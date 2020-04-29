@@ -1931,6 +1931,9 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Remove possible users remaining in the course (teachers) *****/
       DB_QueryDELETE ("can not remove users from a course",
+		      "DELETE FROM crs_usr_last WHERE CrsCod=%ld",
+		      CrsCod);
+      DB_QueryDELETE ("can not remove users from a course",
 		      "DELETE FROM crs_usr WHERE CrsCod=%ld",
 		      CrsCod);
 

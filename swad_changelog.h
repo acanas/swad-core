@@ -544,10 +544,41 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.206.2 (2020-04-29)"
+#define Log_PLATFORM_VERSION	"SWAD 19.207 (2020-04-29)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.207:   Apr 30, 2020	Table with inscriptions of users in courses is splitted into two tables for speed. (300323 lines)
+					8 changes necessary in database:
+RENAME TABLE crs_usr_old TO crs_usr_old_backup_delete_me;
+CREATE TABLE crs_usr_backup_delete_me AS SELECT * FROM crs_usr;
+CREATE TABLE crs_usr_last AS SELECT * FROM crs_usr;
+ALTER TABLE crs_usr_last DROP COLUMN Role;
+ALTER TABLE crs_usr_last DROP COLUMN Accepted;
+ALTER TABLE crs_usr_last ADD UNIQUE INDEX(CrsCod,UsrCod);
+ALTER TABLE crs_usr_last ADD UNIQUE INDEX(UsrCod,CrsCod);
+ALTER TABLE crs_usr DROP COLUMN LastDowGrpCod, DROP COLUMN LastComGrpCod, DROP COLUMN LastAssGrpCod, DROP COLUMN NumAccTst, DROP COLUMN LastAccTst, DROP COLUMN NumQstsLastTst, DROP COLUMN UsrListType, DROP COLUMN ColsClassPhoto, DROP COLUMN ListWithPhotos;
+					If you want to use MyISAM:
+ALTER TABLE crs_usr_last ENGINE=MyISAM;
+OPTIMIZE TABLE crs_usr_last;
+OPTIMIZE TABLE crs_usr;
+
+	Version 19.206.3: Apr 30, 2020	Added indexes on database table. (300244 lines)
+					10 changes necessary in database:
+RENAME TABLE crs_usr TO crs_usr_old;
+CREATE TABLE crs_usr AS SELECT * FROM crs_usr_old;
+ALTER TABLE crs_usr ADD UNIQUE INDEX(CrsCod,UsrCod);
+ALTER TABLE crs_usr ADD UNIQUE INDEX(CrsCod,UsrCod,Role);
+ALTER TABLE crs_usr ADD UNIQUE INDEX(UsrCod,CrsCod);
+ALTER TABLE crs_usr ADD UNIQUE INDEX(UsrCod,CrsCod,Role);
+ALTER TABLE crs_usr ADD UNIQUE INDEX(Role,CrsCod,UsrCod);
+ALTER TABLE crs_usr ADD UNIQUE INDEX(Role,UsrCod,CrsCod);
+ALTER TABLE crs_usr ADD INDEX(CrsCod,Role);
+ALTER TABLE crs_usr ADD INDEX(UsrCod,Role);
+					If you want to use MyISAM:
+ALTER TABLE crs_usr ENGINE=MyISAM;
+OPTIMIZE TABLE crs_usr;
+
 	Version 19.206.2: Apr 29, 2020	Teachers and administrators can not be seen by non logged users. (300244 lines)
 	Version 19.206.1: Apr 29, 2020	Changes in phones. (300243 lines)
 	Version 19.206:   Apr 29, 2020	Removed addresses in user's data. (300259 lines)
@@ -613,6 +644,7 @@ ALTER TABLE exa_sets ADD COLUMN Title VARCHAR(2047) NOT NULL AFTER NumQstsToExam
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS exa_sets (SetCod INT NOT NULL AUTO_INCREMENT,ExaCod INT NOT NULL,SetInd INT NOT NULL DEFAULT 0,UNIQUE INDEX(SetCod),INDEX(ExaCod,SetInd));
 
+---------------------------------------
 	Version 19.193.5: Apr 23, 2020	Fixed bug in exam events. (297871 lines)
 	Version 19.193.4: Apr 23, 2020	Fixed bugs in exams, exam events, games and matches. (297860 lines)
 	Version 19.193.3: Apr 23, 2020	Added new MIME type, reported by Jesús Garrido Manrique.

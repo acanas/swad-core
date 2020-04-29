@@ -87,10 +87,10 @@ int main (void)
 		      "<head><title>%s</title></head>"
 		      "<body><br /><br /><br /><br />"
 		      "<h1 class=\"CM\">"
-		      "%s est&aacute; parado por mantenimiento durante unos minutos."
+		      "%s est&aacute; parado un momento por mantenimiento."
 		      "</h1>"
 		      "<h2 class=\"CM\">"
-		      "Intente acceder m&aacute;s tarde, por favor."
+		      "Intente acceder pasados unos minutos, por favor."
 		      "</h2>"
 		      "</body>"
 		      "</html>",

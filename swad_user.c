@@ -7598,7 +7598,7 @@ static void Usr_GetMyUsrListTypeFromDB (void)
 
    /***** Get type of listing of users from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get type of listing of users",
-			     "SELECT UsrListType FROM crs_usr"
+			     "SELECT UsrListType FROM crs_usr_last"
 			     " WHERE CrsCod=%ld AND UsrCod=%ld",
 			     Gbl.Hierarchy.Crs.CrsCod,
 			     Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -7637,7 +7637,7 @@ static void Usr_UpdateMyUsrListTypeInDB (void)
   {
    /***** Update type of users listing *****/
    DB_QueryUPDATE ("can not update type of listing",
-		   "UPDATE crs_usr SET UsrListType='%s'"
+		   "UPDATE crs_usr_last SET UsrListType='%s'"
                    " WHERE CrsCod=%ld AND UsrCod=%ld",
 		   Usr_StringsUsrListTypeInDB[Gbl.Usrs.Me.ListType],
 		   Gbl.Hierarchy.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -7702,7 +7702,7 @@ static void Usr_GetMyColsClassPhotoFromDB (void)
       /***** Get number of columns in class photo from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get number of columns"
 					   " in class photo",
-				"SELECT ColsClassPhoto FROM crs_usr"
+				"SELECT ColsClassPhoto FROM crs_usr_last"
 				" WHERE CrsCod=%ld AND UsrCod=%ld",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -7736,7 +7736,7 @@ static void Usr_UpdateMyColsClassPhotoInDB (void)
        Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
       /***** Update number of colums in class photo for current course *****/
       DB_QueryUPDATE ("can not update number of columns in class photo",
-		      "UPDATE crs_usr SET ColsClassPhoto=%u"
+		      "UPDATE crs_usr_last SET ColsClassPhoto=%u"
                       " WHERE CrsCod=%ld AND UsrCod=%ld",
 		      Gbl.Usrs.ClassPhoto.Cols,
 		      Gbl.Hierarchy.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -7806,7 +7806,7 @@ void Usr_GetMyPrefAboutListWithPhotosFromDB (void)
       /***** Get if listing of users must show photos from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not check if listing of users"
 					   " must show photos",
-				"SELECT ListWithPhotos FROM crs_usr"
+				"SELECT ListWithPhotos FROM crs_usr_last"
 				" WHERE CrsCod=%ld AND UsrCod=%ld",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -7837,7 +7837,7 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void)
        Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
       /***** Update number of colums in class photo for current course *****/
       DB_QueryUPDATE ("can not update your preference about photos in listing",
-		      "UPDATE crs_usr SET ListWithPhotos='%c'"
+		      "UPDATE crs_usr_last SET ListWithPhotos='%c'"
                       " WHERE CrsCod=%ld AND UsrCod=%ld",
 		      Gbl.Usrs.Listing.WithPhotos ? 'Y' :
 						    'N',

@@ -3921,7 +3921,7 @@ static void Brw_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod)
   {
    /***** Update the group of my last access to a common zone *****/
    DB_QueryUPDATE ("can not update the group of the last access to a file browser",
-		   "UPDATE crs_usr SET %s=%ld"
+		   "UPDATE crs_usr_last SET %s=%ld"
 		   " WHERE CrsCod=%ld AND UsrCod=%ld",
                    FieldNameDB,GrpCod,
                    Gbl.Hierarchy.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -5249,7 +5249,7 @@ static long Brw_GetGrpLastAccZone (const char *FieldNameDB)
    NumRows = DB_QuerySELECT (&mysql_res,"can not get the group"
 					" of your last access"
 					" to a file browser",
-			     "SELECT %s FROM crs_usr"
+			     "SELECT %s FROM crs_usr_last"
 			     " WHERE CrsCod=%ld AND UsrCod=%ld",
 			     FieldNameDB,
 			     Gbl.Hierarchy.Crs.CrsCod,

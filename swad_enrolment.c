@@ -290,18 +290,26 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
    /***** Register user in current course in database *****/
    DB_QueryINSERT ("can not register user in course",
 		   "INSERT INTO crs_usr"
-		   " (CrsCod,UsrCod,Role,Accepted,"
+		   " (CrsCod,UsrCod,Role,Accepted)"
+		   " VALUES"
+		   " (%ld,%ld,%u,'%c')",
+	           Gbl.Hierarchy.Crs.CrsCod,UsrDat->UsrCod,(unsigned) NewRole,
+	           KeepOrSetAccepted == Enr_SET_ACCEPTED_TO_TRUE ? 'Y' :
+							           'N');
+
+   /***** Register last prefs in current course in database *****/
+   DB_QueryINSERT ("can not register user in course",
+		   "INSERT INTO crs_usr_last"
+		   " (CrsCod,UsrCod,"
 		   "LastDowGrpCod,LastComGrpCod,LastAssGrpCod,"
 		   "NumAccTst,LastAccTst,NumQstsLastTst,"
 		   "UsrListType,ColsClassPhoto,ListWithPhotos)"
 		   " VALUES"
-		   " (%ld,%ld,%u,'%c',"
+		   " (%ld,%ld,"
 		   "-1,-1,-1,"
 		   "0,FROM_UNIXTIME(%ld),0,"
 		   "'%s',%u,'%c')",
-	           Gbl.Hierarchy.Crs.CrsCod,UsrDat->UsrCod,(unsigned) NewRole,
-	           KeepOrSetAccepted == Enr_SET_ACCEPTED_TO_TRUE ? 'Y' :
-							           'N',
+	           Gbl.Hierarchy.Crs.CrsCod,UsrDat->UsrCod,
 	           (long) (time_t) 0,	// The user never accessed to tests in this course
 	           Usr_StringsUsrListTypeInDB[Usr_SHOW_USRS_TYPE_DEFAULT],
 	           Usr_CLASS_PHOTO_COLS_DEF,
@@ -4126,7 +4134,11 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
              except notifications about new messages *****/
       Ntf_MarkNotifInCrsAsRemoved (UsrDat->UsrCod,Crs->CrsCod);
 
-      /***** Remove user from the table of courses-users *****/
+      /***** Remove user from the tables of courses-users *****/
+      DB_QueryDELETE ("can not remove a user from a course",
+		      "DELETE FROM crs_usr_last"
+		      " WHERE CrsCod=%ld AND UsrCod=%ld",
+                      Crs->CrsCod,UsrDat->UsrCod);
       DB_QueryDELETE ("can not remove a user from a course",
 		      "DELETE FROM crs_usr"
 		      " WHERE CrsCod=%ld AND UsrCod=%ld",
