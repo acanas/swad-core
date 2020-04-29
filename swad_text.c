@@ -12299,27 +12299,6 @@ const char *Txt_Failed_email_confirmation_key =
 	"Erro na chave de confirma&ccedil;&atilde;o de email.";
 #endif
 
-const char *Txt_Family_address =
-#if   L==1	// ca
-	"Domicilio familiar";	// Necessita traduccio
-#elif L==2	// de
-	"Heimatadresse";
-#elif L==3	// en
-	"Family address";
-#elif L==4	// es
-	"Domicilio familiar";
-#elif L==5	// fr
-	"Adresse famille";
-#elif L==6	// gn
-	"Domicilio familiar";	// Okoteve traducción
-#elif L==7	// it
-	"Domicilio familiare";
-#elif L==8	// pl
-	"Adres rodziny";
-#elif L==9	// pt
-	"Endere&ccedil;o Fam&iacute;lia";
-#endif
-
 const char *Txt_Feedback =
 #if   L==1	// ca
 	"Realimentaci&oacute;n";	// Necessita traduccio
@@ -18350,27 +18329,6 @@ const char *Txt_Links_removed =
 	"Linki usuni&eogon;te";
 #elif L==9	// pt
 	"Liga&ccedil;&otilde;es removidas";
-#endif
-
-const char *Txt_Local_address =
-#if   L==1	// ca
-	"Domicilio local";	// Necessita traduccio
-#elif L==2	// de
-	"Lokale Adresse";
-#elif L==3	// en
-	"Local address";
-#elif L==4	// es
-	"Domicilio local";
-#elif L==5	// fr
-	"Adresse locale";
-#elif L==6	// gn
-	"Domicilio local";	// Okoteve traducción
-#elif L==7	// it
-	"Indirizzo locale";
-#elif L==8	// pl
-	"Adres lokalny";
-#elif L==9	// pt
-	"Local Address";
 #endif
 
 const char *Txt_Location =

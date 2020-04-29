@@ -3324,9 +3324,9 @@ mysql> DESCRIBE usr_data;
 			"CtrCod INT NOT NULL DEFAULT -1,"
 			"Office VARCHAR(2047) NOT NULL DEFAULT '',"		// Usr_MAX_BYTES_ADDRESS
 			"OfficePhone CHAR(16) NOT NULL DEFAULT '',"		// Usr_MAX_BYTES_PHONE
-			"LocalAddress VARCHAR(2047) NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_ADDRESS
+			"LocalAddress VARCHAR(2047) NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_ADDRESS	// TODO: Remove, not yet used
 			"LocalPhone CHAR(16) NOT NULL DEFAULT '',"		// Usr_MAX_BYTES_PHONE
-			"FamilyAddress VARCHAR(2047) NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_ADDRESS
+			"FamilyAddress VARCHAR(2047) NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_ADDRESS	// TODO: Remove, not yet used
 			"FamilyPhone CHAR(16) NOT NULL DEFAULT '',"		// Usr_MAX_BYTES_PHONE
 			"OriginPlace VARCHAR(2047) NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_ADDRESS	// TODO: Remove, not yet used
 			"Birthday DATE,"

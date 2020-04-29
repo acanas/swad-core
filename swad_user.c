@@ -138,8 +138,8 @@ static const char *Usr_ParamUsrCod[Rol_NUM_ROLES] =
   };
 
 #define Usr_NUM_MAIN_FIELDS_DATA_ADM	 7
-#define Usr_NUM_ALL_FIELDS_DATA_GST	16
-#define Usr_NUM_ALL_FIELDS_DATA_STD	12
+#define Usr_NUM_ALL_FIELDS_DATA_GST	14
+#define Usr_NUM_ALL_FIELDS_DATA_STD	10
 #define Usr_NUM_ALL_FIELDS_DATA_TCH	11
 const char *Usr_UsrDatMainFieldNames[Usr_NUM_MAIN_FIELDS_DATA_USR];
 
@@ -353,10 +353,8 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Birthday.Day   = 0;
    UsrDat->Birthday.Month = 0;
    UsrDat->Birthday.Year  = 0;
-   UsrDat->LocalAddress[0]  = '\0';
-   UsrDat->LocalPhone[0]    = '\0';
-   UsrDat->FamilyAddress[0] = '\0';
-   UsrDat->FamilyPhone[0]   = '\0';
+   UsrDat->Phone1[0]      = '\0';
+   UsrDat->Phone2[0]      = '\0';
    if (UsrDat->Comments)
       UsrDat->Comments[0] = '\0';
 
@@ -527,15 +525,13 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
 					  "CtrCod,"		// row[14]
 					  "Office,"		// row[15]
 					  "OfficePhone,"	// row[16]
-					  "LocalAddress,"	// row[17]
-					  "LocalPhone,"		// row[18]
-					  "FamilyAddress,"	// row[19]
-					  "FamilyPhone,"	// row[20]
+					  "LocalPhone,"		// row[17]
+					  "FamilyPhone,"	// row[18]
 					  "DATE_FORMAT(Birthday,"
-					  "'%%Y%%m%%d'),"	// row[21]
-					  "Comments,"		// row[22]
-					  "NotifNtfEvents,"	// row[23]
-					  "EmailNtfEvents"	// row[24]
+					  "'%%Y%%m%%d'),"	// row[19]
+					  "Comments,"		// row[20]
+					  "NotifNtfEvents,"	// row[21]
+					  "EmailNtfEvents"	// row[22]
 				    " FROM usr_data"
 				    " WHERE UsrCod=%ld",
 				    UsrDat->UsrCod);
@@ -560,26 +556,24 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
 					  "CtrCod,"		// row[14]
 					  "Office,"		// row[15]
 					  "OfficePhone,"	// row[16]
-					  "LocalAddress,"	// row[17]
-					  "LocalPhone,"		// row[18]
-					  "FamilyAddress,"	// row[19]
-					  "FamilyPhone,"	// row[20]
+					  "LocalPhone,"		// row[17]
+					  "FamilyPhone,"	// row[18]
 					  "DATE_FORMAT(Birthday,"
-					  "'%%Y%%m%%d'),"	// row[21]
-					  "Comments,"		// row[22]
-					  "NotifNtfEvents,"	// row[23]
-					  "EmailNtfEvents,"	// row[24]
+					  "'%%Y%%m%%d'),"	// row[19]
+					  "Comments,"		// row[20]
+					  "NotifNtfEvents,"	// row[21]
+					  "EmailNtfEvents,"	// row[22]
 
 					  // Settings (usually not necessary
 					  // when getting another user's data)
-					  "Language,"		// row[25]
-					  "FirstDayOfWeek,"	// row[26]
-					  "DateFormat,"		// row[27]
-					  "Theme,"		// row[28]
-					  "IconSet,"		// row[29]
-					  "Menu,"		// row[30]
-					  "SideCols,"		// row[31]
-					  "ThirdPartyCookies"	// row[32]
+					  "Language,"		// row[23]
+					  "FirstDayOfWeek,"	// row[24]
+					  "DateFormat,"		// row[25]
+					  "Theme,"		// row[26]
+					  "IconSet,"		// row[27]
+					  "Menu,"		// row[28]
+					  "SideCols,"		// row[29]
+					  "ThirdPartyCookies"	// row[30]
 				    " FROM usr_data"
 				    " WHERE UsrCod=%ld",
 				    UsrDat->UsrCod);
@@ -652,33 +646,29 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
    Str_Copy (UsrDat->Tch.OfficePhone,row[16],
              Usr_MAX_BYTES_PHONE);
 
-   /* Get local address (row[17]) and local phone (row[18]) */
-   Str_Copy (UsrDat->LocalAddress,row[17],
-             Usr_MAX_BYTES_ADDRESS);
-   Str_Copy (UsrDat->LocalPhone,row[18],
+   /* Get phone 1 (row[17]) */
+   Str_Copy (UsrDat->Phone1,row[17],
              Usr_MAX_BYTES_PHONE);
 
-   /* Get local address (row[19]) and local phone (row[20]) */
-   Str_Copy (UsrDat->FamilyAddress,row[19],
-             Usr_MAX_BYTES_ADDRESS);
-   Str_Copy (UsrDat->FamilyPhone,row[20],
+   /* Get phone 2 (row[18]) */
+   Str_Copy (UsrDat->Phone2,row[18],
              Usr_MAX_BYTES_PHONE);
 
-   /* Get birthday (row[21]) */
-   Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[21]);
+   /* Get birthday (row[19]) */
+   Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[19]);
    Dat_ConvDateToDateStr (&(UsrDat->Birthday),UsrDat->StrBirthday);
 
-   /* Get comments (row[22]) */
-   Usr_GetUsrCommentsFromString (row[23] ? row[22] :
+   /* Get comments (row[20]) */
+   Usr_GetUsrCommentsFromString (row[20] ? row[20] :
 	                                   "",
 	                         UsrDat);
 
-   /* Get on which events the user wants to be notified inside the platform (row[23]) */
-   if (sscanf (row[23],"%u",&UsrDat->NtfEvents.CreateNotif) != 1)
+   /* Get on which events the user wants to be notified inside the platform (row[21]) */
+   if (sscanf (row[21],"%u",&UsrDat->NtfEvents.CreateNotif) != 1)
       UsrDat->NtfEvents.CreateNotif = (unsigned) -1;	// 0xFF..FF
 
-   /* Get on which events the user wants to be notified by email (row[24]) */
-   if (sscanf (row[24],"%u",&UsrDat->NtfEvents.SendEmail) != 1)
+   /* Get on which events the user wants to be notified by email (row[22]) */
+   if (sscanf (row[22],"%u",&UsrDat->NtfEvents.SendEmail) != 1)
       UsrDat->NtfEvents.SendEmail = 0;
    if (UsrDat->NtfEvents.SendEmail >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11
       UsrDat->NtfEvents.SendEmail = 0;
@@ -686,50 +676,50 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
    /***** Get user's settings *****/
    if (GetPrefs == Usr_GET_PREFS)
      {
-      /* Get language (row[25]) */
+      /* Get language (row[23]) */
       UsrDat->Prefs.Language = Lan_LANGUAGE_UNKNOWN;	// Language unknown
       for (Lan  = (Lan_Language_t) 1;
 	   Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	   Lan++)
-	 if (!strcasecmp (row[25],Lan_STR_LANG_ID[Lan]))
+	 if (!strcasecmp (row[23],Lan_STR_LANG_ID[Lan]))
 	   {
 	    UsrDat->Prefs.Language = Lan;
 	    break;
 	   }
 
-      /* Get first day of week (row[26]) */
-      UsrDat->Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[26]);
+      /* Get first day of week (row[24]) */
+      UsrDat->Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[24]);
 
-      /* Get date format (row[27]) */
-      UsrDat->Prefs.DateFormat = Dat_GetDateFormatFromStr (row[27]);
+      /* Get date format (row[25]) */
+      UsrDat->Prefs.DateFormat = Dat_GetDateFormatFromStr (row[25]);
 
-      /* Get theme (row[28]) */
+      /* Get theme (row[26]) */
       UsrDat->Prefs.Theme = The_THEME_DEFAULT;
       for (Theme  = (The_Theme_t) 0;
 	   Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
 	   Theme++)
-	 if (!strcasecmp (row[28],The_ThemeId[Theme]))
+	 if (!strcasecmp (row[26],The_ThemeId[Theme]))
 	   {
 	    UsrDat->Prefs.Theme = Theme;
 	    break;
 	   }
 
-      /* Get icon set (row[29]) */
+      /* Get icon set (row[27]) */
       UsrDat->Prefs.IconSet = Ico_ICON_SET_DEFAULT;
       for (IconSet  = (Ico_IconSet_t) 0;
 	   IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
 	   IconSet++)
-	 if (!strcasecmp (row[29],Ico_IconSetId[IconSet]))
+	 if (!strcasecmp (row[27],Ico_IconSetId[IconSet]))
 	   {
 	    UsrDat->Prefs.IconSet = IconSet;
 	    break;
 	   }
 
-      /* Get menu (row[30]) */
-      UsrDat->Prefs.Menu = Mnu_GetMenuFromStr (row[30]);
+      /* Get menu (row[28]) */
+      UsrDat->Prefs.Menu = Mnu_GetMenuFromStr (row[28]);
 
-      /* Get if user wants to show side columns (row[31]) */
-      if (sscanf (row[31],"%u",&UsrDat->Prefs.SideCols) == 1)
+      /* Get if user wants to show side columns (row[29]) */
+      if (sscanf (row[29],"%u",&UsrDat->Prefs.SideCols) == 1)
 	{
 	 if (UsrDat->Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
 	    UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
@@ -737,8 +727,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
       else
 	 UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
 
-      /* Get if user accepts third party cookies (row[32]) */
-      UsrDat->Prefs.AcceptThirdPartyCookies = (row[32][0] == 'Y');
+      /* Get if user accepts third party cookies (row[30]) */
+      UsrDat->Prefs.AcceptThirdPartyCookies = (row[30][0] == 'Y');
      }
 
    /***** Free structure that stores the query result *****/
@@ -3752,20 +3742,12 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 	                                          "&nbsp;",
 	             NULL,true,false);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->LocalAddress[0] ? UsrDat->LocalAddress :
-	                                       "&nbsp;",
+                     UsrDat->Phone1[0] ? UsrDat->Phone1 :
+	                                 "&nbsp;",
 	             NULL,true,false);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->LocalPhone[0] ? UsrDat->LocalPhone :
-	                                     "&nbsp;",
-	             NULL,true,false);
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->FamilyAddress[0] ? UsrDat->FamilyAddress :
-	                                        "&nbsp;",
-	             NULL,true,false);
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->FamilyPhone[0] ? UsrDat->FamilyPhone :
-	                                      "&nbsp;",
+                     UsrDat->Phone2[0] ? UsrDat->Phone2 :
+	                                 "&nbsp;",
 	             NULL,true,false);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->StrBirthday[0] ? UsrDat->StrBirthday :
@@ -3826,24 +3808,14 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 
    /***** Write the rest of the data of the student *****/
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->LocalAddress[0] ? (ShowData ? UsrDat->LocalAddress :
-	                                                   "********") :
-	                                       "&nbsp;",
+                     UsrDat->Phone1[0] ? (ShowData ? UsrDat->Phone1 :
+                	                             "********") :
+                	                 "&nbsp;",
 	             NULL,true,UsrDat->Accepted);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->LocalPhone[0] ? (ShowData ? UsrDat->LocalPhone :
-                	                                 "********") :
-                	                     "&nbsp;",
-	             NULL,true,UsrDat->Accepted);
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->FamilyAddress[0] ? (ShowData ? UsrDat->FamilyAddress :
-                	                                    "********") :
-                	                        "&nbsp;",
-	             NULL,true,UsrDat->Accepted);
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->FamilyPhone[0] ? (ShowData ? UsrDat->FamilyPhone :
-                	                                  "********") :
-                	                      "&nbsp;",
+                     UsrDat->Phone2[0] ? (ShowData ? UsrDat->Phone2 :
+                	                             "********") :
+                	                 "&nbsp;",
 	             NULL,true,UsrDat->Accepted);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->StrBirthday[0] ? (ShowData ? UsrDat->StrBirthday :
@@ -6816,8 +6788,6 @@ void Usr_ListAllDataGsts (void)
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
-   extern const char *Txt_Local_address;
-   extern const char *Txt_Family_address;
    extern const char *Txt_Date_of_birth;
    unsigned NumColumnsCommonCard;
    unsigned NumCol;
@@ -6837,11 +6807,9 @@ void Usr_ListAllDataGsts (void)
    FieldNames[ 8] = Txt_Department;
    FieldNames[ 9] = Txt_Office;
    FieldNames[10] = Txt_Phone;
-   FieldNames[11] = Txt_Local_address;
+   FieldNames[11] = Txt_Phone;
    FieldNames[12] = Txt_Phone;
-   FieldNames[13] = Txt_Family_address;
-   FieldNames[14] = Txt_Phone;
-   FieldNames[15] = Txt_Date_of_birth;
+   FieldNames[13] = Txt_Date_of_birth;
 
    /***** Get and update type of list,
           number of columns in class photo
@@ -6923,9 +6891,7 @@ void Usr_ListAllDataStds (void)
    extern const char *Txt_First_name;
    extern const char *Txt_Institution;
    extern const char *Txt_Email;
-   extern const char *Txt_Local_address;
    extern const char *Txt_Phone;
-   extern const char *Txt_Family_address;
    extern const char *Txt_Date_of_birth;
    extern const char *Txt_Group;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
@@ -6941,18 +6907,16 @@ void Usr_ListAllDataStds (void)
    size_t Length;
 
    /***** Initialize field names *****/
-   FieldNames[ 0] = Txt_Photo;
-   FieldNames[ 1] = Txt_ID;
-   FieldNames[ 2] = Txt_Surname_1;
-   FieldNames[ 3] = Txt_Surname_2;
-   FieldNames[ 4] = Txt_First_name;
-   FieldNames[ 5] = Txt_Email;
-   FieldNames[ 6] = Txt_Institution;
-   FieldNames[ 7] = Txt_Local_address;
-   FieldNames[ 8] = Txt_Phone;
-   FieldNames[ 9] = Txt_Family_address;
-   FieldNames[10] = Txt_Phone;
-   FieldNames[11] = Txt_Date_of_birth;
+   FieldNames[0] = Txt_Photo;
+   FieldNames[1] = Txt_ID;
+   FieldNames[2] = Txt_Surname_1;
+   FieldNames[3] = Txt_Surname_2;
+   FieldNames[4] = Txt_First_name;
+   FieldNames[5] = Txt_Email;
+   FieldNames[6] = Txt_Institution;
+   FieldNames[7] = Txt_Phone;
+   FieldNames[8] = Txt_Phone;
+   FieldNames[9] = Txt_Date_of_birth;
 
    GroupNames = NULL;        // To avoid warning
 

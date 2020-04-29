@@ -128,10 +128,8 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm);
 static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm);
 static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm);
 static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutForm);
-static void Rec_ShowLocalAddress (struct UsrData *UsrDat,bool ShowData,bool PutForm);
-static void Rec_ShowLocalPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm);
-static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,bool ShowData,bool PutForm);
-static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm);
+static void Rec_ShowPhone1 (struct UsrData *UsrDat,bool ShowData,bool PutForm);
+static void Rec_ShowPhone2 (struct UsrData *UsrDat,bool ShowData,bool PutForm);
 static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm);
 static void Rec_ShowTeacherRows (struct UsrData *UsrDat,struct Instit *Ins,
                                  bool ShowData);
@@ -2350,17 +2348,11 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	 /***** Date of birth *****/
          Rec_ShowDateOfBirth (UsrDat,ShowData,ICanEdit);
 
-	 /***** Local address *****/
-         Rec_ShowLocalAddress (UsrDat,ShowData,ICanEdit);
+	 /***** Phone 1 *****/
+         Rec_ShowPhone1 (UsrDat,ShowData,ICanEdit);
 
-	 /***** Local phone *****/
-         Rec_ShowLocalPhone (UsrDat,ShowData,ICanEdit);
-
-	 /***** Family address *****/
-         Rec_ShowFamilyAddress (UsrDat,ShowData,ICanEdit);
-
-	 /***** Family phone *****/
-         Rec_ShowFamilyPhone (UsrDat,ShowData,ICanEdit);
+	 /***** Phone 2 *****/
+         Rec_ShowPhone2 (UsrDat,ShowData,ICanEdit);
 
 	 /***** User's comments *****/
          Rec_ShowComments (UsrDat,ShowData,ICanEdit);
@@ -3316,43 +3308,10 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutFo
   }
 
 /*****************************************************************************/
-/************************ Show user's local address **************************/
-/*****************************************************************************/
-
-static void Rec_ShowLocalAddress (struct UsrData *UsrDat,bool ShowData,bool PutForm)
-  {
-   extern const char *Txt_Local_address;
-
-   /***** Local address *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "LocalAddress" :
-				              NULL,
-		    Txt_Local_address);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
-   if (ShowData)
-     {
-      if (PutForm)
-	 HTM_INPUT_TEXT ("LocalAddress",Usr_MAX_CHARS_ADDRESS,
-			 UsrDat->LocalAddress,
-			 HTM_DONT_SUBMIT_ON_CHANGE,
-			 "id=\"LocalAddress\" class=\"REC_C2_BOT_INPUT\"");
-      else if (UsrDat->LocalAddress[0])
-	 HTM_Txt (UsrDat->LocalAddress);
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
 /************************* Show user's local phone ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowLocalPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm)
+static void Rec_ShowPhone1 (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
    extern const char *Txt_Phone;
 
@@ -3360,7 +3319,7 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,bool ShowData,bool PutFor
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "LocalPhone" :
+   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "Phone1" :
 				              NULL,
 		    Txt_Phone);
 
@@ -3369,48 +3328,15 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,bool ShowData,bool PutFor
    if (ShowData)
      {
       if (PutForm)
-	 HTM_INPUT_TEL ("LocalPhone",UsrDat->LocalPhone,
+	 HTM_INPUT_TEL ("Phone1",UsrDat->Phone1,
 	                HTM_DONT_SUBMIT_ON_CHANGE,
-	                "id=\"LocalPhone\" class=\"REC_C2_BOT_INPUT\"");
-      else if (UsrDat->LocalPhone[0])
+	                "id=\"Phone1\" class=\"REC_C2_BOT_INPUT\"");
+      else if (UsrDat->Phone1[0])
 	{
-	 HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",UsrDat->LocalPhone);
-	 HTM_Txt (UsrDat->LocalPhone);
+	 HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",UsrDat->Phone1);
+	 HTM_Txt (UsrDat->Phone1);
 	 HTM_A_End ();
 	}
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/*********************** Show user's family address **************************/
-/*****************************************************************************/
-
-static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,bool ShowData,bool PutForm)
-  {
-   extern const char *Txt_Family_address;
-
-   /***** Family address *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "FamilyAddress" :
-				              NULL,
-		    Txt_Family_address);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
-   if (ShowData)
-     {
-      if (PutForm)
-	 HTM_INPUT_TEXT ("FamilyAddress",Usr_MAX_CHARS_ADDRESS,
-			 UsrDat->FamilyAddress,
-			 HTM_DONT_SUBMIT_ON_CHANGE,
-			 "id=\"FamilyAddress\" class=\"REC_C2_BOT_INPUT\"");
-      else if (UsrDat->FamilyAddress[0])
-	 HTM_Txt (UsrDat->FamilyAddress);
      }
    HTM_TD_End ();
 
@@ -3421,7 +3347,7 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,bool ShowData,bool Put
 /************************ Show user's family phone ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm)
+static void Rec_ShowPhone2 (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
    extern const char *Txt_Phone;
 
@@ -3429,7 +3355,7 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,bool ShowData,bool PutFo
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "FamilyPhone" :
+   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "Phone2" :
 				              NULL,
 		    Txt_Phone);
 
@@ -3438,13 +3364,13 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,bool ShowData,bool PutFo
    if (ShowData)
      {
       if (PutForm)
-	 HTM_INPUT_TEL ("FamilyPhone",UsrDat->FamilyPhone,
+	 HTM_INPUT_TEL ("Phone2",UsrDat->Phone2,
 	                HTM_DONT_SUBMIT_ON_CHANGE,
-	                "id=\"FamilyPhone\" class=\"REC_C2_BOT_INPUT\"");
-      else if (UsrDat->FamilyPhone[0])
+	                "id=\"Phone2\" class=\"REC_C2_BOT_INPUT\"");
+      else if (UsrDat->Phone2[0])
 	{
-	 HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",UsrDat->FamilyPhone);
-	 HTM_Txt (UsrDat->FamilyPhone);
+	 HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",UsrDat->Phone2);
+	 HTM_Txt (UsrDat->Phone2);
 	 HTM_A_End ();
 	}
      }
@@ -3805,13 +3731,9 @@ static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
                         &(UsrDat->Birthday.Year ));
    Dat_ConvDateToDateStr (&(UsrDat->Birthday),UsrDat->StrBirthday);
 
-   Par_GetParToText ("LocalAddress",UsrDat->LocalAddress,Usr_MAX_BYTES_ADDRESS);
+   Par_GetParToText ("Phone1",UsrDat->Phone1,Usr_MAX_BYTES_PHONE);
 
-   Par_GetParToText ("LocalPhone",UsrDat->LocalPhone,Usr_MAX_BYTES_PHONE);
-
-   Par_GetParToText ("FamilyAddress",UsrDat->FamilyAddress,Usr_MAX_BYTES_ADDRESS);
-
-   Par_GetParToText ("FamilyPhone",UsrDat->FamilyPhone,Usr_MAX_BYTES_PHONE);
+   Par_GetParToText ("Phone2",UsrDat->Phone2,Usr_MAX_BYTES_PHONE);
 
    Rec_GetUsrCommentsFromForm (UsrDat);
   }

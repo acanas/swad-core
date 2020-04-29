@@ -555,8 +555,8 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 		   " SET Password='%s',"
 		   "Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
 		   "CtyCod=%ld,"
-		   "LocalAddress='%s',LocalPhone='%s',"
-		   "FamilyAddress='%s',FamilyPhone='%s',"
+		   "LocalPhone='%s',"
+		   "FamilyPhone='%s',"
 		   "Birthday=%s,"
 		   "Comments='%s'"
 		   " WHERE UsrCod=%ld",
@@ -564,8 +564,8 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 	           UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
 	           Usr_StringsSexDB[UsrDat->Sex],
 	           UsrDat->CtyCod,
-	           UsrDat->LocalAddress,UsrDat->LocalPhone,
-	           UsrDat->FamilyAddress,UsrDat->FamilyPhone,
+	           UsrDat->Phone1,
+	           UsrDat->Phone2,
 	           BirthdayStrDB,
 	           UsrDat->Comments ? UsrDat->Comments :
 				      "",
