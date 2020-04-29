@@ -194,8 +194,7 @@ struct UsrData
    long CtyCod;		// Country
    struct Date Birthday;
    char StrBirthday	[Cns_MAX_BYTES_DATE + 1];
-   char Phone1		[Usr_MAX_BYTES_PHONE + 1];
-   char Phone2		[Usr_MAX_BYTES_PHONE + 1];
+   char Phone           [2][Usr_MAX_BYTES_PHONE + 1];
    char *Comments;
    long InsCtyCod;	// Country of the institution
    long InsCod;		// Institution

@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>
 
@@ -128,8 +130,8 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm);
 static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm);
 static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm);
 static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutForm);
-static void Rec_ShowPhone1 (struct UsrData *UsrDat,bool ShowData,bool PutForm);
-static void Rec_ShowPhone2 (struct UsrData *UsrDat,bool ShowData,bool PutForm);
+static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
+                           unsigned NumPhone);
 static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm);
 static void Rec_ShowTeacherRows (struct UsrData *UsrDat,struct Instit *Ins,
                                  bool ShowData);
@@ -2348,11 +2350,9 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	 /***** Date of birth *****/
          Rec_ShowDateOfBirth (UsrDat,ShowData,ICanEdit);
 
-	 /***** Phone 1 *****/
-         Rec_ShowPhone1 (UsrDat,ShowData,ICanEdit);
-
-	 /***** Phone 2 *****/
-         Rec_ShowPhone2 (UsrDat,ShowData,ICanEdit);
+	 /***** Phones *****/
+         Rec_ShowPhone (UsrDat,ShowData,ICanEdit,0);
+         Rec_ShowPhone (UsrDat,ShowData,ICanEdit,1);
 
 	 /***** User's comments *****/
          Rec_ShowComments (UsrDat,ShowData,ICanEdit);
@@ -3310,73 +3310,55 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutFo
 /*****************************************************************************/
 /************************* Show user's local phone ***************************/
 /*****************************************************************************/
+// NumPhone can be 0 or 1
 
-static void Rec_ShowPhone1 (struct UsrData *UsrDat,bool ShowData,bool PutForm)
+static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
+                           unsigned NumPhone)
   {
    extern const char *Txt_Phone;
+   char *Name;
+   char *Label;
 
-   /***** Local phone *****/
+   /***** Internal name / id *****/
+   if (asprintf (&Name,"Phone%u",NumPhone) < 0)
+      Lay_NotEnoughMemoryExit ();
+
+   /***** Label to show *****/
+   if (asprintf (&Label,"%s %u",Txt_Phone,NumPhone + 1) < 0)
+      Lay_NotEnoughMemoryExit ();
+
+   /***** Phone *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "Phone1" :
+   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? Name :
 				              NULL,
-		    Txt_Phone);
+		    Label);
 
    /* Data */
    HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
    if (ShowData)
      {
       if (PutForm)
-	 HTM_INPUT_TEL ("Phone1",UsrDat->Phone1,
+	 HTM_INPUT_TEL (Name,UsrDat->Phone[NumPhone],
 	                HTM_DONT_SUBMIT_ON_CHANGE,
-	                "id=\"Phone1\" class=\"REC_C2_BOT_INPUT\"");
-      else if (UsrDat->Phone1[0])
+	                "id=\"%s\" class=\"REC_C2_BOT_INPUT\"",Name);
+      else if (UsrDat->Phone[NumPhone][0])
 	{
-	 HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",UsrDat->Phone1);
-	 HTM_Txt (UsrDat->Phone1);
+	 HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",UsrDat->Phone[NumPhone]);
+	 HTM_Txt (UsrDat->Phone[NumPhone]);
 	 HTM_A_End ();
 	}
      }
    HTM_TD_End ();
 
    HTM_TR_End ();
-  }
 
-/*****************************************************************************/
-/************************ Show user's family phone ***************************/
-/*****************************************************************************/
+   /***** Free label *****/
+   free (Label);
 
-static void Rec_ShowPhone2 (struct UsrData *UsrDat,bool ShowData,bool PutForm)
-  {
-   extern const char *Txt_Phone;
-
-   /***** Family phone *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "Phone2" :
-				              NULL,
-		    Txt_Phone);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
-   if (ShowData)
-     {
-      if (PutForm)
-	 HTM_INPUT_TEL ("Phone2",UsrDat->Phone2,
-	                HTM_DONT_SUBMIT_ON_CHANGE,
-	                "id=\"Phone2\" class=\"REC_C2_BOT_INPUT\"");
-      else if (UsrDat->Phone2[0])
-	{
-	 HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",UsrDat->Phone2);
-	 HTM_Txt (UsrDat->Phone2);
-	 HTM_A_End ();
-	}
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   /***** Free name / id *****/
+   free (Name);
   }
 
 /*****************************************************************************/
@@ -3731,9 +3713,8 @@ static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
                         &(UsrDat->Birthday.Year ));
    Dat_ConvDateToDateStr (&(UsrDat->Birthday),UsrDat->StrBirthday);
 
-   Par_GetParToText ("Phone1",UsrDat->Phone1,Usr_MAX_BYTES_PHONE);
-
-   Par_GetParToText ("Phone2",UsrDat->Phone2,Usr_MAX_BYTES_PHONE);
+   Par_GetParToText ("Phone0",UsrDat->Phone[0],Usr_MAX_BYTES_PHONE);
+   Par_GetParToText ("Phone1",UsrDat->Phone[1],Usr_MAX_BYTES_PHONE);
 
    Rec_GetUsrCommentsFromForm (UsrDat);
   }

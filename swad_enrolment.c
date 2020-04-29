@@ -564,8 +564,8 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 	           UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
 	           Usr_StringsSexDB[UsrDat->Sex],
 	           UsrDat->CtyCod,
-	           UsrDat->Phone1,
-	           UsrDat->Phone2,
+	           UsrDat->Phone[0],
+	           UsrDat->Phone[1],
 	           BirthdayStrDB,
 	           UsrDat->Comments ? UsrDat->Comments :
 				      "",

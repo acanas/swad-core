@@ -785,8 +785,8 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 				Pri_VisibilityDB[UsrDat->BaPrfVisibility],
 				Pri_VisibilityDB[UsrDat->ExPrfVisibility],
 				UsrDat->CtyCod,
-				UsrDat->Phone1,
-				UsrDat->Phone2,
+				UsrDat->Phone[0],
+				UsrDat->Phone[1],
 				BirthdayStrDB,
 				CommentsLength ? UsrDat->Comments :
 						 "",

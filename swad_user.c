@@ -353,8 +353,8 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Birthday.Day   = 0;
    UsrDat->Birthday.Month = 0;
    UsrDat->Birthday.Year  = 0;
-   UsrDat->Phone1[0]      = '\0';
-   UsrDat->Phone2[0]      = '\0';
+   UsrDat->Phone[0][0]    =
+   UsrDat->Phone[1][0]    = '\0';
    if (UsrDat->Comments)
       UsrDat->Comments[0] = '\0';
 
@@ -646,12 +646,10 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
    Str_Copy (UsrDat->Tch.OfficePhone,row[16],
              Usr_MAX_BYTES_PHONE);
 
-   /* Get phone 1 (row[17]) */
-   Str_Copy (UsrDat->Phone1,row[17],
+   /* Get phones (row[17]) and row[18] */
+   Str_Copy (UsrDat->Phone[0],row[17],
              Usr_MAX_BYTES_PHONE);
-
-   /* Get phone 2 (row[18]) */
-   Str_Copy (UsrDat->Phone2,row[18],
+   Str_Copy (UsrDat->Phone[1],row[18],
              Usr_MAX_BYTES_PHONE);
 
    /* Get birthday (row[19]) */
@@ -3742,12 +3740,12 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 	                                          "&nbsp;",
 	             NULL,true,false);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->Phone1[0] ? UsrDat->Phone1 :
-	                                 "&nbsp;",
+                     UsrDat->Phone[0][0] ? UsrDat->Phone[0] :
+	                                   "&nbsp;",
 	             NULL,true,false);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->Phone2[0] ? UsrDat->Phone2 :
-	                                 "&nbsp;",
+                     UsrDat->Phone[1][0] ? UsrDat->Phone[1] :
+	                                   "&nbsp;",
 	             NULL,true,false);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->StrBirthday[0] ? UsrDat->StrBirthday :
@@ -3808,14 +3806,14 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 
    /***** Write the rest of the data of the student *****/
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->Phone1[0] ? (ShowData ? UsrDat->Phone1 :
-                	                             "********") :
-                	                 "&nbsp;",
+                     UsrDat->Phone[0][0] ? (ShowData ? UsrDat->Phone[0] :
+                	                               "********") :
+                	                   "&nbsp;",
 	             NULL,true,UsrDat->Accepted);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->Phone2[0] ? (ShowData ? UsrDat->Phone2 :
-                	                             "********") :
-                	                 "&nbsp;",
+                     UsrDat->Phone[1][0] ? (ShowData ? UsrDat->Phone[1] :
+                	                               "********") :
+                	                   "&nbsp;",
 	             NULL,true,UsrDat->Accepted);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->StrBirthday[0] ? (ShowData ? UsrDat->StrBirthday :
