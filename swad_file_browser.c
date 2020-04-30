@@ -3922,9 +3922,10 @@ static void Brw_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod)
    /***** Update the group of my last access to a common zone *****/
    DB_QueryUPDATE ("can not update the group of the last access to a file browser",
 		   "UPDATE crs_usr_last SET %s=%ld"
-		   " WHERE CrsCod=%ld AND UsrCod=%ld",
+		   " WHERE UsrCod=%ld AND CrsCod=%ld",
                    FieldNameDB,GrpCod,
-                   Gbl.Hierarchy.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+                   Gbl.Usrs.Me.UsrDat.UsrCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -5250,10 +5251,10 @@ static long Brw_GetGrpLastAccZone (const char *FieldNameDB)
 					" of your last access"
 					" to a file browser",
 			     "SELECT %s FROM crs_usr_last"
-			     " WHERE CrsCod=%ld AND UsrCod=%ld",
+			     " WHERE UsrCod=%ld AND CrsCod=%ld",
 			     FieldNameDB,
-			     Gbl.Hierarchy.Crs.CrsCod,
-			     Gbl.Usrs.Me.UsrDat.UsrCod);
+			     Gbl.Usrs.Me.UsrDat.UsrCod,
+			     Gbl.Hierarchy.Crs.CrsCod);
 
    if (NumRows == 0)	// May be an administrator not belonging to this course
       GrpCod = -1L;

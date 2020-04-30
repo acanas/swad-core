@@ -705,10 +705,10 @@ static bool Tst_CheckIfNextTstAllowed (void)
 			      "UNIX_TIMESTAMP(),"						// row[0]
 			      "UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)"	// row[1]
 		       " FROM crs_usr_last"
-		       " WHERE CrsCod=%ld AND UsrCod=%ld",
+		       " WHERE UsrCod=%ld AND CrsCod=%ld",
 		       TstCfg_GetConfigMinTimeNxtTstPerQst (),
 		       TstCfg_GetConfigMinTimeNxtTstPerQst (),
-		       Gbl.Hierarchy.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod) == 1)
+		       Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Hierarchy.Crs.CrsCod) == 1)
      {
       /* Get seconds from now to next access to test */
       row = mysql_fetch_row (mysql_res);
@@ -758,9 +758,9 @@ static unsigned Tst_GetNumExamsGeneratedByMe (void)
       NumRows = DB_QuerySELECT (&mysql_res,"can not get number of test exams generated",
 				"SELECT NumAccTst"	// row[0]
 				" FROM crs_usr_last"
-				" WHERE CrsCod=%ld AND UsrCod=%ld",
-				Gbl.Hierarchy.Crs.CrsCod,
-				Gbl.Usrs.Me.UsrDat.UsrCod);
+				" WHERE UsrCod=%ld AND CrsCod=%ld",
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Gbl.Hierarchy.Crs.CrsCod);
 
       if (NumRows == 0)
          NumExamsGeneratedByMe = 0;
@@ -1170,8 +1170,9 @@ static void Tst_IncreaseMyNumAccessTst (void)
    /***** Update my number of accesses to test in this course *****/
    DB_QueryUPDATE ("can not update the number of accesses to test",
 		   "UPDATE crs_usr_last SET NumAccTst=NumAccTst+1"
-                   " WHERE CrsCod=%ld AND UsrCod=%ld",
-		   Gbl.Hierarchy.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+                   " WHERE UsrCod=%ld AND CrsCod=%ld",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -1183,10 +1184,10 @@ static void Tst_UpdateLastAccTst (unsigned NumQsts)
    /***** Update date-time and number of questions of this test *****/
    DB_QueryUPDATE ("can not update time and number of questions of this test",
 		   "UPDATE crs_usr_last SET LastAccTst=NOW(),NumQstsLastTst=%u"
-                   " WHERE CrsCod=%ld AND UsrCod=%ld",
+                   " WHERE UsrCod=%ld AND CrsCod=%ld",
 		   NumQsts,
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

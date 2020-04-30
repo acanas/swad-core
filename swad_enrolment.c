@@ -300,7 +300,7 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
    /***** Register last prefs in current course in database *****/
    DB_QueryINSERT ("can not register user in course",
 		   "INSERT INTO crs_usr_last"
-		   " (CrsCod,UsrCod,"
+		   " (UsrCod,CrsCod,"
 		   "LastDowGrpCod,LastComGrpCod,LastAssGrpCod,"
 		   "NumAccTst,LastAccTst,NumQstsLastTst,"
 		   "UsrListType,ColsClassPhoto,ListWithPhotos)"
@@ -309,7 +309,7 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 		   "-1,-1,-1,"
 		   "0,FROM_UNIXTIME(%ld),0,"
 		   "'%s',%u,'%c')",
-	           Gbl.Hierarchy.Crs.CrsCod,UsrDat->UsrCod,
+	           UsrDat->UsrCod,Gbl.Hierarchy.Crs.CrsCod,
 	           (long) (time_t) 0,	// The user never accessed to tests in this course
 	           Usr_StringsUsrListTypeInDB[Usr_SHOW_USRS_TYPE_DEFAULT],
 	           Usr_CLASS_PHOTO_COLS_DEF,
@@ -4137,8 +4137,8 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
       /***** Remove user from the tables of courses-users *****/
       DB_QueryDELETE ("can not remove a user from a course",
 		      "DELETE FROM crs_usr_last"
-		      " WHERE CrsCod=%ld AND UsrCod=%ld",
-                      Crs->CrsCod,UsrDat->UsrCod);
+		      " WHERE UsrCod=%ld AND CrsCod=%ld",
+                      UsrDat->UsrCod,Crs->CrsCod);
       DB_QueryDELETE ("can not remove a user from a course",
 		      "DELETE FROM crs_usr"
 		      " WHERE CrsCod=%ld AND UsrCod=%ld",

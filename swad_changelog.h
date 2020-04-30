@@ -544,10 +544,18 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.207 (2020-04-29)"
+#define Log_PLATFORM_VERSION	"SWAD 19.207.1 (2020-04-29)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.207.1: Apr 30, 2020	Optimization in table of last prefs on user-course. (300323 lines)
+					5 changes necessary in database:
+ALTER TABLE crs_usr CHANGE COLUMN CrsCod CrsCod INT NOT NULL;
+ALTER TABLE crs_usr_last CHANGE COLUMN CrsCod CrsCod INT NOT NULL AFTER UsrCod;
+ALTER TABLE crs_usr_last DROP INDEX CrsCod;
+OPTIMIZE TABLE crs_usr;
+OPTIMIZE TABLE crs_usr_last;
+
 	Version 19.207:   Apr 30, 2020	Table with inscriptions of users in courses is splitted into two tables for speed. (300323 lines)
 					8 changes necessary in database:
 RENAME TABLE crs_usr_old TO crs_usr_old_backup_delete_me;
