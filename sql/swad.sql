@@ -368,10 +368,24 @@ CREATE TABLE IF NOT EXISTS crs_records (
 -- Table crs_usr: stores who users belong to what courses
 --
 CREATE TABLE IF NOT EXISTS crs_usr (
-	CrsCod INT NOT NULL DEFAULT -1,
+	CrsCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	Role TINYINT NOT NULL DEFAULT 0,
 	Accepted ENUM('N','Y') NOT NULL DEFAULT 'N',
+	UNIQUE INDEX(CrsCod,UsrCod),
+	UNIQUE INDEX(CrsCod,UsrCod,Role),
+	UNIQUE INDEX(UsrCod,CrsCod),
+	UNIQUE INDEX(UsrCod,CrsCod,Role),
+	UNIQUE INDEX(Role,CrsCod,UsrCod),
+	UNIQUE INDEX(Role,UsrCod,CrsCod),
+	INDEX(CrsCod,Role),
+	INDEX(UsrCod,Role));
+--
+-- Table crs_usr_last: stores last prefs of users in courses
+--
+CREATE TABLE IF NOT EXISTS crs_usr_last (
+	UsrCod INT NOT NULL,
+	CrsCod INT NOT NULL,
 	LastDowGrpCod INT NOT NULL DEFAULT -1,
 	LastComGrpCod INT NOT NULL DEFAULT -1,
 	LastAssGrpCod INT NOT NULL DEFAULT -1,
@@ -381,10 +395,7 @@ CREATE TABLE IF NOT EXISTS crs_usr (
 	UsrListType ENUM('classphoto','list') NOT NULL DEFAULT 'classphoto',
 	ColsClassPhoto TINYINT NOT NULL,
 	ListWithPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',
-	UNIQUE INDEX(CrsCod,UsrCod,Role),
-	UNIQUE INDEX(UsrCod,CrsCod,Role),
-	INDEX(CrsCod,Role),
-	INDEX(UsrCod,Role));
+	UNIQUE INDEX(UsrCod,CrsCod));
 --
 -- Table crs_usr_requests: stores requests for enrollment in courses
 --

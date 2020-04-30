@@ -769,7 +769,6 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 				"'%s','%s','%s',"
 				"%ld,"
 				"'%s','%s',"
-				"'%s','%s','%s',"
 				"%s,'%s',"
 				"%u,%u,-1,0)",
 				UsrDat->EncryptedUsrCod,
