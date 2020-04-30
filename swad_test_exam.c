@@ -347,9 +347,9 @@ static void TstRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
       HTM_TxtColonNBSP (Txt_Score);
       HTM_SPAN_Begin ("class=\"%s\"",
 		      Result->Questions[NumQst].StrAnswers[0] ?
-		      (Result->Questions[NumQst].Score > 0 ? "ANS_OK" :	// Correct/semicorrect
-							   "ANS_BAD") :	// Wrong
-							   "ANS_0");	// Blank answer
+		      (Result->Questions[NumQst].Score > 0 ? "ANS_OK" :		// Correct/semicorrect
+							     "ANS_BAD") :	// Wrong
+							     "ANS_0");		// Blank answer
       HTM_Double2Decimals (Result->Questions[NumQst].Score);
       HTM_SPAN_End ();
       HTM_DIV_End ();
@@ -505,6 +505,7 @@ static void TstRes_ComputeFloatAnsScore (struct TstRes_Result *Result,
    if (Result->Questions[NumQst].AnswerIsNotBlank)	// If user has answered the answer
      {
       AnswerUsr = Str_GetDoubleFromStr (Result->Questions[NumQst].StrAnswers);
+
       // A bad formatted floating point answer will interpreted as 0.0
       Result->Questions[NumQst].Score = (AnswerUsr >= Question->Answer.FloatingPoint[0] &&
 				         AnswerUsr <= Question->Answer.FloatingPoint[1]) ? 1.0 : // If correct (inside the interval)
@@ -2307,17 +2308,20 @@ void TstRes_GetExamQuestionsFromDB (struct TstRes_Result *Result)
    MYSQL_ROW row;
    unsigned NumQsts;
    unsigned NumQst;
+   Tst_AnswerType_t AnswerType;
 
    /***** Get questions of a test exam from database *****/
    NumQsts =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions"
 					 " of a test exam",
-			      "SELECT QstCod,"	// row[0]
-			             "Indexes,"	// row[1]
-			             "Answers"	// row[2]
-			      " FROM tst_exam_questions"
-			      " WHERE ExaCod=%ld"
-			      " ORDER BY QstInd",
+			      "SELECT tst_exam_questions.QstCod,"	// row[0]
+				     "tst_questions.AnsType,"		// row[1]
+			             "tst_exam_questions.Indexes,"	// row[2]
+			             "tst_exam_questions.Answers"	// row[3]
+			      " FROM tst_exam_questions,tst_questions"
+			      " WHERE tst_exam_questions.ExaCod=%ld"
+			      " AND tst_exam_questions.QstCod=tst_questions.QstCod"
+			      " ORDER BY tst_exam_questions.QstInd",
 			      Result->ResCod);
 
    /***** List questions *****/
@@ -2330,22 +2334,28 @@ void TstRes_GetExamQuestionsFromDB (struct TstRes_Result *Result)
 	{
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get question code */
+	 /* Get question code (row[0]) */
 	 if ((Result->Questions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of question.");
 
-	 /* Get indexes for this question (row[1]) */
-	 Str_Copy (Result->Questions[NumQst].StrIndexes,row[1],
+	 /* Get answer type (row[1]) */
+         AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+
+	 /* Get indexes for this question (row[2]) */
+	 Str_Copy (Result->Questions[NumQst].StrIndexes,row[2],
 		   TstRes_MAX_BYTES_INDEXES_ONE_QST);
 
-	 /* Get answers selected by user for this question (row[2]) */
-	 Str_Copy (Result->Questions[NumQst].StrAnswers,row[2],
+	 /* Get answers selected by user for this question (row[3]) */
+	 Str_Copy (Result->Questions[NumQst].StrAnswers,row[3],
 		   TstRes_MAX_BYTES_ANSWERS_ONE_QST);
 
 	 /* Replace each comma by a separator of multiple parameters */
 	 /* In database commas are used as separators instead of special chars */
 	 Par_ReplaceCommaBySeparatorMultiple (Result->Questions[NumQst].StrIndexes);
-	 Par_ReplaceCommaBySeparatorMultiple (Result->Questions[NumQst].StrAnswers);
+	 if (AnswerType == Tst_ANS_MULTIPLE_CHOICE)
+	    // Only multiple choice questions have multiple answers separated by commas
+	    // Other types of questions have a unique answer, and comma may be part of that answer
+	    Par_ReplaceCommaBySeparatorMultiple (Result->Questions[NumQst].StrAnswers);
 	}
 
    /***** Free structure that stores the query result *****/

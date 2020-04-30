@@ -65,6 +65,8 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+#define Fig_MAX_BYTES_NAME 32
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -195,6 +197,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void);
 static void Fig_GetAndShowNumUsrsPerTheme (void);
 static void Fig_GetAndShowNumUsrsPerSideColumns (void);
 unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery);
+bool Fig_GetFigureFromCache (const char *Name);
 
 /*****************************************************************************/
 /************************** Show use of the platform *************************/
@@ -5671,4 +5674,14 @@ unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
      }
 
    return NumUsrs;
+  }
+
+/*****************************************************************************/
+/************** Get number of users who have chosen an option ****************/
+/*****************************************************************************/
+// Return true is figure is valid (if figure is cached and recently calculated)
+
+bool Fig_GetFigureFromCache (const char *Name)
+  {
+   return Name[0] ? true : false;
   }

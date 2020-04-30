@@ -1314,6 +1314,17 @@ mysql> DESCRIBE expanded_folders;
 		   "INDEX(FileBrowser,Cod),"
 		   "INDEX(WorksUsrCod))");
 
+   /***** Table figures *****/
+   /*
+mysql> DESCRIBE figures;
+
+   */
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS figures ("
+			"Name VARCHAR(32) NOT NULL,"	// Fig_MAX_BYTES_NAME
+			"Value INT NOT NULL,"
+			"CalcTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(Name))");
+
    /***** Table file_browser_last *****/
 /*
 mysql> DESCRIBE file_browser_last;

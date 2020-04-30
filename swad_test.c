@@ -2521,7 +2521,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
    const char *Ptr;
    char TagText[Tst_MAX_BYTES_TAG + 1];
    char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   Tst_AnswerType_t AnsType;
+   Tst_AnswerType_t AnswerType;
    bool Shuffle;
    char StrNumQsts[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    unsigned NumQst;
@@ -2593,15 +2593,15 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
       while (*Ptr)
         {
          Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Tst_MAX_BYTES_TAG);
-	 AnsType = Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
-         LengthQuery = LengthQuery + 35 + strlen (Tst_StrAnswerTypesDB[AnsType]) + 1;
+	 AnswerType = Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
+         LengthQuery = LengthQuery + 35 + strlen (Tst_StrAnswerTypesDB[AnswerType]) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 128)
             Lay_ShowErrorAndExit ("Query size exceed.");
          Str_Concat (Query,
                      NumItemInList ? " OR tst_questions.AnsType='" :
                                      " AND (tst_questions.AnsType='",
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,Tst_StrAnswerTypesDB[AnsType],
+         Str_Concat (Query,Tst_StrAnswerTypesDB[AnswerType],
                      Tst_MAX_BYTES_QUERY_TEST);
          Str_Concat (Query,"'",
                      Tst_MAX_BYTES_QUERY_TEST);
@@ -2647,13 +2647,13 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get answer type (row[1]) */
-      AnsType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+      AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
       /* Get shuffle (row[2]) */
       Shuffle = (row[2][0] == 'Y');
 
       /* Set indexes of answers */
-      switch (AnsType)
+      switch (AnswerType)
 	{
 	 case Tst_ANS_INT:
 	 case Tst_ANS_FLOAT:
