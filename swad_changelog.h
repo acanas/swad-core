@@ -544,10 +544,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.207.2 (2020-04-30)"
+#define Log_PLATFORM_VERSION	"SWAD 19.207.3 (2020-04-30)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.207.3: Apr 30, 2020	Fixed bug removing account. (300335 lines)
 	Version 19.207.2: Apr 30, 2020	Fixed bug creating account, reported by Antonio Becerra. (300334 lines)
 	Version 19.207.1: Apr 30, 2020	Optimization in table of last prefs on user-course. (300323 lines)
 					5 changes necessary in database:
