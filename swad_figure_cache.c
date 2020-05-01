@@ -103,7 +103,7 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
 		       "SELECT Value"
 		       " FROM figures"
 		       " WHERE Figure=%u AND Scope='%s' AND Cod=%ld"
-		       " AND LastUpdate<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+		       " AND LastUpdate>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 		       (unsigned) Figure,Sco_GetDBStrFromScope (Scope),Cod,
 		       FigCch_TIME_CACHE))
      {
