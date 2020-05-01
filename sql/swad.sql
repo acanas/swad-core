@@ -604,7 +604,8 @@ CREATE TABLE IF NOT EXISTS figures (
 	Figure INT NOT NULL,
 	Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',
 	Cod INT NOT NULL DEFAULT -1,
-	Value INT NOT NULL,
+	ValueInt INT NOT NULL DEFAULT 0,
+	ValueDouble DOUBLE PRECISION NOT NULL DEFAULT 0.0,
 	LastUpdate TIMESTAMP,
 	UNIQUE INDEX(Figure,Scope,Cod));
 --

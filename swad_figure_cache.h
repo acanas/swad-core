@@ -40,18 +40,35 @@ typedef enum
   {
    FigCch_UNKNOWN		=  0,	// Unknown figure
    //--------------------------------------------------------------------------
-   FigCch_NUM_STDS_IN_CRSS	=  1,	// Number of students in courses
-   FigCch_NUM_NETS_IN_CRSS	=  2,	// Number of non-editing teachers in courses
-   FigCch_NUM_TCHS_IN_CRSS	=  3,	// Number of teachers in courses
-   FigCch_NUM_USRS_IN_CRSS	=  4,	// Number of users in courses
+   FigCch_NUM_CTYS		=  1,	// Number of countries
+   FigCch_NUM_INSS		=  2,	// Number of institutions
+   FigCch_NUM_CTRS		=  3,	// Number of centres
+   FigCch_NUM_CTRS_WITH_MAP	=  4,	// Number of centres with map
+   FigCch_NUM_DEGS		=  5,	// Number of degrees
+   FigCch_NUM_CRSS		=  6,	// Number of courses
    //--------------------------------------------------------------------------
-   FigCch_NUM_CTYS		=  5,	// Number of countries
-   FigCch_NUM_INSS		=  6,	// Number of institutions
-   FigCch_NUM_CTRS		=  7,	// Number of centres
-   FigCch_NUM_CTRS_WITH_MAP	=  8,	// Number of centres with map
-   FigCch_NUM_DEGS		=  9,	// Number of degrees
-   FigCch_NUM_CRSS		= 10,	// Number of courses
+   FigCch_NUM_STDS_IN_CRSS	=  7,	// Number of students in courses
+   FigCch_NUM_NETS_IN_CRSS	=  8,	// Number of non-editing teachers in courses
+   FigCch_NUM_TCHS_IN_CRSS	=  9,	// Number of teachers in courses
+   FigCch_NUM_USRS_IN_CRSS	= 10,	// Number of users in courses
+   //--------------------------------------------------------------------------
+   FigCch_NUM_CRSS_PER_USR	= 11,	// Number of courses per user
+   FigCch_NUM_CRSS_PER_STD	= 12,	// Number of courses per student
+   FigCch_NUM_CRSS_PER_NET	= 13,	// Number of courses per non-editing teacher
+   FigCch_NUM_CRSS_PER_TCH	= 14,	// Number of courses per teacher
+   //--------------------------------------------------------------------------
+   FigCch_NUM_USRS_PER_CRS	= 15,	// Number of users per course
+   FigCch_NUM_STDS_PER_CRS	= 16,	// Number of students per course
+   FigCch_NUM_NETS_PER_CRS	= 17,	// Number of non-editing teachers per course
+   FigCch_NUM_TCHS_PER_CRS	= 18,	// Number of teachers per course
   } FigCch_FigureCached_t;
+
+#define FigCch_NUM_TYPES 2
+typedef enum
+  {
+   FigCch_Type_UNSIGNED,
+   FigCch_Type_DOUBLE,
+  } FigCch_Type_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -59,9 +76,9 @@ typedef enum
 
 void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
                                    Hie_Level_t Scope,long Cod,
-                                   unsigned Value);
+                                   FigCch_Type_t Type,const void *ValuePtr);
 bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
                                 Hie_Level_t Scope,long Cod,
-                                unsigned *Value);
+                                FigCch_Type_t Type,void *ValuePtr);
 
 #endif

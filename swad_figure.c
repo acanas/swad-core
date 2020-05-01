@@ -34,6 +34,7 @@
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_figure.h"
+#include "swad_figure_cache.h"
 #include "swad_file_browser.h"
 #include "swad_follow.h"
 #include "swad_form.h"
@@ -424,9 +425,54 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
   {
    extern const char *Txt_Total;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   static FigCch_FigureCached_t FigureNumUsrs[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = FigCch_NUM_USRS_IN_CRSS,	// Any users in courses
+      [Rol_GST	  ] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_USR	  ] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_STD	  ] = FigCch_NUM_STDS_IN_CRSS,	// Students
+      [Rol_NET    ] = FigCch_NUM_NETS_IN_CRSS,	// Non-editing teachers
+      [Rol_TCH	  ] = FigCch_NUM_TCHS_IN_CRSS,	// Teachers
+      [Rol_DEG_ADM] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_CTR_ADM] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_INS_ADM] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_SYS_ADM] = FigCch_UNKNOWN,		// Not applicable
+     };
+   static FigCch_FigureCached_t FigureNumCrssPerUsr[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = FigCch_NUM_CRSS_PER_USR,	// Number of courses per user
+      [Rol_GST	  ] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_USR	  ] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_STD	  ] = FigCch_NUM_CRSS_PER_STD,	// Number of courses per student
+      [Rol_NET    ] = FigCch_NUM_CRSS_PER_NET,	// Number of courses per non-editing teacher
+      [Rol_TCH	  ] = FigCch_NUM_CRSS_PER_TCH,	// Number of courses per teacher
+      [Rol_DEG_ADM] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_CTR_ADM] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_INS_ADM] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_SYS_ADM] = FigCch_UNKNOWN,		// Not applicable
+     };
+   static FigCch_FigureCached_t FigureNumUsrsPerCrs[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = FigCch_NUM_USRS_PER_CRS,	// Number of users per course
+      [Rol_GST	  ] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_USR	  ] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_STD	  ] = FigCch_NUM_STDS_PER_CRS,	// Number of students per course
+      [Rol_NET    ] = FigCch_NUM_NETS_PER_CRS,	// Number of non-editing teachers per course
+      [Rol_TCH	  ] = FigCch_NUM_TCHS_PER_CRS,	// Number of teachers per course
+      [Rol_DEG_ADM] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_CTR_ADM] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_INS_ADM] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_SYS_ADM] = FigCch_UNKNOWN,		// Not applicable
+     };
    unsigned NumUsrs;
    double NumCrssPerUsr;
    double NumUsrsPerCrs;
+   long Cod = (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Cty.CtyCod :
+	      (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Ins.InsCod :
+	      (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
+	      (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Deg.DegCod :
+	      (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Crs.CrsCod :
+					      -1L)))));
    char *Class = (Role == Rol_UNK) ? "DAT_N_LINE_TOP RB" :
 	                             "DAT RB";
    unsigned Roles = (Role == Rol_UNK) ? ((1 << Rol_STD) |
@@ -435,20 +481,34 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
 	                                 (1 << Role);
 
    /***** Get the number of users belonging to any course *****/
-   NumUsrs = Usr_GetNumUsrsInCrss (Gbl.Scope.Current,
-				  (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Cty.CtyCod :
-				  (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Ins.InsCod :
-				  (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
-				  (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Deg.DegCod :
-				  (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Crs.CrsCod :
-								  -1L))))),
-				   Roles);
+   if (!FigCch_GetFigureFromCache (FigureNumUsrs[Role],Gbl.Scope.Current,Cod,
+                                   FigCch_Type_UNSIGNED,&NumUsrs))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumUsrs = Usr_GetNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles);
+      FigCch_UpdateFigureIntoCache (FigureNumUsrs[Role],Gbl.Scope.Current,Cod,
+                                    FigCch_Type_UNSIGNED,&NumUsrs);
+     }
 
    /***** Get average number of courses per user *****/
-   NumCrssPerUsr = Usr_GetNumCrssPerUsr (Role);
+   if (!FigCch_GetFigureFromCache (FigureNumCrssPerUsr[Role],Gbl.Scope.Current,Cod,
+                                   FigCch_Type_DOUBLE,&NumCrssPerUsr))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumCrssPerUsr = Usr_GetNumCrssPerUsr (Gbl.Scope.Current,Cod,Role);
+      FigCch_UpdateFigureIntoCache (FigureNumCrssPerUsr[Role],Gbl.Scope.Current,Cod,
+                                    FigCch_Type_DOUBLE,&NumCrssPerUsr);
+     }
 
    /***** Query the number of users per course *****/
-   NumUsrsPerCrs = Usr_GetNumUsrsPerCrs (Role);
+   if (!FigCch_GetFigureFromCache (FigureNumUsrsPerCrs[Role],Gbl.Scope.Current,Cod,
+                                   FigCch_Type_DOUBLE,&NumUsrsPerCrs))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumUsrsPerCrs = Usr_GetNumUsrsPerCrs (Gbl.Scope.Current,Cod,Role);
+      FigCch_UpdateFigureIntoCache (FigureNumUsrsPerCrs[Role],Gbl.Scope.Current,Cod,
+                                    FigCch_Type_DOUBLE,&NumUsrsPerCrs);
+     }
 
    /***** Write the total number of users *****/
    HTM_TR_Begin (NULL);

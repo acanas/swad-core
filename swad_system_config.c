@@ -133,12 +133,12 @@ static void SysCfg_Configuration (bool PrintView)
 
    /***** Get number of centres with map *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_SYS,-1L,
-                                   &NumCtrsWithMap))
+                                   FigCch_Type_UNSIGNED,&NumCtrsWithMap))
      {
       // Not updated recently in cache ==> compute and update it in cache
       NumCtrsWithMap = Ctr_GetNumCtrsWithMapInSys ();
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_SYS,-1L,
-                                    NumCtrsWithMap);
+                                    FigCch_Type_UNSIGNED,&NumCtrsWithMap);
      }
 
    if (PrintView)
@@ -147,11 +147,13 @@ static void SysCfg_Configuration (bool PrintView)
    else
      {
       /***** Get number of centres *****/
-      if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS,Hie_SYS,-1L,&NumCtrs))
+      if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS,Hie_SYS,-1L,
+                                      FigCch_Type_UNSIGNED,&NumCtrs))
 	{
 	 // Not updated recently in cache ==> compute and update it in cache
 	 NumCtrs = Ctr_GetNumCtrsInSys ();
-	 FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_SYS,-1L,NumCtrs);
+	 FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_SYS,-1L,
+	                               FigCch_Type_UNSIGNED,&NumCtrs);
 	}
 
       /***** Number of countries,
@@ -364,11 +366,13 @@ static void SysCfg_NumCtys (void)
    HTM_TD_Begin ("class=\"LB\"");
    Frm_StartFormGoTo (ActSeeCty);
    HTM_BUTTON_SUBMIT_Begin (Txt_Countries,"BT_LINK DAT",NULL);
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS,Hie_SYS,-1L,&NumCtys))
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS,Hie_SYS,-1L,
+                                   FigCch_Type_UNSIGNED,&NumCtys))
      {
       // Not updated recently in cache ==> compute and update it in cache
       NumCtys = Cty_GetNumCtysTotal ();
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS,Hie_SYS,-1L,NumCtys);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS,Hie_SYS,-1L,
+                                    FigCch_Type_UNSIGNED,&NumCtys);
      }
    HTM_Unsigned (NumCtys);
    HTM_BUTTON_End ();
@@ -395,11 +399,13 @@ static void SysCfg_NumInss (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,Hie_SYS,-1L,&NumInss))
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,Hie_SYS,-1L,
+                                   FigCch_Type_UNSIGNED,&NumInss))
      {
       // Not updated recently in cache ==> compute and update it in cache
       NumInss = Ins_GetNumInssTotal ();
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,Hie_SYS,-1L,NumInss);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,Hie_SYS,-1L,
+                                    FigCch_Type_UNSIGNED,&NumInss);
      }
    HTM_Unsigned (NumInss);
    HTM_TD_End ();
@@ -424,11 +430,13 @@ static void SysCfg_NumDegs (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_SYS,-1L,&NumDegs))
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_SYS,-1L,
+                                   FigCch_Type_UNSIGNED,&NumDegs))
      {
       // Not updated recently in cache ==> compute and update it in cache
       NumDegs = Deg_GetNumDegsTotal ();
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_SYS,-1L,NumDegs);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_SYS,-1L,
+                                    FigCch_Type_UNSIGNED,&NumDegs);
      }
    HTM_Unsigned (NumDegs);
    HTM_TD_End ();
@@ -453,11 +461,13 @@ static void SysCfg_NumCrss (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_SYS,-1L,&NumCrss))
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_SYS,-1L,
+                                   FigCch_Type_UNSIGNED,&NumCrss))
      {
       // Not updated recently in cache ==> compute and update it in cache
       NumCrss = Crs_GetNumCrssTotal ();
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_SYS,-1L,NumCrss);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_SYS,-1L,
+                                    FigCch_Type_UNSIGNED,&NumCrss);
      }
    HTM_Unsigned (NumCrss);
    HTM_TD_End ();
@@ -499,7 +509,7 @@ static void SysCfg_NumUsrsInCrss (Rol_Role_t Role)
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
    if (!FigCch_GetFigureFromCache (Figure[Role],Hie_SYS,-1L,
-                                   &NumUsrsInCrss))
+                                   FigCch_Type_UNSIGNED,&NumUsrsInCrss))
      {
       // Not updated recently in cache ==> compute and update it in cache
       NumUsrsInCrss = Usr_GetNumUsrsInCrss (Hie_SYS,-1L,
@@ -508,7 +518,7 @@ static void SysCfg_NumUsrsInCrss (Rol_Role_t Role)
 							      (1 << Rol_TCH) :	// Any user
 							      (1 << Role));
       FigCch_UpdateFigureIntoCache (Figure[Role],Hie_SYS,-1L,
-                                    NumUsrsInCrss);
+                                    FigCch_Type_UNSIGNED,&NumUsrsInCrss);
      }
    HTM_Unsigned (NumUsrsInCrss);
    HTM_TD_End ();

@@ -9434,14 +9434,14 @@ unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void)
 /************ Get average number of courses with users of a role *************/
 /*****************************************************************************/
 
-double Usr_GetNumCrssPerUsr (Rol_Role_t Role)
+double Usr_GetNumCrssPerUsr (Hie_Level_t Scope,long Cod,Rol_Role_t Role)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    double NumCrssPerUsr;
 
    /***** Get number of courses per user from database *****/
-   switch (Gbl.Scope.Current)
+   switch (Scope)
      {
       case Hie_SYS:
 	 if (Role == Rol_UNK)	// Any user
@@ -9470,7 +9470,7 @@ double Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 			    " AND degrees.DegCod=courses.DegCod"
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
-			    Gbl.Hierarchy.Cty.CtyCod);
+			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
 			    "SELECT AVG(NumCrss) FROM "
@@ -9483,7 +9483,7 @@ double Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " AND crs_usr.Role=%u"
 			    " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
-			    Gbl.Hierarchy.Cty.CtyCod,
+			    Cod,
 			    (unsigned) Role);
          break;
       case Hie_INS:
@@ -9497,7 +9497,7 @@ double Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 			    " AND degrees.DegCod=courses.DegCod"
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
-			    Gbl.Hierarchy.Ins.InsCod);
+			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
 			    "SELECT AVG(NumCrss) FROM "
@@ -9509,7 +9509,7 @@ double Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " AND crs_usr.Role=%u"
 			    " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
-			    Gbl.Hierarchy.Ins.InsCod,
+			    Cod,
 			    (unsigned) Role);
          break;
       case Hie_CTR:
@@ -9522,7 +9522,7 @@ double Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 			    " AND degrees.DegCod=courses.DegCod"
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
-			    Gbl.Hierarchy.Ctr.CtrCod);
+			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
 			    "SELECT AVG(NumCrss) FROM "
@@ -9533,7 +9533,7 @@ double Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " AND crs_usr.Role=%u"
 			    " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
-			    Gbl.Hierarchy.Ctr.CtrCod,
+			    Cod,
 			    (unsigned) Role);
          break;
       case Hie_DEG:
@@ -9545,7 +9545,7 @@ double Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 			    " WHERE courses.DegCod=%ld"
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
-			    Gbl.Hierarchy.Deg.DegCod);
+			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
 			    "SELECT AVG(NumCrss) FROM "
@@ -9555,7 +9555,7 @@ double Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " AND crs_usr.Role=%u"
 			    " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
-			    Gbl.Hierarchy.Deg.DegCod,
+			    Cod,
 			    (unsigned) Role);
          break;
       case Hie_CRS:
@@ -9579,14 +9579,14 @@ double Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 /************ Get average number of courses with users of a type *************/
 /*****************************************************************************/
 
-double Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
+double Usr_GetNumUsrsPerCrs (Hie_Level_t Scope,long Cod,Rol_Role_t Role)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    double NumUsrsPerCrs;
 
    /***** Get number of users per course from database *****/
-   switch (Gbl.Scope.Current)
+   switch (Scope)
      {
       case Hie_SYS:
 	 if (Role == Rol_UNK)	// Any user
@@ -9615,7 +9615,7 @@ double Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 			    " AND degrees.DegCod=courses.DegCod"
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
-			    Gbl.Hierarchy.Cty.CtyCod);
+			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
 			    "SELECT AVG(NumUsrs) FROM "
@@ -9628,7 +9628,7 @@ double Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " AND crs_usr.Role=%u"
 			    " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
-			    Gbl.Hierarchy.Cty.CtyCod,
+			    Cod,
 			    (unsigned) Role);
          break;
       case Hie_INS:
@@ -9642,7 +9642,7 @@ double Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 			    " AND degrees.DegCod=courses.DegCod"
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
-			    Gbl.Hierarchy.Ins.InsCod);
+			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
 			    "SELECT AVG(NumUsrs) FROM "
@@ -9654,7 +9654,7 @@ double Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " AND crs_usr.Role=%u"
 			    " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
-			    Gbl.Hierarchy.Ins.InsCod,
+			    Cod,
 			    (unsigned) Role);
          break;
       case Hie_CTR:
@@ -9667,7 +9667,7 @@ double Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 			    " AND degrees.DegCod=courses.DegCod"
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
-			    Gbl.Hierarchy.Ctr.CtrCod);
+			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
 			    "SELECT AVG(NumUsrs) FROM "
@@ -9678,7 +9678,7 @@ double Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " AND crs_usr.Role=%u"
 			    " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
-			    Gbl.Hierarchy.Ctr.CtrCod,
+			    Cod,
 			    (unsigned) Role);
          break;
       case Hie_DEG:
@@ -9690,7 +9690,7 @@ double Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 			    " WHERE courses.DegCod=%ld"
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
-			    Gbl.Hierarchy.Deg.DegCod);
+			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
 			    "SELECT AVG(NumUsrs) FROM "
@@ -9700,11 +9700,11 @@ double Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " AND crs_usr.Role=%u"
 			    " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
-			    Gbl.Hierarchy.Deg.DegCod,
+			    Cod,
 			    (unsigned) Role);
          break;
       case Hie_CRS:
-	 return (double) Usr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,
+	 return (double) Usr_GetNumUsrsInCrss (Hie_CRS,Cod,
 				               Role == Rol_UNK ? 1 << Rol_STD |
 							         1 << Rol_NET |
 							         1 << Rol_TCH :	// Any user

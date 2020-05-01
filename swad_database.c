@@ -1317,22 +1317,24 @@ mysql> DESCRIBE expanded_folders;
    /***** Table figures *****/
    /*
 mysql> DESCRIBE figures;
-+------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
-| Field      | Type                                      | Null | Key | Default           | Extra                       |
-+------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
-| Figure     | int(11)                                   | NO   | PRI | NULL              |                             |
-| Scope      | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | PRI | Sys               |                             |
-| Cod        | int(11)                                   | NO   | PRI | -1                |                             |
-| Value      | int(11)                                   | NO   |     | NULL              |                             |
-| LastUpdate | timestamp                                 | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
-+------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
-5 rows in set (0.01 sec)
++-------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
+| Field       | Type                                      | Null | Key | Default           | Extra                       |
++-------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
+| Figure      | int(11)                                   | NO   | PRI | NULL              |                             |
+| Scope       | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | PRI | Sys               |                             |
+| Cod         | int(11)                                   | NO   | PRI | -1                |                             |
+| ValueInt    | int(11)                                   | NO   |     | 0                 |                             |
+| ValueDouble | double                                    | NO   |     | 0                 |                             |
+| LastUpdate  | timestamp                                 | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
+6 rows in set (0.00 sec)
    */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS figures ("
 			"Figure INT NOT NULL,"
 			"Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',"
 			"Cod INT NOT NULL DEFAULT -1,"
-			"Value INT NOT NULL,"
+			"ValueInt INT NOT NULL,"
+			"ValueDouble DOUBLE PRECISION NOT NULL,"
 			"LastUpdate TIMESTAMP,"
 		   "UNIQUE INDEX(Figure,Scope,Cod))");
 

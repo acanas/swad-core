@@ -64,19 +64,34 @@
 
 void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
                                    Hie_Level_t Scope,long Cod,
-                                   unsigned Value)
+                                   FigCch_Type_t Type,const void *ValuePtr)
   {
    /***** Trivial check *****/
    if (Figure == FigCch_UNKNOWN)
       return;
 
    /***** Update figure's value in database *****/
-   DB_QueryREPLACE ("can not update cached figure value",
-		    "REPLACE INTO figures"
-		    " (Figure,Scope,Cod,Value)"
-		    " VALUES"
-		    " (%u,'%s',%ld,%u)",
-		    (unsigned) Figure,Sco_GetDBStrFromScope (Scope),Cod,Value);
+   switch (Type)
+     {
+      case FigCch_Type_UNSIGNED:
+	 DB_QueryREPLACE ("can not update cached figure value",
+			  "REPLACE INTO figures"
+			  " (Figure,Scope,Cod,ValueInt)"
+			  " VALUES"
+			  " (%u,'%s',%ld,%u)",
+			  (unsigned) Figure,Sco_GetDBStrFromScope (Scope),Cod,
+			  *((unsigned *) ValuePtr));
+	 break;
+      case FigCch_Type_DOUBLE:
+	 DB_QueryREPLACE ("can not update cached figure value",
+			  "REPLACE INTO figures"
+			  " (Figure,Scope,Cod,ValueDouble)"
+			  " VALUES"
+			  " (%u,'%s',%ld,%.15lg)",
+			  (unsigned) Figure,Sco_GetDBStrFromScope (Scope),Cod,
+			  *((double *) ValuePtr));
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -86,13 +101,27 @@ void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
 
 bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
                                 Hie_Level_t Scope,long Cod,
-                                unsigned *Value)
+                                FigCch_Type_t Type,void *ValuePtr)
   {
+   static const char *Field[FigCch_NUM_TYPES] =
+     {
+      [FigCch_Type_UNSIGNED] = "ValueInt",
+      [FigCch_Type_DOUBLE  ] = "ValueDouble",
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool Found = false;
 
-   *Value = 0;	// Default value when not found
+   /***** Set default value when not found *****/
+   switch (Type)
+     {
+      case FigCch_Type_UNSIGNED:
+         *((unsigned *) ValuePtr) = 0;
+	 break;
+      case FigCch_Type_DOUBLE:
+         *((double *) ValuePtr) = 0.0;
+	 break;
+     }
 
    /***** Trivial check *****/
    if (Figure == FigCch_UNKNOWN)
@@ -100,10 +129,11 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
 
    /***** Get figure's value if cached and recent *****/
    if (DB_QuerySELECT (&mysql_res,"can not get cached figure value",
-		       "SELECT Value"
+		       "SELECT %s"
 		       " FROM figures"
 		       " WHERE Figure=%u AND Scope='%s' AND Cod=%ld"
 		       " AND LastUpdate>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+		       Field[Type],
 		       (unsigned) Figure,Sco_GetDBStrFromScope (Scope),Cod,
 		       FigCch_TIME_CACHE))
      {
@@ -112,8 +142,19 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
 
       /* Get value (row[0]) */
       if (row[0])
-	 if (sscanf (row[0],"%u",Value) == 1)
-            Found = true;
+	{
+	 switch (Type)
+	   {
+	    case FigCch_Type_UNSIGNED:
+	       if (sscanf (row[0],"%u",(unsigned *) ValuePtr) == 1)
+		  Found = true;
+	       break;
+	    case FigCch_Type_DOUBLE:
+	       if (sscanf (row[0],"%lf",(double *) ValuePtr) == 1)
+		  Found = true;
+	       break;
+	   }
+	}
      }
 
    /***** Free structure that stores the query result *****/
