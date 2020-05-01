@@ -544,14 +544,15 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.209 (2020-05-01)"
+#define Log_PLATFORM_VERSION	"SWAD 19.209.1 (2020-05-01)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.209.1: May 01, 2020  Fixed bug in figures cached. (? lines)
 	Version 19.209:   May 01, 2020  More figures cached. (300734 lines)
 					3 changes necessary in database:
 ALTER TABLE figures CHANGE COLUMN Value ValueInt INT NOT NULL DEFAULT 0;
-ALTER TABLE figures ADD COLUMN ValueDouble DOUBLE PRECISION NOT NULL DEFAULT 0.0 AFTER ValueInt;
+ALTER TABLE figures ADD COLUMN ValueDouble DOUBLE PRECISION NOT NULL DEFAULT 0 AFTER ValueInt;
 DELETE FROM figures;
 
 	Version 19.208.1: May 01, 2020  Fixed bug in cache of figures. (300599 lines)

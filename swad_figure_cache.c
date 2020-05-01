@@ -76,18 +76,18 @@ void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
       case FigCch_Type_UNSIGNED:
 	 DB_QueryREPLACE ("can not update cached figure value",
 			  "REPLACE INTO figures"
-			  " (Figure,Scope,Cod,ValueInt)"
+			  " (Figure,Scope,Cod,ValueInt,ValueDouble)"
 			  " VALUES"
-			  " (%u,'%s',%ld,%u)",
+			  " (%u,'%s',%ld,%u,'0.0')",
 			  (unsigned) Figure,Sco_GetDBStrFromScope (Scope),Cod,
 			  *((unsigned *) ValuePtr));
 	 break;
       case FigCch_Type_DOUBLE:
 	 DB_QueryREPLACE ("can not update cached figure value",
 			  "REPLACE INTO figures"
-			  " (Figure,Scope,Cod,ValueDouble)"
+			  " (Figure,Scope,Cod,ValueInt,ValueDouble)"
 			  " VALUES"
-			  " (%u,'%s',%ld,%.15lg)",
+			  " (%u,'%s',%ld,0,'%.15lg')",
 			  (unsigned) Figure,Sco_GetDBStrFromScope (Scope),Cod,
 			  *((double *) ValuePtr));
 	 break;
