@@ -36,6 +36,7 @@
 #include "swad_config.h"
 #include "swad_course.h"
 #include "swad_database.h"
+#include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_help.h"
 #include "swad_hierarchy.h"
@@ -130,13 +131,28 @@ static void SysCfg_Configuration (bool PrintView)
    /***** Shortcut to the country *****/
    SysCfg_Shortcut (PrintView);
 
-   NumCtrsWithMap = Ctr_GetNumCtrsWithMapInSys ();
+   /***** Get number of centres with map *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_SYS,-1L,
+                                   &NumCtrsWithMap))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumCtrsWithMap = Ctr_GetNumCtrsWithMapInSys ();
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_SYS,-1L,
+                                    NumCtrsWithMap);
+     }
+
    if (PrintView)
       /***** QR code with link to the country *****/
       SysCfg_QR ();
    else
      {
-      NumCtrs = Ctr_GetNumCtrsInSys ();
+      /***** Get number of centres *****/
+      if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS,Hie_SYS,-1L,&NumCtrs))
+	{
+	 // Not updated recently in cache ==> compute and update it in cache
+	 NumCtrs = Ctr_GetNumCtrsInSys ();
+	 FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_SYS,-1L,NumCtrs);
+	}
 
       /***** Number of countries,
              number of institutions,
@@ -336,6 +352,7 @@ static void SysCfg_QR (void)
 static void SysCfg_NumCtys (void)
   {
    extern const char *Txt_Countries;
+   unsigned NumCtys;
 
    /***** Number of countries ******/
    HTM_TR_Begin (NULL);
@@ -347,7 +364,13 @@ static void SysCfg_NumCtys (void)
    HTM_TD_Begin ("class=\"LB\"");
    Frm_StartFormGoTo (ActSeeCty);
    HTM_BUTTON_SUBMIT_Begin (Txt_Countries,"BT_LINK DAT",NULL);
-   HTM_Unsigned (Cty_GetNumCtysTotal ());
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS,Hie_SYS,-1L,&NumCtys))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumCtys = Cty_GetNumCtysTotal ();
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS,Hie_SYS,-1L,NumCtys);
+     }
+   HTM_Unsigned (NumCtys);
    HTM_BUTTON_End ();
    Frm_EndForm ();
    HTM_TD_End ();
@@ -362,6 +385,7 @@ static void SysCfg_NumCtys (void)
 static void SysCfg_NumInss (void)
   {
    extern const char *Txt_Institutions;
+   unsigned NumInss;
 
    /***** Number of institutions ******/
    HTM_TR_Begin (NULL);
@@ -371,7 +395,13 @@ static void SysCfg_NumInss (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Ins_GetNumInssTotal ());
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,Hie_SYS,-1L,&NumInss))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumInss = Ins_GetNumInssTotal ();
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,Hie_SYS,-1L,NumInss);
+     }
+   HTM_Unsigned (NumInss);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -384,6 +414,7 @@ static void SysCfg_NumInss (void)
 static void SysCfg_NumDegs (void)
   {
    extern const char *Txt_Degrees;
+   unsigned NumDegs;
 
    /***** Number of degrees *****/
    HTM_TR_Begin (NULL);
@@ -393,7 +424,13 @@ static void SysCfg_NumDegs (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Deg_GetNumDegsTotal ());
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_SYS,-1L,&NumDegs))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumDegs = Deg_GetNumDegsTotal ();
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_SYS,-1L,NumDegs);
+     }
+   HTM_Unsigned (NumDegs);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -406,6 +443,7 @@ static void SysCfg_NumDegs (void)
 static void SysCfg_NumCrss (void)
   {
    extern const char *Txt_Courses;
+   unsigned NumCrss;
 
    /***** Number of courses *****/
    HTM_TR_Begin (NULL);
@@ -415,7 +453,13 @@ static void SysCfg_NumCrss (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Crs_GetNumCrssTotal ());
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_SYS,-1L,&NumCrss))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumCrss = Crs_GetNumCrssTotal ();
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_SYS,-1L,NumCrss);
+     }
+   HTM_Unsigned (NumCrss);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -429,6 +473,20 @@ static void SysCfg_NumUsrsInCrss (Rol_Role_t Role)
   {
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   unsigned NumUsrsInCrss;
+   static FigCch_FigureCached_t Figure[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = FigCch_NUM_USRS_IN_CRSS,	// Any users in courses
+      [Rol_GST	  ] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_USR	  ] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_STD	  ] = FigCch_NUM_STDS_IN_CRSS,	// Students
+      [Rol_NET    ] = FigCch_NUM_NETS_IN_CRSS,	// Non-editing teachers
+      [Rol_TCH	  ] = FigCch_NUM_TCHS_IN_CRSS,	// Teachers
+      [Rol_DEG_ADM] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_CTR_ADM] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_INS_ADM] = FigCch_UNKNOWN,		// Not applicable
+      [Rol_SYS_ADM] = FigCch_UNKNOWN,		// Not applicable
+     };
 
    /***** Number of users in courses *****/
    HTM_TR_Begin (NULL);
@@ -440,11 +498,19 @@ static void SysCfg_NumUsrsInCrss (Rol_Role_t Role)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_SYS,-1L,
-				       Role == Rol_UNK ? (1 << Rol_STD) |
-							 (1 << Rol_NET) |
-							 (1 << Rol_TCH) :	// Any user
-							 (1 << Role)));
+   if (!FigCch_GetFigureFromCache (Figure[Role],Hie_SYS,-1L,
+                                   &NumUsrsInCrss))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumUsrsInCrss = Usr_GetNumUsrsInCrss (Hie_SYS,-1L,
+					    Role == Rol_UNK ? (1 << Rol_STD) |
+							      (1 << Rol_NET) |
+							      (1 << Rol_TCH) :	// Any user
+							      (1 << Role));
+      FigCch_UpdateFigureIntoCache (Figure[Role],Hie_SYS,-1L,
+                                    NumUsrsInCrss);
+     }
+   HTM_Unsigned (NumUsrsInCrss);
    HTM_TD_End ();
 
    HTM_TR_End ();

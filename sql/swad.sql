@@ -598,6 +598,16 @@ CREATE TABLE IF NOT EXISTS expanded_folders (
 	INDEX(FileBrowser,Cod),
 	INDEX(WorksUsrCod));
 --
+-- Table figures: stores cached figures for quick retrieval of figures (i.e. number of students in the platform)
+--
+CREATE TABLE IF NOT EXISTS figures (
+	Figure INT NOT NULL,
+	Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',
+	Cod INT NOT NULL DEFAULT -1,
+	Value INT NOT NULL,
+	LastUpdate TIMESTAMP,
+	UNIQUE INDEX(Figure,Scope,Cod));
+--
 -- Table file_browser_last: stores the last click of every user in each file browser zone
 --
 CREATE TABLE IF NOT EXISTS file_browser_last (

@@ -1317,13 +1317,24 @@ mysql> DESCRIBE expanded_folders;
    /***** Table figures *****/
    /*
 mysql> DESCRIBE figures;
-
++------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
+| Field      | Type                                      | Null | Key | Default           | Extra                       |
++------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
+| Figure     | int(11)                                   | NO   | PRI | NULL              |                             |
+| Scope      | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | PRI | Sys               |                             |
+| Cod        | int(11)                                   | NO   | PRI | -1                |                             |
+| Value      | int(11)                                   | NO   |     | NULL              |                             |
+| LastUpdate | timestamp                                 | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
+5 rows in set (0.01 sec)
    */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS figures ("
-			"Name VARCHAR(32) NOT NULL,"	// Fig_MAX_BYTES_NAME
+			"Figure INT NOT NULL,"
+			"Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',"
+			"Cod INT NOT NULL DEFAULT -1,"
 			"Value INT NOT NULL,"
-			"CalcTime DATETIME NOT NULL,"
-		   "UNIQUE INDEX(Name))");
+			"LastUpdate TIMESTAMP,"
+		   "UNIQUE INDEX(Figure,Scope,Cod))");
 
    /***** Table file_browser_last *****/
 /*

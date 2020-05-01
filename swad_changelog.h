@@ -544,10 +544,16 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.207.4 (2020-04-30)"
+#define Log_PLATFORM_VERSION	"SWAD 19.208 (2020-05-01)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.208:   May 01, 2020	Optimization in table of last prefs on user-course. (300598 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS figures (Figure INT NOT NULL,Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',Cod INT NOT NULL DEFAULT -1,Value INT NOT NULL,LastUpdate TIMESTAMP,UNIQUE INDEX(Figure,Scope,Cod));
+					If you want to use MyISAM:
+ALTER TABLE figures ENGINE=MyISAM;
+
 	Version 19.207.4: Apr 30, 2020	Fixed bug in test result, reported by Mancia Anguita López. (300363 lines)
 	Version 19.207.3: Apr 30, 2020	Fixed bug removing account. (300335 lines)
 	Version 19.207.2: Apr 30, 2020	Fixed bug creating account, reported by Antonio Becerra. (300334 lines)
