@@ -544,10 +544,15 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.209.1 (2020-05-01)"
+#define Log_PLATFORM_VERSION	"SWAD 19.209.3 (2020-05-01)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.209.3: May 01, 2020  More figures cached. (300750 lines)
+					1 change necessary in database:
+DELETE FROM figures;
+
+	Version 19.209.2: May 01, 2020  Fixed bug in figures cached. (300737 lines)
 	Version 19.209.1: May 01, 2020  Fixed bug in figures cached. (? lines)
 	Version 19.209:   May 01, 2020  More figures cached. (300734 lines)
 					3 changes necessary in database:

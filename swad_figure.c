@@ -540,6 +540,7 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
 static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
   {
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   unsigned NumGsts;
    char *Class = "DAT RB";
 
    /***** Write the total number of users not belonging to any course *****/
@@ -550,7 +551,15 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Unsigned (Usr_GetNumUsrsNotBelongingToAnyCrs ());
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_GSTS,Hie_SYS,-1L,
+                                   FigCch_Type_UNSIGNED,&NumGsts))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumGsts = Usr_GetNumUsrsNotBelongingToAnyCrs ();
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_GSTS,Hie_SYS,-1L,
+                                    FigCch_Type_UNSIGNED,&NumGsts);
+     }
+   HTM_Unsigned (NumGsts);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);

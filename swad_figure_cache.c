@@ -25,10 +25,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-//#define _GNU_SOURCE 		// For asprintf
 #include <stdio.h>		// For sscanf
-//#include <stdlib.h>		// For system, getenv, etc.
-//#include <string.h>		// For string functions
 
 #include "swad_database.h"
 #include "swad_figure_cache.h"
@@ -83,6 +80,7 @@ void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
 			  *((unsigned *) ValuePtr));
 	 break;
       case FigCch_Type_DOUBLE:
+         Str_SetDecimalPointToUS ();	// To write the decimal point as a dot
 	 DB_QueryREPLACE ("can not update cached figure value",
 			  "REPLACE INTO figures"
 			  " (Figure,Scope,Cod,ValueInt,ValueDouble)"
@@ -90,6 +88,7 @@ void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
 			  " (%u,'%s',%ld,0,'%.15lg')",
 			  (unsigned) Figure,Sco_GetDBStrFromScope (Scope),Cod,
 			  *((double *) ValuePtr));
+         Str_SetDecimalPointToLocal ();	// Return to local system
 	 break;
      }
   }
@@ -150,8 +149,10 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
 		  Found = true;
 	       break;
 	    case FigCch_Type_DOUBLE:
+               Str_SetDecimalPointToUS ();	// To write the decimal point as a dot
 	       if (sscanf (row[0],"%lf",(double *) ValuePtr) == 1)
 		  Found = true;
+               Str_SetDecimalPointToLocal ();	// Return to local system
 	       break;
 	   }
 	}

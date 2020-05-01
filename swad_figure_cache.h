@@ -51,16 +51,17 @@ typedef enum
    FigCch_NUM_NETS_IN_CRSS	=  8,	// Number of non-editing teachers in courses
    FigCch_NUM_TCHS_IN_CRSS	=  9,	// Number of teachers in courses
    FigCch_NUM_USRS_IN_CRSS	= 10,	// Number of users in courses
+   FigCch_NUM_GSTS		= 11,	// Number of guests (users not belonging to any course)
    //--------------------------------------------------------------------------
-   FigCch_NUM_CRSS_PER_USR	= 11,	// Number of courses per user
-   FigCch_NUM_CRSS_PER_STD	= 12,	// Number of courses per student
-   FigCch_NUM_CRSS_PER_NET	= 13,	// Number of courses per non-editing teacher
-   FigCch_NUM_CRSS_PER_TCH	= 14,	// Number of courses per teacher
+   FigCch_NUM_CRSS_PER_USR	= 12,	// Number of courses per user
+   FigCch_NUM_CRSS_PER_STD	= 13,	// Number of courses per student
+   FigCch_NUM_CRSS_PER_NET	= 14,	// Number of courses per non-editing teacher
+   FigCch_NUM_CRSS_PER_TCH	= 15,	// Number of courses per teacher
    //--------------------------------------------------------------------------
-   FigCch_NUM_USRS_PER_CRS	= 15,	// Number of users per course
-   FigCch_NUM_STDS_PER_CRS	= 16,	// Number of students per course
-   FigCch_NUM_NETS_PER_CRS	= 17,	// Number of non-editing teachers per course
-   FigCch_NUM_TCHS_PER_CRS	= 18,	// Number of teachers per course
+   FigCch_NUM_USRS_PER_CRS	= 16,	// Number of users per course
+   FigCch_NUM_STDS_PER_CRS	= 17,	// Number of students per course
+   FigCch_NUM_NETS_PER_CRS	= 18,	// Number of non-editing teachers per course
+   FigCch_NUM_TCHS_PER_CRS	= 19,	// Number of teachers per course
   } FigCch_FigureCached_t;
 
 #define FigCch_NUM_TYPES 2
