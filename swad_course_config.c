@@ -73,7 +73,6 @@ static void CrsCfg_InstitutionalCode (bool PutForm);
 static void CrsCfg_InternalCode (void);
 static void CrsCfg_Shortcut (bool PrintView);
 static void CrsCfg_QR (void);
-static void CrsCfg_NumUsrsInCrs (Rol_Role_t Role);
 static void CrsCfg_Indicators (void);
 
 static void CrsCfg_UpdateCrsDegDB (long CrsCod,long DegCod);
@@ -159,9 +158,10 @@ void CrsCfg_Configuration (bool PrintView)
    else
      {
       /***** Number of users *****/
-      CrsCfg_NumUsrsInCrs (Rol_TCH);
-      CrsCfg_NumUsrsInCrs (Rol_NET);
-      CrsCfg_NumUsrsInCrs (Rol_STD);
+      HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_TCH);
+      HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_NET);
+      HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_STD);
+      HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_UNK);
 
       /***** Indicators *****/
       CrsCfg_Indicators ();
@@ -414,32 +414,6 @@ static void CrsCfg_Shortcut (bool PrintView)
 static void CrsCfg_QR (void)
   {
    HieCfg_QR ("crs",Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
-/*********************** Number of users in this course **********************/
-/*****************************************************************************/
-
-static void CrsCfg_NumUsrsInCrs (Rol_Role_t Role)
-  {
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-
-   /***** Number of users in course *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,
-				       Role == Rol_UNK ? 1 << Rol_STD |
-							 1 << Rol_NET |
-							 1 << Rol_TCH :	// Any user
-							 1 << Role));
-   HTM_TD_End ();
-
-   HTM_TR_End ();
   }
 
 /*****************************************************************************/

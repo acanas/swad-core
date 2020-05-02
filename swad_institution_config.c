@@ -79,7 +79,6 @@ static void InsCfg_NumUsrs (void);
 static void InsCfg_NumDegs (void);
 static void InsCfg_NumCrss (void);
 static void InsCfg_NumDpts (void);
-static void InsCfg_NumUsrsInCrssOfIns (Rol_Role_t Role);
 static void InsCfg_UpdateInsCtyDB (long InsCod,long CtyCod);
 
 /*****************************************************************************/
@@ -182,10 +181,10 @@ static void InsCfg_Configuration (bool PrintView)
       InsCfg_NumDpts ();
 
       /***** Number of users in courses of this institution *****/
-      InsCfg_NumUsrsInCrssOfIns (Rol_TCH);
-      InsCfg_NumUsrsInCrssOfIns (Rol_NET);
-      InsCfg_NumUsrsInCrssOfIns (Rol_STD);
-      InsCfg_NumUsrsInCrssOfIns (Rol_UNK);
+      HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Ins.InsCod,Rol_TCH);
+      HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Ins.InsCod,Rol_NET);
+      HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Ins.InsCod,Rol_STD);
+      HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Ins.InsCod,Rol_UNK);
      }
 
    /***** End table *****/
@@ -538,35 +537,6 @@ static void InsCfg_NumDpts (void)
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Dpt_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************** Number of users in courses of this institution ***************/
-/*****************************************************************************/
-
-static void InsCfg_NumUsrsInCrssOfIns (Rol_Role_t Role)
-  {
-   extern const char *Txt_Users_in_courses;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-
-   /***** Number of users in courses *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,
-		    Role == Rol_UNK ? Txt_Users_in_courses :
-		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Ins.InsCod,
-				       Role == Rol_UNK ? 1 << Rol_STD |
-							 1 << Rol_NET |
-							 1 << Rol_TCH :	// Any user
-							 1 << Role));
    HTM_TD_End ();
 
    HTM_TR_End ();

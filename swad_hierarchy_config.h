@@ -56,5 +56,6 @@ void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod);
 void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm);
 void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap);
 void HieCfg_QR (const char *ParamName,long HieCod);
+void HieCfg_NumUsrsInCrss (Hie_Level_t Scope,long Cod,Rol_Role_t Role);
 
 #endif

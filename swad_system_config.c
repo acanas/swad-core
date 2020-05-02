@@ -76,7 +76,6 @@ static void SysCfg_NumCtys (void);
 static void SysCfg_NumInss (void);
 static void SysCfg_NumDegs (void);
 static void SysCfg_NumCrss (void);
-static void SysCfg_NumUsrsInCrss (Rol_Role_t Role);
 
 /*****************************************************************************/
 /***************** Show information of the current country *******************/
@@ -170,10 +169,10 @@ static void SysCfg_Configuration (bool PrintView)
       SysCfg_NumCrss ();
 
       /***** Number of users in courses of this country *****/
-      SysCfg_NumUsrsInCrss (Rol_TCH);
-      SysCfg_NumUsrsInCrss (Rol_NET);
-      SysCfg_NumUsrsInCrss (Rol_STD);
-      SysCfg_NumUsrsInCrss (Rol_UNK);
+      HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_TCH);
+      HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_NET);
+      HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_STD);
+      HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_UNK);
      }
 
    /***** End table *****/
@@ -470,57 +469,6 @@ static void SysCfg_NumCrss (void)
                                     FigCch_Type_UNSIGNED,&NumCrss);
      }
    HTM_Unsigned (NumCrss);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/***************** Number of users in courses of the system ******************/
-/*****************************************************************************/
-
-static void SysCfg_NumUsrsInCrss (Rol_Role_t Role)
-  {
-   extern const char *Txt_Users_in_courses;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   unsigned NumUsrsInCrss;
-   static FigCch_FigureCached_t Figure[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK	  ] = FigCch_NUM_USRS_IN_CRSS,	// Any users in courses
-      [Rol_GST	  ] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_USR	  ] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_STD	  ] = FigCch_NUM_STDS_IN_CRSS,	// Students
-      [Rol_NET    ] = FigCch_NUM_NETS_IN_CRSS,	// Non-editing teachers
-      [Rol_TCH	  ] = FigCch_NUM_TCHS_IN_CRSS,	// Teachers
-      [Rol_DEG_ADM] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_CTR_ADM] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_INS_ADM] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_SYS_ADM] = FigCch_UNKNOWN,		// Not applicable
-     };
-
-   /***** Number of users in courses *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,
-		    Role == Rol_UNK ? Txt_Users_in_courses :
-		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (!FigCch_GetFigureFromCache (Figure[Role],Hie_SYS,-1L,
-                                   FigCch_Type_UNSIGNED,&NumUsrsInCrss))
-     {
-      // Not updated recently in cache ==> compute and update it in cache
-      NumUsrsInCrss = Usr_GetNumUsrsInCrss (Hie_SYS,-1L,
-					    Role == Rol_UNK ? (1 << Rol_STD) |
-							      (1 << Rol_NET) |
-							      (1 << Rol_TCH) :	// Any user
-							      (1 << Role));
-      FigCch_UpdateFigureIntoCache (Figure[Role],Hie_SYS,-1L,
-                                    FigCch_Type_UNSIGNED,&NumUsrsInCrss);
-     }
-   HTM_Unsigned (NumUsrsInCrss);
    HTM_TD_End ();
 
    HTM_TR_End ();

@@ -75,7 +75,6 @@ static void CtyCfg_NumUsrs (void);
 static void CtyCfg_NumInss (void);
 static void CtyCfg_NumDegs (void);
 static void CtyCfg_NumCrss (void);
-static void CtyCfg_NumUsrsInCrssOfCty (Rol_Role_t Role);
 
 static void CtyCfg_GetMapAttr (long CtyCod,char **MapAttribution);
 static void CtyCfg_FreeMapAttr (char **MapAttribution);
@@ -170,10 +169,10 @@ static void CtyCfg_Configuration (bool PrintView)
       CtyCfg_NumCrss ();
 
       /***** Number of users in courses of this country *****/
-      CtyCfg_NumUsrsInCrssOfCty (Rol_TCH);
-      CtyCfg_NumUsrsInCrssOfCty (Rol_NET);
-      CtyCfg_NumUsrsInCrssOfCty (Rol_STD);
-      CtyCfg_NumUsrsInCrssOfCty (Rol_UNK);
+      HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_TCH);
+      HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_NET);
+      HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_STD);
+      HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_UNK);
      }
 
    /***** End table *****/
@@ -560,35 +559,6 @@ static void CtyCfg_NumCrss (void)
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
    HTM_Unsigned (Crs_GetNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod));
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/**************** Number of users in courses of this country *****************/
-/*****************************************************************************/
-
-static void CtyCfg_NumUsrsInCrssOfCty (Rol_Role_t Role)
-  {
-   extern const char *Txt_Users_in_courses;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-
-   /***** Number of users in courses *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,
-		    Role == Rol_UNK ? Txt_Users_in_courses :
-		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Cty.CtyCod,
-				       Role == Rol_UNK ? 1 << Rol_STD |
-							 1 << Rol_NET |
-							 1 << Rol_TCH :	// Any user
-							 1 << Role));
    HTM_TD_End ();
 
    HTM_TR_End ();
