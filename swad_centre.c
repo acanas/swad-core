@@ -34,6 +34,7 @@
 #include "swad_centre_config.h"
 #include "swad_database.h"
 #include "swad_figure.h"
+#include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
@@ -360,6 +361,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
+   unsigned NumUsrsInCrss;
    Ctr_StatusTxt_t StatusTxt;
 
    /***** Get data of place of this centre *****/
@@ -414,10 +416,18 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    /***** Number of users in courses of this centre *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_CTR,Ctr->CtrCod,
-				       1 << Rol_STD |
-				       1 << Rol_NET |
-				       1 << Rol_TCH));	// Any user
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_IN_CRSS,Hie_CTR,Ctr->CtrCod,
+                                   FigCch_Type_UNSIGNED,&NumUsrsInCrss))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumUsrsInCrss = Usr_GetNumUsrsInCrss (Hie_CTR,Ctr->CtrCod,
+				            1 << Rol_STD |
+				            1 << Rol_NET |
+				            1 << Rol_TCH);	// Any user
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_IN_CRSS,Hie_CTR,Ctr->CtrCod,
+                                    FigCch_Type_UNSIGNED,&NumUsrsInCrss);
+     }
+   HTM_Unsigned (NumUsrsInCrss);
    HTM_TD_End ();
 
    /***** Centre status *****/
@@ -939,6 +949,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct UsrData UsrDat;
    bool ICanEdit;
+   unsigned NumDegs;
    unsigned NumUsrsInCrssOfCtr;
    Ctr_StatusTxt_t StatusTxt;
    unsigned StatusUnsigned;
@@ -958,6 +969,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
       Ctr = &Gbl.Hierarchy.Ctrs.Lst[NumCtr];
 
       ICanEdit = Ctr_CheckIfICanEditACentre (Ctr);
+      NumDegs = Deg_GetNumDegsInCtr (Ctr->CtrCod);
       NumUsrsInCrssOfCtr = Usr_GetNumUsrsInCrss (Hie_CTR,Ctr->CtrCod,
 						 1 << Rol_STD |
 						 1 << Rol_NET |
@@ -967,9 +979,8 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
       HTM_TR_Begin (NULL);
       HTM_TD_Begin ("class=\"BM\"");
       if (!ICanEdit ||						// I cannot edit
+	  NumDegs ||						// Centre has degrees
 	  NumUsrsInCrssOfCtr)					// Centre has users
-	 Ico_PutIconRemovalNotAllowed ();
-      else if (Deg_GetNumDegsInCtr (Ctr->CtrCod))		// Centre has degrees
 	 Ico_PutIconRemovalNotAllowed ();
       else if (Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr))	// Centre has users who claim to belong to it
 	 Ico_PutIconRemovalNotAllowed ();
@@ -1080,7 +1091,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
 
       /* Number of degrees */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Deg_GetNumDegsInCtr (Ctr->CtrCod));
+      HTM_Unsigned (NumDegs);
       HTM_TD_End ();
 
       /* Number of users in courses of this centre */

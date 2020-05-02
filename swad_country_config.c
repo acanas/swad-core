@@ -33,6 +33,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
+#include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
@@ -474,6 +475,7 @@ static void CtyCfg_QR (void)
 static void CtyCfg_NumUsrs (void)
   {
    extern const char *Txt_Users_of_the_country;
+   unsigned NumUsrsCty;
 
    /***** Number of users *****/
    HTM_TR_Begin (NULL);
@@ -483,7 +485,15 @@ static void CtyCfg_NumUsrs (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Cty));
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_CTY,Hie_CTY,Gbl.Hierarchy.Cty.CtyCod,
+                                   FigCch_Type_UNSIGNED,&NumUsrsCty))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumUsrsCty = Usr_GetNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Cty);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_CTY,Hie_CTY,Gbl.Hierarchy.Cty.CtyCod,
+                                    FigCch_Type_UNSIGNED,&NumUsrsCty);
+     }
+   HTM_Unsigned (NumUsrsCty);
    HTM_TD_End ();
 
    HTM_TR_End ();

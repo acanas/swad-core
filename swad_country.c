@@ -35,6 +35,7 @@
 #include "swad_country_config.h"
 #include "swad_database.h"
 #include "swad_figure.h"
+#include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -227,6 +228,7 @@ void Cty_ListCountries2 (void)
    extern const char *Txt_Other_countries;
    extern const char *Txt_Country_unspecified;
    unsigned NumCty;
+   unsigned NumUsrsInCrss;
 
    /***** Write menu to select country *****/
    Hie_WriteMenuHierarchy ();
@@ -282,10 +284,20 @@ void Cty_ListCountries2 (void)
    HTM_Unsigned (Crs_GetNumCrssInCty (0));
    HTM_TD_End ();
 
+   /* Number of users in courses of other countries */
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_CTY,0,
-				       1 << Rol_NET |	// Non-editing teachers
-				       1 << Rol_TCH));	// Teachers
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_IN_CRSS,Hie_CTY,0,
+                                   FigCch_Type_UNSIGNED,&NumUsrsInCrss))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumUsrsInCrss = Usr_GetNumUsrsInCrss (Hie_CTY,0,
+				            1 << Rol_STD |
+				            1 << Rol_NET |
+				            1 << Rol_TCH);	// Any user
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_IN_CRSS,Hie_CTY,0,
+                                    FigCch_Type_UNSIGNED,&NumUsrsInCrss);
+     }
+   HTM_Unsigned (NumUsrsInCrss);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -403,6 +415,8 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
   {
    const char *BgColor;
+   unsigned NumUsrsCty;
+   unsigned NumUsrsInCrss;
 
    BgColor = (Cty->CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? "LIGHT_BLUE" :
 							 Gbl.ColorRows[Gbl.RowEvenOdd];
@@ -424,7 +438,15 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
 
    /***** Number of users who claim to belong to this country *****/
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCty (Cty));
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_CTY,Hie_CTY,Cty->CtyCod,
+                                   FigCch_Type_UNSIGNED,&NumUsrsCty))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumUsrsCty = Usr_GetNumUsrsWhoClaimToBelongToCty (Cty);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_CTY,Hie_CTY,Cty->CtyCod,
+                                    FigCch_Type_UNSIGNED,&NumUsrsCty);
+     }
+   HTM_Unsigned (NumUsrsCty);
    HTM_TD_End ();
 
    /***** Other stats *****/
@@ -444,11 +466,20 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
    HTM_Unsigned (Crs_GetNumCrssInCty (Cty->CtyCod));
    HTM_TD_End ();
 
+   /* Number of users in courses */
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_CTY,Cty->CtyCod,
-				       1 << Rol_STD |
-				       1 << Rol_NET |
-				       1 << Rol_TCH));	// Any user
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_IN_CRSS,Hie_CTY,Cty->CtyCod,
+                                   FigCch_Type_UNSIGNED,&NumUsrsInCrss))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumUsrsInCrss = Usr_GetNumUsrsInCrss (Hie_CTY,Cty->CtyCod,
+				            1 << Rol_STD |
+				            1 << Rol_NET |
+				            1 << Rol_TCH);	// Any user
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_IN_CRSS,Hie_CTY,Cty->CtyCod,
+                                    FigCch_Type_UNSIGNED,&NumUsrsInCrss);
+     }
+   HTM_Unsigned (NumUsrsInCrss);
    HTM_TD_End ();
 
    HTM_TR_End ();

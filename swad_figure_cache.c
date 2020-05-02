@@ -41,8 +41,6 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define FigCch_TIME_CACHE	((time_t)(1UL * 60UL * 60UL))	// Past these seconds, update cached value
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -102,6 +100,17 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
                                 Hie_Level_t Scope,long Cod,
                                 FigCch_Type_t Type,void *ValuePtr)
   {
+   /* The higher the level, the longer a value remains cached */
+   time_t TimeCached[Hie_NUM_LEVELS] =	// Time in seconds
+     {
+      [Hie_UNK] = (time_t) (                 0),	// Unknown
+      [Hie_SYS] = (time_t) ( 1UL * 60UL * 60UL),	// System
+      [Hie_CTY] = (time_t) (       30UL * 60UL),	// Country
+      [Hie_INS] = (time_t) (       15UL * 60UL),	// Institution
+      [Hie_CTR] = (time_t) (        5UL * 60UL),	// Centre
+      [Hie_DEG] = (time_t) (              60UL),	// Degree
+      [Hie_CRS] = (time_t) (              10UL),	// Course
+     };
    static const char *Field[FigCch_NUM_TYPES] =
      {
       [FigCch_Type_UNSIGNED] = "ValueInt",
@@ -123,8 +132,9 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
      }
 
    /***** Trivial check *****/
-   if (Figure == FigCch_UNKNOWN)
-      return Found;
+   if (Figure == FigCch_UNKNOWN ||	// Unknown figure
+       Scope == Hie_UNK)		// Unknown scope
+      return false;
 
    /***** Get figure's value if cached and recent *****/
    if (DB_QuerySELECT (&mysql_res,"can not get cached figure value",
@@ -134,7 +144,7 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
 		       " AND LastUpdate>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 		       Field[Type],
 		       (unsigned) Figure,Sco_GetDBStrFromScope (Scope),Cod,
-		       FigCch_TIME_CACHE))
+		       TimeCached[Scope]))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);

@@ -965,13 +965,13 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 Frm_EndForm ();
 	 HTM_TD_End ();
 
-	 /* Current number of teachers in this course */
+	 /* Number of teachers in this course */
 	 HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
 	 HTM_Unsigned (NumUsrs[Rol_TCH] +
 		       NumUsrs[Rol_NET]);
 	 HTM_TD_End ();
 
-	 /* Current number of students in this course */
+	 /* Number of students in this course */
 	 HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
 	 HTM_Unsigned (NumUsrs[Rol_STD]);
 	 HTM_TD_End ();

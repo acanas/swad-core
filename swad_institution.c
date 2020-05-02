@@ -33,6 +33,7 @@
 #include "swad_database.h"
 #include "swad_department.h"
 #include "swad_figure.h"
+#include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
@@ -385,6 +386,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
+   unsigned NumUsrsInCrss;
    Ins_StatusTxt_t StatusTxt;
 
    if (Ins->Status & Ins_STATUS_BIT_PENDING)
@@ -441,10 +443,18 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
 
    /* Number of users in courses of this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_INS,Ins->InsCod,
-				       1 << Rol_STD |
-				       1 << Rol_NET |
-				       1 << Rol_TCH));	// Any user
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_IN_CRSS,Hie_INS,Ins->InsCod,
+                                   FigCch_Type_UNSIGNED,&NumUsrsInCrss))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumUsrsInCrss = Usr_GetNumUsrsInCrss (Hie_INS,Ins->InsCod,
+				            1 << Rol_STD |
+				            1 << Rol_NET |
+				            1 << Rol_TCH);	// Any user
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_IN_CRSS,Hie_INS,Ins->InsCod,
+                                    FigCch_Type_UNSIGNED,&NumUsrsInCrss);
+     }
+   HTM_Unsigned (NumUsrsInCrss);
    HTM_TD_End ();
 
    /***** Institution status *****/

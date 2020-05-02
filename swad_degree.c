@@ -34,6 +34,7 @@
 #include "swad_degree.h"
 #include "swad_degree_config.h"
 #include "swad_figure.h"
+#include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
@@ -342,9 +343,10 @@ static void Deg_ListDegreesForEdition (void)
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct UsrData UsrDat;
    bool ICanEdit;
+   unsigned NumCrss;
+   unsigned NumUsrsInCrssOfDeg;
    Deg_StatusTxt_t StatusTxt;
    unsigned StatusUnsigned;
-   unsigned NumCrss;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -360,15 +362,20 @@ static void Deg_ListDegreesForEdition (void)
      {
       Deg = &(Gbl.Hierarchy.Degs.Lst[NumDeg]);
 
-      NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
       ICanEdit = Deg_CheckIfICanEditADegree (Deg);
+      NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
+      NumUsrsInCrssOfDeg = Usr_GetNumUsrsInCrss (Hie_DEG,Deg->DegCod,
+						 1 << Rol_STD |
+						 1 << Rol_NET |
+						 1 << Rol_TCH);	// Any user
 
       HTM_TR_Begin (NULL);
 
       /* Put icon to remove degree */
       HTM_TD_Begin ("class=\"BM\"");
-      if (NumCrss ||	// Degree has courses ==> deletion forbidden
-	  !ICanEdit)
+      if (!ICanEdit ||
+	  NumCrss ||	// Degree has courses ==> deletion forbidden
+	  NumUsrsInCrssOfDeg)
          Ico_PutIconRemovalNotAllowed ();
       else
         {
@@ -471,9 +478,14 @@ static void Deg_ListDegreesForEdition (void)
 	}
       HTM_TD_End ();
 
-      /* Current number of courses in this degree */
+      /* Number of courses in this degree */
       HTM_TD_Begin ("class=\"DAT RM\"");
       HTM_Unsigned (NumCrss);
+      HTM_TD_End ();
+
+      /* Number of users in courses of this degree */
+      HTM_TD_Begin ("class=\"DAT RM\"");
+      HTM_Unsigned (NumUsrsInCrssOfDeg);
       HTM_TD_End ();
 
       /* Degree requester */
@@ -646,7 +658,12 @@ static void Deg_PutFormToCreateDegree (void)
 		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
    HTM_TD_End ();
 
-   /***** Current number of courses in this degree *****/
+   /***** Number of courses in this degree *****/
+   HTM_TD_Begin ("class=\"DAT RM\"");
+   HTM_Unsigned (0);
+   HTM_TD_End ();
+
+   /***** Number of users in courses of this degree *****/
    HTM_TD_Begin ("class=\"DAT RM\"");
    HTM_Unsigned (0);
    HTM_TD_End ();
@@ -678,6 +695,7 @@ static void Deg_PutHeadDegreesForSeeing (void)
    extern const char *Txt_Degree;
    extern const char *Txt_Type;
    extern const char *Txt_Courses_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
 
    HTM_TR_Begin (NULL);
 
@@ -686,6 +704,11 @@ static void Deg_PutHeadDegreesForSeeing (void)
    HTM_TH (1,1,"LM",Txt_Degree);
    HTM_TH (1,1,"LM",Txt_Type);
    HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
+   HTM_TH_Begin (1,1,"RM");
+   HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   HTM_BR ();
+   HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   HTM_TH_End ();
    HTM_TH_Empty (1);
 
    HTM_TR_End ();
@@ -703,6 +726,7 @@ static void Deg_PutHeadDegreesForEdition (void)
    extern const char *Txt_Type;
    extern const char *Txt_WWW;
    extern const char *Txt_Courses_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Requester;
 
    HTM_TR_Begin (NULL);
@@ -715,6 +739,11 @@ static void Deg_PutHeadDegreesForEdition (void)
    HTM_TH (1,1,"LM",Txt_Type);
    HTM_TH (1,1,"LM",Txt_WWW);
    HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
+   HTM_TH_Begin (1,1,"RM");
+   HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   HTM_BR ();
+   HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   HTM_TH_End ();
    HTM_TH (1,1,"LM",Txt_Requester);
    HTM_TH_Empty (1);
 
@@ -860,6 +889,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    const char *TxtClassStrong;
    const char *BgColor;
    unsigned NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
+   unsigned NumUsrsInCrss;
    Deg_StatusTxt_t StatusTxt;
 
    /***** Get data of type of degree of this degree *****/
@@ -910,6 +940,22 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    /***** Current number of courses in this degree *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
    HTM_Unsigned (NumCrss);
+   HTM_TD_End ();
+
+   /***** Number of users in courses of this degree *****/
+   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_IN_CRSS,Hie_DEG,Deg->DegCod,
+                                   FigCch_Type_UNSIGNED,&NumUsrsInCrss))
+     {
+      // Not updated recently in cache ==> compute and update it in cache
+      NumUsrsInCrss = Usr_GetNumUsrsInCrss (Hie_DEG,Deg->DegCod,
+				            1 << Rol_STD |
+				            1 << Rol_NET |
+				            1 << Rol_TCH);	// Any user
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_IN_CRSS,Hie_DEG,Deg->DegCod,
+                                    FigCch_Type_UNSIGNED,&NumUsrsInCrss);
+     }
+   HTM_Unsigned (NumUsrsInCrss);
    HTM_TD_End ();
 
    /***** Degree status *****/

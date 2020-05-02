@@ -62,6 +62,8 @@ typedef enum
    FigCch_NUM_STDS_PER_CRS	= 17,	// Number of students per course
    FigCch_NUM_NETS_PER_CRS	= 18,	// Number of non-editing teachers per course
    FigCch_NUM_TCHS_PER_CRS	= 19,	// Number of teachers per course
+   //--------------------------------------------------------------------------
+   FigCch_NUM_USRS_CTY		= 20,	// Number of users who claim to belong to country
   } FigCch_FigureCached_t;
 
 #define FigCch_NUM_TYPES 2
