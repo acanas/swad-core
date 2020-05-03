@@ -98,6 +98,8 @@ static void Ctr_PutHeadCentresForEdition (void);
 static void Ctr_RecFormRequestOrCreateCtr (unsigned Status);
 static void Ctr_CreateCentre (unsigned Status);
 
+static unsigned Ctr_GetNumCtrsInCty (long CtyCod);
+
 static void Ctr_EditingCentreConstructor (void);
 static void Ctr_EditingCentreDestructor (void);
 
@@ -1946,7 +1948,7 @@ void Ctr_FlushCacheNumCtrsInCty (void)
    Gbl.Cache.NumCtrsInCty.NumCtrs = 0;
   }
 
-unsigned Ctr_GetNumCtrsInCty (long CtyCod)
+static unsigned Ctr_GetNumCtrsInCty (long CtyCod)
   {
    /***** 1. Fast check: Trivial case *****/
    if (CtyCod <= 0)
@@ -1964,6 +1966,8 @@ unsigned Ctr_GetNumCtrsInCty (long CtyCod)
 			     " WHERE institutions.CtyCod=%ld"
 			     " AND institutions.InsCod=centres.InsCod",
 			     CtyCod);
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_CTY,Gbl.Cache.NumCtrsInCty.CtyCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumCtrsInCty.NumCtrs);
    return Gbl.Cache.NumCtrsInCty.NumCtrs;
   }
 
@@ -1974,12 +1978,8 @@ unsigned Ctr_GetCachedNumCtrsInCty (long CtyCod)
    /***** Get number of centres from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS,Hie_CTY,CtyCod,
 				   FigCch_UNSIGNED,&NumCtrs))
-     {
       /***** Get current number of centres from database and update cache *****/
       NumCtrs = Ctr_GetNumCtrsInCty (CtyCod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_CTY,CtyCod,
-				    FigCch_UNSIGNED,&NumCtrs);
-     }
 
    return NumCtrs;
   }
@@ -2011,7 +2011,8 @@ unsigned Ctr_GetNumCtrsInIns (long InsCod)
 			     "SELECT COUNT(*) FROM centres"
 			     " WHERE InsCod=%ld",
 			     InsCod);
-
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_INS,Gbl.Cache.NumCtrsInIns.InsCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumCtrsInIns.NumCtrs);
    return Gbl.Cache.NumCtrsInIns.NumCtrs;
   }
 
@@ -2022,12 +2023,8 @@ unsigned Ctr_GetCachedNumCtrsInIns (long InsCod)
    /***** Get number of centres from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS,Hie_INS,InsCod,
 				   FigCch_UNSIGNED,&NumCtrs))
-     {
       /***** Get current number of centres from database and update cache *****/
       NumCtrs = Ctr_GetNumCtrsInIns (InsCod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_INS,InsCod,
-				    FigCch_UNSIGNED,&NumCtrs);
-     }
 
    return NumCtrs;
   }
@@ -2061,31 +2058,55 @@ unsigned Ctr_GetCachedNumCtrsWithMapInSys (void)
 /************** Get number of centres with map in a country ******************/
 /*****************************************************************************/
 
-unsigned Ctr_GetNumCtrsWithMapInCty (long CtyCod)
+unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod)
   {
-   /***** Get number of centres with map from database
-          (coordinates 0, 0 means not set ==> don't show map) *****/
-   return (unsigned) DB_QueryCOUNT ("ccan not get number of centres with map",
-				    "SELECT COUNT(*) FROM institutions,centres"
-				    " WHERE institutions.CtyCod=%ld"
-				    " AND institutions.InsCod=centres.InsCod"
-				    " AND (centres.Latitude<>0 OR centres.Longitude<>0)",
-				    CtyCod);
+   unsigned NumCtrsWithMap;
+
+   /***** Get number of centres with map from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_CTY,CtyCod,
+                                   FigCch_UNSIGNED,&NumCtrsWithMap))
+     {
+      /***** Get current number of centres with map from database and update cache *****/
+      /* Ccoordinates 0, 0 means not set ==> don't show map */
+      NumCtrsWithMap = (unsigned)
+		       DB_QueryCOUNT ("ccan not get number of centres with map",
+				      "SELECT COUNT(*) FROM institutions,centres"
+				      " WHERE institutions.CtyCod=%ld"
+				      " AND institutions.InsCod=centres.InsCod"
+				     " AND (centres.Latitude<>0 OR centres.Longitude<>0)",
+				      CtyCod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_CTY,CtyCod,
+                                    FigCch_UNSIGNED,&NumCtrsWithMap);
+     }
+
+   return NumCtrsWithMap;
   }
 
 /*****************************************************************************/
 /************* Get number of centres with map in an institution **************/
 /*****************************************************************************/
 
-unsigned Ctr_GetNumCtrsWithMapInIns (long InsCod)
+unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
   {
-   /***** Get number of centres with map from database
-          (coordinates 0, 0 means not set ==> don't show map) *****/
-   return (unsigned) DB_QueryCOUNT ("can not get number of centres with map",
+   unsigned NumCtrsWithMap;
+
+   /***** Get number of centres with map from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_INS,InsCod,
+                                   FigCch_UNSIGNED,&NumCtrsWithMap))
+     {
+      /***** Get current number of centres with map from database and update cache *****/
+      /* Ccoordinates 0, 0 means not set ==> don't show map */
+      NumCtrsWithMap = (unsigned)
+		       DB_QueryCOUNT ("can not get number of centres with map",
 				    "SELECT COUNT(*) FROM centres"
 				    " WHERE InsCod=%ld"
 				    " AND (Latitude<>0 OR Longitude<>0)",
 				    InsCod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_INS,InsCod,
+                                    FigCch_UNSIGNED,&NumCtrsWithMap);
+     }
+
+   return NumCtrsWithMap;
   }
 
 /*****************************************************************************/

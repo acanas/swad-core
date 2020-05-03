@@ -1941,6 +1941,8 @@ unsigned Deg_GetNumDegsInCty (long CtyCod)
 			     " AND institutions.InsCod=centres.InsCod"
 			     " AND centres.CtrCod=degrees.CtrCod",
 			     CtyCod);
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_CTY,Gbl.Cache.NumDegsInCty.CtyCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInCty.NumDegs);
    return Gbl.Cache.NumDegsInCty.NumDegs;
   }
 
@@ -1951,12 +1953,8 @@ unsigned Deg_GetCachedNumDegsInCty (long CtyCod)
    /***** Get number of degrees from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_CTY,CtyCod,
 				   FigCch_UNSIGNED,&NumDegs))
-     {
       /***** Get current number of degrees from database and update cache *****/
       NumDegs = Deg_GetNumDegsInCty (CtyCod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_CTY,CtyCod,
-				    FigCch_UNSIGNED,&NumDegs);
-     }
 
    return NumDegs;
   }
@@ -1990,6 +1988,8 @@ unsigned Deg_GetNumDegsInIns (long InsCod)
 			     " WHERE centres.InsCod=%ld"
 			     " AND centres.CtrCod=degrees.CtrCod",
 			     InsCod);
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_INS,Gbl.Cache.NumDegsInIns.InsCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInIns.NumDegs);
    return Gbl.Cache.NumDegsInIns.NumDegs;
   }
 
@@ -2000,12 +2000,8 @@ unsigned Deg_GetCachedNumDegsInIns (long InsCod)
    /***** Get number of degrees from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_INS,InsCod,
 				   FigCch_UNSIGNED,&NumDegs))
-     {
       /***** Get current number of degrees from database and update cache *****/
       NumDegs = Deg_GetNumDegsInIns (InsCod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_INS,InsCod,
-				    FigCch_UNSIGNED,&NumDegs);
-     }
 
    return NumDegs;
   }
@@ -2037,6 +2033,8 @@ unsigned Deg_GetNumDegsInCtr (long CtrCod)
 			     "SELECT COUNT(*) FROM degrees"
 			     " WHERE CtrCod=%ld",
 			     CtrCod);
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_CTR,Gbl.Cache.NumDegsInCtr.CtrCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInCtr.NumDegs);
    return Gbl.Cache.NumDegsInCtr.NumDegs;
   }
 
@@ -2047,12 +2045,8 @@ unsigned Deg_GetCachedNumDegsInCtr (long CtrCod)
    /***** Get number of degrees from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_CTR,CtrCod,
 				   FigCch_UNSIGNED,&NumDegs))
-     {
       /***** Get current number of degrees from database and update cache *****/
       NumDegs = Deg_GetNumDegsInCtr (CtrCod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_CTR,CtrCod,
-				    FigCch_UNSIGNED,&NumDegs);
-     }
 
    return NumDegs;
   }

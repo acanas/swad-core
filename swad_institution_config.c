@@ -160,7 +160,7 @@ static void InsCfg_Configuration (bool PrintView)
    /***** Shortcut to the institution *****/
    InsCfg_Shortcut (PrintView);
 
-   NumCtrsWithMap = Ctr_GetNumCtrsWithMapInIns (Gbl.Hierarchy.Ins.InsCod);
+   NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInIns (Gbl.Hierarchy.Ins.InsCod);
    if (PrintView)
       /***** QR code with link to the institution *****/
       InsCfg_QR ();
@@ -462,7 +462,6 @@ static void InsCfg_QR (void)
 static void InsCfg_NumUsrs (void)
   {
    extern const char *Txt_Users_of_the_institution;
-   unsigned NumUsrsIns;
 
    /***** Number of users *****/
    HTM_TR_Begin (NULL);
@@ -472,14 +471,7 @@ static void InsCfg_NumUsrs (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_INS,Hie_INS,Gbl.Hierarchy.Ins.InsCod,
-                                   FigCch_UNSIGNED,&NumUsrsIns))
-     {
-      NumUsrsIns = Usr_GetNumUsrsWhoClaimToBelongToIns (&Gbl.Hierarchy.Ins);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_INS,Hie_INS,Gbl.Hierarchy.Ins.InsCod,
-                                    FigCch_UNSIGNED,&NumUsrsIns);
-     }
-   HTM_Unsigned (NumUsrsIns);
+   HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToIns (&Gbl.Hierarchy.Ins));
    HTM_TD_End ();
 
    HTM_TR_End ();

@@ -457,6 +457,8 @@ unsigned Crs_GetNumCrssInCty (long CtyCod)
 			     " AND centres.CtrCod=degrees.CtrCod"
 			     " AND degrees.DegCod=courses.DegCod",
 			     CtyCod);
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_CTY,Gbl.Cache.NumCrssInCty.CtyCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInCty.NumCrss);
    return Gbl.Cache.NumCrssInCty.NumCrss;
   }
 
@@ -467,12 +469,8 @@ unsigned Crs_GetCachedNumCrssInCty (long CtyCod)
    /***** Get number of courses from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_CTY,CtyCod,
 				   FigCch_UNSIGNED,&NumCrss))
-     {
       /***** Get current number of courses from database and update cache *****/
       NumCrss = Crs_GetNumCrssInCty (CtyCod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_CTY,CtyCod,
-				    FigCch_UNSIGNED,&NumCrss);
-     }
 
    return NumCrss;
   }
@@ -507,6 +505,8 @@ unsigned Crs_GetNumCrssInIns (long InsCod)
 			     " AND centres.CtrCod=degrees.CtrCod"
 			     " AND degrees.DegCod=courses.DegCod",
 			     InsCod);
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_INS,Gbl.Cache.NumCrssInIns.InsCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInIns.NumCrss);
    return Gbl.Cache.NumCrssInIns.NumCrss;
   }
 
@@ -517,12 +517,8 @@ unsigned Crs_GetCachedNumCrssInIns (long InsCod)
    /***** Get number of courses from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_INS,InsCod,
 				   FigCch_UNSIGNED,&NumCrss))
-     {
       /***** Get current number of courses from database and update cache *****/
       NumCrss = Crs_GetNumCrssInIns (InsCod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_INS,InsCod,
-				    FigCch_UNSIGNED,&NumCrss);
-     }
 
    return NumCrss;
   }
@@ -602,6 +598,8 @@ unsigned Crs_GetNumCrssInDeg (long DegCod)
 			     "SELECT COUNT(*) FROM courses"
 			     " WHERE DegCod=%ld",
 			     DegCod);
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_DEG,Gbl.Cache.NumCrssInDeg.DegCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInDeg.NumCrss);
    return Gbl.Cache.NumCrssInDeg.NumCrss;
   }
 
@@ -612,12 +610,8 @@ unsigned Crs_GetCachedNumCrssInDeg (long DegCod)
    /***** Get number of courses from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_DEG,DegCod,
 				   FigCch_UNSIGNED,&NumCrss))
-     {
       /***** Get current number of courses from database and update cache *****/
       NumCrss = Crs_GetNumCrssInDeg (DegCod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_DEG,DegCod,
-				    FigCch_UNSIGNED,&NumCrss);
-     }
 
    return NumCrss;
   }

@@ -148,7 +148,7 @@ static void CtyCfg_Configuration (bool PrintView)
    /***** Shortcut to the country *****/
    CtyCfg_Shortcut (PrintView);
 
-   NumCtrsWithMap = Ctr_GetNumCtrsWithMapInCty (Gbl.Hierarchy.Cty.CtyCod);
+   NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInCty (Gbl.Hierarchy.Cty.CtyCod);
    if (PrintView)
       /***** QR code with link to the country *****/
       CtyCfg_QR ();

@@ -386,7 +386,6 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
-   unsigned NumUsrsIns;
    Ins_StatusTxt_t StatusTxt;
 
    if (Ins->Status & Ins_STATUS_BIT_PENDING)
@@ -417,14 +416,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
 
    /***** Number of users who claim to belong to this institution *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_INS,Hie_INS,Ins->InsCod,
-                                   FigCch_UNSIGNED,&NumUsrsIns))
-     {
-      NumUsrsIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_INS,Hie_INS,Ins->InsCod,
-                                    FigCch_UNSIGNED,&NumUsrsIns);
-     }
-   HTM_Unsigned (NumUsrsIns);
+   HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToIns (Ins));
    HTM_TD_End ();
 
    /***** Other stats *****/
@@ -1088,7 +1080,7 @@ static void Ins_ListInstitutionsForEdition (void)
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct UsrData UsrDat;
    bool ICanEdit;
-   unsigned NumCtrss;
+   unsigned NumCtrs;
    unsigned NumUsrsIns;
    unsigned NumUsrsInCrssOfIns;
    Ins_StatusTxt_t StatusTxt;
@@ -1109,7 +1101,7 @@ static void Ins_ListInstitutionsForEdition (void)
       Ins = &Gbl.Hierarchy.Inss.Lst[NumIns];
 
       ICanEdit = Ins_CheckIfICanEdit (Ins);
-      NumCtrss = Ctr_GetNumCtrsInIns (Ins->InsCod);
+      NumCtrs = Ctr_GetNumCtrsInIns (Ins->InsCod);
       NumUsrsIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins);
       NumUsrsInCrssOfIns = Usr_GetNumUsrsInCrss (Hie_INS,Ins->InsCod,
 						 1 << Rol_STD |
@@ -1121,7 +1113,7 @@ static void Ins_ListInstitutionsForEdition (void)
       /* Put icon to remove institution */
       HTM_TD_Begin ("class=\"BM\"");
       if (!ICanEdit ||
-	  NumCtrss ||		// Institution has centres
+	  NumCtrs ||		// Institution has centres
 	  NumUsrsIns ||		// Institution has users
 	  NumUsrsInCrssOfIns)	// Institution has users
 	 // Institution has centres or users ==> deletion forbidden
@@ -1205,7 +1197,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
       /* Number of centres */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumCtrss);
+      HTM_Unsigned (NumCtrs);
       HTM_TD_End ();
 
       /* Number of users in courses of this institution */
@@ -1985,6 +1977,8 @@ unsigned Ins_GetNumInssInCty (long CtyCod)
 			     " WHERE CtyCod=%ld",
 			     CtyCod);
    Gbl.Cache.NumInssInCty.Valid = true;
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,Hie_CTY,Gbl.Cache.NumInssInCty.CtyCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumInssInCty.NumInss);
    return Gbl.Cache.NumInssInCty.NumInss;
   }
 
@@ -1995,12 +1989,8 @@ unsigned Ins_GetCachedNumInssInCty (long CtyCod)
    /***** Get number of institutions from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,Hie_CTY,CtyCod,
                                    FigCch_UNSIGNED,&NumInss))
-     {
       /***** Get current number of institutions from database and update cache *****/
       NumInss = Ins_GetNumInssInCty (CtyCod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,Hie_CTY,CtyCod,
-                                    FigCch_UNSIGNED,&NumInss);
-     }
 
    return NumInss;
   }

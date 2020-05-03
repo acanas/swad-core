@@ -131,13 +131,7 @@ static void SysCfg_Configuration (bool PrintView)
    SysCfg_Shortcut (PrintView);
 
    /***** Get number of centres with map *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_SYS,-1L,
-                                   FigCch_UNSIGNED,&NumCtrsWithMap))
-     {
-      NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInSys ();
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_SYS,-1L,
-                                    FigCch_UNSIGNED,&NumCtrsWithMap);
-     }
+   NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInSys ();
 
    if (PrintView)
       /***** QR code with link to the country *****/

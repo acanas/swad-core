@@ -135,7 +135,6 @@ void Ctr_RecFormNewCtr (void);
 unsigned Ctr_GetCachedNumCtrsInSys (void);
 
 void Ctr_FlushCacheNumCtrsInCty (void);
-unsigned Ctr_GetNumCtrsInCty (long CtyCod);
 unsigned Ctr_GetCachedNumCtrsInCty (long CtyCod);
 
 void Ctr_FlushCacheNumCtrsInIns (void);
@@ -143,8 +142,9 @@ unsigned Ctr_GetNumCtrsInIns (long InsCod);
 unsigned Ctr_GetCachedNumCtrsInIns (long InsCod);
 
 unsigned Ctr_GetCachedNumCtrsWithMapInSys (void);
-unsigned Ctr_GetNumCtrsWithMapInCty (long CtyCod);
-unsigned Ctr_GetNumCtrsWithMapInIns (long InsCod);
+unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod);
+unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod);
+
 unsigned Ctr_GetNumCtrsInPlc (long PlcCod);
 
 unsigned Ctr_GetCachedNumCtrsWithDegs (const char *SubQuery,
