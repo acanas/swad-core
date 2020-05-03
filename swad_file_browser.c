@@ -1243,16 +1243,9 @@ static const Act_Action_t Brw_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
 
 static const unsigned long long Brw_MAX_QUOTA_BRIEF[Rol_NUM_ROLES] =	// MaxRole is used
   {
-   [Rol_UNK    ] =	            0,
-   [Rol_GST    ] =	            0,
-   [Rol_USR    ] =	            0,
-   [Rol_STD    ] =	32ULL*Brw_GiB,
-   [Rol_NET    ] =	32ULL*Brw_GiB,
-   [Rol_TCH    ] =	64ULL*Brw_GiB,
-   [Rol_DEG_ADM] =	            0,
-   [Rol_CTR_ADM] =	            0,
-   [Rol_INS_ADM] =	            0,
-   [Rol_SYS_ADM] =	            0,
+   [Rol_STD] =	32ULL*Brw_GiB,
+   [Rol_NET] =	32ULL*Brw_GiB,
+   [Rol_TCH] =	64ULL*Brw_GiB,
   };
 #define Brw_MAX_FILES_BRIEF	5000
 #define Brw_MAX_FOLDS_BRIEF	1000

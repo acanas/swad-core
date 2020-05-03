@@ -447,16 +447,16 @@ void Net_ShowWebAndSocialNetworksStats (void)
    /***** Get total number of users in current scope *****/
    NumUsrsTotal =
    (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
-				    Usr_GetNumUsrsInCrss (Gbl.Scope.Current,
-							 (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Cty.CtyCod :
-							 (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Ins.InsCod :
-							 (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
-							 (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Deg.DegCod :
-							 (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Crs.CrsCod :
-											 -1L))))),
-							  1 << Rol_STD |
-							  1 << Rol_NET |
-							  1 << Rol_TCH);	// Any user
+				    Usr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,
+							        (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Cty.CtyCod :
+							        (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Ins.InsCod :
+							        (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
+							        (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Deg.DegCod :
+							        (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Crs.CrsCod :
+											        -1L))))),
+								1 << Rol_STD |
+								1 << Rol_NET |
+								1 << Rol_TCH);	// Any user
 
    /***** Get number of users with a web / social network *****/
    switch (Gbl.Scope.Current)

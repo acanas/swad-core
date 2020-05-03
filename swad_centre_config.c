@@ -35,6 +35,7 @@
 
 #include "swad_centre.h"
 #include "swad_database.h"
+#include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
@@ -744,7 +745,7 @@ static void CtrCfg_NumUsrs (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCtr (&Gbl.Hierarchy.Ctr));
+   HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (&Gbl.Hierarchy.Ctr));
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -773,7 +774,7 @@ static void CtrCfg_NumDegs (void)
 	                                        Gbl.Hierarchy.Ctr.ShrtName),
 			    "BT_LINK DAT",NULL);
    Str_FreeString ();
-   HTM_Unsigned (Deg_GetNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
+   HTM_Unsigned (Deg_GetCachedNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
    HTM_BUTTON_End ();
    Frm_EndForm ();
    HTM_TD_End ();
@@ -797,7 +798,7 @@ static void CtrCfg_NumCrss (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Crs_GetNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
+   HTM_Unsigned (Crs_GetCachedNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
    HTM_TD_End ();
 
    HTM_TR_End ();

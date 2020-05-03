@@ -154,7 +154,7 @@ static void CtyCfg_Configuration (bool PrintView)
       CtyCfg_QR ();
    else
      {
-      NumCtrs = Ctr_GetNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod);
+      NumCtrs = Ctr_GetCachedNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod);
 
       /***** Number of users who claim to belong to this country,
              number of institutions,
@@ -475,7 +475,6 @@ static void CtyCfg_QR (void)
 static void CtyCfg_NumUsrs (void)
   {
    extern const char *Txt_Users_of_the_country;
-   unsigned NumUsrsCty;
 
    /***** Number of users *****/
    HTM_TR_Begin (NULL);
@@ -485,15 +484,7 @@ static void CtyCfg_NumUsrs (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_CTY,Hie_CTY,Gbl.Hierarchy.Cty.CtyCod,
-                                   FigCch_Type_UNSIGNED,&NumUsrsCty))
-     {
-      // Not updated recently in cache ==> compute and update it in cache
-      NumUsrsCty = Usr_GetNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Cty);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_CTY,Hie_CTY,Gbl.Hierarchy.Cty.CtyCod,
-                                    FigCch_Type_UNSIGNED,&NumUsrsCty);
-     }
-   HTM_Unsigned (NumUsrsCty);
+   HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Cty));
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -522,7 +513,7 @@ static void CtyCfg_NumInss (void)
 					        Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 			    "BT_LINK DAT",NULL);
    Str_FreeString ();
-   HTM_Unsigned (Ins_GetNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
+   HTM_Unsigned (Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
    HTM_BUTTON_End ();
    Frm_EndForm ();
    HTM_TD_End ();
@@ -546,7 +537,7 @@ static void CtyCfg_NumDegs (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Deg_GetNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod));
+   HTM_Unsigned (Deg_GetCachedNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod));
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -568,7 +559,7 @@ static void CtyCfg_NumCrss (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Crs_GetNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod));
+   HTM_Unsigned (Crs_GetCachedNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod));
    HTM_TD_End ();
 
    HTM_TR_End ();

@@ -340,7 +340,7 @@ static void DegCfg_NumCrss (void)
 					        Gbl.Hierarchy.Deg.ShrtName),
 			    "BT_LINK DAT",NULL);
    Str_FreeString ();
-   HTM_Unsigned (Crs_GetNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
+   HTM_Unsigned (Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
    HTM_BUTTON_End ();
    Frm_EndForm ();
    HTM_TD_End ();

@@ -68,7 +68,7 @@ void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
    /***** Update figure's value in database *****/
    switch (Type)
      {
-      case FigCch_Type_UNSIGNED:
+      case FigCch_UNSIGNED:
 	 DB_QueryREPLACE ("can not update cached figure value",
 			  "REPLACE INTO figures"
 			  " (Figure,Scope,Cod,ValueInt,ValueDouble)"
@@ -77,7 +77,7 @@ void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
 			  (unsigned) Figure,Sco_GetDBStrFromScope (Scope),Cod,
 			  *((unsigned *) ValuePtr));
 	 break;
-      case FigCch_Type_DOUBLE:
+      case FigCch_DOUBLE:
          Str_SetDecimalPointToUS ();	// To write the decimal point as a dot
 	 DB_QueryREPLACE ("can not update cached figure value",
 			  "REPLACE INTO figures"
@@ -113,8 +113,8 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
      };
    static const char *Field[FigCch_NUM_TYPES] =
      {
-      [FigCch_Type_UNSIGNED] = "ValueInt",
-      [FigCch_Type_DOUBLE  ] = "ValueDouble",
+      [FigCch_UNSIGNED] = "ValueInt",
+      [FigCch_DOUBLE  ] = "ValueDouble",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -123,10 +123,10 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
    /***** Set default value when not found *****/
    switch (Type)
      {
-      case FigCch_Type_UNSIGNED:
+      case FigCch_UNSIGNED:
          *((unsigned *) ValuePtr) = 0;
 	 break;
-      case FigCch_Type_DOUBLE:
+      case FigCch_DOUBLE:
          *((double *) ValuePtr) = 0.0;
 	 break;
      }
@@ -154,11 +154,11 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
 	{
 	 switch (Type)
 	   {
-	    case FigCch_Type_UNSIGNED:
+	    case FigCch_UNSIGNED:
 	       if (sscanf (row[0],"%u",(unsigned *) ValuePtr) == 1)
 		  Found = true;
 	       break;
-	    case FigCch_Type_DOUBLE:
+	    case FigCch_DOUBLE:
                Str_SetDecimalPointToUS ();	// To write the decimal point as a dot
 	       if (sscanf (row[0],"%lf",(double *) ValuePtr) == 1)
 		  Found = true;

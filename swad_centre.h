@@ -132,18 +132,27 @@ void Ctr_ContEditAfterChgCtr (void);
 void Ctr_RecFormReqCtr (void);
 void Ctr_RecFormNewCtr (void);
 
-unsigned Ctr_GetNumCtrsInSys (void);
+unsigned Ctr_GetCachedNumCtrsInSys (void);
+
 void Ctr_FlushCacheNumCtrsInCty (void);
 unsigned Ctr_GetNumCtrsInCty (long CtyCod);
+unsigned Ctr_GetCachedNumCtrsInCty (long CtyCod);
+
 void Ctr_FlushCacheNumCtrsInIns (void);
 unsigned Ctr_GetNumCtrsInIns (long InsCod);
-unsigned Ctr_GetNumCtrsWithMapInSys (void);
+unsigned Ctr_GetCachedNumCtrsInIns (long InsCod);
+
+unsigned Ctr_GetCachedNumCtrsWithMapInSys (void);
 unsigned Ctr_GetNumCtrsWithMapInCty (long CtyCod);
 unsigned Ctr_GetNumCtrsWithMapInIns (long InsCod);
 unsigned Ctr_GetNumCtrsInPlc (long PlcCod);
-unsigned Ctr_GetNumCtrsWithDegs (const char *SubQuery);
-unsigned Ctr_GetNumCtrsWithCrss (const char *SubQuery);
-unsigned Ctr_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery);
+
+unsigned Ctr_GetCachedNumCtrsWithDegs (const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod);
+unsigned Ctr_GetCachedNumCtrsWithCrss (const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod);
+unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod);
 
 void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs);
 

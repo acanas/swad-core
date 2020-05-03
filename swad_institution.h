@@ -129,13 +129,20 @@ void Ins_ContEditAfterChgIns (void);
 void Ins_RecFormReqIns (void);
 void Ins_RecFormNewIns (void);
 
-unsigned Ins_GetNumInssTotal (void);
+unsigned Ins_GetCachedNumInssInSys (void);
+
 void Ins_FlushCacheNumInssInCty (void);
 unsigned Ins_GetNumInssInCty (long CtyCod);
-unsigned Ins_GetNumInssWithCtrs (const char *SubQuery);
-unsigned Ins_GetNumInssWithDegs (const char *SubQuery);
-unsigned Ins_GetNumInssWithCrss (const char *SubQuery);
-unsigned Ins_GetNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery);
+unsigned Ins_GetCachedNumInssInCty (long CtyCod);
+
+unsigned Ins_GetCachedNumInssWithCtrs (const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod);
+unsigned Ins_GetCachedNumInssWithDegs (const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod);
+unsigned Ins_GetCachedNumInssWithCrss (const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod);
+unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod);
 
 void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss);
 

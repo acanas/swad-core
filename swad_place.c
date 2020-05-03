@@ -203,7 +203,7 @@ void Plc_SeePlaces (void)
 
       HTM_TD_Begin ("class=\"DAT RM\"");
       HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod) -
-	                      NumCtrsWithPlc);
+	            NumCtrsWithPlc);
       HTM_TD_End ();
 
       HTM_TR_End ();

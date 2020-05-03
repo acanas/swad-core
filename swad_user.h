@@ -407,16 +407,26 @@ long Usr_GetRamdomStdFromCrs (long CrsCod);
 long Usr_GetRamdomStdFromGrp (long GrpCod);
 
 unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod);
+
 void Usr_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty (void);
 unsigned Usr_GetNumUsrsWhoDontClaimToBelongToAnyCty (void);
+unsigned Usr_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty (void);
+
 void Usr_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty (void);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToAnotherCty (void);
+unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToAnotherCty (void);
+
 void Usr_FlushCacheNumUsrsWhoClaimToBelongToCty (void);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (struct Country *Cty);
+unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCty (struct Country *Cty);
+
 void Usr_FlushCacheNumUsrsWhoClaimToBelongToIns (void);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (struct Instit *Ins);
+
 void Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Centre *Ctr);
+unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Centre *Ctr);
+
 unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod);
 
 void Usr_GetListUsrs (Hie_Level_t Scope,Rol_Role_t Role);
@@ -509,9 +519,16 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 
 unsigned Usr_GetTotalNumberOfUsersInPlatform (void);
 unsigned Usr_GetNumUsrsInCrss (Hie_Level_t Scope,long Cod,unsigned Roles);
+unsigned Usr_GetCachedNumUsrsInCrss (Hie_Level_t Scope,long Cod,unsigned Roles);
+
 unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void);
+unsigned Usr_GetCachedNumUsrsNotBelongingToAnyCrs (void);
+
 double Usr_GetNumCrssPerUsr (Hie_Level_t Scope,long Cod,Rol_Role_t Role);
+double Usr_GetCachedNumCrssPerUsr (Hie_Level_t Scope,long Cod,Rol_Role_t Role);
+
 double Usr_GetNumUsrsPerCrs (Hie_Level_t Scope,long Cod,Rol_Role_t Role);
+double Usr_GetCachedNumUsrsPerCrs (Hie_Level_t Scope,long Cod,Rol_Role_t Role);
 
 bool Usr_CheckIfUsrBanned (long UsrCod);
 void Usr_RemoveUsrFromUsrBanned (long UsrCod);

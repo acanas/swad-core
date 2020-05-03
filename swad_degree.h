@@ -134,15 +134,24 @@ void Deg_RequestLogo (void);
 void Deg_ReceiveLogo (void);
 void Deg_RemoveLogo (void);
 
-unsigned Deg_GetNumDegsTotal (void);
+unsigned Deg_GetCachedNumDegsInSys (void);
+
 void Deg_FlushCacheNumDegsInCty (void);
 unsigned Deg_GetNumDegsInCty (long CtyCod);
+unsigned Deg_GetCachedNumDegsInCty (long CtyCod);
+
 void Deg_FlushCacheNumDegsInIns (void);
 unsigned Deg_GetNumDegsInIns (long InsCod);
+unsigned Deg_GetCachedNumDegsInIns (long InsCod);
+
 void Deg_FlushCacheNumDegsInCtr (void);
 unsigned Deg_GetNumDegsInCtr (long CtrCod);
-unsigned Deg_GetNumDegsWithCrss (const char *SubQuery);
-unsigned Deg_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery);
+unsigned Deg_GetCachedNumDegsInCtr (long CtrCod);
+
+unsigned Deg_GetCachedNumDegsWithCrss (const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod);
+unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod);
 
 void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumCrss);
 

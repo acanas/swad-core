@@ -228,7 +228,6 @@ void Cty_ListCountries2 (void)
    extern const char *Txt_Other_countries;
    extern const char *Txt_Country_unspecified;
    unsigned NumCty;
-   unsigned NumUsrsInCrss;
 
    /***** Write menu to select country *****/
    Hie_WriteMenuHierarchy ();
@@ -264,40 +263,37 @@ void Cty_ListCountries2 (void)
    HTM_Txt (Txt_Other_countries);
    HTM_TD_End ();
 
+   /* Number of users who claim to belong to another country */
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToAnotherCty ());
+   HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToAnotherCty ());
    HTM_TD_End ();
 
+   /* Number of institutions in other countries */
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (Ins_GetNumInssInCty (0));
+   HTM_Unsigned (Ins_GetCachedNumInssInCty (0));
    HTM_TD_End ();
 
+   /* Number of centres in other countries */
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (Ctr_GetNumCtrsInCty (0));
+   HTM_Unsigned (Ctr_GetCachedNumCtrsInCty (0));
    HTM_TD_End ();
 
+   /* Number of degrees in other countries */
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (Deg_GetNumDegsInCty (0));
+   HTM_Unsigned (Deg_GetCachedNumDegsInCty (0));
    HTM_TD_End ();
 
+   /* Number of courses in other countries */
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (Crs_GetNumCrssInCty (0));
+   HTM_Unsigned (Crs_GetCachedNumCrssInCty (0));
    HTM_TD_End ();
 
    /* Number of users in courses of other countries */
    HTM_TD_Begin ("class=\"DAT RM\"");
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_IN_CRSS,Hie_CTY,0,
-                                   FigCch_Type_UNSIGNED,&NumUsrsInCrss))
-     {
-      // Not updated recently in cache ==> compute and update it in cache
-      NumUsrsInCrss = Usr_GetNumUsrsInCrss (Hie_CTY,0,
-				            1 << Rol_STD |
-				            1 << Rol_NET |
-				            1 << Rol_TCH);	// Any user
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_IN_CRSS,Hie_CTY,0,
-                                    FigCch_Type_UNSIGNED,&NumUsrsInCrss);
-     }
-   HTM_Unsigned (NumUsrsInCrss);
+   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_CTY,0,
+					     1 << Rol_STD |
+					     1 << Rol_NET |
+					     1 << Rol_TCH));	// Any user
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -312,24 +308,29 @@ void Cty_ListCountries2 (void)
    HTM_Txt (Txt_Country_unspecified);
    HTM_TD_End ();
 
+   /* Number of users who do not claim to belong to any country */
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (Usr_GetNumUsrsWhoDontClaimToBelongToAnyCty ());
+   HTM_Unsigned (Usr_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty ());
    HTM_TD_End ();
 
+   /* Number of institutions with unknown country */
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (Ins_GetNumInssInCty (-1L));
+   HTM_Unsigned (Ins_GetCachedNumInssInCty (-1L));
    HTM_TD_End ();
 
+   /* Number of centres with unknown country */
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (Ctr_GetNumCtrsInCty (-1L));
+   HTM_Unsigned (Ctr_GetCachedNumCtrsInCty (-1L));
    HTM_TD_End ();
 
+   /* Number of degrees with unknown country */
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (Deg_GetNumDegsInCty (-1L));
+   HTM_Unsigned (Deg_GetCachedNumDegsInCty (-1L));
    HTM_TD_End ();
 
+   /* Number of courses with unknown country */
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (Crs_GetNumCrssInCty (-1L));
+   HTM_Unsigned (Crs_GetCachedNumCrssInCty (-1L));
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
@@ -415,8 +416,6 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
   {
    const char *BgColor;
-   unsigned NumUsrsCty;
-   unsigned NumUsrsInCrss;
 
    BgColor = (Cty->CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? "LIGHT_BLUE" :
 							 Gbl.ColorRows[Gbl.RowEvenOdd];
@@ -438,48 +437,35 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
 
    /***** Number of users who claim to belong to this country *****/
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_CTY,Hie_CTY,Cty->CtyCod,
-                                   FigCch_Type_UNSIGNED,&NumUsrsCty))
-     {
-      // Not updated recently in cache ==> compute and update it in cache
-      NumUsrsCty = Usr_GetNumUsrsWhoClaimToBelongToCty (Cty);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_CTY,Hie_CTY,Cty->CtyCod,
-                                    FigCch_Type_UNSIGNED,&NumUsrsCty);
-     }
-   HTM_Unsigned (NumUsrsCty);
+   HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToCty (Cty));
    HTM_TD_End ();
 
-   /***** Other stats *****/
+   /***** Number of institutions *****/
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   HTM_Unsigned (Ins_GetNumInssInCty (Cty->CtyCod));
+   HTM_Unsigned (Ins_GetCachedNumInssInCty (Cty->CtyCod));
    HTM_TD_End ();
 
+   /***** Number of centres *****/
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   HTM_Unsigned (Ctr_GetNumCtrsInCty (Cty->CtyCod));
+   HTM_Unsigned (Ctr_GetCachedNumCtrsInCty (Cty->CtyCod));
    HTM_TD_End ();
 
+   /***** Number of degrees *****/
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   HTM_Unsigned (Deg_GetNumDegsInCty (Cty->CtyCod));
+   HTM_Unsigned (Deg_GetCachedNumDegsInCty (Cty->CtyCod));
    HTM_TD_End ();
 
+   /***** Number of courses *****/
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   HTM_Unsigned (Crs_GetNumCrssInCty (Cty->CtyCod));
+   HTM_Unsigned (Crs_GetCachedNumCrssInCty (Cty->CtyCod));
    HTM_TD_End ();
 
-   /* Number of users in courses */
+   /***** Number of users in courses *****/
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_IN_CRSS,Hie_CTY,Cty->CtyCod,
-                                   FigCch_Type_UNSIGNED,&NumUsrsInCrss))
-     {
-      // Not updated recently in cache ==> compute and update it in cache
-      NumUsrsInCrss = Usr_GetNumUsrsInCrss (Hie_CTY,Cty->CtyCod,
-				            1 << Rol_STD |
-				            1 << Rol_NET |
-				            1 << Rol_TCH);	// Any user
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_IN_CRSS,Hie_CTY,Cty->CtyCod,
-                                    FigCch_Type_UNSIGNED,&NumUsrsInCrss);
-     }
-   HTM_Unsigned (NumUsrsInCrss);
+   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_CTY,Cty->CtyCod,
+					     1 << Rol_STD |
+					     1 << Rol_NET |
+					     1 << Rol_TCH));	// Any user
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -612,7 +598,8 @@ void Cty_WriteScriptGoogleGeochart (void)
    extern const char *Txt_Users_NO_HTML;
    extern const char *Txt_Institutions_NO_HTML;
    unsigned NumCty;
-   unsigned NumUsrsWhoClaimToBelongToCty;
+   unsigned NumUsrsCty;
+   unsigned NumInss;
    unsigned MaxUsrsInCountry = 0;
    unsigned NumCtysWithUsrs = 0;
 
@@ -638,16 +625,16 @@ void Cty_WriteScriptGoogleGeochart (void)
 	NumCty < Gbl.Hierarchy.Ctys.Num;
 	NumCty++)
      {
-      NumUsrsWhoClaimToBelongToCty = Usr_GetNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Ctys.Lst[NumCty]);
-      if (NumUsrsWhoClaimToBelongToCty)
+      NumUsrsCty = Usr_GetCachedNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Ctys.Lst[NumCty]);
+      if (NumUsrsCty)
         {
+	 NumInss = Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod);
+
          /* Write data of this country */
          HTM_TxtF ("	['%s', %u, %u],\n",
-                   Gbl.Hierarchy.Ctys.Lst[NumCty].Alpha2,
-                   NumUsrsWhoClaimToBelongToCty,
-                   Ins_GetNumInssInCty (Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod));
-         if (NumUsrsWhoClaimToBelongToCty > MaxUsrsInCountry)
-            MaxUsrsInCountry = NumUsrsWhoClaimToBelongToCty;
+                   Gbl.Hierarchy.Ctys.Lst[NumCty].Alpha2,NumUsrsCty,NumInss);
+         if (NumUsrsCty > MaxUsrsInCountry)
+            MaxUsrsInCountry = NumUsrsCty;
          NumCtysWithUsrs++;
         }
      }
@@ -1208,7 +1195,8 @@ static void Cty_ListCountriesForEdition (void)
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    unsigned NumCty;
    struct Country *Cty;
-   unsigned NumInssInCty;
+   unsigned NumInss;
+   unsigned NumUsrsCty;
    Lan_Language_t Lan;
 
    /***** Write heading *****/
@@ -1221,22 +1209,21 @@ static void Cty_ListCountriesForEdition (void)
 	NumCty++)
      {
       Cty = &Gbl.Hierarchy.Ctys.Lst[NumCty];
-      NumInssInCty = Ins_GetNumInssInCty (Cty->CtyCod);
+      NumInss = Ins_GetNumInssInCty (Cty->CtyCod);
+      NumUsrsCty = Usr_GetNumUsrsWhoClaimToBelongToCty (Cty);
 
       HTM_TR_Begin (NULL);
 
       /* Put icon to remove country */
       HTM_TD_Begin ("rowspan=\"%u\" class=\"BT\"",1 + Lan_NUM_LANGUAGES);
-      if (NumInssInCty)						// Country has institutions
-	 // Deletion forbidden
-	 Ico_PutIconRemovalNotAllowed ();
-      else if (Usr_GetNumUsrsWhoClaimToBelongToCty (Cty))	// Country has users
+      if (NumInss ||					// Country has institutions
+	  NumUsrsCty)					// Country has users
 	 // Deletion forbidden
 	 Ico_PutIconRemovalNotAllowed ();
       else if (Usr_GetNumUsrsInCrss (Hie_CTY,Cty->CtyCod,
 				     1 << Rol_STD |
 				     1 << Rol_NET |
-				     1 << Rol_TCH))		// Country has users
+				     1 << Rol_TCH))	// Country has users
 	 // Deletion forbidden
 	 Ico_PutIconRemovalNotAllowed ();
       else
@@ -1262,12 +1249,12 @@ static void Cty_ListCountriesForEdition (void)
 
       /* Number of users */
       HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
-      HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToCty (Cty));
+      HTM_Unsigned (NumUsrsCty);
       HTM_TD_End ();
 
       /* Number of institutions */
       HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
-      HTM_Unsigned (NumInssInCty);
+      HTM_Unsigned (NumInss);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1933,97 +1920,164 @@ static void Cty_CreateCountry (void)
 /*********************** Get total number of countries ***********************/
 /*****************************************************************************/
 
-unsigned Cty_GetNumCtysTotal (void)
+unsigned Cty_GetCachedNumCtysInSys (void)
   {
-   /***** Get total number of countries from database *****/
-   return (unsigned) DB_GetNumRowsTable ("countries");
+   unsigned NumCtys;
+
+   /***** Get number of countries from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS,Hie_SYS,-1L,
+                                   FigCch_UNSIGNED,&NumCtys))
+     {
+      /***** Get current number of countries from database and update cache *****/
+      NumCtys = (unsigned) DB_GetNumRowsTable ("countries");
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS,Hie_SYS,-1L,
+                                    FigCch_UNSIGNED,&NumCtys);
+     }
+
+   return NumCtys;
   }
 
 /*****************************************************************************/
 /***************** Get number of countries with institutions *****************/
 /*****************************************************************************/
 
-unsigned Cty_GetNumCtysWithInss (const char *SubQuery)
+unsigned Cty_GetCachedNumCtysWithInss (void)
   {
-   /***** Get number of countries with institutions from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of countries"
-			     " with institutions",
-			     "SELECT COUNT(DISTINCT countries.CtyCod)"
-			     " FROM countries,institutions"
-			     " WHERE %scountries.CtyCod=institutions.CtyCod",
-			     SubQuery);
+   unsigned NumCtysWithInss;
+
+   /***** Get number of countries with institutions from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_INSS,Hie_SYS,-1L,
+				   FigCch_UNSIGNED,&NumCtysWithInss))
+     {
+      /***** Get current number of countries with institutions from cache *****/
+      NumCtysWithInss = (unsigned)
+	                DB_QueryCOUNT ("can not get number of countries"
+				       " with institutions",
+				       "SELECT COUNT(DISTINCT countries.CtyCod)"
+				       " FROM countries,institutions"
+				       " WHERE countries.CtyCod=institutions.CtyCod");
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_INSS,Hie_SYS,-1L,
+				    FigCch_UNSIGNED,&NumCtysWithInss);
+     }
+
+   return NumCtysWithInss;
   }
 
 /*****************************************************************************/
 /******************* Get number of countries with centres ********************/
 /*****************************************************************************/
 
-unsigned Cty_GetNumCtysWithCtrs (const char *SubQuery)
+unsigned Cty_GetCachedNumCtysWithCtrs (void)
   {
-   /***** Get number of countries with centres from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of countries with centres",
-			     "SELECT COUNT(DISTINCT countries.CtyCod)"
-			     " FROM countries,institutions,centres"
-			     " WHERE %scountries.CtyCod=institutions.CtyCod"
-			     " AND institutions.InsCod=centres.InsCod",
-			     SubQuery);
+   unsigned NumCtysWithCtrs;
+
+   /***** Get number of countries with centres from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_CTRS,Hie_SYS,-1L,
+				   FigCch_UNSIGNED,&NumCtysWithCtrs))
+     {
+      /***** Get current number of countries with centres from database and update cache *****/
+      NumCtysWithCtrs = (unsigned)
+	                DB_QueryCOUNT ("can not get number of countries with centres",
+				       "SELECT COUNT(DISTINCT countries.CtyCod)"
+				       " FROM countries,institutions,centres"
+				       " WHERE countries.CtyCod=institutions.CtyCod"
+				       " AND institutions.InsCod=centres.InsCod");
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CTRS,Hie_SYS,-1L,
+				    FigCch_UNSIGNED,&NumCtysWithCtrs);
+     }
+
+   return NumCtysWithCtrs;
   }
 
 /*****************************************************************************/
 /******************* Get number of countries with degrees ********************/
 /*****************************************************************************/
 
-unsigned Cty_GetNumCtysWithDegs (const char *SubQuery)
+unsigned Cty_GetCachedNumCtysWithDegs (void)
   {
-   /***** Get number of countries with degrees from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of countries with degrees",
-			     "SELECT COUNT(DISTINCT countries.CtyCod)"
-			     " FROM countries,institutions,centres,degrees"
-			     " WHERE %scountries.CtyCod=institutions.CtyCod"
-			     " AND institutions.InsCod=centres.InsCod"
-			     " AND centres.CtrCod=degrees.CtrCod",
-			     SubQuery);
+   unsigned NumCtysWithDegs;
+
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_DEGS,Hie_SYS,-1L,
+				   FigCch_UNSIGNED,&NumCtysWithDegs))
+     {
+      NumCtysWithDegs = (unsigned)
+	                DB_QueryCOUNT ("can not get number of countries with degrees",
+				       "SELECT COUNT(DISTINCT countries.CtyCod)"
+				       " FROM countries,institutions,centres,degrees"
+				       " WHERE countries.CtyCod=institutions.CtyCod"
+				       " AND institutions.InsCod=centres.InsCod"
+				       " AND centres.CtrCod=degrees.CtrCod");
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_DEGS,Hie_SYS,-1L,
+				    FigCch_UNSIGNED,&NumCtysWithDegs);
+     }
+
+   return NumCtysWithDegs;
   }
 
 /*****************************************************************************/
 /******************* Get number of countries with courses ********************/
 /*****************************************************************************/
 
-unsigned Cty_GetNumCtysWithCrss (const char *SubQuery)
+unsigned Cty_GetCachedNumCtysWithCrss (void)
   {
-   /***** Get number of countries with courses from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of countries with courses",
-			     "SELECT COUNT(DISTINCT countries.CtyCod)"
-			     " FROM countries,institutions,centres,degrees,courses"
-			     " WHERE %scountries.CtyCod=institutions.CtyCod"
-			     " AND institutions.InsCod=centres.InsCod"
-			     " AND centres.CtrCod=degrees.CtrCod"
-			     " AND degrees.DegCod=courses.DegCod",
-			     SubQuery);
+   unsigned NumCtysWithCrss;
+
+   /***** Get number of countries with courses from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_CRSS,Hie_SYS,-1L,
+				   FigCch_UNSIGNED,&NumCtysWithCrss))
+     {
+      /***** Get current number of countries with courses from database and update cache *****/
+      NumCtysWithCrss = (unsigned)
+	                DB_QueryCOUNT ("can not get number of countries with courses",
+				       "SELECT COUNT(DISTINCT countries.CtyCod)"
+				       " FROM countries,institutions,centres,degrees,courses"
+				       " WHERE countries.CtyCod=institutions.CtyCod"
+				       " AND institutions.InsCod=centres.InsCod"
+				       " AND centres.CtrCod=degrees.CtrCod"
+				       " AND degrees.DegCod=courses.DegCod");
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CRSS,Hie_SYS,-1L,
+				    FigCch_UNSIGNED,&NumCtysWithCrss);
+     }
+
+   return NumCtysWithCrss;
   }
 
 /*****************************************************************************/
 /******************* Get number of countries with users **********************/
 /*****************************************************************************/
 
-unsigned Cty_GetNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery)
+unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod)
   {
-   /***** Get number of countries with users from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of countries with users",
-			     "SELECT COUNT(DISTINCT countries.CtyCod)"
-			     " FROM countries,institutions,centres,degrees,courses,crs_usr"
-			     " WHERE %scountries.CtyCod=institutions.CtyCod"
-			     " AND institutions.InsCod=centres.InsCod"
-			     " AND centres.CtrCod=degrees.CtrCod"
-			     " AND degrees.DegCod=courses.DegCod"
-			     " AND courses.CrsCod=crs_usr.CrsCod"
-			     " AND crs_usr.Role=%u",
-			     SubQuery,(unsigned) Role);
+   static const FigCch_FigureCached_t FigureCtys[Rol_NUM_ROLES] =
+     {
+      [Rol_STD] = FigCch_NUM_CTYS_WITH_STDS,	// Students
+      [Rol_NET] = FigCch_NUM_CTYS_WITH_NETS,	// Non-editing teachers
+      [Rol_TCH] = FigCch_NUM_CTYS_WITH_TCHS,	// Teachers
+     };
+   unsigned NumCtysWithUsrs;
+
+   /***** Get number of countries with users from cache *****/
+   if (!FigCch_GetFigureFromCache (FigureCtys[Role],Scope,Cod,
+				   FigCch_UNSIGNED,&NumCtysWithUsrs))
+     {
+      /***** Get current number of countries with users from database and update cache *****/
+      NumCtysWithUsrs = (unsigned)
+	                DB_QueryCOUNT ("can not get number of countries with users",
+				       "SELECT COUNT(DISTINCT countries.CtyCod)"
+				       " FROM countries,institutions,centres,degrees,courses,crs_usr"
+				       " WHERE %scountries.CtyCod=institutions.CtyCod"
+				       " AND institutions.InsCod=centres.InsCod"
+				       " AND centres.CtrCod=degrees.CtrCod"
+				       " AND degrees.DegCod=courses.DegCod"
+				       " AND courses.CrsCod=crs_usr.CrsCod"
+				       " AND crs_usr.Role=%u",
+				       SubQuery,(unsigned) Role);
+      FigCch_UpdateFigureIntoCache (FigureCtys[Role],Scope,Cod,
+				    FigCch_UNSIGNED,&NumCtysWithUsrs);
+     }
+
+   return NumCtysWithUsrs;
   }
 
 /*****************************************************************************/

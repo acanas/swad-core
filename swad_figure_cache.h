@@ -38,7 +38,7 @@
 // If numbers change, clean database table figures: "DELETE FROM figures;"
 typedef enum
   {
-   FigCch_UNKNOWN		=  0,	// Unknown figure
+   FigCch_UNKNOWN		=  0,	// Unknown figure (do not change this constant to any value other than 0)
    //--------------------------------------------------------------------------
    FigCch_NUM_CTYS		=  1,	// Number of countries
    FigCch_NUM_INSS		=  2,	// Number of institutions
@@ -47,30 +47,62 @@ typedef enum
    FigCch_NUM_DEGS		=  5,	// Number of degrees
    FigCch_NUM_CRSS		=  6,	// Number of courses
    //--------------------------------------------------------------------------
-   FigCch_NUM_STDS_IN_CRSS	=  7,	// Number of students in courses
-   FigCch_NUM_NETS_IN_CRSS	=  8,	// Number of non-editing teachers in courses
-   FigCch_NUM_TCHS_IN_CRSS	=  9,	// Number of teachers in courses
-   FigCch_NUM_USRS_IN_CRSS	= 10,	// Number of users in courses
-   FigCch_NUM_GSTS		= 11,	// Number of guests (users not belonging to any course)
+   FigCch_NUM_CTYS_WITH_INSS	=  7,	// Number of countries with institutions
+   FigCch_NUM_CTYS_WITH_CTRS	=  8,	// Number of countries with centres
+   FigCch_NUM_CTYS_WITH_DEGS	=  9,	// Number of countries with degrees
+   FigCch_NUM_CTYS_WITH_CRSS	= 10,	// Number of countries with courses
+   FigCch_NUM_CTYS_WITH_TCHS	= 11,	// Number of countries with teachers
+   FigCch_NUM_CTYS_WITH_NETS	= 12,	// Number of countries with non-editing teachers
+   FigCch_NUM_CTYS_WITH_STDS	= 13,	// Number of countries with students
    //--------------------------------------------------------------------------
-   FigCch_NUM_CRSS_PER_USR	= 12,	// Number of courses per user
-   FigCch_NUM_CRSS_PER_STD	= 13,	// Number of courses per student
-   FigCch_NUM_CRSS_PER_NET	= 14,	// Number of courses per non-editing teacher
-   FigCch_NUM_CRSS_PER_TCH	= 15,	// Number of courses per teacher
+   FigCch_NUM_INSS_WITH_CTRS	= 14,	// Number of institutions with centres
+   FigCch_NUM_INSS_WITH_DEGS	= 15,	// Number of institutions with degrees
+   FigCch_NUM_INSS_WITH_CRSS	= 16,	// Number of institutions with courses
+   FigCch_NUM_INSS_WITH_TCHS	= 17,	// Number of institutions with teachers
+   FigCch_NUM_INSS_WITH_NETS	= 18,	// Number of institutions with non-editing teachers
+   FigCch_NUM_INSS_WITH_STDS	= 19,	// Number of institutions with students
    //--------------------------------------------------------------------------
-   FigCch_NUM_USRS_PER_CRS	= 16,	// Number of users per course
-   FigCch_NUM_STDS_PER_CRS	= 17,	// Number of students per course
-   FigCch_NUM_NETS_PER_CRS	= 18,	// Number of non-editing teachers per course
-   FigCch_NUM_TCHS_PER_CRS	= 19,	// Number of teachers per course
+   FigCch_NUM_CTRS_WITH_DEGS	= 20,	// Number of centres with degrees
+   FigCch_NUM_CTRS_WITH_CRSS	= 21,	// Number of centres with courses
+   FigCch_NUM_CTRS_WITH_TCHS	= 22,	// Number of centres with teachers
+   FigCch_NUM_CTRS_WITH_NETS	= 23,	// Number of centres with non-editing teachers
+   FigCch_NUM_CTRS_WITH_STDS	= 24,	// Number of centres with students
    //--------------------------------------------------------------------------
-   FigCch_NUM_USRS_CTY		= 20,	// Number of users who claim to belong to country
+   FigCch_NUM_DEGS_WITH_CRSS	= 25,	// Number of degrees with courses
+   FigCch_NUM_DEGS_WITH_TCHS	= 26,	// Number of degrees with teachers
+   FigCch_NUM_DEGS_WITH_NETS	= 27,	// Number of degrees with non-editing teachers
+   FigCch_NUM_DEGS_WITH_STDS	= 28,	// Number of degrees with students
+   //--------------------------------------------------------------------------
+   FigCch_NUM_CRSS_WITH_TCHS	= 29,	// Number of courses with teachers
+   FigCch_NUM_CRSS_WITH_NETS	= 30,	// Number of courses with non-editing teachers
+   FigCch_NUM_CRSS_WITH_STDS	= 31,	// Number of courses with students
+   //--------------------------------------------------------------------------
+   FigCch_NUM_STDS_IN_CRSS	= 32,	// Number of students in courses
+   FigCch_NUM_NETS_IN_CRSS	= 33,	// Number of non-editing teachers in courses
+   FigCch_NUM_TCHS_IN_CRSS	= 34,	// Number of teachers in courses
+   FigCch_NUM_USRS_IN_CRSS	= 35,	// Number of users in courses
+   FigCch_NUM_GSTS		= 36,	// Number of guests (users not belonging to any course)
+   //--------------------------------------------------------------------------
+   FigCch_NUM_CRSS_PER_USR	= 37,	// Number of courses per user
+   FigCch_NUM_CRSS_PER_STD	= 38,	// Number of courses per student
+   FigCch_NUM_CRSS_PER_NET	= 39,	// Number of courses per non-editing teacher
+   FigCch_NUM_CRSS_PER_TCH	= 40,	// Number of courses per teacher
+   //--------------------------------------------------------------------------
+   FigCch_NUM_USRS_PER_CRS	= 41,	// Number of users per course
+   FigCch_NUM_STDS_PER_CRS	= 42,	// Number of students per course
+   FigCch_NUM_NETS_PER_CRS	= 43,	// Number of non-editing teachers per course
+   FigCch_NUM_TCHS_PER_CRS	= 44,	// Number of teachers per course
+   //--------------------------------------------------------------------------
+   FigCch_NUM_USRS_BELONG_CTY	= 45,	// Number of users who claim to belong to country
+   FigCch_NUM_USRS_BELONG_INS	= 46,	// Number of users who claim to belong to institution
+   FigCch_NUM_USRS_BELONG_CTR	= 47,	// Number of users who claim to belong to centre
   } FigCch_FigureCached_t;
 
 #define FigCch_NUM_TYPES 2
 typedef enum
   {
-   FigCch_Type_UNSIGNED,
-   FigCch_Type_DOUBLE,
+   FigCch_UNSIGNED,
+   FigCch_DOUBLE,
   } FigCch_Type_t;
 
 /*****************************************************************************/

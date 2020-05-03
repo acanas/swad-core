@@ -37,6 +37,7 @@
 #include "swad_database.h"
 #include "swad_exam_announcement.h"
 #include "swad_figure.h"
+#include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
@@ -408,10 +409,21 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 /*********************** Get total number of courses *************************/
 /*****************************************************************************/
 
-unsigned Crs_GetNumCrssTotal (void)
+unsigned Crs_GetCachedNumCrssInSys (void)
   {
-   /***** Get total number of courses from database *****/
-   return (unsigned) DB_GetNumRowsTable ("courses");
+   unsigned NumCrss;
+
+   /***** Get number of courses from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_SYS,-1L,
+                                   FigCch_UNSIGNED,&NumCrss))
+     {
+      /***** Get current number of courses from database and update cache *****/
+      NumCrss = (unsigned) DB_GetNumRowsTable ("courses");
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_SYS,-1L,
+                                    FigCch_UNSIGNED,&NumCrss);
+     }
+
+   return NumCrss;
   }
 
 /*****************************************************************************/
@@ -448,6 +460,23 @@ unsigned Crs_GetNumCrssInCty (long CtyCod)
    return Gbl.Cache.NumCrssInCty.NumCrss;
   }
 
+unsigned Crs_GetCachedNumCrssInCty (long CtyCod)
+  {
+   unsigned NumCrss;
+
+   /***** Get number of courses from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_CTY,CtyCod,
+				   FigCch_UNSIGNED,&NumCrss))
+     {
+      /***** Get current number of courses from database and update cache *****/
+      NumCrss = Crs_GetNumCrssInCty (CtyCod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_CTY,CtyCod,
+				    FigCch_UNSIGNED,&NumCrss);
+     }
+
+   return NumCrss;
+  }
+
 /*****************************************************************************/
 /**************** Get number of courses in an institution ********************/
 /*****************************************************************************/
@@ -481,6 +510,23 @@ unsigned Crs_GetNumCrssInIns (long InsCod)
    return Gbl.Cache.NumCrssInIns.NumCrss;
   }
 
+unsigned Crs_GetCachedNumCrssInIns (long InsCod)
+  {
+   unsigned NumCrss;
+
+   /***** Get number of courses from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_INS,InsCod,
+				   FigCch_UNSIGNED,&NumCrss))
+     {
+      /***** Get current number of courses from database and update cache *****/
+      NumCrss = Crs_GetNumCrssInIns (InsCod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_INS,InsCod,
+				    FigCch_UNSIGNED,&NumCrss);
+     }
+
+   return NumCrss;
+  }
+
 /*****************************************************************************/
 /******************** Get number of courses in a centre **********************/
 /*****************************************************************************/
@@ -510,6 +556,23 @@ unsigned Crs_GetNumCrssInCtr (long CtrCod)
 			     " AND degrees.DegCod=courses.DegCod",
 			     CtrCod);
    return Gbl.Cache.NumCrssInCtr.NumCrss;
+  }
+
+unsigned Crs_GetCachedNumCrssInCtr (long CtrCod)
+  {
+   unsigned NumCrss;
+
+   /***** Get number of courses from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_CTR,CtrCod,
+				   FigCch_UNSIGNED,&NumCrss))
+     {
+      /***** Get current number of courses from database and update cache *****/
+      NumCrss = Crs_GetNumCrssInCtr (CtrCod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_CTR,CtrCod,
+				    FigCch_UNSIGNED,&NumCrss);
+     }
+
+   return NumCrss;
   }
 
 /*****************************************************************************/
@@ -542,23 +605,58 @@ unsigned Crs_GetNumCrssInDeg (long DegCod)
    return Gbl.Cache.NumCrssInDeg.NumCrss;
   }
 
+unsigned Crs_GetCachedNumCrssInDeg (long DegCod)
+  {
+   unsigned NumCrss;
+
+   /***** Get number of courses from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_DEG,DegCod,
+				   FigCch_UNSIGNED,&NumCrss))
+     {
+      /***** Get current number of courses from database and update cache *****/
+      NumCrss = Crs_GetNumCrssInDeg (DegCod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_DEG,DegCod,
+				    FigCch_UNSIGNED,&NumCrss);
+     }
+
+   return NumCrss;
+  }
+
 /*****************************************************************************/
 /********************* Get number of courses with users **********************/
 /*****************************************************************************/
 
-unsigned Crs_GetNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery)
+unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod)
   {
-   /***** Get number of degrees with users from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of courses with users",
-			     "SELECT COUNT(DISTINCT courses.CrsCod)"
-			     " FROM institutions,centres,degrees,courses,crs_usr"
-			     " WHERE %sinstitutions.InsCod=centres.InsCod"
-			     " AND centres.CtrCod=degrees.CtrCod"
-			     " AND degrees.DegCod=courses.DegCod"
-			     " AND courses.CrsCod=crs_usr.CrsCod"
-			     " AND crs_usr.Role=%u",
-			     SubQuery,(unsigned) Role);
+   static const FigCch_FigureCached_t FigureCrss[Rol_NUM_ROLES] =
+     {
+      [Rol_STD] = FigCch_NUM_CRSS_WITH_STDS,	// Students
+      [Rol_NET] = FigCch_NUM_CRSS_WITH_NETS,	// Non-editing teachers
+      [Rol_TCH] = FigCch_NUM_CRSS_WITH_TCHS,	// Teachers
+     };
+   unsigned NumCrssWithUsrs;
+
+   /***** Get number of courses with users from cache *****/
+   if (!FigCch_GetFigureFromCache (FigureCrss[Role],Scope,Cod,
+				   FigCch_UNSIGNED,&NumCrssWithUsrs))
+     {
+      /***** Get current number of courses with users from database and update cache *****/
+      NumCrssWithUsrs = (unsigned)
+	                DB_QueryCOUNT ("can not get number of courses with users",
+				       "SELECT COUNT(DISTINCT courses.CrsCod)"
+				       " FROM institutions,centres,degrees,courses,crs_usr"
+				       " WHERE %sinstitutions.InsCod=centres.InsCod"
+				       " AND centres.CtrCod=degrees.CtrCod"
+				       " AND degrees.DegCod=courses.DegCod"
+				       " AND courses.CrsCod=crs_usr.CrsCod"
+				       " AND crs_usr.Role=%u",
+				       SubQuery,(unsigned) Role);
+      FigCch_UpdateFigureIntoCache (FigureCrss[Role],Scope,Cod,
+				    FigCch_UNSIGNED,&NumCrssWithUsrs);
+     }
+
+   return NumCrssWithUsrs;
   }
 
 /*****************************************************************************/
@@ -927,9 +1025,9 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 HTM_TR_Begin (NULL);
 
 	 /* Get number of users */
-	 NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrss (Hie_CRS,Crs->CrsCod,1 << Rol_STD);
-	 NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrss (Hie_CRS,Crs->CrsCod,1 << Rol_NET);
-	 NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrss (Hie_CRS,Crs->CrsCod,1 << Rol_TCH);
+	 NumUsrs[Rol_STD] = Usr_GetCachedNumUsrsInCrss (Hie_CRS,Crs->CrsCod,1 << Rol_STD);
+	 NumUsrs[Rol_NET] = Usr_GetCachedNumUsrsInCrss (Hie_CRS,Crs->CrsCod,1 << Rol_NET);
+	 NumUsrs[Rol_TCH] = Usr_GetCachedNumUsrsInCrss (Hie_CRS,Crs->CrsCod,1 << Rol_TCH);
 	 NumUsrs[Rol_UNK] = NumUsrs[Rol_STD] +
 	                    NumUsrs[Rol_NET] +
 			    NumUsrs[Rol_TCH];

@@ -172,7 +172,7 @@ static const char *API_Functions[1 + API_NUM_FUNCTIONS] =
 #define API_NUM_ROLES 4
 typedef enum
   {
-   API_ROLE_UNKNOWN = 0,	// User not logged in
+   API_ROLE_UNKNOWN = 0,	// User not logged in (do not change this constant to any value other than 0)
    API_ROLE__GUEST_ = 1,	// User not belonging to any course
    API_ROLE_STUDENT = 2,	// Student in current course
    API_ROLE_TEACHER = 3,	// Teacher in current course
@@ -190,16 +190,10 @@ static const Rol_Role_t API_SvcRole_to_RolRole[API_NUM_ROLES] =
 /* Translation from swad-core-role to service-web-role */
 static const API_Role_t API_RolRole_to_SvcRole[Rol_NUM_ROLES] =
   {
-   [Rol_UNK    ] = API_ROLE_UNKNOWN,
-   [Rol_GST    ] = API_ROLE__GUEST_,
-   [Rol_USR    ] = API_ROLE_UNKNOWN,
-   [Rol_STD    ] = API_ROLE_STUDENT,
-   [Rol_NET    ] = API_ROLE_TEACHER,	// TODO: Create new web service role for non-editing teachers
-   [Rol_TCH    ] = API_ROLE_TEACHER,
-   [Rol_DEG_ADM] = API_ROLE_UNKNOWN,
-   [Rol_CTR_ADM] = API_ROLE_UNKNOWN,
-   [Rol_INS_ADM] = API_ROLE_UNKNOWN,
-   [Rol_SYS_ADM] = API_ROLE_UNKNOWN,
+   [Rol_GST] = API_ROLE__GUEST_,
+   [Rol_STD] = API_ROLE_STUDENT,
+   [Rol_NET] = API_ROLE_TEACHER,	// TODO: Create new web service role for non-editing teachers
+   [Rol_TCH] = API_ROLE_TEACHER,
   };
 
 #define API_BYTES_WS_KEY Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64

@@ -112,12 +112,15 @@ void Cty_ChangeCtyWWW (void);
 void Cty_ContEditAfterChgCty (void);
 void Cty_RecFormNewCountry (void);
 
-unsigned Cty_GetNumCtysTotal (void);
-unsigned Cty_GetNumCtysWithInss (const char *SubQuery);
-unsigned Cty_GetNumCtysWithCtrs (const char *SubQuery);
-unsigned Cty_GetNumCtysWithDegs (const char *SubQuery);
-unsigned Cty_GetNumCtysWithCrss (const char *SubQuery);
-unsigned Cty_GetNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery);
+unsigned Cty_GetCachedNumCtysInSys (void);
+
+unsigned Cty_GetCachedNumCtysWithInss (void);
+unsigned Cty_GetCachedNumCtysWithCtrs (void);
+unsigned Cty_GetCachedNumCtysWithDegs (void);
+unsigned Cty_GetCachedNumCtysWithCrss (void);
+
+unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod);
 
 void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys);
 

@@ -33,6 +33,7 @@
 
 #include "swad_database.h"
 #include "swad_department.h"
+#include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
@@ -165,7 +166,7 @@ static void InsCfg_Configuration (bool PrintView)
       InsCfg_QR ();
    else
      {
-      NumCtrs = Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod);
+      NumCtrs = Ctr_GetCachedNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod);
 
       /***** Number of users who claim to belong to this institution,
              number of centres,
@@ -461,6 +462,7 @@ static void InsCfg_QR (void)
 static void InsCfg_NumUsrs (void)
   {
    extern const char *Txt_Users_of_the_institution;
+   unsigned NumUsrsIns;
 
    /***** Number of users *****/
    HTM_TR_Begin (NULL);
@@ -470,7 +472,14 @@ static void InsCfg_NumUsrs (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (&Gbl.Hierarchy.Ins));
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_INS,Hie_INS,Gbl.Hierarchy.Ins.InsCod,
+                                   FigCch_UNSIGNED,&NumUsrsIns))
+     {
+      NumUsrsIns = Usr_GetNumUsrsWhoClaimToBelongToIns (&Gbl.Hierarchy.Ins);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_INS,Hie_INS,Gbl.Hierarchy.Ins.InsCod,
+                                    FigCch_UNSIGNED,&NumUsrsIns);
+     }
+   HTM_Unsigned (NumUsrsIns);
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -492,7 +501,7 @@ static void InsCfg_NumDegs (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
+   HTM_Unsigned (Deg_GetCachedNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -514,7 +523,7 @@ static void InsCfg_NumCrss (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
+   HTM_Unsigned (Crs_GetCachedNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
 
    HTM_TR_End ();

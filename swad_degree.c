@@ -888,8 +888,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
-   unsigned NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
-   unsigned NumUsrsInCrss;
+   unsigned NumCrss = Crs_GetCachedNumCrssInDeg (Deg->DegCod);
    Deg_StatusTxt_t StatusTxt;
 
    /***** Get data of type of degree of this degree *****/
@@ -944,18 +943,10 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 
    /***** Number of users in courses of this degree *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_IN_CRSS,Hie_DEG,Deg->DegCod,
-                                   FigCch_Type_UNSIGNED,&NumUsrsInCrss))
-     {
-      // Not updated recently in cache ==> compute and update it in cache
-      NumUsrsInCrss = Usr_GetNumUsrsInCrss (Hie_DEG,Deg->DegCod,
-				            1 << Rol_STD |
-				            1 << Rol_NET |
-				            1 << Rol_TCH);	// Any user
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_IN_CRSS,Hie_DEG,Deg->DegCod,
-                                    FigCch_Type_UNSIGNED,&NumUsrsInCrss);
-     }
-   HTM_Unsigned (NumUsrsInCrss);
+   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_DEG,Deg->DegCod,
+				             1 << Rol_STD |
+				             1 << Rol_NET |
+				             1 << Rol_TCH));	// Any user
    HTM_TD_End ();
 
    /***** Degree status *****/
@@ -1904,10 +1895,21 @@ void Deg_RemoveLogo (void)
 /*********************** Get total number of degrees *************************/
 /*****************************************************************************/
 
-unsigned Deg_GetNumDegsTotal (void)
+unsigned Deg_GetCachedNumDegsInSys (void)
   {
-   /***** Get total number of degrees from database *****/
-   return (unsigned) DB_GetNumRowsTable ("degrees");
+   unsigned NumDegs;
+
+   /***** Get number of degrees from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_SYS,-1L,
+                                   FigCch_UNSIGNED,&NumDegs))
+     {
+      /***** Get current number of degrees from database and update cache *****/
+      NumDegs = (unsigned) DB_GetNumRowsTable ("degrees");
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_SYS,-1L,
+                                    FigCch_UNSIGNED,&NumDegs);
+     }
+
+   return NumDegs;
   }
 
 /*****************************************************************************/
@@ -1942,6 +1944,23 @@ unsigned Deg_GetNumDegsInCty (long CtyCod)
    return Gbl.Cache.NumDegsInCty.NumDegs;
   }
 
+unsigned Deg_GetCachedNumDegsInCty (long CtyCod)
+  {
+   unsigned NumDegs;
+
+   /***** Get number of degrees from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_CTY,CtyCod,
+				   FigCch_UNSIGNED,&NumDegs))
+     {
+      /***** Get current number of degrees from database and update cache *****/
+      NumDegs = Deg_GetNumDegsInCty (CtyCod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_CTY,CtyCod,
+				    FigCch_UNSIGNED,&NumDegs);
+     }
+
+   return NumDegs;
+  }
+
 /*****************************************************************************/
 /****************** Get number of degrees in an institution ******************/
 /*****************************************************************************/
@@ -1974,6 +1993,23 @@ unsigned Deg_GetNumDegsInIns (long InsCod)
    return Gbl.Cache.NumDegsInIns.NumDegs;
   }
 
+unsigned Deg_GetCachedNumDegsInIns (long InsCod)
+  {
+   unsigned NumDegs;
+
+   /***** Get number of degrees from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_INS,InsCod,
+				   FigCch_UNSIGNED,&NumDegs))
+     {
+      /***** Get current number of degrees from database and update cache *****/
+      NumDegs = Deg_GetNumDegsInIns (InsCod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_INS,InsCod,
+				    FigCch_UNSIGNED,&NumDegs);
+     }
+
+   return NumDegs;
+  }
+
 /*****************************************************************************/
 /******************** Get number of degrees in a centre **********************/
 /*****************************************************************************/
@@ -2004,40 +2040,87 @@ unsigned Deg_GetNumDegsInCtr (long CtrCod)
    return Gbl.Cache.NumDegsInCtr.NumDegs;
   }
 
+unsigned Deg_GetCachedNumDegsInCtr (long CtrCod)
+  {
+   unsigned NumDegs;
+
+   /***** Get number of degrees from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_CTR,CtrCod,
+				   FigCch_UNSIGNED,&NumDegs))
+     {
+      /***** Get current number of degrees from database and update cache *****/
+      NumDegs = Deg_GetNumDegsInCtr (CtrCod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_CTR,CtrCod,
+				    FigCch_UNSIGNED,&NumDegs);
+     }
+
+   return NumDegs;
+  }
+
 /*****************************************************************************/
 /********************* Get number of centres with courses ********************/
 /*****************************************************************************/
 
-unsigned Deg_GetNumDegsWithCrss (const char *SubQuery)
+unsigned Deg_GetCachedNumDegsWithCrss (const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod)
   {
-   /***** Get number of degrees with courses from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of degrees with courses",
-			     "SELECT COUNT(DISTINCT degrees.DegCod)"
-			     " FROM institutions,centres,degrees,courses"
-			     " WHERE %sinstitutions.InsCod=centres.InsCod"
-			     " AND centres.CtrCod=degrees.CtrCod"
-			     " AND degrees.DegCod=courses.DegCod",
-			     SubQuery);
+   unsigned NumDegsWithCrss;
+
+   /***** Get number of degrees with courses from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS_WITH_CRSS,Scope,Cod,
+				   FigCch_UNSIGNED,&NumDegsWithCrss))
+     {
+      /***** Get current number of degrees with courses from database and update cache *****/
+      NumDegsWithCrss = (unsigned)
+	                DB_QueryCOUNT ("can not get number of degrees with courses",
+				       "SELECT COUNT(DISTINCT degrees.DegCod)"
+				       " FROM institutions,centres,degrees,courses"
+				       " WHERE %sinstitutions.InsCod=centres.InsCod"
+				       " AND centres.CtrCod=degrees.CtrCod"
+				       " AND degrees.DegCod=courses.DegCod",
+				       SubQuery);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS_WITH_CRSS,Scope,Cod,
+				    FigCch_UNSIGNED,&NumDegsWithCrss);
+     }
+
+   return NumDegsWithCrss;
   }
 
 /*****************************************************************************/
 /********************* Get number of degrees with users **********************/
 /*****************************************************************************/
 
-unsigned Deg_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery)
+unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod)
   {
-   /***** Get number of degrees with users from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of degrees with users",
-			     "SELECT COUNT(DISTINCT degrees.DegCod)"
-			     " FROM institutions,centres,degrees,courses,crs_usr"
-			     " WHERE %sinstitutions.InsCod=centres.InsCod"
-			     " AND centres.CtrCod=degrees.CtrCod"
-			     " AND degrees.DegCod=courses.DegCod"
-			     " AND courses.CrsCod=crs_usr.CrsCod"
-			     " AND crs_usr.Role=%u",
-			     SubQuery,(unsigned) Role);
+   static const FigCch_FigureCached_t FigureDegs[Rol_NUM_ROLES] =
+     {
+      [Rol_STD] = FigCch_NUM_DEGS_WITH_STDS,	// Students
+      [Rol_NET] = FigCch_NUM_DEGS_WITH_NETS,	// Non-editing teachers
+      [Rol_TCH] = FigCch_NUM_DEGS_WITH_TCHS,	// Teachers
+     };
+   unsigned NumDegsWithUsrs;
+
+   /***** Get number of degrees with users from cache *****/
+   if (!FigCch_GetFigureFromCache (FigureDegs[Role],Scope,Cod,
+				   FigCch_UNSIGNED,&NumDegsWithUsrs))
+     {
+      /***** Get current number of degrees with users from database and update cache *****/
+      NumDegsWithUsrs = (unsigned)
+	                DB_QueryCOUNT ("can not get number of degrees with users",
+				       "SELECT COUNT(DISTINCT degrees.DegCod)"
+				       " FROM institutions,centres,degrees,courses,crs_usr"
+				       " WHERE %sinstitutions.InsCod=centres.InsCod"
+				       " AND centres.CtrCod=degrees.CtrCod"
+				       " AND degrees.DegCod=courses.DegCod"
+				       " AND courses.CrsCod=crs_usr.CrsCod"
+				       " AND crs_usr.Role=%u",
+				       SubQuery,(unsigned) Role);
+      FigCch_UpdateFigureIntoCache (FigureDegs[Role],Scope,Cod,
+				    FigCch_UNSIGNED,&NumDegsWithUsrs);
+     }
+
+   return NumDegsWithUsrs;
   }
 
 /*****************************************************************************/

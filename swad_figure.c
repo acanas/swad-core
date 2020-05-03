@@ -425,48 +425,6 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
   {
    extern const char *Txt_Total;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   static FigCch_FigureCached_t FigureNumUsrs[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK	  ] = FigCch_NUM_USRS_IN_CRSS,	// Any users in courses
-      [Rol_GST	  ] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_USR	  ] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_STD	  ] = FigCch_NUM_STDS_IN_CRSS,	// Students
-      [Rol_NET    ] = FigCch_NUM_NETS_IN_CRSS,	// Non-editing teachers
-      [Rol_TCH	  ] = FigCch_NUM_TCHS_IN_CRSS,	// Teachers
-      [Rol_DEG_ADM] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_CTR_ADM] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_INS_ADM] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_SYS_ADM] = FigCch_UNKNOWN,		// Not applicable
-     };
-   static FigCch_FigureCached_t FigureNumCrssPerUsr[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK	  ] = FigCch_NUM_CRSS_PER_USR,	// Number of courses per user
-      [Rol_GST	  ] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_USR	  ] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_STD	  ] = FigCch_NUM_CRSS_PER_STD,	// Number of courses per student
-      [Rol_NET    ] = FigCch_NUM_CRSS_PER_NET,	// Number of courses per non-editing teacher
-      [Rol_TCH	  ] = FigCch_NUM_CRSS_PER_TCH,	// Number of courses per teacher
-      [Rol_DEG_ADM] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_CTR_ADM] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_INS_ADM] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_SYS_ADM] = FigCch_UNKNOWN,		// Not applicable
-     };
-   static FigCch_FigureCached_t FigureNumUsrsPerCrs[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK	  ] = FigCch_NUM_USRS_PER_CRS,	// Number of users per course
-      [Rol_GST	  ] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_USR	  ] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_STD	  ] = FigCch_NUM_STDS_PER_CRS,	// Number of students per course
-      [Rol_NET    ] = FigCch_NUM_NETS_PER_CRS,	// Number of non-editing teachers per course
-      [Rol_TCH	  ] = FigCch_NUM_TCHS_PER_CRS,	// Number of teachers per course
-      [Rol_DEG_ADM] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_CTR_ADM] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_INS_ADM] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_SYS_ADM] = FigCch_UNKNOWN,		// Not applicable
-     };
-   unsigned NumUsrs;
-   double NumCrssPerUsr;
-   double NumUsrsPerCrs;
    long Cod = (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Cty.CtyCod :
 	      (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Ins.InsCod :
 	      (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
@@ -480,36 +438,6 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
 	                                 (1 << Rol_TCH)) :
 	                                 (1 << Role);
 
-   /***** Get the number of users belonging to any course *****/
-   if (!FigCch_GetFigureFromCache (FigureNumUsrs[Role],Gbl.Scope.Current,Cod,
-                                   FigCch_Type_UNSIGNED,&NumUsrs))
-     {
-      // Not updated recently in cache ==> compute and update it in cache
-      NumUsrs = Usr_GetNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles);
-      FigCch_UpdateFigureIntoCache (FigureNumUsrs[Role],Gbl.Scope.Current,Cod,
-                                    FigCch_Type_UNSIGNED,&NumUsrs);
-     }
-
-   /***** Get average number of courses per user *****/
-   if (!FigCch_GetFigureFromCache (FigureNumCrssPerUsr[Role],Gbl.Scope.Current,Cod,
-                                   FigCch_Type_DOUBLE,&NumCrssPerUsr))
-     {
-      // Not updated recently in cache ==> compute and update it in cache
-      NumCrssPerUsr = Usr_GetNumCrssPerUsr (Gbl.Scope.Current,Cod,Role);
-      FigCch_UpdateFigureIntoCache (FigureNumCrssPerUsr[Role],Gbl.Scope.Current,Cod,
-                                    FigCch_Type_DOUBLE,&NumCrssPerUsr);
-     }
-
-   /***** Query the number of users per course *****/
-   if (!FigCch_GetFigureFromCache (FigureNumUsrsPerCrs[Role],Gbl.Scope.Current,Cod,
-                                   FigCch_Type_DOUBLE,&NumUsrsPerCrs))
-     {
-      // Not updated recently in cache ==> compute and update it in cache
-      NumUsrsPerCrs = Usr_GetNumUsrsPerCrs (Gbl.Scope.Current,Cod,Role);
-      FigCch_UpdateFigureIntoCache (FigureNumUsrsPerCrs[Role],Gbl.Scope.Current,Cod,
-                                    FigCch_Type_DOUBLE,&NumUsrsPerCrs);
-     }
-
    /***** Write the total number of users *****/
    HTM_TR_Begin (NULL);
 
@@ -518,16 +446,17 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
         	                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
 
+   /* Number of users in courses */
    HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Unsigned (NumUsrs);
+   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles));
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Double2Decimals (NumCrssPerUsr);
+   HTM_Double2Decimals (Usr_GetCachedNumCrssPerUsr (Gbl.Scope.Current,Cod,Role));
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Double2Decimals (NumUsrsPerCrs);
+   HTM_Double2Decimals (Usr_GetCachedNumUsrsPerCrs (Gbl.Scope.Current,Cod,Role));
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -540,7 +469,6 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
 static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
   {
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   unsigned NumGsts;
    char *Class = "DAT RB";
 
    /***** Write the total number of users not belonging to any course *****/
@@ -551,15 +479,7 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_GSTS,Hie_SYS,-1L,
-                                   FigCch_Type_UNSIGNED,&NumGsts))
-     {
-      // Not updated recently in cache ==> compute and update it in cache
-      NumGsts = Usr_GetNumUsrsNotBelongingToAnyCrs ();
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_GSTS,Hie_SYS,-1L,
-                                    FigCch_Type_UNSIGNED,&NumGsts);
-     }
-   HTM_Unsigned (NumGsts);
+   HTM_Unsigned (Usr_GetCachedNumUsrsNotBelongingToAnyCrs ());
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s\"",Class);
@@ -738,7 +658,7 @@ static void Fig_GetAndShowHierarchyWithInss (void)
    switch (Gbl.Scope.Current)
      {
       case Hie_SYS:
-         NumCtysWithInss = Cty_GetNumCtysWithInss ("");
+	 NumCtysWithInss = Cty_GetCachedNumCtysWithInss ();
          break;
       case Hie_CTY:
       case Hie_INS:
@@ -777,13 +697,12 @@ static void Fig_GetAndShowHierarchyWithCtrs (void)
    switch (Gbl.Scope.Current)
      {
       case Hie_SYS:
-         NumCtysWithCtrs = Cty_GetNumCtysWithCtrs ("");
-         NumInssWithCtrs = Ins_GetNumInssWithCtrs ("");
+	 NumCtysWithCtrs = Cty_GetCachedNumCtysWithCtrs ();
+	 NumInssWithCtrs = Ins_GetCachedNumInssWithCtrs ("",Hie_SYS,-1L);
          break;
       case Hie_CTY:
-         sprintf (SubQuery,"institutions.CtyCod=%ld AND ",
-                  Gbl.Hierarchy.Cty.CtyCod);
-         NumInssWithCtrs = Ins_GetNumInssWithCtrs (SubQuery);
+	 sprintf (SubQuery,"institutions.CtyCod=%ld AND ",Gbl.Hierarchy.Cty.CtyCod);
+	 NumInssWithCtrs = Ins_GetCachedNumInssWithCtrs (SubQuery,Hie_CTY,Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_INS:
       case Hie_CTR:
@@ -822,20 +741,18 @@ static void Fig_GetAndShowHierarchyWithDegs (void)
    switch (Gbl.Scope.Current)
      {
       case Hie_SYS:
-         NumCtysWithDegs = Cty_GetNumCtysWithDegs ("");
-         NumInssWithDegs = Ins_GetNumInssWithDegs ("");
-	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs ("");
+	 NumCtysWithDegs = Cty_GetCachedNumCtysWithDegs ();
+	 NumInssWithDegs = Ins_GetCachedNumInssWithDegs ("",Hie_SYS,-1L);
+	 NumCtrsWithDegs = Ctr_GetCachedNumCtrsWithDegs ("",Hie_SYS,-1L);
          break;
       case Hie_CTY:
-         sprintf (SubQuery,"institutions.CtyCod=%ld AND ",
-                  Gbl.Hierarchy.Cty.CtyCod);
-         NumInssWithDegs = Ins_GetNumInssWithDegs (SubQuery);
-	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs (SubQuery);
+	 sprintf (SubQuery,"institutions.CtyCod=%ld AND ",Gbl.Hierarchy.Cty.CtyCod);
+	 NumInssWithDegs = Ins_GetCachedNumInssWithDegs (SubQuery,Hie_CTY,Gbl.Hierarchy.Cty.CtyCod);
+	 NumCtrsWithDegs = Ctr_GetCachedNumCtrsWithDegs (SubQuery,Hie_CTY,Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_INS:
-         sprintf (SubQuery,"centres.InsCod=%ld AND ",
-                  Gbl.Hierarchy.Ins.InsCod);
-	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs (SubQuery);
+	 sprintf (SubQuery,"centres.InsCod=%ld AND ",Gbl.Hierarchy.Ins.InsCod);
+         NumCtrsWithDegs = Ctr_GetCachedNumCtrsWithDegs (SubQuery,Hie_INS,Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_CTR:
       case Hie_DEG:
@@ -874,28 +791,25 @@ static void Fig_GetAndShowHierarchyWithCrss (void)
    switch (Gbl.Scope.Current)
      {
       case Hie_SYS:
-         NumCtysWithCrss = Cty_GetNumCtysWithCrss ("");
-         NumInssWithCrss = Ins_GetNumInssWithCrss ("");
-	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss ("");
-	 NumDegsWithCrss = Deg_GetNumDegsWithCrss ("");
+	 NumCtysWithCrss = Cty_GetCachedNumCtysWithCrss ();
+	 NumInssWithCrss = Ins_GetCachedNumInssWithCrss ("",Hie_SYS,-1L);
+         NumCtrsWithCrss = Ctr_GetCachedNumCtrsWithCrss ("",Hie_SYS,-1L);
+         NumDegsWithCrss = Deg_GetCachedNumDegsWithCrss ("",Hie_SYS,-1L);
          break;
       case Hie_CTY:
-         sprintf (SubQuery,"institutions.CtyCod=%ld AND ",
-                  Gbl.Hierarchy.Cty.CtyCod);
-         NumInssWithCrss = Ins_GetNumInssWithCrss (SubQuery);
-	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
-	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
+	 sprintf (SubQuery,"institutions.CtyCod=%ld AND ",Gbl.Hierarchy.Cty.CtyCod);
+	 NumInssWithCrss = Ins_GetCachedNumInssWithCrss (SubQuery,Hie_CTY,Gbl.Hierarchy.Cty.CtyCod);
+	 NumCtrsWithCrss = Ctr_GetCachedNumCtrsWithCrss (SubQuery,Hie_CTY,Gbl.Hierarchy.Cty.CtyCod);
+         NumDegsWithCrss = Deg_GetCachedNumDegsWithCrss (SubQuery,Hie_CTY,Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_INS:
-         sprintf (SubQuery,"centres.InsCod=%ld AND ",
-                  Gbl.Hierarchy.Ins.InsCod);
-	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
-	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
+	 sprintf (SubQuery,"centres.InsCod=%ld AND ",Gbl.Hierarchy.Ins.InsCod);
+         NumCtrsWithCrss = Ctr_GetCachedNumCtrsWithCrss (SubQuery,Hie_INS,Gbl.Hierarchy.Ins.InsCod);
+	 NumDegsWithCrss = Deg_GetCachedNumDegsWithCrss (SubQuery,Hie_INS,Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_CTR:
-         sprintf (SubQuery,"degrees.CtrCod=%ld AND ",
-                  Gbl.Hierarchy.Ctr.CtrCod);
-	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
+	 sprintf (SubQuery,"degrees.CtrCod=%ld AND ",Gbl.Hierarchy.Ctr.CtrCod);
+	 NumDegsWithCrss = Deg_GetCachedNumDegsWithCrss (SubQuery,Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod);
 	 break;
       case Hie_DEG:
       case Hie_CRS:
@@ -934,56 +848,51 @@ static void Fig_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
    switch (Gbl.Scope.Current)
      {
       case Hie_SYS:
-         NumCtysWithUsrs = Cty_GetNumCtysWithUsrs (Role,"");
-         NumInssWithUsrs = Ins_GetNumInssWithUsrs (Role,"");
-	 NumCtrsWithUsrs = Ctr_GetNumCtrsWithUsrs (Role,"");
-	 NumDegsWithUsrs = Deg_GetNumDegsWithUsrs (Role,"");
-	 NumCrssWithUsrs = Crs_GetNumCrssWithUsrs (Role,"");
+         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,"",Hie_SYS,-1L);
+         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,"",Hie_SYS,-1L);
+         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,"",Hie_SYS,-1L);
+         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,"",Hie_SYS,-1L);
+         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,"",Hie_SYS,-1L);
          break;
       case Hie_CTY:
-         sprintf (SubQuery,"institutions.CtyCod=%ld AND ",
-                  Gbl.Hierarchy.Cty.CtyCod);
-         NumCtysWithUsrs = Cty_GetNumCtysWithUsrs (Role,SubQuery);
-         NumInssWithUsrs = Ins_GetNumInssWithUsrs (Role,SubQuery);
-	 NumCtrsWithUsrs = Ctr_GetNumCtrsWithUsrs (Role,SubQuery);
-	 NumDegsWithUsrs = Deg_GetNumDegsWithUsrs (Role,SubQuery);
-	 NumCrssWithUsrs = Crs_GetNumCrssWithUsrs (Role,SubQuery);
+	 sprintf (SubQuery,"institutions.CtyCod=%ld AND ",Gbl.Hierarchy.Cty.CtyCod);
+         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,Hie_CTY,Gbl.Hierarchy.Cty.CtyCod);
+         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,Hie_CTY,Gbl.Hierarchy.Cty.CtyCod);
+         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,Hie_CTY,Gbl.Hierarchy.Cty.CtyCod);
+         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,SubQuery,Hie_CTY,Gbl.Hierarchy.Cty.CtyCod);
+         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,Hie_CTY,Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_INS:
-         sprintf (SubQuery,"centres.InsCod=%ld AND ",
-                  Gbl.Hierarchy.Ins.InsCod);
-         NumCtysWithUsrs = Cty_GetNumCtysWithUsrs (Role,SubQuery);
-         NumInssWithUsrs = Ins_GetNumInssWithUsrs (Role,SubQuery);
-	 NumCtrsWithUsrs = Ctr_GetNumCtrsWithUsrs (Role,SubQuery);
-	 NumDegsWithUsrs = Deg_GetNumDegsWithUsrs (Role,SubQuery);
-	 NumCrssWithUsrs = Crs_GetNumCrssWithUsrs (Role,SubQuery);
+         sprintf (SubQuery,"centres.InsCod=%ld AND ",Gbl.Hierarchy.Ins.InsCod);
+         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,Hie_INS,Gbl.Hierarchy.Ins.InsCod);
+         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,Hie_INS,Gbl.Hierarchy.Ins.InsCod);
+         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,Hie_INS,Gbl.Hierarchy.Ins.InsCod);
+         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,SubQuery,Hie_INS,Gbl.Hierarchy.Ins.InsCod);
+         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,Hie_INS,Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_CTR:
-         sprintf (SubQuery,"degrees.CtrCod=%ld AND ",
-                  Gbl.Hierarchy.Ctr.CtrCod);
-         NumCtysWithUsrs = Cty_GetNumCtysWithUsrs (Role,SubQuery);
-         NumInssWithUsrs = Ins_GetNumInssWithUsrs (Role,SubQuery);
-	 NumCtrsWithUsrs = Ctr_GetNumCtrsWithUsrs (Role,SubQuery);
-	 NumDegsWithUsrs = Deg_GetNumDegsWithUsrs (Role,SubQuery);
-	 NumCrssWithUsrs = Crs_GetNumCrssWithUsrs (Role,SubQuery);
+         sprintf (SubQuery,"degrees.CtrCod=%ld AND ",Gbl.Hierarchy.Ctr.CtrCod);
+         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod);
+         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod);
+         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod);
+         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,SubQuery,Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod);
+         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod);
 	 break;
       case Hie_DEG:
-         sprintf (SubQuery,"courses.DegCod=%ld AND ",
-                  Gbl.Hierarchy.Deg.DegCod);
-         NumCtysWithUsrs = Cty_GetNumCtysWithUsrs (Role,SubQuery);
-         NumInssWithUsrs = Ins_GetNumInssWithUsrs (Role,SubQuery);
-	 NumCtrsWithUsrs = Ctr_GetNumCtrsWithUsrs (Role,SubQuery);
-	 NumDegsWithUsrs = Deg_GetNumDegsWithUsrs (Role,SubQuery);
-	 NumCrssWithUsrs = Crs_GetNumCrssWithUsrs (Role,SubQuery);
+         sprintf (SubQuery,"courses.DegCod=%ld AND ",Gbl.Hierarchy.Deg.DegCod);
+         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,Hie_DEG,Gbl.Hierarchy.Deg.DegCod);
+         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,Hie_DEG,Gbl.Hierarchy.Deg.DegCod);
+         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,Hie_DEG,Gbl.Hierarchy.Deg.DegCod);
+         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,SubQuery,Hie_DEG,Gbl.Hierarchy.Deg.DegCod);
+         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,Hie_DEG,Gbl.Hierarchy.Deg.DegCod);
 	 break;
      case Hie_CRS:
-         sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
-                  Gbl.Hierarchy.Crs.CrsCod);
-         NumCtysWithUsrs = Cty_GetNumCtysWithUsrs (Role,SubQuery);
-         NumInssWithUsrs = Ins_GetNumInssWithUsrs (Role,SubQuery);
-	 NumCtrsWithUsrs = Ctr_GetNumCtrsWithUsrs (Role,SubQuery);
-	 NumDegsWithUsrs = Deg_GetNumDegsWithUsrs (Role,SubQuery);
-	 NumCrssWithUsrs = Crs_GetNumCrssWithUsrs (Role,SubQuery);
+         sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",Gbl.Hierarchy.Crs.CrsCod);
+         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,Hie_CRS,Gbl.Hierarchy.Crs.CrsCod);
+         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,Hie_CRS,Gbl.Hierarchy.Crs.CrsCod);
+         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,Hie_CRS,Gbl.Hierarchy.Crs.CrsCod);
+         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,SubQuery,Hie_CRS,Gbl.Hierarchy.Crs.CrsCod);
+         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,Hie_CRS,Gbl.Hierarchy.Crs.CrsCod);
 	 break;
       default:
 	 Lay_WrongScopeExit ();
@@ -1017,29 +926,29 @@ static void Fig_GetAndShowHierarchyTotal (void)
    switch (Gbl.Scope.Current)
      {
       case Hie_SYS:
-	 NumCtysTotal = Cty_GetNumCtysTotal ();
-	 NumInssTotal = Ins_GetNumInssTotal ();
-	 NumCtrsTotal = Ctr_GetNumCtrsInSys ();
-	 NumDegsTotal = Deg_GetNumDegsTotal ();
-	 NumCrssTotal = Crs_GetNumCrssTotal ();
+	 NumCtysTotal = Cty_GetCachedNumCtysInSys ();
+	 NumInssTotal = Ins_GetCachedNumInssInSys ();
+	 NumCtrsTotal = Ctr_GetCachedNumCtrsInSys ();
+	 NumDegsTotal = Deg_GetCachedNumDegsInSys ();
+	 NumCrssTotal = Crs_GetCachedNumCrssInSys ();
          break;
       case Hie_CTY:
-	 NumInssTotal = Ins_GetNumInssInCty (Gbl.Hierarchy.Cty.CtyCod);
-	 NumCtrsTotal = Ctr_GetNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod);
-	 NumDegsTotal = Deg_GetNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod);
-	 NumCrssTotal = Crs_GetNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod);
+	 NumInssTotal = Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Cty.CtyCod);
+	 NumCtrsTotal = Ctr_GetCachedNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod);
+	 NumDegsTotal = Deg_GetCachedNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod);
+	 NumCrssTotal = Crs_GetCachedNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_INS:
-	 NumCtrsTotal = Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod);
-	 NumDegsTotal = Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod);
-	 NumCrssTotal = Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod);
+	 NumCtrsTotal = Ctr_GetCachedNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod);
+	 NumDegsTotal = Deg_GetCachedNumDegsInIns (Gbl.Hierarchy.Ins.InsCod);
+	 NumCrssTotal = Crs_GetCachedNumCrssInIns (Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_CTR:
-	 NumDegsTotal = Deg_GetNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod);
-	 NumCrssTotal = Crs_GetNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod);
+	 NumDegsTotal = Deg_GetCachedNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod);
+	 NumCrssTotal = Crs_GetCachedNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod);
 	 break;
       case Hie_DEG:
-	 NumCrssTotal = Crs_GetNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod);
+	 NumCrssTotal = Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod);
 	 break;
      case Hie_CRS:
 	 break;
@@ -3512,16 +3421,16 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    /***** Get total number of users *****/
    NumUsrsTotal =
    (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
-                                    Usr_GetNumUsrsInCrss (Gbl.Scope.Current,
-							 (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Cty.CtyCod :
-							 (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Ins.InsCod :
-							 (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
-							 (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Deg.DegCod :
-							 (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Crs.CrsCod :
-											 -1L))))),
-							  1 << Rol_STD |
-							  1 << Rol_NET |
-							  1 << Rol_TCH);
+                                    Usr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,
+							        (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Cty.CtyCod :
+							        (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Ins.InsCod :
+							        (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
+							        (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Deg.DegCod :
+							        (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Crs.CrsCod :
+											        -1L))))),
+								1 << Rol_STD |
+								1 << Rol_NET |
+								1 << Rol_TCH);
 
    /***** Get total number of following/followers from database *****/
    for (NoteType  = (TL_NoteType_t) 0;
@@ -3824,16 +3733,16 @@ static void Fig_GetAndShowFollowStats (void)
    /***** Get total number of users *****/
    NumUsrsTotal =
    (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
-				    Usr_GetNumUsrsInCrss (Gbl.Scope.Current,
-							 (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Cty.CtyCod :
-							 (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Ins.InsCod :
-							 (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
-							 (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Deg.DegCod :
-							 (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Crs.CrsCod :
-											 -1L))))),
-							  1 << Rol_STD |
-							  1 << Rol_NET |
-							  1 << Rol_TCH);
+				    Usr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,
+							        (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Cty.CtyCod :
+							        (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Ins.InsCod :
+							        (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
+							        (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Deg.DegCod :
+							        (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Crs.CrsCod :
+											        -1L))))),
+								1 << Rol_STD |
+								1 << Rol_NET |
+								1 << Rol_TCH);
 
    /***** Get total number of following/followers from database *****/
    for (Fol = 0;
@@ -4463,16 +4372,16 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
    /***** Get total number of users *****/
    NumUsrsTotal =
    (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
-				    Usr_GetNumUsrsInCrss (Gbl.Scope.Current,
-							 (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Cty.CtyCod :
-							 (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Ins.InsCod :
-							 (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
-							 (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Deg.DegCod :
-							 (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Crs.CrsCod :
-											 -1L))))),
-							  1 << Rol_STD |
-							  1 << Rol_NET |
-							  1 << Rol_TCH);
+				    Usr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,
+							        (Gbl.Scope.Current == Hie_CTY ? Gbl.Hierarchy.Cty.CtyCod :
+							        (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Ins.InsCod :
+							        (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
+							        (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Deg.DegCod :
+							        (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Crs.CrsCod :
+											        -1L))))),
+								1 << Rol_STD |
+								1 << Rol_NET |
+								1 << Rol_TCH);
 
    /***** Get total number of users who want to be
           notified by email on some event, from database *****/

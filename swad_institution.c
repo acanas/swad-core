@@ -386,7 +386,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
-   unsigned NumUsrsInCrss;
+   unsigned NumUsrsIns;
    Ins_StatusTxt_t StatusTxt;
 
    if (Ins->Status & Ins_STATUS_BIT_PENDING)
@@ -417,23 +417,30 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
 
    /***** Number of users who claim to belong to this institution *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Usr_GetNumUsrsWhoClaimToBelongToIns (Ins));
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_INS,Hie_INS,Ins->InsCod,
+                                   FigCch_UNSIGNED,&NumUsrsIns))
+     {
+      NumUsrsIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_INS,Hie_INS,Ins->InsCod,
+                                    FigCch_UNSIGNED,&NumUsrsIns);
+     }
+   HTM_Unsigned (NumUsrsIns);
    HTM_TD_End ();
 
    /***** Other stats *****/
    /* Number of centres in this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Ctr_GetNumCtrsInIns (Ins->InsCod));
+   HTM_Unsigned (Ctr_GetCachedNumCtrsInIns (Ins->InsCod));
    HTM_TD_End ();
 
    /* Number of degrees in this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Deg_GetNumDegsInIns (Ins->InsCod));
+   HTM_Unsigned (Deg_GetCachedNumDegsInIns (Ins->InsCod));
    HTM_TD_End ();
 
    /* Number of courses in this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Crs_GetNumCrssInIns (Ins->InsCod));
+   HTM_Unsigned (Crs_GetCachedNumCrssInIns (Ins->InsCod));
    HTM_TD_End ();
 
    /* Number of departments in this institution */
@@ -443,18 +450,10 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
 
    /* Number of users in courses of this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_IN_CRSS,Hie_INS,Ins->InsCod,
-                                   FigCch_Type_UNSIGNED,&NumUsrsInCrss))
-     {
-      // Not updated recently in cache ==> compute and update it in cache
-      NumUsrsInCrss = Usr_GetNumUsrsInCrss (Hie_INS,Ins->InsCod,
-				            1 << Rol_STD |
-				            1 << Rol_NET |
-				            1 << Rol_TCH);	// Any user
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_IN_CRSS,Hie_INS,Ins->InsCod,
-                                    FigCch_Type_UNSIGNED,&NumUsrsInCrss);
-     }
-   HTM_Unsigned (NumUsrsInCrss);
+   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_INS,Ins->InsCod,
+				             1 << Rol_STD |
+				             1 << Rol_NET |
+				             1 << Rol_TCH));	// Any user);
    HTM_TD_End ();
 
    /***** Institution status *****/
@@ -1090,8 +1089,8 @@ static void Ins_ListInstitutionsForEdition (void)
    struct UsrData UsrDat;
    bool ICanEdit;
    unsigned NumCtrss;
+   unsigned NumUsrsIns;
    unsigned NumUsrsInCrssOfIns;
-   unsigned NumUsrsWhoClaimToBelongToIns;
    Ins_StatusTxt_t StatusTxt;
    unsigned StatusUnsigned;
 
@@ -1111,20 +1110,20 @@ static void Ins_ListInstitutionsForEdition (void)
 
       ICanEdit = Ins_CheckIfICanEdit (Ins);
       NumCtrss = Ctr_GetNumCtrsInIns (Ins->InsCod);
+      NumUsrsIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins);
       NumUsrsInCrssOfIns = Usr_GetNumUsrsInCrss (Hie_INS,Ins->InsCod,
 						 1 << Rol_STD |
 						 1 << Rol_NET |
 						 1 << Rol_TCH);	// Any user
-      NumUsrsWhoClaimToBelongToIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins);
 
       HTM_TR_Begin (NULL);
 
       /* Put icon to remove institution */
       HTM_TD_Begin ("class=\"BM\"");
       if (!ICanEdit ||
-	  NumCtrss ||			// Institution has centres
-	  NumUsrsInCrssOfIns ||		// Institution has users
-	  NumUsrsWhoClaimToBelongToIns)	// Institution has users
+	  NumCtrss ||		// Institution has centres
+	  NumUsrsIns ||		// Institution has users
+	  NumUsrsInCrssOfIns)	// Institution has users
 	 // Institution has centres or users ==> deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
@@ -1201,7 +1200,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
       /* Number of users who claim to belong to this institution */
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumUsrsWhoClaimToBelongToIns);
+      HTM_Unsigned (NumUsrsIns);
       HTM_TD_End ();
 
       /* Number of centres */
@@ -1944,10 +1943,21 @@ static void Ins_CreateInstitution (unsigned Status)
 /********************* Get total number of institutions **********************/
 /*****************************************************************************/
 
-unsigned Ins_GetNumInssTotal (void)
+unsigned Ins_GetCachedNumInssInSys (void)
   {
-   /***** Get total number of institutions from database *****/
-   return (unsigned) DB_GetNumRowsTable ("institutions");
+   unsigned NumInss;
+
+   /***** Get number of institutions from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,Hie_SYS,-1L,
+                                   FigCch_UNSIGNED,&NumInss))
+     {
+      /***** Get current number of institutions from database and update cache *****/
+      NumInss = (unsigned) DB_GetNumRowsTable ("institutions");
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,Hie_SYS,-1L,
+                                    FigCch_UNSIGNED,&NumInss);
+     }
+
+   return NumInss;
   }
 
 /*****************************************************************************/
@@ -1978,71 +1988,142 @@ unsigned Ins_GetNumInssInCty (long CtyCod)
    return Gbl.Cache.NumInssInCty.NumInss;
   }
 
+unsigned Ins_GetCachedNumInssInCty (long CtyCod)
+  {
+   unsigned NumInss;
+
+   /***** Get number of institutions from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,Hie_CTY,CtyCod,
+                                   FigCch_UNSIGNED,&NumInss))
+     {
+      /***** Get current number of institutions from database and update cache *****/
+      NumInss = Ins_GetNumInssInCty (CtyCod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,Hie_CTY,CtyCod,
+                                    FigCch_UNSIGNED,&NumInss);
+     }
+
+   return NumInss;
+  }
+
 /*****************************************************************************/
 /***************** Get number of institutions with centres *******************/
 /*****************************************************************************/
 
-unsigned Ins_GetNumInssWithCtrs (const char *SubQuery)
+unsigned Ins_GetCachedNumInssWithCtrs (const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod)
   {
-   /***** Get number of institutions with centres from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of institutions with centres",
-			     "SELECT COUNT(DISTINCT institutions.InsCod)"
-			     " FROM institutions,centres"
-			     " WHERE %sinstitutions.InsCod=centres.InsCod",
-			     SubQuery);
+   unsigned NumInssWithCtrs;
+
+   /***** Get number of institutions with centres from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_CTRS,Scope,Cod,
+				   FigCch_UNSIGNED,&NumInssWithCtrs))
+     {
+      /***** Get current number of institutions with centres from database and update cache *****/
+      NumInssWithCtrs = (unsigned)
+	                DB_QueryCOUNT ("can not get number of institutions with centres",
+				       "SELECT COUNT(DISTINCT institutions.InsCod)"
+				       " FROM institutions,centres"
+				       " WHERE %sinstitutions.InsCod=centres.InsCod",
+				       SubQuery);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_CTRS,Scope,Cod,
+				    FigCch_UNSIGNED,&NumInssWithCtrs);
+     }
+
+   return NumInssWithCtrs;
   }
 
 /*****************************************************************************/
 /****************** Get number of institutions with degrees ******************/
 /*****************************************************************************/
 
-unsigned Ins_GetNumInssWithDegs (const char *SubQuery)
+unsigned Ins_GetCachedNumInssWithDegs (const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod)
   {
-   /***** Get number of institutions with degrees from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of institutions with degrees",
-			     "SELECT COUNT(DISTINCT institutions.InsCod)"
-			     " FROM institutions,centres,degrees"
-			     " WHERE %sinstitutions.InsCod=centres.InsCod"
-			     " AND centres.CtrCod=degrees.CtrCod",
-			     SubQuery);
+   unsigned NumInssWithDegs;
+
+   /***** Get number of institutions with degrees from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_DEGS,Scope,Cod,
+				   FigCch_UNSIGNED,&NumInssWithDegs))
+     {
+      /***** Get current number of institutions with degrees from database and update cache *****/
+      NumInssWithDegs = (unsigned)
+	                DB_QueryCOUNT ("can not get number of institutions with degrees",
+				       "SELECT COUNT(DISTINCT institutions.InsCod)"
+				       " FROM institutions,centres,degrees"
+				       " WHERE %sinstitutions.InsCod=centres.InsCod"
+				       " AND centres.CtrCod=degrees.CtrCod",
+				       SubQuery);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_DEGS,Scope,Cod,
+				    FigCch_UNSIGNED,&NumInssWithDegs);
+     }
+
+   return NumInssWithDegs;
   }
 
 /*****************************************************************************/
 /****************** Get number of institutions with courses ******************/
 /*****************************************************************************/
 
-unsigned Ins_GetNumInssWithCrss (const char *SubQuery)
+unsigned Ins_GetCachedNumInssWithCrss (const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod)
   {
-   /***** Get number of institutions with courses from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of institutions with courses",
-			     "SELECT COUNT(DISTINCT institutions.InsCod)"
-			     " FROM institutions,centres,degrees,courses"
-			     " WHERE %sinstitutions.InsCod=centres.InsCod"
-			     " AND centres.CtrCod=degrees.CtrCod"
-			     " AND degrees.DegCod=courses.DegCod",
-			     SubQuery);
+   unsigned NumInssWithCrss;
+
+   /***** Get number of institutions with courses from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_CRSS,Scope,Cod,
+				   FigCch_UNSIGNED,&NumInssWithCrss))
+     {
+      /***** Get current number of institutions with courses from database and update cache *****/
+      NumInssWithCrss = (unsigned)
+	                DB_QueryCOUNT ("can not get number of institutions with courses",
+				       "SELECT COUNT(DISTINCT institutions.InsCod)"
+				       " FROM institutions,centres,degrees,courses"
+				       " WHERE %sinstitutions.InsCod=centres.InsCod"
+				       " AND centres.CtrCod=degrees.CtrCod"
+				       " AND degrees.DegCod=courses.DegCod",
+				       SubQuery);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_CRSS,Scope,Cod,
+				    FigCch_UNSIGNED,&NumInssWithCrss);
+     }
+
+   return NumInssWithCrss;
   }
 
 /*****************************************************************************/
 /****************** Get number of institutions with users ********************/
 /*****************************************************************************/
 
-unsigned Ins_GetNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery)
+unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery,
+                                       Hie_Level_t Scope,long Cod)
   {
-   /***** Get number of institutions with users from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of institutions with users",
-			     "SELECT COUNT(DISTINCT institutions.InsCod)"
-			     " FROM institutions,centres,degrees,courses,crs_usr"
-			     " WHERE %sinstitutions.InsCod=centres.InsCod"
-			     " AND centres.CtrCod=degrees.CtrCod"
-			     " AND degrees.DegCod=courses.DegCod"
-			     " AND courses.CrsCod=crs_usr.CrsCod"
-			     " AND crs_usr.Role=%u",
-			     SubQuery,(unsigned) Role);
+   static const FigCch_FigureCached_t FigureInss[Rol_NUM_ROLES] =
+     {
+      [Rol_STD] = FigCch_NUM_INSS_WITH_STDS,	// Students
+      [Rol_NET] = FigCch_NUM_INSS_WITH_NETS,	// Non-editing teachers
+      [Rol_TCH] = FigCch_NUM_INSS_WITH_TCHS,	// Teachers
+     };
+   unsigned NumInssWithUsrs;
+
+   /***** Get number of institutions with users from cache *****/
+   if (!FigCch_GetFigureFromCache (FigureInss[Role],Scope,Cod,
+				   FigCch_UNSIGNED,&NumInssWithUsrs))
+     {
+      /***** Get current number of institutions with users from database and update cache *****/
+      NumInssWithUsrs = (unsigned)
+	                DB_QueryCOUNT ("can not get number of institutions with users",
+				       "SELECT COUNT(DISTINCT institutions.InsCod)"
+				       " FROM institutions,centres,degrees,courses,crs_usr"
+				       " WHERE %sinstitutions.InsCod=centres.InsCod"
+				       " AND centres.CtrCod=degrees.CtrCod"
+				       " AND degrees.DegCod=courses.DegCod"
+				       " AND courses.CrsCod=crs_usr.CrsCod"
+				       " AND crs_usr.Role=%u",
+				       SubQuery,(unsigned) Role);
+      FigCch_UpdateFigureIntoCache (FigureInss[Role],Scope,Cod,
+				    FigCch_UNSIGNED,&NumInssWithUsrs);
+     }
+
+   return NumInssWithUsrs;
   }
 
 /*****************************************************************************/

@@ -324,20 +324,6 @@ void HieCfg_NumUsrsInCrss (Hie_Level_t Scope,long Cod,Rol_Role_t Role)
   {
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   unsigned NumUsrsInCrss;
-   static FigCch_FigureCached_t Figure[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK	  ] = FigCch_NUM_USRS_IN_CRSS,	// Any users in courses
-      [Rol_GST	  ] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_USR	  ] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_STD	  ] = FigCch_NUM_STDS_IN_CRSS,	// Students
-      [Rol_NET    ] = FigCch_NUM_NETS_IN_CRSS,	// Non-editing teachers
-      [Rol_TCH	  ] = FigCch_NUM_TCHS_IN_CRSS,	// Teachers
-      [Rol_DEG_ADM] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_CTR_ADM] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_INS_ADM] = FigCch_UNKNOWN,		// Not applicable
-      [Rol_SYS_ADM] = FigCch_UNKNOWN,		// Not applicable
-     };
 
    /***** Number of users in courses *****/
    HTM_TR_Begin (NULL);
@@ -349,19 +335,11 @@ void HieCfg_NumUsrsInCrss (Hie_Level_t Scope,long Cod,Rol_Role_t Role)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   if (!FigCch_GetFigureFromCache (Figure[Role],Scope,Cod,
-                                   FigCch_Type_UNSIGNED,&NumUsrsInCrss))
-     {
-      // Not updated recently in cache ==> compute and update it in cache
-      NumUsrsInCrss = Usr_GetNumUsrsInCrss (Scope,Cod,
-					    Role == Rol_UNK ? (1 << Rol_STD) |
-							      (1 << Rol_NET) |
-							      (1 << Rol_TCH) :	// Any user
-							      (1 << Role));
-      FigCch_UpdateFigureIntoCache (Figure[Role],Scope,Cod,
-                                    FigCch_Type_UNSIGNED,&NumUsrsInCrss);
-     }
-   HTM_Unsigned (NumUsrsInCrss);
+   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Scope,Cod,
+					     Role == Rol_UNK ? (1 << Rol_STD) |
+							       (1 << Rol_NET) |
+							       (1 << Rol_TCH) :	// Any user
+							       (1 << Role)));
    HTM_TD_End ();
 
    HTM_TR_End ();
