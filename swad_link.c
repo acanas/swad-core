@@ -797,7 +797,7 @@ static void Lnk_PutHeadLinks (void)
 /******************* Receive form to create a new link ***********************/
 /*****************************************************************************/
 
-void Lnk_RecFormNewLink (void)
+void Lnk_ReceiveFormNewLink (void)
   {
    extern const char *Txt_The_link_X_already_exists;
    extern const char *Txt_You_must_specify_the_URL_of_the_new_link;

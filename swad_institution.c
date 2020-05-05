@@ -100,7 +100,7 @@ static void Ins_PutParamGoToIns (void *InsCod);
 
 static void Ins_PutFormToCreateInstitution (void);
 static void Ins_PutHeadInstitutionsForEdition (void);
-static void Ins_RecFormRequestOrCreateIns (unsigned Status);
+static void Ins_ReceiveFormRequestOrCreateIns (unsigned Status);
 static void Ins_CreateInstitution (unsigned Status);
 
 static void Ins_EditingInstitutionConstructor ();
@@ -1831,33 +1831,33 @@ static void Ins_PutHeadInstitutionsForEdition (void)
 /*************** Receive form to request a new institution *******************/
 /*****************************************************************************/
 
-void Ins_RecFormReqIns (void)
+void Ins_ReceiveFormReqIns (void)
   {
    /***** Institution constructor *****/
    Ins_EditingInstitutionConstructor ();
 
    /***** Receive form to request a new institution *****/
-   Ins_RecFormRequestOrCreateIns ((unsigned) Ins_STATUS_BIT_PENDING);
+   Ins_ReceiveFormRequestOrCreateIns ((unsigned) Ins_STATUS_BIT_PENDING);
   }
 
 /*****************************************************************************/
 /***************** Receive form to create a new institution ******************/
 /*****************************************************************************/
 
-void Ins_RecFormNewIns (void)
+void Ins_ReceiveFormNewIns (void)
   {
    /***** Institution constructor *****/
    Ins_EditingInstitutionConstructor ();
 
    /***** Receive form to create a new institution *****/
-   Ins_RecFormRequestOrCreateIns (0);
+   Ins_ReceiveFormRequestOrCreateIns (0);
   }
 
 /*****************************************************************************/
 /*********** Receive form to request or create a new institution *************/
 /*****************************************************************************/
 
-static void Ins_RecFormRequestOrCreateIns (unsigned Status)
+static void Ins_ReceiveFormRequestOrCreateIns (unsigned Status)
   {
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_Created_new_institution_X;

@@ -95,7 +95,7 @@ static Crs_Status_t Crs_GetStatusBitsFromStatusTxt (Crs_StatusTxt_t StatusTxt);
 static void Crs_PutFormToCreateCourse (void);
 static void Crs_PutHeadCoursesForSeeing (void);
 static void Crs_PutHeadCoursesForEdition (void);
-static void Crs_RecFormRequestOrCreateCrs (unsigned Status);
+static void Crs_ReceiveFormRequestOrCreateCrs (unsigned Status);
 static void Crs_GetParamsNewCourse (struct Course *Crs);
 
 static void Crs_CreateCourse (unsigned Status);
@@ -1577,33 +1577,33 @@ static void Crs_PutHeadCoursesForEdition (void)
 /****************** Receive form to request a new course *********************/
 /*****************************************************************************/
 
-void Crs_RecFormReqCrs (void)
+void Crs_ReceiveFormReqCrs (void)
   {
    /***** Course constructor *****/
    Crs_EditingCourseConstructor ();
 
    /***** Receive form to request a new course *****/
-   Crs_RecFormRequestOrCreateCrs ((unsigned) Crs_STATUS_BIT_PENDING);
+   Crs_ReceiveFormRequestOrCreateCrs ((unsigned) Crs_STATUS_BIT_PENDING);
   }
 
 /*****************************************************************************/
 /******************* Receive form to create a new course *********************/
 /*****************************************************************************/
 
-void Crs_RecFormNewCrs (void)
+void Crs_ReceiveFormNewCrs (void)
   {
    /***** Course constructor *****/
    Crs_EditingCourseConstructor ();
 
    /***** Receive form to create a new course *****/
-   Crs_RecFormRequestOrCreateCrs (0);
+   Crs_ReceiveFormRequestOrCreateCrs (0);
   }
 
 /*****************************************************************************/
 /************* Receive form to request or create a new course ****************/
 /*****************************************************************************/
 
-static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
+static void Crs_ReceiveFormRequestOrCreateCrs (unsigned Status)
   {
    extern const char *Txt_The_course_X_already_exists;
    extern const char *Txt_Created_new_course_X;

@@ -1382,7 +1382,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 /****************** Receive form to create a new assignment ******************/
 /*****************************************************************************/
 
-void Asg_RecFormAssignment (void)
+void Asg_ReceiveFormAssignment (void)
   {
    extern const char *Txt_Already_existed_an_assignment_with_the_title_X;
    extern const char *Txt_Already_existed_an_assignment_with_the_folder_X;

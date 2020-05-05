@@ -129,8 +129,8 @@ void Ctr_UpdateCtrWWWDB (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 void Ctr_ChangeCtrStatus (void);
 void Ctr_ContEditAfterChgCtr (void);
 
-void Ctr_RecFormReqCtr (void);
-void Ctr_RecFormNewCtr (void);
+void Ctr_ReceiveFormReqCtr (void);
+void Ctr_ReceiveFormNewCtr (void);
 
 unsigned Ctr_GetCachedNumCtrsInSys (void);
 

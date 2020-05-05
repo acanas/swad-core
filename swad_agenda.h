@@ -123,7 +123,7 @@ void Agd_UnhideEvent (void);
 void Agd_MakeEventPrivate (void);
 void Agd_MakeEventPublic (void);
 
-void Agd_RecFormEvent (void);
+void Agd_ReceiveFormEvent (void);
 
 void Agd_RemoveUsrEvents (long UsrCod);
 unsigned Agd_GetNumEventsFromUsr (long UsrCod);

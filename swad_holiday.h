@@ -99,6 +99,6 @@ void Hld_ChangeStartDate (void);
 void Hld_ChangeEndDate (void);
 void Hld_RenameHoliday (void);
 void Hld_ContEditAfterChgHld (void);
-void Hld_RecFormNewHoliday (void);
+void Hld_ReceiveFormNewHoliday (void);
 
 #endif

@@ -1701,7 +1701,7 @@ void Agd_RequestCreatOrEditEvent (void)
 /********************* Receive form to create a new event ********************/
 /*****************************************************************************/
 
-void Agd_RecFormEvent (void)
+void Agd_ReceiveFormEvent (void)
   {
    extern const char *Txt_You_must_specify_the_title_of_the_event;
    extern const char *Txt_Created_new_event_X;

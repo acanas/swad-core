@@ -107,7 +107,7 @@ void Svy_AskResetSurvey (void);
 void Svy_ResetSurvey (void);
 void Svy_HideSurvey (void);
 void Svy_UnhideSurvey (void);
-void Svy_RecFormSurvey (void);
+void Svy_ReceiveFormSurvey (void);
 bool Svy_CheckIfSvyIsAssociatedToGrp (long SvyCod,long GrpCod);
 void Svy_RemoveGroup (long GrpCod);
 void Svy_RemoveGroupsOfType (long GrpTypCod);

@@ -888,7 +888,7 @@ static void Bld_PutHeadBuildings (void)
 /***************** Receive form to create a new building *********************/
 /*****************************************************************************/
 
-void Bld_RecFormNewBuilding (void)
+void Bld_ReceiveFormNewBuilding (void)
   {
    extern const char *Txt_The_building_X_already_exists;
    extern const char *Txt_Created_new_building_X;

@@ -110,7 +110,7 @@ void Cty_RemoveCountry (void);
 void Cty_RenameCountry (void);
 void Cty_ChangeCtyWWW (void);
 void Cty_ContEditAfterChgCty (void);
-void Cty_RecFormNewCountry (void);
+void Cty_ReceiveFormNewCountry (void);
 
 unsigned Cty_GetCachedNumCtysInSys (void);
 

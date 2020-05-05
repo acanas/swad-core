@@ -107,8 +107,8 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs);
 void Deg_GetListDegsInCurrentCtr (void);
 void Deg_FreeListDegs (struct ListDegrees *Degs);
 
-void Deg_RecFormReqDeg (void);
-void Deg_RecFormNewDeg (void);
+void Deg_ReceiveFormReqDeg (void);
+void Deg_ReceiveFormNewDeg (void);
 void Deg_RemoveDegree (void);
 
 void Deg_PutParamDegCod (long DegCod);

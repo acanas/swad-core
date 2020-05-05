@@ -38,6 +38,7 @@
 #include "swad_exam.h"
 #include "swad_exam_event.h"
 #include "swad_exam_result.h"
+#include "swad_exam_type.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -486,12 +487,12 @@ void Exa_SeeOneExam (void)
   {
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
+   struct ExaEvt_Event Event;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam *****/
    Exa_ResetExam (&Exam);
+   ExaEvt_ResetEvent (&Event);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
@@ -504,8 +505,8 @@ void Exa_SeeOneExam (void)
    Exams.ExaCod = Exam.ExaCod;
 
    /***** Show exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,
-	                false);	// Do not put form to start new event
+   Exa_ShowOnlyOneExam (&Exams,&Exam,&Event,
+	                false);	// Do not put form for event
   }
 
 /*****************************************************************************/
@@ -514,15 +515,17 @@ void Exa_SeeOneExam (void)
 
 void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,
 			  struct Exa_Exam *Exam,
-			  bool PutFormNewMatch)
+			  struct ExaEvt_Event *Event,
+			  bool PutFormEvent)
   {
-   Exa_ShowOnlyOneExamBegin (Exams,Exam,PutFormNewMatch);
+   Exa_ShowOnlyOneExamBegin (Exams,Exam,Event,PutFormEvent);
    Exa_ShowOnlyOneExamEnd ();
   }
 
 void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
 			       struct Exa_Exam *Exam,
-			       bool PutFormNewMatch)
+			       struct ExaEvt_Event *Event,
+			       bool PutFormEvent)
   {
    extern const char *Hlp_ASSESSMENT_Exams;
    extern const char *Txt_Exam;
@@ -539,7 +542,7 @@ void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
 		    true);	// Show only this exam
 
    /***** List events *****/
-   ExaEvt_ListEvents (Exams,Exam,PutFormNewMatch);
+   ExaEvt_ListEvents (Exams,Exam,Event,PutFormEvent);
   }
 
 void Exa_ShowOnlyOneExamEnd (void)
@@ -764,11 +767,11 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
   {
    Exams->ExaCod = Exam->ExaCod;
 
-   /***** Put icon to remove exam *****/
+   /***** Icon to remove exam *****/
    Ico_PutContextualIconToRemove (ActReqRemExa,
                                   Exa_PutParams,Exams);
 
-   /***** Put icon to unhide/hide exam *****/
+   /***** Icon to unhide/hide exam *****/
    if (Exam->Hidden)
       Ico_PutContextualIconToUnhide (ActShoExa,Anchor,
                                      Exa_PutParams,Exams);
@@ -776,7 +779,7 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
       Ico_PutContextualIconToHide (ActHidExa,Anchor,
                                    Exa_PutParams,Exams);
 
-   /***** Put icon to edit exam *****/
+   /***** Icon to edit exam *****/
    Ico_PutContextualIconToEdit (ActEdiOneExa,NULL,
                                 Exa_PutParams,Exams);
   }
@@ -1276,8 +1279,6 @@ void Exa_AskRemExam (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam *****/
    Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
@@ -1318,8 +1319,6 @@ void Exa_RemoveExam (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam *****/
    Exa_ResetExam (&Exam);
 
    /***** Get exam code *****/
@@ -1400,8 +1399,6 @@ void Exa_HideExam (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam *****/
    Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
@@ -1438,8 +1435,6 @@ void Exa_UnhideExam (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam *****/
    Exa_ResetExam (&Exam);
 
    /***** Get parameters *****/
@@ -1512,8 +1507,6 @@ void Exa_RequestCreatOrEditExam (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
@@ -1639,7 +1632,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 /**************** Receive form to create a new set of questions **************/
 /*****************************************************************************/
 
-void ExaSet_RecFormSet (void)
+void ExaSet_ReceiveFormSet (void)
   {
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
@@ -1652,8 +1645,6 @@ void ExaSet_RecFormSet (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
@@ -1747,8 +1738,6 @@ void ExaSet_ChangeSetTitle (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
@@ -1803,8 +1792,6 @@ void ExaSet_ChangeNumQstsToExam (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
@@ -1957,7 +1944,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 /********************** Receive form to create a new exam ********************/
 /*****************************************************************************/
 
-void Exa_RecFormExam (void)
+void Exa_ReceiveFormExam (void)
   {
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
@@ -1971,8 +1958,6 @@ void Exa_RecFormExam (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
@@ -2254,8 +2239,6 @@ void ExaSet_RequestCreatOrEditSet (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
@@ -2301,8 +2284,6 @@ void ExaSet_ReqSelectQstsToAddToSet (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
@@ -2353,8 +2334,6 @@ void ExaSet_ListQstsToAddToSet (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
@@ -3141,8 +3120,6 @@ void ExaSet_AddQstsToSet (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
@@ -3253,8 +3230,6 @@ void ExaSet_RequestRemoveSet (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
@@ -3302,8 +3277,6 @@ void ExaSet_RemoveSet (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
@@ -3374,8 +3347,6 @@ void ExaSet_MoveUpSet (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
@@ -3436,8 +3407,6 @@ void ExaSet_MoveDownSet (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
@@ -3500,8 +3469,6 @@ void ExaSet_RequestRemoveQstFromSet (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
@@ -3559,8 +3526,6 @@ void ExaSet_RemoveQstFromSet (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and set *****/
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 

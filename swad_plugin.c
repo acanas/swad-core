@@ -973,7 +973,7 @@ static void Plg_PutHeadPlugins (void)
 /****************** Receive form to create a new plugin **********************/
 /*****************************************************************************/
 
-void Plg_RecFormNewPlg (void)
+void Plg_ReceiveFormNewPlg (void)
   {
    extern const char *Txt_The_plugin_X_already_exists;
    extern const char *Txt_Created_new_plugin_X;

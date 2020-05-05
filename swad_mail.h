@@ -70,7 +70,7 @@ void Mai_RemoveMailDomain (void);
 void Mai_RenameMailDomainShort (void);
 void Mai_RenameMailDomainFull (void);
 void Mai_ContEditAfterChgMai (void);
-void Mai_RecFormNewMailDomain (void);
+void Mai_ReceiveFormNewMailDomain (void);
 
 void Mai_ReqUsrsToListEmails (void);
 void Mai_GetSelectedUsrsAndListEmails (void);

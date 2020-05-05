@@ -71,7 +71,7 @@ bool DT_CheckIfICanCreateDegreeTypes (void);
 void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order);
 void DT_FreeListDegreeTypes (void);
 
-void DT_RecFormNewDegreeType (void);
+void DT_ReceiveFormNewDegreeType (void);
 
 void DT_RemoveDegreeType (void);
 

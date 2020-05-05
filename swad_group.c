@@ -3703,7 +3703,7 @@ void Grp_GetNamesGrpsStdBelongsTo (long GrpTypCod,long UsrCod,char *GroupNames)
 /****************** Receive form to create a new group type ******************/
 /*****************************************************************************/
 
-void Grp_RecFormNewGrpTyp (void)
+void Grp_ReceiveFormNewGrpTyp (void)
   {
    extern const char *Txt_The_type_of_group_X_already_exists;
    extern const char *Txt_Created_new_type_of_group_X;
@@ -3776,7 +3776,7 @@ static bool Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC)
 /******************** Receive form to create a new group *********************/
 /*****************************************************************************/
 
-void Grp_RecFormNewGrp (void)
+void Grp_ReceiveFormNewGrp (void)
   {
    extern const char *Txt_The_group_X_already_exists;
    extern const char *Txt_Created_new_group_X;

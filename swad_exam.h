@@ -28,87 +28,14 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_date.h"
-#include "swad_scope.h"
+// #include "swad_date.h"
+// #include "swad_exam_event.h"
+#include "swad_exam_type.h"
+// #include "swad_scope.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
-
-#define Exa_MAX_CHARS_TITLE	(128 - 1)	// 127
-#define Exa_MAX_BYTES_TITLE	((Exa_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
-#define ExaSet_MAX_CHARS_TITLE	(128 - 1)	// 127
-#define ExaSet_MAX_BYTES_TITLE	((ExaSet_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
-#define Exa_NUM_ORDERS 3
-typedef enum
-  {
-   Exa_ORDER_BY_START_DATE = 0,
-   Exa_ORDER_BY_END_DATE   = 1,
-   Exa_ORDER_BY_TITLE      = 2,
-  } Exa_Order_t;
-#define Exa_ORDER_DEFAULT Exa_ORDER_BY_START_DATE
-
-#define Exa_NUM_ANS_TYPES	2
-typedef enum
-  {
-   Exa_ANS_UNIQUE_CHOICE   = 0,
-   Exa_ANS_MULTIPLE_CHOICE = 1,
-  } Exa_AnswerType_t;
-#define Exa_ANSWER_TYPE_DEFAULT Exa_ANS_UNIQUE_CHOICE
-
-struct Exa_ExamSelected
-  {
-   long ExaCod;		// Exam code
-   bool Selected;	// Is this exam selected when seeing match results?
-  };
-
-/* Exams context */
-struct Exa_Exams
-  {
-   bool LstIsRead;		// Is the list already read from database...
-				// ...or it needs to be read?
-   unsigned Num;		// Total number of exams
-   unsigned NumSelected;	// Number of exams selected
-   struct Exa_ExamSelected *Lst;// List of exams
-   Exa_Order_t SelectedOrder;
-   unsigned CurrentPage;
-   char *ListQuestions;
-   char *ExaCodsSelected;	// String with selected exam codes separated by separator multiple
-   long ExaCod;			// Selected/current exam code
-   long SetCod;			// Selected/current set code
-   long EvtCod;			// Selected/current match code
-   unsigned SetInd;		// Current set index
-   long QstCod;			// Current question code
-  };
-
-struct Exa_Exam
-  {
-   long ExaCod;			// Exam code
-   long CrsCod;			// Course code
-   long UsrCod;			// Author code
-   double MaxGrade;		// Score range [0...max.score]
-				// will be converted to
-				// grade range [0...max.grade]
-   unsigned Visibility;		// Visibility of results
-   char Title[Exa_MAX_BYTES_TITLE + 1];
-   time_t TimeUTC[Dat_NUM_START_END_TIME];
-   bool Hidden;			// Exam is hidden
-   unsigned NumSets;		// Number of sets in the exam
-   unsigned NumQsts;		// Number of questions in the exam
-   unsigned NumEvts;		// Number of events in the exam
-   unsigned NumUnfinishedEvts;	// Number of unfinished events in the exam
-  };
-
-struct ExaSet_Set
-  {
-   long ExaCod;			// Exam code
-   long SetCod;			// Set code
-   unsigned SetInd;		// Set index (position in the exam)
-   unsigned NumQstsToExam;	// Number of questions in this set taht will appear in the exam
-   char Title[ExaSet_MAX_BYTES_TITLE + 1];	// Title of the set
-  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -121,10 +48,12 @@ void Exa_SeeAllExams (void);
 void Exa_SeeOneExam (void);
 void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,
 			  struct Exa_Exam *Exam,
-			  bool PutFormNewMatch);
+			  struct ExaEvt_Event *Event,
+			  bool PutFormEvent);
 void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
 			       struct Exa_Exam *Exam,
-			       bool PutFormNewMatch);
+			       struct ExaEvt_Event *Event,
+			       bool PutFormEvent);
 void Exa_ShowOnlyOneExamEnd (void);
 
 void Exa_SetCurrentExaCod (long ExaCod);
@@ -150,11 +79,11 @@ void Exa_UnhideExam (void);
 
 void Exa_RequestCreatOrEditExam (void);
 
-void ExaSet_RecFormSet (void);
+void ExaSet_ReceiveFormSet (void);
 void ExaSet_ChangeSetTitle (void);
 void ExaSet_ChangeNumQstsToExam (void);
 
-void Exa_RecFormExam (void);
+void Exa_ReceiveFormExam (void);
 bool Mch_CheckIfMatchIsAssociatedToGrp (long EvtCod,long GrpCod);
 
 unsigned ExaSet_GetNumSetsExam (long ExaCod);

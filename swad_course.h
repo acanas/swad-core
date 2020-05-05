@@ -127,8 +127,8 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void);
 
 void Crs_EditCourses (void);
 
-void Crs_RecFormReqCrs (void);
-void Crs_RecFormNewCrs (void);
+void Crs_ReceiveFormReqCrs (void);
+void Crs_ReceiveFormNewCrs (void);
 
 void Crs_RemoveCourse (void);
 bool Crs_GetDataOfCourseByCod (struct Course *Crs);

@@ -190,7 +190,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActSeeMai		] = { 855,-1,TabUnk,ActSeeNtf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_SeeMailDomains		,NULL},
    [ActEdiMai		] = { 856,-1,TabUnk,ActSeeNtf		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_EditMailDomains		,NULL},
-   [ActNewMai		] = { 857,-1,TabUnk,ActSeeNtf		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Mai_RecFormNewMailDomain	,Mai_ContEditAfterChgMai	,NULL},
+   [ActNewMai		] = { 857,-1,TabUnk,ActSeeNtf		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Mai_ReceiveFormNewMailDomain	,Mai_ContEditAfterChgMai	,NULL},
    [ActRemMai		] = { 860,-1,TabUnk,ActSeeNtf		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Mai_RemoveMailDomain		,Mai_ContEditAfterChgMai	,NULL},
    [ActRenMaiSho	] = { 858,-1,TabUnk,ActSeeNtf		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Mai_RenameMailDomainShort	,Mai_ContEditAfterChgMai	,NULL},
    [ActRenMaiFul	] = { 859,-1,TabUnk,ActSeeNtf		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Mai_RenameMailDomainFull	,Mai_ContEditAfterChgMai	,NULL},
@@ -208,14 +208,14 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActPrnSysInf	] = {1819,-1,TabUnk,ActSeeSysInf	,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,SysCfg_PrintConfiguration	,NULL},
 
    [ActEdiCty		] = { 863,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cty_EditCountries		,NULL},
-   [ActNewCty		] = { 864,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Cty_RecFormNewCountry		,Cty_ContEditAfterChgCty	,NULL},
+   [ActNewCty		] = { 864,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Cty_ReceiveFormNewCountry	,Cty_ContEditAfterChgCty	,NULL},
    [ActRemCty		] = { 893,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Cty_RemoveCountry		,Cty_ContEditAfterChgCty	,NULL},
    [ActRenCty		] = { 866,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Cty_RenameCountry		,Cty_ContEditAfterChgCty	,NULL},
    [ActChgCtyWWW	] = {1157,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Cty_ChangeCtyWWW		,Cty_ContEditAfterChgCty	,NULL},
 
    [ActSeeBan		] = {1137,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x3FF,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ban_SeeBanners			,NULL},
    [ActEdiBan		] = {1138,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ban_EditBanners		,NULL},
-   [ActNewBan		] = {1139,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ban_RecFormNewBanner		,Ban_ContEditAfterChgBan	,NULL},
+   [ActNewBan		] = {1139,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ban_ReceiveFormNewBanner	,Ban_ContEditAfterChgBan	,NULL},
    [ActRemBan		] = {1140,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ban_RemoveBanner		,Ban_ContEditAfterChgBan	,NULL},
    [ActShoBan		] = {1212,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ban_ShowBanner			,Ban_ContEditAfterChgBan	,NULL},
    [ActHidBan		] = {1213,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ban_HideBanner			,Ban_ContEditAfterChgBan	,NULL},
@@ -226,14 +226,14 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActClkBan		] = {1145,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_DOWNLD_FILE,Ban_ClickOnBanner		,NULL				,NULL},
 
    [ActEdiLnk		] = { 749,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lnk_EditLinks			,NULL},
-   [ActNewLnk		] = { 750,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Lnk_RecFormNewLink		,Lnk_ContEditAfterChgLnk	,NULL},
+   [ActNewLnk		] = { 750,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Lnk_ReceiveFormNewLink		,Lnk_ContEditAfterChgLnk	,NULL},
    [ActRemLnk		] = { 897,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Lnk_RemoveLink			,Lnk_ContEditAfterChgLnk	,NULL},
    [ActRenLnkSho	] = { 753,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Lnk_RenameLinkShort		,Lnk_ContEditAfterChgLnk	,NULL},
    [ActRenLnkFul	] = { 751,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Lnk_RenameLinkFull		,Lnk_ContEditAfterChgLnk	,NULL},
    [ActChgLnkWWW	] = { 752,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Lnk_ChangeLinkWWW		,Lnk_ContEditAfterChgLnk	,NULL},
 
    [ActEdiPlg		] = { 778,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_EditPlugins		,NULL},
-   [ActNewPlg		] = { 779,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_RecFormNewPlg		,Plg_ContEditAfterChgPlg	,NULL},
+   [ActNewPlg		] = { 779,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ReceiveFormNewPlg		,Plg_ContEditAfterChgPlg	,NULL},
    [ActRemPlg		] = { 889,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_RemovePlugin		,Plg_ContEditAfterChgPlg	,NULL},
    [ActRenPlg		] = { 782,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_RenamePlugin		,Plg_ContEditAfterChgPlg	,NULL},
    [ActChgPlgDes	] = { 888,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgDescription	,Plg_ContEditAfterChgPlg	,NULL},
@@ -256,8 +256,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActChgCtyMapAtt	] = {1158,-1,TabUnk,ActSeeCtyInf	,    0,    0,    0,    0,    0,0x200,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtyCfg_ChangeCtyMapAttr	,NULL},
 
    [ActEdiIns		] = { 697,-1,TabUnk,ActSeeIns		,    0,    0,    0,    0,    0,0x3C6,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ins_EditInstitutions		,NULL},
-   [ActReqIns		] = {1210,-1,TabUnk,ActSeeIns		,    0,    0,    0,    0,    0,0x3C6,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ins_RecFormReqIns		,Ins_ContEditAfterChgIns	,NULL},
-   [ActNewIns		] = { 698,-1,TabUnk,ActSeeIns		,    0,    0,    0,    0,    0,0x200,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ins_RecFormNewIns		,Ins_ContEditAfterChgIns	,NULL},
+   [ActReqIns		] = {1210,-1,TabUnk,ActSeeIns		,    0,    0,    0,    0,    0,0x3C6,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ins_ReceiveFormReqIns		,Ins_ContEditAfterChgIns	,NULL},
+   [ActNewIns		] = { 698,-1,TabUnk,ActSeeIns		,    0,    0,    0,    0,    0,0x200,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ins_ReceiveFormNewIns		,Ins_ContEditAfterChgIns	,NULL},
    [ActRemIns		] = { 759,-1,TabUnk,ActSeeIns		,    0,    0,    0,    0,    0,0x3C6,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ins_RemoveInstitution		,Ins_ContEditAfterChgIns	,NULL},
    [ActRenInsSho	] = { 702,-1,TabUnk,ActSeeIns		,    0,    0,    0,    0,    0,0x3C6,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ins_RenameInsShort		,Ins_ContEditAfterChgIns	,NULL},
    [ActRenInsFul	] = { 701,-1,TabUnk,ActSeeIns		,    0,    0,    0,    0,    0,0x3C6,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ins_RenameInsFull		,Ins_ContEditAfterChgIns	,NULL},
@@ -283,8 +283,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRemInsLog	] = {1341,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,InsCfg_RemoveLogo		,InsCfg_ShowConfiguration	,NULL},
 
    [ActEdiCtr		] = { 681,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_EditCentres		,NULL},
-   [ActReqCtr		] = {1208,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_RecFormReqCtr		,Ctr_ContEditAfterChgCtr	,NULL},
-   [ActNewCtr		] = { 685,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_RecFormNewCtr		,Ctr_ContEditAfterChgCtr	,NULL},
+   [ActReqCtr		] = {1208,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_ReceiveFormReqCtr		,Ctr_ContEditAfterChgCtr	,NULL},
+   [ActNewCtr		] = { 685,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_ReceiveFormNewCtr		,Ctr_ContEditAfterChgCtr	,NULL},
    [ActRemCtr		] = { 686,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_RemoveCentre		,Ctr_ContEditAfterChgCtr	,NULL},
    [ActChgCtrPlc	] = { 706,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_ChangeCtrPlc		,Ctr_ContEditAfterChgCtr	,NULL},
    [ActRenCtrSho	] = { 682,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_RenameCentreShort		,Ctr_ContEditAfterChgCtr	,NULL},
@@ -293,13 +293,13 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActChgCtrSta	] = {1209,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_ChangeCtrStatus		,Ctr_ContEditAfterChgCtr	,NULL},
 
    [ActEdiPlc		] = { 704,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_EditPlaces			,NULL},
-   [ActNewPlc		] = { 705,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Plc_RecFormNewPlace		,Plc_ContEditAfterChgPlc	,NULL},
+   [ActNewPlc		] = { 705,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Plc_ReceiveFormNewPlace	,Plc_ContEditAfterChgPlc	,NULL},
    [ActRemPlc		] = { 776,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Plc_RemovePlace		,Plc_ContEditAfterChgPlc	,NULL},
    [ActRenPlcSho	] = { 894,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Plc_RenamePlaceShort		,Plc_ContEditAfterChgPlc	,NULL},
    [ActRenPlcFul	] = { 895,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Plc_RenamePlaceFull		,Plc_ContEditAfterChgPlc	,NULL},
 
    [ActEdiDpt		] = { 677,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dpt_EditDepartments		,NULL},
-   [ActNewDpt		] = { 687,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_RecFormNewDpt		,Dpt_ContEditAfterChgDpt	,NULL},
+   [ActNewDpt		] = { 687,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_ReceiveFormNewDpt		,Dpt_ContEditAfterChgDpt	,NULL},
    [ActRemDpt		] = { 690,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_RemoveDepartment		,Dpt_ContEditAfterChgDpt	,NULL},
    [ActChgDptIns	] = { 721,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_ChangeDepartIns		,Dpt_ContEditAfterChgDpt	,NULL},
    [ActRenDptSho	] = { 688,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_RenameDepartShort		,Dpt_ContEditAfterChgDpt	,NULL},
@@ -307,7 +307,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActChgDptWWW	] = { 691,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_ChangeDptWWW		,Dpt_ContEditAfterChgDpt	,NULL},
 
    [ActEdiHld		] = { 713,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Hld_EditHolidays		,NULL},
-   [ActNewHld		] = { 714,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_RecFormNewHoliday		,Hld_ContEditAfterChgHld	,NULL},
+   [ActNewHld		] = { 714,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_ReceiveFormNewHoliday	,Hld_ContEditAfterChgHld	,NULL},
    [ActRemHld		] = { 716,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_RemoveHoliday		,Hld_ContEditAfterChgHld	,NULL},
    [ActChgHldPlc	] = { 896,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_ChangeHolidayPlace		,Hld_ContEditAfterChgHld	,NULL},
    [ActChgHldTyp	] = { 715,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_ChangeHolidayType		,Hld_ContEditAfterChgHld	,NULL},
@@ -341,13 +341,13 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActSeeDegTyp	] = {1013,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_SeeDegreeTypesInDegTab	,NULL},
    [ActEdiDegTyp	] = { 573,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_EditDegreeTypes		,NULL},
-   [ActNewDegTyp	] = { 537,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DT_RecFormNewDegreeType	,DT_ContEditAfterChgDegTyp	,NULL},
+   [ActNewDegTyp	] = { 537,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DT_ReceiveFormNewDegreeType	,DT_ContEditAfterChgDegTyp	,NULL},
    [ActRemDegTyp	] = { 545,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DT_RemoveDegreeType		,DT_ContEditAfterChgDegTyp	,NULL},
    [ActRenDegTyp	] = { 538,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DT_RenameDegreeType		,DT_ContEditAfterChgDegTyp	,NULL},
 
    [ActEdiDeg		] = { 536,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_EditDegrees		,NULL},
-   [ActReqDeg		] = {1206,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_RecFormReqDeg		,Deg_ContEditAfterChgDeg	,NULL},
-   [ActNewDeg		] = { 540,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_RecFormNewDeg		,Deg_ContEditAfterChgDeg	,NULL},
+   [ActReqDeg		] = {1206,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_ReceiveFormReqDeg		,Deg_ContEditAfterChgDeg	,NULL},
+   [ActNewDeg		] = { 540,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_ReceiveFormNewDeg		,Deg_ContEditAfterChgDeg	,NULL},
    [ActRemDeg		] = { 542,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_RemoveDegree		,Deg_ContEditAfterChgDeg	,NULL},
    [ActRenDegSho	] = { 546,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_RenameDegreeShort		,Deg_ContEditAfterChgDeg	,NULL},
    [ActRenDegFul	] = { 547,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_RenameDegreeFull		,Deg_ContEditAfterChgDeg	,NULL},
@@ -356,14 +356,14 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActChgDegSta	] = {1207,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_ChangeDegStatus		,Deg_ContEditAfterChgDeg	,NULL},
 
    [ActEdiBld		] = {1839,-1,TabUnk,ActSeeBld		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Bld_EditBuildings		,NULL},
-   [ActNewBld		] = {1840,-1,TabUnk,ActSeeBld		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Bld_RecFormNewBuilding		,Bld_ContEditAfterChgBuilding	,NULL},
+   [ActNewBld		] = {1840,-1,TabUnk,ActSeeBld		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Bld_ReceiveFormNewBuilding	,Bld_ContEditAfterChgBuilding	,NULL},
    [ActRemBld		] = {1841,-1,TabUnk,ActSeeBld		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Bld_RemoveBuilding		,Bld_ContEditAfterChgBuilding	,NULL},
    [ActRenBldSho	] = {1842,-1,TabUnk,ActSeeBld		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Bld_RenameBuildingShort	,Bld_ContEditAfterChgBuilding	,NULL},
    [ActRenBldFul	] = {1843,-1,TabUnk,ActSeeBld		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Bld_RenameBuildingFull		,Bld_ContEditAfterChgBuilding	,NULL},
    [ActRenBldLoc	] = {1844,-1,TabUnk,ActSeeBld		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Bld_ChangeBuildingLocation	,Bld_ContEditAfterChgBuilding	,NULL},
 
    [ActEdiRoo		] = {1745,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Roo_EditRooms			,NULL},
-   [ActNewRoo		] = {1746,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RecFormNewRoom		,Roo_ContEditAfterChgRoom	,NULL},
+   [ActNewRoo		] = {1746,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_ReceiveFormNewRoom		,Roo_ContEditAfterChgRoom	,NULL},
    [ActRemRoo		] = {1747,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RemoveRoom			,Roo_ContEditAfterChgRoom	,NULL},
    [ActChgRooBld	] = {1845,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_ChangeBuilding		,Roo_ContEditAfterChgRoom	,NULL},
    [ActChgRooFlo	] = {1846,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_ChangeFloor		,Roo_ContEditAfterChgRoom	,NULL},
@@ -388,8 +388,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRemDegLog	] = {1343,-1,TabUnk,ActSeeDegInf	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,Deg_RemoveLogo			,DegCfg_ShowConfiguration	,NULL},
 
    [ActEdiCrs		] = { 555,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C6,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_EditCourses		,NULL},
-   [ActReqCrs		] = {1053,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C6,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_RecFormReqCrs		,Crs_ContEditAfterChgCrs	,NULL},
-   [ActNewCrs		] = { 556,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_RecFormNewCrs		,Crs_ContEditAfterChgCrs	,NULL},
+   [ActReqCrs		] = {1053,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C6,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_ReceiveFormReqCrs		,Crs_ContEditAfterChgCrs	,NULL},
+   [ActNewCrs		] = { 556,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_ReceiveFormNewCrs		,Crs_ContEditAfterChgCrs	,NULL},
    [ActRemCrs		] = { 560,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C6,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_RemoveCourse		,Crs_ContEditAfterChgCrs	,NULL},
    [ActChgInsCrsCod	] = {1025,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C6,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_ChangeInsCrsCod		,Crs_ContEditAfterChgCrs	,NULL},
    [ActChgCrsYea	] = { 561,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C6,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_ChangeCrsYear		,Crs_ContEditAfterChgCrs	,NULL},
@@ -419,8 +419,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActFrmNewPrgItm	] = {1822,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestCreateItem		,NULL},
    [ActFrmChgPrgItm	] = {1823,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestChangeItem		,NULL},
-   [ActNewPrgItm	] = {1825,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RecFormNewItem		,NULL},
-   [ActChgPrgItm	] = {1826,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RecFormChgItem		,NULL},
+   [ActNewPrgItm	] = {1825,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ReceiveFormNewItem		,NULL},
+   [ActChgPrgItm	] = {1826,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ReceiveFormChgItem		,NULL},
    [ActReqRemPrgItm	] = {1827,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ReqRemItem			,NULL},
    [ActRemPrgItm	] = {1828,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RemoveItem			,NULL},
    [ActHidPrgItm	] = {1829,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_HideItem			,NULL},
@@ -567,8 +567,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActFrmNewAsg	] = { 812,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_RequestCreatOrEditAsg	,NULL},
    [ActEdiOneAsg	] = { 814,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_RequestCreatOrEditAsg	,NULL},
    [ActPrnOneAsg	] = {1637,-1,TabUnk,ActSeeAsg		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Asg_PrintOneAssignment		,NULL},
-   [ActNewAsg		] = { 803,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_RecFormAssignment		,NULL},
-   [ActChgAsg		] = { 815,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_RecFormAssignment		,NULL},
+   [ActNewAsg		] = { 803,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReceiveFormAssignment	,NULL},
+   [ActChgAsg		] = { 815,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReceiveFormAssignment	,NULL},
    [ActReqRemAsg	] = { 813,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReqRemAssignment		,NULL},
    [ActRemAsg		] = { 806,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_RemoveAssignment		,NULL},
    [ActHidAsg		] = { 964,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_HideAssignment		,NULL},
@@ -585,8 +585,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActFrmNewPrj	] = {1675,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RequestCreatePrj		,NULL},
    [ActEdiOnePrj	] = {1676,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RequestEditPrj		,NULL},
    [ActPrnOnePrj	] = {1677,-1,TabUnk,ActSeePrj		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_PrintOneProject		,NULL},
-   [ActNewPrj		] = {1678,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RecFormProject		,NULL},
-   [ActChgPrj		] = {1679,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RecFormProject		,NULL},
+   [ActNewPrj		] = {1678,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReceiveFormProject		,NULL},
+   [ActChgPrj		] = {1679,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReceiveFormProject		,NULL},
    [ActReqRemPrj	] = {1680,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemProject		,NULL},
    [ActRemPrj		] = {1681,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemoveProject		,NULL},
    [ActHidPrj		] = {1682,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_HideProject		,NULL},
@@ -677,12 +677,15 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActSeeExa		] = {1849,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_SeeOneExam			,NULL},
 
+   [ActReqNewExaEvt	] = {1852,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_RequestCreatOrEditEvent	,NULL},
+   [ActEdiOneExaEvt	] = {1902,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_RequestCreatOrEditEvent	,NULL},
+   [ActNewExaEvt	] = {1853,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_ReceiveFormEvent	,NULL},
+   [ActChgExaEvt	] = {1903,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_ReceiveFormEvent	,NULL},
    [ActReqRemExaEvt	] = {1850,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_RequestRemoveEvent	,NULL},
    [ActRemExaEvt	] = {1851,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_RemoveEvent		,NULL},
    [ActHidExaEvt	] = {1900,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_HideEvent		,NULL},
    [ActShoExaEvt	] = {1901,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_UnhideEvent		,NULL},
-   [ActReqNewExaEvt	] = {1852,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_RequestNewEvent		,NULL},
-   [ActNewExaEvt	] = {1853,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_CreateNewEventTch	,NULL},
+
    [ActResExaEvt	] = {1854,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_ResumeEvent		,NULL},
    [ActBckExaEvt	] = {1855,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_BackEvent		,NULL},
    [ActPlyPauExaEvt	] = {1856,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_PlayPauseEvent		,NULL},
@@ -713,15 +716,15 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActFrmNewExa	] = {1877,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RequestCreatOrEditExam	,NULL},
    [ActEdiOneExa	] = {1878,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RequestCreatOrEditExam	,NULL},
-   [ActNewExa		] = {1879,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RecFormExam		,NULL},
-   [ActChgExa		] = {1880,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RecFormExam		,NULL},
+   [ActNewExa		] = {1879,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_ReceiveFormExam		,NULL},
+   [ActChgExa		] = {1880,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_ReceiveFormExam		,NULL},
    [ActReqRemExa	] = {1881,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_AskRemExam			,NULL},
    [ActRemExa		] = {1882,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RemoveExam			,NULL},
    [ActHidExa		] = {1883,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_HideExam			,NULL},
    [ActShoExa		] = {1884,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_UnhideExam			,NULL},
 
    [ActFrmNewExaSet	] = {1892,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,ExaSet_RequestCreatOrEditSet	,NULL},
-   [ActNewExaSet	] = {1898,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RecFormSet		,NULL},
+   [ActNewExaSet	] = {1898,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_ReceiveFormSet		,NULL},
    [ActReqRemExaSet	] = {1893,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RequestRemoveSet	,NULL},
    [ActRemExaSet	] = {1894,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RemoveSet		,NULL},
    [ActUp_ExaSet	] = {1895,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_MoveUpSet		,NULL},
@@ -771,8 +774,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActFrmNewGam	] = {1652,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
    [ActEdiOneGam	] = {1653,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
-   [ActNewGam		] = {1654,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RecFormGame		,NULL},
-   [ActChgGam		] = {1655,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RecFormGame		,NULL},
+   [ActNewGam		] = {1654,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ReceiveFormGame		,NULL},
+   [ActChgGam		] = {1655,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ReceiveFormGame		,NULL},
    [ActReqRemGam	] = {1656,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_AskRemGame			,NULL},
    [ActRemGam		] = {1657,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RemoveGame			,NULL},
    [ActHidGam		] = {1660,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_HideGame			,NULL},
@@ -789,8 +792,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActAnsSvy		] = { 983,-1,TabUnk,ActSeeAllSvy	,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReceiveSurveyAnswers	,NULL},
    [ActFrmNewSvy	] = { 973,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_RequestCreatOrEditSvy	,NULL},
    [ActEdiOneSvy	] = { 974,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_RequestCreatOrEditSvy	,NULL},
-   [ActNewSvy		] = { 968,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_RecFormSurvey		,NULL},
-   [ActChgSvy		] = { 975,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_RecFormSurvey		,NULL},
+   [ActNewSvy		] = { 968,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReceiveFormSurvey		,NULL},
+   [ActChgSvy		] = { 975,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReceiveFormSurvey		,NULL},
    [ActReqRemSvy	] = { 976,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_AskRemSurvey		,NULL},
    [ActRemSvy		] = { 969,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_RemoveSurvey		,NULL},
    [ActReqRstSvy	] = { 984,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_AskResetSurvey		,NULL},
@@ -1308,7 +1311,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActReqEdiGrp	] = { 108,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_ReqEditGroups		,NULL},
 
-   [ActNewGrpTyp	] = { 174,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_RecFormNewGrpTyp		,NULL},
+   [ActNewGrpTyp	] = { 174,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_ReceiveFormNewGrpTyp	,NULL},
    [ActReqRemGrpTyp	] = { 236,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_ReqRemGroupType		,NULL},
    [ActRemGrpTyp	] = { 237,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_RemoveGroupType		,NULL},
    [ActRenGrpTyp	] = { 304,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_RenameGroupType		,NULL},
@@ -1316,7 +1319,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActChgMulGrpTyp	] = { 302,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_ChangeMultiGrpTyp		,NULL},
    [ActChgTimGrpTyp	] = {1061,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_ChangeOpenTimeGrpTyp	,NULL},
 
-   [ActNewGrp		] = { 122,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_RecFormNewGrp		,NULL},
+   [ActNewGrp		] = { 122,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_ReceiveFormNewGrp		,NULL},
    [ActReqRemGrp	] = { 107,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_ReqRemGroup		,NULL},
    [ActRemGrp		] = { 175,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_RemoveGroup		,NULL},
    [ActOpeGrp		] = { 322,-1,TabUnk,ActReqSelGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_OpenGroup			,NULL},
@@ -1377,8 +1380,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActPrnLstUsrAtt	] = {1075,-1,TabUnk,ActSeeAtt		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Att_PrintUsrsAttendanceCrs	,NULL},
    [ActFrmNewAtt	] = {1063,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_RequestCreatOrEditAttEvent	,NULL},
    [ActEdiOneAtt	] = {1064,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_RequestCreatOrEditAttEvent	,NULL},
-   [ActNewAtt		] = {1065,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_RecFormAttEvent		,NULL},
-   [ActChgAtt		] = {1066,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_RecFormAttEvent		,NULL},
+   [ActNewAtt		] = {1065,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ReceiveFormAttEvent	,NULL},
+   [ActChgAtt		] = {1066,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ReceiveFormAttEvent	,NULL},
    [ActReqRemAtt	] = {1067,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_AskRemAttEvent		,NULL},
    [ActRemAtt		] = {1068,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_GetAndRemAttEvent		,NULL},
    [ActHidAtt		] = {1069,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_HideAttEvent		,NULL},
@@ -1741,8 +1744,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActFrmNewEvtMyAgd	] = {1603,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_RequestCreatOrEditEvent	,NULL},
    [ActEdiOneEvtMyAgd	] = {1604,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_RequestCreatOrEditEvent	,NULL},
-   [ActNewEvtMyAgd	] = {1605,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_RecFormEvent		,NULL},
-   [ActChgEvtMyAgd	] = {1606,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_RecFormEvent		,NULL},
+   [ActNewEvtMyAgd	] = {1605,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_ReceiveFormEvent		,NULL},
+   [ActChgEvtMyAgd	] = {1606,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_ReceiveFormEvent		,NULL},
    [ActReqRemEvtMyAgd	] = {1607,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_AskRemEvent		,NULL},
    [ActRemEvtMyAgd	] = {1608,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_RemoveEvent		,NULL},
    [ActHidEvtMyAgd	] = {1612,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_HideEvent			,NULL},
@@ -3714,6 +3717,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgNumQstExaSet,	// #1899
 	ActHidExaEvt,		// #1900
 	ActShoExaEvt,		// #1901
+	ActEdiOneExaEvt,	// #1902
+	ActChgExaEvt,		// #1903
 	};
 
 /*****************************************************************************/

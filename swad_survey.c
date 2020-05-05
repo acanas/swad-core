@@ -2185,7 +2185,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 /********************* Receive form to create a new survey *******************/
 /*****************************************************************************/
 
-void Svy_RecFormSurvey (void)
+void Svy_ReceiveFormSurvey (void)
   {
    extern const char *Txt_Already_existed_a_survey_with_the_title_X;
    extern const char *Txt_You_must_specify_the_title_of_the_survey;

@@ -41,8 +41,8 @@ void Prg_ShowCourseProgram (void);
 
 void Prg_RequestCreateItem (void);
 void Prg_RequestChangeItem (void);
-void Prg_RecFormNewItem (void);
-void Prg_RecFormChgItem (void);
+void Prg_ReceiveFormNewItem (void);
+void Prg_ReceiveFormChgItem (void);
 
 void Prg_ReqRemItem (void);
 void Prg_RemoveItem (void);
@@ -54,7 +54,6 @@ void Prg_MoveDownItem (void);
 void Prg_MoveLeftItem (void);
 void Prg_MoveRightItem (void);
 
-void Prg_RecFormItem (void);
 void Prg_RemoveCrsItems (long CrsCod);
 
 unsigned Prg_GetNumCoursesWithItems (Hie_Level_t Scope);

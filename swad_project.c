@@ -3865,7 +3865,7 @@ void Prj_FreeMemProject (struct Prj_Project *Prj)
 /******************** Receive form to create a new project *******************/
 /*****************************************************************************/
 
-void Prj_RecFormProject (void)
+void Prj_ReceiveFormProject (void)
   {
    extern const char *Txt_You_must_specify_the_title_of_the_project;
    extern const char *Txt_Created_new_project_X;

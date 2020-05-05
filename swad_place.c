@@ -889,7 +889,7 @@ static void Plc_PutHeadPlaces (void)
 /******************* Receive form to create a new place **********************/
 /*****************************************************************************/
 
-void Plc_RecFormNewPlace (void)
+void Plc_ReceiveFormNewPlace (void)
   {
    extern const char *Txt_The_place_X_already_exists;
    extern const char *Txt_Created_new_place_X;

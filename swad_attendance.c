@@ -1295,7 +1295,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 /*************** Receive form to create a new attendance event ***************/
 /*****************************************************************************/
 
-void Att_RecFormAttEvent (void)
+void Att_ReceiveFormAttEvent (void)
   {
    extern const char *Txt_Already_existed_an_event_with_the_title_X;
    extern const char *Txt_You_must_specify_the_title_of_the_event;

@@ -95,7 +95,7 @@ void Asg_ReqRemAssignment (void);
 void Asg_RemoveAssignment (void);
 void Asg_HideAssignment (void);
 void Asg_ShowAssignment (void);
-void Asg_RecFormAssignment (void);
+void Asg_ReceiveFormAssignment (void);
 bool Asg_CheckIfAsgIsAssociatedToGrp (long AsgCod,long GrpCod);
 void Asg_RemoveGroup (long GrpCod);
 void Asg_RemoveGroupsOfType (long GrpTypCod);

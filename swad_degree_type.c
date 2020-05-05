@@ -749,7 +749,7 @@ void DT_FreeListDegreeTypes (void)
 /***************** Receive form to create a new degree type ******************/
 /*****************************************************************************/
 
-void DT_RecFormNewDegreeType (void)
+void DT_ReceiveFormNewDegreeType (void)
   {
    extern const char *Txt_The_type_of_degree_X_already_exists;
    extern const char *Txt_Created_new_type_of_degree_X;

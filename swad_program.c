@@ -1949,7 +1949,7 @@ static void Prg_ShowFormItem (const struct ProgramItem *Item,
 /***************** Receive form to create a new program item *****************/
 /*****************************************************************************/
 
-void Prg_RecFormNewItem (void)
+void Prg_ReceiveFormNewItem (void)
   {
    struct ProgramItem ParentItem;	// Parent item
    struct ProgramItem NewItem;		// Item data received from form
@@ -2003,7 +2003,7 @@ void Prg_RecFormNewItem (void)
 /************* Receive form to change an existing program item ***************/
 /*****************************************************************************/
 
-void Prg_RecFormChgItem (void)
+void Prg_ReceiveFormChgItem (void)
   {
    struct ProgramItem OldItem;	// Current program item data in database
    struct ProgramItem NewItem;	// Item data received from form

@@ -91,7 +91,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
 static void Deg_EditDegreesInternal (void);
 static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args);
 
-static void Deg_RecFormRequestOrCreateDeg (unsigned Status);
+static void Deg_ReceiveFormRequestOrCreateDeg (unsigned Status);
 static void Deg_PutParamOtherDegCod (long DegCod);
 
 static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
@@ -1170,33 +1170,33 @@ void Deg_FreeListDegs (struct ListDegrees *Degs)
 /****************** Receive form to request a new degree *********************/
 /*****************************************************************************/
 
-void Deg_RecFormReqDeg (void)
+void Deg_ReceiveFormReqDeg (void)
   {
    /***** Degree constructor *****/
    Deg_EditingDegreeConstructor ();
 
    /***** Receive form to request a new degree *****/
-   Deg_RecFormRequestOrCreateDeg ((unsigned) Deg_STATUS_BIT_PENDING);
+   Deg_ReceiveFormRequestOrCreateDeg ((unsigned) Deg_STATUS_BIT_PENDING);
   }
 
 /*****************************************************************************/
 /******************* Receive form to create a new degree *********************/
 /*****************************************************************************/
 
-void Deg_RecFormNewDeg (void)
+void Deg_ReceiveFormNewDeg (void)
   {
    /***** Degree constructor *****/
    Deg_EditingDegreeConstructor ();
 
    /***** Receive form to create a new degree *****/
-   Deg_RecFormRequestOrCreateDeg (0);
+   Deg_ReceiveFormRequestOrCreateDeg (0);
   }
 
 /*****************************************************************************/
 /******************* Receive form to create a new degree *********************/
 /*****************************************************************************/
 
-static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
+static void Deg_ReceiveFormRequestOrCreateDeg (unsigned Status)
   {
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_Created_new_degree_X;

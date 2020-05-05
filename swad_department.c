@@ -1018,7 +1018,7 @@ static void Dpt_PutHeadDepartments (void)
 /***************** Receive form to create a new department *******************/
 /*****************************************************************************/
 
-void Dpt_RecFormNewDpt (void)
+void Dpt_ReceiveFormNewDpt (void)
   {
    extern const char *Txt_The_department_X_already_exists;
    extern const char *Txt_Created_new_department_X;

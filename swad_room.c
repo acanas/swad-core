@@ -1390,7 +1390,7 @@ static void Roo_PutHeadRooms (void)
 /******************* Receive form to create a new room ***********************/
 /*****************************************************************************/
 
-void Roo_RecFormNewRoom (void)
+void Roo_ReceiveFormNewRoom (void)
   {
    extern const char *Txt_The_room_X_already_exists;
    extern const char *Txt_Created_new_room_X;

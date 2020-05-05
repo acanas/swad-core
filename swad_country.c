@@ -1747,7 +1747,7 @@ static void Cty_PutHeadCountriesForEdition (void)
 /******************* Receive form to create a new country ********************/
 /*****************************************************************************/
 
-void Cty_RecFormNewCountry (void)
+void Cty_ReceiveFormNewCountry (void)
   {
    extern const char *Txt_You_must_specify_the_numerical_code_of_the_new_country;
    extern const char *Txt_The_numerical_code_X_already_exists;

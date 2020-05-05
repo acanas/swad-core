@@ -95,7 +95,7 @@ static void Ctr_PutParamGoToCtr (void *CtrCod);
 static void Ctr_PutFormToCreateCentre (const struct Plc_Places *Places);
 static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable);
 static void Ctr_PutHeadCentresForEdition (void);
-static void Ctr_RecFormRequestOrCreateCtr (unsigned Status);
+static void Ctr_ReceiveFormRequestOrCreateCtr (unsigned Status);
 static void Ctr_CreateCentre (unsigned Status);
 
 static unsigned Ctr_GetNumCtrsInCty (long CtyCod);
@@ -1812,33 +1812,33 @@ static void Ctr_PutHeadCentresForEdition (void)
 /****************** Receive form to request a new centre *********************/
 /*****************************************************************************/
 
-void Ctr_RecFormReqCtr (void)
+void Ctr_ReceiveFormReqCtr (void)
   {
    /***** Centre constructor *****/
    Ctr_EditingCentreConstructor ();
 
    /***** Receive form to request a new centre *****/
-   Ctr_RecFormRequestOrCreateCtr ((unsigned) Ctr_STATUS_BIT_PENDING);
+   Ctr_ReceiveFormRequestOrCreateCtr ((unsigned) Ctr_STATUS_BIT_PENDING);
   }
 
 /*****************************************************************************/
 /******************* Receive form to create a new centre *********************/
 /*****************************************************************************/
 
-void Ctr_RecFormNewCtr (void)
+void Ctr_ReceiveFormNewCtr (void)
   {
    /***** Centre constructor *****/
    Ctr_EditingCentreConstructor ();
 
    /***** Receive form to create a new centre *****/
-   Ctr_RecFormRequestOrCreateCtr (0);
+   Ctr_ReceiveFormRequestOrCreateCtr (0);
   }
 
 /*****************************************************************************/
 /************* Receive form to request or create a new centre ****************/
 /*****************************************************************************/
 
-static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
+static void Ctr_ReceiveFormRequestOrCreateCtr (unsigned Status)
   {
    extern const char *Txt_The_centre_X_already_exists;
    extern const char *Txt_Created_new_centre_X;

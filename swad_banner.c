@@ -1012,7 +1012,7 @@ static void Ban_PutHeadBanners (void)
 /******************* Receive form to create a new banner *********************/
 /*****************************************************************************/
 
-void Ban_RecFormNewBanner (void)
+void Ban_ReceiveFormNewBanner (void)
   {
    extern const char *Txt_The_banner_X_already_exists;
    extern const char *Txt_You_must_specify_the_image_of_the_new_banner;

@@ -99,6 +99,6 @@ void Bld_RenameBuildingFull (void);
 void Bld_ChangeBuildingLocation (void);
 void Bld_ContEditAfterChgBuilding (void);
 
-void Bld_RecFormNewBuilding (void);
+void Bld_ReceiveFormNewBuilding (void);
 
 #endif

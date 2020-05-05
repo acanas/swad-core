@@ -38,6 +38,7 @@
 #include "swad_exam.h"
 #include "swad_exam_event.h"
 #include "swad_exam_result.h"
+#include "swad_exam_type.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -156,12 +157,12 @@ void ExaRes_ShowMyExaResultsInExa (void)
    extern const char *Txt_Results_of_game_X;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
+   struct ExaEvt_Event Event;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam *****/
    Exa_ResetExam (&Exam);
+   ExaEvt_ResetEvent (&Event);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
@@ -174,7 +175,7 @@ void ExaRes_ShowMyExaResultsInExa (void)
    Exams.ExaCod = Exam.ExaCod;
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,
+   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Event,
 	                     false);	// Do not put form to start new event
 
    /***** List my events results in exam *****/
@@ -212,8 +213,6 @@ void ExaRes_ShowMyExaResultsInEvt (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and event *****/
    Exa_ResetExam (&Exam);
    ExaEvt_ResetEvent (&Event);
 
@@ -229,7 +228,7 @@ void ExaRes_ShowMyExaResultsInEvt (void)
    ExaEvt_GetDataOfEventByCod (&Event);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,
+   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Event,
 	                     false);	// Do not put form to start new event
 
    /***** List my events results in event *****/
@@ -364,12 +363,12 @@ void ExaRes_ShowAllExaResultsInExa (void)
    extern const char *Txt_Results_of_game_X;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
+   struct ExaEvt_Event Event;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam *****/
    Exa_ResetExam (&Exam);
+   ExaEvt_ResetEvent (&Event);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
@@ -380,7 +379,7 @@ void ExaRes_ShowAllExaResultsInExa (void)
    Exams.ExaCod = Exam.ExaCod;
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,
+   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Event,
 	                     false);	// Do not put form to start new event
 
    /***** List events results in exam *****/
@@ -459,8 +458,6 @@ void ExaRes_ShowAllExaResultsInEvt (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and event *****/
    Exa_ResetExam (&Exam);
    ExaEvt_ResetEvent (&Event);
 
@@ -478,7 +475,7 @@ void ExaRes_ShowAllExaResultsInEvt (void)
    ExaEvt_GetDataOfEventByCod (&Event);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,
+   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Event,
 	                     false);	// Do not put form to start new event
 
    /***** List events results in event *****/
@@ -1103,8 +1100,6 @@ void ExaRes_ShowOneExaResult (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and event *****/
    Exa_ResetExam (&Exam);
    ExaEvt_ResetEvent (&Event);
 

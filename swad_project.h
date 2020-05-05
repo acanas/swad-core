@@ -226,7 +226,7 @@ void Prj_RemoveProject (void);
 void Prj_HideProject (void);
 void Prj_UnhideProject (void);
 
-void Prj_RecFormProject (void);
+void Prj_ReceiveFormProject (void);
 
 void Prj_ShowFormConfig (void);
 void Prj_ReceiveConfigPrj (void);

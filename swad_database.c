@@ -1067,7 +1067,7 @@ mysql> DESCRIBE exa_events;
 			"UsrCod INT NOT NULL,"
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
-			"Title VARCHAR(2047) NOT NULL,"	// Gam_MAX_BYTES_TITLE
+			"Title VARCHAR(2047) NOT NULL,"	// ExaEvt_MAX_BYTES_TITLE
 			"QstInd INT NOT NULL DEFAULT 0,"
 			"QstCod INT NOT NULL DEFAULT -1,"
 			"Showing ENUM('start','stem','answers','results','end') NOT NULL DEFAULT 'start',"

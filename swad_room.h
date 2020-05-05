@@ -141,6 +141,6 @@ void Roo_RenameRoomFull (void);
 void Roo_ChangeCapacity (void);
 void Roo_ContEditAfterChgRoom (void);
 
-void Roo_RecFormNewRoom (void);
+void Roo_ReceiveFormNewRoom (void);
 
 #endif

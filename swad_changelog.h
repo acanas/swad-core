@@ -544,12 +544,12 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.211 (2020-05-05)"
+#define Log_PLATFORM_VERSION	"SWAD 19.212 (2020-05-05)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
-
-	Version 19.211:   May 05, 2020  Exam events can be hidden. (301215 lines)
+	Version 19.212:   May 05, 2020  Icon to edit exam event. (301319 lines)
+	Version 19.211:   May 05, 2020  Exam events can be hidden/unhidden. (301215 lines)
 					1 change necessary in database:
 ALTER TABLE exa_events ADD COLUMN Hidden ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER ExaCod;
 

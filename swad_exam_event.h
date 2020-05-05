@@ -27,7 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_scope.h"
+#include "swad_exam_type.h"
 #include "swad_test.h"
 
 /*****************************************************************************/
@@ -37,42 +37,6 @@
 #define ExaEvt_NEW_EVENT_SECTION_ID	"new_event"
 
 #define ExaEvt_AFTER_LAST_QUESTION	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database to indicate that a event is finished
-
-#define ExaEvt_NUM_SHOWING 5
-typedef enum
-  {
-   ExaEvt_START,	// Start: don't show anything
-   ExaEvt_STEM,		// Showing only the question stem
-   ExaEvt_ANSWERS,	// Showing the question stem and the answers
-   ExaEvt_RESULTS,	// Showing the results
-   ExaEvt_END,		// End: don't show anything
-  } ExaEvt_Showing_t;
-#define ExaEvt_SHOWING_DEFAULT ExaEvt_START
-
-struct ExaEvt_Event
-  {
-   long EvtCod;
-   long ExaCod;
-   long UsrCod;
-   time_t TimeUTC[Dat_NUM_START_END_TIME];
-   char Title[Exa_MAX_BYTES_TITLE + 1];
-   bool Hidden;
-   struct
-     {
-      unsigned QstInd;	// 0 means that the exam has not started. First question has index 1.
-      long QstCod;
-      time_t QstStartTimeUTC;
-      ExaEvt_Showing_t Showing;	// What is shown on teacher's screen
-      long Countdown;		// > 0 ==> countdown in progress
-				// = 0 ==> countdown over ==> go to next step
-				// < 0 ==> no countdown at this time
-      unsigned NumCols;		// Number of columns for answers on teacher's screen
-      bool ShowQstResults;	// Show global results of current question while playing
-      bool ShowUsrResults;	// Show exam with results of all questions for the student
-      bool Happening;		// Is being played now?
-      unsigned NumParticipants;
-     } Status;			// Status related to event playing
-  };
 
 struct ExaEvt_UsrAnswer
   {
@@ -90,7 +54,8 @@ void ExaEvt_ResetEvent (struct ExaEvt_Event *Event);
 
 void ExaEvt_ListEvents (struct Exa_Exams *Exams,
                         struct Exa_Exam *Exam,
-                        bool PutFormNewEvent);
+		        struct ExaEvt_Event *Event,
+                        bool PutFormEvent);
 void ExaEvt_GetDataOfEventByCod (struct ExaEvt_Event *Event);
 
 void ExaEvt_ToggleVisibilResultsEvtUsr (void);
@@ -112,8 +77,8 @@ void ExaEvt_GetAndCheckParameters (struct Exa_Exams *Exams,
 long ExaEvt_GetParamEvtCod (void);
 
 void ExaEvt_PutButtonNewEvent (struct Exa_Exams *Exams,long ExaCod);
-void ExaEvt_RequestNewEvent (void);
-void ExaEvt_CreateNewEventTch (void);
+void ExaEvt_RequestCreatOrEditEvent (void);
+void ExaEvt_ReceiveFormEvent (void);
 void ExaEvt_ResumeEvent (void);
 void ExaEvt_GetIndexes (long EvtCod,unsigned QstInd,
 		        unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);

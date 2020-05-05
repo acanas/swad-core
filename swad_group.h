@@ -205,8 +205,8 @@ bool Grp_GetIfAvailableGrpTyp (long GrpTypCod);
 
 void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps);
 void Grp_GetNamesGrpsStdBelongsTo (long GrpTypCod,long UsrCod,char *GrpNames);
-void Grp_RecFormNewGrpTyp (void);
-void Grp_RecFormNewGrp (void);
+void Grp_ReceiveFormNewGrpTyp (void);
+void Grp_ReceiveFormNewGrp (void);
 void Grp_ReqRemGroupType (void);
 void Grp_ReqRemGroup (void);
 void Grp_RemoveGroupType (void);

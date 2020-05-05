@@ -97,7 +97,7 @@ void Att_RemoveAttEventFromDB (long AttCod);
 
 void Att_HideAttEvent (void);
 void Att_ShowAttEvent (void);
-void Att_RecFormAttEvent (void);
+void Att_ReceiveFormAttEvent (void);
 void Att_CreateAttEvent (struct Att_Event *Event,const char *Description);
 void Att_UpdateAttEvent (struct Att_Event *Event,const char *Description);
 bool Att_CheckIfAttEventIsAssociatedToGrps (long AttCod);

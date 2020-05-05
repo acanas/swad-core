@@ -37,6 +37,7 @@
 #include "swad_exam.h"
 #include "swad_exam_event.h"
 #include "swad_exam_result.h"
+#include "swad_exam_type.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -108,6 +109,7 @@ static void ExaEvt_PutIconToCreateNewEvent (struct Exa_Exams *Exams);
 
 static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
                                         const struct Exa_Exam *Exam,
+                                        long EvtCodToBeEdited,
 				        unsigned NumEvents,
                                         MYSQL_RES *mysql_res);
 static void ExaEvt_ListOneOrMoreEventsHeading (bool ICanEditEvents);
@@ -285,14 +287,16 @@ void ExaEvt_ResetEvent (struct ExaEvt_Event *Event)
 
 void ExaEvt_ListEvents (struct Exa_Exams *Exams,
                         struct Exa_Exam *Exam,
-                        bool PutFormNewEvent)
+		        struct ExaEvt_Event *Event,
+                        bool PutFormEvent)
   {
    extern const char *Hlp_ASSESSMENT_Exams_events;
    extern const char *Txt_Events;
    char *SubQuery;
    MYSQL_RES *mysql_res;
    unsigned NumEvents;
-   struct ExaEvt_Event Event;
+   long EvtCodToBeEdited;
+   bool PutFormNewEvent;
 
    /***** Get data of events from database *****/
    /* Fill subquery for exam */
@@ -355,8 +359,12 @@ void ExaEvt_ListEvents (struct Exa_Exams *Exams,
      }
 
    if (NumEvents)
+     {
       /***** Show the table with the events *****/
-      ExaEvt_ListOneOrMoreEvents (Exams,Exam,NumEvents,mysql_res);
+      EvtCodToBeEdited = PutFormEvent && Event->EvtCod > 0 ? Event->EvtCod :
+	                                                     -1L;
+      ExaEvt_ListOneOrMoreEvents (Exams,Exam,EvtCodToBeEdited,NumEvents,mysql_res);
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -367,18 +375,19 @@ void ExaEvt_ListEvents (struct Exa_Exams *Exams,
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
+	 PutFormNewEvent = PutFormEvent && Event->EvtCod <= 0;
 	 if (PutFormNewEvent)
 	   {
 	    /* Reset event */
-	    ExaEvt_ResetEvent (&Event);
-	    Event.ExaCod = Exam->ExaCod;
-	    Event.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;			// Now
-	    Event.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (1 * 60 * 60);	// Now + 1 hour
-            Str_Copy (Event.Title,Exam->Title,
-                      Exa_MAX_BYTES_TITLE);
+	    ExaEvt_ResetEvent (Event);
+	    Event->ExaCod = Exam->ExaCod;
+	    Event->TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;			// Now
+	    Event->TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (1 * 60 * 60);	// Now + 1 hour
+            Str_Copy (Event->Title,Exam->Title,
+                      ExaEvt_MAX_BYTES_TITLE);
 
 	    /* Put form to create new event */
-	    ExaEvt_PutFormNewEvent (&Event);			// Form to fill in data and start playing a new exam event
+	    ExaEvt_PutFormNewEvent (Event);			// Form to fill in data and start playing a new exam event
 	   }
 	 else
 	    ExaEvt_PutButtonNewEvent (Exams,Exam->ExaCod);	// Button to create a new exam event
@@ -472,6 +481,7 @@ static void ExaEvt_PutIconToCreateNewEvent (struct Exa_Exams *Exams)
 
 static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
                                         const struct Exa_Exam *Exam,
+                                        long EvtCodToBeEdited,
 				        unsigned NumEvents,
                                         MYSQL_RES *mysql_res)
   {
@@ -534,8 +544,18 @@ static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
 	 /* Event result visible? */
 	 ExaEvt_ListOneOrMoreEventsResult (Exams,&Event);
 
-	 /***** End row for this exam event ****/
+	 /***** End row for this event ****/
 	 HTM_TR_End ();
+
+	 /***** For to edit this event ****/
+	 if (Event.EvtCod == EvtCodToBeEdited)
+	   {
+	    HTM_TR_Begin (NULL);
+            HTM_TD_Begin ("colspan=\"8\" class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
+            Ale_ShowAlert (Ale_INFO,"Form to edit this event.");	// TODO: Replace by form
+            HTM_TD_End ();
+	    HTM_TR_End ();
+	   }
 
 	 /***** Free anchor string *****/
 	 free (Anchor);
@@ -622,18 +642,19 @@ static void ExaEvt_ListOneOrMoreEventsIcons (struct Exa_Exams *Exams,
                                              const struct ExaEvt_Event *Event,
 					     const char *Anchor)
   {
+   /***** Begin cell *****/
    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
    Exams->ExaCod = Event->ExaCod;
    Exams->EvtCod = Event->EvtCod;
 
-   /* Icon to remove the exam event */
+   /***** Icon to remove the exam event *****/
    Frm_StartForm (ActReqRemExaEvt);
    ExaEvt_PutParamsEdit (Exams);
    Ico_PutIconRemove ();
    Frm_EndForm ();
 
-   /* Icon to hide/unhide the exam event */
+   /***** Icon to hide/unhide the exam event *****/
    if (Event->Hidden)
       Ico_PutContextualIconToUnhide (ActShoExaEvt,Anchor,
 				     ExaEvt_PutParamsEdit,Exams);
@@ -641,8 +662,11 @@ static void ExaEvt_ListOneOrMoreEventsIcons (struct Exa_Exams *Exams,
       Ico_PutContextualIconToHide (ActHidExaEvt,Anchor,
 				   ExaEvt_PutParamsEdit,Exams);
 
-   /* Icon to edit the exam event */
+   /***** Icon to edit the exam event *****/
+   Ico_PutContextualIconToEdit (ActEdiOneExaEvt,NULL,
+                                ExaEvt_PutParamsEdit,Exams);
 
+   /***** End cell *****/
    HTM_TD_End ();
   }
 
@@ -941,8 +965,6 @@ void ExaEvt_ToggleVisibilResultsEvtUsr (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and event *****/
    Exa_ResetExam (&Exam);
    ExaEvt_ResetEvent (&Event);
 
@@ -964,8 +986,8 @@ void ExaEvt_ToggleVisibilResultsEvtUsr (void)
 		   Event.EvtCod);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,
-	                false);	// Do not put form to start new exam event
+   Exa_ShowOnlyOneExam (&Exams,&Exam,&Event,
+	                false);	// Do not put form for event
   }
 
 /*****************************************************************************/
@@ -990,8 +1012,8 @@ static void ExaEvt_GetEventDataFromRow (MYSQL_RES *mysql_res,
    row[ 5]	UNIX_TIMESTAMP(EndTime)
    row[ 6]	Title
    */
-   /***** Get exam event data *****/
-   /* Code of the exam event (row[0]) */
+   /***** Get event data *****/
+   /* Code of the event (row[0]) */
    if ((Event->EvtCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Lay_ShowErrorAndExit ("Wrong code of exam event.");
 
@@ -999,10 +1021,10 @@ static void ExaEvt_GetEventDataFromRow (MYSQL_RES *mysql_res,
    if ((Event->ExaCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
       Lay_ShowErrorAndExit ("Wrong code of exam.");
 
-   /* Get whether the exam is hidden (row[2]) */
+   /* Get whether the event is hidden (row[2]) */
    Event->Hidden = (row[2][0] == 'Y');
 
-   /* Get exam event teacher (row[3]) */
+   /* Get event teacher (row[3]) */
    Event->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
    /* Get start/end times (row[4], row[5] hold start/end UTC times) */
@@ -1011,14 +1033,14 @@ static void ExaEvt_GetEventDataFromRow (MYSQL_RES *mysql_res,
 	StartEndTime++)
       Event->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[4 + StartEndTime]);
 
-   /* Get the title of the exam (row[6]) */
+   /* Get the title of the event (row[6]) */
    if (row[6])
       Str_Copy (Event->Title,row[6],
-		Exa_MAX_BYTES_TITLE);
+		ExaEvt_MAX_BYTES_TITLE);
    else
       Event->Title[0] = '\0';
 
-   /***** Get current exam event status *****/
+   /***** Get current event status *****/
    /*
    row[ 7]	QstInd
    row[ 8]	QstCod
@@ -1090,8 +1112,6 @@ void ExaEvt_RequestRemoveEvent (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and event *****/
    Exa_ResetExam (&Exam);
    ExaEvt_ResetEvent (&Event);
 
@@ -1108,8 +1128,8 @@ void ExaEvt_RequestRemoveEvent (void)
 	                   Event.Title);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,
-	                false);	// Do not put form to start new exam event
+   Exa_ShowOnlyOneExam (&Exams,&Exam,&Event,
+	                false);	// Do not put form for event
   }
 
 /*****************************************************************************/
@@ -1125,8 +1145,6 @@ void ExaEvt_RemoveEvent (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and event *****/
    Exa_ResetExam (&Exam);
    ExaEvt_ResetEvent (&Event);
 
@@ -1145,8 +1163,8 @@ void ExaEvt_RemoveEvent (void)
 		  Event.Title);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,
-	                false);	// Do not put form to start new exam event
+   Exa_ShowOnlyOneExam (&Exams,&Exam,&Event,
+	                false);	// Do not put form for event
   }
 
 /*****************************************************************************/
@@ -1297,8 +1315,6 @@ void ExaEvt_HideEvent (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and event *****/
    Exa_ResetExam (&Exam);
    ExaEvt_ResetEvent (&Event);
 
@@ -1317,8 +1333,8 @@ void ExaEvt_HideEvent (void)
 		   Event.EvtCod,Event.ExaCod);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,
-	                false);	// Do not put form to start new exam event
+   Exa_ShowOnlyOneExam (&Exams,&Exam,&Event,
+	                false);	// Do not put form for event
   }
 
 /*****************************************************************************/
@@ -1333,8 +1349,6 @@ void ExaEvt_UnhideEvent (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and event *****/
    Exa_ResetExam (&Exam);
    ExaEvt_ResetEvent (&Event);
 
@@ -1353,8 +1367,8 @@ void ExaEvt_UnhideEvent (void)
 		   Event.EvtCod,Event.ExaCod);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,
-	                false);	// Do not put form to start new exam event
+   Exa_ShowOnlyOneExam (&Exams,&Exam,&Event,
+	                false);	// Do not put form for event
   }
 
 /*****************************************************************************/
@@ -1411,6 +1425,8 @@ void ExaEvt_GetAndCheckParameters (struct Exa_Exams *Exams,
 
    /***** Get exam data and event from database *****/
    Exa_GetDataOfExamByCod (Exam);
+   if (Exam->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+      Lay_WrongExamExit ();
    Exams->ExaCod = Exam->ExaCod;
    ExaEvt_GetDataOfEventByCod (Event);
 
@@ -1469,7 +1485,7 @@ static void ExaEvt_PutFormNewEvent (const struct ExaEvt_Event *Event)
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Event->Title,
+   HTM_INPUT_TEXT ("Title",ExaEvt_MAX_CHARS_TITLE,Event->Title,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"Title\" size=\"45\" required=\"required\"");
    HTM_TD_End ();
@@ -1574,40 +1590,59 @@ void ExaEvt_PutButtonNewEvent (struct Exa_Exams *Exams,long ExaCod)
   }
 
 /*****************************************************************************/
-/************* Request the creation of a new event as a teacher **************/
+/******************* Request the creation of a new event *********************/
 /*****************************************************************************/
 
-void ExaEvt_RequestNewEvent (void)
+void ExaEvt_RequestCreatOrEditEvent (void)
   {
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
+   struct ExaEvt_Event Event;
+   bool ItsANewEvent;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam *****/
    Exa_ResetExam (&Exam);
+   ExaEvt_ResetEvent (&Event);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
+   Grp_GetParamWhichGroups ();
+   Event.EvtCod = ExaEvt_GetParamEvtCod ();
+   ItsANewEvent = (Event.EvtCod <= 0);
 
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
+   if (Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+      Lay_WrongExamExit ();
    Exams.ExaCod = Exam.ExaCod;
 
+   /***** Get event data *****/
+   if (ItsANewEvent)
+      /* Initialize to empty event */
+      ExaEvt_ResetEvent (&Event);
+   else
+     {
+      /* Get event data from database */
+      ExaEvt_GetDataOfEventByCod (&Event);
+      if (Exam.ExaCod != Event.ExaCod)
+	 Lay_WrongExamExit ();
+      Exams.EvtCod = Event.EvtCod;
+     }
+
    /***** Show exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,
-                        true);	// Put form to start new event
+   Exa_ShowOnlyOneExam (&Exams,&Exam,&Event,
+                        true);	// Put form for event
   }
 
 /*****************************************************************************/
 /******************* Create a new exam event (by a teacher) ******************/
 /*****************************************************************************/
 
-void ExaEvt_CreateNewEventTch (void)
+void ExaEvt_ReceiveFormEvent (void)
   {
    extern const char *Txt_Created_new_event_X;
    struct Exa_Exams Exams;
@@ -1616,8 +1651,6 @@ void ExaEvt_CreateNewEventTch (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-
-   /***** Reset exam and event *****/
    Exa_ResetExam (&Exam);
    ExaEvt_ResetEvent (&Event);
 
@@ -1628,7 +1661,7 @@ void ExaEvt_CreateNewEventTch (void)
       Lay_WrongExamExit ();
 
    /* Get event title */
-   Par_GetParToText ("Title",Event.Title,Exa_MAX_BYTES_TITLE);
+   Par_GetParToText ("Title",Event.Title,ExaEvt_MAX_BYTES_TITLE);
 
    /* Get start/end date-times */
    Event.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
@@ -1640,6 +1673,8 @@ void ExaEvt_CreateNewEventTch (void)
    /***** Get exam data from database *****/
    Exam.ExaCod = Exams.ExaCod;
    Exa_GetDataOfExamByCod (&Exam);
+   if (Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+      Lay_WrongExamExit ();
    Event.ExaCod = Exams.ExaCod = Exam.ExaCod;
 
    /***** Create a new exam event *****/
@@ -1653,8 +1688,8 @@ void ExaEvt_CreateNewEventTch (void)
 		  Event.Title);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,
-	                false);	// Do not put form to start new exam event
+   Exa_ShowOnlyOneExam (&Exams,&Exam,&Event,
+	                false);	// Do not put form for event
   }
 
 /*****************************************************************************/

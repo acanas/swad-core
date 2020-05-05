@@ -126,8 +126,8 @@ void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 void Ins_ChangeInsStatus (void);
 void Ins_ContEditAfterChgIns (void);
 
-void Ins_RecFormReqIns (void);
-void Ins_RecFormNewIns (void);
+void Ins_ReceiveFormReqIns (void);
+void Ins_ReceiveFormNewIns (void);
 
 unsigned Ins_GetCachedNumInssInSys (void);
 

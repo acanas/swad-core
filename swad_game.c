@@ -1486,7 +1486,7 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 /********************** Receive form to create a new game ********************/
 /*****************************************************************************/
 
-void Gam_RecFormGame (void)
+void Gam_ReceiveFormGame (void)
   {
    struct Gam_Games Games;
    struct Gam_Game Game;
