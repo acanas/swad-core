@@ -100,8 +100,6 @@ void Att_ShowAttEvent (void);
 void Att_ReceiveFormAttEvent (void);
 void Att_CreateAttEvent (struct Att_Event *Event,const char *Description);
 void Att_UpdateAttEvent (struct Att_Event *Event,const char *Description);
-bool Att_CheckIfAttEventIsAssociatedToGrps (long AttCod);
-bool Att_CheckIfAttEventIsAssociatedToGrp (long AsgCod,long GrpCod);
 void Att_RemoveGroupsOfType (long GrpTypCod);
 void Att_RemoveGroup (long GrpCod);
 

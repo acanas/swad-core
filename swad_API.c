@@ -2944,7 +2944,7 @@ int swad__getAttendanceUsers (struct soap *soap,
 	                          "Requester must be a teacher");
 
    /***** Query list of attendance users *****/
-   if (Att_CheckIfAttEventIsAssociatedToGrps (Event.AttCod))
+   if (Grp_CheckIfAssociatedToGrps ("att_grp","AttCod",Event.AttCod))
       // Event for one or more groups
       // Subquery: list of users in groups of this attendance event...
       // ...who have no entry in attendance list of users

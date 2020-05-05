@@ -132,13 +132,15 @@ typedef enum
   } Grp_WhichGroups_t;
 #define Grp_WHICH_GROUPS_DEFAULT Grp_ALL_GROUPS
 
+#define Grp_NUM_ASSOCIATIONS_TO_GROUPS 5
 typedef enum
   {
    Grp_ASSIGNMENT,
    Grp_ATT_EVENT,
    Grp_SURVEY,
+   Grp_EXA_EVENT,
    Grp_MATCH,
-  } Grp_AsgAttSvyGam_t;
+  } Grp_WhichIsAssociatedToGrp_t;
 
 struct Grp_Groups
   {
@@ -178,9 +180,10 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
 unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGrps);
 void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod);
 void Grp_RemUsrFromAllGrps (long UsrCod);
-void Grp_ListGrpsToEditAsgAttSvyMch (struct GroupType *GrpTyp,long Cod,
-                                        Grp_AsgAttSvyGam_t Grp_AsgOrSvy);
+void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,long Cod,
+                                        Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp);
 
+bool Grp_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod);
 void Grp_ReqRegisterInGrps (void);
 void Grp_ShowLstGrpsToChgMyGrps (void);
 void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod);

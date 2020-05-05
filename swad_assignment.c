@@ -97,7 +97,6 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod);
 static void Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,unsigned NumUsrsToBeNotifiedByEMail);
 static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt);
 static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt);
-static bool Asg_CheckIfAsgIsAssociatedToGrps (long AsgCod);
 static void Asg_RemoveAllTheGrpsAssociatedToAnAssignment (long AsgCod);
 static void Asg_CreateGrps (long AsgCod);
 static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *Asg);
@@ -1352,7 +1351,8 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
       HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 		          "id=\"WholeCrs\" value=\"Y\"%s"
 		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
-			  Asg_CheckIfAsgIsAssociatedToGrps (AsgCod) ? "" : " checked=\"checked\"");
+			  Grp_CheckIfAssociatedToGrps ("asg_grp","AsgCod",AsgCod) ? "" :
+				                                                    " checked=\"checked\"");
       HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -1364,7 +1364,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
          if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+            Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
                                             AsgCod,Grp_ASSIGNMENT);
 
       /***** End table and box *****/
@@ -1600,33 +1600,6 @@ static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt)
    /* Create new groups */
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Asg_CreateGrps (Asg->AsgCod);
-  }
-
-/*****************************************************************************/
-/*********** Check if an assignment is associated to any group ***************/
-/*****************************************************************************/
-
-static bool Asg_CheckIfAsgIsAssociatedToGrps (long AsgCod)
-  {
-   /***** Get if an assignment is associated to a group from database *****/
-   return (DB_QueryCOUNT ("can not check if an assignment"
-			  " is associated to groups",
-			  "SELECT COUNT(*) FROM asg_grp WHERE AsgCod=%ld",
-			  AsgCod) != 0);
-  }
-
-/*****************************************************************************/
-/************ Check if an assignment is associated to a group ****************/
-/*****************************************************************************/
-
-bool Asg_CheckIfAsgIsAssociatedToGrp (long AsgCod,long GrpCod)
-  {
-   /***** Get if an assignment is associated to a group from database *****/
-   return (DB_QueryCOUNT ("can not check if an assignment"
-			  " is associated to a group",
-			  "SELECT COUNT(*) FROM asg_grp"
-			  " WHERE AsgCod=%ld AND GrpCod=%ld",
-		  	  AsgCod,GrpCod) != 0);
   }
 
 /*****************************************************************************/

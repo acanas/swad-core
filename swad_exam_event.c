@@ -145,14 +145,18 @@ static void ExaEvt_RemoveUsrEvtResultsInCrs (long UsrCod,long CrsCod,const char 
 static void ExaEvt_PutParamsPlay (void *EvtCod);
 static void ExaEvt_PutParamEvtCod (long EvtCod);
 
-static void ExaEvt_PutFormNewEvent (const struct ExaEvt_Event *Event);
-static void ExaEvt_ShowLstGrpsToCreateEvent (void);
+static void ExaEvt_PutFormEvent (const struct ExaEvt_Event *Event);
+static void ExaEvt_ShowLstGrpsToCreateEvent (long EvtCod);
 
 static void ExaEvt_CreateEvent (struct ExaEvt_Event *Event);
+static void ExaEvt_UpdateEvent (struct ExaEvt_Event *Event);
+
 // static void ExaEvt_CreateIndexes (long ExaCod,long EvtCod);
 // static void ExaEvt_ReorderAnswer (long EvtCod,unsigned QstInd,
 // 			             const struct Tst_Question *Question);
 static void ExaEvt_CreateGrps (long EvtCod);
+static void ExaEvt_RemoveGroups (long EvtCod);
+
 static void ExaEvt_UpdateEventStatusInDB (const struct ExaEvt_Event *Event);
 
 static void ExaEvt_UpdateElapsedTimeInQuestion (const struct ExaEvt_Event *Event);
@@ -387,7 +391,7 @@ void ExaEvt_ListEvents (struct Exa_Exams *Exams,
                       ExaEvt_MAX_BYTES_TITLE);
 
 	    /* Put form to create new event */
-	    ExaEvt_PutFormNewEvent (Event);			// Form to fill in data and start playing a new exam event
+	    ExaEvt_PutFormEvent (Event);	// Form to create event
 	   }
 	 else
 	    ExaEvt_PutButtonNewEvent (Exams,Exam->ExaCod);	// Button to create a new exam event
@@ -552,7 +556,7 @@ static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
 	   {
 	    HTM_TR_Begin (NULL);
             HTM_TD_Begin ("colspan=\"8\" class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
-            Ale_ShowAlert (Ale_INFO,"Form to edit this event.");	// TODO: Replace by form
+	    ExaEvt_PutFormEvent (&Event);	// Form to edit existing event
             HTM_TD_End ();
 	    HTM_TR_End ();
 	   }
@@ -663,7 +667,7 @@ static void ExaEvt_ListOneOrMoreEventsIcons (struct Exa_Exams *Exams,
 				   ExaEvt_PutParamsEdit,Exams);
 
    /***** Icon to edit the exam event *****/
-   Ico_PutContextualIconToEdit (ActEdiOneExaEvt,NULL,
+   Ico_PutContextualIconToEdit (ActEdiOneExaEvt,Anchor,
                                 ExaEvt_PutParamsEdit,Exams);
 
    /***** End cell *****/
@@ -811,19 +815,6 @@ static void ExaEvt_GetAndWriteNamesOfGrpsAssociatedToEvent (const struct ExaEvt_
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/********** Check if an exam event is associated to a given group ************/
-/*****************************************************************************/
-
-bool ExaEvt_CheckIfMatchIsAssociatedToGrp (long EvtCod,long GrpCod)
-  {
-   /***** Get if an exam event is associated to a group from database *****/
-   return (DB_QueryCOUNT ("can not check if an exam event is associated to a group",
-			  "SELECT COUNT(*) FROM exa_groups"
-			  " WHERE EvtCod=%ld AND GrpCod=%ld",
-			  EvtCod,GrpCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1450,7 +1441,7 @@ long ExaEvt_GetParamEvtCod (void)
 /* Put a big button to play exam event (start a new exam event) as a teacher */
 /*****************************************************************************/
 
-static void ExaEvt_PutFormNewEvent (const struct ExaEvt_Event *Event)
+static void ExaEvt_PutFormEvent (const struct ExaEvt_Event *Event)
   {
    extern const char *Hlp_ASSESSMENT_Exams_events;
    extern const char *Txt_New_event;
@@ -1462,18 +1453,23 @@ static void ExaEvt_PutFormNewEvent (const struct ExaEvt_Event *Event)
       [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
      };
-   bool ItsANewEvent = true;	// TODO: To be used also to edit existing events
+   bool ItsANewEvent = Event->EvtCod <= 0;
 
    /***** Start section for a new exam event *****/
    HTM_SECTION_Begin (ExaEvt_NEW_EVENT_SECTION_ID);
 
    /***** Begin form *****/
-   Frm_StartForm (ActNewExaEvt);
+   Frm_StartForm (ItsANewEvent ? ActNewExaEvt :	// New event
+	                         ActChgExaEvt);	// Existing event
    Exa_PutParamExamCod (Event->ExaCod);
-   Exa_PutParamQstInd (0);	// Start by first question in exam
+   if (!ItsANewEvent)	// Existing event
+      ExaEvt_PutParamEvtCod (Event->EvtCod);
+
+   // Exa_PutParamQstInd (0);	// Start by first question in exam
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_event,
+   Box_BoxTableBegin (NULL,ItsANewEvent ? Txt_New_event :
+					  Event->Title,
                       NULL,NULL,
 		      Hlp_ASSESSMENT_Exams_events,Box_NOT_CLOSABLE,2);
 
@@ -1498,7 +1494,7 @@ static void ExaEvt_PutFormNewEvent (const struct ExaEvt_Event *Event)
 					    SetHMS);
 
    /***** Groups *****/
-   ExaEvt_ShowLstGrpsToCreateEvent ();
+   ExaEvt_ShowLstGrpsToCreateEvent (Event->EvtCod);
 
    /***** End table, send button and end box *****/
    if (ItsANewEvent)
@@ -1517,7 +1513,7 @@ static void ExaEvt_PutFormNewEvent (const struct ExaEvt_Event *Event)
 /************** Show list of groups to create a new exam event ***************/
 /*****************************************************************************/
 
-static void ExaEvt_ShowLstGrpsToCreateEvent (void)
+static void ExaEvt_ShowLstGrpsToCreateEvent (long EvtCod)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Groups;
@@ -1547,8 +1543,10 @@ static void ExaEvt_ShowLstGrpsToCreateEvent (void)
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
       HTM_LABEL_Begin (NULL);
       HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
-			  "id=\"WholeCrs\" value=\"Y\" checked=\"checked\""
-			  " onclick=\"uncheckChildren(this,'GrpCods')\"");
+		          "id=\"WholeCrs\" value=\"Y\"%s"
+		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
+			  Grp_CheckIfAssociatedToGrps ("exa_groups","EvtCod",EvtCod) ? "" :
+				                                                       " checked=\"checked\"");
       HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -1560,9 +1558,9 @@ static void ExaEvt_ShowLstGrpsToCreateEvent (void)
 	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
          if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-                                            -1L,	// -1 means "New exam event"
-					    Grp_MATCH);
+            Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+                                            EvtCod,
+					    Grp_EXA_EVENT);
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
@@ -1645,21 +1643,46 @@ void ExaEvt_RequestCreatOrEditEvent (void)
 void ExaEvt_ReceiveFormEvent (void)
   {
    extern const char *Txt_Created_new_event_X;
+   extern const char *Txt_The_event_has_been_modified;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
+   bool ItsANewEvent;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exam);
    ExaEvt_ResetEvent (&Event);
 
-   /***** Get parameters *****/
-   /* Get context */
+   /***** Get main parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
       Lay_WrongExamExit ();
+   Exam.ExaCod = Exams.ExaCod;
+   Grp_GetParamWhichGroups ();
+   Event.EvtCod = ExaEvt_GetParamEvtCod ();
+   ItsANewEvent = (Event.EvtCod <= 0);
 
+   /***** Get exam data from database *****/
+   Exa_GetDataOfExamByCod (&Exam);
+   if (Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+      Lay_WrongExamExit ();
+   Exams.ExaCod = Exam.ExaCod;
+
+   /***** Get event data from database *****/
+   if (ItsANewEvent)
+      /* Initialize to empty event */
+      ExaEvt_ResetEvent (&Event);
+   else
+     {
+      /* Get event data from database */
+      ExaEvt_GetDataOfEventByCod (&Event);
+      if (Exam.ExaCod != Event.ExaCod)
+	 Lay_WrongExamExit ();
+      Exams.EvtCod = Event.EvtCod;
+     }
+
+   /***** Get parameters from form *****/
    /* Get event title */
    Par_GetParToText ("Title",Event.Title,ExaEvt_MAX_BYTES_TITLE);
 
@@ -1670,22 +1693,21 @@ void ExaEvt_ReceiveFormEvent (void)
    /* Get groups associated to the event */
    Grp_GetParCodsSeveralGrps ();
 
-   /***** Get exam data from database *****/
-   Exam.ExaCod = Exams.ExaCod;
-   Exa_GetDataOfExamByCod (&Exam);
-   if (Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-      Lay_WrongExamExit ();
-   Event.ExaCod = Exams.ExaCod = Exam.ExaCod;
-
-   /***** Create a new exam event *****/
-   ExaEvt_CreateEvent (&Event);
+   /***** Create/update event *****/
+   if (ItsANewEvent)
+      ExaEvt_CreateEvent (&Event);
+   else
+      ExaEvt_UpdateEvent (&Event);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
 
-   /***** Write message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
-		  Event.Title);
+   /***** Write success message *****/
+   if (ItsANewEvent)
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
+		     Event.Title);
+   else
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
 
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,&Event,
@@ -1726,7 +1748,7 @@ void ExaEvt_ResumeEvent (void)
   }
 
 /*****************************************************************************/
-/******************* Create a new exam event in an exam **********************/
+/**************************** Create a new event *****************************/
 /*****************************************************************************/
 
 static void ExaEvt_CreateEvent (struct ExaEvt_Event *Event)
@@ -1735,7 +1757,7 @@ static void ExaEvt_CreateEvent (struct ExaEvt_Event *Event)
    Event->EvtCod =
    DB_QueryINSERTandReturnCode ("can not create exam event",
 				"INSERT exa_events "
-				"(ExaCod,UsrCod,StartTime,EndTime,Title,"
+				"(ExaCod,UsrCod,StartTime,EndTime,Title,Hidden,"
 				"QstInd,QstCod,Showing,Countdown,"
 				"NumCols,ShowQstResults,ShowUsrResults)"
 				" VALUES "
@@ -1744,6 +1766,7 @@ static void ExaEvt_CreateEvent (struct ExaEvt_Event *Event)
                                 "FROM_UNIXTIME(%ld),"	// Start time
                                 "FROM_UNIXTIME(%ld),"	// End time
 				"'%s',"		// Title
+                                "'%c',"
 				"0,"		// QstInd: Event has not started, so not the first question yet
 				"-1,"		// QstCod: Non-existent question
 				"'%s',	"	// Showing: What is being shown
@@ -1756,6 +1779,8 @@ static void ExaEvt_CreateEvent (struct ExaEvt_Event *Event)
 				Event->TimeUTC[Dat_START_TIME],	// Start time
 				Event->TimeUTC[Dat_END_TIME  ],	// End time
 				Event->Title,
+				Event->Hidden ? 'Y' :
+					        'N',
 				ExaEvt_ShowingStringsDB[ExaEvt_SHOWING_DEFAULT],
 				ExaEvt_NUM_COLS_DEFAULT);
 
@@ -1765,6 +1790,35 @@ static void ExaEvt_CreateEvent (struct ExaEvt_Event *Event)
    /***** Create groups associated to the exam event *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       ExaEvt_CreateGrps (Event->EvtCod);
+  }
+
+/*****************************************************************************/
+/************************* Update an existing event **************************/
+/*****************************************************************************/
+
+static void ExaEvt_UpdateEvent (struct ExaEvt_Event *Event)
+  {
+   /***** Insert this new exam event into database *****/
+   DB_QueryUPDATE ("can not update exam event",
+		   "UPDATE exa_events,exa_exams"
+		   " SET exa_events.StartTime=FROM_UNIXTIME(%ld),"
+                        "exa_events.EndTime=FROM_UNIXTIME(%ld),"
+                        "exa_events.Title='%s',"
+			"exa_events.Hidden='%c'"
+		   " WHERE exa_events.EvtCod=%ld"
+		   " AND exa_events.ExaCod=exa_exams.ExaCod"
+		   " AND exa_exams.CrsCod=%ld",		// Extra check
+		   Event->TimeUTC[Dat_START_TIME],	// Start time
+		   Event->TimeUTC[Dat_END_TIME  ],	// End time
+		   Event->Title,
+		   Event->Hidden ? 'Y' :
+			           'N',
+		   Event->EvtCod,Gbl.Hierarchy.Crs.CrsCod);
+
+   /***** Update groups associated to the exam event *****/
+   ExaEvt_RemoveGroups (Event->EvtCod);		// Remove all groups associated to this event
+   if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
+      ExaEvt_CreateGrps (Event->EvtCod);	// Associate new groups
   }
 
 /*****************************************************************************/
@@ -1958,6 +2012,18 @@ static void ExaEvt_CreateGrps (long EvtCod)
 		      " VALUES"
 		      " (%ld,%ld)",
                       EvtCod,Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+  }
+
+/*****************************************************************************/
+/********************* Remove all groups from one event **********************/
+/*****************************************************************************/
+
+static void ExaEvt_RemoveGroups (long EvtCod)
+  {
+   /***** Remove all groups from one event *****/
+   DB_QueryDELETE ("can not remove groups associated to and event",
+		   "DELETE FROM exa_groups WHERE EvtCod=%ld",
+		   EvtCod);
   }
 
 /*****************************************************************************/

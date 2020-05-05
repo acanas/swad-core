@@ -108,7 +108,6 @@ void Svy_ResetSurvey (void);
 void Svy_HideSurvey (void);
 void Svy_UnhideSurvey (void);
 void Svy_ReceiveFormSurvey (void);
-bool Svy_CheckIfSvyIsAssociatedToGrp (long SvyCod,long GrpCod);
 void Svy_RemoveGroup (long GrpCod);
 void Svy_RemoveGroupsOfType (long GrpTypCod);
 void Svy_RemoveSurveys (Hie_Level_t Scope,long Cod);

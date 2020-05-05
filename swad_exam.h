@@ -84,7 +84,6 @@ void ExaSet_ChangeSetTitle (void);
 void ExaSet_ChangeNumQstsToExam (void);
 
 void Exa_ReceiveFormExam (void);
-bool Mch_CheckIfMatchIsAssociatedToGrp (long EvtCod,long GrpCod);
 
 unsigned ExaSet_GetNumSetsExam (long ExaCod);
 unsigned ExaSet_GetNumQstsExam (long ExaCod);

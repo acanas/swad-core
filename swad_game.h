@@ -134,7 +134,6 @@ void Gam_UnhideGame (void);
 void Gam_RequestCreatOrEditGame (void);
 
 void Gam_ReceiveFormGame (void);
-bool Mch_CheckIfMatchIsAssociatedToGrp (long MchCod,long GrpCod);
 
 unsigned Gam_GetNumQstsGame (long GamCod);
 

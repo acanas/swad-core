@@ -35,6 +35,7 @@
 #include "swad_attendance.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_exam_event.h"
 #include "swad_form.h"
 #include "swad_game.h"
 #include "swad_global.h"
@@ -120,6 +121,8 @@ static void Grp_WriteHeadingGroupTypes (void);
 
 static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms);
 static void Grp_WriteHeadingGroups (void);
+static bool Grp_CheckIfAssociatedToGrp (const char *Table,const char *Field,
+                                        long Cod,long GrpCod);
 static void Grp_PutIconToEditGroups (__attribute__((unused)) void *Args);
 
 static void Grp_ShowWarningToStdsToChangeGrps (void);
@@ -1681,18 +1684,30 @@ static void Grp_WriteHeadingGroups (void)
   }
 
 /*****************************************************************************/
-/******** List groups of a type                                     **********/
-/******** to edit assignments, attendance events, surveys or matches *********/
+/****** List groups of a type to edit                                   ******/
+/****** assignments, attendance events, surveys, exam events or matches ******/
 /*****************************************************************************/
 
-void Grp_ListGrpsToEditAsgAttSvyMch (struct GroupType *GrpTyp,long Cod,
-                                     Grp_AsgAttSvyGam_t Grp_AsgAttOrSvy)
+void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,long Cod,
+                                        Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp)
   {
+   static const struct
+     {
+      const char *Table;
+      const char *Field;
+     } AssociationsToGrps[Grp_NUM_ASSOCIATIONS_TO_GROUPS] =
+     {
+      [Grp_ASSIGNMENT] = {"asg_grp"   ,"AsgCod"},
+      [Grp_ATT_EVENT ] = {"att_grp"   ,"AttCod"},
+      [Grp_SURVEY    ] = {"svy_grp"   ,"SvyCod"},
+      [Grp_EXA_EVENT ] = {"exa_groups","EvtCod"},
+      [Grp_MATCH     ] = {"mch_groups","MchCod"},
+     };
    struct ListCodGrps LstGrpsIBelong;
    unsigned NumGrpThisType;
    bool IBelongToThisGroup;
    struct Group *Grp;
-   bool AssociatedToGrp = false;
+   bool AssociatedToGrp;
 
    /***** Write heading *****/
    Grp_WriteGrpHead (GrpTyp);
@@ -1709,23 +1724,12 @@ void Grp_ListGrpsToEditAsgAttSvyMch (struct GroupType *GrpTyp,long Cod,
       Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
       IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
 
-      AssociatedToGrp = false;
-      if (Cod > 0)	// Cod == -1L means new item, assignment, event, survey or match
-         switch (Grp_AsgAttOrSvy)
-           {
-            case Grp_ASSIGNMENT:
-               AssociatedToGrp = Asg_CheckIfAsgIsAssociatedToGrp (Cod,Grp->GrpCod);
-               break;
-            case Grp_ATT_EVENT:
-               AssociatedToGrp = Att_CheckIfAttEventIsAssociatedToGrp (Cod,Grp->GrpCod);
-               break;
-            case Grp_SURVEY:
-               AssociatedToGrp = Svy_CheckIfSvyIsAssociatedToGrp (Cod,Grp->GrpCod);
-               break;
-            case Grp_MATCH:
-               AssociatedToGrp = Mch_CheckIfMatchIsAssociatedToGrp (Cod,Grp->GrpCod);
-               break;
-           }
+      if (Cod > 0)	// Cod == -1L means new item, assignment, event, survey, exam event or match
+	 AssociatedToGrp = Grp_CheckIfAssociatedToGrp (AssociationsToGrps[WhichIsAssociatedToGrp].Table,
+	                                               AssociationsToGrps[WhichIsAssociatedToGrp].Field,
+	                                               Cod,Grp->GrpCod);
+      else
+         AssociatedToGrp = false;
 
       /* Put checkbox to select the group */
       HTM_TR_Begin (NULL);
@@ -1750,6 +1754,37 @@ void Grp_ListGrpsToEditAsgAttSvyMch (struct GroupType *GrpTyp,long Cod,
 
    /***** Free memory with the list of groups which I belongs to *****/
    Grp_FreeListCodGrp (&LstGrpsIBelong);
+  }
+
+
+/*****************************************************************************/
+/************ Check if an assignment is associated to a group ****************/
+/*****************************************************************************/
+
+static bool Grp_CheckIfAssociatedToGrp (const char *Table,const char *Field,
+                                        long Cod,long GrpCod)
+  {
+   /***** Get if an assignment, attendance event, survey, exam event or match
+          is associated to a given group from database *****/
+   return (DB_QueryCOUNT ("can not check if associated to a group",
+			  "SELECT COUNT(*) FROM %s"
+			  " WHERE %s=%ld AND GrpCod=%ld",
+		  	  Table,Field,Cod,GrpCod) != 0);
+  }
+
+
+/*****************************************************************************/
+/*************** Check if a survey is associated to any group ****************/
+/*****************************************************************************/
+
+bool Grp_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod)
+  {
+   /***** Get if an assignment, attendance event, survey, exam event or match
+          is associated to any group from database *****/
+   return (DB_QueryCOUNT ("can not check if associated to groups",
+			  "SELECT COUNT(*) FROM %s"
+			  " WHERE %s=%ld",
+			  Table,Field,Cod) != 0);
   }
 
 /*****************************************************************************/

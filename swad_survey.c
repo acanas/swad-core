@@ -133,7 +133,6 @@ static void Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
                                                          unsigned NumUsrsToBeNotifiedByEMail);
 static void Svy_CreateSurvey (struct Svy_Survey *Svy,const char *Txt);
 static void Svy_UpdateSurvey (struct Svy_Survey *Svy,const char *Txt);
-static bool Svy_CheckIfSvyIsAssociatedToGrps (long SvyCod);
 static void Svy_RemoveAllTheGrpsAssociatedToAndSurvey (long SvyCod);
 static void Svy_CreateGrps (long SvyCod);
 static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy);
@@ -2155,8 +2154,8 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       HTM_LABEL_Begin (NULL);
       HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "id=\"WholeCrs\" value=\"Y\"%s onclick=\"uncheckChildren(this,'GrpCods')\"",
-			  Svy_CheckIfSvyIsAssociatedToGrps (SvyCod) ? "" :
-				                                      " checked=\"checked\"");
+			  Grp_CheckIfAssociatedToGrps ("svy_grp","SvyCod",SvyCod) ? "" :
+				                                                    " checked=\"checked\"");
       HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -2168,8 +2167,8 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
          if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-                                               SvyCod,Grp_SURVEY);
+            Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+                                            SvyCod,Grp_SURVEY);
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
@@ -2414,32 +2413,6 @@ static void Svy_UpdateSurvey (struct Svy_Survey *Svy,const char *Txt)
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_survey_has_been_modified);
-  }
-
-/*****************************************************************************/
-/*************** Check if a survey is associated to any group ****************/
-/*****************************************************************************/
-
-static bool Svy_CheckIfSvyIsAssociatedToGrps (long SvyCod)
-  {
-   /***** Get if a survey is associated to a group from database *****/
-   return (DB_QueryCOUNT ("can not check if a survey is associated to groups",
-			  "SELECT COUNT(*) FROM svy_grp"
-			  " WHERE SvyCod=%ld",
-			  SvyCod) != 0);
-  }
-
-/*****************************************************************************/
-/**************** Check if a survey is associated to a group *****************/
-/*****************************************************************************/
-
-bool Svy_CheckIfSvyIsAssociatedToGrp (long SvyCod,long GrpCod)
-  {
-   /***** Get if a survey is associated to a group from database *****/
-   return (DB_QueryCOUNT ("can not check if a survey is associated to a group",
-			  "SELECT COUNT(*) FROM svy_grp"
-			  " WHERE SvyCod=%ld AND GrpCod=%ld",
-			  SvyCod,GrpCod) != 0);
   }
 
 /*****************************************************************************/

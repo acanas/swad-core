@@ -1266,7 +1266,8 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
       HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 		          "id=\"WholeCrs\" value=\"Y\"%s"
 		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
-			  Att_CheckIfAttEventIsAssociatedToGrps (AttCod) ? "" : " checked=\"checked\"");
+			  Grp_CheckIfAssociatedToGrps ("att_grp","AttCod",AttCod) ? "" :
+				                                                    " checked=\"checked\"");
       HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -1278,7 +1279,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
          if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+            Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
                                             AttCod,Grp_ATT_EVENT);
 
       /***** End table and box *****/
@@ -1450,33 +1451,6 @@ void Att_UpdateAttEvent (struct Att_Event *Event,const char *Description)
    /* Create new groups */
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Att_CreateGrps (Event->AttCod);
-  }
-
-/*****************************************************************************/
-/******** Check if an attendance event is associated to any group ************/
-/*****************************************************************************/
-
-bool Att_CheckIfAttEventIsAssociatedToGrps (long AttCod)
-  {
-   /***** Get if an attendance event is associated to a group from database *****/
-   return (DB_QueryCOUNT ("can not check if an attendance event"
-			  " is associated to groups",
-		          "SELECT COUNT(*) FROM att_grp WHERE AttCod=%ld",
-			  AttCod) != 0);
-  }
-
-/*****************************************************************************/
-/********* Check if an attendance event is associated to a group *************/
-/*****************************************************************************/
-
-bool Att_CheckIfAttEventIsAssociatedToGrp (long AttCod,long GrpCod)
-  {
-   /***** Get if an attendance event is associated to a group from database *****/
-   return (DB_QueryCOUNT ("can not check if an attendance event"
-			  " is associated to a group",
-			  "SELECT COUNT(*) FROM att_grp"
-			  " WHERE AttCod=%ld AND GrpCod=%ld",
-			  AttCod,GrpCod) != 0);
   }
 
 /*****************************************************************************/

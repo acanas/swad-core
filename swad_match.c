@@ -746,19 +746,6 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match 
   }
 
 /*****************************************************************************/
-/************* Check if a match is associated to a given group ***************/
-/*****************************************************************************/
-
-bool Mch_CheckIfMatchIsAssociatedToGrp (long MchCod,long GrpCod)
-  {
-   /***** Get if a match is associated to a group from database *****/
-   return (DB_QueryCOUNT ("can not check if a match is associated to a group",
-			  "SELECT COUNT(*) FROM mch_groups"
-			  " WHERE MchCod=%ld AND GrpCod=%ld",
-			  MchCod,GrpCod) != 0);
-  }
-
-/*****************************************************************************/
 /******************* Put a column for number of players **********************/
 /*****************************************************************************/
 
@@ -1418,7 +1405,7 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
 	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
          if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+            Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
                                             -1L,	// -1 means "New match"
 					    Grp_MATCH);
 
