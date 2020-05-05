@@ -126,7 +126,7 @@ static void Exa_WriteAuthor (struct Exa_Exam *Exam);
 
 static void Exa_PutHiddenParamExamOrder (Exa_Order_t SelectedOrder);
 
-static void Exa_PutFormsToRemEditOneExam (struct Exa_Exams *Exams,
+static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
 					  const struct Exa_Exam *Exam,
 					  const char *Anchor);
 
@@ -252,11 +252,11 @@ void Exa_ResetExam (struct Exa_Exam *Exam)
    Exam->TimeUTC[Dat_START_TIME] = (time_t) 0;
    Exam->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Exam->Title[0]                = '\0';
+   Exam->Hidden                  = false;
    Exam->NumSets                 = 0;
    Exam->NumQsts                 = 0;
    Exam->NumEvts                 = 0;
    Exam->NumUnfinishedEvts       = 0;
-   Exam->Hidden                  = false;
   }
 
 /*****************************************************************************/
@@ -582,7 +582,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
 
       /* Icons to remove/edit this exam */
-      Exa_PutFormsToRemEditOneExam (Exams,Exam,Anchor);
+      Exa_PutIconsToRemEditOneExam (Exams,Exam,Anchor);
 
       HTM_TD_End ();
      }
@@ -758,7 +758,7 @@ static void Exa_PutHiddenParamExamOrder (Exa_Order_t SelectedOrder)
 /******************** Put a link (form) to edit one exam *********************/
 /*****************************************************************************/
 
-static void Exa_PutFormsToRemEditOneExam (struct Exa_Exams *Exams,
+static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
 					  const struct Exa_Exam *Exam,
 					  const char *Anchor)
   {
@@ -1424,7 +1424,7 @@ void Exa_HideExam (void)
   }
 
 /*****************************************************************************/
-/******************************** Show an exam ******************************/
+/******************************* Unhide an exam ******************************/
 /*****************************************************************************/
 
 void Exa_UnhideExam (void)
@@ -1452,8 +1452,8 @@ void Exa_UnhideExam (void)
    Exa_GetDataOfExamByCod (&Exam);
    Exams.ExaCod = Exam.ExaCod;
 
-   /***** Show exam *****/
-   DB_QueryUPDATE ("can not show exam",
+   /***** Unhide exam *****/
+   DB_QueryUPDATE ("can not unhide exam",
 		   "UPDATE exa_exams SET Hidden='N' WHERE ExaCod=%ld",
 		   Exam.ExaCod);
 

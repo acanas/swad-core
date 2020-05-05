@@ -114,10 +114,12 @@ static void ExaEvt_ListOneOrMoreEventsHeading (bool ICanEditEvents);
 static bool ExaEvt_CheckIfICanEditEvents (void);
 static bool ExaEvt_CheckIfICanEditThisEvent (const struct ExaEvt_Event *Event);
 static void ExaEvt_ListOneOrMoreEventsIcons (struct Exa_Exams *Exams,
-                                             const struct ExaEvt_Event *Event);
+                                             const struct ExaEvt_Event *Event,
+					     const char *Anchor);
 static void ExaEvt_ListOneOrMoreEventsAuthor (const struct ExaEvt_Event *Event);
 static void ExaEvt_ListOneOrMoreEventsTimes (const struct ExaEvt_Event *Event,unsigned UniqueId);
-static void ExaEvt_ListOneOrMoreEventsTitleGrps (const struct ExaEvt_Event *Event);
+static void ExaEvt_ListOneOrMoreEventsTitleGrps (const struct ExaEvt_Event *Event,
+                                                 const char *Anchor);
 static void ExaEvt_GetAndWriteNamesOfGrpsAssociatedToEvent (const struct ExaEvt_Event *Event);
 static void ExaEvt_ListOneOrMoreEventsNumParticipants (const struct ExaEvt_Event *Event);
 static void ExaEvt_ListOneOrMoreEventsStatus (struct ExaEvt_Event *Event,unsigned NumQsts);
@@ -253,13 +255,18 @@ long ExaEvt_GetEvtCodBeingPlayed (void)
 
 void ExaEvt_ResetEvent (struct ExaEvt_Event *Event)
   {
+   Dat_StartEndTime_t StartEndTime;
+
    /***** Initialize to empty match *****/
    Event->EvtCod                  = -1L;
    Event->ExaCod                  = -1L;
    Event->UsrCod                  = -1L;
-   Event->TimeUTC[Dat_START_TIME] = (time_t) 0;
-   Event->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	StartEndTime++)
+      Event->TimeUTC[StartEndTime] = (time_t) 0;
    Event->Title[0]                = '\0';
+   Event->Hidden		  = false;
    Event->Status.QstInd           = 0;
    Event->Status.QstCod           = -1L;
    Event->Status.QstStartTimeUTC  = (time_t) 0;
@@ -309,19 +316,20 @@ void ExaEvt_ListEvents (struct Exa_Exams *Exams,
 
    /* Make query */
    NumEvents = (unsigned) DB_QuerySELECT (&mysql_res,"can not get events",
-					   "SELECT EvtCod,"				// row[ 0]
-						  "ExaCod,"				// row[ 1]
-						  "UsrCod,"				// row[ 2]
-						  "UNIX_TIMESTAMP(StartTime),"		// row[ 3]
-						  "UNIX_TIMESTAMP(EndTime),"		// row[ 4]
-						  "Title,"				// row[ 5]
-						  "QstInd,"				// row[ 6]
-						  "QstCod,"				// row[ 7]
-						  "Showing,"				// row[ 8]
-						  "Countdown,"				// row[ 9]
-						  "NumCols,"				// row[10]
-					          "ShowQstResults,"			// row[11]
-					          "ShowUsrResults"			// row[12]
+					   "SELECT EvtCod,"			// row[ 0]
+						  "ExaCod,"			// row[ 1]
+						  "Hidden,"			// row[ 2]
+						  "UsrCod,"			// row[ 3]
+						  "UNIX_TIMESTAMP(StartTime),"	// row[ 4]
+						  "UNIX_TIMESTAMP(EndTime),"	// row[ 5]
+						  "Title,"			// row[ 6]
+						  "QstInd,"			// row[ 7]
+						  "QstCod,"			// row[ 8]
+						  "Showing,"			// row[ 9]
+						  "Countdown,"			// row[10]
+						  "NumCols,"			// row[11]
+					          "ShowQstResults,"		// row[12]
+					          "ShowUsrResults"		// row[13]
 					   " FROM exa_events"
 					   " WHERE ExaCod=%ld%s"
 					   " ORDER BY EvtCod",
@@ -391,55 +399,37 @@ void ExaEvt_GetDataOfEventByCod (struct ExaEvt_Event *Event)
   {
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
-   Dat_StartEndTime_t StartEndTime;
 
    /***** Get exam data event from database *****/
-   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get events",
-					"SELECT EvtCod,"			// row[ 0]
-					       "ExaCod,"			// row[ 1]
-					       "UsrCod,"			// row[ 2]
-					       "UNIX_TIMESTAMP(StartTime),"	// row[ 3]
-					       "UNIX_TIMESTAMP(EndTime),"	// row[ 4]
-					       "Title,"				// row[ 5]
-					       "QstInd,"			// row[ 6]
-					       "QstCod,"			// row[ 7]
-					       "Showing,"			// row[ 8]
-					       "Countdown,"			// row[ 9]
-					       "NumCols,"			// row[10]
-					       "ShowQstResults,"		// row[11]
-					       "ShowUsrResults"			// row[12]
-					" FROM exa_events"
-					" WHERE EvtCod=%ld"
-					" AND ExaCod IN"		// Extra check
-					" (SELECT ExaCod FROM exa_exams"
-					" WHERE CrsCod='%ld')",
-					Event->EvtCod,
-					Gbl.Hierarchy.Crs.CrsCod);
+   NumRows = (unsigned)
+	     DB_QuerySELECT (&mysql_res,"can not get events",
+			     "SELECT EvtCod,"			// row[ 0]
+				    "ExaCod,"			// row[ 1]
+				    "Hidden,"			// row[ 2]
+				    "UsrCod,"			// row[ 3]
+				    "UNIX_TIMESTAMP(StartTime),"// row[ 4]
+				    "UNIX_TIMESTAMP(EndTime),"	// row[ 5]
+				    "Title,"			// row[ 6]
+				    "QstInd,"			// row[ 7]
+				    "QstCod,"			// row[ 8]
+				    "Showing,"			// row[ 9]
+				    "Countdown,"		// row[10]
+				    "NumCols,"			// row[11]
+				    "ShowQstResults,"		// row[12]
+				    "ShowUsrResults"		// row[13]
+			     " FROM exa_events"
+			     " WHERE EvtCod=%ld"
+			     " AND ExaCod IN"		// Extra check
+			     " (SELECT ExaCod FROM exa_exams"
+			     " WHERE CrsCod='%ld')",
+			     Event->EvtCod,
+			     Gbl.Hierarchy.Crs.CrsCod);
    if (NumRows) // Event found...
-      /***** Get exam event data from row *****/
+      /* Get exam event data from row */
       ExaEvt_GetEventDataFromRow (mysql_res,Event);
    else
-     {
       /* Initialize to empty exam event */
-      Event->EvtCod                  = -1L;
-      Event->ExaCod                  = -1L;
-      Event->UsrCod                  = -1L;
-      for (StartEndTime  = (Dat_StartEndTime_t) 0;
-	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	   StartEndTime++)
-         Event->TimeUTC[StartEndTime] = (time_t) 0;
-      Event->Title[0]                = '\0';
-      Event->Status.QstInd           = 0;
-      Event->Status.QstCod           = -1L;
-      Event->Status.QstStartTimeUTC  = (time_t) 0;
-      Event->Status.Showing          = ExaEvt_START;
-      Event->Status.Countdown        = -1L;
-      Event->Status.Happening          = false;
-      Event->Status.NumParticipants  = 0;
-      Event->Status.NumCols          = ExaEvt_NUM_COLS_DEFAULT;
-      Event->Status.ShowQstResults   = false;
-      Event->Status.ShowUsrResults   = false;
-     }
+      ExaEvt_ResetEvent (Event);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -487,6 +477,7 @@ static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
   {
    unsigned NumEvent;
    unsigned UniqueId;
+   char *Anchor;
    struct ExaEvt_Event Event;
    bool ICanEditEvents = ExaEvt_CheckIfICanEditEvents ();
 
@@ -513,12 +504,17 @@ static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
 
       if (ExaEvt_CheckIfICanPlayThisEventBasedOnGrps (&Event))
 	{
-	 /***** Write row for this exam event ****/
+	 /***** Build anchor string *****/
+	 if (asprintf (&Anchor,"evt_%ld_%ld",Exam->ExaCod,Event.EvtCod) < 0)
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Begin row for this exam event ****/
 	 HTM_TR_Begin (NULL);
 
 	 /* Icons */
 	 if (ICanEditEvents)
-	    ExaEvt_ListOneOrMoreEventsIcons (Exams,&Event);
+	    if (ExaEvt_CheckIfICanEditThisEvent (&Event))
+	       ExaEvt_ListOneOrMoreEventsIcons (Exams,&Event,Anchor);
 
 	 /* Event participant */
 	 ExaEvt_ListOneOrMoreEventsAuthor (&Event);
@@ -527,7 +523,7 @@ static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
 	 ExaEvt_ListOneOrMoreEventsTimes (&Event,UniqueId);
 
 	 /* Title and groups */
-	 ExaEvt_ListOneOrMoreEventsTitleGrps (&Event);
+	 ExaEvt_ListOneOrMoreEventsTitleGrps (&Event,Anchor);
 
 	 /* Number of participants who have answered any question in the exam event */
 	 ExaEvt_ListOneOrMoreEventsNumParticipants (&Event);
@@ -537,6 +533,12 @@ static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
 
 	 /* Event result visible? */
 	 ExaEvt_ListOneOrMoreEventsResult (Exams,&Event);
+
+	 /***** End row for this exam event ****/
+	 HTM_TR_End ();
+
+	 /***** Free anchor string *****/
+	 free (Anchor);
 	}
      }
 
@@ -617,22 +619,29 @@ static bool ExaEvt_CheckIfICanEditThisEvent (const struct ExaEvt_Event *Event)
 /*****************************************************************************/
 
 static void ExaEvt_ListOneOrMoreEventsIcons (struct Exa_Exams *Exams,
-                                             const struct ExaEvt_Event *Event)
+                                             const struct ExaEvt_Event *Event,
+					     const char *Anchor)
   {
    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
-   /***** Put icon to remove the exam event *****/
-   if (ExaEvt_CheckIfICanEditThisEvent (Event))
-     {
-      Exams->ExaCod = Event->ExaCod;
-      Exams->EvtCod = Event->EvtCod;
-      Frm_StartForm (ActReqRemExaEvt);
-      ExaEvt_PutParamsEdit (Exams);
-      Ico_PutIconRemove ();
-      Frm_EndForm ();
-     }
+   Exams->ExaCod = Event->ExaCod;
+   Exams->EvtCod = Event->EvtCod;
+
+   /* Icon to remove the exam event */
+   Frm_StartForm (ActReqRemExaEvt);
+   ExaEvt_PutParamsEdit (Exams);
+   Ico_PutIconRemove ();
+   Frm_EndForm ();
+
+   /* Icon to hide/unhide the exam event */
+   if (Event->Hidden)
+      Ico_PutContextualIconToUnhide (ActShoExaEvt,Anchor,
+				     ExaEvt_PutParamsEdit,Exams);
    else
-      Ico_PutIconRemovalNotAllowed ();
+      Ico_PutContextualIconToHide (ActHidExaEvt,Anchor,
+				   ExaEvt_PutParamsEdit,Exams);
+
+   /* Icon to edit the exam event */
 
    HTM_TD_End ();
   }
@@ -645,7 +654,7 @@ static void ExaEvt_ListOneOrMoreEventsAuthor (const struct ExaEvt_Event *Event)
   {
    /***** Event author (teacher) *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Usr_WriteAuthor1Line (Event->UsrCod,false);
+   Usr_WriteAuthor1Line (Event->UsrCod,Event->Hidden);
    HTM_TD_End ();
   }
 
@@ -656,19 +665,24 @@ static void ExaEvt_ListOneOrMoreEventsAuthor (const struct ExaEvt_Event *Event)
 static void ExaEvt_ListOneOrMoreEventsTimes (const struct ExaEvt_Event *Event,unsigned UniqueId)
   {
    Dat_StartEndTime_t StartEndTime;
+   const char *Color;
    char *Id;
 
    for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
+      Color = Event->Status.Showing == ExaEvt_END ? (Event->Hidden ? "DATE_GREEN_LIGHT":
+								     "DATE_GREEN") :
+						    (Event->Hidden ? "DATE_RED_LIGHT":
+								     "DATE_RED");
+
+
+
       if (asprintf (&Id,"exa_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
-		    Id,
-		    Event->Status.Showing == ExaEvt_END ? "DATE_RED" :
-						          "DATE_GREEN",
-		    Gbl.RowEvenOdd);
+		    Id,Color,Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,Event->TimeUTC[StartEndTime],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,true,0x7);
@@ -681,7 +695,8 @@ static void ExaEvt_ListOneOrMoreEventsTimes (const struct ExaEvt_Event *Event,un
 /*************** Put a column for exam event title and grous *****************/
 /*****************************************************************************/
 
-static void ExaEvt_ListOneOrMoreEventsTitleGrps (const struct ExaEvt_Event *Event)
+static void ExaEvt_ListOneOrMoreEventsTitleGrps (const struct ExaEvt_Event *Event,
+                                                 const char *Anchor)
   {
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
@@ -689,15 +704,19 @@ static void ExaEvt_ListOneOrMoreEventsTitleGrps (const struct ExaEvt_Event *Even
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
    /***** Event title *****/
+   HTM_ARTICLE_Begin (Anchor);
    Frm_StartForm (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiExaEvt :
 						       ActResExaEvt);
    ExaEvt_PutParamEvtCod (Event->EvtCod);
    HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 								 Txt_Resume,
-			    "BT_LINK LT ASG_TITLE",NULL);
+			    Event->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
+					    "BT_LINK LT ASG_TITLE",
+			    NULL);
    HTM_Txt (Event->Title);
    HTM_BUTTON_End ();
    Frm_EndForm ();
+   HTM_ARTICLE_End ();
 
    /***** Groups whose students can answer this exam event *****/
    if (Gbl.Crs.Grps.NumGrps)
@@ -732,7 +751,8 @@ static void ExaEvt_GetAndWriteNamesOfGrpsAssociatedToEvent (const struct ExaEvt_
 			     Event->EvtCod);
 
    /***** Write heading *****/
-   HTM_DIV_Begin ("class=\"ASG_GRP\"");
+   HTM_DIV_Begin ("class=\"%s\"",Event->Hidden ? "ASG_GRP_LIGHT":
+					         "ASG_GRP");
    HTM_TxtColonNBSP (NumRows == 1 ? Txt_Group  :
                                     Txt_Groups);
 
@@ -964,10 +984,11 @@ static void ExaEvt_GetEventDataFromRow (MYSQL_RES *mysql_res,
    /*
    row[ 0]	EvtCod
    row[ 1]	ExaCod
-   row[ 2]	UsrCod
-   row[ 3]	UNIX_TIMESTAMP(StartTime)
-   row[ 4]	UNIX_TIMESTAMP(EndTime)
-   row[ 5]	Title
+   row[ 2]	Hidden
+   row[ 3]	UsrCod
+   row[ 4]	UNIX_TIMESTAMP(StartTime)
+   row[ 5]	UNIX_TIMESTAMP(EndTime)
+   row[ 6]	Title
    */
    /***** Get exam event data *****/
    /* Code of the exam event (row[0]) */
@@ -978,55 +999,58 @@ static void ExaEvt_GetEventDataFromRow (MYSQL_RES *mysql_res,
    if ((Event->ExaCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
       Lay_ShowErrorAndExit ("Wrong code of exam.");
 
-   /* Get exam event teacher (row[2]) */
-   Event->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
+   /* Get whether the exam is hidden (row[2]) */
+   Event->Hidden = (row[2][0] == 'Y');
 
-   /* Get start/end times (row[3], row[4] hold start/end UTC times) */
+   /* Get exam event teacher (row[3]) */
+   Event->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
+
+   /* Get start/end times (row[4], row[5] hold start/end UTC times) */
    for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
-      Event->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[3 + StartEndTime]);
+      Event->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[4 + StartEndTime]);
 
-   /* Get the title of the exam (row[5]) */
-   if (row[5])
-      Str_Copy (Event->Title,row[5],
+   /* Get the title of the exam (row[6]) */
+   if (row[6])
+      Str_Copy (Event->Title,row[6],
 		Exa_MAX_BYTES_TITLE);
    else
       Event->Title[0] = '\0';
 
    /***** Get current exam event status *****/
    /*
-   row[ 6]	QstInd
-   row[ 7]	QstCod
-   row[ 8]	Showing
-   row[ 9]	Countdown
-   row[10]	NumCols
-   row[11]	ShowQstResults
-   row[12]	ShowUsrResults
+   row[ 7]	QstInd
+   row[ 8]	QstCod
+   row[ 9]	Showing
+   row[10]	Countdown
+   row[11]	NumCols
+   row[12]	ShowQstResults
+   row[13]	ShowUsrResults
    */
-   /* Current question index (row[6]) */
-   Event->Status.QstInd = Str_ConvertStrToUnsigned (row[6]);
+   /* Current question index (row[7]) */
+   Event->Status.QstInd = Str_ConvertStrToUnsigned (row[7]);
 
-   /* Current question code (row[7]) */
-   Event->Status.QstCod = Str_ConvertStrCodToLongCod (row[7]);
+   /* Current question code (row[8]) */
+   Event->Status.QstCod = Str_ConvertStrCodToLongCod (row[8]);
 
-   /* Get what to show (stem, answers, results) (row(8)) */
-   Event->Status.Showing = ExaEvt_GetShowingFromStr (row[8]);
+   /* Get what to show (stem, answers, results) (row(9)) */
+   Event->Status.Showing = ExaEvt_GetShowingFromStr (row[9]);
 
-   /* Get countdown (row[9]) */
-   Event->Status.Countdown = Str_ConvertStrCodToLongCod (row[9]);
+   /* Get countdown (row[10]) */
+   Event->Status.Countdown = Str_ConvertStrCodToLongCod (row[10]);
 
-   /* Get number of columns (row[10]) */
-   LongNum = Str_ConvertStrCodToLongCod (row[10]);
+   /* Get number of columns (row[11]) */
+   LongNum = Str_ConvertStrCodToLongCod (row[11]);
    Event->Status.NumCols =  (LongNum <= 1           ) ? 1 :
                            ((LongNum >= ExaEvt_MAX_COLS) ? ExaEvt_MAX_COLS :
-                        	                        (unsigned) LongNum);
+                        	                           (unsigned) LongNum);
 
-   /* Get whether to show question results or not (row(11)) */
-   Event->Status.ShowQstResults = (row[11][0] == 'Y');
+   /* Get whether to show question results or not (row(12)) */
+   Event->Status.ShowQstResults = (row[12][0] == 'Y');
 
-   /* Get whether to show user results or not (row(12)) */
-   Event->Status.ShowUsrResults = (row[12][0] == 'Y');
+   /* Get whether to show user results or not (row(13)) */
+   Event->Status.ShowUsrResults = (row[13][0] == 'Y');
 
    /***** Get whether the exam event is being played or not *****/
    if (Event->Status.Showing == ExaEvt_END)	// Event over
@@ -1259,6 +1283,78 @@ static void ExaEvt_RemoveUsrEvtResultsInCrs (long UsrCod,long CrsCod,const char 
 		   TableName,
 		   TableName,
 		   UsrCod);
+  }
+
+/*****************************************************************************/
+/******************************** Hide an event ******************************/
+/*****************************************************************************/
+
+void ExaEvt_HideEvent (void)
+  {
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   struct ExaEvt_Event Event;
+
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Reset exam and event *****/
+   Exa_ResetExam (&Exam);
+   ExaEvt_ResetEvent (&Event);
+
+   /***** Get and check parameters *****/
+   ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
+
+   /***** Check if I can remove this exam event *****/
+   if (!ExaEvt_CheckIfICanEditThisEvent (&Event))
+      Lay_NoPermissionExit ();
+
+   /***** Hide event *****/
+   DB_QueryUPDATE ("can not hide exam event",
+		   "UPDATE exa_events SET Hidden='Y'"
+		   " WHERE EvtCod=%ld"
+		   " AND ExaCod=%ld",	// Extra check
+		   Event.EvtCod,Event.ExaCod);
+
+   /***** Show current exam *****/
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
+	                false);	// Do not put form to start new exam event
+  }
+
+/*****************************************************************************/
+/****************************** Unhide an event ******************************/
+/*****************************************************************************/
+
+void ExaEvt_UnhideEvent (void)
+  {
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   struct ExaEvt_Event Event;
+
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Reset exam and event *****/
+   Exa_ResetExam (&Exam);
+   ExaEvt_ResetEvent (&Event);
+
+   /***** Get and check parameters *****/
+   ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
+
+   /***** Check if I can remove this exam event *****/
+   if (!ExaEvt_CheckIfICanEditThisEvent (&Event))
+      Lay_NoPermissionExit ();
+
+   /***** Unhide event *****/
+   DB_QueryUPDATE ("can not unhide exam event",
+		   "UPDATE exa_events SET Hidden='N'",
+		   " WHERE EvtCod=%ld"
+		   " AND ExaCod=%ld",	// Extra check
+		   Event.EvtCod,Event.ExaCod);
+
+   /***** Show current exam *****/
+   Exa_ShowOnlyOneExam (&Exams,&Exam,
+	                false);	// Do not put form to start new exam event
   }
 
 /*****************************************************************************/

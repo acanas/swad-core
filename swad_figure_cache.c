@@ -104,12 +104,12 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
    time_t TimeCached[Hie_NUM_LEVELS] =	// Time in seconds
      {
       [Hie_UNK] = (time_t) (                 0),	// Unknown
-      [Hie_SYS] = (time_t) ( 1UL * 60UL * 60UL),	// System
-      [Hie_CTY] = (time_t) (       30UL * 60UL),	// Country
-      [Hie_INS] = (time_t) (       15UL * 60UL),	// Institution
-      [Hie_CTR] = (time_t) (        5UL * 60UL),	// Centre
-      [Hie_DEG] = (time_t) (              60UL),	// Degree
-      [Hie_CRS] = (time_t) (              10UL),	// Course
+      [Hie_SYS] = (time_t) (24UL * 60UL * 60UL),	// System
+      [Hie_CTY] = (time_t) (12UL * 60UL * 60UL),	// Country
+      [Hie_INS] = (time_t) ( 6UL * 60UL * 60UL),	// Institution
+      [Hie_CTR] = (time_t) ( 3UL * 60UL * 60UL),	// Centre
+      [Hie_DEG] = (time_t) ( 1UL * 60UL * 60UL),	// Degree
+      [Hie_CRS] = (time_t) (              60UL),	// Course
      };
    static const char *Field[FigCch_NUM_TYPES] =
      {

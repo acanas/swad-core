@@ -56,6 +56,7 @@ struct ExaEvt_Event
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    char Title[Exa_MAX_BYTES_TITLE + 1];
+   bool Hidden;
    struct
      {
       unsigned QstInd;	// 0 means that the exam has not started. First question has index 1.
@@ -100,6 +101,9 @@ void ExaEvt_RemoveEvent (void);
 void ExaEvt_RemoveEventsInExamFromAllTables (long ExaCod);
 void ExaEvt_RemoveEventInCourseFromAllTables (long CrsCod);
 void ExaEvt_RemoveUsrFromEventTablesInCrs (long UsrCod,long CrsCod);
+
+void ExaEvt_HideEvent (void);
+void ExaEvt_UnhideEvent (void);
 
 void ExaEvt_PutParamsEdit (void *Exams);
 void ExaEvt_GetAndCheckParameters (struct Exa_Exams *Exams,

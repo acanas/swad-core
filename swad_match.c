@@ -253,12 +253,16 @@ long Mch_GetMchCodBeingPlayed (void)
 
 void Mch_ResetMatch (struct Mch_Match *Match)
   {
+   Dat_StartEndTime_t StartEndTime;
+
    /***** Initialize to empty match *****/
    Match->MchCod                  = -1L;
    Match->GamCod                  = -1L;
    Match->UsrCod                  = -1L;
-   Match->TimeUTC[Dat_START_TIME] = (time_t) 0;
-   Match->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	StartEndTime++)
+      Match->TimeUTC[StartEndTime] = (time_t) 0;
    Match->Title[0]                = '\0';
    Match->Status.QstInd           = 0;
    Match->Status.QstCod           = -1L;
@@ -379,55 +383,36 @@ void Mch_GetDataOfMatchByCod (struct Mch_Match *Match)
   {
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
-   Dat_StartEndTime_t StartEndTime;
 
    /***** Get data of match from database *****/
-   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches",
-					"SELECT MchCod,"			// row[ 0]
-					       "GamCod,"			// row[ 1]
-					       "UsrCod,"			// row[ 2]
-					       "UNIX_TIMESTAMP(StartTime),"	// row[ 3]
-					       "UNIX_TIMESTAMP(EndTime),"	// row[ 4]
-					       "Title,"				// row[ 5]
-					       "QstInd,"			// row[ 6]
-					       "QstCod,"			// row[ 7]
-					       "Showing,"			// row[ 8]
-					       "Countdown,"			// row[ 9]
-					       "NumCols,"			// row[10]
-					       "ShowQstResults,"		// row[11]
-					       "ShowUsrResults"			// row[12]
-					" FROM mch_matches"
-					" WHERE MchCod=%ld"
-					" AND GamCod IN"		// Extra check
-					" (SELECT GamCod FROM gam_games"
-					" WHERE CrsCod='%ld')",
-					Match->MchCod,
-					Gbl.Hierarchy.Crs.CrsCod);
+   NumRows = (unsigned)
+	     DB_QuerySELECT (&mysql_res,"can not get matches",
+			     "SELECT MchCod,"			// row[ 0]
+				    "GamCod,"			// row[ 1]
+				    "UsrCod,"			// row[ 2]
+				    "UNIX_TIMESTAMP(StartTime),"// row[ 3]
+				    "UNIX_TIMESTAMP(EndTime),"	// row[ 4]
+				    "Title,"			// row[ 5]
+				    "QstInd,"			// row[ 6]
+				    "QstCod,"			// row[ 7]
+				    "Showing,"			// row[ 8]
+				    "Countdown,"		// row[ 9]
+				    "NumCols,"			// row[10]
+				    "ShowQstResults,"		// row[11]
+				    "ShowUsrResults"		// row[12]
+			     " FROM mch_matches"
+			     " WHERE MchCod=%ld"
+			     " AND GamCod IN"		// Extra check
+			     " (SELECT GamCod FROM gam_games"
+			     " WHERE CrsCod='%ld')",
+			     Match->MchCod,
+			     Gbl.Hierarchy.Crs.CrsCod);
    if (NumRows) // Match found...
-      /***** Get match data from row *****/
+      /* Get match data from row */
       Mch_GetMatchDataFromRow (mysql_res,Match);
    else
-     {
       /* Initialize to empty match */
-      Match->MchCod                  = -1L;
-      Match->GamCod                  = -1L;
-      Match->UsrCod                  = -1L;
-      for (StartEndTime  = (Dat_StartEndTime_t) 0;
-	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	   StartEndTime++)
-         Match->TimeUTC[StartEndTime] = (time_t) 0;
-      Match->Title[0]                = '\0';
-      Match->Status.QstInd           = 0;
-      Match->Status.QstCod           = -1L;
-      Match->Status.QstStartTimeUTC  = (time_t) 0;
-      Match->Status.Showing          = Mch_START;
-      Match->Status.Countdown        = -1L;
-      Match->Status.Playing          = false;
-      Match->Status.NumPlayers       = 0;
-      Match->Status.NumCols          = Mch_NUM_COLS_DEFAULT;
-      Match->Status.ShowQstResults   = false;
-      Match->Status.ShowUsrResults   = false;
-     }
+      Mch_ResetMatch (Match);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -501,7 +486,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 
       if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match))
 	{
-	 /***** Write row for this match ****/
+	 /***** Begin row for this match ****/
 	 HTM_TR_Begin (NULL);
 
 	 /* Icons */
@@ -525,6 +510,9 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 
 	 /* Match result visible? */
 	 Mch_ListOneOrMoreMatchesResult (Games,&Match);
+
+	 /***** Begin row for this match ****/
+	 HTM_TR_Begin (NULL);
 	}
      }
 

@@ -1045,6 +1045,7 @@ mysql> DESCRIBE exa_events;
 +----------------+------------------------------------------------+------+-----+---------+----------------+
 | EvtCod         | int(11)                                        | NO   | PRI | NULL    | auto_increment |
 | ExaCod         | int(11)                                        | NO   | MUL | NULL    |                |
+| Hidden         | enum('N','Y')                                  | NO   |     | N       |                |
 | UsrCod         | int(11)                                        | NO   |     | NULL    |                |
 | StartTime      | datetime                                       | NO   |     | NULL    |                |
 | EndTime        | datetime                                       | NO   |     | NULL    |                |
@@ -1057,11 +1058,12 @@ mysql> DESCRIBE exa_events;
 | ShowQstResults | enum('N','Y')                                  | NO   |     | N       |                |
 | ShowUsrResults | enum('N','Y')                                  | NO   |     | N       |                |
 +----------------+------------------------------------------------+------+-----+---------+----------------+
-13 rows in set (0.00 sec)
+14 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_events ("
 			"EvtCod INT NOT NULL AUTO_INCREMENT,"
 			"ExaCod INT NOT NULL,"
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"UsrCod INT NOT NULL,"
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"

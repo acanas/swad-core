@@ -679,6 +679,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActReqRemExaEvt	] = {1850,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_RequestRemoveEvent	,NULL},
    [ActRemExaEvt	] = {1851,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_RemoveEvent		,NULL},
+   [ActHidExaEvt	] = {1900,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_HideEvent		,NULL},
+   [ActShoExaEvt	] = {1901,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_UnhideEvent		,NULL},
    [ActReqNewExaEvt	] = {1852,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_RequestNewEvent		,NULL},
    [ActNewExaEvt	] = {1853,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_CreateNewEventTch	,NULL},
    [ActResExaEvt	] = {1854,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_ResumeEvent		,NULL},
@@ -3710,6 +3712,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgTitExaSet,	// #1897
 	ActNewExaSet,		// #1898
 	ActChgNumQstExaSet,	// #1899
+	ActHidExaEvt,		// #1900
+	ActShoExaEvt,		// #1901
 	};
 
 /*****************************************************************************/

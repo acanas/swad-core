@@ -544,10 +544,15 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.210.4 (2020-05-05)"
+#define Log_PLATFORM_VERSION	"SWAD 19.211 (2020-05-05)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+
+	Version 19.211:   May 05, 2020  Exam events can be hidden. (301215 lines)
+					1 change necessary in database:
+ALTER TABLE exa_events ADD COLUMN Hidden ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER ExaCod;
+
 	Version 19.210.4: May 05, 2020  Fixed bug searching courses. (301103 lines)
 	Version 19.210.3: May 03, 2020  All figures cacheable are cached everytime they are calculated. (301089 lines)
 	Version 19.210.2: May 03, 2020  More figures cached. (301125 lines)
