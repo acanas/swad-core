@@ -607,18 +607,24 @@ static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
       if (Sch_BuildSearchQuery (SearchQuery,"courses.FullName",NULL,NULL))
 	{
 	 /***** Query database and list courses found *****/
-	 NumCrss = (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses",
-					      "SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
-					      "courses.Year,courses.FullName,centres.ShortName"
-					      " FROM courses,degrees,centres,institutions,countries"
-					      " WHERE %s"
-					      " AND courses.DegCod=degrees.DegCod"
-					      " AND degrees.CtrCod=centres.CtrCod"
-					      " AND centres.InsCod=institutions.InsCod"
-					      " AND institutions.CtyCod=countries.CtyCod"
-					      "%s"
-					      " ORDER BY courses.FullName,institutions.FullName,degrees.FullName,courses.Year",
-					      SearchQuery,RangeQuery);
+	 NumCrss = (unsigned)
+		   DB_QuerySELECT (&mysql_res,"can not get courses",
+				   "SELECT degrees.DegCod,"	// row[0]
+					  "courses.CrsCod,"	// row[1]
+					  "degrees.ShortName,"	// row[2]
+					  "degrees.FullName,"	// row[3]
+					  "courses.Year,"	// row[4]
+					  "courses.FullName,"	// row[5]
+					  "centres.ShortName"	// row[6]
+				   " FROM courses,degrees,centres,institutions,countries"
+				   " WHERE %s"
+				   " AND courses.DegCod=degrees.DegCod"
+				   " AND degrees.CtrCod=centres.CtrCod"
+				   " AND centres.InsCod=institutions.InsCod"
+				   " AND institutions.CtyCod=countries.CtyCod"
+				   "%s"
+				   " ORDER BY courses.FullName,institutions.FullName,degrees.FullName,courses.Year",
+				   SearchQuery,RangeQuery);
 	 Crs_ListCrssFound (&mysql_res,NumCrss);
 	 return NumCrss;
 	}

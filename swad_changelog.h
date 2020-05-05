@@ -544,10 +544,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.210.3 (2020-05-03)"
+#define Log_PLATFORM_VERSION	"SWAD 19.210.4 (2020-05-05)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.210.4: May 05, 2020  Fixed bug searching courses. (301103 lines)
 	Version 19.210.3: May 03, 2020  All figures cacheable are cached everytime they are calculated. (301089 lines)
 	Version 19.210.2: May 03, 2020  More figures cached. (301125 lines)
 	Version 19.210.1: May 03, 2020  More figures cached. (301129 lines)

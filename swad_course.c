@@ -2630,6 +2630,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
       HTM_TH (1,1,"CM",Txt_Year_OF_A_DEGREE);
       HTM_TH (1,1,"LM",Txt_Course);
       HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+      HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NET]);
       HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
 
       HTM_TR_End ();
@@ -2689,6 +2690,7 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
       HTM_TH (1,1,"CM",Txt_Year_OF_A_DEGREE);
       HTM_TH (1,1,"LM",Txt_Course);
       HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+      HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NET]);
       HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
 
       HTM_TR_End ();
@@ -2724,23 +2726,24 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    struct Degree Deg;
    long CrsCod;
-   unsigned NumTchs;
    unsigned NumStds;
+   unsigned NumNETs;
+   unsigned NumTchs;
+   unsigned NumUsrs;
    const char *ClassTxt;
    const char *ClassLink;
    const char *BgColor;
    bool Accepted;
    static unsigned RowEvenOdd = 1;
-
    /*
-   SELECT degrees.DegCod	0
-	  courses.CrsCod	1
-	  degrees.ShortName	2
-	  degrees.FullName	3
-	  courses.Year		4
-	  courses.FullName	5
-	  centres.ShortName	6
-	  crs_usr.Accepted	7	(only if WriteColumnAccepted == true)
+   SELECT degrees.DegCod	row[0]
+	  courses.CrsCod	row[1]
+	  degrees.ShortName	row[2]
+	  degrees.FullName	row[3]
+	  courses.Year		row[4]
+	  courses.FullName	row[5]
+	  centres.ShortName	row[6]
+	  crs_usr.Accepted	row[7]	(only if WriteColumnAccepted == true)
    */
 
    /***** Get degree code (row[0]) *****/
@@ -2754,12 +2757,11 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       Lay_ShowErrorAndExit ("Wrong code of course.");
 
    /***** Get number of teachers and students in this course *****/
-   NumTchs = Usr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
-				   1 << Rol_NET |
-				   1 << Rol_TCH);
-   NumStds = Usr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
-				   1 << Rol_STD);
-   if (NumTchs + NumStds)
+   NumStds = Usr_GetNumUsrsInCrss (Hie_CRS,CrsCod,1 << Rol_STD);
+   NumNETs = Usr_GetNumUsrsInCrss (Hie_CRS,CrsCod,1 << Rol_NET);
+   NumTchs = Usr_GetNumUsrsInCrss (Hie_CRS,CrsCod,1 << Rol_TCH);
+   NumUsrs = NumStds + NumNETs + NumTchs;
+   if (NumUsrs)
      {
       ClassTxt  = "DAT_N";
       ClassLink = "BT_LINK LT DAT_N";
@@ -2825,6 +2827,11 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    /***** Write number of teachers in course *****/
    HTM_TD_Begin ("class=\"%s RT %s\"",ClassTxt,BgColor);
    HTM_Unsigned (NumTchs);
+   HTM_TD_End ();
+
+   /***** Write number of non-editing teachers in course *****/
+   HTM_TD_Begin ("class=\"%s RT %s\"",ClassTxt,BgColor);
+   HTM_Unsigned (NumNETs);
    HTM_TD_End ();
 
    /***** Write number of students in course *****/
