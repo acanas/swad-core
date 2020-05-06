@@ -257,7 +257,7 @@ void Exa_ResetExam (struct Exa_Exam *Exam)
    Exam->NumSets                 = 0;
    Exam->NumQsts                 = 0;
    Exam->NumEvts                 = 0;
-   Exam->NumUnfinishedEvts       = 0;
+   Exam->NumOpenEvts             = 0;
   }
 
 /*****************************************************************************/
@@ -555,7 +555,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
                              struct Exa_Exam *Exam,bool ShowOnlyThisExam)
   {
    extern const char *Txt_View_exam;
-   extern const char *Txt_Set_of_questions;
+   extern const char *Txt_Sets_of_questions;
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
    extern const char *Txt_Events;
@@ -598,10 +598,10 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
      {
       if (asprintf (&Id,"exa_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      Color = Exam->NumUnfinishedEvts ? (Exam->Hidden ? "DATE_GREEN_LIGHT":
-							"DATE_GREEN") :
-					(Exam->Hidden ? "DATE_RED_LIGHT":
-							"DATE_RED");
+      Color = Exam->NumOpenEvts ? (Exam->Hidden ? "DATE_GREEN_LIGHT":
+						  "DATE_GREEN") :
+				  (Exam->Hidden ? "DATE_RED_LIGHT":
+						  "DATE_RED");
       if (ShowOnlyThisExam)
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
 		       Id,Color);
@@ -639,7 +639,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
    /* Number of questions, maximum grade, visibility of results */
    HTM_DIV_Begin ("class=\"%s\"",Exam->Hidden ? "ASG_GRP_LIGHT" :
         	                                "ASG_GRP");
-   HTM_TxtColonNBSP (Txt_Set_of_questions);
+   HTM_TxtColonNBSP (Txt_Sets_of_questions);
    HTM_Unsigned (Exam->NumSets);
    HTM_BR ();
    HTM_TxtColonNBSP (Txt_Maximum_grade);
@@ -1188,8 +1188,8 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
       /* Get number of events */
       Exam->NumEvts = ExaEvt_GetNumEventsInExam (Exam->ExaCod);
 
-      /* Get number of unfinished events */
-      Exam->NumUnfinishedEvts = ExaEvt_GetNumUnfinishedEventsInExam (Exam->ExaCod);
+      /* Get number of open events */
+      Exam->NumOpenEvts = ExaEvt_GetNumOpenEventsInExam (Exam->ExaCod);
      }
    else
       /* Initialize to empty exam */

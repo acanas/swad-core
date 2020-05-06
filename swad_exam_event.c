@@ -273,6 +273,7 @@ void ExaEvt_ResetEvent (struct ExaEvt_Event *Event)
       Event->TimeUTC[StartEndTime] = (time_t) 0;
    Event->Title[0]                = '\0';
    Event->Hidden		  = false;
+   Event->Open			  = false;
    Event->Status.QstInd           = 0;
    Event->Status.QstCod           = -1L;
    Event->Status.QstStartTimeUTC  = (time_t) 0;
@@ -323,26 +324,28 @@ void ExaEvt_ListEvents (struct Exa_Exams *Exams,
 	  Lay_NotEnoughMemoryExit ();
 
    /* Make query */
-   NumEvents = (unsigned) DB_QuerySELECT (&mysql_res,"can not get events",
-					   "SELECT EvtCod,"			// row[ 0]
-						  "ExaCod,"			// row[ 1]
-						  "Hidden,"			// row[ 2]
-						  "UsrCod,"			// row[ 3]
-						  "UNIX_TIMESTAMP(StartTime),"	// row[ 4]
-						  "UNIX_TIMESTAMP(EndTime),"	// row[ 5]
-						  "Title,"			// row[ 6]
-						  "QstInd,"			// row[ 7]
-						  "QstCod,"			// row[ 8]
-						  "Showing,"			// row[ 9]
-						  "Countdown,"			// row[10]
-						  "NumCols,"			// row[11]
-					          "ShowQstResults,"		// row[12]
-					          "ShowUsrResults"		// row[13]
-					   " FROM exa_events"
-					   " WHERE ExaCod=%ld%s"
-					   " ORDER BY EvtCod",
-					   Exam->ExaCod,
-					   SubQuery);
+   NumEvents = (unsigned)
+	       DB_QuerySELECT (&mysql_res,"can not get events",
+			       "SELECT EvtCod,"					// row[ 0]
+				      "ExaCod,"					// row[ 1]
+				      "Hidden,"					// row[ 2]
+				      "UsrCod,"					// row[ 3]
+				      "UNIX_TIMESTAMP(StartTime),"		// row[ 4]
+				      "UNIX_TIMESTAMP(EndTime),"		// row[ 5]
+				      "NOW() BETWEEN StartTime AND EndTime,"	// row[ 6]
+				      "Title,"					// row[ 7]
+				      "QstInd,"					// row[ 8]
+				      "QstCod,"					// row[ 9]
+				      "Showing,"				// row[10]
+				      "Countdown,"				// row[11]
+				      "NumCols,"				// row[12]
+				      "ShowQstResults,"				// row[13]
+				      "ShowUsrResults"				// row[14]
+			       " FROM exa_events"
+			       " WHERE ExaCod=%ld%s"
+			       " ORDER BY EvtCod",
+			       Exam->ExaCod,
+			       SubQuery);
 
    /* Free allocated memory for subquery */
    free (SubQuery);
@@ -424,20 +427,21 @@ void ExaEvt_GetDataOfEventByCod (struct ExaEvt_Event *Event)
    /***** Get exam data event from database *****/
    NumRows = (unsigned)
 	     DB_QuerySELECT (&mysql_res,"can not get events",
-			     "SELECT EvtCod,"			// row[ 0]
-				    "ExaCod,"			// row[ 1]
-				    "Hidden,"			// row[ 2]
-				    "UsrCod,"			// row[ 3]
-				    "UNIX_TIMESTAMP(StartTime),"// row[ 4]
-				    "UNIX_TIMESTAMP(EndTime),"	// row[ 5]
-				    "Title,"			// row[ 6]
-				    "QstInd,"			// row[ 7]
-				    "QstCod,"			// row[ 8]
-				    "Showing,"			// row[ 9]
-				    "Countdown,"		// row[10]
-				    "NumCols,"			// row[11]
-				    "ShowQstResults,"		// row[12]
-				    "ShowUsrResults"		// row[13]
+			     "SELECT EvtCod,"					// row[ 0]
+				    "ExaCod,"					// row[ 1]
+				    "Hidden,"					// row[ 2]
+				    "UsrCod,"					// row[ 3]
+				    "UNIX_TIMESTAMP(StartTime),"		// row[ 4]
+				    "UNIX_TIMESTAMP(EndTime),"			// row[ 5]
+	                     	    "NOW() BETWEEN StartTime AND EndTime,"	// row[ 6]
+				    "Title,"					// row[ 7]
+				    "QstInd,"					// row[ 8]
+				    "QstCod,"					// row[ 9]
+				    "Showing,"					// row[10]
+				    "Countdown,"				// row[11]
+				    "NumCols,"					// row[12]
+				    "ShowQstResults,"				// row[13]
+				    "ShowUsrResults"				// row[14]
 			     " FROM exa_events"
 			     " WHERE EvtCod=%ld"
 			     " AND ExaCod IN"		// Extra check
@@ -708,12 +712,10 @@ static void ExaEvt_ListOneOrMoreEventsTimes (const struct ExaEvt_Event *Event,un
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
-      Color = Event->Status.Showing == ExaEvt_END ? (Event->Hidden ? "DATE_GREEN_LIGHT":
-								     "DATE_GREEN") :
-						    (Event->Hidden ? "DATE_RED_LIGHT":
-								     "DATE_RED");
-
-
+      Color = Event->Open ? (Event->Hidden ? "DATE_GREEN_LIGHT":
+					     "DATE_GREEN") :
+			    (Event->Hidden ? "DATE_RED_LIGHT":
+					     "DATE_RED");
 
       if (asprintf (&Id,"exa_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
@@ -1009,7 +1011,8 @@ static void ExaEvt_GetEventDataFromRow (MYSQL_RES *mysql_res,
    row[ 3]	UsrCod
    row[ 4]	UNIX_TIMESTAMP(StartTime)
    row[ 5]	UNIX_TIMESTAMP(EndTime)
-   row[ 6]	Title
+   row[ 6]	Open = NOW() BETWEEN StartTime AND EndTime
+   row[ 7]	Title
    */
    /***** Get event data *****/
    /* Code of the event (row[0]) */
@@ -1032,22 +1035,25 @@ static void ExaEvt_GetEventDataFromRow (MYSQL_RES *mysql_res,
 	StartEndTime++)
       Event->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[4 + StartEndTime]);
 
-   /* Get the title of the event (row[6]) */
-   if (row[6])
-      Str_Copy (Event->Title,row[6],
+   /* Get whether the event is open or closed (row(6)) */
+   Event->Open = (row[6][0] == '1');
+
+   /* Get the title of the event (row[7]) */
+   if (row[7])
+      Str_Copy (Event->Title,row[7],
 		ExaEvt_MAX_BYTES_TITLE);
    else
       Event->Title[0] = '\0';
 
    /***** Get current event status *****/
    /*
-   row[ 7]	QstInd
-   row[ 8]	QstCod
-   row[ 9]	Showing
-   row[10]	Countdown
-   row[11]	NumCols
-   row[12]	ShowQstResults
-   row[13]	ShowUsrResults
+   row[ 8]	QstInd
+   row[ 9]	QstCod
+   row[10]	Showing
+   row[11]	Countdown
+   row[12]	NumCols
+   row[13]	ShowQstResults
+   row[14]	ShowUsrResults
    */
    /* Current question index (row[7]) */
    Event->Status.QstInd = Str_ConvertStrToUnsigned (row[7]);
@@ -1055,23 +1061,23 @@ static void ExaEvt_GetEventDataFromRow (MYSQL_RES *mysql_res,
    /* Current question code (row[8]) */
    Event->Status.QstCod = Str_ConvertStrCodToLongCod (row[8]);
 
-   /* Get what to show (stem, answers, results) (row(9)) */
-   Event->Status.Showing = ExaEvt_GetShowingFromStr (row[9]);
+   /* Get what to show (stem, answers, results) (row(10)) */
+   Event->Status.Showing = ExaEvt_GetShowingFromStr (row[10]);
 
-   /* Get countdown (row[10]) */
-   Event->Status.Countdown = Str_ConvertStrCodToLongCod (row[10]);
+   /* Get countdown (row[11]) */
+   Event->Status.Countdown = Str_ConvertStrCodToLongCod (row[11]);
 
-   /* Get number of columns (row[11]) */
-   LongNum = Str_ConvertStrCodToLongCod (row[11]);
+   /* Get number of columns (row[12]) */
+   LongNum = Str_ConvertStrCodToLongCod (row[12]);
    Event->Status.NumCols =  (LongNum <= 1           ) ? 1 :
                            ((LongNum >= ExaEvt_MAX_COLS) ? ExaEvt_MAX_COLS :
                         	                           (unsigned) LongNum);
 
-   /* Get whether to show question results or not (row(12)) */
-   Event->Status.ShowQstResults = (row[12][0] == 'Y');
+   /* Get whether to show question results or not (row(13)) */
+   Event->Status.ShowQstResults = (row[13][0] == 'Y');
 
-   /* Get whether to show user results or not (row(13)) */
-   Event->Status.ShowUsrResults = (row[13][0] == 'Y');
+   /* Get whether to show user results or not (row(14)) */
+   Event->Status.ShowUsrResults = (row[14][0] == 'Y');
 
    /***** Get whether the exam event is being played or not *****/
    if (Event->Status.Showing == ExaEvt_END)	// Event over
@@ -1160,6 +1166,9 @@ void ExaEvt_RemoveEvent (void)
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_removed,
 		  Event.Title);
+
+   /***** Get exam data again to update it after changes in event *****/
+   Exa_GetDataOfExamByCod (&Exam);
 
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,&Event,
@@ -1716,6 +1725,9 @@ void ExaEvt_ReceiveFormEvent (void)
 		     Event.Title);
    else
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
+
+   /***** Get exam data again to update it after changes in event *****/
+   Exa_GetDataOfExamByCod (&Exam);
 
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,&Event,
@@ -2562,21 +2574,22 @@ unsigned ExaEvt_GetNumEventsInExam (long ExaCod)
   }
 
 /*****************************************************************************/
-/*************** Get number of unfinished events in an exam ******************/
+/****************** Get number of open events in an exam *********************/
 /*****************************************************************************/
 
-unsigned ExaEvt_GetNumUnfinishedEventsInExam (long ExaCod)
+unsigned ExaEvt_GetNumOpenEventsInExam (long ExaCod)
   {
    /***** Trivial check *****/
    if (ExaCod < 0)	// A non-existing exam...
       return 0;		// ...has no events
 
-   /***** Get number of events in an exam from database *****/
+   /***** Get number of open events in an exam from database *****/
    return
-   (unsigned) DB_QueryCOUNT ("can not get number of unfinished events of an exam",
+   (unsigned) DB_QueryCOUNT ("can not get number of open events of an exam",
 			     "SELECT COUNT(*) FROM exa_events"
-			     " WHERE ExaCod=%ld AND Showing<>'%s'",
-			     ExaCod,ExaEvt_ShowingStringsDB[ExaEvt_END]);
+			     " WHERE ExaCod=%ld"
+                             " AND NOW() BETWEEN StartTime AND EndTime",
+			     ExaCod);
   }
 
 /*****************************************************************************/

@@ -548,12 +548,12 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.214 (2020-05-06)"
+#define Log_PLATFORM_VERSION	"SWAD 19.214.1 (2020-05-07)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
-	Version 19.214.1: May 06, 2020  Change color of dates on current exam event. (? lines)
-	Version 19.214:   May 05, 2020  New API function getLocations. (301568 lines)
+	Version 19.214.1: May 07, 2020  Change color of dates on current exam event. (301597 lines)
+	Version 19.214:   May 06, 2020  New API function getLocations. (301568 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS room_MAC (RooCod INT NOT NULL AUTO_INCREMENT,MAC BIGINT NOT NULL,UNIQUE INDEX(RooCod,MAC),UNIQUE INDEX(MAC,RooCod));
 					If you want to use MyISAM:

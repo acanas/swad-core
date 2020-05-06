@@ -93,7 +93,7 @@ void ExaEvt_BackEvent (void);
 void ExaEvt_ForwardEvent (void);
 
 unsigned ExaEvt_GetNumEventsInExam (long ExaCod);
-unsigned ExaEvt_GetNumUnfinishedEventsInExam (long ExaCod);
+unsigned ExaEvt_GetNumOpenEventsInExam (long ExaCod);
 
 bool ExaEvt_CheckIfICanPlayThisEventBasedOnGrps (const struct ExaEvt_Event *Event);
 

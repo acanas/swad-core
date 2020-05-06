@@ -753,11 +753,14 @@ void Asg_GetDataOfAssignmentByCod (struct Asg_Assignment *Asg)
      {
       /***** Build query *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get assignment data",
-				"SELECT AsgCod,Hidden,UsrCod,"
-				"UNIX_TIMESTAMP(StartTime),"
-				"UNIX_TIMESTAMP(EndTime),"
-				"NOW() BETWEEN StartTime AND EndTime,"
-				"Title,Folder"
+				"SELECT AsgCod,"				// row[0]
+				       "Hidden,"				// row[1]
+				       "UsrCod,"				// row[2]
+				       "UNIX_TIMESTAMP(StartTime),"		// row[3]
+				       "UNIX_TIMESTAMP(EndTime),"		// row[4]
+				       "NOW() BETWEEN StartTime AND EndTime,"	// row[5]
+				       "Title,"					// row[6]
+				       "Folder"					// row[7]
 				" FROM assignments"
 				" WHERE AsgCod=%ld AND CrsCod=%ld",
 				Asg->AsgCod,Gbl.Hierarchy.Crs.CrsCod);
@@ -786,11 +789,14 @@ void Asg_GetDataOfAssignmentByFolder (struct Asg_Assignment *Asg)
      {
       /***** Query database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get assignment data",
-	                        "SELECT AsgCod,Hidden,UsrCod,"
-				"UNIX_TIMESTAMP(StartTime),"
-				"UNIX_TIMESTAMP(EndTime),"
-				"NOW() BETWEEN StartTime AND EndTime,"
-				"Title,Folder"
+	                        "SELECT AsgCod,"				// row[0]
+	                               "Hidden,"				// row[1]
+	                               "UsrCod,"				// row[2]
+				       "UNIX_TIMESTAMP(StartTime),"		// row[3]
+				       "UNIX_TIMESTAMP(EndTime),"		// row[4]
+				       "NOW() BETWEEN StartTime AND EndTime,"	// row[5]
+				       "Title,"					// row[6]
+				       "Folder"					// row[7]
 				" FROM assignments"
 				" WHERE CrsCod=%ld AND Folder='%s'",
 				Gbl.Hierarchy.Crs.CrsCod,Asg->Folder);
@@ -824,6 +830,16 @@ static void Asg_GetDataOfAssignment (struct Asg_Assignment *Asg,
      {
       /* Get row */
       row = mysql_fetch_row (*mysql_res);
+      /*
+      row[0]	AsgCod
+      row[1]	Hidden
+      row[2]	UsrCod
+      row[3]	UNIX_TIMESTAMP(StartTime)
+      row[4]	UNIX_TIMESTAMP(EndTime)
+      row[5]	NOW() BETWEEN StartTime AND EndTime
+      row[6]	Title
+      row[7]	Folder
+      */
 
       /* Get code of the assignment (row[0]) */
       Asg->AsgCod = Str_ConvertStrCodToLongCod (row[0]);

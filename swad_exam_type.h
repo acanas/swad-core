@@ -96,7 +96,7 @@ struct Exa_Exam
    unsigned NumSets;		// Number of sets in the exam
    unsigned NumQsts;		// Number of questions in the exam
    unsigned NumEvts;		// Number of events in the exam
-   unsigned NumUnfinishedEvts;	// Number of unfinished events in the exam
+   unsigned NumOpenEvts;	// Number of open events in the exam
   };
 
 struct ExaSet_Set
@@ -127,6 +127,7 @@ struct ExaEvt_Event
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    char Title[ExaEvt_MAX_BYTES_TITLE + 1];
    bool Hidden;
+   bool Open;		// If now is between start and end dates
    struct
      {
       unsigned QstInd;	// 0 means that the exam has not started. First question has index 1.
