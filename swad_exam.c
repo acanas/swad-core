@@ -1067,6 +1067,14 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
    MYSQL_ROW row;
    char StrSetInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
+   /***** Trivial check *****/
+   if (Set->SetCod <= 0)
+     {
+      /* Initialize to empty set */
+      ExaSet_ResetSet (Set);
+      return;
+     }
+
    /***** Get data of set of questions from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get set data",
 		       "SELECT SetCod,"		// row[0]
@@ -1119,6 +1127,14 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
+
+   /***** Trivial check *****/
+   if (Exam->ExaCod <= 0)
+     {
+      /* Initialize to empty exam */
+      Exa_ResetExam (Exam);
+      return;
+     }
 
    /***** Get exam data from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get exam data",
@@ -1966,7 +1982,15 @@ void Exa_ReceiveFormExam (void)
    Exam.ExaCod = Exams.ExaCod;
    ItsANewExam = (Exam.ExaCod <= 0);
 
-   /***** If I can edit exams ==> receive exam from form *****/
+   /***** Get all current exam data from database *****/
+   // Some data are necessary to show exam and sets of questions again
+   if (!ItsANewExam)
+     {
+      Exa_GetDataOfExamByCod (&Exam);
+      Exams.ExaCod = Exam.ExaCod;
+     }
+
+   /***** If I can edit exams ==> receive some data of exam from form *****/
    Exa_ReceiveExamFieldsFromForm (&Exam,Txt);
    if (Exa_CheckExamFieldsReceivedFromForm (&Exam))
      {

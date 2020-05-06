@@ -544,10 +544,12 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.213 (2020-05-06)"
+#define Log_PLATFORM_VERSION	"SWAD 19.213.1 (2020-05-06)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.213.2: May 06, 2020  Change color of dates on current exam event. (? lines)
+	Version 19.213.1: May 06, 2020  Fixed bug in edition of set of questions. (301357 lines)
 	Version 19.213:   May 06, 2020  Edition of exam event.
 					Code refactoring in groups. (301327 lines)
 	Version 19.212:   May 05, 2020  Icon to edit exam event. (301319 lines)

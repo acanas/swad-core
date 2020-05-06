@@ -413,6 +413,14 @@ void ExaEvt_GetDataOfEventByCod (struct ExaEvt_Event *Event)
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
 
+   /***** Trivial check *****/
+   if (Event->EvtCod <= 0)
+     {
+      /* Initialize to empty exam event */
+      ExaEvt_ResetEvent (Event);
+      return;
+     }
+
    /***** Get exam data event from database *****/
    NumRows = (unsigned)
 	     DB_QuerySELECT (&mysql_res,"can not get events",
