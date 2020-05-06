@@ -1983,14 +1983,16 @@ void Exa_ReceiveFormExam (void)
    ItsANewExam = (Exam.ExaCod <= 0);
 
    /***** Get all current exam data from database *****/
-   // Some data are necessary to show exam and sets of questions again
+   // Some data, not received from form,
+   // are necessary to show exam and sets of questions again
    if (!ItsANewExam)
      {
       Exa_GetDataOfExamByCod (&Exam);
       Exams.ExaCod = Exam.ExaCod;
      }
 
-   /***** If I can edit exams ==> receive some data of exam from form *****/
+   /***** If I can edit exams ==>
+          overwrite some exam data with the data received from form *****/
    Exa_ReceiveExamFieldsFromForm (&Exam,Txt);
    if (Exa_CheckExamFieldsReceivedFromForm (&Exam))
      {

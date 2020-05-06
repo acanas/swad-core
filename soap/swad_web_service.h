@@ -440,6 +440,36 @@ struct swad__sendMessageOutput
    struct swad__usersArray usersArray;
   };
 
+/* structs used in getLocations */
+struct swad__location
+  {
+   int institutionCode;
+   char *institutionShortName;
+   char *institutionFullName;
+   int centerCode;
+   char *centerShortName;
+   char *centerFullName;
+   int buildingCode;
+   char *buildingShortName;
+   char *buildingFullName;
+   int floor;
+   int roomCode;
+   char *roomShortName;
+   char *roomFullName;
+  };
+struct swad__locationsArray
+  {
+   struct swad__location *__ptr;	// pointer to array
+   int __size; 				// number of elements pointed to
+  };
+
+/* getLocations */
+struct swad__getLocationsOutput
+  {
+   int numLocations;
+   struct swad__locationsArray locationsArray;
+  };
+
 /*****************************************************************************/
 /*************************** Web service functions ***************************/
 /*****************************************************************************/
@@ -523,3 +553,7 @@ int swad__sendNotice (char *wsKey,int courseCode,char *body,
                       struct swad__sendNoticeOutput *sendNoticeOut);
 int swad__sendMessage (char *wsKey,int messageCode,char *to,char *subject,char *body,
                        struct swad__sendMessageOutput *sendMessageOut);
+
+/* Wi-Fi-based positioning system */
+int swad__getLocations (char *wsKey,char *MAC,
+                        struct swad__getLocationsOutput *getLocationsOut);

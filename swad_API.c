@@ -166,6 +166,7 @@ static const char *API_Functions[1 + API_NUM_FUNCTIONS] =
    [API_getMatches             ] = "getMatches",		// 29
    [API_getMatchStatus         ] = "getMatchStatus",		// 30
    [API_answerMatchQuestion    ] = "answerMatchQuestion",	// 31
+   [API_getLocations           ] = "getLocations",		// 32
   };
 
 /* Web service roles (they do not match internal swad-core roles) */
@@ -5017,7 +5018,7 @@ int swad__getMatches (struct soap *soap,
 				    " (SELECT mch_groups.MchCod"
 				    " FROM mch_groups,crs_grp_usr"
 				    " WHERE crs_grp_usr.UsrCod=%ld"
-				    " AND mch_groups.GrpCod=crs_grp_usr.GrpCod))",
+				    " AND mch_groups.GrpCod=crs_grp_usr.GrpCod))"
 				    " ORDER BY MchCod",
 			     Game.GamCod,
 			     Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -5884,6 +5885,171 @@ int swad__getMarks (struct soap *soap,
       getMarksOut->content = (char *) soap_malloc (soap,1);
       getMarksOut->content[0] = '\0';
      }
+
+   return SOAP_OK;
+  }
+
+/*****************************************************************************/
+/**************** Get locations associated to a MAC address ******************/
+/*****************************************************************************/
+
+int swad__getLocations (struct soap *soap,
+                        char *wsKey,char *MAC,					// input
+                        struct swad__getLocationsOutput *getLocationsOut)	// output
+  {
+   int ReturnCode;
+   unsigned long MACnum;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumLocs;
+   unsigned NumLoc;
+   size_t Length;
+
+   /***** Initializations *****/
+   API_Set_gSOAP_RuntimeEnv (soap);
+   Gbl.WebService.Function = API_getLocations;
+
+   /***** Check web service key *****/
+   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+      return ReturnCode;
+   if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
+      return soap_receiver_fault (soap,
+	                          "Bad web service key",
+	                          "Web service key does not exist in database");
+
+   /***** Get some of my data *****/
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
+      return soap_receiver_fault (soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
+   Gbl.Usrs.Me.Logged = true;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+
+   /***** Convert MAC string to number *****/
+   if (sscanf (MAC,"%lx",&MACnum) != 1)
+      return soap_receiver_fault (soap,
+	                          "Bad MAC",
+	                          "MAC address format should be 12 hexadecimal digits");
+
+   /***** Get list of locations *****/
+   NumLocs = (unsigned)
+	     DB_QuerySELECT (&mysql_res,"can not get matches",
+			     "SELECT institutions.InsCod,"	// row[ 0]
+				    "institutions.ShortName,"	// row[ 1]
+				    "institutions.FullName,"	// row[ 2]
+				    "centres.CtrCod,"		// row[ 3]
+				    "centres.ShortName,"	// row[ 4]
+				    "centres.FullName,"		// row[ 5]
+				    "buildings.BldCod,"		// row[ 6]
+				    "buildings.ShortName,"	// row[ 7]
+				    "buildings.FullName,"	// row[ 8]
+				    "rooms.Floor,"		// row[ 9]
+				    "rooms.RooCod,"		// row[10]
+				    "rooms.ShortName,"		// row[11]
+				    "rooms.FullName"		// row[12]
+				    " FROM room_MAC,rooms,buildings,centres,institutions"
+				    " WHERE room_MAC.MAC=%lu"
+				    " AND room_MAC.RooCod=rooms.RooCod"
+				    " AND rooms.BldCod=buildings.BldCod"
+				    " AND buildings.CtrCod=centres.CtrCod"
+				    " AND centres.InsCod=institutions.InsCod"
+				    " ORDER BY institutions.FullName,"
+				              "centres.FullName,"
+				              "buildings.FullName,"
+				              "rooms.Floor,"
+				              "rooms.FullName",
+			     MACnum);
+   getLocationsOut->locationsArray.__size =
+   getLocationsOut->numLocations          = (int) NumLocs;
+
+   if (getLocationsOut->numLocations == 0)
+      getLocationsOut->locationsArray.__ptr = NULL;
+   else	// Matches found
+     {
+      getLocationsOut->locationsArray.__ptr = soap_malloc (soap,
+						           (getLocationsOut->locationsArray.__size) *
+						            sizeof (*(getLocationsOut->locationsArray.__ptr)));
+      for (NumLoc = 0;
+	   NumLoc < NumLocs;
+	   NumLoc++)
+	{
+	 /* Get next location */
+	 row = mysql_fetch_row (mysql_res);
+	 /*
+	 institutions.InsCod		// row[ 0]
+	 institutions.ShortName		// row[ 1]
+	 institutions.FullName		// row[ 2]
+	 centres.CtrCod			// row[ 3]
+	 centres.ShortName		// row[ 4]
+	 centres.FullName		// row[ 5]
+	 buildings.BldCod		// row[ 6]
+	 buildings.ShortName		// row[ 7]
+	 buildings.FullName		// row[ 8]
+	 rooms.Floor			// row[ 9]
+	 rooms.RooCod			// row[10]
+	 rooms.ShortName		// row[11]
+	 rooms.FullName			// row[12]
+         */
+
+	 /* Get institution code (row[0]) */
+         getLocationsOut->locationsArray.__ptr[NumLoc].institutionCode = (int) Str_ConvertStrCodToLongCod (row[0]);
+
+	 /* Get institution short name (row[1]) */
+         Length = strlen (row[1]);
+         getLocationsOut->locationsArray.__ptr[NumLoc].institutionShortName = (char *) soap_malloc (soap,Length + 1);
+         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].institutionShortName,row[1],Length);
+
+	 /* Get institution full name (row[2]) */
+         Length = strlen (row[2]);
+         getLocationsOut->locationsArray.__ptr[NumLoc].institutionFullName = (char *) soap_malloc (soap,Length + 1);
+         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].institutionFullName,row[2],Length);
+
+	 /* Get center code (row[3]) */
+         getLocationsOut->locationsArray.__ptr[NumLoc].centerCode = (int) Str_ConvertStrCodToLongCod (row[3]);
+
+	 /* Get center short name (row[4]) */
+         Length = strlen (row[4]);
+         getLocationsOut->locationsArray.__ptr[NumLoc].centerShortName = (char *) soap_malloc (soap,Length + 1);
+         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].centerShortName,row[4],Length);
+
+	 /* Get center full name (row[5]) */
+         Length = strlen (row[5]);
+         getLocationsOut->locationsArray.__ptr[NumLoc].centerFullName = (char *) soap_malloc (soap,Length + 1);
+         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].centerFullName,row[5],Length);
+
+	 /* Get building code (row[6]) */
+         getLocationsOut->locationsArray.__ptr[NumLoc].buildingCode = (int) Str_ConvertStrCodToLongCod (row[6]);
+
+	 /* Get building short name (row[7]) */
+         Length = strlen (row[7]);
+         getLocationsOut->locationsArray.__ptr[NumLoc].buildingShortName = (char *) soap_malloc (soap,Length + 1);
+         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].buildingShortName,row[7],Length);
+
+	 /* Get building full name (row[8]) */
+         Length = strlen (row[8]);
+         getLocationsOut->locationsArray.__ptr[NumLoc].buildingFullName = (char *) soap_malloc (soap,Length + 1);
+         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].buildingFullName,row[8],Length);
+
+         /* Get floor (row[9]) */
+         getLocationsOut->locationsArray.__ptr[NumLoc].floor = (int) Str_ConvertStrCodToLongCod (row[9]);
+
+	 /* Get room code (row[10]) */
+         getLocationsOut->locationsArray.__ptr[NumLoc].roomCode = (int) Str_ConvertStrCodToLongCod (row[10]);
+
+	 /* Get room short name (row[11]) */
+         Length = strlen (row[11]);
+         getLocationsOut->locationsArray.__ptr[NumLoc].roomShortName = (char *) soap_malloc (soap,Length + 1);
+         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].roomShortName,row[11],Length);
+
+	 /* Get room full name (row[12]) */
+         Length = strlen (row[12]);
+         getLocationsOut->locationsArray.__ptr[NumLoc].roomFullName = (char *) soap_malloc (soap,Length + 1);
+         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].roomFullName,row[12],Length);
+	}
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    return SOAP_OK;
   }

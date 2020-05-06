@@ -13339,6 +13339,28 @@ UPDATE usr_data SET InsCod=1130 WHERE InsCod=25037;
 
 
 ALTER TABLE rooms CHANGE COLUMN BldCod BldCod INT NOT NULL DEFAULT -1;
+ 
+ 
+--------------------
 
+INSERT INTO room_MAC (RooCod,MAC) VALUES (1,0xf07f0667d5ff);
+INSERT INTO room_MAC (RooCod,MAC) VALUES (2,0x6886a731695f);
+INSERT INTO room_MAC (RooCod,MAC) VALUES (108,0xccd53989961f);
  
- 
+mysql> SELECT RooCod,HEX(MAC) FROM room_MAC;
++--------+--------------+
+| RooCod | HEX(MAC)     |
++--------+--------------+
+|      1 | F07F0667D5FF |
+|      2 | 6886A731695F |
+|    108 | CCD53989961F |
++--------+--------------+
+3 rows in set (0.00 sec)
+
+
+SELECT institutions.InsCod,institutions.ShortName,institutions.FullName,centres.CtrCod,centres.ShortName,centres.FullName,buildings.BldCod,buildings.ShortName,buildings.FullName,rooms.Floor,rooms.RooCod,rooms.ShortName,rooms.FullName FROM room_MAC,rooms,buildings,centres,institutions WHERE room_MAC.MAC=0xCCD53989961F AND room_MAC.RooCod=rooms.RooCod AND rooms.BldCod=buildings.BldCod AND buildings.CtrCod=centres.CtrCod AND centres.InsCod=institutions.InsCod ORDER BY institutions.FullName,centres.FullName,buildings.FullName,rooms.Floor,rooms.FullName;
+
+
+
+
+-------------------------------

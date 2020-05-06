@@ -1264,7 +1264,7 @@ CREATE TABLE IF NOT EXISTS projects (
 	INDEX(CrsCod,ModifTime),
 	INDEX(CrsCod,DptCod));
 --
--- Table rooms: stores the classrooms associated to each centre
+-- Table rooms: stores the rooms associated to each centre
 --
 CREATE TABLE IF NOT EXISTS rooms (
 	RooCod INT NOT NULL AUTO_INCREMENT,
@@ -1277,6 +1277,14 @@ CREATE TABLE IF NOT EXISTS rooms (
 	Capacity INT NOT NULL,
 	UNIQUE INDEX(RooCod),
 	INDEX(CtrCod,BldCod,Floor));
+--
+-- Table room_MAC: stores the associations between rooms and MAC addresses
+--
+CREATE TABLE IF NOT EXISTS room_MAC (
+	RooCod INT NOT NULL AUTO_INCREMENT,
+	MAC BIGINT NOT NULL,
+	UNIQUE INDEX(RooCod,MAC),
+	UNIQUE INDEX(MAC,RooCod));
 --
 -- Table sessions: stores the information of open sessions
 --

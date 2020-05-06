@@ -43,8 +43,9 @@ extern struct Globals Gbl;
 /* The maximum number of clicks in the interval
    should be large enough to prevent an IP from being banned
    due to automatic refresh when the user is viewing the last clicks. */
-#define Fw_CHECK_INTERVAL		((time_t)(10UL))	// Check clicks in the last 10 seconds
-#define Fw_MAX_CLICKS_IN_INTERVAL	100			// Maximum of 100 clicks allowed in 10 seconds
+#define Fw_CHECK_INTERVAL		((time_t)(30UL))	// Check clicks in the last 30 seconds
+#define Fw_MAX_CLICKS_IN_INTERVAL	150			// Maximum of 150 clicks allowed in 30 seconds
+								// (5 clicks/s sustained for 30 s)
 
 #define Fw_TIME_BANNED			((time_t)(60UL*60UL))	// Ban IP for 1 hour
 

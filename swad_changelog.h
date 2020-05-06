@@ -481,6 +481,7 @@ contiene una de las que yo imparto. Así que me imagino que te esperarás la suger
 
 /* TODO: Geolocalización:
 
+
 Función API sendCurrentLocation...
 Parámetros a enviar a la función:
    1. Código único de ubicación (número)
@@ -502,11 +503,13 @@ Función API newLocation...
 Paramétros: MAC, string con ubicación (ej. "Aula 0.1")
 
 
-Función API getLocations
-1. Añadir tipo de ubicación
-2. Añadir lista desplegable de MAC asociadas a una ubicación
-3. API: getLocations (como parámetro se pasa la MAC)
-    - que devolveria las filas de la tabla de ubicaciones asociadas a esa MAC
+Función de la API para ver dónde se encuentra un usuario:
+getUserLocation
+Un usuario sólo podrá consultar la ubicación de otro usuario
+si la intersección de los centros de sus asignaturas no es vacía,
+es decir, no tienen por qué compartir asignaturas,
+pero sí al menos alguna asignatura de cada uno tiene que compartir el centro
+(Por ej. Eva y Antonio comparten ETSIIT, pero no titulación ni asignatura)
 */
 
 // TODO: Sugerencia de Jesús García Miranda. En las preguntas de tipo test de elección única (o un nuevo tipo con un nuevo nombre),
@@ -525,6 +528,7 @@ Función API getLocations
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 // TODO: Cambiar icono notificaciones nuevas con "bell-on.svg"
 // TODO: Ahmed El Moukhtari Koubaa: Cuando le damos a la opción de mostrar solo los mensajes no leídos, se muestran estos mensajes, pero cuando los intentamos leer, es decir, hacemos clic sobre ellos se recarga toda la página por así decirlo y vuelve a dar una lista con los mensajes, pero descartando aquel que clicamos porque, entiendo yo al menos, que ya lo ha marcado como leído.
+// TODO: Cambiar "centre" a "center"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -544,11 +548,18 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.213.1 (2020-05-06)"
+#define Log_PLATFORM_VERSION	"SWAD 19.214 (2020-05-06)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
-	Version 19.213.2: May 06, 2020  Change color of dates on current exam event. (? lines)
+	Version 19.214.1: May 06, 2020  Change color of dates on current exam event. (? lines)
+	Version 19.214:   May 05, 2020  New API function getLocations. (301568 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS room_MAC (RooCod INT NOT NULL AUTO_INCREMENT,MAC BIGINT NOT NULL,UNIQUE INDEX(RooCod,MAC),UNIQUE INDEX(MAC,RooCod));
+					If you want to use MyISAM:
+ALTER TABLE room_MAC ENGINE=MyISAM;
+
+	Version 19.213.2: May 06, 2020  Changed settings of firewall. (301361 lines)
 	Version 19.213.1: May 06, 2020  Fixed bug in edition of set of questions. (301357 lines)
 	Version 19.213:   May 06, 2020  Edition of exam event.
 					Code refactoring in groups. (301327 lines)

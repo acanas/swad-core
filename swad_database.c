@@ -2691,6 +2691,23 @@ mysql> DESCRIBE rooms;
 		   "UNIQUE INDEX(RooCod),"
 		   "INDEX(CtrCod,BldCod,Floor))");
 
+   /***** Table room_MAC *****/
+/*
+mysql> DESCRIBE room_MAC;
++--------+------------+------+-----+---------+----------------+
+| Field  | Type       | Null | Key | Default | Extra          |
++--------+------------+------+-----+---------+----------------+
+| RooCod | int(11)    | NO   | PRI | NULL    | auto_increment |
+| MAC    | bigint(20) | NO   | PRI | NULL    |                |
++--------+------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS room_MAC ("
+			"RooCod INT NOT NULL AUTO_INCREMENT,"
+			"MAC BIGINT NOT NULL,"	// 12 digits hexadecimal number
+		   "UNIQUE INDEX(RooCod,MAC),"
+		   "UNIQUE INDEX(MAC,RooCod))");
+
    /***** Table sessions *****/
 /*
 mysql> DESCRIBE sessions;
