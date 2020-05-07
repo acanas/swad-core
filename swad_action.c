@@ -50,6 +50,7 @@
 #include "swad_exam_announcement.h"
 #include "swad_exam_event.h"
 #include "swad_exam_result.h"
+#include "swad_exam_set.h"
 #include "swad_enrolment.h"
 #include "swad_figure.h"
 #include "swad_follow.h"

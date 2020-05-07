@@ -37,6 +37,7 @@
 #include "swad_exam.h"
 #include "swad_exam_event.h"
 #include "swad_exam_result.h"
+#include "swad_exam_set.h"
 #include "swad_exam_type.h"
 #include "swad_form.h"
 #include "swad_global.h"
