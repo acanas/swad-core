@@ -31,47 +31,21 @@
 #include "swad_game.h"
 #include "swad_media.h"
 #include "swad_test_config.h"
+#include "swad_test_print.h"
+#include "swad_test_type.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
-
-#define Tst_MAX_TAGS_PER_QUESTION		   5
-
-#define Tst_MAX_CHARS_TAG			(128 - 1)	// 127
-#define Tst_MAX_BYTES_TAG			((Tst_MAX_CHARS_TAG + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Tst_MAX_CHARS_ANSWER_OR_FEEDBACK	(1024 - 1)	// 1023
 #define Tst_MAX_BYTES_ANSWER_OR_FEEDBACK	((Tst_MAX_CHARS_ANSWER_OR_FEEDBACK + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
 
 #define Tst_MAX_BYTES_ANSWER_TYPE		  32
 
-#define Tst_MAX_OPTIONS_PER_QUESTION		  10
-
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
-
-struct Tst_Tags
-  {
-   unsigned Num;
-   bool All;
-   char *List;
-   char Txt[Tst_MAX_TAGS_PER_QUESTION][Tst_MAX_BYTES_TAG + 1];
-  };
-
-#define Tst_NUM_ANS_TYPES	6
-#define Tst_MAX_BYTES_LIST_ANSWER_TYPES	(Tst_NUM_ANS_TYPES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
-typedef enum
-  {
-   Tst_ANS_INT             = 0,
-   Tst_ANS_FLOAT           = 1,
-   Tst_ANS_TRUE_FALSE      = 2,
-   Tst_ANS_UNIQUE_CHOICE   = 3,
-   Tst_ANS_MULTIPLE_CHOICE = 4,
-   Tst_ANS_TEXT            = 5,
-   Tst_ANS_ALL             = 6,	// All/any type of answer
-  } Tst_AnswerType_t;
 
 struct Tst_AnswerTypes
   {
@@ -89,35 +63,6 @@ typedef enum
    Tst_ORDER_AVERAGE_SCORE_NOT_BLANK = 4,
   } Tst_QuestionsOrder_t;
 #define Tst_DEFAULT_ORDER Tst_ORDER_STEM
-
-struct Tst_Question
-  {
-   long QstCod;
-   struct Tst_Tags Tags;
-   time_t EditTime;
-   char *Stem;
-   char *Feedback;
-   struct Media Media;
-   struct
-     {
-      Tst_AnswerType_t Type;
-      unsigned NumOptions;
-      bool Shuffle;
-      char TF;
-      struct
-	{
-	 bool Correct;
-	 char *Text;
-	 char *Feedback;
-	 struct Media Media;
-	} Options[Tst_MAX_OPTIONS_PER_QUESTION];
-      long Integer;
-      double FloatingPoint[2];
-     } Answer;
-  unsigned long NumHits;
-  unsigned long NumHitsNotBlank;
-  double Score;
-  };
 
 struct Tst_Test
   {
@@ -176,6 +121,10 @@ void Tst_RequestSelectTestsForGame (struct Gam_Games *Games);
 void Tst_ListQuestionsToEdit (void);
 void Tst_ListQuestionsToSelectForSet (struct Exa_Exams *Exams);
 void Tst_ListQuestionsToSelectForGame (struct Gam_Games *Games);
+
+void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstPrn_PrintedQuestion *PrintedQuestion,
+					          bool Shuffle);
+
 void Tst_WriteParamEditQst (const struct Tst_Test *Test);
 
 unsigned Tst_GetNumAnswersQst (long QstCod);

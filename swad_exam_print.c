@@ -51,13 +51,22 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+#define ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT	100	// Absolute maximum number of questions in an exam print
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
 struct ExaPrn_Print
   {
-   unsigned foo;
+   long PrnCod;			// Exam print code
+   time_t TimeUTC[Dat_NUM_START_END_TIME];
+   unsigned NumQsts;		// Number of questions
+   unsigned NumQstsNotBlank;	// Number of questions not blank
+   bool Sent;			// This exam print has been sent or not?
+				// "Sent" means that user has clicked "Send" button after finishing
+   double Score;		// Total score of the exam print
+   struct TstPrn_PrintedQuestion PrintedQuestions[ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT];
   };
 
 /*****************************************************************************/
@@ -72,11 +81,33 @@ struct ExaPrn_Print
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void ExaPrn_PrintConstructor (struct ExaPrn_Print *Print);
-static void ExaPrn_PrintDestructor (struct ExaPrn_Print *Print);
+static void ExaPrn_ResetPrint (struct ExaPrn_Print *Print);
+static void ExaPrn_ResetPrintExceptPrnCod (struct ExaPrn_Print *Print);
 
 static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
 	                                          struct ExaPrn_Print *Print);
+static void ExaPrn_ShowQuestionsFromSet (struct ExaPrn_Print *Print,
+                                         struct ExaSet_Set *Set);
+
+/*****************************************************************************/
+/**************************** Reset exam print *******************************/
+/*****************************************************************************/
+
+static void ExaPrn_ResetPrint (struct ExaPrn_Print *Print)
+  {
+   Print->PrnCod = -1L;
+   ExaPrn_ResetPrintExceptPrnCod (Print);
+  }
+
+static void ExaPrn_ResetPrintExceptPrnCod (struct ExaPrn_Print *Print)
+  {
+   Print->TimeUTC[Dat_START_TIME] =
+   Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Print->NumQsts                 =
+   Print->NumQstsNotBlank         = 0;
+   Print->Sent                    = false;	// After creating an exam print, it's not sent
+   Print->Score                   = 0.0;
+  }
 
 /*****************************************************************************/
 /******************* Generate print of an exam in an event *******************/
@@ -94,12 +125,10 @@ void ExaPrn_ShowNewExamPrint (void)
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exam);
    ExaEvt_ResetEvent (&Event);
+   ExaPrn_ResetPrint (&Print);
 
    /***** Get and check parameters *****/
    ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
-
-   /***** Create print *****/
-   ExaPrn_PrintConstructor (&Print);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Exam.Title,
@@ -118,34 +147,11 @@ void ExaPrn_ShowNewExamPrint (void)
 
    /***** End table *****/
    HTM_TABLE_End ();
-
-   /***** Destroy print *****/
-   ExaPrn_PrintDestructor (&Print);
-  }
-
-/*****************************************************************************/
-/***************************** Print constructor *****************************/
-/*****************************************************************************/
-
-static void ExaPrn_PrintConstructor (struct ExaPrn_Print *Print)
-  {
-   Print->foo = 1;
-  }
-
-/*****************************************************************************/
-/****************************** Print destructor *****************************/
-/*****************************************************************************/
-
-static void ExaPrn_PrintDestructor (struct ExaPrn_Print *Print)
-  {
-   Print->foo = 1;
   }
 
 /*****************************************************************************/
 /*********** Get questions for a new exam print from the database ************/
 /*****************************************************************************/
-
-#define ExaPrn_MAX_BYTES_QUERY_PRINT (16 * 1024 - 1)
 
 static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
 	                                          struct ExaPrn_Print *Print)
@@ -157,8 +163,6 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
    unsigned NumSets;
    unsigned NumSet;
    struct ExaSet_Set Set;
-
-   Print->foo = 1;
 
    /***** Get data of set of questions from database *****/
    NumSets = (unsigned)
@@ -178,8 +182,6 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
 	   NumSet < NumSets;
 	   NumSet++)
 	{
-	 Gbl.RowEvenOdd = NumSet % 2;
-
 	 /***** Create set of questions *****/
 	 ExaSet_ResetSet (&Set);
 
@@ -200,26 +202,130 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
 	 Str_Copy (Set.Title,row[2],
 		   ExaSet_MAX_BYTES_TITLE);
 
-	 /***** Begin row for this set *****/
+	 /***** Title for this set *****/
+	 /* Begin title for this set */
 	 HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("colspan=\"2\"");
+         HTM_TABLE_BeginWide ();
 
-	 /***** Title *****/
-	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 /* Title */
+	 HTM_TD_Begin ("class=\"EXA_SET_TITLE\"");
 	 HTM_Txt (Set.Title);
 	 HTM_TD_End ();
 
-	 /***** Number of questions to appear in exam print *****/
-	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	 /* Number of questions to appear in exam print */
+	 HTM_TD_Begin ("class=\"EXA_SET_NUM_QSTS\"");
 	 HTM_Unsigned (Set.NumQstsToPrint);
 	 HTM_NBSP ();
 	 HTM_Txt (Set.NumQstsToPrint == 1 ? Txt_question :
 		                            Txt_questions);
 	 HTM_TD_End ();
 
-	 /***** End first row *****/
+	 /* End title for this set */
+	 HTM_TABLE_End ();
+	 HTM_TD_End ();
 	 HTM_TR_End ();
+
+	 /***** Questions in this set *****/
+	 ExaPrn_ShowQuestionsFromSet (Print,&Set);
 	}
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/************************ Show questions from a set **************************/
+/*****************************************************************************/
+
+static void ExaPrn_ShowQuestionsFromSet (struct ExaPrn_Print *Print,
+                                         struct ExaSet_Set *Set)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumQsts;
+   unsigned NumQst;
+   long QstCod;
+   Tst_AnswerType_t AnswerType;
+   bool Shuffle;
+
+   /***** Get questions from database *****/
+   NumQsts = (unsigned)
+	     DB_QuerySELECT (&mysql_res,"can not get questions from set",
+			     "SELECT tst_questions.QstCod,"	// row[0]
+			            "tst_questions.AnsType,"	// row[1]
+			            "tst_questions.Shuffle"	// row[2]
+	                     " FROM exa_questions,tst_questions"
+			     " WHERE exa_questions.setCod=%ld"
+	                     " AND exa_questions.QstCod=tst_questions.QstCod"
+			     " ORDER BY RAND(NOW())"
+			     " LIMIT %u",
+			     Set->SetCod,
+			     Set->NumQstsToPrint);
+
+   /***** Questions in this set *****/
+   for (NumQst = 0;
+	NumQst < NumQsts;
+	NumQst++)
+     {
+      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+
+      /***** Get question data *****/
+      row = mysql_fetch_row (mysql_res);
+      /*
+      row[0] QstCod
+      row[1] AnsType
+      row[2] Shuffle
+      */
+
+      /* Get question code (row[0]) */
+      QstCod = Str_ConvertStrCodToLongCod (row[0]);
+
+      /* Get answer type (row[1]) */
+      AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+
+      /* Get shuffle (row[2]) */
+      Shuffle = (row[2][0] == 'Y');
+
+      /* Set indexes of answers */
+      switch (AnswerType)
+	{
+	 case Tst_ANS_INT:
+	 case Tst_ANS_FLOAT:
+	 case Tst_ANS_TRUE_FALSE:
+	 case Tst_ANS_TEXT:
+	    Print->PrintedQuestions[NumQst].StrIndexes[0] = '\0';
+	    break;
+	 case Tst_ANS_UNIQUE_CHOICE:
+	 case Tst_ANS_MULTIPLE_CHOICE:
+            /* If answer type is unique or multiple option,
+               generate indexes of answers depending on shuffle */
+	    Tst_GenerateChoiceIndexesDependingOnShuffle (&Print->PrintedQuestions[NumQst],Shuffle);
+	    break;
+	 default:
+	    break;
+	}
+
+      /* Reset user's answers.
+         Initially user has not answered the question ==> initially all the answers will be blank.
+         If the user does not confirm the submission of their exam ==>
+         ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
+      Print->PrintedQuestions[NumQst].StrAnswers[0] = '\0';
+
+      /* Begin row for this question */
+      HTM_TR_Begin (NULL);
+
+      /* Title */
+      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TxtF ("Pregunta %ld",QstCod);
+      HTM_TD_End ();
+
+      /* Number of questions to appear in exam print */
+      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_Txt ("Enunciado y respuestas");
+      HTM_TD_End ();
+
+      /* End title for this question */
+      HTM_TR_End ();
+     }
   }

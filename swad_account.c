@@ -50,7 +50,7 @@
 #include "swad_profile.h"
 #include "swad_project.h"
 #include "swad_report.h"
-#include "swad_test_exam.h"
+#include "swad_test_print.h"
 #include "swad_timeline.h"
 
 /*****************************************************************************/
@@ -1082,7 +1082,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
                      UsrDat->FullName);
 
    /***** Remove test results made by user in all courses *****/
-   TstRes_RemoveExamsMadeByUsrInAllCrss (UsrDat->UsrCod);
+   TstPrn_RemoveExamsMadeByUsrInAllCrss (UsrDat->UsrCod);
 
    /***** Remove user's notifications *****/
    Ntf_RemoveUsrNtfs (UsrDat->UsrCod);

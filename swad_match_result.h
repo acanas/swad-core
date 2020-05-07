@@ -27,7 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_test_exam.h"
+#include "swad_test_print.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -51,6 +51,6 @@ void MchRes_ShowAllMchResultsInMch (void);
 
 void MchRes_ShowOneMchResult (void);
 void MchRes_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
-				           struct TstRes_Result *Result);
+				           struct TstPrn_Print *Print);
 
 #endif

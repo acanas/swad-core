@@ -239,7 +239,7 @@ static void ExaEvt_GetNumParticipants (struct ExaEvt_Event *Event);
 
 static void ExaEvt_RemoveMyAnswerToEventQuestion (const struct ExaEvt_Event *Event);
 
-static void ExaEvt_ComputeScore (struct TstRes_Result *Result);
+static void ExaEvt_ComputeScore (struct TstPrn_Print *Print);
 
 static unsigned ExaEvt_GetNumUsrsWhoHaveAnswerEvt (long EvtCod);
 
@@ -1934,7 +1934,7 @@ static void ExaEvt_ReorderAnswer (long EvtCod,unsigned QstInd,
    long LongNum;
    unsigned AnsInd;
    char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrAnswersOneQst[TstRes_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   char StrAnswersOneQst[TstPrn_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
    ***** Initialize list of answers to empty string *****
    StrAnswersOneQst[0] = '\0';
@@ -1967,9 +1967,9 @@ static void ExaEvt_ReorderAnswer (long EvtCod,unsigned QstInd,
       * Concatenate answer index to list of answers *
       if (NumAns)
          Str_Concat (StrAnswersOneQst,",",
-		     TstRes_MAX_BYTES_ANSWERS_ONE_QST);
+		     TstPrn_MAX_BYTES_ANSWERS_ONE_QST);
       Str_Concat (StrAnswersOneQst,StrOneAnswer,
-		  TstRes_MAX_BYTES_ANSWERS_ONE_QST);
+		  TstPrn_MAX_BYTES_ANSWERS_ONE_QST);
      }
 
    ***** Free structure that stores the query result *****
@@ -1993,7 +1993,7 @@ void ExaEvt_GetIndexes (long EvtCod,unsigned QstInd,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char StrIndexesOneQst[TstRes_MAX_BYTES_INDEXES_ONE_QST + 1];
+   char StrIndexesOneQst[TstPrn_MAX_BYTES_INDEXES_ONE_QST + 1];
 
    /***** Get indexes for a question from database *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
@@ -2006,14 +2006,14 @@ void ExaEvt_GetIndexes (long EvtCod,unsigned QstInd,
 
    /* Get indexes (row[0]) */
    Str_Copy (StrIndexesOneQst,row[0],
-	     TstRes_MAX_BYTES_INDEXES_ONE_QST);
+	     TstPrn_MAX_BYTES_INDEXES_ONE_QST);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get indexes from string *****/
    Par_ReplaceCommaBySeparatorMultiple (StrIndexesOneQst);
-   TstRes_GetIndexesFromStr (StrIndexesOneQst,Indexes);
+   TstPrn_GetIndexesFromStr (StrIndexesOneQst,Indexes);
   }
 
 /*****************************************************************************/
@@ -4212,7 +4212,7 @@ void ExaEvt_ReceiveQuestionAnswer (void)
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];
    struct ExaEvt_UsrAnswer PreviousUsrAnswer;
    struct ExaEvt_UsrAnswer UsrAnswer;
-   struct TstRes_Result Result;
+   struct TstPrn_Print Print;
 
    /***** Reset event *****/
    ExaEvt_ResetEvent (&Event);
@@ -4271,8 +4271,8 @@ void ExaEvt_ReceiveQuestionAnswer (void)
 
       /***** Update student's exam event result *****/
       ExaRes_GetExamResultQuestionsFromDB (Event.EvtCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-					 &Result);
-      ExaEvt_ComputeScore (&Result);
+					   &Print);
+      ExaEvt_ComputeScore (&Print);
 
       Str_SetDecimalPointToUS ();	// To print the floating point as a dot
       if (DB_QueryCOUNT ("can not get if exam event result exists",
@@ -4287,9 +4287,9 @@ void ExaEvt_ReceiveQuestionAnswer (void)
 			       "NumQstsNotBlank=%u,"
 			       "Score='%.15lg'"
 			  " WHERE EvtCod=%ld AND UsrCod=%ld",
-			  Result.NumQsts,
-			  Result.NumQstsNotBlank,
-			  Result.Score,
+			  Print.NumQsts,
+			  Print.NumQstsNotBlank,
+			  Print.Score,
 			  Event.EvtCod,Gbl.Usrs.Me.UsrDat.UsrCod);
       else								// Result doesn't exist
 	 /* Create result */
@@ -4305,9 +4305,9 @@ void ExaEvt_ReceiveQuestionAnswer (void)
 			  "%u,"		// NumQstsNotBlank
 			  "'%.15lg')",	// Score
 			  Event.EvtCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-			  Result.NumQsts,
-			  Result.NumQstsNotBlank,
-			  Result.Score);
+			  Print.NumQsts,
+			  Print.NumQstsNotBlank,
+			  Print.Score);
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
 
@@ -4333,25 +4333,25 @@ static void ExaEvt_RemoveMyAnswerToEventQuestion (const struct ExaEvt_Event *Eve
 /******************** Compute exam event score for a student **********************/
 /*****************************************************************************/
 
-static void ExaEvt_ComputeScore (struct TstRes_Result *Result)
+static void ExaEvt_ComputeScore (struct TstPrn_Print *Print)
   {
    unsigned NumQst;
    struct Tst_Question Question;
 
-   for (NumQst = 0, Result->Score = 0.0;
-	NumQst < Result->NumQsts;
+   for (NumQst = 0, Print->Score = 0.0;
+	NumQst < Print->NumQsts;
 	NumQst++)
      {
       /***** Create test question *****/
       Tst_QstConstructor (&Question);
-      Question.QstCod = Result->Questions[NumQst].QstCod;
+      Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
       Question.Answer.Type = Tst_ANS_UNIQUE_CHOICE;
 
       /***** Compute score for this answer ******/
-      TstRes_ComputeChoiceAnsScore (Result,NumQst,&Question);
+      TstPrn_ComputeChoiceAnsScore (Print,NumQst,&Question);
 
       /***** Update total score *****/
-      Result->Score += Result->Questions[NumQst].Score;
+      Print->Score += Print->PrintedQuestions[NumQst].Score;
 
       /***** Destroy test question *****/
       Tst_QstDestructor (&Question);

@@ -52,9 +52,9 @@
 #include "swad_parameter.h"
 #include "swad_theme.h"
 #include "swad_test.h"
-#include "swad_test_exam.h"
 #include "swad_test_config.h"
 #include "swad_test_import.h"
+#include "swad_test_print.h"
 #include "swad_test_visibility.h"
 #include "swad_user.h"
 #include "swad_xml.h"
@@ -133,15 +133,15 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test);
 
 static void Tst_PutCheckBoxAllowTeachers (bool AllowTeachers);
 
-static void Tst_GetAnswersFromForm (struct TstRes_Result *Result);
+static void Tst_GetAnswersFromForm (struct TstPrn_Print *Print);
 
 static bool Tst_CheckIfNextTstAllowed (void);
 static unsigned Tst_GetNumExamsGeneratedByMe (void);
-static void Tst_ShowTestExamToFillIt (struct TstRes_Result *Result,
+static void Tst_ShowTestExamToFillIt (struct TstPrn_Print *Print,
                                       unsigned NumExamsGeneratedByMe,
                                       Tst_RequestOrConfirm_t RequestOrConfirm);
 
-static void Tst_WriteQstAndAnsSeeing (const struct TstRes_Result *Result,
+static void Tst_WriteQstAndAnsSeeing (const struct TstPrn_Print *Print,
                                       unsigned NumQst,
                                       const struct Tst_Question *Question);
 
@@ -177,10 +177,7 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
 static void Tst_ShowFormAnswerTypes (const struct Tst_AnswerTypes *AnswerTypes);
 static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res);
 static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
-                                              struct TstRes_Result *Result);
-static void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstRes_Result *Result,
-							 unsigned NumQst,
-							 bool Shuffle);
+                                              struct TstPrn_Print *Print);
 
 static void Tst_ListOneQstToEdit (struct Tst_Test *Test);
 static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
@@ -196,28 +193,28 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
 static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
                                               struct Tst_Question *Question);
 
-static void Tst_WriteAnswersSeeing (const struct TstRes_Result *Result,
+static void Tst_WriteAnswersSeeing (const struct TstPrn_Print *Print,
                                     unsigned NumQst,
                                     const struct Tst_Question *Question);
 
 static void Tst_WriteIntAnsListing (const struct Tst_Question *Question);
-static void Tst_WriteIntAnsSeeing (const struct TstRes_Result *Result,
+static void Tst_WriteIntAnsSeeing (const struct TstPrn_Print *Print,
 				   unsigned NumQst);
 
 static void Tst_WriteFloatAnsEdit (const struct Tst_Question *Question);
-static void Tst_WriteFloatAnsSeeing (const struct TstRes_Result *Result,
+static void Tst_WriteFloatAnsSeeing (const struct TstPrn_Print *Print,
 				     unsigned NumQst);
 
 static void Tst_WriteTFAnsListing (const struct Tst_Question *Question);
-static void Tst_WriteTFAnsSeeing (const struct TstRes_Result *Result,
+static void Tst_WriteTFAnsSeeing (const struct TstPrn_Print *Print,
 	                          unsigned NumQst);
 
 static void Tst_WriteChoiceAnsListing (const struct Tst_Question *Question);
-static void Tst_WriteChoiceAnsSeeing (const struct TstRes_Result *Result,
+static void Tst_WriteChoiceAnsSeeing (const struct TstPrn_Print *Print,
                                       unsigned NumQst,
                                       const struct Tst_Question *Question);
 
-static void Tst_WriteTextAnsSeeing (const struct TstRes_Result *Result,
+static void Tst_WriteTextAnsSeeing (const struct TstPrn_Print *Print,
 	                            unsigned NumQst);
 
 static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod);
@@ -446,7 +443,7 @@ void Tst_ShowNewTest (void)
   {
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
    struct Tst_Test Test;
-   struct TstRes_Result Exam;
+   struct TstPrn_Print Print;
    unsigned NumExamsGeneratedByMe;
 
    /***** Create test *****/
@@ -461,21 +458,21 @@ void Tst_ShowNewTest (void)
       if (Tst_GetParamsTst (&Test,Tst_SHOW_TEST_TO_ANSWER))	// Get parameters from form
         {
          /***** Get questions *****/
-	 TstRes_ResetResult (&Exam);
-	 Tst_GetQuestionsForNewTestFromDB (&Test,&Exam);
-         if (Exam.NumQsts)
+	 TstPrn_ResetResult (&Print);
+	 Tst_GetQuestionsForNewTestFromDB (&Test,&Print);
+         if (Print.NumQsts)
            {
             /***** Increase number of exams generated (answered or not) by me *****/
             Tst_IncreaseMyNumAccessTst ();
             NumExamsGeneratedByMe = Tst_GetNumExamsGeneratedByMe ();
 
 	    /***** Create new test exam in database *****/
-	    TstRes_CreateExamInDB (&Exam);
-	    TstRes_ComputeScoresAndStoreExamQuestions (&Exam,
+	    TstPrn_CreateExamInDB (&Print);
+	    TstPrn_ComputeScoresAndStoreExamQuestions (&Print,
 	                                               false);	// Don't update question score
 
             /***** Show test exam to be answered *****/
-            Tst_ShowTestExamToFillIt (&Exam,NumExamsGeneratedByMe,Tst_REQUEST);
+            Tst_ShowTestExamToFillIt (&Print,NumExamsGeneratedByMe,Tst_REQUEST);
 
             /***** Update date-time of my next allowed access to test *****/
             if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
@@ -523,47 +520,48 @@ static void Tst_PutCheckBoxAllowTeachers (bool AllowTeachers)
 void Tst_ReceiveTestDraft (void)
   {
    extern const char *Txt_The_test_X_has_already_been_assessed_previously;
+   extern const char *Txt_Please_review_your_answers_before_submitting_the_exam;
    unsigned NumTst;
-   struct TstRes_Result Result;
+   struct TstPrn_Print Print;
 
    /***** Read test configuration from database *****/
    TstCfg_GetConfigFromDB ();
 
    /***** Get basic parameters of the exam *****/
    /* Get test exam code from form */
-   TstRes_ResetResult (&Result);
-   if ((Result.ResCod = TstRes_GetParamExaCod ()) <= 0)
+   TstPrn_ResetResult (&Print);
+   if ((Print.PrnCod = TstPrn_GetParamExaCod ()) <= 0)
       Lay_ShowErrorAndExit ("Wrong test exam.");
 
    /* Get number of this test from form */
    NumTst = Tst_GetParamNumTst ();
 
    /***** Get test exam from database *****/
-   TstRes_GetExamDataByExaCod (&Result);
+   TstPrn_GetExamDataByExaCod (&Print);
 
    /****** Get test status in database for this session-course-num.test *****/
-   if (Result.Sent)
+   if (Print.Sent)
       Ale_ShowAlert (Ale_WARNING,Txt_The_test_X_has_already_been_assessed_previously,
 	             NumTst);
-   else // Exam not yet sent
+   else // Print not yet sent
      {
       /***** Get test exam questions from database *****/
-      TstRes_GetExamQuestionsFromDB (&Result);
+      TstPrn_GetExamQuestionsFromDB (&Print);
 
       /***** Get answers from form to assess a test *****/
-      Tst_GetAnswersFromForm (&Result);
+      Tst_GetAnswersFromForm (&Print);
 
       /***** Update test exam in database *****/
-      TstRes_ComputeScoresAndStoreExamQuestions (&Result,
+      TstPrn_ComputeScoresAndStoreExamQuestions (&Print,
 						 false);	// Don't update question score
-      TstRes_UpdateExamInDB (&Result);
+      TstPrn_UpdateExamInDB (&Print);
 
       /***** Show question and button to send the test *****/
       /* Start alert */
-      Ale_ShowAlert (Ale_WARNING,"Por favor, revise sus respuestas antes de enviar el examen:");	// TODO: Need translation!!!
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_review_your_answers_before_submitting_the_exam);
 
       /* Show the same test exam to be answered */
-      Tst_ShowTestExamToFillIt (&Result,NumTst,Tst_CONFIRM);
+      Tst_ShowTestExamToFillIt (&Print,NumTst,Tst_CONFIRM);
      }
   }
 
@@ -580,43 +578,43 @@ void Tst_AssessTest (void)
    extern const char *Txt_Grade;
    extern const char *Txt_The_test_X_has_already_been_assessed_previously;
    unsigned NumTst;
-   struct TstRes_Result Result;
+   struct TstPrn_Print Print;
 
    /***** Read test configuration from database *****/
    TstCfg_GetConfigFromDB ();
 
    /***** Get basic parameters of the exam *****/
    /* Get test exam code from form */
-   TstRes_ResetResult (&Result);
-   if ((Result.ResCod = TstRes_GetParamExaCod ()) <= 0)
+   TstPrn_ResetResult (&Print);
+   if ((Print.PrnCod = TstPrn_GetParamExaCod ()) <= 0)
       Lay_ShowErrorAndExit ("Wrong test exam.");
 
    /* Get number of this test from form */
    NumTst = Tst_GetParamNumTst ();
 
    /***** Get test exam from database *****/
-   TstRes_GetExamDataByExaCod (&Result);
+   TstPrn_GetExamDataByExaCod (&Print);
 
    /****** Get test status in database for this session-course-num.test *****/
-   if (Result.Sent)
+   if (Print.Sent)
       Ale_ShowAlert (Ale_WARNING,Txt_The_test_X_has_already_been_assessed_previously,
 		     NumTst);
-   else	// Exam not yet sent
+   else	// Print not yet sent
      {
       /***** Get test exam questions from database *****/
-      TstRes_GetExamQuestionsFromDB (&Result);
+      TstPrn_GetExamQuestionsFromDB (&Print);
 
       /***** Get answers from form to assess a test *****/
-      Tst_GetAnswersFromForm (&Result);
+      Tst_GetAnswersFromForm (&Print);
 
       /***** Get if test exam will be visible by teachers *****/
-      Result.Sent          = true;	// The exam has been finished and sent by student
-      Result.AllowTeachers = Par_GetParToBool ("AllowTchs");
+      Print.Sent          = true;	// The exam has been finished and sent by student
+      Print.AllowTeachers = Par_GetParToBool ("AllowTchs");
 
       /***** Update test exam in database *****/
-      TstRes_ComputeScoresAndStoreExamQuestions (&Result,
+      TstPrn_ComputeScoresAndStoreExamQuestions (&Print,
 						 Gbl.Usrs.Me.Role.Logged == Rol_STD);	// Update question score?
-      TstRes_UpdateExamInDB (&Result);
+      TstPrn_UpdateExamInDB (&Print);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Test_result,
@@ -636,19 +634,19 @@ void Tst_AssessTest (void)
 	}
 
       /***** Write answers and solutions *****/
-      TstRes_ShowExamAfterAssess (&Result);
+      TstPrn_ShowExamAfterAssess (&Print);
 
       /***** Write total score and grade *****/
       if (TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
 	{
 	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
 	 HTM_TxtColonNBSP (Txt_Score);
-	 HTM_Double2Decimals (Result.Score);
+	 HTM_Double2Decimals (Print.Score);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Grade);
-	 TstRes_ComputeAndShowGrade (Result.NumQsts,
-				     Result.Score,
-				     TstRes_SCORE_MAX);
+	 TstPrn_ComputeAndShowGrade (Print.NumQsts,
+				     Print.Score,
+				     TstPrn_SCORE_MAX);
 	 HTM_DIV_End ();
 	}
 
@@ -661,22 +659,22 @@ void Tst_AssessTest (void)
 /*********** Get questions and answers from form to assess a test ************/
 /*****************************************************************************/
 
-static void Tst_GetAnswersFromForm (struct TstRes_Result *Result)
+static void Tst_GetAnswersFromForm (struct TstPrn_Print *Print)
   {
    unsigned NumQst;
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Loop for every question getting user's answers *****/
    for (NumQst = 0;
-	NumQst < Result->NumQsts;
+	NumQst < Print->NumQsts;
 	NumQst++)
      {
       /* Get answers selected by user for this question */
       snprintf (StrAns,sizeof (StrAns),
 	        "Ans%010u",
 		NumQst);
-      Par_GetParMultiToText (StrAns,Result->Questions[NumQst].StrAnswers,
-                             TstRes_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
+      Par_GetParMultiToText (StrAns,Print->PrintedQuestions[NumQst].StrAnswers,
+                             TstPrn_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
      }
   }
 
@@ -788,7 +786,7 @@ static unsigned Tst_GetNumExamsGeneratedByMe (void)
 /************************ Show a test exam to be answered ********************/
 /*****************************************************************************/
 
-static void Tst_ShowTestExamToFillIt (struct TstRes_Result *Result,
+static void Tst_ShowTestExamToFillIt (struct TstPrn_Print *Print,
                                       unsigned NumExamsGeneratedByMe,
                                       Tst_RequestOrConfirm_t RequestOrConfirm)
   {
@@ -813,11 +811,11 @@ static void Tst_ShowTestExamToFillIt (struct TstRes_Result *Result,
 			      Gbl.Hierarchy.Deg.DegCod,
 			      Gbl.Hierarchy.Crs.CrsCod);
 
-   if (Result->NumQsts)
+   if (Print->NumQsts)
      {
       /***** Begin form *****/
       Frm_StartForm (Action[RequestOrConfirm]);
-      TstRes_PutParamExaCod (Result->ResCod);
+      TstPrn_PutParamExaCod (Print->PrnCod);
       Par_PutHiddenParamUnsigned (NULL,"NumTst",NumExamsGeneratedByMe);
 
       /***** Begin table *****/
@@ -825,21 +823,21 @@ static void Tst_ShowTestExamToFillIt (struct TstRes_Result *Result,
 
       /***** Write one row for each question *****/
       for (NumQst = 0;
-	   NumQst < Result->NumQsts;
+	   NumQst < Print->NumQsts;
 	   NumQst++)
 	{
 	 Gbl.RowEvenOdd = NumQst % 2;
 
 	 /* Create test question */
 	 Tst_QstConstructor (&Question);
-	 Question.QstCod = Result->Questions[NumQst].QstCod;
+	 Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
 
 	 /* Show question */
 	 if (!Tst_GetQstDataFromDB (&Question))	// Question exists
 	    Lay_ShowErrorAndExit ("Wrong question.");
 
 	 /* Write question and answers */
-	 Tst_WriteQstAndAnsSeeing (Result,NumQst,&Question);
+	 Tst_WriteQstAndAnsSeeing (Print,NumQst,&Question);
 
 	 /* Destroy test question */
 	 Tst_QstDestructor (&Question);
@@ -903,7 +901,7 @@ void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
 /********** Write a row of a test, with one question and its answer **********/
 /*****************************************************************************/
 
-static void Tst_WriteQstAndAnsSeeing (const struct TstRes_Result *Result,
+static void Tst_WriteQstAndAnsSeeing (const struct TstPrn_Print *Print,
                                       unsigned NumQst,
                                       const struct Tst_Question *Question)
   {
@@ -931,7 +929,7 @@ static void Tst_WriteQstAndAnsSeeing (const struct TstRes_Result *Result,
 		  "TEST_MED_SHOW");
 
    /* Answers */
-   Tst_WriteAnswersSeeing (Result,NumQst,Question);
+   Tst_WriteAnswersSeeing (Print,NumQst,Question);
 
    HTM_TD_End ();
 
@@ -2512,7 +2510,7 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
 /*****************************************************************************/
 
 static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
-                                              struct TstRes_Result *Result)
+                                              struct TstPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2625,14 +2623,14 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
       Lay_ShowAlert (Lay_INFO,Query);
 */
    /* Make the query */
-   Result->NumQsts =
+   Print->NumQsts =
    Test->NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions",
 			                      "%s",
 			                      Query);
 
    /***** Get questions and answers from database *****/
    for (NumQst = 0;
-	NumQst < Result->NumQsts;
+	NumQst < Print->NumQsts;
 	NumQst++)
      {
       /* Get question row */
@@ -2644,7 +2642,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
       */
 
       /* Get question code (row[0]) */
-      if ((Result->Questions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get answer type (row[1]) */
@@ -2660,13 +2658,13 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
 	 case Tst_ANS_FLOAT:
 	 case Tst_ANS_TRUE_FALSE:
 	 case Tst_ANS_TEXT:
-	    Result->Questions[NumQst].StrIndexes[0] = '\0';
+	    Print->PrintedQuestions[NumQst].StrIndexes[0] = '\0';
 	    break;
 	 case Tst_ANS_UNIQUE_CHOICE:
 	 case Tst_ANS_MULTIPLE_CHOICE:
             /* If answer type is unique or multiple option,
                generate indexes of answers depending on shuffle */
-	    Tst_GenerateChoiceIndexesDependingOnShuffle (Result,NumQst,Shuffle);
+	    Tst_GenerateChoiceIndexesDependingOnShuffle (&Print->PrintedQuestions[NumQst],Shuffle);
 	    break;
 	 default:
 	    break;
@@ -2676,20 +2674,19 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
          Initially user has not answered the question ==> initially all the answers will be blank.
          If the user does not confirm the submission of their exam ==>
          ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-      Result->Questions[NumQst].StrAnswers[0] = '\0';
+      Print->PrintedQuestions[NumQst].StrAnswers[0] = '\0';
      }
 
    /***** Get if test exam will be visible by teachers *****/
-   Result->AllowTeachers = Par_GetParToBool ("AllowTchs");
+   Print->AllowTeachers = Par_GetParToBool ("AllowTchs");
   }
 
 /*****************************************************************************/
 /********* Get single or multiple choice answer when seeing a test ***********/
 /*****************************************************************************/
 
-static void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstRes_Result *Result,
-							 unsigned NumQst,
-							 bool Shuffle)
+void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstPrn_PrintedQuestion *PrintedQuestion,
+					          bool Shuffle)
   {
    extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    struct Tst_Question Question;
@@ -2702,7 +2699,7 @@ static void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstRes_Result *R
 
    /***** Create test question *****/
    Tst_QstConstructor (&Question);
-   Question.QstCod = Result->Questions[NumQst].QstCod;
+   Question.QstCod = PrintedQuestion->QstCod;
 
    /***** Get answers of question from database *****/
    Tst_GetAnswersQst (&Question,&mysql_res,Shuffle);
@@ -2739,8 +2736,8 @@ static void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstRes_Result *R
 	 snprintf (StrInd,sizeof (StrInd),"%u",Index);
       else
 	 snprintf (StrInd,sizeof (StrInd),"%s%u",Par_SEPARATOR_PARAM_MULTIPLE,Index);
-      Str_Concat (Result->Questions[NumQst].StrIndexes,StrInd,
-                  TstRes_MAX_BYTES_INDEXES_ONE_QST);
+      Str_Concat (PrintedQuestion->StrIndexes,StrInd,
+                  TstPrn_MAX_BYTES_INDEXES_ONE_QST);
      }
 
    /***** Free structure that stores the query result *****/
@@ -3360,7 +3357,7 @@ void Tst_WriteAnswersListing (const struct Tst_Question *Question)
 /************** Write answers of a question when seeing a test ***************/
 /*****************************************************************************/
 
-static void Tst_WriteAnswersSeeing (const struct TstRes_Result *Result,
+static void Tst_WriteAnswersSeeing (const struct TstPrn_Print *Print,
                                     unsigned NumQst,
                                     const struct Tst_Question *Question)
   {
@@ -3368,20 +3365,20 @@ static void Tst_WriteAnswersSeeing (const struct TstRes_Result *Result,
    switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
-         Tst_WriteIntAnsSeeing (Result,NumQst);
+         Tst_WriteIntAnsSeeing (Print,NumQst);
          break;
       case Tst_ANS_FLOAT:
-         Tst_WriteFloatAnsSeeing (Result,NumQst);
+         Tst_WriteFloatAnsSeeing (Print,NumQst);
          break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_WriteTFAnsSeeing (Result,NumQst);
+         Tst_WriteTFAnsSeeing (Print,NumQst);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         Tst_WriteChoiceAnsSeeing (Result,NumQst,Question);
+         Tst_WriteChoiceAnsSeeing (Print,NumQst,Question);
          break;
       case Tst_ANS_TEXT:
-         Tst_WriteTextAnsSeeing (Result,NumQst);
+         Tst_WriteTextAnsSeeing (Print,NumQst);
          break;
       default:
          break;
@@ -3417,7 +3414,7 @@ static void Tst_WriteIntAnsListing (const struct Tst_Question *Question)
 /****************** Write integer answer when seeing a test ******************/
 /*****************************************************************************/
 
-static void Tst_WriteIntAnsSeeing (const struct TstRes_Result *Exam,
+static void Tst_WriteIntAnsSeeing (const struct TstPrn_Print *Print,
 				   unsigned NumQst)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
@@ -3426,7 +3423,7 @@ static void Tst_WriteIntAnsSeeing (const struct TstRes_Result *Exam,
    snprintf (StrAns,sizeof (StrAns),
 	     "Ans%010u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,11,Exam->Questions[NumQst].StrAnswers,
+   HTM_INPUT_TEXT (StrAns,11,Print->PrintedQuestions[NumQst].StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"11\"");
   }
@@ -3450,7 +3447,7 @@ static void Tst_WriteFloatAnsEdit (const struct Tst_Question *Question)
 /****************** Write float answer when seeing a test ********************/
 /*****************************************************************************/
 
-static void Tst_WriteFloatAnsSeeing (const struct TstRes_Result *Exam,
+static void Tst_WriteFloatAnsSeeing (const struct TstPrn_Print *Print,
 				     unsigned NumQst)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
@@ -3459,7 +3456,7 @@ static void Tst_WriteFloatAnsSeeing (const struct TstRes_Result *Exam,
    snprintf (StrAns,sizeof (StrAns),
 	     "Ans%010u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,Exam->Questions[NumQst].StrAnswers,
+   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,Print->PrintedQuestions[NumQst].StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"11\"");
   }
@@ -3482,7 +3479,7 @@ static void Tst_WriteTFAnsListing (const struct Tst_Question *Question)
 /************** Write false / true answer when seeing a test ****************/
 /*****************************************************************************/
 
-static void Tst_WriteTFAnsSeeing (const struct TstRes_Result *Exam,
+static void Tst_WriteTFAnsSeeing (const struct TstPrn_Print *Print,
 	                          unsigned NumQst)
   {
    extern const char *Txt_TF_QST[2];
@@ -3493,9 +3490,9 @@ static void Tst_WriteTFAnsSeeing (const struct TstRes_Result *Exam,
       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"Ans%010u\"",NumQst);
-   HTM_OPTION (HTM_Type_STRING,"" ,Exam->Questions[NumQst].StrAnswers[0] == '\0',false,"&nbsp;");
-   HTM_OPTION (HTM_Type_STRING,"T",Exam->Questions[NumQst].StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
-   HTM_OPTION (HTM_Type_STRING,"F",Exam->Questions[NumQst].StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
+   HTM_OPTION (HTM_Type_STRING,"" ,Print->PrintedQuestions[NumQst].StrAnswers[0] == '\0',false,"&nbsp;");
+   HTM_OPTION (HTM_Type_STRING,"T",Print->PrintedQuestions[NumQst].StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
+   HTM_OPTION (HTM_Type_STRING,"F",Print->PrintedQuestions[NumQst].StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
    HTM_SELECT_End ();
   }
 
@@ -3615,7 +3612,7 @@ static void Tst_WriteChoiceAnsListing (const struct Tst_Question *Question)
 /******** Write single or multiple choice answer when seeing a test **********/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsSeeing (const struct TstRes_Result *Exam,
+static void Tst_WriteChoiceAnsSeeing (const struct TstPrn_Print *Print,
                                       unsigned NumQst,
                                       const struct Tst_Question *Question)
   {
@@ -3625,10 +3622,10 @@ static void Tst_WriteChoiceAnsSeeing (const struct TstRes_Result *Exam,
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Get indexes for this question from string *****/
-   TstRes_GetIndexesFromStr (Exam->Questions[NumQst].StrIndexes,Indexes);
+   TstPrn_GetIndexesFromStr (Print->PrintedQuestions[NumQst].StrIndexes,Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   TstRes_GetAnswersFromStr (Exam->Questions[NumQst].StrAnswers,UsrAnswers);
+   TstPrn_GetAnswersFromStr (Print->PrintedQuestions[NumQst].StrAnswers,UsrAnswers);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -3756,7 +3753,7 @@ void Tst_GetChoiceAns (struct Tst_Question *Question,MYSQL_RES *mysql_res)
 /******************** Write text answer when seeing a test *******************/
 /*****************************************************************************/
 
-static void Tst_WriteTextAnsSeeing (const struct TstRes_Result *Result,
+static void Tst_WriteTextAnsSeeing (const struct TstPrn_Print *Print,
 	                            unsigned NumQst)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
@@ -3765,7 +3762,7 @@ static void Tst_WriteTextAnsSeeing (const struct TstRes_Result *Result,
    snprintf (StrAns,sizeof (StrAns),
 	     "Ans%010u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,TstRes_MAX_CHARS_ANSWERS_ONE_QST,Result->Questions[NumQst].StrAnswers,
+   HTM_INPUT_TEXT (StrAns,TstPrn_MAX_CHARS_ANSWERS_ONE_QST,Print->PrintedQuestions[NumQst].StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"40\"");
   }
@@ -5052,7 +5049,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
    char TagStr[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char AnsStr[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FbStr[5 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrMultiAns[TstRes_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   char StrMultiAns[TstPrn_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TF[1 + 1];	// (T)rue or (F)alse
    const char *Ptr;
    unsigned NumCorrectAns;
@@ -5204,7 +5201,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
            }
       	 else if (Question->Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
            {
-	    Par_GetParMultiToText ("AnsMulti",StrMultiAns,TstRes_MAX_BYTES_ANSWERS_ONE_QST);
+	    Par_GetParMultiToText ("AnsMulti",StrMultiAns,TstPrn_MAX_BYTES_ANSWERS_ONE_QST);
  	    Ptr = StrMultiAns;
             while (*Ptr)
               {

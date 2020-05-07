@@ -103,7 +103,7 @@ static void ExaRes_ShowEvtResultsSummaryRow (unsigned NumResults,
                                              double TotalScoreOfAllResults,
 					     double TotalGrade);
 static void ExaRes_GetEventResultDataByEvtCod (long EvtCod,long UsrCod,
-                                               struct TstRes_Result *Result);
+                                               struct TstPrn_Print *Print);
 
 static bool ExaRes_CheckIfICanSeeEventResult (struct ExaEvt_Event *Event,long UsrCod);
 static bool ExaRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility);
@@ -958,8 +958,8 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanViewScore)
 	   {
-            Grade = TstRes_ComputeGrade (NumQstsInThisResult,ScoreInThisResult,MaxGrade);
-	    TstRes_ShowGrade (Grade,MaxGrade);
+            Grade = TstPrn_ComputeGrade (NumQstsInThisResult,ScoreInThisResult,MaxGrade);
+	    TstPrn_ShowGrade (Grade,MaxGrade);
 	    TotalGrade += Grade;
 	   }
 	 else
@@ -1092,7 +1092,7 @@ void ExaRes_ShowOneExaResult (void)
    struct UsrData *UsrDat;
    Dat_StartEndTime_t StartEndTime;
    char *Id;
-   struct TstRes_Result Result;
+   struct TstPrn_Print Print;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool ICanViewResult;
@@ -1122,8 +1122,8 @@ void ExaRes_ShowOneExaResult (void)
      }
 
    /***** Get event result data *****/
-   TstRes_ResetResult (&Result);
-   ExaRes_GetEventResultDataByEvtCod (Event.EvtCod,UsrDat->UsrCod,&Result);
+   TstPrn_ResetResult (&Print);
+   ExaRes_GetEventResultDataByEvtCod (Event.EvtCod,UsrDat->UsrCod,&Print);
 
    /***** Check if I can view this event result *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1154,7 +1154,7 @@ void ExaRes_ShowOneExaResult (void)
      {
       /***** Get questions and user's answers of the event result from database *****/
       ExaRes_GetExamResultQuestionsFromDB (Event.EvtCod,UsrDat->UsrCod,
-					   &Result);
+					   &Print);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Event.Title,
@@ -1230,8 +1230,8 @@ void ExaRes_ShowOneExaResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       HTM_TxtF ("%u (%u %s)",
-                Result.NumQsts,
-                Result.NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+                Print.NumQsts,
+                Print.NumQstsNotBlank,Txt_non_blank_QUESTIONS);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1245,7 +1245,7 @@ void ExaRes_ShowOneExaResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-         HTM_Double2Decimals (Result.Score);
+         HTM_Double2Decimals (Print.Score);
       else
          Ico_PutIconNotVisible ();
       HTM_TD_End ();
@@ -1261,7 +1261,7 @@ void ExaRes_ShowOneExaResult (void)
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-         TstRes_ComputeAndShowGrade (Result.NumQsts,Result.Score,
+         TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,
                                      Exam.MaxGrade);
       else
          Ico_PutIconNotVisible ();
@@ -1283,7 +1283,7 @@ void ExaRes_ShowOneExaResult (void)
       HTM_TR_End ();
 
       /***** Write answers and solutions *****/
-      TstRes_ShowExamAnswers (UsrDat,&Result,Exam.Visibility);
+      TstPrn_ShowExamAnswers (UsrDat,&Print,Exam.Visibility);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -1293,10 +1293,10 @@ void ExaRes_ShowOneExaResult (void)
 	{
 	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
 	 HTM_TxtColonNBSP (Txt_Score);
-	 HTM_Double2Decimals (Result.Score);
+	 HTM_Double2Decimals (Print.Score);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Grade);
-         TstRes_ComputeAndShowGrade (Result.NumQsts,Result.Score,
+         TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,
                                      Exam.MaxGrade);
          HTM_DIV_End ();
 	}
@@ -1313,7 +1313,7 @@ void ExaRes_ShowOneExaResult (void)
 /*****************************************************************************/
 
 void ExaRes_GetExamResultQuestionsFromDB (long EvtCod,long UsrCod,
-				          struct TstRes_Result *Result)
+				          struct TstPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1323,27 +1323,27 @@ void ExaRes_GetExamResultQuestionsFromDB (long EvtCod,long UsrCod,
    struct ExaEvt_UsrAnswer UsrAnswer;
 
    /***** Get questions and answers of a event result *****/
-   Result->NumQsts = (unsigned)
-		     DB_QuerySELECT (&mysql_res,"can not get questions and answers"
-						" of a event result",
-				     "SELECT exa_questions.QstCod,"	// row[0]
-					    "exa_questions.QstInd,"	// row[1]
-					    "exa_indexes.Indexes"	// row[2]
-				     " FROM exa_events,exa_questions,exa_indexes"
-				     " WHERE exa_events.EvtCod=%ld"
-				     " AND exa_events.ExaCod=exa_questions.ExaCod"
-				     " AND exa_events.EvtCod=exa_indexes.EvtCod"
-				     " AND exa_questions.QstInd=exa_indexes.QstInd"
-				     " ORDER BY exa_questions.QstInd",
-				     EvtCod);
-   for (NumQst = 0, Result->NumQstsNotBlank = 0;
-	NumQst < Result->NumQsts;
+   Print->NumQsts = (unsigned)
+		    DB_QuerySELECT (&mysql_res,"can not get questions and answers"
+					       " of a event result",
+				    "SELECT exa_questions.QstCod,"	// row[0]
+					   "exa_questions.QstInd,"	// row[1]
+					   "exa_indexes.Indexes"	// row[2]
+				    " FROM exa_events,exa_questions,exa_indexes"
+				    " WHERE exa_events.EvtCod=%ld"
+				    " AND exa_events.ExaCod=exa_questions.ExaCod"
+				    " AND exa_events.EvtCod=exa_indexes.EvtCod"
+				    " AND exa_questions.QstInd=exa_indexes.QstInd"
+				    " ORDER BY exa_questions.QstInd",
+				    EvtCod);
+   for (NumQst = 0, Print->NumQstsNotBlank = 0;
+	NumQst < Print->NumQsts;
 	NumQst++)
      {
       row = mysql_fetch_row (mysql_res);
 
       /* Get question code (row[0]) */
-      if ((Result->Questions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get question index (row[1]) */
@@ -1352,24 +1352,24 @@ void ExaRes_GetExamResultQuestionsFromDB (long EvtCod,long UsrCod,
       QstInd = (unsigned) LongNum;
 
       /* Get indexes for this question (row[2]) */
-      Str_Copy (Result->Questions[NumQst].StrIndexes,row[2],
-                TstRes_MAX_BYTES_INDEXES_ONE_QST);
+      Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[2],
+                TstPrn_MAX_BYTES_INDEXES_ONE_QST);
 
       /* Get answers selected by user for this question */
       ExaEvt_GetQstAnsFromDB (EvtCod,UsrCod,QstInd,&UsrAnswer);
       if (UsrAnswer.AnsInd >= 0)	// UsrAnswer.AnsInd >= 0 ==> answer selected
 	{
-         snprintf (Result->Questions[NumQst].StrAnswers,TstRes_MAX_BYTES_ANSWERS_ONE_QST + 1,
+         snprintf (Print->PrintedQuestions[NumQst].StrAnswers,TstPrn_MAX_BYTES_ANSWERS_ONE_QST + 1,
 		   "%d",UsrAnswer.AnsInd);
-         Result->NumQstsNotBlank++;
+         Print->NumQstsNotBlank++;
         }
       else				// UsrAnswer.AnsInd < 0 ==> no answer selected
-	 Result->Questions[NumQst].StrAnswers[0] = '\0';	// Empty answer
+	 Print->PrintedQuestions[NumQst].StrAnswers[0] = '\0';	// Empty answer
 
       /* Replace each comma by a separator of multiple parameters */
       /* In database commas are used as separators instead of special chars */
-      Par_ReplaceCommaBySeparatorMultiple (Result->Questions[NumQst].StrIndexes);
-      Par_ReplaceCommaBySeparatorMultiple (Result->Questions[NumQst].StrAnswers);
+      Par_ReplaceCommaBySeparatorMultiple (Print->PrintedQuestions[NumQst].StrIndexes);
+      Par_ReplaceCommaBySeparatorMultiple (Print->PrintedQuestions[NumQst].StrAnswers);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1381,7 +1381,7 @@ void ExaRes_GetExamResultQuestionsFromDB (long EvtCod,long UsrCod,
 /*****************************************************************************/
 
 static void ExaRes_GetEventResultDataByEvtCod (long EvtCod,long UsrCod,
-                                               struct TstRes_Result *Result)
+                                               struct TstPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1410,27 +1410,27 @@ static void ExaRes_GetEventResultDataByEvtCod (long EvtCod,long UsrCod,
       for (StartEndTime = (Dat_StartEndTime_t) 0;
 	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	   StartEndTime++)
-         Result->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
+         Print->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
 
       /* Get number of questions (row[2]) */
-      if (sscanf (row[2],"%u",&Result->NumQsts) != 1)
-	 Result->NumQsts = 0;
+      if (sscanf (row[2],"%u",&Print->NumQsts) != 1)
+	 Print->NumQsts = 0;
 
       /* Get number of questions not blank (row[3]) */
-      if (sscanf (row[3],"%u",&Result->NumQstsNotBlank) != 1)
-	 Result->NumQstsNotBlank = 0;
+      if (sscanf (row[3],"%u",&Print->NumQstsNotBlank) != 1)
+	 Print->NumQstsNotBlank = 0;
 
       /* Get score (row[4]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[4],"%lf",&Result->Score) != 1)
-	 Result->Score = 0.0;
+      if (sscanf (row[4],"%lf",&Print->Score) != 1)
+	 Print->Score = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
    else
      {
-      Result->NumQsts = 0;
-      Result->NumQstsNotBlank = 0;
-      Result->Score = 0.0;
+      Print->NumQsts = 0;
+      Print->NumQstsNotBlank = 0;
+      Print->Score = 0.0;
      }
 
    /***** Free structure that stores the query result *****/

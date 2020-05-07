@@ -229,7 +229,7 @@ static void Mch_GetNumPlayers (struct Mch_Match *Match);
 
 static void Mch_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match);
 
-static void Mch_ComputeScore (struct TstRes_Result *Result);
+static void Mch_ComputeScore (struct TstPrn_Print *Print);
 
 static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
 
@@ -1612,7 +1612,7 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
    long LongNum;
    unsigned AnsInd;
    char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrAnswersOneQst[TstRes_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   char StrAnswersOneQst[TstPrn_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
    /***** Initialize list of answers to empty string *****/
    StrAnswersOneQst[0] = '\0';
@@ -1645,9 +1645,9 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
       /* Concatenate answer index to list of answers */
       if (NumAns)
          Str_Concat (StrAnswersOneQst,",",
-		     TstRes_MAX_BYTES_ANSWERS_ONE_QST);
+		     TstPrn_MAX_BYTES_ANSWERS_ONE_QST);
       Str_Concat (StrAnswersOneQst,StrOneAnswer,
-		  TstRes_MAX_BYTES_ANSWERS_ONE_QST);
+		  TstPrn_MAX_BYTES_ANSWERS_ONE_QST);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1671,7 +1671,7 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char StrIndexesOneQst[TstRes_MAX_BYTES_INDEXES_ONE_QST + 1];
+   char StrIndexesOneQst[TstPrn_MAX_BYTES_INDEXES_ONE_QST + 1];
 
    /***** Get indexes for a question from database *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
@@ -1684,14 +1684,14 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
 
    /* Get indexes (row[0]) */
    Str_Copy (StrIndexesOneQst,row[0],
-	     TstRes_MAX_BYTES_INDEXES_ONE_QST);
+	     TstPrn_MAX_BYTES_INDEXES_ONE_QST);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get indexes from string *****/
    Par_ReplaceCommaBySeparatorMultiple (StrIndexesOneQst);
-   TstRes_GetIndexesFromStr (StrIndexesOneQst,Indexes);
+   TstPrn_GetIndexesFromStr (StrIndexesOneQst,Indexes);
   }
 
 /*****************************************************************************/
@@ -3881,7 +3881,7 @@ void Mch_ReceiveQuestionAnswer (void)
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];
    struct Mch_UsrAnswer PreviousUsrAnswer;
    struct Mch_UsrAnswer UsrAnswer;
-   struct TstRes_Result Result;
+   struct TstPrn_Print Print;
 
    /***** Reset match *****/
    Mch_ResetMatch (&Match);
@@ -3940,14 +3940,14 @@ void Mch_ReceiveQuestionAnswer (void)
 
       /***** Update student's match result *****/
       MchRes_GetMatchResultQuestionsFromDB (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-					 &Result);
-      Mch_ComputeScore (&Result);
+					    &Print);
+      Mch_ComputeScore (&Print);
 
       Str_SetDecimalPointToUS ();	// To print the floating point as a dot
       if (DB_QueryCOUNT ("can not get if match result exists",
 			 "SELECT COUNT(*) FROM mch_results"
 			 " WHERE MchCod=%ld AND UsrCod=%ld",
-			 Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod))	// Result exists
+			 Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod))	// Match print exists
 	 /* Update result */
 	 DB_QueryUPDATE ("can not update match result",
 			  "UPDATE mch_results"
@@ -3956,11 +3956,11 @@ void Mch_ReceiveQuestionAnswer (void)
 			       "NumQstsNotBlank=%u,"
 			       "Score='%.15lg'"
 			  " WHERE MchCod=%ld AND UsrCod=%ld",
-			  Result.NumQsts,
-			  Result.NumQstsNotBlank,
-			  Result.Score,
+			  Print.NumQsts,
+			  Print.NumQstsNotBlank,
+			  Print.Score,
 			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-      else								// Result doesn't exist
+      else								// Match print doesn't exist
 	 /* Create result */
 	 DB_QueryINSERT ("can not create match result",
 			  "INSERT mch_results "
@@ -3974,9 +3974,9 @@ void Mch_ReceiveQuestionAnswer (void)
 			  "%u,"		// NumQstsNotBlank
 			  "'%.15lg')",	// Score
 			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-			  Result.NumQsts,
-			  Result.NumQstsNotBlank,
-			  Result.Score);
+			  Print.NumQsts,
+			  Print.NumQstsNotBlank,
+			  Print.Score);
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
 
@@ -4002,25 +4002,25 @@ static void Mch_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match)
 /******************** Compute match score for a student **********************/
 /*****************************************************************************/
 
-static void Mch_ComputeScore (struct TstRes_Result *Result)
+static void Mch_ComputeScore (struct TstPrn_Print *Print)
   {
    unsigned NumQst;
    struct Tst_Question Question;
 
-   for (NumQst = 0, Result->Score = 0.0;
-	NumQst < Result->NumQsts;
+   for (NumQst = 0, Print->Score = 0.0;
+	NumQst < Print->NumQsts;
 	NumQst++)
      {
       /***** Create test question *****/
       Tst_QstConstructor (&Question);
-      Question.QstCod = Result->Questions[NumQst].QstCod;
+      Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
       Question.Answer.Type = Tst_ANS_UNIQUE_CHOICE;
 
       /***** Compute score for this answer ******/
-      TstRes_ComputeChoiceAnsScore (Result,NumQst,&Question);
+      TstPrn_ComputeChoiceAnsScore (Print,NumQst,&Question);
 
       /***** Update total score *****/
-      Result->Score += Result->Questions[NumQst].Score;
+      Print->Score += Print->PrintedQuestions[NumQst].Score;
 
       /***** Destroy test question *****/
       Tst_QstDestructor (&Question);

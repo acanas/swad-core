@@ -30708,6 +30708,27 @@ const char *Txt_Please_check_your_privacy_settings =
 	"Por favor, verifique suas configura&ccedil;&otilde;es de privacidade.";
 #endif
 
+const char *Txt_Please_review_your_answers_before_submitting_the_exam =
+#if   L==1	// ca
+	"Si us plau, revisi les seves respostes abans d'enviar l'examen.";
+#elif L==2	// de
+	"Bitte &uuml;berpr&uuml;fen Sie Ihre Antworten, bevor Sie die Pr&uuml;fung einreichen.";
+#elif L==3	// en
+	"Please review your answers before submitting the exam.";
+#elif L==4	// es
+	"Por favor, revise sus respuestas antes de enviar el examen.";
+#elif L==5	// fr
+	"S'il vous pla&icirc;t, veuillez revoir vos r&eacute;ponses avant de soumettre l'examen.";
+#elif L==6	// gn
+	"Por favor, revise sus respuestas antes de enviar el examen.";	// Okoteve traducción
+#elif L==7	// it
+	"Si prega di rivedere le risposte prima di inviare l'esame.";
+#elif L==8	// pl
+	"Przejrzyj swoje odpowiedzi przed przes&lstrok;aniem egzaminu.";
+#elif L==9	// pt
+	"Por favor, revise suas respostas antes de enviar o exame.";
+#endif
+
 const char *Txt_Please_select_the_country_of_your_institution =
 #if   L==1	// ca
 	"Si us plau, seleccioneu el pa&iacute;s de la seva instituci&oacute;.";

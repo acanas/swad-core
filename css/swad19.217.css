@@ -2654,9 +2654,9 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	text-align:center;
 	vertical-align:middle;
 	}
-.TEST_EXA		{color:#202020; font-size:12pt;}
+.TEST_EXA	{color:#202020; font-size:12pt;}
 .TEST_EXA_LIGHT	{color:#a0a0a0; font-size:12pt;}
-.TEST_EDI		{color:#202020; font-size:12pt;}
+.TEST_EDI	{color:#202020; font-size:12pt;}
 .TEST_EDI_LIGHT	{color:#a0a0a0; font-size:12pt;}
 
 .TEST_TAG_LIST
@@ -2744,6 +2744,21 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 
 /*********************************** Exams ***********************************/
+.EXA_SET_TITLE
+	{
+	text-align:left;
+	vertical-align:top;   
+	color:black;
+	font-size:16pt;
+	}
+.EXA_SET_NUM_QSTS
+	{
+	text-align:right;
+	vertical-align:top;   
+	color:#404040;
+	font-size:12pt;
+	}
+
 .EXA_BG
 	{
 	background-image:url("/swad/icon/bg.jpg");

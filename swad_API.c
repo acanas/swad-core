@@ -3955,7 +3955,7 @@ int swad__sendNotice (struct soap *soap,
 /****************** Return test configuration in a course ********************/
 /*****************************************************************************/
 
-#define TstRes_MAX_BYTES_FEEDBACK_TYPE		  32
+#define TstPrn_MAX_BYTES_FEEDBACK_TYPE		  32
 
 int swad__getTestConfig (struct soap *soap,
                          char *wsKey,int courseCode,				// input
@@ -4010,7 +4010,7 @@ int swad__getTestConfig (struct soap *soap,
    getTestConfigOut->visibility   = TstVis_MIN_VISIBILITY;
 
    /* TODO: Remove these lines in 2021 */
-   getTestConfigOut->feedback = (char *) soap_malloc (soap,TstRes_MAX_BYTES_FEEDBACK_TYPE + 1);
+   getTestConfigOut->feedback = (char *) soap_malloc (soap,TstPrn_MAX_BYTES_FEEDBACK_TYPE + 1);
    getTestConfigOut->feedback[0] = '\0';
 
    /***** Get test configuration *****/
@@ -4028,23 +4028,23 @@ int swad__getTestConfig (struct soap *soap,
    if (!TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
       Str_Copy (getTestConfigOut->feedback,
 		"nothing",
-		TstRes_MAX_BYTES_FEEDBACK_TYPE);
+		TstPrn_MAX_BYTES_FEEDBACK_TYPE);
    else if (!TstVis_IsVisibleEachQstScore (TstCfg_GetConfigVisibility ()))
       Str_Copy (getTestConfigOut->feedback,
 		"totalResult",
-		TstRes_MAX_BYTES_FEEDBACK_TYPE);
+		TstPrn_MAX_BYTES_FEEDBACK_TYPE);
    else if (!TstVis_IsVisibleCorrectAns (TstCfg_GetConfigVisibility ()))
       Str_Copy (getTestConfigOut->feedback,
 		"eachResult",
-		TstRes_MAX_BYTES_FEEDBACK_TYPE);
+		TstPrn_MAX_BYTES_FEEDBACK_TYPE);
    else if (!TstVis_IsVisibleFeedbackTxt (TstCfg_GetConfigVisibility ()))
       Str_Copy (getTestConfigOut->feedback,
 		"eachGoodBad",
-		TstRes_MAX_BYTES_FEEDBACK_TYPE);
+		TstPrn_MAX_BYTES_FEEDBACK_TYPE);
    else
       Str_Copy (getTestConfigOut->feedback,
 		"fullFeedback",
-		TstRes_MAX_BYTES_FEEDBACK_TYPE);
+		TstPrn_MAX_BYTES_FEEDBACK_TYPE);
 
    /***** Get number of tests *****/
    if (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_YES &&
