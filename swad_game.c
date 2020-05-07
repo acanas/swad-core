@@ -507,7 +507,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
                              struct Gam_Game *Game,bool ShowOnlyThisGame)
   {
    extern const char *Txt_View_game;
-   extern const char *Txt_No_of_questions;
+   extern const char *Txt_Number_of_questions;
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
    extern const char *Txt_Matches;
@@ -591,7 +591,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
    /* Number of questions, maximum grade, visibility of results */
    HTM_DIV_Begin ("class=\"%s\"",Game->Hidden ? "ASG_GRP_LIGHT" :
         	                                "ASG_GRP");
-   HTM_TxtColonNBSP (Txt_No_of_questions);
+   HTM_TxtColonNBSP (Txt_Number_of_questions);
    HTM_Unsigned (Game->NumQsts);
    HTM_BR ();
    HTM_TxtColonNBSP (Txt_Maximum_grade);

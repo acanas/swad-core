@@ -1259,7 +1259,7 @@ static void ExaSet_PutTableHeadingForSets (void)
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Set_of_questions;
    extern const char *Txt_Number_of_questions;
-   extern const char *Txt_Number_of_questions_in_the_exam;
+   extern const char *Txt_Number_of_questions_to_show;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -1269,7 +1269,7 @@ static void ExaSet_PutTableHeadingForSets (void)
    HTM_TH (1,1,"RB",Txt_No_INDEX);
    HTM_TH (1,1,"LB",Txt_Set_of_questions);
    HTM_TH (1,1,"RB",Txt_Number_of_questions);
-   HTM_TH (1,1,"RB",Txt_Number_of_questions_in_the_exam);
+   HTM_TH (1,1,"RB",Txt_Number_of_questions_to_show);
 
    /***** End row *****/
    HTM_TR_End ();

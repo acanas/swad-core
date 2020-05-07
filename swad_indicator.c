@@ -103,7 +103,7 @@ void Ind_ReqIndicatorsCourses (void)
    extern const char *Txt_only_if_the_scope_is_X;
    extern const char *Txt_Department;
    extern const char *Txt_Any_department;
-   extern const char *Txt_No_of_indicators;
+   extern const char *Txt_Number_of_indicators;
    extern const char *Txt_Indicators_of_courses;
    extern const char *Txt_Show_more_details;
    struct Ind_Indicators Indicators;
@@ -188,7 +188,7 @@ void Ind_ReqIndicatorsCourses (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_No_of_indicators);
+   HTM_TxtF ("%s:",Txt_Number_of_indicators);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
@@ -741,8 +741,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Syllabus_of_the_course;
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   extern const char *Txt_No_of_files_in_SHARE_zones;
-   extern const char *Txt_No_of_files_in_DOCUM_zones;
+   extern const char *Txt_Number_of_files_in_SHARE_zones;
+   extern const char *Txt_Number_of_files_in_DOCUM_zones;
    extern const char *Txt_Guided_academic_assignments;
    extern const char *Txt_Assignments;
    extern const char *Txt_Files_assignments;
@@ -872,8 +872,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
          HTM_TH (1,1,"RM COLOR0",Txt_Messages_sent_by_teachers);
          HTM_TH (1,1,"CM COLOR0",Txt_YES);
          HTM_TH (1,1,"CM COLOR0",Txt_NO);
-         HTM_TH (1,1,"RM COLOR0",Txt_No_of_files_in_DOCUM_zones);
-         HTM_TH (1,1,"RM COLOR0",Txt_No_of_files_in_SHARE_zones);
+         HTM_TH (1,1,"RM COLOR0",Txt_Number_of_files_in_DOCUM_zones);
+         HTM_TH (1,1,"RM COLOR0",Txt_Number_of_files_in_SHARE_zones);
          HTM_TH (1,1,"CM COLOR0",Txt_YES);
          HTM_TH (1,1,"CM COLOR0",Txt_NO);
          HTM_TH (1,1,"LM COLOR0",Txt_INFO_TITLE[Inf_ASSESSMENT]);

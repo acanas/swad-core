@@ -150,6 +150,8 @@ static void ExaPrn_PrintDestructor (struct ExaPrn_Print *Print)
 static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
 	                                          struct ExaPrn_Print *Print)
   {
+   extern const char *Txt_question;
+   extern const char *Txt_questions;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumSets;
@@ -209,6 +211,9 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
 	 /***** Number of questions to appear in exam print *****/
 	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 	 HTM_Unsigned (Set.NumQstsToPrint);
+	 HTM_NBSP ();
+	 HTM_Txt (Set.NumQstsToPrint == 1 ? Txt_question :
+		                            Txt_questions);
 	 HTM_TD_End ();
 
 	 /***** End first row *****/

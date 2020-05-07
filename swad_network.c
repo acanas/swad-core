@@ -433,7 +433,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
    extern const char *Hlp_ANALYTICS_Figures_webs_social_networks;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Web_social_network;
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -559,7 +559,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LM",Txt_Web_social_network);
-   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_users);
    HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
    HTM_TR_End ();

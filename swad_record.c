@@ -404,14 +404,14 @@ void Rec_ShowFormCreateRecordField (void)
 static void Rec_WriteHeadingRecordFields (void)
   {
    extern const char *Txt_Field_BR_name;
-   extern const char *Txt_No_of_BR_lines;
+   extern const char *Txt_Number_of_BR_lines;
    extern const char *Txt_Visible_by_BR_the_student;
 
    HTM_TR_Begin (NULL);
 
    HTM_TH_Empty (1);
    HTM_TH (1,1,"CM",Txt_Field_BR_name);
-   HTM_TH (1,1,"CM",Txt_No_of_BR_lines);
+   HTM_TH (1,1,"CM",Txt_Number_of_BR_lines);
    HTM_TH (1,1,"CM",Txt_Visible_by_BR_the_student);
 
    HTM_TR_End ();

@@ -2433,7 +2433,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_FORUM_THREAD_HELP_ORDER[Dat_NUM_START_END_TIME];
    extern const char *Txt_FORUM_THREAD_ORDER[Dat_NUM_START_END_TIME];
-   extern const char *Txt_No_BR_msgs;
+   extern const char *Txt_Number_BR_msgs;
    extern const char *Txt_Unread_BR_msgs;
    extern const char *Txt_WriBRters;
    extern const char *Txt_ReaBRders;
@@ -2562,7 +2562,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
          HTM_TH_End ();
 	}
 
-      HTM_TH (1,1,"RM",Txt_No_BR_msgs);
+      HTM_TH (1,1,"RM",Txt_Number_BR_msgs);
       HTM_TH (1,1,"RM",Txt_Unread_BR_msgs);
       HTM_TH (1,1,"RM",Txt_WriBRters);
       HTM_TH (1,1,"RM",Txt_ReaBRders);

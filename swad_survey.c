@@ -450,8 +450,8 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    extern const char *Hlp_ASSESSMENT_Surveys;
    extern const char *Txt_Survey;
    extern const char *Txt_View_survey;
-   extern const char *Txt_No_of_questions;
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_questions;
+   extern const char *Txt_Number_of_users;
    extern const char *Txt_Scope;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
@@ -571,10 +571,10 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    HTM_DIV_Begin ("class=\"%s\"",
                   Svy.Status.Visible ? "ASG_GRP" :
         	                       "ASG_GRP_LIGHT");
-   HTM_TxtColonNBSP (Txt_No_of_questions);
+   HTM_TxtColonNBSP (Txt_Number_of_questions);
    HTM_Unsigned (Svy.NumQsts);
    HTM_Txt ("; ");
-   HTM_TxtColonNBSP (Txt_No_of_users);
+   HTM_TxtColonNBSP (Txt_Number_of_users);
    HTM_Unsigned (Svy.NumUsrs);
    HTM_DIV_End ();
 

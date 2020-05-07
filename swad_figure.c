@@ -382,7 +382,7 @@ static void Fig_GetAndShowUsersStats (void)
    extern const char *Hlp_ANALYTICS_Figures_users;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Users;
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_users;
    extern const char *Txt_Average_number_of_courses_to_which_a_user_belongs;
    extern const char *Txt_Average_number_of_users_belonging_to_a_course;
 
@@ -395,7 +395,7 @@ static void Fig_GetAndShowUsersStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"RM",Txt_Users);
-   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_users);
    HTM_TH (1,1,"RM",Txt_Average_number_of_courses_to_which_a_user_belongs);
    HTM_TH (1,1,"RM",Txt_Average_number_of_users_belonging_to_a_course);
 
@@ -2768,8 +2768,8 @@ static void Fig_GetAndShowOERsStats (void)
    extern const char *Hlp_ANALYTICS_Figures_open_educational_resources_oer;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_License;
-   extern const char *Txt_No_of_private_files;
-   extern const char *Txt_No_of_public_files;
+   extern const char *Txt_Number_of_private_files;
+   extern const char *Txt_Number_of_public_files;
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    Brw_License_t License;
    unsigned long NumFiles[2];
@@ -2783,8 +2783,8 @@ static void Fig_GetAndShowOERsStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LM",Txt_License);
-   HTM_TH (1,1,"RM",Txt_No_of_private_files);
-   HTM_TH (1,1,"RM",Txt_No_of_public_files);
+   HTM_TH (1,1,"RM",Txt_Number_of_private_files);
+   HTM_TH (1,1,"RM",Txt_Number_of_public_files);
 
    HTM_TR_End ();
 
@@ -3388,10 +3388,10 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    extern const char *Hlp_ANALYTICS_Figures_timeline;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Type;
-   extern const char *Txt_No_of_posts;
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_posts;
+   extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
-   extern const char *Txt_No_of_posts_BR_per_user;
+   extern const char *Txt_Number_of_posts_BR_per_user;
    extern const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES];
    extern const char *Txt_Total;
    MYSQL_RES *mysql_res;
@@ -3411,10 +3411,10 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LM",Txt_Type);
-   HTM_TH (1,1,"RM",Txt_No_of_posts);
-   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_posts);
+   HTM_TH (1,1,"RM",Txt_Number_of_users);
    HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-   HTM_TH (1,1,"RM",Txt_No_of_posts_BR_per_user);
+   HTM_TH (1,1,"RM",Txt_Number_of_posts_BR_per_user);
 
    HTM_TR_End ();
 
@@ -3699,7 +3699,7 @@ static void Fig_GetAndShowFollowStats (void)
    extern const char *Hlp_ANALYTICS_Figures_followed_followers;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Users;
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    extern const char *Txt_Followed;
    extern const char *Txt_Followers;
@@ -3725,7 +3725,7 @@ static void Fig_GetAndShowFollowStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LM",Txt_Users);
-   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_users);
    HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
    HTM_TR_End ();
@@ -3994,13 +3994,13 @@ static void Fig_GetAndShowForumStats (void)
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Scope;
    extern const char *Txt_Forums;
-   extern const char *Txt_No_of_forums;
-   extern const char *Txt_No_of_threads;
-   extern const char *Txt_No_of_posts;
+   extern const char *Txt_Number_of_forums;
+   extern const char *Txt_Number_of_threads;
+   extern const char *Txt_Number_of_posts;
    extern const char *Txt_Number_of_BR_notifications;
-   extern const char *Txt_No_of_threads_BR_per_forum;
-   extern const char *Txt_No_of_posts_BR_per_thread;
-   extern const char *Txt_No_of_posts_BR_per_forum;
+   extern const char *Txt_Number_of_threads_BR_per_forum;
+   extern const char *Txt_Number_of_posts_BR_per_thread;
+   extern const char *Txt_Number_of_posts_BR_per_forum;
    struct Fig_FiguresForum FiguresForum;
 
    /***** Reset total stats *****/
@@ -4021,13 +4021,13 @@ static void Fig_GetAndShowForumStats (void)
    Ico_PutIcon ("comments.svg",Txt_Scope,"ICO16x16");
    HTM_TH_End ();
    HTM_TH (1,1,"LT",Txt_Forums);
-   HTM_TH (1,1,"RT",Txt_No_of_forums);
-   HTM_TH (1,1,"RT",Txt_No_of_threads);
-   HTM_TH (1,1,"RT",Txt_No_of_posts);
+   HTM_TH (1,1,"RT",Txt_Number_of_forums);
+   HTM_TH (1,1,"RT",Txt_Number_of_threads);
+   HTM_TH (1,1,"RT",Txt_Number_of_posts);
    HTM_TH (1,1,"RT",Txt_Number_of_BR_notifications);
-   HTM_TH (1,1,"RT",Txt_No_of_threads_BR_per_forum);
-   HTM_TH (1,1,"RT",Txt_No_of_posts_BR_per_thread);
-   HTM_TH (1,1,"RT",Txt_No_of_posts_BR_per_forum);
+   HTM_TH (1,1,"RT",Txt_Number_of_threads_BR_per_forum);
+   HTM_TH (1,1,"RT",Txt_Number_of_posts_BR_per_thread);
+   HTM_TH (1,1,"RT",Txt_Number_of_posts_BR_per_forum);
 
    HTM_TR_End ();
 
@@ -4336,7 +4336,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Event;
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    extern const char *Txt_Number_of_BR_events;
    extern const char *Txt_Number_of_BR_emails;
@@ -4362,7 +4362,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LM",Txt_Event);
-   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_users);
    HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
    HTM_TH (1,1,"RM",Txt_Number_of_BR_events);
    HTM_TH (1,1,"RM",Txt_Number_of_BR_emails);
@@ -4847,7 +4847,7 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
                                                         const char *FieldName,
                                                         unsigned MaskAllowedVisibility)
   {
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
    extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
@@ -4860,7 +4860,7 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LM",TxtObject);
-   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_users);
    HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
    HTM_TR_End ();
@@ -4917,7 +4917,7 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
    extern const char *Hlp_ANALYTICS_Figures_cookies;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Cookies;
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    unsigned i;
    static const char AcceptedInDB[2] =
@@ -4949,7 +4949,7 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LM",Txt_Cookies);
-   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_users);
    HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
    HTM_TR_End ();
@@ -5009,7 +5009,7 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
    extern const char *Txt_Language;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    Lan_Language_t Lan;
    char *SubQuery;
@@ -5025,7 +5025,7 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LM",Txt_Language);
-   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_users);
    HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
    HTM_TR_End ();
@@ -5086,7 +5086,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
    extern const char *Txt_Calendar;
    extern const char *Txt_First_day_of_the_week_X;
    extern const char *Txt_DAYS_SMALL[7];
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    unsigned FirstDayOfWeek;
    char *SubQuery;
@@ -5103,7 +5103,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LM",Txt_Calendar);
-   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_users);
    HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
    HTM_TR_End ();
@@ -5171,7 +5171,7 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
    extern const char *Hlp_ANALYTICS_Figures_dates;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Format;
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    unsigned Format;
    char *SubQuery;
@@ -5187,7 +5187,7 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LM",Txt_Format);
-   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_users);
    HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
    HTM_TR_End ();
@@ -5248,7 +5248,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
    extern const char *Ico_IconSetNames[Ico_NUM_ICON_SETS];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Icons;
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    Ico_IconSet_t IconSet;
    char *SubQuery;
@@ -5265,7 +5265,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LM",Txt_Icons);
-   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_users);
    HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
    HTM_TR_End ();
@@ -5329,7 +5329,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
    extern const char *Mnu_MenuIcons[Mnu_NUM_MENUS];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Menu;
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    extern const char *Txt_MENU_NAMES[Mnu_NUM_MENUS];
    Mnu_Menu_t Menu;
@@ -5346,7 +5346,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LM",Txt_Menu);
-   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_users);
    HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
    HTM_TR_End ();
@@ -5406,7 +5406,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
    extern const char *The_ThemeNames[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Theme_SKIN;
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    The_Theme_t Theme;
    char *SubQuery;
@@ -5423,7 +5423,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"LM",Txt_Theme_SKIN);
-   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_users);
    HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
    HTM_TR_End ();
@@ -5486,7 +5486,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
    extern const char *Hlp_ANALYTICS_Figures_columns;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Columns;
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    unsigned SideCols;
    char *SubQuery;
@@ -5504,7 +5504,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"CM",Txt_Columns);
-   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_users);
    HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
    HTM_TR_End ();

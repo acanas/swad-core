@@ -243,7 +243,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
   {
    extern const char *Txt_Rooms_with_users;
    extern const char *Txt_CHAT_Room_code;
-   extern const char *Txt_No_of_users;
+   extern const char *Txt_Number_of_users;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -266,7 +266,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
       HTM_TR_Begin (NULL);
 
       HTM_TH (1,1,"CM LIGHT_BLUE",Txt_CHAT_Room_code);
-      HTM_TH (1,1,"LM LIGHT_BLUE",Txt_No_of_users);
+      HTM_TH (1,1,"LM LIGHT_BLUE",Txt_Number_of_users);
 
       HTM_TR_End ();
 

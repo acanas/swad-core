@@ -366,7 +366,7 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Take_a_test;
-   extern const char *Txt_No_of_questions;
+   extern const char *Txt_Number_of_questions;
    extern const char *Txt_Generate_test;
    extern const char *Txt_No_test_questions;
    MYSQL_RES *mysql_res;
@@ -399,7 +399,7 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test)
          HTM_TR_Begin (NULL);
 
          /* Label */
-         Frm_LabelColumn ("RT","NumQst",Txt_No_of_questions);
+         Frm_LabelColumn ("RT","NumQst",Txt_Number_of_questions);
 
          /* Data */
          HTM_TD_Begin ("class=\"LT\"");
@@ -2017,7 +2017,7 @@ static void Tst_ShowFormConfigTst (void)
    extern const char *Txt_Configure_tests;
    extern const char *Txt_Plugins;
    extern const char *Txt_TST_PLUGGABLE[TstCfg_NUM_OPTIONS_PLUGGABLE];
-   extern const char *Txt_No_of_questions;
+   extern const char *Txt_Number_of_questions;
    extern const char *Txt_minimum;
    extern const char *Txt_default;
    extern const char *Txt_maximum;
@@ -2073,7 +2073,7 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_No_of_questions);
+   HTM_TxtF ("%s:",Txt_Number_of_questions);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");

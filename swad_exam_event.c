@@ -1372,7 +1372,7 @@ void ExaEvt_UnhideEvent (void)
 
    /***** Unhide event *****/
    DB_QueryUPDATE ("can not unhide exam event",
-		   "UPDATE exa_events SET Hidden='N'",
+		   "UPDATE exa_events SET Hidden='N'"
 		   " WHERE EvtCod=%ld"
 		   " AND ExaCod=%ld",	// Extra check
 		   Event.EvtCod,Event.ExaCod);

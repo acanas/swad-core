@@ -1458,7 +1458,7 @@ static void Grp_WriteHeadingGroupTypes (void)
    extern const char *Txt_Mandatory_enrolment;
    extern const char *Txt_Multiple_enrolment;
    extern const char *Txt_Opening_of_groups;
-   extern const char *Txt_No_of_BR_groups;
+   extern const char *Txt_Number_of_BR_groups;
 
    HTM_TR_Begin (NULL);
 
@@ -1471,7 +1471,7 @@ static void Grp_WriteHeadingGroupTypes (void)
    HTM_TH (1,1,"CM",Txt_Mandatory_enrolment);
    HTM_TH (1,1,"CM",Txt_Multiple_enrolment);
    HTM_TH (1,1,"CM",Txt_Opening_of_groups);
-   HTM_TH (1,1,"CM",Txt_No_of_BR_groups);
+   HTM_TH (1,1,"CM",Txt_Number_of_BR_groups);
 
    HTM_TR_End ();
   }

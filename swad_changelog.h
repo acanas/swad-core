@@ -548,10 +548,13 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.216 (2020-05-07)"
+#define Log_PLATFORM_VERSION	"SWAD 19.216.1 (2020-05-07)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.217:   May 07, 2020  Generate and show questions of each set in an exam print. (? lines)
+	Version 19.216.1: May 07, 2020  Fixed bug in edition of exam questions, reported by Antonio Cañas Martínez.
+					Changes in some texts. (301957 lines)
 	Version 19.216:   May 07, 2020  New module exam_print to generate new exam prints. (301949 lines)
 					1 change necessary in database:
 ALTER TABLE exa_sets CHANGE COLUMN NumQstsToExam NumQstsToPrint INT NOT NULL DEFAULT 0;

@@ -25958,27 +25958,6 @@ const char *Txt_No_courses =
 	"N&atilde;o h&aacute; disciplinas.";
 #endif
 
-const char *Txt_No_types_of_degree =
-#if   L==1	// ca
-	"No hay tipos de titulaci&oacute;n.";	// Necessita traduccio
-#elif L==2	// de
-	"No types of degree.";			// Need Übersetzung
-#elif L==3	// en
-	"No types of degree.";
-#elif L==4	// es
-	"No hay tipos de titulaci&oacute;n.";
-#elif L==5	// fr
-	"There are no types of degree.";	// Besoin de traduction
-#elif L==6	// gn
-	"No hay tipos de titulaci&oacute;n.";	// Okoteve traducción
-#elif L==7	// it
-	"Non ci sono tipi di lauree.";
-#elif L==8	// pl
-	"No types of degree.";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"N&atilde;o h&aacute; tipos de grau.";
-#endif
-
 const char *Txt_No_degrees =
 #if   L==1	// ca
 	"No hi ha titulacions.";
@@ -26291,27 +26270,6 @@ const char *Txt_No_links =
 	"N&atilde;o h&aacute; liga&ccedil;&otilde;es.";
 #endif
 
-const char *Txt_No_BR_msgs =
-#if   L==1	// ca
-	"N.&ordm;<br />mens.";	// Necessita traduccio
-#elif L==2	// de
-	"Anzahl<br />Nachr.";
-#elif L==3	// en
-	"No.<br />msgs.";
-#elif L==4	// es
-	"N.&ordm;<br />mens.";
-#elif L==5	// fr
-	"Nombre<br />msgs.";
-#elif L==6	// gn
-	"N.&ordm;<br />mens.";	// Okoteve traducción
-#elif L==7	// it
-	"Num.<br />msg.";
-#elif L==8	// pl
-	"Numer<br />msgs.";
-#elif L==9	// pt
-	"N.&ordm;<br />mens.";
-#endif
-
 const char *Txt_No_new_posts =
 #if   L==1	// ca
 	"No hay comentarios nuevos";	// Necessita traduccio
@@ -26352,447 +26310,6 @@ const char *Txt_No_notices =
 	"Brak ogloszen.";
 #elif L==9	// pt
 	"N&atilde;o h&aacute; avisos.";
-#endif
-
-const char *Txt_No_of_files =
-#if   L==1	// ca
-	"Nombre d'arxius";
-#elif L==2	// de
-	"Anzahl der Dateien";
-#elif L==3	// en
-	"Number of files";
-#elif L==4	// es
-	"N.&ordm; de archivos";
-#elif L==5	// fr
-	"Nombre de fichiers";
-#elif L==6	// gn
-	"N.&ordm; de archivos";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di file";
-#elif L==8	// pl
-	"Liczba pliki";
-#elif L==9	// pt
-	"N.&ordm; de arquivos";
-#endif
-
-const char *Txt_No_of_files_in_SHARE_zones =
-#if   L==1	// ca
-	"Nombre d'arxius compartits";
-#elif L==2	// de
-	"Anzahl der freigegebene Dateien";
-#elif L==3	// en
-	"Number of shared files";
-#elif L==4	// es
-	"N.&ordm; de archivos compartidos";
-#elif L==5	// fr
-	"Nombre de fichiers partag&eacute;s";
-#elif L==6	// gn
-	"N.&ordm; de archivos compartidos";		// Okoteve traducción
-#elif L==7	// it
-	"Numero di file condivisi";
-#elif L==8	// pl
-	"Liczba pliki udost&eogon;pnione";
-#elif L==9	// pt
-	"N.&ordm; de arquivos compartilhados";
-#endif
-
-const char *Txt_No_of_files_in_DOCUM_zones =
-#if   L==1	// ca
-	"N.&ordm; de archivos en zonas de documentos";	// Necessita traduccio
-#elif L==2	// de
-	"Anzahl der Dateien im Dokumente-Bereich";
-#elif L==3	// en
-	"Number of files in documents area";
-#elif L==4	// es
-	"N.&ordm; de archivos en zonas de documentos";
-#elif L==5	// fr
-	"Nombre de fichiers dans les zones de documents";
-#elif L==6	// gn
-	"N.&ordm; de archivos en zonas de documentos";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di file nell'area documenti";
-#elif L==8	// pl
-	"Number of files in documents area";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"N.&ordm; de arquivos em zonas de documentos";
-#endif
-
-const char *Txt_No_of_forums =
-#if   L==1	// ca
-	"N.&ordm; de foros";	// Necessita traduccio
-#elif L==2	// de
-	"Anzahl der Foren";
-#elif L==3	// en
-	"No. of forums";
-#elif L==4	// es
-	"N.&ordm; de foros";
-#elif L==5	// fr
-	"Nombre de forums";
-#elif L==6	// gn
-	"N.&ordm; de foros";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di forum";
-#elif L==8	// pl
-	"Liczba forum";
-#elif L==9	// pt
-	"N.&ordm; de f&oacute;runs";
-#endif
-
-const char *Txt_No_of_BR_groups =
-#if   L==1	// ca
-	"N.&ordm; de<br />grupos";	// Necessita traduccio
-#elif L==2	// de
-	"Anzahl der<br />Gruppen";
-#elif L==3	// en
-	"No. of<br />groups";
-#elif L==4	// es
-	"N.&ordm; de<br />grupos";
-#elif L==5	// fr
-	"Nombre de<br />groupes";
-#elif L==6	// gn
-	"N.&ordm; de<br />grupos";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di<br />gruppi";
-#elif L==8	// pl
-	"Liczba z<br />grupy";
-#elif L==9	// pt
-	"N.&ordm; de<br />grupos";
-#endif
-
-const char *Txt_No_of_indicators =
-#if   L==1	// ca
-	"N.&ordm; de indicadores";	// Necessita traduccio
-#elif L==2	// de
-	"Anzahl der Indikatoren";
-#elif L==3	// en
-	"No. of indicators";
-#elif L==4	// es
-	"N.&ordm; de indicadores";
-#elif L==5	// fr
-	"Nombre d'indicateurs";
-#elif L==6	// gn
-	"N.&ordm; de indicadores";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di indicatori";
-#elif L==8	// pl
-	"Liczba z wskazniki";
-#elif L==9	// pt
-	"N.&ordm; de indocadores";
-#endif
-
-const char *Txt_No_of_BR_lines =
-#if   L==1	// ca
-	"N.&ordm; de<br />l&iacute;neas";	// Necessita traduccio
-#elif L==2	// de
-	"Anzahl der<br />Zeilen";
-#elif L==3	// en
-	"No. of<br />lines";
-#elif L==4	// es
-	"N.&ordm; de<br />l&iacute;neas";
-#elif L==5	// fr
-	"Nombre de<br />lignes";
-#elif L==6	// gn
-	"N.&ordm; de<br />l&iacute;neas";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di<br />linee";
-#elif L==8	// pl
-	"Liczba z<br />linie";
-#elif L==9	// pt
-	"N.&ordm; de<br />linhas";
-#endif
-
-const char *Txt_No_of_posts =
-#if   L==1	// ca
-	"N.&ordm; de comentarios";	// Necessita traduccio
-#elif L==2	// de
-	"Anzahl der Nachrichten";
-#elif L==3	// en
-	"No. of posts";
-#elif L==4	// es
-	"N.&ordm; de comentarios";
-#elif L==5	// fr
-	"Nombre de posts";
-#elif L==6	// gn
-	"N.&ordm; de comentarios";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di post";
-#elif L==8	// pl
-	"Liczba wiadomosci";
-#elif L==9	// pt
-	"N.&ordm; de posts";
-#endif
-
-const char *Txt_No_of_posts_BR_per_forum =
-#if   L==1	// ca
-	"N.&ordm; de comentarios<br />por foro";	// Necessita traduccio
-#elif L==2	// de
-	"Anzahl der Nachrichten<br />pro Forum";
-#elif L==3	// en
-	"No. of posts<br />per forum";
-#elif L==4	// es
-	"N.&ordm; de comentarios<br />por foro";
-#elif L==5	// fr
-	"Nombre de posts<br />par forum";
-#elif L==6	// gn
-	"N.&ordm; de comentarios<br />por foro";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di post<br />per forum";
-#elif L==8	// pl
-	"Liczba wiadomosci<br />per forum";
-#elif L==9	// pt
-	"N.&ordm; de posts<br />por f&oacute;rum";
-#endif
-
-const char *Txt_No_of_posts_BR_per_user =
-#if   L==1	// ca
-	"N.&ordm; de comentarios<br />por usuari";	// Necessita traduccio
-#elif L==2	// de
-	"Anzahl der Nachrichten<br />pro Benutzer";
-#elif L==3	// en
-	"No. of posts<br />per user";
-#elif L==4	// es
-	"N.&ordm; de comentarios<br />por usuario";
-#elif L==5	// fr
-	"Nombre de posts<br />par utilisateur";
-#elif L==6	// gn
-	"N.&ordm; de comentarios<br />por puruh&aacute;ra";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di post<br />per utente";
-#elif L==8	// pl
-	"Liczba wiadomosci<br />per u&zdot;ytkownik";
-#elif L==9	// pt
-	"N.&ordm; de posts<br />por utilizador";
-#endif
-
-const char *Txt_No_of_posts_BR_per_thread =
-#if   L==1	// ca
-	"N.&ordm; de comentarios<br />por discusi&oacute;n";	// Necessita traduccio
-#elif L==2	// de
-	"Anzahl der Nachrichten<br />pro Thread";
-#elif L==3	// en
-	"No. of posts<br />per thread";
-#elif L==4	// es
-	"N.&ordm; de comentarios<br />por usuario";
-#elif L==5	// fr
-	"Nombre de posts<br />par fil";
-#elif L==6	// gn
-	"N.&ordm; de comentarios<br />por discusi&oacute;n";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di post<br />per discussione";
-#elif L==8	// pl
-	"Liczba wiadomosci<br />per watku";
-#elif L==9	// pt
-	"N.&ordm; de posts<br />por discuss&atilde;o";
-#endif
-
-const char *Txt_No_of_private_files =
-#if   L==1	// ca
-	"Nombre d'arxius privats";
-#elif L==2	// de
-	"Anzahl der private Dateien";
-#elif L==3	// en
-	"Number of private files";
-#elif L==4	// es
-	"N.&ordm; de archivos privados";
-#elif L==5	// fr
-	"Nombre de fichiers priv&eacute;s";
-#elif L==6	// gn
-	"N.&ordm; de archivos privados";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di file privati";
-#elif L==8	// pl
-	"Liczba prywatne pliki";
-#elif L==9	// pt
-	"N.&ordm; de arquivos privados";
-#endif
-
-const char *Txt_No_of_public_files =
-#if   L==1	// ca
-	"Nombre d'arxius p&uacute;blics";
-#elif L==2	// de
-	"Anzahl der &ouml;ffentliche Dateien";
-#elif L==3	// en
-	"Number of public files";
-#elif L==4	// es
-	"N.&ordm; de archivos p&uacute;blicos";
-#elif L==5	// fr
-	"Nombre de fichiers publics";
-#elif L==6	// gn
-	"N.&ordm; de archivos p&uacute;blicos";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di file pubblici";
-#elif L==8	// pl
-	"Liczba publicznych pliki";
-#elif L==9	// pt
-	"N.&ordm; de arquivos p&uacute;blicos";
-#endif
-
-const char *Txt_No_of_questions =
-#if   L==1	// ca
-	"Nombre de preguntes";
-#elif L==2	// de
-	"Anzahl der Fragen";
-#elif L==3	// en
-	"No. of questions";
-#elif L==4	// es
-	"N.&ordm; de preguntas";
-#elif L==5	// fr
-	"Nombre de questions";
-#elif L==6	// gn
-	"N.&ordm; de preguntas";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di domande";
-#elif L==8	// pl
-	"Liczba pyta&nacute;";
-#elif L==9	// pt
-	"N.&ordm; de perguntas";
-#endif
-
-const char *Txt_No_of_threads =
-#if   L==1	// ca
-	"N.&ordm; de discusiones";	// Necessita traduccio
-#elif L==2	// de
-	"Anzahl der Threads";
-#elif L==3	// en
-	"No. of threads";
-#elif L==4	// es
-	"N.&ordm; de discusiones";
-#elif L==5	// fr
-	"Nombre de fils";
-#elif L==6	// gn
-	"N.&ordm; de discusiones";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di discussioni";
-#elif L==8	// pl
-	"Liczba watk&oacute;w";
-#elif L==9	// pt
-	"N.&ordm; de discuss&otilde;es";
-#endif
-
-const char *Txt_No_of_threads_BR_per_forum =
-#if   L==1	// ca
-	"N.&ordm; de discusiones<br />por foro";	// Necessita traduccio
-#elif L==2	// de
-	"Anzahl der Threads<br />pro Forum";
-#elif L==3	// en
-	"No. of threads<br />per forum";
-#elif L==4	// es
-	"N.&ordm; de discusiones<br />por foro";
-#elif L==5	// fr
-	"Nombre de fils<br />par forum";
-#elif L==6	// gn
-	"N.&ordm; de discusiones<br />por foro";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di discussioni<br />per forum";
-#elif L==8	// pl
-	"Liczba watk&oacute;w<br />per forum";
-#elif L==9	// pt
-	"N.&ordm; de discuss&otilde;es<br />por f&oacute;rum";
-#endif
-
-const char *Txt_Number_of_BR_program_items =
-#if   L==1	// ca
-	"Nombre d'elements<br />de programes";
-#elif L==2	// de
-	"Anzahl der Programmelemente";
-#elif L==3	// en
-	"Number of<br />program items";
-#elif L==4	// es
-	"N.&ordm; de<br />items en programas";
-#elif L==5	// fr
-	"Nombre d'&eacute;l&eacute;ments<br />de programme";
-#elif L==6	// gn
-	"N.&ordm; de<br />items en programas";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di elementi<br />di programmi";
-#elif L==8	// pl
-	"Liczba<br />pozycji programu";
-#elif L==9	// pt
-	"N.&ordm; de<br />itens de programas";
-#endif
-
-const char *Txt_Number_of_questions =
-#if   L==1	// ca
-	"Nombre de preguntes";
-#elif L==2	// de
-	"Anzahl der Fragen";
-#elif L==3	// en
-	"Number of questions";
-#elif L==4	// es
-	"N.&ordm; de preguntas";
-#elif L==5	// fr
-	"Nombre de questions";
-#elif L==6	// gn
-	"N.&ordm; de preguntas";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di domande";
-#elif L==8	// pl
-	"Liczba pyta&nacute;";
-#elif L==9	// pt
-	"N&uacute;mero de perguntas";
-#endif
-
-const char *Txt_Number_of_questions_in_the_exam =
-#if   L==1	// ca
-	"Nombre de preguntes a l'examen";
-#elif L==2	// de
-	"Anzahl der Fragen in der Pr&uuml;fung";
-#elif L==3	// en
-	"Number of questions in the exam";
-#elif L==4	// es
-	"N.&ordm; de preguntas en el examen";
-#elif L==5	// fr
-	"Nombre de questions dans l'examen";
-#elif L==6	// gn
-	"N.&ordm; de preguntas en el examen";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di domande nell'esame";
-#elif L==8	// pl
-	"Liczba pyta&nacute; na egzaminie";
-#elif L==9	// pt
-	"N&uacute;mero de perguntas no exame";
-#endif
-
-const char *Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded =
-#if   L==1	// ca
-	"N.&ordm; de<br />veces<br />que se ha<br />respondido";	// Necessita traduccio
-#elif L==2	// de
-	"Number of<br />times that<br />questions<br />have been<br />responded";	// Need Übersetzung
-#elif L==3	// en
-	"Number of<br />times that<br />questions<br />have been<br />responded";
-#elif L==4	// es
-	"N.&ordm; de<br />veces<br />que se ha<br />respondido";
-#elif L==5	// fr
-	"Number of<br />times that<br />questions<br />have been<br />responded";	// Besoin de traduction
-#elif L==6	// gn
-	"N.&ordm; de<br />veces<br />que se ha<br />respondido";	// Okoteve traducción
-#elif L==7	// it
-	"Number of<br />times that<br />questions<br />have been<br />responded";	// Bisogno di traduzione
-#elif L==8	// pl
-	"Number of<br />times that<br />questions<br />have been<br />responded";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"N.&ordm; de<br />vezes que<br />as perguntas<br />foram<br />respondidas";
-#endif
-
-const char *Txt_No_of_users =
-#if   L==1	// ca
-	"Nombre d'usuaris";	// Necessita traduccio
-#elif L==2	// de
-	"Anzahl der Benutzer";
-#elif L==3	// en
-	"No. of users";
-#elif L==4	// es
-	"N.&ordm; de usuarios";
-#elif L==5	// fr
-	"Nombre d'utilisateurs";
-#elif L==6	// gn
-	"N.&ordm; de usuarios";	// Okoteve traducción
-#elif L==7	// it
-	"Numero di utenti";
-#elif L==8	// pl
-	"Liczba uzytkownik&oacute;w";
-#elif L==9	// pt
-	"N.&ordm; de utilizadores";
 #endif
 
 const char *Txt_No_projects =
@@ -26982,6 +26499,27 @@ const char *Txt_No_test_questions =
 	"Brak pyta&nacute; testowych.";
 #elif L==9	// pt
 	"N&atilde;o existem perguntas de test.";
+#endif
+
+const char *Txt_No_types_of_degree =
+#if   L==1	// ca
+	"No hay tipos de titulaci&oacute;n.";	// Necessita traduccio
+#elif L==2	// de
+	"No types of degree.";			// Need Übersetzung
+#elif L==3	// en
+	"No types of degree.";
+#elif L==4	// es
+	"No hay tipos de titulaci&oacute;n.";
+#elif L==5	// fr
+	"There are no types of degree.";	// Besoin de traduction
+#elif L==6	// gn
+	"No hay tipos de titulaci&oacute;n.";	// Okoteve traducción
+#elif L==7	// it
+	"Non ci sono tipi di lauree.";
+#elif L==8	// pl
+	"No types of degree.";			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"N&atilde;o h&aacute; tipos de grau.";
 #endif
 
 const char *Txt_No_user_has_been_eliminated =
@@ -28755,6 +28293,426 @@ const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X =	// Warni
 	"Teraz kazdy student moze nalezec tylko do grupy typu <strong>%s</strong>.";
 #elif L==9	// pt
 	"Now each student can only belong to a group of type <strong>%s</strong>.";		//
+#endif
+
+const char *Txt_Number_of_files =
+#if   L==1	// ca
+	"Nombre d'arxius";
+#elif L==2	// de
+	"Anzahl der Dateien";
+#elif L==3	// en
+	"Number of files";
+#elif L==4	// es
+	"N.&ordm; de archivos";
+#elif L==5	// fr
+	"Nombre de fichiers";
+#elif L==6	// gn
+	"N.&ordm; de archivos";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di file";
+#elif L==8	// pl
+	"Liczba pliki";
+#elif L==9	// pt
+	"N.&ordm; de arquivos";
+#endif
+
+const char *Txt_Number_of_files_in_DOCUM_zones =
+#if   L==1	// ca
+	"N.&ordm; de archivos en zonas de documentos";	// Necessita traduccio
+#elif L==2	// de
+	"Anzahl der Dateien im Dokumente-Bereich";
+#elif L==3	// en
+	"Number of files in documents area";
+#elif L==4	// es
+	"N.&ordm; de archivos en zonas de documentos";
+#elif L==5	// fr
+	"Nombre de fichiers dans les zones de documents";
+#elif L==6	// gn
+	"N.&ordm; de archivos en zonas de documentos";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di file nell'area documenti";
+#elif L==8	// pl
+	"Number of files in documents area";	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"N.&ordm; de arquivos em zonas de documentos";
+#endif
+
+const char *Txt_Number_of_files_in_SHARE_zones =
+#if   L==1	// ca
+	"Nombre d'arxius compartits";
+#elif L==2	// de
+	"Anzahl der freigegebene Dateien";
+#elif L==3	// en
+	"Number of shared files";
+#elif L==4	// es
+	"N.&ordm; de archivos compartidos";
+#elif L==5	// fr
+	"Nombre de fichiers partag&eacute;s";
+#elif L==6	// gn
+	"N.&ordm; de archivos compartidos";		// Okoteve traducción
+#elif L==7	// it
+	"Numero di file condivisi";
+#elif L==8	// pl
+	"Liczba pliki udost&eogon;pnione";
+#elif L==9	// pt
+	"N.&ordm; de arquivos compartilhados";
+#endif
+
+const char *Txt_Number_of_forums =
+#if   L==1	// ca
+	"N.&ordm; de foros";	// Necessita traduccio
+#elif L==2	// de
+	"Anzahl der Foren";
+#elif L==3	// en
+	"No. of forums";
+#elif L==4	// es
+	"N.&ordm; de foros";
+#elif L==5	// fr
+	"Nombre de forums";
+#elif L==6	// gn
+	"N.&ordm; de foros";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di forum";
+#elif L==8	// pl
+	"Liczba forum";
+#elif L==9	// pt
+	"N.&ordm; de f&oacute;runs";
+#endif
+
+const char *Txt_Number_of_BR_groups =
+#if   L==1	// ca
+	"N.&ordm; de<br />grupos";	// Necessita traduccio
+#elif L==2	// de
+	"Anzahl der<br />Gruppen";
+#elif L==3	// en
+	"Number of<br />groups";
+#elif L==4	// es
+	"N.&ordm; de<br />grupos";
+#elif L==5	// fr
+	"Nombre de<br />groupes";
+#elif L==6	// gn
+	"N.&ordm; de<br />grupos";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di<br />gruppi";
+#elif L==8	// pl
+	"Liczba z<br />grupy";
+#elif L==9	// pt
+	"N.&ordm; de<br />grupos";
+#endif
+
+const char *Txt_Number_of_indicators =
+#if   L==1	// ca
+	"N.&ordm; de indicadores";	// Necessita traduccio
+#elif L==2	// de
+	"Anzahl der Indikatoren";
+#elif L==3	// en
+	"Number of indicators";
+#elif L==4	// es
+	"N.&ordm; de indicadores";
+#elif L==5	// fr
+	"Nombre d'indicateurs";
+#elif L==6	// gn
+	"N.&ordm; de indicadores";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di indicatori";
+#elif L==8	// pl
+	"Liczba z wskazniki";
+#elif L==9	// pt
+	"N.&ordm; de indocadores";
+#endif
+
+const char *Txt_Number_of_BR_lines =
+#if   L==1	// ca
+	"N.&ordm; de<br />l&iacute;neas";	// Necessita traduccio
+#elif L==2	// de
+	"Anzahl der<br />Zeilen";
+#elif L==3	// en
+	"Number of<br />lines";
+#elif L==4	// es
+	"N.&ordm; de<br />l&iacute;neas";
+#elif L==5	// fr
+	"Nombre de<br />lignes";
+#elif L==6	// gn
+	"N.&ordm; de<br />l&iacute;neas";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di<br />linee";
+#elif L==8	// pl
+	"Liczba z<br />linie";
+#elif L==9	// pt
+	"N.&ordm; de<br />linhas";
+#endif
+
+const char *Txt_Number_BR_msgs =
+#if   L==1	// ca
+	"N.&ordm;<br />mens.";	// Necessita traduccio
+#elif L==2	// de
+	"Anzahl<br />Nachr.";
+#elif L==3	// en
+	"Number<br />msgs.";
+#elif L==4	// es
+	"N.&ordm;<br />mens.";
+#elif L==5	// fr
+	"Nombre<br />msgs.";
+#elif L==6	// gn
+	"N.&ordm;<br />mens.";	// Okoteve traducción
+#elif L==7	// it
+	"Num.<br />msg.";
+#elif L==8	// pl
+	"Numer<br />msgs.";
+#elif L==9	// pt
+	"N.&ordm;<br />mens.";
+#endif
+
+const char *Txt_Number_of_posts =
+#if   L==1	// ca
+	"N.&ordm; de comentarios";	// Necessita traduccio
+#elif L==2	// de
+	"Anzahl der Nachrichten";
+#elif L==3	// en
+	"Number of posts";
+#elif L==4	// es
+	"N.&ordm; de comentarios";
+#elif L==5	// fr
+	"Nombre de posts";
+#elif L==6	// gn
+	"N.&ordm; de comentarios";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di post";
+#elif L==8	// pl
+	"Liczba wiadomosci";
+#elif L==9	// pt
+	"N.&ordm; de posts";
+#endif
+
+const char *Txt_Number_of_posts_BR_per_forum =
+#if   L==1	// ca
+	"N.&ordm; de comentarios<br />por foro";	// Necessita traduccio
+#elif L==2	// de
+	"Anzahl der Nachrichten<br />pro Forum";
+#elif L==3	// en
+	"Number of posts<br />per forum";
+#elif L==4	// es
+	"N.&ordm; de comentarios<br />por foro";
+#elif L==5	// fr
+	"Nombre de posts<br />par forum";
+#elif L==6	// gn
+	"N.&ordm; de comentarios<br />por foro";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di post<br />per forum";
+#elif L==8	// pl
+	"Liczba wiadomosci<br />per forum";
+#elif L==9	// pt
+	"N.&ordm; de posts<br />por f&oacute;rum";
+#endif
+
+const char *Txt_Number_of_posts_BR_per_thread =
+#if   L==1	// ca
+	"N.&ordm; de comentarios<br />por discusi&oacute;n";	// Necessita traduccio
+#elif L==2	// de
+	"Anzahl der Nachrichten<br />pro Thread";
+#elif L==3	// en
+	"Number of posts<br />per thread";
+#elif L==4	// es
+	"N.&ordm; de comentarios<br />por usuario";
+#elif L==5	// fr
+	"Nombre de posts<br />par fil";
+#elif L==6	// gn
+	"N.&ordm; de comentarios<br />por discusi&oacute;n";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di post<br />per discussione";
+#elif L==8	// pl
+	"Liczba wiadomosci<br />per watku";
+#elif L==9	// pt
+	"N.&ordm; de posts<br />por discuss&atilde;o";
+#endif
+
+const char *Txt_Number_of_posts_BR_per_user =
+#if   L==1	// ca
+	"N.&ordm; de comentarios<br />por usuari";	// Necessita traduccio
+#elif L==2	// de
+	"Anzahl der Nachrichten<br />pro Benutzer";
+#elif L==3	// en
+	"Number of posts<br />per user";
+#elif L==4	// es
+	"N.&ordm; de comentarios<br />por usuario";
+#elif L==5	// fr
+	"Nombre de posts<br />par utilisateur";
+#elif L==6	// gn
+	"N.&ordm; de comentarios<br />por puruh&aacute;ra";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di post<br />per utente";
+#elif L==8	// pl
+	"Liczba wiadomosci<br />per u&zdot;ytkownik";
+#elif L==9	// pt
+	"N.&ordm; de posts<br />por utilizador";
+#endif
+
+const char *Txt_Number_of_private_files =
+#if   L==1	// ca
+	"Nombre d'arxius privats";
+#elif L==2	// de
+	"Anzahl der private Dateien";
+#elif L==3	// en
+	"Number of private files";
+#elif L==4	// es
+	"N.&ordm; de archivos privados";
+#elif L==5	// fr
+	"Nombre de fichiers priv&eacute;s";
+#elif L==6	// gn
+	"N.&ordm; de archivos privados";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di file privati";
+#elif L==8	// pl
+	"Liczba prywatne pliki";
+#elif L==9	// pt
+	"N.&ordm; de arquivos privados";
+#endif
+
+const char *Txt_Number_of_BR_program_items =
+#if   L==1	// ca
+	"Nombre d'elements<br />de programes";
+#elif L==2	// de
+	"Anzahl der Programmelemente";
+#elif L==3	// en
+	"Number of<br />program items";
+#elif L==4	// es
+	"N.&ordm; de<br />items en programas";
+#elif L==5	// fr
+	"Nombre d'&eacute;l&eacute;ments<br />de programme";
+#elif L==6	// gn
+	"N.&ordm; de<br />items en programas";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di elementi<br />di programmi";
+#elif L==8	// pl
+	"Liczba<br />pozycji programu";
+#elif L==9	// pt
+	"N.&ordm; de<br />itens de programas";
+#endif
+
+const char *Txt_Number_of_public_files =
+#if   L==1	// ca
+	"Nombre d'arxius p&uacute;blics";
+#elif L==2	// de
+	"Anzahl der &ouml;ffentliche Dateien";
+#elif L==3	// en
+	"Number of public files";
+#elif L==4	// es
+	"N.&ordm; de archivos p&uacute;blicos";
+#elif L==5	// fr
+	"Nombre de fichiers publics";
+#elif L==6	// gn
+	"N.&ordm; de archivos p&uacute;blicos";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di file pubblici";
+#elif L==8	// pl
+	"Liczba publicznych pliki";
+#elif L==9	// pt
+	"N.&ordm; de arquivos p&uacute;blicos";
+#endif
+
+const char *Txt_Number_of_questions =
+#if   L==1	// ca
+	"Nombre de preguntes";
+#elif L==2	// de
+	"Anzahl der Fragen";
+#elif L==3	// en
+	"Number of questions";
+#elif L==4	// es
+	"N.&ordm; de preguntas";
+#elif L==5	// fr
+	"Nombre de questions";
+#elif L==6	// gn
+	"N.&ordm; de preguntas";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di domande";
+#elif L==8	// pl
+	"Liczba pyta&nacute;";
+#elif L==9	// pt
+	"N&uacute;mero de perguntas";
+#endif
+
+const char *Txt_Number_of_questions_to_show =
+#if   L==1	// ca
+	"Nombre de preguntes a mostrar";
+#elif L==2	// de
+	"Anzahl der anzuzeigenden Fragen";
+#elif L==3	// en
+	"Number of questions to show";
+#elif L==4	// es
+	"N.&ordm; de preguntas a mostrar";
+#elif L==5	// fr
+	"Nombre de questions &agrave; afficher";
+#elif L==6	// gn
+	"N.&ordm; de preguntas a mostrar";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di domande da mostrare";
+#elif L==8	// pl
+	"Liczba pyta&nacute; do wy&sacute;wietlenia";
+#elif L==9	// pt
+	"N&uacute;mero de perguntas a mostrar";
+#endif
+
+const char *Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded =
+#if   L==1	// ca
+	"N.&ordm; de<br />veces<br />que se ha<br />respondido";	// Necessita traduccio
+#elif L==2	// de
+	"Number of<br />times that<br />questions<br />have been<br />responded";	// Need Übersetzung
+#elif L==3	// en
+	"Number of<br />times that<br />questions<br />have been<br />responded";
+#elif L==4	// es
+	"N.&ordm; de<br />veces<br />que se ha<br />respondido";
+#elif L==5	// fr
+	"Number of<br />times that<br />questions<br />have been<br />responded";	// Besoin de traduction
+#elif L==6	// gn
+	"N.&ordm; de<br />veces<br />que se ha<br />respondido";	// Okoteve traducción
+#elif L==7	// it
+	"Number of<br />times that<br />questions<br />have been<br />responded";	// Bisogno di traduzione
+#elif L==8	// pl
+	"Number of<br />times that<br />questions<br />have been<br />responded";	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"N.&ordm; de<br />vezes que<br />as perguntas<br />foram<br />respondidas";
+#endif
+
+const char *Txt_Number_of_threads =
+#if   L==1	// ca
+	"N.&ordm; de discusiones";	// Necessita traduccio
+#elif L==2	// de
+	"Anzahl der Threads";
+#elif L==3	// en
+	"Number of threads";
+#elif L==4	// es
+	"N.&ordm; de discusiones";
+#elif L==5	// fr
+	"Nombre de fils";
+#elif L==6	// gn
+	"N.&ordm; de discusiones";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di discussioni";
+#elif L==8	// pl
+	"Liczba watk&oacute;w";
+#elif L==9	// pt
+	"N.&ordm; de discuss&otilde;es";
+#endif
+
+const char *Txt_Number_of_threads_BR_per_forum =
+#if   L==1	// ca
+	"N.&ordm; de discusiones<br />por foro";	// Necessita traduccio
+#elif L==2	// de
+	"Anzahl der Threads<br />pro Forum";
+#elif L==3	// en
+	"Number of threads<br />per forum";
+#elif L==4	// es
+	"N.&ordm; de discusiones<br />por foro";
+#elif L==5	// fr
+	"Nombre de fils<br />par forum";
+#elif L==6	// gn
+	"N.&ordm; de discusiones<br />por foro";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di discussioni<br />per forum";
+#elif L==8	// pl
+	"Liczba watk&oacute;w<br />per forum";
+#elif L==9	// pt
+	"N.&ordm; de discuss&otilde;es<br />por f&oacute;rum";
 #endif
 
 const char *Txt_Number_of_BR_assignments =
@@ -32507,6 +32465,48 @@ const char *Txt_Publish_announcement_OF_EXAM =
 	"Publikuje zaproszenie";
 #elif L==9	// pt
 	"Publicar chamada";
+#endif
+
+const char *Txt_question =
+#if   L==1	// ca
+	"pregunta";
+#elif L==2	// de
+	"Frage";
+#elif L==3	// en
+	"question";
+#elif L==4	// es
+	"pregunta";
+#elif L==5	// fr
+	"question";
+#elif L==6	// gn
+	"pregunta";	// Okoteve traducción
+#elif L==7	// it
+	"domande";
+#elif L==8	// pl
+	"pytanie";
+#elif L==9	// pt
+	"pergunta";
+#endif
+
+const char *Txt_questions =
+#if   L==1	// ca
+	"preguntes";
+#elif L==2	// de
+	"Fragen";
+#elif L==3	// en
+	"questions";
+#elif L==4	// es
+	"preguntas";
+#elif L==5	// fr
+	"questions";
+#elif L==6	// gn
+	"preguntas";	// Okoteve traducción
+#elif L==7	// it
+	"domande";
+#elif L==8	// pl
+	"pytania";
+#elif L==9	// pt
+	"perguntas";
 #endif
 
 const char *Txt_QR_code =
