@@ -53,6 +53,7 @@ typedef enum
    ExaAnn_HIDDEN_EXAM_ANNOUNCEMENT  = 1,
    ExaAnn_DELETED_EXAM_ANNOUNCEMENT = 2,
   } ExaAnn_Status_t;	// Don't change these numbers because they are used in database
+#define ExaAnn_STATUS_DEFAULT ExaAnn_VISIBLE_EXAM_ANNOUNCEMENT
 
 #define ExaAnn_MAX_CHARS_SESSION	(128 - 1)	// 127
 #define ExaAnn_MAX_BYTES_SESSION	((ExaAnn_MAX_CHARS_SESSION + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
@@ -99,30 +100,30 @@ struct ExaAnn_ExamAnnouncements
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaAnn_ResetExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamAnns);
+void ExaAnn_ResetExamAnns (struct ExaAnn_ExamAnnouncements *ExamAnns);
 
-void ExaAnn_PutFrmEditAExamAnnouncement (void);
-void ExaAnn_ReceiveExamAnnouncement1 (void);
-void ExaAnn_ReceiveExamAnnouncement2 (void);
-void ExaAnn_PrintExamAnnouncement (void);
-void ExaAnn_ReqRemoveExamAnnouncement (void);
-void ExaAnn_RemoveExamAnnouncement1 (void);
-void ExaAnn_RemoveExamAnnouncement2 (void);
-void ExaAnn_HideExamAnnouncement (void);
-void ExaAnn_UnhideExamAnnouncement (void);
+void ExaAnn_PutFrmEditAExamAnn (void);
+void ExaAnn_ReceiveExamAnn1 (void);
+void ExaAnn_ReceiveExamAnn2 (void);
+void ExaAnn_PrintExamAnn (void);
+void ExaAnn_ReqRemoveExamAnn (void);
+void ExaAnn_RemoveExamAnn1 (void);
+void ExaAnn_RemoveExamAnn2 (void);
+void ExaAnn_HideExamAnn (void);
+void ExaAnn_UnhideExamAnn (void);
 
-void ExaAnn_FreeListExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamAnns);
-void ExaAnn_ListExamAnnouncementsSee (void);
-void ExaAnn_ListExamAnnouncementsEdit (void);
+void ExaAnn_FreeListExamAnns (struct ExaAnn_ExamAnnouncements *ExamAnns);
+void ExaAnn_ListExamAnnsSee (void);
+void ExaAnn_ListExamAnnsEdit (void);
 
-void ExaAnn_ListExamAnnouncementsCod (void);
-void ExaAnn_ListExamAnnouncementsDay (void);
+void ExaAnn_ListExamAnnsCod (void);
+void ExaAnn_ListExamAnnsDay (void);
 
-void ExaAnn_CreateListExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamAnns);
+void ExaAnn_CreateListExamAnns (struct ExaAnn_ExamAnnouncements *ExamAnns);
 void ExaAnn_PutHiddenParamExaCod (long ExaCod);
 
-void ExaAnn_GetSummaryAndContentExamAnnouncement (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                                  char **ContentStr,
-                                                  long ExaCod,bool GetContent);
+void ExaAnn_GetSummaryAndContentExamAnn (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+                                         char **ContentStr,
+                                         long ExaCod,bool GetContent);
 
 #endif

@@ -550,10 +550,10 @@ static void Lay_WriteScripts (void)
       Hld_GetListHolidays (&Holidays);
 
       /***** Reset exam announcements context *****/
-      ExaAnn_ResetExamAnnouncements (&ExamAnns);
+      ExaAnn_ResetExamAnns (&ExamAnns);
 
       /***** Create list of exam announcements *****/
-      ExaAnn_CreateListExamAnnouncements (&ExamAnns);
+      ExaAnn_CreateListExamAnns (&ExamAnns);
 
       /***** Write script to initialize variables used to draw months *****/
       HTM_SCRIPT_Begin (NULL,NULL);
@@ -598,7 +598,7 @@ static void Lay_WriteScripts (void)
       HTM_SCRIPT_End ();
 
       /***** Free list of exam announcements *****/
-      ExaAnn_FreeListExamAnnouncements (&ExamAnns);
+      ExaAnn_FreeListExamAnns (&ExamAnns);
 
       /***** Free list of holidays *****/
       Hld_FreeListHolidays (&Holidays);

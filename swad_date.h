@@ -124,6 +124,9 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Dat_ResetDate (struct Date *Date);
+void Dat_ResetHour (struct Hour *Hour);
+
 void Dat_PutBoxToSelectDateFormat (void);
 
 void Dat_PutSpanDateFormat (Dat_Format_t Format);

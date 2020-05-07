@@ -859,7 +859,7 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
          Asg_GetNotifAssignment (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_EXAM_ANNOUNCEMENT:
-         ExaAnn_GetSummaryAndContentExamAnnouncement (SummaryStr,ContentStr,Cod,GetContent);
+         ExaAnn_GetSummaryAndContentExamAnn (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_MARKS_FILE:
          Mrk_GetNotifMyMarks (SummaryStr,ContentStr,Cod,UsrCod,GetContent);

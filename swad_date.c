@@ -99,6 +99,25 @@ static void Dat_PutIconsDateFormat (__attribute__((unused)) void *Args);
 static unsigned Dat_GetParamDateFormat (void);
 
 /*****************************************************************************/
+/******************************** Reset date *********************************/
+/*****************************************************************************/
+
+void Dat_ResetDate (struct Date *Date)
+  {
+   Date->Day = 0;
+   Date->Month = 0;
+   Date->Year = 0;
+   Date->Week = 0;
+   Date->YYYYMMDD[0] = '\0';
+  }
+
+void Dat_ResetHour (struct Hour *Hour)
+  {
+   Hour->Hour = 0;
+   Hour->Minute = 0;
+  }
+
+/*****************************************************************************/
 /************** Put icons to select the first day of the week ****************/
 /*****************************************************************************/
 

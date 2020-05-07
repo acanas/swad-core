@@ -68,44 +68,44 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static struct ExaAnn_ExamAnnouncements *ExaAnn_GetGlobalExamAnnouncements (void);
+static struct ExaAnn_ExamAnnouncements *ExaAnn_GetGlobalExamAnns (void);
 
-static long ExaAnn_GetParamsExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAnns);
+static long ExaAnn_GetParamsExamAnn (struct ExaAnn_ExamAnnouncements *ExamAnns);
 
-static void ExaAnn_AllocMemExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAnns);
-static void ExaAnn_FreeMemExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAnns);
+static void ExaAnn_AllocMemExamAnn (struct ExaAnn_ExamAnnouncements *ExamAnns);
+static void ExaAnn_FreeMemExamAnn (struct ExaAnn_ExamAnnouncements *ExamAnns);
 
-static void ExaAnn_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (long ExaCod,unsigned NumUsrsToBeNotifiedByEMail);
+static void ExaAnn_UpdateNumUsrsNotifiedByEMailAboutExamAnn (long ExaCod,unsigned NumUsrsToBeNotifiedByEMail);
 
 static void ExaAnn_GetExaCodToHighlight (struct ExaAnn_ExamAnnouncements *ExamAnns);
 static void ExaAnn_GetDateToHighlight (struct ExaAnn_ExamAnnouncements *ExamAnns);
 
-static void ExaAnn_ListExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamAnns,
-                                       ExaAnn_TypeViewExamAnnouncement_t TypeViewExamAnnouncement);
-static void ExaAnn_PutIconToCreateNewExamAnnouncement (__attribute__((unused)) void *Args);
-static void ExaAnn_PutButtonToCreateNewExamAnnouncement (void);
+static void ExaAnn_ListExamAnns (struct ExaAnn_ExamAnnouncements *ExamAnns,
+                                 ExaAnn_TypeViewExamAnnouncement_t TypeViewExamAnnouncement);
+static void ExaAnn_PutIconToCreateNewExamAnn (__attribute__((unused)) void *Args);
+static void ExaAnn_PutButtonToCreateNewExamAnn (void);
 
-static long ExaAnn_AddExamAnnouncementToDB (const struct ExaAnn_ExamAnnouncements *ExamAnns);
-static void ExaAnn_ModifyExamAnnouncementInDB (const struct ExaAnn_ExamAnnouncements *ExamAnns,
-                                            long ExaCod);
-static void ExaAnn_GetDataExamAnnouncementFromDB (struct ExaAnn_ExamAnnouncements *ExamAnns,
-                                               long ExaCod);
-static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAnns,
-                                      long ExaCod,
-				      ExaAnn_TypeViewExamAnnouncement_t TypeViewExamAnnouncement,
-				      bool HighLight);
-static void ExaAnn_PutIconsExamAnnouncement (void *ExamAnns);
+static long ExaAnn_AddExamAnnToDB (const struct ExaAnn_ExamAnnouncements *ExamAnns);
+static void ExaAnn_ModifyExamAnnInDB (const struct ExaAnn_ExamAnnouncements *ExamAnns,
+                                      long ExaCod);
+static void ExaAnn_GetDataExamAnnFromDB (struct ExaAnn_ExamAnnouncements *ExamAnns,
+                                         long ExaCod);
+static void ExaAnn_ShowExamAnn (struct ExaAnn_ExamAnnouncements *ExamAnns,
+                                long ExaCod,
+				ExaAnn_TypeViewExamAnnouncement_t TypeViewExamAnnouncement,
+				bool HighLight);
+static void ExaAnn_PutIconsExamAnn (void *ExamAnns);
 static void ExaAnn_PutParamExaCodToEdit (void *ExaCod);
 static long ExaAnn_GetParamExaCod (void);
 
-static void ExaAnn_GetNotifContentExamAnnouncement (const struct ExaAnn_ExamAnnouncements *ExamAnns,
-                                                 char **ContentStr);
+static void ExaAnn_GetNotifContentExamAnn (const struct ExaAnn_ExamAnnouncements *ExamAnns,
+                                           char **ContentStr);
 
 /*****************************************************************************/
 /******************* Get global exam announcements context *******************/
 /*****************************************************************************/
 
-static struct ExaAnn_ExamAnnouncements *ExaAnn_GetGlobalExamAnnouncements (void)
+static struct ExaAnn_ExamAnnouncements *ExaAnn_GetGlobalExamAnns (void)
   {
    static struct ExaAnn_ExamAnnouncements ExaAnn_GlobalExamAnns;	// Used to preserve information between priori and posteriori functions
 
@@ -116,7 +116,7 @@ static struct ExaAnn_ExamAnnouncements *ExaAnn_GetGlobalExamAnnouncements (void)
 /********************** Reset exam announcements context *********************/
 /*****************************************************************************/
 
-void ExaAnn_ResetExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamAnns)
+void ExaAnn_ResetExamAnns (struct ExaAnn_ExamAnnouncements *ExamAnns)
   {
    ExamAnns->NumExaAnns       = 0;
    ExamAnns->Lst              = NULL;
@@ -125,43 +125,60 @@ void ExaAnn_ResetExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamAnns)
    ExamAnns->HighlightDate[0] = '\0';	// No exam announcements highlighted
    ExamAnns->ExaCod           = -1L;
    ExamAnns->Anchor           = NULL;
+
+   ExamAnns->ExamAnn.CrsCod = -1L;
+   ExamAnns->ExamAnn.Status = ExaAnn_STATUS_DEFAULT;
+   ExamAnns->ExamAnn.CrsFullName[0] = '\0';
+   ExamAnns->ExamAnn.Year = 0;
+   ExamAnns->ExamAnn.Session[0] = '\0';
+   Dat_ResetDate (&ExamAnns->ExamAnn.CallDate);
+   Dat_ResetDate (&ExamAnns->ExamAnn.ExamDate);
+   Dat_ResetHour (&ExamAnns->ExamAnn.StartTime);
+   Dat_ResetHour (&ExamAnns->ExamAnn.Duration);
+   ExamAnns->ExamAnn.Place            = NULL;
+   ExamAnns->ExamAnn.Mode             = NULL;
+   ExamAnns->ExamAnn.Structure        = NULL;
+   ExamAnns->ExamAnn.DocRequired      = NULL;
+   ExamAnns->ExamAnn.MatRequired      = NULL;
+   ExamAnns->ExamAnn.MatAllowed       = NULL;
+   ExamAnns->ExamAnn.OtherInfo        = NULL;
   }
 
 /*****************************************************************************/
 /********************** Form to edit an exam announcement ********************/
 /*****************************************************************************/
 
-void ExaAnn_PutFrmEditAExamAnnouncement (void)
+void ExaAnn_PutFrmEditAExamAnn (void)
   {
    struct ExaAnn_ExamAnnouncements ExamAnns;
    long ExaCod;
 
    /***** Reset exam announcements context *****/
-   ExaAnn_ResetExamAnnouncements (&ExamAnns);
+   ExaAnn_ResetExamAnns (&ExamAnns);
 
    /***** Allocate memory for the exam announcement *****/
-   ExaAnn_AllocMemExamAnnouncement (&ExamAnns);
+   ExaAnn_AllocMemExamAnn (&ExamAnns);
 
    /***** Get the code of the exam announcement *****/
-   ExaCod = ExaAnn_GetParamsExamAnnouncement (&ExamAnns);
+   ExaCod = ExaAnn_GetParamsExamAnn (&ExamAnns);
 
    if (ExaCod > 0)	// -1 indicates that this is a new exam announcement
       /***** Read exam announcement from the database *****/
-      ExaAnn_GetDataExamAnnouncementFromDB (&ExamAnns,ExaCod);
+      ExaAnn_GetDataExamAnnFromDB (&ExamAnns,ExaCod);
 
    /***** Show exam announcement *****/
-   ExaAnn_ShowExamAnnouncement (&ExamAnns,ExaCod,ExaAnn_FORM_VIEW,
-			     false);	// Don't highlight
+   ExaAnn_ShowExamAnn (&ExamAnns,ExaCod,ExaAnn_FORM_VIEW,
+		       false);	// Don't highlight
 
    /***** Free memory of the exam announcement *****/
-   ExaAnn_FreeMemExamAnnouncement (&ExamAnns);
+   ExaAnn_FreeMemExamAnn (&ExamAnns);
   }
 
 /*****************************************************************************/
 /**************** Get parameters of an exam announcement *********************/
 /*****************************************************************************/
 
-static long ExaAnn_GetParamsExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAnns)
+static long ExaAnn_GetParamsExamAnn (struct ExaAnn_ExamAnnouncements *ExamAnns)
   {
    long ExaCod;
 
@@ -185,7 +202,7 @@ static long ExaAnn_GetParamsExamAnnouncement (struct ExaAnn_ExamAnnouncements *E
    /***** Get the type of exam announcement *****/
    Par_GetParToText ("ExamSession",ExamAnns->ExamAnn.Session,ExaAnn_MAX_BYTES_SESSION);
 
-   /***** Get the data of the exam *****/
+   /***** Get the date of the exam *****/
    Dat_GetDateFromForm ("ExamDay","ExamMonth","ExamYear",
                         &ExamAnns->ExamAnn.ExamDate.Day,
                         &ExamAnns->ExamAnn.ExamDate.Month,
@@ -239,7 +256,7 @@ static long ExaAnn_GetParamsExamAnnouncement (struct ExaAnn_ExamAnnouncements *E
 /* Allocate memory for those parameters of an exam anno. with a lot of text **/
 /*****************************************************************************/
 
-static void ExaAnn_AllocMemExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAnns)
+static void ExaAnn_AllocMemExamAnn (struct ExaAnn_ExamAnnouncements *ExamAnns)
   {
    if ((ExamAnns->ExamAnn.Place       = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
@@ -267,7 +284,7 @@ static void ExaAnn_AllocMemExamAnnouncement (struct ExaAnn_ExamAnnouncements *Ex
 /* Free memory of those parameters of an exam announcem. with a lot of text **/
 /*****************************************************************************/
 
-static void ExaAnn_FreeMemExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAnns)
+static void ExaAnn_FreeMemExamAnn (struct ExaAnn_ExamAnnouncements *ExamAnns)
   {
    if (ExamAnns->ExamAnn.Place)
      {
@@ -312,33 +329,33 @@ static void ExaAnn_FreeMemExamAnnouncement (struct ExaAnn_ExamAnnouncements *Exa
 // This function is splitted into a-priori and a-posteriori functions
 // in order to view updated links in month of left column
 
-void ExaAnn_ReceiveExamAnnouncement1 (void)
+void ExaAnn_ReceiveExamAnn1 (void)
   {
    extern const char *Txt_Created_new_announcement_of_exam;
    extern const char *Txt_The_announcement_of_exam_has_been_successfully_updated;
-   struct ExaAnn_ExamAnnouncements *ExamAnns = ExaAnn_GetGlobalExamAnnouncements ();
+   struct ExaAnn_ExamAnnouncements *ExamAnns = ExaAnn_GetGlobalExamAnns ();
    long ExaCod;
    bool NewExamAnnouncement;
    char *Anchor = NULL;
 
    /***** Reset exam announcements context *****/
-   ExaAnn_ResetExamAnnouncements (ExamAnns);
+   ExaAnn_ResetExamAnns (ExamAnns);
 
    /***** Allocate memory for the exam announcement *****/
-   ExaAnn_AllocMemExamAnnouncement (ExamAnns);
+   ExaAnn_AllocMemExamAnn (ExamAnns);
 
    /***** Get parameters of the exam announcement *****/
-   ExaCod = ExaAnn_GetParamsExamAnnouncement (ExamAnns);
+   ExaCod = ExaAnn_GetParamsExamAnn (ExamAnns);
    NewExamAnnouncement = (ExaCod < 0);
 
    /***** Add the exam announcement to the database and read it again from the database *****/
    if (NewExamAnnouncement)
-      ExamAnns->NewExaCod = ExaCod = ExaAnn_AddExamAnnouncementToDB (ExamAnns);
+      ExamAnns->NewExaCod = ExaCod = ExaAnn_AddExamAnnToDB (ExamAnns);
    else
-      ExaAnn_ModifyExamAnnouncementInDB (ExamAnns,ExaCod);
+      ExaAnn_ModifyExamAnnInDB (ExamAnns,ExaCod);
 
    /***** Free memory of the exam announcement *****/
-   ExaAnn_FreeMemExamAnnouncement (ExamAnns);
+   ExaAnn_FreeMemExamAnn (ExamAnns);
 
    /***** Create alert to show the change made *****/
    Frm_SetAnchorStr (ExaCod,&Anchor);
@@ -351,15 +368,15 @@ void ExaAnn_ReceiveExamAnnouncement1 (void)
    ExamAnns->HighlightExaCod = ExaCod;
   }
 
-void ExaAnn_ReceiveExamAnnouncement2 (void)
+void ExaAnn_ReceiveExamAnn2 (void)
   {
-   struct ExaAnn_ExamAnnouncements *ExamAnns = ExaAnn_GetGlobalExamAnnouncements ();
+   struct ExaAnn_ExamAnnouncements *ExamAnns = ExaAnn_GetGlobalExamAnns ();
    unsigned NumUsrsToBeNotifiedByEMail;
    struct TL_Publication SocPub;
 
    /***** Notify by email about the new exam announcement *****/
    if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExamAnns->HighlightExaCod)))
-      ExaAnn_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (ExamAnns->HighlightExaCod,NumUsrsToBeNotifiedByEMail);
+      ExaAnn_UpdateNumUsrsNotifiedByEMailAboutExamAnn (ExamAnns->HighlightExaCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new exam announcement *****/
    TL_StoreAndPublishNote (TL_NOTE_EXAM_ANNOUNCEMENT,ExamAnns->HighlightExaCod,&SocPub);
@@ -368,14 +385,14 @@ void ExaAnn_ReceiveExamAnnouncement2 (void)
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
 
    /***** Show exam announcements *****/
-   ExaAnn_ListExamAnnouncementsEdit ();
+   ExaAnn_ListExamAnnsEdit ();
   }
 
 /*****************************************************************************/
 /***** Update number of users notified in table of exam announcements ********/
 /*****************************************************************************/
 
-static void ExaAnn_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (long ExaCod,unsigned NumUsrsToBeNotifiedByEMail)
+static void ExaAnn_UpdateNumUsrsNotifiedByEMailAboutExamAnn (long ExaCod,unsigned NumUsrsToBeNotifiedByEMail)
   {
    /***** Update number of users notified *****/
    DB_QueryUPDATE ("can not update the number of notifications"
@@ -389,37 +406,37 @@ static void ExaAnn_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (long ExaCo
 /************************* Print an exam announcement ************************/
 /*****************************************************************************/
 
-void ExaAnn_PrintExamAnnouncement (void)
+void ExaAnn_PrintExamAnn (void)
   {
    struct ExaAnn_ExamAnnouncements ExamAnns;
    long ExaCod;
 
    /***** Reset exam announcements context *****/
-   ExaAnn_ResetExamAnnouncements (&ExamAnns);
+   ExaAnn_ResetExamAnns (&ExamAnns);
 
    /***** Allocate memory for the exam announcement *****/
-   ExaAnn_AllocMemExamAnnouncement (&ExamAnns);
+   ExaAnn_AllocMemExamAnn (&ExamAnns);
 
    /***** Get the code of the exam announcement *****/
    if ((ExaCod = ExaAnn_GetParamExaCod ()) <= 0)
       Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
 
    /***** Read exam announcement from the database *****/
-   ExaAnn_GetDataExamAnnouncementFromDB (&ExamAnns,ExaCod);
+   ExaAnn_GetDataExamAnnFromDB (&ExamAnns,ExaCod);
 
    /***** Show exam announcement *****/
-   ExaAnn_ShowExamAnnouncement (&ExamAnns,ExaCod,ExaAnn_PRINT_VIEW,
+   ExaAnn_ShowExamAnn (&ExamAnns,ExaCod,ExaAnn_PRINT_VIEW,
 			     false);	// Don't highlight
 
    /***** Free memory of the exam announcement *****/
-   ExaAnn_FreeMemExamAnnouncement (&ExamAnns);
+   ExaAnn_FreeMemExamAnn (&ExamAnns);
   }
 
 /*****************************************************************************/
 /************************ Remove an exam announcement ************************/
 /*****************************************************************************/
 
-void ExaAnn_ReqRemoveExamAnnouncement (void)
+void ExaAnn_ReqRemoveExamAnn (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_following_announcement_of_exam;
    extern const char *Txt_Remove;
@@ -427,7 +444,7 @@ void ExaAnn_ReqRemoveExamAnnouncement (void)
    long ExaCod;
 
    /***** Reset exam announcements context *****/
-   ExaAnn_ResetExamAnnouncements (&ExamAnns);
+   ExaAnn_ResetExamAnns (&ExamAnns);
 
    /***** Get the code of the exam announcement *****/
    if ((ExaCod = ExaAnn_GetParamExaCod ()) <= 0)
@@ -438,11 +455,11 @@ void ExaAnn_ReqRemoveExamAnnouncement (void)
    Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_announcement_of_exam);
 
    /* Show announcement */
-   ExaAnn_AllocMemExamAnnouncement (&ExamAnns);
-   ExaAnn_GetDataExamAnnouncementFromDB (&ExamAnns,ExaCod);
-   ExaAnn_ShowExamAnnouncement (&ExamAnns,ExaCod,ExaAnn_NORMAL_VIEW,
+   ExaAnn_AllocMemExamAnn (&ExamAnns);
+   ExaAnn_GetDataExamAnnFromDB (&ExamAnns,ExaCod);
+   ExaAnn_ShowExamAnn (&ExamAnns,ExaCod,ExaAnn_NORMAL_VIEW,
 			     false);	// Don't highlight
-   ExaAnn_FreeMemExamAnnouncement (&ExamAnns);
+   ExaAnn_FreeMemExamAnn (&ExamAnns);
 
    /* End alert */
 
@@ -457,13 +474,13 @@ void ExaAnn_ReqRemoveExamAnnouncement (void)
 // This function is splitted into a-priori and a-posteriori functions
 // in order to view updated links in month of left column
 
-void ExaAnn_RemoveExamAnnouncement1 (void)
+void ExaAnn_RemoveExamAnn1 (void)
   {
-   struct ExaAnn_ExamAnnouncements *ExamAnns = ExaAnn_GetGlobalExamAnnouncements ();
+   struct ExaAnn_ExamAnnouncements *ExamAnns = ExaAnn_GetGlobalExamAnns ();
    long ExaCod;
 
    /***** Reset exam announcements context *****/
-   ExaAnn_ResetExamAnnouncements (ExamAnns);
+   ExaAnn_ResetExamAnns (ExamAnns);
 
    /***** Get the code of the exam announcement *****/
    if ((ExaCod = ExaAnn_GetParamExaCod ()) <= 0)
@@ -486,7 +503,7 @@ void ExaAnn_RemoveExamAnnouncement1 (void)
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
   }
 
-void ExaAnn_RemoveExamAnnouncement2 (void)
+void ExaAnn_RemoveExamAnn2 (void)
   {
    extern const char *Txt_Announcement_of_exam_removed;
 
@@ -494,7 +511,7 @@ void ExaAnn_RemoveExamAnnouncement2 (void)
    Ale_ShowAlert (Ale_SUCCESS,Txt_Announcement_of_exam_removed);
 
    /***** List again all the remaining exam announcements *****/
-   ExaAnn_ListExamAnnouncementsEdit ();
+   ExaAnn_ListExamAnnsEdit ();
   }
 
 /*****************************************************************************/
@@ -503,13 +520,13 @@ void ExaAnn_RemoveExamAnnouncement2 (void)
 // This function is splitted into a-priori and a-posteriori functions
 // in order to view updated links in month of left column
 
-void ExaAnn_HideExamAnnouncement (void)
+void ExaAnn_HideExamAnn (void)
   {
-   struct ExaAnn_ExamAnnouncements *ExamAnns = ExaAnn_GetGlobalExamAnnouncements ();
+   struct ExaAnn_ExamAnnouncements *ExamAnns = ExaAnn_GetGlobalExamAnns ();
    long ExaCod;
 
    /***** Reset exam announcements context *****/
-   ExaAnn_ResetExamAnnouncements (ExamAnns);
+   ExaAnn_ResetExamAnns (ExamAnns);
 
    /***** Get the code of the exam announcement *****/
    if ((ExaCod = ExaAnn_GetParamExaCod ()) <= 0)
@@ -532,13 +549,13 @@ void ExaAnn_HideExamAnnouncement (void)
 // This function is splitted into a-priori and a-posteriori functions
 // in order to view updated links in month of left column
 
-void ExaAnn_UnhideExamAnnouncement (void)
+void ExaAnn_UnhideExamAnn (void)
   {
-   struct ExaAnn_ExamAnnouncements *ExamAnns = ExaAnn_GetGlobalExamAnnouncements ();
+   struct ExaAnn_ExamAnnouncements *ExamAnns = ExaAnn_GetGlobalExamAnns ();
    long ExaCod;
 
    /***** Reset exam announcements context *****/
-   ExaAnn_ResetExamAnnouncements (ExamAnns);
+   ExaAnn_ResetExamAnns (ExamAnns);
 
    /***** Get the code of the exam announcement *****/
    if ((ExaCod = ExaAnn_GetParamExaCod ()) <= 0)
@@ -559,15 +576,15 @@ void ExaAnn_UnhideExamAnnouncement (void)
 /*************** List all the exam announcements to see them *****************/
 /*****************************************************************************/
 
-void ExaAnn_ListExamAnnouncementsSee (void)
+void ExaAnn_ListExamAnnsSee (void)
   {
    struct ExaAnn_ExamAnnouncements ExamAnns;
 
    /***** Reset exam announcements context *****/
-   ExaAnn_ResetExamAnnouncements (&ExamAnns);
+   ExaAnn_ResetExamAnns (&ExamAnns);
 
    /***** List all exam announcements *****/
-   ExaAnn_ListExamAnnouncements (&ExamAnns,ExaAnn_NORMAL_VIEW);
+   ExaAnn_ListExamAnns (&ExamAnns,ExaAnn_NORMAL_VIEW);
 
    /***** Mark possible notifications as seen *****/
    Ntf_MarkNotifAsSeen (Ntf_EVENT_EXAM_ANNOUNCEMENT,
@@ -579,47 +596,47 @@ void ExaAnn_ListExamAnnouncementsSee (void)
 /********** List all the exam announcements to edit or remove them ***********/
 /*****************************************************************************/
 
-void ExaAnn_ListExamAnnouncementsEdit (void)
+void ExaAnn_ListExamAnnsEdit (void)
   {
-   struct ExaAnn_ExamAnnouncements *ExamAnns = ExaAnn_GetGlobalExamAnnouncements ();
+   struct ExaAnn_ExamAnnouncements *ExamAnns = ExaAnn_GetGlobalExamAnns ();
 
-   ExaAnn_ListExamAnnouncements (ExamAnns,ExaAnn_NORMAL_VIEW);
+   ExaAnn_ListExamAnns (ExamAnns,ExaAnn_NORMAL_VIEW);
   }
 
 /*****************************************************************************/
 /********** List exam announcement given an exam announcement code ***********/
 /*****************************************************************************/
 
-void ExaAnn_ListExamAnnouncementsCod (void)
+void ExaAnn_ListExamAnnsCod (void)
   {
    struct ExaAnn_ExamAnnouncements ExamAnns;
 
    /***** Reset exam announcements context *****/
-   ExaAnn_ResetExamAnnouncements (&ExamAnns);
+   ExaAnn_ResetExamAnns (&ExamAnns);
 
    /***** Get exam announcement code *****/
    ExaAnn_GetExaCodToHighlight (&ExamAnns);
 
    /***** List all exam announcements *****/
-   ExaAnn_ListExamAnnouncements (&ExamAnns,ExaAnn_NORMAL_VIEW);
+   ExaAnn_ListExamAnns (&ExamAnns,ExaAnn_NORMAL_VIEW);
   }
 
 /*****************************************************************************/
 /***************** List exam announcements on a given date *******************/
 /*****************************************************************************/
 
-void ExaAnn_ListExamAnnouncementsDay (void)
+void ExaAnn_ListExamAnnsDay (void)
   {
    struct ExaAnn_ExamAnnouncements ExamAnns;
 
    /***** Reset exam announcements context *****/
-   ExaAnn_ResetExamAnnouncements (&ExamAnns);
+   ExaAnn_ResetExamAnns (&ExamAnns);
 
    /***** Get date *****/
    ExaAnn_GetDateToHighlight (&ExamAnns);
 
    /***** List all exam announcements *****/
-   ExaAnn_ListExamAnnouncements (&ExamAnns,ExaAnn_NORMAL_VIEW);
+   ExaAnn_ListExamAnns (&ExamAnns,ExaAnn_NORMAL_VIEW);
   }
 
 /*****************************************************************************/
@@ -648,8 +665,8 @@ static void ExaAnn_GetDateToHighlight (struct ExaAnn_ExamAnnouncements *ExamAnns
 /******************** List all the exam announcements ************************/
 /*****************************************************************************/
 
-static void ExaAnn_ListExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamAnns,
-                                       ExaAnn_TypeViewExamAnnouncement_t TypeViewExamAnnouncement)
+static void ExaAnn_ListExamAnns (struct ExaAnn_ExamAnnouncements *ExamAnns,
+                                 ExaAnn_TypeViewExamAnnouncement_t TypeViewExamAnnouncement)
   {
    extern const char *Hlp_ASSESSMENT_Announcements;
    extern const char *Txt_Announcements_of_exams;
@@ -685,7 +702,7 @@ static void ExaAnn_ListExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamA
    /***** Begin box *****/
    if (ICanEdit)
       Box_BoxBegin (NULL,Txt_Announcements_of_exams,
-		    ExaAnn_PutIconToCreateNewExamAnnouncement,NULL,
+		    ExaAnn_PutIconToCreateNewExamAnn,NULL,
 		    Hlp_ASSESSMENT_Announcements,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,Txt_Announcements_of_exams,
@@ -709,10 +726,10 @@ static void ExaAnn_ListExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamA
          Lay_ShowErrorAndExit ("Wrong code of exam announcement.");
 
       /***** Allocate memory for the exam announcement *****/
-      ExaAnn_AllocMemExamAnnouncement (ExamAnns);
+      ExaAnn_AllocMemExamAnn (ExamAnns);
 
       /***** Read the data of the exam announcement *****/
-      ExaAnn_GetDataExamAnnouncementFromDB (ExamAnns,ExaCod);
+      ExaAnn_GetDataExamAnnFromDB (ExamAnns,ExaCod);
 
       /***** Show exam announcement *****/
       HighLight = false;
@@ -724,11 +741,11 @@ static void ExaAnn_ListExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamA
 	              ExamAnns->HighlightDate))
 	    HighLight = true;
         }
-      ExaAnn_ShowExamAnnouncement (ExamAnns,ExaCod,TypeViewExamAnnouncement,
+      ExaAnn_ShowExamAnn (ExamAnns,ExaCod,TypeViewExamAnnouncement,
 	                        HighLight);
 
       /***** Free memory of the exam announcement *****/
-      ExaAnn_FreeMemExamAnnouncement (ExamAnns);
+      ExaAnn_FreeMemExamAnn (ExamAnns);
      }
 
    /***** Free structure that stores the query result *****/
@@ -736,7 +753,7 @@ static void ExaAnn_ListExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamA
 
    /***** Button to create a new exam announcement *****/
    if (ICanEdit)
-      ExaAnn_PutButtonToCreateNewExamAnnouncement ();
+      ExaAnn_PutButtonToCreateNewExamAnn ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -746,7 +763,7 @@ static void ExaAnn_ListExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamA
 /***************** Put icon to create a new exam announcement ****************/
 /*****************************************************************************/
 
-static void ExaAnn_PutIconToCreateNewExamAnnouncement (__attribute__((unused)) void *Args)
+static void ExaAnn_PutIconToCreateNewExamAnn (__attribute__((unused)) void *Args)
   {
    extern const char *Txt_New_announcement_OF_EXAM;
 
@@ -759,7 +776,7 @@ static void ExaAnn_PutIconToCreateNewExamAnnouncement (__attribute__((unused)) v
 /**************** Put button to create a new exam announcement ***************/
 /*****************************************************************************/
 
-static void ExaAnn_PutButtonToCreateNewExamAnnouncement (void)
+static void ExaAnn_PutButtonToCreateNewExamAnn (void)
   {
    extern const char *Txt_New_announcement_OF_EXAM;
 
@@ -773,7 +790,7 @@ static void ExaAnn_PutButtonToCreateNewExamAnnouncement (void)
 /*****************************************************************************/
 // Return the code of the exam announcement just added
 
-static long ExaAnn_AddExamAnnouncementToDB (const struct ExaAnn_ExamAnnouncements *ExamAnns)
+static long ExaAnn_AddExamAnnToDB (const struct ExaAnn_ExamAnnouncements *ExamAnns)
   {
    long ExaCod;
 
@@ -815,8 +832,8 @@ static long ExaAnn_AddExamAnnouncementToDB (const struct ExaAnn_ExamAnnouncement
 /*************** Modify an exam announcement in the database *****************/
 /*****************************************************************************/
 
-static void ExaAnn_ModifyExamAnnouncementInDB (const struct ExaAnn_ExamAnnouncements *ExamAnns,
-                                            long ExaCod)
+static void ExaAnn_ModifyExamAnnInDB (const struct ExaAnn_ExamAnnouncements *ExamAnns,
+                                      long ExaCod)
   {
    /***** Modify exam announcement *****/
    DB_QueryUPDATE ("can not update an exam announcement",
@@ -851,7 +868,7 @@ static void ExaAnn_ModifyExamAnnouncementInDB (const struct ExaAnn_ExamAnnouncem
 /******* Create a list with the dates of all the exam announcements **********/
 /*****************************************************************************/
 
-void ExaAnn_CreateListExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamAnns)
+void ExaAnn_CreateListExamAnns (struct ExaAnn_ExamAnnouncements *ExamAnns)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -913,7 +930,7 @@ void ExaAnn_CreateListExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamAn
 /***************** Free list of dates of exam announcements ******************/
 /*****************************************************************************/
 
-void ExaAnn_FreeListExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamAnns)
+void ExaAnn_FreeListExamAnns (struct ExaAnn_ExamAnnouncements *ExamAnns)
   {
    if (ExamAnns->Lst)
      {
@@ -927,8 +944,8 @@ void ExaAnn_FreeListExamAnnouncements (struct ExaAnn_ExamAnnouncements *ExamAnns
 /******** Read the data of an exam announcement from the database ************/
 /*****************************************************************************/
 
-static void ExaAnn_GetDataExamAnnouncementFromDB (struct ExaAnn_ExamAnnouncements *ExamAnns,
-                                               long ExaCod)
+static void ExaAnn_GetDataExamAnnFromDB (struct ExaAnn_ExamAnnouncements *ExamAnns,
+                                         long ExaCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1041,10 +1058,10 @@ static void ExaAnn_GetDataExamAnnouncementFromDB (struct ExaAnn_ExamAnnouncement
 /************ Show a form with the data of an exam announcement **************/
 /*****************************************************************************/
 
-static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAnns,
-                                      long ExaCod,
-				      ExaAnn_TypeViewExamAnnouncement_t TypeViewExamAnnouncement,
-				      bool HighLight)
+static void ExaAnn_ShowExamAnn (struct ExaAnn_ExamAnnouncements *ExamAnns,
+                                long ExaCod,
+				ExaAnn_TypeViewExamAnnouncement_t TypeViewExamAnnouncement,
+				bool HighLight)
   {
    extern const char *Hlp_ASSESSMENT_Announcements_new_announcement;
    extern const char *Hlp_ASSESSMENT_Announcements_edit_announcement;
@@ -1108,11 +1125,11 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
    Width = "625px";
    ExamAnns->Anchor = Anchor;	// Used to put contextual icons
    ExamAnns->ExaCod = ExaCod;	// Used to put contextual icons
-   FunctionToDrawContextualIcons = TypeViewExamAnnouncement == ExaAnn_NORMAL_VIEW ? ExaAnn_PutIconsExamAnnouncement :
-									         NULL;
+   FunctionToDrawContextualIcons = TypeViewExamAnnouncement == ExaAnn_NORMAL_VIEW ? ExaAnn_PutIconsExamAnn :
+									            NULL;
    HelpLink = TypeViewExamAnnouncement == ExaAnn_FORM_VIEW ? ((ExaCod > 0) ? Hlp_ASSESSMENT_Announcements_edit_announcement :
-									  Hlp_ASSESSMENT_Announcements_new_announcement) :
-						          NULL;
+									     Hlp_ASSESSMENT_Announcements_new_announcement) :
+						             NULL;
    if (HighLight)
      {
       /* Show pending alerts */
@@ -1194,11 +1211,11 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
    /* Label */
    Frm_LabelColumn ("RT",
 		    TypeViewExamAnnouncement == ExaAnn_FORM_VIEW ? "CrsName" :
-			                                        NULL,
+			                                           NULL,
 		    Txt_EXAM_ANNOUNCEMENT_Course);
 
    /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
+   HTM_TD_Begin ("class=\"EXAM LB\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
       HTM_INPUT_TEXT ("CrsName",Hie_MAX_CHARS_FULL_NAME,ExamAnns->ExamAnn.CrsFullName,
                       HTM_DONT_SUBMIT_ON_CHANGE,
@@ -1223,7 +1240,7 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
 		    Txt_EXAM_ANNOUNCEMENT_Year_or_semester);
 
    /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
+   HTM_TD_Begin ("class=\"EXAM LB\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
      {
       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -1248,11 +1265,11 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
    /* Label */
    Frm_LabelColumn ("RT",
 		    TypeViewExamAnnouncement == ExaAnn_FORM_VIEW ? "ExamSession" :
-			                                        NULL,
+			                                           NULL,
 		    Txt_EXAM_ANNOUNCEMENT_Session);
 
    /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
+   HTM_TD_Begin ("class=\"EXAM LB\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
       HTM_INPUT_TEXT ("ExamSession",ExaAnn_MAX_CHARS_SESSION,ExamAnns->ExamAnn.Session,
                       HTM_DONT_SUBMIT_ON_CHANGE,
@@ -1267,12 +1284,15 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_EXAM_ANNOUNCEMENT_Exam_date);
+   Frm_LabelColumn ("RT",
+                    TypeViewExamAnnouncement == ExaAnn_FORM_VIEW ? "ExamYear" :
+	                                                           NULL,
+	            Txt_EXAM_ANNOUNCEMENT_Exam_date);
 
    /* Data */
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
      {
-      HTM_TD_Begin ("class=\"LT\"");
+      HTM_TD_Begin ("class=\"LB\"");
       Dat_WriteFormDate (ExamAnns->ExamAnn.ExamDate.Year < Gbl.Now.Date.Year ? ExamAnns->ExamAnn.ExamDate.Year :
                                                                                Gbl.Now.Date.Year,
                          Gbl.Now.Date.Year + 1,"Exam",
@@ -1284,7 +1304,7 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
      {
       Dat_ConvDateToDateStr (&ExamAnns->ExamAnn.ExamDate,
                              StrExamDate);
-      HTM_TD_Begin ("class=\"EXAM LT\"");
+      HTM_TD_Begin ("class=\"EXAM LB\"");
       HTM_Txt (StrExamDate);
       HTM_TD_End ();
      }
@@ -1294,14 +1314,17 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_EXAM_ANNOUNCEMENT_Start_time);
+   Frm_LabelColumn ("RT",
+                    TypeViewExamAnnouncement == ExaAnn_FORM_VIEW ? "ExamHour" :
+	                                                           NULL,
+	            Txt_EXAM_ANNOUNCEMENT_Start_time);
 
    /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
+   HTM_TD_Begin ("class=\"EXAM LB\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
      {
       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"name=\"ExamHour\"");
+			"id=\"ExamHour\" name=\"ExamHour\"");
       HTM_OPTION (HTM_Type_STRING,"0",
 		  ExamAnns->ExamAnn.StartTime.Hour == 0,false,
 		  "-");
@@ -1334,14 +1357,17 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_EXAM_ANNOUNCEMENT_Approximate_duration);
+   Frm_LabelColumn ("RT",
+                    TypeViewExamAnnouncement == ExaAnn_FORM_VIEW ? "DurationHour" :
+	                                                           NULL,
+	            Txt_EXAM_ANNOUNCEMENT_Approximate_duration);
 
    /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
+   HTM_TD_Begin ("class=\"EXAM LB\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
      {
       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"name=\"DurationHour\"");
+			"id=\"DurationHour\" name=\"DurationHour\"");
       for (Hour = 0;
 	   Hour <= 8;
 	   Hour++)
@@ -1366,7 +1392,7 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
       if (ExamAnns->ExamAnn.Duration.Hour)
         {
          if (ExamAnns->ExamAnn.Duration.Minute)
-            HTM_TxtF ("%u %s %u &prime;",ExamAnns->ExamAnn.Duration.Hour,
+            HTM_TxtF ("%u%s %u&prime;",ExamAnns->ExamAnn.Duration.Hour,
                                        Txt_hours_ABBREVIATION,
                                        ExamAnns->ExamAnn.Duration.Minute);
          else
@@ -1395,7 +1421,7 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
 		    Txt_EXAM_ANNOUNCEMENT_Place_of_exam);
 
    /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
+   HTM_TD_Begin ("class=\"EXAM LB\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"Place\" name=\"Place\" cols=\"40\" rows=\"4\"");
@@ -1419,11 +1445,11 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
    /* Label */
    Frm_LabelColumn ("RT",
 		    TypeViewExamAnnouncement == ExaAnn_FORM_VIEW ? "ExamMode" :
-			                                        NULL,
+			                                           NULL,
 		    Txt_EXAM_ANNOUNCEMENT_Mode);
 
    /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
+   HTM_TD_Begin ("class=\"EXAM LB\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"ExamMode\" name=\"ExamMode\" cols=\"40\" rows=\"2\"");
@@ -1451,7 +1477,7 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
 		    Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam);
 
    /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
+   HTM_TD_Begin ("class=\"EXAM LB\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"Structure\" name=\"Structure\" cols=\"40\" rows=\"8\"");
@@ -1479,7 +1505,7 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
 		    Txt_EXAM_ANNOUNCEMENT_Documentation_required);
 
    /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
+   HTM_TD_Begin ("class=\"EXAM LB\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"DocRequired\" name=\"DocRequired\" cols=\"40\" rows=\"2\"");
@@ -1503,11 +1529,11 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
    /* Label */
    Frm_LabelColumn ("RT",
 		    TypeViewExamAnnouncement == ExaAnn_FORM_VIEW ? "MatRequired" :
-			                                        NULL,
+			                                           NULL,
 		    Txt_EXAM_ANNOUNCEMENT_Material_required);
 
    /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
+   HTM_TD_Begin ("class=\"EXAM LB\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"MatRequired\" name=\"MatRequired\" cols=\"40\" rows=\"4\"");
@@ -1531,11 +1557,11 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
    /* Label */
    Frm_LabelColumn ("RT",
 		    TypeViewExamAnnouncement == ExaAnn_FORM_VIEW ? "MatAllowed" :
-			                                        NULL,
+			                                           NULL,
 		    Txt_EXAM_ANNOUNCEMENT_Material_allowed);
 
    /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
+   HTM_TD_Begin ("class=\"EXAM LB\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"MatAllowed\" name=\"MatAllowed\" cols=\"40\" rows=\"4\"");
@@ -1563,7 +1589,7 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
 		    Txt_EXAM_ANNOUNCEMENT_Other_information);
 
    /* Data */
-   HTM_TD_Begin ("class=\"EXAM LT\"");
+   HTM_TD_Begin ("class=\"EXAM LB\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
      {
       HTM_TEXTAREA_Begin ("id=\"OtherInfo\" name=\"OtherInfo\" cols=\"40\" rows=\"5\"");
@@ -1605,7 +1631,7 @@ static void ExaAnn_ShowExamAnnouncement (struct ExaAnn_ExamAnnouncements *ExamAn
 /********* Put icons to remove / edit / print an exam announcement ***********/
 /*****************************************************************************/
 
-static void ExaAnn_PutIconsExamAnnouncement (void *ExamAnns)
+static void ExaAnn_PutIconsExamAnn (void *ExamAnns)
   {
    if (ExamAnns)
      {
@@ -1671,9 +1697,9 @@ static long ExaAnn_GetParamExaCod (void)
 /************ Get summary and content about an exam announcement *************/
 /*****************************************************************************/
 
-void ExaAnn_GetSummaryAndContentExamAnnouncement (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                               char **ContentStr,
-                                               long ExaCod,bool GetContent)
+void ExaAnn_GetSummaryAndContentExamAnn (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+                                         char **ContentStr,
+                                         long ExaCod,bool GetContent)
   {
    extern const char *Txt_hours_ABBREVIATION;
    struct ExaAnn_ExamAnnouncements ExamAnns;
@@ -1681,20 +1707,20 @@ void ExaAnn_GetSummaryAndContentExamAnnouncement (char SummaryStr[Ntf_MAX_BYTES_
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
 
    /***** Reset exam announcements context *****/
-   ExaAnn_ResetExamAnnouncements (&ExamAnns);
+   ExaAnn_ResetExamAnns (&ExamAnns);
 
    /***** Initializations *****/
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Allocate memory for the exam announcement *****/
-   ExaAnn_AllocMemExamAnnouncement (&ExamAnns);
+   ExaAnn_AllocMemExamAnn (&ExamAnns);
 
    /***** Get data of an exam announcement from database *****/
-   ExaAnn_GetDataExamAnnouncementFromDB (&ExamAnns,ExaCod);
+   ExaAnn_GetDataExamAnnFromDB (&ExamAnns,ExaCod);
 
    /***** Content *****/
    if (GetContent)
-      ExaAnn_GetNotifContentExamAnnouncement (&ExamAnns,ContentStr);
+      ExaAnn_GetNotifContentExamAnn (&ExamAnns,ContentStr);
 
    /***** Summary *****/
    /* Name of the course and date of exam */
@@ -1709,15 +1735,15 @@ void ExaAnn_GetSummaryAndContentExamAnnouncement (char SummaryStr[Ntf_MAX_BYTES_
              Ntf_MAX_BYTES_SUMMARY);
 
    /***** Free memory of the exam announcement *****/
-   ExaAnn_FreeMemExamAnnouncement (&ExamAnns);
+   ExaAnn_FreeMemExamAnn (&ExamAnns);
   }
 
 /*****************************************************************************/
 /************ Show a form with the data of an exam announcement **************/
 /*****************************************************************************/
 
-static void ExaAnn_GetNotifContentExamAnnouncement (const struct ExaAnn_ExamAnnouncements *ExamAnns,
-                                                 char **ContentStr)
+static void ExaAnn_GetNotifContentExamAnn (const struct ExaAnn_ExamAnnouncements *ExamAnns,
+                                           char **ContentStr)
   {
    extern const char *Txt_Institution;
    extern const char *Txt_Degree;

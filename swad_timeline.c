@@ -2209,7 +2209,7 @@ static void TL_GetNoteSummary (const struct TL_Note *SocNot,
 	 Brw_GetSummaryAndContentOfFile (SummaryStr,NULL,SocNot->Cod,false);
          break;
       case TL_NOTE_EXAM_ANNOUNCEMENT:
-         ExaAnn_GetSummaryAndContentExamAnnouncement (SummaryStr,NULL,SocNot->Cod,false);
+         ExaAnn_GetSummaryAndContentExamAnn (SummaryStr,NULL,SocNot->Cod,false);
          break;
       case TL_NOTE_POST:
 	 // Not applicable
