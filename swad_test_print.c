@@ -76,6 +76,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       struct TstPrn_Print *Print,
 				       unsigned NumQst,
 				       struct Tst_Question *Question,
+				       bool QuestionExists,
 				       unsigned Visibility);
 static void TstPrn_ComputeAnswerScore (struct TstPrn_Print *Print,
 				       unsigned NumQst,
@@ -230,6 +231,7 @@ void TstPrn_ShowExamAfterAssess (struct TstPrn_Print *Print)
   {
    unsigned NumQst;
    struct Tst_Question Question;
+   bool QuestionExists;
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (10);
@@ -249,26 +251,24 @@ void TstPrn_ShowExamAfterAssess (struct TstPrn_Print *Print)
       Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
 
       /***** Get question data *****/
-      if (Tst_GetQstDataFromDB (&Question))	// Question exists
-	{
-	 /***** Write question and answers *****/
-	 TstPrn_WriteQstAndAnsExam (&Gbl.Usrs.Me.UsrDat,
-				    Print,NumQst,
-				    &Question,
-				    TstCfg_GetConfigVisibility ());
+      QuestionExists = Tst_GetQstDataFromDB (&Question);
 
-	 /***** Store test exam question in database *****/
-	 TstPrn_StoreOneExamQstInDB (Print,NumQst);
+      /***** Write question and answers *****/
+      TstPrn_WriteQstAndAnsExam (&Gbl.Usrs.Me.UsrDat,Print,
+				 NumQst,&Question,QuestionExists,
+				 TstCfg_GetConfigVisibility ());
 
-	 /***** Compute total score *****/
-	 Print->Score += Print->PrintedQuestions[NumQst].Score;
-	 if (Print->PrintedQuestions[NumQst].AnswerIsNotBlank)
-	    Print->NumQstsNotBlank++;
+      /***** Store test exam question in database *****/
+      TstPrn_StoreOneExamQstInDB (Print,NumQst);
 
-	 /***** Update the number of accesses and the score of this question *****/
-	 if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-	    Tst_UpdateQstScoreInDB (Print,NumQst);
-	}
+      /***** Compute total score *****/
+      Print->Score += Print->PrintedQuestions[NumQst].Score;
+      if (Print->PrintedQuestions[NumQst].AnswerIsNotBlank)
+	 Print->NumQstsNotBlank++;
+
+      /***** Update the number of accesses and the score of this question *****/
+      if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
+	 Tst_UpdateQstScoreInDB (Print,NumQst);
 
       /***** Destroy test question *****/
       Tst_QstDestructor (&Question);
@@ -286,17 +286,14 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       struct TstPrn_Print *Print,
 				       unsigned NumQst,
 				       struct Tst_Question *Question,
+				       bool QuestionExists,
 				       unsigned Visibility)
   {
    extern const char *Txt_Score;
    extern const char *Txt_Question_removed;
    extern const char *Txt_Question_modified;
-   bool QuestionExists;
    bool QuestionUneditedAfterExam = false;
    bool IsVisibleQstAndAnsTxt = TstVis_IsVisibleQstAndAnsTxt (Visibility);
-
-   /***** Does question exist? *****/
-   QuestionExists = (Question->QstCod > 0);
 
    /***** If this question has been edited later than test time
 	  ==> don't show question ****/
@@ -347,9 +344,9 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
       HTM_TxtColonNBSP (Txt_Score);
       HTM_SPAN_Begin ("class=\"%s\"",
 		      Print->PrintedQuestions[NumQst].StrAnswers[0] ?
-		      (Print->PrintedQuestions[NumQst].Score > 0 ? "ANS_OK" :		// Correct/semicorrect
-							            "ANS_BAD") :	// Wrong
-							            "ANS_0");		// Blank answer
+		      (Print->PrintedQuestions[NumQst].Score > 0 ? "ANS_OK" :	// Correct/semicorrect
+							           "ANS_BAD") :	// Wrong
+							           "ANS_0");	// Blank answer
       HTM_Double2Decimals (Print->PrintedQuestions[NumQst].Score);
       HTM_SPAN_End ();
       HTM_DIV_End ();
@@ -2217,6 +2214,7 @@ void TstPrn_ShowExamAnswers (struct UsrData *UsrDat,
   {
    unsigned NumQst;
    struct Tst_Question Question;
+   bool QuestionExists;
 
    for (NumQst = 0;
 	NumQst < Print->NumQsts;
@@ -2229,9 +2227,12 @@ void TstPrn_ShowExamAnswers (struct UsrData *UsrDat,
       Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
 
       /***** Get question data *****/
-      if (Tst_GetQstDataFromDB (&Question))	// Question exists?
-	 /***** Write questions and answers *****/
-	 TstPrn_WriteQstAndAnsExam (UsrDat,Print,NumQst,&Question,Visibility);
+      QuestionExists = Tst_GetQstDataFromDB (&Question);
+
+      /***** Write questions and answers *****/
+      TstPrn_WriteQstAndAnsExam (UsrDat,Print,
+                                 NumQst,&Question,QuestionExists,
+                                 Visibility);
 
       /***** Destroy test question *****/
       Tst_QstDestructor (&Question);
