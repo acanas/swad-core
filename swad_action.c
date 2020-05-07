@@ -49,6 +49,7 @@
 #include "swad_exam.h"
 #include "swad_exam_announcement.h"
 #include "swad_exam_event.h"
+#include "swad_exam_print.h"
 #include "swad_exam_result.h"
 #include "swad_exam_set.h"
 #include "swad_enrolment.h"
@@ -738,6 +739,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActAddQstToExa	] = {1887,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_AddQstsToSet		,NULL},
    [ActReqRemSetQst	] = {1888,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RequestRemoveQstFromSet	,NULL},
    [ActRemExaQst	] = {1889,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RemoveQstFromSet	,NULL},
+
+   [ActSeeExaPrn	] = {1904,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaPrn_ShowNewExamPrint	,NULL},
 
    [ActSeeGam		] = {1650,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeOneGame			,NULL},
 
@@ -3720,6 +3723,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActShoExaEvt,		// #1901
 	ActEdiOneExaEvt,	// #1902
 	ActChgExaEvt,		// #1903
+	ActSeeExaPrn,		// #1904
 	};
 
 /*****************************************************************************/

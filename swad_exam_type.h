@@ -81,6 +81,24 @@ struct Exa_Exams
    long QstCod;			// Current question code
   };
 
+/*                                                       Student 1
+   +----------------+     +-----------+     +--------------+   +--------------+
+   |     Exam 1     |--+--|  Event 1  |--+--|    Print 1   |   |   Result 1   |
+   |+--------------+|  |  | * Start   |  |  | * Question 2 |   | * Question 2 |
+   ||     Set 1    ||  |  | * End     |  |  |--------------|-->|--------------|
+   || * Question 1 ||  |  | * Groups  |  |  | * Question 5 |   | * Question 5 |
+   || * Question 2 ||  |  +-----------+  |  | * Question 3 |   | * Question 3 |
+   |+--------------+|  |  +-----------+  |  +--------------+   +--------------+
+   |+--------------+|  +--|  Event 2  |  |               Student 2
+   ||     Set 2    ||     | * Start   |  |  +--------------+   +--------------+
+   || * Question 3 ||     | * End     |  +--|    Print 2   |   |   Result 2   |
+   || * Question 4 ||     | * Groups  |     | * Question 1 |   | * Question 1 |
+   || * Question 5 ||     +-----------+     |--------------|-->|--------------|
+   || * Question 6 ||          ...          | * Question 6 |   | * Question 6 |
+   |+--------------+|                       | * Question 5 |   | * Question 5 |
+   +----------------+                       +--------------+   +--------------+
+           ...                                              ...              */
+
 struct Exa_Exam
   {
    long ExaCod;			// Exam code
@@ -104,7 +122,8 @@ struct ExaSet_Set
    long ExaCod;			// Exam code
    long SetCod;			// Set code
    unsigned SetInd;		// Set index (position in the exam)
-   unsigned NumQstsToExam;	// Number of questions in this set taht will appear in the exam
+   unsigned NumQstsToPrint;	// Number of questions in this set
+				// that will appear in each exam print
    char Title[ExaSet_MAX_BYTES_TITLE + 1];	// Title of the set
   };
 

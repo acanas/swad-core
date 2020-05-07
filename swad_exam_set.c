@@ -96,7 +96,7 @@ static void ExaSet_UpdateSet (const struct ExaSet_Set *Set);
 static void ExaSet_UpdateSetTitleDB (const struct ExaSet_Set *Set,
                                      const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1]);
 static void ExaSet_UpdateNumQstsToExamDB (const struct ExaSet_Set *Set,
-                                          unsigned NumQstsToExam);
+                                          unsigned NumQstsToPrint);
 
 static void ExaSet_PutParamSetCod (long SetCod);
 
@@ -202,7 +202,7 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
    if (DB_QuerySELECT (&mysql_res,"can not get set data",
 		       "SELECT SetCod,"		// row[0]
 			      "SetInd,"		// row[1]
-			      "NumQstsToExam,"	// row[2]
+			      "NumQstsToPrint,"	// row[2]
 			      "Title"		// row[3]
 		       " FROM exa_sets"
 		       " WHERE SetCod=%ld"
@@ -214,7 +214,7 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
       /*
       row[0] SetCod
       row[1] SetInd
-      row[2] NumQstsToExam
+      row[2] NumQstsToPrint
       row[3] Title
       */
       /* Get set code (row[0]) */
@@ -227,7 +227,7 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
 		Set->SetInd);
 
       /* Get set index (row[2]) */
-      Set->NumQstsToExam = Str_ConvertStrToUnsigned (row[2]);
+      Set->NumQstsToPrint = Str_ConvertStrToUnsigned (row[2]);
 
       /* Get the title of the set (row[3]) */
       Str_Copy (Set->Title,row[3],
@@ -314,7 +314,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 
    /***** Number of questions to appear in the exam *****/
    HTM_TD_Begin ("class=\"RM\"");
-   HTM_INPUT_LONG ("NumQstsToExam",0,UINT_MAX,(long) Set->NumQstsToExam,
+   HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set->NumQstsToPrint,
                    HTM_DONT_SUBMIT_ON_CHANGE,false,
 		    "class=\"INPUT_LONG\" required=\"required\"");
    HTM_TD_End ();
@@ -382,11 +382,11 @@ static void ExaSet_ReceiveSetFieldsFromForm (struct ExaSet_Set *Set)
    /***** Get set title *****/
    Par_GetParToText ("Title",Set->Title,ExaSet_MAX_BYTES_TITLE);
 
-   /***** Get number of questions in set to appear in exam *****/
-   Set->NumQstsToExam = (unsigned) Par_GetParToUnsignedLong ("NumQstsToExam",
-                                                             0,
-                                                             UINT_MAX,
-                                                             0);
+   /***** Get number of questions in set to appear in exam print *****/
+   Set->NumQstsToPrint = (unsigned) Par_GetParToUnsignedLong ("NumQstsToPrint",
+                                                              0,
+                                                              UINT_MAX,
+                                                              0);
   }
 
 static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
@@ -485,7 +485,7 @@ void ExaSet_ChangeNumQstsToExam (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaSet_Set Set;
-   unsigned NumQstsToExam;
+   unsigned NumQstsToPrint;
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
@@ -512,20 +512,20 @@ void ExaSet_ChangeNumQstsToExam (void)
    ExaSet_GetDataOfSetByCod (&Set);
    Exams.SetCod = Set.SetCod;
 
-   /***** Get number of questions in set to appear in exam *****/
-   NumQstsToExam = (unsigned) Par_GetParToUnsignedLong ("NumQstsToExam",
-                                                        0,
-                                                        UINT_MAX,
-                                                        0);
+   /***** Get number of questions in set to appear in exam print *****/
+   NumQstsToPrint = (unsigned) Par_GetParToUnsignedLong ("NumQstsToPrint",
+                                                         0,
+                                                         UINT_MAX,
+                                                         0);
 
    /***** Check if title should be changed *****/
-   if (NumQstsToExam != Set.NumQstsToExam)
+   if (NumQstsToPrint != Set.NumQstsToPrint)
      {
       /* Update the table changing old number by new number */
-      ExaSet_UpdateNumQstsToExamDB (&Set,NumQstsToExam);
+      ExaSet_UpdateNumQstsToExamDB (&Set,NumQstsToPrint);
 
       /* Update title */
-      Set.NumQstsToExam = NumQstsToExam;
+      Set.NumQstsToPrint = NumQstsToPrint;
      }
 
    /***** Show current exam and its sets *****/
@@ -549,12 +549,12 @@ static void ExaSet_CreateSet (struct ExaSet_Set *Set)
    Set->SetCod =
    DB_QueryINSERTandReturnCode ("can not create new set of questions",
 				"INSERT INTO exa_sets"
-				" (ExaCod,SetInd,NumQstsToExam,Title)"
+				" (ExaCod,SetInd,NumQstsToPrint,Title)"
 				" VALUES"
 				" (%ld,%u,%u,'%s')",
 				Set->ExaCod,
 				MaxSetInd + 1,
-				Set->NumQstsToExam,
+				Set->NumQstsToPrint,
 				Set->Title);
 
    /***** Write success message *****/
@@ -575,12 +575,12 @@ static void ExaSet_UpdateSet (const struct ExaSet_Set *Set)
 		   "UPDATE exa_sets"
 		   " SET ExaCod=%ld,"
 		        "SetInd=%u,"
-		        "NumQstsToExam=%u,"
+		        "NumQstsToPrint=%u,"
 		        "Title='%s'"
 		   " WHERE SetCod=%ld",
 		   Set->ExaCod,
 		   Set->SetInd,
-		   Set->NumQstsToExam,
+		   Set->NumQstsToPrint,
 	           Set->Title,
 	           Set->SetCod);
 
@@ -605,18 +605,18 @@ static void ExaSet_UpdateSetTitleDB (const struct ExaSet_Set *Set,
   }
 
 /*****************************************************************************/
-/********* Update number of questions to appear in exam in database **********/
+/****** Update number of questions to appear in exam print in database *******/
 /*****************************************************************************/
 
 static void ExaSet_UpdateNumQstsToExamDB (const struct ExaSet_Set *Set,
-                                          unsigned NumQstsToExam)
+                                          unsigned NumQstsToPrint)
   {
    /***** Update set of questions changing old number by new number *****/
-   DB_QueryUPDATE ("can not update the number of questions to appear in exam",
-		   "UPDATE exa_sets SET NumQstsToExam=%u"
+   DB_QueryUPDATE ("can not update the number of questions to appear in exam print",
+		   "UPDATE exa_sets SET NumQstsToPrint=%u"
 		   " WHERE SetCod=%ld"
 		   " AND ExaCod=%ld",	// Extra check
-	           NumQstsToExam,
+	           NumQstsToPrint,
 	           Set->SetCod,Set->ExaCod);
   }
 
@@ -644,9 +644,9 @@ unsigned ExaSet_GetNumQstsExam (long ExaCod)
    MYSQL_ROW row;
    unsigned NumQsts = 0;
 
-   /***** Get total number of questions to appear in exam *****/
-   if (!DB_QuerySELECT (&mysql_res,"can not get number of questions in an exam",
-			"SELECT SUM(NumQstsToExam) FROM exa_sets"
+   /***** Get total number of questions to appear in exam print *****/
+   if (!DB_QuerySELECT (&mysql_res,"can not get number of questions in an exam print",
+			"SELECT SUM(NumQstsToPrint) FROM exa_sets"
 			" WHERE ExaCod=%ld",
 			ExaCod))
       Lay_ShowErrorAndExit ("Error: wrong question index.");
@@ -997,7 +997,7 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams,
 	     DB_QuerySELECT (&mysql_res,"can not get sets of questions",
 			      "SELECT SetCod,"		// row[0]
 			             "SetInd,"		// row[1]
-				     "NumQstsToExam,"	// row[2]
+				     "NumQstsToPrint,"	// row[2]
 				     "Title"		// row[3]
 			      " FROM exa_sets"
 			      " WHERE ExaCod=%ld"
@@ -1121,7 +1121,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       /*
       row[0] SetCod
       row[1] SetInd
-      row[2] NumQstsToExam
+      row[2] NumQstsToPrint
       row[3] Title
       */
       /* Get set code (row[0]) */
@@ -1133,8 +1133,8 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	        "%u",
 		Set.SetInd);
 
-      /* Get set index (row[2]) */
-      Set.NumQstsToExam = Str_ConvertStrToUnsigned (row[2]);
+      /* Get number of questions to exam (row[2]) */
+      Set.NumQstsToPrint = Str_ConvertStrToUnsigned (row[2]);
 
       /* Get the title of the set (row[3]) */
       Str_Copy (Set.Title,row[3],
@@ -1215,11 +1215,11 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       HTM_Unsigned (ExaSet_GetNumQstsInSet (Set.SetCod));
       HTM_TD_End ();
 
-      /***** Number of questions to appear in exam *****/
+      /***** Number of questions to appear in exam print *****/
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
       Frm_StartFormAnchor (ActChgNumQstExaSet,Anchor);
       ExaSet_PutParamsOneSet (Exams);
-      HTM_INPUT_LONG ("NumQstsToExam",0,UINT_MAX,(long) Set.NumQstsToExam,
+      HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set.NumQstsToPrint,
                       HTM_SUBMIT_ON_CHANGE,false,
 		       "class=\"INPUT_LONG\" required=\"required\"");
       Frm_EndForm ();
@@ -1285,7 +1285,7 @@ void ExaSet_ResetSet (struct ExaSet_Set *Set)
    Set->SetCod        = -1L;
    Set->SetInd        = 0;
    Set->Title[0]      = '\0';
-   Set->NumQstsToExam = 0;
+   Set->NumQstsToPrint = 0;
   }
 
 /*****************************************************************************/

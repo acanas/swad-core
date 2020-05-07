@@ -548,10 +548,14 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.215 (2020-05-07)"
+#define Log_PLATFORM_VERSION	"SWAD 19.216 (2020-05-07)"
 #define CSS_FILE		"swad19.193.1.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+	Version 19.216:   May 07, 2020  New module exam_print to generate new exam prints. (301949 lines)
+					1 change necessary in database:
+ALTER TABLE exa_sets CHANGE COLUMN NumQstsToExam NumQstsToPrint INT NOT NULL DEFAULT 0;
+
 	Version 19.215:   May 07, 2020  New module exam_set for set of questions. (301695 lines)
 	Version 19.214.1: May 07, 2020  Change color of dates on current exam event. (301597 lines)
 	Version 19.214:   May 06, 2020  New API function getLocations. (301568 lines)

@@ -121,7 +121,8 @@ static void ExaEvt_ListOneOrMoreEventsIcons (struct Exa_Exams *Exams,
 					     const char *Anchor);
 static void ExaEvt_ListOneOrMoreEventsAuthor (const struct ExaEvt_Event *Event);
 static void ExaEvt_ListOneOrMoreEventsTimes (const struct ExaEvt_Event *Event,unsigned UniqueId);
-static void ExaEvt_ListOneOrMoreEventsTitleGrps (const struct ExaEvt_Event *Event,
+static void ExaEvt_ListOneOrMoreEventsTitleGrps (struct Exa_Exams *Exams,
+                                                 const struct ExaEvt_Event *Event,
                                                  const char *Anchor);
 static void ExaEvt_GetAndWriteNamesOfGrpsAssociatedToEvent (const struct ExaEvt_Event *Event);
 static void ExaEvt_ListOneOrMoreEventsNumParticipants (const struct ExaEvt_Event *Event);
@@ -550,7 +551,7 @@ static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
 	 ExaEvt_ListOneOrMoreEventsTimes (&Event,UniqueId);
 
 	 /* Title and groups */
-	 ExaEvt_ListOneOrMoreEventsTitleGrps (&Event,Anchor);
+	 ExaEvt_ListOneOrMoreEventsTitleGrps (Exams,&Event,Anchor);
 
 	 /* Number of participants who have answered any question in the exam event */
 	 ExaEvt_ListOneOrMoreEventsNumParticipants (&Event);
@@ -734,7 +735,8 @@ static void ExaEvt_ListOneOrMoreEventsTimes (const struct ExaEvt_Event *Event,un
 /*************** Put a column for exam event title and grous *****************/
 /*****************************************************************************/
 
-static void ExaEvt_ListOneOrMoreEventsTitleGrps (const struct ExaEvt_Event *Event,
+static void ExaEvt_ListOneOrMoreEventsTitleGrps (struct Exa_Exams *Exams,
+                                                 const struct ExaEvt_Event *Event,
                                                  const char *Anchor)
   {
    extern const char *Txt_Play;
@@ -744,8 +746,8 @@ static void ExaEvt_ListOneOrMoreEventsTitleGrps (const struct ExaEvt_Event *Even
 
    /***** Event title *****/
    HTM_ARTICLE_Begin (Anchor);
-   Frm_StartForm (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiExaEvt :
-						       ActResExaEvt);
+   Frm_StartForm (ActSeeExaPrn);
+   Exa_PutParams (Exams);
    ExaEvt_PutParamEvtCod (Event->EvtCod);
    HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 								 Txt_Resume,
