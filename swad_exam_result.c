@@ -1353,13 +1353,13 @@ void ExaRes_GetExamResultQuestionsFromDB (long EvtCod,long UsrCod,
 
       /* Get indexes for this question (row[2]) */
       Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[2],
-                TstPrn_MAX_BYTES_INDEXES_ONE_QST);
+                Tst_MAX_BYTES_INDEXES_ONE_QST);
 
       /* Get answers selected by user for this question */
       ExaEvt_GetQstAnsFromDB (EvtCod,UsrCod,QstInd,&UsrAnswer);
       if (UsrAnswer.AnsInd >= 0)	// UsrAnswer.AnsInd >= 0 ==> answer selected
 	{
-         snprintf (Print->PrintedQuestions[NumQst].StrAnswers,TstPrn_MAX_BYTES_ANSWERS_ONE_QST + 1,
+         snprintf (Print->PrintedQuestions[NumQst].StrAnswers,Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
 		   "%d",UsrAnswer.AnsInd);
          Print->NumQstsNotBlank++;
         }

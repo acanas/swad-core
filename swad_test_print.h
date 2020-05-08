@@ -35,13 +35,6 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define TstPrn_MAX_BYTES_INDEXES_ONE_QST	(Tst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
-
-#define TstPrn_MAX_CHARS_ANSWERS_ONE_QST	(128 - 1)	// 127
-#define TstPrn_MAX_BYTES_ANSWERS_ONE_QST	((TstPrn_MAX_CHARS_ANSWERS_ONE_QST + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
-#define TstPrn_SCORE_MAX	10	// Maximum score of a test (10 in Spain). Must be unsigned! // TODO: Make this configurable by teachers
-
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
@@ -49,8 +42,8 @@
 struct TstPrn_PrintedQuestion
   {
    long QstCod;		// Question code
-   char StrIndexes[TstPrn_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
-   char StrAnswers[TstPrn_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
+   char StrIndexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
+   char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
    double Score;		// Question score
    bool AnswerIsNotBlank;	// Answer not blank?
   };
@@ -73,19 +66,20 @@ struct TstPrn_Print
 /*****************************************************************************/
 
 void TstPrn_ResetResult (struct TstPrn_Print *Print);
-void TstPrn_CreateExamInDB (struct TstPrn_Print *Print);
+void TstPrn_CreatePrintInDB (struct TstPrn_Print *Print);
 void TstPrn_UpdateExamInDB (const struct TstPrn_Print *Print);
 
 void TstPrn_ShowExamAfterAssess (struct TstPrn_Print *Print);
 
-void TstPrn_ComputeScoresAndStoreExamQuestions (struct TstPrn_Print *Print,
+void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
                                                 bool UpdateQstScore);
-void TstPrn_ComputeChoiceAnsScore (struct TstPrn_Print *Print,
-				   unsigned NumQst,
+void TstPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				struct Tst_Question *Question);
+void TstPrn_ComputeChoiceAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				   struct Tst_Question *Question);
-void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[TstPrn_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
+void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
 			       unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
-void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[TstPrn_MAX_BYTES_ANSWERS_ONE_QST + 1],
+void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1],
 			       bool UsrAnswers[Tst_MAX_OPTIONS_PER_QUESTION]);
 
 void TstPrn_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);

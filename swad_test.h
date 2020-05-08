@@ -177,6 +177,8 @@ void Tst_PutParamQstCod (void *QstCod);
 
 void Tst_InsertOrUpdateQstTagsAnsIntoDB (struct Tst_Question *Question);
 
+void Tst_UpdateQstScoreInDB (struct TstPrn_PrintedQuestion *PrintedQuestion);
+
 void Tst_RemoveCrsTests (long CrsCod);
 
 void Tst_GetTestStats (Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);

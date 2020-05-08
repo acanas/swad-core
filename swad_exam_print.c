@@ -86,8 +86,15 @@ static void ExaPrn_ResetPrintExceptPrnCod (struct ExaPrn_Print *Print);
 
 static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
 	                                          struct ExaPrn_Print *Print);
-static void ExaPrn_ShowQuestionsFromSet (struct ExaPrn_Print *Print,
-                                         struct ExaSet_Set *Set);
+static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
+                                                  struct ExaSet_Set *Set,
+                                                  unsigned *NumQstInPrint);
+static void ExaPrn_CreatePrintInDB (const struct ExaEvt_Event *Event,
+				    struct ExaPrn_Print *Print);
+static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *Print,
+                                                          bool UpdateQstScore);
+static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
+                                           unsigned NumQst);
 
 /*****************************************************************************/
 /**************************** Reset exam print *******************************/
@@ -145,6 +152,22 @@ void ExaPrn_ShowNewExamPrint (void)
    /***** Get questions from database *****/
    ExaPrn_GetQuestionsForNewPrintFromDB (&Exam,&Print);
 
+   if (Print.NumQsts)
+     {
+      /***** Create new exam print in database *****/
+      ExaPrn_CreatePrintInDB (&Event,&Print);
+      ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
+						    false);	// Don't update question score
+
+      /***** Show test exam to be answered *****/
+      // Tst_ShowTestExamToFillIt (&Print,NumExamsGeneratedByMe,Tst_REQUEST);
+     }
+   // else	// No questions found
+   //   {
+   //    Ale_ShowAlert (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
+   //    Tst_ShowFormRequestTest (&Test);	// Show the form again
+   //   }
+
    /***** End table *****/
    HTM_TABLE_End ();
   }
@@ -163,6 +186,8 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
    unsigned NumSets;
    unsigned NumSet;
    struct ExaSet_Set Set;
+   unsigned NumQstsFromSet;
+   unsigned NumQstInPrint = 0;
 
    /***** Get data of set of questions from database *****/
    NumSets = (unsigned)
@@ -175,9 +200,10 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
 			      " ORDER BY SetInd",
 			      Exam->ExaCod);
 
-   /***** Show table with sets *****/
+   /***** Get questions from all sets *****/
+   Print->NumQsts = 0;
    if (NumSets)
-      /***** Write rows *****/
+      /***** For each set in exam... *****/
       for (NumSet = 0;
 	   NumSet < NumSets;
 	   NumSet++)
@@ -227,8 +253,13 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
 	 HTM_TR_End ();
 
 	 /***** Questions in this set *****/
-	 ExaPrn_ShowQuestionsFromSet (Print,&Set);
+	 NumQstsFromSet = ExaPrn_GetSomeQstsFromSetToPrint (Print,&Set,&NumQstInPrint);
+	 Print->NumQsts += NumQstsFromSet;
 	}
+
+   /***** Check *****/
+   if (Print->NumQsts != NumQstInPrint)
+      Lay_ShowErrorAndExit ("Wrong number of questions.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -238,35 +269,35 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
 /************************ Show questions from a set **************************/
 /*****************************************************************************/
 
-static void ExaPrn_ShowQuestionsFromSet (struct ExaPrn_Print *Print,
-                                         struct ExaSet_Set *Set)
+static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
+                                                  struct ExaSet_Set *Set,
+                                                  unsigned *NumQstInPrint)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumQsts;
-   unsigned NumQst;
-   long QstCod;
+   unsigned NumQstsInSet;
+   unsigned NumQstInSet;
    Tst_AnswerType_t AnswerType;
    bool Shuffle;
 
    /***** Get questions from database *****/
-   NumQsts = (unsigned)
-	     DB_QuerySELECT (&mysql_res,"can not get questions from set",
-			     "SELECT tst_questions.QstCod,"	// row[0]
-			            "tst_questions.AnsType,"	// row[1]
-			            "tst_questions.Shuffle"	// row[2]
-	                     " FROM exa_questions,tst_questions"
-			     " WHERE exa_questions.setCod=%ld"
-	                     " AND exa_questions.QstCod=tst_questions.QstCod"
-			     " ORDER BY RAND(NOW())"
-			     " LIMIT %u",
-			     Set->SetCod,
-			     Set->NumQstsToPrint);
+   NumQstsInSet = (unsigned)
+		  DB_QuerySELECT (&mysql_res,"can not get questions from set",
+				  "SELECT tst_questions.QstCod,"	// row[0]
+					 "tst_questions.AnsType,"	// row[1]
+					 "tst_questions.Shuffle"	// row[2]
+				  " FROM exa_questions,tst_questions"
+				  " WHERE exa_questions.setCod=%ld"
+				  " AND exa_questions.QstCod=tst_questions.QstCod"
+				  " ORDER BY RAND()"	// Don't use RAND(NOW()) because the same ordering will be repeated across sets
+				  " LIMIT %u",
+				  Set->SetCod,
+				  Set->NumQstsToPrint);
 
    /***** Questions in this set *****/
-   for (NumQst = 0;
-	NumQst < NumQsts;
-	NumQst++)
+   for (NumQstInSet = 0;
+	NumQstInSet < NumQstsInSet;
+	NumQstInSet++, (*NumQstInPrint)++)
      {
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 
@@ -279,7 +310,7 @@ static void ExaPrn_ShowQuestionsFromSet (struct ExaPrn_Print *Print,
       */
 
       /* Get question code (row[0]) */
-      QstCod = Str_ConvertStrCodToLongCod (row[0]);
+      Print->PrintedQuestions[*NumQstInPrint].QstCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get answer type (row[1]) */
       AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
@@ -294,13 +325,13 @@ static void ExaPrn_ShowQuestionsFromSet (struct ExaPrn_Print *Print,
 	 case Tst_ANS_FLOAT:
 	 case Tst_ANS_TRUE_FALSE:
 	 case Tst_ANS_TEXT:
-	    Print->PrintedQuestions[NumQst].StrIndexes[0] = '\0';
+	    Print->PrintedQuestions[*NumQstInPrint].StrIndexes[0] = '\0';
 	    break;
 	 case Tst_ANS_UNIQUE_CHOICE:
 	 case Tst_ANS_MULTIPLE_CHOICE:
             /* If answer type is unique or multiple option,
                generate indexes of answers depending on shuffle */
-	    Tst_GenerateChoiceIndexesDependingOnShuffle (&Print->PrintedQuestions[NumQst],Shuffle);
+	    Tst_GenerateChoiceIndexesDependingOnShuffle (&Print->PrintedQuestions[*NumQstInPrint],Shuffle);
 	    break;
 	 default:
 	    break;
@@ -310,14 +341,14 @@ static void ExaPrn_ShowQuestionsFromSet (struct ExaPrn_Print *Print,
          Initially user has not answered the question ==> initially all the answers will be blank.
          If the user does not confirm the submission of their exam ==>
          ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-      Print->PrintedQuestions[NumQst].StrAnswers[0] = '\0';
+      Print->PrintedQuestions[*NumQstInPrint].StrAnswers[0] = '\0';
 
       /* Begin row for this question */
       HTM_TR_Begin (NULL);
 
       /* Title */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("Pregunta %ld",QstCod);
+      HTM_TxtF ("Pregunta %ld",Print->PrintedQuestions[*NumQstInPrint].QstCod);
       HTM_TD_End ();
 
       /* Number of questions to appear in exam print */
@@ -328,4 +359,97 @@ static void ExaPrn_ShowQuestionsFromSet (struct ExaPrn_Print *Print,
       /* End title for this question */
       HTM_TR_End ();
      }
+
+   return NumQstsInSet;
+  }
+
+/*****************************************************************************/
+/***************** Create new blank exam print in database *******************/
+/*****************************************************************************/
+
+static void ExaPrn_CreatePrintInDB (const struct ExaEvt_Event *Event,
+				    struct ExaPrn_Print *Print)
+  {
+   /***** Insert new exam print into table *****/
+   Print->PrnCod =
+   DB_QueryINSERTandReturnCode ("can not create new exam print",
+				"INSERT INTO exa_prints"
+				" (EvtCod,UsrCod,StartTime,EndTime,NumQsts,NumQstsNotBlank,Sent,Score)"
+				" VALUES"
+				" (%ld,%ld,NOW(),NOW(),%u,0,'N',0)",
+				Event->EvtCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Print->NumQsts);
+  }
+
+/*****************************************************************************/
+/*********** Compute score of each question and store in database ************/
+/*****************************************************************************/
+
+static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *Print,
+                                                          bool UpdateQstScore)
+  {
+   unsigned NumQst;
+   struct Tst_Question Question;
+
+   /***** Initialize total score *****/
+   Print->Score = 0.0;
+   Print->NumQstsNotBlank = 0;
+
+   /***** Compute and store scores of all questions *****/
+   for (NumQst = 0;
+	NumQst < Print->NumQsts;
+	NumQst++)
+     {
+      /* Compute question score */
+      Tst_QstConstructor (&Question);
+      Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
+      Question.Answer.Type = Tst_GetQstAnswerType (Question.QstCod);
+      TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
+      Tst_QstDestructor (&Question);
+
+      /* Store test exam question in database */
+      ExaPrn_StoreOneQstOfPrintInDB (Print,
+				     NumQst);	// 0, 1, 2, 3...
+
+      /* Accumulate total score */
+      Print->Score += Print->PrintedQuestions[NumQst].Score;
+      if (Print->PrintedQuestions[NumQst].AnswerIsNotBlank)
+	 Print->NumQstsNotBlank++;
+
+      /* Update the number of hits and the score of this question in tests database */
+      if (UpdateQstScore)
+	 Tst_UpdateQstScoreInDB (&Print->PrintedQuestions[NumQst]);
+     }
+  }
+
+
+/*****************************************************************************/
+/************* Store user's answers of an test exam into database ************/
+/*****************************************************************************/
+
+static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
+                                           unsigned NumQst)
+  {
+   char StrIndexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
+   char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
+
+   /***** Replace each separator of multiple parameters by a comma *****/
+   /* In database commas are used as separators instead of special chars */
+   Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrIndexes,StrIndexes);
+   Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrAnswers,StrAnswers);
+
+   /***** Insert question and user's answers into database *****/
+   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
+   DB_QueryREPLACE ("can not update a question in an exam print",
+		    "REPLACE INTO exa_print_questions"
+		    " (PrnCod,QstCod,QstInd,Score,Indexes,Answers)"
+		    " VALUES"
+		    " (%ld,%ld,%u,'%.15lg','%s','%s')",
+		    Print->PrnCod,Print->PrintedQuestions[NumQst].QstCod,
+		    NumQst,	// 0, 1, 2, 3...
+		    Print->PrintedQuestions[NumQst].Score,
+		    StrIndexes,
+		    StrAnswers);
+   Str_SetDecimalPointToLocal ();	// Return to local system
   }

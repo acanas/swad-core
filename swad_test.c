@@ -467,8 +467,8 @@ void Tst_ShowNewTest (void)
             NumExamsGeneratedByMe = Tst_GetNumExamsGeneratedByMe ();
 
 	    /***** Create new test exam in database *****/
-	    TstPrn_CreateExamInDB (&Print);
-	    TstPrn_ComputeScoresAndStoreExamQuestions (&Print,
+	    TstPrn_CreatePrintInDB (&Print);
+	    TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
 	                                               false);	// Don't update question score
 
             /***** Show test exam to be answered *****/
@@ -552,7 +552,7 @@ void Tst_ReceiveTestDraft (void)
       Tst_GetAnswersFromForm (&Print);
 
       /***** Update test exam in database *****/
-      TstPrn_ComputeScoresAndStoreExamQuestions (&Print,
+      TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
 						 false);	// Don't update question score
       TstPrn_UpdateExamInDB (&Print);
 
@@ -612,7 +612,7 @@ void Tst_AssessTest (void)
       Print.AllowTeachers = Par_GetParToBool ("AllowTchs");
 
       /***** Update test exam in database *****/
-      TstPrn_ComputeScoresAndStoreExamQuestions (&Print,
+      TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
 						 Gbl.Usrs.Me.Role.Logged == Rol_STD);	// Update question score?
       TstPrn_UpdateExamInDB (&Print);
 
@@ -646,7 +646,7 @@ void Tst_AssessTest (void)
 	 HTM_TxtColonNBSP (Txt_Grade);
 	 TstPrn_ComputeAndShowGrade (Print.NumQsts,
 				     Print.Score,
-				     TstPrn_SCORE_MAX);
+				     Tst_SCORE_MAX);
 	 HTM_DIV_End ();
 	}
 
@@ -674,7 +674,7 @@ static void Tst_GetAnswersFromForm (struct TstPrn_Print *Print)
 	        "Ans%010u",
 		NumQst);
       Par_GetParMultiToText (StrAns,Print->PrintedQuestions[NumQst].StrAnswers,
-                             TstPrn_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
+                             Tst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
      }
   }
 
@@ -2611,7 +2611,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
      }
 
    /* End query */
-   Str_Concat (Query," ORDER BY RAND(NOW()) LIMIT ",
+   Str_Concat (Query," ORDER BY RAND() LIMIT ",
                Tst_MAX_BYTES_QUERY_TEST);
    snprintf (StrNumQsts,sizeof (StrNumQsts),
 	     "%u",
@@ -2737,7 +2737,7 @@ void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstPrn_PrintedQuestion 
       else
 	 snprintf (StrInd,sizeof (StrInd),"%s%u",Par_SEPARATOR_PARAM_MULTIPLE,Index);
       Str_Concat (PrintedQuestion->StrIndexes,StrInd,
-                  TstPrn_MAX_BYTES_INDEXES_ONE_QST);
+                  Tst_MAX_BYTES_INDEXES_ONE_QST);
      }
 
    /***** Free structure that stores the query result *****/
@@ -3319,7 +3319,7 @@ void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
 		   " WHERE QstCod=%ld"
 		   " ORDER BY %s",
 		   Question->QstCod,
-		   Shuffle ? "RAND(NOW())" :
+		   Shuffle ? "RAND()" :
 		             "AnsInd");
    if (!Question->Answer.NumOptions)
       Ale_ShowAlert (Ale_ERROR,"Error when getting answers of a question.");
@@ -3762,7 +3762,7 @@ static void Tst_WriteTextAnsSeeing (const struct TstPrn_Print *Print,
    snprintf (StrAns,sizeof (StrAns),
 	     "Ans%010u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,TstPrn_MAX_CHARS_ANSWERS_ONE_QST,Print->PrintedQuestions[NumQst].StrAnswers,
+   HTM_INPUT_TEXT (StrAns,Tst_MAX_CHARS_ANSWERS_ONE_QST,Print->PrintedQuestions[NumQst].StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"40\"");
   }
@@ -5049,7 +5049,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
    char TagStr[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char AnsStr[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FbStr[5 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrMultiAns[TstPrn_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   char StrMultiAns[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TF[1 + 1];	// (T)rue or (F)alse
    const char *Ptr;
    unsigned NumCorrectAns;
@@ -5201,7 +5201,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
            }
       	 else if (Question->Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
            {
-	    Par_GetParMultiToText ("AnsMulti",StrMultiAns,TstPrn_MAX_BYTES_ANSWERS_ONE_QST);
+	    Par_GetParMultiToText ("AnsMulti",StrMultiAns,Tst_MAX_BYTES_ANSWERS_ONE_QST);
  	    Ptr = StrMultiAns;
             while (*Ptr)
               {
@@ -6154,6 +6154,31 @@ static void Tst_InsertAnswersIntoDB (struct Tst_Question *Question)
       default:
          break;
      }
+  }
+
+/*****************************************************************************/
+/*********************** Update the score of a question **********************/
+/*****************************************************************************/
+
+void Tst_UpdateQstScoreInDB (struct TstPrn_PrintedQuestion *PrintedQuestion)
+  {
+   /***** Update number of clicks and score of the question *****/
+   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
+   if (PrintedQuestion->AnswerIsNotBlank)
+      DB_QueryUPDATE ("can not update the score of a question",
+		      "UPDATE tst_questions"
+	              " SET NumHits=NumHits+1,NumHitsNotBlank=NumHitsNotBlank+1,"
+	              "Score=Score+(%.15lg)"
+                      " WHERE QstCod=%ld",
+		      PrintedQuestion->Score,
+		      PrintedQuestion->QstCod);
+   else	// The answer is blank
+      DB_QueryUPDATE ("can not update the score of a question",
+		      "UPDATE tst_questions"
+	              " SET NumHits=NumHits+1"
+                      " WHERE QstCod=%ld",
+		      PrintedQuestion->QstCod);
+   Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
 /*****************************************************************************/

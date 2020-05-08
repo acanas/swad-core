@@ -524,6 +524,32 @@ CREATE TABLE IF NOT EXISTS exa_participants (
 	TS TIMESTAMP,
 	UNIQUE INDEX(EvtCod,UsrCod));
 --
+-- Table exa_print_questions: stores the questions and answers in exam prints made by users
+--
+CREATE TABLE IF NOT EXISTS exa_print_questions (
+	PrnCod INT NOT NULL,
+	QstCod INT NOT NULL,
+	QstInd INT NOT NULL,
+	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
+	Indexes TEXT NOT NULL,
+	Answers TEXT NOT NULL,
+	UNIQUE INDEX(PrnCod,QstCod));
+--
+-- Table exa_prints: stores the exam prints of every exam event
+--
+CREATE TABLE IF NOT EXISTS exa_prints (
+	PrnCod INT NOT NULL AUTO_INCREMENT,
+	EvtCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
+	NumQsts INT NOT NULL DEFAULT 0,
+	NumQstsNotBlank INT NOT NULL DEFAULT 0,
+	Sent ENUM('N','Y') NOT NULL DEFAULT 'N',
+	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
+	UNIQUE INDEX(PrnCod),
+	UNIQUE INDEX(EvtCod,UsrCod));
+--
 -- Table exa_questions: stores the questions in the set of questions for exams
 --
 CREATE TABLE IF NOT EXISTS exa_questions (
@@ -1507,7 +1533,7 @@ CREATE TABLE IF NOT EXISTS tst_config (
 	Visibility INT NOT NULL DEFAULT 0x1f,
 	UNIQUE INDEX(CrsCod));
 --
--- Table tst_exam_questions: stores the questions and answers in test exams made by users
+-- Table tst_exam_questions: stores the questions and answers in test prints made by users
 --
 CREATE TABLE IF NOT EXISTS tst_exam_questions (
 	ExaCod INT NOT NULL,

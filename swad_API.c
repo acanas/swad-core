@@ -4635,7 +4635,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 			      " AND tst_tags.TagHidden='Y'"
 			      " AND tst_tags.TagCod=tst_question_tags.TagCod)"
 			      " HAVING S>='%f' AND S<='%f'"
-			      " ORDER BY RAND(NOW()) LIMIT 1",
+			      " ORDER BY RAND() LIMIT 1",
 			      DegreesStr,DegreesStr,
 			      lowerScore,upperScore);
    Str_SetDecimalPointToLocal ();	// Return to local system

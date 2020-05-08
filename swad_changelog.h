@@ -548,10 +548,19 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.218.1 (2020-05-07)"
+#define Log_PLATFORM_VERSION	"SWAD 19.219 (2020-05-07)"
 #define CSS_FILE		"swad19.217.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
+ Arreglar bug: cuando se crea un nuevo proyecto no debería salir de nuevo el formulario de creación sino el formulario que incluye la adición de usuarios al proyecto recién creado.
+               cuando se modifica se hace correctamente, así que se trata de hacer lo mismo cuando se crea que cuando se modifica.
+ Arreglar bug en rol de usuario. Reported by Francisco Ocaña Lara.
+
+	Version 19.219:   May 09, 2020  Create exam print. (302347 lines)
+					2 change necessary in database:
+CREATE TABLE IF NOT EXISTS exa_prints (PrnCod INT NOT NULL AUTO_INCREMENT,EvtCod INT NOT NULL,UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,NumQsts INT NOT NULL DEFAULT 0,NumQstsNotBlank INT NOT NULL DEFAULT 0,Sent ENUM('N','Y') NOT NULL DEFAULT 'N',Score DOUBLE PRECISION NOT NULL DEFAULT 0,UNIQUE INDEX(PrnCod),UNIQUE INDEX(EvtCod,UsrCod));
+CREATE TABLE IF NOT EXISTS exa_print_questions (PrnCod INT NOT NULL,QstCod INT NOT NULL,QstInd INT NOT NULL,Score DOUBLE PRECISION NOT NULL DEFAULT 0,Indexes TEXT NOT NULL,Answers TEXT NOT NULL,UNIQUE INDEX(PrnCod,QstCod));
+
 	Version 19.218.1: May 07, 2020  Fixed minor bug in test results and match results. (302171 lines)
 	Version 19.218:   May 07, 2020  Fixed bug in creation of new exam announcements, reported by Francisco Gómez Mula.
 					Changes in exam announcementes. (302170 lines)
@@ -578,7 +587,7 @@ ALTER TABLE room_MAC ENGINE=MyISAM;
 	Version 19.211:   May 05, 2020  Exam events can be hidden/unhidden. (301215 lines)
 					1 change necessary in database:
 ALTER TABLE exa_events ADD COLUMN Hidden ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER ExaCod;
-
+----
 	Version 19.210.4: May 05, 2020  Fixed bug searching courses. (301103 lines)
 	Version 19.210.3: May 03, 2020  All figures cacheable are cached everytime they are calculated. (301089 lines)
 	Version 19.210.2: May 03, 2020  More figures cached. (301125 lines)

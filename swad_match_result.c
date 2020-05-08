@@ -1344,13 +1344,13 @@ void MchRes_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
 
       /* Get indexes for this question (row[2]) */
       Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[2],
-                TstPrn_MAX_BYTES_INDEXES_ONE_QST);
+                Tst_MAX_BYTES_INDEXES_ONE_QST);
 
       /* Get answers selected by user for this question */
       Mch_GetQstAnsFromDB (MchCod,UsrCod,QstInd,&UsrAnswer);
       if (UsrAnswer.AnsInd >= 0)	// UsrAnswer.AnsInd >= 0 ==> answer selected
 	{
-         snprintf (Print->PrintedQuestions[NumQst].StrAnswers,TstPrn_MAX_BYTES_ANSWERS_ONE_QST + 1,
+         snprintf (Print->PrintedQuestions[NumQst].StrAnswers,Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
 		   "%d",UsrAnswer.AnsInd);
          Print->NumQstsNotBlank++;
         }

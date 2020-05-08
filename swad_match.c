@@ -1612,7 +1612,7 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
    long LongNum;
    unsigned AnsInd;
    char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrAnswersOneQst[TstPrn_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
    /***** Initialize list of answers to empty string *****/
    StrAnswersOneQst[0] = '\0';
@@ -1645,9 +1645,9 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
       /* Concatenate answer index to list of answers */
       if (NumAns)
          Str_Concat (StrAnswersOneQst,",",
-		     TstPrn_MAX_BYTES_ANSWERS_ONE_QST);
+		     Tst_MAX_BYTES_ANSWERS_ONE_QST);
       Str_Concat (StrAnswersOneQst,StrOneAnswer,
-		  TstPrn_MAX_BYTES_ANSWERS_ONE_QST);
+		  Tst_MAX_BYTES_ANSWERS_ONE_QST);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1671,7 +1671,7 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char StrIndexesOneQst[TstPrn_MAX_BYTES_INDEXES_ONE_QST + 1];
+   char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
 
    /***** Get indexes for a question from database *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
@@ -1684,7 +1684,7 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
 
    /* Get indexes (row[0]) */
    Str_Copy (StrIndexesOneQst,row[0],
-	     TstPrn_MAX_BYTES_INDEXES_ONE_QST);
+	     Tst_MAX_BYTES_INDEXES_ONE_QST);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -4017,7 +4017,7 @@ static void Mch_ComputeScore (struct TstPrn_Print *Print)
       Question.Answer.Type = Tst_ANS_UNIQUE_CHOICE;
 
       /***** Compute score for this answer ******/
-      TstPrn_ComputeChoiceAnsScore (Print,NumQst,&Question);
+      TstPrn_ComputeChoiceAnsScore (&Print->PrintedQuestions[NumQst],&Question);
 
       /***** Update total score *****/
       Print->Score += Print->PrintedQuestions[NumQst].Score;

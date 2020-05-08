@@ -38,6 +38,13 @@
 
 #define Tst_MAX_OPTIONS_PER_QUESTION	10
 
+#define Tst_MAX_BYTES_INDEXES_ONE_QST	(Tst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
+
+#define Tst_MAX_CHARS_ANSWERS_ONE_QST	(128 - 1)	// 127
+#define Tst_MAX_BYTES_ANSWERS_ONE_QST	((Tst_MAX_CHARS_ANSWERS_ONE_QST + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+
+#define Tst_SCORE_MAX	10	// Maximum score of a test (10 in Spain). Must be unsigned! // TODO: Make this configurable by teachers
+
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/

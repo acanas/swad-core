@@ -4091,7 +4091,7 @@ long Usr_GetRamdomStdFromCrs (long CrsCod)
 				  " from the current course",
 		       "SELECT UsrCod FROM crs_usr"
 		       " WHERE CrsCod=%ld AND Role=%u"
-		       " ORDER BY RAND(NOW()) LIMIT 1",
+		       " ORDER BY RAND() LIMIT 1",
 		       CrsCod,(unsigned) Rol_STD))
      {
       /***** Get user code *****/
@@ -4121,7 +4121,7 @@ long Usr_GetRamdomStdFromGrp (long GrpCod)
 		       "SELECT crs_grp_usr.UsrCod FROM crs_grp_usr,crs_usr"
 		       " WHERE crs_grp_usr.GrpCod=%ld"
 		       " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
-		       " AND crs_usr.Role=%u ORDER BY RAND(NOW()) LIMIT 1",
+		       " AND crs_usr.Role=%u ORDER BY RAND() LIMIT 1",
 		       GrpCod,(unsigned) Rol_STD))
      {
       /***** Get user code *****/

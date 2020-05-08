@@ -908,7 +908,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
      {
       case Rol_GST:
 	 NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get list of connected users"
-	                                                       " who belong to this location",
+	                                                 " who belong to this location",
 					      "SELECT UsrCod,LastCrsCod,"
 					      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(LastTime) AS Dif"
 					      " FROM connected"
