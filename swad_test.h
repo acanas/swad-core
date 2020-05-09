@@ -106,6 +106,10 @@ void Tst_AssessTest (void);
 
 void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);
 
+void Tst_WriteQstAndAnsSeeing (struct TstPrn_PrintedQuestion *PrintedQuestion,
+                               unsigned NumQst,
+                               const struct Tst_Question *Question);
+
 void Tst_ListQuestionForEdition (const struct Tst_Question *Question,
                                  unsigned QstInd,bool QuestionExists,
                                  const char *Anchor);

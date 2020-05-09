@@ -39,6 +39,7 @@
 #include "swad_exam_result.h"
 #include "swad_exam_set.h"
 #include "swad_exam_type.h"
+#include "swad_form.h"
 #include "swad_global.h"
 
 /*****************************************************************************/
@@ -84,6 +85,7 @@ struct ExaPrn_Print
 static void ExaPrn_ResetPrint (struct ExaPrn_Print *Print);
 static void ExaPrn_ResetPrintExceptPrnCod (struct ExaPrn_Print *Print);
 
+static bool ExaPrn_CheckIfMyPrintExists (const struct ExaEvt_Event *Event);
 static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
 	                                          struct ExaPrn_Print *Print);
 static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
@@ -95,6 +97,11 @@ static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *P
                                                           bool UpdateQstScore);
 static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
                                            unsigned NumQst);
+static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exam *Exam,
+                                          struct ExaPrn_Print *Print);
+
+static void ExaPrn_PutParamPrnCod (long ExaCod);
+static long ExaPrn_GetParamPrnCod (void);
 
 /*****************************************************************************/
 /**************************** Reset exam print *******************************/
@@ -117,16 +124,17 @@ static void ExaPrn_ResetPrintExceptPrnCod (struct ExaPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/******************* Generate print of an exam in an event *******************/
+/********************** Show print of an exam in an event ********************/
 /*****************************************************************************/
 
-void ExaPrn_ShowNewExamPrint (void)
+void ExaPrn_ShowExamPrint (void)
   {
    extern const char *Hlp_ASSESSMENT_Exams;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
    struct ExaPrn_Print Print;
+   bool PrintExists;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -149,27 +157,45 @@ void ExaPrn_ShowNewExamPrint (void)
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (10);
 
-   /***** Get questions from database *****/
-   ExaPrn_GetQuestionsForNewPrintFromDB (&Exam,&Print);
+   /***** Check if already exists exam in database *****/
+   PrintExists = ExaPrn_CheckIfMyPrintExists (&Event);
 
-   if (Print.NumQsts)
+   if (PrintExists)
      {
-      /***** Create new exam print in database *****/
-      ExaPrn_CreatePrintInDB (&Event,&Print);
-      ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
-						    false);	// Don't update question score
-
-      /***** Show test exam to be answered *****/
-      // Tst_ShowTestExamToFillIt (&Print,NumExamsGeneratedByMe,Tst_REQUEST);
+      Ale_ShowAlert (Ale_INFO,"El examen ya existe.");
      }
-   // else	// No questions found
-   //   {
-   //    Ale_ShowAlert (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
-   //    Tst_ShowFormRequestTest (&Test);	// Show the form again
-   //   }
+   else
+     {
+      /***** Get questions from database *****/
+      ExaPrn_GetQuestionsForNewPrintFromDB (&Exam,&Print);
+
+      if (Print.NumQsts)
+	{
+	 /***** Create/update new exam print in database *****/
+	 ExaPrn_CreatePrintInDB (&Event,&Print);
+	 ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
+						       false);	// Don't update question score
+	}
+      }
+
+   /***** Show test exam to be answered *****/
+   ExaPrn_ShowExamPrintToFillIt (&Exam,&Print);
 
    /***** End table *****/
    HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
+/********* Check if my exam print associated to a given event exists *********/
+/*****************************************************************************/
+// Return true if print exists
+
+static bool ExaPrn_CheckIfMyPrintExists (const struct ExaEvt_Event *Event)
+  {
+   return (DB_QueryCOUNT ("can not check if exam print exists",
+			  "SELECT COUNT(*) FROM exa_prints"
+			  " WHERE EvtCod=%ld AND UsrCod=%ld",
+			  Event->EvtCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
   }
 
 /*****************************************************************************/
@@ -312,6 +338,12 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
       /* Get question code (row[0]) */
       Print->PrintedQuestions[*NumQstInPrint].QstCod = Str_ConvertStrCodToLongCod (row[0]);
 
+      /* Set set of questions */
+      Print->PrintedQuestions[*NumQstInPrint].SetCod = Set->SetCod;
+
+      Ale_ShowAlert (Ale_INFO,"DEBUG: ExaPrn_GetSomeQstsFromSetToPrint Print->PrintedQuestions[*NumQstInPrint].SetCod = %ld",
+                     Print->PrintedQuestions[*NumQstInPrint].SetCod);
+
       /* Get answer type (row[1]) */
       AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
@@ -439,17 +471,113 @@ static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
    Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrIndexes,StrIndexes);
    Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrAnswers,StrAnswers);
 
+      Ale_ShowAlert (Ale_INFO,"DEBUG: ExaPrn_StoreOneQstOfPrintInDB Print->PrintedQuestions[NumQst].SetCod = %ld",
+                     Print->PrintedQuestions[NumQst].SetCod);
+
    /***** Insert question and user's answers into database *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    DB_QueryREPLACE ("can not update a question in an exam print",
 		    "REPLACE INTO exa_print_questions"
-		    " (PrnCod,QstCod,QstInd,Score,Indexes,Answers)"
+		    " (PrnCod,QstCod,QstInd,SetCod,Score,Indexes,Answers)"
 		    " VALUES"
-		    " (%ld,%ld,%u,'%.15lg','%s','%s')",
+		    " (%ld,%ld,%u,%ld,'%.15lg','%s','%s')",
 		    Print->PrnCod,Print->PrintedQuestions[NumQst].QstCod,
 		    NumQst,	// 0, 1, 2, 3...
+		    Print->PrintedQuestions[NumQst].SetCod,
 		    Print->PrintedQuestions[NumQst].Score,
 		    StrIndexes,
 		    StrAnswers);
    Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
+/****************** Show a test exam print to be answered ********************/
+/*****************************************************************************/
+
+static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exam *Exam,
+                                          struct ExaPrn_Print *Print)
+  {
+   extern const char *Hlp_ASSESSMENT_Exams;
+   extern const char *Txt_Send;
+   unsigned NumQst;
+   struct Tst_Question Question;
+
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Exam->Title,
+		 NULL,NULL,
+		 Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
+   Lay_WriteHeaderClassPhoto (false,false,
+			      Gbl.Hierarchy.Ins.InsCod,
+			      Gbl.Hierarchy.Deg.DegCod,
+			      Gbl.Hierarchy.Crs.CrsCod);
+
+   if (Print->NumQsts)
+     {
+      /***** Begin form *****/
+      Frm_StartForm (ActReqAssExaPrn);
+      ExaPrn_PutParamPrnCod (Print->PrnCod);
+
+      /***** Begin table *****/
+      HTM_TABLE_BeginWideMarginPadding (10);
+
+      /***** Write one row for each question *****/
+      for (NumQst = 0;
+	   NumQst < Print->NumQsts;
+	   NumQst++)
+	{
+	 Gbl.RowEvenOdd = NumQst % 2;
+
+	 /* Create test question */
+	 Tst_QstConstructor (&Question);
+	 Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
+
+	 /* Show question */
+	 if (!Tst_GetQstDataFromDB (&Question))	// Question exists
+	    Lay_ShowErrorAndExit ("Wrong question.");
+
+	 /* Write question and answers */
+	 Tst_WriteQstAndAnsSeeing (&Print->PrintedQuestions[NumQst],NumQst,&Question);
+
+	 /* Destroy test question */
+	 Tst_QstDestructor (&Question);
+	}
+
+      /***** End table *****/
+      HTM_TABLE_End ();
+
+      /***** Send buttona and end form *****/
+      Btn_PutCreateButton (Txt_Send);
+      Frm_EndForm ();
+     }
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/********************** Receive answer to an exam print **********************/
+/*****************************************************************************/
+
+void ExaPrn_ReceivePrintAnswer (void)
+  {
+   Ale_ShowAlert (Ale_INFO,"Recepci&oacute;n del examen contestado.");
+  }
+
+/*****************************************************************************/
+/***************** Write parameter with code of exam print *******************/
+/*****************************************************************************/
+
+static void ExaPrn_PutParamPrnCod (long ExaCod)
+  {
+   Par_PutHiddenParamLong (NULL,"PrnCod",ExaCod);
+  }
+
+/*****************************************************************************/
+/***************** Get parameter with code of exam print *********************/
+/*****************************************************************************/
+
+static long ExaPrn_GetParamPrnCod (void)
+  {
+   /***** Get code of exam print *****/
+   return Par_GetParToLong ("PrnCod");
   }

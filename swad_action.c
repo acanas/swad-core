@@ -740,7 +740,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActReqRemSetQst	] = {1888,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RequestRemoveQstFromSet	,NULL},
    [ActRemExaQst	] = {1889,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RemoveQstFromSet	,NULL},
 
-   [ActSeeExaPrn	] = {1904,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaPrn_ShowNewExamPrint	,NULL},
+   [ActSeeExaPrn	] = {1904,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaPrn_ShowExamPrint		,NULL},
+   [ActReqAssExaPrn	] = {1905,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaPrn_ReceivePrintAnswer	,NULL},
 
    [ActSeeGam		] = {1650,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeOneGame			,NULL},
 
@@ -1818,7 +1819,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
   };
 
 Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse unique action codes!
-	{
+  {
 	ActSeeAdmDocCrsGrp,	//  #0
 	-1,			//  #1 (obsolete action)
 	ActMnu,			//  #2
@@ -3724,7 +3725,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActEdiOneExaEvt,	// #1902
 	ActChgExaEvt,		// #1903
 	ActSeeExaPrn,		// #1904
-	};
+	ActReqAssExaPrn,	// #1905
+  };
 
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/

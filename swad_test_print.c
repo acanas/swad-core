@@ -1764,7 +1764,7 @@ static void TstPrn_ShowExams (struct UsrData *UsrDat)
 	   {
 	    Frm_StartForm (Gbl.Action.Act == ActSeeMyTstRes ? ActSeeOneTstResMe :
 						              ActSeeOneTstResOth);
-	    TstPrn_PutParamExaCod (Print.PrnCod);
+	    TstPrn_PutParamPrnCod (Print.PrnCod);
 	    Ico_PutIconLink ("tasks.svg",Txt_View_test);
 	    Frm_EndForm ();
 	   }
@@ -1793,22 +1793,22 @@ static void TstPrn_ShowExams (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/****************** Write parameter with code of test exam *******************/
+/*************** Write parameter with code of test exam print ****************/
 /*****************************************************************************/
 
-void TstPrn_PutParamExaCod (long ExaCod)
+void TstPrn_PutParamPrnCod (long ExaCod)
   {
-   Par_PutHiddenParamLong (NULL,"ExaCod",ExaCod);
+   Par_PutHiddenParamLong (NULL,"PrnCod",ExaCod);
   }
 
 /*****************************************************************************/
-/****************** Get parameter with code of test exam *********************/
+/*************** Get parameter with code of test exam print ******************/
 /*****************************************************************************/
 
-long TstPrn_GetParamExaCod (void)
+long TstPrn_GetParamPrnCod (void)
   {
-   /***** Get code of exam *****/
-   return Par_GetParToLong ("ExaCod");
+   /***** Get code of test exam print *****/
+   return Par_GetParToLong ("PrnCod");
   }
 
 /*****************************************************************************/
@@ -1922,7 +1922,7 @@ void TstPrn_ShowOneExam (void)
 
    /***** Get the code of the test *****/
    TstPrn_ResetResult (&Print);
-   if ((Print.PrnCod = TstPrn_GetParamExaCod ()) == -1L)
+   if ((Print.PrnCod = TstPrn_GetParamPrnCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of test is missing.");
 
    /***** Get test exam data *****/

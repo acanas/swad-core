@@ -42,6 +42,7 @@
 struct TstPrn_PrintedQuestion
   {
    long QstCod;		// Question code
+   long SetCod;		// Only for exams
    char StrIndexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
    char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
    double Score;		// Question score
@@ -91,8 +92,8 @@ void TstPrn_SelDatesToSeeMyExams (void);
 void TstPrn_ShowMyExams (void);
 void TstPrn_GetUsrsAndShowExams (void);
 
-void TstPrn_PutParamExaCod (long ExaCod);
-long TstPrn_GetParamExaCod (void);
+void TstPrn_PutParamPrnCod (long ExaCod);
+long TstPrn_GetParamPrnCod (void);
 
 void TstPrn_ShowOneExam (void);
 void TstPrn_ShowExamAnswers (struct UsrData *UsrDat,

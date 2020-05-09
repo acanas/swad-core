@@ -1161,22 +1161,25 @@ mysql> DESCRIBE exa_participants;
 
 /***** Table exa_print_questions *****/
 /*
-mysql> DESCRIBE exa_print_questions;                                                                                                     +---------+---------+------+-----+---------+-------+
+mysql> DESCRIBE exa_print_questions;
++---------+---------+------+-----+---------+-------+
 | Field   | Type    | Null | Key | Default | Extra |
 +---------+---------+------+-----+---------+-------+
 | PrnCod  | int(11) | NO   | PRI | NULL    |       |
 | QstCod  | int(11) | NO   | PRI | NULL    |       |
 | QstInd  | int(11) | NO   |     | NULL    |       |
+| SetCod  | int(11) | NO   |     | NULL    |       |
 | Score   | double  | NO   |     | 0       |       |
 | Indexes | text    | NO   |     | NULL    |       |
 | Answers | text    | NO   |     | NULL    |       |
 +---------+---------+------+-----+---------+-------+
-6 rows in set (0.00 sec)
+7 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_print_questions ("
 			"PrnCod INT NOT NULL,"
 			"QstCod INT NOT NULL,"
 			"QstInd INT NOT NULL,"
+	                "SetCod INT NOT NULL,"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
 			"Indexes TEXT NOT NULL,"	// Tst_MAX_BYTES_INDEXES_ONE_QST
 			"Answers TEXT NOT NULL,"	// Tst_MAX_BYTES_ANSWERS_ONE_QST

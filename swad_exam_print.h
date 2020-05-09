@@ -35,6 +35,9 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaPrn_ShowNewExamPrint (void);
+void ExaPrn_ShowExamPrint (void);
+
+void ExaPrn_ReceivePrintAnswer (void);
+
 
 #endif
