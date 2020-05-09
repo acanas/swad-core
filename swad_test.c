@@ -79,7 +79,6 @@ const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES] =
 /*****************************************************************************/
 
 #define Tst_MAX_BYTES_TAGS_LIST		(16 * 1024)
-#define Tst_MAX_BYTES_FLOAT_ANSWER	30	// Maximum length of the strings that store an floating point answer
 
 static const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES] =
   {
@@ -140,6 +139,9 @@ static unsigned Tst_GetNumExamsGeneratedByMe (void);
 static void Tst_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
                                       unsigned NumExamsGeneratedByMe,
                                       Tst_RequestOrConfirm_t RequestOrConfirm);
+static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                         unsigned NumQst,
+                                         const struct Tst_Question *Question);
 
 static void Tst_PutFormToEditQstMedia (const struct Media *Media,int NumMediaInForm,
                                        bool OptionsDisabled);
@@ -189,31 +191,30 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
 static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
                                               struct Tst_Question *Question);
 
-static void Tst_WriteAnswersSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                    unsigned NumQst,
-                                    const struct Tst_Question *Question);
+static void TstPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                       unsigned NumQst,
+                                       const struct Tst_Question *Question);
 
 static void Tst_WriteIntAnsListing (const struct Tst_Question *Question);
-static void Tst_WriteIntAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				   unsigned NumQst);
+static void TstPrn_WriteIntAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				      unsigned NumQst);
 
 static void Tst_WriteFloatAnsEdit (const struct Tst_Question *Question);
-static void Tst_WriteFloatAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				     unsigned NumQst);
+static void TstPrn_WriteFloatAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				        unsigned NumQst);
 
 static void Tst_WriteTFAnsListing (const struct Tst_Question *Question);
-static void Tst_WriteTFAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-	                          unsigned NumQst);
+static void TstPrn_WriteTFAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+	                             unsigned NumQst);
 
 static void Tst_WriteChoiceAnsListing (const struct Tst_Question *Question);
-static void Tst_WriteChoiceAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
-                                      const struct Tst_Question *Question);
+static void TstPrn_WriteChoiceAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                         unsigned NumQst,
+                                         const struct Tst_Question *Question);
 
-static void Tst_WriteTextAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-	                            unsigned NumQst);
+static void TstPrn_WriteTextAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+	                               unsigned NumQst);
 
-static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod);
 static bool Tst_GetParamsTst (struct Tst_Test *Test,
                               Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
 static unsigned Tst_GetParamNumTst (void);
@@ -833,7 +834,7 @@ static void Tst_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 	    Lay_ShowErrorAndExit ("Wrong question.");
 
 	 /* Write question and answers */
-	 Tst_WriteQstAndAnsSeeing (&Print->PrintedQuestions[NumQst],NumQst,&Question);
+	 TstPrn_WriteQstAndAnsToFill (&Print->PrintedQuestions[NumQst],NumQst,&Question);
 
 	 /* Destroy test question */
 	 Tst_QstDestructor (&Question);
@@ -897,9 +898,9 @@ void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
 /********** Write a row of a test, with one question and its answer **********/
 /*****************************************************************************/
 
-void Tst_WriteQstAndAnsSeeing (struct TstPrn_PrintedQuestion *PrintedQuestion,
-                               unsigned NumQst,
-                               const struct Tst_Question *Question)
+static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                         unsigned NumQst,
+                                         const struct Tst_Question *Question)
   {
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -925,7 +926,7 @@ void Tst_WriteQstAndAnsSeeing (struct TstPrn_PrintedQuestion *PrintedQuestion,
 		  "TEST_MED_SHOW");
 
    /* Answers */
-   Tst_WriteAnswersSeeing (PrintedQuestion,NumQst,Question);
+   TstPrn_WriteAnswersToFill (PrintedQuestion,NumQst,Question);
 
    HTM_TD_End ();
 
@@ -3350,31 +3351,31 @@ void Tst_WriteAnswersListing (const struct Tst_Question *Question)
   }
 
 /*****************************************************************************/
-/************** Write answers of a question when seeing a test ***************/
+/***************** Write answers of a question to fill them ******************/
 /*****************************************************************************/
 
-static void Tst_WriteAnswersSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                    unsigned NumQst,
-                                    const struct Tst_Question *Question)
+static void TstPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                       unsigned NumQst,
+                                       const struct Tst_Question *Question)
   {
    /***** Write answer depending on type *****/
    switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
-         Tst_WriteIntAnsSeeing (PrintedQuestion,NumQst);
+         TstPrn_WriteIntAnsSeeing (PrintedQuestion,NumQst);
          break;
       case Tst_ANS_FLOAT:
-         Tst_WriteFloatAnsSeeing (PrintedQuestion,NumQst);
+         TstPrn_WriteFloatAnsSeeing (PrintedQuestion,NumQst);
          break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_WriteTFAnsSeeing (PrintedQuestion,NumQst);
+         TstPrn_WriteTFAnsSeeing (PrintedQuestion,NumQst);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         Tst_WriteChoiceAnsSeeing (PrintedQuestion,NumQst,Question);
+         TstPrn_WriteChoiceAnsSeeing (PrintedQuestion,NumQst,Question);
          break;
       case Tst_ANS_TEXT:
-         Tst_WriteTextAnsSeeing (PrintedQuestion,NumQst);
+         TstPrn_WriteTextAnsSeeing (PrintedQuestion,NumQst);
          break;
       default:
          break;
@@ -3410,8 +3411,8 @@ static void Tst_WriteIntAnsListing (const struct Tst_Question *Question)
 /****************** Write integer answer when seeing a test ******************/
 /*****************************************************************************/
 
-static void Tst_WriteIntAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				   unsigned NumQst)
+static void TstPrn_WriteIntAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				      unsigned NumQst)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
@@ -3443,8 +3444,8 @@ static void Tst_WriteFloatAnsEdit (const struct Tst_Question *Question)
 /****************** Write float answer when seeing a test ********************/
 /*****************************************************************************/
 
-static void Tst_WriteFloatAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				     unsigned NumQst)
+static void TstPrn_WriteFloatAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				        unsigned NumQst)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
@@ -3475,8 +3476,8 @@ static void Tst_WriteTFAnsListing (const struct Tst_Question *Question)
 /************** Write false / true answer when seeing a test ****************/
 /*****************************************************************************/
 
-static void Tst_WriteTFAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-	                          unsigned NumQst)
+static void TstPrn_WriteTFAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+	                             unsigned NumQst)
   {
    extern const char *Txt_TF_QST[2];
 
@@ -3608,9 +3609,9 @@ static void Tst_WriteChoiceAnsListing (const struct Tst_Question *Question)
 /******** Write single or multiple choice answer when seeing a test **********/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
-                                      const struct Tst_Question *Question)
+static void TstPrn_WriteChoiceAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                         unsigned NumQst,
+                                         const struct Tst_Question *Question)
   {
    unsigned NumOpt;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
@@ -3749,8 +3750,8 @@ void Tst_GetChoiceAns (struct Tst_Question *Question,MYSQL_RES *mysql_res)
 /******************** Write text answer when seeing a test *******************/
 /*****************************************************************************/
 
-static void Tst_WriteTextAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-	                            unsigned NumQst)
+static void TstPrn_WriteTextAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+	                               unsigned NumQst)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
@@ -3767,7 +3768,7 @@ static void Tst_WriteTextAnsSeeing (const struct TstPrn_PrintedQuestion *Printed
 /*************** Write parameter with the code of a question *****************/
 /*****************************************************************************/
 
-static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod)
+void Tst_WriteParamQstCod (unsigned NumQst,long QstCod)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 

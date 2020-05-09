@@ -1938,3 +1938,32 @@ static void ExaSet_PutButtonToAddNewQuestions (struct Exa_Exams *Exams)
    Btn_PutConfirmButtonInline (Txt_Add_questions);
    Frm_EndForm ();
   }
+
+/*****************************************************************************/
+/******************* Show title of exam set in exam print ********************/
+/*****************************************************************************/
+
+void ExaSet_WriteSetTitle (const struct ExaSet_Set *Set)
+  {
+   extern const char *Txt_question;
+   extern const char *Txt_questions;
+
+   /***** Begin table *****/
+   HTM_TABLE_BeginWide ();
+
+   /***** Title *****/
+   HTM_TD_Begin ("class=\"EXA_SET_TITLE\"");
+   HTM_Txt (Set->Title);
+   HTM_TD_End ();
+
+   /***** Number of questions to appear in exam print *****/
+   HTM_TD_Begin ("class=\"EXA_SET_NUM_QSTS\"");
+   HTM_Unsigned (Set->NumQstsToPrint);
+   HTM_NBSP ();
+   HTM_Txt (Set->NumQstsToPrint == 1 ? Txt_question :
+			               Txt_questions);
+   HTM_TD_End ();
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+  }

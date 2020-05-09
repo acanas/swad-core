@@ -106,10 +106,6 @@ void Tst_AssessTest (void);
 
 void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);
 
-void Tst_WriteQstAndAnsSeeing (struct TstPrn_PrintedQuestion *PrintedQuestion,
-                               unsigned NumQst,
-                               const struct Tst_Question *Question);
-
 void Tst_ListQuestionForEdition (const struct Tst_Question *Question,
                                  unsigned QstInd,bool QuestionExists,
                                  const char *Anchor);
@@ -138,6 +134,9 @@ void Tst_WriteAnswersListing (const struct Tst_Question *Question);
 bool Tst_CheckIfQuestionIsValidForGame (long QstCod);
 void Tst_WriteAnsTF (char AnsTF);
 void Tst_GetChoiceAns (struct Tst_Question *Question,MYSQL_RES *mysql_res);
+
+void Tst_WriteParamQstCod (unsigned NumQst,long QstCod);
+
 void Tst_CheckIfNumberOfAnswersIsOne (const struct Tst_Question *Question);
 
 unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res);

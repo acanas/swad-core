@@ -99,9 +99,27 @@ static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
                                            unsigned NumQst);
 static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exam *Exam,
                                           struct ExaPrn_Print *Print);
+static void ExaPrn_WriteQstAndAnsToFill (const struct Exa_Exam *Exam,
+                                         struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                         unsigned NumQst,
+                                         const struct Tst_Question *Question);
+static void ExaPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                       unsigned NumQst,
+                                       const struct Tst_Question *Question);
+static void ExaPrn_WriteIntAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				      unsigned NumQst);
+static void ExaPrn_WriteFloatAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				        unsigned NumQst);
+static void ExaPrn_WriteTFAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+	                             unsigned NumQst);
+static void ExaPrn_WriteChoiceAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                         unsigned NumQst,
+                                         const struct Tst_Question *Question);
+static void ExaPrn_WriteTextAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+	                               unsigned NumQst);
 
 static void ExaPrn_PutParamPrnCod (long ExaCod);
-static long ExaPrn_GetParamPrnCod (void);
+// static long ExaPrn_GetParamPrnCod (void);
 
 /*****************************************************************************/
 /**************************** Reset exam print *******************************/
@@ -129,7 +147,6 @@ static void ExaPrn_ResetPrintExceptPrnCod (struct ExaPrn_Print *Print)
 
 void ExaPrn_ShowExamPrint (void)
   {
-   extern const char *Hlp_ASSESSMENT_Exams;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
@@ -144,18 +161,6 @@ void ExaPrn_ShowExamPrint (void)
 
    /***** Get and check parameters *****/
    ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
-
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Exam.Title,
-		 NULL,NULL,
-		 Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
-   Lay_WriteHeaderClassPhoto (false,false,
-			      Gbl.Hierarchy.Ins.InsCod,
-			      Gbl.Hierarchy.Deg.DegCod,
-			      Gbl.Hierarchy.Crs.CrsCod);
-
-   /***** Begin table *****/
-   HTM_TABLE_BeginWideMarginPadding (10);
 
    /***** Check if already exists exam in database *****/
    PrintExists = ExaPrn_CheckIfMyPrintExists (&Event);
@@ -180,9 +185,6 @@ void ExaPrn_ShowExamPrint (void)
 
    /***** Show test exam to be answered *****/
    ExaPrn_ShowExamPrintToFillIt (&Exam,&Print);
-
-   /***** End table *****/
-   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -205,8 +207,6 @@ static bool ExaPrn_CheckIfMyPrintExists (const struct ExaEvt_Event *Event)
 static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
 	                                          struct ExaPrn_Print *Print)
   {
-   extern const char *Txt_question;
-   extern const char *Txt_questions;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumSets;
@@ -253,30 +253,6 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
 	 /* Get the title of the set (row[2]) */
 	 Str_Copy (Set.Title,row[2],
 		   ExaSet_MAX_BYTES_TITLE);
-
-	 /***** Title for this set *****/
-	 /* Begin title for this set */
-	 HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("colspan=\"2\"");
-         HTM_TABLE_BeginWide ();
-
-	 /* Title */
-	 HTM_TD_Begin ("class=\"EXA_SET_TITLE\"");
-	 HTM_Txt (Set.Title);
-	 HTM_TD_End ();
-
-	 /* Number of questions to appear in exam print */
-	 HTM_TD_Begin ("class=\"EXA_SET_NUM_QSTS\"");
-	 HTM_Unsigned (Set.NumQstsToPrint);
-	 HTM_NBSP ();
-	 HTM_Txt (Set.NumQstsToPrint == 1 ? Txt_question :
-		                            Txt_questions);
-	 HTM_TD_End ();
-
-	 /* End title for this set */
-	 HTM_TABLE_End ();
-	 HTM_TD_End ();
-	 HTM_TR_End ();
 
 	 /***** Questions in this set *****/
 	 NumQstsFromSet = ExaPrn_GetSomeQstsFromSetToPrint (Print,&Set,&NumQstInPrint);
@@ -341,9 +317,6 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
       /* Set set of questions */
       Print->PrintedQuestions[*NumQstInPrint].SetCod = Set->SetCod;
 
-      Ale_ShowAlert (Ale_INFO,"DEBUG: ExaPrn_GetSomeQstsFromSetToPrint Print->PrintedQuestions[*NumQstInPrint].SetCod = %ld",
-                     Print->PrintedQuestions[*NumQstInPrint].SetCod);
-
       /* Get answer type (row[1]) */
       AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
@@ -374,22 +347,6 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
          If the user does not confirm the submission of their exam ==>
          ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
       Print->PrintedQuestions[*NumQstInPrint].StrAnswers[0] = '\0';
-
-      /* Begin row for this question */
-      HTM_TR_Begin (NULL);
-
-      /* Title */
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("Pregunta %ld",Print->PrintedQuestions[*NumQstInPrint].QstCod);
-      HTM_TD_End ();
-
-      /* Number of questions to appear in exam print */
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_Txt ("Enunciado y respuestas");
-      HTM_TD_End ();
-
-      /* End title for this question */
-      HTM_TR_End ();
      }
 
    return NumQstsInSet;
@@ -471,9 +428,6 @@ static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
    Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrIndexes,StrIndexes);
    Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrAnswers,StrAnswers);
 
-      Ale_ShowAlert (Ale_INFO,"DEBUG: ExaPrn_StoreOneQstOfPrintInDB Print->PrintedQuestions[NumQst].SetCod = %ld",
-                     Print->PrintedQuestions[NumQst].SetCod);
-
    /***** Insert question and user's answers into database *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    DB_QueryREPLACE ("can not update a question in an exam print",
@@ -536,7 +490,7 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exam *Exam,
 	    Lay_ShowErrorAndExit ("Wrong question.");
 
 	 /* Write question and answers */
-	 Tst_WriteQstAndAnsSeeing (&Print->PrintedQuestions[NumQst],NumQst,&Question);
+	 ExaPrn_WriteQstAndAnsToFill (Exam,&Print->PrintedQuestions[NumQst],NumQst,&Question);
 
 	 /* Destroy test question */
 	 Tst_QstDestructor (&Question);
@@ -552,6 +506,260 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exam *Exam,
 
    /***** End box *****/
    Box_BoxEnd ();
+  }
+
+
+/*****************************************************************************/
+/********** Write a row of a test, with one question and its answer **********/
+/*****************************************************************************/
+
+static void ExaPrn_WriteQstAndAnsToFill (const struct Exa_Exam *Exam,
+                                         struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                         unsigned NumQst,
+                                         const struct Tst_Question *Question)
+  {
+   static struct ExaSet_Set CurrentSet =
+     {
+      .ExaCod = -1L,
+      .SetCod = -1L,
+      .SetInd = 0,
+      .NumQstsToPrint = 0,
+      .Title[0] = '\0'
+     };
+
+   if (PrintedQuestion->SetCod != CurrentSet.SetCod)
+     {
+      /***** Get data of this set *****/
+      CurrentSet.ExaCod = Exam->ExaCod;
+      CurrentSet.SetCod = PrintedQuestion->SetCod;
+      ExaSet_GetDataOfSetByCod (&CurrentSet);
+
+      /***** Title for this set *****/
+      HTM_TR_Begin (NULL);
+      HTM_TD_Begin ("colspan=\"2\"");
+      ExaSet_WriteSetTitle (&CurrentSet);
+      HTM_TD_End ();
+      HTM_TR_End ();
+     }
+
+   /***** Begin row *****/
+   HTM_TR_Begin (NULL);
+
+   /***** Number of question and answer type *****/
+   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+   Tst_WriteNumQst (NumQst + 1);
+   Tst_WriteAnswerType (Question->Answer.Type);
+   HTM_TD_End ();
+
+   /***** Stem, media and answers *****/
+   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+
+   /* Write parameter with question code */
+   Tst_WriteParamQstCod (NumQst,Question->QstCod);
+
+   /* Stem */
+   Tst_WriteQstStem (Question->Stem,"TEST_EXA",true);
+
+   /* Media */
+   Med_ShowMedia (&Question->Media,
+		  "TEST_MED_SHOW_CONT",
+		  "TEST_MED_SHOW");
+
+   /* Answers */
+   ExaPrn_WriteAnswersToFill (PrintedQuestion,NumQst,Question);
+
+   HTM_TD_End ();
+
+   /***** End row *****/
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/***************** Write answers of a question to fill them ******************/
+/*****************************************************************************/
+
+static void ExaPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                       unsigned NumQst,
+                                       const struct Tst_Question *Question)
+  {
+   /***** Write answer depending on type *****/
+   switch (Question->Answer.Type)
+     {
+      case Tst_ANS_INT:
+         ExaPrn_WriteIntAnsSeeing (PrintedQuestion,NumQst);
+         break;
+      case Tst_ANS_FLOAT:
+         ExaPrn_WriteFloatAnsSeeing (PrintedQuestion,NumQst);
+         break;
+      case Tst_ANS_TRUE_FALSE:
+         ExaPrn_WriteTFAnsSeeing (PrintedQuestion,NumQst);
+         break;
+      case Tst_ANS_UNIQUE_CHOICE:
+      case Tst_ANS_MULTIPLE_CHOICE:
+         ExaPrn_WriteChoiceAnsSeeing (PrintedQuestion,NumQst,Question);
+         break;
+      case Tst_ANS_TEXT:
+         ExaPrn_WriteTextAnsSeeing (PrintedQuestion,NumQst);
+         break;
+      default:
+         break;
+     }
+  }
+
+/*****************************************************************************/
+/****************** Write integer answer when seeing a test ******************/
+/*****************************************************************************/
+
+static void ExaPrn_WriteIntAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				      unsigned NumQst)
+  {
+   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Write input field for the answer *****/
+   snprintf (StrAns,sizeof (StrAns),
+	     "Ans%010u",
+	     NumQst);
+   HTM_INPUT_TEXT (StrAns,11,PrintedQuestion->StrAnswers,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
+		   "size=\"11\"");
+  }
+
+/*****************************************************************************/
+/****************** Write float answer when seeing a test ********************/
+/*****************************************************************************/
+
+static void ExaPrn_WriteFloatAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				        unsigned NumQst)
+  {
+   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Write input field for the answer *****/
+   snprintf (StrAns,sizeof (StrAns),
+	     "Ans%010u",
+	     NumQst);
+   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,PrintedQuestion->StrAnswers,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
+		   "size=\"11\"");
+  }
+
+/*****************************************************************************/
+/************** Write false / true answer when seeing a test ****************/
+/*****************************************************************************/
+
+static void ExaPrn_WriteTFAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+	                             unsigned NumQst)
+  {
+   extern const char *Txt_TF_QST[2];
+
+   /***** Write selector for the answer *****/
+   /* Initially user has not answered the question ==> initially all the answers will be blank.
+      If the user does not confirm the submission of their exam ==>
+      ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+		     "name=\"Ans%010u\"",NumQst);
+   HTM_OPTION (HTM_Type_STRING,"" ,PrintedQuestion->StrAnswers[0] == '\0',false,"&nbsp;");
+   HTM_OPTION (HTM_Type_STRING,"T",PrintedQuestion->StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
+   HTM_OPTION (HTM_Type_STRING,"F",PrintedQuestion->StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
+   HTM_SELECT_End ();
+  }
+
+/*****************************************************************************/
+/******** Write single or multiple choice answer when seeing a test **********/
+/*****************************************************************************/
+
+static void ExaPrn_WriteChoiceAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                         unsigned NumQst,
+                                         const struct Tst_Question *Question)
+  {
+   unsigned NumOpt;
+   unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
+   bool UsrAnswers[Tst_MAX_OPTIONS_PER_QUESTION];
+   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Get indexes for this question from string *****/
+   TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
+
+   /***** Get the user's answers for this question from string *****/
+   TstPrn_GetAnswersFromStr (PrintedQuestion->StrAnswers,UsrAnswers);
+
+   /***** Begin table *****/
+   HTM_TABLE_BeginPadding (2);
+
+   for (NumOpt = 0;
+	NumOpt < Question->Answer.NumOptions;
+	NumOpt++)
+     {
+      /***** Indexes are 0 1 2 3... if no shuffle
+             or 3 1 0 2... (example) if shuffle *****/
+      HTM_TR_Begin (NULL);
+
+      /***** Write selectors and letter of this option *****/
+      /* Initially user has not answered the question ==> initially all the answers will be blank.
+	 If the user does not confirm the submission of their exam ==>
+	 ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
+      HTM_TD_Begin ("class=\"LT\"");
+
+      snprintf (StrAns,sizeof (StrAns),
+		"Ans%010u",
+		NumQst);
+      if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE)
+	 HTM_INPUT_RADIO (StrAns,false,
+			  "id=\"Ans%010u_%u\" value=\"%u\"%s"
+			  " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u);\"",
+			  NumQst,NumOpt,
+			  Indexes[NumOpt],
+			  UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
+				                           "",
+                          NumQst,Question->Answer.NumOptions);
+      else // Answer.Type == Tst_ANS_MULTIPLE_CHOICE
+	 HTM_INPUT_CHECKBOX (StrAns,HTM_DONT_SUBMIT_ON_CHANGE,
+			     "id=\"Ans%010u_%u\" value=\"%u\"%s",
+			     NumQst,NumOpt,
+			     Indexes[NumOpt],
+			     UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
+				                           "");
+
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"LT\"");
+      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"ANS_TXT\"",NumQst,NumOpt);
+      HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
+      HTM_LABEL_End ();
+      HTM_TD_End ();
+
+      /***** Write the option text *****/
+      HTM_TD_Begin ("class=\"LT\"");
+      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"ANS_TXT\"",NumQst,NumOpt);
+      HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
+      HTM_LABEL_End ();
+      Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
+                     "TEST_MED_SHOW_CONT",
+                     "TEST_MED_SHOW");
+      HTM_TD_End ();
+
+      HTM_TR_End ();
+     }
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
+/******************** Write text answer when seeing a test *******************/
+/*****************************************************************************/
+
+static void ExaPrn_WriteTextAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+	                               unsigned NumQst)
+  {
+   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Write input field for the answer *****/
+   snprintf (StrAns,sizeof (StrAns),
+	     "Ans%010u",
+	     NumQst);
+   HTM_INPUT_TEXT (StrAns,Tst_MAX_CHARS_ANSWERS_ONE_QST,PrintedQuestion->StrAnswers,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
+		   "size=\"40\"");
   }
 
 /*****************************************************************************/
@@ -576,8 +784,8 @@ static void ExaPrn_PutParamPrnCod (long ExaCod)
 /***************** Get parameter with code of exam print *********************/
 /*****************************************************************************/
 
-static long ExaPrn_GetParamPrnCod (void)
-  {
-   /***** Get code of exam print *****/
-   return Par_GetParToLong ("PrnCod");
-  }
+// static long ExaPrn_GetParamPrnCod (void)
+//   {
+//    /***** Get code of exam print *****/
+//    return Par_GetParToLong ("PrnCod");
+//   }

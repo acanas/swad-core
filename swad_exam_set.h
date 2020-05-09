@@ -44,6 +44,8 @@
 void ExaSet_PutParamsOneSet (void *Exams);
 long ExaSet_GetParamSetCod (void);
 
+void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set);
+
 void ExaSet_ReceiveFormSet (void);
 void ExaSet_ChangeSetTitle (void);
 void ExaSet_ChangeNumQstsToExam (void);
@@ -71,5 +73,7 @@ void ExaSet_MoveDownSet (void);
 
 void ExaSet_RequestRemoveQstFromSet (void);
 void ExaSet_RemoveQstFromSet (void);
+
+void ExaSet_WriteSetTitle (const struct ExaSet_Set *Set);
 
 #endif
