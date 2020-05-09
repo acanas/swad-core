@@ -61,6 +61,8 @@ extern struct Globals Gbl;
 struct ExaPrn_Print
   {
    long PrnCod;			// Exam print code
+   long EvtCod;			// Event code associated to this print
+   long UsrCod;			// User who answered the exam print
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    unsigned NumQsts;		// Number of questions
    unsigned NumQstsNotBlank;	// Number of questions not blank
@@ -83,9 +85,9 @@ struct ExaPrn_Print
 /*****************************************************************************/
 
 static void ExaPrn_ResetPrint (struct ExaPrn_Print *Print);
-static void ExaPrn_ResetPrintExceptPrnCod (struct ExaPrn_Print *Print);
+static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print);
 
-static bool ExaPrn_CheckIfMyPrintExists (const struct ExaEvt_Event *Event);
+static void ExaPrn_GetPrintDataByEvtCodAndUsrCod (struct ExaPrn_Print *Print);
 static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
 	                                          struct ExaPrn_Print *Print);
 static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
@@ -97,6 +99,9 @@ static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *P
                                                           bool UpdateQstScore);
 static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
                                            unsigned NumQst);
+
+static void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print);
+
 static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exam *Exam,
                                           struct ExaPrn_Print *Print);
 static void ExaPrn_WriteQstAndAnsToFill (const struct Exa_Exam *Exam,
@@ -127,12 +132,14 @@ static void ExaPrn_PutParamPrnCod (long ExaCod);
 
 static void ExaPrn_ResetPrint (struct ExaPrn_Print *Print)
   {
-   Print->PrnCod = -1L;
-   ExaPrn_ResetPrintExceptPrnCod (Print);
+   Print->EvtCod = -1L;
+   Print->UsrCod = -1L;
+   ExaPrn_ResetPrintExceptEvtCodAndUsrCod (Print);
   }
 
-static void ExaPrn_ResetPrintExceptPrnCod (struct ExaPrn_Print *Print)
+static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print)
   {
+   Print->PrnCod                  = -1L;
    Print->TimeUTC[Dat_START_TIME] =
    Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Print->NumQsts                 =
@@ -151,7 +158,6 @@ void ExaPrn_ShowExamPrint (void)
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
    struct ExaPrn_Print Print;
-   bool PrintExists;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -162,12 +168,17 @@ void ExaPrn_ShowExamPrint (void)
    /***** Get and check parameters *****/
    ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
 
-   /***** Check if already exists exam in database *****/
-   PrintExists = ExaPrn_CheckIfMyPrintExists (&Event);
+   /***** Get print data from database *****/
+   Print.EvtCod = Event.EvtCod;
+   Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+   ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
 
-   if (PrintExists)
+   if (Print.PrnCod > 0)	// Print exists
      {
       Ale_ShowAlert (Ale_INFO,"El examen ya existe.");
+
+      /***** Get questions and answers from database *****/
+      ExaPrn_GetPrintQuestionsFromDB (&Print);
      }
    else
      {
@@ -188,16 +199,58 @@ void ExaPrn_ShowExamPrint (void)
   }
 
 /*****************************************************************************/
-/********* Check if my exam print associated to a given event exists *********/
+/********* Get data of an exam print using event code and user code **********/
 /*****************************************************************************/
-// Return true if print exists
 
-static bool ExaPrn_CheckIfMyPrintExists (const struct ExaEvt_Event *Event)
+static void ExaPrn_GetPrintDataByEvtCodAndUsrCod (struct ExaPrn_Print *Print)
   {
-   return (DB_QueryCOUNT ("can not check if exam print exists",
-			  "SELECT COUNT(*) FROM exa_prints"
-			  " WHERE EvtCod=%ld AND UsrCod=%ld",
-			  Event->EvtCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Make database query *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get data of an exam print",
+		       "SELECT PrnCod,"				// row[0]
+			      "UNIX_TIMESTAMP(StartTime),"	// row[1]
+			      "UNIX_TIMESTAMP(EndTime),"	// row[2]
+		              "NumQsts,"			// row[3]
+		              "NumQstsNotBlank,"		// row[4]
+			      "Sent,"				// row[5]
+		              "Score"				// row[6]
+		       " FROM exa_prints"
+	               " WHERE EvtCod=%ld AND UsrCod=%ld",
+		       Print->EvtCod,Print->UsrCod) == 1)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get print code (row[0]) */
+      Print->PrnCod = Str_ConvertStrCodToLongCod (row[0]);
+
+      /* Get date-time (row[1] and row[2] hold UTC date-time) */
+      Print->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[1]);
+      Print->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[2]);
+
+      /* Get number of questions (row[3]) */
+      if (sscanf (row[3],"%u",&Print->NumQsts) != 1)
+	 Print->NumQsts = 0;
+
+      /* Get number of questions not blank (row[4]) */
+      if (sscanf (row[4],"%u",&Print->NumQstsNotBlank) != 1)
+	 Print->NumQstsNotBlank = 0;
+
+      /* Get if exam has been sent (row[5]) */
+      Print->Sent = (row[5][0] == 'Y');
+
+      /* Get score (row[6]) */
+      Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
+      if (sscanf (row[6],"%lf",&Print->Score) != 1)
+	 Print->Score = 0.0;
+      Str_SetDecimalPointToLocal ();	// Return to local system
+     }
+   else
+      ExaPrn_ResetPrintExceptEvtCodAndUsrCod (Print);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -442,6 +495,78 @@ static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
 		    StrIndexes,
 		    StrAnswers);
    Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
+/************* Get the questions of an exam print from database **************/
+/*****************************************************************************/
+
+static void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumQsts;
+   unsigned NumQst;
+   Tst_AnswerType_t AnswerType;
+
+   /***** Get questions of an exam print from database *****/
+   NumQsts =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions"
+					 " of an exam print",
+			      "SELECT exa_print_questions.QstCod,"	// row[0]
+			             "exa_print_questions.SetCod,"	// row[1]
+				     "tst_questions.AnsType,"		// row[2]
+			             "exa_print_questions.Indexes,"	// row[3]
+			             "exa_print_questions.Answers"	// row[4]
+			      " FROM exa_print_questions,tst_questions"
+			      " WHERE exa_print_questions.PrnCod=%ld"
+			      " AND exa_print_questions.QstCod=tst_questions.QstCod"
+			      " ORDER BY exa_print_questions.QstInd",
+			      Print->PrnCod);
+
+   /***** Get questions *****/
+   // The number of questions in table of print questions
+   // should match the number of questions got from print
+   if (NumQsts == Print->NumQsts)
+      for (NumQst = 0;
+	   NumQst < NumQsts;
+	   NumQst++)
+	{
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get question code (row[0]) */
+	 if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	    Lay_ShowErrorAndExit ("Wrong code of question.");
+
+	 /* Get set code (row[1]) */
+	 if ((Print->PrintedQuestions[NumQst].SetCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
+	    Lay_ShowErrorAndExit ("Wrong code of set.");
+
+	 /* Get answer type (row[2]) */
+         AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+
+	 /* Get indexes for this question (row[3]) */
+	 Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[3],
+		   Tst_MAX_BYTES_INDEXES_ONE_QST);
+
+	 /* Get answers selected by user for this question (row[4]) */
+	 Str_Copy (Print->PrintedQuestions[NumQst].StrAnswers,row[4],
+		   Tst_MAX_BYTES_ANSWERS_ONE_QST);
+
+	 /* Replace each comma by a separator of multiple parameters */
+	 /* In database commas are used as separators instead of special chars */
+	 Par_ReplaceCommaBySeparatorMultiple (Print->PrintedQuestions[NumQst].StrIndexes);
+	 if (AnswerType == Tst_ANS_MULTIPLE_CHOICE)
+	    // Only multiple choice questions have multiple answers separated by commas
+	    // Other types of questions have a unique answer, and comma may be part of that answer
+	    Par_ReplaceCommaBySeparatorMultiple (Print->PrintedQuestions[NumQst].StrAnswers);
+	}
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   if (NumQsts != Print->NumQsts)
+      Lay_WrongExamExit ();
   }
 
 /*****************************************************************************/

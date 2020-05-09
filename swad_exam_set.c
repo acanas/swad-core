@@ -269,8 +269,6 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 				  struct ExaSet_Set *Set,
 				  unsigned MaxSetInd)
   {
-   // extern const char *Hlp_ASSESSMENT_Exams_new_set;
-   // extern const char *Hlp_ASSESSMENT_Exams_edit_set;
    extern const char *Txt_New_set_of_questions;
    extern const char *Txt_Create_set_of_questions;
 

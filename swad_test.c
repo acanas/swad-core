@@ -533,8 +533,8 @@ void Tst_ReceiveTestDraft (void)
    /* Get number of this test from form */
    NumTst = Tst_GetParamNumTst ();
 
-   /***** Get test exam from database *****/
-   TstPrn_GetExamDataByExaCod (&Print);
+   /***** Get test exam print from database *****/
+   TstPrn_GetPrintDataByPrnCod (&Print);
 
    /****** Get test status in database for this session-course-num.test *****/
    if (Print.Sent)
@@ -542,8 +542,8 @@ void Tst_ReceiveTestDraft (void)
 	             NumTst);
    else // Print not yet sent
      {
-      /***** Get test exam questions from database *****/
-      TstPrn_GetExamQuestionsFromDB (&Print);
+      /***** Get test exam print questions from database *****/
+      TstPrn_GetPrintQuestionsFromDB (&Print);
 
       /***** Get answers from form to assess a test *****/
       Tst_GetAnswersFromForm (&Print);
@@ -590,7 +590,7 @@ void Tst_AssessTest (void)
    NumTst = Tst_GetParamNumTst ();
 
    /***** Get test exam from database *****/
-   TstPrn_GetExamDataByExaCod (&Print);
+   TstPrn_GetPrintDataByPrnCod (&Print);
 
    /****** Get test status in database for this session-course-num.test *****/
    if (Print.Sent)
@@ -599,7 +599,7 @@ void Tst_AssessTest (void)
    else	// Print not yet sent
      {
       /***** Get test exam questions from database *****/
-      TstPrn_GetExamQuestionsFromDB (&Print);
+      TstPrn_GetPrintQuestionsFromDB (&Print);
 
       /***** Get answers from form to assess a test *****/
       Tst_GetAnswersFromForm (&Print);

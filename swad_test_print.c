@@ -1926,7 +1926,7 @@ void TstPrn_ShowOneExam (void)
       Lay_ShowErrorAndExit ("Code of test is missing.");
 
    /***** Get test exam data *****/
-   TstPrn_GetExamDataByExaCod (&Print);
+   TstPrn_GetPrintDataByPrnCod (&Print);
    TstCfg_SetConfigVisibility (TstVis_MAX_VISIBILITY);
 
    /***** Check if I can view this test exam *****/
@@ -1977,7 +1977,7 @@ void TstPrn_ShowOneExam (void)
    if (ICanViewTest)	// I am allowed to view this test exam
      {
       /***** Get questions and user's answers of the test exam from database *****/
-      TstPrn_GetExamQuestionsFromDB (&Print);
+      TstPrn_GetPrintQuestionsFromDB (&Print);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Test_result,
@@ -2200,7 +2200,7 @@ void TstPrn_ShowExamAnswers (struct UsrData *UsrDat,
 /************ Get data of a test exam using its test exam code ***************/
 /*****************************************************************************/
 
-void TstPrn_GetExamDataByExaCod (struct TstPrn_Print *Print)
+void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2257,10 +2257,10 @@ void TstPrn_GetExamDataByExaCod (struct TstPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/************* Get the questions of a test exam from database ****************/
+/*********** Get the questions of a test exam print from database ************/
 /*****************************************************************************/
 
-void TstPrn_GetExamQuestionsFromDB (struct TstPrn_Print *Print)
+void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2268,7 +2268,7 @@ void TstPrn_GetExamQuestionsFromDB (struct TstPrn_Print *Print)
    unsigned NumQst;
    Tst_AnswerType_t AnswerType;
 
-   /***** Get questions of a test exam from database *****/
+   /***** Get questions of a test exam print from database *****/
    NumQsts =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions"
 					 " of a test exam",
@@ -2282,7 +2282,7 @@ void TstPrn_GetExamQuestionsFromDB (struct TstPrn_Print *Print)
 			      " ORDER BY tst_exam_questions.QstInd",
 			      Print->PrnCod);
 
-   /***** List questions *****/
+   /***** Get questions *****/
    // The number of questions in table of exam questions
    // should match the number of questions got from exam
    if (NumQsts == Print->NumQsts)

@@ -99,9 +99,9 @@ void TstPrn_ShowOneExam (void);
 void TstPrn_ShowExamAnswers (struct UsrData *UsrDat,
 			     struct TstPrn_Print *Print,
 			     unsigned Visibility);
-void TstPrn_GetExamDataByExaCod (struct TstPrn_Print *Print);
+void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print);
 
-void TstPrn_GetExamQuestionsFromDB (struct TstPrn_Print *Print);
+void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print);
 void TstPrn_RemoveExamsMadeByUsrInAllCrss (long UsrCod);
 void TstPrn_RemoveExamsMadeByUsrInCrs (long UsrCod,long CrsCod);
 void TstPrn_RemoveCrsExams (long CrsCod);
