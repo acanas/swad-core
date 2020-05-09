@@ -9493,9 +9493,12 @@ static FigCch_FigureCached_t Usr_GetFigureNumUsrsInCrss (unsigned Roles)
 	 return FigCch_NUM_NETS_IN_CRSS;
       case 1 << Rol_TCH:	// Teachers
 	 return FigCch_NUM_TCHS_IN_CRSS;
+      case 1 << Rol_NET |
+	   1 << Rol_TCH:	// Any teacher in courses
+	 return FigCch_NUM_ALLT_IN_CRSS;
       case 1 << Rol_STD |
 	   1 << Rol_NET |
-	   1 << Rol_TCH:	// Any users in courses
+	   1 << Rol_TCH:	// Any user in courses
 	 return FigCch_NUM_USRS_IN_CRSS;
       default:
 	 Rol_WrongRoleExit ();

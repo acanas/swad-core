@@ -73,6 +73,7 @@ void Lay_NotEnoughMemoryExit (void);
 void Lay_WrongScopeExit (void);
 void Lay_WrongOrderExit (void);
 void Lay_WrongTypeOfViewExit (void);
+void Lay_WrongProjectExit (void);
 void Lay_WrongExamExit (void);
 void Lay_WrongSetExit (void);
 void Lay_WrongEventExit (void);

@@ -80,22 +80,23 @@ typedef enum
    FigCch_NUM_STDS_IN_CRSS	= 32,	// Number of students in courses
    FigCch_NUM_NETS_IN_CRSS	= 33,	// Number of non-editing teachers in courses
    FigCch_NUM_TCHS_IN_CRSS	= 34,	// Number of teachers in courses
-   FigCch_NUM_USRS_IN_CRSS	= 35,	// Number of users in courses
-   FigCch_NUM_GSTS		= 36,	// Number of guests (users not belonging to any course)
+   FigCch_NUM_ALLT_IN_CRSS	= 35,	// Number of non-editing teachers or teachers in courses
+   FigCch_NUM_USRS_IN_CRSS	= 36,	// Number of users in courses
+   FigCch_NUM_GSTS		= 37,	// Number of guests (users not belonging to any course)
    //--------------------------------------------------------------------------
-   FigCch_NUM_CRSS_PER_USR	= 37,	// Number of courses per user
-   FigCch_NUM_CRSS_PER_STD	= 38,	// Number of courses per student
-   FigCch_NUM_CRSS_PER_NET	= 39,	// Number of courses per non-editing teacher
-   FigCch_NUM_CRSS_PER_TCH	= 40,	// Number of courses per teacher
+   FigCch_NUM_CRSS_PER_USR	= 38,	// Number of courses per user
+   FigCch_NUM_CRSS_PER_STD	= 39,	// Number of courses per student
+   FigCch_NUM_CRSS_PER_NET	= 40,	// Number of courses per non-editing teacher
+   FigCch_NUM_CRSS_PER_TCH	= 41,	// Number of courses per teacher
    //--------------------------------------------------------------------------
-   FigCch_NUM_USRS_PER_CRS	= 41,	// Number of users per course
-   FigCch_NUM_STDS_PER_CRS	= 42,	// Number of students per course
-   FigCch_NUM_NETS_PER_CRS	= 43,	// Number of non-editing teachers per course
-   FigCch_NUM_TCHS_PER_CRS	= 44,	// Number of teachers per course
+   FigCch_NUM_USRS_PER_CRS	= 42,	// Number of users per course
+   FigCch_NUM_STDS_PER_CRS	= 43,	// Number of students per course
+   FigCch_NUM_NETS_PER_CRS	= 44,	// Number of non-editing teachers per course
+   FigCch_NUM_TCHS_PER_CRS	= 45,	// Number of teachers per course
    //--------------------------------------------------------------------------
-   FigCch_NUM_USRS_BELONG_CTY	= 45,	// Number of users who claim to belong to country
-   FigCch_NUM_USRS_BELONG_INS	= 46,	// Number of users who claim to belong to institution
-   FigCch_NUM_USRS_BELONG_CTR	= 47,	// Number of users who claim to belong to centre
+   FigCch_NUM_USRS_BELONG_CTY	= 46,	// Number of users who claim to belong to country
+   FigCch_NUM_USRS_BELONG_INS	= 47,	// Number of users who claim to belong to institution
+   FigCch_NUM_USRS_BELONG_CTR	= 48,	// Number of users who claim to belong to centre
   } FigCch_FigureCached_t;
 
 #define FigCch_NUM_TYPES 2

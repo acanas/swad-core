@@ -548,13 +548,18 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.219 (2020-05-07)"
+#define Log_PLATFORM_VERSION	"SWAD 19.219.3 (2020-05-09)"
 #define CSS_FILE		"swad19.217.css"
 #define JS_FILE			"swad19.193.1.js"
 /*
- Arreglar bug: cuando se crea un nuevo proyecto no debería salir de nuevo el formulario de creación sino el formulario que incluye la adición de usuarios al proyecto recién creado.
-               cuando se modifica se hace correctamente, así que se trata de hacer lo mismo cuando se crea que cuando se modifica.
- Arreglar bug en rol de usuario. Reported by Francisco Ocaña Lara.
+	Version 19.219.3: May 09, 2020  Code refactoring in projects. (302366 lines)
+	Version 19.219.2: May 09, 2020  Fixed bug in roles. Reported by Francisco Ocaña Lara. (302354 lines)
+					1 change necessary in database:
+DELETE FROM figures;
+
+	Version 19.219.1: May 09, 2020  By default, only one column is displayed in the layout, for the sake of speed. (302348 lines)
+					If you want to hide right column for current students and guests, do the following query in database:
+UPDATE usr_data SET SideCols=0 WHERE (SideCols & 1)<>0 AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr WHERE Role>3);
 
 	Version 19.219:   May 09, 2020  Create exam print. (302347 lines)
 					2 change necessary in database:
@@ -565,7 +570,7 @@ CREATE TABLE IF NOT EXISTS exa_print_questions (PrnCod INT NOT NULL,QstCod INT N
 	Version 19.218:   May 07, 2020  Fixed bug in creation of new exam announcements, reported by Francisco Gómez Mula.
 					Changes in exam announcementes. (302170 lines)
 	Version 19.217:   May 07, 2020  Generate and show questions of each set in an exam print. Not finished. (302124 lines)
-	Version 19.216.1: May 07, 2020  Fixed bug in edition of exam questions, reported by Antonio Cañas Martínez.
+	Version 19.216.1: May 07, 2020  Fixed bug in edition of exam questions. Reported by Antonio Cañas Martínez.
 					Changes in some texts. (301957 lines)
 	Version 19.216:   May 07, 2020  New module exam_print to generate new exam prints. (301949 lines)
 					1 change necessary in database:

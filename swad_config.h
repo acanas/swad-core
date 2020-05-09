@@ -79,8 +79,6 @@
 #define Cfg_ABOUT_LOGO_WIDTH			125
 #define Cfg_ABOUT_LOGO_HEIGHT			40
 
-#define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
-
 #define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
 
 #define Cfg_GOOGLE_ANALYTICS			""
@@ -117,8 +115,6 @@
 #define Cfg_ABOUT_LOGO				"swad32x32.gif"
 #define Cfg_ABOUT_LOGO_WIDTH			32
 #define Cfg_ABOUT_LOGO_HEIGHT			32
-
-#define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
 #define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
 
@@ -178,9 +174,7 @@
 #define Cfg_ABOUT_LOGO_WIDTH			100
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
-#define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
-
-#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (60UL * 60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
+#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
 
 #define Cfg_GOOGLE_ANALYTICS			""
 
@@ -235,8 +229,6 @@
 #define Cfg_ABOUT_LOGO_WIDTH			32
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
-#define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
-
 #define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
 
 #define Cfg_GOOGLE_ANALYTICS			""
@@ -266,6 +258,9 @@
 
 /* Courses */
 #define Cfg_MIN_NUM_COURSES_TO_CONFIRM_SHOW_BIG_LIST     500	// If the number of courses in a list is greater than this, ask me for confirmation before showing the list
+
+/* Layout */
+#define Cfg_DEFAULT_COLUMNS		Lay_HIDE_BOTH_COLUMNS
 
 /*****************************************************************************/
 /*********************** Directories, folder and files ***********************/

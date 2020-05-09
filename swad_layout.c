@@ -132,7 +132,7 @@ void Lay_WriteStartOfPage (void)
        Gbl.Layout.HTMLStartWritten)
       return;
 
-   /***** Compute connected users to be displayed in right columns *****/
+   /***** Compute connected users to be displayed in right column *****/
    Con_ComputeConnectedUsrsBelongingToCurrentCrs ();
 
    /***** Send head width the file type for the HTTP protocol *****/
@@ -1482,6 +1482,15 @@ void Lay_WrongOrderExit (void)
 void Lay_WrongTypeOfViewExit (void)
   {
    Lay_ShowErrorAndExit ("Wrong type of view.");
+  }
+
+/*****************************************************************************/
+/************* Write error message and exit when wrong project ***************/
+/*****************************************************************************/
+
+void Lay_WrongProjectExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong project.");
   }
 
 /*****************************************************************************/

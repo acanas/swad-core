@@ -252,7 +252,8 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects);
 
 static void Prj_ResetProject (struct Prj_Project *Prj);
 
-static void Prj_RequestCreatOrEditPrj (struct Prj_Projects *Projects);
+static void Prj_RequestCreatOrEditPrj (struct Prj_Projects *Projects,
+                                       struct Prj_Project *Prj);
 static void Prj_PutFormProject (struct Prj_Projects *Projects,
                                 struct Prj_Project *Prj,bool ItsANewProject);
 static void Prj_EditOneProjectTxtArea (const char *Id,
@@ -975,7 +976,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 	Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	Order++)
      {
-      HTM_TH_Begin (1,1,"CM");
+      HTM_TH_Begin (1,1,"LM");
 
       switch (ProjectView)
 	{
@@ -2413,12 +2414,13 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
       [Prj_ROLE_TUT] = ActAddTutPrj,	// Tutor
       [Prj_ROLE_EVL] = ActAddEvlPrj,	// Evaluator
      };
+   struct Prj_Project Prj;
    char *TxtButton;
 
    /***** Get parameters *****/
    Prj_GetParams (Projects);
-   if ((Projects->PrjCod = Prj_GetParamPrjCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of project is missing.");
+   if ((Projects->PrjCod = Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
+      Lay_WrongProjectExit ();
 
    /***** Put form to select users *****/
    if (asprintf (&TxtButton,Txt_Add_USERS,
@@ -2434,7 +2436,7 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
    free (TxtButton);
 
    /***** Put a form to create/edit project *****/
-   Prj_RequestCreatOrEditPrj (Projects);
+   Prj_RequestCreatOrEditPrj (Projects,&Prj);
   }
 
 /*****************************************************************************/
@@ -2486,15 +2488,17 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
    extern const char *Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project;
    extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS];
    struct Prj_Projects Projects;
+   struct Prj_Project Prj;
    const char *Ptr;
    bool ItsMe;
 
    /***** Reset projects *****/
    Prj_ResetProjects (&Projects);
 
-   /***** Get project code *****/
-   if ((Projects.PrjCod = Prj_GetParamPrjCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of project is missing.");
+   /***** Get parameters *****/
+   Prj_GetParams (&Projects);
+   if ((Projects.PrjCod = Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
+      Lay_WrongProjectExit ();
 
    /***** Add the selected users to project *****/
    Ptr = Prj_MembersToAdd.List[Rol_UNK];
@@ -2533,7 +2537,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
    Usr_FreeListsSelectedEncryptedUsrsCods (&Prj_MembersToAdd);
 
    /***** Put form to edit project again *****/
-   Prj_RequestCreatOrEditPrj (&Projects);
+   Prj_RequestCreatOrEditPrj (&Projects,&Prj);
   }
 
 /*****************************************************************************/
@@ -2593,7 +2597,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
    /***** Get parameters *****/
    Prj_GetParams (Projects);
    if ((Projects->PrjCod = Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of project is missing.");
+      Lay_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
@@ -2639,7 +2643,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
    Prj_FreeMemProject (&Prj);
 
    /***** Put form to edit project again *****/
-   Prj_RequestCreatOrEditPrj (Projects);
+   Prj_RequestCreatOrEditPrj (Projects,&Prj);
   }
 
 /*****************************************************************************/
@@ -2678,7 +2682,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Projects.PrjCod = Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of project is missing.");
+      Lay_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
@@ -2718,7 +2722,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
    Prj_FreeMemProject (&Prj);
 
    /***** Put form to edit project again *****/
-   Prj_RequestCreatOrEditPrj (&Projects);
+   Prj_RequestCreatOrEditPrj (&Projects,&Prj);
   }
 
 /*****************************************************************************/
@@ -3097,7 +3101,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	    /* Get next project code */
 	    row = mysql_fetch_row (mysql_res);
 	    if ((PrjCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	       Lay_ShowErrorAndExit ("Error: wrong project code.");
+               Lay_WrongProjectExit ();
 
 	    /* Filter projects depending on faultiness */
 	    switch (Projects->Filter.Faulti)
@@ -3351,7 +3355,7 @@ void Prj_ReqRemProject (void)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of project is missing.");
+      Lay_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
@@ -3396,7 +3400,7 @@ void Prj_RemoveProject (void)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of project is missing.");
+      Lay_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);	// Inside this function, the course is checked to be the current one
@@ -3461,7 +3465,7 @@ void Prj_HideProject (void)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of project is missing.");
+      Lay_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
@@ -3500,7 +3504,7 @@ void Prj_UnhideProject (void)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of project is missing.");
+      Lay_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
@@ -3528,61 +3532,62 @@ void Prj_UnhideProject (void)
 void Prj_RequestCreatePrj (void)
   {
    struct Prj_Projects Projects;
+   struct Prj_Project Prj;
 
    /***** Reset projects *****/
    Prj_ResetProjects (&Projects);
 
+   /***** Get parameters *****/
+   Prj_GetParams (&Projects);
+   Projects.PrjCod = Prj.PrjCod = -1L;	// It's a new, non existing, project
+
    /***** Form to create project *****/
-   Projects.PrjCod = -1L;	// It's a new, non existing, project
-   Prj_RequestCreatOrEditPrj (&Projects);
+   Prj_RequestCreatOrEditPrj (&Projects,&Prj);
   }
 
 void Prj_RequestEditPrj (void)
   {
    struct Prj_Projects Projects;
+   struct Prj_Project Prj;
 
    /***** Reset projects *****/
    Prj_ResetProjects (&Projects);
 
-   /***** Get project code *****/
-   if ((Projects.PrjCod = Prj_GetParamPrjCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of project is missing.");
+   /***** Get parameters *****/
+   Prj_GetParams (&Projects);
+   if ((Projects.PrjCod = Prj.PrjCod = Prj_GetParamPrjCod ()) <= 0)
+      Lay_WrongProjectExit ();
 
    /***** Form to edit project *****/
-   Prj_RequestCreatOrEditPrj (&Projects);
+   Prj_RequestCreatOrEditPrj (&Projects,&Prj);
   }
 
-static void Prj_RequestCreatOrEditPrj (struct Prj_Projects *Projects)
+static void Prj_RequestCreatOrEditPrj (struct Prj_Projects *Projects,
+                                       struct Prj_Project *Prj)
   {
-   struct Prj_Project Prj;
-   bool ItsANewProject;
+   bool ItsANewProject = (Prj->PrjCod < 0);
 
    /***** Allocate memory for the project *****/
-   Prj_AllocMemProject (&Prj);
-
-   /***** Get parameters *****/
-   Prj.PrjCod = Projects->PrjCod;
-   Prj_GetParams (Projects);
-   ItsANewProject = (Prj.PrjCod < 0);
+   Prj_AllocMemProject (Prj);
 
    /***** Get from the database the data of the project *****/
    if (ItsANewProject)
      {
       /* Initialize to empty project */
-      Prj_ResetProject (&Prj);
-      Prj.CreatTime = Gbl.StartExecutionTimeUTC;
-      Prj.ModifTime = Gbl.StartExecutionTimeUTC;
-      Prj.DptCod = Gbl.Usrs.Me.UsrDat.Tch.DptCod;	// Default: my department
+      Prj_ResetProject (Prj);
+      Prj->CreatTime = Gbl.StartExecutionTimeUTC;
+      Prj->ModifTime = Gbl.StartExecutionTimeUTC;
+      Prj->DptCod = Gbl.Usrs.Me.UsrDat.Tch.DptCod;	// Default: my department
      }
    else
       /* Get data of the project from database */
-      Prj_GetDataOfProjectByCod (&Prj);
+      Prj_GetDataOfProjectByCod (Prj);
 
    /***** Put form to edit project *****/
-   Prj_PutFormProject (Projects,&Prj,ItsANewProject);
+   Prj_PutFormProject (Projects,Prj,ItsANewProject);
 
    /***** Free memory of the project *****/
-   Prj_FreeMemProject (&Prj);
+   Prj_FreeMemProject (Prj);
 
    /***** Show projects again *****/
    Prj_ShowProjects (Projects);
@@ -3967,7 +3972,7 @@ void Prj_ReceiveFormProject (void)
          Prj_PutFormProject (&Projects,&Prj,ItsANewProject);
 
       /***** Show again form to edit project *****/
-      Prj_RequestCreatOrEditPrj (&Projects);
+      Prj_RequestCreatOrEditPrj (&Projects,&Prj);
      }
    else
       Lay_NoPermissionExit ();
@@ -4470,7 +4475,7 @@ void Prj_LockProjectEdition (void)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of project is missing.");
+      Lay_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
@@ -4517,7 +4522,7 @@ void Prj_UnloProjectEdition (void)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of project is missing.");
+      Lay_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
