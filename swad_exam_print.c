@@ -61,6 +61,7 @@ extern struct Globals Gbl;
 struct ExaPrn_Print
   {
    long PrnCod;			// Exam print code
+   long ExaCod;			// Exam code
    long EvtCod;			// Event code associated to this print
    long UsrCod;			// User who answered the exam print
    time_t TimeUTC[Dat_NUM_START_END_TIME];
@@ -88,13 +89,11 @@ static void ExaPrn_ResetPrint (struct ExaPrn_Print *Print);
 static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print);
 
 static void ExaPrn_GetPrintDataByEvtCodAndUsrCod (struct ExaPrn_Print *Print);
-static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
-	                                          struct ExaPrn_Print *Print);
+static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print);
 static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
                                                   struct ExaSet_Set *Set,
                                                   unsigned *NumQstInPrint);
-static void ExaPrn_CreatePrintInDB (const struct ExaEvt_Event *Event,
-				    struct ExaPrn_Print *Print);
+static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print);
 static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *Print,
                                                           bool UpdateQstScore);
 static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
@@ -102,25 +101,25 @@ static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
 
 static void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print);
 
-static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exam *Exam,
+static void ExaPrn_ShowExamPrintToFillIt (const char *Title,
                                           struct ExaPrn_Print *Print);
-static void ExaPrn_WriteQstAndAnsToFill (const struct Exa_Exam *Exam,
-                                         struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_ShowTableWithQstsToFill (struct ExaPrn_Print *Print);
+static void ExaPrn_WriteQstAndAnsToFill (struct ExaPrn_Print *Print,
                                          unsigned NumQst,
                                          const struct Tst_Question *Question);
-static void ExaPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
                                        unsigned NumQst,
                                        const struct Tst_Question *Question);
-static void ExaPrn_WriteIntAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_WriteIntAnsSeeing (const struct ExaPrn_Print *Print,
 				      unsigned NumQst);
-static void ExaPrn_WriteFloatAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_WriteFloatAnsSeeing (const struct ExaPrn_Print *Print,
 				        unsigned NumQst);
-static void ExaPrn_WriteTFAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_WriteTFAnsSeeing (const struct ExaPrn_Print *Print,
 	                             unsigned NumQst);
-static void ExaPrn_WriteChoiceAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_WriteChoiceAnsSeeing (const struct ExaPrn_Print *Print,
                                          unsigned NumQst,
                                          const struct Tst_Question *Question);
-static void ExaPrn_WriteTextAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_WriteTextAnsSeeing (const struct ExaPrn_Print *Print,
 	                               unsigned NumQst);
 
 static void ExaPrn_PutParamPrnCod (long ExaCod);
@@ -140,6 +139,7 @@ static void ExaPrn_ResetPrint (struct ExaPrn_Print *Print)
 static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print)
   {
    Print->PrnCod                  = -1L;
+   Print->ExaCod		  = -1L;
    Print->TimeUTC[Dat_START_TIME] =
    Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Print->NumQsts                 =
@@ -169,6 +169,7 @@ void ExaPrn_ShowExamPrint (void)
    ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
 
    /***** Get print data from database *****/
+   Print.ExaCod = Event.ExaCod;
    Print.EvtCod = Event.EvtCod;
    Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
@@ -183,19 +184,19 @@ void ExaPrn_ShowExamPrint (void)
    else
      {
       /***** Get questions from database *****/
-      ExaPrn_GetQuestionsForNewPrintFromDB (&Exam,&Print);
+      ExaPrn_GetQuestionsForNewPrintFromDB (&Print);
 
       if (Print.NumQsts)
 	{
 	 /***** Create/update new exam print in database *****/
-	 ExaPrn_CreatePrintInDB (&Event,&Print);
+	 ExaPrn_CreatePrintInDB (&Print);
 	 ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
 						       false);	// Don't update question score
 	}
       }
 
    /***** Show test exam to be answered *****/
-   ExaPrn_ShowExamPrintToFillIt (&Exam,&Print);
+   ExaPrn_ShowExamPrintToFillIt (Exam.Title,&Print);
   }
 
 /*****************************************************************************/
@@ -257,8 +258,7 @@ static void ExaPrn_GetPrintDataByEvtCodAndUsrCod (struct ExaPrn_Print *Print)
 /*********** Get questions for a new exam print from the database ************/
 /*****************************************************************************/
 
-static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
-	                                          struct ExaPrn_Print *Print)
+static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -277,7 +277,7 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct Exa_Exam *Exam,
 			      " FROM exa_sets"
 			      " WHERE ExaCod=%ld"
 			      " ORDER BY SetInd",
-			      Exam->ExaCod);
+			      Print->ExaCod);
 
    /***** Get questions from all sets *****/
    Print->NumQsts = 0;
@@ -409,8 +409,7 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
 /***************** Create new blank exam print in database *******************/
 /*****************************************************************************/
 
-static void ExaPrn_CreatePrintInDB (const struct ExaEvt_Event *Event,
-				    struct ExaPrn_Print *Print)
+static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print)
   {
    /***** Insert new exam print into table *****/
    Print->PrnCod =
@@ -419,7 +418,7 @@ static void ExaPrn_CreatePrintInDB (const struct ExaEvt_Event *Event,
 				" (EvtCod,UsrCod,StartTime,EndTime,NumQsts,NumQstsNotBlank,Sent,Score)"
 				" VALUES"
 				" (%ld,%ld,NOW(),NOW(),%u,0,'N',0)",
-				Event->EvtCod,
+				Print->EvtCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Print->NumQsts);
   }
@@ -570,19 +569,17 @@ static void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/****************** Show a test exam print to be answered ********************/
+/******************** Show an exam print to be answered **********************/
 /*****************************************************************************/
 
-static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exam *Exam,
+static void ExaPrn_ShowExamPrintToFillIt (const char *Title,
                                           struct ExaPrn_Print *Print)
   {
    extern const char *Hlp_ASSESSMENT_Exams;
    extern const char *Txt_Send;
-   unsigned NumQst;
-   struct Tst_Question Question;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Exam->Title,
+   Box_BoxBegin (NULL,Title,
 		 NULL,NULL,
 		 Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
    Lay_WriteHeaderClassPhoto (false,false,
@@ -596,35 +593,10 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exam *Exam,
       Frm_StartForm (ActReqAssExaPrn);
       ExaPrn_PutParamPrnCod (Print->PrnCod);
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (10);
+      /***** Show table with questions to answer *****/
+      ExaPrn_ShowTableWithQstsToFill (Print);
 
-      /***** Write one row for each question *****/
-      for (NumQst = 0;
-	   NumQst < Print->NumQsts;
-	   NumQst++)
-	{
-	 Gbl.RowEvenOdd = NumQst % 2;
-
-	 /* Create test question */
-	 Tst_QstConstructor (&Question);
-	 Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
-
-	 /* Show question */
-	 if (!Tst_GetQstDataFromDB (&Question))	// Question exists
-	    Lay_ShowErrorAndExit ("Wrong question.");
-
-	 /* Write question and answers */
-	 ExaPrn_WriteQstAndAnsToFill (Exam,&Print->PrintedQuestions[NumQst],NumQst,&Question);
-
-	 /* Destroy test question */
-	 Tst_QstDestructor (&Question);
-	}
-
-      /***** End table *****/
-      HTM_TABLE_End ();
-
-      /***** Send buttona and end form *****/
+      /***** Send button and end form *****/
       Btn_PutCreateButton (Txt_Send);
       Frm_EndForm ();
      }
@@ -633,13 +605,49 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exam *Exam,
    Box_BoxEnd ();
   }
 
+/*****************************************************************************/
+/********* Show the main part (table) of an exam print to be answered ********/
+/*****************************************************************************/
+
+static void ExaPrn_ShowTableWithQstsToFill (struct ExaPrn_Print *Print)
+  {
+   unsigned NumQst;
+   struct Tst_Question Question;
+
+   /***** Begin table *****/
+   HTM_TABLE_BeginWideMarginPadding (10);
+
+   /***** Write one row for each question *****/
+   for (NumQst = 0;
+	NumQst < Print->NumQsts;
+	NumQst++)
+     {
+      Gbl.RowEvenOdd = NumQst % 2;
+
+      /* Create test question */
+      Tst_QstConstructor (&Question);
+      Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
+
+      /* Show question */
+      if (!Tst_GetQstDataFromDB (&Question))	// Question exists
+	 Lay_ShowErrorAndExit ("Wrong question.");
+
+      /* Write question and answers */
+      ExaPrn_WriteQstAndAnsToFill (Print,NumQst,&Question);
+
+      /* Destroy test question */
+      Tst_QstDestructor (&Question);
+     }
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+  }
 
 /*****************************************************************************/
 /********** Write a row of a test, with one question and its answer **********/
 /*****************************************************************************/
 
-static void ExaPrn_WriteQstAndAnsToFill (const struct Exa_Exam *Exam,
-                                         struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_WriteQstAndAnsToFill (struct ExaPrn_Print *Print,
                                          unsigned NumQst,
                                          const struct Tst_Question *Question)
   {
@@ -652,11 +660,11 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct Exa_Exam *Exam,
       .Title[0] = '\0'
      };
 
-   if (PrintedQuestion->SetCod != CurrentSet.SetCod)
+   if (Print->PrintedQuestions[NumQst].SetCod != CurrentSet.SetCod)
      {
       /***** Get data of this set *****/
-      CurrentSet.ExaCod = Exam->ExaCod;
-      CurrentSet.SetCod = PrintedQuestion->SetCod;
+      CurrentSet.ExaCod = Print->ExaCod;
+      CurrentSet.SetCod = Print->PrintedQuestions[NumQst].SetCod;
       ExaSet_GetDataOfSetByCod (&CurrentSet);
 
       /***** Title for this set *****/
@@ -691,7 +699,7 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct Exa_Exam *Exam,
 		  "TEST_MED_SHOW");
 
    /* Answers */
-   ExaPrn_WriteAnswersToFill (PrintedQuestion,NumQst,Question);
+   ExaPrn_WriteAnswersToFill (Print,NumQst,Question);
 
    HTM_TD_End ();
 
@@ -703,7 +711,7 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct Exa_Exam *Exam,
 /***************** Write answers of a question to fill them ******************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
                                        unsigned NumQst,
                                        const struct Tst_Question *Question)
   {
@@ -711,20 +719,20 @@ static void ExaPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *Prin
    switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
-         ExaPrn_WriteIntAnsSeeing (PrintedQuestion,NumQst);
+         ExaPrn_WriteIntAnsSeeing (Print,NumQst);
          break;
       case Tst_ANS_FLOAT:
-         ExaPrn_WriteFloatAnsSeeing (PrintedQuestion,NumQst);
+         ExaPrn_WriteFloatAnsSeeing (Print,NumQst);
          break;
       case Tst_ANS_TRUE_FALSE:
-         ExaPrn_WriteTFAnsSeeing (PrintedQuestion,NumQst);
+         ExaPrn_WriteTFAnsSeeing (Print,NumQst);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         ExaPrn_WriteChoiceAnsSeeing (PrintedQuestion,NumQst,Question);
+         ExaPrn_WriteChoiceAnsSeeing (Print,NumQst,Question);
          break;
       case Tst_ANS_TEXT:
-         ExaPrn_WriteTextAnsSeeing (PrintedQuestion,NumQst);
+         ExaPrn_WriteTextAnsSeeing (Print,NumQst);
          break;
       default:
          break;
@@ -735,7 +743,7 @@ static void ExaPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *Prin
 /****************** Write integer answer when seeing a test ******************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteIntAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_WriteIntAnsSeeing (const struct ExaPrn_Print *Print,
 				      unsigned NumQst)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
@@ -744,7 +752,7 @@ static void ExaPrn_WriteIntAnsSeeing (const struct TstPrn_PrintedQuestion *Print
    snprintf (StrAns,sizeof (StrAns),
 	     "Ans%010u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,11,PrintedQuestion->StrAnswers,
+   HTM_INPUT_TEXT (StrAns,11,Print->PrintedQuestions[NumQst].StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"11\"");
   }
@@ -753,7 +761,7 @@ static void ExaPrn_WriteIntAnsSeeing (const struct TstPrn_PrintedQuestion *Print
 /****************** Write float answer when seeing a test ********************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteFloatAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_WriteFloatAnsSeeing (const struct ExaPrn_Print *Print,
 				        unsigned NumQst)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
@@ -762,7 +770,7 @@ static void ExaPrn_WriteFloatAnsSeeing (const struct TstPrn_PrintedQuestion *Pri
    snprintf (StrAns,sizeof (StrAns),
 	     "Ans%010u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,PrintedQuestion->StrAnswers,
+   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,Print->PrintedQuestions[NumQst].StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"11\"");
   }
@@ -771,7 +779,7 @@ static void ExaPrn_WriteFloatAnsSeeing (const struct TstPrn_PrintedQuestion *Pri
 /************** Write false / true answer when seeing a test ****************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteTFAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_WriteTFAnsSeeing (const struct ExaPrn_Print *Print,
 	                             unsigned NumQst)
   {
    extern const char *Txt_TF_QST[2];
@@ -782,9 +790,9 @@ static void ExaPrn_WriteTFAnsSeeing (const struct TstPrn_PrintedQuestion *Printe
       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "name=\"Ans%010u\"",NumQst);
-   HTM_OPTION (HTM_Type_STRING,"" ,PrintedQuestion->StrAnswers[0] == '\0',false,"&nbsp;");
-   HTM_OPTION (HTM_Type_STRING,"T",PrintedQuestion->StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
-   HTM_OPTION (HTM_Type_STRING,"F",PrintedQuestion->StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
+   HTM_OPTION (HTM_Type_STRING,"" ,Print->PrintedQuestions[NumQst].StrAnswers[0] == '\0',false,"&nbsp;");
+   HTM_OPTION (HTM_Type_STRING,"T",Print->PrintedQuestions[NumQst].StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
+   HTM_OPTION (HTM_Type_STRING,"F",Print->PrintedQuestions[NumQst].StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
    HTM_SELECT_End ();
   }
 
@@ -792,7 +800,7 @@ static void ExaPrn_WriteTFAnsSeeing (const struct TstPrn_PrintedQuestion *Printe
 /******** Write single or multiple choice answer when seeing a test **********/
 /*****************************************************************************/
 
-static void ExaPrn_WriteChoiceAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_WriteChoiceAnsSeeing (const struct ExaPrn_Print *Print,
                                          unsigned NumQst,
                                          const struct Tst_Question *Question)
   {
@@ -802,10 +810,10 @@ static void ExaPrn_WriteChoiceAnsSeeing (const struct TstPrn_PrintedQuestion *Pr
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Get indexes for this question from string *****/
-   TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
+   TstPrn_GetIndexesFromStr (Print->PrintedQuestions[NumQst].StrIndexes,Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   TstPrn_GetAnswersFromStr (PrintedQuestion->StrAnswers,UsrAnswers);
+   TstPrn_GetAnswersFromStr (Print->PrintedQuestions[NumQst].StrAnswers,UsrAnswers);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -873,7 +881,7 @@ static void ExaPrn_WriteChoiceAnsSeeing (const struct TstPrn_PrintedQuestion *Pr
 /******************** Write text answer when seeing a test *******************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteTextAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+static void ExaPrn_WriteTextAnsSeeing (const struct ExaPrn_Print *Print,
 	                               unsigned NumQst)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
@@ -882,7 +890,7 @@ static void ExaPrn_WriteTextAnsSeeing (const struct TstPrn_PrintedQuestion *Prin
    snprintf (StrAns,sizeof (StrAns),
 	     "Ans%010u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,Tst_MAX_CHARS_ANSWERS_ONE_QST,PrintedQuestion->StrAnswers,
+   HTM_INPUT_TEXT (StrAns,Tst_MAX_CHARS_ANSWERS_ONE_QST,Print->PrintedQuestions[NumQst].StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"40\"");
   }
