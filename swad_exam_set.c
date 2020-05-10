@@ -1919,7 +1919,7 @@ static void ExaSet_PutIconToAddNewQuestions (void *Exams)
 
    /***** Put form to create a new question *****/
    Ico_PutContextualIconToAdd (ActReqAddQstExaSet,NULL,
-			       Exa_PutParams,Exams,
+			       ExaSet_PutParamsOneSet,Exams,
 			       Txt_Add_questions);
   }
 

@@ -39,5 +39,6 @@ void ExaPrn_ShowExamPrint (void);
 
 void ExaPrn_ReceivePrintAnswer (void);
 
+void ExaPrn_EndPrintAnswer (void);
 
 #endif

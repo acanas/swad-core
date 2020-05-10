@@ -169,20 +169,22 @@ void ExaPrn_ShowExamPrint (void)
    ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
 
    /***** Get print data from database *****/
-   Print.ExaCod = Event.ExaCod;
    Print.EvtCod = Event.EvtCod;
    Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
+   Print.ExaCod = Event.ExaCod;
 
    if (Print.PrnCod > 0)	// Print exists
      {
-      Ale_ShowAlert (Ale_INFO,"El examen ya existe.");
+      Ale_ShowAlert (Ale_INFO,"Examen existente.");
 
       /***** Get questions and answers from database *****/
       ExaPrn_GetPrintQuestionsFromDB (&Print);
      }
    else
      {
+      Ale_ShowAlert (Ale_INFO,"Examen nuevo.");
+
       /***** Get questions from database *****/
       ExaPrn_GetQuestionsForNewPrintFromDB (&Print);
 
@@ -278,6 +280,8 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print)
 			      " WHERE ExaCod=%ld"
 			      " ORDER BY SetInd",
 			      Print->ExaCod);
+
+   Ale_ShowAlert (Ale_INFO,"%u conjuntos de preguntas.",NumSets);	// TODO: Remove this. Only for debug purpose.
 
    /***** Get questions from all sets *****/
    Print->NumQsts = 0;
@@ -576,7 +580,6 @@ static void ExaPrn_ShowExamPrintToFillIt (const char *Title,
                                           struct ExaPrn_Print *Print)
   {
    extern const char *Hlp_ASSESSMENT_Exams;
-   extern const char *Txt_Send;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Title,
@@ -590,14 +593,14 @@ static void ExaPrn_ShowExamPrintToFillIt (const char *Title,
    if (Print->NumQsts)
      {
       /***** Begin form *****/
-      Frm_StartForm (ActReqAssExaPrn);
+      Frm_StartForm (ActEndExaPrn);
       ExaPrn_PutParamPrnCod (Print->PrnCod);
 
       /***** Show table with questions to answer *****/
       ExaPrn_ShowTableWithQstsToFill (Print);
 
       /***** Send button and end form *****/
-      Btn_PutCreateButton (Txt_Send);
+      Btn_PutCreateButton ("He terminado");	// TODO: Translate!!!
       Frm_EndForm ();
      }
 
@@ -753,7 +756,7 @@ static void ExaPrn_WriteIntAnsSeeing (const struct ExaPrn_Print *Print,
 	     "Ans%010u",
 	     NumQst);
    HTM_INPUT_TEXT (StrAns,11,Print->PrintedQuestions[NumQst].StrAnswers,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
+                   HTM_SUBMIT_ON_CHANGE,
 		   "size=\"11\"");
   }
 
@@ -902,6 +905,15 @@ static void ExaPrn_WriteTextAnsSeeing (const struct ExaPrn_Print *Print,
 void ExaPrn_ReceivePrintAnswer (void)
   {
    Ale_ShowAlert (Ale_INFO,"Recepci&oacute;n del examen contestado.");
+  }
+
+/*****************************************************************************/
+/********************** Receive answer to an exam print **********************/
+/*****************************************************************************/
+
+void ExaPrn_EndPrintAnswer (void)
+  {
+   Ale_ShowAlert (Ale_INFO,"Terminar de contestar el examen.");
   }
 
 /*****************************************************************************/

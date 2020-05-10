@@ -1691,13 +1691,16 @@ void ExaEvt_ReceiveFormEvent (void)
 
    /***** Get event data from database *****/
    if (ItsANewEvent)
+     {
       /* Initialize to empty event */
       ExaEvt_ResetEvent (&Event);
+      Event.ExaCod = Exam.ExaCod;
+     }
    else
      {
       /* Get event data from database */
       ExaEvt_GetDataOfEventByCod (&Event);
-      if (Exam.ExaCod != Event.ExaCod)
+      if (Event.ExaCod != Exam.ExaCod)
 	 Lay_WrongExamExit ();
       Exams.EvtCod = Event.EvtCod;
      }
