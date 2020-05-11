@@ -2524,7 +2524,7 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
 
    if (PutForm)
      {
-      /***** Start form *****/
+      /***** Begin form *****/
       if (asprintf (&OnSubmit,"updateMatchTch('match_left',"
 			      "'act=%ld&ses=%s&MchCod=%ld&Countdown=%ld');"
 			      " return false;",	// return false is necessary to not submit form
@@ -2532,7 +2532,6 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
 		    Match->MchCod,Seconds) < 0)
 	 Lay_NotEnoughMemoryExit ();
       Frm_StartFormOnSubmit (ActUnk,OnSubmit);
-
      }
 
    /***** Put icon *****/
@@ -2884,7 +2883,7 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
        Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
        Answered)				// I have answered this question
      {
-      /* Start form */
+      /* Begin form */
       Frm_StartForm (ActSeeMchAnsQstStd);
       Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
@@ -2922,10 +2921,10 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match)
   {
    extern const char *Txt_Delete_my_answer;
 
-   /***** Start container *****/
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"MCH_REM_MY_ANS\"");
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActRemMchAnsQstStd);
    Mch_PutParamMchCod (Match->MchCod);		// Current match being played
    Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown

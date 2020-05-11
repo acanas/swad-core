@@ -157,6 +157,18 @@ static void Frm_StartFormInternal (Act_Action_t NextAction,bool PutParameterLoca
      }
   }
 
+void Frm_StartFormNoAction (void)
+  {
+   if (!Gbl.Form.Inside)
+     {
+      /* Begin form */
+      HTM_Txt ("<form accept-charset=\"windows-1252\""
+	       " onsubmit=\"return false;\">");	// Form that can not be submitted, to avoid enter key to send it
+
+      Gbl.Form.Inside = true;
+     }
+  }
+
 void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_t NextAction,
                         bool PutParameterLocationIfNoSesion)
   {

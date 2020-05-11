@@ -1113,7 +1113,7 @@ void MchRes_ShowOneMchResult (void)
      }
 
    /***** Get match result data *****/
-   TstPrn_ResetResult (&Print);
+   TstPrn_ResetPrint (&Print);
    MchRes_GetMatchResultDataByMchCod (Match.MchCod,UsrDat->UsrCod,&Print);
 
    /***** Check if I can view this match result *****/

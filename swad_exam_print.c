@@ -94,10 +94,6 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
                                                   struct ExaSet_Set *Set,
                                                   unsigned *NumQstInPrint);
 static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print);
-static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *Print,
-                                                          bool UpdateQstScore);
-static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
-                                           unsigned NumQst);
 
 static void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print);
 
@@ -122,7 +118,20 @@ static void ExaPrn_WriteChoiceAnsSeeing (const struct ExaPrn_Print *Print,
 static void ExaPrn_WriteTextAnsSeeing (const struct ExaPrn_Print *Print,
 	                               unsigned NumQst);
 
-static void ExaPrn_PutParamPrnCod (long ExaCod);
+static unsigned ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print);
+
+// static void ExaPrn_PutParamNumQst (unsigned NumQst);
+static unsigned ExaPrn_GetParamQstInd (void);
+
+static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *Print,
+                                                          bool UpdateQstScore);
+static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Print,
+                                                        unsigned NumQst);
+static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
+                                           unsigned NumQst);
+static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print);
+
+// static void ExaPrn_PutParamPrnCod (long ExaCod);
 // static long ExaPrn_GetParamPrnCod (void);
 
 /*****************************************************************************/
@@ -172,7 +181,6 @@ void ExaPrn_ShowExamPrint (void)
    Print.EvtCod = Event.EvtCod;
    Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
-   Print.ExaCod = Event.ExaCod;
 
    if (Print.PrnCod > 0)	// Print exists
      {
@@ -186,6 +194,8 @@ void ExaPrn_ShowExamPrint (void)
       Ale_ShowAlert (Ale_INFO,"Examen nuevo.");
 
       /***** Get questions from database *****/
+      // Print doesn't exists ==> exam code is -1 ==> so initialize it
+      Print.ExaCod = Exam.ExaCod;
       ExaPrn_GetQuestionsForNewPrintFromDB (&Print);
 
       if (Print.NumQsts)
@@ -212,40 +222,51 @@ static void ExaPrn_GetPrintDataByEvtCodAndUsrCod (struct ExaPrn_Print *Print)
 
    /***** Make database query *****/
    if (DB_QuerySELECT (&mysql_res,"can not get data of an exam print",
-		       "SELECT PrnCod,"				// row[0]
-			      "UNIX_TIMESTAMP(StartTime),"	// row[1]
-			      "UNIX_TIMESTAMP(EndTime),"	// row[2]
-		              "NumQsts,"			// row[3]
-		              "NumQstsNotBlank,"		// row[4]
-			      "Sent,"				// row[5]
-		              "Score"				// row[6]
-		       " FROM exa_prints"
-	               " WHERE EvtCod=%ld AND UsrCod=%ld",
-		       Print->EvtCod,Print->UsrCod) == 1)
+		       "SELECT exa_prints.PrnCod,"			// row[0]
+                              "exa_exams.ExaCod,"			// row[1]
+			      "UNIX_TIMESTAMP(exa_prints.StartTime),"	// row[2]
+			      "UNIX_TIMESTAMP(exa_prints.EndTime),"	// row[3]
+		              "exa_prints.NumQsts,"			// row[4]
+		              "exa_prints.NumQstsNotBlank,"		// row[5]
+			      "exa_prints.Sent,"			// row[6]
+		              "exa_prints.Score"			// row[7]
+		       " FROM exa_prints,exa_events,exa_exams"
+	               " WHERE exa_prints.EvtCod=%ld"
+                       " AND exa_prints.UsrCod=%ld"			// Extra check: it belong to user
+                       " AND exa_prints.EvtCod=exa_events.EvtCod"
+		       " AND (NOW() BETWEEN exa_events.StartTime AND exa_events.EndTime)"	// Extra check: event is open
+                       " AND exa_events.ExaCod=exa_exams.ExaCod"
+                       " AND exa_exams.CrsCod=%ld",			// Extra check: it belong to current course
+		       Print->EvtCod,
+		       Print->UsrCod,
+		       Gbl.Hierarchy.Crs.CrsCod) == 1)
      {
       row = mysql_fetch_row (mysql_res);
 
       /* Get print code (row[0]) */
       Print->PrnCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get date-time (row[1] and row[2] hold UTC date-time) */
-      Print->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[1]);
-      Print->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[2]);
+       /* Get exam code (row[1]) */
+      Print->ExaCod = Str_ConvertStrCodToLongCod (row[1]);
 
-      /* Get number of questions (row[3]) */
-      if (sscanf (row[3],"%u",&Print->NumQsts) != 1)
+      /* Get date-time (row[2] and row[3] hold UTC date-time) */
+      Print->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[2]);
+      Print->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[3]);
+
+      /* Get number of questions (row[4]) */
+      if (sscanf (row[4],"%u",&Print->NumQsts) != 1)
 	 Print->NumQsts = 0;
 
-      /* Get number of questions not blank (row[4]) */
-      if (sscanf (row[4],"%u",&Print->NumQstsNotBlank) != 1)
+      /* Get number of questions not blank (row[5]) */
+      if (sscanf (row[5],"%u",&Print->NumQstsNotBlank) != 1)
 	 Print->NumQstsNotBlank = 0;
 
-      /* Get if exam has been sent (row[5]) */
-      Print->Sent = (row[5][0] == 'Y');
+      /* Get if exam has been sent (row[6]) */
+      Print->Sent = (row[6][0] == 'Y');
 
-      /* Get score (row[6]) */
+      /* Get score (row[7]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[6],"%lf",&Print->Score) != 1)
+      if (sscanf (row[7],"%lf",&Print->Score) != 1)
 	 Print->Score = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
@@ -428,79 +449,6 @@ static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/*********** Compute score of each question and store in database ************/
-/*****************************************************************************/
-
-static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *Print,
-                                                          bool UpdateQstScore)
-  {
-   unsigned NumQst;
-   struct Tst_Question Question;
-
-   /***** Initialize total score *****/
-   Print->Score = 0.0;
-   Print->NumQstsNotBlank = 0;
-
-   /***** Compute and store scores of all questions *****/
-   for (NumQst = 0;
-	NumQst < Print->NumQsts;
-	NumQst++)
-     {
-      /* Compute question score */
-      Tst_QstConstructor (&Question);
-      Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
-      Question.Answer.Type = Tst_GetQstAnswerType (Question.QstCod);
-      TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
-      Tst_QstDestructor (&Question);
-
-      /* Store test exam question in database */
-      ExaPrn_StoreOneQstOfPrintInDB (Print,
-				     NumQst);	// 0, 1, 2, 3...
-
-      /* Accumulate total score */
-      Print->Score += Print->PrintedQuestions[NumQst].Score;
-      if (Print->PrintedQuestions[NumQst].AnswerIsNotBlank)
-	 Print->NumQstsNotBlank++;
-
-      /* Update the number of hits and the score of this question in tests database */
-      if (UpdateQstScore)
-	 Tst_UpdateQstScoreInDB (&Print->PrintedQuestions[NumQst]);
-     }
-  }
-
-
-/*****************************************************************************/
-/************* Store user's answers of an test exam into database ************/
-/*****************************************************************************/
-
-static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
-                                           unsigned NumQst)
-  {
-   char StrIndexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
-   char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
-
-   /***** Replace each separator of multiple parameters by a comma *****/
-   /* In database commas are used as separators instead of special chars */
-   Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrIndexes,StrIndexes);
-   Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrAnswers,StrAnswers);
-
-   /***** Insert question and user's answers into database *****/
-   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   DB_QueryREPLACE ("can not update a question in an exam print",
-		    "REPLACE INTO exa_print_questions"
-		    " (PrnCod,QstCod,QstInd,SetCod,Score,Indexes,Answers)"
-		    " VALUES"
-		    " (%ld,%ld,%u,%ld,'%.15lg','%s','%s')",
-		    Print->PrnCod,Print->PrintedQuestions[NumQst].QstCod,
-		    NumQst,	// 0, 1, 2, 3...
-		    Print->PrintedQuestions[NumQst].SetCod,
-		    Print->PrintedQuestions[NumQst].Score,
-		    StrIndexes,
-		    StrAnswers);
-   Str_SetDecimalPointToLocal ();	// Return to local system
-  }
-
-/*****************************************************************************/
 /************* Get the questions of an exam print from database **************/
 /*****************************************************************************/
 
@@ -592,14 +540,16 @@ static void ExaPrn_ShowExamPrintToFillIt (const char *Title,
 
    if (Print->NumQsts)
      {
-      /***** Begin form *****/
-      Frm_StartForm (ActEndExaPrn);
-      ExaPrn_PutParamPrnCod (Print->PrnCod);
-
       /***** Show table with questions to answer *****/
+      Frm_StartFormNoAction ();	// Form that can not be submitted, to avoid enter key to send it
+      HTM_DIV_Begin ("id=\"examprint\"");	// Used for AJAX based refresh
       ExaPrn_ShowTableWithQstsToFill (Print);
+      HTM_DIV_End ();				// Used for AJAX based refresh
+      Frm_EndForm ();
 
-      /***** Send button and end form *****/
+      /***** Form to end/close this exam print *****/
+      Frm_StartForm (ActEndExaPrn);
+      // ExaEvt_PutParamEvtCod (Print->EvtCod);
       Btn_PutCreateButton ("He terminado");	// TODO: Translate!!!
       Frm_EndForm ();
      }
@@ -668,6 +618,7 @@ static void ExaPrn_WriteQstAndAnsToFill (struct ExaPrn_Print *Print,
       /***** Get data of this set *****/
       CurrentSet.ExaCod = Print->ExaCod;
       CurrentSet.SetCod = Print->PrintedQuestions[NumQst].SetCod;
+
       ExaSet_GetDataOfSetByCod (&CurrentSet);
 
       /***** Title for this set *****/
@@ -749,15 +700,24 @@ static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
 static void ExaPrn_WriteIntAnsSeeing (const struct ExaPrn_Print *Print,
 				      unsigned NumQst)
   {
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+   char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),
+   snprintf (Id,sizeof (Id),
 	     "Ans%010u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,11,Print->PrintedQuestions[NumQst].StrAnswers,
-                   HTM_SUBMIT_ON_CHANGE,
-		   "size=\"11\"");
+   HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"%s\""
+	     " size=\"11\" maxlength=\"11\" value=\"%s\"",
+	     Id,Id,
+	     Print->PrintedQuestions[NumQst].StrAnswers);
+   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','%s',"
+			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
+		         " return false;\"",	// return false is necessary to not submit form
+	     Id,Id,
+	     Act_GetActCod (ActAnsExaPrn),
+	     Gbl.Session.Id,Print->EvtCod,NumQst);
+
+   HTM_Txt (" />");
   }
 
 /*****************************************************************************/
@@ -904,7 +864,207 @@ static void ExaPrn_WriteTextAnsSeeing (const struct ExaPrn_Print *Print,
 
 void ExaPrn_ReceivePrintAnswer (void)
   {
-   Ale_ShowAlert (Ale_INFO,"Recepci&oacute;n del examen contestado.");
+   // struct Exa_Exams Exams;
+   // struct Exa_Exam Exam;
+   // struct ExaEvt_Event Event;
+   struct ExaPrn_Print Print;
+   unsigned NumQst;
+
+   /***** Reset exams context *****/
+   // Exa_ResetExams (&Exams);
+   // Exa_ResetExam (&Exam);
+   // ExaEvt_ResetEvent (&Event);
+   ExaPrn_ResetPrint (&Print);
+
+   /***** Get and check parameters *****/
+   Print.EvtCod = ExaEvt_GetParamEvtCod ();
+   Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+   ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
+   if (Print.PrnCod <= 0)
+      Lay_ShowErrorAndExit ("Wrong exam print.");
+
+   /***** Get exam data and event from database *****/
+   /*
+   Exam.ExaCod = Print.ExaCod;
+   Exa_GetDataOfExamByCod (Exam);
+   Exams->ExaCod = Exam.ExaCod;
+
+   Event.EvtCod = Print.EvtCod;
+   ExaEvt_GetDataOfEventByCod (Event);
+   Exams->EvtCod = Event.ExaCod;
+   */
+
+   /***** Get questions and answers from database *****/
+   ExaPrn_GetPrintQuestionsFromDB (&Print);
+
+   /***** Get answers from form to assess a test *****/
+   NumQst = ExaPrn_GetAnswerFromForm (&Print);
+
+   /***** Update answer in database *****/
+   /* Compute question score and store in database */
+   ExaPrn_ComputeScoreAndStoreQuestionOfPrint (&Print,NumQst);
+
+   /* Update exam print in database */
+   ExaPrn_UpdatePrintInDB (&Print);
+
+   /***** Show table with questions to answer *****/
+   ExaPrn_ShowTableWithQstsToFill (&Print);
+  }
+
+/*****************************************************************************/
+/******** Get questions and answers from form to assess an exam print ********/
+/*****************************************************************************/
+
+static unsigned ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print)
+  {
+   unsigned NumQst;
+   char AnsName[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Get question index from form *****/
+   NumQst = ExaPrn_GetParamQstInd ();
+
+   /***** Get answers selected by user for this question *****/
+   snprintf (AnsName,sizeof (AnsName),
+	     "Ans%010u",
+	     NumQst);
+   Par_GetParMultiToText (AnsName,Print->PrintedQuestions[NumQst].StrAnswers,
+			  Tst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
+
+   return NumQst;
+  }
+
+/*****************************************************************************/
+/****************** Write parameter with index of question *******************/
+/*****************************************************************************/
+/*
+static void ExaPrn_PutParamNumQst (unsigned NumQst)
+  {
+   Par_PutHiddenParamUnsigned (NULL,"NumQst",NumQst);
+  }
+*/
+/*****************************************************************************/
+/******************* Get parameter with index of question ********************/
+/*****************************************************************************/
+
+static unsigned ExaPrn_GetParamQstInd (void)
+  {
+   long NumQst;
+
+   NumQst = Par_GetParToLong ("NumQst");
+   if (NumQst < 0)
+      Lay_ShowErrorAndExit ("Wrong number of question.");
+
+   return (unsigned) NumQst;
+  }
+
+/*****************************************************************************/
+/*********** Compute score of each question and store in database ************/
+/*****************************************************************************/
+
+static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *Print,
+                                                          bool UpdateQstScore)
+  {
+   unsigned NumQst;
+
+   /***** Initialize total score *****/
+   Print->Score = 0.0;
+   Print->NumQstsNotBlank = 0;
+
+   /***** Compute and store scores of all questions *****/
+   for (NumQst = 0;
+	NumQst < Print->NumQsts;
+	NumQst++)
+     {
+      /* Compute question score and store in database */
+      ExaPrn_ComputeScoreAndStoreQuestionOfPrint (Print,NumQst);
+
+      /* Accumulate total score */
+      Print->Score += Print->PrintedQuestions[NumQst].Score;
+      if (Print->PrintedQuestions[NumQst].AnswerIsNotBlank)
+	 Print->NumQstsNotBlank++;
+
+      /* Update the number of hits and the score of this question in tests database */
+      if (UpdateQstScore)
+	 Tst_UpdateQstScoreInDB (&Print->PrintedQuestions[NumQst]);
+     }
+  }
+
+/*****************************************************************************/
+/*********** Compute score of one question and store in database *************/
+/*****************************************************************************/
+
+static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Print,
+                                                        unsigned NumQst)
+  {
+   struct Tst_Question Question;
+
+   /***** Compute question score *****/
+   Tst_QstConstructor (&Question);
+   Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
+   Question.Answer.Type = Tst_GetQstAnswerType (Question.QstCod);
+   TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
+   Tst_QstDestructor (&Question);
+
+   /***** Store test exam question in database *****/
+   ExaPrn_StoreOneQstOfPrintInDB (Print,
+				  NumQst);	// 0, 1, 2, 3...
+  }
+
+/*****************************************************************************/
+/************* Store user's answers of an test exam into database ************/
+/*****************************************************************************/
+
+static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
+                                           unsigned NumQst)
+  {
+   char StrIndexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
+   char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
+
+   /***** Replace each separator of multiple parameters by a comma *****/
+   /* In database commas are used as separators instead of special chars */
+   Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrIndexes,StrIndexes);
+   Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrAnswers,StrAnswers);
+
+   /***** Insert question and user's answers into database *****/
+   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
+   DB_QueryREPLACE ("can not update a question in an exam print",
+		    "REPLACE INTO exa_print_questions"
+		    " (PrnCod,QstCod,QstInd,SetCod,Score,Indexes,Answers)"
+		    " VALUES"
+		    " (%ld,%ld,%u,%ld,'%.15lg','%s','%s')",
+		    Print->PrnCod,Print->PrintedQuestions[NumQst].QstCod,
+		    NumQst,	// 0, 1, 2, 3...
+		    Print->PrintedQuestions[NumQst].SetCod,
+		    Print->PrintedQuestions[NumQst].Score,
+		    StrIndexes,
+		    StrAnswers);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
+/********************** Update exam print in database ************************/
+/*****************************************************************************/
+
+static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print)
+  {
+   /***** Update exam print in database *****/
+   Str_SetDecimalPointToUS ();		// To print the floating point as a dot
+   DB_QueryUPDATE ("can not update exam print",
+		   "UPDATE exa_prints"
+	           " SET EndTime=NOW(),"
+	                "NumQstsNotBlank=%u,"
+		        "Sent='%c',"
+	                "Score='%.15lg'"
+	           " WHERE PrnCod=%ld"
+	           " AND EvtCod=%ld AND UsrCod=%ld",	// Extra checks
+		   Print->NumQstsNotBlank,
+		   Print->Sent ? 'Y' :
+			         'N',
+		   Print->Score,
+		   Print->PrnCod,
+		   Print->EvtCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
 /*****************************************************************************/
@@ -920,10 +1080,10 @@ void ExaPrn_EndPrintAnswer (void)
 /***************** Write parameter with code of exam print *******************/
 /*****************************************************************************/
 
-static void ExaPrn_PutParamPrnCod (long ExaCod)
-  {
-   Par_PutHiddenParamLong (NULL,"PrnCod",ExaCod);
-  }
+// static void ExaPrn_PutParamPrnCod (long ExaCod)
+//   {
+//    Par_PutHiddenParamLong (NULL,"PrnCod",ExaCod);
+//   }
 
 /*****************************************************************************/
 /***************** Get parameter with code of exam print *********************/

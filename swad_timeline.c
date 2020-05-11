@@ -2101,7 +2101,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot,
      {
       HTM_DIV_Begin ("class=\"TL_FORM\"");
 
-      /***** Start form with parameters depending on the type of note *****/
+      /***** Begin form with parameters depending on the type of note *****/
       switch (SocNot->NoteType)
 	{
 	 case TL_NOTE_INS_DOC_PUB_FILE:
@@ -2859,7 +2859,7 @@ static void TL_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t Act
 		  IdComments);
 
    /***** Form and icon-text to show hidden comments *****/
-   /* Start form */
+   /* Begin form */
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
       if (asprintf (&OnSubmit,"toggleComments('%s');"

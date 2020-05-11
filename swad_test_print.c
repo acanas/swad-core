@@ -70,7 +70,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void TstPrn_ResetExamExceptExaCod (struct TstPrn_Print *Print);
+static void TstPrn_ResetPrintExceptPrnCod (struct TstPrn_Print *Print);
 
 static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       struct TstPrn_Print *Print,
@@ -148,13 +148,13 @@ static void TstPrn_ShowTagsPresentInAnExam (long ResCod);
 /******************************** Reset exam *********************************/
 /*****************************************************************************/
 
-void TstPrn_ResetResult (struct TstPrn_Print *Print)
+void TstPrn_ResetPrint (struct TstPrn_Print *Print)
   {
    Print->PrnCod = -1L;
-   TstPrn_ResetExamExceptExaCod (Print);
+   TstPrn_ResetPrintExceptPrnCod (Print);
   }
 
-static void TstPrn_ResetExamExceptExaCod (struct TstPrn_Print *Print)
+static void TstPrn_ResetPrintExceptPrnCod (struct TstPrn_Print *Print)
   {
    Print->TimeUTC[Dat_START_TIME] =
    Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
@@ -184,12 +184,12 @@ void TstPrn_CreatePrintInDB (struct TstPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/********************** Update test exam in database *************************/
+/******************** Update test exam print in database *********************/
 /*****************************************************************************/
 
-void TstPrn_UpdateExamInDB (const struct TstPrn_Print *Print)
+void TstPrn_UpdatePrintInDB (const struct TstPrn_Print *Print)
   {
-   /***** Update score in test exam *****/
+   /***** Update test exam print in database *****/
    Str_SetDecimalPointToUS ();		// To print the floating point as a dot
    DB_QueryUPDATE ("can not update test exam",
 		   "UPDATE tst_exams"
@@ -1641,7 +1641,7 @@ static void TstPrn_ShowExams (struct UsrData *UsrDat)
          row = mysql_fetch_row (mysql_res);
 
          /* Get test code (row[0]) */
-         TstPrn_ResetResult (&Print);
+         TstPrn_ResetPrint (&Print);
 	 if ((Print.PrnCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of test exam.");
 
@@ -1921,7 +1921,7 @@ void TstPrn_ShowOneExam (void)
    bool ICanViewScore;
 
    /***** Get the code of the test *****/
-   TstPrn_ResetResult (&Print);
+   TstPrn_ResetPrint (&Print);
    if ((Print.PrnCod = TstPrn_GetParamPrnCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of test is missing.");
 
@@ -2250,7 +2250,7 @@ void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
    else
-      TstPrn_ResetExamExceptExaCod (Print);
+      TstPrn_ResetPrintExceptPrnCod (Print);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

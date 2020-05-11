@@ -132,7 +132,7 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test);
 
 static void Tst_PutCheckBoxAllowTeachers (bool AllowTeachers);
 
-static void Tst_GetAnswersFromForm (struct TstPrn_Print *Print);
+static void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print);
 
 static bool Tst_CheckIfNextTstAllowed (void);
 static unsigned Tst_GetNumExamsGeneratedByMe (void);
@@ -455,7 +455,7 @@ void Tst_ShowNewTest (void)
       if (Tst_GetParamsTst (&Test,Tst_SHOW_TEST_TO_ANSWER))	// Get parameters from form
         {
          /***** Get questions *****/
-	 TstPrn_ResetResult (&Print);
+	 TstPrn_ResetPrint (&Print);
 	 Tst_GetQuestionsForNewTestFromDB (&Test,&Print);
          if (Print.NumQsts)
            {
@@ -466,7 +466,7 @@ void Tst_ShowNewTest (void)
 	    /***** Create new test exam in database *****/
 	    TstPrn_CreatePrintInDB (&Print);
 	    TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
-	                                               false);	// Don't update question score
+	                                                  false);	// Don't update question score
 
             /***** Show test exam to be answered *****/
             Tst_ShowTestPrintToFillIt (&Print,NumExamsGeneratedByMe,Tst_REQUEST);
@@ -526,7 +526,7 @@ void Tst_ReceiveTestDraft (void)
 
    /***** Get basic parameters of the exam *****/
    /* Get test exam code from form */
-   TstPrn_ResetResult (&Print);
+   TstPrn_ResetPrint (&Print);
    if ((Print.PrnCod = TstPrn_GetParamPrnCod ()) <= 0)
       Lay_ShowErrorAndExit ("Wrong test exam.");
 
@@ -546,12 +546,12 @@ void Tst_ReceiveTestDraft (void)
       TstPrn_GetPrintQuestionsFromDB (&Print);
 
       /***** Get answers from form to assess a test *****/
-      Tst_GetAnswersFromForm (&Print);
+      TstPrn_GetAnswersFromForm (&Print);
 
       /***** Update test exam in database *****/
       TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
-						 false);	// Don't update question score
-      TstPrn_UpdateExamInDB (&Print);
+						    false);	// Don't update question score
+      TstPrn_UpdatePrintInDB (&Print);
 
       /***** Show question and button to send the test *****/
       /* Start alert */
@@ -582,7 +582,7 @@ void Tst_AssessTest (void)
 
    /***** Get basic parameters of the exam *****/
    /* Get test exam code from form */
-   TstPrn_ResetResult (&Print);
+   TstPrn_ResetPrint (&Print);
    if ((Print.PrnCod = TstPrn_GetParamPrnCod ()) <= 0)
       Lay_ShowErrorAndExit ("Wrong test exam.");
 
@@ -602,7 +602,7 @@ void Tst_AssessTest (void)
       TstPrn_GetPrintQuestionsFromDB (&Print);
 
       /***** Get answers from form to assess a test *****/
-      Tst_GetAnswersFromForm (&Print);
+      TstPrn_GetAnswersFromForm (&Print);
 
       /***** Get if test exam will be visible by teachers *****/
       Print.Sent          = true;	// The exam has been finished and sent by student
@@ -610,8 +610,8 @@ void Tst_AssessTest (void)
 
       /***** Update test exam in database *****/
       TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
-						 Gbl.Usrs.Me.Role.Logged == Rol_STD);	// Update question score?
-      TstPrn_UpdateExamInDB (&Print);
+						    Gbl.Usrs.Me.Role.Logged == Rol_STD);	// Update question score?
+      TstPrn_UpdatePrintInDB (&Print);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Test_result,
@@ -653,10 +653,10 @@ void Tst_AssessTest (void)
   }
 
 /*****************************************************************************/
-/*********** Get questions and answers from form to assess a test ************/
+/****** Get questions and answers from form to assess a test exam print ******/
 /*****************************************************************************/
 
-static void Tst_GetAnswersFromForm (struct TstPrn_Print *Print)
+static void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print)
   {
    unsigned NumQst;
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"

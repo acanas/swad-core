@@ -3224,7 +3224,7 @@ static void ExaEvt_PutIfAnswered (const struct ExaEvt_Event *Event,bool Answered
        Event->Status.Showing == ExaEvt_ANSWERS &&	// Teacher's screen is showing question answers
        Answered)				// I have answered this question
      {
-      /* Start form */
+      /* Begin form */
       Frm_StartForm (ActSeeExaEvtAnsQstStd);
       ExaEvt_PutParamEvtCod (Event->EvtCod);	// Current exam event being played
 
@@ -3265,7 +3265,7 @@ static void ExaEvt_PutIconToRemoveMyAnswer (const struct ExaEvt_Event *Event)
    /***** Start container *****/
    HTM_DIV_Begin ("class=\"EXA_REM_MY_ANS\"");
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActRemExaEvtAnsQstStd);
    ExaEvt_PutParamEvtCod (Event->EvtCod);	// Current exam event being played
    Exa_PutParamQstInd (Event->Status.QstInd);	// Current question index shown

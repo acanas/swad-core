@@ -1122,7 +1122,7 @@ void ExaRes_ShowOneExaResult (void)
      }
 
    /***** Get event result data *****/
-   TstPrn_ResetResult (&Print);
+   TstPrn_ResetPrint (&Print);
    ExaRes_GetEventResultDataByEvtCod (Event.EvtCod,UsrDat->UsrCod,&Print);
 
    /***** Check if I can view this event result *****/

@@ -66,9 +66,9 @@ struct TstPrn_Print
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void TstPrn_ResetResult (struct TstPrn_Print *Print);
+void TstPrn_ResetPrint (struct TstPrn_Print *Print);
 void TstPrn_CreatePrintInDB (struct TstPrn_Print *Print);
-void TstPrn_UpdateExamInDB (const struct TstPrn_Print *Print);
+void TstPrn_UpdatePrintInDB (const struct TstPrn_Print *Print);
 
 void TstPrn_ShowExamAfterAssess (struct TstPrn_Print *Print);
 
