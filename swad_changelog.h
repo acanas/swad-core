@@ -548,11 +548,12 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.223 (2020-05-11)"
+#define Log_PLATFORM_VERSION	"SWAD 19.223.1 (2020-05-11)"
 #define CSS_FILE		"swad19.217.css"
 #define JS_FILE			"swad19.223.js"
 /*
-	Version 19.223:   May 11, 2020  Store exam answer and refresh exam print. (303024 lines)
+	Version 19.223.1: May 11, 2020  Code refactoring in exam print. Stored float and text answers. (303023 lines)
+	Version 19.223:   May 11, 2020  Store int answer and refresh exam print. (303024 lines)
 	Version 19.222.2: May 10, 2020  Fixed bugs in exams. (302852 lines)
 	Version 19.222.1: May 10, 2020  Code refactoring in exam prints. (302794 lines)
 	Version 19.222:   May 10, 2020  Changes in exam prints. (302787 lines)
@@ -574,7 +575,7 @@ UPDATE usr_data SET SideCols=0 WHERE (SideCols & 1)<>0 AND UsrCod NOT IN (SELECT
 					2 change necessary in database:
 CREATE TABLE IF NOT EXISTS exa_prints (PrnCod INT NOT NULL AUTO_INCREMENT,EvtCod INT NOT NULL,UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,NumQsts INT NOT NULL DEFAULT 0,NumQstsNotBlank INT NOT NULL DEFAULT 0,Sent ENUM('N','Y') NOT NULL DEFAULT 'N',Score DOUBLE PRECISION NOT NULL DEFAULT 0,UNIQUE INDEX(PrnCod),UNIQUE INDEX(EvtCod,UsrCod));
 CREATE TABLE IF NOT EXISTS exa_print_questions (PrnCod INT NOT NULL,QstCod INT NOT NULL,QstInd INT NOT NULL,Score DOUBLE PRECISION NOT NULL DEFAULT 0,Indexes TEXT NOT NULL,Answers TEXT NOT NULL,UNIQUE INDEX(PrnCod,QstCod));
-
+-----
 	Version 19.218.1: May 07, 2020  Fixed minor bug in test results and match results. (302171 lines)
 	Version 19.218:   May 07, 2020  Fixed bug in creation of new exam announcements, reported by Francisco Gómez Mula.
 					Changes in exam announcementes. (302170 lines)
@@ -601,7 +602,7 @@ ALTER TABLE room_MAC ENGINE=MyISAM;
 	Version 19.211:   May 05, 2020  Exam events can be hidden/unhidden. (301215 lines)
 					1 change necessary in database:
 ALTER TABLE exa_events ADD COLUMN Hidden ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER ExaCod;
-----
+
 	Version 19.210.4: May 05, 2020  Fixed bug searching courses. (301103 lines)
 	Version 19.210.3: May 03, 2020  All figures cacheable are cached everytime they are calculated. (301089 lines)
 	Version 19.210.2: May 03, 2020  More figures cached. (301125 lines)

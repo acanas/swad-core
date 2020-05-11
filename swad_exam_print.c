@@ -106,16 +106,16 @@ static void ExaPrn_WriteQstAndAnsToFill (struct ExaPrn_Print *Print,
 static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
                                        unsigned NumQst,
                                        const struct Tst_Question *Question);
-static void ExaPrn_WriteIntAnsSeeing (const struct ExaPrn_Print *Print,
+static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
 				      unsigned NumQst);
-static void ExaPrn_WriteFloatAnsSeeing (const struct ExaPrn_Print *Print,
+static void ExaPrn_WriteFloatAnsToFill (const struct ExaPrn_Print *Print,
 				        unsigned NumQst);
-static void ExaPrn_WriteTFAnsSeeing (const struct ExaPrn_Print *Print,
+static void ExaPrn_WriteTFAnsToFill (const struct ExaPrn_Print *Print,
 	                             unsigned NumQst);
-static void ExaPrn_WriteChoiceAnsSeeing (const struct ExaPrn_Print *Print,
+static void ExaPrn_WriteChoiceAnsToFill (const struct ExaPrn_Print *Print,
                                          unsigned NumQst,
                                          const struct Tst_Question *Question);
-static void ExaPrn_WriteTextAnsSeeing (const struct ExaPrn_Print *Print,
+static void ExaPrn_WriteTextAnsToFill (const struct ExaPrn_Print *Print,
 	                               unsigned NumQst);
 
 static unsigned ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print);
@@ -301,8 +301,6 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print)
 			      " WHERE ExaCod=%ld"
 			      " ORDER BY SetInd",
 			      Print->ExaCod);
-
-   Ale_ShowAlert (Ale_INFO,"%u conjuntos de preguntas.",NumSets);	// TODO: Remove this. Only for debug purpose.
 
    /***** Get questions from all sets *****/
    Print->NumQsts = 0;
@@ -641,9 +639,6 @@ static void ExaPrn_WriteQstAndAnsToFill (struct ExaPrn_Print *Print,
    /***** Stem, media and answers *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
-   /* Write parameter with question code */
-   Tst_WriteParamQstCod (NumQst,Question->QstCod);
-
    /* Stem */
    Tst_WriteQstStem (Question->Stem,"TEST_EXA",true);
 
@@ -673,20 +668,20 @@ static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
    switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
-         ExaPrn_WriteIntAnsSeeing (Print,NumQst);
+         ExaPrn_WriteIntAnsToFill (Print,NumQst);
          break;
       case Tst_ANS_FLOAT:
-         ExaPrn_WriteFloatAnsSeeing (Print,NumQst);
+         ExaPrn_WriteFloatAnsToFill (Print,NumQst);
          break;
       case Tst_ANS_TRUE_FALSE:
-         ExaPrn_WriteTFAnsSeeing (Print,NumQst);
+         ExaPrn_WriteTFAnsToFill (Print,NumQst);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         ExaPrn_WriteChoiceAnsSeeing (Print,NumQst,Question);
+         ExaPrn_WriteChoiceAnsToFill (Print,NumQst,Question);
          break;
       case Tst_ANS_TEXT:
-         ExaPrn_WriteTextAnsSeeing (Print,NumQst);
+         ExaPrn_WriteTextAnsToFill (Print,NumQst);
          break;
       default:
          break;
@@ -697,7 +692,7 @@ static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
 /****************** Write integer answer when seeing a test ******************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteIntAnsSeeing (const struct ExaPrn_Print *Print,
+static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
 				      unsigned NumQst)
   {
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
@@ -716,7 +711,6 @@ static void ExaPrn_WriteIntAnsSeeing (const struct ExaPrn_Print *Print,
 	     Id,Id,
 	     Act_GetActCod (ActAnsExaPrn),
 	     Gbl.Session.Id,Print->EvtCod,NumQst);
-
    HTM_Txt (" />");
   }
 
@@ -724,25 +718,33 @@ static void ExaPrn_WriteIntAnsSeeing (const struct ExaPrn_Print *Print,
 /****************** Write float answer when seeing a test ********************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteFloatAnsSeeing (const struct ExaPrn_Print *Print,
+static void ExaPrn_WriteFloatAnsToFill (const struct ExaPrn_Print *Print,
 				        unsigned NumQst)
   {
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+   char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),
+   snprintf (Id,sizeof (Id),
 	     "Ans%010u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,Print->PrintedQuestions[NumQst].StrAnswers,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"11\"");
+   HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"%s\""
+	     " size=\"11\" maxlength=\"%u\" value=\"%s\"",
+	     Id,Id,Tst_MAX_BYTES_FLOAT_ANSWER,
+	     Print->PrintedQuestions[NumQst].StrAnswers);
+   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','%s',"
+			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
+		         " return false;\"",	// return false is necessary to not submit form
+	     Id,Id,
+	     Act_GetActCod (ActAnsExaPrn),
+	     Gbl.Session.Id,Print->EvtCod,NumQst);
+   HTM_Txt (" />");
   }
 
 /*****************************************************************************/
 /************** Write false / true answer when seeing a test ****************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteTFAnsSeeing (const struct ExaPrn_Print *Print,
+static void ExaPrn_WriteTFAnsToFill (const struct ExaPrn_Print *Print,
 	                             unsigned NumQst)
   {
    extern const char *Txt_TF_QST[2];
@@ -763,7 +765,7 @@ static void ExaPrn_WriteTFAnsSeeing (const struct ExaPrn_Print *Print,
 /******** Write single or multiple choice answer when seeing a test **********/
 /*****************************************************************************/
 
-static void ExaPrn_WriteChoiceAnsSeeing (const struct ExaPrn_Print *Print,
+static void ExaPrn_WriteChoiceAnsToFill (const struct ExaPrn_Print *Print,
                                          unsigned NumQst,
                                          const struct Tst_Question *Question)
   {
@@ -844,18 +846,26 @@ static void ExaPrn_WriteChoiceAnsSeeing (const struct ExaPrn_Print *Print,
 /******************** Write text answer when seeing a test *******************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteTextAnsSeeing (const struct ExaPrn_Print *Print,
+static void ExaPrn_WriteTextAnsToFill (const struct ExaPrn_Print *Print,
 	                               unsigned NumQst)
   {
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+   char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),
+   snprintf (Id,sizeof (Id),
 	     "Ans%010u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,Tst_MAX_CHARS_ANSWERS_ONE_QST,Print->PrintedQuestions[NumQst].StrAnswers,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"40\"");
+   HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"%s\""
+	     " size=\"40\" maxlength=\"%u\" value=\"%s\"",
+	     Id,Id,Tst_MAX_CHARS_ANSWERS_ONE_QST,
+	     Print->PrintedQuestions[NumQst].StrAnswers);
+   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','%s',"
+			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
+		         " return false;\"",	// return false is necessary to not submit form
+	     Id,Id,
+	     Act_GetActCod (ActAnsExaPrn),
+	     Gbl.Session.Id,Print->EvtCod,NumQst);
+   HTM_Txt (" />");
   }
 
 /*****************************************************************************/
@@ -864,16 +874,10 @@ static void ExaPrn_WriteTextAnsSeeing (const struct ExaPrn_Print *Print,
 
 void ExaPrn_ReceivePrintAnswer (void)
   {
-   // struct Exa_Exams Exams;
-   // struct Exa_Exam Exam;
-   // struct ExaEvt_Event Event;
    struct ExaPrn_Print Print;
    unsigned NumQst;
 
-   /***** Reset exams context *****/
-   // Exa_ResetExams (&Exams);
-   // Exa_ResetExam (&Exam);
-   // ExaEvt_ResetEvent (&Event);
+   /***** Reset print *****/
    ExaPrn_ResetPrint (&Print);
 
    /***** Get and check parameters *****/
@@ -882,17 +886,6 @@ void ExaPrn_ReceivePrintAnswer (void)
    ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
    if (Print.PrnCod <= 0)
       Lay_ShowErrorAndExit ("Wrong exam print.");
-
-   /***** Get exam data and event from database *****/
-   /*
-   Exam.ExaCod = Print.ExaCod;
-   Exa_GetDataOfExamByCod (Exam);
-   Exams->ExaCod = Exam.ExaCod;
-
-   Event.EvtCod = Print.EvtCod;
-   ExaEvt_GetDataOfEventByCod (Event);
-   Exams->EvtCod = Event.ExaCod;
-   */
 
    /***** Get questions and answers from database *****/
    ExaPrn_GetPrintQuestionsFromDB (&Print);
