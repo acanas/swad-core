@@ -441,7 +441,7 @@ struct swad__sendMessageOutput
   };
 
 /* structs used in getLocations */
-struct swad__location
+struct swad__getLocationsOutput
   {
    int institutionCode;
    char *institutionShortName;
@@ -456,18 +456,6 @@ struct swad__location
    int roomCode;
    char *roomShortName;
    char *roomFullName;
-  };
-struct swad__locationsArray
-  {
-   struct swad__location *__ptr;	// pointer to array
-   int __size; 				// number of elements pointed to
-  };
-
-/* getLocations */
-struct swad__getLocationsOutput
-  {
-   int numLocations;
-   struct swad__locationsArray locationsArray;
   };
 
 /*****************************************************************************/

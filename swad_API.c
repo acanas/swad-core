@@ -5902,7 +5902,6 @@ int swad__getLocations (struct soap *soap,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumLocs;
-   unsigned NumLoc;
    size_t Length;
 
    /***** Initializations *****/
@@ -5953,99 +5952,112 @@ int swad__getLocations (struct soap *soap,
 				    " AND rooms.BldCod=buildings.BldCod"
 				    " AND buildings.CtrCod=centres.CtrCod"
 				    " AND centres.InsCod=institutions.InsCod"
-				    " ORDER BY institutions.FullName,"
-				              "centres.FullName,"
-				              "buildings.FullName,"
-				              "rooms.Floor,"
-				              "rooms.FullName",
+				    " ORDER BY rooms.Capacity DESC LIMIT 1",	// Get the biggest room
 			     MACnum);
-   getLocationsOut->locationsArray.__size =
-   getLocationsOut->numLocations          = (int) NumLocs;
 
-   if (getLocationsOut->numLocations == 0)
-      getLocationsOut->locationsArray.__ptr = NULL;
-   else	// Matches found
+   if (NumLocs)		// Rooms found
      {
-      getLocationsOut->locationsArray.__ptr = soap_malloc (soap,
-						           (getLocationsOut->locationsArray.__size) *
-						            sizeof (*(getLocationsOut->locationsArray.__ptr)));
-      for (NumLoc = 0;
-	   NumLoc < NumLocs;
-	   NumLoc++)
-	{
-	 /* Get next location */
-	 row = mysql_fetch_row (mysql_res);
-	 /*
-	 institutions.InsCod		// row[ 0]
-	 institutions.ShortName		// row[ 1]
-	 institutions.FullName		// row[ 2]
-	 centres.CtrCod			// row[ 3]
-	 centres.ShortName		// row[ 4]
-	 centres.FullName		// row[ 5]
-	 buildings.BldCod		// row[ 6]
-	 buildings.ShortName		// row[ 7]
-	 buildings.FullName		// row[ 8]
-	 rooms.Floor			// row[ 9]
-	 rooms.RooCod			// row[10]
-	 rooms.ShortName		// row[11]
-	 rooms.FullName			// row[12]
-         */
+      /* Get next location */
+      row = mysql_fetch_row (mysql_res);
+      /*
+      institutions.InsCod	// row[ 0]
+      institutions.ShortName	// row[ 1]
+      institutions.FullName	// row[ 2]
+      centres.CtrCod		// row[ 3]
+      centres.ShortName		// row[ 4]
+      centres.FullName		// row[ 5]
+      buildings.BldCod		// row[ 6]
+      buildings.ShortName	// row[ 7]
+      buildings.FullName	// row[ 8]
+      rooms.Floor		// row[ 9]
+      rooms.RooCod		// row[10]
+      rooms.ShortName		// row[11]
+      rooms.FullName		// row[12]
+      */
 
-	 /* Get institution code (row[0]) */
-         getLocationsOut->locationsArray.__ptr[NumLoc].institutionCode = (int) Str_ConvertStrCodToLongCod (row[0]);
+      /* Get institution code (row[0]) */
+      getLocationsOut->institutionCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
-	 /* Get institution short name (row[1]) */
-         Length = strlen (row[1]);
-         getLocationsOut->locationsArray.__ptr[NumLoc].institutionShortName = (char *) soap_malloc (soap,Length + 1);
-         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].institutionShortName,row[1],Length);
+      /* Get institution short name (row[1]) */
+      Length = strlen (row[1]);
+      getLocationsOut->institutionShortName = (char *) soap_malloc (soap,Length + 1);
+      Str_Copy (getLocationsOut->institutionShortName,row[1],Length);
 
-	 /* Get institution full name (row[2]) */
-         Length = strlen (row[2]);
-         getLocationsOut->locationsArray.__ptr[NumLoc].institutionFullName = (char *) soap_malloc (soap,Length + 1);
-         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].institutionFullName,row[2],Length);
+      /* Get institution full name (row[2]) */
+      Length = strlen (row[2]);
+      getLocationsOut->institutionFullName = (char *) soap_malloc (soap,Length + 1);
+      Str_Copy (getLocationsOut->institutionFullName,row[2],Length);
 
-	 /* Get center code (row[3]) */
-         getLocationsOut->locationsArray.__ptr[NumLoc].centerCode = (int) Str_ConvertStrCodToLongCod (row[3]);
+      /* Get center code (row[3]) */
+      getLocationsOut->centerCode = (int) Str_ConvertStrCodToLongCod (row[3]);
 
-	 /* Get center short name (row[4]) */
-         Length = strlen (row[4]);
-         getLocationsOut->locationsArray.__ptr[NumLoc].centerShortName = (char *) soap_malloc (soap,Length + 1);
-         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].centerShortName,row[4],Length);
+      /* Get center short name (row[4]) */
+      Length = strlen (row[4]);
+      getLocationsOut->centerShortName = (char *) soap_malloc (soap,Length + 1);
+      Str_Copy (getLocationsOut->centerShortName,row[4],Length);
 
-	 /* Get center full name (row[5]) */
-         Length = strlen (row[5]);
-         getLocationsOut->locationsArray.__ptr[NumLoc].centerFullName = (char *) soap_malloc (soap,Length + 1);
-         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].centerFullName,row[5],Length);
+      /* Get center full name (row[5]) */
+      Length = strlen (row[5]);
+      getLocationsOut->centerFullName = (char *) soap_malloc (soap,Length + 1);
+      Str_Copy (getLocationsOut->centerFullName,row[5],Length);
 
-	 /* Get building code (row[6]) */
-         getLocationsOut->locationsArray.__ptr[NumLoc].buildingCode = (int) Str_ConvertStrCodToLongCod (row[6]);
+      /* Get building code (row[6]) */
+      getLocationsOut->buildingCode = (int) Str_ConvertStrCodToLongCod (row[6]);
 
-	 /* Get building short name (row[7]) */
-         Length = strlen (row[7]);
-         getLocationsOut->locationsArray.__ptr[NumLoc].buildingShortName = (char *) soap_malloc (soap,Length + 1);
-         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].buildingShortName,row[7],Length);
+      /* Get building short name (row[7]) */
+      Length = strlen (row[7]);
+      getLocationsOut->buildingShortName = (char *) soap_malloc (soap,Length + 1);
+      Str_Copy (getLocationsOut->buildingShortName,row[7],Length);
 
-	 /* Get building full name (row[8]) */
-         Length = strlen (row[8]);
-         getLocationsOut->locationsArray.__ptr[NumLoc].buildingFullName = (char *) soap_malloc (soap,Length + 1);
-         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].buildingFullName,row[8],Length);
+      /* Get building full name (row[8]) */
+      Length = strlen (row[8]);
+      getLocationsOut->buildingFullName = (char *) soap_malloc (soap,Length + 1);
+      Str_Copy (getLocationsOut->buildingFullName,row[8],Length);
 
-         /* Get floor (row[9]) */
-         getLocationsOut->locationsArray.__ptr[NumLoc].floor = (int) Str_ConvertStrCodToLongCod (row[9]);
+      /* Get floor (row[9]) */
+      getLocationsOut->floor = (int) Str_ConvertStrCodToLongCod (row[9]);
 
-	 /* Get room code (row[10]) */
-         getLocationsOut->locationsArray.__ptr[NumLoc].roomCode = (int) Str_ConvertStrCodToLongCod (row[10]);
+      /* Get room code (row[10]) */
+      getLocationsOut->roomCode = (int) Str_ConvertStrCodToLongCod (row[10]);
 
-	 /* Get room short name (row[11]) */
-         Length = strlen (row[11]);
-         getLocationsOut->locationsArray.__ptr[NumLoc].roomShortName = (char *) soap_malloc (soap,Length + 1);
-         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].roomShortName,row[11],Length);
+      /* Get room short name (row[11]) */
+      Length = strlen (row[11]);
+      getLocationsOut->roomShortName = (char *) soap_malloc (soap,Length + 1);
+      Str_Copy (getLocationsOut->roomShortName,row[11],Length);
 
-	 /* Get room full name (row[12]) */
-         Length = strlen (row[12]);
-         getLocationsOut->locationsArray.__ptr[NumLoc].roomFullName = (char *) soap_malloc (soap,Length + 1);
-         Str_Copy (getLocationsOut->locationsArray.__ptr[NumLoc].roomFullName,row[12],Length);
-	}
+      /* Get room full name (row[12]) */
+      Length = strlen (row[12]);
+      getLocationsOut->roomFullName = (char *) soap_malloc (soap,Length + 1);
+      Str_Copy (getLocationsOut->roomFullName,row[12],Length);
+     }
+   else
+     {
+      /* No room found ==> reset output */
+      getLocationsOut->institutionCode = -1;
+      getLocationsOut->institutionShortName = (char *) soap_malloc (soap,1);
+      getLocationsOut->institutionShortName[0] = '\0';
+      getLocationsOut->institutionFullName = (char *) soap_malloc (soap,1);
+      getLocationsOut->institutionFullName[0] = '\0';
+
+      getLocationsOut->centerCode = -1;
+      getLocationsOut->centerShortName = (char *) soap_malloc (soap,1);
+      getLocationsOut->centerShortName[0] = '\0';
+      getLocationsOut->centerFullName = (char *) soap_malloc (soap,1);
+      getLocationsOut->centerFullName[0] = '\0';
+
+      getLocationsOut->buildingCode = -1;
+      getLocationsOut->buildingShortName = (char *) soap_malloc (soap,1);
+      getLocationsOut->buildingShortName[0] = '\0';
+      getLocationsOut->buildingFullName = (char *) soap_malloc (soap,1);
+      getLocationsOut->buildingFullName[0] = '\0';
+
+      getLocationsOut->floor = 0;
+
+      getLocationsOut->roomCode = -1;
+      getLocationsOut->roomShortName = (char *) soap_malloc (soap,1);
+      getLocationsOut->roomShortName[0] = '\0';
+      getLocationsOut->roomFullName = (char *) soap_malloc (soap,1);
+      getLocationsOut->roomFullName[0] = '\0';
      }
 
    /***** Free structure that stores the query result *****/
