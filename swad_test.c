@@ -3096,7 +3096,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exam
    HTM_TABLE_End ();
 
    /***** Button to add questions *****/
-   Btn_PutConfirmButton (Txt_Add_questions);
+   Btn_PutCreateButton (Txt_Add_questions);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -3178,7 +3178,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
    HTM_TABLE_End ();
 
    /***** Button to add questions *****/
-   Btn_PutConfirmButton (Txt_Add_questions);
+   Btn_PutCreateButton (Txt_Add_questions);
 
    /***** End form *****/
    Frm_EndForm ();

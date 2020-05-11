@@ -748,17 +748,27 @@ static void ExaPrn_WriteTFAnsToFill (const struct ExaPrn_Print *Print,
 	                             unsigned NumQst)
   {
    extern const char *Txt_TF_QST[2];
+   char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write selector for the answer *****/
    /* Initially user has not answered the question ==> initially all the answers will be blank.
       If the user does not confirm the submission of their exam ==>
       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"Ans%010u\"",NumQst);
+   snprintf (Id,sizeof (Id),
+	     "Ans%010u",
+	     NumQst);
+   HTM_TxtF ("<select id=\"%s\" name=\"%s\"",Id,Id);
+   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','%s',"
+			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
+		         " return false;\"",	// return false is necessary to not submit form
+	     Id,Id,
+	     Act_GetActCod (ActAnsExaPrn),
+	     Gbl.Session.Id,Print->EvtCod,NumQst);
+   HTM_Txt (" />");
    HTM_OPTION (HTM_Type_STRING,"" ,Print->PrintedQuestions[NumQst].StrAnswers[0] == '\0',false,"&nbsp;");
    HTM_OPTION (HTM_Type_STRING,"T",Print->PrintedQuestions[NumQst].StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
    HTM_OPTION (HTM_Type_STRING,"F",Print->PrintedQuestions[NumQst].StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
-   HTM_SELECT_End ();
+   HTM_Txt ("</select>");
   }
 
 /*****************************************************************************/
