@@ -465,18 +465,17 @@ static void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 			      "SELECT exa_print_questions.QstCod,"	// row[0]
 			             "exa_print_questions.SetCod,"	// row[1]
 				     "tst_questions.AnsType,"		// row[2]
-			             "exa_print_questions.Indexes,"	// row[3]
-			             "exa_print_questions.Answers"	// row[4]
-			      " FROM exa_print_questions,tst_questions"
+			             "exa_print_questions.Score,"	// row[3]
+			             "exa_print_questions.Indexes,"	// row[4]
+			             "exa_print_questions.Answers"	// row[5]
+			      " FROM exa_print_questions LEFT JOIN tst_questions"
+			      " ON (exa_print_questions.QstCod=tst_questions.QstCod)"
 			      " WHERE exa_print_questions.PrnCod=%ld"
-			      " AND exa_print_questions.QstCod=tst_questions.QstCod"
 			      " ORDER BY exa_print_questions.QstInd",
 			      Print->PrnCod);
 
    /***** Get questions *****/
-   // Some questions may be deleted, so the number of questions retrieved
-   // could be lower than the original number of questions in the exam print
-   if (NumQsts <= Print->NumQsts)
+   if (NumQsts == Print->NumQsts)
       for (NumQst = 0;
 	   NumQst < NumQsts;
 	   NumQst++)
@@ -494,12 +493,18 @@ static void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 	 /* Get answer type (row[2]) */
          AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
 
-	 /* Get indexes for this question (row[3]) */
-	 Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[3],
+         /* Get score (row[3]) */
+	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
+         if (sscanf (row[3],"%lf",&Print->PrintedQuestions[NumQst].Score) != 1)
+            Lay_ShowErrorAndExit ("Wrong question score.");
+         Str_SetDecimalPointToLocal ();	// Return to local system
+
+	 /* Get indexes for this question (row[4]) */
+	 Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[4],
 		   Tst_MAX_BYTES_INDEXES_ONE_QST);
 
-	 /* Get answers selected by user for this question (row[4]) */
-	 Str_Copy (Print->PrintedQuestions[NumQst].StrAnswers,row[4],
+	 /* Get answers selected by user for this question (row[5]) */
+	 Str_Copy (Print->PrintedQuestions[NumQst].StrAnswers,row[5],
 		   Tst_MAX_BYTES_ANSWERS_ONE_QST);
 
 	 /* Replace each comma by a separator of multiple parameters */
@@ -514,7 +519,7 @@ static void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (NumQsts > Print->NumQsts)
+   if (NumQsts != Print->NumQsts)
       Lay_WrongExamExit ();
   }
 

@@ -553,7 +553,7 @@ ps2pdf source.ps destination.pdf
 #define JS_FILE			"swad19.223.js"
 /*
 	Version 19.223.4: May 11, 2020  Stored unique/multiple choice questions in exam print. (? lines)
-	Version 19.223.3: May 11, 2020  Fixed bug in test exam print, reported by Julio Ortega Lopera. (303043 lines)
+	Version 19.223.3: May 11, 2020  Fixed bug in test exam print, reported by Julio Ortega Lopera. (303050 lines)
 	Version 19.223.2: May 11, 2020  Stored T/F answers in exam print. (303034 lines)
 	Version 19.223.1: May 11, 2020  Code refactoring in exam print. Stored float and text answers. (303023 lines)
 	Version 19.223:   May 11, 2020  Store int answer and refresh exam print. (303024 lines)

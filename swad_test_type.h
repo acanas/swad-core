@@ -68,7 +68,7 @@ typedef enum
    Tst_ANS_UNIQUE_CHOICE   = 3,
    Tst_ANS_MULTIPLE_CHOICE = 4,
    Tst_ANS_TEXT            = 5,
-   Tst_ANS_ALL             = 6,	// All/any type of answer
+   Tst_ANS_UNKNOWN         = 6,	// Unknown/all/any type of answer
   } Tst_AnswerType_t;
 
 struct Tst_Question

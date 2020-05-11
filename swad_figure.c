@@ -3218,7 +3218,7 @@ static void Fig_GetAndShowTestsStats (void)
      }
 
    /***** Get the stats about test questions from this location *****/
-   Tst_GetTestStats (Tst_ANS_ALL,&Stats);
+   Tst_GetTestStats (Tst_ANS_UNKNOWN,&Stats);
 
    /***** Write number of assignments *****/
    HTM_TR_Begin (NULL);

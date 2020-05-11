@@ -4972,8 +4972,7 @@ Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD)
          if (!strcmp (StrAnsTypeBD,Tst_StrAnswerTypesDB[AnsType]))
             return AnsType;
 
-   Lay_ShowErrorAndExit ("Wrong type of answer. 1");
-   return (Tst_AnswerType_t) 0;	// Not reached
+   return Tst_ANS_UNKNOWN;
   }
 
 /*****************************************************************************/
@@ -5059,9 +5058,9 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
 			   Par_GetParToUnsignedLong ("AnswerType",
 						     0,
 						     Tst_NUM_ANS_TYPES - 1,
-						     (unsigned long) Tst_ANS_ALL);
-   if (Question->Answer.Type == Tst_ANS_ALL)
-      Lay_ShowErrorAndExit ("Wrong type of answer. 4");
+						     (unsigned long) Tst_ANS_UNKNOWN);
+   if (Question->Answer.Type == Tst_ANS_UNKNOWN)
+      Lay_ShowErrorAndExit ("Wrong type of answer.");
 
    /***** Get question tags *****/
    for (NumTag = 0;
@@ -6383,7 +6382,7 @@ static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsTy
    switch (Scope)
      {
       case Hie_SYS:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	            " FROM tst_questions");
@@ -6395,7 +6394,7 @@ static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsTy
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Hie_CTY:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	            " FROM institutions,centres,degrees,courses,tst_questions"
@@ -6419,7 +6418,7 @@ static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsTy
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Hie_INS:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	            " FROM centres,degrees,courses,tst_questions"
@@ -6441,7 +6440,7 @@ static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsTy
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Hie_CTR:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	            " FROM degrees,courses,tst_questions"
@@ -6461,7 +6460,7 @@ static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsTy
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Hie_DEG:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	            " FROM courses,tst_questions"
@@ -6479,7 +6478,7 @@ static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsTy
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Hie_CRS:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	            " FROM tst_questions"
@@ -6541,7 +6540,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerT
    switch (Scope)
      {
       case Hie_SYS:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
         		    "SELECT COUNT(DISTINCT CrsCod)"
@@ -6555,7 +6554,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerT
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Hie_CTY:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
         		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -6581,7 +6580,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerT
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Hie_INS:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
         		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -6605,7 +6604,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerT
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Hie_CTR:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
         		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -6627,7 +6626,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerT
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Hie_DEG:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
         		    "SELECT COUNTDISTINCT (tst_questions.CrsCod)"
@@ -6647,7 +6646,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerT
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Hie_CRS:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
         		    "SELECT COUNT(DISTINCT CrsCod)"
@@ -6697,7 +6696,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
    switch (Scope)
      {
       case Hie_SYS:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
 			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -6717,7 +6716,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
 			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
          break;
       case Hie_CTY:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
 			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -6749,7 +6748,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
 			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
          break;
       case Hie_INS:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
 			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -6779,7 +6778,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
 			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
          break;
       case Hie_CTR:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
 			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -6807,7 +6806,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
 			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
          break;
       case Hie_DEG:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
 			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -6833,7 +6832,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
 			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
          break;
       case Hie_CRS:
-         if (AnsType == Tst_ANS_ALL)
+         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
 			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
