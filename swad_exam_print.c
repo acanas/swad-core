@@ -474,9 +474,9 @@ static void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 			      Print->PrnCod);
 
    /***** Get questions *****/
-   // The number of questions in table of print questions
-   // should match the number of questions got from print
-   if (NumQsts == Print->NumQsts)
+   // Some questions may be deleted, so the number of questions retrieved
+   // could be lower than the original number of questions in the exam print
+   if (NumQsts <= Print->NumQsts)
       for (NumQst = 0;
 	   NumQst < NumQsts;
 	   NumQst++)
@@ -514,7 +514,7 @@ static void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (NumQsts != Print->NumQsts)
+   if (NumQsts > Print->NumQsts)
       Lay_WrongExamExit ();
   }
 
@@ -782,7 +782,7 @@ static void ExaPrn_WriteChoiceAnsToFill (const struct ExaPrn_Print *Print,
    unsigned NumOpt;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    bool UsrAnswers[Tst_MAX_OPTIONS_PER_QUESTION];
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+   char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Get indexes for this question from string *****/
    TstPrn_GetIndexesFromStr (Print->PrintedQuestions[NumQst].StrIndexes,Indexes);
@@ -807,11 +807,11 @@ static void ExaPrn_WriteChoiceAnsToFill (const struct ExaPrn_Print *Print,
 	 ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
       HTM_TD_Begin ("class=\"LT\"");
 
-      snprintf (StrAns,sizeof (StrAns),
+      snprintf (Id,sizeof (Id),
 		"Ans%010u",
 		NumQst);
       if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE)
-	 HTM_INPUT_RADIO (StrAns,false,
+	 HTM_INPUT_RADIO (Id,false,
 			  "id=\"Ans%010u_%u\" value=\"%u\"%s"
 			  " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u);\"",
 			  NumQst,NumOpt,
@@ -820,13 +820,19 @@ static void ExaPrn_WriteChoiceAnsToFill (const struct ExaPrn_Print *Print,
 				                           "",
                           NumQst,Question->Answer.NumOptions);
       else // Answer.Type == Tst_ANS_MULTIPLE_CHOICE
-	 HTM_INPUT_CHECKBOX (StrAns,HTM_DONT_SUBMIT_ON_CHANGE,
+	 HTM_INPUT_CHECKBOX (Id,HTM_DONT_SUBMIT_ON_CHANGE,
 			     "id=\"Ans%010u_%u\" value=\"%u\"%s",
 			     NumQst,NumOpt,
 			     Indexes[NumOpt],
 			     UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
 				                           "");
-
+      /* HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','%s',"
+			       "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
+			       " return false;\"",	// return false is necessary to not submit form
+		   Id,Id,
+		   Act_GetActCod (ActAnsExaPrn),
+		   Gbl.Session.Id,Print->EvtCod,NumQst);
+	 HTM_Txt (" />"); */
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
@@ -895,7 +901,7 @@ void ExaPrn_ReceivePrintAnswer (void)
    Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
    if (Print.PrnCod <= 0)
-      Lay_ShowErrorAndExit ("Wrong exam print.");
+      Lay_WrongExamExit ();
 
    /***** Get questions and answers from database *****/
    ExaPrn_GetPrintQuestionsFromDB (&Print);

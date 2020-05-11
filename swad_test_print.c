@@ -2283,9 +2283,9 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
 			      Print->PrnCod);
 
    /***** Get questions *****/
-   // The number of questions in table of exam questions
-   // should match the number of questions got from exam
-   if (NumQsts == Print->NumQsts)
+   // Some questions may be deleted, so the number of questions retrieved
+   // could be lower than the original number of questions in the exam print
+   if (NumQsts <= Print->NumQsts)
       for (NumQst = 0;
 	   NumQst < NumQsts;
 	   NumQst++)
@@ -2319,7 +2319,7 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (NumQsts != Print->NumQsts)
+   if (NumQsts > Print->NumQsts)
       Lay_WrongExamExit ();
   }
 
