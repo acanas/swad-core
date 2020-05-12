@@ -127,6 +127,8 @@ static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *P
                                                           bool UpdateQstScore);
 static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Print,
                                                         unsigned NumQst);
+static void ExaPrn_GetAnswerFromDB (struct ExaPrn_Print *Print,long QstCod,
+                                    char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1]);
 static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
                                            unsigned NumQst);
 static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print);
@@ -698,10 +700,9 @@ static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
 	     Print->PrintedQuestions[NumQst].StrAnswers);
    HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
 			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
-		         " return false;\"",	// return false is necessary to not submit form
+		         " return false;\" />",	// return false is necessary to not submit form
 	     Id,
 	     Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->EvtCod,NumQst);
-   HTM_Txt (" />");
   }
 
 /*****************************************************************************/
@@ -723,10 +724,9 @@ static void ExaPrn_WriteFloatAnsToFill (const struct ExaPrn_Print *Print,
 	     Print->PrintedQuestions[NumQst].StrAnswers);
    HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
 			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
-		         " return false;\"",	// return false is necessary to not submit form
+		         " return false;\" />",	// return false is necessary to not submit form
 	     Id,
 	     Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->EvtCod,NumQst);
-   HTM_Txt (" />");
   }
 
 /*****************************************************************************/
@@ -749,11 +749,10 @@ static void ExaPrn_WriteTFAnsToFill (const struct ExaPrn_Print *Print,
    HTM_TxtF ("<select id=\"%s\" name=\"Ans\"",Id);
    HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
 			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
-		         " return false;\"",	// return false is necessary to not submit form
+		         " return false;\" />",	// return false is necessary to not submit form
 	     Id,
 	     Act_GetActCod (ActAnsExaPrn),
 	     Gbl.Session.Id,Print->EvtCod,NumQst);
-   HTM_Txt (" />");
    HTM_OPTION (HTM_Type_STRING,"" ,Print->PrintedQuestions[NumQst].StrAnswers[0] == '\0',false,"&nbsp;");
    HTM_OPTION (HTM_Type_STRING,"T",Print->PrintedQuestions[NumQst].StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
    HTM_OPTION (HTM_Type_STRING,"F",Print->PrintedQuestions[NumQst].StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
@@ -799,32 +798,17 @@ static void ExaPrn_WriteChoiceAnsToFill (struct ExaPrn_Print *Print,
       snprintf (Id,sizeof (Id),
 		"Ans%010u",
 		NumQst);
-      if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE)
-        {
-	 HTM_TxtF ("<input type=\"radio\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"%s",
-	           Id,NumOpt,Indexes[NumOpt],
-	           UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
-				                 "");
-	 HTM_TxtF (" onclick=\"updateExamPrint('examprint','%s_%u','Ans',"
-		   "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
-		   " return false;\"",	// return false is necessary to not submit form
-		   Id,NumOpt,
-		   Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->EvtCod,NumQst);
-	 HTM_Txt (" />");
-        }
-      else // Answer.Type == Tst_ANS_MULTIPLE_CHOICE
-	{
-	 HTM_TxtF ("<input type=\"checkbox\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"%s",
-	           Id,NumOpt,Indexes[NumOpt],
-	           UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
-				                 "");
-	 HTM_TxtF (" onclick=\"updateExamPrint('examprint','%s_%u','Ans',"
-		   "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
-		   " return false;\"",	// return false is necessary to not submit form
-		   Id,NumOpt,
-		   Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->EvtCod,NumQst);
-	 HTM_Txt (" />");
-        }
+      HTM_TxtF ("<input type=\"%s\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"%s",
+		Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE ? "radio" :
+								 "checkbox",
+		Id,NumOpt,Indexes[NumOpt],
+		UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
+					      "");
+      HTM_TxtF (" onclick=\"updateExamPrint('examprint','%s_%u','Ans',"
+		"'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
+		" return false;\" />",	// return false is necessary to not submit form
+		Id,NumOpt,
+		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->EvtCod,NumQst);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
@@ -869,10 +853,9 @@ static void ExaPrn_WriteTextAnsToFill (const struct ExaPrn_Print *Print,
 	     Print->PrintedQuestions[NumQst].StrAnswers);
    HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
 			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
-		         " return false;\"",	// return false is necessary to not submit form
+		         " return false;\" />",	// return false is necessary to not submit form
 	     Id,
 	     Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->EvtCod,NumQst);
-   HTM_Txt (" />");
   }
 
 /*****************************************************************************/
@@ -993,6 +976,7 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
                                                         unsigned NumQst)
   {
    struct Tst_Question Question;
+   char CurrentStrAnswersInDB[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
 
    /***** Compute question score *****/
    Tst_QstConstructor (&Question);
@@ -1001,9 +985,50 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
    TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
    Tst_QstDestructor (&Question);
 
+   /***** If type is unique choice and the option (radio button) is checked
+          ==> uncheck it by deleting answer *****/
+   if (Question.Answer.Type == Tst_ANS_UNIQUE_CHOICE)
+     {
+      ExaPrn_GetAnswerFromDB (Print,Print->PrintedQuestions[NumQst].QstCod,
+                              CurrentStrAnswersInDB);
+      if (!strcmp (Print->PrintedQuestions[NumQst].StrAnswers,CurrentStrAnswersInDB))
+	 Print->PrintedQuestions[NumQst].StrAnswers[0] = '\0';
+     }
+
    /***** Store test exam question in database *****/
    ExaPrn_StoreOneQstOfPrintInDB (Print,
 				  NumQst);	// 0, 1, 2, 3...
+  }
+
+
+/*****************************************************************************/
+/************* Get the questions of an exam print from database **************/
+/*****************************************************************************/
+
+static void ExaPrn_GetAnswerFromDB (struct ExaPrn_Print *Print,long QstCod,
+                                    char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1])
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Get questions of an exam print from database *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get answer in an exam print",
+		       "SELECT Answers"
+		       " FROM exa_print_questions"
+		       " WHERE PrnCod=%ld AND QstCod=%ld",
+		       Print->PrnCod,QstCod))
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get answers selected by user for this question (row[0]) */
+      Str_Copy (StrAnswers,row[0],
+		Tst_MAX_BYTES_ANSWERS_ONE_QST);
+     }
+   else
+      StrAnswers[0] = '\0';
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

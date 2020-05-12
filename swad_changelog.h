@@ -548,10 +548,12 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.225 (2020-05-12)"
+#define Log_PLATFORM_VERSION	"SWAD 19.225.1 (2020-05-12)"
 #define CSS_FILE		"swad19.217.css"
 #define JS_FILE			"swad19.223.js"
 /*
+	Version 19.225.1: May 12, 2020  Code refactoring in exam prints.
+					Unckeck radio button in exam prints. (303057 lines)
 	Version 19.225:   May 12, 2020  Stored unique/multiple choice questions in exam print.
 					Code refactoring in tests, exams and games. (303037 lines)
 	Version 19.224:   May 11, 2020  API function getLocations returns only one room. (303048 lines)
