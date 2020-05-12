@@ -307,7 +307,7 @@ void Med_GetMediaDataByCod (struct Media *Media)
 	     Length = Cns_MAX_BYTES_WWW;
 
 	 if ((Media->URL = (char *) malloc (Length + 1)) == NULL)
-	    Lay_ShowErrorAndExit ("Error allocating memory for image URL.");
+	    Lay_ShowErrorAndExit ("Error allocating memory for media URL.");
 	 Str_Copy (Media->URL,row[2],
 		   Length);
 	}
@@ -324,7 +324,7 @@ void Med_GetMediaDataByCod (struct Media *Media)
 	     Length = Med_MAX_BYTES_TITLE;
 
 	 if ((Media->Title = (char *) malloc (Length + 1)) == NULL)
-	    Lay_ShowErrorAndExit ("Error allocating memory for image title.");
+	    Lay_ShowErrorAndExit ("Error allocating memory for media title.");
 	 Str_Copy (Media->Title,row[3],
 		   Length);
 	}
@@ -1405,13 +1405,6 @@ static bool Med_MoveTmpFileToDefDir (struct Media *Media,
 
 void Med_StoreMediaInDB (struct Media *Media)
   {
-   /***** Trivial case *****/
-   if (Media->Status != Med_MOVED)
-     {
-      Med_ResetMedia (Media);	// No media inserted in database
-      return;
-     }
-
    /***** Insert media into database *****/
    Media->MedCod = DB_QueryINSERTandReturnCode ("can not create media",
 					        "INSERT INTO media"
@@ -1436,9 +1429,8 @@ void Med_ShowMedia (const struct Media *Media,
    char PathMedPriv[PATH_MAX + 1];
 
    /***** If no media to show ==> nothing to do *****/
-   if (Media->Status != Med_STORED_IN_DB)
-      return;
-   if (Media->Type == Med_TYPE_NONE)
+   if (Media->Status != Med_STORED_IN_DB ||
+       Media->Type == Med_TYPE_NONE)
       return;
 
    /***** Start media container *****/
@@ -1806,6 +1798,140 @@ static void Med_AlertThirdPartyCookies (void)
    Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
                             NULL,NULL,
                             Btn_NO_BUTTON,NULL);
+  }
+
+/*****************************************************************************/
+/************************* Create duplicate of media *************************/
+/*****************************************************************************/
+
+#define Med_NUM_MEDIA 2
+#define Med_SRC 0
+#define Med_DST 1
+
+long Med_CloneMedia (const struct Media *MediaSrc)
+  {
+   long MedCod = -1L;
+   struct Media MediaDst;
+   struct
+     {
+      char Path[PATH_MAX + 1];
+      char FullPath[PATH_MAX + 1 + NAME_MAX + 1];
+     } MediaPriv[Med_NUM_MEDIA];
+   size_t Length;
+
+   /***** If no media ==> nothing to do *****/
+   if (MediaSrc->Type == Med_TYPE_NONE)
+      return MedCod;
+
+   /***** If no media name ==> nothing to do *****/
+   if (!MediaSrc->Name)
+      return MedCod;
+   if (!MediaSrc->Name[0])
+      return MedCod;
+
+   /***** Initialize media *****/
+   Med_MediaConstructor (&MediaDst);
+
+   /***** Copy type *****/
+   MediaDst.Type = MediaSrc->Type;
+
+   /***** Assign a unique name for the destination media *****/
+   Cry_CreateUniqueNameEncrypted (MediaDst.Name);
+
+   /***** Copy media URL *****/
+   Med_FreeMediaURL (&MediaDst);
+   if (MediaSrc->URL)
+     {
+      /* Get and limit length of the URL */
+      Length = strlen (MediaSrc->URL);
+      if (Length > Cns_MAX_BYTES_WWW)
+	  Length = Cns_MAX_BYTES_WWW;
+      if ((MediaDst.URL = (char *) malloc (Length + 1)) == NULL)
+	 Lay_ShowErrorAndExit ("Error allocating memory for media URL.");
+      Str_Copy (MediaDst.URL,MediaSrc->URL,
+		Length);
+     }
+
+   /***** Copy media title *****/
+   Med_FreeMediaTitle (&MediaDst);
+   if (MediaSrc->Title)
+     {
+      /* Get and limit length of the title */
+      Length = strlen (MediaSrc->Title);
+      if (Length > Cns_MAX_BYTES_WWW)
+	  Length = Cns_MAX_BYTES_WWW;
+      if ((MediaDst.Title = (char *) malloc (Length + 1)) == NULL)
+	 Lay_ShowErrorAndExit ("Error allocating memory for media title.");
+      Str_Copy (MediaDst.Title,MediaSrc->Title,
+		Length);
+     }
+
+   /***** Create duplicate of files *****/
+   switch (MediaSrc->Type)
+     {
+      case Med_JPG:
+      case Med_GIF:
+      case Med_MP4:
+      case Med_WEBM:
+      case Med_OGG:
+	 /***** Create private directories if not exist *****/
+	 /* Create private directory for images/videos if it does not exist */
+	 Fil_CreateDirIfNotExists (Cfg_PATH_MEDIA_PRIVATE);
+
+	 /* Build paths to private directories */
+	 snprintf (MediaPriv[Med_SRC].Path,sizeof (MediaPriv[Med_SRC].Path),
+		   "%s/%c%c",
+		   Cfg_PATH_MEDIA_PRIVATE,MediaSrc->Name[0],MediaSrc->Name[1]);
+	 snprintf (MediaPriv[Med_DST].Path,sizeof (MediaPriv[Med_DST].Path),
+		   "%s/%c%c",
+		   Cfg_PATH_MEDIA_PRIVATE,MediaDst.Name[0],MediaDst.Name[1]);
+	 Fil_CreateDirIfNotExists (MediaPriv[Med_DST].Path);
+
+	 /* Build paths to private files */
+	 snprintf (MediaPriv[Med_SRC].FullPath,sizeof (MediaPriv[Med_SRC].FullPath),
+		   "%s/%s.%s",
+		   MediaPriv[Med_SRC].Path,MediaSrc->Name,Med_Extensions[MediaSrc->Type]);
+	 snprintf (MediaPriv[Med_DST].FullPath,sizeof (MediaPriv[Med_DST].FullPath),
+		   "%s/%s.%s",
+		   MediaPriv[Med_DST].Path,MediaDst.Name,Med_Extensions[MediaSrc->Type]);
+
+	 /* Copy file */
+	 Ale_ShowAlert (Ale_INFO,"DEBUG<br />"
+		                 "MediaPriv[Med_SRC].FullPath = &quot;%s&quot<br />"
+		                 "MediaPriv[Med_DST].FullPath = &quot;%s&quot",
+	                MediaPriv[Med_SRC].FullPath,
+	                MediaPriv[Med_DST].FullPath);
+
+	 Fil_FastCopyOfFiles (MediaPriv[Med_SRC].FullPath,
+			      MediaPriv[Med_DST].FullPath);
+
+	 if (MediaSrc->Type == Med_GIF)
+	   {
+	    /* Build private paths to PNG */
+	    snprintf (MediaPriv[Med_SRC].FullPath,sizeof (MediaPriv[Med_SRC].FullPath),
+		      "%s/%s.png",
+		      MediaPriv[Med_SRC].Path,MediaSrc->Name);
+	    snprintf (MediaPriv[Med_DST].FullPath,sizeof (MediaPriv[Med_DST].FullPath),
+		      "%s/%s.png",
+		      MediaPriv[Med_DST].Path,MediaDst.Name);
+
+	    /* Copy PNG file */
+	    Fil_FastCopyOfFiles (MediaPriv[Med_SRC].FullPath,
+				 MediaPriv[Med_DST].FullPath);
+	   }
+	 break;
+      default:
+	 break;
+     }
+
+   /***** Code to return *****/
+   Med_StoreMediaInDB (&MediaDst);
+   MedCod = MediaDst.MedCod;
+
+   /***** Free media *****/
+   Med_MediaDestructor (&MediaDst);
+
+   return MedCod;
   }
 
 /*****************************************************************************/

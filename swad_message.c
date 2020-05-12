@@ -3197,13 +3197,13 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       HTM_TxtColonNBSP (Txt_MSG_Content);
       HTM_TD_End ();
 
-      /***** Initialize image *****/
+      /***** Initialize media *****/
       Med_MediaConstructor (&Media);
 
-      /***** Get message content and optional image *****/
+      /***** Get message content and optional media *****/
       Msg_GetMsgContent (MsgCod,Content,&Media);
 
-      /***** Show content and image *****/
+      /***** Show content and media *****/
       HTM_TD_Begin ("colspan=\"2\" class=\"MSG_TXT LT\"");
       if (Content[0])
          Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
@@ -3212,7 +3212,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 
       HTM_TR_End ();
 
-      /***** Free image *****/
+      /***** Free media *****/
       Med_MediaDestructor (&Media);
      }
 

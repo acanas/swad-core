@@ -1326,15 +1326,15 @@ void ExaRes_GetExamResultQuestionsFromDB (long EvtCod,long UsrCod,
    Print->NumQsts = (unsigned)
 		    DB_QuerySELECT (&mysql_res,"can not get questions and answers"
 					       " of a event result",
-				    "SELECT exa_questions.QstCod,"	// row[0]
-					   "exa_questions.QstInd,"	// row[1]
+				    "SELECT exa_set_questions.QstCod,"	// row[0]
+					   "exa_set_questions.QstInd,"	// row[1]
 					   "exa_indexes.Indexes"	// row[2]
-				    " FROM exa_events,exa_questions,exa_indexes"
+				    " FROM exa_events,exa_set_questions,exa_indexes"
 				    " WHERE exa_events.EvtCod=%ld"
-				    " AND exa_events.ExaCod=exa_questions.ExaCod"
+				    " AND exa_events.ExaCod=exa_set_questions.ExaCod"
 				    " AND exa_events.EvtCod=exa_indexes.EvtCod"
-				    " AND exa_questions.QstInd=exa_indexes.QstInd"
-				    " ORDER BY exa_questions.QstInd",
+				    " AND exa_set_questions.QstInd=exa_indexes.QstInd"
+				    " ORDER BY exa_set_questions.QstInd",
 				    EvtCod);
    for (NumQst = 0, Print->NumQstsNotBlank = 0;
 	NumQst < Print->NumQsts;

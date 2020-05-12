@@ -93,6 +93,8 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print);
 static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
                                                   struct ExaSet_Set *Set,
                                                   unsigned *NumQstInPrint);
+static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
+					  bool Shuffle);
 static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print);
 
 static void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print);
@@ -363,12 +365,11 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
    /***** Get questions from database *****/
    NumQstsInSet = (unsigned)
 		  DB_QuerySELECT (&mysql_res,"can not get questions from set",
-				  "SELECT tst_questions.QstCod,"	// row[0]
-					 "tst_questions.AnsType,"	// row[1]
-					 "tst_questions.Shuffle"	// row[2]
-				  " FROM exa_questions,tst_questions"
-				  " WHERE exa_questions.setCod=%ld"
-				  " AND exa_questions.QstCod=tst_questions.QstCod"
+				  "SELECT QstCod,"	// row[0]
+					 "AnsType,"	// row[1]
+					 "Shuffle"	// row[2]
+				  " FROM exa_set_questions"
+				  " WHERE SetCod=%ld"
 				  " ORDER BY RAND()"	// Don't use RAND(NOW()) because the same ordering will be repeated across sets
 				  " LIMIT %u",
 				  Set->SetCod,
@@ -414,7 +415,7 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
 	 case Tst_ANS_MULTIPLE_CHOICE:
             /* If answer type is unique or multiple option,
                generate indexes of answers depending on shuffle */
-	    Tst_GenerateChoiceIndexesDependingOnShuffle (&Print->PrintedQuestions[*NumQstInPrint],Shuffle);
+	    ExaPrn_GenerateChoiceIndexes (&Print->PrintedQuestions[*NumQstInPrint],Shuffle);
 	    break;
 	 default:
 	    break;
@@ -428,6 +429,71 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
      }
 
    return NumQstsInSet;
+  }
+
+/*****************************************************************************/
+/*************** Generate choice indexes depending on shuffle ****************/
+/*****************************************************************************/
+
+static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
+					  bool Shuffle)
+  {
+   struct Tst_Question Question;
+   unsigned NumOpt;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned Index;
+   bool ErrorInIndex;
+   char StrInd[1 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+
+   /***** Create test question *****/
+   Tst_QstConstructor (&Question);
+   Question.QstCod = PrintedQuestion->QstCod;
+
+   /***** Get answers of question from database *****/
+   ExaSet_GetAnswersQst (&Question,&mysql_res,Shuffle);
+   /*
+   row[0] AnsInd
+   row[1] Answer
+   row[2] Feedback
+   row[3] MedCod
+   row[4] Correct
+   */
+
+   for (NumOpt = 0;
+	NumOpt < Question.Answer.NumOptions;
+	NumOpt++)
+     {
+      /***** Get next answer *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Assign index (row[0]).
+             Index is 0,1,2,3... if no shuffle
+             or 1,3,0,2... (example) if shuffle *****/
+      ErrorInIndex = false;
+      if (sscanf (row[0],"%u",&Index) == 1)
+        {
+         if (Index >= Tst_MAX_OPTIONS_PER_QUESTION)
+            ErrorInIndex = true;
+        }
+      else
+         ErrorInIndex = true;
+      if (ErrorInIndex)
+         Lay_ShowErrorAndExit ("Wrong index of answer.");
+
+      if (NumOpt == 0)
+	 snprintf (StrInd,sizeof (StrInd),"%u",Index);
+      else
+	 snprintf (StrInd,sizeof (StrInd),",%u",Index);
+      Str_Concat (PrintedQuestion->StrIndexes,StrInd,
+                  Tst_MAX_BYTES_INDEXES_ONE_QST);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
@@ -571,8 +637,7 @@ static void ExaPrn_ShowTableWithQstsToFill (struct ExaPrn_Print *Print)
       Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
 
       /* Show question */
-      if (!Tst_GetQstDataFromDB (&Question))	// Question exists
-	 Lay_ShowErrorAndExit ("Wrong question.");
+      ExaSet_GetQstDataFromDB (&Question,Print->ExaCod);
 
       /* Write question and answers */
       ExaPrn_WriteQstAndAnsToFill (Print,NumQst,&Question);
@@ -981,7 +1046,7 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
    /***** Compute question score *****/
    Tst_QstConstructor (&Question);
    Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
-   Question.Answer.Type = Tst_GetQstAnswerType (Question.QstCod);
+   Question.Answer.Type = ExaSet_GetQstAnswerTypeFromDB (Question.QstCod);
    TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
    Tst_QstDestructor (&Question);
 
@@ -999,7 +1064,6 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
    ExaPrn_StoreOneQstOfPrintInDB (Print,
 				  NumQst);	// 0, 1, 2, 3...
   }
-
 
 /*****************************************************************************/
 /************* Get the questions of an exam print from database **************/

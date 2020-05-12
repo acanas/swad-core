@@ -548,10 +548,33 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.225.1 (2020-05-12)"
+#define Log_PLATFORM_VERSION	"SWAD 19.226 (2020-05-12)"
 #define CSS_FILE		"swad19.217.css"
 #define JS_FILE			"swad19.223.js"
 /*
+// TODO: Public link to images on exams should be cached during the current session. When session is closed ==> remove public link
+
+	Version 19.226:   May 12, 2020  Questions and answer are cloned from test bank to exams. (303468 lines)
+					18 changes necessary in database:
+CREATE TABLE IF NOT EXISTS exa_set_answers (QstCod INT NOT NULL,AnsInd TINYINT NOT NULL,Answer TEXT NOT NULL,Feedback TEXT NOT NULL,MedCod INT NOT NULL DEFAULT -1,Correct ENUM('N','Y') NOT NULL,UNIQUE INDEX(QstCod,AnsInd),INDEX(MedCod));
+CREATE TABLE IF NOT EXISTS exa_set_questions (QstCod INT NOT NULL AUTO_INCREMENT,SetCod INT NOT NULL,AnsType ENUM ('int','float','true_false','unique_choice','multiple_choice','text') NOT NULL,Shuffle ENUM('N','Y') NOT NULL,Stem TEXT NOT NULL,Feedback TEXT NOT NULL,MedCod INT NOT NULL DEFAULT -1,UNIQUE INDEX(QstCod),UNIQUE INDEX(SetCod,QstCod),INDEX(MedCod));
+DELETE FROM exa_answers;
+DELETE FROM exa_events;
+DELETE FROM exa_exams;
+DELETE FROM exa_groups;
+DELETE FROM exa_happening;
+DELETE FROM exa_indexes;
+DELETE FROM exa_participants;
+DELETE FROM exa_print_questions;
+DELETE FROM exa_prints;
+DELETE FROM exa_questions;
+DELETE FROM exa_results;
+DELETE FROM exa_set_answers;
+DELETE FROM exa_set_questions;
+DELETE FROM exa_sets;
+DELETE FROM exa_times;
+DROP TABLE exa_questions;
+
 	Version 19.225.1: May 12, 2020  Code refactoring in exam prints.
 					Unckeck radio button in exam prints. (303057 lines)
 	Version 19.225:   May 12, 2020  Stored unique/multiple choice questions in exam print.

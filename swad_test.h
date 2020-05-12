@@ -122,8 +122,8 @@ void Tst_ListQuestionsToEdit (void);
 void Tst_ListQuestionsToSelectForSet (struct Exa_Exams *Exams);
 void Tst_ListQuestionsToSelectForGame (struct Gam_Games *Games);
 
-void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstPrn_PrintedQuestion *PrintedQuestion,
-					          bool Shuffle);
+void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				bool Shuffle);
 
 void Tst_WriteParamEditQst (const struct Tst_Test *Test);
 
@@ -158,7 +158,7 @@ void Tst_QstDestructor (struct Tst_Question *Question);
 
 bool Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt);
 
-Tst_AnswerType_t Tst_GetQstAnswerType (long QstCod);
+Tst_AnswerType_t Tst_GetQstAnswerTypeFromDB (long QstCod);
 bool Tst_GetQstDataFromDB (struct Tst_Question *Question);
 Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
 void Tst_ReceiveQst (void);

@@ -155,6 +155,8 @@ void Med_StoreMediaInDB (struct Media *Media);
 void Med_ShowMedia (const struct Media *Media,
                     const char *ClassContainer,const char *ClassMedia);
 
+long Med_CloneMedia (const struct Media *MediaSrc);
+
 void Med_RemoveMediaFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res);
 void Med_RemoveMedia (long MedCod);
 

@@ -551,13 +551,6 @@ CREATE TABLE IF NOT EXISTS exa_prints (
 	UNIQUE INDEX(PrnCod),
 	UNIQUE INDEX(EvtCod,UsrCod));
 --
--- Table exa_questions: stores the questions in the set of questions for exams
---
-CREATE TABLE IF NOT EXISTS exa_questions (
-	SetCod INT NOT NULL,
-	QstCod INT NOT NULL,
-	UNIQUE INDEX(SetCod,QstCod));
---
 -- Table exa_results: stores exam results
 --
 CREATE TABLE IF NOT EXISTS exa_results (
@@ -569,6 +562,32 @@ CREATE TABLE IF NOT EXISTS exa_results (
 	NumQstsNotBlank INT NOT NULL DEFAULT 0,
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
 	UNIQUE INDEX(EvtCod,UsrCod));
+--
+-- Table exa_set_answers: stores the answers of questions in exam sets
+--
+CREATE TABLE IF NOT EXISTS exa_set_answers (
+	QstCod INT NOT NULL,
+	AnsInd TINYINT NOT NULL,
+	Answer TEXT NOT NULL,
+	Feedback TEXT NOT NULL,
+	MedCod INT NOT NULL DEFAULT -1,
+	Correct ENUM('N','Y') NOT NULL,
+	UNIQUE INDEX(QstCod,AnsInd),
+	INDEX(MedCod));
+--
+-- Table exa_set_questions: stores the questions in exam sets
+--
+CREATE TABLE IF NOT EXISTS exa_set_questions (
+	QstCod INT NOT NULL AUTO_INCREMENT,
+	SetCod INT NOT NULL,
+	AnsType ENUM ('int','float','true_false','unique_choice','multiple_choice','text') NOT NULL,
+	Shuffle ENUM('N','Y') NOT NULL,
+	Stem TEXT NOT NULL,
+	Feedback TEXT NOT NULL,
+	MedCod INT NOT NULL DEFAULT -1,
+	UNIQUE INDEX(QstCod),
+	UNIQUE INDEX(SetCod,QstCod),
+	INDEX(MedCod));
 --
 -- Table exa_sets: stores the question sets in the exams
 --

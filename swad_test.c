@@ -74,13 +74,7 @@ const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES] =
    [Tst_ANS_TEXT           ] = "text",
   };
 
-/*****************************************************************************/
-/**************************** Private constants ******************************/
-/*****************************************************************************/
-
-#define Tst_MAX_BYTES_TAGS_LIST		(16 * 1024)
-
-static const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES] =
+const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES] =
   {
    [Tst_ANS_INT            ] = "int",
    [Tst_ANS_FLOAT          ] = "float",
@@ -89,6 +83,12 @@ static const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES] =
    [Tst_ANS_MULTIPLE_CHOICE] = "multiple_choice",
    [Tst_ANS_TEXT           ] = "text",
   };
+
+/*****************************************************************************/
+/**************************** Private constants ******************************/
+/*****************************************************************************/
+
+#define Tst_MAX_BYTES_TAGS_LIST		(16 * 1024)
 
 // Test images will be saved with:
 // - maximum width of Tst_IMAGE_SAVED_MAX_HEIGHT
@@ -936,7 +936,7 @@ static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQ
   }
 
 /*****************************************************************************/
-/******************* List exam/game question for edition *********************/
+/********************* List game question for edition ************************/
 /*****************************************************************************/
 
 void Tst_ListQuestionForEdition (const struct Tst_Question *Question,
@@ -2662,7 +2662,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
 	 case Tst_ANS_MULTIPLE_CHOICE:
             /* If answer type is unique or multiple option,
                generate indexes of answers depending on shuffle */
-	    Tst_GenerateChoiceIndexesDependingOnShuffle (&Print->PrintedQuestions[NumQst],Shuffle);
+	    Tst_GenerateChoiceIndexes (&Print->PrintedQuestions[NumQst],Shuffle);
 	    break;
 	 default:
 	    break;
@@ -2680,13 +2680,12 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
   }
 
 /*****************************************************************************/
-/********* Get single or multiple choice answer when seeing a test ***********/
+/*************** Generate choice indexes depending on shuffle ****************/
 /*****************************************************************************/
 
-void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstPrn_PrintedQuestion *PrintedQuestion,
-					          bool Shuffle)
+void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				bool Shuffle)
   {
-   // extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    struct Tst_Question Question;
    unsigned NumOpt;
    MYSQL_RES *mysql_res;
@@ -2733,7 +2732,6 @@ void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstPrn_PrintedQuestion 
       if (NumOpt == 0)
 	 snprintf (StrInd,sizeof (StrInd),"%u",Index);
       else
-	 // snprintf (StrInd,sizeof (StrInd),"%s%u",Par_SEPARATOR_PARAM_MULTIPLE,Index);
 	 snprintf (StrInd,sizeof (StrInd),",%u",Index);
       Str_Concat (PrintedQuestion->StrIndexes,StrInd,
                   Tst_MAX_BYTES_INDEXES_ONE_QST);
@@ -4699,19 +4697,18 @@ static void Tst_FreeMediaOfQuestion (struct Tst_Question *Question)
 /*************** Get answer type of a question from database *****************/
 /*****************************************************************************/
 
-Tst_AnswerType_t Tst_GetQstAnswerType (long QstCod)
+Tst_AnswerType_t Tst_GetQstAnswerTypeFromDB (long QstCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Tst_AnswerType_t AnswerType;
 
    /***** Get type of answer from database *****/
-   if (!DB_QuerySELECT (&mysql_res,"can not get a question",
+   if (!DB_QuerySELECT (&mysql_res,"can not get the type of a question",
 		       "SELECT AnsType"		// row[0]
 		       " FROM tst_questions"
-		       " WHERE QstCod=%ld"
-		       " AND CrsCod=%ld",	// Extra check
-		       QstCod,Gbl.Hierarchy.Crs.CrsCod))
+		       " WHERE QstCod=%ld",
+		       QstCod))
       Lay_ShowErrorAndExit ("Question does not exist.");
 
    /* Get type of answer */

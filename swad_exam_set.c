@@ -123,9 +123,16 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 						     unsigned NumQsts,
                                                      MYSQL_RES *mysql_res,
 						     bool ICanEditQuestions);
+static void ExaSet_ListQuestionForEdition (const struct Tst_Question *Question,
+                                           unsigned QstInd,const char *Anchor);
 
 static void ExaSet_AllocateListSelectedQuestions (struct Exa_Exams *Exams);
 static void ExaSet_FreeListsSelectedQuestions (struct Exa_Exams *Exams);
+
+static void ExaSet_CopyQstFromBankToExamSet (struct ExaSet_Set *Set,long QstCod);
+
+static long ExaSet_GetParamQstCod (void);
+static void ExaSet_PutParamQstCod (void *QstCod);	// Should be a pointer to long
 
 static void ExaSet_ExchangeSets (long ExaCod,
                                  unsigned SetIndTop,unsigned SetIndBottom);
@@ -153,7 +160,7 @@ void ExaSet_PutParamsOneSet (void *Exams)
 static void ExaSet_PutParamsOneQst (void *Exams)
   {
    ExaSet_PutParamsOneSet (Exams);
-   Tst_PutParamQstCod (&(((struct Exa_Exams *) Exams)->QstCod));
+   ExaSet_PutParamQstCod (&(((struct Exa_Exams *) Exams)->QstCod));
   }
 
 /*****************************************************************************/
@@ -175,7 +182,7 @@ static unsigned ExaSet_GetNumQstsInSet (long SetCod)
    /***** Get number of questions in set from database *****/
    return
    (unsigned) DB_QueryCOUNT ("can not get number of questions in a set",
-			     "SELECT COUNT(*) FROM exa_questions"
+			     "SELECT COUNT(*) FROM exa_set_questions"
 			     " WHERE SetCod=%ld",
 			     SetCod);
   }
@@ -1042,11 +1049,10 @@ static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
    /***** Get data of questions from database *****/
    NumQsts = (unsigned)
              DB_QuerySELECT (&mysql_res,"can not get exam questions",
-			      "SELECT exa_questions.QstCod"	// row[0]
-			      " FROM exa_questions LEFT JOIN tst_questions"	// LEFT JOIN because the question could be removed in table of test questions
-			      " ON (exa_questions.QstCod=tst_questions.QstCod)"
-			      " WHERE exa_questions.SetCod=%ld"
-			      " ORDER BY tst_questions.Stem",
+			      "SELECT QstCod"	// row[0]
+			      " FROM exa_set_questions"
+			      " WHERE SetCod=%ld"
+			      " ORDER BY Stem",
 			      Set->SetCod);
 
    /***** Begin box *****/
@@ -1298,12 +1304,10 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Code;
-   extern const char *Txt_Tags;
    extern const char *Txt_Question;
    unsigned NumQst;
    MYSQL_ROW row;
    struct Tst_Question Question;
-   bool QuestionExists;
    char *Anchor;
 
    /***** Build anchor string *****/
@@ -1317,7 +1321,6 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 
    HTM_TH (1,1,"CT",Txt_No_INDEX);
    HTM_TH (1,1,"CT",Txt_Code);
-   HTM_TH (1,1,"CT",Txt_Tags);
    HTM_TH (1,1,"CT",Txt_Question);
 
    HTM_TR_End ();
@@ -1360,13 +1363,13 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
       /* Put icon to edit the question */
       if (ICanEditQuestions)
 	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
-	                              Tst_PutParamQstCod,&Question.QstCod);
+	                              ExaSet_PutParamQstCod,&Question.QstCod);
 
       HTM_TD_End ();
 
       /***** Question *****/
-      QuestionExists = Tst_GetQstDataFromDB (&Question);
-      Tst_ListQuestionForEdition (&Question,NumQst + 1,QuestionExists,Anchor);
+      ExaSet_GetQstDataFromDB (&Question,Exams->ExaCod);
+      ExaSet_ListQuestionForEdition (&Question,NumQst + 1,Anchor);
 
       /***** End row *****/
       HTM_TR_End ();
@@ -1380,6 +1383,233 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
+  }
+
+/*****************************************************************************/
+/*************** Get answer type of a question from database *****************/
+/*****************************************************************************/
+
+Tst_AnswerType_t ExaSet_GetQstAnswerTypeFromDB (long QstCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   Tst_AnswerType_t AnswerType;
+
+   /***** Get type of answer from database *****/
+   if (!DB_QuerySELECT (&mysql_res,"can not get the type of a question",
+		       "SELECT AnsType"		// row[0]
+		       " FROM exa_set_questions"
+		       " WHERE QstCod=%ld",
+		       QstCod))
+      Lay_ShowErrorAndExit ("Question does not exist.");
+
+   /* Get type of answer */
+   row = mysql_fetch_row (mysql_res);
+   AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   return AnswerType;
+  }
+
+/*****************************************************************************/
+/*************** Get data of a question in a set from database ***************/
+/*****************************************************************************/
+
+void ExaSet_GetQstDataFromDB (struct Tst_Question *Question,long ExaCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   bool QuestionExists;
+   unsigned NumOpt;
+
+   /***** Get question data from database *****/
+   QuestionExists = (DB_QuerySELECT (&mysql_res,"can not get a question",
+				     "SELECT AnsType,"			// row[0]
+					    "Shuffle,"			// row[1]
+					    "Stem,"			// row[2]
+					    "Feedback,"			// row[3]
+					    "MedCod"			// row[4]
+				     " FROM exa_set_questions"
+				     " WHERE QstCod=%ld"
+				     " AND SetCod IN"
+				     " (SELECT SetCod FROM exa_sets WHERE ExaCod=%ld)",		// Extra check
+				     Question->QstCod,
+				     ExaCod) != 0);
+
+   if (QuestionExists)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get the type of answer (row[0]) */
+      Question->Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
+
+      /* Get shuffle (row[1]) */
+      Question->Answer.Shuffle = (row[1][0] == 'Y');
+
+      /* Get the stem (row[2]) */
+      Question->Stem[0] = '\0';
+      if (row[2])
+	 if (row[2][0])
+	    Str_Copy (Question->Stem,row[2],
+		      Cns_MAX_BYTES_TEXT);
+
+      /* Get the feedback (row[3]) */
+      Question->Feedback[0] = '\0';
+      if (row[3])
+	 if (row[3][0])
+	    Str_Copy (Question->Feedback,row[3],
+		      Cns_MAX_BYTES_TEXT);
+
+      /* Get media (row[4]) */
+      Question->Media.MedCod = Str_ConvertStrCodToLongCod (row[4]);
+      Med_GetMediaDataByCod (&Question->Media);
+
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
+
+      /***** Get the answers from the database *****/
+      ExaSet_GetAnswersQst (Question,&mysql_res,
+			    false);	// Don't shuffle
+      /*
+      row[0] AnsInd
+      row[1] Answer
+      row[2] Feedback
+      row[3] MedCod
+      row[4] Correct
+      */
+      for (NumOpt = 0;
+	   NumOpt < Question->Answer.NumOptions;
+	   NumOpt++)
+	{
+	 row = mysql_fetch_row (mysql_res);
+	 switch (Question->Answer.Type)
+	   {
+	    case Tst_ANS_INT:
+	       Tst_CheckIfNumberOfAnswersIsOne (Question);
+	       Question->Answer.Integer = Tst_GetIntAnsFromStr (row[1]);
+	       break;
+	    case Tst_ANS_FLOAT:
+	       if (Question->Answer.NumOptions != 2)
+		  Lay_ShowErrorAndExit ("Wrong answer.");
+	       Question->Answer.FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[1]);
+	       break;
+	    case Tst_ANS_TRUE_FALSE:
+	       Tst_CheckIfNumberOfAnswersIsOne (Question);
+	       Question->Answer.TF = row[1][0];
+	       break;
+	    case Tst_ANS_UNIQUE_CHOICE:
+	    case Tst_ANS_MULTIPLE_CHOICE:
+	    case Tst_ANS_TEXT:
+	       /* Check number of options */
+	       if (Question->Answer.NumOptions > Tst_MAX_OPTIONS_PER_QUESTION)
+		  Lay_ShowErrorAndExit ("Wrong answer.");
+
+	       /*  Allocate space for text and feedback */
+	       if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
+		  /* Abort on error */
+		  Ale_ShowAlertsAndExit ();
+
+	       /* Get text (row[1]) */
+	       Question->Answer.Options[NumOpt].Text[0] = '\0';
+	       if (row[1])
+		  if (row[1][0])
+		     Str_Copy (Question->Answer.Options[NumOpt].Text,row[1],
+			       Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+
+	       /* Get feedback (row[2]) */
+	       Question->Answer.Options[NumOpt].Feedback[0] = '\0';
+	       if (row[2])
+		  if (row[2][0])
+		     Str_Copy (Question->Answer.Options[NumOpt].Feedback,row[2],
+			       Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+
+	       /* Get media (row[3]) */
+	       Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+	       Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
+
+	       /* Get if this option is correct (row[4]) */
+	       Question->Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
+	       break;
+	    default:
+	       break;
+	   }
+	}
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   if (!QuestionExists)
+      Lay_ShowErrorAndExit ("Wrong question.");
+  }
+
+/*****************************************************************************/
+/*************** Get answers of a test question from database ****************/
+/*****************************************************************************/
+
+void ExaSet_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
+                           bool Shuffle)
+  {
+   /***** Get answers of a question from database *****/
+   Question->Answer.NumOptions = (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get answers of a question",
+		   "SELECT AnsInd,"		// row[0]
+			  "Answer,"		// row[1]
+			  "Feedback,"		// row[2]
+			  "MedCod,"		// row[3]
+			  "Correct"		// row[4]
+		   " FROM exa_set_answers"
+		   " WHERE QstCod=%ld"
+		   " ORDER BY %s",
+		   Question->QstCod,
+		   Shuffle ? "RAND()" :
+		             "AnsInd");
+   if (!Question->Answer.NumOptions)
+      Ale_ShowAlert (Ale_ERROR,"Error when getting answers of a question.");
+  }
+
+
+/*****************************************************************************/
+/********************* List question in set for edition **********************/
+/*****************************************************************************/
+
+static void ExaSet_ListQuestionForEdition (const struct Tst_Question *Question,
+                                           unsigned QstInd,const char *Anchor)
+  {
+   /***** Number of question and answer type (row[1]) *****/
+   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+   Tst_WriteNumQst (QstInd);
+   Tst_WriteAnswerType (Question->Answer.Type);
+   HTM_TD_End ();
+
+   /***** Write question code *****/
+   HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TxtF ("%ld&nbsp;",Question->QstCod);
+   HTM_TD_End ();
+
+   /***** Write stem (row[3]) and media *****/
+   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_ARTICLE_Begin (Anchor);
+
+   /* Write stem */
+   Tst_WriteQstStem (Question->Stem,"TEST_EDI",
+		     true);	// Visible
+
+   /* Show media */
+   Med_ShowMedia (&Question->Media,
+		  "TEST_MED_EDIT_LIST_STEM_CONTAINER",
+		  "TEST_MED_EDIT_LIST_STEM");
+
+   /* Show feedback */
+   Tst_WriteQstFeedback (Question->Feedback,"TEST_EDI_LIGHT");
+
+   /* Show answers */
+   Tst_WriteAnswersListing (Question);
+
+   HTM_ARTICLE_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -1448,13 +1678,7 @@ void ExaSet_AddQstsToSet (void)
 	 if (sscanf (LongStr,"%ld",&QstCod) != 1)
 	    Lay_ShowErrorAndExit ("Wrong question code.");
 
-	 /* Insert question in the table of questions */
-	 DB_QueryINSERT ("can not add question to set",
-			 "INSERT INTO exa_questions"
-			 " (SetCod,QstCod)"
-			 " VALUES"
-			 " (%ld,%ld)",
-			 Set.SetCod,QstCod);
+	 ExaSet_CopyQstFromBankToExamSet (&Set,QstCod);
 	}
      }
    else
@@ -1493,6 +1717,93 @@ static void ExaSet_FreeListsSelectedQuestions (struct Exa_Exams *Exams)
       free (Exams->ListQuestions);
       Exams->ListQuestions = NULL;
      }
+  }
+
+/*****************************************************************************/
+/******* Copy question and answers from back of questions to exam set ********/
+/*****************************************************************************/
+
+static void ExaSet_CopyQstFromBankToExamSet (struct ExaSet_Set *Set,long QstCod)
+  {
+   extern const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES];
+   extern const char *Txt_Question_removed;
+   struct Tst_Question Question;
+   long CloneMedCod;
+   long QstCodInSet;
+   unsigned NumOpt;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Create test question *****/
+   Tst_QstConstructor (&Question);
+   Question.QstCod = QstCod;
+
+   /***** Get data of question from database *****/
+   if (Tst_GetQstDataFromDB (&Question))
+     {
+      /***** Clone media *****/
+      CloneMedCod = Med_CloneMedia (&Question.Media);
+      Ale_ShowAlert (Ale_INFO,"DEBUG: CloneMedCod = %ld",CloneMedCod);
+
+      /***** Insert question in table of questions *****/
+      QstCodInSet = DB_QueryINSERTandReturnCode ("can not add question to set",
+						 "INSERT INTO exa_set_questions"
+						 " (SetCod,AnsType,Shuffle,Stem,Feedback,MedCod)"
+						 " VALUES"
+						 " (%ld,'%s','%c','%s','%s',%ld)",
+						 Set->SetCod,
+						 Tst_StrAnswerTypesDB[Question.Answer.Type],
+						 Question.Answer.Shuffle ? 'Y' :
+									   'N',
+						 Question.Stem,
+						 Question.Feedback,
+						 CloneMedCod);
+
+      /***** Get the answers from the database *****/
+      Tst_GetAnswersQst (&Question,&mysql_res,
+			 false);	// Don't shuffle
+      /*
+      row[0] AnsInd
+      row[1] Answer
+      row[2] Feedback
+      row[3] MedCod
+      row[4] Correct
+      */
+      for (NumOpt = 0;
+	   NumOpt < Question.Answer.NumOptions;
+	   NumOpt++)
+	{
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get media (row[3]) */
+	 Question.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+	 Med_GetMediaDataByCod (&Question.Answer.Options[NumOpt].Media);
+
+	 /* Clone media */
+	 CloneMedCod = Med_CloneMedia (&Question.Answer.Options[NumOpt].Media);
+
+	 /* Copy answer option to exam set */
+	 DB_QueryINSERT ("can not add answer to set",
+			 "INSERT INTO exa_set_answers"
+			 " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
+			 " VALUES"
+			 " (%ld,%u,'%s','%s',%ld,'%s')",
+			 QstCodInSet,	// Question code in set
+			 NumOpt,	// Answer index (number of option)
+			 row[1],	// Copy of text
+			 row[2],	// Copy of feedback
+			 CloneMedCod,	// Media code of the new cloned media
+			 row[4]);	// Copy of correct
+	}
+
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
+     }
+   else
+      Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
@@ -1581,10 +1892,10 @@ void ExaSet_RemoveSet (void)
    /***** Remove the set from all the tables *****/
    /* Remove questions associated to set */
    DB_QueryDELETE ("can not remove questions associated to set",
-		   "DELETE FROM exa_questions"
-		   " USING exa_questions,exa_sets"
-		   " WHERE exa_questions.SetCod=%ld"
-                   " AND exa_questions.SetCod=exa_sets.SetCod"
+		   "DELETE FROM exa_set_questions"
+		   " USING exa_set_questions,exa_sets"
+		   " WHERE exa_set_questions.SetCod=%ld"
+                   " AND exa_set_questions.SetCod=exa_sets.SetCod"
 		   " AND exa_sets.ExaCod=%ld",	// Extra check
 		   Set.SetCod,Set.ExaCod);
 
@@ -1771,7 +2082,7 @@ void ExaSet_RequestRemoveQstFromSet (void)
    Exams.SetCod = Set.SetCod;
 
    /***** Get question index *****/
-   Exams.QstCod = Tst_GetParamQstCod ();
+   Exams.QstCod = ExaSet_GetParamQstCod ();
 
    /***** Build anchor string *****/
    Frm_SetAnchorStr (Set.SetCod,&Anchor);
@@ -1828,14 +2139,15 @@ void ExaSet_RemoveQstFromSet (void)
    Exams.SetCod = Set.SetCod;
 
    /***** Get question index *****/
-   QstCod = Tst_GetParamQstCod ();
+   QstCod = ExaSet_GetParamQstCod ();
 
    /***** Remove the question from set *****/
    /* Remove the question itself */
    DB_QueryDELETE ("can not remove a question from a set",
-		   "DELETE FROM exa_questions"
-		   " WHERE SetCod=%ld AND QstCod=%ld",
-		   Set.SetCod,QstCod);
+		   "DELETE FROM exa_set_questions"
+		   " WHERE QstCod=%ld"
+		   " AND SetCod=%ld",	// Extra check
+		   QstCod,Set.SetCod);
    if (!mysql_affected_rows (&Gbl.mysql))
       Lay_ShowErrorAndExit ("The question to be removed does not exist.");
 
@@ -1845,6 +2157,27 @@ void ExaSet_RemoveQstFromSet (void)
    /***** Show current exam and its sets *****/
    Exa_PutFormsOneExam (&Exams,&Exam,&Set,
                         false);	// It's not a new exam
+  }
+
+/*****************************************************************************/
+/************ Get the parameter with the code of a test question *************/
+/*****************************************************************************/
+
+static long ExaSet_GetParamQstCod (void)
+  {
+   /***** Get code of test question *****/
+   return Par_GetParToLong ("QstCod");
+  }
+
+/*****************************************************************************/
+/************ Put parameter with question code to edit, remove... ************/
+/*****************************************************************************/
+
+static void ExaSet_PutParamQstCod (void *QstCod)	// Should be a pointer to long
+  {
+   if (QstCod)
+      if (*((long *) QstCod) > 0)	// If question exists
+	 Par_PutHiddenParamLong (NULL,"QstCod",*((long *) QstCod));
   }
 
 /*****************************************************************************/

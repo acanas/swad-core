@@ -28,10 +28,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include "swad_date.h"
-// #include "swad_exam_event.h"
 #include "swad_exam_type.h"
-// #include "swad_scope.h"
+#include "swad_test_type.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -62,6 +60,11 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams,
 			  struct ExaSet_Set *Set);
 
 void ExaSet_ResetSet (struct ExaSet_Set *Set);
+
+Tst_AnswerType_t ExaSet_GetQstAnswerTypeFromDB (long QstCod);
+void ExaSet_GetQstDataFromDB (struct Tst_Question *Question,long ExaCod);
+void ExaSet_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
+                           bool Shuffle);
 
 void ExaSet_AddQstsToSet (void);
 

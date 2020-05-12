@@ -1181,9 +1181,18 @@ static void Exa_RemoveExamFromAllTables (long ExaCod)
    /***** Remove all events in this exam *****/
    ExaEvt_RemoveEventsInExamFromAllTables (ExaCod);
 
-   /***** Remove exam question *****/
+   /***** Remove exam questions *****/
    DB_QueryDELETE ("can not remove exam questions",
-		   "DELETE FROM exa_questions WHERE ExaCod=%ld",
+		   "DELETE FROM exa_set_questions"
+		   " USING exa_sets,exa_set_questions"
+		   " WHERE exa_sets.ExaCod=%ld"
+		   " AND exa_sets.SetCod=exa_set_questions.SetCod",
+		   ExaCod);
+
+   /***** Remove exam sets *****/
+   DB_QueryDELETE ("can not remove exam sets",
+		   "DELETE FROM exa_sets"
+		   " WHERE ExaCod=%ld",
 		   ExaCod);
 
    /***** Remove exam *****/
@@ -1203,10 +1212,19 @@ void Exa_RemoveExamsCrs (long CrsCod)
 
    /***** Remove the questions in exams *****/
    DB_QueryDELETE ("can not remove questions in course exams",
-		   "DELETE FROM exa_questions"
-		   " USING exa_exams,exa_questions"
+		   "DELETE FROM exa_set_questions"
+		   " USING exa_exams,exa_sets,exa_set_questions"
 		   " WHERE exa_exams.CrsCod=%ld"
-		   " AND exa_exams.ExaCod=exa_questions.ExaCod",
+		   " AND exa_exams.ExaCod=exa_sets.ExaCod",
+		   " AND exa_sets.SetCod=exa_set_questions.SetCod",
+                   CrsCod);
+
+   /***** Remove the sets in exams *****/
+   DB_QueryDELETE ("can not remove sets in course exams",
+		   "DELETE FROM exa_sets"
+		   " USING exa_exams,exa_sets"
+		   " WHERE exa_exams.CrsCod=%ld"
+		   " AND exa_exams.ExaCod=exa_sets.ExaCod",
                    CrsCod);
 
    /***** Remove the exams *****/
@@ -1678,7 +1696,7 @@ long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd)
 
    /***** Get question code of the question to be moved up *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get question code",
-			"SELECT QstCod FROM exa_questions"
+			"SELECT QstCod FROM exa_set_questions"
 			" WHERE ExaCod=%ld AND QstInd=%u",
 			ExaCod,QstInd))
       Lay_ShowErrorAndExit ("Error: wrong question index.");
@@ -1710,7 +1728,7 @@ unsigned Exa_GetPrevQuestionIndexInExam (long ExaCod,unsigned QstInd)
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
    if (!DB_QuerySELECT (&mysql_res,"can not get previous question index",
-			"SELECT MAX(QstInd) FROM exa_questions"
+			"SELECT MAX(QstInd) FROM exa_set_questions"
 			" WHERE ExaCod=%ld AND QstInd<%u",
 			ExaCod,QstInd))
       Lay_ShowErrorAndExit ("Error: previous question index not found.");
@@ -1744,7 +1762,7 @@ unsigned Exa_GetNextQuestionIndexInExam (long ExaCod,unsigned QstInd)
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
    if (!DB_QuerySELECT (&mysql_res,"can not get next question index",
-			"SELECT MIN(QstInd) FROM exa_questions"
+			"SELECT MIN(QstInd) FROM exa_set_questions"
 			" WHERE ExaCod=%ld AND QstInd>%u",
 			ExaCod,QstInd))
       Lay_ShowErrorAndExit ("Error: next question index not found.");
@@ -1964,69 +1982,69 @@ double Exa_GetNumQstsPerCrsExam (Hie_Level_t Scope)
       case Hie_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
 			 "SELECT AVG(NumQsts) FROM"
-			 " (SELECT COUNT(exa_questions.QstCod) AS NumQsts"
-			 " FROM exa_exams,exa_questions"
-			 " WHERE exa_exams.ExaCod=exa_questions.ExaCod"
-			 " GROUP BY exa_questions.ExaCod) AS NumQstsTable");
+			 " (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+			 " FROM exa_exams,exa_set_questions"
+			 " WHERE exa_exams.ExaCod=exa_set_questions.ExaCod"
+			 " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable");
          break;
       case Hie_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
 			 "SELECT AVG(NumQsts) FROM"
-			 " (SELECT COUNT(exa_questions.QstCod) AS NumQsts"
-			 " FROM institutions,centres,degrees,courses,exa_exams,exa_questions"
+			 " (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+			 " FROM institutions,centres,degrees,courses,exa_exams,exa_set_questions"
 			 " WHERE institutions.CtyCod=%ld"
 			 " AND institutions.InsCod=centres.InsCod"
 			 " AND centres.CtrCod=degrees.CtrCod"
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=exa_exams.CrsCod"
-			 " AND exa_exams.ExaCod=exa_questions.ExaCod"
-			 " GROUP BY exa_questions.ExaCod) AS NumQstsTable",
+			 " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
+			 " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
                          Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
 			 "SELECT AVG(NumQsts) FROM"
-			 " (SELECT COUNT(exa_questions.QstCod) AS NumQsts"
-			 " FROM centres,degrees,courses,exa_exams,exa_questions"
+			 " (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+			 " FROM centres,degrees,courses,exa_exams,exa_set_questions"
 			 " WHERE centres.InsCod=%ld"
 			 " AND centres.CtrCod=degrees.CtrCod"
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=exa_exams.CrsCod"
-			 " AND exa_exams.ExaCod=exa_questions.ExaCod"
-			 " GROUP BY exa_questions.ExaCod) AS NumQstsTable",
+			 " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
+			 " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
 		         Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
 			 "SELECT AVG(NumQsts) FROM"
-			 " (SELECT COUNT(exa_questions.QstCod) AS NumQsts"
-			 " FROM degrees,courses,exa_exams,exa_questions"
+			 " (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+			 " FROM degrees,courses,exa_exams,exa_set_questions"
 			 " WHERE degrees.CtrCod=%ld"
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=exa_exams.CrsCod"
-			 " AND exa_exams.ExaCod=exa_questions.ExaCod"
-			 " GROUP BY exa_questions.ExaCod) AS NumQstsTable",
+			 " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
+			 " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
 			 "SELECT AVG(NumQsts) FROM"
-			 " (SELECT COUNT(exa_questions.QstCod) AS NumQsts"
-			 " FROM courses,exa_exams,exa_questions"
+			 " (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+			 " FROM courses,exa_exams,exa_set_questions"
 			 " WHERE courses.DegCod=%ld"
 			 " AND courses.CrsCod=exa_exams.CrsCod"
-			 " AND exa_exams.ExaCod=exa_questions.ExaCod"
-			 " GROUP BY exa_questions.ExaCod) AS NumQstsTable",
+			 " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
+			 " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
 		         Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
 			 "SELECT AVG(NumQsts) FROM"
-			 " (SELECT COUNT(exa_questions.QstCod) AS NumQsts"
-			 " FROM exa_exams,exa_questions"
+			 " (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+			 " FROM exa_exams,exa_set_questions"
 			 " WHERE exa_exams.Cod=%ld"
-			 " AND exa_exams.ExaCod=exa_questions.ExaCod"
-			 " GROUP BY exa_questions.ExaCod) AS NumQstsTable",
+			 " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
+			 " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
                          Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
@@ -2060,9 +2078,9 @@ void Exa_ShowTstTagsPresentInAnExam (long ExaCod)
 			     "SELECT tst_tags.TagTxt"	// row[0]
 			     " FROM"
 			     " (SELECT DISTINCT(tst_question_tags.TagCod)"
-			     " FROM tst_question_tags,exa_questions"
-			     " WHERE exa_questions.ExaCod=%ld"
-			     " AND exa_questions.QstCod=tst_question_tags.QstCod)"
+			     " FROM tst_question_tags,exa_set_questions"
+			     " WHERE exa_set_questions.ExaCod=%ld"
+			     " AND exa_set_questions.QstCod=tst_question_tags.QstCod)"
 			     " AS TagsCods,tst_tags"
 			     " WHERE TagsCods.TagCod=tst_tags.TagCod"
 			     " ORDER BY tst_tags.TagTxt",
@@ -2089,9 +2107,9 @@ void Exa_GetScoreRange (long ExaCod,double *MinScore,double *MaxScore)
    NumRows = (unsigned)
 	     DB_QuerySELECT (&mysql_res,"can not get data of a question",
 			     "SELECT COUNT(tst_answers.AnsInd) AS N"
-			     " FROM tst_answers,exa_questions"
-			     " WHERE exa_questions.ExaCod=%ld"
-			     " AND exa_questions.QstCod=tst_answers.QstCod"
+			     " FROM tst_answers,exa_set_questions"
+			     " WHERE exa_set_questions.ExaCod=%ld"
+			     " AND exa_set_questions.QstCod=tst_answers.QstCod"
 			     " GROUP BY tst_answers.QstCod",
 			     ExaCod);
    for (NumRow = 0, *MinScore = *MaxScore = 0.0;

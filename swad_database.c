@@ -1216,22 +1216,6 @@ mysql> DESCRIBE exa_prints;
 		   "UNIQUE INDEX(PrnCod),"
 		   "UNIQUE INDEX(EvtCod,UsrCod))");
 
-   /***** Table exa_questions *****/
-/*
-mysql> DESCRIBE exa_questions;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| SetCod | int(11) | NO   | PRI | NULL    |       |
-| QstCod | int(11) | NO   | PRI | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_questions ("
-			"SetCod INT NOT NULL,"
-			"QstCod INT NOT NULL,"
-		   "UNIQUE INDEX(SetCod,QstCod))");
-
    /***** Table exa_results *****/
 /*
 mysql> DESCRIBE exa_results;
@@ -1257,6 +1241,59 @@ mysql> DESCRIBE exa_results;
 			"NumQstsNotBlank INT NOT NULL DEFAULT 0,"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(EvtCod,UsrCod))");
+
+   /***** Table exa_set_answers *****/
+/*
+mysql> DESCRIBE exa_set_answers;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| QstCod   | int(11)       | NO   | PRI | NULL    |       |
+| AnsInd   | tinyint(4)    | NO   | PRI | NULL    |       |
+| Answer   | text          | NO   |     | NULL    |       |
+| Feedback | text          | NO   |     | NULL    |       |
+| MedCod   | int(11)       | NO   | MUL | -1      |       |
+| Correct  | enum('N','Y') | NO   |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_set_answers ("
+			"QstCod INT NOT NULL,"
+			"AnsInd TINYINT NOT NULL,"
+			"Answer TEXT NOT NULL,"		// Tst_MAX_BYTES_ANSWER_OR_FEEDBACK
+			"Feedback TEXT NOT NULL,"	// Tst_MAX_BYTES_ANSWER_OR_FEEDBACK
+			"MedCod INT NOT NULL DEFAULT -1,"
+			"Correct ENUM('N','Y') NOT NULL,"
+		   "UNIQUE INDEX(QstCod,AnsInd),"
+		   "INDEX(MedCod))");
+
+   /***** Table exa_set_questions *****/
+/*
+mysql> DESCRIBE exa_set_questions;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| QstCod   | int(11)       | NO   | PRI | NULL    |       |
+| AnsInd   | tinyint(4)    | NO   | PRI | NULL    |       |
+| Answer   | text          | NO   |     | NULL    |       |
+| Feedback | text          | NO   |     | NULL    |       |
+| MedCod   | int(11)       | NO   | MUL | -1      |       |
+| Correct  | enum('N','Y') | NO   |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_set_questions ("
+			"QstCod INT NOT NULL AUTO_INCREMENT,"
+			"SetCod INT NOT NULL,"
+			"AnsType ENUM ('int','float','true_false','unique_choice','multiple_choice','text') NOT NULL,"
+			"Shuffle ENUM('N','Y') NOT NULL,"
+			"Stem TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
+			"Feedback TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
+			"MedCod INT NOT NULL DEFAULT -1,"
+		   "UNIQUE INDEX(QstCod),"
+		   "UNIQUE INDEX(SetCod,QstCod),"
+		   "INDEX(MedCod))");
 
    /***** Table exa_sets *****/
 /*

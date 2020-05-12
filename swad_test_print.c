@@ -374,7 +374,7 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
       /* Compute question score */
       Tst_QstConstructor (&Question);
       Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
-      Question.Answer.Type = Tst_GetQstAnswerType (Question.QstCod);
+      Question.Answer.Type = Tst_GetQstAnswerTypeFromDB (Question.QstCod);
       TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
       Tst_QstDestructor (&Question);
 
