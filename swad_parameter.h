@@ -86,8 +86,7 @@ unsigned Par_GetParAndChangeFormat (const char *ParamName,char *ParamValue,size_
 
 bool Par_GetNextStrUntilSeparParamMult (const char **StrSrc,char *StrDst,size_t LongMax);
 bool Par_GetNextStrUntilComma (const char **StrSrc,char *StrDst,size_t LongMax);
-void Par_ReplaceSeparatorMultipleByComma (const char *StrSrc,char *StrDst);
-void Par_ReplaceCommaBySeparatorMultiple (char *Str);
+void Par_ReplaceSeparatorMultipleByComma (char *Str);
 
 void Par_PutHiddenParamUnsigned (const char *Id,const char *ParamName,unsigned Value);
 void Par_PutHiddenParamUnsignedDisabled (const char *Id,const char *ParamName,unsigned Value);

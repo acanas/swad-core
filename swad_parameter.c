@@ -1010,32 +1010,50 @@ bool Par_GetNextStrUntilSeparParamMult (const char **StrSrc,char *StrDst,size_t 
   }
 
 /*****************************************************************************/
-/************ Replace any character between 1 and 31 by a comma **************/
+/***** Search in the string StrSrc the next string until find separator ******/
 /*****************************************************************************/
+// Modifies *StrSrc
+// When StrDst is NULL, nothing is stored
+// Return true if characters found
 
-void Par_ReplaceSeparatorMultipleByComma (const char *StrSrc,char *StrDst)
+bool Par_GetNextStrUntilComma (const char **StrSrc,char *StrDst,size_t LongMax)
   {
-   for (;
-	*StrSrc;
-	StrSrc++, StrDst++)
-      *StrDst = ((unsigned char) *StrSrc < 32) ? ',' :
-	                                         *StrSrc;
-   *StrDst = '\0';
+   size_t i = 0;
+   unsigned char Ch;	// Must be unsigned to work with characters > 127
+   bool CharsFound = false;
+
+   do
+      if ((Ch = (unsigned char) **StrSrc))
+	 (*StrSrc)++;
+   while (Ch == ',');	// Skip commas
+
+   while (Ch && Ch != ',')		// Until special character or end
+     {
+      CharsFound = true;
+      if (i < LongMax)
+         if (StrDst)
+            StrDst[i++] = (char) Ch;
+      if ((Ch = (unsigned char) **StrSrc))
+	 (*StrSrc)++;
+     }
+
+   if (StrDst)
+      StrDst[i] = '\0';
+
+   return CharsFound;
   }
 
 /*****************************************************************************/
 /******** Replace each comma by the separator of multiple parameters *********/
 /*****************************************************************************/
 
-void Par_ReplaceCommaBySeparatorMultiple (char *Str)
+void Par_ReplaceSeparatorMultipleByComma (char *Str)
   {
-   extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
-
    for (;
 	*Str;
 	Str++)
-      if (*Str == ',')
-	 *Str = Par_SEPARATOR_PARAM_MULTIPLE[0];
+      if ((unsigned char) *Str < 32)
+	 *Str = ',';
   }
 
 /*****************************************************************************/

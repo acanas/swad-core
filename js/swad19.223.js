@@ -680,9 +680,34 @@ function updateExamPrint (idDiv,idInput,nameInput,Params) {
 			}
 		};
 
-		var input = document.getElementById(idInput);
-		if (input)
-		   Params = Params + '&' + nameInput + '=' + input.value;
+		var inputElem = document.getElementById(idInput);
+
+		if (inputElem)
+			if (inputElem.type) {
+				if (inputElem.type === 'radio') {
+					if (inputElem.checked)
+						Params += '&' + nameInput + '=' + inputElem.value;
+				}
+				else if (inputElem.type === 'checkbox') {
+					var inputElems = inputElem.form.elements;
+					var i = 0;
+
+					// First checkbox checked
+					for (; i<inputElems.length; i++)
+						if (inputElems[i].checked) {
+							Params += '&' + nameInput + '=' + inputElems[i].value;
+							i++;
+							break;
+						}
+
+					// Other checked checkboxes
+					for (; i<inputElems.length; i++)
+						if (inputElems[i].checked)
+							Params += ',' + inputElems[i].value;
+				}
+				else
+					Params += '&' + nameInput + '=' + inputElem.value;
+			}
 
 		objXMLHttp.open('POST',ActionAJAX,true);
 		objXMLHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');

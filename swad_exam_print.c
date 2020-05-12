@@ -103,7 +103,7 @@ static void ExaPrn_ShowTableWithQstsToFill (struct ExaPrn_Print *Print);
 static void ExaPrn_WriteQstAndAnsToFill (struct ExaPrn_Print *Print,
                                          unsigned NumQst,
                                          const struct Tst_Question *Question);
-static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
+static void ExaPrn_WriteAnswersToFill (struct ExaPrn_Print *Print,
                                        unsigned NumQst,
                                        const struct Tst_Question *Question);
 static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
@@ -112,7 +112,7 @@ static void ExaPrn_WriteFloatAnsToFill (const struct ExaPrn_Print *Print,
 				        unsigned NumQst);
 static void ExaPrn_WriteTFAnsToFill (const struct ExaPrn_Print *Print,
 	                             unsigned NumQst);
-static void ExaPrn_WriteChoiceAnsToFill (const struct ExaPrn_Print *Print,
+static void ExaPrn_WriteChoiceAnsToFill (struct ExaPrn_Print *Print,
                                          unsigned NumQst,
                                          const struct Tst_Question *Question);
 static void ExaPrn_WriteTextAnsToFill (const struct ExaPrn_Print *Print,
@@ -456,22 +456,19 @@ static void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
    MYSQL_ROW row;
    unsigned NumQsts;
    unsigned NumQst;
-   Tst_AnswerType_t AnswerType;
 
    /***** Get questions of an exam print from database *****/
    NumQsts =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions"
 					 " of an exam print",
-			      "SELECT exa_print_questions.QstCod,"	// row[0]
-			             "exa_print_questions.SetCod,"	// row[1]
-				     "tst_questions.AnsType,"		// row[2]
-			             "exa_print_questions.Score,"	// row[3]
-			             "exa_print_questions.Indexes,"	// row[4]
-			             "exa_print_questions.Answers"	// row[5]
-			      " FROM exa_print_questions LEFT JOIN tst_questions"
-			      " ON (exa_print_questions.QstCod=tst_questions.QstCod)"
-			      " WHERE exa_print_questions.PrnCod=%ld"
-			      " ORDER BY exa_print_questions.QstInd",
+			      "SELECT QstCod,"	// row[0]
+			             "SetCod,"	// row[1]
+			             "Score,"	// row[2]
+			             "Indexes,"	// row[3]
+			             "Answers"	// row[4]
+			      " FROM exa_print_questions"
+			      " WHERE PrnCod=%ld"
+			      " ORDER BY QstInd",
 			      Print->PrnCod);
 
    /***** Get questions *****/
@@ -490,30 +487,19 @@ static void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 	 if ((Print->PrintedQuestions[NumQst].SetCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of set.");
 
-	 /* Get answer type (row[2]) */
-         AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-
-         /* Get score (row[3]) */
+         /* Get score (row[2]) */
 	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-         if (sscanf (row[3],"%lf",&Print->PrintedQuestions[NumQst].Score) != 1)
+         if (sscanf (row[2],"%lf",&Print->PrintedQuestions[NumQst].Score) != 1)
             Lay_ShowErrorAndExit ("Wrong question score.");
          Str_SetDecimalPointToLocal ();	// Return to local system
 
-	 /* Get indexes for this question (row[4]) */
-	 Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[4],
+	 /* Get indexes for this question (row[3]) */
+	 Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[3],
 		   Tst_MAX_BYTES_INDEXES_ONE_QST);
 
-	 /* Get answers selected by user for this question (row[5]) */
-	 Str_Copy (Print->PrintedQuestions[NumQst].StrAnswers,row[5],
+	 /* Get answers selected by user for this question (row[4]) */
+	 Str_Copy (Print->PrintedQuestions[NumQst].StrAnswers,row[4],
 		   Tst_MAX_BYTES_ANSWERS_ONE_QST);
-
-	 /* Replace each comma by a separator of multiple parameters */
-	 /* In database commas are used as separators instead of special chars */
-	 Par_ReplaceCommaBySeparatorMultiple (Print->PrintedQuestions[NumQst].StrIndexes);
-	 if (AnswerType == Tst_ANS_MULTIPLE_CHOICE)
-	    // Only multiple choice questions have multiple answers separated by commas
-	    // Other types of questions have a unique answer, and comma may be part of that answer
-	    Par_ReplaceCommaBySeparatorMultiple (Print->PrintedQuestions[NumQst].StrAnswers);
 	}
 
    /***** Free structure that stores the query result *****/
@@ -544,11 +530,9 @@ static void ExaPrn_ShowExamPrintToFillIt (const char *Title,
    if (Print->NumQsts)
      {
       /***** Show table with questions to answer *****/
-      Frm_StartFormNoAction ();	// Form that can not be submitted, to avoid enter key to send it
       HTM_DIV_Begin ("id=\"examprint\"");	// Used for AJAX based refresh
       ExaPrn_ShowTableWithQstsToFill (Print);
       HTM_DIV_End ();				// Used for AJAX based refresh
-      Frm_EndForm ();
 
       /***** Form to end/close this exam print *****/
       Frm_StartForm (ActEndExaPrn);
@@ -653,7 +637,9 @@ static void ExaPrn_WriteQstAndAnsToFill (struct ExaPrn_Print *Print,
 		  "TEST_MED_SHOW");
 
    /* Answers */
+   Frm_StartFormNoAction ();	// Form that can not be submitted, to avoid enter key to send it
    ExaPrn_WriteAnswersToFill (Print,NumQst,Question);
+   Frm_EndForm ();
 
    HTM_TD_End ();
 
@@ -665,7 +651,7 @@ static void ExaPrn_WriteQstAndAnsToFill (struct ExaPrn_Print *Print,
 /***************** Write answers of a question to fill them ******************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
+static void ExaPrn_WriteAnswersToFill (struct ExaPrn_Print *Print,
                                        unsigned NumQst,
                                        const struct Tst_Question *Question)
   {
@@ -706,16 +692,15 @@ static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
    snprintf (Id,sizeof (Id),
 	     "Ans%010u",
 	     NumQst);
-   HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"%s\""
+   HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"Ans\""
 	     " size=\"11\" maxlength=\"11\" value=\"%s\"",
-	     Id,Id,
+	     Id,
 	     Print->PrintedQuestions[NumQst].StrAnswers);
-   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','%s',"
+   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
 			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
 		         " return false;\"",	// return false is necessary to not submit form
-	     Id,Id,
-	     Act_GetActCod (ActAnsExaPrn),
-	     Gbl.Session.Id,Print->EvtCod,NumQst);
+	     Id,
+	     Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->EvtCod,NumQst);
    HTM_Txt (" />");
   }
 
@@ -732,16 +717,15 @@ static void ExaPrn_WriteFloatAnsToFill (const struct ExaPrn_Print *Print,
    snprintf (Id,sizeof (Id),
 	     "Ans%010u",
 	     NumQst);
-   HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"%s\""
+   HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"Ans\""
 	     " size=\"11\" maxlength=\"%u\" value=\"%s\"",
-	     Id,Id,Tst_MAX_BYTES_FLOAT_ANSWER,
+	     Id,Tst_MAX_BYTES_FLOAT_ANSWER,
 	     Print->PrintedQuestions[NumQst].StrAnswers);
-   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','%s',"
+   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
 			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
 		         " return false;\"",	// return false is necessary to not submit form
-	     Id,Id,
-	     Act_GetActCod (ActAnsExaPrn),
-	     Gbl.Session.Id,Print->EvtCod,NumQst);
+	     Id,
+	     Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->EvtCod,NumQst);
    HTM_Txt (" />");
   }
 
@@ -762,11 +746,11 @@ static void ExaPrn_WriteTFAnsToFill (const struct ExaPrn_Print *Print,
    snprintf (Id,sizeof (Id),
 	     "Ans%010u",
 	     NumQst);
-   HTM_TxtF ("<select id=\"%s\" name=\"%s\"",Id,Id);
-   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','%s',"
+   HTM_TxtF ("<select id=\"%s\" name=\"Ans\"",Id);
+   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
 			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
 		         " return false;\"",	// return false is necessary to not submit form
-	     Id,Id,
+	     Id,
 	     Act_GetActCod (ActAnsExaPrn),
 	     Gbl.Session.Id,Print->EvtCod,NumQst);
    HTM_Txt (" />");
@@ -780,7 +764,7 @@ static void ExaPrn_WriteTFAnsToFill (const struct ExaPrn_Print *Print,
 /******** Write single or multiple choice answer when seeing a test **********/
 /*****************************************************************************/
 
-static void ExaPrn_WriteChoiceAnsToFill (const struct ExaPrn_Print *Print,
+static void ExaPrn_WriteChoiceAnsToFill (struct ExaPrn_Print *Print,
                                          unsigned NumQst,
                                          const struct Tst_Question *Question)
   {
@@ -816,28 +800,31 @@ static void ExaPrn_WriteChoiceAnsToFill (const struct ExaPrn_Print *Print,
 		"Ans%010u",
 		NumQst);
       if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE)
-	 HTM_INPUT_RADIO (Id,false,
-			  "id=\"Ans%010u_%u\" value=\"%u\"%s"
-			  " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u);\"",
-			  NumQst,NumOpt,
-			  Indexes[NumOpt],
-			  UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
-				                           "",
-                          NumQst,Question->Answer.NumOptions);
+        {
+	 HTM_TxtF ("<input type=\"radio\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"%s",
+	           Id,NumOpt,Indexes[NumOpt],
+	           UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
+				                 "");
+	 HTM_TxtF (" onclick=\"updateExamPrint('examprint','%s_%u','Ans',"
+		   "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
+		   " return false;\"",	// return false is necessary to not submit form
+		   Id,NumOpt,
+		   Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->EvtCod,NumQst);
+	 HTM_Txt (" />");
+        }
       else // Answer.Type == Tst_ANS_MULTIPLE_CHOICE
-	 HTM_INPUT_CHECKBOX (Id,HTM_DONT_SUBMIT_ON_CHANGE,
-			     "id=\"Ans%010u_%u\" value=\"%u\"%s",
-			     NumQst,NumOpt,
-			     Indexes[NumOpt],
-			     UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
-				                           "");
-      /* HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','%s',"
-			       "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
-			       " return false;\"",	// return false is necessary to not submit form
-		   Id,Id,
-		   Act_GetActCod (ActAnsExaPrn),
-		   Gbl.Session.Id,Print->EvtCod,NumQst);
-	 HTM_Txt (" />"); */
+	{
+	 HTM_TxtF ("<input type=\"checkbox\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"%s",
+	           Id,NumOpt,Indexes[NumOpt],
+	           UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
+				                 "");
+	 HTM_TxtF (" onclick=\"updateExamPrint('examprint','%s_%u','Ans',"
+		   "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
+		   " return false;\"",	// return false is necessary to not submit form
+		   Id,NumOpt,
+		   Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->EvtCod,NumQst);
+	 HTM_Txt (" />");
+        }
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
@@ -876,16 +863,15 @@ static void ExaPrn_WriteTextAnsToFill (const struct ExaPrn_Print *Print,
    snprintf (Id,sizeof (Id),
 	     "Ans%010u",
 	     NumQst);
-   HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"%s\""
+   HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"Ans\""
 	     " size=\"40\" maxlength=\"%u\" value=\"%s\"",
-	     Id,Id,Tst_MAX_CHARS_ANSWERS_ONE_QST,
+	     Id,Tst_MAX_CHARS_ANSWERS_ONE_QST,
 	     Print->PrintedQuestions[NumQst].StrAnswers);
-   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','%s',"
+   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
 			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
 		         " return false;\"",	// return false is necessary to not submit form
-	     Id,Id,
-	     Act_GetActCod (ActAnsExaPrn),
-	     Gbl.Session.Id,Print->EvtCod,NumQst);
+	     Id,
+	     Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->EvtCod,NumQst);
    HTM_Txt (" />");
   }
 
@@ -932,17 +918,13 @@ void ExaPrn_ReceivePrintAnswer (void)
 static unsigned ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print)
   {
    unsigned NumQst;
-   char AnsName[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Get question index from form *****/
    NumQst = ExaPrn_GetParamQstInd ();
 
    /***** Get answers selected by user for this question *****/
-   snprintf (AnsName,sizeof (AnsName),
-	     "Ans%010u",
-	     NumQst);
-   Par_GetParMultiToText (AnsName,Print->PrintedQuestions[NumQst].StrAnswers,
-			  Tst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
+   Par_GetParToText ("Ans",Print->PrintedQuestions[NumQst].StrAnswers,
+		     Tst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
 
    return NumQst;
   }
@@ -1031,14 +1013,6 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
 static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
                                            unsigned NumQst)
   {
-   char StrIndexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
-   char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
-
-   /***** Replace each separator of multiple parameters by a comma *****/
-   /* In database commas are used as separators instead of special chars */
-   Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrIndexes,StrIndexes);
-   Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrAnswers,StrAnswers);
-
    /***** Insert question and user's answers into database *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    DB_QueryREPLACE ("can not update a question in an exam print",
@@ -1050,8 +1024,8 @@ static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
 		    NumQst,	// 0, 1, 2, 3...
 		    Print->PrintedQuestions[NumQst].SetCod,
 		    Print->PrintedQuestions[NumQst].Score,
-		    StrIndexes,
-		    StrAnswers);
+		    Print->PrintedQuestions[NumQst].StrIndexes,
+		    Print->PrintedQuestions[NumQst].StrAnswers);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 

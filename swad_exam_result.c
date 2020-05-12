@@ -1365,11 +1365,6 @@ void ExaRes_GetExamResultQuestionsFromDB (long EvtCod,long UsrCod,
         }
       else				// UsrAnswer.AnsInd < 0 ==> no answer selected
 	 Print->PrintedQuestions[NumQst].StrAnswers[0] = '\0';	// Empty answer
-
-      /* Replace each comma by a separator of multiple parameters */
-      /* In database commas are used as separators instead of special chars */
-      Par_ReplaceCommaBySeparatorMultiple (Print->PrintedQuestions[NumQst].StrIndexes);
-      Par_ReplaceCommaBySeparatorMultiple (Print->PrintedQuestions[NumQst].StrAnswers);
      }
 
    /***** Free structure that stores the query result *****/

@@ -2015,7 +2015,6 @@ void ExaEvt_GetIndexes (long EvtCod,unsigned QstInd,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get indexes from string *****/
-   Par_ReplaceCommaBySeparatorMultiple (StrIndexesOneQst);
    TstPrn_GetIndexesFromStr (StrIndexesOneQst,Indexes);
   }
 

@@ -1690,7 +1690,6 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get indexes from string *****/
-   Par_ReplaceCommaBySeparatorMultiple (StrIndexesOneQst);
    TstPrn_GetIndexesFromStr (StrIndexesOneQst,Indexes);
   }
 

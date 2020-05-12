@@ -672,6 +672,7 @@ static void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print)
 		NumQst);
       Par_GetParMultiToText (StrAns,Print->PrintedQuestions[NumQst].StrAnswers,
                              Tst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
+      Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrAnswers);
      }
   }
 
@@ -2685,7 +2686,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
 void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstPrn_PrintedQuestion *PrintedQuestion,
 					          bool Shuffle)
   {
-   extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
+   // extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    struct Tst_Question Question;
    unsigned NumOpt;
    MYSQL_RES *mysql_res;
@@ -2732,7 +2733,8 @@ void Tst_GenerateChoiceIndexesDependingOnShuffle (struct TstPrn_PrintedQuestion 
       if (NumOpt == 0)
 	 snprintf (StrInd,sizeof (StrInd),"%u",Index);
       else
-	 snprintf (StrInd,sizeof (StrInd),"%s%u",Par_SEPARATOR_PARAM_MULTIPLE,Index);
+	 // snprintf (StrInd,sizeof (StrInd),"%s%u",Par_SEPARATOR_PARAM_MULTIPLE,Index);
+	 snprintf (StrInd,sizeof (StrInd),",%u",Index);
       Str_Concat (PrintedQuestion->StrIndexes,StrInd,
                   Tst_MAX_BYTES_INDEXES_ONE_QST);
      }

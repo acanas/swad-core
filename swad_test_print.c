@@ -647,7 +647,7 @@ void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION && *Ptr;
 	NumOpt++)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneIndex,Cns_MAX_DECIMAL_DIGITS_UINT);
+      Par_GetNextStrUntilComma (&Ptr,StrOneIndex,Cns_MAX_DECIMAL_DIGITS_UINT);
 
       if (sscanf (StrOneIndex,"%u",&(Indexes[NumOpt])) != 1)
 	 Lay_ShowErrorAndExit ("Wrong index of answer.");
@@ -686,7 +686,7 @@ void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION && *Ptr;
 	NumOpt++)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneAnswer,Cns_MAX_DECIMAL_DIGITS_UINT);
+      Par_GetNextStrUntilComma (&Ptr,StrOneAnswer,Cns_MAX_DECIMAL_DIGITS_UINT);
 
       if (sscanf (StrOneAnswer,"%u",&AnsUsr) != 1)
 	 Lay_ShowErrorAndExit ("Bad user's answer.");
@@ -1386,14 +1386,6 @@ static void TstPrn_WriteHeadUserCorrect (struct UsrData *UsrDat)
 static void TstPrn_StoreOneQstOfPrintInDB (const struct TstPrn_Print *Print,
                                            unsigned NumQst)
   {
-   char StrIndexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
-   char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
-
-   /***** Replace each separator of multiple parameters by a comma *****/
-   /* In database commas are used as separators instead of special chars */
-   Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrIndexes,StrIndexes);
-   Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrAnswers,StrAnswers);
-
    /***** Insert question and user's answers into database *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    DB_QueryREPLACE ("can not update a question of a test exam",
@@ -1404,8 +1396,8 @@ static void TstPrn_StoreOneQstOfPrintInDB (const struct TstPrn_Print *Print,
 		    Print->PrnCod,Print->PrintedQuestions[NumQst].QstCod,
 		    NumQst,	// 0, 1, 2, 3...
 		    Print->PrintedQuestions[NumQst].Score,
-		    StrIndexes,
-		    StrAnswers);
+		    Print->PrintedQuestions[NumQst].StrIndexes,
+		    Print->PrintedQuestions[NumQst].StrAnswers);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
@@ -2266,21 +2258,18 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
    MYSQL_ROW row;
    unsigned NumQsts;
    unsigned NumQst;
-   Tst_AnswerType_t AnswerType;
 
    /***** Get questions of a test exam print from database *****/
    NumQsts =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions"
 					 " of a test exam",
-			      "SELECT tst_exam_questions.QstCod,"	// row[0]
-				     "tst_questions.AnsType,"		// row[1]
-			             "tst_exam_questions.Score,"	// row[2]
-			             "tst_exam_questions.Indexes,"	// row[3]
-			             "tst_exam_questions.Answers"	// row[4]
-			      " FROM tst_exam_questions LEFT JOIN tst_questions"
-			      " ON (tst_exam_questions.QstCod=tst_questions.QstCod)"
-			      " WHERE tst_exam_questions.ExaCod=%ld"
-			      " ORDER BY tst_exam_questions.QstInd",
+			      "SELECT QstCod,"	// row[0]
+			             "Score,"	// row[1]
+			             "Indexes,"	// row[2]
+			             "Answers"	// row[3]
+			      " FROM tst_exam_questions"
+			      " WHERE ExaCod=%ld"
+			      " ORDER BY QstInd",
 			      Print->PrnCod);
 
    /***** Get questions *****/
@@ -2295,30 +2284,19 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
 	 if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of question.");
 
-	 /* Get answer type (row[1]) */
-         AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-
-         /* Get score (row[2]) */
+	 /* Get score (row[1]) */
 	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-         if (sscanf (row[2],"%lf",&Print->PrintedQuestions[NumQst].Score) != 1)
+         if (sscanf (row[1],"%lf",&Print->PrintedQuestions[NumQst].Score) != 1)
             Lay_ShowErrorAndExit ("Wrong question score.");
          Str_SetDecimalPointToLocal ();	// Return to local system
 
-	 /* Get indexes for this question (row[3]) */
-	 Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[3],
+	 /* Get indexes for this question (row[2]) */
+	 Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[2],
 		   Tst_MAX_BYTES_INDEXES_ONE_QST);
 
-	 /* Get answers selected by user for this question (row[4]) */
-	 Str_Copy (Print->PrintedQuestions[NumQst].StrAnswers,row[4],
+	 /* Get answers selected by user for this question (row[3]) */
+	 Str_Copy (Print->PrintedQuestions[NumQst].StrAnswers,row[3],
 		   Tst_MAX_BYTES_ANSWERS_ONE_QST);
-
-	 /* Replace each comma by a separator of multiple parameters */
-	 /* In database commas are used as separators instead of special chars */
-	 Par_ReplaceCommaBySeparatorMultiple (Print->PrintedQuestions[NumQst].StrIndexes);
-	 if (AnswerType == Tst_ANS_MULTIPLE_CHOICE)
-	    // Only multiple choice questions have multiple answers separated by commas
-	    // Other types of questions have a unique answer, and comma may be part of that answer
-	    Par_ReplaceCommaBySeparatorMultiple (Print->PrintedQuestions[NumQst].StrAnswers);
 	}
 
    /***** Free structure that stores the query result *****/
