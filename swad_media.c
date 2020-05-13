@@ -1458,9 +1458,6 @@ void Med_ShowMedia (const struct Media *Media,
 	 if (PutLink)
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Media->URL);
 
-	 /* Create a temporary public directory used to show the media */
-	 Brw_CreateDirDownloadTmp ();
-
 	 /* Build path to private directory with the media */
 	 snprintf (PathMedPriv,sizeof (PathMedPriv),
 		   "%s/%c%c",
@@ -1516,6 +1513,7 @@ static void Med_ShowJPG (const struct Media *Media,
   {
    extern const char *Txt_File_not_found;
    char FileNameMedia[NAME_MAX + 1];
+   char TmpPubDir[PATH_MAX + 1];
    char *FullPathMediaPriv;
    char *URL;
 
@@ -1530,15 +1528,23 @@ static void Med_ShowJPG (const struct Media *Media,
    /***** Check if private media file exists *****/
    if (Fil_CheckIfPathExists (FullPathMediaPriv))
      {
-      /***** Create symbolic link from temporary public directory to private file
-	     in order to gain access to it for showing/downloading *****/
-      Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMedia);
+      /***** Get cached public link to private file *****/
+      if (!Ses_GetPublicDirFromCache (FullPathMediaPriv,TmpPubDir))
+	{
+	 /***** Create symbolic link from temporary public directory to private file
+		in order to gain access to it for showing/downloading *****/
+	 Brw_CreateDirDownloadTmp ();
+	 Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMedia);
+
+	 snprintf (TmpPubDir,sizeof (TmpPubDir),
+	           "%s/%s",
+	           Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
+	 Ses_AddPublicDirToCache (FullPathMediaPriv,TmpPubDir);
+	}
 
       /***** Show media *****/
-      if (asprintf (&URL,"%s/%s/%s",
-		    Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-		    Gbl.FileBrowser.TmpPubDir.L,
-		    Gbl.FileBrowser.TmpPubDir.R) < 0)
+      if (asprintf (&URL,"%s/%s",
+		    Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
 	 Lay_NotEnoughMemoryExit ();
       HTM_IMG (URL,FileNameMedia,Media->Title,
 	       "class=\"%s\" lazyload=\"on\"",ClassMedia);	// Lazy load of the media
@@ -1579,6 +1585,7 @@ static void Med_ShowGIF (const struct Media *Media,
      {
       /***** Create symbolic link from temporary public directory to private file
 	     in order to gain access to it for showing/downloading *****/
+      Brw_CreateDirDownloadTmp ();
       Brw_CreateTmpPublicLinkToPrivateFile (FullPathGIFPriv,FileNameMedia);
 
       /***** Create URL pointing to symbolic link *****/
@@ -1605,6 +1612,7 @@ static void Med_ShowGIF (const struct Media *Media,
 	{
 	 /***** Create symbolic link from temporary public directory to private file
 		in order to gain access to it for showing/downloading *****/
+         Brw_CreateDirDownloadTmp ();
 	 Brw_CreateTmpPublicLinkToPrivateFile (FullPathPNGPriv,FileNameMedia);
 
 	 /***** Show static PNG and animated GIF *****/
@@ -1667,6 +1675,7 @@ static void Med_ShowVideo (const struct Media *Media,
      {
       /***** Create symbolic link from temporary public directory to private file
 	     in order to gain access to it for showing/downloading *****/
+      Brw_CreateDirDownloadTmp ();
       Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMediaPriv);
 
       /***** Create URL pointing to symbolic link *****/

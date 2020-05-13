@@ -548,11 +548,17 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.226 (2020-05-12)"
+#define Log_PLATFORM_VERSION	"SWAD 19.227 (2020-05-13)"
 #define CSS_FILE		"swad19.217.css"
 #define JS_FILE			"swad19.223.js"
 /*
-// TODO: Public link to images on exams should be cached during the current session. When session is closed ==> remove public link
+	Version 19.227:   May 13, 2020  Cache of linked images. (303586 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS file_cache (SessionId CHAR(43) NOT NULL,PrivPath TEXT COLLATE latin1_bin NOT NULL,TmpPubDir TEXT COLLATE latin1_bin NOT NULL,INDEX(SessionId));
+					If you want to use MyISAM:
+ALTER TABLE exa_set_answers ENGINE=MyISAM;
+ALTER TABLE exa_set_questions ENGINE=MyISAM;
+ALTER TABLE file_cache ENGINE=MyISAM;
 
 	Version 19.226:   May 12, 2020  Questions and answer are cloned from test bank to exams. (303468 lines)
 					18 changes necessary in database:

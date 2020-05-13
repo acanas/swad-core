@@ -198,6 +198,7 @@ void Brw_RemoveUsrFilesFromDB (long UsrCod);
 void Brw_PutHiddenParamFullTreeIfSelected (void *FullTree);
 
 void Brw_CreateDirDownloadTmp (void);
+
 void Brw_AskEditWorksCrs (void);
 void Brw_AskRemFileFromTree (void);
 void Brw_RemFileFromTree (void);

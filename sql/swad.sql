@@ -678,6 +678,14 @@ CREATE TABLE IF NOT EXISTS file_browser_size (
 	UNIQUE INDEX(FileBrowser,Cod,ZoneUsrCod),
 	INDEX(ZoneUsrCod));
 --
+-- Table file_cache: stores the media private paths linked from public directories in current session 
+--
+CREATE TABLE IF NOT EXISTS file_cache (
+	SessionId CHAR(43) NOT NULL,
+	PrivPath TEXT COLLATE latin1_bin NOT NULL,
+	TmpPubDir TEXT COLLATE latin1_bin NOT NULL,
+	INDEX(SessionId));
+--
 -- Table file_view: stores the number of times each user has seen each file
 --
 CREATE TABLE IF NOT EXISTS file_view (

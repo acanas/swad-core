@@ -118,6 +118,9 @@ void Ses_CloseSession (void)
   {
    if (Gbl.Usrs.Me.Logged)
      {
+      /***** Remove links to private files from cache *****/
+      Ses_RemovePublicDirsCache ();
+
       /***** Remove session from database *****/
       Ses_RemoveSessionFromDB ();
       Gbl.Session.IsOpen = false;
@@ -127,7 +130,9 @@ void Ses_CloseSession (void)
       /***** If there are no more sessions for current user ==> remove user from connected list *****/
       Con_RemoveOldConnected ();
 
+      /***** Remove unused data associated to expired sessions *****/
       Ses_RemoveHiddenParFromExpiredSessions ();
+      Ses_RemovePublicDirsFromExpiredSessions ();
 
       /***** Now, user is not logged in *****/
       Gbl.Usrs.Me.Role.LoggedBeforeCloseSession = Gbl.Usrs.Me.Role.Logged;
@@ -449,4 +454,83 @@ void Ses_GetHiddenParFromDB (const char *ParamName,char *ParamValue,
                 ParamName,(unsigned long) MaxBytes);
       Lay_ShowErrorAndExit (ErrorTxt);
      }
+  }
+
+/*****************************************************************************/
+/******** Get public directory used to link private path from cache **********/
+/*****************************************************************************/
+
+bool Ses_GetPublicDirFromCache (const char *FullPathMediaPriv,
+                                char TmpPubDir[PATH_MAX + 1])
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   bool Cached = false;
+
+   /***** Reset temporary directory *****/
+   TmpPubDir[0] = '\0';
+
+   if (Gbl.Session.IsOpen)
+     {
+      /***** Get temporary directory from cache *****/
+      if (DB_QuerySELECT (&mysql_res,"can not get check if file is cached",
+			  "SELECT TmpPubDir FROM file_cache"
+			  " WHERE SessionId='%s' AND PrivPath='%s'",
+			  Gbl.Session.Id,FullPathMediaPriv))
+	{
+	 /* Get the temporary public directory (row[0]) */
+	 row = mysql_fetch_row (mysql_res);
+	 Str_Copy (TmpPubDir,row[0],PATH_MAX);
+	 Cached = true;
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+
+   return Cached;
+  }
+
+/*****************************************************************************/
+/********* Add public directory used to link private path to cache ***********/
+/*****************************************************************************/
+
+void Ses_AddPublicDirToCache (const char *FullPathMediaPriv,
+                              const char TmpPubDir[PATH_MAX + 1])
+  {
+   /***** Insert into cache *****/
+   if (Gbl.Session.IsOpen)
+      DB_QueryINSERT ("can not cache file",
+		      "INSERT INTO file_cache"
+		      " (SessionId,PrivPath,TmpPubDir)"
+		      " VALUES"
+		      " ('%s','%s','%s')",
+		      Gbl.Session.Id,FullPathMediaPriv,TmpPubDir);
+  }
+
+/*****************************************************************************/
+/****** Remove public directories used to link private paths from cache ******/
+/*****************************************************************************/
+
+void Ses_RemovePublicDirsCache (void)
+  {
+   /***** Insert into cache *****/
+   if (Gbl.Session.IsOpen)
+      DB_QueryDELETE ("can not cache file",
+		      "DELETE FROM file_cache WHERE SessionId='%s'",
+		      Gbl.Session.Id);
+  }
+
+/*****************************************************************************/
+/****** Remove public directories used to link private paths from cache ******/
+/****** (from expired sessions)                                         ******/
+/*****************************************************************************/
+
+void Ses_RemovePublicDirsFromExpiredSessions (void)
+  {
+   /***** Remove public directories in expired sessions *****/
+   DB_QueryDELETE ("can not remove public directories in expired sessions",
+		   "DELETE FROM file_cache"
+                   " WHERE SessionId NOT IN"
+                   " (SELECT SessionId FROM sessions)");
   }

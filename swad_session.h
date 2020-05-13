@@ -53,4 +53,11 @@ void Ses_RemoveHiddenParFromExpiredSessions (void);
 void Ses_GetHiddenParFromDB (const char *ParamName,char *ParamValue,
                              size_t MaxBytes);
 
+bool Ses_GetPublicDirFromCache (const char *FullPathMediaPriv,
+                                char TmpPubDir[PATH_MAX + 1]);
+void Ses_AddPublicDirToCache (const char *FullPathMediaPriv,
+                              const char TmpPubDir[PATH_MAX + 1]);
+void Ses_RemovePublicDirsCache (void);
+void Ses_RemovePublicDirsFromExpiredSessions (void);
+
 #endif

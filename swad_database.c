@@ -1481,6 +1481,24 @@ mysql> DESCRIBE file_browser_size;
 		   "UNIQUE INDEX(FileBrowser,Cod,ZoneUsrCod),"
 		   "INDEX(ZoneUsrCod))");
 
+   /***** Table file_cache *****/
+/*
+mysql> DESCRIBE file_cache;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| SessionId | char(43) | NO   | MUL | NULL    |       |
+| PrivPath  | text     | NO   |     | NULL    |       |
+| TmpPubDir | text     | NO   |     | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_cache ("
+			"SessionId CHAR(43) NOT NULL,"			// Cns_BYTES_SESSION_ID
+			"PrivPath TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
+			"TmpPubDir TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
+		   "INDEX(SessionId))");
+
    /***** Table file_view *****/
 /*
 mysql> DESCRIBE file_view;
