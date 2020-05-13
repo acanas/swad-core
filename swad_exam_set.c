@@ -1743,7 +1743,6 @@ static void ExaSet_CopyQstFromBankToExamSet (struct ExaSet_Set *Set,long QstCod)
      {
       /***** Clone media *****/
       CloneMedCod = Med_CloneMedia (&Question.Media);
-      Ale_ShowAlert (Ale_INFO,"DEBUG: CloneMedCod = %ld",CloneMedCod);
 
       /***** Insert question in table of questions *****/
       QstCodInSet = DB_QueryINSERTandReturnCode ("can not add question to set",

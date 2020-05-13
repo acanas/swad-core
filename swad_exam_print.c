@@ -36,6 +36,7 @@
 #include "swad_database.h"
 #include "swad_exam.h"
 #include "swad_exam_event.h"
+#include "swad_exam_print.h"
 #include "swad_exam_result.h"
 #include "swad_exam_set.h"
 #include "swad_exam_type.h"
@@ -129,6 +130,28 @@ static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *P
                                                           bool UpdateQstScore);
 static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Print,
                                                         unsigned NumQst);
+
+//-----------------------------------------------------------------------------
+
+static void ExaPrn_GetCorrectAndComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question);
+static void ExaPrn_GetCorrectAndComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question);
+static void ExaPrn_GetCorrectAndComputeTF_AnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question);
+static void ExaPrn_GetCorrectAndComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question);
+static void ExaPrn_GetCorrectAndComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question);
+
+static void ExaPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question);
+static void ExaPrn_GetCorrectFltAnswerFromDB (struct Tst_Question *Question);
+static void ExaPrn_GetCorrectTF_AnswerFromDB (struct Tst_Question *Question);
+static void ExaPrn_GetCorrectChoAnswerFromDB (struct Tst_Question *Question);
+static void ExaPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question);
+
+//-----------------------------------------------------------------------------
+
 static void ExaPrn_GetAnswerFromDB (struct ExaPrn_Print *Print,long QstCod,
                                     char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1]);
 static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
@@ -1047,7 +1070,7 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
    Tst_QstConstructor (&Question);
    Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
    Question.Answer.Type = ExaSet_GetQstAnswerTypeFromDB (Question.QstCod);
-   TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
+   ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
    Tst_QstDestructor (&Question);
 
    /***** If type is unique choice and the option (radio button) is checked
@@ -1063,6 +1086,247 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
    /***** Store test exam question in database *****/
    ExaPrn_StoreOneQstOfPrintInDB (Print,
 				  NumQst);	// 0, 1, 2, 3...
+  }
+
+/*****************************************************************************/
+/************* Write answers of a question when assessing a test *************/
+/*****************************************************************************/
+
+void ExaPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				struct Tst_Question *Question)
+  {
+   /***** Write answer depending on type *****/
+   switch (Question->Answer.Type)
+     {
+      case Tst_ANS_INT:
+         ExaPrn_GetCorrectAndComputeIntAnsScore (PrintedQuestion,Question); break;
+      case Tst_ANS_FLOAT:
+	 ExaPrn_GetCorrectAndComputeFltAnsScore (PrintedQuestion,Question); break;
+      case Tst_ANS_TRUE_FALSE:
+         ExaPrn_GetCorrectAndComputeTF_AnsScore (PrintedQuestion,Question); break;
+      case Tst_ANS_UNIQUE_CHOICE:
+      case Tst_ANS_MULTIPLE_CHOICE:
+         ExaPrn_GetCorrectAndComputeChoAnsScore (PrintedQuestion,Question); break;
+      case Tst_ANS_TEXT:
+         ExaPrn_GetCorrectAndComputeTxtAnsScore (PrintedQuestion,Question); break;
+      default:
+         break;
+     }
+  }
+
+/*****************************************************************************/
+/******* Get correct answer and compute score for each type of answer ********/
+/*****************************************************************************/
+
+static void ExaPrn_GetCorrectAndComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question)
+  {
+   /***** Get the numerical value of the correct answer *****/
+   ExaPrn_GetCorrectIntAnswerFromDB (Question);
+
+   /***** Compute score *****/
+   TstPrn_ComputeIntAnsScore (PrintedQuestion,Question);
+  }
+
+static void ExaPrn_GetCorrectAndComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question)
+  {
+   /***** Get the numerical value of the minimum and maximum correct answers *****/
+   ExaPrn_GetCorrectFltAnswerFromDB (Question);
+
+   /***** Compute score *****/
+   TstPrn_ComputeFltAnsScore (PrintedQuestion,Question);
+  }
+
+static void ExaPrn_GetCorrectAndComputeTF_AnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                   struct Tst_Question *Question)
+  {
+   /***** Get answer true or false *****/
+   ExaPrn_GetCorrectTF_AnswerFromDB (Question);
+
+   /***** Compute score *****/
+   TstPrn_ComputeTF_AnsScore (PrintedQuestion,Question);
+  }
+
+static void ExaPrn_GetCorrectAndComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                       struct Tst_Question *Question)
+  {
+   /***** Get correct options of test question from database *****/
+   ExaPrn_GetCorrectChoAnswerFromDB (Question);
+
+   /***** Compute the total score of this question *****/
+   TstPrn_ComputeChoAnsScore (PrintedQuestion,Question);
+  }
+
+static void ExaPrn_GetCorrectAndComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question)
+  {
+   /***** Get correct answers for this question from database *****/
+   ExaPrn_GetCorrectTxtAnswerFromDB (Question);
+
+   /***** Compute score *****/
+   TstPrn_ComputeTxtAnsScore (PrintedQuestion,Question);
+  }
+
+/*****************************************************************************/
+/***************** Get correct answer for each type of answer ****************/
+/*****************************************************************************/
+
+static void ExaPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Query database *****/
+   Question->Answer.NumOptions =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+			      "SELECT Answer"		// row[0]
+			      " FROM exa_set_answers"
+			      " WHERE QstCod=%ld",
+			      Question->QstCod);
+
+   /***** Check if number of rows is correct *****/
+   Tst_CheckIfNumberOfAnswersIsOne (Question);
+
+   /***** Get correct answer *****/
+   row = mysql_fetch_row (mysql_res);
+   if (sscanf (row[0],"%ld",&Question->Answer.Integer) != 1)
+      Lay_ShowErrorAndExit ("Wrong integer answer.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+static void ExaPrn_GetCorrectFltAnswerFromDB (struct Tst_Question *Question)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumOpt;
+   double Tmp;
+
+   /***** Query database *****/
+   Question->Answer.NumOptions =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+			      "SELECT Answer"		// row[0]
+			      " FROM exa_set_answers"
+			      " WHERE QstCod=%ld",
+			      Question->QstCod);
+
+   /***** Check if number of rows is correct *****/
+   if (Question->Answer.NumOptions != 2)
+      Lay_ShowErrorAndExit ("Wrong float range.");
+
+   /***** Get float range *****/
+   for (NumOpt = 0;
+	NumOpt < 2;
+	NumOpt++)
+     {
+      row = mysql_fetch_row (mysql_res);
+      Question->Answer.FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[0]);
+     }
+   if (Question->Answer.FloatingPoint[0] >
+       Question->Answer.FloatingPoint[1]) 	// The maximum and the minimum are swapped
+    {
+      /* Swap maximum and minimum */
+      Tmp = Question->Answer.FloatingPoint[0];
+      Question->Answer.FloatingPoint[0] = Question->Answer.FloatingPoint[1];
+      Question->Answer.FloatingPoint[1] = Tmp;
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+static void ExaPrn_GetCorrectTF_AnswerFromDB (struct Tst_Question *Question)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Query database *****/
+   Question->Answer.NumOptions =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+			      "SELECT Answer"		// row[0]
+			      " FROM exa_set_answers"
+			      " WHERE QstCod=%ld",
+			      Question->QstCod);
+
+   /***** Check if number of rows is correct *****/
+   Tst_CheckIfNumberOfAnswersIsOne (Question);
+
+   /***** Get answer *****/
+   row = mysql_fetch_row (mysql_res);
+   Question->Answer.TF = row[0][0];
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+static void ExaPrn_GetCorrectChoAnswerFromDB (struct Tst_Question *Question)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumOpt;
+
+   /***** Query database *****/
+   Question->Answer.NumOptions =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+			      "SELECT Correct"		// row[0]
+			      " FROM exa_set_answers"
+			      " WHERE QstCod=%ld"
+			      " ORDER BY AnsInd",
+			      Question->QstCod);
+   for (NumOpt = 0;
+	NumOpt < Question->Answer.NumOptions;
+	NumOpt++)
+     {
+      /* Get next answer */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Assign correctness (row[0]) of this answer (this option) */
+      Question->Answer.Options[NumOpt].Correct = (row[0][0] == 'Y');
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+static void ExaPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumOpt;
+
+   /***** Query database *****/
+   Question->Answer.NumOptions =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+			      "SELECT Answer"		// row[0]
+			      " FROM exa_set_answers"
+			      " WHERE QstCod=%ld",
+			      Question->QstCod);
+
+   /***** Get text and correctness of answers for this question from database (one row per answer) *****/
+   for (NumOpt = 0;
+	NumOpt < Question->Answer.NumOptions;
+	NumOpt++)
+     {
+      /***** Get next answer *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Allocate memory for text in this choice answer *****/
+      if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
+	 /* Abort on error */
+	 Ale_ShowAlertsAndExit ();
+
+      /***** Copy answer text (row[0]) and convert it, that is in HTML, to rigorous HTML ******/
+      Str_Copy (Question->Answer.Options[NumOpt].Text,row[0],
+                Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+                        Question->Answer.Options[NumOpt].Text,
+                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

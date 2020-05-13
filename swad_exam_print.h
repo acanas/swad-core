@@ -39,6 +39,9 @@ void ExaPrn_ShowExamPrint (void);
 
 void ExaPrn_ReceivePrintAnswer (void);
 
+void ExaPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				struct Tst_Question *Question);
+
 void ExaPrn_EndPrintAnswer (void);
 
 #endif

@@ -4015,7 +4015,7 @@ static void Mch_ComputeScore (struct TstPrn_Print *Print)
       Question.Answer.Type = Tst_ANS_UNIQUE_CHOICE;
 
       /***** Compute score for this answer ******/
-      TstPrn_ComputeChoiceAnsScore (&Print->PrintedQuestions[NumQst],&Question);
+      TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
 
       /***** Update total score *****/
       Print->Score += Print->PrintedQuestions[NumQst].Score;

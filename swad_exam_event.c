@@ -36,6 +36,7 @@
 #include "swad_date.h"
 #include "swad_exam.h"
 #include "swad_exam_event.h"
+#include "swad_exam_print.h"
 #include "swad_exam_result.h"
 #include "swad_exam_set.h"
 #include "swad_exam_type.h"
@@ -4210,7 +4211,7 @@ static void ExaEvt_ComputeScore (struct TstPrn_Print *Print)
       Question.Answer.Type = Tst_ANS_UNIQUE_CHOICE;
 
       /***** Compute score for this answer ******/
-      TstPrn_ComputeChoiceAnsScore (&Print->PrintedQuestions[NumQst],&Question);
+      ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
 
       /***** Update total score *****/
       Print->Score += Print->PrintedQuestions[NumQst].Score;

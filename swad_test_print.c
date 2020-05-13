@@ -78,24 +78,27 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       struct Tst_Question *Question,
 				       bool QuestionExists,
 				       unsigned Visibility);
-static void TstPrn_ComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				       struct Tst_Question *Question);
-static void TstPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question);
-static void TstPrn_ComputeFloatAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				         struct Tst_Question *Question);
-static void TstPrn_GetCorrectFloatAnswerFromDB (struct Tst_Question *Question);
-static void TstPrn_ComputeTFAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				      struct Tst_Question *Question);
-static void TstPrn_GetCorrectTFAnswerFromDB (struct Tst_Question *Question);
-static void TstPrn_GetCorrectChoiceAnswerFromDB (struct Tst_Question *Question);
 
-static void TstPrn_ComputeScoreQst (struct TstPrn_PrintedQuestion *PrintedQuestion,
-	                            const struct Tst_Question *Question,
-                                    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION],	// Indexes of all answers of this question
-                                    bool UsrAnswers[Tst_MAX_OPTIONS_PER_QUESTION]);
-static void TstPrn_ComputeTextAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				        struct Tst_Question *Question);
-static void TstPrn_GetCorrectTextAnswerFromDB (struct Tst_Question *Question);
+//-----------------------------------------------------------------------------
+
+static void TstPrn_GetCorrectAndComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question);
+static void TstPrn_GetCorrectAndComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question);
+static void TstPrn_GetCorrectAndComputeTF_AnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question);
+static void TstPrn_GetCorrectAndComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question);
+static void TstPrn_GetCorrectAndComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question);
+
+static void TstPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question);
+static void TstPrn_GetCorrectFltAnswerFromDB (struct Tst_Question *Question);
+static void TstPrn_GetCorrectTF_AnswerFromDB (struct Tst_Question *Question);
+static void TstPrn_GetCorrectChoAnswerFromDB (struct Tst_Question *Question);
+static void TstPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question);
+
+//-----------------------------------------------------------------------------
 
 static void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
                                      const struct TstPrn_Print *Print,
@@ -394,7 +397,7 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
   }
 
 /*****************************************************************************/
-/************* Write answers of a question when assessing a test *************/
+/******************* Get correct answer and compute score ********************/
 /*****************************************************************************/
 
 void TstPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
@@ -404,46 +407,78 @@ void TstPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
    switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
-         TstPrn_ComputeIntAnsScore    (PrintedQuestion,Question);
-         break;
+         TstPrn_GetCorrectAndComputeIntAnsScore (PrintedQuestion,Question); break;
       case Tst_ANS_FLOAT:
-	 TstPrn_ComputeFloatAnsScore  (PrintedQuestion,Question);
-         break;
+	 TstPrn_GetCorrectAndComputeFltAnsScore (PrintedQuestion,Question); break;
       case Tst_ANS_TRUE_FALSE:
-         TstPrn_ComputeTFAnsScore     (PrintedQuestion,Question);
-         break;
+         TstPrn_GetCorrectAndComputeTF_AnsScore (PrintedQuestion,Question); break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         TstPrn_ComputeChoiceAnsScore (PrintedQuestion,Question);
-         break;
+         TstPrn_GetCorrectAndComputeChoAnsScore (PrintedQuestion,Question); break;
       case Tst_ANS_TEXT:
-         TstPrn_ComputeTextAnsScore   (PrintedQuestion,Question);
-         break;
+         TstPrn_GetCorrectAndComputeTxtAnsScore (PrintedQuestion,Question); break;
       default:
          break;
      }
   }
 
 /*****************************************************************************/
-/**************** Write integer answer when assessing a test *****************/
+/******* Get correct answer and compute score for each type of answer ********/
 /*****************************************************************************/
 
-static void TstPrn_ComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				       struct Tst_Question *Question)
+static void TstPrn_GetCorrectAndComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question)
   {
-   long AnswerUsr;
-
    /***** Get the numerical value of the correct answer *****/
    TstPrn_GetCorrectIntAnswerFromDB (Question);
 
    /***** Compute score *****/
-   PrintedQuestion->Score = 0.0;		// Default score for blank or wrong answer
-   PrintedQuestion->AnswerIsNotBlank = (PrintedQuestion->StrAnswers[0] != '\0');
-   if (PrintedQuestion->AnswerIsNotBlank)	// If user has answered the answer
-      if (sscanf (PrintedQuestion->StrAnswers,"%ld",&AnswerUsr) == 1)
-	 if (AnswerUsr == Question->Answer.Integer)	// Correct answer
-	    PrintedQuestion->Score = 1.0;
+   TstPrn_ComputeIntAnsScore (PrintedQuestion,Question);
   }
+
+static void TstPrn_GetCorrectAndComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question)
+  {
+   /***** Get the numerical value of the minimum and maximum correct answers *****/
+   TstPrn_GetCorrectFltAnswerFromDB (Question);
+
+   /***** Compute score *****/
+   TstPrn_ComputeFltAnsScore (PrintedQuestion,Question);
+  }
+
+static void TstPrn_GetCorrectAndComputeTF_AnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question)
+  {
+   /***** Get answer true or false *****/
+   TstPrn_GetCorrectTF_AnswerFromDB (Question);
+
+   /***** Compute score *****/
+   TstPrn_ComputeTF_AnsScore (PrintedQuestion,Question);
+  }
+
+static void TstPrn_GetCorrectAndComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question)
+  {
+   /***** Get correct options of test question from database *****/
+   TstPrn_GetCorrectChoAnswerFromDB (Question);
+
+   /***** Compute the total score of this question *****/
+   TstPrn_ComputeChoAnsScore (PrintedQuestion,Question);
+  }
+
+static void TstPrn_GetCorrectAndComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                    struct Tst_Question *Question)
+  {
+   /***** Get correct answers for this question from database *****/
+   TstPrn_GetCorrectTxtAnswerFromDB (Question);
+
+   /***** Compute score *****/
+   TstPrn_ComputeTxtAnsScore (PrintedQuestion,Question);
+  }
+
+/*****************************************************************************/
+/**************** Get correct answer for each type of answer *****************/
+/*****************************************************************************/
 
 static void TstPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question)
   {
@@ -470,33 +505,7 @@ static void TstPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question)
    DB_FreeMySQLResult (&mysql_res);
   }
 
-/*****************************************************************************/
-/***************** Write float answer when assessing a test ******************/
-/*****************************************************************************/
-
-static void TstPrn_ComputeFloatAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				         struct Tst_Question *Question)
-  {
-   double AnswerUsr;
-
-   /***** Get the numerical value of the minimum and maximum correct answers *****/
-   TstPrn_GetCorrectFloatAnswerFromDB (Question);
-
-   /***** Compute score *****/
-   PrintedQuestion->Score = 0.0;			// Default score for blank or wrong answer
-   PrintedQuestion->AnswerIsNotBlank = (PrintedQuestion->StrAnswers[0] != '\0');
-   if (PrintedQuestion->AnswerIsNotBlank)	// If user has answered the answer
-     {
-      AnswerUsr = Str_GetDoubleFromStr (PrintedQuestion->StrAnswers);
-
-      // A bad formatted floating point answer will interpreted as 0.0
-      PrintedQuestion->Score = (AnswerUsr >= Question->Answer.FloatingPoint[0] &&
-			        AnswerUsr <= Question->Answer.FloatingPoint[1]) ? 1.0 : // If correct (inside the interval)
-										  0.0;  // If wrong (outside the interval)
-     }
-  }
-
-static void TstPrn_GetCorrectFloatAnswerFromDB (struct Tst_Question *Question)
+static void TstPrn_GetCorrectFltAnswerFromDB (struct Tst_Question *Question)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -536,26 +545,7 @@ static void TstPrn_GetCorrectFloatAnswerFromDB (struct Tst_Question *Question)
    DB_FreeMySQLResult (&mysql_res);
   }
 
-/*****************************************************************************/
-/************** Write false / true answer when assessing a test **************/
-/*****************************************************************************/
-
-static void TstPrn_ComputeTFAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				      struct Tst_Question *Question)
-  {
-   /***** Get answer true or false *****/
-   TstPrn_GetCorrectTFAnswerFromDB (Question);
-
-   /***** Compute score *****/
-   PrintedQuestion->AnswerIsNotBlank = (PrintedQuestion->StrAnswers[0] != '\0');
-   if (PrintedQuestion->AnswerIsNotBlank)	// User has selected T or F
-      PrintedQuestion->Score = (PrintedQuestion->StrAnswers[0] == Question->Answer.TF) ? 1.0 :	// Correct
-					                                                -1.0;	// Wrong
-   else
-      PrintedQuestion->Score = 0.0;
-  }
-
-static void TstPrn_GetCorrectTFAnswerFromDB (struct Tst_Question *Question)
+static void TstPrn_GetCorrectTF_AnswerFromDB (struct Tst_Question *Question)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -579,30 +569,7 @@ static void TstPrn_GetCorrectTFAnswerFromDB (struct Tst_Question *Question)
    DB_FreeMySQLResult (&mysql_res);
   }
 
-/*****************************************************************************/
-/************ Compute score for single or multiple choice answer *************/
-/*****************************************************************************/
-
-void TstPrn_ComputeChoiceAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				   struct Tst_Question *Question)
-  {
-   unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   bool UsrAnswers[Tst_MAX_OPTIONS_PER_QUESTION];
-
-   /***** Get correct options of test question from database *****/
-   TstPrn_GetCorrectChoiceAnswerFromDB (Question);
-
-   /***** Get indexes for this question from string *****/
-   TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
-
-   /***** Get the user's answers for this question from string *****/
-   TstPrn_GetAnswersFromStr (PrintedQuestion->StrAnswers,UsrAnswers);
-
-   /***** Compute the total score of this question *****/
-   TstPrn_ComputeScoreQst (PrintedQuestion,Question,Indexes,UsrAnswers);
-  }
-
-static void TstPrn_GetCorrectChoiceAnswerFromDB (struct Tst_Question *Question)
+static void TstPrn_GetCorrectChoAnswerFromDB (struct Tst_Question *Question)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -631,87 +598,107 @@ static void TstPrn_GetCorrectChoiceAnswerFromDB (struct Tst_Question *Question)
    DB_FreeMySQLResult (&mysql_res);
   }
 
-/*****************************************************************************/
-/********************* Get vector of indexes from string *********************/
-/*****************************************************************************/
-
-void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
-			       unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION])
+static void TstPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question)
   {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
    unsigned NumOpt;
-   const char *Ptr;
-   char StrOneIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
-   /***** Get indexes from string *****/
-   for (NumOpt = 0, Ptr = StrIndexesOneQst;
-	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION && *Ptr;
-	NumOpt++)
-     {
-      Par_GetNextStrUntilComma (&Ptr,StrOneIndex,Cns_MAX_DECIMAL_DIGITS_UINT);
+   /***** Query database *****/
+   Question->Answer.NumOptions =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+			      "SELECT Answer"		// row[0]
+			      " FROM tst_answers"
+			      " WHERE QstCod=%ld",
+			      Question->QstCod);
 
-      if (sscanf (StrOneIndex,"%u",&(Indexes[NumOpt])) != 1)
-	 Lay_ShowErrorAndExit ("Wrong index of answer.");
-
-      if (Indexes[NumOpt] >= Tst_MAX_OPTIONS_PER_QUESTION)
-	 Lay_ShowErrorAndExit ("Wrong index of answer.");
-     }
-
-   /***** Initialize remaining to 0 *****/
-   for (;
-	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
-	NumOpt++)
-      Indexes[NumOpt] = 0;
-  }
-
-/*****************************************************************************/
-/****************** Get vector of user's answers from string *****************/
-/*****************************************************************************/
-
-void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1],
-			       bool UsrAnswers[Tst_MAX_OPTIONS_PER_QUESTION])
-  {
-   unsigned NumOpt;
-   const char *Ptr;
-   char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   unsigned AnsUsr;
-
-   /***** Initialize all answers to false *****/
+   /***** Get text and correctness of answers for this question from database (one row per answer) *****/
    for (NumOpt = 0;
-	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
-	NumOpt++)
-      UsrAnswers[NumOpt] = false;
-
-   /***** Set selected answers to true *****/
-   for (NumOpt = 0, Ptr = StrAnswersOneQst;
-	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION && *Ptr;
+	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
      {
-      Par_GetNextStrUntilComma (&Ptr,StrOneAnswer,Cns_MAX_DECIMAL_DIGITS_UINT);
+      /***** Get next answer *****/
+      row = mysql_fetch_row (mysql_res);
 
-      if (sscanf (StrOneAnswer,"%u",&AnsUsr) != 1)
-	 Lay_ShowErrorAndExit ("Bad user's answer.");
+      /***** Allocate memory for text in this choice answer *****/
+      if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
+	 /* Abort on error */
+	 Ale_ShowAlertsAndExit ();
 
-      if (AnsUsr >= Tst_MAX_OPTIONS_PER_QUESTION)
-	 Lay_ShowErrorAndExit ("Bad user's answer.");
-
-      UsrAnswers[AnsUsr] = true;
+      /***** Copy answer text (row[0]) and convert it, that is in HTML, to rigorous HTML ******/
+      Str_Copy (Question->Answer.Options[NumOpt].Text,row[0],
+                Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+                        Question->Answer.Options[NumOpt].Text,
+                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
      }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
-/*********************** Compute the score of a question *********************/
+/************** Compute answer score for each type of answer *****************/
 /*****************************************************************************/
 
-static void TstPrn_ComputeScoreQst (struct TstPrn_PrintedQuestion *PrintedQuestion,
-	                            const struct Tst_Question *Question,
-                                    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION],	// Indexes of all answers of this question
-                                    bool UsrAnswers[Tst_MAX_OPTIONS_PER_QUESTION])
+void TstPrn_ComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+		                const struct Tst_Question *Question)
   {
+   long AnswerUsr;
+
+   PrintedQuestion->Score = 0.0;		// Default score for blank or wrong answer
+   PrintedQuestion->AnswerIsNotBlank = (PrintedQuestion->StrAnswers[0] != '\0');
+   if (PrintedQuestion->AnswerIsNotBlank)	// If user has answered the answer
+      if (sscanf (PrintedQuestion->StrAnswers,"%ld",&AnswerUsr) == 1)
+	 if (AnswerUsr == Question->Answer.Integer)	// Correct answer
+	    PrintedQuestion->Score = 1.0;
+  }
+
+void TstPrn_ComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				  const struct Tst_Question *Question)
+  {
+   double AnswerUsr;
+
+   PrintedQuestion->Score = 0.0;		// Default score for blank or wrong answer
+   PrintedQuestion->AnswerIsNotBlank = (PrintedQuestion->StrAnswers[0] != '\0');
+   if (PrintedQuestion->AnswerIsNotBlank)	// If user has answered the answer
+     {
+      AnswerUsr = Str_GetDoubleFromStr (PrintedQuestion->StrAnswers);
+
+      // A bad formatted floating point answer will interpreted as 0.0
+      PrintedQuestion->Score = (AnswerUsr >= Question->Answer.FloatingPoint[0] &&
+			        AnswerUsr <= Question->Answer.FloatingPoint[1]) ? 1.0 : // If correct (inside the interval)
+										  0.0;  // If wrong (outside the interval)
+     }
+  }
+
+void TstPrn_ComputeTF_AnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+			        const struct Tst_Question *Question)
+  {
+   PrintedQuestion->AnswerIsNotBlank = (PrintedQuestion->StrAnswers[0] != '\0');
+   if (PrintedQuestion->AnswerIsNotBlank)	// User has selected T or F
+      PrintedQuestion->Score = (PrintedQuestion->StrAnswers[0] == Question->Answer.TF) ? 1.0 :	// Correct
+					                                                -1.0;	// Wrong
+   else
+      PrintedQuestion->Score = 0.0;
+  }
+
+void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+	                           const struct Tst_Question *Question)
+  {
+   unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
+   bool UsrAnswers[Tst_MAX_OPTIONS_PER_QUESTION];
    unsigned NumOpt;
    unsigned NumOptTotInQst = 0;
    unsigned NumOptCorrInQst = 0;
    unsigned NumAnsGood = 0;
    unsigned NumAnsBad = 0;
+
+   /***** Get indexes for this question from string *****/
+   TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
+
+   /***** Get the user's answers for this question from string *****/
+   TstPrn_GetAnswersFromStr (PrintedQuestion->StrAnswers,UsrAnswers);
 
    /***** Compute the total score of this question *****/
    for (NumOpt = 0;
@@ -767,21 +754,13 @@ static void TstPrn_ComputeScoreQst (struct TstPrn_PrintedQuestion *PrintedQuesti
       PrintedQuestion->Score = 0.0;
   }
 
-/*****************************************************************************/
-/********************* Compute score for text answer *************************/
-/*****************************************************************************/
-
-static void TstPrn_ComputeTextAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				        struct Tst_Question *Question)
+void TstPrn_ComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				 const struct Tst_Question *Question)
   {
    unsigned NumOpt;
    char TextAnsUsr[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TextAnsOK[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
-   /***** Get correct answers for this question from database *****/
-   TstPrn_GetCorrectTextAnswerFromDB (Question);
-
-   /***** Compute score *****/
    PrintedQuestion->Score = 0.0;	// Default score for blank or wrong answer
    PrintedQuestion->AnswerIsNotBlank = (PrintedQuestion->StrAnswers[0] != '\0');
    if (PrintedQuestion->AnswerIsNotBlank)	// If user has answered the answer
@@ -811,43 +790,71 @@ static void TstPrn_ComputeTextAnsScore (struct TstPrn_PrintedQuestion *PrintedQu
      }
   }
 
-static void TstPrn_GetCorrectTextAnswerFromDB (struct Tst_Question *Question)
+/*****************************************************************************/
+/********** Get vector of unsigned indexes from string with indexes **********/
+/*****************************************************************************/
+
+void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
+			       unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION])
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumOpt;
+   const char *Ptr;
+   char StrOneIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
-   /***** Query database *****/
-   Question->Answer.NumOptions =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-			      "SELECT Answer"		// row[0]
-			      " FROM tst_answers"
-			      " WHERE QstCod=%ld",
-			      Question->QstCod);
-
-   /***** Get text and correctness of answers for this question from database (one row per answer) *****/
-   for (NumOpt = 0;
-	NumOpt < Question->Answer.NumOptions;
+   /***** Get indexes from string *****/
+   for (NumOpt = 0, Ptr = StrIndexesOneQst;
+	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION && *Ptr;
 	NumOpt++)
      {
-      /***** Get next answer *****/
-      row = mysql_fetch_row (mysql_res);
+      Par_GetNextStrUntilComma (&Ptr,StrOneIndex,Cns_MAX_DECIMAL_DIGITS_UINT);
 
-      /***** Allocate memory for text in this choice answer *****/
-      if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
-	 /* Abort on error */
-	 Ale_ShowAlertsAndExit ();
+      if (sscanf (StrOneIndex,"%u",&(Indexes[NumOpt])) != 1)
+	 Lay_ShowErrorAndExit ("Wrong index of answer.");
 
-      /***** Copy answer text (row[0]) and convert it, that is in HTML, to rigorous HTML ******/
-      Str_Copy (Question->Answer.Options[NumOpt].Text,row[0],
-                Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Question->Answer.Options[NumOpt].Text,
-                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+      if (Indexes[NumOpt] >= Tst_MAX_OPTIONS_PER_QUESTION)
+	 Lay_ShowErrorAndExit ("Wrong index of answer.");
      }
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   /***** Initialize remaining to 0 *****/
+   for (;
+	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+	NumOpt++)
+      Indexes[NumOpt] = 0;
+  }
+
+/*****************************************************************************/
+/************ Get vector of bool answers from string with answers ************/
+/*****************************************************************************/
+
+void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1],
+			       bool UsrAnswers[Tst_MAX_OPTIONS_PER_QUESTION])
+  {
+   unsigned NumOpt;
+   const char *Ptr;
+   char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   unsigned AnsUsr;
+
+   /***** Initialize all answers to false *****/
+   for (NumOpt = 0;
+	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+	NumOpt++)
+      UsrAnswers[NumOpt] = false;
+
+   /***** Set selected answers to true *****/
+   for (NumOpt = 0, Ptr = StrAnswersOneQst;
+	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION && *Ptr;
+	NumOpt++)
+     {
+      Par_GetNextStrUntilComma (&Ptr,StrOneAnswer,Cns_MAX_DECIMAL_DIGITS_UINT);
+
+      if (sscanf (StrOneAnswer,"%u",&AnsUsr) != 1)
+	 Lay_ShowErrorAndExit ("Bad user's answer.");
+
+      if (AnsUsr >= Tst_MAX_OPTIONS_PER_QUESTION)
+	 Lay_ShowErrorAndExit ("Bad user's answer.");
+
+      UsrAnswers[AnsUsr] = true;
+     }
   }
 
 /*****************************************************************************/

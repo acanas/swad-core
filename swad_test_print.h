@@ -76,8 +76,20 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
                                                 bool UpdateQstScore);
 void TstPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				struct Tst_Question *Question);
-void TstPrn_ComputeChoiceAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				   struct Tst_Question *Question);
+
+//-----------------------------------------------------------------------------
+void TstPrn_ComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+		                const struct Tst_Question *Question);
+void TstPrn_ComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				const struct Tst_Question *Question);
+void TstPrn_ComputeTF_AnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+			        const struct Tst_Question *Question);
+void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+	                        const struct Tst_Question *Question);
+void TstPrn_ComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				const struct Tst_Question *Question);
+//-----------------------------------------------------------------------------
+
 void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
 			       unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
 void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1],
