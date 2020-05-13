@@ -1444,7 +1444,7 @@ static bool ExaRes_CheckIfICanSeeEventResult (struct ExaEvt_Event *Event,long Us
      {
       case Rol_STD:
 	 ItsMe = Usr_ItsMe (UsrCod);
-	 if (ItsMe && Event->Status.ShowUsrResults)
+	 if (ItsMe && Event->ShowUsrResults)
 	    return ExaEvt_CheckIfICanPlayThisEventBasedOnGrps (Event);
          return false;
       case Rol_NET:

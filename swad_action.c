@@ -688,21 +688,6 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActHidExaEvt	] = {1900,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_HideEvent		,NULL},
    [ActShoExaEvt	] = {1901,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaEvt_UnhideEvent		,NULL},
 
-   [ActResExaEvt	] = {1854,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_ResumeEvent		,NULL},
-   [ActBckExaEvt	] = {1855,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_BackEvent		,NULL},
-   [ActPlyPauExaEvt	] = {1856,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_PlayPauseEvent		,NULL},
-   [ActFwdExaEvt	] = {1857,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_ForwardEvent		,NULL},
-   [ActChgNumColExaEvt	] = {1858,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_ChangeNumColsEvt	,NULL},
-   [ActChgVisResExaEvtQst] = {1859,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_ToggleVisibilResultsEvtQst,NULL},
-   [ActExaEvtCntDwn	] = {1860,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,ExaEvt_GetEventBeingPlayed	,ExaEvt_StartCountdown		,NULL},
-   [ActRefExaEvtTch	] = {1861,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,ExaEvt_GetEventBeingPlayed	,ExaEvt_RefreshEventTch		,NULL},
-
-   [ActJoiExaEvt	] = {1862,-1,TabUnk,ActSeeAllExa	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_JoinEventAsStd		,NULL},
-   [ActSeeExaEvtAnsQstStd] = {1863,-1,TabUnk,ActSeeAllExa	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_JoinEventAsStd		,NULL},
-   [ActRemExaEvtAnsQstStd] = {1864,-1,TabUnk,ActSeeAllExa	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_RemoveMyQuestionAnswer	,NULL},
-   [ActAnsExaEvtQstStd	] = {1865,-1,TabUnk,ActSeeAllExa	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,ExaEvt_GetEventBeingPlayed	,ExaEvt_ReceiveQuestionAnswer	,NULL},
-   [ActRefExaEvtStd	] = {1866,-1,TabUnk,ActSeeAllExa	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,ExaEvt_GetEventBeingPlayed	,ExaEvt_RefreshEventStd		,NULL},
-
    [ActSeeMyExaEvtResCrs] = {1867,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyExaResultsInCrs	,NULL},
    [ActSeeMyExaEvtResExa] = {1868,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyExaResultsInExa	,NULL},
    [ActSeeMyExaEvtResEvt] = {1869,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyExaResultsInEvt	,NULL},
@@ -3675,19 +3660,19 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActRemExaEvt,		// #1851
 	ActReqNewExaEvt,	// #1852
 	ActNewExaEvt,		// #1853
-	ActResExaEvt,		// #1854
-	ActBckExaEvt,		// #1855
-	ActPlyPauExaEvt,	// #1856
-	ActFwdExaEvt,		// #1857
-	ActChgNumColExaEvt,	// #1858
-	ActChgVisResExaEvtQst,	// #1859
-	ActExaEvtCntDwn,	// #1860
-	ActRefExaEvtTch,	// #1861
-	ActJoiExaEvt,		// #1862
-	ActSeeExaEvtAnsQstStd,	// #1863
-	ActRemExaEvtAnsQstStd,	// #1864
-	ActAnsExaEvtQstStd,	// #1865
-	ActRefExaEvtStd,	// #1866
+	-1,			// #1854 (obsolete action)
+	-1,			// #1855 (obsolete action)
+	-1,			// #1856 (obsolete action)
+	-1,			// #1857 (obsolete action)
+	-1,			// #1858 (obsolete action)
+	-1,			// #1859 (obsolete action)
+	-1,			// #1860 (obsolete action)
+	-1,			// #1861 (obsolete action)
+	-1,			// #1862 (obsolete action)
+	-1,			// #1863 (obsolete action)
+	-1,			// #1864 (obsolete action)
+	-1,			// #1865 (obsolete action)
+	-1,			// #1866 (obsolete action)
 	ActSeeMyExaEvtResCrs,	// #1867
 	ActSeeMyExaEvtResExa,	// #1868
 	ActSeeMyExaEvtResEvt,	// #1869

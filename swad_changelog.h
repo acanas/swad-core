@@ -548,10 +548,14 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.228.2 (2020-05-13)"
+#define Log_PLATFORM_VERSION	"SWAD 19.229 (2020-05-13)"
 #define CSS_FILE		"swad19.217.css"
 #define JS_FILE			"swad19.223.js"
 /*
+	Version 19.229:   May 13, 2020  Removed unused code in exam events. (301163 lines)
+					1 change necessary in database:
+ALTER TABLE exa_events DROP COLUMN QstInd,DROP COLUMN QstCod,DROP COLUMN Showing,DROP COLUMN Countdown,DROP COLUMN NumCols,DROP COLUMN ShowQstResults;
+
 	Version 19.228.2: May 13, 2020  Code refactoring in exam prints. (303829 lines)
 	Version 19.228.1: May 13, 2020  Code refactoring in exam prints. (303828 lines)
 	Version 19.228:   May 13, 2020  Code refactoring and bug fixing in exam prints. (303837 lines)

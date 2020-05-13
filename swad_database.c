@@ -1040,25 +1040,19 @@ mysql> DESCRIBE exa_groups;
    /***** Table exa_events *****/
 /*
 mysql> DESCRIBE exa_events;
-+----------------+------------------------------------------------+------+-----+---------+----------------+
-| Field          | Type                                           | Null | Key | Default | Extra          |
-+----------------+------------------------------------------------+------+-----+---------+----------------+
-| EvtCod         | int(11)                                        | NO   | PRI | NULL    | auto_increment |
-| ExaCod         | int(11)                                        | NO   | MUL | NULL    |                |
-| Hidden         | enum('N','Y')                                  | NO   |     | N       |                |
-| UsrCod         | int(11)                                        | NO   |     | NULL    |                |
-| StartTime      | datetime                                       | NO   |     | NULL    |                |
-| EndTime        | datetime                                       | NO   |     | NULL    |                |
-| Title          | varchar(2047)                                  | NO   |     | NULL    |                |
-| QstInd         | int(11)                                        | NO   |     | 0       |                |
-| QstCod         | int(11)                                        | NO   |     | -1      |                |
-| Showing        | enum('start','stem','answers','results','end') | NO   |     | start   |                |
-| Countdown      | int(11)                                        | NO   |     | -1      |                |
-| NumCols        | int(11)                                        | NO   |     | 1       |                |
-| ShowQstResults | enum('N','Y')                                  | NO   |     | N       |                |
-| ShowUsrResults | enum('N','Y')                                  | NO   |     | N       |                |
-+----------------+------------------------------------------------+------+-----+---------+----------------+
-14 rows in set (0.00 sec)
++----------------+---------------+------+-----+---------+----------------+
+| Field          | Type          | Null | Key | Default | Extra          |
++----------------+---------------+------+-----+---------+----------------+
+| EvtCod         | int(11)       | NO   | PRI | NULL    | auto_increment |
+| ExaCod         | int(11)       | NO   | MUL | NULL    |                |
+| Hidden         | enum('N','Y') | NO   |     | N       |                |
+| UsrCod         | int(11)       | NO   |     | NULL    |                |
+| StartTime      | datetime      | NO   |     | NULL    |                |
+| EndTime        | datetime      | NO   |     | NULL    |                |
+| Title          | varchar(2047) | NO   |     | NULL    |                |
+| ShowUsrResults | enum('N','Y') | NO   |     | N       |                |
++----------------+---------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_events ("
 			"EvtCod INT NOT NULL AUTO_INCREMENT,"
@@ -1068,12 +1062,6 @@ mysql> DESCRIBE exa_events;
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
 			"Title VARCHAR(2047) NOT NULL,"	// ExaEvt_MAX_BYTES_TITLE
-			"QstInd INT NOT NULL DEFAULT 0,"
-			"QstCod INT NOT NULL DEFAULT -1,"
-			"Showing ENUM('start','stem','answers','results','end') NOT NULL DEFAULT 'start',"
-			"Countdown INT NOT NULL DEFAULT -1,"
-		        "NumCols INT NOT NULL DEFAULT 1,"
-			"ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
 		   "UNIQUE INDEX(EvtCod),"
 		   "INDEX(ExaCod))");

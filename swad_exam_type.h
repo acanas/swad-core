@@ -127,17 +127,6 @@ struct ExaSet_Set
    char Title[ExaSet_MAX_BYTES_TITLE + 1];	// Title of the set
   };
 
-#define ExaEvt_NUM_SHOWING 5
-typedef enum
-  {
-   ExaEvt_START,	// Start: don't show anything
-   ExaEvt_STEM,		// Showing only the question stem
-   ExaEvt_ANSWERS,	// Showing the question stem and the answers
-   ExaEvt_RESULTS,	// Showing the results
-   ExaEvt_END,		// End: don't show anything
-  } ExaEvt_Showing_t;
-#define ExaEvt_SHOWING_DEFAULT ExaEvt_START
-
 struct ExaEvt_Event
   {
    long EvtCod;
@@ -147,21 +136,7 @@ struct ExaEvt_Event
    char Title[ExaEvt_MAX_BYTES_TITLE + 1];
    bool Hidden;
    bool Open;		// If now is between start and end dates
-   struct
-     {
-      unsigned QstInd;	// 0 means that the exam has not started. First question has index 1.
-      long QstCod;
-      time_t QstStartTimeUTC;
-      ExaEvt_Showing_t Showing;	// What is shown on teacher's screen
-      long Countdown;		// > 0 ==> countdown in progress
-				// = 0 ==> countdown over ==> go to next step
-				// < 0 ==> no countdown at this time
-      unsigned NumCols;		// Number of columns for answers on teacher's screen
-      bool ShowQstResults;	// Show global results of current question while playing
-      bool ShowUsrResults;	// Show exam with results of all questions for the student
-      bool Happening;		// Is being played now?
-      unsigned NumParticipants;
-     } Status;			// Status related to event playing
+   bool ShowUsrResults;	// Show exam with results of all questions for the student
   };
 
 #endif

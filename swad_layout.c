@@ -282,16 +282,6 @@ void Lay_WriteStartOfPage (void)
 	 HTM_Txt ("<body onload=\"init();\"");
 	 switch (Gbl.Action.Act)
 	   {
-	    case ActNewExaEvt:
-	    case ActResExaEvt:
-	    case ActBckExaEvt:
-	    case ActPlyPauExaEvt:
-	    case ActFwdExaEvt:
-	    case ActChgNumColExaEvt:
-	    case ActChgVisResExaEvtQst:
-	    case ActExaEvtCntDwn:
-	       HTM_Txt (" class=\"EXA_BG\"");
-	       break;
 	    case ActNewMch:
 	    case ActResMch:
 	    case ActBckMch:
@@ -764,8 +754,6 @@ static void Lay_WriteScriptInit (void)
    bool RefreshConnected;
    bool RefreshLastClicks   = false;
    bool RefreshNewTimeline  = false;
-   bool RefreshExamEventStd = false;
-   bool RefreshExamEventTch = false;
    bool RefreshMatchStd     = false;
    bool RefreshMatchTch     = false;
 
@@ -788,24 +776,6 @@ static void Lay_WriteScriptInit (void)
       case ActReqRemSocComGbl:
       case ActRemSocComGbl:
 	 RefreshNewTimeline = true;
-	 break;
-
-      /* Exam event */
-      case ActJoiExaEvt:
-      case ActSeeExaEvtAnsQstStd:
-      case ActRemExaEvtAnsQstStd:
-      case ActAnsExaEvtQstStd:
-	 RefreshExamEventStd = true;
-	 break;
-      case ActNewExaEvt:
-      case ActResExaEvt:
-      case ActBckExaEvt:
-      case ActPlyPauExaEvt:
-      case ActFwdExaEvt:
-      case ActChgNumColExaEvt:
-      case ActChgVisResExaEvtQst:
-      case ActExaEvtCntDwn:
-	 RefreshExamEventTch = true;
 	 break;
 
       /* Match */
@@ -836,10 +806,6 @@ static void Lay_WriteScriptInit (void)
 
    if (RefreshNewTimeline)		// Refresh new timeline via AJAX
       HTM_TxtF ("\tvar delayNewTL = %lu;\n",Cfg_TIME_TO_REFRESH_TIMELINE);
-   else if (RefreshExamEventStd)	// Refresh exam event via AJAX
-      HTM_TxtF ("\tvar delayExamEvent = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_STD);
-   else if (RefreshExamEventTch)	// Refresh exam event via AJAX
-      HTM_TxtF ("\tvar delayExamEvent = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_TCH);
    else if (RefreshMatchStd)		// Refresh match via AJAX
       HTM_TxtF ("\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_STD);
    else if (RefreshMatchTch)		// Refresh match via AJAX
@@ -862,10 +828,6 @@ static void Lay_WriteScriptInit (void)
                 Cfg_TIME_TO_REFRESH_LAST_CLICKS);
    else if (RefreshNewTimeline)		// Refresh timeline via AJAX
       HTM_Txt ("\tsetTimeout(\"refreshNewTL()\",delayNewTL);\n");
-   else if (RefreshExamEventStd)	// Refresh exam event for a student via AJAX
-      HTM_Txt ("\tsetTimeout(\"refreshExamEventStd()\",delayExamEvent);\n");
-   else if (RefreshExamEventTch)	// Refresh exam event for a teacher via AJAX
-      HTM_Txt ("\tsetTimeout(\"refreshExamEventTch()\",delayExamEvent);\n");
    else if (RefreshMatchStd)		// Refresh match for a student via AJAX
       HTM_Txt ("\tsetTimeout(\"refreshMatchStd()\",delayMatch);\n");
    else if (RefreshMatchTch)		// Refresh match for a teacher via AJAX
@@ -946,34 +908,6 @@ static void Lay_WriteScriptParamsAJAX (void)
 		   "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
 		   Act_GetActCod (ActRefOldSocPubUsr),
 		   Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
-	 break;
-      /* Parameters related with exam event refreshing (for students) */
-      case ActJoiExaEvt:
-      case ActSeeExaEvtAnsQstStd:
-      case ActRemExaEvtAnsQstStd:
-      case ActAnsExaEvtQstStd:
-	 // Refresh parameters
-	 HTM_TxtF ("var RefreshParamNxtActExaEvt = \"act=%ld\";\n"
-	           "var RefreshParamExaEvtCod = \"EvtCod=%ld\";\n",
-		   Act_GetActCod (ActRefExaEvtStd),
-		   ExaEvt_GetEvtCodBeingPlayed ());
-	 break;
-      /* Parameters related with exam event refreshing (for teachers) */
-      case ActNewExaEvt:
-      case ActResExaEvt:
-      case ActBckExaEvt:
-      case ActPlyPauExaEvt:
-      case ActFwdExaEvt:
-      case ActChgNumColExaEvt:
-      case ActChgVisResExaEvtQst:
-      case ActExaEvtCntDwn:
-	 // Handle keys in keyboard/presenter
-	 HTM_Txt ("document.addEventListener(\"keydown\",handleMatchKeys);\n");
-	 // Refresh parameters
-	 HTM_TxtF ("var RefreshParamNxtActExaEvt = \"act=%ld\";\n"
-		   "var RefreshParamExaEvtCod = \"EvtCod=%ld\";\n",
-		   Act_GetActCod (ActRefExaEvtTch),
-		   ExaEvt_GetEvtCodBeingPlayed ());
 	 break;
       /* Parameters related with match refreshing (for students) */
       case ActJoiMch:

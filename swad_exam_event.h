@@ -48,8 +48,6 @@ struct ExaEvt_UsrAnswer
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-long ExaEvt_GetEvtCodBeingPlayed (void);
-
 void ExaEvt_ResetEvent (struct ExaEvt_Event *Event);
 
 void ExaEvt_ListEvents (struct Exa_Exams *Exams,
@@ -79,44 +77,16 @@ long ExaEvt_GetParamEvtCod (void);
 void ExaEvt_PutButtonNewEvent (struct Exa_Exams *Exams,long ExaCod);
 void ExaEvt_RequestCreatOrEditEvent (void);
 void ExaEvt_ReceiveFormEvent (void);
-void ExaEvt_ResumeEvent (void);
-void ExaEvt_GetIndexes (long EvtCod,unsigned QstInd,
-		        unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
 
 void ExaEvt_RemoveGroup (long GrpCod);
 void ExaEvt_RemoveGroupsOfType (long GrpTypCod);
-
-void ExaEvt_PlayPauseEvent (void);
-void ExaEvt_ChangeNumColsEvt (void);
-void ExaEvt_ToggleVisibilResultsEvtQst (void);
-void ExaEvt_BackEvent (void);
-void ExaEvt_ForwardEvent (void);
 
 unsigned ExaEvt_GetNumEventsInExam (long ExaCod);
 unsigned ExaEvt_GetNumOpenEventsInExam (long ExaCod);
 
 bool ExaEvt_CheckIfICanPlayThisEventBasedOnGrps (const struct ExaEvt_Event *Event);
 
-void ExaEvt_WriteChoiceAnsViewEvent (const struct ExaEvt_Event *Event,
-                                     const struct Tst_Question *Question,
-                                     const char *Class,bool ShowResult);
-
-bool ExaEvt_RegisterMeAsParticipantInEvent (struct ExaEvt_Event *Event);
-
-void ExaEvt_GetEventBeingPlayed (void);
-void ExaEvt_JoinEventAsStd (void);
-void ExaEvt_RemoveMyQuestionAnswer (void);
-
-void ExaEvt_StartCountdown (void);
-void ExaEvt_RefreshEventTch (void);
-void ExaEvt_RefreshEventStd (void);
-
 void ExaEvt_GetQstAnsFromDB (long EvtCod,long UsrCod,unsigned QstInd,
 		             struct ExaEvt_UsrAnswer *UsrAnswer);
-void ExaEvt_ReceiveQuestionAnswer (void);
-
-unsigned ExaEvt_GetNumUsrsWhoAnsweredQst (long EvtCod,unsigned QstInd);
-unsigned ExaEvt_GetNumUsrsWhoHaveChosenAns (long EvtCod,unsigned QstInd,unsigned AnsInd);
-void ExaEvt_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,bool Correct);
 
 #endif

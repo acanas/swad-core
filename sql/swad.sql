@@ -477,13 +477,6 @@ CREATE TABLE IF NOT EXISTS exa_events (
 	StartTime DATETIME NOT NULL,
 	EndTime DATETIME NOT NULL,
 	Title VARCHAR(2047) NOT NULL,
-	QstInd INT NOT NULL DEFAULT 0,
-	QstCod INT NOT NULL DEFAULT -1,
-	Showing ENUM('start','stem','answers','results','end') NOT NULL DEFAULT 'start',
-	Countdown INT NOT NULL DEFAULT -1,
-	NumCols INT NOT NULL DEFAULT 1,
-	ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',
-	ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',
 	UNIQUE INDEX(EvtCod),
 	INDEX(ExaCod));
 --
