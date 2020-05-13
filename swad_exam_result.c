@@ -407,10 +407,10 @@ static void ExaRes_ListAllEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod)
    /***** Get all users who have answered any event question in this exam *****/
    NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in exam",
 			     "SELECT users.UsrCod FROM"
-			     " (SELECT DISTINCT exa_results.UsrCod AS UsrCod"	// row[0]
-			     " FROM exa_results,exa_events,exa_exams"
+			     " (SELECT DISTINCT exa_prints.UsrCod AS UsrCod"	// row[0]
+			     " FROM exa_prints,exa_events,exa_exams"
 			     " WHERE exa_events.ExaCod=%ld"
-			     " AND exa_events.EvtCod=exa_results.EvtCod"
+			     " AND exa_events.EvtCod=exa_prints.EvtCod"
 			     " AND exa_events.ExaCod=exa_exams.ExaCod"
 			     " AND exa_exams.CrsCod=%ld)"			// Extra check
 			     " AS users,usr_data"
@@ -503,10 +503,10 @@ static void ExaRes_ListAllEvtResultsInEvt (struct Exa_Exams *Exams,long EvtCod)
    /***** Get all users who have answered any event question in this exam *****/
    NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in event",
 			     "SELECT users.UsrCod FROM"
-			     " (SELECT exa_results.UsrCod AS UsrCod"	// row[0]
-			     " FROM exa_results,exa_events,exa_exams"
-			     " WHERE exa_results.EvtCod=%ld"
-			     " AND exa_results.EvtCod=exa_events.EvtCod"
+			     " (SELECT exa_prints.UsrCod AS UsrCod"	// row[0]
+			     " FROM exa_prints,exa_events,exa_exams"
+			     " WHERE exa_prints.EvtCod=%ld"
+			     " AND exa_prints.EvtCod=exa_events.EvtCod"
 			     " AND exa_events.ExaCod=exa_exams.ExaCod"
 			     " AND exa_exams.CrsCod=%ld)"		// Extra check
 			     " AS users,usr_data"
@@ -782,7 +782,7 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
    /***** Build events subquery *****/
    if (EvtCod > 0)
      {
-      if (asprintf (&EvtSubQuery," AND exa_results.EvtCod=%ld",EvtCod) < 0)
+      if (asprintf (&EvtSubQuery," AND exa_prints.EvtCod=%ld",EvtCod) < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
    else
@@ -820,18 +820,18 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
    /***** Make database query *****/
    NumResults =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get events results",
-			      "SELECT exa_results.EvtCod,"			// row[0]
-				     "UNIX_TIMESTAMP(exa_results.StartTime),"	// row[1]
-				     "UNIX_TIMESTAMP(exa_results.EndTime),"	// row[2]
-				     "exa_results.NumQsts,"			// row[3]
-				     "exa_results.NumQstsNotBlank,"		// row[4]
-				     "exa_results.Score,"			// row[5]
+			      "SELECT exa_prints.EvtCod,"			// row[0]
+				     "UNIX_TIMESTAMP(exa_prints.StartTime),"	// row[1]
+				     "UNIX_TIMESTAMP(exa_prints.EndTime),"	// row[2]
+				     "exa_prints.NumQsts,"			// row[3]
+				     "exa_prints.NumQstsNotBlank,"		// row[4]
+				     "exa_prints.Score,"			// row[5]
 				     "exa_exams.MaxGrade,"			// row[6]
 				     "exa_exams.Visibility"			// row[7]
-			      " FROM exa_results,exa_events,exa_exams"
-			      " WHERE exa_results.UsrCod=%ld"
+			      " FROM exa_prints,exa_events,exa_exams"
+			      " WHERE exa_prints.UsrCod=%ld"
 			      "%s"	// Event subquery
-			      " AND exa_results.EvtCod=exa_events.EvtCod"
+			      " AND exa_prints.EvtCod=exa_events.EvtCod"
 			      "%s"	// Exams subquery
 			      " AND exa_events.ExaCod=exa_exams.ExaCod"
 			      " AND exa_exams.CrsCod=%ld"			// Extra check
@@ -1326,14 +1326,13 @@ void ExaRes_GetExamResultQuestionsFromDB (long EvtCod,long UsrCod,
    Print->NumQsts = (unsigned)
 		    DB_QuerySELECT (&mysql_res,"can not get questions and answers"
 					       " of a event result",
-				    "SELECT exa_set_questions.QstCod,"	// row[0]
-					   "exa_set_questions.QstInd,"	// row[1]
-					   "exa_indexes.Indexes"	// row[2]
-				    " FROM exa_events,exa_set_questions,exa_indexes"
+				    "SELECT exa_set_questions.QstCod,"		// row[0]
+					   "exa_set_questions.QstInd,"		// row[1]
+					   "exa_print_questions.Indexes"	// row[2]
+				    " FROM exa_events,exa_set_questions,exa_print_questions"
 				    " WHERE exa_events.EvtCod=%ld"
-				    " AND exa_events.ExaCod=exa_set_questions.ExaCod"
-				    " AND exa_events.EvtCod=exa_indexes.EvtCod"
-				    " AND exa_set_questions.QstInd=exa_indexes.QstInd"
+				    " AND exa_events.EvtCod=exa_print_questions.EvtCod"
+				    " AND exa_set_questions.QstInd=exa_print_questions.QstInd"
 				    " ORDER BY exa_set_questions.QstInd",
 				    EvtCod);
    for (NumQst = 0, Print->NumQstsNotBlank = 0;
@@ -1385,15 +1384,15 @@ static void ExaRes_GetEventResultDataByEvtCod (long EvtCod,long UsrCod,
    /***** Make database query *****/
    if (DB_QuerySELECT (&mysql_res,"can not get data"
 				  " of a event result of a user",
-		       "SELECT UNIX_TIMESTAMP(exa_results.StartTime),"	// row[1]
-			      "UNIX_TIMESTAMP(exa_results.EndTime),"	// row[2]
-		              "exa_results.NumQsts,"			// row[3]
-		              "exa_results.NumQstsNotBlank,"		// row[4]
-		              "exa_results.Score"			// row[5]
-		       " FROM exa_results,exa_events,exa_exams"
-		       " WHERE exa_results.EvtCod=%ld"
-		       " AND exa_results.UsrCod=%ld"
-		       " AND exa_results.EvtCod=exa_events.EvtCod"
+		       "SELECT UNIX_TIMESTAMP(exa_prints.StartTime),"	// row[1]
+			      "UNIX_TIMESTAMP(exa_prints.EndTime),"	// row[2]
+		              "exa_prints.NumQsts,"			// row[3]
+		              "exa_prints.NumQstsNotBlank,"		// row[4]
+		              "exa_prints.Score"			// row[5]
+		       " FROM exa_prints,exa_events,exa_exams"
+		       " WHERE exa_prints.EvtCod=%ld"
+		       " AND exa_prints.UsrCod=%ld"
+		       " AND exa_prints.EvtCod=exa_events.EvtCod"
 		       " AND exa_events.ExaCod=exa_exams.ExaCod"
 		       " AND exa_exams.CrsCod=%ld",	// Extra check
 		       EvtCod,UsrCod,

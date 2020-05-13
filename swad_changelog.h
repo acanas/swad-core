@@ -548,10 +548,23 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.229 (2020-05-13)"
+#define Log_PLATFORM_VERSION	"SWAD 19.229.1 (2020-05-14)"
 #define CSS_FILE		"swad19.217.css"
 #define JS_FILE			"swad19.223.js"
 /*
+	Version 19.229.1: May 14, 2020  Removed unused database tables in exams.
+					Fixed bugs in exam prints. (301009 lines)
+					6 changes necessary in database:
+DROP TABLE exa_answers;
+DROP TABLE exa_happening;
+DROP TABLE exa_indexes;
+DROP TABLE exa_participants;
+DROP TABLE exa_results;
+DROP TABLE exa_times;
+					If you want to use MyISAM:
+ALTER TABLE exa_prints ENGINE=MyISAM;
+ALTER TABLE exa_print_questions ENGINE=MyISAM;
+
 	Version 19.229:   May 13, 2020  Removed unused code in exam events. (301163 lines)
 					1 change necessary in database:
 ALTER TABLE exa_events DROP COLUMN QstInd,DROP COLUMN QstCod,DROP COLUMN Showing,DROP COLUMN Countdown,DROP COLUMN NumCols,DROP COLUMN ShowQstResults;
@@ -619,7 +632,7 @@ UPDATE usr_data SET SideCols=0 WHERE (SideCols & 1)<>0 AND UsrCod NOT IN (SELECT
 					2 change necessary in database:
 CREATE TABLE IF NOT EXISTS exa_prints (PrnCod INT NOT NULL AUTO_INCREMENT,EvtCod INT NOT NULL,UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,NumQsts INT NOT NULL DEFAULT 0,NumQstsNotBlank INT NOT NULL DEFAULT 0,Sent ENUM('N','Y') NOT NULL DEFAULT 'N',Score DOUBLE PRECISION NOT NULL DEFAULT 0,UNIQUE INDEX(PrnCod),UNIQUE INDEX(EvtCod,UsrCod));
 CREATE TABLE IF NOT EXISTS exa_print_questions (PrnCod INT NOT NULL,QstCod INT NOT NULL,QstInd INT NOT NULL,Score DOUBLE PRECISION NOT NULL DEFAULT 0,Indexes TEXT NOT NULL,Answers TEXT NOT NULL,UNIQUE INDEX(PrnCod,QstCod));
------
+
 	Version 19.218.1: May 07, 2020  Fixed minor bug in test results and match results. (302171 lines)
 	Version 19.218:   May 07, 2020  Fixed bug in creation of new exam announcements, reported by Francisco Gómez Mula.
 					Changes in exam announcementes. (302170 lines)

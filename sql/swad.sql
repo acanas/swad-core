@@ -450,16 +450,6 @@ CREATE TABLE IF NOT EXISTS departments (
 	UNIQUE INDEX(DptCod),
 	INDEX(InsCod));
 --
--- Table exa_answers: stores the users' answers to the exam events
---
-CREATE TABLE IF NOT EXISTS exa_answers (
-	EvtCod INT NOT NULL,
-	UsrCod INT NOT NULL,
-	QstInd INT NOT NULL,
-	NumOpt TINYINT NOT NULL,
-	AnsInd TINYINT NOT NULL,
-	UNIQUE INDEX(EvtCod,UsrCod,QstInd));
---
 -- Table exa_groups: stores the groups associated to each event in an exam
 --
 CREATE TABLE IF NOT EXISTS exa_groups (
@@ -494,29 +484,6 @@ CREATE TABLE IF NOT EXISTS exa_exams (
 	UNIQUE INDEX(ExaCod),
 	INDEX(CrsCod));
 --
--- Table exa_happening: stores the current events taking place right now
---
-CREATE TABLE IF NOT EXISTS exa_happening (
-	EvtCod INT NOT NULL,
-	TS TIMESTAMP,
-	UNIQUE INDEX(EvtCod));
---
--- Table exa_indexes: stores the order of answers in an event
---
-CREATE TABLE IF NOT EXISTS exa_indexes (
-	EvtCod INT NOT NULL,
-	QstInd INT NOT NULL,
-	Indexes TEXT NOT NULL,
-	UNIQUE INDEX(EvtCod,QstInd));
---
--- Table exa_participants: stores the current exam event participants
---
-CREATE TABLE IF NOT EXISTS exa_participants (
-	EvtCod INT NOT NULL,
-	UsrCod INT NOT NULL,
-	TS TIMESTAMP,
-	UNIQUE INDEX(EvtCod,UsrCod));
---
 -- Table exa_print_questions: stores the questions and answers in exam prints made by users
 --
 CREATE TABLE IF NOT EXISTS exa_print_questions (
@@ -542,18 +509,6 @@ CREATE TABLE IF NOT EXISTS exa_prints (
 	Sent ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
 	UNIQUE INDEX(PrnCod),
-	UNIQUE INDEX(EvtCod,UsrCod));
---
--- Table exa_results: stores exam results
---
-CREATE TABLE IF NOT EXISTS exa_results (
-	EvtCod INT NOT NULL,
-	UsrCod INT NOT NULL,
-	StartTime DATETIME NOT NULL,
-	EndTime DATETIME NOT NULL,
-	NumQsts INT NOT NULL DEFAULT 0,
-	NumQstsNotBlank INT NOT NULL DEFAULT 0,
-	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
 	UNIQUE INDEX(EvtCod,UsrCod));
 --
 -- Table exa_set_answers: stores the answers of questions in exam sets
@@ -592,14 +547,6 @@ CREATE TABLE IF NOT EXISTS exa_sets (
 	Title VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(SetCod),
 	UNIQUE INDEX(ExaCod,SetInd));
---
--- Table exa_times: stores the elapsed time in every question in every exam event
---
-CREATE TABLE IF NOT EXISTS exa_times (
-	EvtCod INT NOT NULL,
-	QstInd INT NOT NULL,
-	ElapsedTime TIME NOT NULL DEFAULT 0,
-	UNIQUE INDEX(EvtCod,QstInd));
 --
 -- Table exam_announcements: stores the calls for examination
 --

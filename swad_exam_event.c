@@ -294,21 +294,15 @@ void ExaEvt_GetDataOfEventByCod (struct ExaEvt_Event *Event)
    /***** Get exam data event from database *****/
    NumRows = (unsigned)
 	     DB_QuerySELECT (&mysql_res,"can not get events",
-			     "SELECT EvtCod,"					// row[ 0]
-				    "ExaCod,"					// row[ 1]
-				    "Hidden,"					// row[ 2]
-				    "UsrCod,"					// row[ 3]
-				    "UNIX_TIMESTAMP(StartTime),"		// row[ 4]
-				    "UNIX_TIMESTAMP(EndTime),"			// row[ 5]
-	                     	    "NOW() BETWEEN StartTime AND EndTime,"	// row[ 6]
-				    "Title,"					// row[ 7]
-				    "QstInd,"					// row[ 8]
-				    "QstCod,"					// row[ 9]
-				    "Showing,"					// row[10]
-				    "Countdown,"				// row[11]
-				    "NumCols,"					// row[12]
-				    "ShowQstResults,"				// row[13]
-				    "ShowUsrResults"				// row[14]
+			     "SELECT EvtCod,"					// row[0]
+				    "ExaCod,"					// row[1]
+				    "Hidden,"					// row[2]
+				    "UsrCod,"					// row[3]
+				    "UNIX_TIMESTAMP(StartTime),"		// row[4]
+				    "UNIX_TIMESTAMP(EndTime),"			// row[5]
+	                     	    "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
+				    "Title,"					// row[7]
+				    "ShowUsrResults"				// row[8]
 			     " FROM exa_events"
 			     " WHERE EvtCod=%ld"
 			     " AND ExaCod IN"		// Extra check
@@ -944,13 +938,7 @@ mysql> SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'e
 static void ExaEvt_RemoveEventFromAllTables (long EvtCod)
   {
    /***** Remove exam event from secondary tables *****/
-   ExaEvt_RemoveEventFromTable (EvtCod,"exa_participants");
-   ExaEvt_RemoveEventFromTable (EvtCod,"exa_happening");
-   ExaEvt_RemoveEventFromTable (EvtCod,"exa_results");
-   ExaEvt_RemoveEventFromTable (EvtCod,"exa_answers");
-   ExaEvt_RemoveEventFromTable (EvtCod,"exa_times");
    ExaEvt_RemoveEventFromTable (EvtCod,"exa_groups");
-   ExaEvt_RemoveEventFromTable (EvtCod,"exa_indexes");
 
    /***** Remove exam event from main table *****/
    DB_QueryDELETE ("can not remove exam event",
@@ -974,13 +962,7 @@ static void ExaEvt_RemoveEventFromTable (long EvtCod,const char *TableName)
 void ExaEvt_RemoveEventsInExamFromAllTables (long ExaCod)
   {
    /***** Remove events from secondary tables *****/
-   ExaEvt_RemoveEventsInExamFromTable (ExaCod,"exa_participants");
-   ExaEvt_RemoveEventsInExamFromTable (ExaCod,"exa_happening");
-   ExaEvt_RemoveEventsInExamFromTable (ExaCod,"exa_results");
-   ExaEvt_RemoveEventsInExamFromTable (ExaCod,"exa_answers");
-   ExaEvt_RemoveEventsInExamFromTable (ExaCod,"exa_times");
    ExaEvt_RemoveEventsInExamFromTable (ExaCod,"exa_groups");
-   ExaEvt_RemoveEventsInExamFromTable (ExaCod,"exa_indexes");
 
    /***** Remove events from main table *****/
    DB_QueryDELETE ("can not remove events of an exam",
@@ -1009,13 +991,7 @@ static void ExaEvt_RemoveEventsInExamFromTable (long ExaCod,const char *TableNam
 void ExaEvt_RemoveEventInCourseFromAllTables (long CrsCod)
   {
    /***** Remove events from secondary tables *****/
-   ExaEvt_RemoveEventInCourseFromTable (CrsCod,"exa_participants");
-   ExaEvt_RemoveEventInCourseFromTable (CrsCod,"exa_happening");
-   ExaEvt_RemoveEventInCourseFromTable (CrsCod,"exa_results");
-   ExaEvt_RemoveEventInCourseFromTable (CrsCod,"exa_answers");
-   ExaEvt_RemoveEventInCourseFromTable (CrsCod,"exa_times");
    ExaEvt_RemoveEventInCourseFromTable (CrsCod,"exa_groups");
-   ExaEvt_RemoveEventInCourseFromTable (CrsCod,"exa_indexes");
 
    /***** Remove events from main table *****/
    DB_QueryDELETE ("can not remove events of a course",
@@ -1048,9 +1024,7 @@ static void ExaEvt_RemoveEventInCourseFromTable (long CrsCod,const char *TableNa
 void ExaEvt_RemoveUsrFromEventTablesInCrs (long UsrCod,long CrsCod)
   {
    /***** Remove student from secondary tables *****/
-   ExaEvt_RemoveUsrEvtResultsInCrs (UsrCod,CrsCod,"exa_participants");
-   ExaEvt_RemoveUsrEvtResultsInCrs (UsrCod,CrsCod,"exa_results");
-   ExaEvt_RemoveUsrEvtResultsInCrs (UsrCod,CrsCod,"exa_answers");
+   ExaEvt_RemoveUsrEvtResultsInCrs (UsrCod,CrsCod,"exa_prints");
   }
 
 static void ExaEvt_RemoveUsrEvtResultsInCrs (long UsrCod,long CrsCod,const char *TableName)
@@ -1700,12 +1674,13 @@ void ExaEvt_GetQstAnsFromDB (long EvtCod,long UsrCod,unsigned QstInd,
 
    /***** Get student's answer *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's answer to an exam event question",
-					"SELECT NumOpt,"	// row[0]
-					       "AnsInd"		// row[1]
-					" FROM exa_answers"
-					" WHERE EvtCod=%ld"
-					" AND UsrCod=%ld"
-					" AND QstInd=%u",
+					"SELECT Indexes,"	// row[0]	// TODO: Get correctly
+					       "Answers"	// row[1]	// TODO: Get correctly
+					" FROM exa_prints,exa_print_questions"
+					" WHERE exa_prints.EvtCod=%ld"
+					" AND exa_prints.UsrCod=%ld"
+                                        " AND exa_prints.PrnCod=exa_print_questions.PrnCod"
+					" AND exa_print_questions.QstInd=%u",
 					EvtCod,UsrCod,QstInd);
    if (NumRows) // Answer found...
      {

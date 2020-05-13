@@ -126,8 +126,7 @@ static unsigned ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print);
 // static void ExaPrn_PutParamNumQst (unsigned NumQst);
 static unsigned ExaPrn_GetParamQstInd (void);
 
-static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *Print,
-                                                          bool UpdateQstScore);
+static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *Print);
 static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Print,
                                                         unsigned NumQst);
 
@@ -156,10 +155,10 @@ static void ExaPrn_GetAnswerFromDB (struct ExaPrn_Print *Print,long QstCod,
                                     char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1]);
 static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
                                            unsigned NumQst);
-static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print);
 
-// static void ExaPrn_PutParamPrnCod (long ExaCod);
-// static long ExaPrn_GetParamPrnCod (void);
+static void ExaPrn_GetNumQstsNotBlank (struct ExaPrn_Print *Print);
+static void ExaPrn_ComputeTotalScoreOfPrint (struct ExaPrn_Print *Print);
+static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print);
 
 /*****************************************************************************/
 /**************************** Reset exam print *******************************/
@@ -229,8 +228,7 @@ void ExaPrn_ShowExamPrint (void)
 	{
 	 /***** Create/update new exam print in database *****/
 	 ExaPrn_CreatePrintInDB (&Print);
-	 ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
-						       false);	// Don't update question score
+	 ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print);
 	}
       }
 
@@ -976,6 +974,8 @@ void ExaPrn_ReceivePrintAnswer (void)
    ExaPrn_ComputeScoreAndStoreQuestionOfPrint (&Print,NumQst);
 
    /* Update exam print in database */
+   ExaPrn_GetNumQstsNotBlank (&Print);
+   ExaPrn_ComputeTotalScoreOfPrint (&Print);
    ExaPrn_UpdatePrintInDB (&Print);
 
    /***** Show table with questions to answer *****/
@@ -1001,15 +1001,6 @@ static unsigned ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/****************** Write parameter with index of question *******************/
-/*****************************************************************************/
-/*
-static void ExaPrn_PutParamNumQst (unsigned NumQst)
-  {
-   Par_PutHiddenParamUnsigned (NULL,"NumQst",NumQst);
-  }
-*/
-/*****************************************************************************/
 /******************* Get parameter with index of question ********************/
 /*****************************************************************************/
 
@@ -1028,8 +1019,7 @@ static unsigned ExaPrn_GetParamQstInd (void)
 /*********** Compute score of each question and store in database ************/
 /*****************************************************************************/
 
-static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *Print,
-                                                          bool UpdateQstScore)
+static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *Print)
   {
    unsigned NumQst;
 
@@ -1049,10 +1039,6 @@ static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *P
       Print->Score += Print->PrintedQuestions[NumQst].Score;
       if (Print->PrintedQuestions[NumQst].AnswerIsNotBlank)
 	 Print->NumQstsNotBlank++;
-
-      /* Update the number of hits and the score of this question in tests database */
-      if (UpdateQstScore)
-	 Tst_UpdateQstScoreInDB (&Print->PrintedQuestions[NumQst]);
      }
   }
 
@@ -1374,6 +1360,53 @@ static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
   }
 
 /*****************************************************************************/
+/************ Get number of questions not blank in an exam print *************/
+/*****************************************************************************/
+
+static void ExaPrn_GetNumQstsNotBlank (struct ExaPrn_Print *Print)
+  {
+   /***** Count number of questions not blank in exam print in database *****/
+   Print->NumQstsNotBlank = (unsigned)
+	                    DB_QueryCOUNT ("can not get number of questions not blank",
+				           "SELECT COUNT(*) FROM exa_print_questions"
+				           " WHERE PrnCod=%ld AND Answers<>''",
+				           Print->PrnCod);
+  }
+
+/*****************************************************************************/
+/***************** Compute score of questions of an exam print ***************/
+/*****************************************************************************/
+
+static void ExaPrn_ComputeTotalScoreOfPrint (struct ExaPrn_Print *Print)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Default score *****/
+   Print->Score = 0.0;
+
+   /***** Compute total score of exam print *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get score of exam print",
+		       "SELECT SUM(Score) FROM exa_print_questions WHERE PrnCod=%ld",
+		       Print->PrnCod))
+     {
+      /***** Get sum of individual scores (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
+      if (row[0])
+	{
+	 /* Get score (row[0]) */
+	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
+	 if (sscanf (row[0],"%lf",&Print->Score) != 1)
+	    Print->Score = 0.0;
+	 Str_SetDecimalPointToLocal ();	// Return to local system
+	}
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
 /********************** Update exam print in database ************************/
 /*****************************************************************************/
 
@@ -1394,8 +1427,7 @@ static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print)
 			         'N',
 		   Print->Score,
 		   Print->PrnCod,
-		   Print->EvtCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Print->EvtCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 

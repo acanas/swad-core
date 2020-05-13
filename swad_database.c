@@ -999,28 +999,6 @@ mysql> DESCRIBE departments;
 		   "UNIQUE INDEX(DptCod),"
 		   "INDEX(InsCod))");
 
-   /***** Table exa_answers *****/
-/*
-mysql> DESCRIBE exa_answers;
-+--------+------------+------+-----+---------+-------+
-| Field  | Type       | Null | Key | Default | Extra |
-+--------+------------+------+-----+---------+-------+
-| EvtCod | int(11)    | NO   | PRI | NULL    |       |
-| UsrCod | int(11)    | NO   | PRI | NULL    |       |
-| QstInd | int(11)    | NO   | PRI | NULL    |       |
-| NumOpt | tinyint(4) | NO   |     | NULL    |       |
-| AnsInd | tinyint(4) | NO   |     | NULL    |       |
-+--------+------------+------+-----+---------+-------+
-5 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_answers ("
-			"EvtCod INT NOT NULL,"
-	                "UsrCod INT NOT NULL,"
-			"QstInd INT NOT NULL,"
-			"NumOpt TINYINT NOT NULL,"	// Number of button on screen (Always ordered: 0,1,2,3)
-			"AnsInd TINYINT NOT NULL,"	// Answer index (Can be shuffled: 0,3,1,2)
-		   "UNIQUE INDEX(EvtCod,UsrCod,QstInd))");
-
    /***** Table exa_groups *****/
 /*
 mysql> DESCRIBE exa_groups;
@@ -1095,58 +1073,6 @@ mysql> DESCRIBE exa_exams;
 		   "UNIQUE INDEX(ExaCod),"
 		   "INDEX(CrsCod))");
 
-   /***** Table exa_happening *****/
-/*
-mysql> DESCRIBE exa_happening;
-+--------+-----------+------+-----+-------------------+-----------------------------+
-| Field  | Type      | Null | Key | Default           | Extra                       |
-+--------+-----------+------+-----+-------------------+-----------------------------+
-| EvtCod | int(11)   | NO   | PRI | NULL              |                             |
-| TS     | timestamp | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
-+--------+-----------+------+-----+-------------------+-----------------------------+
-2 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_happening ("
-			"EvtCod INT NOT NULL,"
-		        "TS TIMESTAMP,"
-		   "UNIQUE INDEX(EvtCod))");
-
-   /***** Table exa_indexes *****/
-/*
-mysql> DESCRIBE exa_indexes;
-+---------+---------+------+-----+---------+-------+
-| Field   | Type    | Null | Key | Default | Extra |
-+---------+---------+------+-----+---------+-------+
-| EvtCod  | int(11) | NO   | PRI | NULL    |       |
-| QstInd  | int(11) | NO   | PRI | NULL    |       |
-| Indexes | text    | NO   |     | NULL    |       |
-+---------+---------+------+-----+---------+-------+
-3 rows in set (0.01 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_indexes ("
-			"EvtCod INT NOT NULL,"
-			"QstInd INT NOT NULL,"
-			"Indexes TEXT NOT NULL,"	// ExaRes_MAX_BYTES_INDEXES_ONE_QST
-		   "UNIQUE INDEX(EvtCod,QstInd))");
-
-   /***** Table exa_participants *****/
-/*
-mysql> DESCRIBE exa_participants;
-+--------+-----------+------+-----+-------------------+-----------------------------+
-| Field  | Type      | Null | Key | Default           | Extra                       |
-+--------+-----------+------+-----+-------------------+-----------------------------+
-| EvtCod | int(11)   | NO   | PRI | NULL              |                             |
-| UsrCod | int(11)   | NO   | PRI | NULL              |                             |
-| TS     | timestamp | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
-+--------+-----------+------+-----+-------------------+-----------------------------+
-3 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_participants ("
-			"EvtCod INT NOT NULL,"
-	                "UsrCod INT NOT NULL,"
-		        "TS TIMESTAMP,"
-		   "UNIQUE INDEX(EvtCod,UsrCod))");
-
 /***** Table exa_print_questions *****/
 /*
 mysql> DESCRIBE exa_print_questions;
@@ -1202,32 +1128,6 @@ mysql> DESCRIBE exa_prints;
 			"Sent ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(PrnCod),"
-		   "UNIQUE INDEX(EvtCod,UsrCod))");
-
-   /***** Table exa_results *****/
-/*
-mysql> DESCRIBE exa_results;
-+-----------------+----------+------+-----+---------+-------+
-| Field           | Type     | Null | Key | Default | Extra |
-+-----------------+----------+------+-----+---------+-------+
-| EvtCod          | int(11)  | NO   | PRI | NULL    |       |
-| UsrCod          | int(11)  | NO   | PRI | NULL    |       |
-| StartTime       | datetime | NO   |     | NULL    |       |
-| EndTime         | datetime | NO   |     | NULL    |       |
-| NumQsts         | int(11)  | NO   |     | 0       |       |
-| NumQstsNotBlank | int(11)  | NO   |     | 0       |       |
-| Score           | double   | NO   |     | 0       |       |
-+-----------------+----------+------+-----+---------+-------+
-7 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_results ("
-			"EvtCod INT NOT NULL,"
-			"UsrCod INT NOT NULL,"
-			"StartTime DATETIME NOT NULL,"	// Time this user started to answer
-			"EndTime DATETIME NOT NULL,"	// Time this user finished to answer
-			"NumQsts INT NOT NULL DEFAULT 0,"
-			"NumQstsNotBlank INT NOT NULL DEFAULT 0,"
-			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(EvtCod,UsrCod))");
 
    /***** Table exa_set_answers *****/
@@ -1305,24 +1205,6 @@ mysql> DESCRIBE exa_sets;
 			"Title VARCHAR(2047) NOT NULL,"	// ExaSet_MAX_BYTES_TITLE
 		   "UNIQUE INDEX(SetCod),"
 		   "UNIQUE INDEX(ExaCod,SetInd))");
-
-      /***** Table exa_times *****/
-/*
-mysql> DESCRIBE exa_times;
-+-------------+---------+------+-----+----------+-------+
-| Field       | Type    | Null | Key | Default  | Extra |
-+-------------+---------+------+-----+----------+-------+
-| EvtCod      | int(11) | NO   | PRI | NULL     |       |
-| QstInd      | int(11) | NO   | PRI | NULL     |       |
-| ElapsedTime | time    | NO   |     | 00:00:00 |       |
-+-------------+---------+------+-----+----------+-------+
-3 rows in set (0.01 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_times ("
-			"EvtCod INT NOT NULL,"
-			"QstInd INT NOT NULL,"
-			"ElapsedTime TIME NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(EvtCod,QstInd))");
 
    /***** Table exam_announcements *****/
 /*
