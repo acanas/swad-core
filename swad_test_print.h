@@ -78,6 +78,7 @@ void TstPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				struct Tst_Question *Question);
 
 //-----------------------------------------------------------------------------
+
 void TstPrn_ComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 		                const struct Tst_Question *Question);
 void TstPrn_ComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,

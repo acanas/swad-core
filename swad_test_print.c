@@ -403,23 +403,19 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
 void TstPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				struct Tst_Question *Question)
   {
-   /***** Write answer depending on type *****/
-   switch (Question->Answer.Type)
-     {
-      case Tst_ANS_INT:
-         TstPrn_GetCorrectAndComputeIntAnsScore (PrintedQuestion,Question); break;
-      case Tst_ANS_FLOAT:
-	 TstPrn_GetCorrectAndComputeFltAnsScore (PrintedQuestion,Question); break;
-      case Tst_ANS_TRUE_FALSE:
-         TstPrn_GetCorrectAndComputeTF_AnsScore (PrintedQuestion,Question); break;
-      case Tst_ANS_UNIQUE_CHOICE:
-      case Tst_ANS_MULTIPLE_CHOICE:
-         TstPrn_GetCorrectAndComputeChoAnsScore (PrintedQuestion,Question); break;
-      case Tst_ANS_TEXT:
-         TstPrn_GetCorrectAndComputeTxtAnsScore (PrintedQuestion,Question); break;
-      default:
-         break;
-     }
+   void (*TstPrn_GetCorrectAndComputeAnsScore[Tst_NUM_ANS_TYPES]) (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                                   struct Tst_Question *Question) =
+    {
+     [Tst_ANS_INT            ] = TstPrn_GetCorrectAndComputeIntAnsScore,
+     [Tst_ANS_FLOAT          ] = TstPrn_GetCorrectAndComputeFltAnsScore,
+     [Tst_ANS_TRUE_FALSE     ] = TstPrn_GetCorrectAndComputeTF_AnsScore,
+     [Tst_ANS_UNIQUE_CHOICE  ] = TstPrn_GetCorrectAndComputeChoAnsScore,
+     [Tst_ANS_MULTIPLE_CHOICE] = TstPrn_GetCorrectAndComputeChoAnsScore,
+     [Tst_ANS_TEXT           ] = TstPrn_GetCorrectAndComputeTxtAnsScore,
+    };
+
+   /***** Get correct answer and compute answer score depending on type *****/
+   TstPrn_GetCorrectAndComputeAnsScore[Question->Answer.Type] (PrintedQuestion,Question);
   }
 
 /*****************************************************************************/

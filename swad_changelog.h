@@ -548,10 +548,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.228 (2020-05-13)"
+#define Log_PLATFORM_VERSION	"SWAD 19.228.1 (2020-05-13)"
 #define CSS_FILE		"swad19.217.css"
 #define JS_FILE			"swad19.223.js"
 /*
+	Version 19.228.1: May 13, 2020  Code refactoring in exam prints. (303828 lines)
 	Version 19.228:   May 13, 2020  Code refactoring and bug fixing in exam prints. (303837 lines)
 	Version 19.227.1: May 13, 2020  Cache of linked GIFs and videos. (303612 lines)
 	Version 19.227:   May 13, 2020  Cache of linked images. (303586 lines)
