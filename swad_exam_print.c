@@ -1117,50 +1117,45 @@ void ExaPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 static void ExaPrn_GetCorrectAndComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				                    struct Tst_Question *Question)
   {
-   /***** Get the numerical value of the correct answer *****/
+   /***** Get the numerical value of the correct answer,
+          and compute score *****/
    ExaPrn_GetCorrectIntAnswerFromDB (Question);
-
-   /***** Compute score *****/
    TstPrn_ComputeIntAnsScore (PrintedQuestion,Question);
   }
 
 static void ExaPrn_GetCorrectAndComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				                    struct Tst_Question *Question)
   {
-   /***** Get the numerical value of the minimum and maximum correct answers *****/
+   /***** Get the numerical value of the minimum and maximum correct answers,
+          and compute score *****/
    ExaPrn_GetCorrectFltAnswerFromDB (Question);
-
-   /***** Compute score *****/
    TstPrn_ComputeFltAnsScore (PrintedQuestion,Question);
   }
 
 static void ExaPrn_GetCorrectAndComputeTF_AnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				                   struct Tst_Question *Question)
+				                    struct Tst_Question *Question)
   {
-   /***** Get answer true or false *****/
+   /***** Get answer true or false,
+          and compute score *****/
    ExaPrn_GetCorrectTF_AnswerFromDB (Question);
-
-   /***** Compute score *****/
    TstPrn_ComputeTF_AnsScore (PrintedQuestion,Question);
   }
 
 static void ExaPrn_GetCorrectAndComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				                       struct Tst_Question *Question)
+				                    struct Tst_Question *Question)
   {
-   /***** Get correct options of test question from database *****/
+   /***** Get correct options of test question from database,
+          and compute score *****/
    ExaPrn_GetCorrectChoAnswerFromDB (Question);
-
-   /***** Compute the total score of this question *****/
    TstPrn_ComputeChoAnsScore (PrintedQuestion,Question);
   }
 
 static void ExaPrn_GetCorrectAndComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				                    struct Tst_Question *Question)
   {
-   /***** Get correct answers for this question from database *****/
+   /***** Get correct text answers for this question from database,
+          and compute score *****/
    ExaPrn_GetCorrectTxtAnswerFromDB (Question);
-
-   /***** Compute score *****/
    TstPrn_ComputeTxtAnsScore (PrintedQuestion,Question);
   }
 
