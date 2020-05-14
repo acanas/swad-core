@@ -154,7 +154,7 @@ static void ExaRes_ListMyEvtResultsInCrs (struct Exa_Exams *Exams)
 
 void ExaRes_ShowMyExaResultsInExa (void)
   {
-   extern const char *Txt_Results_of_game_X;
+   extern const char *Txt_Results_of_exam_X;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
@@ -180,7 +180,7 @@ void ExaRes_ShowMyExaResultsInExa (void)
 
    /***** List my events results in exam *****/
    ExaRes_ShowResultsBegin (&Exams,
-                            Str_BuildStringStr (Txt_Results_of_game_X,Exam.Title),
+                            Str_BuildStringStr (Txt_Results_of_exam_X,Exam.Title),
 			    false);	// Do not list exams to select
    Str_FreeString ();
    ExaRes_ListMyEvtResultsInExa (&Exams,Exam.ExaCod);
@@ -206,7 +206,7 @@ static void ExaRes_ListMyEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod)
 
 void ExaRes_ShowMyExaResultsInEvt (void)
   {
-   extern const char *Txt_Results_of_match_X;
+   extern const char *Txt_Results_of_event_X;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
@@ -232,7 +232,7 @@ void ExaRes_ShowMyExaResultsInEvt (void)
 	                     false);	// Do not put form to start new event
 
    /***** List my events results in event *****/
-   ExaRes_ShowResultsBegin (&Exams,Str_BuildStringStr (Txt_Results_of_match_X,Event.Title),
+   ExaRes_ShowResultsBegin (&Exams,Str_BuildStringStr (Txt_Results_of_event_X,Event.Title),
 			    false);	// Do not list exams to select
    Str_FreeString ();
    ExaRes_ListMyEvtResultsInEvt (&Exams,Event.EvtCod);
@@ -360,7 +360,7 @@ static void ExaRes_PutFormToSelUsrsToViewEvtResults (void *Exams)
 
 void ExaRes_ShowAllExaResultsInExa (void)
   {
-   extern const char *Txt_Results_of_game_X;
+   extern const char *Txt_Results_of_exam_X;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
@@ -384,7 +384,7 @@ void ExaRes_ShowAllExaResultsInExa (void)
 
    /***** List events results in exam *****/
    ExaRes_ShowResultsBegin (&Exams,
-                            Str_BuildStringStr (Txt_Results_of_game_X,Exam.Title),
+                            Str_BuildStringStr (Txt_Results_of_exam_X,Exam.Title),
 			    false);	// Do not list exams to select
    Str_FreeString ();
    ExaRes_ListAllEvtResultsInExa (&Exams,Exam.ExaCod);
@@ -451,7 +451,7 @@ static void ExaRes_ListAllEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod)
 
 void ExaRes_ShowAllExaResultsInEvt (void)
   {
-   extern const char *Txt_Results_of_match_X;
+   extern const char *Txt_Results_of_event_X;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
@@ -480,7 +480,7 @@ void ExaRes_ShowAllExaResultsInEvt (void)
 
    /***** List events results in event *****/
    ExaRes_ShowResultsBegin (&Exams,
-                            Str_BuildStringStr (Txt_Results_of_match_X,Event.Title),
+                            Str_BuildStringStr (Txt_Results_of_event_X,Event.Title),
 			    false);	// Do not list exams to select
    Str_FreeString ();
    ExaRes_ListAllEvtResultsInEvt (&Exams,Event.EvtCod);
@@ -680,7 +680,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 static void ExaRes_ShowHeaderEvtResults (Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_User[Usr_NUM_SEXS];
-   extern const char *Txt_Match;
+   extern const char *Txt_Event;
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
    extern const char *Txt_Non_blank_BR_questions;
@@ -694,7 +694,7 @@ static void ExaRes_ShowHeaderEvtResults (Usr_MeOrOther_t MeOrOther)
 		                                           Usr_SEX_UNKNOWN]);
    HTM_TH (1,1,"LT",Txt_START_END_TIME[Dat_START_TIME]);
    HTM_TH (1,1,"LT",Txt_START_END_TIME[Dat_END_TIME  ]);
-   HTM_TH (1,1,"LT",Txt_Match);
+   HTM_TH (1,1,"LT",Txt_Event);
    HTM_TH (1,1,"RT",Txt_Questions);
    HTM_TH (1,1,"RT",Txt_Non_blank_BR_questions);
    HTM_TH (1,1,"RT",Txt_Score);
@@ -746,7 +746,7 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
 				   long ExaCod,	// <= 0 ==> any
 				   const char *ExamsSelectedCommas)
   {
-   extern const char *Txt_Match_result;
+   extern const char *Txt_Event_result;
    char *EvtSubQuery;
    char *ExaSubQuery;
    MYSQL_RES *mysql_res;
@@ -984,7 +984,7 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
 		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 		  break;
 	      }
-	    Ico_PutIconLink ("tasks.svg",Txt_Match_result);
+	    Ico_PutIconLink ("tasks.svg",Txt_Event_result);
 	    Frm_EndForm ();
 	   }
 	 else

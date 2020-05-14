@@ -11424,7 +11424,7 @@ const char *Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_cour
 #elif L==4	// es
 	"Evento privado; pulse para hacerlo visible por los usuarios de sus asignaturas";
 #elif L==5	// fr
-	"Event privat, cliquez pour le rendre visible aux utilisateurs de vos mati&egrave;res";
+	"&Eacute;v&eacute;nement privat, cliquez pour le rendre visible aux utilisateurs de vos mati&egrave;res";
 #elif L==6	// gn
 	"Evento privado; pulse para hacerlo visible por los usuarios de sus asignaturas";	// Okoteve traducción
 #elif L==7	// it
@@ -11454,6 +11454,27 @@ const char *Txt_Event_X_removed =	// Warning: it is very important to include %s
 	"Wydarzenie <strong>%s</strong> usuniete.";
 #elif L==9	// pt
 	"Evento <strong>%s</strong> removido.";
+#endif
+
+const char *Txt_Event_result =
+#if   L==1	// ca
+	"Resultat del esdeveniment";
+#elif L==2	// de
+	"Ergebnis der Ereignis";
+#elif L==3	// en
+	"Event result";
+#elif L==4	// es
+	"Resultado del evento";
+#elif L==5	// fr
+	"R&eacute;sultat de l'&eacute;v&eacute;nement";
+#elif L==6	// gn
+	"Resultado del evento";	// Okoteve traducción
+#elif L==7	// it
+	"Risultato dell'evento";
+#elif L==8	// pl
+	"Wynik wydarzenia";
+#elif L==9	// pt
+	"Resultado do evento";
 #endif
 
 const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private =
@@ -34712,6 +34733,48 @@ const char *Txt_Results_of_game_X =	// Warning: it is very important to include 
 	"Wyniki gry &quot;%s&quot;";
 #elif L==9	// pt
 	"Resultados do jogo &quot;%s&quot;";
+#endif
+
+const char *Txt_Results_of_event_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Resultats del esdeveniment &quot;%s&quot;";
+#elif L==2	// de
+	"Ergebnisse von Ereignis &quot;%s&quot;";
+#elif L==3	// en
+	"Results of event &quot;%s&quot;";
+#elif L==4	// es
+	"Resultados del evento &quot;%s&quot;";
+#elif L==5	// fr
+	"R&eacute;sultats de l'&eacute;v&eacute;nement &quot;%s&quot;";
+#elif L==6	// gn
+	"Resultados del evento &quot;%s&quot;";	// Okoteve traducción
+#elif L==7	// it
+	"Risultati del evento &quot;%s&quot;";
+#elif L==8	// pl
+	"Wyniki wydarzenie &quot;%s&quot;";
+#elif L==9	// pt
+	"Resultados do evento &quot;%s&quot;";
+#endif
+
+const char *Txt_Results_of_exam_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Resultats del examen &quot;%s&quot;";
+#elif L==2	// de
+	"Ergebnisse von Pr&uuml;fung &quot;%s&quot;";
+#elif L==3	// en
+	"Results of exam &quot;%s&quot;";
+#elif L==4	// es
+	"Resultados del examen &quot;%s&quot;";
+#elif L==5	// fr
+	"R&eacute;sultats de l'exam &quot;%s&quot;";
+#elif L==6	// gn
+	"Resultados del examen &quot;%s&quot;";	// Okoteve traducción
+#elif L==7	// it
+	"Risultati del esame &quot;%s&quot;";
+#elif L==8	// pl
+	"Wyniki egzamin &quot;%s&quot;";
+#elif L==9	// pt
+	"Resultados do exame &quot;%s&quot;";
 #endif
 
 const char *Txt_Results_of_match_X =	// Warning: it is very important to include %s in the following sentences
