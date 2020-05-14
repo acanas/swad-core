@@ -62,7 +62,7 @@ extern struct Globals Gbl;
 struct ExaPrn_Print
   {
    long PrnCod;			// Exam print code
-   long ExaCod;			// Exam code
+   // long ExaCod;			// Exam code
    long EvtCod;			// Event code associated to this print
    long UsrCod;			// User who answered the exam print
    time_t TimeUTC[Dat_NUM_START_END_TIME];
@@ -90,7 +90,7 @@ static void ExaPrn_ResetPrint (struct ExaPrn_Print *Print);
 static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print);
 
 static void ExaPrn_GetPrintDataByEvtCodAndUsrCod (struct ExaPrn_Print *Print);
-static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print);
+static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,long ExaCod);
 static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
                                                   struct ExaSet_Set *Set,
                                                   unsigned *NumQstInPrint);
@@ -174,7 +174,7 @@ static void ExaPrn_ResetPrint (struct ExaPrn_Print *Print)
 static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print)
   {
    Print->PrnCod                  = -1L;
-   Print->ExaCod		  = -1L;
+   // Print->ExaCod		  = -1L;
    Print->TimeUTC[Dat_START_TIME] =
    Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Print->NumQsts                 =
@@ -203,37 +203,35 @@ void ExaPrn_ShowExamPrint (void)
    /***** Get and check parameters *****/
    ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
 
-   /***** Get print data from database *****/
-   Print.EvtCod = Event.EvtCod;
-   Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
-
-   if (Print.PrnCod > 0)	// Print exists
+   /***** Check if I can access to this event *****/
+   if (ExaEvt_CheckIfICanAnswerThisEvent (&Event))
      {
-      Ale_ShowAlert (Ale_INFO,"Examen existente.");
+      /***** Get print data from database *****/
+      Print.EvtCod = Event.EvtCod;
+      Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+      ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
 
-      /***** Get questions and answers from database *****/
-      ExaPrn_GetPrintQuestionsFromDB (&Print);
+      if (Print.PrnCod > 0)	// Print exists and I can access to it
+	 /***** Get questions and answers from database *****/
+	 ExaPrn_GetPrintQuestionsFromDB (&Print);
+      else
+	{
+	 /***** Get questions from database *****/
+	 ExaPrn_GetQuestionsForNewPrintFromDB (&Print,Exam.ExaCod);
+
+	 if (Print.NumQsts)
+	   {
+	    /***** Create/update new exam print in database *****/
+	    ExaPrn_CreatePrintInDB (&Print);
+	    ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print);
+	   }
+	 }
+
+      /***** Show test exam to be answered *****/
+      ExaPrn_ShowExamPrintToFillIt (Exam.Title,&Print);
      }
    else
-     {
-      Ale_ShowAlert (Ale_INFO,"Examen nuevo.");
-
-      /***** Get questions from database *****/
-      // Print doesn't exists ==> exam code is -1 ==> so initialize it
-      Print.ExaCod = Exam.ExaCod;
-      ExaPrn_GetQuestionsForNewPrintFromDB (&Print);
-
-      if (Print.NumQsts)
-	{
-	 /***** Create/update new exam print in database *****/
-	 ExaPrn_CreatePrintInDB (&Print);
-	 ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print);
-	}
-      }
-
-   /***** Show test exam to be answered *****/
-   ExaPrn_ShowExamPrintToFillIt (Exam.Title,&Print);
+      Ale_ShowAlert (Ale_INFO,"Usted no tiene acceso al examen.");	// TODO: Need translation!!!!
   }
 
 /*****************************************************************************/
@@ -247,51 +245,42 @@ static void ExaPrn_GetPrintDataByEvtCodAndUsrCod (struct ExaPrn_Print *Print)
 
    /***** Make database query *****/
    if (DB_QuerySELECT (&mysql_res,"can not get data of an exam print",
-		       "SELECT exa_prints.PrnCod,"			// row[0]
-                              "exa_exams.ExaCod,"			// row[1]
-			      "UNIX_TIMESTAMP(exa_prints.StartTime),"	// row[2]
-			      "UNIX_TIMESTAMP(exa_prints.EndTime),"	// row[3]
-		              "exa_prints.NumQsts,"			// row[4]
-		              "exa_prints.NumQstsNotBlank,"		// row[5]
-			      "exa_prints.Sent,"			// row[6]
-		              "exa_prints.Score"			// row[7]
-		       " FROM exa_prints,exa_events,exa_exams"
-	               " WHERE exa_prints.EvtCod=%ld"
-                       " AND exa_prints.UsrCod=%ld"			// Extra check: it belong to user
-                       " AND exa_prints.EvtCod=exa_events.EvtCod"
-		       " AND (NOW() BETWEEN exa_events.StartTime AND exa_events.EndTime)"	// Extra check: event is open
-                       " AND exa_events.ExaCod=exa_exams.ExaCod"
-                       " AND exa_exams.CrsCod=%ld",			// Extra check: it belong to current course
+		       "SELECT PrnCod,"				// row[0]
+			      "UNIX_TIMESTAMP(StartTime),"	// row[1]
+			      "UNIX_TIMESTAMP(EndTime),"	// row[2]
+		              "NumQsts,"			// row[3]
+		              "NumQstsNotBlank,"		// row[4]
+			      "Sent,"				// row[5]
+		              "Score"				// row[6]
+		       " FROM exa_prints"
+	               " WHERE EvtCod=%ld"
+                       " AND UsrCod=%ld",
 		       Print->EvtCod,
-		       Print->UsrCod,
-		       Gbl.Hierarchy.Crs.CrsCod) == 1)
+		       Print->UsrCod) == 1)
      {
       row = mysql_fetch_row (mysql_res);
 
       /* Get print code (row[0]) */
       Print->PrnCod = Str_ConvertStrCodToLongCod (row[0]);
 
-       /* Get exam code (row[1]) */
-      Print->ExaCod = Str_ConvertStrCodToLongCod (row[1]);
+      /* Get date-time (row[1] and row[2] hold UTC date-time) */
+      Print->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[1]);
+      Print->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[2]);
 
-      /* Get date-time (row[2] and row[3] hold UTC date-time) */
-      Print->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[2]);
-      Print->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[3]);
-
-      /* Get number of questions (row[4]) */
-      if (sscanf (row[4],"%u",&Print->NumQsts) != 1)
+      /* Get number of questions (row[3]) */
+      if (sscanf (row[3],"%u",&Print->NumQsts) != 1)
 	 Print->NumQsts = 0;
 
-      /* Get number of questions not blank (row[5]) */
-      if (sscanf (row[5],"%u",&Print->NumQstsNotBlank) != 1)
+      /* Get number of questions not blank (row[4]) */
+      if (sscanf (row[4],"%u",&Print->NumQstsNotBlank) != 1)
 	 Print->NumQstsNotBlank = 0;
 
-      /* Get if exam has been sent (row[6]) */
-      Print->Sent = (row[6][0] == 'Y');
+      /* Get if exam has been sent (row[5]) */
+      Print->Sent = (row[5][0] == 'Y');
 
-      /* Get score (row[7]) */
+      /* Get score (row[6]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[7],"%lf",&Print->Score) != 1)
+      if (sscanf (row[6],"%lf",&Print->Score) != 1)
 	 Print->Score = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
@@ -306,7 +295,7 @@ static void ExaPrn_GetPrintDataByEvtCodAndUsrCod (struct ExaPrn_Print *Print)
 /*********** Get questions for a new exam print from the database ************/
 /*****************************************************************************/
 
-static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print)
+static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,long ExaCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -325,7 +314,7 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print)
 			      " FROM exa_sets"
 			      " WHERE ExaCod=%ld"
 			      " ORDER BY SetInd",
-			      Print->ExaCod);
+			      ExaCod);
 
    /***** Get questions from all sets *****/
    Print->NumQsts = 0;
@@ -658,7 +647,7 @@ static void ExaPrn_ShowTableWithQstsToFill (struct ExaPrn_Print *Print)
       Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
 
       /* Show question */
-      ExaSet_GetQstDataFromDB (&Question,Print->ExaCod);
+      ExaSet_GetQstDataFromDB (&Question);
 
       /* Write question and answers */
       ExaPrn_WriteQstAndAnsToFill (Print,NumQst,&Question);
@@ -691,9 +680,7 @@ static void ExaPrn_WriteQstAndAnsToFill (struct ExaPrn_Print *Print,
    if (Print->PrintedQuestions[NumQst].SetCod != CurrentSet.SetCod)
      {
       /***** Get data of this set *****/
-      CurrentSet.ExaCod = Print->ExaCod;
       CurrentSet.SetCod = Print->PrintedQuestions[NumQst].SetCod;
-
       ExaSet_GetDataOfSetByCod (&CurrentSet);
 
       /***** Title for this set *****/
@@ -956,30 +943,38 @@ void ExaPrn_ReceivePrintAnswer (void)
    /***** Reset print *****/
    ExaPrn_ResetPrint (&Print);
 
-   /***** Get and check parameters *****/
+   /***** Get event code *****/
    Print.EvtCod = ExaEvt_GetParamEvtCod ();
-   Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
-   if (Print.PrnCod <= 0)
-      Lay_WrongExamExit ();
 
-   /***** Get questions and answers from database *****/
-   ExaPrn_GetPrintQuestionsFromDB (&Print);
+   /***** Check if event if visible and open *****/
+   if (ExaEvt_CheckIfEventIsVisibleAndOpen (Print.EvtCod))
+     {
+      /***** Get print data *****/
+      Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+      ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
+      if (Print.PrnCod <= 0)
+	 Lay_WrongExamExit ();
 
-   /***** Get answers from form to assess a test *****/
-   NumQst = ExaPrn_GetAnswerFromForm (&Print);
+      /***** Get questions and answers from database *****/
+      ExaPrn_GetPrintQuestionsFromDB (&Print);
 
-   /***** Update answer in database *****/
-   /* Compute question score and store in database */
-   ExaPrn_ComputeScoreAndStoreQuestionOfPrint (&Print,NumQst);
+      /***** Get answers from form to assess a test *****/
+      NumQst = ExaPrn_GetAnswerFromForm (&Print);
 
-   /* Update exam print in database */
-   ExaPrn_GetNumQstsNotBlank (&Print);
-   ExaPrn_ComputeTotalScoreOfPrint (&Print);
-   ExaPrn_UpdatePrintInDB (&Print);
+      /***** Update answer in database *****/
+      /* Compute question score and store in database */
+      ExaPrn_ComputeScoreAndStoreQuestionOfPrint (&Print,NumQst);
 
-   /***** Show table with questions to answer *****/
-   ExaPrn_ShowTableWithQstsToFill (&Print);
+      /* Update exam print in database */
+      ExaPrn_GetNumQstsNotBlank (&Print);
+      ExaPrn_ComputeTotalScoreOfPrint (&Print);
+      ExaPrn_UpdatePrintInDB (&Print);
+
+      /***** Show table with questions to answer *****/
+      ExaPrn_ShowTableWithQstsToFill (&Print);
+     }
+   else
+      Ale_ShowAlert (Ale_INFO,"Usted no tiene acceso al examen.");	// TODO: Need translation!!!!
   }
 
 /*****************************************************************************/

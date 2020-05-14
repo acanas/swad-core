@@ -131,6 +131,10 @@ static void ExaSet_FreeListsSelectedQuestions (struct Exa_Exams *Exams);
 
 static void ExaSet_CopyQstFromBankToExamSet (struct ExaSet_Set *Set,long QstCod);
 
+static void ExaSet_GetAndCheckParameters (struct Exa_Exams *Exams,
+                                          struct Exa_Exam *Exam,
+                                          struct ExaSet_Set *Set);
+
 static long ExaSet_GetParamQstCod (void);
 static void ExaSet_PutParamQstCod (void *QstCod);	// Should be a pointer to long
 
@@ -208,36 +212,40 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
    /***** Get data of set of questions from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get set data",
 		       "SELECT SetCod,"		// row[0]
-			      "SetInd,"		// row[1]
-			      "NumQstsToPrint,"	// row[2]
-			      "Title"		// row[3]
+                              "ExaCod,"		// row[1]
+			      "SetInd,"		// row[2]
+			      "NumQstsToPrint,"	// row[3]
+			      "Title"		// row[4]
 		       " FROM exa_sets"
-		       " WHERE SetCod=%ld"
-		       " AND ExaCod=%ld",	// Extra check
-		       Set->SetCod,Set->ExaCod)) // Set found...
+		       " WHERE SetCod=%ld",
+		       Set->SetCod)) // Set found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
       /*
       row[0] SetCod
-      row[1] SetInd
-      row[2] NumQstsToPrint
-      row[3] Title
+      row[1] ExaCod
+      row[2] SetInd
+      row[3] NumQstsToPrint
+      row[4] Title
       */
       /* Get set code (row[0]) */
       Set->SetCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get set index (row[1]) */
-      Set->SetInd = Str_ConvertStrToUnsigned (row[1]);
+      /* Get exam code (row[0]) */
+      Set->ExaCod = Str_ConvertStrCodToLongCod (row[1]);
+
+      /* Get set index (row[2]) */
+      Set->SetInd = Str_ConvertStrToUnsigned (row[2]);
       snprintf (StrSetInd,sizeof (Set->SetInd),
 	        "%u",
 		Set->SetInd);
 
-      /* Get set index (row[2]) */
-      Set->NumQstsToPrint = Str_ConvertStrToUnsigned (row[2]);
+      /* Get set index (row[3]) */
+      Set->NumQstsToPrint = Str_ConvertStrToUnsigned (row[3]);
 
-      /* Get the title of the set (row[3]) */
-      Str_Copy (Set->Title,row[3],
+      /* Get the title of the set (row[4]) */
+      Str_Copy (Set->Title,row[4],
                 ExaSet_MAX_BYTES_TITLE);
      }
    else
@@ -447,21 +455,8 @@ void ExaSet_ChangeSetTitle (void)
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
-   Set.SetCod = ExaSet_GetParamSetCod ();
-   if (Set.SetCod <= 0)
-      Lay_WrongSetExit ();
-   Exams.SetCod = Set.SetCod;
-
-   /***** Get exam and set data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
-   ExaSet_GetDataOfSetByCod (&Set);
-   Exams.SetCod = Set.SetCod;
+   /***** Get and check parameters *****/
+   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
 
    /***** Receive new title from form *****/
    Par_GetParToText ("Title",NewTitle,ExaSet_MAX_BYTES_TITLE);
@@ -501,21 +496,8 @@ void ExaSet_ChangeNumQstsToExam (void)
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
-   Set.SetCod = ExaSet_GetParamSetCod ();
-   if (Set.SetCod <= 0)
-      Lay_WrongSetExit ();
-   Exams.SetCod = Set.SetCod;
-
-   /***** Get exam and set data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
-   ExaSet_GetDataOfSetByCod (&Set);
-   Exams.SetCod = Set.SetCod;
+   /***** Get and check parameters *****/
+   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
 
    /***** Get number of questions in set to appear in exam print *****/
    NumQstsToPrint = (unsigned) Par_GetParToUnsignedLong ("NumQstsToPrint",
@@ -726,38 +708,14 @@ void ExaSet_ReqSelectQstsToAddToSet (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaSet_Set Set;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
-
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
-   Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
-   if (Set.SetCod <= 0)
-      Lay_WrongSetExit ();
-
-   /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
-   Exa_GetExamTxtFromDB (Exam.ExaCod,Txt);
-   if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
-
-   /***** Get set data from database *****/
-   ExaSet_GetDataOfSetByCod (&Set);
-   Exams.SetCod = Set.SetCod;
+   /***** Get and check parameters *****/
+   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
 
    /***** Show form to select questions for set *****/
    Tst_RequestSelectTestsForSet (&Exams);
@@ -776,34 +734,14 @@ void ExaSet_ListQstsToAddToSet (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaSet_Set Set;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
-
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
-   Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
-   if (Set.SetCod <= 0)
-      Lay_WrongSetExit ();
-
-   /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
-   Exa_GetExamTxtFromDB (Exam.ExaCod,Txt);
-   if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
+   /***** Get and check parameters *****/
+   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
 
    /***** Get set data from database *****/
    ExaSet_GetDataOfSetByCod (&Set);
@@ -1368,7 +1306,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
       HTM_TD_End ();
 
       /***** Question *****/
-      ExaSet_GetQstDataFromDB (&Question,Exams->ExaCod);
+      ExaSet_GetQstDataFromDB (&Question);
       ExaSet_ListQuestionForEdition (&Question,NumQst + 1,Anchor);
 
       /***** End row *****/
@@ -1417,7 +1355,7 @@ Tst_AnswerType_t ExaSet_GetQstAnswerTypeFromDB (long QstCod)
 /*************** Get data of a question in a set from database ***************/
 /*****************************************************************************/
 
-void ExaSet_GetQstDataFromDB (struct Tst_Question *Question,long ExaCod)
+void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1432,11 +1370,8 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question,long ExaCod)
 					    "Feedback,"			// row[3]
 					    "MedCod"			// row[4]
 				     " FROM exa_set_questions"
-				     " WHERE QstCod=%ld"
-				     " AND SetCod IN"
-				     " (SELECT SetCod FROM exa_sets WHERE ExaCod=%ld)",		// Extra check
-				     Question->QstCod,
-				     ExaCod) != 0);
+				     " WHERE QstCod=%ld",
+				     Question->QstCod) != 0);
 
    if (QuestionExists)
      {
@@ -1622,7 +1557,6 @@ void ExaSet_AddQstsToSet (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaSet_Set Set;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
    const char *Ptr;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    long QstCod;
@@ -1632,27 +1566,8 @@ void ExaSet_AddQstsToSet (void)
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
-
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
-   Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
-   if (Set.SetCod <= 0)
-      Lay_WrongSetExit ();
-
-   /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
-   Exa_GetExamTxtFromDB (Exam.ExaCod,Txt);
-   if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
+   /***** Get and check parameters *****/
+   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
 
    /***** Get set data from database *****/
    ExaSet_GetDataOfSetByCod (&Set);
@@ -1822,24 +1737,8 @@ void ExaSet_RequestRemoveSet (void)
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
-   Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
-   if (Set.SetCod <= 0)
-      Lay_WrongSetExit ();
-
-   /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
-   if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
-
-   /***** Get set data from database *****/
-   ExaSet_GetDataOfSetByCod (&Set);
-   Exams.SetCod = Set.SetCod;
+   /***** Get and check parameters *****/
+   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
 
    /***** Show question and button to remove question *****/
    Ale_ShowAlertAndButton (ActRemExaSet,NULL,NULL,
@@ -1869,24 +1768,8 @@ void ExaSet_RemoveSet (void)
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
-   Set.SetCod = ExaSet_GetParamSetCod ();
-   if (Set.SetCod <= 0)
-      Lay_WrongSetExit ();
-
-   /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
-   if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
-
-   /***** Get set data from database *****/
-   ExaSet_GetDataOfSetByCod (&Set);
-   Exams.SetCod = Set.SetCod;
+   /***** Get and check parameters *****/
+   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
 
    /***** Remove the set from all the tables *****/
    /* Remove questions associated to set */
@@ -1939,24 +1822,8 @@ void ExaSet_MoveUpSet (void)
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
-   Set.SetCod = ExaSet_GetParamSetCod ();
-   if (Set.SetCod <= 0)
-      Lay_WrongSetExit ();
-
-   /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
-   if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
-
-   /***** Get set data from database *****/
-   ExaSet_GetDataOfSetByCod (&Set);
-   Exams.SetCod = Set.SetCod;
+   /***** Get and check parameters *****/
+   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
 
    /***** Get set index *****/
    SetIndBottom = ExaSet_GetSetIndFromSetCod (Exam.ExaCod,Set.SetCod);
@@ -1999,24 +1866,8 @@ void ExaSet_MoveDownSet (void)
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
-   Set.SetCod = ExaSet_GetParamSetCod ();
-   if (Set.SetCod <= 0)
-      Lay_WrongSetExit ();
-
-   /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
-   if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
-
-   /***** Get set data from database *****/
-   ExaSet_GetDataOfSetByCod (&Set);
-   Exams.SetCod = Set.SetCod;
+   /***** Get and check parameters *****/
+   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
 
    /***** Get set index *****/
    SetIndTop = ExaSet_GetSetIndFromSetCod (Exam.ExaCod,Set.SetCod);
@@ -2061,24 +1912,8 @@ void ExaSet_RequestRemoveQstFromSet (void)
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
-   Set.SetCod = ExaSet_GetParamSetCod ();
-   if (Set.SetCod <= 0)
-      Lay_WrongSetExit ();
-
-   /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
-   if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
-
-   /***** Get set data from database *****/
-   ExaSet_GetDataOfSetByCod (&Set);
-   Exams.SetCod = Set.SetCod;
+   /***** Get and check parameters *****/
+   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
 
    /***** Get question index *****/
    Exams.QstCod = ExaSet_GetParamQstCod ();
@@ -2118,24 +1953,8 @@ void ExaSet_RemoveQstFromSet (void)
    Exa_ResetExam (&Exam);
    ExaSet_ResetSet (&Set);
 
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
-   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
-   Set.SetCod = ExaSet_GetParamSetCod ();
-   if (Set.SetCod <= 0)
-      Lay_WrongSetExit ();
-
-   /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
-   if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
-
-   /***** Get set data from database *****/
-   ExaSet_GetDataOfSetByCod (&Set);
-   Exams.SetCod = Set.SetCod;
+   /***** Get and check parameters *****/
+   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
 
    /***** Get question index *****/
    QstCod = ExaSet_GetParamQstCod ();
@@ -2156,6 +1975,36 @@ void ExaSet_RemoveQstFromSet (void)
    /***** Show current exam and its sets *****/
    Exa_PutFormsOneExam (&Exams,&Exam,&Set,
                         false);	// It's not a new exam
+  }
+
+/*****************************************************************************/
+/************************** Get and check parameters *************************/
+/*****************************************************************************/
+
+static void ExaSet_GetAndCheckParameters (struct Exa_Exams *Exams,
+                                          struct Exa_Exam *Exam,
+                                          struct ExaSet_Set *Set)
+  {
+   /***** Get parameters *****/
+   Exa_GetParams (Exams);
+   if (Exams->ExaCod <= 0)
+      Lay_WrongExamExit ();
+   Exam->ExaCod = Exams->ExaCod;
+   Grp_GetParamWhichGroups ();
+   if ((Set->SetCod = ExaSet_GetParamSetCod ()) <= 0)
+      Lay_WrongSetExit ();
+
+   /***** Get exam data from database *****/
+   Exa_GetDataOfExamByCod (Exam);
+   if (Exam->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+      Lay_WrongExamExit ();
+   Exams->ExaCod = Exam->ExaCod;
+
+   /***** Get set data from database *****/
+   ExaSet_GetDataOfSetByCod (Set);
+   if (Set->ExaCod != Exam->ExaCod)
+      Lay_WrongSetExit ();
+   Exams->SetCod = Set->SetCod;
   }
 
 /*****************************************************************************/

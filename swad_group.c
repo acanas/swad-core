@@ -5070,6 +5070,7 @@ Grp_WhichGroups_t Grp_GetParamWhichGroups (void)
 	 case ActPrnCrsTT:	// Print course timetable
 	 case ActChgCrsTT1stDay:// Change first day of week in course timetable
 	 case ActSeeAsg:	// List assignments
+	 case ActSeeAllExa:	// List exams
 	 case ActSeeAllGam:	// List games
 	 case ActSeeAllSvy:	// List surveys
 	 case ActSeeAtt:	// List attendance

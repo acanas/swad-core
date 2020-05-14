@@ -224,17 +224,26 @@ void ExaEvt_ListEvents (struct Exa_Exams *Exams,
                  Hlp_ASSESSMENT_Exams_events,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
-   if (Gbl.Crs.Grps.NumGrps)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
-      Set_StartSettingsHead ();
-      Grp_ShowFormToSelWhichGrps (ActSeeExa,
-                                  Exa_PutParams,Exams);
-      Set_EndSettingsHead ();
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+	 if (Gbl.Crs.Grps.NumGrps)
+	   {
+	    Set_StartSettingsHead ();
+	    Grp_ShowFormToSelWhichGrps (ActSeeExa,
+					Exa_PutParams,Exams);
+	    Set_EndSettingsHead ();
+	   }
+	 break;
+      default:
+	 break;
      }
 
+   /***** Show the table with the events *****/
    if (NumEvents)
      {
-      /***** Show the table with the events *****/
       EvtCodToBeEdited = PutFormEvent && Event->EvtCod > 0 ? Event->EvtCod :
 	                                                     -1L;
       ExaEvt_ListOneOrMoreEvents (Exams,Exam,EvtCodToBeEdited,NumEvents,mysql_res);
@@ -322,6 +331,25 @@ void ExaEvt_GetDataOfEventByCod (struct ExaEvt_Event *Event)
   }
 
 /*****************************************************************************/
+/***************** Check if exam event is visible and open *******************/
+/*****************************************************************************/
+
+bool ExaEvt_CheckIfEventIsVisibleAndOpen (long EvtCod)
+  {
+   /***** Trivial check *****/
+   if (EvtCod < 0)	// A non-existing event...
+      return false;	// ...is not visible or open
+
+   /***** Check if exam event is visible and open from database *****/
+   return (DB_QueryCOUNT ("can not check if event is visible and open",
+			  "SELECT COUNT(*) FROM exa_events"
+			  " WHERE EvtCod=%ld"
+			  " AND Hidden='N'"				// Visible
+			  " AND NOW() BETWEEN StartTime AND EndTime",	// Open
+			  EvtCod) != 0);
+  }
+
+/*****************************************************************************/
 /****************** Put icons in list of events of an exam *******************/
 /*****************************************************************************/
 
@@ -389,7 +417,7 @@ static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
       /***** Get exam event data from row *****/
       ExaEvt_GetEventDataFromRow (mysql_res,&Event);
 
-      if (ExaEvt_CheckIfICanPlayThisEventBasedOnGrps (&Event))
+      if (ExaEvt_CheckIfICanListThisEventBasedOnGrps (&Event))
 	{
 	 /***** Build anchor string *****/
 	 if (asprintf (&Anchor,"evt_%ld_%ld",Exam->ExaCod,Event.EvtCod) < 0)
@@ -574,7 +602,7 @@ static void ExaEvt_ListOneOrMoreEventsTimes (const struct ExaEvt_Event *Event,un
 		    Id,Color,Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,Event->TimeUTC[StartEndTime],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				    true,true,true,0x7);
+				    true,true,true,0x6);
       HTM_TD_End ();
       free (Id);
      }
@@ -595,17 +623,27 @@ static void ExaEvt_ListOneOrMoreEventsTitleGrps (struct Exa_Exams *Exams,
 
    /***** Event title *****/
    HTM_ARTICLE_Begin (Anchor);
-   Frm_StartForm (ActSeeExaPrn);
-   Exa_PutParams (Exams);
-   ExaEvt_PutParamEvtCod (Event->EvtCod);
-   HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
-								 Txt_Resume,
-			    Event->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
-					    "BT_LINK LT ASG_TITLE",
-			    NULL);
-   HTM_Txt (Event->Title);
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
+   if (ExaEvt_CheckIfICanAnswerThisEvent (Event))
+     {
+      Frm_StartForm (ActSeeExaPrn);
+      Exa_PutParams (Exams);
+      ExaEvt_PutParamEvtCod (Event->EvtCod);
+      HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
+								    Txt_Resume,
+			       Event->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
+					       "BT_LINK LT ASG_TITLE",
+			       NULL);
+      HTM_Txt (Event->Title);
+      HTM_BUTTON_End ();
+      Frm_EndForm ();
+     }
+   else
+     {
+      HTM_SPAN_Begin ("class=\"%s\"",Event->Hidden ? "LT ASG_TITLE_LIGHT":
+					             "LT ASG_TITLE");
+      HTM_Txt (Event->Title);
+      HTM_SPAN_End ();
+     }
    HTM_ARTICLE_End ();
 
    /***** Groups whose students can answer this exam event *****/
@@ -1152,17 +1190,17 @@ void ExaEvt_GetAndCheckParameters (struct Exa_Exams *Exams,
    if ((Event->EvtCod = ExaEvt_GetParamEvtCod ()) <= 0)
       Lay_WrongEventExit ();
 
-   /***** Get exam data and event from database *****/
+   /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (Exam);
    if (Exam->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Lay_WrongExamExit ();
    Exams->ExaCod = Exam->ExaCod;
-   ExaEvt_GetDataOfEventByCod (Event);
 
-   /***** Ensure parameters are correct *****/
-   if (Exam->ExaCod != Event->ExaCod ||
-       Exam->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-      Lay_WrongExamExit ();
+   /***** Get set data from database *****/
+   ExaEvt_GetDataOfEventByCod (Event);
+   if (Event->ExaCod != Exam->ExaCod)
+      Lay_WrongSetExit ();
+   Exams->EvtCod = Event->EvtCod;
   }
 
 /*****************************************************************************/
@@ -1203,8 +1241,6 @@ static void ExaEvt_PutFormEvent (const struct ExaEvt_Event *Event)
    if (!ItsANewEvent)	// Existing event
       ExaEvt_PutParamEvtCod (Event->EvtCod);
 
-   // Exa_PutParamQstInd (0);	// Start by first question in exam
-
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,ItsANewEvent ? Txt_New_event :
 					  Event->Title,
@@ -1228,7 +1264,7 @@ static void ExaEvt_PutFormEvent (const struct ExaEvt_Event *Event)
 
    /***** Start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (Event->TimeUTC,
-                                            Dat_FORM_SECONDS_ON,
+                                            Dat_FORM_SECONDS_OFF,
 					    SetHMS);
 
    /***** Groups *****/
@@ -1625,7 +1661,16 @@ unsigned ExaEvt_GetNumOpenEventsInExam (long ExaCod)
 /********* Check if I belong to any of the groups of an exam event ***********/
 /*****************************************************************************/
 
-bool ExaEvt_CheckIfICanPlayThisEventBasedOnGrps (const struct ExaEvt_Event *Event)
+bool ExaEvt_CheckIfICanAnswerThisEvent (const struct ExaEvt_Event *Event)
+  {
+   /***** Hidden or closed events are not accesible *****/
+   if (Event->Hidden || !Event->Open)
+      return false;
+
+   return ExaEvt_CheckIfICanListThisEventBasedOnGrps (Event);
+  }
+
+bool ExaEvt_CheckIfICanListThisEventBasedOnGrps (const struct ExaEvt_Event *Event)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -1647,8 +1692,6 @@ bool ExaEvt_CheckIfICanPlayThisEventBasedOnGrps (const struct ExaEvt_Event *Even
 				Event->EvtCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
 	 break;
       case Rol_NET:
-	 /***** Only if I am the creator *****/
-	 return (Event->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 return true;

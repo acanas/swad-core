@@ -341,16 +341,25 @@ void Mch_ListMatches (struct Gam_Games *Games,
                  Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
-   if (Gbl.Crs.Grps.NumGrps)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
-      Set_StartSettingsHead ();
-      Grp_ShowFormToSelWhichGrps (ActSeeGam,
-                                  Gam_PutParams,Games);
-      Set_EndSettingsHead ();
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+	 if (Gbl.Crs.Grps.NumGrps)
+	   {
+	    Set_StartSettingsHead ();
+	    Grp_ShowFormToSelWhichGrps (ActSeeGam,
+					Gam_PutParams,Games);
+	    Set_EndSettingsHead ();
+	   }
+	 break;
+      default:
+	 break;
      }
 
+   /***** Show the table with the matches *****/
    if (NumMatches)
-      /***** Show the table with the matches *****/
       Mch_ListOneOrMoreMatches (Games,Game,NumMatches,mysql_res);
 
    /***** Free structure that stores the query result *****/

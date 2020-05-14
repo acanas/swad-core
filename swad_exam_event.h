@@ -55,6 +55,7 @@ void ExaEvt_ListEvents (struct Exa_Exams *Exams,
 		        struct ExaEvt_Event *Event,
                         bool PutFormEvent);
 void ExaEvt_GetDataOfEventByCod (struct ExaEvt_Event *Event);
+bool ExaEvt_CheckIfEventIsVisibleAndOpen (long EvtCod);
 
 void ExaEvt_ToggleVisibilResultsEvtUsr (void);
 
@@ -84,7 +85,8 @@ void ExaEvt_RemoveGroupsOfType (long GrpTypCod);
 unsigned ExaEvt_GetNumEventsInExam (long ExaCod);
 unsigned ExaEvt_GetNumOpenEventsInExam (long ExaCod);
 
-bool ExaEvt_CheckIfICanPlayThisEventBasedOnGrps (const struct ExaEvt_Event *Event);
+bool ExaEvt_CheckIfICanAnswerThisEvent (const struct ExaEvt_Event *Event);
+bool ExaEvt_CheckIfICanListThisEventBasedOnGrps (const struct ExaEvt_Event *Event);
 
 void ExaEvt_GetQstAnsFromDB (long EvtCod,long UsrCod,unsigned QstInd,
 		             struct ExaEvt_UsrAnswer *UsrAnswer);

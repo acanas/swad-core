@@ -535,7 +535,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
       if (Exam->TimeUTC[Dat_START_TIME])
 	 Dat_WriteLocalDateHMSFromUTC (Id,Exam->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				       true,true,true,0x7);
+				       true,true,true,0x6);
       HTM_TD_End ();
       free (Id);
      }
