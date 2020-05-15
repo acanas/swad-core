@@ -209,7 +209,7 @@ void HTM_TABLE_BeginWideMarginPadding (unsigned CellPadding)
    if (CellPadding)
      {
       HTM_TxtF ("<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_%u\">",
-	        CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+	        CellPadding);	// CellPadding must be 0, 1, 2, 5, 10, 20
 
       HTM_TABLE_NestingLevel++;
      }

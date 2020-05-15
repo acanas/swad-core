@@ -683,12 +683,10 @@ static void ExaPrn_WriteQstAndAnsToFill (struct ExaPrn_Print *Print,
 
       /***** Title for this set *****/
       HTM_TR_Begin (NULL);
-      HTM_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("colspan=\"2\" class=\"COLOR0\"");
       ExaSet_WriteSetTitle (&CurrentSet);
       HTM_TD_End ();
       HTM_TR_End ();
-
-      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
 
    /***** Begin row *****/
