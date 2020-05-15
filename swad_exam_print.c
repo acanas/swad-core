@@ -646,7 +646,7 @@ static void ExaPrn_ShowTableWithQstsToFill (struct ExaPrn_Print *Print)
       Tst_QstConstructor (&Question);
       Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
 
-      /* Show question */
+      /* Get question from database */
       ExaSet_GetQstDataFromDB (&Question);
 
       /* Write question and answers */
