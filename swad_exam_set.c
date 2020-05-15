@@ -353,10 +353,6 @@ void ExaSet_ReceiveFormSet (void)
    struct ExaSet_Set Set;
    bool ItsANewSet;
 
-   /***** Check if I can edit exams *****/
-   if (!Exa_CheckIfICanEditExams ())
-      Lay_NoPermissionExit ();
-
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exam);
@@ -373,6 +369,10 @@ void ExaSet_ReceiveFormSet (void)
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
    Exams.ExaCod = Exam.ExaCod;
+
+   /***** Check if exam is editable *****/
+   if (!Exa_CheckIfEditable (&Exam))
+      Lay_NoPermissionExit ();
 
    /***** If I can edit exams ==> receive set from form *****/
    ExaSet_ReceiveSetFieldsFromForm (&Set);
@@ -458,6 +458,10 @@ void ExaSet_ChangeSetTitle (void)
    /***** Get and check parameters *****/
    ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
 
+   /***** Check if exam is editable *****/
+   if (!Exa_CheckIfEditable (&Exam))
+      Lay_NoPermissionExit ();
+
    /***** Receive new title from form *****/
    Par_GetParToText ("Title",NewTitle,ExaSet_MAX_BYTES_TITLE);
 
@@ -498,6 +502,10 @@ void ExaSet_ChangeNumQstsToExam (void)
 
    /***** Get and check parameters *****/
    ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+
+   /***** Check if exam is editable *****/
+   if (!Exa_CheckIfEditable (&Exam))
+      Lay_NoPermissionExit ();
 
    /***** Get number of questions in set to appear in exam print *****/
    NumQstsToPrint = (unsigned) Par_GetParToUnsignedLong ("NumQstsToPrint",
@@ -964,7 +972,8 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Put forms to create/edit a set *****/
-   ExaSet_PutFormNewSet (Exams,Exam,Set,MaxSetInd);
+   if (ICanEditSets)
+      ExaSet_PutFormNewSet (Exams,Exam,Set,MaxSetInd);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1142,29 +1151,49 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       /***** Title *****/
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
       HTM_ARTICLE_Begin (Anchor);
-      Frm_StartFormAnchor (ActChgTitExaSet,Anchor);
-      ExaSet_PutParamsOneSet (Exams);
-      HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set.Title,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "id=\"Title\" required=\"required\""
-		      " class=\"TITLE_DESCRIPTION_WIDTH\"");
-      Frm_EndForm ();
+      if (ICanEditSets)
+	{
+	 Frm_StartFormAnchor (ActChgTitExaSet,Anchor);
+	 ExaSet_PutParamsOneSet (Exams);
+	 HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set.Title,
+			 HTM_SUBMIT_ON_CHANGE,
+			 "id=\"Title\" required=\"required\""
+			 " class=\"TITLE_DESCRIPTION_WIDTH\"");
+	 Frm_EndForm ();
+	}
+      else
+	{
+	 HTM_SPAN_Begin ("class=\"EXA_SET_TITLE\"");
+         HTM_Txt (Set.Title);
+         HTM_SPAN_End ();
+	}
       HTM_ARTICLE_End ();
       HTM_TD_End ();
 
       /***** Current number of questions in set *****/
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_SPAN_Begin ("class=\"EXA_SET_NUM_QSTS\"");
       HTM_Unsigned (ExaSet_GetNumQstsInSet (Set.SetCod));
+      HTM_SPAN_End ();
       HTM_TD_End ();
 
       /***** Number of questions to appear in exam print *****/
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-      Frm_StartFormAnchor (ActChgNumQstExaSet,Anchor);
-      ExaSet_PutParamsOneSet (Exams);
-      HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set.NumQstsToPrint,
-                      HTM_SUBMIT_ON_CHANGE,false,
-		       "class=\"INPUT_LONG\" required=\"required\"");
-      Frm_EndForm ();
+      if (ICanEditSets)
+	{
+	 Frm_StartFormAnchor (ActChgNumQstExaSet,Anchor);
+	 ExaSet_PutParamsOneSet (Exams);
+	 HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set.NumQstsToPrint,
+			 HTM_SUBMIT_ON_CHANGE,false,
+			  "class=\"INPUT_LONG\" required=\"required\"");
+	 Frm_EndForm ();
+	}
+      else
+	{
+	 HTM_SPAN_Begin ("class=\"EXA_SET_NUM_QSTS\"");
+         HTM_Unsigned (Set.NumQstsToPrint);
+         HTM_SPAN_End ();
+	}
       HTM_TD_End ();
 
       /***** End first row *****/
@@ -1740,6 +1769,10 @@ void ExaSet_RequestRemoveSet (void)
    /***** Get and check parameters *****/
    ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
 
+   /***** Check if exam is editable *****/
+   if (!Exa_CheckIfEditable (&Exam))
+      Lay_NoPermissionExit ();
+
    /***** Show question and button to remove question *****/
    Ale_ShowAlertAndButton (ActRemExaSet,NULL,NULL,
 			   ExaSet_PutParamsOneSet,&Exams,
@@ -1770,6 +1803,10 @@ void ExaSet_RemoveSet (void)
 
    /***** Get and check parameters *****/
    ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+
+   /***** Check if exam is editable *****/
+   if (!Exa_CheckIfEditable (&Exam))
+      Lay_NoPermissionExit ();
 
    /***** Remove the set from all the tables *****/
    /* Remove questions associated to set */
@@ -1825,6 +1862,10 @@ void ExaSet_MoveUpSet (void)
    /***** Get and check parameters *****/
    ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
 
+   /***** Check if exam is editable *****/
+   if (!Exa_CheckIfEditable (&Exam))
+      Lay_NoPermissionExit ();
+
    /***** Get set index *****/
    SetIndBottom = ExaSet_GetSetIndFromSetCod (Exam.ExaCod,Set.SetCod);
 
@@ -1868,6 +1909,10 @@ void ExaSet_MoveDownSet (void)
 
    /***** Get and check parameters *****/
    ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+
+   /***** Check if exam is editable *****/
+   if (!Exa_CheckIfEditable (&Exam))
+      Lay_NoPermissionExit ();
 
    /***** Get set index *****/
    SetIndTop = ExaSet_GetSetIndFromSetCod (Exam.ExaCod,Set.SetCod);

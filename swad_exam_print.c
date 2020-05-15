@@ -640,8 +640,6 @@ static void ExaPrn_ShowTableWithQstsToFill (struct ExaPrn_Print *Print)
 	NumQst < Print->NumQsts;
 	NumQst++)
      {
-      Gbl.RowEvenOdd = NumQst % 2;
-
       /* Create test question */
       Tst_QstConstructor (&Question);
       Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
@@ -685,23 +683,25 @@ static void ExaPrn_WriteQstAndAnsToFill (struct ExaPrn_Print *Print,
 
       /***** Title for this set *****/
       HTM_TR_Begin (NULL);
-      HTM_TD_Begin ("colspan=\"2\"");
+      HTM_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
       ExaSet_WriteSetTitle (&CurrentSet);
       HTM_TD_End ();
       HTM_TR_End ();
+
+      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
    /***** Number of question and answer type *****/
-   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RT\"");
    Tst_WriteNumQst (NumQst + 1);
    Tst_WriteAnswerType (Question->Answer.Type);
    HTM_TD_End ();
 
    /***** Stem, media and answers *****/
-   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"LT\"");
 
    /* Stem */
    Tst_WriteQstStem (Question->Stem,"TEST_EXA",true);
