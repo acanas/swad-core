@@ -50,7 +50,5 @@ void ExaRes_ShowAllExaResultsInExa (void);
 void ExaRes_ShowAllExaResultsInEvt (void);
 
 void ExaRes_ShowOneExaResult (void);
-void ExaRes_GetExamResultQuestionsFromDB (long EvtCod,long UsrCod,
-				          struct TstPrn_Print *Print);
 
 #endif

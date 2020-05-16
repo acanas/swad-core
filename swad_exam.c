@@ -2063,35 +2063,6 @@ double Exa_GetNumQstsPerCrsExam (Hie_Level_t Scope)
   }
 
 /*****************************************************************************/
-/************************* Show test tags in an exam **************************/
-/*****************************************************************************/
-
-void Exa_ShowTstTagsPresentInAnExam (long ExaCod)
-  {
-   MYSQL_RES *mysql_res;
-   unsigned long NumTags;
-
-   /***** Get all tags of questions in this exam *****/
-   NumTags = (unsigned)
-	     DB_QuerySELECT (&mysql_res,"can not get tags"
-					" present in an event result",
-			     "SELECT tst_tags.TagTxt"	// row[0]
-			     " FROM"
-			     " (SELECT DISTINCT(tst_question_tags.TagCod)"
-			     " FROM tst_question_tags,exa_set_questions"
-			     " WHERE exa_set_questions.ExaCod=%ld"
-			     " AND exa_set_questions.QstCod=tst_question_tags.QstCod)"
-			     " AS TagsCods,tst_tags"
-			     " WHERE TagsCods.TagCod=tst_tags.TagCod"
-			     " ORDER BY tst_tags.TagTxt",
-			     ExaCod);
-   Tst_ShowTagList (NumTags,mysql_res);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
 /*************** Get maximum score of an exam from database *******************/
 /*****************************************************************************/
 

@@ -37,13 +37,16 @@
 #include "swad_date.h"
 #include "swad_exam.h"
 #include "swad_exam_event.h"
+#include "swad_exam_print.h"
 #include "swad_exam_result.h"
+#include "swad_exam_set.h"
 #include "swad_exam_type.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_photo.h"
+#include "swad_test_print.h"
 #include "swad_test_visibility.h"
 #include "swad_user.h"
 
@@ -102,14 +105,21 @@ static void ExaRes_ShowEvtResultsSummaryRow (unsigned NumResults,
                                              unsigned NumTotalQstsNotBlank,
                                              double TotalScoreOfAllResults,
 					     double TotalGrade);
-static void ExaRes_GetEventResultDataByEvtCod (long EvtCod,long UsrCod,
-                                               struct TstPrn_Print *Print);
 
-static bool ExaRes_CheckIfICanSeeEventResult (struct ExaEvt_Event *Event,long UsrCod);
+static bool ExaRes_CheckIfICanSeePrintResult (struct ExaEvt_Event *Event,long UsrCod);
 static bool ExaRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility);
 
+static void ExaRes_ShowExamAnswers (struct UsrData *UsrDat,
+			            struct ExaPrn_Print *Print,
+			            unsigned Visibility);
+static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
+				       struct ExaPrn_Print *Print,
+				       unsigned NumQst,
+				       struct Tst_Question *Question,
+				       unsigned Visibility);
+
 /*****************************************************************************/
-/*************************** Show my events results *************************/
+/*************************** Show my events results **************************/
 /*****************************************************************************/
 
 void ExaRes_ShowMyExaResultsInCrs (void)
@@ -865,7 +875,7 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
 	 Visibility = TstVis_GetVisibilityFromStr (row[7]);
 
 	 /* Show event result? */
-	 ICanViewResult = ExaRes_CheckIfICanSeeEventResult (&Event,UsrDat->UsrCod);
+	 ICanViewResult = ExaRes_CheckIfICanSeePrintResult (&Event,UsrDat->UsrCod);
          ICanViewScore  = ExaRes_CheckIfICanViewScore (ICanViewResult,Visibility);
 
 	 if (NumResult)
@@ -1084,7 +1094,6 @@ void ExaRes_ShowOneExaResult (void)
    extern const char *Txt_non_blank_QUESTIONS;
    extern const char *Txt_Score;
    extern const char *Txt_Grade;
-   extern const char *Txt_Tags;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaEvt_Event Event;
@@ -1092,7 +1101,7 @@ void ExaRes_ShowOneExaResult (void)
    struct UsrData *UsrDat;
    Dat_StartEndTime_t StartEndTime;
    char *Id;
-   struct TstPrn_Print Print;
+   struct ExaPrn_Print Print;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool ICanViewResult;
@@ -1122,14 +1131,16 @@ void ExaRes_ShowOneExaResult (void)
      }
 
    /***** Get event result data *****/
-   TstPrn_ResetPrint (&Print);
-   ExaRes_GetEventResultDataByEvtCod (Event.EvtCod,UsrDat->UsrCod,&Print);
+   ExaPrn_ResetPrint (&Print);
+   Print.EvtCod = Event.EvtCod;
+   Print.UsrCod = UsrDat->UsrCod;
+   ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
 
-   /***** Check if I can view this event result *****/
+   /***** Check if I can view this print result *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 ICanViewResult = ExaRes_CheckIfICanSeeEventResult (&Event,UsrDat->UsrCod);
+	 ICanViewResult = ExaRes_CheckIfICanSeePrintResult (&Event,UsrDat->UsrCod);
 	 if (ICanViewResult)
 	    ICanViewScore = TstVis_IsVisibleTotalScore (Exam.Visibility);
 	 else
@@ -1152,9 +1163,8 @@ void ExaRes_ShowOneExaResult (void)
 
    if (ICanViewResult)	// I am allowed to view this event result
      {
-      /***** Get questions and user's answers of the event result from database *****/
-      ExaRes_GetExamResultQuestionsFromDB (Event.EvtCod,UsrDat->UsrCod,
-					   &Print);
+      /***** Get questions and user's answers of exam print from database *****/
+      ExaPrn_GetPrintQuestionsFromDB (&Print);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Event.Title,
@@ -1269,21 +1279,8 @@ void ExaRes_ShowOneExaResult (void)
 
       HTM_TR_End ();
 
-      /* Tags present in this result */
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_Tags);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LT\"");
-      Exa_ShowTstTagsPresentInAnExam (Event.ExaCod);
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
       /***** Write answers and solutions *****/
-      TstPrn_ShowExamAnswers (UsrDat,&Print,Exam.Visibility);
+      ExaRes_ShowExamAnswers (UsrDat,&Print,Exam.Visibility);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -1309,133 +1306,10 @@ void ExaRes_ShowOneExaResult (void)
   }
 
 /*****************************************************************************/
-/************ Get the questions of a event result from database **************/
-/*****************************************************************************/
-
-void ExaRes_GetExamResultQuestionsFromDB (long EvtCod,long UsrCod,
-				          struct TstPrn_Print *Print)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumQst;
-   long LongNum;
-   unsigned QstInd;
-   struct ExaEvt_UsrAnswer UsrAnswer;
-
-   /***** Get questions and answers of a event result *****/
-   Print->NumQsts = (unsigned)
-		    DB_QuerySELECT (&mysql_res,"can not get questions and answers"
-					       " of a event result",
-				    "SELECT exa_set_questions.QstCod,"		// row[0]
-					   "exa_set_questions.QstInd,"		// row[1]
-					   "exa_print_questions.Indexes"	// row[2]
-				    " FROM exa_events,exa_set_questions,exa_print_questions"
-				    " WHERE exa_events.EvtCod=%ld"
-				    " AND exa_events.EvtCod=exa_print_questions.EvtCod"
-				    " AND exa_set_questions.QstInd=exa_print_questions.QstInd"
-				    " ORDER BY exa_set_questions.QstInd",
-				    EvtCod);
-   for (NumQst = 0, Print->NumQstsNotBlank = 0;
-	NumQst < Print->NumQsts;
-	NumQst++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get question code (row[0]) */
-      if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	 Lay_ShowErrorAndExit ("Wrong code of question.");
-
-      /* Get question index (row[1]) */
-      if ((LongNum = Str_ConvertStrCodToLongCod (row[1])) < 0)
-	 Lay_ShowErrorAndExit ("Wrong code of question.");
-      QstInd = (unsigned) LongNum;
-
-      /* Get indexes for this question (row[2]) */
-      Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[2],
-                Tst_MAX_BYTES_INDEXES_ONE_QST);
-
-      /* Get answers selected by user for this question */
-      ExaEvt_GetQstAnsFromDB (EvtCod,UsrCod,QstInd,&UsrAnswer);
-      if (UsrAnswer.AnsInd >= 0)	// UsrAnswer.AnsInd >= 0 ==> answer selected
-	{
-         snprintf (Print->PrintedQuestions[NumQst].StrAnswers,Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
-		   "%d",UsrAnswer.AnsInd);
-         Print->NumQstsNotBlank++;
-        }
-      else				// UsrAnswer.AnsInd < 0 ==> no answer selected
-	 Print->PrintedQuestions[NumQst].StrAnswers[0] = '\0';	// Empty answer
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/************* Get data of a event result using its event code ***************/
-/*****************************************************************************/
-
-static void ExaRes_GetEventResultDataByEvtCod (long EvtCod,long UsrCod,
-                                               struct TstPrn_Print *Print)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   Dat_StartEndTime_t StartEndTime;
-
-   /***** Make database query *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data"
-				  " of a event result of a user",
-		       "SELECT UNIX_TIMESTAMP(exa_prints.StartTime),"	// row[1]
-			      "UNIX_TIMESTAMP(exa_prints.EndTime),"	// row[2]
-		              "exa_prints.NumQsts,"			// row[3]
-		              "exa_prints.NumQstsNotBlank,"		// row[4]
-		              "exa_prints.Score"			// row[5]
-		       " FROM exa_prints,exa_events,exa_exams"
-		       " WHERE exa_prints.EvtCod=%ld"
-		       " AND exa_prints.UsrCod=%ld"
-		       " AND exa_prints.EvtCod=exa_events.EvtCod"
-		       " AND exa_events.ExaCod=exa_exams.ExaCod"
-		       " AND exa_exams.CrsCod=%ld",	// Extra check
-		       EvtCod,UsrCod,
-		       Gbl.Hierarchy.Crs.CrsCod) == 1)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get start time (row[0] and row[1] hold UTC date-times) */
-      for (StartEndTime = (Dat_StartEndTime_t) 0;
-	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	   StartEndTime++)
-         Print->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
-
-      /* Get number of questions (row[2]) */
-      if (sscanf (row[2],"%u",&Print->NumQsts) != 1)
-	 Print->NumQsts = 0;
-
-      /* Get number of questions not blank (row[3]) */
-      if (sscanf (row[3],"%u",&Print->NumQstsNotBlank) != 1)
-	 Print->NumQstsNotBlank = 0;
-
-      /* Get score (row[4]) */
-      Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[4],"%lf",&Print->Score) != 1)
-	 Print->Score = 0.0;
-      Str_SetDecimalPointToLocal ();	// Return to local system
-     }
-   else
-     {
-      Print->NumQsts = 0;
-      Print->NumQstsNotBlank = 0;
-      Print->Score = 0.0;
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
 /********************** Get if I can see event result ************************/
 /*****************************************************************************/
 
-static bool ExaRes_CheckIfICanSeeEventResult (struct ExaEvt_Event *Event,long UsrCod)
+static bool ExaRes_CheckIfICanSeePrintResult (struct ExaEvt_Event *Event,long UsrCod)
   {
    bool ItsMe;
 
@@ -1444,7 +1318,7 @@ static bool ExaRes_CheckIfICanSeeEventResult (struct ExaEvt_Event *Event,long Us
       case Rol_STD:
 	 ItsMe = Usr_ItsMe (UsrCod);
 	 if (ItsMe && Event->ShowUsrResults)
-	    return ExaEvt_CheckIfICanListThisEventBasedOnGrps (Event);
+	    return ExaEvt_CheckIfICanListThisEventBasedOnGrps (Event->EvtCod);
          return false;
       case Rol_NET:
       case Rol_TCH:
@@ -1481,4 +1355,99 @@ static bool ExaRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility
       default:
 	 return false;
      }
+  }
+
+/*****************************************************************************/
+/************** Show user's and correct answers of a test exam ***************/
+/*****************************************************************************/
+
+static void ExaRes_ShowExamAnswers (struct UsrData *UsrDat,
+			            struct ExaPrn_Print *Print,
+			            unsigned Visibility)
+  {
+   unsigned NumQst;
+   struct Tst_Question Question;
+
+   for (NumQst = 0;
+	NumQst < Print->NumQsts;
+	NumQst++)
+     {
+      Gbl.RowEvenOdd = NumQst % 2;
+
+      /***** Create test question *****/
+      Tst_QstConstructor (&Question);
+      Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
+
+      /***** Get question data *****/
+      ExaSet_GetQstDataFromDB (&Question);
+
+      /***** Write questions and answers *****/
+      ExaRes_WriteQstAndAnsExam (UsrDat,Print,NumQst,&Question,Visibility);
+
+      /***** Destroy test question *****/
+      Tst_QstDestructor (&Question);
+     }
+  }
+
+/*****************************************************************************/
+/********** Write a row of a test, with one question and its answer **********/
+/*****************************************************************************/
+
+static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
+				       struct ExaPrn_Print *Print,
+				       unsigned NumQst,
+				       struct Tst_Question *Question,
+				       unsigned Visibility)
+  {
+   extern const char *Txt_Score;
+   bool IsVisibleQstAndAnsTxt = TstVis_IsVisibleQstAndAnsTxt (Visibility);
+
+   /***** Begin row *****/
+   HTM_TR_Begin (NULL);
+
+   /***** Number of question and answer type *****/
+   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+   Tst_WriteNumQst (NumQst + 1);
+   Tst_WriteAnswerType (Question->Answer.Type);
+   HTM_TD_End ();
+
+   /***** Stem, media and answers *****/
+   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+
+   /* Stem */
+   Tst_WriteQstStem (Question->Stem,"TEST_EXA",IsVisibleQstAndAnsTxt);
+
+   /* Media */
+   if (IsVisibleQstAndAnsTxt)
+      Med_ShowMedia (&Question->Media,
+		     "TEST_MED_SHOW_CONT",
+		     "TEST_MED_SHOW");
+
+   /* Answers */
+   ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],Question);
+   TstPrn_WriteAnswersExam (UsrDat,&Print->PrintedQuestions[NumQst],Question,Visibility);
+
+   /* Write score retrieved from database */
+   if (TstVis_IsVisibleEachQstScore (Visibility))
+     {
+      HTM_DIV_Begin ("class=\"DAT_SMALL LM\"");
+      HTM_TxtColonNBSP (Txt_Score);
+      HTM_SPAN_Begin ("class=\"%s\"",
+		      Print->PrintedQuestions[NumQst].StrAnswers[0] ?
+		      (Print->PrintedQuestions[NumQst].Score > 0 ? "ANS_OK" :	// Correct/semicorrect
+							           "ANS_BAD") :	// Wrong
+							           "ANS_0");	// Blank answer
+      HTM_Double2Decimals (Print->PrintedQuestions[NumQst].Score);
+      HTM_SPAN_End ();
+      HTM_DIV_End ();
+     }
+
+   /* Question feedback */
+   if (TstVis_IsVisibleFeedbackTxt (Visibility))
+      Tst_WriteQstFeedback (Question->Feedback,"TEST_EXA_LIGHT");
+
+   HTM_TD_End ();
+
+   /***** End row *****/
+   HTM_TR_End ();
   }

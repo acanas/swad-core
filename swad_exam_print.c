@@ -53,29 +53,8 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT	100	// Absolute maximum number of questions in an exam print
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
-/*****************************************************************************/
-
-struct ExaPrn_Print
-  {
-   long PrnCod;			// Exam print code
-   // long ExaCod;			// Exam code
-   long EvtCod;			// Event code associated to this print
-   long UsrCod;			// User who answered the exam print
-   time_t TimeUTC[Dat_NUM_START_END_TIME];
-   unsigned NumQsts;		// Number of questions
-   unsigned NumQstsNotBlank;	// Number of questions not blank
-   bool Sent;			// This exam print has been sent or not?
-				// "Sent" means that user has clicked "Send" button after finishing
-   double Score;		// Total score of the exam print
-   struct TstPrn_PrintedQuestion PrintedQuestions[ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT];
-  };
-
-/*****************************************************************************/
-/***************************** Private constants *****************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
@@ -86,10 +65,8 @@ struct ExaPrn_Print
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void ExaPrn_ResetPrint (struct ExaPrn_Print *Print);
 static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print);
 
-static void ExaPrn_GetPrintDataByEvtCodAndUsrCod (struct ExaPrn_Print *Print);
 static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,long ExaCod);
 static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
                                                   struct ExaSet_Set *Set,
@@ -97,8 +74,6 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
 static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
 					  bool Shuffle);
 static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print);
-
-static void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print);
 
 static void ExaPrn_ShowExamPrintToFillIt (const char *Title,
                                           struct ExaPrn_Print *Print);
@@ -123,7 +98,6 @@ static void ExaPrn_WriteTextAnsToFill (const struct ExaPrn_Print *Print,
 
 static unsigned ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print);
 
-// static void ExaPrn_PutParamNumQst (unsigned NumQst);
 static unsigned ExaPrn_GetParamQstInd (void);
 
 static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *Print);
@@ -164,7 +138,7 @@ static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print);
 /**************************** Reset exam print *******************************/
 /*****************************************************************************/
 
-static void ExaPrn_ResetPrint (struct ExaPrn_Print *Print)
+void ExaPrn_ResetPrint (struct ExaPrn_Print *Print)
   {
    Print->EvtCod = -1L;
    Print->UsrCod = -1L;
@@ -212,7 +186,7 @@ void ExaPrn_ShowExamPrint (void)
       ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
 
       if (Print.PrnCod > 0)	// Print exists and I can access to it
-	 /***** Get questions and answers from database *****/
+         /***** Get questions and user's answers of exam print from database *****/
 	 ExaPrn_GetPrintQuestionsFromDB (&Print);
       else
 	{
@@ -238,7 +212,7 @@ void ExaPrn_ShowExamPrint (void)
 /********* Get data of an exam print using event code and user code **********/
 /*****************************************************************************/
 
-static void ExaPrn_GetPrintDataByEvtCodAndUsrCod (struct ExaPrn_Print *Print)
+void ExaPrn_GetPrintDataByEvtCodAndUsrCod (struct ExaPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -528,7 +502,7 @@ static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print)
 /************* Get the questions of an exam print from database **************/
 /*****************************************************************************/
 
-static void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
+void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -953,7 +927,7 @@ void ExaPrn_ReceivePrintAnswer (void)
       if (Print.PrnCod <= 0)
 	 Lay_WrongExamExit ();
 
-      /***** Get questions and answers from database *****/
+      /***** Get questions and user's answers of exam print from database *****/
       ExaPrn_GetPrintQuestionsFromDB (&Print);
 
       /***** Get answers from form to assess a test *****/

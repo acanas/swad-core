@@ -92,6 +92,8 @@ static void TstPrn_GetCorrectAndComputeChoAnsScore (struct TstPrn_PrintedQuestio
 static void TstPrn_GetCorrectAndComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				                    struct Tst_Question *Question);
 
+//-----------------------------------------------------------------------------
+
 static void TstPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question);
 static void TstPrn_GetCorrectFltAnswerFromDB (struct Tst_Question *Question);
 static void TstPrn_GetCorrectTF_AnswerFromDB (struct Tst_Question *Question);
@@ -100,36 +102,29 @@ static void TstPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question);
 
 //-----------------------------------------------------------------------------
 
-static void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
-                                     const struct TstPrn_Print *Print,
-                                     unsigned NumQst,
-				     struct Tst_Question *Question,
-				     unsigned Visibility);
 static void TstPrn_WriteIntAnsExam (struct UsrData *UsrDat,
-                                    const struct TstPrn_Print *Print,
-				    unsigned NumQst,
+                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				    const struct Tst_Question *Question,
 				    unsigned Visibility);
-static void TstPrn_WriteFloatAnsExam (struct UsrData *UsrDat,
-                                      const struct TstPrn_Print *Print,
-				      unsigned NumQst,
-				      const struct Tst_Question *Question,
-				      unsigned Visibility);
-static void TstPrn_WriteTFAnsExam (struct UsrData *UsrDat,
-                                   const struct TstPrn_Print *Print,
-				   unsigned NumQst,
-				   const struct Tst_Question *Question,
-				   unsigned Visibility);
-static void TstPrn_WriteChoiceAnsExam (struct UsrData *UsrDat,
-                                       const struct TstPrn_Print *Print,
-				       unsigned NumQst,
-				       struct Tst_Question *Question,
-				       unsigned Visibility);
-static void TstPrn_WriteTextAnsExam (struct UsrData *UsrDat,
-                                     const struct TstPrn_Print *Print,
-				     unsigned NumQst,
-				     struct Tst_Question *Question,
-				     unsigned Visibility);
+static void TstPrn_WriteFltAnsExam (struct UsrData *UsrDat,
+                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				    const struct Tst_Question *Question,
+				    unsigned Visibility);
+static void TstPrn_WriteTF_AnsExam (struct UsrData *UsrDat,
+                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				    const struct Tst_Question *Question,
+				    unsigned Visibility);
+static void TstPrn_WriteChoAnsExam (struct UsrData *UsrDat,
+                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				    const struct Tst_Question *Question,
+				    unsigned Visibility);
+static void TstPrn_WriteTxtAnsExam (struct UsrData *UsrDat,
+                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				    const struct Tst_Question *Question,
+				    unsigned Visibility);
+
+//-----------------------------------------------------------------------------
+
 static void TstPrn_WriteHeadUserCorrect (struct UsrData *UsrDat);
 
 static void TstPrn_StoreOneQstOfPrintInDB (const struct TstPrn_Print *Print,
@@ -297,7 +292,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
-   /***** Number of question and answer type (row[1]) *****/
+   /***** Number of question and answer type *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
    Tst_WriteNumQst (NumQst + 1);
    if (QuestionUneditedAfterExam)
@@ -321,7 +316,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 
 	 /* Answers */
 	 TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],Question);
-	 TstPrn_WriteAnswersExam (UsrDat,Print,NumQst,Question,Visibility);
+	 TstPrn_WriteAnswersExam (UsrDat,&Print->PrintedQuestions[NumQst],Question,Visibility);
 	}
       else
 	 Ale_ShowAlert (Ale_WARNING,Txt_Question_modified);
@@ -894,34 +889,26 @@ void TstPrn_ShowGrade (double Grade,double MaxGrade)
 /************* Write answers of a question when assessing a test *************/
 /*****************************************************************************/
 
-static void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
-                                     const struct TstPrn_Print *Print,
-                                     unsigned NumQst,
-				     struct Tst_Question *Question,
-				     unsigned Visibility)
+void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
+                              const struct TstPrn_PrintedQuestion *PrintedQuestion,
+			      const struct Tst_Question *Question,
+			      unsigned Visibility)
   {
-   /***** Write answer depending on type *****/
-   switch (Question->Answer.Type)
-     {
-      case Tst_ANS_INT:
-         TstPrn_WriteIntAnsExam    (UsrDat,Print,NumQst,Question,Visibility);
-         break;
-      case Tst_ANS_FLOAT:
-	 TstPrn_WriteFloatAnsExam  (UsrDat,Print,NumQst,Question,Visibility);
-         break;
-      case Tst_ANS_TRUE_FALSE:
-         TstPrn_WriteTFAnsExam     (UsrDat,Print,NumQst,Question,Visibility);
-         break;
-      case Tst_ANS_UNIQUE_CHOICE:
-      case Tst_ANS_MULTIPLE_CHOICE:
-         TstPrn_WriteChoiceAnsExam (UsrDat,Print,NumQst,Question,Visibility);
-         break;
-      case Tst_ANS_TEXT:
-         TstPrn_WriteTextAnsExam   (UsrDat,Print,NumQst,Question,Visibility);
-         break;
-      default:
-         break;
-     }
+   void (*TstPrn_WriteAnsExam[Tst_NUM_ANS_TYPES]) (struct UsrData *UsrDat,
+                                                   const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                   const struct Tst_Question *Question,
+				                   unsigned Visibility) =
+    {
+     [Tst_ANS_INT            ] = TstPrn_WriteIntAnsExam,
+     [Tst_ANS_FLOAT          ] = TstPrn_WriteFltAnsExam,
+     [Tst_ANS_TRUE_FALSE     ] = TstPrn_WriteTF_AnsExam,
+     [Tst_ANS_UNIQUE_CHOICE  ] = TstPrn_WriteChoAnsExam,
+     [Tst_ANS_MULTIPLE_CHOICE] = TstPrn_WriteChoAnsExam,
+     [Tst_ANS_TEXT           ] = TstPrn_WriteTxtAnsExam,
+    };
+
+   /***** Get correct answer and compute answer score depending on type *****/
+   TstPrn_WriteAnsExam[Question->Answer.Type] (UsrDat,PrintedQuestion,Question,Visibility);
   }
 
 /*****************************************************************************/
@@ -929,8 +916,7 @@ static void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
 /*****************************************************************************/
 
 static void TstPrn_WriteIntAnsExam (struct UsrData *UsrDat,
-                                    const struct TstPrn_Print *Print,
-				    unsigned NumQst,
+                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				    const struct Tst_Question *Question,
 				    unsigned Visibility)
   {
@@ -948,9 +934,9 @@ static void TstPrn_WriteIntAnsExam (struct UsrData *UsrDat,
    HTM_TR_Begin (NULL);
 
    /***** Write the user answer *****/
-   if (Print->PrintedQuestions[NumQst].StrAnswers[0])		// If user has answered the question
+   if (PrintedQuestion->StrAnswers[0])		// If user has answered the question
      {
-      if (sscanf (Print->PrintedQuestions[NumQst].StrAnswers,"%ld",&IntAnswerUsr) == 1)
+      if (sscanf (PrintedQuestion->StrAnswers,"%ld",&IntAnswerUsr) == 1)
 	{
          HTM_TD_Begin ("class=\"%s CM\"",
 		       TstVis_IsVisibleCorrectAns (Visibility) ?
@@ -988,11 +974,10 @@ static void TstPrn_WriteIntAnsExam (struct UsrData *UsrDat,
 /******************** Write float answer in an test exam *********************/
 /*****************************************************************************/
 
-static void TstPrn_WriteFloatAnsExam (struct UsrData *UsrDat,
-                                      const struct TstPrn_Print *Print,
-				      unsigned NumQst,
-				      const struct Tst_Question *Question,
-				      unsigned Visibility)
+static void TstPrn_WriteFltAnsExam (struct UsrData *UsrDat,
+                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				    const struct Tst_Question *Question,
+				    unsigned Visibility)
   {
    double FloatAnsUsr = 0.0;
 
@@ -1009,9 +994,9 @@ static void TstPrn_WriteFloatAnsExam (struct UsrData *UsrDat,
    HTM_TR_Begin (NULL);
 
    /***** Write the user answer *****/
-   if (Print->PrintedQuestions[NumQst].StrAnswers[0])	// If user has answered the question
+   if (PrintedQuestion->StrAnswers[0])	// If user has answered the question
      {
-      FloatAnsUsr = Str_GetDoubleFromStr (Print->PrintedQuestions[NumQst].StrAnswers);
+      FloatAnsUsr = Str_GetDoubleFromStr (PrintedQuestion->StrAnswers);
       // A bad formatted floating point answer will interpreted as 0.0
       HTM_TD_Begin ("class=\"%s CM\"",
 		    TstVis_IsVisibleCorrectAns (Visibility) ?
@@ -1049,11 +1034,10 @@ static void TstPrn_WriteFloatAnsExam (struct UsrData *UsrDat,
 /***************** Write false / true answer in a test exam ******************/
 /*****************************************************************************/
 
-static void TstPrn_WriteTFAnsExam (struct UsrData *UsrDat,
-                                   const struct TstPrn_Print *Print,
-				   unsigned NumQst,
-				   const struct Tst_Question *Question,
-				   unsigned Visibility)
+static void TstPrn_WriteTF_AnsExam (struct UsrData *UsrDat,
+                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				    const struct Tst_Question *Question,
+				    unsigned Visibility)
   {
    char AnsTFUsr;
 
@@ -1061,7 +1045,7 @@ static void TstPrn_WriteTFAnsExam (struct UsrData *UsrDat,
    Tst_CheckIfNumberOfAnswersIsOne (Question);
 
    /***** Get answer true or false *****/
-   AnsTFUsr = Print->PrintedQuestions[NumQst].StrAnswers[0];
+   AnsTFUsr = PrintedQuestion->StrAnswers[0];
 
    /***** Header with the title of each column *****/
    HTM_TABLE_BeginPadding (2);
@@ -1098,11 +1082,10 @@ static void TstPrn_WriteTFAnsExam (struct UsrData *UsrDat,
 /********** Write single or multiple choice answer in a test exam ************/
 /*****************************************************************************/
 
-static void TstPrn_WriteChoiceAnsExam (struct UsrData *UsrDat,
-                                       const struct TstPrn_Print *Print,
-				       unsigned NumQst,
-				       struct Tst_Question *Question,
-				       unsigned Visibility)
+static void TstPrn_WriteChoAnsExam (struct UsrData *UsrDat,
+                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				    const struct Tst_Question *Question,
+				    unsigned Visibility)
   {
    extern const char *Txt_TST_Answer_given_by_the_user;
    extern const char *Txt_TST_Answer_given_by_the_teachers;
@@ -1116,10 +1099,10 @@ static void TstPrn_WriteChoiceAnsExam (struct UsrData *UsrDat,
      } Ans;
 
    /***** Get indexes for this question from string *****/
-   TstPrn_GetIndexesFromStr (Print->PrintedQuestions[NumQst].StrIndexes,Indexes);
+   TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   TstPrn_GetAnswersFromStr (Print->PrintedQuestions[NumQst].StrAnswers,UsrAnswers);
+   TstPrn_GetAnswersFromStr (PrintedQuestion->StrAnswers,UsrAnswers);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -1227,11 +1210,10 @@ static void TstPrn_WriteChoiceAnsExam (struct UsrData *UsrDat,
 /***************** Write text answer when assessing a test *******************/
 /*****************************************************************************/
 
-static void TstPrn_WriteTextAnsExam (struct UsrData *UsrDat,
-                                     const struct TstPrn_Print *Print,
-				     unsigned NumQst,
-				     struct Tst_Question *Question,
-				     unsigned Visibility)
+static void TstPrn_WriteTxtAnsExam (struct UsrData *UsrDat,
+                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				    const struct Tst_Question *Question,
+				    unsigned Visibility)
   {
    unsigned NumOpt;
    char TextAnsUsr[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
@@ -1266,10 +1248,10 @@ static void TstPrn_WriteTextAnsExam (struct UsrData *UsrDat,
    HTM_TR_Begin (NULL);
 
    /***** Write the user answer *****/
-   if (Print->PrintedQuestions[NumQst].StrAnswers[0])	// If user has answered the question
+   if (PrintedQuestion->StrAnswers[0])	// If user has answered the question
      {
       /* Filter the user answer */
-      Str_Copy (TextAnsUsr,Print->PrintedQuestions[NumQst].StrAnswers,
+      Str_Copy (TextAnsUsr,PrintedQuestion->StrAnswers,
                 Tst_MAX_BYTES_ANSWERS_ONE_QST);
 
       /* In order to compare student answer to stored answer,
@@ -1299,7 +1281,7 @@ static void TstPrn_WriteTextAnsExam (struct UsrData *UsrDat,
 		       (Correct ? "ANS_OK" :
 				  "ANS_BAD") :
 		       "ANS_0");
-      HTM_Txt (Print->PrintedQuestions[NumQst].StrAnswers);
+      HTM_Txt (PrintedQuestion->StrAnswers);
      }
    else						// If user has omitted the answer
       HTM_TD_Begin (NULL);
@@ -2102,7 +2084,7 @@ void TstPrn_ShowOneExam (void)
       /***** End table *****/
       HTM_TABLE_End ();
 
-      /***** Write total mark of test *****/
+      /***** Write total grade of test *****/
       if (ICanViewScore)
 	{
 	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");

@@ -92,7 +92,7 @@ void Mch_ListMatches (struct Gam_Games *Games,
                       bool PutFormNewMatch);
 void Mch_GetDataOfMatchByCod (struct Mch_Match *Match);
 
-void Mch_ToggleVisibilResultsMchUsr (void);
+void Mch_ToggleVisResultsMchUsr (void);
 
 void Mch_RequestRemoveMatch (void);
 void Mch_RemoveMatch (void);
@@ -117,7 +117,7 @@ void Mch_RemoveGroupsOfType (long GrpTypCod);
 
 void Mch_PlayPauseMatch (void);
 void Mch_ChangeNumColsMch (void);
-void Mch_ToggleVisibilResultsMchQst (void);
+void Mch_ToggleVisResultsMchQst (void);
 void Mch_BackMatch (void);
 void Mch_ForwardMatch (void);
 

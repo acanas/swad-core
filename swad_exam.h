@@ -105,8 +105,6 @@ unsigned Exa_GetNumCoursesWithExams (Hie_Level_t Scope);
 unsigned Exa_GetNumExams (Hie_Level_t Scope);
 double Exa_GetNumQstsPerCrsExam (Hie_Level_t Scope);
 
-void Exa_ShowTstTagsPresentInAnExam (long ExaCod);
-
 void Exa_GetScoreRange (long ExaCod,double *MinScore,double *MaxScore);
 
 #endif

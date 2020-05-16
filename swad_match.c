@@ -885,7 +885,7 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
 /******************** Toggle visibility of match results *********************/
 /*****************************************************************************/
 
-void Mch_ToggleVisibilResultsMchUsr (void)
+void Mch_ToggleVisResultsMchUsr (void)
   {
    struct Gam_Games Games;
    struct Gam_Game Game;
@@ -1974,7 +1974,7 @@ void Mch_ChangeNumColsMch (void)
 /********* Toggle the display of results in a match (by a teacher) ***********/
 /*****************************************************************************/
 
-void Mch_ToggleVisibilResultsMchQst (void)
+void Mch_ToggleVisResultsMchQst (void)
   {
    struct Mch_Match Match;
 

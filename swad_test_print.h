@@ -100,6 +100,11 @@ void TstPrn_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
 double TstPrn_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);
 void TstPrn_ShowGrade (double Grade,double MaxGrade);
 
+void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
+                              const struct TstPrn_PrintedQuestion *PrintedQuestion,
+			      const struct Tst_Question *Question,
+			      unsigned Visibility);
+
 void TstPrn_SelUsrsToViewUsrsExams (void);
 void TstPrn_SelDatesToSeeMyExams (void);
 void TstPrn_ShowMyExams (void);

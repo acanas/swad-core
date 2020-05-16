@@ -1279,7 +1279,7 @@ void MchRes_ShowOneMchResult (void)
       /***** End table *****/
       HTM_TABLE_End ();
 
-      /***** Write total mark of match result *****/
+      /***** Write total grade of match result *****/
       if (ICanViewScore)
 	{
 	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");

@@ -57,7 +57,7 @@ void ExaEvt_ListEvents (struct Exa_Exams *Exams,
 void ExaEvt_GetDataOfEventByCod (struct ExaEvt_Event *Event);
 bool ExaEvt_CheckIfEventIsVisibleAndOpen (long EvtCod);
 
-void ExaEvt_ToggleVisibilResultsEvtUsr (void);
+void ExaEvt_ToggleVisResultsEvtUsr (void);
 
 void ExaEvt_RequestRemoveEvent (void);
 void ExaEvt_RemoveEvent (void);
@@ -86,7 +86,7 @@ unsigned ExaEvt_GetNumEventsInExam (long ExaCod);
 unsigned ExaEvt_GetNumOpenEventsInExam (long ExaCod);
 
 bool ExaEvt_CheckIfICanAnswerThisEvent (const struct ExaEvt_Event *Event);
-bool ExaEvt_CheckIfICanListThisEventBasedOnGrps (const struct ExaEvt_Event *Event);
+bool ExaEvt_CheckIfICanListThisEventBasedOnGrps (long EvtCod);
 
 void ExaEvt_GetQstAnsFromDB (long EvtCod,long UsrCod,unsigned QstInd,
 		             struct ExaEvt_UsrAnswer *UsrAnswer);

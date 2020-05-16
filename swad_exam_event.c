@@ -417,7 +417,7 @@ static void ExaEvt_ListOneOrMoreEvents (struct Exa_Exams *Exams,
       /***** Get exam event data from row *****/
       ExaEvt_GetEventDataFromRow (mysql_res,&Event);
 
-      if (ExaEvt_CheckIfICanListThisEventBasedOnGrps (&Event))
+      if (ExaEvt_CheckIfICanListThisEventBasedOnGrps (Event.EvtCod))
 	{
 	 /***** Build anchor string *****/
 	 if (asprintf (&Anchor,"evt_%ld_%ld",Exam->ExaCod,Event.EvtCod) < 0)
@@ -804,7 +804,7 @@ static void ExaEvt_ListOneOrMoreEventsResultTch (struct Exa_Exams *Exams,
 /****************** Toggle visibility of exam event results ******************/
 /*****************************************************************************/
 
-void ExaEvt_ToggleVisibilResultsEvtUsr (void)
+void ExaEvt_ToggleVisResultsEvtUsr (void)
   {
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
@@ -1667,10 +1667,10 @@ bool ExaEvt_CheckIfICanAnswerThisEvent (const struct ExaEvt_Event *Event)
    if (Event->Hidden || !Event->Open)
       return false;
 
-   return ExaEvt_CheckIfICanListThisEventBasedOnGrps (Event);
+   return ExaEvt_CheckIfICanListThisEventBasedOnGrps (Event->EvtCod);
   }
 
-bool ExaEvt_CheckIfICanListThisEventBasedOnGrps (const struct ExaEvt_Event *Event)
+bool ExaEvt_CheckIfICanListThisEventBasedOnGrps (long EvtCod)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -1689,7 +1689,7 @@ bool ExaEvt_CheckIfICanListThisEventBasedOnGrps (const struct ExaEvt_Event *Even
 				" FROM exa_groups,crs_grp_usr"
 				" WHERE crs_grp_usr.UsrCod=%ld"
 				" AND exa_groups.GrpCod=crs_grp_usr.GrpCod))",
-				Event->EvtCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+				EvtCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
 	 break;
       case Rol_NET:
       case Rol_TCH:
