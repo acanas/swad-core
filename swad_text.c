@@ -20056,91 +20056,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Projetos"
 #endif
 	,
-	//  3: ActReqTst
-#if   L==1	// ca
-	"Tests"
-#elif L==2	// de
-	"Tests"
-#elif L==3	// en
-	"Tests"
-#elif L==4	// es
-	"Test"
-#elif L==5	// fr
-	"Tests"
-#elif L==6	// gn
-	"Test"	// Okoteve traducción
-#elif L==7	// it
-	"Test"
-#elif L==8	// pl
-	"Test&oacute;w"
-#elif L==9	// pt
-	"Testes"
-#endif
-	,
-	//  4: ActSeeAllExa
-#if   L==1	// ca
-	"Ex&agrave;mens"
-#elif L==2	// de
-	"Pr&uuml;fungen"
-#elif L==3	// en
-	"Exams"
-#elif L==4	// es
-	"Ex&aacute;menes"
-#elif L==5	// fr
-	"Examens"
-#elif L==6	// gn
-	"Ex&aacute;menes"	// Okoteve traducción
-#elif L==7	// it
-	"Esami"
-#elif L==8	// pl
-	"Egzaminy"
-#elif L==9	// pt
-	"Exames"
-#endif
-	,
-	//  5: ActSeeAllGam
-#if   L==1	// ca
-	"Jocs"
-#elif L==2	// de
-	"Spiele"
-#elif L==3	// en
-	"Games"
-#elif L==4	// es
-	"Juegos"
-#elif L==5	// fr
-	"Jeux"
-#elif L==6	// gn
-	"Juegos"	// Okoteve traducción
-#elif L==7	// it
-	"Giochi"
-#elif L==8	// pl
-	"Gry"
-#elif L==9	// pt
-	"Jogos"
-#endif
-	,
-	//  6: ActSeeAllSvy
-#if   L==1	// ca
-	"Enquestes"
-#elif L==2	// de
-	"Umfragen"
-#elif L==3	// en
-	"Surveys"
-#elif L==4	// es
-	"Encuestas"
-#elif L==5	// fr
-	"Sondages"
-#elif L==6	// gn
-	"Encuestas"	// Okoteve traducción
-#elif L==7	// it
-	"Sondaggi"
-#elif L==8	// pl
-	"Ankiety"
-#elif L==9	// pt
-	"Inqu&eacute;ritos"
-#endif
-	,
-	//  7: ActSeeAllExaAnn
+	//  3: ActSeeAllExaAnn
 #if   L==1	// ca
 	"Convocat&ograve;ries"
 #elif L==2	// de
@@ -20161,7 +20077,111 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chamadas"
 #endif
 	,
-	NULL,	//  8
+	//  4: ActEdiTstQst
+#if   L==1	// ca
+	"Preguntes"
+#elif L==2	// de
+	"Fragen"
+#elif L==3	// en
+	"Questions"
+#elif L==4	// es
+	"Preguntas"
+#elif L==5	// fr
+	"Questions"
+#elif L==6	// gn
+	"Preguntas"	// Okoteve traducción
+#elif L==7	// it
+	"Domande"
+#elif L==8	// pl
+	"Pyta&nacute;"
+#elif L==9	// pt
+	"Perguntas"
+#endif
+	,
+	//  5: ActReqTst
+#if   L==1	// ca
+	"Tests"
+#elif L==2	// de
+	"Tests"
+#elif L==3	// en
+	"Tests"
+#elif L==4	// es
+	"Test"
+#elif L==5	// fr
+	"Tests"
+#elif L==6	// gn
+	"Test"	// Okoteve traducción
+#elif L==7	// it
+	"Test"
+#elif L==8	// pl
+	"Test&oacute;w"
+#elif L==9	// pt
+	"Testes"
+#endif
+	,
+	//  6: ActSeeAllExa
+#if   L==1	// ca
+	"Ex&agrave;mens"
+#elif L==2	// de
+	"Pr&uuml;fungen"
+#elif L==3	// en
+	"Exams"
+#elif L==4	// es
+	"Ex&aacute;menes"
+#elif L==5	// fr
+	"Examens"
+#elif L==6	// gn
+	"Ex&aacute;menes"	// Okoteve traducción
+#elif L==7	// it
+	"Esami"
+#elif L==8	// pl
+	"Egzaminy"
+#elif L==9	// pt
+	"Exames"
+#endif
+	,
+	//  7: ActSeeAllGam
+#if   L==1	// ca
+	"Jocs"
+#elif L==2	// de
+	"Spiele"
+#elif L==3	// en
+	"Games"
+#elif L==4	// es
+	"Juegos"
+#elif L==5	// fr
+	"Jeux"
+#elif L==6	// gn
+	"Juegos"	// Okoteve traducción
+#elif L==7	// it
+	"Giochi"
+#elif L==8	// pl
+	"Gry"
+#elif L==9	// pt
+	"Jogos"
+#endif
+	,
+	//  8: ActSeeAllSvy
+#if   L==1	// ca
+	"Enquestes"
+#elif L==2	// de
+	"Umfragen"
+#elif L==3	// en
+	"Surveys"
+#elif L==4	// es
+	"Encuestas"
+#elif L==5	// fr
+	"Sondages"
+#elif L==6	// gn
+	"Encuestas"	// Okoteve traducción
+#elif L==7	// it
+	"Sondaggi"
+#elif L==8	// pl
+	"Ankiety"
+#elif L==9	// pt
+	"Inqu&eacute;ritos"
+#endif
+	,
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
@@ -21955,70 +21975,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Projetos (projetos de fim de grau, tese&hellip;)"
 #endif
 	,
-	//  3: ActReqTst
-#if   L==1	// ca
-	"Tests sobre els continguts d'aquesta assignatura"
-#elif L==2	// de
-	"Tests"
-#elif L==3	// en
-	"Tests on the contents of this course"
-#elif L==4	// es
-	"Test sobre los contenidos de esta asignatura"
-#elif L==5	// fr
-	"Tests sur le contenu de cette mati&egrave;re"
-#elif L==6	// gn
-	"Test sobre los contenidos de esta asignatura"// Okoteve traducción
-#elif L==7	// it
-	"Test sui contenuti del corso"
-#elif L==8	// pl
-	"Test&oacute;w"
-#elif L==9	// pt
-	"Testes"
-#endif
-	,
-	//  4: ActSeeAllGam
-#if   L==1	// ca
-	"Jocs (comandament a dist&agrave;ncia)"
-#elif L==2	// de
-	"Spiele (Fernbedienung)"
-#elif L==3	// en
-	"Games (remote control)"
-#elif L==4	// es
-	"Juegos (mando a distancia)"
-#elif L==5	// fr
-	"Jeux (t&eacute;l&eacute;commande)"
-#elif L==6	// gn
-	"Juegos (mando a distancia)"	// Okoteve traducción
-#elif L==7	// it
-	"Giochi (telecomando)"
-#elif L==8	// pl
-	"Gry (pilot zdalnego sterowania)"
-#elif L==9	// pt
-	"Jogos (controlo remoto)"
-#endif
-	,
-	//  5: ActSeeAllSvy
-#if   L==1	// ca
-	"Enquestes an&ograve;nimes"
-#elif L==2	// de
-	"Umfragen"
-#elif L==3	// en
-	"Surveys"
-#elif L==4	// es
-	"Encuestas an&oacute;nimas"
-#elif L==5	// fr
-	"Sondages"
-#elif L==6	// gn
-	"Encuestas an&oacute;nimas"	// Okoteve traducción
-#elif L==7	// it
-	"Sondaggi"
-#elif L==8	// pl
-	"Ankiety"
-#elif L==9	// pt
-	"Inqu&eacute;ritos"
-#endif
-	,
-	//  6: ActSeeAllExaAnn
+	//  3: ActSeeAllExaAnn
 #if   L==1	// ca
 	"Llistat de convocat&ograve;ries d'ex&agrave;mens d'aquesta assignatura"
 #elif L==2	// de
@@ -22039,7 +21996,90 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chamadas para exames"
 #endif
 	,
-	NULL,	//  7
+	//  4: ActEdiTstQst
+#if   L==1	// ca
+	"Banc de preguntes per test, ex&agrave;mens i jocs"
+#elif L==2	// de
+	"Fragenbank f&uuml;r Tests, Pr&uuml;fungen und Spiele"
+#elif L==3	// en
+	"Bank of questions for tests, exams and games"
+#elif L==4	// es
+	"Banco de preguntas para test, ex&aacute;menes y juegos"
+#elif L==5	// fr
+	"Banque de questions pour tests, examens et jeux"
+#elif L==6	// gn
+	"Banco de preguntas para test, ex&aacute;menes y juegos"	// Okoteve traducción
+#elif L==7	// it
+	"Banca di domande per test, esami e giochi"
+#elif L==8	// pl
+	"Zbi&oacute;r pyta&nacute; do test&oacute;w, egzamin&oacute;w i gier"
+#elif L==9	// pt
+	"Banco de perguntas para testes, exames e jogos"
+#endif
+	,
+	//  5: ActReqTst
+#if   L==1	// ca
+	"Tests sobre els continguts d'aquesta assignatura"
+#elif L==2	// de
+	"Tests"
+#elif L==3	// en
+	"Tests on the contents of this course"
+#elif L==4	// es
+	"Test sobre los contenidos de esta asignatura"
+#elif L==5	// fr
+	"Tests sur le contenu de cette mati&egrave;re"
+#elif L==6	// gn
+	"Test sobre los contenidos de esta asignatura"// Okoteve traducción
+#elif L==7	// it
+	"Test sui contenuti del corso"
+#elif L==8	// pl
+	"Test&oacute;w"
+#elif L==9	// pt
+	"Testes"
+#endif
+	,
+	//  6: ActSeeAllGam
+#if   L==1	// ca
+	"Jocs (comandament a dist&agrave;ncia)"
+#elif L==2	// de
+	"Spiele (Fernbedienung)"
+#elif L==3	// en
+	"Games (remote control)"
+#elif L==4	// es
+	"Juegos (mando a distancia)"
+#elif L==5	// fr
+	"Jeux (t&eacute;l&eacute;commande)"
+#elif L==6	// gn
+	"Juegos (mando a distancia)"	// Okoteve traducción
+#elif L==7	// it
+	"Giochi (telecomando)"
+#elif L==8	// pl
+	"Gry (pilot zdalnego sterowania)"
+#elif L==9	// pt
+	"Jogos (controlo remoto)"
+#endif
+	,
+	//  7: ActSeeAllSvy
+#if   L==1	// ca
+	"Enquestes an&ograve;nimes"
+#elif L==2	// de
+	"Umfragen"
+#elif L==3	// en
+	"Surveys"
+#elif L==4	// es
+	"Encuestas an&oacute;nimas"
+#elif L==5	// fr
+	"Sondages"
+#elif L==6	// gn
+	"Encuestas an&oacute;nimas"	// Okoteve traducción
+#elif L==7	// it
+	"Sondaggi"
+#elif L==8	// pl
+	"Ankiety"
+#elif L==9	// pt
+	"Inqu&eacute;ritos"
+#endif
+	,
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10

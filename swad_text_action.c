@@ -7502,9 +7502,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show the assessment system"
+	"See assessment system"
 #elif L==4	// es
-	""
+	"Ver sistema de evaluaci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -7523,9 +7523,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show assignments"
+	"See assignments"
 #elif L==4	// es
-	""
+	"Ver actividades"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -7544,9 +7544,51 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show projects"
+	"See projects"
 #elif L==4	// es
-	""
+	"Ver proyectos"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActSeeAllExaAnn] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"See exam announcements"
+#elif L==4	// es
+	"Ver convocatorias de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActEdiTstQst] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Request the edition of test questions"
+#elif L==4	// es
+	"Solicitar la edici&oacute;n de preguntas de test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -7565,9 +7607,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request a test of self-assesment"
+	"Request a test"
 #elif L==4	// es
-	""
+	"Solicitar un test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -7628,30 +7670,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"List all surveys in pages"
+	"See surveys"
 #elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActSeeAllExaAnn] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Show the exam announcements"
-#elif L==4	// es
-	""
+	"Ver encuestas"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -7672,7 +7693,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Edit the assessment system"
 #elif L==4	// es
-	""
+	"Editar el sistema de evaluaci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9533,90 +9554,6 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActSeeTst] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"See a test"
-#elif L==4	// es
-	"Ver un test"
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActReqAssTst] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Request assessment of a test"
-#elif L==4	// es
-	"Solicitar evaluaci&oacute;n de un test"
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActAssTst] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Assess a test"
-#elif L==4	// es
-	"Evaluar un test"
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActEdiTstQst] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Request the edition of test questions"
-#elif L==4	// es
-	"Solicitar la edici&oacute;n de preguntas de test"
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
 	[ActEdiOneTstQst] =
 #if   L==1	// ca
 	""			// Necessita traducció
@@ -9815,6 +9752,69 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change shuffle of a test question"
 #elif L==4	// es
 	"Cambiar baraje de una pregunta de test"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActSeeTst] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"See a test"
+#elif L==4	// es
+	"Ver un test"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActReqAssTst] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Request assessment of a test"
+#elif L==4	// es
+	"Solicitar evaluaci&oacute;n de un test"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActAssTst] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Assess a test"
+#elif L==4	// es
+	"Evaluar un test"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
