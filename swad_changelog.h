@@ -548,13 +548,14 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.232 (2020-05-16)"
+#define Log_PLATFORM_VERSION	"SWAD 19.232.1 (2020-05-16)"
 #define CSS_FILE		"swad19.230.1.css"
 #define JS_FILE			"swad19.230.3.js"
 /*
 TODO: Comprobar si el directorio público que devuelve Ses_GetPublicDirFromCache sigue existiendo.
 //    Si no existe, hay que crear un nuevo directorio y meterlo en cache
 
+	Version 19.232.1: May 16, 2020  Changes in contextual icons in bank of questions and test. (301004 lines)
 	Version 19.232:   May 16, 2020  New option to edit questions separated from tests. (301000 lines)
 	Version 19.231:   May 16, 2020  Fixed bugs and code refactoring in exam results. (300956 lines)
 	Version 19.230.3: May 15, 2020  Update maths in exam prints when user answers. (301037 lines)

@@ -154,7 +154,8 @@ static void Tst_ShowFormRequestSelectTestsForSet (struct Exa_Exams *Exams,
 static void Tst_ShowFormRequestSelectTestsForGame (struct Gam_Games *Games,
                                                    struct Tst_Test *Test);
 static bool Tst_CheckIfICanEditTests (void);
-static void Tst_PutIconsTests (void *Test);
+static void Tst_PutIconsBankQsts (void *Test);
+static void Tst_PutIconsTests (__attribute__((unused)) void *Args);
 static void Tst_PutButtonToAddQuestion (void);
 
 static long Tst_GetParamTagCode (void);
@@ -359,7 +360,7 @@ static void Tst_FreeTagsList (struct Tst_Tags *Tags)
 static void Tst_ShowFormRequestTest (struct Tst_Test *Test)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *Txt_Take_a_test;
+   extern const char *Txt_Test;
    extern const char *Txt_Number_of_questions;
    extern const char *Txt_Generate_test;
    extern const char *Txt_No_test_questions;
@@ -369,8 +370,8 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test)
    TstCfg_GetConfigFromDB ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Take_a_test,
-                 Tst_PutIconsTests,Test,
+   Box_BoxBegin (NULL,Txt_Test,
+                 Tst_PutIconsTests,NULL,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Get tags *****/
@@ -1213,7 +1214,7 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
   {
    extern const char *Hlp_ASSESSMENT_Tests_editing_questions;
    extern const char *Txt_No_test_questions;
-   extern const char *Txt_List_edit_questions;
+   extern const char *Txt_Question_bank;
    extern const char *Txt_Show_questions;
    MYSQL_RES *mysql_res;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
@@ -1228,8 +1229,8 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
    Mnu_ContextMenuEnd ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_List_edit_questions,
-                 Tst_PutIconsTests,Test,
+   Box_BoxBegin (NULL,Txt_Question_bank,
+                 Tst_PutIconsBankQsts,Test,
                  Hlp_ASSESSMENT_Tests_editing_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
@@ -1442,42 +1443,47 @@ static bool Tst_CheckIfICanEditTests (void)
 /********************* Put contextual icons in tests *************************/
 /*****************************************************************************/
 
-static void Tst_PutIconsTests (void *Test)
+static void Tst_PutIconsBankQsts (void *Test)
   {
    extern const char *Txt_New_question;
 
-   if (Tst_CheckIfICanEditTests ())
+   /***** Put form to remove selected test questions *****/
+   switch (Gbl.Action.Act)
      {
-      switch (Gbl.Action.Act)
-	{
-	 case ActLstTstQst:		// List selected test questions for edition
-	 case ActReqRemSevTstQst:	// Request removal of selected questions
-	 case ActReqRemOneTstQst:	// Request removal of a question
-	 case ActRemOneTstQst:		// Remove a question
-	 case ActChgShfTstQst:		// Change shuffle of a question
-	    /***** Put form to remove selected test questions *****/
-	    Ico_PutContextualIconToRemove (ActReqRemSevTstQst,
-					   Tst_PutParamsRemoveSelectedQsts,Test);
-	    break;
-	 default:
-	    break;
-	}
-
-      if (Gbl.Action.Act != ActEdiTstQst)
-	 /***** Put form to edit existing test questions *****/
-	 Ico_PutContextualIconToEdit (ActEdiTstQst,NULL,
-				      NULL,NULL);
-
-      if (Gbl.Action.Act != ActEdiOneTstQst)
-	 /***** Put form to create a new test question *****/
-	 Ico_PutContextualIconToAdd (ActEdiOneTstQst,NULL,
-				     NULL,NULL,
-				     Txt_New_question);
-
-      /***** Put form to go to test configuration *****/
-      Ico_PutContextualIconToConfigure (ActCfgTst,
-					NULL,NULL);
+      case ActLstTstQst:	// List selected test questions for edition
+      case ActReqRemSevTstQst:	// Request removal of selected questions
+      case ActReqRemOneTstQst:	// Request removal of a question
+      case ActRemOneTstQst:	// Remove a question
+      case ActChgShfTstQst:	// Change shuffle of a question
+	 Ico_PutContextualIconToRemove (ActReqRemSevTstQst,
+					Tst_PutParamsRemoveSelectedQsts,Test);
+	 break;
+      default:
+	 break;
      }
+
+   if (Gbl.Action.Act != ActEdiOneTstQst)
+      /***** Put form to create a new test question *****/
+      Ico_PutContextualIconToAdd (ActEdiOneTstQst,NULL,
+				  NULL,NULL,
+				  Txt_New_question);
+
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_TESTS);
+  }
+
+
+/*****************************************************************************/
+/********************* Put contextual icons in tests *************************/
+/*****************************************************************************/
+
+static void Tst_PutIconsTests (__attribute__((unused)) void *Args)
+  {
+   extern const char *Txt_New_question;
+
+   /***** Put form to go to test configuration *****/
+   Ico_PutContextualIconToConfigure (ActCfgTst,
+				     NULL,NULL);
 
    /***** Put icon to view test exams *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -2032,7 +2038,7 @@ static void Tst_ShowFormConfigTst (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Configure_tests,
-                 Tst_PutIconsTests,&Test,
+                 Tst_PutIconsTests,NULL,
                  Hlp_ASSESSMENT_Tests_configuring_tests,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
@@ -2758,7 +2764,7 @@ static void Tst_ListOneQstToEdit (struct Tst_Test *Test)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Questions,
-                 Tst_PutIconsTests,Test,
+                 Tst_PutIconsBankQsts,Test,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Write the heading *****/
@@ -2792,7 +2798,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Questions,
-                 Tst_PutIconsTests,Test,
+                 Tst_PutIconsBankQsts,Test,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Write the heading *****/

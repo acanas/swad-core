@@ -18226,27 +18226,6 @@ const char *Txt_Link_to_announcement_of_exam =
 	"Link para chamada para exame";
 #endif
 
-const char *Txt_List_edit_questions =
-#if   L==1	// ca
-	"Llistar / editar preguntes";
-#elif L==2	// de
-	"Liste / bearbeiten Fragen";
-#elif L==3	// en
-	"List / edit questions";
-#elif L==4	// es
-	"Listar / editar preguntas";
-#elif L==5	// fr
-	"Lister / modifier questions";
-#elif L==6	// gn
-	"Listar / editar preguntas";	// Okoteve traducción
-#elif L==7	// it
-	"Elencare / modificare domande";
-#elif L==8	// pl
-	"Wy&sacute;wietli&cacute; / edytowa&cacute; pytania";
-#elif L==9	// pt
-	"Listar / editar perguntas";
-#endif
-
 const char *Txt_List_of_detailed_clicks =
 #if   L==1	// ca
 	"Listado de clics detallados";		// Necessita traduccio
@@ -22038,7 +22017,28 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Testes"
 #endif
 	,
-	//  6: ActSeeAllGam
+	//  6: ActSeeAllExa
+#if   L==1	// ca
+	"Ex&agrave;mens"
+#elif L==2	// de
+	"Pr&uuml;fungen"
+#elif L==3	// en
+	"Exams"
+#elif L==4	// es
+	"Ex&aacute;menes"
+#elif L==5	// fr
+	"Examens"
+#elif L==6	// gn
+	"Ex&aacute;menes"	// Okoteve traducción
+#elif L==7	// it
+	"Esami"
+#elif L==8	// pl
+	"Egzaminy"
+#elif L==9	// pt
+	"Exames"
+#endif
+	,
+	//  7: ActSeeAllGam
 #if   L==1	// ca
 	"Jocs (comandament a dist&agrave;ncia)"
 #elif L==2	// de
@@ -22059,7 +22059,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Jogos (controlo remoto)"
 #endif
 	,
-	//  7: ActSeeAllSvy
+	//  8: ActSeeAllSvy
 #if   L==1	// ca
 	"Enquestes an&ograve;nimes"
 #elif L==2	// de
@@ -22080,7 +22080,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Inqu&eacute;ritos"
 #endif
 	,
-	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
@@ -32631,6 +32630,27 @@ const char *Txt_Question =
 	"Pytanie";
 #elif L==9	// pt
 	"Pergunta";
+#endif
+
+const char *Txt_Question_bank =
+#if   L==1	// ca
+	"Banc de preguntes";
+#elif L==2	// de
+	"Fragenbank";
+#elif L==3	// en
+	"Question bank";
+#elif L==4	// es
+	"Banco de preguntas";
+#elif L==5	// fr
+	"Banque de questions";
+#elif L==6	// gn
+	"Banco de preguntas";	// Okoteve traducción
+#elif L==7	// it
+	"Banca di domande";
+#elif L==8	// pl
+	"Bank pyta&nacute;";
+#elif L==9	// pt
+	"Banco de perguntas";
 #endif
 
 const char *Txt_Question_code_X =	// Warning: it is very important to include %ld in the following sentences
@@ -45465,27 +45485,6 @@ const char *Txt_Tags =		// Tags used in test
 	"Tags";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Descritores";
-#endif
-
-const char *Txt_Take_a_test =
-#if   L==1	// ca
-	"Fer un test";
-#elif L==2	// de
-	"F&uuml;hren Sie einen Test";
-#elif L==3	// en
-	"Take a test";
-#elif L==4	// es
-	"Hacer un test";
-#elif L==5	// fr
-	"Passer un test";
-#elif L==6	// gn
-	"Hacer un test";	// Okoteve traducción
-#elif L==7	// it
-	"Fare un test";
-#elif L==8	// pl
-	"Zr&oacute;b test";
-#elif L==9	// pt
-	"Fazer um teste";
 #endif
 
 const char *Txt_teachers_ABBREVIATION =	// Abbreviation of "Teachers"
