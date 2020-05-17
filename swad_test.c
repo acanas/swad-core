@@ -158,16 +158,17 @@ static void Tst_PutIconsBankQsts (void *Test);
 static void Tst_PutIconsTests (__attribute__((unused)) void *Args);
 static void Tst_PutButtonToAddQuestion (void);
 
-static long Tst_GetParamTagCode (void);
+static long Tag_GetParamTagCode (void);
 static bool Tst_CheckIfCurrentCrsHasTestTags (void);
 static unsigned Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
 static unsigned Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res);
-static void Tst_ShowFormSelTags (const struct Tst_Tags *Tags,
+
+static void Tag_ShowFormSelTags (const struct Tst_Tags *Tags,
                                  MYSQL_RES *mysql_res,
                                  bool ShowOnlyEnabledTags);
-static void Tst_ShowFormEditTags (void);
-static void Tst_PutIconEnable (long TagCod,const char *TagTxt);
-static void Tst_PutIconDisable (long TagCod,const char *TagTxt);
+static void Tag_PutIconEnable (long TagCod,const char *TagTxt);
+static void Tag_PutIconDisable (long TagCod,const char *TagTxt);
+
 static void Tst_ShowFormConfigTst (void);
 
 static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
@@ -385,7 +386,7 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test)
          HTM_TABLE_BeginPadding (2);
 
          /***** Selection of tags *****/
-         Tst_ShowFormSelTags (&Test->Tags,mysql_res,true);
+         Tag_ShowFormSelTags (&Test->Tags,mysql_res,true);
 
          /***** Selection of types of answers *****/
          Tst_ShowFormAnswerTypes (&Test->AnswerTypes);
@@ -1242,7 +1243,7 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
       HTM_TABLE_BeginPadding (2);
 
       /***** Selection of tags *****/
-      Tst_ShowFormSelTags (&Test->Tags,mysql_res,false);
+      Tag_ShowFormSelTags (&Test->Tags,mysql_res,false);
 
       /***** Selection of types of answers *****/
       Tst_ShowFormAnswerTypes (&Test->AnswerTypes);
@@ -1340,7 +1341,7 @@ static void Tst_ShowFormRequestSelectTestsForSet (struct Exa_Exams *Exams,
       HTM_TABLE_BeginPadding (2);
 
       /***** Selection of tags *****/
-      Tst_ShowFormSelTags (&Test->Tags,mysql_res,false);
+      Tag_ShowFormSelTags (&Test->Tags,mysql_res,false);
 
       /***** Selection of types of answers *****/
       Tst_ShowFormAnswerTypes (&Test->AnswerTypes);
@@ -1402,7 +1403,7 @@ static void Tst_ShowFormRequestSelectTestsForGame (struct Gam_Games *Games,
       HTM_TABLE_BeginPadding (2);
 
       /***** Selection of tags *****/
-      Tst_ShowFormSelTags (&Test->Tags,mysql_res,false);
+      Tag_ShowFormSelTags (&Test->Tags,mysql_res,false);
 
       /***** Starting and ending dates in the search *****/
       Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
@@ -1468,10 +1469,15 @@ static void Tst_PutIconsBankQsts (void *Test)
 				  NULL,NULL,
 				  Txt_New_question);
 
+   /***** Put form to edit tags *****/
+   Lay_PutContextualLinkOnlyIcon (ActEdiTag,NULL,
+                                  NULL,NULL,
+				  "tag.svg",
+				  "Editar descriptores");	// TODO: Need translation!!!
+
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_TESTS);
   }
-
 
 /*****************************************************************************/
 /********************* Put contextual icons in tests *************************/
@@ -1533,46 +1539,43 @@ void Tst_ShowFormConfig (void)
 
    /***** Form to configure test *****/
    Tst_ShowFormConfigTst ();
-
-   /***** Form to edit tags *****/
-   Tst_ShowFormEditTags ();
   }
 
 /*****************************************************************************/
 /******************************* Enable a test tag ***************************/
 /*****************************************************************************/
 
-void Tst_EnableTag (void)
+void Tag_EnableTag (void)
   {
-   long TagCod = Tst_GetParamTagCode ();
+   long TagCod = Tag_GetParamTagCode ();
 
    /***** Change tag status to enabled *****/
    Tst_EnableOrDisableTag (TagCod,false);
 
-   /***** Show again the form to configure test *****/
-   Tst_ShowFormConfig ();
+   /***** Show again the form to edit tags *****/
+   Tag_ShowFormEditTags ();
   }
 
 /*****************************************************************************/
 /****************************** Disable a test tag ***************************/
 /*****************************************************************************/
 
-void Tst_DisableTag (void)
+void Tag_DisableTag (void)
   {
-   long TagCod = Tst_GetParamTagCode ();
+   long TagCod = Tag_GetParamTagCode ();
 
    /***** Change tag status to disabled *****/
    Tst_EnableOrDisableTag (TagCod,true);
 
-   /***** Show again the form to configure test *****/
-   Tst_ShowFormConfig ();
+   /***** Show again the form to edit tags *****/
+   Tag_ShowFormEditTags ();
   }
 
 /*****************************************************************************/
 /************************* Get parameter with tag code ***********************/
 /*****************************************************************************/
 
-static long Tst_GetParamTagCode (void)
+static long Tag_GetParamTagCode (void)
   {
    long TagCod;
 
@@ -1587,7 +1590,7 @@ static long Tst_GetParamTagCode (void)
 /************************ Rename a tag of test questions *********************/
 /*****************************************************************************/
 
-void Tst_RenameTag (void)
+void Tag_RenameTag (void)
   {
    extern const char *Txt_The_tag_X_has_been_renamed_as_Y;
    extern const char *Txt_The_tag_X_has_not_changed;
@@ -1696,8 +1699,8 @@ void Tst_RenameTag (void)
    else			// New tag empty
       Ale_ShowAlertYouCanNotLeaveFieldEmpty ();
 
-   /***** Show again the form to configure test *****/
-   Tst_ShowFormConfig ();
+   /***** Show again the form to edit tags *****/
+   Tag_ShowFormEditTags ();
   }
 
 /*****************************************************************************/
@@ -1802,7 +1805,7 @@ static unsigned Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
 /********************* Show a form to select test tags ***********************/
 /*****************************************************************************/
 
-static void Tst_ShowFormSelTags (const struct Tst_Tags *Tags,
+static void Tag_ShowFormSelTags (const struct Tst_Tags *Tags,
                                  MYSQL_RES *mysql_res,
                                  bool ShowOnlyEnabledTags)
   {
@@ -1906,7 +1909,7 @@ static void Tst_ShowFormSelTags (const struct Tst_Tags *Tags,
 /************* Show a form to enable/disable and rename test tags ************/
 /*****************************************************************************/
 
-static void Tst_ShowFormEditTags (void)
+void Tag_ShowFormEditTags (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_configuring_tests;
    extern const char *Txt_No_test_questions;
@@ -1943,9 +1946,9 @@ static void Tst_ShowFormEditTags (void)
 
          /* Form to enable / disable this tag */
          if (row[2][0] == 'Y')	// Tag disabled
-            Tst_PutIconEnable (TagCod,row[1]);
+            Tag_PutIconEnable (TagCod,row[1]);
          else
-            Tst_PutIconDisable (TagCod,row[1]);
+            Tag_PutIconDisable (TagCod,row[1]);
 
          /* Form to rename this tag */
          HTM_TD_Begin ("class=\"LM\"");
@@ -1974,12 +1977,12 @@ static void Tst_ShowFormEditTags (void)
 /******************* Put a link and an icon to enable a tag ******************/
 /*****************************************************************************/
 
-static void Tst_PutIconEnable (long TagCod,const char *TagTxt)
+static void Tag_PutIconEnable (long TagCod,const char *TagTxt)
   {
    extern const char *Txt_Tag_X_not_allowed_Click_to_allow_it;
 
    HTM_TD_Begin ("class=\"BM\"");
-   Frm_StartForm (ActEnableTag);
+   Frm_StartForm (ActEnaTag);
    Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
    Ico_PutIconLink ("eye-slash-red.svg",
 		    Str_BuildStringStr (Txt_Tag_X_not_allowed_Click_to_allow_it,
@@ -1993,12 +1996,12 @@ static void Tst_PutIconEnable (long TagCod,const char *TagTxt)
 /****************** Put a link and an icon to disable a tag ******************/
 /*****************************************************************************/
 
-static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
+static void Tag_PutIconDisable (long TagCod,const char *TagTxt)
   {
    extern const char *Txt_Tag_X_allowed_Click_to_disable_it;
 
    HTM_TD_Begin ("class=\"BM\"");
-   Frm_StartForm (ActDisableTag);
+   Frm_StartForm (ActDisTag);
    Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
    Ico_PutIconLink ("eye-green.svg",
 		    Str_BuildStringStr (Txt_Tag_X_allowed_Click_to_disable_it,

@@ -143,11 +143,13 @@ unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res);
 void Tst_GetAndWriteTagsQst (long QstCod);
 
 void Tst_ShowFormConfig (void);
-void Tst_EnableTag (void);
-void Tst_DisableTag (void);
-void Tst_RenameTag (void);
+void Tag_EnableTag (void);
+void Tag_DisableTag (void);
+void Tag_RenameTag (void);
 
 bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void);
+
+void Tag_ShowFormEditTags (void);
 
 unsigned Tst_CountNumQuestionsInList (const char *ListQuestions);
 
