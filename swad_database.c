@@ -3281,7 +3281,7 @@ mysql> DESCRIBE tst_tags;
 			"TagCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"ChangeTime DATETIME NOT NULL,"
-			"TagTxt VARCHAR(2047) NOT NULL,"	// Tst_MAX_BYTES_TAG
+			"TagTxt VARCHAR(2047) NOT NULL,"	// Tag_MAX_BYTES_TAG
 			"TagHidden ENUM('N','Y') NOT NULL,"
 		   "UNIQUE INDEX(TagCod),"
 		   "INDEX(CrsCod,ChangeTime))");

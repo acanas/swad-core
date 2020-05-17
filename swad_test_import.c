@@ -566,7 +566,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		  if (!strcmp (TagsElem->TagName,"tags"))
 		    {
 		     for (TagElem = TagsElem->FirstChild;
-			  TagElem != NULL && Question.Tags.Num < Tst_MAX_TAGS_PER_QUESTION;
+			  TagElem != NULL && Question.Tags.Num < Tag_MAX_TAGS_PER_QUESTION;
 			  TagElem = TagElem->NextBrother)
 			if (!strcmp (TagElem->TagName,"tag"))
 			  {
@@ -574,7 +574,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 			     {
 			      Str_Copy (Question.Tags.Txt[Question.Tags.Num],
 					TagElem->Content,
-					Tst_MAX_BYTES_TAG);
+					Tag_MAX_BYTES_TAG);
 			      Question.Tags.Num++;
 			     }
 			  }

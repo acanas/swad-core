@@ -557,7 +557,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.234 (2020-05-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.235 (2020-05-17)"
 #define CSS_FILE		"swad19.230.1.css"
 #define JS_FILE			"swad19.230.3.js"
 /*
@@ -565,6 +565,7 @@ TODO: Comprobar si el directorio público que devuelve Ses_GetPublicDirFromCache 
 //    Si no existe, hay que crear un nuevo directorio y meterlo en cache
 TODO: ¿Mover importar y exportar a icono en la esquina?
 
+	Version 19.235:   May 17, 2020  New module swad_tag for question tags. (301147 lines)
 	Version 19.234:   May 17, 2020  Option to edit tags in bank of questions. (301061 lines)
 					Copy the following 3 icons to icon public directory:
 sudo cp icon/tag.svg /var/www/html/swad/icon/

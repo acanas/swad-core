@@ -4248,9 +4248,9 @@ static int API_GetTstTags (struct soap *soap,
 
          /* Get tag text (row[1]) */
          getTestsOut->tagsArray.__ptr[NumRow].tagText =
-            (char *) soap_malloc (soap,Tst_MAX_BYTES_TAG + 1);
+            (char *) soap_malloc (soap,Tag_MAX_BYTES_TAG + 1);
 	 Str_Copy (getTestsOut->tagsArray.__ptr[NumRow].tagText,row[1],
-	           Tst_MAX_BYTES_TAG);
+	           Tag_MAX_BYTES_TAG);
 	}
      }
 

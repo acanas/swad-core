@@ -88,8 +88,6 @@ const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES] =
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-#define Tst_MAX_BYTES_TAGS_LIST		(16 * 1024)
-
 // Test images will be saved with:
 // - maximum width of Tst_IMAGE_SAVED_MAX_HEIGHT
 // - maximum height of Tst_IMAGE_SAVED_MAX_HEIGHT
@@ -125,8 +123,6 @@ extern struct Globals Gbl;
 
 static void Tst_TstConstructor (struct Tst_Test *Test);
 static void Tst_TstDestructor (struct Tst_Test *Test);
-static void Tst_ResetTags (struct Tst_Tags *Tags);
-static void Tst_FreeTagsList (struct Tst_Tags *Tags);
 
 static void Tst_ShowFormRequestTest (struct Tst_Test *Test);
 
@@ -157,17 +153,6 @@ static bool Tst_CheckIfICanEditTests (void);
 static void Tst_PutIconsBankQsts (void *Test);
 static void Tst_PutIconsTests (__attribute__((unused)) void *Args);
 static void Tst_PutButtonToAddQuestion (void);
-
-static long Tag_GetParamTagCode (void);
-static bool Tst_CheckIfCurrentCrsHasTestTags (void);
-static unsigned Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
-static unsigned Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res);
-
-static void Tag_ShowFormSelTags (const struct Tst_Tags *Tags,
-                                 MYSQL_RES *mysql_res,
-                                 bool ShowOnlyEnabledTags);
-static void Tag_PutIconEnable (long TagCod,const char *TagTxt);
-static void Tag_PutIconDisable (long TagCod,const char *TagTxt);
 
 static void Tst_ShowFormConfigTst (void);
 
@@ -221,7 +206,7 @@ static bool Tst_GetParamsTst (struct Tst_Test *Test,
                               Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
 static unsigned Tst_GetParamNumTst (void);
 static unsigned Tst_GetParamNumQsts (void);
-static unsigned Tst_CountNumTagsInList (const struct Tst_Tags *Tags);
+static unsigned Tst_CountNumTagsInList (const struct Tag_Tags *Tags);
 static int Tst_CountNumAnswerTypesInList (const struct Tst_AnswerTypes *AnswerTypes);
 
 static void Tst_PutFormEditOneQst (struct Tst_Question *Question);
@@ -245,10 +230,6 @@ static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *Unsigned
 static void Tst_GetQstFromForm (struct Tst_Question *Question);
 static void Tst_MoveMediaToDefinitiveDirectories (struct Tst_Question *Question);
 
-static long Tst_GetTagCodFromTagTxt (const char *TagTxt);
-static long Tst_CreateNewTag (long CrsCod,const char *TagTxt);
-static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden);
-
 static void Tst_PutParamsRemoveSelectedQsts (void *Test);
 static void Tst_PutIconToRemoveOneQst (void *QstCod);
 static void Tst_PutParamsRemoveOnlyThisQst (void *QstCod);
@@ -256,12 +237,9 @@ static void Tst_PutParamsRemoveOneQstWhileEditing (void *Test);
 static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod);
 
 static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question);
-static void Tst_InsertTagsIntoDB (const struct Tst_Question *Question);
 static void Tst_InsertAnswersIntoDB (struct Tst_Question *Question);
 
 static void Tst_RemAnsFromQst (long QstCod);
-static void Tst_RemTagsFromQst (long QstCod);
-static void Tst_RemoveUnusedTagsFromCrs (long CrsCod);
 
 static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
 static void Tst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod);
@@ -296,7 +274,7 @@ void Tst_RequestTest (void)
 static void Tst_TstConstructor (struct Tst_Test *Test)
   {
    /***** Reset tags *****/
-   Tst_ResetTags (&Test->Tags);
+   Tag_ResetTags (&Test->Tags);
 
    /***** Reset answer types *****/
    Test->AnswerTypes.All = false;
@@ -319,39 +297,7 @@ static void Tst_TstDestructor (struct Tst_Test *Test)
    Tst_QstDestructor (&Test->Question);
 
    /***** Free tag list *****/
-   Tst_FreeTagsList (&Test->Tags);
-  }
-
-/*****************************************************************************/
-/********************************* Reset tags ********************************/
-/*****************************************************************************/
-
-static void Tst_ResetTags (struct Tst_Tags *Tags)
-  {
-   unsigned IndTag;
-
-   Tags->Num  = 0;
-   Tags->All  = false;
-   Tags->List = NULL;
-
-   /***** Initialize all tags in question to empty string *****/
-   for (IndTag = 0;
-	IndTag < Tst_MAX_TAGS_PER_QUESTION;
-	IndTag++)
-      Tags->Txt[IndTag][0] = '\0';
-  }
-
-/*****************************************************************************/
-/**************** Free memory allocated for the list of tags *****************/
-/*****************************************************************************/
-
-static void Tst_FreeTagsList (struct Tst_Tags *Tags)
-  {
-   if (Tags->List)
-     {
-      free (Tags->List);
-      Tst_ResetTags (Tags);
-     }
+   Tag_FreeTagsList (&Test->Tags);
   }
 
 /*****************************************************************************/
@@ -376,7 +322,7 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test)
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Get tags *****/
-   if ((Test->Tags.Num = Tst_GetEnabledTagsFromThisCrs (&mysql_res)) != 0)
+   if ((Test->Tags.Num = Tag_GetEnabledTagsFromThisCrs (&mysql_res)) != 0)
      {
       /***** Check if minimum date-time of next access to test is older than now *****/
       if (Tst_CheckIfNextTstAllowed ())
@@ -1235,7 +1181,7 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
                  Hlp_ASSESSMENT_Tests_editing_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
-   if ((Test->Tags.Num = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
+   if ((Test->Tags.Num = Tag_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       Frm_StartForm (ActLstTstQst);
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Tst_DEFAULT_ORDER);
@@ -1333,7 +1279,7 @@ static void Tst_ShowFormRequestSelectTestsForSet (struct Exa_Exams *Exams,
                  Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
-   if ((Test->Tags.Num = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
+   if ((Test->Tags.Num = Tag_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       Frm_StartForm (ActLstTstQstForSet);
       ExaSet_PutParamsOneSet (Exams);
@@ -1395,7 +1341,7 @@ static void Tst_ShowFormRequestSelectTestsForGame (struct Gam_Games *Games,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
-   if ((Test->Tags.Num = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
+   if ((Test->Tags.Num = Tag_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       Frm_StartForm (ActGamLstTstQst);
       Gam_PutParams (Games);
@@ -1542,168 +1488,6 @@ void Tst_ShowFormConfig (void)
   }
 
 /*****************************************************************************/
-/******************************* Enable a test tag ***************************/
-/*****************************************************************************/
-
-void Tag_EnableTag (void)
-  {
-   long TagCod = Tag_GetParamTagCode ();
-
-   /***** Change tag status to enabled *****/
-   Tst_EnableOrDisableTag (TagCod,false);
-
-   /***** Show again the form to edit tags *****/
-   Tag_ShowFormEditTags ();
-  }
-
-/*****************************************************************************/
-/****************************** Disable a test tag ***************************/
-/*****************************************************************************/
-
-void Tag_DisableTag (void)
-  {
-   long TagCod = Tag_GetParamTagCode ();
-
-   /***** Change tag status to disabled *****/
-   Tst_EnableOrDisableTag (TagCod,true);
-
-   /***** Show again the form to edit tags *****/
-   Tag_ShowFormEditTags ();
-  }
-
-/*****************************************************************************/
-/************************* Get parameter with tag code ***********************/
-/*****************************************************************************/
-
-static long Tag_GetParamTagCode (void)
-  {
-   long TagCod;
-
-   /***** Get tag code *****/
-   if ((TagCod = Par_GetParToLong ("TagCod")) <= 0)
-      Lay_ShowErrorAndExit ("Code of tag is missing.");
-
-   return TagCod;
-  }
-
-/*****************************************************************************/
-/************************ Rename a tag of test questions *********************/
-/*****************************************************************************/
-
-void Tag_RenameTag (void)
-  {
-   extern const char *Txt_The_tag_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_tag_X_has_not_changed;
-   char OldTagTxt[Tst_MAX_BYTES_TAG + 1];
-   char NewTagTxt[Tst_MAX_BYTES_TAG + 1];
-   long ExistingTagCod;
-   long OldTagCod;
-   bool ComplexRenaming;
-
-   /***** Get old and new tags from the form *****/
-   Par_GetParToText ("OldTagTxt",OldTagTxt,Tst_MAX_BYTES_TAG);
-   Par_GetParToText ("NewTagTxt",NewTagTxt,Tst_MAX_BYTES_TAG);
-
-   /***** Check that the new tag is not empty *****/
-   if (NewTagTxt[0])	// New tag not empty
-     {
-      /***** Check if the old tag is equal to the new one *****/
-      if (!strcmp (OldTagTxt,NewTagTxt))	// The old and the new tag
-						// are exactly the same (case sensitively).
-						// This happens when user press INTRO
-						// without changing anything in the form.
-         Ale_ShowAlert (Ale_INFO,Txt_The_tag_X_has_not_changed,
-                        NewTagTxt);
-      else					// The old and the new tag
-						// are not exactly the same (case sensitively).
-	{
-	 /***** Check if renaming is complex or easy *****/
-	 ComplexRenaming = false;
-	 if (strcasecmp (OldTagTxt,NewTagTxt))	// The old and the new tag
-						// are not the same (case insensitively)
-	    /* Check if the new tag text is equal to any of the tags
-	       already present in the database */
-	    if ((ExistingTagCod = Tst_GetTagCodFromTagTxt (NewTagTxt)) > 0)
-	       // The new tag was already in database
-	       ComplexRenaming = true;
-
-	 if (ComplexRenaming)	// Renaming is not easy
-	   {
-	    /***** Complex update made to not repeat tags:
-		   - If the new tag existed for a question ==>
-		     delete old tag from tst_question_tags;
-		     the new tag will remain
-		   - If the new tag did not exist for a question ==>
-		     change old tag to new tag in tst_question_tags *****/
-	    /* Get tag code of the old tag */
-	    if ((OldTagCod =  Tst_GetTagCodFromTagTxt (OldTagTxt)) < 0)
-	       Lay_ShowErrorAndExit ("Tag does not exists.");
-
-	    /* Create a temporary table with all the question codes
-	       that had the new tag as one of their tags */
-	    DB_Query ("can not remove temporary table",
-		      "DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
-
-	    DB_Query ("can not create temporary table",
-		      "CREATE TEMPORARY TABLE tst_question_tags_tmp"
-		      " ENGINE=MEMORY"
-		      " SELECT QstCod FROM tst_question_tags"
-	   	      " WHERE TagCod=%ld",
-		      ExistingTagCod);
-
-	    /* Remove old tag in questions where it would be repeated */
-	    // New tag existed for a question ==> delete old tag
-	    DB_QueryDELETE ("can not remove a tag from some questions",
-			    "DELETE FROM tst_question_tags"
-			    " WHERE TagCod=%ld"
-			    " AND QstCod IN"
-			    " (SELECT QstCod FROM tst_question_tags_tmp)",
-			    OldTagCod);
-
-	    /* Change old tag to new tag in questions where it would not be repeated */
-	    // New tag did not exist for a question ==> change old tag to new tag
-	    DB_QueryUPDATE ("can not update a tag in some questions",
-			    "UPDATE tst_question_tags"
-			    " SET TagCod=%ld"
-			    " WHERE TagCod=%ld"
-			    " AND QstCod NOT IN"
-			    " (SELECT QstCod FROM tst_question_tags_tmp)",
-			    ExistingTagCod,
-			    OldTagCod);
-
-	    /* Drop temporary table, no longer necessary */
-	    DB_Query ("can not remove temporary table",
-		      "DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
-
-	    /***** Delete old tag from tst_tags
-		   because it is not longer used *****/
-	    DB_QueryDELETE ("can not remove old tag",
-			    "DELETE FROM tst_tags WHERE TagCod=%ld",
-			    OldTagCod);
-	   }
-	 else			// Renaming is easy
-	   {
-	    /***** Simple update replacing each instance of the old tag by the new tag *****/
-	    DB_QueryUPDATE ("can not update tag",
-			    "UPDATE tst_tags SET TagTxt='%s',ChangeTime=NOW()"
-			    " WHERE tst_tags.CrsCod=%ld"
-			    " AND tst_tags.TagTxt='%s'",
-			    NewTagTxt,Gbl.Hierarchy.Crs.CrsCod,OldTagTxt);
-	   }
-
-	 /***** Write message to show the change made *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_tag_X_has_been_renamed_as_Y,
-		        OldTagTxt,NewTagTxt);
-	}
-     }
-   else			// New tag empty
-      Ale_ShowAlertYouCanNotLeaveFieldEmpty ();
-
-   /***** Show again the form to edit tags *****/
-   Tag_ShowFormEditTags ();
-  }
-
-/*****************************************************************************/
 /*************** Get configuration of test for current course ****************/
 /*****************************************************************************/
 // Returns true if course has test tags and pluggable is unknown
@@ -1747,268 +1531,9 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void)
 
    /***** Get if current course has tests from database *****/
    if (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_UNKNOWN)
-      return Tst_CheckIfCurrentCrsHasTestTags ();	// Return true if course has tests
+      return Tag_CheckIfCurrentCrsHasTestTags ();	// Return true if course has tests
 
    return false;	// Pluggable is not unknown
-  }
-
-/*****************************************************************************/
-/******************* Check if current course has test tags *******************/
-/*****************************************************************************/
-// Return the number of rows of the result
-
-static bool Tst_CheckIfCurrentCrsHasTestTags (void)
-  {
-   /***** Get available tags from database *****/
-   return (DB_QueryCOUNT ("can not check if course has tags",
-			  "SELECT COUNT(*) FROM tst_tags"
-			  " WHERE CrsCod=%ld",
-			  Gbl.Hierarchy.Crs.CrsCod) != 0);
-  }
-
-/*****************************************************************************/
-/********* Get all (enabled or disabled) test tags for this course ***********/
-/*****************************************************************************/
-// Return the number of rows of the result
-
-static unsigned Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
-  {
-   /***** Get available tags from database *****/
-   return (unsigned) DB_QuerySELECT (mysql_res,"can not get available tags",
-				     "SELECT TagCod,"	// row[0]
-					    "TagTxt,"	// row[1]
-					    "TagHidden"	// row[2]
-				     " FROM tst_tags"
-				     " WHERE CrsCod=%ld"
-				     " ORDER BY TagTxt",
-				     Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
-/********************** Get enabled test tags for this course ****************/
-/*****************************************************************************/
-// Return the number of rows of the result
-
-static unsigned Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
-  {
-   /***** Get available not hidden tags from database *****/
-   return (unsigned) DB_QuerySELECT (mysql_res,"can not get available enabled tags",
-				     "SELECT TagCod,"	// row[0]
-					    "TagTxt"	// row[1]
-				     " FROM tst_tags"
-				     " WHERE CrsCod=%ld AND TagHidden='N'"
-				     " ORDER BY TagTxt",
-				     Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
-/********************* Show a form to select test tags ***********************/
-/*****************************************************************************/
-
-static void Tag_ShowFormSelTags (const struct Tst_Tags *Tags,
-                                 MYSQL_RES *mysql_res,
-                                 bool ShowOnlyEnabledTags)
-  {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Tags;
-   extern const char *Txt_All_tags;
-   extern const char *Txt_Tag_not_allowed;
-   extern const char *Txt_Tag_allowed;
-   unsigned NumTag;
-   MYSQL_ROW row;
-   bool TagHidden = false;
-   bool Checked;
-   const char *Ptr;
-   char TagText[Tst_MAX_BYTES_TAG + 1];
-   /*
-   row[0] TagCod
-   row[1] TagTxt
-   row[2] TagHidden
-   */
-   HTM_TR_Begin (NULL);
-
-   /***** Label *****/
-   HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Tags);
-   HTM_TD_End ();
-
-   /***** Select all tags *****/
-   HTM_TD_Begin ("class=\"LT\"");
-
-   HTM_TABLE_BeginPadding (2);
-   HTM_TR_Begin (NULL);
-   if (!ShowOnlyEnabledTags)
-      HTM_TD_Empty (1);
-
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("AllTags",HTM_DONT_SUBMIT_ON_CHANGE,
-		       "value=\"Y\"%s onclick=\"togglecheckChildren(this,'ChkTag');\"",
-		       Tags->All ? " checked=\"checked\"" :
-			           "");
-   HTM_TxtF ("&nbsp;%s",Txt_All_tags);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Select tags one by one *****/
-   for (NumTag = 1;
-	NumTag <= Tags->Num;
-	NumTag++)
-     {
-      row = mysql_fetch_row (mysql_res);
-      HTM_TR_Begin (NULL);
-
-      if (!ShowOnlyEnabledTags)
-        {
-         TagHidden = (row[2][0] == 'Y');
-         HTM_TD_Begin ("class=\"LM\"");
-         Ico_PutIconOff (TagHidden ? "eye-slash-red.svg" :
-                                     "eye-green.svg",
-			 TagHidden ? Txt_Tag_not_allowed :
-			             Txt_Tag_allowed);
-         HTM_TD_End ();
-        }
-
-      Checked = false;
-      if (Tags->List)
-        {
-         Ptr = Tags->List;
-         while (*Ptr)
-           {
-            Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tst_MAX_BYTES_TAG);
-            if (!strcmp (row[1],TagText))
-              {
-               Checked = true;
-               break;
-              }
-           }
-        }
-
-      HTM_TD_Begin ("class=\"LM\"");
-      HTM_LABEL_Begin ("class=\"DAT\"");
-      HTM_INPUT_CHECKBOX ("ChkTag",HTM_DONT_SUBMIT_ON_CHANGE,
-			  "value=\"%s\"%s onclick=\"checkParent(this,'AllTags');\"",
-			  row[1],
-			  Checked ? " checked=\"checked\"" :
-				    "");
-      HTM_TxtF ("&nbsp;%s",row[1]);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-     }
-
-   HTM_TABLE_End ();
-   HTM_TD_End ();
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************* Show a form to enable/disable and rename test tags ************/
-/*****************************************************************************/
-
-void Tag_ShowFormEditTags (void)
-  {
-   extern const char *Hlp_ASSESSMENT_Tests_configuring_tests;
-   extern const char *Txt_No_test_questions;
-   extern const char *Txt_Tags;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumTags;
-   unsigned NumTag;
-   long TagCod;
-
-   /***** Get current tags in current course *****/
-   if ((NumTags = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
-     {
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Tags,
-                         NULL,NULL,
-                         Hlp_ASSESSMENT_Tests_configuring_tests,Box_NOT_CLOSABLE,2);
-
-      /***** Show tags *****/
-      for (NumTag = 0;
-	   NumTag < NumTags;
-	   NumTag++)
-        {
-         row = mysql_fetch_row (mysql_res);
-	 /*
-	 row[0] TagCod
-	 row[1] TagTxt
-	 row[2] TagHidden
-	 */
-         if ((TagCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of tag.");
-
-         HTM_TR_Begin (NULL);
-
-         /* Form to enable / disable this tag */
-         if (row[2][0] == 'Y')	// Tag disabled
-            Tag_PutIconEnable (TagCod,row[1]);
-         else
-            Tag_PutIconDisable (TagCod,row[1]);
-
-         /* Form to rename this tag */
-         HTM_TD_Begin ("class=\"LM\"");
-         Frm_StartForm (ActRenTag);
-         Par_PutHiddenParamString (NULL,"OldTagTxt",row[1]);
-	 HTM_INPUT_TEXT ("NewTagTxt",Tst_MAX_CHARS_TAG,row[1],
-	                 HTM_SUBMIT_ON_CHANGE,
-			 "size=\"36\" required=\"required\"");
-         Frm_EndForm ();
-         HTM_TD_End ();
-
-         HTM_TR_End ();
-        }
-
-      /***** End table and box *****/
-      Box_BoxTableEnd ();
-     }
-   else
-      Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/******************* Put a link and an icon to enable a tag ******************/
-/*****************************************************************************/
-
-static void Tag_PutIconEnable (long TagCod,const char *TagTxt)
-  {
-   extern const char *Txt_Tag_X_not_allowed_Click_to_allow_it;
-
-   HTM_TD_Begin ("class=\"BM\"");
-   Frm_StartForm (ActEnaTag);
-   Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
-   Ico_PutIconLink ("eye-slash-red.svg",
-		    Str_BuildStringStr (Txt_Tag_X_not_allowed_Click_to_allow_it,
-				        TagTxt));
-   Str_FreeString ();
-   Frm_EndForm ();
-   HTM_TD_End ();
-  }
-
-/*****************************************************************************/
-/****************** Put a link and an icon to disable a tag ******************/
-/*****************************************************************************/
-
-static void Tag_PutIconDisable (long TagCod,const char *TagTxt)
-  {
-   extern const char *Txt_Tag_X_allowed_Click_to_disable_it;
-
-   HTM_TD_Begin ("class=\"BM\"");
-   Frm_StartForm (ActDisTag);
-   Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
-   Ico_PutIconLink ("eye-green.svg",
-		    Str_BuildStringStr (Txt_Tag_X_allowed_Click_to_disable_it,
-				        TagTxt));
-   Str_FreeString ();
-   Frm_EndForm ();
-   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -2366,7 +1891,7 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
    long LengthQuery;
    unsigned NumItemInList;
    const char *Ptr;
-   char TagText[Tst_MAX_BYTES_TAG + 1];
+   char TagText[Tag_MAX_BYTES_TAG + 1];
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    Tst_AnswerType_t AnsType;
@@ -2425,7 +1950,7 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
       Ptr = Test->Tags.List;
       while (*Ptr)
         {
-         Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tst_MAX_BYTES_TAG);
+         Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
          LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 256)
             Lay_ShowErrorAndExit ("Query size exceed.");
@@ -2451,7 +1976,7 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
       Ptr = Test->AnswerTypes.List;
       while (*Ptr)
         {
-         Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Tst_MAX_BYTES_TAG);
+         Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Tag_MAX_BYTES_TAG);
 	 AnsType = Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
          LengthQuery = LengthQuery + 35 + strlen (Tst_StrAnswerTypesDB[AnsType]) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 256)
@@ -2525,7 +2050,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
    long LengthQuery;
    unsigned NumItemInList;
    const char *Ptr;
-   char TagText[Tst_MAX_BYTES_TAG + 1];
+   char TagText[Tag_MAX_BYTES_TAG + 1];
    char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    Tst_AnswerType_t AnswerType;
    bool Shuffle;
@@ -2572,7 +2097,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
       Ptr = Test->Tags.List;
       while (*Ptr)
         {
-         Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tst_MAX_BYTES_TAG);
+         Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
          LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 128)
             Lay_ShowErrorAndExit ("Query size exceed.");
@@ -2598,7 +2123,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
       Ptr = Test->AnswerTypes.List;
       while (*Ptr)
         {
-         Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Tst_MAX_BYTES_TAG);
+         Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Tag_MAX_BYTES_TAG);
 	 AnswerType = Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
          LengthQuery = LengthQuery + 35 + strlen (Tst_StrAnswerTypesDB[AnswerType]) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 128)
@@ -3872,9 +3397,9 @@ static bool Tst_GetParamsTst (struct Tst_Test *Test,
    Test->Tags.All = Par_GetParToBool ("AllTags");
 
    /* Get the tags */
-   if ((Test->Tags.List = (char *) malloc (Tst_MAX_BYTES_TAGS_LIST + 1)) == NULL)
+   if ((Test->Tags.List = (char *) malloc (Tag_MAX_BYTES_TAGS_LIST + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
-   Par_GetParMultiToText ("ChkTag",Test->Tags.List,Tst_MAX_BYTES_TAGS_LIST);
+   Par_GetParMultiToText ("ChkTag",Test->Tags.List,Tag_MAX_BYTES_TAGS_LIST);
 
    /* Check number of tags selected */
    if (Tst_CountNumTagsInList (&Test->Tags) == 0)	// If no tags selected...
@@ -3982,17 +3507,17 @@ static unsigned Tst_GetParamNumQsts (void)
 /***************** Count number of tags in the list of tags ******************/
 /*****************************************************************************/
 
-static unsigned Tst_CountNumTagsInList (const struct Tst_Tags *Tags)
+static unsigned Tst_CountNumTagsInList (const struct Tag_Tags *Tags)
   {
    const char *Ptr;
    unsigned NumTags = 0;
-   char TagText[Tst_MAX_BYTES_TAG + 1];
+   char TagText[Tag_MAX_BYTES_TAG + 1];
 
    /***** Go over the list of tags counting the number of tags *****/
    Ptr = Tags->List;
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tst_MAX_BYTES_TAG);
+      Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
       NumTags++;
      }
 
@@ -4149,7 +3674,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
    HTM_TR_End ();
 
    /***** Get tags already existing for questions in current course *****/
-   NumTags = Tst_GetAllTagsFromCurrentCrs (&mysql_res);
+   NumTags = Tag_GetAllTagsFromCurrentCrs (&mysql_res);
 
    /***** Write the tags *****/
    HTM_TR_Begin (NULL);
@@ -4162,7 +3687,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
    HTM_TABLE_BeginPadding (2);	// Table for tags
 
    for (IndTag = 0;
-	IndTag < Tst_MAX_TAGS_PER_QUESTION;
+	IndTag < Tag_MAX_TAGS_PER_QUESTION;
 	IndTag++)
      {
       HTM_TR_Begin (NULL);
@@ -4213,7 +3738,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
       snprintf (StrTagTxt,sizeof (StrTagTxt),
 		"TagTxt%u",
 		IndTag);
-      HTM_INPUT_TEXT (StrTagTxt,Tst_MAX_CHARS_TAG,Question->Tags.Txt[IndTag],
+      HTM_INPUT_TEXT (StrTagTxt,Tag_MAX_CHARS_TAG,Question->Tags.Txt[IndTag],
                       HTM_DONT_SUBMIT_ON_CHANGE,
 		      "id=\"%s\" class=\"TAG_TXT\" onchange=\"changeSelTag('%u')\"",
 	              StrTagTxt,IndTag);
@@ -4545,7 +4070,7 @@ void Tst_QstConstructor (struct Tst_Question *Question)
    unsigned NumOpt;
 
    /***** Reset question tags *****/
-   Tst_ResetTags (&Question->Tags);
+   Tag_ResetTags (&Question->Tags);
 
    /***** Reset edition time *****/
    Question->EditTime = (time_t) 0;
@@ -4820,7 +4345,7 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
 	{
 	 row = mysql_fetch_row (mysql_res);
 	 Str_Copy (Question->Tags.Txt[NumRow],row[0],
-		   Tst_MAX_BYTES_TAG);
+		   Tag_MAX_BYTES_TAG);
 	}
 
       /* Free structure that stores the query result */
@@ -5072,18 +4597,18 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
 
    /***** Get question tags *****/
    for (NumTag = 0;
-	NumTag < Tst_MAX_TAGS_PER_QUESTION;
+	NumTag < Tag_MAX_TAGS_PER_QUESTION;
 	NumTag++)
      {
       snprintf (TagStr,sizeof (TagStr),
 	        "TagTxt%u",
 		NumTag);
-      Par_GetParToText (TagStr,Question->Tags.Txt[NumTag],Tst_MAX_BYTES_TAG);
+      Par_GetParToText (TagStr,Question->Tags.Txt[NumTag],Tag_MAX_BYTES_TAG);
 
       if (Question->Tags.Txt[NumTag][0])
         {
          Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-                           Question->Tags.Txt[NumTag],Tst_MAX_BYTES_TAG,true);
+                           Question->Tags.Txt[NumTag],Tag_MAX_BYTES_TAG,true);
          /* Check if not repeated */
          for (NumTagRead = 0;
               NumTagRead < NumTag;
@@ -5230,7 +4755,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
 
    /***** Adjust variables related to this test question *****/
    for (NumTag = 0, Question->Tags.Num = 0;
-        NumTag < Tst_MAX_TAGS_PER_QUESTION;
+        NumTag < Tag_MAX_TAGS_PER_QUESTION;
         NumTag++)
       if (Question->Tags.Txt[NumTag][0])
          Question->Tags.Num++;
@@ -5581,75 +5106,6 @@ long Tst_GetIntAnsFromStr (char *Str)
   }
 
 /*****************************************************************************/
-/***************** Check if this tag exists for current course ***************/
-/*****************************************************************************/
-
-static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   long TagCod = -1L;	// -1 means that the tag does not exist in database
-
-   /***** Get tag code from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get tag",
-			     "SELECT TagCod FROM tst_tags"
-			     " WHERE CrsCod=%ld AND TagTxt='%s'",
-			     Gbl.Hierarchy.Crs.CrsCod,TagTxt);
-   if (NumRows == 1)
-     {
-      /***** Get tag code *****/
-      row = mysql_fetch_row (mysql_res);
-      if ((TagCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Ale_CreateAlert (Ale_ERROR,NULL,
-                          "Wrong code of tag.");
-     }
-   else if (NumRows > 1)
-      Ale_CreateAlert (Ale_ERROR,NULL,
-	               "Duplicated tag.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Abort on error *****/
-   if (Ale_GetTypeOfLastAlert () == Ale_ERROR)
-      Ale_ShowAlertsAndExit ();
-
-   return TagCod;
-  }
-
-/*****************************************************************************/
-/********************* Insert new tag into tst_tags table ********************/
-/*****************************************************************************/
-
-static long Tst_CreateNewTag (long CrsCod,const char *TagTxt)
-  {
-   /***** Insert new tag into tst_tags table *****/
-   return
-   DB_QueryINSERTandReturnCode ("can not create new tag",
-				"INSERT INTO tst_tags"
-				" (CrsCod,ChangeTime,TagTxt,TagHidden)"
-				" VALUES"
-				" (%ld,NOW(),'%s','Y')",	// Hidden by default
-				CrsCod,TagTxt);
-  }
-
-/*****************************************************************************/
-/********** Change visibility of an existing tag into tst_tags table *********/
-/*****************************************************************************/
-
-static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden)
-  {
-   /***** Insert new tag into tst_tags table *****/
-   DB_QueryUPDATE ("can not update the visibility of a tag",
-		   "UPDATE tst_tags SET TagHidden='%c',ChangeTime=NOW()"
-                   " WHERE TagCod=%ld AND CrsCod=%ld",
-		   TagHidden ? 'Y' :
-			       'N',
-		   TagCod,Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
 /***************** Request the removal of selected questions *****************/
 /*****************************************************************************/
 
@@ -5878,8 +5334,8 @@ static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod)
    /***** Remove the question from all the tables *****/
    /* Remove answers and tags from this test question */
    Tst_RemAnsFromQst (QstCod);
-   Tst_RemTagsFromQst (QstCod);
-   Tst_RemoveUnusedTagsFromCrs (CrsCod);
+   Tag_RemTagsFromQst (QstCod);
+   Tag_RemoveUnusedTagsFromCrs (CrsCod);
 
    /* Remove the question itself */
    DB_QueryDELETE ("can not remove a question",
@@ -5973,10 +5429,10 @@ void Tst_InsertOrUpdateQstTagsAnsIntoDB (struct Tst_Question *Question)
    if (Question->QstCod > 0)
      {
       /***** Insert tags in the tags table *****/
-      Tst_InsertTagsIntoDB (Question);
+      Tag_InsertTagsIntoDB (Question->QstCod,&Question->Tags);
 
       /***** Remove unused tags in current course *****/
-      Tst_RemoveUnusedTagsFromCrs (Gbl.Hierarchy.Crs.CrsCod);
+      Tag_RemoveUnusedTagsFromCrs (Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Insert answers in the answers table *****/
       Tst_InsertAnswersIntoDB (Question);
@@ -6047,41 +5503,8 @@ static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question)
 
       /* Remove answers and tags from this test question */
       Tst_RemAnsFromQst (Question->QstCod);
-      Tst_RemTagsFromQst (Question->QstCod);
+      Tag_RemTagsFromQst (Question->QstCod);
      }
-  }
-
-/*****************************************************************************/
-/*********************** Insert tags in the tags table ***********************/
-/*****************************************************************************/
-
-static void Tst_InsertTagsIntoDB (const struct Tst_Question *Question)
-  {
-   unsigned NumTag;
-   unsigned TagIdx;
-   long TagCod;
-
-   /***** For each tag... *****/
-   for (NumTag = 0, TagIdx = 0;
-        TagIdx < Question->Tags.Num;
-        NumTag++)
-      if (Question->Tags.Txt[NumTag][0])
-        {
-         /***** Check if this tag exists for current course *****/
-         if ((TagCod = Tst_GetTagCodFromTagTxt (Question->Tags.Txt[NumTag])) < 0)
-            /* This tag is new for current course. Add it to tags table */
-            TagCod = Tst_CreateNewTag (Gbl.Hierarchy.Crs.CrsCod,Question->Tags.Txt[NumTag]);
-
-         /***** Insert tag in tst_question_tags *****/
-         DB_QueryINSERT ("can not create tag",
-			 "INSERT INTO tst_question_tags"
-                         " (QstCod,TagCod,TagInd)"
-                         " VALUES"
-                         " (%ld,%ld,%u)",
-			 Question->QstCod,TagCod,TagIdx);
-
-         TagIdx++;
-        }
   }
 
 /*****************************************************************************/
@@ -6238,36 +5661,6 @@ static void Tst_RemAnsFromQst (long QstCod)
    DB_QueryDELETE ("can not remove the answers of a question",
 		   "DELETE FROM tst_answers WHERE QstCod=%ld",
 		   QstCod);
-  }
-
-/*****************************************************************************/
-/************************** Remove tags from a test question *****************/
-/*****************************************************************************/
-
-static void Tst_RemTagsFromQst (long QstCod)
-  {
-   /***** Remove tags *****/
-   DB_QueryDELETE ("can not remove the tags of a question",
-		   "DELETE FROM tst_question_tags WHERE QstCod=%ld",
-		   QstCod);
-  }
-
-/*****************************************************************************/
-/********************** Remove unused tags in a course ***********************/
-/*****************************************************************************/
-
-static void Tst_RemoveUnusedTagsFromCrs (long CrsCod)
-  {
-   /***** Remove unused tags from tst_tags *****/
-   DB_QueryDELETE ("can not remove unused tags",
-		   "DELETE FROM tst_tags"
-	           " WHERE CrsCod=%ld AND TagCod NOT IN"
-                   " (SELECT DISTINCT tst_question_tags.TagCod"
-                   " FROM tst_questions,tst_question_tags"
-                   " WHERE tst_questions.CrsCod=%ld"
-                   " AND tst_questions.QstCod=tst_question_tags.QstCod)",
-		   CrsCod,
-		   CrsCod);
   }
 
 /*****************************************************************************/

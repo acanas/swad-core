@@ -92,6 +92,7 @@
 #include "swad_survey.h"
 #include "swad_system_config.h"
 #include "swad_tab.h"
+#include "swad_tag.h"
 #include "swad_test_import.h"
 #include "swad_timeline.h"
 #include "swad_timetable.h"

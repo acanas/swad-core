@@ -1,7 +1,7 @@
-// swad_test_type.h: definition of types for tests
+// swad_tag.h: tags for questions
 
-#ifndef _SWAD_TST_TYP
-#define _SWAD_TST_TYP
+#ifndef _SWAD_TAG
+#define _SWAD_TAG
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,72 +27,54 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_media.h"
-#include "swad_tag.h"
+#include "swad_string.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Tst_MAX_BYTES_FLOAT_ANSWER	30	// Maximum length of the strings that store an floating point answer
+#define Tag_MAX_TAGS_PER_QUESTION	5
 
-#define Tst_MAX_OPTIONS_PER_QUESTION	10
+#define Tag_MAX_CHARS_TAG		(128 - 1)	// 127
+#define Tag_MAX_BYTES_TAG		((Tag_MAX_CHARS_TAG + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Tst_MAX_BYTES_INDEXES_ONE_QST	(Tst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
-
-#define Tst_MAX_CHARS_ANSWERS_ONE_QST	(128 - 1)	// 127
-#define Tst_MAX_BYTES_ANSWERS_ONE_QST	((Tst_MAX_CHARS_ANSWERS_ONE_QST + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
-#define Tst_SCORE_MAX	10	// Maximum score of a test (10 in Spain). Must be unsigned! // TODO: Make this configurable by teachers
+#define Tag_MAX_BYTES_TAGS_LIST		(16 * 1024)
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-#define Tst_NUM_ANS_TYPES	6
-#define Tst_MAX_BYTES_LIST_ANSWER_TYPES	(Tst_NUM_ANS_TYPES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
-typedef enum
+struct Tag_Tags
   {
-   Tst_ANS_INT             = 0,
-   Tst_ANS_FLOAT           = 1,
-   Tst_ANS_TRUE_FALSE      = 2,
-   Tst_ANS_UNIQUE_CHOICE   = 3,
-   Tst_ANS_MULTIPLE_CHOICE = 4,
-   Tst_ANS_TEXT            = 5,
-   Tst_ANS_UNKNOWN         = 6,	// Unknown/all/any type of answer
-  } Tst_AnswerType_t;
-
-struct Tst_Question
-  {
-   long QstCod;
-   struct Tag_Tags Tags;
-   time_t EditTime;
-   char *Stem;
-   char *Feedback;
-   struct Media Media;
-   struct
-     {
-      Tst_AnswerType_t Type;
-      unsigned NumOptions;
-      bool Shuffle;
-      char TF;
-      struct
-	{
-	 bool Correct;
-	 char *Text;
-	 char *Feedback;
-	 struct Media Media;
-	} Options[Tst_MAX_OPTIONS_PER_QUESTION];
-      long Integer;
-      double FloatingPoint[2];
-     } Answer;
-   unsigned long NumHits;
-   unsigned long NumHitsNotBlank;
-   double Score;
+   unsigned Num;
+   bool All;
+   char *List;
+   char Txt[Tag_MAX_TAGS_PER_QUESTION][Tag_MAX_BYTES_TAG + 1];
   };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
+
+void Tag_ResetTags (struct Tag_Tags *Tags);
+void Tag_FreeTagsList (struct Tag_Tags *Tags);
+
+bool Tag_CheckIfCurrentCrsHasTestTags (void);
+unsigned Tag_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
+unsigned Tag_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res);
+
+void Tag_EnableTag (void);
+void Tag_DisableTag (void);
+void Tag_RenameTag (void);
+
+void Tag_InsertTagsIntoDB (long QstCod,const struct Tag_Tags *Tags);
+
+void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
+                          MYSQL_RES *mysql_res,
+                          bool ShowOnlyEnabledTags);
+void Tag_ShowFormEditTags (void);
+
+void Tag_RemTagsFromQst (long QstCod);
+void Tag_RemoveUnusedTagsFromCrs (long CrsCod);
 
 #endif
