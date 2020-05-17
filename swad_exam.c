@@ -244,7 +244,7 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
    if (Exams->Num)
      {
       /***** Table head *****/
-      HTM_TABLE_BeginWideMarginPadding (2);
+      HTM_TABLE_BeginWideMarginPadding (5);
       HTM_TR_Begin (NULL);
       if (Exa_CheckIfICanEditExams ())
          HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons

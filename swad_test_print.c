@@ -1961,7 +1961,7 @@ void TstPrn_ShowOneExam (void)
 				 Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (5);
+      HTM_TABLE_BeginWideMarginPadding (10);
 
       /***** Header row *****/
       /* Get data of the user who made the test */

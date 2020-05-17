@@ -557,13 +557,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.235.2 (2020-05-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.235.3 (2020-05-17)"
 #define CSS_FILE		"swad19.230.1.css"
 #define JS_FILE			"swad19.230.3.js"
 /*
-TODO: Comprobar si el directorio público que devuelve Ses_GetPublicDirFromCache sigue existiendo.
-//    Si no existe, hay que crear un nuevo directorio y meterlo en cache
-
+	Version 19.235.3: May 17, 2020  Check if temporary public directory exists when got from cache. (301239 lines)
 	Version 19.235.2: May 17, 2020  Changes in exam prints. (301216 lines)
 	Version 19.235.1: May 17, 2020  Changes in edition of bank of questions. (301193 lines)
 	Version 19.235:   May 17, 2020  New module swad_tag for question tags. (301147 lines)

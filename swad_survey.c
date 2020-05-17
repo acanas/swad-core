@@ -262,7 +262,7 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
    if (Surveys->Num)
      {
       /***** Table head *****/
-      HTM_TABLE_BeginWideMarginPadding (2);
+      HTM_TABLE_BeginWideMarginPadding (5);
       HTM_TR_Begin (NULL);
 
       HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
@@ -3289,7 +3289,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 	}
 
       /***** Write the heading *****/
-      HTM_TABLE_BeginWideMarginPadding (2);
+      HTM_TABLE_BeginWideMarginPadding (5);
       HTM_TR_Begin (NULL);
 
       if (Svy->Status.ICanEdit)

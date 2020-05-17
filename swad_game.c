@@ -273,7 +273,7 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
    if (Games->Num)
      {
       /***** Table head *****/
-      HTM_TABLE_BeginWideMarginPadding (2);
+      HTM_TABLE_BeginWideMarginPadding (5);
       HTM_TR_Begin (NULL);
       if (Gam_CheckIfICanEditGames ())
          HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
@@ -2005,7 +2005,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
    MaxQstInd = Gam_GetMaxQuestionIndexInGame (GamCod);	// 0 is no questions in game
 
    /***** Write the heading *****/
-   HTM_TABLE_BeginWideMarginPadding (2);
+   HTM_TABLE_BeginWideMarginPadding (5);
    HTM_TR_Begin (NULL);
 
    HTM_TH_Empty (1);

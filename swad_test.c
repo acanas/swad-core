@@ -2314,7 +2314,7 @@ static void Tst_ListOneQstToEdit (struct Tst_Test *Test)
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Write the heading *****/
-   HTM_TABLE_BeginWideMarginPadding (2);
+   HTM_TABLE_BeginWideMarginPadding (5);
    Tst_WriteHeadingRowQuestionsForEdition (Test);
 
    /***** Write question row *****/
@@ -2348,7 +2348,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Write the heading *****/
-   HTM_TABLE_BeginWideMarginPadding (2);
+   HTM_TABLE_BeginWideMarginPadding (5);
    Tst_WriteHeadingRowQuestionsForEdition (Test);
 
    /***** Write rows *****/
@@ -2607,7 +2607,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exam
    ExaSet_PutParamsOneSet (Exams);
 
    /***** Write the heading *****/
-   HTM_TABLE_BeginWideMarginPadding (2);
+   HTM_TABLE_BeginWideMarginPadding (5);
    HTM_TR_Begin (NULL);
 
    HTM_TH_Empty (1);
@@ -2689,7 +2689,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
    Gam_PutParams (Games);
 
    /***** Write the heading *****/
-   HTM_TABLE_BeginWideMarginPadding (2);
+   HTM_TABLE_BeginWideMarginPadding (5);
    HTM_TR_Begin (NULL);
 
    HTM_TH_Empty (1);

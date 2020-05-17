@@ -1365,9 +1365,9 @@ mysql> DESCRIBE file_cache;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_cache ("
 			"SessionId CHAR(43) NOT NULL,"			// Cns_BYTES_SESSION_ID
-			"PrivPath TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
-			"TmpPubDir TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
-		   "INDEX(SessionId))");
+			"PrivPath VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
+			"TmpPubDir VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
+		   "UNIQUE INDEX(SessionId))");
 
    /***** Table file_view *****/
 /*

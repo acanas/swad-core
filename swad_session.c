@@ -55,6 +55,8 @@ static void Ses_RemoveSessionFromDB (void);
 
 static bool Ses_CheckIfHiddenParIsAlreadyInDB (const char *ParamName);
 
+static void Ses_DeletePublicDirFromCache (const char *FullPathMediaPriv);
+
 /*****************************************************************************/
 /************************** Get number of open sessions **********************/
 /*****************************************************************************/
@@ -465,7 +467,8 @@ bool Ses_GetPublicDirFromCache (const char *FullPathMediaPriv,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool Cached = false;
+   bool Cached;
+   bool TmpPubDirExists;
 
    /***** Reset temporary directory *****/
    TmpPubDir[0] = '\0';
@@ -481,14 +484,40 @@ bool Ses_GetPublicDirFromCache (const char *FullPathMediaPriv,
 	 /* Get the temporary public directory (row[0]) */
 	 row = mysql_fetch_row (mysql_res);
 	 Str_Copy (TmpPubDir,row[0],PATH_MAX);
-	 Cached = true;
 	}
+      else
+	 Cached = false;
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
+
+      /***** Check if temporary public directory exists *****/
+      if (Cached)
+	{
+	 /* If not exists (it could be deleted if its lifetime has expired)
+	    ==> remove from cache */
+         TmpPubDirExists = Fil_CheckIfPathExists (TmpPubDir);
+         if (!TmpPubDirExists)
+            Ses_DeletePublicDirFromCache (FullPathMediaPriv);
+         return TmpPubDirExists;
+	}
      }
 
-   return Cached;
+   return false;
+  }
+
+/*****************************************************************************/
+/********* Add public directory used to link private path to cache ***********/
+/*****************************************************************************/
+
+static void Ses_DeletePublicDirFromCache (const char *FullPathMediaPriv)
+  {
+   /***** Delete possible entry *****/
+   if (Gbl.Session.IsOpen)
+      DB_QueryDELETE ("can not remove cached file",
+		      "DELETE FROM file_cache"
+		      " WHERE SessionId='%s' AND PrivPath='%s'",
+		      Gbl.Session.Id,FullPathMediaPriv);
   }
 
 /*****************************************************************************/
@@ -500,12 +529,18 @@ void Ses_AddPublicDirToCache (const char *FullPathMediaPriv,
   {
    /***** Insert into cache *****/
    if (Gbl.Session.IsOpen)
+     {
+      /* Delete possible old entry */
+      Ses_DeletePublicDirFromCache (FullPathMediaPriv);
+
+      /* Insert new entry */
       DB_QueryINSERT ("can not cache file",
 		      "INSERT INTO file_cache"
 		      " (SessionId,PrivPath,TmpPubDir)"
 		      " VALUES"
 		      " ('%s','%s','%s')",
 		      Gbl.Session.Id,FullPathMediaPriv,TmpPubDir);
+     }
   }
 
 /*****************************************************************************/

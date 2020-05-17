@@ -1054,7 +1054,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       return;
 
    /***** Write the heading *****/
-   HTM_TABLE_BeginWideMarginPadding (2);
+   HTM_TABLE_BeginWideMarginPadding (5);
    ExaSet_PutTableHeadingForSets ();
 
    /***** Write rows *****/
@@ -1270,7 +1270,6 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
   {
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
-   extern const char *Txt_Code;
    extern const char *Txt_Question;
    unsigned NumQst;
    MYSQL_ROW row;
@@ -1281,13 +1280,12 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
    Frm_SetAnchorStr (Exams->SetCod,&Anchor);
 
    /***** Write the heading *****/
-   HTM_TABLE_BeginWideMarginPadding (2);
+   HTM_TABLE_BeginWideMarginPadding (5);
    HTM_TR_Begin (NULL);
 
    HTM_TH_Empty (1);
 
    HTM_TH (1,1,"CT",Txt_No_INDEX);
-   HTM_TH (1,1,"CT",Txt_Code);
    HTM_TH (1,1,"CT",Txt_Question);
 
    HTM_TR_End ();
@@ -1546,11 +1544,6 @@ static void ExaSet_ListQuestionForEdition (const struct Tst_Question *Question,
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
    Tst_WriteNumQst (QstInd);
    Tst_WriteAnswerType (Question->Answer.Type);
-   HTM_TD_End ();
-
-   /***** Write question code *****/
-   HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtF ("%ld&nbsp;",Question->QstCod);
    HTM_TD_End ();
 
    /***** Write stem (row[3]) and media *****/
