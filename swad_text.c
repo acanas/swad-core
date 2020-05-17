@@ -15813,6 +15813,27 @@ const char *Txt_I_understand_that_this_action_can_not_be_undone =
 	"Eu entendo que esta a&ccedil;&atilde;o n&atilde;o pode ser desfeita.";
 #endif
 
+const char *Txt_I_have_finished =
+#if   L==1	// ca
+	"He acabat";
+#elif L==2	// de
+	"Ich bin fertig";
+#elif L==3	// en
+	"I have finished";
+#elif L==4	// es
+	"He terminado";
+#elif L==5	// fr
+	"J'ai fini";
+#elif L==6	// gn
+	"He terminado";	// Okoteve traducción
+#elif L==7	// it
+	"Ho finito";
+#elif L==8	// pl
+	"Sko&nacute;czy&lstrok;em";
+#elif L==9	// pt
+	"Acabei";
+#endif
+
 const char *Txt_Icons =
 #if   L==1	// ca
 	"Icones";
@@ -57864,6 +57885,27 @@ const char *Txt_You_dont_follow_any_user =
 	"Nie po &zdot;adnej u&zdot;ytkownika.";
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o segue nenhum usu&aacute;rio.";
+#endif
+
+const char *Txt_You_dont_have_access_to_the_exam =
+#if   L==1	// ca
+	"No t&eacute; acc&eacute;s a l'examen.";
+#elif L==2	// de
+	"Sie haben keinen Zugang zur Pr&uuml;fung.";
+#elif L==3	// en
+	"You don't have access to the exam.";
+#elif L==4	// es
+	"No tiene acceso al examen.";
+#elif L==5	// fr
+	"Vous n'avez pas acc&egrave;s à l'examen.";
+#elif L==6	// gn
+	"No tiene acceso al examen.";	// Okoteve traducción
+#elif L==7	// it
+	"Non hai accesso all'esame.";
+#elif L==8	// pl
+	"Nie masz dost&eogon;pu do egzaminu.";
+#elif L==9	// pt
+	"Voc&ecirc; n&atilde;o tem acesso ao exame.";
 #endif
 
 const char *Txt_You_dont_have_permission_to_perform_this_action =

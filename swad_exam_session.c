@@ -110,8 +110,6 @@ static void ExaSes_RemoveSessionsInExamFromTable (long ExaCod,const char *TableN
 static void ExaSes_RemoveSessionInCourseFromTable (long CrsCod,const char *TableName);
 static void ExaSes_RemoveUsrSesResultsInCrs (long UsrCod,long CrsCod,const char *TableName);
 
-static void ExaSes_PutParamSesCod (long SesCod);
-
 static void ExaSes_PutFormSession (const struct ExaSes_Session *Session);
 static void ExaSes_ShowLstGrpsToCreateSession (long SesCod);
 
@@ -1154,7 +1152,7 @@ void ExaSes_PutParamsEdit (void *Exams)
 /**************** Write parameter with code of exam session ******************/
 /*****************************************************************************/
 
-static void ExaSes_PutParamSesCod (long SesCod)
+void ExaSes_PutParamSesCod (long SesCod)
   {
    Par_PutHiddenParamLong (NULL,"SesCod",SesCod);
   }

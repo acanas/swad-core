@@ -693,13 +693,13 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActSeeMyExaEvtResCrs] = {1867,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyExaResultsInCrs	,NULL},
    [ActSeeMyExaEvtResExa] = {1868,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyExaResultsInExa	,NULL},
-   [ActSeeMyExaEvtResEvt] = {1869,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyExaResultsInEvt	,NULL},
+   [ActSeeMyExaEvtResEvt] = {1869,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyExaResultsInSes	,NULL},
    [ActSeeOneExaEvtResMe] = {1870,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowOneExaResult	,NULL},
 
    [ActReqSeeAllExaEvtRes] = {1871,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_SelUsrsToViewExaResults	,NULL},
    [ActSeeAllExaEvtResCrs] = {1872,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowAllExaResultsInCrs	,NULL},
    [ActSeeAllExaEvtResExa] = {1873,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowAllExaResultsInExa	,NULL},
-   [ActSeeAllExaEvtResEvt] = {1874,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowAllExaResultsInEvt	,NULL},
+   [ActSeeAllExaEvtResEvt] = {1874,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowAllExaResultsInSes	,NULL},
    [ActSeeOneExaEvtResOth] = {1875,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowOneExaResult	,NULL},
 
    [ActChgVisResExaEvtUsr] = {1876,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSes_ToggleVisResultsSesUsr	,NULL},
@@ -730,7 +730,6 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActSeeExaPrn	] = {1904,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaPrn_ShowExamPrint		,NULL},
    [ActAnsExaPrn	] = {1906,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,NULL				,ExaPrn_ReceivePrintAnswer	,NULL},
-   [ActEndExaPrn	] = {1905,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaPrn_EndPrintAnswer		,NULL},
 
    [ActSeeGam		] = {1650,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeOneGame			,NULL},
 
@@ -3714,7 +3713,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActEdiOneExaEvt,	// #1902
 	ActChgExaEvt,		// #1903
 	ActSeeExaPrn,		// #1904
-	ActEndExaPrn,		// #1905
+	-1,			// #1905 (obsolete action)
 	ActAnsExaPrn,		// #1906
 	ActEdiTag,		// #1907
   };

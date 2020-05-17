@@ -70,6 +70,7 @@ void ExaSes_HideSession (void);
 void ExaSes_UnhideSession (void);
 
 void ExaSes_PutParamsEdit (void *Exams);
+void ExaSes_PutParamSesCod (long SesCod);
 void ExaSes_GetAndCheckParameters (struct Exa_Exams *Exams,
                                    struct Exa_Exam *Exam,
                                    struct ExaSes_Session *Session);

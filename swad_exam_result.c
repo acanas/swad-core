@@ -211,10 +211,10 @@ static void ExaRes_ListMySesResultsInExa (struct Exa_Exams *Exams,long ExaCod)
   }
 
 /*****************************************************************************/
-/***************** Show my sessions results in a given session ******************/
+/****************** Show my exam results in a given session ******************/
 /*****************************************************************************/
 
-void ExaRes_ShowMyExaResultsInEvt (void)
+void ExaRes_ShowMyExaResultsInSes (void)
   {
    extern const char *Txt_Results_of_session_X;
    struct Exa_Exams Exams;
@@ -459,7 +459,7 @@ static void ExaRes_ListAllSesResultsInExa (struct Exa_Exams *Exams,long ExaCod)
 /** Show sessions results of a session for the users who answered in that session */
 /*****************************************************************************/
 
-void ExaRes_ShowAllExaResultsInEvt (void)
+void ExaRes_ShowAllExaResultsInSes (void)
   {
    extern const char *Txt_Results_of_session_X;
    struct Exa_Exams Exams;

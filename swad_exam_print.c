@@ -75,13 +75,14 @@ static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *Printed
 					  bool Shuffle);
 static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print);
 
-static void ExaPrn_ShowExamPrintToFillIt (const char *Title,
-                                          struct ExaPrn_Print *Print);
-static void ExaPrn_ShowTableWithQstsToFill (struct ExaPrn_Print *Print);
-static void ExaPrn_WriteQstAndAnsToFill (struct ExaPrn_Print *Print,
+static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
+                                          const struct Exa_Exam *Exam,
+                                          const struct ExaPrn_Print *Print);
+static void ExaPrn_ShowTableWithQstsToFill (const struct ExaPrn_Print *Print);
+static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
                                          unsigned NumQst,
                                          const struct Tst_Question *Question);
-static void ExaPrn_WriteAnswersToFill (struct ExaPrn_Print *Print,
+static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
                                        unsigned NumQst,
                                        const struct Tst_Question *Question);
 static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
@@ -90,7 +91,7 @@ static void ExaPrn_WriteFloatAnsToFill (const struct ExaPrn_Print *Print,
 				        unsigned NumQst);
 static void ExaPrn_WriteTFAnsToFill (const struct ExaPrn_Print *Print,
 	                             unsigned NumQst);
-static void ExaPrn_WriteChoiceAnsToFill (struct ExaPrn_Print *Print,
+static void ExaPrn_WriteChoiceAnsToFill (const struct ExaPrn_Print *Print,
                                          unsigned NumQst,
                                          const struct Tst_Question *Question);
 static void ExaPrn_WriteTextAnsToFill (const struct ExaPrn_Print *Print,
@@ -162,6 +163,7 @@ static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print)
 
 void ExaPrn_ShowExamPrint (void)
   {
+   extern const char *Txt_You_dont_have_access_to_the_exam;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaSes_Session Session;
@@ -201,10 +203,10 @@ void ExaPrn_ShowExamPrint (void)
 	 }
 
       /***** Show test exam to be answered *****/
-      ExaPrn_ShowExamPrintToFillIt (Exam.Title,&Print);
+      ExaPrn_ShowExamPrintToFillIt (&Exams,&Exam,&Print);
      }
    else
-      Ale_ShowAlert (Ale_INFO,"Usted no tiene acceso al examen.");	// TODO: Need translation!!!!
+      Ale_ShowAlert (Ale_INFO,Txt_You_dont_have_access_to_the_exam);
   }
 
 /*****************************************************************************/
@@ -564,13 +566,15 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 /******************** Show an exam print to be answered **********************/
 /*****************************************************************************/
 
-static void ExaPrn_ShowExamPrintToFillIt (const char *Title,
-                                          struct ExaPrn_Print *Print)
+static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
+                                          const struct Exa_Exam *Exam,
+                                          const struct ExaPrn_Print *Print)
   {
    extern const char *Hlp_ASSESSMENT_Exams;
+   extern const char *Txt_I_have_finished;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Title,
+   Box_BoxBegin (NULL,Exam->Title,
 		 NULL,NULL,
 		 Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
    Lay_WriteHeaderClassPhoto (false,false,
@@ -586,9 +590,9 @@ static void ExaPrn_ShowExamPrintToFillIt (const char *Title,
       HTM_DIV_End ();				// Used for AJAX based refresh
 
       /***** Form to end/close this exam print *****/
-      Frm_StartForm (ActEndExaPrn);
-      // ExaSes_PutParamSesCod (Print->SesCod);
-      Btn_PutCreateButton ("He terminado");	// TODO: Need translations!!!
+      Frm_StartForm (ActSeeOneExaEvtResMe);
+      ExaSes_PutParamsEdit (Exams);
+      Btn_PutCreateButton (Txt_I_have_finished);
       Frm_EndForm ();
      }
 
@@ -600,7 +604,7 @@ static void ExaPrn_ShowExamPrintToFillIt (const char *Title,
 /********* Show the main part (table) of an exam print to be answered ********/
 /*****************************************************************************/
 
-static void ExaPrn_ShowTableWithQstsToFill (struct ExaPrn_Print *Print)
+static void ExaPrn_ShowTableWithQstsToFill (const struct ExaPrn_Print *Print)
   {
    unsigned NumQst;
    struct Tst_Question Question;
@@ -635,7 +639,7 @@ static void ExaPrn_ShowTableWithQstsToFill (struct ExaPrn_Print *Print)
 /********** Write a row of a test, with one question and its answer **********/
 /*****************************************************************************/
 
-static void ExaPrn_WriteQstAndAnsToFill (struct ExaPrn_Print *Print,
+static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
                                          unsigned NumQst,
                                          const struct Tst_Question *Question)
   {
@@ -697,7 +701,7 @@ static void ExaPrn_WriteQstAndAnsToFill (struct ExaPrn_Print *Print,
 /***************** Write answers of a question to fill them ******************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteAnswersToFill (struct ExaPrn_Print *Print,
+static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
                                        unsigned NumQst,
                                        const struct Tst_Question *Question)
   {
@@ -807,7 +811,7 @@ static void ExaPrn_WriteTFAnsToFill (const struct ExaPrn_Print *Print,
 /******** Write single or multiple choice answer when seeing a test **********/
 /*****************************************************************************/
 
-static void ExaPrn_WriteChoiceAnsToFill (struct ExaPrn_Print *Print,
+static void ExaPrn_WriteChoiceAnsToFill (const struct ExaPrn_Print *Print,
                                          unsigned NumQst,
                                          const struct Tst_Question *Question)
   {
@@ -908,6 +912,7 @@ static void ExaPrn_WriteTextAnsToFill (const struct ExaPrn_Print *Print,
 
 void ExaPrn_ReceivePrintAnswer (void)
   {
+   extern const char *Txt_You_dont_have_access_to_the_exam;
    struct ExaPrn_Print Print;
    unsigned NumQst;
 
@@ -945,7 +950,7 @@ void ExaPrn_ReceivePrintAnswer (void)
       ExaPrn_ShowTableWithQstsToFill (&Print);
      }
    else
-      Ale_ShowAlert (Ale_INFO,"Usted no tiene acceso al examen.");	// TODO: Need translation!!!!
+      Ale_ShowAlert (Ale_INFO,Txt_You_dont_have_access_to_the_exam);
   }
 
 /*****************************************************************************/
@@ -1404,6 +1409,9 @@ static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print)
 void ExaPrn_EndPrintAnswer (void)
   {
    Ale_ShowAlert (Ale_INFO,"Terminar de contestar el examen.");
+
+
+
   }
 
 /*****************************************************************************/

@@ -42,12 +42,12 @@
 
 void ExaRes_ShowMyExaResultsInCrs (void);
 void ExaRes_ShowMyExaResultsInExa (void);
-void ExaRes_ShowMyExaResultsInEvt (void);
+void ExaRes_ShowMyExaResultsInSes (void);
 
 void ExaRes_ShowAllExaResultsInCrs (void);
 void ExaRes_SelUsrsToViewExaResults (void);
 void ExaRes_ShowAllExaResultsInExa (void);
-void ExaRes_ShowAllExaResultsInEvt (void);
+void ExaRes_ShowAllExaResultsInSes (void);
 
 void ExaRes_ShowOneExaResult (void);
 
