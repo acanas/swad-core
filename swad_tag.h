@@ -59,6 +59,8 @@ struct Tag_Tags
 void Tag_ResetTags (struct Tag_Tags *Tags);
 void Tag_FreeTagsList (struct Tag_Tags *Tags);
 
+void Tag_PutIconToEditTags (void);
+
 bool Tag_CheckIfCurrentCrsHasTestTags (void);
 unsigned Tag_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
 unsigned Tag_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res);

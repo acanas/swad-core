@@ -88,12 +88,12 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 /**************** Put a link (form) to export test questions *****************/
 /*****************************************************************************/
 
-void TsI_PutFormToExportQuestions (struct Tst_Test *Test)
+void TsI_PutIconToExportQuestions (struct Tst_Test *Test)
   {
    extern const char *Txt_Export_questions;
 
    /***** Put a link to create a file with questions *****/
-   Lay_PutContextualLinkIconText (ActLstTstQst,NULL,
+   Lay_PutContextualLinkOnlyIcon (ActLstTstQst,NULL,
                                   TsI_PutParamsExportQsts,Test,
 				  "file-import.svg",
 				  Txt_Export_questions);
@@ -137,12 +137,12 @@ bool TsI_GetCreateXMLParamFromForm (void)
 /*************** Put a link (form) to import test questions ******************/
 /*****************************************************************************/
 
-void TsI_PutFormToImportQuestions (void)
+void TsI_PutIconToImportQuestions (void)
   {
    extern const char *Txt_Import_questions;
 
    /***** Put a link to create a file with questions *****/
-   Lay_PutContextualLinkIconText (ActReqImpTstQst,NULL,
+   Lay_PutContextualLinkOnlyIcon (ActReqImpTstQst,NULL,
                                   NULL,NULL,
 				  "file-export.svg",
 				  Txt_Import_questions);

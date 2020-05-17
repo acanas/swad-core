@@ -150,7 +150,8 @@ static void Tst_ShowFormRequestSelectTestsForSet (struct Exa_Exams *Exams,
 static void Tst_ShowFormRequestSelectTestsForGame (struct Gam_Games *Games,
                                                    struct Tst_Test *Test);
 static bool Tst_CheckIfICanEditTests (void);
-static void Tst_PutIconsBankQsts (void *Test);
+static void Tst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args);
+static void Tst_PutIconsEditBankQsts (void *Test);
 static void Tst_PutIconsTests (__attribute__((unused)) void *Args);
 static void Tst_PutButtonToAddQuestion (void);
 
@@ -1170,14 +1171,9 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
       [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
      };
 
-   /***** Contextual menu *****/
-   Mnu_ContextMenuBegin ();
-   TsI_PutFormToImportQuestions ();	// Import questions from XML file
-   Mnu_ContextMenuEnd ();
-
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Question_bank,
-                 Tst_PutIconsBankQsts,Test,
+                 Tst_PutIconsRequestBankQsts,NULL,
                  Hlp_ASSESSMENT_Tests_editing_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
@@ -1390,7 +1386,30 @@ static bool Tst_CheckIfICanEditTests (void)
 /********************* Put contextual icons in tests *************************/
 /*****************************************************************************/
 
-static void Tst_PutIconsBankQsts (void *Test)
+static void Tst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args)
+  {
+   extern const char *Txt_New_question;
+
+   /***** Put icon to create a new test question *****/
+   Ico_PutContextualIconToAdd (ActEdiOneTstQst,NULL,
+			       NULL,NULL,
+			       Txt_New_question);
+
+   /***** Put icon to edit tags *****/
+   Tag_PutIconToEditTags ();
+
+   /***** Put icon to import questions *****/
+   TsI_PutIconToImportQuestions ();
+
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_TESTS);
+  }
+
+/*****************************************************************************/
+/********************* Put contextual icons in tests *************************/
+/*****************************************************************************/
+
+static void Tst_PutIconsEditBankQsts (void *Test)
   {
    extern const char *Txt_New_question;
 
@@ -1415,11 +1434,11 @@ static void Tst_PutIconsBankQsts (void *Test)
 				  NULL,NULL,
 				  Txt_New_question);
 
-   /***** Put form to edit tags *****/
-   Lay_PutContextualLinkOnlyIcon (ActEdiTag,NULL,
-                                  NULL,NULL,
-				  "tag.svg",
-				  "Editar descriptores");	// TODO: Need translation!!!
+   /***** Put icon to edit tags *****/
+   Tag_PutIconToEditTags ();
+
+   /***** Put icon to export questions *****/
+   TsI_PutIconToExportQuestions (Test);
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_TESTS);
@@ -1792,14 +1811,13 @@ void Tst_ListQuestionsToEdit (void)
       if (Test.NumQsts)
         {
 	 /* Contextual menu */
-         Mnu_ContextMenuBegin ();
-
 	 if (TsI_GetCreateXMLParamFromForm ())
+	   {
+            Mnu_ContextMenuBegin ();
             TsI_CreateXML (Test.NumQsts,mysql_res);	// Create XML file with exported questions...
 							// ...and put a link to download it
-         else
-            TsI_PutFormToExportQuestions (&Test);	// Export questions
-	 Mnu_ContextMenuEnd ();
+            Mnu_ContextMenuEnd ();
+	   }
 
 	 /* Show the table with the questions */
          Tst_ListOneOrMoreQuestionsForEdition (&Test,mysql_res);
@@ -2292,7 +2310,7 @@ static void Tst_ListOneQstToEdit (struct Tst_Test *Test)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Questions,
-                 Tst_PutIconsBankQsts,Test,
+                 Tst_PutIconsEditBankQsts,Test,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Write the heading *****/
@@ -2326,7 +2344,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Questions,
-                 Tst_PutIconsBankQsts,Test,
+                 Tst_PutIconsEditBankQsts,Test,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Write the heading *****/

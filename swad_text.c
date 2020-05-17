@@ -10401,6 +10401,27 @@ const char *Txt_Edit_rich_text =
 	"Editar texto rico";
 #endif
 
+const char *Txt_Edit_tags =
+#if   L==1	// ca
+	"Editar descriptors";
+#elif L==2	// de
+	"Tags bearbeiten";
+#elif L==3	// en
+	"Edit tags";
+#elif L==4	// es
+	"Editar descriptores";
+#elif L==5	// fr
+	"&Eacute;diter descripteurs";
+#elif L==6	// gn
+	"Editar descriptores";	// Okoteve traducción
+#elif L==7	// it
+	"Editare etichette";
+#elif L==8	// pl
+	"Edycja tag&oacute;w";
+#elif L==9	// pt
+	"Editar descritores";
+#endif
+
 const char *Txt_Editable =
 #if   L==1	// ca
 	"Editables";
