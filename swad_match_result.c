@@ -735,7 +735,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 				   long GamCod,	// <= 0 ==> any
 				   const char *GamesSelectedCommas)
   {
-   extern const char *Txt_Match_result;
+   extern const char *Txt_Result;
    char *MchSubQuery;
    char *GamSubQuery;
    MYSQL_RES *mysql_res;
@@ -973,7 +973,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 		  break;
 	      }
-	    Ico_PutIconLink ("tasks.svg",Txt_Match_result);
+	    Ico_PutIconLink ("tasks.svg",Txt_Result);
 	    Frm_EndForm ();
 	   }
 	 else

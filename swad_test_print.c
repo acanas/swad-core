@@ -1874,7 +1874,7 @@ static void TstPrn_ShowExamsSummaryRow (bool ItsMe,
 void TstPrn_ShowOneExam (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
-   extern const char *Txt_Test_result;
+   extern const char *Txt_Result;
    extern const char *Txt_The_user_does_not_exist;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -1952,7 +1952,7 @@ void TstPrn_ShowOneExam (void)
       TstPrn_GetPrintQuestionsFromDB (&Print);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Test_result,
+      Box_BoxBegin (NULL,Txt_Result,
                     NULL,NULL,
                     Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
       Lay_WriteHeaderClassPhoto (false,false,

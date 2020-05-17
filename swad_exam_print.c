@@ -1,4 +1,4 @@
-// swad_exam_print.c: exam prints (each copy of an exam in an event for a student)
+// swad_exam_print.c: exam prints (each copy of an exam in a session for a student)
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -35,9 +35,9 @@
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_exam.h"
-#include "swad_exam_event.h"
 #include "swad_exam_print.h"
 #include "swad_exam_result.h"
+#include "swad_exam_session.h"
 #include "swad_exam_set.h"
 #include "swad_exam_type.h"
 #include "swad_form.h"
@@ -140,7 +140,7 @@ static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print);
 
 void ExaPrn_ResetPrint (struct ExaPrn_Print *Print)
   {
-   Print->EvtCod = -1L;
+   Print->SesCod = -1L;
    Print->UsrCod = -1L;
    ExaPrn_ResetPrintExceptEvtCodAndUsrCod (Print);
   }
@@ -148,7 +148,6 @@ void ExaPrn_ResetPrint (struct ExaPrn_Print *Print)
 static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print)
   {
    Print->PrnCod                  = -1L;
-   // Print->ExaCod		  = -1L;
    Print->TimeUTC[Dat_START_TIME] =
    Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Print->NumQsts                 =
@@ -158,32 +157,32 @@ static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/********************** Show print of an exam in an event ********************/
+/********************** Show print of an exam in a session *******************/
 /*****************************************************************************/
 
 void ExaPrn_ShowExamPrint (void)
   {
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
-   struct ExaEvt_Event Event;
+   struct ExaSes_Session Session;
    struct ExaPrn_Print Print;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exam);
-   ExaEvt_ResetEvent (&Event);
+   ExaSes_ResetSession (&Session);
    ExaPrn_ResetPrint (&Print);
 
    /***** Get and check parameters *****/
-   ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
+   ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
 
-   /***** Check if I can access to this event *****/
-   if (ExaEvt_CheckIfICanAnswerThisEvent (&Event))
+   /***** Check if I can access to this session *****/
+   if (ExaSes_CheckIfICanAnswerThisSession (&Session))
      {
       /***** Get print data from database *****/
-      Print.EvtCod = Event.EvtCod;
+      Print.SesCod = Session.SesCod;
       Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
+      ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
 
       if (Print.PrnCod > 0)	// Print exists and I can access to it
          /***** Get questions and user's answers of exam print from database *****/
@@ -209,10 +208,10 @@ void ExaPrn_ShowExamPrint (void)
   }
 
 /*****************************************************************************/
-/********* Get data of an exam print using event code and user code **********/
+/******** Get data of an exam print using session code and user code *********/
 /*****************************************************************************/
 
-void ExaPrn_GetPrintDataByEvtCodAndUsrCod (struct ExaPrn_Print *Print)
+void ExaPrn_GetPrintDataBySesCodAndUsrCod (struct ExaPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -227,9 +226,9 @@ void ExaPrn_GetPrintDataByEvtCodAndUsrCod (struct ExaPrn_Print *Print)
 			      "Sent,"				// row[5]
 		              "Score"				// row[6]
 		       " FROM exa_prints"
-	               " WHERE EvtCod=%ld"
+	               " WHERE SesCod=%ld"
                        " AND UsrCod=%ld",
-		       Print->EvtCod,
+		       Print->SesCod,
 		       Print->UsrCod) == 1)
      {
       row = mysql_fetch_row (mysql_res);
@@ -490,10 +489,10 @@ static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print)
    Print->PrnCod =
    DB_QueryINSERTandReturnCode ("can not create new exam print",
 				"INSERT INTO exa_prints"
-				" (EvtCod,UsrCod,StartTime,EndTime,NumQsts,NumQstsNotBlank,Sent,Score)"
+				" (SesCod,UsrCod,StartTime,EndTime,NumQsts,NumQstsNotBlank,Sent,Score)"
 				" VALUES"
 				" (%ld,%ld,NOW(),NOW(),%u,0,'N',0)",
-				Print->EvtCod,
+				Print->SesCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Print->NumQsts);
   }
@@ -588,8 +587,8 @@ static void ExaPrn_ShowExamPrintToFillIt (const char *Title,
 
       /***** Form to end/close this exam print *****/
       Frm_StartForm (ActEndExaPrn);
-      // ExaEvt_PutParamEvtCod (Print->EvtCod);
-      Btn_PutCreateButton ("He terminado");	// TODO: Translate!!!
+      // ExaSes_PutParamSesCod (Print->SesCod);
+      Btn_PutCreateButton ("He terminado");	// TODO: Need translations!!!
       Frm_EndForm ();
      }
 
@@ -744,10 +743,10 @@ static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
 	     Id,
 	     Print->PrintedQuestions[NumQst].StrAnswers);
    HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
-			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
+			 "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u');"
 		         " return false;\" />",	// return false is necessary to not submit form
 	     Id,
-	     Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->EvtCod,NumQst);
+	     Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst);
   }
 
 /*****************************************************************************/
@@ -768,10 +767,10 @@ static void ExaPrn_WriteFloatAnsToFill (const struct ExaPrn_Print *Print,
 	     Id,Tst_MAX_BYTES_FLOAT_ANSWER,
 	     Print->PrintedQuestions[NumQst].StrAnswers);
    HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
-			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
+			 "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u');"
 		         " return false;\" />",	// return false is necessary to not submit form
 	     Id,
-	     Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->EvtCod,NumQst);
+	     Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst);
   }
 
 /*****************************************************************************/
@@ -793,11 +792,11 @@ static void ExaPrn_WriteTFAnsToFill (const struct ExaPrn_Print *Print,
 	     NumQst);
    HTM_TxtF ("<select id=\"%s\" name=\"Ans\"",Id);
    HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
-			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
+			 "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u');"
 		         " return false;\" />",	// return false is necessary to not submit form
 	     Id,
 	     Act_GetActCod (ActAnsExaPrn),
-	     Gbl.Session.Id,Print->EvtCod,NumQst);
+	     Gbl.Session.Id,Print->SesCod,NumQst);
    HTM_OPTION (HTM_Type_STRING,"" ,Print->PrintedQuestions[NumQst].StrAnswers[0] == '\0',false,"&nbsp;");
    HTM_OPTION (HTM_Type_STRING,"T",Print->PrintedQuestions[NumQst].StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
    HTM_OPTION (HTM_Type_STRING,"F",Print->PrintedQuestions[NumQst].StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
@@ -850,10 +849,10 @@ static void ExaPrn_WriteChoiceAnsToFill (struct ExaPrn_Print *Print,
 		UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
 					      "");
       HTM_TxtF (" onclick=\"updateExamPrint('examprint','%s_%u','Ans',"
-		"'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
+		"'act=%ld&ses=%s&SesCod=%ld&NumQst=%u');"
 		" return false;\" />",	// return false is necessary to not submit form
 		Id,NumOpt,
-		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->EvtCod,NumQst);
+		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
@@ -897,10 +896,10 @@ static void ExaPrn_WriteTextAnsToFill (const struct ExaPrn_Print *Print,
 	     Id,Tst_MAX_CHARS_ANSWERS_ONE_QST,
 	     Print->PrintedQuestions[NumQst].StrAnswers);
    HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
-			 "'act=%ld&ses=%s&EvtCod=%ld&NumQst=%u');"
+			 "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u');"
 		         " return false;\" />",	// return false is necessary to not submit form
 	     Id,
-	     Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->EvtCod,NumQst);
+	     Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst);
   }
 
 /*****************************************************************************/
@@ -915,15 +914,15 @@ void ExaPrn_ReceivePrintAnswer (void)
    /***** Reset print *****/
    ExaPrn_ResetPrint (&Print);
 
-   /***** Get event code *****/
-   Print.EvtCod = ExaEvt_GetParamEvtCod ();
+   /***** Get session code *****/
+   Print.SesCod = ExaSes_GetParamSesCod ();
 
-   /***** Check if event if visible and open *****/
-   if (ExaEvt_CheckIfEventIsVisibleAndOpen (Print.EvtCod))
+   /***** Check if session if visible and open *****/
+   if (ExaSes_CheckIfSessionIsVisibleAndOpen (Print.SesCod))
      {
       /***** Get print data *****/
       Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
+      ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
       if (Print.PrnCod <= 0)
 	 Lay_WrongExamExit ();
 
@@ -1388,13 +1387,13 @@ static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print)
 		        "Sent='%c',"
 	                "Score='%.15lg'"
 	           " WHERE PrnCod=%ld"
-	           " AND EvtCod=%ld AND UsrCod=%ld",	// Extra checks
+	           " AND SesCod=%ld AND UsrCod=%ld",	// Extra checks
 		   Print->NumQstsNotBlank,
 		   Print->Sent ? 'Y' :
 			         'N',
 		   Print->Score,
 		   Print->PrnCod,
-		   Print->EvtCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Print->SesCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 

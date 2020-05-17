@@ -39,7 +39,7 @@
 #include "swad_connected.h"
 #include "swad_database.h"
 #include "swad_exam_announcement.h"
-#include "swad_exam_event.h"
+#include "swad_exam_session.h"
 #include "swad_firewall.h"
 #include "swad_follow.h"
 #include "swad_form.h"
@@ -1446,12 +1446,12 @@ void Lay_WrongSetExit (void)
   }
 
 /*****************************************************************************/
-/************** Write error message and exit when wrong event ****************/
+/*********** Write error message and exit when wrong exam session ************/
 /*****************************************************************************/
 
-void Lay_WrongEventExit (void)
+void Lay_WrongExamSessionExit (void)
   {
-   Lay_ShowErrorAndExit ("Wrong event.");
+   Lay_ShowErrorAndExit ("Wrong exam session.");
   }
 
 /*****************************************************************************/

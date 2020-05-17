@@ -36,8 +36,8 @@
 
 #include "swad_database.h"
 #include "swad_exam.h"
-#include "swad_exam_event.h"
 #include "swad_exam_result.h"
+#include "swad_exam_session.h"
 #include "swad_exam_set.h"
 #include "swad_exam_type.h"
 #include "swad_figure.h"
@@ -157,7 +157,7 @@ void Exa_ResetExams (struct Exa_Exams *Exams)
    Exams->ListQuestions     = NULL;
    Exams->ExaCodsSelected   = NULL;	// String with selected exam codes separated by separator multiple
    Exams->ExaCod            = -1L;	// Selected/current exam code
-   Exams->EvtCod            = -1L;	// Selected/current event code
+   Exams->SesCod            = -1L;	// Selected/current session code
    Exams->SetInd            = 0;	// Current set index
    Exams->QstCod            = -1L;	// Current question code
   }
@@ -180,8 +180,8 @@ void Exa_ResetExam (struct Exa_Exam *Exam)
    Exam->Hidden                  = false;
    Exam->NumSets                 = 0;
    Exam->NumQsts                 = 0;
-   Exam->NumEvts                 = 0;
-   Exam->NumOpenEvts             = 0;
+   Exam->NumSess                 = 0;
+   Exam->NumOpenSess             = 0;
   }
 
 /*****************************************************************************/
@@ -212,7 +212,7 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
    extern const char *Txt_Exams;
    extern const char *Txt_EXAMS_ORDER_HELP[Exa_NUM_ORDERS];
    extern const char *Txt_EXAMS_ORDER[Exa_NUM_ORDERS];
-   extern const char *Txt_Events;
+   extern const char *Txt_Sessions;
    extern const char *Txt_No_exams;
    Exa_Order_t Order;
    struct Pagination Pagination;
@@ -271,7 +271,7 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
 	 HTM_TH_End ();
 	}
 
-      HTM_TH (1,1,"RM",Txt_Events);
+      HTM_TH (1,1,"RM",Txt_Sessions);
 
       HTM_TR_End ();
 
@@ -341,7 +341,7 @@ static void Exa_PutIconsListExams (void *Exams)
       if (Exa_CheckIfICanEditExams ())
 	 Exa_PutIconToCreateNewExam ((struct Exa_Exams *) Exams);
 
-      /***** Put icon to view events results *****/
+      /***** Put icon to view sessions results *****/
       switch (Gbl.Usrs.Me.Role.Logged)
 	{
 	 case Rol_STD:
@@ -411,12 +411,12 @@ void Exa_SeeOneExam (void)
   {
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
-   struct ExaEvt_Event Event;
+   struct ExaSes_Session Session;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exam);
-   ExaEvt_ResetEvent (&Event);
+   ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
@@ -429,8 +429,8 @@ void Exa_SeeOneExam (void)
    Exams.ExaCod = Exam.ExaCod;
 
    /***** Show exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,&Event,
-	                false);	// Do not put form for event
+   Exa_ShowOnlyOneExam (&Exams,&Exam,&Session,
+	                false);	// Do not put form for session
   }
 
 /*****************************************************************************/
@@ -439,17 +439,17 @@ void Exa_SeeOneExam (void)
 
 void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,
 			  struct Exa_Exam *Exam,
-			  struct ExaEvt_Event *Event,
-			  bool PutFormEvent)
+			  struct ExaSes_Session *Session,
+			  bool PutFormSession)
   {
-   Exa_ShowOnlyOneExamBegin (Exams,Exam,Event,PutFormEvent);
+   Exa_ShowOnlyOneExamBegin (Exams,Exam,Session,PutFormSession);
    Exa_ShowOnlyOneExamEnd ();
   }
 
 void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
 			       struct Exa_Exam *Exam,
-			       struct ExaEvt_Event *Event,
-			       bool PutFormEvent)
+			       struct ExaSes_Session *Session,
+			       bool PutFormSession)
   {
    extern const char *Hlp_ASSESSMENT_Exams;
    extern const char *Txt_Exam;
@@ -465,8 +465,8 @@ void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
                     Exam,
 		    true);	// Show only this exam
 
-   /***** List events *****/
-   ExaEvt_ListEvents (Exams,Exam,Event,PutFormEvent);
+   /***** List sessions *****/
+   ExaSes_ListSessions (Exams,Exam,Session,PutFormSession);
   }
 
 void Exa_ShowOnlyOneExamEnd (void)
@@ -482,7 +482,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
    extern const char *Txt_Sets_of_questions;
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
-   extern const char *Txt_Events;
+   extern const char *Txt_Sessions;
    char *Anchor;
    static unsigned UniqueId = 0;
    char *Id;
@@ -522,7 +522,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
      {
       if (asprintf (&Id,"exa_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      Color = Exam->NumOpenEvts ? (Exam->Hidden ? "DATE_GREEN_LIGHT":
+      Color = Exam->NumOpenSess ? (Exam->Hidden ? "DATE_GREEN_LIGHT":
 						  "DATE_GREEN") :
 				  (Exam->Hidden ? "DATE_RED_LIGHT":
 						  "DATE_RED");
@@ -573,7 +573,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
    TstVis_ShowVisibilityIcons (Exam->Visibility,Exam->Hidden);
    HTM_DIV_End ();
 
-   /***** Number of events in exam *****/
+   /***** Number of sessions in exam *****/
    if (ShowOnlyThisExam)
       HTM_TD_Begin ("class=\"RT\"");
    else
@@ -582,13 +582,13 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
    Exams->ExaCod = Exam->ExaCod;
    Frm_StartForm (ActSeeExa);
    Exa_PutParams (Exams);
-   HTM_BUTTON_SUBMIT_Begin (Txt_Events,
+   HTM_BUTTON_SUBMIT_Begin (Txt_Sessions,
 			    Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
 				           "BT_LINK LT ASG_TITLE",
 			    NULL);
    if (ShowOnlyThisExam)
-      HTM_TxtColonNBSP (Txt_Events);
-   HTM_Unsigned (Exam->NumEvts);
+      HTM_TxtColonNBSP (Txt_Sessions);
+   HTM_Unsigned (Exam->NumSess);
    HTM_BUTTON_End ();
    Frm_EndForm ();
 
@@ -637,14 +637,14 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
   }
 
 /*****************************************************************************/
-/************* Put icon to show results of events in an exam *****************/
+/************ Put icon to show results of sessions in an exam ****************/
 /*****************************************************************************/
 
 static void Exa_PutIconToShowResultsOfExam (void *Exams)
   {
    if (Exams)
      {
-      /***** Put icon to view events results *****/
+      /***** Put icon to view sessions results *****/
       switch (Gbl.Usrs.Me.Role.Logged)
 	{
 	 case Rol_STD:
@@ -828,11 +828,11 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
    /***** Get list of exams from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get exams",
 			     "SELECT exa_exams.ExaCod,"				// row[0]
-			            "MIN(exa_events.StartTime) AS StartTime,"	// row[1]
-			            "MAX(exa_events.EndTime) AS EndTime"	// row[2]
+			            "MIN(exa_sessions.StartTime) AS StartTime,"	// row[1]
+			            "MAX(exa_sessions.EndTime) AS EndTime"	// row[2]
 			     " FROM exa_exams"
-			     " LEFT JOIN exa_events"
-			     " ON exa_exams.ExaCod=exa_events.ExaCod"
+			     " LEFT JOIN exa_sessions"
+			     " ON exa_exams.ExaCod=exa_sessions.ExaCod"
 			     " WHERE exa_exams.CrsCod=%ld"
 			     "%s"
 			     " GROUP BY exa_exams.ExaCod"
@@ -873,7 +873,7 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
   }
 
 /*****************************************************************************/
-/********************* Get list of exam events selected **********************/
+/******************** Get list of exam sessions selected *********************/
 /*****************************************************************************/
 
 void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
@@ -962,8 +962,8 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
 			            "exa_exams.Visibility,"	// row[5]
 			            "exa_exams.Title"		// row[6]
 			     " FROM exa_exams"
-			     " LEFT JOIN exa_events"
-			     " ON exa_exams.ExaCod=exa_events.ExaCod"
+			     " LEFT JOIN exa_sessions"
+			     " ON exa_exams.ExaCod=exa_sessions.ExaCod"
 			     " WHERE exa_exams.ExaCod=%ld",
 			     Exam->ExaCod);
    if (NumRows) // Exam found...
@@ -1001,11 +1001,11 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
       /* Get number of questions */
       Exam->NumQsts = ExaSet_GetNumQstsExam (Exam->ExaCod);
 
-      /* Get number of events */
-      Exam->NumEvts = ExaEvt_GetNumEventsInExam (Exam->ExaCod);
+      /* Get number of sessions */
+      Exam->NumSess = ExaSes_GetNumSessionsInExam (Exam->ExaCod);
 
-      /* Get number of open events */
-      Exam->NumOpenEvts = ExaEvt_GetNumOpenEventsInExam (Exam->ExaCod);
+      /* Get number of open sessions */
+      Exam->NumOpenSess = ExaSes_GetNumOpenSessionsInExam (Exam->ExaCod);
      }
    else
       /* Initialize to empty exam */
@@ -1020,7 +1020,7 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
       NumRows = DB_QuerySELECT (&mysql_res,"can not get exam data",
 				"SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
 				       "UNIX_TIMESTAMP(MAX(EndTime))"		// row[1]
-				" FROM exa_events"
+				" FROM exa_sessions"
 				" WHERE ExaCod=%ld",
 				Exam->ExaCod);
       if (NumRows)
@@ -1178,8 +1178,8 @@ void Exa_RemoveExam (void)
 
 static void Exa_RemoveExamFromAllTables (long ExaCod)
   {
-   /***** Remove all events in this exam *****/
-   ExaEvt_RemoveEventsInExamFromAllTables (ExaCod);
+   /***** Remove all sessions in this exam *****/
+   ExaSes_RemoveSessionsInExamFromAllTables (ExaCod);
 
    /***** Remove exam questions *****/
    DB_QueryDELETE ("can not remove exam questions",
@@ -1207,8 +1207,8 @@ static void Exa_RemoveExamFromAllTables (long ExaCod)
 
 void Exa_RemoveExamsCrs (long CrsCod)
   {
-   /***** Remove all events in this course *****/
-   ExaEvt_RemoveEventInCourseFromAllTables (CrsCod);
+   /***** Remove all sessions in this course *****/
+   ExaSes_RemoveSessionInCourseFromAllTables (CrsCod);
 
    /***** Remove the questions in exams *****/
    DB_QueryDELETE ("can not remove questions in course exams",
@@ -1756,7 +1756,7 @@ unsigned Exa_GetNextQuestionIndexInExam (long ExaCod,unsigned QstInd)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NextQstInd = ExaEvt_AFTER_LAST_QUESTION;	// End of questions has been reached
+   unsigned NextQstInd = ExaSes_AFTER_LAST_QUESTION;	// End of questions has been reached
 
    /***** Get next question index in an exam from database *****/
    // Although indexes are always continuous...
@@ -1793,15 +1793,15 @@ static void Exa_PutParamSetCod (void *SetCod)	// Should be a pointer to long
 */
 
 /*****************************************************************************/
-/*********** Get number of events and check is edition is possible **********/
+/********** Get number of sessions and check is edition is possible **********/
 /*****************************************************************************/
-// Before calling this function, number of events must be calculated
+// Before calling this function, number of sessions must be calculated
 
 bool Exa_CheckIfEditable (const struct Exa_Exam *Exam)
   {
    if (Exa_CheckIfICanEditExams ())
-      /***** Questions are editable only if exam has no events *****/
-      return (bool) (Exam->NumEvts == 0);	// Exams with events should not be edited
+      /***** Questions are editable only if exam has no sessions *****/
+      return (bool) (Exam->NumSess == 0);	// Exams with sessions should not be edited
    else
       return false;	// Questions are not editable
   }

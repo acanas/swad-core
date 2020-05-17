@@ -36,8 +36,8 @@
 
 #include "swad_database.h"
 #include "swad_exam.h"
-#include "swad_exam_event.h"
 #include "swad_exam_result.h"
+#include "swad_exam_session.h"
 #include "swad_exam_set.h"
 #include "swad_exam_type.h"
 #include "swad_figure.h"
@@ -901,7 +901,7 @@ static unsigned ExaSet_GetNextSetIndexInExam (long ExaCod,unsigned SetInd)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NextSetInd = ExaEvt_AFTER_LAST_QUESTION;	// End of sets has been reached
+   unsigned NextSetInd = ExaSes_AFTER_LAST_QUESTION;	// End of sets has been reached
 
    /***** Get next set index in an exam from database *****/
    // Although indexes are always continuous...

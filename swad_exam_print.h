@@ -1,4 +1,4 @@
-// swad_exam_print.h: exam prints (each copy of an exam in an event for a student)
+// swad_exam_print.h: exam prints (each copy of an exam in a session for a student)
 
 #ifndef _SWAD_EXA_PRN
 #define _SWAD_EXA_PRN
@@ -27,6 +27,8 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_test_print.h"
+
 /*****************************************************************************/
 /************************* Public types and constants ************************/
 /*****************************************************************************/
@@ -36,7 +38,7 @@
 struct ExaPrn_Print
   {
    long PrnCod;			// Exam print code
-   long EvtCod;			// Event code associated to this print
+   long SesCod;			// Session code associated to this print
    long UsrCod;			// User who answered the exam print
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    unsigned NumQsts;		// Number of questions
@@ -55,7 +57,7 @@ void ExaPrn_ResetPrint (struct ExaPrn_Print *Print);
 
 void ExaPrn_ShowExamPrint (void);
 
-void ExaPrn_GetPrintDataByEvtCodAndUsrCod (struct ExaPrn_Print *Print);
+void ExaPrn_GetPrintDataBySesCodAndUsrCod (struct ExaPrn_Print *Print);
 
 void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print);
 

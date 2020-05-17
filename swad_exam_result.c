@@ -36,9 +36,9 @@
 #include "swad_database.h"
 #include "swad_date.h"
 #include "swad_exam.h"
-#include "swad_exam_event.h"
 #include "swad_exam_print.h"
 #include "swad_exam_result.h"
+#include "swad_exam_session.h"
 #include "swad_exam_set.h"
 #include "swad_exam_type.h"
 #include "swad_form.h"
@@ -78,13 +78,13 @@ extern struct Globals Gbl;
 
 static void ExaRes_PutFormToSelUsrsToViewEvtResults (void *Exams);
 
-static void ExaRes_ListMyEvtResultsInCrs (struct Exa_Exams *Exams);
-static void ExaRes_ListMyEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod);
-static void ExaRes_ListMyEvtResultsInEvt (struct Exa_Exams *Exams,long EvtCod);
-static void ExaRes_ShowAllEvtResultsInSelectedExams (void *Exams);
-static void ExaRes_ListAllEvtResultsInSelectedExams (struct Exa_Exams *Exams);
-static void ExaRes_ListAllEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod);
-static void ExaRes_ListAllEvtResultsInEvt (struct Exa_Exams *Exams,long EvtCod);
+static void ExaRes_ListMySesResultsInCrs (struct Exa_Exams *Exams);
+static void ExaRes_ListMySesResultsInExa (struct Exa_Exams *Exams,long ExaCod);
+static void ExaRes_ListMySesResultsInSes (struct Exa_Exams *Exams,long SesCod);
+static void ExaRes_ShowAllSesResultsInSelectedExams (void *Exams);
+static void ExaRes_ListAllSesResultsInSelectedExams (struct Exa_Exams *Exams);
+static void ExaRes_ListAllSesResultsInExa (struct Exa_Exams *Exams,long ExaCod);
+static void ExaRes_ListAllSesResultsInSes (struct Exa_Exams *Exams,long SesCod);
 
 static void ExaRes_ShowResultsBegin (struct Exa_Exams *Exams,
                                      const char *Title,bool ListExamsToSelect);
@@ -95,9 +95,9 @@ static void ExaRes_ShowHeaderEvtResults (Usr_MeOrOther_t MeOrOther);
 
 static void ExaRes_BuildExamsSelectedCommas (struct Exa_Exams *Exams,
                                              char **ExamsSelectedCommas);
-static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
+static void ExaRes_ShowSesResults (struct Exa_Exams *Exams,
                                    Usr_MeOrOther_t MeOrOther,
-				   long EvtCod,	// <= 0 ==> any
+				   long SesCod,	// <= 0 ==> any
 				   long ExaCod,	// <= 0 ==> any
 				   const char *ExamsSelectedCommas);
 static void ExaRes_ShowEvtResultsSummaryRow (unsigned NumResults,
@@ -106,7 +106,7 @@ static void ExaRes_ShowEvtResultsSummaryRow (unsigned NumResults,
                                              double TotalScoreOfAllResults,
 					     double TotalGrade);
 
-static bool ExaRes_CheckIfICanSeePrintResult (struct ExaEvt_Event *Event,long UsrCod);
+static bool ExaRes_CheckIfICanSeePrintResult (struct ExaSes_Session *Session,long UsrCod);
 static bool ExaRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility);
 
 static void ExaRes_ShowExamAnswers (struct UsrData *UsrDat,
@@ -119,7 +119,7 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       unsigned Visibility);
 
 /*****************************************************************************/
-/*************************** Show my events results **************************/
+/*************************** Show my sessions results **************************/
 /*****************************************************************************/
 
 void ExaRes_ShowMyExaResultsInCrs (void)
@@ -134,9 +134,9 @@ void ExaRes_ShowMyExaResultsInCrs (void)
    Exa_GetListExams (&Exams,Exa_ORDER_BY_TITLE);
    Exa_GetListSelectedExaCods (&Exams);
 
-   /***** List my events results in the current course *****/
+   /***** List my sessions results in the current course *****/
    ExaRes_ShowResultsBegin (&Exams,Txt_Results,true);	// List exams to select
-   ExaRes_ListMyEvtResultsInCrs (&Exams);
+   ExaRes_ListMySesResultsInCrs (&Exams);
    ExaRes_ShowResultsEnd ();
 
    /***** Free list of exams *****/
@@ -144,22 +144,22 @@ void ExaRes_ShowMyExaResultsInCrs (void)
    Exa_FreeListExams (&Exams);
   }
 
-static void ExaRes_ListMyEvtResultsInCrs (struct Exa_Exams *Exams)
+static void ExaRes_ListMySesResultsInCrs (struct Exa_Exams *Exams)
   {
    char *ExamsSelectedCommas = NULL;	// Initialized to avoid warning
 
    /***** Table header *****/
    ExaRes_ShowHeaderEvtResults (Usr_ME);
 
-   /***** List my events results in the current course *****/
+   /***** List my sessions results in the current course *****/
    TstCfg_GetConfigFromDB ();	// Get feedback type
    ExaRes_BuildExamsSelectedCommas (Exams,&ExamsSelectedCommas);
-   ExaRes_ShowEvtResults (Exams,Usr_ME,-1L,-1L,ExamsSelectedCommas);
+   ExaRes_ShowSesResults (Exams,Usr_ME,-1L,-1L,ExamsSelectedCommas);
    free (ExamsSelectedCommas);
   }
 
 /*****************************************************************************/
-/***************** Show my events results in a given exam *******************/
+/***************** Show my sessions results in a given exam *******************/
 /*****************************************************************************/
 
 void ExaRes_ShowMyExaResultsInExa (void)
@@ -167,12 +167,12 @@ void ExaRes_ShowMyExaResultsInExa (void)
    extern const char *Txt_Results_of_exam_X;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
-   struct ExaEvt_Event Event;
+   struct ExaSes_Session Session;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exam);
-   ExaEvt_ResetEvent (&Event);
+   ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
@@ -185,85 +185,85 @@ void ExaRes_ShowMyExaResultsInExa (void)
    Exams.ExaCod = Exam.ExaCod;
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Event,
-	                     false);	// Do not put form to start new event
+   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Session,
+	                     false);	// Do not put form to start new session
 
-   /***** List my events results in exam *****/
+   /***** List my sessions results in exam *****/
    ExaRes_ShowResultsBegin (&Exams,
                             Str_BuildStringStr (Txt_Results_of_exam_X,Exam.Title),
 			    false);	// Do not list exams to select
    Str_FreeString ();
-   ExaRes_ListMyEvtResultsInExa (&Exams,Exam.ExaCod);
+   ExaRes_ListMySesResultsInExa (&Exams,Exam.ExaCod);
    ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();
   }
 
-static void ExaRes_ListMyEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod)
+static void ExaRes_ListMySesResultsInExa (struct Exa_Exams *Exams,long ExaCod)
   {
    /***** Table header *****/
    ExaRes_ShowHeaderEvtResults (Usr_ME);
 
-   /***** List my events results in exam *****/
+   /***** List my sessions results in exam *****/
    TstCfg_GetConfigFromDB ();	// Get feedback type
-   ExaRes_ShowEvtResults (Exams,Usr_ME,-1L,ExaCod,NULL);
+   ExaRes_ShowSesResults (Exams,Usr_ME,-1L,ExaCod,NULL);
   }
 
 /*****************************************************************************/
-/***************** Show my events results in a given event ******************/
+/***************** Show my sessions results in a given session ******************/
 /*****************************************************************************/
 
 void ExaRes_ShowMyExaResultsInEvt (void)
   {
-   extern const char *Txt_Results_of_event_X;
+   extern const char *Txt_Results_of_session_X;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
-   struct ExaEvt_Event Event;
+   struct ExaSes_Session Session;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exam);
-   ExaEvt_ResetEvent (&Event);
+   ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
-   if ((Event.EvtCod = ExaEvt_GetParamEvtCod ()) <= 0)
-      Lay_WrongEventExit ();
+   if ((Session.SesCod = ExaSes_GetParamSesCod ()) <= 0)
+      Lay_WrongExamSessionExit ();
    Exa_GetDataOfExamByCod (&Exam);
    Exams.ExaCod = Exam.ExaCod;
-   ExaEvt_GetDataOfEventByCod (&Event);
+   ExaSes_GetDataOfSessionByCod (&Session);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Event,
-	                     false);	// Do not put form to start new event
+   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Session,
+	                     false);	// Do not put form to start new session
 
-   /***** List my events results in event *****/
-   ExaRes_ShowResultsBegin (&Exams,Str_BuildStringStr (Txt_Results_of_event_X,Event.Title),
+   /***** List my sessions results in session *****/
+   ExaRes_ShowResultsBegin (&Exams,Str_BuildStringStr (Txt_Results_of_session_X,Session.Title),
 			    false);	// Do not list exams to select
    Str_FreeString ();
-   ExaRes_ListMyEvtResultsInEvt (&Exams,Event.EvtCod);
+   ExaRes_ListMySesResultsInSes (&Exams,Session.SesCod);
    ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();
   }
 
-static void ExaRes_ListMyEvtResultsInEvt (struct Exa_Exams *Exams,long EvtCod)
+static void ExaRes_ListMySesResultsInSes (struct Exa_Exams *Exams,long SesCod)
   {
    /***** Table header *****/
    ExaRes_ShowHeaderEvtResults (Usr_ME);
 
-   /***** List my events results in exam *****/
+   /***** List my sessions results in exam *****/
    TstCfg_GetConfigFromDB ();	// Get feedback type
-   ExaRes_ShowEvtResults (Exams,Usr_ME,EvtCod,-1L,NULL);
+   ExaRes_ShowSesResults (Exams,Usr_ME,SesCod,-1L,NULL);
   }
 
 /*****************************************************************************/
-/****************** Get users and show their events results *****************/
+/****************** Get users and show their sessions results *****************/
 /*****************************************************************************/
 
 void ExaRes_ShowAllExaResultsInCrs (void)
@@ -273,17 +273,17 @@ void ExaRes_ShowAllExaResultsInCrs (void)
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
 
-   /***** Get users and show their events results *****/
+   /***** Get users and show their sessions results *****/
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
-				  ExaRes_ShowAllEvtResultsInSelectedExams,&Exams,
+				  ExaRes_ShowAllSesResultsInSelectedExams,&Exams,
                                   ExaRes_PutFormToSelUsrsToViewEvtResults,&Exams);
   }
 
 /*****************************************************************************/
-/****************** Show events results for several users *******************/
+/****************** Show sessions results for several users *******************/
 /*****************************************************************************/
 
-static void ExaRes_ShowAllEvtResultsInSelectedExams (void *Exams)
+static void ExaRes_ShowAllSesResultsInSelectedExams (void *Exams)
   {
    extern const char *Txt_Results;
 
@@ -294,11 +294,11 @@ static void ExaRes_ShowAllEvtResultsInSelectedExams (void *Exams)
    Exa_GetListExams ((struct Exa_Exams *) Exams,Exa_ORDER_BY_TITLE);
    Exa_GetListSelectedExaCods ((struct Exa_Exams *) Exams);
 
-   /***** List the events results of the selected users *****/
+   /***** List the sessions results of the selected users *****/
    ExaRes_ShowResultsBegin ((struct Exa_Exams *) Exams,
                             Txt_Results,
                             true);	// List exams to select
-   ExaRes_ListAllEvtResultsInSelectedExams ((struct Exa_Exams *) Exams);
+   ExaRes_ListAllSesResultsInSelectedExams ((struct Exa_Exams *) Exams);
    ExaRes_ShowResultsEnd ();
 
    /***** Free list of exams *****/
@@ -306,7 +306,7 @@ static void ExaRes_ShowAllEvtResultsInSelectedExams (void *Exams)
    Exa_FreeListExams ((struct Exa_Exams *) Exams);
   }
 
-static void ExaRes_ListAllEvtResultsInSelectedExams (struct Exa_Exams *Exams)
+static void ExaRes_ListAllSesResultsInSelectedExams (struct Exa_Exams *Exams)
   {
    char *ExamsSelectedCommas = NULL;	// Initialized to avoid warning
    const char *Ptr;
@@ -314,7 +314,7 @@ static void ExaRes_ListAllEvtResultsInSelectedExams (struct Exa_Exams *Exams)
    /***** Table head *****/
    ExaRes_ShowHeaderEvtResults (Usr_OTHER);
 
-   /***** List the events results of the selected users *****/
+   /***** List the sessions results of the selected users *****/
    ExaRes_BuildExamsSelectedCommas (Exams,&ExamsSelectedCommas);
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
@@ -325,16 +325,16 @@ static void ExaRes_ListAllEvtResultsInSelectedExams (struct Exa_Exams *Exams)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	   {
-	    /***** Show events results *****/
+	    /***** Show sessions results *****/
 	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-	    ExaRes_ShowEvtResults (Exams,Usr_OTHER,-1L,-1L,ExamsSelectedCommas);
+	    ExaRes_ShowSesResults (Exams,Usr_OTHER,-1L,-1L,ExamsSelectedCommas);
 	   }
      }
    free (ExamsSelectedCommas);
   }
 
 /*****************************************************************************/
-/**************** Select users to show their events results *****************/
+/**************** Select users to show their sessions results *****************/
 /*****************************************************************************/
 
 void ExaRes_SelUsrsToViewExaResults (void)
@@ -365,7 +365,7 @@ static void ExaRes_PutFormToSelUsrsToViewEvtResults (void *Exams)
   }
 
 /*****************************************************************************/
-/*** Show events results of a exam for the users who answered in that exam **/
+/*** Show sessions results of a exam for the users who answered in that exam **/
 /*****************************************************************************/
 
 void ExaRes_ShowAllExaResultsInExa (void)
@@ -373,12 +373,12 @@ void ExaRes_ShowAllExaResultsInExa (void)
    extern const char *Txt_Results_of_exam_X;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
-   struct ExaEvt_Event Event;
+   struct ExaSes_Session Session;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exam);
-   ExaEvt_ResetEvent (&Event);
+   ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
@@ -389,22 +389,22 @@ void ExaRes_ShowAllExaResultsInExa (void)
    Exams.ExaCod = Exam.ExaCod;
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Event,
-	                     false);	// Do not put form to start new event
+   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Session,
+	                     false);	// Do not put form to start new session
 
-   /***** List events results in exam *****/
+   /***** List sessions results in exam *****/
    ExaRes_ShowResultsBegin (&Exams,
                             Str_BuildStringStr (Txt_Results_of_exam_X,Exam.Title),
 			    false);	// Do not list exams to select
    Str_FreeString ();
-   ExaRes_ListAllEvtResultsInExa (&Exams,Exam.ExaCod);
+   ExaRes_ListAllSesResultsInExa (&Exams,Exam.ExaCod);
    ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();
   }
 
-static void ExaRes_ListAllEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod)
+static void ExaRes_ListAllSesResultsInExa (struct Exa_Exams *Exams,long ExaCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -414,14 +414,14 @@ static void ExaRes_ListAllEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod)
    /***** Table head *****/
    ExaRes_ShowHeaderEvtResults (Usr_OTHER);
 
-   /***** Get all users who have answered any event question in this exam *****/
+   /***** Get all users who have answered any session question in this exam *****/
    NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in exam",
 			     "SELECT users.UsrCod FROM"
 			     " (SELECT DISTINCT exa_prints.UsrCod AS UsrCod"	// row[0]
-			     " FROM exa_prints,exa_events,exa_exams"
-			     " WHERE exa_events.ExaCod=%ld"
-			     " AND exa_events.EvtCod=exa_prints.EvtCod"
-			     " AND exa_events.ExaCod=exa_exams.ExaCod"
+			     " FROM exa_prints,exa_sessions,exa_exams"
+			     " WHERE exa_sessions.ExaCod=%ld"
+			     " AND exa_sessions.SesCod=exa_prints.SesCod"
+			     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
 			     " AND exa_exams.CrsCod=%ld)"			// Extra check
 			     " AS users,usr_data"
 			     " WHERE users.UsrCod=usr_data.UsrCod"
@@ -432,21 +432,21 @@ static void ExaRes_ListAllEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod)
 			     Gbl.Hierarchy.Crs.CrsCod);
    if (NumUsrs)
      {
-      /***** List events results for each user *****/
+      /***** List sessions results for each user *****/
       for (NumUsr = 0;
 	   NumUsr < NumUsrs;
 	   NumUsr++)
 	{
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get event code (row[0]) */
+	 /* Get session code (row[0]) */
 	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	       if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 		 {
-		  /***** Show events results *****/
+		  /***** Show sessions results *****/
 		  Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-		  ExaRes_ShowEvtResults (Exams,Usr_OTHER,-1L,ExaCod,NULL);
+		  ExaRes_ShowSesResults (Exams,Usr_OTHER,-1L,ExaCod,NULL);
 		 }
 	}
      }
@@ -456,51 +456,51 @@ static void ExaRes_ListAllEvtResultsInExa (struct Exa_Exams *Exams,long ExaCod)
   }
 
 /*****************************************************************************/
-/** Show events results of a event for the users who answered in that event */
+/** Show sessions results of a session for the users who answered in that session */
 /*****************************************************************************/
 
 void ExaRes_ShowAllExaResultsInEvt (void)
   {
-   extern const char *Txt_Results_of_event_X;
+   extern const char *Txt_Results_of_session_X;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
-   struct ExaEvt_Event Event;
+   struct ExaSes_Session Session;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exam);
-   ExaEvt_ResetEvent (&Event);
+   ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
       Lay_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
-   if ((Event.EvtCod = ExaEvt_GetParamEvtCod ()) <= 0)
-      Lay_WrongEventExit ();
+   if ((Session.SesCod = ExaSes_GetParamSesCod ()) <= 0)
+      Lay_WrongExamSessionExit ();
 
-   /***** Get exam data and event *****/
+   /***** Get exam data and session *****/
    Exa_GetDataOfExamByCod (&Exam);
    Exams.ExaCod = Exam.ExaCod;
-   ExaEvt_GetDataOfEventByCod (&Event);
+   ExaSes_GetDataOfSessionByCod (&Session);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Event,
-	                     false);	// Do not put form to start new event
+   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Session,
+	                     false);	// Do not put form to start new session
 
-   /***** List events results in event *****/
+   /***** List sessions results in session *****/
    ExaRes_ShowResultsBegin (&Exams,
-                            Str_BuildStringStr (Txt_Results_of_event_X,Event.Title),
+                            Str_BuildStringStr (Txt_Results_of_session_X,Session.Title),
 			    false);	// Do not list exams to select
    Str_FreeString ();
-   ExaRes_ListAllEvtResultsInEvt (&Exams,Event.EvtCod);
+   ExaRes_ListAllSesResultsInSes (&Exams,Session.SesCod);
    ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();
   }
 
-static void ExaRes_ListAllEvtResultsInEvt (struct Exa_Exams *Exams,long EvtCod)
+static void ExaRes_ListAllSesResultsInSes (struct Exa_Exams *Exams,long SesCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -510,39 +510,39 @@ static void ExaRes_ListAllEvtResultsInEvt (struct Exa_Exams *Exams,long EvtCod)
    /***** Table head *****/
    ExaRes_ShowHeaderEvtResults (Usr_OTHER);
 
-   /***** Get all users who have answered any event question in this exam *****/
-   NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in event",
+   /***** Get all users who have answered any session question in this exam *****/
+   NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in session",
 			     "SELECT users.UsrCod FROM"
 			     " (SELECT exa_prints.UsrCod AS UsrCod"	// row[0]
-			     " FROM exa_prints,exa_events,exa_exams"
-			     " WHERE exa_prints.EvtCod=%ld"
-			     " AND exa_prints.EvtCod=exa_events.EvtCod"
-			     " AND exa_events.ExaCod=exa_exams.ExaCod"
+			     " FROM exa_prints,exa_sessions,exa_exams"
+			     " WHERE exa_prints.SesCod=%ld"
+			     " AND exa_prints.SesCod=exa_sessions.SesCod"
+			     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
 			     " AND exa_exams.CrsCod=%ld)"		// Extra check
 			     " AS users,usr_data"
 			     " WHERE users.UsrCod=usr_data.UsrCod"
 			     " ORDER BY usr_data.Surname1,"
 			               "usr_data.Surname2,"
 			               "usr_data.FirstName",
-			     EvtCod,
+			     SesCod,
 			     Gbl.Hierarchy.Crs.CrsCod);
    if (NumUsrs)
      {
-      /***** List events results for each user *****/
+      /***** List sessions results for each user *****/
       for (NumUsr = 0;
 	   NumUsr < NumUsrs;
 	   NumUsr++)
 	{
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get event code (row[0]) */
+	 /* Get session code (row[0]) */
 	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	       if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 		 {
-		  /***** Show events results *****/
+		  /***** Show sessions results *****/
 		  Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-		  ExaRes_ShowEvtResults (Exams,Usr_OTHER,EvtCod,-1L,NULL);
+		  ExaRes_ShowSesResults (Exams,Usr_OTHER,SesCod,-1L,NULL);
 		 }
 	}
      }
@@ -570,14 +570,14 @@ static void ExaRes_ShowResultsBegin (struct Exa_Exams *Exams,
    if (ListExamsToSelect)
       ExaRes_ListExamsToSelect (Exams);
 
-   /***** Begin event results table *****/
+   /***** Begin session results table *****/
    HTM_SECTION_Begin (ExaRes_RESULTS_TABLE_ID);
    HTM_TABLE_BeginWidePadding (2);
   }
 
 static void ExaRes_ShowResultsEnd (void)
   {
-   /***** End event results table *****/
+   /***** End session results table *****/
    HTM_TABLE_End ();
    HTM_SECTION_End ();
 
@@ -587,7 +587,7 @@ static void ExaRes_ShowResultsEnd (void)
   }
 
 /*****************************************************************************/
-/********** Write list of those attendance events that have students *********/
+/********** Write list of those attendance sessions that have students *********/
 /*****************************************************************************/
 
 static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
@@ -626,7 +626,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 
    HTM_TR_End ();
 
-   /***** List the events *****/
+   /***** List the sessions *****/
    for (NumExam = 0, UniqueId = 1, Gbl.RowEvenOdd = 0;
 	NumExam < Exams->Num;
 	NumExam++, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
@@ -636,7 +636,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
       Exa_GetDataOfExamByCod (&Exam);
       Exams->ExaCod = Exam.ExaCod;
 
-      /* Write a row for this event */
+      /* Write a row for this session */
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
@@ -684,13 +684,13 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
   }
 
 /*****************************************************************************/
-/********************* Show header of my events results *********************/
+/********************* Show header of my sessions results *********************/
 /*****************************************************************************/
 
 static void ExaRes_ShowHeaderEvtResults (Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_User[Usr_NUM_SEXS];
-   extern const char *Txt_Event;
+   extern const char *Txt_Session;
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
    extern const char *Txt_Non_blank_BR_questions;
@@ -704,7 +704,7 @@ static void ExaRes_ShowHeaderEvtResults (Usr_MeOrOther_t MeOrOther)
 		                                           Usr_SEX_UNKNOWN]);
    HTM_TH (1,1,"LT",Txt_START_END_TIME[Dat_START_TIME]);
    HTM_TH (1,1,"LT",Txt_START_END_TIME[Dat_END_TIME  ]);
-   HTM_TH (1,1,"LT",Txt_Event);
+   HTM_TH (1,1,"LT",Txt_Session);
    HTM_TH (1,1,"RT",Txt_Questions);
    HTM_TH (1,1,"RT",Txt_Non_blank_BR_questions);
    HTM_TH (1,1,"RT",Txt_Score);
@@ -747,16 +747,16 @@ static void ExaRes_BuildExamsSelectedCommas (struct Exa_Exams *Exams,
   }
 
 /*****************************************************************************/
-/********* Show the events results of a user in the current course **********/
+/********* Show the sessions results of a user in the current course *********/
 /*****************************************************************************/
 
-static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
+static void ExaRes_ShowSesResults (struct Exa_Exams *Exams,
                                    Usr_MeOrOther_t MeOrOther,
-				   long EvtCod,	// <= 0 ==> any
+				   long SesCod,	// <= 0 ==> any
 				   long ExaCod,	// <= 0 ==> any
 				   const char *ExamsSelectedCommas)
   {
-   extern const char *Txt_Event_result;
+   extern const char *Txt_Result;
    char *EvtSubQuery;
    char *ExaSubQuery;
    MYSQL_RES *mysql_res;
@@ -768,7 +768,7 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
    unsigned NumResult;
    static unsigned UniqueId = 0;
    char *Id;
-   struct ExaEvt_Event Event;
+   struct ExaSes_Session Session;
    Dat_StartEndTime_t StartEndTime;
    unsigned NumQstsInThisResult;
    unsigned NumQstsNotBlankInThisResult;
@@ -782,17 +782,17 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
    unsigned Visibility;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
 
-   /***** Reset event *****/
-   ExaEvt_ResetEvent (&Event);
+   /***** Reset session *****/
+   ExaSes_ResetSession (&Session);
 
    /***** Set user *****/
    UsrDat = (MeOrOther == Usr_ME) ? &Gbl.Usrs.Me.UsrDat :
 				    &Gbl.Usrs.Other.UsrDat;
 
-   /***** Build events subquery *****/
-   if (EvtCod > 0)
+   /***** Build sessions subquery *****/
+   if (SesCod > 0)
      {
-      if (asprintf (&EvtSubQuery," AND exa_prints.EvtCod=%ld",EvtCod) < 0)
+      if (asprintf (&EvtSubQuery," AND exa_prints.SesCod=%ld",SesCod) < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
    else
@@ -804,14 +804,14 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
    /***** Build exams subquery *****/
    if (ExaCod > 0)
      {
-      if (asprintf (&ExaSubQuery," AND exa_events.ExaCod=%ld",ExaCod) < 0)
+      if (asprintf (&ExaSubQuery," AND exa_sessions.ExaCod=%ld",ExaCod) < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
    else if (ExamsSelectedCommas)
      {
       if (ExamsSelectedCommas[0])
 	{
-	 if (asprintf (&ExaSubQuery," AND exa_events.ExaCod IN (%s)",
+	 if (asprintf (&ExaSubQuery," AND exa_sessions.ExaCod IN (%s)",
 		       ExamsSelectedCommas) < 0)
 	    Lay_NotEnoughMemoryExit ();
 	}
@@ -829,8 +829,8 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
 
    /***** Make database query *****/
    NumResults =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get events results",
-			      "SELECT exa_prints.EvtCod,"			// row[0]
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get sessions results",
+			      "SELECT exa_prints.SesCod,"			// row[0]
 				     "UNIX_TIMESTAMP(exa_prints.StartTime),"	// row[1]
 				     "UNIX_TIMESTAMP(exa_prints.EndTime),"	// row[2]
 				     "exa_prints.NumQsts,"			// row[3]
@@ -838,14 +838,14 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
 				     "exa_prints.Score,"			// row[5]
 				     "exa_exams.MaxGrade,"			// row[6]
 				     "exa_exams.Visibility"			// row[7]
-			      " FROM exa_prints,exa_events,exa_exams"
+			      " FROM exa_prints,exa_sessions,exa_exams"
 			      " WHERE exa_prints.UsrCod=%ld"
-			      "%s"	// Event subquery
-			      " AND exa_prints.EvtCod=exa_events.EvtCod"
+			      "%s"	// Session subquery
+			      " AND exa_prints.SesCod=exa_sessions.SesCod"
 			      "%s"	// Exams subquery
-			      " AND exa_events.ExaCod=exa_exams.ExaCod"
+			      " AND exa_sessions.ExaCod=exa_exams.ExaCod"
 			      " AND exa_exams.CrsCod=%ld"			// Extra check
-			      " ORDER BY exa_events.Title",
+			      " ORDER BY exa_sessions.Title",
 			      UsrDat->UsrCod,
 			      EvtSubQuery,
 			      ExaSubQuery,
@@ -857,7 +857,7 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
    HTM_TR_Begin (NULL);
    Usr_ShowTableCellWithUsrData (UsrDat,NumResults);
 
-   /***** Get and print events results *****/
+   /***** Get and print sessions results *****/
    if (NumResults)
      {
       for (NumResult = 0;
@@ -866,16 +866,16 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
 	{
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get event code (row[0]) */
-	 if ((Event.EvtCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of event.");
-	 ExaEvt_GetDataOfEventByCod (&Event);
+	 /* Get session code (row[0]) */
+	 if ((Session.SesCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	    Lay_ShowErrorAndExit ("Wrong code of session.");
+	 ExaSes_GetDataOfSessionByCod (&Session);
 
 	 /* Get visibility (row[7]) */
 	 Visibility = TstVis_GetVisibilityFromStr (row[7]);
 
-	 /* Show event result? */
-	 ICanViewResult = ExaRes_CheckIfICanSeePrintResult (&Event,UsrDat->UsrCod);
+	 /* Show session result? */
+	 ICanViewResult = ExaRes_CheckIfICanSeePrintResult (&Session,UsrDat->UsrCod);
          ICanViewScore  = ExaRes_CheckIfICanViewScore (ICanViewResult,Visibility);
 
 	 if (NumResult)
@@ -899,9 +899,9 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
 	    free (Id);
 	   }
 
-	 /* Write event title */
+	 /* Write session title */
 	 HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-	 HTM_Txt (Event.Title);
+	 HTM_Txt (Session.Title);
 	 HTM_TD_End ();
 
 	 if (ICanViewScore)
@@ -980,21 +980,21 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
 	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanViewResult)
 	   {
-	    Exams->ExaCod = Event.ExaCod;
-	    Exams->EvtCod = Event.EvtCod;
+	    Exams->ExaCod = Session.ExaCod;
+	    Exams->SesCod = Session.SesCod;
 	    switch (MeOrOther)
 	      {
 	       case Usr_ME:
 		  Frm_StartForm (ActSeeOneExaEvtResMe);
-		  ExaEvt_PutParamsEdit (Exams);
+		  ExaSes_PutParamsEdit (Exams);
 		  break;
 	       case Usr_OTHER:
 		  Frm_StartForm (ActSeeOneExaEvtResOth);
-		  ExaEvt_PutParamsEdit (Exams);
+		  ExaSes_PutParamsEdit (Exams);
 		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 		  break;
 	      }
-	    Ico_PutIconLink ("tasks.svg",Txt_Event_result);
+	    Ico_PutIconLink ("tasks.svg",Txt_Result);
 	    Frm_EndForm ();
 	   }
 	 else
@@ -1023,7 +1023,7 @@ static void ExaRes_ShowEvtResults (struct Exa_Exams *Exams,
   }
 
 /*****************************************************************************/
-/************** Show row with summary of user's events results **************/
+/************** Show row with summary of user's sessions results **************/
 /*****************************************************************************/
 
 static void ExaRes_ShowEvtResultsSummaryRow (unsigned NumResults,
@@ -1032,14 +1032,14 @@ static void ExaRes_ShowEvtResultsSummaryRow (unsigned NumResults,
                                              double TotalScoreOfAllResults,
 					     double TotalGrade)
   {
-   extern const char *Txt_Events;
+   extern const char *Txt_Sessions;
 
    /***** Start row *****/
    HTM_TR_Begin (NULL);
 
    /***** Row title *****/
    HTM_TD_Begin ("colspan=\"3\" class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtColonNBSP (Txt_Events);
+   HTM_TxtColonNBSP (Txt_Sessions);
    HTM_Unsigned (NumResults);
    HTM_TD_End ();
 
@@ -1081,7 +1081,7 @@ static void ExaRes_ShowEvtResultsSummaryRow (unsigned NumResults,
   }
 
 /*****************************************************************************/
-/******************* Show one event result of another user *******************/
+/******************* Show one session result of another user *******************/
 /*****************************************************************************/
 
 void ExaRes_ShowOneExaResult (void)
@@ -1096,7 +1096,7 @@ void ExaRes_ShowOneExaResult (void)
    extern const char *Txt_Grade;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
-   struct ExaEvt_Event Event;
+   struct ExaSes_Session Session;
    Usr_MeOrOther_t MeOrOther;
    struct UsrData *UsrDat;
    Dat_StartEndTime_t StartEndTime;
@@ -1110,10 +1110,10 @@ void ExaRes_ShowOneExaResult (void)
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exam);
-   ExaEvt_ResetEvent (&Event);
+   ExaSes_ResetSession (&Session);
 
    /***** Get and check parameters *****/
-   ExaEvt_GetAndCheckParameters (&Exams,&Exam,&Event);
+   ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
 
    /***** Pointer to user's data *****/
    MeOrOther = (Gbl.Action.Act == ActSeeOneExaEvtResMe) ? Usr_ME :
@@ -1130,17 +1130,17 @@ void ExaRes_ShowOneExaResult (void)
 	 break;
      }
 
-   /***** Get event result data *****/
+   /***** Get session result data *****/
    ExaPrn_ResetPrint (&Print);
-   Print.EvtCod = Event.EvtCod;
+   Print.SesCod = Session.SesCod;
    Print.UsrCod = UsrDat->UsrCod;
-   ExaPrn_GetPrintDataByEvtCodAndUsrCod (&Print);
+   ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
 
    /***** Check if I can view this print result *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 ICanViewResult = ExaRes_CheckIfICanSeePrintResult (&Event,UsrDat->UsrCod);
+	 ICanViewResult = ExaRes_CheckIfICanSeePrintResult (&Session,UsrDat->UsrCod);
 	 if (ICanViewResult)
 	    ICanViewScore = TstVis_IsVisibleTotalScore (Exam.Visibility);
 	 else
@@ -1161,13 +1161,13 @@ void ExaRes_ShowOneExaResult (void)
 	 break;
      }
 
-   if (ICanViewResult)	// I am allowed to view this event result
+   if (ICanViewResult)	// I am allowed to view this session result
      {
       /***** Get questions and user's answers of exam print from database *****/
       ExaPrn_GetPrintQuestionsFromDB (&Print);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Event.Title,
+      Box_BoxBegin (NULL,Session.Title,
                     NULL,NULL,
                     Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
       Lay_WriteHeaderClassPhoto (false,false,
@@ -1179,7 +1179,7 @@ void ExaRes_ShowOneExaResult (void)
       HTM_TABLE_BeginWideMarginPadding (5);
 
       /***** Header row *****/
-      /* Get data of the user who answer the event */
+      /* Get data of the user who answer the session */
       if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS))
 	 Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
       if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
@@ -1208,7 +1208,7 @@ void ExaRes_ShowOneExaResult (void)
 
       HTM_TR_End ();
 
-      /* Start/end time (for user in this event) */
+      /* Start/end time (for user in this session) */
       for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	   StartEndTime++)
@@ -1285,7 +1285,7 @@ void ExaRes_ShowOneExaResult (void)
       /***** End table *****/
       HTM_TABLE_End ();
 
-      /***** Write total mark of event result *****/
+      /***** Write total mark of session result *****/
       if (ICanViewScore)
 	{
 	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
@@ -1301,15 +1301,15 @@ void ExaRes_ShowOneExaResult (void)
       /***** End box *****/
       Box_BoxEnd ();
      }
-   else	// I am not allowed to view this event result
+   else	// I am not allowed to view this session result
       Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/
-/********************** Get if I can see event result ************************/
+/********************** Get if I can see session result ************************/
 /*****************************************************************************/
 
-static bool ExaRes_CheckIfICanSeePrintResult (struct ExaEvt_Event *Event,long UsrCod)
+static bool ExaRes_CheckIfICanSeePrintResult (struct ExaSes_Session *Session,long UsrCod)
   {
    bool ItsMe;
 
@@ -1317,8 +1317,8 @@ static bool ExaRes_CheckIfICanSeePrintResult (struct ExaEvt_Event *Event,long Us
      {
       case Rol_STD:
 	 ItsMe = Usr_ItsMe (UsrCod);
-	 if (ItsMe && Event->ShowUsrResults)
-	    return ExaEvt_CheckIfICanListThisEventBasedOnGrps (Event->EvtCod);
+	 if (ItsMe && Session->ShowUsrResults)
+	    return ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session->SesCod);
          return false;
       case Rol_NET:
       case Rol_TCH:
@@ -1333,7 +1333,7 @@ static bool ExaRes_CheckIfICanSeePrintResult (struct ExaEvt_Event *Event,long Us
   }
 
 /*****************************************************************************/
-/********************** Get if I can see event result ************************/
+/********************** Get if I can see session result ************************/
 /*****************************************************************************/
 
 static bool ExaRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility)

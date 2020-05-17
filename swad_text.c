@@ -11456,27 +11456,6 @@ const char *Txt_Event_X_removed =	// Warning: it is very important to include %s
 	"Evento <strong>%s</strong> removido.";
 #endif
 
-const char *Txt_Event_result =
-#if   L==1	// ca
-	"Resultat del esdeveniment";
-#elif L==2	// de
-	"Ergebnis der Ereignis";
-#elif L==3	// en
-	"Event result";
-#elif L==4	// es
-	"Resultado del evento";
-#elif L==5	// fr
-	"R&eacute;sultat de l'&eacute;v&eacute;nement";
-#elif L==6	// gn
-	"Resultado del evento";	// Okoteve traducción
-#elif L==7	// it
-	"Risultato dell'evento";
-#elif L==8	// pl
-	"Wynik wydarzenia";
-#elif L==9	// pt
-	"Resultado do evento";
-#endif
-
 const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private =
 #if   L==1	// ca
 	"Esdeveniment visible pels usuaris de les seves assignatures; feu clic per fer-lo privat";
@@ -18946,27 +18925,6 @@ const char *Txt_MATCH_respond =
 	"respondem";
 #endif
 
-const char *Txt_Match_result =
-#if   L==1	// ca
-	"Resultat de la partida";
-#elif L==2	// de
-	"Spielergebnis";
-#elif L==3	// en
-	"Match result";
-#elif L==4	// es
-	"Resultado de la partida";
-#elif L==5	// fr
-	"R&eacute;sultat du match";
-#elif L==6	// gn
-	"Resultado de la partida";	// Okoteve traducción
-#elif L==7	// it
-	"Risultato della partita";
-#elif L==8	// pl
-	"Wynik mecz";
-#elif L==9	// pt
-	"Resultado do jogo";
-#endif
-
 const char *Txt_Matches =	// of a game
 #if   L==1	// ca
 	"Partides";
@@ -25491,6 +25449,27 @@ const char *Txt_New_room =
 	"Nowe klasa";
 #elif L==9	// pt
 	"Nova sala";
+#endif
+
+const char *Txt_New_session =
+#if   L==1	// ca
+	"Nova sessi&oacute;";
+#elif L==2	// de
+	"Neue Sitzung";
+#elif L==3	// en
+	"New session";
+#elif L==4	// es
+	"Nueva sesi&oacute;n";
+#elif L==5	// fr
+	"Nouvelle session";
+#elif L==6	// gn
+	"Nueva sesi&oacute;n";	// Okoteve traducción
+#elif L==7	// it
+	"Nuova sessione";
+#elif L==8	// pl
+	"Nowy sesji";
+#elif L==9	// pt
+	"Nova sess&atilde;o";
 #endif
 
 const char *Txt_New_set_of_questions =
@@ -34753,6 +34732,48 @@ const char *Txt_Reset_survey =
 	"Reiniciar inqu&eacute;rito";
 #endif
 
+const char *Txt_Result =
+#if   L==1	// ca
+	"Resultat";
+#elif L==2	// de
+	"Ergebnis";
+#elif L==3	// en
+	"Result";
+#elif L==4	// es
+	"Resultado";
+#elif L==5	// fr
+	"R&eacute;sultat";
+#elif L==6	// gn
+	"Resultado";	// Okoteve traducción
+#elif L==7	// it
+	"Risultato";
+#elif L==8	// pl
+	"Wynik";
+#elif L==9	// pt
+	"Resultado";
+#endif
+
+const char *Txt_Result_visibility =
+#if   L==1	// ca
+	"Visibilitat de resultats";
+#elif L==2	// de
+	"Ergebnis Sichtbarkeit";
+#elif L==3	// en
+	"Result visibility";
+#elif L==4	// es
+	"Visibilidad de resultados";
+#elif L==5	// fr
+	"Visibilit&eacute; des r&eacute;sultats";
+#elif L==6	// gn
+	"Visibilidad de resultados";		// Okoteve traducción
+#elif L==7	// it
+	"Visibilit&agrave; dei risultati";
+#elif L==8	// pl
+	"Widoczno&sacute;&cacute; wynik&oacute;w";
+#elif L==9	// pt
+	"Visibilidade dos resultados";
+#endif
+
 const char *Txt_Results =
 #if   L==1	// ca
 	"Resultats";
@@ -34795,27 +34816,6 @@ const char *Txt_Results_of_game_X =	// Warning: it is very important to include 
 	"Resultados do jogo &quot;%s&quot;";
 #endif
 
-const char *Txt_Results_of_event_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Resultats del esdeveniment &quot;%s&quot;";
-#elif L==2	// de
-	"Ergebnisse von Ereignis &quot;%s&quot;";
-#elif L==3	// en
-	"Results of event &quot;%s&quot;";
-#elif L==4	// es
-	"Resultados del evento &quot;%s&quot;";
-#elif L==5	// fr
-	"R&eacute;sultats de l'&eacute;v&eacute;nement &quot;%s&quot;";
-#elif L==6	// gn
-	"Resultados del evento &quot;%s&quot;";	// Okoteve traducción
-#elif L==7	// it
-	"Risultati del evento &quot;%s&quot;";
-#elif L==8	// pl
-	"Wyniki wydarzenie &quot;%s&quot;";
-#elif L==9	// pt
-	"Resultados do evento &quot;%s&quot;";
-#endif
-
 const char *Txt_Results_of_exam_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Resultats del examen &quot;%s&quot;";
@@ -34856,6 +34856,27 @@ const char *Txt_Results_of_match_X =	// Warning: it is very important to include
 	"Wyniki mecz &quot;%s&quot;";
 #elif L==9	// pt
 	"Resultados do jogo &quot;%s&quot;";
+#endif
+
+const char *Txt_Results_of_session_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Resultats de la sessi&oacute; &quot;%s&quot;";
+#elif L==2	// de
+	"Ergebnisse von Sitzung &quot;%s&quot;";
+#elif L==3	// en
+	"Results of session &quot;%s&quot;";
+#elif L==4	// es
+	"Resultados de la sesi&oacute;n &quot;%s&quot;";
+#elif L==5	// fr
+	"R&eacute;sultats de la session &quot;%s&quot;";
+#elif L==6	// gn
+	"Resultados de la sesi&oacute;n &quot;%s&quot;";	// Okoteve traducción
+#elif L==7	// it
+	"Risultati della sessione &quot;%s&quot;";
+#elif L==8	// pl
+	"Wyniki sesji &quot;%s&quot;";
+#elif L==9	// pt
+	"Resultados da sess&atilde;o &quot;%s&quot;";
 #endif
 
 const char *Txt_results_per_page =
@@ -41127,6 +41148,48 @@ const char *Txt_session =
 	"sess&atilde;o";
 #endif
 
+const char *Txt_Session_X_removed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Sessi&oacute; <strong>%s</strong> eliminada.";
+#elif L==2	// de
+	"Sitzung <strong>%s</strong> entfernt.";
+#elif L==3	// en
+	"Session <strong>%s</strong> removed.";
+#elif L==4	// es
+	"Sesi&oacute;n <strong>%s</strong> eliminada.";
+#elif L==5	// fr
+	"Session <strong>%s</strong> supprim&eacute;.";
+#elif L==6	// gn
+	"Sesi&oacute;n <strong>%s</strong> eliminada.";	// Okoteve traducción
+#elif L==7	// it
+	"Sessione <strong>%s</strong> rimossa.";
+#elif L==8	// pl
+	"Sesja <strong>%s</strong> usuni&eogon;te.";
+#elif L==9	// pt
+	"Sess&atilde;o <strong>%s</strong> removida.";
+#endif
+
+const char *Txt_Sessions =
+#if   L==1	// ca
+	"Sessions";
+#elif L==2	// de
+	"Sitzungen";
+#elif L==3	// en
+	"Sessions";
+#elif L==4	// es
+	"Sesiones";
+#elif L==5	// fr
+	"Sessions";
+#elif L==6	// gn
+	"Sesiones";	// Okoteve traducción
+#elif L==7	// it
+	"Sessioni";
+#elif L==8	// pl
+	"Sesje";
+#elif L==9	// pt
+	"Sess&otilde;es";
+#endif
+
 const char *Txt_sessions =
 #if   L==1	// ca
 	"sessions";
@@ -41143,7 +41206,7 @@ const char *Txt_sessions =
 #elif L==7	// it
 	"sessioni";
 #elif L==8	// pl
-	"sessions";	// Potrzebujesz tlumaczenie
+	"sesje";
 #elif L==9	// pt
 	"sess&otilde;es";
 #endif
@@ -45653,27 +45716,6 @@ const char *Txt_Test_No_X_that_you_make_in_this_course =	// Warning: it is very 
 	"Test nr %u kt&oacute;ry przeprowadzasz na ten kurs";
 #elif L==9	// pt
 	"Teste n&ordm; %u que voc&ecirc; faz nesta disciplina";
-#endif
-
-const char *Txt_Test_result =
-#if   L==1	// ca
-	"Resultat del test";
-#elif L==2	// de
-	"Testergebnis";
-#elif L==3	// en
-	"Test result";
-#elif L==4	// es
-	"Resultado del test";
-#elif L==5	// fr
-	"R&eacute;sultat du test";
-#elif L==6	// gn
-	"Resultado del test";	// Okoteve traducción
-#elif L==7	// it
-	"Risultato del test";
-#elif L==8	// pl
-	"Wynik testu";
-#elif L==9	// pt
-	"Resultado do teste";
 #endif
 
 const char *Txt_Text =
@@ -55960,27 +56002,6 @@ const char *Txt_View_homework =
 	"Zobacz prac&eogon; domow&aogon;";
 #elif L==9	// pt
 	"Ver trabalhos";
-#endif
-
-const char *Txt_Result_visibility =
-#if   L==1	// ca
-	"Visibilitat de resultats";
-#elif L==2	// de
-	"Ergebnis Sichtbarkeit";
-#elif L==3	// en
-	"Result visibility";
-#elif L==4	// es
-	"Visibilidad de resultados";
-#elif L==5	// fr
-	"Visibilit&eacute; des r&eacute;sultats";
-#elif L==6	// gn
-	"Visibilidad de resultados";		// Okoteve traducción
-#elif L==7	// it
-	"Visibilit&agrave; dei risultati";
-#elif L==8	// pl
-	"Widoczno&sacute;&cacute; wynik&oacute;w";
-#elif L==9	// pt
-	"Visibilidade dos resultados";
 #endif
 
 const char *Txt_Visible_by_BR_the_student =

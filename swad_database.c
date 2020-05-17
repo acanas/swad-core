@@ -1005,44 +1005,15 @@ mysql> DESCRIBE exa_groups;
 +--------+---------+------+-----+---------+-------+
 | Field  | Type    | Null | Key | Default | Extra |
 +--------+---------+------+-----+---------+-------+
-| EvtCod | int(11) | NO   | PRI | NULL    |       |
+| SesCod | int(11) | NO   | PRI | NULL    |       |
 | GrpCod | int(11) | NO   | PRI | NULL    |       |
 +--------+---------+------+-----+---------+-------+
-2 rows in set (0.01 sec)
+2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_groups ("
-			"EvtCod INT NOT NULL,"
+			"SesCod INT NOT NULL,"
 			"GrpCod INT NOT NULL,"
-		   "UNIQUE INDEX(EvtCod,GrpCod))");
-
-   /***** Table exa_events *****/
-/*
-mysql> DESCRIBE exa_events;
-+----------------+---------------+------+-----+---------+----------------+
-| Field          | Type          | Null | Key | Default | Extra          |
-+----------------+---------------+------+-----+---------+----------------+
-| EvtCod         | int(11)       | NO   | PRI | NULL    | auto_increment |
-| ExaCod         | int(11)       | NO   | MUL | NULL    |                |
-| Hidden         | enum('N','Y') | NO   |     | N       |                |
-| UsrCod         | int(11)       | NO   |     | NULL    |                |
-| StartTime      | datetime      | NO   |     | NULL    |                |
-| EndTime        | datetime      | NO   |     | NULL    |                |
-| Title          | varchar(2047) | NO   |     | NULL    |                |
-| ShowUsrResults | enum('N','Y') | NO   |     | N       |                |
-+----------------+---------------+------+-----+---------+----------------+
-8 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_events ("
-			"EvtCod INT NOT NULL AUTO_INCREMENT,"
-			"ExaCod INT NOT NULL,"
-			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"UsrCod INT NOT NULL,"
-			"StartTime DATETIME NOT NULL,"
-			"EndTime DATETIME NOT NULL,"
-			"Title VARCHAR(2047) NOT NULL,"	// ExaEvt_MAX_BYTES_TITLE
-			"ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
-		   "UNIQUE INDEX(EvtCod),"
-		   "INDEX(ExaCod))");
+		   "UNIQUE INDEX(SesCod,GrpCod))");
 
    /***** Table exa_exams *****/
 /*
@@ -1106,7 +1077,7 @@ mysql> DESCRIBE exa_prints;
 | Field           | Type          | Null | Key | Default | Extra          |
 +-----------------+---------------+------+-----+---------+----------------+
 | PrnCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
-| EvtCod          | int(11)       | NO   | MUL | NULL    |                |
+| SesCod          | int(11)       | NO   | MUL | NULL    |                |
 | UsrCod          | int(11)       | NO   |     | NULL    |                |
 | StartTime       | datetime      | NO   |     | NULL    |                |
 | EndTime         | datetime      | NO   |     | NULL    |                |
@@ -1119,7 +1090,7 @@ mysql> DESCRIBE exa_prints;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_prints ("
 			"PrnCod INT NOT NULL AUTO_INCREMENT,"
-			"EvtCod INT NOT NULL,"
+			"SesCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
@@ -1128,7 +1099,36 @@ mysql> DESCRIBE exa_prints;
 			"Sent ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(PrnCod),"
-		   "UNIQUE INDEX(EvtCod,UsrCod))");
+		   "UNIQUE INDEX(SesCod,UsrCod))");
+
+   /***** Table exa_sessions *****/
+/*
+mysql> DESCRIBE exa_sessions;
++----------------+---------------+------+-----+---------+----------------+
+| Field          | Type          | Null | Key | Default | Extra          |
++----------------+---------------+------+-----+---------+----------------+
+| SesCod         | int(11)       | NO   | PRI | NULL    | auto_increment |
+| ExaCod         | int(11)       | NO   | MUL | NULL    |                |
+| Hidden         | enum('N','Y') | NO   |     | N       |                |
+| UsrCod         | int(11)       | NO   |     | NULL    |                |
+| StartTime      | datetime      | NO   |     | NULL    |                |
+| EndTime        | datetime      | NO   |     | NULL    |                |
+| Title          | varchar(2047) | NO   |     | NULL    |                |
+| ShowUsrResults | enum('N','Y') | NO   |     | N       |                |
++----------------+---------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_sessions ("
+			"SesCod INT NOT NULL AUTO_INCREMENT,"
+			"ExaCod INT NOT NULL,"
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"UsrCod INT NOT NULL,"
+			"StartTime DATETIME NOT NULL,"
+			"EndTime DATETIME NOT NULL,"
+			"Title VARCHAR(2047) NOT NULL,"	// ExaSes_MAX_BYTES_TITLE
+			"ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
+		   "UNIQUE INDEX(SesCod),"
+		   "INDEX(ExaCod))");
 
    /***** Table exa_set_answers *****/
 /*

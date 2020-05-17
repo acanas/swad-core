@@ -44,8 +44,8 @@
 #define ExaSet_MAX_CHARS_TITLE	(128 - 1)	// 127
 #define ExaSet_MAX_BYTES_TITLE	((ExaSet_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define ExaEvt_MAX_CHARS_TITLE	(128 - 1)	// 127
-#define ExaEvt_MAX_BYTES_TITLE	((ExaEvt_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define ExaSes_MAX_CHARS_TITLE	(128 - 1)	// 127
+#define ExaSes_MAX_BYTES_TITLE	((ExaSes_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Exa_NUM_ORDERS 3
 typedef enum
@@ -76,20 +76,20 @@ struct Exa_Exams
    char *ExaCodsSelected;	// String with selected exam codes separated by separator multiple
    long ExaCod;			// Selected/current exam code
    long SetCod;			// Selected/current set code
-   long EvtCod;			// Selected/current match code
+   long SesCod;			// Selected/current session code
    unsigned SetInd;		// Current set index
    long QstCod;			// Current question code
   };
 
 /*                                                       Student 1
    +----------------+     +-----------+     +--------------+   +--------------+
-   |     Exam 1     |--+--|  Event 1  |--+--|    Print 1   |   |   Result 1   |
+   |     Exam 1     |--+--| Session 1 |--+--|    Print 1   |   |   Result 1   |
    |+--------------+|  |  | * Start   |  |  | * Question 2 |   | * Question 2 |
    ||     Set 1    ||  |  | * End     |  |  |--------------|-->|--------------|
    || * Question 1 ||  |  | * Groups  |  |  | * Question 5 |   | * Question 5 |
    || * Question 2 ||  |  +-----------+  |  | * Question 3 |   | * Question 3 |
    |+--------------+|  |  +-----------+  |  +--------------+   +--------------+
-   |+--------------+|  +--|  Event 2  |  |               Student 2
+   |+--------------+|  +--| Session 2 |  |               Student 2
    ||     Set 2    ||     | * Start   |  |  +--------------+   +--------------+
    || * Question 3 ||     | * End     |  +--|    Print 2   |   |   Result 2   |
    || * Question 4 ||     | * Groups  |     | * Question 1 |   | * Question 1 |
@@ -113,8 +113,8 @@ struct Exa_Exam
    bool Hidden;			// Exam is hidden
    unsigned NumSets;		// Number of sets in the exam
    unsigned NumQsts;		// Number of questions in the exam
-   unsigned NumEvts;		// Number of events in the exam
-   unsigned NumOpenEvts;	// Number of open events in the exam
+   unsigned NumSess;		// Number of sessions in the exam
+   unsigned NumOpenSess;	// Number of open sessions in the exam
   };
 
 struct ExaSet_Set
@@ -127,13 +127,13 @@ struct ExaSet_Set
    char Title[ExaSet_MAX_BYTES_TITLE + 1];	// Title of the set
   };
 
-struct ExaEvt_Event
+struct ExaSes_Session
   {
-   long EvtCod;
+   long SesCod;
    long ExaCod;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
-   char Title[ExaEvt_MAX_BYTES_TITLE + 1];
+   char Title[ExaSes_MAX_BYTES_TITLE + 1];
    bool Hidden;
    bool Open;		// If now is between start and end dates
    bool ShowUsrResults;	// Show exam with results of all questions for the student

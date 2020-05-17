@@ -472,6 +472,15 @@ contiene una de las que yo imparto. Así que me imagino que te esperarás la suger
 // TODO: ¿Añadir dos columnas a resultados de juegos entre "Preguntas contestadas" y "Puntuación total": Preguntas "Correctas" y Preguntas "Erróneas"?
 //       Problema: sólo es aplicable a tipo test
 
+// TODO: En los avisos amarillos aparecen enlaces, pero en las copias de ellos en el timeline
+//       no se insertan los hipervínculos de los avisos.
+//       No los añadí en su momento porque se copian los primeros caracteres del mensaje,
+//       pudiendo cortarse en mitad de un enlace.
+//       Es decir, porque es complicadillo de hacer.
+//       Lo mejor sería limitar la longitud máximoa de los avisos a N caracteres,
+//       igual que los posts del timeline, y así ponerlos completos siempre, con enlaces y todo.
+//       De camino evitaría los avisos kilométricos.
+
 // TODO: Si hay accesos a un centro y el centro se elimina, al clicar en el acceso sale un mensaje de "Usted no tiene permiso para realizar esta acción." en lugar de "No existe el centro"
 
 // TODO: Poner en swad.cfg varias líneas de swad_config.h para que sea más configurable
@@ -548,14 +557,29 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.232.1 (2020-05-16)"
+#define Log_PLATFORM_VERSION	"SWAD 19.233 (2020-05-17)"
 #define CSS_FILE		"swad19.230.1.css"
 #define JS_FILE			"swad19.230.3.js"
 /*
 TODO: Comprobar si el directorio público que devuelve Ses_GetPublicDirFromCache sigue existiendo.
 //    Si no existe, hay que crear un nuevo directorio y meterlo en cache
 
-	Version 19.232.1: May 16, 2020  Changes in contextual icons in bank of questions and test. (301004 lines)
+	Version 19.233:   May 17, 2020  Exam event is renamed as exam session. (301028 lines)
+					7 changes necessary in database:
+RENAME TABLE exa_events TO exa_sessions;
+ALTER TABLE exa_groups CHANGE COLUMN EvtCod SesCod INT NOT NULL;
+ALTER TABLE exa_prints CHANGE COLUMN EvtCod SesCod INT NOT NULL;
+ALTER TABLE exa_sessions CHANGE COLUMN EvtCod SesCod INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE exa_groups DROP INDEX EvtCod,ADD UNIQUE INDEX(SesCod,GrpCod);
+ALTER TABLE exa_prints DROP INDEX EvtCod,ADD UNIQUE INDEX(SesCod,UsrCod);
+ALTER TABLE exa_sessions DROP INDEX EvtCod,ADD UNIQUE INDEX(SesCod);
+
+	Version 19.232.2: May 16, 2020  When a new tag is created, it is marked as hidden. (301007 lines)
+	Version 19.232.1: May 16, 2020  Changes in contextual icons in bank of questions and test. (301006 lines)
+					Copy the following 2 icons to icon public directory:
+sudo cp icon/iconset/nuvola/house-user.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/tasks.png /var/www/html/swad/icon/iconset/nuvola/
+
 	Version 19.232:   May 16, 2020  New option to edit questions separated from tests. (301000 lines)
 	Version 19.231:   May 16, 2020  Fixed bugs and code refactoring in exam results. (300956 lines)
 	Version 19.230.3: May 15, 2020  Update maths in exam prints when user answers. (301037 lines)
@@ -728,7 +752,7 @@ ALTER TABLE crs_usr DROP COLUMN LastDowGrpCod, DROP COLUMN LastComGrpCod, DROP C
 ALTER TABLE crs_usr_last ENGINE=MyISAM;
 OPTIMIZE TABLE crs_usr_last;
 OPTIMIZE TABLE crs_usr;
---------------
+
 	Version 19.206.3: Apr 30, 2020	Added indexes on database table. (300244 lines)
 					10 changes necessary in database:
 RENAME TABLE crs_usr TO crs_usr_old;

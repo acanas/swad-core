@@ -570,7 +570,7 @@ void Tst_ReceiveTestDraft (void)
 void Tst_AssessTest (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *Txt_Test_result;
+   extern const char *Txt_Result;
    extern const char *Txt_Test_No_X_that_you_make_in_this_course;
    extern const char *Txt_Score;
    extern const char *Txt_Grade;
@@ -615,7 +615,7 @@ void Tst_AssessTest (void)
       TstPrn_UpdatePrintInDB (&Print);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Test_result,
+      Box_BoxBegin (NULL,Txt_Result,
 		    NULL,NULL,
 		    Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
       Lay_WriteHeaderClassPhoto (false,false,
@@ -5627,7 +5627,7 @@ static long Tst_CreateNewTag (long CrsCod,const char *TagTxt)
 				"INSERT INTO tst_tags"
 				" (CrsCod,ChangeTime,TagTxt,TagHidden)"
 				" VALUES"
-				" (%ld,NOW(),'%s','N')",
+				" (%ld,NOW(),'%s','Y')",	// Hidden by default
 				CrsCod,TagTxt);
   }
 

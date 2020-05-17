@@ -1474,7 +1474,7 @@ const char *Hlp_ASSESSMENT_Exams_question_sets =
 	"ASSESSMENT.Exams.en#question-set";
 #endif
 
-const char *Hlp_ASSESSMENT_Exams_events =
+const char *Hlp_ASSESSMENT_Exams_sessions =
 #if   L==1
 	"ASSESSMENT.Exams.es#eventos";
 #elif L==2

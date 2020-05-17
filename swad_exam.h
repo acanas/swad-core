@@ -28,10 +28,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include "swad_date.h"
-// #include "swad_exam_event.h"
 #include "swad_exam_type.h"
-// #include "swad_scope.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -51,12 +48,12 @@ bool Exa_CheckIfICanEditExams (void);
 void Exa_SeeOneExam (void);
 void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,
 			  struct Exa_Exam *Exam,
-			  struct ExaEvt_Event *Event,
-			  bool PutFormEvent);
+			  struct ExaSes_Session *Session,
+			  bool PutFormSession);
 void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
 			       struct Exa_Exam *Exam,
-			       struct ExaEvt_Event *Event,
-			       bool PutFormEvent);
+			       struct ExaSes_Session *Session,
+			       bool PutFormSession);
 void Exa_ShowOnlyOneExamEnd (void);
 
 void Exa_SetCurrentExaCod (long ExaCod);

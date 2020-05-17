@@ -453,21 +453,21 @@ CREATE TABLE IF NOT EXISTS departments (
 -- Table exa_groups: stores the groups associated to each event in an exam
 --
 CREATE TABLE IF NOT EXISTS exa_groups (
-	EvtCod INT NOT NULL,
+	SesCod INT NOT NULL,
 	GrpCod INT NOT NULL,
-	UNIQUE INDEX(EvtCod,GrpCod));
+	UNIQUE INDEX(SesCod,GrpCod));
 --
--- Table exa_events: stores the events (exams instances) that have already taken place
+-- Table exa_sessions: stores the exam sessions that have already taken place
 --
-CREATE TABLE IF NOT EXISTS exa_events (
-	EvtCod INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS exa_sessions (
+	SesCod INT NOT NULL AUTO_INCREMENT,
 	ExaCod INT NOT NULL,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
 	UsrCod INT NOT NULL,
 	StartTime DATETIME NOT NULL,
 	EndTime DATETIME NOT NULL,
 	Title VARCHAR(2047) NOT NULL,
-	UNIQUE INDEX(EvtCod),
+	UNIQUE INDEX(SesCod),
 	INDEX(ExaCod));
 --
 -- Table exa_exams: stores the exams
@@ -500,7 +500,7 @@ CREATE TABLE IF NOT EXISTS exa_print_questions (
 --
 CREATE TABLE IF NOT EXISTS exa_prints (
 	PrnCod INT NOT NULL AUTO_INCREMENT,
-	EvtCod INT NOT NULL,
+	SesCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	StartTime DATETIME NOT NULL,
 	EndTime DATETIME NOT NULL,
@@ -509,7 +509,7 @@ CREATE TABLE IF NOT EXISTS exa_prints (
 	Sent ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
 	UNIQUE INDEX(PrnCod),
-	UNIQUE INDEX(EvtCod,UsrCod));
+	UNIQUE INDEX(SesCod,UsrCod));
 --
 -- Table exa_set_answers: stores the answers of questions in exam sets
 --

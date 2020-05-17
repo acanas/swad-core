@@ -35,7 +35,7 @@
 #include "swad_attendance.h"
 #include "swad_box.h"
 #include "swad_database.h"
-#include "swad_exam_event.h"
+#include "swad_exam_session.h"
 #include "swad_form.h"
 #include "swad_game.h"
 #include "swad_global.h"
@@ -1700,7 +1700,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,long Cod,
       [Grp_ASSIGNMENT] = {"asg_grp"   ,"AsgCod"},
       [Grp_ATT_EVENT ] = {"att_grp"   ,"AttCod"},
       [Grp_SURVEY    ] = {"svy_grp"   ,"SvyCod"},
-      [Grp_EXA_EVENT ] = {"exa_groups","EvtCod"},
+      [Grp_EXA_EVENT ] = {"exa_groups","SesCod"},
       [Grp_MATCH     ] = {"mch_groups","MchCod"},
      };
    struct ListCodGrps LstGrpsIBelong;
