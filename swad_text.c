@@ -2521,6 +2521,27 @@ const char *Txt_Average_number_BR_of_ASSIG_BR_per_course =
 	"N.&ordm; medio<br />de atividades<br />por disciplina";
 #endif
 
+const char *Txt_Average_number_BR_of_exams_BR_per_course =
+#if   L==1	// ca
+	"Nombre mitj&acute;<br />d'ex&agrave;mens<br />per assignatura";
+#elif L==2	// de
+	"Durchschnittliche Anzahl<br />von Pr&uuml;fung<br />pro Kurs";
+#elif L==3	// en
+	"Average number<br />of exams<br />per course";
+#elif L==4	// es
+	"N.&ordm; medio<br />de ex&aacute;menes<br />por asignatura";
+#elif L==5	// fr
+	"Nombre moyen<br />d'examens<br />par mati&egrave;re";
+#elif L==6	// gn
+	"N.&ordm; medio<br />de ex&aacute;menes<br />por asignatura";	// Okoteve traducción
+#elif L==7	// it
+	"Numero medio<br />d'esame<br />per corso";
+#elif L==8	// pl
+	"&Sacute;rednia liczba<br />egzamin&oacute;w<br />na kurs";
+#elif L==9	// pt
+	"N.&ordm; medio<br />de exames<br />por disciplina";
+#endif
+
 const char *Txt_Average_number_BR_of_games_BR_per_course =
 #if   L==1	// ca
 	"Nombre mitj&acute;<br />de jocs<br />per assignatura";
@@ -28838,6 +28859,27 @@ const char *Txt_Number_of_BR_courses_with_BR_assignments =
 	"N.&ordm; de<br />disciplinas<br />com atividades";
 #endif
 
+const char *Txt_Number_of_BR_courses_with_BR_exams =
+#if   L==1	// ca
+	"Nombre<br />d'assignatures<br />amb ex&agrave;mens";
+#elif L==2	// de
+	"Anzahl der<br />Kursen<br />mit Pr&uuml;fung";
+#elif L==3	// en
+	"Number of<br />courses with<br />exams";
+#elif L==4	// es
+	"N.&ordm; de<br />asignaturas<br />con ex&aacute;menes";
+#elif L==5	// fr
+	"Nombre de<br />mati&egrave;res<br />avec examens";
+#elif L==6	// gn
+	"N.&ordm; de<br />asignaturas<br />con ex&aacute;menes";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di<br />corsi con<br />esame";
+#elif L==8	// pl
+	"Liczba<br />kurs&oacute;w z<br />egzamin&oacute;w";
+#elif L==9	// pt
+	"N.&ordm; de<br />disciplinas<br />com exames";
+#endif
+
 const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions =
 #if   L==1	// ca
 	"Nombre<br />d'assignatures<br />amb preguntes<br />de test<br />exportables";
@@ -29006,9 +29048,30 @@ const char *Txt_Number_of_BR_emails =
 	"N&uacute;mero de<br />emails";
 #endif
 
+const char *Txt_Number_of_BR_exams =
+#if   L==1	// ca
+	"Nombre<br />d'ex&agrave;mens";
+#elif L==2	// de
+	"Anzahl der<br />Pr&uuml;fung";
+#elif L==3	// en
+	"Number of<br />exams";
+#elif L==4	// es
+	"N.&ordm; de<br />ex&aacute;menes";
+#elif L==5	// fr
+	"Nombre<br />d'examens";
+#elif L==6	// gn
+	"N.&ordm; de<br />ex&aacute;menes";	// Okoteve traducción
+#elif L==7	// it
+	"Numero<br />d'esame";
+#elif L==8	// pl
+	"Liczba<br />egzamin&oacute;w";
+#elif L==9	// pt
+	"N&uacute;mero de<br />exames";
+#endif
+
 const char *Txt_Number_of_BR_games =
 #if   L==1	// ca
-	"Nombre<br />de jocs.";
+	"Nombre<br />de jocs";
 #elif L==2	// de
 	"Anzahl der<br />Spiele";
 #elif L==3	// en
@@ -29022,7 +29085,7 @@ const char *Txt_Number_of_BR_games =
 #elif L==7	// it
 	"Numero di<br />giochi";
 #elif L==8	// pl
-	"Liczba<br />gier.";
+	"Liczba<br />gier";
 #elif L==9	// pt
 	"N&uacute;mero de<br />jogos";
 #endif

@@ -3057,6 +3057,27 @@ const char *Hlp_ANALYTICS_Figures_tests =
 	"ANALYTICS.Figures.en#tests";
 #endif
 
+const char *Hlp_ANALYTICS_Figures_exams =
+#if   L==1
+	"ANALYTICS.Figures.es#ex%C3%A1menes";
+#elif L==2
+	"ANALYTICS.Figures.en#exams";
+#elif L==3
+	"ANALYTICS.Figures.en#exams";
+#elif L==4
+	"ANALYTICS.Figures.es#ex%C3%A1menes";
+#elif L==5
+	"ANALYTICS.Figures.en#exams";
+#elif L==6
+	"ANALYTICS.Figures.es#ex%C3%A1menes";
+#elif L==7
+	"ANALYTICS.Figures.en#exams";
+#elif L==8
+	"ANALYTICS.Figures.en#exams";
+#elif L==9
+	"ANALYTICS.Figures.en#exams";
+#endif
+
 const char *Hlp_ANALYTICS_Figures_games =
 #if   L==1
 	"ANALYTICS.Figures.es#juegos";

@@ -3275,47 +3275,47 @@ static void Fig_GetAndShowTestsStats (void)
 
 static void Fig_GetAndShowExamsStats (void)
   {
-   extern const char *Hlp_ANALYTICS_Figures_games;
+   extern const char *Hlp_ANALYTICS_Figures_exams;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
-   extern const char *Txt_Number_of_BR_games;
-   extern const char *Txt_Number_of_BR_courses_with_BR_games;
-   extern const char *Txt_Average_number_BR_of_games_BR_per_course;
-   unsigned NumGames;
-   unsigned NumCoursesWithGames = 0;
-   double NumGamesPerCourse = 0.0;
+   extern const char *Txt_Number_of_BR_exams;
+   extern const char *Txt_Number_of_BR_courses_with_BR_exams;
+   extern const char *Txt_Average_number_BR_of_exams_BR_per_course;
+   unsigned NumExams;
+   unsigned NumCoursesWithExams = 0;
+   double NumExamsPerCourse = 0.0;
 
-   /***** Get the number of games from this location *****/
-   if ((NumGames = Gam_GetNumGames (Gbl.Scope.Current)))
-      if ((NumCoursesWithGames = Gam_GetNumCoursesWithGames (Gbl.Scope.Current)) != 0)
-         NumGamesPerCourse = (double) NumGames / (double) NumCoursesWithGames;
+   /***** Get the number of exams from this location *****/
+   if ((NumExams = Exa_GetNumExams (Gbl.Scope.Current)))
+      if ((NumCoursesWithExams = Exa_GetNumCoursesWithExams (Gbl.Scope.Current)) != 0)
+         NumExamsPerCourse = (double) NumExams / (double) NumCoursesWithExams;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_GAMES],
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_EXAMS],
                       NULL,NULL,
-                      Hlp_ANALYTICS_Figures_games,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_exams,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_games);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_games);
-   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_games_BR_per_course);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_exams);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_exams);
+   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_exams_BR_per_course);
 
    HTM_TR_End ();
 
-   /***** Write number of games *****/
+   /***** Write number of exams *****/
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumGames);
+   HTM_Unsigned (NumExams);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumCoursesWithGames);
+   HTM_Unsigned (NumCoursesWithExams);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double2Decimals (NumGamesPerCourse);
+   HTM_Double2Decimals (NumExamsPerCourse);
    HTM_TD_End ();
 
    HTM_TR_End ();
