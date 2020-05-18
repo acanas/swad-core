@@ -1650,7 +1650,7 @@ static void ExaAnn_PutIconsExamAnn (void *ExamAnns)
 					    ExaAnn_PutParamExaCodToEdit,&((struct ExaAnn_ExamAnnouncements *) ExamAnns)->ExaCod);
 	       break;
 	    case ExaAnn_HIDDEN_EXAM_ANNOUNCEMENT:
-	       Ico_PutContextualIconToUnhide (ActShoExaAnn,((struct ExaAnn_ExamAnnouncements *) ExamAnns)->Anchor,
+	       Ico_PutContextualIconToUnhide (ActUnhExaAnn,((struct ExaAnn_ExamAnnouncements *) ExamAnns)->Anchor,
 					      ExaAnn_PutParamExaCodToEdit,&((struct ExaAnn_ExamAnnouncements *) ExamAnns)->ExaCod);
 	       break;
 	    case ExaAnn_DELETED_EXAM_ANNOUNCEMENT:	// Not applicable here

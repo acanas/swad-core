@@ -357,7 +357,7 @@ static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams)
    extern const char *Txt_New_session;
 
    /***** Put form to create a new exam session *****/
-   Ico_PutContextualIconToAdd (ActReqNewExaEvt,ExaSes_NEW_SESSION_SECTION_ID,
+   Ico_PutContextualIconToAdd (ActReqNewExaSes,ExaSes_NEW_SESSION_SECTION_ID,
                                Exa_PutParams,Exams,
 			       Txt_New_session);
   }
@@ -526,21 +526,21 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
    Exams->SesCod = Session->SesCod;
 
    /***** Icon to remove the exam session *****/
-   Frm_StartForm (ActReqRemExaEvt);
+   Frm_StartForm (ActReqRemExaSes);
    ExaSes_PutParamsEdit (Exams);
    Ico_PutIconRemove ();
    Frm_EndForm ();
 
    /***** Icon to hide/unhide the exam session *****/
    if (Session->Hidden)
-      Ico_PutContextualIconToUnhide (ActShoExaEvt,Anchor,
+      Ico_PutContextualIconToUnhide (ActUnhExaSes,Anchor,
 				     ExaSes_PutParamsEdit,Exams);
    else
-      Ico_PutContextualIconToHide (ActHidExaEvt,Anchor,
+      Ico_PutContextualIconToHide (ActHidExaSes,Anchor,
 				   ExaSes_PutParamsEdit,Exams);
 
    /***** Icon to edit the exam session *****/
-   Ico_PutContextualIconToEdit (ActEdiOneExaEvt,Anchor,
+   Ico_PutContextualIconToEdit (ActEdiOneExaSes,Anchor,
                                 ExaSes_PutParamsEdit,Exams);
 
    /***** End cell *****/
@@ -739,7 +739,7 @@ static void ExaSes_ListOneOrMoreSessionsResultStd (struct Exa_Exams *Exams,
       /* Result is visible by me */
       Exams->ExaCod = Session->ExaCod;
       Exams->SesCod = Session->SesCod;
-      Lay_PutContextualLinkOnlyIcon (ActSeeMyExaEvtResEvt,ExaRes_RESULTS_BOX_ID,
+      Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResSes,ExaRes_RESULTS_BOX_ID,
 				     ExaSes_PutParamsEdit,Exams,
 				     "trophy.svg",
 				     Txt_Results);
@@ -763,13 +763,13 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
       Exams->SesCod = Session->SesCod;
 
       /* Show exam session results */
-      Lay_PutContextualLinkOnlyIcon (ActSeeAllExaEvtResEvt,ExaRes_RESULTS_BOX_ID,
+      Lay_PutContextualLinkOnlyIcon (ActSeeAllExaResSes,ExaRes_RESULTS_BOX_ID,
 				     ExaSes_PutParamsEdit,Exams,
 				     "trophy.svg",
 				     Txt_Results);
 
       /* I can edit visibility */
-      Lay_PutContextualLinkOnlyIcon (ActChgVisResExaEvtUsr,NULL,
+      Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
 				     ExaSes_PutParamsEdit,Exams,
 				     Session->ShowUsrResults ? "eye-green.svg" :
 							       "eye-slash-red.svg",
@@ -902,7 +902,7 @@ void ExaSes_RequestRemoveSession (void)
    /***** Show question and button to remove question *****/
    Exams.ExaCod = Session.ExaCod;
    Exams.SesCod = Session.SesCod;
-   Ale_ShowAlertAndButton (ActRemExaEvt,NULL,NULL,
+   Ale_ShowAlertAndButton (ActRemExaSes,NULL,NULL,
                            ExaSes_PutParamsEdit,&Exams,
 			   Btn_REMOVE_BUTTON,Txt_Remove_event,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_event_X,
@@ -1219,8 +1219,8 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
    HTM_SECTION_Begin (ExaSes_NEW_SESSION_SECTION_ID);
 
    /***** Begin form *****/
-   Frm_StartForm (ItsANewSession ? ActNewExaEvt :	// New session
-	                           ActChgExaEvt);	// Existing session
+   Frm_StartForm (ItsANewSession ? ActNewExaSes :	// New session
+	                           ActChgExaSes);	// Existing session
    Exa_PutParamExamCod (Session->ExaCod);
    if (!ItsANewSession)	// Existing session
       ExaSes_PutParamSesCod (Session->SesCod);
@@ -1339,7 +1339,7 @@ void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams,long ExaCod)
    extern const char *Txt_New_event;
 
    Exams->ExaCod = ExaCod;
-   Frm_StartFormAnchor (ActReqNewExaEvt,ExaSes_NEW_SESSION_SECTION_ID);
+   Frm_StartFormAnchor (ActReqNewExaSes,ExaSes_NEW_SESSION_SECTION_ID);
    Exa_PutParams (Exams);
    Btn_PutConfirmButton (Txt_New_event);
    Frm_EndForm ();
@@ -1679,46 +1679,4 @@ bool ExaSes_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
       default:
 	 return false;
      }
-  }
-
-/*****************************************************************************/
-/*** Receive previous question answer in a session question from database ****/
-/*****************************************************************************/
-
-void ExaSes_GetQstAnsFromDB (long SesCod,long UsrCod,unsigned QstInd,
-		             struct ExaSes_UsrAnswer *UsrAnswer)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumRows;
-
-   /***** Set default values for number of option and answer index *****/
-   UsrAnswer->NumOpt = -1;	// < 0 ==> no answer selected
-   UsrAnswer->AnsInd = -1;	// < 0 ==> no answer selected
-
-   /***** Get student's answer *****/
-   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's answer to an exam session question",
-					"SELECT Indexes,"	// row[0]	// TODO: Get correctly
-					       "Answers"	// row[1]	// TODO: Get correctly
-					" FROM exa_prints,exa_print_questions"
-					" WHERE exa_prints.SesCod=%ld"
-					" AND exa_prints.UsrCod=%ld"
-                                        " AND exa_prints.PrnCod=exa_print_questions.PrnCod"
-					" AND exa_print_questions.QstInd=%u",
-					SesCod,UsrCod,QstInd);
-   if (NumRows) // Answer found...
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /***** Get number of option index (row[0]) *****/
-      if (sscanf (row[0],"%d",&(UsrAnswer->NumOpt)) != 1)
-	 Lay_ShowErrorAndExit ("Error when getting student's answer to an exam session question.");
-
-      /***** Get answer index (row[1]) *****/
-      if (sscanf (row[1],"%d",&(UsrAnswer->AnsInd)) != 1)
-	 Lay_ShowErrorAndExit ("Error when getting student's answer to an exam session question.");
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }

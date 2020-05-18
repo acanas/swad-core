@@ -345,13 +345,13 @@ static void Exa_PutIconsListExams (void *Exams)
       switch (Gbl.Usrs.Me.Role.Logged)
 	{
 	 case Rol_STD:
-	    Ico_PutContextualIconToShowResults (ActSeeMyExaEvtResCrs,NULL,
+	    Ico_PutContextualIconToShowResults (ActSeeMyExaResCrs,NULL,
 	                                        NULL,NULL);
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    Ico_PutContextualIconToShowResults (ActReqSeeAllExaEvtRes,NULL,
+	    Ico_PutContextualIconToShowResults (ActReqSeeAllExaRes,NULL,
 	                                        NULL,NULL);
 	    break;
 	 default:
@@ -648,13 +648,13 @@ static void Exa_PutIconToShowResultsOfExam (void *Exams)
       switch (Gbl.Usrs.Me.Role.Logged)
 	{
 	 case Rol_STD:
-	    Ico_PutContextualIconToShowResults (ActSeeMyExaEvtResExa,ExaRes_RESULTS_BOX_ID,
+	    Ico_PutContextualIconToShowResults (ActSeeMyExaResExa,ExaRes_RESULTS_BOX_ID,
 						Exa_PutParams,Exams);
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    Ico_PutContextualIconToShowResults (ActSeeAllExaEvtResExa,ExaRes_RESULTS_BOX_ID,
+	    Ico_PutContextualIconToShowResults (ActSeeAllExaResExa,ExaRes_RESULTS_BOX_ID,
 						Exa_PutParams,Exams);
 	    break;
 	 default:

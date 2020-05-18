@@ -9554,6 +9554,195 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
+	[ActSeeOneExaAnn] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"See one exam announcement"
+#elif L==4	// es
+	"Ver una convocatoria de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActSeeDatExaAnn] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"See exam announcements of a given date"
+#elif L==4	// es
+	"Ver convocatorias de examen de una fecha dada"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActEdiExaAnn] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Edit an exam announcement"
+#elif L==4	// es
+	"Editar una convocatoria de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActRcvExaAnn] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Receive an exam announcement"
+#elif L==4	// es
+	"Recibir una convocatoria de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActPrnExaAnn] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"See an exam announcement ready to be printed"
+#elif L==4	// es
+	"Ver una convocatoria de examen lista para imprimir"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActReqRemExaAnn] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Request the removal of an exam announcement"
+#elif L==4	// es
+	"Solicitar la eliminaci&oacute;n de una convocatoria de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActRemExaAnn] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Remove an exam announcement"
+#elif L==4	// es
+	"Eliminar una convocatoria de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActHidExaAnn] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Hide exam announcement"
+#elif L==4	// es
+	"Ocultar una convocatoria de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActUnhExaAnn] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Unhide exam announcement"
+#elif L==4	// es
+	"Mostrar una convocatoria de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
 	[ActEdiOneTstQst] =
 #if   L==1	// ca
 	""			// Necessita traducció
@@ -10100,384 +10289,6 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActReqNewExaEvt] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Request new exam event"
-#elif L==4	// es
-	"Solicitar nuevo evento de examen"
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActEdiOneExaEvt] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Edit exam event"
-#elif L==4	// es
-	"Editar evento de examen"
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActNewExaEvt] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Create new exam event"
-#elif L==4	// es
-	"Crear nuevo evento de examen"
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActChgExaEvt] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Change exam event"
-#elif L==4	// es
-	"Cambiar evento de examen"
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActReqRemExaEvt] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Request exam event removal"
-#elif L==4	// es
-	"Solicitar eliminaci&oacute;n de evento de examen"
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActRemExaEvt] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Remove exam event"
-#elif L==4	// es
-	"Eliminar evento de examen"
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActHidExaEvt] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Hide exam event"
-#elif L==4	// es
-	"Ocultar evento de examen"
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActShoExaEvt] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Unhide exam event"
-#elif L==4	// es
-	"Mostrar evento de examen"
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActSeeMyExaEvtResCrs] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	""
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActSeeMyExaEvtResExa] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	""
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActSeeMyExaEvtResEvt] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	""
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActSeeOneExaEvtResMe] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	""
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActReqSeeAllExaEvtRes] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	""
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActSeeAllExaEvtResCrs] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	""
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActSeeAllExaEvtResExa] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	""
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActSeeAllExaEvtResEvt] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	""
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActSeeOneExaEvtResOth] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	""
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActChgVisResExaEvtUsr] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	""
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
 	[ActFrmNewExa] =
 #if   L==1	// ca
 	""			// Necessita traducció
@@ -10919,6 +10730,174 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
+	[ActReqNewExaSes] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Request new exam session"
+#elif L==4	// es
+	"Solicitar nueva sesi&oacute;n de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActEdiOneExaSes] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Edit exam session"
+#elif L==4	// es
+	"Editar sesi&oacute;n de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActNewExaSes] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Create new exam session"
+#elif L==4	// es
+	"Crear nueva sesi&oacute;n de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActChgExaSes] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Change exam session"
+#elif L==4	// es
+	"Cambiar sesi&oacute;n de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActReqRemExaSes] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Request exam session removal"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de sesi&oacute;n de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActRemExaSes] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Remove exam session"
+#elif L==4	// es
+	"Eliminar sesi&oacute;n de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActHidExaSes] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Hide exam session"
+#elif L==4	// es
+	"Ocultar sesi&oacute;n de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActUnhExaSes] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Unhide exam session"
+#elif L==4	// es
+	"Mostrar sesi&oacute;n de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
 	[ActSeeExaPrn] =
 #if   L==1	// ca
 	""			// Necessita traducció
@@ -10949,6 +10928,216 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Answer exam print"
 #elif L==4	// es
 	"Responder impresi&oacute;n de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActSeeMyExaResCrs] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"See my exam results in a course"
+#elif L==4	// es
+	"Ver mis resultados de ex&aacute;menes en una asignatura"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActSeeMyExaResExa] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"See my exam results in an exam"
+#elif L==4	// es
+	"Ver mis resultados de ex&aacute;menes en un examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActSeeMyExaResSes] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"See my exam results in a session"
+#elif L==4	// es
+	"Ver mis resultados de ex&aacute;menes en una sesi&oacute;n"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActSeeOneExaResMe] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"See one of my exam results"
+#elif L==4	// es
+	"Ver uno de mis resultados de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActReqSeeAllExaRes] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Select users to see all their exam results"
+#elif L==4	// es
+	"Seleccionar usuarios para ver todos sus resultados de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActSeeAllExaResCrs] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"See all exam results of a course"
+#elif L==4	// es
+	"Ver todos los resultados de examen de una sesi&oacute;n"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActSeeAllExaResExa] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"See all exam results of an exam"
+#elif L==4	// es
+	"Ver todos los resultados de examen de un examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActSeeAllExaResSes] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"See all exam results of a session"
+#elif L==4	// es
+	"Ver todos los resultados de examen de una sesi&oacute;n"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActSeeOneExaResOth] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"See one of the exam results of another user"
+#elif L==4	// es
+	"Ver uno de los resultados de examen de otro usuario"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActChgVisExaRes] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Change visibility of exam results"
+#elif L==4	// es
+	"Cambiar visibilidad de resultados de examen"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12186,195 +12375,6 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Need Übersetzung
 #elif L==3	// en
 	"Confirm the removal of a question of a survey"
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActSeeOneExaAnn] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Show one exam announcement"
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActSeeDatExaAnn] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Show exam announcements of a given date"
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActEdiExaAnn] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Edit an exam announcement"
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActRcvExaAnn] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Receive an exam announcement"
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActPrnExaAnn] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Show an exam announcement ready to be printed"
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActReqRemExaAnn] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Request the removal of an exam announcement"
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActRemExaAnn] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Remove an exam announcement"
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActHidExaAnn] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Hide exam announcement"
-#elif L==4	// es
-	""
-#elif L==5	// fr
-	""			// Besoin de traduction
-#elif L==6	// gn
-	""			// Okoteve traducción
-#elif L==7	// it
-	""			// Bisogno di traduzione
-#elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	""			// Precisa de tradução
-#endif
-	,
-	[ActShoExaAnn] =
-#if   L==1	// ca
-	""			// Necessita traducció
-#elif L==2	// de
-	""			// Need Übersetzung
-#elif L==3	// en
-	"Show exam announcement"
 #elif L==4	// es
 	""
 #elif L==5	// fr

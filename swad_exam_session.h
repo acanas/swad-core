@@ -89,7 +89,4 @@ unsigned ExaSes_GetNumOpenSessionsInExam (long ExaCod);
 bool ExaSes_CheckIfICanAnswerThisSession (const struct ExaSes_Session *Session);
 bool ExaSes_CheckIfICanListThisSessionBasedOnGrps (long SesCod);
 
-void ExaSes_GetQstAnsFromDB (long SesCod,long UsrCod,unsigned QstInd,
-		             struct ExaSes_UsrAnswer *UsrAnswer);
-
 #endif

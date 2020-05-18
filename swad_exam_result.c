@@ -356,7 +356,7 @@ static void ExaRes_PutFormToSelUsrsToViewEvtResults (void *Exams)
 
    if (Exams)	// Not used
       Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-					ActSeeAllExaEvtResCrs,
+					ActSeeAllExaResCrs,
 					NULL,NULL,
 					Txt_Results,
 					Hlp_ASSESSMENT_Exams_results,
@@ -985,11 +985,11 @@ static void ExaRes_ShowSesResults (struct Exa_Exams *Exams,
 	    switch (MeOrOther)
 	      {
 	       case Usr_ME:
-		  Frm_StartForm (ActSeeOneExaEvtResMe);
+		  Frm_StartForm (ActSeeOneExaResMe);
 		  ExaSes_PutParamsEdit (Exams);
 		  break;
 	       case Usr_OTHER:
-		  Frm_StartForm (ActSeeOneExaEvtResOth);
+		  Frm_StartForm (ActSeeOneExaResOth);
 		  ExaSes_PutParamsEdit (Exams);
 		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 		  break;
@@ -1116,8 +1116,8 @@ void ExaRes_ShowOneExaResult (void)
    ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
 
    /***** Pointer to user's data *****/
-   MeOrOther = (Gbl.Action.Act == ActSeeOneExaEvtResMe) ? Usr_ME :
-	                                                  Usr_OTHER;
+   MeOrOther = (Gbl.Action.Act == ActSeeOneExaResMe) ? Usr_ME :
+	                                               Usr_OTHER;
    switch (MeOrOther)
      {
       case Usr_ME:
@@ -1161,148 +1161,144 @@ void ExaRes_ShowOneExaResult (void)
 	 break;
      }
 
-   if (ICanViewResult)	// I am allowed to view this session result
+   /***** Get questions and user's answers of exam print from database *****/
+   ExaPrn_GetPrintQuestionsFromDB (&Print);
+
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Session.Title,
+		 NULL,NULL,
+		 Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
+   Lay_WriteHeaderClassPhoto (false,false,
+			      Gbl.Hierarchy.Ins.InsCod,
+			      Gbl.Hierarchy.Deg.DegCod,
+			      Gbl.Hierarchy.Crs.CrsCod);
+
+   /***** Begin table *****/
+   HTM_TABLE_BeginWideMarginPadding (10);
+
+   /***** Header row *****/
+   /* Get data of the user who answer the session */
+   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS))
+      Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
+   if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
+      Lay_NoPermissionExit ();
+
+   /* User */
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"DAT_N RT\"");
+   HTM_TxtF ("%s:",Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT LT\"");
+   ID_WriteUsrIDs (UsrDat,NULL);
+   HTM_TxtF ("&nbsp;%s",UsrDat->Surname1);
+   if (UsrDat->Surname2[0])
+      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
+   if (UsrDat->FirstName[0])
+      HTM_TxtF (", %s",UsrDat->FirstName);
+   HTM_BR ();
+   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
+   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+					NULL,
+		     "PHOTO45x60",Pho_ZOOM,false);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /* Start/end time (for user in this session) */
+   for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	StartEndTime++)
      {
-      /***** Get questions and user's answers of exam print from database *****/
-      ExaPrn_GetPrintQuestionsFromDB (&Print);
-
-      /***** Begin box *****/
-      Box_BoxBegin (NULL,Session.Title,
-                    NULL,NULL,
-                    Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
-      Lay_WriteHeaderClassPhoto (false,false,
-				 Gbl.Hierarchy.Ins.InsCod,
-				 Gbl.Hierarchy.Deg.DegCod,
-				 Gbl.Hierarchy.Crs.CrsCod);
-
-      /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (10);
-
-      /***** Header row *****/
-      /* Get data of the user who answer the session */
-      if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS))
-	 Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
-      if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
-         Lay_NoPermissionExit ();
-
-      /* User */
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+      HTM_TxtF ("%s:",Txt_START_END_TIME[StartEndTime]);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LT\"");
-      ID_WriteUsrIDs (UsrDat,NULL);
-      HTM_TxtF ("&nbsp;%s",UsrDat->Surname1);
-      if (UsrDat->Surname2[0])
-	 HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
-      if (UsrDat->FirstName[0])
-	 HTM_TxtF (", %s",UsrDat->FirstName);
-      HTM_BR ();
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-					   NULL,
-			"PHOTO45x60",Pho_ZOOM,false);
+      if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_TD_Begin ("id=\"%s\" class=\"DAT LT\"",Id);
+      Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+				    true,true,true,0x7);
       HTM_TD_End ();
+      free (Id);
 
       HTM_TR_End ();
+     }
 
-      /* Start/end time (for user in this session) */
-      for (StartEndTime  = (Dat_StartEndTime_t) 0;
-	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	   StartEndTime++)
-	{
-	 HTM_TR_Begin (NULL);
+   /* Number of questions */
+   HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT_N RT\"");
-	 HTM_TxtF ("%s:",Txt_START_END_TIME[StartEndTime]);
-	 HTM_TD_End ();
+   HTM_TD_Begin ("class=\"DAT_N RT\"");
+   HTM_TxtF ("%s:",Txt_Questions);
+   HTM_TD_End ();
 
-	 if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"DAT LT\"",Id);
-	 Dat_WriteLocalDateHMSFromUTC (Id,Exam.TimeUTC[StartEndTime],
-				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				       true,true,true,0x7);
-	 HTM_TD_End ();
-         free (Id);
+   HTM_TD_Begin ("class=\"DAT LT\"");
+   HTM_TxtF ("%u (%u %s)",
+	     Print.NumQsts,
+	     Print.NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+   HTM_TD_End ();
 
-	 HTM_TR_End ();
-	}
+   HTM_TR_End ();
 
-      /* Number of questions */
-      HTM_TR_Begin (NULL);
+   /* Score */
+   HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_Questions);
-      HTM_TD_End ();
+   HTM_TD_Begin ("class=\"DAT_N RT\"");
+   HTM_TxtF ("%s:",Txt_Score);
+   HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LT\"");
-      HTM_TxtF ("%u (%u %s)",
-                Print.NumQsts,
-                Print.NumQstsNotBlank,Txt_non_blank_QUESTIONS);
-      HTM_TD_End ();
+   HTM_TD_Begin ("class=\"DAT LT\"");
+   if (ICanViewScore)
+      HTM_Double2Decimals (Print.Score);
+   else
+      Ico_PutIconNotVisible ();
+   HTM_TD_End ();
 
-      HTM_TR_End ();
+   HTM_TR_End ();
 
-      /* Score */
-      HTM_TR_Begin (NULL);
+   /* Grade */
+   HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_Score);
-      HTM_TD_End ();
+   HTM_TD_Begin ("class=\"DAT_N RT\"");
+   HTM_TxtF ("%s:",Txt_Grade);
+   HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LT\"");
-      if (ICanViewScore)
-         HTM_Double2Decimals (Print.Score);
-      else
-         Ico_PutIconNotVisible ();
-      HTM_TD_End ();
+   HTM_TD_Begin ("class=\"DAT LT\"");
+   if (ICanViewScore)
+      TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,
+				  Exam.MaxGrade);
+   else
+      Ico_PutIconNotVisible ();
+   HTM_TD_End ();
 
-      HTM_TR_End ();
+   HTM_TR_End ();
 
-      /* Grade */
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_Grade);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT LT\"");
-      if (ICanViewScore)
-         TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,
-                                     Exam.MaxGrade);
-      else
-         Ico_PutIconNotVisible ();
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Write answers and solutions *****/
+   /***** Write answers and solutions *****/
+   if (ICanViewResult)
       ExaRes_ShowExamAnswers (UsrDat,&Print,Exam.Visibility);
 
-      /***** End table *****/
-      HTM_TABLE_End ();
+   /***** End table *****/
+   HTM_TABLE_End ();
 
-      /***** Write total mark of session result *****/
-      if (ICanViewScore)
-	{
-	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
-	 HTM_TxtColonNBSP (Txt_Score);
-	 HTM_Double2Decimals (Print.Score);
-	 HTM_BR ();
-	 HTM_TxtColonNBSP (Txt_Grade);
-         TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,
-                                     Exam.MaxGrade);
-         HTM_DIV_End ();
-	}
-
-      /***** End box *****/
-      Box_BoxEnd ();
+   /***** Write total mark of session result *****/
+   if (ICanViewScore)
+     {
+      HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
+      HTM_TxtColonNBSP (Txt_Score);
+      HTM_Double2Decimals (Print.Score);
+      HTM_BR ();
+      HTM_TxtColonNBSP (Txt_Grade);
+      TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,
+				  Exam.MaxGrade);
+      HTM_DIV_End ();
      }
-   else	// I am not allowed to view this session result
-      Lay_NoPermissionExit ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

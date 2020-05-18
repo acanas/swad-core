@@ -590,7 +590,7 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
       HTM_DIV_End ();				// Used for AJAX based refresh
 
       /***** Form to end/close this exam print *****/
-      Frm_StartForm (ActSeeOneExaEvtResMe);
+      Frm_StartForm (ActSeeOneExaResMe);
       ExaSes_PutParamsEdit (Exams);
       Btn_PutCreateButton (Txt_I_have_finished);
       Frm_EndForm ();
