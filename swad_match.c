@@ -227,11 +227,11 @@ static void Mch_SetMatchAsNotBeingPlayed (long MchCod);
 static bool Mch_GetIfMatchIsBeingPlayed (long MchCod);
 static void Mch_GetNumPlayers (struct Mch_Match *Match);
 
+static void Mch_UpdateMyAnswerToMatchQuestion (const struct Mch_Match *Match,
+                                               const struct Mch_UsrAnswer *UsrAnswer);
 static void Mch_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match);
 
-static void Mch_ComputeScore (struct TstPrn_Print *Print);
-
-static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
+static unsigned Mch_GetNumUsrsWhoHavePlayedMch (long MchCod);
 
 /*****************************************************************************/
 /*************** Set/Get match code of the match being played ****************/
@@ -511,7 +511,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	 /* Title and groups */
 	 Mch_ListOneOrMoreMatchesTitleGrps (&Match);
 
-	 /* Number of players who have answered any question in the match */
+	 /* Number of players who have played the match */
 	 Mch_ListOneOrMoreMatchesNumPlayers (&Match);
 
 	 /* Match status */
@@ -762,7 +762,7 @@ static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match)
   {
    /***** Number of players who have answered any question in the match ******/
    HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Unsigned (Mch_GetNumUsrsWhoHaveAnswerMch (Match->MchCod));
+   HTM_Unsigned (Mch_GetNumUsrsWhoHavePlayedMch (Match->MchCod));
    HTM_TD_End ();
   }
 
@@ -3012,8 +3012,8 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
 
       /* Show media */
       Med_ShowMedia (&Question.Media,
-		     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
-		     "TEST_MED_EDIT_LIST_STEM");
+		     "TEST_MED_EDIT_LIST_CONT",
+		     "TEST_MED_EDIT_LIST");
 
       /***** Write answers? *****/
       switch (Match->Status.Showing)
@@ -3710,8 +3710,13 @@ void Mch_RemoveMyQuestionAnswer (void)
    if (Match.Status.Playing &&			// Match is being played
        Match.Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing answers
        QstInd == Match.Status.QstInd)		// Removing answer to the current question being played
-      /***** Remove answer to this question *****/
+     {
+      /***** Remove my answer to this question *****/
       Mch_RemoveMyAnswerToMatchQuestion (&Match);
+
+      /***** Compute score and update my match result *****/
+      MchRes_ComputeScoreAndUpdateMyMatchResult (Match.MchCod);
+     }
 
    /***** Show current match status *****/
    HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
@@ -3888,7 +3893,6 @@ void Mch_ReceiveQuestionAnswer (void)
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];
    struct Mch_UsrAnswer PreviousUsrAnswer;
    struct Mch_UsrAnswer UsrAnswer;
-   struct TstPrn_Print Print;
 
    /***** Reset match *****/
    Mch_ResetMatch (&Match);
@@ -3902,7 +3906,8 @@ void Mch_ReceiveQuestionAnswer (void)
 
    /***** Check that teacher's screen is showing answers
           and question index is the current one being played *****/
-   if (Match.Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing answers
+   if (Match.Status.Playing &&			// Match is being played
+       Match.Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing answers
        QstInd == Match.Status.QstInd)		// Receiving an answer to the current question being played
      {
       /***** Get indexes for this question from database *****/
@@ -3911,7 +3916,7 @@ void Mch_ReceiveQuestionAnswer (void)
       /***** Get answer index *****/
       /*
       Indexes[4] = {0,3,1,2}
-      +-------+--------+----------+---------+
+      +--------+--------+----------+---------+
       | Button | Option | Answer   | Correct |
       | letter | number | index    |         |
       | screen | screen | database |         |
@@ -3936,55 +3941,13 @@ void Mch_ReceiveQuestionAnswer (void)
       if (UsrAnswer.NumOpt >= 0 &&
 	  UsrAnswer.AnsInd >= 0 &&
 	  UsrAnswer.AnsInd != PreviousUsrAnswer.AnsInd)
-	 DB_QueryREPLACE ("can not register your answer to the match question",
-			  "REPLACE mch_answers"
-			  " (MchCod,UsrCod,QstInd,NumOpt,AnsInd)"
-			  " VALUES"
-			  " (%ld,%ld,%u,%d,%d)",
-			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,Match.Status.QstInd,
-			  UsrAnswer.NumOpt,
-			  UsrAnswer.AnsInd);
+	{
+	 /***** Update my answer to this question *****/
+	 Mch_UpdateMyAnswerToMatchQuestion (&Match,&UsrAnswer);
 
-      /***** Update student's match result *****/
-      MchRes_GetMatchResultQuestionsFromDB (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-					    &Print);
-      Mch_ComputeScore (&Print);
-
-      Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-      if (DB_QueryCOUNT ("can not get if match result exists",
-			 "SELECT COUNT(*) FROM mch_results"
-			 " WHERE MchCod=%ld AND UsrCod=%ld",
-			 Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod))	// Match print exists
-	 /* Update result */
-	 DB_QueryUPDATE ("can not update match result",
-			  "UPDATE mch_results"
-			  " SET EndTime=NOW(),"
-			       "NumQsts=%u,"
-			       "NumQstsNotBlank=%u,"
-			       "Score='%.15lg'"
-			  " WHERE MchCod=%ld AND UsrCod=%ld",
-			  Print.NumQsts,
-			  Print.NumQstsNotBlank,
-			  Print.Score,
-			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-      else								// Match print doesn't exist
-	 /* Create result */
-	 DB_QueryINSERT ("can not create match result",
-			  "INSERT mch_results "
-			  "(MchCod,UsrCod,StartTime,EndTime,NumQsts,NumQstsNotBlank,Score)"
-			  " VALUES "
-			  "(%ld,"	// MchCod
-			  "%ld,"	// UsrCod
-			  "NOW(),"	// StartTime
-			  "NOW(),"	// EndTime
-			  "%u,"		// NumQsts
-			  "%u,"		// NumQstsNotBlank
-			  "'%.15lg')",	// Score
-			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-			  Print.NumQsts,
-			  Print.NumQstsNotBlank,
-			  Print.Score);
-      Str_SetDecimalPointToLocal ();	// Return to local system
+	 /***** Compute score and update my match result *****/
+	 MchRes_ComputeScoreAndUpdateMyMatchResult (Match.MchCod);
+	}
      }
 
    /***** Show current match status *****/
@@ -3994,7 +3957,24 @@ void Mch_ReceiveQuestionAnswer (void)
   }
 
 /*****************************************************************************/
-/********************* Remove answer to match question ***********************/
+/******************** Update my answer to match question *********************/
+/*****************************************************************************/
+
+static void Mch_UpdateMyAnswerToMatchQuestion (const struct Mch_Match *Match,
+                                               const struct Mch_UsrAnswer *UsrAnswer)
+  {
+   DB_QueryREPLACE ("can not register your answer to the match question",
+		    "REPLACE mch_answers"
+		    " (MchCod,UsrCod,QstInd,NumOpt,AnsInd)"
+		    " VALUES"
+		    " (%ld,%ld,%u,%d,%d)",
+		    Match->MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,Match->Status.QstInd,
+		    UsrAnswer->NumOpt,
+		    UsrAnswer->AnsInd);
+  }
+
+/*****************************************************************************/
+/******************* Remove my answer to match question **********************/
 /*****************************************************************************/
 
 static void Mch_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match)
@@ -4006,10 +3986,73 @@ static void Mch_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match)
   }
 
 /*****************************************************************************/
+/*************** Get the questions of a match from database ******************/
+/*****************************************************************************/
+
+void Mch_GetMatchQuestionsFromDB (long MchCod,long UsrCod,
+				  struct TstPrn_Print *Print)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumQst;
+   long LongNum;
+   unsigned QstInd;
+   struct Mch_UsrAnswer UsrAnswer;
+
+   /***** Get questions and answers of a match result *****/
+   Print->NumQsts = (unsigned)
+		    DB_QuerySELECT (&mysql_res,"can not get questions and answers"
+					       " of a match result",
+				    "SELECT gam_questions.QstCod,"	// row[0]
+					   "gam_questions.QstInd,"	// row[1]
+					   "mch_indexes.Indexes"	// row[2]
+				    " FROM mch_matches,gam_questions,mch_indexes"
+				    " WHERE mch_matches.MchCod=%ld"
+				    " AND mch_matches.GamCod=gam_questions.GamCod"
+				    " AND mch_matches.MchCod=mch_indexes.MchCod"
+				    " AND gam_questions.QstInd=mch_indexes.QstInd"
+				    " ORDER BY gam_questions.QstInd",
+				    MchCod);
+   for (NumQst = 0, Print->NumQstsNotBlank = 0;
+	NumQst < Print->NumQsts;
+	NumQst++)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get question code (row[0]) */
+      if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	 Lay_ShowErrorAndExit ("Wrong code of question.");
+
+      /* Get question index (row[1]) */
+      if ((LongNum = Str_ConvertStrCodToLongCod (row[1])) < 0)
+	 Lay_ShowErrorAndExit ("Wrong code of question.");
+      QstInd = (unsigned) LongNum;
+
+      /* Get indexes for this question (row[2]) */
+      Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[2],
+                Tst_MAX_BYTES_INDEXES_ONE_QST);
+
+      /* Get answers selected by user for this question */
+      Mch_GetQstAnsFromDB (MchCod,UsrCod,QstInd,&UsrAnswer);
+      if (UsrAnswer.AnsInd >= 0)	// UsrAnswer.AnsInd >= 0 ==> answer selected
+	{
+         snprintf (Print->PrintedQuestions[NumQst].StrAnswers,Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
+		   "%d",UsrAnswer.AnsInd);
+         Print->NumQstsNotBlank++;
+        }
+      else				// UsrAnswer.AnsInd < 0 ==> no answer selected
+	 Print->PrintedQuestions[NumQst].StrAnswers[0] = '\0';	// Empty answer
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
 /******************** Compute match score for a student **********************/
 /*****************************************************************************/
 
-static void Mch_ComputeScore (struct TstPrn_Print *Print)
+void Mch_ComputeScore (struct TstPrn_Print *Print)
   {
    unsigned NumQst;
    struct Tst_Question Question;
@@ -4065,16 +4108,17 @@ unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned An
   }
 
 /*****************************************************************************/
-/****** Get number of users who have answered any question in a match ********/
+/************ Get number of users who have played a given match **************/
 /*****************************************************************************/
 
-static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod)
+static unsigned Mch_GetNumUsrsWhoHavePlayedMch (long MchCod)
   {
-   /***** Get number of users who have answered
-          any question in match from database *****/
+   /***** Get number of users who have played the match
+          (users who have a result for this match, even blank result)
+          from database *****/
    return
-   (unsigned) DB_QueryCOUNT ("can not get number of users who have answered a match",
-			     "SELECT COUNT(DISTINCT UsrCod) FROM mch_answers"
+   (unsigned) DB_QueryCOUNT ("can not get number of users who have played a match",
+			     "SELECT COUNT(*) FROM mch_results"
 			     " WHERE MchCod=%ld",
 			     MchCod);
   }

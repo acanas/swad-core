@@ -1082,7 +1082,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
                      UsrDat->FullName);
 
    /***** Remove test results made by user in all courses *****/
-   TstPrn_RemoveExamsMadeByUsrInAllCrss (UsrDat->UsrCod);
+   TstPrn_RemovePrintsMadeByUsrInAllCrss (UsrDat->UsrCod);
 
    /***** Remove user's notifications *****/
    Ntf_RemoveUsrNtfs (UsrDat->UsrCod);

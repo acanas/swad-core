@@ -144,6 +144,11 @@ void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
 		          struct Mch_UsrAnswer *UsrAnswer);
 void Mch_ReceiveQuestionAnswer (void);
 
+void Mch_GetMatchQuestionsFromDB (long MchCod,long UsrCod,
+				  struct TstPrn_Print *Print);
+
+void Mch_ComputeScore (struct TstPrn_Print *Print);
+
 unsigned Mch_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd);
 unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd);
 void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,bool Correct);

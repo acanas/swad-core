@@ -580,7 +580,7 @@ void Tst_AssessTest (void)
 	}
 
       /***** Write answers and solutions *****/
-      TstPrn_ShowExamAfterAssess (&Print);
+      TstPrn_ShowPrintAfterAssess (&Print);
 
       /***** Write total score and grade *****/
       if (TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
@@ -923,8 +923,8 @@ void Tst_ListQuestionForEdition (const struct Tst_Question *Question,
 
       /* Show media */
       Med_ShowMedia (&Question->Media,
-		     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
-		     "TEST_MED_EDIT_LIST_STEM");
+		     "TEST_MED_EDIT_LIST_CONT",
+		     "TEST_MED_EDIT_LIST");
 
       /* Show feedback */
       Tst_WriteQstFeedback (Question->Feedback,"TEST_EDI_LIGHT");

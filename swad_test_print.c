@@ -102,26 +102,26 @@ static void TstPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question);
 
 //-----------------------------------------------------------------------------
 
-static void TstPrn_WriteIntAnsExam (struct UsrData *UsrDat,
-                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				    const struct Tst_Question *Question,
-				    unsigned Visibility);
-static void TstPrn_WriteFltAnsExam (struct UsrData *UsrDat,
-                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				    const struct Tst_Question *Question,
-				    unsigned Visibility);
-static void TstPrn_WriteTF_AnsExam (struct UsrData *UsrDat,
-                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				    const struct Tst_Question *Question,
-				    unsigned Visibility);
-static void TstPrn_WriteChoAnsExam (struct UsrData *UsrDat,
-                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				    const struct Tst_Question *Question,
-				    unsigned Visibility);
-static void TstPrn_WriteTxtAnsExam (struct UsrData *UsrDat,
-                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				    const struct Tst_Question *Question,
-				    unsigned Visibility);
+static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
+                                     const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				     const struct Tst_Question *Question,
+				     unsigned Visibility);
+static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
+                                     const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				     const struct Tst_Question *Question,
+				     unsigned Visibility);
+static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
+                                     const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				     const struct Tst_Question *Question,
+				     unsigned Visibility);
+static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
+                                     const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				     const struct Tst_Question *Question,
+				     unsigned Visibility);
+static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
+                                     const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				     const struct Tst_Question *Question,
+				     unsigned Visibility);
 
 //-----------------------------------------------------------------------------
 
@@ -130,17 +130,17 @@ static void TstPrn_WriteHeadUserCorrect (struct UsrData *UsrDat);
 static void TstPrn_StoreOneQstOfPrintInDB (const struct TstPrn_Print *Print,
                                            unsigned NumQst);
 
-static void TstPrn_PutFormToSelectUsrsToViewUsrsExams (__attribute__((unused)) void *Args);
+static void TstPrn_PutFormToSelectUsrsToViewUsrsPrints (__attribute__((unused)) void *Args);
 
-static void TstPrn_ShowUsrsExams (__attribute__((unused)) void *Args);
-static void TstPrn_ShowHeaderExams (void);
-static void TstPrn_ShowExams (struct UsrData *UsrDat);
-static void TstPrn_ShowExamsSummaryRow (bool ItsMe,
-                                        unsigned NumExams,
-                                        unsigned NumTotalQsts,
-                                        unsigned NumTotalQstsNotBlank,
-                                        double TotalScoreOfAllTests);
-static void TstPrn_ShowTagsPresentInAnExam (long ResCod);
+static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args);
+static void TstPrn_ShowHeaderPrints (void);
+static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat);
+static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
+                                         unsigned NumPrints,
+                                         unsigned NumTotalQsts,
+                                         unsigned NumTotalQstsNotBlank,
+                                         double TotalScoreOfAllTests);
+static void TstPrn_ShowTagsPresentInAPrint (long ResCod);
 
 /*****************************************************************************/
 /******************************** Reset exam *********************************/
@@ -214,7 +214,7 @@ void TstPrn_UpdatePrintInDB (const struct TstPrn_Print *Print)
 /********************* Show test exam after assessing it *********************/
 /*****************************************************************************/
 
-void TstPrn_ShowExamAfterAssess (struct TstPrn_Print *Print)
+void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
   {
    unsigned NumQst;
    struct Tst_Question Question;
@@ -899,12 +899,12 @@ void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
 				                   const struct Tst_Question *Question,
 				                   unsigned Visibility) =
     {
-     [Tst_ANS_INT            ] = TstPrn_WriteIntAnsExam,
-     [Tst_ANS_FLOAT          ] = TstPrn_WriteFltAnsExam,
-     [Tst_ANS_TRUE_FALSE     ] = TstPrn_WriteTF_AnsExam,
-     [Tst_ANS_UNIQUE_CHOICE  ] = TstPrn_WriteChoAnsExam,
-     [Tst_ANS_MULTIPLE_CHOICE] = TstPrn_WriteChoAnsExam,
-     [Tst_ANS_TEXT           ] = TstPrn_WriteTxtAnsExam,
+     [Tst_ANS_INT            ] = TstPrn_WriteIntAnsPrint,
+     [Tst_ANS_FLOAT          ] = TstPrn_WriteFltAnsPrint,
+     [Tst_ANS_TRUE_FALSE     ] = TstPrn_WriteTF_AnsPrint,
+     [Tst_ANS_UNIQUE_CHOICE  ] = TstPrn_WriteChoAnsPrint,
+     [Tst_ANS_MULTIPLE_CHOICE] = TstPrn_WriteChoAnsPrint,
+     [Tst_ANS_TEXT           ] = TstPrn_WriteTxtAnsPrint,
     };
 
    /***** Get correct answer and compute answer score depending on type *****/
@@ -912,13 +912,13 @@ void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/******************* Write integer answer in a test exam *********************/
+/******************* Write integer answer in a test print ********************/
 /*****************************************************************************/
 
-static void TstPrn_WriteIntAnsExam (struct UsrData *UsrDat,
-                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				    const struct Tst_Question *Question,
-				    unsigned Visibility)
+static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
+                                     const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				     const struct Tst_Question *Question,
+				     unsigned Visibility)
   {
    long IntAnswerUsr;
 
@@ -971,13 +971,13 @@ static void TstPrn_WriteIntAnsExam (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/******************** Write float answer in an test exam *********************/
+/******************** Write float answer in an test print ********************/
 /*****************************************************************************/
 
-static void TstPrn_WriteFltAnsExam (struct UsrData *UsrDat,
-                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				    const struct Tst_Question *Question,
-				    unsigned Visibility)
+static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
+                                     const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				     const struct Tst_Question *Question,
+				     unsigned Visibility)
   {
    double FloatAnsUsr = 0.0;
 
@@ -1031,13 +1031,13 @@ static void TstPrn_WriteFltAnsExam (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/***************** Write false / true answer in a test exam ******************/
+/***************** Write false / true answer in a test print *****************/
 /*****************************************************************************/
 
-static void TstPrn_WriteTF_AnsExam (struct UsrData *UsrDat,
-                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				    const struct Tst_Question *Question,
-				    unsigned Visibility)
+static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
+                                     const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				     const struct Tst_Question *Question,
+				     unsigned Visibility)
   {
    char AnsTFUsr;
 
@@ -1079,13 +1079,13 @@ static void TstPrn_WriteTF_AnsExam (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/********** Write single or multiple choice answer in a test exam ************/
+/********** Write single or multiple choice answer in a test print ***********/
 /*****************************************************************************/
 
-static void TstPrn_WriteChoAnsExam (struct UsrData *UsrDat,
-                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				    const struct Tst_Question *Question,
-				    unsigned Visibility)
+static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
+                                     const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				     const struct Tst_Question *Question,
+				     unsigned Visibility)
   {
    extern const char *Txt_TST_Answer_given_by_the_user;
    extern const char *Txt_TST_Answer_given_by_the_teachers;
@@ -1207,13 +1207,13 @@ static void TstPrn_WriteChoAnsExam (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/***************** Write text answer when assessing a test *******************/
+/************** Write text answer when assessing a test print ****************/
 /*****************************************************************************/
 
-static void TstPrn_WriteTxtAnsExam (struct UsrData *UsrDat,
-                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				    const struct Tst_Question *Question,
-				    unsigned Visibility)
+static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
+                                     const struct TstPrn_PrintedQuestion *PrintedQuestion,
+				     const struct Tst_Question *Question,
+				     unsigned Visibility)
   {
    unsigned NumOpt;
    char TextAnsUsr[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
@@ -1385,12 +1385,12 @@ static void TstPrn_StoreOneQstOfPrintInDB (const struct TstPrn_Print *Print,
 /************* Select users and dates to show their test exams ***************/
 /*****************************************************************************/
 
-void TstPrn_SelUsrsToViewUsrsExams (void)
+void TstPrn_SelUsrsToViewUsrsPrints (void)
   {
-   TstPrn_PutFormToSelectUsrsToViewUsrsExams (NULL);
+   TstPrn_PutFormToSelectUsrsToViewUsrsPrints (NULL);
   }
 
-static void TstPrn_PutFormToSelectUsrsToViewUsrsExams (__attribute__((unused)) void *Args)
+static void TstPrn_PutFormToSelectUsrsToViewUsrsPrints (__attribute__((unused)) void *Args)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Results;
@@ -1409,7 +1409,7 @@ static void TstPrn_PutFormToSelectUsrsToViewUsrsExams (__attribute__((unused)) v
 /******************** Select dates to show my test exams *********************/
 /*****************************************************************************/
 
-void TstPrn_SelDatesToSeeMyExams (void)
+void TstPrn_SelDatesToSeeMyPrints (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Results;
@@ -1440,7 +1440,7 @@ void TstPrn_SelDatesToSeeMyExams (void)
 /***************************** Show my test exams ****************************/
 /*****************************************************************************/
 
-void TstPrn_ShowMyExams (void)
+void TstPrn_ShowMyPrints (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Results;
@@ -1454,11 +1454,11 @@ void TstPrn_ShowMyExams (void)
                       Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
 
    /***** Header of the table with the list of users *****/
-   TstPrn_ShowHeaderExams ();
+   TstPrn_ShowHeaderPrints ();
 
    /***** List my test exams *****/
    TstCfg_GetConfigFromDB ();	// To get feedback type
-   TstPrn_ShowExams (&Gbl.Usrs.Me.UsrDat);
+   TstPrn_ShowUsrPrints (&Gbl.Usrs.Me.UsrDat);
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -1468,18 +1468,18 @@ void TstPrn_ShowMyExams (void)
 /******************** Get users and show their test exams ********************/
 /*****************************************************************************/
 
-void TstPrn_GetUsrsAndShowExams (void)
+void TstPrn_GetUsrsAndShowPrints (void)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
-				  TstPrn_ShowUsrsExams,NULL,
-                                  TstPrn_PutFormToSelectUsrsToViewUsrsExams,NULL);
+				  TstPrn_ShowUsrsPrints,NULL,
+                                  TstPrn_PutFormToSelectUsrsToViewUsrsPrints,NULL);
   }
 
 /*****************************************************************************/
-/********************* Show test exams for several users *********************/
+/********************* Show test prints for several users ********************/
 /*****************************************************************************/
 
-static void TstPrn_ShowUsrsExams (__attribute__((unused)) void *Args)
+static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Results;
@@ -1494,7 +1494,7 @@ static void TstPrn_ShowUsrsExams (__attribute__((unused)) void *Args)
 		      Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
 
    /***** Header of the table with the list of users *****/
-   TstPrn_ShowHeaderExams ();
+   TstPrn_ShowHeaderPrints ();
 
    /***** List the test exams of the selected users *****/
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
@@ -1508,7 +1508,7 @@ static void TstPrn_ShowUsrsExams (__attribute__((unused)) void *Args)
 	   {
 	    /***** Show test exams *****/
 	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-	    TstPrn_ShowExams (&Gbl.Usrs.Other.UsrDat);
+	    TstPrn_ShowUsrPrints (&Gbl.Usrs.Other.UsrDat);
 	   }
      }
 
@@ -1520,7 +1520,7 @@ static void TstPrn_ShowUsrsExams (__attribute__((unused)) void *Args)
 /************************ Show header of my test exams ***********************/
 /*****************************************************************************/
 
-static void TstPrn_ShowHeaderExams (void)
+static void TstPrn_ShowHeaderPrints (void)
   {
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -1546,16 +1546,16 @@ static void TstPrn_ShowHeaderExams (void)
   }
 
 /*****************************************************************************/
-/************ Show the test exams of a user in the current course ************/
+/************ Show the test prints of a user in the current course ***********/
 /*****************************************************************************/
 
-static void TstPrn_ShowExams (struct UsrData *UsrDat)
+static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
   {
    extern const char *Txt_View_test;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumExams;
-   unsigned NumExam;
+   unsigned NumPrints;
+   unsigned NumPrint;
    static unsigned UniqueId = 0;
    Dat_StartEndTime_t StartEndTime;
    char *Id;
@@ -1563,7 +1563,7 @@ static void TstPrn_ShowExams (struct UsrData *UsrDat)
    unsigned NumTotalQsts = 0;
    unsigned NumTotalQstsNotBlank = 0;
    double TotalScoreOfAllTests = 0.0;
-   unsigned NumExamsVisibleByTchs = 0;
+   unsigned NumPrintsVisibleByTchs = 0;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    struct
      {
@@ -1579,7 +1579,7 @@ static void TstPrn_ShowExams (struct UsrData *UsrDat)
    -----|______Exam_|_____|-----------------|_____|_Exam______|-----> time
       Start         |    End              Start   |          End
    */
-   NumExams =
+   NumPrints =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get test exams of a user",
 			      "SELECT ExaCod,"				// row[0]
 			             "UNIX_TIMESTAMP(StartTime),"	// row[1]
@@ -1601,14 +1601,14 @@ static void TstPrn_ShowExams (struct UsrData *UsrDat)
 
    /***** Show user's data *****/
    HTM_TR_Begin (NULL);
-   Usr_ShowTableCellWithUsrData (UsrDat,NumExams);
+   Usr_ShowTableCellWithUsrData (UsrDat,NumPrints);
 
    /***** Get and print test exams *****/
-   if (NumExams)
+   if (NumPrints)
      {
-      for (NumExam = 0;
-           NumExam < NumExams;
-           NumExam++)
+      for (NumPrint = 0;
+           NumPrint < NumPrints;
+           NumPrint++)
         {
          row = mysql_fetch_row (mysql_res);
 
@@ -1655,7 +1655,7 @@ static void TstPrn_ShowExams (struct UsrData *UsrDat)
                break;
 	   }
 
-         if (NumExam)
+         if (NumPrint)
             HTM_TR_Begin (NULL);
 
          /* Write date and time (row[1] and row[2] hold UTC date-times) */
@@ -1744,11 +1744,11 @@ static void TstPrn_ShowExams (struct UsrData *UsrDat)
 	 HTM_TR_End ();
 
 	 if (Print.AllowTeachers)
-            NumExamsVisibleByTchs++;
+            NumPrintsVisibleByTchs++;
         }
 
       /***** Write totals for this user *****/
-      TstPrn_ShowExamsSummaryRow (ItsMe,NumExamsVisibleByTchs,
+      TstPrn_ShowPrintsSummaryRow (ItsMe,NumPrintsVisibleByTchs,
                                   NumTotalQsts,NumTotalQstsNotBlank,
                                   TotalScoreOfAllTests);
      }
@@ -1787,8 +1787,8 @@ long TstPrn_GetParamPrnCod (void)
 /**************** Show row with summary of user's test exams *****************/
 /*****************************************************************************/
 
-static void TstPrn_ShowExamsSummaryRow (bool ItsMe,
-                                        unsigned NumExams,
+static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
+                                        unsigned NumPrints,
                                         unsigned NumTotalQsts,
                                         unsigned NumTotalQstsNotBlank,
                                         double TotalScoreOfAllTests)
@@ -1808,7 +1808,7 @@ static void TstPrn_ShowExamsSummaryRow (bool ItsMe,
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
 	 ICanViewTotalScore = ItsMe ||
-			      NumExams;
+			      NumPrints;
 	 break;
       case Rol_SYS_ADM:
 	 ICanViewTotalScore = true;
@@ -1824,18 +1824,18 @@ static void TstPrn_ShowExamsSummaryRow (bool ItsMe,
    /***** Row title *****/
    HTM_TD_Begin ("colspan=\"2\" class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    HTM_TxtColonNBSP (Txt_Visible_tests);
-   HTM_Unsigned (NumExams);
+   HTM_Unsigned (NumPrints);
    HTM_TD_End ();
 
    /***** Write total number of questions *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumExams)
+   if (NumPrints)
       HTM_Unsigned (NumTotalQsts);
    HTM_TD_End ();
 
    /***** Write total number of questions not blank *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumExams)
+   if (NumPrints)
       HTM_Unsigned (NumTotalQstsNotBlank);
    HTM_TD_End ();
 
@@ -1871,7 +1871,7 @@ static void TstPrn_ShowExamsSummaryRow (bool ItsMe,
 /******************** Show one test exam of another user *********************/
 /*****************************************************************************/
 
-void TstPrn_ShowOneExam (void)
+void TstPrn_ShowOnePrint (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Result;
@@ -2072,13 +2072,13 @@ void TstPrn_ShowOneExam (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
-      TstPrn_ShowTagsPresentInAnExam (Print.PrnCod);
+      TstPrn_ShowTagsPresentInAPrint (Print.PrnCod);
       HTM_TD_End ();
 
       HTM_TR_End ();
 
       /***** Write answers and solutions *****/
-      TstPrn_ShowExamAnswers (&Gbl.Usrs.Other.UsrDat,&Print,
+      TstPrn_ShowPrintAnswers (&Gbl.Usrs.Other.UsrDat,&Print,
 			      TstCfg_GetConfigVisibility ());
 
       /***** End table *****/
@@ -2108,7 +2108,7 @@ void TstPrn_ShowOneExam (void)
 /********************* Show test tags in this test exam **********************/
 /*****************************************************************************/
 
-static void TstPrn_ShowTagsPresentInAnExam (long ResCod)
+static void TstPrn_ShowTagsPresentInAPrint (long ResCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumTags;
@@ -2137,7 +2137,7 @@ static void TstPrn_ShowTagsPresentInAnExam (long ResCod)
 /************** Show user's and correct answers of a test exam ***************/
 /*****************************************************************************/
 
-void TstPrn_ShowExamAnswers (struct UsrData *UsrDat,
+void TstPrn_ShowPrintAnswers (struct UsrData *UsrDat,
 			     struct TstPrn_Print *Print,
 			     unsigned Visibility)
   {
@@ -2290,7 +2290,7 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
 /********************** Remove test exams made by a user *********************/
 /*****************************************************************************/
 
-void TstPrn_RemoveExamsMadeByUsrInAllCrss (long UsrCod)
+void TstPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
   {
    /***** Remove test exams made by the specified user *****/
    DB_QueryDELETE ("can not remove test exams made by a user",
@@ -2310,7 +2310,7 @@ void TstPrn_RemoveExamsMadeByUsrInAllCrss (long UsrCod)
 /*************** Remove test exams made by a user in a course ****************/
 /*****************************************************************************/
 
-void TstPrn_RemoveExamsMadeByUsrInCrs (long UsrCod,long CrsCod)
+void TstPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
   {
    /***** Remove test exams made by the given user *****/
    DB_QueryDELETE ("can not remove test exams made by a user in a course",
@@ -2330,7 +2330,7 @@ void TstPrn_RemoveExamsMadeByUsrInCrs (long UsrCod,long CrsCod)
 /******************* Remove all test exams made in a course ******************/
 /*****************************************************************************/
 
-void TstPrn_RemoveCrsExams (long CrsCod)
+void TstPrn_RemoveCrsPrints (long CrsCod)
   {
    /***** Remove questions of test exams made in the course *****/
    DB_QueryDELETE ("can not remove test exams made in a course",

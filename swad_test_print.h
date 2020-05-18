@@ -70,10 +70,10 @@ void TstPrn_ResetPrint (struct TstPrn_Print *Print);
 void TstPrn_CreatePrintInDB (struct TstPrn_Print *Print);
 void TstPrn_UpdatePrintInDB (const struct TstPrn_Print *Print);
 
-void TstPrn_ShowExamAfterAssess (struct TstPrn_Print *Print);
+void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print);
 
 void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
-                                                bool UpdateQstScore);
+                                                   bool UpdateQstScore);
 void TstPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				struct Tst_Question *Question);
 
@@ -105,23 +105,23 @@ void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
 			      const struct Tst_Question *Question,
 			      unsigned Visibility);
 
-void TstPrn_SelUsrsToViewUsrsExams (void);
-void TstPrn_SelDatesToSeeMyExams (void);
-void TstPrn_ShowMyExams (void);
-void TstPrn_GetUsrsAndShowExams (void);
+void TstPrn_SelUsrsToViewUsrsPrints (void);
+void TstPrn_SelDatesToSeeMyPrints (void);
+void TstPrn_ShowMyPrints (void);
+void TstPrn_GetUsrsAndShowPrints (void);
 
 void TstPrn_PutParamPrnCod (long ExaCod);
 long TstPrn_GetParamPrnCod (void);
 
-void TstPrn_ShowOneExam (void);
-void TstPrn_ShowExamAnswers (struct UsrData *UsrDat,
-			     struct TstPrn_Print *Print,
-			     unsigned Visibility);
+void TstPrn_ShowOnePrint (void);
+void TstPrn_ShowPrintAnswers (struct UsrData *UsrDat,
+			      struct TstPrn_Print *Print,
+			      unsigned Visibility);
 void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print);
 
 void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print);
-void TstPrn_RemoveExamsMadeByUsrInAllCrss (long UsrCod);
-void TstPrn_RemoveExamsMadeByUsrInCrs (long UsrCod,long CrsCod);
-void TstPrn_RemoveCrsExams (long CrsCod);
+void TstPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod);
+void TstPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod);
+void TstPrn_RemoveCrsPrints (long CrsCod);
 
 #endif

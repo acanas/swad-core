@@ -71,6 +71,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void MchRes_UpdateMyMatchResult (long MchCod,const struct TstPrn_Print *Print);
+
 static void MchRes_PutFormToSelUsrsToViewMchResults (void *Games);
 
 static void MchRes_ListMyMchResultsInCrs (struct Gam_Games *Games);
@@ -105,6 +107,66 @@ static void MchRes_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 
 static bool MchRes_CheckIfICanSeeMatchResult (struct Mch_Match *Match,long UsrCod);
 static bool MchRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility);
+
+/*****************************************************************************/
+/*********** Compute score and create/update my result in a match ************/
+/*****************************************************************************/
+
+void MchRes_ComputeScoreAndUpdateMyMatchResult (long MchCod)
+  {
+   struct TstPrn_Print Print;
+
+   /***** Compute my match result *****/
+   TstPrn_ResetPrint (&Print);
+   Mch_GetMatchQuestionsFromDB (MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,&Print);
+   Mch_ComputeScore (&Print);
+
+   /***** Update my match result in database *****/
+   MchRes_UpdateMyMatchResult (MchCod,&Print);
+  }
+
+/*****************************************************************************/
+/******************** Create/update my result in a match *********************/
+/*****************************************************************************/
+
+static void MchRes_UpdateMyMatchResult (long MchCod,const struct TstPrn_Print *Print)
+  {
+   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
+   if (DB_QueryCOUNT ("can not get if match result exists",
+		      "SELECT COUNT(*) FROM mch_results"
+		      " WHERE MchCod=%ld AND UsrCod=%ld",
+		      MchCod,Gbl.Usrs.Me.UsrDat.UsrCod))	// Match print exists
+      /* Update result */
+      DB_QueryUPDATE ("can not update match result",
+		       "UPDATE mch_results"
+		       " SET EndTime=NOW(),"
+			    "NumQsts=%u,"
+			    "NumQstsNotBlank=%u,"
+			    "Score='%.15lg'"
+		       " WHERE MchCod=%ld AND UsrCod=%ld",
+		       Print->NumQsts,
+		       Print->NumQstsNotBlank,
+		       Print->Score,
+		       MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   else								// Match print doesn't exist
+      /* Create result */
+      DB_QueryINSERT ("can not create match result",
+		       "INSERT mch_results "
+		       "(MchCod,UsrCod,StartTime,EndTime,NumQsts,NumQstsNotBlank,Score)"
+		       " VALUES "
+		       "(%ld,"		// MchCod
+		       "%ld,"		// UsrCod
+		       "NOW(),"		// StartTime
+		       "NOW(),"		// EndTime
+		       "%u,"		// NumQsts
+		       "%u,"		// NumQstsNotBlank
+		       "'%.15lg')",	// Score
+		       MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+		       Print->NumQsts,
+		       Print->NumQstsNotBlank,
+		       Print->Score);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
 
 /*****************************************************************************/
 /*************************** Show my matches results *************************/
@@ -1144,8 +1206,7 @@ void MchRes_ShowOneMchResult (void)
    if (ICanViewResult)	// I am allowed to view this match result
      {
       /***** Get questions and user's answers of the match result from database *****/
-      MchRes_GetMatchResultQuestionsFromDB (Match.MchCod,UsrDat->UsrCod,
-					    &Print);
+      Mch_GetMatchQuestionsFromDB (Match.MchCod,UsrDat->UsrCod,&Print);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Match.Title,
@@ -1274,7 +1335,7 @@ void MchRes_ShowOneMchResult (void)
       HTM_TR_End ();
 
       /***** Write answers and solutions *****/
-      TstPrn_ShowExamAnswers (UsrDat,&Print,Game.Visibility);
+      TstPrn_ShowPrintAnswers (UsrDat,&Print,Game.Visibility);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -1297,69 +1358,6 @@ void MchRes_ShowOneMchResult (void)
      }
    else	// I am not allowed to view this match result
       Lay_NoPermissionExit ();
-  }
-
-/*****************************************************************************/
-/************ Get the questions of a match result from database **************/
-/*****************************************************************************/
-
-void MchRes_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
-				           struct TstPrn_Print *Print)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumQst;
-   long LongNum;
-   unsigned QstInd;
-   struct Mch_UsrAnswer UsrAnswer;
-
-   /***** Get questions and answers of a match result *****/
-   Print->NumQsts = (unsigned)
-		    DB_QuerySELECT (&mysql_res,"can not get questions and answers"
-					       " of a match result",
-				    "SELECT gam_questions.QstCod,"	// row[0]
-					   "gam_questions.QstInd,"	// row[1]
-					   "mch_indexes.Indexes"	// row[2]
-				    " FROM mch_matches,gam_questions,mch_indexes"
-				    " WHERE mch_matches.MchCod=%ld"
-				    " AND mch_matches.GamCod=gam_questions.GamCod"
-				    " AND mch_matches.MchCod=mch_indexes.MchCod"
-				    " AND gam_questions.QstInd=mch_indexes.QstInd"
-				    " ORDER BY gam_questions.QstInd",
-				    MchCod);
-   for (NumQst = 0, Print->NumQstsNotBlank = 0;
-	NumQst < Print->NumQsts;
-	NumQst++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get question code (row[0]) */
-      if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	 Lay_ShowErrorAndExit ("Wrong code of question.");
-
-      /* Get question index (row[1]) */
-      if ((LongNum = Str_ConvertStrCodToLongCod (row[1])) < 0)
-	 Lay_ShowErrorAndExit ("Wrong code of question.");
-      QstInd = (unsigned) LongNum;
-
-      /* Get indexes for this question (row[2]) */
-      Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[2],
-                Tst_MAX_BYTES_INDEXES_ONE_QST);
-
-      /* Get answers selected by user for this question */
-      Mch_GetQstAnsFromDB (MchCod,UsrCod,QstInd,&UsrAnswer);
-      if (UsrAnswer.AnsInd >= 0)	// UsrAnswer.AnsInd >= 0 ==> answer selected
-	{
-         snprintf (Print->PrintedQuestions[NumQst].StrAnswers,Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
-		   "%d",UsrAnswer.AnsInd);
-         Print->NumQstsNotBlank++;
-        }
-      else				// UsrAnswer.AnsInd < 0 ==> no answer selected
-	 Print->PrintedQuestions[NumQst].StrAnswers[0] = '\0';	// Empty answer
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
