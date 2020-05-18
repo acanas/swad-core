@@ -6428,6 +6428,7 @@ static void Brw_WriteDatesAssignment (void)
    static unsigned UniqueId = 0;
    char *Id;
 
+   /***** Begin table cell *****/
    HTM_TD_Begin ("colspan=\"2\" class=\"%s RM COLOR%u\"",
 		 Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
 					    "ASG_LST_DATE_RED",
@@ -6462,6 +6463,8 @@ static void Brw_WriteDatesAssignment (void)
      }
    else
       HTM_TxtF ("&nbsp;(%s)",Txt_unknown_assignment);
+
+   /***** End table cell *****/
    HTM_TD_End ();
   }
 

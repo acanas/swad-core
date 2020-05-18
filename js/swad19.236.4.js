@@ -153,12 +153,10 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
 		if (WriteWeekDay) {
 			DayOfWeek = d.getDay();
 			DayOfWeek = (DayOfWeek == 0) ? 6 : DayOfWeek - 1;
-			StrDate = StrDate + Separator + DAYS[DayOfWeek];
+			StrDate += Separator + DAYS[DayOfWeek];
 		}
+		StrDate += Separator;
 	}
-	else if (WriteWeekDay)
-		StrDate = Separator;
-	StrDate = StrDate + Separator;
 
 	/* Set HH:MM:SS */
 	StrHou = '';

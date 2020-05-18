@@ -557,10 +557,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.236.3 (2020-05-18)"
+#define Log_PLATFORM_VERSION	"SWAD 19.236.4 (2020-05-18)"
 #define CSS_FILE		"swad19.230.1.css"
-#define JS_FILE			"swad19.230.3.js"
+#define JS_FILE			"swad19.236.4.js"
 /*
+	Version 19.236.4: May 18, 2020  Fixed minor bug in dates. (301244 lines)
 	Version 19.236.3: May 18, 2020  Number of players in a match now is calculated as number of users who have result, even in blank. (301243 lines)
 	Version 19.236.2: May 18, 2020  Fixed bug in matches, reported by Javier Fernández Baldomero. (301241 lines)
 	Version 19.236.1: May 18, 2020  Fixed bugs in exam results. (301205 lines)
