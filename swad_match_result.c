@@ -398,15 +398,15 @@ static void MchRes_PutFormToSelUsrsToViewMchResults (void *Games)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
-   extern const char *Txt_View_matches_results;
+   extern const char *Txt_View_results;
 
    if (Games)	// Not used
       Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-					ActSeeAllMchResCrs,
+					ActSeeUsrMchResCrs,
 					NULL,NULL,
 					Txt_Results,
 					Hlp_ASSESSMENT_Games_results,
-					Txt_View_matches_results,
+					Txt_View_results,
 					false);	// Do not put form with date range
   }
 
@@ -634,7 +634,6 @@ static void MchRes_ShowResultsEnd (void)
 
 static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
   {
-   extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Games;
    extern const char *Txt_Game;
@@ -649,7 +648,7 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Games,
                  NULL,NULL,
-                 Hlp_ASSESSMENT_Games_results,Box_CLOSABLE);
+                 NULL,Box_CLOSABLE);
 
    /***** Begin form to update the results
 	  depending on the games selected *****/
@@ -1472,4 +1471,3 @@ static bool MchRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility
 	 return false;
      }
   }
-

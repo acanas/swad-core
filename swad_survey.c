@@ -460,7 +460,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    extern const char *Txt_Course;
    extern const char *Txt_Users;
    extern const char *Txt_Answer_survey;
-   extern const char *Txt_View_survey_results;
+   extern const char *Txt_View_results;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -616,7 +616,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
          WhichGroups = Grp_GetParamWhichGroups ();
 	 Grp_PutParamWhichGroups (&WhichGroups);
 	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-	 Btn_PutConfirmButtonInline (Txt_View_survey_results);
+	 Btn_PutConfirmButtonInline (Txt_View_results);
 	 Frm_EndForm ();
 
 	 HTM_DIV_End ();

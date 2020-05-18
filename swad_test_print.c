@@ -1394,14 +1394,14 @@ static void TstPrn_PutFormToSelectUsrsToViewUsrsPrints (__attribute__((unused)) 
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Results;
-   extern const char *Txt_View_test_results;
+   extern const char *Txt_View_results;
 
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-				     ActSeeUsrTstRes,
+				     ActSeeUsrTstResCrs,
 				     NULL,NULL,
 				     Txt_Results,
 				     Hlp_ASSESSMENT_Tests_results,
-				     Txt_View_test_results,
+				     Txt_View_results,
 				     true);	// Put form with date range
   }
 
@@ -1413,7 +1413,7 @@ void TstPrn_SelDatesToSeeMyPrints (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Results;
-   extern const char *Txt_View_test_results;
+   extern const char *Txt_View_results;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
@@ -1421,7 +1421,7 @@ void TstPrn_SelDatesToSeeMyPrints (void)
      };
 
    /***** Begin form *****/
-   Frm_StartForm (ActSeeMyTstRes);
+   Frm_StartForm (ActSeeMyTstResCrs);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Results,
@@ -1430,7 +1430,7 @@ void TstPrn_SelDatesToSeeMyPrints (void)
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
    /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_View_test_results);
+   Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_View_results);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1734,7 +1734,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanView.Exam)
 	   {
-	    Frm_StartForm (Gbl.Action.Act == ActSeeMyTstRes ? ActSeeOneTstResMe :
+	    Frm_StartForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
 						              ActSeeOneTstResOth);
 	    TstPrn_PutParamPrnCod (Print.PrnCod);
 	    Ico_PutIconLink ("tasks.svg",Txt_View_test);
@@ -2287,12 +2287,12 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/********************** Remove test exams made by a user *********************/
+/******************* Remove test exam prints made by a user ******************/
 /*****************************************************************************/
 
 void TstPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
   {
-   /***** Remove test exams made by the specified user *****/
+   /***** Remove test prints questions for the given user *****/
    DB_QueryDELETE ("can not remove test exams made by a user",
 		   "DELETE FROM tst_exam_questions"
 	           " USING tst_exams,tst_exam_questions"
@@ -2300,6 +2300,7 @@ void TstPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
                    " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
 		   UsrCod);
 
+   /***** Remove test prints made by the given user *****/
    DB_QueryDELETE ("can not remove test exams made by a user",
 		   "DELETE FROM tst_exams"
 	           " WHERE UsrCod=%ld",
@@ -2307,7 +2308,7 @@ void TstPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
   }
 
 /*****************************************************************************/
-/*************** Remove test exams made by a user in a course ****************/
+/************ Remove test exam prints made by a user in a course *************/
 /*****************************************************************************/
 
 void TstPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
@@ -2327,7 +2328,7 @@ void TstPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
   }
 
 /*****************************************************************************/
-/******************* Remove all test exams made in a course ******************/
+/**************** Remove all test exam prints made in a course ***************/
 /*****************************************************************************/
 
 void TstPrn_RemoveCrsPrints (long CrsCod)

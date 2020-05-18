@@ -542,7 +542,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 
 void Tag_ShowFormEditTags (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests_configuring_tests;
+   extern const char *Hlp_ASSESSMENT_Questions_editing_tags;
    extern const char *Txt_No_test_questions;
    extern const char *Txt_Tags;
    MYSQL_RES *mysql_res;
@@ -557,7 +557,7 @@ void Tag_ShowFormEditTags (void)
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,Txt_Tags,
                          NULL,NULL,
-                         Hlp_ASSESSMENT_Tests_configuring_tests,Box_NOT_CLOSABLE,2);
+                         Hlp_ASSESSMENT_Questions_editing_tags,Box_NOT_CLOSABLE,2);
 
       /***** Show tags *****/
       for (NumTag = 0;

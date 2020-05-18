@@ -36,6 +36,7 @@
 #include "swad_database.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
+#include "swad_exam_print.h"
 #include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_forum.h"
@@ -43,6 +44,7 @@
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_language.h"
+#include "swad_match.h"
 #include "swad_message.h"
 #include "swad_nickname.h"
 #include "swad_notification.h"
@@ -1081,8 +1083,10 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
       Ale_ShowAlert (Ale_SUCCESS,Txt_Briefcase_of_THE_USER_X_has_been_removed,
                      UsrDat->FullName);
 
-   /***** Remove test results made by user in all courses *****/
+   /***** Remove test, exams and matches made by user in all courses *****/
    TstPrn_RemovePrintsMadeByUsrInAllCrss (UsrDat->UsrCod);
+   ExaPrn_RemovePrintsMadeByUsrInAllCrss (UsrDat->UsrCod);
+   Mch_RemoveMatchesMadeByUsrInAllCrss (UsrDat->UsrCod);
 
    /***** Remove user's notifications *****/
    Ntf_RemoveUsrNtfs (UsrDat->UsrCod);

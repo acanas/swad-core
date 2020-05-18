@@ -37,6 +37,7 @@
 #include "swad_database.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
+#include "swad_exam_print.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -4117,8 +4118,10 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 	 /* Remove works zone in course */
          Brw_RemoveUsrWorksInCrs (UsrDat,Crs);
 
-         /* Remove user's matches in course */
-         Mch_RemoveUsrFromMatchTablesInCrs (UsrDat->UsrCod,Crs->CrsCod);
+	 /* Remove tests, exams and matches results made by user in course */
+	 TstPrn_RemovePrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
+	 ExaPrn_RemovePrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
+         Mch_RemoveMatchesMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
 	}
 
       /***** Remove fields of this user in its course record *****/
@@ -4126,9 +4129,6 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 
       /***** Remove some information about files in course and groups *****/
       Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (UsrDat->UsrCod,Crs->CrsCod);
-
-      /***** Remove test results made by user in course *****/
-      TstPrn_RemovePrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Set all the notifications for this user in this course as removed,
              except notifications about new messages *****/

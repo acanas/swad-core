@@ -684,10 +684,10 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRcvCfgTst	] = { 454,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TstCfg_ReceiveConfigTst	,NULL},
 
    [ActReqSeeMyTstRes	] = {1083,-1,TabUnk,ActReqTst		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,TstPrn_SelDatesToSeeMyPrints	,NULL},
-   [ActSeeMyTstRes	] = {1084,-1,TabUnk,ActReqTst		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TstPrn_ShowMyPrints		,NULL},
+   [ActSeeMyTstResCrs	] = {1084,-1,TabUnk,ActReqTst		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TstPrn_ShowMyPrints		,NULL},
    [ActSeeOneTstResMe	] = {1085,-1,TabUnk,ActReqTst		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TstPrn_ShowOnePrint		,NULL},
    [ActReqSeeUsrTstRes	] = {1080,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,TstPrn_SelUsrsToViewUsrsPrints	,NULL},
-   [ActSeeUsrTstRes	] = {1081,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TstPrn_GetUsrsAndShowPrints	,NULL},
+   [ActSeeUsrTstResCrs	] = {1081,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TstPrn_GetUsrsAndShowPrints	,NULL},
    [ActSeeOneTstResOth	] = {1082,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TstPrn_ShowOnePrint		,NULL},
 
    [ActSeeExa		] = {1849,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_SeeOneExam			,NULL},
@@ -732,11 +732,13 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActSeeMyExaResExa	] = {1868,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyResultsInExa	,NULL},
    [ActSeeMyExaResSes	] = {1869,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyResultsInSes	,NULL},
    [ActSeeOneExaResMe	] = {1870,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowOneExaResult	,NULL},
-   [ActReqSeeAllExaRes	] = {1871,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_SelUsrsToViewResults	,NULL},
-   [ActSeeAllExaResCrs	] = {1872,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowAllResultsInCrs	,NULL},
-   [ActSeeAllExaResExa	] = {1873,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowAllResultsInExa	,NULL},
-   [ActSeeAllExaResSes	] = {1874,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowAllResultsInSes	,NULL},
+
+   [ActReqSeeUsrExaRes	] = {1871,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_SelUsrsToViewResults	,NULL},
+   [ActSeeUsrExaResCrs	] = {1872,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowAllResultsInCrs	,NULL},
+   [ActSeeUsrExaResExa	] = {1873,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowAllResultsInExa	,NULL},
+   [ActSeeUsrExaResSes	] = {1874,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowAllResultsInSes	,NULL},
    [ActSeeOneExaResOth	] = {1875,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowOneExaResult	,NULL},
+
    [ActChgVisExaRes	] = {1876,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSes_ToggleVisResultsSesUsr	,NULL},
 
    [ActSeeGam		] = {1650,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeOneGame			,NULL},
@@ -765,10 +767,10 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActSeeMyMchResMch	] = {1812,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowMyMchResultsInMch	,NULL},
    [ActSeeOneMchResMe	] = {1797,-1,TabUnk,ActSeeAllGam	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowOneMchResult	,NULL},
 
-   [ActReqSeeAllMchRes	] = {1798,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_SelUsrsToViewMchResults	,NULL},
-   [ActSeeAllMchResCrs	] = {1799,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowAllMchResultsInCrs	,NULL},
-   [ActSeeAllMchResGam	] = {1811,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowAllMchResultsInGam	,NULL},
-   [ActSeeAllMchResMch	] = {1813,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowAllMchResultsInMch	,NULL},
+   [ActReqSeeUsrMchRes	] = {1798,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_SelUsrsToViewMchResults	,NULL},
+   [ActSeeUsrMchResCrs	] = {1799,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowAllMchResultsInCrs	,NULL},
+   [ActSeeUsrMchResGam	] = {1811,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowAllMchResultsInGam	,NULL},
+   [ActSeeUsrMchResMch	] = {1813,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowAllMchResultsInMch	,NULL},
    [ActSeeOneMchResOth	] = {1800,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchRes_ShowOneMchResult	,NULL},
 
    [ActChgVisResMchUsr	] = {1801,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ToggleVisResultsMchUsr	,NULL},
@@ -2887,10 +2889,10 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActSeeDocCrs,		// #1078
 	ActSeeMrkCrs,		// #1079
 	ActReqSeeUsrTstRes,	// #1080
-	ActSeeUsrTstRes,	// #1081
+	ActSeeUsrTstResCrs,	// #1081
 	ActSeeOneTstResOth,	// #1082
 	ActReqSeeMyTstRes,	// #1083
-	ActSeeMyTstRes,		// #1084
+	ActSeeMyTstResCrs,		// #1084
 	ActSeeOneTstResMe,	// #1085
 	ActReqDatSeeMrkCrs,	// #1086
 	ActReqDatSeeMrkGrp,	// #1087
@@ -3604,8 +3606,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #1795
 	ActSeeMyMchResCrs,	// #1796
 	ActSeeOneMchResMe,	// #1797
-	ActReqSeeAllMchRes,	// #1798
-	ActSeeAllMchResCrs,	// #1799
+	ActReqSeeUsrMchRes,	// #1798
+	ActSeeUsrMchResCrs,	// #1799
 	ActSeeOneMchResOth,	// #1800
 	ActChgVisResMchUsr,	// #1801
 	ActChgNumColMch,	// #1802
@@ -3617,9 +3619,9 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
         ActSeeMchAnsQstStd,	// #1808
         ActRemMchAnsQstStd,	// #1809
         ActSeeMyMchResGam,	// #1810
-        ActSeeAllMchResGam,	// #1811
+        ActSeeUsrMchResGam,	// #1811
         ActSeeMyMchResMch,	// #1812
-        ActSeeAllMchResMch,	// #1813
+        ActSeeUsrMchResMch,	// #1813
 	ActMchCntDwn,		// #1814
 	ActChgCtrLatCfg,	// #1815
 	ActChgCtrLgtCfg,	// #1816
@@ -3677,10 +3679,10 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActSeeMyExaResExa,	// #1868
 	ActSeeMyExaResSes,	// #1869
 	ActSeeOneExaResMe,	// #1870
-	ActReqSeeAllExaRes,	// #1871
-	ActSeeAllExaResCrs,	// #1872
-	ActSeeAllExaResExa,	// #1873
-	ActSeeAllExaResSes,	// #1874
+	ActReqSeeUsrExaRes,	// #1871
+	ActSeeUsrExaResCrs,	// #1872
+	ActSeeUsrExaResExa,	// #1873
+	ActSeeUsrExaResSes,	// #1874
 	ActSeeOneExaResOth,	// #1875
 	ActChgVisExaRes,	// #1876
 	ActFrmNewExa,		// #1877

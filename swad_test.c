@@ -242,8 +242,10 @@ static void Tst_InsertAnswersIntoDB (struct Tst_Question *Question);
 
 static void Tst_RemAnsFromQst (long QstCod);
 
-static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
+static void Tst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod);
 static void Tst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod);
+
+static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
 static void Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
 
 static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
@@ -1160,7 +1162,7 @@ void Tst_RequestEditTests (void)
 
 static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
   {
-   extern const char *Hlp_ASSESSMENT_Tests_editing_questions;
+   extern const char *Hlp_ASSESSMENT_Questions_editing_questions;
    extern const char *Txt_No_test_questions;
    extern const char *Txt_Question_bank;
    extern const char *Txt_Show_questions;
@@ -1174,7 +1176,7 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Question_bank,
                  Tst_PutIconsRequestBankQsts,NULL,
-                 Hlp_ASSESSMENT_Tests_editing_questions,Box_NOT_CLOSABLE);
+                 Hlp_ASSESSMENT_Questions_editing_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
    if ((Test->Tags.Num = Tag_GetAllTagsFromCurrentCrs (&mysql_res)))
@@ -3628,7 +3630,7 @@ void Tst_ShowFormEditOneQst (void)
 
 static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
   {
-   extern const char *Hlp_ASSESSMENT_Tests_writing_a_question;
+   extern const char *Hlp_ASSESSMENT_Questions_writing_a_question;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Question_code_X;
    extern const char *Txt_New_question;
@@ -3670,13 +3672,13 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
      {
       Box_BoxBegin (NULL,Str_BuildStringLong (Txt_Question_code_X,Question->QstCod),
 		    Tst_PutIconToRemoveOneQst,&Question->QstCod,
-                    Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE);
+                    Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
       Str_FreeString ();
      }
    else
       Box_BoxBegin (NULL,Txt_New_question,
                     NULL,NULL,
-                    Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE);
+                    Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
    Frm_StartForm (ActRcvTstQst);
@@ -5339,16 +5341,9 @@ void Tst_RemoveOneQst (void)
 
 static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod)
   {
-   long MedCod;
-
    /***** Remove media associated to question *****/
-   /* Remove media associated to answers */
+   Tst_RemoveMediaFromStemOfQst (CrsCod,QstCod);
    Tst_RemoveMediaFromAllAnsOfQst (CrsCod,QstCod);
-
-   /* Remove media associated to stem */
-   MedCod = Tst_GetMedCodFromDB (CrsCod,QstCod,
-                                 -1L);	// Get current media code associated to stem
-   Med_RemoveMedia (MedCod);
 
    /***** Remove the question from all the tables *****/
    /* Remove answers and tags from this test question */
@@ -5633,6 +5628,9 @@ void Tst_UpdateQstScoreInDB (struct TstPrn_PrintedQuestion *PrintedQuestion)
 
 void Tst_RemoveCrsTests (long CrsCod)
   {
+   /***** Remove all test exam prints made in the course *****/
+   TstPrn_RemoveCrsPrints (CrsCod);
+
    /***** Remove test configuration of the course *****/
    DB_QueryDELETE ("can not remove configuration of tests of a course",
 		   "DELETE FROM tst_config WHERE CrsCod=%ld",
@@ -5653,16 +5651,17 @@ void Tst_RemoveCrsTests (long CrsCod)
 		   "DELETE FROM tst_tags WHERE CrsCod=%ld",
 		   CrsCod);
 
+   /***** Remove media associated to test questions in the course *****/
+   Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (CrsCod);
+   Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (CrsCod);
+
    /***** Remove test answers in the course *****/
    DB_QueryDELETE ("can not remove answers of tests of a course",
-		   "DELETE FROM tst_answers USING tst_questions,tst_answers"
+		   "DELETE FROM tst_answers"
+		   " USING tst_questions,tst_answers"
                    " WHERE tst_questions.CrsCod=%ld"
                    " AND tst_questions.QstCod=tst_answers.QstCod",
 		   CrsCod);
-
-   /***** Remove media associated to test questions in the course *****/
-   Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (CrsCod);
-   Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (CrsCod);
 
    /***** Remove test questions in the course *****/
    DB_QueryDELETE ("can not remove test questions of a course",
@@ -5683,23 +5682,24 @@ static void Tst_RemAnsFromQst (long QstCod)
   }
 
 /*****************************************************************************/
-/** Remove all media associated to stems of all test questions in a course ***/
+/************ Remove media associated to stem of a test question *************/
 /*****************************************************************************/
 
-static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
+static void Tst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
 
-   /***** Get media codes associated to stems of test questions from database *****/
+   /***** Get media code associated to stem of test question from database *****/
    NumMedia =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
 			      "SELECT MedCod"	// row[0]
 			      " FROM tst_questions"
-			      " WHERE CrsCod=%ld",
-			      CrsCod);
+			      " WHERE QstCod=%ld"
+			      " AND CrsCod=%ld",	// Extra check
+			      QstCod,CrsCod);
 
-   /***** Go over result removing media files *****/
+   /***** Go over result removing media *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
 
    /***** Free structure that stores the query result *****/
@@ -5719,14 +5719,38 @@ static void Tst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod)
    NumMedia =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
 			      "SELECT tst_answers.MedCod"	// row[0]
-			      " FROM tst_questions,tst_answers"
-			      " WHERE tst_questions.CrsCod=%ld"	// Extra check
-			      " AND tst_questions.QstCod=%ld"	// Extra check
-			      " AND tst_questions.QstCod=tst_answers.QstCod"
-			      " AND tst_answers.QstCod=%ld",
-			      CrsCod,QstCod,QstCod);
+			      " FROM tst_answers,tst_questions"
+			      " WHERE tst_answers.QstCod=%ld",
+			      " AND tst_answers.QstCod=tst_questions.QstCod"
+			      " AND tst_questions.CrsCod=%ld"	// Extra check
+			      " AND tst_questions.QstCod=%ld",	// Extra check
+			      QstCod,CrsCod,QstCod);
 
    /***** Go over result removing media *****/
+   Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/** Remove all media associated to stems of all test questions in a course ***/
+/*****************************************************************************/
+
+static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
+  {
+   MYSQL_RES *mysql_res;
+   unsigned NumMedia;
+
+   /***** Get media codes associated to stems of test questions from database *****/
+   NumMedia =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
+			      "SELECT MedCod"	// row[0]
+			      " FROM tst_questions"
+			      " WHERE CrsCod=%ld",
+			      CrsCod);
+
+   /***** Go over result removing media files *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
 
    /***** Free structure that stores the query result *****/

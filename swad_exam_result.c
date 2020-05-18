@@ -81,7 +81,7 @@ static void ExaRes_ListMyResultsInCrs (struct Exa_Exams *Exams);
 static void ExaRes_ListMyResultsInExa (struct Exa_Exams *Exams,long ExaCod);
 static void ExaRes_ListMyResultsInSes (struct Exa_Exams *Exams,long SesCod);
 
-static void ExaRes_PutFormToSelUsrsToViewResults (void *Exams);
+static void ExaRes_PutFormToSelUsrsToViewResults (__attribute__((unused)) void *Args);
 static void ExaRes_ShowAllResultsInSelectedExams (void *Exams);
 static void ExaRes_ListAllResultsInSelectedExams (struct Exa_Exams *Exams);
 static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams,long ExaCod);
@@ -269,29 +269,23 @@ static void ExaRes_ListMyResultsInSes (struct Exa_Exams *Exams,long SesCod)
 
 void ExaRes_SelUsrsToViewResults (void)
   {
-   struct Exa_Exams Exams;
-
-   /***** Reset exams context *****/
-   Exa_ResetExams (&Exams);
-
    /***** Put form to select users *****/
-   ExaRes_PutFormToSelUsrsToViewResults (&Exams);
+   ExaRes_PutFormToSelUsrsToViewResults (NULL);
   }
 
-static void ExaRes_PutFormToSelUsrsToViewResults (void *Exams)
+static void ExaRes_PutFormToSelUsrsToViewResults (__attribute__((unused)) void *Args)
   {
    extern const char *Hlp_ASSESSMENT_Exams_results;
    extern const char *Txt_Results;
-   extern const char *Txt_View_matches_results;
+   extern const char *Txt_View_results;
 
-   if (Exams)	// Not used
-      Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-					ActSeeAllExaResCrs,
-					NULL,NULL,
-					Txt_Results,
-					Hlp_ASSESSMENT_Exams_results,
-					Txt_View_matches_results,
-					false);	// Do not put form with date range
+   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+				     ActSeeUsrExaResCrs,
+				     NULL,NULL,
+				     Txt_Results,
+				     Hlp_ASSESSMENT_Exams_results,
+				     Txt_View_results,
+				     false);	// Do not put form with date range
   }
 
 /*****************************************************************************/
@@ -308,7 +302,7 @@ void ExaRes_ShowAllResultsInCrs (void)
    /***** Get users and show their sessions results *****/
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
 				  ExaRes_ShowAllResultsInSelectedExams,&Exams,
-                                  ExaRes_PutFormToSelUsrsToViewResults,&Exams);
+                                  ExaRes_PutFormToSelUsrsToViewResults,NULL);
   }
 
 /*****************************************************************************/
@@ -593,7 +587,6 @@ static void ExaRes_ShowResultsEnd (void)
 
 static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
   {
-   extern const char *Hlp_ASSESSMENT_Exams_results;
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Exams;
    extern const char *Txt_Exam;
@@ -608,7 +601,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Exams,
                  NULL,NULL,
-                 Hlp_ASSESSMENT_Exams_results,Box_CLOSABLE);
+                 NULL,Box_CLOSABLE);
 
    /***** Begin form to update the results
 	  depending on the exams selected *****/

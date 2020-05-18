@@ -557,10 +557,16 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.237 (2020-05-18)"
+#define Log_PLATFORM_VERSION	"SWAD 19.238 (2020-05-18)"
 #define CSS_FILE		"swad19.230.1.css"
 #define JS_FILE			"swad19.236.4.js"
 /*
+	Version 19.238:   May 18, 2020  Fix exam-related details.
+					Removal of exams. (301565 lines)
+					Copy the following 2 icons to icon public directory:
+sudo cp icon/file-signature.svg /var/www/html/swad/icon/
+sudo cp icon/gamepad.svg /var/www/html/swad/icon/
+
 	Version 19.237:   May 18, 2020  Figures about exams. (301325 lines)
 	Version 19.236.4: May 18, 2020  Fixed minor bug in dates. (301244 lines)
 	Version 19.236.3: May 18, 2020  Number of players in a match now is calculated as number of users who have result, even in blank. (301243 lines)

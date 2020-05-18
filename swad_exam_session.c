@@ -107,7 +107,6 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
 static void ExaSes_RemoveSessionFromAllTables (long SesCod);
 static void ExaSes_RemoveSessionFromTable (long SesCod,const char *TableName);
 static void ExaSes_RemoveSessionsInExamFromTable (long ExaCod,const char *TableName);
-static void ExaSes_RemoveSessionInCourseFromTable (long CrsCod,const char *TableName);
 static void ExaSes_RemoveUsrSesResultsInCrs (long UsrCod,long CrsCod,const char *TableName);
 
 static void ExaSes_PutFormSession (const struct ExaSes_Session *Session);
@@ -763,7 +762,7 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
       Exams->SesCod = Session->SesCod;
 
       /* Show exam session results */
-      Lay_PutContextualLinkOnlyIcon (ActSeeAllExaResSes,ExaRes_RESULTS_BOX_ID,
+      Lay_PutContextualLinkOnlyIcon (ActSeeUsrExaResSes,ExaRes_RESULTS_BOX_ID,
 				     ExaSes_PutParamsEdit,Exams,
 				     "trophy.svg",
 				     Txt_Results);
@@ -1012,31 +1011,22 @@ static void ExaSes_RemoveSessionsInExamFromTable (long ExaCod,const char *TableN
 
 void ExaSes_RemoveSessionInCourseFromAllTables (long CrsCod)
   {
-   /***** Remove sessions from secondary tables *****/
-   ExaSes_RemoveSessionInCourseFromTable (CrsCod,"exa_groups");
+   /***** Remove sessions from table of sessions groups *****/
+   DB_QueryDELETE ("can not remove sessions of a course",
+		   "DELETE FROM exa_groups"
+		   " USING exa_exams,exa_sessions,exa_groups"
+		   " WHERE exa_exams.CrsCod=%ld"
+		   " AND exa_exams.ExaCod=exa_sessions.ExaCod"
+		   " AND exa_sessions.SesCod=exa_groups.SesCod",
+		   CrsCod);
 
-   /***** Remove sessions from main table *****/
+   /***** Remove sessions from exam sessions table *****/
    DB_QueryDELETE ("can not remove sessions of a course",
 		   "DELETE FROM exa_sessions"
 		   " USING exa_exams,exa_sessions"
 		   " WHERE exa_exams.CrsCod=%ld"
 		   " AND exa_exams.ExaCod=exa_sessions.ExaCod",
 		   CrsCod);
-  }
-
-static void ExaSes_RemoveSessionInCourseFromTable (long CrsCod,const char *TableName)
-  {
-   /***** Remove sessions in course from secondary table *****/
-   DB_QueryDELETE ("can not remove sessions of a course from table",
-		   "DELETE FROM %s"
-		   " USING exa_exams,exa_sessions,%s"
-		   " WHERE exa_exams.CrsCod=%ld"
-		   " AND exa_exams.ExaCod=exa_sessions.ExaCod"
-		   " AND exa_sessions.SesCod=%s.SesCod",
-		   TableName,
-		   TableName,
-		   CrsCod,
-		   TableName);
   }
 
 /*****************************************************************************/
@@ -1204,9 +1194,9 @@ long ExaSes_GetParamSesCod (void)
 static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
   {
    extern const char *Hlp_ASSESSMENT_Exams_sessions;
-   extern const char *Txt_New_event;
+   extern const char *Txt_New_session;
    extern const char *Txt_Title;
-   extern const char *Txt_Create_event;
+   extern const char *Txt_Create_session;
    extern const char *Txt_Save_changes;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
@@ -1226,7 +1216,7 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
       ExaSes_PutParamSesCod (Session->SesCod);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,ItsANewSession ? Txt_New_event :
+   Box_BoxTableBegin (NULL,ItsANewSession ? Txt_New_session :
 					    Session->Title,
                       NULL,NULL,
 		      Hlp_ASSESSMENT_Exams_sessions,Box_NOT_CLOSABLE,2);
@@ -1256,7 +1246,7 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
 
    /***** End table, send button and end box *****/
    if (ItsANewSession)
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_event);
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_session);
    else
       Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
@@ -1336,12 +1326,12 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 
 void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams,long ExaCod)
   {
-   extern const char *Txt_New_event;
+   extern const char *Txt_New_session;
 
    Exams->ExaCod = ExaCod;
    Frm_StartFormAnchor (ActReqNewExaSes,ExaSes_NEW_SESSION_SECTION_ID);
    Exa_PutParams (Exams);
-   Btn_PutConfirmButton (Txt_New_event);
+   Btn_PutConfirmButton (Txt_New_session);
    Frm_EndForm ();
   }
 

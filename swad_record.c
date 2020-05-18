@@ -2428,7 +2428,9 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
    extern const char *Txt_Administer_user;
    extern const char *Txt_Write_a_message;
    extern const char *Txt_View_homework;
-   extern const char *Txt_View_test_results;
+   extern const char *Txt_View_tests;
+   extern const char *Txt_View_exams;
+   extern const char *Txt_View_games;
    extern const char *Txt_View_attendance;
    extern const char *Txt_Following_unfollow;
    extern const char *Txt_Follow;
@@ -2519,19 +2521,45 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	{
 	 if (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role == Rol_STD)	// He/she is a student in current course
 	   {
-	    /***** Button to view student's test exams *****/
+	    /***** Buttons to view student's test, exam and match results *****/
 	    if (Usr_CheckIfICanViewTstExaMchResult (Gbl.Record.UsrDat))
 	      {
 	       if (ItsMe)
-		  Lay_PutContextualLinkOnlyIcon (ActSeeMyTstRes,NULL,
+		 {
+		  /* My test results in course */
+		  Lay_PutContextualLinkOnlyIcon (ActSeeMyTstResCrs,NULL,
 						 Rec_PutParamsMyTsts,NULL,
 						 "check.svg",
-						 Txt_View_test_results);
+						 Txt_View_tests);
+		  /* My exam results in course */
+		  Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResCrs,NULL,
+						 Rec_PutParamsMyTsts,NULL,
+						 "file-signature.svg",
+						 Txt_View_exams);
+		  /* My match results in course */
+		  Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResCrs,NULL,
+						 Rec_PutParamsMyTsts,NULL,
+						 "gamepad.svg",
+						 Txt_View_games);
+		 }
 	       else	// Not me
-		  Lay_PutContextualLinkOnlyIcon (ActSeeUsrTstRes,NULL,
+		 {
+		  /* User's test results in course */
+		  Lay_PutContextualLinkOnlyIcon (ActSeeUsrTstResCrs,NULL,
 						 Rec_PutParamsStdTsts,NULL,
 						 "check.svg",
-						 Txt_View_test_results);
+						 Txt_View_tests);
+		  /* User's exam results in course */
+		  Lay_PutContextualLinkOnlyIcon (ActSeeUsrExaResCrs,NULL,
+						 Rec_PutParamsStdTsts,NULL,
+						 "file-signature.svg",
+						 Txt_View_exams);
+		  /* User's match results in course */
+		  Lay_PutContextualLinkOnlyIcon (ActSeeUsrMchResCrs,NULL,
+						 Rec_PutParamsStdTsts,NULL,
+						 "gamepad.svg",
+						 Txt_View_games);
+		 }
 	      }
 
 	    /***** Button to view student's assignments and works *****/

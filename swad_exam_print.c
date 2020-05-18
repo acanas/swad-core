@@ -1403,32 +1403,63 @@ static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/********************** Receive answer to an exam print **********************/
+/********************** Remove exam prints made by a user ********************/
 /*****************************************************************************/
 
-void ExaPrn_EndPrintAnswer (void)
+void ExaPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
   {
-   Ale_ShowAlert (Ale_INFO,"Terminar de contestar el examen.");
+   /***** Remove exam prints questions for the given user *****/
+   DB_QueryDELETE ("can not remove exam prints made by a user",
+		   "DELETE FROM exa_print_questions"
+	           " USING exa_prints,exa_print_questions"
+                   " WHERE exa_prints.UsrCod=%ld"
+                   " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
+		   UsrCod);
 
-
-
+   /***** Remove exam prints made by the given user *****/
+   DB_QueryDELETE ("can not remove exam prints made by a user",
+		   "DELETE FROM exa_prints"
+	           " WHERE UsrCod=%ld",
+		   UsrCod);
   }
 
 /*****************************************************************************/
-/***************** Write parameter with code of exam print *******************/
+/*************** Remove exam prints made by a user in a course ***************/
 /*****************************************************************************/
 
-// static void ExaPrn_PutParamPrnCod (long ExaCod)
-//   {
-//    Par_PutHiddenParamLong (NULL,"PrnCod",ExaCod);
-//   }
+void ExaPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
+  {
+   /***** Remove questions of exams prints made by the given user in the given course *****/
+   DB_QueryDELETE ("can not remove exams prints made by a user in a course",
+		   "DELETE FROM exa_print_questions"
+	           " USING exa_prints,exa_print_questions"
+                   " WHERE exa_prints.CrsCod=%ld AND exa_prints.UsrCod=%ld"
+                   " AND exa_prints.ExaCod=exa_print_questions.ExaCod",
+		   CrsCod,UsrCod);
+
+   /***** Remove exams prints made by the given user in the given course *****/
+   DB_QueryDELETE ("can not remove exams prints made by a user in a course",
+		   "DELETE FROM exa_prints"
+	           " WHERE CrsCod=%ld AND UsrCod=%ld",
+		   CrsCod,UsrCod);
+  }
 
 /*****************************************************************************/
-/***************** Get parameter with code of exam print *********************/
+/****************** Remove all exams prints made in a course *****************/
 /*****************************************************************************/
 
-// static long ExaPrn_GetParamPrnCod (void)
-//   {
-//    /***** Get code of exam print *****/
-//    return Par_GetParToLong ("PrnCod");
-//   }
+void ExaPrn_RemoveCrsPrints (long CrsCod)
+  {
+   /***** Remove questions of exams prints made in the course *****/
+   DB_QueryDELETE ("can not remove exams prints made in a course",
+		   "DELETE FROM exa_print_questions"
+	           " USING exa_prints,exa_print_questions"
+                   " WHERE exa_prints.CrsCod=%ld"
+                   " AND exa_prints.ExaCod=exa_print_questions.ExaCod",
+		   CrsCod);
+
+   /***** Remove exam prints made in the course *****/
+   DB_QueryDELETE ("can not remove exams prints made in a course",
+		   "DELETE FROM exa_prints WHERE CrsCod=%ld",
+		   CrsCod);
+  }

@@ -379,7 +379,7 @@ static void Gam_PutIconsListGames (void *Games)
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    Ico_PutContextualIconToShowResults (ActReqSeeAllMchRes,NULL,
+	    Ico_PutContextualIconToShowResults (ActReqSeeUsrMchRes,NULL,
 	                                        NULL,NULL);
 	    break;
 	 default:
@@ -682,7 +682,7 @@ static void Gam_PutIconToShowResultsOfGame (void *Games)
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    Ico_PutContextualIconToShowResults (ActSeeAllMchResGam,MchRes_RESULTS_BOX_ID,
+	    Ico_PutContextualIconToShowResults (ActSeeUsrMchResGam,MchRes_RESULTS_BOX_ID,
 						Gam_PutParams,Games);
 	    break;
 	 default:
@@ -1222,10 +1222,10 @@ static void Gam_RemoveGameFromAllTables (long GamCod)
 /******************** Remove all the games of a course ***********************/
 /*****************************************************************************/
 
-void Gam_RemoveGamesCrs (long CrsCod)
+void Gam_RemoveCrsGames (long CrsCod)
   {
    /***** Remove all matches in this course *****/
-   Mch_RemoveMatchInCourseFromAllTables (CrsCod);
+   Mch_RemoveMatchesInCourseFromAllTables (CrsCod);
 
    /***** Remove the questions in games *****/
    DB_QueryDELETE ("can not remove questions in course games",

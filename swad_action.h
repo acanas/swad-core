@@ -650,10 +650,10 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActRcvCfgTst		(ActChgCrsTT1stDay + 126)
 
 #define ActReqSeeMyTstRes	(ActChgCrsTT1stDay + 127)
-#define ActSeeMyTstRes		(ActChgCrsTT1stDay + 128)
+#define ActSeeMyTstResCrs		(ActChgCrsTT1stDay + 128)
 #define ActSeeOneTstResMe	(ActChgCrsTT1stDay + 129)
 #define ActReqSeeUsrTstRes	(ActChgCrsTT1stDay + 130)
-#define ActSeeUsrTstRes		(ActChgCrsTT1stDay + 131)
+#define ActSeeUsrTstResCrs		(ActChgCrsTT1stDay + 131)
 #define ActSeeOneTstResOth	(ActChgCrsTT1stDay + 132)
 
 #define ActSeeExa		(ActChgCrsTT1stDay + 133)
@@ -697,10 +697,10 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActSeeMyExaResExa	(ActChgCrsTT1stDay + 166)
 #define ActSeeMyExaResSes	(ActChgCrsTT1stDay + 167)
 #define ActSeeOneExaResMe	(ActChgCrsTT1stDay + 168)
-#define ActReqSeeAllExaRes	(ActChgCrsTT1stDay + 169)
-#define ActSeeAllExaResCrs	(ActChgCrsTT1stDay + 170)
-#define ActSeeAllExaResExa	(ActChgCrsTT1stDay + 171)
-#define ActSeeAllExaResSes	(ActChgCrsTT1stDay + 172)
+#define ActReqSeeUsrExaRes	(ActChgCrsTT1stDay + 169)
+#define ActSeeUsrExaResCrs	(ActChgCrsTT1stDay + 170)
+#define ActSeeUsrExaResExa	(ActChgCrsTT1stDay + 171)
+#define ActSeeUsrExaResSes	(ActChgCrsTT1stDay + 172)
 #define ActSeeOneExaResOth	(ActChgCrsTT1stDay + 173)
 #define ActChgVisExaRes		(ActChgCrsTT1stDay + 174)
 
@@ -729,10 +729,10 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActSeeMyMchResMch	(ActChgCrsTT1stDay + 195)
 #define ActSeeOneMchResMe	(ActChgCrsTT1stDay + 196)
 
-#define ActReqSeeAllMchRes	(ActChgCrsTT1stDay + 197)
-#define ActSeeAllMchResCrs	(ActChgCrsTT1stDay + 198)
-#define ActSeeAllMchResGam	(ActChgCrsTT1stDay + 199)
-#define ActSeeAllMchResMch	(ActChgCrsTT1stDay + 200)
+#define ActReqSeeUsrMchRes	(ActChgCrsTT1stDay + 197)
+#define ActSeeUsrMchResCrs	(ActChgCrsTT1stDay + 198)
+#define ActSeeUsrMchResGam	(ActChgCrsTT1stDay + 199)
+#define ActSeeUsrMchResMch	(ActChgCrsTT1stDay + 200)
 #define ActSeeOneMchResOth	(ActChgCrsTT1stDay + 201)
 
 #define ActChgVisResMchUsr	(ActChgCrsTT1stDay + 202)

@@ -72,7 +72,7 @@ void Exa_GetExamTxtFromDB (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
 void Exa_AskRemExam (void);
 void Exa_RemoveExam (void);
-void Exa_RemoveExamsCrs (long CrsCod);
+void Exa_RemoveCrsExams (long CrsCod);
 
 void Exa_HideExam (void);
 void Exa_UnhideExam (void);

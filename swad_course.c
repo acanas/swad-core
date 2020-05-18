@@ -1982,16 +1982,16 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       /***** Remove all the threads and posts in forums of the course *****/
       For_RemoveForums (Hie_CRS,CrsCod);
 
-      /***** Remove games of the course *****/
-      Gam_RemoveGamesCrs (CrsCod);
-
-      /***** Remove surveys of the course *****/
+      /***** Remove all surveys in the course *****/
       Svy_RemoveSurveys (Hie_CRS,CrsCod);
 
-      /***** Remove all test exams made in the course *****/
-      TstPrn_RemoveCrsPrints (CrsCod);
+      /***** Remove all games in the course *****/
+      Gam_RemoveCrsGames (CrsCod);
 
-      /***** Remove all tests questions in the course *****/
+      /***** Remove all exams in the course *****/
+      Exa_RemoveCrsExams (CrsCod);
+
+      /***** Remove all tests in the course *****/
       Tst_RemoveCrsTests (CrsCod);
 
       /***** Remove groups in the course *****/

@@ -1306,6 +1306,69 @@ const char *Hlp_ASSESSMENT_Projects_add_user =
 	"ASSESSMENT.Projects.en#add-user";
 #endif
 
+const char *Hlp_ASSESSMENT_Questions_editing_questions =
+#if   L==1
+	"ASSESSMENT.Questions.es#editar-preguntas";
+#elif L==2
+	"ASSESSMENT.Questions.en#editing-questions";
+#elif L==3
+	"ASSESSMENT.Questions.en#editing-questions";
+#elif L==4
+	"ASSESSMENT.Questions.es#editar-preguntas";
+#elif L==5
+	"ASSESSMENT.Questions.en#editing-questions";
+#elif L==6
+	"ASSESSMENT.Questions.es#editar-preguntas";
+#elif L==7
+	"ASSESSMENT.Questions.en#editing-questions";
+#elif L==8
+	"ASSESSMENT.Questions.en#editing-questions";
+#elif L==9
+	"ASSESSMENT.Questions.en#editing-questions";
+#endif
+
+const char *Hlp_ASSESSMENT_Questions_writing_a_question =
+#if   L==1
+	"ASSESSMENT.Questions.es#escribir-una-pregunta";
+#elif L==2
+	"ASSESSMENT.Questions.en#writing-a-question";
+#elif L==3
+	"ASSESSMENT.Questions.en#writing-a-question";
+#elif L==4
+	"ASSESSMENT.Questions.es#escribir-una-pregunta";
+#elif L==5
+	"ASSESSMENT.Questions.en#writing-a-question";
+#elif L==6
+	"ASSESSMENT.Questions.es#escribir-una-pregunta";
+#elif L==7
+	"ASSESSMENT.Questions.en#writing-a-question";
+#elif L==8
+	"ASSESSMENT.Questions.en#writing-a-question";
+#elif L==9
+	"ASSESSMENT.Questions.en#writing-a-question";
+#endif
+
+const char *Hlp_ASSESSMENT_Questions_editing_tags =
+#if   L==1
+	"ASSESSMENT.Questions.es#editar-descriptores";
+#elif L==2
+	"ASSESSMENT.Questions.en#editing-tags";
+#elif L==3
+	"ASSESSMENT.Questions.en#editing-tags";
+#elif L==4
+	"ASSESSMENT.Questions.es#editar-descriptores";
+#elif L==5
+	"ASSESSMENT.Questions.en#editing-tags";
+#elif L==6
+	"ASSESSMENT.Questions.es#editar-descriptores";
+#elif L==7
+	"ASSESSMENT.Questions.en#editing-tags";
+#elif L==8
+	"ASSESSMENT.Questions.en#editing-tags";
+#elif L==9
+	"ASSESSMENT.Questions.en#editing-tags";
+#endif
+
 const char *Hlp_ASSESSMENT_Tests =
 #if   L==1
 	"ASSESSMENT.Tests.es";
@@ -1325,48 +1388,6 @@ const char *Hlp_ASSESSMENT_Tests =
 	"ASSESSMENT.Tests.en";
 #elif L==9
 	"ASSESSMENT.Tests.en";
-#endif
-
-const char *Hlp_ASSESSMENT_Tests_editing_questions =
-#if   L==1
-	"ASSESSMENT.Tests.es#editar-preguntas";
-#elif L==2
-	"ASSESSMENT.Tests.en#editing-questions";
-#elif L==3
-	"ASSESSMENT.Tests.en#editing-questions";
-#elif L==4
-	"ASSESSMENT.Tests.es#editar-preguntas";
-#elif L==5
-	"ASSESSMENT.Tests.en#editing-questions";
-#elif L==6
-	"ASSESSMENT.Tests.es#editar-preguntas";
-#elif L==7
-	"ASSESSMENT.Tests.en#editing-questions";
-#elif L==8
-	"ASSESSMENT.Tests.en#editing-questions";
-#elif L==9
-	"ASSESSMENT.Tests.en#editing-questions";
-#endif
-
-const char *Hlp_ASSESSMENT_Tests_writing_a_question =
-#if   L==1
-	"ASSESSMENT.Tests.es#escribir-una-pregunta";
-#elif L==2
-	"ASSESSMENT.Tests.en#writing-a-question";
-#elif L==3
-	"ASSESSMENT.Tests.en#writing-a-question";
-#elif L==4
-	"ASSESSMENT.Tests.es#escribir-una-pregunta";
-#elif L==5
-	"ASSESSMENT.Tests.en#writing-a-question";
-#elif L==6
-	"ASSESSMENT.Tests.es#escribir-una-pregunta";
-#elif L==7
-	"ASSESSMENT.Tests.en#writing-a-question";
-#elif L==8
-	"ASSESSMENT.Tests.en#writing-a-question";
-#elif L==9
-	"ASSESSMENT.Tests.en#writing-a-question";
 #endif
 
 const char *Hlp_ASSESSMENT_Tests_configuring_tests =
@@ -1476,23 +1497,23 @@ const char *Hlp_ASSESSMENT_Exams_question_sets =
 
 const char *Hlp_ASSESSMENT_Exams_sessions =
 #if   L==1
-	"ASSESSMENT.Exams.es#eventos";
+	"ASSESSMENT.Exams.es#sesiones";
 #elif L==2
-	"ASSESSMENT.Exams.en#events";
+	"ASSESSMENT.Exams.en#sessions";
 #elif L==3
-	"ASSESSMENT.Exams.en#events";
+	"ASSESSMENT.Exams.en#sessions";
 #elif L==4
-	"ASSESSMENT.Exams.es#eventos";
+	"ASSESSMENT.Exams.es#sesiones";
 #elif L==5
-	"ASSESSMENT.Exams.en#events";
+	"ASSESSMENT.Exams.en#sessions";
 #elif L==6
-	"ASSESSMENT.Exams.es#eventos";
+	"ASSESSMENT.Exams.es#sesiones";
 #elif L==7
-	"ASSESSMENT.Exams.en#events";
+	"ASSESSMENT.Exams.en#sessions";
 #elif L==8
-	"ASSESSMENT.Exams.en#events";
+	"ASSESSMENT.Exams.en#sessions";
 #elif L==9
-	"ASSESSMENT.Exams.en#events";
+	"ASSESSMENT.Exams.en#sessions";
 #endif
 
 const char *Hlp_ASSESSMENT_Exams_new_exam =

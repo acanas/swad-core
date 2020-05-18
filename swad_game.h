@@ -126,7 +126,7 @@ void Gam_FreeListGames (struct Gam_Games *Games);
 
 void Gam_AskRemGame (void);
 void Gam_RemoveGame (void);
-void Gam_RemoveGamesCrs (long CrsCod);
+void Gam_RemoveCrsGames (long CrsCod);
 
 void Gam_HideGame (void);
 void Gam_UnhideGame (void);

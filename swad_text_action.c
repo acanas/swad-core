@@ -10163,7 +10163,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActSeeMyTstRes] =
+	[ActSeeMyTstResCrs] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -10226,7 +10226,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActSeeUsrTstRes] =
+	[ActSeeUsrTstResCrs] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -11024,7 +11024,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActReqSeeAllExaRes] =
+	[ActReqSeeUsrExaRes] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -11045,7 +11045,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActSeeAllExaResCrs] =
+	[ActSeeUsrExaResCrs] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -11066,7 +11066,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActSeeAllExaResExa] =
+	[ActSeeUsrExaResExa] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -11087,7 +11087,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActSeeAllExaResSes] =
+	[ActSeeUsrExaResSes] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -11612,7 +11612,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActReqSeeAllMchRes] =
+	[ActReqSeeUsrMchRes] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -11633,7 +11633,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActSeeAllMchResCrs] =
+	[ActSeeUsrMchResCrs] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -11654,7 +11654,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActSeeAllMchResGam] =
+	[ActSeeUsrMchResGam] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
@@ -11675,7 +11675,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
-	[ActSeeAllMchResMch] =
+	[ActSeeUsrMchResMch] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de

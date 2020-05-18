@@ -6341,6 +6341,27 @@ const char *Txt_Create_set_of_questions =
 	"Criar conjunto de perguntas";
 #endif
 
+const char *Txt_Create_session =
+#if   L==1	// ca
+	"Crear sessi&oacute;";
+#elif L==2	// de
+	"Sitzung erstellen";
+#elif L==3	// en
+	"Create session";
+#elif L==4	// es
+	"Crear sesi&oacute;n";
+#elif L==5	// fr
+	"Cr&eacute;er session";
+#elif L==6	// gn
+	"Crear sesi&oacute;n";	// Okoteve traducción
+#elif L==7	// it
+	"Crea sessione";
+#elif L==8	// pl
+	"Utw&oacute;rz sesji";
+#elif L==9	// pt
+	"Criar sess&atilde;o";
+#endif
+
 const char *Txt_Create_survey =
 #if   L==1	// ca
 	"Crear enquesta";
@@ -55815,6 +55836,27 @@ const char *Txt_View_exam =
 	"Ver exame";
 #endif
 
+const char *Txt_View_exams =
+#if   L==1	// ca
+	"Veure ex&agrave;mens";
+#elif L==2	// de
+	"Anzeigen Pr&uuml;fung";
+#elif L==3	// en
+	"View exams";
+#elif L==4	// es
+	"Ver ex&aacute;menes";
+#elif L==5	// fr
+	"Voir examens";
+#elif L==6	// gn
+	"Ver ex&aacute;menes";	// Okoteve traducción
+#elif L==7	// it
+	"Vedi esame";
+#elif L==8	// pl
+	"Zobacz egzamin&oacute;w";
+#elif L==9	// pt
+	"Ver exames";
+#endif
+
 const char *Txt_View_game =
 #if   L==1	// ca
 	"Veure joc";
@@ -55836,6 +55878,27 @@ const char *Txt_View_game =
 	"Ver jogo";
 #endif
 
+const char *Txt_View_games =
+#if   L==1	// ca
+	"Veure jocs";
+#elif L==2	// de
+	"Anzeigen Spiele";
+#elif L==3	// en
+	"View games";
+#elif L==4	// es
+	"Ver juegos";
+#elif L==5	// fr
+	"Voir jeux";
+#elif L==6	// gn
+	"Ver juegos";	// Okoteve traducción
+#elif L==7	// it
+	"Vedi giochi";
+#elif L==8	// pl
+	"Zobacz gier";
+#elif L==9	// pt
+	"Ver jogos";
+#endif
+
 const char *Txt_View_in_a_new_window =
 #if   L==1	// ca
 	"Mostrar en una finestra nova";
@@ -55855,27 +55918,6 @@ const char *Txt_View_in_a_new_window =
 	"View in a new window";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Ver em uma nova janela";
-#endif
-
-const char *Txt_View_matches_results =
-#if   L==1	// ca
-	"Veure resultats de partides";
-#elif L==2	// de
-	"Siehe Spielergebnisse";
-#elif L==3	// en
-	"View matches results";
-#elif L==4	// es
-	"Ver resultados de partidas";
-#elif L==5	// fr
-	"Voir r&eacute;sultats de matchs";
-#elif L==6	// gn
-	"Ver resultados de partidas";	// Okoteve traducción
-#elif L==7	// it
-	"Vedi risultati delle partite";
-#elif L==8	// pl
-	"Zobacz wyniki mecze";
-#elif L==9	// pt
-	"Ver resultados de partidas";
 #endif
 
 const char *Txt_View_my_answer =
@@ -55999,7 +56041,7 @@ const char *Txt_View_results =
 #elif L==7	// it
 	"Vedi risultati";
 #elif L==8	// pl
-	"Wy&sacute;wietl wyniki ankiety";
+	"Poka&zdot; wyniki";
 #elif L==9	// pt
 	"Ver resultados";
 #endif
@@ -56025,27 +56067,6 @@ const char *Txt_View_survey =
 	"Ver inqu&eacute;rito";
 #endif
 
-const char *Txt_View_survey_results =
-#if   L==1	// ca
-	"Veure resultats";
-#elif L==2	// de
-	"Anzeigen Ergebnisse";
-#elif L==3	// en
-	"View survey results";
-#elif L==4	// es
-	"Ver resultados";
-#elif L==5	// fr
-	"Voir r&eacute;sultats";
-#elif L==6	// gn
-	"Ver resultados";	// Okoteve traducción
-#elif L==7	// it
-	"Vedi risultati";
-#elif L==8	// pl
-	"Wy&sacute;wietl wyniki ankiety";
-#elif L==9	// pt
-	"Ver resultados";
-#endif
-
 const char *Txt_View_test =
 #if   L==1	// ca
 	"Veure test";
@@ -56067,25 +56088,25 @@ const char *Txt_View_test =
 	"Ver teste";
 #endif
 
-const char *Txt_View_test_results =
+const char *Txt_View_tests =
 #if   L==1	// ca
-	"Veure resultats de tests";
+	"Veure tests";
 #elif L==2	// de
-	"Siehe Testergebnisse";
+	"Siehe Tests";
 #elif L==3	// en
-	"View test results";
+	"View tests";
 #elif L==4	// es
-	"Ver resultados de test";
+	"Ver test";
 #elif L==5	// fr
-	"Voir r&eacute;sultats de tests";
+	"Voir tests";
 #elif L==6	// gn
-	"Ver resultados de test";	// Okoteve traducción
+	"Ver test";	// Okoteve traducción
 #elif L==7	// it
-	"Vedi risultati dei test";
+	"Vedi test";
 #elif L==8	// pl
-	"Zobacz wyniki test&oacute;w";
+	"Wiadomo&sacute;ci test";
 #elif L==9	// pt
-	"Ver resultados de testes";
+	"Ver testes";
 #endif
 
 const char *Txt_View_homework =
