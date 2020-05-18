@@ -1452,20 +1452,21 @@ static void Tst_PutIconsTests (__attribute__((unused)) void *Args)
   {
    extern const char *Txt_New_question;
 
-   /***** Put form to go to test configuration *****/
-   Ico_PutContextualIconToConfigure (ActCfgTst,
-				     NULL,NULL);
-
-   /***** Put icon to view test exams *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
+         /***** Put icon to view test results *****/
 	 Ico_PutContextualIconToShowResults (ActReqSeeMyTstRes,NULL,
 					     NULL,NULL);
 	 break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
+	 /***** Put form to go to test configuration *****/
+	 Ico_PutContextualIconToConfigure (ActCfgTst,
+					   NULL,NULL);
+
+         /***** Put icon to view test results *****/
 	 Ico_PutContextualIconToShowResults (ActReqSeeUsrTstRes,NULL,
 					     NULL,NULL);
 	 break;

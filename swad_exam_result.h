@@ -40,14 +40,14 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaRes_ShowMyExaResultsInCrs (void);
-void ExaRes_ShowMyExaResultsInExa (void);
-void ExaRes_ShowMyExaResultsInSes (void);
+void ExaRes_ShowMyResultsInCrs (void);
+void ExaRes_ShowMyResultsInExa (void);
+void ExaRes_ShowMyResultsInSes (void);
 
-void ExaRes_ShowAllExaResultsInCrs (void);
-void ExaRes_SelUsrsToViewExaResults (void);
-void ExaRes_ShowAllExaResultsInExa (void);
-void ExaRes_ShowAllExaResultsInSes (void);
+void ExaRes_SelUsrsToViewResults (void);
+void ExaRes_ShowAllResultsInCrs (void);
+void ExaRes_ShowAllResultsInExa (void);
+void ExaRes_ShowAllResultsInSes (void);
 
 void ExaRes_ShowOneExaResult (void);
 
