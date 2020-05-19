@@ -550,15 +550,16 @@ function readConnUsrsData () {
 /*****************************************************************************/
 
 // This function is called when user changes an answer in an exam print
-function updateExamPrint (idDiv,idInput,nameInput,Params) {
+function updateExamPrint (idDiv,idInput,nameInput,Params,timeoutMsg) {
     var objXMLHttp = false;
 
 	objXMLHttp = AJAXCreateObject ();
 	if (objXMLHttp) {
 		/* Send request to server */
 		objXMLHttp.onreadystatechange = function() {	// onreadystatechange must be lowercase
-			if (objXMLHttp.readyState == 4)				// Check if data have been received
-				if (objXMLHttp.status == 200)
+			if (objXMLHttp.readyState == 4)	{			// Check if data have been received
+				if (objXMLHttp.status == 200) {
+					clearTimeout (xmlHttpTimeout);		// Response received ==> clear timeout
 					if (idDiv) {
 						var div = document.getElementById(idDiv);		// Access to DIV
 						if (div) {				
@@ -572,6 +573,8 @@ function updateExamPrint (idDiv,idInput,nameInput,Params) {
 							MathJax.typeset();
 						}
 					}
+				}
+			}
 		};
 
 		var inputElem = document.getElementById(idInput);
@@ -606,6 +609,16 @@ function updateExamPrint (idDiv,idInput,nameInput,Params) {
 		objXMLHttp.open('POST',ActionAJAX,true);
 		objXMLHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		objXMLHttp.send(Params);
+
+		/* Timeout to abort in 5 seconds.
+		   See https://stackoverflow.com/questions/1018705/how-to-detect-timeout-on-an-ajax-xmlhttprequest-call-in-the-browser
+		   and http://geekswithblogs.net/lorint/archive/2006/03/07/71625.aspx
+		   "ontimeout" based solutions does not work when network disconnects */
+		var xmlHttpTimeout = setTimeout (ajaxTimeout,5000);	// 5 s
+		function ajaxTimeout () {
+			objXMLHttp.abort ();
+			alert (timeoutMsg);
+		};
 	}
 }
 

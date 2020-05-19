@@ -46312,6 +46312,45 @@ const char *Txt_The_centre_X_has_been_renamed_as_Y =	// Warning: it is very impo
 	"O centro <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
 
+const char *Txt_The_changes_have_not_been_saved_ =
+#if   L==1	// ca
+	"Els canvis no s'han desat."
+	" &Eacute;s possible que el servidor estigui trigant a respondre"
+	" o que hi hagi problemes en la connexi&oacute; de xarxa.";
+#elif L==2	// de
+	"Die &Auml;nderungen wurden nicht gespeichert."
+	" Der Server reagiert m&ouml;glicherweise nur langsam"
+	" oder es treten Probleme mit Ihrer Netzwerkverbindung auf.";
+#elif L==3	// en
+	"The changes have not been saved."
+	" The server may be slow to respond"
+	" or there may be problems with your network connection.";
+#elif L==4	// es
+	"Los cambios no se han guardado."
+	" Es posible que el servidor est&eacute; tardando en responder"
+	" o que haya problemas en la conexi&oacute;n de red.";
+#elif L==5	// fr
+	"Les modifications n'ont pas &eacute;t&eacute; enregistr&eacute;es."
+	" Le serveur peut &ecirc;tre lent &agrave; r&eacute;pondre"
+	" ou il peut y avoir des probl&egrave;mes avec votre connexion r&eacute;seau.";
+#elif L==6	// gn
+	"Los cambios no se han guardado."
+	" Es posible que el servidor est&eacute; tardando en responder"
+	" o que haya problemas en la conexi&oacute;n de red.";	// Okoteve traducción
+#elif L==7	// it
+	"Le modifiche non sono state salvate."
+	" Il server potrebbe rispondere lentamente"
+	" o potrebbero esserci problemi con la connessione di rete.";
+#elif L==8	// pl
+	"Zmiany nie zosta&lstrok;y zapisane."
+	" Serwer mo&zdot;e d&lstrok;ugo reagowa&cacute;"
+	" lub mog&aogon; wyst&eogon;powa&cacute; problemy z po&lstrok;&atrok;czeniem sieciowym.";
+#elif L==9	// pt
+	"As altera&ccedil;&otilde;es n&atilde;o foram salvas."
+	" O servidor pode demorar para responder"
+	" ou pode haver problemas com sua conex&atilde;o de rede.";
+#endif
+
 const char *Txt_The_comment_no_longer_exists =
 #if   L==1	// ca
 	"El comentari ja no existeix.";

@@ -86,17 +86,22 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
 static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
                                        unsigned NumQst,
                                        const struct Tst_Question *Question);
+//-----------------------------------------------------------------------------
 static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
 				      unsigned NumQst);
-static void ExaPrn_WriteFloatAnsToFill (const struct ExaPrn_Print *Print,
-				        unsigned NumQst);
-static void ExaPrn_WriteTFAnsToFill (const struct ExaPrn_Print *Print,
-	                             unsigned NumQst);
-static void ExaPrn_WriteChoiceAnsToFill (const struct ExaPrn_Print *Print,
-                                         unsigned NumQst,
-                                         const struct Tst_Question *Question);
-static void ExaPrn_WriteTextAnsToFill (const struct ExaPrn_Print *Print,
-	                               unsigned NumQst);
+static void ExaPrn_WriteFloAnsToFill (const struct ExaPrn_Print *Print,
+				      unsigned NumQst);
+static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
+	                              unsigned NumQst);
+static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
+                                      unsigned NumQst,
+                                      const struct Tst_Question *Question);
+static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
+	                              unsigned NumQst);
+//-----------------------------------------------------------------------------
+static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
+	                                     unsigned NumQst,
+	                                     const char *Id,int NumOpt);
 
 static unsigned ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print);
 
@@ -736,17 +741,17 @@ static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
          ExaPrn_WriteIntAnsToFill (Print,NumQst);
          break;
       case Tst_ANS_FLOAT:
-         ExaPrn_WriteFloatAnsToFill (Print,NumQst);
+         ExaPrn_WriteFloAnsToFill (Print,NumQst);
          break;
       case Tst_ANS_TRUE_FALSE:
-         ExaPrn_WriteTFAnsToFill (Print,NumQst);
+         ExaPrn_WriteTF_AnsToFill (Print,NumQst);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         ExaPrn_WriteChoiceAnsToFill (Print,NumQst,Question);
+         ExaPrn_WriteChoAnsToFill (Print,NumQst,Question);
          break;
       case Tst_ANS_TEXT:
-         ExaPrn_WriteTextAnsToFill (Print,NumQst);
+         ExaPrn_WriteTxtAnsToFill (Print,NumQst);
          break;
       default:
          break;
@@ -770,19 +775,16 @@ static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
 	     " size=\"11\" maxlength=\"11\" value=\"%s\"",
 	     Id,
 	     Print->PrintedQuestions[NumQst].StrAnswers);
-   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
-			 "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u');"
-		         " return false;\" />",	// return false is necessary to not submit form
-	     Id,
-	     Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst);
+   ExaPrn_WriteJSToUpdateExamPrint (Print,NumQst,Id,-1);
+   HTM_Txt (" />");
   }
 
 /*****************************************************************************/
 /****************** Write float answer when seeing a test ********************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteFloatAnsToFill (const struct ExaPrn_Print *Print,
-				        unsigned NumQst)
+static void ExaPrn_WriteFloAnsToFill (const struct ExaPrn_Print *Print,
+				      unsigned NumQst)
   {
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
@@ -794,19 +796,16 @@ static void ExaPrn_WriteFloatAnsToFill (const struct ExaPrn_Print *Print,
 	     " size=\"11\" maxlength=\"%u\" value=\"%s\"",
 	     Id,Tst_MAX_BYTES_FLOAT_ANSWER,
 	     Print->PrintedQuestions[NumQst].StrAnswers);
-   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
-			 "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u');"
-		         " return false;\" />",	// return false is necessary to not submit form
-	     Id,
-	     Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst);
+   ExaPrn_WriteJSToUpdateExamPrint (Print,NumQst,Id,-1);
+   HTM_Txt (" />");
   }
 
 /*****************************************************************************/
 /************** Write false / true answer when seeing a test ****************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteTFAnsToFill (const struct ExaPrn_Print *Print,
-	                             unsigned NumQst)
+static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
+	                              unsigned NumQst)
   {
    extern const char *Txt_TF_QST[2];
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
@@ -819,12 +818,8 @@ static void ExaPrn_WriteTFAnsToFill (const struct ExaPrn_Print *Print,
 	     "Ans%010u",
 	     NumQst);
    HTM_TxtF ("<select id=\"%s\" name=\"Ans\"",Id);
-   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
-			 "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u');"
-		         " return false;\" />",	// return false is necessary to not submit form
-	     Id,
-	     Act_GetActCod (ActAnsExaPrn),
-	     Gbl.Session.Id,Print->SesCod,NumQst);
+   ExaPrn_WriteJSToUpdateExamPrint (Print,NumQst,Id,-1);
+   HTM_Txt (" />");
    HTM_OPTION (HTM_Type_STRING,"" ,Print->PrintedQuestions[NumQst].StrAnswers[0] == '\0',false,"&nbsp;");
    HTM_OPTION (HTM_Type_STRING,"T",Print->PrintedQuestions[NumQst].StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
    HTM_OPTION (HTM_Type_STRING,"F",Print->PrintedQuestions[NumQst].StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
@@ -835,9 +830,9 @@ static void ExaPrn_WriteTFAnsToFill (const struct ExaPrn_Print *Print,
 /******** Write single or multiple choice answer when seeing a test **********/
 /*****************************************************************************/
 
-static void ExaPrn_WriteChoiceAnsToFill (const struct ExaPrn_Print *Print,
-                                         unsigned NumQst,
-                                         const struct Tst_Question *Question)
+static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
+                                      unsigned NumQst,
+                                      const struct Tst_Question *Question)
   {
    unsigned NumOpt;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
@@ -866,7 +861,6 @@ static void ExaPrn_WriteChoiceAnsToFill (const struct ExaPrn_Print *Print,
 	 If the user does not confirm the submission of their exam ==>
 	 ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
       HTM_TD_Begin ("class=\"LT\"");
-
       snprintf (Id,sizeof (Id),
 		"Ans%010u",
 		NumQst);
@@ -876,11 +870,8 @@ static void ExaPrn_WriteChoiceAnsToFill (const struct ExaPrn_Print *Print,
 		Id,NumOpt,Indexes[NumOpt],
 		UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
 					      "");
-      HTM_TxtF (" onclick=\"updateExamPrint('examprint','%s_%u','Ans',"
-		"'act=%ld&ses=%s&SesCod=%ld&NumQst=%u');"
-		" return false;\" />",	// return false is necessary to not submit form
-		Id,NumOpt,
-		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst);
+      ExaPrn_WriteJSToUpdateExamPrint (Print,NumQst,Id,(int) NumOpt);
+      HTM_Txt (" />");
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
@@ -910,8 +901,8 @@ static void ExaPrn_WriteChoiceAnsToFill (const struct ExaPrn_Print *Print,
 /******************** Write text answer when seeing a test *******************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteTextAnsToFill (const struct ExaPrn_Print *Print,
-	                               unsigned NumQst)
+static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
+	                              unsigned NumQst)
   {
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
@@ -923,11 +914,33 @@ static void ExaPrn_WriteTextAnsToFill (const struct ExaPrn_Print *Print,
 	     " size=\"40\" maxlength=\"%u\" value=\"%s\"",
 	     Id,Tst_MAX_CHARS_ANSWERS_ONE_QST,
 	     Print->PrintedQuestions[NumQst].StrAnswers);
-   HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
-			 "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u');"
-		         " return false;\" />",	// return false is necessary to not submit form
-	     Id,
-	     Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst);
+   ExaPrn_WriteJSToUpdateExamPrint (Print,NumQst,Id,-1);
+   HTM_Txt (" />");
+  }
+
+/*****************************************************************************/
+/********************** Receive answer to an exam print **********************/
+/*****************************************************************************/
+
+static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
+	                                     unsigned NumQst,
+	                                     const char *Id,int NumOpt)
+  {
+   extern const char *Txt_The_changes_have_not_been_saved_;
+
+   if (NumOpt < 0)
+      HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
+			    "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u','%s');",
+		Id,
+		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst,
+		Txt_The_changes_have_not_been_saved_);
+   else	// NumOpt >= 0
+      HTM_TxtF (" onclick=\"updateExamPrint('examprint','%s_%d','Ans',"
+		           "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u','%s');",
+		Id,NumOpt,
+		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst,
+	        Txt_The_changes_have_not_been_saved_);
+   HTM_Txt (" return false;\"");	// return false is necessary to not submit form
   }
 
 /*****************************************************************************/

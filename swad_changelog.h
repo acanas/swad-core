@@ -557,10 +557,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.238.2 (2020-05-18)"
+#define Log_PLATFORM_VERSION	"SWAD 19.238.3 (2020-05-19)"
 #define CSS_FILE		"swad19.238.2.css"
-#define JS_FILE			"swad19.236.4.js"
+#define JS_FILE			"swad19.238.3.js"
 /*
+	Version 19.238.3: May 19, 2020  Fixed issue due to network timeout while answering exams. Reported by Nuria Torres Rosell. (301316 lines)
 	Version 19.238.2: May 19, 2020  Exam description is written in exam heading. Suggested by Eva Martínez Ortigosa. (301254 lines)
 	Version 19.238.1: May 19, 2020  Fixed bug: clicks on answers of exam prints are logged. (301566 lines)
 	Version 19.238:   May 18, 2020  Fix exam-related details.
