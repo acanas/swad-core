@@ -10925,9 +10925,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Answer exam print"
+	"Answer exam question"
 #elif L==4	// es
-	"Responder impresi&oacute;n de examen"
+	"Responder pregunta de examen"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn

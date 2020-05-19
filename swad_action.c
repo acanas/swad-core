@@ -726,7 +726,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActUnhExaSes	] = {1901,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSes_UnhideSession		,NULL},
 
    [ActSeeExaPrn	] = {1904,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaPrn_ShowExamPrint		,NULL},
-   [ActAnsExaPrn	] = {1906,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,NULL				,ExaPrn_ReceivePrintAnswer	,NULL},
+   [ActAnsExaPrn	] = {1906,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,ExaPrn_ReceivePrintAnswer	,NULL},
 
    [ActSeeMyExaResCrs	] = {1867,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyResultsInCrs	,NULL},
    [ActSeeMyExaResExa	] = {1868,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyResultsInExa	,NULL},
@@ -753,7 +753,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActFwdMch		] = {1672,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ForwardMatch		,NULL},
    [ActChgNumColMch	] = {1802,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ChangeNumColsMch		,NULL},
    [ActChgVisResMchQst	] = {1794,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ToggleVisResultsMchQst	,NULL},
-   [ActMchCntDwn	] = {1814,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_StartCountdown		,NULL},
+   [ActMchCntDwn	] = {1814,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,Mch_GetMatchBeingPlayed	,Mch_StartCountdown		,NULL},
    [ActRefMchTch	] = {1788,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchTch		,NULL},
 
    [ActJoiMch		] = {1780,-1,TabUnk,ActSeeAllGam	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_GetMatchBeingPlayed	,Mch_JoinMatchAsStd		,NULL},
