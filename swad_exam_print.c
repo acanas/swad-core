@@ -78,6 +78,7 @@ static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print);
 static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
                                           const struct Exa_Exam *Exam,
                                           const struct ExaPrn_Print *Print);
+static void ExaPrn_GetAndWriteDescription (long ExaCod);
 static void ExaPrn_ShowTableWithQstsToFill (const struct ExaPrn_Print *Print);
 static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
                                          unsigned NumQst,
@@ -577,10 +578,13 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
    Box_BoxBegin (NULL,Exam->Title,
 		 NULL,NULL,
 		 Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
+
+   /***** Heading *****/
    Lay_WriteHeaderClassPhoto (false,false,
 			      Gbl.Hierarchy.Ins.InsCod,
 			      Gbl.Hierarchy.Deg.DegCod,
 			      Gbl.Hierarchy.Crs.CrsCod);
+   ExaPrn_GetAndWriteDescription (Exam->ExaCod);
 
    if (Print->NumQsts)
      {
@@ -598,6 +602,26 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
 
    /***** End box *****/
    Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/********************* Write description in an exam print ********************/
+/*****************************************************************************/
+
+static void ExaPrn_GetAndWriteDescription (long ExaCod)
+  {
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Get description from database *****/
+   Exa_GetExamTxtFromDB (ExaCod,Txt);
+   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,	// Convert from HTML to rigorous HTML
+                     Txt,Cns_MAX_BYTES_TEXT,false);
+   Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);			// Insert links
+
+   /***** Write description *****/
+   HTM_DIV_Begin ("class=\"EXA_PRN_DESC DAT_SMALL\"");
+   HTM_Txt (Txt);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
