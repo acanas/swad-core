@@ -3450,7 +3450,7 @@ void Enr_RemUsrFromCrs1 (void)
 	{
 	 if (Enr_CheckIfICanRemUsrFromCrs ())
 	    Enr_EffectivelyRemUsrFromCrs (&Gbl.Usrs.Other.UsrDat,&Gbl.Hierarchy.Crs,
-					  Enr_REMOVE_USR_PRODUCTION,
+					  Enr_DO_NOT_REMOVE_USR_PRODUCTION,
 					  Cns_VERBOSE);
 	 else
 	    Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();

@@ -1469,15 +1469,22 @@ void ExaPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
    /***** Remove questions of exams prints made by the given user in the given course *****/
    DB_QueryDELETE ("can not remove exams prints made by a user in a course",
 		   "DELETE FROM exa_print_questions"
-	           " USING exa_prints,exa_print_questions"
-                   " WHERE exa_prints.CrsCod=%ld AND exa_prints.UsrCod=%ld"
-                   " AND exa_prints.ExaCod=exa_print_questions.ExaCod",
+	           " USING exa_exams,exa_sessions,exa_prints,exa_print_questions"
+                   " WHERE exa_exams.CrsCod=%ld"
+                   " AND exa_exams.ExaCod=exa_sessions.ExaCod"
+                   " AND exa_sessions.SesCod=exa_prints.SesCod"
+                   " AND exa_prints.UsrCod=%ld"
+                   " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
 		   CrsCod,UsrCod);
 
    /***** Remove exams prints made by the given user in the given course *****/
    DB_QueryDELETE ("can not remove exams prints made by a user in a course",
 		   "DELETE FROM exa_prints"
-	           " WHERE CrsCod=%ld AND UsrCod=%ld",
+	           " USING exa_exams,exa_sessions,exa_prints"
+                   " WHERE exa_exams.CrsCod=%ld"
+                   " AND exa_exams.ExaCod=exa_sessions.ExaCod"
+                   " AND exa_sessions.SesCod=exa_prints.SesCod"
+                   " AND exa_prints.UsrCod=%ld",
 		   CrsCod,UsrCod);
   }
 
@@ -1487,16 +1494,22 @@ void ExaPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
 
 void ExaPrn_RemoveCrsPrints (long CrsCod)
   {
-   /***** Remove questions of exams prints made in the course *****/
-   DB_QueryDELETE ("can not remove exams prints made in a course",
+   /***** Remove questions of exams prints made by the given user in the given course *****/
+   DB_QueryDELETE ("can not remove exams prints in a course",
 		   "DELETE FROM exa_print_questions"
-	           " USING exa_prints,exa_print_questions"
-                   " WHERE exa_prints.CrsCod=%ld"
-                   " AND exa_prints.ExaCod=exa_print_questions.ExaCod",
+	           " USING exa_exams,exa_sessions,exa_prints,exa_print_questions"
+                   " WHERE exa_exams.CrsCod=%ld"
+                   " AND exa_exams.ExaCod=exa_sessions.ExaCod"
+                   " AND exa_sessions.SesCod=exa_prints.SesCod"
+                   " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
 		   CrsCod);
 
-   /***** Remove exam prints made in the course *****/
-   DB_QueryDELETE ("can not remove exams prints made in a course",
-		   "DELETE FROM exa_prints WHERE CrsCod=%ld",
+   /***** Remove exams prints made by the given user in the given course *****/
+   DB_QueryDELETE ("can not remove exams prints in a course",
+		   "DELETE FROM exa_prints"
+	           " USING exa_exams,exa_sessions,exa_prints"
+                   " WHERE exa_exams.CrsCod=%ld"
+                   " AND exa_exams.ExaCod=exa_sessions.ExaCod"
+                   " AND exa_sessions.SesCod=exa_prints.SesCod",
 		   CrsCod);
   }
