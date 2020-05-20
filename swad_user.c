@@ -9972,7 +9972,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    char PhotoURL[PATH_MAX + 1];
    Act_Action_t NextAction;
 
-   /***** Show user's photo and name *****/
+   /***** Show user's photo *****/
    if (NumRows)
       HTM_TD_Begin ("rowspan=\"%u\" class=\"LT COLOR%u\"",
 	            NumRows + 1,Gbl.RowEvenOdd);
@@ -9984,12 +9984,15 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
                      "PHOTO45x60",Pho_ZOOM,false);
    HTM_TD_End ();
 
-   /***** Begin form to go to user's record card *****/
+   /***** User's IDs and name *****/
+   /* Begin cell */
    if (NumRows)
       HTM_TD_Begin ("rowspan=\"%u\" class=\"LT COLOR%u\"",
 	            NumRows + 1,Gbl.RowEvenOdd);
    else
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+
+   /* Action to go to user's record depending on role in course */
    switch (UsrDat->Roles.InCurrentCrs.Role)
      {
       case Rol_STD:
@@ -10001,17 +10004,24 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
 	 break;
       default:
 	 NextAction = ActUnk;
-	 Rol_WrongRoleExit ();
 	 break;
      }
-   Frm_StartForm (NextAction);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   HTM_BUTTON_SUBMIT_Begin (UsrDat->FullName,"BT_LINK LT AUTHOR_TXT",NULL);
 
-   /***** Show user's ID *****/
+   if (NextAction == ActUnk)
+      /* Begin div */
+      HTM_DIV_Begin ("class=\"LT AUTHOR_TXT\"");
+   else
+     {
+      /* Begin form to go to user's record card */
+      Frm_StartForm (NextAction);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      HTM_BUTTON_SUBMIT_Begin (UsrDat->FullName,"BT_LINK LT AUTHOR_TXT",NULL);
+     }
+
+   /* User's ID */
    ID_WriteUsrIDs (UsrDat,NULL);
 
-   /***** Show user's name *****/
+   /* User's name */
    HTM_BR ();
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
@@ -10023,9 +10033,17 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
       HTM_Txt (UsrDat->FirstName);
      }
 
-   /***** End form *****/
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
+   if (NextAction == ActUnk)
+      /* End div */
+      HTM_DIV_End ();
+   else
+     {
+      /* End form */
+      HTM_BUTTON_End ();
+      Frm_EndForm ();
+     }
+
+   /* End cell */
    HTM_TD_End ();
   }
 
