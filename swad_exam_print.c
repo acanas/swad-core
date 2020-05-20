@@ -926,20 +926,20 @@ static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
 	                                     unsigned NumQst,
 	                                     const char *Id,int NumOpt)
   {
-   extern const char *Txt_The_changes_have_not_been_saved_;
+   extern const char *Txt_Connection_issues_;
 
    if (NumOpt < 0)
       HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
 			    "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u','%s');",
 		Id,
 		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst,
-		Txt_The_changes_have_not_been_saved_);
+		Txt_Connection_issues_);
    else	// NumOpt >= 0
       HTM_TxtF (" onclick=\"updateExamPrint('examprint','%s_%d','Ans',"
 		           "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u','%s');",
 		Id,NumOpt,
 		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst,
-	        Txt_The_changes_have_not_been_saved_);
+	        Txt_Connection_issues_);
    HTM_Txt (" return false;\"");	// return false is necessary to not submit form
   }
 

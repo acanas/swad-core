@@ -1295,7 +1295,7 @@ static void Exa_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod)
 			      "SELECT exa_set_answers.MedCod"	// row[0]
 			      " FROM exa_sets,exa_set_questions,exa_set_answers"
 			      " WHERE exa_sets.CrsCod=%ld"
-                              " AND exa_sets.SetCod=exa_set_questions.SetCod",
+                              " AND exa_sets.SetCod=exa_set_questions.SetCod"
 			      " AND exa_set_questions.QstCod=exa_set_answers.QstCod",
 			      CrsCod);
 

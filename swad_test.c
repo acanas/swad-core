@@ -5720,7 +5720,7 @@ static void Tst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod)
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
 			      "SELECT tst_answers.MedCod"	// row[0]
 			      " FROM tst_answers,tst_questions"
-			      " WHERE tst_answers.QstCod=%ld",
+			      " WHERE tst_answers.QstCod=%ld"
 			      " AND tst_answers.QstCod=tst_questions.QstCod"
 			      " AND tst_questions.CrsCod=%ld"	// Extra check
 			      " AND tst_questions.QstCod=%ld",	// Extra check
