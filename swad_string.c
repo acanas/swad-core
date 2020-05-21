@@ -1111,9 +1111,20 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
 			SpecialChar = 0x20;
 			break;
 		     case '%':	/* Change "%XX" --> "&#decimal_number;" (from 0 to 255) */
+				/* Change "%uXXXX" --> "&#decimal number;  (from 0 to 65535) */
 			IsSpecialChar = true;
+			if (*(PtrSrc + 1) == 'u')
+			  {
+			   sscanf (PtrSrc + 2,"%4X",&SpecialChar);
+			   LengthSpecStrSrc = 6;
+			  }
+			else
+			  {
+			   sscanf (PtrSrc + 1,"%2X",&SpecialChar);
+			   LengthSpecStrSrc = 3;
+			  }
 			/* Some special characters, like a chinese character,
-			   are received from a form in a format like this:
+			   can be received from a form in a format like this:
                            %26%2335753%3B --> %26 %23 3 5 7 5 3 %3B --> &#35753;
                                                ^   ^             ^
                                                |   |             |
@@ -1122,8 +1133,6 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
 			   to 2 special chars + 5 normal chars + 1 special char,
 			   and finally is stored as the following 8 bytes: &#35753;
 			*/
-			sscanf (PtrSrc + 1,"%2X",&SpecialChar);
-			LengthSpecStrSrc = 3;
 			break;
 		     case 0x27:	/* Change single comilla --> "&#39;" to avoid SQL code injection */
 		     case 0x5C:	/* '\\' */
@@ -1430,9 +1439,10 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                   break;
                default: /* The rest of special chars are stored as special code */
                   snprintf (StrSpecialChar,sizeof (StrSpecialChar),
-                            (ChangeTo == Str_TO_TEXT ||
-                             ChangeTo == Str_TO_MARKDOWN) ? "%c" :
-                        	                            "&#%u;",
+                            (SpecialChar < 256 &&
+                             (ChangeTo == Str_TO_TEXT ||
+                              ChangeTo == Str_TO_MARKDOWN)) ? "%c" :
+                        	                              "&#%u;",
                 	    SpecialChar);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;

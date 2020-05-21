@@ -157,12 +157,19 @@ static void Frm_StartFormInternal (Act_Action_t NextAction,bool PutParameterLoca
      }
   }
 
+/*
+   Form without action are used in exams.
+   The accept-charset attribute specifies the character encodings that are to be used for the form submission
+   But this type of form is sent via AJAX ==>
+   ==> we use the value property of input fields to build the parameters sent using XMLHttp.send ==>
+   ==> the value property is always codified in UTF-8 ==> accept-charset is irrelevant
+*/
 void Frm_StartFormNoAction (void)
   {
    if (!Gbl.Form.Inside)
      {
       /* Begin form */
-      HTM_Txt ("<form accept-charset=\"windows-1252\""
+      HTM_Txt ("<form accept-charset=\"UTF-8\""
 	       " onsubmit=\"return false;\">");	// Form that can not be submitted, to avoid enter key to send it
 
       Gbl.Form.Inside = true;

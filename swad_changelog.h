@@ -557,10 +557,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.239.4 (2020-05-20)"
+#define Log_PLATFORM_VERSION	"SWAD 19.239.5 (2020-05-21)"
 #define CSS_FILE		"swad19.238.2.css"
-#define JS_FILE			"swad19.239.js"
+#define JS_FILE			"swad19.239.5.js"
 /*
+	Version 19.239.5: May 21, 2020  Fixed bug in charset in answer forms in exam prints. (301405 lines)
 	Version 19.239.4: May 20, 2020  Fixed bug listing user's exam prints. (301332 lines)
 	Version 19.239.3: May 20, 2020  Fixed bugs removing exam prints in a course.
 					Don't remove user's production in a course when removing the user individually. (301316 lines)
@@ -1081,7 +1082,7 @@ ALTER TABLE tst_exams CHANGE COLUMN EndTime EndTime DATETIME NOT NULL;
 	Version 19.155.6: Mar 26, 2020	Code refactoring in matches. (284479 lines)
 	Version 19.155.5: Mar 26, 2020	Code refactoring in tests. (284480 lines)
 	Version 19.155.4: Mar 26, 2020	Code refactoring in tests. (284476 lines)
-	Version 19.155.3: Mar 27, 2020	Code refactoring in pass to parameters of functions. (284476 lines)
+	Version 19.155.3: Mar 26, 2020	Code refactoring in pass to parameters of functions. (284476 lines)
 	Version 19.155.2: Mar 26, 2020	Code refactoring in tests. (284414 lines)
 	Version 19.155.1: Mar 26, 2020	Code refactoring in tests. (284430 lines)
 	Version 19.155:   Mar 25, 2020	Big code refactoring in pass to parameters of functions. (284446 lines)

@@ -151,30 +151,30 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
   {
    extern const char *Hlp_ASSESSMENT_Exams_sessions;
    extern const char *Txt_Sessions;
-   char *SubQuery;
+   char *GroupsSubQuery;
    MYSQL_RES *mysql_res;
    unsigned NumSessions;
    long SesCodToBeEdited;
    bool PutFormNewSession;
 
    /***** Get data of sessions from database *****/
-   /* Fill subquery for exam */
+   /* Fill groups subquery for exam */
    if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
      {
-      if (asprintf (&SubQuery," AND"
-			      "(SesCod NOT IN"
-			      " (SELECT SesCod FROM exa_groups)"
-			      " OR"
-			      " SesCod IN"
-			      " (SELECT exa_groups.SesCod"
-			      " FROM exa_groups,crs_grp_usr"
-			      " WHERE crs_grp_usr.UsrCod=%ld"
-			      " AND exa_groups.GrpCod=crs_grp_usr.GrpCod))",
+      if (asprintf (&GroupsSubQuery," AND"
+				    "(SesCod NOT IN"
+				    " (SELECT SesCod FROM exa_groups)"
+				    " OR"
+				    " SesCod IN"
+				    " (SELECT exa_groups.SesCod"
+				    " FROM exa_groups,crs_grp_usr"
+				    " WHERE crs_grp_usr.UsrCod=%ld"
+				    " AND exa_groups.GrpCod=crs_grp_usr.GrpCod))",
 		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
 	  Lay_NotEnoughMemoryExit ();
       }
     else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
-       if (asprintf (&SubQuery,"%s","") < 0)
+       if (asprintf (&GroupsSubQuery,"%s","") < 0)
 	  Lay_NotEnoughMemoryExit ();
 
    /* Make query */
@@ -193,10 +193,10 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 			       " WHERE ExaCod=%ld%s"
 			       " ORDER BY SesCod",
 			       Exam->ExaCod,
-			       SubQuery);
+			       GroupsSubQuery);
 
    /* Free allocated memory for subquery */
-   free (SubQuery);
+   free (GroupsSubQuery);
 
    /***** Begin box *****/
    Exams->ExaCod = Exam->ExaCod;
