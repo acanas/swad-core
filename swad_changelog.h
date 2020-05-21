@@ -557,10 +557,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.239.8 (2020-05-21)"
+#define Log_PLATFORM_VERSION	"SWAD 19.239.9 (2020-05-21)"
 #define CSS_FILE		"swad19.238.2.css"
 #define JS_FILE			"swad19.239.6.js"
 /*
+	Version 19.239.9: May 21, 2020  Fixed issue in exam sessions: exam prints in sessions of hidden exams are no accesible. (301441 lines)
 	Version 19.239.8: May 21, 2020  Fixed issue in exam sessions: a student can not see hidden sessions. (301433 lines)
 	Version 19.239.7: May 21, 2020  Fixed bug in permissions to see exam results. Reported by Eduardo Ros Vidal. (301412 lines)
 	Version 19.239.6: May 21, 2020  Code refactoring in JS function to escape chars. (301411 lines)

@@ -86,7 +86,8 @@ void ExaSes_RemoveGroupsOfType (long GrpTypCod);
 unsigned ExaSes_GetNumSessionsInExam (long ExaCod);
 unsigned ExaSes_GetNumOpenSessionsInExam (long ExaCod);
 
-bool ExaSes_CheckIfICanAnswerThisSession (const struct ExaSes_Session *Session);
+bool ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
+                                          const struct ExaSes_Session *Session);
 bool ExaSes_CheckIfICanListThisSessionBasedOnGrps (long SesCod);
 
 #endif

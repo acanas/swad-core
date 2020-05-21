@@ -185,7 +185,7 @@ void ExaPrn_ShowExamPrint (void)
    ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
 
    /***** Check if I can access to this session *****/
-   if (ExaSes_CheckIfICanAnswerThisSession (&Session))
+   if (ExaSes_CheckIfICanAnswerThisSession (&Exam,&Session))
      {
       /***** Get print data from database *****/
       Print.SesCod = Session.SesCod;

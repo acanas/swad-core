@@ -91,6 +91,7 @@ static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Ses
 static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Session,
                                                unsigned UniqueId);
 static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
+                                                   const struct Exa_Exam *Exam,
                                                    const struct ExaSes_Session *Session,
                                                    const char *Anchor);
 static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSes_Session *Session);
@@ -145,9 +146,9 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session)
 /*****************************************************************************/
 
 void ExaSes_ListSessions (struct Exa_Exams *Exams,
-                        struct Exa_Exam *Exam,
-		        struct ExaSes_Session *Session,
-                        bool PutFormSession)
+                          struct Exa_Exam *Exam,
+		          struct ExaSes_Session *Session,
+                          bool PutFormSession)
   {
    extern const char *Hlp_ASSESSMENT_Exams_sessions;
    extern const char *Txt_Sessions;
@@ -440,7 +441,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	 ExaSes_ListOneOrMoreSessionsTimes (&Session,UniqueId);
 
 	 /* Title and groups */
-	 ExaSes_ListOneOrMoreSessionsTitleGrps (Exams,&Session,Anchor);
+	 ExaSes_ListOneOrMoreSessionsTitleGrps (Exams,Exam,&Session,Anchor);
 
 	 /* Session result visible? */
 	 ExaSes_ListOneOrMoreSessionsResult (Exams,&Session);
@@ -616,8 +617,9 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
 /*****************************************************************************/
 
 static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
-                                                 const struct ExaSes_Session *Session,
-                                                 const char *Anchor)
+                                                   const struct Exa_Exam *Exam,
+                                                   const struct ExaSes_Session *Session,
+                                                   const char *Anchor)
   {
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
@@ -626,7 +628,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 
    /***** Session title *****/
    HTM_ARTICLE_Begin (Anchor);
-   if (ExaSes_CheckIfICanAnswerThisSession (Session))
+   if (ExaSes_CheckIfICanAnswerThisSession (Exam,Session))
      {
       Frm_StartForm (ActSeeExaPrn);
       Exa_PutParams (Exams);
@@ -634,7 +636,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
       HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 								    Txt_Resume,
 			       Session->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
-					       "BT_LINK LT ASG_TITLE",
+					         "BT_LINK LT ASG_TITLE",
 			       NULL);
       HTM_Txt (Session->Title);
       HTM_BUTTON_End ();
@@ -643,7 +645,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
    else
      {
       HTM_SPAN_Begin ("class=\"%s\"",Session->Hidden ? "LT ASG_TITLE_LIGHT":
-					             "LT ASG_TITLE");
+					               "LT ASG_TITLE");
       HTM_Txt (Session->Title);
       HTM_SPAN_End ();
      }
@@ -1653,12 +1655,16 @@ unsigned ExaSes_GetNumOpenSessionsInExam (long ExaCod)
 /******** Check if I belong to any of the groups of an exam session **********/
 /*****************************************************************************/
 
-bool ExaSes_CheckIfICanAnswerThisSession (const struct ExaSes_Session *Session)
+bool ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
+                                          const struct ExaSes_Session *Session)
   {
-   /***** Hidden or closed sessions are not accesible *****/
-   if (Session->Hidden || !Session->Open)
+   /***** 1. Sessions in hidden exams are not accesible
+          2. Hidden or closed sessions are not accesible *****/
+   if (Exam->Hidden || Session->Hidden || !Session->Open)
       return false;
 
+   /***** Exam is visible, session is visible and open ==>
+          ==> I can answer this session if I can list it based on groups *****/
    return ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session->SesCod);
   }
 
