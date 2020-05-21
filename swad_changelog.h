@@ -557,10 +557,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.239.7 (2020-05-21)"
+#define Log_PLATFORM_VERSION	"SWAD 19.239.8 (2020-05-21)"
 #define CSS_FILE		"swad19.238.2.css"
 #define JS_FILE			"swad19.239.6.js"
 /*
+	Version 19.239.8: May 21, 2020  Fixed issue in exam sessions: a student can not see hidden sessions. (301433 lines)
 	Version 19.239.7: May 21, 2020  Fixed bug in permissions to see exam results. Reported by Eduardo Ros Vidal. (301412 lines)
 	Version 19.239.6: May 21, 2020  Code refactoring in JS function to escape chars. (301411 lines)
 	Version 19.239.5: May 21, 2020  Fixed bug in charset in answer forms in exam prints. (301405 lines)
@@ -696,7 +697,7 @@ DELETE FROM figures;
 UPDATE usr_data SET SideCols=0 WHERE (SideCols & 1)<>0 AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr WHERE Role>3);
 
 	Version 19.219:   May 09, 2020  Create exam print. (302347 lines)
-					2 change necessary in database:
+					2 changes necessary in database:
 CREATE TABLE IF NOT EXISTS exa_prints (PrnCod INT NOT NULL AUTO_INCREMENT,EvtCod INT NOT NULL,UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,NumQsts INT NOT NULL DEFAULT 0,NumQstsNotBlank INT NOT NULL DEFAULT 0,Sent ENUM('N','Y') NOT NULL DEFAULT 'N',Score DOUBLE PRECISION NOT NULL DEFAULT 0,UNIQUE INDEX(PrnCod),UNIQUE INDEX(EvtCod,UsrCod));
 CREATE TABLE IF NOT EXISTS exa_print_questions (PrnCod INT NOT NULL,QstCod INT NOT NULL,QstInd INT NOT NULL,Score DOUBLE PRECISION NOT NULL DEFAULT 0,Indexes TEXT NOT NULL,Answers TEXT NOT NULL,UNIQUE INDEX(PrnCod,QstCod));
 

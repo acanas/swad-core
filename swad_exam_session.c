@@ -151,14 +151,35 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
   {
    extern const char *Hlp_ASSESSMENT_Exams_sessions;
    extern const char *Txt_Sessions;
+   char *HiddenSubQuery;
    char *GroupsSubQuery;
    MYSQL_RES *mysql_res;
    unsigned NumSessions;
    long SesCodToBeEdited;
    bool PutFormNewSession;
 
-   /***** Get data of sessions from database *****/
-   /* Fill groups subquery for exam */
+   /***** Subquery: get hidden sessions depending on user's role *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+         if (asprintf (&HiddenSubQuery," AND Hidden='N'") < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 if (asprintf (&HiddenSubQuery,"%s","") < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 break;
+      default:
+	 Rol_WrongRoleExit ();
+	 break;
+     }
+
+   /***** Subquery: get sessions depending on groups *****/
    if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
      {
       if (asprintf (&GroupsSubQuery," AND"
@@ -177,7 +198,7 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
        if (asprintf (&GroupsSubQuery,"%s","") < 0)
 	  Lay_NotEnoughMemoryExit ();
 
-   /* Make query */
+   /***** Get data of sessions from database *****/
    NumSessions = (unsigned)
 	       DB_QuerySELECT (&mysql_res,"can not get sessions",
 			       "SELECT SesCod,"					// row[0]
@@ -190,13 +211,13 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 				      "Title,"					// row[7]
 				      "ShowUsrResults"				// row[8]
 			       " FROM exa_sessions"
-			       " WHERE ExaCod=%ld%s"
+			       " WHERE ExaCod=%ld%s%s"
 			       " ORDER BY SesCod",
-			       Exam->ExaCod,
-			       GroupsSubQuery);
+			       Exam->ExaCod,HiddenSubQuery,GroupsSubQuery);
 
-   /* Free allocated memory for subquery */
+   /***** Free allocated memory for subqueries *****/
    free (GroupsSubQuery);
+   free (HiddenSubQuery);
 
    /***** Begin box *****/
    Exams->ExaCod = Exam->ExaCod;
