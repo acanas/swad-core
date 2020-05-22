@@ -1566,7 +1566,7 @@ static void ExaSet_ListQuestionForEdition (const struct Tst_Question *Question,
    Tst_WriteQstFeedback (Question->Feedback,"TEST_EDI_LIGHT");
 
    /* Show answers */
-   Tst_WriteAnswersListing (Question);
+   Tst_WriteAnswersBank (Question);
 
    HTM_ARTICLE_End ();
    HTM_TD_End ();

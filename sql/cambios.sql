@@ -13364,3 +13364,14 @@ SELECT institutions.InsCod,institutions.ShortName,institutions.FullName,centres.
 
 
 -------------------------------
+
+SELECT * FROM
+(SELECT PrnCod,Score AS S FROM exa_prints ORDER BY PrnCod) AS ep
+LEFT JOIN
+(SELECT PrnCod,SUM(Score) AS S FROM exa_print_questions GROUP BY PrnCod ORDER BY PrnCod) AS epq
+ON ep.PrnCod=epq.PrnCod
+WHERE ABS(ep.S-epq.S)<0.001;
+
+
+
+

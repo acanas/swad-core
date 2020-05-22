@@ -183,25 +183,32 @@ static void TstPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *Prin
                                        unsigned NumQst,
                                        const struct Tst_Question *Question);
 
-static void Tst_WriteIntAnsListing (const struct Tst_Question *Question);
-static void TstPrn_WriteIntAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				      unsigned NumQst);
+//-----------------------------------------------------------------------------
 
-static void Tst_WriteFloatAnsEdit (const struct Tst_Question *Question);
-static void TstPrn_WriteFloatAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				        unsigned NumQst);
+static void Tst_WriteIntAnsBank (const struct Tst_Question *Question);
+static void Tst_WriteFltAnsBank (const struct Tst_Question *Question);
+static void Tst_WriteTF_AnsBank (const struct Tst_Question *Question);
+static void Tst_WriteChoAnsBank (const struct Tst_Question *Question);
 
-static void Tst_WriteTFAnsListing (const struct Tst_Question *Question);
-static void TstPrn_WriteTFAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-	                             unsigned NumQst);
+//-----------------------------------------------------------------------------
 
-static void Tst_WriteChoiceAnsListing (const struct Tst_Question *Question);
-static void TstPrn_WriteChoiceAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                         unsigned NumQst,
-                                         const struct Tst_Question *Question);
+static void TstPrn_WriteIntAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                      unsigned NumQst,
+                                      __attribute__((unused)) const struct Tst_Question *Question);
+static void TstPrn_WriteFltAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                      unsigned NumQst,
+                                      __attribute__((unused)) const struct Tst_Question *Question);
+static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                      unsigned NumQst,
+                                      __attribute__((unused)) const struct Tst_Question *Question);
+static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                      unsigned NumQst,
+                                      const struct Tst_Question *Question);
+static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                      unsigned NumQst,
+                                      __attribute__((unused)) const struct Tst_Question *Question);
 
-static void TstPrn_WriteTextAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-	                               unsigned NumQst);
+//-----------------------------------------------------------------------------
 
 static bool Tst_GetParamsTst (struct Tst_Test *Test,
                               Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
@@ -932,7 +939,7 @@ void Tst_ListQuestionForEdition (const struct Tst_Question *Question,
       Tst_WriteQstFeedback (Question->Feedback,"TEST_EDI_LIGHT");
 
       /* Show answers */
-      Tst_WriteAnswersListing (Question);
+      Tst_WriteAnswersBank (Question);
      }
    else
      {
@@ -2541,7 +2548,7 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
 
       /* Feedback (row[4]) and answers */
       Tst_WriteQstFeedback (Test->Question.Feedback,"TEST_EDI_LIGHT");
-      Tst_WriteAnswersListing (&Test->Question);
+      Tst_WriteAnswersBank (&Test->Question);
       HTM_TD_End ();
 
       /* Number of times this question has been answered */
@@ -2820,7 +2827,7 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
       Tst_WriteQstFeedback (Question->Feedback,"TEST_EDI_LIGHT");
 
       /* Write answers */
-      Tst_WriteAnswersListing (Question);
+      Tst_WriteAnswersBank (Question);
       HTM_TD_End ();
 
       /***** End table row *****/
@@ -2881,28 +2888,20 @@ void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
-void Tst_WriteAnswersListing (const struct Tst_Question *Question)
+void Tst_WriteAnswersBank (const struct Tst_Question *Question)
   {
+   void (*TstPrn_WriteAnsBank[Tst_NUM_ANS_TYPES]) (const struct Tst_Question *Question) =
+    {
+     [Tst_ANS_INT            ] = Tst_WriteIntAnsBank,
+     [Tst_ANS_FLOAT          ] = Tst_WriteFltAnsBank,
+     [Tst_ANS_TRUE_FALSE     ] = Tst_WriteTF_AnsBank,
+     [Tst_ANS_UNIQUE_CHOICE  ] = Tst_WriteChoAnsBank,
+     [Tst_ANS_MULTIPLE_CHOICE] = Tst_WriteChoAnsBank,
+     [Tst_ANS_TEXT           ] = Tst_WriteChoAnsBank,
+    };
+
    /***** Write answers *****/
-   switch (Question->Answer.Type)
-     {
-      case Tst_ANS_INT:
-         Tst_WriteIntAnsListing (Question);
-         break;
-      case Tst_ANS_FLOAT:
-         Tst_WriteFloatAnsEdit (Question);
-         break;
-      case Tst_ANS_TRUE_FALSE:
-         Tst_WriteTFAnsListing (Question);
-         break;
-      case Tst_ANS_UNIQUE_CHOICE:
-      case Tst_ANS_MULTIPLE_CHOICE:
-      case Tst_ANS_TEXT:
-         Tst_WriteChoiceAnsListing (Question);
-	 break;
-      default:
-         break;
-     }
+   TstPrn_WriteAnsBank[Question->Answer.Type] (Question);
   }
 
 /*****************************************************************************/
@@ -2913,28 +2912,20 @@ static void TstPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *Prin
                                        unsigned NumQst,
                                        const struct Tst_Question *Question)
   {
-   /***** Write answer depending on type *****/
-   switch (Question->Answer.Type)
-     {
-      case Tst_ANS_INT:
-         TstPrn_WriteIntAnsSeeing (PrintedQuestion,NumQst);
-         break;
-      case Tst_ANS_FLOAT:
-         TstPrn_WriteFloatAnsSeeing (PrintedQuestion,NumQst);
-         break;
-      case Tst_ANS_TRUE_FALSE:
-         TstPrn_WriteTFAnsSeeing (PrintedQuestion,NumQst);
-         break;
-      case Tst_ANS_UNIQUE_CHOICE:
-      case Tst_ANS_MULTIPLE_CHOICE:
-         TstPrn_WriteChoiceAnsSeeing (PrintedQuestion,NumQst,Question);
-         break;
-      case Tst_ANS_TEXT:
-         TstPrn_WriteTextAnsSeeing (PrintedQuestion,NumQst);
-         break;
-      default:
-         break;
-     }
+   void (*TstPrn_WriteAnsBank[Tst_NUM_ANS_TYPES]) (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+						   unsigned NumQst,
+						   const struct Tst_Question *Question) =
+    {
+     [Tst_ANS_INT            ] = TstPrn_WriteIntAnsToFill,
+     [Tst_ANS_FLOAT          ] = TstPrn_WriteFltAnsToFill,
+     [Tst_ANS_TRUE_FALSE     ] = TstPrn_WriteTF_AnsToFill,
+     [Tst_ANS_UNIQUE_CHOICE  ] = TstPrn_WriteChoAnsToFill,
+     [Tst_ANS_MULTIPLE_CHOICE] = TstPrn_WriteChoAnsToFill,
+     [Tst_ANS_TEXT           ] = TstPrn_WriteTxtAnsToFill,
+    };
+
+   /***** Write answers *****/
+   TstPrn_WriteAnsBank[Question->Answer.Type] (PrintedQuestion,NumQst,Question);
   }
 
 /*****************************************************************************/
@@ -2955,7 +2946,7 @@ bool Tst_CheckIfQuestionIsValidForGame (long QstCod)
 /****************** Write integer answer when editing a test *****************/
 /*****************************************************************************/
 
-static void Tst_WriteIntAnsListing (const struct Tst_Question *Question)
+static void Tst_WriteIntAnsBank (const struct Tst_Question *Question)
   {
    HTM_SPAN_Begin ("class=\"TEST_EDI\"");
    HTM_TxtF ("(%ld)",Question->Answer.Integer);
@@ -2963,28 +2954,10 @@ static void Tst_WriteIntAnsListing (const struct Tst_Question *Question)
   }
 
 /*****************************************************************************/
-/****************** Write integer answer when seeing a test ******************/
-/*****************************************************************************/
-
-static void TstPrn_WriteIntAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				      unsigned NumQst)
-  {
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),
-	     "Ans%010u",
-	     NumQst);
-   HTM_INPUT_TEXT (StrAns,11,PrintedQuestion->StrAnswers,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"11\"");
-  }
-
-/*****************************************************************************/
 /****************** Write float answer when editing a test *******************/
 /*****************************************************************************/
 
-static void Tst_WriteFloatAnsEdit (const struct Tst_Question *Question)
+static void Tst_WriteFltAnsBank (const struct Tst_Question *Question)
   {
    HTM_SPAN_Begin ("class=\"TEST_EDI\"");
    HTM_Txt ("([");
@@ -2996,28 +2969,10 @@ static void Tst_WriteFloatAnsEdit (const struct Tst_Question *Question)
   }
 
 /*****************************************************************************/
-/****************** Write float answer when seeing a test ********************/
-/*****************************************************************************/
-
-static void TstPrn_WriteFloatAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-				        unsigned NumQst)
-  {
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),
-	     "Ans%010u",
-	     NumQst);
-   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,PrintedQuestion->StrAnswers,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"11\"");
-  }
-
-/*****************************************************************************/
 /*********** Write false / true answer when listing test questions ***********/
 /*****************************************************************************/
 
-static void Tst_WriteTFAnsListing (const struct Tst_Question *Question)
+static void Tst_WriteTF_AnsBank (const struct Tst_Question *Question)
   {
    /***** Write answer *****/
    HTM_SPAN_Begin ("class=\"TEST_EDI\"");
@@ -3028,53 +2983,10 @@ static void Tst_WriteTFAnsListing (const struct Tst_Question *Question)
   }
 
 /*****************************************************************************/
-/************** Write false / true answer when seeing a test ****************/
-/*****************************************************************************/
-
-static void TstPrn_WriteTFAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-	                             unsigned NumQst)
-  {
-   extern const char *Txt_TF_QST[2];
-
-   /***** Write selector for the answer *****/
-   /* Initially user has not answered the question ==> initially all the answers will be blank.
-      If the user does not confirm the submission of their exam ==>
-      ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"Ans%010u\"",NumQst);
-   HTM_OPTION (HTM_Type_STRING,"" ,PrintedQuestion->StrAnswers[0] == '\0',false,"&nbsp;");
-   HTM_OPTION (HTM_Type_STRING,"T",PrintedQuestion->StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
-   HTM_OPTION (HTM_Type_STRING,"F",PrintedQuestion->StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
-   HTM_SELECT_End ();
-  }
-
-/*****************************************************************************/
-/************** Write false / true answer when seeing a test *****************/
-/*****************************************************************************/
-
-void Tst_WriteAnsTF (char AnsTF)
-  {
-   extern const char *Txt_TF_QST[2];
-
-   switch (AnsTF)
-     {
-      case 'T':		// true
-         HTM_Txt (Txt_TF_QST[0]);
-         break;
-      case 'F':		// false
-         HTM_Txt (Txt_TF_QST[1]);
-         break;
-      default:		// no answer
-         HTM_NBSP ();
-         break;
-     }
-  }
-
-/*****************************************************************************/
 /**** Write single or multiple choice answer when listing test questions *****/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsListing (const struct Tst_Question *Question)
+static void Tst_WriteChoAnsBank (const struct Tst_Question *Question)
   {
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    unsigned NumOpt;
@@ -3161,17 +3073,87 @@ static void Tst_WriteChoiceAnsListing (const struct Tst_Question *Question)
   }
 
 /*****************************************************************************/
+/****************** Write integer answer when seeing a test ******************/
+/*****************************************************************************/
+
+static void TstPrn_WriteIntAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                      unsigned NumQst,
+                                      __attribute__((unused)) const struct Tst_Question *Question)
+  {
+   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Write input field for the answer *****/
+   snprintf (StrAns,sizeof (StrAns),
+	     "Ans%010u",
+	     NumQst);
+   HTM_INPUT_TEXT (StrAns,11,PrintedQuestion->StrAnswers,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
+		   "size=\"11\"");
+  }
+
+/*****************************************************************************/
+/****************** Write float answer when seeing a test ********************/
+/*****************************************************************************/
+
+static void TstPrn_WriteFltAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                      unsigned NumQst,
+                                      __attribute__((unused)) const struct Tst_Question *Question)
+  {
+   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Write input field for the answer *****/
+   snprintf (StrAns,sizeof (StrAns),
+	     "Ans%010u",
+	     NumQst);
+   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,PrintedQuestion->StrAnswers,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
+		   "size=\"11\"");
+  }
+
+/*****************************************************************************/
+/************** Write false / true answer when seeing a test ****************/
+/*****************************************************************************/
+
+static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                      unsigned NumQst,
+                                      __attribute__((unused)) const struct Tst_Question *Question)
+  {
+   extern const char *Txt_TF_QST[2];
+
+   /***** Write selector for the answer *****/
+   /* Initially user has not answered the question ==> initially all the answers will be blank.
+      If the user does not confirm the submission of their exam ==>
+      ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+		     "name=\"Ans%010u\"",NumQst);
+   HTM_OPTION (HTM_Type_STRING,"" ,PrintedQuestion->StrAnswers[0] == '\0',false,"&nbsp;");
+   HTM_OPTION (HTM_Type_STRING,"T",PrintedQuestion->StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
+   HTM_OPTION (HTM_Type_STRING,"F",PrintedQuestion->StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
+   HTM_SELECT_End ();
+  }
+
+/*****************************************************************************/
 /******** Write single or multiple choice answer when seeing a test **********/
 /*****************************************************************************/
 
-static void TstPrn_WriteChoiceAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                         unsigned NumQst,
-                                         const struct Tst_Question *Question)
+static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                      unsigned NumQst,
+                                      const struct Tst_Question *Question)
   {
    unsigned NumOpt;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    bool UsrAnswers[Tst_MAX_OPTIONS_PER_QUESTION];
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Change format of answers text *****/
+   for (NumOpt = 0;
+	NumOpt < Question->Answer.NumOptions;
+	NumOpt++)
+      /* Convert answer text, that is in HTML, to rigorous HTML */
+      if (Question->Answer.Options[NumOpt].Text[0])
+	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			   Question->Answer.Options[NumOpt].Text,
+			   Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
    /***** Get indexes for this question from string *****/
    TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
@@ -3242,6 +3224,47 @@ static void TstPrn_WriteChoiceAnsSeeing (const struct TstPrn_PrintedQuestion *Pr
   }
 
 /*****************************************************************************/
+/******************** Write text answer when seeing a test *******************/
+/*****************************************************************************/
+
+static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
+                                      unsigned NumQst,
+                                      __attribute__((unused)) const struct Tst_Question *Question)
+  {
+   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Write input field for the answer *****/
+   snprintf (StrAns,sizeof (StrAns),
+	     "Ans%010u",
+	     NumQst);
+   HTM_INPUT_TEXT (StrAns,Tst_MAX_CHARS_ANSWERS_ONE_QST,PrintedQuestion->StrAnswers,
+                   HTM_DONT_SUBMIT_ON_CHANGE,
+		   "size=\"40\"");
+  }
+
+/*****************************************************************************/
+/************** Write false / true answer when seeing a test *****************/
+/*****************************************************************************/
+
+void Tst_WriteAnsTF (char AnsTF)
+  {
+   extern const char *Txt_TF_QST[2];
+
+   switch (AnsTF)
+     {
+      case 'T':		// true
+         HTM_Txt (Txt_TF_QST[0]);
+         break;
+      case 'F':		// false
+         HTM_Txt (Txt_TF_QST[1]);
+         break;
+      default:		// no answer
+         HTM_NBSP ();
+         break;
+     }
+  }
+
+/*****************************************************************************/
 /************************ Get choice answer from row *************************/
 /*****************************************************************************/
 
@@ -3299,24 +3322,6 @@ void Tst_GetChoiceAns (struct Tst_Question *Question,MYSQL_RES *mysql_res)
       /***** Assign correctness (row[4]) of this answer (this option) *****/
       Question->Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
      }
-  }
-
-/*****************************************************************************/
-/******************** Write text answer when seeing a test *******************/
-/*****************************************************************************/
-
-static void TstPrn_WriteTextAnsSeeing (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-	                               unsigned NumQst)
-  {
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),
-	     "Ans%010u",
-	     NumQst);
-   HTM_INPUT_TEXT (StrAns,Tst_MAX_CHARS_ANSWERS_ONE_QST,PrintedQuestion->StrAnswers,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"40\"");
   }
 
 /*****************************************************************************/
@@ -5604,8 +5609,8 @@ static void Tst_InsertAnswersIntoDB (struct Tst_Question *Question)
 void Tst_UpdateQstScoreInDB (struct TstPrn_PrintedQuestion *PrintedQuestion)
   {
    /***** Update number of clicks and score of the question *****/
-   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   if (PrintedQuestion->AnswerIsNotBlank)
+   Str_SetDecimalPointToUS ();		// To print the floating point as a dot
+   if (PrintedQuestion->StrAnswers[0])	// User's answer is not blank
       DB_QueryUPDATE ("can not update the score of a question",
 		      "UPDATE tst_questions"
 	              " SET NumHits=NumHits+1,NumHitsNotBlank=NumHitsNotBlank+1,"
@@ -5613,7 +5618,7 @@ void Tst_UpdateQstScoreInDB (struct TstPrn_PrintedQuestion *PrintedQuestion)
                       " WHERE QstCod=%ld",
 		      PrintedQuestion->Score,
 		      PrintedQuestion->QstCod);
-   else	// The answer is blank
+   else					// User's answer is blank
       DB_QueryUPDATE ("can not update the score of a question",
 		      "UPDATE tst_questions"
 	              " SET NumHits=NumHits+1"

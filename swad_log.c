@@ -32,6 +32,7 @@
 #include "swad_banner.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_exam_log.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_log.h"
@@ -122,6 +123,9 @@ void Log_LogAccess (const char *Comments)
 		   Gbl.TimeGenerationInMicroseconds,
 		   Gbl.TimeSendInMicroseconds,
 		   Gbl.IP);
+
+   /* Log access while answering exam prints */
+   ExaLog_LogAccess (LogCod);
 
    /* Log comments */
    if (Comments)

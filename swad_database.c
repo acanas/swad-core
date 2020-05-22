@@ -1044,6 +1044,33 @@ mysql> DESCRIBE exa_exams;
 		   "UNIQUE INDEX(ExaCod),"
 		   "INDEX(CrsCod))");
 
+   /***** Table exa_log *****/
+/*
+mysql> DESCRIBE exa_log;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| LogCod    | int(11)  | NO   | PRI | NULL    |       |
+| PrnCod    | int(11)  | NO   | MUL | NULL    |       |
+| ActCod    | int(11)  | NO   |     | NULL    |       |
+| ClickTime | datetime | NO   | MUL | NULL    |       |
+| IP        | char(15) | NO   |     | NULL    |       |
+| SessionId | char(43) | NO   |     | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+*/
+// TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_log ("
+			"LogCod INT NOT NULL,"
+			"PrnCod INT NOT NULL,"
+			"ActCod INT NOT NULL,"
+			"ClickTime DATETIME NOT NULL,"
+			"IP CHAR(15) NOT NULL,"		// Cns_MAX_BYTES_IP
+			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
+		   "UNIQUE INDEX(LogCod),"
+		   "INDEX(PrnCod,ClickTime),"
+		   "INDEX(ClickTime))");
+
 /***** Table exa_print_questions *****/
 /*
 mysql> DESCRIBE exa_print_questions;

@@ -130,7 +130,7 @@ void Tst_WriteParamEditQst (const struct Tst_Test *Test);
 unsigned Tst_GetNumAnswersQst (long QstCod);
 void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
                         bool Shuffle);
-void Tst_WriteAnswersListing (const struct Tst_Question *Question);
+void Tst_WriteAnswersBank (const struct Tst_Question *Question);
 bool Tst_CheckIfQuestionIsValidForGame (long QstCod);
 void Tst_WriteAnsTF (char AnsTF);
 void Tst_GetChoiceAns (struct Tst_Question *Question,MYSQL_RES *mysql_res);

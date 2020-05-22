@@ -727,11 +727,12 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActSeeExaPrn	] = {1904,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaPrn_ShowExamPrint		,NULL},
    [ActAnsExaPrn	] = {1906,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,ExaPrn_ReceivePrintAnswer	,NULL},
+   [ActEndExaPrn	] = {1908,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowOneExaResult	,NULL},
 
    [ActSeeMyExaResCrs	] = {1867,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyResultsInCrs	,NULL},
    [ActSeeMyExaResExa	] = {1868,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyResultsInExa	,NULL},
    [ActSeeMyExaResSes	] = {1869,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyResultsInSes	,NULL},
-   [ActSeeOneExaResMe	] = {1870,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowOneExaResult	,NULL},
+   [ActSeeOneExaResMe	] = {1870,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowOneExaResult	,NULL},
 
    [ActReqSeeUsrExaRes	] = {1871,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_SelUsrsToViewResults	,NULL},
    [ActSeeUsrExaResCrs	] = {1872,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowAllResultsInCrs	,NULL},
@@ -3716,6 +3717,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #1905 (obsolete action)
 	ActAnsExaPrn,		// #1906
 	ActEdiTag,		// #1907
+	ActEndExaPrn,		// #1908
   };
 
 /*****************************************************************************/

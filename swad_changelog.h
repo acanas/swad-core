@@ -557,10 +557,16 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.239.9 (2020-05-21)"
+#define Log_PLATFORM_VERSION	"SWAD 19.241 (2020-05-22)"
 #define CSS_FILE		"swad19.238.2.css"
 #define JS_FILE			"swad19.239.6.js"
 /*
+	Version 19.241:   May 22, 2020  Log in exams.
+					Bug fixing and code refactoring in tests and exams. (301712 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS exa_log (LogCod INT NOT NULL,PrnCod INT NOT NULL,ActCod INT NOT NULL,ClickTime DATETIME NOT NULL,IP CHAR(15) NOT NULL,SessionId CHAR(43) NOT NULL,UNIQUE INDEX(LogCod),INDEX(PrnCod,ClickTime),INDEX(ClickTime));
+
+	Version 19.240:   May 21, 2020  Code refactoring in tests and exams. (301428 lines)
 	Version 19.239.9: May 21, 2020  Fixed issue in exam sessions: exam prints in sessions of hidden exams are no accesible. (301441 lines)
 	Version 19.239.8: May 21, 2020  Fixed issue in exam sessions: a student can not see hidden sessions. (301433 lines)
 	Version 19.239.7: May 21, 2020  Fixed bug in permissions to see exam results. Reported by Eduardo Ros Vidal. (301412 lines)

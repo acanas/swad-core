@@ -61,6 +61,8 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+static long ExaPrn_CurrentPrnCod = -1L;
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -107,7 +109,6 @@ static unsigned ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print);
 
 static unsigned ExaPrn_GetParamQstInd (void);
 
-static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *Print);
 static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Print,
                                                         unsigned NumQst);
 
@@ -140,6 +141,20 @@ static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
 static void ExaPrn_GetNumQstsNotBlank (struct ExaPrn_Print *Print);
 static void ExaPrn_ComputeTotalScoreOfPrint (struct ExaPrn_Print *Print);
 static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print);
+
+/*****************************************************************************/
+/************* Set and get current exam print code (used in log) *************/
+/*****************************************************************************/
+
+void ExaPrn_SetCurrentPrnCod (long PrnCod)
+  {
+   ExaPrn_CurrentPrnCod = PrnCod;
+  }
+
+long ExaPrn_GetCurrentPrnCod (void)
+  {
+   return ExaPrn_CurrentPrnCod;
+  }
 
 /*****************************************************************************/
 /**************************** Reset exam print *******************************/
@@ -201,12 +216,12 @@ void ExaPrn_ShowExamPrint (void)
 	 ExaPrn_GetQuestionsForNewPrintFromDB (&Print,Exam.ExaCod);
 
 	 if (Print.NumQsts)
-	   {
 	    /***** Create/update new exam print in database *****/
 	    ExaPrn_CreatePrintInDB (&Print);
-	    ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print);
-	   }
 	 }
+
+      /***** Set current print code (to be used in log) *****/
+      ExaPrn_SetCurrentPrnCod (Print.PrnCod);
 
       /***** Show test exam to be answered *****/
       ExaPrn_ShowExamPrintToFillIt (&Exams,&Exam,&Print);
@@ -417,6 +432,9 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
          If the user does not confirm the submission of their exam ==>
          ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
       Print->PrintedQuestions[*NumQstInPrint].StrAnswers[0] = '\0';
+
+      /* Reset score of this question in print */
+      Print->PrintedQuestions[*NumQstInPrint].Score = 0.0;
      }
 
    return NumQstsInSet;
@@ -493,6 +511,8 @@ static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *Printed
 
 static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print)
   {
+   unsigned NumQst;
+
    /***** Insert new exam print into table *****/
    Print->PrnCod =
    DB_QueryINSERTandReturnCode ("can not create new exam print",
@@ -503,6 +523,13 @@ static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print)
 				Print->SesCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Print->NumQsts);
+
+   /***** Store all questions (with blank answers)
+          of this exam print just generated in database *****/
+   for (NumQst = 0;
+	NumQst < Print->NumQsts;
+	NumQst++)
+      ExaPrn_StoreOneQstOfPrintInDB (Print,NumQst);
   }
 
 /*****************************************************************************/
@@ -599,7 +626,7 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
       HTM_DIV_End ();				// Used for AJAX based refresh
 
       /***** Form to end/close this exam print *****/
-      Frm_StartForm (ActSeeOneExaResMe);
+      Frm_StartForm (ActEndExaPrn);
       ExaSes_PutParamsEdit (Exams);
       Btn_PutCreateButton (Txt_I_have_finished);
       Frm_EndForm ();
@@ -968,6 +995,9 @@ void ExaPrn_ReceivePrintAnswer (void)
       if (Print.PrnCod <= 0)
 	 Lay_WrongExamExit ();
 
+      /***** Set current print code (to be used in log) *****/
+      ExaPrn_SetCurrentPrnCod (Print.PrnCod);
+
       /***** Get questions and user's answers of exam print from database *****/
       ExaPrn_GetPrintQuestionsFromDB (&Print);
 
@@ -1024,33 +1054,6 @@ static unsigned ExaPrn_GetParamQstInd (void)
   }
 
 /*****************************************************************************/
-/*********** Compute score of each question and store in database ************/
-/*****************************************************************************/
-
-static void ExaPrn_ComputeScoresAndStoreQuestionsOfPrint (struct ExaPrn_Print *Print)
-  {
-   unsigned NumQst;
-
-   /***** Initialize total score *****/
-   Print->Score = 0.0;
-   Print->NumQstsNotBlank = 0;
-
-   /***** Compute and store scores of all questions *****/
-   for (NumQst = 0;
-	NumQst < Print->NumQsts;
-	NumQst++)
-     {
-      /* Compute question score and store in database */
-      ExaPrn_ComputeScoreAndStoreQuestionOfPrint (Print,NumQst);
-
-      /* Accumulate total score */
-      Print->Score += Print->PrintedQuestions[NumQst].Score;
-      if (Print->PrintedQuestions[NumQst].AnswerIsNotBlank)
-	 Print->NumQstsNotBlank++;
-     }
-  }
-
-/*****************************************************************************/
 /*********** Compute score of one question and store in database *************/
 /*****************************************************************************/
 
@@ -1074,7 +1077,12 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
       ExaPrn_GetAnswerFromDB (Print,Print->PrintedQuestions[NumQst].QstCod,
                               CurrentStrAnswersInDB);
       if (!strcmp (Print->PrintedQuestions[NumQst].StrAnswers,CurrentStrAnswersInDB))
-	 Print->PrintedQuestions[NumQst].StrAnswers[0] = '\0';
+	{
+	 /* The answer just clicked by user
+	    is the same as the last one checked and stored in database */
+	 Print->PrintedQuestions[NumQst].StrAnswers[0]    = '\0';	// Uncheck option
+	 Print->PrintedQuestions[NumQst].Score            = 0;		// Clear question score
+	}
      }
 
    /***** Store test exam question in database *****/
@@ -1395,7 +1403,9 @@ static void ExaPrn_ComputeTotalScoreOfPrint (struct ExaPrn_Print *Print)
 
    /***** Compute total score of exam print *****/
    if (DB_QuerySELECT (&mysql_res,"can not get score of exam print",
-		       "SELECT SUM(Score) FROM exa_print_questions WHERE PrnCod=%ld",
+		       "SELECT SUM(Score)"
+		       " FROM exa_print_questions"
+		       " WHERE PrnCod=%ld",
 		       Print->PrnCod))
      {
       /***** Get sum of individual scores (row[0]) *****/

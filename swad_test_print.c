@@ -105,23 +105,23 @@ static void TstPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question);
 static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     const struct Tst_Question *Question,
-				     unsigned Visibility);
+				     bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY]);
 static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     const struct Tst_Question *Question,
-				     unsigned Visibility);
+				     bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY]);
 static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     const struct Tst_Question *Question,
-				     unsigned Visibility);
+				     bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY]);
 static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     const struct Tst_Question *Question,
-				     unsigned Visibility);
+				     bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY]);
 static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     const struct Tst_Question *Question,
-				     unsigned Visibility);
+				     bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY]);
 
 //-----------------------------------------------------------------------------
 
@@ -250,7 +250,7 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
 
       /***** Compute total score *****/
       Print->Score += Print->PrintedQuestions[NumQst].Score;
-      if (Print->PrintedQuestions[NumQst].AnswerIsNotBlank)
+      if (Print->PrintedQuestions[NumQst].StrAnswers[0])	// User's answer is not blank
 	 Print->NumQstsNotBlank++;
 
       /***** Update the number of accesses and the score of this question *****/
@@ -280,7 +280,35 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
    extern const char *Txt_Question_removed;
    extern const char *Txt_Question_modified;
    bool QuestionUneditedAfterExam = false;
-   bool IsVisibleQstAndAnsTxt = TstVis_IsVisibleQstAndAnsTxt (Visibility);
+   bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY];
+
+   /***** Check if I can view each part of the question *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+	 IsVisible[TstVis_VISIBLE_QST_ANS_TXT   ] = TstVis_IsVisibleQstAndAnsTxt (Visibility);
+	 IsVisible[TstVis_VISIBLE_FEEDBACK_TXT  ] = TstVis_IsVisibleFeedbackTxt  (Visibility);
+	 IsVisible[TstVis_VISIBLE_CORRECT_ANSWER] = TstVis_IsVisibleCorrectAns   (Visibility);
+	 IsVisible[TstVis_VISIBLE_EACH_QST_SCORE] = TstVis_IsVisibleEachQstScore (Visibility);
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 IsVisible[TstVis_VISIBLE_QST_ANS_TXT   ] =
+	 IsVisible[TstVis_VISIBLE_FEEDBACK_TXT  ] =
+	 IsVisible[TstVis_VISIBLE_CORRECT_ANSWER] =
+	 IsVisible[TstVis_VISIBLE_EACH_QST_SCORE] = true;
+	 break;
+      default:
+	 IsVisible[TstVis_VISIBLE_QST_ANS_TXT   ] =
+	 IsVisible[TstVis_VISIBLE_FEEDBACK_TXT  ] =
+	 IsVisible[TstVis_VISIBLE_CORRECT_ANSWER] =
+	 IsVisible[TstVis_VISIBLE_EACH_QST_SCORE] = false;
+	 break;
+     }
 
    /***** If this question has been edited later than test time
 	  ==> don't show question ****/
@@ -306,17 +334,18 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
       if (QuestionUneditedAfterExam)
 	{
 	 /* Stem */
-	 Tst_WriteQstStem (Question->Stem,"TEST_EXA",IsVisibleQstAndAnsTxt);
+	 Tst_WriteQstStem (Question->Stem,"TEST_EXA",IsVisible[TstVis_VISIBLE_QST_ANS_TXT]);
 
 	 /* Media */
-	 if (IsVisibleQstAndAnsTxt)
+	 if (IsVisible[TstVis_VISIBLE_QST_ANS_TXT])
 	    Med_ShowMedia (&Question->Media,
 			   "TEST_MED_SHOW_CONT",
 			   "TEST_MED_SHOW");
 
 	 /* Answers */
 	 TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],Question);
-	 TstPrn_WriteAnswersExam (UsrDat,&Print->PrintedQuestions[NumQst],Question,Visibility);
+	 TstPrn_WriteAnswersExam (UsrDat,&Print->PrintedQuestions[NumQst],Question,
+	                          IsVisible);
 	}
       else
 	 Ale_ShowAlert (Ale_WARNING,Txt_Question_modified);
@@ -325,7 +354,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
       Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
 
    /* Write score retrieved from database */
-   if (TstVis_IsVisibleEachQstScore (Visibility))
+   if (IsVisible[TstVis_VISIBLE_EACH_QST_SCORE])
      {
       HTM_DIV_Begin ("class=\"DAT_SMALL LM\"");
       HTM_TxtColonNBSP (Txt_Score);
@@ -341,7 +370,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 
    /* Question feedback */
    if (QuestionUneditedAfterExam)
-      if (TstVis_IsVisibleFeedbackTxt (Visibility))
+      if (IsVisible[TstVis_VISIBLE_FEEDBACK_TXT])
 	 Tst_WriteQstFeedback (Question->Feedback,"TEST_EXA_LIGHT");
 
    HTM_TD_End ();
@@ -382,7 +411,7 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
 
       /* Accumulate total score */
       Print->Score += Print->PrintedQuestions[NumQst].Score;
-      if (Print->PrintedQuestions[NumQst].AnswerIsNotBlank)
+      if (Print->PrintedQuestions[NumQst].StrAnswers[0])	// User's answer is not blank
 	 Print->NumQstsNotBlank++;
 
       /* Update the number of hits and the score of this question in tests database */
@@ -632,22 +661,20 @@ void TstPrn_ComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
   {
    long AnswerUsr;
 
-   PrintedQuestion->Score = 0.0;		// Default score for blank or wrong answer
-   PrintedQuestion->AnswerIsNotBlank = (PrintedQuestion->StrAnswers[0] != '\0');
-   if (PrintedQuestion->AnswerIsNotBlank)	// If user has answered the answer
+   PrintedQuestion->Score = 0.0;	// Default score for blank or wrong answer
+   if (PrintedQuestion->StrAnswers[0])	// If user has answered the answer
       if (sscanf (PrintedQuestion->StrAnswers,"%ld",&AnswerUsr) == 1)
 	 if (AnswerUsr == Question->Answer.Integer)	// Correct answer
 	    PrintedQuestion->Score = 1.0;
   }
 
 void TstPrn_ComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				  const struct Tst_Question *Question)
+				const struct Tst_Question *Question)
   {
    double AnswerUsr;
 
-   PrintedQuestion->Score = 0.0;		// Default score for blank or wrong answer
-   PrintedQuestion->AnswerIsNotBlank = (PrintedQuestion->StrAnswers[0] != '\0');
-   if (PrintedQuestion->AnswerIsNotBlank)	// If user has answered the answer
+   PrintedQuestion->Score = 0.0;	// Default score for blank or wrong answer
+   if (PrintedQuestion->StrAnswers[0])	// If user has answered the answer
      {
       AnswerUsr = Str_GetDoubleFromStr (PrintedQuestion->StrAnswers);
 
@@ -661,8 +688,7 @@ void TstPrn_ComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 void TstPrn_ComputeTF_AnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 			        const struct Tst_Question *Question)
   {
-   PrintedQuestion->AnswerIsNotBlank = (PrintedQuestion->StrAnswers[0] != '\0');
-   if (PrintedQuestion->AnswerIsNotBlank)	// User has selected T or F
+   if (PrintedQuestion->StrAnswers[0])	// If user has selected T or F
       PrintedQuestion->Score = (PrintedQuestion->StrAnswers[0] == Question->Answer.TF) ? 1.0 :	// Correct
 					                                                -1.0;	// Wrong
    else
@@ -705,8 +731,7 @@ void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
      }
 
    /* The answer is blank? */
-   PrintedQuestion->AnswerIsNotBlank = NumAnsGood != 0 || NumAnsBad != 0;
-   if (PrintedQuestion->AnswerIsNotBlank)
+   if (NumAnsGood || NumAnsBad)	// If user has answered the answer
      {
       /* Compute the score */
       if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE)
@@ -748,8 +773,7 @@ void TstPrn_ComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
    char TextAnsOK[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
    PrintedQuestion->Score = 0.0;	// Default score for blank or wrong answer
-   PrintedQuestion->AnswerIsNotBlank = (PrintedQuestion->StrAnswers[0] != '\0');
-   if (PrintedQuestion->AnswerIsNotBlank)	// If user has answered the answer
+   if (PrintedQuestion->StrAnswers[0])	// If user has answered the answer
      {
       /* Filter the user answer */
       Str_Copy (TextAnsUsr,PrintedQuestion->StrAnswers,
@@ -892,12 +916,12 @@ void TstPrn_ShowGrade (double Grade,double MaxGrade)
 void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
                               const struct TstPrn_PrintedQuestion *PrintedQuestion,
 			      const struct Tst_Question *Question,
-			      unsigned Visibility)
+			      bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY])
   {
    void (*TstPrn_WriteAnsExam[Tst_NUM_ANS_TYPES]) (struct UsrData *UsrDat,
                                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				                   const struct Tst_Question *Question,
-				                   unsigned Visibility) =
+				                   bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY]) =
     {
      [Tst_ANS_INT            ] = TstPrn_WriteIntAnsPrint,
      [Tst_ANS_FLOAT          ] = TstPrn_WriteFltAnsPrint,
@@ -908,7 +932,8 @@ void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
     };
 
    /***** Get correct answer and compute answer score depending on type *****/
-   TstPrn_WriteAnsExam[Question->Answer.Type] (UsrDat,PrintedQuestion,Question,Visibility);
+   TstPrn_WriteAnsExam[Question->Answer.Type] (UsrDat,PrintedQuestion,Question,
+	                                       IsVisible);
   }
 
 /*****************************************************************************/
@@ -918,7 +943,7 @@ void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
 static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     const struct Tst_Question *Question,
-				     unsigned Visibility)
+				     bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY])
   {
    long IntAnswerUsr;
 
@@ -939,7 +964,7 @@ static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
       if (sscanf (PrintedQuestion->StrAnswers,"%ld",&IntAnswerUsr) == 1)
 	{
          HTM_TD_Begin ("class=\"%s CM\"",
-		       TstVis_IsVisibleCorrectAns (Visibility) ?
+		       IsVisible[TstVis_VISIBLE_CORRECT_ANSWER] ?
 			  (IntAnswerUsr == Question->Answer.Integer ? "ANS_OK" :
 							              "ANS_BAD") :
 			  "ANS_0");
@@ -958,8 +983,8 @@ static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
-   if (TstVis_IsVisibleQstAndAnsTxt (Visibility) &&
-       TstVis_IsVisibleCorrectAns   (Visibility))
+   if (IsVisible[TstVis_VISIBLE_QST_ANS_TXT] &&
+       IsVisible[TstVis_VISIBLE_CORRECT_ANSWER])
       HTM_Long (Question->Answer.Integer);
    else
       Ico_PutIconNotVisible ();
@@ -977,7 +1002,7 @@ static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
 static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     const struct Tst_Question *Question,
-				     unsigned Visibility)
+				     bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY])
   {
    double FloatAnsUsr = 0.0;
 
@@ -999,7 +1024,7 @@ static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
       FloatAnsUsr = Str_GetDoubleFromStr (PrintedQuestion->StrAnswers);
       // A bad formatted floating point answer will interpreted as 0.0
       HTM_TD_Begin ("class=\"%s CM\"",
-		    TstVis_IsVisibleCorrectAns (Visibility) ?
+		    IsVisible[TstVis_VISIBLE_CORRECT_ANSWER] ?
 		       ((FloatAnsUsr >= Question->Answer.FloatingPoint[0] &&
 			 FloatAnsUsr <= Question->Answer.FloatingPoint[1]) ? "ANS_OK" :
 							                     "ANS_BAD") :
@@ -1012,8 +1037,8 @@ static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
-   if (TstVis_IsVisibleQstAndAnsTxt (Visibility) &&
-       TstVis_IsVisibleCorrectAns   (Visibility))
+   if (IsVisible[TstVis_VISIBLE_QST_ANS_TXT] &&
+       IsVisible[TstVis_VISIBLE_CORRECT_ANSWER])
      {
       HTM_Txt ("[");
       HTM_Double (Question->Answer.FloatingPoint[0]);
@@ -1037,7 +1062,7 @@ static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
 static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     const struct Tst_Question *Question,
-				     unsigned Visibility)
+				     bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY])
   {
    char AnsTFUsr;
 
@@ -1057,7 +1082,7 @@ static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
 
    /***** Write the user answer *****/
    HTM_TD_Begin ("class=\"%s CM\"",
-		 TstVis_IsVisibleCorrectAns (Visibility) ?
+		 IsVisible[TstVis_VISIBLE_CORRECT_ANSWER] ?
 		    (AnsTFUsr == Question->Answer.TF ? "ANS_OK" :
 					               "ANS_BAD") :
 		    "ANS_0");
@@ -1066,8 +1091,8 @@ static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
-   if (TstVis_IsVisibleQstAndAnsTxt (Visibility) &&
-       TstVis_IsVisibleCorrectAns   (Visibility))
+   if (IsVisible[TstVis_VISIBLE_QST_ANS_TXT] &&
+       IsVisible[TstVis_VISIBLE_CORRECT_ANSWER])
       Tst_WriteAnsTF (Question->Answer.TF);
    else
       Ico_PutIconNotVisible ();
@@ -1085,7 +1110,7 @@ static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
 static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     const struct Tst_Question *Question,
-				     unsigned Visibility)
+				     bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY])
   {
    extern const char *Txt_TST_Answer_given_by_the_user;
    extern const char *Txt_TST_Answer_given_by_the_teachers;
@@ -1097,6 +1122,26 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
       char *Class;
       char *Str;
      } Ans;
+
+   /***** Change format of answers text and feedback *****/
+   for (NumOpt = 0;
+	NumOpt < Question->Answer.NumOptions;
+	NumOpt++)
+     {
+      /* Convert answer text, that is in HTML, to rigorous HTML */
+      if (Question->Answer.Options[NumOpt].Text[0])
+	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			   Question->Answer.Options[NumOpt].Text,
+			   Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+
+      /* Convert answer feedback, that is in HTML, to rigorous HTML */
+      if (IsVisible[TstVis_VISIBLE_FEEDBACK_TXT])
+	 if (Question->Answer.Options[NumOpt].Feedback)
+	    if (Question->Answer.Options[NumOpt].Feedback[0])
+	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				 Question->Answer.Options[NumOpt].Feedback,
+				 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+     }
 
    /***** Get indexes for this question from string *****/
    TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
@@ -1121,7 +1166,7 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
       /* Draw icon depending on user's answer */
       if (UsrAnswers[Indexes[NumOpt]] == true)	// This answer has been selected by the user
         {
-         if (TstVis_IsVisibleCorrectAns (Visibility))
+         if (IsVisible[TstVis_VISIBLE_CORRECT_ANSWER])
            {
             if (Question->Answer.Options[Indexes[NumOpt]].Correct)
               {
@@ -1149,7 +1194,7 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
          HTM_TD_Empty (1);
 
       /* Draw icon that indicates whether the answer is correct */
-      if (TstVis_IsVisibleCorrectAns (Visibility))
+      if (IsVisible[TstVis_VISIBLE_CORRECT_ANSWER])
         {
          if (Question->Answer.Options[Indexes[NumOpt]].Correct)
            {
@@ -1177,7 +1222,7 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
       HTM_TD_Begin ("class=\"LT\"");
 
       HTM_DIV_Begin ("class=\"ANS_TXT\"");
-      if (TstVis_IsVisibleQstAndAnsTxt (Visibility))
+      if (IsVisible[TstVis_VISIBLE_QST_ANS_TXT])
 	{
 	 HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
 	 Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
@@ -1188,7 +1233,7 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
          Ico_PutIconNotVisible ();
       HTM_DIV_End ();
 
-      if (TstVis_IsVisibleCorrectAns (Visibility))
+      if (IsVisible[TstVis_VISIBLE_CORRECT_ANSWER])
 	 if (Question->Answer.Options[Indexes[NumOpt]].Feedback)
 	    if (Question->Answer.Options[Indexes[NumOpt]].Feedback[0])
 	      {
@@ -1213,30 +1258,31 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
 static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     const struct Tst_Question *Question,
-				     unsigned Visibility)
+				     bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY])
   {
    unsigned NumOpt;
    char TextAnsUsr[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TextAnsOK[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    bool Correct = false;
 
-   /***** Get text and correctness of answers for this question from database (one row per answer) *****/
+   /***** Change format of answers text and feedback *****/
    for (NumOpt = 0;
 	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
      {
-      /***** Convert answer text, that is in HTML, to rigorous HTML ******/
+      /* Convert answer text, that is in HTML, to rigorous HTML */
       if (Question->Answer.Options[NumOpt].Text[0])
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			   Question->Answer.Options[NumOpt].Text,
 			   Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
-      /***** Convert answer feedback, that is in HTML, to rigorous HTML ******/
-      if (TstVis_IsVisibleFeedbackTxt (Visibility))
-	 if (Question->Answer.Options[NumOpt].Feedback[0])
-	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			      Question->Answer.Options[NumOpt].Feedback,
-			      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+      /* Convert answer feedback, that is in HTML, to rigorous HTML */
+      if (IsVisible[TstVis_VISIBLE_FEEDBACK_TXT])
+	 if (Question->Answer.Options[NumOpt].Feedback)
+	    if (Question->Answer.Options[NumOpt].Feedback[0])
+	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				 Question->Answer.Options[NumOpt].Feedback,
+				 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
      }
 
    /***** Header with the title of each column *****/
@@ -1277,10 +1323,9 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
            }
         }
       HTM_TD_Begin ("class=\"%s CT\"",
-		    TstVis_IsVisibleCorrectAns (Visibility) ?
-		       (Correct ? "ANS_OK" :
-				  "ANS_BAD") :
-		       "ANS_0");
+		    IsVisible[TstVis_VISIBLE_CORRECT_ANSWER] ? (Correct ? "ANS_OK" :
+				                     "ANS_BAD") :
+		                          "ANS_0");
       HTM_Txt (PrintedQuestion->StrAnswers);
      }
    else						// If user has omitted the answer
@@ -1288,8 +1333,8 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
    HTM_TD_End ();
 
    /***** Write the correct answers *****/
-   if (TstVis_IsVisibleQstAndAnsTxt (Visibility) &&
-       TstVis_IsVisibleCorrectAns   (Visibility))
+   if (IsVisible[TstVis_VISIBLE_QST_ANS_TXT] &&
+       IsVisible[TstVis_VISIBLE_CORRECT_ANSWER])
      {
       HTM_TD_Begin ("class=\"CT\"");
       HTM_TABLE_BeginPadding (2);
@@ -1312,7 +1357,7 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
          HTM_Txt (Question->Answer.Options[NumOpt].Text);
          HTM_DIV_End ();
 
-         if (TstVis_IsVisibleFeedbackTxt (Visibility))
+         if (IsVisible[TstVis_VISIBLE_FEEDBACK_TXT])
 	    if (Question->Answer.Options[NumOpt].Feedback)
 	       if (Question->Answer.Options[NumOpt].Feedback[0])
 		 {
@@ -1735,7 +1780,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	 if (ICanView.Exam)
 	   {
 	    Frm_StartForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
-						              ActSeeOneTstResOth);
+						                 ActSeeOneTstResOth);
 	    TstPrn_PutParamPrnCod (Print.PrnCod);
 	    Ico_PutIconLink ("tasks.svg",Txt_View_test);
 	    Frm_EndForm ();
@@ -2079,7 +2124,7 @@ void TstPrn_ShowOnePrint (void)
 
       /***** Write answers and solutions *****/
       TstPrn_ShowPrintAnswers (&Gbl.Usrs.Other.UsrDat,&Print,
-			      TstCfg_GetConfigVisibility ());
+			       TstCfg_GetConfigVisibility ());
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -2138,8 +2183,8 @@ static void TstPrn_ShowTagsPresentInAPrint (long ResCod)
 /*****************************************************************************/
 
 void TstPrn_ShowPrintAnswers (struct UsrData *UsrDat,
-			     struct TstPrn_Print *Print,
-			     unsigned Visibility)
+			      struct TstPrn_Print *Print,
+			      unsigned Visibility)
   {
    unsigned NumQst;
    struct Tst_Question Question;

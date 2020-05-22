@@ -484,6 +484,19 @@ CREATE TABLE IF NOT EXISTS exa_exams (
 	UNIQUE INDEX(ExaCod),
 	INDEX(CrsCod));
 --
+-- Table exa_log: stores the access log to exam prints
+--
+CREATE TABLE IF NOT EXISTS exa_log (
+	LogCod INT NOT NULL,
+	PrnCod INT NOT NULL,
+	ActCod INT NOT NULL,
+	ClickTime DATETIME NOT NULL,
+	IP CHAR(15) NOT NULL,
+	SessionId CHAR(43) NOT NULL,
+	UNIQUE INDEX(LogCod),
+	INDEX(PrnCod,ClickTime),
+	INDEX(ClickTime));
+--
 -- Table exa_print_questions: stores the questions and answers in exam prints made by users
 --
 CREATE TABLE IF NOT EXISTS exa_print_questions (

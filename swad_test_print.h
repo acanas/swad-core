@@ -29,6 +29,7 @@
 
 #include "swad_test_config.h"
 #include "swad_test_type.h"
+#include "swad_test_visibility.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -46,7 +47,6 @@ struct TstPrn_PrintedQuestion
    char StrIndexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
    char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
    double Score;		// Question score
-   bool AnswerIsNotBlank;	// Answer not blank?
   };
 
 struct TstPrn_Print
@@ -103,7 +103,7 @@ void TstPrn_ShowGrade (double Grade,double MaxGrade);
 void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
                               const struct TstPrn_PrintedQuestion *PrintedQuestion,
 			      const struct Tst_Question *Question,
-			      unsigned Visibility);
+			      bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY]);
 
 void TstPrn_SelUsrsToViewUsrsPrints (void);
 void TstPrn_SelDatesToSeeMyPrints (void);

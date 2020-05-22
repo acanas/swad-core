@@ -10904,9 +10904,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"See exam print"
+	"Start / resume exam"
 #elif L==4	// es
-	"Ver impresi&oacute;n de examen"
+	"Comenzar / reanudar examen"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -10928,6 +10928,27 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Answer exam question"
 #elif L==4	// es
 	"Responder pregunta de examen"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActEndExaPrn] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"End exam"
+#elif L==4	// es
+	"Finalizar examen"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn

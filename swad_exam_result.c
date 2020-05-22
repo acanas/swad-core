@@ -1110,8 +1110,9 @@ void ExaRes_ShowOneExaResult (void)
    ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
 
    /***** Pointer to user's data *****/
-   MeOrOther = (Gbl.Action.Act == ActSeeOneExaResMe) ? Usr_ME :
-	                                               Usr_OTHER;
+   MeOrOther = (Gbl.Action.Act == ActSeeOneExaResMe ||
+	        Gbl.Action.Act == ActEndExaPrn) ? Usr_ME :
+	                                          Usr_OTHER;
    switch (MeOrOther)
      {
       case Usr_ME:
@@ -1130,12 +1131,18 @@ void ExaRes_ShowOneExaResult (void)
    Print.UsrCod = UsrDat->UsrCod;
    ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
 
+   /***** Set current print code (to be used in log) *****/
+   ExaPrn_SetCurrentPrnCod (Print.PrnCod);
+
    /***** Check if I can view this print result *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
+	 // Depends on visibility of result for this session (eye icon)
 	 ICanViewResult = ExaRes_CheckIfICanSeePrintResult (&Session,UsrDat->UsrCod);
+
 	 if (ICanViewResult)
+	    // Depends on 5 visibility icons
 	    ICanViewScore = TstVis_IsVisibleTotalScore (Exam.Visibility);
 	 else
 	    ICanViewScore = false;
@@ -1393,7 +1400,35 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       unsigned Visibility)
   {
    extern const char *Txt_Score;
-   bool IsVisibleQstAndAnsTxt = TstVis_IsVisibleQstAndAnsTxt (Visibility);
+   bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY];
+
+   /***** Check if I can view each part of the question *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+	 IsVisible[TstVis_VISIBLE_QST_ANS_TXT   ] = TstVis_IsVisibleQstAndAnsTxt (Visibility);
+	 IsVisible[TstVis_VISIBLE_FEEDBACK_TXT  ] = TstVis_IsVisibleFeedbackTxt  (Visibility);
+	 IsVisible[TstVis_VISIBLE_CORRECT_ANSWER] = TstVis_IsVisibleCorrectAns   (Visibility);
+	 IsVisible[TstVis_VISIBLE_EACH_QST_SCORE] = TstVis_IsVisibleEachQstScore (Visibility);
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 IsVisible[TstVis_VISIBLE_QST_ANS_TXT   ] =
+	 IsVisible[TstVis_VISIBLE_FEEDBACK_TXT  ] =
+	 IsVisible[TstVis_VISIBLE_CORRECT_ANSWER] =
+	 IsVisible[TstVis_VISIBLE_EACH_QST_SCORE] = true;
+	 break;
+      default:
+	 IsVisible[TstVis_VISIBLE_QST_ANS_TXT   ] =
+	 IsVisible[TstVis_VISIBLE_FEEDBACK_TXT  ] =
+	 IsVisible[TstVis_VISIBLE_CORRECT_ANSWER] =
+	 IsVisible[TstVis_VISIBLE_EACH_QST_SCORE] = false;
+	 break;
+     }
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -1408,20 +1443,21 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
    /* Stem */
-   Tst_WriteQstStem (Question->Stem,"TEST_EXA",IsVisibleQstAndAnsTxt);
+   Tst_WriteQstStem (Question->Stem,"TEST_EXA",IsVisible[TstVis_VISIBLE_QST_ANS_TXT]);
 
    /* Media */
-   if (IsVisibleQstAndAnsTxt)
+   if (IsVisible[TstVis_VISIBLE_QST_ANS_TXT])
       Med_ShowMedia (&Question->Media,
 		     "TEST_MED_SHOW_CONT",
 		     "TEST_MED_SHOW");
 
    /* Answers */
    ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],Question);
-   TstPrn_WriteAnswersExam (UsrDat,&Print->PrintedQuestions[NumQst],Question,Visibility);
+   TstPrn_WriteAnswersExam (UsrDat,&Print->PrintedQuestions[NumQst],Question,
+                            IsVisible);
 
    /* Write score retrieved from database */
-   if (TstVis_IsVisibleEachQstScore (Visibility))
+   if (IsVisible[TstVis_VISIBLE_EACH_QST_SCORE])
      {
       HTM_DIV_Begin ("class=\"DAT_SMALL LM\"");
       HTM_TxtColonNBSP (Txt_Score);
@@ -1436,7 +1472,7 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
      }
 
    /* Question feedback */
-   if (TstVis_IsVisibleFeedbackTxt (Visibility))
+   if (IsVisible[TstVis_VISIBLE_FEEDBACK_TXT])
       Tst_WriteQstFeedback (Question->Feedback,"TEST_EXA_LIGHT");
 
    HTM_TD_End ();

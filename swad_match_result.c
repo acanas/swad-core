@@ -1181,8 +1181,11 @@ void MchRes_ShowOneMchResult (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
+	 // Depends on visibility of result for this match (eye icon)
 	 ICanViewResult = MchRes_CheckIfICanSeeMatchResult (&Match,UsrDat->UsrCod);
+
 	 if (ICanViewResult)
+	    // Depends on 5 visibility icons
 	    ICanViewScore = TstVis_IsVisibleTotalScore (Game.Visibility);
 	 else
 	    ICanViewScore = false;
