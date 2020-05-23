@@ -27,6 +27,8 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_exam_print.h"
+
 /*****************************************************************************/
 /************************* Public types and constants ************************/
 /*****************************************************************************/
@@ -56,5 +58,7 @@ void ExaLog_SetIfCanAnswer (bool CanBeAnswered);
 bool ExaLog_GetIfCanAnswer (void);
 
 void ExaLog_LogAccess (long LogCod);
+
+void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print);
 
 #endif

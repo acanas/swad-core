@@ -7203,6 +7203,27 @@ const char *Txt_Date =
 	"Data";
 #endif
 
+const char *Txt_Date_and_time =
+#if   L==1	// ca
+	"Data i hora";
+#elif L==2	// de
+	"Datum und Uhrzeit";
+#elif L==3	// en
+	"Date and time";
+#elif L==4	// es
+	"Fecha y hora";
+#elif L==5	// fr
+	"Date et heure";
+#elif L==6	// gn
+	"Fecha y hora";	// Okoteve traducción
+#elif L==7	// it
+	"Data e ora";
+#elif L==8	// pl
+	"Data i godzina";
+#elif L==9	// pt
+	"Data e hora";
+#endif
+
 const char *Txt_Date_of_birth =
 #if   L==1	// ca
 	"Data naixement";
@@ -9521,6 +9542,27 @@ const char *Txt_Do_you_really_want_to_remove_the_selected_questions =
        "Czy na pewno chcesz usun&aogon;&cacute; wybrane pytania?";
 #elif L==9	// pt
        "Voc&ecirc; realmente deseja remover as perguntas selecionadas?";
+#endif
+
+const char *Txt_Do_you_really_want_to_remove_the_session_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"De veres voleu eliminar la sessi&oacute; <strong>%s</strong>?";
+#elif L==2	// de
+	"Wollen Sie der Sitzung <strong>%s</strong> wirklich entfernen?";
+#elif L==3	// en
+	"Do you really want to remove the session <strong>%s</strong>?";
+#elif L==4	// es
+	"&iquest;Realmente desea eliminar la sesi&oacute;n <strong>%s</strong>?";
+#elif L==5	// fr
+	"Voulez-vous vraiment supprimer la session <strong>%s</strong>?";
+#elif L==6	// gn
+	"&iquest;Realmente desea eliminar la sesi&oacute;n <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi realmente rimuovere la sessione <strong>%s</strong>?";
+#elif L==8	// pl
+	"Czy na pewno chcesz usunac sesji <strong>%s</strong>?";
+#elif L==9	// pt
+	"Voc&ecirc; realmente deseja remover a sess&atilde;o <strong>%s</strong>?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_set_of_questions_X =	// Warning: it is very important to include %s in the following sentences
@@ -12004,6 +12046,27 @@ const char *Txt_Exam_of_X =	// Warning: it is very important to include %s in th
 	"Egzamin z %s";
 #elif L==9	// pt
 	"Exame de %s";
+#endif
+
+const char *Txt_EXAM_Open =
+#if   L==1	// ca
+	"Obert";
+#elif L==2	// de
+	"Ge&ouml;ffneten";
+#elif L==3	// en
+	"Open";
+#elif L==4	// es
+	"Abierto";
+#elif L==5	// fr
+	"Ouvert";
+#elif L==6	// gn
+	"Abierto";	// Okoteve traducción
+#elif L==7	// it
+	"Aperto";
+#elif L==8	// pl
+	"otwarte";
+#elif L==9	// pt
+	"Aberta";
 #endif
 
 const char *Txt_Exam_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -24470,7 +24533,7 @@ const char *Txt_MSG_Not_replied =
 
 const char *Txt_MSG_Open =
 #if   L==1	// ca
-	"Abierto";	// Necessita traduccio
+	"Obert";
 #elif L==2	// de
 	"Ge&ouml;ffneten";
 #elif L==3	// en
@@ -34413,6 +34476,27 @@ const char *Txt_Remove_record_field =
 	"Usu&nacute; pola rekordu";
 #elif L==9	// pt
 	"Remover campo de cart&atilde;o";
+#endif
+
+const char *Txt_Remove_session =
+#if   L==1	// ca
+	"Eliminar sessi&oacute;";
+#elif L==2	// de
+	"Entfernen Sitzung";
+#elif L==3	// en
+	"Remove session";
+#elif L==4	// es
+	"Eliminar sesi&oacute;n";
+#elif L==5	// fr
+	"Supprimer session";
+#elif L==6	// gn
+	"Eliminar sesi&oacute;n";	// Okoteve traducción
+#elif L==7	// it
+	"Rimuovere sessione";
+#elif L==8	// pl
+	"Usu&nacute; sesji";
+#elif L==9	// pt
+	"Remover sess&atilde;o";
 #endif
 
 const char *Txt_Remove_set_of_questions =

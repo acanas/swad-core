@@ -1138,10 +1138,11 @@ void ExaRes_ShowOneExaResult (void)
    ExaRes_ShowExamResult (&Exam,&Session,&Print,UsrDat);
 
    /***** Show exam log *****/
+   ExaLog_ShowExamLog (&Print);
   }
 
 /*****************************************************************************/
-/*************************** Show one exam result ****************************/
+/***************************** Show exam result ******************************/
 /*****************************************************************************/
 
 static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,

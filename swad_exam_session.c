@@ -888,8 +888,8 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
 
 void ExaSes_RequestRemoveSession (void)
   {
-   extern const char *Txt_Do_you_really_want_to_remove_the_event_X;
-   extern const char *Txt_Remove_event;
+   extern const char *Txt_Do_you_really_want_to_remove_the_session_X;
+   extern const char *Txt_Remove_session;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaSes_Session Session;
@@ -907,8 +907,8 @@ void ExaSes_RequestRemoveSession (void)
    Exams.SesCod = Session.SesCod;
    Ale_ShowAlertAndButton (ActRemExaSes,NULL,NULL,
                            ExaSes_PutParamsEdit,&Exams,
-			   Btn_REMOVE_BUTTON,Txt_Remove_event,
-			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_event_X,
+			   Btn_REMOVE_BUTTON,Txt_Remove_session,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_session_X,
 	                   Session.Title);
 
    /***** Show current exam *****/

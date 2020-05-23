@@ -557,11 +557,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.242.1 (2020-05-23)"
+#define Log_PLATFORM_VERSION	"SWAD 19.243 (2020-05-23)"
 #define CSS_FILE		"swad19.238.2.css"
 #define JS_FILE			"swad19.239.6.js"
 /*
-	Version 19.243:   May 23, 2020  List exam log. (? lines)
+	Version 19.243:   May 23, 2020  List exam log. (302180 lines)
 	Version 19.242.1: May 23, 2020  Bug fixing and code refactoring in exam log. (301932 lines)
 					1 change necessary in database:
 ALTER TABLE exa_log CHANGE COLUMN Open CanAnswer ENUM('N','Y') NOT NULL DEFAULT 'N';
