@@ -35,6 +35,7 @@
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_exam.h"
+#include "swad_exam_log.h"
 #include "swad_exam_print.h"
 #include "swad_exam_result.h"
 #include "swad_exam_session.h"
@@ -61,8 +62,6 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static long ExaPrn_CurrentPrnCod = -1L;
-
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -88,7 +87,9 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
 static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
                                        unsigned NumQst,
                                        const struct Tst_Question *Question);
+
 //-----------------------------------------------------------------------------
+
 static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
 				      unsigned NumQst);
 static void ExaPrn_WriteFloAnsToFill (const struct ExaPrn_Print *Print,
@@ -100,12 +101,14 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
                                       const struct Tst_Question *Question);
 static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
 	                              unsigned NumQst);
+
 //-----------------------------------------------------------------------------
+
 static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
 	                                     unsigned NumQst,
 	                                     const char *Id,int NumOpt);
 
-static unsigned ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print);
+static void ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print,unsigned QstInd);
 
 static unsigned ExaPrn_GetParamQstInd (void);
 
@@ -125,6 +128,8 @@ static void ExaPrn_GetCorrectAndComputeChoAnsScore (struct TstPrn_PrintedQuestio
 static void ExaPrn_GetCorrectAndComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				                    struct Tst_Question *Question);
 
+//-----------------------------------------------------------------------------
+
 static void ExaPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question);
 static void ExaPrn_GetCorrectFltAnswerFromDB (struct Tst_Question *Question);
 static void ExaPrn_GetCorrectTF_AnswerFromDB (struct Tst_Question *Question);
@@ -141,20 +146,6 @@ static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
 static void ExaPrn_GetNumQstsNotBlank (struct ExaPrn_Print *Print);
 static void ExaPrn_ComputeTotalScoreOfPrint (struct ExaPrn_Print *Print);
 static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print);
-
-/*****************************************************************************/
-/************* Set and get current exam print code (used in log) *************/
-/*****************************************************************************/
-
-void ExaPrn_SetCurrentPrnCod (long PrnCod)
-  {
-   ExaPrn_CurrentPrnCod = PrnCod;
-  }
-
-long ExaPrn_GetCurrentPrnCod (void)
-  {
-   return ExaPrn_CurrentPrnCod;
-  }
 
 /*****************************************************************************/
 /**************************** Reset exam print *******************************/
@@ -221,7 +212,7 @@ void ExaPrn_ShowExamPrint (void)
 	 }
 
       /***** Set current print code (to be used in log) *****/
-      ExaPrn_SetCurrentPrnCod (Print.PrnCod);
+      ExaLog_SetCurrentPrnCod (Print.PrnCod);
 
       /***** Show test exam to be answered *****/
       ExaPrn_ShowExamPrintToFillIt (&Exams,&Exam,&Print);
@@ -978,7 +969,7 @@ void ExaPrn_ReceivePrintAnswer (void)
   {
    extern const char *Txt_You_dont_have_access_to_the_exam;
    struct ExaPrn_Print Print;
-   unsigned NumQst;
+   unsigned QstInd;
 
    /***** Reset print *****/
    ExaPrn_ResetPrint (&Print);
@@ -986,32 +977,41 @@ void ExaPrn_ReceivePrintAnswer (void)
    /***** Get session code *****/
    Print.SesCod = ExaSes_GetParamSesCod ();
 
+   /***** Get print data *****/
+   Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+   ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
+   if (Print.PrnCod <= 0)
+      Lay_WrongExamExit ();
+
+   /***** Set current print code (to be used in log) *****/
+   ExaLog_SetCurrentPrnCod (Print.PrnCod);
+
+   /***** Get questions and current user's answers of exam print from database *****/
+   ExaPrn_GetPrintQuestionsFromDB (&Print);
+
+   /***** Get question index from form *****/
+   QstInd = ExaPrn_GetParamQstInd ();
+
+   /***** Set current question index (to be used in log) *****/
+   ExaLog_SetCurrentQstInd (QstInd);
+
    /***** Check if session if visible and open *****/
    if (ExaSes_CheckIfSessionIsVisibleAndOpen (Print.SesCod))
      {
-      /***** Get print data *****/
-      Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
-      if (Print.PrnCod <= 0)
-	 Lay_WrongExamExit ();
-
-      /***** Set current print code (to be used in log) *****/
-      ExaPrn_SetCurrentPrnCod (Print.PrnCod);
-
-      /***** Get questions and user's answers of exam print from database *****/
-      ExaPrn_GetPrintQuestionsFromDB (&Print);
-
       /***** Get answers from form to assess a test *****/
-      NumQst = ExaPrn_GetAnswerFromForm (&Print);
+      ExaPrn_GetAnswerFromForm (&Print,QstInd);
 
       /***** Update answer in database *****/
       /* Compute question score and store in database */
-      ExaPrn_ComputeScoreAndStoreQuestionOfPrint (&Print,NumQst);
+      ExaPrn_ComputeScoreAndStoreQuestionOfPrint (&Print,QstInd);
 
       /* Update exam print in database */
       ExaPrn_GetNumQstsNotBlank (&Print);
       ExaPrn_ComputeTotalScoreOfPrint (&Print);
       ExaPrn_UpdatePrintInDB (&Print);
+
+      /***** Set success saving answer (to be used in log) *****/
+      ExaLog_SetAnswerIsSaved ();
 
       /***** Show table with questions to answer *****/
       ExaPrn_ShowTableWithQstsToFill (&Print);
@@ -1024,18 +1024,11 @@ void ExaPrn_ReceivePrintAnswer (void)
 /******** Get questions and answers from form to assess an exam print ********/
 /*****************************************************************************/
 
-static unsigned ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print)
+static void ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print,unsigned QstInd)
   {
-   unsigned NumQst;
-
-   /***** Get question index from form *****/
-   NumQst = ExaPrn_GetParamQstInd ();
-
    /***** Get answers selected by user for this question *****/
-   Par_GetParToText ("Ans",Print->PrintedQuestions[NumQst].StrAnswers,
+   Par_GetParToText ("Ans",Print->PrintedQuestions[QstInd].StrAnswers,
 		     Tst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
-
-   return NumQst;
   }
 
 /*****************************************************************************/

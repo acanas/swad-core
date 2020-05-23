@@ -25,23 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #define _GNU_SOURCE 		// For asprintf
-// #include <linux/limits.h>	// For PATH_MAX
-// #include <stddef.h>		// For NULL
-// #include <stdio.h>		// For asprintf
-// #include <stdlib.h>		// For calloc
-// #include <string.h>		// For string functions
-
 #include "swad_action.h"
-// #include "swad_box.h"
 #include "swad_database.h"
-// #include "swad_exam.h"
-#include "swad_exam_print.h"
-// #include "swad_exam_result.h"
-// #include "swad_exam_session.h"
-// #include "swad_exam_set.h"
-// #include "swad_exam_type.h"
-// #include "swad_form.h"
 #include "swad_global.h"
 
 /*****************************************************************************/
@@ -62,9 +47,63 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+static struct
+  {
+   long PrnCod;
+   int  QstInd;
+   bool AnswerIsSaved;
+  } ExaLog_CurrentPrint =
+  {
+   .PrnCod        = -1L,	// -1 means no print code set
+   .QstInd        = -1,		// -1 means no question index set
+   .AnswerIsSaved = false,	// By default, answer is not saved
+  };
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+/*****************************************************************************/
+/************* Set and get current exam print code (used in log) *************/
+/*****************************************************************************/
+
+void ExaLog_SetCurrentPrnCod (long PrnCod)
+  {
+   ExaLog_CurrentPrint.PrnCod = PrnCod;
+  }
+
+long ExaLog_GetCurrentPrnCod (void)
+  {
+   return ExaLog_CurrentPrint.PrnCod;
+  }
+
+/*****************************************************************************/
+/****** Set and get current question index in exam print (used in log) *******/
+/*****************************************************************************/
+
+void ExaLog_SetCurrentQstInd (unsigned QstInd)
+  {
+   ExaLog_CurrentPrint.QstInd = (int) QstInd;
+  }
+
+int  ExaLog_GetCurrentQstInd (void)
+  {
+   return ExaLog_CurrentPrint.QstInd;
+  }
+
+/*****************************************************************************/
+/******** Set and get if answer is saved in exam print (used in log) *********/
+/*****************************************************************************/
+
+void ExaLog_SetAnswerIsSaved (void)
+  {
+   ExaLog_CurrentPrint.AnswerIsSaved = true;
+  }
+
+bool ExaLog_GetAnswerIsSaved (void)
+  {
+   return ExaLog_CurrentPrint.AnswerIsSaved;
+  }
 
 /*****************************************************************************/
 /**************************** Log access in database *************************/
@@ -74,11 +113,13 @@ void ExaLog_LogAccess (long LogCod)
   {
    long PrnCod;
 
+   /* WARNING: Don't change the codes os the actions.
+               If the codes of the actions change ==> change them in exam log table */
    if (Gbl.Action.Act == ActAnsExaPrn ||	// Answer question
        Gbl.Action.Act == ActSeeExaPrn ||	// Create/resume print exam
        Gbl.Action.Act == ActEndExaPrn)		// End print exam
      {
-      PrnCod = ExaPrn_GetCurrentPrnCod ();
+      PrnCod = ExaLog_GetCurrentPrnCod ();
 
       if (PrnCod > 0)	// Only if exam print is accesible (visible, open...)
 	 /***** Insert access into database *****/
@@ -86,12 +127,15 @@ void ExaLog_LogAccess (long LogCod)
 	    Redundant data (also present in log table) are stored for speed */
 	 DB_QueryINSERT ("can not log exam access",
 			 "INSERT INTO exa_log "
-			 "(LogCod,PrnCod,ActCod,ClickTime,IP,SessionId)"
+			 "(LogCod,PrnCod,ActCod,QstInd,Saved,ClickTime,IP,SessionId)"
 			 " VALUES "
-			 "(%ld,%ld,%ld,NOW(),'%s','%s')",
+			 "(%ld,%ld,%ld,%d,'%c',NOW(),'%s','%s')",
 			 LogCod,
 			 PrnCod,
 			 Act_GetActCod (Gbl.Action.Act),	// Redundant, for speed
+			 ExaLog_GetCurrentQstInd (),
+			 ExaLog_GetAnswerIsSaved () ? 'Y' :
+				                      'N',
 			 // NOW()			  	   Redundant, for speed
 			 Gbl.IP,				// Redundant, for speed
 			 Gbl.Session.Id);

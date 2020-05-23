@@ -36,6 +36,7 @@
 #include "swad_database.h"
 #include "swad_date.h"
 #include "swad_exam.h"
+#include "swad_exam_log.h"
 #include "swad_exam_print.h"
 #include "swad_exam_result.h"
 #include "swad_exam_session.h"
@@ -1132,7 +1133,7 @@ void ExaRes_ShowOneExaResult (void)
    ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
 
    /***** Set current print code (to be used in log) *****/
-   ExaPrn_SetCurrentPrnCod (Print.PrnCod);
+   ExaLog_SetCurrentPrnCod (Print.PrnCod);
 
    /***** Check if I can view this print result *****/
    switch (Gbl.Usrs.Me.Role.Logged)

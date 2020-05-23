@@ -53,9 +53,6 @@ struct ExaPrn_Print
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaPrn_SetCurrentPrnCod (long PrnCod);
-long ExaPrn_GetCurrentPrnCod (void);
-
 void ExaPrn_ResetPrint (struct ExaPrn_Print *Print);
 
 void ExaPrn_ShowExamPrint (void);
