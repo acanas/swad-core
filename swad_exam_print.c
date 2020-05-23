@@ -198,26 +198,38 @@ void ExaPrn_ShowExamPrint (void)
       Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
       ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
 
-      if (Print.PrnCod > 0)	// Print exists and I can access to it
-         /***** Get questions and user's answers of exam print from database *****/
-	 ExaPrn_GetPrintQuestionsFromDB (&Print);
-      else
+      if (Print.PrnCod <= 0)	// Print does not exists
 	{
 	 /***** Get questions from database *****/
 	 ExaPrn_GetQuestionsForNewPrintFromDB (&Print,Exam.ExaCod);
 
 	 if (Print.NumQsts)
+	   {
 	    /***** Create/update new exam print in database *****/
 	    ExaPrn_CreatePrintInDB (&Print);
-	 }
 
-      /***** Set current print code (to be used in log) *****/
-      ExaLog_SetCurrentPrnCod (Print.PrnCod);
+	    /***** Set log print code and action *****/
+	    ExaLog_SetPrnCod (Print.PrnCod);
+	    ExaLog_SetAction (ExaLog_START_EXAM);
+	    ExaLog_SetOpen (true);
+	   }
+	 }
+      else			// Print exists
+         {
+         /***** Get questions and current user's answers from database *****/
+	 ExaPrn_GetPrintQuestionsFromDB (&Print);
+
+         /***** Set log print code and action *****/
+         ExaLog_SetPrnCod (Print.PrnCod);
+	 ExaLog_SetAction (ExaLog_RESUME_EXAM);
+	 ExaLog_SetOpen (true);
+	}
 
       /***** Show test exam to be answered *****/
       ExaPrn_ShowExamPrintToFillIt (&Exams,&Exam,&Print);
      }
-   else
+   else	// Session not open or accessible
+      /***** Show warning *****/
       Ale_ShowAlert (Ale_INFO,Txt_You_dont_have_access_to_the_exam);
   }
 
@@ -983,21 +995,23 @@ void ExaPrn_ReceivePrintAnswer (void)
    if (Print.PrnCod <= 0)
       Lay_WrongExamExit ();
 
-   /***** Set current print code (to be used in log) *****/
-   ExaLog_SetCurrentPrnCod (Print.PrnCod);
-
    /***** Get questions and current user's answers of exam print from database *****/
    ExaPrn_GetPrintQuestionsFromDB (&Print);
 
    /***** Get question index from form *****/
    QstInd = ExaPrn_GetParamQstInd ();
 
-   /***** Set current question index (to be used in log) *****/
-   ExaLog_SetCurrentQstInd (QstInd);
+   /***** Set log print code, action and question index *****/
+   ExaLog_SetPrnCod (Print.PrnCod);
+   ExaLog_SetAction (ExaLog_ANSWER_QUESTION);
+   ExaLog_SetQstInd (QstInd);
 
    /***** Check if session if visible and open *****/
    if (ExaSes_CheckIfSessionIsVisibleAndOpen (Print.SesCod))
      {
+      /***** Set log open ****/
+      ExaLog_SetOpen (true);
+
       /***** Get answers from form to assess a test *****/
       ExaPrn_GetAnswerFromForm (&Print,QstInd);
 
@@ -1010,14 +1024,17 @@ void ExaPrn_ReceivePrintAnswer (void)
       ExaPrn_ComputeTotalScoreOfPrint (&Print);
       ExaPrn_UpdatePrintInDB (&Print);
 
-      /***** Set success saving answer (to be used in log) *****/
-      ExaLog_SetAnswerIsSaved ();
-
       /***** Show table with questions to answer *****/
       ExaPrn_ShowTableWithQstsToFill (&Print);
      }
-   else
+   else	// Not accessible to answer
+     {
+      /***** Set log open ****/
+      ExaLog_SetOpen (true);
+
+      /***** Show warning *****/
       Ale_ShowAlert (Ale_INFO,Txt_You_dont_have_access_to_the_exam);
+     }
   }
 
 /*****************************************************************************/

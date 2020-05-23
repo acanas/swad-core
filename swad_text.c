@@ -67,6 +67,7 @@
 #include "swad_degree.h"
 #include "swad_degree_type.h"
 #include "swad_department.h"
+#include "swad_exam_log.h"
 #include "swad_figure.h"
 #include "swad_file_browser.h"
 #include "swad_forum.h"
@@ -11875,6 +11876,114 @@ const char *Txt_EXAM_ANNOUNCEMENT_Year_or_semester =	// 1, 2, 3..., not 1984, 20
 #elif L==9	// pt
 	"Ano ou semestre";
 #endif
+
+const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS] =
+	{
+	[ExaLog_UNKNOWN_ACTION] =
+#if   L==1	// ca
+	"Acci&oacute; desconeguda"
+#elif L==2	// de
+	"Unbekannte Aktion"
+#elif L==3	// en
+	"Unknown action"
+#elif L==4	// es
+	"Acci&oacute;n desconocida"
+#elif L==5	// fr
+	"Action inconnue"
+#elif L==6	// gn
+	"Acci&oacute;n desconocida"	// Okoteve traducción
+#elif L==7	// it
+	"Azione sconosciuta"
+#elif L==8	// pl
+	"Nieznana akcja"
+#elif L==9	// pt
+	"A&ccedil;&atilde;o desconhecida"
+#endif
+	,
+	[ExaLog_START_EXAM] =
+#if   L==1	// ca
+	"Va comen&ccedil;ar l'examen"
+#elif L==2	// de
+	"Begann die Pr&uacute;fung"
+#elif L==3	// en
+	"Started the exam"
+#elif L==4	// es
+	"Comenz&oacute; el examen"
+#elif L==5	// fr
+	"A commenc&eacute; l'examen"
+#elif L==6	// gn
+	"Comenz&oacute; el examen"	// Okoteve traducción
+#elif L==7	// it
+	"Ha iniziato l'esame"
+#elif L==8	// pl
+	"Rozpocz&aogon;&lstrok; egzamin"
+#elif L==9	// pt
+	"Iniciou o exame"
+#endif
+	,
+	[ExaLog_RESUME_EXAM] =
+#if   L==1	// ca
+	"Va reprendre l'examen"
+#elif L==2	// de
+	"Nahm die Pr&uuml;fung wieder auf"
+#elif L==3	// en
+	"Resumed the exam"
+#elif L==4	// es
+	"Reanud&oacute; el examen"
+#elif L==5	// fr
+	"A repris l'examen"
+#elif L==6	// gn
+	"Reanud&oacute; el examen"	// Okoteve traducción
+#elif L==7	// it
+	"Ha ripreso l'esame"
+#elif L==8	// pl
+	"Wznowi&lstrok; egzamin"
+#elif L==9	// pt
+	"Retomou o exame"
+#endif
+	,
+	[ExaLog_ANSWER_QUESTION] =
+#if   L==1	// ca
+	"Va respondre una pregunta"
+#elif L==2	// de
+	"Beantwortete eine Frage"
+#elif L==3	// en
+	"Answer exam question"
+#elif L==4	// es
+	"Respondi&oacute; una pregunta"
+#elif L==5	// fr
+	"A r&eacute;pondu &agrave; une question"
+#elif L==6	// gn
+	"Respondi&oacute; una pregunta"	// Okoteve traducción
+#elif L==7	// it
+	"Ha risposto a una domanda"
+#elif L==8	// pl
+	"Odpowiedzia&lstrok; na pytanie"
+#elif L==9	// pt
+	"Respondeu a uma pergunta"
+#endif
+	,
+	[ExaLog_FINISH_EXAM] =
+#if   L==1	// ca
+	"Va acabar l'examen"
+#elif L==2	// de
+	"Beendete die Pr&uuml;fung"
+#elif L==3	// en
+	"Finished the exam"
+#elif L==4	// es
+	"Termin&oacute; el examen"
+#elif L==5	// fr
+	"A termin&eacute; l'examen"
+#elif L==6	// gn
+	"Termin&oacute; el examen"		// Okoteve traducción
+#elif L==7	// it
+	"Ha terminato l'esame"
+#elif L==8	// pl
+	"Zako&nacute;czy&lstrok; egzamin"
+#elif L==9	// pt
+	"Terminou o exame"
+#endif
+	};
 
 const char *Txt_Exam_of_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca

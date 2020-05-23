@@ -1054,7 +1054,7 @@ mysql> DESCRIBE exa_log;
 | PrnCod    | int(11)       | NO   | MUL | NULL    |       |
 | ActCod    | int(11)       | NO   |     | NULL    |       |
 | QstInd    | int(11)       | NO   |     | -1      |       |
-| Saved     | enum('N','Y') | NO   |     | N       |       |
+| Open      | enum('N','Y') | NO   |     | N       |       |
 | ClickTime | datetime      | NO   | MUL | NULL    |       |
 | IP        | char(15)      | NO   |     | NULL    |       |
 | SessionId | char(43)      | NO   |     | NULL    |       |
@@ -1067,7 +1067,7 @@ mysql> DESCRIBE exa_log;
 			"PrnCod INT NOT NULL,"
 			"ActCod INT NOT NULL,"
 		        "QstInd INT NOT NULL DEFAULT -1,"
-			"Saved ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Open ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"ClickTime DATETIME NOT NULL,"
 			"IP CHAR(15) NOT NULL,"		// Cns_MAX_BYTES_IP
 			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID

@@ -10900,65 +10900,65 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActSeeExaPrn] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Comen&ccedil;ar / reprendre examen"
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Pr&uacute;fung starten / fortsetzen"
 #elif L==3	// en
 	"Start / resume exam"
 #elif L==4	// es
 	"Comenzar / reanudar examen"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Commencer / reprendre examen"
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comenzar / reanudar examen"			// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Avvia / riprendi esame"
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Rozpocznij / wzn&oacute;w egzamin"
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Iniciar / retomar exame"
 #endif
 	,
 	[ActAnsExaPrn] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Respondre pregunta d'examen"
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Beantworten Sie die Pr&uuml;fungsfrage"
 #elif L==3	// en
 	"Answer exam question"
 #elif L==4	// es
 	"Responder pregunta de examen"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"R&eacute;pondre question d'examen"
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Responder pregunta de examen"			// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Rispondi domanda d'esame"
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Odpowiedz pytanie egzaminacyjne"
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Responda pergunta do exame"
 #endif
 	,
 	[ActEndExaPrn] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Finalitzar examen"
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Pr&uuml;fung beenden"
 #elif L==3	// en
 	"End exam"
 #elif L==4	// es
 	"Finalizar examen"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Terminer examen"
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Finalizar examen"			// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Finire esame"
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Zako&nacute;czy&cacute; egzamin"
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Terminar exame"
 #endif
 	,
 	[ActSeeMyExaResCrs] =

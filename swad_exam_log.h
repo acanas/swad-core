@@ -31,16 +31,29 @@
 /************************* Public types and constants ************************/
 /*****************************************************************************/
 
+#define ExaLog_NUM_ACTIONS 5
+// Don't change the numbers! If change ==> update them in table exa_log
+typedef enum
+  {
+   ExaLog_UNKNOWN_ACTION  = 0,
+   ExaLog_START_EXAM      = 1,
+   ExaLog_RESUME_EXAM     = 2,
+   ExaLog_ANSWER_QUESTION = 3,
+   ExaLog_FINISH_EXAM     = 4,
+  } ExaLog_Action_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaLog_SetCurrentPrnCod (long PrnCod);
-long ExaLog_GetCurrentPrnCod (void);
-void ExaLog_SetCurrentQstInd (unsigned QstInd);
-int  ExaLog_GetCurrentQstInd (void);
-void ExaLog_SetAnswerIsSaved (void);
-bool ExaLog_GetAnswerIsSaved (void);
+void ExaLog_SetPrnCod (long PrnCod);
+long ExaLog_GetPrnCod (void);
+void ExaLog_SetAction (ExaLog_Action_t Action);
+ExaLog_Action_t ExaLog_GetAction (void);
+void ExaLog_SetQstInd (unsigned QstInd);
+int ExaLog_GetQstInd (void);
+void ExaLog_SetOpen (bool Open);
+bool ExaLog_GetOpen (void);
 
 void ExaLog_LogAccess (long LogCod);
 

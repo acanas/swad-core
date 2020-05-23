@@ -1132,8 +1132,12 @@ void ExaRes_ShowOneExaResult (void)
    Print.UsrCod = UsrDat->UsrCod;
    ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
 
-   /***** Set current print code (to be used in log) *****/
-   ExaLog_SetCurrentPrnCod (Print.PrnCod);
+   /***** Set log action and print code *****/
+   if (Gbl.Action.Act == ActEndExaPrn)
+     {
+      ExaLog_SetAction (ExaLog_FINISH_EXAM);
+      ExaLog_SetPrnCod (Print.PrnCod);
+     }
 
    /***** Check if I can view this print result *****/
    switch (Gbl.Usrs.Me.Role.Logged)
