@@ -57,7 +57,7 @@ void ExaPrn_ResetPrint (struct ExaPrn_Print *Print);
 
 void ExaPrn_ShowExamPrint (void);
 
-void ExaPrn_GetPrintDataBySesCodAndUsrCod (struct ExaPrn_Print *Print);
+void ExaPrn_GetDataOfPrintByCodAndUsrCod (struct ExaPrn_Print *Print);
 
 void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print);
 

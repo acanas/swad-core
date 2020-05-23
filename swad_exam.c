@@ -958,17 +958,15 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
 
    /***** Get exam data from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get exam data",
-			     "SELECT exa_exams.ExaCod,"		// row[0]
-			            "exa_exams.CrsCod,"		// row[1]
-			            "exa_exams.Hidden,"		// row[2]
-			            "exa_exams.UsrCod,"		// row[3]
-			            "exa_exams.MaxGrade,"	// row[4]
-			            "exa_exams.Visibility,"	// row[5]
-			            "exa_exams.Title"		// row[6]
+			     "SELECT ExaCod,"		// row[0]
+			            "CrsCod,"		// row[1]
+			            "Hidden,"		// row[2]
+			            "UsrCod,"		// row[3]
+			            "MaxGrade,"		// row[4]
+			            "Visibility,"	// row[5]
+			            "Title"		// row[6]
 			     " FROM exa_exams"
-			     " LEFT JOIN exa_sessions"
-			     " ON exa_exams.ExaCod=exa_sessions.ExaCod"
-			     " WHERE exa_exams.ExaCod=%ld",
+			     " WHERE ExaCod=%ld",
 			     Exam->ExaCod);
    if (NumRows) // Exam found...
      {

@@ -108,7 +108,12 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
                                           double TotalScoreOfAllResults,
 					  double TotalGrade);
 
-static bool ExaRes_CheckIfICanSeePrintResult (struct ExaSes_Session *Session,long UsrCod);
+static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
+	                           const struct ExaSes_Session *Session,
+                                   struct ExaPrn_Print *Print,
+                                   struct UsrData *UsrDat);
+
+static bool ExaRes_CheckIfICanSeePrintResult (const struct ExaSes_Session *Session,long UsrCod);
 static bool ExaRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility);
 
 static void ExaRes_ShowExamAnswers (struct UsrData *UsrDat,
@@ -1076,31 +1081,17 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
   }
 
 /*****************************************************************************/
-/******************* Show one session result of another user *******************/
+/*************************** Show one exam result ****************************/
 /*****************************************************************************/
 
 void ExaRes_ShowOneExaResult (void)
   {
-   extern const char *Hlp_ASSESSMENT_Exams_results;
-   extern const char *Txt_The_user_does_not_exist;
-   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
-   extern const char *Txt_Questions;
-   extern const char *Txt_non_blank_QUESTIONS;
-   extern const char *Txt_Score;
-   extern const char *Txt_Grade;
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaSes_Session Session;
    Usr_MeOrOther_t MeOrOther;
    struct UsrData *UsrDat;
-   Dat_StartEndTime_t StartEndTime;
-   char *Id;
    struct ExaPrn_Print Print;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
-   bool ICanViewResult;
-   bool ICanViewScore;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -1126,31 +1117,68 @@ void ExaRes_ShowOneExaResult (void)
 	 break;
      }
 
-   /***** Get session result data *****/
+   /***** Get exam print data *****/
    ExaPrn_ResetPrint (&Print);
    Print.SesCod = Session.SesCod;
    Print.UsrCod = UsrDat->UsrCod;
-   ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
+   ExaPrn_GetDataOfPrintByCodAndUsrCod (&Print);
 
    /***** Set log action and print code *****/
    if (Gbl.Action.Act == ActEndExaPrn)
      {
       ExaLog_SetAction (ExaLog_FINISH_EXAM);
       ExaLog_SetPrnCod (Print.PrnCod);
+      ExaLog_SetIfCanAnswer (ExaSes_CheckIfICanAnswerThisSession (&Exam,&Session));
      }
+
+   /***** Get questions and user's answers of exam print from database *****/
+   ExaPrn_GetPrintQuestionsFromDB (&Print);
+
+   /***** Show exam result *****/
+   ExaRes_ShowExamResult (&Exam,&Session,&Print,UsrDat);
+
+   /***** Show exam log *****/
+  }
+
+/*****************************************************************************/
+/*************************** Show one exam result ****************************/
+/*****************************************************************************/
+
+static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
+	                           const struct ExaSes_Session *Session,
+                                   struct ExaPrn_Print *Print,
+                                   struct UsrData *UsrDat)
+  {
+   extern const char *Hlp_ASSESSMENT_Exams_results;
+   extern const char *Txt_The_user_does_not_exist;
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
+   extern const char *Txt_Questions;
+   extern const char *Txt_non_blank_QUESTIONS;
+   extern const char *Txt_Score;
+   extern const char *Txt_Grade;
+   bool ShowPhoto;
+   char PhotoURL[PATH_MAX + 1];
+   Dat_StartEndTime_t StartEndTime;
+   char *Id;
+   struct
+     {
+      bool Result;
+      bool Score;
+     } ICanView;
 
    /***** Check if I can view this print result *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
 	 // Depends on visibility of result for this session (eye icon)
-	 ICanViewResult = ExaRes_CheckIfICanSeePrintResult (&Session,UsrDat->UsrCod);
+	 ICanView.Result = ExaRes_CheckIfICanSeePrintResult (Session,UsrDat->UsrCod);
 
-	 if (ICanViewResult)
+	 if (ICanView.Result)
 	    // Depends on 5 visibility icons
-	    ICanViewScore = TstVis_IsVisibleTotalScore (Exam.Visibility);
+	    ICanView.Score = TstVis_IsVisibleTotalScore (Exam->Visibility);
 	 else
-	    ICanViewScore = false;
+	    ICanView.Score = false;
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -1158,20 +1186,17 @@ void ExaRes_ShowOneExaResult (void)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 ICanViewResult =
-	 ICanViewScore  = true;
+	 ICanView.Result =
+	 ICanView.Score  = true;
 	 break;
       default:
-	 ICanViewResult =
-	 ICanViewScore  = false;
+	 ICanView.Result =
+	 ICanView.Score  = false;
 	 break;
      }
 
-   /***** Get questions and user's answers of exam print from database *****/
-   ExaPrn_GetPrintQuestionsFromDB (&Print);
-
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Session.Title,
+   Box_BoxBegin (NULL,Session->Title,
 		 NULL,NULL,
 		 Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
    Lay_WriteHeaderClassPhoto (false,false,
@@ -1226,7 +1251,7 @@ void ExaRes_ShowOneExaResult (void)
       if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
 	 Lay_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"DAT LT\"",Id);
-      Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
+      Dat_WriteLocalDateHMSFromUTC (Id,Print->TimeUTC[StartEndTime],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,true,0x7);
       HTM_TD_End ();
@@ -1243,10 +1268,10 @@ void ExaRes_ShowOneExaResult (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LT\"");
-   if (ICanViewResult)
+   if (ICanView.Result)
       HTM_TxtF ("%u (%u %s)",
-		Print.NumQsts,
-		Print.NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+		Print->NumQsts,
+		Print->NumQstsNotBlank,Txt_non_blank_QUESTIONS);
    else
       Ico_PutIconNotVisible ();
    HTM_TD_End ();
@@ -1261,8 +1286,8 @@ void ExaRes_ShowOneExaResult (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LT\"");
-   if (ICanViewScore)
-      HTM_Double2Decimals (Print.Score);
+   if (ICanView.Score)
+      HTM_Double2Decimals (Print->Score);
    else
       Ico_PutIconNotVisible ();
    HTM_TD_End ();
@@ -1277,9 +1302,9 @@ void ExaRes_ShowOneExaResult (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LT\"");
-   if (ICanViewScore)
-      TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,
-				  Exam.MaxGrade);
+   if (ICanView.Score)
+      TstPrn_ComputeAndShowGrade (Print->NumQsts,Print->Score,
+				  Exam->MaxGrade);
    else
       Ico_PutIconNotVisible ();
    HTM_TD_End ();
@@ -1287,22 +1312,22 @@ void ExaRes_ShowOneExaResult (void)
    HTM_TR_End ();
 
    /***** Write answers and solutions *****/
-   if (ICanViewResult)
-      ExaRes_ShowExamAnswers (UsrDat,&Print,Exam.Visibility);
+   if (ICanView.Result)
+      ExaRes_ShowExamAnswers (UsrDat,Print,Exam->Visibility);
 
    /***** End table *****/
    HTM_TABLE_End ();
 
    /***** Write total mark of session result *****/
-   if (ICanViewScore)
+   if (ICanView.Score)
      {
       HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
       HTM_TxtColonNBSP (Txt_Score);
-      HTM_Double2Decimals (Print.Score);
+      HTM_Double2Decimals (Print->Score);
       HTM_BR ();
       HTM_TxtColonNBSP (Txt_Grade);
-      TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,
-				  Exam.MaxGrade);
+      TstPrn_ComputeAndShowGrade (Print->NumQsts,Print->Score,
+				  Exam->MaxGrade);
       HTM_DIV_End ();
      }
 
@@ -1314,7 +1339,7 @@ void ExaRes_ShowOneExaResult (void)
 /********************** Get if I can see session result ************************/
 /*****************************************************************************/
 
-static bool ExaRes_CheckIfICanSeePrintResult (struct ExaSes_Session *Session,long UsrCod)
+static bool ExaRes_CheckIfICanSeePrintResult (const struct ExaSes_Session *Session,long UsrCod)
   {
    bool ItsMe;
 
@@ -1405,16 +1430,16 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       unsigned Visibility)
   {
    extern const char *Txt_Score;
-   bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY];
+   bool ICanView[TstVis_NUM_ITEMS_VISIBILITY];
 
    /***** Check if I can view each part of the question *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 IsVisible[TstVis_VISIBLE_QST_ANS_TXT   ] = TstVis_IsVisibleQstAndAnsTxt (Visibility);
-	 IsVisible[TstVis_VISIBLE_FEEDBACK_TXT  ] = TstVis_IsVisibleFeedbackTxt  (Visibility);
-	 IsVisible[TstVis_VISIBLE_CORRECT_ANSWER] = TstVis_IsVisibleCorrectAns   (Visibility);
-	 IsVisible[TstVis_VISIBLE_EACH_QST_SCORE] = TstVis_IsVisibleEachQstScore (Visibility);
+	 ICanView[TstVis_VISIBLE_QST_ANS_TXT   ] = TstVis_IsVisibleQstAndAnsTxt (Visibility);
+	 ICanView[TstVis_VISIBLE_FEEDBACK_TXT  ] = TstVis_IsVisibleFeedbackTxt  (Visibility);
+	 ICanView[TstVis_VISIBLE_CORRECT_ANSWER] = TstVis_IsVisibleCorrectAns   (Visibility);
+	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = TstVis_IsVisibleEachQstScore (Visibility);
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -1422,16 +1447,16 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 IsVisible[TstVis_VISIBLE_QST_ANS_TXT   ] =
-	 IsVisible[TstVis_VISIBLE_FEEDBACK_TXT  ] =
-	 IsVisible[TstVis_VISIBLE_CORRECT_ANSWER] =
-	 IsVisible[TstVis_VISIBLE_EACH_QST_SCORE] = true;
+	 ICanView[TstVis_VISIBLE_QST_ANS_TXT   ] =
+	 ICanView[TstVis_VISIBLE_FEEDBACK_TXT  ] =
+	 ICanView[TstVis_VISIBLE_CORRECT_ANSWER] =
+	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = true;
 	 break;
       default:
-	 IsVisible[TstVis_VISIBLE_QST_ANS_TXT   ] =
-	 IsVisible[TstVis_VISIBLE_FEEDBACK_TXT  ] =
-	 IsVisible[TstVis_VISIBLE_CORRECT_ANSWER] =
-	 IsVisible[TstVis_VISIBLE_EACH_QST_SCORE] = false;
+	 ICanView[TstVis_VISIBLE_QST_ANS_TXT   ] =
+	 ICanView[TstVis_VISIBLE_FEEDBACK_TXT  ] =
+	 ICanView[TstVis_VISIBLE_CORRECT_ANSWER] =
+	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = false;
 	 break;
      }
 
@@ -1448,10 +1473,10 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
    /* Stem */
-   Tst_WriteQstStem (Question->Stem,"TEST_EXA",IsVisible[TstVis_VISIBLE_QST_ANS_TXT]);
+   Tst_WriteQstStem (Question->Stem,"TEST_EXA",ICanView[TstVis_VISIBLE_QST_ANS_TXT]);
 
    /* Media */
-   if (IsVisible[TstVis_VISIBLE_QST_ANS_TXT])
+   if (ICanView[TstVis_VISIBLE_QST_ANS_TXT])
       Med_ShowMedia (&Question->Media,
 		     "TEST_MED_SHOW_CONT",
 		     "TEST_MED_SHOW");
@@ -1459,10 +1484,10 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
    /* Answers */
    ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],Question);
    TstPrn_WriteAnswersExam (UsrDat,&Print->PrintedQuestions[NumQst],Question,
-                            IsVisible);
+                            ICanView);
 
    /* Write score retrieved from database */
-   if (IsVisible[TstVis_VISIBLE_EACH_QST_SCORE])
+   if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE])
      {
       HTM_DIV_Begin ("class=\"DAT_SMALL LM\"");
       HTM_TxtColonNBSP (Txt_Score);
@@ -1477,7 +1502,7 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
      }
 
    /* Question feedback */
-   if (IsVisible[TstVis_VISIBLE_FEEDBACK_TXT])
+   if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT])
       Tst_WriteQstFeedback (Question->Feedback,"TEST_EXA_LIGHT");
 
    HTM_TD_End ();

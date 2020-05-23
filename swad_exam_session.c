@@ -334,25 +334,6 @@ void ExaSes_GetDataOfSessionByCod (struct ExaSes_Session *Session)
   }
 
 /*****************************************************************************/
-/***************** Check if exam session is visible and open *****************/
-/*****************************************************************************/
-
-bool ExaSes_CheckIfSessionIsVisibleAndOpen (long SesCod)
-  {
-   /***** Trivial check *****/
-   if (SesCod < 0)	// A non-existing session...
-      return false;	// ...is not visible or open
-
-   /***** Check if exam session is visible and open from database *****/
-   return (DB_QueryCOUNT ("can not check if session is visible and open",
-			  "SELECT COUNT(*) FROM exa_sessions"
-			  " WHERE SesCod=%ld"
-			  " AND Hidden='N'"				// Visible
-			  " AND NOW() BETWEEN StartTime AND EndTime",	// Open
-			  SesCod) != 0);
-  }
-
-/*****************************************************************************/
 /***************** Put icons in list of sessions of an exam ******************/
 /*****************************************************************************/
 

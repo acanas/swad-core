@@ -196,22 +196,22 @@ void ExaPrn_ShowExamPrint (void)
       /***** Get print data from database *****/
       Print.SesCod = Session.SesCod;
       Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
+      ExaPrn_GetDataOfPrintByCodAndUsrCod (&Print);
 
-      if (Print.PrnCod <= 0)	// Print does not exists
+      if (Print.PrnCod <= 0)	// Print does not exists ==> create it
 	{
 	 /***** Get questions from database *****/
 	 ExaPrn_GetQuestionsForNewPrintFromDB (&Print,Exam.ExaCod);
 
 	 if (Print.NumQsts)
 	   {
-	    /***** Create/update new exam print in database *****/
+	    /***** Create new exam print in database *****/
 	    ExaPrn_CreatePrintInDB (&Print);
 
 	    /***** Set log print code and action *****/
 	    ExaLog_SetPrnCod (Print.PrnCod);
 	    ExaLog_SetAction (ExaLog_START_EXAM);
-	    ExaLog_SetOpen (true);
+	    ExaLog_SetIfCanAnswer (true);
 	   }
 	 }
       else			// Print exists
@@ -222,7 +222,7 @@ void ExaPrn_ShowExamPrint (void)
          /***** Set log print code and action *****/
          ExaLog_SetPrnCod (Print.PrnCod);
 	 ExaLog_SetAction (ExaLog_RESUME_EXAM);
-	 ExaLog_SetOpen (true);
+	 ExaLog_SetIfCanAnswer (true);
 	}
 
       /***** Show test exam to be answered *****/
@@ -237,7 +237,7 @@ void ExaPrn_ShowExamPrint (void)
 /******** Get data of an exam print using session code and user code *********/
 /*****************************************************************************/
 
-void ExaPrn_GetPrintDataBySesCodAndUsrCod (struct ExaPrn_Print *Print)
+void ExaPrn_GetDataOfPrintByCodAndUsrCod (struct ExaPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -980,10 +980,14 @@ static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
 void ExaPrn_ReceivePrintAnswer (void)
   {
    extern const char *Txt_You_dont_have_access_to_the_exam;
+   struct Exa_Exam Exam;
+   struct ExaSes_Session Session;
    struct ExaPrn_Print Print;
    unsigned QstInd;
 
-   /***** Reset print *****/
+   /***** Reset exam, session and print *****/
+   Exa_ResetExam (&Exam);
+   ExaSes_ResetSession (&Session);
    ExaPrn_ResetPrint (&Print);
 
    /***** Get session code *****/
@@ -991,12 +995,23 @@ void ExaPrn_ReceivePrintAnswer (void)
 
    /***** Get print data *****/
    Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
+   ExaPrn_GetDataOfPrintByCodAndUsrCod (&Print);
    if (Print.PrnCod <= 0)
       Lay_WrongExamExit ();
 
-   /***** Get questions and current user's answers of exam print from database *****/
-   ExaPrn_GetPrintQuestionsFromDB (&Print);
+   /***** Get session data *****/
+   Session.SesCod = Print.SesCod;
+   ExaSes_GetDataOfSessionByCod (&Session);
+   if (Session.SesCod <= 0)
+      Lay_WrongExamExit ();
+
+   /***** Get exam data *****/
+   Exam.ExaCod = Session.ExaCod;
+   Exa_GetDataOfExamByCod (&Exam);
+   if (Exam.ExaCod <= 0)
+      Lay_WrongExamExit ();
+   if (Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+      Lay_WrongExamExit ();
 
    /***** Get question index from form *****/
    QstInd = ExaPrn_GetParamQstInd ();
@@ -1007,10 +1022,13 @@ void ExaPrn_ReceivePrintAnswer (void)
    ExaLog_SetQstInd (QstInd);
 
    /***** Check if session if visible and open *****/
-   if (ExaSes_CheckIfSessionIsVisibleAndOpen (Print.SesCod))
+   if (ExaSes_CheckIfICanAnswerThisSession (&Exam,&Session))
      {
-      /***** Set log open ****/
-      ExaLog_SetOpen (true);
+      /***** Set log open to true ****/
+      ExaLog_SetIfCanAnswer (true);
+
+      /***** Get questions and current user's answers of exam print from database *****/
+      ExaPrn_GetPrintQuestionsFromDB (&Print);
 
       /***** Get answers from form to assess a test *****/
       ExaPrn_GetAnswerFromForm (&Print,QstInd);
@@ -1029,8 +1047,8 @@ void ExaPrn_ReceivePrintAnswer (void)
      }
    else	// Not accessible to answer
      {
-      /***** Set log open ****/
-      ExaLog_SetOpen (true);
+      /***** Set log open to false ****/
+      ExaLog_SetIfCanAnswer (false);
 
       /***** Show warning *****/
       Ale_ShowAlert (Ale_INFO,Txt_You_dont_have_access_to_the_exam);

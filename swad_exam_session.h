@@ -55,7 +55,6 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 		          struct ExaSes_Session *Session,
                           bool PutFormSession);
 void ExaSes_GetDataOfSessionByCod (struct ExaSes_Session *Session);
-bool ExaSes_CheckIfSessionIsVisibleAndOpen (long SesCod);
 
 void ExaSes_ToggleVisResultsSesUsr (void);
 

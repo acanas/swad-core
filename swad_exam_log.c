@@ -53,13 +53,13 @@ static struct
    long PrnCod;			// Exam print code
    int  QstInd;			// Exam print question index
    ExaLog_Action_t Action;	// Action performed by user
-   bool Open;			// Exam print is open and accesible to answer by the user
+   bool ICanAnswer;		// Exam print is open and accesible to answer by the user
   } ExaLog_Log =
   {
-   .PrnCod        = -1L,	// -1 means no print code set
-   .QstInd        = -1,		// -1 means no question index set
-   .Action        = ExaLog_UNKNOWN_ACTION,
-   .Open          = false,
+   .PrnCod     = -1L,	// -1 means no print code set
+   .QstInd     = -1,	// -1 means no question index set
+   .Action     = ExaLog_UNKNOWN_ACTION,
+   .ICanAnswer = false,
   };
 
 /*****************************************************************************/
@@ -81,7 +81,7 @@ ExaLog_Action_t ExaLog_GetAction (void)
   }
 
 /*****************************************************************************/
-/************* Set and get current exam print code (used in log) *************/
+/******************** Set and get current exam print code ********************/
 /*****************************************************************************/
 
 void ExaLog_SetPrnCod (long PrnCod)
@@ -95,7 +95,7 @@ long ExaLog_GetPrnCod (void)
   }
 
 /*****************************************************************************/
-/****** Set and get current question index in exam print (used in log) *******/
+/************* Set and get current question index in exam print **************/
 /*****************************************************************************/
 
 void ExaLog_SetQstInd (unsigned QstInd)
@@ -109,17 +109,17 @@ int ExaLog_GetQstInd (void)
   }
 
 /*****************************************************************************/
-/******** Set and get if answer is saved in exam print (used in log) *********/
+/************* Set and get if exam print is open and accessible **************/
 /*****************************************************************************/
 
-void ExaLog_SetOpen (bool Open)
+void ExaLog_SetIfCanAnswer (bool ICanAnswer)
   {
-   ExaLog_Log.Open = Open;
+   ExaLog_Log.ICanAnswer = ICanAnswer;
   }
 
-bool ExaLog_GetOpen (void)
+bool ExaLog_GetIfCanAnswer (void)
   {
-   return ExaLog_Log.Open;
+   return ExaLog_Log.ICanAnswer;
   }
 
 /*****************************************************************************/
@@ -142,15 +142,15 @@ void ExaLog_LogAccess (long LogCod)
 	    Redundant data (also present in log table) are stored for speed */
 	 DB_QueryINSERT ("can not log exam access",
 			 "INSERT INTO exa_log "
-			 "(LogCod,PrnCod,ActCod,QstInd,Open,ClickTime,IP,SessionId)"
+			 "(LogCod,PrnCod,ActCod,QstInd,UserCanAnswer,ClickTime,IP,SessionId)"
 			 " VALUES "
 			 "(%ld,%ld,%ld,%d,'%c',NOW(),'%s','%s')",
 			 LogCod,
 			 PrnCod,
 			 (unsigned) Action,
 			 ExaLog_GetQstInd (),
-			 ExaLog_GetOpen () ? 'Y' :
-				             'N',
+			 ExaLog_GetIfCanAnswer () ? 'Y' :
+				                    'N',
 			 // NOW()   	   Redundant, for speed
 			 Gbl.IP,	// Redundant, for speed
 			 Gbl.Session.Id);
