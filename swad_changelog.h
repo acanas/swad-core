@@ -557,10 +557,12 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.244 (2020-05-24)"
+#define Log_PLATFORM_VERSION	"SWAD 19.244.1 (2020-05-24)"
 #define CSS_FILE		"swad19.238.2.css"
 #define JS_FILE			"swad19.239.6.js"
 /*
+	Version 19.244.1: May 24, 2020  Prepare to remove exam prints when removed sessions and exams.
+				        Fixed bug writing exam log. (302365 lines)
 	Version 19.244:   May 24, 2020  User agent stored in exam log. (302329 lines)
 					2 changes necessary in database:
 ALTER TABLE exa_log DROP INDEX PrnCod,ADD UNIQUE INDEX(PrnCod,LogCod);

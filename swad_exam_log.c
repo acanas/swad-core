@@ -356,7 +356,6 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	       free (LastUserAgent);
 	    if (asprintf (&LastUserAgent,"%s",row[6]) < 0)
 	       Lay_NotEnoughMemoryExit ();
-	    HTM_Txt (LastUserAgent);
 	   }
 
 	 /***** Write row *****/

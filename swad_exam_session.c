@@ -106,8 +106,6 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
 				          struct ExaSes_Session *Session);
 
 static void ExaSes_RemoveSessionFromAllTables (long SesCod);
-static void ExaSes_RemoveSessionFromTable (long SesCod,const char *TableName);
-static void ExaSes_RemoveSessionsInExamFromTable (long ExaCod,const char *TableName);
 static void ExaSes_RemoveUsrSesResultsInCrs (long UsrCod,long CrsCod,const char *TableName);
 
 static void ExaSes_PutFormSession (const struct ExaSes_Session *Session);
@@ -957,26 +955,36 @@ void ExaSes_RemoveSession (void)
 /*****************************************************************************/
 /******************* Remove exam session from all tables *********************/
 /*****************************************************************************/
-/*
-mysql> SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'exa%';
-*/
+
 static void ExaSes_RemoveSessionFromAllTables (long SesCod)
   {
-   /***** Remove exam session from secondary tables *****/
-   ExaSes_RemoveSessionFromTable (SesCod,"exa_groups");
+   /* To delete orphan exam prints:
+   // DELETE FROM exa_print_questions WHERE PrnCod IN (SELECT PrnCod FROM exa_prints WHERE SesCod NOT IN (SELECT SesCod FROM exa_sessions));
+   // DELETE FROM exa_prints WHERE SesCod NOT IN (SELECT SesCod FROM exa_sessions);
+   */
+   /***** Remove exam prints in this session *****/
+   /*
+    * TODO: DO NOT REMOVE EXAMS PRINTS. Instead move them to tables of deleted prints
+   DB_QueryDELETE ("can not remove exam print questions in exam session",
+		   "DELETE FROM exa_print_questions"
+		   " USING exa_print_questions,exa_prints"
+                   " WHERE exa_prints.SesCod=%ld"
+                   " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
+		   SesCod);
+   DB_QueryDELETE ("can not remove exam prints in exam session",
+		   "DELETE FROM exa_prints"
+                   " WHERE exa_prints.SesCod=%ld",
+		   SesCod);
+   */
+
+   /***** Remove groups associated to this exam session *****/
+   DB_QueryDELETE ("can not remove groups associated to exam session",
+		   "DELETE FROM exa_groups WHERE SesCod=%ld",
+		   SesCod);
 
    /***** Remove exam session from main table *****/
    DB_QueryDELETE ("can not remove exam session",
 		   "DELETE FROM exa_sessions WHERE SesCod=%ld",
-		   SesCod);
-  }
-
-static void ExaSes_RemoveSessionFromTable (long SesCod,const char *TableName)
-  {
-   /***** Remove exam session from secondary table *****/
-   DB_QueryDELETE ("can not remove exam session from table",
-		   "DELETE FROM %s WHERE SesCod=%ld",
-		   TableName,
 		   SesCod);
   }
 
@@ -986,27 +994,36 @@ static void ExaSes_RemoveSessionFromTable (long SesCod,const char *TableName)
 
 void ExaSes_RemoveSessionsInExamFromAllTables (long ExaCod)
   {
-   /***** Remove sessions from secondary tables *****/
-   ExaSes_RemoveSessionsInExamFromTable (ExaCod,"exa_groups");
+   /***** Remove exam prints in this session *****/
+   /*
+    * TODO: DO NOT REMOVE EXAMS PRINTS. Instead move them to tables of deleted prints
+   DB_QueryDELETE ("can not remove exam print questions in exam",
+		   "DELETE FROM exa_print_questions"
+		   " USING exa_print_questions,exa_prints,exa_sessions"
+                   " WHERE exa_sessions.ExaCod=%ld"
+                   " AND exa_sessions.SesCod=exa_prints.SesCod"
+                   " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
+		   ExaCod);
+   DB_QueryDELETE ("can not remove exam prints in exam",
+		   "DELETE FROM exa_prints"
+		   " USING exa_prints,exa_sessions"
+                   " WHERE exa_sessions.ExaCod=%ld"
+                   " AND exa_sessions.SesCod=exa_prints.SesCod",
+		   ExaCod);
+   */
+
+   /***** Remove groups associated to exam sessions of this exam *****/
+   DB_QueryDELETE ("can not remove groups associated to sessions of an exam",
+		   "DELETE FROM exa_groups"
+		   " USING exa_sessions,exa_groups"
+		   " WHERE exa_sessions.ExaCod=%ld"
+		   " AND exa_sessions.SesCod=exa_groups.SesCod",
+		   ExaCod);
 
    /***** Remove sessions from main table *****/
    DB_QueryDELETE ("can not remove sessions of an exam",
 		   "DELETE FROM exa_sessions WHERE ExaCod=%ld",
 		   ExaCod);
-  }
-
-static void ExaSes_RemoveSessionsInExamFromTable (long ExaCod,const char *TableName)
-  {
-   /***** Remove sessions in exam from secondary table *****/
-   DB_QueryDELETE ("can not remove sessions of an exam from table",
-		   "DELETE FROM %s"
-		   " USING exa_sessions,%s"
-		   " WHERE exa_sessions.ExaCod=%ld"
-		   " AND exa_sessions.SesCod=%s.SesCod",
-		   TableName,
-		   TableName,
-		   ExaCod,
-		   TableName);
   }
 
 /*****************************************************************************/
@@ -1015,6 +1032,26 @@ static void ExaSes_RemoveSessionsInExamFromTable (long ExaCod,const char *TableN
 
 void ExaSes_RemoveSessionInCourseFromAllTables (long CrsCod)
   {
+   /***** Remove exam prints in this course *****/
+   /*
+    * TODO: DO NOT REMOVE EXAMS PRINTS. Instead move them to tables of deleted prints
+   DB_QueryDELETE ("can not remove exam print questions in course",
+		   "DELETE FROM exa_print_questions"
+		   " USING exa_print_questions,exa_prints,exa_sessions,exa_exams"
+		   " WHERE exa_exams.CrsCod=%ld"
+                   " AND exa_exams.ExaCod=exa_sessions"
+                   " AND exa_sessions.SesCod=exa_prints.SesCod"
+                   " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
+		   CrsCod);
+   DB_QueryDELETE ("can not remove exam print questions in course",
+		   "DELETE FROM exa_prints"
+		   " USING exa_prints,exa_sessions,exa_exams"
+		   " WHERE exa_exams.CrsCod=%ld"
+                   " AND exa_exams.ExaCod=exa_sessions"
+                   " AND exa_sessions.SesCod=exa_prints.SesCod",
+		   CrsCod);
+   */
+
    /***** Remove sessions from table of sessions groups *****/
    DB_QueryDELETE ("can not remove sessions of a course",
 		   "DELETE FROM exa_groups"
