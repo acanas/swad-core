@@ -70,6 +70,8 @@ static struct
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void ExaLog_LogUsrAgent (long LogCod,long PrnCod);
+
 /*****************************************************************************/
 /************* Set and get current exam print code (used in log) *************/
 /*****************************************************************************/
@@ -141,6 +143,7 @@ void ExaLog_LogAccess (long LogCod)
       PrnCod = ExaLog_GetPrnCod ();
 
       if (PrnCod > 0)	// Only if exam print is accesible (visible, open...)
+	{
 	 /***** Insert access into database *****/
 	 /* Log access in exam log.
 	    Redundant data (also present in log table) are stored for speed */
@@ -158,7 +161,78 @@ void ExaLog_LogAccess (long LogCod)
 			 // NOW()   	   Redundant, for speed
 			 Gbl.IP,	// Redundant, for speed
 			 Gbl.Session.Id);
+
+	 /***** Log user agent *****/
+	 ExaLog_LogUsrAgent (LogCod,PrnCod);
+	}
      }
+  }
+
+/*****************************************************************************/
+/************************** Log user agent in database ***********************/
+/*****************************************************************************/
+/* Examples of HTTP_USER_AGENT:
+Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0
+Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0
+Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1
+Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0)
+Googlebot/2.1 (+http://www.google.com/bot.html)
+*/
+
+static void ExaLog_LogUsrAgent (long LogCod,long PrnCod)
+  {
+   bool TheSameAsTheLast;
+   const char *UserAgent;
+   char *UserAgentDB;
+   size_t MaxBytes;
+
+   /***** Get current user agent *****/
+   UserAgent = getenv ("HTTP_USER_AGENT");
+   if (UserAgent)
+      MaxBytes = strlen (UserAgent) * Str_MAX_BYTES_PER_CHAR;
+   else
+      MaxBytes = 0;
+   if ((UserAgentDB = (char *) malloc (MaxBytes + 1)) == NULL)
+      Lay_NotEnoughMemoryExit ();
+   if (UserAgent)
+     {
+      Str_Copy (UserAgentDB,UserAgent,
+                MaxBytes);
+      Str_ChangeFormat (Str_FROM_TEXT,Str_TO_TEXT,
+			UserAgentDB,MaxBytes,true);
+     }
+   else
+      UserAgentDB[0] = '\0';
+
+   /***** Get if the current user agent
+          is the same as the last stored in database *****/
+   TheSameAsTheLast = (DB_QueryCOUNT ("can not check user agent",
+				      "SELECT COUNT(*)"
+				      " FROM exa_log_user_agent"
+				      " WHERE LogCod="
+				      "(SELECT MAX(LogCod)"
+				      " FROM exa_log_user_agent"
+				      " WHERE PrnCod=%ld)"
+				      " AND UserAgent='%s'",
+				      PrnCod,
+				      UserAgentDB) != 0);
+
+
+   /***** Insert user agent into database
+          only if it's not the same as the last one stored *****/
+   if (!TheSameAsTheLast)
+      DB_QueryINSERT ("can not log user agent",
+		      "INSERT INTO exa_log_user_agent "
+		      "(LogCod,PrnCod,UserAgent)"
+		      " VALUES "
+		      "(%ld,%ld,'%s')",
+		      LogCod,
+		      PrnCod,
+		      UserAgentDB);
+
+   /***** Free user agent *****/
+   free (UserAgentDB);
   }
 
 /*****************************************************************************/
@@ -174,6 +248,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
    extern const char *Txt_EXAM_Open;
    extern const char *Txt_IP;
    extern const char *Txt_Session;
+   extern const char *Txt_Web_browser;
    extern const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -187,8 +262,9 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
    char SessionId[Cns_BYTES_SESSION_ID + 1];
    char *Id;
    size_t Length;
-   char Anonymized[14 + 1];	// XXX&hellip;XXX
+   char Anonymized[14 + 1];	// ***&hellip;***
 				// 12345678901234
+   char *LastUserAgent = NULL;
 
    /***** Check if I can view this print result *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -207,15 +283,17 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
    /***** Get print log from database *****/
    NumClicks = (unsigned)
 	       DB_QuerySELECT (&mysql_res,"can not get exam print log",
-			       "SELECT ActCod,"				// row[0]
-			              "QstInd,"				// row[1]
-			              "CanAnswer,"			// row[2]
-			              "UNIX_TIMESTAMP(ClickTime),"	// row[3]
-			              "IP,"				// row[4]
-			              "SessionId"			// row[5]
-			       " FROM exa_log"
-			       " WHERE PrnCod=%ld"
-			       " ORDER BY LogCod",
+			       "SELECT exa_log.ActCod,"				// row[0]
+			              "exa_log.QstInd,"				// row[1]
+			              "exa_log.CanAnswer,"			// row[2]
+			              "UNIX_TIMESTAMP(exa_log.ClickTime),"	// row[3]
+			              "exa_log.IP,"				// row[4]
+			              "exa_log.SessionId,"			// row[5]
+				      "exa_log_user_agent.UserAgent"		// row[6]
+			       " FROM exa_log LEFT JOIN exa_log_user_agent"
+	                       " ON exa_log.LogCod=exa_log_user_agent.LogCod"
+			       " WHERE exa_log.PrnCod=%ld"
+			       " ORDER BY exa_log.LogCod",
 			       Print->PrnCod);
 
    if (NumClicks)
@@ -237,6 +315,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
       HTM_TH (1,1,"CB",Txt_EXAM_Open);
       HTM_TH (1,1,"LB",Txt_IP);
       HTM_TH (1,1,"LB",Txt_Session);
+      HTM_TH (1,1,"LB",Txt_Web_browser);
 
       HTM_TR_End ();
 
@@ -270,13 +349,25 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	 Str_Copy (SessionId,row[5],
 		   Cns_BYTES_SESSION_ID);
 
+	 /* Get session id (row[6]) */
+	 if (row[6])	// This row has a user agent stored in database
+	   {
+	    if (LastUserAgent)
+	       free (LastUserAgent);
+	    if (asprintf (&LastUserAgent,"%s",row[6]) < 0)
+	       Lay_NotEnoughMemoryExit ();
+	    HTM_Txt (LastUserAgent);
+	   }
+
 	 /***** Write row *****/
 	 HTM_TR_Begin (NULL);
 
 	 /* Write click time */
 	 if (asprintf (&Id,"click_date_%u",NumClick) < 0)
 	    Lay_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"LM DAT\"",Id);
+	 HTM_TD_Begin ("id=\"%s\" class=\"LM %s\"",
+	               Id,UsrCouldAnswer ? "DAT_SMALL" :
+	        		           "DAT_SMALL_LIGHT");
 	 Dat_WriteLocalDateHMSFromUTC (Id,ClickTimeUTC,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,true,0x7);
@@ -284,25 +375,28 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	 HTM_TD_End ();
 
 	 /* Write action */
-	 HTM_TD_Begin ("class=\"LM DAT\"");
+	 HTM_TD_Begin ("class=\"LM %s\"",UsrCouldAnswer ? "DAT_SMALL" :
+	        		                          "DAT_SMALL_LIGHT");
 	 HTM_Txt (Txt_EXAM_LOG_ACTIONS[ActCod]);
 	 HTM_TD_End ();
 
 	 /* Write number of question */
-	 HTM_TD_Begin ("class=\"RM DAT\"");
+	 HTM_TD_Begin ("class=\"RM %s\"",UsrCouldAnswer ? "DAT_SMALL" :
+	        		                          "DAT_SMALL_LIGHT");
 	 if (QstInd >= 0)
 	    HTM_Unsigned ((unsigned) QstInd + 1);
 	 HTM_TD_End ();
 
 	 /* Write if exam print was open and accesible to answer */
-	 HTM_TD_Begin ("class=\"CM %s\"",UsrCouldAnswer ? "DAT_GREEN" :
-		                                          "DAT_RED");
+	 HTM_TD_Begin ("class=\"CM %s\"",UsrCouldAnswer ? "DAT_SMALL_GREEN" :
+		                                          "DAT_SMALL_RED");
 	 HTM_Txt (UsrCouldAnswer ? "&check;" :
 				   "&cross;");
 	 HTM_TD_End ();
 
 	 /* Write IP */
-	 HTM_TD_Begin ("class=\"CM DAT\"");
+	 HTM_TD_Begin ("class=\"LM %s\"",UsrCouldAnswer ? "DAT_SMALL" :
+	        		                          "DAT_SMALL_LIGHT");
 	 Length = strlen (IP);
 	 if (Length > 6)
 	   {
@@ -316,13 +410,13 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	    HTM_Txt (Anonymized);
 	   }
 	 else
-	    HTM_Txt ("&hellip;");
+	    HTM_Txt (IP);
 	 HTM_TD_End ();
 
 	 /* Write session id */
-	 HTM_TD_Begin ("class=\"CM DAT\"");
+	 HTM_TD_Begin ("class=\"LM %s\"",UsrCouldAnswer ? "DAT_SMALL" :
+	        		                          "DAT_SMALL_LIGHT");
 	 Length = strlen (SessionId);
-	 Length = strlen (IP);
 	 if (Length > 6)
 	   {
 	    sprintf (Anonymized,"%c%c%c&hellip;%c%c%c",
@@ -335,7 +429,16 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	    HTM_Txt (Anonymized);
 	   }
 	 else
-	    HTM_Txt ("&hellip;");
+	    HTM_Txt (SessionId);
+	 HTM_TD_End ();
+
+	 /* Write user agent (row[6]) */
+	 HTM_TD_Begin ("class=\"LM %s\"",UsrCouldAnswer ? "DAT_SMALL" :
+	        		                          "DAT_SMALL_LIGHT");
+	 if (LastUserAgent)
+	    HTM_Txt (LastUserAgent);
+	 else
+	    HTM_Txt ("?");
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -344,6 +447,10 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
       /***** End table and box *****/
       Box_BoxTableEnd ();
      }
+
+   /***** Free user agent *****/
+   if (LastUserAgent)
+      free (LastUserAgent);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

@@ -13372,6 +13372,9 @@ LEFT JOIN
 ON ep.PrnCod=epq.PrnCod
 WHERE ABS(ep.S-epq.S)<0.001;
 
+----------------------------------
 
+
+SELECT COUNT(*) FROM exa_log_user_agent WHERE LogCod=(SELECT MAX(LogCod) FROM exa_log_user_agent WHERE PrnCod=10) AND UserAgent='Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0';
 
 

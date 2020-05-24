@@ -496,8 +496,17 @@ CREATE TABLE IF NOT EXISTS exa_log (
 	IP CHAR(15) NOT NULL,
 	SessionId CHAR(43) NOT NULL,
 	UNIQUE INDEX(LogCod),
-	INDEX(PrnCod,ClickTime),
+	UNIQUE INDEX(PrnCod,LogCod),
 	INDEX(ClickTime));
+--
+-- Table exa_log_user_agent: stores the user agent field for access log to exam prints
+--
+CREATE TABLE IF NOT EXISTS exa_log_user_agent (
+	LogCod INT NOT NULL,
+	PrnCod INT NOT NULL,
+	UserAgent TEXT NOT NULL,
+	UNIQUE INDEX(LogCod),
+	UNIQUE INDEX(PrnCod,LogCod));
 --
 -- Table exa_print_questions: stores the questions and answers in exam prints made by users
 --

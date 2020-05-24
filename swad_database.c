@@ -1072,8 +1072,28 @@ mysql> DESCRIBE exa_log;
 			"IP CHAR(15) NOT NULL,"		// Cns_MAX_BYTES_IP
 			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
 		   "UNIQUE INDEX(LogCod),"
-		   "INDEX(PrnCod,ClickTime),"
+		   "UNIQUE INDEX(PrnCod,LogCod),"
 		   "INDEX(ClickTime))");
+
+   /***** Table exa_log_user_agent *****/
+/*
+mysql> DESCRIBE exa_log_user_agent;
++-----------+---------+------+-----+---------+-------+
+| Field     | Type    | Null | Key | Default | Extra |
++-----------+---------+------+-----+---------+-------+
+| LogCod    | int(11) | NO   | PRI | NULL    |       |
+| PrnCod    | int(11) | NO   | MUL | NULL    |       |
+| UserAgent | text    | NO   |     | NULL    |       |
++-----------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+*/
+// TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_log_user_agent ("
+			"LogCod INT NOT NULL,"
+			"PrnCod INT NOT NULL,"
+			"UserAgent TEXT NOT NULL,"
+		   "UNIQUE INDEX(LogCod),"
+		   "UNIQUE INDEX(PrnCod,LogCod))");
 
 /***** Table exa_print_questions *****/
 /*

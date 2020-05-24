@@ -56491,6 +56491,27 @@ const char *Txt_Web =
 	"Web";
 #endif
 
+const char *Txt_Web_browser =
+#if   L==1	// ca
+	"Navegador web";
+#elif L==2	// de
+	"Webbrowser";
+#elif L==3	// en
+	"Web browser";
+#elif L==4	// es
+	"Navegador web";
+#elif L==5	// fr
+	"Navigateur web";
+#elif L==6	// gn
+	"Navegador web";	// Okoteve traducción
+#elif L==7	// it
+	"Web browser";
+#elif L==8	// pl
+	"Przegl&aogon;darka internetowa";
+#elif L==9	// pt
+	"Navegador web";
+#endif
+
 const char *Txt_Web_page =
 #if   L==1	// ca
 	"P&agrave;gina web";
