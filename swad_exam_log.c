@@ -70,6 +70,7 @@ static struct
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void ExaLog_LogSession (long LogCod,long PrnCod);
 static void ExaLog_LogUsrAgent (long LogCod,long PrnCod);
 
 /*****************************************************************************/
@@ -149,9 +150,9 @@ void ExaLog_LogAccess (long LogCod)
 	    Redundant data (also present in log table) are stored for speed */
 	 DB_QueryINSERT ("can not log exam access",
 			 "INSERT INTO exa_log "
-			 "(LogCod,PrnCod,ActCod,QstInd,CanAnswer,ClickTime,IP,SessionId)"
+			 "(LogCod,PrnCod,ActCod,QstInd,CanAnswer,ClickTime,IP)"
 			 " VALUES "
-			 "(%ld,%ld,%ld,%d,'%c',NOW(),'%s','%s')",
+			 "(%ld,%ld,%ld,%d,'%c',NOW(),'%s')",
 			 LogCod,
 			 PrnCod,
 			 (unsigned) Action,
@@ -159,13 +160,48 @@ void ExaLog_LogAccess (long LogCod)
 			 ExaLog_GetIfCanAnswer () ? 'Y' :
 				                    'N',
 			 // NOW()   	   Redundant, for speed
-			 Gbl.IP,	// Redundant, for speed
-			 Gbl.Session.Id);
+			 Gbl.IP);	// Redundant, for speed
 
-	 /***** Log user agent *****/
+	 /***** Log session and user agent *****/
+	 ExaLog_LogSession (LogCod,PrnCod);
 	 ExaLog_LogUsrAgent (LogCod,PrnCod);
 	}
      }
+  }
+
+/*****************************************************************************/
+/*************************** Log session in database *************************/
+/*****************************************************************************/
+
+static void ExaLog_LogSession (long LogCod,long PrnCod)
+  {
+   bool TheSameAsTheLast;
+
+   /***** Get if the current session id
+          is the same as the last stored in database *****/
+   TheSameAsTheLast = (DB_QueryCOUNT ("can not check session",
+				      "SELECT COUNT(*)"
+				      " FROM exa_log_session"
+				      " WHERE LogCod="
+				      "(SELECT MAX(LogCod)"
+				      " FROM exa_log_session"
+				      " WHERE PrnCod=%ld)"
+				      " AND SessionId='%s'",
+				      PrnCod,
+				      Gbl.Session.Id) != 0);
+
+
+   /***** Insert session id into database
+          only if it's not the same as the last one stored *****/
+   if (!TheSameAsTheLast)
+      DB_QueryINSERT ("can not log session",
+		      "INSERT INTO exa_log_session "
+		      "(LogCod,PrnCod,SessionId)"
+		      " VALUES "
+		      "(%ld,%ld,'%s')",
+		      LogCod,
+		      PrnCod,
+		      Gbl.Session.Id);
   }
 
 /*****************************************************************************/
@@ -259,12 +295,12 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
    bool UsrCouldAnswer;
    time_t ClickTimeUTC;
    char IP[Cns_MAX_BYTES_IP + 1];
-   char SessionId[Cns_BYTES_SESSION_ID + 1];
    char *Id;
    size_t Length;
    char Anonymized[14 + 1];	// ***&hellip;***
 				// 12345678901234
-   char *LastUserAgent = NULL;
+   char LastSessionId[Cns_BYTES_SESSION_ID + 1];
+   char *LastUserAgent;
 
    /***** Check if I can view this print result *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -288,9 +324,11 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 			              "exa_log.CanAnswer,"			// row[2]
 			              "UNIX_TIMESTAMP(exa_log.ClickTime),"	// row[3]
 			              "exa_log.IP,"				// row[4]
-			              "exa_log.SessionId,"			// row[5]
+			              "exa_log_session.SessionId,"		// row[5]
 				      "exa_log_user_agent.UserAgent"		// row[6]
-			       " FROM exa_log LEFT JOIN exa_log_user_agent"
+			       " FROM exa_log LEFT JOIN exa_log_session"
+	                       " ON exa_log.LogCod=exa_log_session.LogCod"
+			       " LEFT JOIN exa_log_user_agent"
 	                       " ON exa_log.LogCod=exa_log_user_agent.LogCod"
 			       " WHERE exa_log.PrnCod=%ld"
 			       " ORDER BY exa_log.LogCod",
@@ -298,6 +336,10 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 
    if (NumClicks)
      {
+      /***** Initialize last session id and last user agent ******/
+      LastSessionId[0] = '\0';
+      LastUserAgent = NULL;
+
       /***** Begin box *****/
       Box_BoxTableBegin (NULL,Txt_Hits,
                          NULL,NULL,
@@ -324,6 +366,8 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	   NumClick < NumClicks;
 	   NumClick++)
 	{
+	 Gbl.RowEvenOdd = NumClick % 2;
+
 	 /***** Get row *****/
 	 row = mysql_fetch_row (mysql_res);
 
@@ -346,8 +390,9 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 		   Cns_MAX_BYTES_IP);
 
 	 /* Get session id (row[5]) */
-	 Str_Copy (SessionId,row[5],
-		   Cns_BYTES_SESSION_ID);
+	 if (row[5])	// This row has a user agent stored in database
+	    Str_Copy (LastSessionId,row[5],
+		      Cns_BYTES_SESSION_ID);
 
 	 /* Get session id (row[6]) */
 	 if (row[6])	// This row has a user agent stored in database
@@ -364,9 +409,9 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	 /* Write click time */
 	 if (asprintf (&Id,"click_date_%u",NumClick) < 0)
 	    Lay_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"LM %s\"",
-	               Id,UsrCouldAnswer ? "DAT_SMALL" :
-	        		           "DAT_SMALL_LIGHT");
+	 HTM_TD_Begin ("id=\"%s\" class=\"LT COLOR%u %s\"",
+	               Id,Gbl.RowEvenOdd,UsrCouldAnswer ? "DAT_SMALL" :
+	        		                          "DAT_SMALL_LIGHT");
 	 Dat_WriteLocalDateHMSFromUTC (Id,ClickTimeUTC,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,true,0x7);
@@ -374,28 +419,32 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	 HTM_TD_End ();
 
 	 /* Write action */
-	 HTM_TD_Begin ("class=\"LM %s\"",UsrCouldAnswer ? "DAT_SMALL" :
-	        		                          "DAT_SMALL_LIGHT");
+	 HTM_TD_Begin ("class=\"LT COLOR%u %s\"",
+	               Gbl.RowEvenOdd,UsrCouldAnswer ? "DAT_SMALL" :
+	        		                       "DAT_SMALL_LIGHT");
 	 HTM_Txt (Txt_EXAM_LOG_ACTIONS[ActCod]);
 	 HTM_TD_End ();
 
 	 /* Write number of question */
-	 HTM_TD_Begin ("class=\"RM %s\"",UsrCouldAnswer ? "DAT_SMALL" :
-	        		                          "DAT_SMALL_LIGHT");
+	 HTM_TD_Begin ("class=\"RT COLOR%u %s\"",
+	               Gbl.RowEvenOdd,UsrCouldAnswer ? "DAT_SMALL" :
+	        		                       "DAT_SMALL_LIGHT");
 	 if (QstInd >= 0)
 	    HTM_Unsigned ((unsigned) QstInd + 1);
 	 HTM_TD_End ();
 
 	 /* Write if exam print was open and accesible to answer */
-	 HTM_TD_Begin ("class=\"CM %s\"",UsrCouldAnswer ? "DAT_SMALL_GREEN" :
-		                                          "DAT_SMALL_RED");
+	 HTM_TD_Begin ("class=\"CT COLOR%u %s\"",
+	               Gbl.RowEvenOdd,UsrCouldAnswer ? "DAT_SMALL_GREEN" :
+		                                       "DAT_SMALL_RED");
 	 HTM_Txt (UsrCouldAnswer ? "&check;" :
 				   "&cross;");
 	 HTM_TD_End ();
 
 	 /* Write IP */
-	 HTM_TD_Begin ("class=\"LM %s\"",UsrCouldAnswer ? "DAT_SMALL" :
-	        		                          "DAT_SMALL_LIGHT");
+	 HTM_TD_Begin ("class=\"LT COLOR%u %s\"",
+	               Gbl.RowEvenOdd,UsrCouldAnswer ? "DAT_SMALL" :
+	        		                       "DAT_SMALL_LIGHT");
 	 Length = strlen (IP);
 	 if (Length > 6)
 	   {
@@ -413,27 +462,29 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	 HTM_TD_End ();
 
 	 /* Write session id */
-	 HTM_TD_Begin ("class=\"LM %s\"",UsrCouldAnswer ? "DAT_SMALL" :
-	        		                          "DAT_SMALL_LIGHT");
-	 Length = strlen (SessionId);
+	 HTM_TD_Begin ("class=\"LT COLOR%u %s\"",
+	               Gbl.RowEvenOdd,UsrCouldAnswer ? "DAT_SMALL" :
+	        		                       "DAT_SMALL_LIGHT");
+	 Length = strlen (LastSessionId);
 	 if (Length > 6)
 	   {
 	    sprintf (Anonymized,"%c%c%c&hellip;%c%c%c",
-		     SessionId[0],
-		     SessionId[1],
-		     SessionId[2],
-		     SessionId[Length - 3],
-		     SessionId[Length - 2],
-		     SessionId[Length - 1]);
+		     LastSessionId[0],
+		     LastSessionId[1],
+		     LastSessionId[2],
+		     LastSessionId[Length - 3],
+		     LastSessionId[Length - 2],
+		     LastSessionId[Length - 1]);
 	    HTM_Txt (Anonymized);
 	   }
 	 else
-	    HTM_Txt (SessionId);
+	    HTM_Txt (LastSessionId);
 	 HTM_TD_End ();
 
 	 /* Write user agent (row[6]) */
-	 HTM_TD_Begin ("class=\"LM %s\"",UsrCouldAnswer ? "DAT_SMALL" :
-	        		                          "DAT_SMALL_LIGHT");
+	 HTM_TD_Begin ("class=\"LM COLOR%u %s\"",
+	               Gbl.RowEvenOdd,UsrCouldAnswer ? "DAT_SMALL" :
+	        		                       "DAT_SMALL_LIGHT");
 	 if (LastUserAgent)
 	    HTM_Txt (LastUserAgent);
 	 else
@@ -445,11 +496,11 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
-     }
 
-   /***** Free user agent *****/
-   if (LastUserAgent)
-      free (LastUserAgent);
+      /***** Free user agent *****/
+      if (LastUserAgent)
+	 free (LastUserAgent);
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

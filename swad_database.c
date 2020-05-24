@@ -1057,9 +1057,8 @@ mysql> DESCRIBE exa_log;
 | CanAnswer | enum('N','Y') | NO   |     | N       |       |
 | ClickTime | datetime      | NO   | MUL | NULL    |       |
 | IP        | char(15)      | NO   |     | NULL    |       |
-| SessionId | char(43)      | NO   |     | NULL    |       |
 +-----------+---------------+------+-----+---------+-------+
-8 rows in set (0.00 sec)
+7 rows in set (0.00 sec)
 */
 // TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_log ("
@@ -1070,10 +1069,29 @@ mysql> DESCRIBE exa_log;
 			"CanAnswer ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"ClickTime DATETIME NOT NULL,"
 			"IP CHAR(15) NOT NULL,"		// Cns_MAX_BYTES_IP
-			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
 		   "UNIQUE INDEX(LogCod),"
 		   "UNIQUE INDEX(PrnCod,LogCod),"
 		   "INDEX(ClickTime))");
+
+   /***** Table exa_log_session *****/
+/*
+mysql> DESCRIBE exa_log_session;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| LogCod    | int(11)  | NO   | PRI | NULL    |       |
+| PrnCod    | int(11)  | NO   | MUL | NULL    |       |
+| SessionId | char(43) | NO   |     | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+*/
+// TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_log_session ("
+			"LogCod INT NOT NULL,"
+			"PrnCod INT NOT NULL,"
+			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
+		   "UNIQUE INDEX(LogCod),"
+		   "UNIQUE INDEX(PrnCod,LogCod))");
 
    /***** Table exa_log_user_agent *****/
 /*

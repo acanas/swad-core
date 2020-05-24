@@ -557,10 +557,16 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.244.1 (2020-05-24)"
+#define Log_PLATFORM_VERSION	"SWAD 19.245 (2020-05-24)"
 #define CSS_FILE		"swad19.238.2.css"
 #define JS_FILE			"swad19.239.6.js"
 /*
+	Version 19.245:   May 24, 2020  Session id is stored in a separated table. (302439 lines)
+ALTER TABLE exa_log DROP COLUMN SessionId;
+CREATE TABLE IF NOT EXISTS exa_log_session (LogCod INT NOT NULL,PrnCod INT NOT NULL,SessionId CHAR(43) NOT NULL,UNIQUE INDEX(LogCod),UNIQUE INDEX(PrnCod,LogCod));
+					If you want to use MyISAM:
+ALTER TABLE exa_log_session ENGINE=MyISAM;
+
 	Version 19.244.1: May 24, 2020  Prepare to remove exam prints when removed sessions and exams.
 				        Fixed bug writing exam log. (302365 lines)
 	Version 19.244:   May 24, 2020  User agent stored in exam log. (302329 lines)
@@ -568,7 +574,7 @@ ps2pdf source.ps destination.pdf
 ALTER TABLE exa_log DROP INDEX PrnCod,ADD UNIQUE INDEX(PrnCod,LogCod);
 CREATE TABLE IF NOT EXISTS exa_log_user_agent (LogCod INT NOT NULL,PrnCod INT NOT NULL,UserAgent TEXT NOT NULL,UNIQUE INDEX(LogCod),UNIQUE INDEX(PrnCod,LogCod));
 					If you want to use MyISAM:
-ALTER TABLE exa_log ENGINE=MyISAM;
+ALTER TABLE exa_log_user_agent ENGINE=MyISAM;
 
 	Version 19.243:   May 23, 2020  List exam log. (302180 lines)
 	Version 19.242.1: May 23, 2020  Bug fixing and code refactoring in exam log. (301932 lines)

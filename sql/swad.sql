@@ -494,10 +494,18 @@ CREATE TABLE IF NOT EXISTS exa_log (
 	CanAnswer ENUM('N','Y') NOT NULL DEFAULT 'N',
 	ClickTime DATETIME NOT NULL,
 	IP CHAR(15) NOT NULL,
-	SessionId CHAR(43) NOT NULL,
 	UNIQUE INDEX(LogCod),
 	UNIQUE INDEX(PrnCod,LogCod),
 	INDEX(ClickTime));
+--
+-- Table exa_log_session: stores the session id field for access log to exam prints
+--
+CREATE TABLE IF NOT EXISTS exa_log_session (
+	LogCod INT NOT NULL,
+	PrnCod INT NOT NULL,
+	SessionId CHAR(43) NOT NULL,
+	UNIQUE INDEX(LogCod),
+	UNIQUE INDEX(PrnCod,LogCod));
 --
 -- Table exa_log_user_agent: stores the user agent field for access log to exam prints
 --
