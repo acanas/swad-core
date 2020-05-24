@@ -550,7 +550,7 @@ function readConnUsrsData () {
 /*****************************************************************************/
 
 // This function is called when user changes an answer in an exam print
-function updateExamPrint (idDiv,idInput,nameInput,Params,timeoutMsg) {
+function updateExamPrint (idDiv,idInput,nameInput,Params,timeoutMsg,IHaveFinishedTxt,savingTxt) {
     var objXMLHttp = false;
 
 	objXMLHttp = AJAXCreateObject ();
@@ -559,7 +559,8 @@ function updateExamPrint (idDiv,idInput,nameInput,Params,timeoutMsg) {
 		objXMLHttp.onreadystatechange = function() {	// onreadystatechange must be lowercase
 			if (objXMLHttp.readyState == 4)	{			// Check if data have been received
 				if (objXMLHttp.status == 200) {
-					clearTimeout (xmlHttpTimeout);		// Response received ==> clear timeout
+					// Response received
+					clearTimeout (xmlHttpTimeout);		// Clear timeout
 					if (idDiv) {
 						var div = document.getElementById(idDiv);		// Access to DIV
 						if (div) {
@@ -609,8 +610,11 @@ function updateExamPrint (idDiv,idInput,nameInput,Params,timeoutMsg) {
 					// Params += '&' + nameInput + '=' + encodeURIComponent(val);	// UTF-8 escaped
 					// Params += '&' + nameInput + '=' + escape(val);				// ISO-8859-1 escaped (deprecated)
 					Params += '&' + nameInput + '=' + getEscapedString(val);		// ISO-8859-1 escaped, replacement for deprecated escape()
+					inputElem.value = '?';	// Reset while waiting response. If connection is broken ==> user will see ? input
 				}
 			}
+		
+		disableFinished (savingTxt);	// Disable finished button on sending. When answer is saved and response received ==> the button will be reloaded
 
 		objXMLHttp.open('POST',ActionAJAX,true);
 		objXMLHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -624,6 +628,7 @@ function updateExamPrint (idDiv,idInput,nameInput,Params,timeoutMsg) {
 		function ajaxTimeout () {
 			objXMLHttp.abort ();
 			alert (timeoutMsg);
+			disableFinished (IHaveFinishedTxt);	// Sending aborted ==> change "Saving..." to original "I have finished"
 		};
 	}
 }
@@ -685,6 +690,25 @@ for(var i=0;i<256;i++) {
 console.table(arr);
 //-----------------------------------------------------------------------------
 */
+
+/*****************************************************************************/
+/********* Disable button to finish exam when focus on a input text **********/
+/*****************************************************************************/
+
+function disableFinished (Txt) {
+	var f = document.getElementById('finished');		// Access to form
+	
+	if (f)
+		for (var i = 0; i < f.elements.length; i++) {
+			var b = f.elements[i];
+			if (b.type == 'submit') {
+				b.disabled = true;
+				b.style.opacity = 0.5;
+				b.innerHTML = Txt;
+			}
+		}
+}
+
 /*****************************************************************************/
 /********** Automatic refresh of current match question using AJAX ***********/
 /*****************************************************************************/

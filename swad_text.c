@@ -40648,6 +40648,27 @@ const char *Txt_Save_file_properties =
 	"Salvar as propriedades do arquivo";
 #endif
 
+const char *Txt_Saving_ =
+#if   L==1	// ca
+	"Desant&hellip;";
+#elif L==2	// de
+	"Speichern&hellip;";
+#elif L==3	// en
+	"Saving&hellip;";
+#elif L==4	// es
+	"Guardando&hellip;";
+#elif L==5	// fr
+	"Enregistrement&hellip;";
+#elif L==6	// gn
+	"Guardando&hellip;";	// Okoteve traducción
+#elif L==7	// it
+	"Salvataggio&hellip;";
+#elif L==8	// pl
+	"Zapisywanie&hellip;";
+#elif L==9	// pt
+	"Salvando&hellip;";
+#endif
+
 const char *Txt_Scope =
 #if   L==1	// ca
 	"&Agrave;mbit";

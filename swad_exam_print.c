@@ -80,7 +80,8 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
                                           const struct Exa_Exam *Exam,
                                           const struct ExaPrn_Print *Print);
 static void ExaPrn_GetAndWriteDescription (long ExaCod);
-static void ExaPrn_ShowTableWithQstsToFill (const struct ExaPrn_Print *Print);
+static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
+					    const struct ExaPrn_Print *Print);
 static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
                                          unsigned NumQst,
                                          const struct Tst_Question *Question);
@@ -607,7 +608,6 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
                                           const struct ExaPrn_Print *Print)
   {
    extern const char *Hlp_ASSESSMENT_Exams;
-   extern const char *Txt_I_have_finished;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Exam->Title,
@@ -625,14 +625,8 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
      {
       /***** Show table with questions to answer *****/
       HTM_DIV_Begin ("id=\"examprint\"");	// Used for AJAX based refresh
-      ExaPrn_ShowTableWithQstsToFill (Print);
+      ExaPrn_ShowTableWithQstsToFill (Exams,Print);
       HTM_DIV_End ();				// Used for AJAX based refresh
-
-      /***** Form to end/close this exam print *****/
-      Frm_StartForm (ActEndExaPrn);
-      ExaSes_PutParamsEdit (Exams);
-      Btn_PutCreateButton (Txt_I_have_finished);
-      Frm_EndForm ();
      }
 
    /***** End box *****/
@@ -663,8 +657,10 @@ static void ExaPrn_GetAndWriteDescription (long ExaCod)
 /********* Show the main part (table) of an exam print to be answered ********/
 /*****************************************************************************/
 
-static void ExaPrn_ShowTableWithQstsToFill (const struct ExaPrn_Print *Print)
+static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
+					    const struct ExaPrn_Print *Print)
   {
+   extern const char *Txt_I_have_finished;
    unsigned NumQst;
    struct Tst_Question Question;
 
@@ -692,6 +688,12 @@ static void ExaPrn_ShowTableWithQstsToFill (const struct ExaPrn_Print *Print)
 
    /***** End table *****/
    HTM_TABLE_End ();
+
+   /***** Form to end/close this exam print *****/
+   Frm_StartFormId (ActEndExaPrn,"finished");
+   ExaSes_PutParamsEdit (Exams);
+   Btn_PutCreateButton (Txt_I_have_finished);
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -945,6 +947,7 @@ static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
 	     Id,Tst_MAX_CHARS_ANSWERS_ONE_QST,
 	     Print->PrintedQuestions[NumQst].StrAnswers);
    ExaPrn_WriteJSToUpdateExamPrint (Print,NumQst,Id,-1);
+
    HTM_Txt (" />");
   }
 
@@ -957,19 +960,21 @@ static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
 	                                     const char *Id,int NumOpt)
   {
    extern const char *Txt_Connection_issues_;
+   extern const char *Txt_I_have_finished;
+   extern const char *Txt_Saving_;
 
    if (NumOpt < 0)
       HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
-			    "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u','%s');",
+			    "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u','%s','%s','%s');",
 		Id,
 		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst,
-		Txt_Connection_issues_);
+		Txt_Connection_issues_,Txt_I_have_finished,Txt_Saving_);
    else	// NumOpt >= 0
       HTM_TxtF (" onclick=\"updateExamPrint('examprint','%s_%d','Ans',"
-		           "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u','%s');",
+		           "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u','%s','%s','%s');",
 		Id,NumOpt,
 		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst,
-	        Txt_Connection_issues_);
+	        Txt_Connection_issues_,Txt_I_have_finished,Txt_Saving_);
    HTM_Txt (" return false;\"");	// return false is necessary to not submit form
   }
 
@@ -980,12 +985,15 @@ static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
 void ExaPrn_ReceivePrintAnswer (void)
   {
    extern const char *Txt_You_dont_have_access_to_the_exam;
+   extern const char *Txt_Continue;
+   struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaSes_Session Session;
    struct ExaPrn_Print Print;
    unsigned QstInd;
 
-   /***** Reset exam, session and print *****/
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exam);
    ExaSes_ResetSession (&Session);
    ExaPrn_ResetPrint (&Print);
@@ -1004,6 +1012,7 @@ void ExaPrn_ReceivePrintAnswer (void)
    ExaSes_GetDataOfSessionByCod (&Session);
    if (Session.SesCod <= 0)
       Lay_WrongExamExit ();
+   Exams.SesCod = Session.SesCod;
 
    /***** Get exam data *****/
    Exam.ExaCod = Session.ExaCod;
@@ -1012,6 +1021,7 @@ void ExaPrn_ReceivePrintAnswer (void)
       Lay_WrongExamExit ();
    if (Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Lay_WrongExamExit ();
+   Exams.ExaCod = Exam.ExaCod;
 
    /***** Get question index from form *****/
    QstInd = ExaPrn_GetParamQstInd ();
@@ -1043,7 +1053,7 @@ void ExaPrn_ReceivePrintAnswer (void)
       ExaPrn_UpdatePrintInDB (&Print);
 
       /***** Show table with questions to answer *****/
-      ExaPrn_ShowTableWithQstsToFill (&Print);
+      ExaPrn_ShowTableWithQstsToFill (&Exams,&Print);
      }
    else	// Not accessible to answer
      {
@@ -1052,6 +1062,12 @@ void ExaPrn_ReceivePrintAnswer (void)
 
       /***** Show warning *****/
       Ale_ShowAlert (Ale_INFO,Txt_You_dont_have_access_to_the_exam);
+
+      /***** Form to end/close this exam print *****/
+      Frm_StartForm (ActEndExaPrn);
+      ExaSes_PutParamsEdit (&Exams);
+      Btn_PutCreateButton (Txt_Continue);
+      Frm_EndForm ();
      }
   }
 

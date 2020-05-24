@@ -557,10 +557,12 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.245 (2020-05-24)"
+#define Log_PLATFORM_VERSION	"SWAD 19.246.1 (2020-05-25)"
 #define CSS_FILE		"swad19.238.2.css"
-#define JS_FILE			"swad19.239.6.js"
+#define JS_FILE			"swad19.246.1.js"
 /*
+	Version 19.246.1: May 25, 2020  Removed unused JavaScript code. (302515 lines)
+	Version 19.246:   May 24, 2020  Fixed issue answering exam prints: when answer is been sent, button to send exam is disabled. (302527 lines)
 	Version 19.245:   May 24, 2020  Session id is stored in a separated table. (302439 lines)
 ALTER TABLE exa_log DROP COLUMN SessionId;
 CREATE TABLE IF NOT EXISTS exa_log_session (LogCod INT NOT NULL,PrnCod INT NOT NULL,SessionId CHAR(43) NOT NULL,UNIQUE INDEX(LogCod),UNIQUE INDEX(PrnCod,LogCod));
@@ -596,7 +598,7 @@ ALTER TABLE exa_log ENGINE=MyISAM;
 					Bug fixing and code refactoring in tests and exams. (301712 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS exa_log (LogCod INT NOT NULL,PrnCod INT NOT NULL,ActCod INT NOT NULL,ClickTime DATETIME NOT NULL,IP CHAR(15) NOT NULL,SessionId CHAR(43) NOT NULL,UNIQUE INDEX(LogCod),INDEX(PrnCod,ClickTime),INDEX(ClickTime));
-
+--------------
 	Version 19.240:   May 21, 2020  Code refactoring in tests and exams. (301428 lines)
 	Version 19.239.9: May 21, 2020  Fixed issue in exam sessions: exam prints in sessions of hidden exams are no accesible. (301441 lines)
 	Version 19.239.8: May 21, 2020  Fixed issue in exam sessions: a student can not see hidden sessions. (301433 lines)

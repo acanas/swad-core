@@ -27,6 +27,7 @@
 
 #define _GNU_SOURCE 		// For asprintf
 #include <stdio.h>		// For asprintf
+#include <stdlib.h>		// For system, getenv, etc.
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
@@ -278,6 +279,7 @@ static void ExaLog_LogUsrAgent (long LogCod,long PrnCod)
 void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
   {
    extern const char *Txt_Hits;
+   extern const char *Txt_Click;
    extern const char *Txt_Date_and_time;
    extern const char *Txt_Action;
    extern const char *Txt_Question;
@@ -291,6 +293,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
    unsigned NumClicks;
    unsigned NumClick;
    unsigned ActCod;
+   ExaLog_Action_t Action;
    int QstInd;
    bool UsrCouldAnswer;
    time_t ClickTimeUTC;
@@ -299,8 +302,9 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
    size_t Length;
    char Anonymized[14 + 1];	// ***&hellip;***
 				// 12345678901234
-   char LastSessionId[Cns_BYTES_SESSION_ID + 1];
-   char *LastUserAgent;
+   char SessionId[Cns_BYTES_SESSION_ID + 1];
+   char *UserAgent;
+   const char *Class;
 
    /***** Check if I can view this print result *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -337,8 +341,8 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
    if (NumClicks)
      {
       /***** Initialize last session id and last user agent ******/
-      LastSessionId[0] = '\0';
-      LastUserAgent = NULL;
+      SessionId[0] = '\0';
+      UserAgent = NULL;
 
       /***** Begin box *****/
       Box_BoxTableBegin (NULL,Txt_Hits,
@@ -351,6 +355,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
       /***** Write heading *****/
       HTM_TR_Begin (NULL);
 
+      HTM_TH (1,1,"RB",Txt_Click);
       HTM_TH (1,1,"LB",Txt_Date_and_time);
       HTM_TH (1,1,"LB",Txt_Action);
       HTM_TH (1,1,"RB",Txt_Question);
@@ -373,8 +378,10 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 
 	 /* Get code of action (row[0]) */
 	 ActCod = Str_ConvertStrToUnsigned (row[0]);
-	 if (ActCod >= ExaLog_NUM_ACTIONS)
-	    ActCod = ExaLog_UNKNOWN_ACTION;
+	 if (ActCod < ExaLog_NUM_ACTIONS)
+	    Action = (ExaLog_Action_t) ActCod;
+	 else
+	    Action = ExaLog_UNKNOWN_ACTION;
 
 	 /* Get question index (row[1]) */
 	 QstInd = (int) Str_ConvertStrCodToLongCod (row[1]);
@@ -391,27 +398,50 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 
 	 /* Get session id (row[5]) */
 	 if (row[5])	// This row has a user agent stored in database
-	    Str_Copy (LastSessionId,row[5],
+	    Str_Copy (SessionId,row[5],
+		      Cns_BYTES_SESSION_ID);
+	 else
+	    Str_Copy (SessionId,"=",
 		      Cns_BYTES_SESSION_ID);
 
 	 /* Get session id (row[6]) */
-	 if (row[6])	// This row has a user agent stored in database
-	   {
-	    if (LastUserAgent)
-	       free (LastUserAgent);
-	    if (asprintf (&LastUserAgent,"%s",row[6]) < 0)
-	       Lay_NotEnoughMemoryExit ();
-	   }
+	 if (asprintf (&UserAgent,"%s",row[6] ? row[6] :
+						"=") < 0)
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Set color of row depending on action *****/
+	 if (UsrCouldAnswer)
+	    switch (Action)
+	      {
+	       case ExaLog_START_EXAM:
+	       case ExaLog_RESUME_EXAM:
+	       case ExaLog_FINISH_EXAM:
+	          Class = "DAT_SMALL_N";
+	          break;
+	       case ExaLog_ANSWER_QUESTION:
+	          Class = "DAT_SMALL";
+		  break;
+	       default:
+	          Class = "DAT_SMALL_LIGHT";
+	          break;
+	      }
+	 else	// Closed or not accesible exam print
+	    Class = "DAT_SMALL_LIGHT";
 
 	 /***** Write row *****/
 	 HTM_TR_Begin (NULL);
 
+	 /* Write number of click */
+	 HTM_TD_Begin ("class=\"RT COLOR%u %s\"",
+	               Gbl.RowEvenOdd,UsrCouldAnswer ? "DAT_SMALL" :
+	        		                       "DAT_SMALL_LIGHT");
+	 HTM_Unsigned (NumClick + 1);
+	 HTM_TD_End ();
+
 	 /* Write click time */
 	 if (asprintf (&Id,"click_date_%u",NumClick) < 0)
 	    Lay_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"LT COLOR%u %s\"",
-	               Id,Gbl.RowEvenOdd,UsrCouldAnswer ? "DAT_SMALL" :
-	        		                          "DAT_SMALL_LIGHT");
+	 HTM_TD_Begin ("id=\"%s\" class=\"LT COLOR%u %s\"",Id,Gbl.RowEvenOdd,Class);
 	 Dat_WriteLocalDateHMSFromUTC (Id,ClickTimeUTC,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,true,0x7);
@@ -419,16 +449,12 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	 HTM_TD_End ();
 
 	 /* Write action */
-	 HTM_TD_Begin ("class=\"LT COLOR%u %s\"",
-	               Gbl.RowEvenOdd,UsrCouldAnswer ? "DAT_SMALL" :
-	        		                       "DAT_SMALL_LIGHT");
-	 HTM_Txt (Txt_EXAM_LOG_ACTIONS[ActCod]);
+	 HTM_TD_Begin ("class=\"LT COLOR%u %s\"",Gbl.RowEvenOdd,Class);
+	 HTM_Txt (Txt_EXAM_LOG_ACTIONS[Action]);
 	 HTM_TD_End ();
 
 	 /* Write number of question */
-	 HTM_TD_Begin ("class=\"RT COLOR%u %s\"",
-	               Gbl.RowEvenOdd,UsrCouldAnswer ? "DAT_SMALL" :
-	        		                       "DAT_SMALL_LIGHT");
+	 HTM_TD_Begin ("class=\"RT COLOR%u %s\"",Gbl.RowEvenOdd,Class);
 	 if (QstInd >= 0)
 	    HTM_Unsigned ((unsigned) QstInd + 1);
 	 HTM_TD_End ();
@@ -442,9 +468,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	 HTM_TD_End ();
 
 	 /* Write IP */
-	 HTM_TD_Begin ("class=\"LT COLOR%u %s\"",
-	               Gbl.RowEvenOdd,UsrCouldAnswer ? "DAT_SMALL" :
-	        		                       "DAT_SMALL_LIGHT");
+	 HTM_TD_Begin ("class=\"LT COLOR%u %s\"",Gbl.RowEvenOdd,Class);
 	 Length = strlen (IP);
 	 if (Length > 6)
 	   {
@@ -462,44 +486,40 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	 HTM_TD_End ();
 
 	 /* Write session id */
-	 HTM_TD_Begin ("class=\"LT COLOR%u %s\"",
-	               Gbl.RowEvenOdd,UsrCouldAnswer ? "DAT_SMALL" :
-	        		                       "DAT_SMALL_LIGHT");
-	 Length = strlen (LastSessionId);
-	 if (Length > 6)
+	 HTM_TD_Begin ("class=\"LT COLOR%u %s\"",Gbl.RowEvenOdd,Class);
+	 if (SessionId[0])
 	   {
-	    sprintf (Anonymized,"%c%c%c&hellip;%c%c%c",
-		     LastSessionId[0],
-		     LastSessionId[1],
-		     LastSessionId[2],
-		     LastSessionId[Length - 3],
-		     LastSessionId[Length - 2],
-		     LastSessionId[Length - 1]);
-	    HTM_Txt (Anonymized);
+	    Length = strlen (SessionId);
+	    if (Length > 6)
+	      {
+	       sprintf (Anonymized,"%c%c%c&hellip;%c%c%c",
+			SessionId[0],
+			SessionId[1],
+			SessionId[2],
+			SessionId[Length - 3],
+			SessionId[Length - 2],
+			SessionId[Length - 1]);
+	       HTM_Txt (Anonymized);
+	      }
+	    else
+	       HTM_Txt (SessionId);
 	   }
-	 else
-	    HTM_Txt (LastSessionId);
 	 HTM_TD_End ();
 
 	 /* Write user agent (row[6]) */
-	 HTM_TD_Begin ("class=\"LM COLOR%u %s\"",
-	               Gbl.RowEvenOdd,UsrCouldAnswer ? "DAT_SMALL" :
-	        		                       "DAT_SMALL_LIGHT");
-	 if (LastUserAgent)
-	    HTM_Txt (LastUserAgent);
-	 else
-	    HTM_Txt ("?");
+	 HTM_TD_Begin ("class=\"LT COLOR%u %s\"",Gbl.RowEvenOdd,Class);
+	 if (UserAgent[0])
+	    HTM_Txt (UserAgent);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
+
+	 /***** Free user agent *****/
+	 free (UserAgent);
 	}
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
-
-      /***** Free user agent *****/
-      if (LastUserAgent)
-	 free (LastUserAgent);
      }
 
    /***** Free structure that stores the query result *****/
