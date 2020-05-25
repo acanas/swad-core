@@ -1471,9 +1471,12 @@ static void Tst_PutIconsTests (__attribute__((unused)) void *Args)
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 /***** Put form to go to test configuration *****/
+	 /***** Put icon to go to test configuration *****/
 	 Ico_PutContextualIconToConfigure (ActCfgTst,
 					   NULL,NULL);
+
+	 /***** Put icon to edit tags *****/
+	 Tag_PutIconToEditTags ();
 
          /***** Put icon to view test results *****/
 	 Ico_PutContextualIconToShowResults (ActReqSeeUsrTstRes,NULL,

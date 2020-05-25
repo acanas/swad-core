@@ -557,10 +557,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.246.1 (2020-05-25)"
+#define Log_PLATFORM_VERSION	"SWAD 19.246.2 (2020-05-25)"
 #define CSS_FILE		"swad19.238.2.css"
 #define JS_FILE			"swad19.246.1.js"
 /*
+	Version 19.246.2: May 25, 2020  Links to edition of tags in test and test configuration. (302518 lines)
 	Version 19.246.1: May 25, 2020  Removed unused JavaScript code. (302515 lines)
 	Version 19.246:   May 24, 2020  Fixed issue answering exam prints: when answer is been sent, button to send exam is disabled. (302527 lines)
 	Version 19.245:   May 24, 2020  Session id is stored in a separated table. (302439 lines)
