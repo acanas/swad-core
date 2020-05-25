@@ -437,10 +437,19 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
       /* Get the content (row[3]) and insert links */
       Str_Copy (Content,row[3],
 		Cns_MAX_BYTES_TEXT);
-      Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
-		       Not_MaxCharsURLOnScreen[TypeNoticesListing]);
-      if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
-	 Str_LimitLengthHTMLStr (Content,Not_MAX_CHARS_ON_NOTICE);
+
+      /* Inserting links is incompatible with limiting the length
+	 ==> don't insert links when limiting length */
+      switch (TypeNoticesListing)
+        {
+	 case Not_LIST_BRIEF_NOTICES:
+	    Str_LimitLengthHTMLStr (Content,Not_MAX_CHARS_ON_NOTICE);
+	    break;
+	 case Not_LIST_FULL_NOTICES:
+	    Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
+			     Not_MaxCharsURLOnScreen[TypeNoticesListing]);
+	    break;
+        }
 
       /* Get status of the notice (row[4]) */
       Status = Not_OBSOLETE_NOTICE;
@@ -778,6 +787,8 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       // TODO: Do only direct copy when a Subject of type VARCHAR(255) is available
       if (strlen (row[0]) > Ntf_MAX_BYTES_SUMMARY)
 	{
+	 /* Inserting links is incompatible with limiting the length
+	    ==> don't insert links */
 	 strncpy (SummaryStr,row[0],
 		  Ntf_MAX_BYTES_SUMMARY);
 	 SummaryStr[Ntf_MAX_BYTES_SUMMARY] = '\0';
