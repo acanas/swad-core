@@ -1312,6 +1312,17 @@ CREATE TABLE IF NOT EXISTS room_MAC (
 	UNIQUE INDEX(RooCod,MAC),
 	UNIQUE INDEX(MAC,RooCod));
 --
+-- Table room_check_in: stores the history of locations of users
+--
+CREATE TABLE IF NOT EXISTS room_check_in (
+	ChkCod INT NOT NULL AUTO_INCREMENT,
+	UsrCod INT NOT NULL,
+	RooCod INT NOT NULL,
+	CheckInTime DATETIME NOT NULL,
+	UNIQUE INDEX(ChkCod),
+	INDEX(UsrCod,CheckInTime),
+	INDEX(CheckInTime));
+--
 -- Table sessions: stores the information of open sessions
 --
 CREATE TABLE IF NOT EXISTS sessions (

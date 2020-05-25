@@ -493,11 +493,14 @@ contiene una de las que yo imparto. Así que me imagino que te esperarás la suger
 
 Función API sendCurrentLocation...
 Parámetros a enviar a la función:
-   1. Código único de ubicación (número)
+   1. Código único de la sala (número roomCode)
 Almacenaría esa ubicación en una tabla
 - Código usuario
 - Código de ubicación (sacado de la tabla de ubicaciones)
 - Fecha-hora
+
+La tabla contendría todas las ubicaciones de todos los usuarios en las últimas 12/24 horas como mucho.
+Se eliminaría periódicamante en Lay_RefreshNotifsAndConnected().
 
 Haría falta una función API que envíe el histórico reciente de ubicaciones de un usuario
 
@@ -519,6 +522,11 @@ si la intersección de los centros de sus asignaturas no es vacía,
 es decir, no tienen por qué compartir asignaturas,
 pero sí al menos alguna asignatura de cada uno tiene que compartir el centro
 (Por ej. Eva y Antonio comparten ETSIIT, pero no titulación ni asignatura)
+
+Se puede mostrar las últimas dos o tres ubicaciones (y dentro de ellas sólo el último instante de cada ubicación)
+dentro siempre de lo que haya guardado en la tabla de ubicaciones limitada a 12/24 h.
+
+
 */
 
 // TODO: Sugerencia de Jesús García Miranda. En las preguntas de tipo test de elección única (o un nuevo tipo con un nuevo nombre),
@@ -557,15 +565,22 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.246.3 (2020-05-25)"
+#define Log_PLATFORM_VERSION	"SWAD 19.247 (2020-05-25)"
 #define CSS_FILE		"swad19.238.2.css"
 #define JS_FILE			"swad19.246.1.js"
 /*
+	Version 19.247:   May 24, 2020  New API function getCurrentLocation. (302622 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS room_check_in (ChkCod INT NOT NULL AUTO_INCREMENT,UsrCod INT NOT NULL,RooCod INT NOT NULL,CheckInTime DATETIME NOT NULL,UNIQUE INDEX(ChkCod),INDEX(UsrCod,CheckInTime),INDEX(CheckInTime));
+					If you want to use MyISAM:
+ALTER TABLE room_check_in ENGINE=MyISAM;
+
 	Version 19.246.3: May 25, 2020  Fixed bug in notices. (302529 lines)
 	Version 19.246.2: May 25, 2020  Links to edition of tags in test and test configuration. (302518 lines)
 	Version 19.246.1: May 25, 2020  Removed unused JavaScript code. (302515 lines)
 	Version 19.246:   May 24, 2020  Fixed issue answering exam prints: when answer is been sent, button to send exam is disabled. (302527 lines)
 	Version 19.245:   May 24, 2020  Session id is stored in a separated table. (302439 lines)
+					2 changes necessary in database:
 ALTER TABLE exa_log DROP COLUMN SessionId;
 CREATE TABLE IF NOT EXISTS exa_log_session (LogCod INT NOT NULL,PrnCod INT NOT NULL,SessionId CHAR(43) NOT NULL,UNIQUE INDEX(LogCod),UNIQUE INDEX(PrnCod,LogCod));
 					If you want to use MyISAM:

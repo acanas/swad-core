@@ -2759,6 +2759,28 @@ mysql> DESCRIBE room_MAC;
 		   "UNIQUE INDEX(RooCod,MAC),"
 		   "UNIQUE INDEX(MAC,RooCod))");
 
+   /***** Table room_check_in *****/
+/*
+mysql> DESCRIBE room_check_in;
++-------------+----------+------+-----+---------+----------------+
+| Field       | Type     | Null | Key | Default | Extra          |
++-------------+----------+------+-----+---------+----------------+
+| ChkCod      | int(11)  | NO   | PRI | NULL    | auto_increment |
+| UsrCod      | int(11)  | NO   | MUL | NULL    |                |
+| RooCod      | int(11)  | NO   |     | NULL    |                |
+| CheckInTime | datetime | NO   | MUL | NULL    |                |
++-------------+----------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS room_check_in ("
+			"ChkCod INT NOT NULL AUTO_INCREMENT,"
+			"UsrCod INT NOT NULL,"
+			"RooCod INT NOT NULL,"
+			"CheckInTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(ChkCod),"
+		   "INDEX(UsrCod,CheckInTime),"
+		   "INDEX(CheckInTime))");
+
    /***** Table sessions *****/
 /*
 mysql> DESCRIBE sessions;

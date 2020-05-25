@@ -440,7 +440,7 @@ struct swad__sendMessageOutput
    struct swad__usersArray usersArray;
   };
 
-/* structs used in getLocations */
+/* getLocations */
 struct swad__getLocationsOutput
   {
    int institutionCode;
@@ -456,6 +456,12 @@ struct swad__getLocationsOutput
    int roomCode;
    char *roomShortName;
    char *roomFullName;
+  };
+
+/* sendCurrentLocation */
+struct swad__sendCurrentLocationOutput
+  {
+   int success;
   };
 
 /*****************************************************************************/
@@ -545,3 +551,6 @@ int swad__sendMessage (char *wsKey,int messageCode,char *to,char *subject,char *
 /* Wi-Fi-based positioning system */
 int swad__getLocations (char *wsKey,char *MAC,
                         struct swad__getLocationsOutput *getLocationsOut);
+int swad__sendCurrentLocation (char *wsKey,int roomCode,
+                               struct swad__sendCurrentLocationOutput *endCurrentLocationOut);
+

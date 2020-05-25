@@ -167,6 +167,7 @@ static const char *API_Functions[1 + API_NUM_FUNCTIONS] =
    [API_getMatchStatus         ] = "getMatchStatus",		// 30
    [API_answerMatchQuestion    ] = "answerMatchQuestion",	// 31
    [API_getLocations           ] = "getLocations",		// 32
+   [API_sendCurrentLocation    ] = "sendCurrentLocation",	// 33
   };
 
 /* Web service roles (they do not match internal swad-core roles) */
@@ -6062,6 +6063,57 @@ int swad__getLocations (struct soap *soap,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   return SOAP_OK;
+  }
+
+/*****************************************************************************/
+/***************** Check in (send user's current location) *******************/
+/*****************************************************************************/
+
+int swad__sendCurrentLocation (struct soap *soap,
+                               char *wsKey,int roomCode,					// input
+                               struct swad__sendCurrentLocationOutput *sendCurrentLocationOut)	// output
+  {
+   int ReturnCode;
+   long ChkCod;
+
+   /***** Initializations *****/
+   API_Set_gSOAP_RuntimeEnv (soap);
+   Gbl.WebService.Function = API_sendCurrentLocation;
+
+   /***** Default values returned on error *****/
+   sendCurrentLocationOut->success = 0;	// error
+
+   /***** Check web service key *****/
+   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+      return ReturnCode;
+   if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
+      return soap_receiver_fault (soap,
+	                          "Bad web service key",
+	                          "Web service key does not exist in database");
+
+   /***** Get some of my data *****/
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
+      return soap_receiver_fault (soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
+   Gbl.Usrs.Me.Logged = true;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+
+   /***** Check in (insert pair user-room) in the database *****/
+   /* Get the code of the inserted item */
+   ChkCod =
+   DB_QueryINSERTandReturnCode ("can not save current location",
+				"INSERT INTO room_check_in"
+				" (UsrCod,RooCod,CheckInTime)"
+				" SELECT %ld,RooCod,NOW()"
+				" FROM rooms"
+				" WHERE RooCod=%d",	// Check that room exists
+				Gbl.Usrs.Me.UsrDat.UsrCod,roomCode);
+
+   /***** Return notification code *****/
+   sendCurrentLocationOut->success = (ChkCod > 0) ? 1 : 0;
 
    return SOAP_OK;
   }
