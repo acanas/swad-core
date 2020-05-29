@@ -1704,7 +1704,7 @@ bool ExaSes_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
 				" (SELECT exa_groups.SesCod"
 				" FROM exa_groups,crs_grp_usr"
 				" WHERE crs_grp_usr.UsrCod=%ld"
-				" AND exa_groups.GrpCod=crs_grp_usr.GrpCod))",
+				" AND crs_grp_usr.GrpCod=exa_groups.GrpCod))",
 				SesCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
 	 break;
       case Rol_NET:

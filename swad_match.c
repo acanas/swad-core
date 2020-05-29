@@ -2313,7 +2313,7 @@ bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Mch_Match *Match)
 				" (SELECT mch_groups.MchCod"
 				" FROM mch_groups,crs_grp_usr"
 				" WHERE crs_grp_usr.UsrCod=%ld"
-				" AND mch_groups.GrpCod=crs_grp_usr.GrpCod))",
+				" AND crs_grp_usr.GrpCod=mch_groups.GrpCod))",
 				Match->MchCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
 	 break;
       case Rol_NET:

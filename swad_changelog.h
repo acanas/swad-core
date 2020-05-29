@@ -490,16 +490,7 @@ contiene una de las que yo imparto. Así que me imagino que te esperarás la suger
 
 /* TODO: Geolocalización:
 
-
-Función API sendCurrentLocation...
-Parámetros a enviar a la función:
-   1. Código único de la sala (número roomCode)
-Almacenaría esa ubicación en una tabla
-- Código usuario
-- Código de ubicación (sacado de la tabla de ubicaciones)
-- Fecha-hora
-
-La tabla contendría todas las ubicaciones de todos los usuarios en las últimas 12/24 horas como mucho.
+La tabla room_check_in contiene todas las ubicaciones de todos los usuarios en las últimas 12/24 horas como mucho.
 Se eliminaría periódicamante en Lay_RefreshNotifsAndConnected().
 
 Haría falta una función API que envíe el histórico reciente de ubicaciones de un usuario
@@ -565,10 +556,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.247 (2020-05-25)"
+#define Log_PLATFORM_VERSION	"SWAD 19.247.1 (2020-05-25)"
 #define CSS_FILE		"swad19.238.2.css"
 #define JS_FILE			"swad19.246.1.js"
 /*
+	Version 19.247.1: May 29, 2020  Do not show exam results in hidden exams or hidden exam sessions. (302646 lines)
 	Version 19.247:   May 24, 2020  New API function getCurrentLocation. (302622 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS room_check_in (ChkCod INT NOT NULL AUTO_INCREMENT,UsrCod INT NOT NULL,RooCod INT NOT NULL,CheckInTime DATETIME NOT NULL,UNIQUE INDEX(ChkCod),INDEX(UsrCod,CheckInTime),INDEX(CheckInTime));

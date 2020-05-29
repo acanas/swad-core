@@ -113,7 +113,9 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
                                    struct ExaPrn_Print *Print,
                                    struct UsrData *UsrDat);
 
-static bool ExaRes_CheckIfICanSeePrintResult (const struct ExaSes_Session *Session,long UsrCod);
+static bool ExaRes_CheckIfICanSeePrintResult (const struct Exa_Exam *Exam,
+                                              const struct ExaSes_Session *Session,
+                                              long UsrCod);
 static bool ExaRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility);
 
 static void ExaRes_ShowExamAnswers (struct UsrData *UsrDat,
@@ -758,6 +760,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
   {
    extern const char *Txt_Result;
    char *SesSubQuery;
+   char *HidSubQuery;
    char *ExaSubQuery;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -790,26 +793,43 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 				    &Gbl.Usrs.Other.UsrDat;
 
    /***** Build sessions subquery *****/
-   if (SesCod > 0)
+   if (SesCod > 0)	// One unique session
      {
       if (asprintf (&SesSubQuery," AND exa_prints.SesCod=%ld",SesCod) < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
-   else
+   else			// All sessions of selected exams
      {
       if (asprintf (&SesSubQuery,"%s","") < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
 
+   /***** Subquery: get hidden sessions?
+	  · A student will not be able to see their results in hidden sessions
+	  · A teacher will be able to see results from other users
+	    even in hidden sessions
+   *****/
+   switch (MeOrOther)
+     {
+      case Usr_ME:	// A student watching her/his results
+         if (asprintf (&HidSubQuery," AND exa_sessions.Hidden='N'") < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 break;
+      default:		// A teacher/admin watching the results of other users
+	 if (asprintf (&HidSubQuery,"%s","") < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 break;
+     }
+
    /***** Build exams subquery *****/
-   if (ExaCod > 0)
+   if (ExaCod > 0)			// One unique exams
      {
       if (asprintf (&ExaSubQuery," AND exa_sessions.ExaCod=%ld",ExaCod) < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
    else if (ExamsSelectedCommas)
      {
-      if (ExamsSelectedCommas[0])
+      if (ExamsSelectedCommas[0])	// Selected exams
 	{
 	 if (asprintf (&ExaSubQuery," AND exa_sessions.ExaCod IN (%s)",
 		       ExamsSelectedCommas) < 0)
@@ -821,13 +841,15 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    Lay_NotEnoughMemoryExit ();
 	}
      }
-   else
+   else					// All exams
      {
       if (asprintf (&ExaSubQuery,"%s","") < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
 
    /***** Make database query *****/
+   // Do not filter by groups, because a student who has changed groups
+   // must be able to access exams taken in other groups
    NumResults =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get sessions results",
 			      "SELECT exa_prints.SesCod,"			// row[0]
@@ -842,15 +864,18 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 			      " WHERE exa_prints.UsrCod=%ld"
 			      "%s"	// Session subquery
 			      " AND exa_prints.SesCod=exa_sessions.SesCod"
+                              "%s"	// Hidden sessions subquery
 			      "%s"	// Exams subquery
 			      " AND exa_sessions.ExaCod=exa_exams.ExaCod"
 			      " AND exa_exams.CrsCod=%ld"			// Extra check
 			      " ORDER BY exa_sessions.Title",
 			      UsrDat->UsrCod,
 			      SesSubQuery,
+			      HidSubQuery,
 			      ExaSubQuery,
 			      Gbl.Hierarchy.Crs.CrsCod);
    free (ExaSubQuery);
+   free (HidSubQuery);
    free (SesSubQuery);
 
    /***** Show user's data *****/
@@ -875,7 +900,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	 Visibility = TstVis_GetVisibilityFromStr (row[7]);
 
 	 /* Show session result? */
-	 ICanViewResult = ExaRes_CheckIfICanSeePrintResult (&Session,UsrDat->UsrCod);
+	 ICanViewResult = true;	// Filtering is already made in the query
          ICanViewScore  = ExaRes_CheckIfICanViewScore (ICanViewResult,Visibility);
 
 	 if (NumResult)
@@ -1126,6 +1151,7 @@ void ExaRes_ShowOneExaResult (void)
    /***** Set log action and print code *****/
    if (Gbl.Action.Act == ActEndExaPrn)
      {
+      // The user has clicked on the "I have finished" button in an exam print
       ExaLog_SetAction (ExaLog_FINISH_EXAM);
       ExaLog_SetPrnCod (Print.PrnCod);
       ExaLog_SetIfCanAnswer (ExaSes_CheckIfICanAnswerThisSession (&Exam,&Session));
@@ -1173,7 +1199,7 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
      {
       case Rol_STD:
 	 // Depends on visibility of result for this session (eye icon)
-	 ICanView.Result = ExaRes_CheckIfICanSeePrintResult (Session,UsrDat->UsrCod);
+	 ICanView.Result = ExaRes_CheckIfICanSeePrintResult (Exam,Session,UsrDat->UsrCod);
 
 	 if (ICanView.Result)
 	    // Depends on 5 visibility icons
@@ -1340,7 +1366,9 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 /********************** Get if I can see session result ************************/
 /*****************************************************************************/
 
-static bool ExaRes_CheckIfICanSeePrintResult (const struct ExaSes_Session *Session,long UsrCod)
+static bool ExaRes_CheckIfICanSeePrintResult (const struct Exa_Exam *Exam,
+                                              const struct ExaSes_Session *Session,
+                                              long UsrCod)
   {
    bool ItsMe;
 
@@ -1348,7 +1376,10 @@ static bool ExaRes_CheckIfICanSeePrintResult (const struct ExaSes_Session *Sessi
      {
       case Rol_STD:
 	 ItsMe = Usr_ItsMe (UsrCod);
-	 if (ItsMe && Session->ShowUsrResults)
+	 if (ItsMe &&				// The result is mine
+	     !Exam->Hidden &&			// The exam is visible
+	     !Session->Hidden &&		// The session is visible
+	     Session->ShowUsrResults)		// The results of the session are visible to users
 	    return ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session->SesCod);
          return false;
       case Rol_NET:
