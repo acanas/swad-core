@@ -31,7 +31,7 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define API_NUM_FUNCTIONS 33
+#define API_NUM_FUNCTIONS 34
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -72,8 +72,9 @@ typedef enum
    API_getMatches		= 29,
    API_getMatchStatus		= 30,
    API_answerMatchQuestion	= 31,
-   API_getLocations		= 32,
-   API_sendCurrentLocation	= 33,
+   API_getLocation		= 32,
+   API_sendMyLocation		= 33,
+   API_getLastLocation		= 34,
   } API_Function_t;
 
 /*****************************************************************************/

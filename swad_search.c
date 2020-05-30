@@ -44,7 +44,7 @@
 /*****************************************************************************/
 
 #define Sch_MIN_LENGTH_LONGEST_WORD	  3
-#define Sch_MIN_LENGTH_TOTAL		  3	// "A An" is not valid; "A An Ann" is valid
+#define Sch_MIN_LENGTH_TOTAL		  6	// "An Ann" is not valid; "A An Ann" is valid
 
 /*****************************************************************************/
 /****************************** Private types ********************************/

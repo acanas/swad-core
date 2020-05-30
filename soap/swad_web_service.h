@@ -440,8 +440,8 @@ struct swad__sendMessageOutput
    struct swad__usersArray usersArray;
   };
 
-/* getLocations */
-struct swad__getLocationsOutput
+/* location */
+struct swad__location
   {
    int institutionCode;
    char *institutionShortName;
@@ -458,10 +458,23 @@ struct swad__getLocationsOutput
    char *roomFullName;
   };
 
-/* sendCurrentLocation */
-struct swad__sendCurrentLocationOutput
+/* getLocation */
+struct swad__getLocationOutput
+  {
+   struct swad__location location;
+  };
+
+/* sendMyLocation */
+struct swad__sendMyLocationOutput
   {
    int success;
+  };
+
+/* getLastLocation */
+struct swad__getLastLocationOutput
+  {
+   struct swad__location location;
+   long checkinTime;
   };
 
 /*****************************************************************************/
@@ -549,8 +562,9 @@ int swad__sendMessage (char *wsKey,int messageCode,char *to,char *subject,char *
                        struct swad__sendMessageOutput *sendMessageOut);
 
 /* Wi-Fi-based positioning system */
-int swad__getLocations (char *wsKey,char *MAC,
-                        struct swad__getLocationsOutput *getLocationsOut);
-int swad__sendCurrentLocation (char *wsKey,int roomCode,
-                               struct swad__sendCurrentLocationOutput *endCurrentLocationOut);
-
+int swad__getLocation (char *wsKey,char *MAC,
+                       struct swad__getLocationOutput *getLocationOut);
+int swad__sendMyLocation (char *wsKey,int roomCode,
+                          struct swad__sendMyLocationOutput *sendMyLocationOut);
+int swad__getLastLocation (char *wsKey,int userCode,
+                           struct swad__getLastLocationOutput *getLastLocationOut);

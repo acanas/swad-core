@@ -13383,3 +13383,22 @@ SELECT COUNT(*) FROM exa_log_user_agent WHERE LogCod=(SELECT MAX(LogCod) FROM ex
 
 
 INSERT INTO room_check_in (UsrCod,RooCod,CheckInTime) SELECT 1,RooCod,NOW() FROM rooms WHERE RooCod=1;
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------
+
+
+INSERT INTO room_check_in (UsrCod,RooCod,CheckInTime) VALUES (1,1,NOW());
+
+SELECT institutions.InsCod,institutions.ShortName,institutions.FullName,centres.CtrCod,centres.ShortName,centres.FullName,buildings.BldCod,buildings.ShortName,buildings.FullName,rooms.Floor,rooms.RooCod,rooms.ShortName,rooms.FullName,UNIX_TIMESTAMP(room_check_in.CheckInTime) FROM room_check_in,rooms,buildings,centres,institutions WHERE room_check_in.UsrCod=1 AND room_check_in.CheckInTime=(SELECT MAX(CheckInTime) FROM room_check_in.UsrCod=1) AND room_check_in.RooCod=rooms.RooCod AND rooms.BldCod=buildings.BldCod AND buildings.CtrCod=centres.CtrCod AND centres.InsCod=institutions.InsCod;
+
+SELECT COUNT(*) FROM (SELECT DISTINCT degrees.CtrCod FROM crs_usr,courses,degrees WHERE crs_usr.UsrCod=1346 AND crs_usr.CrsCod=courses.CrsCod AND courses.DegCod=degrees.DegCod) AS centres1,(SELECT DISTINCT degrees.CtrCod FROM crs_usr,courses,degrees WHERE crs_usr.UsrCod=1331 AND crs_usr.CrsCod=courses.CrsCod AND courses.DegCod=degrees.DegCod) AS centres2 WHERE centres1.CtrCod=centres2.CtrCod;
