@@ -560,6 +560,7 @@ ps2pdf source.ps destination.pdf
 #define CSS_FILE		"swad19.238.2.css"
 #define JS_FILE			"swad19.246.1.js"
 /*
+	Version 19.248.3: May 30, 2020  Selection of all questions to add to a game. (302863 lines)
 	Version 19.248.2: May 30, 2020  Selection of all questions to add to a set. Suggested by Nuria Torres Rosell. (302854 lines)
 	Version 19.248.1: May 30, 2020  Exam session results can not be marked as visible if end of time is not in the past. (302825 lines)
 	Version 19.248:   May 30, 2020  New API function getLastLocation. (302787 lines)
