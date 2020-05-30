@@ -176,6 +176,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exam
 static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Games,
 						           unsigned NumQsts,
                                                            MYSQL_RES *mysql_res);
+static void Tst_PutCheckboxToSelectAllQuestions (void);
 static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
                                               struct Tst_Question *Question);
 
@@ -2597,9 +2598,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exam
                                                           MYSQL_RES *mysql_res)
   {
    extern const char *Hlp_ASSESSMENT_Exams_questions;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Questions;
-   extern const char *Txt_All_questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Code;
    extern const char *Txt_Date;
@@ -2622,11 +2621,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exam
    ExaSet_PutParamsOneSet (Exams);
 
    /***** Select all questions *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("AllQsts",HTM_DONT_SUBMIT_ON_CHANGE,
-		       "value=\"Y\" onclick=\"togglecheckChildren(this,'QstCods');\"");
-   HTM_TxtF ("&nbsp;%s",Txt_All_questions);
-   HTM_LABEL_End ();
+   Tst_PutCheckboxToSelectAllQuestions ();
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWideMarginPadding (5);
@@ -2688,9 +2683,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
                                                            MYSQL_RES *mysql_res)
   {
    extern const char *Hlp_ASSESSMENT_Games_questions;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Questions;
-   extern const char *Txt_All_questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Code;
    extern const char *Txt_Date;
@@ -2713,11 +2706,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
    Gam_PutParams (Games);
 
    /***** Select all questions *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("AllQsts",HTM_DONT_SUBMIT_ON_CHANGE,
-		       "value=\"Y\" onclick=\"togglecheckChildren(this,'QstCods');\"");
-   HTM_TxtF ("&nbsp;%s",Txt_All_questions);
-   HTM_LABEL_End ();
+   Tst_PutCheckboxToSelectAllQuestions ();
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWideMarginPadding (5);
@@ -2768,6 +2757,23 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
 
    /***** End box *****/
    Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/************** Select all questions to add them to set/game *****************/
+/*****************************************************************************/
+
+static void Tst_PutCheckboxToSelectAllQuestions (void)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_All_questions;
+
+   /***** Checkbox to select all listed questions *****/
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_INPUT_CHECKBOX ("AllQsts",HTM_DONT_SUBMIT_ON_CHANGE,
+		       "value=\"Y\" onclick=\"togglecheckChildren(this,'QstCods');\"");
+   HTM_TxtF ("&nbsp;%s",Txt_All_questions);
+   HTM_LABEL_End ();
   }
 
 /*****************************************************************************/
