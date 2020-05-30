@@ -1403,6 +1403,27 @@ const char *Txt_All_places =
 	"Todas as localiza&ccedil;oes";
 #endif
 
+const char *Txt_All_questions =
+#if   L==1	// ca
+	"Totes les preguntes";
+#elif L==2	// de
+	"Alle Fragen";
+#elif L==3	// en
+	"All questions";
+#elif L==4	// es
+	"Todas las preguntas";
+#elif L==5	// fr
+	"Toutes les questions";
+#elif L==6	// gn
+	"Todas las preguntas";	// Okoteve traducción
+#elif L==7	// it
+	"Tutte le domande";
+#elif L==8	// pl
+	"Wszystkie pytania";
+#elif L==9	// pt
+	"Todas as perguntas";
+#endif
+
 const char *Txt_All_tags =		// Tags used in test
 #if   L==1	// ca
 	"Tots els descriptors";
