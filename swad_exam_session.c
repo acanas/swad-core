@@ -84,6 +84,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 static void ExaSes_ListOneOrMoreSessionsHeading (bool ICanEditSessions);
 static bool ExaSes_CheckIfICanEditSessions (void);
 static bool ExaSes_CheckIfICanEditThisSession (const struct ExaSes_Session *Session);
+static bool ExaSes_CheckIfVisibilityOfResultsCanBeChanged (const struct ExaSes_Session *Session);
 static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
                                                const struct ExaSes_Session *Session,
 					       const char *Anchor);
@@ -512,6 +513,20 @@ static bool ExaSes_CheckIfICanEditThisSession (const struct ExaSes_Session *Sess
   }
 
 /*****************************************************************************/
+/********** Check if visibility of session results can be changed ************/
+/*****************************************************************************/
+
+static bool ExaSes_CheckIfVisibilityOfResultsCanBeChanged (const struct ExaSes_Session *Session)
+  {
+   if (Session->ShowUsrResults ||					// Results are currently visible
+       Session->TimeUTC[Dat_END_TIME] < Gbl.StartExecutionTimeUTC)	// End of time is in the past
+      if (ExaSes_CheckIfICanEditThisSession (Session))
+	 return true;
+
+   return false;
+  }
+
+/*****************************************************************************/
 /************************* Put a column for icons ****************************/
 /*****************************************************************************/
 
@@ -757,19 +772,20 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
    extern const char *Txt_Hidden_results;
    extern const char *Txt_Results;
 
-   /***** Can I edit exam session vivibility? *****/
-   if (ExaSes_CheckIfICanEditThisSession (Session))
-     {
-      Exams->ExaCod = Session->ExaCod;
-      Exams->SesCod = Session->SesCod;
+   Exams->ExaCod = Session->ExaCod;
+   Exams->SesCod = Session->SesCod;
 
-      /* Show exam session results */
+   /***** Show exam session results *****/
+   if (ExaSes_CheckIfICanEditThisSession (Session))
       Lay_PutContextualLinkOnlyIcon (ActSeeUsrExaResSes,ExaRes_RESULTS_BOX_ID,
 				     ExaSes_PutParamsEdit,Exams,
 				     "trophy.svg",
 				     Txt_Results);
 
-      /* I can edit visibility */
+   /***** Check if visibility of session results can be changed *****/
+   if (ExaSes_CheckIfVisibilityOfResultsCanBeChanged (Session))
+     {
+      /***** Put form to change visibility of session results *****/
       Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
 				     ExaSes_PutParamsEdit,Exams,
 				     Session->ShowUsrResults ? "eye-green.svg" :
@@ -777,8 +793,8 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
 				     Session->ShowUsrResults ? Txt_Visible_results :
 							       Txt_Hidden_results);
      }
-   else
-      /* I can not edit visibility */
+   else	// Don't put form
+      /***** Put icon showing the current visibility of session results *****/
       Ico_PutIconOff (Session->ShowUsrResults ? "eye-green.svg" :
 					        "eye-slash-red.svg",
 		      Session->ShowUsrResults ? Txt_Visible_results :
@@ -803,19 +819,24 @@ void ExaSes_ToggleVisResultsSesUsr (void)
    /***** Get and check parameters *****/
    ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
 
-   /***** Check if I have permission to change visibility *****/
-   if (!ExaSes_CheckIfICanEditThisSession (&Session))
+   /***** Check if visibility of session results can be changed *****/
+   if (!ExaSes_CheckIfVisibilityOfResultsCanBeChanged (&Session))
       Lay_NoPermissionExit ();
 
    /***** Toggle visibility of exam session results *****/
    Session.ShowUsrResults = !Session.ShowUsrResults;
    DB_QueryUPDATE ("can not toggle visibility of session results",
-		   "UPDATE exa_sessions"
-		   " SET ShowUsrResults='%c'"
-		   " WHERE SesCod=%ld",
+		   "UPDATE exa_sessions,exa_exams"
+		   " SET exa_sessions.ShowUsrResults='%c'"
+		   " WHERE exa_sessions.SesCod=%ld"
+		   " AND exa_sessions.ExaCod=%ld"	// Extra check
+		   " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+		   " AND exa_exams.CrsCod=%ld",		// Extra check
 		   Session.ShowUsrResults ? 'Y' :
-			                  'N',
-		   Session.SesCod);
+			                    'N',
+		   Session.SesCod,
+		   Session.ExaCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,&Session,
@@ -1122,10 +1143,15 @@ void ExaSes_HideSession (void)
 
    /***** Hide session *****/
    DB_QueryUPDATE ("can not hide exam sessions",
-		   "UPDATE exa_sessions SET Hidden='Y'"
-		   " WHERE SesCod=%ld"
-		   " AND ExaCod=%ld",	// Extra check
-		   Session.SesCod,Session.ExaCod);
+		   "UPDATE exa_sessions,exa_exams"
+		   " SET exa_sessions.Hidden='Y'"
+		   " WHERE exa_sessions.SesCod=%ld"
+		   " AND exa_sessions.ExaCod=%ld"	// Extra check
+		   " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+		   " AND exa_exams.CrsCod=%ld",		// Extra check
+		   Session.SesCod,
+		   Session.ExaCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,&Session,
@@ -1156,10 +1182,15 @@ void ExaSes_UnhideSession (void)
 
    /***** Unhide session *****/
    DB_QueryUPDATE ("can not unhide exam session",
-		   "UPDATE exa_sessions SET Hidden='N'"
-		   " WHERE SesCod=%ld"
-		   " AND ExaCod=%ld",	// Extra check
-		   Session.SesCod,Session.ExaCod);
+		   "UPDATE exa_sessions,exa_exams"
+		   " SET exa_sessions.Hidden='N'"
+		   " WHERE exa_sessions.SesCod=%ld"
+		   " AND exa_sessions.ExaCod=%ld"	// Extra check
+		   " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+		   " AND exa_exams.CrsCod=%ld",		// Extra check
+		   Session.SesCod,
+		   Session.ExaCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Exam,&Session,
@@ -1489,7 +1520,11 @@ void ExaSes_ReceiveFormSession (void)
    if (ItsANewSession)
       ExaSes_CreateSession (&Session);
    else
+     {
+      if (Session.TimeUTC[Dat_END_TIME] >= Gbl.StartExecutionTimeUTC)	// End of time is in the future
+         Session.ShowUsrResults = false;	// Force results to be hidden
       ExaSes_UpdateSession (&Session);
+     }
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -1550,19 +1585,25 @@ static void ExaSes_UpdateSession (struct ExaSes_Session *Session)
    /***** Insert this new exam session into database *****/
    DB_QueryUPDATE ("can not update exam session",
 		   "UPDATE exa_sessions,exa_exams"
-		   " SET exa_sessions.StartTime=FROM_UNIXTIME(%ld),"
+		   " SET exa_sessions.Hidden='%c',"
+		        "exa_sessions.StartTime=FROM_UNIXTIME(%ld),"
                         "exa_sessions.EndTime=FROM_UNIXTIME(%ld),"
                         "exa_sessions.Title='%s',"
-			"exa_sessions.Hidden='%c'"
+                        "exa_sessions.ShowUsrResults='%c'"
 		   " WHERE exa_sessions.SesCod=%ld"
+		   " AND exa_sessions.ExaCod=%ld"	// Extra check
 		   " AND exa_sessions.ExaCod=exa_exams.ExaCod"
 		   " AND exa_exams.CrsCod=%ld",		// Extra check
-		   Session->TimeUTC[Dat_START_TIME],	// Start time
+		   Session->Hidden ? 'Y' :
+			             'N',
+	           Session->TimeUTC[Dat_START_TIME],	// Start time
 		   Session->TimeUTC[Dat_END_TIME  ],	// End time
 		   Session->Title,
-		   Session->Hidden ? 'Y' :
-			           'N',
-		   Session->SesCod,Gbl.Hierarchy.Crs.CrsCod);
+		   Session->ShowUsrResults ? 'Y' :
+			                     'N',
+		   Session->SesCod,
+		   Session->ExaCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Update groups associated to the exam session *****/
    ExaSes_RemoveGroups (Session->SesCod);	// Remove all groups associated to this session

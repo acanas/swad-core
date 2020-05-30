@@ -556,12 +556,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.248 (2020-05-25)"
+#define Log_PLATFORM_VERSION	"SWAD 19.248.1 (2020-05-25)"
 #define CSS_FILE		"swad19.238.2.css"
 #define JS_FILE			"swad19.246.1.js"
 /*
-
-	Version 19.248.1: May 30, 2020  Exam session results can not be marked as visible if end of time is not in the past. (? lines)
+	Version 19.248.1: May 30, 2020  Exam session results can not be marked as visible if end of time is not in the past. (302825 lines)
 	Version 19.248:   May 30, 2020  New API function getLastLocation. (302787 lines)
 	Version 19.247.1: May 29, 2020  Do not show exam results in hidden exams or hidden exam sessions. (302646 lines)
 	Version 19.247:   May 24, 2020  New API function sendMyCurrentLocation. (302622 lines)
