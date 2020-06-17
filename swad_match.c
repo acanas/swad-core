@@ -200,7 +200,7 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered);
 static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match);
 static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
-                                         const struct Tst_Question *Question,
+                                         struct Tst_Question *Question,
                                          const char *Class,bool ShowResult);
 static bool Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 					   const struct Mch_UsrAnswer *UsrAnswer,
@@ -3078,7 +3078,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
 /*****************************************************************************/
 
 static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
-                                         const struct Tst_Question *Question,
+                                         struct Tst_Question *Question,
                                          const char *Class,bool ShowResult)
   {
    /***** Write answer depending on type *****/
@@ -3095,7 +3095,7 @@ static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
 /*****************************************************************************/
 
 void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
-                                  const struct Tst_Question *Question,
+                                  struct Tst_Question *Question,
                                   const char *Class,bool ShowResult)
   {
    unsigned NumOpt;
@@ -3106,6 +3106,9 @@ void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
 
    /***** Get number of users who have answered this question from database *****/
    NumRespondersQst = Mch_GetNumUsrsWhoAnsweredQst (Match->MchCod,Match->Status.QstInd);
+
+   /***** Change format of answers text *****/
+   Tst_ChangeFormatAnswersText (Question);
 
    /***** Get indexes for this question in match *****/
    Mch_GetIndexes (Match->MchCod,Match->Status.QstInd,Indexes);
@@ -3135,13 +3138,7 @@ void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
       /***** Write the option text and the result *****/
       HTM_TD_Begin ("class=\"LT\"");
       HTM_LABEL_Begin ("for=\"Ans%06u_%u\" class=\"%s\"",Match->Status.QstInd,NumOpt,Class);
-
-      /* Convert text, that is in HTML, to rigorous HTML */
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Question->Answer.Options[NumOpt].Text,
-                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
       HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
-
       HTM_LABEL_End ();
       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
                      "TEST_MED_SHOW_CONT",

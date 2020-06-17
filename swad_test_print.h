@@ -62,6 +62,13 @@ struct TstPrn_Print
    struct TstPrn_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST];
   };
 
+#define Tst_NUM_REQUEST_OR_CONFIRM 2
+typedef enum
+  {
+   TstPrn_REQUEST,
+   TstPrn_CONFIRM,
+  } TstPrn_RequestOrConfirm_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -69,6 +76,10 @@ struct TstPrn_Print
 void TstPrn_ResetPrint (struct TstPrn_Print *Print);
 void TstPrn_CreatePrintInDB (struct TstPrn_Print *Print);
 void TstPrn_UpdatePrintInDB (const struct TstPrn_Print *Print);
+
+void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
+                                   unsigned NumExamsGeneratedByMe,
+                                   TstPrn_RequestOrConfirm_t RequestOrConfirm);
 
 void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print);
 
@@ -91,6 +102,9 @@ void TstPrn_ComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				const struct Tst_Question *Question);
 //-----------------------------------------------------------------------------
 
+void Tst_ChangeFormatAnswersText (struct Tst_Question *Question);
+void Tst_ChangeFormatAnswersFeedback (struct Tst_Question *Question);
+
 void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
 			       unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
 void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1],
@@ -102,7 +116,7 @@ void TstPrn_ShowGrade (double Grade,double MaxGrade);
 
 void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
                               const struct TstPrn_PrintedQuestion *PrintedQuestion,
-			      const struct Tst_Question *Question,
+			      struct Tst_Question *Question,
 			      bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY]);
 
 void TstPrn_SelUsrsToViewUsrsPrints (void);

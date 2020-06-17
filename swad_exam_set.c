@@ -123,7 +123,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 						     unsigned NumQsts,
                                                      MYSQL_RES *mysql_res,
 						     bool ICanEditQuestions);
-static void ExaSet_ListQuestionForEdition (const struct Tst_Question *Question,
+static void ExaSet_ListQuestionForEdition (struct Tst_Question *Question,
                                            unsigned QstInd,const char *Anchor);
 
 static void ExaSet_AllocateListSelectedQuestions (struct Exa_Exams *Exams);
@@ -1540,7 +1540,7 @@ void ExaSet_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
 /********************* List question in set for edition **********************/
 /*****************************************************************************/
 
-static void ExaSet_ListQuestionForEdition (const struct Tst_Question *Question,
+static void ExaSet_ListQuestionForEdition (struct Tst_Question *Question,
                                            unsigned QstInd,const char *Anchor)
   {
    /***** Number of question and answer type (row[1]) *****/

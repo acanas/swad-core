@@ -106,7 +106,7 @@ void Tst_AssessTest (void);
 
 void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);
 
-void Tst_ListQuestionForEdition (const struct Tst_Question *Question,
+void Tst_ListQuestionForEdition (struct Tst_Question *Question,
                                  unsigned QstInd,bool QuestionExists,
                                  const char *Anchor);
 void Tst_WriteNumQst (unsigned NumQst);
@@ -130,10 +130,13 @@ void Tst_WriteParamEditQst (const struct Tst_Test *Test);
 unsigned Tst_GetNumAnswersQst (long QstCod);
 void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
                         bool Shuffle);
-void Tst_WriteAnswersBank (const struct Tst_Question *Question);
+
+void Tst_ChangeFormatAnswersText (struct Tst_Question *Question);
+void Tst_ChangeFormatAnswersFeedback (struct Tst_Question *Question);
+
+void Tst_WriteAnswersBank (struct Tst_Question *Question);
 bool Tst_CheckIfQuestionIsValidForGame (long QstCod);
 void Tst_WriteAnsTF (char AnsTF);
-void Tst_GetChoiceAns (struct Tst_Question *Question,MYSQL_RES *mysql_res);
 
 void Tst_WriteParamQstCod (unsigned NumQst,long QstCod);
 

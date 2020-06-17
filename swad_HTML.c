@@ -1779,7 +1779,9 @@ static void HTM_SPTxt (const char *Txt)
 
 void HTM_Txt (const char *Txt)
   {
-   fputs (Txt,Gbl.F.Out);
+   if (Txt)
+      if (Txt[0])
+         fputs (Txt,Gbl.F.Out);
   }
 
 void HTM_TxtColonNBSP (const char *Txt)

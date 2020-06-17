@@ -84,25 +84,27 @@ static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
 					    const struct ExaPrn_Print *Print);
 static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
                                          unsigned NumQst,
-                                         const struct Tst_Question *Question);
+                                         struct Tst_Question *Question);
 static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
                                        unsigned NumQst,
-                                       const struct Tst_Question *Question);
+                                       struct Tst_Question *Question);
 
 //-----------------------------------------------------------------------------
-
 static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
-				      unsigned NumQst);
-static void ExaPrn_WriteFloAnsToFill (const struct ExaPrn_Print *Print,
-				      unsigned NumQst);
+				      unsigned NumQst,
+                                      __attribute__((unused)) struct Tst_Question *Question);
+static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
+				      unsigned NumQst,
+                                      __attribute__((unused)) struct Tst_Question *Question);
 static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
-	                              unsigned NumQst);
+	                              unsigned NumQst,
+                                      __attribute__((unused)) struct Tst_Question *Question);
 static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
                                       unsigned NumQst,
-                                      const struct Tst_Question *Question);
+                                      struct Tst_Question *Question);
 static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
-	                              unsigned NumQst);
-
+	                              unsigned NumQst,
+                                      __attribute__((unused)) struct Tst_Question *Question);
 //-----------------------------------------------------------------------------
 
 static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
@@ -117,7 +119,6 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
                                                         unsigned NumQst);
 
 //-----------------------------------------------------------------------------
-
 static void ExaPrn_GetCorrectAndComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				                    struct Tst_Question *Question);
 static void ExaPrn_GetCorrectAndComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
@@ -128,15 +129,12 @@ static void ExaPrn_GetCorrectAndComputeChoAnsScore (struct TstPrn_PrintedQuestio
 				                    struct Tst_Question *Question);
 static void ExaPrn_GetCorrectAndComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				                    struct Tst_Question *Question);
-
 //-----------------------------------------------------------------------------
-
 static void ExaPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question);
 static void ExaPrn_GetCorrectFltAnswerFromDB (struct Tst_Question *Question);
 static void ExaPrn_GetCorrectTF_AnswerFromDB (struct Tst_Question *Question);
 static void ExaPrn_GetCorrectChoAnswerFromDB (struct Tst_Question *Question);
 static void ExaPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question);
-
 //-----------------------------------------------------------------------------
 
 static void ExaPrn_GetAnswerFromDB (struct ExaPrn_Print *Print,long QstCod,
@@ -702,7 +700,7 @@ static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
 
 static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
                                          unsigned NumQst,
-                                         const struct Tst_Question *Question)
+                                         struct Tst_Question *Question)
   {
    static struct ExaSet_Set CurrentSet =
      {
@@ -764,30 +762,22 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
 
 static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
                                        unsigned NumQst,
-                                       const struct Tst_Question *Question)
+                                       struct Tst_Question *Question)
   {
-   /***** Write answer depending on type *****/
-   switch (Question->Answer.Type)
-     {
-      case Tst_ANS_INT:
-         ExaPrn_WriteIntAnsToFill (Print,NumQst);
-         break;
-      case Tst_ANS_FLOAT:
-         ExaPrn_WriteFloAnsToFill (Print,NumQst);
-         break;
-      case Tst_ANS_TRUE_FALSE:
-         ExaPrn_WriteTF_AnsToFill (Print,NumQst);
-         break;
-      case Tst_ANS_UNIQUE_CHOICE:
-      case Tst_ANS_MULTIPLE_CHOICE:
-         ExaPrn_WriteChoAnsToFill (Print,NumQst,Question);
-         break;
-      case Tst_ANS_TEXT:
-         ExaPrn_WriteTxtAnsToFill (Print,NumQst);
-         break;
-      default:
-         break;
-     }
+   void (*ExaPrn_WriteAnsToFill[Tst_NUM_ANS_TYPES]) (const struct ExaPrn_Print *Print,
+                                                     unsigned NumQst,
+                                                     struct Tst_Question *Question) =
+    {
+     [Tst_ANS_INT            ] = ExaPrn_WriteIntAnsToFill,
+     [Tst_ANS_FLOAT          ] = ExaPrn_WriteFltAnsToFill,
+     [Tst_ANS_TRUE_FALSE     ] = ExaPrn_WriteTF_AnsToFill,
+     [Tst_ANS_UNIQUE_CHOICE  ] = ExaPrn_WriteChoAnsToFill,
+     [Tst_ANS_MULTIPLE_CHOICE] = ExaPrn_WriteChoAnsToFill,
+     [Tst_ANS_TEXT           ] = ExaPrn_WriteTxtAnsToFill,
+    };
+
+   /***** Write answers *****/
+   ExaPrn_WriteAnsToFill[Question->Answer.Type] (Print,NumQst,Question);
   }
 
 /*****************************************************************************/
@@ -795,7 +785,8 @@ static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
 /*****************************************************************************/
 
 static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
-				      unsigned NumQst)
+				      unsigned NumQst,
+                                      __attribute__((unused)) struct Tst_Question *Question)
   {
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
@@ -815,8 +806,9 @@ static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
 /****************** Write float answer when seeing a test ********************/
 /*****************************************************************************/
 
-static void ExaPrn_WriteFloAnsToFill (const struct ExaPrn_Print *Print,
-				      unsigned NumQst)
+static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
+				      unsigned NumQst,
+                                      __attribute__((unused)) struct Tst_Question *Question)
   {
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
@@ -837,7 +829,8 @@ static void ExaPrn_WriteFloAnsToFill (const struct ExaPrn_Print *Print,
 /*****************************************************************************/
 
 static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
-	                              unsigned NumQst)
+	                              unsigned NumQst,
+                                      __attribute__((unused)) struct Tst_Question *Question)
   {
    extern const char *Txt_TF_QST[2];
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
@@ -864,12 +857,15 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
 
 static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
                                       unsigned NumQst,
-                                      const struct Tst_Question *Question)
+                                      struct Tst_Question *Question)
   {
    unsigned NumOpt;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    bool UsrAnswers[Tst_MAX_OPTIONS_PER_QUESTION];
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Change format of answers text *****/
+   Tst_ChangeFormatAnswersText (Question);
 
    /***** Get indexes for this question from string *****/
    TstPrn_GetIndexesFromStr (Print->PrintedQuestions[NumQst].StrIndexes,Indexes);
@@ -934,7 +930,8 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 /*****************************************************************************/
 
 static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
-	                              unsigned NumQst)
+	                              unsigned NumQst,
+                                      __attribute__((unused)) struct Tst_Question *Question)
   {
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
@@ -1354,13 +1351,13 @@ static void ExaPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question)
 	 /* Abort on error */
 	 Ale_ShowAlertsAndExit ();
 
-      /***** Copy answer text (row[0]) and convert it, that is in HTML, to rigorous HTML ******/
+      /***** Copy answer text (row[0]) ******/
       Str_Copy (Question->Answer.Options[NumOpt].Text,row[0],
                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Question->Answer.Options[NumOpt].Text,
-                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
      }
+
+   /***** Change format of answers text *****/
+   Tst_ChangeFormatAnswersText (Question);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

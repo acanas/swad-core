@@ -100,13 +100,6 @@ const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES] =
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
-#define Tst_NUM_REQUEST_OR_CONFIRM 2
-typedef enum
-  {
-   Tst_REQUEST,
-   Tst_CONFIRM,
-  } Tst_RequestOrConfirm_t;
-
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -126,18 +119,10 @@ static void Tst_TstDestructor (struct Tst_Test *Test);
 
 static void Tst_ShowFormRequestTest (struct Tst_Test *Test);
 
-static void Tst_PutCheckBoxAllowTeachers (bool AllowTeachers);
-
 static void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print);
 
 static bool Tst_CheckIfNextTstAllowed (void);
 static unsigned Tst_GetNumExamsGeneratedByMe (void);
-static void Tst_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
-                                      unsigned NumExamsGeneratedByMe,
-                                      Tst_RequestOrConfirm_t RequestOrConfirm);
-static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                         unsigned NumQst,
-                                         const struct Tst_Question *Question);
 
 static void Tst_PutFormToEditQstMedia (const struct Media *Media,int NumMediaInForm,
                                        bool OptionsDisabled);
@@ -180,34 +165,12 @@ static void Tst_PutCheckboxToSelectAllQuestions (void);
 static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
                                               struct Tst_Question *Question);
 
-static void TstPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                       unsigned NumQst,
-                                       const struct Tst_Question *Question);
-
 //-----------------------------------------------------------------------------
 
-static void Tst_WriteIntAnsBank (const struct Tst_Question *Question);
-static void Tst_WriteFltAnsBank (const struct Tst_Question *Question);
-static void Tst_WriteTF_AnsBank (const struct Tst_Question *Question);
-static void Tst_WriteChoAnsBank (const struct Tst_Question *Question);
-
-//-----------------------------------------------------------------------------
-
-static void TstPrn_WriteIntAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
-                                      __attribute__((unused)) const struct Tst_Question *Question);
-static void TstPrn_WriteFltAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
-                                      __attribute__((unused)) const struct Tst_Question *Question);
-static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
-                                      __attribute__((unused)) const struct Tst_Question *Question);
-static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
-                                      const struct Tst_Question *Question);
-static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
-                                      __attribute__((unused)) const struct Tst_Question *Question);
+static void Tst_WriteIntAnsBank (struct Tst_Question *Question);
+static void Tst_WriteFltAnsBank (struct Tst_Question *Question);
+static void Tst_WriteTF_AnsBank (struct Tst_Question *Question);
+static void Tst_WriteChoAnsBank (struct Tst_Question *Question);
 
 //-----------------------------------------------------------------------------
 
@@ -428,7 +391,7 @@ void Tst_ShowNewTest (void)
 	                                                  false);	// Don't update question score
 
             /***** Show test exam to be answered *****/
-            Tst_ShowTestPrintToFillIt (&Print,NumExamsGeneratedByMe,Tst_REQUEST);
+            TstPrn_ShowTestPrintToFillIt (&Print,NumExamsGeneratedByMe,TstPrn_REQUEST);
 
             /***** Update date-time of my next allowed access to test *****/
             if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
@@ -446,27 +409,6 @@ void Tst_ShowNewTest (void)
 
    /***** Destroy test *****/
    Tst_TstDestructor (&Test);
-  }
-
-/*****************************************************************************/
-/************* Put checkbox to allow teachers to see test exam ***************/
-/*****************************************************************************/
-
-static void Tst_PutCheckBoxAllowTeachers (bool AllowTeachers)
-  {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Allow_teachers_to_consult_this_test;
-
-   /***** Test exam will be available for teachers? *****/
-   HTM_DIV_Begin ("class=\"CM\"");
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("AllowTchs",HTM_DONT_SUBMIT_ON_CHANGE,
-		       "value=\"Y\"%s",
-                       AllowTeachers ? " checked=\"checked\"" :	// Teachers can see test exam
-                		       "");
-   HTM_TxtF ("&nbsp;%s",Txt_Allow_teachers_to_consult_this_test);
-   HTM_LABEL_End ();
-   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -517,7 +459,7 @@ void Tst_ReceiveTestDraft (void)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_review_your_answers_before_submitting_the_exam);
 
       /* Show the same test exam to be answered */
-      Tst_ShowTestPrintToFillIt (&Print,NumTst,Tst_CONFIRM);
+      TstPrn_ShowTestPrintToFillIt (&Print,NumTst,TstPrn_CONFIRM);
      }
   }
 
@@ -740,92 +682,6 @@ static unsigned Tst_GetNumExamsGeneratedByMe (void)
   }
 
 /*****************************************************************************/
-/****************** Show a test exam print to be answered ********************/
-/*****************************************************************************/
-
-static void Tst_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
-                                       unsigned NumExamsGeneratedByMe,
-                                       Tst_RequestOrConfirm_t RequestOrConfirm)
-  {
-   extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *Txt_Test;
-   extern const char *Txt_Continue;
-   extern const char *Txt_Send;
-   unsigned NumQst;
-   struct Tst_Question Question;
-   static const Act_Action_t Action[Tst_NUM_REQUEST_OR_CONFIRM] =
-     {
-      [Tst_REQUEST] = ActReqAssTst,
-      [Tst_CONFIRM] = ActAssTst,
-     };
-
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Test,
-		 NULL,NULL,
-		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
-   Lay_WriteHeaderClassPhoto (false,false,
-			      Gbl.Hierarchy.Ins.InsCod,
-			      Gbl.Hierarchy.Deg.DegCod,
-			      Gbl.Hierarchy.Crs.CrsCod);
-
-   if (Print->NumQsts)
-     {
-      /***** Begin form *****/
-      Frm_StartForm (Action[RequestOrConfirm]);
-      TstPrn_PutParamPrnCod (Print->PrnCod);
-      Par_PutHiddenParamUnsigned (NULL,"NumTst",NumExamsGeneratedByMe);
-
-      /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (10);
-
-      /***** Write one row for each question *****/
-      for (NumQst = 0;
-	   NumQst < Print->NumQsts;
-	   NumQst++)
-	{
-	 Gbl.RowEvenOdd = NumQst % 2;
-
-	 /* Create test question */
-	 Tst_QstConstructor (&Question);
-	 Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
-
-	 /* Show question */
-	 if (!Tst_GetQstDataFromDB (&Question))	// Question exists
-	    Lay_ShowErrorAndExit ("Wrong question.");
-
-	 /* Write question and answers */
-	 TstPrn_WriteQstAndAnsToFill (&Print->PrintedQuestions[NumQst],NumQst,&Question);
-
-	 /* Destroy test question */
-	 Tst_QstDestructor (&Question);
-	}
-
-      /***** End table *****/
-      HTM_TABLE_End ();
-
-      /***** End form *****/
-      switch (RequestOrConfirm)
-        {
-	 case Tst_REQUEST:
-            /* Send button */
-            Btn_PutConfirmButton (Txt_Continue);
-	    break;
-	 case Tst_CONFIRM:
-	    /* Will the test exam be visible by teachers? */
-            Tst_PutCheckBoxAllowTeachers (true);
-
-            /* Send button */
-            Btn_PutCreateButton (Txt_Send);
-	    break;
-        }
-      Frm_EndForm ();
-     }
-
-   /***** End box *****/
-   Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
 /************************** Show list of test tags ***************************/
 /*****************************************************************************/
 
@@ -855,50 +711,10 @@ void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
   }
 
 /*****************************************************************************/
-/********** Write a row of a test, with one question and its answer **********/
-/*****************************************************************************/
-
-static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                         unsigned NumQst,
-                                         const struct Tst_Question *Question)
-  {
-   /***** Begin row *****/
-   HTM_TR_Begin (NULL);
-
-   /***** Number of question and answer type *****/
-   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteNumQst (NumQst + 1);
-   Tst_WriteAnswerType (Question->Answer.Type);
-   HTM_TD_End ();
-
-   /***** Stem, media and answers *****/
-   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-
-   /* Write parameter with question code */
-   Tst_WriteParamQstCod (NumQst,Question->QstCod);
-
-   /* Stem */
-   Tst_WriteQstStem (Question->Stem,"TEST_EXA",true);
-
-   /* Media */
-   Med_ShowMedia (&Question->Media,
-		  "TEST_MED_SHOW_CONT",
-		  "TEST_MED_SHOW");
-
-   /* Answers */
-   TstPrn_WriteAnswersToFill (PrintedQuestion,NumQst,Question);
-
-   HTM_TD_End ();
-
-   /***** End row *****/
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
 /********************* List game question for edition ************************/
 /*****************************************************************************/
 
-void Tst_ListQuestionForEdition (const struct Tst_Question *Question,
+void Tst_ListQuestionForEdition (struct Tst_Question *Question,
                                  unsigned QstInd,bool QuestionExists,
                                  const char *Anchor)
   {
@@ -2912,12 +2728,47 @@ void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
+/***************** Change format of answers text / feedback ******************/
+/*****************************************************************************/
+
+void Tst_ChangeFormatAnswersText (struct Tst_Question *Question)
+  {
+   unsigned NumOpt;
+
+   /***** Change format of answers text *****/
+   for (NumOpt = 0;
+	NumOpt < Question->Answer.NumOptions;
+	NumOpt++)
+      /* Convert answer text, that is in HTML, to rigorous HTML */
+      if (Question->Answer.Options[NumOpt].Text[0])
+	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			   Question->Answer.Options[NumOpt].Text,
+			   Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+  }
+
+void Tst_ChangeFormatAnswersFeedback (struct Tst_Question *Question)
+  {
+   unsigned NumOpt;
+
+   /***** Change format of answers text and feedback *****/
+   for (NumOpt = 0;
+	NumOpt < Question->Answer.NumOptions;
+	NumOpt++)
+      /* Convert answer feedback, that is in HTML, to rigorous HTML */
+      if (Question->Answer.Options[NumOpt].Feedback)
+	 if (Question->Answer.Options[NumOpt].Feedback[0])
+	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			      Question->Answer.Options[NumOpt].Feedback,
+			      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+  }
+
+/*****************************************************************************/
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
-void Tst_WriteAnswersBank (const struct Tst_Question *Question)
+void Tst_WriteAnswersBank (struct Tst_Question *Question)
   {
-   void (*TstPrn_WriteAnsBank[Tst_NUM_ANS_TYPES]) (const struct Tst_Question *Question) =
+   void (*Tst_WriteAnsBank[Tst_NUM_ANS_TYPES]) (struct Tst_Question *Question) =
     {
      [Tst_ANS_INT            ] = Tst_WriteIntAnsBank,
      [Tst_ANS_FLOAT          ] = Tst_WriteFltAnsBank,
@@ -2928,31 +2779,7 @@ void Tst_WriteAnswersBank (const struct Tst_Question *Question)
     };
 
    /***** Write answers *****/
-   TstPrn_WriteAnsBank[Question->Answer.Type] (Question);
-  }
-
-/*****************************************************************************/
-/***************** Write answers of a question to fill them ******************/
-/*****************************************************************************/
-
-static void TstPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                       unsigned NumQst,
-                                       const struct Tst_Question *Question)
-  {
-   void (*TstPrn_WriteAnsBank[Tst_NUM_ANS_TYPES]) (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-						   unsigned NumQst,
-						   const struct Tst_Question *Question) =
-    {
-     [Tst_ANS_INT            ] = TstPrn_WriteIntAnsToFill,
-     [Tst_ANS_FLOAT          ] = TstPrn_WriteFltAnsToFill,
-     [Tst_ANS_TRUE_FALSE     ] = TstPrn_WriteTF_AnsToFill,
-     [Tst_ANS_UNIQUE_CHOICE  ] = TstPrn_WriteChoAnsToFill,
-     [Tst_ANS_MULTIPLE_CHOICE] = TstPrn_WriteChoAnsToFill,
-     [Tst_ANS_TEXT           ] = TstPrn_WriteTxtAnsToFill,
-    };
-
-   /***** Write answers *****/
-   TstPrn_WriteAnsBank[Question->Answer.Type] (PrintedQuestion,NumQst,Question);
+   Tst_WriteAnsBank[Question->Answer.Type] (Question);
   }
 
 /*****************************************************************************/
@@ -2973,7 +2800,7 @@ bool Tst_CheckIfQuestionIsValidForGame (long QstCod)
 /****************** Write integer answer when editing a test *****************/
 /*****************************************************************************/
 
-static void Tst_WriteIntAnsBank (const struct Tst_Question *Question)
+static void Tst_WriteIntAnsBank (struct Tst_Question *Question)
   {
    HTM_SPAN_Begin ("class=\"TEST_EDI\"");
    HTM_TxtF ("(%ld)",Question->Answer.Integer);
@@ -2984,7 +2811,7 @@ static void Tst_WriteIntAnsBank (const struct Tst_Question *Question)
 /****************** Write float answer when editing a test *******************/
 /*****************************************************************************/
 
-static void Tst_WriteFltAnsBank (const struct Tst_Question *Question)
+static void Tst_WriteFltAnsBank (struct Tst_Question *Question)
   {
    HTM_SPAN_Begin ("class=\"TEST_EDI\"");
    HTM_Txt ("([");
@@ -2999,7 +2826,7 @@ static void Tst_WriteFltAnsBank (const struct Tst_Question *Question)
 /*********** Write false / true answer when listing test questions ***********/
 /*****************************************************************************/
 
-static void Tst_WriteTF_AnsBank (const struct Tst_Question *Question)
+static void Tst_WriteTF_AnsBank (struct Tst_Question *Question)
   {
    /***** Write answer *****/
    HTM_SPAN_Begin ("class=\"TEST_EDI\"");
@@ -3013,50 +2840,22 @@ static void Tst_WriteTF_AnsBank (const struct Tst_Question *Question)
 /**** Write single or multiple choice answer when listing test questions *****/
 /*****************************************************************************/
 
-static void Tst_WriteChoAnsBank (const struct Tst_Question *Question)
+static void Tst_WriteChoAnsBank (struct Tst_Question *Question)
   {
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    unsigned NumOpt;
-   char *AnswerTxt;
-   char *Feedback;
-   size_t LengthAnswerTxt;
-   size_t LengthFeedback;
+
+   /***** Change format of answers text *****/
+   Tst_ChangeFormatAnswersText (Question);
+
+   /***** Change format of answers feedback *****/
+   Tst_ChangeFormatAnswersFeedback (Question);
 
    HTM_TABLE_BeginPadding (2);
    for (NumOpt = 0;
 	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
      {
-      /* Convert the answer, that is in HTML, to rigorous HTML */
-      LengthAnswerTxt = 0;
-      AnswerTxt = NULL;
-      if (Question->Answer.Options[NumOpt].Text)
-	 if (Question->Answer.Options[NumOpt].Text[0])
-	   {
-	    LengthAnswerTxt = strlen (Question->Answer.Options[NumOpt].Text) * Str_MAX_BYTES_PER_CHAR;
-	    if ((AnswerTxt = (char *) malloc (LengthAnswerTxt + 1)) == NULL)
-	       Lay_NotEnoughMemoryExit ();
-	    Str_Copy (AnswerTxt,Question->Answer.Options[NumOpt].Text,
-		      LengthAnswerTxt);
-	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			      AnswerTxt,LengthAnswerTxt,false);
-	   }
-
-      /* Convert the feedback, that is in HTML, to rigorous HTML */
-      LengthFeedback = 0;
-      Feedback = NULL;
-      if (Question->Answer.Options[NumOpt].Feedback)
-	 if (Question->Answer.Options[NumOpt].Feedback[0])
-	   {
-	    LengthFeedback = strlen (Question->Answer.Options[NumOpt].Feedback) * Str_MAX_BYTES_PER_CHAR;
-	    if ((Feedback = (char *) malloc (LengthFeedback + 1)) == NULL)
-	       Lay_NotEnoughMemoryExit ();
-	    Str_Copy (Feedback,Question->Answer.Options[NumOpt].Feedback,
-		      LengthFeedback);
-	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			      Feedback,LengthFeedback,false);
-	   }
-
       HTM_TR_Begin (NULL);
 
       /* Put an icon that indicates whether the answer is correct or wrong */
@@ -3074,8 +2873,7 @@ static void Tst_WriteChoAnsBank (const struct Tst_Question *Question)
 
       /* Write the text of the answer and the media */
       HTM_DIV_Begin ("class=\"TEST_EDI\"");
-      if (LengthAnswerTxt)
-         HTM_Txt (AnswerTxt);
+      HTM_Txt (Question->Answer.Options[NumOpt].Text);
       Med_ShowMedia (&Question->Answer.Options[NumOpt].Media,
 		     "TEST_MED_EDIT_LIST_CONT",
 		     "TEST_MED_EDIT_LIST");
@@ -3083,190 +2881,14 @@ static void Tst_WriteChoAnsBank (const struct Tst_Question *Question)
 
       /* Write the text of the feedback */
       HTM_DIV_Begin ("class=\"TEST_EDI_LIGHT\"");
-      if (LengthFeedback)
-	 HTM_Txt (Feedback);
+      HTM_Txt (Question->Answer.Options[NumOpt].Feedback);
       HTM_DIV_End ();
 
       HTM_TD_End ();
 
       HTM_TR_End ();
-
-      /* Free memory allocated for the answer and the feedback */
-      free (AnswerTxt);
-      if (LengthFeedback)
-	 free (Feedback);
      }
    HTM_TABLE_End ();
-  }
-
-/*****************************************************************************/
-/****************** Write integer answer when seeing a test ******************/
-/*****************************************************************************/
-
-static void TstPrn_WriteIntAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
-                                      __attribute__((unused)) const struct Tst_Question *Question)
-  {
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),
-	     "Ans%010u",
-	     NumQst);
-   HTM_INPUT_TEXT (StrAns,11,PrintedQuestion->StrAnswers,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"11\"");
-  }
-
-/*****************************************************************************/
-/****************** Write float answer when seeing a test ********************/
-/*****************************************************************************/
-
-static void TstPrn_WriteFltAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
-                                      __attribute__((unused)) const struct Tst_Question *Question)
-  {
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),
-	     "Ans%010u",
-	     NumQst);
-   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,PrintedQuestion->StrAnswers,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"11\"");
-  }
-
-/*****************************************************************************/
-/************** Write false / true answer when seeing a test ****************/
-/*****************************************************************************/
-
-static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
-                                      __attribute__((unused)) const struct Tst_Question *Question)
-  {
-   extern const char *Txt_TF_QST[2];
-
-   /***** Write selector for the answer *****/
-   /* Initially user has not answered the question ==> initially all the answers will be blank.
-      If the user does not confirm the submission of their exam ==>
-      ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"Ans%010u\"",NumQst);
-   HTM_OPTION (HTM_Type_STRING,"" ,PrintedQuestion->StrAnswers[0] == '\0',false,"&nbsp;");
-   HTM_OPTION (HTM_Type_STRING,"T",PrintedQuestion->StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
-   HTM_OPTION (HTM_Type_STRING,"F",PrintedQuestion->StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
-   HTM_SELECT_End ();
-  }
-
-/*****************************************************************************/
-/******** Write single or multiple choice answer when seeing a test **********/
-/*****************************************************************************/
-
-static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
-                                      const struct Tst_Question *Question)
-  {
-   unsigned NumOpt;
-   unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   bool UsrAnswers[Tst_MAX_OPTIONS_PER_QUESTION];
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Change format of answers text *****/
-   for (NumOpt = 0;
-	NumOpt < Question->Answer.NumOptions;
-	NumOpt++)
-      /* Convert answer text, that is in HTML, to rigorous HTML */
-      if (Question->Answer.Options[NumOpt].Text[0])
-	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			   Question->Answer.Options[NumOpt].Text,
-			   Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
-
-   /***** Get indexes for this question from string *****/
-   TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
-
-   /***** Get the user's answers for this question from string *****/
-   TstPrn_GetAnswersFromStr (PrintedQuestion->StrAnswers,UsrAnswers);
-
-   /***** Begin table *****/
-   HTM_TABLE_BeginPadding (2);
-
-   for (NumOpt = 0;
-	NumOpt < Question->Answer.NumOptions;
-	NumOpt++)
-     {
-      /***** Indexes are 0 1 2 3... if no shuffle
-             or 3 1 0 2... (example) if shuffle *****/
-      HTM_TR_Begin (NULL);
-
-      /***** Write selectors and letter of this option *****/
-      /* Initially user has not answered the question ==> initially all the answers will be blank.
-	 If the user does not confirm the submission of their exam ==>
-	 ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-      HTM_TD_Begin ("class=\"LT\"");
-
-      snprintf (StrAns,sizeof (StrAns),
-		"Ans%010u",
-		NumQst);
-      if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE)
-	 HTM_INPUT_RADIO (StrAns,false,
-			  "id=\"Ans%010u_%u\" value=\"%u\"%s"
-			  " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u);\"",
-			  NumQst,NumOpt,
-			  Indexes[NumOpt],
-			  UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
-				                           "",
-                          NumQst,Question->Answer.NumOptions);
-      else // Answer.Type == Tst_ANS_MULTIPLE_CHOICE
-	 HTM_INPUT_CHECKBOX (StrAns,HTM_DONT_SUBMIT_ON_CHANGE,
-			     "id=\"Ans%010u_%u\" value=\"%u\"%s",
-			     NumQst,NumOpt,
-			     Indexes[NumOpt],
-			     UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
-				                           "");
-
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"LT\"");
-      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"ANS_TXT\"",NumQst,NumOpt);
-      HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
-
-      /***** Write the option text *****/
-      HTM_TD_Begin ("class=\"LT\"");
-      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"ANS_TXT\"",NumQst,NumOpt);
-      HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
-      HTM_LABEL_End ();
-      Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
-                     "TEST_MED_SHOW_CONT",
-                     "TEST_MED_SHOW");
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-     }
-
-   /***** End table *****/
-   HTM_TABLE_End ();
-  }
-
-/*****************************************************************************/
-/******************** Write text answer when seeing a test *******************/
-/*****************************************************************************/
-
-static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
-                                      __attribute__((unused)) const struct Tst_Question *Question)
-  {
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),
-	     "Ans%010u",
-	     NumQst);
-   HTM_INPUT_TEXT (StrAns,Tst_MAX_CHARS_ANSWERS_ONE_QST,PrintedQuestion->StrAnswers,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"40\"");
   }
 
 /*****************************************************************************/
@@ -3288,66 +2910,6 @@ void Tst_WriteAnsTF (char AnsTF)
       default:		// no answer
          HTM_NBSP ();
          break;
-     }
-  }
-
-/*****************************************************************************/
-/************************ Get choice answer from row *************************/
-/*****************************************************************************/
-
-void Tst_GetChoiceAns (struct Tst_Question *Question,MYSQL_RES *mysql_res)
-  {
-   unsigned NumOpt;
-   MYSQL_ROW row;
-
-   /***** Get text and correctness of answers for this question
-          from database (one row per answer) *****/
-   /*
-   row[0] AnsInd
-   row[1] Answer
-   row[2] Feedback
-   row[3] MedCod
-   row[4] Correct
-   */
-   for (NumOpt = 0;
-	NumOpt < Question->Answer.NumOptions;
-	NumOpt++)
-     {
-      /***** Get next answer *****/
-      row = mysql_fetch_row (mysql_res);
-
-      /***** Allocate memory for text in this choice option *****/
-      if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
-	 /* Abort on error */
-	 Ale_ShowAlertsAndExit ();
-
-      /***** Copy answer text (row[1]) and convert it,
-             that is in HTML, to rigorous HTML ******/
-      Str_Copy (Question->Answer.Options[NumOpt].Text,row[1],
-                Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Question->Answer.Options[NumOpt].Text,
-                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
-
-      /***** Copy answer feedback (row[2]) and convert it,
-             that is in HTML, to rigorous HTML ******/
-      if (TstVis_IsVisibleFeedbackTxt (TstCfg_GetConfigVisibility ()))
-	 if (row[2])
-	    if (row[2][0])
-	      {
-	       Str_Copy (Question->Answer.Options[NumOpt].Feedback,row[2],
-	                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-	                         Question->Answer.Options[NumOpt].Feedback,
-	                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
-	      }
-
-      /***** Get media (row[3]) *****/
-      Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-      Med_GetMediaDataByCod (&Question->Answer.Options[NumOpt].Media);
-
-      /***** Assign correctness (row[4]) of this answer (this option) *****/
-      Question->Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
      }
   }
 
