@@ -556,7 +556,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.250 (2020-06-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.250.2 (2020-06-17)"
 #define CSS_FILE		"swad19.250.css"
 #define JS_FILE			"swad19.246.1.js"
 /*
@@ -564,6 +564,8 @@ TODO:  Encarnación Hidalgo Tenorio: Antonio, ¿podría @swad_ugr mandar una notifi
        Se trataría de añadir un par de líneas "Nuevos archivos en actividades", "Nuevos archivos en otros trabajos".
 TODO: Fix bug: Cuando se pulsa en ver fichas, y luego en una ficha en "Ver trabajos" o "Ver exámenes", o lo que sea, sale dos veces ese estudiante.
 
+	Version 19.250.2: Jun 17, 2020  Show valid score and valid grade in exam result. (303069 lines)
+	Version 19.250.1: Jun 17, 2020  Fixed bug in attendance events, reported by Carlos A. Pozzo. (302977 lines)
 	Version 19.250:   Jun 17, 2020  Exam questions can be invalidated. Not finished. (302974 lines)
 					1 change necessary in database:
 ALTER TABLE exa_set_questions ADD COLUMN Invalid ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER SetCod;

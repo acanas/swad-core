@@ -118,6 +118,8 @@ static bool ExaRes_CheckIfICanSeePrintResult (const struct Exa_Exam *Exam,
                                               long UsrCod);
 static bool ExaRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility);
 
+static void ExaRes_ComputeScoreValid (struct ExaPrn_Print *Print);
+
 static void ExaRes_ShowExamAnswers (struct UsrData *UsrDat,
 			            struct ExaPrn_Print *Print,
 			            unsigned Visibility);
@@ -1222,6 +1224,10 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 	 break;
      }
 
+   /***** Compute score taking into account only valid questions *****/
+   if (ICanView.Score)
+      ExaRes_ComputeScoreValid (Print);
+
    /***** Begin box *****/
    Box_BoxBegin (NULL,Session->Title,
 		 NULL,NULL,
@@ -1296,9 +1302,15 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 
    HTM_TD_Begin ("class=\"DAT LT\"");
    if (ICanView.Result)
-      HTM_TxtF ("%u (%u %s)",
-		Print->NumQsts,
-		Print->NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+     {
+      HTM_TxtF ("%u",Print->NumQsts);
+      if (Print->NumQsts != Print->NumQstsValid)
+	 HTM_TxtF (" (%s: %u, %s: %u)",
+		   "v&aacute;lidas",Print->NumQstsValid,		// TODO: Need translation!!!
+		   "anuladas",Print->NumQsts - Print->NumQstsValid);	// TODO: Need translation!!!
+      HTM_TxtF ("; %s: %u",
+		Txt_non_blank_QUESTIONS,Print->NumQstsNotBlank);
+     }
    else
       Ico_PutIconNotVisible ();
    HTM_TD_End ();
@@ -1314,7 +1326,16 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 
    HTM_TD_Begin ("class=\"DAT LT\"");
    if (ICanView.Score)
+     {
       HTM_Double2Decimals (Print->Score);
+      if (Print->NumQsts != Print->NumQstsValid)
+	{
+         HTM_Txt (" (");
+         HTM_TxtColonNBSP ("Puntuaci&oacute;n v&aacute;lida");	// TODO: Need translation!!!!
+         HTM_Double2Decimals (Print->ScoreValid);
+         HTM_Txt (")");
+	}
+     }
    else
       Ico_PutIconNotVisible ();
    HTM_TD_End ();
@@ -1330,8 +1351,18 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 
    HTM_TD_Begin ("class=\"DAT LT\"");
    if (ICanView.Score)
+     {
       TstPrn_ComputeAndShowGrade (Print->NumQsts,Print->Score,
 				  Exam->MaxGrade);
+      if (Print->NumQsts != Print->NumQstsValid)
+	{
+         HTM_Txt (" (");
+         HTM_TxtColonNBSP ("Nota v&aacute;lida");	// TODO: Need translation!!!!
+	 TstPrn_ComputeAndShowGrade (Print->NumQstsValid,Print->ScoreValid,
+				     Exam->MaxGrade);
+         HTM_Txt (")");
+	}
+     }
    else
       Ico_PutIconNotVisible ();
    HTM_TD_End ();
@@ -1349,12 +1380,31 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
    if (ICanView.Score)
      {
       HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
+
+      /* Score */
       HTM_TxtColonNBSP (Txt_Score);
       HTM_Double2Decimals (Print->Score);
+      if (Print->NumQsts != Print->NumQstsValid)
+	{
+	 HTM_Txt (" / ");
+	 HTM_TxtColonNBSP ("Puntuaci&oacute;n v&aacute;lida");	// TODO: Need translation!!!!
+	 HTM_Double2Decimals (Print->ScoreValid);
+	}
+
       HTM_BR ();
+
+      /* Grade */
       HTM_TxtColonNBSP (Txt_Grade);
       TstPrn_ComputeAndShowGrade (Print->NumQsts,Print->Score,
 				  Exam->MaxGrade);
+      if (Print->NumQsts != Print->NumQstsValid)
+	{
+	 HTM_Txt (" / ");
+	 HTM_TxtColonNBSP ("Nota v&aacute;lida");		// TODO: Need translation!!!!
+	 TstPrn_ComputeAndShowGrade (Print->NumQstsValid,Print->ScoreValid,
+				     Exam->MaxGrade);
+	}
+
       HTM_DIV_End ();
      }
 
@@ -1420,6 +1470,45 @@ static bool ExaRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility
   }
 
 /*****************************************************************************/
+/******* Compute total score taking into account only valid questions ********/
+/*****************************************************************************/
+
+static void ExaRes_ComputeScoreValid (struct ExaPrn_Print *Print)
+  {
+   unsigned NumQst;
+   struct Tst_Question Question;
+
+   /***** Initialize score valid *****/
+   Print->NumQstsValid = 0;
+   Print->ScoreValid = 0.0;
+
+   for (NumQst = 0;
+	NumQst < Print->NumQsts;
+	NumQst++)
+     {
+      Gbl.RowEvenOdd = NumQst % 2;
+
+      /***** Create test question *****/
+      Tst_QstConstructor (&Question);
+      Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
+
+      /***** Get question data *****/
+      ExaSet_GetQstDataFromDB (&Question);
+
+      /***** Compute answer score *****/
+      if (Question.Validity == Tst_VALID_QUESTION)
+	{
+	 ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
+	 Print->NumQstsValid++;
+	 Print->ScoreValid += Print->PrintedQuestions[NumQst].Score;
+	}
+
+      /***** Destroy test question *****/
+      Tst_QstDestructor (&Question);
+     }
+  }
+
+/*****************************************************************************/
 /************** Show user's and correct answers of a test exam ***************/
 /*****************************************************************************/
 
@@ -1463,6 +1552,16 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
   {
    extern const char *Txt_Score;
    bool ICanView[TstVis_NUM_ITEMS_VISIBILITY];
+   static char *ClassNumQst[Tst_NUM_VALIDITIES] =
+     {
+      [Tst_INVALID_QUESTION] = "BIG_INDEX_RED",
+      [Tst_VALID_QUESTION  ] = "BIG_INDEX",
+     };
+   static char *ClassAnswerType[Tst_NUM_VALIDITIES] =
+     {
+      [Tst_INVALID_QUESTION] = "DAT_SMALL_RED",
+      [Tst_VALID_QUESTION  ] = "DAT_SMALL",
+     };
    static char *ClassTxt[Tst_NUM_VALIDITIES] =
      {
       [Tst_INVALID_QUESTION] = "TEST_TXT_RED",
@@ -1507,8 +1606,8 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
 
    /***** Number of question and answer type *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteNumQst (NumQst + 1,"BIG_INDEX");
-   Tst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
+   Tst_WriteNumQst (NumQst + 1,ClassNumQst[Question->Validity]);
+   Tst_WriteAnswerType (Question->Answer.Type,ClassAnswerType[Question->Validity]);
    HTM_TD_End ();
 
    /***** Stem, media and answers *****/
@@ -1539,9 +1638,11 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
       HTM_SPAN_Begin ("class=\"%s\"",
 		      Print->PrintedQuestions[NumQst].StrAnswers[0] ?
 		      (Print->PrintedQuestions[NumQst].Score > 0 ? "ANS_OK" :	// Correct/semicorrect
-							           "ANS_BAD") :	// Wrong
-							           "ANS_0");	// Blank answer
+								   "ANS_BAD") :	// Wrong
+								   "ANS_0");	// Blank answer
       HTM_Double2Decimals (Print->PrintedQuestions[NumQst].Score);
+      if (Question->Validity == Tst_INVALID_QUESTION)
+	 HTM_TxtF (" (%s)","Pregunta anulada");	// TODO: Need translation!!!!
       HTM_SPAN_End ();
       HTM_DIV_End ();
      }

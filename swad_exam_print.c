@@ -163,9 +163,11 @@ static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print)
    Print->TimeUTC[Dat_START_TIME] =
    Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Print->NumQsts                 =
-   Print->NumQstsNotBlank         = 0;
+   Print->NumQstsNotBlank         =
+   Print->NumQstsValid            = 0;
    Print->Sent                    = false;	// After creating an exam print, it's not sent
-   Print->Score                   = 0.0;
+   Print->Score                   =
+   Print->ScoreValid              = 0.0;
   }
 
 /*****************************************************************************/

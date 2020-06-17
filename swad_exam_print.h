@@ -43,9 +43,11 @@ struct ExaPrn_Print
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    unsigned NumQsts;		// Number of questions
    unsigned NumQstsNotBlank;	// Number of questions not blank
+   unsigned NumQstsValid;	// Number of valid questions (not invalidated by teachers)
    bool Sent;			// This exam print has been sent or not?
 				// "Sent" means that user has clicked "Send" button after finishing
    double Score;		// Total score of the exam print
+   double ScoreValid;		// Total score taking into account only valid questions
    struct TstPrn_PrintedQuestion PrintedQuestions[ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT];
   };
 

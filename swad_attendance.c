@@ -1099,6 +1099,9 @@ void Att_RequestCreatOrEditAttEvent (void)
       [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
      };
 
+   /***** Reset attendance events *****/
+   Att_ResetEvents (&Events);
+
    /***** Get parameters *****/
    Events.SelectedOrder = Att_GetParamAttOrder ();
    Grp_GetParamWhichGroups ();
