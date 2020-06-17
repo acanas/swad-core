@@ -730,15 +730,15 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
 
    /***** Number of question and answer type *****/
    HTM_TD_Begin ("class=\"RT\"");
-   Tst_WriteNumQst (NumQst + 1);
-   Tst_WriteAnswerType (Question->Answer.Type);
+   Tst_WriteNumQst (NumQst + 1,"BIG_INDEX");
+   Tst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
    HTM_TD_End ();
 
    /***** Stem, media and answers *****/
    HTM_TD_Begin ("class=\"LT\"");
 
    /* Stem */
-   Tst_WriteQstStem (Question->Stem,"TEST_EXA",true);
+   Tst_WriteQstStem (Question->Stem,"TEST_TXT",true);
 
    /* Media */
    Med_ShowMedia (&Question->Media,
@@ -903,14 +903,14 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
-      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"ANS_TXT\"",NumQst,NumOpt);
+      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",NumQst,NumOpt);
       HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
       /***** Write the option text *****/
       HTM_TD_Begin ("class=\"LT\"");
-      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"ANS_TXT\"",NumQst,NumOpt);
+      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",NumQst,NumOpt);
       HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
       HTM_LABEL_End ();
       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,

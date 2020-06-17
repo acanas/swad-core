@@ -109,8 +109,8 @@ void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);
 void Tst_ListQuestionForEdition (struct Tst_Question *Question,
                                  unsigned QstInd,bool QuestionExists,
                                  const char *Anchor);
-void Tst_WriteNumQst (unsigned NumQst);
-void Tst_WriteAnswerType (Tst_AnswerType_t AnswerType);
+void Tst_WriteNumQst (unsigned NumQst,const char *Class);
+void Tst_WriteAnswerType (Tst_AnswerType_t AnswerType,const char *Class);
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
 void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 
@@ -134,7 +134,9 @@ void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
 void Tst_ChangeFormatAnswersText (struct Tst_Question *Question);
 void Tst_ChangeFormatAnswersFeedback (struct Tst_Question *Question);
 
-void Tst_WriteAnswersBank (struct Tst_Question *Question);
+void Tst_WriteAnswersBank (struct Tst_Question *Question,
+                           const char *ClassTxt,
+                           const char *ClassFeedback);
 bool Tst_CheckIfQuestionIsValidForGame (long QstCod);
 void Tst_WriteAnsTF (char AnsTF);
 

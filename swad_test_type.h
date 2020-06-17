@@ -49,6 +49,13 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
+#define Tst_NUM_VALIDITIES 2
+typedef enum
+  {
+   Tst_INVALID_QUESTION,
+   Tst_VALID_QUESTION,
+  } Tst_Validity_t;
+
 #define Tst_NUM_ANS_TYPES	6
 #define Tst_MAX_BYTES_LIST_ANSWER_TYPES	(Tst_NUM_ANS_TYPES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
 typedef enum
@@ -89,6 +96,7 @@ struct Tst_Question
    unsigned long NumHits;
    unsigned long NumHitsNotBlank;
    double Score;
+   Tst_Validity_t Validity;	// If a question in an exam has been marked as invalid
   };
 
 /*****************************************************************************/

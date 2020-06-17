@@ -77,6 +77,9 @@ void ExaSet_MoveDownSet (void);
 void ExaSet_RequestRemoveQstFromSet (void);
 void ExaSet_RemoveQstFromSet (void);
 
+void ExaSet_ValidateQst (void);
+void ExaSet_InvalidateQst (void);
+
 void ExaSet_WriteSetTitle (const struct ExaSet_Set *Set);
 
 #endif

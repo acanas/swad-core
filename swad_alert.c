@@ -414,7 +414,7 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
       HTM_DIV_Begin ("class=\"ALERT_CLOSE\"");
       HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\" /",
 	           IdAlert);
-      Ico_PutIcon ("close.svg",Txt_Close,"ICO16x16");
+      Ico_PutIcon ("times.svg",Txt_Close,"ICO16x16");
       HTM_A_End ();
       HTM_DIV_End ();
      }

@@ -356,7 +356,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
       /***** Put form to mark announcement as seen *****/
       Lay_PutContextualLinkIconText (ActAnnSee,NULL,
                                      Ann_PutParams,&AnnCod,
-				     "close.svg",
+				     "times.svg",
 				     Txt_Do_not_show_again);
 
    HTM_DIV_End ();

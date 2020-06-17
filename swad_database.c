@@ -1227,22 +1227,24 @@ mysql> DESCRIBE exa_set_answers;
    /***** Table exa_set_questions *****/
 /*
 mysql> DESCRIBE exa_set_questions;
-+----------+---------------+------+-----+---------+-------+
-| Field    | Type          | Null | Key | Default | Extra |
-+----------+---------------+------+-----+---------+-------+
-| QstCod   | int(11)       | NO   | PRI | NULL    |       |
-| AnsInd   | tinyint(4)    | NO   | PRI | NULL    |       |
-| Answer   | text          | NO   |     | NULL    |       |
-| Feedback | text          | NO   |     | NULL    |       |
-| MedCod   | int(11)       | NO   | MUL | -1      |       |
-| Correct  | enum('N','Y') | NO   |     | NULL    |       |
-+----------+---------------+------+-----+---------+-------+
-6 rows in set (0.00 sec)
-
++----------+---------------------------------------------------------------------------+------+-----+---------+----------------+
+| Field    | Type                                                                      | Null | Key | Default | Extra          |
++----------+---------------------------------------------------------------------------+------+-----+---------+----------------+
+| QstCod   | int(11)                                                                   | NO   | PRI | NULL    | auto_increment |
+| SetCod   | int(11)                                                                   | NO   | MUL | NULL    |                |
+| Invalid  | enum('N','Y')                                                             | NO   |     | N       |                |
+| AnsType  | enum('int','float','true_false','unique_choice','multiple_choice','text') | NO   |     | NULL    |                |
+| Shuffle  | enum('N','Y')                                                             | NO   |     | NULL    |                |
+| Stem     | text                                                                      | NO   |     | NULL    |                |
+| Feedback | text                                                                      | NO   |     | NULL    |                |
+| MedCod   | int(11)                                                                   | NO   | MUL | -1      |                |
++----------+---------------------------------------------------------------------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_set_questions ("
 			"QstCod INT NOT NULL AUTO_INCREMENT,"
 			"SetCod INT NOT NULL,"
+			"Invalid ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"AnsType ENUM ('int','float','true_false','unique_choice','multiple_choice','text') NOT NULL,"
 			"Shuffle ENUM('N','Y') NOT NULL,"
 			"Stem TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT

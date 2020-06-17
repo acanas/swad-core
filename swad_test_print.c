@@ -127,23 +127,33 @@ static void TstPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question);
 static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Tst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY]);
+				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     __attribute__((unused)) const char *ClassTxt,
+				     __attribute__((unused)) const char *ClassFeedback);
 static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Tst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY]);
+				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     __attribute__((unused)) const char *ClassTxt,
+				     __attribute__((unused)) const char *ClassFeedback);
 static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Tst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY]);
+				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     __attribute__((unused)) const char *ClassTxt,
+				     __attribute__((unused)) const char *ClassFeedback);
 static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Tst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY]);
+				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     const char *ClassTxt,
+				     const char *ClassFeedback);
 static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Tst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY]);
+				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     __attribute__((unused)) const char *ClassTxt,
+				     __attribute__((unused)) const char *ClassFeedback);
 //-----------------------------------------------------------------------------
 
 static void TstPrn_WriteHeadUserCorrect (struct UsrData *UsrDat);
@@ -330,8 +340,8 @@ static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQ
 
    /***** Number of question and answer type *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteNumQst (NumQst + 1);
-   Tst_WriteAnswerType (Question->Answer.Type);
+   Tst_WriteNumQst (NumQst + 1,"BIG_INDEX");
+   Tst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
    HTM_TD_End ();
 
    /***** Stem, media and answers *****/
@@ -341,7 +351,7 @@ static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQ
    Tst_WriteParamQstCod (NumQst,Question->QstCod);
 
    /* Stem */
-   Tst_WriteQstStem (Question->Stem,"TEST_EXA",true);
+   Tst_WriteQstStem (Question->Stem,"TEST_TXT",true);
 
    /* Media */
    Med_ShowMedia (&Question->Media,
@@ -503,14 +513,14 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
-      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"ANS_TXT\"",NumQst,NumOpt);
+      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",NumQst,NumOpt);
       HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
       /***** Write the option text *****/
       HTM_TD_Begin ("class=\"LT\"");
-      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"ANS_TXT\"",NumQst,NumOpt);
+      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",NumQst,NumOpt);
       HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
       HTM_LABEL_End ();
       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
@@ -677,9 +687,9 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 
    /***** Number of question and answer type *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteNumQst (NumQst + 1);
+   Tst_WriteNumQst (NumQst + 1,"BIG_INDEX");
    if (QuestionUneditedAfterExam)
-      Tst_WriteAnswerType (Question->Answer.Type);
+      Tst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
    HTM_TD_End ();
 
    /***** Stem, media and answers *****/
@@ -689,7 +699,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
       if (QuestionUneditedAfterExam)
 	{
 	 /* Stem */
-	 Tst_WriteQstStem (Question->Stem,"TEST_EXA",ICanView[TstVis_VISIBLE_QST_ANS_TXT]);
+	 Tst_WriteQstStem (Question->Stem,"TEST_TXT",ICanView[TstVis_VISIBLE_QST_ANS_TXT]);
 
 	 /* Media */
 	 if (ICanView[TstVis_VISIBLE_QST_ANS_TXT])
@@ -700,7 +710,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 	 /* Answers */
 	 TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],Question);
 	 TstPrn_WriteAnswersExam (UsrDat,&Print->PrintedQuestions[NumQst],Question,
-	                          ICanView);
+	                          ICanView,"TEST_TXT","TEST_TXT_LIGHT");
 	}
       else
 	 Ale_ShowAlert (Ale_WARNING,Txt_Question_modified);
@@ -726,7 +736,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
    /* Question feedback */
    if (QuestionUneditedAfterExam)
       if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT])
-	 Tst_WriteQstFeedback (Question->Feedback,"TEST_EXA_LIGHT");
+	 Tst_WriteQstFeedback (Question->Feedback,"TEST_TXT_LIGHT");
 
    HTM_TD_End ();
 
@@ -1271,12 +1281,16 @@ void TstPrn_ShowGrade (double Grade,double MaxGrade)
 void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
                               const struct TstPrn_PrintedQuestion *PrintedQuestion,
 			      struct Tst_Question *Question,
-			      bool ICanView[TstVis_NUM_ITEMS_VISIBILITY])
+			      bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+			      const char *ClassTxt,
+			      const char *ClassFeedback)
   {
    void (*TstPrn_WriteAnsExam[Tst_NUM_ANS_TYPES]) (struct UsrData *UsrDat,
                                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				                   struct Tst_Question *Question,
-				                   bool ICanView[TstVis_NUM_ITEMS_VISIBILITY]) =
+				                   bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				                   const char *ClassTxt,
+				                   const char *ClassFeedback) =
     {
      [Tst_ANS_INT            ] = TstPrn_WriteIntAnsPrint,
      [Tst_ANS_FLOAT          ] = TstPrn_WriteFltAnsPrint,
@@ -1288,7 +1302,7 @@ void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
 
    /***** Get correct answer and compute answer score depending on type *****/
    TstPrn_WriteAnsExam[Question->Answer.Type] (UsrDat,PrintedQuestion,Question,
-	                                       ICanView);
+	                                       ICanView,ClassTxt,ClassFeedback);
   }
 
 /*****************************************************************************/
@@ -1298,7 +1312,9 @@ void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
 static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Tst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY])
+				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     __attribute__((unused)) const char *ClassTxt,
+				     __attribute__((unused)) const char *ClassFeedback)
   {
    long IntAnswerUsr;
 
@@ -1357,7 +1373,9 @@ static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
 static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Tst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY])
+				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     __attribute__((unused)) const char *ClassTxt,
+				     __attribute__((unused)) const char *ClassFeedback)
   {
    double FloatAnsUsr = 0.0;
 
@@ -1417,7 +1435,9 @@ static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
 static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Tst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY])
+				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     __attribute__((unused)) const char *ClassTxt,
+				     __attribute__((unused)) const char *ClassFeedback)
   {
    char AnsTFUsr;
 
@@ -1465,7 +1485,9 @@ static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
 static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Tst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY])
+				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     const char *ClassTxt,
+				     const char *ClassFeedback)
   {
    extern const char *Txt_TST_Answer_given_by_the_user;
    extern const char *Txt_TST_Answer_given_by_the_teachers;
@@ -1556,14 +1578,14 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
 	}
 
       /* Answer letter (a, b, c,...) */
-      HTM_TD_Begin ("class=\"ANS_TXT LT\"");
+      HTM_TD_Begin ("class=\"%s LT\"",ClassTxt);
       HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
       HTM_TD_End ();
 
       /* Answer text and feedback */
       HTM_TD_Begin ("class=\"LT\"");
 
-      HTM_DIV_Begin ("class=\"ANS_TXT\"");
+      HTM_DIV_Begin ("class=\"%s\"",ClassTxt);
       if (ICanView[TstVis_VISIBLE_QST_ANS_TXT])
 	{
 	 HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
@@ -1579,7 +1601,7 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
 	 if (Question->Answer.Options[Indexes[NumOpt]].Feedback)
 	    if (Question->Answer.Options[Indexes[NumOpt]].Feedback[0])
 	      {
-	       HTM_DIV_Begin ("class=\"TEST_EXA_LIGHT\"");
+	       HTM_DIV_Begin ("class=\"%s\"",ClassFeedback);
 	       HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Feedback);
 	       HTM_DIV_End ();
 	      }
@@ -1600,7 +1622,9 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
 static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Tst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY])
+				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     __attribute__((unused)) const char *ClassTxt,
+				     __attribute__((unused)) const char *ClassFeedback)
   {
    unsigned NumOpt;
    char TextAnsUsr[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
@@ -1690,7 +1714,7 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
 	    if (Question->Answer.Options[NumOpt].Feedback)
 	       if (Question->Answer.Options[NumOpt].Feedback[0])
 		 {
-		  HTM_DIV_Begin ("class=\"TEST_EXA_LIGHT\"");
+		  HTM_DIV_Begin ("class=\"TEST_TXT_LIGHT\"");
 		  HTM_Txt (Question->Answer.Options[NumOpt].Feedback);
 		  HTM_DIV_End ();
 		 }

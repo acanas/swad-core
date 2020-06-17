@@ -898,8 +898,8 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    size_t AnswerFeedbackLength;
    const char *ClassData = QuestionExists ? "DAT_SMALL_LIGHT" :
 	                                    "DAT_SMALL";
-   const char *ClassStem = QuestionExists ? "TEST_EDI_LIGHT" :
-	                                    "TEST_EDI";
+   const char *ClassStem = QuestionExists ? "TEST_TXT_LIGHT" :
+	                                    "TEST_TXT";
 
    Gbl.RowEvenOdd = NumQst % 2;
    NumQst++;
@@ -974,7 +974,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    Tst_WriteQstStem (Stem,ClassStem,
 		     true);	// Visible
-   Tst_WriteQstFeedback (Feedback,"TEST_EDI_LIGHT");
+   Tst_WriteQstFeedback (Feedback,"TEST_TXT_LIGHT");
    switch (Question->Answer.Type)
      {
       case Tst_ANS_INT:
@@ -1057,7 +1057,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
             if (AnswerFeedbackLength)
               {
-	       HTM_DIV_Begin ("class=\"TEST_EDI_LIGHT\"");
+	       HTM_DIV_Begin ("class=\"TEST_TXT_LIGHT\"");
 	       HTM_Txt (AnswerFeedback);
 	       HTM_DIV_End ();
               }

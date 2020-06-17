@@ -1463,6 +1463,16 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
   {
    extern const char *Txt_Score;
    bool ICanView[TstVis_NUM_ITEMS_VISIBILITY];
+   static char *ClassTxt[Tst_NUM_VALIDITIES] =
+     {
+      [Tst_INVALID_QUESTION] = "TEST_TXT_RED",
+      [Tst_VALID_QUESTION  ] = "TEST_TXT",
+     };
+   static char *ClassFeedback[Tst_NUM_VALIDITIES] =
+     {
+      [Tst_INVALID_QUESTION] = "TEST_TXT_LIGHT_RED",
+      [Tst_VALID_QUESTION  ] = "TEST_TXT_LIGHT",
+     };
 
    /***** Check if I can view each part of the question *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1497,15 +1507,16 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
 
    /***** Number of question and answer type *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteNumQst (NumQst + 1);
-   Tst_WriteAnswerType (Question->Answer.Type);
+   Tst_WriteNumQst (NumQst + 1,"BIG_INDEX");
+   Tst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
    HTM_TD_End ();
 
    /***** Stem, media and answers *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
    /* Stem */
-   Tst_WriteQstStem (Question->Stem,"TEST_EXA",ICanView[TstVis_VISIBLE_QST_ANS_TXT]);
+   Tst_WriteQstStem (Question->Stem,ClassTxt[Question->Validity],
+                     ICanView[TstVis_VISIBLE_QST_ANS_TXT]);
 
    /* Media */
    if (ICanView[TstVis_VISIBLE_QST_ANS_TXT])
@@ -1516,7 +1527,9 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
    /* Answers */
    ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],Question);
    TstPrn_WriteAnswersExam (UsrDat,&Print->PrintedQuestions[NumQst],Question,
-                            ICanView);
+                            ICanView,
+                            ClassTxt[Question->Validity],
+                            ClassFeedback[Question->Validity]);
 
    /* Write score retrieved from database */
    if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE])
@@ -1535,7 +1548,7 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
 
    /* Question feedback */
    if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT])
-      Tst_WriteQstFeedback (Question->Feedback,"TEST_EXA_LIGHT");
+      Tst_WriteQstFeedback (Question->Feedback,ClassFeedback[Question->Validity]);
 
    HTM_TD_End ();
 

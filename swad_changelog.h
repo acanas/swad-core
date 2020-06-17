@@ -556,13 +556,21 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.249.1 (2020-06-17)"
-#define CSS_FILE		"swad19.238.2.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.250 (2020-06-17)"
+#define CSS_FILE		"swad19.250.css"
 #define JS_FILE			"swad19.246.1.js"
 /*
 TODO:  Encarnación Hidalgo Tenorio: Antonio, ¿podría @swad_ugr mandar una notificación cuando el alumnado ha mandado su tarea?
        Se trataría de añadir un par de líneas "Nuevos archivos en actividades", "Nuevos archivos en otros trabajos".
 TODO: Fix bug: Cuando se pulsa en ver fichas, y luego en una ficha en "Ver trabajos" o "Ver exámenes", o lo que sea, sale dos veces ese estudiante.
+
+	Version 19.250:   Jun 17, 2020  Exam questions can be invalidated. Not finished. (302974 lines)
+					1 change necessary in database:
+ALTER TABLE exa_set_questions ADD COLUMN Invalid ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER SetCod;
+					Copy the following 3 icons to icon public directory:
+sudo cp icon/times.svg /var/www/html/swad/icon/
+sudo cp icon/times-red.svg /var/www/html/swad/icon/
+sudo cp icon/check-green.svg /var/www/html/swad/icon/
 
 	Version 19.249.1: Jun 17, 2020  Fixed bug removing a course. Reported by Raymon Moreno Colina. (302789 lines)
 	Version 19.249:   Jun 17, 2020  Fixed bug in exams and matches.
@@ -619,7 +627,7 @@ ALTER TABLE exa_log ENGINE=MyISAM;
 					Bug fixing and code refactoring in tests and exams. (301712 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS exa_log (LogCod INT NOT NULL,PrnCod INT NOT NULL,ActCod INT NOT NULL,ClickTime DATETIME NOT NULL,IP CHAR(15) NOT NULL,SessionId CHAR(43) NOT NULL,UNIQUE INDEX(LogCod),INDEX(PrnCod,ClickTime),INDEX(ClickTime));
---------------
+
 	Version 19.240:   May 21, 2020  Code refactoring in tests and exams. (301428 lines)
 	Version 19.239.9: May 21, 2020  Fixed issue in exam sessions: exam prints in sessions of hidden exams are no accesible. (301441 lines)
 	Version 19.239.8: May 21, 2020  Fixed issue in exam sessions: a student can not see hidden sessions. (301433 lines)

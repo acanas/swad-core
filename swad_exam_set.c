@@ -134,6 +134,8 @@ static void ExaSet_CopyQstFromBankToExamSet (struct ExaSet_Set *Set,long QstCod)
 static void ExaSet_RemoveMediaFromStemOfQst (long SetCod,long QstCod);
 static void ExaSet_RemoveMediaFromAllAnsOfQst (long SetCod,long QstCod);
 
+static void ExaSet_ChangeValidityQst (Tst_Validity_t Valid);
+
 static void ExaSet_GetAndCheckParameters (struct Exa_Exams *Exams,
                                           struct Exa_Exam *Exam,
                                           struct ExaSet_Set *Set);
@@ -312,7 +314,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 
    /***** Index *****/
    HTM_TD_Begin ("class=\"RM\"");
-   Tst_WriteNumQst (MaxSetInd + 1);
+   Tst_WriteNumQst (MaxSetInd + 1,"BIG_INDEX");
    HTM_TD_End ();
 
    /***** Title *****/
@@ -1148,7 +1150,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 
       /***** Index *****/
       HTM_TD_Begin ("rowspan=\"2\" class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteNumQst (Set.SetInd);
+      Tst_WriteNumQst (Set.SetInd,"BIG_INDEX");
       HTM_TD_End ();
 
       /***** Title *****/
@@ -1278,9 +1280,21 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
    MYSQL_ROW row;
    struct Tst_Question Question;
    char *Anchor;
-
-   /***** Build anchor string *****/
-   Frm_SetAnchorStr (Exams->SetCod,&Anchor);
+   static Act_Action_t NextAction[Tst_NUM_VALIDITIES] =
+     {
+      [Tst_INVALID_QUESTION] = ActValSetQst,	// Validate question (set it as valid question)
+      [Tst_VALID_QUESTION  ] = ActInvSetQst,	// Invalidated question (set it as canceled question)
+     };
+   static const char *Icon[Tst_NUM_VALIDITIES] =
+     {
+      [Tst_INVALID_QUESTION] = "times-red.svg",
+      [Tst_VALID_QUESTION  ] = "check-green.svg",
+     };
+   static const char *Title[Tst_NUM_VALIDITIES] =
+     {
+      [Tst_INVALID_QUESTION] = "Pregunta anulada",		// TODO: Need translation!!!!
+      [Tst_VALID_QUESTION  ] = "Pregunta v&aacute;lida",	// TODO: Need translation!!!!
+     };
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWideMarginPadding (5);
@@ -1310,6 +1324,10 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
       */
       /* Get question code (row[0]) */
       Exams->QstCod = Question.QstCod = Str_ConvertStrCodToLongCod (row[0]);
+      ExaSet_GetQstDataFromDB (&Question);
+
+      /***** Build anchor string *****/
+      Frm_SetAnchorStr (Exams->QstCod,&Anchor);
 
       /***** Begin row *****/
       HTM_TR_Begin (NULL);
@@ -1328,19 +1346,21 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
       else
          Ico_PutIconRemovalNotAllowed ();
 
-      /* Put icon to edit the question */
-      if (ICanEditQuestions)
-	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
-	                              ExaSet_PutParamQstCod,&Question.QstCod);
-
+      /* Put icon to cancel the question */
+      Lay_PutContextualLinkOnlyIcon (NextAction[Question.Validity],Anchor,
+				     ExaSet_PutParamsOneQst,Exams,
+				     Icon[Question.Validity],
+				     Title[Question.Validity]);
       HTM_TD_End ();
 
-      /***** Question *****/
-      ExaSet_GetQstDataFromDB (&Question);
+      /***** List question *****/
       ExaSet_ListQuestionForEdition (&Question,NumQst + 1,Anchor);
 
       /***** End row *****/
       HTM_TR_End ();
+
+      /***** Free anchor string *****/
+      Frm_FreeAnchorStr (Anchor);
 
       /***** Destroy test question *****/
       Tst_QstDestructor (&Question);
@@ -1348,9 +1368,6 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 
    /***** End table *****/
    HTM_TABLE_End ();
-
-   /***** Free anchor string *****/
-   Frm_FreeAnchorStr (Anchor);
   }
 
 /*****************************************************************************/
@@ -1394,11 +1411,12 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
 
    /***** Get question data from database *****/
    QuestionExists = (DB_QuerySELECT (&mysql_res,"can not get a question",
-				     "SELECT AnsType,"			// row[0]
-					    "Shuffle,"			// row[1]
-					    "Stem,"			// row[2]
-					    "Feedback,"			// row[3]
-					    "MedCod"			// row[4]
+				     "SELECT Invalid,"			// row[0]
+				            "AnsType,"			// row[1]
+					    "Shuffle,"			// row[2]
+					    "Stem,"			// row[3]
+					    "Feedback,"			// row[4]
+					    "MedCod"			// row[5]
 				     " FROM exa_set_questions"
 				     " WHERE QstCod=%ld",
 				     Question->QstCod) != 0);
@@ -1407,28 +1425,32 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
      {
       row = mysql_fetch_row (mysql_res);
 
-      /* Get the type of answer (row[0]) */
-      Question->Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
+      /* Get whether the question is invalid (row[0]) */
+      Question->Validity = (row[0][0] == 'Y') ? Tst_INVALID_QUESTION :
+	                                        Tst_VALID_QUESTION;
 
-      /* Get shuffle (row[1]) */
-      Question->Answer.Shuffle = (row[1][0] == 'Y');
+      /* Get the type of answer (row[1]) */
+      Question->Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
-      /* Get the stem (row[2]) */
+      /* Get shuffle (row[2]) */
+      Question->Answer.Shuffle = (row[2][0] == 'Y');
+
+      /* Get the stem (row[3]) */
       Question->Stem[0] = '\0';
-      if (row[2])
-	 if (row[2][0])
-	    Str_Copy (Question->Stem,row[2],
-		      Cns_MAX_BYTES_TEXT);
-
-      /* Get the feedback (row[3]) */
-      Question->Feedback[0] = '\0';
       if (row[3])
 	 if (row[3][0])
-	    Str_Copy (Question->Feedback,row[3],
+	    Str_Copy (Question->Stem,row[3],
 		      Cns_MAX_BYTES_TEXT);
 
-      /* Get media (row[4]) */
-      Question->Media.MedCod = Str_ConvertStrCodToLongCod (row[4]);
+      /* Get the feedback (row[4]) */
+      Question->Feedback[0] = '\0';
+      if (row[4])
+	 if (row[4][0])
+	    Str_Copy (Question->Feedback,row[4],
+		      Cns_MAX_BYTES_TEXT);
+
+      /* Get media (row[5]) */
+      Question->Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
       Med_GetMediaDataByCod (&Question->Media);
 
       /* Free structure that stores the query result */
@@ -1543,10 +1565,31 @@ void ExaSet_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
 static void ExaSet_ListQuestionForEdition (struct Tst_Question *Question,
                                            unsigned QstInd,const char *Anchor)
   {
+   static char *ClassNumQst[Tst_NUM_VALIDITIES] =
+     {
+      [Tst_INVALID_QUESTION] = "BIG_INDEX_RED",
+      [Tst_VALID_QUESTION  ] = "BIG_INDEX",
+     };
+   static char *ClassAnswerType[Tst_NUM_VALIDITIES] =
+     {
+      [Tst_INVALID_QUESTION] = "DAT_SMALL_RED",
+      [Tst_VALID_QUESTION  ] = "DAT_SMALL",
+     };
+   static char *ClassTxt[Tst_NUM_VALIDITIES] =
+     {
+      [Tst_INVALID_QUESTION] = "TEST_TXT_RED",
+      [Tst_VALID_QUESTION  ] = "TEST_TXT",
+     };
+   static char *ClassFeedback[Tst_NUM_VALIDITIES] =
+     {
+      [Tst_INVALID_QUESTION] = "TEST_TXT_LIGHT_RED",
+      [Tst_VALID_QUESTION  ] = "TEST_TXT_LIGHT",
+     };
+
    /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteNumQst (QstInd);
-   Tst_WriteAnswerType (Question->Answer.Type);
+   Tst_WriteNumQst (QstInd,ClassNumQst[Question->Validity]);
+   Tst_WriteAnswerType (Question->Answer.Type,ClassAnswerType[Question->Validity]);
    HTM_TD_End ();
 
    /***** Write stem (row[3]) and media *****/
@@ -1554,7 +1597,7 @@ static void ExaSet_ListQuestionForEdition (struct Tst_Question *Question,
    HTM_ARTICLE_Begin (Anchor);
 
    /* Write stem */
-   Tst_WriteQstStem (Question->Stem,"TEST_EDI",
+   Tst_WriteQstStem (Question->Stem,ClassTxt[Question->Validity],
 		     true);	// Visible
 
    /* Show media */
@@ -1563,10 +1606,12 @@ static void ExaSet_ListQuestionForEdition (struct Tst_Question *Question,
 		  "TEST_MED_EDIT_LIST");
 
    /* Show feedback */
-   Tst_WriteQstFeedback (Question->Feedback,"TEST_EDI_LIGHT");
+   Tst_WriteQstFeedback (Question->Feedback,ClassFeedback[Question->Validity]);
 
    /* Show answers */
-   Tst_WriteAnswersBank (Question);
+   Tst_WriteAnswersBank (Question,
+                         ClassTxt[Question->Validity],
+                         ClassFeedback[Question->Validity]);
 
    HTM_ARTICLE_End ();
    HTM_TD_End ();
@@ -1673,6 +1718,11 @@ static void ExaSet_CopyQstFromBankToExamSet (struct ExaSet_Set *Set,long QstCod)
    unsigned NumOpt;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   static char CharInvalid[Tst_NUM_VALIDITIES] =
+     {
+      [Tst_INVALID_QUESTION] = 'Y',
+      [Tst_VALID_QUESTION  ] = 'N'
+     };
 
    /***** Create test question *****/
    Tst_QstConstructor (&Question);
@@ -1687,10 +1737,11 @@ static void ExaSet_CopyQstFromBankToExamSet (struct ExaSet_Set *Set,long QstCod)
       /***** Insert question in table of questions *****/
       QstCodInSet = DB_QueryINSERTandReturnCode ("can not add question to set",
 						 "INSERT INTO exa_set_questions"
-						 " (SetCod,AnsType,Shuffle,Stem,Feedback,MedCod)"
+						 " (SetCod,Invalid,AnsType,Shuffle,Stem,Feedback,MedCod)"
 						 " VALUES"
-						 " (%ld,'%s','%c','%s','%s',%ld)",
+						 " (%ld,'%c','%s','%c','%s','%s',%ld)",
 						 Set->SetCod,
+						 CharInvalid[Question.Validity],
 						 Tst_StrAnswerTypesDB[Question.Answer.Type],
 						 Question.Answer.Shuffle ? 'Y' :
 									   'N',
@@ -2069,6 +2120,64 @@ static void ExaSet_RemoveMediaFromAllAnsOfQst (long SetCod,long QstCod)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/***************************** Validate a question ***************************/
+/*****************************************************************************/
+
+void ExaSet_ValidateQst (void)
+  {
+   ExaSet_ChangeValidityQst (Tst_VALID_QUESTION);
+  }
+
+void ExaSet_InvalidateQst (void)
+  {
+   ExaSet_ChangeValidityQst (Tst_INVALID_QUESTION);
+  }
+
+static void ExaSet_ChangeValidityQst (Tst_Validity_t Validity)
+  {
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   struct ExaSet_Set Set;
+   long QstCod;
+   static char CharInvalid[Tst_NUM_VALIDITIES] =
+     {
+      [Tst_INVALID_QUESTION] = 'Y',
+      [Tst_VALID_QUESTION  ] = 'N'
+     };
+
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
+   Exa_ResetExam (&Exam);
+   ExaSet_ResetSet (&Set);
+
+   /***** Get and check parameters *****/
+   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+
+   /***** Get question index *****/
+   QstCod = ExaSet_GetParamQstCod ();
+
+   /***** Validate question *****/
+   DB_QueryUPDATE ("can not validate question",
+		   "UPDATE exa_set_questions,exa_sets,exa_exams"
+		   " SET exa_set_questions.Invalid='%c'"
+		   " WHERE exa_set_questions.QstCod=%ld"
+		   " AND exa_set_questions.SetCod=%ld"		// Extra check
+		   " AND exa_set_questions.SetCod=exa_sets.SetCod"
+		   " AND exa_sets.ExaCod=%ld"			// Extra check
+		   " AND exa_sets.ExaCod=exa_exams.ExaCod"
+		   " AND exa_exams.CrsCod=%ld",			// Extra check
+		   CharInvalid[Validity],
+		   QstCod,
+		   Set.SetCod,
+		   Exam.ExaCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+
+   /***** Show current exam and its sets *****/
+   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+                        false);	// It's not a new exam
   }
 
 /*****************************************************************************/

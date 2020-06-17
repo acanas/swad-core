@@ -715,6 +715,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActAddQstToExa	] = {1887,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_AddQstsToSet		,NULL},
    [ActReqRemSetQst	] = {1888,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RequestRemoveQstFromSet	,NULL},
    [ActRemExaQst	] = {1889,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RemoveQstFromSet	,NULL},
+   [ActValSetQst	] = {1909,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_ValidateQst		,NULL},
+   [ActInvSetQst	] = {1910,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_InvalidateQst		,NULL},
 
    [ActReqNewExaSes	] = {1852,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSes_RequestCreatOrEditSession,NULL},
    [ActEdiOneExaSes	] = {1902,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSes_RequestCreatOrEditSession,NULL},
@@ -3718,6 +3720,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActAnsExaPrn,		// #1906
 	ActEdiTag,		// #1907
 	ActEndExaPrn,		// #1908
+	ActValSetQst,		// #1909
+	ActInvSetQst,		// #1910
   };
 
 /*****************************************************************************/

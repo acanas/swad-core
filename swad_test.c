@@ -167,10 +167,18 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
 
 //-----------------------------------------------------------------------------
 
-static void Tst_WriteIntAnsBank (struct Tst_Question *Question);
-static void Tst_WriteFltAnsBank (struct Tst_Question *Question);
-static void Tst_WriteTF_AnsBank (struct Tst_Question *Question);
-static void Tst_WriteChoAnsBank (struct Tst_Question *Question);
+static void Tst_WriteIntAnsBank (struct Tst_Question *Question,
+                                 const char *ClassTxt,
+                                 __attribute__((unused)) const char *ClassFeedback);
+static void Tst_WriteFltAnsBank (struct Tst_Question *Question,
+                                 const char *ClassTxt,
+                                 __attribute__((unused)) const char *ClassFeedback);
+static void Tst_WriteTF_AnsBank (struct Tst_Question *Question,
+                                 const char *ClassTxt,
+                                 __attribute__((unused)) const char *ClassFeedback);
+static void Tst_WriteChoAnsBank (struct Tst_Question *Question,
+                                 const char *ClassTxt,
+                                 const char *ClassFeedback);
 
 //-----------------------------------------------------------------------------
 
@@ -722,9 +730,9 @@ void Tst_ListQuestionForEdition (struct Tst_Question *Question,
 
    /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteNumQst (QstInd);
+   Tst_WriteNumQst (QstInd,"BIG_INDEX");
    if (QuestionExists)
-      Tst_WriteAnswerType (Question->Answer.Type);
+      Tst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
    HTM_TD_End ();
 
    /***** Write question code *****/
@@ -744,7 +752,7 @@ void Tst_ListQuestionForEdition (struct Tst_Question *Question,
    if (QuestionExists)
      {
       /* Write stem */
-      Tst_WriteQstStem (Question->Stem,"TEST_EDI",
+      Tst_WriteQstStem (Question->Stem,"TEST_TXT",
 			true);	// Visible
 
       /* Show media */
@@ -753,10 +761,10 @@ void Tst_ListQuestionForEdition (struct Tst_Question *Question,
 		     "TEST_MED_EDIT_LIST");
 
       /* Show feedback */
-      Tst_WriteQstFeedback (Question->Feedback,"TEST_EDI_LIGHT");
+      Tst_WriteQstFeedback (Question->Feedback,"TEST_TXT_LIGHT");
 
       /* Show answers */
-      Tst_WriteAnswersBank (Question);
+      Tst_WriteAnswersBank (Question,"TEST_TXT","TEST_TXT_LIGHT");
      }
    else
      {
@@ -773,9 +781,9 @@ void Tst_ListQuestionForEdition (struct Tst_Question *Question,
 /*****************************************************************************/
 // Number of question should be 1, 2, 3...
 
-void Tst_WriteNumQst (unsigned NumQst)
+void Tst_WriteNumQst (unsigned NumQst,const char *Class)
   {
-   HTM_DIV_Begin ("class=\"BIG_INDEX\"");
+   HTM_DIV_Begin ("class=\"%s\"",Class);
    HTM_Unsigned (NumQst);
    HTM_DIV_End ();
   }
@@ -784,11 +792,11 @@ void Tst_WriteNumQst (unsigned NumQst)
 /************************** Write the type of answer *************************/
 /*****************************************************************************/
 
-void Tst_WriteAnswerType (Tst_AnswerType_t AnswerType)
+void Tst_WriteAnswerType (Tst_AnswerType_t AnswerType,const char *Class)
   {
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
 
-   HTM_DIV_Begin ("class=\"DAT_SMALL\"");
+   HTM_DIV_Begin ("class=\"%s\"",Class);
    HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnswerType]);
    HTM_DIV_End ();
   }
@@ -2311,8 +2319,8 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
 
       /* Number of question and answer type */
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteNumQst (NumQst + 1);
-      Tst_WriteAnswerType (Test->Question.Answer.Type);
+      Tst_WriteNumQst (NumQst + 1,"BIG_INDEX");
+      Tst_WriteAnswerType (Test->Question.Answer.Type,"DAT_SMALL");
       HTM_TD_End ();
 
       /* Question code */
@@ -2358,7 +2366,7 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
 
       /* Stem (row[3]) */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteQstStem (Test->Question.Stem,"TEST_EDI",
+      Tst_WriteQstStem (Test->Question.Stem,"TEST_TXT",
 			true);	// Visible
 
       /***** Get and show media (row[5]) *****/
@@ -2367,8 +2375,8 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
 		     "TEST_MED_EDIT_LIST");
 
       /* Feedback (row[4]) and answers */
-      Tst_WriteQstFeedback (Test->Question.Feedback,"TEST_EDI_LIGHT");
-      Tst_WriteAnswersBank (&Test->Question);
+      Tst_WriteQstFeedback (Test->Question.Feedback,"TEST_TXT_LIGHT");
+      Tst_WriteAnswersBank (&Test->Question,"TEST_TXT","TEST_TXT_LIGHT");
       HTM_TD_End ();
 
       /* Number of times this question has been answered */
@@ -2658,7 +2666,7 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
 
       /* Write stem */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteQstStem (Question->Stem,"TEST_EDI",
+      Tst_WriteQstStem (Question->Stem,"TEST_TXT",
 			true);	// Visible
 
       /***** Get and show media *****/
@@ -2667,10 +2675,10 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
 		     "TEST_MED_EDIT_LIST");
 
       /* Write feedback */
-      Tst_WriteQstFeedback (Question->Feedback,"TEST_EDI_LIGHT");
+      Tst_WriteQstFeedback (Question->Feedback,"TEST_TXT_LIGHT");
 
       /* Write answers */
-      Tst_WriteAnswersBank (Question);
+      Tst_WriteAnswersBank (Question,"TEST_TXT","TEST_TXT_LIGHT");
       HTM_TD_End ();
 
       /***** End table row *****/
@@ -2766,9 +2774,13 @@ void Tst_ChangeFormatAnswersFeedback (struct Tst_Question *Question)
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
-void Tst_WriteAnswersBank (struct Tst_Question *Question)
+void Tst_WriteAnswersBank (struct Tst_Question *Question,
+                           const char *ClassTxt,
+                           const char *ClassFeedback)
   {
-   void (*Tst_WriteAnsBank[Tst_NUM_ANS_TYPES]) (struct Tst_Question *Question) =
+   void (*Tst_WriteAnsBank[Tst_NUM_ANS_TYPES]) (struct Tst_Question *Question,
+                                                const char *ClassTxt,
+                                                const char *ClassFeedback) =
     {
      [Tst_ANS_INT            ] = Tst_WriteIntAnsBank,
      [Tst_ANS_FLOAT          ] = Tst_WriteFltAnsBank,
@@ -2779,7 +2791,7 @@ void Tst_WriteAnswersBank (struct Tst_Question *Question)
     };
 
    /***** Write answers *****/
-   Tst_WriteAnsBank[Question->Answer.Type] (Question);
+   Tst_WriteAnsBank[Question->Answer.Type] (Question,ClassTxt,ClassFeedback);
   }
 
 /*****************************************************************************/
@@ -2800,9 +2812,11 @@ bool Tst_CheckIfQuestionIsValidForGame (long QstCod)
 /****************** Write integer answer when editing a test *****************/
 /*****************************************************************************/
 
-static void Tst_WriteIntAnsBank (struct Tst_Question *Question)
+static void Tst_WriteIntAnsBank (struct Tst_Question *Question,
+                                 const char *ClassTxt,
+                                 __attribute__((unused)) const char *ClassFeedback)
   {
-   HTM_SPAN_Begin ("class=\"TEST_EDI\"");
+   HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
    HTM_TxtF ("(%ld)",Question->Answer.Integer);
    HTM_SPAN_End ();
   }
@@ -2811,9 +2825,11 @@ static void Tst_WriteIntAnsBank (struct Tst_Question *Question)
 /****************** Write float answer when editing a test *******************/
 /*****************************************************************************/
 
-static void Tst_WriteFltAnsBank (struct Tst_Question *Question)
+static void Tst_WriteFltAnsBank (struct Tst_Question *Question,
+                                 const char *ClassTxt,
+                                 __attribute__((unused)) const char *ClassFeedback)
   {
-   HTM_SPAN_Begin ("class=\"TEST_EDI\"");
+   HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
    HTM_Txt ("([");
    HTM_Double (Question->Answer.FloatingPoint[0]);
    HTM_Txt ("; ");
@@ -2826,10 +2842,12 @@ static void Tst_WriteFltAnsBank (struct Tst_Question *Question)
 /*********** Write false / true answer when listing test questions ***********/
 /*****************************************************************************/
 
-static void Tst_WriteTF_AnsBank (struct Tst_Question *Question)
+static void Tst_WriteTF_AnsBank (struct Tst_Question *Question,
+                                 const char *ClassTxt,
+                                 __attribute__((unused)) const char *ClassFeedback)
   {
    /***** Write answer *****/
-   HTM_SPAN_Begin ("class=\"TEST_EDI\"");
+   HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
    HTM_Txt ("(");
    Tst_WriteAnsTF (Question->Answer.TF);
    HTM_Txt (")");
@@ -2840,7 +2858,9 @@ static void Tst_WriteTF_AnsBank (struct Tst_Question *Question)
 /**** Write single or multiple choice answer when listing test questions *****/
 /*****************************************************************************/
 
-static void Tst_WriteChoAnsBank (struct Tst_Question *Question)
+static void Tst_WriteChoAnsBank (struct Tst_Question *Question,
+                                 const char *ClassTxt,
+                                 const char *ClassFeedback)
   {
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    unsigned NumOpt;
@@ -2865,14 +2885,14 @@ static void Tst_WriteChoAnsBank (struct Tst_Question *Question)
       HTM_TD_End ();
 
       /* Write the number of option */
-      HTM_TD_Begin ("class=\"DAT_SMALL LT\"");
+      HTM_TD_Begin ("class=\"%s LT\"",ClassTxt);
       HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
 
       /* Write the text of the answer and the media */
-      HTM_DIV_Begin ("class=\"TEST_EDI\"");
+      HTM_DIV_Begin ("class=\"%s\"",ClassTxt);
       HTM_Txt (Question->Answer.Options[NumOpt].Text);
       Med_ShowMedia (&Question->Answer.Options[NumOpt].Media,
 		     "TEST_MED_EDIT_LIST_CONT",
@@ -2880,7 +2900,7 @@ static void Tst_WriteChoAnsBank (struct Tst_Question *Question)
       HTM_DIV_End ();
 
       /* Write the text of the feedback */
-      HTM_DIV_Begin ("class=\"TEST_EDI_LIGHT\"");
+      HTM_DIV_Begin ("class=\"%s\"",ClassFeedback);
       HTM_Txt (Question->Answer.Options[NumOpt].Feedback);
       HTM_DIV_End ();
 
@@ -3728,6 +3748,9 @@ void Tst_QstConstructor (struct Tst_Question *Question)
    Question->NumHits =
    Question->NumHitsNotBlank = 0;
    Question->Score = 0.0;
+
+   /***** Mark question as valid *****/
+   Question->Validity = Tst_VALID_QUESTION;
   }
 
 /*****************************************************************************/

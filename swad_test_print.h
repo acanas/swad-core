@@ -117,7 +117,9 @@ void TstPrn_ShowGrade (double Grade,double MaxGrade);
 void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
                               const struct TstPrn_PrintedQuestion *PrintedQuestion,
 			      struct Tst_Question *Question,
-			      bool IsVisible[TstVis_NUM_ITEMS_VISIBILITY]);
+			      bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+			      const char *ClassTxt,
+			      const char *ClassFeedback);
 
 void TstPrn_SelUsrsToViewUsrsPrints (void);
 void TstPrn_SelDatesToSeeMyPrints (void);

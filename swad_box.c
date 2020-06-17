@@ -182,7 +182,7 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
       HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\"",
 	           Gbl.Box.Ids[Gbl.Box.Nested]);
       Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
-		      "close.svg",Txt_Close);
+		      "times.svg",Txt_Close);
       HTM_A_End ();
      }
 
