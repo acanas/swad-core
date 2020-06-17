@@ -1266,8 +1266,9 @@ static void Exa_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
    NumMedia =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
 			      "SELECT exa_set_questions.MedCod"	// row[0]
-			      " FROM exa_sets,exa_set_questions"
-			      " WHERE exa_sets.CrsCod=%ld"
+			      " FROM exa_exams,exa_sets,exa_set_questions"
+			      " WHERE exa_exams.CrsCod=%ld"
+                              " AND exa_exams.ExaCod=exa_sets.ExaCod"
                               " AND exa_sets.SetCod=exa_set_questions.SetCod",
 			      CrsCod);
 
@@ -1291,8 +1292,9 @@ static void Exa_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod)
    NumMedia =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
 			      "SELECT exa_set_answers.MedCod"	// row[0]
-			      " FROM exa_sets,exa_set_questions,exa_set_answers"
-			      " WHERE exa_sets.CrsCod=%ld"
+			      " FROM exa_exams,exa_sets,exa_set_questions,exa_set_answers"
+			      " WHERE exa_exams.CrsCod=%ld"
+                              " AND exa_exams.ExaCod=exa_sets.ExaCod"
                               " AND exa_sets.SetCod=exa_set_questions.SetCod"
 			      " AND exa_set_questions.QstCod=exa_set_answers.QstCod",
 			      CrsCod);

@@ -556,7 +556,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.249 (2020-06-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.249.1 (2020-06-17)"
 #define CSS_FILE		"swad19.238.2.css"
 #define JS_FILE			"swad19.246.1.js"
 /*
@@ -564,6 +564,7 @@ TODO:  Encarnación Hidalgo Tenorio: Antonio, ¿podría @swad_ugr mandar una notifi
        Se trataría de añadir un par de líneas "Nuevos archivos en actividades", "Nuevos archivos en otros trabajos".
 TODO: Fix bug: Cuando se pulsa en ver fichas, y luego en una ficha en "Ver trabajos" o "Ver exámenes", o lo que sea, sale dos veces ese estudiante.
 
+	Version 19.249.1: Jun 17, 2020  Fixed bug removing a course. Reported by Raymon Moreno Colina. (302789 lines)
 	Version 19.249:   Jun 17, 2020  Fixed bug in exams and matches.
 					Code refactoring in test questions. (302786 lines)
 	Version 19.248.4: May 30, 2020  Code refactoring in selection of questions. (302867 lines)
