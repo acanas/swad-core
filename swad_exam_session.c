@@ -1349,7 +1349,7 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Groups);
+      HTM_TxtColon (Txt_Groups);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");

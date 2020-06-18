@@ -9556,7 +9556,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtF ("%s:",Txt_Filename);
+	 HTM_TxtColon (Txt_Filename);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LB\"");
@@ -9569,7 +9569,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtF ("%s:",Txt_Uploaded_by);
+	 HTM_TxtColon (Txt_Uploaded_by);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LB\"");
@@ -9601,7 +9601,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtF ("%s:",Txt_File_size);
+	 HTM_TxtColon (Txt_File_size);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LB\"");
@@ -9614,7 +9614,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtF ("%s:",Txt_Date_of_creation);
+	 HTM_TxtColon (Txt_Date_of_creation);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("id=\"filedate\" class=\"DAT LB\"");
@@ -9687,7 +9687,7 @@ void Brw_ShowFileMetadata (void)
 	    HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	    HTM_TxtF ("%s:",Txt_My_views);
+	    HTM_TxtColon (Txt_My_views);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT LB\"");
@@ -9701,7 +9701,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtF ("%s:",Txt_Identified_views);
+	 HTM_TxtColon (Txt_Identified_views);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LB\"");
@@ -9718,7 +9718,7 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtF ("%s:",Txt_Public_views);
+	 HTM_TxtColon (Txt_Public_views);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LB\"");

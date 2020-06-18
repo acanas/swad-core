@@ -340,7 +340,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    if (ShowAllAnnouncements)
      {
       /* Users' roles who can view this announcement */
-      HTM_TxtF ("%s:",Txt_Users);
+      HTM_TxtColon (Txt_Users);
       for (Role = Rol_UNK, SomeRolesAreSelected = false;
 	   Role <= Rol_TCH;
 	   Role++)

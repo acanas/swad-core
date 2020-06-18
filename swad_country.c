@@ -1268,7 +1268,7 @@ static void Cty_ListCountriesForEdition (void)
 
 	 /* Language */
          HTM_TD_Begin ("class=\"DAT RM\"");
-         HTM_TxtF ("%s:",Txt_STR_LANG_NAME[Lan]);
+         HTM_TxtColon (Txt_STR_LANG_NAME[Lan]);
          HTM_TD_End ();
 
          /* Name */

@@ -1288,7 +1288,7 @@ void Asg_RequestCreatOrEditAsg (void)
    /* Data */
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"DAT\"");
-   HTM_TxtF ("%s:",Txt_Folder);
+   HTM_TxtColon (Txt_Folder);
    HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Asg.Folder,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"Folder\" size=\"30\"");
@@ -1351,7 +1351,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Groups);
+      HTM_TxtColon (Txt_Groups);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");

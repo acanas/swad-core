@@ -550,9 +550,7 @@ void Tst_AssessTest (void)
 	 HTM_Double2Decimals (Print.Score);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Grade);
-	 TstPrn_ComputeAndShowGrade (Print.NumQsts,
-				     Print.Score,
-				     Tst_SCORE_MAX);
+	 TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,Tst_SCORE_MAX);
 	 HTM_DIV_End ();
 	}
 
@@ -1434,7 +1432,7 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Plugins);
+   HTM_TxtColon (Txt_Plugins);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");
@@ -1460,7 +1458,7 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Number_of_questions);
+   HTM_TxtColon (Txt_Number_of_questions);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");
@@ -1499,7 +1497,7 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Result_visibility);
+   HTM_TxtColon (Txt_Result_visibility);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");
@@ -1571,7 +1569,7 @@ static void Tst_ShowFormAnswerTypes (const struct Tst_AnswerTypes *AnswerTypes)
 
    /***** Label *****/
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Types_of_answers);
+   HTM_TxtColon (Txt_Types_of_answers);
    HTM_TD_End ();
 
    /***** Select all types of answers *****/
@@ -3315,7 +3313,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Tags);
+   HTM_TxtColon (Txt_Tags);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
@@ -3423,7 +3421,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Type);
+   HTM_TxtColon (Txt_Type);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -3450,7 +3448,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Answers);
+   HTM_TxtColon (Txt_Answers);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");

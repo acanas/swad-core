@@ -6357,7 +6357,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TxtF ("%s:",Txt_Users);
+         HTM_TxtColon (Txt_Users);
          HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -6482,8 +6482,8 @@ static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
    else
       Rol_WrongRoleExit ();
    Sex = Usr_GetSexOfUsrsLst (Role);
-   HTM_TxtF ("%s:",Gbl.Usrs.LstUsrs[Role].NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
-                                                         Txt_ROLES_PLURAL_Abc[Role][Sex]);
+   HTM_TxtColon (Gbl.Usrs.LstUsrs[Role].NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
+                                                       Txt_ROLES_PLURAL_Abc[Role][Sex]);
    HTM_LABEL_End ();
 
    HTM_TH_End ();

@@ -461,7 +461,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 
    /***** Label *****/
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Tags);
+   HTM_TxtColon (Txt_Tags);
    HTM_TD_End ();
 
    /***** Select all tags *****/

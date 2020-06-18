@@ -324,7 +324,7 @@ void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label)
      }
    else
       HTM_LABEL_Begin ("class=\"DAT\"");
-   HTM_TxtF ("%s:",Label);
+   HTM_TxtColon (Label);
    HTM_LABEL_End ();
 
    /***** Column/cell end *****/

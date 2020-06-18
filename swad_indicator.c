@@ -188,7 +188,7 @@ void Ind_ReqIndicatorsCourses (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Number_of_indicators);
+   HTM_TxtColon (Txt_Number_of_indicators);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");

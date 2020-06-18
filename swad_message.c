@@ -355,7 +355,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_MSG_To);
+   HTM_TxtColon (Txt_MSG_To);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
@@ -551,8 +551,8 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 
    HTM_TH_Begin (1,ColSpan,"LM LIGHT_BLUE");
    HTM_LABEL_Begin ("for=\"OtherRecipients\"");
-   HTM_TxtF ("%s:",StdsAndTchsWritten ? Txt_Other_recipients :
-				        Txt_Recipients);
+   HTM_TxtColon (StdsAndTchsWritten ? Txt_Other_recipients :
+				      Txt_Recipients);
    HTM_LABEL_End ();
    HTM_TH_End ();
 

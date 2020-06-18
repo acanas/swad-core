@@ -162,12 +162,12 @@ static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print)
    Print->PrnCod                  = -1L;
    Print->TimeUTC[Dat_START_TIME] =
    Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
-   Print->NumQsts                 =
-   Print->NumQstsValid            =
-   Print->NumQstsNotBlank         = 0;
+   Print->NumQsts.All             =
+   Print->NumQsts.Valid           =
+   Print->NumQsts.NotBlank        = 0;
    Print->Sent                    = false;	// After creating an exam print, it's not sent
-   Print->Score                   =
-   Print->ScoreValid              = 0.0;
+   Print->Score.All               =
+   Print->Score.Valid             = 0.0;
   }
 
 /*****************************************************************************/
@@ -204,7 +204,7 @@ void ExaPrn_ShowExamPrint (void)
 	 /***** Get questions from database *****/
 	 ExaPrn_GetQuestionsForNewPrintFromDB (&Print,Exam.ExaCod);
 
-	 if (Print.NumQsts)
+	 if (Print.NumQsts.All)
 	   {
 	    /***** Create new exam print in database *****/
 	    ExaPrn_CreatePrintInDB (&Print);
@@ -268,20 +268,20 @@ void ExaPrn_GetDataOfPrintByCodAndUsrCod (struct ExaPrn_Print *Print)
       Print->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[2]);
 
       /* Get number of questions (row[3]) */
-      if (sscanf (row[3],"%u",&Print->NumQsts) != 1)
-	 Print->NumQsts = 0;
+      if (sscanf (row[3],"%u",&Print->NumQsts.All) != 1)
+	 Print->NumQsts.All = 0;
 
       /* Get number of questions not blank (row[4]) */
-      if (sscanf (row[4],"%u",&Print->NumQstsNotBlank) != 1)
-	 Print->NumQstsNotBlank = 0;
+      if (sscanf (row[4],"%u",&Print->NumQsts.NotBlank) != 1)
+	 Print->NumQsts.NotBlank = 0;
 
       /* Get if exam has been sent (row[5]) */
       Print->Sent = (row[5][0] == 'Y');
 
       /* Get score (row[6]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[6],"%lf",&Print->Score) != 1)
-	 Print->Score = 0.0;
+      if (sscanf (row[6],"%lf",&Print->Score.All) != 1)
+	 Print->Score.All = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
    else
@@ -317,7 +317,7 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,lon
 			      ExaCod);
 
    /***** Get questions from all sets *****/
-   Print->NumQsts = 0;
+   Print->NumQsts.All = 0;
    if (NumSets)
       /***** For each set in exam... *****/
       for (NumSet = 0;
@@ -346,11 +346,11 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,lon
 
 	 /***** Questions in this set *****/
 	 NumQstsFromSet = ExaPrn_GetSomeQstsFromSetToPrint (Print,&Set,&NumQstInPrint);
-	 Print->NumQsts += NumQstsFromSet;
+	 Print->NumQsts.All += NumQstsFromSet;
 	}
 
    /***** Check *****/
-   if (Print->NumQsts != NumQstInPrint)
+   if (Print->NumQsts.All != NumQstInPrint)
       Lay_ShowErrorAndExit ("Wrong number of questions.");
 
    /***** Free structure that stores the query result *****/
@@ -531,7 +531,7 @@ static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print)
    /***** Store all questions (with blank answers)
           of this exam print just generated in database *****/
    for (NumQst = 0;
-	NumQst < Print->NumQsts;
+	NumQst < Print->NumQsts.All;
 	NumQst++)
       ExaPrn_StoreOneQstOfPrintInDB (Print,NumQst);
   }
@@ -547,7 +547,7 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
    unsigned NumQst;
 
    /***** Get questions of an exam print from database *****/
-   Print->NumQsts =
+   Print->NumQsts.All =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions"
 					 " of an exam print",
 			      "SELECT QstCod,"	// row[0]
@@ -561,9 +561,9 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 			      Print->PrnCod);
 
    /***** Get questions *****/
-   if (Print->NumQsts <= ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT)
+   if (Print->NumQsts.All <= ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT)
       for (NumQst = 0;
-	   NumQst < Print->NumQsts;
+	   NumQst < Print->NumQsts.All;
 	   NumQst++)
 	{
 	 row = mysql_fetch_row (mysql_res);
@@ -594,7 +594,7 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (Print->NumQsts > ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT)
+   if (Print->NumQsts.All > ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT)
       Lay_ShowErrorAndExit ("Too many questions.");
   }
 
@@ -620,7 +620,7 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
 			      Gbl.Hierarchy.Crs.CrsCod);
    ExaPrn_GetAndWriteDescription (Exam->ExaCod);
 
-   if (Print->NumQsts)
+   if (Print->NumQsts.All)
      {
       /***** Show table with questions to answer *****/
       HTM_DIV_Begin ("id=\"examprint\"");	// Used for AJAX based refresh
@@ -668,7 +668,7 @@ static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
 
    /***** Write one row for each question *****/
    for (NumQst = 0;
-	NumQst < Print->NumQsts;
+	NumQst < Print->NumQsts.All;
 	NumQst++)
      {
       /* Create test question */
@@ -1424,11 +1424,11 @@ static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
 static void ExaPrn_GetNumQstsNotBlank (struct ExaPrn_Print *Print)
   {
    /***** Count number of questions not blank in exam print in database *****/
-   Print->NumQstsNotBlank = (unsigned)
-	                    DB_QueryCOUNT ("can not get number of questions not blank",
-				           "SELECT COUNT(*) FROM exa_print_questions"
-				           " WHERE PrnCod=%ld AND Answers<>''",
-				           Print->PrnCod);
+   Print->NumQsts.NotBlank = (unsigned)
+			     DB_QueryCOUNT ("can not get number of questions not blank",
+			                    "SELECT COUNT(*) FROM exa_print_questions"
+			                    " WHERE PrnCod=%ld AND Answers<>''",
+			                    Print->PrnCod);
   }
 
 /*****************************************************************************/
@@ -1441,7 +1441,7 @@ static void ExaPrn_ComputeTotalScoreOfPrint (struct ExaPrn_Print *Print)
    MYSQL_ROW row;
 
    /***** Default score *****/
-   Print->Score = 0.0;
+   Print->Score.All = 0.0;
 
    /***** Compute total score of exam print *****/
    if (DB_QuerySELECT (&mysql_res,"can not get score of exam print",
@@ -1456,8 +1456,8 @@ static void ExaPrn_ComputeTotalScoreOfPrint (struct ExaPrn_Print *Print)
 	{
 	 /* Get score (row[0]) */
 	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-	 if (sscanf (row[0],"%lf",&Print->Score) != 1)
-	    Print->Score = 0.0;
+	 if (sscanf (row[0],"%lf",&Print->Score.All) != 1)
+	    Print->Score.All = 0.0;
 	 Str_SetDecimalPointToLocal ();	// Return to local system
 	}
      }
@@ -1482,7 +1482,7 @@ static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print)
 	                "Score='%.15lg'"
 	           " WHERE PrnCod=%ld"
 	           " AND SesCod=%ld AND UsrCod=%ld",	// Extra checks
-		   Print->NumQstsNotBlank,
+		   Print->NumQsts.NotBlank,
 		   Print->Sent ? 'Y' :
 			         'N',
 		   Print->Score,

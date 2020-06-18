@@ -1388,7 +1388,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 		       ClassLabel);
          break;
      }
-   HTM_TxtF ("%s:",Txt_Assigned_QUESTION);
+   HTM_TxtColon (Txt_Assigned_QUESTION);
    HTM_TD_End ();
 
    switch (ProjectView)
@@ -1428,7 +1428,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 		       ClassLabel);
          break;
      }
-   HTM_TxtF ("%s:",Txt_Number_of_students);
+   HTM_TxtColon (Txt_Number_of_students);
    HTM_TD_End ();
 
    switch (ProjectView)
@@ -1502,7 +1502,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 	 HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
 	 break;
      }
-   HTM_TxtF ("%s:",Txt_Proposal);
+   HTM_TxtColon (Txt_Proposal);
    HTM_TD_End ();
 
    switch (ProjectView)
@@ -1862,7 +1862,7 @@ static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
 	 // Not applicable
 	 break;
      }
-   HTM_TxtF ("%s:",Label);
+   HTM_TxtColon (Label);
    HTM_TD_End ();
 
    /***** Change text format *****/
@@ -1957,7 +1957,7 @@ static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
 	 // Not applicable
 	 break;
      }
-   HTM_TxtF ("%s:",Txt_URL);
+   HTM_TxtColon (Txt_URL);
    HTM_TD_End ();
 
    switch (ProjectView)
@@ -2073,22 +2073,22 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",
 			  ClassLabel,Gbl.RowEvenOdd);
-	    HTM_TxtF ("%s:",NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-		                           Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
+		                         Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
 	    break;
 	 case Prj_FILE_BROWSER_PROJECT:
 	    HTM_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
-	    HTM_TxtF ("%s:",NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-		                           Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
+		                         Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
 	    break;
 	 case Prj_PRINT_ONE_PROJECT:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
-	    HTM_TxtF ("%s:",NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-		                           Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
+		                         Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
 	    break;
 	 case Prj_EDIT_ONE_PROJECT:
 	    HTM_TD_Begin ("class=\"RT ASG_LABEL\"");
-	    HTM_TxtF ("%s:",Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    HTM_TxtColon (Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
 	    break;
 	}
       HTM_TD_End ();
@@ -3702,7 +3702,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Assigned_QUESTION);
+   HTM_TxtColon (Txt_Assigned_QUESTION);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -3721,7 +3721,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Number_of_students);
+   HTM_TxtColon (Txt_Number_of_students);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -3736,7 +3736,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Proposal);
+   HTM_TxtColon (Txt_Proposal);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");

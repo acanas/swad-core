@@ -3138,7 +3138,7 @@ static void Fig_GetAndShowTestsStats (void)
    extern const char *Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded;
    extern const char *Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course;
    extern const char *Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded;
-   extern const char *Txt_Average_BR_score_BR_per_question_BR_from_0_to_1;
+   extern const char *Txt_Average_BR_score_BR_per_question_BR_less_than_or_equal_to_1;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    extern const char *Txt_Total;
    Tst_AnswerType_t AnsType;
@@ -3160,7 +3160,7 @@ static void Fig_GetAndShowTestsStats (void)
    HTM_TH (1,1,"RM",Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded);
    HTM_TH (1,1,"RM",Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course);
    HTM_TH (1,1,"RM",Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded);
-   HTM_TH (1,1,"RM",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
+   HTM_TH (1,1,"RM",Txt_Average_BR_score_BR_per_question_BR_less_than_or_equal_to_1);
 
    HTM_TR_End ();
 

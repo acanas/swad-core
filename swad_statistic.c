@@ -316,7 +316,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TxtF ("%s:",Txt_Users);
+         HTM_TxtColon (Txt_Users);
          HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -349,7 +349,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"RM %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TxtF ("%s:",Txt_Show);
+         HTM_TxtColon (Txt_Show);
          HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LM\"");

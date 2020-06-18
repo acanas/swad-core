@@ -2819,25 +2819,25 @@ const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 #endif
 	};
 
-const char *Txt_Average_BR_score_BR_per_question_BR_from_0_to_1 =
+const char *Txt_Average_BR_score_BR_per_question_BR_less_than_or_equal_to_1 =
 #if   L==1	// ca
-	"Puntuaci&oacute;n<br />media<br />por pregunta<br />(de 0 a 1)";	// Necessita traduccio
+	"Puntuaci&oacute;<br />mitjana<br />per pregunta<br />(&le;1)";
 #elif L==2	// de
-	"Average<br />score<br />per question<br />(from 0 to 1)";		// Need Übersetzung
+	"Durchschnittliche<br />Punktzahl<br />pro Frage<br />(&le;1)";
 #elif L==3	// en
-	"Average<br />score<br />per question<br />(from 0 to 1)";
+	"Average<br />score<br />per question<br />(&le;1)";
 #elif L==4	// es
-	"Puntuaci&oacute;n<br />media<br />por pregunta<br />(de 0 a 1)";
+	"Puntuaci&oacute;n<br />media<br />por pregunta<br />(&le;1)";
 #elif L==5	// fr
-	"Average<br />score<br />per question<br />(from 0 to 1)";		// Besoin de traduction
+	"Score<br />moyen<br />par question<br />(&le;1)";
 #elif L==6	// gn
-	"Puntuaci&oacute;n<br />media<br />por pregunta<br />(de 0 a 1)";	// Okoteve traducción
+	"Puntuaci&oacute;n<br />media<br />por pregunta<br />(&le;1)";	// Okoteve traducción
 #elif L==7	// it
-	"Average<br />score<br />per question<br />(from 0 to 1)";		// Bisogno di traduzione
+	"Punteggio<br />medio<br />per domanda<br />(&le;1)";
 #elif L==8	// pl
-	"Average<br />score<br />per question<br />(from 0 to 1)";		// Potrzebujesz tlumaczenie
+	"&Sacute;rednia<br />ocena<br />za pytanie<br />(&le;1)";
 #elif L==9	// pt
-	"Pontua&ccedil;&atilde;o<br />m&eacute;dia por<br />pergunta<br />(de 0 a 1)";
+	"Pontua&ccedil;&atilde;o<br />m&eacute;dia por<br />pergunta<br />(&le;1)";
 #endif
 
 const char *Txt_Average_type =
@@ -17850,6 +17850,27 @@ const char *Txt_Internationalization =
 	"Internacionaliza&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Invalid_question =
+#if   L==1	// ca
+	"Pregunta anul&middot;lada";
+#elif L==2	// de
+	"Frage storniert";
+#elif L==3	// en
+	"Invalid question";
+#elif L==4	// es
+	"Pregunta anulada";
+#elif L==5	// fr
+	"Question annul&eacute;e";
+#elif L==6	// gn
+	"Pregunta anulada";	// Okoteve traducción
+#elif L==7	// it
+	"Domanda annullata";
+#elif L==8	// pl
+	"Pytanie anulowane";
+#elif L==9	// pt
+	"Pergunta cancelada";
+#endif
+
 const char *Txt_IP =		// Internet Protocol address
 #if   L==1	// ca
 	"IP";
@@ -27165,27 +27186,6 @@ const char *Txt_nobody_else_can_access_this_content =
 	"ningu&eacute;m mais pode acessar este conte&uacute;do";
 #endif
 
-const char *Txt_non_blank_QUESTIONS =
-#if   L==1	// ca
-	"contestades";
-#elif L==2	// de
-	"Non-blank";
-#elif L==3	// en
-	"non-blank";
-#elif L==4	// es
-	"contestadas";
-#elif L==5	// fr
-	"non vide";
-#elif L==6	// gn
-	"contestadas";	// Okoteve traducción
-#elif L==7	// it
-	"risposte";
-#elif L==8	// pl
-	"niepustych";
-#elif L==9	// pt
-	"respondidas";
-#endif
-
 const char *Txt_Non_blank_BR_questions =
 #if   L==1	// ca
 	"Preguntes<br />contestades";
@@ -32846,48 +32846,6 @@ const char *Txt_Publish_announcement_OF_EXAM =
 	"Publicar chamada";
 #endif
 
-const char *Txt_question =
-#if   L==1	// ca
-	"pregunta";
-#elif L==2	// de
-	"Frage";
-#elif L==3	// en
-	"question";
-#elif L==4	// es
-	"pregunta";
-#elif L==5	// fr
-	"question";
-#elif L==6	// gn
-	"pregunta";	// Okoteve traducción
-#elif L==7	// it
-	"domande";
-#elif L==8	// pl
-	"pytanie";
-#elif L==9	// pt
-	"pergunta";
-#endif
-
-const char *Txt_questions =
-#if   L==1	// ca
-	"preguntes";
-#elif L==2	// de
-	"Fragen";
-#elif L==3	// en
-	"questions";
-#elif L==4	// es
-	"preguntas";
-#elif L==5	// fr
-	"questions";
-#elif L==6	// gn
-	"preguntas";	// Okoteve traducción
-#elif L==7	// it
-	"domande";
-#elif L==8	// pl
-	"pytania";
-#elif L==9	// pt
-	"perguntas";
-#endif
-
 const char *Txt_QR_code =
 #if   L==1	// ca
 	"Codi QR";
@@ -32907,6 +32865,27 @@ const char *Txt_QR_code =
 	"QR Code";
 #elif L==9	// pt
 	"C&oacute;digo QR";
+#endif
+
+const char *Txt_question =
+#if   L==1	// ca
+	"pregunta";
+#elif L==2	// de
+	"Frage";
+#elif L==3	// en
+	"question";
+#elif L==4	// es
+	"pregunta";
+#elif L==5	// fr
+	"question";
+#elif L==6	// gn
+	"pregunta";	// Okoteve traducción
+#elif L==7	// it
+	"domande";
+#elif L==8	// pl
+	"pytanie";
+#elif L==9	// pt
+	"pergunta";
 #endif
 
 const char *Txt_Question =
@@ -33014,6 +32993,27 @@ const char *Txt_Question_removed =
 	"Pergunta removida.";
 #endif
 
+const char *Txt_questions =
+#if   L==1	// ca
+	"preguntes";
+#elif L==2	// de
+	"Fragen";
+#elif L==3	// en
+	"questions";
+#elif L==4	// es
+	"preguntas";
+#elif L==5	// fr
+	"questions";
+#elif L==6	// gn
+	"preguntas";	// Okoteve traducción
+#elif L==7	// it
+	"domande";
+#elif L==8	// pl
+	"pytania";
+#elif L==9	// pt
+	"perguntas";
+#endif
+
 const char *Txt_Questions =
 #if   L==1	// ca
 	"Preguntes";
@@ -33056,6 +33056,48 @@ const char *Txt_Questions_and_problems =
 	"Perguntas e problemas";
 #endif
 
+const char *Txt_QUESTIONS_non_blank =
+#if   L==1	// ca
+	"contestades";
+#elif L==2	// de
+	"Non-blank";
+#elif L==3	// en
+	"non-blank";
+#elif L==4	// es
+	"contestadas";
+#elif L==5	// fr
+	"non vide";
+#elif L==6	// gn
+	"contestadas";	// Okoteve traducción
+#elif L==7	// it
+	"risposte";
+#elif L==8	// pl
+	"niepustych";
+#elif L==9	// pt
+	"respondidas";
+#endif
+
+const char *Txt_QUESTIONS_invalid =
+#if   L==1	// ca
+	"anul&middot;lades";
+#elif L==2	// de
+	"storniert";
+#elif L==3	// en
+	"invalid";
+#elif L==4	// es
+	"anuladas";
+#elif L==5	// fr
+	"annul&eacute;es";
+#elif L==6	// gn
+	"anuladas";	// Okoteve traducción
+#elif L==7	// it
+	"cancellate";
+#elif L==8	// pl
+	"anulowane";
+#elif L==9	// pt
+	"canceladas";
+#endif
+
 const char *Txt_Questions_removed_X =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
 	"Preguntas eliminadas: %u.";
@@ -33075,6 +33117,27 @@ const char *Txt_Questions_removed_X =	// Warning: it is very important to includ
 	"Pytania usuniete: %u.";
 #elif L==9	// pt
 	"Perguntas removidas: %u.";
+#endif
+
+const char *Txt_QUESTIONS_valid =
+#if   L==1	// ca
+	"v&agrave;lides";
+#elif L==2	// de
+	"g&uuml;ltige";
+#elif L==3	// en
+	"valid";
+#elif L==4	// es
+	"v&aacute;lidas";
+#elif L==5	// fr
+	"valides";
+#elif L==6	// gn
+	"v&aacute;lidas";	// Okoteve traducción
+#elif L==7	// it
+	"valide";
+#elif L==8	// pl
+	"wa&zdot;ne";
+#elif L==9	// pt
+	"v&aacute;lidas";
 #endif
 
 const char *Txt_Quota_exceeded =
@@ -55943,6 +56006,69 @@ const char *Txt_Vacants =
 	"Wolne";
 #elif L==9	// pt
 	"Desocupados";
+#endif
+
+const char *Txt_valid_grade =
+#if   L==1	// ca
+	"nota v&agrave;lida";
+#elif L==2	// de
+	"G&uuml;ltige Note";
+#elif L==3	// en
+	"valid grade";
+#elif L==4	// es
+	"nota v&aacute;lida";
+#elif L==5	// fr
+	"note valide";
+#elif L==6	// gn
+	"nota v&aacute;lida";	// Okoteve traducción
+#elif L==7	// it
+	"voto valido";
+#elif L==8	// pl
+	"ocena wynik";
+#elif L==9	// pt
+	"nota v&aacute;lida";
+#endif
+
+const char *Txt_Valid_question =
+#if   L==1	// ca
+	"Pregunta v&agrave;lida";
+#elif L==2	// de
+	"G&uuml;ltige Frage";
+#elif L==3	// en
+	"Valid question";
+#elif L==4	// es
+	"Pregunta v&aacute;lida";
+#elif L==5	// fr
+	"Question valide";
+#elif L==6	// gn
+	"Pregunta v&aacute;lida";	// Okoteve traducción
+#elif L==7	// it
+	"Domanda valida";
+#elif L==8	// pl
+	"Wa&zdot;ne pytanie";
+#elif L==9	// pt
+	"Pergunta v&aacute;lida";
+#endif
+
+const char *Txt_valid_score =
+#if   L==1	// ca
+	"puntuaci&oacute; v&agrave;lida";
+#elif L==2	// de
+	"G&uuml;ltige Ergebnis";
+#elif L==3	// en
+	"valid score";
+#elif L==4	// es
+	"puntuaci&oacute;n v&aacute;lida";
+#elif L==5	// fr
+	"note valide";
+#elif L==6	// gn
+	"puntuaci&oacute;n v&aacute;lida";	// Okoteve traducción
+#elif L==7	// it
+	"punteggio valido";
+#elif L==8	// pl
+	"prawid&lstrok;owy wynik";
+#elif L==9	// pt
+	"pontua&ccedil;&atilde;o v&aacute;lida";
 #endif
 
 const char *Txt_View =

@@ -735,7 +735,7 @@ static void MchRes_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    extern const char *Txt_Questions;
    extern const char *Txt_Non_blank_BR_questions;
    extern const char *Txt_Score;
-   extern const char *Txt_Average_BR_score_BR_per_question_BR_from_0_to_1;
+   extern const char *Txt_Average_BR_score_BR_per_question_BR_less_than_or_equal_to_1;
    extern const char *Txt_Grade;
 
    HTM_TR_Begin (NULL);
@@ -748,7 +748,7 @@ static void MchRes_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    HTM_TH (1,1,"RT",Txt_Questions);
    HTM_TH (1,1,"RT",Txt_Non_blank_BR_questions);
    HTM_TH (1,1,"RT",Txt_Score);
-   HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
+   HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_less_than_or_equal_to_1);
    HTM_TH (1,1,"RT",Txt_Grade);
    HTM_TH_Empty (1);
 
@@ -989,7 +989,11 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 /* Write score */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanViewScore)
+	   {
 	    HTM_Double2Decimals (ScoreInThisResult);
+	    HTM_Txt ("/");
+	    HTM_Unsigned (NumQstsInThisResult);
+	   }
 	 else
             Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
@@ -1046,9 +1050,9 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 
       /***** Write totals for this user *****/
       MchRes_ShowMchResultsSummaryRow (NumResults,
-				    NumTotalQsts,NumTotalQstsNotBlank,
-				    TotalScoreOfAllResults,
-				    TotalGrade);
+				       NumTotalQsts,NumTotalQstsNotBlank,
+				       TotalScoreOfAllResults,
+				       TotalGrade);
      }
    else
      {
@@ -1098,6 +1102,8 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
    /***** Write total score *****/
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    HTM_Double2Decimals (TotalScoreOfAllResults);
+   HTM_Txt ("/");
+   HTM_Unsigned (NumTotalQsts);
    HTM_TD_End ();
 
    /***** Write average score per question *****/
@@ -1131,7 +1137,7 @@ void MchRes_ShowOneMchResult (void)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
-   extern const char *Txt_non_blank_QUESTIONS;
+   extern const char *Txt_QUESTIONS_non_blank;
    extern const char *Txt_Score;
    extern const char *Txt_Grade;
    extern const char *Txt_Tags;
@@ -1222,7 +1228,7 @@ void MchRes_ShowOneMchResult (void)
       /***** Begin table *****/
       HTM_TABLE_BeginWideMarginPadding (10);
 
-      /***** Header row *****/
+      /***** User *****/
       /* Get data of the user who answer the match */
       if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS))
 	 Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
@@ -1233,7 +1239,7 @@ void MchRes_ShowOneMchResult (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+      HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
@@ -1252,7 +1258,7 @@ void MchRes_ShowOneMchResult (void)
 
       HTM_TR_End ();
 
-      /* Start/end time (for user in this match) */
+      /***** Start/end time (for user in this match) *****/
       for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	   StartEndTime++)
@@ -1260,7 +1266,7 @@ void MchRes_ShowOneMchResult (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"DAT_N RT\"");
-	 HTM_TxtF ("%s:",Txt_START_END_TIME[StartEndTime]);
+	 HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
 	 HTM_TD_End ();
 
 	 if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
@@ -1275,59 +1281,67 @@ void MchRes_ShowOneMchResult (void)
 	 HTM_TR_End ();
 	}
 
-      /* Number of questions */
+      /***** Number of questions *****/
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_Questions);
+      HTM_TxtColon (Txt_Questions);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
-      HTM_TxtF ("%u (%u %s)",
-                Print.NumQsts,
-                Print.NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+      HTM_TxtF ("%u; %s: %u",
+                Print.NumQsts,Txt_QUESTIONS_non_blank,Print.NumQstsNotBlank);
       HTM_TD_End ();
 
       HTM_TR_End ();
 
-      /* Score */
+      /***** Score *****/
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_Score);
+      HTM_TxtColon (Txt_Score);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
+	{
+         HTM_STRONG_Begin ();
          HTM_Double2Decimals (Print.Score);
+	 HTM_Txt ("/");
+	 HTM_Unsigned (Print.NumQsts);
+         HTM_STRONG_End ();
+	}
       else
          Ico_PutIconNotVisible ();
       HTM_TD_End ();
 
       HTM_TR_End ();
 
-      /* Grade */
+      /***** Grade *****/
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_Grade);
+      HTM_TxtColon (Txt_Grade);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
-         TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,
-                                     Game.MaxGrade);
+	{
+         HTM_STRONG_Begin ();
+         TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,Game.MaxGrade);
+         HTM_STRONG_End ();
+	}
       else
          Ico_PutIconNotVisible ();
       HTM_TD_End ();
 
       HTM_TR_End ();
 
-      /* Tags present in this result */
+      /***** Tags present in this result *****/
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtF ("%s:",Txt_Tags);
+      HTM_TxtColon (Txt_Tags);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT\"");
@@ -1341,19 +1355,6 @@ void MchRes_ShowOneMchResult (void)
 
       /***** End table *****/
       HTM_TABLE_End ();
-
-      /***** Write total grade of match result *****/
-      if (ICanViewScore)
-	{
-	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
-	 HTM_TxtColonNBSP (Txt_Score);
-	 HTM_Double2Decimals (Print.Score);
-	 HTM_BR ();
-	 HTM_TxtColonNBSP (Txt_Grade);
-         TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,
-                                     Game.MaxGrade);
-         HTM_DIV_End ();
-	}
 
       /***** End box *****/
       Box_BoxEnd ();

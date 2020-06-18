@@ -160,7 +160,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 
    /***** Select visibility *****/
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",TxtLabel);
+   HTM_TxtColon (TxtLabel);
    HTM_TD_End ();
 
    /***** Form with list of options *****/

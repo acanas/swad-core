@@ -1253,7 +1253,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s:",Txt_Groups);
+      HTM_TxtColon (Txt_Groups);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
@@ -3359,7 +3359,7 @@ static void Att_ListUsrsAttendanceTable (const struct Att_Events *Events,
       HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_N_LINE_TOP RM\"",
 		    Gbl.Usrs.Listing.WithPhotos ? 4 :
 						  3);
-      HTM_TxtF ("%s:",Txt_Number_of_users);
+      HTM_TxtColon (Txt_Number_of_users);
       HTM_TD_End ();
 
       for (NumAttEvent = 0, Total = 0;
@@ -3720,7 +3720,7 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				 CommentStd,Cns_MAX_BYTES_TEXT,false);
 	       HTM_DT_Begin ();
-	       HTM_TxtF ("%s:",Txt_Student_comment);
+	       HTM_TxtColon (Txt_Student_comment);
 	       HTM_DT_End ();
 	       HTM_DD_Begin ();
 	       HTM_Txt (CommentStd);
@@ -3731,7 +3731,7 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				 CommentTch,Cns_MAX_BYTES_TEXT,false);
 	       HTM_DT_Begin ();
-	       HTM_TxtF ("%s:",Txt_Teachers_comment);
+	       HTM_TxtColon (Txt_Teachers_comment);
 	       HTM_DT_End ();
 	       HTM_DD_Begin ();
 	       HTM_Txt (CommentTch);

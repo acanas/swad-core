@@ -1273,6 +1273,8 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
                                                      MYSQL_RES *mysql_res,
 						     bool ICanEditQuestions)
   {
+   extern const char *Txt_Invalid_question;
+   extern const char *Txt_Valid_question;
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Question;
@@ -1290,10 +1292,10 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
       [Tst_INVALID_QUESTION] = "times-red.svg",
       [Tst_VALID_QUESTION  ] = "check-green.svg",
      };
-   static const char *Title[Tst_NUM_VALIDITIES] =
+   const char *Title[Tst_NUM_VALIDITIES] =
      {
-      [Tst_INVALID_QUESTION] = "Pregunta anulada",		// TODO: Need translation!!!!
-      [Tst_VALID_QUESTION  ] = "Pregunta v&aacute;lida",	// TODO: Need translation!!!!
+      [Tst_INVALID_QUESTION] = Txt_Invalid_question,
+      [Tst_VALID_QUESTION  ] = Txt_Valid_question,
      };
 
    /***** Write the heading *****/

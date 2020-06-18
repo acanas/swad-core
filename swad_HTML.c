@@ -1784,6 +1784,12 @@ void HTM_Txt (const char *Txt)
          fputs (Txt,Gbl.F.Out);
   }
 
+void HTM_TxtColon (const char *Txt)
+  {
+   HTM_Txt (Txt);
+   HTM_Colon ();
+  }
+
 void HTM_TxtColonNBSP (const char *Txt)
   {
    HTM_Txt (Txt);

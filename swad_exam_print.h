@@ -35,19 +35,29 @@
 
 #define ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT	100	// Absolute maximum number of questions in an exam print
 
+struct ExaPrn_NumQuestions
+  {
+   unsigned All;	// Total number of questions
+   unsigned Valid;	// Number of valid questions (not invalidated by teachers)
+   unsigned NotBlank;	// Number of answered questions (not blank)
+  };
+
+struct ExaPrn_Score
+  {
+   double All;	// Total score of the exam print (counting valid and invalid questions)
+   double Valid;	// Total score of the exam print (counting only valid questions)
+  };
+
 struct ExaPrn_Print
   {
-   long PrnCod;			// Exam print code
-   long SesCod;			// Session code associated to this print
-   long UsrCod;			// User who answered the exam print
+   long PrnCod;		// Exam print code
+   long SesCod;		// Session code associated to this print
+   long UsrCod;		// User who answered the exam print
    time_t TimeUTC[Dat_NUM_START_END_TIME];
-   unsigned NumQsts;		// Number of questions
-   unsigned NumQstsValid;	// Number of valid questions (not invalidated by teachers)
-   unsigned NumQstsNotBlank;	// Number of questions not blank
-   bool Sent;			// This exam print has been sent or not?
-				// "Sent" means that user has clicked "Send" button after finishing
-   double Score;		// Total score of the exam print
-   double ScoreValid;		// Total score taking into account only valid questions
+   bool Sent;		// This exam print has been sent or not?
+			// "Sent" means that user has clicked "Send" button after finishing
+   struct ExaPrn_NumQuestions NumQsts;
+   struct ExaPrn_Score Score;
    struct TstPrn_PrintedQuestion PrintedQuestions[ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT];
   };
 

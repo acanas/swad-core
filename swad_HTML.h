@@ -185,6 +185,7 @@ void HTM_BR (void);
 
 void HTM_TxtF (const char *fmt,...);
 void HTM_Txt (const char *Txt);
+void HTM_TxtColon (const char *Txt);
 void HTM_TxtColonNBSP (const char *Txt);
 void HTM_NBSP (void);
 void HTM_Colon (void);

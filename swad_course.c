@@ -2615,9 +2615,9 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
       HTM_TR_Begin (NULL);
 
       HTM_TH_Begin (1,7,"LM");
-      HTM_TxtF ("%s:",Str_BuildStringStr (Txt_USER_in_COURSE,
-				          Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
-							    Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]));
+      HTM_TxtColon (Str_BuildStringStr (Txt_USER_in_COURSE,
+				        Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
+							  Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]));
       Str_FreeString ();
       HTM_TH_End ();
 

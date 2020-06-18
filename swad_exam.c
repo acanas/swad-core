@@ -1521,7 +1521,7 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Maximum_grade);
+   HTM_TxtColon (Txt_Maximum_grade);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -1535,7 +1535,7 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s:",Txt_Result_visibility);
+   HTM_TxtColon (Txt_Result_visibility);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");

@@ -1786,7 +1786,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		       ICanEditThisField ? The_ClassFormInBox[Gbl.Prefs.Theme] :
 					   "REC_DAT_SMALL",
 		       Gbl.RowEvenOdd);
-         HTM_TxtF ("%s:",Gbl.Crs.Records.LstFields.Lst[NumField].Name);
+         HTM_TxtColon (Gbl.Crs.Records.LstFields.Lst[NumField].Name);
          if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
              TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
            {
