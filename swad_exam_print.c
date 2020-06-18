@@ -163,8 +163,8 @@ static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print)
    Print->TimeUTC[Dat_START_TIME] =
    Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Print->NumQsts                 =
-   Print->NumQstsNotBlank         =
-   Print->NumQstsValid            = 0;
+   Print->NumQstsValid            =
+   Print->NumQstsNotBlank         = 0;
    Print->Sent                    = false;	// After creating an exam print, it's not sent
    Print->Score                   =
    Print->ScoreValid              = 0.0;
@@ -544,11 +544,10 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumQsts;
    unsigned NumQst;
 
    /***** Get questions of an exam print from database *****/
-   NumQsts =
+   Print->NumQsts =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions"
 					 " of an exam print",
 			      "SELECT QstCod,"	// row[0]
@@ -562,9 +561,9 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 			      Print->PrnCod);
 
    /***** Get questions *****/
-   if (NumQsts == Print->NumQsts)
+   if (Print->NumQsts <= ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT)
       for (NumQst = 0;
-	   NumQst < NumQsts;
+	   NumQst < Print->NumQsts;
 	   NumQst++)
 	{
 	 row = mysql_fetch_row (mysql_res);
@@ -595,8 +594,8 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (NumQsts != Print->NumQsts)
-      Lay_WrongExamExit ();
+   if (Print->NumQsts > ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT)
+      Lay_ShowErrorAndExit ("Too many questions.");
   }
 
 /*****************************************************************************/

@@ -104,6 +104,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 				const char *ExamsSelectedCommas);
 static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
                                           unsigned NumTotalQsts,
+                                          unsigned NumTotalQstsValid,
                                           unsigned NumTotalQstsNotBlank,
                                           double TotalScoreOfAllResults,
 					  double TotalGrade);
@@ -710,6 +711,7 @@ static void ExaRes_ShowHeaderResults (Usr_MeOrOther_t MeOrOther)
    HTM_TH (1,1,"LT",Txt_START_END_TIME[Dat_END_TIME  ]);
    HTM_TH (1,1,"LT",Txt_Session);
    HTM_TH (1,1,"RT",Txt_Questions);
+   HTM_TH (1,1,"RT","Preguntas v&aacute;lidas");	// TODO: Need translation!!!!
    HTM_TH (1,1,"RT",Txt_Non_blank_BR_questions);
    HTM_TH (1,1,"RT",Txt_Score);
    HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
@@ -773,21 +775,22 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
    unsigned NumResult;
    static unsigned UniqueId = 0;
    char *Id;
+   struct ExaPrn_Print Print;
    struct ExaSes_Session Session;
    Dat_StartEndTime_t StartEndTime;
-   unsigned NumQstsInThisResult;
-   unsigned NumQstsNotBlankInThisResult;
    unsigned NumTotalQsts = 0;
+   unsigned NumTotalQstsValid = 0;
    unsigned NumTotalQstsNotBlank = 0;
-   double ScoreInThisResult;
    double TotalScoreOfAllResults = 0.0;
+   double TotalScoreValidOfAllResults = 0.0;
    double MaxGrade;
    double Grade;
    double TotalGrade = 0.0;
    unsigned Visibility;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
 
-   /***** Reset session *****/
+   /***** Reset print and session *****/
+   ExaPrn_ResetPrint (&Print);
    ExaSes_ResetSession (&Session);
 
    /***** Set user *****/
@@ -854,14 +857,15 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
    // must be able to access exams taken in other groups
    NumResults =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get sessions results",
-			      "SELECT exa_prints.SesCod,"			// row[0]
-				     "UNIX_TIMESTAMP(exa_prints.StartTime),"	// row[1]
-				     "UNIX_TIMESTAMP(exa_prints.EndTime),"	// row[2]
-				     "exa_prints.NumQsts,"			// row[3]
-				     "exa_prints.NumQstsNotBlank,"		// row[4]
-				     "exa_prints.Score,"			// row[5]
-				     "exa_exams.MaxGrade,"			// row[6]
-				     "exa_exams.Visibility"			// row[7]
+			      "SELECT exa_prints.PrnCod,"			// row[0]
+			             "exa_prints.SesCod,"			// row[1]
+				     "UNIX_TIMESTAMP(exa_prints.StartTime),"	// row[2]
+				     "UNIX_TIMESTAMP(exa_prints.EndTime),"	// row[3]
+				     "exa_prints.NumQsts,"			// row[4]
+				     "exa_prints.NumQstsNotBlank,"		// row[5]
+				     "exa_prints.Score,"			// row[6]
+				     "exa_exams.MaxGrade,"			// row[7]
+				     "exa_exams.Visibility"			// row[8]
 			      " FROM exa_prints,exa_sessions,exa_exams"
 			      " WHERE exa_prints.UsrCod=%ld"
 			      "%s"	// Session subquery
@@ -893,13 +897,17 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	{
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get session code (row[0]) */
-	 if ((Session.SesCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	 /* Get print code (row[0]) */
+	 if ((Print.PrnCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	    Lay_ShowErrorAndExit ("Wrong code of exam print.");
+
+	 /* Get session code (row[1]) */
+	 if ((Session.SesCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of session.");
 	 ExaSes_GetDataOfSessionByCod (&Session);
 
-	 /* Get visibility (row[7]) */
-	 Visibility = TstVis_GetVisibilityFromStr (row[7]);
+	 /* Get visibility (row[8]) */
+	 Visibility = TstVis_GetVisibilityFromStr (row[8]);
 
 	 /* Show session result? */
 	 ICanViewResult = true;	// Filtering is already made in the query
@@ -908,12 +916,12 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	 if (NumResult)
 	    HTM_TR_Begin (NULL);
 
-	 /* Write start/end times (row[1], row[2] hold UTC start/end times) */
+	 /* Write start/end times (row[2], row[3] hold UTC start/end times) */
 	 for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	      StartEndTime++)
 	   {
-	    TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[1 + StartEndTime]);
+	    TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[2 + StartEndTime]);
 	    UniqueId++;
 	    if (asprintf (&Id,"exa_res_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	       Lay_NotEnoughMemoryExit ();
@@ -933,25 +941,29 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 
 	 if (ICanViewScore)
 	   {
-	    /* Get number of questions (row[3]) */
-	    if (sscanf (row[3],"%u",&NumQstsInThisResult) != 1)
-	       NumQstsInThisResult = 0;
-	    NumTotalQsts += NumQstsInThisResult;
+	    /* Get questions and user's answers of exam print from database */
+	    ExaPrn_GetPrintQuestionsFromDB (&Print);
+	    NumTotalQsts += Print.NumQsts;
 
-	    /* Get number of questions not blank (row[4]) */
-	    if (sscanf (row[4],"%u",&NumQstsNotBlankInThisResult) != 1)
-	       NumQstsNotBlankInThisResult = 0;
-	    NumTotalQstsNotBlank += NumQstsNotBlankInThisResult;
+	    /* Compute score taking into account only valid questions */
+	    ExaRes_ComputeScoreValid (&Print);
+	    NumTotalQstsValid += Print.NumQstsValid;
+	    TotalScoreValidOfAllResults += Print.ScoreValid;
+
+	    /* Get number of questions not blank (row[5]) */
+	    if (sscanf (row[5],"%u",&Print.NumQstsNotBlank) != 1)
+	       Print.NumQstsNotBlank = 0;
+	    NumTotalQstsNotBlank += Print.NumQstsNotBlank;
 
 	    Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
 
-	    /* Get score (row[5]) */
-	    if (sscanf (row[5],"%lf",&ScoreInThisResult) != 1)
-	       ScoreInThisResult = 0.0;
-	    TotalScoreOfAllResults += ScoreInThisResult;
+	    /* Get score (row[6]) */
+	    if (sscanf (row[6],"%lf",&Print.Score) != 1)
+	       Print.Score = 0.0;
+	    TotalScoreOfAllResults += Print.Score;
 
-	    /* Get maximum grade (row[6]) */
-	    if (sscanf (row[6],"%lf",&MaxGrade) != 1)
+	    /* Get maximum grade (row[7]) */
+	    if (sscanf (row[7],"%lf",&MaxGrade) != 1)
 	       MaxGrade = 0.0;
 
 	    Str_SetDecimalPointToLocal ();	// Return to local system
@@ -960,7 +972,15 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	 /* Write number of questions */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanViewScore)
-	    HTM_Unsigned (NumQstsInThisResult);
+	    HTM_Unsigned (Print.NumQsts);
+	 else
+            Ico_PutIconNotVisible ();
+         HTM_TD_End ();
+
+	 /* Write number of valid questions */
+	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+	 if (ICanViewScore)
+	    HTM_Unsigned (Print.NumQstsValid);
 	 else
             Ico_PutIconNotVisible ();
          HTM_TD_End ();
@@ -968,34 +988,34 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	 /* Write number of questions not blank */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanViewScore)
-	    HTM_Unsigned (NumQstsNotBlankInThisResult);
+	    HTM_Unsigned (Print.NumQstsNotBlank);
 	 else
             Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
-	 /* Write score */
+	 /* Write score valid (taking into account only valid questions) */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanViewScore)
-	    HTM_Double2Decimals (ScoreInThisResult);
+	    HTM_Double2Decimals (Print.ScoreValid);
 	 else
             Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
-	 /* Write average score per question */
+	 /* Write average score per question (taking into account only valid questions) */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanViewScore)
-	    HTM_Double2Decimals (NumQstsInThisResult ? ScoreInThisResult /
-					               (double) NumQstsInThisResult :
-					               0.0);
+	    HTM_Double2Decimals (Print.NumQstsValid ? Print.ScoreValid /
+					              (double) Print.NumQstsValid :
+					              0.0);
 	 else
             Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
-	 /* Write grade over maximum grade */
+	 /* Write grade over maximum grade (taking into account only valid questions) */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanViewScore)
 	   {
-            Grade = TstPrn_ComputeGrade (NumQstsInThisResult,ScoreInThisResult,MaxGrade);
+            Grade = TstPrn_ComputeGrade (Print.NumQstsValid,Print.ScoreValid,MaxGrade);
 	    TstPrn_ShowGrade (Grade,MaxGrade);
 	    TotalGrade += Grade;
 	   }
@@ -1032,10 +1052,14 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	}
 
       /***** Write totals for this user *****/
+      // ExaRes_ShowResultsSummaryRow (NumResults,
+      //			       NumTotalQsts,NumTotalQstsNotBlank,
+      // 		   	       TotalScoreOfAllResults,
+      //			       TotalGrade);
       ExaRes_ShowResultsSummaryRow (NumResults,
-				       NumTotalQsts,NumTotalQstsNotBlank,
-				       TotalScoreOfAllResults,
-				       TotalGrade);
+				    NumTotalQsts,NumTotalQstsValid,NumTotalQstsNotBlank,
+				    TotalScoreValidOfAllResults,
+				    TotalGrade);
      }
    else
      {
@@ -1055,6 +1079,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 
 static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
                                           unsigned NumTotalQsts,
+                                          unsigned NumTotalQstsValid,
                                           unsigned NumTotalQstsNotBlank,
                                           double TotalScoreOfAllResults,
 					  double TotalGrade)
@@ -1074,6 +1099,12 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (NumResults)
       HTM_Unsigned (NumTotalQsts);
+   HTM_TD_End ();
+
+   /***** Write total number of questions valid *****/
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   if (NumResults)
+      HTM_Unsigned (NumTotalQstsValid);
    HTM_TD_End ();
 
    /***** Write total number of questions not blank *****/
@@ -1475,8 +1506,11 @@ static bool ExaRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility
 
 static void ExaRes_ComputeScoreValid (struct ExaPrn_Print *Print)
   {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
    unsigned NumQst;
    struct Tst_Question Question;
+   bool QuestionExists;
 
    /***** Initialize score valid *****/
    Print->NumQstsValid = 0;
@@ -1486,25 +1520,39 @@ static void ExaRes_ComputeScoreValid (struct ExaPrn_Print *Print)
 	NumQst < Print->NumQsts;
 	NumQst++)
      {
-      Gbl.RowEvenOdd = NumQst % 2;
-
-      /***** Create test question *****/
-      Tst_QstConstructor (&Question);
+      /***** Copy question code *****/
       Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
 
-      /***** Get question data *****/
-      ExaSet_GetQstDataFromDB (&Question);
-
-      /***** Compute answer score *****/
-      if (Question.Validity == Tst_VALID_QUESTION)
+      /***** Get validity and answer type from database *****/
+      QuestionExists = (DB_QuerySELECT (&mysql_res,"can not get a question",
+					"SELECT Invalid,"	// row[0]
+					       "AnsType"	// row[1]
+					" FROM exa_set_questions"
+					" WHERE QstCod=%ld",
+					Question.QstCod) != 0);
+      if (QuestionExists)
 	{
-	 ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
-	 Print->NumQstsValid++;
-	 Print->ScoreValid += Print->PrintedQuestions[NumQst].Score;
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get whether the question is invalid (row[0]) */
+	 Question.Validity = (row[0][0] == 'Y') ? Tst_INVALID_QUESTION :
+						  Tst_VALID_QUESTION;
+
+	 /* Get the type of answer (row[1]) */
+	 Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 	}
 
-      /***** Destroy test question *****/
-      Tst_QstDestructor (&Question);
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
+
+      /***** Compute answer score *****/
+      if (QuestionExists)
+	 if (Question.Validity == Tst_VALID_QUESTION)
+	   {
+	    ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
+	    Print->NumQstsValid++;
+	    Print->ScoreValid += Print->PrintedQuestions[NumQst].Score;
+	   }
      }
   }
 
