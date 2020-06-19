@@ -65,6 +65,12 @@ extern struct Globals Gbl;
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
+struct ExaRes_ICanView
+  {
+   bool Result;
+   bool Score;
+  };
+
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
@@ -113,10 +119,10 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
                                    struct ExaPrn_Print *Print,
                                    struct UsrData *UsrDat);
 
-static bool ExaRes_CheckIfICanSeePrintResult (const struct Exa_Exam *Exam,
+static void ExaRes_CheckIfICanSeePrintResult (const struct Exa_Exam *Exam,
                                               const struct ExaSes_Session *Session,
-                                              long UsrCod);
-static bool ExaRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility);
+                                              long UsrCod,
+                                              struct ExaRes_ICanView *ICanView);
 
 static void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print);
 
@@ -762,31 +768,31 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
   {
    extern const char *Txt_Result;
    char *SesSubQuery;
-   char *HidSubQuery;
+   char *HidSesSubQuery;
+   char *HidExaSubQuery;
    char *ExaSubQuery;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct UsrData *UsrDat;
-   bool ICanViewResult;
-   bool ICanViewScore;
    unsigned NumResults;
    unsigned NumResult;
+   struct ExaRes_ICanView ICanView;
    static unsigned UniqueId = 0;
    char *Id;
    struct ExaPrn_Print Print;
    struct ExaSes_Session Session;
+   struct Exa_Exam Exam;
    Dat_StartEndTime_t StartEndTime;
    struct ExaPrn_NumQuestions NumTotalQsts;
    struct ExaPrn_Score TotalScore;
-   double MaxGrade;
    double Grade;
    double TotalGrade = 0.0;
-   unsigned Visibility;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
 
-   /***** Reset print and session *****/
+   /***** Reset print, session and exam *****/
    ExaPrn_ResetPrint (&Print);
    ExaSes_ResetSession (&Session);
+   Exa_ResetExam (&Exam);
 
    /***** Reset total number of questions and total score *****/
    NumTotalQsts.All      =
@@ -813,17 +819,16 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 
    /***** Subquery: get hidden sessions?
 	  � A student will not be able to see their results in hidden sessions
-	  � A teacher will be able to see results from other users
-	    even in hidden sessions
+	  � A teacher will be able to see results from other users even in hidden sessions
    *****/
    switch (MeOrOther)
      {
       case Usr_ME:	// A student watching her/his results
-         if (asprintf (&HidSubQuery," AND exa_sessions.Hidden='N'") < 0)
+         if (asprintf (&HidSesSubQuery," AND exa_sessions.Hidden='N'") < 0)
 	    Lay_NotEnoughMemoryExit ();
 	 break;
       default:		// A teacher/admin watching the results of other users
-	 if (asprintf (&HidSubQuery,"%s","") < 0)
+	 if (asprintf (&HidSesSubQuery,"%s","") < 0)
 	    Lay_NotEnoughMemoryExit ();
 	 break;
      }
@@ -854,6 +859,22 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	 Lay_NotEnoughMemoryExit ();
      }
 
+   /***** Subquery: get hidden exams?
+	  � A student will not be able to see their results in hidden exams
+	  � A teacher will be able to see results from other users even in hidden exams
+   *****/
+   switch (MeOrOther)
+     {
+      case Usr_ME:	// A student watching her/his results
+         if (asprintf (&HidExaSubQuery," AND exa_exams.Hidden='N'") < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 break;
+      default:		// A teacher/admin watching the results of other users
+	 if (asprintf (&HidExaSubQuery,"%s","") < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 break;
+     }
+
    /***** Make database query *****/
    // Do not filter by groups, because a student who has changed groups
    // must be able to access exams taken in other groups
@@ -863,9 +884,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 			             "exa_prints.SesCod,"			// row[1]
 				     "UNIX_TIMESTAMP(exa_prints.StartTime),"	// row[2]
 				     "UNIX_TIMESTAMP(exa_prints.EndTime),"	// row[3]
-				     "exa_prints.NumQstsNotBlank,"		// row[4]
-				     "exa_exams.MaxGrade,"			// row[5]
-				     "exa_exams.Visibility"			// row[6]
+				     "exa_prints.NumQstsNotBlank"		// row[4]
 			      " FROM exa_prints,exa_sessions,exa_exams"
 			      " WHERE exa_prints.UsrCod=%ld"
 			      "%s"	// Session subquery
@@ -873,15 +892,18 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
                               "%s"	// Hidden sessions subquery
 			      "%s"	// Exams subquery
 			      " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+                              "%s"	// Hidden exams subquery
 			      " AND exa_exams.CrsCod=%ld"			// Extra check
 			      " ORDER BY exa_sessions.Title",
 			      UsrDat->UsrCod,
 			      SesSubQuery,
-			      HidSubQuery,
+			      HidSesSubQuery,
 			      ExaSubQuery,
+			      HidExaSubQuery,
 			      Gbl.Hierarchy.Crs.CrsCod);
+   free (HidExaSubQuery);
    free (ExaSubQuery);
-   free (HidSubQuery);
+   free (HidSesSubQuery);
    free (SesSubQuery);
 
    /***** Show user's data *****/
@@ -904,14 +926,14 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	 /* Get session code (row[1]) */
 	 if ((Session.SesCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of session.");
+
+	 /* Get data of session and exam */
 	 ExaSes_GetDataOfSessionByCod (&Session);
+	 Exam.ExaCod = Session.ExaCod;
+	 Exa_GetDataOfExamByCod (&Exam);
 
-	 /* Get visibility (row[6]) */
-	 Visibility = TstVis_GetVisibilityFromStr (row[6]);
-
-	 /* Show session result? */
-	 ICanViewResult = true;	// Filtering is already made in the query
-         ICanViewScore  = ExaRes_CheckIfICanViewScore (ICanViewResult,Visibility);
+	 /* Check if I can view this print result and its score */
+	 ExaRes_CheckIfICanSeePrintResult (&Exam,&Session,UsrDat->UsrCod,&ICanView);
 
 	 if (NumResult)
 	    HTM_TR_Begin (NULL);
@@ -939,7 +961,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	 HTM_Txt (Session.Title);
 	 HTM_TD_End ();
 
-	 if (ICanViewScore)
+	 if (ICanView.Score)
 	   {
 	    /* Get questions and user's answers of exam print from database */
 	    ExaPrn_GetPrintQuestionsFromDB (&Print);
@@ -954,19 +976,11 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    if (sscanf (row[4],"%u",&Print.NumQsts.NotBlank) != 1)
 	       Print.NumQsts.NotBlank = 0;
 	    NumTotalQsts.NotBlank += Print.NumQsts.NotBlank;
-
-	    Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
-
-	    /* Get maximum grade (row[5]) */
-	    if (sscanf (row[5],"%lf",&MaxGrade) != 1)
-	       MaxGrade = 0.0;
-
-	    Str_SetDecimalPointToLocal ();	// Return to local system
 	   }
 
 	 /* Write number of questions */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewScore)
+	 if (ICanView.Score)
 	    ExaRes_ShowNumQsts (&Print.NumQsts);
 	 else
             Ico_PutIconNotVisible ();
@@ -974,7 +988,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 
 	 /* Write number of questions not blank */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewScore)
+	 if (ICanView.Score)
 	    HTM_Unsigned (Print.NumQsts.NotBlank);
 	 else
             Ico_PutIconNotVisible ();
@@ -982,7 +996,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 
 	 /* Write score valid (taking into account only valid questions) */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewScore)
+	 if (ICanView.Score)
 	   {
 	    HTM_Double2Decimals (Print.Score.Valid);
 	    HTM_Txt ("/");
@@ -994,7 +1008,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 
 	 /* Write average score per question (taking into account only valid questions) */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewScore)
+	 if (ICanView.Score)
 	    HTM_Double2Decimals (Print.NumQsts.Valid ? Print.Score.Valid /
 					               (double) Print.NumQsts.Valid :
 					               0.0);
@@ -1004,10 +1018,10 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 
 	 /* Write grade over maximum grade (taking into account only valid questions) */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewScore)
+	 if (ICanView.Score)
 	   {
-            Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid,Print.Score.Valid,MaxGrade);
-	    TstPrn_ShowGrade (Grade,MaxGrade);
+            Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid,Print.Score.Valid,Exam.MaxGrade);
+	    TstPrn_ShowGrade (Grade,Exam.MaxGrade);
 	    TotalGrade += Grade;
 	   }
 	 else
@@ -1016,7 +1030,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 
 	 /* Link to show this result */
 	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewResult)
+	 if (ICanView.Result)
 	   {
 	    Exams->ExaCod = Session.ExaCod;
 	    Exams->SesCod = Session.SesCod;
@@ -1236,39 +1250,10 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
    char PhotoURL[PATH_MAX + 1];
    Dat_StartEndTime_t StartEndTime;
    char *Id;
-   struct
-     {
-      bool Result;
-      bool Score;
-     } ICanView;
+   struct ExaRes_ICanView ICanView;
 
-   /***** Check if I can view this print result *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 // Depends on visibility of result for this session (eye icon)
-	 ICanView.Result = ExaRes_CheckIfICanSeePrintResult (Exam,Session,UsrDat->UsrCod);
-
-	 if (ICanView.Result)
-	    // Depends on 5 visibility icons
-	    ICanView.Score = TstVis_IsVisibleTotalScore (Exam->Visibility);
-	 else
-	    ICanView.Score = false;
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 ICanView.Result =
-	 ICanView.Score  = true;
-	 break;
-      default:
-	 ICanView.Result =
-	 ICanView.Score  = false;
-	 break;
-     }
+   /***** Check if I can view this print result and its score *****/
+   ExaRes_CheckIfICanSeePrintResult (Exam,Session,UsrDat->UsrCod,&ICanView);
 
    /***** Compute score taking into account only valid questions *****/
    if (ICanView.Score)
@@ -1460,49 +1445,35 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
   }
 
 /*****************************************************************************/
-/********************** Get if I can see session result ************************/
+/********************** Get if I can see print result ************************/
 /*****************************************************************************/
 
-static bool ExaRes_CheckIfICanSeePrintResult (const struct Exa_Exam *Exam,
+static void ExaRes_CheckIfICanSeePrintResult (const struct Exa_Exam *Exam,
                                               const struct ExaSes_Session *Session,
-                                              long UsrCod)
+                                              long UsrCod,
+                                              struct ExaRes_ICanView *ICanView)
   {
    bool ItsMe;
 
+   /***** Check if I can view this print result *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
+	 // Depends on visibility of exam, session and result (eye icons)
 	 ItsMe = Usr_ItsMe (UsrCod);
 	 if (ItsMe &&				// The result is mine
 	     !Exam->Hidden &&			// The exam is visible
 	     !Session->Hidden &&		// The session is visible
 	     Session->ShowUsrResults)		// The results of the session are visible to users
-	    return ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session->SesCod);
-         return false;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 return true;
-      default:
-	 return false;
-     }
-  }
+	    ICanView->Result = ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session->SesCod);
+	 else
+            ICanView->Result = false;
 
-/*****************************************************************************/
-/********************** Get if I can see session result ************************/
-/*****************************************************************************/
-
-static bool ExaRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility)
-  {
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 if (ICanViewResult)
-	    return TstVis_IsVisibleTotalScore (Visibility);
-	 return false;
+	 if (ICanView->Result)
+	    // Depends on 5 visibility icons associated to exam
+	    ICanView->Score = TstVis_IsVisibleTotalScore (Exam->Visibility);
+	 else
+	    ICanView->Score = false;
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -1510,9 +1481,13 @@ static bool ExaRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 return true;
+	 ICanView->Result =
+	 ICanView->Score  = true;
+	 break;
       default:
-	 return false;
+	 ICanView->Result =
+	 ICanView->Score  = false;
+	 break;
      }
   }
 

@@ -556,7 +556,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.251 (2020-06-18)"
+#define Log_PLATFORM_VERSION	"SWAD 19.252 (2020-06-19)"
 #define CSS_FILE		"swad19.250.css"
 #define JS_FILE			"swad19.246.1.js"
 /*
@@ -565,7 +565,9 @@ TODO:  Encarnación Hidalgo Tenorio: Antonio, ¿podría @swad_ugr mandar una notifi
 TODO: Fix bug: Un estudiante recibe una notificación de un archivo de calificaciones. Luego el archivo es ocultado por el profesor. Pero desde la notificación sigue estando accesible, cuando no debería ser así. Reported by Adrián José Martínez Navarro.
 TODO: Fix bug: Cuando se pulsa en ver fichas, y luego en una ficha en "Ver trabajos" o "Ver exámenes", o lo que sea, sale dos veces ese estudiante.
 TODO: No limitar el número de preguntas en un examen a ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT, sino asignar PrintedQuestions dinámicamente con malloc
+TODO: Que al generar un examen sólo se cojan preguntas válidas. Y si ya está generado, al entrar de nuevo, que se vean en rojo.
 
+	Version 19.252:   Jun 19, 2020  Fixed bug in exam results, reported by Francisco Ligero Ligero. (303243 lines)
 	Version 19.251:   Jun 18, 2020  Changes in test, exam and match results. (303263 lines)
 	Version 19.250.3: Jun 18, 2020  Show valid score and valid grade in listing of exam results. (303113 lines)
 	Version 19.250.2: Jun 17, 2020  Show valid score and valid grade in one exam result. (303069 lines)
