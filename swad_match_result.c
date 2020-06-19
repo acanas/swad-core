@@ -1436,9 +1436,9 @@ static bool MchRes_CheckIfICanSeeMatchResult (struct Mch_Match *Match,long UsrCo
      {
       case Rol_STD:
 	 ItsMe = Usr_ItsMe (UsrCod);
-	 if (ItsMe && Match->Status.ShowUsrResults)
-	    return Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match);
-         return false;
+	 return ItsMe && Match->Status.ShowUsrResults;
+	 // Whether I belong or not to groups of match is not checked here...
+	 // ...because I should be able to see old matches made in old groups to which I belonged
       case Rol_NET:
       case Rol_TCH:
       case Rol_DEG_ADM:
