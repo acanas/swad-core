@@ -77,9 +77,21 @@ function submitForm(FormId) {
 // WriteDateOnSameDay = false ==> don't write date if it's the same day than the last call
 // WriteWeekDay = true ==> write day of the week ('monday', 'tuesday'...)
 // WriteHMS = 3 least significant bits for hour, minute and second
+var txtToday = [
+	"",					// Unknown
+	"Avui",				// CA
+	"Heute",			// DE
+	"Today",			// EN
+	"Hoy",				// ES
+	"Aujourd'hui",		// FR
+	"Ko &aacute;ra",	// GN
+	"Oggi",				// IT
+	"Dzisiaj",			// PL
+	"Hoje",				// PT
+];
 
-function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
-									WriteDateOnSameDay,WriteWeekDay,WriteHMS) {
+function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,
+									WriteToday,WriteDateOnSameDay,WriteWeekDay,WriteHMS) {
 	// HMS: Hour, Minutes, Seconds
 	var today = new Date();
 	var todayYea = today.getFullYear();
@@ -87,7 +99,6 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
 	var todayDay = today.getDate();
 	var d = new Date();
 	var WriteDate;
-	var WriteTodayStr;
 	var Yea;
 	var Mon;
 	var Day;
@@ -123,16 +134,11 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
 	/* Set date */
 	StrDate = '';
 	if (WriteDate) {
-        WriteTodayStr = false;
-        if (StrToday != null)
-        	if (StrToday.length &&
-        		Yea == todayYea &&
-        		Mon == todayMon &&
-        		Day == todayDay)	// Today
-        		WriteTodayStr = true;
-        
-        if (WriteTodayStr)
-        	StrDate = StrToday;
+        WriteToday = WriteToday && (Yea == todayYea &&
+        							Mon == todayMon &&
+        							Day == todayDay);	// Date is today
+        if (WriteToday)
+        	StrDate = txtToday[Language];
 		else
 			switch (DateFormat) {
 				case 0:	// Dat_FORMAT_YYYY_MM_DD
@@ -549,8 +555,36 @@ function readConnUsrsData () {
 /***************** Update exam print main area using AJAX ********************/
 /*****************************************************************************/
 
+var txtConnectionIssues = [
+	"",																									// Unknown
+	"Problemes de connexi&oacute;. Els canvis no s&apos;han desat.",									// CA
+	"Verbindungsprobleme. Die &Auml;nderungen wurden nicht gespeichert.",								// DE
+	"Connection issues. The changes have not been saved.",												// EN
+	"Problema de conexi&oacute;n. Los cambios no se han guardado.",										// ES
+	"Probl&egrave;mes de connexion. Les modifications n'ont pas &eacute;t&eacute; enregistr&eacute;es.",// FR
+	"Problema de conexi&oacute;n. Los cambios no se han guardado.",										// GN Okoteve traducción
+	"Problemi di connessione. Le modifiche non sono state salvate.",									// IT
+	"Problemy z po&lstrok;&aogon;czeniem. Zmiany nie zosta&lstrok;y zapisane.",							// PL
+	"Problemas de conex&atilde;o. As altera&ccedil;&otilde;es n&atilde;o foram salvas."					// PT
+];
+
+var txtSaving = [
+	"",							// Unknown
+	"Desant&hellip;",			// CA
+	"Speichern&hellip;",		// DE
+	"Saving&hellip;",			// EN
+	"Guardando&hellip;",		// ES
+	"Enregistrement&hellip;",	// FR
+	"Guardando&hellip;",		// GN Okoteve traducción
+	"Salvataggio&hellip;",		// IT
+	"Zapisywanie&hellip;",		// PL
+	"Salvando&hellip;",			// PT
+];
+
+var IHaveFinishedTxt;
+
 // This function is called when user changes an answer in an exam print
-function updateExamPrint (idDiv,idInput,nameInput,Params,timeoutMsg,IHaveFinishedTxt,savingTxt) {
+function updateExamPrint (idDiv,idInput,nameInput,Params,Language) {
     var objXMLHttp = false;
 
 	objXMLHttp = AJAXCreateObject ();
@@ -614,7 +648,7 @@ function updateExamPrint (idDiv,idInput,nameInput,Params,timeoutMsg,IHaveFinishe
 				}
 			}
 		
-		disableFinished (savingTxt);	// Disable finished button on sending. When answer is saved and response received ==> the button will be reloaded
+		IHaveFinishedTxt = disableFinished (txtSaving[Language]);	// Disable finished button on sending. When answer is saved and response received ==> the button will be reloaded
 
 		objXMLHttp.open('POST',ActionAJAX,true);
 		objXMLHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -627,7 +661,7 @@ function updateExamPrint (idDiv,idInput,nameInput,Params,timeoutMsg,IHaveFinishe
 		var xmlHttpTimeout = setTimeout (ajaxTimeout,5000);	// 5 s
 		function ajaxTimeout () {
 			objXMLHttp.abort ();
-			alert (timeoutMsg);
+			alert (txtConnectionIssues[Language]);
 			disableFinished (IHaveFinishedTxt);	// Sending aborted ==> change "Saving..." to original "I have finished"
 		};
 	}
@@ -695,8 +729,9 @@ console.table(arr);
 /********* Disable button to finish exam when focus on a input text **********/
 /*****************************************************************************/
 
-function disableFinished (Txt) {
+function disableFinished (buttonNewTxt) {
 	var f = document.getElementById('finished');		// Access to form
+	var buttonOldTxt = '';
 	
 	if (f)
 		for (var i = 0; i < f.elements.length; i++) {
@@ -704,9 +739,12 @@ function disableFinished (Txt) {
 			if (b.type == 'submit') {
 				b.disabled = true;
 				b.style.opacity = 0.5;
-				b.innerHTML = Txt;
+				buttonOldTxt = b.innerHTML;
+				b.innerHTML = buttonNewTxt;
 			}
 		}
+	
+	return buttonOldTxt;
 }
 
 /*****************************************************************************/

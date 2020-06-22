@@ -962,22 +962,18 @@ static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
 	                                     unsigned NumQst,
 	                                     const char *Id,int NumOpt)
   {
-   extern const char *Txt_Connection_issues_;
-   extern const char *Txt_I_have_finished;
-   extern const char *Txt_Saving_;
-
    if (NumOpt < 0)
       HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
-			    "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u','%s','%s','%s');",
+			    "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u',%u);",
 		Id,
 		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst,
-		Txt_Connection_issues_,Txt_I_have_finished,Txt_Saving_);
+		(unsigned) Gbl.Prefs.Language);
    else	// NumOpt >= 0
       HTM_TxtF (" onclick=\"updateExamPrint('examprint','%s_%d','Ans',"
-		           "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u','%s','%s','%s');",
+		           "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u',%u);",
 		Id,NumOpt,
 		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst,
-	        Txt_Connection_issues_,Txt_I_have_finished,Txt_Saving_);
+	        (unsigned) Gbl.Prefs.Language);
    HTM_Txt (" return false;\"");	// return false is necessary to not submit form
   }
 

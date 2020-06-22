@@ -124,7 +124,7 @@ const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES] =
 	[Lan_LANGUAGE_EN     ] = "English",
 	[Lan_LANGUAGE_ES     ] = "Espa&ntilde;ol",
 	[Lan_LANGUAGE_FR     ] = "Fran&ccedil;ais",
-	[Lan_LANGUAGE_GN     ] = "Ava&ntilde;e&apos;&#7869;",
+	[Lan_LANGUAGE_GN     ] = "Ava&ntilde;e'&#7869;",
 	[Lan_LANGUAGE_IT     ] = "Italiano",
 	[Lan_LANGUAGE_PL     ] = "Polski",
 	[Lan_LANGUAGE_PT     ] = "Portugu&ecirc;s",
@@ -132,12 +132,12 @@ const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES] =
 const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	{
 	[Lan_LANGUAGE_UNKNOWN] = "",
-	[Lan_LANGUAGE_CA     ] = "Voleu canviar l&apos;idioma a catal&agrave;?",
+	[Lan_LANGUAGE_CA     ] = "Voleu canviar l'idioma a catal&agrave;?",
 	[Lan_LANGUAGE_DE     ] = "Wollen Sie die Sprache auf Deutsch umstellen?",
 	[Lan_LANGUAGE_EN     ] = "Do you want to change the language to English?",
 	[Lan_LANGUAGE_ES     ] = "&iquest;Desea cambiar el idioma a espa&ntilde;ol?",
 	[Lan_LANGUAGE_FR     ] = "Voulez-vous changer la langue au fran&ccedil;ais?",
-	[Lan_LANGUAGE_GN     ] = "&iquest;Oipota moambue pe &ntilde;e&apos;&#7869; pe ava&ntilde;e&apos;&#7869;?",
+	[Lan_LANGUAGE_GN     ] = "&iquest;Oipota moambue pe &ntilde;e'&#7869; pe ava&ntilde;e'&#7869;?",
 	[Lan_LANGUAGE_IT     ] = "Vuoi cambiare la lingua in italiano?",
 	[Lan_LANGUAGE_PL     ] = "Czy chcesz zmieni&cacute; j&eogon;zyk na polski?",
 	[Lan_LANGUAGE_PT     ] = "Voc&ecirc; quer mudar o idioma para portugu&ecirc;s?",
@@ -150,7 +150,7 @@ const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1 + Lan_NUM_LANG
 	[Lan_LANGUAGE_EN     ] = "Do you want to change your language to English?",
 	[Lan_LANGUAGE_ES     ] = "&iquest;Desea cambiar su idioma a espa&ntilde;ol?",
 	[Lan_LANGUAGE_FR     ] = "Voulez-vous changer votre langue au fran&ccedil;ais?",
-	[Lan_LANGUAGE_GN     ] = "&iquest;Oipota moambue pe &ntilde;e&apos;&#7869; pe ava&ntilde;e&apos;&#7869;?",
+	[Lan_LANGUAGE_GN     ] = "&iquest;Oipota moambue pe &ntilde;e'&#7869; pe ava&ntilde;e'&#7869;?",
 	[Lan_LANGUAGE_IT     ] = "Vuoi cambiare la tua lingua in italiano?",
 	[Lan_LANGUAGE_PL     ] = "Czy chcesz zmieni&cacute; j&eogon;zyk na polski?",
 	[Lan_LANGUAGE_PT     ] = "Voc&ecirc; quer mudar suo idioma para portugu&ecirc;s?",
@@ -163,7 +163,7 @@ const char *Txt_Switch_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	[Lan_LANGUAGE_EN     ] = "Switch to English",
 	[Lan_LANGUAGE_ES     ] = "Cambiar a espa&ntilde;ol",
 	[Lan_LANGUAGE_FR     ] = "Passer au fran&ccedil;ais",
-	[Lan_LANGUAGE_GN     ] = "Moambue pe &ntilde;e&apos;&#7869; ava&ntilde;e&apos;&#7869;",
+	[Lan_LANGUAGE_GN     ] = "Moambue pe &ntilde;e'&#7869; ava&ntilde;e'&#7869;",
 	[Lan_LANGUAGE_IT     ] = "Passare a italiano",
 	[Lan_LANGUAGE_PL     ] = "Prze&lstrok;&aogon;cz na polski",
 	[Lan_LANGUAGE_PT     ] = "Mudar para portugu&ecirc;s",
@@ -176,7 +176,7 @@ const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	[Lan_LANGUAGE_EN     ] = "Switching to English&hellip;",
 	[Lan_LANGUAGE_ES     ] = "Cambiando a espa&ntilde;ol&hellip;",
 	[Lan_LANGUAGE_FR     ] = "Passant au fran&ccedil;ais&hellip;",
-	[Lan_LANGUAGE_GN     ] = "Moambue pe &ntilde;e&apos;&#7869; ava&ntilde;e&apos;&#7869;&hellip;",
+	[Lan_LANGUAGE_GN     ] = "Moambue pe &ntilde;e'&#7869; ava&ntilde;e'&#7869;&hellip;",
 	[Lan_LANGUAGE_IT     ] = "Passando a italiano&hellip;",
 	[Lan_LANGUAGE_PL     ] = "Prze&lstrok;&aogon;cz na polski&hellip;",
 	[Lan_LANGUAGE_PT     ] = "Mudando para portugu&ecirc;s&hellip;",
@@ -186,7 +186,7 @@ const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 
 const char *Txt_A_face_marked_in_green_has_been_detected_ =
 #if   L==1	// ca
-	"S&apos;ha detectat un rostre (senyalat en verd) en posici&oacute; frontal"
+	"S'ha detectat un rostre (senyalat en verd) en posici&oacute; frontal"
 	" i amb el fons prou clar.<br />"
 	"Premeu sobre ell per confirmar la actualizaci&oacute; de la fotografia.";
 #elif L==2	// de
@@ -203,8 +203,8 @@ const char *Txt_A_face_marked_in_green_has_been_detected_ =
 	"Pulse sobre &eacute;l para confirmar la actualizaci&oacute;n de la fotograf&iacute;a.";
 #elif L==5	// fr
 	"Un visage (marqu&eacute; en vert) a &eacute;t&eacute; d&eacute;tect&eacute; en position avant"
-	" et l&apos;arri&egrave;re-plan est assez clair.<br />"
-	"Cliquez sur pour confirmer la mise &agrave; jour de l&apos;image.";
+	" et l'arri&egrave;re-plan est assez clair.<br />"
+	"Cliquez sur pour confirmer la mise &agrave; jour de l'image.";
 #elif L==6	// gn
 	"Se ha detectado un rostro (se&ntilde;alado en verde) en posici&oacute;n frontal"
 	" y con el fondo suficientemente claro.<br />"
@@ -212,7 +212,7 @@ const char *Txt_A_face_marked_in_green_has_been_detected_ =
 #elif L==7	// it
 	"Un viso (segnato in verde) &egrave; stato individuato nella posizione centrale"
 	" e lo sfondo &egrave; abbastanza chiaro.<br />"
-	"Clicca su di esso per confermare l&apos;aggiornamento dell&apos;immagine.";
+	"Clicca su di esso per confermare l'aggiornamento dell'immagine.";
 #elif L==8	// pl
 	"Twarz (zaznaczone na zielono) zosta&lstrok; wykryty w przednim po&lstrok;o&zdot;eniu,"
 	" a t&lstrok;o jest wystarczaj&aogon;co du&zdot;o &sacute;wiat&lstrok;a.<br />"
@@ -225,7 +225,7 @@ const char *Txt_A_face_marked_in_green_has_been_detected_ =
 
 const char *Txt_A_face_marked_in_red_has_been_detected_ =
 #if   L==1	// ca
-	"S&apos;ha detectat un rostre (senyalat en vermell) en posici&oacute; frontal,"
+	"S'ha detectat un rostre (senyalat en vermell) en posici&oacute; frontal,"
 	" per&ograve; el fons &eacute;s massa fosc.";
 #elif L==2	// de
 	"Ein Gesicht (rot markiert) wurde vor Position erkannt,"
@@ -294,7 +294,7 @@ const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_addre
 
 const char *Txt_A_question_has_been_added =
 #if   L==1	// ca
-	"S&apos;ha afegit una pregunta.";
+	"S'ha afegit una pregunta.";
 #elif L==2	// de
 	"Eine Frage wurde hinzugef&uuml;gt.";
 #elif L==3	// en
@@ -315,7 +315,7 @@ const char *Txt_A_question_has_been_added =
 
 const char *Txt_X_questions_have_been_added =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"S&apos;han afegit %u preguntes.";
+	"S'han afegit %u preguntes.";
 #elif L==2	// de
 	"%u Fragen wurden hinzugef&uuml;gt.";
 #elif L==3	// en
@@ -378,11 +378,11 @@ const char *Txt_A_student_can_only_belong_to_one_group =
 
 const char *Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"Un professor/a o un administrador/a l&apos;ha inscrit"
+	"Un professor/a o un administrador/a l'ha inscrit"
 	" com a <strong>%s</strong>"
-	" en l&apos;assignatura <strong>%s</strong>."
+	" en l'assignatura <strong>%s</strong>."
 	" &iquest;Confirma la inscripci&oacute;"
-	" o prefereix ser eliminat de l&apos;assignatura?";
+	" o prefereix ser eliminat de l'assignatura?";
 #elif L==2	// de
 	"Ein Lehrer oder ein Administrator hat Sie"
 	" als <strong>%s</strong>"
@@ -406,7 +406,7 @@ const char *Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_
 	"Un professeur ou un administrateur vous a enregistr&eacute;"
 	" en tant que <strong>%s</strong>"
 	" dans la mati&egrave;re <strong>%s</strong>."
-	" Voulez-vous confirmer l&apos;inscription"
+	" Voulez-vous confirmer l'inscription"
 	" ou pr&eacute;f&eacute;rez-vous &ecirc;tre retir&eacute; de la mati&egrave;re?";
 #elif L==6	// gn
 	"Un profesor/a o un administrador/a le ha inscrito"
@@ -533,7 +533,7 @@ const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other
 	" para ver contenido multimedia de otros sitios web";
 #elif L==5	// fr
 	"Accepter les cookies de tiers"
-	" pour afficher le contenu multim&eacute;dia d&apos;autres sites Web";
+	" pour afficher le contenu multim&eacute;dia d'autres sites Web";
 #elif L==6	// gn
 	"Aceptar cookies de terceros"
 	" para ver contenido multimedia de otros sitios web";	// Okoteve traducción
@@ -584,7 +584,7 @@ const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_degr
 	" por administradores de la titulaci&oacute;n";
 #elif L==5	// fr
 	"accessible en lecture et en &eacute;criture"
-	" par les administrateurs de l&apos;&eacute;tude";
+	" par les administrateurs de l'&eacute;tude";
 #elif L==6	// gn
 	"accesible para lectura y escritura"
 	" por administradores de la titulaci&oacute;n";	// Okoteve traducción
@@ -601,7 +601,7 @@ const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_degr
 
 const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_institution =
 #if   L==1	// ca
-	"accessible per a lectura i escriptura per administradors de l&apos;instituci&oacute;";
+	"accessible per a lectura i escriptura per administradors de l'instituci&oacute;";
 #elif L==2	// de
 	"zum Schreiben zug&auml;nglich f&uuml;r Administratoren der Hochschule";
 #elif L==3	// en
@@ -630,7 +630,7 @@ const char *Txt_accessible_for_reading_and_writing_by_project_members =
 #elif L==4	// es
 	"accesible para lectura y escritura por miembros del proyecto";
 #elif L==5	// fr
-	"accessible pour la lecture et l&apos;&eacute;criture par les membres du projet";
+	"accessible pour la lecture et l'&eacute;criture par les membres du projet";
 #elif L==6	// gn
 	"accesible para lectura y escritura por miembros del proyecto";	// Okoteve traducción
 #elif L==7	// it
@@ -651,7 +651,7 @@ const char *Txt_accessible_for_reading_and_writing_by_project_tutors_and_evaluat
 #elif L==4	// es
 	"accesible para lectura y escritura por tutores y evaluadores del proyecto";
 #elif L==5	// fr
-	"accessible pour la lecture et l&apos;&eacute;criture par tuteurs et &eacute;valuateurs du projet";
+	"accessible pour la lecture et l'&eacute;criture par tuteurs et &eacute;valuateurs du projet";
 #elif L==6	// gn
 	"accesible para lectura y escritura por tutores y evaluadores del proyecto";	// Okoteve traducción
 #elif L==7	// it
@@ -685,7 +685,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 
 const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_course =
 #if   L==1	// ca
-	"accessible per a lectura i escriptura per estudiants i professors de l&apos;assignatura";
+	"accessible per a lectura i escriptura per estudiants i professors de l'assignatura";
 #elif L==2	// de
 	"zum Schreiben zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Kurs";
 #elif L==3	// en
@@ -719,7 +719,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 	" por estudiantes y profesores de la titulaci&oacute;n";
 #elif L==5	// fr
 	"accessible en lecture et en &eacute;criture"
-	" par les &eacute;tudiants et les enseignants de l&apos;&eacute;tude";
+	" par les &eacute;tudiants et les enseignants de l'&eacute;tude";
 #elif L==6	// gn
 	"accesible para lectura y escritura"
 	" por estudiantes y profesores de la titulaci&oacute;n";	// Okoteve traducción
@@ -757,7 +757,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 
 const char *Txt_accessible_for_reading_and_writing_by_students_of_the_group_and_teachers_of_the_course =
 #if   L==1	// ca
-	"accesible per a lectura i escriptura per estudiants del grup i professors de l&apos;assignatura";
+	"accesible per a lectura i escriptura per estudiants del grup i professors de l'assignatura";
 #elif L==2	// de
 	"zum Schreiben zug&auml;nglich f&uuml;r Studenten der Gruppe und Lehrkr&auml;fte der Kurs";
 #elif L==3	// en
@@ -778,7 +778,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_of_the_group_and_
 
 const char *Txt_accessible_for_reading_and_writing_by_teachers_of_the_course =
 #if   L==1	// ca
-	"accessible per a lectura i escriptura per professors de l&apos;assignatura";
+	"accessible per a lectura i escriptura per professors de l'assignatura";
 #elif L==2	// de
 	"zum Schreiben zug&auml;nglich f&uuml;r Lehrkr&auml;fte der Kurs";
 #elif L==3	// en
@@ -799,7 +799,7 @@ const char *Txt_accessible_for_reading_and_writing_by_teachers_of_the_course =
 
 const char *Txt_accessible_for_reading_and_writing_by_you_and_the_teachers_of_the_course =
 #if   L==1	// ca
-	"accessible per a lectura per vost&egrave; i els professors de l&apos;assignatura";
+	"accessible per a lectura per vost&egrave; i els professors de l'assignatura";
 #elif L==2	// de
 	"zum Schreiben zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte der Kurs";
 #elif L==3	// en
@@ -820,7 +820,7 @@ const char *Txt_accessible_for_reading_and_writing_by_you_and_the_teachers_of_th
 
 const char *Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_course =
 #if   L==1	// ca
-	"accesible nom&egrave; per a lectura per vost&eacute; i els professors de l&apos;assignatura";
+	"accesible nom&egrave; per a lectura per vost&eacute; i els professors de l'assignatura";
 #elif L==2	// de
 	"zum Lesen zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte der Kurs";
 #elif L==3	// en
@@ -862,7 +862,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_cent
 
 const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_course =
 #if   L==1	// ca
-	"accessible nom&eacute;s per a lectura per estudiants i professors de l&apos;assignatura";
+	"accessible nom&eacute;s per a lectura per estudiants i professors de l'assignatura";
 #elif L==2	// de
 	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Kurs";
 #elif L==3	// en
@@ -896,7 +896,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degr
 	" por estudiantes y profesores de la titulaci&oacute;n";
 #elif L==5	// fr
 	"accessible uniquement pour la lecture"
-	" par les &eacute;tudiants et les enseignants de l&apos;&eacute;tude";
+	" par les &eacute;tudiants et les enseignants de l'&eacute;tude";
 #elif L==6	// gn
 	"accesible solo para lectura"
 	" por estudiantes y profesores de la titulaci&oacute;n";	// Okoteve traducción
@@ -913,7 +913,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degr
 
 const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_institution =
 #if   L==1	// ca
-	"accessible nom&eacute;s per a lectura per estudiants i professors de l&apos;instituci&oacute;";
+	"accessible nom&eacute;s per a lectura per estudiants i professors de l'instituci&oacute;";
 #elif L==2	// de
 	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Hochschule";
 #elif L==3	// en
@@ -934,7 +934,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_inst
 
 const char *Txt_accessible_only_for_reading_by_students_of_the_group_and_teachers_of_the_course =
 #if   L==1	// ca
-	"accesible nom&eacute;s per a lectura per estudiants del grup i professors de l&apos;assignatura";
+	"accesible nom&eacute;s per a lectura per estudiants del grup i professors de l'assignatura";
 #elif L==2	// de
 	"zum Lesen zug&auml;nglich f&uuml;r Studenten der Gruppe und Lehrkr&auml;fte der Kurs";
 #elif L==3	// en
@@ -1005,11 +1005,11 @@ const char *Txt_Add_this_ID =
 #elif L==4	// es
 	"A&ntilde;adir este ID";
 #elif L==5	// fr
-	"Ajouter ce num&eacute;ro d&apos;identit&eacute;";
+	"Ajouter ce num&eacute;ro d'identit&eacute;";
 #elif L==6	// gn
 	"A&ntilde;adir este ID";	// Okoteve traducción
 #elif L==7	// it
-	"Aggiungere questa carta d&apos;identit&agrave;";
+	"Aggiungere questa carta d'identit&agrave;";
 #elif L==8	// pl
 	"Dodaj ten identyfikator";
 #elif L==9	// pt
@@ -1167,7 +1167,7 @@ const char *Txt_AGENDA_PAST___FUTURE_EVENTS[2] =
 	{
 	// Agd_PAST___EVENTS
 #if   L==1	// ca
-	"Esdeveniments passats i d&apos;avui"
+	"Esdeveniments passats i d'avui"
 #elif L==2	// de
 	"Vergangenheit und Gegenwart Ereignisse"
 #elif L==3	// en
@@ -1188,7 +1188,7 @@ const char *Txt_AGENDA_PAST___FUTURE_EVENTS[2] =
 	,
 	// Agd_FUTURE_EVENTS
 #if   L==1	// ca
-	"Esdeveniments d&apos;avui i futurs"
+	"Esdeveniments d'avui i futurs"
 #elif L==2	// de
 	"Aktuelle und zuk&uuml;nftige Ereignisse"
 #elif L==3	// en
@@ -1354,7 +1354,7 @@ const char *Txt_all_files_inside_the_root_folder =
 #elif L==6	// gn
 	"todos los archivos dentro de la carpeta ra&iacute;z";	// Okoteve traducción
 #elif L==7	// it
-	"tutti i file all&apos;interno della cartella principale";
+	"tutti i file all'interno della cartella principale";
 #elif L==8	// pl
 	"wszystkie pliki znajduj&aogon;ce si&eogon; w folderze g&lstrok;&oacute;wnym";
 #elif L==9	// pt
@@ -1606,7 +1606,7 @@ const char *Txt_Already_existed_an_assignment_with_the_folder_X =	// Warning: it
 #elif L==6	// gn
 	"Ya exist&iacute;a una actividad con la carpeta <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"Esiste gi&agrave; un&apos;attivit&agrave; con la cartella <strong>%s</strong>.";
+	"Esiste gi&agrave; un'attivit&agrave; con la cartella <strong>%s</strong>.";
 #elif L==8	// pl
 	"Jest juz zadanie z folderu <strong>%s</strong>.";
 #elif L==9	// pt
@@ -1627,7 +1627,7 @@ const char *Txt_Already_existed_an_assignment_with_the_title_X =	// Warning: it 
 #elif L==6	// gn
 	"Ya exist&iacute;a una actividad con el t&iacute;tulo <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"Esiste gi&agrave; un&apos;attivit&agrave; con il titolo <strong>%s</strong>.";
+	"Esiste gi&agrave; un'attivit&agrave; con il titolo <strong>%s</strong>.";
 #elif L==8	// pl
 	"Istniala juz przydzialu z tytulu <strong>%s</strong>.";
 #elif L==9	// pt
@@ -1762,7 +1762,7 @@ const char *Txt_Announcements =
 
 const char *Txt_Announcement_of_exam_removed =
 #if   L==1	// ca
-	"Convocat&ograve;ria d&apos;examen eliminada.";
+	"Convocat&ograve;ria d'examen eliminada.";
 #elif L==2	// de
 	"Aufruf zur Pr&uuml;fung entfernt.";
 #elif L==3	// en
@@ -1770,11 +1770,11 @@ const char *Txt_Announcement_of_exam_removed =
 #elif L==4	// es
 	"Convocatoria de examen eliminada.";
 #elif L==5	// fr
-	"Convocation pour l&apos;examen supprim&eacute;.";
+	"Convocation pour l'examen supprim&eacute;.";
 #elif L==6	// gn
 	"Convocatoria de examen eliminada.";	// Okoteve traducción
 #elif L==7	// it
-	"Appello d&apos;esame rimosso.";
+	"Appello d'esame rimosso.";
 #elif L==8	// pl
 	"Ogloszenie egzamin usuniete.";
 #elif L==9	// pt
@@ -1783,7 +1783,7 @@ const char *Txt_Announcement_of_exam_removed =
 
 const char *Txt_Announcements_of_exams =
 #if   L==1	// ca
-	"Convocat&ograve;ries d&apos;ex&agrave;mens";
+	"Convocat&ograve;ries d'ex&agrave;mens";
 #elif L==2	// de
 	"Aufrufe f&uuml;r Pr&uuml;fung";
 #elif L==3	// en
@@ -1795,7 +1795,7 @@ const char *Txt_Announcements_of_exams =
 #elif L==6	// gn
 	"Convocatorias de ex&aacute;menes";	// Okoteve traducción
 #elif L==7	// it
-	"Appelli d&apos;esame";
+	"Appelli d'esame";
 #elif L==8	// pl
 	"Ogloszenia egzamin&oacute;w";
 #elif L==9	// pt
@@ -1858,7 +1858,7 @@ const char *Txt_Another_room =
 #elif L==6	// gn
 	"Otra sala";	// Okoteve traducción
 #elif L==7	// it
-	"Un&apos;altra aula";
+	"Un'altra aula";
 #elif L==8	// pl
 	"Kolejna klasa";
 #elif L==9	// pt
@@ -1917,11 +1917,11 @@ const char *Txt_Another_ID =
 #elif L==4	// es
 	"Otro ID";
 #elif L==5	// fr
-	"Un autre num&eacute;ro d&apos;identit&eacute;";
+	"Un autre num&eacute;ro d'identit&eacute;";
 #elif L==6	// gn
 	"Otro ID";		// Okoteve traducción
 #elif L==7	// it
-	"Un&apos;altra carta d&apos;identit&agrave;";
+	"Un'altra carta d'identit&agrave;";
 #elif L==8	// pl
 	"Another ID";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -1942,7 +1942,7 @@ const char *Txt_Another_institution =
 #elif L==6	// gn
 	"Otra instituci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
-	"Un&apos;altra istituzione";
+	"Un'altra istituzione";
 #elif L==8	// pl
 	"Kolejna instytucja";
 #elif L==9	// pt
@@ -1963,7 +1963,7 @@ const char *Txt_Another_place =
 #elif L==6	// gn
 	"Otro lugar";	// Okoteve traducción
 #elif L==7	// it
-	"Un&apos;altra localit&grave;";
+	"Un'altra localit&grave;";
 #elif L==8	// pl
 	"Innym miejscem";
 #elif L==9	// pt
@@ -1972,15 +1972,15 @@ const char *Txt_Another_place =
 
 const char *Txt_Another_user_s_profile =
 #if   L==1	// ca
-	"Perfil d&apos;un altre usuari";
+	"Perfil d'un altre usuari";
 #elif L==2	// de
 	"Profil eines anderen Benutzers";
 #elif L==3	// en
-	"Another user&apos;s profile";
+	"Another user's profile";
 #elif L==4	// es
 	"Perfil de otro usuario";
 #elif L==5	// fr
-	"Profil d&apos;un autre utilisateur";
+	"Profil d'un autre utilisateur";
 #elif L==6	// gn
 	"Perfil de otro usuario";	// Okoteve traducción
 #elif L==7	// it
@@ -2148,7 +2148,7 @@ const char *Txt_Any_type_of_degree =
 #elif L==4	// es
 	"Cualquier tipo de titulaci&oacute;n";
 #elif L==5	// fr
-	"Tout type d&apos;&eacute;tude";
+	"Tout type d'&eacute;tude";
 #elif L==6	// gn
 	"Cualquier tipo de titulaci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -2169,7 +2169,7 @@ const char *Txt_any_user =
 #elif L==4	// es
 	"cualquier usuario";
 #elif L==5	// fr
-	"n&apos;importe qu&apos;utilisateur";
+	"n'importe qu'utilisateur";
 #elif L==6	// gn
 	"cualquier usuario";	// Okoteve traducción
 #elif L==7	// it
@@ -2190,7 +2190,7 @@ const char *Txt_Application_key =
 #elif L==4	// es
 	"Clave de aplicaci&oacute;n";
 #elif L==5	// fr
-	"Cl&eacute; d&apos;application";
+	"Cl&eacute; d'application";
 #elif L==6	// gn
 	"Clave de aplicaci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -2203,7 +2203,7 @@ const char *Txt_Application_key =
 
 const char *Txt_Assessment_criteria =
 #if   L==1	// ca
-	"Criteris d&apos;avaluaci&oacute;";
+	"Criteris d'avaluaci&oacute;";
 #elif L==2	// de
 	"Bewertungskriterien";
 #elif L==3	// en
@@ -2211,7 +2211,7 @@ const char *Txt_Assessment_criteria =
 #elif L==4	// es
 	"Criterios de evaluaci&oacute;n";
 #elif L==5	// fr
-	"Crit&egrave;res d&apos;&eacute;valuation";
+	"Crit&egrave;res d'&eacute;valuation";
 #elif L==6	// gn
 	"Criterios de evaluaci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -2419,7 +2419,7 @@ const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME] =
 
 const char *Txt_Assignments_area =
 #if   L==1	// ca
-	"Zona d&apos;activitats";
+	"Zona d'activitats";
 #elif L==2	// de
 	"Aufgaben-Bereich";
 #elif L==3	// en
@@ -2427,7 +2427,7 @@ const char *Txt_Assignments_area =
 #elif L==4	// es
 	"Zona de actividades";
 #elif L==5	// fr
-	"Zone d&apos;activit&eacute;s";
+	"Zone d'activit&eacute;s";
 #elif L==6	// gn
 	"Zona de actividades";	// Okoteve traducción
 #elif L==7	// it
@@ -2440,7 +2440,7 @@ const char *Txt_Assignments_area =
 
 const char *Txt_assignments_area =
 #if   L==1	// ca
-	"zona d&apos;activitats";	// Necessita traduccio
+	"zona d'activitats";	// Necessita traduccio
 #elif L==2	// de
 	"Aufgaben-Bereich";
 #elif L==3	// en
@@ -2448,7 +2448,7 @@ const char *Txt_assignments_area =
 #elif L==4	// es
 	"zona de actividades";
 #elif L==5	// fr
-	"zone d&apos;activit&eacute;s";
+	"zone d'activit&eacute;s";
 #elif L==6	// gn
 	"zona de actividades";	// Okoteve traducción
 #elif L==7	// it
@@ -2545,7 +2545,7 @@ const char *Txt_average =
 
 const char *Txt_Average_number_BR_of_ASSIG_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&acute;<br />d&apos;activitats<br />per assignatura";
+	"Nombre mitj&acute;<br />d'activitats<br />per assignatura";
 #elif L==2	// de
 	"Durchschnittliche Anzahl<br />von Aufgaben<br />pro Kurs";
 #elif L==3	// en
@@ -2553,7 +2553,7 @@ const char *Txt_Average_number_BR_of_ASSIG_BR_per_course =
 #elif L==4	// es
 	"N.&ordm; medio<br />de actividades<br />por asignatura";
 #elif L==5	// fr
-	"Nombre moyen<br />d&apos;activit&eacute;s<br />par mati&egrave;re";
+	"Nombre moyen<br />d'activit&eacute;s<br />par mati&egrave;re";
 #elif L==6	// gn
 	"N.&ordm; medio<br />de actividades<br />por asignatura";	// Okoteve traducción
 #elif L==7	// it
@@ -2566,7 +2566,7 @@ const char *Txt_Average_number_BR_of_ASSIG_BR_per_course =
 
 const char *Txt_Average_number_BR_of_exams_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&acute;<br />d&apos;ex&agrave;mens<br />per assignatura";
+	"Nombre mitj&acute;<br />d'ex&agrave;mens<br />per assignatura";
 #elif L==2	// de
 	"Durchschnittliche Anzahl<br />von Pr&uuml;fung<br />pro Kurs";
 #elif L==3	// en
@@ -2574,11 +2574,11 @@ const char *Txt_Average_number_BR_of_exams_BR_per_course =
 #elif L==4	// es
 	"N.&ordm; medio<br />de ex&aacute;menes<br />por asignatura";
 #elif L==5	// fr
-	"Nombre moyen<br />d&apos;examens<br />par mati&egrave;re";
+	"Nombre moyen<br />d'examens<br />par mati&egrave;re";
 #elif L==6	// gn
 	"N.&ordm; medio<br />de ex&aacute;menes<br />por asignatura";	// Okoteve traducción
 #elif L==7	// it
-	"Numero medio<br />d&apos;esame<br />per corso";
+	"Numero medio<br />d'esame<br />per corso";
 #elif L==8	// pl
 	"&Sacute;rednia liczba<br />egzamin&oacute;w<br />na kurs";
 #elif L==9	// pt
@@ -2608,7 +2608,7 @@ const char *Txt_Average_number_BR_of_games_BR_per_course =
 
 const char *Txt_Average_number_BR_of_items_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&acute;<br />d&apos;items<br />per assignatura";
+	"Nombre mitj&acute;<br />d'items<br />per assignatura";
 #elif L==2	// de
 	"Durchschnittliche Anzahl<br />von Programmelemente<br />pro Kurs";
 #elif L==3	// en
@@ -2616,7 +2616,7 @@ const char *Txt_Average_number_BR_of_items_BR_per_course =
 #elif L==4	// es
 	"N.&ordm; medio<br />de items<br />por asignatura";
 #elif L==5	// fr
-	"Nombre moyen<br />d&apos;&eacute;l&eacute;ments<br />par mati&egrave;re";
+	"Nombre moyen<br />d'&eacute;l&eacute;ments<br />par mati&egrave;re";
 #elif L==6	// gn
 	"N.&ordm; medio<br />de items<br />por asignatura";	// Okoteve traducción
 #elif L==7	// it
@@ -2692,7 +2692,7 @@ const char *Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course =
 
 const char *Txt_Average_number_BR_of_surveys_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&acute;<br />d&apos;enquestes<br />per assignatura";
+	"Nombre mitj&acute;<br />d'enquestes<br />per assignatura";
 #elif L==2	// de
 	"Durchschnittliche Anzahl<br />von Umfragen<br />pro Kurs";
 #elif L==3	// en
@@ -2713,7 +2713,7 @@ const char *Txt_Average_number_BR_of_surveys_BR_per_course =
 
 const char *Txt_Average_number_of_courses_to_which_a_user_belongs =
 #if   L==1	// ca
-	"Nombre mitj&acute; d&apos;assignatures a las quals pertany cada usuari";
+	"Nombre mitj&acute; d'assignatures a las quals pertany cada usuari";
 #elif L==2	// de
 	"Durchschnittliche Anzahl von Kursen, an denen der Benutzer teilnimmt";
 #elif L==3	// en
@@ -2784,7 +2784,7 @@ const char *Txt_Average_number_of_users_belonging_to_a_course =
 #elif L==4	// es
 	"N.&ordm; medio de usuarios que pertenecen a cada asignatura";
 #elif L==5	// fr
-	"Nombre moyen d&apos;utilisateurs appartenant &agrave; une mati&egrave;re";
+	"Nombre moyen d'utilisateurs appartenant &agrave; une mati&egrave;re";
 #elif L==6	// gn
 	"N.&ordm; medio de usuarios que pertenecen a cada asignatura";	// Okoteve traducción
 #elif L==7	// it
@@ -3019,7 +3019,7 @@ const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_reg
 
 const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
 #if   L==1	// ca
-	"Abans d&apos;accedir a qualsevol altra opci&oacute;"
+	"Abans d'accedir a qualsevol altra opci&oacute;"
 	" ha de crear el seu sobrenom.";
 #elif L==2	// de
 	"Bevor ich auf jede andere Option"
@@ -3031,7 +3031,7 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
 	"Antes de acceder a cualquier otra opci&oacute;n"
 	" debe crear su apodo.";
 #elif L==5	// fr
-	"Avant d&apos;aller &agrave; une autre option"
+	"Avant d'aller &agrave; une autre option"
 	" vous devez cr&eacute;er votre surnom.";
 #elif L==6	// gn
 	"Antes de acceder a cualquier otra opci&oacute;n"
@@ -3049,7 +3049,7 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
 
 const char *Txt_Before_going_to_any_other_option_you_must_create_your_password =
 #if   L==1	// ca
-	"Abans d&apos;accedir a qualsevol altra opci&oacute;"
+	"Abans d'accedir a qualsevol altra opci&oacute;"
 	" ha de crear la seva contrasenya.";
 #elif L==2	// de
 	"Bevor ich auf jede andere Option"
@@ -3061,7 +3061,7 @@ const char *Txt_Before_going_to_any_other_option_you_must_create_your_password =
 	"Antes de acceder a cualquier otra opci&oacute;n"
 	" debe crear su contrase&ntilde;a.";
 #elif L==5	// fr
-	"Avant d&apos;aller &agrave; une autre option"
+	"Avant d'aller &agrave; une autre option"
 	" vous devez cr&eacute;er votre mot de passe.";
 #elif L==6	// gn
 	"Antes de acceder a cualquier otra opci&oacute;n"
@@ -3079,7 +3079,7 @@ const char *Txt_Before_going_to_any_other_option_you_must_create_your_password =
 
 const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address =
 #if   L==1	// ca
-	"Abans d&apos;accedir a qualsevol altra opci&oacute;"
+	"Abans d'accedir a qualsevol altra opci&oacute;"
 	" ha de omplir la seva adre&ccedil;a de correu.";
 #elif L==2	// de
 	"Bevor ich auf jede andere Option"
@@ -3091,7 +3091,7 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_add
 	"Antes de acceder a cualquier otra opci&oacute;n"
 	" debe rellenar su direcci&oacute;n de correo.";
 #elif L==5	// fr
-	"Avant d&apos;aller &agrave; une autre option"
+	"Avant d'aller &agrave; une autre option"
 	" vous devez indiquer votre adresse email.";
 #elif L==6	// gn
 	"Antes de acceder a cualquier otra opci&oacute;n"
@@ -3438,7 +3438,7 @@ const char *Txt_Call_the_roll =
 #elif L==4	// es
 	"Pasar lista";
 #elif L==5	// fr
-	"Faire l&apos;appel";
+	"Faire l'appel";
 #elif L==6	// gn
 	"Pasar lista";	// Okoteve traducción
 #elif L==7	// it
@@ -3451,8 +3451,8 @@ const char *Txt_Call_the_roll =
 
 const char *Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"No s&apos;ha creat la carpeta <strong>%s</strong>"
-	" perque s&apos;excediria la quota de disc.";
+	"No s'ha creat la carpeta <strong>%s</strong>"
+	" perque s'excediria la quota de disc.";
 #elif L==2	// de
 	"Verzeichnis <strong>%s</strong> kann aus Platzgründen"
 	" nicht erstellt werden.";
@@ -3464,7 +3464,7 @@ const char *Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quo
 	" porque se exceder&iacute;a la cuota de disco.";
 #elif L==5	// fr
 	"Impossible de cr&eacute;er le r&eacute;pertoire <strong>%s</strong>"
-	" parce qu&apos;il d&eacute;passerait le quota de disque.";
+	" parce qu'il d&eacute;passerait le quota de disque.";
 #elif L==6	// gn
 	"No se ha creado la carpeta <strong>%s</strong>"
 	" porque se exceder&iacute;a la cuota de disco.";	// Okoteve traducción
@@ -3481,7 +3481,7 @@ const char *Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quo
 
 const char *Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or_a_file_with_that_name =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"No s&apos;ha creat la carpeta <strong>%s</strong>"
+	"No s'ha creat la carpeta <strong>%s</strong>"
 	" perque ja existeix una carpeta o un fitxer amb aquest nom.";
 #elif L==2	// de
 	"Cannot create the folder <strong>%s</strong>"
@@ -3511,8 +3511,8 @@ const char *Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or
 
 const char *Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"No s&apos;ha creat l&apos;enlla&ccedil; <strong>%s</strong>"
-	" perque s&apos;excediria la quota de disc.";
+	"No s'ha creat l'enlla&ccedil; <strong>%s</strong>"
+	" perque s'excediria la quota de disc.";
 #elif L==2	// de
 	"Link <strong>%s</strong> kann aus Platzgr&uuml;nden"
 	" nicht erstellt werden.";
@@ -3524,7 +3524,7 @@ const char *Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota
 	" porque se exceder&iacute;a la cuota de disco.";
 #elif L==5	// fr
 	"Impossible de cr&eacute;er le lien <strong>%s</strong>"
-	" parce qu&apos;il d&eacute;passerait le quota de disque.";
+	" parce qu'il d&eacute;passerait le quota de disque.";
 #elif L==6	// gn
 	"No se ha creado el enlace <strong>%s</strong>"
 	" porque se exceder&iacute;a la cuota de disco.";	// Okoteve traducción
@@ -3541,7 +3541,7 @@ const char *Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota
 
 const char *Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a_link_with_that_name =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"No s&apos;ha creat l&apos;enlla&ccedil; <strong>%s</strong>"
+	"No s'ha creat l'enlla&ccedil; <strong>%s</strong>"
 	" perque ja existeix una carpeta o un enlla&ccedil; amb aquest nom.";
 #elif L==2	// de
 	"Cannot create the link <strong>%s</strong>"
@@ -3579,7 +3579,7 @@ const char *Txt_Can_not_rename_a_folder_of_assignment =
 #elif L==4	// es
 	"No se puede cambiar el nombre de una carpeta de actividad.";
 #elif L==5	// fr
-	"Impossible de renommer un r&eacute;pertoire d&apos;activit&eacute;.";
+	"Impossible de renommer un r&eacute;pertoire d'activit&eacute;.";
 #elif L==6	// gn
 	"No se puede cambiar el nombre de una carpeta de actividad.";	// Okoteve traducción
 #elif L==7	// it
@@ -3623,7 +3623,7 @@ const char *Txt_Centre =
 #elif L==5	// fr
 	"Centre";
 #elif L==6	// gn
-	"Mbo&apos;ehao";
+	"Mbo'ehao";
 #elif L==7	// it
 	"Centro";
 #elif L==8	// pl
@@ -3644,7 +3644,7 @@ const char *Txt_centre =
 #elif L==5	// fr
 	"centre";
 #elif L==6	// gn
-	"mbo&apos;ehao";
+	"mbo'ehao";
 #elif L==7	// it
 	"centro";
 #elif L==8	// pl
@@ -3773,7 +3773,7 @@ const char *Txt_Centres =
 #elif L==5	// fr
 	"Centres";
 #elif L==6	// gn
-	"Mbo&apos;ehao";
+	"Mbo'ehao";
 #elif L==7	// it
 	"Centri";
 #elif L==8	// pl
@@ -3794,7 +3794,7 @@ const char *Txt_Centres_ABBREVIATION =
 #elif L==5	// fr
 	"Cent.";
 #elif L==6	// gn
-	"Mbo&apos;ehao";
+	"Mbo'ehao";
 #elif L==7	// it
 	"Cent.";
 #elif L==8	// pl
@@ -3815,7 +3815,7 @@ const char *Txt_centres =
 #elif L==5	// fr
 	"centres";
 #elif L==6	// gn
-	"mbo&apos;ehao";
+	"mbo'ehao";
 #elif L==7	// it
 	"centri";
 #elif L==8	// pl
@@ -3849,7 +3849,7 @@ const char *Txt_CENTRES_HELP_ORDER[Ctr_NUM_ORDERS] =
 	,
  	[Ctr_ORDER_BY_NUM_USRS] =
 #if   L==1	// ca
-	"Ordenar per n&ordm; d&apos;usuaris"
+	"Ordenar per n&ordm; d'usuaris"
 #elif L==2	// de
 	"Nach Anzahl der Benutzer sortieren"
 #elif L==3	// en
@@ -3857,7 +3857,7 @@ const char *Txt_CENTRES_HELP_ORDER[Ctr_NUM_ORDERS] =
 #elif L==4	// es
 	"Ordenar por n&ordm; de usuarios"
 #elif L==5	// fr
-	"Trier par nombre d&apos;utilisateurs"
+	"Trier par nombre d'utilisateurs"
 #elif L==6	// gn
 	"Ordenar por n&ordm; de usuarios"	// Okoteve traducción
 #elif L==7	// it
@@ -3904,7 +3904,7 @@ const char *Txt_CENTRES_ORDER[Ctr_NUM_ORDERS] =
 #elif L==5	// fr
 	"Centre"
 #elif L==6	// gn
-	"Mbo&apos;ehao"
+	"Mbo'ehao"
 #elif L==7	// it
 	"Centro"
 #elif L==8	// pl
@@ -3958,7 +3958,7 @@ const char *Txt_Centres_with_map =
 
 const char *Txt_Centres_with_pending_degrees =
 #if   L==1	// ca
-	"Centres amb titulacions pendents d&apos;activar";
+	"Centres amb titulacions pendents d'activar";
 #elif L==2	// de
 	"Lehrinstitute mit anh&auml;ngig Studiengang";
 #elif L==3	// en
@@ -4052,7 +4052,7 @@ const char *Txt_Change_image_video =
 #elif L==5	// fr
 	"Changer image / vid&eacute;o";
 #elif L==6	// gn
-	"Moambue ta&apos;&atilde;nga / video";
+	"Moambue ta'&atilde;nga / video";
 #elif L==7	// it
 	"Cambiare immagine / video";
 #elif L==8	// pl
@@ -4449,7 +4449,7 @@ const char *Txt_Color_of_the_graphic =
 #elif L==4	// es
 	"Color de la gr&aacute;fica";
 #elif L==5	// fr
-	"Couleur de l&apos;image";
+	"Couleur de l'image";
 #elif L==6	// gn
 	"Color de la gr&aacute;fica";	// Okoteve traducción
 #elif L==7	// it
@@ -4584,27 +4584,6 @@ const char *Txt_Comments =
 	"Komentarze";
 #elif L==9	// pt
 	"Coment&aacute;rios";
-#endif
-
-const char *Txt_Connection_issues_ =
-#if   L==1	// ca
-	"Problemes de connexi&oacute;. Els canvis no s&apos;han desat.";
-#elif L==2	// de
-	"Verbindungsprobleme. Die &Auml;nderungen wurden nicht gespeichert.";
-#elif L==3	// en
-	"Connection issues. The changes have not been saved.";
-#elif L==4	// es
-	"Problema de conexi&oacute;n. Los cambios no se han guardado.";
-#elif L==5	// fr
-	"Probl&egrave;mes de connexion. Les modifications n&apos;ont pas &eacute;t&eacute; enregistr&eacute;es.";
-#elif L==6	// gn
-	"Problema de conexi&oacute;n. Los cambios no se han guardado.";	// Okoteve traducción
-#elif L==7	// it
-	"Problemi di connessione. Le modifiche non sono state salvate.";
-#elif L==8	// pl
-	"Problemy z po&lstrok;&aogon;czeniem. Zmiany nie zosta&lstrok;y zapisane.";
-#elif L==9	// pt
-	"Problemas de conex&atilde;o. As altera&ccedil;&otilde;es n&atilde;o foram salvas.";
 #endif
 
 const char *Txt_Configure =
@@ -4787,9 +4766,9 @@ const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_reque
 #elif L==5	// fr
 	"F&eacute;licitations! Vous avez cr&eacute;&eacute; votre compte <strong>@%s</strong>."
 	" Maintenant %s vous demander&aacute; certaines donn&eacute;es pour compl&eacute;ter votre profil."
-	" Vous serez alors en mesure de demander l&apos;inscription &agrave; des mati&egrave;res."
+	" Vous serez alors en mesure de demander l'inscription &agrave; des mati&egrave;res."
 	" Si une mati&egrave;re ne existe pas,"
-	" vous pouvez le cr&eacute;er avant de demander l&apos;inscription en elle"
+	" vous pouvez le cr&eacute;er avant de demander l'inscription en elle"
 	" (la m&ecirc;me chose se applique aux institutions, centres et degr&eacute;s).";
 #elif L==6	// gn
 	"&iexcl;Enhorabuena! Ha creado su cuenta <strong>@%s</strong>."
@@ -4801,8 +4780,8 @@ const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_reque
 #elif L==7	// it
 	"Congratulazioni! Avete creato il vostro account <strong>@%s</strong>."
 	" Ora %s chieder&agrave; alcuni dati per completare il tuo profilo."
-	" Allora si sar&agrave; in grado di applicare per l&apos;iscrizione ai corsi."
-	" Se un corso non esiste, &egrave; possibile crearlo prima di applicare per l&apos;iscrizione in esso"
+	" Allora si sar&agrave; in grado di applicare per l'iscrizione ai corsi."
+	" Se un corso non esiste, &egrave; possibile crearlo prima di applicare per l'iscrizione in esso"
 	" (lo stesso vale per le istituzioni, centri e gradi).";
 #elif L==8	// pl
 	"Gratulujemy! Utworzeniu konta <strong>@%s</strong>."
@@ -4927,7 +4906,7 @@ const char *Txt_Contract =	// As a verb
 
 const char *Txt_Control_of_class_attendance =
 #if   L==1	// ca
-	"Control d&apos;assistencia a classe";
+	"Control d'assistencia a classe";
 #elif L==2	// de
 	"Anwesenheitskontrolle";
 #elif L==3	// en
@@ -5053,7 +5032,7 @@ const char *Txt_correct_ANSWERS =
 
 const char *Txt_Could_not_detect_any_face_in_front_position_ =
 #if   L==1	// ca
-	"No s&apos;ha detectat cap rostre en posici&oacute; frontal.";
+	"No s'ha detectat cap rostre en posici&oacute; frontal.";
 #elif L==2	// de
 	"Could not detect any face in front position.";				// Need Übersetzung
 #elif L==3	// en
@@ -5161,7 +5140,7 @@ const char *Txt_COUNTRIES_HELP_ORDER[Cty_NUM_ORDERS] =
 	,
 	[Cty_ORDER_BY_NUM_USRS] =
 #if   L==1	// ca
-	"Ordenar per n&ordm; d&apos;usuaris"
+	"Ordenar per n&ordm; d'usuaris"
 #elif L==2	// de
 	"Nach Anzahl der Benutzer sortieren"
 #elif L==3	// en
@@ -5169,7 +5148,7 @@ const char *Txt_COUNTRIES_HELP_ORDER[Cty_NUM_ORDERS] =
 #elif L==4	// es
 	"Ordenar por n&ordm; de usuarios"
 #elif L==5	// fr
-	"Trier par nombre d&apos;utilisateurs"
+	"Trier par nombre d'utilisateurs"
 #elif L==6	// gn
 	"Ordenar por n&ordm; de usuarios"	// Okoteve traducción
 #elif L==7	// it
@@ -5183,7 +5162,7 @@ const char *Txt_COUNTRIES_HELP_ORDER[Cty_NUM_ORDERS] =
 
 const char *Txt_Countries_with_pending_institutions =
 #if   L==1	// ca
-	"Pa&iuml;sos amb institucions pendents d&apos;activar";
+	"Pa&iuml;sos amb institucions pendents d'activar";
 #elif L==2	// de
 	"L&auml;nder mit anh&auml;ngig Hochschulen";
 #elif L==3	// en
@@ -5343,7 +5322,7 @@ const char *Txt_Course =
 #elif L==5	// fr
 	"Mati&egrave;re";
 #elif L==6	// gn
-	"Mbo&apos;esyry";
+	"Mbo'esyry";
 #elif L==7	// it
 	"Corso";
 #elif L==8	// pl
@@ -5364,7 +5343,7 @@ const char *Txt_course =
 #elif L==5	// fr
 	"mati&egrave;re";
 #elif L==6	// gn
-	"mbo&apos;esyry";
+	"mbo'esyry";
 #elif L==7	// it
 	"corso";
 #elif L==8	// pl
@@ -5375,7 +5354,7 @@ const char *Txt_course =
 
 const char *Txt_Course_program =
 #if   L==1	// ca
-	"Programa de l&apos;assignatura";
+	"Programa de l'assignatura";
 #elif L==2	// de
 	"Kursprogramm";
 #elif L==3	// en
@@ -5556,7 +5535,7 @@ const char *Txt_Courses =
 #elif L==5	// fr
 	"Mati&egrave;res";
 #elif L==6	// gn
-	"Mbo&apos;esyry";
+	"Mbo'esyry";
 #elif L==7	// it
 	"Corsi";
 #elif L==8	// pl
@@ -5598,7 +5577,7 @@ const char *Txt_courses =
 #elif L==5	// fr
 	"mati&egrave;res";
 #elif L==6	// gn
-	"mbo&apos;esyry";
+	"mbo'esyry";
 #elif L==7	// it
 	"corsi";
 #elif L==8	// pl
@@ -5806,7 +5785,7 @@ const char *Txt_Create_another_type_of_degree =
 #elif L==4	// es
 	"Crear otro tipo de titulaci&oacute;n";
 #elif L==5	// fr
-	"Cr&eacute;er un autre type d&apos;&eacute;tude";
+	"Cr&eacute;er un autre type d'&eacute;tude";
 #elif L==6	// gn
 	"Crear otro tipo de titulaci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -6478,7 +6457,7 @@ const char *Txt_Create_type_of_degree =
 #elif L==4	// es
 	"Crear tipo de titulaci&oacute;n";
 #elif L==5	// fr
-	"Cr&eacute;er type d&apos;&eacute;tude";
+	"Cr&eacute;er type d'&eacute;tude";
 #elif L==6	// gn
 	"Crear tipo de titulaci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -6545,7 +6524,7 @@ const char *Txt_Created_new_announcement_of_exam =
 #elif L==6	// gn
 	"Creada nueva convocatoria de examen.";	// Okoteve traducción
 #elif L==7	// it
-	"Creato nuovo appello d&apos;esame.";
+	"Creato nuovo appello d'esame.";
 #elif L==8	// pl
 	"Utworzono nowe ogloszenie egzamin.";
 #elif L==9	// pt
@@ -7045,7 +7024,7 @@ const char *Txt_Created_new_type_of_degree_X =	// Warning: it is very important 
 #elif L==4	// es
 	"Creado nuevo tipo de titulaci&oacute;n <strong>%s</strong>.";
 #elif L==5	// fr
-	"Cr&eacute;&eacute; nouveau type d&apos;&eacute;tude <strong>%s</strong>.";
+	"Cr&eacute;&eacute; nouveau type d'&eacute;tude <strong>%s</strong>.";
 #elif L==6	// gn
 	"Creado nuevo tipo de titulaci&oacute;n <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
@@ -7087,7 +7066,7 @@ const char *Txt_Created_tables_in_the_database_that_did_not_exist =
 #elif L==4	// es
 	"Creadas las tablas de la base de datos que no exist&iacute;an.";
 #elif L==5	// fr
-	"Tables cr&eacute;&eacute;es dans la base de donn&eacute;es qui n&apos;existaient pas.";
+	"Tables cr&eacute;&eacute;es dans la base de donn&eacute;es qui n'existaient pas.";
 #elif L==6	// gn
 	"Creadas las tablas de la base de datos que no exist&iacute;an.";	// Okoteve traducción
 #elif L==7	// it
@@ -7903,7 +7882,7 @@ const char *Txt_DEGREE_TYPES_HELP_ORDER[DT_NUM_ORDERS] =
 #elif L==4	// es
 	"Ordenar por tipo de titulaci&oacute;n"
 #elif L==5	// fr
-	"Trier par type d&apos;&eacute;tude"
+	"Trier par type d'&eacute;tude"
 #elif L==6	// gn
 	"Ordenar por tipo de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
@@ -7924,7 +7903,7 @@ const char *Txt_DEGREE_TYPES_HELP_ORDER[DT_NUM_ORDERS] =
 #elif L==4	// es
 	"Ordenar por n&ordm; de titulaciones"
 #elif L==5	// fr
-	"Trier par nombre d&apos;&eacute;tudes"
+	"Trier par nombre d'&eacute;tudes"
 #elif L==6	// gn
 	"Ordenar por n&ordm; de titulaciones"	// Okoteve traducción
 #elif L==7	// it
@@ -7948,7 +7927,7 @@ const char *Txt_DEGREE_TYPES_ORDER[DT_NUM_ORDERS] =
 #elif L==4	// es
 	"Tipos de titulaci&oacute;n"
 #elif L==5	// fr
-	"Types d&apos;&eacute;tude"
+	"Types d'&eacute;tude"
 #elif L==6	// gn
 	"Arandur&atilde; l&aacute;ja"
 #elif L==7	// it
@@ -8130,7 +8109,7 @@ const char *Txt_Degrees_of_CENTRE_X =	// Warning: it is very important to includ
 
 const char *Txt_Degrees_with_pending_courses =
 #if   L==1	// ca
-	"Titulacions amb assignatures pendents d&apos;activar";
+	"Titulacions amb assignatures pendents d'activar";
 #elif L==2	// de
 	"Studiengang mit anh&auml;ngig Kursen";
 #elif L==3	// en
@@ -8371,7 +8350,7 @@ const char *Txt_DEPARTMENTS_HELP_ORDER[Dpt_NUM_ORDERS] =
 #elif L==4	// es
 	"Ordenar por n&ordm; de profesores"
 #elif L==5	// fr
-	"Trier par nombre d&apos;enseignants"
+	"Trier par nombre d'enseignants"
 #elif L==6	// gn
 	"Ordenar por n&ordm; de profesores"	// Okoteve traducción
 #elif L==7	// it
@@ -8461,7 +8440,7 @@ const char *Txt_Design =
 #elif L==5	// fr
 	"Design";
 #elif L==6	// gn
-	"Ta&apos;&atilde;ngahai";
+	"Ta'&atilde;ngahai";
 #elif L==7	// it
 	"Disegno";
 #elif L==8	// pl
@@ -8975,14 +8954,14 @@ const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =
 	" y su inscripci&oacute;n en grupos de esta asignatura.</strong>.";		// Necessita traduccio
 #elif L==2	// de
 	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
-	"Although students&apos; data will not be removed in other courses,"
+	"Although students' data will not be removed in other courses,"
 	" they will no longer enroled in this course,"
 	" and also <strong>all the works submitted by them in this course,"
 	" their record cards for this course,"
 	" and their enrolment in groups of this course will be removed.</strong>.";	// Need Übersetzung
 #elif L==3	// en
 	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
-	"Although students&apos; data will not be removed in other courses,"
+	"Although students' data will not be removed in other courses,"
 	" they will no longer enroled in this course,"
 	" and also <strong>all the works submitted by them in this course,"
 	" their record cards for this course,"
@@ -8996,7 +8975,7 @@ const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =
 	" y su inscripci&oacute;n en grupos de esta asignatura.</strong>.";
 #elif L==5	// fr
 	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
-	"Although students&apos; data will not be removed in other courses,"
+	"Although students' data will not be removed in other courses,"
 	" they will no longer enroled in this course,"
 	" and also <strong>all the works submitted by them in this course,"
 	" their record cards for this course,"
@@ -9017,7 +8996,7 @@ const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =
 	" e la loro registrazione nei gruppi di questo corso saranno rimossi.</strong>.";
 #elif L==8	// pl
 	"Czy na pewno chcesz usunac %u student&oacute;w z kursu <strong>%s</strong>?<br />"
-	"Although students&apos; data will not be removed in other courses,"
+	"Although students' data will not be removed in other courses,"
 	" nie beda juz zarejestrowane w tym kurs"
 	" a takze <strong>wszystkie prace zlozone przez nich w tym kursie,"
 	" swoich kart zapisu na ten kurs,"
@@ -9033,7 +9012,7 @@ const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =
 
 const char *Txt_Do_you_really_want_to_remove_the_assignment_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"&iquest;De veres voleu eliminar l&apos;activitat <strong>%s</strong>?";
+	"&iquest;De veres voleu eliminar l'activitat <strong>%s</strong>?";
 #elif L==2	// de
 	"Wollen Sie die Aufgabe <strong>%s</strong> wirklich entfernen?";
 #elif L==3	// en
@@ -9041,11 +9020,11 @@ const char *Txt_Do_you_really_want_to_remove_the_assignment_X =	// Warning: it i
 #elif L==4	// es
 	"&iquest;Realmente desea eliminar la actividad <strong>%s</strong>?";
 #elif L==5	// fr
-	"Voulez-vous vraiment supprimer l&apos;activit&eacute; <strong>%s</strong>?";
+	"Voulez-vous vraiment supprimer l'activit&eacute; <strong>%s</strong>?";
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar la actividad <strong>%s</strong>?";	// Okoteve traducción
 #elif L==7	// it
-	"Vuoi realmente rimuovere l&apos;attivit&agrave; <strong>%s</strong>?";
+	"Vuoi realmente rimuovere l'attivit&agrave; <strong>%s</strong>?";
 #elif L==8	// pl
 	"Czy na pewno chcesz usunac przypisanie <strong>%s</strong>?";
 #elif L==9	// pt
@@ -9066,7 +9045,7 @@ const char *Txt_Do_you_really_want_to_remove_the_entire_thread =
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar toda la discusi&oacute;n?";	// Okoteve traducción
 #elif L==7	// it
-	"Vuoi realmente rimuovere l&apos;intera discussione?";
+	"Vuoi realmente rimuovere l'intera discussione?";
 #elif L==8	// pl
 	"Czy na pewno chcesz usunac caly watek?";
 #elif L==9	// pt
@@ -9087,7 +9066,7 @@ const char *Txt_Do_you_really_want_to_remove_the_entire_thread_X =	// Warning: i
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar toda la discusi&oacute;n <strong>%s</strong>?";	// Okoteve traducción
 #elif L==7	// it
-	"Vuoi realmente rimuovere l&apos;intera discussione <strong>%s</strong>?";
+	"Vuoi realmente rimuovere l'intera discussione <strong>%s</strong>?";
 #elif L==8	// pl
 	"Czy na pewno chcesz usunac caly watek <strong>%s</strong>?";
 #elif L==9	// pt
@@ -9096,7 +9075,7 @@ const char *Txt_Do_you_really_want_to_remove_the_entire_thread_X =	// Warning: i
 
 const char *Txt_Do_you_really_want_to_remove_the_event_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"De veres voleu eliminar l&apos;esdevenimen <strong>%s</strong>?";
+	"De veres voleu eliminar l'esdevenimen <strong>%s</strong>?";
 #elif L==2	// de
 	"Wollen Sie der Ereignis <strong>%s</strong> wirklich entfernen?";
 #elif L==3	// en
@@ -9104,11 +9083,11 @@ const char *Txt_Do_you_really_want_to_remove_the_event_X =	// Warning: it is ver
 #elif L==4	// es
 	"&iquest;Realmente desea eliminar el evento <strong>%s</strong>?";
 #elif L==5	// fr
-	"Voulez-vous vraiment supprimer l&apos;&eacute;v&eacute;nement <strong>%s</strong>?";
+	"Voulez-vous vraiment supprimer l'&eacute;v&eacute;nement <strong>%s</strong>?";
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar el evento <strong>%s</strong>?";	// Okoteve traducción
 #elif L==7	// it
-	"Vuoi realmente rimuovere l&apos;evento <strong>%s</strong>?";
+	"Vuoi realmente rimuovere l'evento <strong>%s</strong>?";
 #elif L==8	// pl
 	"Czy na pewno chcesz usunac wydarzenie <strong>%s</strong>?";
 #elif L==9	// pt
@@ -9117,7 +9096,7 @@ const char *Txt_Do_you_really_want_to_remove_the_event_X =	// Warning: it is ver
 
 const char *Txt_Do_you_really_want_to_remove_the_exam_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"De veres voleu eliminar l&apos;examen <strong>%s</strong>?";
+	"De veres voleu eliminar l'examen <strong>%s</strong>?";
 #elif L==2	// de
 	"Wollen Sie der Pr&uuml;fung <strong>%s</strong> wirklich entfernen?";
 #elif L==3	// en
@@ -9125,11 +9104,11 @@ const char *Txt_Do_you_really_want_to_remove_the_exam_X =	// Warning: it is very
 #elif L==4	// es
 	"&iquest;Realmente desea eliminar el examen <strong>%s</strong>?";
 #elif L==5	// fr
-	"Voulez-vous vraiment supprimer l&apos;examen <strong>%s</strong>?";
+	"Voulez-vous vraiment supprimer l'examen <strong>%s</strong>?";
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar el examen <strong>%s</strong>?";	// Okoteve traducción
 #elif L==7	// it
-	"Vuoi realmente rimuovere l&apos;esame <strong>%s</strong>?";
+	"Vuoi realmente rimuovere l'esame <strong>%s</strong>?";
 #elif L==8	// pl
 	"Czy na pewno chcesz usunac egzaminu <strong>%s</strong>?";
 #elif L==9	// pt
@@ -9211,7 +9190,7 @@ const char *Txt_Do_you_really_want_to_remove_the_folder_X =	// Warning: it is ve
 	" la carpeta <strong>%s</strong> y todo su contenido?";
 #elif L==5	// fr
 	"Voulez-vous vraiment supprimer"
-	" le r&eacute;pertoire <strong>%s</strong> et l&apos;ensemble de son contenu?";
+	" le r&eacute;pertoire <strong>%s</strong> et l'ensemble de son contenu?";
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar"
 	" la carpeta <strong>%s</strong> y todo su contenido?";		// Okoteve traducción
@@ -9228,7 +9207,7 @@ const char *Txt_Do_you_really_want_to_remove_the_folder_X =	// Warning: it is ve
 
 const char *Txt_Do_you_really_want_to_remove_the_following_announcement_of_exam =
 #if   L==1	// ca
-	"De veres voleu eliminar la seg&uuml;ent convocat&ograve;ria d&apos;examen?";
+	"De veres voleu eliminar la seg&uuml;ent convocat&ograve;ria d'examen?";
 #elif L==2	// de
 	"Wollen Sie wirklich, um die folgende Aufruf f&uuml;r Pr&uuml;fung?";
 #elif L==3	// en
@@ -9240,7 +9219,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_announcement_of_exam 
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar la siguiente convocatoria de examen?";		// Okoteve traducción
 #elif L==7	// it
-	"Vuoi realmente rimuovere il seguente appello d&apos;esame?";
+	"Vuoi realmente rimuovere il seguente appello d'esame?";
 #elif L==8	// pl
 	"Czy na pewno chcesz usun&aogon;&cacute; nast&eogon;puj&aogon;c&aogon; zapowied&zacute; egzaminu?";
 #elif L==9	// pt
@@ -9257,7 +9236,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_notice =
 #elif L==4	// es
 	"&iquest;Realmente desea eliminar el siguiente aviso?";
 #elif L==5	// fr
-	"Voulez-vous vraiment supprimer l&apos;avis suivant?";
+	"Voulez-vous vraiment supprimer l'avis suivant?";
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar el siguiente aviso?";		// Okoteve traducción
 #elif L==7	// it
@@ -9342,7 +9321,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administra
 
 const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"&iquest;De veres voleu eliminar el seg&uuml;ent usuari de l&apos;assignatura <strong>%s</strong>"
+	"&iquest;De veres voleu eliminar el seg&uuml;ent usuari de l'assignatura <strong>%s</strong>"
 	" (eliminant els seus treballs, adscripci&oacute; a grups, etc.)?";
 #elif L==2	// de
         "M&ouml;chten Sie den folgenden Benutzer wirklich aus dem Kurs <strong>%s</strong> entfernen"
@@ -9354,7 +9333,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_
 	"&iquest;Realmente desea eliminar el siguiente usuario de la asignatura <strong>%s</strong>"
 	" (eliminando sus trabajos, adscripci&oacute;n a grupos, etc.)?";
 #elif L==5	// fr
-	"Voulez-vous vraiment supprimer l&apos;utilisateur suivant de la mati&egrave;re <strong>%s</strong>"
+	"Voulez-vous vraiment supprimer l'utilisateur suivant de la mati&egrave;re <strong>%s</strong>"
 	" (&eacute;liminant ses travaux, inscription en groupes, etc.)?";
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar el siguiente usuario de la asignatura <strong>%s</strong>"
@@ -9384,7 +9363,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_
 	"&iquest;Realmente desea eliminar el siguiente usuario"
 	" como %s del proyecto <strong>%s</strong>?";
 #elif L==5	// fr
-	"Voulez-vous vraiment supprimer l&apos;utilisateur suivant"
+	"Voulez-vous vraiment supprimer l'utilisateur suivant"
 	" en tant que %s du projet <strong>%s</strong>?";
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar el siguiente usuario"
@@ -9504,7 +9483,7 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X_Y_students_ =	// Warnin
 
 const char *Txt_Do_you_really_want_to_remove_the_item_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"De veres voleu eliminar l&apos;&iacute;tem <strong>%s</strong>?";
+	"De veres voleu eliminar l'&iacute;tem <strong>%s</strong>?";
 #elif L==2	// de
 	"Wollen Sie die Artikel <strong>%s</strong> wirklich entfernen?";
 #elif L==3	// en
@@ -9512,7 +9491,7 @@ const char *Txt_Do_you_really_want_to_remove_the_item_X =	// Warning: it is very
 #elif L==4	// es
 	"&iquest;Realmente desea eliminar el &iacute;tem <strong>%s</strong>?";
 #elif L==5	// fr
-	"Voulez-vous vraiment supprimer l&apos;article <strong>%s</strong>?";
+	"Voulez-vous vraiment supprimer l'article <strong>%s</strong>?";
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar el &iacute;tem <strong>%s</strong>?";	// Okoteve traducción
 #elif L==7	// it
@@ -9659,7 +9638,7 @@ const char *Txt_Do_you_really_want_to_remove_the_set_of_questions_X =	// Warning
 #elif L==4	// es
 	"&iquest;Realmente desea eliminar el conjunto de preguntas <strong>%s</strong>?";
 #elif L==5	// fr
-	"Voulez-vous vraiment supprimer l&apos;ensemble de questions <strong>%s</strong>?";
+	"Voulez-vous vraiment supprimer l'ensemble de questions <strong>%s</strong>?";
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar el conjunto de preguntas <strong>%s</strong>?";	// Okoteve traducción
 #elif L==7	// it
@@ -9672,7 +9651,7 @@ const char *Txt_Do_you_really_want_to_remove_the_set_of_questions_X =	// Warning
 
 const char *Txt_Do_you_really_want_to_remove_the_survey_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Realment voleu eliminar l&apos;enquesta <strong>%s</strong>?";
+	"Realment voleu eliminar l'enquesta <strong>%s</strong>?";
 #elif L==2	// de
 	"Wollen Sie die Umfrage <strong>%s</strong> wirklich entfernen?";
 #elif L==3	// en
@@ -9774,7 +9753,7 @@ const char *Txt_Do_you_really_want_to_remove_your_photo =
 
 const char *Txt_Do_you_really_want_to_reset_the_survey_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"De veres voleu posar a zero l&apos;enquesta <strong>%s</strong>?";
+	"De veres voleu posar a zero l'enquesta <strong>%s</strong>?";
 #elif L==2	// de
 	"Wollen Sie die Umfrage <strong>%s</strong> wirklich reset?";
 #elif L==3	// en
@@ -9795,7 +9774,7 @@ const char *Txt_Do_you_really_want_to_reset_the_survey_X =	// Warning: it is ver
 
 const char *Txt_Do_you_think_you_are_one_of_these_users =
 #if   L==1	// ca
-	"Creu que vost&egrave; &eacute;s un d&apos;aquests usuaris?";
+	"Creu que vost&egrave; &eacute;s un d'aquests usuaris?";
 #elif L==2	// de
 	"Denken Sie, Sie einer dieser Benutzer sind?";
 #elif L==3	// en
@@ -9837,7 +9816,7 @@ const char *Txt_Do_you_think_you_are_this_user =
 
 const char *Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_yet =
 #if   L==1	// ca
-	"Voleu seguir a l&apos;usuari seleccionat a qui encara no segueix?";
+	"Voleu seguir a l'usuari seleccionat a qui encara no segueix?";
 #elif L==2	// de
 	"M&ouml;chten Sie dem ausgew&auml;hlten Benutzer folgen, dem Sie noch nicht folgen?";
 #elif L==3	// en
@@ -9845,11 +9824,11 @@ const char *Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_y
 #elif L==4	// es
 	"&iquest;Desea seguir al usuario seleccionado que a&uacute;n no sigue?";
 #elif L==5	// fr
-	"Voulez-vous suivre l&apos;utilisateur s&eacute;lectionn&eacute; que vous ne suivez pas encore?";
+	"Voulez-vous suivre l'utilisateur s&eacute;lectionn&eacute; que vous ne suivez pas encore?";
 #elif L==6	// gn
 	"&iquest;Desea seguir al usuario seleccionado que a&uacute;n no sigue?";	// Okoteve traducción
 #elif L==7	// it
-	"Vuoi seguire l&apos;utente selezionato che non segui ancora?";
+	"Vuoi seguire l'utente selezionato che non segui ancora?";
 #elif L==8	// pl
 	"Czy chcesz &sacute;ledzi&cacute; wybranego u&zdot;ytkownika, kt&oacute;rego jeszcze nie &sacute;ledzisz?";
 #elif L==9	// pt
@@ -9879,7 +9858,7 @@ const char *Txt_Do_you_want_to_follow_the_X_selected_users_whom_you_do_not_follo
 
 const char *Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"Voleu bloquejar l&apos;edici&oacute;n dels %u projectes seleccionats?";
+	"Voleu bloquejar l'edici&oacute;n dels %u projectes seleccionats?";
 #elif L==2	// de
 	"M&ouml;chten Sie die Bearbeitung der ausgew&auml;hlten %u-Projekte sperren?";
 #elif L==3	// en
@@ -9887,7 +9866,7 @@ const char *Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects =	// 
 #elif L==4	// es
 	"&iquest;Desea bloquear la edici&oacute;n de los %u proyectos seleccionados?";
 #elif L==5	// fr
-	"Voulez-vous verrouiller l&apos;&eacute;dition des %u projets s&eacute;lectionn&eacute;s?";
+	"Voulez-vous verrouiller l'&eacute;dition des %u projets s&eacute;lectionn&eacute;s?";
 #elif L==6	// gn
 	"&iquest;Desea bloquear la edici&oacute;n de los %u proyectos seleccionados?";	// Okoteve traducción
 #elif L==7	// it
@@ -9900,7 +9879,7 @@ const char *Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects =	// 
 
 const char *Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow =
 #if   L==1	// ca
-	"Voleu deixar de seguir a l&apos;usuari seleccionat a qui segueix?";
+	"Voleu deixar de seguir a l'usuari seleccionat a qui segueix?";
 #elif L==2	// de
 	"M&ouml;chten Sie dem ausgew&auml;hlten Benutzer, dem Sie folgen, nicht mehr folgen?";
 #elif L==3	// en
@@ -9908,11 +9887,11 @@ const char *Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow 
 #elif L==4	// es
 	"&iquest;Desea dejar de seguir al usuario seleccionado que sigue?";
 #elif L==5	// fr
-	"Voulez-vous arr&ecirc;ter de suivre l&apos;utilisateur s&eacute;lectionn&eacute; que vous suivez?";
+	"Voulez-vous arr&ecirc;ter de suivre l'utilisateur s&eacute;lectionn&eacute; que vous suivez?";
 #elif L==6	// gn
 	"&iquest;Desea dejar de seguir al usuario seleccionado que sigue?";	// Okoteve traducción
 #elif L==7	// it
-	"Vuoi smettere di seguire l&apos;utente selezionato che segui?";
+	"Vuoi smettere di seguire l'utente selezionato che segui?";
 #elif L==8	// pl
 	"Czy chcesz przesta&cacute; &sacute;ledzi&cacute; wybranego u&zdot;ytkownika, kt&oacute;rego &sacute;ledzisz?";
 #elif L==9	// pt
@@ -9942,7 +9921,7 @@ const char *Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_foll
 
 const char *Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"Voleu desbloquejar l&apos;edici&oacute; dels %u projectes seleccionats?";
+	"Voleu desbloquejar l'edici&oacute; dels %u projectes seleccionats?";
 #elif L==2	// de
 	"M&ouml;chten Sie die Bearbeitung der ausgew&auml;hlten %u-Projekte freischalten?";
 #elif L==3	// en
@@ -9950,7 +9929,7 @@ const char *Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects =	/
 #elif L==4	// es
 	"&iquest;Desea desbloquear la edici&oacute;n de los %u proyectos seleccionados?";
 #elif L==5	// fr
-	"Voulez-vous d&eacute;verrouiller l&apos;&eacute;dition des %u projets s&eacute;lectionn&eacute;s?";
+	"Voulez-vous d&eacute;verrouiller l'&eacute;dition des %u projets s&eacute;lectionn&eacute;s?";
 #elif L==6	// gn
 	"&iquest;Desea desbloquear la edici&oacute;n de los %u proyectos seleccionados?";	// Okoteve traducción
 #elif L==7	// it
@@ -10110,7 +10089,7 @@ const char *Txt_Documents_area =
 
 const char *Txt_Documents_management_area =
 #if   L==1	// ca
-	"Zona d&apos;administraci&oacute; de documents";
+	"Zona d'administraci&oacute; de documents";
 #elif L==2	// de
 	"Dokumente-Verwaltung";
 #elif L==3	// en
@@ -10922,7 +10901,7 @@ const char *Txt_Eliminating_X_courses_whithout_users_and_with_more_than_Y_months
 
 const char *Txt_Eliminate_my_user_account =
 #if   L==1	// ca
-	"Eliminar la meva compte d&apos;usuari";
+	"Eliminar la meva compte d'usuari";
 #elif L==2	// de
 	"Entfernen mein Benutzerkonto";
 #elif L==3	// en
@@ -10930,7 +10909,7 @@ const char *Txt_Eliminate_my_user_account =
 #elif L==4	// es
 	"Eliminar mi cuenta de usuario/a";
 #elif L==5	// fr
-	"Supprimer mon compte d&apos;utilisateur";
+	"Supprimer mon compte d'utilisateur";
 #elif L==6	// gn
 	"Eliminar mi cuenta de usuario/a";		// Okoteve traducción
 #elif L==7	// it
@@ -10943,7 +10922,7 @@ const char *Txt_Eliminate_my_user_account =
 
 const char *Txt_Eliminate_user_account =
 #if   L==1	// ca
-	"Eliminar compte d&apos;usuari";
+	"Eliminar compte d'usuari";
 #elif L==2	// de
 	"Entfernen Benutzerkonto";
 #elif L==3	// en
@@ -10951,7 +10930,7 @@ const char *Txt_Eliminate_user_account =
 #elif L==4	// es
 	"Eliminar cuenta de usuario/a";
 #elif L==5	// fr
-	"Supprimer compte d&apos;utilisateur";
+	"Supprimer compte d'utilisateur";
 #elif L==6	// gn
 	"Eliminar cuenta de usuario/a";		// Okoteve traducción
 #elif L==7	// it
@@ -11004,7 +10983,7 @@ const char *Txt_Email =
 #elif L==5	// fr
 	"Courrier";
 #elif L==6	// gn
-	"&Ntilde;e&apos;&#7869;veve";
+	"&Ntilde;e'&#7869;veve";
 #elif L==7	// it
 	"Email";
 #elif L==8	// pl
@@ -11130,7 +11109,7 @@ const char *Txt_EMAIL_DOMAIN_HELP_ORDER[Mai_NUM_ORDERS] =
 #elif L==4	// es
 	"Ordenar por n&ordm; de usuarios"
 #elif L==5	// fr
-	"Trier par nombre d&apos;utilisateurs"
+	"Trier par nombre d'utilisateurs"
 #elif L==6	// gn
 	"Ordenar por n&ordm; de usuarios"	// Okoteve traducción
 #elif L==7	// it
@@ -11408,7 +11387,7 @@ const char *Txt_Enrolment_not_confirmed =
 
 const char *Txt_Enrolment_requests =
 #if   L==1	// ca
-	"Peticions d&apos;inscripci&oacute;";
+	"Peticions d'inscripci&oacute;";
 #elif L==2	// de
 	"Registrierungsanforderungen";
 #elif L==3	// en
@@ -11416,7 +11395,7 @@ const char *Txt_Enrolment_requests =
 #elif L==4	// es
 	"Solicitudes de inscripci&oacute;n";
 #elif L==5	// fr
-	"Demandes d&apos;inscription";
+	"Demandes d'inscription";
 #elif L==6	// gn
 	"Solicitudes de inscripci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -11521,11 +11500,11 @@ const char *Txt_Error_sending_or_processing_image_video =
 #elif L==4	// es
 	"Error enviando o procesando imagen / v&iacute;deo.";
 #elif L==5	// fr
-	"Erreur d&apos;envoi ou de traitement de l&apos;image / vid&eacute;o.";
+	"Erreur d'envoi ou de traitement de l'image / vid&eacute;o.";
 #elif L==6	// gn
 	"Error enviando o procesando imagen / v&iacute;deo.";	// Okoteve traducción
 #elif L==7	// it
-	"Errore nell&apos;invio o nell&apos;elaborazione dell&apos;immagine / video.";
+	"Errore nell'invio o nell'elaborazione dell'immagine / video.";
 #elif L==8	// pl
 	"B&lstrok;&aogon;d podczas wysy&lstrok;ania lub przetwarzania obrazu / wideo.";
 #elif L==9	// pt
@@ -11555,7 +11534,7 @@ const char *Txt_Event =
 
 const char *Txt_Event_X_is_now_private =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"L&apos;esdevenimen <strong>%s</strong> ara &eacute;s privat.";
+	"L'esdevenimen <strong>%s</strong> ara &eacute;s privat.";
 #elif L==2	// de
 	"Der Ereignis <strong>%s</strong> ist jetzt privat.";
 #elif L==3	// en
@@ -11563,11 +11542,11 @@ const char *Txt_Event_X_is_now_private =	// Warning: it is very important to inc
 #elif L==4	// es
 	"El evento <strong>%s</strong> ahora es privado.";
 #elif L==5	// fr
-	"L&apos;&eacute;v&eacute;nement <strong>%s</strong> est maintenant priv&eacute;.";
+	"L'&eacute;v&eacute;nement <strong>%s</strong> est maintenant priv&eacute;.";
 #elif L==6	// gn
 	"El evento <strong>%s</strong> ahora es privado.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;evento <strong>%s</strong> &egrave; ora privato.";
+	"L'evento <strong>%s</strong> &egrave; ora privato.";
 #elif L==8	// pl
 	"Wydarzenie <strong>%s</strong> jest obecnie prywatne.";
 #elif L==9	// pt
@@ -11576,7 +11555,7 @@ const char *Txt_Event_X_is_now_private =	// Warning: it is very important to inc
 
 const char *Txt_Event_X_is_now_visible_to_users_of_your_courses =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"L&apos;esdevenimen <strong>%s</strong> ara &eacute;s visible"
+	"L'esdevenimen <strong>%s</strong> ara &eacute;s visible"
 	" pels usuaris de les seves assignatures.";
 #elif L==2	// de
 	"Der Ereignis <strong>%s</strong> ist jetzt sichtbar"
@@ -11588,13 +11567,13 @@ const char *Txt_Event_X_is_now_visible_to_users_of_your_courses =	// Warning: it
 	"El evento <strong>%s</strong> ahora es visible"
 	" por los usuarios de sus asignaturas.";
 #elif L==5	// fr
-	"L&apos;&eacute;v&eacute;nement <strong>%s</strong> est maintenant visible"
+	"L'&eacute;v&eacute;nement <strong>%s</strong> est maintenant visible"
 	" pour les utilisateurs de vos mati&egrave;res.";
 #elif L==6	// gn
 	"El evento <strong>%s</strong> ahora es visible"
 	" por los usuarios de sus asignaturas.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;evento <strong>%s</strong> &egrave; ora visibile"
+	"L'evento <strong>%s</strong> &egrave; ora visibile"
 	" agli utenti dei corsi.";
 #elif L==8	// pl
 	"Wydarzenie <strong>%s</strong> jest teraz widoczne"
@@ -11700,7 +11679,7 @@ const char *Txt_Exam =
 #elif L==5	// fr
 	"Examen";
 #elif L==6	// gn
-	"Kuaara&apos;&atilde;";
+	"Kuaara'&atilde;";
 #elif L==7	// it
 	"Esame";
 #elif L==8	// pl
@@ -11711,7 +11690,7 @@ const char *Txt_Exam =
 
 const char *Txt_EXAM_ANNOUNCEMENT =
 #if   L==1	// ca
-	"CONVOCAT&Ograve;RIA D&apos;EXAMEN";
+	"CONVOCAT&Ograve;RIA D'EXAMEN";
 #elif L==2	// de
 	"PR&Uuml;FUNGSAUFRUF";
 #elif L==3	// en
@@ -11723,7 +11702,7 @@ const char *Txt_EXAM_ANNOUNCEMENT =
 #elif L==6	// gn
 	"CONVOCATORIA DE EXAMEN";	// Okoteve traducción
 #elif L==7	// it
-	"APPELLO D&apos;ESAME";
+	"APPELLO D'ESAME";
 #elif L==8	// pl
 	"OGLOSZENIE egzaminu";
 #elif L==9	// pt
@@ -11763,7 +11742,7 @@ const char *Txt_EXAM_ANNOUNCEMENT_Course =
 #elif L==5	// fr
 	"Mati&egrave;re";
 #elif L==6	// gn
-	"Mbo&apos;esyry";
+	"Mbo'esyry";
 #elif L==7	// it
 	"Corso";
 #elif L==8	// pl
@@ -11782,7 +11761,7 @@ const char *Txt_EXAM_ANNOUNCEMENT_Documentation_required =
 #elif L==4	// es
 	"Documentaci&oacute;n exigida";
 #elif L==5	// fr
-	"Pi&egrave;ce d&apos;identité obligatoire";
+	"Pi&egrave;ce d'identité obligatoire";
 #elif L==6	// gn
 	"Documentaci&oacute;n exigida";	// Okoteve traducción
 #elif L==7	// it
@@ -11803,11 +11782,11 @@ const char *Txt_EXAM_ANNOUNCEMENT_Exam_date =
 #elif L==4	// es
 	"Fecha del examen";
 #elif L==5	// fr
-	"Date de l&apos;examen";
+	"Date de l'examen";
 #elif L==6	// gn
 	"Fecha del examen";	// Okoteve traducción
 #elif L==7	// it
-	"Data d&apos;esame";
+	"Data d'esame";
 #elif L==8	// pl
 	"Termin egzaminu";
 #elif L==9	// pt
@@ -11908,11 +11887,11 @@ const char *Txt_EXAM_ANNOUNCEMENT_Place_of_exam =
 #elif L==4	// es
 	"Lugar de realizaci&oacute;n";
 #elif L==5	// fr
-	"Lieu de l&apos;examen";
+	"Lieu de l'examen";
 #elif L==6	// gn
 	"Lugar de realizaci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
-	"Luogo d&apos;esame";
+	"Luogo d'esame";
 #elif L==8	// pl
 	"Miejsce egzaminu";
 #elif L==9	// pt
@@ -11954,7 +11933,7 @@ const char *Txt_EXAM_ANNOUNCEMENT_Start_time =
 #elif L==6	// gn
 	"Hora de inicio";	// Okoteve traducción
 #elif L==7	// it
-	"Ora d&apos;inizio";
+	"Ora d'inizio";
 #elif L==8	// pl
 	"Czas rozpoczecia";
 #elif L==9	// pt
@@ -11971,11 +11950,11 @@ const char *Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam =
 #elif L==4	// es
 	"Estructura del examen";
 #elif L==5	// fr
-	"Structure de l&apos;examen";
+	"Structure de l'examen";
 #elif L==6	// gn
 	"Estructura del examen";	// Okoteve traducción
 #elif L==7	// it
-	"Struttura d&apos;esame";
+	"Struttura d'esame";
 #elif L==8	// pl
 	"Struktura egzaminu";
 #elif L==9	// pt
@@ -12028,7 +12007,7 @@ const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS] =
 	,
 	[ExaLog_START_EXAM] =
 #if   L==1	// ca
-	"Va comen&ccedil;ar l&apos;examen"
+	"Va comen&ccedil;ar l'examen"
 #elif L==2	// de
 	"Begann die Pr&uacute;fung"
 #elif L==3	// en
@@ -12036,11 +12015,11 @@ const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS] =
 #elif L==4	// es
 	"Comenz&oacute; el examen"
 #elif L==5	// fr
-	"A commenc&eacute; l&apos;examen"
+	"A commenc&eacute; l'examen"
 #elif L==6	// gn
 	"Comenz&oacute; el examen"	// Okoteve traducción
 #elif L==7	// it
-	"Ha iniziato l&apos;esame"
+	"Ha iniziato l'esame"
 #elif L==8	// pl
 	"Rozpocz&aogon;&lstrok; egzamin"
 #elif L==9	// pt
@@ -12049,7 +12028,7 @@ const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS] =
 	,
 	[ExaLog_RESUME_EXAM] =
 #if   L==1	// ca
-	"Va reprendre l&apos;examen"
+	"Va reprendre l'examen"
 #elif L==2	// de
 	"Nahm die Pr&uuml;fung wieder auf"
 #elif L==3	// en
@@ -12057,11 +12036,11 @@ const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS] =
 #elif L==4	// es
 	"Reanud&oacute; el examen"
 #elif L==5	// fr
-	"A repris l&apos;examen"
+	"A repris l'examen"
 #elif L==6	// gn
 	"Reanud&oacute; el examen"	// Okoteve traducción
 #elif L==7	// it
-	"Ha ripreso l&apos;esame"
+	"Ha ripreso l'esame"
 #elif L==8	// pl
 	"Wznowi&lstrok; egzamin"
 #elif L==9	// pt
@@ -12091,7 +12070,7 @@ const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS] =
 	,
 	[ExaLog_FINISH_EXAM] =
 #if   L==1	// ca
-	"Va acabar l&apos;examen"
+	"Va acabar l'examen"
 #elif L==2	// de
 	"Beendete die Pr&uuml;fung"
 #elif L==3	// en
@@ -12099,11 +12078,11 @@ const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS] =
 #elif L==4	// es
 	"Termin&oacute; el examen"
 #elif L==5	// fr
-	"A termin&eacute; l&apos;examen"
+	"A termin&eacute; l'examen"
 #elif L==6	// gn
 	"Termin&oacute; el examen"		// Okoteve traducción
 #elif L==7	// it
-	"Ha terminato l&apos;esame"
+	"Ha terminato l'esame"
 #elif L==8	// pl
 	"Zako&nacute;czy&lstrok; egzamin"
 #elif L==9	// pt
@@ -12251,7 +12230,7 @@ const char *Txt_EXAMS_ORDER[Exa_NUM_ORDERS] =
 #elif L==5	// fr
 	"Examen"
 #elif L==6	// gn
-	"Kuaara&apos;&atilde;"
+	"Kuaara'&atilde;"
 #elif L==7	// it
 	"Esame"
 #elif L==8	// pl
@@ -12315,7 +12294,7 @@ const char *Txt_EXAMS_ORDER_HELP[Gam_NUM_ORDERS] =
 #elif L==4	// es
 	"Ordenar por t&iacute;tulo del examen"
 #elif L==5	// fr
-	"Trier par titre de l&apos;examen"
+	"Trier par titre de l'examen"
 #elif L==6	// gn
 	"Ordenar por t&iacute;tulo del examen"	// Okoteve traducción
 #elif L==7	// it
@@ -12509,9 +12488,9 @@ const char *Txt_X_faces_have_been_detected_in_front_position_Y_Z_ =	// Warning: 
 
 const char *Txt_X_faces_marked_in_green_have_been_detected_ =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"S&apos;han detectat %u cares (assenyalats en verd) en posici&oacute; frontal"
+	"S'han detectat %u cares (assenyalats en verd) en posici&oacute; frontal"
 	" i amb el fons prou clar.<br />"
-	"Si voleu triar un d&apos;aquests rostres, premi sobre ell.";
+	"Si voleu triar un d'aquests rostres, premi sobre ell.";
 #elif L==2	// de
 	"%u Fl&auml;chen (gr&uuml;n markiert) wurden vor Position erfasst,"
 	" und der Hintergrund ist leicht genug.<br />"
@@ -12548,7 +12527,7 @@ const char *Txt_X_faces_marked_in_green_have_been_detected_ =	// Warning: it is 
 
 const char *Txt_X_faces_marked_in_red_have_been_detected_ =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"S&apos;han detectat %u cares (assenyalats en vermell) en posici&oacute; frontal,"
+	"S'han detectat %u cares (assenyalats en vermell) en posici&oacute; frontal,"
 	" per&ograve; el fons &eacute;s massa fosc.";
 #elif L==2	// de
 	"%u wurden Fl&auml;chen (in rot abgebildet) in der vorderen Position erkannt,"
@@ -12693,7 +12672,7 @@ const char *Txt_File =
 #elif L==5	// fr
 	"Fichier";
 #elif L==6	// gn
-	"Jehai&apos;aty";
+	"Jehai'aty";
 #elif L==7	// it
 	"File";
 #elif L==8	// pl
@@ -12714,7 +12693,7 @@ const char *Txt_file =
 #elif L==5	// fr
 	"fichier";
 #elif L==6	// gn
-	"jehai&apos;aty";
+	"jehai'aty";
 #elif L==7	// it
 	"file";
 #elif L==8	// pl
@@ -12914,7 +12893,7 @@ const char *Txt_File_with_the_photo =
 
 const char *Txt_File_zone =
 #if   L==1	// ca
-	"Zona d&apos;arxius";
+	"Zona d'arxius";
 #elif L==2	// de
 	"Dateienbereich";
 #elif L==3	// en
@@ -12935,7 +12914,7 @@ const char *Txt_File_zone =
 
 const char *Txt_File_zones =
 #if   L==1	// ca
-	"Zones d&apos;arxius";
+	"Zones d'arxius";
 #elif L==2	// de
 	"Dateienbereiche";
 #elif L==3	// en
@@ -13189,7 +13168,7 @@ const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_ =
 	" by selecting the desired portion of the table and saving it as web page.<br />"
 	" A table can have <strong>multiple header and footer rows</strong>."
 	" Between them it should be <strong>a single row for each student</strong>,"
-	" with any number of columns, <strong>the first column containing the student&apos;s ID</strong>.<br />"
+	" with any number of columns, <strong>the first column containing the student's ID</strong>.<br />"
 	" A student will see a table with header rows,"
 	" followed by the row with his/her marks,"
 	" and footer rows.";
@@ -13209,7 +13188,7 @@ const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_ =
 	" by selecting the desired portion of the table and saving it as web page.<br />"
 	" A table can have <strong>multiple header and footer rows</strong>."
 	" Between them it should be <strong>a single row for each student</strong>,"
-	" with any number of columns, <strong>the first column containing the student&apos;s ID</strong>.<br />"
+	" with any number of columns, <strong>the first column containing the student's ID</strong>.<br />"
 	" A student will see a table with header rows,"
 	" followed by the row with his/her marks,"
 	" and footer rows.";				// Besoin de traduction
@@ -13229,7 +13208,7 @@ const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_ =
 	" selezionando la desiderata porzione di tabella e salvandolo come una pagina web.<br />"
 	" Una tabella pu&ograve; avere <strong>intestazioni multiple e righe a pi&egrave; di pagina</strong>."
 	" Tra di loro dovrebbe esserci <strong>una singola riga per ogni studente</strong>,"
-	" con alcuni numeri di colonne, <strong>la prima colonna contiene l&apos;ID dello studente</strong>.<br />"
+	" con alcuni numeri di colonne, <strong>la prima colonna contiene l'ID dello studente</strong>.<br />"
 	" Uno studente vedr&agrave; una tabella con righe intestate,"
 	" seguite da una riga con i loro risultati,"
 	" e righe a pi&egrave; di pagina.";
@@ -13431,7 +13410,7 @@ const char *Txt_Folder_X_and_all_its_contents_removed =	// Warning: it is very i
 #elif L==4	// es
 	"Carpeta <strong>%s</strong> y todo su contenido eliminados.";
 #elif L==5	// fr
-	"R&eacute;pertoire <strong>%s</strong> et l&apos;ensemble de son contenu supprim&eacute;s.";
+	"R&eacute;pertoire <strong>%s</strong> et l'ensemble de son contenu supprim&eacute;s.";
 #elif L==6	// gn
 	"Carpeta <strong>%s</strong> y todo su contenido eliminados.";	// Okoteve traducción
 #elif L==7	// it
@@ -14173,7 +14152,7 @@ const char *Txt_FORUM_THREAD_HELP_ORDER[Dat_NUM_START_END_TIME] =
 #elif L==6	// gn
 	"Ordenar por fecha del &uacute;ltimo mensaje"	// Okoteve traducción
 #elif L==7	// it
-	"Ordina per data dell&apos;ultimo messaggio"
+	"Ordina per data dell'ultimo messaggio"
 #elif L==8	// pl
 	"Sortuj wedlug daty ostatniego komunikatu"
 #elif L==9	// pt
@@ -14230,7 +14209,7 @@ const char *Txt_FORUM_WHICH_FORUM[For_NUM_FORUM_SETS] =
 	{
 	[For_ONLY_CURRENT_FORUMS] =
 #if   L==1	// ca
-	"F&ograve;rums d&apos;aquest lloc"
+	"F&ograve;rums d'aquest lloc"
 #elif L==2	// de
 	"Foren zu diesem Standort"
 #elif L==3	// en
@@ -14543,7 +14522,7 @@ const char *Txt_Full_name_of_the_centre =
 
 const char *Txt_Full_name_of_the_course =
 #if   L==1	// ca
-	"Nom complet de l&apos;assignatura";
+	"Nom complet de l'assignatura";
 #elif L==2	// de
 	"Vollst&auml;ndiger Name der Kurs";
 #elif L==3	// en
@@ -14572,11 +14551,11 @@ const char *Txt_Full_name_of_the_institution =
 #elif L==4	// es
 	"Nombre completo de la instituci&oacute;n";
 #elif L==5	// fr
-	"Nom complet de l&apos;institution";
+	"Nom complet de l'institution";
 #elif L==6	// gn
 	"Nombre completo de la instituci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
-	"Nome completo dell&apos;istituzione";
+	"Nome completo dell'istituzione";
 #elif L==8	// pl
 	"Pe&lstrok;na nazwa instytucji";
 #elif L==9	// pt
@@ -14956,7 +14935,7 @@ const char *Txt_Go_forward =
 #elif L==4	// es
 	"Avanzar";
 #elif L==5	// fr
-	"Aller de l&apos;avant";
+	"Aller de l'avant";
 #elif L==6	// gn
 	"Avanzar";	// Okoteve traducción
 #elif L==7	// it
@@ -15040,7 +15019,7 @@ const char *Txt_Go_to_one_of_my_courses =
 #elif L==4	// es
 	"Ir a una de mis asignaturas";
 #elif L==5	// fr
-	"Allez &agrave; l&apos;une de mes mati&egrave;res";
+	"Allez &agrave; l'une de mes mati&egrave;res";
 #elif L==6	// gn
 	"Ir a una de mis asignaturas";	// Okoteve traducción
 #elif L==7	// it
@@ -15166,7 +15145,7 @@ const char *Txt_Group_X_closed_click_to_open_it =	// Warning: it is very importa
 #elif L==4	// es
 	"Grupo %s cerrado; pulse para abrirlo";
 #elif L==5	// fr
-	"Groupe %s ferm&eacute;, cliquez pour l&apos;ouvrir";
+	"Groupe %s ferm&eacute;, cliquez pour l'ouvrir";
 #elif L==6	// gn
 	"Grupo %s cerrado; pulse para abrirlo";		// Okoteve traducción
 #elif L==7	// it
@@ -15759,7 +15738,7 @@ const char *Txt_Hits_per_year =	// hits = visits, clicks, page views...
 #elif L==6	// gn
 	"Accesos (clics) por a&ntilde;o";	// Okoteve traducción
 #elif L==7	// it
-	"Visite (clic) all&apos;anno";
+	"Visite (clic) all'anno";
 #elif L==8	// pl
 	"Ods&lstrok;on (klikni&eogon;cia) rocznie";
 #elif L==9	// pt
@@ -16079,7 +16058,7 @@ const char *Txt_I_have_read_this_information =
 #elif L==4	// es
 	"He le&iacute;do esta informaci&oacute;n";
 #elif L==5	// fr
-	"J&apos;ai lu cette information";
+	"J'ai lu cette information";
 #elif L==6	// gn
 	"He le&iacute;do esta informaci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -16121,7 +16100,7 @@ const char *Txt_I_have_finished =
 #elif L==4	// es
 	"He terminado";
 #elif L==5	// fr
-	"J&apos;ai fini";
+	"J'ai fini";
 #elif L==6	// gn
 	"He terminado";	// Okoteve traducción
 #elif L==7	// it
@@ -16163,11 +16142,11 @@ const char *Txt_ID =
 #elif L==4	// es
 	"ID (DNI/c&eacute;dula)";
 #elif L==5	// fr
-	"Num. d&apos;identit&eacute;";
+	"Num. d'identit&eacute;";
 #elif L==6	// gn
 	"ID (DNI/c&eacute;dula)";	// Okoteve traducción
 #elif L==7	// it
-	"Numero carta d&apos;identit&agrave;";
+	"Numero carta d'identit&agrave;";
 #elif L==8	// pl
 	"Dow&oacute;d osobisty";
 #elif L==9	// pt
@@ -16184,11 +16163,11 @@ const char *Txt_ID_X_had_already_been_confirmed =	// Warning: it is very importa
 #elif L==4	// es
 	"El ID (DNI/c&eacute;dula) %s ya hab&iacute;a sido confirmado.";
 #elif L==5	// fr
-	"L&apos;ID %s avait d&eacute;j&agrave; &eacute;t&eacute; confirm&eacute;e.";
+	"L'ID %s avait d&eacute;j&agrave; &eacute;t&eacute; confirm&eacute;e.";
 #elif L==6	// gn
 	"El ID (DNI/c&eacute;dula) %s ya hab&iacute;a sido confirmado.";		// Okoteve traducción
 #elif L==7	// it
-	"L&apos;ID %s era gi&agrave; stato confermato.";
+	"L'ID %s era gi&agrave; stato confermato.";
 #elif L==8	// pl
 	"ID %s zosta&lstrok;a ju&zdot; potwierdzona.";
 #elif L==9	// pt
@@ -16417,16 +16396,16 @@ const char *Txt_If_you_have_written_your_ID_nickname_or_email_correctly_ =
 	" y el correo en su ficha es correcto,"
 	" recibir&aacute; un mensaje con una nueva contrase&ntilde;a.";
 #elif L==5	// fr
-	"Si vous avez &eacute;crit votre @surnom, courrier ou num&eacute;ro d&apos;identit&eacute; correctement,"
-	" ainsi que l&apos;adresse email sur votre carte est correct,"
+	"Si vous avez &eacute;crit votre @surnom, courrier ou num&eacute;ro d'identit&eacute; correctement,"
+	" ainsi que l'adresse email sur votre carte est correct,"
 	" vous recevrez un email avec un nouveau mot de passe.";
 #elif L==6	// gn
 	"Si usted ha escrito correctamente su @apodo, correo o ID (DNI/c&eacute;dula),"
 	" y el correo en su ficha es correcto,"
 	" recibir&aacute; un mensaje con una nueva contrase&ntilde;a.";	// Okoteve traducción
 #elif L==7	// it
-	"Se hai scritto il tuo nome utente, email o numero di carta d&apos;identit&agrave; correttamente,"
-	" e l&apos;indirizzo email della tua scheda &egrave; corretto,"
+	"Se hai scritto il tuo nome utente, email o numero di carta d'identit&agrave; correttamente,"
+	" e l'indirizzo email della tua scheda &egrave; corretto,"
 	" riceverai una email con una nuova password.";
 #elif L==8	// pl
 	"Jesli napisales swoja nazwe lub nick poprawnie,"
@@ -16461,8 +16440,8 @@ const char *Txt_If_you_think_you_may_have_been_registered_ =
 #elif L==5	// fr
 	"Si vous pensez que vous avez &eacute;t&eacute; enregistr&eacute;"
 	" par un enseignant ou un administrateur,"
-	" v&eacute;rifiez-le en &eacute;crivant l&apos;un de vos identifiants possibles"
-	" (carte d&apos;identit&eacute;, passeport, etc.).";
+	" v&eacute;rifiez-le en &eacute;crivant l'un de vos identifiants possibles"
+	" (carte d'identit&eacute;, passeport, etc.).";
 #elif L==6	// gn
 	"Si cree que puede haber sido inscrito/a"
 	" por un profesor o administrador,"
@@ -16497,7 +16476,7 @@ const char *Txt_Image =
 #elif L==5	// fr
 	"Image";
 #elif L==6	// gn
-	"Ta&apos;&atilde;nga";
+	"Ta'&atilde;nga";
 #elif L==7	// it
 	"Immagine";
 #elif L==8	// pl
@@ -16518,7 +16497,7 @@ const char *Txt_Image_video =
 #elif L==5	// fr
 	"Image / vid&eacute;o";
 #elif L==6	// gn
-	"Ta&apos;&atilde;nga / video";
+	"Ta'&atilde;nga / video";
 #elif L==7	// it
 	"Immagine / video";
 #elif L==8	// pl
@@ -16640,7 +16619,7 @@ const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_
 	"En el a&ntilde;o/semestre <strong>%s</strong> de la titulaci&oacute;n <strong>%s</strong>"
 	" ya exist&iacute;a una asignatura con el nombre <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"Nell&apos;anno/semester <strong>%s</strong> di laurea <strong>%s</strong>"
+	"Nell'anno/semester <strong>%s</strong> di laurea <strong>%s</strong>"
 	" gi&agrave; esiste un corso con il nome <strong>%s</strong>.";
 #elif L==8	// pl
 	"W roku/semestr <strong>%s</strong> stopnia <strong>%s</strong>"
@@ -16652,7 +16631,7 @@ const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_
 
 const char *Txt_Incomplete_timetable_for_lack_of_space =
 #if   L==1	// ca
-	"Horari incomplet per falta d&apos;espai.";
+	"Horari incomplet per falta d'espai.";
 #elif L==2	// de
 	"Unvollst&auml;ndige Studenplan f&uuml;r Platzmangel.";
 #elif L==3	// en
@@ -16715,7 +16694,7 @@ const char *Txt_Indicators =
 
 const char *Txt_Indicators_of_courses =
 #if   L==1	// ca
-	"Indicadors d&apos;assignatures";
+	"Indicadors d'assignatures";
 #elif L==2	// de
 	"Anzeigen von Kursen";
 #elif L==3	// en
@@ -16906,7 +16885,7 @@ const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES] =
 	,
 	[Inf_ASSESSMENT] =
 #if   L==1	// ca
-	"Sistema d&apos;avaluaci&oacute;"
+	"Sistema d'avaluaci&oacute;"
 #elif L==2	// de
 	"Bewertungssystem"
 #elif L==3	// en
@@ -16914,7 +16893,7 @@ const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES] =
 #elif L==4	// es
 	"Sistema de evaluaci&oacute;n"
 #elif L==5	// fr
-	"Syst&egrave;me d&apos;&eacute;valuation"
+	"Syst&egrave;me d'&eacute;valuation"
 #elif L==6	// gn
 	"Sistema de evaluaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
@@ -16938,7 +16917,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES] =
 #elif L==4	// es
 	"No ofrecer ninguna informaci&oacute;n"
 #elif L==5	// fr
-	"Ne pas donner d&apos;information"
+	"Ne pas donner d'information"
 #elif L==6	// gn
 	"No ofrecer ninguna informaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
@@ -17132,7 +17111,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 #elif L==4	// es
 	"env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes"
 #elif L==5	// fr
-	"envoyer un fichier HTML, ou un fichier ZIP contenant un fichier index.html / index.htm et les fichiers d&apos;images"
+	"envoyer un fichier HTML, ou un fichier ZIP contenant un fichier index.html / index.htm et les fichiers d'images"
 #elif L==6	// gn
 	"env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes"// Okoteve traducción
 #elif L==7	// it
@@ -17153,11 +17132,11 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 #elif L==4	// es
 	"escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor"
 #elif L==5	// fr
-	"entrer l&apos;adresse d&apos;une page Web qui est h&eacute;berg&eacute;e sur un autre serveur"
+	"entrer l'adresse d'une page Web qui est h&eacute;berg&eacute;e sur un autre serveur"
 #elif L==6	// gn
 	"escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor"	// Okoteve traducción
 #elif L==7	// it
-	"immettere l&apos;indirizzo di una pagina web che &egrave; ospitata su un altro server"
+	"immettere l'indirizzo di una pagina web che &egrave; ospitata su un altro server"
 #elif L==8	// pl
 	"wprowadzic adres strony internetowej, kt&oacute;ra znajduje sie na innym serwerze"
 #elif L==9	// pt
@@ -17348,7 +17327,7 @@ const char *Txt_Institution =
 #elif L==5	// fr
 	"&Eacute;tablissement";
 #elif L==6	// gn
-	"Mbo&apos;ehao";
+	"Mbo'ehao";
 #elif L==7	// it
 	"Istituzione";
 #elif L==8	// pl
@@ -17369,7 +17348,7 @@ const char *Txt_institution =
 #elif L==5	// fr
 	"&eacute;tablissement";
 #elif L==6	// gn
-	"mbo&apos;ehao";
+	"mbo'ehao";
 #elif L==7	// it
 	"istituzione";
 #elif L==8	// pl
@@ -17390,7 +17369,7 @@ const char *Txt_Institution_centre_and_department =
 #elif L==5	// fr
 	"&Eacute;tablissement, centre et d&eacute;partement";
 #elif L==6	// gn
-	"Mbo&apos;ehao, mbo&apos;ehao, peh&#7869;";
+	"Mbo'ehao, mbo'ehao, peh&#7869;";
 #elif L==7	// it
 	"Istituzione, centro e dipartimento";
 #elif L==8	// pl
@@ -17562,7 +17541,7 @@ const char *Txt_Institutions =
 #elif L==5	// fr
 	"&Eacute;tablissements";
 #elif L==6	// gn
-	"Mbo&apos;ehao";
+	"Mbo'ehao";
 #elif L==7	// it
 	"Istituzioni";
 #elif L==8	// pl
@@ -17583,7 +17562,7 @@ const char *Txt_Institutions_ABBREVIATION =
 #elif L==5	// fr
 	"&Eacute;tabl.";
 #elif L==6	// gn
-	"Mbo&apos;ehao";
+	"Mbo'ehao";
 #elif L==7	// it
 	"Istit.";
 #elif L==8	// pl
@@ -17604,7 +17583,7 @@ const char *Txt_institutions =
 #elif L==5	// fr
 	"&eacute;tablissements";
 #elif L==6	// gn
-	"mbo&apos;ehao";
+	"mbo'ehao";
 #elif L==7	// it
 	"istituzioni";
 #elif L==8	// pl
@@ -17646,7 +17625,7 @@ const char *Txt_INSTITUTIONS_HELP_ORDER[Ins_NUM_ORDERS] =
 #elif L==4	// es
 	"Ordenar por n&ordm; de usuarios"
 #elif L==5	// fr
-	"Trier par nombre d&apos;utilisateurs"
+	"Trier par nombre d'utilisateurs"
 #elif L==6	// gn
 	"Ordenar por n&ordm; de usuarios"	// Okoteve traducción
 #elif L==7	// it
@@ -17689,7 +17668,7 @@ const char *Txt_Institutions_by_number_of_degrees =
 #elif L==4	// es
 	"Instituciones seg&uacute;n n&uacute;mero de titulaciones";
 #elif L==5	// fr
-	"&Eacute;tablissements par nombre d&apos;&eacute;tudes";
+	"&Eacute;tablissements par nombre d'&eacute;tudes";
 #elif L==6	// gn
 	"Instituciones seg&uacute;n n&uacute;mero de titulaciones";	// Okoteve traducción
 #elif L==7	// it
@@ -17723,7 +17702,7 @@ const char *Txt_Institutions_by_number_of_courses =
 
 const char *Txt_Institutions_by_number_of_users_in_courses =
 #if   L==1	// ca
-	"Institucions segons nombre d&apos;usuaris en assignatures";
+	"Institucions segons nombre d'usuaris en assignatures";
 #elif L==2	// de
 	"Hochschulen nach der Anzahl der Benutzer in Kurse";
 #elif L==3	// en
@@ -17731,7 +17710,7 @@ const char *Txt_Institutions_by_number_of_users_in_courses =
 #elif L==4	// es
 	"Instituciones seg&uacute;n n&uacute;mero de usuarios en asignaturas";
 #elif L==5	// fr
-	"&Eacute;tablissements par nombre d&apos;utilisateurs dans mati&egrave;res";
+	"&Eacute;tablissements par nombre d'utilisateurs dans mati&egrave;res";
 #elif L==6	// gn
 	"Instituciones seg&uacute;n n&uacute;mero de usuarios en asignaturas";	// Okoteve traducción
 #elif L==7	// it
@@ -17744,7 +17723,7 @@ const char *Txt_Institutions_by_number_of_users_in_courses =
 
 const char *Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them =
 #if   L==1	// ca
-	"Institucions segons nombre d&apos;usuaris que diuen pert&agrave;nyer-hi";
+	"Institucions segons nombre d'usuaris que diuen pert&agrave;nyer-hi";
 #elif L==2	// de
 	"Hochschulen nach der Anzahl der Benutzer, die behaupten, zu ihnen geh&ouml;ren";
 #elif L==3	// en
@@ -17752,7 +17731,7 @@ const char *Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them =
 #elif L==4	// es
 	"Instituciones seg&uacute;n n&uacute;mero de usuarios que dicen pertenecer a ellas";
 #elif L==5	// fr
-	"&Eacute;tablissements par nombre d&apos;utilisateurs qui pr&eacute;tendent leur appartiennent";
+	"&Eacute;tablissements par nombre d'utilisateurs qui pr&eacute;tendent leur appartiennent";
 #elif L==6	// gn
 	"Instituciones seg&uacute;n n&uacute;mero de usuarios que dicen pertenecer a ellas";	// Okoteve traducción
 #elif L==7	// it
@@ -17798,7 +17777,7 @@ const char *Txt_INSTITUTIONS_ORDER[Ins_NUM_ORDERS] =
 #elif L==5	// fr
 	"&Eacute;tablissement"
 #elif L==6	// gn
-	"Mbo&apos;ehao"
+	"Mbo'ehao"
 #elif L==7	// it
 	"Istituzione"
 #elif L==8	// pl
@@ -17831,7 +17810,7 @@ const char *Txt_INSTITUTIONS_ORDER[Ins_NUM_ORDERS] =
 
 const char *Txt_Institutions_with_pending_centres =
 #if   L==1	// ca
-	"Institucions amb centres pendents d&apos;activar";
+	"Institucions amb centres pendents d'activar";
 #elif L==2	// de
 	"Hochschulen mit anh&auml;ngig Lehrinstitute";
 #elif L==3	// en
@@ -17969,7 +17948,7 @@ const char *Txt_It_is_mandatory_to_choose_a_group =
 #elif L==6	// gn
 	"Elegir grupo es obligatorio";		// Okoteve traducción
 #elif L==7	// it
-	"E &apos;obbligatorio scegliere un gruppo";
+	"E 'obbligatorio scegliere un gruppo";
 #elif L==8	// pl
 	"Jest to obowiazkowe, aby wybrac grupe";
 #elif L==9	// pt
@@ -17990,7 +17969,7 @@ const char *Txt_It_is_optional_to_choose_a_group =
 #elif L==6	// gn
 	"Elegir grupo es voluntario";		// Okoteve traducción
 #elif L==7	// it
-	"E&apos; facoltativo scegliere un gruppo";
+	"E' facoltativo scegliere un gruppo";
 #elif L==8	// pl
 	"Opcjonalnie mozna wybrac grupe";
 #elif L==9	// pt
@@ -18045,11 +18024,11 @@ const char *Txt_Its_me =
 #elif L==2	// de
 	"Da ich bin!";
 #elif L==3	// en
-	"It&apos;s me!";
+	"It's me!";
 #elif L==4	// es
 	"&iexcl;Soy yo!";
 #elif L==5	// fr
-	"C&apos;est moi!";
+	"C'est moi!";
 #elif L==6	// gn
 	"&iexcl;Soy yo!";	// Okoteve traducción
 #elif L==7	// it
@@ -18072,7 +18051,7 @@ const char *Txt_Language =
 #elif L==5	// fr
 	"Langue";
 #elif L==6	// gn
-	"&Ntilde;e&apos;&#7869;";
+	"&Ntilde;e'&#7869;";
 #elif L==7	// it
 	"Lingua";
 #elif L==8	// pl
@@ -18386,7 +18365,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #elif L==4	// es
 	"CC Reconocimiento - Compartir bajo la misma licencia"		// CC Attribution-ShareAlike License
 #elif L==5	// fr
-	"CC Attribution - Partage &agrave; l&apos;Identique"			// CC Attribution-ShareAlike License
+	"CC Attribution - Partage &agrave; l'Identique"			// CC Attribution-ShareAlike License
 #elif L==6	// gn
 	"CC Reconocimiento - Compartir bajo la misma licencia"		// CC Attribution-ShareAlike License	// Okoteve traducción
 #elif L==7	// it
@@ -18428,7 +18407,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #elif L==4	// es
 	"CC Reconocimiento - No comercial"			// CC Attribution-NonCommercial License
 #elif L==5	// fr
-	"CC Attribution - Pas d&apos;Utilisation Commerciale"	// CC Attribution-NonCommercial License
+	"CC Attribution - Pas d'Utilisation Commerciale"	// CC Attribution-NonCommercial License
 #elif L==6	// gn
 	"CC Reconocimiento - No comercial"			// CC Attribution-NonCommercial License	// Okoteve traducción
 #elif L==7	// it
@@ -18449,7 +18428,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #elif L==4	// es
 	"CC Reconocimiento - No comercial - Compartir bajo la misma licencia"			// CC Attribution-NonCommercial-ShareAlike License
 #elif L==5	// fr
-	"CC Attribution - Pas d&apos;Utilisation Commerciale - Partage &agrave; l&apos;Identique"		// CC Attribution-NonCommercial-ShareAlike License
+	"CC Attribution - Pas d'Utilisation Commerciale - Partage &agrave; l'Identique"		// CC Attribution-NonCommercial-ShareAlike License
 #elif L==6	// gn
 	"CC Reconocimiento - No comercial - Compartir bajo la misma licencia"			// CC Attribution-NonCommercial-ShareAlike License	// Okoteve traducción
 #elif L==7	// it
@@ -18547,7 +18526,7 @@ const char *Txt_Link_X_removed =	// Warning: it is very important to include %s 
 
 const char *Txt_Link_to_announcement_of_exam =
 #if   L==1	// ca
-	"Enlla&ccedil; a convocat&ograve;ria d&apos;examen";
+	"Enlla&ccedil; a convocat&ograve;ria d'examen";
 #elif L==2	// de
 	"Link zu Aufruf f&uuml;r Pr&uuml;fung";
 #elif L==3	// en
@@ -18559,7 +18538,7 @@ const char *Txt_Link_to_announcement_of_exam =
 #elif L==6	// gn
 	"Enlace a convocatoria de examen";	// Okoteve traducción
 #elif L==7	// it
-	"Link al appello d&apos;esame";
+	"Link al appello d'esame";
 #elif L==8	// pl
 	"Link do ogloszenie egzaminu";
 #elif L==9	// pt
@@ -18597,11 +18576,11 @@ const char *Txt_List_of_nicks_emails_or_IDs =
 #elif L==4	// es
 	"Lista de @apodos, correos o ID (DNI/c&eacute;dulas)";
 #elif L==5	// fr
-	"Liste de num&eacute;ros d&apos;identit&eacute;";
+	"Liste de num&eacute;ros d'identit&eacute;";
 #elif L==6	// gn
 	"Lista de @apodos, correos o ID (DNI/c&eacute;dulas)";	// Okoteve traducción
 #elif L==7	// it
-	"Lista di @nomi-utenti, email o numero carte d&apos;identit&agrave;";
+	"Lista di @nomi-utenti, email o numero carte d'identit&agrave;";
 #elif L==8	// pl
 	"List of @nicks, emails or IDs";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -18768,7 +18747,7 @@ const char *Txt_Lock_editing =
 #elif L==4	// es
 	"Bloquear edici&oacute;n";
 #elif L==5	// fr
-	"Verrouiller l&apos;&eacute;dition";
+	"Verrouiller l'&eacute;dition";
 #elif L==6	// gn
 	"Bloquear edici&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -18789,7 +18768,7 @@ const char *Txt_LOG_More_info =
 #elif L==4	// es
 	"Observaciones";
 #elif L==5	// fr
-	"Plus d&apos;informations";
+	"Plus d'informations";
 #elif L==6	// gn
 	"Observaciones";	// Okoteve traducción
 #elif L==7	// it
@@ -19057,7 +19036,7 @@ const char *Txt_Mark_as_favourite =
 
 const char *Txt_Marks_management_area =
 #if   L==1	// ca
-	"Zona d&apos;administraci&oacute; de qualificacions";
+	"Zona d'administraci&oacute; de qualificacions";
 #elif L==2	// de
 	"Bewertungs-Verwaltung";
 #elif L==3	// en
@@ -19351,7 +19330,7 @@ const char *Txt_Max_levels =
 
 const char *Txt_Max_BR_students =
 #if   L==1	// ca
-	"M&agrave;xim<br />d&apos;est.";
+	"M&agrave;xim<br />d'est.";
 #elif L==2	// de
 	"Max.<br />Stud.";
 #elif L==3	// en
@@ -19529,7 +19508,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4	// es
 	"Entrar"
 #elif L==5	// fr
-	"S&apos;identifier"
+	"S'identifier"
 #elif L==6	// gn
 	"Entrar"	// Okoteve traducción
 #elif L==7	// it
@@ -19824,7 +19803,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"&Eacute;tablissements"
 #elif L==6	// gn
-	"Mbo&apos;ehao"
+	"Mbo'ehao"
 #elif L==7	// it
 	"Istituzioni"
 #elif L==8	// pl
@@ -19880,7 +19859,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Centres"
 #elif L==6	// gn
-	"Mbo&apos;ehao"
+	"Mbo'ehao"
 #elif L==7	// it
 	"Centri"
 #elif L==8	// pl
@@ -20038,7 +20017,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Salles"
 #elif L==6	// gn
-	"Mbo&apos;ehakoty"
+	"Mbo'ehakoty"
 #elif L==7	// it
 	"Aule"
 #elif L==8	// pl
@@ -20092,7 +20071,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Mati&egrave;res"
 #elif L==6	// gn
-	"Mbo&apos;esyry"
+	"Mbo'esyry"
 #elif L==7	// it
 	"Corsi"
 #elif L==8	// pl
@@ -20816,7 +20795,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Enseignants"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7	// it
 	"Professori"
 #elif L==8	// pl
@@ -21283,7 +21262,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Mati&egrave;res"
 #elif L==6	// gn
-	"Mbo&apos;esyry"
+	"Mbo'esyry"
 #elif L==7	// it
 	"Corsi"
 #elif L==8	// pl
@@ -21449,7 +21428,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  1: ActReqSch
 #if   L==1	// ca
-	"Cerca d&apos;assignatures, professors i documents"
+	"Cerca d'assignatures, professors i documents"
 #elif L==2	// de
 	"Suche Kursen, Lehrer und Dokumente"
 #elif L==3	// en
@@ -21585,7 +21564,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  1: ActSeeCty
 #if   L==1	// ca
-	"Llista de pa&iuml;sos i del nombre d&apos;usuaris de cada pa&iacute;s"
+	"Llista de pa&iuml;sos i del nombre d'usuaris de cada pa&iacute;s"
 #elif L==2	// de
 	"L&auml;nder"
 #elif L==3	// en
@@ -21606,7 +21585,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  2: ActSeePen
 #if   L==1	// ca
-	"Institutions, centres, titulacions i assignatures pendents d&apos;activar"
+	"Institutions, centres, titulacions i assignatures pendents d'activar"
 #elif L==2	// de
 	"Anh&auml;ngig Hochschulen, Lehrinstitute, Studiengang und Kursen"
 #elif L==3	// en
@@ -21627,7 +21606,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  3: ActSeeLnk
 #if   L==1	// ca
-	"Llista d&apos;enlla&ccedil;os institucionals"
+	"Llista d'enlla&ccedil;os institucionals"
 #elif L==2	// de
 	"Offizielle Links Liste"
 #elif L==3	// en
@@ -21700,7 +21679,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	{
 	//  0: ActSeeCtyInf
 #if   L==1	// ca
-	"Informaci&oacute; d&apos;aquest pa&iacute;s"
+	"Informaci&oacute; d'aquest pa&iacute;s"
 #elif L==2	// de
 	"Information dieses Land"
 #elif L==3	// en
@@ -21721,7 +21700,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  1: ActSeeIns
 #if   L==1	// ca
-	"Llista d&apos;institucions"
+	"Llista d'institucions"
 #elif L==2	// de
 	"Hochschulen"
 #elif L==3	// en
@@ -21756,7 +21735,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	{
 	//  0: ActSeeInsInf
 #if   L==1	// ca
-	"Informaci&oacute; d&apos;aquesta instituci&oacute;"
+	"Informaci&oacute; d'aquesta instituci&oacute;"
 #elif L==2	// de
 	"Information dieses Hochschule"
 #elif L==3	// en
@@ -21799,7 +21778,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	//  2: ActSeePlc
 #if   L==1	// ca
 	"Llocs o seus de la instituci&oacute;"
-	" on s&apos;ubica cada un dels centres."
+	" on s'ubica cada un dels centres."
 #elif L==2	// de
 	"Standorte oder Hauptsitze der Institution,"
 	" an der sich jedes Zentrum befindet."
@@ -21810,13 +21789,13 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lugares o sedes de la instituci&oacute;n"
 	" donde se ubica cada uno de los centros."
 #elif L==5	// fr
-	"Emplacements ou si&egrave;ges de l&apos;institution"
+	"Emplacements ou si&egrave;ges de l'institution"
 	" o&ugrave; est situ&eacute; chacun des centres."
 #elif L==6	// gn
 	"Lugares o sedes de la instituci&oacute;n"
 	" donde se ubica cada uno de los centros."
 #elif L==7	// it
-	"Localit&grave; o sede dell&apos;istituzione"
+	"Localit&grave; o sede dell'istituzione"
 	" in cui si trova ciascun centro."
 #elif L==8	// pl
 	"Miejsca lub siedziba instytucji,"
@@ -21828,7 +21807,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  3: ActSeeDpt
 #if   L==1	// ca
-	"Llista de tots els departaments d&apos;aquesta instituci&oacute;"
+	"Llista de tots els departaments d'aquesta instituci&oacute;"
 #elif L==2	// de
 	"Abteilungen"
 #elif L==3	// en
@@ -21881,7 +21860,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	{
 	//  0: ActSeeCtrInf
 #if   L==1	// ca
-	"Informaci&oacute; d&apos;aquest centre"
+	"Informaci&oacute; d'aquest centre"
 #elif L==2	// de
 	"Information dieses Lehrinstitut"
 #elif L==3	// en
@@ -21902,7 +21881,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  1: ActSeeDeg
 #if   L==1	// ca
-	"Titulacions d&apos;aquest centre"
+	"Titulacions d'aquest centre"
 #elif L==2	// de
 	"Studiengang"
 #elif L==3	// en
@@ -21954,7 +21933,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Salles de classe, laboratoires ou autres lieux"
 #elif L==6	// gn
-	"Mbo&apos;ehakoty"
+	"Mbo'ehakoty"
 #elif L==7	// it
 	"Aule, laboratori o altri luoghi"
 #elif L==8	// pl
@@ -21977,7 +21956,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	{
 	//  0: ActSeeDegInf
 #if   L==1	// ca
-	"Informaci&oacute; d&apos;aquesta titulaci&oacute;"
+	"Informaci&oacute; d'aquesta titulaci&oacute;"
 #elif L==2	// de
 	"Information dieses Studiengang"
 #elif L==3	// en
@@ -21998,7 +21977,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  1: ActSeeCrs
 #if   L==1	// ca
-	"Assignatures d&apos;aquesta titulaci&oacute;"
+	"Assignatures d'aquesta titulaci&oacute;"
 #elif L==2	// de
 	"Kursen in diesem Studiengang"
 #elif L==3	// en
@@ -22033,7 +22012,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	{
 	//  0: ActSeeCrsInf
 #if   L==1	// ca
-	"Informaci&oacute; d&apos;aquesta assignatura"
+	"Informaci&oacute; d'aquesta assignatura"
 #elif L==2	// de
 	"Information dieses Kurs"
 #elif L==3	// en
@@ -22054,7 +22033,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  1: ActSeePrg
 #if   L==1	// ca
-	"Programaci&oacute; did&agrave;ctica de l&apos;assignatura"
+	"Programaci&oacute; did&agrave;ctica de l'assignatura"
 #elif L==2	// de
 	"Didaktische Programmierung des Kurses"
 #elif L==3	// en
@@ -22075,7 +22054,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  2: ActSeeTchGui
 #if   L==1	// ca
-	"Guia docent de l&apos;assignatura"
+	"Guia docent de l'assignatura"
 #elif L==2	// de
 	"Hinweise zur Kurs"
 #elif L==3	// en
@@ -22096,7 +22075,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  3: ActSeeSyl
 #if   L==1	// ca
-	"Temari de l&apos;assignatura"
+	"Temari de l'assignatura"
 #elif L==2	// de
 	"Studienplan"
 #elif L==3	// en
@@ -22117,7 +22096,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  4: ActSeeBib
 #if   L==1	// ca
-	"Bibliografia relacionada amb els continguts de l&apos;assignatura"
+	"Bibliografia relacionada amb els continguts de l'assignatura"
 #elif L==2	// de
 	"Literatur"
 #elif L==3	// en
@@ -22159,7 +22138,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  6: ActSeeCrsLnk
 #if   L==1	// ca
-	"Enlla&ccedil;os relacionats amb els continguts de l&apos;assignatura"
+	"Enlla&ccedil;os relacionats amb els continguts de l'assignatura"
 #elif L==2	// de
 	"Links"
 #elif L==3	// en
@@ -22180,7 +22159,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  7: ActSeeCrsTT
 #if   L==1	// ca
-	"Horari de classes de l&apos;assignatura"
+	"Horari de classes de l'assignatura"
 #elif L==2	// de
 	"Stundenplan"
 #elif L==3	// en
@@ -22209,8 +22188,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	{
 	//  0: ActSeeAss
 #if   L==1	// ca
-	"Sistema o criteris d&apos;avaluaci&oacute;"
-	" de l&apos;estudiant en aquesta assignatura"
+	"Sistema o criteris d'avaluaci&oacute;"
+	" de l'estudiant en aquesta assignatura"
 #elif L==2	// de
 	"Bewertungssystem"
 #elif L==3	// en
@@ -22219,7 +22198,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Sistema o criterios de evaluaci&oacute;n"
 	" del estudiante en esta asignatura"
 #elif L==5	// fr
-	"Syst&egrave;me d&apos;&eacute;valuation"
+	"Syst&egrave;me d'&eacute;valuation"
 #elif L==6	// gn
 	"Sistema o criterios de evaluaci&oacute;n"
 	" del estudiante en esta asignatura"// Okoteve traducción
@@ -22275,7 +22254,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  3: ActSeeAllExaAnn
 #if   L==1	// ca
-	"Llistat de convocat&ograve;ries d&apos;ex&agrave;mens d&apos;aquesta assignatura"
+	"Llistat de convocat&ograve;ries d'ex&agrave;mens d'aquesta assignatura"
 #elif L==2	// de
 	"Pr&uuml;fungsaufruf"
 #elif L==3	// en
@@ -22287,7 +22266,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==6	// gn
 	"Listado de convocatorias de ex&aacute;menes de esta asignatura"// Okoteve traducción
 #elif L==7	// it
-	"Appelli d&apos;esame"
+	"Appelli d'esame"
 #elif L==8	// pl
 	"Ogloszenia egzamin&oacute;w"
 #elif L==9	// pt
@@ -22317,7 +22296,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  5: ActReqTst
 #if   L==1	// ca
-	"Tests sobre els continguts d&apos;aquesta assignatura"
+	"Tests sobre els continguts d'aquesta assignatura"
 #elif L==2	// de
 	"Tests"
 #elif L==3	// en
@@ -22430,7 +22409,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	//  1: ActAdmShaIns
 #if   L==1	// ca
 	"Arxius compartits per professors i estudiants"
-	" de l&apos;instituci&oacute;"
+	" de l'instituci&oacute;"
 #elif L==2	// de
 	"Freigegebene Dateien"
 #elif L==3	// en
@@ -22546,7 +22525,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  6: ActSeeAdmDocCrsGrp
 #if   L==1	// ca
-	"Documents de l&apos;assignatura o d&apos;un grup enviats per professors"
+	"Documents de l'assignatura o d'un grup enviats per professors"
 #elif L==2	// de
 	"Dokumente"
 #elif L==3	// en
@@ -22567,7 +22546,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  7: ActAdmTchCrsGrp
 #if   L==1	// ca
-	"Arxius privats, nom&eacute;s per als professors de l&apos;assignatura"
+	"Arxius privats, nom&eacute;s per als professors de l'assignatura"
 #elif L==2	// de
 	"Privat-Dateien, nur f&uuml;r die Lehrer des Kurses"
 #elif L==3	// en
@@ -22589,7 +22568,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	//  8: ActAdmShaCrsGrp
 #if   L==1	// ca
 	"Arxius compartits per professors i estudiants"
-	" de l&apos;assignatura o d&apos;un grup"
+	" de l'assignatura o d'un grup"
 #elif L==2	// de
 	"Freigegebene Dateien"
 #elif L==3	// en
@@ -22613,7 +22592,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  9: ActAdmAsgWrkUsr
 #if   L==1	// ca
-	"Els meus documents d&apos;activitats i altres treballs en aquesta assignatura"
+	"Els meus documents d'activitats i altres treballs en aquesta assignatura"
 #elif L==2	// de
 	"Eingereichte Hausarbeiten"
 #elif L==3	// en
@@ -22634,15 +22613,15 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// 10: ActReqAsgWrkCrs
 #if   L==1	// ca
-	"Activitats i altres treballs enviats pels usuaris d&apos;aquesta assignatura"
+	"Activitats i altres treballs enviats pels usuaris d'aquesta assignatura"
 #elif L==2	// de
 	"Hausarbeiten der Benutzer"
 #elif L==3	// en
-	"Users&apos; homework"
+	"Users' homework"
 #elif L==4	// es
 	"Actividades y otros trabajos enviados por los usuarios de esta asignatura"
 #elif L==5	// fr
-	"Travails d&apos;utilisateurs"
+	"Travails d'utilisateurs"
 #elif L==6	// gn
 	"Actividades y otros trabajos enviados por los usuarios de esta asignatura"// Okoteve traducción
 #elif L==7	// it
@@ -22685,7 +22664,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// 12: ActAdmBrf
 #if   L==1	// ca
-	"La meva zona privada d&apos;emmagatzematge de fitxers"
+	"La meva zona privada d'emmagatzematge de fitxers"
 #elif L==2	// de
 	"Aktentasche"
 #elif L==3	// en
@@ -22733,11 +22712,11 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==2	// de
 	"Studentenverzeichnis und profile"
 #elif L==3	// en
-	"Students&apos; list and records"
+	"Students' list and records"
 #elif L==4	// es
 	"Listado y fichas de los estudiantes"
 #elif L==5	// fr
-	"Liste et cartes d&apos;&eacute;tudiants"
+	"Liste et cartes d'&eacute;tudiants"
 #elif L==6	// gn
 	"Listado y fichas de los estudiantes"// Okoteve traducción
 #elif L==7	// it
@@ -22754,11 +22733,11 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==2	// de
 	"Lehrkr&auml;fteverzeichnis und profile"
 #elif L==3	// en
-	"Teachers&apos; list and records"
+	"Teachers' list and records"
 #elif L==4	// es
 	"Listado y fichas de profesores"
 #elif L==5	// fr
-	"Liste et cartes d&apos;enseignants"
+	"Liste et cartes d'enseignants"
 #elif L==6	// gn
 	"Listado y fichas de profesores"// Okoteve traducción
 #elif L==7	// it
@@ -22771,15 +22750,15 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  3: ActLstOth
 #if   L==1	// ca
-	"Llistat i fitxes d&apos;altres usuaris"
+	"Llistat i fitxes d'altres usuaris"
 #elif L==2	// de
 	"Eingeladenverzeichnis und profile von anderen Benutzer"
 #elif L==3	// en
-	"Other users&apos; list and records"
+	"Other users' list and records"
 #elif L==4	// es
 	"Listado y fichas de otros usuarios"
 #elif L==5	// fr
-	"Liste et cartes d&apos;autres utilisateurs"
+	"Liste et cartes d'autres utilisateurs"
 #elif L==6	// gn
 	"Listado y fichas de otros usuarios"	// Okoteve traducción
 #elif L==7	// it
@@ -22792,12 +22771,12 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  4: ActSeeAtt
 #if   L==1	// ca
-	"Control d&apos;assist&egrave;ncia dels estudiants"
-	" a les classes d&apos;aquesta assignatura"
+	"Control d'assist&egrave;ncia dels estudiants"
+	" a les classes d'aquesta assignatura"
 #elif L==2	// de
 	"Kontrolle der Studierenden Anwesenheit"
 #elif L==3	// en
-	"Control of students&apos; attendance"
+	"Control of students' attendance"
 	" to classes in this course"
 #elif L==4	// es
 	"Control de asistencia de los estudiantes"
@@ -22838,7 +22817,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  6: ActSeeSignUpReq
 #if   L==1	// ca
-	"Peticions d&apos;inscripci&oacute;"
+	"Peticions d'inscripci&oacute;"
 #elif L==2	// de
 	"Registrierungsanforderungen"
 #elif L==3	// en
@@ -22846,7 +22825,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4	// es
 	"Peticiones de inscripci&oacute;n pendientes de verificar"
 #elif L==5	// fr
-	"Demandes d&apos;inscription"
+	"Demandes d'inscription"
 #elif L==6	// gn
 	"Peticiones de inscripci&oacute;n pendientes de verificar"	// Okoteve traducción
 #elif L==7	// it
@@ -22859,7 +22838,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  7: ActLstCon
 #if   L==1	// ca
-	"Llista d&apos;usuaris connectats en aquest moment"
+	"Llista d'usuaris connectats en aquest moment"
 #elif L==2	// de
 	"Angemeldet"
 #elif L==3	// en
@@ -22978,7 +22957,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  4: ActReqMsgUsr
 #if   L==1	// ca
-	"Enviament d&apos;un nou missatge a altres usuaris"
+	"Enviament d'un nou missatge a altres usuaris"
 #elif L==2	// de
 	"Neue Nachricht an andere Benutzer senden"
 #elif L==3	// en
@@ -22986,7 +22965,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4	// es
 	"Env&iacute;o de un nuevo mensaje a otros usuarios"
 #elif L==5	// fr
-	"Envoi d&apos;un nouveau message &agrave; d&apos;autres utilisateurs"
+	"Envoi d'un nouveau message &agrave; d'autres utilisateurs"
 #elif L==6	// gn
 	"Env&iacute;o de un nuevo mensaje a otros usuarios"// Okoteve traducción
 #elif L==7	// it
@@ -22999,7 +22978,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  5: ActSeeRcvMsg
 #if   L==1	// ca
-	"Missatges rebuts d&apos;altres usuaris"
+	"Missatges rebuts d'altres usuaris"
 #elif L==2	// de
 	"Nachrichten, die von anderen Benutzern empfangen wurden"
 #elif L==3	// en
@@ -23007,7 +22986,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4	// es
 	"Mensajes recibidos de otros usuarios"
 #elif L==5	// fr
-	"Messages re&ccedil;us d&apos;autres utilisateurs"
+	"Messages re&ccedil;us d'autres utilisateurs"
 #elif L==6	// gn
 	"Mensajes recibidos de otros usuarios"	// Okoteve traducción
 #elif L==7	// it
@@ -23028,7 +23007,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4	// es
 	"Mensajes enviados por m&iacute; a otros usuarios"
 #elif L==5	// fr
-	"Messages envoy&eacute;s par moi &agrave; d&apos;autres utilisateurs"
+	"Messages envoy&eacute;s par moi &agrave; d'autres utilisateurs"
 #elif L==6	// gn
 	"Mensajes enviados por m&iacute; a otros usuarios"// Okoteve traducción
 #elif L==7	// it
@@ -23041,8 +23020,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  7: ActReqMaiUsr
 #if   L==1	// ca
-	"Creaci&oacute; d&apos;un missatge de correu"
-	" per enviar-lo a usuaris d&apos;aquesta assignatura"
+	"Creaci&oacute; d'un missatge de correu"
+	" per enviar-lo a usuaris d'aquesta assignatura"
 	" utilitzant el programa client de correu predeterminat en el meu sistema"
 #elif L==2	// de
 	"E-Mail"
@@ -23076,8 +23055,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	{
 	//  0: ActReqUseGbl
 #if   L==1	// ca
-	"Grans nombres sobre l&apos;&uacute;s actual de tota la plataforma,"
-	" o d&apos;aquesta titulaci&oacute; o assignatura"
+	"Grans nombres sobre l'&uacute;s actual de tota la plataforma,"
+	" o d'aquesta titulaci&oacute; o assignatura"
 #elif L==2	// de
 	"Nutzung von SWAD"
 #elif L==3	// en
@@ -23100,7 +23079,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  1: ActSeePhoDeg
 #if   L==1	// ca
-	"Estad&iacute;stiques del nombre d&apos;estudiants en cada titulaci&oacute;"
+	"Estad&iacute;stiques del nombre d'estudiants en cada titulaci&oacute;"
 	" representades per les fotos mitjana dels estudiants"
 #elif L==2	// de
 	"Mischbilder der Studieng&auml;nge"
@@ -23125,7 +23104,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  2: ActReqStaCrs
 #if   L==1	// ca
-	"Indicadors d&apos;assignatures per al contracte-programa"
+	"Indicadors d'assignatures per al contracte-programa"
 #elif L==2	// de
 	"Anzeigen von Kursen f&uuml;r den Vertrag Programm"
 #elif L==3	// en
@@ -23146,7 +23125,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  3: ActReqAccGbl
 #if   L==1	// ca
-	"Estad&iacute;stiques d&apos;accesso a la plataforma"
+	"Estad&iacute;stiques d'accesso a la plataforma"
 #elif L==2	// de
 	"Zugriffsstatistik auf die Plattform"
 #elif L==3	// en
@@ -23303,7 +23282,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  4: ActFrmMyAcc
 #if   L==1	// ca
-	"Creaci&oacute; o edici&oacute; del meu compte d&apos;usuari"
+	"Creaci&oacute; o edici&oacute; del meu compte d'usuari"
 #elif L==2	// de
 	"Erstellen oder Bearbeiten meinem Benutzerkonto"
 #elif L==3	// en
@@ -23311,7 +23290,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4	// es
 	"Creaci&oacute;n o edici&oacute;n de mi cuenta de usuario/a"
 #elif L==5	// fr
-	"Cr&eacute;er ou modifier mon compte d&apos;utilisateur"
+	"Cr&eacute;er ou modifier mon compte d'utilisateur"
 #elif L==6	// gn
 	"Creaci&oacute;n o edici&oacute;n de mi cuenta de usuario/a"// Okoteve traducción
 #elif L==7	// it
@@ -23784,7 +23763,7 @@ const char *Txt_minute =
 #elif L==5	// fr
 	"minute";
 #elif L==6	// gn
-	"aravo&apos;i";
+	"aravo'i";
 #elif L==7	// it
 	"minuto";
 #elif L==8	// pl
@@ -23805,7 +23784,7 @@ const char *Txt_minutes =
 #elif L==5	// fr
 	"minutes";
 #elif L==6	// gn
-	"aravo&apos;i";
+	"aravo'i";
 #elif L==7	// it
 	"minuti";
 #elif L==8	// pl
@@ -23816,7 +23795,7 @@ const char *Txt_minutes =
 
 const char *Txt_Modify_me_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Modificarme en l&apos;assignatura <strong>%s</strong>";
+	"Modificarme en l'assignatura <strong>%s</strong>";
 #elif L==2	// de
 	"&Auml;ndern Sie mir im Kurs <strong>%s</strong>";
 #elif L==3	// en
@@ -23837,7 +23816,7 @@ const char *Txt_Modify_me_in_the_course_X =	// Warning: it is very important to 
 
 const char *Txt_Modify_user_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Modificar usuari en l&apos;assignatura <strong>%s</strong>";
+	"Modificar usuari en l'assignatura <strong>%s</strong>";
 #elif L==2	// de
 	"&Auml;ndern Benutzer im Kurs <strong>%s</strong>";
 #elif L==3	// en
@@ -24963,7 +24942,7 @@ const char *Txt_My_courses =
 #elif L==5	// fr
 	"Mes mati&egrave;res";
 #elif L==6	// gn
-	"Che mbo&apos;esyry";
+	"Che mbo'esyry";
 #elif L==7	// it
 	"Miei corsi";
 #elif L==8	// pl
@@ -25625,7 +25604,7 @@ const char *Txt_New_notice =
 
 const char *Txt_New_on_PLATFORM_Sign_up =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"No t&eacute; compte a %s? Registra&apos;t ara";
+	"No t&eacute; compte a %s? Registra't ara";
 #elif L==2	// de
 	"Neu bei %s? Registriere Dich!";
 #elif L==3	// en
@@ -25969,7 +25948,7 @@ const char *Txt_New_type_of_degree =
 #elif L==4	// es
 	"Nuevo tipo de titulaci&oacute;n";
 #elif L==5	// fr
-	"Nouveau type d&apos;&eacute;tude";
+	"Nouveau type d'&eacute;tude";
 #elif L==6	// gn
 	"Nuevo tipo de titulaci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -26032,11 +26011,11 @@ const char *Txt_nick_email_or_ID =
 #elif L==4	// es
 	"@apodo, correo o ID (DNI/c&eacute;dula)";
 #elif L==5	// fr
-	"@surnom, courrier ou num&eacute;ro d&apos;identit&eacute;";
+	"@surnom, courrier ou num&eacute;ro d'identit&eacute;";
 #elif L==6	// gn
 	"@apodo, correo o ID (DNI/c&eacute;dula)";	// Okoteve traducción
 #elif L==7	// it
-	"@nome-utente, email o numero carta d&apos;identit&agrave;";
+	"@nome-utente, email o numero carta d'identit&agrave;";
 #elif L==8	// pl
 	"@pseudonim, email lub ID";
 #elif L==9	// pt
@@ -26053,11 +26032,11 @@ const char *Txt_nicks_emails_or_IDs_separated_by_commas =
 #elif L==4	// es
 	"@apodos, correos o ID (DNI/c&eacute;dulas) separados por comas";
 #elif L==5	// fr
-	"@surnoms, courriers ou num&eacute;ros d&apos;identit&eacute; s&eacute;par&eacute;s par des virgules";
+	"@surnoms, courriers ou num&eacute;ros d'identit&eacute; s&eacute;par&eacute;s par des virgules";
 #elif L==6	// gn
 	"@apodos, correos o ID (DNI/c&eacute;dulas) separados por comas";	// Okoteve traducción
 #elif L==7	// it
-	"@nomi-utenti, email o numero carte d&apos;identit&agrave; separati da virgole";
+	"@nomi-utenti, email o numero carte d'identit&agrave; separati da virgole";
 #elif L==8	// pl
 	"@nicks, emails or IDs separated by commas";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -26158,7 +26137,7 @@ const char *Txt_No_announcements =
 #elif L==4	// es
 	"No hay anuncios";
 #elif L==5	// fr
-	"Il n&apos;y a pas d&apos;annonces";
+	"Il n'y a pas d'annonces";
 #elif L==6	// gn
 	"No hay anuncios";	// Okoteve traducción
 #elif L==7	// it
@@ -26183,7 +26162,7 @@ const char *Txt_No_announcements_of_exams_of_X =	// Warning: it is very importan
 #elif L==6	// gn
 	"No hay convocatorias de examen de <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"Nessun appello d&apos;esame di <strong>%s</strong>.";
+	"Nessun appello d'esame di <strong>%s</strong>.";
 #elif L==8	// pl
 	"Brak ogloszen egzamin&oacute;w <strong>%s</strong>.";
 #elif L==9	// pt
@@ -26242,7 +26221,7 @@ const char *Txt_No_assignments =
 #elif L==4	// es
 	"No hay actividades.";
 #elif L==5	// fr
-	"Il n&apos;y a pas d&apos;activit&eacute;s.";
+	"Il n'y a pas d'activit&eacute;s.";
 #elif L==6	// gn
 	"No hay actividades.";	// Okoteve traducción
 #elif L==7	// it
@@ -26263,7 +26242,7 @@ const char *Txt_No_banners =
 #elif L==4	// es
 	"No hay banners.";
 #elif L==5	// fr
-	"Il n&apos;y a pas de banni&eacute;res.";
+	"Il n'y a pas de banni&eacute;res.";
 #elif L==6	// gn
 	"No hay banners.";	// Okoteve traducción
 #elif L==7	// it
@@ -26326,7 +26305,7 @@ const char *Txt_No_centres =
 #elif L==4	// es
 	"No hay centros.";
 #elif L==5	// fr
-	"Il n&apos;y a pas de centres.";
+	"Il n'y a pas de centres.";
 #elif L==6	// gn
 	"No hay centros.";	// Okoteve traducción
 #elif L==7	// it
@@ -26347,7 +26326,7 @@ const char *Txt_No_courses =
 #elif L==4	// es
 	"No hay asignaturas.";
 #elif L==5	// fr
-	"Il n&apos;y a pas de mati&egrave;res.";
+	"Il n'y a pas de mati&egrave;res.";
 #elif L==6	// gn
 	"No hay asignaturas.";	// Okoteve traducción
 #elif L==7	// it
@@ -26368,7 +26347,7 @@ const char *Txt_No_degrees =
 #elif L==4	// es
 	"No hay titulaciones.";
 #elif L==5	// fr
-	"Il n&apos;y a pas d&apos;&eacute;tudes.";
+	"Il n'y a pas d'&eacute;tudes.";
 #elif L==6	// gn
 	"No hay titulaciones.";	// Okoteve traducción
 #elif L==7	// it
@@ -26410,7 +26389,7 @@ const char *Txt_No_events =
 #elif L==4	// es
 	"No hay eventos.";
 #elif L==5	// fr
-	"Il n&apos;y a pas d&apos;&eacute;v&eacute;nements.";
+	"Il n'y a pas d'&eacute;v&eacute;nements.";
 #elif L==6	// gn
 	"No hay eventos.";	// Okoteve traducción
 #elif L==7	// it
@@ -26431,7 +26410,7 @@ const char *Txt_No_exams =
 #elif L==4	// es
 	"No hay ex&aacute;menes.";
 #elif L==5	// fr
-	"Il n&apos;y a pas d&apos;examens.";
+	"Il n'y a pas d'examens.";
 #elif L==6	// gn
 	"No hay ex&aacute;menes.";	// Okoteve traducción
 #elif L==7	// it
@@ -26482,7 +26461,7 @@ const char *Txt_No_games =
 #elif L==4	// es
 	"No hay juegos.";
 #elif L==5	// fr
-	"Il n&apos;y a pas de jeux.";
+	"Il n'y a pas de jeux.";
 #elif L==6	// gn
 	"No hay juegos.";	// Okoteve traducción
 #elif L==7	// it
@@ -26575,7 +26554,7 @@ const char *Txt_No_image_video =	// Without any image
 #elif L==4	// es
 	"Sin imagen / v&iacute;deo";
 #elif L==5	// fr
-	"Pas d&apos;image / vid&eacute;o";
+	"Pas d'image / vid&eacute;o";
 #elif L==6	// gn
 	"Sin imagen / v&iacute;deo";	// Okoteve traducción
 #elif L==7	// it
@@ -26638,7 +26617,7 @@ const char *Txt_No_institutions =
 #elif L==4	// es
 	"No hay instituciones.";
 #elif L==5	// fr
-	"Il n&apos;y a pas d&apos;&eacute;tablissements.";
+	"Il n'y a pas d'&eacute;tablissements.";
 #elif L==6	// gn
 	"No hay instituciones.";	// Okoteve traducción
 #elif L==7	// it
@@ -26659,7 +26638,7 @@ const char *Txt_No_links =
 #elif L==4	// es
 	"No hay enlaces.";
 #elif L==5	// fr
-	"Il n&apos;y a pas de liens.";
+	"Il n'y a pas de liens.";
 #elif L==6	// gn
 	"No hay enlaces.";	// Okoteve traducción
 #elif L==7	// it
@@ -26701,7 +26680,7 @@ const char *Txt_No_notices =
 #elif L==4	// es
 	"No hay avisos.";
 #elif L==5	// fr
-	"Il n&apos;y a pas d&apos;avis.";
+	"Il n'y a pas d'avis.";
 #elif L==6	// gn
 	"No hay avisos.";	// Okoteve traducción
 #elif L==7	// it
@@ -26722,7 +26701,7 @@ const char *Txt_No_projects =
 #elif L==4	// es
 	"No hay proyectos.";
 #elif L==5	// fr
-	"Il n&apos;y a pas de projets.";
+	"Il n'y a pas de projets.";
 #elif L==6	// gn
 	"No hay proyectos.";	// Okoteve traducción
 #elif L==7	// it
@@ -26756,7 +26735,7 @@ const char *Txt_No_questions_found_matching_your_search_criteria =
 
 const char *Txt_No_questions_have_been_added =
 #if   L==1	// ca
-	"No s&apos;ha afegit cap pregunta.";
+	"No s'ha afegit cap pregunta.";
 #elif L==2	// de
 	"Es wurden keine Fragen hinzugef&uuml;gt.";
 #elif L==3	// en
@@ -26764,7 +26743,7 @@ const char *Txt_No_questions_have_been_added =
 #elif L==4	// es
 	"No se ha a&ntilde;adido ninguna pregunta.";
 #elif L==5	// fr
-	"Aucune question n&apos;a &eacute;t&eacute; ajout&eacute;e.";
+	"Aucune question n'a &eacute;t&eacute; ajout&eacute;e.";
 #elif L==6	// gn
 	"No se ha a&ntilde;adido ninguna pregunta.";		// Okoteve traducción
 #elif L==7	// it
@@ -26827,7 +26806,7 @@ const char *Txt_No_surveys =
 #elif L==4	// es
 	"No hay encuestas.";
 #elif L==5	// fr
-	"Il n&apos;y a pas de sondages.";
+	"Il n'y a pas de sondages.";
 #elif L==6	// gn
 	"No hay encuestas.";	// Okoteve traducción
 #elif L==7	// it
@@ -26890,7 +26869,7 @@ const char *Txt_No_test_questions =
 #elif L==4	// es
 	"No hay preguntas de test.";
 #elif L==5	// fr
-	"Il n&apos;y a pas de questions de test.";
+	"Il n'y a pas de questions de test.";
 #elif L==6	// gn
 	"No hay preguntas de test.";	// Okoteve traducción
 #elif L==7	// it
@@ -27238,7 +27217,7 @@ const char *Txt_nobody_else_can_access_this_content =
 #elif L==4	// es
 	"nadie m&aacute;s puede acceder a este contenido";
 #elif L==5	// fr
-	"personne d&apos;autre ne peut acc&eacute;der &agrave; ce contenu";
+	"personne d'autre ne peut acc&eacute;der &agrave; ce contenu";
 #elif L==6	// gn
 	"nadie m&aacute;s puede acceder a este contenido";	// Okoteve traducción
 #elif L==7	// it
@@ -27773,11 +27752,11 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==2	// de
 	"New Lehrer Dateien"
 #elif L==3	// en
-	"New teachers&apos; files"
+	"New teachers' files"
 #elif L==4	// es
 	"Nuevos archivos de profesores"
 #elif L==5	// fr
-	"Nouveaux fichiers d&apos;enseignants"
+	"Nouveaux fichiers d'enseignants"
 #elif L==6	// gn
 	"Nuevos archivos de profesores"	// Okoteve traducción
 #elif L==7	// it
@@ -27832,7 +27811,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	,
 	[Ntf_EVENT_EXAM_ANNOUNCEMENT] =
 #if   L==1	// ca
-	"Noves convocat&ograve;ries d&apos;examen"
+	"Noves convocat&ograve;ries d'examen"
 #elif L==2	// de
 	"Neue Aufrufe f&uuml;r Pr&uuml;fung"
 #elif L==3	// en
@@ -27844,7 +27823,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==6	// gn
 	"Nuevas convocatorias de examen"	// Okoteve traducción
 #elif L==7	// it
-	"Nuovi appelli d&apos;esame"
+	"Nuovi appelli d'esame"
 #elif L==8	// pl
 	"Nowe anonse egzamin"
 #elif L==9	// pt
@@ -27882,7 +27861,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==4	// es
 	"Nuevas inscripciones como estudiante"
 #elif L==5	// fr
-	"Nouvelles inscriptions en tant qu&apos;&eacute;tudiant"
+	"Nouvelles inscriptions en tant qu'&eacute;tudiant"
 #elif L==6	// gn
 	"Nuevas inscripciones como estudiante"	// Okoteve traducción
 #elif L==7	// it
@@ -27903,7 +27882,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==4	// es
 	"Nuevas inscripciones como profesor/a"
 #elif L==5	// fr
-	"Nouvelles inscriptions en tant qu&apos;enseignant"
+	"Nouvelles inscriptions en tant qu'enseignant"
 #elif L==6	// gn
 	"Nuevas inscripciones como profesor/a"	// Okoteve traducción
 #elif L==7	// it
@@ -27916,7 +27895,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	,
 	[Ntf_EVENT_ENROLMENT_REQUEST] =
 #if   L==1	// ca
-	"Novas petici&oacute;s d&apos;inscripci&oacute;"
+	"Novas petici&oacute;s d'inscripci&oacute;"
 #elif L==2	// de
 	"New Registrierungsanforderungen"
 #elif L==3	// en
@@ -27924,7 +27903,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==4	// es
 	"Nuevas peticiones de inscripci&oacute;n"
 #elif L==5	// fr
-	"Nouvelles demandes d&apos;inscription"
+	"Nouvelles demandes d'inscription"
 #elif L==6	// gn
 	"Nuevas peticiones de inscripci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
@@ -28155,7 +28134,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==4	// es
 	"Nuevas inscripciones como profesor/a/a no editor/a"
 #elif L==5	// fr
-	"Nouvelles inscriptions en tant qu&apos;enseignant/e non-&eacute;diteur/trice"
+	"Nouvelles inscriptions en tant qu'enseignant/e non-&eacute;diteur/trice"
 #elif L==6	// gn
 	"Nuevas inscripciones como profesor/a no editor/a"	// Okoteve traducción
 #elif L==7	// it
@@ -28217,11 +28196,11 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==2	// de
 	"Lehrer Datei"
 #elif L==3	// en
-	"Teachers&apos; file"
+	"Teachers' file"
 #elif L==4	// es
 	"Archivo de profesores"
 #elif L==5	// fr
-	"Fichier d&apos;enseignants"
+	"Fichier d'enseignants"
 #elif L==6	// gn
 	"Archivo de profesores"	// Okoteve traducción
 #elif L==7	// it
@@ -28276,7 +28255,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	,
 	[Ntf_EVENT_EXAM_ANNOUNCEMENT] =
 #if   L==1	// ca
-	"Convocat&ograve;ria d&apos;examen"
+	"Convocat&ograve;ria d'examen"
 #elif L==2	// de
 	"Aufrufe für Pr&uuml;fung"
 #elif L==3	// en
@@ -28288,7 +28267,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==6	// gn
 	"Convocatoria de examen"	// Okoteve traducción
 #elif L==7	// it
-	"Appello d&apos;esame"
+	"Appello d'esame"
 #elif L==8	// pl
 	"Ogloszenie egzamin"
 #elif L==9	// pt
@@ -28326,7 +28305,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==4	// es
 	"Inscripci&oacute;n como estudiante"
 #elif L==5	// fr
-	"Inscription en tant qu&apos;&eacute;tudiant"
+	"Inscription en tant qu'&eacute;tudiant"
 #elif L==6	// gn
 	"Inscripci&oacute;n como estudiante"	// Okoteve traducción
 #elif L==7	// it
@@ -28347,7 +28326,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==4	// es
 	"Inscripci&oacute;n como profesor/a"
 #elif L==5	// fr
-	"Inscription en tant qu&apos;enseignant"
+	"Inscription en tant qu'enseignant"
 #elif L==6	// gn
 	"Inscripci&oacute;n como profesor/a"	// Okoteve traducción
 #elif L==7	// it
@@ -28360,7 +28339,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	,
 	[Ntf_EVENT_ENROLMENT_REQUEST] =
 #if   L==1	// ca
-	"Petici&oacute; d&apos;inscripci&oacute;"
+	"Petici&oacute; d'inscripci&oacute;"
 #elif L==2	// de
 	"Registrierungsanforderung"
 #elif L==3	// en
@@ -28368,7 +28347,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==4	// es
 	"Petici&oacute;n de inscripci&oacute;n"
 #elif L==5	// fr
-	"Demande d&apos;inscription"
+	"Demande d'inscription"
 #elif L==6	// gn
 	"Petici&oacute;n de inscripci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
@@ -28599,7 +28578,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==4	// es
 	"Inscripci&oacute;n como profesor/a no editor/a"
 #elif L==5	// fr
-	"Inscription en tant qu&apos;enseignant non-&eacute;diteur/trice"
+	"Inscription en tant qu'enseignant non-&eacute;diteur/trice"
 #elif L==6	// gn
 	"Inscripci&oacute;n como profesor/a no editor/a"	// Okoteve traducción
 #elif L==7	// it
@@ -28676,7 +28655,7 @@ const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X =	// Warni
 
 const char *Txt_Number_of_files =
 #if   L==1	// ca
-	"Nombre d&apos;arxius";
+	"Nombre d'arxius";
 #elif L==2	// de
 	"Anzahl der Dateien";
 #elif L==3	// en
@@ -28709,7 +28688,7 @@ const char *Txt_Number_of_files_in_DOCUM_zones =
 #elif L==6	// gn
 	"N.&ordm; de archivos en zonas de documentos";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di file nell&apos;area documenti";
+	"Numero di file nell'area documenti";
 #elif L==8	// pl
 	"Number of files in documents area";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -28718,7 +28697,7 @@ const char *Txt_Number_of_files_in_DOCUM_zones =
 
 const char *Txt_Number_of_files_in_SHARE_zones =
 #if   L==1	// ca
-	"Nombre d&apos;arxius compartits";
+	"Nombre d'arxius compartits";
 #elif L==2	// de
 	"Anzahl der freigegebene Dateien";
 #elif L==3	// en
@@ -28789,7 +28768,7 @@ const char *Txt_Number_of_indicators =
 #elif L==4	// es
 	"N.&ordm; de indicadores";
 #elif L==5	// fr
-	"Nombre d&apos;indicateurs";
+	"Nombre d'indicateurs";
 #elif L==6	// gn
 	"N.&ordm; de indicadores";	// Okoteve traducción
 #elif L==7	// it
@@ -28928,7 +28907,7 @@ const char *Txt_Number_of_posts_BR_per_user =
 
 const char *Txt_Number_of_private_files =
 #if   L==1	// ca
-	"Nombre d&apos;arxius privats";
+	"Nombre d'arxius privats";
 #elif L==2	// de
 	"Anzahl der private Dateien";
 #elif L==3	// en
@@ -28949,7 +28928,7 @@ const char *Txt_Number_of_private_files =
 
 const char *Txt_Number_of_BR_program_items =
 #if   L==1	// ca
-	"Nombre d&apos;elements<br />de programes";
+	"Nombre d'elements<br />de programes";
 #elif L==2	// de
 	"Anzahl der Programmelemente";
 #elif L==3	// en
@@ -28957,7 +28936,7 @@ const char *Txt_Number_of_BR_program_items =
 #elif L==4	// es
 	"N.&ordm; de<br />items en programas";
 #elif L==5	// fr
-	"Nombre d&apos;&eacute;l&eacute;ments<br />de programme";
+	"Nombre d'&eacute;l&eacute;ments<br />de programme";
 #elif L==6	// gn
 	"N.&ordm; de<br />items en programas";	// Okoteve traducción
 #elif L==7	// it
@@ -28970,7 +28949,7 @@ const char *Txt_Number_of_BR_program_items =
 
 const char *Txt_Number_of_public_files =
 #if   L==1	// ca
-	"Nombre d&apos;arxius p&uacute;blics";
+	"Nombre d'arxius p&uacute;blics";
 #elif L==2	// de
 	"Anzahl der &ouml;ffentliche Dateien";
 #elif L==3	// en
@@ -29096,7 +29075,7 @@ const char *Txt_Number_of_threads_BR_per_forum =
 
 const char *Txt_Number_of_BR_assignments =
 #if   L==1	// ca
-	"Nombre<br />d&apos;activitats";
+	"Nombre<br />d'activitats";
 #elif L==2	// de
 	"Anzahl der<br />Aufgaben";
 #elif L==3	// en
@@ -29104,7 +29083,7 @@ const char *Txt_Number_of_BR_assignments =
 #elif L==4	// es
 	"N.&ordm; de<br />actividades";
 #elif L==5	// fr
-	"Nombre<br />d&apos;activit&eacute;s";
+	"Nombre<br />d'activit&eacute;s";
 #elif L==6	// gn
 	"N.&ordm; de<br />actividades";	// Okoteve traducción
 #elif L==7	// it
@@ -29117,7 +29096,7 @@ const char *Txt_Number_of_BR_assignments =
 
 const char *Txt_Number_of_BR_courses_with_BR_assignments =
 #if   L==1	// ca
-	"Nombre<br />d&apos;assignatures<br />amb activitats";
+	"Nombre<br />d'assignatures<br />amb activitats";
 #elif L==2	// de
 	"Anzahl der<br />Kursen<br />mit Aufgaben";
 #elif L==3	// en
@@ -29138,7 +29117,7 @@ const char *Txt_Number_of_BR_courses_with_BR_assignments =
 
 const char *Txt_Number_of_BR_courses_with_BR_exams =
 #if   L==1	// ca
-	"Nombre<br />d&apos;assignatures<br />amb ex&agrave;mens";
+	"Nombre<br />d'assignatures<br />amb ex&agrave;mens";
 #elif L==2	// de
 	"Anzahl der<br />Kursen<br />mit Pr&uuml;fung";
 #elif L==3	// en
@@ -29159,7 +29138,7 @@ const char *Txt_Number_of_BR_courses_with_BR_exams =
 
 const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions =
 #if   L==1	// ca
-	"Nombre<br />d&apos;assignatures<br />amb preguntes<br />de test<br />exportables";
+	"Nombre<br />d'assignatures<br />amb preguntes<br />de test<br />exportables";
 #elif L==2	// de
 	"Anzahl der<br />Kursen<br />mit exportierbar<br />Testfragen";
 #elif L==3	// en
@@ -29180,7 +29159,7 @@ const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions =
 
 const char *Txt_Number_of_BR_courses_with_BR_games =
 #if   L==1	// ca
-	"Nombre<br />d&apos;assignatures<br />amb jocs";
+	"Nombre<br />d'assignatures<br />amb jocs";
 #elif L==2	// de
 	"Anzahl der<br />Kursen<br />mit Spiele";
 #elif L==3	// en
@@ -29201,7 +29180,7 @@ const char *Txt_Number_of_BR_courses_with_BR_games =
 
 const char *Txt_Number_of_BR_courses_with_BR_program_items =
 #if   L==1	// ca
-	"Nombre<br />d&apos;assignatures amb<br />elements de programes";
+	"Nombre<br />d'assignatures amb<br />elements de programes";
 #elif L==2	// de
 	"Anzahl der<br />Kursen mit<br />Programmelemente";
 #elif L==3	// en
@@ -29209,7 +29188,7 @@ const char *Txt_Number_of_BR_courses_with_BR_program_items =
 #elif L==4	// es
 	"N.&ordm; de<br />asignaturas con<br />items de programas";
 #elif L==5	// fr
-	"Nombre de<br />mati&egrave;res avec<br />d&apos;&eacute;l&eacute;ments de programme";
+	"Nombre de<br />mati&egrave;res avec<br />d'&eacute;l&eacute;ments de programme";
 #elif L==6	// gn
 	"N.&ordm; de<br />asignaturas con<br />items de programas";	// Okoteve traducción
 #elif L==7	// it
@@ -29222,7 +29201,7 @@ const char *Txt_Number_of_BR_courses_with_BR_program_items =
 
 const char *Txt_Number_of_BR_courses_with_BR_projects =
 #if   L==1	// ca
-	"Nombre<br />d&apos;assignatures<br />amb projectes";
+	"Nombre<br />d'assignatures<br />amb projectes";
 #elif L==2	// de
 	"Anzahl der<br />Kursen<br />mit Projekte";
 #elif L==3	// en
@@ -29243,7 +29222,7 @@ const char *Txt_Number_of_BR_courses_with_BR_projects =
 
 const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions =
 #if   L==1	// ca
-	"Nombre<br />d&apos;assignatures<br />amb preguntes<br />de test";
+	"Nombre<br />d'assignatures<br />amb preguntes<br />de test";
 #elif L==2	// de
 	"Anzahl der<br />Kursen<br />mit Testfragen";
 #elif L==3	// en
@@ -29264,7 +29243,7 @@ const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions =
 
 const char *Txt_Number_of_BR_courses_with_BR_surveys =
 #if   L==1	// ca
-	"Nombre<br />d&apos;assignatures<br />amb enquestes";
+	"Nombre<br />d'assignatures<br />amb enquestes";
 #elif L==2	// de
 	"Anzahl der<br />Kursen<br />mit Umfragen";
 #elif L==3	// en
@@ -29285,7 +29264,7 @@ const char *Txt_Number_of_BR_courses_with_BR_surveys =
 
 const char *Txt_Number_of_BR_events =
 #if   L==1	// ca
-	"N.&ordm; d&apos;<br />esdeveniments.";
+	"N.&ordm; d'<br />esdeveniments.";
 #elif L==2	// de
 	"Anzahl der<br />Ereignisse";
 #elif L==3	// en
@@ -29293,7 +29272,7 @@ const char *Txt_Number_of_BR_events =
 #elif L==4	// es
 	"N.&ordm; de<br />eventos";
 #elif L==5	// fr
-	"Nombre<br />d&apos;&eacute;v&eacute;nements";
+	"Nombre<br />d'&eacute;v&eacute;nements";
 #elif L==6	// gn
 	"N.&ordm; de<br />eventos";	// Okoteve traducción
 #elif L==7	// it
@@ -29314,7 +29293,7 @@ const char *Txt_Number_of_BR_emails =
 #elif L==4	// es
 	"N.&ordm; de<br />correos";
 #elif L==5	// fr
-	"Nombre<br />d&apos;emails";
+	"Nombre<br />d'emails";
 #elif L==6	// gn
 	"N.&ordm; de<br />correos";	// Okoteve traducción
 #elif L==7	// it
@@ -29327,7 +29306,7 @@ const char *Txt_Number_of_BR_emails =
 
 const char *Txt_Number_of_BR_exams =
 #if   L==1	// ca
-	"Nombre<br />d&apos;ex&agrave;mens";
+	"Nombre<br />d'ex&agrave;mens";
 #elif L==2	// de
 	"Anzahl der<br />Pr&uuml;fung";
 #elif L==3	// en
@@ -29335,11 +29314,11 @@ const char *Txt_Number_of_BR_exams =
 #elif L==4	// es
 	"N.&ordm; de<br />ex&aacute;menes";
 #elif L==5	// fr
-	"Nombre<br />d&apos;examens";
+	"Nombre<br />d'examens";
 #elif L==6	// gn
 	"N.&ordm; de<br />ex&aacute;menes";	// Okoteve traducción
 #elif L==7	// it
-	"Numero<br />d&apos;esame";
+	"Numero<br />d'esame";
 #elif L==8	// pl
 	"Liczba<br />egzamin&oacute;w";
 #elif L==9	// pt
@@ -29411,7 +29390,7 @@ const char *Txt_Number_of_BR_projects =
 
 const char *Txt_Number_of_students =
 #if   L==1	// ca
-	"Nombre d&apos;estudiants";
+	"Nombre d'estudiants";
 #elif L==2	// de
 	"Anzahl der Studenten";
 #elif L==3	// en
@@ -29419,7 +29398,7 @@ const char *Txt_Number_of_students =
 #elif L==4	// es
 	"N.&ordm; de estudiantes";
 #elif L==5	// fr
-	"Nombre d&apos;&eacute;tudiants";
+	"Nombre d'&eacute;tudiants";
 #elif L==6	// gn
 	"N.&ordm; de estudiantes";	// Okoteve traducción
 #elif L==7	// it
@@ -29432,7 +29411,7 @@ const char *Txt_Number_of_students =
 
 const char *Txt_Number_of_BR_surveys =
 #if   L==1	// ca
-	"Nombre<br />d&apos;enquestes";
+	"Nombre<br />d'enquestes";
 #elif L==2	// de
 	"Anzahl der<br />Umfragen";
 #elif L==3	// en
@@ -29474,7 +29453,7 @@ const char *Txt_Number_BR_of_test_BR_questions =
 
 const char *Txt_Number_of_users =
 #if   L==1	// ca
-	"Nombre d&apos;usuaris";
+	"Nombre d'usuaris";
 #elif L==2	// de
 	"Anzahl der Benutzer";
 #elif L==3	// en
@@ -29482,7 +29461,7 @@ const char *Txt_Number_of_users =
 #elif L==4	// es
 	"N.&ordm; de usuarios";
 #elif L==5	// fr
-	"Nombre d&apos;utilisateurs";
+	"Nombre d'utilisateurs";
 #elif L==6	// gn
 	"N.&ordm; de usuarios";	// Okoteve traducción
 #elif L==7	// it
@@ -29547,7 +29526,7 @@ const char *Txt_Office =
 #elif L==5	// fr
 	"Bureau";
 #elif L==6	// gn
-	"Mba&apos;apoha";
+	"Mba'apoha";
 #elif L==7	// it
 	"Ufficio";
 #elif L==8	// pl
@@ -29684,7 +29663,7 @@ const char *Txt_Only_courses_with_more_than_X_clicks_are_shown =	// Warning: it 
 
 const char *Txt_only_if_the_scope_is_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"nom&eacute;s si l&apos;&agrave;mbit &eacute;s %s";
+	"nom&eacute;s si l'&agrave;mbit &eacute;s %s";
 #elif L==2	// de
 	"nur dann, wenn der Geltungsbereich ist %s";
 #elif L==3	// en
@@ -29696,7 +29675,7 @@ const char *Txt_only_if_the_scope_is_X =	// Warning: it is very important to inc
 #elif L==6	// gn
 	"solo si el &aacute;mbito es %s";	// Okoteve traducción
 #elif L==7	// it
-	"solo se l&apos;ambito &egrave; %s";
+	"solo se l'ambito &egrave; %s";
 #elif L==8	// pl
 	"tylko wtedy, gdy zakres jest %s";
 #elif L==9	// pt
@@ -29913,7 +29892,7 @@ const char *Txt_or_you_can_create_a_new_link_inside_the_folder_X =	// Warning: i
 	" dentro de la carpeta <strong>%s</strong>:";	// Okoteve traducción
 #elif L==7	// it
 	"&hellip;oppure &egrave; possibile creare una nuova cartella"
-	" all&apos;interno della cartella <strong>%s</strong>:";
+	" all'interno della cartella <strong>%s</strong>:";
 #elif L==8	// pl
 	"&hellip;czy mo&zdot;esz utworzy&cacute; nowy link"
 	" wewn&aogon;trz folderu <strong>%s</strong>:";
@@ -29924,7 +29903,7 @@ const char *Txt_or_you_can_create_a_new_link_inside_the_folder_X =	// Warning: i
 
 const char *Txt_or_you_can_make_a_file_copy_to_the_folder_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"&hellip;o pot realitzar una c&ograve;pia d&apos;arxius"
+	"&hellip;o pot realitzar una c&ograve;pia d'arxius"
 	" a la carpeta <strong>%s</strong>:";
 #elif L==2	// de
 	"&hellip;Oder Sie k&ouml;nnen die Kopie einer Datei"
@@ -30022,7 +30001,7 @@ const char *Txt_Original_message =
 #elif L==4	// es
 	"Mensaje original";
 #elif L==5	// fr
-	"Message d&apos;origine";
+	"Message d'origine";
 #elif L==6	// gn
 	"Mensaje original";	// Okoteve traducción
 #elif L==7	// it
@@ -30400,7 +30379,7 @@ const char *Txt_PERCENT_of_users =
 #elif L==4	// es
 	"% de usuarios";
 #elif L==5	// fr
-	"% d&apos;utilisateurs";
+	"% d'utilisateurs";
 #elif L==6	// gn
 	"% de usuarios";	// Okoteve traducción
 #elif L==7	// it
@@ -30486,7 +30465,7 @@ const char *Txt_Photo =
 #elif L==5	// fr
 	"Photo";
 #elif L==6	// gn
-	"Ta&apos;anga";
+	"Ta'anga";
 #elif L==7	// it
 	"Foto";
 #elif L==8	// pl
@@ -30497,7 +30476,7 @@ const char *Txt_Photo =
 
 const char *Txt_Photo_has_been_updated =
 #if   L==1	// ca
-	"La fotografia s&apos;ha actualitzat.";
+	"La fotografia s'ha actualitzat.";
 #elif L==2	// de
 	"Foto wurde aktualisiert.";
 #elif L==3	// en
@@ -30780,7 +30759,7 @@ const char *Txt_PLACES_HELP_ORDER[Plc_NUM_ORDERS] =
 #elif L==4	// es
 	"Ordenar por n&ordm; de titulaciones"
 #elif L==5	// fr
-	"Trier par nombre d&apos;&eacute;tudes"
+	"Trier par nombre d'&eacute;tudes"
 #elif L==6	// gn
 	"Ordenar por n&ordm; de titulaciones"	// Okoteve traducción
 #elif L==7	// it
@@ -30827,7 +30806,7 @@ const char *Txt_PLACES_ORDER[Plc_NUM_ORDERS] =
 #elif L==5	// fr
 	"Centres"
 #elif L==6	// gn
-	"Mbo&apos;ehao"
+	"Mbo'ehao"
 #elif L==7	// it
 	"Centri"
 #elif L==8	// pl
@@ -30910,7 +30889,7 @@ const char *Txt_Please_check_your_email_address =
 #elif L==4	// es
 	"Por favor, compruebe su direcci&oacute;n de correo.";
 #elif L==5	// fr
-	"S&apos;il vous pla&iacute;t, v&eaxcute;rifiez votre adresse email.";
+	"S'il vous pla&iacute;t, v&eaxcute;rifiez votre adresse email.";
 #elif L==6	// gn
 	"Por favor, compruebe su direcci&oacute;n de correo.";	// Okoteve traducción
 #elif L==7	// it
@@ -30931,7 +30910,7 @@ const char *Txt_Please_confirm_your_email_address =
 #elif L==4	// es
 	"Por favor, confirme su direcci&oacute;n de correo.";
 #elif L==5	// fr
-	"S&apos;il vous pla&iacute;t, confirmez votre adresse email.";
+	"S'il vous pla&iacute;t, confirmez votre adresse email.";
 #elif L==6	// gn
 	"Por favor, confirme su direcci&oacute;n de correo.";	// Okoteve traducción
 #elif L==7	// it
@@ -30952,7 +30931,7 @@ const char *Txt_Please_enter_your_ID =
 #elif L==4	// es
 	"Por favor, escriba su ID (DNI/c&eacute;dula).";
 #elif L==5	// fr
-	"S&apos;il vous pla&iacute;t, entrez votre ID.";
+	"S'il vous pla&iacute;t, entrez votre ID.";
 #elif L==6	// gn
 	"Por favor, escriba su ID (DNI/c&eacute;dula).";		// Okoteve traducción
 #elif L==7	// it
@@ -30967,8 +30946,8 @@ const char *Txt_Please_fill_in_your_ID =
 #if   L==1	// ca
 	"Si us plau, ompli el seu ID (DNI/c&egrave;dula)."
 	" &Eacute;s una dada opcional,"
-	" per&ograve; &eacute;s recomanable que l&apos;ompli"
-        " perqu&egrave; facilita el proc&eacute;s d&apos;inscripci&oacute;"
+	" per&ograve; &eacute;s recomanable que l'ompli"
+        " perqu&egrave; facilita el proc&eacute;s d'inscripci&oacute;"
         " dels usuaris en les assignatures.";
 #elif L==2	// de
 	"Bitte geben Sie Ihre Ausweis-Nr. &auml;nder."
@@ -30989,10 +30968,10 @@ const char *Txt_Please_fill_in_your_ID =
 	" porque facilita el proceso de inscripci&oacute;n"
 	" de los usuarios en las asignaturas.";
 #elif L==5	// fr
-	"S&apos;il vous pla&iacute;t, indiquez votre ID."
-	" C&apos;est une donn&eacute;e facultative,"
+	"S'il vous pla&iacute;t, indiquez votre ID."
+	" C'est une donn&eacute;e facultative,"
 	" mais il est recommand&eacute; que vous la remplissez"
-	" parce qu&apos;il facilite le processus d&apos;enregistrement"
+	" parce qu'il facilite le processus d'enregistrement"
 	" des utilisateurs dans les mati&egrave;res.";
 #elif L==6	// gn
 	"Por favor, rellene su ID (DNI/c&eacute;dula)."
@@ -31032,7 +31011,7 @@ const char *Txt_Please_fill_in_your_record_card_including_your_country_nationali
 	"Por favor, rellene su ficha,"
 	" incluyendo su pa&iacute;s (nacionalidad).";
 #elif L==5	// fr
-	"S&apos;il vous pla&iacute;t, remplissez votre carte d&apos;enregistrement,"
+	"S'il vous pla&iacute;t, remplissez votre carte d'enregistrement,"
 	" y compris votre pays (nationalit&eacute;).";
 #elif L==6	// gn
 	"Por favor, rellene su ficha,"
@@ -31062,7 +31041,7 @@ const char *Txt_Please_fill_in_your_record_card_including_your_name =
 	"Por favor, rellene su ficha,"
 	" incluyendo su nombre y apellido(s).";
 #elif L==5	// fr
-	"S&apos;il vous pla&iacute;t, remplissez votre carte d&apos;enregistrement,"
+	"S'il vous pla&iacute;t, remplissez votre carte d'enregistrement,"
 	" y compris votre nom.";
 #elif L==6	// gn
 	"Por favor, rellene su ficha,"
@@ -31092,7 +31071,7 @@ const char *Txt_Please_fill_in_your_record_card_including_your_sex =
 	"Por favor, rellene su ficha,"
 	" incluyendo el sexo.";
 #elif L==5	// fr
-	"S&apos;il vous pla&iacute;t, remplissez votre carte d&apos;enregistrement,"
+	"S'il vous pla&iacute;t, remplissez votre carte d'enregistrement,"
 	" y compris votre sexe.";
 #elif L==6	// gn
 	"Por favor, rellene su ficha,"
@@ -31118,7 +31097,7 @@ const char *Txt_Please_check_your_privacy_settings =
 #elif L==4	// es
 	"Por favor, revise sus ajustes de privacidad.";
 #elif L==5	// fr
-	"S&apos;il vous pla&icirc;t, v&eacute;rifiez vos param&egrave;tres de privacit&eacute;.";
+	"S'il vous pla&icirc;t, v&eacute;rifiez vos param&egrave;tres de privacit&eacute;.";
 #elif L==6	// gn
 	"Por favor, revise sus ajustes de privacidad.";	// Okoteve traducción
 #elif L==7	// it
@@ -31131,7 +31110,7 @@ const char *Txt_Please_check_your_privacy_settings =
 
 const char *Txt_Please_review_your_answers_before_submitting_the_exam =
 #if   L==1	// ca
-	"Si us plau, revisi les seves respostes abans d&apos;enviar l&apos;examen.";
+	"Si us plau, revisi les seves respostes abans d'enviar l'examen.";
 #elif L==2	// de
 	"Bitte &uuml;berpr&uuml;fen Sie Ihre Antworten, bevor Sie die Pr&uuml;fung einreichen.";
 #elif L==3	// en
@@ -31139,11 +31118,11 @@ const char *Txt_Please_review_your_answers_before_submitting_the_exam =
 #elif L==4	// es
 	"Por favor, revise sus respuestas antes de enviar el examen.";
 #elif L==5	// fr
-	"S&apos;il vous pla&icirc;t, veuillez revoir vos r&eacute;ponses avant de soumettre l&apos;examen.";
+	"S'il vous pla&icirc;t, veuillez revoir vos r&eacute;ponses avant de soumettre l'examen.";
 #elif L==6	// gn
 	"Por favor, revise sus respuestas antes de enviar el examen.";	// Okoteve traducción
 #elif L==7	// it
-	"Si prega di rivedere le risposte prima di inviare l&apos;esame.";
+	"Si prega di rivedere le risposte prima di inviare l'esame.";
 #elif L==8	// pl
 	"Przejrzyj swoje odpowiedzi przed przes&lstrok;aniem egzaminu.";
 #elif L==9	// pt
@@ -31160,7 +31139,7 @@ const char *Txt_Please_select_the_country_of_your_institution =
 #elif L==4	// es
 	"Por favor, seleccione el pa&iacute;s de su instituci&oacute;n.";
 #elif L==5	// fr
-	"S&apos;il vous pla&iacute;t, s&eacute;lectionnez le pays de votre &eacute;tablissement.";
+	"S'il vous pla&iacute;t, s&eacute;lectionnez le pays de votre &eacute;tablissement.";
 #elif L==6	// gn
 	"Por favor, seleccione el pa&iacute;s de su instituci&oacute;n.";	// Okoteve traducción
 #elif L==7	// it
@@ -31181,7 +31160,7 @@ const char *Txt_Please_select_your_centre =
 #elif L==4	// es
 	"Por favor, seleccione su centro.";
 #elif L==5	// fr
-	"S&apos;il vous pla&iacute;t, s&eacute;lectionnez votre centre.";
+	"S'il vous pla&iacute;t, s&eacute;lectionnez votre centre.";
 #elif L==6	// gn
 	"Por favor, seleccione su centro.";	// Okoteve traducción
 #elif L==7	// it
@@ -31202,7 +31181,7 @@ const char *Txt_Please_select_your_department =
 #elif L==4	// es
 	"Por favor, seleccione su departamento.";
 #elif L==5	// fr
-	"S&apos;il vous pla&iacute;t, s&eacute;lectionnez votre d&eacute;partement.";
+	"S'il vous pla&iacute;t, s&eacute;lectionnez votre d&eacute;partement.";
 #elif L==6	// gn
 	"Por favor, seleccione su departamento.";	// Okoteve traducción
 #elif L==7	// it
@@ -31223,7 +31202,7 @@ const char *Txt_Please_select_your_institution =
 #elif L==4	// es
 	"Por favor, seleccione su instituci&oacute;n.";
 #elif L==5	// fr
-	"S&apos;il vous pla&iacute;t, s&eacute;lectionnez votre &eacute;tablissement.";
+	"S'il vous pla&iacute;t, s&eacute;lectionnez votre &eacute;tablissement.";
 #elif L==6	// gn
 	"Por favor, seleccione su instituci&oacute;n.";	// Okoteve traducción
 #elif L==7	// it
@@ -31236,7 +31215,7 @@ const char *Txt_Please_select_your_institution =
 
 const char *Txt_Please_specify_if_you_allow_downloading_the_question_bank_from_other_applications =
 #if   L==1	// ca
-	"Si us plau, especifiqui si permet la desc&agrave;rrega de el banc de preguntes des d&apos;altres aplicacions.";
+	"Si us plau, especifiqui si permet la desc&agrave;rrega de el banc de preguntes des d'altres aplicacions.";
 #elif L==2	// de
 	"Bitte geben Sie an, ob Sie das Herunterladen der Fragenbank aus anderen Anwendungen zulassen.";
 #elif L==3	// en
@@ -31244,7 +31223,7 @@ const char *Txt_Please_specify_if_you_allow_downloading_the_question_bank_from_o
 #elif L==4	// es
 	"Por favor, especifique si permite la descarga del banco de preguntas desde otras aplicaciones.";
 #elif L==5	// fr
-	"Veuillez indiquer si vous autorisez le t&eacute;l&eacute;chargement de la banque de questions &agrave; partir d&apos;autres applications.";
+	"Veuillez indiquer si vous autorisez le t&eacute;l&eacute;chargement de la banque de questions &agrave; partir d'autres applications.";
 #elif L==6	// gn
 	"Por favor, especifique si permite la descarga del banco de preguntas desde otras aplicaciones.";	// Okoteve traducción
 #elif L==7	// it
@@ -31265,7 +31244,7 @@ const char *Txt_Please_wait_ =
 #elif L==4	// es
 	"Espere, por favor&hellip;";
 #elif L==5	// fr
-	"Attendez s&apos;il vous pla&icirc;t&hellip;";
+	"Attendez s'il vous pla&icirc;t&hellip;";
 #elif L==6	// gn
 	"Espere, por favor&hellip;";	// Okoteve traducción
 #elif L==7	// it
@@ -31833,7 +31812,7 @@ const char *Txt_PROJECT_ORDER_HELP[Prj_NUM_ORDERS] =
 	,
 	[Prj_ORDER_END_TIME] =
 #if   L==1	// ca
-	"Ordenar per data de l&apos;&uacute;ltima edici&oacute;"
+	"Ordenar per data de l'&uacute;ltima edici&oacute;"
 #elif L==2	// de
 	"Sortieren nach letzten Ausgabe"
 #elif L==3	// en
@@ -31845,7 +31824,7 @@ const char *Txt_PROJECT_ORDER_HELP[Prj_NUM_ORDERS] =
 #elif L==6	// gn
 	"Ordenar por fecha de &uacute;ltima edici&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Ordina per data dell&apos;ultima edizione"
+	"Ordina per data dell'ultima edizione"
 #elif L==8	// pl
 	"Sortuj wed&lstrok;ug daty ostatniej edycji"
 #elif L==9	// pt
@@ -31951,7 +31930,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==5	// fr
 	"&Eacute;tudiant/e"
 #elif L==6	// gn
-	"Temimbo&apos;e"
+	"Temimbo'e"
 #elif L==7	// it
 	"Studente"
 #elif L==8	// pl
@@ -32101,7 +32080,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==5	// fr
 	"&eacute;tudiant/e"
 #elif L==6	// gn
-	"temimbo&apos;e"
+	"temimbo'e"
 #elif L==7	// it
 	"studente"
 #elif L==8	// pl
@@ -32122,7 +32101,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==5	// fr
 	"&eacute;tudiante"
 #elif L==6	// gn
-	"temimbo&apos;e"
+	"temimbo'e"
 #elif L==7	// it
 	"studente"
 #elif L==8	// pl
@@ -32143,7 +32122,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==5	// fr
 	"&eacute;tudiant"
 #elif L==6	// gn
-	"temimbo&apos;e"
+	"temimbo'e"
 #elif L==7	// it
 	"studente"
 #elif L==8	// pl
@@ -32164,7 +32143,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==5	// fr
 	"&eacute;tudiant/e"
 #elif L==6	// gn
-	"temimbo&apos;e"
+	"temimbo'e"
 #elif L==7	// it
 	"studente"
 #elif L==8	// pl
@@ -32377,7 +32356,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==5	// fr
 	"&Eacute;tudiants"
 #elif L==6	// gn
-	"Temimbo&apos;e"
+	"Temimbo'e"
 #elif L==7	// it
 	"Studenti"
 #elif L==8	// pl
@@ -32464,7 +32443,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==5	// fr
 	"&eacute;tudiants"
 #elif L==6	// gn
-	"temimbo&apos;e"
+	"temimbo'e"
 #elif L==7	// it
 	"studenti"
 #elif L==8	// pl
@@ -32810,7 +32789,7 @@ const char *Txt_Public_agenda_USER =	// Warning: it is very important to include
 #elif L==2	// de
 	"&Ouml;ffentliche Organizer von %s";
 #elif L==3	// en
-	"%s&apos;s public agenda";
+	"%s's public agenda";
 #elif L==4	// es
 	"Agenda p&uacute;blica de %s";
 #elif L==5	// fr
@@ -33268,7 +33247,7 @@ const char *Txt_Real_number_between_A_and_B_2 =	// Must start by space
 
 const char *Txt_Recommended_aspect_ratio =
 #if   L==1	// ca
-	"Relaci&oacute; d&apos;aspecte recomanada";
+	"Relaci&oacute; d'aspecte recomanada";
 #elif L==2	// de
 	"Empfohlene Seitenverh&auml;ltnisr";
 #elif L==3	// en
@@ -33276,7 +33255,7 @@ const char *Txt_Recommended_aspect_ratio =
 #elif L==4	// es
 	"Relaci&oacute;n de aspecto recomendada";
 #elif L==5	// fr
-	"Rapport d&apos;aspect recommand&eacute;";
+	"Rapport d'aspect recommand&eacute;";
 #elif L==6	// gn
 	"Relaci&oacute;n de aspecto recomendada";	// Okoteve traducción
 #elif L==7	// it
@@ -33817,7 +33796,7 @@ const char *Txt_Register_me_in_X =	// Warning: it is very important to include %
 
 const char *Txt_Register_USER_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Inscriure en l&apos;assignatura <strong>%s</strong>";
+	"Inscriure en l'assignatura <strong>%s</strong>";
 #elif L==2	// de
 	"Anmeldung im Kurs <strong>%s</strong>";
 #elif L==3	// en
@@ -33850,7 +33829,7 @@ const char *Txt_Register_USER_as_an_administrator_of_the_centre_X =	// Warning: 
 	"Inscribir como administrador/a"
 	" del centro <strong>%s</strong>";
 #elif L==5	// fr
-	"Inscrire en tant qu&apos;administrateur"
+	"Inscrire en tant qu'administrateur"
 	" du centre <strong>%s</strong>";
 #elif L==6	// gn
 	"Inscribir como administrador/a"
@@ -33880,7 +33859,7 @@ const char *Txt_Register_USER_as_an_administrator_of_the_degree_X =	// Warning: 
 	"Inscribir como administrador/a"
 	" de la titulaci&oacute;n <strong>%s</strong>";
 #elif L==5	// fr
-	"Inscrire en tant qu&apos;administrateur"
+	"Inscrire en tant qu'administrateur"
 	" du &eacute;tude <strong>%s</strong>";
 #elif L==6	// gn
 	"Inscribir como administrador/a"
@@ -33910,7 +33889,7 @@ const char *Txt_Register_USER_as_an_administrator_of_the_institution_X =	// Warn
 	"Inscribir como administrador/a"
 	" de la instituci&oacute;n <strong>%s</strong>";
 #elif L==5	// fr
-	"Inscrire en tant qu&apos;administrateur"
+	"Inscrire en tant qu'administrateur"
 	" du &eacute;tablissement <strong>%s</strong>";
 #elif L==6	// gn
 	"Inscribir como administrador/a"
@@ -34138,7 +34117,7 @@ const char *Txt_Remove_files_older_than_PART_1_OF_2 =
 
 const char *Txt_Remove_files_older_than_PART_2_OF_2 =
 #if   L==1	// ca
-	"mesos d&apos;antiguitat.";
+	"mesos d'antiguitat.";
 #elif L==2	// de
 	"Monate.";
 #elif L==3	// en
@@ -34335,7 +34314,7 @@ const char *Txt_Remove_me_as_an_administrator =
 #elif L==4	// es
 	"Eliminarme como administrador/a";
 #elif L==5	// fr
-	"Enlever-moi en tant qu&apos;administrateur";
+	"Enlever-moi en tant qu'administrateur";
 #elif L==6	// gn
 	"Eliminarme como administrador/a";	// Okoteve traducción
 #elif L==7	// it
@@ -34360,7 +34339,7 @@ const char *Txt_Remove_me_as_an_administrator_of_the_centre_X =	// Warning: it i
 	"Eliminarme como administrador/a"
 	" del centro <strong>%s</strong>";
 #elif L==5	// fr
-	"Enlever-moi en tant qu&apos;administrateur"
+	"Enlever-moi en tant qu'administrateur"
 	" du centre <strong>%s</strong>";
 #elif L==6	// gn
 	"Eliminarme como administrador/a"
@@ -34390,7 +34369,7 @@ const char *Txt_Remove_me_as_an_administrator_of_the_degree_X =	// Warning: it i
 	"Eliminarme como administrador/a"
 	" de la titulaci&oacute;n <strong>%s</strong>";
 #elif L==5	// fr
-	"Enlever-moi en tant qu&apos;administrateur"
+	"Enlever-moi en tant qu'administrateur"
 	" du &eacute;tude <strong>%s</strong>";
 #elif L==6	// gn
 	"Eliminarme como administrador/a"
@@ -34420,7 +34399,7 @@ const char *Txt_Remove_me_as_an_administrator_of_the_institution_X =	// Warning:
 	"Eliminarme como administrador/a"
 	" de la instituci&oacute;n <strong>%s</strong>";
 #elif L==5	// fr
-	"Enlever-moi en tant qu&apos;administrateur"
+	"Enlever-moi en tant qu'administrateur"
 	" du &eacute;tablissement <strong>%s</strong>";
 #elif L==6	// gn
 	"Eliminarme como administrador/a"
@@ -34438,7 +34417,7 @@ const char *Txt_Remove_me_as_an_administrator_of_the_institution_X =	// Warning:
 
 const char *Txt_Remove_me_from_this_course =
 #if   L==1	// ca
-	"Eliminarme d&apos;aquesta assignatura";
+	"Eliminarme d'aquesta assignatura";
 #elif L==2	// de
 	"Entfernen Sie diesen Kurs";
 #elif L==3	// en
@@ -34753,7 +34732,7 @@ const char *Txt_Remove_type_of_group =
 
 const char *Txt_Remove_user_from_this_course =
 #if   L==1	// ca
-	"Eliminar usuari d&apos;aquesta assignatura";
+	"Eliminar usuari d'aquesta assignatura";
 #elif L==2	// de
 	"Entfernen Benutzer Sie diesen Kurs";
 #elif L==3	// en
@@ -34774,7 +34753,7 @@ const char *Txt_Remove_user_from_this_course =
 
 const char *Txt_Remove_USER_from_this_project =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Eliminar %s d&apos;aquest projecte";
+	"Eliminar %s d'aquest projecte";
 #elif L==2	// de
 	"Entfernen %s Sie diesen Projekt";
 #elif L==3	// en
@@ -34803,7 +34782,7 @@ const char *Txt_Remove_USER_as_an_administrator =
 #elif L==4	// es
 	"Eliminar como administrador/a";
 #elif L==5	// fr
-	"Enlever en tant qu&apos;administrateur";
+	"Enlever en tant qu'administrateur";
 #elif L==6	// gn
 	"Eliminar como administrador/a";	// Okoteve traducción
 #elif L==7	// it
@@ -34828,7 +34807,7 @@ const char *Txt_Remove_USER_as_an_administrator_of_the_centre_X =	// Warning: it
 	"Eliminar como administrador/a"
 	" del centro <strong>%s</strong>";
 #elif L==5	// fr
-	"Enlever en tant qu&apos;administrateur"
+	"Enlever en tant qu'administrateur"
 	" du centre <strong>%s</strong>";
 #elif L==6	// gn
 	"Eliminar como administrador/a"
@@ -34858,7 +34837,7 @@ const char *Txt_Remove_USER_as_an_administrator_of_the_degree_X =	// Warning: it
 	"Eliminar como administrador/a"
 	" de la titulaci&oacute;n <strong>%s</strong>";
 #elif L==5	// fr
-	"Enlever en tant qu&apos;administrateur"
+	"Enlever en tant qu'administrateur"
 	" du &eacute;tude <strong>%s</strong>";
 #elif L==6	// gn
 	"Eliminar como administrador/a"
@@ -34888,7 +34867,7 @@ const char *Txt_Remove_USER_as_an_administrator_of_the_institution_X =	// Warnin
 	"Eliminar como administrador/a"
 	" de la instituci&oacute;n <strong>%s</strong>";
 #elif L==5	// fr
-	"Enlever en tant qu&apos;administrateur"
+	"Enlever en tant qu'administrateur"
 	" du &eacute;tablissement <strong>%s</strong>";
 #elif L==6	// gn
 	"Eliminar como administrador/a"
@@ -35011,7 +34990,7 @@ const char *Txt_Report =
 
 const char *Txt_Report_of_use_of_PLATFORM =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Informe d&apos;&uacute;s de %s";
+	"Informe d'&uacute;s de %s";
 #elif L==2	// de
 	"Bericht der Nutzung der %s";
 #elif L==3	// en
@@ -35019,7 +34998,7 @@ const char *Txt_Report_of_use_of_PLATFORM =	// Warning: it is very important to 
 #elif L==4	// es
 	"Informe de uso de %s";
 #elif L==5	// fr
-	"Rapport d&apos;utilisation de %s";
+	"Rapport d'utilisation de %s";
 #elif L==6	// gn
 	"Informe de uso de %s";	// Okoteve traducción
 #elif L==7	// it
@@ -35271,7 +35250,7 @@ const char *Txt_Results_of_exam_X =	// Warning: it is very important to include 
 #elif L==4	// es
 	"Resultados del examen &quot;%s&quot;";
 #elif L==5	// fr
-	"R&eacute;sultats de l&apos;exam &quot;%s&quot;";
+	"R&eacute;sultats de l'exam &quot;%s&quot;";
 #elif L==6	// gn
 	"Resultados del examen &quot;%s&quot;";	// Okoteve traducción
 #elif L==7	// it
@@ -35454,7 +35433,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 	,
 	[Sta_ROLE_INS_ADMINS] =
 #if   L==1	// ca
-	"administradors d&apos;institucions"
+	"administradors d'institucions"
 #elif L==2	// de
 	"Administratoren von Hochschulen"
 #elif L==3	// en
@@ -35462,7 +35441,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==4	// es
 	"administradores de instituciones"
 #elif L==5	// fr
-	"administrateurs d&apos;&eacute;tablissements"
+	"administrateurs d'&eacute;tablissements"
 #elif L==6	// gn
 	"administradores de instituciones"	// Okoteve traducción
 #elif L==7	// it
@@ -35527,7 +35506,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==5	// fr
 	"enseignants"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7	// it
 	"professori"
 #elif L==8	// pl
@@ -35548,7 +35527,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==5	// fr
 	"enseignants non-&eacute;diteurs"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra no editores"	// Okoteve traducción
+	"mbo'eh&aacute;ra no editores"	// Okoteve traducción
 #elif L==7	// it
 	"professori non-editing"
 #elif L==8	// pl
@@ -35569,7 +35548,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==5	// fr
 	"&eacute;tudiants"
 #elif L==6	// gn
-	"temimbo&apos;e"
+	"temimbo'e"
 #elif L==7	// it
 	"studenti"
 #elif L==8	// pl
@@ -35929,7 +35908,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&Eacute;tudiant/e"
 #elif L==6	// gn
-	"Temimbo&apos;e"
+	"Temimbo'e"
 #elif L==7	// it
 	"Studente"
 #elif L==8	// pl
@@ -35950,7 +35929,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&Eacute;tudiante"
 #elif L==6	// gn
-	"Temimbo&apos;e"
+	"Temimbo'e"
 #elif L==7	// it
 	"Studentessa"
 #elif L==8	// pl
@@ -35971,7 +35950,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&Eacute;tudiant"
 #elif L==6	// gn
-	"Temimbo&apos;e"
+	"Temimbo'e"
 #elif L==7	// it
 	"Studente"
 #elif L==8	// pl
@@ -35992,7 +35971,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&Eacute;tudiant/e"
 #elif L==6	// gn
-	"Temimbo&apos;e"
+	"Temimbo'e"
 #elif L==7	// it
 	"Studente"
 #elif L==8	// pl
@@ -36013,7 +35992,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignant/e non-&eacute;diteur/trice"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra no editor/a"	// Okoteve traducción
+	"Mbo'eh&aacute;ra no editor/a"	// Okoteve traducción
 #elif L==7	// it
 	"Professore/ssa non-editing"
 #elif L==8	// pl
@@ -36034,7 +36013,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignante non-&eacute;ditrice"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra no editora"	// Okoteve traducción
+	"Mbo'eh&aacute;ra no editora"	// Okoteve traducción
 #elif L==7	// it
 	"Professoressa non-editing"
 #elif L==8	// pl
@@ -36055,7 +36034,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignant non-&eacute;diteur"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra no editor"	// Okoteve traducción
+	"Mbo'eh&aacute;ra no editor"	// Okoteve traducción
 #elif L==7	// it
 	"Professore non-editing"
 #elif L==8	// pl
@@ -36076,7 +36055,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignant/e non-&eacute;diteur/trice"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra no editor/a"	// Okoteve traducción
+	"Mbo'eh&aacute;ra no editor/a"	// Okoteve traducción
 #elif L==7	// it
 	"Professore/ssa non-editing"
 #elif L==8	// pl
@@ -36097,7 +36076,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignant/e"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7	// it
 	"Professore/ssa"
 #elif L==8	// pl
@@ -36118,7 +36097,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignante"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7	// it
 	"Professoressa"
 #elif L==8	// pl
@@ -36139,7 +36118,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignant"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7	// it
 	"Professore"
 #elif L==8	// pl
@@ -36160,7 +36139,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignant/e"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7	// it
 	"Professore/ssa"
 #elif L==8	// pl
@@ -36772,7 +36751,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&eacute;tudiant/e"
 #elif L==6	// gn
-	"temimbo&apos;e"
+	"temimbo'e"
 #elif L==7	// it
 	"studente"
 #elif L==8	// pl
@@ -36793,7 +36772,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&eacute;tudiante"
 #elif L==6	// gn
-	"temimbo&apos;e"
+	"temimbo'e"
 #elif L==7	// it
 	"studentessa"
 #elif L==8	// pl
@@ -36814,7 +36793,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&eacute;tudiant"
 #elif L==6	// gn
-	"temimbo&apos;e"
+	"temimbo'e"
 #elif L==7	// it
 	"studente"
 #elif L==8	// pl
@@ -36835,7 +36814,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&eacute;tudiant/e"
 #elif L==6	// gn
-	"temimbo&apos;e"
+	"temimbo'e"
 #elif L==7	// it
 	"studente/ssa"
 #elif L==8	// pl
@@ -36856,7 +36835,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignant/e non-&eacute;diteur/trice"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra no editor/a"	// Okoteve traducción
+	"mbo'eh&aacute;ra no editor/a"	// Okoteve traducción
 #elif L==7	// it
 	"professore/ssa non-editing"
 #elif L==8	// pl
@@ -36877,7 +36856,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignante non-&eacute;ditrice"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra no editora"	// Okoteve traducción
+	"mbo'eh&aacute;ra no editora"	// Okoteve traducción
 #elif L==7	// it
 	"professoressa non-editing"
 #elif L==8	// pl
@@ -36898,7 +36877,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignant non-&eacute;diteur"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra no editor"	// Okoteve traducción
+	"mbo'eh&aacute;ra no editor"	// Okoteve traducción
 #elif L==7	// it
 	"professore non-editing"
 #elif L==8	// pl
@@ -36919,7 +36898,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignant/e non-&eacute;diteur/trice"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra no editor/a"	// Okoteve traducción
+	"mbo'eh&aacute;ra no editor/a"	// Okoteve traducción
 #elif L==7	// it
 	"professore/ssa non-editing"
 #elif L==8	// pl
@@ -36940,7 +36919,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignant/e"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7	// it
 	"Professore/ssa"
 #elif L==8	// pl
@@ -36961,7 +36940,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignante"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7	// it
 	"Professoressa"
 #elif L==8	// pl
@@ -36982,7 +36961,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignant"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7	// it
 	"professore"
 #elif L==8	// pl
@@ -37003,7 +36982,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignant/e"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7	// it
 	"professore/ssa"
 #elif L==8	// pl
@@ -37615,7 +37594,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&Eacute;tudiants"
 #elif L==6	// gn
-	"Temimbo&apos;e"
+	"Temimbo'e"
 #elif L==7	// it
 	"Studenti"
 #elif L==8	// pl
@@ -37636,7 +37615,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&Eacute;tudiantes"
 #elif L==6	// gn
-	"Temimbo&apos;e"
+	"Temimbo'e"
 #elif L==7	// it
 	"Studentesse"
 #elif L==8	// pl
@@ -37657,7 +37636,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&Eacute;tudiants"
 #elif L==6	// gn
-	"Temimbo&apos;e"
+	"Temimbo'e"
 #elif L==7	// it
 	"Studenti"
 #elif L==8	// pl
@@ -37678,7 +37657,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&Eacute;tudiants"
 #elif L==6	// gn
-	"Temimbo&apos;e"
+	"Temimbo'e"
 #elif L==7	// it
 	"Studenti"
 #elif L==8	// pl
@@ -37699,7 +37678,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignants non-&eacute;diteurs"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra no editores"	// Okoteve traducción
+	"Mbo'eh&aacute;ra no editores"	// Okoteve traducción
 #elif L==7	// it
 	"Professori non-editing"
 #elif L==8	// pl
@@ -37720,7 +37699,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignantes non-&eacute;ditrices"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra no editoras"	// Okoteve traducción
+	"Mbo'eh&aacute;ra no editoras"	// Okoteve traducción
 #elif L==7	// it
 	"Professoresse non-editing"
 #elif L==8	// pl
@@ -37741,7 +37720,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignants non-&eacute;diteurs"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra no editores"	// Okoteve traducción
+	"Mbo'eh&aacute;ra no editores"	// Okoteve traducción
 #elif L==7	// it
 	"Professori non-editing"
 #elif L==8	// pl
@@ -37762,7 +37741,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignants non-&eacute;diteurs"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra no editores"	// Okoteve traducción
+	"Mbo'eh&aacute;ra no editores"	// Okoteve traducción
 #elif L==7	// it
 	"Professori non-editing"
 #elif L==8	// pl
@@ -37783,7 +37762,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignants"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7	// it
 	"Professori"
 #elif L==8	// pl
@@ -37804,7 +37783,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignantes"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7	// it
 	"Professoresse"
 #elif L==8	// pl
@@ -37825,7 +37804,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignants"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7	// it
 	"Professori"
 #elif L==8	// pl
@@ -37846,7 +37825,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Enseignants"
 #elif L==6	// gn
-	"Mbo&apos;eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7	// it
 	"Professori"
 #elif L==8	// pl
@@ -38290,7 +38269,7 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 #elif L==5	// fr
 	"Ense.n.&eacute;."
 #elif L==6	// gn
-	"Mbo&apos;e.n.e."	// Okoteve traducción
+	"Mbo'e.n.e."	// Okoteve traducción
 #elif L==7	// it
 	"Prof.n.e."
 #elif L==8	// pl
@@ -38311,7 +38290,7 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 #elif L==5	// fr
 	"Ense."
 #elif L==6	// gn
-	"Mbo&apos;e."
+	"Mbo'e."
 #elif L==7	// it
 	"Prof."
 #elif L==8	// pl
@@ -38671,7 +38650,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&eacute;tudiants"
 #elif L==6	// gn
-	"temimbo&apos;e"
+	"temimbo'e"
 #elif L==7	// it
 	"studenti"
 #elif L==8	// pl
@@ -38692,7 +38671,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&eacute;tudiantes"
 #elif L==6	// gn
-	"temimbo&apos;e"
+	"temimbo'e"
 #elif L==7	// it
 	"studentesse"
 #elif L==8	// pl
@@ -38713,7 +38692,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&eacute;tudiants"
 #elif L==6	// gn
-	"temimbo&apos;e"
+	"temimbo'e"
 #elif L==7	// it
 	"studenti"
 #elif L==8	// pl
@@ -38734,7 +38713,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&eacute;tudiants"
 #elif L==6	// gn
-	"temimbo&apos;e"
+	"temimbo'e"
 #elif L==7	// it
 	"studenti"
 #elif L==8	// pl
@@ -38755,7 +38734,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignants non-&eacute;diteurs"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra no editores"	// Okoteve traducción
+	"mbo'eh&aacute;ra no editores"	// Okoteve traducción
 #elif L==7	// it
 	"professori non-editing"
 #elif L==8	// pl
@@ -38776,7 +38755,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignantes non-&eacute;ditrices"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra no editoras"	// Okoteve traducción
+	"mbo'eh&aacute;ra no editoras"	// Okoteve traducción
 #elif L==7	// it
 	"professoresse non-editing"
 #elif L==8	// pl
@@ -38797,7 +38776,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignants non-&eacute;diteurs"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra no editores"	// Okoteve traducción
+	"mbo'eh&aacute;ra no editores"	// Okoteve traducción
 #elif L==7	// it
 	"professori non-editing"
 #elif L==8	// pl
@@ -38818,7 +38797,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignants non-&eacute;diteurs"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra no editores"	// Okoteve traducción
+	"mbo'eh&aacute;ra no editores"	// Okoteve traducción
 #elif L==7	// it
 	"professori non-editing"
 #elif L==8	// pl
@@ -38839,7 +38818,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignants"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7	// it
 	"professori"
 #elif L==8	// pl
@@ -38860,7 +38839,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignantes"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7	// it
 	"professoresse"
 #elif L==8	// pl
@@ -38881,7 +38860,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignants"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7	// it
 	"professori"
 #elif L==8	// pl
@@ -38902,7 +38881,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"enseignants"
 #elif L==6	// gn
-	"mbo&apos;eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7	// it
 	"professori"
 #elif L==8	// pl
@@ -39260,7 +39239,7 @@ const char *Txt_Room =
 #elif L==5	// fr
 	"Salle";
 #elif L==6	// gn
-	"Mbo&apos;ehakoty";
+	"Mbo'ehakoty";
 #elif L==7	// it
 	"Aula";
 #elif L==8	// pl
@@ -39919,7 +39898,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	"Salle"
 #elif L==6	// gn
-	"Mbo&apos;ehakoty"
+	"Mbo'ehakoty"
 #elif L==7	// it
 	"Aula"
 #elif L==8	// pl
@@ -40088,7 +40067,7 @@ const char *Txt_Rooms =
 #elif L==5	// fr
 	"Salles";
 #elif L==6	// gn
-	"Mbo&apos;ehakoty";
+	"Mbo'ehakoty";
 #elif L==7	// it
 	"Aule";
 #elif L==8	// pl
@@ -40774,27 +40753,6 @@ const char *Txt_Save_file_properties =
 	"Salvar as propriedades do arquivo";
 #endif
 
-const char *Txt_Saving_ =
-#if   L==1	// ca
-	"Desant&hellip;";
-#elif L==2	// de
-	"Speichern&hellip;";
-#elif L==3	// en
-	"Saving&hellip;";
-#elif L==4	// es
-	"Guardando&hellip;";
-#elif L==5	// fr
-	"Enregistrement&hellip;";
-#elif L==6	// gn
-	"Guardando&hellip;";	// Okoteve traducción
-#elif L==7	// it
-	"Salvataggio&hellip;";
-#elif L==8	// pl
-	"Zapisywanie&hellip;";
-#elif L==9	// pt
-	"Salvando&hellip;";
-#endif
-
 const char *Txt_Scope =
 #if   L==1	// ca
 	"&Agrave;mbit";
@@ -40870,7 +40828,7 @@ const char *Txt_Search_courses =
 #elif L==5	// fr
 	"Chercher mati&egrave;res";
 #elif L==6	// gn
-	"Heka mbo&apos;esyry";
+	"Heka mbo'esyry";
 #elif L==7	// it
 	"Cercare corsi";
 #elif L==8	// pl
@@ -40889,7 +40847,7 @@ const char *Txt_See_full_notice =
 #elif L==4	// es
 	"Ver aviso completo";
 #elif L==5	// fr
-	"Voir l&apos;avis complet";
+	"Voir l'avis complet";
 #elif L==6	// gn
 	"Ver aviso completo";	// Okoteve traducción
 #elif L==7	// it
@@ -42054,7 +42012,7 @@ const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Homme"
 #elif L==6	// gn
-	"Kuimba&apos;e"
+	"Kuimba'e"
 #elif L==7	// it
 	"Uomo"
 #elif L==8	// pl
@@ -42108,7 +42066,7 @@ const char *Txt_Share =
 
 const char *Txt_Shared_files_area =
 #if   L==1	// ca
-	"Zona d&apos;arxius compartits";
+	"Zona d'arxius compartits";
 #elif L==2	// de
 	"Freigegebene Dateien-Bereich";
 #elif L==3	// en
@@ -42129,7 +42087,7 @@ const char *Txt_Shared_files_area =
 
 const char *Txt_shared_files_area =
 #if   L==1	// ca
-	"zona d&apos;arxius compartits";
+	"zona d'arxius compartits";
 #elif L==2	// de
 	"Freigegebene Dateien-Bereich";
 #elif L==3	// en
@@ -42213,7 +42171,7 @@ const char *Txt_Short_name_of_the_centre =
 
 const char *Txt_Short_name_of_the_course =
 #if   L==1	// ca
-	"Nom breu de l&apos;assignatura";
+	"Nom breu de l'assignatura";
 #elif L==2	// de
 	"Kurzname der Kurs";
 #elif L==3	// en
@@ -42242,11 +42200,11 @@ const char *Txt_Short_name_of_the_institution =
 #elif L==4	// es
 	"Nombre breve de la instituci&oacute;n";
 #elif L==5	// fr
-	"Nom abr&eacute;g&eacute; de l&apos;institution";
+	"Nom abr&eacute;g&eacute; de l'institution";
 #elif L==6	// gn
 	"Nombre breve de la instituci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
-	"Nome breve dell&apos;istituzione";
+	"Nome breve dell'istituzione";
 #elif L==8	// pl
 	"Skr&oacute;cona nazwa instytucji";
 #elif L==9	// pt
@@ -42759,7 +42717,7 @@ const char *Txt_Sort_degrees_by =
 
 const char *Txt_Source_of_information =
 #if   L==1	// ca
-	"Font d&apos;informaci&oacute;";
+	"Font d'informaci&oacute;";
 #elif L==2	// de
 	"Quelle von Informationen";
 #elif L==3	// en
@@ -42767,7 +42725,7 @@ const char *Txt_Source_of_information =
 #elif L==4	// es
 	"Fuente de informaci&oacute;n";
 #elif L==5	// fr
-	"Source d&apos;information";
+	"Source d'information";
 #elif L==6	// gn
 	"Fuente de informaci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -42960,7 +42918,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==5	// fr
 	"minute"
 #elif L==6	// gn
-	"aravo&apos;i"
+	"aravo'i"
 #elif L==7	// it
 	"minuto"
 #elif L==8	// pl
@@ -43128,7 +43086,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==5	// fr
 	"minute"
 #elif L==6	// gn
-	"aravo&apos;i"
+	"aravo'i"
 #elif L==7	// it
 	"minuto"
 #elif L==8	// pl
@@ -43254,7 +43212,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==5	// fr
 	"&eacute;tablissement"
 #elif L==6	// gn
-	"mbo&apos;ehao"
+	"mbo'ehao"
 #elif L==7	// it
 	"istituzione"
 #elif L==8	// pl
@@ -43275,7 +43233,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==5	// fr
 	"centre"
 #elif L==6	// gn
-	"mbo&apos;ehao"
+	"mbo'ehao"
 #elif L==7	// it
 	"centro"
 #elif L==8	// pl
@@ -43317,7 +43275,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==5	// fr
 	"mati&egrave;re"
 #elif L==6	// gn
-	"mbo&apos;esyry"
+	"mbo'esyry"
 #elif L==7	// it
 	"corso"
 #elif L==8	// pl
@@ -43739,7 +43697,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 	{
 	[Pho_PROPORTIONAL_TO_NUMBER_OF_STUDENTS] =
 #if   L==1	// ca
-	"nombre d&apos;estudiants"
+	"nombre d'estudiants"
 #elif L==2	// de
 	"Anzahl der Studenten"
 #elif L==3	// en
@@ -43747,7 +43705,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 #elif L==4	// es
 	"n&ordm; de estudiantes"
 #elif L==5	// fr
-	"nombre d&apos;&eacute;tudiants"
+	"nombre d'&eacute;tudiants"
 #elif L==6	// gn
 	"n&ordm; de estudiantes"	// Okoteve traducción
 #elif L==7	// it
@@ -43760,7 +43718,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 	,
 	[Pho_PROPORTIONAL_TO_NUMBER_OF_PHOTOS] =
 #if   L==1	// ca
-	"nombre d&apos;estudiants amb fotografia"
+	"nombre d'estudiants amb fotografia"
 #elif L==2	// de
 	"Anzahl der Studenten mit Foto"
 #elif L==3	// en
@@ -43768,7 +43726,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 #elif L==4	// es
 	"n&ordm; de estudiantes con fotograf&iacute;a"
 #elif L==5	// fr
-	"nombre d&apos;&eacute;tudiants avec photo"
+	"nombre d'&eacute;tudiants avec photo"
 #elif L==6	// gn
 	"n&ordm; de estudiantes con fotograf&iacute;a"	// Okoteve traducción
 #elif L==7	// it
@@ -43922,7 +43880,7 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 #elif L==6	// gn
 	"Tiempo de env&iacute;o de p&aacute;gina"	// Okoteve traducción
 #elif L==7	// it
-	"Tempo d&apos;invio della pagina"
+	"Tempo d'invio della pagina"
 #elif L==8	// pl
 	"Time to send page"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -44030,7 +43988,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 #elif L==6	// gn
 	"tiempo de env&iacute;o"	// Okoteve traducción
 #elif L==7	// it
-	"tempo d&apos;invio"
+	"tempo d'invio"
 #elif L==8	// pl
 	"time to send"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -44115,7 +44073,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==5	// fr
 	"&Eacute;tablissements"
 #elif L==6	// gn
-	"Mbo&apos;ehao"
+	"Mbo'ehao"
 #elif L==7	// it
 	"Istituzioni"
 #elif L==8	// pl
@@ -44134,7 +44092,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==4	// es
 	"Tipos de titulaci&oacute;n"
 #elif L==5	// fr
-	"Types d&apos;&eacute;tude"
+	"Types d'&eacute;tude"
 #elif L==6	// gn
 	"Arandur&atilde; l&aacute;ja"
 #elif L==7	// it
@@ -44493,7 +44451,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==5	// fr
 	"Langue"
 #elif L==6	// gn
-	"&Ntilde;e&apos;&#7869;"
+	"&Ntilde;e'&#7869;"
 #elif L==7	// it
 	"Lingua"
 #elif L==8	// pl
@@ -44704,7 +44662,7 @@ const char *Txt_Statistic =
 #elif L==5	// fr
 	"Statistique";
 #elif L==6	// gn
-	"Papy&apos;aporeko";
+	"Papy'aporeko";
 #elif L==7	// it
 	"Statistica";
 #elif L==8	// pl
@@ -44736,7 +44694,7 @@ const char *Txt_Statistics_of_all_visits =
 
 const char *Txt_Statistics_of_visits_to_the_course_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Estad&iacute;stica d&apos;accessos a l&apos;assignatura %s";
+	"Estad&iacute;stica d'accessos a l'assignatura %s";
 #elif L==2	// de
 	"Statistik der Besuche des Kurses %s";
 #elif L==3	// en
@@ -44832,7 +44790,7 @@ const char *Txt_Step_2_Select_the_desired_action =
 #elif L==6	// gn
 	"Paso 2: Seleccione la acci&oacute;n que desea realizar";	// Okoteve traducción
 #elif L==7	// it
-	"Passo 2: Seleziona l&apos;azione desiderata";
+	"Passo 2: Seleziona l'azione desiderata";
 #elif L==8	// pl
 	"Step 2: Select the desired action";				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -44883,15 +44841,15 @@ const char *Txt_Step_4_Confirm_the_enrolment_removing =
 
 const char *Txt_Student_comment =
 #if   L==1	// ca
-	"Comentari de l&apos;estudiant";
+	"Comentari de l'estudiant";
 #elif L==2	// de
 	"Student-Kommentar";
 #elif L==3	// en
-	"Student&apos;s comment";
+	"Student's comment";
 #elif L==4	// es
 	"Comentario del estudiante";
 #elif L==5	// fr
-	"Commentaire de l&apos;&eacute;tudiant";
+	"Commentaire de l'&eacute;tudiant";
 #elif L==6	// gn
 	"Comentario del estudiante";	// Okoteve traducción
 #elif L==7	// it
@@ -45051,7 +45009,7 @@ const char *Txt_Survey =
 
 const char *Txt_SURVEY_You_belong_to_the_scope_of_the_survey =
 #if   L==1	// ca
-	"Pertany a l&apos;&agrave;mbit de l&apos;enquesta";
+	"Pertany a l'&agrave;mbit de l'enquesta";
 #elif L==2	// de
 	"Sie geh&ouml;ren zum Umfang der Umfrage";
 #elif L==3	// en
@@ -45059,11 +45017,11 @@ const char *Txt_SURVEY_You_belong_to_the_scope_of_the_survey =
 #elif L==4	// es
 	"Pertenece al &aacute;mbito de la encuesta";
 #elif L==5	// fr
-	"Vous appartenez &agrave; la port&eacute;e de l&apos;enqu&ecirc;te";
+	"Vous appartenez &agrave; la port&eacute;e de l'enqu&ecirc;te";
 #elif L==6	// gn
 	"Pertenece al &aacute;mbito de la encuesta";	// Okoteve traducción
 #elif L==7	// it
-	"Voi appartenete al campo d&apos;indagine";
+	"Voi appartenete al campo d'indagine";
 #elif L==8	// pl
 	"Nale&zdot;ysz do zakresu badania";
 #elif L==9	// pt
@@ -45072,19 +45030,19 @@ const char *Txt_SURVEY_You_belong_to_the_scope_of_the_survey =
 
 const char *Txt_SURVEY_You_dont_belong_to_the_scope_of_the_survey =
 #if   L==1	// ca
-	"No pertany a l&apos;&agrave;mbit de l&apos;enquesta";
+	"No pertany a l'&agrave;mbit de l'enquesta";
 #elif L==2	// de
 	"Sie geh&ouml;ren nicht zum Umfang der Befragung";
 #elif L==3	// en
-	"You don&apos;t belong to the scope of the survey";
+	"You don't belong to the scope of the survey";
 #elif L==4	// es
 	"No pertenece al &aacute;mbito de la encuesta";
 #elif L==5	// fr
-	"Vous n&apos;appartenez pas &agrave; la port&eacute;e de l&apos;enqu&ecirc;te";
+	"Vous n'appartenez pas &agrave; la port&eacute;e de l'enqu&ecirc;te";
 #elif L==6	// gn
 	"No pertenece al &aacute;mbito de la encuesta";	// Okoteve traducción
 #elif L==7	// it
-	"Voi non appartieni al campo d&apos;indagine";
+	"Voi non appartieni al campo d'indagine";
 #elif L==8	// pl
 	"Nie nale&zdot;&aogon; do zakresu badania";
 #elif L==9	// pt
@@ -45534,7 +45492,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 #elif L==5	// fr
 	"&Eacute;tablissement"
 #elif L==6	// gn
-	"Mbo&apos;ehao"
+	"Mbo'ehao"
 #elif L==7	// it
 	"Istituzione"
 #elif L==8	// pl
@@ -45555,7 +45513,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 #elif L==5	// fr
 	"Centre"
 #elif L==6	// gn
-	"Mbo&apos;ehao"
+	"Mbo'ehao"
 #elif L==7	// it
 	"Centro"
 #elif L==8	// pl
@@ -45597,7 +45555,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 #elif L==5	// fr
 	"Mati&egrave;re"
 #elif L==6	// gn
-	"Mbo&apos;esyry"
+	"Mbo'esyry"
 #elif L==7	// it
 	"Corso"
 #elif L==8	// pl
@@ -45702,7 +45660,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 #elif L==5	// fr
 	"Analytiques"
 #elif L==6	// gn
-	"&Ntilde;ehesa&apos;&yuml;ijo"
+	"&Ntilde;ehesa'&yuml;ijo"
 #elif L==7	// it
 	"Analitiche"
 #elif L==8	// pl
@@ -45917,11 +45875,11 @@ const char *Txt_TAGLINE =
 # elif L==4
 	"plataforma de apoyo a la docencia / UGR /";
 # elif L==5
-	"plate-forme pour appuyer l&apos;enseignement / UGR /";
+	"plate-forme pour appuyer l'enseignement / UGR /";
 # elif L==6
 	"plataforma de apoyo a la docencia / UGR /";	// Okoteve traducción
 # elif L==7
-	"piattaforma per sostenere l&apos;insegnamento / UGR /";
+	"piattaforma per sostenere l'insegnamento / UGR /";
 # elif L==8
 	"platforma do wspierania nauczania / UGR /";
 # elif L==9
@@ -45938,11 +45896,11 @@ const char *Txt_TAGLINE_BR =
 # elif L==4
 	"/ UGR / plataforma de<br />apoyo a la docencia";
 # elif L==5
-	"/ UGR / plate-forme pour<br />appuyer l&apos;enseignement";
+	"/ UGR / plate-forme pour<br />appuyer l'enseignement";
 # elif L==6
 	"/ UGR / plataforma de<br />apoyo a la docencia";	// Okoteve traducción
 # elif L==7
-	"/ UGR / piattaforma per<br />sostenere l&apos;insegnamento";
+	"/ UGR / piattaforma per<br />sostenere l'insegnamento";
 # elif L==8
 	"/ UGR / platforma do<br />wspierania nauczania";
 # elif L==9
@@ -45961,11 +45919,11 @@ const char *Txt_TAGLINE =
 # elif L==4
 	"plataforma de apoyo a la docencia (Raspberry Pi)";
 # elif L==5
-	"plate-forme pour appuyer l&apos;enseignement (Raspberry Pi)";
+	"plate-forme pour appuyer l'enseignement (Raspberry Pi)";
 # elif L==6
 	"plataforma de apoyo a la docencia (Raspberry Pi)";	// Okoteve traducción
 # elif L==7
-	"piattaforma per sostenere l&apos;insegnamento (Raspberry Pi)";
+	"piattaforma per sostenere l'insegnamento (Raspberry Pi)";
 # elif L==8
 	"platforma do wspierania nauczania (Raspberry Pi)";
 # elif L==9
@@ -45982,11 +45940,11 @@ const char *Txt_TAGLINE_BR =
 # elif L==4
 	"plataforma de apoyo a la<br />docencia (Raspberry Pi)";
 # elif L==5
-	"plate-forme pour appuyer<br />l&apos;enseignement (Raspberry Pi)";
+	"plate-forme pour appuyer<br />l'enseignement (Raspberry Pi)";
 # elif L==6
 	"plataforma de apoyo a la<br />docencia (Raspberry Pi)";	// Okoteve traducción
 # elif L==7
-	"piattaforma per sostenere<br />l&apos;insegnamento (Raspberry Pi)";
+	"piattaforma per sostenere<br />l'insegnamento (Raspberry Pi)";
 # elif L==8
 	"platforma do wspierania<br />nauczania (Raspberry Pi)";
 # elif L==9
@@ -46043,7 +46001,7 @@ const char *Txt_Teachers_comment =
 #elif L==2	// de
 	"Lehrern-Kommentar";
 #elif L==3	// en
-	"Teachers&apos; comment";
+	"Teachers' comment";
 #elif L==4	// es
 	"Comentario de profesores";
 #elif L==5	// fr
@@ -46060,15 +46018,15 @@ const char *Txt_Teachers_comment =
 
 const char *Txt_Teachers_files_area =
 #if   L==1	// ca
-	"Zona d&apos;arxius de professors";
+	"Zona d'arxius de professors";
 #elif L==2	// de
 	"Lehrer Dateien-Bereich";
 #elif L==3	// en
-	"Teachers&apos; files area";
+	"Teachers' files area";
 #elif L==4	// es
 	"Zona de archivos de profesores";
 #elif L==5	// fr
-	"Zone de fichiers d&apos;enseignants";
+	"Zone de fichiers d'enseignants";
 #elif L==6	// gn
 	"Zona de archivos de profesores";	// Okoteve traducción
 #elif L==7	// it
@@ -46081,15 +46039,15 @@ const char *Txt_Teachers_files_area =
 
 const char *Txt_teachers_files_area =
 #if   L==1	// ca
-	"zona d&apos;arxius de professors";
+	"zona d'arxius de professors";
 #elif L==2	// de
 	"Lehrer Dateien-Bereich";
 #elif L==3	// en
-	"teachers&apos; files area";
+	"teachers' files area";
 #elif L==4	// es
 	"zona de archivos de profesores";
 #elif L==5	// fr
-	"zone de fichiers d&apos;enseignants";
+	"zone de fichiers d'enseignants";
 #elif L==6	// gn
 	"zona de archivos de profesores";	// Okoteve traducción
 #elif L==7	// it
@@ -46110,7 +46068,7 @@ const char *Txt_Teaching_platform =
 #elif L==4	// es
 	"Plataforma docente";
 #elif L==5	// fr
-	"Plate-forme d&apos;enseignement";
+	"Plate-forme d'enseignement";
 #elif L==6	// gn
 	"Plataforma docente";	// Okoteve traducción
 #elif L==7	// it
@@ -46123,7 +46081,7 @@ const char *Txt_Teaching_platform =
 
 const char *Txt_Temporary_private_storage_area =
 #if   L==1	// ca
-	"Zona d&apos;emmagatzematge privada";
+	"Zona d'emmagatzematge privada";
 #elif L==2	// de
 	"Privater Speicherbereich";
 #elif L==3	// en
@@ -46144,7 +46102,7 @@ const char *Txt_Temporary_private_storage_area =
 
 const char *Txt_temporary_private_storage_area =
 #if   L==1	// ca
-	"zona d&apos;emmagatzematge privada";
+	"zona d'emmagatzematge privada";
 #elif L==2	// de
 	"privater Speicherbereich";
 #elif L==3	// en
@@ -46249,7 +46207,7 @@ const char *Txt_TEXT_plain =
 
 const char *Txt_Thank_you_for_reporting_a_possible_duplicate_user =
 #if   L==1	// ca
-	"Gr&agrave;cies per informar d&apos;un usuari possiblement duplicat.";
+	"Gr&agrave;cies per informar d'un usuari possiblement duplicat.";
 #elif L==2	// de
 	"Vielen Dank für eine m&ouml;gliche doppelte Benutzer berichten.";
 #elif L==3	// en
@@ -46257,7 +46215,7 @@ const char *Txt_Thank_you_for_reporting_a_possible_duplicate_user =
 #elif L==4	// es
 	"Gracias por informar de un usuario posiblemente duplicado.";
 #elif L==5	// fr
-	"Merci d&apos;avoir signal&eacute; un &eacute;ventuel utilisateur en double.";
+	"Merci d'avoir signal&eacute; un &eacute;ventuel utilisateur en double.";
 #elif L==6	// gn
 	"Gracias por informar de un usuario posiblemente duplicado.";	// Okoteve traducción
 #elif L==7	// it
@@ -46333,7 +46291,7 @@ const char *Txt_The_alphabetical_code_X_is_not_correct =	// Warning: it is very 
 
 const char *Txt_The_announcement_of_exam_has_been_successfully_updated =
 #if   L==1	// ca
-	"La convocat&ograve;ria d&apos;examen s&apos;ha actualitzat correctament.";
+	"La convocat&ograve;ria d'examen s'ha actualitzat correctament.";
 #elif L==2	// de
 	"Der Aufruf zur Pr&uuml;fung wurde erfolgreich aktualisiert.";
 #elif L==3	// en
@@ -46341,11 +46299,11 @@ const char *Txt_The_announcement_of_exam_has_been_successfully_updated =
 #elif L==4	// es
 	"La convocatoria de examen se ha actualizado correctamente.";
 #elif L==5	// fr
-	"La convocation pour l&apos;examen a &eacute;t&eacute; mis &agrave; jour avec succ&egrave;s.";
+	"La convocation pour l'examen a &eacute;t&eacute; mis &agrave; jour avec succ&egrave;s.";
 #elif L==6	// gn
 	"La convocatoria de examen se ha actualizado correctamente.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;apello d&apos;esame &egrave; stata aggiornata con successo.";
+	"L'apello d'esame &egrave; stata aggiornata con successo.";
 #elif L==8	// pl
 	"Ogloszenie egzamin zosta&lstrok; pomy&sacute;lnie zaktualizowany.";
 #elif L==9	// pt
@@ -46414,7 +46372,7 @@ const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuf
 
 const char *Txt_The_assignment_has_been_modified =
 #if   L==1	// ca
-	"L&apos;activitat ha estat modificada.";
+	"L'activitat ha estat modificada.";
 #elif L==2	// de
 	"Die Aufgabe wurde ge&auml;ndert.";
 #elif L==3	// en
@@ -46422,11 +46380,11 @@ const char *Txt_The_assignment_has_been_modified =
 #elif L==4	// es
 	"La actividad ha sido modificada.";
 #elif L==5	// fr
-	"L&apos;activit&eacute; a &eacute;t&eacute; modifi&eacute;e.";
+	"L'activit&eacute; a &eacute;t&eacute; modifi&eacute;e.";
 #elif L==6	// gn
 	"La actividad ha sido modificada.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;attivit&agrave; &egrave; stata modificata.";
+	"L'attivit&agrave; &egrave; stata modificata.";
 #elif L==8	// pl
 	"Dzia&lstrok;anie zosta&lstrok;o zmodyfikowane.";
 #elif L==9	// pt
@@ -46477,7 +46435,7 @@ const char *Txt_The_banner_X_has_been_renamed_as_Y =	// Warning: it is very impo
 
 const char *Txt_The_building_X_already_exists =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"L&apos;edifici <strong>%s</strong> ja existeix.";
+	"L'edifici <strong>%s</strong> ja existeix.";
 #elif L==2	// de
 	"Das Geb&auml;ude <strong>%s</strong> wurde bereits eingegeben.";
 #elif L==3	// en
@@ -46489,7 +46447,7 @@ const char *Txt_The_building_X_already_exists =	// Warning: it is very important
 #elif L==6	// gn
 	"El edificio <strong>%s</strong> ya existe.";		// Okoteve traducción
 #elif L==7	// it
-	"L&apos;edificio <strong>%s</strong> gi&agrave; esiste.";
+	"L'edificio <strong>%s</strong> gi&agrave; esiste.";
 #elif L==8	// pl
 	"Budynek <strong>%s</strong> ju&zdot; istnieje.";
 #elif L==9	// pt
@@ -46498,7 +46456,7 @@ const char *Txt_The_building_X_already_exists =	// Warning: it is very important
 
 const char *Txt_The_building_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"L&apos;edifici <strong>%s</strong> ha passat a denominar-se <strong>%s</strong>.";
+	"L'edifici <strong>%s</strong> ha passat a denominar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"Das Geb&auml;ude <strong>%s</strong> wurde in <strong>%s</strong> umbenannt.";
 #elif L==3	// en
@@ -46510,7 +46468,7 @@ const char *Txt_The_building_X_has_been_renamed_as_Y =	// Warning: it is very im
 #elif L==6	// gn
 	"El edificio <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;edificio <strong>%s</strong> &egrave; stata rinominata come <strong>%s</strong>.";
+	"L'edificio <strong>%s</strong> &egrave; stata rinominata come <strong>%s</strong>.";
 #elif L==8	// pl
 	"Budynek <strong>%s</strong> zosta&lstrok;o przemianowane na <strong>%s</strong>.";
 #elif L==9	// pt
@@ -46519,7 +46477,7 @@ const char *Txt_The_building_X_has_been_renamed_as_Y =	// Warning: it is very im
 
 const char *Txt_The_building_of_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"L&apos;edifici de la sala <strong>%s</strong> no ha canviat.";
+	"L'edifici de la sala <strong>%s</strong> no ha canviat.";
 #elif L==2	// de
 	"Das Geb&auml;ude des Raum <strong>%s</strong> hat sich nicht ge&auml;ndert.";
 #elif L==3	// en
@@ -46527,11 +46485,11 @@ const char *Txt_The_building_of_room_X_has_not_changed =	// Warning: it is very 
 #elif L==4	// es
 	"El edificio de la sala <strong>%s</strong> no ha cambiado.";
 #elif L==5	// fr
-	"Le b&acirc;timent de la salle <strong>%s</strong> n&apos;a pas chang&eacute;.";
+	"Le b&acirc;timent de la salle <strong>%s</strong> n'a pas chang&eacute;.";
 #elif L==6	// gn
 	"El edificio de la sala <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;edificio della aula <strong>%s</strong> non &egrave; cambiata.";
+	"L'edificio della aula <strong>%s</strong> non &egrave; cambiata.";
 #elif L==8	// pl
 	"Budynek klasy <strong>%s</strong> nie uleg&lstrok;a zmianie.";
 #elif L==9	// pt
@@ -46540,7 +46498,7 @@ const char *Txt_The_building_of_room_X_has_not_changed =	// Warning: it is very 
 
 const char *Txt_The_building_of_room_X_is_now_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"L&apos;edifici de la sala <strong>%s</strong> ara &eacute;s <strong>%s</strong>.";
+	"L'edifici de la sala <strong>%s</strong> ara &eacute;s <strong>%s</strong>.";
 #elif L==2	// de
 	"Das Geb&auml;ude des Raum <strong>%s</strong> betr&auml;gt jetzt <strong>%s</strong>.";
 #elif L==3	// en
@@ -46552,7 +46510,7 @@ const char *Txt_The_building_of_room_X_is_now_Y =	// Warning: it is very importa
 #elif L==6	// gn
 	"El edificio de la sala <strong>%s</strong> ahora es <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;edificio della aula <strong>%s</strong> &egrave; ora <strong>%s</strong>.";
+	"L'edificio della aula <strong>%s</strong> &egrave; ora <strong>%s</strong>.";
 #elif L==8	// pl
 	"Budynek klasy <strong>%s</strong> wynosi teraz <strong>%s</strong>.";
 #elif L==9	// pt
@@ -46561,7 +46519,7 @@ const char *Txt_The_building_of_room_X_is_now_Y =	// Warning: it is very importa
 
 const char *Txt_The_capacity_of_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"L&apos;aforament de la sala <strong>%s</strong> no ha canviat.";
+	"L'aforament de la sala <strong>%s</strong> no ha canviat.";
 #elif L==2	// de
 	"Die Kapazit&auml;t des Raum <strong>%s</strong> hat sich nicht ge&auml;ndert.";
 #elif L==3	// en
@@ -46569,7 +46527,7 @@ const char *Txt_The_capacity_of_room_X_has_not_changed =	// Warning: it is very 
 #elif L==4	// es
 	"El aforo de la sala <strong>%s</strong> no ha cambiado.";
 #elif L==5	// fr
-	"La capacit&eacute; de la salle <strong>%s</strong> n&apos;a pas chang&eacute;.";
+	"La capacit&eacute; de la salle <strong>%s</strong> n'a pas chang&eacute;.";
 #elif L==6	// gn
 	"El aforo de la sala <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
@@ -46582,7 +46540,7 @@ const char *Txt_The_capacity_of_room_X_has_not_changed =	// Warning: it is very 
 
 const char *Txt_The_capacity_of_room_X_is_now_Y =	// Warning: it is very important to include %s and %u in the following sentences
 #if   L==1	// ca
-	"L&apos;aforament de la sala <strong>%s</strong> ara &eacute;s <strong>%u</strong>.";
+	"L'aforament de la sala <strong>%s</strong> ara &eacute;s <strong>%u</strong>.";
 #elif L==2	// de
 	"Die Kapazit&auml;t des Raum <strong>%s</strong> betr&auml;gt jetzt <strong>%u</strong>.";
 #elif L==3	// en
@@ -46696,7 +46654,7 @@ const char *Txt_The_comment_no_longer_exists =
 
 const char *Txt_The_configuration_of_the_projects_has_been_updated =
 #if   L==1	// ca
-	"La configuraci&oacute; dels projectes s&apos;ha actualitzat.";
+	"La configuraci&oacute; dels projectes s'ha actualitzat.";
 #elif L==2	// de
 	"Die Konfiguration der Projekte wurde aktualisiert.";
 #elif L==3	// en
@@ -46958,7 +46916,7 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_the
 	" porque ya existe otro objecto con ese nombre.";	// Okoteve traducción
 #elif L==7	// it
 	"La copia &egrave; terminata quando si &egrave; provato a incollare il file <strong>%s</strong>"
-	" perch&egrave; c&apos;era gi&agrave; un oggetto con quel nome.";
+	" perch&egrave; c'era gi&agrave; un oggetto con quel nome.";
 #elif L==8	// pl
 	"The copy has stopped when trying to paste the file <strong>%s</strong>"
 	" because there is already an object with that name.";	// Potrzebujesz tlumaczenie
@@ -46988,7 +46946,7 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_the
 	" porque ya existe otro objecto con ese nombre.";	// Okoteve traducción
 #elif L==7	// it
 	"La copia &egrave; terminata quando si &egrave; provato a incollare il link <strong>%s</strong>"
-	" perch&egrave; c&apos;era gi&agrave; un oggetto con quel nome.";
+	" perch&egrave; c'era gi&agrave; un oggetto con quel nome.";
 #elif L==8	// pl
 	"The copy has stopped when trying to paste the link <strong>%s</strong>"
 	" because there is already an object with that name.";	// Potrzebujesz tlumaczenie
@@ -47089,7 +47047,7 @@ const char *Txt_The_country_of_the_institution_X_has_changed_to_Y =	// Warning: 
 	"El pa&iacute;s de la instituci&oacute;n <strong>%s</strong>"
 	" ha cambiado a <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"Il paese dell&apos;istituzione <strong>%s</strong>"
+	"Il paese dell'istituzione <strong>%s</strong>"
 	" &egrave; cambiato in <strong>%s</strong>.";
 #elif L==8	// pl
 	"The country of the institution <strong>%s</strong>"
@@ -47134,7 +47092,7 @@ const char *Txt_The_course_X_already_exists_in_year_Y =	// Warning: it is very i
 #elif L==6	// gn
 	"La asignatura <strong>%s</strong> ya existe en el a&ntilde;o/semestre %s.";	// Okoteve traducción
 #elif L==7	// it
-	"Il corso <strong>%s</strong> esiste gi&agrave; nell&apos;anno/semester %s.";
+	"Il corso <strong>%s</strong> esiste gi&agrave; nell'anno/semester %s.";
 #elif L==8	// pl
 	"The course <strong>%s</strong> already exists in year/semester %s.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -47215,7 +47173,7 @@ const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days =	// Warning
 
 const char *Txt_The_date_time_of_opening_of_groups_has_changed =
 #if   L==1	// ca
-	"La data / hora d&apos;obertura de grups s&apos;ha modificat.";
+	"La data / hora d'obertura de grups s'ha modificat.";
 #elif L==2	// de
 	"The date / time of opening of groups has changed.";			// Need Übersetzung
 #elif L==3	// en
@@ -47599,7 +47557,7 @@ const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_voluntary
 
 const char *Txt_The_event_has_been_modified =
 #if   L==1	// ca
-	"L&apos;esdeveniment ha estat modificat.";
+	"L'esdeveniment ha estat modificat.";
 #elif L==2	// de
 	"Der Ereignis wurde ge&auml;ndert.";
 #elif L==3	// en
@@ -47607,11 +47565,11 @@ const char *Txt_The_event_has_been_modified =
 #elif L==4	// es
 	"El evento ha sido modificado.";
 #elif L==5	// fr
-	"L&apos;&eacute;v&eacute;nement a &eacute;t&eacute; modifi&eacute;.";
+	"L'&eacute;v&eacute;nement a &eacute;t&eacute; modifi&eacute;.";
 #elif L==6	// gn
 	"El evento ha sido modificado.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;evento &egrave; stata modificato.";
+	"L'evento &egrave; stata modificato.";
 #elif L==8	// pl
 	"Wydarzenie zosta&lstrok;o zmodyfikowane.";
 #elif L==9	// pt
@@ -47620,7 +47578,7 @@ const char *Txt_The_event_has_been_modified =
 
 const char *Txt_The_exam_has_been_modified =
 #if   L==1	// ca
-	"L&apos;examen ha estat modificat.";
+	"L'examen ha estat modificat.";
 #elif L==2	// de
 	"Der Ereignis wurde ge&auml;ndert.";
 #elif L==3	// en
@@ -47628,11 +47586,11 @@ const char *Txt_The_exam_has_been_modified =
 #elif L==4	// es
 	"El examen ha sido modificado.";
 #elif L==5	// fr
-	"L&apos;examen a &eacute;t&eacute; modifi&eacute;.";
+	"L'examen a &eacute;t&eacute; modifi&eacute;.";
 #elif L==6	// gn
 	"El examen ha sido modificado.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;esame &egrave; stata modificato.";
+	"L'esame &egrave; stata modificato.";
 #elif L==8	// pl
 	"Egzamin zosta&lstrok; zmodyfikowany.";
 #elif L==9	// pt
@@ -47641,7 +47599,7 @@ const char *Txt_The_exam_has_been_modified =
 
 const char *Txt_The_file_could_not_be_processed_successfully =
 #if   L==1	// ca
-	"El fitxer no s&apos;ha pogut processar correctament.";
+	"El fitxer no s'ha pogut processar correctament.";
 #elif L==2	// de
 	"Die Datei konnte nicht erfolgreich verarbeitet werden.";
 #elif L==3	// en
@@ -47649,7 +47607,7 @@ const char *Txt_The_file_could_not_be_processed_successfully =
 #elif L==4	// es
 	"El archivo no ha podido procesarse correctamente.";
 #elif L==5	// fr
-	"Le fichier n&apos;a pas pu &ecirc;tre trait&eacute; avec succ&egrave;s.";
+	"Le fichier n'a pas pu &ecirc;tre trait&eacute; avec succ&egrave;s.";
 #elif L==6	// gn
 	"El archivo no ha podido procesarse correctamente.";	// Okoteve traducción
 #elif L==7	// it
@@ -47681,7 +47639,7 @@ const char *Txt_The_file_X_has_been_placed_inside_the_folder_Y =	// Warning: it 
 	" dentro de la carpeta <strong>%s</strong>.";		// Okoteve traducción
 #elif L==7	// it
 	"Il file <strong>%s</strong> &egrave; stato messo"
-	" all&apos;interno della cartella <strong>%s</strong>.";
+	" all'interno della cartella <strong>%s</strong>.";
 #elif L==8	// pl
 	"The file <strong>%s</strong> has been placed"
 	" inside the folder <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
@@ -47713,7 +47671,7 @@ const char *Txt_The_file_is_not_X =	// Warning: it is very important to include 
 
 const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden =
 #if   L==1	// ca
-	"L&apos;arxiu o carpeta ja no existeix o est&agrave; ara ocult.";
+	"L'arxiu o carpeta ja no existeix o est&agrave; ara ocult.";
 #elif L==2	// de
 	"Die Datei oder Ordner existiert nicht mehr oder ist jetzt versteckt.";
 #elif L==3	// en
@@ -47721,7 +47679,7 @@ const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden =
 #elif L==4	// es
 	"El archivo o carpeta ya no existe o est&aacute; ahora oculto.";
 #elif L==5	// fr
-	"Le fichier ou r&eacute;pertoire n&apos;existe plus ou est maintenant cach&eacute;.";
+	"Le fichier ou r&eacute;pertoire n'existe plus ou est maintenant cach&eacute;.";
 #elif L==6	// gn
 	"El archivo o carpeta ya no existe o est&aacute; ahora oculto.";	// Okoteve traducción
 #elif L==7	// it
@@ -47784,7 +47742,7 @@ const char *Txt_The_floor_of_room_X_has_not_changed =	// Warning: it is very imp
 #elif L==4	// es
 	"La planta de la sala <strong>%s</strong> no ha cambiado.";
 #elif L==5	// fr
-	"L&apos;&eacute;tage de la salle <strong>%s</strong> n&apos;a pas chang&eacute;.";
+	"L'&eacute;tage de la salle <strong>%s</strong> n'a pas chang&eacute;.";
 #elif L==6	// gn
 	"La planta de la sala <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
@@ -47805,7 +47763,7 @@ const char *Txt_The_floor_of_room_X_is_now_Y =	// Warning: it is very important 
 #elif L==4	// es
 	"La planta de la sala <strong>%s</strong> ahora es <strong>%d</strong>.";
 #elif L==5	// fr
-	"L&apos;&eacute;tage de la salle <strong>%s</strong> est maintenant de <strong>%d</strong>.";
+	"L'&eacute;tage de la salle <strong>%s</strong> est maintenant de <strong>%d</strong>.";
 #elif L==6	// gn
 	"La planta de la sala <strong>%s</strong> ahora es <strong>%d</strong>.";	// Okoteve traducción
 #elif L==7	// it
@@ -47830,7 +47788,7 @@ const char *Txt_The_folder_X_has_been_created_inside_the_folder_Y =	// Warning: 
 #elif L==6	// gn
 	"Se ha creado la carpeta <strong>%s</strong> dentro de la carpeta <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"La cartella <strong>%s</strong> &egrave; stata creata all&apos;interno della cartella <strong>%s</strong>.";
+	"La cartella <strong>%s</strong> &egrave; stata creata all'interno della cartella <strong>%s</strong>.";
 #elif L==8	// pl
 	"The folder <strong>%s</strong> has been created inside the folder <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -47921,7 +47879,7 @@ const char *Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_fol
 	" porque ya existe una carpeta o un archivo con el nombre <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
 	"Il nome della cartella <strong>%s</strong> non &egrave; cambiato"
-	" perch&egrave; c&apos;&egrave; gi&agrave; una cartella o un file con il nome <strong>%s</strong>.";
+	" perch&egrave; c'&egrave; gi&agrave; una cartella o un file con il nome <strong>%s</strong>.";
 #elif L==8	// pl
 	"The folder name <strong>%s</strong> has not changed"
 	" because there is already a folder or a file with the name <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
@@ -48037,7 +47995,7 @@ const char *Txt_The_group_X_is_now_open =	// Warning: it is very important to in
 
 const char *Txt_The_group_X_does_not_have_a_student_limit_now =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"El grup <strong>%s</strong> ara no t&eacute; cap l&iacute;mit d&apos;estudiants.";
+	"El grup <strong>%s</strong> ara no t&eacute; cap l&iacute;mit d'estudiants.";
 #elif L==2	// de
 	"Die Gruppe <strong>%s</strong> hat jetzt kein Studentenlimit.";
 #elif L==3	// en
@@ -48045,7 +48003,7 @@ const char *Txt_The_group_X_does_not_have_a_student_limit_now =	// Warning: it i
 #elif L==4	// es
 	"El grupo <strong>%s</strong> no tiene ahora l&iacute;mite de estudiantes.";
 #elif L==5	// fr
-	"Le groupe <strong>%s</strong> n&apos;a plus de limite d&apos;&eacute;tudiants.";
+	"Le groupe <strong>%s</strong> n'a plus de limite d'&eacute;tudiants.";
 #elif L==6	// gn
 	"El grupo <strong>%s</strong> no tiene ahora l&iacute;mite de estudiantes.";	// Okoteve traducción
 #elif L==7	// it
@@ -48058,7 +48016,7 @@ const char *Txt_The_group_X_does_not_have_a_student_limit_now =	// Warning: it i
 
 const char *Txt_The_groups_will_automatically_open =
 #if   L==1	// ca
-	"Els grups s&apos;obriran autom&agrave;ticament.";
+	"Els grups s'obriran autom&agrave;ticament.";
 #elif L==2	// de
 	"The groups will automatically open.";			// Need Übersetzung
 #elif L==3	// en
@@ -48079,7 +48037,7 @@ const char *Txt_The_groups_will_automatically_open =
 
 const char *Txt_The_groups_will_not_automatically_open =
 #if   L==1	// ca
-	"Els grups no s&apos;obriran autom&agrave;ticament.";
+	"Els grups no s'obriran autom&agrave;ticament.";
 #elif L==2	// de
 	"The groups will not automatically open.";			// Need Übersetzung
 #elif L==3	// en
@@ -48199,7 +48157,7 @@ const char *Txt_The_ID_X_is_not_valid =	// Warning: it is very important to incl
 	"El ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido."
 	" Solo puede contener n&uacute;meros (al menos uno) y letras.";		// Okoteve traducción
 #elif L==7	// it
-	"L&apos;ID <strong>%s</strong> non &egrave; valido."
+	"L'ID <strong>%s</strong> non &egrave; valido."
 	" Pu&ograve; contenere solo numeri (almeno uno) e lettere.";
 #elif L==8	// pl
 	"The ID <strong>%s</strong> is not valid."
@@ -48211,7 +48169,7 @@ const char *Txt_The_ID_X_is_not_valid =	// Warning: it is very important to incl
 
 const char *Txt_The_ID_is_used_in_order_to_facilitate_ =
 #if   L==1	// ca
-	"L&apos;ID s&apos;utilitza per tal de facilitar"
+	"L'ID s'utilitza per tal de facilitar"
 	" la inscripci&oacute; en les assignatures"
 	" i la consulta de qualificacions."
 	" Si hi ha diverses versions de la ID"
@@ -48239,10 +48197,10 @@ const char *Txt_The_ID_is_used_in_order_to_facilitate_ =
 	" (por ej. DNI con o sin letra),"
 	" indique todas las versiones.";
 #elif L==5	// fr
-	"L&apos;ID est utilis&eacute; afin de faciliter"
-	" l&apos;inscription &agrave; des mati&egrave;res"
+	"L'ID est utilis&eacute; afin de faciliter"
+	" l'inscription &agrave; des mati&egrave;res"
 	" et la consulte des notes."
-	" S&apos;il existe plusieurs versions du ID"
+	" S'il existe plusieurs versions du ID"
 	" (par example avec ou sans lettre),"
 	" &eacute;crire toutes les versions.";
 #elif L==6	// gn
@@ -48253,8 +48211,8 @@ const char *Txt_The_ID_is_used_in_order_to_facilitate_ =
 	" (por ej. DNI con o sin letra),"
 	" indique todas las versiones.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;ID &egrave; utilizzato per agevolare"
-	" l&apos;iscrizione ai corsi"
+	"L'ID &egrave; utilizzato per agevolare"
+	" l'iscrizione ai corsi"
 	" e consultare dei risultati."
 	" Se ci sono pi&ugrave; versioni del ID"
 	" (ad es. con o senza lettera),"
@@ -48340,7 +48298,7 @@ const char *Txt_The_institution_X_already_exists =	// Warning: it is very import
 #elif L==6	// gn
 	"La instituci&oacute;n <strong>%s</strong> ya existe.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;istituzione <strong>%s</strong> gi&agrave; esiste.";
+	"L'istituzione <strong>%s</strong> gi&agrave; esiste.";
 #elif L==8	// pl
 	"The institution <strong>%s</strong> already exists.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -48361,7 +48319,7 @@ const char *Txt_The_institution_X_has_been_renamed_as_Y =	// Warning: it is very
 #elif L==6	// gn
 	"La instituci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;istituzione <strong>%s</strong> &egrave; stata rinominata <strong>%s</strong>.";
+	"L'istituzione <strong>%s</strong> &egrave; stata rinominata <strong>%s</strong>.";
 #elif L==8	// pl
 	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -48382,7 +48340,7 @@ const char *Txt_The_institution_of_the_centre_has_changed =
 #elif L==6	// gn
 	"La instituci&oacute;n del centro ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;istituzione del centro &egrave; cambiata.";
+	"L'istituzione del centro &egrave; cambiata.";
 #elif L==8	// pl
 	"The institution of the centre has changed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -48403,7 +48361,7 @@ const char *Txt_The_institution_of_the_department_has_changed =
 #elif L==6	// gn
 	"La instituci&oacute;n del departamento ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;istituzione del dipartimento &egrave; cambiata.";
+	"L'istituzione del dipartimento &egrave; cambiata.";
 #elif L==8	// pl
 	"The institution of the department has changed.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -48475,7 +48433,7 @@ const char *Txt_The_integrated_editor_is_not_yet_available =
 #elif L==6	// gn
 	"El editor integrado a&uacute;n no est&aacute; disponible.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;editor integrato non &egrave; ancora disponibile.";
+	"L'editor integrato non &egrave; ancora disponibile.";
 #elif L==8	// pl
 	"The integrated editor is not yet available.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -48524,7 +48482,7 @@ const char *Txt_The_link_X_has_been_placed_inside_the_folder_Y =	// Warning: it 
 	" dentro de la carpeta <strong>%s</strong>.";		// Okoteve traducción
 #elif L==7	// it
 	"Il link <strong>%s</strong> &egrave; stato messo"
-	" all&apos;interno della cartella <strong>%s</strong>.";
+	" all'interno della cartella <strong>%s</strong>.";
 #elif L==8	// pl
 	"The link <strong>%s</strong> has been placed"
 	" inside the folder <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
@@ -48598,7 +48556,7 @@ const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed =	// Warning: i
 
 const char *Txt_The_location_of_the_building_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"La ubicaci&oacute; de l&apos;edifici <strong>%s</strong>"
+	"La ubicaci&oacute; de l'edifici <strong>%s</strong>"
 	" ha canviat a <strong>%s</strong>.";
 #elif L==2	// de
 	"Der Standort des Geb&auml;udes <strong>%s</strong>"
@@ -48610,13 +48568,13 @@ const char *Txt_The_location_of_the_building_X_has_changed_to_Y =	// Warning: it
 	"La ubicaci&oacute;n del edificio <strong>%s</strong>"
 	" ha cambiado a <strong>%s</strong>.";
 #elif L==5	// fr
-	"L&apos;emplacement du b&acirc;timent <strong>%s</strong>"
+	"L'emplacement du b&acirc;timent <strong>%s</strong>"
 	" a &eacute;t&eacute; remplac&eacute; par <strong>%s</strong>.";
 #elif L==6	// gn
 	"La ubicaci&oacute;n del edificio <strong>%s</strong>"
 	" ha cambiado a <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"La posizione dell&apos;edificio <strong>%s</strong>"
+	"La posizione dell'edificio <strong>%s</strong>"
 	" &egrave; cambiata in <strong>%s</strong>.";
 #elif L==8	// pl
 	"Lokalizacja budynek <strong>%s</strong>"
@@ -48628,7 +48586,7 @@ const char *Txt_The_location_of_the_building_X_has_changed_to_Y =	// Warning: it
 
 const char *Txt_The_location_of_the_building_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"La ubicaci&oacute; de l&apos;edifici <strong>%s</strong>"
+	"La ubicaci&oacute; de l'edifici <strong>%s</strong>"
 	" no ha canviat.";
 #elif L==2	// de
 	"Der Standort des Geb&auml;udes <strong>%s</strong>"
@@ -48640,13 +48598,13 @@ const char *Txt_The_location_of_the_building_X_has_not_changed =	// Warning: it 
 	"La ubicaci&oacute;n del edificio <strong>%s</strong>"
 	" no ha cambiado.";
 #elif L==5	// fr
-	"L&apos;emplacement du b&acirc;timent <strong>%s</strong>"
-	" n&apos;a pas chang&eacute;.";
+	"L'emplacement du b&acirc;timent <strong>%s</strong>"
+	" n'a pas chang&eacute;.";
 #elif L==6	// gn
 	"La ubicaci&oacute;n del edificio <strong>%s</strong>"
 	" no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
-	"La posizione dell&apos;edificio <strong>%s</strong>"
+	"La posizione dell'edificio <strong>%s</strong>"
 	" non &egrave; cambiata.";
 #elif L==8	// pl
 	"Lokalizacja budynek <strong>%s</strong>"
@@ -48700,8 +48658,8 @@ const char *Txt_the_marks_of_a_student_chosen_at_random_ =
 	"se mostrar&aacute;n las calificaciones de un estudiante de la asignatura escogido al azar;<br />"
 	" si ve m&aacute;s de un estudiante, significa que los n&uacute;meros de filas de cabecera o de pie no son correctos";
 #elif L==5	// fr
-	"les notes d&apos;un &eacute;tudiant choisi au hasard dans la mati&egrave;re seront pr&eacute;sent&eacute;s;<br />"
-	" si vous voyez plus d&apos;un &eacute;tudiant, cela signifie que le nombre de ligned de la t&ecirc;te ou du pied n&apos;est pas correcte";
+	"les notes d'un &eacute;tudiant choisi au hasard dans la mati&egrave;re seront pr&eacute;sent&eacute;s;<br />"
+	" si vous voyez plus d'un &eacute;tudiant, cela signifie que le nombre de ligned de la t&ecirc;te ou du pied n'est pas correcte";
 #elif L==6	// gn
 	"se mostrar&aacute;n las calificaciones de un estudiante de la asignatura escogido al azar;<br />"
 	" si ve m&aacute;s de un estudiante, significa que los n&uacute;meros de filas de cabecera o de pie no son correctos";	// Okoteve traducción
@@ -48718,7 +48676,7 @@ const char *Txt_the_marks_of_a_student_chosen_at_random_ =
 
 const char *Txt_The_maximum_number_of_students_in_group_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"El nombre m&agrave;xim d&apos;estudiants"
+	"El nombre m&agrave;xim d'estudiants"
 	" del grup <strong>%s</strong> no ha canviat.";
 #elif L==2	// de
 	"Die maximale Anzahl der Studenten"
@@ -48730,8 +48688,8 @@ const char *Txt_The_maximum_number_of_students_in_group_X_has_not_changed =	// W
 	"El n&ordm; m&aacute;ximo de estudiantes"
 	" del grupo <strong>%s</strong> no ha cambiado.";
 #elif L==5	// fr
-	"Le nombre maximum d&apos;&eacute;tudiants"
-	" du groupe <strong>%s</strong> n&apos;a pas chang&eacute;.";
+	"Le nombre maximum d'&eacute;tudiants"
+	" du groupe <strong>%s</strong> n'a pas chang&eacute;.";
 #elif L==6	// gn
 	"El n&ordm; m&aacute;ximo de estudiantes"
 	" del grupo <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
@@ -48748,7 +48706,7 @@ const char *Txt_The_maximum_number_of_students_in_group_X_has_not_changed =	// W
 
 const char *Txt_The_maximum_number_of_students_in_group_X_is_now_Y =	// Warning: it is very important to include %s and %u in the following sentences
 #if   L==1	// ca
-	"El nombre m&agrave;xim d&apos;estudiants"
+	"El nombre m&agrave;xim d'estudiants"
 	" del grup <strong>%s</strong> ara &eacute;s <strong>%u</strong>.";
 #elif L==2	// de
 	"Die maximale Anzahl der Studenten"
@@ -48760,7 +48718,7 @@ const char *Txt_The_maximum_number_of_students_in_group_X_is_now_Y =	// Warning:
 	"El n&ordm; m&aacute;ximo de estudiantes"
 	" del grupo <strong>%s</strong> ahora es <strong>%u</strong>.";
 #elif L==5	// fr
-	"Le nombre maximum d&apos;&eacute;tudiants"
+	"Le nombre maximum d'&eacute;tudiants"
 	" du groupe <strong>%s</strong> est maintenant de <strong>%u</strong>.";
 #elif L==6	// gn
 	"El n&ordm; m&aacute;ximo de estudiantes"
@@ -48862,7 +48820,7 @@ const char *Txt_The_name_of_the_banner_X_has_not_changed =	// Warning: it is ver
 
 const char *Txt_The_name_of_the_building_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"El nom de l&apos;edifici <strong>%s</strong> no ha canviat.";
+	"El nom de l'edifici <strong>%s</strong> no ha canviat.";
 #elif L==2	// de
 	"Der Name des Geb&auml;udes <strong>%s</strong> hat sich nicht ge&auml;ndert.";
 #elif L==3	// en
@@ -48870,11 +48828,11 @@ const char *Txt_The_name_of_the_building_X_has_not_changed =	// Warning: it is v
 #elif L==4	// es
 	"El nombre del edificio <strong>%s</strong> no ha cambiado.";
 #elif L==5	// fr
-	"Le nom du b&acirc;timent <strong>%s</strong> n&apos;a pas chang&eacute;.";
+	"Le nom du b&acirc;timent <strong>%s</strong> n'a pas chang&eacute;.";
 #elif L==6	// gn
 	"El nombre del edificio <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
-	"Il nome dell&apos;edificio <strong>%s</strong> non &egrave; cambiato.";
+	"Il nome dell'edificio <strong>%s</strong> non &egrave; cambiato.";
 #elif L==8	// pl
 	"Nazwa budynek <strong>%s</strong> nie uleg&lstrok;a zmianie.";
 #elif L==9	// pt
@@ -49126,7 +49084,7 @@ const char *Txt_The_name_of_the_institution_X_has_not_changed =	// Warning: it i
 #elif L==6	// gn
 	"El nombre de la instituci&oacute;n <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
-	"Il nome dell&apos;istituzione <strong>%s</strong> non &egrave; cambiato.";
+	"Il nome dell'istituzione <strong>%s</strong> non &egrave; cambiato.";
 #elif L==8	// pl
 	"The name of the institution <strong>%s</strong> has not changed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -49164,7 +49122,7 @@ const char *Txt_The_name_of_the_place_X_has_not_changed =	// Warning: it is very
 #elif L==4	// es
 	"El nombre del lugar <strong>%s</strong> no ha cambiado.";
 #elif L==5	// fr
-	"Le nom de l&apos;emplacement <strong>%s</strong> n&apos;a pas chang&eacute;.";
+	"Le nom de l'emplacement <strong>%s</strong> n'a pas chang&eacute;.";
 #elif L==6	// gn
 	"El nombre del lugar <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
@@ -49206,7 +49164,7 @@ const char *Txt_The_name_of_the_room_X_has_not_changed =	// Warning: it is very 
 #elif L==4	// es
 	"El nombre de la sala <strong>%s</strong> no ha cambiado.";
 #elif L==5	// fr
-	"Le nom de la salle <strong>%s</strong> n&apos;a pas chang&eacute;.";
+	"Le nom de la salle <strong>%s</strong> n'a pas chang&eacute;.";
 #elif L==6	// gn
 	"El nombre de la sala <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
@@ -49381,14 +49339,14 @@ const char *Txt_The_nickname_entered_X_is_not_valid_ =	// Warning: it is very im
 
 const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 #if   L==1	// ca
-	"L&apos;av&iacute;s apareixer&agrave; en forma de nota groga"
-	" a l&apos;esquerra de la p&agrave;gina"
+	"L'av&iacute;s apareixer&agrave; en forma de nota groga"
+	" a l'esquerra de la p&agrave;gina"
 	" i ser&agrave; <strong>visible per tot el m&oacute;n</strong>"
-	" (no nom&eacute;s pels usuaris de l&apos;assignatura).<br />"
+	" (no nom&eacute;s pels usuaris de l'assignatura).<br />"
 	"<strong>El missatge ha de ser breu.</strong>"
 	" Per crear un av&iacute;s extens"
-	" o d&apos;acc&eacute;s exclusiu per a estudiants,"
-	" pot utilitzar el f&ograve;rum de l&apos;assignatura,"
+	" o d'acc&eacute;s exclusiu per a estudiants,"
+	" pot utilitzar el f&ograve;rum de l'assignatura,"
 	" enviar un missatge a tots,"
 	" o pujar un arxiu amb el text a la zona de documents.";
 #elif L==2	// de
@@ -49425,7 +49383,7 @@ const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 	" enviar un mensaje a todos,"
 	" o subir un archivo con el texto a la zona de documentos.";
 #elif L==5	// fr
-	"L&apos;avis appara&icirc;tra comme une note jaune"
+	"L'avis appara&icirc;tra comme une note jaune"
 	" &agrave; gauche de la page"
 	" et sera <strong>visible dans le monde entier</strong>"
 	" (pas seulement par les utilisateurs du cours).<br />"
@@ -49447,7 +49405,7 @@ const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 	" enviar un mensaje a todos,"
 	" o subir un archivo con el texto a la zona de documentos.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;avviso verr&agrave; visualizzato come una nota di colore giallo"
+	"L'avviso verr&agrave; visualizzato come una nota di colore giallo"
 	" nella parte sinistra della pagina"
 	" e sar&agrave; <strong>visibile in tutto il mondo</strong>"
 	" (non solo dagli utenti del corso).<br />"
@@ -49456,7 +49414,7 @@ const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 	" o una comunicazione con accesso esclusivo per gli studenti,"
 	" &egrave; possibile utilizzare il forum del corso,"
 	" inviare un messaggio a tutti,"
-	" o caricare un file con il testo all&apos;area documenti.";
+	" o caricare un file con il testo all'area documenti.";
 #elif L==8	// pl
 	"Og&lstrok;oszenie pojawi si&eogon; jako &zdot;&oacute;&lstrok;ty notatki"
 	" w lewej strony"
@@ -49669,7 +49627,7 @@ const char *Txt_The_number_of_questions_must_be_in_the_interval_X =	// Warning: 
 #elif L==6	// gn
 	"El n&uacute;mero de preguntas debe estar en el intervalo [%u,%u].";	// Okoteve traducción
 #elif L==7	// it
-	"Il numero di domande dovrebbe stare nell&apos;intervallo [%u,%u].";
+	"Il numero di domande dovrebbe stare nell'intervallo [%u,%u].";
 #elif L==8	// pl
 	"The number of questions must be in the interval [%u,%u].";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -49832,7 +49790,7 @@ const char *Txt_The_password_is_too_trivial_ =
 	" Use otra m&aacute;s dif&iacute;cil de averiguar.";	// Okoteve traducción
 #elif L==7	// it
 	"La password &egrave; troppo semplice."
-	" Utilizza un&apos;altra pi&ugrave; difficile da individuare.";
+	" Utilizza un'altra pi&ugrave; difficile da individuare.";
 #elif L==8	// pl
 	"The password is too trivial."
 	" Use other harder to guess.";				// Potrzebujesz tlumaczenie
@@ -49893,7 +49851,7 @@ const char *Txt_The_place_X_already_exists =	// Warning: it is very important to
 #elif L==4	// es
 	"El lugar <strong>%s</strong> ya existe.";
 #elif L==5	// fr
-	"L&apos;emplacement <strong>%s</strong> existe d&eacute;j&agrave;.";
+	"L'emplacement <strong>%s</strong> existe d&eacute;j&agrave;.";
 #elif L==6	// gn
 	"El lugar <strong>%s</strong> ya existe.";		// Okoteve traducción
 #elif L==7	// it
@@ -49914,7 +49872,7 @@ const char *Txt_The_place_X_has_been_renamed_as_Y =	// Warning: it is very impor
 #elif L==4	// es
 	"El lugar <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
 #elif L==5	// fr
-	"L&apos;emplacement <strong>%s</strong> a &eacute;t&eacute; renomm&eacute; en <strong>%s</strong>.";
+	"L'emplacement <strong>%s</strong> a &eacute;t&eacute; renomm&eacute; en <strong>%s</strong>.";
 #elif L==6	// gn
 	"El lugar <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
@@ -50095,7 +50053,7 @@ const char *Txt_The_record_field_X_has_been_renamed_as_Y =	// Warning: it is ver
 
 const char *Txt_The_requested_group_changes_were_successful =
 #if   L==1	// ca
-	"Els canvis de grup sol&middot;licitats s&apos;han realitzat correctament.";
+	"Els canvis de grup sol&middot;licitats s'han realitzat correctament.";
 #elif L==2	// de
 	"The requested group changes were successful.";				// Need Übersetzung
 #elif L==3	// en
@@ -50167,7 +50125,7 @@ const char *Txt_The_room_X_already_exists =	// Warning: it is very important to 
 #elif L==6	// gn
 	"La sala <strong>%s</strong> ya existe.";		// Okoteve traducción
 #elif L==7	// it
-	"L&apos;aula <strong>%s</strong> gi&agrave; esiste.";
+	"L'aula <strong>%s</strong> gi&agrave; esiste.";
 #elif L==8	// pl
 	"Klasa <strong>%s</strong> ju&zdot; istnieje.";
 #elif L==9	// pt
@@ -50184,11 +50142,11 @@ const char *Txt_The_room_X_does_not_have_a_limited_capacity_now =	// Warning: it
 #elif L==4	// es
 	"La sala <strong>%s</strong> ya no tiene un aforo limitado.";
 #elif L==5	// fr
-	"La salle <strong>%s</strong> n&apos;a plus de capacit&eacute; limit&eacute;e.";
+	"La salle <strong>%s</strong> n'a plus de capacit&eacute; limit&eacute;e.";
 #elif L==6	// gn
 	"La sala <strong>%s</strong> ya no tiene un aforo limitado.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;aula <strong>%s</strong> non ha una capacit&agrave; limitata ora.";
+	"L'aula <strong>%s</strong> non ha una capacit&agrave; limitata ora.";
 #elif L==8	// pl
 	"Klasa <strong>%s</strong> nie ma teraz ograniczonej pojemno&sacute;ci.";
 #elif L==9	// pt
@@ -50209,7 +50167,7 @@ const char *Txt_The_room_X_has_been_renamed_as_Y =	// Warning: it is very import
 #elif L==6	// gn
 	"La sala <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;aula <strong>%s</strong> &egrave; stata rinominata come <strong>%s</strong>.";
+	"L'aula <strong>%s</strong> &egrave; stata rinominata come <strong>%s</strong>.";
 #elif L==8	// pl
 	"Klasa <strong>%s</strong> zosta&lstrok;o przemianowane na <strong>%s</strong>.";
 #elif L==9	// pt
@@ -50230,7 +50188,7 @@ const char *Txt_The_room_assigned_to_the_group_X_has_changed =
 #elif L==6	// gn
 	"La sala asignada al grupo <strong>%s</strong> ha cambiado.";		// Okoteve traducción
 #elif L==7	// it
-	"L&apos;aula assegnata al gruppo <strong>%s</strong> &egrave; cambiata.";
+	"L'aula assegnata al gruppo <strong>%s</strong> &egrave; cambiata.";
 #elif L==8	// pl
 	"Klasa przypisana do grupy <strong>%s</strong> uleg&lstrok;a zmianie.";
 #elif L==9	// pt
@@ -50319,7 +50277,7 @@ const char *Txt_The_set_of_questions_has_been_modified =
 #elif L==4	// es
 	"El conjunto de preguntas ha sido modificado.";
 #elif L==5	// fr
-	"L&apos;ensemble de questions a &eacute;t&eacute; modifi&eacute;.";
+	"L'ensemble de questions a &eacute;t&eacute; modifi&eacute;.";
 #elif L==6	// gn
 	"El conjunto de preguntas ha sido modificado.";	// Okoteve traducción
 #elif L==7	// it
@@ -50446,7 +50404,7 @@ const char *Txt_The_status_of_the_institution_X_has_changed =	// Warning: it is 
 
 const char *Txt_The_survey_has_been_modified =
 #if   L==1	// ca
-	"L&apos;enquesta ha estat modificada.";
+	"L'enquesta ha estat modificada.";
 #elif L==2	// de
 	"Die Umfrage wurde ge&auml;ndert.";
 #elif L==3	// en
@@ -50479,7 +50437,7 @@ const char *Txt_The_tag_X_has_been_renamed_as_Y =	// Warning: it is very importa
 #elif L==6	// gn
 	"El descriptor <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;etichetta <strong>%s</strong> &egrave; stata rinominata come <strong>%s</strong>.";
+	"L'etichetta <strong>%s</strong> &egrave; stata rinominata come <strong>%s</strong>.";
 #elif L==8	// pl
 	"The tag <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -50500,7 +50458,7 @@ const char *Txt_The_tag_X_has_not_changed =	// Warning: it is very important to 
 #elif L==6	// gn
 	"El descriptor <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;etichetta <strong>%s</strong> non &egrave; cambiata.";
+	"L'etichetta <strong>%s</strong> non &egrave; cambiata.";
 #elif L==8	// pl
 	"The tag <strong>%s</strong> has not changed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -50530,7 +50488,7 @@ const char *Txt_The_test_X_has_already_been_assessed_previously =	// Warning: it
 
 const char *Txt_The_test_configuration_has_been_updated =
 #if   L==1	// ca
-	"La configuraci&oacute; dels test s&apos;ha actualitzat.";
+	"La configuraci&oacute; dels test s'ha actualitzat.";
 #elif L==2	// de
 	"Die Testkonfiguration wurde aktualisiert.";
 #elif L==3	// en
@@ -50593,7 +50551,7 @@ const char *Txt_The_thread_X_is_already_in_this_forum =	// Warning: it is very i
 
 const char *Txt_The_timetable_is_empty =
 #if   L==1	// ca
-	"L&apos;horari est&agrave; buit.";
+	"L'horari est&agrave; buit.";
 #elif L==2	// de
 	"Der Fahrplan ist leer.";
 #elif L==3	// en
@@ -50601,7 +50559,7 @@ const char *Txt_The_timetable_is_empty =
 #elif L==4	// es
 	"El horario est&aacute; vac&iacute;o.";
 #elif L==5	// fr
-	"L&apos;horaire est vide.";
+	"L'horaire est vide.";
 #elif L==6	// gn
 	"El horario est&aacute; vac&iacute;o.";	// Okoteve traducción
 #elif L==7	// it
@@ -50769,7 +50727,7 @@ const char *Txt_The_type_of_room_X_has_not_changed =	// Warning: it is very impo
 #elif L==4	// es
 	"El tipo de la sala <strong>%s</strong> no ha cambiado.";
 #elif L==5	// fr
-	"Le type de la salle <strong>%s</strong> n&apos;a pas chang&eacute;.";
+	"Le type de la salle <strong>%s</strong> n'a pas chang&eacute;.";
 #elif L==6	// gn
 	"El tipo de la sala <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
@@ -50836,7 +50794,7 @@ const char *Txt_The_URL_X_has_been_updated =	// Warning: it is very important to
 #elif L==6	// gn
 	"El URL <strong>%s</strong> se ha actualizado.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;URL <strong>%s</strong> &egrave; stata archiviata.";
+	"L'URL <strong>%s</strong> &egrave; stata archiviata.";
 #elif L==8	// pl
 	"The URL <strong>%s</strong> has been updated.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -50853,7 +50811,7 @@ const char *Txt_The_user_does_not_exist =
 #elif L==4	// es
 	"El usuario/a no existe.";
 #elif L==5	// fr
-	"L&apos;utilisateur n&apos;existe pas.";
+	"L'utilisateur n'existe pas.";
 #elif L==6	// gn
 	"El usuario/a no existe.";	// Okoteve traducción
 #elif L==7	// it
@@ -50878,7 +50836,7 @@ const char *Txt_The_user_does_not_exist_or_password_is_incorrect =
 	"El usuario/a no existe"
 	" o bien la contrase&ntilde;a es incorrecta.";
 #elif L==5	// fr
-	"L&apos;utilisateur n&apos;existe pas"
+	"L'utilisateur n'existe pas"
 	" ou le mot de passe est incorrect.";
 #elif L==6	// gn
 	"El usuario/a no existe"
@@ -51017,7 +50975,7 @@ const char *Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y =	// Warning: 
 const char *Txt_THE_USER_X_has_been_enroled_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"<strong>%s</strong> ha estat afegit/da"
-	" a l&apos;assignatura <strong>%s</strong>.";
+	" a l'assignatura <strong>%s</strong>.";
 #elif L==2	// de
 	"<strong>%s</strong> hat sich"
 	" im Kurs <strong>%s</strong> eingeschrieben.";
@@ -51221,7 +51179,7 @@ const char *Txt_THE_USER_X_has_been_removed_from_one_group =	// Warning: it is v
 const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"<strong>%s</strong> ha estat eliminat"
-	" de l&apos;assignatura <strong>%s</strong>.";
+	" de l'assignatura <strong>%s</strong>.";
 #elif L==2	// de
 	"<strong>%s</strong> wurde aus"
 	" dem Kurs <strong>%s</strong> entfernt.";
@@ -51400,7 +51358,7 @@ const char *Txt_THE_USER_X_is_already_enroled_in_the_course_Y =	// Warning: it i
 
 const char *Txt_The_user_is_new_not_yet_in_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"L&apos;usuari &eacute;s nou, encara no existeix en %s.";
+	"L'usuari &eacute;s nou, encara no existeix en %s.";
 #elif L==2	// de
 	"Der Benutzer ist neu, noch nicht in %s.";
 #elif L==3	// en
@@ -51408,11 +51366,11 @@ const char *Txt_The_user_is_new_not_yet_in_X =	// Warning: it is very important 
 #elif L==4	// es
 	"El usuario/a es nuevo/a, a&uacute;n no existe en %s.";
 #elif L==5	// fr
-	"L&apos;utilisateur est nouveau, pas encore dans %s.";
+	"L'utilisateur est nouveau, pas encore dans %s.";
 #elif L==6	// gn
 	"El usuario/a es nuevo/a, a&uacute;n no existe en %s.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;utente &egrave; nuovo, non esiste ancora in %s.";
+	"L'utente &egrave; nuovo, non esiste ancora in %s.";
 #elif L==8	// pl
 	"U&zdot;ytkownik jest nowa, jeszcze nie w %s.";
 #elif L==9	// pt
@@ -51492,11 +51450,11 @@ const char *Txt_The_whole_course =
 #elif L==4	// es
 	"Toda la asignatura";
 #elif L==5	// fr
-	"L&apos;ensemble de la mati&egrave;re";
+	"L'ensemble de la mati&egrave;re";
 #elif L==6	// gn
 	"Toda la asignatura";		// Okoteve traducción
 #elif L==7	// it
-	"L&apos;intero corso";
+	"L'intero corso";
 #elif L==8	// pl
 	"The whole course";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -51517,7 +51475,7 @@ const char *Txt_The_year_X_is_not_allowed =	// Warning: it is very important to 
 #elif L==6	// gn
 	"El a&ntilde;o/semestre <strong>%u</strong> no est&aacute; permitido.";		// Okoteve traducción
 #elif L==7	// it
-	"L&apos;anno/semester <strong>%u</strong> non &egrave; consentito.";
+	"L'anno/semester <strong>%u</strong> non &egrave; consentito.";
 #elif L==8	// pl
 	"The year/semester <strong>%u</strong> is not allowed.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -51538,7 +51496,7 @@ const char *Txt_The_year_of_the_course_X_has_changed =	// Warning: it is very im
 #elif L==6	// gn
 	"El a&ntilde;o/semestre de la asignatura <strong>%s</strong> ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
-	"L&apos;anno/semestre del corso <strong>%s</strong> &egrave; cambiato.";
+	"L'anno/semestre del corso <strong>%s</strong> &egrave; cambiato.";
 #elif L==8	// pl
 	"The year/semestre of the couse <strong>%s</strong> has changed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -51622,7 +51580,7 @@ const char *Txt_There_are_more_than_one_table_in_the_file_of_marks =
 #elif L==6	// gn
 	"Hay m&aacute;s de una tabla en el archivo de calificaciones.";	// Okoteve traducción
 #elif L==7	// it
-	"C&apos;&egrave; pi&ugrave; di una tabella nel file dei risultati.";
+	"C'&egrave; pi&ugrave; di una tabella nel file dei risultati.";
 #elif L==8	// pl
 	"There are more than one table in the file of marks.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -51649,7 +51607,7 @@ const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or
 	"Hay m&aacute;s de un usuario con el ID <strong>%s</strong>."
 	" Por favor, escriba un @apodo o correo.";	// Okoteve traducción
 #elif L==7	// it
-	"Ci sono pi&ugrave; di un utente con l&apos;ID <strong>%s</strong>."
+	"Ci sono pi&ugrave; di un utente con l'ID <strong>%s</strong>."
 	" Si prega di digitare un @nome-utente o email.";
 #elif L==8	// pl
 	"There are more than one user with the ID <strong>%s</strong>."
@@ -51719,7 +51677,7 @@ const char *Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed =
 	" con solicitudes de titulaciones"
 	" pendientes de confirmar.";
 #elif L==5	// fr
-	"Il n&apos;y a pas de centres"
+	"Il n'y a pas de centres"
 	" avec demandes de degr&eacute;s"
 	" &agrave; confirmer.";
 #elif L==6	// gn
@@ -51758,8 +51716,8 @@ const char *Txt_There_are_no_countries_with_requests_for_institutions_to_be_conf
 	" con solicitudes de instituciones"
 	" pendientes de confirmar.";
 #elif L==5	// fr
-	"Il n&apos;y a pas de pays"
-	" avec demandes d&apos;&eacute;tablissements"
+	"Il n'y a pas de pays"
+	" avec demandes d'&eacute;tablissements"
 	" &agrave; confirmer.";
 #elif L==6	// gn
 	"No hay pa&iacute;ses"
@@ -51782,7 +51740,7 @@ const char *Txt_There_are_no_countries_with_requests_for_institutions_to_be_conf
 const char *Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed =
 #if   L==1	// ca
 	"No hi ha titulacions"
-	" amb sol&middot;licituds d&apos;assignatures"
+	" amb sol&middot;licituds d'assignatures"
 	" pendents de confirmar.";
 #elif L==2	// de
 	"There are no degrees"
@@ -51797,7 +51755,7 @@ const char *Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed =
 	" con solicitudes de asignaturas"
 	" pendientes de confirmar.";
 #elif L==5	// fr
-	"Il n&apos;y a pas de degr&eacute;s"
+	"Il n'y a pas de degr&eacute;s"
 	" avec demandes de cours"
 	" &agrave; confirmer.";
 #elif L==6	// gn
@@ -51836,7 +51794,7 @@ const char *Txt_There_are_no_institutions_with_requests_for_centres_to_be_confir
 	" con solicitudes de centros"
 	" pendientes de confirmar.";
 #elif L==5	// fr
-	"Il n&apos;y a pas d&apos;&eacute;tablissements"
+	"Il n'y a pas d'&eacute;tablissements"
 	" avec demandes de centres"
 	" &agrave; confirmer.";
 #elif L==6	// gn
@@ -51976,7 +51934,7 @@ const char *Txt_There_is_already_a_file_named_X =	// Warning: it is very importa
 #elif L==6	// gn
 	"Ya existe un archivo con el nombre <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"C&apos;&egrave; gi&agrave; un file chiamato <strong>%s</strong>.";
+	"C'&egrave; gi&agrave; un file chiamato <strong>%s</strong>.";
 #elif L==8	// pl
 	"There is already a file named <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -51997,7 +51955,7 @@ const char *Txt_There_is_already_a_non_empty_folder_named_X =	// Warning: it is 
 #elif L==6	// gn
 	"Ya existe una carpeta no vac&iacute;a con el nombre <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"C&apos;&egrave; gi&agrave; una cartella non vuota chiamata <strong>%s</strong>.";
+	"C'&egrave; gi&agrave; una cartella non vuota chiamata <strong>%s</strong>.";
 #elif L==8	// pl
 	"There is already a non-empty folder named <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -52018,7 +51976,7 @@ const char *Txt_There_is_no_empty_account_associated_with_your_ID_X =	// Warning
 	"No existe ninguna cuenta vac&iacute;a (a&uacute;n no usada)"
 	" asociada a su ID <strong>%s</strong>.";
 #elif L==5	// fr
-	"Il n&apos;y a pas de compte vide (pas encore utilis&eacute;)"
+	"Il n'y a pas de compte vide (pas encore utilis&eacute;)"
 	" associ&eacute; &agrave; votre ID <strong>%s</strong>.";
 #elif L==6	// gn
 	"No existe ninguna cuenta vac&iacute;a (a&uacute;n no usada)"
@@ -52084,7 +52042,7 @@ const char *Txt_There_is_no_user_with_email_X =	// Warning: it is very important
 	"No existe ning&uacute;n usuario"
 	" con correo <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"Non c&apos;&egrave; alcun utente"
+	"Non c'&egrave; alcun utente"
 	" con email <strong>%s</strong>.";
 #elif L==8	// pl
 	"There is no user"
@@ -52114,7 +52072,7 @@ const char *Txt_There_is_no_user_with_ID_nick_or_email_X =	// Warning: it is ver
 	"No existe ning&uacute;n usuario"
 	" con ID (DNI/c&eacute;dula), apodo o correo <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"Non c&apos;&egrave; alcun utente"
+	"Non c'&egrave; alcun utente"
 	" con ID, nome utente o email <strong>%s</strong>.";
 #elif L==8	// pl
 	"There is no user"
@@ -52144,7 +52102,7 @@ const char *Txt_There_is_no_user_with_nickname_X =	// Warning: it is very import
 	"No existe ning&uacute;n usuario"
 	" con el apodo <strong>%s</strong>.";		// Okoteve traducción
 #elif L==7	// it
-	"Non c&apos;&egrave; alcun utente"
+	"Non c'&egrave; alcun utente"
 	" con nome utente <strong>%s</strong>.";
 #elif L==8	// pl
 	"There is no user"
@@ -52168,7 +52126,7 @@ const char *Txt_There_was_a_problem_sending_an_email_automatically =
 #elif L==6	// gn
 	"Ha ocurrido un problema enviando autom&aacute;ticamente un correo.";	// Okoteve traducción
 #elif L==7	// it
-	"C&apos;&egrave; stato un problema inviando automaticamente un&apos;email.";
+	"C'&egrave; stato un problema inviando automaticamente un'email.";
 #elif L==8	// pl
 	"There was a problem sending an email automatically.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -52185,7 +52143,7 @@ const char *Txt_This_exam_has_no_questions =
 #elif L==4	// es
 	"Este examen no tiene preguntas.";
 #elif L==5	// fr
-	"Cet examen n&apos;a pas de questions.";
+	"Cet examen n'a pas de questions.";
 #elif L==6	// gn
 	"Este examen no tiene preguntas.";	// Okoteve traducción
 #elif L==7	// it
@@ -52198,15 +52156,15 @@ const char *Txt_This_exam_has_no_questions =
 
 const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists =
 #if   L==1	// ca
-	"Aquest enlla&ccedil; romandr&agrave; actiu mentre existeixi el seu compte de l&apos;usuari.";
+	"Aquest enlla&ccedil; romandr&agrave; actiu mentre existeixi el seu compte de l'usuari.";
 #elif L==2	// de
 	"Diese Verbindung bleibt aktiv, solange das Konto Ihres Benutzers vorhanden.";
 #elif L==3	// en
-	"This link will remain active as long as your user&apos;s account exists.";
+	"This link will remain active as long as your user's account exists.";
 #elif L==4	// es
 	"Este enlace permanecer&aacute; activo mientras exista su cuenta del usuario.";
 #elif L==5	// fr
-	"Ce lien restera actif aussi longtemps que votre compte de l&apos;utilisateur existe.";
+	"Ce lien restera actif aussi longtemps que votre compte de l'utilisateur existe.";
 #elif L==6	// gn
 	"Este enlace permanecer&aacute; activo mientras exista su cuenta del usuario.";	// Okoteve traducción
 #elif L==7	// it
@@ -52257,7 +52215,7 @@ const char *Txt_This_survey_has_no_questions =
 #elif L==4	// es
 	"Esta encuesta no tiene preguntas.";
 #elif L==5	// fr
-	"Ce sondage n&apos;a pas de questions.";
+	"Ce sondage n'a pas de questions.";
 #elif L==6	// gn
 	"Esta encuesta no tiene preguntas.";	// Okoteve traducción
 #elif L==7	// it
@@ -52509,7 +52467,7 @@ const char *Txt_TIME_until =
 #elif L==4	// es
 	"hasta";
 #elif L==5	// fr
-	"jusqu&apos;au";
+	"jusqu'au";
 #elif L==6	// gn
 	"hasta";	// Okoteve traducción
 #elif L==7	// it
@@ -52543,7 +52501,7 @@ const char *Txt_time =
 
 const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics =
 #if   L==1	// ca
-	"Zona hor&agrave;ria usada en el c&agrave;lcul d&apos;aquesta estad&iacute;stica";
+	"Zona hor&agrave;ria usada en el c&agrave;lcul d'aquesta estad&iacute;stica";
 #elif L==2	// de
 	"Zeitzone in die Berechnung dieser Statistik verwendet";
 #elif L==3	// en
@@ -52798,7 +52756,7 @@ const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 	,
 	[TL_NOTE_EXAM_ANNOUNCEMENT] =
 #if   L==1	// ca
-	"Convocat&ograve;ria d&apos;examen"
+	"Convocat&ograve;ria d'examen"
 #elif L==2	// de
 	"Aufrufe für Pr&uuml;fung"
 #elif L==3	// en
@@ -52810,7 +52768,7 @@ const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
 #elif L==6	// gn
 	"Convocatoria de examen"	// Okoteve traducción
 #elif L==7	// it
-	"Appello d&apos;esame"
+	"Appello d'esame"
 #elif L==8	// pl
 	"Ogloszenie egzamin"
 #elif L==9	// pt
@@ -52975,7 +52933,7 @@ const char *Txt_TIMELINE_NOTE_Not_favourited_by_anyone =	// No longer shared
 #elif L==4	// es
 	"No marcado como favorito por nadie";
 #elif L==5	// fr
-	"Personne n&apos;a marqu&eacute; comme favori";
+	"Personne n'a marqu&eacute; comme favori";
 #elif L==6	// gn
 	"No marcado como favorito por nadie";	// Okoteve traducción
 #elif L==7	// it
@@ -52996,7 +52954,7 @@ const char *Txt_TIMELINE_NOTE_Not_shared_by_anyone =	// No longer shared
 #elif L==4	// es
 	"No compartido por nadie";
 #elif L==5	// fr
-	"Personne n&apos;a partag&eacute;";
+	"Personne n'a partag&eacute;";
 #elif L==6	// gn
 	"No compartido por nadie";	// Okoteve traducción
 #elif L==7	// it
@@ -53206,7 +53164,7 @@ const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 	{
 	[TT_COURSE_TIMETABLE] =
 #if   L==1	// ca
-	"Horari de classes de l&apos;assignatura"
+	"Horari de classes de l'assignatura"
 #elif L==2	// de
 	"Stundenplan"
 #elif L==3	// en
@@ -53597,8 +53555,8 @@ const char *Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_u
 	"Para eliminar una instituci&oacute;n, primero debe eliminar"
 	" todos centros y todos los usuarios de esa instituci&oacute;n.";	// Okoteve traducción
 #elif L==7	// it
-	"Per rimuovere un&apos;istituzione, devi prima rimuovere"
-	" tutti gli centri e utenti di quell&apos;istituzione.";
+	"Per rimuovere un'istituzione, devi prima rimuovere"
+	" tutti gli centri e utenti di quell'istituzione.";
 #elif L==8	// pl
 	"To remove an institution, you must first remove"
 	" all centres and users in the institution.";				// Potrzebujesz tlumaczenie
@@ -53657,8 +53615,8 @@ const char *Txt_To_use_chat_you_must_have_installed_the_software_X_and_add_Y_ =	
 
 const char *Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings =
 #if   L==1	// ca
-	"Per veure contingut multim&egrave;dia d&apos;un altre lloc web"
-	" ha d&apos;acceptar les cookies de tercers"
+	"Per veure contingut multim&egrave;dia d'un altre lloc web"
+	" ha d'acceptar les cookies de tercers"
 	" en les seves par&agrave;metres personals.";
 #elif L==2	// de
 	"Um Multimedia-Inhalte von einer anderen Website anzuzeigen,"
@@ -53673,7 +53631,7 @@ const char *Txt_To_watch_multimedia_content_from_another_website_you_have_to_acc
 	" tiene que aceptar las cookies de terceros"
 	" en sus ajustes personales.";
 #elif L==5	// fr
-	"Pour regarder le contenu multim&eacute;dia d&apos;un autre site Web,"
+	"Pour regarder le contenu multim&eacute;dia d'un autre site Web,"
 	" vous devez accepter les cookies de tiers"
 	" dans vos r&eacute;glages personnels.";
 #elif L==6	// gn
@@ -53704,7 +53662,7 @@ const char *Txt_Today =
 #elif L==4	// es
 	"Hoy";
 #elif L==5	// fr
-	"Aujourd&apos;hui";
+	"Aujourd'hui";
 #elif L==6	// gn
 	"Ko &aacute;ra";
 #elif L==7	// it
@@ -53780,7 +53738,7 @@ const char *Txt_TST_Answer_given_by_the_teachers =
 
 const char *Txt_TST_Answer_given_by_the_user =
 #if   L==1	// ca
-	"Resposta donada per l&apos;usuari/a";
+	"Resposta donada per l'usuari/a";
 #elif L==2	// de
 	"Antwort vom Benutzer";
 #elif L==3	// en
@@ -53788,11 +53746,11 @@ const char *Txt_TST_Answer_given_by_the_user =
 #elif L==4	// es
 	"Respuesta dada por el usuario/a";
 #elif L==5	// fr
-	"R&eacute;ponse donn&eacute;e par l&apos;utilisateur/se";
+	"R&eacute;ponse donn&eacute;e par l'utilisateur/se";
 #elif L==6	// gn
 	"Respuesta dada por el usuario/a";	// Okoteve traducción
 #elif L==7	// it
-	"Risposta fornita dall&apos;utente";
+	"Risposta fornita dall'utente";
 #elif L==8	// pl
 	"Odpowied&zacute; udzielona przez u&zdot;ytkownika";
 #elif L==9	// pt
@@ -53850,7 +53808,7 @@ const char *Txt_TST_PLUGGABLE[TstCfg_NUM_OPTIONS_PLUGGABLE] =
 	"",
 	[TstCfg_PLUGGABLE_NO] =
 #if   L==1	// ca
-	"Banc de preguntes no descarregable/visible des d&apos;altres aplicacions (SWADroid, iSWAD, TriSWADos)."
+	"Banc de preguntes no descarregable/visible des d'altres aplicacions (SWADroid, iSWAD, TriSWADos)."
 #elif L==2	// de
 	"Fragenbank nicht herunterladbar/sichtbar von anderen Anwendungen (SWADroid, iSWAD, TriSWADos)."
 #elif L==3	// en
@@ -53858,7 +53816,7 @@ const char *Txt_TST_PLUGGABLE[TstCfg_NUM_OPTIONS_PLUGGABLE] =
 #elif L==4	// es
 	"Banco de preguntas no descargable/visible desde otras aplicaciones (SWADroid, iSWAD, TriSWADos)."
 #elif L==5	// fr
-	"Banque de questions non t&eacute;l&eacute;chargeable/visible depuis d&apos;autres applications (SWADroid, iSWAD, TriSWADos)."
+	"Banque de questions non t&eacute;l&eacute;chargeable/visible depuis d'autres applications (SWADroid, iSWAD, TriSWADos)."
 #elif L==6	// gn
 	"Banco de preguntas no descargable/visible desde otras aplicaciones (SWADroid, iSWAD, TriSWADos)."// Okoteve traducción
 #elif L==7	// it
@@ -53871,7 +53829,7 @@ const char *Txt_TST_PLUGGABLE[TstCfg_NUM_OPTIONS_PLUGGABLE] =
 	,
 	[TstCfg_PLUGGABLE_YES] =
 #if   L==1	// ca
-	"Banc de preguntes descarregable/visible des d&apos;altres aplicacions (SWADroid, iSWAD, TriSWADos)."
+	"Banc de preguntes descarregable/visible des d'altres aplicacions (SWADroid, iSWAD, TriSWADos)."
 #elif L==2	// de
 	"Fragenbank herunterladbar/sichtbar von anderen Anwendungen (SWADroid, iSWAD, TriSWADos)."
 #elif L==3	// en
@@ -53879,7 +53837,7 @@ const char *Txt_TST_PLUGGABLE[TstCfg_NUM_OPTIONS_PLUGGABLE] =
 #elif L==4	// es
 	"Banco de preguntas descargable/visible desde otras aplicaciones (SWADroid, iSWAD, TriSWADos)."
 #elif L==5	// fr
-	"Banque de questions t&eacute;l&eacute;chargeable/visible depuis d&apos;autres applications (SWADroid, iSWAD, TriSWADos)."
+	"Banque de questions t&eacute;l&eacute;chargeable/visible depuis d'autres applications (SWADroid, iSWAD, TriSWADos)."
 #elif L==6	// gn
 	"Banco de preguntas descargable/visible desde otras aplicaciones (SWADroid, iSWAD, TriSWADos)."// Okoteve traducción
 #elif L==7	// it
@@ -54010,7 +53968,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 #elif L==5	// fr
 	"Texte"
 #elif L==6	// gn
-	"Mba&apos;ehaipyre"
+	"Mba'ehaipyre"
 #elif L==7	// it
 	"Testo"
 #elif L==8	// pl
@@ -54053,7 +54011,7 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 #elif L==4	// es
 	"Ordenar por n&ordm; de veces que se ha respondido la pregunta"
 #elif L==5	// fr
-	"Trier par nombre de fois qu&apos;on a r&eacute;pondu &agrave; la question"
+	"Trier par nombre de fois qu'on a r&eacute;pondu &agrave; la question"
 #elif L==6	// gn
 	"Ordenar por n&ordm; de veces que se ha respondido la pregunta"	// Okoteve traducción
 #elif L==7	// it
@@ -54099,7 +54057,7 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 	"Ordenar por n&ordm; de veces que se ha respondido"
 	" la pregunta (excluyendo respuestas en blanco)"
 #elif L==5	// fr
-	"Trier par nombre de fois qu&apos;on a r&eacute;pondu"
+	"Trier par nombre de fois qu'on a r&eacute;pondu"
 	" &agrave; la question (non vide)"
 #elif L==6	// gn
 	"Ordenar por n&ordm; de veces que se ha respondido"
@@ -54448,7 +54406,7 @@ const char *Txt_Type_of_degree =
 #elif L==4	// es
 	"Tipo de titulaci&oacute;n";
 #elif L==5	// fr
-	"Type d&apos;&eacute;tude";
+	"Type d'&eacute;tude";
 #elif L==6	// gn
 	"Tipo de titulaci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -54638,7 +54596,7 @@ const char *Txt_Types_of_degree =
 #elif L==4	// es
 	"Tipos de titulaci&oacute;n";
 #elif L==5	// fr
-	"Types d&apos;&eacute;tude";
+	"Types d'&eacute;tude";
 #elif L==6	// gn
 	"Arandur&atilde; l&aacute;ja";
 #elif L==7	// it
@@ -54755,9 +54713,9 @@ const char *Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_ =
 	" hasta que desarrollemos un nuevo chat con otra tecnolog&iacute;a."
 	" Sentimos las molestias.";
 #elif L==5	// fr
-	"Malheureusement, pas Firefox et Chrome plus vous permettent d&apos;ex&eacute;cuter Java,"
-	" donc le chat n&apos;est pas disponible pour ces navigateurs"
-	" jusqu&apos;&agrave; ce que nous d&eacute;veloppons un nouveau chat avec d&apos;autres technologies."
+	"Malheureusement, pas Firefox et Chrome plus vous permettent d'ex&eacute;cuter Java,"
+	" donc le chat n'est pas disponible pour ces navigateurs"
+	" jusqu'&agrave; ce que nous d&eacute;veloppons un nouveau chat avec d'autres technologies."
 	" D&eacute;sol&eacute; pour la g&ecirc;ne occasionn&eacute;e.";
 #elif L==6	// gn
 	"Desafortunadamente Firefox y Chrome ya no permiten ejecutar Java,"
@@ -54768,7 +54726,7 @@ const char *Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_ =
 	"Purtroppo Firefox e Chrome non consentono pi&ugrave; di eseguire Java,"
 	" quindi la chat non &egrave; disponibile per questi browser"
 	" finch&eacute; non sviluppiamo una nuova chat con altre tecnologie."
-	" Ci scusiamo per l&apos;inconveniente.";
+	" Ci scusiamo per l'inconveniente.";
 #elif L==8	// pl
 	"Niestety Firefox i Chrome nie pozwalaj&aogon; ju&zdot; na uruchamianie Java,"
 	" wi&eogon;c rozmowa nie jest dost&eogon;pny dla tych przegl&aogon;darek"
@@ -54917,7 +54875,7 @@ const char *Txt_Unlock_editing =
 #elif L==4	// es
 	"Desbloquear edici&oacute;n";
 #elif L==5	// fr
-	"D&eacute;verrouiller l&apos;&eacute;dition";
+	"D&eacute;verrouiller l'&eacute;dition";
 #elif L==6	// gn
 	"Desbloquear edici&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -55587,7 +55545,7 @@ const char *Txt_USER_comments =
 
 const char *Txt_User_ID =
 #if   L==1	// ca
-	"ID (DNI/c&egrave;dula/passaport) de l&apos;usuari";
+	"ID (DNI/c&egrave;dula/passaport) de l'usuari";
 #elif L==2	// de
 	"Ausweis-Nr.";
 #elif L==3	// en
@@ -55595,11 +55553,11 @@ const char *Txt_User_ID =
 #elif L==4	// es
 	"ID (DNI/c&eacute;dula) del usuario";
 #elif L==5	// fr
-	"Num&eacute;ro d&apos;identit&eacute; d&apos;utilisateur";
+	"Num&eacute;ro d'identit&eacute; d'utilisateur";
 #elif L==6	// gn
 	"ID (DNI/c&eacute;dula) del usuario";		// Okoteve traducción
 #elif L==7	// it
-	"Numero carta d&apos;identit&agrave; utente";
+	"Numero carta d'identit&agrave; utente";
 #elif L==8	// pl
 	"User ID";					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -55646,15 +55604,15 @@ const char *Txt_User_not_found_or_you_do_not_have_permission_ =
 	" para realizar esta acci&oacute;n.";
 #elif L==5	// fr
 	"Utilisateur introuvable"
-	" ou vous n&apos;avez pas l&apos;autorisation"
-	" d&apos;effectuer cette action.";
+	" ou vous n'avez pas l'autorisation"
+	" d'effectuer cette action.";
 #elif L==6	// gn
 	"Usuario/a no encontrado/a"
 	" o bien usted no tiene permiso"
 	" para realizar esta acci&oacute;n.";	// Okoteve traducción
 #elif L==7	// it
 	"IUtente non trovato"
-	" o non si dispone dell&apos;autorizzazione"
+	" o non si dispone dell'autorizzazione"
 	" per eseguire questa azione.";
 #elif L==8	// pl
 	"User not found"
@@ -55966,7 +55924,7 @@ const char *Txt_X_users_who_have_accepted_and_who_have_email =	// Warning: it is
 	" y que tienen correo";
 #elif L==5	// fr
 	"%u utilisateurs qui ont accept&eacute;"
-	" et qui ont l&apos;email";
+	" et qui ont l'email";
 #elif L==6	// gn
 	"%u usuarios que han aceptado la inscripci&oacute;n"
 	" y que tienen correo";		// Okoteve traducción
@@ -55991,7 +55949,7 @@ const char *Txt_X_users_who_have_email =	// Warning: it is very important to inc
 #elif L==4	// es
 	"%u usuarios con correo";
 #elif L==5	// fr
-	"%u utilisateurs qui ont l&apos;email";
+	"%u utilisateurs qui ont l'email";
 #elif L==6	// gn
 	"%u usuarios con correo";			// Okoteve traducción
 #elif L==7	// it
@@ -56606,7 +56564,7 @@ const char *Txt_Visible_by_BR_the_student =
 #elif L==4	// es
 	"&iquest;Visible por<br />el estudiante?";
 #elif L==5	// fr
-	"Visible par<br />l&apos;&eacute;tudiant/e?";
+	"Visible par<br />l'&eacute;tudiant/e?";
 #elif L==6	// gn
 	"&iquest;Visible por<br />el estudiante?";	// Okoteve traducción
 #elif L==7	// it
@@ -56896,7 +56854,7 @@ const char *Txt_Where_s_USER =
 #elif L==2	// de
 	"Wo ist %s?";
 #elif L==3	// en
-	"Where&apos;s %s";
+	"Where's %s";
 #elif L==4	// es
 	"&iquest;D&oacute;nde est&aacute; %s?";
 #elif L==5	// fr
@@ -56964,7 +56922,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 #elif L==2	// de
 	"Benutzer Ich folge"
 #elif L==3	// en
-	"Users I&apos;m following"
+	"Users I'm following"
 #elif L==4	// es
 	"Usuarios que sigo"
 #elif L==5	// fr
@@ -57108,7 +57066,7 @@ const char *Txt_Wording =	// Statement of a question
 
 const char *Txt_Works_area =
 #if   L==1	// ca
-	"Zona d&apos;altres treballs";
+	"Zona d'altres treballs";
 #elif L==2	// de
 	"Hausarbeiten-Bereich";
 #elif L==3	// en
@@ -57213,7 +57171,7 @@ const char *Txt_wrong_ANSWERS =
 
 const char *Txt_Wrong_file_type =
 #if   L==1	// ca
-	"Tipus d&apos;arxiu incorrecte.";
+	"Tipus d'arxiu incorrecte.";
 #elif L==2	// de
 	"Falsche Dateityp.";
 #elif L==3	// en
@@ -57780,7 +57738,7 @@ const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 #elif L==4	// es
 	"No est&aacute; inscrito/a en ninguna asignatura."
 #elif L==5	// fr
-	"Vous n&apos;&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
+	"Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
 #elif L==6	// gn
 	"No est&aacute; inscrito/a en ninguna asignatura."	// Okoteve traducción
 #elif L==7	// it
@@ -57801,7 +57759,7 @@ const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 #elif L==4	// es
 	"No est&aacute; inscrita en ninguna asignatura."
 #elif L==5	// fr
-	"Vous n&apos;&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
+	"Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
 #elif L==6	// gn
 	"No est&aacute; inscrita en ninguna asignatura."	// Okoteve traducción
 #elif L==7	// it
@@ -57822,7 +57780,7 @@ const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 #elif L==4	// es
 	"No est&aacute; inscrito en ninguna asignatura."
 #elif L==5	// fr
-	"Vous n&apos;&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
+	"Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
 #elif L==6	// gn
 	"No est&aacute; inscrito en ninguna asignatura."	// Okoteve traducción
 #elif L==7	// it
@@ -57843,7 +57801,7 @@ const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 #elif L==4	// es
 	"No est&aacute; inscrito/a en ninguna asignatura."
 #elif L==5	// fr
-	"Vous n&apos;&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
+	"Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
 #elif L==6	// gn
 	"No est&aacute; inscrito/a en ninguna asignatura."	// Okoteve traducción
 #elif L==7	// it
@@ -57876,7 +57834,7 @@ const char *Txt_You_can_create_a_new_folder_inside_the_folder_X =	// Warning: it
 	" dentro de la carpeta <strong>%s</strong>:";	// Okoteve traducción
 #elif L==7	// it
 	"&Egrave; possibile creare una nuova cartella"
-	" all&apos;interno della cartella <strong>%s</strong>:";
+	" all'interno della cartella <strong>%s</strong>:";
 #elif L==8	// pl
 	"Mo&zdot;esz utworzy&cacute; nowy folder"
 	" wewn&aogon;trz folderu <strong>%s</strong>:";
@@ -58076,7 +58034,7 @@ const char *Txt_You_can_not_leave_the_image_empty =
 #elif L==6	// gn
 	"No puede dejar la imagen vac&iacute;a.";	// Okoteve traducción
 #elif L==7	// it
-	"Non puoi lasciare l&apos;image vuota.";
+	"Non puoi lasciare l'image vuota.";
 #elif L==8	// pl
 	"You can not leave the image empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -58245,16 +58203,16 @@ const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very
 	" si no env&iacute;a su fotograf&iacute;a.";		// Necessita traduccio
 #elif L==2	// de
 	"You can only perform %u further actions"
-	" if you don&apos;t send your photo.";			// Need Übersetzung
+	" if you don't send your photo.";			// Need Übersetzung
 #elif L==3	// en
 	"You can only perform %u further actions"
-	" if you don&apos;t send your photo.";
+	" if you don't send your photo.";
 #elif L==4	// es
 	"Solo podr&aacute; realizar %u acciones m&aacute;s"
 	" si no env&iacute;a su fotograf&iacute;a.";
 #elif L==5	// fr
 	"You can only perform %u further actions"
-	" if you don&apos;t send your photo.";			// Besoin de traduction
+	" if you don't send your photo.";			// Besoin de traduction
 #elif L==6	// gn
 	"Solo podr&aacute; realizar %u acciones m&aacute;s"
 	" si no env&iacute;a su fotograf&iacute;a.";		// Okoteve traducción
@@ -58263,7 +58221,7 @@ const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very
 	" se non hai inviato la tua foto.";
 #elif L==8	// pl
 	"You can only perform %u further actions"
-	" if you don&apos;t send your photo.";			// Potrzebujesz tlumaczenie
+	" if you don't send your photo.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Voc&ecirc; s&oacute; pode executar %u a&ccedil;&otilde;es adicionais"
 	" se n&atilde;o enviar sua foto.";
@@ -58289,7 +58247,7 @@ const char *Txt_You_can_only_receive_email_notifications_if_ =	// Warning: it is
 #elif L==5	// fr
 	"Vous ne pouvez recevoir des notifications par email"
 	" si votre adresse email est confirm&eacute; (%s &gt; %s)"
-	" et se termine dans l&apos;un des domaines autoris&eacute;s (%s &gt; %s &gt; %s).";
+	" et se termine dans l'un des domaines autoris&eacute;s (%s &gt; %s &gt; %s).";
 #elif L==6	// gn
 	"Solo podr&aacute; recibir notificaciones por correo"
 	" si su direcci&oacute;n de correo est&aacute; confirmada (%s &gt; %s)"
@@ -58380,7 +58338,7 @@ const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrolmen
 	" y solicitar su inscripci&oacute;n en ellas.";		// Okoteve traducción"
 #elif L==7	// it
 	"&Egrave; possibile cercare corsi, selezionarli"
-	" e richiedere l&apos;iscrizione in loro.";
+	" e richiedere l'iscrizione in loro.";
 #elif L==8	// pl
 	"Mo&zdot;esz szuka&cacute; kurs&oacute;w, zaznacz je"
 	" i poprosi&cacute; o rejestracj&eogon; w nich.";
@@ -58409,7 +58367,7 @@ const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_back
 	"Puede enviar un archivo con una imagen en formato <em>PNG</em>,"
 	" fondo transparente y tama&ntilde;o %u&times;%u p&iacute;xeles.";	// Okoteve traducción
 #elif L==7	// it
-	"Puoi inviare un file con un&apos;immagine in formato <em>PNG</em>,"
+	"Puoi inviare un file con un'immagine in formato <em>PNG</em>,"
 	" sfondo trasparente e di dimensione %u&times;%u pixel.";
 #elif L==8	// pl
 	"You can send a file with an image in <em>PNG</em> format,"
@@ -58438,15 +58396,15 @@ const char *Txt_You_can_send_a_file_with_an_image_in_JPEG_format_ =
 	" y con el fondo blanco o muy claro.";
 #elif L==5	// fr
 	"Vous pouvez envoyer un fichier avec une image au format JPEG.<br />"
-	"L&apos;image doit contenir au moins un visage en position verticale et frontale,"
+	"L'image doit contenir au moins un visage en position verticale et frontale,"
 	" et le fond doit &ecirc;tre blanc ou tr&egrave;s clair.";
 #elif L==6	// gn
 	"Puede enviar un archivo con una imagen en formato <em>JPEG</em>.<br />"
 	"La imagen debe contener al menos un rostro en posici&oacute;n vertical y frontal,"
 	" y con el fondo blanco o muy claro.";				// Okoteve traducción
 #elif L==7	// it
-	"&Egrave; possibile inviare un file in un&apos;immagine con formato <em>JPEG</em>.<br />"
-	"L&apos;immagine deve contenere almeno una faccia in posizione verticale e frontale,"
+	"&Egrave; possibile inviare un file in un'immagine con formato <em>JPEG</em>.<br />"
+	"L'immagine deve contenere almeno una faccia in posizione verticale e frontale,"
 	" e lo sfondo deve essere bianco o molto chiaro.";
 #elif L==8	// pl
 	"Mo&zdot;esz wys&lstrok;a&cacute; plik obrazu w formacie <em>JPEG</em>.<br />"
@@ -58464,7 +58422,7 @@ const char *Txt_You_dont_follow_any_user =
 #elif L==2	// de
 	"Sie haben noch keine Benutzer folgen.";
 #elif L==3	// en
-	"You don&apos;t follow any user.";
+	"You don't follow any user.";
 #elif L==4	// es
 	"Usted no sigue a ning&uacute;n usuario.";
 #elif L==5	// fr
@@ -58481,19 +58439,19 @@ const char *Txt_You_dont_follow_any_user =
 
 const char *Txt_You_dont_have_access_to_the_exam =
 #if   L==1	// ca
-	"No t&eacute; acc&eacute;s a l&apos;examen.";
+	"No t&eacute; acc&eacute;s a l'examen.";
 #elif L==2	// de
 	"Sie haben keinen Zugang zur Pr&uuml;fung.";
 #elif L==3	// en
-	"You don&apos;t have access to the exam.";
+	"You don't have access to the exam.";
 #elif L==4	// es
 	"No tiene acceso al examen.";
 #elif L==5	// fr
-	"Vous n&apos;avez pas acc&egrave;s à l&apos;examen.";
+	"Vous n'avez pas acc&egrave;s à l'examen.";
 #elif L==6	// gn
 	"No tiene acceso al examen.";	// Okoteve traducción
 #elif L==7	// it
-	"Non hai accesso all&apos;esame.";
+	"Non hai accesso all'esame.";
 #elif L==8	// pl
 	"Nie masz dost&eogon;pu do egzaminu.";
 #elif L==9	// pt
@@ -58508,22 +58466,22 @@ const char *Txt_You_dont_have_permission_to_perform_this_action =
 	"Sie haben keine Berechtigung,"
 	" um diese Handlung durchzuf&uuml;hren.";
 #elif L==3	// en
-	"You don&apos;t have permission"
+	"You don't have permission"
 	" to perform this action.";
 #elif L==4	// es
 	"Usted no tiene permiso"
 	" para realizar esta acci&oacute;n.";
 #elif L==5	// fr
-	"Vous n&apos;avez pas la permission"
-	" d&apos;effectuer cette action.";
+	"Vous n'avez pas la permission"
+	" d'effectuer cette action.";
 #elif L==6	// gn
 	"Usted no tiene permiso"
 	" para realizar esta acci&oacute;n.";		// Okoteve traducción
 #elif L==7	// it
-	"Non si dispone dell&apos;autorizzazione"
+	"Non si dispone dell'autorizzazione"
 	" per eseguire questa azione.";
 #elif L==8	// pl
-	"You don&apos;t have permission"
+	"You don't have permission"
 	" to perform this action.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o tem permiss&atilde;o"
@@ -58663,7 +58621,7 @@ const char *Txt_You_have_no_notifications =
 #elif L==4	// es
 	"No tiene notificaciones.";
 #elif L==5	// fr
-	"Vous n&apos;avez aucune notification.";
+	"Vous n'avez aucune notification.";
 #elif L==6	// gn
 	"No tiene notificaciones.";	// Okoteve traducción
 #elif L==7	// it
@@ -58684,7 +58642,7 @@ const char *Txt_You_have_no_unread_notifications =
 #elif L==4	// es
 	"No tiene notificaciones sin leer.";
 #elif L==5	// fr
-	"Vous n&apos;avez aucune notification non lue.";
+	"Vous n'avez aucune notification non lue.";
 #elif L==6	// gn
 	"No tiene notificaciones sin leer.";	// Okoteve traducción
 #elif L==7	// it
@@ -58718,7 +58676,7 @@ const char *Txt_You_have_not_banned_any_sender =
 
 const char *Txt_You_have_not_confirmed_the_action =
 #if   L==1	// ca
-	"No ha confirmat l&apos;acci&oacute;.";
+	"No ha confirmat l'acci&oacute;.";
 #elif L==2	// de
 	"Sie haben nicht die Aktion best&auml;tigt.";
 #elif L==3	// en
@@ -58726,7 +58684,7 @@ const char *Txt_You_have_not_confirmed_the_action =
 #elif L==4	// es
 	"No ha confirmado la acci&oacute;n.";
 #elif L==5	// fr
-	"Vous n&apos;avez pas confirm&eacute; l&apos;action.";
+	"Vous n'avez pas confirm&eacute; l'action.";
 #elif L==6	// gn
 	"No ha confirmado la acci&oacute;n.";		// Okoteve traducción
 #elif L==7	// it
@@ -58747,7 +58705,7 @@ const char *Txt_You_have_not_entered_your_password_correctly =
 #elif L==4	// es
 	"No ha introducido correctamente su contrase&ntilde;a.";
 #elif L==5	// fr
-	"Vous n&apos;avez pas entr&eacute; votre mot de passe correctement.";
+	"Vous n'avez pas entr&eacute; votre mot de passe correctement.";
 #elif L==6	// gn
 	"No ha introducido correctamente su contrase&ntilde;a.";	// Okoteve traducción
 #elif L==7	// it
@@ -58907,7 +58865,7 @@ const char *Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_ans
 
 const char *Txt_You_must_enter_your_nick_email_or_ID =
 #if   L==1	// ca
-	"Ha d&apos;escriure el seu @sobrenom, correu o ID (DNI/c&egrave;dula).";
+	"Ha d'escriure el seu @sobrenom, correu o ID (DNI/c&egrave;dula).";
 #elif L==2	// de
 	"Bitte geben Sie Ihre @Benutzername, Email oder Ausweis-Nr.";
 #elif L==3	// en
@@ -58915,11 +58873,11 @@ const char *Txt_You_must_enter_your_nick_email_or_ID =
 #elif L==4	// es
 	"Debe escribir su @apodo, correo o ID (DNI/c&eacute;dula).";
 #elif L==5	// fr
-	"Vous devez entrer votre @surnom, courrier ou num&eacute;ro d&apos;identit&eacute;.";
+	"Vous devez entrer votre @surnom, courrier ou num&eacute;ro d'identit&eacute;.";
 #elif L==6	// gn
 	"Debe escribir su @apodo, correo o ID (DNI/c&eacute;dula).";	// Okoteve traducción
 #elif L==7	// it
-	"Devi inserire il tuo @nome-utente, email o numero carta d&apos;identit&agrave;.";
+	"Devi inserire il tuo @nome-utente, email o numero carta d'identit&agrave;.";
 #elif L==8	// pl
 	"Musisz napisa&cacute; @pseudonim, email lub ID.";
 #elif L==9	// pt
@@ -59111,7 +59069,7 @@ const char *Txt_You_must_specify_the_image_of_the_new_banner =
 	"Debe especificar la imagen"
 	" del nuevo banner.";		// Okoteve traducción
 #elif L==7	// it
-	"Devi specificare l&apos;image"
+	"Devi specificare l'image"
 	" del nuovo banner.";
 #elif L==8	// pl
 	"You must specify the image"
@@ -59142,7 +59100,7 @@ const char *Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP
 	" el URL y la IP del nuevo complemento.";		// Okoteve traducción
 #elif L==7	// it
 	"Devi specificare il logo, il codice di applicazione,"
-	" l&apos;URL e l&apos;indirizzo IP del nuovo plugin.";
+	" l'URL e l'indirizzo IP del nuovo plugin.";
 #elif L==8	// pl
 	"You must specify the logo, the application key,"
 	" the URL and the IP address of the new plugin.";	// Potrzebujesz tlumaczenie
@@ -59351,7 +59309,7 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_ban
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_building =
 #if   L==1	// ca
-	"Heu d&apos;especificar el nom curt i el nom complet"
+	"Heu d'especificar el nom curt i el nom complet"
 	" de el nou edifici.";
 #elif L==2	// de
 	"Sie m&uml;ssen den Kurznamen und den vollst&auml;ndigen Namen"
@@ -59591,7 +59549,7 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_ema
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_place =
 #if   L==1	// ca
-	"Heu d&apos;especificar el nom curt i el nom complet"
+	"Heu d'especificar el nom curt i el nom complet"
 	" del nou lloc.";
 #elif L==2	// de
 	"Sie m&uml;ssen den Kurznamen und den vollst&auml;ndigen Namen"
@@ -59621,7 +59579,7 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_pla
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_room =
 #if   L==1	// ca
-	"Heu d&apos;especificar el nom curt i el nom complet"
+	"Heu d'especificar el nom curt i el nom complet"
 	" de la nova sala.";
 #elif L==2	// de
 	"Sie m&uml;ssen den Kurznamen und den vollst&auml;ndigen Namen"
@@ -59651,7 +59609,7 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_roo
 
 const char *Txt_You_must_specify_the_title_of_the_assignment =
 #if   L==1	// ca
-	"Cal especificar el t&iacute;tol de l&apos;activitat.";
+	"Cal especificar el t&iacute;tol de l'activitat.";
 #elif L==2	// de
 	"Die Aufgabe muss angegeben werden.";
 #elif L==3	// en
@@ -59659,11 +59617,11 @@ const char *Txt_You_must_specify_the_title_of_the_assignment =
 #elif L==4	// es
 	"Debe especificar el t&iacute;tulo de la actividad.";
 #elif L==5	// fr
-	"Vous devez sp&eacute;cifier le titre de l&apos;activit&eacute;.";
+	"Vous devez sp&eacute;cifier le titre de l'activit&eacute;.";
 #elif L==6	// gn
 	"Debe especificar el t&iacute;tulo de la actividad.";	// Okoteve traducción
 #elif L==7	// it
-	"&Egrave; necessario specificare il titolo dell&apos;attivit&agrave;.";
+	"&Egrave; necessario specificare il titolo dell'attivit&agrave;.";
 #elif L==8	// pl
 	"Musisz poda&cacute; tytu&lstrok; zadania.";
 #elif L==9	// pt
@@ -59672,7 +59630,7 @@ const char *Txt_You_must_specify_the_title_of_the_assignment =
 
 const char *Txt_You_must_specify_the_title_of_the_event =
 #if   L==1	// ca
-	"Cal especificar el t&iacute;tol de l&apos;esdeveniment.";
+	"Cal especificar el t&iacute;tol de l'esdeveniment.";
 #elif L==2	// de
 	"Der Ereignis muss angegeben werden.";
 #elif L==3	// en
@@ -59684,7 +59642,7 @@ const char *Txt_You_must_specify_the_title_of_the_event =
 #elif L==6	// gn
 	"Debe especificar el t&iacute;tulo del evento.";	// Okoteve traducción
 #elif L==7	// it
-	"&Egrave; necessario specificare il titolo dell&apos;evento.";
+	"&Egrave; necessario specificare il titolo dell'evento.";
 #elif L==8	// pl
 	"Musisz poda&cacute; tytu&lstrok; wydarzenia.";
 #elif L==9	// pt
@@ -59693,7 +59651,7 @@ const char *Txt_You_must_specify_the_title_of_the_event =
 
 const char *Txt_You_must_specify_the_title_of_the_exam =
 #if   L==1	// ca
-	"Cal especificar el t&iacute;tol de l&apos;examen.";
+	"Cal especificar el t&iacute;tol de l'examen.";
 #elif L==2	// de
 	"Der Pr&uuml;fung muss angegeben werden.";
 #elif L==3	// en
@@ -59701,11 +59659,11 @@ const char *Txt_You_must_specify_the_title_of_the_exam =
 #elif L==4	// es
 	"Debe especificar el t&iacute;tulo del examen.";
 #elif L==5	// fr
-	"Vous devez sp&eacute;cifier le titre de l&apos;examen.";
+	"Vous devez sp&eacute;cifier le titre de l'examen.";
 #elif L==6	// gn
 	"Debe especificar el t&iacute;tulo del examen.";	// Okoteve traducción
 #elif L==7	// it
-	"&Egrave; necessario specificare il titolo dell&apos;esame.";
+	"&Egrave; necessario specificare il titolo dell'esame.";
 #elif L==8	// pl
 	"Musisz poda&cacute; tytu&lstrok; egzaminu.";
 #elif L==9	// pt
@@ -59764,7 +59722,7 @@ const char *Txt_You_must_specify_the_title_of_the_set_of_questions =
 #elif L==4	// es
 	"Debe especificar el t&iacute;tulo del conjunto de preguntas.";
 #elif L==5	// fr
-	"Vous devez sp&eacute;cifier le titre de l&apos;ensemble de questions.";
+	"Vous devez sp&eacute;cifier le titre de l'ensemble de questions.";
 #elif L==6	// gn
 	"Debe especificar el t&iacute;tulo del conjunto de preguntas.";	// Okoteve traducción
 #elif L==7	// it
@@ -59777,7 +59735,7 @@ const char *Txt_You_must_specify_the_title_of_the_set_of_questions =
 
 const char *Txt_You_must_specify_the_title_of_the_survey =
 #if   L==1	// ca
-	"Cal especificar el t&iacute;tol de l&apos;enquesta.";
+	"Cal especificar el t&iacute;tol de l'enquesta.";
 #elif L==2	// de
 	"Die Umfrage muss angegeben werden.";
 #elif L==3	// en
@@ -59810,7 +59768,7 @@ const char *Txt_You_must_specify_the_URL_of_the_new_banner =
 #elif L==6	// gn
 	"Debe especificar el URL del nuevo banner.";	// Okoteve traducción
 #elif L==7	// it
-	"Devi specificare l&apos;URL del nuovo banner.";
+	"Devi specificare l'URL del nuovo banner.";
 #elif L==8	// pl
 	"You must specify the URL of the new banner.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -59831,7 +59789,7 @@ const char *Txt_You_must_specify_the_URL_of_the_new_link =
 #elif L==6	// gn
 	"Debe especificar el URL del nuevo enlace.";	// Okoteve traducción
 #elif L==7	// it
-	"Devi specificare l&apos;URL del nuovo link.";
+	"Devi specificare l'URL del nuovo link.";
 #elif L==8	// pl
 	"You must specify the URL of the new link.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -59858,7 +59816,7 @@ const char *Txt_You_must_specify_the_web_address_of_the_new_centre =
 	"Debe especificar la direcci&oacute;n web"
 	" del nuevo centro.";				// Okoteve traducción
 #elif L==7	// it
-	"Devi specificare l&apos;indirizzo web"
+	"Devi specificare l'indirizzo web"
 	" del nuovo centro.";
 #elif L==8	// pl
 	"You must specify the web address"
@@ -59889,7 +59847,7 @@ const char *Txt_You_must_specify_the_web_address_of_the_new_degree =
 	"Debe especificar la direcci&oacute;n web"
 	" de la nueva titulaci&oacute;n.";		// Okoteve traducción
 #elif L==7	// it
-	"Devi specificare l&apos;indirizzo web"
+	"Devi specificare l'indirizzo web"
 	" della nuova laurea.";
 #elif L==8	// pl
 	"You must specify the web address"
@@ -59919,7 +59877,7 @@ const char *Txt_You_must_specify_the_web_address_of_the_new_department =
 	"Debe especificar la direcci&oacute;n web"
 	" del nuevo departamento.";			// Okoteve traducción
 #elif L==7	// it
-	"Devi specificare l&apos;indirizzo web"
+	"Devi specificare l'indirizzo web"
 	" del nuovo dipartimento.";
 #elif L==8	// pl
 	"You must specify the web address"
@@ -59949,7 +59907,7 @@ const char *Txt_You_must_specify_the_web_address_of_the_new_institution =
 	"Debe especificar la direcci&oacute;n web"
 	" de la nueva instituci&oacute;n.";		// Okoteve traducción
 #elif L==7	// it
-	"Devi specificare l&apos;indirizzo web"
+	"Devi specificare l'indirizzo web"
 	" della nuova istituzione.";
 #elif L==8	// pl
 	"You must specify the web address"
@@ -59973,7 +59931,7 @@ const char *Txt_You_must_type_at_least_one_tag_for_the_question =
 #elif L==6	// gn
 	"Debe escribir al menos un descriptor para la pregunta.";	// Okoteve traducción
 #elif L==7	// it
-	"Devi scrivere almeno un&apos;etichetta per la domanda.";
+	"Devi scrivere almeno un'etichetta per la domanda.";
 #elif L==8	// pl
 	"You must type at least one tag for the question.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -60036,7 +59994,7 @@ const char *Txt_You_must_type_the_stem_of_the_question =
 #elif L==6	// gn
 	"Debe escribir el enunciado de la pregunta.";	// Okoteve traducción
 #elif L==7	// it
-	"Devi scrivere l&apos;enunciato della domanda.";
+	"Devi scrivere l'enunciato della domanda.";
 #elif L==8	// pl
 	"You must type the stem of the question.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -60176,13 +60134,13 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 #elif L==2	// de
 	"Your password must be at least %u characters"
 	" and can not contain spaces."
-	" It&apos;s very important not to use only"
+	" It's very important not to use only"
 	" numeric digits, or a name or surname,"
 	" or a known word.";				// Need Übersetzung
 #elif L==3	// en
 	"Your password must be at least %u characters"
 	" and can not contain spaces."
-	" It&apos;s very important not to use only"
+	" It's very important not to use only"
 	" numeric digits, or a name or surname,"
 	" or a known word.";
 #elif L==4	// es
@@ -60194,7 +60152,7 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 #elif L==5	// fr
 	"Your password must be at least %u characters"
 	" and can not contain spaces."
-	" It&apos;s very important not to use only"
+	" It's very important not to use only"
 	" numeric digits, or a name or surname,"
 	" or a known word.";				// Besoin de traduction
 #elif L==6	// gn
@@ -60206,13 +60164,13 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 #elif L==7	// it
 	"La tua password deve essere almeno di %u caratteri"
 	" e non pu&ograve; contenere spazi."
-	" E&apos; molto importante non usare solo"
+	" E' molto importante non usare solo"
 	" tasti numerici, o un nome o cognome,"
 	" o una parola conosciuta.";
 #elif L==8	// pl
 	"Your password must be at least %u characters"
 	" and can not contain spaces."
-	" It&apos;s very important not to use only"
+	" It's very important not to use only"
 	" numeric digits, or a name or surname,"
 	" or a known word.";				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -60288,10 +60246,10 @@ const char *Txt_Your_record_card_in_this_course_has_been_updated =
 
 const char *Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"La seva petici&oacute; d&apos;inscripci&oacute; com <strong>%s</strong>"
-	" en l&apos;assignatura <strong>%s</strong> ha estat realitzada."
+	"La seva petici&oacute; d'inscripci&oacute; com <strong>%s</strong>"
+	" en l'assignatura <strong>%s</strong> ha estat realitzada."
 	" La petici&oacute; ser&agrave; revisada per un professor o un administrador."
-	" Vost&egrave; rebr&agrave; una notificaci&oacute; quan s&apos;accepti la seva inscripci&oacute;.";
+	" Vost&egrave; rebr&agrave; una notificaci&oacute; quan s'accepti la seva inscripci&oacute;.";
 #elif L==2	// de
 	"Sein Antrag auf Registrierung als <strong>%s</strong>"
 	" in Kurs <strong>%s</strong> gemacht wurde."
@@ -60308,10 +60266,10 @@ const char *Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepte
 	" La petici&oacute;n ser&aacute; revisada por un/a profesor/a o un/a administrador/a."
 	" Usted recibir&aacute; una notificaci&oacute;n cuando se acepte su inscripci&oacute;n.";
 #elif L==5	// fr
-	"Votre demande d&apos;enregistrement en tant que <strong>%s</strong>"
+	"Votre demande d'enregistrement en tant que <strong>%s</strong>"
 	" dans la mati&egrave;re <strong>%s</strong> a &eacute;t&eacute; fait."
 	" Votre demande sera examin&eacute;e par un enseignant ou un administrateur."
-	" Vous serez avis&eacute; lorsque l&apos;enregistrement est accept&eacute;e.";
+	" Vous serez avis&eacute; lorsque l'enregistrement est accept&eacute;e.";
 #elif L==6	// gn
 	"Su petici&oacute;n de inscripci&oacute;n como <strong>%s</strong>"
 	" en la asignatura <strong>%s</strong> ha sido realizada."

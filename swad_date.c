@@ -1654,7 +1654,6 @@ void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
 				   bool WriteToday,bool WriteDateOnSameDay,
 				   bool WriteWeekDay,unsigned WriteHMS)
   {
-   extern const char *Txt_Today;
    static const char *SeparatorStr[] =
      {
       [Dat_SEPARATOR_NONE ] = "",
@@ -1663,14 +1662,15 @@ void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
      };
 
    HTM_SCRIPT_Begin (NULL,NULL);
-   HTM_TxtF ("writeLocalDateHMSFromUTC('%s',%ld,%u,'%s','%s',%s,%s,0x%x);",
+   HTM_TxtF ("writeLocalDateHMSFromUTC('%s',%ld,%u,'%s',%u,%s,%s,%s,0x%x);",
 	     Id,(long) TimeUTC,(unsigned) DateFormat,SeparatorStr[Separator],
-	     WriteToday ? Txt_Today :
-		          "",
+	     (unsigned) Gbl.Prefs.Language,
+	     WriteToday         ? "true" :
+		                  "false",
 	     WriteDateOnSameDay ? "true" :
 		                  "false",
-	     WriteWeekDay ? "true" :
-		            "false",
+	     WriteWeekDay       ? "true" :
+		                  "false",
 	     WriteHMS);
    HTM_SCRIPT_End ();
   }

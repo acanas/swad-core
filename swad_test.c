@@ -592,7 +592,6 @@ static bool Tst_CheckIfNextTstAllowed (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_You_can_not_take_a_new_test_until;
-   extern const char *Txt_Today;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long NumSecondsFromNowToNextAccTst = -1L;	// Access allowed when this number <= 0
@@ -634,11 +633,12 @@ static bool Tst_CheckIfNextTstAllowed (void)
       Ale_ShowAlert (Ale_WARNING,"%s:<br /><span id=\"date_next_test\"></span>."
 		     "<script type=\"text/javascript\">"
 		     "writeLocalDateHMSFromUTC('date_next_test',%ld,"
-		     "%u,',&nbsp;','%s',true,true,0x7);"
+		     "%u,',&nbsp;',%u,true,true,true,0x7);"
 		     "</script>",
 		     Txt_You_can_not_take_a_new_test_until,
 		     (long) TimeNextTestUTC,
-		     (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+		     (unsigned) Gbl.Prefs.DateFormat,
+		     (unsigned) Gbl.Prefs.Language);
 
       return false;
      }

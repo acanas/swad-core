@@ -556,9 +556,9 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.253.1 (2020-06-22)"
+#define Log_PLATFORM_VERSION	"SWAD 19.254 (2020-06-22)"
 #define CSS_FILE		"swad19.253.css"
-#define JS_FILE			"swad19.246.1.js"
+#define JS_FILE			"swad19.254.js"
 /*
 TODO:  Encarnación Hidalgo Tenorio: Antonio, ¿podría @swad_ugr mandar una notificación cuando el alumnado ha mandado su tarea?
        Se trataría de añadir un par de líneas "Nuevos archivos en actividades", "Nuevos archivos en otros trabajos".
@@ -569,8 +569,7 @@ TODO: Que al generar un examen sólo se cojan preguntas válidas. Y si ya está gen
 TODO: Refactorizar MchRes_CheckIfICanSeeMatchResult y MchRes_CheckIfICanViewScore uniéndolas en una función como ExaRes_CheckIfICanSeePrintResult
       Y dentro de las funciones TstPrn_ShowUsrPrints y TstPrn_ShowOnePrint crear y llamar a una función común similar a ExaRes_CheckIfICanSeePrintResult
 
-	Version 19.253.1: Jun 22, 2020  Fixed bug in dates reported by Laura García Rejón.
-				        Use &apos; in HTML translations. (303662 lines)
+	Version 19.254:   Jun 22, 2020  Fixed bug in Javascript related to quotes. Reported by Laura García Rejón. (303653 lines)
 	Version 19.253:   Jun 22, 2020  More details in listing of exams. (303643 lines)
 	Version 19.252.1: Jun 19, 2020  Changes in listing of exams and matches results. (303245 lines)
 	Version 19.252:   Jun 19, 2020  Fixed bug in exam results, reported by Francisco Ligero Ligero. (303243 lines)
