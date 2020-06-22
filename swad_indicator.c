@@ -707,15 +707,15 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
    if (PutForm)
       HTM_TD_Empty (1);
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Txt (Txt_Total);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Unsigned (NumCrss);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_TxtF ("(%.1f%%)",100.0);
    HTM_TD_End ();
 

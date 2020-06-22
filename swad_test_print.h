@@ -40,13 +40,23 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
+typedef enum
+  {
+   TstPrn_ANSWER_IS_CORRECT,
+   TstPrn_ANSWER_IS_WRONG_NEGATIVE,
+   TstPrn_ANSWER_IS_WRONG_ZERO,
+   TstPrn_ANSWER_IS_WRONG_POSITIVE,
+   TstPrn_ANSWER_IS_BLANK,
+  } TstPrn_Correct_t;
+
 struct TstPrn_PrintedQuestion
   {
    long QstCod;		// Question code
    long SetCod;		// Only for exams
    char StrIndexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
    char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
-   double Score;		// Question score
+   TstPrn_Correct_t AnswerIsCorrect;	// Is question wrong, medium or correct?
+   double Score;			// Question score
   };
 
 struct TstPrn_Print

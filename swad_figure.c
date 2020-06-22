@@ -431,7 +431,7 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
 	      (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Deg.DegCod :
 	      (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Crs.CrsCod :
 					      -1L)))));
-   char *Class = (Role == Rol_UNK) ? "DAT_N_LINE_TOP RB" :
+   char *Class = (Role == Rol_UNK) ? "DAT_N LINE_TOP RB" :
 	                             "DAT RB";
    unsigned Roles = (Role == Rol_UNK) ? ((1 << Rol_STD) |
 	                                 (1 << Rol_NET) |
@@ -959,7 +959,7 @@ static void Fig_GetAndShowHierarchyTotal (void)
 
    /***** Write total number of elements *****/
    Fig_ShowHierarchyRow ("",Txt_Total,
-			 "DAT_N_LINE_TOP",
+			 "DAT_N LINE_TOP",
                          (int) NumCtysTotal,
                          (int) NumInssTotal,
                          (int) NumCtrsTotal,
@@ -2577,7 +2577,7 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
    char StrNumGrps[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumUsrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   char *Class = (FileZone == Brw_UNKNOWN) ? "DAT_N_LINE_TOP" :
+   char *Class = (FileZone == Brw_UNKNOWN) ? "DAT_N LINE_TOP" :
 	                                     "DAT";
 
    Fil_WriteFileSizeFull ((double) SizeOfFileZones->Size,FileSizeStr);
@@ -2650,7 +2650,7 @@ static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
    char StrNumFoldersPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumFilesPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizePerCrsStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   char *Class = (FileZone == Brw_UNKNOWN) ? "DAT_N_LINE_TOP" :
+   char *Class = (FileZone == Brw_UNKNOWN) ? "DAT_N LINE_TOP" :
 	                                     "DAT";
 
    if (SizeOfFileZones->NumCrss == -1)	// Not applicable
@@ -2708,7 +2708,7 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
    char StrNumFoldersPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumFilesPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizePerUsrStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   char *Class = (FileZone == Brw_UNKNOWN) ? "DAT_N_LINE_TOP" :
+   char *Class = (FileZone == Brw_UNKNOWN) ? "DAT_N LINE_TOP" :
 	                                     "DAT";
 
    if (SizeOfFileZones->NumUsrs == -1)	// Not applicable
@@ -3138,7 +3138,7 @@ static void Fig_GetAndShowTestsStats (void)
    extern const char *Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded;
    extern const char *Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course;
    extern const char *Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded;
-   extern const char *Txt_Average_BR_score_BR_per_question_BR_less_than_or_equal_to_1;
+   extern const char *Txt_Average_BR_score_BR_per_question;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    extern const char *Txt_Total;
    Tst_AnswerType_t AnsType;
@@ -3160,7 +3160,7 @@ static void Fig_GetAndShowTestsStats (void)
    HTM_TH (1,1,"RM",Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded);
    HTM_TH (1,1,"RM",Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course);
    HTM_TH (1,1,"RM",Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded);
-   HTM_TH (1,1,"RM",Txt_Average_BR_score_BR_per_question_BR_less_than_or_equal_to_1);
+   HTM_TH (1,1,"RM",Txt_Average_BR_score_BR_per_question);
 
    HTM_TR_End ();
 
@@ -3223,15 +3223,15 @@ static void Fig_GetAndShowTestsStats (void)
    /***** Write number of assignments *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
    HTM_Txt (Txt_Total);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Unsigned (Stats.NumCoursesWithQuestions);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_TxtF ("%u (%.1f%%)",
              Stats.NumCoursesWithPluggableQuestions,
              Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
@@ -3239,27 +3239,27 @@ static void Fig_GetAndShowTestsStats (void)
         	                             0.0);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Unsigned (Stats.NumQsts);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Double2Decimals (Stats.AvgQstsPerCourse);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_UnsignedLong (Stats.NumHits);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Double2Decimals (Stats.AvgHitsPerCourse);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Double2Decimals (Stats.AvgHitsPerQuestion);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Double2Decimals (Stats.AvgScorePerQuestion);
    HTM_TD_End ();
 
@@ -3661,25 +3661,25 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    /* Write totals */
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
    HTM_Txt (Txt_Total);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_UnsignedLong (NumNotes);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Unsigned (NumUsrs);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
 	                          (double) NumUsrsTotal :
 			          0.0);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
 		        0.0);
    HTM_TD_End ();
@@ -4288,38 +4288,38 @@ static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
    /***** Write forum name and stats *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP\" style=\"width:20px;\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP\" style=\"width:20px;\"");
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
    HTM_Txt (Txt_Total);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Unsigned (FiguresForum->NumForums);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Unsigned (FiguresForum->NumThreads);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Unsigned (FiguresForum->NumPosts);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Unsigned (FiguresForum->NumUsrsToBeNotifiedByEMail);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Double2Decimals (NumThrsPerForum);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Double2Decimals (NumPostsPerThread);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Double2Decimals (NumPostsPerForum);
    HTM_TD_End ();
 
@@ -4530,25 +4530,25 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
    /***** Write total number of users who want to be notified by email on some event *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
    HTM_Txt (Txt_Total);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Unsigned (NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Percentage (NumUsrsTotal ? (double) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
         	                  (double) NumUsrsTotal :
         	                  0.0);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Unsigned (NumEventsTotal);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
    HTM_Unsigned (NumMailsTotal);
    HTM_TD_End ();
 

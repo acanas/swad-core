@@ -2400,11 +2400,24 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .DAT_N_BOLD		{color:black;   font-size:13pt; font-weight:bold;}
 
 /*********************** Line in top part of a table row *********************/
-.DAT_N_LINE_TOP
+.LINE_TOP
 	{
-	color:black;
-	font-size:13pt;
-	border-style:solid none none none;
+	border-top-style:solid;
+	border-width:1px;
+	}
+.LINE_BOTTOM
+	{
+	border-bottom-style:solid;
+	border-width:1px;
+	}
+.LINE_LEFT
+	{
+	border-left-style:solid;
+	border-width:1px;
+	}
+.LINE_RIGHT
+	{
+	border-right-style:solid;
 	border-width:1px;
 	}
 
@@ -4216,6 +4229,10 @@ a.PAG:hover, .PAG_CUR
 	}
 
 /************ Something that takes up space but which is invisible ***********/
+.LIGHT
+	{
+	opacity:0.2;
+	}
 .HIDDEN
 	{
 	visibility:hidden;

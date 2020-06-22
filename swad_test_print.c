@@ -187,7 +187,7 @@ static void TstPrn_ResetPrintExceptPrnCod (struct TstPrn_Print *Print)
   {
    Print->TimeUTC[Dat_START_TIME] =
    Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
-   Print->NumQsts                 =
+   Print->NumQsts                 = 0;
    Print->NumQstsNotBlank         = 0;
    Print->Sent                    = false;	// After creating an exam, it's not sent
    Print->AllowTeachers           = false;	// Teachers can't seen the exam if student don't allow it
@@ -1026,11 +1026,19 @@ void TstPrn_ComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
   {
    long AnswerUsr;
 
+   PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_BLANK;
    PrintedQuestion->Score = 0.0;	// Default score for blank or wrong answer
+
    if (PrintedQuestion->StrAnswers[0])	// If user has answered the answer
+     {
+      PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
       if (sscanf (PrintedQuestion->StrAnswers,"%ld",&AnswerUsr) == 1)
 	 if (AnswerUsr == Question->Answer.Integer)	// Correct answer
+	   {
+	    PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_CORRECT;
 	    PrintedQuestion->Score = 1.0;
+	   }
+     }
   }
 
 void TstPrn_ComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
@@ -1038,30 +1046,47 @@ void TstPrn_ComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
   {
    double AnswerUsr;
 
+   PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_BLANK;
    PrintedQuestion->Score = 0.0;	// Default score for blank or wrong answer
+
    if (PrintedQuestion->StrAnswers[0])	// If user has answered the answer
      {
+      PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
       AnswerUsr = Str_GetDoubleFromStr (PrintedQuestion->StrAnswers);
 
       // A bad formatted floating point answer will interpreted as 0.0
-      PrintedQuestion->Score = (AnswerUsr >= Question->Answer.FloatingPoint[0] &&
-			        AnswerUsr <= Question->Answer.FloatingPoint[1]) ? 1.0 : // If correct (inside the interval)
-										  0.0;  // If wrong (outside the interval)
+      if (AnswerUsr >= Question->Answer.FloatingPoint[0] &&
+	  AnswerUsr <= Question->Answer.FloatingPoint[1])
+	{
+	 PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_CORRECT;
+         PrintedQuestion->Score = 1.0; // Correct (inside the interval)
+	}
      }
   }
 
 void TstPrn_ComputeTF_AnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 			        const struct Tst_Question *Question)
   {
+   PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_BLANK;
+   PrintedQuestion->Score = 0.0;
+
    if (PrintedQuestion->StrAnswers[0])	// If user has selected T or F
-      PrintedQuestion->Score = (PrintedQuestion->StrAnswers[0] == Question->Answer.TF) ? 1.0 :	// Correct
-					                                                -1.0;	// Wrong
-   else
-      PrintedQuestion->Score = 0.0;
+     {
+      if (PrintedQuestion->StrAnswers[0] == Question->Answer.TF)
+	{
+ 	 PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_CORRECT;
+         PrintedQuestion->Score = 1.0;	// Correct
+	}
+      else
+	{
+ 	 PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
+         PrintedQuestion->Score = -1.0;	// Wrong
+	}
+     }
   }
 
 void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-	                           const struct Tst_Question *Question)
+	                        const struct Tst_Question *Question)
   {
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    bool UsrAnswers[Tst_MAX_OPTIONS_PER_QUESTION];
@@ -1070,6 +1095,9 @@ void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
    unsigned NumOptCorrInQst = 0;
    unsigned NumAnsGood = 0;
    unsigned NumAnsBad = 0;
+
+   PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_BLANK;
+   PrintedQuestion->Score = 0.0;
 
    /***** Get indexes for this question from string *****/
    TstPrn_GetIndexesFromStr (PrintedQuestion->StrIndexes,Indexes);
@@ -1095,39 +1123,68 @@ void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
         }
      }
 
-   /* The answer is blank? */
+   /* The answer is not blank? */
    if (NumAnsGood || NumAnsBad)	// If user has answered the answer
      {
       /* Compute the score */
       if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE)
         {
          if (NumOptTotInQst >= 2)	// It should be 2 options at least
-            PrintedQuestion->Score = (double) NumAnsGood -
-                                     (double) NumAnsBad / (double) (NumOptTotInQst - 1);
-         else				// 0 or 1 options (impossible)
-            PrintedQuestion->Score = (double) NumAnsGood;
+           {
+            if (NumAnsGood == 1 && NumAnsBad == 0)
+              {
+               PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_CORRECT;
+               PrintedQuestion->Score = 1;
+              }
+            else if (NumAnsGood == 0 && NumAnsBad == 1)
+              {
+               PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
+               PrintedQuestion->Score = -1.0 / (double) (NumOptTotInQst - 1);
+              }
+            // other case should be impossible
+           }
+         // other case should be impossible
         }
       else	// AnswerType == Tst_ANS_MULTIPLE_CHOICE
         {
          if (NumOptCorrInQst)	// There are correct options in the question
            {
-            if (NumOptCorrInQst < NumOptTotInQst)	// If there are correct options and wrong options (typical case)
-               PrintedQuestion->Score = (double) NumAnsGood / (double) NumOptCorrInQst -
-                                        (double) NumAnsBad  / (double) (NumOptTotInQst - NumOptCorrInQst);
-            else					// If all options are correct (extrange case)
-               PrintedQuestion->Score = (double) NumAnsGood / (double) NumOptCorrInQst;
+            if (NumAnsGood == NumOptCorrInQst && NumAnsBad == 0)
+              {
+	       PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_CORRECT;
+	       PrintedQuestion->Score = 1.0;
+              }
+            else
+              {
+	       if (NumOptCorrInQst < NumOptTotInQst)	// If there are correct options and wrong options (typical case)
+		 {
+		  PrintedQuestion->Score = (double) NumAnsGood / (double) NumOptCorrInQst -
+					   (double) NumAnsBad  / (double) (NumOptTotInQst - NumOptCorrInQst);
+		  if (PrintedQuestion->Score > 0.000001)
+		     PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_WRONG_POSITIVE;
+		  else if (PrintedQuestion->Score < -0.000001)
+		     PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_WRONG_NEGATIVE;
+		  else	// Score is 0
+		     PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+		 }
+	       else					// If all options are correct (extrange case)
+		 {
+		  if (NumAnsGood == 0)
+		    {
+		     PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
+		     PrintedQuestion->Score = 0.0;
+		    }
+		  else
+		    {
+		     PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_WRONG_POSITIVE;
+		     PrintedQuestion->Score = (double) NumAnsGood / (double) NumOptCorrInQst;
+		    }
+		 }
+              }
            }
-         else
-           {
-            if (NumOptTotInQst)	// There are options but none is correct (extrange case)
-               PrintedQuestion->Score = - (double) NumAnsBad / (double) NumOptTotInQst;
-            else		// There are no options (impossible!)
-               PrintedQuestion->Score = 0.0;
-           }
+         // other case should be impossible
         }
      }
-   else	// Answer is blank
-      PrintedQuestion->Score = 0.0;
   }
 
 void TstPrn_ComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
@@ -1137,7 +1194,9 @@ void TstPrn_ComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
    char TextAnsUsr[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TextAnsOK[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
+   PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_BLANK;
    PrintedQuestion->Score = 0.0;	// Default score for blank or wrong answer
+
    if (PrintedQuestion->StrAnswers[0])	// If user has answered the answer
      {
       /* Filter the user answer */
@@ -1149,6 +1208,7 @@ void TstPrn_ComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
       Str_ReplaceSeveralSpacesForOne (TextAnsUsr);
       Str_ConvertToComparable (TextAnsUsr);
 
+      PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_WRONG_ZERO;
       for (NumOpt = 0;
 	   NumOpt < Question->Answer.NumOptions;
 	   NumOpt++)
@@ -1160,7 +1220,11 @@ void TstPrn_ComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 
          /* Check is user answer is correct */
          if (!strcoll (TextAnsUsr,TextAnsOK))
+           {
+            PrintedQuestion->AnswerIsCorrect = TstPrn_ANSWER_IS_CORRECT;
 	    PrintedQuestion->Score = 1.0;	// Correct answer
+	    break;
+           }
         }
      }
   }
@@ -1889,7 +1953,7 @@ static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Results,
                       NULL,NULL,
-		      Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
+		      Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,5);
 
    /***** Header of the table with the list of users *****/
    TstPrn_ShowHeaderPrints ();
@@ -1925,7 +1989,7 @@ static void TstPrn_ShowHeaderPrints (void)
    extern const char *Txt_Questions;
    extern const char *Txt_Non_blank_BR_questions;
    extern const char *Txt_Score;
-   extern const char *Txt_Average_BR_score_BR_per_question_BR_less_than_or_equal_to_1;
+   extern const char *Txt_Average_BR_score_BR_per_question;
    extern const char *Txt_Grade;
 
    HTM_TR_Begin (NULL);
@@ -1936,7 +2000,7 @@ static void TstPrn_ShowHeaderPrints (void)
    HTM_TH (1,1,"RT",Txt_Questions);
    HTM_TH (1,1,"RT",Txt_Non_blank_BR_questions);
    HTM_TH (1,1,"RT",Txt_Score);
-   HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_less_than_or_equal_to_1);
+   HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question);
    HTM_TH (1,1,"RT",Txt_Grade);
    HTM_TH_Empty (1);
 
@@ -2223,25 +2287,25 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
    HTM_TR_Begin (NULL);
 
    /***** Row title *****/
-   HTM_TD_Begin ("colspan=\"2\" class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("colspan=\"2\" class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    HTM_TxtColonNBSP (Txt_Visible_tests);
    HTM_Unsigned (NumPrints);
    HTM_TD_End ();
 
    /***** Write total number of questions *****/
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (NumPrints)
       HTM_Unsigned (NumTotalQsts);
    HTM_TD_End ();
 
    /***** Write total number of questions not blank *****/
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (NumPrints)
       HTM_Unsigned (NumTotalQstsNotBlank);
    HTM_TD_End ();
 
    /***** Write total score *****/
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
      {
       HTM_Double2Decimals (TotalScoreOfAllTests);
@@ -2251,20 +2315,20 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
    HTM_TD_End ();
 
    /***** Write average score per question *****/
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
       HTM_Double2Decimals (NumTotalQsts ? TotalScoreOfAllTests / (double) NumTotalQsts :
 			                  0.0);
    HTM_TD_End ();
 
    /***** Write score over Tst_SCORE_MAX *****/
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
       TstPrn_ComputeAndShowGrade (NumTotalQsts,TotalScoreOfAllTests,Tst_SCORE_MAX);
    HTM_TD_End ();
 
    /***** Last cell *****/
-   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP COLOR%u\"",Gbl.RowEvenOdd);
    HTM_TD_End ();
 
    /***** End row *****/
@@ -2283,7 +2347,7 @@ void TstPrn_ShowOnePrint (void)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
-   extern const char *Txt_QUESTIONS_non_blank;
+   extern const char *Txt_Answers;
    extern const char *Txt_Score;
    extern const char *Txt_Grade;
    extern const char *Txt_Tags;
@@ -2381,7 +2445,7 @@ void TstPrn_ShowOnePrint (void)
       HTM_TxtColon (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Other.UsrDat.Sex]);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LT\"");
+      HTM_TD_Begin ("class=\"DAT LB\"");
       ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
       HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname1);
       if (Gbl.Usrs.Other.UsrDat.Surname2[0])
@@ -2411,7 +2475,7 @@ void TstPrn_ShowOnePrint (void)
 	 HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("id=\"%s\" class=\"DAT LT\"",Id);
+	 HTM_TD_Begin ("id=\"%s\" class=\"DAT LB\"",Id);
 	 Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,true,0x7);
@@ -2429,9 +2493,21 @@ void TstPrn_ShowOnePrint (void)
       HTM_TxtColon (Txt_Questions);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LT\"");
-      HTM_TxtF ("%u; %s: %u",
-                Print.NumQsts,Txt_QUESTIONS_non_blank,Print.NumQstsNotBlank);
+      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_Unsigned (Print.NumQsts);
+      HTM_TD_End ();
+
+      HTM_TR_End ();
+
+      /***** Number of answers *****/
+      HTM_TR_Begin (NULL);
+
+      HTM_TD_Begin ("class=\"DAT_N RT\"");
+      HTM_TxtColon (Txt_Answers);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_Unsigned (Print.NumQstsNotBlank);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -2443,7 +2519,7 @@ void TstPrn_ShowOnePrint (void)
       HTM_TxtColon (Txt_Score);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LT\"");
+      HTM_TD_Begin ("class=\"DAT LB\"");
       if (ICanViewScore)
 	{
          HTM_STRONG_Begin ();
@@ -2463,7 +2539,7 @@ void TstPrn_ShowOnePrint (void)
       HTM_TxtColon (Txt_Grade);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LT\"");
+      HTM_TD_Begin ("class=\"DAT LB\"");
       if (ICanViewScore)
 	{
          HTM_STRONG_Begin ();
@@ -2483,7 +2559,7 @@ void TstPrn_ShowOnePrint (void)
       HTM_TxtColon (Txt_Tags);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LT\"");
+      HTM_TD_Begin ("class=\"DAT LB\"");
       TstPrn_ShowTagsPresentInAPrint (Print.PrnCod);
       HTM_TD_End ();
 

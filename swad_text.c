@@ -2522,6 +2522,27 @@ const char *Txt_Availability =
 	"Disponibilidade";
 #endif
 
+const char *Txt_average =
+#if   L==1	// ca
+	"mitjana";
+#elif L==2	// de
+	"Mittel";
+#elif L==3	// en
+	"average";
+#elif L==4	// es
+	"media";
+#elif L==5	// fr
+	"moyenne";
+#elif L==6	// gn
+	"media";	// Okoteve traducción
+#elif L==7	// it
+	"media";
+#elif L==8	// pl
+	"&sacute;rednia";
+#elif L==9	// pt
+	"m&eacute;dia";
+#endif
+
 const char *Txt_Average_number_BR_of_ASSIG_BR_per_course =
 #if   L==1	// ca
 	"Nombre mitj&acute;<br />d'activitats<br />per assignatura";
@@ -2819,25 +2840,25 @@ const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 #endif
 	};
 
-const char *Txt_Average_BR_score_BR_per_question_BR_less_than_or_equal_to_1 =
+const char *Txt_Average_BR_score_BR_per_question =
 #if   L==1	// ca
-	"Puntuaci&oacute;<br />mitjana<br />per pregunta<br />(&le;1)";
+	"Puntuaci&oacute;<br />mitjana<br />per pregunta";
 #elif L==2	// de
-	"Durchschnittliche<br />Punktzahl<br />pro Frage<br />(&le;1)";
+	"Durchschnittliche<br />Punktzahl<br />pro Frage";
 #elif L==3	// en
-	"Average<br />score<br />per question<br />(&le;1)";
+	"Average<br />score<br />per question";
 #elif L==4	// es
-	"Puntuaci&oacute;n<br />media<br />por pregunta<br />(&le;1)";
+	"Puntuaci&oacute;n<br />media<br />por pregunta";
 #elif L==5	// fr
-	"Score<br />moyen<br />par question<br />(&le;1)";
+	"Score<br />moyen<br />par question";
 #elif L==6	// gn
-	"Puntuaci&oacute;n<br />media<br />por pregunta<br />(&le;1)";	// Okoteve traducción
+	"Puntuaci&oacute;n<br />media<br />por pregunta";	// Okoteve traducción
 #elif L==7	// it
-	"Punteggio<br />medio<br />per domanda<br />(&le;1)";
+	"Punteggio<br />medio<br />per domanda";
 #elif L==8	// pl
-	"&Sacute;rednia<br />ocena<br />za pytanie<br />(&le;1)";
+	"&Sacute;rednia<br />ocena<br />za pytanie";
 #elif L==9	// pt
-	"Pontua&ccedil;&atilde;o<br />m&eacute;dia por<br />pergunta<br />(&le;1)";
+	"Pontua&ccedil;&atilde;o<br />m&eacute;dia por<br />pergunta";
 #endif
 
 const char *Txt_Average_type =
@@ -3084,6 +3105,27 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_add
 #elif L==9	// pt
 	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
 	"voc&ecirc; deve preencher seu endere&ccedil;o de email.";
+#endif
+
+const char *Txt_blank_ANSWERS =
+#if   L==1	// ca
+	"en&nbsp;blanc";
+#elif L==2	// de
+	"leere";
+#elif L==3	// en
+	"blank";
+#elif L==4	// es
+	"en&nbsp;blanco";
+#elif L==5	// fr
+	"vides";
+#elif L==6	// gn
+	"en&nbsp;blanco";	// Okoteve traducción
+#elif L==7	// it
+	"vuote";
+#elif L==8	// pl
+	"puste";
+#elif L==9	// pt
+	"em&nbsp;branco";
 #endif
 
 const char *Txt_Briefcase_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
@@ -4986,6 +5028,27 @@ const char *Txt_Copy_source =
 	"Kopiowanie zr&oacute;dla";
 #elif L==9	// pt
 	"Origem da copia";
+#endif
+
+const char *Txt_correct_ANSWERS =
+#if   L==1	// ca
+	"correctes";
+#elif L==2	// de
+	"richtige";
+#elif L==3	// en
+	"correct";
+#elif L==4	// es
+	"correctas";
+#elif L==5	// fr
+	"bonnes";
+#elif L==6	// gn
+	"correctas";	// Okoteve traducción
+#elif L==7	// it
+	"corrette";
+#elif L==8	// pl
+	"prawid&lstrok;owe";
+#elif L==9	// pt
+	"corretas";
 #endif
 
 const char *Txt_Could_not_detect_any_face_in_front_position_ =
@@ -33056,27 +33119,6 @@ const char *Txt_Questions_and_problems =
 	"Perguntas e problemas";
 #endif
 
-const char *Txt_QUESTIONS_non_blank =
-#if   L==1	// ca
-	"contestades";
-#elif L==2	// de
-	"Non-blank";
-#elif L==3	// en
-	"non-blank";
-#elif L==4	// es
-	"contestadas";
-#elif L==5	// fr
-	"non vide";
-#elif L==6	// gn
-	"contestadas";	// Okoteve traducción
-#elif L==7	// it
-	"risposte";
-#elif L==8	// pl
-	"niepustych";
-#elif L==9	// pt
-	"respondidas";
-#endif
-
 const char *Txt_QUESTIONS_invalid =
 #if   L==1	// ca
 	"anul&middot;lades";
@@ -53694,6 +53736,27 @@ const char *Txt_Total =
 	"Total";
 #endif
 
+const char *Txt_total =
+#if   L==1	// ca
+	"total";
+#elif L==2	// de
+	"Gesamtzahl";
+#elif L==3	// en
+	"total";
+#elif L==4	// es
+	"total";
+#elif L==5	// fr
+	"total";
+#elif L==6	// gn
+	"total";	// Okoteve traducción
+#elif L==7	// it
+	"totale";
+#elif L==8	// pl
+	"ca&lstrok;kowity";
+#elif L==9	// pt
+	"total";
+#endif
+
 const char *Txt_TST_Answer_given_by_the_teachers =
 #if   L==1	// ca
 	"Resposta donada pels professors";
@@ -56008,6 +56071,27 @@ const char *Txt_Vacants =
 	"Desocupados";
 #endif
 
+const char *Txt_Valid_answers =
+#if   L==1	// ca
+	"Respostes v&agrave;lides";
+#elif L==2	// de
+	"G&uuml;ltige Antworten";
+#elif L==3	// en
+	"Valid answers";
+#elif L==4	// es
+	"Respuestas v&aacute;lidas";
+#elif L==5	// fr
+	"R&eacute;ponses valides";
+#elif L==6	// gn
+	"Respuestas v&aacute;lidas";	// Okoteve traducción
+#elif L==7	// it
+	"Risposte valide";
+#elif L==8	// pl
+	"Prawid&lstrok;owe odpowiedzi";
+#elif L==9	// pt
+	"Respostas v&aacute;lidas";
+#endif
+
 const char *Txt_valid_grade =
 #if   L==1	// ca
 	"nota v&agrave;lida";
@@ -57104,6 +57188,27 @@ const char *Txt_Write_a_message =
 	"Napisz wiadomo&sacute;&cacute;";
 #elif L==9	// pt
 	"Escrever uma mensagem";
+#endif
+
+const char *Txt_wrong_ANSWERS =
+#if   L==1	// ca
+	"incorrectes";
+#elif L==2	// de
+	"falsche";
+#elif L==3	// en
+	"wrong";
+#elif L==4	// es
+	"err&oacute;neas";
+#elif L==5	// fr
+	"mauvaises";
+#elif L==6	// gn
+	"err&oacute;neas";	// Okoteve traducción
+#elif L==7	// it
+	"sbagliate";
+#elif L==8	// pl
+	"z&lstrok;e";
+#elif L==9	// pt
+	"erradas";
 #endif
 
 const char *Txt_Wrong_file_type =

@@ -3356,7 +3356,7 @@ static void Att_ListUsrsAttendanceTable (const struct Att_Events *Events,
      {
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_N_LINE_TOP RM\"",
+      HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_N LINE_TOP RM\"",
 		    Gbl.Usrs.Listing.WithPhotos ? 4 :
 						  3);
       HTM_TxtColon (Txt_Number_of_users);
@@ -3367,14 +3367,14 @@ static void Att_ListUsrsAttendanceTable (const struct Att_Events *Events,
 	   NumAttEvent++)
 	 if (Events->Lst[NumAttEvent].Selected)
 	   {
-	    HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+	    HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
 	    HTM_Unsigned (Events->Lst[NumAttEvent].NumStdsFromList);
 	    HTM_TD_End ();
 
 	    Total += Events->Lst[NumAttEvent].NumStdsFromList;
 	   }
 
-      HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
       HTM_Unsigned (Total);
       HTM_TD_End ();
 

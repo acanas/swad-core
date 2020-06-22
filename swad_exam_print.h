@@ -38,8 +38,19 @@
 struct ExaPrn_NumQuestions
   {
    unsigned All;	// Total number of questions
-   unsigned Valid;	// Number of valid questions (not invalidated by teachers)
-   unsigned NotBlank;	// Number of answered questions (not blank)
+   unsigned NotBlank;	// Answered questions (valid or not)
+   struct
+     {
+      struct
+        {
+	 unsigned Negative;
+	 unsigned Zero;
+	 unsigned Positive;
+        } Wrong;
+      unsigned Correct;
+      unsigned Blank;
+      unsigned Total;
+     } Valid;		// Number of valid questions
   };
 
 struct ExaPrn_Score

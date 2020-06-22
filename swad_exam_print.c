@@ -162,12 +162,17 @@ static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print)
    Print->PrnCod                  = -1L;
    Print->TimeUTC[Dat_START_TIME] =
    Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
-   Print->NumQsts.All             =
-   Print->NumQsts.Valid           =
-   Print->NumQsts.NotBlank        = 0;
    Print->Sent                    = false;	// After creating an exam print, it's not sent
-   Print->Score.All               =
-   Print->Score.Valid             = 0.0;
+   Print->NumQsts.All                  =
+   Print->NumQsts.NotBlank             =
+   Print->NumQsts.Valid.Correct        =
+   Print->NumQsts.Valid.Wrong.Negative =
+   Print->NumQsts.Valid.Wrong.Zero     =
+   Print->NumQsts.Valid.Wrong.Positive =
+   Print->NumQsts.Valid.Blank          =
+   Print->NumQsts.Valid.Total          = 0;
+   Print->Score.All   =
+   Print->Score.Valid = 0.0;
   }
 
 /*****************************************************************************/
@@ -1426,9 +1431,10 @@ static void ExaPrn_GetNumQstsNotBlank (struct ExaPrn_Print *Print)
    /***** Count number of questions not blank in exam print in database *****/
    Print->NumQsts.NotBlank = (unsigned)
 			     DB_QueryCOUNT ("can not get number of questions not blank",
-			                    "SELECT COUNT(*) FROM exa_print_questions"
-			                    " WHERE PrnCod=%ld AND Answers<>''",
-			                    Print->PrnCod);
+					    "SELECT COUNT(*)"
+					    " FROM exa_print_questions"
+					    " WHERE PrnCod=%ld AND Answers<>''",
+					    Print->PrnCod);
   }
 
 /*****************************************************************************/

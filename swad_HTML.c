@@ -344,34 +344,34 @@ void HTM_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *Class)
      {
       if (Class)
 	 HTM_TH_BeginAttr ("rowspan=\"%u\" colspan=\"%u\" class=\"%s\"",
-		       RowSpan,ColSpan,Class);
+		           RowSpan,ColSpan,Class);
       else
 	 HTM_TH_BeginAttr ("rowspan=\"%u\" colspan=\"%u\"",
-		       RowSpan,ColSpan);
+		           RowSpan,ColSpan);
      }
    else if (RowSpan > 1)
      {
       if (Class)
 	 HTM_TH_BeginAttr ("rowspan=\"%u\" class=\"%s\"",
-		       RowSpan,Class);
+		           RowSpan,Class);
       else
 	 HTM_TH_BeginAttr ("rowspan=\"%u\"",
-		       RowSpan);
+		           RowSpan);
      }
    else if (ColSpan > 1)
      {
       if (Class)
 	 HTM_TH_BeginAttr ("colspan=\"%u\" class=\"%s\"",
-		       ColSpan,Class);
+		           ColSpan,Class);
       else
 	 HTM_TH_BeginAttr ("colspan=\"%u\"",
-		       ColSpan);
+		           ColSpan);
      }
    else
      {
       if (Class)
          HTM_TH_BeginAttr ("class=\"%s\"",
-		       Class);
+		           Class);
       else
 	 HTM_TH_BeginWithoutAttr ();
      }
@@ -1825,6 +1825,13 @@ void HTM_Asterisk (void)
 void HTM_Unsigned (unsigned Num)
   {
    HTM_TxtF ("%u",Num);
+  }
+
+void HTM_Light0 (void)
+  {
+   HTM_SPAN_Begin ("class=\"LIGHT\"");
+   HTM_Txt ("0");
+   HTM_SPAN_End ();
   }
 
 void HTM_Int (int Num)
