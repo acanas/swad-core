@@ -1180,7 +1180,30 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
      }
    else
      {
-      HTM_TD_ColouredEmpty (9);
+      /* Columns for dates and title */
+      HTM_TD_Begin ("colspan=\"3\" class=\"LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
+      /* Columns for questions */
+      HTM_TD_Begin ("colspan=\"3\" class=\"LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
+      /* Columns for answers */
+      HTM_TD_Begin ("colspan=\"5\" class=\"LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
+      /* Columns for score */
+      HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
+      /* Column for grade */
+      HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
+      /* Column for link to show the result */
+      HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
       HTM_TR_End ();
      }
 
