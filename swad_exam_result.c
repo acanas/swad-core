@@ -1643,7 +1643,7 @@ static void ExaRes_CheckIfICanSeePrintResult (const struct Exa_Exam *Exam,
   {
    bool ItsMe;
 
-   /***** Check if I can view this print result *****/
+   /***** Check if I can view print result and score *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:

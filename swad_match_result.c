@@ -59,6 +59,12 @@ extern struct Globals Gbl;
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
+struct MchRes_ICanView
+  {
+   bool Result;
+   bool Score;
+  };
+
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
@@ -105,8 +111,10 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
 static void MchRes_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
                                                struct TstPrn_Print *Print);
 
-static bool MchRes_CheckIfICanSeeMatchResult (struct Mch_Match *Match,long UsrCod);
-static bool MchRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility);
+static void MchRes_CheckIfICanSeeMatchResult (const struct Gam_Game *Game,
+                                              const struct Mch_Match *Match,
+                                              long UsrCod,
+                                              struct MchRes_ICanView *ICanView);
 
 /*****************************************************************************/
 /*********** Compute score and create/update my result in a match ************/
@@ -799,16 +807,17 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
    extern const char *Txt_Result;
    char *MchSubQuery;
    char *GamSubQuery;
+   char *HidGamSubQuery;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct UsrData *UsrDat;
-   bool ICanViewResult;
-   bool ICanViewScore;
+   struct MchRes_ICanView ICanView;
    unsigned NumResults;
    unsigned NumResult;
    static unsigned UniqueId = 0;
    char *Id;
    struct Mch_Match Match;
+   struct Gam_Game Game;
    Dat_StartEndTime_t StartEndTime;
    unsigned NumQstsInThisResult;
    unsigned NumQstsNotBlankInThisResult;
@@ -816,10 +825,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
    unsigned NumTotalQstsNotBlank = 0;
    double ScoreInThisResult;
    double TotalScoreOfAllResults = 0.0;
-   double MaxGrade;
    double Grade;
    double TotalGrade = 0.0;
-   unsigned Visibility;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
 
    /***** Reset match *****/
@@ -867,6 +874,22 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 Lay_NotEnoughMemoryExit ();
      }
 
+   /***** Subquery: get hidden games?
+	  · A student will not be able to see their results in hidden games
+	  · A teacher will be able to see results from other users even in hidden games
+   *****/
+   switch (MeOrOther)
+     {
+      case Usr_ME:	// A student watching her/his results
+         if (asprintf (&HidGamSubQuery," AND gam_games.Hidden='N'") < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 break;
+      default:		// A teacher/admin watching the results of other users
+	 if (asprintf (&HidGamSubQuery,"%s","") < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 break;
+     }
+
    /***** Make database query *****/
    NumResults =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches results",
@@ -875,21 +898,22 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 				     "UNIX_TIMESTAMP(mch_results.EndTime),"	// row[2]
 				     "mch_results.NumQsts,"			// row[3]
 				     "mch_results.NumQstsNotBlank,"		// row[4]
-				     "mch_results.Score,"			// row[5]
-				     "gam_games.MaxGrade,"			// row[6]
-				     "gam_games.Visibility"			// row[7]
+				     "mch_results.Score"			// row[5]
 			      " FROM mch_results,mch_matches,gam_games"
 			      " WHERE mch_results.UsrCod=%ld"
 			      "%s"	// Match subquery
 			      " AND mch_results.MchCod=mch_matches.MchCod"
 			      "%s"	// Games subquery
 			      " AND mch_matches.GamCod=gam_games.GamCod"
+                              "%s"	// Hidden games subquery
 			      " AND gam_games.CrsCod=%ld"			// Extra check
 			      " ORDER BY mch_matches.Title",
 			      UsrDat->UsrCod,
 			      MchSubQuery,
 			      GamSubQuery,
+			      HidGamSubQuery,
 			      Gbl.Hierarchy.Crs.CrsCod);
+   free (HidGamSubQuery);
    free (GamSubQuery);
    free (MchSubQuery);
 
@@ -911,12 +935,13 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	    Lay_ShowErrorAndExit ("Wrong code of match.");
 	 Mch_GetDataOfMatchByCod (&Match);
 
-	 /* Get visibility (row[7]) */
-	 Visibility = TstVis_GetVisibilityFromStr (row[7]);
+	 /* Get data of match and game */
+	 Mch_GetDataOfMatchByCod (&Match);
+	 Game.GamCod = Match.GamCod;
+	 Gam_GetDataOfGameByCod (&Game);
 
-	 /* Show match result? */
-	 ICanViewResult = MchRes_CheckIfICanSeeMatchResult (&Match,UsrDat->UsrCod);
-         ICanViewScore  = MchRes_CheckIfICanViewScore (ICanViewResult,Visibility);
+         /* Check if I can view this match result and score */
+	 MchRes_CheckIfICanSeeMatchResult (&Game,&Match,UsrDat->UsrCod,&ICanView);
 
 	 if (NumResult)
 	    HTM_TR_Begin (NULL);
@@ -944,7 +969,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_Txt (Match.Title);
 	 HTM_TD_End ();
 
-	 if (ICanViewScore)
+	 if (ICanView.Score)
 	   {
 	    /* Get number of questions (row[3]) */
 	    if (sscanf (row[3],"%u",&NumQstsInThisResult) != 1)
@@ -963,16 +988,12 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	       ScoreInThisResult = 0.0;
 	    TotalScoreOfAllResults += ScoreInThisResult;
 
-	    /* Get maximum grade (row[6]) */
-	    if (sscanf (row[6],"%lf",&MaxGrade) != 1)
-	       MaxGrade = 0.0;
-
 	    Str_SetDecimalPointToLocal ();	// Return to local system
 	   }
 
 	 /* Write number of questions */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewScore)
+	 if (ICanView.Score)
 	    HTM_Unsigned (NumQstsInThisResult);
 	 else
             Ico_PutIconNotVisible ();
@@ -980,7 +1001,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 
 	 /* Write number of questions not blank */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewScore)
+	 if (ICanView.Score)
 	    HTM_Unsigned (NumQstsNotBlankInThisResult);
 	 else
             Ico_PutIconNotVisible ();
@@ -988,7 +1009,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 
 	 /* Write score */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewScore)
+	 if (ICanView.Score)
 	   {
 	    HTM_Double2Decimals (ScoreInThisResult);
 	    HTM_Txt ("/");
@@ -1000,7 +1021,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 
 	 /* Write average score per question */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewScore)
+	 if (ICanView.Score)
 	    HTM_Double2Decimals (NumQstsInThisResult ? ScoreInThisResult /
 					               (double) NumQstsInThisResult :
 					               0.0);
@@ -1010,10 +1031,10 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 
 	 /* Write grade over maximum grade */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewScore)
+	 if (ICanView.Score)
 	   {
-            Grade = TstPrn_ComputeGrade (NumQstsInThisResult,ScoreInThisResult,MaxGrade);
-	    TstPrn_ShowGrade (Grade,MaxGrade);
+            Grade = TstPrn_ComputeGrade (NumQstsInThisResult,ScoreInThisResult,Game.MaxGrade);
+	    TstPrn_ShowGrade (Grade,Game.MaxGrade);
 	    TotalGrade += Grade;
 	   }
 	 else
@@ -1022,7 +1043,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 
 	 /* Link to show this result */
 	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanViewResult)
+	 if (ICanView.Result)
 	   {
 	    Games->GamCod = Match.GamCod;
 	    Games->MchCod = Match.MchCod;
@@ -1151,8 +1172,7 @@ void MchRes_ShowOneMchResult (void)
    struct TstPrn_Print Print;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
-   bool ICanViewResult;
-   bool ICanViewScore;
+   struct MchRes_ICanView ICanView;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
@@ -1183,35 +1203,10 @@ void MchRes_ShowOneMchResult (void)
    TstPrn_ResetPrint (&Print);
    MchRes_GetMatchResultDataByMchCod (Match.MchCod,UsrDat->UsrCod,&Print);
 
-   /***** Check if I can view this match result *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 // Depends on visibility of result for this match (eye icon)
-	 ICanViewResult = MchRes_CheckIfICanSeeMatchResult (&Match,UsrDat->UsrCod);
+   /***** Check if I can view this match result and score *****/
+   MchRes_CheckIfICanSeeMatchResult (&Game,&Match,UsrDat->UsrCod,&ICanView);
 
-	 if (ICanViewResult)
-	    // Depends on 5 visibility icons
-	    ICanViewScore = TstVis_IsVisibleTotalScore (Game.Visibility);
-	 else
-	    ICanViewScore = false;
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 ICanViewResult =
-	 ICanViewScore  = true;
-	 break;
-      default:
-	 ICanViewResult =
-	 ICanViewScore  = false;
-	 break;
-     }
-
-   if (ICanViewResult)	// I am allowed to view this match result
+   if (ICanView.Result)	// I am allowed to view this match result
      {
       /***** Get questions and user's answers of the match result from database *****/
       Mch_GetMatchQuestionsFromDB (Match.MchCod,UsrDat->UsrCod,&Print);
@@ -1315,7 +1310,7 @@ void MchRes_ShowOneMchResult (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LB\"");
-      if (ICanViewScore)
+      if (ICanView.Score)
 	{
          HTM_STRONG_Begin ();
          HTM_Double2Decimals (Print.Score);
@@ -1337,7 +1332,7 @@ void MchRes_ShowOneMchResult (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LB\"");
-      if (ICanViewScore)
+      if (ICanView.Score)
 	{
          HTM_STRONG_Begin ();
          TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,Game.MaxGrade);
@@ -1440,41 +1435,30 @@ static void MchRes_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 /********************** Get if I can see match result ************************/
 /*****************************************************************************/
 
-static bool MchRes_CheckIfICanSeeMatchResult (struct Mch_Match *Match,long UsrCod)
+static void MchRes_CheckIfICanSeeMatchResult (const struct Gam_Game *Game,
+                                              const struct Mch_Match *Match,
+                                              long UsrCod,
+                                              struct MchRes_ICanView *ICanView)
   {
    bool ItsMe;
 
+   /***** Check if I can view print result and score *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
+	 // Depends on visibility of game and result (eye icons)
 	 ItsMe = Usr_ItsMe (UsrCod);
-	 return ItsMe && Match->Status.ShowUsrResults;
+	 ICanView->Result = (ItsMe &&				// The result is mine
+			     !Game->Hidden &&			// The game is visible
+			     Match->Status.ShowUsrResults);	// The results of the match are visible to users
 	 // Whether I belong or not to groups of match is not checked here...
 	 // ...because I should be able to see old matches made in old groups to which I belonged
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 return true;
-      default:
-	 return false;
-     }
-  }
 
-/*****************************************************************************/
-/********************** Get if I can see match result ************************/
-/*****************************************************************************/
-
-static bool MchRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility)
-  {
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 if (ICanViewResult)
-	    return TstVis_IsVisibleTotalScore (Visibility);
-	 return false;
+	 if (ICanView->Result)
+	    // Depends on 5 visibility icons associated to game
+	    ICanView->Score = TstVis_IsVisibleTotalScore (Game->Visibility);
+	 else
+	    ICanView->Score = false;
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -1482,8 +1466,12 @@ static bool MchRes_CheckIfICanViewScore (bool ICanViewResult,unsigned Visibility
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 return true;
+	 ICanView->Result =
+	 ICanView->Score  = true;
+	 break;
       default:
-	 return false;
+	 ICanView->Result =
+	 ICanView->Score  = false;
+	 break;
      }
   }

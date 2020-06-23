@@ -925,6 +925,13 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
    long GamCod;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
+   /***** Default selected *****/
+   Games->NumSelected = 0;
+
+   /***** Trivial check: there are games visibles by me *****/
+   if (!Games->Num)
+      return;
+
    /***** Allocate memory for list of games selected *****/
    MaxSizeListGamCodsSelected = Games->Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
    if ((Games->GamCodsSelected = (char *) malloc (MaxSizeListGamCodsSelected + 1)) == NULL)
@@ -941,7 +948,6 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
 	   NumGame < Games->Num;
 	   NumGame++)
 	 Games->Lst[NumGame].Selected = false;
-      Games->NumSelected = 0;
 
       /* Set some games as selected */
       for (Ptr = Games->GamCodsSelected;

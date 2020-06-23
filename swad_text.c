@@ -30889,7 +30889,7 @@ const char *Txt_Please_check_your_email_address =
 #elif L==4	// es
 	"Por favor, compruebe su direcci&oacute;n de correo.";
 #elif L==5	// fr
-	"S'il vous pla&iacute;t, v&eaxcute;rifiez votre adresse email.";
+	"S'il vous pla&iacute;t, v&eacute;rifiez votre adresse email.";
 #elif L==6	// gn
 	"Por favor, compruebe su direcci&oacute;n de correo.";	// Okoteve traducción
 #elif L==7	// it
