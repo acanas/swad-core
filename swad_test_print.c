@@ -56,6 +56,12 @@
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
+struct TstRes_ICanView
+  {
+   bool Result;
+   bool Score;
+  };
+
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -171,6 +177,11 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
                                          unsigned NumTotalQsts,
                                          unsigned NumTotalQstsNotBlank,
                                          double TotalScoreOfAllTests);
+
+static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
+                                              long UsrCod,
+                                              struct TstRes_ICanView *ICanView);
+
 static void TstPrn_ShowTagsPresentInAPrint (long ResCod);
 
 /*****************************************************************************/
@@ -1919,7 +1930,7 @@ void TstPrn_ShowMyPrints (void)
    TstPrn_ShowHeaderPrints ();
 
    /***** List my test exams *****/
-   TstCfg_GetConfigFromDB ();	// To get feedback type
+   TstCfg_GetConfigFromDB ();	// To get visibility
    TstPrn_ShowUsrPrints (&Gbl.Usrs.Me.UsrDat);
 
    /***** End table and box *****/
@@ -2027,12 +2038,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
    double TotalScoreOfAllTests = 0.0;
    unsigned NumPrintsVisibleByTchs = 0;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-   struct
-     {
-      bool NumQsts;
-      bool Score;
-      bool Exam;
-     } ICanView;
+   struct TstRes_ICanView ICanView;
    char *ClassDat;
 
    /***** Make database query *****/
@@ -2043,14 +2049,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
    */
    NumPrints =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get test exams of a user",
-			      "SELECT ExaCod,"				// row[0]
-			             "UNIX_TIMESTAMP(StartTime),"	// row[1]
-			             "UNIX_TIMESTAMP(EndTime),"		// row[2]
-			             "NumQsts,"				// row[3]
-			             "NumQstsNotBlank,"			// row[4]
-			             "Sent,"				// row[5]
-			             "AllowTeachers,"			// row[6]
-			             "Score"				// row[7]
+			      "SELECT ExaCod"			// row[0]
 			      " FROM tst_exams"
 			      " WHERE CrsCod=%ld AND UsrCod=%ld"
 			      " AND EndTime>=FROM_UNIXTIME(%ld)"
@@ -2074,55 +2073,23 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
         {
          row = mysql_fetch_row (mysql_res);
 
-         /* Get test code (row[0]) */
+         /* Get print code (row[0]) */
          TstPrn_ResetPrint (&Print);
 	 if ((Print.PrnCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of test exam.");
 
-	 /* Get if exam has been sent (row[5]) */
-	 Print.Sent = (row[5][0] == 'Y');
-
-	 /* Get if teachers are allowed to see this test exam (row[6]) */
-	 Print.AllowTeachers = (row[6][0] == 'Y');
+	 /* Get print data */
+         TstPrn_GetPrintDataByPrnCod (&Print);
 	 ClassDat = Print.AllowTeachers ? "DAT" :
-	                                 "DAT_LIGHT";
+	                                  "DAT_LIGHT";
 
-	 switch (Gbl.Usrs.Me.Role.Logged)
-	   {
-	    case Rol_STD:
-	       ICanView.NumQsts  = Print.Sent && ItsMe;
-	       ICanView.Score    = Print.Sent && ItsMe &&
-		                   TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ());
-	       ICanView.Exam     = Print.Sent && ItsMe;
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	    case Rol_DEG_ADM:
-	    case Rol_CTR_ADM:
-	    case Rol_INS_ADM:
-	       ICanView.NumQsts  = Print.Sent;	// If the exam has been sent,
-						// teachers can see the number of questions
-	       ICanView.Score    =
-	       ICanView.Exam     = Print.Sent && (ItsMe || Print.AllowTeachers);
-	       break;
-	    case Rol_SYS_ADM:
-	       ICanView.NumQsts  =
-	       ICanView.Score    =
-	       ICanView.Exam     = true;
-	       break;
-	    default:
-	       ICanView.NumQsts  =
-	       ICanView.Score    =
-	       ICanView.Exam     = false;
-               break;
-	   }
+         /* Get if I can see print result and score */
+	 TstRes_CheckIfICanSeePrintResult (&Print,UsrDat->UsrCod,&ICanView);
 
          if (NumPrint)
             HTM_TR_Begin (NULL);
 
-         /* Write date and time (row[1] and row[2] hold UTC date-times) */
-         Print.TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[1]);
-         Print.TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[2]);
+         /* Write dates and times */
          UniqueId++;
 	 for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
@@ -2139,36 +2106,20 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	    free (Id);
 	   }
 
-         /* Get number of questions (row[3]) */
-         if (sscanf (row[3],"%u",&Print.NumQsts) != 1)
-            Print.NumQsts = 0;
-	 if (Print.AllowTeachers)
-	    NumTotalQsts += Print.NumQsts;
-
-         /* Get number of questions not blank (row[4]) */
-         if (sscanf (row[4],"%u",&Print.NumQstsNotBlank) != 1)
-            Print.NumQstsNotBlank = 0;
-	 if (Print.AllowTeachers)
-	    NumTotalQstsNotBlank += Print.NumQstsNotBlank;
-
-         /* Get score (row[7]) */
-	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-         if (sscanf (row[7],"%lf",&Print.Score) != 1)
-            Print.Score = 0.0;
-         Str_SetDecimalPointToLocal ();	// Return to local system
-	 if (Print.AllowTeachers)
-	    TotalScoreOfAllTests += Print.Score;
-
          /* Write number of questions */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
-	 if (ICanView.NumQsts)
+	 if (ICanView.Result)
 	    HTM_Unsigned (Print.NumQsts);
+	 else
+            Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
          /* Write number of questions not blank */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
-	 if (ICanView.NumQsts)
+	 if (ICanView.Result)
 	    HTM_Unsigned (Print.NumQstsNotBlank);
+	 else
+            Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Write score */
@@ -2179,6 +2130,8 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	    HTM_Txt ("/");
 	    HTM_Unsigned (Print.NumQsts);
 	   }
+	 else
+            Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
          /* Write average score per question */
@@ -2187,17 +2140,21 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	    HTM_Double2Decimals (Print.NumQsts ? Print.Score /
 		                                 (double) Print.NumQsts :
 			                         0.0);
+	 else
+            Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
          /* Write grade */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanView.Score)
             TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,Tst_SCORE_MAX);
+	 else
+            Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Link to show this test exam */
 	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanView.Exam)
+	 if (ICanView.Result)
 	   {
 	    Frm_StartForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
 						                 ActSeeOneTstResOth);
@@ -2205,6 +2162,8 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	    Ico_PutIconLink ("tasks.svg",Txt_View_test);
 	    Frm_EndForm ();
 	   }
+	 else
+            Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 	 HTM_TR_End ();
 
@@ -2214,8 +2173,8 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 
       /***** Write totals for this user *****/
       TstPrn_ShowPrintsSummaryRow (ItsMe,NumPrintsVisibleByTchs,
-                                  NumTotalQsts,NumTotalQstsNotBlank,
-                                  TotalScoreOfAllTests);
+                                   NumTotalQsts,NumTotalQstsNotBlank,
+                                   TotalScoreOfAllTests);
      }
    else
      {
@@ -2356,9 +2315,7 @@ void TstPrn_ShowOnePrint (void)
    char PhotoURL[PATH_MAX + 1];
    Dat_StartEndTime_t StartEndTime;
    char *Id;
-   bool ItsMe;
-   bool ICanViewTest;
-   bool ICanViewScore;
+   struct TstRes_ICanView ICanView;
 
    /***** Get the code of the test *****/
    TstPrn_ResetPrint (&Print);
@@ -2367,54 +2324,13 @@ void TstPrn_ShowOnePrint (void)
 
    /***** Get test exam data *****/
    TstPrn_GetPrintDataByPrnCod (&Print);
-   TstCfg_SetConfigVisibility (TstVis_MAX_VISIBILITY);
 
-   /***** Check if I can view this test exam *****/
-   ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 ICanViewTest = ItsMe;
-	 if (ItsMe)
-	   {
-	    TstCfg_GetConfigFromDB ();	// To get feedback type
-	    ICanViewScore = TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ());
-	   }
-	 else
-	    ICanViewScore = false;
-	 break;
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-	 switch (Gbl.Action.Act)
-	   {
-	    case ActSeeOneTstResMe:
-	       ICanViewTest  =
-	       ICanViewScore = ItsMe;
-	       break;
-	    case ActSeeOneTstResOth:
-	       ICanViewTest  =
-	       ICanViewScore = ItsMe ||
-			       Print.AllowTeachers;
-	       break;
-	    default:
-	       ICanViewTest  =
-	       ICanViewScore = false;
-	       break;
-	   }
-	 break;
-      case Rol_SYS_ADM:
-	 ICanViewTest  =
-	 ICanViewScore = true;
-	 break;
-      default:
-	 ICanViewTest  =
-	 ICanViewScore = false;
-	 break;
-     }
+   /***** Get if I can see print result and score *****/
+   if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
+      TstCfg_GetConfigFromDB ();	// To get visibility
+   TstRes_CheckIfICanSeePrintResult (&Print,Gbl.Usrs.Other.UsrDat.UsrCod,&ICanView);
 
-   if (ICanViewTest)	// I am allowed to view this test exam
+   if (ICanView.Result)	// I am allowed to view this test print result
      {
       /***** Get questions and user's answers of the test exam from database *****/
       TstPrn_GetPrintQuestionsFromDB (&Print);
@@ -2520,7 +2436,7 @@ void TstPrn_ShowOnePrint (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LB\"");
-      if (ICanViewScore)
+      if (ICanView.Score)
 	{
          HTM_STRONG_Begin ();
 	 HTM_Double2Decimals (Print.Score);
@@ -2540,7 +2456,7 @@ void TstPrn_ShowOnePrint (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LB\"");
-      if (ICanViewScore)
+      if (ICanView.Score)
 	{
          HTM_STRONG_Begin ();
          TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,Tst_SCORE_MAX);
@@ -2577,6 +2493,50 @@ void TstPrn_ShowOnePrint (void)
      }
    else	// I am not allowed to view this test exam
       Lay_NoPermissionExit ();
+  }
+
+/*****************************************************************************/
+/****************** Get if I can see print result and score ******************/
+/*****************************************************************************/
+
+static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
+                                              long UsrCod,
+                                              struct TstRes_ICanView *ICanView)
+  {
+   /***** Check if I can view print result and score *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+	 // Depends on whether the print is sent or not
+	 // if the print is not sent ==> I can not view results
+	 ICanView->Result = Print->Sent && Usr_ItsMe (UsrCod);
+
+	 if (ICanView->Result)
+	    // Depends on 5 visibility icons associated to tests
+	    ICanView->Score = TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ());
+	 else
+	    ICanView->Score = false;
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+	 // Depends on whether the print is sent or not, and whether teachers are allowed
+	 // if the print is not sent ==> I can not view results
+	 // if teachers are not allowed ==> I can not view results (except if the print is mine)
+	 ICanView->Result =
+	 ICanView->Score  = Print->Sent && (Print->AllowTeachers || Usr_ItsMe (UsrCod));
+	 break;
+      case Rol_SYS_ADM:
+	 ICanView->Result =
+	 ICanView->Score  = true;
+	 break;
+      default:
+	 ICanView->Result =
+	 ICanView->Score  = false;
+	 break;
+     }
   }
 
 /*****************************************************************************/

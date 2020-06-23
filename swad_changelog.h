@@ -556,7 +556,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.254.2 (2020-06-23)"
+#define Log_PLATFORM_VERSION	"SWAD 19.255 (2020-06-23)"
 #define CSS_FILE		"swad19.253.css"
 #define JS_FILE			"swad19.254.js"
 /*
@@ -566,8 +566,8 @@ TODO: Fix bug: Un estudiante recibe una notificación de un archivo de calificaci
 TODO: Fix bug: Cuando se pulsa en ver fichas, y luego en una ficha en "Ver trabajos" o "Ver exámenes", o lo que sea, sale dos veces ese estudiante.
 TODO: No limitar el número de preguntas en un examen a ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT, sino asignar PrintedQuestions dinámicamente con malloc
 TODO: Que al generar un examen sólo se cojan preguntas válidas. Y si ya está generado, al entrar de nuevo, que se vean en rojo.
-TODO: Dentro de las funciones TstPrn_ShowUsrPrints y TstPrn_ShowOnePrint crear y llamar a una función común similar a ExaRes_CheckIfICanSeePrintResult
 
+	Version 19.255:   Jun 23, 2020  Code refactoring in test results. (303625 lines)
 	Version 19.254.2: Jun 23, 2020  Matches results can only be changed to visible when match is at the end.
 					If teacher goes back in match, the results change antumatically to hidden. (303667 lines)
 	Version 19.254.1: Jun 23, 2020  Code refactoring in matches results. (303646 lines)
