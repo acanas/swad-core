@@ -531,8 +531,8 @@ static bool ExaSes_CheckIfVisibilityOfResultsCanBeChanged (const struct ExaSes_S
 /*****************************************************************************/
 
 static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
-                                             const struct ExaSes_Session *Session,
-					     const char *Anchor)
+                                               const struct ExaSes_Session *Session,
+					       const char *Anchor)
   {
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);

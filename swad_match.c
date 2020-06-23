@@ -113,6 +113,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches);
 static bool Mch_CheckIfICanEditMatches (void);
 static bool Mch_CheckIfICanEditThisMatch (const struct Mch_Match *Match);
+static bool Mch_CheckIfVisibilityOfResultsCanBeChanged (const struct Mch_Match *Match);
 static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
                                            const struct Mch_Match *Match);
 static void Mch_ListOneOrMoreMatchesAuthor (const struct Mch_Match *Match);
@@ -599,6 +600,20 @@ static bool Mch_CheckIfICanEditThisMatch (const struct Mch_Match *Match)
   }
 
 /*****************************************************************************/
+/*********** Check if visibility of match results can be changed *************/
+/*****************************************************************************/
+
+static bool Mch_CheckIfVisibilityOfResultsCanBeChanged (const struct Mch_Match *Match)
+  {
+   if (Match->Status.ShowUsrResults ||		// Results are currently visible
+       Match->Status.Showing == Mch_END)	// Match has finished
+      if (Mch_CheckIfICanEditThisMatch (Match))
+	 return true;
+
+   return false;
+  }
+
+/*****************************************************************************/
 /************************* Put a column for icons ****************************/
 /*****************************************************************************/
 
@@ -854,18 +869,19 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
    extern const char *Txt_Hidden_results;
    extern const char *Txt_Results;
 
-   /***** Can I edit match vivibility? *****/
-   if (Mch_CheckIfICanEditThisMatch (Match))
-     {
-      Games->GamCod = Match->GamCod;
-      Games->MchCod = Match->MchCod;
+   Games->GamCod = Match->GamCod;
+   Games->MchCod = Match->MchCod;
 
-      /* Show match results */
+   /***** Show match results *****/
+   if (Mch_CheckIfICanEditThisMatch (Match))
       Lay_PutContextualLinkOnlyIcon (ActSeeUsrMchResMch,MchRes_RESULTS_BOX_ID,
 				     Mch_PutParamsEdit,Games,
 				     "trophy.svg",
 				     Txt_Results);
 
+   /***** Check if visibility of session results can be changed *****/
+   if (Mch_CheckIfVisibilityOfResultsCanBeChanged (Match))
+     {
       /* I can edit visibility */
       Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
 				     Mch_PutParamsEdit,Games,
@@ -902,8 +918,8 @@ void Mch_ToggleVisResultsMchUsr (void)
    /***** Get and check parameters *****/
    Mch_GetAndCheckParameters (&Games,&Game,&Match);
 
-   /***** Check if I have permission to change visibility *****/
-   if (!Mch_CheckIfICanEditThisMatch (&Match))
+   /***** Check if visibility of match results can be changed *****/
+   if (!Mch_CheckIfVisibilityOfResultsCanBeChanged (&Match))
       Lay_NoPermissionExit ();
 
    /***** Toggle visibility of match results *****/
@@ -1804,7 +1820,8 @@ static void Mch_UpdateMatchStatusInDB (const struct Mch_Match *Match)
 			"mch_matches.Showing='%s',"
 		        "mch_matches.Countdown=%ld,"
 		        "mch_matches.NumCols=%u,"
-			"mch_matches.ShowQstResults='%c'"
+			"mch_matches.ShowQstResults='%c',"
+			"mch_matches.ShowUsrResults='%c'"
 		   " WHERE mch_matches.MchCod=%ld"
 		   " AND mch_matches.GamCod=gam_games.GamCod"
 		   " AND gam_games.CrsCod=%ld",	// Extra check
@@ -1813,7 +1830,10 @@ static void Mch_UpdateMatchStatusInDB (const struct Mch_Match *Match)
 		   Mch_ShowingStringsDB[Match->Status.Showing],
 		   Match->Status.Countdown,
 		   Match->Status.NumCols,
-		   Match->Status.ShowQstResults ? 'Y' : 'N',
+		   Match->Status.ShowQstResults ? 'Y' :
+			                          'N',
+		   Match->Status.ShowUsrResults ? 'Y' :
+			                          'N',
 		   Match->MchCod,Gbl.Hierarchy.Crs.CrsCod);
    free (MchSubQuery);
 
@@ -2115,7 +2135,10 @@ static void Mch_SetMatchStatusToPrev (struct Mch_Match *Match)
 	 Match->Status.Showing = Mch_ANSWERS;
 	 break;
      }
-   Match->Status.Countdown = -1L;	// No countdown
+   Match->Status.Countdown = -1L;		// No countdown
+
+   /***** Force showing results to false when match is not at the end *****/
+   Match->Status.ShowUsrResults = false;	// Force results to be hidden
   }
 
 /*****************************************************************************/
