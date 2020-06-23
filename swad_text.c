@@ -2075,6 +2075,90 @@ const char *Txt_Answers =		// Answers of test
 	"Respostas";
 #endif
 
+const char *Txt_ANSWERS_blank =
+#if   L==1	// ca
+	"en&nbsp;blanc";
+#elif L==2	// de
+	"leere";
+#elif L==3	// en
+	"blank";
+#elif L==4	// es
+	"en&nbsp;blanco";
+#elif L==5	// fr
+	"vides";
+#elif L==6	// gn
+	"en&nbsp;blanco";	// Okoteve traducción
+#elif L==7	// it
+	"vuote";
+#elif L==8	// pl
+	"puste";
+#elif L==9	// pt
+	"em&nbsp;branco";
+#endif
+
+const char *Txt_ANSWERS_correct =
+#if   L==1	// ca
+	"correctes";
+#elif L==2	// de
+	"richtige";
+#elif L==3	// en
+	"correct";
+#elif L==4	// es
+	"correctas";
+#elif L==5	// fr
+	"bonnes";
+#elif L==6	// gn
+	"correctas";	// Okoteve traducción
+#elif L==7	// it
+	"corrette";
+#elif L==8	// pl
+	"prawid&lstrok;owe";
+#elif L==9	// pt
+	"corretas";
+#endif
+
+const char *Txt_ANSWERS_non_blank =
+#if   L==1	// ca
+	"contestades";
+#elif L==2	// de
+	"non-blank";
+#elif L==3	// en
+	"non-blank";
+#elif L==4	// es
+	"contestadas";
+#elif L==5	// fr
+	"non vide";
+#elif L==6	// gn
+	"contestadas";	// Okoteve traducción
+#elif L==7	// it
+	"risposte";
+#elif L==8	// pl
+	"niepustych";
+#elif L==9	// pt
+	"respondidas";
+#endif
+
+const char *Txt_ANSWERS_wrong =
+#if   L==1	// ca
+	"incorrectes";
+#elif L==2	// de
+	"falsche";
+#elif L==3	// en
+	"wrong";
+#elif L==4	// es
+	"err&oacute;neas";
+#elif L==5	// fr
+	"mauvaises";
+#elif L==6	// gn
+	"err&oacute;neas";	// Okoteve traducción
+#elif L==7	// it
+	"sbagliate";
+#elif L==8	// pl
+	"z&lstrok;e";
+#elif L==9	// pt
+	"erradas";
+#endif
+
 const char *Txt_Any_action =
 #if   L==1	// ca
 	"Qualsevol acci&oacute;";
@@ -3105,27 +3189,6 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_add
 #elif L==9	// pt
 	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
 	"voc&ecirc; deve preencher seu endere&ccedil;o de email.";
-#endif
-
-const char *Txt_blank_ANSWERS =
-#if   L==1	// ca
-	"en&nbsp;blanc";
-#elif L==2	// de
-	"leere";
-#elif L==3	// en
-	"blank";
-#elif L==4	// es
-	"en&nbsp;blanco";
-#elif L==5	// fr
-	"vides";
-#elif L==6	// gn
-	"en&nbsp;blanco";	// Okoteve traducción
-#elif L==7	// it
-	"vuote";
-#elif L==8	// pl
-	"puste";
-#elif L==9	// pt
-	"em&nbsp;branco";
 #endif
 
 const char *Txt_Briefcase_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
@@ -5007,27 +5070,6 @@ const char *Txt_Copy_source =
 	"Kopiowanie zr&oacute;dla";
 #elif L==9	// pt
 	"Origem da copia";
-#endif
-
-const char *Txt_correct_ANSWERS =
-#if   L==1	// ca
-	"correctes";
-#elif L==2	// de
-	"richtige";
-#elif L==3	// en
-	"correct";
-#elif L==4	// es
-	"correctas";
-#elif L==5	// fr
-	"bonnes";
-#elif L==6	// gn
-	"correctas";	// Okoteve traducción
-#elif L==7	// it
-	"corrette";
-#elif L==8	// pl
-	"prawid&lstrok;owe";
-#elif L==9	// pt
-	"corretas";
 #endif
 
 const char *Txt_Could_not_detect_any_face_in_front_position_ =
@@ -27226,27 +27268,6 @@ const char *Txt_nobody_else_can_access_this_content =
 	"nikt inny nie moze uzyskac dostepu do tej zawartosci";
 #elif L==9	// pt
 	"ningu&eacute;m mais pode acessar este conte&uacute;do";
-#endif
-
-const char *Txt_Non_blank_BR_questions =
-#if   L==1	// ca
-	"Preguntes<br />contestades";
-#elif L==2	// de
-	"Non-blank<br />Fragen";
-#elif L==3	// en
-	"Non-blank<br />questions";
-#elif L==4	// es
-	"Preguntas<br />contestadas";
-#elif L==5	// fr
-	"Questions<br />non vide";
-#elif L==6	// gn
-	"Preguntas<br />contestadas";	// Okoteve traducción
-#elif L==7	// it
-	"Domande<br />risposte";
-#elif L==8	// pl
-	"Niepustych<br />pytania";
-#elif L==9	// pt
-	"Perguntas<br />respondidas";
 #endif
 
 const char *Txt_Not_applicable =
@@ -57146,27 +57167,6 @@ const char *Txt_Write_a_message =
 	"Napisz wiadomo&sacute;&cacute;";
 #elif L==9	// pt
 	"Escrever uma mensagem";
-#endif
-
-const char *Txt_wrong_ANSWERS =
-#if   L==1	// ca
-	"incorrectes";
-#elif L==2	// de
-	"falsche";
-#elif L==3	// en
-	"wrong";
-#elif L==4	// es
-	"err&oacute;neas";
-#elif L==5	// fr
-	"mauvaises";
-#elif L==6	// gn
-	"err&oacute;neas";	// Okoteve traducción
-#elif L==7	// it
-	"sbagliate";
-#elif L==8	// pl
-	"z&lstrok;e";
-#elif L==9	// pt
-	"erradas";
 #endif
 
 const char *Txt_Wrong_file_type =

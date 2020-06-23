@@ -708,9 +708,9 @@ static void ExaRes_ShowHeaderResults (Usr_MeOrOther_t MeOrOther)
    extern const char *Txt_total;
    extern const char *Txt_QUESTIONS_valid;
    extern const char *Txt_QUESTIONS_invalid;
-   extern const char *Txt_correct_ANSWERS;
-   extern const char *Txt_wrong_ANSWERS;
-   extern const char *Txt_blank_ANSWERS;
+   extern const char *Txt_ANSWERS_correct;
+   extern const char *Txt_ANSWERS_wrong;
+   extern const char *Txt_ANSWERS_blank;
    extern const char *Txt_average;
 
    /***** First row *****/
@@ -735,9 +735,9 @@ static void ExaRes_ShowHeaderResults (Usr_MeOrOther_t MeOrOther)
    HTM_TH (2,1,"RT LINE_LEFT",Txt_total);
    HTM_TH (2,1,"RT",Txt_QUESTIONS_valid);
    HTM_TH (2,1,"RT",Txt_QUESTIONS_invalid);
-   HTM_TH (1,1,"RT LINE_LEFT",Txt_correct_ANSWERS);
-   HTM_TH (1,3,"CT",Txt_wrong_ANSWERS);
-   HTM_TH (1,1,"RT",Txt_blank_ANSWERS);
+   HTM_TH (1,1,"RT LINE_LEFT",Txt_ANSWERS_correct);
+   HTM_TH (1,3,"CT",Txt_ANSWERS_wrong);
+   HTM_TH (1,1,"RT",Txt_ANSWERS_blank);
    HTM_TH (1,1,"RT LINE_LEFT",Txt_total);
    HTM_TH (1,1,"RT",Txt_average);
 
@@ -1402,9 +1402,9 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
    extern const char *Txt_QUESTIONS_valid;
    extern const char *Txt_QUESTIONS_invalid;
    extern const char *Txt_Valid_answers;
-   extern const char *Txt_correct_ANSWERS;
-   extern const char *Txt_wrong_ANSWERS;
-   extern const char *Txt_blank_ANSWERS;
+   extern const char *Txt_ANSWERS_correct;
+   extern const char *Txt_ANSWERS_wrong;
+   extern const char *Txt_ANSWERS_blank;
    extern const char *Txt_Score;
    extern const char *Txt_valid_score;
    extern const char *Txt_Grade;
@@ -1540,11 +1540,11 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 	        "%s(<em>p<sub>i</sub></em>=0):&nbsp;%u; "
 	        "%s(0&lt;<em>p<sub>i</sub></em>&lt;1):&nbsp;%u; "
 	        "%s(<em>p<sub>i</sub></em>=0):&nbsp;%u",
-                Txt_correct_ANSWERS,Print->NumQsts.Valid.Correct,
-                Txt_wrong_ANSWERS  ,Print->NumQsts.Valid.Wrong.Negative,
-                Txt_wrong_ANSWERS  ,Print->NumQsts.Valid.Wrong.Zero,
-                Txt_wrong_ANSWERS  ,Print->NumQsts.Valid.Wrong.Positive,
-                Txt_blank_ANSWERS  ,Print->NumQsts.Valid.Blank);
+                Txt_ANSWERS_correct,Print->NumQsts.Valid.Correct,
+                Txt_ANSWERS_wrong  ,Print->NumQsts.Valid.Wrong.Negative,
+                Txt_ANSWERS_wrong  ,Print->NumQsts.Valid.Wrong.Zero,
+                Txt_ANSWERS_wrong  ,Print->NumQsts.Valid.Wrong.Positive,
+                Txt_ANSWERS_blank  ,Print->NumQsts.Valid.Blank);
    else
       Ico_PutIconNotVisible ();
    HTM_TD_End ();

@@ -1998,22 +1998,45 @@ static void TstPrn_ShowHeaderPrints (void)
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
-   extern const char *Txt_Non_blank_BR_questions;
+   extern const char *Txt_Answers;
    extern const char *Txt_Score;
-   extern const char *Txt_Average_BR_score_BR_per_question;
    extern const char *Txt_Grade;
+   extern const char *Txt_ANSWERS_non_blank;
+   extern const char *Txt_ANSWERS_blank;
+   extern const char *Txt_total;
+   extern const char *Txt_average;
 
+   /***** First row *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TH (1,2,"CT",Txt_User[Usr_SEX_UNKNOWN]);
-   HTM_TH (1,1,"LT",Txt_START_END_TIME[Dat_START_TIME]);
-   HTM_TH (1,1,"LT",Txt_START_END_TIME[Dat_END_TIME  ]);
-   HTM_TH (1,1,"RT",Txt_Questions);
-   HTM_TH (1,1,"RT",Txt_Non_blank_BR_questions);
-   HTM_TH (1,1,"RT",Txt_Score);
-   HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question);
-   HTM_TH (1,1,"RT",Txt_Grade);
-   HTM_TH_Empty (1);
+   HTM_TH (3,2,"CT",Txt_User[Usr_SEX_UNKNOWN]);
+   HTM_TH (3,1,"LT",Txt_START_END_TIME[Dat_START_TIME]);
+   HTM_TH (3,1,"LT",Txt_START_END_TIME[Dat_END_TIME  ]);
+   HTM_TH (3,1,"RT LINE_LEFT",Txt_Questions);
+   HTM_TH (1,2,"CT LINE_LEFT",Txt_Answers);
+   HTM_TH (1,2,"CT LINE_LEFT",Txt_Score);
+   HTM_TH (3,1,"RT LINE_LEFT",Txt_Grade);
+   HTM_TH (3,1,"LINE_LEFT",NULL);
+
+   HTM_TR_End ();
+
+   /***** Second row *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TH (1,1,"RT LINE_LEFT",Txt_ANSWERS_non_blank);
+   HTM_TH (1,1,"RT",Txt_ANSWERS_blank);
+   HTM_TH (1,1,"RT LINE_LEFT",Txt_total);
+   HTM_TH (1,1,"RT",Txt_average);
+
+   HTM_TR_End ();
+
+   /***** Third row *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TH (1,1,"RT LINE_LEFT","-1&le;<em>p<sub>i</sub></em>&le;1");
+   HTM_TH (1,1,"RT","<em>p<sub>i</sub></em>=0");
+   HTM_TH (1,1,"RT LINE_LEFT","<em>&Sigma;p<sub>i</sub></em>");
+   HTM_TH (1,1,"RT","-1&le;<em style=\"text-decoration:overline;\">p</em>&le;1");
 
    HTM_TR_End ();
   }
@@ -2107,23 +2130,31 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	   }
 
          /* Write number of questions */
-	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"%s LINE_LEFT RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanView.Result)
 	    HTM_Unsigned (Print.NumQsts);
 	 else
             Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
-         /* Write number of questions not blank */
-	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
+         /* Write number of non-blank answers */
+	 HTM_TD_Begin ("class=\"%s LINE_LEFT RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanView.Result)
 	    HTM_Unsigned (Print.NumQstsNotBlank);
 	 else
             Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
-	 /* Write score */
+         /* Write number of blank answers */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
+	 if (ICanView.Result)
+	    HTM_Unsigned (Print.NumQsts - Print.NumQstsNotBlank);
+	 else
+            Ico_PutIconNotVisible ();
+	 HTM_TD_End ();
+
+	 /* Write score */
+	 HTM_TD_Begin ("class=\"%s LINE_LEFT RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanView.Score)
 	   {
 	    HTM_Double2Decimals (Print.Score);
@@ -2145,7 +2176,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	 HTM_TD_End ();
 
          /* Write grade */
-	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"%s LINE_LEFT RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanView.Score)
             TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,Tst_SCORE_MAX);
 	 else
@@ -2153,7 +2184,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	 HTM_TD_End ();
 
 	 /* Link to show this test exam */
-	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LINE_LEFT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanView.Result)
 	   {
 	    Frm_StartForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
@@ -2246,25 +2277,31 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
    HTM_TR_Begin (NULL);
 
    /***** Row title *****/
-   HTM_TD_Begin ("colspan=\"2\" class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("colspan=\"2\" class=\"DAT_N LINE_TOP LINE_BOTTOM RM COLOR%u\"",Gbl.RowEvenOdd);
    HTM_TxtColonNBSP (Txt_Visible_tests);
    HTM_Unsigned (NumPrints);
    HTM_TD_End ();
 
    /***** Write total number of questions *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT RM COLOR%u\"",Gbl.RowEvenOdd);
    if (NumPrints)
       HTM_Unsigned (NumTotalQsts);
    HTM_TD_End ();
 
-   /***** Write total number of questions not blank *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   /***** Write total number of non-blank answers *****/
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT RM COLOR%u\"",Gbl.RowEvenOdd);
    if (NumPrints)
       HTM_Unsigned (NumTotalQstsNotBlank);
    HTM_TD_End ();
 
+   /***** Write total number of blank answers *****/
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM RM COLOR%u\"",Gbl.RowEvenOdd);
+   if (NumPrints)
+      HTM_Unsigned (NumTotalQsts - NumTotalQstsNotBlank);
+   HTM_TD_End ();
+
    /***** Write total score *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
      {
       HTM_Double2Decimals (TotalScoreOfAllTests);
@@ -2274,20 +2311,20 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
    HTM_TD_End ();
 
    /***** Write average score per question *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
       HTM_Double2Decimals (NumTotalQsts ? TotalScoreOfAllTests / (double) NumTotalQsts :
 			                  0.0);
    HTM_TD_End ();
 
-   /***** Write score over Tst_SCORE_MAX *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   /***** Write grade over Tst_SCORE_MAX *****/
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
       TstPrn_ComputeAndShowGrade (NumTotalQsts,TotalScoreOfAllTests,Tst_SCORE_MAX);
    HTM_TD_End ();
 
    /***** Last cell *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
    HTM_TD_End ();
 
    /***** End row *****/

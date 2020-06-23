@@ -741,7 +741,7 @@ static void MchRes_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    extern const char *Txt_Match;
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
-   extern const char *Txt_Non_blank_BR_questions;
+   extern const char *Txt_ANSWERS_non_blank;
    extern const char *Txt_Score;
    extern const char *Txt_Average_BR_score_BR_per_question;
    extern const char *Txt_Grade;
@@ -754,7 +754,7 @@ static void MchRes_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    HTM_TH (1,1,"LT",Txt_START_END_TIME[Dat_END_TIME  ]);
    HTM_TH (1,1,"LT",Txt_Match);
    HTM_TH (1,1,"RT",Txt_Questions);
-   HTM_TH (1,1,"RT",Txt_Non_blank_BR_questions);
+   HTM_TH (1,1,"RT",Txt_ANSWERS_non_blank);
    HTM_TH (1,1,"RT",Txt_Score);
    HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question);
    HTM_TH (1,1,"RT",Txt_Grade);
