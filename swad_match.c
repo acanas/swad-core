@@ -3758,7 +3758,7 @@ void Mch_RemoveMyQuestionAnswer (void)
       Mch_RemoveMyAnswerToMatchQuestion (&Match);
 
       /***** Compute score and update my match result *****/
-      MchRes_ComputeScoreAndUpdateMyMatchResult (Match.MchCod);
+      MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (Match.MchCod);
      }
 
    /***** Show current match status *****/
@@ -3989,7 +3989,7 @@ void Mch_ReceiveQuestionAnswer (void)
 	 Mch_UpdateMyAnswerToMatchQuestion (&Match,&UsrAnswer);
 
 	 /***** Compute score and update my match result *****/
-	 MchRes_ComputeScoreAndUpdateMyMatchResult (Match.MchCod);
+	 MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (Match.MchCod);
 	}
      }
 

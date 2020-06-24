@@ -556,7 +556,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.256 (2020-06-24)"
+#define Log_PLATFORM_VERSION	"SWAD 19.257 (2020-06-24)"
 #define CSS_FILE		"swad19.253.css"
 #define JS_FILE			"swad19.254.js"
 /*
@@ -567,6 +567,7 @@ TODO: Fix bug: Cuando se pulsa en ver fichas, y luego en una ficha en "Ver traba
 TODO: No limitar el número de preguntas en un examen a ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT, sino asignar PrintedQuestions dinámicamente con malloc
 TODO: Que al generar un examen sólo se cojan preguntas válidas. Y si ya está generado, al entrar de nuevo, que se vean en rojo.
 
+	Version 19.257:   Jun 24, 2020  New module swad_match_print. (303887 lines)
 	Version 19.256:   Jun 24, 2020  Code refactoring in tests, exams and matches results. (303841 lines)
 	Version 19.255.2: Jun 24, 2020  Changes in listing of tests and exams results. (303701 lines)
 	Version 19.255.1: Jun 23, 2020  Changes in listing of tests results. (303655 lines)

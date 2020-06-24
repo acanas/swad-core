@@ -77,10 +77,6 @@ struct MchRes_ICanView
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void MchPrn_ResetPrint (struct MchPrn_Print *Print);
-
-static void MchRes_UpdateMyMatchResult (struct MchPrn_Print *Print);
-
 static void MchRes_PutFormToSelUsrsToViewMchResults (void *Games);
 
 static void MchRes_ListMyMchResultsInCrs (struct Gam_Games *Games);
@@ -110,90 +106,10 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
                                              double TotalScore,
 					     double TotalGrade);
 
-static void MchRes_GetMatchResultDataByMchCodAndUsrCod (struct MchPrn_Print *Print);
-
 static void MchRes_CheckIfICanSeeMatchResult (const struct Gam_Game *Game,
                                               const struct Mch_Match *Match,
                                               long UsrCod,
                                               struct MchRes_ICanView *ICanView);
-
-
-/*****************************************************************************/
-/**************************** Reset match print ******************************/
-/*****************************************************************************/
-
-static void MchPrn_ResetPrint (struct MchPrn_Print *Print)
-  {
-   Print->MchCod = -1L;
-   Print->UsrCod = -1L;
-   Print->TimeUTC[Dat_START_TIME] =
-   Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
-   Print->NumQsts.All      =
-   Print->NumQsts.NotBlank = 0;
-   Print->Score            = 0.0;
-  }
-
-/*****************************************************************************/
-/*********** Compute score and create/update my result in a match ************/
-/*****************************************************************************/
-
-void MchRes_ComputeScoreAndUpdateMyMatchResult (long MchCod)
-  {
-   struct MchPrn_Print Print;
-
-   /***** Compute my match result *****/
-   MchPrn_ResetPrint (&Print);
-   Print.MchCod = MchCod;
-   Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Mch_GetMatchQuestionsFromDB (&Print);
-   Mch_ComputeScore (&Print);
-
-   /***** Update my match result in database *****/
-   MchRes_UpdateMyMatchResult (&Print);
-  }
-
-/*****************************************************************************/
-/******************** Create/update my result in a match *********************/
-/*****************************************************************************/
-
-static void MchRes_UpdateMyMatchResult (struct MchPrn_Print *Print)
-  {
-   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   if (DB_QueryCOUNT ("can not get if match result exists",
-		      "SELECT COUNT(*) FROM mch_results"
-		      " WHERE MchCod=%ld AND UsrCod=%ld",
-		      Print->MchCod,Print->UsrCod))	// Match print exists
-      /* Update result */
-      DB_QueryUPDATE ("can not update match result",
-		       "UPDATE mch_results"
-		       " SET EndTime=NOW(),"
-			    "NumQsts=%u,"
-			    "NumQstsNotBlank=%u,"
-			    "Score='%.15lg'"
-		       " WHERE MchCod=%ld AND UsrCod=%ld",
-		       Print->NumQsts.All,
-		       Print->NumQsts.NotBlank,
-		       Print->Score,
-		       Print->MchCod,Print->UsrCod);
-   else							// Match print doesn't exist
-      /* Create result */
-      DB_QueryINSERT ("can not create match result",
-		       "INSERT mch_results "
-		       "(MchCod,UsrCod,StartTime,EndTime,NumQsts,NumQstsNotBlank,Score)"
-		       " VALUES "
-		       "(%ld,"		// MchCod
-		       "%ld,"		// UsrCod
-		       "NOW(),"		// StartTime
-		       "NOW(),"		// EndTime
-		       "%u,"		// NumQsts
-		       "%u,"		// NumQstsNotBlank
-		       "'%.15lg')",	// Score
-		       Print->MchCod,Print->UsrCod,
-		       Print->NumQsts.All,
-		       Print->NumQsts.NotBlank,
-		       Print->Score);
-   Str_SetDecimalPointToLocal ();	// Return to local system
-  }
 
 /*****************************************************************************/
 /*************************** Show my matches results *************************/
@@ -974,7 +890,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 
 	 /* Get match result data */
 	 Print.UsrCod = UsrDat->UsrCod;
-         MchRes_GetMatchResultDataByMchCodAndUsrCod (&Print);
+         MchPrn_GetMatchPrintDataByMchCodAndUsrCod (&Print);
 
 	 /* Get data of match and game */
 	 Match.MchCod = Print.MchCod;
@@ -1276,7 +1192,7 @@ void MchRes_ShowOneMchResult (void)
    /***** Get match result data *****/
    Print.MchCod = Match.MchCod;
    Print.UsrCod = UsrDat->UsrCod;
-   MchRes_GetMatchResultDataByMchCodAndUsrCod (&Print);
+   MchPrn_GetMatchPrintDataByMchCodAndUsrCod (&Print);
 
    /***** Check if I can view this match result and score *****/
    MchRes_CheckIfICanSeeMatchResult (&Game,&Match,UsrDat->UsrCod,&ICanView);
@@ -1447,62 +1363,6 @@ void MchRes_ShowOneMchResult (void)
      }
    else	// I am not allowed to view this match result
       Lay_NoPermissionExit ();
-  }
-
-/*****************************************************************************/
-/************* Get data of a match result using its match code ***************/
-/*****************************************************************************/
-
-static void MchRes_GetMatchResultDataByMchCodAndUsrCod (struct MchPrn_Print *Print)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   Dat_StartEndTime_t StartEndTime;
-
-   /***** Make database query *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data"
-				  " of a match result of a user",
-		       "SELECT UNIX_TIMESTAMP(mch_results.StartTime),"		// row[1]
-			      "UNIX_TIMESTAMP(mch_results.EndTime),"		// row[2]
-		              "mch_results.NumQsts,"				// row[3]
-		              "mch_results.NumQstsNotBlank,"			// row[4]
-		              "mch_results.Score"				// row[5]
-		       " FROM mch_results,mch_matches,gam_games"
-		       " WHERE mch_results.MchCod=%ld"
-		       " AND mch_results.UsrCod=%ld"
-		       " AND mch_results.MchCod=mch_matches.MchCod"
-		       " AND mch_matches.GamCod=gam_games.GamCod"
-		       " AND gam_games.CrsCod=%ld",	// Extra check
-		       Print->MchCod,Print->UsrCod,
-		       Gbl.Hierarchy.Crs.CrsCod) == 1)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get start time (row[0] and row[1] hold UTC date-times) */
-      for (StartEndTime = (Dat_StartEndTime_t) 0;
-	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	   StartEndTime++)
-         Print->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
-
-      /* Get number of questions (row[2]) */
-      if (sscanf (row[2],"%u",&Print->NumQsts.All) != 1)
-	 Print->NumQsts.All = 0;
-
-      /* Get number of questions not blank (row[3]) */
-      if (sscanf (row[3],"%u",&Print->NumQsts.NotBlank) != 1)
-	 Print->NumQsts.NotBlank = 0;
-
-      /* Get score (row[4]) */
-      Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[4],"%lf",&Print->Score) != 1)
-	 Print->Score = 0.0;
-      Str_SetDecimalPointToLocal ();	// Return to local system
-     }
-   else
-      MchPrn_ResetPrint (Print);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

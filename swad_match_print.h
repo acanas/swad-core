@@ -53,4 +53,10 @@ struct MchPrn_Print
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void MchPrn_ResetPrint (struct MchPrn_Print *Print);
+
+void MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (long MchCod);
+
+void MchPrn_GetMatchPrintDataByMchCodAndUsrCod (struct MchPrn_Print *Print);
+
 #endif

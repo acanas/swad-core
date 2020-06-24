@@ -38,8 +38,6 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void MchRes_ComputeScoreAndUpdateMyMatchResult (long MchCod);
-
 void MchRes_ShowMyMchResultsInCrs (void);
 void MchRes_ShowMyMchResultsInGam (void);
 void MchRes_ShowMyMchResultsInMch (void);
