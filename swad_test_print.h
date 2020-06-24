@@ -146,7 +146,9 @@ long TstPrn_GetParamPrnCod (void);
 
 void TstPrn_ShowOnePrint (void);
 void TstPrn_ShowPrintAnswers (struct UsrData *UsrDat,
-			      struct TstPrn_Print *Print,
+			      unsigned NumQsts,
+			      struct TstPrn_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST],
+			      time_t TimeUTC[Dat_NUM_START_END_TIME],
 			      unsigned Visibility);
 void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print);
 

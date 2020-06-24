@@ -66,7 +66,9 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print);
+static void ExaPrn_GetDataOfPrint (struct ExaPrn_Print *Print,
+                                   MYSQL_RES **mysql_res,
+				   unsigned long NumRows);
 
 static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,long ExaCod);
 static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
@@ -152,14 +154,9 @@ static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print);
 
 void ExaPrn_ResetPrint (struct ExaPrn_Print *Print)
   {
+   Print->PrnCod = -1L;
    Print->SesCod = -1L;
    Print->UsrCod = -1L;
-   ExaPrn_ResetPrintExceptEvtCodAndUsrCod (Print);
-  }
-
-static void ExaPrn_ResetPrintExceptEvtCodAndUsrCod (struct ExaPrn_Print *Print)
-  {
-   Print->PrnCod                  = -1L;
    Print->TimeUTC[Dat_START_TIME] =
    Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Print->Sent                    = false;	// After creating an exam print, it's not sent
@@ -191,7 +188,6 @@ void ExaPrn_ShowExamPrint (void)
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exam);
    ExaSes_ResetSession (&Session);
-   ExaPrn_ResetPrint (&Print);
 
    /***** Get and check parameters *****/
    ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
@@ -202,7 +198,7 @@ void ExaPrn_ShowExamPrint (void)
       /***** Get print data from database *****/
       Print.SesCod = Session.SesCod;
       Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      ExaPrn_GetDataOfPrintByCodAndUsrCod (&Print);
+      ExaPrn_GetDataOfPrintBySesCodAndUsrCod (&Print);
 
       if (Print.PrnCod <= 0)	// Print does not exists ==> create it
 	{
@@ -240,60 +236,112 @@ void ExaPrn_ShowExamPrint (void)
   }
 
 /*****************************************************************************/
+/**************** Get data of an exam print using print code *****************/
+/*****************************************************************************/
+
+void ExaPrn_GetDataOfPrintByPrnCod (struct ExaPrn_Print *Print)
+  {
+   MYSQL_RES *mysql_res;
+   unsigned long NumRows;
+
+   /***** Make database query *****/
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get data of an exam print",
+			     "SELECT PrnCod,"				// row[0]
+				    "SesCod,"				// row[1]
+				    "UsrCod,"				// row[2]
+				    "UNIX_TIMESTAMP(StartTime),"	// row[3]
+				    "UNIX_TIMESTAMP(EndTime),"		// row[4]
+				    "NumQsts,"				// row[5]
+				    "NumQstsNotBlank,"			// row[6]
+				    "Sent,"				// row[7]
+				    "Score"				// row[8]
+			     " FROM exa_prints"
+			     " WHERE PrnCod=%ld",
+			     Print->PrnCod);
+
+   /***** Get data of print *****/
+   ExaPrn_GetDataOfPrint (Print,&mysql_res,NumRows);
+  }
+
+/*****************************************************************************/
 /******** Get data of an exam print using session code and user code *********/
 /*****************************************************************************/
 
-void ExaPrn_GetDataOfPrintByCodAndUsrCod (struct ExaPrn_Print *Print)
+void ExaPrn_GetDataOfPrintBySesCodAndUsrCod (struct ExaPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
+   unsigned long NumRows;
 
    /***** Make database query *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data of an exam print",
-		       "SELECT PrnCod,"				// row[0]
-			      "UNIX_TIMESTAMP(StartTime),"	// row[1]
-			      "UNIX_TIMESTAMP(EndTime),"	// row[2]
-		              "NumQsts,"			// row[3]
-		              "NumQstsNotBlank,"		// row[4]
-			      "Sent,"				// row[5]
-		              "Score"				// row[6]
-		       " FROM exa_prints"
-	               " WHERE SesCod=%ld"
-                       " AND UsrCod=%ld",
-		       Print->SesCod,
-		       Print->UsrCod) == 1)
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get data of an exam print",
+			     "SELECT PrnCod,"				// row[0]
+				    "SesCod,"				// row[1]
+				    "UsrCod,"				// row[2]
+				    "UNIX_TIMESTAMP(StartTime),"	// row[3]
+				    "UNIX_TIMESTAMP(EndTime),"		// row[4]
+				    "NumQsts,"				// row[5]
+				    "NumQstsNotBlank,"			// row[6]
+				    "Sent,"				// row[7]
+				    "Score"				// row[8]
+			     " FROM exa_prints"
+			     " WHERE SesCod=%ld"
+			     " AND UsrCod=%ld",
+			     Print->SesCod,
+			     Print->UsrCod);
+
+   /***** Get data of print *****/
+   ExaPrn_GetDataOfPrint (Print,&mysql_res,NumRows);
+  }
+
+/*****************************************************************************/
+/************************* Get assignment data *******************************/
+/*****************************************************************************/
+
+static void ExaPrn_GetDataOfPrint (struct ExaPrn_Print *Print,
+                                   MYSQL_RES **mysql_res,
+				   unsigned long NumRows)
+  {
+   MYSQL_ROW row;
+
+   if (NumRows)
      {
-      row = mysql_fetch_row (mysql_res);
+      row = mysql_fetch_row (*mysql_res);
 
       /* Get print code (row[0]) */
       Print->PrnCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get date-time (row[1] and row[2] hold UTC date-time) */
-      Print->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[1]);
-      Print->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[2]);
+      /* Get session code (row[1]) */
+      Print->SesCod = Str_ConvertStrCodToLongCod (row[1]);
 
-      /* Get number of questions (row[3]) */
-      if (sscanf (row[3],"%u",&Print->NumQsts.All) != 1)
+      /* Get user code (row[2]) */
+      Print->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
+
+      /* Get date-time (row[3] and row[4] hold UTC date-time) */
+      Print->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
+      Print->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
+
+      /* Get number of questions (row[5]) */
+      if (sscanf (row[5],"%u",&Print->NumQsts.All) != 1)
 	 Print->NumQsts.All = 0;
 
-      /* Get number of questions not blank (row[4]) */
-      if (sscanf (row[4],"%u",&Print->NumQsts.NotBlank) != 1)
+      /* Get number of questions not blank (row[6]) */
+      if (sscanf (row[6],"%u",&Print->NumQsts.NotBlank) != 1)
 	 Print->NumQsts.NotBlank = 0;
 
-      /* Get if exam has been sent (row[5]) */
-      Print->Sent = (row[5][0] == 'Y');
+      /* Get if exam has been sent (row[7]) */
+      Print->Sent = (row[7][0] == 'Y');
 
-      /* Get score (row[6]) */
+      /* Get score (row[8]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[6],"%lf",&Print->Score.All) != 1)
+      if (sscanf (row[8],"%lf",&Print->Score.All) != 1)
 	 Print->Score.All = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
    else
-      ExaPrn_ResetPrintExceptEvtCodAndUsrCod (Print);
+      ExaPrn_ResetPrint (Print);
 
    /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   DB_FreeMySQLResult (mysql_res);
   }
 
 /*****************************************************************************/
@@ -995,14 +1043,13 @@ void ExaPrn_ReceivePrintAnswer (void)
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exam);
    ExaSes_ResetSession (&Session);
-   ExaPrn_ResetPrint (&Print);
 
    /***** Get session code *****/
    Print.SesCod = ExaSes_GetParamSesCod ();
 
    /***** Get print data *****/
    Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   ExaPrn_GetDataOfPrintByCodAndUsrCod (&Print);
+   ExaPrn_GetDataOfPrintBySesCodAndUsrCod (&Print);
    if (Print.PrnCod <= 0)
       Lay_WrongExamExit ();
 

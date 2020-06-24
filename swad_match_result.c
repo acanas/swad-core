@@ -77,7 +77,9 @@ struct MchRes_ICanView
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void MchRes_UpdateMyMatchResult (long MchCod,const struct TstPrn_Print *Print);
+static void MchPrn_ResetPrint (struct MchPrn_Print *Print);
+
+static void MchRes_UpdateMyMatchResult (struct MchPrn_Print *Print);
 
 static void MchRes_PutFormToSelUsrsToViewMchResults (void *Games);
 
@@ -104,17 +106,32 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 				   long GamCod,	// <= 0 ==> any
 				   const char *GamesSelectedCommas);
 static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
-                                             unsigned NumTotalQsts,
-                                             unsigned NumTotalQstsNotBlank,
-                                             double TotalScoreOfAllResults,
+                                             struct MchPrn_NumQuestions *NumTotalQsts,
+                                             double TotalScore,
 					     double TotalGrade);
-static void MchRes_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
-                                               struct TstPrn_Print *Print);
+
+static void MchRes_GetMatchResultDataByMchCodAndUsrCod (struct MchPrn_Print *Print);
 
 static void MchRes_CheckIfICanSeeMatchResult (const struct Gam_Game *Game,
                                               const struct Mch_Match *Match,
                                               long UsrCod,
                                               struct MchRes_ICanView *ICanView);
+
+
+/*****************************************************************************/
+/**************************** Reset match print ******************************/
+/*****************************************************************************/
+
+static void MchPrn_ResetPrint (struct MchPrn_Print *Print)
+  {
+   Print->MchCod = -1L;
+   Print->UsrCod = -1L;
+   Print->TimeUTC[Dat_START_TIME] =
+   Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Print->NumQsts.All      =
+   Print->NumQsts.NotBlank = 0;
+   Print->Score            = 0.0;
+  }
 
 /*****************************************************************************/
 /*********** Compute score and create/update my result in a match ************/
@@ -122,28 +139,30 @@ static void MchRes_CheckIfICanSeeMatchResult (const struct Gam_Game *Game,
 
 void MchRes_ComputeScoreAndUpdateMyMatchResult (long MchCod)
   {
-   struct TstPrn_Print Print;
+   struct MchPrn_Print Print;
 
    /***** Compute my match result *****/
-   TstPrn_ResetPrint (&Print);
-   Mch_GetMatchQuestionsFromDB (MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,&Print);
+   MchPrn_ResetPrint (&Print);
+   Print.MchCod = MchCod;
+   Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+   Mch_GetMatchQuestionsFromDB (&Print);
    Mch_ComputeScore (&Print);
 
    /***** Update my match result in database *****/
-   MchRes_UpdateMyMatchResult (MchCod,&Print);
+   MchRes_UpdateMyMatchResult (&Print);
   }
 
 /*****************************************************************************/
 /******************** Create/update my result in a match *********************/
 /*****************************************************************************/
 
-static void MchRes_UpdateMyMatchResult (long MchCod,const struct TstPrn_Print *Print)
+static void MchRes_UpdateMyMatchResult (struct MchPrn_Print *Print)
   {
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    if (DB_QueryCOUNT ("can not get if match result exists",
 		      "SELECT COUNT(*) FROM mch_results"
 		      " WHERE MchCod=%ld AND UsrCod=%ld",
-		      MchCod,Gbl.Usrs.Me.UsrDat.UsrCod))	// Match print exists
+		      Print->MchCod,Print->UsrCod))	// Match print exists
       /* Update result */
       DB_QueryUPDATE ("can not update match result",
 		       "UPDATE mch_results"
@@ -155,8 +174,8 @@ static void MchRes_UpdateMyMatchResult (long MchCod,const struct TstPrn_Print *P
 		       Print->NumQsts.All,
 		       Print->NumQsts.NotBlank,
 		       Print->Score,
-		       MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   else								// Match print doesn't exist
+		       Print->MchCod,Print->UsrCod);
+   else							// Match print doesn't exist
       /* Create result */
       DB_QueryINSERT ("can not create match result",
 		       "INSERT mch_results "
@@ -169,7 +188,7 @@ static void MchRes_UpdateMyMatchResult (long MchCod,const struct TstPrn_Print *P
 		       "%u,"		// NumQsts
 		       "%u,"		// NumQstsNotBlank
 		       "'%.15lg')",	// Score
-		       MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+		       Print->MchCod,Print->UsrCod,
 		       Print->NumQsts.All,
 		       Print->NumQsts.NotBlank,
 		       Print->Score);
@@ -612,7 +631,7 @@ static void MchRes_ShowResultsBegin (struct Gam_Games *Games,
 
    /***** Begin box *****/
    HTM_SECTION_Begin (MchRes_RESULTS_BOX_ID);
-   Box_BoxBegin ("100%",Title,
+   Box_BoxBegin (NULL,Title,
                  NULL,NULL,
 		 Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
 
@@ -741,24 +760,47 @@ static void MchRes_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    extern const char *Txt_Match;
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
-   extern const char *Txt_ANSWERS_non_blank;
+   extern const char *Txt_Answers;
    extern const char *Txt_Score;
-   extern const char *Txt_Average_BR_score_BR_per_question;
    extern const char *Txt_Grade;
+   extern const char *Txt_ANSWERS_non_blank;
+   extern const char *Txt_ANSWERS_blank;
+   extern const char *Txt_total;
+   extern const char *Txt_average;
 
+   /***** First row *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TH (1,2,"CT",Txt_User[MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.Sex :
-		                                           Usr_SEX_UNKNOWN]);
-   HTM_TH (1,1,"LT",Txt_START_END_TIME[Dat_START_TIME]);
-   HTM_TH (1,1,"LT",Txt_START_END_TIME[Dat_END_TIME  ]);
-   HTM_TH (1,1,"LT",Txt_Match);
-   HTM_TH (1,1,"RT",Txt_Questions);
-   HTM_TH (1,1,"RT",Txt_ANSWERS_non_blank);
-   HTM_TH (1,1,"RT",Txt_Score);
-   HTM_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question);
-   HTM_TH (1,1,"RT",Txt_Grade);
-   HTM_TH_Empty (1);
+   HTM_TH (3,2,"CT LINE_BOTTOM",Txt_User[MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.Sex :
+		                                               Usr_SEX_UNKNOWN]);
+   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_START_TIME]);
+   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_END_TIME  ]);
+   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_Match);
+   HTM_TH (3,1,"RT LINE_BOTTOM LINE_LEFT",Txt_Questions);
+   HTM_TH (1,2,"CT LINE_LEFT",Txt_Answers);
+   HTM_TH (1,2,"CT LINE_LEFT",Txt_Score);
+   HTM_TH (3,1,"RT LINE_BOTTOM LINE_LEFT",Txt_Grade);
+   HTM_TH (3,1,"LINE_BOTTOM LINE_LEFT",NULL);
+
+   HTM_TR_End ();
+
+   /***** Second row *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TH (1,1,"RT LINE_LEFT",Txt_ANSWERS_non_blank);
+   HTM_TH (1,1,"RT",Txt_ANSWERS_blank);
+   HTM_TH (1,1,"RT LINE_LEFT",Txt_total);
+   HTM_TH (1,1,"RT",Txt_average);
+
+   HTM_TR_End ();
+
+   /***** Third row *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TH (1,1,"RT LINE_BOTTOM LINE_LEFT","{-1&le;<em>p<sub>i</sub></em>&le;1}");
+   HTM_TH (1,1,"RT LINE_BOTTOM","{<em>p<sub>i</sub></em>=0}");
+   HTM_TH (1,1,"RT LINE_BOTTOM LINE_LEFT","<em>&Sigma;p<sub>i</sub></em>");
+   HTM_TH (1,1,"RT LINE_BOTTOM","-1&le;<em style=\"text-decoration:overline;\">p</em>&le;1");
 
    HTM_TR_End ();
   }
@@ -815,22 +857,22 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
    unsigned NumResults;
    unsigned NumResult;
    static unsigned UniqueId = 0;
+   Dat_StartEndTime_t StartEndTime;
    char *Id;
+   struct MchPrn_Print Print;
+   unsigned NumQstsBlank;
    struct Mch_Match Match;
    struct Gam_Game Game;
-   Dat_StartEndTime_t StartEndTime;
-   unsigned NumQstsInThisResult;
-   unsigned NumQstsNotBlankInThisResult;
-   unsigned NumTotalQsts = 0;
-   unsigned NumTotalQstsNotBlank = 0;
-   double ScoreInThisResult;
-   double TotalScoreOfAllResults = 0.0;
    double Grade;
-   double TotalGrade = 0.0;
-   time_t TimeUTC[Dat_NUM_START_END_TIME];
+   struct MchPrn_NumQuestions NumTotalQsts;
+   double TotalScore;
+   double TotalGrade;
 
-   /***** Reset match *****/
-   Mch_ResetMatch (&Match);
+   /***** Reset total number of questions and total score *****/
+   NumTotalQsts.All      =
+   NumTotalQsts.NotBlank = 0;
+   TotalScore = 0.0;
+   TotalGrade = 0.0;
 
    /***** Set user *****/
    UsrDat = (MeOrOther == Usr_ME) ? &Gbl.Usrs.Me.UsrDat :
@@ -893,12 +935,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
    /***** Make database query *****/
    NumResults =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches results",
-			      "SELECT mch_results.MchCod,"			// row[0]
-				     "UNIX_TIMESTAMP(mch_results.StartTime),"	// row[1]
-				     "UNIX_TIMESTAMP(mch_results.EndTime),"	// row[2]
-				     "mch_results.NumQsts,"			// row[3]
-				     "mch_results.NumQstsNotBlank,"		// row[4]
-				     "mch_results.Score"			// row[5]
+			      "SELECT mch_results.MchCod"			// row[0]
 			      " FROM mch_results,mch_matches,gam_games"
 			      " WHERE mch_results.UsrCod=%ld"
 			      "%s"	// Match subquery
@@ -931,11 +968,16 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get match code (row[0]) */
-	 if ((Match.MchCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         MchPrn_ResetPrint (&Print);
+	 if ((Print.MchCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of match.");
-	 Mch_GetDataOfMatchByCod (&Match);
+
+	 /* Get match result data */
+	 Print.UsrCod = UsrDat->UsrCod;
+         MchRes_GetMatchResultDataByMchCodAndUsrCod (&Print);
 
 	 /* Get data of match and game */
+	 Match.MchCod = Print.MchCod;
 	 Mch_GetDataOfMatchByCod (&Match);
 	 Game.GamCod = Match.GamCod;
 	 Gam_GetDataOfGameByCod (&Game);
@@ -946,18 +988,17 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 if (NumResult)
 	    HTM_TR_Begin (NULL);
 
-	 /* Write start/end times (row[1], row[2] hold UTC start/end times) */
+	 /* Write start/end times */
 	 for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	      StartEndTime++)
 	   {
-	    TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[1 + StartEndTime]);
 	    UniqueId++;
 	    if (asprintf (&Id,"mch_res_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	       Lay_NotEnoughMemoryExit ();
 	    HTM_TD_Begin ("id =\"%s\" class=\"DAT LT COLOR%u\"",
 			  Id,Gbl.RowEvenOdd);
-	    Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC[StartEndTime],
+	    Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					  true,true,false,0x7);
 	    HTM_TD_End ();
@@ -969,51 +1010,56 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_Txt (Match.Title);
 	 HTM_TD_End ();
 
+	 /* Accumulate questions and score */
 	 if (ICanView.Score)
 	   {
-	    /* Get number of questions (row[3]) */
-	    if (sscanf (row[3],"%u",&NumQstsInThisResult) != 1)
-	       NumQstsInThisResult = 0;
-	    NumTotalQsts += NumQstsInThisResult;
-
-	    /* Get number of questions not blank (row[4]) */
-	    if (sscanf (row[4],"%u",&NumQstsNotBlankInThisResult) != 1)
-	       NumQstsNotBlankInThisResult = 0;
-	    NumTotalQstsNotBlank += NumQstsNotBlankInThisResult;
-
-	    Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
-
-	    /* Get score (row[5]) */
-	    if (sscanf (row[5],"%lf",&ScoreInThisResult) != 1)
-	       ScoreInThisResult = 0.0;
-	    TotalScoreOfAllResults += ScoreInThisResult;
-
-	    Str_SetDecimalPointToLocal ();	// Return to local system
+	    NumTotalQsts.All      += Print.NumQsts.All;
+            NumTotalQsts.NotBlank += Print.NumQsts.NotBlank;
+            TotalScore            += Print.Score;
 	   }
 
 	 /* Write number of questions */
-	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanView.Score)
-	    HTM_Unsigned (NumQstsInThisResult);
+	    HTM_Unsigned (Print.NumQsts.All);
 	 else
             Ico_PutIconNotVisible ();
          HTM_TD_End ();
 
-	 /* Write number of questions not blank */
-	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+	 /* Write number of non-blank answers */
+	 HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanView.Score)
-	    HTM_Unsigned (NumQstsNotBlankInThisResult);
+	   {
+	    if (Print.NumQsts.NotBlank)
+	       HTM_Unsigned (Print.NumQsts.NotBlank);
+	    else
+	       HTM_Light0 ();
+	   }
+	 else
+            Ico_PutIconNotVisible ();
+	 HTM_TD_End ();
+
+	 /* Write number of blank answers */
+	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+	 NumQstsBlank = Print.NumQsts.All - Print.NumQsts.NotBlank;
+	 if (ICanView.Score)
+	   {
+	    if (NumQstsBlank)
+	       HTM_Unsigned (NumQstsBlank);
+	    else
+	       HTM_Light0 ();
+	   }
 	 else
             Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Write score */
-	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanView.Score)
 	   {
-	    HTM_Double2Decimals (ScoreInThisResult);
+	    HTM_Double2Decimals (Print.Score);
 	    HTM_Txt ("/");
-	    HTM_Unsigned (NumQstsInThisResult);
+	    HTM_Unsigned (Print.NumQsts.All);
 	   }
 	 else
             Ico_PutIconNotVisible ();
@@ -1022,18 +1068,18 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 /* Write average score per question */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanView.Score)
-	    HTM_Double2Decimals (NumQstsInThisResult ? ScoreInThisResult /
-					               (double) NumQstsInThisResult :
-					               0.0);
+	    HTM_Double2Decimals (Print.NumQsts.All ? Print.Score /
+					             (double) Print.NumQsts.All :
+					             0.0);
 	 else
             Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Write grade over maximum grade */
-	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanView.Score)
 	   {
-            Grade = TstPrn_ComputeGrade (NumQstsInThisResult,ScoreInThisResult,Game.MaxGrade);
+            Grade = TstPrn_ComputeGrade (Print.NumQsts.All,Print.Score,Game.MaxGrade);
 	    TstPrn_ShowGrade (Grade,Game.MaxGrade);
 	    TotalGrade += Grade;
 	   }
@@ -1042,7 +1088,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_End ();
 
 	 /* Link to show this result */
-	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanView.Result)
 	   {
 	    Games->GamCod = Match.GamCod;
@@ -1071,13 +1117,36 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 
       /***** Write totals for this user *****/
       MchRes_ShowMchResultsSummaryRow (NumResults,
-				       NumTotalQsts,NumTotalQstsNotBlank,
-				       TotalScoreOfAllResults,
+				       &NumTotalQsts,
+				       TotalScore,
 				       TotalGrade);
      }
    else
      {
-      HTM_TD_ColouredEmpty (9);
+      /* Columns for dates and match */
+      HTM_TD_Begin ("colspan=\"3\" class=\"LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
+      /* Column for questions */
+      HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
+      /* Columns for answers */
+      HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
+      /* Columns for score */
+      HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
+      /* Column for grade */
+      HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
+      /* Column for link to show the result */
+      HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
       HTM_TR_End ();
      }
 
@@ -1092,9 +1161,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 /*****************************************************************************/
 
 static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
-                                             unsigned NumTotalQsts,
-                                             unsigned NumTotalQstsNotBlank,
-                                             double TotalScoreOfAllResults,
+                                             struct MchPrn_NumQuestions *NumTotalQsts,
+                                             double TotalScore,
 					     double TotalGrade)
   {
    extern const char *Txt_Matches;
@@ -1103,44 +1171,50 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
    HTM_TR_Begin (NULL);
 
    /***** Row title *****/
-   HTM_TD_Begin ("colspan=\"3\" class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("colspan=\"3\" class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
    HTM_TxtColonNBSP (Txt_Matches);
    HTM_Unsigned (NumResults);
    HTM_TD_End ();
 
    /***** Write total number of questions *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
    if (NumResults)
-      HTM_Unsigned (NumTotalQsts);
+      HTM_Unsigned (NumTotalQsts->All);
    HTM_TD_End ();
 
-   /***** Write total number of questions not blank *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   /***** Write total number of non-blank answers *****/
+   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
    if (NumResults)
-      HTM_Unsigned (NumTotalQstsNotBlank);
+      HTM_Unsigned (NumTotalQsts->NotBlank);
+   HTM_TD_End ();
+
+   /***** Write total number of blank answers *****/
+   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+   if (NumResults)
+      HTM_Unsigned (NumTotalQsts->All - NumTotalQsts->NotBlank);
    HTM_TD_End ();
 
    /***** Write total score *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Double2Decimals (TotalScoreOfAllResults);
+   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_Double2Decimals (TotalScore);
    HTM_Txt ("/");
-   HTM_Unsigned (NumTotalQsts);
+   HTM_Unsigned (NumTotalQsts->All);
    HTM_TD_End ();
 
    /***** Write average score per question *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Double2Decimals (NumTotalQsts ? TotalScoreOfAllResults /
-	                               (double) NumTotalQsts :
-			               0.0);
+   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_Double2Decimals (NumTotalQsts->All ? TotalScore /
+	                                    (double) NumTotalQsts->All :
+			                    0.0);
    HTM_TD_End ();
 
    /***** Write total grade *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
    HTM_Double2Decimals (TotalGrade);
    HTM_TD_End ();
 
    /***** Last cell *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
    HTM_TD_End ();
 
    /***** End row *****/
@@ -1169,7 +1243,7 @@ void MchRes_ShowOneMchResult (void)
    struct UsrData *UsrDat;
    Dat_StartEndTime_t StartEndTime;
    char *Id;
-   struct TstPrn_Print Print;
+   struct MchPrn_Print Print;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    struct MchRes_ICanView ICanView;
@@ -1200,8 +1274,9 @@ void MchRes_ShowOneMchResult (void)
      }
 
    /***** Get match result data *****/
-   TstPrn_ResetPrint (&Print);
-   MchRes_GetMatchResultDataByMchCod (Match.MchCod,UsrDat->UsrCod,&Print);
+   Print.MchCod = Match.MchCod;
+   Print.UsrCod = UsrDat->UsrCod;
+   MchRes_GetMatchResultDataByMchCodAndUsrCod (&Print);
 
    /***** Check if I can view this match result and score *****/
    MchRes_CheckIfICanSeeMatchResult (&Game,&Match,UsrDat->UsrCod,&ICanView);
@@ -1209,7 +1284,7 @@ void MchRes_ShowOneMchResult (void)
    if (ICanView.Result)	// I am allowed to view this match result
      {
       /***** Get questions and user's answers of the match result from database *****/
-      Mch_GetMatchQuestionsFromDB (Match.MchCod,UsrDat->UsrCod,&Print);
+      Mch_GetMatchQuestionsFromDB (&Print);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Match.Title,
@@ -1358,7 +1433,11 @@ void MchRes_ShowOneMchResult (void)
       HTM_TR_End ();
 
       /***** Write answers and solutions *****/
-      TstPrn_ShowPrintAnswers (UsrDat,&Print,Game.Visibility);
+      TstPrn_ShowPrintAnswers (UsrDat,
+                               Print.NumQsts.All,
+                               Print.PrintedQuestions,
+                               Print.TimeUTC,
+                               Game.Visibility);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -1374,8 +1453,7 @@ void MchRes_ShowOneMchResult (void)
 /************* Get data of a match result using its match code ***************/
 /*****************************************************************************/
 
-static void MchRes_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
-                                               struct TstPrn_Print *Print)
+static void MchRes_GetMatchResultDataByMchCodAndUsrCod (struct MchPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1395,7 +1473,7 @@ static void MchRes_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 		       " AND mch_results.MchCod=mch_matches.MchCod"
 		       " AND mch_matches.GamCod=gam_games.GamCod"
 		       " AND gam_games.CrsCod=%ld",	// Extra check
-		       MchCod,UsrCod,
+		       Print->MchCod,Print->UsrCod,
 		       Gbl.Hierarchy.Crs.CrsCod) == 1)
      {
       row = mysql_fetch_row (mysql_res);
@@ -1421,11 +1499,7 @@ static void MchRes_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
    else
-     {
-      Print->NumQsts.All      =
-      Print->NumQsts.NotBlank = 0;
-      Print->Score = 0.0;
-     }
+      MchPrn_ResetPrint (Print);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

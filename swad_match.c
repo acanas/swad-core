@@ -4032,8 +4032,7 @@ static void Mch_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match)
 /*************** Get the questions of a match from database ******************/
 /*****************************************************************************/
 
-void Mch_GetMatchQuestionsFromDB (long MchCod,long UsrCod,
-				  struct TstPrn_Print *Print)
+void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -4055,7 +4054,7 @@ void Mch_GetMatchQuestionsFromDB (long MchCod,long UsrCod,
 					" AND mch_matches.MchCod=mch_indexes.MchCod"
 					" AND gam_questions.QstInd=mch_indexes.QstInd"
 					" ORDER BY gam_questions.QstInd",
-					MchCod);
+					Print->MchCod);
    for (NumQst = 0, Print->NumQsts.NotBlank = 0;
 	NumQst < Print->NumQsts.All;
 	NumQst++)
@@ -4076,7 +4075,7 @@ void Mch_GetMatchQuestionsFromDB (long MchCod,long UsrCod,
                 Tst_MAX_BYTES_INDEXES_ONE_QST);
 
       /* Get answers selected by user for this question */
-      Mch_GetQstAnsFromDB (MchCod,UsrCod,QstInd,&UsrAnswer);
+      Mch_GetQstAnsFromDB (Print->MchCod,Print->UsrCod,QstInd,&UsrAnswer);
       if (UsrAnswer.AnsInd >= 0)	// UsrAnswer.AnsInd >= 0 ==> answer selected
 	{
          snprintf (Print->PrintedQuestions[NumQst].StrAnswers,Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
@@ -4095,7 +4094,7 @@ void Mch_GetMatchQuestionsFromDB (long MchCod,long UsrCod,
 /******************** Compute match score for a student **********************/
 /*****************************************************************************/
 
-void Mch_ComputeScore (struct TstPrn_Print *Print)
+void Mch_ComputeScore (struct MchPrn_Print *Print)
   {
    unsigned NumQst;
    struct Tst_Question Question;

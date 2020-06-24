@@ -1,7 +1,7 @@
-// swad_match_result.h: matches results in games using remote control
+// swad_match_print.h: matches prints in games using remote control
 
-#ifndef _SWAD_MCH_RES
-#define _SWAD_MCH_RES
+#ifndef _SWAD_MCH_PRN
+#define _SWAD_MCH_PRN
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,28 +27,30 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_test_print.h"
+
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define MchRes_RESULTS_BOX_ID		"mcr_box"
-#define MchRes_RESULTS_TABLE_ID		"mcr_table"
+struct MchPrn_NumQuestions
+  {
+   unsigned All;	// Total number of questions
+   unsigned NotBlank;	// Answered questions
+  };
+
+struct MchPrn_Print
+  {
+   long MchCod;		// Match code
+   long UsrCod;		// User who answered the match
+   time_t TimeUTC[Dat_NUM_START_END_TIME];
+   struct MchPrn_NumQuestions NumQsts;	// Number of questions
+   double Score;	// Total score of the match for this user
+   struct TstPrn_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST];
+  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
-
-void MchRes_ComputeScoreAndUpdateMyMatchResult (long MchCod);
-
-void MchRes_ShowMyMchResultsInCrs (void);
-void MchRes_ShowMyMchResultsInGam (void);
-void MchRes_ShowMyMchResultsInMch (void);
-
-void MchRes_ShowAllMchResultsInCrs (void);
-void MchRes_SelUsrsToViewMchResults (void);
-void MchRes_ShowAllMchResultsInGam (void);
-void MchRes_ShowAllMchResultsInMch (void);
-
-void MchRes_ShowOneMchResult (void);
 
 #endif
