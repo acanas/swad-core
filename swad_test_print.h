@@ -40,6 +40,12 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
+struct TstPrn_NumQuestions
+  {
+   unsigned All;	// Total number of questions
+   unsigned NotBlank;	// Answered questions
+  };
+
 typedef enum
   {
    TstPrn_ANSWER_IS_CORRECT,
@@ -63,8 +69,7 @@ struct TstPrn_Print
   {
    long PrnCod;			// Test print code
    time_t TimeUTC[Dat_NUM_START_END_TIME];
-   unsigned NumQsts;		// Number of questions
-   unsigned NumQstsNotBlank;	// Number of questions not blank
+   struct TstPrn_NumQuestions NumQsts;	// Number of questions
    bool Sent;			// This test print has been sent or not?
 				// "Sent" means that user has clicked "Send" button after finishing
    bool AllowTeachers;		// Are teachers allowed to see this test result?

@@ -531,7 +531,7 @@ static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print)
 				" (%ld,%ld,NOW(),NOW(),%u,0,'N',0)",
 				Print->SesCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Print->NumQsts);
+				Print->NumQsts.All);
 
    /***** Store all questions (with blank answers)
           of this exam print just generated in database *****/

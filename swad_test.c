@@ -387,7 +387,7 @@ void Tst_ShowNewTest (void)
          /***** Get questions *****/
 	 TstPrn_ResetPrint (&Print);
 	 Tst_GetQuestionsForNewTestFromDB (&Test,&Print);
-         if (Print.NumQsts)
+         if (Print.NumQsts.All)
            {
             /***** Increase number of exams generated (answered or not) by me *****/
             Tst_IncreaseMyNumAccessTst ();
@@ -550,7 +550,7 @@ void Tst_AssessTest (void)
 	 HTM_Double2Decimals (Print.Score);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Grade);
-	 TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,Tst_SCORE_MAX);
+	 TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
 	 HTM_DIV_End ();
 	}
 
@@ -570,7 +570,7 @@ static void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print)
 
    /***** Loop for every question getting user's answers *****/
    for (NumQst = 0;
-	NumQst < Print->NumQsts;
+	NumQst < Print->NumQsts.All;
 	NumQst++)
      {
       /* Get answers selected by user for this question */
@@ -2009,14 +2009,14 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
       Lay_ShowAlert (Lay_INFO,Query);
 */
    /* Make the query */
-   Print->NumQsts =
-   Test->NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions",
-			                      "%s",
-			                      Query);
+   Print->NumQsts.All =
+   Test->NumQsts      = (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions",
+			                           "%s",
+			                           Query);
 
    /***** Get questions and answers from database *****/
    for (NumQst = 0;
-	NumQst < Print->NumQsts;
+	NumQst < Print->NumQsts.All;
 	NumQst++)
      {
       /* Get question row */

@@ -152,8 +152,8 @@ static void MchRes_UpdateMyMatchResult (long MchCod,const struct TstPrn_Print *P
 			    "NumQstsNotBlank=%u,"
 			    "Score='%.15lg'"
 		       " WHERE MchCod=%ld AND UsrCod=%ld",
-		       Print->NumQsts,
-		       Print->NumQstsNotBlank,
+		       Print->NumQsts.All,
+		       Print->NumQsts.NotBlank,
 		       Print->Score,
 		       MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    else								// Match print doesn't exist
@@ -170,8 +170,8 @@ static void MchRes_UpdateMyMatchResult (long MchCod,const struct TstPrn_Print *P
 		       "%u,"		// NumQstsNotBlank
 		       "'%.15lg')",	// Score
 		       MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-		       Print->NumQsts,
-		       Print->NumQstsNotBlank,
+		       Print->NumQsts.All,
+		       Print->NumQsts.NotBlank,
 		       Print->Score);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
@@ -1284,7 +1284,7 @@ void MchRes_ShowOneMchResult (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LB\"");
-      HTM_Unsigned (Print.NumQsts);
+      HTM_Unsigned (Print.NumQsts.All);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1297,7 +1297,7 @@ void MchRes_ShowOneMchResult (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LB\"");
-      HTM_Unsigned (Print.NumQstsNotBlank);
+      HTM_Unsigned (Print.NumQsts.NotBlank);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1315,7 +1315,7 @@ void MchRes_ShowOneMchResult (void)
          HTM_STRONG_Begin ();
          HTM_Double2Decimals (Print.Score);
 	 HTM_Txt ("/");
-	 HTM_Unsigned (Print.NumQsts);
+	 HTM_Unsigned (Print.NumQsts.All);
          HTM_STRONG_End ();
 	}
       else
@@ -1335,7 +1335,7 @@ void MchRes_ShowOneMchResult (void)
       if (ICanView.Score)
 	{
          HTM_STRONG_Begin ();
-         TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,Game.MaxGrade);
+         TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Game.MaxGrade);
          HTM_STRONG_End ();
 	}
       else
@@ -1407,12 +1407,12 @@ static void MchRes_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
          Print->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
 
       /* Get number of questions (row[2]) */
-      if (sscanf (row[2],"%u",&Print->NumQsts) != 1)
-	 Print->NumQsts = 0;
+      if (sscanf (row[2],"%u",&Print->NumQsts.All) != 1)
+	 Print->NumQsts.All = 0;
 
       /* Get number of questions not blank (row[3]) */
-      if (sscanf (row[3],"%u",&Print->NumQstsNotBlank) != 1)
-	 Print->NumQstsNotBlank = 0;
+      if (sscanf (row[3],"%u",&Print->NumQsts.NotBlank) != 1)
+	 Print->NumQsts.NotBlank = 0;
 
       /* Get score (row[4]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
@@ -1422,8 +1422,8 @@ static void MchRes_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
      }
    else
      {
-      Print->NumQsts = 0;
-      Print->NumQstsNotBlank = 0;
+      Print->NumQsts.All      =
+      Print->NumQsts.NotBlank = 0;
       Print->Score = 0.0;
      }
 

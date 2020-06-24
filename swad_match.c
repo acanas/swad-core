@@ -4043,21 +4043,21 @@ void Mch_GetMatchQuestionsFromDB (long MchCod,long UsrCod,
    struct Mch_UsrAnswer UsrAnswer;
 
    /***** Get questions and answers of a match result *****/
-   Print->NumQsts = (unsigned)
-		    DB_QuerySELECT (&mysql_res,"can not get questions and answers"
-					       " of a match result",
-				    "SELECT gam_questions.QstCod,"	// row[0]
-					   "gam_questions.QstInd,"	// row[1]
-					   "mch_indexes.Indexes"	// row[2]
-				    " FROM mch_matches,gam_questions,mch_indexes"
-				    " WHERE mch_matches.MchCod=%ld"
-				    " AND mch_matches.GamCod=gam_questions.GamCod"
-				    " AND mch_matches.MchCod=mch_indexes.MchCod"
-				    " AND gam_questions.QstInd=mch_indexes.QstInd"
-				    " ORDER BY gam_questions.QstInd",
-				    MchCod);
-   for (NumQst = 0, Print->NumQstsNotBlank = 0;
-	NumQst < Print->NumQsts;
+   Print->NumQsts.All = (unsigned)
+		        DB_QuerySELECT (&mysql_res,"can not get questions and answers"
+						   " of a match result",
+					"SELECT gam_questions.QstCod,"	// row[0]
+					       "gam_questions.QstInd,"	// row[1]
+					       "mch_indexes.Indexes"	// row[2]
+					" FROM mch_matches,gam_questions,mch_indexes"
+					" WHERE mch_matches.MchCod=%ld"
+					" AND mch_matches.GamCod=gam_questions.GamCod"
+					" AND mch_matches.MchCod=mch_indexes.MchCod"
+					" AND gam_questions.QstInd=mch_indexes.QstInd"
+					" ORDER BY gam_questions.QstInd",
+					MchCod);
+   for (NumQst = 0, Print->NumQsts.NotBlank = 0;
+	NumQst < Print->NumQsts.All;
 	NumQst++)
      {
       row = mysql_fetch_row (mysql_res);
@@ -4081,7 +4081,7 @@ void Mch_GetMatchQuestionsFromDB (long MchCod,long UsrCod,
 	{
          snprintf (Print->PrintedQuestions[NumQst].StrAnswers,Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
 		   "%d",UsrAnswer.AnsInd);
-         Print->NumQstsNotBlank++;
+         Print->NumQsts.NotBlank++;
         }
       else				// UsrAnswer.AnsInd < 0 ==> no answer selected
 	 Print->PrintedQuestions[NumQst].StrAnswers[0] = '\0';	// Empty answer
@@ -4101,7 +4101,7 @@ void Mch_ComputeScore (struct TstPrn_Print *Print)
    struct Tst_Question Question;
 
    for (NumQst = 0, Print->Score = 0.0;
-	NumQst < Print->NumQsts;
+	NumQst < Print->NumQsts.All;
 	NumQst++)
      {
       /***** Create test question *****/

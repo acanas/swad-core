@@ -9974,10 +9974,10 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
 
    /***** Show user's photo *****/
    if (NumRows)
-      HTM_TD_Begin ("rowspan=\"%u\" class=\"LT COLOR%u\"",
+      HTM_TD_Begin ("rowspan=\"%u\" class=\"LT LINE_BOTTOM COLOR%u\"",
 	            NumRows + 1,Gbl.RowEvenOdd);
    else
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"LT LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
@@ -9987,10 +9987,10 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    /***** User's IDs and name *****/
    /* Begin cell */
    if (NumRows)
-      HTM_TD_Begin ("rowspan=\"%u\" class=\"LT COLOR%u\"",
+      HTM_TD_Begin ("rowspan=\"%u\" class=\"LT LINE_BOTTOM COLOR%u\"",
 	            NumRows + 1,Gbl.RowEvenOdd);
    else
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"LT LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
 
    /* Action to go to user's record depending on role in course */
    switch (UsrDat->Roles.InCurrentCrs.Role)

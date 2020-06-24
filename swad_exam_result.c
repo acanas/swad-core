@@ -716,25 +716,25 @@ static void ExaRes_ShowHeaderResults (Usr_MeOrOther_t MeOrOther)
    /***** First row *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TH (3,2,"CT",Txt_User[MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.Sex :
+   HTM_TH (3,2,"CT LINE_BOTTOM",Txt_User[MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.Sex :
 		                                   Usr_SEX_UNKNOWN]);
-   HTM_TH (3,1,"LT",Txt_START_END_TIME[Dat_START_TIME]);
-   HTM_TH (3,1,"LT",Txt_START_END_TIME[Dat_END_TIME  ]);
-   HTM_TH (3,1,"LT",Txt_Session);
+   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_START_TIME]);
+   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_END_TIME  ]);
+   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_Session);
    HTM_TH (1,3,"CT LINE_LEFT",Txt_Questions);
    HTM_TH (1,5,"CT LINE_LEFT",Txt_Valid_answers);
    HTM_TH (1,2,"CT LINE_LEFT",Txt_Score);
-   HTM_TH (3,1,"RT LINE_LEFT",Txt_Grade);
-   HTM_TH (3,1,"LINE_LEFT",NULL);
+   HTM_TH (3,1,"RT LINE_BOTTOM LINE_LEFT",Txt_Grade);
+   HTM_TH (3,1,"LINE_BOTTOM LINE_LEFT",NULL);
 
    HTM_TR_End ();
 
    /***** Second row *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TH (2,1,"RT LINE_LEFT",Txt_total);
-   HTM_TH (2,1,"RT",Txt_QUESTIONS_valid);
-   HTM_TH (2,1,"RT",Txt_QUESTIONS_invalid);
+   HTM_TH (2,1,"RT LINE_BOTTOM LINE_LEFT",Txt_total);
+   HTM_TH (2,1,"RT LINE_BOTTOM",Txt_QUESTIONS_valid);
+   HTM_TH (2,1,"RT LINE_BOTTOM",Txt_QUESTIONS_invalid);
    HTM_TH (1,1,"RT LINE_LEFT",Txt_ANSWERS_correct);
    HTM_TH (1,3,"CT",Txt_ANSWERS_wrong);
    HTM_TH (1,1,"RT",Txt_ANSWERS_blank);
@@ -746,13 +746,13 @@ static void ExaRes_ShowHeaderResults (Usr_MeOrOther_t MeOrOther)
    /***** Third row *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TH (1,1,"RT LINE_LEFT","<em>p<sub>i</sub></em>=1");
-   HTM_TH (1,1,"RT","-1&le;<em>p<sub>i</sub></em>&lt;0");
-   HTM_TH (1,1,"RT","<em>p<sub>i</sub></em>=0");
-   HTM_TH (1,1,"RT","0&lt;<em>p<sub>i</sub></em>&lt;1");
-   HTM_TH (1,1,"RT","<em>p<sub>i</sub></em>=0");
-   HTM_TH (1,1,"RT LINE_LEFT","<em>&Sigma;p<sub>i</sub></em>");
-   HTM_TH (1,1,"RT","-1&le;<em style=\"text-decoration:overline;\">p</em>&le;1");
+   HTM_TH (1,1,"RT LINE_BOTTOM LINE_LEFT","<em>p<sub>i</sub></em>=1");
+   HTM_TH (1,1,"RT LINE_BOTTOM","-1&le;<em>p<sub>i</sub></em>&lt;0");
+   HTM_TH (1,1,"RT LINE_BOTTOM","<em>p<sub>i</sub></em>=0");
+   HTM_TH (1,1,"RT LINE_BOTTOM","0&lt;<em>p<sub>i</sub></em>&lt;1");
+   HTM_TH (1,1,"RT LINE_BOTTOM","<em>p<sub>i</sub></em>=0");
+   HTM_TH (1,1,"RT LINE_BOTTOM LINE_LEFT","<em>&Sigma;p<sub>i</sub></em>");
+   HTM_TH (1,1,"RT LINE_BOTTOM","-1&le;<em style=\"text-decoration:overline;\">p</em>&le;1");
 
    HTM_TR_End ();
   }
@@ -998,6 +998,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	 HTM_Txt (Session.Title);
 	 HTM_TD_End ();
 
+	 /* Get and accumulate questions and score */
 	 if (ICanView.Score)
 	   {
 	    /* Get questions and user's answers of exam print from database */
@@ -1012,7 +1013,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    NumTotalQsts.Valid.Wrong.Positive += Print.NumQsts.Valid.Wrong.Positive;
 	    NumTotalQsts.Valid.Blank          += Print.NumQsts.Valid.Blank;
 	    NumTotalQsts.Valid.Total          += Print.NumQsts.Valid.Total;
-	    TotalScore.Valid += Print.Score.Valid;
+	    TotalScore.Valid                  += Print.Score.Valid;
 	   }
 
 	 /* Write total number of questions */

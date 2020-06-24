@@ -174,9 +174,8 @@ static void TstPrn_ShowHeaderPrints (void);
 static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat);
 static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
                                          unsigned NumPrints,
-                                         unsigned NumTotalQsts,
-                                         unsigned NumTotalQstsNotBlank,
-                                         double TotalScoreOfAllTests);
+                                         struct TstPrn_NumQuestions *NumTotalQsts,
+                                         double TotalScore);
 
 static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
                                               long UsrCod,
@@ -198,11 +197,11 @@ static void TstPrn_ResetPrintExceptPrnCod (struct TstPrn_Print *Print)
   {
    Print->TimeUTC[Dat_START_TIME] =
    Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
-   Print->NumQsts                 = 0;
-   Print->NumQstsNotBlank         = 0;
-   Print->Sent                    = false;	// After creating an exam, it's not sent
-   Print->AllowTeachers           = false;	// Teachers can't seen the exam if student don't allow it
-   Print->Score                   = 0.0;
+   Print->NumQsts.All      =
+   Print->NumQsts.NotBlank = 0;
+   Print->Sent             = false;	// After creating an exam, it's not sent
+   Print->AllowTeachers    = false;	// Teachers can't seen the exam if student don't allow it
+   Print->Score            = 0.0;
   }
 
 /*****************************************************************************/
@@ -220,7 +219,7 @@ void TstPrn_CreatePrintInDB (struct TstPrn_Print *Print)
 				" (%ld,%ld,NOW(),NOW(),%u,0,'N','N',0)",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Print->NumQsts);
+				Print->NumQsts.All);
   }
 
 /*****************************************************************************/
@@ -240,7 +239,7 @@ void TstPrn_UpdatePrintInDB (const struct TstPrn_Print *Print)
 	                "Score='%.15lg'"
 	           " WHERE ExaCod=%ld"
 	           " AND CrsCod=%ld AND UsrCod=%ld",	// Extra checks
-		   Print->NumQstsNotBlank,
+		   Print->NumQsts.NotBlank,
 		   Print->Sent ? 'Y' :
 			         'N',
 		   Print->AllowTeachers ? 'Y' :
@@ -281,7 +280,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 			      Gbl.Hierarchy.Deg.DegCod,
 			      Gbl.Hierarchy.Crs.CrsCod);
 
-   if (Print->NumQsts)
+   if (Print->NumQsts.All)
      {
       /***** Begin form *****/
       Frm_StartForm (Action[RequestOrConfirm]);
@@ -293,7 +292,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 
       /***** Write one row for each question *****/
       for (NumQst = 0;
-	   NumQst < Print->NumQsts;
+	   NumQst < Print->NumQsts.All;
 	   NumQst++)
 	{
 	 Gbl.RowEvenOdd = NumQst % 2;
@@ -600,11 +599,11 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
    HTM_TABLE_BeginWideMarginPadding (10);
 
    /***** Initialize score and number of questions not blank *****/
-   Print->NumQstsNotBlank = 0;
+   Print->NumQsts.NotBlank = 0;
    Print->Score = 0.0;
 
    for (NumQst = 0;
-	NumQst < Print->NumQsts;
+	NumQst < Print->NumQsts.All;
 	NumQst++)
      {
       Gbl.RowEvenOdd = NumQst % 2;
@@ -627,7 +626,7 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
       /***** Compute total score *****/
       Print->Score += Print->PrintedQuestions[NumQst].Score;
       if (Print->PrintedQuestions[NumQst].StrAnswers[0])	// User's answer is not blank
-	 Print->NumQstsNotBlank++;
+	 Print->NumQsts.NotBlank++;
 
       /***** Update the number of accesses and the score of this question *****/
       if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
@@ -767,11 +766,11 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
 
    /***** Initialize total score *****/
    Print->Score = 0.0;
-   Print->NumQstsNotBlank = 0;
+   Print->NumQsts.NotBlank = 0;
 
    /***** Compute and store scores of all questions *****/
    for (NumQst = 0;
-	NumQst < Print->NumQsts;
+	NumQst < Print->NumQsts.All;
 	NumQst++)
      {
       /* Compute question score */
@@ -788,7 +787,7 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
       /* Accumulate total score */
       Print->Score += Print->PrintedQuestions[NumQst].Score;
       if (Print->PrintedQuestions[NumQst].StrAnswers[0])	// User's answer is not blank
-	 Print->NumQstsNotBlank++;
+	 Print->NumQsts.NotBlank++;
 
       /* Update the number of hits and the score of this question in tests database */
       if (UpdateQstScore)
@@ -2009,14 +2008,14 @@ static void TstPrn_ShowHeaderPrints (void)
    /***** First row *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TH (3,2,"CT",Txt_User[Usr_SEX_UNKNOWN]);
-   HTM_TH (3,1,"LT",Txt_START_END_TIME[Dat_START_TIME]);
-   HTM_TH (3,1,"LT",Txt_START_END_TIME[Dat_END_TIME  ]);
-   HTM_TH (3,1,"RT LINE_LEFT",Txt_Questions);
+   HTM_TH (3,2,"CT LINE_BOTTOM",Txt_User[Usr_SEX_UNKNOWN]);
+   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_START_TIME]);
+   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_END_TIME  ]);
+   HTM_TH (3,1,"RT LINE_BOTTOM LINE_LEFT",Txt_Questions);
    HTM_TH (1,2,"CT LINE_LEFT",Txt_Answers);
    HTM_TH (1,2,"CT LINE_LEFT",Txt_Score);
-   HTM_TH (3,1,"RT LINE_LEFT",Txt_Grade);
-   HTM_TH (3,1,"LINE_LEFT",NULL);
+   HTM_TH (3,1,"RT LINE_BOTTOM LINE_LEFT",Txt_Grade);
+   HTM_TH (3,1,"LINE_BOTTOM LINE_LEFT",NULL);
 
    HTM_TR_End ();
 
@@ -2033,10 +2032,10 @@ static void TstPrn_ShowHeaderPrints (void)
    /***** Third row *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TH (1,1,"RT LINE_LEFT","-1&le;<em>p<sub>i</sub></em>&le;1");
-   HTM_TH (1,1,"RT","<em>p<sub>i</sub></em>=0");
-   HTM_TH (1,1,"RT LINE_LEFT","<em>&Sigma;p<sub>i</sub></em>");
-   HTM_TH (1,1,"RT","-1&le;<em style=\"text-decoration:overline;\">p</em>&le;1");
+   HTM_TH (1,1,"RT LINE_BOTTOM LINE_LEFT","-1&le;<em>p<sub>i</sub></em>&le;1");
+   HTM_TH (1,1,"RT LINE_BOTTOM","<em>p<sub>i</sub></em>=0");
+   HTM_TH (1,1,"RT LINE_BOTTOM LINE_LEFT","<em>&Sigma;p<sub>i</sub></em>");
+   HTM_TH (1,1,"RT LINE_BOTTOM","-1&le;<em style=\"text-decoration:overline;\">p</em>&le;1");
 
    HTM_TR_End ();
   }
@@ -2056,13 +2055,21 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
    Dat_StartEndTime_t StartEndTime;
    char *Id;
    struct TstPrn_Print Print;
-   unsigned NumTotalQsts = 0;
-   unsigned NumTotalQstsNotBlank = 0;
-   double TotalScoreOfAllTests = 0.0;
+   unsigned NumQstsBlank;
+   struct TstPrn_NumQuestions NumTotalQsts;
+   double TotalScore;
    unsigned NumPrintsVisibleByTchs = 0;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    struct TstRes_ICanView ICanView;
    char *ClassDat;
+
+   /***** Reset print *****/
+   TstPrn_ResetPrint (&Print);
+
+   /***** Reset total number of questions and total score *****/
+   NumTotalQsts.All      =
+   NumTotalQsts.NotBlank = 0;
+   TotalScore = 0.0;
 
    /***** Make database query *****/
    /*           From here...                 ...to here
@@ -2129,10 +2136,20 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	    free (Id);
 	   }
 
+	 /* Accumulate questions and score */
+	 if (ICanView.Score)
+	   {
+	    NumTotalQsts.All      += Print.NumQsts.All;
+            NumTotalQsts.NotBlank += Print.NumQsts.NotBlank;
+            TotalScore            += Print.Score;
+	   }
+
          /* Write number of questions */
 	 HTM_TD_Begin ("class=\"%s LINE_LEFT RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanView.Result)
-	    HTM_Unsigned (Print.NumQsts);
+	   {
+	    HTM_Unsigned (Print.NumQsts.All);
+	   }
 	 else
             Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
@@ -2140,7 +2157,12 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
          /* Write number of non-blank answers */
 	 HTM_TD_Begin ("class=\"%s LINE_LEFT RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanView.Result)
-	    HTM_Unsigned (Print.NumQstsNotBlank);
+	   {
+	    if (Print.NumQsts.NotBlank)
+	       HTM_Unsigned (Print.NumQsts.NotBlank);
+	    else
+	       HTM_Light0 ();
+	   }
 	 else
             Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
@@ -2148,7 +2170,13 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
          /* Write number of blank answers */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanView.Result)
-	    HTM_Unsigned (Print.NumQsts - Print.NumQstsNotBlank);
+	   {
+	    NumQstsBlank = Print.NumQsts.All - Print.NumQsts.NotBlank;
+	    if (NumQstsBlank)
+	       HTM_Unsigned (NumQstsBlank);
+	    else
+	       HTM_Light0 ();
+	   }
 	 else
             Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
@@ -2159,7 +2187,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	   {
 	    HTM_Double2Decimals (Print.Score);
 	    HTM_Txt ("/");
-	    HTM_Unsigned (Print.NumQsts);
+	    HTM_Unsigned (Print.NumQsts.All);
 	   }
 	 else
             Ico_PutIconNotVisible ();
@@ -2168,9 +2196,9 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
          /* Write average score per question */
 	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanView.Score)
-	    HTM_Double2Decimals (Print.NumQsts ? Print.Score /
-		                                 (double) Print.NumQsts :
-			                         0.0);
+	    HTM_Double2Decimals (Print.NumQsts.All ? Print.Score /
+		                                     (double) Print.NumQsts.All :
+			                             0.0);
 	 else
             Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
@@ -2178,7 +2206,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
          /* Write grade */
 	 HTM_TD_Begin ("class=\"%s LINE_LEFT RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanView.Score)
-            TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,Tst_SCORE_MAX);
+            TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
 	 else
             Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
@@ -2204,12 +2232,34 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 
       /***** Write totals for this user *****/
       TstPrn_ShowPrintsSummaryRow (ItsMe,NumPrintsVisibleByTchs,
-                                   NumTotalQsts,NumTotalQstsNotBlank,
-                                   TotalScoreOfAllTests);
+                                   &NumTotalQsts,TotalScore);
      }
    else
      {
-      HTM_TD_ColouredEmpty (8);
+      /* Columns for dates */
+      HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
+      /* Column for questions */
+      HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
+      /* Columns for answers */
+      HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
+      /* Columns for score */
+      HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
+      /* Column for grade */
+      HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
+      /* Column for link to show the result */
+      HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
+
       HTM_TR_End ();
      }
 
@@ -2243,10 +2293,9 @@ long TstPrn_GetParamPrnCod (void)
 /*****************************************************************************/
 
 static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
-                                        unsigned NumPrints,
-                                        unsigned NumTotalQsts,
-                                        unsigned NumTotalQstsNotBlank,
-                                        double TotalScoreOfAllTests)
+                                         unsigned NumPrints,
+                                         struct TstPrn_NumQuestions *NumTotalQsts,
+                                         double TotalScore)
   {
    extern const char *Txt_Visible_tests;
    bool ICanViewTotalScore;
@@ -2285,42 +2334,42 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
    /***** Write total number of questions *****/
    HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT RM COLOR%u\"",Gbl.RowEvenOdd);
    if (NumPrints)
-      HTM_Unsigned (NumTotalQsts);
+      HTM_Unsigned (NumTotalQsts->All);
    HTM_TD_End ();
 
    /***** Write total number of non-blank answers *****/
    HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT RM COLOR%u\"",Gbl.RowEvenOdd);
    if (NumPrints)
-      HTM_Unsigned (NumTotalQstsNotBlank);
+      HTM_Unsigned (NumTotalQsts->NotBlank);
    HTM_TD_End ();
 
    /***** Write total number of blank answers *****/
    HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM RM COLOR%u\"",Gbl.RowEvenOdd);
    if (NumPrints)
-      HTM_Unsigned (NumTotalQsts - NumTotalQstsNotBlank);
+      HTM_Unsigned (NumTotalQsts->All - NumTotalQsts->NotBlank);
    HTM_TD_End ();
 
    /***** Write total score *****/
    HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
      {
-      HTM_Double2Decimals (TotalScoreOfAllTests);
+      HTM_Double2Decimals (TotalScore);
       HTM_Txt ("/");
-      HTM_Unsigned (NumTotalQsts);
+      HTM_Unsigned (NumTotalQsts->All);
      }
    HTM_TD_End ();
 
    /***** Write average score per question *****/
    HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
-      HTM_Double2Decimals (NumTotalQsts ? TotalScoreOfAllTests / (double) NumTotalQsts :
-			                  0.0);
+      HTM_Double2Decimals (NumTotalQsts->All ? TotalScore / (double) NumTotalQsts->All :
+			                       0.0);
    HTM_TD_End ();
 
    /***** Write grade over Tst_SCORE_MAX *****/
    HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
-      TstPrn_ComputeAndShowGrade (NumTotalQsts,TotalScoreOfAllTests,Tst_SCORE_MAX);
+      TstPrn_ComputeAndShowGrade (NumTotalQsts->All,TotalScore,Tst_SCORE_MAX);
    HTM_TD_End ();
 
    /***** Last cell *****/
@@ -2447,7 +2496,7 @@ void TstPrn_ShowOnePrint (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LB\"");
-      HTM_Unsigned (Print.NumQsts);
+      HTM_Unsigned (Print.NumQsts.All);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -2460,7 +2509,7 @@ void TstPrn_ShowOnePrint (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LB\"");
-      HTM_Unsigned (Print.NumQstsNotBlank);
+      HTM_Unsigned (Print.NumQsts.NotBlank);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -2478,7 +2527,7 @@ void TstPrn_ShowOnePrint (void)
          HTM_STRONG_Begin ();
 	 HTM_Double2Decimals (Print.Score);
 	 HTM_Txt ("/");
-	 HTM_Unsigned (Print.NumQsts);
+	 HTM_Unsigned (Print.NumQsts.All);
          HTM_STRONG_End ();
 	}
       else
@@ -2496,7 +2545,7 @@ void TstPrn_ShowOnePrint (void)
       if (ICanView.Score)
 	{
          HTM_STRONG_Begin ();
-         TstPrn_ComputeAndShowGrade (Print.NumQsts,Print.Score,Tst_SCORE_MAX);
+         TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
          HTM_STRONG_End ();
 	}
       else
@@ -2618,7 +2667,7 @@ void TstPrn_ShowPrintAnswers (struct UsrData *UsrDat,
    bool QuestionExists;
 
    for (NumQst = 0;
-	NumQst < Print->NumQsts;
+	NumQst < Print->NumQsts.All;
 	NumQst++)
      {
       Gbl.RowEvenOdd = NumQst % 2;
@@ -2674,12 +2723,12 @@ void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
       Print->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[2]);
 
       /* Get number of questions (row[3]) */
-      if (sscanf (row[3],"%u",&Print->NumQsts) != 1)
-	 Print->NumQsts = 0;
+      if (sscanf (row[3],"%u",&Print->NumQsts.All) != 1)
+	 Print->NumQsts.All = 0;
 
       /* Get number of questions not blank (row[4]) */
-      if (sscanf (row[4],"%u",&Print->NumQstsNotBlank) != 1)
-	 Print->NumQstsNotBlank = 0;
+      if (sscanf (row[4],"%u",&Print->NumQsts.NotBlank) != 1)
+	 Print->NumQsts.NotBlank = 0;
 
       /* Get if exam has been sent (row[5]) */
       Print->Sent = (row[5][0] == 'Y');
@@ -2725,7 +2774,7 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
 			      Print->PrnCod);
 
    /***** Get questions *****/
-   if (NumQsts == Print->NumQsts)
+   if (NumQsts == Print->NumQsts.All)
       for (NumQst = 0;
 	   NumQst < NumQsts;
 	   NumQst++)
@@ -2754,7 +2803,7 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (NumQsts != Print->NumQsts)
+   if (NumQsts != Print->NumQsts.All)
       Lay_WrongExamExit ();
   }
 
