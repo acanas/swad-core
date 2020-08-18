@@ -4823,14 +4823,14 @@ int swad__getGames (struct soap *soap,
 
    /***** Query list of games *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get games",
-			     "SELECT gam_games.GamCod,"				// row[0]
-			            "gam_games.UsrCod,"				// row[1]
-			            "MIN(mch_matches.StartTime) AS StartTime,"	// row[2]
-			            "MAX(mch_matches.EndTime) AS EndTime,"	// row[3]
-				    "gam_games.MaxGrade,"			// row[4]
-				    "gam_games.Visibility,"			// row[5]
-			            "gam_games.Title,"				// row[6]
-			            "gam_games.Txt"				// row[7]
+			     "SELECT gam_games.GamCod,"						// row[0]
+			            "gam_games.UsrCod,"						// row[1]
+			            "UNIX_TIMESTAMP(MIN(mch_matches.StartTime)) AS StartTime,"	// row[2]
+			            "UNIX_TIMESTAMP(MAX(mch_matches.EndTime)) AS EndTime,"	// row[3]
+				    "gam_games.MaxGrade,"					// row[4]
+				    "gam_games.Visibility,"					// row[5]
+			            "gam_games.Title,"						// row[6]
+			            "gam_games.Txt"						// row[7]
 			     " FROM gam_games"
 			     " LEFT JOIN mch_matches"
 			     " ON gam_games.GamCod=mch_matches.GamCod"
@@ -4951,7 +4951,7 @@ int swad__getGames (struct soap *soap,
 /*****************************************************************************/
 
 int swad__getMatches (struct soap *soap,
-                      char *wsKey,int gameCode,				// input
+                      char *wsKey,int courseCode,int gameCode,		// input
                       struct swad__getMatchesOutput *getMatchesOut)	// output
   {
    int ReturnCode;
@@ -4969,6 +4969,7 @@ int swad__getMatches (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getMatches;
+   Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
@@ -4977,6 +4978,12 @@ int swad__getMatches (struct soap *soap,
       return soap_receiver_fault (soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
+
+   /***** Check if course code is correct *****/
+   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
+      return soap_sender_fault (soap,
+	                        "Bad course code",
+	                        "Course code must be a integer greater than 0");
 
    /***** Reset game *****/
    Gam_ResetGame (&Game);
@@ -4988,13 +4995,6 @@ int swad__getMatches (struct soap *soap,
 	                        "Bad game code",
 	                        "Game code must be a integer greater than 0");
    Gam_GetDataOfGameByCod (&Game);
-
-   /***** Check if course code is correct *****/
-   Gbl.Hierarchy.Crs.CrsCod = (long) Game.CrsCod;
-   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
-      return soap_sender_fault (soap,
-	                        "Bad course code",
-	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
@@ -5134,8 +5134,8 @@ int swad__getMatches (struct soap *soap,
 /*****************************************************************************/
 
 int swad__getMatchStatus (struct soap *soap,
-                          char *wsKey,int matchCode,				// input
-                          struct swad__getMatchStatusOutput *getMatchStatusOut)	// output
+                          char *wsKey,int courseCode,int gameCode,int matchCode,	// input
+                          struct swad__getMatchStatusOutput *getMatchStatusOut)		// output
   {
    int ReturnCode;
    struct Gam_Game Game;
@@ -5144,9 +5144,16 @@ int swad__getMatchStatus (struct soap *soap,
    unsigned NumOptions;
    struct Mch_UsrAnswer UsrAnswer;
 
+   /***** Reset game and match *****/
+   Gam_ResetGame (&Game);
+   Mch_ResetMatch (&Match);
+
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getMatchStatus;
+   Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
+   Game.GamCod = (long) gameCode;
+   Match.MchCod = (long) matchCode;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
@@ -5156,32 +5163,31 @@ int swad__getMatchStatus (struct soap *soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
-   /***** Reset game and match *****/
-   Gam_ResetGame (&Game);
-   Mch_ResetMatch (&Match);
-
-   /***** Get match data from database *****/
-   Match.MchCod = (long) matchCode;
-   if (Match.MchCod <= 0)
+   /***** Check if course code is correct *****/
+   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
       return soap_sender_fault (soap,
-	                        "Bad match code",
-	                        "Match code must be a integer greater than 0");
-   Mch_GetDataOfMatchByCod (&Match);
+	                        "Bad course code",
+	                        "Course code must be a integer greater than 0");
 
    /***** Get game data from database *****/
-   Game.GamCod = Match.GamCod;
    if (Game.GamCod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad game code",
 	                        "Game code must be a integer greater than 0");
    Gam_GetDataOfGameByCod (&Game);
 
-   /***** Check if course code is correct *****/
-   Gbl.Hierarchy.Crs.CrsCod = (long) Game.CrsCod;
-   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
+   /***** Get match data from database *****/
+   if (Match.MchCod <= 0)
       return soap_sender_fault (soap,
-	                        "Bad course code",
-	                        "Course code must be a integer greater than 0");
+	                        "Bad match code",
+	                        "Match code must be a integer greater than 0");
+   Mch_GetDataOfMatchByCod (&Match);
+
+   /* Check that match belongs to game */
+   if (Match.GamCod != Game.GamCod)
+      return soap_sender_fault (soap,
+	                        "Bad game code",
+	                        "Match code does not belong to game code");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
@@ -5227,7 +5233,7 @@ int swad__getMatchStatus (struct soap *soap,
 
    /***** Set number of selected answer *****/
    if (NumOptions == 0)
-      getMatchStatusOut->selected = -1;
+      getMatchStatusOut->answerIndex = -1;
    else	// Answers found
      {
       /***** Get student's answer to this question
@@ -5236,8 +5242,21 @@ int swad__getMatchStatus (struct soap *soap,
 			   Gbl.Usrs.Me.UsrDat.UsrCod,
 			   Match.Status.QstInd,
 			   &UsrAnswer);
-      getMatchStatusOut->selected = UsrAnswer.NumOpt;
+      getMatchStatusOut->answerIndex = UsrAnswer.NumOpt;
      }
+
+   DB_QueryINSERT ("can not debug",
+		   "INSERT INTO debug"
+		   " (DebugTime,Txt)"
+		   " VALUES"
+		   " (NOW(),'getMatchStatusOut->matchCode: %d;"
+		   " getMatchStatusOut->questionIndex: %d;"
+		   " getMatchStatusOut->numAnswers: %d;"
+		   " getMatchStatusOut->answerIndex: %d')",
+		   getMatchStatusOut->matchCode,
+		   getMatchStatusOut->questionIndex,
+		   getMatchStatusOut->numAnswers,
+		   getMatchStatusOut->answerIndex);
 
    return SOAP_OK;
   }
@@ -5247,16 +5266,25 @@ int swad__getMatchStatus (struct soap *soap,
 /*****************************************************************************/
 
 int swad__answerMatchQuestion (struct soap *soap,
-                               char *wsKey,int matchCode,int questionIndex,int numOption,	// input
-                               struct swad__answerMatchQuestionOutput *answerMatchQuestionOut)	// output
+                               char *wsKey,int courseCode,int gameCode,int matchCode,int questionIndex,int numOption,	// input
+                               struct swad__answerMatchQuestionOutput *answerMatchQuestionOut)				// output
   {
    int ReturnCode;
    // unsigned QstInd;	// 0 means that the game has not started. First question has index 1.
    // unsigned NumOpt;
+   struct Gam_Game Game;
+   struct Mch_Match Match;
+
+   /***** Reset game and match *****/
+   Gam_ResetGame (&Game);
+   Mch_ResetMatch (&Match);
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_answerMatchQuestion;
+   Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
+   Game.GamCod = (long) gameCode;
+   Match.MchCod = (long) matchCode;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
@@ -5266,18 +5294,46 @@ int swad__answerMatchQuestion (struct soap *soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
+   /***** Check if course code is correct *****/
+   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
+      return soap_sender_fault (soap,
+	                        "Bad course code",
+	                        "Course code must be a integer greater than 0");
+
+   /***** Get game data from database *****/
+   if (Game.GamCod <= 0)
+      return soap_sender_fault (soap,
+	                        "Bad game code",
+	                        "Game code must be a integer greater than 0");
+   Gam_GetDataOfGameByCod (&Game);
+
+   /***** Get match data from database *****/
+   if (Match.MchCod <= 0)
+      return soap_sender_fault (soap,
+	                        "Bad match code",
+	                        "Match code must be a integer greater than 0");
+   Mch_GetDataOfMatchByCod (&Match);
+
+   /* Check that match belongs to game */
+   if (Match.GamCod != Game.GamCod)
+      return soap_sender_fault (soap,
+	                        "Bad game code",
+	                        "Match code does not belong to game code");
+
    // TODO: Write the code
    if (questionIndex > 0 && numOption > 0)
      {
       // QstInd = (unsigned) questionIndex;
       // NumOpt = (unsigned) numOption;
       answerMatchQuestionOut->matchCode = matchCode;
+      answerMatchQuestionOut->answerIndex = 1;	// TODO: Return the current answer index
      }
    else
      {
       // QstInd = 0;
       // NumOpt = 0;
       answerMatchQuestionOut->matchCode = -1;
+      answerMatchQuestionOut->answerIndex = -1;
      }
 
    return SOAP_OK;
@@ -6072,19 +6128,19 @@ int swad__getLastLocation (struct soap *soap,
       /***** Get list of locations *****/
       NumLocs = (unsigned)
 		DB_QuerySELECT (&mysql_res,"can not get matches",
-				"SELECT institutions.InsCod,"	// row[ 0]
-				       "institutions.ShortName,"	// row[ 1]
-				       "institutions.FullName,"	// row[ 2]
-				       "centres.CtrCod,"		// row[ 3]
-				       "centres.ShortName,"	// row[ 4]
-				       "centres.FullName,"		// row[ 5]
-				       "buildings.BldCod,"		// row[ 6]
-				       "buildings.ShortName,"	// row[ 7]
-				       "buildings.FullName,"	// row[ 8]
-				       "rooms.Floor,"		// row[ 9]
-				       "rooms.RooCod,"		// row[10]
-				       "rooms.ShortName,"		// row[11]
-				       "rooms.FullName,"		// row[12]
+				"SELECT institutions.InsCod,"				// row[ 0]
+				       "institutions.ShortName,"			// row[ 1]
+				       "institutions.FullName,"				// row[ 2]
+				       "centres.CtrCod,"				// row[ 3]
+				       "centres.ShortName,"				// row[ 4]
+				       "centres.FullName,"				// row[ 5]
+				       "buildings.BldCod,"				// row[ 6]
+				       "buildings.ShortName,"				// row[ 7]
+				       "buildings.FullName,"				// row[ 8]
+				       "rooms.Floor,"					// row[ 9]
+				       "rooms.RooCod,"					// row[10]
+				       "rooms.ShortName,"				// row[11]
+				       "rooms.FullName,"				// row[12]
 				       "UNIX_TIMESTAMP(room_check_in.CheckInTime)"	// row[13]
 				       " FROM room_check_in,rooms,buildings,centres,institutions"
 				       " WHERE room_check_in.UsrCod=%d"

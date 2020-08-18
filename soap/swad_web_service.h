@@ -301,13 +301,14 @@ struct swad__getMatchStatusOutput
    int matchCode;
    int questionIndex;
    int numAnswers;
-   int selected;
+   int answerIndex;
   };
 
 /* answerMatchQuestion */
 struct swad__answerMatchQuestionOutput
   {
    int matchCode;
+   int answerIndex;
   };
 
 /* structs used in getUsers and sendMessage */
@@ -524,11 +525,11 @@ int swad__getTrivialQuestion (char *wsKey,char *degrees,float lowerScore,float u
 /* Games */
 int swad__getGames (char *wsKey,int courseCode,
                     struct swad__getGamesOutput *getGamesOut);
-int swad__getMatches (char *wsKey,int gameCode,
+int swad__getMatches (char *wsKey,int courseCode,int gameCode,
                       struct swad__getMatchesOutput *getMatchesOut);
-int swad__getMatchStatus (char *wsKey,int matchCode,
+int swad__getMatchStatus (char *wsKey,int courseCode,int gameCode,int matchCode,
                           struct swad__getMatchStatusOutput *getMatchStatusOut);
-int swad__answerMatchQuestion (char *wsKey,int matchCode,int questionIndex,int answerIndex,
+int swad__answerMatchQuestion (char *wsKey,int courseCode,int gameCode,int matchCode,int questionIndex,int answerIndex,
                                struct swad__answerMatchQuestionOutput *answerMatchQuestionOut);
 
 /* List of users */

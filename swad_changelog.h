@@ -499,7 +499,7 @@ Poblar base de datos:
 En Usuarios > Ubicación aparecería un botón pequeño de "Añadir ubicación".
 Se preguntaría a SWAD a través de una función de la API
 si el usuario tiene permiso para añadir ubicaciones.
-Función API checkPermission...
+Función API checkPermissionToAdminCenter
 
 Si es así, se llamaría a la función:
 Función API newLocation...
@@ -516,6 +516,15 @@ pero sí al menos alguna asignatura de cada uno tiene que compartir el centro
 
 Se puede mostrar las últimas dos o tres ubicaciones (y dentro de ellas sólo el último instante de cada ubicación)
 dentro siempre de lo que haya guardado en la tabla de ubicaciones limitada a 12/24 h.
+
+-------------------------------------------------------------------------------
+
+Función API
+getAvailableRoles
+
+Devuelve el campo Gbl.Usr.Role.Available.
+Con esta función SWADroid sabe si al usuario se le puede mostrar un botón para ver la MAC más cercana
+
 
 
 */
@@ -556,17 +565,26 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.257 (2020-06-24)"
+#define Log_PLATFORM_VERSION	"SWAD 19.258 (2020-08-11)"
 #define CSS_FILE		"swad19.253.css"
 #define JS_FILE			"swad19.254.js"
 /*
+TODO: José Martínez Aroza: Si estoy viendo la lista de trabajos de un grupo de estudiantes y pulso F5 (reenviando datos) entonces sale el listado duplicado, y la siguiente vez triplicado, etc.
+
+TODO: Raymon Moreno Colina: ¿sera posible colocarle a las preguntas distinta ponderación (puntuación)?; porque como docente a veces uno formula en un examen cuestiones que tienen mayor profundidad que otras y considero que no debería ser la misma puntuación para toda las preguntas.
 TODO:  Encarnación Hidalgo Tenorio: Antonio, ¿podría @swad_ugr mandar una notificación cuando el alumnado ha mandado su tarea?
        Se trataría de añadir un par de líneas "Nuevos archivos en actividades", "Nuevos archivos en otros trabajos".
 TODO: Fix bug: Un estudiante recibe una notificación de un archivo de calificaciones. Luego el archivo es ocultado por el profesor. Pero desde la notificación sigue estando accesible, cuando no debería ser así. Reported by Adrián José Martínez Navarro.
 TODO: Fix bug: Cuando se pulsa en ver fichas, y luego en una ficha en "Ver trabajos" o "Ver exámenes", o lo que sea, sale dos veces ese estudiante.
 TODO: No limitar el número de preguntas en un examen a ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT, sino asignar PrintedQuestions dinámicamente con malloc
 TODO: Que al generar un examen sólo se cojan preguntas válidas. Y si ya está generado, al entrar de nuevo, que se vean en rojo.
+TODO: Create module swad_test_result
+"sudo apt install webp" en Ubuntu, y "yum install libwebp libwebp-tools" en CentOS, para decodificar imágenes Web/ug reportado por Javier Fernández Baldomero.
 
+TODO: Escribir la función getAvailableRoles
+TODO: Escribir correctamente la función swad__answerMatchQuestion
+
+	Version 19.258:   Aug 11, 2020  Changes in API functions related to games and matches. (303951 lines)
 	Version 19.257:   Jun 24, 2020  New module swad_match_print. (303887 lines)
 	Version 19.256:   Jun 24, 2020  Code refactoring in tests, exams and matches results. (303841 lines)
 	Version 19.255.2: Jun 24, 2020  Changes in listing of tests and exams results. (303701 lines)

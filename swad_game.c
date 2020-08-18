@@ -1003,8 +1003,10 @@ void Gam_GetDataOfGameByCod (struct Gam_Game *Game)
 			     " FROM gam_games"
 			     " LEFT JOIN mch_matches"
 			     " ON gam_games.GamCod=mch_matches.GamCod"
-			     " WHERE gam_games.GamCod=%ld",
-			     Game->GamCod);
+			     " WHERE gam_games.GamCod=%ld"
+			     " AND gam_games.CrsCod='%ld'",	// Extra check
+			     Game->GamCod,
+			     Gbl.Hierarchy.Crs.CrsCod);
    if (NumRows) // Game found...
      {
       /* Get row */
