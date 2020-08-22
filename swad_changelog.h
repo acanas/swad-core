@@ -565,7 +565,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.258 (2020-08-11)"
+#define Log_PLATFORM_VERSION	"SWAD 19.259 (2020-08-22)"
 #define CSS_FILE		"swad19.253.css"
 #define JS_FILE			"swad19.254.js"
 /*
@@ -582,8 +582,8 @@ TODO: Create module swad_test_result
 "sudo apt install webp" en Ubuntu, y "yum install libwebp libwebp-tools" en CentOS, para decodificar imágenes Web/ug reportado por Javier Fernández Baldomero.
 
 TODO: Escribir la función getAvailableRoles
-TODO: Escribir correctamente la función swad__answerMatchQuestion
 
+	Version 19.259:   Aug 22, 2020  Changes in API function answerMatchQuestion. (303969 lines)
 	Version 19.258:   Aug 11, 2020  Changes in API functions related to games and matches. (303951 lines)
 	Version 19.257:   Jun 24, 2020  New module swad_match_print. (303887 lines)
 	Version 19.256:   Jun 24, 2020  Code refactoring in tests, exams and matches results. (303841 lines)

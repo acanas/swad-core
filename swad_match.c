@@ -3932,9 +3932,7 @@ void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
 void Mch_ReceiveQuestionAnswer (void)
   {
    struct Mch_Match Match;
-   unsigned QstInd;
-   unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];
-   struct Mch_UsrAnswer PreviousUsrAnswer;
+   unsigned QstInd;	// 0 means that the game has not started. First question has index 1.
    struct Mch_UsrAnswer UsrAnswer;
 
    /***** Reset match *****/
@@ -3947,14 +3945,36 @@ void Mch_ReceiveQuestionAnswer (void)
    /***** Get question index from form *****/
    QstInd = Gam_GetParamQstInd ();
 
+   /***** Get number of option selected by student from form *****/
+   UsrAnswer.NumOpt = Mch_GetParamNumOpt ();
+
+   /***** Store answer *****/
+   Mch_StoreQuestionAnswer (&Match,QstInd,&UsrAnswer);
+
+   /***** Show current match status *****/
+   HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
+   Mch_ShowMatchStatusForStd (&Match,Mch_CHANGE_STATUS_BY_STUDENT);
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/********** Store question answer from student when playing a match **********/
+/*****************************************************************************/
+
+void Mch_StoreQuestionAnswer (struct Mch_Match *Match,unsigned QstInd,
+                              struct Mch_UsrAnswer *UsrAnswer)
+  {
+   unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];
+   struct Mch_UsrAnswer PreviousUsrAnswer;
+
    /***** Check that teacher's screen is showing answers
           and question index is the current one being played *****/
-   if (Match.Status.Playing &&			// Match is being played
-       Match.Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing answers
-       QstInd == Match.Status.QstInd)		// Receiving an answer to the current question being played
+   if (Match->Status.Playing &&			// Match is being played
+       Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing answers
+       QstInd == Match->Status.QstInd)		// Receiving an answer to the current question being played
      {
       /***** Get indexes for this question from database *****/
-      Mch_GetIndexes (Match.MchCod,Match.Status.QstInd,Indexes);
+      Mch_GetIndexes (Match->MchCod,Match->Status.QstInd,Indexes);
 
       /***** Get answer index *****/
       /*
@@ -3969,34 +3989,28 @@ void Mch_ReceiveQuestionAnswer (void)
       |   c    |    2   |    1     |    Y    | <---- User press button #2 (index = 1, correct)
       |   d    |    3   |    2     |         |
       +--------+--------+----------+---------+
-      UsrAnswer.NumOpt = 2
-      UsrAnswer.AnsInd = 1
+      UsrAnswer->NumOpt = 2
+      UsrAnswer->AnsInd = 1
       */
-      UsrAnswer.NumOpt = Mch_GetParamNumOpt ();
-      UsrAnswer.AnsInd = Indexes[UsrAnswer.NumOpt];
+      UsrAnswer->AnsInd = Indexes[UsrAnswer->NumOpt];
 
       /***** Get previous student's answer to this question
 	     (<0 ==> no answer) *****/
-      Mch_GetQstAnsFromDB (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,Match.Status.QstInd,
+      Mch_GetQstAnsFromDB (Match->MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,Match->Status.QstInd,
 			   &PreviousUsrAnswer);
 
       /***** Store student's answer *****/
-      if (UsrAnswer.NumOpt >= 0 &&
-	  UsrAnswer.AnsInd >= 0 &&
-	  UsrAnswer.AnsInd != PreviousUsrAnswer.AnsInd)
+      if (UsrAnswer->NumOpt >= 0 &&
+	  UsrAnswer->AnsInd >= 0 &&
+	  UsrAnswer->AnsInd != PreviousUsrAnswer.AnsInd)
 	{
 	 /***** Update my answer to this question *****/
-	 Mch_UpdateMyAnswerToMatchQuestion (&Match,&UsrAnswer);
+	 Mch_UpdateMyAnswerToMatchQuestion (Match,UsrAnswer);
 
 	 /***** Compute score and update my match result *****/
-	 MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (Match.MchCod);
+	 MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (Match->MchCod);
 	}
      }
-
-   /***** Show current match status *****/
-   HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
-   Mch_ShowMatchStatusForStd (&Match,Mch_CHANGE_STATUS_BY_STUDENT);
-   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

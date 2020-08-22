@@ -308,7 +308,6 @@ struct swad__getMatchStatusOutput
 struct swad__answerMatchQuestionOutput
   {
    int matchCode;
-   int answerIndex;
   };
 
 /* structs used in getUsers and sendMessage */

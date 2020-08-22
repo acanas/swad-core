@@ -145,6 +145,8 @@ void Mch_RefreshMatchStd (void);
 void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
 		          struct Mch_UsrAnswer *UsrAnswer);
 void Mch_ReceiveQuestionAnswer (void);
+void Mch_StoreQuestionAnswer (struct Mch_Match *Match,unsigned QstInd,
+                              struct Mch_UsrAnswer *UsrAnswer);
 
 void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print);
 

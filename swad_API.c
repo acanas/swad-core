@@ -5187,7 +5187,7 @@ int swad__getMatchStatus (struct soap *soap,
    if (Match.GamCod != Game.GamCod)
       return soap_sender_fault (soap,
 	                        "Bad game code",
-	                        "Match code does not belong to game code");
+	                        "Match does not belong to game");
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
@@ -5270,10 +5270,11 @@ int swad__answerMatchQuestion (struct soap *soap,
                                struct swad__answerMatchQuestionOutput *answerMatchQuestionOut)				// output
   {
    int ReturnCode;
-   // unsigned QstInd;	// 0 means that the game has not started. First question has index 1.
    // unsigned NumOpt;
    struct Gam_Game Game;
    struct Mch_Match Match;
+   unsigned QstInd;	// 0 means that the game has not started. First question has index 1.
+   struct Mch_UsrAnswer UsrAnswer;
 
    /***** Reset game and match *****/
    Gam_ResetGame (&Game);
@@ -5283,8 +5284,16 @@ int swad__answerMatchQuestion (struct soap *soap,
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_answerMatchQuestion;
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
-   Game.GamCod = (long) gameCode;
+   Game.GamCod  = (long) gameCode;
    Match.MchCod = (long) matchCode;
+
+   /***** Set default output *****/
+   /*
+   > 0 if the answer was saved
+   = 0 if the answer was not saved because the match is in pause or in another question
+   < 0 on error
+    */
+   answerMatchQuestionOut->matchCode = -1;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
@@ -5314,27 +5323,28 @@ int swad__answerMatchQuestion (struct soap *soap,
 	                        "Match code must be a integer greater than 0");
    Mch_GetDataOfMatchByCod (&Match);
 
-   /* Check that match belongs to game */
+   /***** Check that match belongs to game *****/
    if (Match.GamCod != Game.GamCod)
       return soap_sender_fault (soap,
 	                        "Bad game code",
-	                        "Match code does not belong to game code");
+	                        "Match does not belong to game");
 
-   // TODO: Write the code
-   if (questionIndex > 0 && numOption > 0)
-     {
-      // QstInd = (unsigned) questionIndex;
-      // NumOpt = (unsigned) numOption;
-      answerMatchQuestionOut->matchCode = matchCode;
-      answerMatchQuestionOut->answerIndex = 1;	// TODO: Return the current answer index
-     }
-   else
-     {
-      // QstInd = 0;
-      // NumOpt = 0;
-      answerMatchQuestionOut->matchCode = -1;
-      answerMatchQuestionOut->answerIndex = -1;
-     }
+   /***** Check question index *****/
+   if (questionIndex <= 0)
+      return soap_sender_fault (soap,
+	                        "Bad question index",
+	                        "The question index should be greater than 0");
+   QstInd = (unsigned) questionIndex;
+
+   /***** Check number of option selected by student *****/
+   if (numOption < 0)
+      return soap_sender_fault (soap,
+	                        "Bad number of option",
+	                        "The number of option should be greater or equal than 0");
+   UsrAnswer.NumOpt = (unsigned) numOption;
+
+   /***** Store answer *****/
+   Mch_StoreQuestionAnswer (&Match,QstInd,&UsrAnswer);
 
    return SOAP_OK;
   }
