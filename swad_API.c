@@ -114,6 +114,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_password.h"
+#include "swad_role.h"
 #include "swad_search.h"
 #include "swad_test_config.h"
 #include "swad_test_visibility.h"
@@ -134,41 +135,42 @@ extern const char Str_BIN_TO_BASE64URL[64 + 1];
 // Add new functions at the end
 static const char *API_Functions[1 + API_NUM_FUNCTIONS] =
   {
-   [API_unknown                ] = "?",				//  0 ==> unknown function
-   [API_loginBySessionKey      ] = "loginBySession",		//  1
-   [API_loginByUserPassword    ] = "loginByUserPassword",	//  2 (deprecated)
-   [API_loginByUserPasswordKey ] = "loginByUserPasswordKey",	//  3
-   [API_getCourses             ] = "getCourses",		//  4
-   [API_getUsers               ] = "getUsers",			//  5
-   [API_getNotifications       ] = "getNotifications",		//  6
-   [API_getTestConfig          ] = "getTestConfig",		//  7
-   [API_getTests               ] = "getTests",			//  8
-   [API_sendMessage            ] = "sendMessage",		//  9
-   [API_sendNotice             ] = "sendNotice",		// 10
-   [API_getDirectoryTree       ] = "getDirectoryTree",		// 11
-   [API_getGroups              ] = "getGroups",			// 12
-   [API_getGroupTypes          ] = "getGroupTypes",		// 13
-   [API_sendMyGroups           ] = "sendMyGroups",		// 14
-   [API_getFile                ] = "getFile",			// 15
-   [API_markNotificationsAsRead] = "markNotificationsAsRead",	// 16
-   [API_getNewPassword         ] = "getNewPassword",		// 17
-   [API_getCourseInfo          ] = "getCourseInfo",		// 18
-   [API_getAttendanceEvents    ] = "getAttendanceEvents",	// 19
-   [API_sendAttendanceEvent    ] = "sendAttendanceEvent",	// 20
-   [API_getAttendanceUsers     ] = "getAttendanceUsers",	// 21
-   [API_sendAttendanceUsers    ] = "sendAttendanceUsers",	// 22
-   [API_createAccount          ] = "createAccount",		// 23
-   [API_getMarks               ] = "getMarks",			// 24
-   [API_getTrivialQuestion     ] = "getTrivialQuestion",	// 25
-   [API_findUsers              ] = "findUsers",			// 26
-   [API_removeAttendanceEvent  ] = "removeAttendanceEvent",	// 27
-   [API_getGames               ] = "getGames",			// 28
-   [API_getMatches             ] = "getMatches",		// 29
-   [API_getMatchStatus         ] = "getMatchStatus",		// 30
-   [API_answerMatchQuestion    ] = "answerMatchQuestion",	// 31
-   [API_getLocation            ] = "getLocation",		// 32
-   [API_sendMyLocation         ] = "sendMyLocation",		// 33
-   [API_getLastLocation        ] = "getLastLocation",		// 34
+   [API_unknown			] = "?",			//  0 ==> unknown function
+   [API_loginBySessionKey	] = "loginBySession",		//  1
+   [API_loginByUserPassword	] = "loginByUserPassword",	//  2 (deprecated)
+   [API_loginByUserPasswordKey	] = "loginByUserPasswordKey",	//  3
+   [API_getCourses		] = "getCourses",		//  4
+   [API_getUsers		] = "getUsers",			//  5
+   [API_getNotifications	] = "getNotifications",		//  6
+   [API_getTestConfig		] = "getTestConfig",		//  7
+   [API_getTests		] = "getTests",			//  8
+   [API_sendMessage		] = "sendMessage",		//  9
+   [API_sendNotice		] = "sendNotice",		// 10
+   [API_getDirectoryTree	] = "getDirectoryTree",		// 11
+   [API_getGroups		] = "getGroups",		// 12
+   [API_getGroupTypes		] = "getGroupTypes",		// 13
+   [API_sendMyGroups		] = "sendMyGroups",		// 14
+   [API_getFile			] = "getFile",			// 15
+   [API_markNotificationsAsRead	] = "markNotificationsAsRead",	// 16
+   [API_getNewPassword		] = "getNewPassword",		// 17
+   [API_getCourseInfo		] = "getCourseInfo",		// 18
+   [API_getAttendanceEvents	] = "getAttendanceEvents",	// 19
+   [API_sendAttendanceEvent	] = "sendAttendanceEvent",	// 20
+   [API_getAttendanceUsers	] = "getAttendanceUsers",	// 21
+   [API_sendAttendanceUsers	] = "sendAttendanceUsers",	// 22
+   [API_createAccount		] = "createAccount",		// 23
+   [API_getMarks		] = "getMarks",			// 24
+   [API_getTrivialQuestion	] = "getTrivialQuestion",	// 25
+   [API_findUsers		] = "findUsers",		// 26
+   [API_removeAttendanceEvent	] = "removeAttendanceEvent",	// 27
+   [API_getGames		] = "getGames",			// 28
+   [API_getMatches		] = "getMatches",		// 29
+   [API_getMatchStatus		] = "getMatchStatus",		// 30
+   [API_answerMatchQuestion	] = "answerMatchQuestion",	// 31
+   [API_getLocation		] = "getLocation",		// 32
+   [API_sendMyLocation		] = "sendMyLocation",		// 33
+   [API_getLastLocation		] = "getLastLocation",		// 34
+   [API_getAvailableRoles	] = "getAvailableRoles",	// 35
   };
 
 /* Web service roles (they do not match internal swad-core roles) */
@@ -1178,6 +1180,49 @@ int swad__loginBySessionKey (struct soap *soap,
   }
 
 /*****************************************************************************/
+/***************** Get available roles in the current course *****************/
+/*****************************************************************************/
+/*
+With this function, SWADroid is able to check if user can see the button to show the MAC address of the nearest WiFi access point
+*/
+
+int swad__getAvailableRoles (struct soap *soap,
+                             char *wsKey,							// input
+                             struct swad__getAvailableRolesOutput *getAvailableRolesOut)	// output
+  {
+   int ReturnCode;
+
+   /***** Initializations *****/
+   API_Set_gSOAP_RuntimeEnv (soap);
+   Gbl.WebService.Function = API_getAvailableRoles;
+
+   /***** Default value returned on error *****/
+   getAvailableRolesOut->roles = 0;	// error
+
+   /***** Check web service key *****/
+   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+      return ReturnCode;
+   if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
+      return soap_receiver_fault (soap,
+	                          "Bad web service key",
+	                          "Web service key does not exist in database");
+
+   /***** Get some of my data *****/
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L))
+      return soap_receiver_fault (soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
+   Gbl.Usrs.Me.Logged = true;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+
+   /***** Return available roles *****/
+   Rol_SetMyRoles ();
+   getAvailableRolesOut->roles = Gbl.Usrs.Me.Role.Available;
+
+   return SOAP_OK;
+  }
+
+/*****************************************************************************/
 /*********************** Send a new password by email ************************/
 /*****************************************************************************/
 
@@ -1196,7 +1241,7 @@ int swad__getNewPassword (struct soap *soap,
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getNewPassword;
 
-   /***** Default values returned on error *****/
+   /***** Default value returned on error *****/
    getNewPasswordOut->success = 0;	// error
 
    /***** Get plugin code *****/

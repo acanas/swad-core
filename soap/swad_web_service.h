@@ -14,6 +14,21 @@ struct swad__createAccountOutput
    char *wsKey;		// key used in subsequent calls to other web services
   };
 
+/* loginByUserPasswordKey */
+struct swad__loginByUserPasswordKeyOutput
+  {
+   int userCode;
+   char *wsKey;		// key used in subsequent calls to other web services
+   char *userNickname;
+   char *userID;
+   char *userSurname1;
+   char *userSurname2;
+   char *userFirstname;
+   char *userPhoto;
+   char *userBirthday;
+   int userRole;	// 1 = guest, no courses; 2 = student in all courses; 3 = teacher in one course at least
+  };
+
 /* loginBySessionKey */
 struct swad__loginBySessionKeyOutput
   {
@@ -35,19 +50,10 @@ struct swad__loginBySessionKeyOutput
    char *courseName;
   };
 
-/* loginByUserPasswordKey */
-struct swad__loginByUserPasswordKeyOutput
+/* getAvailableRoles */
+struct swad__getAvailableRolesOutput
   {
-   int userCode;
-   char *wsKey;		// key used in subsequent calls to other web services
-   char *userNickname;
-   char *userID;
-   char *userSurname1;
-   char *userSurname2;
-   char *userFirstname;
-   char *userPhoto;
-   char *userBirthday;
-   int userRole;	// 1 = guest, no courses; 2 = student in all courses; 3 = teacher in one course at least
+   int roles;
   };
 
 /* getNewPassword */
@@ -488,6 +494,8 @@ int swad__loginByUserPasswordKey (char *userID,char *userPassword,char *appKey,
                                   struct swad__loginByUserPasswordKeyOutput *loginByUserPasswordKeyOut);
 int swad__loginBySessionKey (char *sessionID,char *appKey,
                              struct swad__loginBySessionKeyOutput *loginBySessionKeyOut);
+int swad__getAvailableRoles (char *wsKey,
+                             struct swad__getAvailableRolesOutput *getAvailableRolesOut);
 int swad__getNewPassword (char *userID,char *appKey,
                           struct swad__getNewPasswordOutput *getNewPasswordOut);
 
