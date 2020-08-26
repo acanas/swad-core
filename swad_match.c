@@ -3733,7 +3733,7 @@ void Mch_JoinMatchAsStd (void)
 /****** Remove student's answer to a question and show match as student ******/
 /*****************************************************************************/
 
-void Mch_RemoveMyQuestionAnswer (void)
+void Mch_RemMyQstAnsAndShowMchStatus (void)
   {
    struct Mch_Match Match;
    unsigned QstInd;
@@ -3748,23 +3748,33 @@ void Mch_RemoveMyQuestionAnswer (void)
    /***** Get question index from form *****/
    QstInd = Gam_GetParamQstInd ();
 
-   /***** Check that teacher's screen is showing answers
-          and question index is the current one being played *****/
-   if (Match.Status.Playing &&			// Match is being played
-       Match.Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing answers
-       QstInd == Match.Status.QstInd)		// Removing answer to the current question being played
-     {
-      /***** Remove my answer to this question *****/
-      Mch_RemoveMyAnswerToMatchQuestion (&Match);
-
-      /***** Compute score and update my match result *****/
-      MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (Match.MchCod);
-     }
+   /***** Remove my answer to this question *****/
+   Mch_RemoveMyQuestionAnswer (&Match,QstInd);
 
    /***** Show current match status *****/
    HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
    Mch_ShowMatchStatusForStd (&Match,Mch_CHANGE_STATUS_BY_STUDENT);
    HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/******************** Remove student's answer to a question ******************/
+/*****************************************************************************/
+
+void Mch_RemoveMyQuestionAnswer (const struct Mch_Match *Match,unsigned QstInd)
+  {
+   /***** Check that teacher's screen is showing answers
+          and question index is the current one being played *****/
+   if (Match->Status.Playing &&			// Match is being played
+       Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing answers
+       QstInd == Match->Status.QstInd)		// Removing answer to the current question being played
+     {
+      /***** Remove my answer to this question *****/
+      Mch_RemoveMyAnswerToMatchQuestion (Match);
+
+      /***** Compute score and update my match result *****/
+      MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (Match->MchCod);
+     }
   }
 
 /*****************************************************************************/
@@ -3961,7 +3971,7 @@ void Mch_ReceiveQuestionAnswer (void)
 /********** Store question answer from student when playing a match **********/
 /*****************************************************************************/
 
-void Mch_StoreQuestionAnswer (struct Mch_Match *Match,unsigned QstInd,
+void Mch_StoreQuestionAnswer (const struct Mch_Match *Match,unsigned QstInd,
                               struct Mch_UsrAnswer *UsrAnswer)
   {
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];

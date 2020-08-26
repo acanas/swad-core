@@ -136,7 +136,8 @@ bool Mch_RegisterMeAsPlayerInMatch (struct Mch_Match *Match);
 
 void Mch_GetMatchBeingPlayed (void);
 void Mch_JoinMatchAsStd (void);
-void Mch_RemoveMyQuestionAnswer (void);
+void Mch_RemMyQstAnsAndShowMchStatus (void);
+void Mch_RemoveMyQuestionAnswer (const struct Mch_Match *Match,unsigned QstInd);
 
 void Mch_StartCountdown (void);
 void Mch_RefreshMatchTch (void);
@@ -145,7 +146,7 @@ void Mch_RefreshMatchStd (void);
 void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
 		          struct Mch_UsrAnswer *UsrAnswer);
 void Mch_ReceiveQuestionAnswer (void);
-void Mch_StoreQuestionAnswer (struct Mch_Match *Match,unsigned QstInd,
+void Mch_StoreQuestionAnswer (const struct Mch_Match *Match,unsigned QstInd,
                               struct Mch_UsrAnswer *UsrAnswer);
 
 void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print);

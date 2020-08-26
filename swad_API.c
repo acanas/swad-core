@@ -5200,6 +5200,12 @@ int swad__getMatchStatus (struct soap *soap,
    Game.GamCod = (long) gameCode;
    Match.MchCod = (long) matchCode;
 
+   /***** Default output *****/
+   getMatchStatusOut->matchCode = -1;
+   getMatchStatusOut->questionIndex = -1;
+   getMatchStatusOut->numAnswers = -1;
+   getMatchStatusOut->answerIndex = -1;
+
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
       return ReturnCode;
@@ -5266,8 +5272,9 @@ int swad__getMatchStatus (struct soap *soap,
    if (Match.Status.Playing &&		// Match is being played
        Match.Status.Showing != Mch_END)	// Unfinished
       /* Update players */
-      getMatchStatusOut->matchCode = Mch_RegisterMeAsPlayerInMatch (&Match) ? matchCode :	//  > 0 ==> OK
-									      -1;		//  < 0 ==> can not join this match
+      if (Mch_RegisterMeAsPlayerInMatch (&Match))
+	 if (Match.Status.Showing == Mch_ANSWERS)	// Showing the question stem and the answers
+	    getMatchStatusOut->matchCode = (int) Match.MchCod;	// > 0 ==> student is allowed to answer the question
 
    /***** Set index of question inside the game *****/
    getMatchStatusOut->questionIndex = (int) Match.Status.QstInd;
@@ -5383,13 +5390,14 @@ int swad__answerMatchQuestion (struct soap *soap,
 
    /***** Check number of option selected by student *****/
    if (numOption < 0)
-      return soap_sender_fault (soap,
-	                        "Bad number of option",
-	                        "The number of option should be greater or equal than 0");
-   UsrAnswer.NumOpt = (unsigned) numOption;
-
-   /***** Store answer *****/
-   Mch_StoreQuestionAnswer (&Match,QstInd,&UsrAnswer);
+      /***** Remove my answer to this question *****/
+      Mch_RemoveMyQuestionAnswer (&Match,QstInd);
+   else
+     {
+      /***** Store answer *****/
+      UsrAnswer.NumOpt = (unsigned) numOption;
+      Mch_StoreQuestionAnswer (&Match,QstInd,&UsrAnswer);
+     }
 
    return SOAP_OK;
   }
