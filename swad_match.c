@@ -203,6 +203,9 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match);
 static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
                                          struct Tst_Question *Question,
                                          const char *Class,bool ShowResult);
+static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
+                                         struct Tst_Question *Question,
+                                         const char *Class,bool ShowResult);
 static bool Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 					   const struct Mch_UsrAnswer *UsrAnswer,
 					   Mch_Update_t Update);
@@ -3117,9 +3120,9 @@ static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
 /******** Write single or multiple choice answer when seeing a match *********/
 /*****************************************************************************/
 
-void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
-                                  struct Tst_Question *Question,
-                                  const char *Class,bool ShowResult)
+static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
+                                         struct Tst_Question *Question,
+                                         const char *Class,bool ShowResult)
   {
    unsigned NumOpt;
    bool RowIsOpen = false;
@@ -3213,10 +3216,6 @@ static bool Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
    unsigned NumOptions;
    unsigned NumOpt;
    char *Class;
-
-   /***** Trivial check: this question must be valid for games *****/
-   if (!Tst_CheckIfQuestionIsValidForGame (Match->Status.QstCod))
-      return false;
 
    /***** Get number of options in this question *****/
    NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);

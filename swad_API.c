@@ -5186,7 +5186,6 @@ int swad__getMatchStatus (struct soap *soap,
    struct Gam_Game Game;
    struct Mch_Match Match;
    bool ICanPlayThisMatchBasedOnGrps;
-   unsigned NumOptions;
    struct Mch_UsrAnswer UsrAnswer;
 
    /***** Reset game and match *****/
@@ -5261,40 +5260,38 @@ int swad__getMatchStatus (struct soap *soap,
 				  "Request forbidden",
 				  "Requester can not join this match");
 
-   /***** Check question *****/
-   if (!Tst_CheckIfQuestionIsValidForGame (Match.Status.QstCod))
-      return soap_receiver_fault (soap,
-				  "Wrong question",
-				  "Type of answer not valid in a game.");
-
-   /***** Join match *****/
+   /***** Set default match code *****/
    getMatchStatusOut->matchCode = 0;	// == 0 ==> wait
+
+   /***** Set index of question inside the game *****/
+   getMatchStatusOut->questionIndex = (int) Match.Status.QstInd;
+
    if (Match.Status.Playing &&		// Match is being played
        Match.Status.Showing != Mch_END)	// Unfinished
+      /***** Join match *****/
       /* Update players */
       if (Mch_RegisterMeAsPlayerInMatch (&Match))
 	 if (Match.Status.Showing == Mch_ANSWERS)	// Showing the question stem and the answers
 	    getMatchStatusOut->matchCode = (int) Match.MchCod;	// > 0 ==> student is allowed to answer the question
 
-   /***** Set index of question inside the game *****/
-   getMatchStatusOut->questionIndex = (int) Match.Status.QstInd;
-
-   /***** Set number of answers (options) in question *****/
-   NumOptions = Tst_GetNumAnswersQst (Match.Status.QstCod);
-   getMatchStatusOut->numAnswers = (int) NumOptions;
-
-   /***** Set number of selected answer *****/
-   if (NumOptions == 0)
-      getMatchStatusOut->answerIndex = -1;
-   else	// Answers found
+   /***** Set number of answers (options) in question and student's answer (<0 ==> no answer) *****/
+   switch (Match.Status.Showing)
      {
-      /***** Get student's answer to this question
-	     (<0 ==> no answer) *****/
-      Mch_GetQstAnsFromDB (Match.MchCod,
-			   Gbl.Usrs.Me.UsrDat.UsrCod,
-			   Match.Status.QstInd,
-			   &UsrAnswer);
-      getMatchStatusOut->answerIndex = UsrAnswer.NumOpt;
+      case Mch_START:	// Start: don't show anything
+      case Mch_END:	// End: don't show anything
+         getMatchStatusOut->numAnswers = 0;
+         getMatchStatusOut->answerIndex = -1;
+         break;
+      case Mch_STEM:	// Showing only the question stem
+      case Mch_ANSWERS:	// Showing the question stem and the answers
+      case Mch_RESULTS:	// Showing the results
+	 getMatchStatusOut->numAnswers = (int) Tst_GetNumAnswersQst (Match.Status.QstCod);
+	 Mch_GetQstAnsFromDB (Match.MchCod,
+			      Gbl.Usrs.Me.UsrDat.UsrCod,
+			      Match.Status.QstInd,
+			      &UsrAnswer);
+	 getMatchStatusOut->answerIndex = UsrAnswer.NumOpt;
+         break;
      }
 
    DB_QueryINSERT ("can not debug",

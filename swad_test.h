@@ -137,7 +137,6 @@ void Tst_ChangeFormatAnswersFeedback (struct Tst_Question *Question);
 void Tst_WriteAnswersBank (struct Tst_Question *Question,
                            const char *ClassTxt,
                            const char *ClassFeedback);
-bool Tst_CheckIfQuestionIsValidForGame (long QstCod);
 void Tst_WriteAnsTF (char AnsTF);
 
 void Tst_WriteParamQstCod (unsigned NumQst,long QstCod);

@@ -555,7 +555,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.260.1 (2020-08-26)"
+#define Log_PLATFORM_VERSION	"SWAD 19.260.2 (2020-08-28)"
 #define CSS_FILE		"swad19.253.css"
 #define JS_FILE			"swad19.254.js"
 /*
@@ -573,6 +573,7 @@ TODO: Que al generar un examen sólo se cojan preguntas válidas. Y si ya está gen
 TODO: Create module swad_test_result
 "sudo apt install webp" en Ubuntu, y "yum install libwebp libwebp-tools" en CentOS, para decodificar imágenes Web/ug reportado por Javier Fernández Baldomero.
 
+	Version 19.260.2: Aug 28, 2020  Fixed bugs in API functions related to games and matches. Reported by Sergio Díaz Rueda. (304010 lines)
 	Version 19.260.1: Aug 26, 2020  Fixed bugs in API functions related to games and matches. Reported by Sergio Díaz Rueda. (304027 lines)
 	Version 19.260:   Aug 23, 2020  New API function getAvailableRoles. (304009 lines)
 	Version 19.259:   Aug 22, 2020  Changes in API function answerMatchQuestion. (303969 lines)

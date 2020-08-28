@@ -2793,20 +2793,6 @@ void Tst_WriteAnswersBank (struct Tst_Question *Question,
   }
 
 /*****************************************************************************/
-/***************** Check if a question is valid for a game *******************/
-/*****************************************************************************/
-
-bool Tst_CheckIfQuestionIsValidForGame (long QstCod)
-  {
-   /***** Check if a question is valid for a game from database *****/
-   return DB_QueryCOUNT ("can not check type of a question",
-			 "SELECT COUNT(*)"
-			 " FROM tst_questions"
-			 " WHERE QstCod=%ld AND AnsType='%s'",
-			 QstCod,Tst_StrAnswerTypesDB[Tst_ANS_UNIQUE_CHOICE]) != 0;
-  }
-
-/*****************************************************************************/
 /****************** Write integer answer when editing a test *****************/
 /*****************************************************************************/
 
