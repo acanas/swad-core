@@ -5337,11 +5337,8 @@ int swad__answerMatchQuestion (struct soap *soap,
    Match.MchCod = (long) matchCode;
 
    /***** Set default output *****/
-   /*
-   > 0 if the answer was saved
-   = 0 if the answer was not saved because the match is in pause or in another question
-   < 0 on error
-    */
+   /*	<= 0 on error
+	 > 0 on sucess */
    answerMatchQuestionOut->matchCode = -1;
 
    /***** Check web service key *****/
@@ -5395,6 +5392,9 @@ int swad__answerMatchQuestion (struct soap *soap,
       UsrAnswer.NumOpt = (unsigned) numOption;
       Mch_StoreQuestionAnswer (&Match,QstInd,&UsrAnswer);
      }
+
+   /***** Set success output *****/
+   answerMatchQuestionOut->matchCode = Match.MchCod;
 
    return SOAP_OK;
   }
