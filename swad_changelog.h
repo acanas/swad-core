@@ -555,7 +555,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.262 (2020-09-01)"
+#define Log_PLATFORM_VERSION	"SWAD 19.263 (2020-09-02)"
 #define CSS_FILE		"swad19.253.css"
 #define JS_FILE			"swad19.254.js"
 /*
@@ -573,6 +573,7 @@ TODO: Que al generar un examen sólo se cojan preguntas válidas. Y si ya está gen
 TODO: Create module swad_test_result
 "sudo apt install webp" en Ubuntu, y "yum install libwebp libwebp-tools" en CentOS, para decodificar imágenes Web/ug reportado por Javier Fernández Baldomero.
 
+	Version 19.263  : Sep 02, 2020  New module swad_MAC for MAC addresses. (304364 lines)
 	Version 19.262  : Sep 01, 2020  Edition of MAC addresses in listing of rooms. (304239 lines)
 	Version 19.261  : Sep 01, 2020  MAC addresses are printed in listing of rooms. (304103 lines)
 	Version 19.260.3: Aug 30, 2020  Fixed bug in API function answerMatchQuestion. Reported by Sergio Díaz Rueda. (304010 lines)

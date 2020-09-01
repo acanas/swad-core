@@ -35,6 +35,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
+#include "swad_MAC.h"
 #include "swad_room.h"
 
 /*****************************************************************************/
@@ -122,8 +123,6 @@ static struct Roo_Room *Roo_EditingRoom = NULL;	// Static variable to keep the r
 static void Roo_GetAndListMACAddresses (long RooCod);
 static void Roo_GetAndEditMACAddresses (long RooCod,const char *Anchor);
 static unsigned Roo_GetMACAddresses (long RooCod,MYSQL_RES **mysql_res);
-static void Roo_MACnumToMACstr (unsigned long long MACnum,char MACstr[17 + 1]);
-unsigned long long Roo_GetMACnum (const char *ParamName);
 
 static Roo_Order_t Roo_GetParamRoomOrder (void);
 static bool Roo_CheckIfICanCreateRooms (void);
@@ -326,37 +325,13 @@ void Roo_SeeRooms (void)
 static void Roo_GetAndListMACAddresses (long RooCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumMACs;
-   unsigned NumMAC;
-   unsigned long long MACnum;
-   char MACstr[17 + 1];
 
    /***** Get MAC addresses from database *****/
    NumMACs = Roo_GetMACAddresses (RooCod,&mysql_res);
 
    /***** Write the MAC addresses *****/
-   for (NumMAC = 0;
-	NumMAC < NumMACs;
-	NumMAC++)
-     {
-      /* Get next MAC address */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Write break line */
-      if (NumMAC)
-	 HTM_BR ();
-
-      /* Write MAC address (row[0]) */
-      if (sscanf (row[0],"%llu",&MACnum) == 1)
-	{
-         Roo_MACnumToMACstr (MACnum,MACstr);
-         HTM_Txt (MACstr);
-	}
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   MAC_ListMACAddresses (NumMACs,&mysql_res);
   }
 
 /*****************************************************************************/
@@ -366,50 +341,13 @@ static void Roo_GetAndListMACAddresses (long RooCod)
 static void Roo_GetAndEditMACAddresses (long RooCod,const char *Anchor)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumMACs;
-   unsigned NumMAC;
-   unsigned long long MACnum;
-   char MACstr[17 + 1];
 
    /***** Get MAC addresses from database *****/
    NumMACs = Roo_GetMACAddresses (RooCod,&mysql_res);
 
    /***** Write the MAC addresses *****/
-   for (NumMAC = 0;
-	NumMAC < NumMACs;
-	NumMAC++)
-     {
-      /* Get next MAC address */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Write MAC address (row[0]) */
-      if (sscanf (row[0],"%llu",&MACnum) == 1)
-	{
-         Frm_StartFormAnchor (ActChgRooMAC,Anchor);
-         Roo_PutParamRooCod (RooCod);
-         Roo_MACnumToMACstr (MACnum,MACstr);
-	 Par_PutHiddenParamString (NULL,"OldMAC",MACstr);
-	 HTM_INPUT_TEXT ("NewMAC",17,MACstr,
-			 HTM_SUBMIT_ON_CHANGE,
-			 "size=\"8\"");
-         Frm_EndForm ();
-
-	 /* Write break line */
-	 HTM_BR ();
-	}
-     }
-
-   /* New MAC address */
-   Frm_StartFormAnchor (ActChgRooMAC,Anchor);
-   Roo_PutParamRooCod (RooCod);
-   HTM_INPUT_TEXT ("NewMAC",17,"",
-		   HTM_SUBMIT_ON_CHANGE,
-		   "size=\"8\"");
-   Frm_EndForm ();
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   MAC_EditMACAddresses (RooCod,Anchor,NumMACs,&mysql_res);
   }
 
 /*****************************************************************************/
@@ -428,21 +366,6 @@ static unsigned Roo_GetMACAddresses (long RooCod,MYSQL_RES **mysql_res)
   }
 
 /*****************************************************************************/
-/****** Get and list for edition the MAC addresses associated to a room ******/
-/*****************************************************************************/
-
-static void Roo_MACnumToMACstr (unsigned long long MACnum,char MACstr[17 + 1])
-  {
-   snprintf (MACstr,17 + 1,"%02x:%02x:%02x:%02x:%02x:%02x",
-	     (unsigned char) ((MACnum >> 40) & 0xff),
-	     (unsigned char) ((MACnum >> 32) & 0xff),
-	     (unsigned char) ((MACnum >> 24) & 0xff),
-	     (unsigned char) ((MACnum >> 16) & 0xff),
-	     (unsigned char) ((MACnum >>  8) & 0xff),
-	     (unsigned char) ((MACnum      ) & 0xff));
-  }
-
-/*****************************************************************************/
 /**************************** Change MAC of a room ***************************/
 /*****************************************************************************/
 
@@ -456,14 +379,14 @@ void Roo_ChangeMAC (void)
 
    /***** Get parameters from form *****/
    /* Get room code */
-   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
+   if ((Roo_EditingRoom->RooCod = Par_GetParToLong ("Cod")) == -1L)
       Lay_ShowErrorAndExit ("Code of room is missing.");
 
    /* Get the old MAC address of the room */
-   OldMAC = Roo_GetMACnum ("OldMAC");
+   OldMAC = MAC_GetMACnumFromForm ("MAC");
 
    /* Get the new MAC address of the room */
-   NewMAC = Roo_GetMACnum ("NewMAC");
+   NewMAC = MAC_GetMACnumFromForm ("NewMAC");
 
    /***** Get data of the room from database *****/
    Roo_GetDataOfRoomByCod (Roo_EditingRoom);
@@ -481,38 +404,6 @@ void Roo_ChangeMAC (void)
 		       Roo_EditingRoom->RooCod,NewMAC);
 
    Roo_EditingRoom->MAC = NewMAC;
-  }
-
-/*****************************************************************************/
-/****************** Get MAC address as a number from a form ******************/
-/*****************************************************************************/
-
-unsigned long long Roo_GetMACnum (const char *ParamName)
-  {
-   char MACstr[17 * Str_MAX_BYTES_PER_CHAR + 1];
-   unsigned long long MAC[6 + 1];
-   unsigned long long MACnum;
-
-   /***** Get parameter *****/
-   Par_GetParToText (ParamName,MACstr,17 * Str_MAX_BYTES_PER_CHAR);
-
-   if (MACstr[0])	// Not empty
-     {
-      /***** Try to scan it in xx:xx:xx:xx:xx:xx format (where x are hexadecimal digits) *****/
-      if (sscanf (MACstr,"%02llx:%02llx:%02llx:%02llx:%02llx:%02llx",&MAC[0],&MAC[1],&MAC[2],&MAC[3],&MAC[4],&MAC[5]) == 6)
-	 return (MAC[0] << 40) +
-		(MAC[1] << 32) +
-		(MAC[2] << 24) +
-		(MAC[3] << 16) +
-		(MAC[4] <<  8) +
-		 MAC[5];
-
-      /***** Try to scan it in xxxxxxxxxxxx format (where x are hexadecimal digits) ******/
-      if (sscanf (MACstr,"%llx",&MACnum) == 1)
-	 return MACnum;
-     }
-
-   return 0;
   }
 
 /*****************************************************************************/
