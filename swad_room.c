@@ -119,6 +119,8 @@ static struct Roo_Room *Roo_EditingRoom = NULL;	// Static variable to keep the r
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Roo_GetAndWriteMACAddresses (long RooCod);
+
 static Roo_Order_t Roo_GetParamRoomOrder (void);
 static bool Roo_CheckIfICanCreateRooms (void);
 static void Roo_PutIconsListingRooms (__attribute__((unused)) void *Args);
@@ -176,6 +178,7 @@ void Roo_SeeRooms (void)
    extern const char *Txt_Rooms;
    extern const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS];
    extern const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS];
+   extern const char *Txt_MAC_address;
    extern const char *Txt_ROOM_TYPES[Roo_NUM_TYPES];
    extern const char *Txt_New_room;
    struct Roo_Rooms Rooms;
@@ -203,6 +206,8 @@ void Roo_SeeRooms (void)
 		 Hlp_CENTRE_Rooms,Box_NOT_CLOSABLE);
    HTM_TABLE_BeginWideMarginPadding (2);
    HTM_TR_Begin (NULL);
+
+   /* Columns visible by all */
    for (Order  = (Roo_Order_t) 0;
 	Order <= (Roo_Order_t) (Roo_NUM_ORDERS - 1);
 	Order++)
@@ -220,6 +225,21 @@ void Roo_SeeRooms (void)
       Frm_EndForm ();
       HTM_TH_End ();
      }
+
+   /* Column visible by admins */
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 HTM_TH_Begin (1,1,"LM");
+	 HTM_Txt (Txt_MAC_address);
+	 HTM_TH_End ();
+	 break;
+      default:
+	 break;
+     }
+
    HTM_TR_End ();
 
    /***** Write list of rooms *****/
@@ -260,6 +280,20 @@ void Roo_SeeRooms (void)
       HTM_Txt (StrCapacity);
       HTM_TD_End ();
 
+      /* Column visible by admins */
+      switch (Gbl.Usrs.Me.Role.Logged)
+	{
+	 case Rol_CTR_ADM:
+	 case Rol_INS_ADM:
+	 case Rol_SYS_ADM:
+            HTM_TD_Begin ("class=\"DAT RM %s\"",Gbl.ColorRows[RowEvenOdd]);
+            Roo_GetAndWriteMACAddresses (Rooms.Lst[NumRoom].RooCod);
+            HTM_TD_End ();
+	    break;
+	 default:
+	    break;
+	}
+
       HTM_TR_End ();
      }
 
@@ -279,6 +313,56 @@ void Roo_SeeRooms (void)
 
    /***** Free list of rooms *****/
    Roo_FreeListRooms (&Rooms);
+  }
+
+/*****************************************************************************/
+/************* Write list of MAC addresses associated to a room **************/
+/*****************************************************************************/
+
+static void Roo_GetAndWriteMACAddresses (long RooCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumMACs;
+   unsigned NumMAC;
+   unsigned long long MACnum;
+
+   /***** Get MAC addresses from database *****/
+   NumMACs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get MAC addresses",
+				        "SELECT MAC"		// row[0]
+				        " FROM room_MAC"
+				        " WHERE RooCod=%ld"
+				        " ORDER BY MAC",
+				        RooCod);
+
+   /***** Write the MACs *****/
+   for (NumMAC = 0;
+	NumMAC < NumMACs;
+	NumMAC++)
+     {
+      /* Get next MAC */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Write break line */
+      if (NumMAC)
+	 HTM_BR ();
+
+      /* Get MAC (row[0]) */
+      if (sscanf (row[0],"%llu",&MACnum) == 1)
+	 /* Write MAC */
+	 HTM_TxtF ("%02x:%02x:%02x:%02x:%02x:%02x",
+		   (unsigned char) ((MACnum >> 40) & 0xff),
+		   (unsigned char) ((MACnum >> 32) & 0xff),
+		   (unsigned char) ((MACnum >> 24) & 0xff),
+		   (unsigned char) ((MACnum >> 16) & 0xff),
+		   (unsigned char) ((MACnum >>  8) & 0xff),
+		   (unsigned char) ((MACnum      ) & 0xff));
+      else
+	 HTM_Txt ("?");
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

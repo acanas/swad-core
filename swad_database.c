@@ -2756,7 +2756,7 @@ mysql> DESCRIBE room_MAC;
 2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS room_MAC ("
-			"RooCod INT NOT NULL AUTO_INCREMENT,"
+			"RooCod INT NOT NULL,"
 			"MAC BIGINT NOT NULL,"	// 12 digits hexadecimal number
 		   "UNIQUE INDEX(RooCod,MAC),"
 		   "UNIQUE INDEX(MAC,RooCod))");

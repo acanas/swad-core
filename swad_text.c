@@ -18992,6 +18992,27 @@ const char *Txt_Longitude =
 	"Longitude";
 #endif
 
+const char *Txt_MAC_address =
+#if   L==1	// ca
+	"Adre&ccedil;a MAC";
+#elif L==2	// de
+	"MAC-Adresse";
+#elif L==3	// en
+	"MAC address";
+#elif L==4	// es
+	"Direcci&oacute;n MAC";
+#elif L==5	// fr
+	"Adresse MAC";
+#elif L==6	// gn
+	"Direcci&oacute;n MAC";	// Okoteve traducción
+#elif L==7	// it
+	"Indirizzo MAC";
+#elif L==8	// pl
+	"Adres MAC";
+#elif L==9	// pt
+	"Endere&ccedil;o MAC";
+#endif
+
 const char *Txt_Mandatory_enrolment =		// (to a type of group)
 #if   L==1	// ca
 	"&iquest;Adscripci&oacute;n obligatoria?";	// Necessita traduccio

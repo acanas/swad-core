@@ -6024,7 +6024,7 @@ int swad__getLocation (struct soap *soap,
                        struct swad__getLocationOutput *getLocationOut)	// output
   {
    int ReturnCode;
-   unsigned long MACnum;
+   unsigned long long MACnum;
    MYSQL_RES *mysql_res;
    unsigned NumLocs;
 
@@ -6049,7 +6049,7 @@ int swad__getLocation (struct soap *soap,
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
 
    /***** Convert MAC string to number *****/
-   if (sscanf (MAC,"%lx",&MACnum) != 1)
+   if (sscanf (MAC,"%llx",&MACnum) != 1)
       return soap_receiver_fault (soap,
 	                          "Bad MAC",
 	                          "MAC address format should be 12 hexadecimal digits");
@@ -6071,7 +6071,7 @@ int swad__getLocation (struct soap *soap,
 				    "rooms.ShortName,"		// row[11]
 				    "rooms.FullName"		// row[12]
 				    " FROM room_MAC,rooms,buildings,centres,institutions"
-				    " WHERE room_MAC.MAC=%lu"
+				    " WHERE room_MAC.MAC=%llu"
 				    " AND room_MAC.RooCod=rooms.RooCod"
 				    " AND rooms.BldCod=buildings.BldCod"
 				    " AND buildings.CtrCod=centres.CtrCod"
