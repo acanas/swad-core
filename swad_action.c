@@ -374,6 +374,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRenRooSho	] = {1748,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RenameRoomShort		,Roo_ContEditAfterChgRoom	,NULL},
    [ActRenRooFul	] = {1749,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_RenameRoomFull		,Roo_ContEditAfterChgRoom	,NULL},
    [ActChgRooMaxUsr	] = {1750,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_ChangeCapacity		,Roo_ContEditAfterChgRoom	,NULL},
+   [ActChgRooMAC	] = {1911,-1,TabUnk,ActSeeRoo		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Roo_ChangeMAC			,Roo_ContEditAfterChgRoom	,NULL},
 
    // TabDeg ******************************************************************
    // Actions in menu:
@@ -3722,6 +3723,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActEndExaPrn,		// #1908
 	ActValSetQst,		// #1909
 	ActInvSetQst,		// #1910
+	ActChgRooMAC,		// #1911
   };
 
 /*****************************************************************************/

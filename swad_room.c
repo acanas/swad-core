@@ -119,7 +119,11 @@ static struct Roo_Room *Roo_EditingRoom = NULL;	// Static variable to keep the r
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Roo_GetAndWriteMACAddresses (long RooCod);
+static void Roo_GetAndListMACAddresses (long RooCod);
+static void Roo_GetAndEditMACAddresses (long RooCod,const char *Anchor);
+static unsigned Roo_GetMACAddresses (long RooCod,MYSQL_RES **mysql_res);
+static void Roo_MACnumToMACstr (unsigned long long MACnum,char MACstr[17 + 1]);
+unsigned long long Roo_GetMACnum (const char *ParamName);
 
 static Roo_Order_t Roo_GetParamRoomOrder (void);
 static bool Roo_CheckIfICanCreateRooms (void);
@@ -250,32 +254,32 @@ void Roo_SeeRooms (void)
       HTM_TR_Begin (NULL);
 
       /* Building short name */
-      HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
+      HTM_TD_Begin ("class=\"DAT LT %s\"",Gbl.ColorRows[RowEvenOdd]);
       HTM_Txt (Rooms.Lst[NumRoom].BldShrtName);
       HTM_TD_End ();
 
       /* Floor */
-      HTM_TD_Begin ("class=\"DAT RM %s\"",Gbl.ColorRows[RowEvenOdd]);
+      HTM_TD_Begin ("class=\"DAT RT %s\"",Gbl.ColorRows[RowEvenOdd]);
       HTM_Int (Rooms.Lst[NumRoom].Floor);
       HTM_TD_End ();
 
       /* Type */
-      HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
+      HTM_TD_Begin ("class=\"DAT LT %s\"",Gbl.ColorRows[RowEvenOdd]);
       Ico_PutIconOn (Roo_TypesIcons[Rooms.Lst[NumRoom].Type],Txt_ROOM_TYPES[Rooms.Lst[NumRoom].Type]);
       HTM_TD_End ();
 
       /* Short name */
-      HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
+      HTM_TD_Begin ("class=\"DAT LT %s\"",Gbl.ColorRows[RowEvenOdd]);
       HTM_Txt (Rooms.Lst[NumRoom].ShrtName);
       HTM_TD_End ();
 
       /* Full name */
-      HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
+      HTM_TD_Begin ("class=\"DAT LT %s\"",Gbl.ColorRows[RowEvenOdd]);
       HTM_Txt (Rooms.Lst[NumRoom].FullName);
       HTM_TD_End ();
 
       /* Capacity */
-      HTM_TD_Begin ("class=\"DAT RM %s\"",Gbl.ColorRows[RowEvenOdd]);
+      HTM_TD_Begin ("class=\"DAT RT %s\"",Gbl.ColorRows[RowEvenOdd]);
       Roo_WriteCapacity (StrCapacity,Rooms.Lst[NumRoom].Capacity);
       HTM_Txt (StrCapacity);
       HTM_TD_End ();
@@ -286,8 +290,8 @@ void Roo_SeeRooms (void)
 	 case Rol_CTR_ADM:
 	 case Rol_INS_ADM:
 	 case Rol_SYS_ADM:
-            HTM_TD_Begin ("class=\"DAT RM %s\"",Gbl.ColorRows[RowEvenOdd]);
-            Roo_GetAndWriteMACAddresses (Rooms.Lst[NumRoom].RooCod);
+            HTM_TD_Begin ("class=\"DAT LT %s\"",Gbl.ColorRows[RowEvenOdd]);
+            Roo_GetAndListMACAddresses (Rooms.Lst[NumRoom].RooCod);
             HTM_TD_End ();
 	    break;
 	 default:
@@ -316,53 +320,199 @@ void Roo_SeeRooms (void)
   }
 
 /*****************************************************************************/
-/************* Write list of MAC addresses associated to a room **************/
+/************ Get and list the MAC addresses associated to a room ************/
 /*****************************************************************************/
 
-static void Roo_GetAndWriteMACAddresses (long RooCod)
+static void Roo_GetAndListMACAddresses (long RooCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumMACs;
    unsigned NumMAC;
    unsigned long long MACnum;
+   char MACstr[17 + 1];
 
    /***** Get MAC addresses from database *****/
-   NumMACs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get MAC addresses",
-				        "SELECT MAC"		// row[0]
-				        " FROM room_MAC"
-				        " WHERE RooCod=%ld"
-				        " ORDER BY MAC",
-				        RooCod);
+   NumMACs = Roo_GetMACAddresses (RooCod,&mysql_res);
 
-   /***** Write the MACs *****/
+   /***** Write the MAC addresses *****/
    for (NumMAC = 0;
 	NumMAC < NumMACs;
 	NumMAC++)
      {
-      /* Get next MAC */
+      /* Get next MAC address */
       row = mysql_fetch_row (mysql_res);
 
       /* Write break line */
       if (NumMAC)
 	 HTM_BR ();
 
-      /* Get MAC (row[0]) */
+      /* Write MAC address (row[0]) */
       if (sscanf (row[0],"%llu",&MACnum) == 1)
-	 /* Write MAC */
-	 HTM_TxtF ("%02x:%02x:%02x:%02x:%02x:%02x",
-		   (unsigned char) ((MACnum >> 40) & 0xff),
-		   (unsigned char) ((MACnum >> 32) & 0xff),
-		   (unsigned char) ((MACnum >> 24) & 0xff),
-		   (unsigned char) ((MACnum >> 16) & 0xff),
-		   (unsigned char) ((MACnum >>  8) & 0xff),
-		   (unsigned char) ((MACnum      ) & 0xff));
-      else
-	 HTM_Txt ("?");
+	{
+         Roo_MACnumToMACstr (MACnum,MACstr);
+         HTM_Txt (MACstr);
+	}
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/****** Get and list for edition the MAC addresses associated to a room ******/
+/*****************************************************************************/
+
+static void Roo_GetAndEditMACAddresses (long RooCod,const char *Anchor)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumMACs;
+   unsigned NumMAC;
+   unsigned long long MACnum;
+   char MACstr[17 + 1];
+
+   /***** Get MAC addresses from database *****/
+   NumMACs = Roo_GetMACAddresses (RooCod,&mysql_res);
+
+   /***** Write the MAC addresses *****/
+   for (NumMAC = 0;
+	NumMAC < NumMACs;
+	NumMAC++)
+     {
+      /* Get next MAC address */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Write MAC address (row[0]) */
+      if (sscanf (row[0],"%llu",&MACnum) == 1)
+	{
+         Frm_StartFormAnchor (ActChgRooMAC,Anchor);
+         Roo_PutParamRooCod (RooCod);
+         Roo_MACnumToMACstr (MACnum,MACstr);
+	 Par_PutHiddenParamString (NULL,"OldMAC",MACstr);
+	 HTM_INPUT_TEXT ("NewMAC",17,MACstr,
+			 HTM_SUBMIT_ON_CHANGE,
+			 "size=\"8\"");
+         Frm_EndForm ();
+
+	 /* Write break line */
+	 HTM_BR ();
+	}
+     }
+
+   /* New MAC address */
+   Frm_StartFormAnchor (ActChgRooMAC,Anchor);
+   Roo_PutParamRooCod (RooCod);
+   HTM_INPUT_TEXT ("NewMAC",17,"",
+		   HTM_SUBMIT_ON_CHANGE,
+		   "size=\"8\"");
+   Frm_EndForm ();
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/***************** Get the MAC addresses associated to a room ****************/
+/*****************************************************************************/
+
+static unsigned Roo_GetMACAddresses (long RooCod,MYSQL_RES **mysql_res)
+  {
+   /***** Get MAC addresses from database *****/
+   return (unsigned) DB_QuerySELECT (mysql_res,"can not get MAC addresses",
+				     "SELECT MAC"		// row[0]
+				     " FROM room_MAC"
+				     " WHERE RooCod=%ld"
+				     " ORDER BY MAC",
+				     RooCod);
+  }
+
+/*****************************************************************************/
+/****** Get and list for edition the MAC addresses associated to a room ******/
+/*****************************************************************************/
+
+static void Roo_MACnumToMACstr (unsigned long long MACnum,char MACstr[17 + 1])
+  {
+   snprintf (MACstr,17 + 1,"%02x:%02x:%02x:%02x:%02x:%02x",
+	     (unsigned char) ((MACnum >> 40) & 0xff),
+	     (unsigned char) ((MACnum >> 32) & 0xff),
+	     (unsigned char) ((MACnum >> 24) & 0xff),
+	     (unsigned char) ((MACnum >> 16) & 0xff),
+	     (unsigned char) ((MACnum >>  8) & 0xff),
+	     (unsigned char) ((MACnum      ) & 0xff));
+  }
+
+/*****************************************************************************/
+/**************************** Change MAC of a room ***************************/
+/*****************************************************************************/
+
+void Roo_ChangeMAC (void)
+  {
+   unsigned long long OldMAC;
+   unsigned long long NewMAC;
+
+   /***** Room constructor *****/
+   Roo_EditingRoomConstructor ();
+
+   /***** Get parameters from form *****/
+   /* Get room code */
+   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of room is missing.");
+
+   /* Get the old MAC address of the room */
+   OldMAC = Roo_GetMACnum ("OldMAC");
+
+   /* Get the new MAC address of the room */
+   NewMAC = Roo_GetMACnum ("NewMAC");
+
+   /***** Get data of the room from database *****/
+   Roo_GetDataOfRoomByCod (Roo_EditingRoom);
+
+   /***** Check if the new MAC is different from the old MAC *****/
+   if (OldMAC)
+      DB_QueryDELETE ("can not remove MAC address",
+		      "DELETE FROM room_MAC"
+		      " WHERE RooCod=%ld AND MAC=%llu",
+		      Roo_EditingRoom->RooCod,OldMAC);
+   if (NewMAC)
+      /***** Update the table of rooms-MACs changing the old MAC for the new one *****/
+      DB_QueryREPLACE ("can not change MAC address",
+		       "REPLACE INTO room_MAC (RooCod,MAC) VALUES (%ld,%llu)",
+		       Roo_EditingRoom->RooCod,NewMAC);
+
+   Roo_EditingRoom->MAC = NewMAC;
+  }
+
+/*****************************************************************************/
+/****************** Get MAC address as a number from a form ******************/
+/*****************************************************************************/
+
+unsigned long long Roo_GetMACnum (const char *ParamName)
+  {
+   char MACstr[17 * Str_MAX_BYTES_PER_CHAR + 1];
+   unsigned long long MAC[6 + 1];
+   unsigned long long MACnum;
+
+   /***** Get parameter *****/
+   Par_GetParToText (ParamName,MACstr,17 * Str_MAX_BYTES_PER_CHAR);
+
+   if (MACstr[0])	// Not empty
+     {
+      /***** Try to scan it in xx:xx:xx:xx:xx:xx format (where x are hexadecimal digits) *****/
+      if (sscanf (MACstr,"%02llx:%02llx:%02llx:%02llx:%02llx:%02llx",&MAC[0],&MAC[1],&MAC[2],&MAC[3],&MAC[4],&MAC[5]) == 6)
+	 return (MAC[0] << 40) +
+		(MAC[1] << 32) +
+		(MAC[2] << 24) +
+		(MAC[3] << 16) +
+		(MAC[4] <<  8) +
+		 MAC[5];
+
+      /***** Try to scan it in xxxxxxxxxxxx format (where x are hexadecimal digits) ******/
+      if (sscanf (MACstr,"%llx",&MACnum) == 1)
+	 return MACnum;
+     }
+
+   return 0;
   }
 
 /*****************************************************************************/
@@ -755,7 +905,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       HTM_TR_Begin (NULL);
 
       /* Put icon to remove room */
-      HTM_TD_Begin ("class=\"BM\"");
+      HTM_TD_Begin ("class=\"BT\"");
       Frm_StartForm (ActRemRoo);
       Roo_PutParamRooCod (Room->RooCod);
       Ico_PutIconRemove ();
@@ -763,14 +913,14 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       HTM_TD_End ();
 
       /* Room code */
-      HTM_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RT\"");
       HTM_ARTICLE_Begin (Anchor);
       HTM_Long (Room->RooCod);
       HTM_ARTICLE_End ();
       HTM_TD_End ();
 
       /* Building */
-      HTM_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CT\"");
       Frm_StartFormAnchor (ActChgRooBld,Anchor);
       Roo_PutParamRooCod (Room->RooCod);
       Roo_PutSelectorBuilding (Room->BldCod,Buildings,
@@ -779,7 +929,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       HTM_TD_End ();
 
       /* Floor */
-      HTM_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LT\"");
       Frm_StartFormAnchor (ActChgRooFlo,Anchor);
       Roo_PutParamRooCod (Room->RooCod);
       HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Room->Floor,
@@ -789,7 +939,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       HTM_TD_End ();
 
       /* Room type */
-      HTM_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CT\"");
       Frm_StartFormAnchor (ActChgRooTyp,Anchor);
       Roo_PutParamRooCod (Room->RooCod);
       Roo_PutSelectorType (Room->Type,
@@ -798,7 +948,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       HTM_TD_End ();
 
       /* Room short name */
-      HTM_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LT\"");
       Frm_StartFormAnchor (ActRenRooSho,Anchor);
       Roo_PutParamRooCod (Room->RooCod);
       HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Room->ShrtName,
@@ -808,7 +958,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       HTM_TD_End ();
 
       /* Room full name */
-      HTM_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LT\"");
       Frm_StartFormAnchor (ActRenRooFul,Anchor);
       Roo_PutParamRooCod (Room->RooCod);
       HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Room->FullName,
@@ -818,7 +968,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       HTM_TD_End ();
 
       /* Seating capacity */
-      HTM_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LT\"");
       Frm_StartFormAnchor (ActChgRooMaxUsr,Anchor);
       Roo_PutParamRooCod (Room->RooCod);
       Roo_WriteCapacity (StrCapacity,Room->Capacity);
@@ -826,6 +976,11 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
                       HTM_SUBMIT_ON_CHANGE,
 		      "size=\"3\"");
       Frm_EndForm ();
+      HTM_TD_End ();
+
+      /* MAC addresses */
+      HTM_TD_Begin ("class=\"LT\"");
+      Roo_GetAndEditMACAddresses (Room->RooCod,Anchor);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1455,6 +1610,7 @@ static void Roo_PutHeadRooms (void)
    extern const char *Txt_Short_name;
    extern const char *Txt_Full_name;
    extern const char *Txt_Capacity_OF_A_ROOM;
+   extern const char *Txt_MAC_address;
 
    HTM_TR_Begin (NULL);
 
@@ -1466,6 +1622,7 @@ static void Roo_PutHeadRooms (void)
    HTM_TH (1,1,"LM",Txt_Short_name);
    HTM_TH (1,1,"LM",Txt_Full_name);
    HTM_TH (1,1,"LM",Txt_Capacity_OF_A_ROOM);
+   HTM_TH (1,1,"LM",Txt_MAC_address);
 
    HTM_TR_End ();
   }
@@ -1579,6 +1736,7 @@ static void Roo_EditingRoomConstructor (void)
    Roo_EditingRoom->ShrtName[0]    = '\0';
    Roo_EditingRoom->FullName[0]    = '\0';
    Roo_EditingRoom->Capacity       = Roo_UNLIMITED_CAPACITY;
+   Roo_EditingRoom->MAC            = 0ULL;
   }
 
 static void Roo_EditingRoomDestructor (void)
