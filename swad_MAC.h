@@ -31,6 +31,9 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
+#define MAC_NUM_BYTES 		6
+#define MAC_LENGTH_MAC_ADDRESS (MAC_NUM_BYTES * 3 - 1)	// xx:xx:xx:xx:xx:xx
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -40,5 +43,6 @@ void MAC_EditMACAddresses (long Cod,const char *Anchor,
                            unsigned NumMACs,MYSQL_RES **mysql_res);
 
 unsigned long long MAC_GetMACnumFromForm (const char *ParamName);
+void MAC_MACnumToMACstr (unsigned long long MACnum,char MACstr[MAC_LENGTH_MAC_ADDRESS + 1]);
 
 #endif

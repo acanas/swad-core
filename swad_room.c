@@ -371,8 +371,8 @@ static unsigned Roo_GetMACAddresses (long RooCod,MYSQL_RES **mysql_res)
 
 void Roo_ChangeMAC (void)
   {
-   unsigned long long OldMAC;
-   unsigned long long NewMAC;
+   unsigned long long OldMACnum;
+   unsigned long long NewMACnum;
 
    /***** Room constructor *****/
    Roo_EditingRoomConstructor ();
@@ -383,27 +383,27 @@ void Roo_ChangeMAC (void)
       Lay_ShowErrorAndExit ("Code of room is missing.");
 
    /* Get the old MAC address of the room */
-   OldMAC = MAC_GetMACnumFromForm ("MAC");
+   OldMACnum = MAC_GetMACnumFromForm ("MAC");
 
    /* Get the new MAC address of the room */
-   NewMAC = MAC_GetMACnumFromForm ("NewMAC");
+   NewMACnum = MAC_GetMACnumFromForm ("NewMAC");
 
    /***** Get data of the room from database *****/
    Roo_GetDataOfRoomByCod (Roo_EditingRoom);
 
    /***** Check if the new MAC is different from the old MAC *****/
-   if (OldMAC)
+   if (OldMACnum)
       DB_QueryDELETE ("can not remove MAC address",
 		      "DELETE FROM room_MAC"
 		      " WHERE RooCod=%ld AND MAC=%llu",
-		      Roo_EditingRoom->RooCod,OldMAC);
-   if (NewMAC)
+		      Roo_EditingRoom->RooCod,OldMACnum);
+   if (NewMACnum)
       /***** Update the table of rooms-MACs changing the old MAC for the new one *****/
       DB_QueryREPLACE ("can not change MAC address",
 		       "REPLACE INTO room_MAC (RooCod,MAC) VALUES (%ld,%llu)",
-		       Roo_EditingRoom->RooCod,NewMAC);
+		       Roo_EditingRoom->RooCod,NewMACnum);
 
-   Roo_EditingRoom->MAC = NewMAC;
+   Roo_EditingRoom->MACnum = NewMACnum;
   }
 
 /*****************************************************************************/
@@ -1416,6 +1416,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
    extern const char *Txt_New_room;
    extern const char *Txt_Create_room;
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char MACstr[MAC_LENGTH_MAC_ADDRESS + 1];	// MAC address in xx:xx:xx:xx:xx:xx format
 
    /***** Begin form *****/
    Frm_StartForm (ActNewRoo);
@@ -1477,6 +1478,14 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
    HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"3\"");
+   HTM_TD_End ();
+
+   /***** MAC address *****/
+   HTM_TD_Begin ("class=\"LM\"");
+   MAC_MACnumToMACstr (Roo_EditingRoom->MACnum,MACstr);
+   HTM_INPUT_TEXT ("MAC",MAC_LENGTH_MAC_ADDRESS,MACstr,
+		   HTM_DONT_SUBMIT_ON_CHANGE,
+		   "size=\"8\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1554,6 +1563,10 @@ void Roo_ReceiveFormNewRoom (void)
                                                          Roo_MAX_CAPACITY,
                                                          Roo_UNLIMITED_CAPACITY);
 
+   /* Get MAC address */
+   Roo_EditingRoom->MACnum = MAC_GetMACnumFromForm ("MAC");
+
+
    if (Roo_EditingRoom->ShrtName[0] &&
        Roo_EditingRoom->FullName[0])	// If there's a room name
      {
@@ -1590,18 +1603,29 @@ static void Roo_CreateRoom (struct Roo_Room *Room)
       Room->Type = Roo_NO_TYPE;
 
    /***** Create a new room *****/
-   DB_QueryINSERT ("can not create room",
-		   "INSERT INTO rooms"
-		   " (CtrCod,BldCod,Floor,Type,ShortName,FullName,Capacity)"
-		   " VALUES"
-		   " (%ld,%ld,%d,'%s','%s','%s',%u)",
-                   Gbl.Hierarchy.Ctr.CtrCod,
-                   Room->BldCod,
-                   Room->Floor,
-                   Roo_TypesDB[Room->Type],
-		   Room->ShrtName,
-		   Room->FullName,
-		   Room->Capacity);
+   Room->RooCod =
+   DB_QueryINSERTandReturnCode ("can not create room",
+			        "INSERT INTO rooms"
+			        " (CtrCod,BldCod,Floor,Type,ShortName,FullName,Capacity)"
+			        " VALUES"
+			        " (%ld,%ld,%d,'%s','%s','%s',%u)",
+			        Gbl.Hierarchy.Ctr.CtrCod,
+			        Room->BldCod,
+			        Room->Floor,
+			        Roo_TypesDB[Room->Type],
+			        Room->ShrtName,
+			        Room->FullName,
+			        Room->Capacity);
+
+   /***** Create MAC address *****/
+   if (Room->MACnum)
+      DB_QueryINSERT ("can not create MAC address",
+		      "INSERT INTO room_MAC"
+		      " (RooCod,MAC)"
+		      " VALUES"
+		      " (%ld,%llu)",
+		      Room->RooCod,
+		      Room->MACnum);
   }
 
 /*****************************************************************************/
@@ -1627,7 +1651,7 @@ static void Roo_EditingRoomConstructor (void)
    Roo_EditingRoom->ShrtName[0]    = '\0';
    Roo_EditingRoom->FullName[0]    = '\0';
    Roo_EditingRoom->Capacity       = Roo_UNLIMITED_CAPACITY;
-   Roo_EditingRoom->MAC            = 0ULL;
+   Roo_EditingRoom->MACnum         = 0ULL;
   }
 
 static void Roo_EditingRoomDestructor (void)

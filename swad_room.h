@@ -86,7 +86,7 @@ struct Roo_Room
    char FullName[Roo_MAX_BYTES_FULL_NAME + 1];		// Room full name
    unsigned Capacity;		// Room seating capacity
 				// (maximum people who fit in the room)
-   unsigned long long MAC;
+   unsigned long long MACnum;
   };
 
 #define Roo_NUM_ORDERS 6

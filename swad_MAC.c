@@ -31,6 +31,7 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_HTML.h"
+#include "swad_MAC.h"
 #include "swad_parameter.h"
 
 /*****************************************************************************/
@@ -41,9 +42,6 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define MAC_NUM_BYTES 		6
-#define MAC_LENGTH_MAC_ADDRESS (MAC_NUM_BYTES * 3 - 1)	// xx:xx:xx:xx:xx:xx
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -52,7 +50,7 @@
 struct MAC_Params
   {
    long Cod;					// Code (i.e. room code)
-   char MAC[MAC_LENGTH_MAC_ADDRESS + 1];	// MAC address
+   char MACstr[MAC_LENGTH_MAC_ADDRESS + 1];	// MAC address
   };
 
 /*****************************************************************************/
@@ -67,8 +65,6 @@ static void MAC_PutParams (void *Args);
 static void MAC_PutFormToEditMACAddress (Act_Action_t NextAction,const char *Anchor,
                                          void (*FuncParams) (void *Args),void *Args);
 
-static void MAC_MACnumToMACstr (unsigned long long MACnum,char MACstr[MAC_LENGTH_MAC_ADDRESS + 1]);
-
 /*****************************************************************************/
 /**************** Put hidden parameters to edit a MAC address ****************/
 /*****************************************************************************/
@@ -78,7 +74,7 @@ static void MAC_PutParams (void *Args)
    if (Args)
      {
       Par_PutHiddenParamLong   (NULL,"Cod",((struct MAC_Params *) Args)->Cod);
-      Par_PutHiddenParamString (NULL,"MAC",((struct MAC_Params *) Args)->MAC);
+      Par_PutHiddenParamString (NULL,"MAC",((struct MAC_Params *) Args)->MACstr);
      }
   }
 
@@ -92,7 +88,7 @@ static void MAC_PutFormToEditMACAddress (Act_Action_t NextAction,const char *Anc
    /* Form to enter a new MAC address */
    Frm_StartFormAnchor (NextAction,Anchor);
    FuncParams (Args);
-   HTM_INPUT_TEXT ("NewMAC",MAC_LENGTH_MAC_ADDRESS,((struct MAC_Params *) Args)->MAC,
+   HTM_INPUT_TEXT ("NewMAC",MAC_LENGTH_MAC_ADDRESS,((struct MAC_Params *) Args)->MACstr,
 		   HTM_SUBMIT_ON_CHANGE,
 		   "size=\"8\"");
    Frm_EndForm ();
@@ -157,7 +153,7 @@ void MAC_EditMACAddresses (long Cod,const char *Anchor,
       if (sscanf (row[0],"%llu",&MACnum) == 1)
 	{
          Params.Cod = Cod;				// Code (i.e. room code)
-         MAC_MACnumToMACstr (MACnum,Params.MAC);	// Current MAC address
+         MAC_MACnumToMACstr (MACnum,Params.MACstr);	// Current MAC address in xx:xx:xx:xx:xx:xx format
          MAC_PutFormToEditMACAddress (ActChgRooMAC,Anchor,
                                       MAC_PutParams,&Params);
 
@@ -168,7 +164,7 @@ void MAC_EditMACAddresses (long Cod,const char *Anchor,
 
    /* Form to enter a new MAC address */
    Params.Cod = Cod;		// Code (i.e. room code)
-   Params.MAC[0] = '\0';	// Current MAC address
+   Params.MACstr[0] = '\0';	// Current MAC address in xx:xx:xx:xx:xx:xx format
    MAC_PutFormToEditMACAddress (ActChgRooMAC,Anchor,
                                 MAC_PutParams,&Params);
 
@@ -213,13 +209,16 @@ unsigned long long MAC_GetMACnumFromForm (const char *ParamName)
 /**** Convert from MAC as a number to string in xx:xx:xx:xx:xx:xx format *****/
 /*****************************************************************************/
 
-static void MAC_MACnumToMACstr (unsigned long long MACnum,char MACstr[MAC_LENGTH_MAC_ADDRESS + 1])
+void MAC_MACnumToMACstr (unsigned long long MACnum,char MACstr[MAC_LENGTH_MAC_ADDRESS + 1])
   {
-   snprintf (MACstr,MAC_LENGTH_MAC_ADDRESS + 1,"%02x:%02x:%02x:%02x:%02x:%02x",
-	     (unsigned char) ((MACnum >> (CHAR_BIT * 5)) & ((1 << CHAR_BIT) - 1)),
-	     (unsigned char) ((MACnum >> (CHAR_BIT * 4)) & ((1 << CHAR_BIT) - 1)),
-	     (unsigned char) ((MACnum >> (CHAR_BIT * 3)) & ((1 << CHAR_BIT) - 1)),
-	     (unsigned char) ((MACnum >> (CHAR_BIT * 2)) & ((1 << CHAR_BIT) - 1)),
-	     (unsigned char) ((MACnum >> (CHAR_BIT * 1)) & ((1 << CHAR_BIT) - 1)),
-	     (unsigned char) ((MACnum >> (CHAR_BIT * 0)) & ((1 << CHAR_BIT) - 1)));
+   if (MACnum)
+      snprintf (MACstr,MAC_LENGTH_MAC_ADDRESS + 1,"%02x:%02x:%02x:%02x:%02x:%02x",
+		(unsigned char) ((MACnum >> (CHAR_BIT * 5)) & ((1 << CHAR_BIT) - 1)),
+		(unsigned char) ((MACnum >> (CHAR_BIT * 4)) & ((1 << CHAR_BIT) - 1)),
+		(unsigned char) ((MACnum >> (CHAR_BIT * 3)) & ((1 << CHAR_BIT) - 1)),
+		(unsigned char) ((MACnum >> (CHAR_BIT * 2)) & ((1 << CHAR_BIT) - 1)),
+		(unsigned char) ((MACnum >> (CHAR_BIT * 1)) & ((1 << CHAR_BIT) - 1)),
+		(unsigned char) ((MACnum >> (CHAR_BIT * 0)) & ((1 << CHAR_BIT) - 1)));
+   else
+      MACstr[0] = '\0';
   }
