@@ -494,7 +494,7 @@ int swad__loginByUserPasswordKey (char *userID,char *userPassword,char *appKey,
                                   struct swad__loginByUserPasswordKeyOutput *loginByUserPasswordKeyOut);
 int swad__loginBySessionKey (char *sessionID,char *appKey,
                              struct swad__loginBySessionKeyOutput *loginBySessionKeyOut);
-int swad__getAvailableRoles (char *wsKey,
+int swad__getAvailableRoles (char *wsKey,int courseCode,
                              struct swad__getAvailableRolesOutput *getAvailableRolesOut);
 int swad__getNewPassword (char *userID,char *appKey,
                           struct swad__getNewPasswordOutput *getNewPasswordOut);

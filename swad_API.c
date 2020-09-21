@@ -1187,7 +1187,7 @@ With this function, SWADroid is able to check if user can see the button to show
 */
 
 int swad__getAvailableRoles (struct soap *soap,
-                             char *wsKey,							// input
+                             char *wsKey,int courseCode,					// input
                              struct swad__getAvailableRolesOutput *getAvailableRolesOut)	// output
   {
    int ReturnCode;
@@ -1195,6 +1195,7 @@ int swad__getAvailableRoles (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getAvailableRoles;
+   Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
    /***** Default value returned on error *****/
    getAvailableRolesOut->roles = 0;	// error
@@ -1216,8 +1217,28 @@ int swad__getAvailableRoles (struct soap *soap,
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
 
    /***** Return available roles *****/
+   DB_QueryINSERT ("can not debug",
+		   "INSERT INTO debug"
+		   " (DebugTime,Txt)"
+		   " VALUES"
+		   " (NOW(),'Gbl.Usrs.Me.Role.Available before Rol_SetMyRoles: %u')",
+		   Gbl.Usrs.Me.Role.Available);
+
    Rol_SetMyRoles ();
    getAvailableRolesOut->roles = Gbl.Usrs.Me.Role.Available;
+   DB_QueryINSERT ("can not debug",
+		   "INSERT INTO debug"
+		   " (DebugTime,Txt)"
+		   " VALUES"
+		   " (NOW(),'Gbl.Usrs.Me.Role.Available after Rol_SetMyRoles: %u')",
+		   Gbl.Usrs.Me.Role.Available);
+
+   DB_QueryINSERT ("can not debug",
+		   "INSERT INTO debug"
+		   " (DebugTime,Txt)"
+		   " VALUES"
+		   " (NOW(),'getAvailableRolesOut->roles: %d')",
+		   getAvailableRolesOut->roles);
 
    return SOAP_OK;
   }
@@ -5294,19 +5315,6 @@ int swad__getMatchStatus (struct soap *soap,
          break;
      }
 
-   DB_QueryINSERT ("can not debug",
-		   "INSERT INTO debug"
-		   " (DebugTime,Txt)"
-		   " VALUES"
-		   " (NOW(),'getMatchStatusOut->matchCode: %d;"
-		   " getMatchStatusOut->questionIndex: %d;"
-		   " getMatchStatusOut->numAnswers: %d;"
-		   " getMatchStatusOut->answerIndex: %d')",
-		   getMatchStatusOut->matchCode,
-		   getMatchStatusOut->questionIndex,
-		   getMatchStatusOut->numAnswers,
-		   getMatchStatusOut->answerIndex);
-
    return SOAP_OK;
   }
 
@@ -6076,7 +6084,9 @@ int swad__getLocation (struct soap *soap,
 				    " AND rooms.BldCod=buildings.BldCod"
 				    " AND buildings.CtrCod=centres.CtrCod"
 				    " AND centres.InsCod=institutions.InsCod"
-				    " ORDER BY rooms.Capacity DESC LIMIT 1",	// Get the biggest room
+				    " ORDER BY rooms.Capacity,"	// Get the biggest room
+				              "rooms.ShortName"
+				              " DESC LIMIT 1",
 			     MACnum);
 
    API_GetDataOfLocation (soap,

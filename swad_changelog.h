@@ -555,7 +555,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.263.1 (2020-09-02)"
+#define Log_PLATFORM_VERSION	"SWAD 20.0 (2020-09-22)"
 #define CSS_FILE		"swad19.253.css"
 #define JS_FILE			"swad19.254.js"
 /*
@@ -573,6 +573,8 @@ TODO: Que al generar un examen sólo se cojan preguntas válidas. Y si ya está gen
 TODO: Create module swad_test_result
 "sudo apt install webp" en Ubuntu, y "yum install libwebp libwebp-tools" en CentOS, para decodificar imágenes Web/ug reportado por Javier Fernández Baldomero.
 
+	Version 20.0:	  Sep 22, 2020  Changes in API function getAvailableRoles.
+					Fixed bug when listing teachers' records. (304400 lines)
 	Version 19.263.1: Sep 02, 2020  MAC address in form to create a new room. (304389 lines)
 	Version 19.263:   Sep 02, 2020  New module swad_MAC for MAC addresses. (304364 lines)
 	Version 19.262:   Sep 01, 2020  Edition of MAC addresses in listing of rooms. (304239 lines)

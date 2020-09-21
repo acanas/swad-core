@@ -1834,7 +1834,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #19 (obsolete action)
 	ActSeeSylPra,		// #20
 	-1,			// #21 (obsolete action)
-	ActDoActOnSevTch,	// #22
+	ActSeeRecSevTch,	// #22
 	ActAdmBrf,		// #23
 	-1,			// #24 (obsolete action)
 	ActSeeCrsTT,		// #25
