@@ -21085,70 +21085,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Mensagens"
 #endif
 	,
-	//  5: ActReqMsgUsr
-#if   L==1	// ca
-	"Redactar"
-#elif L==2	// de
-	"Schreiben"
-#elif L==3	// en
-	"Write"
-#elif L==4	// es
-	"Redactar"
-#elif L==5	// fr
-	"Ecrire"
-#elif L==6	// gn
-	"Redactar"	// Okoteve traducción
-#elif L==7	// it
-	"Scrivi"
-#elif L==8	// pl
-	"Napisz"
-#elif L==9	// pt
-	"Escrever"
-#endif
-	,
-	//  6: ActSeeRcvMsg
-#if   L==1	// ca
-	"Rebuts"
-#elif L==2	// de
-	"Empfangene"
-#elif L==3	// en
-	"Received"
-#elif L==4	// es
-	"Recibidos"
-#elif L==5	// fr
-	"Re&ccedil;us"
-#elif L==6	// gn
-	"Recibidos"	// Okoteve traducción
-#elif L==7	// it
-	"Ricevuti"
-#elif L==8	// pl
-	"Odebrane"
-#elif L==9	// pt
-	"Recebidas"
-#endif
-	,
-	//  7: ActSeeSntMsg
-#if   L==1	// ca
-	"Enviats"
-#elif L==2	// de
-	"Gesendete"
-#elif L==3	// en
-	"Sent"
-#elif L==4	// es
-	"Enviados"
-#elif L==5	// fr
-	"Envoy&eacute;s"
-#elif L==6	// gn
-	"Enviados"	// Okoteve traducción
-#elif L==7	// it
-	"Inviati"
-#elif L==8	// pl
-	"Wysylane"
-#elif L==9	// pt
-	"Enviadas"
-#endif
-	,
-	//  8: ActReqMaiUsr
+	//  5: ActReqMaiUsr
 #if   L==1	// ca
 	"Correu"
 #elif L==2	// de
@@ -21169,6 +21106,9 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Email"
 #endif
 	,
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
@@ -23059,70 +22999,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Mensagens"
 #endif
 	,
-	//  5: ActReqMsgUsr
-#if   L==1	// ca
-	"Enviament d'un nou missatge a altres usuaris"
-#elif L==2	// de
-	"Neue Nachricht an andere Benutzer senden"
-#elif L==3	// en
-	"Sending a new message to other users"
-#elif L==4	// es
-	"Env&iacute;o de un nuevo mensaje a otros usuarios"
-#elif L==5	// fr
-	"Envoi d'un nouveau message &agrave; d'autres utilisateurs"
-#elif L==6	// gn
-	"Env&iacute;o de un nuevo mensaje a otros usuarios"// Okoteve traducción
-#elif L==7	// it
-	"Invio di un nuovo messaggio ad altri utenti"
-#elif L==8	// pl
-	"Wysy&lstrok;anie nowej wiadomo&sacute;ci do innych u&zdot;ytkownik&oacute;w"
-#elif L==9	// pt
-	"Envio de uma nova mensagem para outros usu&aacute;rios"
-#endif
-	,
-	//  6: ActSeeRcvMsg
-#if   L==1	// ca
-	"Missatges rebuts d'altres usuaris"
-#elif L==2	// de
-	"Nachrichten, die von anderen Benutzern empfangen wurden"
-#elif L==3	// en
-	"Messages received from other users"
-#elif L==4	// es
-	"Mensajes recibidos de otros usuarios"
-#elif L==5	// fr
-	"Messages re&ccedil;us d'autres utilisateurs"
-#elif L==6	// gn
-	"Mensajes recibidos de otros usuarios"	// Okoteve traducción
-#elif L==7	// it
-	"Messaggi ricevuti da altri utenti"
-#elif L==8	// pl
-	"Wiadomo&sacute;ci otrzymane od innych u&zdot;ytkownik&oacute;w"
-#elif L==9	// pt
-	"Mensagens recebidas de outros usu&aacute;rios"
-#endif
-	,
-	//  7: ActSeeSntMsg
-#if   L==1	// ca
-	"Missatges enviats per mi a altres usuaris"
-#elif L==2	// de
-	"Nachrichten, die ich an andere Benutzer gesendet habe"
-#elif L==3	// en
-	"Messages sent by me to other users"
-#elif L==4	// es
-	"Mensajes enviados por m&iacute; a otros usuarios"
-#elif L==5	// fr
-	"Messages envoy&eacute;s par moi &agrave; d'autres utilisateurs"
-#elif L==6	// gn
-	"Mensajes enviados por m&iacute; a otros usuarios"// Okoteve traducción
-#elif L==7	// it
-	"Messaggi inviati da me ad altri utenti"
-#elif L==8	// pl
-	"Wiadomo&sacute;ci wysy&lstrok;ane przeze mnie do innych u&zdot;ytkownik&oacute;w"
-#elif L==9	// pt
-	"Mensagens enviadas por mim para outros usu&aacute;rios"
-#endif
-	,
-	//  8: ActReqMaiUsr
+	//  5: ActReqMaiUsr
 #if   L==1	// ca
 	"Creaci&oacute; d'un missatge de correu"
 	" per enviar-lo a usuaris d'aquesta assignatura"
@@ -23149,6 +23026,9 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Email"
 #endif
 	,
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
@@ -45738,7 +45618,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 #elif L==3	// en
 	"Messages"
 #elif L==4	// es
-	"Mensajes"
+	"Comunicaci&oacute;n"
 #elif L==5	// fr
 	"Messages"
 #elif L==6	// gn

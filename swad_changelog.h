@@ -555,8 +555,8 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.1 (2020-09-25)"
-#define CSS_FILE		"swad19.253.css"
+#define Log_PLATFORM_VERSION	"SWAD 20.1.1 (2020-09-25)"
+#define CSS_FILE		"swad20.1.1.css"
 #define JS_FILE			"swad19.254.js"
 /*
 TODO: Juan Miguel Boyero Corral: Este verano ha habido varias personas que han solicitado incluir la funcionalidad del apartado de Actividades en SWADroid. Si lo ves viable podríamos estudiarlo.
@@ -572,6 +572,12 @@ TODO: No limitar el número de preguntas en un examen a ExaPrn_MAX_QUESTIONS_PER_
 TODO: Que al generar un examen sólo se cojan preguntas válidas. Y si ya está generado, al entrar de nuevo, que se vean en rojo.
 TODO: Create module swad_test_result
 "sudo apt install webp" en Ubuntu, y "yum install libwebp libwebp-tools" en CentOS, para decodificar imágenes Web/ug reportado por Javier Fernández Baldomero.
+
+	Version 20.1.1:	  Sep 25, 2020  Old options related to messages removed from menu. (304394 lines)
+					Copy the following icon to icon public directory:
+sudo cp icon/iconset/awesome/comment.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/comment-alt.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/nuvola/comment.svg /var/www/html/swad/icon/iconset/nuvola/
 
 	Version 20.1:	  Sep 25, 2020  Options related to messages are grouped into one. (304520 lines)
 					Copy the following 2 icons to icon public directory:

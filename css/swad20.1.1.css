@@ -713,7 +713,7 @@ a:hover						/* Default ==> underlined */
 		{
 		display:table-cell;
 		box-sizing:border-box;
-		width:98px;
+		width:108px;
 		height:58px;
 		margin:0;
 		padding:0;
@@ -727,7 +727,7 @@ a:hover						/* Default ==> underlined */
 		{
 		display:table-cell;
 		box-sizing:border-box;
-		width:98px;
+		width:108px;
 		height:58px;
 		margin:0;
 		padding:0;
@@ -742,7 +742,7 @@ a:hover						/* Default ==> underlined */
 		font-size:9pt;
 		font-weight:bold;
 		line-height:100%;
-		max-width:90px;
+		max-width:100px;
 		white-space:nowrap;
 		overflow:hidden;
 		margin:0 auto;

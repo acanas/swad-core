@@ -153,10 +153,7 @@ static const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_
 		[ 2] = ActSeeFor,
 		[ 3] = ActSeeChtRms,
 		[ 4] = ActSeeMsg,
-		[ 5] = ActReqMsgUsr,
-		[ 6] = ActSeeRcvMsg,
-		[ 7] = ActSeeSntMsg,
-		[ 8] = ActReqMaiUsr,
+		[ 5] = ActReqMaiUsr,
 	       },
    [TabAna] =  {
 		[ 0] = ActReqUseGbl,

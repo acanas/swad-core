@@ -196,7 +196,7 @@ static const char *Tab_GetIcon (Tab_Tab_t NumTab)
       [TabAss] = "check",
       [TabFil] = "folder-open",
       [TabUsr] = "users",
-      [TabMsg] = "envelope",
+      [TabMsg] = "comment",
       [TabAna] = "chart-bar",
       [TabPrf] = "user",
      };
