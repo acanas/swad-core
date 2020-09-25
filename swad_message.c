@@ -2627,6 +2627,19 @@ static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
 
 static void Msg_PutIconsListMsgs (void *Messages)
   {
+   extern const char *Txt_MSGS_Sent;
+   extern const char *Txt_MSGS_Received;
+   extern const char *Txt_MSGS_Write;
+   static struct
+     {
+      const Act_Action_t Act;
+      const char *Icon;
+      const char *Title;
+     } SeeRcvSntMsg[Msg_NUM_TYPES_OF_MSGS] =
+     {
+      [Msg_MESSAGES_RECEIVED] = {ActSeeSntMsg,"share.svg",NULL},
+      [Msg_MESSAGES_SENT    ] = {ActSeeRcvMsg,"inbox.svg",NULL},
+     };
    static const Act_Action_t ActionReqDelAllMsg[Msg_NUM_TYPES_OF_MSGS] =
      {
       [Msg_MESSAGES_RECEIVED] = ActReqDelAllRcvMsg,
@@ -2635,6 +2648,20 @@ static void Msg_PutIconsListMsgs (void *Messages)
 
    if (Messages)
      {
+      /***** Put icon to write a new message *****/
+      Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,
+				     Msg_PutHiddenParamsMsgsFilters,Messages,
+				     "marker.svg",
+				     Txt_MSGS_Write);
+
+      /***** Put icon to see received/sent messages *****/
+      SeeRcvSntMsg[Msg_MESSAGES_RECEIVED].Title = Txt_MSGS_Sent;
+      SeeRcvSntMsg[Msg_MESSAGES_SENT    ].Title = Txt_MSGS_Received;
+      Lay_PutContextualLinkOnlyIcon (SeeRcvSntMsg[((struct Msg_Messages *) Messages)->TypeOfMessages].Act,NULL,
+				     Msg_PutHiddenParamsMsgsFilters,Messages,
+				     SeeRcvSntMsg[((struct Msg_Messages *) Messages)->TypeOfMessages].Icon,
+				     SeeRcvSntMsg[((struct Msg_Messages *) Messages)->TypeOfMessages].Title);
+
       /***** Put icon to remove messages *****/
       Ico_PutContextualIconToRemove (ActionReqDelAllMsg[((struct Msg_Messages *) Messages)->TypeOfMessages],
 				     Msg_PutHiddenParamsMsgsFilters,Messages);

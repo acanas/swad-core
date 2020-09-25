@@ -25367,19 +25367,40 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
+	[ActSeeMsg] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Show the messages received from other users"
+#elif L==4	// es
+	"Ver mensajes recibidos de otros usuarios"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	"Ver mensajes recibidos de otros usuarios"	// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
 	[ActReqMsgUsr] =
 #if   L==1	// ca
 	""			// Necessita traducció
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Write message to several users"
+	"Write message to other users"
 #elif L==4	// es
-	""
+	"Redactar mensaje a otros usuarios"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Redactar mensaje a otros usuarios"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25394,13 +25415,13 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show the messages received from other users (link in menu)"
+	"Show the messages received from other users"
 #elif L==4	// es
-	""
+	"Ver mensajes recibidos de otros usuarios"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver mensajes recibidos de otros usuarios"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25417,11 +25438,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Show the messages sent to other users"
 #elif L==4	// es
-	""
+	"Ver mensajes enviados a otros usuarios"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver mensajes enviados a otros usuarios"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl

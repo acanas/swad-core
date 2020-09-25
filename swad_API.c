@@ -1195,7 +1195,10 @@ int swad__getAvailableRoles (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getAvailableRoles;
+
+   /***** Initialize hierarchy *****/
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
+   Hie_InitHierarchy ();
 
    /***** Default value returned on error *****/
    getAvailableRolesOut->roles = 0;	// error
@@ -1473,7 +1476,10 @@ int swad__getCourseInfo (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getCourseInfo;
+
+   /***** Initialize hierarchy *****/
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
+   Hie_InitHierarchy ();
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
@@ -1527,9 +1533,6 @@ int swad__getCourseInfo (struct soap *soap,
    getCourseInfo->infoSrc = (char *) soap_malloc (soap,Length + 1);
    Str_Copy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[InfoSrc],
              Length);
-
-   /***** Set paths *****/
-   Hie_InitHierarchy ();
 
    /***** Get info text *****/
    getCourseInfo->infoTxt = NULL;
@@ -2070,7 +2073,10 @@ int swad__getGroupTypes (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getGroupTypes;
+
+   /***** Initialize hierarchy *****/
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
+   Hie_InitHierarchy ();
 
    /***** Open groups of this course that must be opened
           if open time is in the past *****/
@@ -2186,7 +2192,10 @@ int swad__getGroups (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getGroups;
+
+   /***** Initialize hierarchy *****/
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
+   Hie_InitHierarchy ();
 
    /***** Open groups of this course that must be opened
           if open time is in the past *****/
@@ -5821,6 +5830,7 @@ int swad__getFile (struct soap *soap,
                                   &Gbl.Hierarchy.Deg.DegCod,
                                   &Gbl.Hierarchy.Crs.CrsCod,
                                   &Gbl.Crs.Grps.GrpCod);
+   Hie_InitHierarchy ();
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
@@ -5875,7 +5885,6 @@ int swad__getFile (struct soap *soap,
      }
 
    /***** Set paths *****/
-   Hie_InitHierarchy ();
    Brw_InitializeFileBrowser ();
    Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,FileMetadata.FilFolLnk.Path,
 	     PATH_MAX);

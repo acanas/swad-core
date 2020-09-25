@@ -21064,7 +21064,28 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chat"
 #endif
 	,
-	//  4: ActReqMsgUsr
+	//  4: ActMsgUsr
+#if   L==1	// ca
+	"Missatges"
+#elif L==2	// de
+	"Nachrichten"
+#elif L==3	// en
+	"Messages"
+#elif L==4	// es
+	"Mensajes"
+#elif L==5	// fr
+	"Messages"
+#elif L==6	// gn
+	"Marandu"
+#elif L==7	// it
+	"Messaggi"
+#elif L==8	// pl
+	"Wiadomo&sacute;ci"
+#elif L==9	// pt
+	"Mensagens"
+#endif
+	,
+	//  5: ActReqMsgUsr
 #if   L==1	// ca
 	"Redactar"
 #elif L==2	// de
@@ -21085,7 +21106,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Escrever"
 #endif
 	,
-	//  5: ActSeeRcvMsg
+	//  6: ActSeeRcvMsg
 #if   L==1	// ca
 	"Rebuts"
 #elif L==2	// de
@@ -21106,7 +21127,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Recebidas"
 #endif
 	,
-	//  6: ActSeeSntMsg
+	//  7: ActSeeSntMsg
 #if   L==1	// ca
 	"Enviats"
 #elif L==2	// de
@@ -21127,7 +21148,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Enviadas"
 #endif
 	,
-	//  7: ActReqMaiUsr
+	//  8: ActReqMaiUsr
 #if   L==1	// ca
 	"Correu"
 #elif L==2	// de
@@ -21148,7 +21169,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Email"
 #endif
 	,
-	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
@@ -23018,7 +23038,28 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chat"
 #endif
 	,
-	//  4: ActReqMsgUsr
+	//  4: ActMsgUsr
+#if   L==1	// ca
+	"Missatges"
+#elif L==2	// de
+	"Nachrichten"
+#elif L==3	// en
+	"Messages"
+#elif L==4	// es
+	"Mensajes"
+#elif L==5	// fr
+	"Messages"
+#elif L==6	// gn
+	"Marandu"
+#elif L==7	// it
+	"Messaggi"
+#elif L==8	// pl
+	"Wiadomo&sacute;ci"
+#elif L==9	// pt
+	"Mensagens"
+#endif
+	,
+	//  5: ActReqMsgUsr
 #if   L==1	// ca
 	"Enviament d'un nou missatge a altres usuaris"
 #elif L==2	// de
@@ -23039,7 +23080,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Envio de uma nova mensagem para outros usu&aacute;rios"
 #endif
 	,
-	//  5: ActSeeRcvMsg
+	//  6: ActSeeRcvMsg
 #if   L==1	// ca
 	"Missatges rebuts d'altres usuaris"
 #elif L==2	// de
@@ -23060,7 +23101,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Mensagens recebidas de outros usu&aacute;rios"
 #endif
 	,
-	//  6: ActSeeSntMsg
+	//  7: ActSeeSntMsg
 #if   L==1	// ca
 	"Missatges enviats per mi a altres usuaris"
 #elif L==2	// de
@@ -23081,7 +23122,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Mensagens enviadas por mim para outros usu&aacute;rios"
 #endif
 	,
-	//  7: ActReqMaiUsr
+	//  8: ActReqMaiUsr
 #if   L==1	// ca
 	"Creaci&oacute; d'un missatge de correu"
 	" per enviar-lo a usuaris d'aquesta assignatura"
@@ -23108,7 +23149,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Email"
 #endif
 	,
-	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
@@ -24928,6 +24968,27 @@ const char *Txt_MSGS_Sent =
 	"Wyslane";
 #elif L==9	// pt
 	"Enviadas";
+#endif
+
+const char *Txt_MSGS_Write =
+#if   L==1	// ca
+	"Redactar";
+#elif L==2	// de
+	"Schreiben";
+#elif L==3	// en
+	"Write";
+#elif L==4	// es
+	"Redactar";
+#elif L==5	// fr
+	"Ecrire";
+#elif L==6	// gn
+	"Redactar";	// Okoteve traducción
+#elif L==7	// it
+	"Scrivi";
+#elif L==8	// pl
+	"Napisz";
+#elif L==9	// pt
+	"Escrever";
 #endif
 
 const char *Txt_Multimedia =

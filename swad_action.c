@@ -1518,10 +1518,11 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActSeeFor		] = {  95, 2,TabMsg,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,"comments"		},
 // [ActSeeChtRms	] = {  51, 3,TabMsg,ActSeeChtRms	,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cht_ShowChatRooms		,"comments"		},
    [ActSeeChtRms	] = {  51, 3,TabMsg,ActSeeChtRms	,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cht_ShowChatRooms		,"comments"		},
-   [ActReqMsgUsr	] = {  26, 4,TabMsg,ActReqMsgUsr	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_FormMsgUsrs		,"marker"		},
-   [ActSeeRcvMsg	] = {   3, 5,TabMsg,ActSeeRcvMsg	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_ShowRecMsgs		,"inbox"		},
-   [ActSeeSntMsg	] = {  70, 6,TabMsg,ActSeeSntMsg	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_ShowSntMsgs		,"share"		},
-   [ActReqMaiUsr	] = {1772, 7,TabMsg,ActReqMaiUsr	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_ReqUsrsToListEmails	,"envelope"		},
+   [ActSeeMsg		] = {1912, 4,TabMsg,ActSeeMsg		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_ShowRecMsgs		,"envelope"		},
+   [ActReqMsgUsr	] = {  26, 5,TabMsg,ActReqMsgUsr	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_FormMsgUsrs		,"marker"		},
+   [ActSeeRcvMsg	] = {   3, 6,TabMsg,ActSeeRcvMsg	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_ShowRecMsgs		,"inbox"		},
+   [ActSeeSntMsg	] = {  70, 7,TabMsg,ActSeeSntMsg	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_ShowSntMsgs		,"share"		},
+   [ActReqMaiUsr	] = {1772, 8,TabMsg,ActReqMaiUsr	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_ReqUsrsToListEmails	,"at"			},
 
    // Actions not in menu:
    [ActWriAnn		] = {1237,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ann_ShowFormAnnouncement	,NULL},
@@ -3724,6 +3725,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActValSetQst,		// #1909
 	ActInvSetQst,		// #1910
 	ActChgRooMAC,		// #1911
+	ActSeeMsg,		// #1912
   };
 
 /*****************************************************************************/

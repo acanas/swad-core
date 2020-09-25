@@ -555,7 +555,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.0 (2020-09-22)"
+#define Log_PLATFORM_VERSION	"SWAD 20.1 (2020-09-25)"
 #define CSS_FILE		"swad19.253.css"
 #define JS_FILE			"swad19.254.js"
 /*
@@ -572,6 +572,11 @@ TODO: No limitar el número de preguntas en un examen a ExaPrn_MAX_QUESTIONS_PER_
 TODO: Que al generar un examen sólo se cojan preguntas válidas. Y si ya está generado, al entrar de nuevo, que se vean en rojo.
 TODO: Create module swad_test_result
 "sudo apt install webp" en Ubuntu, y "yum install libwebp libwebp-tools" en CentOS, para decodificar imágenes Web/ug reportado por Javier Fernández Baldomero.
+
+	Version 20.1:	  Sep 25, 2020  Options related to messages are grouped into one. (304520 lines)
+					Copy the following 2 icons to icon public directory:
+sudo cp icon/inbox.svg /var/www/html/swad/icon/
+sudo cp icon/marker.svg /var/www/html/swad/icon/
 
 	Version 20.0:	  Sep 22, 2020  Changes in API function getAvailableRoles.
 					Fixed bug when listing teachers' records. (304400 lines)
