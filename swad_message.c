@@ -75,8 +75,9 @@ extern struct Globals Gbl;
 
 static const Pag_WhatPaginate_t Msg_WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
   {
-   [Msg_MESSAGES_RECEIVED] = Pag_MESSAGES_RECEIVED,
-   [Msg_MESSAGES_SENT    ] = Pag_MESSAGES_SENT,
+   [Msg_WRITING ] = Pag_NONE,
+   [Msg_RECEIVED] = Pag_MESSAGES_RECEIVED,
+   [Msg_SENT    ] = Pag_MESSAGES_SENT,
   };
 
 /*****************************************************************************/
@@ -236,7 +237,7 @@ void Msg_FormMsgUsrs (void)
 static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
                                 char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
-   extern const char *Hlp_MESSAGES_Write;
+   extern const char *Hlp_COMMUNICATION_Messages_write;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Reply_message;
    extern const char *Txt_New_message;
@@ -290,8 +291,8 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
    /***** Begin box *****/
    Box_BoxBegin (NULL,Messages->Reply.IsReply ? Txt_Reply_message :
 					        Txt_New_message,
-		 NULL,NULL,
-		 Hlp_MESSAGES_Write,Box_NOT_CLOSABLE);
+                 Msg_PutIconsListMsgs,Messages,
+		 Hlp_COMMUNICATION_Messages_write,Box_NOT_CLOSABLE);
 
    if (Messages->ShowOnlyOneRecipient)
       /***** Form to show several potential recipients *****/
@@ -989,7 +990,7 @@ void Msg_ReqDelAllRecMsgs (void)
      }
 
    /* Show received messages again */
-   Messages.TypeOfMessages = Msg_MESSAGES_RECEIVED;
+   Messages.TypeOfMessages = Msg_RECEIVED;
    Msg_ShowSentOrReceivedMessages (&Messages);
 
    /* End alert */
@@ -1032,7 +1033,7 @@ void Msg_ReqDelAllSntMsgs (void)
 			       Messages.FilterCrsShrtName);
 
    /* Show sent messages again */
-   Messages.TypeOfMessages = Msg_MESSAGES_SENT;
+   Messages.TypeOfMessages = Msg_SENT;
    Msg_ShowSentOrReceivedMessages (&Messages);
 
    /* End alert */
@@ -1063,7 +1064,7 @@ void Msg_DelAllRecMsgs (void)
 
    /***** Delete messages *****/
    NumMsgs = Msg_DelSomeRecOrSntMsgsUsr (&Messages,
-                                         Msg_MESSAGES_RECEIVED,
+                                         Msg_RECEIVED,
                                          Gbl.Usrs.Me.UsrDat.UsrCod,
                                          FilterFromToSubquery);
    Msg_ShowNumMsgsDeleted (NumMsgs);
@@ -1091,7 +1092,7 @@ void Msg_DelAllSntMsgs (void)
 
    /***** Delete messages *****/
    NumMsgs = Msg_DelSomeRecOrSntMsgsUsr (&Messages,
-                                         Msg_MESSAGES_SENT,
+                                         Msg_SENT,
                                          Gbl.Usrs.Me.UsrDat.UsrCod,
                                          FilterFromToSubquery);
    Msg_ShowNumMsgsDeleted (NumMsgs);
@@ -1470,10 +1471,10 @@ static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Mess
          Lay_ShowErrorAndExit ("Wrong code of message.");
       switch (TypeOfMessages)
         {
-         case Msg_MESSAGES_RECEIVED:
+         case Msg_RECEIVED:
             Msg_MoveReceivedMsgToDeleted (MsgCod,UsrCod);
             break;
-         case Msg_MESSAGES_SENT:
+         case Msg_SENT:
             Msg_MoveSentMsgToDeleted (MsgCod);
             break;
          default:
@@ -1774,7 +1775,7 @@ void Msg_ShowSntMsgs (void)
    Msg_ResetMessages (&Messages);
 
    /***** Show the sent messages *****/
-   Messages.TypeOfMessages = Msg_MESSAGES_SENT;
+   Messages.TypeOfMessages = Msg_SENT;
    Msg_ShowSentOrReceivedMessages (&Messages);
   }
 
@@ -1798,7 +1799,7 @@ void Msg_ShowRecMsgs (void)
      }
 
    /***** Show the received messages *****/
-   Messages.TypeOfMessages = Msg_MESSAGES_RECEIVED;
+   Messages.TypeOfMessages = Msg_RECEIVED;
    Msg_ShowSentOrReceivedMessages (&Messages);
   }
 
@@ -1808,10 +1809,10 @@ void Msg_ShowRecMsgs (void)
 
 static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
   {
-   extern const char *Hlp_MESSAGES_Received;
-   extern const char *Hlp_MESSAGES_Received_filter;
-   extern const char *Hlp_MESSAGES_Sent;
-   extern const char *Hlp_MESSAGES_Sent_filter;
+   extern const char *Hlp_COMMUNICATION_Messages_received;
+   extern const char *Hlp_COMMUNICATION_Messages_received_filter;
+   extern const char *Hlp_COMMUNICATION_Messages_sent;
+   extern const char *Hlp_COMMUNICATION_Messages_sent_filter;
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Filter;
    extern const char *Txt_Update_messages;
@@ -1821,29 +1822,33 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
    unsigned long NumRow;
    unsigned long NumRows;
    char *NumMsgsStr;
-   unsigned long NumMsg = 0;		// Initialized to avoid warning
-   unsigned NumUnreadMsgs = 0;		// Initialized to avoid warning
+   unsigned long NumMsg;
+   unsigned NumUnreadMsgs;
    struct Pagination Pagination;
    long MsgCod;
    static const Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
      {
-      [Msg_MESSAGES_RECEIVED] = ActSeeRcvMsg,
-      [Msg_MESSAGES_SENT    ] = ActSeeSntMsg,
+      [Msg_WRITING ] = ActUnk,
+      [Msg_RECEIVED] = ActSeeRcvMsg,
+      [Msg_SENT    ] = ActSeeSntMsg,
      };
    static const Pag_WhatPaginate_t WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
      {
-      [Msg_MESSAGES_RECEIVED] = Pag_MESSAGES_RECEIVED,
-      [Msg_MESSAGES_SENT    ] = Pag_MESSAGES_SENT,
+      [Msg_WRITING ] = Pag_NONE,
+      [Msg_RECEIVED] = Pag_MESSAGES_RECEIVED,
+      [Msg_SENT    ] = Pag_MESSAGES_SENT,
      };
    const char *Help[Msg_NUM_TYPES_OF_MSGS] =
      {
-      [Msg_MESSAGES_RECEIVED] = Hlp_MESSAGES_Received,
-      [Msg_MESSAGES_SENT    ] = Hlp_MESSAGES_Sent,
+      [Msg_WRITING ] = NULL,
+      [Msg_RECEIVED] = Hlp_COMMUNICATION_Messages_received,
+      [Msg_SENT    ] = Hlp_COMMUNICATION_Messages_sent,
      };
    const char *HelpFilter[Msg_NUM_TYPES_OF_MSGS] =
      {
-      [Msg_MESSAGES_RECEIVED] = Hlp_MESSAGES_Received_filter,
-      [Msg_MESSAGES_SENT    ] = Hlp_MESSAGES_Sent_filter,
+      [Msg_WRITING ] = NULL,
+      [Msg_RECEIVED] = Hlp_COMMUNICATION_Messages_received_filter,
+      [Msg_SENT    ] = Hlp_COMMUNICATION_Messages_sent_filter,
      };
 
    /***** Get the page number *****/
@@ -1859,14 +1864,17 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
    /***** Get number of unread messages *****/
    switch (Messages->TypeOfMessages)
      {
-      case Msg_MESSAGES_RECEIVED:
+      case Msg_RECEIVED:
          Messages->ShowOnlyUnreadMsgs = Msg_GetParamOnlyUnreadMsgs ();
          NumUnreadMsgs = Msg_GetNumUnreadMsgs (Messages,
                                                FilterFromToSubquery);
          break;
-      case Msg_MESSAGES_SENT:
+      case Msg_SENT:
          NumUnreadMsgs = 0;
          break;
+      default:
+	 NumUnreadMsgs = 0;
+	 break;
      }
 
    /***** Get messages from database *****/
@@ -1894,7 +1902,7 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
 
    HTM_DIV_Begin ("class=\"CM\"");
    Msg_ShowFormSelectCourseSentOrRecMsgs (Messages);
-   if (Messages->TypeOfMessages == Msg_MESSAGES_RECEIVED)
+   if (Messages->TypeOfMessages == Msg_RECEIVED)
       Msg_ShowFormToShowOnlyUnreadMessages (Messages);
    HTM_DIV_End ();
    Msg_ShowFormToFilterMsgs (Messages);
@@ -1954,7 +1962,7 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
       HTM_TABLE_BeginWidePadding (2);
 
       mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible - 1));
-      for (NumRow = Pagination.FirstItemVisible;
+      for (NumRow  = Pagination.FirstItemVisible;
            NumRow <= Pagination.LastItemVisible;
            NumRow++)
         {
@@ -2023,7 +2031,7 @@ static unsigned long Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messa
    if (Messages->FilterCrsCod > 0)	// If origin course selected
       switch (Messages->TypeOfMessages)
         {
-         case Msg_MESSAGES_RECEIVED:
+         case Msg_RECEIVED:
             StrUnreadMsg = (Messages->ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
         	                                           "");
             if (FilterFromToSubquery[0])
@@ -2063,7 +2071,7 @@ static unsigned long Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messa
                   Lay_NotEnoughMemoryExit ();
               }
             break;
-         case Msg_MESSAGES_SENT:
+         case Msg_SENT:
             if (FilterFromToSubquery[0])
               {
                if (asprintf (&SubQuery,"(SELECT DISTINCT msg_snt.MsgCod"
@@ -2098,7 +2106,7 @@ static unsigned long Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messa
    else	// If no origin course selected
       switch (Messages->TypeOfMessages)
         {
-         case Msg_MESSAGES_RECEIVED:
+         case Msg_RECEIVED:
             if (FilterFromToSubquery[0])
               {
                StrUnreadMsg = (Messages->ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
@@ -2129,7 +2137,7 @@ static unsigned long Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messa
                   Lay_NotEnoughMemoryExit ();
               }
             break;
-         case Msg_MESSAGES_SENT:
+         case Msg_SENT:
             if (FilterFromToSubquery[0])
               {
                if (asprintf (&SubQuery,"(SELECT msg_snt.MsgCod"
@@ -2566,7 +2574,7 @@ static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
 
    switch (Messages->TypeOfMessages)
      {
-      case Msg_MESSAGES_RECEIVED:
+      case Msg_RECEIVED:
 	 if (Messages->NumMsgs == 1)
 	   {
 	    if (NumUnreadMsgs)
@@ -2605,7 +2613,7 @@ static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
 	      }
 	   }
 	 break;
-      case Msg_MESSAGES_SENT:
+      case Msg_SENT:
 	 if (Messages->NumMsgs == 1)
 	   {
 	    if (asprintf (NumMsgsStr,"1 %s",Txt_message_sent) < 0)
@@ -2617,6 +2625,8 @@ static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
 			  Messages->NumMsgs,Txt_messages_sent) < 0)
                Lay_NotEnoughMemoryExit ();
 	   }
+	 break;
+      default:
 	 break;
      }
   }
@@ -2632,31 +2642,66 @@ static void Msg_PutIconsListMsgs (void *Messages)
    extern const char *Txt_MSGS_Write;
    static const Act_Action_t ActionReqDelAllMsg[Msg_NUM_TYPES_OF_MSGS] =
      {
-      [Msg_MESSAGES_RECEIVED] = ActReqDelAllRcvMsg,
-      [Msg_MESSAGES_SENT    ] = ActReqDelAllSntMsg,
+      [Msg_WRITING ] = ActUnk,
+      [Msg_RECEIVED] = ActReqDelAllRcvMsg,
+      [Msg_SENT    ] = ActReqDelAllSntMsg,
      };
 
    if (Messages)
      {
       /***** Put icon to write a new message *****/
-      Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,
-				     Msg_PutHiddenParamsMsgsFilters,Messages,
-				     "marker.svg",
-				     Txt_MSGS_Write);
+      switch (((struct Msg_Messages *) Messages)->TypeOfMessages)
+        {
+	 case Msg_RECEIVED:
+	 case Msg_SENT:
+	    Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,
+					   Msg_PutHiddenParamsMsgsFilters,Messages,
+					   "marker.svg",
+					   Txt_MSGS_Write);
+	    break;
+	 default:
+	    break;
+        }
 
-      /***** Put icon to see received/sent messages *****/
-      Lay_PutContextualLinkOnlyIcon (ActSeeRcvMsg,NULL,
-				     Msg_PutHiddenParamsMsgsFilters,Messages,
-				     "inbox.svg",
-				     Txt_MSGS_Received);
-      Lay_PutContextualLinkOnlyIcon (ActSeeSntMsg,NULL,
-				     Msg_PutHiddenParamsMsgsFilters,Messages,
-				     "share.svg",
-				     Txt_MSGS_Sent);
+      /***** Put icon to see received messages *****/
+      switch (((struct Msg_Messages *) Messages)->TypeOfMessages)
+        {
+	 case Msg_WRITING:
+	 case Msg_SENT:
+	    Lay_PutContextualLinkOnlyIcon (ActSeeRcvMsg,NULL,
+					   Msg_PutHiddenParamsMsgsFilters,Messages,
+					   "inbox.svg",
+					   Txt_MSGS_Received);
+	    break;
+	 default:
+	    break;
+        }
+
+      /***** Put icon to see sent messages *****/
+      switch (((struct Msg_Messages *) Messages)->TypeOfMessages)
+        {
+	 case Msg_WRITING:
+	 case Msg_RECEIVED:
+	    Lay_PutContextualLinkOnlyIcon (ActSeeSntMsg,NULL,
+					   Msg_PutHiddenParamsMsgsFilters,Messages,
+					   "share.svg",
+					   Txt_MSGS_Sent);
+	    break;
+	 default:
+	    break;
+        }
 
       /***** Put icon to remove messages *****/
-      Ico_PutContextualIconToRemove (ActionReqDelAllMsg[((struct Msg_Messages *) Messages)->TypeOfMessages],
-				     Msg_PutHiddenParamsMsgsFilters,Messages);
+      switch (((struct Msg_Messages *) Messages)->TypeOfMessages)
+        {
+	 case Msg_RECEIVED:
+	 case Msg_SENT:
+	    Ico_PutContextualIconToRemove (ActionReqDelAllMsg[((struct Msg_Messages *) Messages)->TypeOfMessages],
+					   Msg_PutHiddenParamsMsgsFilters,Messages);
+	    break;
+	 default:
+	    break;
+        }
 
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_MESSAGES);
@@ -2712,7 +2757,7 @@ static void Msg_GetDistinctCoursesInMyMessages (struct Msg_Messages *Messages)
    /***** Get distinct courses in my messages from database *****/
    switch (Messages->TypeOfMessages)
      {
-      case Msg_MESSAGES_RECEIVED:
+      case Msg_RECEIVED:
          NumRows = DB_QuerySELECT (&mysql_res,"can not get distinct courses"
 					      " in your messages",""
 				   "SELECT DISTINCT courses.CrsCod,courses.ShortName"
@@ -2723,7 +2768,7 @@ static void Msg_GetDistinctCoursesInMyMessages (struct Msg_Messages *Messages)
 				   " ORDER BY courses.ShortName",
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
-      case Msg_MESSAGES_SENT:
+      case Msg_SENT:
          NumRows = DB_QuerySELECT (&mysql_res,"can not get distinct courses"
 					      " in your messages",
 				   "SELECT DISTINCT courses.CrsCod,courses.ShortName"
@@ -2773,8 +2818,9 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
    unsigned NumOriginCrs;
    const char *TxtSelector[Msg_NUM_TYPES_OF_MSGS] =
      {
-      [Msg_MESSAGES_RECEIVED] = Txt_Messages_received_from_A_COURSE,
-      [Msg_MESSAGES_SENT    ] = Txt_Messages_sent_from_A_COURSE
+      [Msg_WRITING ] = NULL,
+      [Msg_RECEIVED] = Txt_Messages_received_from_A_COURSE,
+      [Msg_SENT    ] = Txt_Messages_sent_from_A_COURSE
      };
 
    /***** Course selection *****/
@@ -2809,8 +2855,9 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
    extern const char *Txt_MSG_Content;
    const char *TxtFromTo[Msg_NUM_TYPES_OF_MSGS] =
      {
-      [Msg_MESSAGES_RECEIVED] = Txt_MSG_From,
-      [Msg_MESSAGES_SENT    ] = Txt_MSG_To
+      [Msg_WRITING ] = NULL,
+      [Msg_RECEIVED] = Txt_MSG_From,
+      [Msg_SENT    ] = Txt_MSG_To
      };
 
    /***** Begin table *****/
@@ -3075,8 +3122,9 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    extern const char *Txt_MSG_Content;
    static const Act_Action_t ActionDelMsg[Msg_NUM_TYPES_OF_MSGS] =
      {
-      [Msg_MESSAGES_RECEIVED] = ActDelRcvMsg,
-      [Msg_MESSAGES_SENT    ] = ActDelSntMsg,
+      [Msg_WRITING ] = ActUnk,
+      [Msg_RECEIVED] = ActDelRcvMsg,
+      [Msg_SENT    ] = ActDelSntMsg,
      };
    struct UsrData UsrDat;
    const char *Title = NULL;	// Initialized to avoid warning
@@ -3098,37 +3146,41 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    Msg_GetMsgSntData (MsgCod,&CrsCod,&UsrDat.UsrCod,&CreatTimeUTC,Subject,&Deleted);
    switch (Messages->TypeOfMessages)
      {
-      case Msg_MESSAGES_RECEIVED:
+      case Msg_RECEIVED:
          Msg_GetStatusOfReceivedMsg (MsgCod,&Open,&Replied,&Expanded);
          break;
-      case Msg_MESSAGES_SENT:
+      case Msg_SENT:
          Msg_GetStatusOfSentMsg (MsgCod,&Expanded);
          break;
+      default:
+	 break;
      }
 
    /***** Put an icon with message status *****/
    switch (Messages->TypeOfMessages)
      {
-      case Msg_MESSAGES_RECEIVED:
+      case Msg_RECEIVED:
          Title = (Open ? (Replied ? Txt_MSG_Replied :
                                     Txt_MSG_Not_replied) :
                          Txt_MSG_Unopened);
 	 break;
-      case Msg_MESSAGES_SENT:
+      case Msg_SENT:
 	 Title = Txt_MSG_Sent;
+	 break;
+      default:
 	 break;
      }
 
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",
-		 Messages->TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? "BG_MSG_BLUE" :
-									     "BG_MSG_GREEN") :
-								      "BG_MSG_BLUE");
-   Ico_PutIcon (Messages->TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? (Replied ? "reply.svg" :
-        	                                                                       "envelope-open-text.svg") :
-                                                                             "envelope.svg") :
-                                                                    "share.svg",
+		 Messages->TypeOfMessages == Msg_RECEIVED ? (Open ? "BG_MSG_BLUE" :
+								    "BG_MSG_GREEN") :
+							    "BG_MSG_BLUE");
+   Ico_PutIcon (Messages->TypeOfMessages == Msg_RECEIVED ? (Open ? (Replied ? "reply.svg" :
+        	                                                              "envelope-open-text.svg") :
+                                                                   "envelope.svg") :
+                                                           "share.svg",
 		Title,"ICO16x16");
 
    /***** Form to delete message *****/
@@ -3175,7 +3227,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       /***** Form to reply message *****/
       HTM_TR_Begin (NULL);
       HTM_TD_Begin ("class=\"LM\"");
-      if (Messages->TypeOfMessages == Msg_MESSAGES_RECEIVED &&
+      if (Messages->TypeOfMessages == Msg_RECEIVED &&
 	  Gbl.Usrs.Me.Role.Logged >= Rol_USR)
 	 // Guests (users without courses) can read messages but not reply them
          Msg_WriteFormToReply (MsgCod,CrsCod,FromThisCrs,Replied,&UsrDat);
@@ -3319,7 +3371,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
         	                                "MSG_TIT_BG_NEW");
 
    /***** Begin form to expand/contract the message *****/
-   Frm_StartForm (Messages->TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Expanded ? ActConRcvMsg :
+   Frm_StartForm (Messages->TypeOfMessages == Msg_RECEIVED ? (Expanded ? ActConRcvMsg :
 	                                                                          ActExpRcvMsg) :
                                                                       (Expanded ? ActConSntMsg :
                                                         	                  ActExpSntMsg));
@@ -3597,8 +3649,9 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
    char PhotoURL[PATH_MAX + 1];
    static const Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
      {
-      [Msg_MESSAGES_RECEIVED] = ActSeeRcvMsg,
-      [Msg_MESSAGES_SENT    ] = ActSeeSntMsg,
+      [Msg_WRITING ] = ActUnk,
+      [Msg_RECEIVED] = ActSeeRcvMsg,
+      [Msg_SENT    ] = ActSeeSntMsg,
      };
 
    /***** Get number of recipients of a message from database *****/

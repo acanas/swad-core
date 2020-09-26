@@ -989,7 +989,7 @@ void For_RemoveUsrFromReadThrs (long UsrCod)
 static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 				    Ale_AlertType_t AlertType,const char *Message)
   {
-   extern const char *Hlp_MESSAGES_Forums_posts;
+   extern const char *Hlp_COMMUNICATION_Forums_posts;
    extern const char *Txt_Thread;
    struct For_Thread Thread;
    char LastSubject[Cns_MAX_BYTES_SUBJECT + 1];
@@ -1031,7 +1031,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 	     Txt_Thread,Thread.Subject);
    Box_BoxBegin (NULL,FrameTitle,
                  For_PutIconNewPost,Forums,
-                 Hlp_MESSAGES_Forums_posts,Box_NOT_CLOSABLE);
+                 Hlp_COMMUNICATION_Forums_posts,Box_NOT_CLOSABLE);
 
    /***** Get posts of a thread from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get posts of a thread",
@@ -1564,7 +1564,7 @@ static void For_PutHiddenParamPstCod (long PstCod)
 
 static void For_ShowForumList (struct For_Forums *Forums)
   {
-   extern const char *Hlp_MESSAGES_Forums;
+   extern const char *Hlp_COMMUNICATION_Forums;
    extern const char *Txt_Forums;
    bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS];
    MYSQL_RES *mysql_resCtr;
@@ -1596,7 +1596,7 @@ static void For_ShowForumList (struct For_Forums *Forums)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Forums,
                  For_PutIconsForums,NULL,
-                 Hlp_MESSAGES_Forums,Box_NOT_CLOSABLE);
+                 Hlp_COMMUNICATION_Forums,Box_NOT_CLOSABLE);
 
    /***** Put a form to select which forums *****/
    For_PutFormWhichForums (Forums);
@@ -2428,7 +2428,7 @@ void For_ShowForumTheads (void)
 static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
                                                        Ale_AlertType_t AlertType,const char *Message)
   {
-   extern const char *Hlp_MESSAGES_Forums_threads;
+   extern const char *Hlp_COMMUNICATION_Forums_threads;
    extern const char *Txt_Forum;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_FORUM_THREAD_HELP_ORDER[Dat_NUM_START_END_TIME];
@@ -2518,7 +2518,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 	     Txt_Forum,ForumName);
    Box_BoxBegin (NULL,FrameTitle,
                  For_PutIconNewThread,Forums,
-		 Hlp_MESSAGES_Forums_threads,Box_NOT_CLOSABLE);
+		 Hlp_COMMUNICATION_Forums_threads,Box_NOT_CLOSABLE);
 
    /***** List the threads *****/
    if (NumThrs)
@@ -3847,8 +3847,8 @@ static void For_RestrictAccess (const struct For_Forums *Forums)
 static void For_WriteFormForumPst (struct For_Forums *Forums,
                                    bool IsReply,const char *Subject)
   {
-   extern const char *Hlp_MESSAGES_Forums_new_post;
-   extern const char *Hlp_MESSAGES_Forums_new_thread;
+   extern const char *Hlp_COMMUNICATION_Forums_new_post;
+   extern const char *Hlp_COMMUNICATION_Forums_new_thread;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_post;
    extern const char *Txt_New_thread;
@@ -3860,11 +3860,11 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
    if (IsReply)
       Box_BoxBegin (NULL,Txt_New_post,
                     NULL,NULL,
-		    Hlp_MESSAGES_Forums_new_post,Box_NOT_CLOSABLE);
+		    Hlp_COMMUNICATION_Forums_new_post,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,Txt_New_thread,
                     NULL,NULL,
-		    Hlp_MESSAGES_Forums_new_thread,Box_NOT_CLOSABLE);
+		    Hlp_COMMUNICATION_Forums_new_thread,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
    if (IsReply)	// Form to write a reply to a post of an existing thread

@@ -64,7 +64,7 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_MAX_ACTION_COD		1912
+#define Act_MAX_ACTION_COD		1911
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB	  13
 
@@ -1457,7 +1457,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActSeeAllNot		(ActUnfSevTch +   2)
 #define ActSeeFor		(ActUnfSevTch +   3)
 #define ActSeeChtRms		(ActUnfSevTch +   4)
-#define ActSeeMsg		(ActUnfSevTch +   5)
+#define ActSeeRcvMsg		(ActUnfSevTch +   5)
 #define ActReqMaiUsr		(ActUnfSevTch +   6)
 // Secondary actions
 #define ActWriAnn		(ActUnfSevTch +   7)
@@ -1609,26 +1609,25 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActCht			(ActUnfSevTch + 151)
 
 #define ActReqMsgUsr		(ActUnfSevTch + 152)
-#define ActSeeRcvMsg		(ActUnfSevTch + 153)
-#define ActSeeSntMsg		(ActUnfSevTch + 154)
+#define ActSeeSntMsg		(ActUnfSevTch + 153)
 
-#define ActRcvMsgUsr		(ActUnfSevTch + 155)
-#define ActReqDelAllSntMsg	(ActUnfSevTch + 156)
-#define ActReqDelAllRcvMsg	(ActUnfSevTch + 157)
-#define ActDelAllSntMsg		(ActUnfSevTch + 158)
-#define ActDelAllRcvMsg		(ActUnfSevTch + 159)
-#define ActDelSntMsg		(ActUnfSevTch + 160)
-#define ActDelRcvMsg		(ActUnfSevTch + 161)
-#define ActExpSntMsg		(ActUnfSevTch + 162)
-#define ActExpRcvMsg		(ActUnfSevTch + 163)
-#define ActConSntMsg		(ActUnfSevTch + 164)
-#define ActConRcvMsg		(ActUnfSevTch + 165)
-#define ActLstBanUsr		(ActUnfSevTch + 166)
-#define ActBanUsrMsg		(ActUnfSevTch + 167)
-#define ActUnbUsrMsg		(ActUnfSevTch + 168)
-#define ActUnbUsrLst		(ActUnfSevTch + 169)
+#define ActRcvMsgUsr		(ActUnfSevTch + 154)
+#define ActReqDelAllSntMsg	(ActUnfSevTch + 155)
+#define ActReqDelAllRcvMsg	(ActUnfSevTch + 156)
+#define ActDelAllSntMsg		(ActUnfSevTch + 157)
+#define ActDelAllRcvMsg		(ActUnfSevTch + 158)
+#define ActDelSntMsg		(ActUnfSevTch + 159)
+#define ActDelRcvMsg		(ActUnfSevTch + 160)
+#define ActExpSntMsg		(ActUnfSevTch + 161)
+#define ActExpRcvMsg		(ActUnfSevTch + 162)
+#define ActConSntMsg		(ActUnfSevTch + 163)
+#define ActConRcvMsg		(ActUnfSevTch + 164)
+#define ActLstBanUsr		(ActUnfSevTch + 165)
+#define ActBanUsrMsg		(ActUnfSevTch + 166)
+#define ActUnbUsrMsg		(ActUnfSevTch + 167)
+#define ActUnbUsrLst		(ActUnfSevTch + 168)
 
-#define ActMaiUsr		(ActUnfSevTch + 170)
+#define ActMaiUsr		(ActUnfSevTch + 169)
 
 /*****************************************************************************/
 /****************************** Analytics tab ********************************/

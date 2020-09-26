@@ -157,6 +157,69 @@ const char *Hlp_START_Calendar =
 	"START.Calendar.en";
 #endif
 
+const char *Hlp_START_Notifications =
+#if   L==1
+	"START.Notifications.es";
+#elif L==2
+	"START.Notifications.en";
+#elif L==3
+	"START.Notifications.en";
+#elif L==4
+	"START.Notifications.es";
+#elif L==5
+	"START.Notifications.en";
+#elif L==6
+	"START.Notifications.es";
+#elif L==7
+	"START.Notifications.en";
+#elif L==8
+	"START.Notifications.en";
+#elif L==9
+	"START.Notifications.en";
+#endif
+
+const char *Hlp_START_Domains =
+#if   L==1
+	"START.Domains.es";
+#elif L==2
+	"START.Domains.en";
+#elif L==3
+	"START.Domains.en";
+#elif L==4
+	"START.Domains.es";
+#elif L==5
+	"START.Domains.en";
+#elif L==6
+	"START.Domains.es";
+#elif L==7
+	"START.Domains.en";
+#elif L==8
+	"START.Domains.en";
+#elif L==9
+	"START.Domains.en";
+#endif
+
+const char *Hlp_START_Domains_edit =
+#if   L==1
+	"START.Domains.es#editar";
+#elif L==2
+	"START.Domains.en#edit";
+#elif L==3
+	"START.Domains.en#edit";
+#elif L==4
+	"START.Domains.es#editar";
+#elif L==5
+	"START.Domains.en#edit";
+#elif L==6
+	"START.Domains.es#editar";
+#elif L==7
+	"START.Domains.en#edit";
+#elif L==8
+	"START.Domains.en#edit";
+#elif L==9
+	"START.Domains.en#edit";
+#endif
+
 /***** SYSTEM tab *****/
 
 const char *Hlp_SYSTEM_Information =
@@ -2486,342 +2549,279 @@ const char *Hlp_USERS_Connected_last_clicks =
 	"USERS.Connected.en#last-clicks";
 #endif
 
-/***** MESSAGES tab *****/
+/***** COMMUNICATION tab *****/
 
-const char *Hlp_START_Notifications =
+const char *Hlp_COMMUNICATION_Announcements =
 #if   L==1
-	"MESSAGES.Notifications.es";
+	"COMMUNICATION.Announcements.es";
 #elif L==2
-	"MESSAGES.Notifications.en";
+	"COMMUNICATION.Announcements.en";
 #elif L==3
-	"MESSAGES.Notifications.en";
+	"COMMUNICATION.Announcements.en";
 #elif L==4
-	"MESSAGES.Notifications.es";
+	"COMMUNICATION.Announcements.es";
 #elif L==5
-	"MESSAGES.Notifications.en";
+	"COMMUNICATION.Announcements.en";
 #elif L==6
-	"MESSAGES.Notifications.es";
+	"COMMUNICATION.Announcements.es";
 #elif L==7
-	"MESSAGES.Notifications.en";
+	"COMMUNICATION.Announcements.en";
 #elif L==8
-	"MESSAGES.Notifications.en";
+	"COMMUNICATION.Announcements.en";
 #elif L==9
-	"MESSAGES.Notifications.en";
+	"COMMUNICATION.Announcements.en";
 #endif
 
-const char *Hlp_START_Domains =
+const char *Hlp_COMMUNICATION_Notices =
 #if   L==1
-	"MESSAGES.Domains.es";
+	"COMMUNICATION.Notices.es";
 #elif L==2
-	"MESSAGES.Domains.en";
+	"COMMUNICATION.Notices.en";
 #elif L==3
-	"MESSAGES.Domains.en";
+	"COMMUNICATION.Notices.en";
 #elif L==4
-	"MESSAGES.Domains.es";
+	"COMMUNICATION.Notices.es";
 #elif L==5
-	"MESSAGES.Domains.en";
+	"COMMUNICATION.Notices.en";
 #elif L==6
-	"MESSAGES.Domains.es";
+	"COMMUNICATION.Notices.es";
 #elif L==7
-	"MESSAGES.Domains.en";
+	"COMMUNICATION.Notices.en";
 #elif L==8
-	"MESSAGES.Domains.en";
+	"COMMUNICATION.Notices.en";
 #elif L==9
-	"MESSAGES.Domains.en";
+	"COMMUNICATION.Notices.en";
 #endif
 
-const char *Hlp_START_Domains_edit =
+const char *Hlp_COMMUNICATION_Forums =
 #if   L==1
-	"MESSAGES.Domains.es#editar";
+	"COMMUNICATION.Forums.es";
 #elif L==2
-	"MESSAGES.Domains.en#edit";
+	"COMMUNICATION.Forums.en";
 #elif L==3
-	"MESSAGES.Domains.en#edit";
+	"COMMUNICATION.Forums.en";
 #elif L==4
-	"MESSAGES.Domains.es#editar";
+	"COMMUNICATION.Forums.es";
 #elif L==5
-	"MESSAGES.Domains.en#edit";
+	"COMMUNICATION.Forums.en";
 #elif L==6
-	"MESSAGES.Domains.es#editar";
+	"COMMUNICATION.Forums.es";
 #elif L==7
-	"MESSAGES.Domains.en#edit";
+	"COMMUNICATION.Forums.en";
 #elif L==8
-	"MESSAGES.Domains.en#edit";
+	"COMMUNICATION.Forums.en";
 #elif L==9
-	"MESSAGES.Domains.en#edit";
+	"COMMUNICATION.Forums.en";
 #endif
 
-const char *Hlp_MESSAGES_Announcements =
+const char *Hlp_COMMUNICATION_Forums_threads =
 #if   L==1
-	"MESSAGES.Announcements.es";
+	"COMMUNICATION.Forums.es#discusiones";
 #elif L==2
-	"MESSAGES.Announcements.en";
+	"COMMUNICATION.Forums.en#threads";
 #elif L==3
-	"MESSAGES.Announcements.en";
+	"COMMUNICATION.Forums.en#threads";
 #elif L==4
-	"MESSAGES.Announcements.es";
+	"COMMUNICATION.Forums.es#discusiones";
 #elif L==5
-	"MESSAGES.Announcements.en";
+	"COMMUNICATION.Forums.en#threads";
 #elif L==6
-	"MESSAGES.Announcements.es";
+	"COMMUNICATION.Forums.es#discusiones";
 #elif L==7
-	"MESSAGES.Announcements.en";
+	"COMMUNICATION.Forums.en#threads";
 #elif L==8
-	"MESSAGES.Announcements.en";
+	"COMMUNICATION.Forums.en#threads";
 #elif L==9
-	"MESSAGES.Announcements.en";
+	"COMMUNICATION.Forums.en#threads";
 #endif
 
-const char *Hlp_MESSAGES_Notices =
+const char *Hlp_COMMUNICATION_Forums_new_thread =
 #if   L==1
-	"MESSAGES.Notices.es";
+	"COMMUNICATION.Forums.es#nueva-discusi%C3%B3n";
 #elif L==2
-	"MESSAGES.Notices.en";
+	"COMMUNICATION.Forums.en#new-thread";
 #elif L==3
-	"MESSAGES.Notices.en";
+	"COMMUNICATION.Forums.en#new-thread";
 #elif L==4
-	"MESSAGES.Notices.es";
+	"COMMUNICATION.Forums.es#nueva-discusi%C3%B3n";
 #elif L==5
-	"MESSAGES.Notices.en";
+	"COMMUNICATION.Forums.en#new-thread";
 #elif L==6
-	"MESSAGES.Notices.es";
+	"COMMUNICATION.Forums.es#nueva-discusi%C3%B3n";
 #elif L==7
-	"MESSAGES.Notices.en";
+	"COMMUNICATION.Forums.en#new-thread";
 #elif L==8
-	"MESSAGES.Notices.en";
+	"COMMUNICATION.Forums.en#new-thread";
 #elif L==9
-	"MESSAGES.Notices.en";
+	"COMMUNICATION.Forums.en#new-thread";
 #endif
 
-const char *Hlp_MESSAGES_Forums =
+const char *Hlp_COMMUNICATION_Forums_posts =
 #if   L==1
-	"MESSAGES.Forums.es";
+	"COMMUNICATION.Forums.es#comentarios";
 #elif L==2
-	"MESSAGES.Forums.en";
+	"COMMUNICATION.Forums.en#posts";
 #elif L==3
-	"MESSAGES.Forums.en";
+	"COMMUNICATION.Forums.en#posts";
 #elif L==4
-	"MESSAGES.Forums.es";
+	"COMMUNICATION.Forums.es#comentarios";
 #elif L==5
-	"MESSAGES.Forums.en";
+	"COMMUNICATION.Forums.en#posts";
 #elif L==6
-	"MESSAGES.Forums.es";
+	"COMMUNICATION.Forums.es#comentarios";
 #elif L==7
-	"MESSAGES.Forums.en";
+	"COMMUNICATION.Forums.en#posts";
 #elif L==8
-	"MESSAGES.Forums.en";
+	"COMMUNICATION.Forums.en#posts";
 #elif L==9
-	"MESSAGES.Forums.en";
+	"COMMUNICATION.Forums.en#posts";
 #endif
 
-const char *Hlp_MESSAGES_Forums_threads =
+const char *Hlp_COMMUNICATION_Forums_new_post =
 #if   L==1
-	"MESSAGES.Forums.es#discusiones";
+	"COMMUNICATION.Forums.es#nuevo-comentario";
 #elif L==2
-	"MESSAGES.Forums.en#threads";
+	"COMMUNICATION.Forums.en#new-post";
 #elif L==3
-	"MESSAGES.Forums.en#threads";
+	"COMMUNICATION.Forums.en#new-post";
 #elif L==4
-	"MESSAGES.Forums.es#discusiones";
+	"COMMUNICATION.Forums.es#nuevo-comentario";
 #elif L==5
-	"MESSAGES.Forums.en#threads";
+	"COMMUNICATION.Forums.en#new-post";
 #elif L==6
-	"MESSAGES.Forums.es#discusiones";
+	"COMMUNICATION.Forums.es#nuevo-comentario";
 #elif L==7
-	"MESSAGES.Forums.en#threads";
+	"COMMUNICATION.Forums.en#new-post";
 #elif L==8
-	"MESSAGES.Forums.en#threads";
+	"COMMUNICATION.Forums.en#new-post";
 #elif L==9
-	"MESSAGES.Forums.en#threads";
+	"COMMUNICATION.Forums.en#new-post";
 #endif
 
-const char *Hlp_MESSAGES_Forums_new_thread =
+const char *Hlp_COMMUNICATION_Messages_write =
 #if   L==1
-	"MESSAGES.Forums.es#nueva-discusi%C3%B3n";
+	"COMMUNICATION.Write.es";
 #elif L==2
-	"MESSAGES.Forums.en#new-thread";
+	"COMMUNICATION.Write.en";
 #elif L==3
-	"MESSAGES.Forums.en#new-thread";
+	"COMMUNICATION.Write.en";
 #elif L==4
-	"MESSAGES.Forums.es#nueva-discusi%C3%B3n";
+	"COMMUNICATION.Write.es";
 #elif L==5
-	"MESSAGES.Forums.en#new-thread";
+	"COMMUNICATION.Write.en";
 #elif L==6
-	"MESSAGES.Forums.es#nueva-discusi%C3%B3n";
+	"COMMUNICATION.Write.es";
 #elif L==7
-	"MESSAGES.Forums.en#new-thread";
+	"COMMUNICATION.Write.en";
 #elif L==8
-	"MESSAGES.Forums.en#new-thread";
+	"COMMUNICATION.Write.en";
 #elif L==9
-	"MESSAGES.Forums.en#new-thread";
+	"COMMUNICATION.Write.en";
 #endif
 
-const char *Hlp_MESSAGES_Forums_posts =
+const char *Hlp_COMMUNICATION_Messages_received =
 #if   L==1
-	"MESSAGES.Forums.es#comentarios";
+	"COMMUNICATION.Received.es";
 #elif L==2
-	"MESSAGES.Forums.en#posts";
+	"COMMUNICATION.Received.en";
 #elif L==3
-	"MESSAGES.Forums.en#posts";
+	"COMMUNICATION.Received.en";
 #elif L==4
-	"MESSAGES.Forums.es#comentarios";
+	"COMMUNICATION.Received.es";
 #elif L==5
-	"MESSAGES.Forums.en#posts";
+	"COMMUNICATION.Received.en";
 #elif L==6
-	"MESSAGES.Forums.es#comentarios";
+	"COMMUNICATION.Received.es";
 #elif L==7
-	"MESSAGES.Forums.en#posts";
+	"COMMUNICATION.Received.en";
 #elif L==8
-	"MESSAGES.Forums.en#posts";
+	"COMMUNICATION.Received.en";
 #elif L==9
-	"MESSAGES.Forums.en#posts";
+	"COMMUNICATION.Received.en";
 #endif
 
-const char *Hlp_MESSAGES_Forums_new_post =
+const char *Hlp_COMMUNICATION_Messages_received_filter =
 #if   L==1
-	"MESSAGES.Forums.es#nuevo-comentario";
+	"COMMUNICATION.Received.es#filtro";
 #elif L==2
-	"MESSAGES.Forums.en#new-post";
+	"COMMUNICATION.Received.en#filter";
 #elif L==3
-	"MESSAGES.Forums.en#new-post";
+	"COMMUNICATION.Received.en#filter";
 #elif L==4
-	"MESSAGES.Forums.es#nuevo-comentario";
+	"COMMUNICATION.Received.es#filtro";
 #elif L==5
-	"MESSAGES.Forums.en#new-post";
+	"COMMUNICATION.Received.en#filter";
 #elif L==6
-	"MESSAGES.Forums.es#nuevo-comentario";
+	"COMMUNICATION.Received.es#filtro";
 #elif L==7
-	"MESSAGES.Forums.en#new-post";
+	"COMMUNICATION.Received.en#filter";
 #elif L==8
-	"MESSAGES.Forums.en#new-post";
+	"COMMUNICATION.Received.en#filter";
 #elif L==9
-	"MESSAGES.Forums.en#new-post";
+	"COMMUNICATION.Received.en#filter";
 #endif
 
-const char *Hlp_MESSAGES_Write =
+const char *Hlp_COMMUNICATION_Messages_sent =
 #if   L==1
-	"MESSAGES.Write.es";
+	"COMMUNICATION.Sent.es";
 #elif L==2
-	"MESSAGES.Write.en";
+	"COMMUNICATION.Sent.en";
 #elif L==3
-	"MESSAGES.Write.en";
+	"COMMUNICATION.Sent.en";
 #elif L==4
-	"MESSAGES.Write.es";
+	"COMMUNICATION.Sent.es";
 #elif L==5
-	"MESSAGES.Write.en";
+	"COMMUNICATION.Sent.en";
 #elif L==6
-	"MESSAGES.Write.es";
+	"COMMUNICATION.Sent.es";
 #elif L==7
-	"MESSAGES.Write.en";
+	"COMMUNICATION.Sent.en";
 #elif L==8
-	"MESSAGES.Write.en";
+	"COMMUNICATION.Sent.en";
 #elif L==9
-	"MESSAGES.Write.en";
+	"COMMUNICATION.Sent.en";
 #endif
 
-const char *Hlp_MESSAGES_Received =
+const char *Hlp_COMMUNICATION_Messages_sent_filter =
 #if   L==1
-	"MESSAGES.Received.es";
+	"COMMUNICATION.Sent.es#filtro";
 #elif L==2
-	"MESSAGES.Received.en";
+	"COMMUNICATION.Sent.en#filter";
 #elif L==3
-	"MESSAGES.Received.en";
+	"COMMUNICATION.Sent.en#filter";
 #elif L==4
-	"MESSAGES.Received.es";
+	"COMMUNICATION.Sent.es#filtro";
 #elif L==5
-	"MESSAGES.Received.en";
+	"COMMUNICATION.Sent.en#filter";
 #elif L==6
-	"MESSAGES.Received.es";
+	"COMMUNICATION.Sent.es#filtro";
 #elif L==7
-	"MESSAGES.Received.en";
+	"COMMUNICATION.Sent.en#filter";
 #elif L==8
-	"MESSAGES.Received.en";
+	"COMMUNICATION.Sent.en#filter";
 #elif L==9
-	"MESSAGES.Received.en";
+	"COMMUNICATION.Sent.en#filter";
 #endif
 
-const char *Hlp_MESSAGES_Received_filter =
+const char *Hlp_COMMUNICATION_Email =
 #if   L==1
-	"MESSAGES.Received.es#filtro";
+	"COMMUNICATION.Email.es";
 #elif L==2
-	"MESSAGES.Received.en#filter";
+	"COMMUNICATION.Email.en";
 #elif L==3
-	"MESSAGES.Received.en#filter";
+	"COMMUNICATION.Email.en";
 #elif L==4
-	"MESSAGES.Received.es#filtro";
+	"COMMUNICATION.Email.es";
 #elif L==5
-	"MESSAGES.Received.en#filter";
+	"COMMUNICATION.Email.en";
 #elif L==6
-	"MESSAGES.Received.es#filtro";
+	"COMMUNICATION.Email.es";
 #elif L==7
-	"MESSAGES.Received.en#filter";
+	"COMMUNICATION.Email.en";
 #elif L==8
-	"MESSAGES.Received.en#filter";
+	"COMMUNICATION.Email.en";
 #elif L==9
-	"MESSAGES.Received.en#filter";
-#endif
-
-const char *Hlp_MESSAGES_Sent =
-#if   L==1
-	"MESSAGES.Sent.es";
-#elif L==2
-	"MESSAGES.Sent.en";
-#elif L==3
-	"MESSAGES.Sent.en";
-#elif L==4
-	"MESSAGES.Sent.es";
-#elif L==5
-	"MESSAGES.Sent.en";
-#elif L==6
-	"MESSAGES.Sent.es";
-#elif L==7
-	"MESSAGES.Sent.en";
-#elif L==8
-	"MESSAGES.Sent.en";
-#elif L==9
-	"MESSAGES.Sent.en";
-#endif
-
-const char *Hlp_MESSAGES_Sent_filter =
-#if   L==1
-	"MESSAGES.Sent.es#filtro";
-#elif L==2
-	"MESSAGES.Sent.en#filter";
-#elif L==3
-	"MESSAGES.Sent.en#filter";
-#elif L==4
-	"MESSAGES.Sent.es#filtro";
-#elif L==5
-	"MESSAGES.Sent.en#filter";
-#elif L==6
-	"MESSAGES.Sent.es#filtro";
-#elif L==7
-	"MESSAGES.Sent.en#filter";
-#elif L==8
-	"MESSAGES.Sent.en#filter";
-#elif L==9
-	"MESSAGES.Sent.en#filter";
-#endif
-
-const char *Hlp_MESSAGES_Email =
-#if   L==1
-	"MESSAGES.Email.es";
-#elif L==2
-	"MESSAGES.Email.en";
-#elif L==3
-	"MESSAGES.Email.en";
-#elif L==4
-	"MESSAGES.Email.es";
-#elif L==5
-	"MESSAGES.Email.en";
-#elif L==6
-	"MESSAGES.Email.es";
-#elif L==7
-	"MESSAGES.Email.en";
-#elif L==8
-	"MESSAGES.Email.en";
-#elif L==9
-	"MESSAGES.Email.en";
+	"COMMUNICATION.Email.en";
 #endif
 
 /***** ANALYTICS tab *****/

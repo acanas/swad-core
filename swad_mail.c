@@ -879,7 +879,7 @@ void Mai_ReqUsrsToListEmails (void)
 
 static void Mai_PutFormToSelectUsrsToListEmails (__attribute__((unused)) void *Args)
   {
-   extern const char *Hlp_MESSAGES_Email;
+   extern const char *Hlp_COMMUNICATION_Email;
    extern const char *Txt_Email;
    extern const char *Txt_View_email_addresses;
 
@@ -888,7 +888,7 @@ static void Mai_PutFormToSelectUsrsToListEmails (__attribute__((unused)) void *A
 				     ActMaiUsr,
 				     NULL,NULL,
 				     Txt_Email,
-				     Hlp_MESSAGES_Email,
+				     Hlp_COMMUNICATION_Email,
 				     Txt_View_email_addresses,
 				     false);	// Do not put form with date range
   }
@@ -912,7 +912,7 @@ void Mai_GetSelectedUsrsAndListEmails (void)
 
 static void Mai_ListEmails (__attribute__((unused)) void *Args)
   {
-   extern const char *Hlp_MESSAGES_Email;
+   extern const char *Hlp_COMMUNICATION_Email;
    extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
    extern const char *Txt_Email_addresses;
    extern const char *Txt_X_users_who_have_email;
@@ -928,7 +928,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
    /***** Start the box used to list the emails *****/
    Box_BoxBegin (NULL,Txt_Email_addresses,
                  NULL,NULL,
-		 Hlp_MESSAGES_Email,Box_NOT_CLOSABLE);
+		 Hlp_COMMUNICATION_Email,Box_NOT_CLOSABLE);
 
    /***** Start list with users' email addresses *****/
    HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");

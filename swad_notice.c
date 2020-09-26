@@ -94,7 +94,7 @@ static long Not_GetParamNotCod (void);
 
 void Not_ShowFormNotice (void)
   {
-   extern const char *Hlp_MESSAGES_Notices;
+   extern const char *Hlp_COMMUNICATION_Notices;
    extern const char *Txt_The_notice_will_appear_as_a_yellow_note_;
    extern const char *Txt_New_notice;
    extern const char *Txt_Create_notice;
@@ -109,7 +109,7 @@ void Not_ShowFormNotice (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_New_notice,
                  NULL,NULL,
-                 Hlp_MESSAGES_Notices,Box_NOT_CLOSABLE);
+                 Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE);
 
    /***** Message body *****/
    HTM_TEXTAREA_Begin ("name=\"Content\" cols=\"30\" rows=\"10\""
@@ -353,7 +353,7 @@ void Not_RemoveNotice (void)
 
 void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
   {
-   extern const char *Hlp_MESSAGES_Notices;
+   extern const char *Hlp_COMMUNICATION_Notices;
    extern const char *Txt_Notices;
    extern const char *Txt_No_notices;
    MYSQL_RES *mysql_res;
@@ -412,7 +412,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 		Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
       Box_BoxBegin (StrWidth,Txt_Notices,
 		    Not_PutIconsListNotices,NULL,
-		    Hlp_MESSAGES_Notices,Box_NOT_CLOSABLE);
+		    Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE);
       if (!NumNotices)
 	 Ale_ShowAlert (Ale_INFO,Txt_No_notices);
      }

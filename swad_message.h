@@ -40,11 +40,12 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define Msg_NUM_TYPES_OF_MSGS 2
+#define Msg_NUM_TYPES_OF_MSGS 3
 typedef enum
   {
-   Msg_MESSAGES_RECEIVED,
-   Msg_MESSAGES_SENT,
+   Msg_WRITING,
+   Msg_RECEIVED,
+   Msg_SENT,
   } Msg_TypeOfMessages_t;
 
 typedef enum

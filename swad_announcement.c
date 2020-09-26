@@ -79,7 +79,7 @@ static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const cha
 
 void Ann_ShowAllAnnouncements (void)
   {
-   extern const char *Hlp_MESSAGES_Announcements;
+   extern const char *Hlp_COMMUNICATION_Announcements;
    extern const char *Txt_Announcements;
    extern const char *Txt_No_announcements;
    MYSQL_RES *mysql_res;
@@ -130,7 +130,7 @@ void Ann_ShowAllAnnouncements (void)
    Box_BoxBegin ("550px",Txt_Announcements,
                  ICanEdit ? Ann_PutIconToAddNewAnnouncement :
 			    NULL,NULL,
-		 Hlp_MESSAGES_Announcements,Box_NOT_CLOSABLE);
+		 Hlp_COMMUNICATION_Announcements,Box_NOT_CLOSABLE);
    if (!NumAnnouncements)
       Ale_ShowAlert (Ale_INFO,Txt_No_announcements);
 
@@ -395,7 +395,7 @@ static long Ann_GetParamAnnCod (void)
 
 void Ann_ShowFormAnnouncement (void)
   {
-   extern const char *Hlp_MESSAGES_Announcements;
+   extern const char *Hlp_COMMUNICATION_Announcements;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_announcement;
    extern const char *Txt_MSG_Subject;
@@ -409,7 +409,7 @@ void Ann_ShowFormAnnouncement (void)
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_announcement,
                       NULL,NULL,
-                      Hlp_MESSAGES_Announcements,Box_NOT_CLOSABLE,2);
+                      Hlp_COMMUNICATION_Announcements,Box_NOT_CLOSABLE,2);
 
    /***** Announcement subject and body *****/
    Ann_PutSubjectMessage ("Subject",Txt_MSG_Subject, 2);

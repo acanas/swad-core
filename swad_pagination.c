@@ -61,6 +61,7 @@ extern const Act_Action_t For_ActionsSeePstFor[For_NUM_TYPES_FORUM];
 
 static const char *Pag_ParamNumPag[Pag_NUM_WHAT_PAGINATE] =
   {
+   [Pag_NONE             ] = NULL,
    [Pag_ASSIGNMENTS      ] = "NumPagAsg",
    [Pag_PROJECTS         ] = "NumPagPrj",
    [Pag_EXAMS            ] = "NumPagExa",
@@ -264,6 +265,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
                Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
                break;
+            default:
+               break;
            }
 	 if (asprintf (&ClassLink,"BT_LINK LT %s",ClassTxt) < 0)
 	    Lay_NotEnoughMemoryExit ();
@@ -389,6 +392,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
                Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
                break;
+            default:
+               break;
            }
          if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
 	    Lay_NotEnoughMemoryExit ();
@@ -499,6 +504,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
                Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+               break;
+            default:
                break;
            }
          if (asprintf (&Title,Txt_Page_X_of_Y,
@@ -623,6 +630,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
                   Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
                   break;
+	       default:
+		  break;
               }
             HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
             HTM_Unsigned (NumPage);
@@ -733,6 +742,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
 	       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	       break;
+            default:
+               break;
            }
          if (asprintf (&Title,Txt_Page_X_of_Y,
 		       Pagination->RightPage,Pagination->NumPags) < 0)
@@ -844,6 +855,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
 	       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	       break;
+            default:
+               break;
            }
          if (asprintf (&Title,Txt_Page_X_of_Y,
 		       Pagination->NumPags,Pagination->NumPags) < 0)
