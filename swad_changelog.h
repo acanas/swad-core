@@ -555,7 +555,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.2 (2020-09-26)"
+#define Log_PLATFORM_VERSION	"SWAD 20.2.1 (2020-09-27)"
 #define CSS_FILE		"swad20.1.1.css"
 #define JS_FILE			"swad19.254.js"
 /*
@@ -573,6 +573,7 @@ TODO: Que al generar un examen sólo se cojan preguntas válidas. Y si ya está gen
 TODO: Create module swad_test_result
 "sudo apt install webp" en Ubuntu, y "yum install libwebp libwebp-tools" en CentOS, para decodificar imágenes Web/ug reportado por Javier Fernández Baldomero.
 
+	Version 20.2.1:	  Sep 27, 2020  Fixed bug in exam, reported by Nuria Torres Rosell. (304442 lines)
 	Version 20.2:	  Sep 26, 2020  Removed unused action.
 					Contextual menu in box used to write a new message.
 					Changes in help links. (304440 lines)

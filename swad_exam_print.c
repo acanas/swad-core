@@ -195,10 +195,9 @@ void ExaPrn_ShowExamPrint (void)
    /***** Check if I can access to this session *****/
    if (ExaSes_CheckIfICanAnswerThisSession (&Exam,&Session))
      {
-      /***** Get print data from database *****/
+      /***** Set basic data of exam print *****/
       Print.SesCod = Session.SesCod;
       Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      ExaPrn_GetDataOfPrintBySesCodAndUsrCod (&Print);
 
       if (Print.PrnCod <= 0)	// Print does not exists ==> create it
 	{
@@ -215,9 +214,12 @@ void ExaPrn_ShowExamPrint (void)
 	    ExaLog_SetAction (ExaLog_START_EXAM);
 	    ExaLog_SetIfCanAnswer (true);
 	   }
-	 }
+	}
       else			// Print exists
-         {
+        {
+         /***** Get exam print data from database *****/
+	 ExaPrn_GetDataOfPrintBySesCodAndUsrCod (&Print);
+
          /***** Get questions and current user's answers from database *****/
 	 ExaPrn_GetPrintQuestionsFromDB (&Print);
 
@@ -578,7 +580,7 @@ static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print)
 				" VALUES"
 				" (%ld,%ld,NOW(),NOW(),%u,0,'N',0)",
 				Print->SesCod,
-				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Print->UsrCod,
 				Print->NumQsts.All);
 
    /***** Store all questions (with blank answers)
