@@ -199,8 +199,15 @@ void ExaPrn_ShowExamPrint (void)
       Print.SesCod = Session.SesCod;
       Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 
+      /***** Get exam print data from database *****/
+      ExaPrn_GetDataOfPrintBySesCodAndUsrCod (&Print);
+
       if (Print.PrnCod <= 0)	// Print does not exists ==> create it
 	{
+	 /***** Set again basic data of exam print *****/
+	 Print.SesCod = Session.SesCod;
+	 Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+
 	 /***** Get questions from database *****/
 	 ExaPrn_GetQuestionsForNewPrintFromDB (&Print,Exam.ExaCod);
 
@@ -363,13 +370,13 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,lon
    /***** Get data of set of questions from database *****/
    NumSets = (unsigned)
 	     DB_QuerySELECT (&mysql_res,"can not get sets of questions",
-			      "SELECT SetCod,"		// row[0]
-				     "NumQstsToPrint,"	// row[1]
-				     "Title"		// row[2]
-			      " FROM exa_sets"
-			      " WHERE ExaCod=%ld"
-			      " ORDER BY SetInd",
-			      ExaCod);
+			     "SELECT SetCod,"		// row[0]
+				    "NumQstsToPrint,"	// row[1]
+				    "Title"		// row[2]
+			     " FROM exa_sets"
+			     " WHERE ExaCod=%ld"
+			     " ORDER BY SetInd",
+			     ExaCod);
 
    /***** Get questions from all sets *****/
    Print->NumQsts.All = 0;
