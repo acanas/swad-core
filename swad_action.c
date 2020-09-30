@@ -779,6 +779,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActChgVisResMchUsr	] = {1801,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ToggleVisResultsMchUsr	,NULL},
 
+   [ActLstOneGam	] = {1912,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ListGame			,NULL},
+
    [ActFrmNewGam	] = {1652,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
    [ActEdiOneGam	] = {1653,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
    [ActNewGam		] = {1654,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ReceiveFormGame		,NULL},
@@ -3725,6 +3727,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActValSetQst,		// #1909
 	ActInvSetQst,		// #1910
 	ActChgRooMAC,		// #1911
+	ActLstOneGam,		// #1912
   };
 
 /*****************************************************************************/

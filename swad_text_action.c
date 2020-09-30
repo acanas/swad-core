@@ -11759,6 +11759,27 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	""			// Precisa de tradução
 #endif
 	,
+	[ActLstOneGam] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"View one game and its questions"
+#elif L==4	// es
+	"Ver un juego y sus preguntas"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	"Ver un juego y sus preguntas"	// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
 	[ActFrmNewGam] =
 #if   L==1	// ca
 	""			// Necessita traducció
@@ -11767,11 +11788,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Form to create a new game"
 #elif L==4	// es
-	""
+	"Formulario para crear un nuevo juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Formulario para crear un nuevo juego"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -11786,13 +11807,13 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Edit one game"
+	"Edit game"
 #elif L==4	// es
-	""
+	"Editar juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar juego"		// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -11809,11 +11830,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Create new game"
 #elif L==4	// es
-	""
+	"Crear nuevo juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear nuevo juego"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -11830,11 +11851,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Modify data of an existing game"
 #elif L==4	// es
-	""
+	"Modificar datos de un juego existente"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Modificar datos de un juego existente"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl

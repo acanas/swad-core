@@ -573,6 +573,10 @@ TODO: Que al generar un examen sólo se cojan preguntas válidas. Y si ya está gen
 TODO: Create module swad_test_result
 "sudo apt install webp" en Ubuntu, y "yum install libwebp libwebp-tools" en CentOS, para decodificar imágenes Web/ug reportado por Javier Fernández Baldomero.
 
+TODO: En los resultados de una partida, cuando la pregunta ha sido modificada, no calcular ni mostrar la puntuación de esa pregunta.
+      Por ejemplo una pregunta podria haber sido bien contestada con 1 punto, y se muestra en esa pregunta modificada aparece 0 en rojo.
+
+	Version 20.3:	  Sep 30, 2020  Non-editing teachers can list questions in a game. (304528 lines)
 	Version 20.2.2:	  Sep 27, 2020  Fixed bug in exam. (304448 lines)
 	Version 20.2.1:	  Sep 27, 2020  Fixed bug in exam, reported by Nuria Torres Rosell. (304442 lines)
 	Version 20.2:	  Sep 26, 2020  Removed unused action.

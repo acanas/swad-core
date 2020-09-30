@@ -110,6 +110,7 @@ extern struct Globals Gbl;
 
 static void Gam_ListAllGames (struct Gam_Games *Games);
 static bool Gam_CheckIfICanEditGames (void);
+static bool Gam_CheckIfICanListGameQuestions (void);
 static void Gam_PutIconsListGames (void *Games);
 static void Gam_PutIconToCreateNewGame (struct Gam_Games *Games);
 static void Gam_PutButtonToCreateNewGame (struct Gam_Games *Games);
@@ -275,7 +276,8 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
       /***** Table head *****/
       HTM_TABLE_BeginWideMarginPadding (5);
       HTM_TR_Begin (NULL);
-      if (Gam_CheckIfICanEditGames ())
+      if (Gam_CheckIfICanEditGames () ||
+	  Gam_CheckIfICanListGameQuestions ())
          HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
 
       for (Order  = (Gam_Order_t) 0;
@@ -348,6 +350,24 @@ static bool Gam_CheckIfICanEditGames (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+         return true;
+      default:
+         return false;
+     }
+   return false;
+  }
+
+/*****************************************************************************/
+/**************** Check if I can list questions in games *********************/
+/*****************************************************************************/
+
+static bool Gam_CheckIfICanListGameQuestions (void)
+  {
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
          return true;
@@ -517,6 +537,8 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
    Dat_StartEndTime_t StartEndTime;
    const char *Color;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
+   bool ICanEditGames     = Gam_CheckIfICanEditGames ();
+   bool ICanListQuestions = Gam_CheckIfICanListGameQuestions ();
 
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Game->GamCod,&Anchor);
@@ -529,15 +551,23 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
    HTM_TR_Begin (NULL);
 
    /***** Icons related to this game *****/
-   if (Gam_CheckIfICanEditGames ())
+   if (ICanEditGames ||
+       ICanListQuestions)
      {
+      Games->GamCod = Game->GamCod;
+
       if (ShowOnlyThisGame)
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
       else
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
 
-      /* Icons to remove/edit this game */
-      Gam_PutFormsToRemEditOneGame (Games,Game,Anchor);
+      if (ICanEditGames)
+         /* Icons to remove/edit this game */
+         Gam_PutFormsToRemEditOneGame (Games,Game,Anchor);
+      else
+         /* Put icon to view game listing its questions */
+         Ico_PutContextualIconToView (ActLstOneGam,
+				      Gam_PutParams,Games);
 
       HTM_TD_End ();
      }
@@ -717,8 +747,6 @@ static void Gam_PutFormsToRemEditOneGame (struct Gam_Games *Games,
 					  const struct Gam_Game *Game,
 					  const char *Anchor)
   {
-   Games->GamCod = Game->GamCod;
-
    /***** Put icon to remove game *****/
    Ico_PutContextualIconToRemove (ActReqRemGam,
                                   Gam_PutParams,Games);
@@ -1332,6 +1360,40 @@ static bool Gam_CheckIfSimilarGameExists (const struct Gam_Game *Game)
   }
 
 /*****************************************************************************/
+/************************* List the questions in a game **********************/
+/*****************************************************************************/
+
+void Gam_ListGame (void)
+  {
+   struct Gam_Games Games;
+   struct Gam_Game Game;
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Reset games context *****/
+   Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
+
+   /***** Check if I can list game questions *****/
+   if (!Gam_CheckIfICanListGameQuestions ())
+      Lay_NoPermissionExit ();
+
+   /***** Get parameters *****/
+   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+      Lay_ShowErrorAndExit ("Code of game is missing.");
+
+   /***** Get game data *****/
+   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetGameTxtFromDB (Game.GamCod,Txt);
+
+   /***** Show game *****/
+   Gam_ShowOnlyOneGame (&Games,&Game,
+                        true,	// List game questions
+	                false);	// Do not put form to start new match
+  }
+
+/*****************************************************************************/
 /**************** Request the creation or edition of a game ******************/
 /*****************************************************************************/
 
@@ -1379,7 +1441,6 @@ void Gam_RequestCreatOrEditGame (void)
    else
       /* Show questions of the game ready to be edited */
       Gam_ListGameQuestions (&Games,&Game);
-
   }
 
 /*****************************************************************************/

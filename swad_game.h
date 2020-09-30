@@ -131,6 +131,8 @@ void Gam_RemoveCrsGames (long CrsCod);
 void Gam_HideGame (void);
 void Gam_UnhideGame (void);
 
+void Gam_ListGame (void);
+
 void Gam_RequestCreatOrEditGame (void);
 
 void Gam_ReceiveFormGame (void);

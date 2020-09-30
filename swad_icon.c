@@ -268,7 +268,7 @@ void Ico_PutContextualIconToView (Act_Action_t NextAction,
 
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "eye.svg",
+				  "list.svg",
 				  Txt_View);
   }
 

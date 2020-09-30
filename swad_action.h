@@ -64,7 +64,7 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_MAX_ACTION_COD		1911
+#define Act_MAX_ACTION_COD		1912
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB	  13
 
@@ -741,38 +741,40 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 
 #define ActChgVisResMchUsr	(ActChgCrsTT1stDay + 205)
 
-#define ActFrmNewGam		(ActChgCrsTT1stDay + 206)
-#define ActEdiOneGam		(ActChgCrsTT1stDay + 207)
-#define ActNewGam		(ActChgCrsTT1stDay + 208)
-#define ActChgGam		(ActChgCrsTT1stDay + 209)
-#define ActReqRemGam		(ActChgCrsTT1stDay + 210)
-#define ActRemGam		(ActChgCrsTT1stDay + 211)
-#define ActHidGam		(ActChgCrsTT1stDay + 212)
-#define ActShoGam		(ActChgCrsTT1stDay + 213)
-#define ActAddOneGamQst		(ActChgCrsTT1stDay + 214)
-#define ActGamLstTstQst		(ActChgCrsTT1stDay + 215)
-#define ActAddTstQstToGam	(ActChgCrsTT1stDay + 216)
-#define ActReqRemGamQst		(ActChgCrsTT1stDay + 217)
-#define ActRemGamQst		(ActChgCrsTT1stDay + 218)
-#define ActUp_GamQst		(ActChgCrsTT1stDay + 219)
-#define ActDwnGamQst		(ActChgCrsTT1stDay + 220)
+#define ActLstOneGam		(ActChgCrsTT1stDay + 206)
 
-#define ActSeeSvy		(ActChgCrsTT1stDay + 221)
-#define ActAnsSvy		(ActChgCrsTT1stDay + 222)
-#define ActFrmNewSvy		(ActChgCrsTT1stDay + 223)
-#define ActEdiOneSvy		(ActChgCrsTT1stDay + 224)
-#define ActNewSvy		(ActChgCrsTT1stDay + 225)
-#define ActChgSvy		(ActChgCrsTT1stDay + 226)
-#define ActReqRemSvy		(ActChgCrsTT1stDay + 227)
-#define ActRemSvy		(ActChgCrsTT1stDay + 228)
-#define ActReqRstSvy		(ActChgCrsTT1stDay + 229)
-#define ActRstSvy		(ActChgCrsTT1stDay + 230)
-#define ActHidSvy		(ActChgCrsTT1stDay + 231)
-#define ActShoSvy		(ActChgCrsTT1stDay + 232)
-#define ActEdiOneSvyQst		(ActChgCrsTT1stDay + 233)
-#define ActRcvSvyQst		(ActChgCrsTT1stDay + 234)
-#define ActReqRemSvyQst		(ActChgCrsTT1stDay + 235)
-#define ActRemSvyQst		(ActChgCrsTT1stDay + 236)
+#define ActFrmNewGam		(ActChgCrsTT1stDay + 207)
+#define ActEdiOneGam		(ActChgCrsTT1stDay + 208)
+#define ActNewGam		(ActChgCrsTT1stDay + 209)
+#define ActChgGam		(ActChgCrsTT1stDay + 210)
+#define ActReqRemGam		(ActChgCrsTT1stDay + 211)
+#define ActRemGam		(ActChgCrsTT1stDay + 212)
+#define ActHidGam		(ActChgCrsTT1stDay + 213)
+#define ActShoGam		(ActChgCrsTT1stDay + 214)
+#define ActAddOneGamQst		(ActChgCrsTT1stDay + 215)
+#define ActGamLstTstQst		(ActChgCrsTT1stDay + 216)
+#define ActAddTstQstToGam	(ActChgCrsTT1stDay + 217)
+#define ActReqRemGamQst		(ActChgCrsTT1stDay + 218)
+#define ActRemGamQst		(ActChgCrsTT1stDay + 219)
+#define ActUp_GamQst		(ActChgCrsTT1stDay + 220)
+#define ActDwnGamQst		(ActChgCrsTT1stDay + 221)
+
+#define ActSeeSvy		(ActChgCrsTT1stDay + 222)
+#define ActAnsSvy		(ActChgCrsTT1stDay + 223)
+#define ActFrmNewSvy		(ActChgCrsTT1stDay + 224)
+#define ActEdiOneSvy		(ActChgCrsTT1stDay + 225)
+#define ActNewSvy		(ActChgCrsTT1stDay + 226)
+#define ActChgSvy		(ActChgCrsTT1stDay + 227)
+#define ActReqRemSvy		(ActChgCrsTT1stDay + 228)
+#define ActRemSvy		(ActChgCrsTT1stDay + 229)
+#define ActReqRstSvy		(ActChgCrsTT1stDay + 230)
+#define ActRstSvy		(ActChgCrsTT1stDay + 231)
+#define ActHidSvy		(ActChgCrsTT1stDay + 232)
+#define ActShoSvy		(ActChgCrsTT1stDay + 233)
+#define ActEdiOneSvyQst		(ActChgCrsTT1stDay + 234)
+#define ActRcvSvyQst		(ActChgCrsTT1stDay + 235)
+#define ActReqRemSvyQst		(ActChgCrsTT1stDay + 236)
+#define ActRemSvyQst		(ActChgCrsTT1stDay + 237)
 
 /*****************************************************************************/
 /******************************** Files tab **********************************/
