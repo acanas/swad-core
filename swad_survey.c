@@ -883,7 +883,7 @@ static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Surveys,
    Surveys->SvyCod = Svy->SvyCod;	// Used as parameters in contextual links
 
    /***** Put form to remove survey *****/
-   Ico_PutContextualIconToRemove (ActReqRemSvy,
+   Ico_PutContextualIconToRemove (ActReqRemSvy,NULL,
                                   Svy_PutParams,Surveys);
 
    /***** Put form to reset survey *****/
@@ -3613,7 +3613,7 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 
 static void Svy_PutIconToRemoveOneQst (void *Surveys)
   {
-   Ico_PutContextualIconToRemove (ActReqRemSvyQst,
+   Ico_PutContextualIconToRemove (ActReqRemSvyQst,NULL,
 				  Svy_PutParamsRemoveOneQst,Surveys);
   }
 

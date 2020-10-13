@@ -2332,7 +2332,7 @@ static void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FilFolL
   {
    if (Brw_GetIfGroupFileBrowser ())		// This file browser needs specify a group
       /***** Group code *****/
-      Grp_PutParamGrpCod (Gbl.Crs.Grps.GrpCod);
+      Grp_PutParamGrpCod (&Gbl.Crs.Grps.GrpCod);
    else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
       /***** Project code *****/
       Prj_PutParamPrjCod (Prj_GetPrjCod ());
@@ -4984,7 +4984,7 @@ static void Brw_PutCheckboxFullTree (void)
 static void Brw_PutParamsFullTree (void)
   {
    if (Brw_GetIfGroupFileBrowser ())
-      Grp_PutParamGrpCod (Gbl.Crs.Grps.GrpCod);
+      Grp_PutParamGrpCod (&Gbl.Crs.Grps.GrpCod);
    else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
       Prj_PutParamPrjCod (Prj_GetPrjCod ());
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
@@ -5795,12 +5795,12 @@ static void Brw_PutIconRemove (void)
 	 case Brw_IS_FILE:
 	 case Brw_IS_LINK:
 	    /***** Form to remove a file or link *****/
-	    Ico_PutContextualIconToRemove (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type],
+	    Ico_PutContextualIconToRemove (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type],NULL,
 					   Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
 	    break;
 	 case Brw_IS_FOLDER:
 	    /***** Form to remove a folder *****/
-	    Ico_PutContextualIconToRemove (Brw_ActRemoveFolder[Gbl.FileBrowser.Type],
+	    Ico_PutContextualIconToRemove (Brw_ActRemoveFolder[Gbl.FileBrowser.Type],NULL,
 					   Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
 	    break;
 	 default:
@@ -12109,7 +12109,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	 Frm_StartFormGoTo (Action);
 	 Crs_PutParamCrsCod (CrsCod);	// Go to course
 	 if (GrpCod > 0)
-	    Grp_PutParamGrpCod (GrpCod);
+	    Grp_PutParamGrpCod (&GrpCod);
         }
       else if (DegCod > 0)
 	{

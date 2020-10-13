@@ -2696,7 +2696,7 @@ static void Msg_PutIconsListMsgs (void *Messages)
         {
 	 case Msg_RECEIVED:
 	 case Msg_SENT:
-	    Ico_PutContextualIconToRemove (ActionReqDelAllMsg[((struct Msg_Messages *) Messages)->TypeOfMessages],
+	    Ico_PutContextualIconToRemove (ActionReqDelAllMsg[((struct Msg_Messages *) Messages)->TypeOfMessages],NULL,
 					   Msg_PutHiddenParamsMsgsFilters,Messages);
 	    break;
 	 default:
@@ -3186,7 +3186,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    /***** Form to delete message *****/
    HTM_BR ();
    Messages->MsgCod = MsgCod;	// Message to be deleted
-   Ico_PutContextualIconToRemove (ActionDelMsg[Messages->TypeOfMessages],
+   Ico_PutContextualIconToRemove (ActionDelMsg[Messages->TypeOfMessages],NULL,
                                   Msg_PutHiddenParamsOneMsg,Messages);
    HTM_TD_End ();
 

@@ -748,7 +748,7 @@ static void Gam_PutFormsToRemEditOneGame (struct Gam_Games *Games,
 					  const char *Anchor)
   {
    /***** Put icon to remove game *****/
-   Ico_PutContextualIconToRemove (ActReqRemGam,
+   Ico_PutContextualIconToRemove (ActReqRemGam,NULL,
                                   Gam_PutParams,Games);
 
    /***** Put icon to unhide/hide game *****/

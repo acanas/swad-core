@@ -92,7 +92,7 @@ static void Deg_EditDegreesInternal (void);
 static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args);
 
 static void Deg_ReceiveFormRequestOrCreateDeg (unsigned Status);
-static void Deg_PutParamOtherDegCod (long DegCod);
+static void Deg_PutParamOtherDegCod (void *DegCod);
 
 static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
 
@@ -378,12 +378,8 @@ static void Deg_ListDegreesForEdition (void)
 	  NumUsrsInCrssOfDeg)
          Ico_PutIconRemovalNotAllowed ();
       else
-        {
-         Frm_StartForm (ActRemDeg);
-         Deg_PutParamOtherDegCod (Deg->DegCod);
-         Ico_PutIconRemove ();
-         Frm_EndForm ();
-        }
+	 Ico_PutContextualIconToRemove (ActRemDeg,NULL,
+					Deg_PutParamOtherDegCod,&Deg->DegCod);
       HTM_TD_End ();
 
       /* Degree code */
@@ -401,7 +397,7 @@ static void Deg_ListDegreesForEdition (void)
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActRenDegSho);
-	 Deg_PutParamOtherDegCod (Deg->DegCod);
+	 Deg_PutParamOtherDegCod (&Deg->DegCod);
 	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Deg->ShrtName,
 	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_SHORT_NAME\"");
@@ -416,7 +412,7 @@ static void Deg_ListDegreesForEdition (void)
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActRenDegFul);
-	 Deg_PutParamOtherDegCod (Deg->DegCod);
+	 Deg_PutParamOtherDegCod (&Deg->DegCod);
 	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Deg->FullName,
 	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_FULL_NAME\"");
@@ -431,7 +427,7 @@ static void Deg_ListDegreesForEdition (void)
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActChgDegTyp);
-	 Deg_PutParamOtherDegCod (Deg->DegCod);
+	 Deg_PutParamOtherDegCod (&Deg->DegCod);
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"OthDegTypCod\" class=\"HIE_SEL_NARROW\"");
 	 for (NumDegTyp = 0;
@@ -460,7 +456,7 @@ static void Deg_ListDegreesForEdition (void)
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActChgDegWWW);
-	 Deg_PutParamOtherDegCod (Deg->DegCod);
+	 Deg_PutParamOtherDegCod (&Deg->DegCod);
 	 HTM_INPUT_URL ("WWW",Deg->WWW,HTM_SUBMIT_ON_CHANGE,
 			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
 	 Frm_EndForm ();
@@ -502,7 +498,7 @@ static void Deg_ListDegreesForEdition (void)
 	  StatusTxt == Deg_STATUS_PENDING)
 	{
 	 Frm_StartForm (ActChgDegSta);
-	 Deg_PutParamOtherDegCod (Deg->DegCod);
+	 Deg_PutParamOtherDegCod (&Deg->DegCod);
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"Status\" class=\"INPUT_STATUS\"");
 	 StatusUnsigned = (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_PENDING);
@@ -1301,9 +1297,10 @@ void Deg_PutParamDegCod (long DegCod)
 /******************** Write parameter with code of degree ********************/
 /*****************************************************************************/
 
-static void Deg_PutParamOtherDegCod (long DegCod)
+static void Deg_PutParamOtherDegCod (void *DegCod)
   {
-   Par_PutHiddenParamLong (NULL,"OthDegCod",DegCod);
+   if (DegCod)
+      Par_PutHiddenParamLong (NULL,"OthDegCod",*((long *) DegCod));
   }
 
 /*****************************************************************************/

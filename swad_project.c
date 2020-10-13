@@ -2752,7 +2752,7 @@ static void Prj_PutFormsToRemEditOnePrj (struct Prj_Projects *Projects,
    if (Prj_CheckIfICanEditProject (Prj))
      {
       /***** Put form to remove project *****/
-      Ico_PutContextualIconToRemove (ActReqRemPrj,
+      Ico_PutContextualIconToRemove (ActReqRemPrj,NULL,
                                      Prj_PutCurrentParams,Projects);
 
       /***** Put form to hide/show project *****/

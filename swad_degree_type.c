@@ -91,7 +91,7 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
 static void DT_PutHeadDegreeTypesForEdition (void);
 static void DT_CreateDegreeType (struct DegreeType *DegTyp);
 
-static void DT_PutParamOtherDegTypCod (long DegTypCod);
+static void DT_PutParamOtherDegTypCod (void *DegTypCod);
 
 static unsigned DT_CountNumDegsOfType (long DegTypCod);
 static void DT_RemoveDegreeTypeCompletely (long DegTypCod);
@@ -406,12 +406,8 @@ static void DT_ListDegreeTypesForEdition (void)
       if (Gbl.DegTypes.Lst[NumDegTyp].NumDegs)	// Degree type has degrees => deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
-        {
-         Frm_StartForm (ActRemDegTyp);
-         DT_PutParamOtherDegTypCod (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
-         Ico_PutIconRemove ();
-         Frm_EndForm ();
-        }
+	 Ico_PutContextualIconToRemove (ActRemDegTyp,NULL,
+					DT_PutParamOtherDegTypCod,&Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
       HTM_TD_End ();
 
       /* Degree type code */
@@ -422,7 +418,7 @@ static void DT_ListDegreeTypesForEdition (void)
       /* Name of degree type */
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActRenDegTyp);
-      DT_PutParamOtherDegTypCod (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
+      DT_PutParamOtherDegTypCod (&Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
       HTM_INPUT_TEXT ("DegTypName",Deg_MAX_CHARS_DEGREE_TYPE_NAME,
 		      Gbl.DegTypes.Lst[NumDegTyp].DegTypName,
 		      HTM_SUBMIT_ON_CHANGE,
@@ -821,9 +817,10 @@ void DT_RemoveDegreeType (void)
 /***************** Write parameter with code of degree type ******************/
 /*****************************************************************************/
 
-static void DT_PutParamOtherDegTypCod (long DegTypCod)
+static void DT_PutParamOtherDegTypCod (void *DegTypCod)
   {
-   Par_PutHiddenParamLong (NULL,"OthDegTypCod",DegTypCod);
+   if (DegTypCod)
+      Par_PutHiddenParamLong (NULL,"OthDegTypCod",*((long *) DegTypCod));
   }
 
 /*****************************************************************************/

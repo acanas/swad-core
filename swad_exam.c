@@ -696,7 +696,7 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
    Exams->ExaCod = Exam->ExaCod;
 
    /***** Icon to remove exam *****/
-   Ico_PutContextualIconToRemove (ActReqRemExa,
+   Ico_PutContextualIconToRemove (ActReqRemExa,NULL,
                                   Exa_PutParams,Exams);
 
    /***** Icon to unhide/hide exam *****/

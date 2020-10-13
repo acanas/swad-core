@@ -787,7 +787,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Put form to remove program item *****/
-	 Ico_PutContextualIconToRemove (ActReqRemPrgItm,
+	 Ico_PutContextualIconToRemove (ActReqRemPrgItm,NULL,
 	                                Prg_PutParams,&Item->Hierarchy.ItmCod);
 
 	 /***** Put form to hide/show program item *****/

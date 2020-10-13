@@ -467,7 +467,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"BM\"");
-      Ico_PutContextualIconToRemove (ActRemBan,
+      Ico_PutContextualIconToRemove (ActRemBan,NULL,
                                      Ban_PutParamBanCodToEdit,&Banners->BanCodToEdit);
       HTM_TD_End ();
 

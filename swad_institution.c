@@ -90,7 +90,7 @@ static bool Ins_CheckIfICanEdit (struct Instit *Ins);
 static Ins_StatusTxt_t Ins_GetStatusTxtFromStatusBits (Ins_Status_t Status);
 static Ins_Status_t Ins_GetStatusBitsFromStatusTxt (Ins_StatusTxt_t StatusTxt);
 
-static void Ins_PutParamOtherInsCod (long InsCod);
+static void Ins_PutParamOtherInsCod (void *InsCod);
 static long Ins_GetParamOtherInsCod (void);
 
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName);
@@ -1119,12 +1119,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	 // Institution has centres or users ==> deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
-        {
-         Frm_StartForm (ActRemIns);
-         Ins_PutParamOtherInsCod (Ins->InsCod);
-         Ico_PutIconRemove ();
-         Frm_EndForm ();
-        }
+	 Ico_PutContextualIconToRemove (ActRemIns,NULL,
+					Ins_PutParamOtherInsCod,&Ins->InsCod);
       HTM_TD_End ();
 
       /* Institution code */
@@ -1142,7 +1138,7 @@ static void Ins_ListInstitutionsForEdition (void)
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActRenInsSho);
-	 Ins_PutParamOtherInsCod (Ins->InsCod);
+	 Ins_PutParamOtherInsCod (&Ins->InsCod);
 	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
 	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_SHORT_NAME\"");
@@ -1157,7 +1153,7 @@ static void Ins_ListInstitutionsForEdition (void)
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActRenInsFul);
-	 Ins_PutParamOtherInsCod (Ins->InsCod);
+	 Ins_PutParamOtherInsCod (&Ins->InsCod);
 	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins->FullName,
 	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_FULL_NAME\"");
@@ -1172,7 +1168,7 @@ static void Ins_ListInstitutionsForEdition (void)
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActChgInsWWW);
-	 Ins_PutParamOtherInsCod (Ins->InsCod);
+	 Ins_PutParamOtherInsCod (&Ins->InsCod);
 	 HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
 			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
 	 Frm_EndForm ();
@@ -1219,7 +1215,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	  StatusTxt == Ins_STATUS_PENDING)
 	{
 	 Frm_StartForm (ActChgInsSta);
-	 Ins_PutParamOtherInsCod (Ins->InsCod);
+	 Ins_PutParamOtherInsCod (&Ins->InsCod);
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"Status\" class=\"INPUT_STATUS\"");
 	 StatusUnsigned = (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_PENDING);
@@ -1320,9 +1316,10 @@ void Ins_PutParamInsCod (long InsCod)
 /***************** Write parameter with code of institution ******************/
 /*****************************************************************************/
 
-static void Ins_PutParamOtherInsCod (long InsCod)
+static void Ins_PutParamOtherInsCod (void *InsCod)
   {
-   Par_PutHiddenParamLong (NULL,"OthInsCod",InsCod);
+   if (InsCod)
+      Par_PutHiddenParamLong (NULL,"OthInsCod",*((long *) InsCod));
   }
 
 /*****************************************************************************/

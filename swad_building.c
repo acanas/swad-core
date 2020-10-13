@@ -69,7 +69,7 @@ static void Bld_PutIconsEditingBuildings (__attribute__((unused)) void *Args);
 static void Bld_EditBuildingsInternal (void);
 
 static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings);
-static void Bld_PutParamBldCod (long BldCod);
+static void Bld_PutParamBldCod (void *BldCod);
 
 static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Bld_CheckIfBuildingNameExists (const char *FieldName,const char *Name,long BldCod);
@@ -491,10 +491,8 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 
       /* Put icon to remove building */
       HTM_TD_Begin ("class=\"BM\"");
-      Frm_StartForm (ActRemBld);
-      Bld_PutParamBldCod (Building->BldCod);
-      Ico_PutIconRemove ();
-      Frm_EndForm ();
+      Ico_PutContextualIconToRemove (ActRemBld,NULL,
+				     Bld_PutParamBldCod,&Building->BldCod);
       HTM_TD_End ();
 
       /* Building code */
@@ -507,7 +505,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
       /* Building short name */
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartFormAnchor (ActRenBldSho,Anchor);
-      Bld_PutParamBldCod (Building->BldCod);
+      Bld_PutParamBldCod (&Building->BldCod);
       HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Building->ShrtName,
                       HTM_SUBMIT_ON_CHANGE,
 		      "size=\"10\" class=\"INPUT_SHORT_NAME\"");
@@ -517,7 +515,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
       /* Building full name */
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartFormAnchor (ActRenBldFul,Anchor);
-      Bld_PutParamBldCod (Building->BldCod);
+      Bld_PutParamBldCod (&Building->BldCod);
       HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Building->FullName,
                       HTM_SUBMIT_ON_CHANGE,
 		      "size=\"20\" class=\"INPUT_FULL_NAME\"");
@@ -527,7 +525,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
       /* Building location */
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartFormAnchor (ActRenBldLoc,Anchor);
-      Bld_PutParamBldCod (Building->BldCod);
+      Bld_PutParamBldCod (&Building->BldCod);
       HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Building->Location,
                       HTM_SUBMIT_ON_CHANGE,
 		      "size=\"15\" class=\"INPUT_FULL_NAME\"");
@@ -545,9 +543,10 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 /******************* Write parameter with code of building *******************/
 /*****************************************************************************/
 
-static void Bld_PutParamBldCod (long BldCod)
+static void Bld_PutParamBldCod (void *BldCod)
   {
-   Par_PutHiddenParamLong (NULL,"BldCod",BldCod);
+   if (BldCod)
+      Par_PutHiddenParamLong (NULL,"BldCod",*((long *) BldCod));
   }
 
 /*****************************************************************************/

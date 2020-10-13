@@ -541,10 +541,8 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
    Exams->SesCod = Session->SesCod;
 
    /***** Icon to remove the exam session *****/
-   Frm_StartForm (ActReqRemExaSes);
-   ExaSes_PutParamsEdit (Exams);
-   Ico_PutIconRemove ();
-   Frm_EndForm ();
+   Ico_PutContextualIconToRemove (ActReqRemExaSes,NULL,
+                                  ExaSes_PutParamsEdit,Exams);
 
    /***** Icon to hide/unhide the exam session *****/
    if (Session->Hidden)

@@ -72,7 +72,7 @@ static void Lnk_EditLinksInternal (void);
 static void Lnk_PutIconsEditingLinks (__attribute__((unused)) void *Args);
 
 static void Lnk_ListLinksForEdition (void);
-static void Lnk_PutParamLnkCod (long LnkCod);
+static void Lnk_PutParamLnkCod (void *LnkCod);
 
 static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Lnk_CheckIfLinkNameExists (const char *FieldName,const char *Name,long LnkCod);
@@ -428,10 +428,8 @@ static void Lnk_ListLinksForEdition (void)
 
       /* Put icon to remove link */
       HTM_TD_Begin ("class=\"BM\"");
-      Frm_StartForm (ActRemLnk);
-      Lnk_PutParamLnkCod (Lnk->LnkCod);
-      Ico_PutIconRemove ();
-      Frm_EndForm ();
+      Ico_PutContextualIconToRemove (ActRemLnk,NULL,
+				     Lnk_PutParamLnkCod,&Lnk->LnkCod);
       HTM_TD_End ();
 
       /* Link code */
@@ -442,7 +440,7 @@ static void Lnk_ListLinksForEdition (void)
       /* Link short name */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenLnkSho);
-      Lnk_PutParamLnkCod (Lnk->LnkCod);
+      Lnk_PutParamLnkCod (&Lnk->LnkCod);
       HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
                       HTM_SUBMIT_ON_CHANGE,
 		      "class=\"INPUT_SHORT_NAME\" required=\"required\"");
@@ -452,7 +450,7 @@ static void Lnk_ListLinksForEdition (void)
       /* Link full name */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenLnkFul);
-      Lnk_PutParamLnkCod (Lnk->LnkCod);
+      Lnk_PutParamLnkCod (&Lnk->LnkCod);
       HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
                       HTM_SUBMIT_ON_CHANGE,
 		      "class=\"INPUT_FULL_NAME\" required=\"required\"");
@@ -462,7 +460,7 @@ static void Lnk_ListLinksForEdition (void)
       /* Link WWW */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgLnkWWW);
-      Lnk_PutParamLnkCod (Lnk->LnkCod);
+      Lnk_PutParamLnkCod (&Lnk->LnkCod);
       HTM_INPUT_URL ("WWW",Lnk->WWW,HTM_SUBMIT_ON_CHANGE,
 		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
       Frm_EndForm ();
@@ -479,9 +477,10 @@ static void Lnk_ListLinksForEdition (void)
 /******************** Write parameter with code of link **********************/
 /*****************************************************************************/
 
-static void Lnk_PutParamLnkCod (long LnkCod)
+static void Lnk_PutParamLnkCod (void *LnkCod)
   {
-   Par_PutHiddenParamLong (NULL,"LnkCod",LnkCod);
+   if (LnkCod)
+      Par_PutHiddenParamLong (NULL,"LnkCod",*((long *) LnkCod));
   }
 
 /*****************************************************************************/

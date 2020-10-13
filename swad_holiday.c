@@ -74,7 +74,7 @@ static Hld_HolidayType_t Hld_GetParamHldType (void);
 static Hld_HolidayType_t Hld_GetTypeOfHoliday (const char *UnsignedStr);
 static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 					const struct Plc_Places *Places);
-static void Hld_PutParamHldCod (long HldCod);
+static void Hld_PutParamHldCod (void *HldCod);
 static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate);
 static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places);
 static void Hld_PutHeadHolidays (void);
@@ -602,10 +602,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 
       /* Put icon to remove holiday */
       HTM_TD_Begin ("class=\"BM\"");
-      Frm_StartForm (ActRemHld);
-      Hld_PutParamHldCod (Hld->HldCod);
-      Ico_PutIconRemove ();
-      Frm_EndForm ();
+      Ico_PutContextualIconToRemove (ActRemHld,NULL,
+				     Hld_PutParamHldCod,&Hld->HldCod);
       HTM_TD_End ();
 
       /* Holiday code */
@@ -616,7 +614,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
       /* Holiday place */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgHldPlc);
-      Hld_PutParamHldCod (Hld->HldCod);
+      Hld_PutParamHldCod (&Hld->HldCod);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"PlcCod\" class=\"PLC_SEL\"");
       HTM_OPTION (HTM_Type_STRING,"-1",Hld->PlcCod <= 0,false,
@@ -634,7 +632,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
       /* Holiday type */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgHldTyp);
-      Hld_PutParamHldCod (Hld->HldCod);
+      Hld_PutParamHldCod (&Hld->HldCod);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"HldTyp\" style=\"width:62px;\"");
       for (HolidayType  = (Hld_HolidayType_t) 0;
@@ -653,7 +651,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
       /* Holiday date / Non school period start date */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgHldStrDat);
-      Hld_PutParamHldCod (Hld->HldCod);
+      Hld_PutParamHldCod (&Hld->HldCod);
       Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
 	                 Gbl.Now.Date.Year + 1,
 	                 "Start",
@@ -665,7 +663,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
       /* Non school period end date */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgHldEndDat);
-      Hld_PutParamHldCod (Hld->HldCod);
+      Hld_PutParamHldCod (&Hld->HldCod);
       Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
 	                 Gbl.Now.Date.Year + 1,
 	                 "End",
@@ -677,7 +675,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
       /* Holiday name */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenHld);
-      Hld_PutParamHldCod (Hld->HldCod);
+      Hld_PutParamHldCod (&Hld->HldCod);
       HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name,
                       HTM_SUBMIT_ON_CHANGE,
 		      "size=\"20\"");
@@ -694,9 +692,10 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 /******************** Write parameter with code of holiday *******************/
 /*****************************************************************************/
 
-static void Hld_PutParamHldCod (long HldCod)
+static void Hld_PutParamHldCod (void *HldCod)
   {
-   Par_PutHiddenParamLong (NULL,"HldCod",HldCod);
+   if (HldCod)
+      Par_PutHiddenParamLong (NULL,"HldCod",*((long *) HldCod));
   }
 
 /*****************************************************************************/

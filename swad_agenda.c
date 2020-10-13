@@ -907,7 +907,7 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
    Agenda->AgdCodToEdit = AgdEvent->AgdCod;	// Used as parameter in contextual links
 
    /***** Put form to remove event *****/
-   Ico_PutContextualIconToRemove (ActReqRemEvtMyAgd,
+   Ico_PutContextualIconToRemove (ActReqRemEvtMyAgd,NULL,
                                   Agd_PutCurrentParamsMyAgenda,Agenda);
 
    /***** Put form to hide/show event *****/

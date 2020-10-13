@@ -625,15 +625,18 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
   {
    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
-   /***** Put icon to remove the match *****/
    if (Mch_CheckIfICanEditThisMatch (Match))
      {
       Games->GamCod = Match->GamCod;
       Games->MchCod = Match->MchCod;
-      Frm_StartForm (ActReqRemMch);
-      Mch_PutParamsEdit (Games);
-      Ico_PutIconRemove ();
-      Frm_EndForm ();
+
+      /***** Put icon to remove the match *****/
+      Ico_PutContextualIconToRemove (ActReqRemMch,NULL,
+                                     Mch_PutParamsEdit,Games);
+
+      /***** Put icon to edit the match *****/
+      Ico_PutContextualIconToEdit (ActEdiMch,NULL,
+				   Mch_PutParamsEdit,Games);
      }
    else
       Ico_PutIconRemovalNotAllowed ();
@@ -1276,6 +1279,40 @@ static void Mch_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long CrsCod,co
 		   TableName,
 		   TableName,
 		   UsrCod);
+  }
+
+/*****************************************************************************/
+/************************ Edit a match (game instance) ***********************/
+/*****************************************************************************/
+
+void Mch_EditMatch (void)
+  {
+   struct Gam_Games Games;
+   struct Gam_Game Game;
+   struct Mch_Match Match;
+
+   /***** Reset games context *****/
+   Gam_ResetGames (&Games);
+
+   /***** Reset game and match *****/
+   Gam_ResetGame (&Game);
+   Mch_ResetMatch (&Match);
+
+   /***** Get and check parameters *****/
+   Mch_GetAndCheckParameters (&Games,&Game,&Match);
+
+   /***** Check if I can edit this match *****/
+   if (!Mch_CheckIfICanEditThisMatch (&Match))
+      Lay_NoPermissionExit ();
+
+   /***** Write message *****/
+   Ale_ShowAlert (Ale_SUCCESS,"Editando partida %s",
+		  Match.Title);
+
+   /***** Show current game *****/
+   Gam_ShowOnlyOneGame (&Games,&Game,
+                        false,	// Do not list game questions
+	                false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/

@@ -1253,7 +1253,7 @@ static void Tst_PutIconsEditBankQsts (void *Test)
       case ActReqRemOneTstQst:	// Request removal of a question
       case ActRemOneTstQst:	// Remove a question
       case ActChgShfTstQst:	// Change shuffle of a question
-	 Ico_PutContextualIconToRemove (ActReqRemSevTstQst,
+	 Ico_PutContextualIconToRemove (ActReqRemSevTstQst,NULL,
 					Tst_PutParamsRemoveSelectedQsts,Test);
 	 break;
       default:
@@ -4822,7 +4822,7 @@ void Tst_RemoveSelectedQsts (void)
 
 static void Tst_PutIconToRemoveOneQst (void *QstCod)
   {
-   Ico_PutContextualIconToRemove (ActReqRemOneTstQst,
+   Ico_PutContextualIconToRemove (ActReqRemOneTstQst,NULL,
                                   Tst_PutParamsRemoveOnlyThisQst,QstCod);
   }
 

@@ -228,12 +228,12 @@ void Ico_PutContextualIconToAdd (Act_Action_t NextAction,const char *Anchor,
 				  Txt);
   }
 
-void Ico_PutContextualIconToRemove (Act_Action_t NextAction,
+void Ico_PutContextualIconToRemove (Act_Action_t NextAction,const char *Anchor,
                                     void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_Remove;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
 				  "trash.svg",
 				  Txt_Remove);

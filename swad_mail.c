@@ -78,7 +78,7 @@ static void Mai_GetMailDomain (const char *Email,char MailDomain[Cns_MAX_BYTES_E
 static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 static void Mai_ListMailDomainsForEdition (void);
-static void Mai_PutParamMaiCod (long MaiCod);
+static void Mai_PutParamMaiCod (void *MaiCod);
 
 static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Mai_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,long MaiCod);
@@ -498,10 +498,8 @@ static void Mai_ListMailDomainsForEdition (void)
 
       /* Put icon to remove mail */
       HTM_TD_Begin ("class=\"BM\"");
-      Frm_StartForm (ActRemMai);
-      Mai_PutParamMaiCod (Mai->MaiCod);
-      Ico_PutIconRemove ();
-      Frm_EndForm ();
+      Ico_PutContextualIconToRemove (ActRemMai,NULL,
+				     Mai_PutParamMaiCod,&Mai->MaiCod);
       HTM_TD_End ();
 
       /* Mail code */
@@ -512,7 +510,7 @@ static void Mai_ListMailDomainsForEdition (void)
       /* Mail domain */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenMaiSho);
-      Mai_PutParamMaiCod (Mai->MaiCod);
+      Mai_PutParamMaiCod (&Mai->MaiCod);
       HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
                       HTM_SUBMIT_ON_CHANGE,
 		      "size=\"15\"");
@@ -522,7 +520,7 @@ static void Mai_ListMailDomainsForEdition (void)
       /* Mail domain info */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenMaiFul);
-      Mai_PutParamMaiCod (Mai->MaiCod);
+      Mai_PutParamMaiCod (&Mai->MaiCod);
       HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
                       HTM_SUBMIT_ON_CHANGE,
 		      "size=\"40\"");
@@ -545,9 +543,10 @@ static void Mai_ListMailDomainsForEdition (void)
 /******************** Write parameter with code of mail **********************/
 /*****************************************************************************/
 
-static void Mai_PutParamMaiCod (long MaiCod)
+static void Mai_PutParamMaiCod (void *MaiCod)
   {
-   Par_PutHiddenParamLong (NULL,"MaiCod",MaiCod);
+   if (MaiCod)
+      Par_PutHiddenParamLong (NULL,"MaiCod",*((long *) MaiCod));
   }
 
 /*****************************************************************************/

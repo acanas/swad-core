@@ -605,7 +605,7 @@ static void Att_PutFormsToRemEditOneAttEvent (struct Att_Events *Events,
    Events->AttCod = Event->AttCod;
 
    /***** Put form to remove attendance event *****/
-   Ico_PutContextualIconToRemove (ActReqRemAtt,
+   Ico_PutContextualIconToRemove (ActReqRemAtt,NULL,
                                   Att_PutParams,Events);
 
    /***** Put form to hide/show attendance event *****/

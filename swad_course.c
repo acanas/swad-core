@@ -115,7 +115,7 @@ static void Crs_PutButtonToRegisterInCrs (void);
 
 static void Crs_PutIconToSearchCourses (__attribute__((unused)) void *Args);
 
-static void Crs_PutParamOtherCrsCod (long CrsCod);
+static void Crs_PutParamOtherCrsCod (void *CrsCod);
 static long Crs_GetAndCheckParamOtherCrsCod (long MinCodAllowed);
 
 static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted);
@@ -1233,12 +1233,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	     !ICanEdit)
 	    Ico_PutIconRemovalNotAllowed ();
 	 else	// Crs->NumUsrs == 0 && ICanEdit
-	   {
-	    Frm_StartForm (ActRemCrs);
-	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
-	    Ico_PutIconRemove ();
-	    Frm_EndForm ();
-	   }
+	    Ico_PutContextualIconToRemove (ActRemCrs,NULL,
+					   Crs_PutParamOtherCrsCod,&Crs->CrsCod);
 	 HTM_TD_End ();
 
 	 /* Course code */
@@ -1251,7 +1247,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 if (ICanEdit)
 	   {
 	    Frm_StartForm (ActChgInsCrsCod);
-	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
+	    Crs_PutParamOtherCrsCod (&Crs->CrsCod);
 	    HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
 			    Crs->InstitutionalCrsCod,HTM_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_INS_CODE\"");
@@ -1266,7 +1262,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 if (ICanEdit)
 	   {
 	    Frm_StartForm (ActChgCrsYea);
-	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
+	    Crs_PutParamOtherCrsCod (&Crs->CrsCod);
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "name=\"OthCrsYear\" class=\"HIE_SEL_NARROW\"");
 	    for (YearAux = 0;
@@ -1287,7 +1283,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 if (ICanEdit)
 	   {
 	    Frm_StartForm (ActRenCrsSho);
-	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
+	    Crs_PutParamOtherCrsCod (&Crs->CrsCod);
 	    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Crs->ShrtName,
 	                    HTM_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_SHORT_NAME\"");
@@ -1302,7 +1298,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 if (ICanEdit)
 	   {
 	    Frm_StartForm (ActRenCrsFul);
-	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
+	    Crs_PutParamOtherCrsCod (&Crs->CrsCod);
 	    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Crs->FullName,
 	                    HTM_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME\"");
@@ -1337,7 +1333,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	     StatusTxt == Crs_STATUS_PENDING)
 	   {
 	    Frm_StartForm (ActChgCrsSta);
-	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
+	    Crs_PutParamOtherCrsCod (&Crs->CrsCod);
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "name=\"Status\" class=\"INPUT_STATUS\"");
 
@@ -2539,9 +2535,10 @@ void Crs_PutParamCrsCod (long CrsCod)
 /******************** Write parameter with code of course ********************/
 /*****************************************************************************/
 
-static void Crs_PutParamOtherCrsCod (long CrsCod)
+static void Crs_PutParamOtherCrsCod (void *CrsCod)
   {
-   Par_PutHiddenParamLong (NULL,"OthCrsCod",CrsCod);
+   if (CrsCod)
+      Par_PutHiddenParamLong (NULL,"OthCrsCod",*((long *) CrsCod));
   }
 
 /*****************************************************************************/

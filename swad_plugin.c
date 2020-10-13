@@ -74,7 +74,7 @@ static struct Plugin *Plg_EditingPlg = NULL;	// Static variable to keep the plug
 static void Plg_PutIconToEditPlugins (__attribute__((unused)) void *Args);
 static void Plg_EditPluginsInternal (void);
 static void Plg_ListPluginsForEdition (void);
-static void Plg_PutParamPlgCod (long PlgCod);
+static void Plg_PutParamPlgCod (void *PlgCod);
 static void Plg_GetListPlugins (void);
 static void Plg_PutFormToCreatePlugin (void);
 static void Plg_PutHeadPlugins (void);
@@ -402,10 +402,8 @@ static void Plg_ListPluginsForEdition (void)
 
       /* Put icon to remove plugin */
       HTM_TD_Begin ("class=\"BM\"");
-      Frm_StartForm (ActRemPlg);
-      Plg_PutParamPlgCod (Plg->PlgCod);
-      Ico_PutIconRemove ();
-      Frm_EndForm ();
+      Ico_PutContextualIconToRemove (ActRemPlg,NULL,
+				     Plg_PutParamPlgCod,&Plg->PlgCod);
       HTM_TD_End ();
 
       /* Plugin code */
@@ -426,7 +424,7 @@ static void Plg_ListPluginsForEdition (void)
       /* Plugin name */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenPlg);
-      Plg_PutParamPlgCod (Plg->PlgCod);
+      Plg_PutParamPlgCod (&Plg->PlgCod);
       HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,
                       HTM_SUBMIT_ON_CHANGE,
 		      "size=\"10\"");
@@ -436,7 +434,7 @@ static void Plg_ListPluginsForEdition (void)
       /* Plugin description */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgDes);
-      Plg_PutParamPlgCod (Plg->PlgCod);
+      Plg_PutParamPlgCod (&Plg->PlgCod);
       HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,
                       HTM_SUBMIT_ON_CHANGE,
 		      "size=\"30\"");
@@ -446,7 +444,7 @@ static void Plg_ListPluginsForEdition (void)
       /* Plugin logo */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgLog);
-      Plg_PutParamPlgCod (Plg->PlgCod);
+      Plg_PutParamPlgCod (&Plg->PlgCod);
       HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,
                       HTM_SUBMIT_ON_CHANGE,
 		      "size=\"4\"");
@@ -456,7 +454,7 @@ static void Plg_ListPluginsForEdition (void)
       /* Plugin application key */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgAppKey);
-      Plg_PutParamPlgCod (Plg->PlgCod);
+      Plg_PutParamPlgCod (&Plg->PlgCod);
       HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,
                       HTM_SUBMIT_ON_CHANGE,
 		      "size=\"16\"");
@@ -466,7 +464,7 @@ static void Plg_ListPluginsForEdition (void)
       /* Plugin URL */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgURL);
-      Plg_PutParamPlgCod (Plg->PlgCod);
+      Plg_PutParamPlgCod (&Plg->PlgCod);
       HTM_INPUT_URL ("URL",Plg->URL,HTM_SUBMIT_ON_CHANGE,
 		     "size=\"15\"");
       Frm_EndForm ();
@@ -475,7 +473,7 @@ static void Plg_ListPluginsForEdition (void)
       /* Plugin IP */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgIP);
-      Plg_PutParamPlgCod (Plg->PlgCod);
+      Plg_PutParamPlgCod (&Plg->PlgCod);
       HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,HTM_SUBMIT_ON_CHANGE,
 		      "size=\"10\"");
       Frm_EndForm ();
@@ -493,9 +491,10 @@ static void Plg_ListPluginsForEdition (void)
 /******************* Write parameter with code of plugin *********************/
 /*****************************************************************************/
 
-static void Plg_PutParamPlgCod (long PlgCod)
+static void Plg_PutParamPlgCod (void *PlgCod)
   {
-   Par_PutHiddenParamLong (NULL,"PlgCod",PlgCod);
+   if (PlgCod)
+      Par_PutHiddenParamLong (NULL,"PlgCod",*((long *) PlgCod));
   }
 
 /*****************************************************************************/

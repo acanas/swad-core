@@ -229,7 +229,7 @@ void Grp_ChangeMaxStdsGrp (void);
 unsigned Grp_ConvertToNumMaxStdsGrp (const char *StrMaxStudents);
 void Grp_RenameGroupType (void);
 void Grp_RenameGroup (void);
-void Grp_PutParamGrpCod (long GrpCod);
+void Grp_PutParamGrpCod (void *GrpCod);
 void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted);
 void Grp_FreeListCodGrp (struct ListCodGrps *LstGrps);
 void Grp_PutParamAllGroups (void);

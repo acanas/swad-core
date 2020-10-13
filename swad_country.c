@@ -79,7 +79,7 @@ static void Cty_PutIconsEditingCountries (__attribute__((unused)) void *Args);
 static void Cty_PutIconToViewCountries (void);
 
 static void Cty_ListCountriesForEdition (void);
-static void Cty_PutParamOtherCtyCod (long CtyCod);
+static void Cty_PutParamOtherCtyCod (void *CtyCod);
 static long Cty_GetParamOtherCtyCod (void);
 
 static bool Cty_CheckIfNumericCountryCodeExists (long CtyCod);
@@ -1227,12 +1227,8 @@ static void Cty_ListCountriesForEdition (void)
 	 // Deletion forbidden
 	 Ico_PutIconRemovalNotAllowed ();
       else
-        {
-         Frm_StartForm (ActRemCty);
-         Cty_PutParamOtherCtyCod (Cty->CtyCod);
-         Ico_PutIconRemove ();
-         Frm_EndForm ();
-        }
+	 Ico_PutContextualIconToRemove (ActRemCty,NULL,
+					Cty_PutParamOtherCtyCod,&Cty->CtyCod);
       HTM_TD_End ();
 
       /* Numerical country code (ISO 3166-1) */
@@ -1274,7 +1270,7 @@ static void Cty_ListCountriesForEdition (void)
          /* Name */
          HTM_TD_Begin ("class=\"LT\"");
          Frm_StartForm (ActRenCty);
-         Cty_PutParamOtherCtyCod (Cty->CtyCod);
+         Cty_PutParamOtherCtyCod (&Cty->CtyCod);
          Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
 	 HTM_INPUT_TEXT ("Name",Cty_MAX_CHARS_NAME,Cty->Name[Lan],
 	                 HTM_SUBMIT_ON_CHANGE,
@@ -1285,7 +1281,7 @@ static void Cty_ListCountriesForEdition (void)
          /* WWW */
          HTM_TD_Begin ("class=\"LT\"");
          Frm_StartForm (ActChgCtyWWW);
-         Cty_PutParamOtherCtyCod (Cty->CtyCod);
+         Cty_PutParamOtherCtyCod (&Cty->CtyCod);
          Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
 	 HTM_INPUT_URL ("WWW",Cty->WWW[Lan],HTM_SUBMIT_ON_CHANGE,
 			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
@@ -1313,9 +1309,10 @@ void Cty_PutParamCtyCod (long CtyCod)
 /******************** Write parameter with code of country *******************/
 /*****************************************************************************/
 
-static void Cty_PutParamOtherCtyCod (long CtyCod)
+static void Cty_PutParamOtherCtyCod (void *CtyCod)
   {
-   Par_PutHiddenParamLong (NULL,"OthCtyCod",CtyCod);
+   if (CtyCod)
+      Par_PutHiddenParamLong (NULL,"OthCtyCod",*((long *) CtyCod));
   }
 
 /*****************************************************************************/

@@ -715,7 +715,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	      }
 	    Frm_StartForm (Action);
 	    if (GrpCod > 0)
-	       Grp_PutParamGrpCod (GrpCod);
+	       Grp_PutParamGrpCod (&GrpCod);
             Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
 	   }
 	 break;

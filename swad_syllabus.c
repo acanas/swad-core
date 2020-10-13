@@ -638,13 +638,9 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	 if (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren)
             Ico_PutIconRemovalNotAllowed ();
 	 else
-	   {
-	    Frm_StartForm (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
-		                                               ActDelItmSylPra);
-	    Syl_PutParamNumItem (&Syllabus->ParamNumItem);
-            Ico_PutIconRemove ();
-            Frm_EndForm ();
-	   }
+	    Ico_PutContextualIconToRemove (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
+		                                                               ActDelItmSylPra,NULL,
+					   Syl_PutParamNumItem,&Syllabus->ParamNumItem);
          HTM_TD_End ();
 
 	 /***** Icon to get up an item *****/

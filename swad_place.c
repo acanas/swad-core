@@ -71,7 +71,7 @@ static void Plc_EditPlacesInternal (void);
 static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args);
 
 static void Plc_ListPlacesForEdition (const struct Plc_Places *Places);
-static void Plc_PutParamPlcCod (long PlcCod);
+static void Plc_PutParamPlcCod (void *PlcCod);
 
 static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,long PlcCod);
@@ -556,12 +556,8 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
       if (Plc->NumCtrs)	// Place has centres ==> deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
-        {
-         Frm_StartForm (ActRemPlc);
-         Plc_PutParamPlcCod (Plc->PlcCod);
-         Ico_PutIconRemove ();
-         Frm_EndForm ();
-        }
+	 Ico_PutContextualIconToRemove (ActRemPlc,NULL,
+					Plc_PutParamPlcCod,&Plc->PlcCod);
       HTM_TD_End ();
 
       /* Place code */
@@ -572,7 +568,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
       /* Place short name */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenPlcSho);
-      Plc_PutParamPlcCod (Plc->PlcCod);
+      Plc_PutParamPlcCod (&Plc->PlcCod);
       HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,
                       HTM_SUBMIT_ON_CHANGE,
 		      "class=\"INPUT_SHORT_NAME\"");
@@ -582,7 +578,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
       /* Place full name */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenPlcFul);
-      Plc_PutParamPlcCod (Plc->PlcCod);
+      Plc_PutParamPlcCod (&Plc->PlcCod);
       HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,
                       HTM_SUBMIT_ON_CHANGE,
 		      "class=\"INPUT_FULL_NAME\"");
@@ -605,9 +601,10 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 /******************** Write parameter with code of place *********************/
 /*****************************************************************************/
 
-static void Plc_PutParamPlcCod (long PlcCod)
+static void Plc_PutParamPlcCod (void *PlcCod)
   {
-   Par_PutHiddenParamLong (NULL,"PlcCod",PlcCod);
+   if (PlcCod)
+      Par_PutHiddenParamLong (NULL,"PlcCod",*((long *) PlcCod));
   }
 
 /*****************************************************************************/

@@ -85,7 +85,7 @@ static bool Ctr_CheckIfICanEditACentre (struct Centre *Ctr);
 static Ctr_StatusTxt_t Ctr_GetStatusTxtFromStatusBits (Ctr_Status_t Status);
 static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
 
-static void Ctr_PutParamOtherCtrCod (long CtrCod);
+static void Ctr_PutParamOtherCtrCod (void *CtrCod);
 
 static void Ctr_UpdateInsNameDB (long CtrCod,const char *FieldName,const char *NewCtrName);
 
@@ -979,12 +979,8 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
 	  NumUsrsInCrssOfCtr)			// Centre has users
 	 Ico_PutIconRemovalNotAllowed ();
       else	// I can remove centre
-        {
-         Frm_StartForm (ActRemCtr);
-         Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-         Ico_PutIconRemove ();
-         Frm_EndForm ();
-        }
+	 Ico_PutContextualIconToRemove (ActRemCtr,NULL,
+					Ctr_PutParamOtherCtrCod,&Ctr->CtrCod);
       HTM_TD_End ();
 
       /* Centre code */
@@ -1002,7 +998,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActChgCtrPlc);
-	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
+	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"PlcCod\" class=\"PLC_SEL\"");
 	 HTM_OPTION (HTM_Type_STRING,"0",
@@ -1030,7 +1026,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActRenCtrSho);
-	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
+	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
 	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
 	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_SHORT_NAME\"");
@@ -1045,7 +1041,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActRenCtrFul);
-	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
+	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
 	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ctr->FullName,
 	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_FULL_NAME\"");
@@ -1060,7 +1056,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActChgCtrWWW);
-	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
+	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
 	 HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
 			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
 	 Frm_EndForm ();
@@ -1107,7 +1103,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
 	  StatusTxt == Ctr_STATUS_PENDING)
 	{
 	 Frm_StartForm (ActChgCtrSta);
-	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
+	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"Status\" class=\"INPUT_STATUS\"");
 
@@ -1201,9 +1197,10 @@ void Ctr_PutParamCtrCod (long CtrCod)
 /***************** Write parameter with code of other centre *****************/
 /*****************************************************************************/
 
-static void Ctr_PutParamOtherCtrCod (long CtrCod)
+static void Ctr_PutParamOtherCtrCod (void *CtrCod)
   {
-   Par_PutHiddenParamLong (NULL,"OthCtrCod",CtrCod);
+   if (CtrCod)
+      Par_PutHiddenParamLong (NULL,"OthCtrCod",*((long *) CtrCod));
   }
 
 /*****************************************************************************/

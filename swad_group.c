@@ -151,16 +151,14 @@ static void Grp_CreateGroupType (void);
 static void Grp_CreateGroup (void);
 
 static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps);
-static void Grp_PutParamRemGrpTyp (void *GrpTypCod);
 static void Grp_AskConfirmRemGrp (void);
-static void Grp_PutParamRemGrp (void *GrpCod);
 static void Grp_RemoveGroupTypeCompletely (void);
 static void Grp_RemoveGroupCompletely (void);
 
 static void Grp_WriteMaxStds (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned MaxStudents);
 static long Grp_GetParamGrpTypCod (void);
 static long Grp_GetParamGrpCod (void);
-static void Grp_PutParamGrpTypCod (long GrpTypCod);
+static void Grp_PutParamGrpTypCod (void *GrpTypCod);
 
 /*****************************************************************************/
 /******************* Write the names of the selected groups ******************/
@@ -1321,16 +1319,14 @@ static void Grp_ListGroupTypesForEdition (void)
 
       /* Put icon to remove group type */
       HTM_TD_Begin ("class=\"BM\"");
-      Frm_StartFormAnchor (ActReqRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-      Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      Ico_PutIconRemove ();
-      Frm_EndForm ();
+      Ico_PutContextualIconToRemove (ActReqRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,
+				     Grp_PutParamGrpTypCod,&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       HTM_TD_End ();
 
       /* Name of group type */
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartFormAnchor (ActRenGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-      Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+      Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
 		      Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
 		      HTM_SUBMIT_ON_CHANGE,
@@ -1341,7 +1337,7 @@ static void Grp_ListGroupTypesForEdition (void)
       /* Is it mandatory to register in any group? */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartFormAnchor (ActChgMdtGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-      Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+      Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"MandatoryEnrolment\""
 	                " style=\"width:150px;\"");
@@ -1358,7 +1354,7 @@ static void Grp_ListGroupTypesForEdition (void)
       /* Is it possible to register in multiple groups? */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartFormAnchor (ActChgMulGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-      Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+      Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"MultipleEnrolment\""
 	                " style=\"width:150px;\"");
@@ -1375,7 +1371,7 @@ static void Grp_ListGroupTypesForEdition (void)
       /* Open time */
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartFormAnchor (ActChgTimGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-      Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+      Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       HTM_TABLE_BeginCenterPadding (2);
       HTM_TR_Begin (NULL);
 
@@ -1518,10 +1514,8 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 
          /***** Icon to remove group *****/
          HTM_TD_Begin ("class=\"BM\"");
-         Frm_StartFormAnchor (ActReqRemGrp,Grp_GROUPS_SECTION_ID);
-         Grp_PutParamGrpCod (Grp->GrpCod);
-         Ico_PutIconRemove ();
-         Frm_EndForm ();
+	 Ico_PutContextualIconToRemove (ActReqRemGrp,Grp_GROUPS_SECTION_ID,
+					Grp_PutParamGrpCod,&Grp->GrpCod);
          HTM_TD_End ();
 
          /***** Icon to open/close group *****/
@@ -1529,7 +1523,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
          Frm_StartFormAnchor (Grp->Open ? ActCloGrp :
                                           ActOpeGrp,
                               Grp_GROUPS_SECTION_ID);
-         Grp_PutParamGrpCod (Grp->GrpCod);
+         Grp_PutParamGrpCod (&Grp->GrpCod);
 	 Ico_PutIconLink (Grp->Open ? "unlock.svg" :
                 	              "lock.svg",
                           Str_BuildStringStr (Grp->Open ? Txt_Group_X_open_click_to_close_it :
@@ -1544,7 +1538,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
          Frm_StartFormAnchor (Grp->FileZones ? ActDisFilZonGrp :
                                                ActEnaFilZonGrp,
                               Grp_GROUPS_SECTION_ID);
-         Grp_PutParamGrpCod (Grp->GrpCod);
+         Grp_PutParamGrpCod (&Grp->GrpCod);
 	 Ico_PutIconLink (Grp->FileZones ? "folder-open-green.svg" :
                 	                   "folder-red.svg",
                           Str_BuildStringStr (Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
@@ -1558,7 +1552,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
          /* Start selector */
          HTM_TD_Begin ("class=\"CM\"");
          Frm_StartFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
-         Grp_PutParamGrpCod (Grp->GrpCod);
+         Grp_PutParamGrpCod (&Grp->GrpCod);
          HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"GrpTypCod\" style=\"width:100px;\"");
 
@@ -1581,7 +1575,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
          /***** Group name *****/
          HTM_TD_Begin ("class=\"CM\"");
          Frm_StartFormAnchor (ActRenGrp,Grp_GROUPS_SECTION_ID);
-         Grp_PutParamGrpCod (Grp->GrpCod);
+         Grp_PutParamGrpCod (&Grp->GrpCod);
 	 HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,
 	                 HTM_SUBMIT_ON_CHANGE,
 			 "size=\"20\"");
@@ -1592,7 +1586,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	 /* Start selector */
 	 HTM_TD_Begin ("class=\"CM\"");
          Frm_StartFormAnchor (ActChgGrpRoo,Grp_GROUPS_SECTION_ID);
-         Grp_PutParamGrpCod (Grp->GrpCod);
+         Grp_PutParamGrpCod (&Grp->GrpCod);
          HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"RooCod\" style=\"width:100px;\"");
 
@@ -1632,7 +1626,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
          /***** Maximum number of students of the group (row[3]) *****/
          HTM_TD_Begin ("class=\"CM\"");
          Frm_StartFormAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
-         Grp_PutParamGrpCod (Grp->GrpCod);
+         Grp_PutParamGrpCod (&Grp->GrpCod);
          Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
 	 HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
 	                 HTM_SUBMIT_ON_CHANGE,
@@ -3999,13 +3993,13 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    /***** Show question and button to remove type of group *****/
    if (NumGrps == 1)
       Ale_ShowAlertAndButton (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
-			      Grp_PutParamRemGrpTyp,&Gbl.Crs.Grps.GrpTyp.GrpTypCod,
+			      Grp_PutParamGrpTypCod,&Gbl.Crs.Grps.GrpTyp.GrpTypCod,
 			      Btn_REMOVE_BUTTON,Txt_Remove_type_of_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_,
                               Gbl.Crs.Grps.GrpTyp.GrpTypName);
    else
       Ale_ShowAlertAndButton (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
-			      Grp_PutParamRemGrpTyp,&Gbl.Crs.Grps.GrpTyp.GrpTypCod,
+			      Grp_PutParamGrpTypCod,&Gbl.Crs.Grps.GrpTyp.GrpTypCod,
 			      Btn_REMOVE_BUTTON,Txt_Remove_type_of_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_,
                               Gbl.Crs.Grps.GrpTyp.GrpTypName,NumGrps);
@@ -4013,16 +4007,6 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    /***** Show the form to edit group types and groups again *****/
    Grp_ReqEditGroupsInternal1 (Ale_INFO,NULL);
    Grp_ReqEditGroupsInternal2 (Ale_INFO,NULL);
-  }
-
-/*****************************************************************************/
-/**************** Put parameter to remove a type of group ********************/
-/*****************************************************************************/
-
-static void Grp_PutParamRemGrpTyp (void *GrpTypCod)
-  {
-   if (GrpTypCod)
-      Grp_PutParamGrpTypCod (*((long *) GrpTypCod));
   }
 
 /*****************************************************************************/
@@ -4052,35 +4036,25 @@ static void Grp_AskConfirmRemGrp (void)
    /***** Show question and button to remove group *****/
    if (NumStds == 0)
       Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
-			      Grp_PutParamRemGrp,&Gbl.Crs.Grps.GrpCod,
+			      Grp_PutParamGrpCod,&Gbl.Crs.Grps.GrpCod,
 			      Btn_REMOVE_BUTTON,Txt_Remove_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X,
                               GrpDat.GrpName);
    else if (NumStds == 1)
       Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
-			      Grp_PutParamRemGrp,&Gbl.Crs.Grps.GrpCod,
+			      Grp_PutParamGrpCod,&Gbl.Crs.Grps.GrpCod,
 			      Btn_REMOVE_BUTTON,Txt_Remove_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X_1_student_,
                               GrpDat.GrpName);
    else
       Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
-			      Grp_PutParamRemGrp,&Gbl.Crs.Grps.GrpCod,
+			      Grp_PutParamGrpCod,&Gbl.Crs.Grps.GrpCod,
 			      Btn_REMOVE_BUTTON,Txt_Remove_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X_Y_students_,
                               GrpDat.GrpName,NumStds);
 
    /***** Show the form to edit groups again *****/
    Grp_ReqEditGroupsInternal2 (Ale_INFO,NULL);
-  }
-
-/*****************************************************************************/
-/*********************** Put parameter to remove a group *********************/
-/*****************************************************************************/
-
-static void Grp_PutParamRemGrp (void *GrpCod)
-  {
-   if (GrpCod)
-      Grp_PutParamGrpCod (*((long *) GrpCod));
   }
 
 /*****************************************************************************/
@@ -4882,18 +4856,20 @@ static long Grp_GetParamGrpCod (void)
 /****************** Write parameter with code of group type ******************/
 /*****************************************************************************/
 
-static void Grp_PutParamGrpTypCod (long GrpTypCod)
+static void Grp_PutParamGrpTypCod (void *GrpTypCod)
   {
-   Par_PutHiddenParamLong (NULL,"GrpTypCod",GrpTypCod);
+   if (GrpTypCod)
+      Par_PutHiddenParamLong (NULL,"GrpTypCod",*((long *) GrpTypCod));
   }
 
 /*****************************************************************************/
 /********************* Write parameter with code of group ********************/
 /*****************************************************************************/
 
-void Grp_PutParamGrpCod (long GrpCod)
+void Grp_PutParamGrpCod (void *GrpCod)
   {
-   Par_PutHiddenParamLong (NULL,"GrpCod",GrpCod);
+   if (GrpCod)
+      Par_PutHiddenParamLong (NULL,"GrpCod",*((long *) GrpCod));
   }
 
 /*****************************************************************************/

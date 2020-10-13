@@ -103,6 +103,8 @@ void Mch_RemoveMatchesInCourseFromAllTables (long CrsCod);
 void Mch_RemoveMatchesMadeByUsrInAllCrss (long UsrCod);
 void Mch_RemoveMatchesMadeByUsrInCrs (long UsrCod,long CrsCod);
 
+void Mch_EditMatch (void);
+
 void Mch_PutParamsEdit (void *Games);
 void Mch_GetAndCheckParameters (struct Gam_Games *Games,
                                 struct Gam_Game *Game,

@@ -1639,7 +1639,7 @@ static void ExaAnn_PutIconsExamAnn (void *ExamAnns)
 	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	{
 	 /***** Link to remove this exam announcement *****/
-	 Ico_PutContextualIconToRemove (ActReqRemExaAnn,
+	 Ico_PutContextualIconToRemove (ActReqRemExaAnn,NULL,
 					ExaAnn_PutParamExaCodToEdit,&((struct ExaAnn_ExamAnnouncements *) ExamAnns)->ExaCod);
 
 	 /***** Put form to hide/show exam announement *****/

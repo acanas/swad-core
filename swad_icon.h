@@ -58,7 +58,7 @@ Ico_IconSet_t Ico_GetIconSetFromStr (const char *Str);
 void Ico_PutContextualIconToAdd (Act_Action_t NextAction,const char *Anchor,
 				 void (*FuncParams) (void *Args),void *Args,
 				 const char *Txt);
-void Ico_PutContextualIconToRemove (Act_Action_t NextAction,
+void Ico_PutContextualIconToRemove (Act_Action_t NextAction,const char *Anchor,
                                     void (*FuncParams) (void *Args),void *Args);
 void Ico_PutContextualIconToEdit (Act_Action_t NextAction,const char *Anchor,
 				  void (*FuncParams) (void *Args),void *Args);

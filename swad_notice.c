@@ -671,7 +671,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       if (Not_CheckIfICanEditNotices ())
 	{
 	 /***** Put form to remove announcement *****/
-         Ico_PutContextualIconToRemove (ActReqRemNot,
+         Ico_PutContextualIconToRemove (ActReqRemNot,NULL,
                                         Not_PutParams,&NotCod);
 
 	 /***** Put form to change the status of the notice *****/

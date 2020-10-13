@@ -610,7 +610,7 @@ static void Asg_PutFormsToRemEditOneAsg (const struct Asg_Assignment *Asg,
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Put form to remove assignment *****/
-	 Ico_PutContextualIconToRemove (ActReqRemAsg,
+	 Ico_PutContextualIconToRemove (ActReqRemAsg,NULL,
 	                                Asg_PutParams,&Assignments);
 
 	 /***** Put form to hide/show assignment *****/

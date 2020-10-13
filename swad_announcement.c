@@ -307,7 +307,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    if (ICanEdit)
      {
       /***** Put form to remove announcement *****/
-      Ico_PutContextualIconToRemove (ActRemAnn,
+      Ico_PutContextualIconToRemove (ActRemAnn,NULL,
                                      Ann_PutParams,&AnnCod);
 
       /***** Put form to change the status of the announcement *****/

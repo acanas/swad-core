@@ -1111,12 +1111,8 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 
       /* Put icon to remove the set */
       if (ICanEditSets)
-	{
-	 Frm_StartForm (ActReqRemExaSet);
-	 ExaSet_PutParamsOneSet (Exams);
-	 Ico_PutIconRemove ();
-	 Frm_EndForm ();
-	}
+	 Ico_PutContextualIconToRemove (ActReqRemExaSet,NULL,
+					ExaSet_PutParamsOneSet,Exams);
       else
          Ico_PutIconRemovalNotAllowed ();
 
@@ -1339,12 +1335,8 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 
       /* Put icon to remove the question */
       if (ICanEditQuestions)
-	{
-	 Frm_StartForm (ActReqRemSetQst);
-         ExaSet_PutParamsOneQst (Exams);
-	 Ico_PutIconRemove ();
-	 Frm_EndForm ();
-	}
+	 Ico_PutContextualIconToRemove (ActReqRemSetQst,NULL,
+					ExaSet_PutParamsOneQst,Exams);
       else
          Ico_PutIconRemovalNotAllowed ();
 

@@ -555,7 +555,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.3.1 (2020-10-13)"
+#define Log_PLATFORM_VERSION	"SWAD 20.4 (2020-10-13)"
 #define CSS_FILE		"swad20.1.1.css"
 #define JS_FILE			"swad19.254.js"
 /*
@@ -581,6 +581,8 @@ TODO: En los resultados de una partida, cuando la pregunta ha sido modificada, n
 
 TODO: Poder editar las partidas, al menos el título, y si es posible, también los grupos.
 
+	Version 20.4:	  Oct 13, 2020  Code refactoring in remove icon.
+					New action to edit a match. Not finished. (304517 lines)
 	Version 20.3.1:	  Oct 13, 2020  Code refactoring in file browser. (? lines)
 	Version 20.3:	  Sep 30, 2020  Non-editing teachers can list questions in a game. (304528 lines)
 	Version 20.2.2:	  Sep 27, 2020  Fixed bug in exam. (304448 lines)
