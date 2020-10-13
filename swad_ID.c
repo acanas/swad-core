@@ -72,8 +72,10 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
 static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
                                    const char *Anchor);
 
-static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
-			            bool ItsMe,bool IShouldFillInID);
+static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID);
+
+static void ID_PutParamsRemoveMyID (void *ID);
+static void ID_PutParamsRemoveOtherID (void *ID);
 
 static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe);
 static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID);
@@ -523,8 +525,7 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show form to change ID *****/
-   ID_ShowFormChangeUsrID (&Gbl.Usrs.Me.UsrDat,
-			   true,	// ItsMe
+   ID_ShowFormChangeUsrID (true,	// ItsMe
 			   IShouldFillInID);
 
    /***** End box *****/
@@ -556,8 +557,7 @@ void ID_ShowFormChangeOtherUsrID (void)
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show form to change ID *****/
-   ID_ShowFormChangeUsrID (&Gbl.Usrs.Other.UsrDat,
-			   false,	// ItsMe
+   ID_ShowFormChangeUsrID (false,	// ItsMe
 			   false);	// IShouldFillInID
 
    /***** End box *****/
@@ -571,8 +571,7 @@ void ID_ShowFormChangeOtherUsrID (void)
 /*********************** Show form to change my user's ID ********************/
 /*****************************************************************************/
 
-static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
-			            bool ItsMe,bool IShouldFillInID)
+static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_Please_fill_in_your_ID;
@@ -584,6 +583,8 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
    extern const char *Txt_The_ID_is_used_in_order_to_facilitate_;
    unsigned NumID;
    Act_Action_t NextAction;
+   const struct UsrData *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
+	                                   &Gbl.Usrs.Other.UsrDat);
 
    /***** Show possible alerts *****/
    Ale_ShowAlerts (ID_ID_SECTION_ID);
@@ -622,7 +623,8 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	   {
 	    /* Form to remove user's ID */
 	    if (ItsMe)
-	       Frm_StartFormAnchor (ActRemMyID,ID_ID_SECTION_ID);
+	       Ico_PutContextualIconToRemove (ActRemMyID,ID_ID_SECTION_ID,
+				              ID_PutParamsRemoveMyID,UsrDat->IDs.List[NumID].ID);
 	    else
 	      {
 	       switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -638,12 +640,9 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 		     NextAction = ActRemID_Oth;
 		     break;
 		 }
-	       Frm_StartFormAnchor (NextAction,ID_ID_SECTION_ID);
-	       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	       Ico_PutContextualIconToRemove (NextAction,ID_ID_SECTION_ID,
+				              ID_PutParamsRemoveOtherID,UsrDat->IDs.List[NumID].ID);
 	      }
-            Par_PutHiddenParamString (NULL,"UsrID",UsrDat->IDs.List[NumID].ID);
-	    Ico_PutIconRemove ();
-	    Frm_EndForm ();
 	   }
 	}
 
@@ -722,6 +721,21 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 
    /***** End table *****/
    HTM_TABLE_End ();
+  }
+
+static void ID_PutParamsRemoveMyID (void *ID)
+  {
+   if (ID)
+      Par_PutHiddenParamString (NULL,"UsrID",(char *) ID);
+  }
+
+static void ID_PutParamsRemoveOtherID (void *ID)
+  {
+   if (ID)
+     {
+      Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Par_PutHiddenParamString (NULL,"UsrID",(char *) ID);
+     }
   }
 
 /*****************************************************************************/

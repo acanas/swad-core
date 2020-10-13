@@ -125,7 +125,7 @@ void Tst_ListQuestionsToSelectForGame (struct Gam_Games *Games);
 void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				bool Shuffle);
 
-void Tst_WriteParamEditQst (const struct Tst_Test *Test);
+void Tst_PutParamsEditQst (void *Test);
 
 unsigned Tst_GetNumAnswersQst (long QstCod);
 void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,

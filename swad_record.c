@@ -272,16 +272,14 @@ void Rec_ListFieldsRecordsForEdition (void)
 
       /* Write icon to remove the field */
       HTM_TD_Begin ("class=\"BM\"");
-      Frm_StartForm (ActReqRemFie);
-      Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
-      Ico_PutIconRemove ();
-      Frm_EndForm ();
+      Ico_PutContextualIconToRemove (ActReqRemFie,NULL,
+				     Rec_PutParamFieldCod,&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       HTM_TD_End ();
 
       /* Name of the field */
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActRenFie);
-      Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+      Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,
 		      Gbl.Crs.Records.LstFields.Lst[NumField].Name,
 		      HTM_SUBMIT_ON_CHANGE,
@@ -292,7 +290,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       /* Number of lines in the form */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgRowFie);
-      Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+      Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       snprintf (StrNumLines,sizeof (StrNumLines),
 		"%u",
 		Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
@@ -305,7 +303,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       /* Visibility of a field */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgVisFie);
-      Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+      Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"Visibility\"");
       for (Vis  = (Rec_VisibilityRecordFields_t) 0;

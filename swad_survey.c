@@ -3322,16 +3322,15 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
            {
 	    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
-            /* Write icon to remove the question */
-            Frm_StartForm (ActReqRemSvyQst);
-            Svy_PutParamSvyCod (Svy->SvyCod);
-            Svy_PutParamQstCod (SvyQst.QstCod);
-            Ico_PutIconRemove ();
-            Frm_EndForm ();
-
-            /* Write icon to edit the question */
+	    /* Initialize context */
             Surveys->SvyCod = Svy->SvyCod;
             Surveys->QstCod = SvyQst.QstCod;
+
+            /* Write icon to remove the question */
+	    Ico_PutContextualIconToRemove (ActReqRemSvyQst,NULL,
+					   Svy_PutParamsToEditQuestion,Surveys);
+
+            /* Write icon to edit the question */
             Ico_PutContextualIconToEdit (ActEdiOneSvyQst,NULL,
                                          Svy_PutParamsToEditQuestion,Surveys);
 

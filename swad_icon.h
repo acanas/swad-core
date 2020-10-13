@@ -101,7 +101,6 @@ void Ico_PutCalculateIcon (const char *Title);
 void Ico_PutCalculateIconWithText (const char *Text);
 
 void Ico_PutIconRemovalNotAllowed (void);
-void Ico_PutIconRemove (void);
 
 void Ico_PutIconCut (void);
 void Ico_PutIconPaste (void);

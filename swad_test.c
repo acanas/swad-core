@@ -153,7 +153,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
 static void Tst_ListOneQstToEdit (struct Tst_Test *Test);
 static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
                                                   MYSQL_RES *mysql_res);
-static void Tst_WriteHeadingRowQuestionsForEdition (const struct Tst_Test *Test);
+static void Tst_WriteHeadingRowQuestionsForEdition (struct Tst_Test *Test);
 static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst);
 static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exams,
 						          unsigned NumQsts,
@@ -210,10 +210,8 @@ static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *Unsigned
 static void Tst_GetQstFromForm (struct Tst_Question *Question);
 static void Tst_MoveMediaToDefinitiveDirectories (struct Tst_Question *Question);
 
-static void Tst_PutParamsRemoveSelectedQsts (void *Test);
 static void Tst_PutIconToRemoveOneQst (void *QstCod);
 static void Tst_PutParamsRemoveOnlyThisQst (void *QstCod);
-static void Tst_PutParamsRemoveOneQstWhileEditing (void *Test);
 static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod);
 
 static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question);
@@ -1254,7 +1252,7 @@ static void Tst_PutIconsEditBankQsts (void *Test)
       case ActRemOneTstQst:	// Remove a question
       case ActChgShfTstQst:	// Change shuffle of a question
 	 Ico_PutContextualIconToRemove (ActReqRemSevTstQst,NULL,
-					Tst_PutParamsRemoveSelectedQsts,Test);
+					Tst_PutParamsEditQst,Test);
 	 break;
       default:
 	 break;
@@ -2223,7 +2221,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
 /*********** Write heading row in listing of questions for edition ***********/
 /*****************************************************************************/
 
-static void Tst_WriteHeadingRowQuestionsForEdition (const struct Tst_Test *Test)
+static void Tst_WriteHeadingRowQuestionsForEdition (struct Tst_Test *Test)
   {
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Code;
@@ -2258,8 +2256,7 @@ static void Tst_WriteHeadingRowQuestionsForEdition (const struct Tst_Test *Test)
       if (Test->NumQsts > 1)
         {
          Frm_StartForm (ActLstTstQst);
-         Dat_WriteParamsIniEndDates ();
-         Tst_WriteParamEditQst (Test);
+         Tst_PutParamsEditQst (Test);
          Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
          HTM_BUTTON_SUBMIT_Begin (Txt_TST_STR_ORDER_FULL[Order],"BT_LINK TIT_TBL",NULL);
          if (Order == Test->SelectedOrder)
@@ -2300,14 +2297,8 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
       HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
       /* Write icon to remove the question */
-      Frm_StartForm (ActReqRemOneTstQst);
-      Tst_PutParamQstCod (&Test->Question.QstCod);
-      if (Test->NumQsts == 1)
-	 Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
-      Dat_WriteParamsIniEndDates ();
-      Tst_WriteParamEditQst (Test);
-      Ico_PutIconRemove ();
-      Frm_EndForm ();
+      Ico_PutContextualIconToRemove (ActReqRemOneTstQst,NULL,
+				     Tst_PutParamsEditQst,Test);
 
       /* Write icon to edit the question */
       Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
@@ -2348,11 +2339,7 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
 	  Test->Question.Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
 	{
 	 Frm_StartForm (ActChgShfTstQst);
-	 Tst_PutParamQstCod (&Test->Question.QstCod);
-	 Dat_WriteParamsIniEndDates ();
-	 Tst_WriteParamEditQst (Test);
-	 if (Test->NumQsts == 1)
-	    Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If editing only one question, don't edit others
+	 Tst_PutParamsEditQst (Test);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Test->SelectedOrder);
 	 HTM_INPUT_CHECKBOX ("Shuffle",HTM_SUBMIT_ON_CHANGE,
 			     "value=\"Y\"%s",
@@ -2685,18 +2672,26 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
   }
 
 /*****************************************************************************/
-/*********** Write hidden parameters for edition of test questions ***********/
+/************ Put hidden parameters for edition of test questions ************/
 /*****************************************************************************/
 
-void Tst_WriteParamEditQst (const struct Tst_Test *Test)
+void Tst_PutParamsEditQst (void *Test)
   {
-   Par_PutHiddenParamChar   ("AllTags",Test->Tags.All ? 'Y' :
-                        	                        'N');
-   Par_PutHiddenParamString (NULL,"ChkTag",Test->Tags.List ? Test->Tags.List :
-                        	                             "");
-   Par_PutHiddenParamChar   ("AllAnsTypes",Test->AnswerTypes.All ? 'Y' :
-                        	                                   'N');
-   Par_PutHiddenParamString (NULL,"AnswerType",Test->AnswerTypes.List);
+   if (Test)
+     {
+      Par_PutHiddenParamChar   ("AllTags",((struct Tst_Test *) Test)->Tags.All ? 'Y' :
+					                                         'N');
+      Par_PutHiddenParamString (NULL,"ChkTag",((struct Tst_Test *) Test)->Tags.List ? ((struct Tst_Test *) Test)->Tags.List :
+								                      "");
+      Par_PutHiddenParamChar   ("AllAnsTypes",((struct Tst_Test *) Test)->AnswerTypes.All ? 'Y' :
+								                            'N');
+      Par_PutHiddenParamString (NULL,"AnswerType",((struct Tst_Test *) Test)->AnswerTypes.List);
+
+      Tst_PutParamQstCod (&((struct Tst_Test *) Test)->Question.QstCod);
+      // if (Test->NumQsts == 1)
+      //    Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
+      Dat_WriteParamsIniEndDates ();
+     }
   }
 
 /*****************************************************************************/
@@ -4745,9 +4740,9 @@ void Tst_RequestRemoveSelectedQsts (void)
      {
       /***** Show question and button to remove question *****/
       Ale_ShowAlertAndButton (ActRemSevTstQst,NULL,NULL,
-			     Tst_PutParamsRemoveSelectedQsts,&Test,
-			     Btn_REMOVE_BUTTON,Txt_Remove_questions,
-			     Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_selected_questions);
+			      Tst_PutParamsEditQst,&Test,
+			      Btn_REMOVE_BUTTON,Txt_Remove_questions,
+			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_selected_questions);
      }
    else
       Ale_ShowAlert (Ale_ERROR,"Wrong parameters.");
@@ -4757,16 +4752,6 @@ void Tst_RequestRemoveSelectedQsts (void)
 
    /***** Destroy test *****/
    Tst_TstDestructor (&Test);
-  }
-
-/*****************************************************************************/
-/**************** Put parameters to remove selected questions ****************/
-/*****************************************************************************/
-
-static void Tst_PutParamsRemoveSelectedQsts (void *Test)
-  {
-   Dat_WriteParamsIniEndDates ();
-   Tst_WriteParamEditQst ((struct Tst_Test *) Test);
   }
 
 /*****************************************************************************/
@@ -4864,7 +4849,7 @@ void Tst_RequestRemoveOneQst (void)
 			      Test.Question.QstCod);
    else
       Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
-			      Tst_PutParamsRemoveOneQstWhileEditing,&Test,
+			      Tst_PutParamsEditQst,&Test,
 			      Btn_REMOVE_BUTTON,Txt_Remove_question,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 			      Test.Question.QstCod);
@@ -4889,20 +4874,6 @@ static void Tst_PutParamsRemoveOnlyThisQst (void *QstCod)
      {
       Tst_PutParamQstCod (QstCod);
       Par_PutHiddenParamChar ("OnlyThisQst",'Y');
-     }
-  }
-
-/*****************************************************************************/
-/***** Put parameters to remove question when editing several questions ******/
-/*****************************************************************************/
-
-static void Tst_PutParamsRemoveOneQstWhileEditing (void *Test)
-  {
-   if (Test)
-     {
-      Tst_PutParamQstCod (&(((struct Tst_Test *) Test)->Question.QstCod));
-      Dat_WriteParamsIniEndDates ();
-      Tst_WriteParamEditQst ((struct Tst_Test *) Test);
      }
   }
 

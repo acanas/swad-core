@@ -75,7 +75,7 @@ static void Dpt_EditDepartmentsInternal (void);
 static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long InsCod);
 
 static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments);
-static void Dpt_PutParamDptCod (long DptCod);
+static void Dpt_PutParamDptCod (void *DptCod);
 
 static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Dpt_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,long DptCod);
@@ -557,12 +557,8 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
       if (Dpt->NumTchs)	// Department has teachers ==> deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
-        {
-         Frm_StartForm (ActRemDpt);
-         Dpt_PutParamDptCod (Dpt->DptCod);
-         Ico_PutIconRemove ();
-         Frm_EndForm ();
-        }
+	 Ico_PutContextualIconToRemove (ActRemDpt,NULL,
+					Dpt_PutParamDptCod,&Dpt->DptCod);
       HTM_TD_End ();
 
       /* Department code */
@@ -573,7 +569,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
       /* Institution */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgDptIns);
-      Dpt_PutParamDptCod (Dpt->DptCod);
+      Dpt_PutParamDptCod (&Dpt->DptCod);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"OthInsCod\" class=\"HIE_SEL_NARROW\"");
       HTM_OPTION (HTM_Type_STRING,"0",Dpt->InsCod == 0,false,
@@ -591,7 +587,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
       /* Department short name */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenDptSho);
-      Dpt_PutParamDptCod (Dpt->DptCod);
+      Dpt_PutParamDptCod (&Dpt->DptCod);
       HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,
                       HTM_SUBMIT_ON_CHANGE,
 		      "class=\"INPUT_SHORT_NAME\"");
@@ -601,7 +597,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
       /* Department full name */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenDptFul);
-      Dpt_PutParamDptCod (Dpt->DptCod);
+      Dpt_PutParamDptCod (&Dpt->DptCod);
       HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt->FullName,
                       HTM_SUBMIT_ON_CHANGE,
 		      "class=\"INPUT_FULL_NAME\"");
@@ -611,7 +607,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
       /* Department WWW */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgDptWWW);
-      Dpt_PutParamDptCod (Dpt->DptCod);
+      Dpt_PutParamDptCod (&Dpt->DptCod);
       HTM_INPUT_URL ("WWW",Dpt->WWW,HTM_SUBMIT_ON_CHANGE,
 		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
       Frm_EndForm ();
@@ -633,9 +629,10 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 /****************** Write parameter with code of department ******************/
 /*****************************************************************************/
 
-static void Dpt_PutParamDptCod (long DptCod)
+static void Dpt_PutParamDptCod (void *DptCod)
   {
-   Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,DptCod);
+   if (DptCod)
+      Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,*((long *) DptCod));
   }
 
 /*****************************************************************************/

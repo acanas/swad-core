@@ -91,8 +91,11 @@ static void Mai_CreateMailDomain (struct Mail *Mai);
 static void Mai_PutFormToSelectUsrsToListEmails (__attribute__((unused)) void *Args);
 static void Mai_ListEmails (__attribute__((unused)) void *Args);
 
-static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
-				        bool IMustFillInEmail,bool IShouldConfirmEmail);
+static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
+				        bool IMustFillInEmail,
+				        bool IShouldConfirmEmail);
+static void Mai_PutParamsRemoveMyEmail (void *Email);
+static void Mai_PutParamsRemoveOtherEmail (void *Email);
 
 static void Mai_RemoveEmail (struct UsrData *UsrDat);
 static void Mai_RemoveEmailFromDB (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
@@ -1174,9 +1177,9 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show form to change email *****/
-   Mai_ShowFormChangeUsrEmail (&Gbl.Usrs.Me.UsrDat,
-			       true,	// ItsMe
-			       IMustFillInEmail,IShouldConfirmEmail);
+   Mai_ShowFormChangeUsrEmail (true,	// ItsMe
+			       IMustFillInEmail,
+			       IShouldConfirmEmail);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1207,8 +1210,7 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show form to change email *****/
-   Mai_ShowFormChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,
-			       false,	// ItsMe
+   Mai_ShowFormChangeUsrEmail (false,	// ItsMe
 			       false,	// IMustFillInEmail
 			       false);	// IShouldConfirmEmail
 
@@ -1223,8 +1225,9 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
 /********************** Show form to change user's email *********************/
 /*****************************************************************************/
 
-static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
-				        bool IMustFillInEmail,bool IShouldConfirmEmail)
+static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
+				        bool IMustFillInEmail,
+				        bool IShouldConfirmEmail)
   {
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address;
    extern const char *Txt_Please_confirm_your_email_address;
@@ -1243,6 +1246,8 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
    unsigned NumEmail;
    bool Confirmed;
    Act_Action_t NextAction;
+   const struct UsrData *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
+	                                   &Gbl.Usrs.Other.UsrDat);
 
    /***** Show possible alerts *****/
    Ale_ShowAlerts (Mai_EMAIL_SECTION_ID);
@@ -1299,7 +1304,8 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 
       /* Form to remove email */
       if (ItsMe)
-	 Frm_StartFormAnchor (ActRemMyMai,Mai_EMAIL_SECTION_ID);
+	 Ico_PutContextualIconToRemove (ActRemMyMai,Mai_EMAIL_SECTION_ID,
+					Mai_PutParamsRemoveMyEmail,row[0]);
       else
 	{
 	 switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -1315,12 +1321,9 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	       NextAction = ActRemMaiOth;
 	       break;
 	   }
-	 Frm_StartFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Ico_PutContextualIconToRemove (NextAction,Mai_EMAIL_SECTION_ID,
+					Mai_PutParamsRemoveOtherEmail,row[0]);
 	}
-      Par_PutHiddenParamString (NULL,"Email",row[0]);
-      Ico_PutIconRemove ();
-      Frm_EndForm ();
 
       /* Email */
       HTM_Txt (row[0]);
@@ -1416,6 +1419,21 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 
    /***** End table *****/
    HTM_TABLE_End ();
+  }
+
+static void Mai_PutParamsRemoveMyEmail (void *Email)
+  {
+   if (Email)
+      Par_PutHiddenParamString (NULL,"Email",Email);
+  }
+
+static void Mai_PutParamsRemoveOtherEmail (void *Email)
+  {
+   if (Email)
+     {
+      Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Par_PutHiddenParamString (NULL,"Email",Email);
+     }
   }
 
 /*****************************************************************************/

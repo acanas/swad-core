@@ -330,8 +330,8 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 static void For_PutIconNewPost (void *Forums);
 static void For_PutAllHiddenParamsNewPost (void *Forums);
 
-static void For_ShowAForumPost (const struct For_Forums *Forums,
-	                        unsigned PstNum,long PstCod,
+static void For_ShowAForumPost (struct For_Forums *Forums,
+	                        unsigned PstNum,
                                 bool LastPst,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1],
                                 bool NewPst,bool ICanModerateForum);
 static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
@@ -339,6 +339,8 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
                             char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
                             struct Media *Media);
 static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod);
+
+static void For_PutParamsForum (void *Forums);
 
 static void For_PutParamForumSet (For_ForumSet_t ForumSet);
 static void For_PutParamForumLocation (long Location);
@@ -1003,7 +1005,6 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
    time_t ReadTimeUTC;		// Read time of thread for the current user
    time_t CreatTimeUTC;		// Creation time of post
    struct Pagination PaginationPsts;
-   long PstCod;
    bool NewPst = false;
    bool ICanModerateForum = false;
 
@@ -1096,7 +1097,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
         {
          row = mysql_fetch_row (mysql_res);
 
-         if (sscanf (row[0],"%ld",&PstCod) != 1)
+         if (sscanf (row[0],"%ld",&Forums->PstCod) != 1)
             Lay_ShowErrorAndExit ("Wrong code of post.");
 
          CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
@@ -1115,7 +1116,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
                                    CreatTimeUTC);
 
          /* Show post */
-         For_ShowAForumPost (Forums,NumPst,PstCod,
+         For_ShowAForumPost (Forums,NumPst,
                              (NumRow == NumRows),LastSubject,
                              NewPst,ICanModerateForum);
 
@@ -1125,7 +1126,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
             case For_FORUM_COURSE_TCHS:
             case For_FORUM_COURSE_USRS:
                Ntf_MarkNotifAsSeen (Ntf_EVENT_FORUM_POST_COURSE,
-           	                    PstCod,Gbl.Hierarchy.Crs.CrsCod,
+           	                    Forums->PstCod,Gbl.Hierarchy.Crs.CrsCod,
            	                    Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
             default:
@@ -1133,7 +1134,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
            }
          if (Thread.NumMyPosts)
             Ntf_MarkNotifAsSeen (Ntf_EVENT_FORUM_REPLY,
-        	                 PstCod,-1L,
+        	                 Forums->PstCod,-1L,
         	                 Gbl.Usrs.Me.UsrDat.UsrCod);
         }
 
@@ -1189,8 +1190,8 @@ static void For_PutAllHiddenParamsNewPost (void *Forums)
 /**************************** Show a post from forum *************************/
 /*****************************************************************************/
 
-static void For_ShowAForumPost (const struct For_Forums *Forums,
-	                        unsigned PstNum,long PstCod,
+static void For_ShowAForumPost (struct For_Forums *Forums,
+	                        unsigned PstNum,
                                 bool LastPst,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1],
                                 bool NewPst,bool ICanModerateForum)
   {
@@ -1210,7 +1211,6 @@ static void For_ShowAForumPost (const struct For_Forums *Forums,
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Media Media;
    bool Enabled;
-   bool ItsMe;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1219,10 +1219,10 @@ static void For_ShowAForumPost (const struct For_Forums *Forums,
    Med_MediaConstructor (&Media);
 
    /***** Check if post is enabled *****/
-   Enabled = For_GetIfPstIsEnabled (PstCod);
+   Enabled = For_GetIfPstIsEnabled (Forums->PstCod);
 
    /***** Get data of post *****/
-   For_GetPstData (PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
+   For_GetPstData (Forums->PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
                    Subject,OriginalContent,&Media);
 
    if (Enabled)
@@ -1273,13 +1273,7 @@ static void For_ShowAForumPost (const struct For_Forums *Forums,
       Frm_StartFormAnchor (Enabled ? For_ActionsDisPstFor[Forums->Forum.Type] :
 				     For_ActionsEnbPstFor[Forums->Forum.Type],
 			   For_FORUM_POSTS_SECTION_ID);
-      For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
-                                   Forums->CurrentPagePsts,	// Page of posts   = current
-                                   Forums->ForumSet,
-				   Forums->ThreadsOrder,
-				   Forums->Forum.Location,
-				   Forums->ThrCod,
-				   PstCod);
+      For_PutParamsForum (Forums);
       Ico_PutIconLink (Enabled ? "eye-green.svg" :
 			         "eye-slash-red.svg",
 	               Str_BuildStringLong (Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
@@ -1301,28 +1295,12 @@ static void For_ShowAForumPost (const struct For_Forums *Forums,
 
    /***** Form to remove post *****/
    if (LastPst)
-     {
-      ItsMe = Usr_ItsMe (UsrDat.UsrCod);
-      if (ItsMe)
-	{
+      if (Usr_ItsMe (UsrDat.UsrCod))
 	 // Post can be removed if post is the last (without answers) and it's mine
-	 if (PstNum == 1)	// First and unique post in thread
-	    Frm_StartFormAnchor (For_ActionsDelPstFor[Forums->Forum.Type],
-				 For_FORUM_THREADS_SECTION_ID);
-	 else		// Last of several posts in thread
-	    Frm_StartFormAnchor (For_ActionsDelPstFor[Forums->Forum.Type],
-				 For_FORUM_POSTS_SECTION_ID);
-	 For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
-				      Forums->CurrentPagePsts,	// Page of posts   = current
-				      Forums->ForumSet,
-				      Forums->ThreadsOrder,
-				      Forums->Forum.Location,
-				      Forums->ThrCod,
-				      PstCod);
-	 Ico_PutIconRemove ();
-	 Frm_EndForm ();
-	}
-     }
+	 Ico_PutContextualIconToRemove (For_ActionsDelPstFor[Forums->Forum.Type],
+	                                PstNum == 1 ? For_FORUM_THREADS_SECTION_ID : 	// First and unique post in thread
+	                                	      For_FORUM_POSTS_SECTION_ID,	// Last of several posts in thread
+					For_PutParamsForum,Forums);
    HTM_TD_End ();
 
    /***** Write author *****/
@@ -1498,6 +1476,18 @@ static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod)
 /*****************************************************************************/
 /************ Put all the hidden parameters related to forums ****************/
 /*****************************************************************************/
+
+static void For_PutParamsForum (void *Forums)
+  {
+   if (Forums)
+      For_PutAllHiddenParamsForum (((struct For_Forums *) Forums)->CurrentPageThrs,	// Page of threads = current
+                                   ((struct For_Forums *) Forums)->CurrentPagePsts,	// Page of posts   = current
+                                   ((struct For_Forums *) Forums)->ForumSet,
+				   ((struct For_Forums *) Forums)->ThreadsOrder,
+				   ((struct For_Forums *) Forums)->Forum.Location,
+				   ((struct For_Forums *) Forums)->ThrCod,
+				   ((struct For_Forums *) Forums)->PstCod);
+  }
 
 void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
                                   unsigned NumPagePosts,
@@ -3329,6 +3319,10 @@ static void For_ListForumThrs (struct For_Forums *Forums,
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
+   /***** Initialize forums context *****/
+   Forums->CurrentPagePsts = 1;	// Page of posts = first
+   Forums->PstCod          = -1L;
+
    for (NumThr  = PaginationThrs->FirstItemVisible, NumThrInScreen = 0, UniqueId = 0, Gbl.RowEvenOdd = 0;
         NumThr <= PaginationThrs->LastItemVisible;
         NumThr++, NumThrInScreen++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
@@ -3336,6 +3330,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
       /***** Get the data of this thread *****/
       Thr.ThrCod = ThrCods[NumThrInScreen];
       For_GetThreadData (&Thr);
+      Forums->ThrCod = Thr.ThrCod;
       Style = (Thr.NumUnreadPosts ? "AUTHOR_TXT_NEW" :
 	                            "AUTHOR_TXT");
       BgColor =  (Thr.ThrCod == ThreadInMyClipboard) ? "LIGHT_GREEN" :
@@ -3368,17 +3363,8 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	  (1 << Gbl.Usrs.Me.Role.Logged)) // If I have permission to remove thread in this forum...
         {
          HTM_BR ();
-         Frm_StartFormAnchor (For_ActionsReqDelThr[Forums->Forum.Type],
-                              For_REMOVE_THREAD_SECTION_ID);
-	 For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
-                                      1,				// Page of posts   = first
-                                      Forums->ForumSet,
-				      Forums->ThreadsOrder,
-				      Forums->Forum.Location,
-				      Thr.ThrCod,
-				      -1L);
-         Ico_PutIconRemove ();
-         Frm_EndForm ();
+         Ico_PutContextualIconToRemove (For_ActionsReqDelThr[Forums->Forum.Type],For_REMOVE_THREAD_SECTION_ID,
+				        For_PutParamsForum,Forums);
         }
 
       /***** Put button to cut the thread for moving it to another forum *****/

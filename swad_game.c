@@ -2127,13 +2127,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 
       /* Put icon to remove the question */
       if (ICanEditQuestions)
-	{
-	 Frm_StartForm (ActReqRemGamQst);
-	 Gam_PutParams (Games);
-	 Gam_PutParamQstInd (QstInd);
-	 Ico_PutIconRemove ();
-	 Frm_EndForm ();
-	}
+	 Ico_PutContextualIconToRemove (ActReqRemGamQst,NULL,
+					Gam_PutParamsOneQst,Games);
       else
          Ico_PutIconRemovalNotAllowed ();
 

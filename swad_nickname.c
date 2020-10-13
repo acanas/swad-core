@@ -61,8 +61,10 @@ const char *Nck_NICKNAME_SECTION_ID = "nickname_section";
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool ItsMe,
+static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
                                            bool IMustFillNickname);
+static void Nck_PutParamsRemoveMyNick (void *Nick);
+static void Nck_PutParamsRemoveOtherNick (void *Nick);
 
 static void Nck_RemoveNicknameFromDB (long UsrCod,const char *Nickname);
 
@@ -192,8 +194,7 @@ long Nck_GetUsrCodFromNickname (const char *Nickname)
 
 void Nck_ShowFormChangeMyNickname (bool IMustFillNickname)
   {
-   Nck_ShowFormChangeUsrNickname (&Gbl.Usrs.Me.UsrDat,
-				  true,		// ItsMe
+   Nck_ShowFormChangeUsrNickname (true,		// ItsMe
 				  IMustFillNickname);
   }
 
@@ -203,8 +204,7 @@ void Nck_ShowFormChangeMyNickname (bool IMustFillNickname)
 
 void Nck_ShowFormChangeOtherUsrNickname (void)
   {
-   Nck_ShowFormChangeUsrNickname (&Gbl.Usrs.Other.UsrDat,
-				  false,	// ItsMe
+   Nck_ShowFormChangeUsrNickname (false,	// ItsMe
 				  false);	// IMustFillNickname
   }
 
@@ -212,7 +212,7 @@ void Nck_ShowFormChangeOtherUsrNickname (void)
 /*********************** Show form to change my nickname *********************/
 /*****************************************************************************/
 
-static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool ItsMe,
+static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
                                            bool IMustFillNickname)
   {
    extern const char *Hlp_PROFILE_Account;
@@ -231,6 +231,8 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    unsigned NumNick;
    Act_Action_t NextAction;
    char NicknameWithArroba[1 + Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
+   const struct UsrData *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
+	                                   &Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
    HTM_SECTION_Begin (Nck_NICKNAME_SECTION_ID);
@@ -295,7 +297,8 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 
 	 /* Form to remove old nickname */
 	 if (ItsMe)
-	    Frm_StartFormAnchor (ActRemMyNck,Nck_NICKNAME_SECTION_ID);
+	    Ico_PutContextualIconToRemove (ActRemMyNck,Nck_NICKNAME_SECTION_ID,
+					   Nck_PutParamsRemoveMyNick,row[0]);
 	 else
 	   {
 	    switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -311,12 +314,9 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 		  NextAction = ActRemOldNicOth;
 		  break;
 	      }
-	    Frm_StartFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	    Ico_PutContextualIconToRemove (NextAction,Nck_NICKNAME_SECTION_ID,
+					   Nck_PutParamsRemoveOtherNick,row[0]);
 	   }
-	 Par_PutHiddenParamString (NULL,"Nick",row[0]);
-	 Ico_PutIconRemove ();
-	 Frm_EndForm ();
 	}
 
       /* Nickname */
@@ -419,6 +419,21 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 
    /***** End section *****/
    HTM_SECTION_End ();
+  }
+
+static void Nck_PutParamsRemoveMyNick (void *Nick)
+  {
+   if (Nick)
+      Par_PutHiddenParamString (NULL,"Nick",Nick);
+  }
+
+static void Nck_PutParamsRemoveOtherNick (void *Nick)
+  {
+   if (Nick)
+     {
+      Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Par_PutHiddenParamString (NULL,"Nick",Nick);
+     }
   }
 
 /*****************************************************************************/

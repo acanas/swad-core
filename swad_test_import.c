@@ -65,7 +65,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void TsI_PutParamsExportQsts (void *TestPtr);
+static void TsI_PutParamsExportQsts (void *Test);
 static void TsI_PutCreateXMLParam (void);
 
 static void TsI_ExportQuestion (struct Tst_Question *Question,FILE *FileXML);
@@ -103,18 +103,13 @@ void TsI_PutIconToExportQuestions (struct Tst_Test *Test)
 /****************** Put params to export test questions **********************/
 /*****************************************************************************/
 
-static void TsI_PutParamsExportQsts (void *TestPtr)
+static void TsI_PutParamsExportQsts (void *Test)
   {
-   struct Tst_Test *Test;
-
-   if (TestPtr)
+   if (Test)
      {
-      Test = (struct Tst_Test *) TestPtr;
-
-      Dat_WriteParamsIniEndDates ();
-      Tst_WriteParamEditQst (Test);
+      Tst_PutParamsEditQst (Test);
       Par_PutHiddenParamChar ("OnlyThisQst",'N');
-      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Test->SelectedOrder);
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) (((struct Tst_Test *) Test)->SelectedOrder));
       TsI_PutCreateXMLParam ();
      }
   }
