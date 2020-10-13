@@ -555,7 +555,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.2.2 (2020-09-27)"
+#define Log_PLATFORM_VERSION	"SWAD 20.3.1 (2020-10-13)"
 #define CSS_FILE		"swad20.1.1.css"
 #define JS_FILE			"swad19.254.js"
 /*
@@ -573,9 +573,15 @@ TODO: Que al generar un examen sólo se cojan preguntas válidas. Y si ya está gen
 TODO: Create module swad_test_result
 "sudo apt install webp" en Ubuntu, y "yum install libwebp libwebp-tools" en CentOS, para decodificar imágenes Web/ug reportado por Javier Fernández Baldomero.
 
+TODO: JJ: Hoy me ha saltado una "alarma" en swad cuando había asignado un proyecto a un estudiante, pero no había puesto que estaba asignado. ¿No sería conveniente que si se asigna a un estudiante se ponga automáticamente que está asignado?
+      Respuesta: Tienes razón. La explicación de por qué no lo hice así seguramente es que antes, en vez de "Asignado" se indicaba "Preasignado", y no cambiando automáticamente a "Sí", los ofertados quedaban marcados como no preasignados incluso después de que se añadiera al estudiante al que se le "postasigna". Pero ahora "Asignado" se usa tanto para los preasignados como para los "postasignados", con lo cual sí sería conveniente que se activara el "Sí" automáticamente para evitar el aviso de error (triángulo amarillo). Lo anoto y lo corrijo en cuanto pueda.
+
 TODO: En los resultados de una partida, cuando la pregunta ha sido modificada, no calcular ni mostrar la puntuación de esa pregunta.
       Por ejemplo una pregunta podria haber sido bien contestada con 1 punto, y se muestra en esa pregunta modificada aparece 0 en rojo.
 
+TODO: Poder editar las partidas, al menos el título, y si es posible, también los grupos.
+
+	Version 20.3.1:	  Oct 13, 2020  Code refactoring in file browser. (? lines)
 	Version 20.3:	  Sep 30, 2020  Non-editing teachers can list questions in a game. (304528 lines)
 	Version 20.2.2:	  Sep 27, 2020  Fixed bug in exam. (304448 lines)
 	Version 20.2.1:	  Sep 27, 2020  Fixed bug in exam, reported by Nuria Torres Rosell. (304442 lines)

@@ -407,7 +407,6 @@ struct Globals
       char NewFilFolLnkName[NAME_MAX + 1];
       struct FilFolLnk FilFolLnk;
       unsigned Level;
-      bool ICanEditFileOrFolder;	// Can I modify (remove, rename, create inside, etc.) a file or folder?
       Brw_IconViewEdit_t IconViewEdit;
       struct
         {

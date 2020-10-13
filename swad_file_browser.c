@@ -1254,6 +1254,8 @@ static const unsigned long long Brw_MAX_QUOTA_BRIEF[Rol_NUM_ROLES] =	// MaxRole 
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+bool Brw_ICanEditFileOrFolder;	// Can I modify (remove, rename, create inside, etc.) a file or folder?
+
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
@@ -1427,7 +1429,11 @@ static void Brw_RenameOneFolderInDB (const char OldPath[PATH_MAX + 1],
                                      const char NewPath[PATH_MAX + 1]);
 static void Brw_RenameChildrenFilesOrFoldersInDB (const char OldPath[PATH_MAX + 1],
                                                   const char NewPath[PATH_MAX + 1]);
+
+static void Brw_SetIfICanEditFileOrFolder (bool Value);
+static bool Brw_GetIfICanEditFileOrFolder (void);
 static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level);
+
 static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level);
 static bool Brw_CheckIfICanModifySharedFileOrFolder (void);
 static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void);
@@ -5604,7 +5610,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
      }
 
    /****** If current action allows file administration... ******/
-   Gbl.FileBrowser.ICanEditFileOrFolder = false;
+   Brw_SetIfICanEditFileOrFolder (false);
    if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type] &&
        !Gbl.FileBrowser.ShowOnlyPublicFiles)
      {
@@ -5612,11 +5618,12 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	  Level != 0)	// Never copy root folder
 	 // If path in the clipboard is equal to complete path in tree...
 	 // ...or is the start of complete path in tree...
-         if (Str_Path1BeginsByPath2 (Gbl.FileBrowser.FilFolLnk.Full,Gbl.FileBrowser.Clipboard.FilFolLnk.Full))
+         if (Str_Path1BeginsByPath2 (Gbl.FileBrowser.FilFolLnk.Full,
+                                     Gbl.FileBrowser.Clipboard.FilFolLnk.Full))
             Gbl.FileBrowser.Clipboard.IsThisFile = true;
 
       /* Check if I can modify (remove, rename, etc.) this file or folder */
-      Gbl.FileBrowser.ICanEditFileOrFolder = Brw_CheckIfICanEditFileOrFolder (Level);
+      Brw_SetIfICanEditFileOrFolder (Brw_CheckIfICanEditFileOrFolder (Level));
 
       /* Icon to remove folder, file or link */
       Brw_PutIconRemove ();
@@ -5782,7 +5789,7 @@ static void Brw_PutIconRemove (void)
   {
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 
-   if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I remove this?
+   if (Brw_GetIfICanEditFileOrFolder ())	// Can I remove this?
       switch (Gbl.FileBrowser.FilFolLnk.Type)
 	{
 	 case Brw_IS_FILE:
@@ -6269,6 +6276,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
    extern const char *Txt_Check_marks_in_the_file;
    extern const char *Txt_Download;
    extern const char *Txt_Public_open_educational_resource_OER_for_everyone;
+   bool ICanEditFileOrFolder;
    char FileNameToShow[NAME_MAX + 1];
    char *Class;
 
@@ -6282,6 +6290,8 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
    /***** Name and link of the folder, file or link *****/
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
      {
+      ICanEditFileOrFolder = Brw_GetIfICanEditFileOrFolder ();
+
       /***** Start cell *****/
       if (Gbl.FileBrowser.Clipboard.IsThisFile)
 	 HTM_TD_Begin ("class=\"%s LM LIGHT_GREEN\" style=\"width:99%%;\"",
@@ -6293,7 +6303,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
       HTM_DIV_Begin ("class=\"FILENAME\"");
 
       /***** Form to rename folder *****/
-      if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
+      if (ICanEditFileOrFolder)	// Can I rename this folder?
 	{
          Frm_StartForm (Brw_ActRenameFolder[Gbl.FileBrowser.Type]);
          Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
@@ -6301,7 +6311,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 
       /***** Write name of the folder *****/
       HTM_NBSP ();
-      if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
+      if (ICanEditFileOrFolder)	// Can I rename this folder?
 	{
 	 HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,Gbl.FileBrowser.FilFolLnk.Name,
 	                 HTM_SUBMIT_ON_CHANGE,
@@ -11304,6 +11314,16 @@ static void Brw_RenameChildrenFilesOrFoldersInDB (const char OldPath[PATH_MAX + 
 /*****************************************************************************/
 /********** Check if I have permission to modify a file or folder ************/
 /*****************************************************************************/
+
+static void Brw_SetIfICanEditFileOrFolder (bool Value)
+  {
+   Brw_ICanEditFileOrFolder = Value;
+  }
+
+static bool Brw_GetIfICanEditFileOrFolder (void)
+  {
+   return Brw_ICanEditFileOrFolder;
+  }
 
 static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
   {
