@@ -2241,15 +2241,18 @@ static void Brw_GetDataCurrentGrp (void)
       switch (Gbl.Action.Act)
 	{
 	 case ActSeeAdmDocCrsGrp:	// Access to see/admin a documents zone from menu
+
 	 case ActChgToSeeDocCrs:	// Access to see a documents zone
 	 case ActSeeDocGrp:		// Access to see a documents zone
 
 	 case ActChgToAdmDocCrs:	// Access to admin a documents zone
 	 case ActAdmDocGrp:		// Access to admin a documents zone
 
+	 case ActAdmTchCrsGrp:		// Access to admin a teachers' zone from menu
 	 case ActChgToAdmTch:		// Access to admin a teachers' zone
 	 case ActAdmTchGrp:		// Access to admin a teachers' zone
 
+	 case ActAdmShaCrsGrp:		// Access to admin a shared zone from menu
 	 case ActChgToAdmSha:		// Access to admin a shared zone
 	 case ActAdmShaGrp:		// Access to admin a shared zone
 

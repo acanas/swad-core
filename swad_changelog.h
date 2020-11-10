@@ -555,7 +555,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.5 (2020-10-14)"
+#define Log_PLATFORM_VERSION	"SWAD 20.5.1 (2020-11-10)"
 #define CSS_FILE		"swad20.1.1.css"
 #define JS_FILE			"swad19.254.js"
 /*
@@ -579,8 +579,30 @@ TODO: JJ: Hoy me ha saltado una "alarma" en swad cuando había asignado un proyec
 TODO: En los resultados de una partida, cuando la pregunta ha sido modificada, no calcular ni mostrar la puntuación de esa pregunta.
       Por ejemplo una pregunta podria haber sido bien contestada con 1 punto, y se muestra en esa pregunta modificada aparece 0 en rojo.
 
+TODO: Al pulsar en una notificación de un mensaje nos lleva a la página 1, aunque el mensaje esté en otra página.
+TODO: Al pulsar en la acción 964 (ocultar o visualizar una actividad) en la página 1, nos lleva erróneamente a la página 2.
+
+TODO: Partidas en SWADroid:
+Hola Antonio:
+
+Dado que Sergio sigue sin dar señales de vida lo he dado por perdido y estoy continuando yo el desarrollo del módulo de Kahoot. Durante las pruebas he detectado dos problemas:
+
+1. Al recuperar el número de preguntas de un juego se devuelve un valor incorrecto. Por ejemplo, en la asignatura Prueba el juego "Prueba" tiene 37 preguntas pero el servicio web devuelve un número muy alto:
+
+<numQuestions>1701605202</numQuestions>
+
+2. Desde anoche cuando creo una partida dentro de un juego y la inicio no se cargan las opciones de respuesta en la pantalla de la partida. Sale permanentemente la animación de "Cargando". Esto ocurre en la asignatura Prueba, el juego "Prueba" y la partida "Prueba". Esta incidencia es bloqueante, ya que me impide continuar con las pruebas.
+
+¿Podrías revisar estas dos incidencias para poder completar el desarrollo, por favor?
+
+Muchas gracias,.
+
+Juan Miguel.
+
+TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse al ver los accesos de un estudiante a la asignatura.
 TODO: Poder editar las partidas, al menos el título, y si es posible, también los grupos.
 
+	Version 20.5.1:	  Nov 10, 2020  Fixed bug in file browser, reportedby Luis Javier Herrera Maldonado. (? lines)
 	Version 20.5:	  Oct 14, 2020  Code refactoring in remove icon. (304491 lines)
 	Version 20.4:	  Oct 13, 2020  Code refactoring in remove icon.
 					New action to edit a match. Not finished. (304517 lines)
