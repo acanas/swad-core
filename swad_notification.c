@@ -748,7 +748,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
                                       Forums->ForumSet,
 				      Forums->ThreadsOrder,
 				      Forums->Forum.Location,
-				      Forums->ThrCod,
+				      Forums->Thread.Selected,
 				      -1L);
 	 break;
       case Ntf_EVENT_NOTICE:

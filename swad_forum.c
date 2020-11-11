@@ -425,11 +425,12 @@ void For_ResetForums (struct For_Forums *Forums)
    Forums->Forum.Type      = For_FORUM_UNKNOWN;
    Forums->Forum.Location  = -1L;
 
-   Forums->ThrCod          = -1L;
+   Forums->Thread.Selected =
+   Forums->Thread.Current  =
+   Forums->Thread.ToMove   = -1L;
 
    Forums->PstCod          = -1L;
 
-   Forums->ThreadToMove    = -1L;
   }
 
 /*****************************************************************************/
@@ -1009,12 +1010,14 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
    bool ICanModerateForum = false;
 
    /***** Get data of the thread *****/
-   Thread.ThrCod = Forums->ThrCod;
+   Thread.ThrCod =
+   Forums->Thread.Current =
+   Forums->Thread.Selected;
    For_GetThreadData (&Thread);
 
    /***** Get if there is a thread ready to be moved *****/
    if (For_CheckIfICanMoveThreads ())
-      Forums->ThreadToMove = For_GetThrInMyClipboard ();
+      Forums->Thread.ToMove = For_GetThrInMyClipboard ();
 
    /***** Get thread read time for the current user *****/
    ReadTimeUTC = For_GetThrReadTime (Thread.ThrCod);
@@ -1182,7 +1185,7 @@ static void For_PutAllHiddenParamsNewPost (void *Forums)
 				   ((struct For_Forums *) Forums)->ForumSet,
 				   ((struct For_Forums *) Forums)->ThreadsOrder,
 				   ((struct For_Forums *) Forums)->Forum.Location,
-				   ((struct For_Forums *) Forums)->ThrCod,
+				   ((struct For_Forums *) Forums)->Thread.Current,
 				   -1L);
   }
 
@@ -1485,7 +1488,7 @@ static void For_PutParamsForum (void *Forums)
                                    ((struct For_Forums *) Forums)->ForumSet,
 				   ((struct For_Forums *) Forums)->ThreadsOrder,
 				   ((struct For_Forums *) Forums)->Forum.Location,
-				   ((struct For_Forums *) Forums)->ThrCod,
+				   ((struct For_Forums *) Forums)->Thread.Current,
 				   ((struct For_Forums *) Forums)->PstCod);
   }
 
@@ -1578,7 +1581,7 @@ static void For_ShowForumList (struct For_Forums *Forums)
 
    /***** Get if there is a thread ready to be moved *****/
    if (For_CheckIfICanMoveThreads ())
-      Forums->ThreadToMove = For_GetThrInMyClipboard ();
+      Forums->Thread.ToMove = For_GetThrInMyClipboard ();
 
    /***** Fill the list with the institutions I belong to *****/
    Usr_GetMyInstits ();
@@ -2071,10 +2074,10 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
 
    /***** Write paste button used to move a thread in clipboard to this forum *****/
-   if (Forums->ThreadToMove >= 0) // If I have permission to paste threads and there is a thread ready to be pasted...
+   if (Forums->Thread.ToMove >= 0) // If I have permission to paste threads and there is a thread ready to be pasted...
      {
       /* Check if thread to move is yet in current forum */
-      if (For_CheckIfThrBelongsToForum (Forums->ThreadToMove,Forum))
+      if (For_CheckIfThrBelongsToForum (Forums->Thread.ToMove,Forum))
          Ico_PutIcon ("paste.svg",Txt_Copy_not_allowed,"CONTEXT_OPT ICO_HIDDEN ICO16x16");
       else
         {
@@ -2085,7 +2088,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
                                       Forums->ForumSet,
 				      Forums->ThreadsOrder,
 				      Forum->Location,
-				      Forums->ThreadToMove,
+				      Forums->Thread.ToMove,
 				      -1L);
          Ico_PutIconPaste ();
          Frm_EndForm ();
@@ -2560,7 +2563,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
       HTM_TR_End ();
 
       /***** List the threads *****/
-      For_ListForumThrs (Forums,ThrCods,Forums->ThrCod,&PaginationThrs);
+      For_ListForumThrs (Forums,ThrCods,Forums->Thread.Current,&PaginationThrs);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -3330,7 +3333,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
       /***** Get the data of this thread *****/
       Thr.ThrCod = ThrCods[NumThrInScreen];
       For_GetThreadData (&Thr);
-      Forums->ThrCod = Thr.ThrCod;
+      Forums->Thread.Current = Thr.ThrCod;
       Style = (Thr.NumUnreadPosts ? "AUTHOR_TXT_NEW" :
 	                            "AUTHOR_TXT");
       BgColor =  (Thr.ThrCod == ThreadInMyClipboard) ? "LIGHT_GREEN" :
@@ -3607,7 +3610,8 @@ static void For_GetParamsForums (struct For_Forums *Forums)
      }
 
    /***** Get optional parameter with code of a selected thread *****/
-   Forums->ThrCod = Par_GetParToLong ("ThrCod");
+   Forums->Thread.Current  =
+   Forums->Thread.Selected = Par_GetParToLong ("ThrCod");
 
    /***** Get optional parameter with code of a selected post *****/
    Forums->PstCod = Par_GetParToLong ("PstCod");
@@ -3973,23 +3977,24 @@ void For_ReceiveForumPost (void)
       // Forums.ThrCod has been received from form
 
       /***** Create last message of the thread *****/
-      PstCod = For_InsertForumPst (Forums.ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+      PstCod = For_InsertForumPst (Forums.Thread.Current,Gbl.Usrs.Me.UsrDat.UsrCod,
                                    Subject,Content,&Media);
 
       /***** Modify last message of the thread *****/
-      For_UpdateThrLastPst (Forums.ThrCod,PstCod);
+      For_UpdateThrLastPst (Forums.Thread.Current,PstCod);
      }
    else			// This post is the first of a new thread
      {
       /***** Create new thread with unknown first and last message codes *****/
-      Forums.ThrCod = For_InsertForumThread (&Forums,-1L);
+      Forums.Thread.Current  =
+      Forums.Thread.Selected = For_InsertForumThread (&Forums,-1L);
 
       /***** Create first (and last) message of the thread *****/
-      PstCod = For_InsertForumPst (Forums.ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+      PstCod = For_InsertForumPst (Forums.Thread.Current,Gbl.Usrs.Me.UsrDat.UsrCod,
                                    Subject,Content,&Media);
 
       /***** Update first and last posts of new thread *****/
-      For_UpdateThrFirstAndLastPst (Forums.ThrCod,PstCod,PstCod);
+      For_UpdateThrFirstAndLastPst (Forums.Thread.Current,PstCod,PstCod);
      }
 
    /***** Free media *****/
@@ -4090,7 +4095,7 @@ void For_RemovePost (void)
       Lay_NoPermissionExit ();
 
    /* Check if the message is the last message in the thread */
-   if (Forums.PstCod != For_GetLastPstCod (Forums.ThrCod))
+   if (Forums.PstCod != For_GetLastPstCod (Forums.Thread.Current))
       Lay_NoPermissionExit ();
 
    /***** Remove the post *****/
@@ -4148,7 +4153,7 @@ void For_RequestRemoveThread (void)
    For_GetParamsForums (&Forums);
 
    /***** Get subject of the thread to delete *****/
-   For_GetThrSubject (Forums.ThrCod,Subject);
+   For_GetThrSubject (Forums.Thread.Current,Subject);
 
    /***** Show forum list again *****/
    For_ShowForumList (&Forums);
@@ -4182,7 +4187,7 @@ static void For_PutAllHiddenParamsRemThread (void *Forums)
 				   ((struct For_Forums *) Forums)->ForumSet,
 				   ((struct For_Forums *) Forums)->ThreadsOrder,
 				   ((struct For_Forums *) Forums)->Forum.Location,
-				   ((struct For_Forums *) Forums)->ThrCod,
+				   ((struct For_Forums *) Forums)->Thread.Current,
 				   -1L);
   }
 
@@ -4208,10 +4213,10 @@ void For_RemoveThread (void)
        (1 << Gbl.Usrs.Me.Role.Logged)) // If I have permission to remove thread in this forum...
      {
       /***** Get subject of thread to delete *****/
-      For_GetThrSubject (Forums.ThrCod,Subject);
+      For_GetThrSubject (Forums.Thread.Current,Subject);
 
       /***** Remove the thread and all its posts *****/
-      For_RemoveThreadAndItsPsts (Forums.ThrCod);
+      For_RemoveThreadAndItsPsts (Forums.Thread.Current);
 
       /***** Show forum list again *****/
       For_ShowForumList (&Forums);
@@ -4249,10 +4254,10 @@ void For_CutThread (void)
    For_GetParamsForums (&Forums);
 
    /***** Get subject of thread to cut *****/
-   For_GetThrSubject (Forums.ThrCod,Subject);
+   For_GetThrSubject (Forums.Thread.Current,Subject);
 
    /***** Mark the thread as cut *****/
-   For_InsertThrInClipboard (Forums.ThrCod);
+   For_InsertThrInClipboard (Forums.Thread.Current);
 
    /***** Show forum list again *****/
    For_ShowForumList (&Forums);
@@ -4290,10 +4295,10 @@ void For_PasteThread (void)
    For_GetParamsForums (&Forums);
 
    /***** Get subject of thread to paste *****/
-   For_GetThrSubject (Forums.ThrCod,Subject);
+   For_GetThrSubject (Forums.Thread.Current,Subject);
 
    /***** Check if paste (move) the thread to current forum has sense *****/
-   if (For_CheckIfThrBelongsToForum (Forums.ThrCod,&Forums.Forum))
+   if (For_CheckIfThrBelongsToForum (Forums.Thread.Current,&Forums.Forum))
      {
       /***** Show forum list again *****/
       For_ShowForumList (&Forums);
@@ -4408,7 +4413,7 @@ static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
 			 " SET ForumType=%u,Location=-1"
 			 " WHERE ThrCod=%ld",
                          (unsigned) Forums->Forum.Type,
-                         Forums->ThrCod);
+                         Forums->Thread.Current);
          break;
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
@@ -4418,7 +4423,7 @@ static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
 			 " WHERE ThrCod=%ld",
 		         (unsigned) Forums->Forum.Type,
 		         Forums->Forum.Location,
-		         Forums->ThrCod);
+		         Forums->Thread.Current);
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
@@ -4428,7 +4433,7 @@ static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
 			 " WHERE ThrCod=%ld",
                          (unsigned) Forums->Forum.Type,
                          Forums->Forum.Location,
-                         Forums->ThrCod);
+                         Forums->Thread.Current);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
@@ -4438,7 +4443,7 @@ static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
 			 " WHERE ThrCod=%ld",
 		         (unsigned) Forums->Forum.Type,
 		         Forums->Forum.Location,
-		         Forums->ThrCod);
+		         Forums->Thread.Current);
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
@@ -4448,7 +4453,7 @@ static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
 			 " WHERE ThrCod=%ld",
 		         (unsigned) Forums->Forum.Type,
 		         Forums->Forum.Location,
-		         Forums->ThrCod);
+		         Forums->Thread.Current);
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong forum.");

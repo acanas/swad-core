@@ -555,7 +555,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.5.1 (2020-11-10)"
+#define Log_PLATFORM_VERSION	"SWAD 20.6 (2020-11-11)"
 #define CSS_FILE		"swad20.1.1.css"
 #define JS_FILE			"swad19.254.js"
 /*
@@ -602,6 +602,7 @@ Juan Miguel.
 TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse al ver los accesos de un estudiante a la asignatura.
 TODO: Poder editar las partidas, al menos el título, y si es posible, también los grupos.
 
+	Version 20.6:	  Nov 11, 2020  Fixed bug and code refactoring in forums. (304516 lines)
 	Version 20.5.1:	  Nov 10, 2020  Fixed bug in file browser, reportedby Luis Javier Herrera Maldonado. (? lines)
 	Version 20.5:	  Oct 14, 2020  Code refactoring in remove icon. (304491 lines)
 	Version 20.4:	  Oct 13, 2020  Code refactoring in remove icon.

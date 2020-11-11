@@ -98,9 +98,13 @@ struct For_Forums
    unsigned CurrentPageThrs;
    unsigned CurrentPagePsts;
    struct For_Forum Forum;	// Forum selected
-   long ThrCod;			// Thread selected
+   struct
+     {
+      long Selected;		// Thread selected
+      long Current;		// Current thread
+      long ToMove;		// Thread to move
+     } Thread;
    long PstCod;			// Post selected
-   long ThreadToMove;
   };
 
 #define For_DEFAULT_ORDER Dat_END_TIME
