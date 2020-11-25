@@ -1064,6 +1064,11 @@ void Asg_RemoveAssignment (void)
    /***** Reset assignments *****/
    Asg_ResetAssignments (&Assignments);
 
+   /***** Get parameters *****/
+   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
+   Gbl.Crs.Grps.WhichGrps = Grp_GetParamWhichGroups ();
+   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+
    /***** Get assignment code *****/
    if ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of assignment is missing.");
@@ -1106,6 +1111,11 @@ void Asg_HideAssignment (void)
    /***** Reset assignments *****/
    Asg_ResetAssignments (&Assignments);
 
+   /***** Get parameters *****/
+   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
+   Gbl.Crs.Grps.WhichGrps = Grp_GetParamWhichGroups ();
+   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+
    /***** Get assignment code *****/
    if ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of assignment is missing.");
@@ -1134,6 +1144,11 @@ void Asg_ShowAssignment (void)
 
    /***** Reset assignments *****/
    Asg_ResetAssignments (&Assignments);
+
+   /***** Get parameters *****/
+   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
+   Gbl.Crs.Grps.WhichGrps = Grp_GetParamWhichGroups ();
+   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
    if ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L)
@@ -1417,6 +1432,11 @@ void Asg_ReceiveFormAssignment (void)
    /***** Reset assignments *****/
    Asg_ResetAssignments (&Assignments);
 
+   /***** Get parameters *****/
+   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
+   Grp_GetParamWhichGroups ();
+   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+
    /***** Get the code of the assignment *****/
    NewAsg.AsgCod = Asg_GetParamAsgCod ();
    ItsANewAssignment = (NewAsg.AsgCod < 0);
@@ -1541,7 +1561,7 @@ void Asg_ReceiveFormAssignment (void)
 	 Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (NewAsg.AsgCod,NumUsrsToBeNotifiedByEMail);
 
       /***** Show all assignments again *****/
-   Asg_ShowAllAssignments (&Assignments);
+      Asg_ShowAllAssignments (&Assignments);
      }
    else
       // TODO: The form should be filled with partial data, now is always empty

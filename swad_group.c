@@ -4984,9 +4984,8 @@ void Grp_PutParamAllGroups (void)
 void Grp_PutParamWhichGroups (void *WhichGrps)
   {
    if (WhichGrps)
-      if (*((Grp_WhichGroups_t *) WhichGrps) != Grp_WHICH_GROUPS_DEFAULT)
-	 Par_PutHiddenParamUnsigned (NULL,"WhichGrps",
-	                             (unsigned) *((Grp_WhichGroups_t *) WhichGrps));
+      Par_PutHiddenParamUnsigned (NULL,"WhichGrps",
+				  (unsigned) *((Grp_WhichGroups_t *) WhichGrps));
   }
 
 void Grp_PutParamWhichGrpsOnlyMyGrps (void)
