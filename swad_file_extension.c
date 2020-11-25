@@ -70,6 +70,7 @@ const char *Ext_FileExtensionsAllowed[] =
    "htm"  ,
    "html" ,
    "img"  ,
+   "ipynb",	// Jupyter Notebook
    "java" ,
    "jpg"  ,
    "jpeg" ,

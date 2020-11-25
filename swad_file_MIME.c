@@ -82,6 +82,9 @@ const char *MIM_MIMETypesAllowed[] =
    "application/vnd.fdf",		// Forms Data Format
    "application/vnd.geogebra.file",	// GeoGebra .ggb
    "application/vnd.geogebra.tool",	// GeoGebra .ggt
+   "application/vnd.jupyter",		// Jupyter and IPython
+   "application/vnd.jupyter.cells",	// Jupyter and IPython
+   "application/vnd.jupyter.dragindex",	// Jupyter and IPython
    "application/vnd.msexcel",		// Microsoft Excel .xls
    "application/vnd.ms-excel",		// Microsoft Excel .xls
    "application/vnd.ms-powerpoint",	// Microsoft PowerPoint .ppt or .pps
@@ -123,6 +126,7 @@ const char *MIM_MIMETypesAllowed[] =
    "application/x-gtar",		// GNU tar gtar
    "application/x-gunzip",		// GNU ZIP gz, gzip
    "application/x-gzip",		// GNU ZIP gz, gzip
+   "application/x-ipynb+json",		// Jupyter and IPython
    "application/x-latex",	   	// LateX latex (LateX)
    "application/x-midi",		// MIDI mid
    "application/x-msdos-program",	// MSDOS program
