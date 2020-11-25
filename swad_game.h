@@ -72,7 +72,11 @@ struct Gam_Games
    char *ListQuestions;
    char *GamCodsSelected;	// String with selected game codes separated by separator multiple
    long GamCod;			// Selected/current game code
-   long MchCod;			// Selected/current match code
+   struct
+     {
+      long Selected;			// Current match code
+      long Current;
+     } MchCod;
    unsigned QstInd;		// Current question index
   };
 

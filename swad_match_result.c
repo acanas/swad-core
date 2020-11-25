@@ -1007,8 +1007,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_Begin ("class=\"RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanView.Result)
 	   {
-	    Games->GamCod = Match.GamCod;
-	    Games->MchCod = Match.MchCod;
+	    Games->GamCod         = Match.GamCod;
+	    Games->MchCod.Current = Match.MchCod;
 	    switch (MeOrOther)
 	      {
 	       case Usr_ME:

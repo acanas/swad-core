@@ -1283,7 +1283,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 	   NumGrpTyp++)
          if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
             Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-                                            AttCod,Grp_ATT_EVENT);
+                                               Grp_ATT_EVENT,AttCod);
 
       /***** End table and box *****/
       Box_BoxTableEnd ();

@@ -1682,8 +1682,9 @@ static void Grp_WriteHeadingGroups (void)
 /****** assignments, attendance events, surveys, exam events or matches ******/
 /*****************************************************************************/
 
-void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,long Cod,
-                                        Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp)
+void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
+                                        Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
+                                        long Cod)	// Assignment, attendance event, survey, exam event or match
   {
    static const struct
      {
@@ -1736,9 +1737,11 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,long Cod,
 		          "id=\"Grp%ld\" value=\"%ld\"%s%s"
 		          " onclick=\"uncheckParent(this,'WholeCrs')\"",
 			  Grp->GrpCod,Grp->GrpCod,
-			  AssociatedToGrp ? " checked=\"checked\"" : "",
+			  AssociatedToGrp ? " checked=\"checked\"" :
+				            "",
 			  (IBelongToThisGroup ||
-                           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? "" : " disabled=\"disabled\"");
+                           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? "" :
+                        	                                     " disabled=\"disabled\"");
       HTM_TD_End ();
 
       Grp_WriteRowGrp (Grp,IBelongToThisGroup);
@@ -1768,11 +1771,16 @@ static bool Grp_CheckIfAssociatedToGrp (const char *Table,const char *Field,
 
 
 /*****************************************************************************/
-/*************** Check if a survey is associated to any group ****************/
+/*** Check if an assignment, attendance event, survey, exam event or match ***/
+/*** is associated to any group                                            ***/
 /*****************************************************************************/
 
 bool Grp_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod)
   {
+   /***** Trivial check *****/
+   if (Cod <= 0)	// Assignment, attendance event, survey, exam event or match code
+      return false;
+
    /***** Get if an assignment, attendance event, survey, exam event or match
           is associated to any group from database *****/
    return (DB_QueryCOUNT ("can not check if associated to groups",

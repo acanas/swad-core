@@ -1377,8 +1377,7 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 	   NumGrpTyp++)
          if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
             Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-                                               SesCod,
-					       Grp_EXA_EVENT);
+                                               Grp_EXA_EVENT,SesCod);
 
       /***** End table and box *****/
       Box_BoxTableEnd ();

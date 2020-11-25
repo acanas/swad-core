@@ -11261,9 +11261,30 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Create a new match show it in a new tab"
+	"Create a new match and show it in a new tab"
 #elif L==4	// es
 	"Crear una nueva partida y mostrarla en una nueva pesta&ntilde;a"
+#elif L==5	// fr
+	""			// Besoin de traduction
+#elif L==6	// gn
+	""			// Okoteve traducción
+#elif L==7	// it
+	""			// Bisogno di traduzione
+#elif L==8	// pl
+	""			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	""			// Precisa de tradução
+#endif
+	,
+	[ActChgMch] =
+#if   L==1	// ca
+	""			// Necessita traducció
+#elif L==2	// de
+	""			// Need Übersetzung
+#elif L==3	// en
+	"Change a match"
+#elif L==4	// es
+	"Cambiar una partida"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn

@@ -185,8 +185,9 @@ void Gam_ResetGames (struct Gam_Games *Games)
    Games->CurrentPage       = 0;
    Games->ListQuestions     = NULL;
    Games->GamCodsSelected   = NULL;	// String with selected game codes separated by separator multiple
-   Games->GamCod            = -1L;	// Selected/current game code
-   Games->MchCod            = -1L;	// Selected/current match code
+   Games->GamCod            = -1L;	// Current/selected game code
+   Games->MchCod.Current    =
+   Games->MchCod.Selected   = -1L;	// Current/selected match code
    Games->QstInd            = 0;	// Current question index
   }
 

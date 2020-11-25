@@ -750,8 +750,9 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActReqRemMch	] = {1783,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_RequestRemoveMatch		,NULL},
    [ActRemMch		] = {1784,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_RemoveMatch		,NULL},
    [ActEdiMch		] = {1913,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_EditMatch			,NULL},
+   [ActChgMch		] = {1914,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ChangeMatch		,NULL},
    [ActReqNewMch	] = {1670,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestNewMatch		,NULL},
-   [ActNewMch		] = {1671,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_CreateNewMatchTch		,Mch_ResumeMatch		,NULL},
+   [ActNewMch		] = {1671,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_CreateNewMatch		,Mch_ResumeMatch		,NULL},
    [ActResMch		] = {1785,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_GetMatchBeingPlayed	,Mch_ResumeMatch		,NULL},
    [ActBckMch		] = {1790,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_BackMatch			,NULL},
    [ActPlyPauMch	] = {1789,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_PlayPauseMatch		,NULL},
@@ -3730,6 +3731,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgRooMAC,		// #1911
 	ActLstOneGam,		// #1912
 	ActEdiMch,		// #1913
+	ActChgMch,		// #1914
   };
 
 /*****************************************************************************/

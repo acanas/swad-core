@@ -27,6 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_game.h"
 #include "swad_match_print.h"
 #include "swad_scope.h"
 #include "swad_test.h"
@@ -34,6 +35,9 @@
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
+
+#define Mch_MAX_CHARS_TITLE	Gam_MAX_CHARS_TITLE	// 127
+#define Mch_MAX_BYTES_TITLE	((Mch_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Mch_NEW_MATCH_SECTION_ID	"new_match"
 
@@ -111,7 +115,8 @@ void Mch_GetAndCheckParameters (struct Gam_Games *Games,
                                 struct Mch_Match *Match);
 long Mch_GetParamMchCod (void);
 
-void Mch_CreateNewMatchTch (void);
+void Mch_CreateNewMatch (void);
+void Mch_ChangeMatch (void);
 void Mch_ResumeMatch (void);
 void Mch_GetIndexes (long MchCod,unsigned QstInd,
 		     unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);

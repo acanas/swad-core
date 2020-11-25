@@ -180,8 +180,9 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
 unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGrps);
 void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod);
 void Grp_RemUsrFromAllGrps (long UsrCod);
-void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,long Cod,
-                                        Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp);
+void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
+                                        Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
+                                        long Cod);
 
 bool Grp_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod);
 void Grp_ReqRegisterInGrps (void);

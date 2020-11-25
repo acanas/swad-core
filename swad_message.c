@@ -148,7 +148,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
                               struct Media *Media);
 
 static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Messages,
-                                                 Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
+                                                 long UsrCod,
                                                  const char *FilterFromToSubquery);
 static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,bool NotifyByEmail);
 static void Msg_SetReceivedMsgAsReplied (long MsgCod);
@@ -1063,8 +1063,8 @@ void Msg_DelAllRecMsgs (void)
    Msg_MakeFilterFromToSubquery (&Messages,FilterFromToSubquery);
 
    /***** Delete messages *****/
+   Messages.TypeOfMessages = Msg_RECEIVED;
    NumMsgs = Msg_DelSomeRecOrSntMsgsUsr (&Messages,
-                                         Msg_RECEIVED,
                                          Gbl.Usrs.Me.UsrDat.UsrCod,
                                          FilterFromToSubquery);
    Msg_ShowNumMsgsDeleted (NumMsgs);
@@ -1091,8 +1091,8 @@ void Msg_DelAllSntMsgs (void)
    Msg_MakeFilterFromToSubquery (&Messages,FilterFromToSubquery);
 
    /***** Delete messages *****/
+   Messages.TypeOfMessages = Msg_SENT;
    NumMsgs = Msg_DelSomeRecOrSntMsgsUsr (&Messages,
-                                         Msg_SENT,
                                          Gbl.Usrs.Me.UsrDat.UsrCod,
                                          FilterFromToSubquery);
    Msg_ShowNumMsgsDeleted (NumMsgs);
@@ -1446,7 +1446,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 /*****************************************************************************/
 
 static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Messages,
-                                                 Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
+                                                 long UsrCod,
                                                  const char *FilterFromToSubquery)
   {
    MYSQL_RES *mysql_res;
@@ -1469,7 +1469,7 @@ static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Mess
       row = mysql_fetch_row (mysql_res);
       if (sscanf (row[0],"%ld",&MsgCod) != 1)
          Lay_ShowErrorAndExit ("Wrong code of message.");
-      switch (TypeOfMessages)
+      switch (Messages->TypeOfMessages)
         {
          case Msg_RECEIVED:
             Msg_MoveReceivedMsgToDeleted (MsgCod,UsrCod);

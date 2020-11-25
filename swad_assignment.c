@@ -1381,7 +1381,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 	   NumGrpTyp++)
          if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
             Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-                                            AsgCod,Grp_ASSIGNMENT);
+                                               Grp_ASSIGNMENT,AsgCod);
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
