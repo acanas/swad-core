@@ -541,7 +541,8 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	 HTM_TR_End ();
 
 	 /***** Second row for this match used for edition ****/
-	 if (Match.MchCod == Games->MchCod.Selected)
+	 if (Gbl.Action.Act == ActEdiMch &&		// Editing...
+             Match.MchCod == Games->MchCod.Selected)	// ...this match
 	    /***** Check if I can edit this match *****/
 	    if (Mch_CheckIfICanEditThisMatch (&Match))
 	      {

@@ -602,6 +602,7 @@ Juan Miguel.
 TODO: Fix bug: un profesor editor no puede ver las carpetas de TFG (proyectos) de otros. Debería poder.
 TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse al ver los accesos de un estudiante a la asignatura.
 
+	Version 20.7.2:	  Nov 25, 2020  Changes in edition of matches. (304690 lines)
 	Version 20.7.1:	  Nov 25, 2020  New file extension .ipynb, suggested by Pedro A. García Sánchez. (304688 lines)
 					Copy the following icon to icon public directory:
 sudo cp icon/filext32x32/ipynb32x32.gif /var/www/html/swad/icon/filext32x32/
