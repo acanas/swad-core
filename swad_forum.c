@@ -3322,10 +3322,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   /***** Initialize forums context *****/
-   Forums->CurrentPagePsts = 1;	// Page of posts = first
-   Forums->PstCod          = -1L;
-
+   /***** List threads *****/
    for (NumThr  = PaginationThrs->FirstItemVisible, NumThrInScreen = 0, UniqueId = 0, Gbl.RowEvenOdd = 0;
         NumThr <= PaginationThrs->LastItemVisible;
         NumThr++, NumThrInScreen++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
@@ -3377,7 +3374,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
          Frm_StartFormAnchor (For_ActionsCutThrFor[Forums->Forum.Type],
                               For_FORUM_THREADS_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
-                                      1,				// Page of posts   = first
+                                      1,			// Page of posts   = first
                                       Forums->ForumSet,
 				      Forums->ThreadsOrder,
 				      Forums->Forum.Location,

@@ -555,7 +555,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.7.3 (2020-11-26)"
+#define Log_PLATFORM_VERSION	"SWAD 20.7.4 (2020-12-01)"
 #define CSS_FILE		"swad20.1.1.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
@@ -602,6 +602,7 @@ Juan Miguel.
 TODO: Fix bug: un profesor editor no puede ver las carpetas de TFG (proyectos) de otros. Debería poder.
 TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse al ver los accesos de un estudiante a la asignatura.
 
+	Version 20.7.4:	  Dec 01, 2020  Fixed bug in pagination of forums of a thread. Reported by Javier Fernández Baldomero. (304705 lines)
 	Version 20.7.3:	  Nov 26, 2020  Fixed bugs in pagination when editing assignments. (304706 lines)
 	Version 20.7.2:	  Nov 25, 2020  Changes in edition of matches. (304690 lines)
 	Version 20.7.1:	  Nov 25, 2020  New file extension .ipynb, suggested by Pedro A. García Sánchez. (304688 lines)
