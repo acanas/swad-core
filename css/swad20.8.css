@@ -2374,7 +2374,8 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .LST_EDIT_REC_HID	{width:250px; color:#89BE87; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 .LST_EDIT_ROWS		{width:30px;  color:#202020; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 
-.LICENSE	{max-width:260px;}
+.PUBLIC_FILE	{max-width:400px;}
+.LICENSE	{max-width:400px;}
 
 /************** Paragraph (margin on top and bottom of a div) ****************/
 .PAR

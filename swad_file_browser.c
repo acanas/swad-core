@@ -1418,7 +1418,7 @@ static bool Brw_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1]);
 
 static void Brw_ChangeFileOrFolderHiddenInDB (const char Path[PATH_MAX + 1],bool IsHidden);
 
-static void Brw_ChangeFilePublicInDB (long PublisherUsrCod,const char *Path,
+static void Brw_ChangeFilePublicInDB (struct FileMetadata *FileMetadata,
                                       bool IsPublic,Brw_License_t License);
 
 static long Brw_GetZoneUsrCodForFiles (void);
@@ -9548,7 +9548,10 @@ void Brw_ShowFileMetadata (void)
 	      }
 
 	    Frm_StartForm (Brw_ActRecDatFile[Gbl.FileBrowser.Type]);
-	    Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
+	    Brw_PutParamsFileBrowser (NULL,		// Not used
+			              NULL,		// Not used
+			              Brw_IS_UNKNOWN,	// Not used
+                                      FileMetadata.FilCod);
 	   }
 
          /***** Begin box and table *****/
@@ -9649,7 +9652,7 @@ void Brw_ShowFileMetadata (void)
 	 if (ICanChangePublic)	// I can change file to public
 	   {
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			      "id=\"PublicFile\" name=\"PublicFile\"");
+			      "id=\"PublicFile\" name=\"PublicFile\" class=\"PUBLIC_FILE\"");
 	    HTM_OPTION (HTM_Type_STRING,"N",
 			!FileMetadata.IsPublic,false,
 			"%s",Txt_Private_available_to_certain_users_identified);
@@ -10205,6 +10208,7 @@ void Brw_ChgFileMetadata (void)
   {
    extern const char *Txt_The_properties_of_file_X_have_been_saved;
    struct FileMetadata FileMetadata;
+   bool Found;
    bool IAmTheOwner;
    bool PublicFileBeforeEdition;
    bool PublicFileAfterEdition;
@@ -10214,106 +10218,103 @@ void Brw_ChgFileMetadata (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   /***** Get file metadata from database *****/
-   Brw_GetFileMetadataByPath (&FileMetadata);
-   Brw_GetFileTypeSizeAndDate (&FileMetadata);
+   /***** Get file metadata *****/
+   FileMetadata.FilCod = Brw_GetParamFilCod ();
+   Brw_GetFileMetadataByCod (&FileMetadata);
+   Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
-   /***** Check if I can change file metadata *****/
-   IAmTheOwner = Brw_CheckIfIAmOwnerOfFile (FileMetadata.PublisherUsrCod);
-   if (Brw_CheckIfICanEditFileMetadata (IAmTheOwner))
+   if (Found)
      {
-      /* Check if the file was public before the edition */
-      PublicFileBeforeEdition = FileMetadata.IsPublic;
+      /***** Check if I can change file metadata *****/
+      IAmTheOwner = Brw_CheckIfIAmOwnerOfFile (FileMetadata.PublisherUsrCod);
+      if (Brw_CheckIfICanEditFileMetadata (IAmTheOwner))
+	{
+	 /* Check if the file was public before the edition */
+	 PublicFileBeforeEdition = FileMetadata.IsPublic;
 
-      /***** Get the new file privacy and license from form *****/
-      switch (Gbl.FileBrowser.Type)
-        {
-         case Brw_ADMI_DOC_INS:
-         case Brw_ADMI_SHR_INS:
-         case Brw_ADMI_DOC_CTR:
-         case Brw_ADMI_SHR_CTR:
-         case Brw_ADMI_DOC_DEG:
-         case Brw_ADMI_SHR_DEG:
-         case Brw_ADMI_DOC_CRS:
-         case Brw_ADMI_SHR_CRS:
-            PublicFileAfterEdition = Brw_GetParamPublicFile ();
-            License = Brw_GetParLicense ();
-            break;
-         case Brw_ADMI_DOC_GRP:
-         case Brw_ADMI_TCH_CRS:
-         case Brw_ADMI_TCH_GRP:
-         case Brw_ADMI_SHR_GRP:
-         case Brw_ADMI_ASG_USR:
-         case Brw_ADMI_ASG_CRS:
-         case Brw_ADMI_WRK_USR:
-         case Brw_ADMI_WRK_CRS:
-         case Brw_ADMI_DOC_PRJ:
-         case Brw_ADMI_ASS_PRJ:
-         case Brw_ADMI_BRF_USR:
-            PublicFileAfterEdition = false;	// Files in these zones can not be public
-            License = Brw_GetParLicense ();
-            break;
-         default:
-            PublicFileAfterEdition = false;	// Files in other zones can not be public
-            License = Brw_LICENSE_DEFAULT;
-            break;
-        }
-
-      /***** Change file metadata *****/
-      if (FileMetadata.FilCod > 0)	// Entry exists in database
-         Brw_ChangeFilePublicInDB (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                   Gbl.FileBrowser.FilFolLnk.Full,
-                                   PublicFileAfterEdition,License);
-      else				// No entry in database
-         FileMetadata.FilCod = Brw_AddPathToDB (Gbl.Usrs.Me.UsrDat.UsrCod,FileMetadata.FilFolLnk.Type,
-                                                Gbl.FileBrowser.FilFolLnk.Full,
-                                                PublicFileAfterEdition,License);
-
-      /***** Remove the affected clipboards *****/
-      Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-	                            Gbl.Usrs.Me.UsrDat.UsrCod,
-	                            Gbl.Usrs.Other.UsrDat.UsrCod);
-
-      /***** Insert file into public social activity *****/
-      if (!PublicFileBeforeEdition &&
-	   PublicFileAfterEdition)	// Only if file has changed from private to public
+	 /***** Get the new file privacy and license from form *****/
 	 switch (Gbl.FileBrowser.Type)
 	   {
 	    case Brw_ADMI_DOC_INS:
-	       TL_StoreAndPublishNote (TL_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
-	       break;
 	    case Brw_ADMI_SHR_INS:
-	       TL_StoreAndPublishNote (TL_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
-	       break;
 	    case Brw_ADMI_DOC_CTR:
-	       TL_StoreAndPublishNote (TL_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
-	       break;
 	    case Brw_ADMI_SHR_CTR:
-	       TL_StoreAndPublishNote (TL_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
-	       break;
 	    case Brw_ADMI_DOC_DEG:
-	       TL_StoreAndPublishNote (TL_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
-	       break;
 	    case Brw_ADMI_SHR_DEG:
-	       TL_StoreAndPublishNote (TL_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
-	       break;
 	    case Brw_ADMI_DOC_CRS:
-	       TL_StoreAndPublishNote (TL_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
-	       break;
 	    case Brw_ADMI_SHR_CRS:
-	       TL_StoreAndPublishNote (TL_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
+	       PublicFileAfterEdition = Brw_GetParamPublicFile ();
+	       License = Brw_GetParLicense ();
+	       break;
+	    case Brw_ADMI_DOC_GRP:
+	    case Brw_ADMI_TCH_CRS:
+	    case Brw_ADMI_TCH_GRP:
+	    case Brw_ADMI_SHR_GRP:
+	    case Brw_ADMI_ASG_USR:
+	    case Brw_ADMI_ASG_CRS:
+	    case Brw_ADMI_WRK_USR:
+	    case Brw_ADMI_WRK_CRS:
+	    case Brw_ADMI_DOC_PRJ:
+	    case Brw_ADMI_ASS_PRJ:
+	    case Brw_ADMI_BRF_USR:
+	       PublicFileAfterEdition = false;	// Files in these zones can not be public
+	       License = Brw_GetParLicense ();
 	       break;
 	    default:
+	       PublicFileAfterEdition = false;	// Files in other zones can not be public
+	       License = Brw_LICENSE_DEFAULT;
 	       break;
 	   }
 
-      /***** Write sucess message *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_properties_of_file_X_have_been_saved,
-                     Gbl.FileBrowser.FilFolLnk.Name);
+	 /***** Change file metadata *****/
+	 Brw_ChangeFilePublicInDB (&FileMetadata,PublicFileAfterEdition,License);
+
+	 /***** Remove the affected clipboards *****/
+	 Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				       Gbl.Usrs.Me.UsrDat.UsrCod,
+				       Gbl.Usrs.Other.UsrDat.UsrCod);
+
+	 /***** Insert file into public social activity *****/
+	 if (!PublicFileBeforeEdition &&
+	      PublicFileAfterEdition)	// Only if file has changed from private to public
+	    switch (Gbl.FileBrowser.Type)
+	      {
+	       case Brw_ADMI_DOC_INS:
+		  TL_StoreAndPublishNote (TL_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  break;
+	       case Brw_ADMI_SHR_INS:
+		  TL_StoreAndPublishNote (TL_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  break;
+	       case Brw_ADMI_DOC_CTR:
+		  TL_StoreAndPublishNote (TL_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  break;
+	       case Brw_ADMI_SHR_CTR:
+		  TL_StoreAndPublishNote (TL_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  break;
+	       case Brw_ADMI_DOC_DEG:
+		  TL_StoreAndPublishNote (TL_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  break;
+	       case Brw_ADMI_SHR_DEG:
+		  TL_StoreAndPublishNote (TL_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  break;
+	       case Brw_ADMI_DOC_CRS:
+		  TL_StoreAndPublishNote (TL_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  break;
+	       case Brw_ADMI_SHR_CRS:
+		  TL_StoreAndPublishNote (TL_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  break;
+	       default:
+		  break;
+	      }
+
+	 /***** Write sucess message *****/
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_properties_of_file_X_have_been_saved,
+			Gbl.FileBrowser.FilFolLnk.Name);
+	}
+      else
+	 /***** Write error message and exit *****/
+	 Lay_NoPermissionExit ();
      }
-   else
-      /***** Write error message and exit *****/
-      Lay_NoPermissionExit ();
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -10979,24 +10980,28 @@ static void Brw_ChangeFileOrFolderHiddenInDB (const char Path[PATH_MAX + 1],bool
 /******* Change publisher, public and license of file in the database ********/
 /*****************************************************************************/
 
-static void Brw_ChangeFilePublicInDB (long PublisherUsrCod,const char *Path,
+static void Brw_ChangeFilePublicInDB (struct FileMetadata *FileMetadata,
                                       bool IsPublic,Brw_License_t License)
   {
-   long Cod = Brw_GetCodForFiles ();
+   long Cod        = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+
+   /***** Trivial check *****/
+   if (FileMetadata->FilCod <= 0)
+      return;
 
    /***** Change publisher, public and license of file in database *****/
    DB_QueryUPDATE ("can not change metadata of a file in database",
-		   "UPDATE files SET PublisherUsrCod=%ld,Public='%c',License=%u"
+		   "UPDATE files SET Public='%c',License=%u"
 		   " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-		   " AND Path='%s'",
-	           PublisherUsrCod,
+		   " AND FilCod=%ld AND Path='%s'",
 	           IsPublic ? 'Y' :
 			      'N',
 	           (unsigned) License,
 	           (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 	           Cod,ZoneUsrCod,
-	           Path);
+	           FileMetadata->FilCod,
+	           FileMetadata->FilFolLnk.Full);
   }
 
 /*****************************************************************************/
