@@ -306,20 +306,6 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
    char *UserAgent;
    const char *Class;
 
-   /***** Check if I can view this print result *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 break;
-      default:	// Other users can not see log
-	 return;
-     }
-
    /***** Get print log from database *****/
    NumClicks = (unsigned)
 	       DB_QuerySELECT (&mysql_res,"can not get exam print log",

@@ -43,6 +43,8 @@
 #include "swad_exam_type.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_ID.h"
+#include "swad_photo.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -80,7 +82,7 @@ static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print);
 
 static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
                                           const struct Exa_Exam *Exam,
-                                          const struct ExaPrn_Print *Print);
+                                          struct ExaPrn_Print *Print);
 static void ExaPrn_GetAndWriteDescription (long ExaCod);
 static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
 					    const struct ExaPrn_Print *Print);
@@ -202,7 +204,7 @@ void ExaPrn_ShowExamPrint (void)
       /***** Get exam print data from database *****/
       ExaPrn_GetDataOfPrintBySesCodAndUsrCod (&Print);
 
-      if (Print.PrnCod <= 0)	// Print does not exists ==> create it
+      if (Print.PrnCod <= 0)	// Exam print does not exists ==> create it
 	{
 	 /***** Set again basic data of exam print *****/
 	 Print.SesCod = Session.SesCod;
@@ -222,7 +224,7 @@ void ExaPrn_ShowExamPrint (void)
 	    ExaLog_SetIfCanAnswer (true);
 	   }
 	}
-      else			// Print exists
+      else			// Exam print exists
         {
          /***** Get exam print data from database *****/
 	 ExaPrn_GetDataOfPrintBySesCodAndUsrCod (&Print);
@@ -666,20 +668,34 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 
 static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
                                           const struct Exa_Exam *Exam,
-                                          const struct ExaPrn_Print *Print)
+                                          struct ExaPrn_Print *Print)
   {
-   extern const char *Hlp_ASSESSMENT_Exams;
+   extern const char *Hlp_ASSESSMENT_Exams_answer_exam;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Exam->Title,
 		 NULL,NULL,
-		 Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
+		 Hlp_ASSESSMENT_Exams_answer_exam,Box_NOT_CLOSABLE);
 
    /***** Heading *****/
+   /* Institution, degree and course */
    Lay_WriteHeaderClassPhoto (false,false,
 			      Gbl.Hierarchy.Ins.InsCod,
 			      Gbl.Hierarchy.Deg.DegCod,
 			      Gbl.Hierarchy.Crs.CrsCod);
+
+
+   /***** Show user and time *****/
+   /* Begin table */
+   HTM_TABLE_BeginWideMarginPadding (10);
+
+   /* User */
+   ExaRes_ShowExamResultUser (&Gbl.Usrs.Me.UsrDat);
+
+   /* End table */
+   HTM_TABLE_End ();
+
+   /* Exam description */
    ExaPrn_GetAndWriteDescription (Exam->ExaCod);
 
    if (Print->NumQsts.All)

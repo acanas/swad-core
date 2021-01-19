@@ -1621,6 +1621,27 @@ const char *Hlp_ASSESSMENT_Exams_questions =
 	"ASSESSMENT.Exams.en#questions";
 #endif
 
+const char *Hlp_ASSESSMENT_Exams_answer_exam =
+#if   L==1
+	"ASSESSMENT.Exams.es#responder-examen";
+#elif L==2
+	"ASSESSMENT.Exams.en#answer-exam";
+#elif L==3
+	"ASSESSMENT.Exams.en#answer-exam";
+#elif L==4
+	"ASSESSMENT.Exams.es#responder-examen";
+#elif L==5
+	"ASSESSMENT.Exams.en#answer-exam";
+#elif L==6
+	"ASSESSMENT.Exams.es#responder-examen";
+#elif L==7
+	"ASSESSMENT.Exams.en#answer-exam";
+#elif L==8
+	"ASSESSMENT.Exams.en#answer-exam";
+#elif L==9
+	"ASSESSMENT.Exams.en#answer-exam";
+#endif
+
 const char *Hlp_ASSESSMENT_Exams_results =
 #if   L==1
 	"ASSESSMENT.Exams.es#resultados";

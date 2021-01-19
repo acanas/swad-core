@@ -124,7 +124,16 @@ static void ExaRes_CheckIfICanSeePrintResult (const struct Exa_Exam *Exam,
                                               struct ExaRes_ICanView *ICanView);
 
 static void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print);
-
+static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print);
+static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
+                                          const struct ExaRes_ICanView *ICanView);
+static void ExaRes_ShowExamResultNumAnss (struct ExaPrn_Print *Print,
+                                          const struct ExaRes_ICanView *ICanView);
+static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
+                                        const struct ExaRes_ICanView *ICanView);
+static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
+	                                struct ExaPrn_Print *Print,
+                                        const struct ExaRes_ICanView *ICanView);
 static void ExaRes_ShowExamAnswers (struct UsrData *UsrDat,
 			            struct ExaPrn_Print *Print,
 			            unsigned Visibility);
@@ -1371,7 +1380,19 @@ void ExaRes_ShowOneExaResult (void)
    ExaRes_ShowExamResult (&Exam,&Session,&Print,UsrDat);
 
    /***** Show exam log *****/
-   ExaLog_ShowExamLog (&Print);
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 ExaLog_ShowExamLog (&Print);
+	 break;
+      default:	// Other users can not see log
+	 return;
+     }
   }
 
 /*****************************************************************************/
@@ -1385,23 +1406,6 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
   {
    extern const char *Hlp_ASSESSMENT_Exams_results;
    extern const char *Txt_The_user_does_not_exist;
-   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
-   extern const char *Txt_Questions;
-   extern const char *Txt_QUESTIONS_valid;
-   extern const char *Txt_QUESTIONS_invalid;
-   extern const char *Txt_Valid_answers;
-   extern const char *Txt_ANSWERS_correct;
-   extern const char *Txt_ANSWERS_wrong;
-   extern const char *Txt_ANSWERS_blank;
-   extern const char *Txt_Score;
-   extern const char *Txt_valid_score;
-   extern const char *Txt_Grade;
-   extern const char *Txt_valid_grade;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
-   Dat_StartEndTime_t StartEndTime;
-   char *Id;
    struct ExaRes_ICanView ICanView;
 
    /***** Check if I can view this print result and its score *****/
@@ -1420,195 +1424,33 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 			      Gbl.Hierarchy.Deg.DegCod,
 			      Gbl.Hierarchy.Crs.CrsCod);
 
-
-   /***** Begin table *****/
-   HTM_TABLE_BeginWideMarginPadding (10);
-
-   /***** User *****/
+   /***** Check user data *****/
    /* Get data of the user who answered the exam print */
    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS))
       Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
    if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
       Lay_NoPermissionExit ();
 
-   /* User */
-   HTM_TR_Begin (NULL);
+   /***** Begin table *****/
+   HTM_TABLE_BeginWideMarginPadding (10);
 
-   HTM_TD_Begin ("class=\"DAT_N RT\"");
-   HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_TxtF ("&nbsp;%s",UsrDat->Surname1);
-   if (UsrDat->Surname2[0])
-      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
-   if (UsrDat->FirstName[0])
-      HTM_TxtF (", %s",UsrDat->FirstName);
-   HTM_BR ();
-   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-					NULL,
-		     "PHOTO45x60",Pho_ZOOM,false);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   /***** User *****/
+   ExaRes_ShowExamResultUser (UsrDat);
 
    /***** Start/end time (for user in this exam print) *****/
-   for (StartEndTime  = (Dat_StartEndTime_t) 0;
-	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	StartEndTime++)
-     {
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
-      HTM_TD_End ();
-
-      if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      HTM_TD_Begin ("id=\"%s\" class=\"DAT LB\"",Id);
-      Dat_WriteLocalDateHMSFromUTC (Id,Print->TimeUTC[StartEndTime],
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				    true,true,true,0x7);
-      HTM_TD_End ();
-      free (Id);
-
-      HTM_TR_End ();
-     }
+   ExaRes_ShowExamResultTime (Print);
 
    /***** Number of questions *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"DAT_N RT\"");
-   HTM_TxtColon (Txt_Questions);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (ICanView.Result)
-     {
-      HTM_TxtF ("%u",Print->NumQsts.All);
-      if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
-	{
-	 HTM_Txt (" (");
-
-	 /* Valid questions */
-	 HTM_SPAN_Begin ("class=\"DAT_GREEN\"");
-	 HTM_TxtColonNBSP (Txt_QUESTIONS_valid);
-	 HTM_Unsigned (Print->NumQsts.Valid.Total);
-	 HTM_SPAN_End ();
-
-	 HTM_TxtF ("; ");
-
-	 /* Invalid questions */
-	 HTM_SPAN_Begin ("class=\"DAT_RED\"");
-	 HTM_TxtColonNBSP (Txt_QUESTIONS_invalid);
-	 HTM_Unsigned (Print->NumQsts.All - Print->NumQsts.Valid.Total);
-	 HTM_SPAN_End ();
-
-	 HTM_Txt (")");
-	}
-     }
-   else
-      Ico_PutIconNotVisible ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   ExaRes_ShowExamResultNumQsts (Print,&ICanView);
 
    /***** Number of answers *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"DAT_N RT\"");
-   HTM_TxtColon (Txt_Valid_answers);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (ICanView.Result)
-      HTM_TxtF ("%s(<em>p<sub>i</sub></em>=1):&nbsp;%u; "
-	        "%s(-1&le;<em>p<sub>i</sub></em>&lt;0):&nbsp;%u; "
-	        "%s(<em>p<sub>i</sub></em>=0):&nbsp;%u; "
-	        "%s(0&lt;<em>p<sub>i</sub></em>&lt;1):&nbsp;%u; "
-	        "%s(<em>p<sub>i</sub></em>=0):&nbsp;%u",
-                Txt_ANSWERS_correct,Print->NumQsts.Valid.Correct,
-                Txt_ANSWERS_wrong  ,Print->NumQsts.Valid.Wrong.Negative,
-                Txt_ANSWERS_wrong  ,Print->NumQsts.Valid.Wrong.Zero,
-                Txt_ANSWERS_wrong  ,Print->NumQsts.Valid.Wrong.Positive,
-                Txt_ANSWERS_blank  ,Print->NumQsts.Valid.Blank);
-   else
-      Ico_PutIconNotVisible ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   ExaRes_ShowExamResultNumAnss (Print,&ICanView);
 
    /***** Score *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"DAT_N RT\"");
-   HTM_TxtColon (Txt_Score);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (ICanView.Score)
-     {
-      /* Score counting all questions */
-      if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
-         HTM_STRONG_Begin ();
-      HTM_Double2Decimals (Print->Score.All);
-      HTM_Txt ("/");
-      HTM_Unsigned (Print->NumQsts.All);
-      if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
-         HTM_STRONG_End ();
-
-      /* Scoure counting only valid questions */
-      if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
-	{
-         HTM_Txt ("; ");
-         HTM_TxtColonNBSP (Txt_valid_score);
-         HTM_STRONG_Begin ();
-         HTM_Double2Decimals (Print->Score.Valid);
-	 HTM_Txt ("/");
-	 HTM_Unsigned (Print->NumQsts.Valid.Total);
-         HTM_STRONG_End ();
-	}
-     }
-   else
-      Ico_PutIconNotVisible ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   ExaRes_ShowExamResultScore (Print,&ICanView);
 
    /***** Grade *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"DAT_N RT\"");
-   HTM_TxtColon (Txt_Grade);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (ICanView.Score)
-     {
-      /* Grade counting all questions */
-      if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
-         HTM_STRONG_Begin ();
-      TstPrn_ComputeAndShowGrade (Print->NumQsts.All,Print->Score.All,Exam->MaxGrade);
-      if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
-         HTM_STRONG_End ();
-
-      /* Grade counting only valid questions */
-      if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
-	{
-         HTM_Txt ("; ");
-         HTM_TxtColonNBSP (Txt_valid_grade);
-         HTM_STRONG_Begin ();
-	 TstPrn_ComputeAndShowGrade (Print->NumQsts.Valid.Total,Print->Score.Valid,Exam->MaxGrade);
-         HTM_STRONG_End ();
-	}
-     }
-   else
-      Ico_PutIconNotVisible ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+   ExaRes_ShowExamResultGrade (Exam,Print,&ICanView);
 
    /***** Write answers and solutions *****/
    if (ICanView.Result)
@@ -1744,6 +1586,273 @@ static void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 	    Print->Score.Valid += Print->PrintedQuestions[NumQst].Score;
 	   }
      }
+  }
+
+/*****************************************************************************/
+/************************ Show user row in exam result ***********************/
+/*****************************************************************************/
+
+void ExaRes_ShowExamResultUser (struct UsrData *UsrDat)
+  {
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   bool ShowPhoto;
+   char PhotoURL[PATH_MAX + 1];
+
+   /***** Row begin *****/
+   HTM_TR_Begin (NULL);
+
+   /***** Label *****/
+   HTM_TD_Begin ("class=\"DAT_N RT\"");
+   HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+   HTM_TD_End ();
+
+   /***** User's data *****/
+   HTM_TD_Begin ("class=\"DAT LB\"");
+   ID_WriteUsrIDs (UsrDat,NULL);
+   HTM_TxtF ("&nbsp;%s",UsrDat->Surname1);
+   if (UsrDat->Surname2[0])
+      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
+   if (UsrDat->FirstName[0])
+      HTM_TxtF (", %s",UsrDat->FirstName);
+   HTM_BR ();
+   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
+   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+					NULL,
+		     "PHOTO45x60",Pho_ZOOM,false);
+   HTM_TD_End ();
+
+   /***** Row end *****/
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/********************* Show start/end time in exam print *********************/
+/*****************************************************************************/
+
+static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print)
+  {
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
+   Dat_StartEndTime_t StartEndTime;
+   char *Id;
+
+   for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	StartEndTime++)
+     {
+      /***** Row begin *****/
+      HTM_TR_Begin (NULL);
+
+      /***** Label *****/
+      HTM_TD_Begin ("class=\"DAT_N RT\"");
+      HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
+      HTM_TD_End ();
+
+      /***** Time *****/
+      if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_TD_Begin ("id=\"%s\" class=\"DAT LB\"",Id);
+      Dat_WriteLocalDateHMSFromUTC (Id,Print->TimeUTC[StartEndTime],
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+				    true,true,true,0x7);
+      HTM_TD_End ();
+      free (Id);
+
+      /***** Row end *****/
+      HTM_TR_End ();
+     }
+  }
+
+/*****************************************************************************/
+/******************* Show number of questions in exam print ******************/
+/*****************************************************************************/
+
+static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
+                                          const struct ExaRes_ICanView *ICanView)
+  {
+   extern const char *Txt_Questions;
+   extern const char *Txt_QUESTIONS_valid;
+   extern const char *Txt_QUESTIONS_invalid;
+
+   /***** Row begin *****/
+   HTM_TR_Begin (NULL);
+
+   /***** Label *****/
+   HTM_TD_Begin ("class=\"DAT_N RT\"");
+   HTM_TxtColon (Txt_Questions);
+   HTM_TD_End ();
+
+   /***** Number of questions *****/
+   HTM_TD_Begin ("class=\"DAT LB\"");
+   if (ICanView->Result)
+     {
+      HTM_TxtF ("%u",Print->NumQsts.All);
+      if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
+	{
+	 HTM_Txt (" (");
+
+	 /* Valid questions */
+	 HTM_SPAN_Begin ("class=\"DAT_GREEN\"");
+	 HTM_TxtColonNBSP (Txt_QUESTIONS_valid);
+	 HTM_Unsigned (Print->NumQsts.Valid.Total);
+	 HTM_SPAN_End ();
+
+	 HTM_TxtF ("; ");
+
+	 /* Invalid questions */
+	 HTM_SPAN_Begin ("class=\"DAT_RED\"");
+	 HTM_TxtColonNBSP (Txt_QUESTIONS_invalid);
+	 HTM_Unsigned (Print->NumQsts.All - Print->NumQsts.Valid.Total);
+	 HTM_SPAN_End ();
+
+	 HTM_Txt (")");
+	}
+     }
+   else
+      Ico_PutIconNotVisible ();
+   HTM_TD_End ();
+
+   /***** Row end *****/
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/******************** Show number of answers in exam print *******************/
+/*****************************************************************************/
+
+static void ExaRes_ShowExamResultNumAnss (struct ExaPrn_Print *Print,
+                                          const struct ExaRes_ICanView *ICanView)
+  {
+   extern const char *Txt_Valid_answers;
+   extern const char *Txt_ANSWERS_correct;
+   extern const char *Txt_ANSWERS_wrong;
+   extern const char *Txt_ANSWERS_blank;
+
+   /***** Row begin *****/
+   HTM_TR_Begin (NULL);
+
+   /***** Label *****/
+   HTM_TD_Begin ("class=\"DAT_N RT\"");
+   HTM_TxtColon (Txt_Valid_answers);
+   HTM_TD_End ();
+
+   /***** Number of answers *****/
+   HTM_TD_Begin ("class=\"DAT LB\"");
+   if (ICanView->Result)
+      HTM_TxtF ("%s(<em>p<sub>i</sub></em>=1):&nbsp;%u; "
+	        "%s(-1&le;<em>p<sub>i</sub></em>&lt;0):&nbsp;%u; "
+	        "%s(<em>p<sub>i</sub></em>=0):&nbsp;%u; "
+	        "%s(0&lt;<em>p<sub>i</sub></em>&lt;1):&nbsp;%u; "
+	        "%s(<em>p<sub>i</sub></em>=0):&nbsp;%u",
+                Txt_ANSWERS_correct,Print->NumQsts.Valid.Correct,
+                Txt_ANSWERS_wrong  ,Print->NumQsts.Valid.Wrong.Negative,
+                Txt_ANSWERS_wrong  ,Print->NumQsts.Valid.Wrong.Zero,
+                Txt_ANSWERS_wrong  ,Print->NumQsts.Valid.Wrong.Positive,
+                Txt_ANSWERS_blank  ,Print->NumQsts.Valid.Blank);
+   else
+      Ico_PutIconNotVisible ();
+   HTM_TD_End ();
+
+   /***** Row end *****/
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************************** Show score in exam print *************************/
+/*****************************************************************************/
+
+static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
+                                        const struct ExaRes_ICanView *ICanView)
+  {
+   extern const char *Txt_Score;
+   extern const char *Txt_valid_score;
+
+   /***** Row begin *****/
+   HTM_TR_Begin (NULL);
+
+   /***** Label *****/
+   HTM_TD_Begin ("class=\"DAT_N RT\"");
+   HTM_TxtColon (Txt_Score);
+   HTM_TD_End ();
+
+   /***** Score *****/
+   HTM_TD_Begin ("class=\"DAT LB\"");
+   if (ICanView->Score)
+     {
+      /* Score counting all questions */
+      if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
+         HTM_STRONG_Begin ();
+      HTM_Double2Decimals (Print->Score.All);
+      HTM_Txt ("/");
+      HTM_Unsigned (Print->NumQsts.All);
+      if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
+         HTM_STRONG_End ();
+
+      /* Scoure counting only valid questions */
+      if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
+	{
+         HTM_Txt ("; ");
+         HTM_TxtColonNBSP (Txt_valid_score);
+         HTM_STRONG_Begin ();
+         HTM_Double2Decimals (Print->Score.Valid);
+	 HTM_Txt ("/");
+	 HTM_Unsigned (Print->NumQsts.Valid.Total);
+         HTM_STRONG_End ();
+	}
+     }
+   else
+      Ico_PutIconNotVisible ();
+   HTM_TD_End ();
+
+   /***** Row end *****/
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************************** Show grade in exam print *************************/
+/*****************************************************************************/
+
+static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
+	                                struct ExaPrn_Print *Print,
+                                        const struct ExaRes_ICanView *ICanView)
+  {
+   extern const char *Txt_Grade;
+   extern const char *Txt_valid_grade;
+
+   /***** Row begin *****/
+   HTM_TR_Begin (NULL);
+
+   /***** Label *****/
+   HTM_TD_Begin ("class=\"DAT_N RT\"");
+   HTM_TxtColon (Txt_Grade);
+   HTM_TD_End ();
+
+   /***** Grade *****/
+   HTM_TD_Begin ("class=\"DAT LB\"");
+   if (ICanView->Score)
+     {
+      /* Grade counting all questions */
+      if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
+         HTM_STRONG_Begin ();
+      TstPrn_ComputeAndShowGrade (Print->NumQsts.All,Print->Score.All,Exam->MaxGrade);
+      if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
+         HTM_STRONG_End ();
+
+      /* Grade counting only valid questions */
+      if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
+	{
+         HTM_Txt ("; ");
+         HTM_TxtColonNBSP (Txt_valid_grade);
+         HTM_STRONG_Begin ();
+	 TstPrn_ComputeAndShowGrade (Print->NumQsts.Valid.Total,Print->Score.Valid,Exam->MaxGrade);
+         HTM_STRONG_End ();
+	}
+     }
+   else
+      Ico_PutIconNotVisible ();
+   HTM_TD_End ();
+
+   /***** Row end *****/
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/

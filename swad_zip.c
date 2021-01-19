@@ -25,9 +25,11 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <dirent.h>		// For scandir, etc.
 #include <errno.h>		// For errno
 #include <linux/limits.h>	// For PATH_MAX
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For system...
 #include <string.h>		// For string functions...
 #include <sys/stat.h>		// For mkdir...
@@ -357,7 +359,7 @@ static void ZIP_CompressFolderIntoZIP (void)
                         NAME_MAX + 1 +
                         NAME_MAX + 1];
    int Result;
-   char FileNameZIP[NAME_MAX + 1];
+   char *FileNameZIP;
    char PathFileZIP[PATH_MAX + 1];
    struct stat FileStatus;
    char URLWithSpaces[PATH_MAX + 1];
@@ -395,10 +397,10 @@ static void ZIP_CompressFolderIntoZIP (void)
 	 Lay_ShowErrorAndExit ("Can not change to temporary folder for compression.");
 
       /***** Create public zip file with the assignment and works *****/
-      snprintf (FileNameZIP,sizeof (FileNameZIP),
-	        "%s.zip",
-	        strcmp (Gbl.FileBrowser.FilFolLnk.Name,".") ? Gbl.FileBrowser.FilFolLnk.Name :
-							    Txt_ROOT_FOLDER_EXTERNAL_NAMES[Gbl.FileBrowser.Type]);
+      if (asprintf (&FileNameZIP,"%s.zip",
+	            strcmp (Gbl.FileBrowser.FilFolLnk.Name,".") ? Gbl.FileBrowser.FilFolLnk.Name :
+							          Txt_ROOT_FOLDER_EXTERNAL_NAMES[Gbl.FileBrowser.Type]) < 0)
+         Lay_NotEnoughMemoryExit ();
       snprintf (PathFileZIP,sizeof (PathFileZIP),
 	        "%s/%s/%s/%s",
 	        Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
@@ -414,29 +416,30 @@ static void ZIP_CompressFolderIntoZIP (void)
       if (chdir (Cfg_PATH_CGI_BIN))
 	 Lay_ShowErrorAndExit ("Can not change to cgi-bin folder.");
 
-      /***** If the zip command has been sucessful, write the link to zip file *****/
-      if (Result == 0)
-	{
-	 /***** Get file size *****/
-	 if (lstat (PathFileZIP,&FileStatus))	// On success ==> 0 is returned
-	    Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
-	 else
-	   {
-	    /***** Create URL pointing to ZIP file *****/
-	    snprintf (URLWithSpaces,sizeof (URLWithSpaces),
-		      "%s/%s/%s/%s",
-		      Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-		      Gbl.FileBrowser.TmpPubDir.L,
-		      Gbl.FileBrowser.TmpPubDir.R,
-		      FileNameZIP);
-	    Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
-
-	    /****** Link to download file *****/
-	    ZIP_ShowLinkToDownloadZIP (FileNameZIP,URL,FileStatus.st_size,UncompressedSize);
-	   }
-	}
-      else
+      /***** If the zip command has not been sucessful, abort *****/
+      if (Result)
 	 Lay_ShowErrorAndExit ("Can not compress files into zip file.");
+
+      /***** If the zip command has been sucessful, write the link to zip file *****/
+      /* Get file size */
+      if (lstat (PathFileZIP,&FileStatus))	// On success ==> 0 is returned
+	 Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+      else
+	{
+	 /* Create URL pointing to ZIP file */
+	 snprintf (URLWithSpaces,sizeof (URLWithSpaces),
+		   "%s/%s/%s/%s",
+		   Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
+		   Gbl.FileBrowser.TmpPubDir.L,
+		   Gbl.FileBrowser.TmpPubDir.R,
+		   FileNameZIP);
+	 Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
+
+	 /** Link to download file */
+	 ZIP_ShowLinkToDownloadZIP (FileNameZIP,URL,FileStatus.st_size,UncompressedSize);
+	}
+
+      free (FileNameZIP);
      }
 
    /***** Remove the directory of compression *****/

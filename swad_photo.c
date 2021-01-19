@@ -1598,8 +1598,8 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    unsigned NumUsr;
    char PathPrivRelPhoto[PATH_MAX + 1];	// Relative path to private photo, to calculate average face
-   char PathRelAvgPhoto[PATH_MAX + 1];
-   char FileNamePhotoNames[PATH_MAX + 1];
+   char *PathRelAvgPhoto;
+   char *FileNamePhotoNames;
    FILE *FilePhotoNames = NULL;	// Initialized to avoid warning
    char StrCallToProgram[3 * (PATH_MAX + 1)];	// Call to photo processing program
    int ReturnCode;
@@ -1615,18 +1615,18 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
    *NumStds = *NumStdsWithPhoto = 0;
 
    /***** Build name for file with average photo *****/
-   snprintf (PathRelAvgPhoto,sizeof (PathRelAvgPhoto),
-	     "%s/%ld_%s.jpg",
-             DirAvgPhotosRelPath,DegCod,Usr_StringsSexDB[Sex]);
+   if (asprintf (&PathRelAvgPhoto,"%s/%ld_%s.jpg",
+                 DirAvgPhotosRelPath,DegCod,Usr_StringsSexDB[Sex]) < 0)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Remove old file if exists *****/
    if (Fil_CheckIfPathExists (PathRelAvgPhoto))  // If file exists
       unlink (PathRelAvgPhoto);
 
    /***** Build names for text file with photo paths *****/
-   snprintf (FileNamePhotoNames,sizeof (FileNamePhotoNames),
-	     "%s/%ld.txt",
-	     Cfg_PATH_PHOTO_TMP_PRIVATE,DegCod);
+   if (asprintf (&FileNamePhotoNames,"%s/%ld.txt",
+	         Cfg_PATH_PHOTO_TMP_PRIVATE,DegCod) < 0)
+      Lay_NotEnoughMemoryExit ();
    if ((FilePhotoNames = fopen (FileNamePhotoNames,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not open file to compute average photo.");
 
@@ -1666,6 +1666,9 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
       if (WEXITSTATUS(ReturnCode))
 	 Lay_ShowErrorAndExit ("The average photo has not been computed successfully.");
      }
+
+   free (PathRelAvgPhoto);
+   free (FileNamePhotoNames);
 
    /***** Time used to compute the stats of this degree *****/
    if (gettimeofday (&tvEndComputingStat, &tz))

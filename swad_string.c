@@ -1456,7 +1456,8 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                Lay_ShowErrorAndExit ("Space allocated to string is full.");
 
             /* Copy to appropiate place the special character string */
-            strncpy (PtrDst,StrSpecialChar,LengthSpecStrDst);
+            // strncpy (PtrDst,StrSpecialChar,LengthSpecStrDst);
+            strcpy (PtrDst,StrSpecialChar);
 
             /* Increment pointer to character after ';' */
             PtrSrc += LengthSpecStrSrc;
