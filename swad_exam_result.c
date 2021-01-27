@@ -116,12 +116,14 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
 static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 	                           const struct ExaSes_Session *Session,
                                    struct ExaPrn_Print *Print,
-                                   struct UsrData *UsrDat);
+                                   struct UsrData *UsrDat,
+                                   struct ExaRes_ICanView *ICanView,
+                                   unsigned Visibility);
 
-static void ExaRes_CheckIfICanSeePrintResult (const struct Exa_Exam *Exam,
-                                              const struct ExaSes_Session *Session,
-                                              long UsrCod,
-                                              struct ExaRes_ICanView *ICanView);
+static void ExaRes_CheckIfICanViewResult (const struct Exa_Exam *Exam,
+                                          const struct ExaSes_Session *Session,
+                                          long UsrCod,
+                                          struct ExaRes_ICanView *ICanView);
 
 static void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print);
 static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print);
@@ -970,7 +972,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	 Exa_GetDataOfExamByCod (&Exam);
 
 	 /* Check if I can view this print result and its score */
-	 ExaRes_CheckIfICanSeePrintResult (&Exam,&Session,UsrDat->UsrCod,&ICanView);
+	 ExaRes_CheckIfICanViewResult (&Exam,&Session,UsrDat->UsrCod,&ICanView);
 
 	 if (NumResult)
 	    HTM_TR_Begin (NULL);
@@ -1332,6 +1334,12 @@ void ExaRes_ShowExaResultAfterFinish (void)
    struct Exa_Exam Exam;
    struct ExaSes_Session Session;
    struct ExaPrn_Print Print;
+   struct ExaRes_ICanView ICanView =
+     {
+      .Result = true,	// I have just finish answering, so show result...
+      .Score  = false,	// ...but not score
+     };
+   unsigned Visibility = 1 << TstVis_VISIBLE_QST_ANS_TXT;	// Show only questions and answers text
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -1356,22 +1364,8 @@ void ExaRes_ShowExaResultAfterFinish (void)
    ExaPrn_GetPrintQuestionsFromDB (&Print);
 
    /***** Show exam result *****/
-   ExaRes_ShowExamResult (&Exam,&Session,&Print,&Gbl.Usrs.Me.UsrDat);
-
-   /***** Show exam log *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 ExaLog_ShowExamLog (&Print);
-	 break;
-      default:	// Other users can not see log
-	 return;
-     }
+   ExaRes_ShowExamResult (&Exam,&Session,&Print,
+                          &Gbl.Usrs.Me.UsrDat,&ICanView,Visibility);
   }
 
 /*****************************************************************************/
@@ -1386,6 +1380,7 @@ void ExaRes_ShowOneExaResult (void)
    Usr_MeOrOther_t MeOrOther;
    struct UsrData *UsrDat;
    struct ExaPrn_Print Print;
+   struct ExaRes_ICanView ICanView;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -1418,8 +1413,12 @@ void ExaRes_ShowOneExaResult (void)
    /***** Get questions and user's answers of exam print from database *****/
    ExaPrn_GetPrintQuestionsFromDB (&Print);
 
+   /***** Check if I can view this print result and its score *****/
+   ExaRes_CheckIfICanViewResult (&Exam,&Session,UsrDat->UsrCod,&ICanView);
+
    /***** Show exam result *****/
-   ExaRes_ShowExamResult (&Exam,&Session,&Print,UsrDat);
+   ExaRes_ShowExamResult (&Exam,&Session,&Print,
+                          UsrDat,&ICanView,Exam.Visibility);
 
    /***** Show exam log *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1444,18 +1443,15 @@ void ExaRes_ShowOneExaResult (void)
 static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 	                           const struct ExaSes_Session *Session,
                                    struct ExaPrn_Print *Print,
-                                   struct UsrData *UsrDat)
+                                   struct UsrData *UsrDat,
+                                   struct ExaRes_ICanView *ICanView,
+                                   unsigned Visibility)
   {
    extern const char *Hlp_ASSESSMENT_Exams_results;
    extern const char *Txt_The_user_does_not_exist;
-   struct ExaRes_ICanView ICanView;
-
-   /***** Check if I can view this print result and its score *****/
-   ExaRes_CheckIfICanSeePrintResult (Exam,Session,UsrDat->UsrCod,&ICanView);
 
    /***** Compute score taking into account only valid questions *****/
-   if (ICanView.Score)
-      ExaRes_ComputeValidPrintScore (Print);
+   ExaRes_ComputeValidPrintScore (Print);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Session->Title,
@@ -1483,20 +1479,20 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
    ExaRes_ShowExamResultTime (Print);
 
    /***** Number of questions *****/
-   ExaRes_ShowExamResultNumQsts (Print,&ICanView);
+   ExaRes_ShowExamResultNumQsts (Print,ICanView);
 
    /***** Number of answers *****/
-   ExaRes_ShowExamResultNumAnss (Print,&ICanView);
+   ExaRes_ShowExamResultNumAnss (Print,ICanView);
 
    /***** Score *****/
-   ExaRes_ShowExamResultScore (Print,&ICanView);
+   ExaRes_ShowExamResultScore (Print,ICanView);
 
    /***** Grade *****/
-   ExaRes_ShowExamResultGrade (Exam,Print,&ICanView);
+   ExaRes_ShowExamResultGrade (Exam,Print,ICanView);
 
    /***** Write answers and solutions *****/
-   if (ICanView.Result)
-      ExaRes_ShowExamAnswers (UsrDat,Print,Exam->Visibility);
+   if (ICanView->Result)
+      ExaRes_ShowExamAnswers (UsrDat,Print,Visibility);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1506,13 +1502,13 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
   }
 
 /*****************************************************************************/
-/********************** Get if I can see print result ************************/
+/********************* Get if I can view print result ************************/
 /*****************************************************************************/
 
-static void ExaRes_CheckIfICanSeePrintResult (const struct Exa_Exam *Exam,
-                                              const struct ExaSes_Session *Session,
-                                              long UsrCod,
-                                              struct ExaRes_ICanView *ICanView)
+static void ExaRes_CheckIfICanViewResult (const struct Exa_Exam *Exam,
+                                          const struct ExaSes_Session *Session,
+                                          long UsrCod,
+                                          struct ExaRes_ICanView *ICanView)
   {
    bool ItsMe;
 
@@ -1779,7 +1775,7 @@ static void ExaRes_ShowExamResultNumAnss (struct ExaPrn_Print *Print,
 
    /***** Number of answers *****/
    HTM_TD_Begin ("class=\"DAT LB\"");
-   if (ICanView->Result)
+   if (ICanView->Score)
       HTM_TxtF ("%s(<em>p<sub>i</sub></em>=1):&nbsp;%u; "
 	        "%s(-1&le;<em>p<sub>i</sub></em>&lt;0):&nbsp;%u; "
 	        "%s(<em>p<sub>i</sub></em>=0):&nbsp;%u; "
