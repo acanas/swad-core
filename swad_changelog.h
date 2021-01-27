@@ -452,8 +452,6 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Non-editing teacher should create attendance events and control attendance
 
-// TODO: Reportado por Javier Fernández Baldomero. Un profesor debería poder cambiar la foto de un estudiante confirmado. Sale el icono, pero luego dice ue no hay permiso
-
 // TODO: URGENTE: Reportado por Javier Fernández Baldomero. Al pasar lista con SWADroid, los estudiantes sin foto no salen en la lista de alumnos de SWADroid.
 
 // TODO: Sugerencia de Pedro A. García Sánchez: poner un enlace a horario externo, igual que con otras partes de la información
@@ -555,7 +553,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.9 (2021-01-20)"
+#define Log_PLATFORM_VERSION	"SWAD 20.9.1 (2021-01-27)"
 #define CSS_FILE		"swad20.8.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
@@ -602,6 +600,9 @@ Juan Miguel.
 TODO: Fix bug: un profesor editor no puede ver las carpetas de TFG (proyectos) de otros. Debería poder.
 TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse al ver los accesos de un estudiante a la asignatura.
 
+TODO: Reportado por Javier Fernández Baldomero. Un profesor debería poder cambiar la foto de un estudiante confirmado. Sale el icono, pero luego dice ue no hay permiso
+
+	Version 20.9.1:	  Jan 27, 2021  Code refactoring in exam results. (304865 lines)
 	Version 20.9:	  Jan 20, 2021  Exam print ready to be answered is displayed in a new tab.
 					Code refactoring in exam results. (304829 lines)
 	Version 20.8:	  Dec 15, 2020  Fixed bug in file browser. Reported by Javier Fernández Baldomero. (304711 lines)

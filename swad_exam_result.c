@@ -1323,6 +1323,58 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
   }
 
 /*****************************************************************************/
+/************** Show one exam result after finish answering it ***************/
+/*****************************************************************************/
+
+void ExaRes_ShowExaResultAfterFinish (void)
+  {
+   struct Exa_Exams Exams;
+   struct Exa_Exam Exam;
+   struct ExaSes_Session Session;
+   struct ExaPrn_Print Print;
+
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
+   Exa_ResetExam (&Exam);
+   ExaSes_ResetSession (&Session);
+
+   /***** Get and check parameters *****/
+   ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
+
+   /***** Get exam print data *****/
+   Print.SesCod = Session.SesCod;
+   Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+   ExaPrn_GetDataOfPrintBySesCodAndUsrCod (&Print);
+
+   /***** Set log action and print code *****/
+   // The user has clicked on the "I have finished" button in an exam print
+   ExaLog_SetAction (ExaLog_FINISH_EXAM);
+   ExaLog_SetPrnCod (Print.PrnCod);
+   ExaLog_SetIfCanAnswer (ExaSes_CheckIfICanAnswerThisSession (&Exam,&Session));
+
+   /***** Get questions and user's answers of exam print from database *****/
+   ExaPrn_GetPrintQuestionsFromDB (&Print);
+
+   /***** Show exam result *****/
+   ExaRes_ShowExamResult (&Exam,&Session,&Print,&Gbl.Usrs.Me.UsrDat);
+
+   /***** Show exam log *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 ExaLog_ShowExamLog (&Print);
+	 break;
+      default:	// Other users can not see log
+	 return;
+     }
+  }
+
+/*****************************************************************************/
 /*************************** Show one exam result ****************************/
 /*****************************************************************************/
 
@@ -1344,9 +1396,8 @@ void ExaRes_ShowOneExaResult (void)
    ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
 
    /***** Pointer to user's data *****/
-   MeOrOther = (Gbl.Action.Act == ActSeeOneExaResMe ||
-	        Gbl.Action.Act == ActEndExaPrn) ? Usr_ME :
-	                                          Usr_OTHER;
+   MeOrOther = (Gbl.Action.Act == ActSeeOneExaResMe) ? Usr_ME :
+	                                               Usr_OTHER;
    switch (MeOrOther)
      {
       case Usr_ME:
@@ -1363,15 +1414,6 @@ void ExaRes_ShowOneExaResult (void)
    Print.SesCod = Session.SesCod;
    Print.UsrCod = UsrDat->UsrCod;
    ExaPrn_GetDataOfPrintBySesCodAndUsrCod (&Print);
-
-   /***** Set log action and print code *****/
-   if (Gbl.Action.Act == ActEndExaPrn)
-     {
-      // The user has clicked on the "I have finished" button in an exam print
-      ExaLog_SetAction (ExaLog_FINISH_EXAM);
-      ExaLog_SetPrnCod (Print.PrnCod);
-      ExaLog_SetIfCanAnswer (ExaSes_CheckIfICanAnswerThisSession (&Exam,&Session));
-     }
 
    /***** Get questions and user's answers of exam print from database *****/
    ExaPrn_GetPrintQuestionsFromDB (&Print);
