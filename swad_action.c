@@ -728,9 +728,9 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActHidExaSes	] = {1900,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSes_HideSession		,NULL},
    [ActUnhExaSes	] = {1901,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSes_UnhideSession		,NULL},
 
-   [ActSeeExaPrn	] = {1904,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,ExaPrn_ShowExamPrint		,NULL},
+   [ActSeeExaPrn	] = {1904,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaPrn_ShowExamPrint		,NULL},
    [ActAnsExaPrn	] = {1906,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,ExaPrn_ReceivePrintAnswer	,NULL},
-   [ActEndExaPrn	] = {1908,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,NULL				,ExaRes_ShowExaResultAfterFinish,NULL},
+   [ActEndExaPrn	] = {1908,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,ExaRes_ShowExaResultAfterFinish,NULL},
 
    [ActSeeMyExaResCrs	] = {1867,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyResultsInCrs	,NULL},
    [ActSeeMyExaResExa	] = {1868,-1,TabUnk,ActSeeAllExa	,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRes_ShowMyResultsInExa	,NULL},

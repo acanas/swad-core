@@ -553,7 +553,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.10 (2021-01-27)"
+#define Log_PLATFORM_VERSION	"SWAD 20.10.1 (2021-01-28)"
 #define CSS_FILE		"swad20.8.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
@@ -602,6 +602,7 @@ TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse 
 
 TODO: Reportado por Javier Fernández Baldomero. Un profesor debería poder cambiar la foto de un estudiante confirmado. Sale el icono, pero luego dice ue no hay permiso
 
+	Version 20.10.1:  Jan 28, 2021  Exam print returns to the main tab to avoid bug when the student changes the course. (304864 lines)
 	Version 20.10:	  Jan 27, 2021  Exam print is visible just after answering it. (304863 lines)
 	Version 20.9.1:	  Jan 27, 2021  Code refactoring in exam results. (304865 lines)
 	Version 20.9:	  Jan 20, 2021  Exam print ready to be answered is displayed in a new tab.
