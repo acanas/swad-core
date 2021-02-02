@@ -156,6 +156,12 @@ void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void)
    /***** Update my current password *****/
    Str_Copy (Gbl.Usrs.Me.UsrDat.Password,Gbl.Usrs.Me.PendingPassword,
              Pwd_BYTES_ENCRYPTED_PASSWORD);
+
+   /***** Remove my pending password from database
+          since it is not longer necessary *****/
+   DB_QueryDELETE ("can not remove pending password",
+		   "DELETE FROM pending_passwd WHERE UsrCod=%ld",
+	           Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
