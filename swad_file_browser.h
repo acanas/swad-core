@@ -244,6 +244,8 @@ long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
                       const char *FullPathInTree,
                       bool IsPublic,Brw_License_t License);
 
+bool Brw_CheckIfICanViewProjectFiles (long PrjCod);
+
 void Brw_RemoveExpiredExpandedFolders (void);
 
 void Brw_CalcSizeOfDir (char *Path);

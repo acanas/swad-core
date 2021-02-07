@@ -1437,8 +1437,8 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level);
 static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level);
 static bool Brw_CheckIfICanModifySharedFileOrFolder (void);
 static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void);
-static bool Brw_CheckIfICanViewProjectDocuments (unsigned MyRolesInProject);
-static bool Brw_CheckIfICanViewProjectAssessment (unsigned MyRolesInProject);
+static bool Brw_CheckIfICanViewProjectDocuments (long PrjCod);
+static bool Brw_CheckIfICanViewProjectAssessment (long PrjCod);
 static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void);
 static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void);
 static long Brw_GetPublisherOfSubtree (void);
@@ -3150,7 +3150,6 @@ static void Brw_ShowFileBrowserProject (void)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
    struct Prj_Project Prj;
-   unsigned MyRolesInProject;
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Prj);
@@ -3168,12 +3167,11 @@ static void Brw_ShowFileBrowserProject (void)
    Prj_ShowOneUniqueProject (&Prj);
 
    /***** Show project file browsers *****/
-   MyRolesInProject = Prj_GetMyRolesInProject (Prj_GetPrjCod ());
-   if (Prj_CheckIfICanViewProjectFiles (MyRolesInProject))
+   if (Brw_CheckIfICanViewProjectFiles (Prj.PrjCod))
      {
       Brw_WriteTopBeforeShowingFileBrowser ();
 
-      if (Brw_CheckIfICanViewProjectDocuments (MyRolesInProject))
+      if (Brw_CheckIfICanViewProjectDocuments (Prj.PrjCod))
 	{
 	 /***** Show the tree with the project documents *****/
 	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_PRJ;
@@ -3181,7 +3179,7 @@ static void Brw_ShowFileBrowserProject (void)
 	 Brw_ShowFileBrowser ();
 	}
 
-      if (Brw_CheckIfICanViewProjectAssessment (MyRolesInProject))
+      if (Brw_CheckIfICanViewProjectAssessment (Prj.PrjCod))
 	{
 	 /***** Show the tree with the project assessment *****/
 	 Gbl.FileBrowser.Type = Brw_ADMI_ASS_PRJ;
@@ -11524,17 +11522,42 @@ static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void)
   }
 
 /*****************************************************************************/
-/******** Check if I have permission to view project documents zone **********/
+/******************** Can I view files of a given project? *******************/
 /*****************************************************************************/
 
-static bool Brw_CheckIfICanViewProjectDocuments (unsigned MyRolesInProject)
+bool Brw_CheckIfICanViewProjectFiles (long PrjCod)
   {
+   unsigned MyRolesInProject;
+
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
-      case Rol_TCH:
+	 MyRolesInProject = Prj_GetMyRolesInProject (PrjCod);
 	 return (MyRolesInProject != 0);	// Am I a member?
+      case Rol_TCH:	// Editing teachers in a course can access to all files
+      case Rol_SYS_ADM:
+	 return true;
+      default:
+	 return false;
+     }
+  }
+
+/*****************************************************************************/
+/******** Check if I have permission to view project documents zone **********/
+/*****************************************************************************/
+
+static bool Brw_CheckIfICanViewProjectDocuments (long PrjCod)
+  {
+   unsigned MyRolesInProject;
+
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+      case Rol_NET:
+	 MyRolesInProject = Prj_GetMyRolesInProject (PrjCod);
+	 return (MyRolesInProject != 0);	// Am I a member?
+      case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
          return true;
       default:
@@ -11547,15 +11570,18 @@ static bool Brw_CheckIfICanViewProjectDocuments (unsigned MyRolesInProject)
 /******** Check if I have permission to view project assessment zone *********/
 /*****************************************************************************/
 
-static bool Brw_CheckIfICanViewProjectAssessment (unsigned MyRolesInProject)
+static bool Brw_CheckIfICanViewProjectAssessment (long PrjCod)
   {
+   unsigned MyRolesInProject;
+
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
-      case Rol_TCH:
+	 MyRolesInProject = Prj_GetMyRolesInProject (PrjCod);
 	 return ((MyRolesInProject & (1 << Prj_ROLE_TUT |		// Tutor...
 	                              1 << Prj_ROLE_EVL)) != 0);	// ...or evaluator
+      case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
          return true;
       default:
@@ -11580,11 +11606,11 @@ static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void)
      {
       case Rol_STD:
       case Rol_NET:
-      case Rol_TCH:
 	 MyRolesInProject = Prj_GetMyRolesInProject (Prj_GetPrjCod ());
 	 if (MyRolesInProject)	// I am a member
             return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_GetPublisherOfSubtree ());	// Am I the publisher of subtree?
 	 return false;
+      case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
          return true;
       default:
@@ -11609,12 +11635,12 @@ static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void)
      {
       case Rol_STD:
       case Rol_NET:
-      case Rol_TCH:
 	 MyRolesInProject = Prj_GetMyRolesInProject (Prj_GetPrjCod ());
 	 if ((MyRolesInProject & (1 << Prj_ROLE_TUT |	// Tutor...
 	                          1 << Prj_ROLE_EVL)))	// ...or evaluator
             return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_GetPublisherOfSubtree ());	// Am I the publisher of subtree?
 	 return false;
+      case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
          return true;
       default:

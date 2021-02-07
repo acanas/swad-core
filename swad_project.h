@@ -207,8 +207,6 @@ void Prj_RemStd (void);
 void Prj_RemTut (void);
 void Prj_RemEvl (void);
 
-bool Prj_CheckIfICanViewProjectFiles (unsigned MyRolesInProject);
-
 void Prj_RequestCreatePrj (void);
 void Prj_RequestEditPrj (void);
 

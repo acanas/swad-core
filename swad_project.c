@@ -1230,7 +1230,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
    char *Anchor = NULL;
-   bool ICanViewProjectFiles = Prj_CheckIfICanViewProjectFiles (Prj_GetMyRolesInProject (Prj->PrjCod));
+   bool ICanViewProjectFiles = Brw_CheckIfICanViewProjectFiles (Prj->PrjCod);
    const char *ClassLabel;
    const char *ClassDate;
    const char *ClassTitle;
@@ -2793,25 +2793,6 @@ static void Prj_PutFormsToRemEditOnePrj (struct Prj_Projects *Projects,
    else
       /* Put icon toinform about locked/unlocked project edition */
       Prj_PutIconOffLockedUnlocked (Prj);
-  }
-
-/*****************************************************************************/
-/******************** Can I view files of a given project? *******************/
-/*****************************************************************************/
-
-bool Prj_CheckIfICanViewProjectFiles (unsigned MyRolesInProject)
-  {
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-      case Rol_NET:
-      case Rol_TCH:
-	 return (MyRolesInProject != 0);	// Am I a member?
-      case Rol_SYS_ADM:
-	 return true;
-      default:
-	 return false;
-     }
   }
 
 /*****************************************************************************/
