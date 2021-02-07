@@ -76,12 +76,14 @@ static void Asg_PutIconsListAssignments (void *Assignments);
 static void Asg_PutIconToCreateNewAsg (void *Assignments);
 static void Asg_PutButtonToCreateNewAsg (void *Assignments);
 static void Asg_ParamsWhichGroupsToShow (void *Assignments);
-static void Asg_ShowOneAssignment (long AsgCod,bool PrintView);
+static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
+                                   long AsgCod,bool PrintView);
 static void Asg_WriteAsgAuthor (struct Asg_Assignment *Asg);
 static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView);
 static Dat_StartEndTime_t Asg_GetParamAsgOrder (void);
 
-static void Asg_PutFormsToRemEditOneAsg (const struct Asg_Assignment *Asg,
+static void Asg_PutFormsToRemEditOneAsg (struct Asg_Assignments *Assignments,
+                                         const struct Asg_Assignment *Asg,
                                          const char *Anchor);
 static void Asg_PutParams (void *Assignments);
 static void Asg_GetListAssignments (struct Asg_Assignments *Assignments);
@@ -185,7 +187,8 @@ static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
       for (NumAsg = Pagination.FirstItemVisible;
 	   NumAsg <= Pagination.LastItemVisible;
 	   NumAsg++)
-	 Asg_ShowOneAssignment (Assignments->LstAsgCods[NumAsg - 1],
+	 Asg_ShowOneAssignment (Assignments,
+	                        Assignments->LstAsgCods[NumAsg - 1],
 	                        false);	// Not print view
 
       /***** End table *****/
@@ -363,7 +366,8 @@ void Asg_PrintOneAssignment (void)
                          true);		// Print view
 
    /***** Write assignment *****/
-   Asg_ShowOneAssignment (AsgCod,
+   Asg_ShowOneAssignment (&Assignments,
+                          AsgCod,
                           true);	// Print view
 
    /***** End table *****/
@@ -374,7 +378,8 @@ void Asg_PrintOneAssignment (void)
 /*************************** Show one assignment *****************************/
 /*****************************************************************************/
 
-static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
+static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
+                                   long AsgCod,bool PrintView)
   {
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
@@ -399,7 +404,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    else
      {
       HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
-      Asg_PutFormsToRemEditOneAsg (&Asg,Anchor);
+      Asg_PutFormsToRemEditOneAsg (Assignments,&Asg,Anchor);
      }
    HTM_TD_End ();
 
@@ -595,15 +600,13 @@ static Dat_StartEndTime_t Asg_GetParamAsgOrder (void)
 /***************** Put a link (form) to edit one assignment ******************/
 /*****************************************************************************/
 
-static void Asg_PutFormsToRemEditOneAsg (const struct Asg_Assignment *Asg,
+static void Asg_PutFormsToRemEditOneAsg (struct Asg_Assignments *Assignments,
+                                         const struct Asg_Assignment *Asg,
                                          const char *Anchor)
   {
-   struct Asg_Assignments Assignments;
-
-   /***** Reset assignments *****/
-   Asg_ResetAssignments (&Assignments);
-
-   Assignments.AsgCodToEdit = Asg->AsgCod;	// Used as parameter in contextual links
+   /***** Set assigment to edit
+          (used as parameter in contextual links) *****/
+   Assignments->AsgCodToEdit = Asg->AsgCod;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -611,26 +614,26 @@ static void Asg_PutFormsToRemEditOneAsg (const struct Asg_Assignment *Asg,
       case Rol_SYS_ADM:
 	 /***** Put form to remove assignment *****/
 	 Ico_PutContextualIconToRemove (ActReqRemAsg,NULL,
-	                                Asg_PutParams,&Assignments);
+	                                Asg_PutParams,Assignments);
 
 	 /***** Put form to hide/show assignment *****/
 	 if (Asg->Hidden)
 	    Ico_PutContextualIconToUnhide (ActShoAsg,Anchor,
-	                                   Asg_PutParams,&Assignments);
+	                                   Asg_PutParams,Assignments);
 	 else
 	    Ico_PutContextualIconToHide (ActHidAsg,Anchor,
-	                                 Asg_PutParams,&Assignments);
+	                                 Asg_PutParams,Assignments);
 
 	 /***** Put form to edit assignment *****/
 	 Ico_PutContextualIconToEdit (ActEdiOneAsg,NULL,
-	                              Asg_PutParams,&Assignments);
+	                              Asg_PutParams,Assignments);
 	 /* falls through */
 	 /* no break */
       case Rol_STD:
       case Rol_NET:
 	 /***** Put form to print assignment *****/
 	 Ico_PutContextualIconToPrint (ActPrnOneAsg,
-	                               Asg_PutParams,&Assignments);
+	                               Asg_PutParams,Assignments);
 	 break;
       default:
          break;

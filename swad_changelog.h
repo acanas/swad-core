@@ -553,7 +553,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.11 (2021-02-07)"
+#define Log_PLATFORM_VERSION	"SWAD 20.11.1 (2021-02-07)"
 #define CSS_FILE		"swad20.8.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
@@ -578,7 +578,6 @@ TODO: En los resultados de una partida, cuando la pregunta ha sido modificada, n
       Por ejemplo una pregunta podria haber sido bien contestada con 1 punto, y se muestra en esa pregunta modificada aparece 0 en rojo.
 
 TODO: Al pulsar en una notificación de un mensaje nos lleva a la página 1, aunque el mensaje esté en otra página.
-TODO: Al pulsar en la acción 964 (ocultar o visualizar una actividad) en la página 1, nos lleva erróneamente a la página 2.
 
 TODO: Partidas en SWADroid:
 Hola Antonio:
@@ -601,6 +600,7 @@ TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse 
 
 TODO: BUG: Cuando un tipo de grupo sólo tiene un grupo, inscribirse es voluntario, el estudiante sólo puede pertenecer a un grupo, y se inscribe en él, debería poder desapuntarse. Ahora no puede.
 
+	Version 20.11.1:  Feb 07, 2021  Fixed bugs in assigments pagination. (304880 lines)
 	Version 20.11:    Feb 07, 2021  An editing teacher can access and modify all files in all projects in course. (304875 lines)
 	Version 20.10.3:  Feb 07, 2021  Fixed bug when a teacher changes a student's photo. Reported by Javier Fernández Baldomero. (304871 lines)
 	Version 20.10.2:  Feb 02, 2021  Pending password is deleted when used for the first time. (304870 lines)
