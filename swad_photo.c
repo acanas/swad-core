@@ -146,7 +146,7 @@ static void Pho_ComputePhotoSize (const struct Pho_DegPhotos *DegPhotos,
 /************** Check if I can change the photo of another user **************/
 /*****************************************************************************/
 
-bool Pho_ICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
+bool Pho_ICanChangeOtherUsrPhoto (struct UsrData *UsrDat)
   {
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
@@ -158,11 +158,13 @@ bool Pho_ICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
      {
       case Rol_TCH:
 	 /* A teacher can change the photo of confirmed students */
-         if (UsrDat->Roles.InCurrentCrs.Role == Rol_STD &&	// A student
-	     UsrDat->Accepted)					// who accepted registration
-            return true;
+	 if (UsrDat->Roles.InCurrentCrs.Role != Rol_STD)	// Not a student
+            return false;
 
-         return false;
+	 /* It's a student in this course,
+	    check if he/she has accepted registration */
+         UsrDat->Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
+         return UsrDat->Accepted;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
@@ -366,27 +368,26 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
 
 void Pho_SendPhotoUsr (void)
   {
-   bool ItsMe;
-
    /***** Get user whose photo must be sent or removed *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))	// If I have permission to change user's photo...
-	{
-	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-         if (ItsMe)
-	    /***** Form to send my photo *****/
-            Pho_ReqMyPhoto ();
-	 else	// Not me
-	    /***** Form to send another user's photo *****/
-	    Pho_ReqOtherUsrPhoto ();
-	}
-      else
-         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
-   else		// User not found
+   if (!Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {	// User not found
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      return;
+     }
+
+   /***** Check if I have permission to change user's photo *****/
+   if (!Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
+     {
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      return;
+     }
+
+   if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
+      /***** Form to send my photo *****/
+      Pho_ReqMyPhoto ();
+   else	// Not me
+      /***** Form to send another user's photo *****/
+      Pho_ReqOtherUsrPhoto ();
   }
 
 /*****************************************************************************/

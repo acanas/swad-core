@@ -93,7 +93,7 @@ struct Pho_DegPhotos
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-bool Pho_ICanChangeOtherUsrPhoto (const struct UsrData *UsrDat);
+bool Pho_ICanChangeOtherUsrPhoto (struct UsrData *UsrDat);
 void Pho_PutIconToChangeUsrPhoto (void);
 void Pho_ReqMyPhoto (void);
 void Pho_SendPhotoUsr (void);

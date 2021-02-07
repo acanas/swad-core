@@ -553,7 +553,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.10.2 (2021-02-02)"
+#define Log_PLATFORM_VERSION	"SWAD 20.10.3 (2021-02-07)"
 #define CSS_FILE		"swad20.8.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
@@ -600,8 +600,9 @@ Juan Miguel.
 TODO: Fix bug: un profesor editor no puede ver las carpetas de TFG (proyectos) de otros. Debería poder.
 TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse al ver los accesos de un estudiante a la asignatura.
 
-TODO: Reportado por Javier Fernández Baldomero. Un profesor debería poder cambiar la foto de un estudiante confirmado. Sale el icono, pero luego dice ue no hay permiso
+TODO: BUG: Cuando un tipo de grupo sólo tiene un grupo, inscribirse es voluntario, el estudiante sólo puede pertenecer a un grupo, y se inscribe en él, debería poder desapuntarse. Ahora no puede.
 
+	Version 20.10.3:  Feb 07, 2021  Fixed bug when a teacher changes a student's photo. Reported by Javier Fernández Baldomero. (304871 lines)
 	Version 20.10.2:  Feb 02, 2021  Pending password is deleted when used for the first time. (304870 lines)
 	Version 20.10.1:  Jan 28, 2021  Exam print returns to the main tab to avoid bug when the student changes the course. (304864 lines)
 	Version 20.10:	  Jan 27, 2021  Exam print is visible just after answering it. (304863 lines)
