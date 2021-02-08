@@ -681,7 +681,7 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 	       SubQueryPublishers[0] = '\0';
 	       break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong parameter which users.");
+	       Lay_WrongWhoExit ();
 	       break;
 	   }
 	 break;
@@ -807,7 +807,7 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 			      RangePubsToGet.Bottom);
 		     break;
 		  default:
-		     Lay_ShowErrorAndExit ("Wrong parameter which users.");
+	             Lay_WrongWhoExit ();
 		     break;
 		 }
 	       break;
@@ -835,7 +835,7 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 			      RangePubsToGet.Top);
 		     break;
 		  default:
-		     Lay_ShowErrorAndExit ("Wrong parameter which users.");
+	             Lay_WrongWhoExit ();
 		     break;
 		 }
 	       break;
@@ -894,7 +894,7 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 					     SubQueryAlreadyExists);
 		  break;
 	       default:
-		  Lay_ShowErrorAndExit ("Wrong parameter which users.");
+	          Lay_WrongWhoExit ();
 		  break;
 	      }
 	    break;
@@ -1113,7 +1113,6 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
 
    /***** List recent publications in timeline *****/
    HTM_UL_Begin ("id=\"timeline_list\" class=\"TL_LIST\"");
-
    for (NumPub = 0, SocPub.PubCod = 0;
 	NumPub < NumPubsGot;
 	NumPub++)

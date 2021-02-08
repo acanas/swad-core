@@ -10078,6 +10078,9 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
 			  Txt_WHO[Who],
 			  "ICO_HIGHLIGHT ICOx20");
 	 break;
+      default:
+	Lay_WrongWhoExit ();
+	break;
      }
   }
 

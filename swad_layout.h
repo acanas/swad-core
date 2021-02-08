@@ -77,6 +77,7 @@ void Lay_WrongProjectExit (void);
 void Lay_WrongExamExit (void);
 void Lay_WrongSetExit (void);
 void Lay_WrongExamSessionExit (void);
+void Lay_WrongWhoExit (void);
 void Lay_NoPermissionExit (void);
 void Lay_ShowErrorAndExit (const char *Txt);
 

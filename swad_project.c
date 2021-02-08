@@ -383,6 +383,7 @@ static void Prj_ShowProjects (struct Prj_Projects *Projects)
          Prj_GetSelectedUsrsAndShowTheirPrjs (Projects);
          break;
       default:
+	 Lay_WrongWhoExit ();
 	 break;
      }
   }
@@ -3056,7 +3057,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	      }
 	    break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong parameter which users.");
+	    Lay_WrongWhoExit ();
 	    break;
         }
 

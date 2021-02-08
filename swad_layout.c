@@ -1455,6 +1455,15 @@ void Lay_WrongExamSessionExit (void)
   }
 
 /*****************************************************************************/
+/*** Write error message and exit when wrong parameter "who" (which users) ***/
+/*****************************************************************************/
+
+void Lay_WrongWhoExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong parameter who.");
+  }
+
+/*****************************************************************************/
 /******* Write error message, close files, remove lock file, and exit ********/
 /*****************************************************************************/
 
