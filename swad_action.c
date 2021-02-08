@@ -96,6 +96,7 @@
 #include "swad_test_import.h"
 #include "swad_timeline.h"
 #include "swad_timeline_favourite.h"
+#include "swad_timeline_share.h"
 #include "swad_timetable.h"
 #include "swad_zip.h"
 

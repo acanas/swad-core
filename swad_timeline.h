@@ -97,6 +97,27 @@ typedef enum
    TL_SHOW_ALL_USRS,	// Show all favers/sharers
   } TL_HowManyUsrs_t;
 
+#define TL_NUM_PUB_TYPES	4
+// If the numbers assigned to each event type change,
+// it is necessary to change old numbers to new ones in database table tl_notes
+typedef enum
+  {
+   TL_PUB_UNKNOWN		= 0,
+   TL_PUB_ORIGINAL_NOTE		= 1,
+   TL_PUB_SHARED_NOTE		= 2,
+   TL_PUB_COMMENT_TO_NOTE	= 3,
+  } TL_PubType_t;
+
+struct TL_Publication
+  {
+   long PubCod;
+   long NotCod;
+   long PublisherCod;		// Sharer or writer of the publication
+   TL_PubType_t PubType;
+   time_t DateTimeUTC;
+   TL_TopMessage_t TopMessage;	// Used to show feedback on the action made
+  };
+
 struct TL_PostContent
   {
    char Txt[Cns_MAX_BYTES_LONG_TEXT + 1];
@@ -154,6 +175,8 @@ void TL_MarkNoteAsUnavailable (TL_NoteType_t NoteType,long Cod);
 void TL_MarkNoteOneFileAsUnavailable (const char *Path);
 void TL_MarkNotesChildrenOfFolderAsUnavailable (const char *Path);
 
+void TL_PublishNoteInTimeline (struct TL_Publication *SocPub);
+
 void TL_ReceivePostUsr (void);
 void TL_ReceivePostGbl (void);
 
@@ -167,16 +190,8 @@ long TL_GetParamPubCod (void);
 void TL_ReceiveCommentUsr (void);
 void TL_ReceiveCommentGbl (void);
 
-void TL_Sha_ShowAllSharersNoteUsr (void);
-void TL_Sha_ShowAllSharersNoteGbl (void);
-void TL_Sha_ShaNoteUsr (void);
-void TL_Sha_ShaNoteGbl (void);
-
 void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
                              Ntf_NotifyEvent_t NotifyEvent);
-
-void TL_Sha_UnsNoteUsr (void);
-void TL_Sha_UnsNoteGbl (void);
 
 void TL_RequestRemNoteUsr (void);
 void TL_RequestRemNoteGbl (void);
