@@ -136,7 +136,6 @@ void Not_ReceiveNotice (void)
    extern const char *Txt_Notice_created;
    long NotCod;
    unsigned NumUsrsToBeNotifiedByEMail;
-   struct TL_Publication SocPub;
    char Content[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the text of the notice *****/
@@ -157,7 +156,7 @@ void Not_ReceiveNotice (void)
       Not_UpdateNumUsrsNotifiedByEMailAboutNotice (NotCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new notice *****/
-   TL_StoreAndPublishNote (TL_NOTE_NOTICE,NotCod,&SocPub);
+   TL_StoreAndPublishNote (TL_NOTE_NOTICE,NotCod);
 
    /***** Set notice to be highlighted *****/
    Gbl.Crs.Notices.HighlightNotCod = NotCod;

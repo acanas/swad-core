@@ -372,14 +372,13 @@ void ExaAnn_ReceiveExamAnn2 (void)
   {
    struct ExaAnn_ExamAnnouncements *ExamAnns = ExaAnn_GetGlobalExamAnns ();
    unsigned NumUsrsToBeNotifiedByEMail;
-   struct TL_Publication SocPub;
 
    /***** Notify by email about the new exam announcement *****/
    if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExamAnns->HighlightExaCod)))
       ExaAnn_UpdateNumUsrsNotifiedByEMailAboutExamAnn (ExamAnns->HighlightExaCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new exam announcement *****/
-   TL_StoreAndPublishNote (TL_NOTE_EXAM_ANNOUNCEMENT,ExamAnns->HighlightExaCod,&SocPub);
+   TL_StoreAndPublishNote (TL_NOTE_EXAM_ANNOUNCEMENT,ExamAnns->HighlightExaCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);

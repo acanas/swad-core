@@ -33,16 +33,9 @@
 
 #define TL_TIMELINE_SECTION_ID	"timeline"
 
-// Number of recent publishings got and shown the first time, before refreshing
-#define TL_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// Unlimited
-#define TL_MAX_REC_PUBS_TO_GET_AND_SHOW	   10	// Recent publishings to show (first time)
-#define TL_MAX_OLD_PUBS_TO_GET_AND_SHOW	   20	// Old publishings are retrieved in packs of this size
-
 /*****************************************************************************/
 /******************************** Public types *******************************/
 /*****************************************************************************/
-
-#define TL_DEFAULT_WHO	Usr_WHO_FOLLOWED
 
 #define TL_NUM_NOTE_TYPES	13
 // If the numbers assigned to each event type change,
@@ -74,17 +67,6 @@ typedef enum
    /* Profile tab */
   } TL_NoteType_t;
 
-#define TL_NUM_PUB_TYPES	4
-// If the numbers assigned to each event type change,
-// it is necessary to change old numbers to new ones in database table tl_notes
-typedef enum
-  {
-   TL_PUB_UNKNOWN		= 0,
-   TL_PUB_ORIGINAL_NOTE		= 1,
-   TL_PUB_SHARED_NOTE		= 2,
-   TL_PUB_COMMENT_TO_NOTE	= 3,
-  } TL_PubType_t;
-
 #define TL_NUM_TOP_MESSAGES (1 + 6)
 typedef enum
   {
@@ -96,16 +78,6 @@ typedef enum
    TL_TOP_MESSAGE_UNSHARED	= 5,
    TL_TOP_MESSAGE_MENTIONED	= 6,
   } TL_TopMessage_t;
-
-struct TL_Publication
-  {
-   long PubCod;
-   long NotCod;
-   long PublisherCod;		// Sharer or writer of the publication
-   TL_PubType_t PubType;
-   time_t DateTimeUTC;
-   TL_TopMessage_t TopMessage;	// Used to show feedback on the action made
-  };
 
 struct TL_Timeline
   {
@@ -133,7 +105,7 @@ void TL_MarkMyNotifAsSeen (void);
 void TL_GetParamWho (void);
 Usr_Who_t TL_GetGlobalWho (void);
 
-void TL_StoreAndPublishNote (TL_NoteType_t NoteType,long Cod,struct TL_Publication *SocPub);
+void TL_StoreAndPublishNote (TL_NoteType_t NoteType,long Cod);
 void TL_MarkNoteAsUnavailableUsingNotCod (long NotCod);
 void TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NoteType_t NoteType,long Cod);
 void TL_MarkNoteOneFileAsUnavailable (const char *Path);

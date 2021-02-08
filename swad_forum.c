@@ -3931,7 +3931,6 @@ void For_ReceiveForumPost (void)
    bool IsReply = false;
    long PstCod = 0;
    unsigned NumUsrsToBeNotifiedByEMail;
-   struct TL_Publication SocPub;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Media Media;
@@ -4022,7 +4021,7 @@ void For_ReceiveForumPost (void)
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM__SWAD__USRS:
-         TL_StoreAndPublishNote (TL_NOTE_FORUM_POST,PstCod,&SocPub);
+         TL_StoreAndPublishNote (TL_NOTE_FORUM_POST,PstCod);
          break;
       default:
 	 break;

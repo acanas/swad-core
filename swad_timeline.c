@@ -61,12 +61,17 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
+// Number of recent publishings got and shown the first time, before refreshing
+#define TL_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// Unlimited
+#define TL_MAX_REC_PUBS_TO_GET_AND_SHOW	   10	// Recent publishings to show (first time)
+#define TL_MAX_OLD_PUBS_TO_GET_AND_SHOW	   20	// Old publishings are retrieved in packs of this size
+
 #define TL_NUM_VISIBLE_COMMENTS	3	// Maximum number of comments visible before expanding them
 
 #define TL_DEF_USRS_SHOWN	5	// Default maximum number of users shown who have share/fav a note
 #define TL_MAX_USRS_SHOWN	1000	// Top     maximum number of users shown who have share/fav a note
 
-#define TL_MAX_CHARS_IN_POST	1000
+#define TL_MAX_CHARS_IN_POST	1000	// Maximum number of characters in a post
 
 #define TL_ICON_ELLIPSIS	"ellipsis-h.svg"
 #define TL_ICON_FAV		"heart.svg"
@@ -85,10 +90,10 @@ typedef enum
   {
    TL_GET_ONLY_NEW_PUBS,	// New publications are retrieved via AJAX
 				// automatically from time to time
-   TL_GET_RECENT_TIMELINE,	// Recent timeline is shown when user clicks on action menu,...
+   TL_GET_RECENT_TIMELINE,	// Recent timeline is shown when the user clicks on action menu,...
 				// or after editing timeline
    TL_GET_ONLY_OLD_PUBS,	// Old publications are retrieved via AJAX
-				// when user clicks on link at bottom of timeline
+				// when the user clicks on link at bottom of timeline
   } TL_WhatToGetFromTimeline_t;
 
 struct PostContent
@@ -99,7 +104,7 @@ struct PostContent
 
 /*
    Timeline images will be saved with:
-   � maximum width of TL_IMAGE_SAVED_MAX_HEIGHT
+   � maximum width  of TL_IMAGE_SAVED_MAX_HEIGHT
    � maximum height of TL_IMAGE_SAVED_MAX_HEIGHT
    � maintaining the original aspect ratio (aspect ratio recommended: 3:2)
 */
@@ -146,19 +151,6 @@ struct PostContent
    written by an author in a date-time.
 */
 
-struct TL_Note
-  {
-   long NotCod;
-   TL_NoteType_t NoteType;	// Timeline post, public file, exam announcement, notice, forum post...
-   long UsrCod;			// Publisher
-   long HieCod;			// Hierarchy code (institution/centre/degree/course)
-   long Cod;			// Code of file, forum post, notice, timeline post...
-   bool Unavailable;		// File, forum post, notice,... unavailable (removed)
-   time_t DateTimeUTC;		// Date-time of publication in UTC time
-   unsigned NumShared;		// Number of times (users) this note has been shared
-   unsigned NumFavs;		// Number of times (users) this note has been favourited
-  };
-
 /* A note can have comments attached to it.
  __________________
 |@author           |
@@ -178,9 +170,44 @@ struct TL_Note
     |______________|
 
 */
-struct TL_Comment
+
+#define TL_NUM_PUB_TYPES	4
+// If the numbers assigned to each event type change,
+// it is necessary to change old numbers to new ones in database table tl_notes
+typedef enum
+  {
+   TL_PUB_UNKNOWN		= 0,
+   TL_PUB_ORIGINAL_NOTE		= 1,
+   TL_PUB_SHARED_NOTE		= 2,
+   TL_PUB_COMMENT_TO_NOTE	= 3,
+  } TL_PubType_t;
+
+struct TL_Publication
   {
    long PubCod;
+   long NotCod;
+   long PublisherCod;		// Sharer or writer of the publication
+   TL_PubType_t PubType;
+   time_t DateTimeUTC;
+   TL_TopMessage_t TopMessage;	// Used to show feedback on the action made
+  };
+
+struct TL_Note
+  {
+   long NotCod;			// Unique code/identifier for each note
+   TL_NoteType_t NoteType;	// Timeline post, public file, exam announcement, notice, forum post...
+   long UsrCod;			// Publisher
+   long HieCod;			// Hierarchy code (institution/centre/degree/course)
+   long Cod;			// Code of file, forum post, notice, timeline post...
+   bool Unavailable;		// File, forum post, notice,... unavailable (removed)
+   time_t DateTimeUTC;		// Date-time of publication in UTC time
+   unsigned NumShared;		// Number of times (users) this note has been shared
+   unsigned NumFavs;		// Number of times (users) this note has been favourited
+  };
+
+struct TL_Comment
+  {
+   long PubCod;			// Unique code/identifier for each publication
    long UsrCod;			// Publisher
    long NotCod;			// Note code to which this comment belongs
    time_t DateTimeUTC;		// Date-time of publication in UTC time
@@ -190,9 +217,9 @@ struct TL_Comment
 
 typedef enum
   {
-   TL_SHOW_A_FEW_USRS,	// Show a few first favers/sharers
+   TL_SHOW_FEW_USRS,	// Show a few first favers/sharers
    TL_SHOW_ALL_USRS,	// Show all favers/sharers
-  } TL_HowMany_t;
+  } TL_HowManyUsrs_t;
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -205,6 +232,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 Usr_Who_t TL_GlobalWho;
+
+#define TL_DEFAULT_WHO	Usr_WHO_FOLLOWED
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -273,6 +302,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot,
                                   const struct For_Forums *Forums);
 static void TL_GetNoteSummary (const struct TL_Note *SocNot,
                                char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
+static void TL_StoreAndPublishNoteInternal (TL_NoteType_t NoteType,long Cod,struct TL_Publication *SocPub);
 static void TL_PublishNoteInTimeline (struct TL_Publication *SocPub);
 
 static void TL_PutFormToWriteNewPost (struct TL_Timeline *Timeline);
@@ -317,17 +347,17 @@ static void TL_PutDisabledIconShare (unsigned NumShared);
 static void TL_PutDisabledIconFav (unsigned NumFavs);
 
 static void TL_PutFormToSeeAllSharersNote (const struct TL_Note *SocNot,
-                                           TL_HowMany_t HowMany);
+                                           TL_HowManyUsrs_t HowManyUsrs);
 static void TL_PutFormToShaNote (const struct TL_Note *SocNot);
 static void TL_PutFormToUnsNote (const struct TL_Note *SocNot);
 
 static void TL_PutFormToSeeAllFaversNote (const struct TL_Note *SocNot,
-                                          TL_HowMany_t HowMany);
+                                          TL_HowManyUsrs_t HowManyUsrs);
 static void TL_PutFormToFavNote (const struct TL_Note *SocNot);
 static void TL_PutFormToUnfNote (const struct TL_Note *SocNot);
 
 static void TL_PutFormToSeeAllFaversComment (const struct TL_Comment *SocCom,
-                                             TL_HowMany_t HowMany);
+                                             TL_HowManyUsrs_t HowManyUsrs);
 static void TL_PutFormToFavComment (const struct TL_Comment *SocCom);
 static void TL_PutFormToUnfComment (const struct TL_Comment *SocCom);
 
@@ -341,17 +371,17 @@ static long TL_GetParamPubCod (void);
 static long TL_ReceiveComment (void);
 
 static void TL_PutFormToShaUnsNote (const struct TL_Note *SocNot,
-                                    TL_HowMany_t HowMany);
+                                    TL_HowManyUsrs_t HowManyUsrs);
 static void TL_ShaNote (struct TL_Note *SocNot);
 static void TL_UnsNote (struct TL_Note *SocNot);
 
 static void TL_PutFormToFavUnfNote (const struct TL_Note *SocNot,
-                                    TL_HowMany_t HowMany);
+                                    TL_HowManyUsrs_t HowManyUsrs);
 static void TL_FavNote (struct TL_Note *SocNot);
 static void TL_UnfNote (struct TL_Note *SocNot);
 
 static void TL_PutFormToFavUnfComment (const struct TL_Comment *SocCom,
-                                       TL_HowMany_t HowMany);
+                                       TL_HowManyUsrs_t HowManyUsrs);
 static void TL_FavComment (struct TL_Comment *SocCom);
 static void TL_UnfComment (struct TL_Comment *SocCom);
 
@@ -380,11 +410,11 @@ static void TL_GetNumTimesANoteHasBeenFav (struct TL_Note *SocNot);
 static void TL_GetNumTimesACommHasBeenFav (struct TL_Comment *SocCom);
 
 static void TL_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
-					  TL_HowMany_t HowMany);
+					  TL_HowManyUsrs_t HowManyUsrs);
 static void TL_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
-					       TL_HowMany_t HowMany);
+					       TL_HowManyUsrs_t HowManyUsrs);
 static void TL_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom,
-					       TL_HowMany_t HowMany);
+					       TL_HowManyUsrs_t HowManyUsrs);
 static void TL_ShowNumSharersOrFavers (unsigned NumUsrs);
 static void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 				    unsigned NumUsrs,unsigned NumFirstUsrs);
@@ -1829,13 +1859,13 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
       /* Foot column 1: Fav zone */
       HTM_DIV_Begin ("id=\"fav_not_%s_%u\" class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\"",
 	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_PutFormToFavUnfNote (SocNot,TL_SHOW_A_FEW_USRS);
+      TL_PutFormToFavUnfNote (SocNot,TL_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /* Foot column 2: Share zone */
       HTM_DIV_Begin ("id=\"sha_not_%s_%u\" class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\"",
 	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_PutFormToShaUnsNote (SocNot,TL_SHOW_A_FEW_USRS);
+      TL_PutFormToShaUnsNote (SocNot,TL_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /* Foot column 3: Icon to remove this note */
@@ -2226,9 +2256,15 @@ static void TL_GetNoteSummary (const struct TL_Note *SocNot,
 /*****************************************************************************/
 /***************** Store and publish a note into database ********************/
 /*****************************************************************************/
-// Return the code of the new note just created
 
-void TL_StoreAndPublishNote (TL_NoteType_t NoteType,long Cod,struct TL_Publication *SocPub)
+void TL_StoreAndPublishNote (TL_NoteType_t NoteType,long Cod)
+  {
+   struct TL_Publication SocPub;
+
+   TL_StoreAndPublishNoteInternal (NoteType,Cod,&SocPub);
+  }
+
+static void TL_StoreAndPublishNoteInternal (TL_NoteType_t NoteType,long Cod,struct TL_Publication *SocPub)
   {
    long HieCod;	// Hierarchy code (institution/centre/degree/course)
 
@@ -2611,7 +2647,7 @@ static long TL_ReceivePost (void)
 				   Content.Media.MedCod);
 
       /* Insert post in notes */
-      TL_StoreAndPublishNote (TL_NOTE_POST,PstCod,&SocPub);
+      TL_StoreAndPublishNoteInternal (TL_NOTE_POST,PstCod,&SocPub);
 
       /***** Analyze content and store notifications about mentions *****/
       Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content.Txt);
@@ -3173,7 +3209,7 @@ static void TL_WriteComment (struct TL_Timeline *Timeline,
       /* Fav zone */
       HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"TL_FAV_COM TL_FAV_WIDTH\"",
 	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_PutFormToFavUnfComment (SocCom,TL_SHOW_A_FEW_USRS);
+      TL_PutFormToFavUnfComment (SocCom,TL_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /* Put icon to remove this comment */
@@ -3286,14 +3322,14 @@ static void TL_PutDisabledIconFav (unsigned NumFavs)
 /*****************************************************************************/
 
 static void TL_PutFormToSeeAllSharersNote (const struct TL_Note *SocNot,
-                                           TL_HowMany_t HowMany)
+                                           TL_HowManyUsrs_t HowManyUsrs)
   {
    extern const char *Txt_View_all_USERS;
    char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
-   switch (HowMany)
+   switch (HowManyUsrs)
      {
-      case TL_SHOW_A_FEW_USRS:
+      case TL_SHOW_FEW_USRS:
 	 /***** Form and icon to mark note as favourite *****/
 	 sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
 	 TL_FormFavSha (ActAllShaSocNotGbl,ActAllShaSocNotUsr,ParamCod,
@@ -3332,14 +3368,14 @@ static void TL_PutFormToUnsNote (const struct TL_Note *SocNot)
 /*****************************************************************************/
 
 static void TL_PutFormToSeeAllFaversNote (const struct TL_Note *SocNot,
-                                          TL_HowMany_t HowMany)
+                                          TL_HowManyUsrs_t HowManyUsrs)
   {
    extern const char *Txt_View_all_USERS;
    char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
-   switch (HowMany)
+   switch (HowManyUsrs)
      {
-      case TL_SHOW_A_FEW_USRS:
+      case TL_SHOW_FEW_USRS:
 	 /***** Form and icon to mark note as favourite *****/
 	 sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
 	 TL_FormFavSha (ActAllFavSocNotGbl,ActAllFavSocNotUsr,ParamCod,
@@ -3378,14 +3414,14 @@ static void TL_PutFormToUnfNote (const struct TL_Note *SocNot)
 /*****************************************************************************/
 
 static void TL_PutFormToSeeAllFaversComment (const struct TL_Comment *SocCom,
-                                             TL_HowMany_t HowMany)
+                                             TL_HowManyUsrs_t HowManyUsrs)
   {
    extern const char *Txt_View_all_USERS;
    char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
-   switch (HowMany)
+   switch (HowManyUsrs)
      {
-      case TL_SHOW_A_FEW_USRS:
+      case TL_SHOW_FEW_USRS:
 	 /***** Form and icon to mark comment as favourite *****/
 	 sprintf (ParamCod,"PubCod=%ld",SocCom->PubCod);
 	 TL_FormFavSha (ActAllFavSocComGbl,ActAllFavSocComUsr,ParamCod,
@@ -3626,11 +3662,11 @@ void TL_ShaNoteGbl (void)
    TL_ShaNote (&SocNot);
 
    /***** Write HTML inside DIV with form to unshare *****/
-   TL_PutFormToShaUnsNote (&SocNot,TL_SHOW_A_FEW_USRS);
+   TL_PutFormToShaUnsNote (&SocNot,TL_SHOW_FEW_USRS);
   }
 
 static void TL_PutFormToShaUnsNote (const struct TL_Note *SocNot,
-                                    TL_HowMany_t HowMany)
+                                    TL_HowManyUsrs_t HowManyUsrs)
   {
    bool IAmTheAuthor;
    bool IAmASharerOfThisSocNot;
@@ -3655,7 +3691,7 @@ static void TL_PutFormToShaUnsNote (const struct TL_Note *SocNot,
    HTM_DIV_End ();
 
    /***** Show who have shared this note *****/
-   TL_ShowUsrsWhoHaveSharedNote (SocNot,HowMany);
+   TL_ShowUsrsWhoHaveSharedNote (SocNot,HowManyUsrs);
   }
 
 static void TL_ShaNote (struct TL_Note *SocNot)
@@ -3736,7 +3772,7 @@ void TL_FavNoteGbl (void)
    TL_FavNote (&SocNot);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   TL_PutFormToFavUnfNote (&SocNot,TL_SHOW_A_FEW_USRS);
+   TL_PutFormToFavUnfNote (&SocNot,TL_SHOW_FEW_USRS);
   }
 
 void TL_UnfNoteUsr (void)
@@ -3756,11 +3792,11 @@ void TL_UnfNoteGbl (void)
    TL_UnfNote (&SocNot);
 
    /***** Write HTML inside DIV with form to fav *****/
-   TL_PutFormToFavUnfNote (&SocNot,TL_SHOW_A_FEW_USRS);
+   TL_PutFormToFavUnfNote (&SocNot,TL_SHOW_FEW_USRS);
   }
 
 static void TL_PutFormToFavUnfNote (const struct TL_Note *SocNot,
-                                    TL_HowMany_t HowMany)
+                                    TL_HowManyUsrs_t HowManyUsrs)
   {
    bool IAmTheAuthor;
    bool IAmAFaverOfThisSocNot;
@@ -3785,7 +3821,7 @@ static void TL_PutFormToFavUnfNote (const struct TL_Note *SocNot,
    HTM_DIV_End ();
 
    /***** Show who have marked this note as favourite *****/
-   TL_ShowUsrsWhoHaveMarkedNoteAsFav (SocNot,HowMany);
+   TL_ShowUsrsWhoHaveMarkedNoteAsFav (SocNot,HowManyUsrs);
   }
 
 static void TL_FavNote (struct TL_Note *SocNot)
@@ -3904,7 +3940,7 @@ void TL_FavCommentGbl (void)
    TL_FavComment (&SocCom);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   TL_PutFormToFavUnfComment (&SocCom,TL_SHOW_A_FEW_USRS);
+   TL_PutFormToFavUnfComment (&SocCom,TL_SHOW_FEW_USRS);
   }
 
 void TL_UnfCommentUsr (void)
@@ -3924,11 +3960,11 @@ void TL_UnfCommentGbl (void)
    TL_UnfComment (&SocCom);
 
    /***** Write HTML inside DIV with form to fav *****/
-   TL_PutFormToFavUnfComment (&SocCom,TL_SHOW_A_FEW_USRS);
+   TL_PutFormToFavUnfComment (&SocCom,TL_SHOW_FEW_USRS);
   }
 
 static void TL_PutFormToFavUnfComment (const struct TL_Comment *SocCom,
-                                       TL_HowMany_t HowMany)
+                                       TL_HowManyUsrs_t HowManyUsrs)
   {
    bool IAmTheAuthor;
    bool IAmAFaverOfThisSocCom;
@@ -3954,7 +3990,7 @@ static void TL_PutFormToFavUnfComment (const struct TL_Comment *SocCom,
    HTM_DIV_End ();
 
    /***** Show who have marked this comment as favourite *****/
-   TL_ShowUsrsWhoHaveMarkedCommAsFav (SocCom,HowMany);
+   TL_ShowUsrsWhoHaveMarkedCommAsFav (SocCom,HowManyUsrs);
   }
 
 static void TL_FavComment (struct TL_Comment *SocCom)
@@ -4095,7 +4131,7 @@ void TL_UnsNoteGbl (void)
    TL_UnsNote (&SocNot);
 
    /***** Write HTML inside DIV with form to share *****/
-   TL_PutFormToShaUnsNote (&SocNot,TL_SHOW_A_FEW_USRS);
+   TL_PutFormToShaUnsNote (&SocNot,TL_SHOW_FEW_USRS);
   }
 
 static void TL_UnsNote (struct TL_Note *SocNot)
@@ -4917,7 +4953,7 @@ static void TL_GetNumTimesACommHasBeenFav (struct TL_Comment *SocCom)
 /*****************************************************************************/
 
 static void TL_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
-					  TL_HowMany_t HowMany)
+					  TL_HowManyUsrs_t HowManyUsrs)
   {
    MYSQL_RES *mysql_res;
    unsigned NumFirstUsrs = 0;
@@ -4934,7 +4970,7 @@ static void TL_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
 				 SocNot->NotCod,
 				 SocNot->UsrCod,
 				 (unsigned) TL_PUB_SHARED_NOTE,
-				 HowMany == TL_SHOW_A_FEW_USRS ? TL_DEF_USRS_SHOWN :
+				 HowManyUsrs == TL_SHOW_FEW_USRS ? TL_DEF_USRS_SHOWN :
 				                                 TL_MAX_USRS_SHOWN);
 
    /***** Show users *****/
@@ -4945,7 +4981,7 @@ static void TL_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
    HTM_DIV_Begin ("class=\"TL_USRS\"");
    TL_ShowSharersOrFavers (&mysql_res,SocNot->NumShared,NumFirstUsrs);
    if (NumFirstUsrs < SocNot->NumShared)
-      TL_PutFormToSeeAllSharersNote (SocNot,HowMany);
+      TL_PutFormToSeeAllSharersNote (SocNot,HowManyUsrs);
    HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/
@@ -4958,7 +4994,7 @@ static void TL_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
 /*****************************************************************************/
 
 static void TL_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
-					       TL_HowMany_t HowMany)
+					       TL_HowManyUsrs_t HowManyUsrs)
   {
    MYSQL_RES *mysql_res;
    unsigned NumFirstUsrs = 0;
@@ -4975,7 +5011,7 @@ static void TL_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
 				 " ORDER BY FavCod LIMIT %u",
 				 SocNot->NotCod,
 				 SocNot->UsrCod,
-				 HowMany == TL_SHOW_A_FEW_USRS ? TL_DEF_USRS_SHOWN :
+				 HowManyUsrs == TL_SHOW_FEW_USRS ? TL_DEF_USRS_SHOWN :
 				                                 TL_MAX_USRS_SHOWN);
      }
 
@@ -4987,7 +5023,7 @@ static void TL_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
    HTM_DIV_Begin ("class=\"TL_USRS\"");
    TL_ShowSharersOrFavers (&mysql_res,SocNot->NumFavs,NumFirstUsrs);
    if (NumFirstUsrs < SocNot->NumFavs)		// Not all are shown
-      TL_PutFormToSeeAllFaversNote (SocNot,HowMany);
+      TL_PutFormToSeeAllFaversNote (SocNot,HowManyUsrs);
    HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/
@@ -5000,7 +5036,7 @@ static void TL_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
 /*****************************************************************************/
 
 static void TL_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom,
-					       TL_HowMany_t HowMany)
+					       TL_HowManyUsrs_t HowManyUsrs)
   {
    MYSQL_RES *mysql_res;
    unsigned NumFirstUsrs = 0;
@@ -5016,7 +5052,7 @@ static void TL_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom,
 				 " ORDER BY FavCod LIMIT %u",
 				 SocCom->PubCod,
 				 SocCom->UsrCod,
-				 HowMany == TL_SHOW_A_FEW_USRS ? TL_DEF_USRS_SHOWN :
+				 HowManyUsrs == TL_SHOW_FEW_USRS ? TL_DEF_USRS_SHOWN :
 				                                 TL_MAX_USRS_SHOWN);
 
    /***** Show users *****/
@@ -5027,7 +5063,7 @@ static void TL_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom,
    HTM_DIV_Begin ("class=\"TL_USRS\"");
    TL_ShowSharersOrFavers (&mysql_res,SocCom->NumFavs,NumFirstUsrs);
    if (NumFirstUsrs < SocCom->NumFavs)
-      TL_PutFormToSeeAllFaversComment (SocCom,HowMany);
+      TL_PutFormToSeeAllFaversComment (SocCom,HowManyUsrs);
    HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/

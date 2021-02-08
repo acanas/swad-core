@@ -10211,7 +10211,6 @@ void Brw_ChgFileMetadata (void)
    bool PublicFileBeforeEdition;
    bool PublicFileAfterEdition;
    Brw_License_t License;
-   struct TL_Publication SocPub;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -10278,28 +10277,28 @@ void Brw_ChgFileMetadata (void)
 	    switch (Gbl.FileBrowser.Type)
 	      {
 	       case Brw_ADMI_DOC_INS:
-		  TL_StoreAndPublishNote (TL_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  TL_StoreAndPublishNote (TL_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_INS:
-		  TL_StoreAndPublishNote (TL_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  TL_StoreAndPublishNote (TL_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_CTR:
-		  TL_StoreAndPublishNote (TL_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  TL_StoreAndPublishNote (TL_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_CTR:
-		  TL_StoreAndPublishNote (TL_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  TL_StoreAndPublishNote (TL_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_DEG:
-		  TL_StoreAndPublishNote (TL_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  TL_StoreAndPublishNote (TL_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_DEG:
-		  TL_StoreAndPublishNote (TL_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  TL_StoreAndPublishNote (TL_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_CRS:
-		  TL_StoreAndPublishNote (TL_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  TL_StoreAndPublishNote (TL_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_CRS:
-		  TL_StoreAndPublishNote (TL_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
+		  TL_StoreAndPublishNote (TL_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       default:
 		  break;
