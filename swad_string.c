@@ -681,6 +681,101 @@ static unsigned Str_FindHTMLEntity (const char *Ptr)
   }
 
 /*****************************************************************************/
+/*** Create a notification about mention for any nickname in a publication ***/
+/*****************************************************************************/
+/*
+ Example: "The user @rms says..."
+                     ^ ^
+         PtrStart ___| |___ PtrEnd
+                 Length = 3
+*/
+void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *Txt)
+  {
+   const char *Ptr;
+   bool IsNickname;
+   struct
+     {
+      const char *PtrStart;
+      const char *PtrEnd;
+      size_t Length;		// Length of the nickname
+     } Nickname;
+   struct UsrData UsrDat;
+   bool ItsMe;
+   bool CreateNotif;
+   bool NotifyByEmail;
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** Find nicknames and create notifications *****/
+   for (Ptr = Txt;
+	*Ptr;)
+      /* Check if the next char is the start of a nickname */
+      if ((int) *Ptr == (int) '@')
+	{
+	 /* Find nickname end */
+	 Ptr++;	// Points to first character after @
+         Nickname.PtrStart = Ptr;
+
+	 /* A nick can have digits, letters and '_'  */
+	 for (;
+	      *Ptr;
+	      Ptr++)
+	    if (!((*Ptr >= 'a' && *Ptr <= 'z') ||
+		  (*Ptr >= 'A' && *Ptr <= 'Z') ||
+		  (*Ptr >= '0' && *Ptr <= '9') ||
+		  (*Ptr == '_')))
+	       break;
+
+	 /* Calculate length of this nickname */
+	 Nickname.PtrEnd = Ptr - 1;
+         Nickname.Length = (size_t) (Ptr - Nickname.PtrStart);
+
+	 /* A nick (without arroba) must have a number of characters
+            Nck_MIN_BYTES_NICKNAME_WITHOUT_ARROBA <= Length <= Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA */
+	 IsNickname = (Nickname.Length >= Nck_MIN_BYTES_NICKNAME_WITHOUT_ARROBA &&
+	               Nickname.Length <= Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
+
+	 if (IsNickname)
+	   {
+	    /* Copy nickname */
+	    strncpy (UsrDat.Nickname,Nickname.PtrStart,Nickname.Length);
+	    UsrDat.Nickname[Nickname.Length] = '\0';
+
+	    if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.Nickname)) > 0)
+	      {
+	       ItsMe = Usr_ItsMe (UsrDat.UsrCod);
+	       if (!ItsMe)	// Not me
+		 {
+		  /* Get user's data */
+		  Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+
+		  /* Create notification for the mentioned user *****/
+		  CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << Ntf_EVENT_TIMELINE_MENTION));
+		  if (CreateNotif)
+		    {
+		     NotifyByEmail = (UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_TIMELINE_MENTION));
+		     Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_TIMELINE_MENTION,&UsrDat,PubCod,
+						    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
+										    0),
+						    Gbl.Hierarchy.Ins.InsCod,
+						    Gbl.Hierarchy.Ctr.CtrCod,
+						    Gbl.Hierarchy.Deg.DegCod,
+						    Gbl.Hierarchy.Crs.CrsCod);
+		    }
+		 }
+	      }
+	   }
+	}
+      /* The next char is not the start of a nickname */
+      else	// Character != '@'
+         Ptr++;
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
+  }
+
+/*****************************************************************************/
 /***** Convert a string to title: first uppercase and the rest lowercase *****/
 /*****************************************************************************/
 

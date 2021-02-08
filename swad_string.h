@@ -84,6 +84,9 @@ typedef enum
 
 void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen);
 size_t Str_LimitLengthHTMLStr (char *Str,size_t MaxCharsOnScreen);
+
+void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *Txt);
+
 void Str_ConvertToTitleType (char *Str);
 void Str_ConvertToComparable (char *Str);
 char *Str_ConvertToUpperText (char *Str);

@@ -100,7 +100,7 @@ static void TL_Fav_PutDisabledIconFav (unsigned NumFavs)
   }
 
 /*****************************************************************************/
-/************************** Form to fav/unfav note ***************************/
+/************************ Form to show all favers ****************************/
 /*****************************************************************************/
 
 void TL_Fav_PutFormToSeeAllFaversNote (const struct TL_Note *SocNot,
@@ -600,11 +600,10 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
 					           TL_HowManyUsrs_t HowManyUsrs)
   {
    MYSQL_RES *mysql_res;
-   unsigned NumFirstUsrs = 0;
+   unsigned NumFirstUsrs;
 
    /***** Get users who have marked this note as favourite *****/
    if (SocNot->NumFavs)
-     {
       /***** Get list of users from database *****/
       NumFirstUsrs =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get users",
@@ -616,16 +615,20 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
 				 SocNot->UsrCod,
 				 HowManyUsrs == TL_SHOW_FEW_USRS ? TL_DEF_USRS_SHOWN :
 				                                   TL_MAX_USRS_SHOWN);
-     }
+   else
+      NumFirstUsrs = 0;
 
    /***** Show users *****/
+   /* Number of users */
    HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
    TL_ShowNumSharersOrFavers (SocNot->NumFavs);
    HTM_DIV_End ();
 
+   /* List users one by one */
    HTM_DIV_Begin ("class=\"TL_USRS\"");
    TL_ShowSharersOrFavers (&mysql_res,SocNot->NumFavs,NumFirstUsrs);
    if (NumFirstUsrs < SocNot->NumFavs)		// Not all are shown
+      /* Clickable ellipsis to show all users */
       TL_Fav_PutFormToSeeAllFaversNote (SocNot,HowManyUsrs);
    HTM_DIV_End ();
 
@@ -639,10 +642,10 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
 /*****************************************************************************/
 
 static void TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom,
-					       TL_HowManyUsrs_t HowManyUsrs)
+					           TL_HowManyUsrs_t HowManyUsrs)
   {
    MYSQL_RES *mysql_res;
-   unsigned NumFirstUsrs = 0;
+   unsigned NumFirstUsrs;
 
    /***** Get users who have marked this comment as favourite *****/
    if (SocCom->NumFavs)
@@ -656,16 +659,21 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocC
 				 SocCom->PubCod,
 				 SocCom->UsrCod,
 				 HowManyUsrs == TL_SHOW_FEW_USRS ? TL_DEF_USRS_SHOWN :
-				                                 TL_MAX_USRS_SHOWN);
+				                                   TL_MAX_USRS_SHOWN);
+   else
+      NumFirstUsrs = 0;
 
    /***** Show users *****/
+   /* Number of users */
    HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
    TL_ShowNumSharersOrFavers (SocCom->NumFavs);
    HTM_DIV_End ();
 
+   /* List users one by one */
    HTM_DIV_Begin ("class=\"TL_USRS\"");
    TL_ShowSharersOrFavers (&mysql_res,SocCom->NumFavs,NumFirstUsrs);
    if (NumFirstUsrs < SocCom->NumFavs)
+      /* Clickable ellipsis to show all users */
       TL_Fav_PutFormToSeeAllFaversComment (SocCom,HowManyUsrs);
    HTM_DIV_End ();
 

@@ -32,9 +32,6 @@
 #include <string.h>		// For string functions
 #include <sys/types.h>		// For time_t
 
-#include "swad_announcement.h"
-#include "swad_box.h"
-#include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_exam_announcement.h"
 #include "swad_figure.h"
@@ -42,13 +39,9 @@
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
-#include "swad_HTML.h"
-#include "swad_layout.h"
-#include "swad_media.h"
 #include "swad_message.h"
 #include "swad_notice.h"
-#include "swad_notification.h"
-#include "swad_parameter.h"
+#include "swad_photo.h"
 #include "swad_profile.h"
 #include "swad_setting.h"
 #include "swad_timeline.h"
@@ -308,8 +301,6 @@ static void TL_ResetComment (struct TL_Comment *SocCom);
 
 static void TL_ClearTimelineThisSession (void);
 static void TL_AddNotesJustRetrievedToTimelineThisSession (void);
-
-static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *Txt);
 
 /*****************************************************************************/
 /************************ Initialize global timeline *************************/
@@ -4054,7 +4045,8 @@ void TL_RemoveUsrContent (long UsrCod)
 
 void TL_ShowNumSharersOrFavers (unsigned NumUsrs)
   {
-   /***** Show number of users who have marked this note as favourite *****/
+   /***** Show number of sharers or favers
+          (users who have shared or marked this note as favourite) *****/
    HTM_TxtF ("&nbsp;%u",NumUsrs);
   }
 
@@ -4201,7 +4193,13 @@ static void TL_GetDataOfPublicationFromRow (MYSQL_ROW row,struct TL_Publication 
       [TL_PUB_SHARED_NOTE    ] = TL_TOP_MESSAGE_SHARED,
       [TL_PUB_COMMENT_TO_NOTE] = TL_TOP_MESSAGE_COMMENTED,
      };
-
+   /*
+   row[0]: PubCod
+   row[1]: NotCod
+   row[2]: PublisherCod
+   row[3]: PubType
+   row[4]: UNIX_TIMESTAMP(TimePublish)
+   */
    /***** Get code of publication (row[0]) *****/
    SocPub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
 
@@ -4225,6 +4223,15 @@ static void TL_GetDataOfPublicationFromRow (MYSQL_ROW row,struct TL_Publication 
 
 static void TL_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Note *SocNot)
   {
+   /*
+   row[0]: NotCod
+   row[1]: NoteType
+   row[2]: Cod
+   row[3]: UsrCod
+   row[4]: HieCod
+   row[5]: Unavailable
+   row[5]: UNIX_TIMESTAMP(TimeNote)
+   */
    /***** Get code (row[0]) *****/
    SocNot->NotCod      = Str_ConvertStrCodToLongCod (row[0]);
 
@@ -4296,7 +4303,7 @@ static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *SocCom)
    row[3]: TimePublish
    row[4]: Txt
    row[5]: MedCod
-    */
+   */
    /***** Get code of comment (row[0]) *****/
    SocCom->PubCod      = Str_ConvertStrCodToLongCod (row[0]);
 
@@ -4521,101 +4528,6 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    if (GetContent && !ContentCopied)
       if ((*ContentStr = (char *) malloc (1)) != NULL)
          (*ContentStr)[0] = '\0';
-  }
-
-/*****************************************************************************/
-/*** Create a notification about mention for any nickname in a publication ***/
-/*****************************************************************************/
-/*
- Example: "The user @rms says..."
-                     ^ ^
-         PtrStart ___| |___ PtrEnd
-                 Length = 3
-*/
-static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *Txt)
-  {
-   const char *Ptr;
-   bool IsNickname;
-   struct
-     {
-      const char *PtrStart;
-      const char *PtrEnd;
-      size_t Length;		// Length of the nickname
-     } Nickname;
-   struct UsrData UsrDat;
-   bool ItsMe;
-   bool CreateNotif;
-   bool NotifyByEmail;
-
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
-
-   /***** Find nicknames and create notifications *****/
-   for (Ptr = Txt;
-	*Ptr;)
-      /* Check if the next char is the start of a nickname */
-      if ((int) *Ptr == (int) '@')
-	{
-	 /* Find nickname end */
-	 Ptr++;	// Points to first character after @
-         Nickname.PtrStart = Ptr;
-
-	 /* A nick can have digits, letters and '_'  */
-	 for (;
-	      *Ptr;
-	      Ptr++)
-	    if (!((*Ptr >= 'a' && *Ptr <= 'z') ||
-		  (*Ptr >= 'A' && *Ptr <= 'Z') ||
-		  (*Ptr >= '0' && *Ptr <= '9') ||
-		  (*Ptr == '_')))
-	       break;
-
-	 /* Calculate length of this nickname */
-	 Nickname.PtrEnd = Ptr - 1;
-         Nickname.Length = (size_t) (Ptr - Nickname.PtrStart);
-
-	 /* A nick (without arroba) must have a number of characters
-            Nck_MIN_BYTES_NICKNAME_WITHOUT_ARROBA <= Length <= Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA */
-	 IsNickname = (Nickname.Length >= Nck_MIN_BYTES_NICKNAME_WITHOUT_ARROBA &&
-	               Nickname.Length <= Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
-
-	 if (IsNickname)
-	   {
-	    /* Copy nickname */
-	    strncpy (UsrDat.Nickname,Nickname.PtrStart,Nickname.Length);
-	    UsrDat.Nickname[Nickname.Length] = '\0';
-
-	    if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.Nickname)) > 0)
-	      {
-	       ItsMe = Usr_ItsMe (UsrDat.UsrCod);
-	       if (!ItsMe)	// Not me
-		 {
-		  /* Get user's data */
-		  Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
-
-		  /* Create notification for the mentioned user *****/
-		  CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << Ntf_EVENT_TIMELINE_MENTION));
-		  if (CreateNotif)
-		    {
-		     NotifyByEmail = (UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_TIMELINE_MENTION));
-		     Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_TIMELINE_MENTION,&UsrDat,PubCod,
-						    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-										    0),
-						    Gbl.Hierarchy.Ins.InsCod,
-						    Gbl.Hierarchy.Ctr.CtrCod,
-						    Gbl.Hierarchy.Deg.DegCod,
-						    Gbl.Hierarchy.Crs.CrsCod);
-		    }
-		 }
-	      }
-	   }
-	}
-      /* The next char is not the start of a nickname */
-      else	// Character != '@'
-         Ptr++;
-
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/

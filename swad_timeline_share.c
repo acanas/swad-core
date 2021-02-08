@@ -352,7 +352,7 @@ static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
 					      TL_HowManyUsrs_t HowManyUsrs)
   {
    MYSQL_RES *mysql_res;
-   unsigned NumFirstUsrs = 0;
+   unsigned NumFirstUsrs;
 
    /***** Get users who have shared this note *****/
    if (SocNot->NumShared)
@@ -367,16 +367,21 @@ static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
 				 SocNot->UsrCod,
 				 (unsigned) TL_PUB_SHARED_NOTE,
 				 HowManyUsrs == TL_SHOW_FEW_USRS ? TL_DEF_USRS_SHOWN :
-				                                 TL_MAX_USRS_SHOWN);
+				                                   TL_MAX_USRS_SHOWN);
+   else
+      NumFirstUsrs = 0;
 
    /***** Show users *****/
+   /* Number of users */
    HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
    TL_ShowNumSharersOrFavers (SocNot->NumShared);
    HTM_DIV_End ();
 
+   /* List users one by one */
    HTM_DIV_Begin ("class=\"TL_USRS\"");
    TL_ShowSharersOrFavers (&mysql_res,SocNot->NumShared,NumFirstUsrs);
    if (NumFirstUsrs < SocNot->NumShared)
+      /* Clickable ellipsis to show all users */
       TL_Sha_PutFormToSeeAllSharersNote (SocNot,HowManyUsrs);
    HTM_DIV_End ();
 
