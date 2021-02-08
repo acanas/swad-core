@@ -65,22 +65,7 @@
 
 #define TL_MAX_CHARS_IN_POST	1000	// Maximum number of characters in a post
 
-typedef enum
-  {
-   TL_TIMELINE_USR,	// Show the timeline of a user
-   TL_TIMELINE_GBL,	// Show the timeline of the users follwed by me
-  } TL_TimelineUsrOrGbl_t;
-
-#define TL_NUM_WHAT_TO_GET_FROM_TIMELINE 3
-typedef enum
-  {
-   TL_GET_ONLY_NEW_PUBS,	// New publications are retrieved via AJAX
-				// automatically from time to time
-   TL_GET_RECENT_TIMELINE,	// Recent timeline is shown when the user clicks on action menu,...
-				// or after editing timeline
-   TL_GET_ONLY_OLD_PUBS,	// Old publications are retrieved via AJAX
-				// when the user clicks on link at bottom of timeline
-  } TL_WhatToGetFromTimeline_t;
+#define TL_MAX_BYTES_SUBQUERY (128 - 1)
 
 /*
    Timeline images will be saved with:
@@ -179,17 +164,22 @@ static void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
 static void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
                                                long NotCod);
 
-static void TL_GetAndShowOldTimeline (struct TL_Timeline *Timeline,
-                                      TL_TimelineUsrOrGbl_t TimelineUsrOrGbl);
+static void TL_GetAndShowOldTimeline (struct TL_Timeline *Timeline);
 
 static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
-	                                char **Query,
-                                        TL_TimelineUsrOrGbl_t TimelineUsrOrGbl,
-                                        TL_WhatToGetFromTimeline_t WhatToGetFromTimeline);
+	                                char **Query);
 static long TL_GetPubCodFromSession (const char *FieldName);
 static void TL_UpdateLastPubCodIntoSession (void);
 static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod);
-static void TL_DropTemporaryTablesUsedToQueryTimeline (void);
+static void TL_CreateTmpTablePubCodes (void);
+static void TL_CreateTmpTableNotCodes (void);
+static void TL_CreateTmpTableCurrentTimeline (void);
+static void TL_CreateTmpTablePublishers (void);
+static void TL_DropTmpTablesUsedToQueryTimeline (void);
+static void TL_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
+                                         char SubQueryPublishers[TL_MAX_BYTES_SUBQUERY + 1]);
+static void TL_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
+                                            char SubQueryAlreadyExists[TL_MAX_BYTES_SUBQUERY + 1]);
 
 static void TL_ShowTimeline (struct TL_Timeline *Timeline,
 			     char *Query,
@@ -324,7 +314,9 @@ static void TL_InitTimelineGbl (struct TL_Timeline *Timeline)
 
 void TL_ResetTimeline (struct TL_Timeline *Timeline)
   {
-   Timeline->Who    = TL_DEFAULT_WHO;
+   Timeline->UsrOrGbl      = TL_TIMELINE_GBL;
+   Timeline->Who                   = TL_DEFAULT_WHO;
+   Timeline->WhatToGet = TL_GET_RECENT_TIMELINE;
    Timeline->NotCod = -1L;
    Timeline->PubCod = -1L;
   }
@@ -449,15 +441,15 @@ static void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
    char *Query = NULL;
 
    /***** Build query to get timeline *****/
-   TL_BuildQueryToGetTimeline (Timeline,&Query,
-	                       TL_TIMELINE_GBL,
-                               TL_GET_RECENT_TIMELINE);
+   Timeline->UsrOrGbl      = TL_TIMELINE_GBL;
+   Timeline->WhatToGet = TL_GET_RECENT_TIMELINE;
+   TL_BuildQueryToGetTimeline (Timeline,&Query);
 
    /***** Show timeline *****/
    TL_ShowTimeline (Timeline,Query,Txt_Timeline,NotCod);
 
    /***** Drop temporary tables *****/
-   TL_DropTemporaryTablesUsedToQueryTimeline ();
+   TL_DropTmpTablesUsedToQueryTimeline ();
   }
 
 /*****************************************************************************/
@@ -480,9 +472,9 @@ static void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
    char *Query = NULL;
 
    /***** Build query to show timeline with publications of a unique user *****/
-   TL_BuildQueryToGetTimeline (Timeline,&Query,
-	                       TL_TIMELINE_USR,
-                               TL_GET_RECENT_TIMELINE);
+   Timeline->UsrOrGbl      = TL_TIMELINE_USR;
+   Timeline->WhatToGet = TL_GET_RECENT_TIMELINE;
+   TL_BuildQueryToGetTimeline (Timeline,&Query);
 
    /***** Show timeline *****/
    TL_ShowTimeline (Timeline,
@@ -492,7 +484,7 @@ static void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
    Str_FreeString ();
 
    /***** Drop temporary tables *****/
-   TL_DropTemporaryTablesUsedToQueryTimeline ();
+   TL_DropTmpTablesUsedToQueryTimeline ();
   }
 
 /*****************************************************************************/
@@ -513,15 +505,15 @@ void TL_RefreshNewTimelineGbl (void)
       Timeline.Who = TL_GetGlobalWho ();
 
       /***** Build query to get timeline *****/
-      TL_BuildQueryToGetTimeline (&Timeline,&Query,
-	                          TL_TIMELINE_GBL,
-				  TL_GET_ONLY_NEW_PUBS);
+      Timeline.UsrOrGbl      = TL_TIMELINE_GBL;
+      Timeline.WhatToGet = TL_GET_ONLY_NEW_PUBS;
+      TL_BuildQueryToGetTimeline (&Timeline,&Query);
 
       /***** Show new timeline *****/
       TL_InsertNewPubsInTimeline (&Timeline,Query);
 
       /***** Drop temporary tables *****/
-      TL_DropTemporaryTablesUsedToQueryTimeline ();
+      TL_DropTmpTablesUsedToQueryTimeline ();
      }
   }
 
@@ -540,7 +532,9 @@ void TL_RefreshOldTimelineGbl (void)
    Timeline.Who = TL_GetGlobalWho ();
 
    /***** Show old publications *****/
-   TL_GetAndShowOldTimeline (&Timeline,TL_TIMELINE_GBL);
+   Timeline.UsrOrGbl      = TL_TIMELINE_GBL;
+   Timeline.WhatToGet = TL_GET_ONLY_OLD_PUBS;
+   TL_GetAndShowOldTimeline (&Timeline);
   }
 
 void TL_RefreshOldTimelineUsr (void)
@@ -554,7 +548,9 @@ void TL_RefreshOldTimelineUsr (void)
       TL_ResetTimeline (&Timeline);
 
       /***** If user exists, show old publications *****/
-      TL_GetAndShowOldTimeline (&Timeline,TL_TIMELINE_USR);
+      Timeline.UsrOrGbl      = TL_TIMELINE_USR;
+      Timeline.WhatToGet = TL_GET_ONLY_OLD_PUBS;
+      TL_GetAndShowOldTimeline (&Timeline);
      }
   }
 
@@ -562,21 +558,18 @@ void TL_RefreshOldTimelineUsr (void)
 /**************** Get and show old publications in timeline ******************/
 /*****************************************************************************/
 
-static void TL_GetAndShowOldTimeline (struct TL_Timeline *Timeline,
-                                      TL_TimelineUsrOrGbl_t TimelineUsrOrGbl)
+static void TL_GetAndShowOldTimeline (struct TL_Timeline *Timeline)
   {
    char *Query = NULL;
 
    /***** Build query to get timeline *****/
-   TL_BuildQueryToGetTimeline (Timeline,&Query,
-	                       TimelineUsrOrGbl,
-                               TL_GET_ONLY_OLD_PUBS);
+   TL_BuildQueryToGetTimeline (Timeline,&Query);
 
    /***** Show old timeline *****/
    TL_ShowOldPubsInTimeline (Timeline,Query);
 
    /***** Drop temporary tables *****/
-   TL_DropTemporaryTablesUsedToQueryTimeline ();
+   TL_DropTmpTablesUsedToQueryTimeline ();
   }
 
 /*****************************************************************************/
@@ -596,17 +589,13 @@ void TL_MarkMyNotifAsSeen (void)
 /************************ Build query to get timeline ************************/
 /*****************************************************************************/
 
-#define TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS (256 - 1)
-
 static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
-	                                char **Query,
-                                        TL_TimelineUsrOrGbl_t TimelineUsrOrGbl,
-                                        TL_WhatToGetFromTimeline_t WhatToGetFromTimeline)
+	                                char **Query)
   {
-   char SubQueryPublishers[128];
-   char SubQueryRangeBottom[128];
-   char SubQueryRangeTop[128];
-   char SubQueryAlreadyExists[TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS + 1];
+   char SubQueryPublishers[TL_MAX_BYTES_SUBQUERY + 1];
+   char SubQueryRangeBottom[TL_MAX_BYTES_SUBQUERY + 1];
+   char SubQueryRangeTop[TL_MAX_BYTES_SUBQUERY + 1];
+   char SubQueryAlreadyExists[TL_MAX_BYTES_SUBQUERY + 1];
    struct
      {
       long Top;
@@ -618,7 +607,7 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
    unsigned NumPub;
    long PubCod;
    long NotCod;
-   static const unsigned MaxPubsToGet[TL_NUM_WHAT_TO_GET_FROM_TIMELINE] =
+   static const unsigned MaxPubsToGet[TL_NUM_WHAT_TO_GET] =
      {
       [TL_GET_ONLY_NEW_PUBS  ] = TL_MAX_NEW_PUBS_TO_GET_AND_SHOW,
       [TL_GET_RECENT_TIMELINE] = TL_MAX_REC_PUBS_TO_GET_AND_SHOW,
@@ -626,107 +615,22 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
      };
 
    /***** Clear timeline for this session in database *****/
-   if (WhatToGetFromTimeline == TL_GET_RECENT_TIMELINE)
+   if (Timeline->WhatToGet == TL_GET_RECENT_TIMELINE)
       TL_ClearTimelineThisSession ();
 
    /***** Drop temporary tables *****/
-   TL_DropTemporaryTablesUsedToQueryTimeline ();
+   TL_DropTmpTablesUsedToQueryTimeline ();
 
-   /***** Create temporary table with publication codes *****/
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE tl_pub_codes "
-	     "(PubCod BIGINT NOT NULL,UNIQUE INDEX(PubCod)) ENGINE=MEMORY");
-
-   /***** Create temporary table with notes got in this execution *****/
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE tl_not_codes "
-	     "(NotCod BIGINT NOT NULL,INDEX(NotCod)) ENGINE=MEMORY");
-
-   /***** Create temporary table with notes already present in timeline for this session *****/
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE tl_current_timeline "
-	     "(NotCod BIGINT NOT NULL,INDEX(NotCod)) ENGINE=MEMORY"
-	     " SELECT NotCod FROM tl_timelines WHERE SessionId='%s'",
-	     Gbl.Session.Id);
+   /***** Create some temporary tables *****/
+   TL_CreateTmpTablePubCodes ();
+   TL_CreateTmpTableNotCodes ();
+   TL_CreateTmpTableCurrentTimeline ();
 
    /***** Create temporary table and subquery with potential publishers *****/
-   switch (TimelineUsrOrGbl)
-     {
-      case TL_TIMELINE_USR:	// Show the timeline of a user
-	 sprintf (SubQueryPublishers,"PublisherCod=%ld AND ",
-	          Gbl.Usrs.Other.UsrDat.UsrCod);
-	 break;
-      case TL_TIMELINE_GBL:	// Show the global timeline
-	 switch (Timeline->Who)
-	   {
-	    case Usr_WHO_ME:	// Show my timeline
-	       sprintf (SubQueryPublishers,"PublisherCod=%ld AND ",
-	                Gbl.Usrs.Me.UsrDat.UsrCod);
-               break;
-	    case Usr_WHO_FOLLOWED:	// Show the timeline of the users I follow
-	       DB_Query ("can not create temporary table",
-		         "CREATE TEMPORARY TABLE tl_publishers "
-			 "(UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
-			 " SELECT %ld AS UsrCod"
-			 " UNION"
-			 " SELECT FollowedCod AS UsrCod"
-			 " FROM usr_follow WHERE FollowerCod=%ld",
-			 Gbl.Usrs.Me.UsrDat.UsrCod,
-			 Gbl.Usrs.Me.UsrDat.UsrCod);
-
-	       sprintf (SubQueryPublishers,
-			"tl_pubs.PublisherCod=tl_publishers.UsrCod AND ");
-	       break;
-	    case Usr_WHO_ALL:	// Show the timeline of all users
-	       SubQueryPublishers[0] = '\0';
-	       break;
-	    default:
-	       Lay_WrongWhoExit ();
-	       break;
-	   }
-	 break;
-     }
+   TL_CreateSubQueryPublishers (Timeline,SubQueryPublishers);
 
    /***** Create subquery to get only notes not present in timeline *****/
-   switch (TimelineUsrOrGbl)
-     {
-      case TL_TIMELINE_USR:	// Show the timeline of a user
-	 switch (WhatToGetFromTimeline)
-           {
-            case TL_GET_ONLY_NEW_PUBS:
-            case TL_GET_RECENT_TIMELINE:
-	       Str_Copy (SubQueryAlreadyExists,
-	                 " NotCod NOT IN"
-			 " (SELECT NotCod FROM tl_not_codes)",
-			 TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
-	       break;
-            case TL_GET_ONLY_OLD_PUBS:
-	       Str_Copy (SubQueryAlreadyExists,
-	                 " NotCod NOT IN"
-			 " (SELECT NotCod FROM tl_current_timeline)",
-			 TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
-	       break;
-           }
-	 break;
-      case TL_TIMELINE_GBL:	// Show the timeline of the users I follow
-	 switch (WhatToGetFromTimeline)
-           {
-            case TL_GET_ONLY_NEW_PUBS:
-            case TL_GET_RECENT_TIMELINE:
-	       Str_Copy (SubQueryAlreadyExists,
-	                 " tl_pubs.NotCod NOT IN"
-			 " (SELECT NotCod FROM tl_not_codes)",
-			 TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
-	       break;
-            case TL_GET_ONLY_OLD_PUBS:
-	       Str_Copy (SubQueryAlreadyExists,
-	                 " tl_pubs.NotCod NOT IN"
-			 " (SELECT NotCod FROM tl_current_timeline)",
-			 TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
-	       break;
-           }
-	 break;
-     }
+   TL_CreateSubQueryAlreadyExists (Timeline,SubQueryAlreadyExists);
 
    /***** Get the publications in timeline *****/
    /* Initialize range of pubs:
@@ -748,7 +652,7 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
    */
    RangePubsToGet.Top    = 0;	// +Infinite
    RangePubsToGet.Bottom = 0;	// -Infinite
-   switch (WhatToGetFromTimeline)
+   switch (Timeline->WhatToGet)
      {
       case TL_GET_ONLY_NEW_PUBS:	 // Get the publications (without limit) newer than LastPubCod
 	 /* This query is made via AJAX automatically from time to time */
@@ -783,12 +687,12 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
    */
 
    for (NumPub = 0;
-	NumPub < MaxPubsToGet[WhatToGetFromTimeline];
+	NumPub < MaxPubsToGet[Timeline->WhatToGet];
 	NumPub++)
      {
       /* Create subqueries with range of publications to get from tl_pubs */
       if (RangePubsToGet.Bottom > 0)
-	 switch (TimelineUsrOrGbl)
+	 switch (Timeline->UsrOrGbl)
 	   {
 	    case TL_TIMELINE_USR:	// Show the timeline of a user
 	       sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",
@@ -816,7 +720,7 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 	 SubQueryRangeBottom[0] = '\0';
 
       if (RangePubsToGet.Top > 0)
-	 switch (TimelineUsrOrGbl)
+	 switch (Timeline->UsrOrGbl)
 	   {
 	    case TL_TIMELINE_USR:	// Show the timeline of a user
 	       sprintf (SubQueryRangeTop,"PubCod<%ld AND ",
@@ -845,7 +749,7 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 
       /* Select the most recent publication from tl_pubs */
       NumPubs = 0;	// Initialized to avoid warning
-      switch (TimelineUsrOrGbl)
+      switch (Timeline->UsrOrGbl)
 	{
 	 case TL_TIMELINE_USR:	// Show the timeline of a user
 	    NumPubs =
@@ -1015,22 +919,164 @@ static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod)
   {
    /***** Update last publication code *****/
    DB_QueryUPDATE ("can not update first publication code into session",
-		   "UPDATE sessions SET FirstPubCod=%ld WHERE SessionId='%s'",
-		   FirstPubCod,Gbl.Session.Id);
+		   "UPDATE sessions"
+		   " SET FirstPubCod=%ld"
+		   " WHERE SessionId='%s'",
+		   FirstPubCod,
+		   Gbl.Session.Id);
+  }
+
+/*****************************************************************************/
+/************* Create temporary tables used to query timeline ****************/
+/*****************************************************************************/
+
+static void TL_CreateTmpTablePubCodes (void)
+  {
+   /***** Create temporary table with publication codes *****/
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE tl_pub_codes "
+	     "(PubCod BIGINT NOT NULL,"
+	     "UNIQUE INDEX(PubCod))"
+	     " ENGINE=MEMORY");
+  }
+
+static void TL_CreateTmpTableNotCodes (void)
+  {
+   /***** Create temporary table with notes got in this execution *****/
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE tl_not_codes "
+	     "(NotCod BIGINT NOT NULL,"
+	     "INDEX(NotCod))"
+	     " ENGINE=MEMORY");
+  }
+
+static void TL_CreateTmpTableCurrentTimeline (void)
+  {
+   /***** Create temporary table with notes
+          already present in timeline for this session *****/
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE tl_current_timeline "
+	     "(NotCod BIGINT NOT NULL,"
+	     "INDEX(NotCod))"
+	     " ENGINE=MEMORY"
+	     " SELECT NotCod FROM tl_timelines WHERE SessionId='%s'",
+	     Gbl.Session.Id);
+  }
+
+static void TL_CreateTmpTablePublishers (void)
+  {
+   /***** Create temporary table with me and the users I follow *****/
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE tl_publishers "
+	     "(UsrCod INT NOT NULL,"
+	     "UNIQUE INDEX(UsrCod))"
+	     " ENGINE=MEMORY"
+	     " SELECT %ld AS UsrCod"		// Me
+	     " UNION"
+	     " SELECT FollowedCod AS UsrCod"	// Users I follow
+	     " FROM usr_follow"
+	     " WHERE FollowerCod=%ld",
+	     Gbl.Usrs.Me.UsrDat.UsrCod,
+	     Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
 /*************** Drop temporary tables used to query timeline ****************/
 /*****************************************************************************/
 
-static void TL_DropTemporaryTablesUsedToQueryTimeline (void)
+static void TL_DropTmpTablesUsedToQueryTimeline (void)
   {
    DB_Query ("can not remove temporary tables",
 	     "DROP TEMPORARY TABLE IF EXISTS "
 	     "tl_pub_codes,"
 	     "tl_not_codes,"
-	     "tl_publishers,"
-	     "tl_current_timeline");
+	     "tl_current_timeline,"
+	     "tl_publishers");
+  }
+
+/*****************************************************************************/
+/******* Create temporary table and subquery with potential publishers *******/
+/*****************************************************************************/
+
+static void TL_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
+                                         char SubQueryPublishers[TL_MAX_BYTES_SUBQUERY + 1])
+  {
+   /***** Create temporary table and subquery with potential publishers *****/
+   switch (Timeline->UsrOrGbl)
+     {
+      case TL_TIMELINE_USR:	// Show the timeline of a user
+	 sprintf (SubQueryPublishers,"PublisherCod=%ld AND ",
+	          Gbl.Usrs.Other.UsrDat.UsrCod);
+	 break;
+      case TL_TIMELINE_GBL:	// Show the global timeline
+	 switch (Timeline->Who)
+	   {
+	    case Usr_WHO_ME:		// Show my timeline
+	       sprintf (SubQueryPublishers,"PublisherCod=%ld AND ",
+	                Gbl.Usrs.Me.UsrDat.UsrCod);
+               break;
+	    case Usr_WHO_FOLLOWED:	// Show the timeline of the users I follow
+	       TL_CreateTmpTablePublishers ();
+	       sprintf (SubQueryPublishers,
+			"tl_pubs.PublisherCod=tl_publishers.UsrCod AND ");
+	       break;
+	    case Usr_WHO_ALL:		// Show the timeline of all users
+	       SubQueryPublishers[0] = '\0';
+	       break;
+	    default:
+	       Lay_WrongWhoExit ();
+	       break;
+	   }
+	 break;
+     }
+  }
+
+/*****************************************************************************/
+/********* Create subquery to get only notes not present in timeline *********/
+/*****************************************************************************/
+
+static void TL_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
+                                            char SubQueryAlreadyExists[TL_MAX_BYTES_SUBQUERY + 1])
+  {
+   switch (Timeline->UsrOrGbl)
+     {
+      case TL_TIMELINE_USR:	// Show the timeline of a user
+	 switch (Timeline->WhatToGet)
+           {
+            case TL_GET_ONLY_NEW_PUBS:
+            case TL_GET_RECENT_TIMELINE:
+	       Str_Copy (SubQueryAlreadyExists,
+	                 " NotCod NOT IN"
+			 " (SELECT NotCod FROM tl_not_codes)",
+			 TL_MAX_BYTES_SUBQUERY);
+	       break;
+            case TL_GET_ONLY_OLD_PUBS:
+	       Str_Copy (SubQueryAlreadyExists,
+	                 " NotCod NOT IN"
+			 " (SELECT NotCod FROM tl_current_timeline)",
+			 TL_MAX_BYTES_SUBQUERY);
+	       break;
+           }
+	 break;
+      case TL_TIMELINE_GBL:	// Show the timeline of the users I follow
+	 switch (Timeline->WhatToGet)
+           {
+            case TL_GET_ONLY_NEW_PUBS:
+            case TL_GET_RECENT_TIMELINE:
+	       Str_Copy (SubQueryAlreadyExists,
+	                 " tl_pubs.NotCod NOT IN"
+			 " (SELECT NotCod FROM tl_not_codes)",
+			 TL_MAX_BYTES_SUBQUERY);
+	       break;
+            case TL_GET_ONLY_OLD_PUBS:
+	       Str_Copy (SubQueryAlreadyExists,
+	                 " tl_pubs.NotCod NOT IN"
+			 " (SELECT NotCod FROM tl_current_timeline)",
+			 TL_MAX_BYTES_SUBQUERY);
+	       break;
+           }
+	 break;
+     }
   }
 
 /*****************************************************************************/

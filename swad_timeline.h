@@ -84,9 +84,28 @@ typedef enum
    TL_TOP_MESSAGE_MENTIONED	= 6,
   } TL_TopMessage_t;
 
+typedef enum
+  {
+   TL_TIMELINE_USR,	// Show the timeline of a user
+   TL_TIMELINE_GBL,	// Show the timeline of the users follwed by me
+  } TL_UsrOrGbl_t;
+
+#define TL_NUM_WHAT_TO_GET 3
+typedef enum
+  {
+   TL_GET_ONLY_NEW_PUBS,	// New publications are retrieved via AJAX
+				// automatically from time to time
+   TL_GET_RECENT_TIMELINE,	// Recent timeline is shown when the user clicks on action menu,...
+				// or after editing timeline
+   TL_GET_ONLY_OLD_PUBS,	// Old publications are retrieved via AJAX
+				// when the user clicks on link at bottom of timeline
+  } TL_WhatToGet_t;
+
 struct TL_Timeline
   {
+   TL_UsrOrGbl_t UsrOrGbl;
    Usr_Who_t Who;
+   TL_WhatToGet_t WhatToGet;
    long NotCod;		// Used as parameter about social note to be edited, removed...
    long PubCod;		// Used as parameter about social publishing to be edited, removed...
   };
