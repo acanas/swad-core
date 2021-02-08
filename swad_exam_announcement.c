@@ -496,7 +496,7 @@ void ExaAnn_RemoveExamAnn1 (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExaCod);
 
    /***** Mark possible social note as unavailable *****/
-   TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
+   TL_MarkNoteAsUnavailable (TL_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);

@@ -1,4 +1,4 @@
-// swad_timeline.c: social timeline
+// swad_timeline.h: social timeline
 
 #ifndef _SWAD_TL
 #define _SWAD_TL
@@ -32,6 +32,11 @@
 /*****************************************************************************/
 
 #define TL_TIMELINE_SECTION_ID	"timeline"
+
+#define TL_ICON_ELLIPSIS	"ellipsis-h.svg"
+
+#define TL_DEF_USRS_SHOWN	5	// Default maximum number of users shown who have share/fav a note
+#define TL_MAX_USRS_SHOWN	1000	// Top     maximum number of users shown who have share/fav a note
 
 /*****************************************************************************/
 /******************************** Public types *******************************/
@@ -86,6 +91,41 @@ struct TL_Timeline
    long PubCod;		// Used as parameter about social publishing to be edited, removed...
   };
 
+typedef enum
+  {
+   TL_SHOW_FEW_USRS,	// Show a few first favers/sharers
+   TL_SHOW_ALL_USRS,	// Show all favers/sharers
+  } TL_HowManyUsrs_t;
+
+struct TL_PostContent
+  {
+   char Txt[Cns_MAX_BYTES_LONG_TEXT + 1];
+   struct Media Media;
+  };
+
+struct TL_Note
+  {
+   long NotCod;			// Unique code/identifier for each note
+   TL_NoteType_t NoteType;	// Timeline post, public file, exam announcement, notice, forum post...
+   long UsrCod;			// Publisher
+   long HieCod;			// Hierarchy code (institution/centre/degree/course)
+   long Cod;			// Code of file, forum post, notice, timeline post...
+   bool Unavailable;		// File, forum post, notice,... unavailable (removed)
+   time_t DateTimeUTC;		// Date-time of publication in UTC time
+   unsigned NumShared;		// Number of times (users) this note has been shared
+   unsigned NumFavs;		// Number of times (users) this note has been favourited
+  };
+
+struct TL_Comment
+  {
+   long PubCod;			// Unique code/identifier for each publication
+   long UsrCod;			// Publisher
+   long NotCod;			// Note code to which this comment belongs
+   time_t DateTimeUTC;		// Date-time of publication in UTC time
+   unsigned NumFavs;		// Number of times (users) this comment has been favourited
+   struct TL_PostContent Content;
+  };
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -102,12 +142,15 @@ void TL_RefreshOldTimelineUsr (void);
 
 void TL_MarkMyNotifAsSeen (void);
 
+void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+		    const char *ParamCod,
+		    const char *Icon,const char *Title);
+
 void TL_GetParamWho (void);
 Usr_Who_t TL_GetGlobalWho (void);
 
 void TL_StoreAndPublishNote (TL_NoteType_t NoteType,long Cod);
-void TL_MarkNoteAsUnavailableUsingNotCod (long NotCod);
-void TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NoteType_t NoteType,long Cod);
+void TL_MarkNoteAsUnavailable (TL_NoteType_t NoteType,long Cod);
 void TL_MarkNoteOneFileAsUnavailable (const char *Path);
 void TL_MarkNotesChildrenOfFolderAsUnavailable (const char *Path);
 
@@ -118,35 +161,29 @@ void TL_ShowHiddenCommentsUsr (void);
 void TL_ShowHiddenCommentsGbl (void);
 
 void TL_PutHiddenParamPubCod (long PubCod);
+long TL_GetParamNotCod (void);
+long TL_GetParamPubCod (void);
 
 void TL_ReceiveCommentUsr (void);
 void TL_ReceiveCommentGbl (void);
 
-void TL_ShowAllSharersNoteUsr (void);
-void TL_ShowAllSharersNoteGbl (void);
-void TL_ShaNoteUsr (void);
-void TL_ShaNoteGbl (void);
-void TL_UnsNoteUsr (void);
-void TL_UnsNoteGbl (void);
+void TL_Sha_ShowAllSharersNoteUsr (void);
+void TL_Sha_ShowAllSharersNoteGbl (void);
+void TL_Sha_ShaNoteUsr (void);
+void TL_Sha_ShaNoteGbl (void);
 
-void TL_ShowAllFaversNoteUsr (void);
-void TL_ShowAllFaversNoteGbl (void);
-void TL_FavNoteUsr (void);
-void TL_FavNoteGbl (void);
-void TL_UnfNoteUsr (void);
-void TL_UnfNoteGbl (void);
+void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
+                             Ntf_NotifyEvent_t NotifyEvent);
 
-void TL_ShowAllFaversComUsr (void);
-void TL_ShowAllFaversComGbl (void);
-void TL_FavCommentUsr (void);
-void TL_FavCommentGbl (void);
-void TL_UnfCommentUsr (void);
-void TL_UnfCommentGbl (void);
+void TL_Sha_UnsNoteUsr (void);
+void TL_Sha_UnsNoteGbl (void);
 
 void TL_RequestRemNoteUsr (void);
 void TL_RequestRemNoteGbl (void);
 void TL_RemoveNoteUsr (void);
 void TL_RemoveNoteGbl (void);
+
+long TL_GetPubCodOfOriginalNote (long NotCod);
 
 void TL_RequestRemComUsr (void);
 void TL_RequestRemComGbl (void);
@@ -154,6 +191,13 @@ void TL_RemoveComUsr (void);
 void TL_RemoveComGbl (void);
 
 void TL_RemoveUsrContent (long UsrCod);
+
+void TL_ShowNumSharersOrFavers (unsigned NumUsrs);
+void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
+			     unsigned NumUsrs,unsigned NumFirstUsrs);
+
+void TL_GetDataOfNoteByCod (struct TL_Note *SocNot);
+void TL_GetDataOfCommByCod (struct TL_Comment *SocCom);
 
 void TL_ClearOldTimelinesDB (void);
 

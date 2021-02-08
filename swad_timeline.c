@@ -52,6 +52,7 @@
 #include "swad_profile.h"
 #include "swad_setting.h"
 #include "swad_timeline.h"
+#include "swad_timeline_favourite.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -68,14 +69,8 @@
 
 #define TL_NUM_VISIBLE_COMMENTS	3	// Maximum number of comments visible before expanding them
 
-#define TL_DEF_USRS_SHOWN	5	// Default maximum number of users shown who have share/fav a note
-#define TL_MAX_USRS_SHOWN	1000	// Top     maximum number of users shown who have share/fav a note
-
 #define TL_MAX_CHARS_IN_POST	1000	// Maximum number of characters in a post
 
-#define TL_ICON_ELLIPSIS	"ellipsis-h.svg"
-#define TL_ICON_FAV		"heart.svg"
-#define TL_ICON_FAVED		"heart-red.svg"
 #define TL_ICON_SHARE		"share-alt.svg"
 #define TL_ICON_SHARED		"share-alt-green.svg"
 
@@ -95,12 +90,6 @@ typedef enum
    TL_GET_ONLY_OLD_PUBS,	// Old publications are retrieved via AJAX
 				// when the user clicks on link at bottom of timeline
   } TL_WhatToGetFromTimeline_t;
-
-struct PostContent
-  {
-   char Txt[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Media Media;
-  };
 
 /*
    Timeline images will be saved with:
@@ -192,35 +181,6 @@ struct TL_Publication
    TL_TopMessage_t TopMessage;	// Used to show feedback on the action made
   };
 
-struct TL_Note
-  {
-   long NotCod;			// Unique code/identifier for each note
-   TL_NoteType_t NoteType;	// Timeline post, public file, exam announcement, notice, forum post...
-   long UsrCod;			// Publisher
-   long HieCod;			// Hierarchy code (institution/centre/degree/course)
-   long Cod;			// Code of file, forum post, notice, timeline post...
-   bool Unavailable;		// File, forum post, notice,... unavailable (removed)
-   time_t DateTimeUTC;		// Date-time of publication in UTC time
-   unsigned NumShared;		// Number of times (users) this note has been shared
-   unsigned NumFavs;		// Number of times (users) this note has been favourited
-  };
-
-struct TL_Comment
-  {
-   long PubCod;			// Unique code/identifier for each publication
-   long UsrCod;			// Publisher
-   long NotCod;			// Note code to which this comment belongs
-   time_t DateTimeUTC;		// Date-time of publication in UTC time
-   unsigned NumFavs;		// Number of times (users) this comment has been favourited
-   struct PostContent Content;
-  };
-
-typedef enum
-  {
-   TL_SHOW_FEW_USRS,	// Show a few first favers/sharers
-   TL_SHOW_ALL_USRS,	// Show all favers/sharers
-  } TL_HowManyUsrs_t;
-
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -269,9 +229,6 @@ static void TL_PutIconsTimeline (__attribute__((unused)) void *Args);
 static void TL_FormStart (const struct TL_Timeline *Timeline,
 	                  Act_Action_t ActionGbl,
                           Act_Action_t ActionUsr);
-static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
-			   const char *ParamCod,
-			   const char *Icon,const char *Title);
 
 static void TL_PutFormWho (struct TL_Timeline *Timeline);
 static Usr_Who_t TL_GetWhoFromDB (void);
@@ -345,50 +302,24 @@ static void TL_WriteAuthorComment (struct UsrData *UsrDat);
 static void TL_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
 	                               long PubCod);
 
-static void TL_PutDisabledIconShare (unsigned NumShared);
-static void TL_PutDisabledIconFav (unsigned NumFavs);
+static void TL_Sha_PutDisabledIconShare (unsigned NumShared);
 
-static void TL_PutFormToSeeAllSharersNote (const struct TL_Note *SocNot,
-                                           TL_HowManyUsrs_t HowManyUsrs);
-static void TL_PutFormToShaNote (const struct TL_Note *SocNot);
-static void TL_PutFormToUnsNote (const struct TL_Note *SocNot);
-
-static void TL_PutFormToSeeAllFaversNote (const struct TL_Note *SocNot,
-                                          TL_HowManyUsrs_t HowManyUsrs);
-static void TL_PutFormToFavNote (const struct TL_Note *SocNot);
-static void TL_PutFormToUnfNote (const struct TL_Note *SocNot);
-
-static void TL_PutFormToSeeAllFaversComment (const struct TL_Comment *SocCom,
-                                             TL_HowManyUsrs_t HowManyUsrs);
-static void TL_PutFormToFavComment (const struct TL_Comment *SocCom);
-static void TL_PutFormToUnfComment (const struct TL_Comment *SocCom);
+static void TL_Sha_PutFormToSeeAllSharersNote (const struct TL_Note *SocNot,
+                                               TL_HowManyUsrs_t HowManyUsrs);
+static void TL_Sha_PutFormToShaNote (const struct TL_Note *SocNot);
+static void TL_Sha_PutFormToUnsNote (const struct TL_Note *SocNot);
 
 static void TL_PutFormToRemovePublication (const struct TL_Timeline *Timeline,
                                            long NotCod);
 
 static void TL_PutHiddenParamNotCod (long NotCod);
-static long TL_GetParamNotCod (void);
-static long TL_GetParamPubCod (void);
 
 static long TL_ReceiveComment (void);
 
-static void TL_PutFormToShaUnsNote (const struct TL_Note *SocNot,
-                                    TL_HowManyUsrs_t HowManyUsrs);
-static void TL_ShaNote (struct TL_Note *SocNot);
-static void TL_UnsNote (struct TL_Note *SocNot);
-
-static void TL_PutFormToFavUnfNote (const struct TL_Note *SocNot,
-                                    TL_HowManyUsrs_t HowManyUsrs);
-static void TL_FavNote (struct TL_Note *SocNot);
-static void TL_UnfNote (struct TL_Note *SocNot);
-
-static void TL_PutFormToFavUnfComment (const struct TL_Comment *SocCom,
-                                       TL_HowManyUsrs_t HowManyUsrs);
-static void TL_FavComment (struct TL_Comment *SocCom);
-static void TL_UnfComment (struct TL_Comment *SocCom);
-
-static void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
-                                    Ntf_NotifyEvent_t NotifyEvent);
+static void TL_Sha_PutFormToShaUnsNote (const struct TL_Note *SocNot,
+                                        TL_HowManyUsrs_t HowManyUsrs);
+static void TL_Sha_ShaNote (struct TL_Note *SocNot);
+static void TL_Sha_UnsNote (struct TL_Note *SocNot);
 
 static void TL_RequestRemovalNote (struct TL_Timeline *Timeline);
 static void TL_PutParamsRemoveNote (void *Timeline);
@@ -396,33 +327,18 @@ static void TL_RemoveNote (void);
 static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot);
 
 static long TL_GetNotCodFromPubCod (long PubCod);
-static long TL_GetPubCodOfOriginalNote (long NotCod);
 
 static void TL_RequestRemovalComment (struct TL_Timeline *Timeline);
 static void TL_PutParamsRemoveComment (void *Timeline);
 static void TL_RemoveComment (void);
 static void TL_RemoveCommentMediaAndDBEntries (long PubCod);
 
-static bool TL_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);
-static bool TL_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod);
-static bool TL_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod);
+static bool TL_Sha_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);
 
-static void TL_UpdateNumTimesANoteHasBeenShared (struct TL_Note *SocNot);
-static void TL_GetNumTimesANoteHasBeenFav (struct TL_Note *SocNot);
-static void TL_GetNumTimesACommHasBeenFav (struct TL_Comment *SocCom);
+static void TL_Sha_UpdateNumTimesANoteHasBeenShared (struct TL_Note *SocNot);
 
-static void TL_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
-					  TL_HowManyUsrs_t HowManyUsrs);
-static void TL_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
-					       TL_HowManyUsrs_t HowManyUsrs);
-static void TL_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom,
-					       TL_HowManyUsrs_t HowManyUsrs);
-static void TL_ShowNumSharersOrFavers (unsigned NumUsrs);
-static void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
-				    unsigned NumUsrs,unsigned NumFirstUsrs);
-
-static void TL_GetDataOfNoteByCod (struct TL_Note *SocNot);
-static void TL_GetDataOfCommByCod (struct TL_Comment *SocCom);
+static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
+					      TL_HowManyUsrs_t HowManyUsrs);
 
 static void TL_GetDataOfPublicationFromRow (MYSQL_ROW row,struct TL_Publication *SocPub);
 static void TL_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Note *SocNot);
@@ -575,7 +491,7 @@ static void TL_ShowHighlightedNote (struct TL_Timeline *Timeline,
   }
 
 /*****************************************************************************/
-/***************************** Show global timeline **************************/
+/******************* Show global timeline highlighting a note ****************/
 /*****************************************************************************/
 
 static void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
@@ -604,6 +520,10 @@ void TL_ShowTimelineUsr (struct TL_Timeline *Timeline)
   {
    TL_ShowTimelineUsrHighlightingNot (Timeline,-1L);
   }
+
+/*****************************************************************************/
+/************ Show timeline of a selected user highlighting a note ***********/
+/*****************************************************************************/
 
 static void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
                                                long NotCod)
@@ -1320,9 +1240,9 @@ static void TL_FormStart (const struct TL_Timeline *Timeline,
 /******* Form to fav/unfav or share/unshare in global or user timeline *******/
 /*****************************************************************************/
 
-static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
-			   const char *ParamCod,
-			   const char *Icon,const char *Title)
+void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+		    const char *ParamCod,
+		    const char *Icon,const char *Title)
   {
    char *OnSubmit;
 
@@ -1882,13 +1802,13 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
       /* Foot column 1: Fav zone */
       HTM_DIV_Begin ("id=\"fav_not_%s_%u\" class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\"",
 	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_PutFormToFavUnfNote (SocNot,TL_SHOW_FEW_USRS);
+      TL_Fav_PutFormToFavUnfNote (SocNot,TL_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /* Foot column 2: Share zone */
       HTM_DIV_Begin ("id=\"sha_not_%s_%u\" class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\"",
 	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_PutFormToShaUnsNote (SocNot,TL_SHOW_FEW_USRS);
+      TL_Sha_PutFormToShaUnsNote (SocNot,TL_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /* Foot column 3: Icon to remove this note */
@@ -2026,7 +1946,7 @@ static void TL_GetAndWritePost (long PstCod)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
-   struct PostContent Content;
+   struct TL_PostContent Content;
 
    /***** Initialize image *****/
    Med_MediaConstructor (&Content.Media);
@@ -2336,16 +2256,7 @@ static void TL_StoreAndPublishNoteInternal (TL_NoteType_t NoteType,long Cod,stru
 /************************* Mark a note as unavailable ************************/
 /*****************************************************************************/
 
-void TL_MarkNoteAsUnavailableUsingNotCod (long NotCod)
-  {
-   /***** Mark the note as unavailable *****/
-   DB_QueryUPDATE ("can not mark note as unavailable",
-		   "UPDATE tl_notes SET Unavailable='Y'"
-		   " WHERE NotCod=%ld",
-		   NotCod);
-  }
-
-void TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NoteType_t NoteType,long Cod)
+void TL_MarkNoteAsUnavailable (TL_NoteType_t NoteType,long Cod)
   {
    /***** Mark the note as unavailable *****/
    DB_QueryUPDATE ("can not mark note as unavailable",
@@ -2409,7 +2320,7 @@ void TL_MarkNoteOneFileAsUnavailable (const char *Path)
 	       default:
 		  return;
 	      }
-	    TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (NoteType,FilCod);
+	    TL_MarkNoteAsUnavailable (NoteType,FilCod);
 	   }
          break;
       default:
@@ -2634,7 +2545,7 @@ void TL_ReceivePostGbl (void)
 // Returns the code of the note just created
 static long TL_ReceivePost (void)
   {
-   struct PostContent Content;
+   struct TL_PostContent Content;
    long PstCod;
    struct TL_Publication SocPub;
 
@@ -3232,7 +3143,7 @@ static void TL_WriteComment (struct TL_Timeline *Timeline,
       /* Fav zone */
       HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"TL_FAV_COM TL_FAV_WIDTH\"",
 	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_PutFormToFavUnfComment (SocCom,TL_SHOW_FEW_USRS);
+      TL_Fav_PutFormToFavUnfComment (SocCom,TL_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /* Put icon to remove this comment */
@@ -3300,7 +3211,7 @@ static void TL_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
 /*********************** Put disabled icon to share **************************/
 /*****************************************************************************/
 
-static void TL_PutDisabledIconShare (unsigned NumShared)
+static void TL_Sha_PutDisabledIconShare (unsigned NumShared)
   {
    extern const char *Txt_TIMELINE_NOTE_Shared_by_X_USERS;
    extern const char *Txt_TIMELINE_NOTE_Not_shared_by_anyone;
@@ -3319,33 +3230,11 @@ static void TL_PutDisabledIconShare (unsigned NumShared)
   }
 
 /*****************************************************************************/
-/****************** Put disabled icon to mark as favourite *******************/
-/*****************************************************************************/
-
-static void TL_PutDisabledIconFav (unsigned NumFavs)
-  {
-   extern const char *Txt_TIMELINE_NOTE_Favourited_by_X_USERS;
-   extern const char *Txt_TIMELINE_NOTE_Not_favourited_by_anyone;
-
-   /***** Disabled icon to mark as favourite *****/
-   if (NumFavs)
-     {
-      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_FAV,
-		      Str_BuildStringLong (Txt_TIMELINE_NOTE_Favourited_by_X_USERS,
-					   (long) NumFavs));
-      Str_FreeString ();
-     }
-   else
-      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_FAV,
-		      Txt_TIMELINE_NOTE_Not_favourited_by_anyone);
-  }
-
-/*****************************************************************************/
 /*********************** Form to share/unshare note **************************/
 /*****************************************************************************/
 
-static void TL_PutFormToSeeAllSharersNote (const struct TL_Note *SocNot,
-                                           TL_HowManyUsrs_t HowManyUsrs)
+static void TL_Sha_PutFormToSeeAllSharersNote (const struct TL_Note *SocNot,
+                                               TL_HowManyUsrs_t HowManyUsrs)
   {
    extern const char *Txt_View_all_USERS;
    char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
@@ -3364,7 +3253,7 @@ static void TL_PutFormToSeeAllSharersNote (const struct TL_Note *SocNot,
      }
   }
 
-static void TL_PutFormToShaNote (const struct TL_Note *SocNot)
+static void TL_Sha_PutFormToShaNote (const struct TL_Note *SocNot)
   {
    extern const char *Txt_Share;
    char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
@@ -3375,7 +3264,7 @@ static void TL_PutFormToShaNote (const struct TL_Note *SocNot)
 	          TL_ICON_SHARE,Txt_Share);
   }
 
-static void TL_PutFormToUnsNote (const struct TL_Note *SocNot)
+static void TL_Sha_PutFormToUnsNote (const struct TL_Note *SocNot)
   {
    extern const char *Txt_TIMELINE_NOTE_Shared;
    char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
@@ -3384,98 +3273,6 @@ static void TL_PutFormToUnsNote (const struct TL_Note *SocNot)
    sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
    TL_FormFavSha (ActUnsSocNotGbl,ActUnsSocNotUsr,ParamCod,
 	          TL_ICON_SHARED,Txt_TIMELINE_NOTE_Shared);
-  }
-
-/*****************************************************************************/
-/************************** Form to fav/unfav note ***************************/
-/*****************************************************************************/
-
-static void TL_PutFormToSeeAllFaversNote (const struct TL_Note *SocNot,
-                                          TL_HowManyUsrs_t HowManyUsrs)
-  {
-   extern const char *Txt_View_all_USERS;
-   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-
-   switch (HowManyUsrs)
-     {
-      case TL_SHOW_FEW_USRS:
-	 /***** Form and icon to mark note as favourite *****/
-	 sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
-	 TL_FormFavSha (ActAllFavSocNotGbl,ActAllFavSocNotUsr,ParamCod,
-			TL_ICON_ELLIPSIS,Txt_View_all_USERS);
-	 break;
-      case TL_SHOW_ALL_USRS:
-         Ico_PutIconOff (TL_ICON_ELLIPSIS,Txt_View_all_USERS);
-	 break;
-     }
-  }
-
-static void TL_PutFormToFavNote (const struct TL_Note *SocNot)
-  {
-   extern const char *Txt_Mark_as_favourite;
-   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-
-   /***** Form and icon to mark note as favourite *****/
-   sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
-   TL_FormFavSha (ActFavSocNotGbl,ActFavSocNotUsr,ParamCod,
-	          TL_ICON_FAV,Txt_Mark_as_favourite);
-  }
-
-static void TL_PutFormToUnfNote (const struct TL_Note *SocNot)
-  {
-   extern const char *Txt_TIMELINE_NOTE_Favourite;
-   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-
-   /***** Form and icon to unfav (remove mark as favourite) note *****/
-   sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
-   TL_FormFavSha (ActUnfSocNotGbl,ActUnfSocNotUsr,ParamCod,
-	          TL_ICON_FAVED,Txt_TIMELINE_NOTE_Favourite);
-  }
-
-/*****************************************************************************/
-/************************** Form to fav/unfav comment ************************/
-/*****************************************************************************/
-
-static void TL_PutFormToSeeAllFaversComment (const struct TL_Comment *SocCom,
-                                             TL_HowManyUsrs_t HowManyUsrs)
-  {
-   extern const char *Txt_View_all_USERS;
-   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-
-   switch (HowManyUsrs)
-     {
-      case TL_SHOW_FEW_USRS:
-	 /***** Form and icon to mark comment as favourite *****/
-	 sprintf (ParamCod,"PubCod=%ld",SocCom->PubCod);
-	 TL_FormFavSha (ActAllFavSocComGbl,ActAllFavSocComUsr,ParamCod,
-			TL_ICON_ELLIPSIS,Txt_View_all_USERS);
-	 break;
-      case TL_SHOW_ALL_USRS:
-         Ico_PutIconOff (TL_ICON_ELLIPSIS,Txt_View_all_USERS);
-         break;
-     }
-  }
-
-static void TL_PutFormToFavComment (const struct TL_Comment *SocCom)
-  {
-   extern const char *Txt_Mark_as_favourite;
-   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-
-   /***** Form and icon to mark comment as favourite *****/
-   sprintf (ParamCod,"PubCod=%ld",SocCom->PubCod);
-   TL_FormFavSha (ActFavSocComGbl,ActFavSocComUsr,ParamCod,
-	          TL_ICON_FAV,Txt_Mark_as_favourite);
-  }
-
-static void TL_PutFormToUnfComment (const struct TL_Comment *SocCom)
-  {
-   extern const char *Txt_TIMELINE_NOTE_Favourite;
-   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-
-   /***** Form and icon to unfav (remove mark as favourite) comment *****/
-   sprintf (ParamCod,"PubCod=%ld",SocCom->PubCod);
-   TL_FormFavSha (ActUnfSocComGbl,ActUnfSocComUsr,ParamCod,
-	          TL_ICON_FAVED,Txt_TIMELINE_NOTE_Favourite);
   }
 
 /*****************************************************************************/
@@ -3516,7 +3313,7 @@ void TL_PutHiddenParamPubCod (long PubCod)
 /****************** Get parameter with the code of a note ********************/
 /*****************************************************************************/
 
-static long TL_GetParamNotCod (void)
+long TL_GetParamNotCod (void)
   {
    /***** Get note code *****/
    return Par_GetParToLong ("NotCod");
@@ -3526,7 +3323,7 @@ static long TL_GetParamNotCod (void)
 /**************** Get parameter with the code of a publication ***************/
 /*****************************************************************************/
 
-static long TL_GetParamPubCod (void)
+long TL_GetParamPubCod (void)
   {
    /***** Get comment code *****/
    return Par_GetParToLong ("PubCod");
@@ -3580,7 +3377,7 @@ void TL_ReceiveCommentGbl (void)
 static long TL_ReceiveComment (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
-   struct PostContent Content;
+   struct TL_PostContent Content;
    struct TL_Note SocNot;
    struct TL_Publication SocPub;
 
@@ -3647,16 +3444,16 @@ static long TL_ReceiveComment (void)
 /******************************** Share a note *******************************/
 /*****************************************************************************/
 
-void TL_ShowAllSharersNoteUsr (void)
+void TL_Sha_ShowAllSharersNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show all sharers *****/
-   TL_ShowAllSharersNoteGbl ();
+   TL_Sha_ShowAllSharersNoteGbl ();
   }
 
-void TL_ShowAllSharersNoteGbl (void)
+void TL_Sha_ShowAllSharersNoteGbl (void)
   {
    struct TL_Note SocNot;
 
@@ -3665,31 +3462,31 @@ void TL_ShowAllSharersNoteGbl (void)
    TL_GetDataOfNoteByCod (&SocNot);
 
    /***** Write HTML inside DIV with form to share/unshare *****/
-   TL_PutFormToShaUnsNote (&SocNot,TL_SHOW_ALL_USRS);
+   TL_Sha_PutFormToShaUnsNote (&SocNot,TL_SHOW_ALL_USRS);
   }
 
-void TL_ShaNoteUsr (void)
+void TL_Sha_ShaNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Share note *****/
-   TL_ShaNoteGbl ();
+   TL_Sha_ShaNoteGbl ();
   }
 
-void TL_ShaNoteGbl (void)
+void TL_Sha_ShaNoteGbl (void)
   {
    struct TL_Note SocNot;
 
    /***** Share note *****/
-   TL_ShaNote (&SocNot);
+   TL_Sha_ShaNote (&SocNot);
 
    /***** Write HTML inside DIV with form to unshare *****/
-   TL_PutFormToShaUnsNote (&SocNot,TL_SHOW_FEW_USRS);
+   TL_Sha_PutFormToShaUnsNote (&SocNot,TL_SHOW_FEW_USRS);
   }
 
-static void TL_PutFormToShaUnsNote (const struct TL_Note *SocNot,
-                                    TL_HowManyUsrs_t HowManyUsrs)
+static void TL_Sha_PutFormToShaUnsNote (const struct TL_Note *SocNot,
+                                        TL_HowManyUsrs_t HowManyUsrs)
   {
    bool IAmTheAuthor;
    bool IAmASharerOfThisSocNot;
@@ -3700,24 +3497,24 @@ static void TL_PutFormToShaUnsNote (const struct TL_Note *SocNot,
    if (SocNot->Unavailable ||		// Unavailable notes can not be shared
        IAmTheAuthor)			// I am the author
       /* Put disabled icon */
-      TL_PutDisabledIconShare (SocNot->NumShared);
+      TL_Sha_PutDisabledIconShare (SocNot->NumShared);
    else					// Available and I am not the author
      {
       /* Put icon to share/unshare */
-      IAmASharerOfThisSocNot = TL_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
+      IAmASharerOfThisSocNot = TL_Sha_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
 							    Gbl.Usrs.Me.UsrDat.UsrCod);
       if (IAmASharerOfThisSocNot)	// I have shared this note
-	 TL_PutFormToUnsNote (SocNot);
+	 TL_Sha_PutFormToUnsNote (SocNot);
       else				// I have not shared this note
-	 TL_PutFormToShaNote (SocNot);
+	 TL_Sha_PutFormToShaNote (SocNot);
      }
    HTM_DIV_End ();
 
    /***** Show who have shared this note *****/
-   TL_ShowUsrsWhoHaveSharedNote (SocNot,HowManyUsrs);
+   TL_Sha_ShowUsrsWhoHaveSharedNote (SocNot,HowManyUsrs);
   }
 
-static void TL_ShaNote (struct TL_Note *SocNot)
+static void TL_Sha_ShaNote (struct TL_Note *SocNot)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    struct TL_Publication SocPub;
@@ -3732,7 +3529,7 @@ static void TL_ShaNote (struct TL_Note *SocNot)
      {
       ItsMe = Usr_ItsMe (SocNot->UsrCod);
       if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-         if (!TL_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
+         if (!TL_Sha_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
 					    Gbl.Usrs.Me.UsrDat.UsrCod))	// Not yet shared by me
 	   {
 	    /***** Share (publish note in timeline) *****/
@@ -3742,7 +3539,7 @@ static void TL_ShaNote (struct TL_Note *SocNot)
 	    TL_PublishNoteInTimeline (&SocPub);	// Set SocPub.PubCod
 
 	    /* Update number of times this note is shared */
-	    TL_UpdateNumTimesANoteHasBeenShared (SocNot);
+	    TL_Sha_UpdateNumTimesANoteHasBeenShared (SocNot);
 
 	    /**** Create notification about shared post
 		  for the author of the post ***/
@@ -3754,352 +3551,11 @@ static void TL_ShaNote (struct TL_Note *SocNot)
   }
 
 /*****************************************************************************/
-/********************** Mark/unmark a note as favourite **********************/
-/*****************************************************************************/
-
-void TL_ShowAllFaversNoteUsr (void)
-  {
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Show all favers *****/
-   TL_ShowAllFaversNoteGbl ();
-  }
-
-void TL_ShowAllFaversNoteGbl (void)
-  {
-   struct TL_Note SocNot;
-
-   /***** Get data of note *****/
-   SocNot.NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (&SocNot);
-
-   /***** Write HTML inside DIV with form to fav/unfav *****/
-   TL_PutFormToFavUnfNote (&SocNot,TL_SHOW_ALL_USRS);
-  }
-
-void TL_FavNoteUsr (void)
-  {
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Mark note as favourite *****/
-   TL_FavNoteGbl ();
-  }
-
-void TL_FavNoteGbl (void)
-  {
-   struct TL_Note SocNot;
-
-   /***** Mark note as favourite *****/
-   TL_FavNote (&SocNot);
-
-   /***** Write HTML inside DIV with form to unfav *****/
-   TL_PutFormToFavUnfNote (&SocNot,TL_SHOW_FEW_USRS);
-  }
-
-void TL_UnfNoteUsr (void)
-  {
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Unfav a note previously marked as favourite *****/
-   TL_UnfNoteGbl ();
-  }
-
-void TL_UnfNoteGbl (void)
-  {
-   struct TL_Note SocNot;
-
-   /***** Stop marking as favourite a previously favourited note *****/
-   TL_UnfNote (&SocNot);
-
-   /***** Write HTML inside DIV with form to fav *****/
-   TL_PutFormToFavUnfNote (&SocNot,TL_SHOW_FEW_USRS);
-  }
-
-static void TL_PutFormToFavUnfNote (const struct TL_Note *SocNot,
-                                    TL_HowManyUsrs_t HowManyUsrs)
-  {
-   bool IAmTheAuthor;
-   bool IAmAFaverOfThisSocNot;
-
-   /***** Put form to fav/unfav this note *****/
-   HTM_DIV_Begin ("class=\"TL_ICO\"");
-   IAmTheAuthor = Usr_ItsMe (SocNot->UsrCod);
-   if (SocNot->Unavailable ||		// Unavailable notes can not be favourited
-       IAmTheAuthor)			// I am the author
-      /* Put disabled icon */
-      TL_PutDisabledIconFav (SocNot->NumFavs);
-   else					// Available and I am not the author
-     {
-      /* Put icon to fav/unfav */
-      IAmAFaverOfThisSocNot = TL_CheckIfNoteIsFavedByUsr (SocNot->NotCod,
-							  Gbl.Usrs.Me.UsrDat.UsrCod);
-      if (IAmAFaverOfThisSocNot)	// I have favourited this note
-	 TL_PutFormToUnfNote (SocNot);
-      else				// I am not a faver of this note
-	 TL_PutFormToFavNote (SocNot);
-     }
-   HTM_DIV_End ();
-
-   /***** Show who have marked this note as favourite *****/
-   TL_ShowUsrsWhoHaveMarkedNoteAsFav (SocNot,HowManyUsrs);
-  }
-
-static void TL_FavNote (struct TL_Note *SocNot)
-  {
-   bool ItsMe;
-   long OriginalPubCod;
-
-   /***** Get data of note *****/
-   SocNot->NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (SocNot);
-
-   if (SocNot->NotCod > 0)
-     {
-      ItsMe = Usr_ItsMe (SocNot->UsrCod);
-      if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-	 if (!TL_CheckIfNoteIsFavedByUsr (SocNot->NotCod,
-					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
-	   {
-	    /***** Mark as favourite in database *****/
-	    DB_QueryINSERT ("can not favourite note",
-			    "INSERT IGNORE INTO tl_notes_fav"
-			    " (NotCod,UsrCod,TimeFav)"
-			    " VALUES"
-			    " (%ld,%ld,NOW())",
-			    SocNot->NotCod,
-			    Gbl.Usrs.Me.UsrDat.UsrCod);
-
-	    /***** Update number of times this note is favourited *****/
-	    TL_GetNumTimesANoteHasBeenFav (SocNot);
-
-	    /***** Create notification about favourite post
-		   for the author of the post *****/
-	    OriginalPubCod = TL_GetPubCodOfOriginalNote (SocNot->NotCod);
-	    if (OriginalPubCod > 0)
-	       TL_CreateNotifToAuthor (SocNot->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_FAV);
-	   }
-     }
-  }
-
-static void TL_UnfNote (struct TL_Note *SocNot)
-  {
-   long OriginalPubCod;
-   bool ItsMe;
-
-   /***** Get data of note *****/
-   SocNot->NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (SocNot);
-
-   if (SocNot->NotCod > 0)
-     {
-      ItsMe = Usr_ItsMe (SocNot->UsrCod);
-      if (SocNot->NumFavs &&
-	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-	 if (TL_CheckIfNoteIsFavedByUsr (SocNot->NotCod,
-					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
-	   {
-	    /***** Delete the mark as favourite from database *****/
-	    DB_QueryDELETE ("can not unfavourite note",
-			    "DELETE FROM tl_notes_fav"
-			    " WHERE NotCod=%ld AND UsrCod=%ld",
-			    SocNot->NotCod,
-			    Gbl.Usrs.Me.UsrDat.UsrCod);
-
-	    /***** Update number of times this note is favourited *****/
-	    TL_GetNumTimesANoteHasBeenFav (SocNot);
-
-            /***** Mark possible notifications on this note as removed *****/
-	    OriginalPubCod = TL_GetPubCodOfOriginalNote (SocNot->NotCod);
-	    if (OriginalPubCod > 0)
-	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,OriginalPubCod);
-	   }
-     }
-  }
-
-/*****************************************************************************/
-/********************* Mark/unmark a comment as favourite ************************/
-/*****************************************************************************/
-
-void TL_ShowAllFaversComUsr (void)
-  {
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Show all favers *****/
-   TL_ShowAllFaversComGbl ();
-  }
-
-void TL_ShowAllFaversComGbl (void)
-  {
-   struct TL_Comment SocCom;
-
-   /***** Get data of comment *****/
-   Med_MediaConstructor (&SocCom.Content.Media);
-   SocCom.PubCod = TL_GetParamPubCod ();
-   TL_GetDataOfCommByCod (&SocCom);
-   Med_MediaDestructor (&SocCom.Content.Media);
-
-   /***** Write HTML inside DIV with form to fav/unfav *****/
-   TL_PutFormToFavUnfComment (&SocCom,TL_SHOW_ALL_USRS);
-  }
-
-void TL_FavCommentUsr (void)
-  {
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Mark comment as favourite *****/
-   TL_FavCommentGbl ();
-  }
-
-void TL_FavCommentGbl (void)
-  {
-   struct TL_Comment SocCom;
-
-   /***** Mark comment as favourite *****/
-   TL_FavComment (&SocCom);
-
-   /***** Write HTML inside DIV with form to unfav *****/
-   TL_PutFormToFavUnfComment (&SocCom,TL_SHOW_FEW_USRS);
-  }
-
-void TL_UnfCommentUsr (void)
-  {
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Unfav a comment previously marked as favourite *****/
-   TL_UnfCommentGbl ();
-  }
-
-void TL_UnfCommentGbl (void)
-  {
-   struct TL_Comment SocCom;
-
-   /***** Stop marking as favourite a previously favourited comment *****/
-   TL_UnfComment (&SocCom);
-
-   /***** Write HTML inside DIV with form to fav *****/
-   TL_PutFormToFavUnfComment (&SocCom,TL_SHOW_FEW_USRS);
-  }
-
-static void TL_PutFormToFavUnfComment (const struct TL_Comment *SocCom,
-                                       TL_HowManyUsrs_t HowManyUsrs)
-  {
-   bool IAmTheAuthor;
-   bool IAmAFaverOfThisSocCom;
-
-   /***** Put form to fav/unfav this comment *****/
-   HTM_DIV_Begin ("class=\"TL_ICO\"");
-   IAmTheAuthor = Usr_ItsMe (SocCom->UsrCod);
-   if (IAmTheAuthor)			// I am the author
-      /* Put disabled icon */
-      TL_PutDisabledIconFav (SocCom->NumFavs);
-   else				// I am not the author
-     {
-      /* Put icon to mark this comment as favourite */
-      IAmAFaverOfThisSocCom = TL_CheckIfCommIsFavedByUsr (SocCom->PubCod,
-							  Gbl.Usrs.Me.UsrDat.UsrCod);
-      if (IAmAFaverOfThisSocCom)	// I have favourited this comment
-	 /* Put icon to unfav this publication and list of users */
-	 TL_PutFormToUnfComment (SocCom);
-      else				// I am not a favouriter
-	 /* Put icon to fav this publication and list of users */
-	 TL_PutFormToFavComment (SocCom);
-     }
-   HTM_DIV_End ();
-
-   /***** Show who have marked this comment as favourite *****/
-   TL_ShowUsrsWhoHaveMarkedCommAsFav (SocCom,HowManyUsrs);
-  }
-
-static void TL_FavComment (struct TL_Comment *SocCom)
-  {
-   bool IAmTheAuthor;
-
-   /***** Initialize image *****/
-   Med_MediaConstructor (&SocCom->Content.Media);
-
-   /***** Get data of comment *****/
-   SocCom->PubCod = TL_GetParamPubCod ();
-   TL_GetDataOfCommByCod (SocCom);
-
-   if (SocCom->PubCod > 0)
-     {
-      IAmTheAuthor = Usr_ItsMe (SocCom->UsrCod);
-      if (!IAmTheAuthor)	// I am not the author
-	 if (!TL_CheckIfCommIsFavedByUsr (SocCom->PubCod,
-					  Gbl.Usrs.Me.UsrDat.UsrCod)) // I have not yet favourited the comment
-	   {
-	    /***** Mark as favourite in database *****/
-	    DB_QueryINSERT ("can not favourite comment",
-			    "INSERT IGNORE INTO tl_comments_fav"
-			    " (PubCod,UsrCod,TimeFav)"
-			    " VALUES"
-			    " (%ld,%ld,NOW())",
-			    SocCom->PubCod,
-			    Gbl.Usrs.Me.UsrDat.UsrCod);
-
-	    /* Update number of times this comment is favourited */
-	    TL_GetNumTimesACommHasBeenFav (SocCom);
-
-	    /**** Create notification about favourite post
-		  for the author of the post ***/
-	    TL_CreateNotifToAuthor (SocCom->UsrCod,SocCom->PubCod,Ntf_EVENT_TIMELINE_FAV);
-	   }
-     }
-
-   /***** Free image *****/
-   Med_MediaDestructor (&SocCom->Content.Media);
-  }
-
-static void TL_UnfComment (struct TL_Comment *SocCom)
-  {
-   bool IAmTheAuthor;
-
-   /***** Initialize image *****/
-   Med_MediaConstructor (&SocCom->Content.Media);
-
-   /***** Get data of comment *****/
-   SocCom->PubCod = TL_GetParamPubCod ();
-   TL_GetDataOfCommByCod (SocCom);
-
-   if (SocCom->PubCod > 0)
-     {
-      IAmTheAuthor = Usr_ItsMe (SocCom->UsrCod);
-      if (SocCom->NumFavs &&
-	  !IAmTheAuthor)	// I am not the author
-	 if (TL_CheckIfCommIsFavedByUsr (SocCom->PubCod,
-					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the comment
-	   {
-	    /***** Delete the mark as favourite from database *****/
-	    DB_QueryDELETE ("can not unfavourite comment",
-			    "DELETE FROM tl_comments_fav"
-			    " WHERE PubCod=%ld AND UsrCod=%ld",
-			    SocCom->PubCod,
-			    Gbl.Usrs.Me.UsrDat.UsrCod);
-
-	    /***** Update number of times this comment is favourited *****/
-	    TL_GetNumTimesACommHasBeenFav (SocCom);
-
-            /***** Mark possible notifications on this comment as removed *****/
-            Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,SocCom->PubCod);
-	   }
-     }
-
-   /***** Free image *****/
-   Med_MediaDestructor (&SocCom->Content.Media);
-  }
-
-/*****************************************************************************/
 /*********** Create a notification for the author of a post/comment **********/
 /*****************************************************************************/
 
-static void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
-                                    Ntf_NotifyEvent_t NotifyEvent)
+void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
+                             Ntf_NotifyEvent_t NotifyEvent)
   {
    struct UsrData UsrDat;
    bool CreateNotif;
@@ -4137,27 +3593,27 @@ static void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
 /******************** Unshare a previously shared note ***********************/
 /*****************************************************************************/
 
-void TL_UnsNoteUsr (void)
+void TL_Sha_UnsNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Unshare note *****/
-   TL_UnsNoteGbl ();
+   TL_Sha_UnsNoteGbl ();
   }
 
-void TL_UnsNoteGbl (void)
+void TL_Sha_UnsNoteGbl (void)
   {
    struct TL_Note SocNot;
 
    /***** Unshare note *****/
-   TL_UnsNote (&SocNot);
+   TL_Sha_UnsNote (&SocNot);
 
    /***** Write HTML inside DIV with form to share *****/
-   TL_PutFormToShaUnsNote (&SocNot,TL_SHOW_FEW_USRS);
+   TL_Sha_PutFormToShaUnsNote (&SocNot,TL_SHOW_FEW_USRS);
   }
 
-static void TL_UnsNote (struct TL_Note *SocNot)
+static void TL_Sha_UnsNote (struct TL_Note *SocNot)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    long OriginalPubCod;
@@ -4172,7 +3628,7 @@ static void TL_UnsNote (struct TL_Note *SocNot)
       ItsMe = Usr_ItsMe (SocNot->UsrCod);
       if (SocNot->NumShared &&
 	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-	 if (TL_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
+	 if (TL_Sha_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
 					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I am a sharer
 	   {
 	    /***** Delete publication from database *****/
@@ -4186,7 +3642,7 @@ static void TL_UnsNote (struct TL_Note *SocNot)
 			    (unsigned) TL_PUB_SHARED_NOTE);
 
 	    /***** Update number of times this note is shared *****/
-	    TL_UpdateNumTimesANoteHasBeenShared (SocNot);
+	    TL_Sha_UpdateNumTimesANoteHasBeenShared (SocNot);
 
             /***** Mark possible notifications on this note as removed *****/
 	    OriginalPubCod = TL_GetPubCodOfOriginalNote (SocNot->NotCod);
@@ -4503,7 +3959,7 @@ static long TL_GetNotCodFromPubCod (long PubCod)
 /*************** Get code of publication of the original note ****************/
 /*****************************************************************************/
 
-static long TL_GetPubCodOfOriginalNote (long NotCod)
+long TL_GetPubCodOfOriginalNote (long NotCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -4880,7 +4336,7 @@ void TL_RemoveUsrContent (long UsrCod)
 /****************** Check if a user has published a note *********************/
 /*****************************************************************************/
 
-static bool TL_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod)
+static bool TL_Sha_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod)
   {
    return (DB_QueryCOUNT ("can not check if a user has shared a note",
 			  "SELECT COUNT(*) FROM tl_pubs"
@@ -4893,36 +4349,10 @@ static bool TL_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod)
   }
 
 /*****************************************************************************/
-/****************** Check if a user has favourited a note ********************/
-/*****************************************************************************/
-
-static bool TL_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod)
-  {
-   return (DB_QueryCOUNT ("can not check if a user"
-			  " has favourited a note",
-			  "SELECT COUNT(*) FROM tl_notes_fav"
-			  " WHERE NotCod=%ld AND UsrCod=%ld",
-			  NotCod,UsrCod) != 0);
-  }
-
-/*****************************************************************************/
-/**************** Check if a user has favourited a comment *******************/
-/*****************************************************************************/
-
-static bool TL_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod)
-  {
-   return (DB_QueryCOUNT ("can not check if a user"
-			  " has favourited a comment",
-			  "SELECT COUNT(*) FROM tl_comments_fav"
-			  " WHERE PubCod=%ld AND UsrCod=%ld",
-			  PubCod,UsrCod) != 0);
-  }
-
-/*****************************************************************************/
 /********** Get number of times a note has been shared in timeline ***********/
 /*****************************************************************************/
 
-static void TL_UpdateNumTimesANoteHasBeenShared (struct TL_Note *SocNot)
+static void TL_Sha_UpdateNumTimesANoteHasBeenShared (struct TL_Note *SocNot)
   {
    /***** Get number of times (users) this note has been shared *****/
    SocNot->NumShared =
@@ -4938,45 +4368,11 @@ static void TL_UpdateNumTimesANoteHasBeenShared (struct TL_Note *SocNot)
   }
 
 /*****************************************************************************/
-/*************** Get number of times a note has been favourited **************/
-/*****************************************************************************/
-
-static void TL_GetNumTimesANoteHasBeenFav (struct TL_Note *SocNot)
-  {
-   /***** Get number of times (users) this note has been favourited *****/
-   SocNot->NumFavs =
-   (unsigned) DB_QueryCOUNT ("can not get number of times"
-			     " a note has been favourited",
-			     "SELECT COUNT(*) FROM tl_notes_fav"
-			     " WHERE NotCod=%ld"
-			     " AND UsrCod<>%ld",	// Extra check
-			     SocNot->NotCod,
-			     SocNot->UsrCod);		// The author
-  }
-
-/*****************************************************************************/
-/************ Get number of times a comment has been favourited **************/
-/*****************************************************************************/
-
-static void TL_GetNumTimesACommHasBeenFav (struct TL_Comment *SocCom)
-  {
-   /***** Get number of times (users) this comment has been favourited *****/
-   SocCom->NumFavs =
-   (unsigned) DB_QueryCOUNT ("can not get number of times"
-			     " a comment has been favourited",
-			     "SELECT COUNT(*) FROM tl_comments_fav"
-			     " WHERE PubCod=%ld"
-			     " AND UsrCod<>%ld",	// Extra check
-			     SocCom->PubCod,
-			     SocCom->UsrCod);		// The author
-  }
-
-/*****************************************************************************/
 /******************* Show users who have shared this note ********************/
 /*****************************************************************************/
 
-static void TL_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
-					  TL_HowManyUsrs_t HowManyUsrs)
+static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
+					      TL_HowManyUsrs_t HowManyUsrs)
   {
    MYSQL_RES *mysql_res;
    unsigned NumFirstUsrs = 0;
@@ -5004,7 +4400,7 @@ static void TL_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
    HTM_DIV_Begin ("class=\"TL_USRS\"");
    TL_ShowSharersOrFavers (&mysql_res,SocNot->NumShared,NumFirstUsrs);
    if (NumFirstUsrs < SocNot->NumShared)
-      TL_PutFormToSeeAllSharersNote (SocNot,HowManyUsrs);
+      TL_Sha_PutFormToSeeAllSharersNote (SocNot,HowManyUsrs);
    HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/
@@ -5013,99 +4409,17 @@ static void TL_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
   }
 
 /*****************************************************************************/
-/************ Show users who have marked this note as favourite **************/
-/*****************************************************************************/
-
-static void TL_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
-					       TL_HowManyUsrs_t HowManyUsrs)
-  {
-   MYSQL_RES *mysql_res;
-   unsigned NumFirstUsrs = 0;
-
-   /***** Get users who have marked this note as favourite *****/
-   if (SocNot->NumFavs)
-     {
-      /***** Get list of users from database *****/
-      NumFirstUsrs =
-      (unsigned) DB_QuerySELECT (&mysql_res,"can not get users",
-				 "SELECT UsrCod FROM tl_notes_fav"
-				 " WHERE NotCod=%ld"
-				 " AND UsrCod<>%ld"	// Extra check
-				 " ORDER BY FavCod LIMIT %u",
-				 SocNot->NotCod,
-				 SocNot->UsrCod,
-				 HowManyUsrs == TL_SHOW_FEW_USRS ? TL_DEF_USRS_SHOWN :
-				                                 TL_MAX_USRS_SHOWN);
-     }
-
-   /***** Show users *****/
-   HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
-   TL_ShowNumSharersOrFavers (SocNot->NumFavs);
-   HTM_DIV_End ();
-
-   HTM_DIV_Begin ("class=\"TL_USRS\"");
-   TL_ShowSharersOrFavers (&mysql_res,SocNot->NumFavs,NumFirstUsrs);
-   if (NumFirstUsrs < SocNot->NumFavs)		// Not all are shown
-      TL_PutFormToSeeAllFaversNote (SocNot,HowManyUsrs);
-   HTM_DIV_End ();
-
-   /***** Free structure that stores the query result *****/
-   if (SocNot->NumFavs)
-      DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/************ Show users who have marked this note as favourite **************/
-/*****************************************************************************/
-
-static void TL_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom,
-					       TL_HowManyUsrs_t HowManyUsrs)
-  {
-   MYSQL_RES *mysql_res;
-   unsigned NumFirstUsrs = 0;
-
-   /***** Get users who have marked this comment as favourite *****/
-   if (SocCom->NumFavs)
-      /***** Get list of users from database *****/
-      NumFirstUsrs =
-      (unsigned) DB_QuerySELECT (&mysql_res,"can not get users",
-				 "SELECT UsrCod FROM tl_comments_fav"
-				 " WHERE PubCod=%ld"
-				 " AND UsrCod<>%ld"	// Extra check
-				 " ORDER BY FavCod LIMIT %u",
-				 SocCom->PubCod,
-				 SocCom->UsrCod,
-				 HowManyUsrs == TL_SHOW_FEW_USRS ? TL_DEF_USRS_SHOWN :
-				                                 TL_MAX_USRS_SHOWN);
-
-   /***** Show users *****/
-   HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
-   TL_ShowNumSharersOrFavers (SocCom->NumFavs);
-   HTM_DIV_End ();
-
-   HTM_DIV_Begin ("class=\"TL_USRS\"");
-   TL_ShowSharersOrFavers (&mysql_res,SocCom->NumFavs,NumFirstUsrs);
-   if (NumFirstUsrs < SocCom->NumFavs)
-      TL_PutFormToSeeAllFaversComment (SocCom,HowManyUsrs);
-   HTM_DIV_End ();
-
-   /***** Free structure that stores the query result *****/
-   if (SocCom->NumFavs)
-      DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
 /************************ Show sharers or favouriters ************************/
 /*****************************************************************************/
 
-static void TL_ShowNumSharersOrFavers (unsigned NumUsrs)
+void TL_ShowNumSharersOrFavers (unsigned NumUsrs)
   {
    /***** Show number of users who have marked this note as favourite *****/
    HTM_TxtF ("&nbsp;%u",NumUsrs);
   }
 
-static void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
-				    unsigned NumUsrs,unsigned NumFirstUsrs)
+void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
+			     unsigned NumUsrs,unsigned NumFirstUsrs)
   {
    MYSQL_ROW row;
    unsigned NumUsr;
@@ -5157,7 +4471,7 @@ static void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 /******************** Get data of note using its code ************************/
 /*****************************************************************************/
 
-static void TL_GetDataOfNoteByCod (struct TL_Note *SocNot)
+void TL_GetDataOfNoteByCod (struct TL_Note *SocNot)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -5197,7 +4511,7 @@ static void TL_GetDataOfNoteByCod (struct TL_Note *SocNot)
 /******************* Get data of comment using its code **********************/
 /*****************************************************************************/
 
-static void TL_GetDataOfCommByCod (struct TL_Comment *SocCom)
+void TL_GetDataOfCommByCod (struct TL_Comment *SocCom)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -5293,10 +4607,10 @@ static void TL_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Note *SocNot)
    SocNot->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[6]);
 
    /***** Get number of times this note has been shared *****/
-   TL_UpdateNumTimesANoteHasBeenShared (SocNot);
+   TL_Sha_UpdateNumTimesANoteHasBeenShared (SocNot);
 
    /***** Get number of times this note has been favourited *****/
-   TL_GetNumTimesANoteHasBeenFav (SocNot);
+   TL_Fav_GetNumTimesANoteHasBeenFav (SocNot);
   }
 
 /*****************************************************************************/
@@ -5360,7 +4674,7 @@ static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *SocCom)
              Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Get number of times this comment has been favourited *****/
-   TL_GetNumTimesACommHasBeenFav (SocCom);
+   TL_Fav_GetNumTimesACommHasBeenFav (SocCom);
 
    /***** Get media content (row[5]) *****/
    SocCom->Content.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
@@ -5446,7 +4760,7 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    MYSQL_ROW row;
    struct TL_Publication SocPub;
    struct TL_Note SocNot;
-   struct PostContent Content;
+   struct TL_PostContent Content;
    size_t Length;
    bool ContentCopied = false;
 

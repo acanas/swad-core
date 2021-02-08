@@ -340,7 +340,7 @@ void Not_RemoveNotice (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_NOTICE,NotCod);
 
    /***** Mark possible social note as unavailable *****/
-   TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NOTE_NOTICE,NotCod);
+   TL_MarkNoteAsUnavailable (TL_NOTE_NOTICE,NotCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);

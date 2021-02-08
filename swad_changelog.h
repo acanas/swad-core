@@ -553,7 +553,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.12.1 (2021-02-08)"
+#define Log_PLATFORM_VERSION	"SWAD 20.13 (2021-02-08)"
 #define CSS_FILE		"swad20.8.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
@@ -600,6 +600,7 @@ TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse 
 
 TODO: BUG: Cuando un tipo de grupo sólo tiene un grupo, inscribirse es voluntario, el estudiante sólo puede pertenecer a un grupo, y se inscribe en él, debería poder desapuntarse. Ahora no puede.
 
+	Version 20.13:    Feb 08, 2021  New module timeline_favourite. (304994 lines)
 	Version 20.12.1:  Feb 08, 2021  Code refactoring in timeline. (304900 lines)
 	Version 20.12:    Feb 08, 2021  Code refactoring in timeline. (304882 lines)
 	Version 20.11.1:  Feb 07, 2021  Fixed bugs in assigments pagination. (304880 lines)
