@@ -135,6 +135,13 @@
     |______________|
 
 */
+struct TL_SubQueries
+  {
+   char Publishers[TL_MAX_BYTES_SUBQUERY + 1];
+   char RangeBottom[TL_MAX_BYTES_SUBQUERY + 1];
+   char RangeTop[TL_MAX_BYTES_SUBQUERY + 1];
+   char AlreadyExists[TL_MAX_BYTES_SUBQUERY + 1];
+  };
 
 struct TL_RangePubsToGet
   {
@@ -184,15 +191,18 @@ static void TL_CreateTmpTableCurrentTimeline (void);
 static void TL_CreateTmpTablePublishers (void);
 static void TL_DropTmpTablesUsedToQueryTimeline (void);
 static void TL_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
-                                         char SubQueryPublishers[TL_MAX_BYTES_SUBQUERY + 1]);
+                                         struct TL_SubQueries *SubQueries);
 static void TL_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
-                                            char SubQueryAlreadyExists[TL_MAX_BYTES_SUBQUERY + 1]);
+                                            struct TL_SubQueries *SubQueries);
 static void TL_CreateSubQueryRangeBottom (const struct TL_Timeline *Timeline,
                                           const struct TL_RangePubsToGet *RangePubsToGet,
-                                          char SubQueryRangeBottom[TL_MAX_BYTES_SUBQUERY + 1]);
+                                          struct TL_SubQueries *SubQueries);
 static void TL_CreateSubQueryRangeTop (const struct TL_Timeline *Timeline,
                                        const struct TL_RangePubsToGet *RangePubsToGet,
-                                       char SubQueryRangeTop[TL_MAX_BYTES_SUBQUERY + 1]);
+                                       struct TL_SubQueries *SubQueries);
+static void TL_SelectTheMostRecentPub (const struct TL_Timeline *Timeline,
+                                       const struct TL_SubQueries *SubQueries,
+				       long *PubCod,long *NotCod);
 
 static void TL_ShowTimeline (struct TL_Timeline *Timeline,
 			     char *Query,
@@ -605,15 +615,9 @@ void TL_MarkMyNotifAsSeen (void)
 static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 	                                char **Query)
   {
-   char SubQueryPublishers[TL_MAX_BYTES_SUBQUERY + 1];
-   char SubQueryRangeBottom[TL_MAX_BYTES_SUBQUERY + 1];
-   char SubQueryRangeTop[TL_MAX_BYTES_SUBQUERY + 1];
-   char SubQueryAlreadyExists[TL_MAX_BYTES_SUBQUERY + 1];
+   struct TL_SubQueries SubQueries;
    struct TL_RangePubsToGet RangePubsToGet;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned MaxPubsToGet = TL_GetMaxPubsToGet (Timeline);
-   unsigned NumPubs;
    unsigned NumPub;
    long PubCod;
    long NotCod;
@@ -631,10 +635,10 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
    TL_CreateTmpTableCurrentTimeline ();
 
    /***** Create temporary table and subquery with potential publishers *****/
-   TL_CreateSubQueryPublishers (Timeline,SubQueryPublishers);
+   TL_CreateSubQueryPublishers (Timeline,&SubQueries);
 
    /***** Create subquery to get only notes not present in timeline *****/
-   TL_CreateSubQueryAlreadyExists (Timeline,SubQueryAlreadyExists);
+   TL_CreateSubQueryAlreadyExists (Timeline,&SubQueries);
 
    /***** Get the publications in timeline *****/
    /* Initialize range of pubs:
@@ -694,99 +698,27 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 	NumPub++)
      {
       /* Create subqueries with range of publications to get from tl_pubs */
-      TL_CreateSubQueryRangeBottom (Timeline,&RangePubsToGet,SubQueryRangeBottom);
-      TL_CreateSubQueryRangeTop    (Timeline,&RangePubsToGet,SubQueryRangeTop);
+      TL_CreateSubQueryRangeBottom (Timeline,&RangePubsToGet,&SubQueries);
+      TL_CreateSubQueryRangeTop    (Timeline,&RangePubsToGet,&SubQueries);
 
       /* Select the most recent publication from tl_pubs */
-      NumPubs = 0;	// Initialized to avoid warning
-      switch (Timeline->UsrOrGbl)
-	{
-	 case TL_TIMELINE_USR:	// Show the timeline of a user
-	    NumPubs =
-	    (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
-				       "SELECT PubCod,NotCod"
-				       " FROM tl_pubs"
-				       " WHERE %s%s%s%s"
-				       " ORDER BY PubCod DESC LIMIT 1",
-				       SubQueryRangeBottom,SubQueryRangeTop,
-				       SubQueryPublishers,
-				       SubQueryAlreadyExists);
-	    break;
-	 case TL_TIMELINE_GBL:	// Show the global timeline
-	    switch (Timeline->Who)
-	      {
-	       case Usr_WHO_ME:		// Show my timeline
-		  NumPubs =
-		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
-					     "SELECT PubCod,NotCod"
-					     " FROM tl_pubs"
-					     " WHERE %s%s%s%s"
-					     " ORDER BY PubCod DESC LIMIT 1",
-					     SubQueryRangeBottom,SubQueryRangeTop,
-					     SubQueryPublishers,
-					     SubQueryAlreadyExists);
-		  break;
-	       case Usr_WHO_FOLLOWED:	// Show the timeline of the users I follow
-		  NumPubs =
-		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
-				             "SELECT PubCod,NotCod"
-				             " FROM tl_pubs,tl_publishers"
-					     " WHERE %s%s%s%s"
-					     " ORDER BY tl_pubs.PubCod DESC LIMIT 1",
-					     SubQueryRangeBottom,SubQueryRangeTop,
-					     SubQueryPublishers,
-					     SubQueryAlreadyExists);
-		  break;
-	       case Usr_WHO_ALL:	// Show the timeline of all users
-		  NumPubs =
-		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
-				             "SELECT PubCod,NotCod"
-				             " FROM tl_pubs"
-					     " WHERE %s%s%s"
-					     " ORDER BY PubCod DESC LIMIT 1",
-					     SubQueryRangeBottom,SubQueryRangeTop,
-					     SubQueryAlreadyExists);
-		  break;
-	       default:
-	          Lay_WrongWhoExit ();
-		  break;
-	      }
-	    break;
-	}
-
-      if (NumPubs == 1)
-	{
-	 /* Get code of publication */
-	 row = mysql_fetch_row (mysql_res);
-	 PubCod = Str_ConvertStrCodToLongCod (row[0]);
-	}
-      else
-        {
-	 row = NULL;
-	 PubCod = -1L;
-        }
-
-      /* Free structure that stores the query result */
-      DB_FreeMySQLResult (&mysql_res);
+      TL_SelectTheMostRecentPub (Timeline,&SubQueries,&PubCod,&NotCod);
 
       if (PubCod > 0)
 	{
+	 /* Insert publication */
 	 DB_QueryINSERT ("can not store publication code",
 			 "INSERT INTO tl_pub_codes SET PubCod=%ld",
 			 PubCod);
 	 RangePubsToGet.Top = PubCod;	// Narrow the range for the next iteration
 
-	 /* Get note code (row[1]) */
-	 if (row)
-	   {
-	    NotCod = Str_ConvertStrCodToLongCod (row[1]);
-	    DB_QueryINSERT ("can not store note code",
-			    "INSERT INTO tl_not_codes SET NotCod=%ld",
-			    NotCod);
-	    DB_QueryINSERT ("can not store note code",
-			    "INSERT INTO tl_current_timeline SET NotCod=%ld",
-			    NotCod);
-	   }
+	 /* Insert note code */
+	 DB_QueryINSERT ("can not store note code",
+			 "INSERT INTO tl_not_codes SET NotCod=%ld",
+			 NotCod);
+	 DB_QueryINSERT ("can not store note code",
+			 "INSERT INTO tl_current_timeline SET NotCod=%ld",
+			 NotCod);
 	}
       else	// Nothing got ==> abort loop
          break;	// Last publication
@@ -965,29 +897,29 @@ static void TL_DropTmpTablesUsedToQueryTimeline (void)
 /*****************************************************************************/
 
 static void TL_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
-                                         char SubQueryPublishers[TL_MAX_BYTES_SUBQUERY + 1])
+                                         struct TL_SubQueries *SubQueries)
   {
    /***** Create temporary table and subquery with potential publishers *****/
    switch (Timeline->UsrOrGbl)
      {
       case TL_TIMELINE_USR:	// Show the timeline of a user
-	 sprintf (SubQueryPublishers,"PublisherCod=%ld AND ",
+	 sprintf (SubQueries->Publishers,"PublisherCod=%ld AND ",
 	          Gbl.Usrs.Other.UsrDat.UsrCod);
 	 break;
       case TL_TIMELINE_GBL:	// Show the global timeline
 	 switch (Timeline->Who)
 	   {
 	    case Usr_WHO_ME:		// Show my timeline
-	       sprintf (SubQueryPublishers,"PublisherCod=%ld AND ",
+	       sprintf (SubQueries->Publishers,"PublisherCod=%ld AND ",
 	                Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
 	    case Usr_WHO_FOLLOWED:	// Show the timeline of the users I follow
 	       TL_CreateTmpTablePublishers ();
-	       sprintf (SubQueryPublishers,
+	       sprintf (SubQueries->Publishers,
 			"tl_pubs.PublisherCod=tl_publishers.UsrCod AND ");
 	       break;
 	    case Usr_WHO_ALL:		// Show the timeline of all users
-	       SubQueryPublishers[0] = '\0';
+	       SubQueries->Publishers[0] = '\0';
 	       break;
 	    default:
 	       Lay_WrongWhoExit ();
@@ -1002,7 +934,7 @@ static void TL_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
 /*****************************************************************************/
 
 static void TL_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
-                                            char SubQueryAlreadyExists[TL_MAX_BYTES_SUBQUERY + 1])
+                                            struct TL_SubQueries *SubQueries)
   {
    switch (Timeline->UsrOrGbl)
      {
@@ -1011,13 +943,13 @@ static void TL_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
            {
             case TL_GET_ONLY_NEW_PUBS:
             case TL_GET_RECENT_TIMELINE:
-	       Str_Copy (SubQueryAlreadyExists,
+	       Str_Copy (SubQueries->AlreadyExists,
 	                 " NotCod NOT IN"
 			 " (SELECT NotCod FROM tl_not_codes)",
 			 TL_MAX_BYTES_SUBQUERY);
 	       break;
             case TL_GET_ONLY_OLD_PUBS:
-	       Str_Copy (SubQueryAlreadyExists,
+	       Str_Copy (SubQueries->AlreadyExists,
 	                 " NotCod NOT IN"
 			 " (SELECT NotCod FROM tl_current_timeline)",
 			 TL_MAX_BYTES_SUBQUERY);
@@ -1029,13 +961,13 @@ static void TL_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
            {
             case TL_GET_ONLY_NEW_PUBS:
             case TL_GET_RECENT_TIMELINE:
-	       Str_Copy (SubQueryAlreadyExists,
+	       Str_Copy (SubQueries->AlreadyExists,
 	                 " tl_pubs.NotCod NOT IN"
 			 " (SELECT NotCod FROM tl_not_codes)",
 			 TL_MAX_BYTES_SUBQUERY);
 	       break;
             case TL_GET_ONLY_OLD_PUBS:
-	       Str_Copy (SubQueryAlreadyExists,
+	       Str_Copy (SubQueries->AlreadyExists,
 	                 " tl_pubs.NotCod NOT IN"
 			 " (SELECT NotCod FROM tl_current_timeline)",
 			 TL_MAX_BYTES_SUBQUERY);
@@ -1051,13 +983,13 @@ static void TL_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
 
 static void TL_CreateSubQueryRangeBottom (const struct TL_Timeline *Timeline,
                                           const struct TL_RangePubsToGet *RangePubsToGet,
-                                          char SubQueryRangeBottom[TL_MAX_BYTES_SUBQUERY + 1])
+                                          struct TL_SubQueries *SubQueries)
   {
    if (RangePubsToGet->Bottom > 0)
       switch (Timeline->UsrOrGbl)
 	{
 	 case TL_TIMELINE_USR:	// Show the timeline of a user
-	    sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",
+	    sprintf (SubQueries->RangeBottom,"PubCod>%ld AND ",
 		     RangePubsToGet->Bottom);
 	    break;
 	 case TL_TIMELINE_GBL:	// Show the global timeline
@@ -1065,11 +997,11 @@ static void TL_CreateSubQueryRangeBottom (const struct TL_Timeline *Timeline,
 	      {
 	       case Usr_WHO_ME:	// Show my timeline
 	       case Usr_WHO_ALL:	// Show the timeline of all users
-		  sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",
+		  sprintf (SubQueries->RangeBottom,"PubCod>%ld AND ",
 			   RangePubsToGet->Bottom);
 		  break;
 	       case Usr_WHO_FOLLOWED:// Show the timeline of the users I follow
-		  sprintf (SubQueryRangeBottom,"tl_pubs.PubCod>%ld AND ",
+		  sprintf (SubQueries->RangeBottom,"tl_pubs.PubCod>%ld AND ",
 			   RangePubsToGet->Bottom);
 		  break;
 	       default:
@@ -1079,18 +1011,18 @@ static void TL_CreateSubQueryRangeBottom (const struct TL_Timeline *Timeline,
 	    break;
 	}
    else
-      SubQueryRangeBottom[0] = '\0';
+      SubQueries->RangeBottom[0] = '\0';
   }
 
 static void TL_CreateSubQueryRangeTop (const struct TL_Timeline *Timeline,
                                        const struct TL_RangePubsToGet *RangePubsToGet,
-                                       char SubQueryRangeTop[TL_MAX_BYTES_SUBQUERY + 1])
+                                       struct TL_SubQueries *SubQueries)
   {
    if (RangePubsToGet->Top > 0)
       switch (Timeline->UsrOrGbl)
 	{
 	 case TL_TIMELINE_USR:	// Show the timeline of a user
-	    sprintf (SubQueryRangeTop,"PubCod<%ld AND ",
+	    sprintf (SubQueries->RangeTop,"PubCod<%ld AND ",
 		     RangePubsToGet->Top);
 	    break;
 	 case TL_TIMELINE_GBL:	// Show the global timeline
@@ -1098,11 +1030,11 @@ static void TL_CreateSubQueryRangeTop (const struct TL_Timeline *Timeline,
 	      {
 	       case Usr_WHO_ME:	// Show my timeline
 	       case Usr_WHO_ALL:	// Show the timeline of all users
-		  sprintf (SubQueryRangeTop,"PubCod<%ld AND ",
+		  sprintf (SubQueries->RangeTop,"PubCod<%ld AND ",
 			   RangePubsToGet->Top);
 		  break;
 	       case Usr_WHO_FOLLOWED:// Show the timeline of the users I follow
-		  sprintf (SubQueryRangeTop,"tl_pubs.PubCod<%ld AND ",
+		  sprintf (SubQueries->RangeTop,"tl_pubs.PubCod<%ld AND ",
 			   RangePubsToGet->Top);
 		  break;
 	       default:
@@ -1112,7 +1044,92 @@ static void TL_CreateSubQueryRangeTop (const struct TL_Timeline *Timeline,
 	    break;
 	}
    else
-      SubQueryRangeTop[0] = '\0';
+      SubQueries->RangeTop[0] = '\0';
+  }
+
+/*****************************************************************************/
+/************** Select the most recent publication from tl_pubs **************/
+/*****************************************************************************/
+
+static void TL_SelectTheMostRecentPub (const struct TL_Timeline *Timeline,
+                                       const struct TL_SubQueries *SubQueries,
+				       long *PubCod,long *NotCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumPubs = 0;	// Initialized to avoid warning
+
+   switch (Timeline->UsrOrGbl)
+     {
+      case TL_TIMELINE_USR:	// Show the timeline of a user
+	 NumPubs =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
+				    "SELECT PubCod,NotCod"
+				    " FROM tl_pubs"
+				    " WHERE %s%s%s%s"
+				    " ORDER BY PubCod DESC LIMIT 1",
+				    SubQueries->RangeBottom,
+				    SubQueries->RangeTop,
+				    SubQueries->Publishers,
+				    SubQueries->AlreadyExists);
+	 break;
+      case TL_TIMELINE_GBL:	// Show the global timeline
+	 switch (Timeline->Who)
+	   {
+	    case Usr_WHO_ME:		// Show my timeline
+	       NumPubs =
+	       (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
+					  "SELECT PubCod,NotCod"
+					  " FROM tl_pubs"
+					  " WHERE %s%s%s%s"
+					  " ORDER BY PubCod DESC LIMIT 1",
+					  SubQueries->RangeBottom,
+					  SubQueries->RangeTop,
+					  SubQueries->Publishers,
+					  SubQueries->AlreadyExists);
+	       break;
+	    case Usr_WHO_FOLLOWED:	// Show the timeline of the users I follow
+	       NumPubs =
+	       (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
+					  "SELECT PubCod,NotCod"
+					  " FROM tl_pubs,tl_publishers"
+					  " WHERE %s%s%s%s"
+					  " ORDER BY tl_pubs.PubCod DESC LIMIT 1",
+					  SubQueries->RangeBottom,
+					  SubQueries->RangeTop,
+					  SubQueries->Publishers,
+					  SubQueries->AlreadyExists);
+	       break;
+	    case Usr_WHO_ALL:	// Show the timeline of all users
+	       NumPubs =
+	       (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
+					  "SELECT PubCod,NotCod"
+					  " FROM tl_pubs"
+					  " WHERE %s%s%s"
+					  " ORDER BY PubCod DESC LIMIT 1",
+					  SubQueries->RangeBottom,
+					  SubQueries->RangeTop,
+					  SubQueries->AlreadyExists);
+	       break;
+	    default:
+	       Lay_WrongWhoExit ();
+	       break;
+	   }
+	 break;
+     }
+
+   if (NumPubs == 1)
+     {
+      /* Get codes of publication and note */
+      row = mysql_fetch_row (mysql_res);
+      *PubCod = Str_ConvertStrCodToLongCod (row[0]);
+      *NotCod = Str_ConvertStrCodToLongCod (row[1]);
+     }
+   else
+      *PubCod = *NotCod = -1L;
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
