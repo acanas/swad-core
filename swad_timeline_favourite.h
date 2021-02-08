@@ -39,9 +39,9 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_Fav_PutFormToSeeAllFaversNote (const struct TL_Note *SocNot,
+void TL_Fav_PutFormToSeeAllFaversNote (long NotCod,
                                        TL_HowManyUsrs_t HowManyUsrs);
-void TL_Fav_PutFormToSeeAllFaversComment (const struct TL_Comment *SocCom,
+void TL_Fav_PutFormToSeeAllFaversComment (long PubCod,
                                           TL_HowManyUsrs_t HowManyUsrs);
 
 void TL_Fav_ShowAllFaversNoteUsr (void);

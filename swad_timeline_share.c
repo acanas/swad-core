@@ -57,8 +57,8 @@ extern struct Globals Gbl;
 
 static void TL_Sha_PutDisabledIconShare (unsigned NumShared);
 
-static void TL_Sha_PutFormToShaNote (const struct TL_Note *SocNot);
-static void TL_Sha_PutFormToUnsNote (const struct TL_Note *SocNot);
+static void TL_Sha_PutFormToShaNote (long ParamCod);
+static void TL_Sha_PutFormToUnsNote (long ParamCod);
 
 static void TL_Sha_ShaNote (struct TL_Note *SocNot);
 static void TL_Sha_UnsNote (struct TL_Note *SocNot);
@@ -94,45 +94,23 @@ static void TL_Sha_PutDisabledIconShare (unsigned NumShared)
 /*********************** Form to share/unshare note **************************/
 /*****************************************************************************/
 
-void TL_Sha_PutFormToSeeAllSharersNote (const struct TL_Note *SocNot,
-                                        TL_HowManyUsrs_t HowManyUsrs)
-  {
-   extern const char *Txt_View_all_USERS;
-   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-
-   switch (HowManyUsrs)
-     {
-      case TL_SHOW_FEW_USRS:
-	 /***** Form and icon to mark note as favourite *****/
-	 sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
-	 TL_FormFavSha (ActAllShaSocNotGbl,ActAllShaSocNotUsr,ParamCod,
-			TL_ICON_ELLIPSIS,Txt_View_all_USERS);
-	 break;
-      case TL_SHOW_ALL_USRS:
-	 Ico_PutIconOff (TL_ICON_ELLIPSIS,Txt_View_all_USERS);
-	 break;
-     }
-  }
-
-static void TL_Sha_PutFormToShaNote (const struct TL_Note *SocNot)
+static void TL_Sha_PutFormToShaNote (long ParamCod)
   {
    extern const char *Txt_Share;
-   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Form and icon to mark note as favourite *****/
-   sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
-   TL_FormFavSha (ActShaSocNotGbl,ActShaSocNotUsr,ParamCod,
+   TL_FormFavSha (ActShaSocNotGbl,ActShaSocNotUsr,
+                  "NotCod=%ld",ParamCod,
 	          TL_ICON_SHARE,Txt_Share);
   }
 
-static void TL_Sha_PutFormToUnsNote (const struct TL_Note *SocNot)
+static void TL_Sha_PutFormToUnsNote (long ParamCod)
   {
    extern const char *Txt_TIMELINE_NOTE_Shared;
-   char ParamCod[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Form and icon to mark note as favourite *****/
-   sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
-   TL_FormFavSha (ActUnsSocNotGbl,ActUnsSocNotUsr,ParamCod,
+   TL_FormFavSha (ActUnsSocNotGbl,ActUnsSocNotUsr,
+                  "NotCod=%ld",ParamCod,
 	          TL_ICON_SHARED,Txt_TIMELINE_NOTE_Shared);
   }
 
@@ -299,9 +277,9 @@ void TL_Sha_PutFormToShaUnsNote (const struct TL_Note *SocNot,
       IAmASharerOfThisSocNot = TL_Sha_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
 							    Gbl.Usrs.Me.UsrDat.UsrCod);
       if (IAmASharerOfThisSocNot)	// I have shared this note
-	 TL_Sha_PutFormToUnsNote (SocNot);
+	 TL_Sha_PutFormToUnsNote (SocNot->NotCod);
       else				// I have not shared this note
-	 TL_Sha_PutFormToShaNote (SocNot);
+	 TL_Sha_PutFormToShaNote (SocNot->NotCod);
      }
    HTM_DIV_End ();
 
@@ -382,11 +360,12 @@ static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
    TL_ShowSharersOrFavers (&mysql_res,SocNot->NumShared,NumFirstUsrs);
    if (NumFirstUsrs < SocNot->NumShared)
       /* Clickable ellipsis to show all users */
-      TL_Sha_PutFormToSeeAllSharersNote (SocNot,HowManyUsrs);
+      TL_PutFormToSeeAllFaversSharers (ActAllShaSocNotGbl,ActAllShaSocNotUsr,
+		                       "NotCod=%ld",SocNot->NotCod,
+                                       HowManyUsrs);
    HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/
    if (SocNot->NumShared)
       DB_FreeMySQLResult (&mysql_res);
   }
-

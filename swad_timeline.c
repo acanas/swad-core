@@ -1185,63 +1185,6 @@ static void TL_FormStart (const struct TL_Timeline *Timeline,
   }
 
 /*****************************************************************************/
-/******* Form to fav/unfav or share/unshare in global or user timeline *******/
-/*****************************************************************************/
-
-void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
-		    const char *ParamCod,
-		    const char *Icon,const char *Title)
-  {
-   char *OnSubmit;
-
-   /*
-   +---------------------------------------------------------------------------+
-   | div which content will be updated (parent of parent of form)              |
-   | +---------------------+ +-------+ +-------------------------------------+ |
-   | | div (parent of form)| | div   | | div for users                       | |
-   | | +-----------------+ | | for   | | +------+ +------+ +------+ +------+ | |
-   | | |    this form    | | | num.  | | |      | |      | |      | | form | | |
-   | | | +-------------+ | | | of    | | | user | | user | | user | |  to  | | |
-   | | | |   fav icon  | | | | users | | |   1  | |   2  | |   3  | | show | | |
-   | | | +-------------+ | | |       | | |      | |      | |      | |  all | | |
-   | | +-----------------+ | |       | | +------+ +------+ +------+ +------+ | |
-   | +---------------------+ +-------+ +-------------------------------------+ |
-   +---------------------------------------------------------------------------+
-   */
-
-   /***** Form and icon to mark note as favourite *****/
-   /* Form with icon */
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      if (asprintf (&OnSubmit,"updateDivFaversSharers(this,"
-			      "'act=%ld&ses=%s&%s&OtherUsrCod=%s');"
-			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (ActionUsr),
-		    Gbl.Session.Id,
-		    ParamCod,
-		    Gbl.Usrs.Other.UsrDat.EncryptedUsrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
-     }
-   else
-     {
-      if (asprintf (&OnSubmit,"updateDivFaversSharers(this,"
-			      "'act=%ld&ses=%s&%s');"
-			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (ActionGbl),
-		    Gbl.Session.Id,
-		    ParamCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
-     }
-   Ico_PutIconLink (Icon,Title);
-   Frm_EndForm ();
-
-   /* Free allocated memory */
-   free (OnSubmit);
-  }
-
-/*****************************************************************************/
 /******** Show form to select users whom public activity is displayed ********/
 /*****************************************************************************/
 
@@ -4097,6 +4040,91 @@ void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 	 Usr_UsrDataDestructor (&UsrDat);
 	}
      }
+  }
+
+/*****************************************************************************/
+/********************* Form to show all favers/sharers ***********************/
+/*****************************************************************************/
+
+void TL_PutFormToSeeAllFaversSharers (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+		                      const char *ParamFormat,long ParamCod,
+                                      TL_HowManyUsrs_t HowManyUsrs)
+  {
+   extern const char *Txt_View_all_USERS;
+
+   switch (HowManyUsrs)
+     {
+      case TL_SHOW_FEW_USRS:
+	 /***** Form and icon to mark note as favourite *****/
+	 TL_FormFavSha (ActionGbl,ActionUsr,
+	                ParamFormat,ParamCod,
+			TL_ICON_ELLIPSIS,Txt_View_all_USERS);
+	 break;
+      case TL_SHOW_ALL_USRS:
+         Ico_PutIconOff (TL_ICON_ELLIPSIS,Txt_View_all_USERS);
+	 break;
+     }
+  }
+
+/*****************************************************************************/
+/******* Form to fav/unfav or share/unshare in global or user timeline *******/
+/*****************************************************************************/
+
+void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+		    const char *ParamFormat,long ParamCod,
+		    const char *Icon,const char *Title)
+  {
+   char *OnSubmit;
+   char ParamStr[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+
+   /***** Create parameter string *****/
+   sprintf (ParamStr,ParamFormat,ParamCod);
+
+   /*
+   +---------------------------------------------------------------------------+
+   | div which content will be updated (parent of parent of form)              |
+   | +---------------------+ +-------+ +-------------------------------------+ |
+   | | div (parent of form)| | div   | | div for users                       | |
+   | | +-----------------+ | | for   | | +------+ +------+ +------+ +------+ | |
+   | | |    this form    | | | num.  | | |      | |      | |      | | form | | |
+   | | | +-------------+ | | | of    | | | user | | user | | user | |  to  | | |
+   | | | |   fav icon  | | | | users | | |   1  | |   2  | |   3  | | show | | |
+   | | | +-------------+ | | |       | | |      | |      | |      | |  all | | |
+   | | +-----------------+ | |       | | +------+ +------+ +------+ +------+ | |
+   | +---------------------+ +-------+ +-------------------------------------+ |
+   +---------------------------------------------------------------------------+
+   */
+
+   /***** Form and icon to mark note as favourite *****/
+   /* Form with icon */
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      if (asprintf (&OnSubmit,"updateDivFaversSharers(this,"
+			      "'act=%ld&ses=%s&%s&OtherUsrCod=%s');"
+			      " return false;",	// return false is necessary to not submit form
+		    Act_GetActCod (ActionUsr),
+		    Gbl.Session.Id,
+		    ParamStr,
+		    Gbl.Usrs.Other.UsrDat.EncryptedUsrCod) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
+     }
+   else
+     {
+      if (asprintf (&OnSubmit,"updateDivFaversSharers(this,"
+			      "'act=%ld&ses=%s&%s');"
+			      " return false;",	// return false is necessary to not submit form
+		    Act_GetActCod (ActionGbl),
+		    Gbl.Session.Id,
+		    ParamStr) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
+     }
+   Ico_PutIconLink (Icon,Title);
+   Frm_EndForm ();
+
+   /* Free allocated memory */
+   free (OnSubmit);
   }
 
 /*****************************************************************************/

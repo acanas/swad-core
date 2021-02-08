@@ -163,10 +163,6 @@ void TL_RefreshOldTimelineUsr (void);
 
 void TL_MarkMyNotifAsSeen (void);
 
-void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
-		    const char *ParamCod,
-		    const char *Icon,const char *Title);
-
 void TL_GetParamWho (void);
 Usr_Who_t TL_GetGlobalWho (void);
 
@@ -210,6 +206,12 @@ void TL_RemoveUsrContent (long UsrCod);
 void TL_ShowNumSharersOrFavers (unsigned NumUsrs);
 void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 			     unsigned NumUsrs,unsigned NumFirstUsrs);
+void TL_PutFormToSeeAllFaversSharers (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+		                      const char *ParamFormat,long ParamCod,
+                                      TL_HowManyUsrs_t HowManyUsrs);
+void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+		    const char *ParamFormat,long ParamCod,
+		    const char *Icon,const char *Title);
 
 void TL_GetDataOfNoteByCod (struct TL_Note *SocNot);
 void TL_GetDataOfCommByCod (struct TL_Comment *SocCom);

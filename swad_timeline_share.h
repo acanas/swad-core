@@ -39,9 +39,6 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_Sha_PutFormToSeeAllSharersNote (const struct TL_Note *SocNot,
-                                        TL_HowManyUsrs_t HowManyUsrs);
-
 void TL_Sha_ShowAllSharersNoteUsr (void);
 void TL_Sha_ShowAllSharersNoteGbl (void);
 void TL_Sha_ShaNoteUsr (void);
