@@ -240,6 +240,8 @@ Usr_Who_t TL_GlobalWho;
 /*****************************************************************************/
 
 static void TL_InitTimelineGbl (struct TL_Timeline *Timeline);
+static void TL_ShowHighlightedNote (struct TL_Timeline *Timeline,
+                                    struct TL_Note *SocNot);
 static void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline);
 
 static void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
@@ -393,7 +395,7 @@ static void TL_PutParamsRemoveNote (void *Timeline);
 static void TL_RemoveNote (void);
 static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot);
 
-static long TL_GetNotCodOfPublication (long PubCod);
+static long TL_GetNotCodFromPubCod (long PubCod);
 static long TL_GetPubCodOfOriginalNote (long NotCod);
 
 static void TL_RequestRemovalComment (struct TL_Timeline *Timeline);
@@ -464,7 +466,7 @@ void TL_ResetTimeline (struct TL_Timeline *Timeline)
   }
 
 /*****************************************************************************/
-/**************************** See global timeline ****************************/
+/**************** Show highlighted note and global timeline ******************/
 /*****************************************************************************/
 
 void TL_ShowTimelineGbl (void)
@@ -477,14 +479,47 @@ void TL_ShowTimelineGbl (void)
    /***** Save which users in database *****/
    TL_SaveWhoInDB (&Timeline);
 
-   /***** Show timeline *****/
+   /***** Show highlighted note and global timeline *****/
    TL_ShowNoteAndTimelineGbl (&Timeline);
   }
+
+/*****************************************************************************/
+/**************** Show highlighted note and global timeline ******************/
+/*****************************************************************************/
 
 static void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline)
   {
    long PubCod;
    struct TL_Note SocNot;
+
+   /***** Initialize note code to -1 ==> no highlighted note *****/
+   SocNot.NotCod = -1L;
+
+   /***** Get parameter with the code of a publication *****/
+   // This parameter is optional. It can be provided by a notification.
+   // If > 0 ==> the note is shown highlighted above the timeline
+   PubCod = TL_GetParamPubCod ();
+
+   /***** If a note should be highlighted ==> get code of note from database *****/
+   if (PubCod > 0)
+      SocNot.NotCod = TL_GetNotCodFromPubCod (PubCod);
+
+   /***** If a note should be highlighted ==> show it above the timeline *****/
+   if (SocNot.NotCod > 0)
+      /***** Show the note highlighted above the timeline *****/
+      TL_ShowHighlightedNote (Timeline,&SocNot);
+
+   /***** Show timeline with possible highlighted note *****/
+   TL_ShowTimelineGblHighlightingNot (Timeline,SocNot.NotCod);
+  }
+
+/*****************************************************************************/
+/****************** Show highlighted note above timeline *********************/
+/*****************************************************************************/
+
+static void TL_ShowHighlightedNote (struct TL_Timeline *Timeline,
+                                     struct TL_Note *SocNot)
+  {
    struct UsrData UsrDat;
    Ntf_NotifyEvent_t NotifyEvent;
    static const TL_TopMessage_t TopMessages[Ntf_NUM_NOTIFY_EVENTS] =
@@ -525,35 +560,23 @@ static void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline)
       /* Profile tab */
      };
 
-   /***** Initialize note code to -1 ==> no highlighted note *****/
-   SocNot.NotCod = -1L;
+   /***** Get other parameters *****/
+   /* Get who did the action (publication, commenting, faving, sharing, mentioning) */
+   Usr_GetParamOtherUsrCodEncrypted (&UsrDat);
 
-   /***** Get parameter with the code of a publication *****/
-   // This parameter is optional. It can be provided by a notification.
-   // If > 0 ==> the note is shown highlighted above the timeline
-   PubCod = TL_GetParamPubCod ();
-   if (PubCod > 0)
-      /***** Get code of note from database *****/
-      SocNot.NotCod = TL_GetNotCodOfPublication (PubCod);
+   /* Get what he/she did */
+   NotifyEvent = Ntf_GetParamNotifyEvent ();
 
-   if (SocNot.NotCod > 0)
-     {
-      /* Get who did the action (publication, commenting, faving, sharing, mentioning) */
-      Usr_GetParamOtherUsrCodEncrypted (&UsrDat);
-
-      /* Get what he/she did */
-      NotifyEvent = Ntf_GetParamNotifyEvent ();
-
-      /***** Show the note highlighted *****/
-      TL_GetDataOfNoteByCod (&SocNot);
-      TL_WriteNote (Timeline,&SocNot,
-		    TopMessages[NotifyEvent],UsrDat.UsrCod,
-		    true,true);
-     }
-
-   /***** Show timeline with possible highlighted note *****/
-   TL_ShowTimelineGblHighlightingNot (Timeline,SocNot.NotCod);
+   /***** Show the note highlighted *****/
+   TL_GetDataOfNoteByCod (SocNot);
+   TL_WriteNote (Timeline,SocNot,
+		 TopMessages[NotifyEvent],UsrDat.UsrCod,
+		 true,true);
   }
+
+/*****************************************************************************/
+/***************************** Show global timeline **************************/
+/*****************************************************************************/
 
 static void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
 	                                       long NotCod)
@@ -4453,7 +4476,7 @@ static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot)
 /*********************** Get code of note of a publication *******************/
 /*****************************************************************************/
 
-static long TL_GetNotCodOfPublication (long PubCod)
+static long TL_GetNotCodFromPubCod (long PubCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
