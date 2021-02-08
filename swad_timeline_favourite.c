@@ -25,32 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
-#include <linux/limits.h>	// For PATH_MAX
-#include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For malloc and free
-#include <string.h>		// For string functions
-#include <sys/types.h>		// For time_t
-
-#include "swad_announcement.h"
-#include "swad_box.h"
-#include "swad_constant.h"
 #include "swad_database.h"
-#include "swad_exam_announcement.h"
-#include "swad_figure.h"
-#include "swad_follow.h"
-#include "swad_form.h"
-#include "swad_forum.h"
 #include "swad_global.h"
-#include "swad_HTML.h"
-#include "swad_layout.h"
-#include "swad_media.h"
-#include "swad_message.h"
-#include "swad_notice.h"
-#include "swad_notification.h"
-#include "swad_parameter.h"
-#include "swad_profile.h"
-#include "swad_setting.h"
 #include "swad_timeline.h"
 #include "swad_timeline_favourite.h"
 
