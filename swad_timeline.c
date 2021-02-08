@@ -168,6 +168,7 @@ static void TL_GetAndShowOldTimeline (struct TL_Timeline *Timeline);
 
 static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 	                                char **Query);
+static unsigned TL_GetMaxPubsToGet (const struct TL_Timeline *Timeline);
 static long TL_GetPubCodFromSession (const char *FieldName);
 static void TL_UpdateLastPubCodIntoSession (void);
 static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod);
@@ -603,16 +604,11 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
      } RangePubsToGet;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   unsigned MaxPubsToGet = TL_GetMaxPubsToGet (Timeline);
    unsigned NumPubs;
    unsigned NumPub;
    long PubCod;
    long NotCod;
-   static const unsigned MaxPubsToGet[TL_NUM_WHAT_TO_GET] =
-     {
-      [TL_GET_ONLY_NEW_PUBS  ] = TL_MAX_NEW_PUBS_TO_GET_AND_SHOW,
-      [TL_GET_RECENT_TIMELINE] = TL_MAX_REC_PUBS_TO_GET_AND_SHOW,
-      [TL_GET_ONLY_OLD_PUBS  ] = TL_MAX_OLD_PUBS_TO_GET_AND_SHOW,
-     };
 
    /***** Clear timeline for this session in database *****/
    if (Timeline->WhatToGet == TL_GET_RECENT_TIMELINE)
@@ -685,9 +681,8 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
       " GROUP BY NotCod ORDER BY NewestPubCod DESC LIMIT ..."
       but this query is slow (several seconds) with a big table.
    */
-
    for (NumPub = 0;
-	NumPub < MaxPubsToGet[Timeline->WhatToGet];
+	NumPub < MaxPubsToGet;
 	NumPub++)
      {
       /* Create subqueries with range of publications to get from tl_pubs */
@@ -862,6 +857,22 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 		  "(SELECT PubCod"
 		  " FROM tl_pub_codes)"
 		  " ORDER BY PubCod DESC");
+  }
+
+/*****************************************************************************/
+/********* Get maximum number of publications to get from database ***********/
+/*****************************************************************************/
+
+static unsigned TL_GetMaxPubsToGet (const struct TL_Timeline *Timeline)
+  {
+   static const unsigned MaxPubsToGet[TL_NUM_WHAT_TO_GET] =
+     {
+      [TL_GET_ONLY_NEW_PUBS  ] = TL_MAX_NEW_PUBS_TO_GET_AND_SHOW,
+      [TL_GET_RECENT_TIMELINE] = TL_MAX_REC_PUBS_TO_GET_AND_SHOW,
+      [TL_GET_ONLY_OLD_PUBS  ] = TL_MAX_OLD_PUBS_TO_GET_AND_SHOW,
+     };
+
+   return MaxPubsToGet[Timeline->WhatToGet];
   }
 
 /*****************************************************************************/
