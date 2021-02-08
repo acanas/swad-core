@@ -136,6 +136,12 @@
 
 */
 
+struct TL_RangePubsToGet
+  {
+   long Top;
+   long Bottom;
+  };
+
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -181,6 +187,12 @@ static void TL_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
                                          char SubQueryPublishers[TL_MAX_BYTES_SUBQUERY + 1]);
 static void TL_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
                                             char SubQueryAlreadyExists[TL_MAX_BYTES_SUBQUERY + 1]);
+static void TL_CreateSubQueryRangeBottom (const struct TL_Timeline *Timeline,
+                                          const struct TL_RangePubsToGet *RangePubsToGet,
+                                          char SubQueryRangeBottom[TL_MAX_BYTES_SUBQUERY + 1]);
+static void TL_CreateSubQueryRangeTop (const struct TL_Timeline *Timeline,
+                                       const struct TL_RangePubsToGet *RangePubsToGet,
+                                       char SubQueryRangeTop[TL_MAX_BYTES_SUBQUERY + 1]);
 
 static void TL_ShowTimeline (struct TL_Timeline *Timeline,
 			     char *Query,
@@ -597,11 +609,7 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
    char SubQueryRangeBottom[TL_MAX_BYTES_SUBQUERY + 1];
    char SubQueryRangeTop[TL_MAX_BYTES_SUBQUERY + 1];
    char SubQueryAlreadyExists[TL_MAX_BYTES_SUBQUERY + 1];
-   struct
-     {
-      long Top;
-      long Bottom;
-     } RangePubsToGet;
+   struct TL_RangePubsToGet RangePubsToGet;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned MaxPubsToGet = TL_GetMaxPubsToGet (Timeline);
@@ -686,61 +694,8 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 	NumPub++)
      {
       /* Create subqueries with range of publications to get from tl_pubs */
-      if (RangePubsToGet.Bottom > 0)
-	 switch (Timeline->UsrOrGbl)
-	   {
-	    case TL_TIMELINE_USR:	// Show the timeline of a user
-	       sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",
-		        RangePubsToGet.Bottom);
-	       break;
-	    case TL_TIMELINE_GBL:	// Show the global timeline
-	       switch (Timeline->Who)
-		 {
-		  case Usr_WHO_ME:	// Show my timeline
-		  case Usr_WHO_ALL:	// Show the timeline of all users
-		     sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",
-			      RangePubsToGet.Bottom);
-		     break;
-		  case Usr_WHO_FOLLOWED:// Show the timeline of the users I follow
-		     sprintf (SubQueryRangeBottom,"tl_pubs.PubCod>%ld AND ",
-			      RangePubsToGet.Bottom);
-		     break;
-		  default:
-	             Lay_WrongWhoExit ();
-		     break;
-		 }
-	       break;
-	   }
-      else
-	 SubQueryRangeBottom[0] = '\0';
-
-      if (RangePubsToGet.Top > 0)
-	 switch (Timeline->UsrOrGbl)
-	   {
-	    case TL_TIMELINE_USR:	// Show the timeline of a user
-	       sprintf (SubQueryRangeTop,"PubCod<%ld AND ",
-		        RangePubsToGet.Top);
-	       break;
-	    case TL_TIMELINE_GBL:	// Show the global timeline
-	       switch (Timeline->Who)
-		 {
-		  case Usr_WHO_ME:	// Show my timeline
-		  case Usr_WHO_ALL:	// Show the timeline of all users
-		     sprintf (SubQueryRangeTop,"PubCod<%ld AND ",
-			      RangePubsToGet.Top);
-		     break;
-		  case Usr_WHO_FOLLOWED:// Show the timeline of the users I follow
-		     sprintf (SubQueryRangeTop,"tl_pubs.PubCod<%ld AND ",
-			      RangePubsToGet.Top);
-		     break;
-		  default:
-	             Lay_WrongWhoExit ();
-		     break;
-		 }
-	       break;
-	   }
-      else
-	 SubQueryRangeTop[0] = '\0';
+      TL_CreateSubQueryRangeBottom (Timeline,&RangePubsToGet,SubQueryRangeBottom);
+      TL_CreateSubQueryRangeTop    (Timeline,&RangePubsToGet,SubQueryRangeTop);
 
       /* Select the most recent publication from tl_pubs */
       NumPubs = 0;	// Initialized to avoid warning
@@ -1088,6 +1043,76 @@ static void TL_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
            }
 	 break;
      }
+  }
+
+/*****************************************************************************/
+/***** Create subqueries with range of publications to get from tl_pubs ******/
+/*****************************************************************************/
+
+static void TL_CreateSubQueryRangeBottom (const struct TL_Timeline *Timeline,
+                                          const struct TL_RangePubsToGet *RangePubsToGet,
+                                          char SubQueryRangeBottom[TL_MAX_BYTES_SUBQUERY + 1])
+  {
+   if (RangePubsToGet->Bottom > 0)
+      switch (Timeline->UsrOrGbl)
+	{
+	 case TL_TIMELINE_USR:	// Show the timeline of a user
+	    sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",
+		     RangePubsToGet->Bottom);
+	    break;
+	 case TL_TIMELINE_GBL:	// Show the global timeline
+	    switch (Timeline->Who)
+	      {
+	       case Usr_WHO_ME:	// Show my timeline
+	       case Usr_WHO_ALL:	// Show the timeline of all users
+		  sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",
+			   RangePubsToGet->Bottom);
+		  break;
+	       case Usr_WHO_FOLLOWED:// Show the timeline of the users I follow
+		  sprintf (SubQueryRangeBottom,"tl_pubs.PubCod>%ld AND ",
+			   RangePubsToGet->Bottom);
+		  break;
+	       default:
+		  Lay_WrongWhoExit ();
+		  break;
+	      }
+	    break;
+	}
+   else
+      SubQueryRangeBottom[0] = '\0';
+  }
+
+static void TL_CreateSubQueryRangeTop (const struct TL_Timeline *Timeline,
+                                       const struct TL_RangePubsToGet *RangePubsToGet,
+                                       char SubQueryRangeTop[TL_MAX_BYTES_SUBQUERY + 1])
+  {
+   if (RangePubsToGet->Top > 0)
+      switch (Timeline->UsrOrGbl)
+	{
+	 case TL_TIMELINE_USR:	// Show the timeline of a user
+	    sprintf (SubQueryRangeTop,"PubCod<%ld AND ",
+		     RangePubsToGet->Top);
+	    break;
+	 case TL_TIMELINE_GBL:	// Show the global timeline
+	    switch (Timeline->Who)
+	      {
+	       case Usr_WHO_ME:	// Show my timeline
+	       case Usr_WHO_ALL:	// Show the timeline of all users
+		  sprintf (SubQueryRangeTop,"PubCod<%ld AND ",
+			   RangePubsToGet->Top);
+		  break;
+	       case Usr_WHO_FOLLOWED:// Show the timeline of the users I follow
+		  sprintf (SubQueryRangeTop,"tl_pubs.PubCod<%ld AND ",
+			   RangePubsToGet->Top);
+		  break;
+	       default:
+		  Lay_WrongWhoExit ();
+		  break;
+	      }
+	    break;
+	}
+   else
+      SubQueryRangeTop[0] = '\0';
   }
 
 /*****************************************************************************/
