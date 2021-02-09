@@ -713,6 +713,9 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
          RangePubsToGet.Bottom = 0;	// -Infinite
 	 break;
      }
+   /* Create subquery with bottom range of publications to get from tl_pubs.
+      Bottom publication code remains unchanged in all iterations of the next loop. */
+   TL_CreateSubQueryRangeBottom (&RangePubsToGet,&SubQueries);
 
    /*
       With the current approach, we select one by one
@@ -734,9 +737,9 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 	NumPub < MaxPubsToGet;
 	NumPub++)
      {
-      /* Create subqueries with range of publications to get from tl_pubs */
-      TL_CreateSubQueryRangeBottom (&RangePubsToGet,&SubQueries);
-      TL_CreateSubQueryRangeTop    (&RangePubsToGet,&SubQueries);
+      /* Create subquery with top range of publications to get from tl_pubs
+         In each iteration of this loop, top publication code is changed to a lower value */
+      TL_CreateSubQueryRangeTop (&RangePubsToGet,&SubQueries);
 
       /* Select the most recent publication from tl_pubs */
       TL_SelectTheMostRecentPub (&SubQueries,&PubCod,&NotCod);
