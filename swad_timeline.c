@@ -237,12 +237,14 @@ static unsigned TL_GetMaxPubsToGet (const struct TL_Timeline *Timeline);
 static long TL_GetPubCodFromSession (const char *FieldName);
 static void TL_UpdateLastPubCodIntoSession (void);
 static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod);
-static void TL_CreateTmpTablePubCodes (void);
+static void TL_CreateTmpTablePubs (void);
+static void TL_CreateTmpTableCurrentTimeline (void);
 static void TL_CreateTmpTablePublishers (void);
 static void TL_DropTmpTablesUsedToQueryTimeline (void);
 static void TL_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
                                          struct TL_SubQueries *SubQueries);
-static void TL_CreateSubQueryAlreadyExists (struct TL_SubQueries *SubQueries);
+static void TL_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
+                                            struct TL_SubQueries *SubQueries);
 static void TL_CreateSubQueryRangeBottom (const struct TL_RangePubsToGet *RangePubsToGet,
                                           struct TL_SubQueries *SubQueries);
 static void TL_CreateSubQueryRangeTop (const struct TL_RangePubsToGet *RangePubsToGet,
@@ -679,15 +681,18 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
    /***** Drop temporary tables *****/
    TL_DropTmpTablesUsedToQueryTimeline ();
 
-   /***** Create some temporary tables *****/
-   TL_CreateTmpTablePubCodes ();
-   // TL_CreateTmpTableNotCodes ();
+   /***** Create temporary table with publications *****/
+   TL_CreateTmpTablePubs ();
+
+   /***** Create temporary table with notes in current timeline *****/
+   if (Timeline->WhatToGet == TL_GET_ONLY_OLD_PUBS)
+      TL_CreateTmpTableCurrentTimeline ();
 
    /***** Create temporary table and subquery with potential publishers *****/
    TL_CreateSubQueryPublishers (Timeline,&SubQueries);
 
    /***** Create subquery to get only notes not present in timeline *****/
-   TL_CreateSubQueryAlreadyExists (&SubQueries);
+   TL_CreateSubQueryAlreadyExists (Timeline,&SubQueries);
 
    /***** Get the publications in timeline *****/
    /* Initialize range of pubs:
@@ -768,7 +773,7 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 	 /* Insert publication in temporary table with publications.
 	    This table contains publications,
 	    and it will be used to get the notes to show */
-	 DB_QueryINSERT ("can not store publication code",
+	 DB_QueryINSERT ("can not store publication",
 			 "INSERT INTO tl_tmp_pubs"
 			 " (PubCod,NotCod,PublisherCod,PubType)"
 			 " VALUES"
@@ -777,6 +782,15 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 			 SocPub.NotCod,
 			 SocPub.PublisherCod,
 			 (unsigned) SocPub.PubType);
+
+	 /* Insert publication in temporary table with current timeline.
+	    This table contains all notes shown,
+	    and it will be used to not get notes already shown */
+         if (Timeline->WhatToGet == TL_GET_ONLY_OLD_PUBS)
+	    DB_QueryINSERT ("can not store note code",
+			    "INSERT INTO tl_tmp_current_timeline SET NotCod=%ld",
+			    SocPub.NotCod);
+
 	 RangePubsToGet.Top = SocPub.PubCod;	// Narrow the range for the next iteration
 	}
       else	// Nothing got ==> abort loop
@@ -883,9 +897,8 @@ static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod)
 /************* Create temporary tables used to query timeline ****************/
 /*****************************************************************************/
 
-static void TL_CreateTmpTablePubCodes (void)
+static void TL_CreateTmpTablePubs (void)
   {
-   /***** Create temporary table with publications *****/
    DB_Query ("can not create temporary table",
 	     "CREATE TEMPORARY TABLE tl_tmp_pubs ("
 	     	"PubCod BIGINT NOT NULL,"
@@ -895,6 +908,16 @@ static void TL_CreateTmpTablePubCodes (void)
 	     "UNIQUE INDEX(PubCod),"
              "UNIQUE INDEX(NotCod,PublisherCod,PubType))"
 	     " ENGINE=MEMORY");
+  }
+
+static void TL_CreateTmpTableCurrentTimeline (void)
+  {
+   /***** Create temporary table with notes already present in timeline for this session *****/
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE tl_tmp_current_timeline "
+	     "(NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod)) ENGINE=MEMORY"
+	     " SELECT NotCod FROM tl_timelines WHERE SessionId='%s'",
+	     Gbl.Session.Id);
   }
 
 static void TL_CreateTmpTablePublishers (void)
@@ -923,6 +946,7 @@ static void TL_DropTmpTablesUsedToQueryTimeline (void)
    DB_Query ("can not remove temporary tables",
 	     "DROP TEMPORARY TABLE IF EXISTS "
 	     "tl_tmp_pubs,"
+             "tl_tmp_current_timeline,"
 	     "tl_tmp_publishers");
   }
 
@@ -973,12 +997,25 @@ static void TL_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
 /********* Create subquery to get only notes not present in timeline *********/
 /*****************************************************************************/
 
-static void TL_CreateSubQueryAlreadyExists (struct TL_SubQueries *SubQueries)
+static void TL_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
+                                            struct TL_SubQueries *SubQueries)
   {
-   Str_Copy (SubQueries->AlreadyExists,
-	     " tl_pubs.NotCod NOT IN"
-	     " (SELECT NotCod FROM tl_tmp_pubs)",	// Avoid notes already got
-	     TL_MAX_BYTES_SUBQUERY);
+   switch (Timeline->WhatToGet)
+     {
+      case TL_GET_ONLY_NEW_PUBS:
+      case TL_GET_RECENT_TIMELINE:
+	 Str_Copy (SubQueries->AlreadyExists,
+		   " tl_pubs.NotCod NOT IN"
+		   " (SELECT NotCod FROM tl_tmp_pubs)",			// Avoid notes already shown
+		   TL_MAX_BYTES_SUBQUERY);
+	 break;
+      case TL_GET_ONLY_OLD_PUBS:
+	 Str_Copy (SubQueries->AlreadyExists,
+		   " tl_pubs.NotCod NOT IN"
+		   " (SELECT NotCod FROM tl_tmp_current_timeline)",	// Avoid notes already shown
+		   TL_MAX_BYTES_SUBQUERY);
+	 break;
+     }
   }
 
 /*****************************************************************************/
