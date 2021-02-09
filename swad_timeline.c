@@ -189,6 +189,18 @@ struct TL_RangePubsToGet
    long Bottom;
   };
 
+typedef enum
+  {
+   TL_DONT_HIGHLIGHT_NOTE,
+   TL_HIGHLIGHT_NOTE,
+  } TL_HighlightNote_t;
+
+typedef enum
+  {
+   TL_DONT_SHOW_NOTE_ALONE,
+   TL_SHOW_NOTE_ALONE,
+  } TL_ShowNoteAlone_t;
+
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -261,17 +273,16 @@ static void TL_InsertNewPubsInTimeline (struct TL_Timeline *Timeline,
 static void TL_ShowOldPubsInTimeline (struct TL_Timeline *Timeline,
                                       char *Query);
 
-static void TL_GetDataOfPublicationFromRow (MYSQL_ROW row,struct TL_Publication *SocPub);
-
 static void TL_PutLinkToViewNewPublications (void);
 static void TL_PutLinkToViewOldPublications (void);
 
 static void TL_WriteNote (struct TL_Timeline *Timeline,
 	                  const struct TL_Note *SocNot,
-                          TL_TopMessage_t TopMessage,long UsrCod,
-                          bool Highlight,	// Highlight note
-                          bool ShowNoteAlone);	// Note is shown alone, not in a list
-static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod);
+                          TL_TopMessage_t TopMessage,
+                          long PublisherCod,	// Who did the action (publication, commenting, faving, sharing, mentioning)
+                          TL_HighlightNote_t HighlightNote,	// Highlight note
+                          TL_ShowNoteAlone_t ShowNoteAlone);	// Note is shown alone, not in a list
+static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod);
 static void TL_WriteAuthorNote (const struct UsrData *UsrDat);
 static void TL_WriteDateTime (time_t TimeUTC);
 static void TL_GetAndWritePost (long PstCod);
@@ -338,7 +349,8 @@ static void TL_PutParamsRemoveComment (void *Timeline);
 static void TL_RemoveComment (void);
 static void TL_RemoveCommentMediaAndDBEntries (long PubCod);
 
-static void TL_GetDataOfPublicationFromRow (MYSQL_ROW row,struct TL_Publication *SocPub);
+static void TL_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
+                                                struct TL_Publication *SocPub);
 static void TL_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Note *SocNot);
 static TL_PubType_t TL_GetPubTypeFromStr (const char *Str);
 static TL_NoteType_t TL_GetNoteTypeFromStr (const char *Str);
@@ -432,9 +444,9 @@ static void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline)
 /*****************************************************************************/
 
 static void TL_ShowHighlightedNote (struct TL_Timeline *Timeline,
-                                     struct TL_Note *SocNot)
+                                    struct TL_Note *SocNot)
   {
-   struct UsrData UsrDat;
+   struct UsrData PublisherDat;
    Ntf_NotifyEvent_t NotifyEvent;
    static const TL_TopMessage_t TopMessages[Ntf_NUM_NOTIFY_EVENTS] =
      {
@@ -475,8 +487,9 @@ static void TL_ShowHighlightedNote (struct TL_Timeline *Timeline,
      };
 
    /***** Get other parameters *****/
-   /* Get who did the action (publication, commenting, faving, sharing, mentioning) */
-   Usr_GetParamOtherUsrCodEncrypted (&UsrDat);
+   /* Get the publisher who did the action
+      (publishing, commenting, faving, sharing, mentioning) */
+   Usr_GetParamOtherUsrCodEncrypted (&PublisherDat);
 
    /* Get what he/she did */
    NotifyEvent = Ntf_GetParamNotifyEvent ();
@@ -484,8 +497,9 @@ static void TL_ShowHighlightedNote (struct TL_Timeline *Timeline,
    /***** Show the note highlighted *****/
    TL_GetDataOfNoteByCod (SocNot);
    TL_WriteNote (Timeline,SocNot,
-		 TopMessages[NotifyEvent],UsrDat.UsrCod,
-		 true,true);
+		 TopMessages[NotifyEvent],PublisherDat.UsrCod,
+		 TL_HIGHLIGHT_NOTE,
+		 TL_SHOW_NOTE_ALONE);
   }
 
 /*****************************************************************************/
@@ -778,10 +792,10 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 
    /***** Build query to show timeline including the users I am following *****/
    DB_BuildQuery (Query,
-	          "SELECT PubCod,"			// row[0]
-	                 "NotCod,"			// row[1]
-	                 "PublisherCod,"		// row[2]
-	                 "PubType"			// row[3]
+	          "SELECT PubCod,"		// row[0]
+	                 "NotCod,"		// row[1]
+	                 "PublisherCod,"	// row[2]
+	                 "PubType"		// row[3]
 		  " FROM tl_pubs"
 		  " WHERE PubCod IN "
 		  "(SELECT PubCod"
@@ -1087,7 +1101,6 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
   {
    extern const char *Hlp_START_Timeline;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumPubsGot;
    unsigned long NumPub;
    struct TL_Publication SocPub;
@@ -1099,6 +1112,7 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
    NumPubsGot = DB_QuerySELECT (&mysql_res,"can not get timeline",
 				"%s",
 				Query);
+
    /***** Begin box *****/
    Box_BoxBegin (NULL,Title,
                  TL_PutIconsTimeline,NULL,
@@ -1129,13 +1143,12 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
 
    /***** List recent publications in timeline *****/
    HTM_UL_Begin ("id=\"timeline_list\" class=\"TL_LIST\"");
-   for (NumPub = 0, SocPub.PubCod = 0;
+   for (NumPub = 0;
 	NumPub < NumPubsGot;
 	NumPub++)
      {
-      /* Get data of publication */
-      row = mysql_fetch_row (mysql_res);
-      TL_GetDataOfPublicationFromRow (row,&SocPub);
+      /* Get data of publication from next row */
+      TL_GetDataOfPublicationFromNextRow (mysql_res,&SocPub);
 
       /* Get data of note */
       SocNot.NotCod = SocPub.NotCod;
@@ -1144,8 +1157,9 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
       /* Write note */
       TL_WriteNote (Timeline,&SocNot,
                     SocPub.TopMessage,SocPub.PublisherCod,
-		    SocNot.NotCod == NotCodToHighlight,
-		    false);
+		    SocNot.NotCod == NotCodToHighlight ? TL_HIGHLIGHT_NOTE :
+			                                 TL_DONT_HIGHLIGHT_NOTE,
+		    TL_DONT_SHOW_NOTE_ALONE);
      }
    HTM_UL_End ();
 
@@ -1357,7 +1371,6 @@ static void TL_InsertNewPubsInTimeline (struct TL_Timeline *Timeline,
                                         char *Query)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumPubsGot;
    unsigned long NumPub;
    struct TL_Publication SocPub;
@@ -1373,9 +1386,8 @@ static void TL_InsertNewPubsInTimeline (struct TL_Timeline *Timeline,
 	NumPub < NumPubsGot;
 	NumPub++)
      {
-      /* Get data of publication */
-      row = mysql_fetch_row (mysql_res);
-      TL_GetDataOfPublicationFromRow (row,&SocPub);
+      /* Get data of publication from row */
+      TL_GetDataOfPublicationFromNextRow (mysql_res,&SocPub);
 
       /* Get data of note */
       SocNot.NotCod = SocPub.NotCod;
@@ -1384,7 +1396,8 @@ static void TL_InsertNewPubsInTimeline (struct TL_Timeline *Timeline,
       /* Write note */
       TL_WriteNote (Timeline,&SocNot,
                     SocPub.TopMessage,SocPub.PublisherCod,
-                    false,false);
+                    TL_DONT_HIGHLIGHT_NOTE,
+                    TL_DONT_SHOW_NOTE_ALONE);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1400,7 +1413,6 @@ static void TL_ShowOldPubsInTimeline (struct TL_Timeline *Timeline,
                                       char *Query)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumPubsGot;
    unsigned long NumPub;
    struct TL_Publication SocPub;
@@ -1416,9 +1428,8 @@ static void TL_ShowOldPubsInTimeline (struct TL_Timeline *Timeline,
 	NumPub < NumPubsGot;
 	NumPub++)
      {
-      /* Get data of publication */
-      row = mysql_fetch_row (mysql_res);
-      TL_GetDataOfPublicationFromRow (row,&SocPub);
+      /* Get data of publication from row */
+      TL_GetDataOfPublicationFromNextRow (mysql_res,&SocPub);
 
       /* Get data of note */
       SocNot.NotCod = SocPub.NotCod;
@@ -1427,7 +1438,8 @@ static void TL_ShowOldPubsInTimeline (struct TL_Timeline *Timeline,
       /* Write note */
       TL_WriteNote (Timeline,&SocNot,
                     SocPub.TopMessage,SocPub.PublisherCod,
-                    false,false);
+                    TL_DONT_HIGHLIGHT_NOTE,
+                    TL_DONT_SHOW_NOTE_ALONE);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1498,16 +1510,17 @@ static void TL_PutLinkToViewOldPublications (void)
 
 static void TL_WriteNote (struct TL_Timeline *Timeline,
 	                  const struct TL_Note *SocNot,
-                          TL_TopMessage_t TopMessage,long UsrCod,
-                          bool Highlight,	// Highlight note
-                          bool ShowNoteAlone)	// Note is shown alone, not in a list
+                          TL_TopMessage_t TopMessage,
+                          long PublisherCod,	// Who did the action (publication, commenting, faving, sharing, mentioning)
+                          TL_HighlightNote_t HighlightNote,	// Highlight note
+                          TL_ShowNoteAlone_t ShowNoteAlone)	// Note is shown alone, not in a list
   {
    extern const char *Txt_Forum;
    extern const char *Txt_Course;
    extern const char *Txt_Degree;
    extern const char *Txt_Centre;
    extern const char *Txt_Institution;
-   struct UsrData UsrDat;
+   struct UsrData AuthorDat;
    bool IAmTheAuthor;
    struct Instit Ins;
    struct Centre Ctr;
@@ -1525,7 +1538,7 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
    NumDiv++;
 
    /***** Begin box ****/
-   if (ShowNoteAlone)
+   if (ShowNoteAlone == TL_SHOW_NOTE_ALONE)
      {
       Box_BoxBegin (NULL,NULL,
                     NULL,NULL,
@@ -1535,10 +1548,11 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
 
    /***** Start list item *****/
    HTM_LI_Begin ("class=\"%s\"",
-		 ShowNoteAlone ? (Highlight ? "TL_WIDTH TL_NEW_PUB" :
-					      "TL_WIDTH") :
-				 (Highlight ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
-					      "TL_WIDTH TL_SEP"));
+		 ShowNoteAlone == TL_SHOW_NOTE_ALONE ?
+		    (HighlightNote == TL_HIGHLIGHT_NOTE ? "TL_WIDTH TL_NEW_PUB" :
+					                  "TL_WIDTH") :
+		    (HighlightNote == TL_HIGHLIGHT_NOTE ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
+					                  "TL_WIDTH TL_SEP"));
 
    if (SocNot->NotCod   <= 0 ||
        SocNot->NoteType == TL_NOTE_UNKNOWN ||
@@ -1553,21 +1567,21 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
       Crs.CrsCod = -1L;
 
       /***** Write sharer/commenter if distinct to author *****/
-      TL_WriteTopMessage (TopMessage,UsrCod);
+      TL_WriteTopMessage (TopMessage,PublisherCod);
 
       /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
+      Usr_UsrDataConstructor (&AuthorDat);
 
       /***** Get author data *****/
-      UsrDat.UsrCod = SocNot->UsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
-      IAmTheAuthor = Usr_ItsMe (UsrDat.UsrCod);
+      AuthorDat.UsrCod = SocNot->UsrCod;
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&AuthorDat,Usr_DONT_GET_PREFS);
+      IAmTheAuthor = Usr_ItsMe (AuthorDat.UsrCod);
 
       /***** Left: write author's photo *****/
       HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-					    NULL,
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&AuthorDat,PhotoURL);
+      Pho_ShowUsrPhoto (&AuthorDat,ShowPhoto ? PhotoURL :
+					       NULL,
 			"PHOTO45x60",Pho_ZOOM,true);	// Use unique id
       HTM_DIV_End ();
 
@@ -1576,7 +1590,7 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
       HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
 
       /* Write author's full name and date-time */
-      TL_WriteAuthorNote (&UsrDat);
+      TL_WriteAuthorNote (&AuthorDat);
       TL_WriteDateTime (SocNot->DateTimeUTC);
 
       /* Write content of the note */
@@ -1738,15 +1752,15 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
       TL_PutHiddenFormToWriteNewCommentToNote (Timeline,
                                                SocNot->NotCod,IdNewComment);
 
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
+      /***** Free memory used for author's data *****/
+      Usr_UsrDataDestructor (&AuthorDat);
      }
 
    /***** End list item *****/
    HTM_LI_End ();
 
    /***** End box ****/
-   if (ShowNoteAlone)
+   if (ShowNoteAlone == TL_SHOW_NOTE_ALONE)
      {
       HTM_UL_End ();
       Box_BoxEnd ();
@@ -1757,32 +1771,32 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
 /*************** Write sharer/commenter if distinct to author ****************/
 /*****************************************************************************/
 
-static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod)
+static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
    extern const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES];
-   struct UsrData UsrDat;
-   bool ItsMe = Usr_ItsMe (UsrCod);
+   struct UsrData PublisherDat;
+   bool ItsMe = Usr_ItsMe (PublisherCod);
 
    if (TopMessage != TL_TOP_MESSAGE_NONE)
      {
       /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
+      Usr_UsrDataConstructor (&PublisherDat);
 
       /***** Get user's data *****/
-      UsrDat.UsrCod = UsrCod;
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))	// Really we only need EncryptedUsrCod and FullName
+      PublisherDat.UsrCod = PublisherCod;
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherDat,Usr_DONT_GET_PREFS))	// Really we only need EncryptedUsrCod and FullName
 	{
 	 HTM_DIV_Begin ("class=\"TL_TOP_CONT TL_TOP_PUBLISHER TL_WIDTH\"");
 
 	 /***** Show user's name inside form to go to user's public profile *****/
 	 Frm_StartFormUnique (ActSeeOthPubPrf);
-	 Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+	 Usr_PutParamUsrCodEncrypted (PublisherDat.EncryptedUsrCod);
 	 HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
 					  Txt_Another_user_s_profile,
 				  "BT_LINK TL_TOP_PUBLISHER",NULL);
-	 HTM_Txt (UsrDat.FullName);
+	 HTM_Txt (PublisherDat.FullName);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
@@ -1793,7 +1807,7 @@ static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod)
 	}
 
       /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
+      Usr_UsrDataDestructor (&PublisherDat);
      }
   }
 
@@ -3385,7 +3399,8 @@ static void TL_RequestRemovalNote (struct TL_Timeline *Timeline)
 	 /* Show note */
 	 TL_WriteNote (Timeline,&SocNot,
 		       TL_TOP_MESSAGE_NONE,-1L,
-		       false,true);
+		       TL_DONT_HIGHLIGHT_NOTE,
+		       TL_SHOW_NOTE_ALONE);
 
 	 /* End alert */
 	 Timeline->NotCod = SocNot.NotCod;	// Note to be removed
@@ -4227,7 +4242,8 @@ void TL_GetDataOfCommByCod (struct TL_Comment *SocCom)
 /***************** Get data of publication using its code ********************/
 /*****************************************************************************/
 
-static void TL_GetDataOfPublicationFromRow (MYSQL_ROW row,struct TL_Publication *SocPub)
+static void TL_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
+                                                struct TL_Publication *SocPub)
   {
    static const TL_TopMessage_t TopMessages[TL_NUM_PUB_TYPES] =
      {
@@ -4236,12 +4252,17 @@ static void TL_GetDataOfPublicationFromRow (MYSQL_ROW row,struct TL_Publication 
       [TL_PUB_SHARED_NOTE    ] = TL_TOP_MESSAGE_SHARED,
       [TL_PUB_COMMENT_TO_NOTE] = TL_TOP_MESSAGE_COMMENTED,
      };
+   MYSQL_ROW row;
+
+   /***** Get next row from result *****/
+   row = mysql_fetch_row (mysql_res);
    /*
    row[0]: PubCod
    row[1]: NotCod
    row[2]: PublisherCod
    row[3]: PubType
    */
+
    /***** Get code of publication (row[0]) *****/
    SocPub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
 
@@ -4481,11 +4502,8 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 			      "PubType"			// row[3]
 		       " FROM tl_pubs WHERE PubCod=%ld",
 		       PubCod) == 1)   // Result should have a unique row
-     {
-      /* Get data of publication */
-      row = mysql_fetch_row (mysql_res);
-      TL_GetDataOfPublicationFromRow (row,&SocPub);
-     }
+      /* Get data of publication from row */
+      TL_GetDataOfPublicationFromNextRow (mysql_res,&SocPub);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
