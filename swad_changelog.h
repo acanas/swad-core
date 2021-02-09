@@ -553,7 +553,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.16.3 (2021-02-09)"
+#define Log_PLATFORM_VERSION	"SWAD 20.17 (2021-02-09)"
 #define CSS_FILE		"swad20.8.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
@@ -600,7 +600,8 @@ TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse 
 
 TODO: BUG: Cuando un tipo de grupo sólo tiene un grupo, inscribirse es voluntario, el estudiante sólo puede pertenecer a un grupo, y se inscribe en él, debería poder desapuntarse. Ahora no puede.
 
-	Version 20.16.3:  Feb 09, 2021  Time is not get from database in timeline publications. (? lines)
+	Version 20.17:    Feb 09, 2021  Code refactoring in timeline. (305110 lines)
+	Version 20.16.3:  Feb 09, 2021  Time is not get from database in timeline publications. (305211 lines)
 	Version 20.16.2:  Feb 09, 2021  Code refactoring in timeline. (305168 lines)
 	Version 20.16.1:  Feb 08, 2021  Code refactoring in timeline. (305167 lines)
 	Version 20.16:    Feb 08, 2021  Code refactoring in timeline. (305169 lines)
