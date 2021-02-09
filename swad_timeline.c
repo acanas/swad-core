@@ -238,7 +238,6 @@ static long TL_GetPubCodFromSession (const char *FieldName);
 static void TL_UpdateLastPubCodIntoSession (void);
 static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod);
 static void TL_CreateTmpTablePubCodes (void);
-static void TL_CreateTmpTableNotCodes (void);
 static void TL_CreateTmpTablePublishers (void);
 static void TL_DropTmpTablesUsedToQueryTimeline (void);
 static void TL_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
@@ -249,7 +248,7 @@ static void TL_CreateSubQueryRangeBottom (const struct TL_RangePubsToGet *RangeP
 static void TL_CreateSubQueryRangeTop (const struct TL_RangePubsToGet *RangePubsToGet,
                                        struct TL_SubQueries *SubQueries);
 static void TL_SelectTheMostRecentPub (const struct TL_SubQueries *SubQueries,
-				       long *PubCod,long *NotCod);
+				       struct TL_Publication *SocPub);
 
 static void TL_ShowTimeline (struct TL_Timeline *Timeline,
 			     char *Query,
@@ -356,6 +355,7 @@ static TL_PubType_t TL_GetPubTypeFromStr (const char *Str);
 static TL_NoteType_t TL_GetNoteTypeFromStr (const char *Str);
 static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *SocCom);
 
+static void TL_ResetPublication (struct TL_Publication *SocPub);
 static void TL_ResetNote (struct TL_Note *SocNot);
 static void TL_ResetComment (struct TL_Comment *SocCom);
 
@@ -668,8 +668,9 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
    struct TL_RangePubsToGet RangePubsToGet;
    unsigned MaxPubsToGet = TL_GetMaxPubsToGet (Timeline);
    unsigned NumPub;
-   long PubCod;
-   long NotCod;
+   struct TL_Publication SocPub;
+   // long PubCod;
+   // long NotCod;
 
    /***** Clear timeline for this session in database *****/
    if (Timeline->WhatToGet == TL_GET_RECENT_TIMELINE)
@@ -680,7 +681,7 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 
    /***** Create some temporary tables *****/
    TL_CreateTmpTablePubCodes ();
-   TL_CreateTmpTableNotCodes ();
+   // TL_CreateTmpTableNotCodes ();
 
    /***** Create temporary table and subquery with potential publishers *****/
    TL_CreateSubQueryPublishers (Timeline,&SubQueries);
@@ -756,27 +757,27 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
       TL_CreateSubQueryRangeTop (&RangePubsToGet,&SubQueries);
 
       /* Select the most recent publication from tl_pubs */
-      TL_SelectTheMostRecentPub (&SubQueries,&PubCod,&NotCod);
+      TL_SelectTheMostRecentPub (&SubQueries,&SocPub);
 /*
       Ale_ShowAlert (Ale_INFO,"DEBUG:<br />"
 			      "PubCod = %ld, NotCod = %ld",
 			       PubCod,NotCod);
 */
-      if (PubCod > 0)
+      if (SocPub.PubCod > 0)
 	{
-	 /* Insert publication code in temporary table with publication codes.
-	    This table contains only publication codes,
+	 /* Insert publication in temporary table with publications.
+	    This table contains publications,
 	    and it will be used to get the notes to show */
 	 DB_QueryINSERT ("can not store publication code",
-			 "INSERT INTO tl_tmp_pub_codes SET PubCod=%ld",
-			 PubCod);
-	 RangePubsToGet.Top = PubCod;	// Narrow the range for the next iteration
-
-	 /* Insert note code in temporary table with note codes already got,
-	    in order to not get them again */
-	 DB_QueryINSERT ("can not store note code",
-			 "INSERT INTO tl_tmp_not_codes SET NotCod=%ld",
-			 NotCod);
+			 "INSERT INTO tl_tmp_pubs"
+			 " (PubCod,NotCod,PublisherCod,PubType)"
+			 " VALUES"
+			 " (%ld,%ld,%ld,%u)",
+			 SocPub.PubCod,
+			 SocPub.NotCod,
+			 SocPub.PublisherCod,
+			 (unsigned) SocPub.PubType);
+	 RangePubsToGet.Top = SocPub.PubCod;	// Narrow the range for the next iteration
 	}
       else	// Nothing got ==> abort loop
          break;	// Last publication
@@ -790,16 +791,13 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
    /***** Add notes just retrieved to current timeline for this session *****/
    TL_AddNotesJustRetrievedToTimelineThisSession ();
 
-   /***** Build query to show timeline including the users I am following *****/
+   /***** Build query to show timeline *****/
    DB_BuildQuery (Query,
 	          "SELECT PubCod,"		// row[0]
 	                 "NotCod,"		// row[1]
 	                 "PublisherCod,"	// row[2]
 	                 "PubType"		// row[3]
-		  " FROM tl_pubs"
-		  " WHERE PubCod IN "
-		  "(SELECT PubCod"
-		  " FROM tl_tmp_pub_codes)"
+		  " FROM tl_tmp_pubs"
 		  " ORDER BY PubCod DESC");
   }
 
@@ -887,22 +885,15 @@ static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod)
 
 static void TL_CreateTmpTablePubCodes (void)
   {
-   /***** Create temporary table with publication codes *****/
+   /***** Create temporary table with publications *****/
    DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE tl_tmp_pub_codes "
-	     "(PubCod BIGINT NOT NULL,"
-	     "UNIQUE INDEX(PubCod))"
-	     " ENGINE=MEMORY");
-  }
-
-static void TL_CreateTmpTableNotCodes (void)
-  {
-   /***** Create temporary table with notes already got in this execution,
-	  in order to not get them again */
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE tl_tmp_not_codes "
-	     "(NotCod BIGINT NOT NULL,"
-	     "INDEX(NotCod))"
+	     "CREATE TEMPORARY TABLE tl_tmp_pubs ("
+	     	"PubCod BIGINT NOT NULL,"
+             	"NotCod BIGINT NOT NULL,"
+	     	"PublisherCod INT NOT NULL,"
+	     	"PubType TINYINT NOT NULL,"
+	     "UNIQUE INDEX(PubCod),"
+             "UNIQUE INDEX(NotCod,PublisherCod,PubType))"
 	     " ENGINE=MEMORY");
   }
 
@@ -931,8 +922,7 @@ static void TL_DropTmpTablesUsedToQueryTimeline (void)
   {
    DB_Query ("can not remove temporary tables",
 	     "DROP TEMPORARY TABLE IF EXISTS "
-	     "tl_tmp_pub_codes,"
-	     "tl_tmp_not_codes,"
+	     "tl_tmp_pubs,"
 	     "tl_tmp_publishers");
   }
 
@@ -987,7 +977,7 @@ static void TL_CreateSubQueryAlreadyExists (struct TL_SubQueries *SubQueries)
   {
    Str_Copy (SubQueries->AlreadyExists,
 	     " tl_pubs.NotCod NOT IN"
-	     " (SELECT NotCod FROM tl_tmp_not_codes)",	// Avoid notes already got
+	     " (SELECT NotCod FROM tl_tmp_pubs)",	// Avoid notes already got
 	     TL_MAX_BYTES_SUBQUERY);
   }
 
@@ -1020,15 +1010,17 @@ static void TL_CreateSubQueryRangeTop (const struct TL_RangePubsToGet *RangePubs
 /*****************************************************************************/
 
 static void TL_SelectTheMostRecentPub (const struct TL_SubQueries *SubQueries,
-				       long *PubCod,long *NotCod)
+				       struct TL_Publication *SocPub)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumPubs = 0;	// Initialized to avoid warning
 
    NumPubs =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
-			      "SELECT tl_pubs.PubCod,tl_pubs.NotCod"
+			      "SELECT tl_pubs.PubCod,"		// row[0]
+			             "tl_pubs.NotCod,"		// row[1]
+			             "tl_pubs.PublisherCod,"	// row[2]
+			             "tl_pubs.PubType"		// row[3]
 			      " FROM tl_pubs%s"
 			      " WHERE %s%s%s%s"
 			      " ORDER BY tl_pubs.PubCod DESC LIMIT 1",
@@ -1050,14 +1042,11 @@ static void TL_SelectTheMostRecentPub (const struct TL_SubQueries *SubQueries,
 			      SubQueries->AlreadyExists);
 */
    if (NumPubs == 1)
-     {
-      /* Get codes of publication and note */
-      row = mysql_fetch_row (mysql_res);
-      *PubCod = Str_ConvertStrCodToLongCod (row[0]);
-      *NotCod = Str_ConvertStrCodToLongCod (row[1]);
-     }
+      /* Get data of publication */
+      TL_GetDataOfPublicationFromNextRow (mysql_res,SocPub);
    else
-      *PubCod = *NotCod = -1L;
+      /* Reset data of publication */
+      TL_ResetPublication (SocPub);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -4389,6 +4378,19 @@ static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *SocCom)
   }
 
 /*****************************************************************************/
+/************************ Reset fields of publication ************************/
+/*****************************************************************************/
+
+static void TL_ResetPublication (struct TL_Publication *SocPub)
+  {
+   SocPub->PubCod       = -1L;
+   SocPub->NotCod       = -1L;
+   SocPub->PublisherCod = -1L;
+   SocPub->PubType      = TL_PUB_UNKNOWN;
+   SocPub->TopMessage   = TL_TOP_MESSAGE_NONE;
+  }
+
+/*****************************************************************************/
 /*************************** Reset fields of note ****************************/
 /*****************************************************************************/
 
@@ -4469,7 +4471,7 @@ mysql> SELECT SessionId,COUNT(*) FROM tl_timelines GROUP BY SessionId;
    DB_QueryINSERT ("can not insert notes in timeline",
 		   "INSERT IGNORE INTO tl_timelines"
 	           " (SessionId,NotCod)"
-	           " SELECT DISTINCTROW '%s',NotCod FROM tl_tmp_not_codes",
+	           " SELECT '%s',NotCod FROM tl_tmp_pubs",
 		   Gbl.Session.Id);
   }
 
