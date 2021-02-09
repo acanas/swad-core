@@ -227,13 +227,11 @@ static void TL_UpdateLastPubCodIntoSession (void);
 static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod);
 static void TL_CreateTmpTablePubCodes (void);
 static void TL_CreateTmpTableNotCodes (void);
-static void TL_CreateTmpTableCurrentTimeline (void);
 static void TL_CreateTmpTablePublishers (void);
 static void TL_DropTmpTablesUsedToQueryTimeline (void);
 static void TL_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
                                          struct TL_SubQueries *SubQueries);
-static void TL_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
-                                            struct TL_SubQueries *SubQueries);
+static void TL_CreateSubQueryAlreadyExists (struct TL_SubQueries *SubQueries);
 static void TL_CreateSubQueryRangeBottom (const struct TL_RangePubsToGet *RangePubsToGet,
                                           struct TL_SubQueries *SubQueries);
 static void TL_CreateSubQueryRangeTop (const struct TL_RangePubsToGet *RangePubsToGet,
@@ -669,13 +667,12 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
    /***** Create some temporary tables *****/
    TL_CreateTmpTablePubCodes ();
    TL_CreateTmpTableNotCodes ();
-   TL_CreateTmpTableCurrentTimeline ();
 
    /***** Create temporary table and subquery with potential publishers *****/
    TL_CreateSubQueryPublishers (Timeline,&SubQueries);
 
    /***** Create subquery to get only notes not present in timeline *****/
-   TL_CreateSubQueryAlreadyExists (Timeline,&SubQueries);
+   TL_CreateSubQueryAlreadyExists (&SubQueries);
 
    /***** Get the publications in timeline *****/
    /* Initialize range of pubs:
@@ -759,11 +756,6 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 	    in order to not get them again */
 	 DB_QueryINSERT ("can not store note code",
 			 "INSERT INTO tl_tmp_not_codes SET NotCod=%ld",
-			 NotCod);
-
-	 /* Insert note code in temporary table */
-	 DB_QueryINSERT ("can not store note code",
-			 "INSERT INTO tl_tmp_current_timeline SET NotCod=%ld",
 			 NotCod);
 	}
       else	// Nothing got ==> abort loop
@@ -894,19 +886,6 @@ static void TL_CreateTmpTableNotCodes (void)
 	     " ENGINE=MEMORY");
   }
 
-static void TL_CreateTmpTableCurrentTimeline (void)
-  {
-   /***** Create temporary table with notes
-          already present in timeline for this session *****/
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE tl_tmp_current_timeline "
-	     "(NotCod BIGINT NOT NULL,"
-	     "INDEX(NotCod))"
-	     " ENGINE=MEMORY"
-	     " SELECT NotCod FROM tl_timelines WHERE SessionId='%s'",
-	     Gbl.Session.Id);
-  }
-
 static void TL_CreateTmpTablePublishers (void)
   {
    /***** Create temporary table with me and the users I follow *****/
@@ -934,7 +913,6 @@ static void TL_DropTmpTablesUsedToQueryTimeline (void)
 	     "DROP TEMPORARY TABLE IF EXISTS "
 	     "tl_tmp_pub_codes,"
 	     "tl_tmp_not_codes,"
-	     "tl_tmp_current_timeline,"
 	     "tl_tmp_publishers");
   }
 
@@ -985,25 +963,12 @@ static void TL_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
 /********* Create subquery to get only notes not present in timeline *********/
 /*****************************************************************************/
 
-static void TL_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
-                                            struct TL_SubQueries *SubQueries)
+static void TL_CreateSubQueryAlreadyExists (struct TL_SubQueries *SubQueries)
   {
-   switch (Timeline->WhatToGet)
-     {
-      case TL_GET_ONLY_NEW_PUBS:
-      case TL_GET_RECENT_TIMELINE:
-	 Str_Copy (SubQueries->AlreadyExists,
-		   " tl_pubs.NotCod NOT IN"
-		   " (SELECT NotCod FROM tl_tmp_not_codes)",	// Avoid notes already got
-		   TL_MAX_BYTES_SUBQUERY);
-	 break;
-      case TL_GET_ONLY_OLD_PUBS:
-	 Str_Copy (SubQueries->AlreadyExists,
-		   " tl_pubs.NotCod NOT IN"
-		   " (SELECT NotCod FROM tl_tmp_current_timeline)",
-		   TL_MAX_BYTES_SUBQUERY);
-	 break;
-     }
+   Str_Copy (SubQueries->AlreadyExists,
+	     " tl_pubs.NotCod NOT IN"
+	     " (SELECT NotCod FROM tl_tmp_not_codes)",	// Avoid notes already got
+	     TL_MAX_BYTES_SUBQUERY);
   }
 
 /*****************************************************************************/
@@ -4456,6 +4421,24 @@ static void TL_ClearTimelineThisSession (void)
 
 static void TL_AddNotesJustRetrievedToTimelineThisSession (void)
   {
+   /* tl_timelines contains the distinct notes in timeline of each open session:
+mysql> SELECT SessionId,COUNT(*) FROM tl_timelines GROUP BY SessionId;
++---------------------------------------------+----------+
+| SessionId                                   | COUNT(*) |
++---------------------------------------------+----------+
+| u-X-R3gKki7eKMXrNCP8bGhwOAZuVngRy7FNGZFMKzI |       52 | --> 52 distinct notes
+| u1CoqL1YWl3_hR4wk4bI7vhnc-uRcCmIDyKYAgBB6kk |       10 |
+| u8xqamzkorHfY4BvYRMXjNhzHvQyigZUZemO0YiMn48 |       10 |
+| u_n2V_L3KrFjnd4SqZk0gxMFwZHRuWZ8_EIVTU9sdpI |       10 |
+| V6pGe1kGGS_uO5i__waqXKnuDkPYaDZHNAYr-Zv-GJQ |        2 |
+| vqDRz-iiM8v10Dl8ThwqIqmDRIklz8szJaqflwXZucs |       10 |
+| w11juqKPx6lg-f_pL2ZBYqlagU1mEepSvvk9L3gDGac |       10 | --> 10 distinct notes
+| wLg4e8KQljCcVuFWIkJjNeti89kAiwOZ3iyXdzm_eDk |       10 |
+| wnU85YrwJHhZGWIZhd7LQfQTPrclIWHfMF3DcB-Rcgw |        4 |
+| wRzRJFnHfzW61fZYnvMIaMRlkuWUeEyqXVQ6JeWA32k |       11 |
++---------------------------------------------+----------+
+10 rows in set (0,01 sec)
+    */
    DB_QueryINSERT ("can not insert notes in timeline",
 		   "INSERT IGNORE INTO tl_timelines"
 	           " (SessionId,NotCod)"
