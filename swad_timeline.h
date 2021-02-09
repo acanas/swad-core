@@ -93,10 +93,10 @@ typedef enum
 #define TL_NUM_WHAT_TO_GET 3
 typedef enum
   {
-   TL_GET_ONLY_NEW_PUBS,	// New publications are retrieved via AJAX
-				// automatically from time to time
    TL_GET_RECENT_TIMELINE,	// Recent timeline is shown when the user clicks on action menu,...
 				// or after editing timeline
+   TL_GET_ONLY_NEW_PUBS,	// New publications are retrieved via AJAX
+				// automatically from time to time
    TL_GET_ONLY_OLD_PUBS,	// Old publications are retrieved via AJAX
 				// when the user clicks on link at bottom of timeline
   } TL_WhatToGet_t;

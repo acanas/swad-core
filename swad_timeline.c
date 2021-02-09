@@ -57,8 +57,8 @@
 /*****************************************************************************/
 
 // Number of recent publishings got and shown the first time, before refreshing
-#define TL_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// Unlimited
 #define TL_MAX_REC_PUBS_TO_GET_AND_SHOW	   10	// Recent publishings to show (first time)
+#define TL_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// Unlimited
 #define TL_MAX_OLD_PUBS_TO_GET_AND_SHOW	   20	// Old publishings are retrieved in packs of this size
 
 #define TL_NUM_VISIBLE_COMMENTS	3	// Maximum number of comments visible before expanding them
@@ -692,22 +692,25 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
               |_____| 1
                       0
    */
-   RangePubsToGet.Top    = 0;	// +Infinite
-   RangePubsToGet.Bottom = 0;	// -Infinite
    switch (Timeline->WhatToGet)
      {
       case TL_GET_ONLY_NEW_PUBS:	 // Get the publications (without limit) newer than LastPubCod
 	 /* This query is made via AJAX automatically from time to time */
+         RangePubsToGet.Top    = 0;	// +Infinite
 	 RangePubsToGet.Bottom = TL_GetPubCodFromSession ("LastPubCod");
-	 break;
-      case TL_GET_RECENT_TIMELINE:	 // Get some limited recent publications
-	 /* This is the first query to get initial timeline shown
-	    ==> no notes yet in current timeline table */
 	 break;
       case TL_GET_ONLY_OLD_PUBS:	 // Get some limited publications older than FirstPubCod
 	 /* This query is made via AJAX
 	    when I click in link to get old publications */
 	 RangePubsToGet.Top    = TL_GetPubCodFromSession ("FirstPubCod");
+         RangePubsToGet.Bottom = 0;	// -Infinite
+	 break;
+      case TL_GET_RECENT_TIMELINE:	 // Get some limited recent publications
+      default:
+	 /* This is the first query to get initial timeline shown
+	    ==> no notes yet in current timeline table */
+         RangePubsToGet.Top    = 0;	// +Infinite
+         RangePubsToGet.Bottom = 0;	// -Infinite
 	 break;
      }
 
@@ -791,8 +794,8 @@ static unsigned TL_GetMaxPubsToGet (const struct TL_Timeline *Timeline)
   {
    static const unsigned MaxPubsToGet[TL_NUM_WHAT_TO_GET] =
      {
-      [TL_GET_ONLY_NEW_PUBS  ] = TL_MAX_NEW_PUBS_TO_GET_AND_SHOW,
       [TL_GET_RECENT_TIMELINE] = TL_MAX_REC_PUBS_TO_GET_AND_SHOW,
+      [TL_GET_ONLY_NEW_PUBS  ] = TL_MAX_NEW_PUBS_TO_GET_AND_SHOW,
       [TL_GET_ONLY_OLD_PUBS  ] = TL_MAX_OLD_PUBS_TO_GET_AND_SHOW,
      };
 
