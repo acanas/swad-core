@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2020 Antonio Cañas Vargas
+    Copyright (C) 1999-2021 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -79,44 +79,83 @@
 // in timeline posts, the quality should not be high in order to speed up the loading of images
 
 /*
+mysql> SHOW TABLES LIKE 'tl_%';
++-----------------------+
+| Tables_in_swad (tl_%) |
++-----------------------+
+| tl_comments           |
+| tl_comments_fav       |
+| tl_notes              |
+| tl_notes_fav          |
+| tl_posts              |
+| tl_pubs               |
+| tl_timelines          |
++-----------------------+
+7 rows in set (0.00 sec)
+
    The timeline is a set of publications.
    A publication can be:
-   · an original note
-   · a shared note
-   · a comment to a note
+   · an original note    (22783, 83% of 27396)
+   · a shared note       (  750,  3% of 27396)
+   · a comment to a note ( 3863, 14% of 27396)
 
-     _____tl_pubs_____                                       _tl_comments_
-    |                 |                                     |             |
-    |  Publication n  |------------------------------------>|  Comment p  |
-    |    (comment)    |                                +----| (to note m) |
-    |_________________|          ____tl_notes_____     |    |_____________|
-    |                 |         |                 |    |    |             |
-    | Publication n-1 |-------->|      Note m     |<---+    |             |
-    | (original note) |         |    (tl. post)   |         |     ...     |
-    |_________________|         |_________________|         |_____________|
-    |                 |         |                 |         |             |
-    |                 |         |     Note m-1    |         |  Comment 1  |
-    |        ...      |         |  (public file)  |    +----| (to note 2) |
-    |_________________|         |_________________|    |    |_____________|
-    |                 |         |                 |    |
-    |  Publication 2  |         |      Note 2     |<---+
-    |  (shared note)  |----+    | (exam announc.) |
-    |_________________|    |    |_________________|
-    |                 |    |    |                 |
-    |  Publication 1  |    +--->|      Note 1     |
-    | (original note) |-------->|    (tl. post)   |
-    |_________________|         |_________________|
+
+   ____tl_pubs____             _tl_comments_
+  |               |           |             |
+  | Publication p |---------->|  Comment c  |-----+
+  |   (comment)   |           | (to note 2) |     |
+  |_______________|           |_____________|     |
+  |               |           |             |     |
+  ·      ...      ·           ·     ...     ·     |
+  ·      ...      ·           ·     ...     ·     |
+  |_______________|           |_____________|     |
+  |               |           |             |     |
+  |Publication i+4|---------->|  Comment 1  |---+ |
+  |   (comment)   |           | (to note n) |   | |
+  |_______________|           |_____________|   | |
+  |               |                (3863)       | |
+  |Publication i+3|--                           | |
+  |(original note)|  \                          | |
+  |_______________|   \       ___tl_notes____   | |     _exam_announcements_
+  |               |    \     |               |  | |    |                    |
+  |Publication i+2|--   ---->|     Note n    |<-+ |    | Exam announcement  | (5571)
+  |(original note)|  \       |(exam announc.)|-(2639)->|____________________|
+  |_______________|   \      |_______________|  12%     ____files____
+  |               |    \     |               |    |    |             |
+  |Publication i+1|--   ---->|    Note n-1   |-(64)--->| Public file | (1473406)
+  |(original note)|  \       | (public file) |  <1%    |_____________|
+  |_______________|   \      |_______________|    |     _notices_
+  |               |    \     |               |    |    |         |
+  | Publication i |--   ---->|    Note n-2   |-(16693)>| Notice  | (14793)
+  |(original note)|  \       |    (notice)   |  73%    |_________|
+  |_______________|   \      |_______________|    |     __tl_posts___
+  |               |    \     |               |    |    |             |
+  ·      ...      ·     ---->|    Note n-3   |-(3119)->|    Post s   |
+  ·      ...      ·          |   (tl. post)  |  14%    |             |
+  |_______________|          |_______________|    |    |_____________|
+  |               |          |               |    |    |             |
+  | Publication 3 |          ·      ...      ·    |    ·     ...     · (3119)
+  | (shared note) |---       ·      ...      ·    |    ·     ...     ·
+  |_______________|   \      |_______________|    |    |_____________|
+  |               |    \     |               |    |    |             |
+  | Publication 2 |     ---->|     Note 2    |<---+    |    Post 1   |
+  |(original note)|--------->|   (tl. post)  |-------->|             |
+  |_______________|          |_______________|         |_____________|
+  |               |          |               |          _forum_post_
+  | Publication 1 |--------->|     Note 1    |         |            |
+  |(original note)|          | (forum post)  |-(268)-->| Forum post | (66226)
+  |_______________|          |_______________|   1%    |____________|
+       (27396)                    (22783)
 
    A note can be:
-   · a timeline post
-   · a public file
-   · an exam announcement
-   · a notice
-   · a forum post
+   · a timeline post      ( 3119, 14% of 22783)
+   · a public file        (   64, <1% of 22783)
+   · an exam announcement ( 2639, 12% of 22783)
+   · a notice             (16693, 73% of 22783)
+   · a forum post         (  268,  1% of 22783)
    written by an author in a date-time.
-*/
 
-/* A note can have comments attached to it.
+   A note can have comments attached to it.
  __________________
 |@author           |
 |       Note       |
@@ -464,7 +503,7 @@ static void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
    char *Query = NULL;
 
    /***** Build query to get timeline *****/
-   Timeline->UsrOrGbl      = TL_TIMELINE_GBL;
+   Timeline->UsrOrGbl  = TL_TIMELINE_GBL;
    Timeline->WhatToGet = TL_GET_RECENT_TIMELINE;
    TL_BuildQueryToGetTimeline (Timeline,&Query);
 
@@ -495,7 +534,7 @@ static void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
    char *Query = NULL;
 
    /***** Build query to show timeline with publications of a unique user *****/
-   Timeline->UsrOrGbl      = TL_TIMELINE_USR;
+   Timeline->UsrOrGbl  = TL_TIMELINE_USR;
    Timeline->WhatToGet = TL_GET_RECENT_TIMELINE;
    TL_BuildQueryToGetTimeline (Timeline,&Query);
 
@@ -528,7 +567,7 @@ void TL_RefreshNewTimelineGbl (void)
       Timeline.Who = TL_GetGlobalWho ();
 
       /***** Build query to get timeline *****/
-      Timeline.UsrOrGbl      = TL_TIMELINE_GBL;
+      Timeline.UsrOrGbl  = TL_TIMELINE_GBL;
       Timeline.WhatToGet = TL_GET_ONLY_NEW_PUBS;
       TL_BuildQueryToGetTimeline (&Timeline,&Query);
 
@@ -555,7 +594,7 @@ void TL_RefreshOldTimelineGbl (void)
    Timeline.Who = TL_GetGlobalWho ();
 
    /***** Show old publications *****/
-   Timeline.UsrOrGbl      = TL_TIMELINE_GBL;
+   Timeline.UsrOrGbl  = TL_TIMELINE_GBL;
    Timeline.WhatToGet = TL_GET_ONLY_OLD_PUBS;
    TL_GetAndShowOldTimeline (&Timeline);
   }
@@ -571,7 +610,7 @@ void TL_RefreshOldTimelineUsr (void)
       TL_ResetTimeline (&Timeline);
 
       /***** If user exists, show old publications *****/
-      Timeline.UsrOrGbl      = TL_TIMELINE_USR;
+      Timeline.UsrOrGbl  = TL_TIMELINE_USR;
       Timeline.WhatToGet = TL_GET_ONLY_OLD_PUBS;
       TL_GetAndShowOldTimeline (&Timeline);
      }
@@ -704,6 +743,10 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
       /* Select the most recent publication from tl_pubs */
       TL_SelectTheMostRecentPub (Timeline,&SubQueries,&PubCod,&NotCod);
 
+      Ale_ShowAlert (Ale_INFO,"DEBUG:<br />"
+			      "PubCod = %ld, NotCod = %ld",
+			       PubCod,NotCod);
+
       if (PubCod > 0)
 	{
 	 /* Insert publication */
@@ -737,8 +780,7 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline,
 	          "SELECT PubCod,"			// row[0]
 	                 "NotCod,"			// row[1]
 	                 "PublisherCod,"		// row[2]
-	                 "PubType,"			// row[3]
-	                 "UNIX_TIMESTAMP(TimePublish)"	// row[4]
+	                 "PubType"			// row[3]
 		  " FROM tl_pubs"
 		  " WHERE PubCod IN "
 		  "(SELECT PubCod"
@@ -1110,6 +1152,16 @@ static void TL_SelectTheMostRecentPub (const struct TL_Timeline *Timeline,
 					  SubQueries->RangeBottom,
 					  SubQueries->RangeTop,
 					  SubQueries->AlreadyExists);
+
+	       Ale_ShowAlert (Ale_INFO,   "DEBUG:<br />"
+			                  "SELECT PubCod,NotCod"
+					  " FROM tl_pubs"
+					  " WHERE %s%s%s"
+					  " ORDER BY PubCod DESC LIMIT 1",
+					  SubQueries->RangeBottom,
+					  SubQueries->RangeTop,
+					  SubQueries->AlreadyExists);
+
 	       break;
 	    default:
 	       Lay_WrongWhoExit ();
@@ -4324,7 +4376,6 @@ static void TL_GetDataOfPublicationFromRow (MYSQL_ROW row,struct TL_Publication 
    row[1]: NotCod
    row[2]: PublisherCod
    row[3]: PubType
-   row[4]: UNIX_TIMESTAMP(TimePublish)
    */
    /***** Get code of publication (row[0]) *****/
    SocPub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
@@ -4338,9 +4389,6 @@ static void TL_GetDataOfPublicationFromRow (MYSQL_ROW row,struct TL_Publication 
    /***** Get type of publication (row[3]) *****/
    SocPub->PubType      = TL_GetPubTypeFromStr ((const char *) row[3]);
    SocPub->TopMessage   = TopMessages[SocPub->PubType];
-
-   /***** Get time of the note (row[4]) *****/
-   SocPub->DateTimeUTC  = Dat_GetUNIXTimeFromStr (row[4]);
   }
 
 /*****************************************************************************/
@@ -4544,11 +4592,10 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
    /***** Get summary and content from post from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get data of publication",
-		       "SELECT PubCod,"				// row[0]
-			      "NotCod,"				// row[1]
-			      "PublisherCod,"			// row[2]
-			      "PubType,"			// row[3]
-			      "UNIX_TIMESTAMP(TimePublish)"	// row[4]
+		       "SELECT PubCod,"			// row[0]
+			      "NotCod,"			// row[1]
+			      "PublisherCod,"		// row[2]
+			      "PubType"			// row[3]
 		       " FROM tl_pubs WHERE PubCod=%ld",
 		       PubCod) == 1)   // Result should have a unique row
      {
