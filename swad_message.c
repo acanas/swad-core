@@ -145,7 +145,7 @@ static void Msg_ContractSentMsg (long MsgCod);
 static void Msg_ContractReceivedMsg (long MsgCod);
 
 static long Msg_InsertNewMsg (const char *Subject,const char *Content,
-                              struct Media *Media);
+                              struct Med_Media *Media);
 
 static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Messages,
                                                  long UsrCod,
@@ -166,7 +166,7 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
                                bool *Deleted);
 static void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
 static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
-                               struct Media *Media);
+                               struct Med_Media *Media);
 
 static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 					       long MsgCod,const char *Subject,
@@ -760,7 +760,7 @@ void Msg_RecMsgFromUsr (void)
    bool CreateNotif;
    bool NotifyByEmail;
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Media Media;
+   struct Med_Media Media;
    bool Error = false;
 
    /***** Reset messages context *****/
@@ -1122,7 +1122,7 @@ static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs)
 static void Msg_GetParamMsgsCrsCod (struct Msg_Messages *Messages)
   {
    extern const char *Txt_any_course;
-   struct Course Crs;
+   struct Crs_Course Crs;
 
    if ((Messages->FilterCrsCod = Par_GetParToLong ("FilterCrsCod")) > 0)	// If origin course specified
      {
@@ -1409,7 +1409,7 @@ void Msg_SetReceivedMsgAsOpen (long MsgCod,long UsrCod)
 // Return the code of the new inserted message
 
 static long Msg_InsertNewMsg (const char *Subject,const char *Content,
-                              struct Media *Media)
+                              struct Med_Media *Media)
   {
    long MsgCod;
 
@@ -2752,7 +2752,7 @@ static void Msg_GetDistinctCoursesInMyMessages (struct Msg_Messages *Messages)
    MYSQL_ROW row;
    unsigned long NumRow;
    unsigned long NumRows = 0;	// Initialized to avoid warning
-   struct Course Crs;
+   struct Crs_Course Crs;
 
    /***** Get distinct courses in my messages from database *****/
    switch (Messages->TypeOfMessages)
@@ -3006,7 +3006,7 @@ static void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 
 /*****************************************************************************/
 
 static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
-                               struct Media *Media)
+                               struct Med_Media *Media)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3133,7 +3133,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    long CrsCod;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Media Media;
+   struct Med_Media Media;
    bool Deleted;
    bool Open = true;
    bool Replied = false;	// Initialized to avoid warning
@@ -3474,7 +3474,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
   {
    extern const char *Txt_from_this_course;
    extern const char *Txt_no_course_of_origin;
-   struct Course Crs;
+   struct Crs_Course Crs;
    bool FromThisCrs = true;
    bool ThereIsOrgCrs = false;
 

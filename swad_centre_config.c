@@ -1027,7 +1027,7 @@ void CtrCfg_ChangeCtrIns (void)
   {
    extern const char *Txt_The_centre_X_already_exists;
    extern const char *Txt_The_centre_X_has_been_moved_to_the_institution_Y;
-   struct Instit NewIns;
+   struct Ins_Instit NewIns;
 
    /***** Get parameter with institution code *****/
    NewIns.InsCod = Ins_GetAndCheckParamOtherInsCod (1);

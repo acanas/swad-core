@@ -46,6 +46,7 @@
 #include "swad_setting.h"
 #include "swad_timeline.h"
 #include "swad_timeline_favourite.h"
+#include "swad_timeline_note.h"
 #include "swad_timeline_share.h"
 
 /*****************************************************************************/
@@ -62,22 +63,9 @@
 #define TL_MAX_NEW_PUBS_TO_GET_AND_SHOW	  100	// New publishings retrieved
 #define TL_MAX_OLD_PUBS_TO_GET_AND_SHOW	   20	// Old publishings are retrieved in packs of this size
 
-#define TL_NUM_VISIBLE_COMMENTS	3	// Maximum number of comments visible before expanding them
-
 #define TL_MAX_CHARS_IN_POST	1000	// Maximum number of characters in a post
 
 #define TL_MAX_BYTES_SUBQUERY (128 - 1)
-
-/*
-   Timeline images will be saved with:
-   · maximum width  of TL_IMAGE_SAVED_MAX_HEIGHT
-   · maximum height of TL_IMAGE_SAVED_MAX_HEIGHT
-   · maintaining the original aspect ratio (aspect ratio recommended: 3:2)
-*/
-#define TL_IMAGE_SAVED_MAX_WIDTH	768
-#define TL_IMAGE_SAVED_MAX_HEIGHT	768
-#define TL_IMAGE_SAVED_QUALITY		 90	// 1 to 100
-// in timeline posts, the quality should not be high in order to speed up the loading of images
 
 /*
 mysql> SHOW TABLES LIKE 'tl_%';
@@ -176,6 +164,7 @@ mysql> SHOW TABLES LIKE 'tl_%';
     |______________|
 
 */
+
 struct TL_SubQueries
   {
    char *TablePublishers;
@@ -190,18 +179,6 @@ struct TL_RangePubsToGet
    long Top;
    long Bottom;
   };
-
-typedef enum
-  {
-   TL_DONT_HIGHLIGHT_NOTE,
-   TL_HIGHLIGHT_NOTE,
-  } TL_HighlightNote_t;
-
-typedef enum
-  {
-   TL_DONT_SHOW_NOTE_ALONE,
-   TL_SHOW_NOTE_ALONE,
-  } TL_ShowNoteAlone_t;
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -220,16 +197,6 @@ Usr_Who_t TL_GlobalWho;
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
-
-static void TL_InitTimelineGbl (struct TL_Timeline *Timeline);
-static void TL_ShowHighlightedNote (struct TL_Timeline *Timeline,
-                                    struct TL_Note *Not);
-static void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline);
-
-static void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
-	                                       long NotCod);
-static void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
-                                               long NotCod);
 
 static void TL_GetAndShowOldTimeline (struct TL_Timeline *Timeline);
 
@@ -253,20 +220,14 @@ static void TL_AllocateListPubs (struct TL_Timeline *Timeline,
 static void TL_FreeListPubs (const struct TL_Timeline *Timeline);
 static void TL_SelectTheMostRecentPub (const struct TL_SubQueries *SubQueries,
 				       struct TL_Publication *Pub);
-static void TL_InsertNoteInJustRetrievedNotes (long NotCod);
-static void TL_InsertNoteInVisibleTimeline (long NotCod);
 
 static void TL_ShowTimeline (struct TL_Timeline *Timeline,
                              const char *Title,long NotCodToHighlight);
 static void TL_PutIconsTimeline (__attribute__((unused)) void *Args);
 
-static void TL_FormStart (const struct TL_Timeline *Timeline,
-	                  Act_Action_t ActionGbl,
-                          Act_Action_t ActionUsr);
-
 static void TL_PutFormWho (struct TL_Timeline *Timeline);
 static Usr_Who_t TL_GetWhoFromDB (void);
-static void Set_GlobalWho (Usr_Who_t Who);
+static void TL_SetGlobalWho (Usr_Who_t Who);
 
 static void TL_SaveWhoInDB (struct TL_Timeline *Timeline);
 
@@ -278,98 +239,25 @@ static void TL_ShowOldPubsInTimeline (struct TL_Timeline *Timeline);
 static void TL_PutLinkToViewNewPublications (void);
 static void TL_PutLinkToViewOldPublications (void);
 
-static void TL_WriteNote (struct TL_Timeline *Timeline,
-	                  const struct TL_Note *Not,
-                          TL_TopMessage_t TopMessage,
-                          long PublisherCod,	// Who did the action (publication, commenting, faving, sharing, mentioning)
-                          TL_HighlightNote_t HighlightNote,	// Highlight note
-                          TL_ShowNoteAlone_t ShowNoteAlone);	// Note is shown alone, not in a list
-static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod);
-static void TL_WriteAuthorNote (const struct UsrData *UsrDat);
-static void TL_WriteDateTime (time_t TimeUTC);
-static void TL_GetAndWritePost (long PstCod);
-static void TL_PutFormGoToAction (const struct TL_Note *Not,
-                                  const struct For_Forums *Forums);
-static void TL_GetNoteSummary (const struct TL_Note *Not,
-                               char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
-static void TL_StoreAndPublishNoteInternal (TL_NoteType_t NoteType,long Cod,struct TL_Publication *Pub);
-
 static void TL_PutFormToWriteNewPost (struct TL_Timeline *Timeline);
-static void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea);
 
 static long TL_ReceivePost (void);
 
-static void TL_PutIconToToggleCommentNote (const char UniqueId[Frm_MAX_BYTES_ID + 1]);
-static void TL_PutIconCommentDisabled (void);
-static void TL_PutHiddenFormToWriteNewCommentToNote (const struct TL_Timeline *Timeline,
-	                                             long NotCod,
-                                                     const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
-static unsigned long TL_GetNumCommentsInNote (long NotCod);
-static void TL_WriteCommentsInNote (struct TL_Timeline *Timeline,
-				    const struct TL_Note *Not,
-				    unsigned NumComments);
-static void TL_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
-			                 long NotCod,
-					 char IdComments[Frm_MAX_BYTES_ID + 1],
-					 unsigned NumInitialComments);
-static unsigned TL_WriteHiddenComments (struct TL_Timeline *Timeline,
-                                        long NotCod,
-				        char IdComments[Frm_MAX_BYTES_ID + 1],
-					unsigned NumInitialCommentsToGet);
-static void TL_WriteOneCommentInList (struct TL_Timeline *Timeline,
-                                      MYSQL_RES *mysql_res);
-static void TL_LinkToShowOnlyLatestComments (const char IdComments[Frm_MAX_BYTES_ID + 1]);
-static void TL_LinkToShowPreviousComments (const char IdComments[Frm_MAX_BYTES_ID + 1],
-				           unsigned NumInitialComments);
-static void TL_PutIconToToggleComments (const char *UniqueId,
-                                        const char *Icon,const char *Text);
-static void TL_WriteComment (struct TL_Timeline *Timeline,
-	                     struct TL_Comment *Com,
-                             TL_TopMessage_t TopMessage,long UsrCod,
-                             bool ShowCommentAlone);	// Comment is shown alone, not in a list
-static void TL_WriteAuthorComment (struct UsrData *UsrDat);
-
-static void TL_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
-	                               long PubCod);
-
-static void TL_PutFormToRemovePublication (const struct TL_Timeline *Timeline,
-                                           long NotCod);
-
-static void TL_PutHiddenParamNotCod (long NotCod);
-
-static long TL_ReceiveComment (void);
-
-static void TL_RequestRemovalNote (struct TL_Timeline *Timeline);
-static void TL_PutParamsRemoveNote (void *Timeline);
-static void TL_RemoveNote (void);
-static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *Not);
-
-static long TL_GetNotCodFromPubCod (long PubCod);
-
-static void TL_RequestRemovalComment (struct TL_Timeline *Timeline);
-static void TL_PutParamsRemoveComment (void *Timeline);
-static void TL_RemoveComment (void);
-static void TL_RemoveCommentMediaAndDBEntries (long PubCod);
+static long TL_Pub_GetNotCodFromPubCod (long PubCod);
 
 static void TL_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
                                                 struct TL_Publication *Pub);
-static void TL_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Note *Not);
 static TL_PubType_t TL_GetPubTypeFromStr (const char *Str);
-static TL_NoteType_t TL_GetNoteTypeFromStr (const char *Str);
-static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *Com);
 
-static void TL_ResetPublication (struct TL_Publication *Pub);
-static void TL_ResetNote (struct TL_Note *Not);
-static void TL_ResetComment (struct TL_Comment *Com);
+static void TL_Pub_ResetPublication (struct TL_Publication *Pub);
 
 static void TL_ClearTimelineThisSession (void);
-static void TL_AddNotesJustRetrievedToTimelineThisSession (void);
 
 /*****************************************************************************/
 /************************ Initialize global timeline *************************/
 /*****************************************************************************/
 
-static void TL_InitTimelineGbl (struct TL_Timeline *Timeline)
+void TL_InitTimelineGbl (struct TL_Timeline *Timeline)
   {
    /***** Reset timeline context *****/
    TL_ResetTimeline (Timeline);
@@ -418,10 +306,10 @@ void TL_ShowTimelineGbl (void)
 /**************** Show highlighted note and global timeline ******************/
 /*****************************************************************************/
 
-static void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline)
+void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline)
   {
    long PubCod;
-   struct TL_Note Not;
+   struct TL_Not_Note Not;
 
    /***** Initialize note code to -1 ==> no highlighted note *****/
    Not.NotCod = -1L;
@@ -433,86 +321,23 @@ static void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline)
 
    /***** If a note should be highlighted ==> get code of note from database *****/
    if (PubCod > 0)
-      Not.NotCod = TL_GetNotCodFromPubCod (PubCod);
+      Not.NotCod = TL_Pub_GetNotCodFromPubCod (PubCod);
 
    /***** If a note should be highlighted ==> show it above the timeline *****/
    if (Not.NotCod > 0)
       /***** Show the note highlighted above the timeline *****/
-      TL_ShowHighlightedNote (Timeline,&Not);
+      TL_Not_ShowHighlightedNote (Timeline,&Not);
 
    /***** Show timeline with possible highlighted note *****/
    TL_ShowTimelineGblHighlightingNot (Timeline,Not.NotCod);
   }
 
 /*****************************************************************************/
-/****************** Show highlighted note above timeline *********************/
-/*****************************************************************************/
-
-static void TL_ShowHighlightedNote (struct TL_Timeline *Timeline,
-                                    struct TL_Note *Not)
-  {
-   struct UsrData PublisherDat;
-   Ntf_NotifyEvent_t NotifyEvent;
-   static const TL_TopMessage_t TopMessages[Ntf_NUM_NOTIFY_EVENTS] =
-     {
-      [Ntf_EVENT_UNKNOWN          ] = TL_TOP_MESSAGE_NONE,
-      /* Start tab */
-      [Ntf_EVENT_TIMELINE_COMMENT ] = TL_TOP_MESSAGE_COMMENTED,
-      [Ntf_EVENT_TIMELINE_FAV     ] = TL_TOP_MESSAGE_FAVED,
-      [Ntf_EVENT_TIMELINE_SHARE   ] = TL_TOP_MESSAGE_SHARED,
-      [Ntf_EVENT_TIMELINE_MENTION ] = TL_TOP_MESSAGE_MENTIONED,
-      [Ntf_EVENT_FOLLOWER         ] = TL_TOP_MESSAGE_NONE,
-      /* System tab */
-      /* Country tab */
-      /* Institution tab */
-      /* Centre tab */
-      /* Degree tab */
-      /* Course tab */
-      /* Assessment tab */
-      [Ntf_EVENT_ASSIGNMENT       ] = TL_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_SURVEY           ] = TL_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_EXAM_ANNOUNCEMENT] = TL_TOP_MESSAGE_NONE,
-      /* Files tab */
-      [Ntf_EVENT_DOCUMENT_FILE    ] = TL_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_TEACHERS_FILE    ] = TL_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_SHARED_FILE      ] = TL_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_MARKS_FILE       ] = TL_TOP_MESSAGE_NONE,
-      /* Users tab */
-      [Ntf_EVENT_ENROLMENT_STD    ] = TL_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_ENROLMENT_NET    ] = TL_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_ENROLMENT_TCH    ] = TL_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_ENROLMENT_REQUEST] = TL_TOP_MESSAGE_NONE,
-      /* Messages tab */
-      [Ntf_EVENT_NOTICE           ] = TL_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_FORUM_POST_COURSE] = TL_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_FORUM_REPLY      ] = TL_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_MESSAGE          ] = TL_TOP_MESSAGE_NONE,
-      /* Analytics tab */
-      /* Profile tab */
-     };
-
-   /***** Get other parameters *****/
-   /* Get the publisher who did the action
-      (publishing, commenting, faving, sharing, mentioning) */
-   Usr_GetParamOtherUsrCodEncrypted (&PublisherDat);
-
-   /* Get what he/she did */
-   NotifyEvent = Ntf_GetParamNotifyEvent ();
-
-   /***** Show the note highlighted *****/
-   TL_GetDataOfNoteByCod (Not);
-   TL_WriteNote (Timeline,Not,
-		 TopMessages[NotifyEvent],PublisherDat.UsrCod,
-		 TL_HIGHLIGHT_NOTE,
-		 TL_SHOW_NOTE_ALONE);
-  }
-
-/*****************************************************************************/
 /******************* Show global timeline highlighting a note ****************/
 /*****************************************************************************/
 
-static void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
-	                                       long NotCod)
+void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
+	                                long NotCod)
   {
    extern const char *Txt_Timeline;
 
@@ -541,8 +366,8 @@ void TL_ShowTimelineUsr (struct TL_Timeline *Timeline)
 /************ Show timeline of a selected user highlighting a note ***********/
 /*****************************************************************************/
 
-static void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
-                                               long NotCod)
+void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
+                                        long NotCod)
   {
    extern const char *Txt_Timeline_OF_A_USER;
 
@@ -758,9 +583,9 @@ static void TL_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
 
       /* Insert note in temporary tables with just retrieved notes.
 	 These tables will be used to not get notes already shown */
-      TL_InsertNoteInJustRetrievedNotes (Timeline->Pubs.Lst[NumPub].NotCod);
+      TL_Not_InsertNoteInJustRetrievedNotes (Timeline->Pubs.Lst[NumPub].NotCod);
       if (Timeline->WhatToGet == TL_GET_ONLY_OLD_PUBS)
-	 TL_InsertNoteInVisibleTimeline (Timeline->Pubs.Lst[NumPub].NotCod);
+	 TL_Not_InsertNoteInVisibleTimeline (Timeline->Pubs.Lst[NumPub].NotCod);
 
       RangePubsToGet.Top = Timeline->Pubs.Lst[NumPub].PubCod;	// Narrow the range for the next iteration
      }
@@ -771,7 +596,7 @@ static void TL_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
    TL_UpdateFirstLastPubCodesIntoSession (Timeline);
 
    /***** Add notes just retrieved to current timeline for this session *****/
-   TL_AddNotesJustRetrievedToTimelineThisSession ();
+   TL_Not_AddNotesJustRetrievedToTimelineThisSession ();
 
    /***** Drop temporary tables *****/
    TL_DropTmpTablesUsedToQueryTimeline ();
@@ -1071,34 +896,10 @@ static void TL_SelectTheMostRecentPub (const struct TL_SubQueries *SubQueries,
       TL_GetDataOfPublicationFromNextRow (mysql_res,Pub);
    else
       /* Reset data of publication */
-      TL_ResetPublication (Pub);
+      TL_Pub_ResetPublication (Pub);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/**** Insert note in temporary tables used to not get notes already shown ****/
-/*****************************************************************************/
-
-static void TL_InsertNoteInJustRetrievedNotes (long NotCod)
-  {
-   /* Insert note in temporary table with just retrieved notes.
-      This table will be used to not get notes already shown */
-   DB_QueryINSERT ("can not store note code",
-		   "INSERT IGNORE INTO tl_tmp_just_retrieved_notes"
-		   " SET NotCod=%ld",
-		   NotCod);
-  }
-
-static void TL_InsertNoteInVisibleTimeline (long NotCod)
-  {
-   /* Insert note in temporary table with visible timeline.
-      This table will be used to not get notes already shown */
-   DB_QueryINSERT ("can not store note code",
-		   "INSERT IGNORE INTO tl_tmp_visible_timeline"
-		   " SET NotCod=%ld",
-		   NotCod);
   }
 
 /*****************************************************************************/
@@ -1138,7 +939,7 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
   {
    extern const char *Hlp_START_Timeline;
    unsigned long NumPub;
-   struct TL_Note Not;
+   struct TL_Not_Note Not;
    bool GlobalTimeline = (Gbl.Usrs.Other.UsrDat.UsrCod <= 0);
    bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
@@ -1178,15 +979,15 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
      {
       /* Get data of note */
       Not.NotCod = Timeline->Pubs.Lst[NumPub].NotCod;
-      TL_GetDataOfNoteByCod (&Not);
+      TL_Not_GetDataOfNoteByCod (&Not);
 
       /* Write note */
-      TL_WriteNote (Timeline,&Not,
-                    Timeline->Pubs.Lst[NumPub].TopMessage,
-                    Timeline->Pubs.Lst[NumPub].PublisherCod,
-		    Not.NotCod == NotCodToHighlight ? TL_HIGHLIGHT_NOTE :
-			                                 TL_DONT_HIGHLIGHT_NOTE,
-		    TL_DONT_SHOW_NOTE_ALONE);
+      TL_Not_WriteNote (Timeline,&Not,
+                        Timeline->Pubs.Lst[NumPub].TopMessage,
+                        Timeline->Pubs.Lst[NumPub].PublisherCod,
+		        Not.NotCod == NotCodToHighlight ? TL_HIGHLIGHT :
+			                                  TL_DONT_HIGHLIGHT,
+		        TL_DONT_SHOW_ALONE);
      }
    HTM_UL_End ();
 
@@ -1218,9 +1019,9 @@ static void TL_PutIconsTimeline (__attribute__((unused)) void *Args)
 /***************** Start a form in global or user timeline *******************/
 /*****************************************************************************/
 
-static void TL_FormStart (const struct TL_Timeline *Timeline,
-	                  Act_Action_t ActionGbl,
-                          Act_Action_t ActionUsr)
+void TL_FormStart (const struct TL_Timeline *Timeline,
+	           Act_Action_t ActionGbl,
+                   Act_Action_t ActionUsr)
   {
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
@@ -1290,7 +1091,7 @@ void TL_GetParamWho (void)
       Who = TL_DEFAULT_WHO;
 
    /***** Set global variable *****/
-   Set_GlobalWho (Who);
+   TL_SetGlobalWho (Who);
   }
 
 /*****************************************************************************/
@@ -1349,7 +1150,7 @@ static void TL_SaveWhoInDB (struct TL_Timeline *Timeline)
 /**** Set/get global variable with which users to view in global timeline ****/
 /*****************************************************************************/
 
-static void Set_GlobalWho (Usr_Who_t Who)
+static void TL_SetGlobalWho (Usr_Who_t Who)
   {
    TL_GlobalWho = Who;
   }
@@ -1391,7 +1192,7 @@ static void TL_ShowWarningYouDontFollowAnyUser (void)
 static void TL_InsertNewPubsInTimeline (struct TL_Timeline *Timeline)
   {
    unsigned long NumPub;
-   struct TL_Note Not;
+   struct TL_Not_Note Not;
 
    /***** List new publications timeline *****/
    for (NumPub = 0;
@@ -1400,14 +1201,14 @@ static void TL_InsertNewPubsInTimeline (struct TL_Timeline *Timeline)
      {
       /* Get data of note */
       Not.NotCod = Timeline->Pubs.Lst[NumPub].NotCod;
-      TL_GetDataOfNoteByCod (&Not);
+      TL_Not_GetDataOfNoteByCod (&Not);
 
       /* Write note */
-      TL_WriteNote (Timeline,&Not,
+      TL_Not_WriteNote (Timeline,&Not,
                     Timeline->Pubs.Lst[NumPub].TopMessage,
                     Timeline->Pubs.Lst[NumPub].PublisherCod,
-                    TL_DONT_HIGHLIGHT_NOTE,
-                    TL_DONT_SHOW_NOTE_ALONE);
+                    TL_DONT_HIGHLIGHT,
+                    TL_DONT_SHOW_ALONE);
      }
   }
 
@@ -1419,7 +1220,7 @@ static void TL_InsertNewPubsInTimeline (struct TL_Timeline *Timeline)
 static void TL_ShowOldPubsInTimeline (struct TL_Timeline *Timeline)
   {
    unsigned long NumPub;
-   struct TL_Note Not;
+   struct TL_Not_Note Not;
 
    /***** List old publications in timeline *****/
    for (NumPub = 0;
@@ -1428,14 +1229,14 @@ static void TL_ShowOldPubsInTimeline (struct TL_Timeline *Timeline)
      {
       /* Get data of note */
       Not.NotCod = Timeline->Pubs.Lst[NumPub].NotCod;
-      TL_GetDataOfNoteByCod (&Not);
+      TL_Not_GetDataOfNoteByCod (&Not);
 
       /* Write note */
-      TL_WriteNote (Timeline,&Not,
+      TL_Not_WriteNote (Timeline,&Not,
                     Timeline->Pubs.Lst[NumPub].TopMessage,
                     Timeline->Pubs.Lst[NumPub].PublisherCod,
-                    TL_DONT_HIGHLIGHT_NOTE,
-                    TL_DONT_SHOW_NOTE_ALONE);
+                    TL_DONT_HIGHLIGHT,
+                    TL_DONT_SHOW_ALONE);
      }
   }
 
@@ -1495,273 +1296,10 @@ static void TL_PutLinkToViewOldPublications (void)
   }
 
 /*****************************************************************************/
-/******************************** Write note *********************************/
-/*****************************************************************************/
-
-static void TL_WriteNote (struct TL_Timeline *Timeline,
-	                  const struct TL_Note *Not,
-                          TL_TopMessage_t TopMessage,
-                          long PublisherCod,	// Who did the action (publication, commenting, faving, sharing, mentioning)
-                          TL_HighlightNote_t HighlightNote,	// Highlight note
-                          TL_ShowNoteAlone_t ShowNoteAlone)	// Note is shown alone, not in a list
-  {
-   extern const char *Txt_Forum;
-   extern const char *Txt_Course;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Centre;
-   extern const char *Txt_Institution;
-   struct UsrData AuthorDat;
-   bool IAmTheAuthor;
-   struct Instit Ins;
-   struct Centre Ctr;
-   struct Degree Deg;
-   struct Course Crs;
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
-   struct For_Forums Forums;
-   char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
-   char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
-   unsigned NumComments;
-   char IdNewComment[Frm_MAX_BYTES_ID + 1];
-   static unsigned NumDiv = 0;	// Used to create unique div id for fav and shared
-
-   NumDiv++;
-
-   /***** Begin box ****/
-   if (ShowNoteAlone == TL_SHOW_NOTE_ALONE)
-     {
-      Box_BoxBegin (NULL,NULL,
-                    NULL,NULL,
-                    NULL,Box_CLOSABLE);
-      HTM_UL_Begin ("class=\"TL_LIST\"");
-     }
-
-   /***** Start list item *****/
-   HTM_LI_Begin ("class=\"%s\"",
-		 ShowNoteAlone == TL_SHOW_NOTE_ALONE ?
-		    (HighlightNote == TL_HIGHLIGHT_NOTE ? "TL_WIDTH TL_NEW_PUB" :
-					                  "TL_WIDTH") :
-		    (HighlightNote == TL_HIGHLIGHT_NOTE ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
-					                  "TL_WIDTH TL_SEP"));
-
-   if (Not->NotCod   <= 0 ||
-       Not->NoteType == TL_NOTE_UNKNOWN ||
-       Not->UsrCod   <= 0)
-      Ale_ShowAlert (Ale_ERROR,"Error in note.");
-   else
-     {
-      /***** Initialize location in hierarchy *****/
-      Ins.InsCod = -1L;
-      Ctr.CtrCod = -1L;
-      Deg.DegCod = -1L;
-      Crs.CrsCod = -1L;
-
-      /***** Write sharer/commenter if distinct to author *****/
-      TL_WriteTopMessage (TopMessage,PublisherCod);
-
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&AuthorDat);
-
-      /***** Get author data *****/
-      AuthorDat.UsrCod = Not->UsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&AuthorDat,Usr_DONT_GET_PREFS);
-      IAmTheAuthor = Usr_ItsMe (AuthorDat.UsrCod);
-
-      /***** Left: write author's photo *****/
-      HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&AuthorDat,PhotoURL);
-      Pho_ShowUsrPhoto (&AuthorDat,ShowPhoto ? PhotoURL :
-					       NULL,
-			"PHOTO45x60",Pho_ZOOM,true);	// Use unique id
-      HTM_DIV_End ();
-
-      /***** Right: author's name, time, summary and buttons *****/
-      /* Begin right container */
-      HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
-
-      /* Write author's full name and date-time */
-      TL_WriteAuthorNote (&AuthorDat);
-      TL_WriteDateTime (Not->DateTimeUTC);
-
-      /* Write content of the note */
-      if (Not->NoteType == TL_NOTE_POST)
-	 /* Write post content */
-	 TL_GetAndWritePost (Not->Cod);
-      else
-	{
-	 /* Reset forums */
-         For_ResetForums (&Forums);
-
-	 /* Get location in hierarchy */
-	 if (!Not->Unavailable)
-	    switch (Not->NoteType)
-	      {
-	       case TL_NOTE_INS_DOC_PUB_FILE:
-	       case TL_NOTE_INS_SHA_PUB_FILE:
-		  /* Get institution data */
-		  Ins.InsCod = Not->HieCod;
-		  Ins_GetDataOfInstitutionByCod (&Ins);
-		  break;
-	       case TL_NOTE_CTR_DOC_PUB_FILE:
-	       case TL_NOTE_CTR_SHA_PUB_FILE:
-		  /* Get centre data */
-		  Ctr.CtrCod = Not->HieCod;
-		  Ctr_GetDataOfCentreByCod (&Ctr);
-		  break;
-	       case TL_NOTE_DEG_DOC_PUB_FILE:
-	       case TL_NOTE_DEG_SHA_PUB_FILE:
-		  /* Get degree data */
-		  Deg.DegCod = Not->HieCod;
-		  Deg_GetDataOfDegreeByCod (&Deg);
-		  break;
-	       case TL_NOTE_CRS_DOC_PUB_FILE:
-	       case TL_NOTE_CRS_SHA_PUB_FILE:
-	       case TL_NOTE_EXAM_ANNOUNCEMENT:
-	       case TL_NOTE_NOTICE:
-		  /* Get course data */
-		  Crs.CrsCod = Not->HieCod;
-		  Crs_GetDataOfCourseByCod (&Crs);
-		  break;
-	       case TL_NOTE_FORUM_POST:
-		  /* Get forum type of the post */
-		  For_GetForumTypeAndLocationOfAPost (Not->Cod,&Forums.Forum);
-		  For_SetForumName (&Forums.Forum,ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
-		  break;
-	       default:
-		  break;
-	      }
-
-	 /* Write note type */
-	 TL_PutFormGoToAction (Not,&Forums);
-
-	 /* Write location in hierarchy */
-	 if (!Not->Unavailable)
-	    switch (Not->NoteType)
-	      {
-	       case TL_NOTE_INS_DOC_PUB_FILE:
-	       case TL_NOTE_INS_SHA_PUB_FILE:
-		  /* Write location (institution) in hierarchy */
-		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Ins.ShrtName);
-		  HTM_DIV_End ();
-		  break;
-	       case TL_NOTE_CTR_DOC_PUB_FILE:
-	       case TL_NOTE_CTR_SHA_PUB_FILE:
-		  /* Write location (centre) in hierarchy */
-		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  HTM_TxtF ("%s:&nbsp;%s",Txt_Centre,Ctr.ShrtName);
-		  HTM_DIV_End ();
-		  break;
-	       case TL_NOTE_DEG_DOC_PUB_FILE:
-	       case TL_NOTE_DEG_SHA_PUB_FILE:
-		  /* Write location (degree) in hierarchy */
-		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Deg.ShrtName);
-		  HTM_DIV_End ();
-		  break;
-	       case TL_NOTE_CRS_DOC_PUB_FILE:
-	       case TL_NOTE_CRS_SHA_PUB_FILE:
-	       case TL_NOTE_EXAM_ANNOUNCEMENT:
-	       case TL_NOTE_NOTICE:
-		  /* Write location (course) in hierarchy */
-		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Crs.ShrtName);
-		  HTM_DIV_End ();
-		  break;
-	       case TL_NOTE_FORUM_POST:
-		  /* Write forum name */
-		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
-		  HTM_DIV_End ();
-		  break;
-	       default:
-		  break;
-	      }
-
-	 /* Write note summary */
-	 TL_GetNoteSummary (Not,SummaryStr);
-	 HTM_DIV_Begin ("class=\"TL_TXT\"");
-	 HTM_Txt (SummaryStr);
-	 HTM_DIV_End ();
-	}
-
-      /* End right container */
-      HTM_DIV_End ();
-
-      /***** Buttons and comments *****/
-      /* Create unique id for new comment */
-      Frm_SetUniqueId (IdNewComment);
-
-      /* Get number of comments in this note */
-      NumComments = TL_GetNumCommentsInNote (Not->NotCod);
-
-      /* Put icon to add a comment */
-      HTM_DIV_Begin ("class=\"TL_BOTTOM_LEFT\"");
-      if (Not->Unavailable)		// Unavailable notes can not be commented
-	 TL_PutIconCommentDisabled ();
-      else
-         TL_PutIconToToggleCommentNote (IdNewComment);
-      HTM_DIV_End ();
-
-      /* Start container for buttons and comments */
-      HTM_DIV_Begin ("class=\"TL_BOTTOM_RIGHT TL_RIGHT_WIDTH\"");
-
-      /* Start foot container */
-      HTM_DIV_Begin ("class=\"TL_FOOT TL_RIGHT_WIDTH\"");
-
-      /* Foot column 1: Fav zone */
-      HTM_DIV_Begin ("id=\"fav_not_%s_%u\" class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\"",
-	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_Fav_PutFormToFavUnfNote (Not,TL_SHOW_FEW_USRS);
-      HTM_DIV_End ();
-
-      /* Foot column 2: Share zone */
-      HTM_DIV_Begin ("id=\"sha_not_%s_%u\" class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\"",
-	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_Sha_PutFormToShaUnsNote (Not,TL_SHOW_FEW_USRS);
-      HTM_DIV_End ();
-
-      /* Foot column 3: Icon to remove this note */
-      HTM_DIV_Begin ("class=\"TL_REM\"");
-      if (IAmTheAuthor)
-	 TL_PutFormToRemovePublication (Timeline,
-	                                Not->NotCod);
-      HTM_DIV_End ();
-
-      /* End foot container */
-      HTM_DIV_End ();
-
-      /* Comments */
-      if (NumComments)
-	 TL_WriteCommentsInNote (Timeline,Not,NumComments);
-
-      /* End container for buttons and comments */
-      HTM_DIV_End ();
-
-      /* Put hidden form to write a new comment */
-      TL_PutHiddenFormToWriteNewCommentToNote (Timeline,
-                                               Not->NotCod,IdNewComment);
-
-      /***** Free memory used for author's data *****/
-      Usr_UsrDataDestructor (&AuthorDat);
-     }
-
-   /***** End list item *****/
-   HTM_LI_End ();
-
-   /***** End box ****/
-   if (ShowNoteAlone == TL_SHOW_NOTE_ALONE)
-     {
-      HTM_UL_End ();
-      Box_BoxEnd ();
-     }
-  }
-
-/*****************************************************************************/
 /*************** Write sharer/commenter if distinct to author ****************/
 /*****************************************************************************/
 
-static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod)
+void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
@@ -1802,33 +1340,11 @@ static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod)
   }
 
 /*****************************************************************************/
-/*************** Write name and nickname of author of a note *****************/
-/*****************************************************************************/
-
-static void TL_WriteAuthorNote (const struct UsrData *UsrDat)
-  {
-   extern const char *Txt_My_public_profile;
-   extern const char *Txt_Another_user_s_profile;
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-
-   /***** Show user's name inside form to go to user's public profile *****/
-   Frm_StartFormUnique (ActSeeOthPubPrf);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
-				    Txt_Another_user_s_profile,
-		            "BT_LINK TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH DAT_N_BOLD",
-			    NULL);
-   HTM_Txt (UsrDat->FullName);
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
 /******************* Write the date of creation of a note ********************/
 /*****************************************************************************/
 // TimeUTC holds UTC date and time in UNIX format (seconds since 1970)
 
-static void TL_WriteDateTime (time_t TimeUTC)
+void TL_WriteDateTime (time_t TimeUTC)
   {
    char IdDateTime[Frm_MAX_BYTES_ID + 1];
 
@@ -1851,7 +1367,7 @@ static void TL_WriteDateTime (time_t TimeUTC)
 /***************** Get from database and write public post *******************/
 /*****************************************************************************/
 
-static void TL_GetAndWritePost (long PstCod)
+void TL_GetAndWritePost (long PstCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1906,414 +1422,15 @@ static void TL_GetAndWritePost (long PstCod)
   }
 
 /*****************************************************************************/
-/************* Put form to go to an action depending on the note *************/
-/*****************************************************************************/
-
-static void TL_PutFormGoToAction (const struct TL_Note *Not,
-                                  const struct For_Forums *Forums)
-  {
-   extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
-   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
-   extern const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES];
-   extern const char *Txt_not_available;
-   char *Anchor = NULL;
-   static const Act_Action_t TL_DefaultActions[TL_NUM_NOTE_TYPES] =
-     {
-      [TL_NOTE_UNKNOWN          ] = ActUnk,
-      /* Start tab */
-      [TL_NOTE_POST             ] = ActUnk,	// action not used
-      /* Institution tab */
-      [TL_NOTE_INS_DOC_PUB_FILE ] = ActReqDatSeeDocIns,
-      [TL_NOTE_INS_SHA_PUB_FILE ] = ActReqDatShaIns,
-      /* Centre tab */
-      [TL_NOTE_CTR_DOC_PUB_FILE ] = ActReqDatSeeDocCtr,
-      [TL_NOTE_CTR_SHA_PUB_FILE ] = ActReqDatShaCtr,
-      /* Degree tab */
-      [TL_NOTE_DEG_DOC_PUB_FILE ] = ActReqDatSeeDocDeg,
-      [TL_NOTE_DEG_SHA_PUB_FILE ] = ActReqDatShaDeg,
-      /* Course tab */
-      [TL_NOTE_CRS_DOC_PUB_FILE ] = ActReqDatSeeDocCrs,
-      [TL_NOTE_CRS_SHA_PUB_FILE ] = ActReqDatShaCrs,
-      /* Assessment tab */
-      [TL_NOTE_EXAM_ANNOUNCEMENT] = ActSeeOneExaAnn,
-      /* Users tab */
-      /* Messages tab */
-      [TL_NOTE_NOTICE           ] = ActSeeOneNot,
-      [TL_NOTE_FORUM_POST       ] = ActSeeFor,
-      /* Analytics tab */
-      /* Profile tab */
-     };
-   static const char *TL_Icons[TL_NUM_NOTE_TYPES] =
-     {
-      [TL_NOTE_UNKNOWN          ] = NULL,
-      /* Start tab */
-      [TL_NOTE_POST             ] = NULL,	// icon not used
-      /* Institution tab */
-      [TL_NOTE_INS_DOC_PUB_FILE ] = "file.svg",
-      [TL_NOTE_INS_SHA_PUB_FILE ] = "file.svg",
-      /* Centre tab */
-      [TL_NOTE_CTR_DOC_PUB_FILE ] = "file.svg",
-      [TL_NOTE_CTR_SHA_PUB_FILE ] = "file.svg",
-      /* Degree tab */
-      [TL_NOTE_DEG_DOC_PUB_FILE ] = "file.svg",
-      [TL_NOTE_DEG_SHA_PUB_FILE ] = "file.svg",
-      /* Course tab */
-      [TL_NOTE_CRS_DOC_PUB_FILE ] = "file.svg",
-      [TL_NOTE_CRS_SHA_PUB_FILE ] = "file.svg",
-      /* Assessment tab */
-      [TL_NOTE_EXAM_ANNOUNCEMENT] = "bullhorn.svg",
-      /* Users tab */
-      /* Messages tab */
-      [TL_NOTE_NOTICE           ] = "sticky-note.svg",
-      [TL_NOTE_FORUM_POST       ] = "comments.svg",
-      /* Analytics tab */
-      /* Profile tab */
-     };
-
-   if (Not->Unavailable ||	// File/notice... pointed by this note is unavailable
-       Gbl.Form.Inside)		// Inside another form
-     {
-      /***** Do not put form *****/
-      HTM_DIV_Begin ("class=\"TL_FORM_OFF\"");
-      HTM_Txt (Txt_TIMELINE_NOTE[Not->NoteType]);
-      if (Not->Unavailable)
-         HTM_TxtF ("&nbsp;(%s)",Txt_not_available);
-      HTM_DIV_End ();
-     }
-   else			// Not inside another form
-     {
-      HTM_DIV_Begin ("class=\"TL_FORM\"");
-
-      /***** Begin form with parameters depending on the type of note *****/
-      switch (Not->NoteType)
-	{
-	 case TL_NOTE_INS_DOC_PUB_FILE:
-	 case TL_NOTE_INS_SHA_PUB_FILE:
-	    Frm_StartFormUnique (TL_DefaultActions[Not->NoteType]);
-	    Brw_PutHiddenParamFilCod (Not->Cod);
-	    if (Not->HieCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
-	       Ins_PutParamInsCod (Not->HieCod);		// Go to another institution
-	    break;
-	 case TL_NOTE_CTR_DOC_PUB_FILE:
-	 case TL_NOTE_CTR_SHA_PUB_FILE:
-	    Frm_StartFormUnique (TL_DefaultActions[Not->NoteType]);
-	    Brw_PutHiddenParamFilCod (Not->Cod);
-	    if (Not->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current centre
-	       Ctr_PutParamCtrCod (Not->HieCod);		// Go to another centre
-	    break;
-	 case TL_NOTE_DEG_DOC_PUB_FILE:
-	 case TL_NOTE_DEG_SHA_PUB_FILE:
-	    Frm_StartFormUnique (TL_DefaultActions[Not->NoteType]);
-	    Brw_PutHiddenParamFilCod (Not->Cod);
-	    if (Not->HieCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
-	       Deg_PutParamDegCod (Not->HieCod);		// Go to another degree
-	    break;
-	 case TL_NOTE_CRS_DOC_PUB_FILE:
-	 case TL_NOTE_CRS_SHA_PUB_FILE:
-	    Frm_StartFormUnique (TL_DefaultActions[Not->NoteType]);
-	    Brw_PutHiddenParamFilCod (Not->Cod);
-	    if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-	       Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
-	    break;
-	 case TL_NOTE_EXAM_ANNOUNCEMENT:
-            Frm_SetAnchorStr (Not->Cod,&Anchor);
-	    Frm_StartFormUniqueAnchor (TL_DefaultActions[Not->NoteType],
-		                       Anchor);	// Locate on this specific exam
-            Frm_FreeAnchorStr (Anchor);
-	    ExaAnn_PutHiddenParamExaCod (Not->Cod);
-	    if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-	       Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
-	    break;
-	 case TL_NOTE_POST:	// Not applicable
-	    return;
-	 case TL_NOTE_FORUM_POST:
-	    Frm_StartFormUnique (For_ActionsSeeFor[Forums->Forum.Type]);
-	    For_PutAllHiddenParamsForum (1,	// Page of threads = first
-                                         1,	// Page of posts   = first
-                                         Forums->ForumSet,
-					 Forums->ThreadsOrder,
-					 Forums->Forum.Location,
-					 Forums->Thread.Selected,
-					 -1L);
-	    if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-	       Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
-	    break;
-	 case TL_NOTE_NOTICE:
-            Frm_SetAnchorStr (Not->Cod,&Anchor);
-	    Frm_StartFormUniqueAnchor (TL_DefaultActions[Not->NoteType],
-				       Anchor);
-            Frm_FreeAnchorStr (Anchor);
-	    Not_PutHiddenParamNotCod (Not->Cod);
-	    if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-	       Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
-	    break;
-	 default:			// Not applicable
-	    return;
-	}
-
-      /***** Icon and link to go to action *****/
-      HTM_BUTTON_SUBMIT_Begin (Txt_TIMELINE_NOTE[Not->NoteType],
-			       Str_BuildStringStr ("BT_LINK %s ICO_HIGHLIGHT",
-						   The_ClassFormInBoxBold[Gbl.Prefs.Theme]),
-			       NULL);
-      Ico_PutIcon (TL_Icons[Not->NoteType],Txt_TIMELINE_NOTE[Not->NoteType],"CONTEXT_ICO_x16");
-      HTM_TxtF ("&nbsp;%s",Txt_TIMELINE_NOTE[Not->NoteType]);
-      HTM_BUTTON_End ();
-      Str_FreeString ();
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-      HTM_DIV_End ();
-     }
-  }
-
-/*****************************************************************************/
-/********************** Get note summary and content *************************/
-/*****************************************************************************/
-
-static void TL_GetNoteSummary (const struct TL_Note *Not,
-                               char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1])
-  {
-   SummaryStr[0] = '\0';
-
-   switch (Not->NoteType)
-     {
-      case TL_NOTE_UNKNOWN:
-          break;
-      case TL_NOTE_INS_DOC_PUB_FILE:
-      case TL_NOTE_INS_SHA_PUB_FILE:
-      case TL_NOTE_CTR_DOC_PUB_FILE:
-      case TL_NOTE_CTR_SHA_PUB_FILE:
-      case TL_NOTE_DEG_DOC_PUB_FILE:
-      case TL_NOTE_DEG_SHA_PUB_FILE:
-      case TL_NOTE_CRS_DOC_PUB_FILE:
-      case TL_NOTE_CRS_SHA_PUB_FILE:
-	 Brw_GetSummaryAndContentOfFile (SummaryStr,NULL,Not->Cod,false);
-         break;
-      case TL_NOTE_EXAM_ANNOUNCEMENT:
-         ExaAnn_GetSummaryAndContentExamAnn (SummaryStr,NULL,Not->Cod,false);
-         break;
-      case TL_NOTE_POST:
-	 // Not applicable
-         break;
-      case TL_NOTE_FORUM_POST:
-         For_GetSummaryAndContentForumPst (SummaryStr,NULL,Not->Cod,false);
-         break;
-      case TL_NOTE_NOTICE:
-         Not_GetSummaryAndContentNotice (SummaryStr,NULL,Not->Cod,false);
-         break;
-     }
-  }
-
-/*****************************************************************************/
-/***************** Store and publish a note into database ********************/
-/*****************************************************************************/
-
-void TL_StoreAndPublishNote (TL_NoteType_t NoteType,long Cod)
-  {
-   struct TL_Publication Pub;
-
-   TL_StoreAndPublishNoteInternal (NoteType,Cod,&Pub);
-  }
-
-static void TL_StoreAndPublishNoteInternal (TL_NoteType_t NoteType,long Cod,struct TL_Publication *Pub)
-  {
-   long HieCod;	// Hierarchy code (institution/centre/degree/course)
-
-   switch (NoteType)
-     {
-      case TL_NOTE_INS_DOC_PUB_FILE:
-      case TL_NOTE_INS_SHA_PUB_FILE:
-	 HieCod = Gbl.Hierarchy.Ins.InsCod;
-	 break;
-      case TL_NOTE_CTR_DOC_PUB_FILE:
-      case TL_NOTE_CTR_SHA_PUB_FILE:
-	 HieCod = Gbl.Hierarchy.Ctr.CtrCod;
-	 break;
-      case TL_NOTE_DEG_DOC_PUB_FILE:
-      case TL_NOTE_DEG_SHA_PUB_FILE:
-	 HieCod = Gbl.Hierarchy.Deg.DegCod;
-	 break;
-      case TL_NOTE_CRS_DOC_PUB_FILE:
-      case TL_NOTE_CRS_SHA_PUB_FILE:
-      case TL_NOTE_EXAM_ANNOUNCEMENT:
-      case TL_NOTE_NOTICE:
-	 HieCod = Gbl.Hierarchy.Crs.CrsCod;
-	 break;
-      default:
-	 HieCod = -1L;
-         break;
-     }
-
-   /***** Store note *****/
-   Pub->NotCod =
-   DB_QueryINSERTandReturnCode ("can not create new note",
-				"INSERT INTO tl_notes"
-				" (NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote)"
-				" VALUES"
-				" (%u,%ld,%ld,%ld,'N',NOW())",
-				(unsigned) NoteType,
-				Cod,Gbl.Usrs.Me.UsrDat.UsrCod,HieCod);
-
-   /***** Publish note in timeline *****/
-   Pub->PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Pub->PubType      = TL_PUB_ORIGINAL_NOTE;
-   TL_PublishNoteInTimeline (Pub);
-  }
-
-/*****************************************************************************/
-/************************* Mark a note as unavailable ************************/
-/*****************************************************************************/
-
-void TL_MarkNoteAsUnavailable (TL_NoteType_t NoteType,long Cod)
-  {
-   /***** Mark the note as unavailable *****/
-   DB_QueryUPDATE ("can not mark note as unavailable",
-		   "UPDATE tl_notes SET Unavailable='Y'"
-		   " WHERE NoteType=%u AND Cod=%ld",
-		   (unsigned) NoteType,Cod);
-  }
-
-/*****************************************************************************/
-/****************** Mark notes of one file as unavailable ********************/
-/*****************************************************************************/
-
-void TL_MarkNoteOneFileAsUnavailable (const char *Path)
-  {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
-   long FilCod;
-   TL_NoteType_t NoteType;
-
-   switch (FileBrowser)
-     {
-      case Brw_ADMI_DOC_INS:
-      case Brw_ADMI_SHR_INS:
-      case Brw_ADMI_DOC_CTR:
-      case Brw_ADMI_SHR_CTR:
-      case Brw_ADMI_DOC_DEG:
-      case Brw_ADMI_SHR_DEG:
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_SHR_CRS:
-         /***** Get file code *****/
-	 FilCod = Brw_GetFilCodByPath (Path,true);	// Only if file is public
-	 if (FilCod > 0)
-	   {
-	    /***** Mark possible note as unavailable *****/
-	    switch (FileBrowser)
-	      {
-	       case Brw_ADMI_DOC_INS:
-		  NoteType = TL_NOTE_INS_DOC_PUB_FILE;
-		  break;
-	       case Brw_ADMI_SHR_INS:
-		  NoteType = TL_NOTE_INS_SHA_PUB_FILE;
-		  break;
-	       case Brw_ADMI_DOC_CTR:
-		  NoteType = TL_NOTE_CTR_DOC_PUB_FILE;
-		  break;
-	       case Brw_ADMI_SHR_CTR:
-		  NoteType = TL_NOTE_CTR_SHA_PUB_FILE;
-		  break;
-	       case Brw_ADMI_DOC_DEG:
-		  NoteType = TL_NOTE_DEG_DOC_PUB_FILE;
-		  break;
-	       case Brw_ADMI_SHR_DEG:
-		  NoteType = TL_NOTE_DEG_SHA_PUB_FILE;
-		  break;
-	       case Brw_ADMI_DOC_CRS:
-		  NoteType = TL_NOTE_CRS_DOC_PUB_FILE;
-		  break;
-	       case Brw_ADMI_SHR_CRS:
-		  NoteType = TL_NOTE_CRS_SHA_PUB_FILE;
-		  break;
-	       default:
-		  return;
-	      }
-	    TL_MarkNoteAsUnavailable (NoteType,FilCod);
-	   }
-         break;
-      default:
-	 break;
-     }
-  }
-
-/*****************************************************************************/
-/***** Mark possible notes involving children of a folder as unavailable *****/
-/*****************************************************************************/
-
-void TL_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
-  {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
-   long Cod = Brw_GetCodForFiles ();
-   TL_NoteType_t NoteType;
-
-   switch (FileBrowser)
-     {
-      case Brw_ADMI_DOC_INS:
-      case Brw_ADMI_SHR_INS:
-      case Brw_ADMI_DOC_CTR:
-      case Brw_ADMI_SHR_CTR:
-      case Brw_ADMI_DOC_DEG:
-      case Brw_ADMI_SHR_DEG:
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_SHR_CRS:
-	 /***** Mark possible note as unavailable *****/
-	 switch (FileBrowser)
-	   {
-	    case Brw_ADMI_DOC_INS:
-	       NoteType = TL_NOTE_INS_DOC_PUB_FILE;
-	       break;
-	    case Brw_ADMI_SHR_INS:
-	       NoteType = TL_NOTE_INS_SHA_PUB_FILE;
-	       break;
-	    case Brw_ADMI_DOC_CTR:
-	       NoteType = TL_NOTE_CTR_DOC_PUB_FILE;
-	       break;
-	    case Brw_ADMI_SHR_CTR:
-	       NoteType = TL_NOTE_CTR_SHA_PUB_FILE;
-	       break;
-	    case Brw_ADMI_DOC_DEG:
-	       NoteType = TL_NOTE_DEG_DOC_PUB_FILE;
-	       break;
-	    case Brw_ADMI_SHR_DEG:
-	       NoteType = TL_NOTE_DEG_SHA_PUB_FILE;
-	       break;
-	    case Brw_ADMI_DOC_CRS:
-	       NoteType = TL_NOTE_CRS_DOC_PUB_FILE;
-	       break;
-	    case Brw_ADMI_SHR_CRS:
-	       NoteType = TL_NOTE_CRS_SHA_PUB_FILE;
-	       break;
-	    default:
-	       return;
-	   }
-         DB_QueryUPDATE ("can not mark notes as unavailable",
-			 "UPDATE tl_notes SET Unavailable='Y'"
-		         " WHERE NoteType=%u AND Cod IN"
-	                 " (SELECT FilCod FROM files"
-			 " WHERE FileBrowser=%u AND Cod=%ld"
-			 " AND Path LIKE '%s/%%' AND Public='Y')",	// Only public files
-			 (unsigned) NoteType,
-			 (unsigned) FileBrowser,Cod,
-			 Path);
-         break;
-      default:
-	 break;
-     }
-  }
-
-/*****************************************************************************/
-/************************* Publish note in timeline **************************/
+/********************* Publish note/comment in timeline **********************/
 /*****************************************************************************/
 // Pub->PubCod is set by the function
 
-void TL_PublishNoteInTimeline (struct TL_Publication *Pub)
+void TL_PublishPubInTimeline (struct TL_Publication *Pub)
   {
    /***** Publish note in timeline *****/
    Pub->PubCod =
-   DB_QueryINSERTandReturnCode ("can not publish note",
+   DB_QueryINSERTandReturnCode ("can not publish note/comment",
 				"INSERT INTO tl_pubs"
 				" (NotCod,PublisherCod,PubType,TimePublish)"
 				" VALUES"
@@ -2352,7 +1469,7 @@ static void TL_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
    HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
 
    /* Author name */
-   TL_WriteAuthorNote (&Gbl.Usrs.Me.UsrDat);
+   TL_Not_WriteAuthorNote (&Gbl.Usrs.Me.UsrDat);
 
    /* Form to write the post */
    HTM_DIV_Begin ("class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\"");
@@ -2372,7 +1489,7 @@ static void TL_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
 /*** Put textarea and button inside a form to submit a new post or comment ***/
 /*****************************************************************************/
 
-static void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea)
+void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea)
   {
    extern const char *Txt_Post;
    char IdDivImgButton[Frm_MAX_BYTES_ID + 1];
@@ -2491,7 +1608,7 @@ static long TL_ReceivePost (void)
 				   Content.Media.MedCod);
 
       /* Insert post in notes */
-      TL_StoreAndPublishNoteInternal (TL_NOTE_POST,PstCod,&Pub);
+      TL_Not_StoreAndPublishNoteInternal (TL_NOTE_POST,PstCod,&Pub);
 
       /***** Analyze content and store notifications about mentions *****/
       Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (Pub.PubCod,Content.Txt);
@@ -2506,659 +1623,12 @@ static long TL_ReceivePost (void)
   }
 
 /*****************************************************************************/
-/********* Put an icon to toggle on/off the form to comment a note ***********/
-/*****************************************************************************/
-
-static void TL_PutIconToToggleCommentNote (const char UniqueId[Frm_MAX_BYTES_ID + 1])
-  {
-   extern const char *Txt_Comment;
-
-   /***** Link to toggle on/off the form to comment a note *****/
-   HTM_DIV_Begin ("id=\"%s_ico\" class=\"TL_ICO_COM_OFF\"",UniqueId);
-   HTM_A_Begin ("href=\"\" onclick=\"toggleNewComment ('%s');return false;\"",
-                UniqueId);
-   Ico_PutIcon ("comment-regular.svg",Txt_Comment,"CONTEXT_ICO_16x16");
-   HTM_A_End ();
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/********** Put an icon to toggle on/off the form to comment a note **********/
-/*****************************************************************************/
-
-static void TL_PutIconCommentDisabled (void)
-  {
-   extern const char *Txt_Comment;
-
-   /***** Disabled icon to comment a note *****/
-   HTM_DIV_Begin ("class=\"TL_ICO_COM_OFF TL_ICO_DISABLED\"");
-   Ico_PutIcon ("edit.svg",Txt_Comment,"ICO16x16");
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/********************** Form to comment a publication ************************/
-/*****************************************************************************/
-
-static void TL_PutHiddenFormToWriteNewCommentToNote (const struct TL_Timeline *Timeline,
-	                                             long NotCod,
-                                                     const char IdNewComment[Frm_MAX_BYTES_ID + 1])
-  {
-   extern const char *Txt_New_TIMELINE_comment;
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
-
-   /***** Start container *****/
-   HTM_DIV_Begin ("id=\"%s\" class=\"TL_FORM_NEW_COM TL_RIGHT_WIDTH\""
-		  " style=\"display:none;\"",
-	          IdNewComment);
-
-   /***** Left: write author's photo (my photo) *****/
-   HTM_DIV_Begin ("class=\"TL_COM_PHOTO\"");
-   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
-					             NULL,
-		     "PHOTO30x40",Pho_ZOOM,true);	// Use unique id
-   HTM_DIV_End ();
-
-   /***** Right: form to write the comment *****/
-   /* Start right container */
-   HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
-
-   /* Begin form to write the post */
-   TL_FormStart (Timeline,ActRcvTL_ComGbl,ActRcvTL_ComUsr);
-   TL_PutHiddenParamNotCod (NotCod);
-
-   /* Textarea and button */
-   TL_PutTextarea (Txt_New_TIMELINE_comment,
-	           "TL_COM_TEXTAREA TL_COMM_WIDTH");
-
-   /* End form */
-   Frm_EndForm ();
-
-   /* End right container */
-   HTM_DIV_End ();
-
-   /***** End container *****/
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/********************* Get number of comments in a note **********************/
-/*****************************************************************************/
-
-static unsigned long TL_GetNumCommentsInNote (long NotCod)
-  {
-   return DB_QueryCOUNT ("can not get number of comments in a note",
-			 "SELECT COUNT(*) FROM tl_pubs"
-			 " WHERE NotCod=%ld AND PubType=%u",
-			 NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
-  }
-
-/*****************************************************************************/
-/*********************** Write comments in a note ****************************/
-/*****************************************************************************/
-
-static void TL_WriteCommentsInNote (struct TL_Timeline *Timeline,
-				    const struct TL_Note *Not,
-				    unsigned NumComments)
-  {
-   MYSQL_RES *mysql_res;
-   unsigned NumInitialComments;
-   unsigned NumFinalCommentsToGet;
-   unsigned NumFinalCommentsGot;
-   unsigned NumCom;
-   char IdComments[Frm_MAX_BYTES_ID + 1];
-
-   /***** Compute how many initial comments will be hidden
-          and how many final comments will be visible *****/
-   // Never hide only one comment
-   // So, the number of comments initially hidden must be 0 or >= 2
-   if (NumComments <= TL_NUM_VISIBLE_COMMENTS + 1)
-     {
-      NumInitialComments    = 0;
-      NumFinalCommentsToGet = NumComments;
-     }
-   else
-     {
-      NumInitialComments    = NumComments - TL_NUM_VISIBLE_COMMENTS;
-      NumFinalCommentsToGet = TL_NUM_VISIBLE_COMMENTS;
-     }
-
-   /***** Get last comments of this note from database *****/
-   NumFinalCommentsGot = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get comments",
-			      "SELECT * FROM "
-			      "("
-			      "SELECT tl_pubs.PubCod,"		// row[0]
-				     "tl_pubs.PublisherCod,"	// row[1]
-				     "tl_pubs.NotCod,"		// row[2]
-				     "UNIX_TIMESTAMP("
-				     "tl_pubs.TimePublish),"	// row[3]
-				     "tl_comments.Txt,"		// row[4]
-				     "tl_comments.MedCod"	// row[5]
-			      " FROM tl_pubs,tl_comments"
-			      " WHERE tl_pubs.NotCod=%ld"
-			      " AND tl_pubs.PubType=%u"
-			      " AND tl_pubs.PubCod=tl_comments.PubCod"
-			      " ORDER BY tl_pubs.PubCod DESC LIMIT %u"
-			      ") AS comments"
-			      " ORDER BY PubCod",
-			      Not->NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE,
-			      NumFinalCommentsToGet);
-
-   /*
-      Before clicking "See prev..."    -->    After clicking "See prev..."
-    _________________________________       _________________________________
-   |           div con_<id>          |     |           div con_<id>          |
-   |            (hidden)             |     |            (visible)            |
-   |  _____________________________  |     |  _____________________________  |
-   | |    v See only the latest    | |     | |    v See only the latest    | |
-   | |_____________________________| |     | |_____________________________| |
-   |_________________________________|     |_________________________________|
-    _________________________________       _________________________________
-   |            div <id>             |     |        div <id> updated         |
-   |          which content          |     |  _____________________________  |
-   |    will be updated via AJAX     |     | |         ul com_<id>         | |
-   |   (parent of parent of form)    |     | |  _________________________  | |
-   |                                 |     | | |     li (comment 1)      | | |
-   |                                 |     | | |_________________________| | |
-   |                                 |     | | |           ...           | | |
-   |                                 |     | | |_________________________| | |
-   |                                 |     | | |     li (comment n)      | | |
-   |                                 | --> | | |_________________________| | |
-   |                                 |     | |_____________________________| |
-   |  _____________________________  |     |  _____________________________  |
-   | |        div exp_<id>         | |     | |         div exp_<id>        | |
-   | |  _________________________  | |     | |          (hidden)           | |
-   | | |          form           | | |     | |                             | |
-   | | |  _____________________  | | |     | |    _____________________    | |
-   | | | | ^ See prev.comments | | | |     | |   | ^ See prev.comments |   | |
-   | | | |_____________________| | | |     | |   |_____________________|   | |
-   | | |_________________________| | |     | |                             | |
-   | |_____________________________| |     | |_____________________________| |
-   |_________________________________|     |_________________________________|
-    _________________________________       _________________________________
-   |           ul com_<id>           |     |           ul com_<id>           |
-   |    _________________________    |     |    _________________________    |
-   |   |     li (comment 1)      |   |     |   |     li (comment 1)      |   |
-   |   |_________________________|   |     |   |_________________________|   |
-   |   |           ...           |   |     |   |           ...           |   |
-   |   |_________________________|   |     |   |_________________________|   |
-   |   |     li (comment n)      |   |     |   |     li (comment n)      |   |
-   |   |_________________________|   |     |   |_________________________|   |
-   |_________________________________|     |_________________________________|
-   */
-   /***** Link to show initial hidden comments *****/
-   if (NumInitialComments)
-     {
-      /***** Create unique id for list of hidden comments *****/
-      Frm_SetUniqueId (IdComments);
-
-      /***** Link (initially hidden) to show only the latest comments *****/
-      TL_LinkToShowOnlyLatestComments (IdComments);
-
-      /***** Div which content will be updated via AJAX *****/
-      HTM_DIV_Begin ("id=\"%s\" class=\"TL_RIGHT_WIDTH\"",IdComments);
-      TL_FormToShowHiddenComments (ActShoHidTL_ComGbl,ActShoHidTL_ComUsr,
-				   Not->NotCod,
-				   IdComments,
-				   NumInitialComments);
-      HTM_DIV_End ();
-     }
-
-   /***** List final visible comments *****/
-   if (NumFinalCommentsGot)
-     {
-      HTM_UL_Begin ("class=\"TL_LIST\"");
-      for (NumCom = 0;
-	   NumCom < NumFinalCommentsGot;
-	   NumCom++)
-	 TL_WriteOneCommentInList (Timeline,mysql_res);
-      HTM_UL_End ();
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/********** Form to show hidden coments in global or user timeline ***********/
-/*****************************************************************************/
-
-static void TL_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
-			                 long NotCod,
-					 char IdComments[Frm_MAX_BYTES_ID + 1],
-					 unsigned NumInitialComments)
-  {
-   extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
-   extern const char *Txt_See_the_previous_X_COMMENTS;
-   char *OnSubmit;
-
-   HTM_DIV_Begin ("id=\"exp_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\"",
-		  IdComments);
-
-   /***** Form and icon-text to show hidden comments *****/
-   /* Begin form */
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      if (asprintf (&OnSubmit,"toggleComments('%s');"
-	                      "updateDivHiddenComments(this,"
-			      "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u&OtherUsrCod=%s');"
-			      " return false;",	// return false is necessary to not submit form
-		    IdComments,
-		    Act_GetActCod (ActionUsr),
-		    Gbl.Session.Id,
-		    NotCod,
-		    IdComments,
-		    NumInitialComments,
-		    Gbl.Usrs.Other.UsrDat.EncryptedUsrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
-     }
-   else
-     {
-      if (asprintf (&OnSubmit,"toggleComments('%s');"
-	                      "updateDivHiddenComments(this,"
-			      "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u');"
-			      " return false;",	// return false is necessary to not submit form
-		    IdComments,
-		    Act_GetActCod (ActionGbl),
-		    Gbl.Session.Id,
-		    NotCod,
-		    IdComments,
-		    NumInitialComments) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
-     }
-
-   /* Put icon and text with link to show the first hidden comments */
-   HTM_BUTTON_SUBMIT_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
-   Ico_PutIconTextLink ("angle-up.svg",
-			Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
-					     (long) NumInitialComments));
-   Str_FreeString ();
-   HTM_BUTTON_End ();
-
-   /* End form */
-   Frm_EndForm ();
-
-   /* Free allocated memory */
-   free (OnSubmit);
-
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/********************** Write hidden comments via AJAX ***********************/
-/*****************************************************************************/
-
-void TL_ShowHiddenCommentsUsr (void)
-  {
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Show hidden comments *****/
-   TL_ShowHiddenCommentsGbl ();
-  }
-
-void TL_ShowHiddenCommentsGbl (void)
-  {
-   struct TL_Timeline Timeline;
-   long NotCod;
-   char IdComments[Frm_MAX_BYTES_ID + 1];
-   unsigned NumInitialCommentsToGet;
-   unsigned NumInitialCommentsGot;
-
-   /***** Reset timeline context *****/
-   TL_ResetTimeline (&Timeline);
-
-   /***** Get parameters *****/
-   /* Get note code */
-   NotCod = TL_GetParamNotCod ();
-
-   /* Get identifier */
-   Par_GetParToText ("IdComments",IdComments,Frm_MAX_BYTES_ID);
-
-   /* Get number of comments to get */
-   NumInitialCommentsToGet = (unsigned) Par_GetParToLong ("NumHidCom");
-
-   /***** Write HTML inside DIV with hidden comments *****/
-   NumInitialCommentsGot = TL_WriteHiddenComments (&Timeline,
-                                                   NotCod,IdComments,NumInitialCommentsToGet);
-
-   /***** Link to show the first comments *****/
-   TL_LinkToShowPreviousComments (IdComments,NumInitialCommentsGot);
-  }
-
-/*****************************************************************************/
-/**************************** Write hidden comments **************************/
-/*****************************************************************************/
-// Returns the number of comments got
-
-static unsigned TL_WriteHiddenComments (struct TL_Timeline *Timeline,
-                                        long NotCod,
-				        char IdComments[Frm_MAX_BYTES_ID + 1],
-					unsigned NumInitialCommentsToGet)
-  {
-   MYSQL_RES *mysql_res;
-   unsigned long NumInitialCommentsGot;
-   unsigned long NumCom;
-
-   /***** Get comments of this note from database *****/
-   NumInitialCommentsGot = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get comments",
-		   "SELECT tl_pubs.PubCod,"		// row[0]
-			  "tl_pubs.PublisherCod,"	// row[1]
-			  "tl_pubs.NotCod,"		// row[2]
-			  "UNIX_TIMESTAMP("
-			  "tl_pubs.TimePublish),"	// row[3]
-			  "tl_comments.Txt,"		// row[4]
-			  "tl_comments.MedCod"		// row[5]
-		   " FROM tl_pubs,tl_comments"
-		   " WHERE tl_pubs.NotCod=%ld"
-		   " AND tl_pubs.PubType=%u"
-		   " AND tl_pubs.PubCod=tl_comments.PubCod"
-		   " ORDER BY tl_pubs.PubCod"
-		   " LIMIT %lu",
-		   NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE,
-		   NumInitialCommentsToGet);
-
-   /***** List with comments *****/
-   HTM_UL_Begin ("id=\"com_%s\" class=\"TL_LIST\"",IdComments);
-   for (NumCom = 0;
-	NumCom < NumInitialCommentsGot;
-	NumCom++)
-      TL_WriteOneCommentInList (Timeline,mysql_res);
-   HTM_UL_End ();
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumInitialCommentsGot;
-  }
-
-/*****************************************************************************/
-/************************* Write a comment in list ***************************/
-/*****************************************************************************/
-
-static void TL_WriteOneCommentInList (struct TL_Timeline *Timeline,
-                                      MYSQL_RES *mysql_res)
-  {
-   MYSQL_ROW row;
-   struct TL_Comment Com;
-
-   /***** Initialize image *****/
-   Med_MediaConstructor (&Com.Content.Media);
-
-   /***** Get data of comment *****/
-   row = mysql_fetch_row (mysql_res);
-   TL_GetDataOfCommentFromRow (row,&Com);
-
-   /***** Write comment *****/
-   TL_WriteComment (Timeline,&Com,
-		    TL_TOP_MESSAGE_NONE,-1L,
-		    false);	// Not alone
-
-   /***** Free image *****/
-   Med_MediaDestructor (&Com.Content.Media);
-  }
-
-/*****************************************************************************/
-/****************** Link to show only the latest comments ********************/
-/*****************************************************************************/
-
-static void TL_LinkToShowOnlyLatestComments (const char IdComments[Frm_MAX_BYTES_ID + 1])
-  {
-   extern const char *Txt_See_only_the_latest_COMMENTS;
-
-   /***** Icon and text to show only the latest comments ****/
-   HTM_DIV_Begin ("id=\"con_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\""
-		  " style=\"display:none;\"",	// Hidden
-		  IdComments);
-   TL_PutIconToToggleComments (IdComments,"angle-down.svg",
-			       Txt_See_only_the_latest_COMMENTS);
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/********************* Link to show the first comments ***********************/
-/*****************************************************************************/
-
-static void TL_LinkToShowPreviousComments (const char IdComments[Frm_MAX_BYTES_ID + 1],
-				           unsigned NumInitialComments)
-  {
-   extern const char *Txt_See_the_previous_X_COMMENTS;
-
-   /***** Icon and text to show only the latest comments ****/
-   HTM_DIV_Begin ("id=\"exp_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\""
-	          " style=\"display:none;\"",	// Hidden
-		  IdComments);
-   TL_PutIconToToggleComments (IdComments,"angle-up.svg",
-			       Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
-						    (long) NumInitialComments));
-   Str_FreeString ();
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/********** Put an icon to toggle on/off comments in a publication ***********/
-/*****************************************************************************/
-
-static void TL_PutIconToToggleComments (const char *UniqueId,
-                                        const char *Icon,const char *Text)
-  {
-   extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
-   char *OnClick;
-
-   if (asprintf (&OnClick,"toggleComments('%s')",UniqueId) < 0)
-      Lay_NotEnoughMemoryExit ();
-
-   /***** Link to toggle on/off some divs *****/
-   HTM_BUTTON_BUTTON_Begin (Text,The_ClassFormLinkInBox[Gbl.Prefs.Theme],OnClick);
-   Ico_PutIconTextLink (Icon,Text);
-   HTM_BUTTON_End ();
-
-   free (OnClick);
-  }
-
-/*****************************************************************************/
-/******************************** Write comment ******************************/
-/*****************************************************************************/
-
-static void TL_WriteComment (struct TL_Timeline *Timeline,
-	                     struct TL_Comment *Com,
-                             TL_TopMessage_t TopMessage,long UsrCod,
-                             bool ShowCommentAlone)	// Comment is shown alone, not in a list
-  {
-   extern const char *Txt_Forum;
-   extern const char *Txt_Course;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Centre;
-   extern const char *Txt_Institution;
-   struct UsrData UsrDat;
-   bool IAmTheAuthor;
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
-   static unsigned NumDiv = 0;	// Used to create unique div id for fav
-
-   NumDiv++;
-
-   if (ShowCommentAlone)
-     {
-      Box_BoxBegin (NULL,NULL,
-                    NULL,NULL,
-                    NULL,Box_NOT_CLOSABLE);
-
-      /***** Write sharer/commenter if distinct to author *****/
-      TL_WriteTopMessage (TopMessage,UsrCod);
-
-      HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
-      HTM_DIV_End ();
-
-      HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
-      HTM_UL_Begin ("class=\"LIST_LEFT\"");
-     }
-
-   /***** Start list item *****/
-   if (ShowCommentAlone)
-      HTM_LI_Begin (NULL);
-   else
-      HTM_LI_Begin ("class=\"TL_COM\"");
-
-   if (Com->PubCod <= 0 ||
-       Com->NotCod <= 0 ||
-       Com->UsrCod <= 0)
-      Ale_ShowAlert (Ale_ERROR,"Error in comment.");
-   else
-     {
-      /***** Get author's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
-      UsrDat.UsrCod = Com->UsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
-      IAmTheAuthor = Usr_ItsMe (UsrDat.UsrCod);
-
-      /***** Left: write author's photo *****/
-      HTM_DIV_Begin ("class=\"TL_COM_PHOTO\"");
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-					    NULL,
-			"PHOTO30x40",Pho_ZOOM,true);	// Use unique id
-      HTM_DIV_End ();
-
-      /***** Right: author's name, time, content, image and buttons *****/
-      HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
-
-      /* Write author's full name and nickname */
-      TL_WriteAuthorComment (&UsrDat);
-
-      /* Write date and time */
-      TL_WriteDateTime (Com->DateTimeUTC);
-
-      /* Write content of the comment */
-      if (Com->Content.Txt[0])
-	{
-	 HTM_DIV_Begin ("class=\"TL_TXT\"");
-	 Msg_WriteMsgContent (Com->Content.Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
-	 HTM_DIV_End ();
-	}
-
-      /* Show image */
-      Med_ShowMedia (&Com->Content.Media,"TL_COM_MED_CONT TL_COMM_WIDTH",
-	                                    "TL_COM_MED TL_COMM_WIDTH");
-
-      /* Start foot container */
-      HTM_DIV_Begin ("class=\"TL_FOOT TL_COMM_WIDTH\"");
-
-      /* Fav zone */
-      HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"TL_FAV_COM TL_FAV_WIDTH\"",
-	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_Fav_PutFormToFavUnfComment (Com,TL_SHOW_FEW_USRS);
-      HTM_DIV_End ();
-
-      /* Put icon to remove this comment */
-      HTM_DIV_Begin ("class=\"TL_REM\"");
-      if (IAmTheAuthor && !ShowCommentAlone)
-	 TL_PutFormToRemoveComment (Timeline,Com->PubCod);
-      HTM_DIV_End ();
-
-      /* End foot container */
-      HTM_DIV_End ();
-
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
-     }
-
-   /***** End list item *****/
-   HTM_LI_End ();
-
-   if (ShowCommentAlone)
-     {
-      HTM_UL_End ();
-      HTM_DIV_End ();
-      Box_BoxEnd ();
-     }
-  }
-
-/*****************************************************************************/
-/********* Write name and nickname of author of a comment to a note **********/
-/*****************************************************************************/
-
-static void TL_WriteAuthorComment (struct UsrData *UsrDat)
-  {
-   extern const char *Txt_My_public_profile;
-   extern const char *Txt_Another_user_s_profile;
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-
-   /***** Show user's name inside form to go to user's public profile *****/
-   Frm_StartFormUnique (ActSeeOthPubPrf);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
-			            Txt_Another_user_s_profile,
-	                    "BT_LINK TL_COM_AUTHOR TL_COMM_AUTHOR_WIDTH DAT_BOLD",NULL);
-   HTM_Txt (UsrDat->FullName);
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/************************* Form to remove comment ****************************/
-/*****************************************************************************/
-
-static void TL_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
-	                               long PubCod)
-  {
-   extern const char *Txt_Remove;
-
-   /***** Form to remove publication *****/
-   TL_FormStart (Timeline,ActReqRemTL_ComGbl,ActReqRemTL_ComUsr);
-   TL_PutHiddenParamPubCod (PubCod);
-   Ico_PutIconLink ("trash.svg",Txt_Remove);
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/************************ Form to remove publication *************************/
-/*****************************************************************************/
-
-static void TL_PutFormToRemovePublication (const struct TL_Timeline *Timeline,
-                                           long NotCod)
-  {
-   extern const char *Txt_Remove;
-
-   /***** Form to remove publication *****/
-   TL_FormStart (Timeline,ActReqRemTL_PubGbl,ActReqRemTL_PubUsr);
-   TL_PutHiddenParamNotCod (NotCod);
-   Ico_PutIconLink ("trash.svg",Txt_Remove);
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/****************** Put parameter with the code of a note ********************/
-/*****************************************************************************/
-
-static void TL_PutHiddenParamNotCod (long NotCod)
-  {
-   Par_PutHiddenParamLong (NULL,"NotCod",NotCod);
-  }
-
-/*****************************************************************************/
 /*************** Put parameter with the code of a publication ****************/
 /*****************************************************************************/
 
 void TL_PutHiddenParamPubCod (long PubCod)
   {
    Par_PutHiddenParamLong (NULL,"PubCod",PubCod);
-  }
-
-/*****************************************************************************/
-/****************** Get parameter with the code of a note ********************/
-/*****************************************************************************/
-
-long TL_GetParamNotCod (void)
-  {
-   /***** Get note code *****/
-   return Par_GetParToLong ("NotCod");
   }
 
 /*****************************************************************************/
@@ -3169,117 +1639,6 @@ long TL_GetParamPubCod (void)
   {
    /***** Get comment code *****/
    return Par_GetParToLong ("PubCod");
-  }
-
-/*****************************************************************************/
-/******************************* Comment a note ******************************/
-/*****************************************************************************/
-
-void TL_ReceiveCommentUsr (void)
-  {
-   struct TL_Timeline Timeline;
-   long NotCod;
-
-   /***** Reset timeline context *****/
-   TL_ResetTimeline (&Timeline);
-
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Show user's profile *****/
-   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
-
-   /***** Start section *****/
-   HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
-
-   /***** Receive comment in a note
-          and write updated timeline after commenting (user) *****/
-   NotCod = TL_ReceiveComment ();
-   TL_ShowTimelineUsrHighlightingNot (&Timeline,NotCod);
-
-   /***** End section *****/
-   HTM_SECTION_End ();
-  }
-
-void TL_ReceiveCommentGbl (void)
-  {
-   struct TL_Timeline Timeline;
-   long NotCod;
-
-   /***** Initialize timeline *****/
-   TL_InitTimelineGbl (&Timeline);
-
-   /***** Receive comment in a note *****/
-   NotCod = TL_ReceiveComment ();
-
-   /***** Write updated timeline after commenting (global) *****/
-   TL_ShowTimelineGblHighlightingNot (&Timeline,NotCod);
-  }
-
-static long TL_ReceiveComment (void)
-  {
-   extern const char *Txt_The_original_post_no_longer_exists;
-   struct TL_PostContent Content;
-   struct TL_Note Not;
-   struct TL_Publication Pub;
-
-   /***** Get data of note *****/
-   Not.NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (&Not);
-
-   if (Not.NotCod > 0)
-     {
-      /***** Get the content of the comment *****/
-      Par_GetParAndChangeFormat ("Txt",Content.Txt,Cns_MAX_BYTES_LONG_TEXT,
-				 Str_TO_RIGOROUS_HTML,true);
-
-      /***** Initialize image *****/
-      Med_MediaConstructor (&Content.Media);
-
-      /***** Get attached image (action, file and title) *****/
-      Content.Media.Width   = TL_IMAGE_SAVED_MAX_WIDTH;
-      Content.Media.Height  = TL_IMAGE_SAVED_MAX_HEIGHT;
-      Content.Media.Quality = TL_IMAGE_SAVED_QUALITY;
-      Med_GetMediaFromForm (-1L,-1L,-1,&Content.Media,NULL,NULL);
-      Ale_ShowAlerts (NULL);
-
-      if (Content.Txt[0] ||			// Text not empty
-	 Content.Media.Status == Med_PROCESSED)	// A media is attached
-	{
-	 /***** Store media in filesystem and database *****/
-	 Med_RemoveKeepOrStoreMedia (-1L,&Content.Media);
-
-	 /***** Publish *****/
-	 /* Insert into publications */
-	 Pub.NotCod       = Not.NotCod;
-	 Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-	 Pub.PubType      = TL_PUB_COMMENT_TO_NOTE;
-	 TL_PublishNoteInTimeline (&Pub);	// Set Pub.PubCod
-
-	 /* Insert comment content in the database */
-	 DB_QueryINSERT ("can not store comment content",
-			 "INSERT INTO tl_comments"
-	                 " (PubCod,Txt,MedCod)"
-			 " VALUES"
-			 " (%ld,'%s',%ld)",
-			 Pub.PubCod,
-			 Content.Txt,
-			 Content.Media.MedCod);
-
-	 /***** Store notifications about the new comment *****/
-	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,Pub.PubCod);
-
-	 /***** Analyze content and store notifications about mentions *****/
-	 Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (Pub.PubCod,Content.Txt);
-	}
-
-      /***** Free image *****/
-      Med_MediaDestructor (&Content.Media);
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
-
-   return Not.NotCod;
   }
 
 /*****************************************************************************/
@@ -3322,287 +1681,10 @@ void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
   }
 
 /*****************************************************************************/
-/*********************** Request the removal of a note ***********************/
-/*****************************************************************************/
-
-void TL_RequestRemNoteUsr (void)
-  {
-   struct TL_Timeline Timeline;
-
-   /***** Reset timeline context *****/
-   TL_ResetTimeline (&Timeline);
-
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Show user's profile *****/
-   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
-
-   /***** Start section *****/
-   HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
-
-   /***** Request the removal of note *****/
-   TL_RequestRemovalNote (&Timeline);
-
-   /***** Write timeline again (user) *****/
-   TL_ShowTimelineUsr (&Timeline);
-
-   /***** End section *****/
-   HTM_SECTION_End ();
-  }
-
-void TL_RequestRemNoteGbl (void)
-  {
-   struct TL_Timeline Timeline;
-
-   /***** Initialize timeline *****/
-   TL_InitTimelineGbl (&Timeline);
-
-   /***** Request the removal of note *****/
-   TL_RequestRemovalNote (&Timeline);
-
-   /***** Write timeline again (global) *****/
-   TL_ShowNoteAndTimelineGbl (&Timeline);
-  }
-
-static void TL_RequestRemovalNote (struct TL_Timeline *Timeline)
-  {
-   extern const char *Txt_The_original_post_no_longer_exists;
-   extern const char *Txt_Do_you_really_want_to_remove_the_following_post;
-   extern const char *Txt_Remove;
-   struct TL_Note Not;
-   bool ItsMe;
-
-   /***** Get data of note *****/
-   Not.NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (&Not);
-
-   if (Not.NotCod > 0)
-     {
-      ItsMe = Usr_ItsMe (Not.UsrCod);
-      if (ItsMe)	// I am the author of this note
-	{
-	 /***** Show question and button to remove note *****/
-	 /* Start alert */
-	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_post);
-
-	 /* Show note */
-	 TL_WriteNote (Timeline,&Not,
-		       TL_TOP_MESSAGE_NONE,-1L,
-		       TL_DONT_HIGHLIGHT_NOTE,
-		       TL_SHOW_NOTE_ALONE);
-
-	 /* End alert */
-	 Timeline->NotCod = Not.NotCod;	// Note to be removed
-	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	    Ale_ShowAlertAndButton2 (ActRemTL_PubUsr,"timeline",NULL,
-	                             TL_PutParamsRemoveNote,Timeline,
-				     Btn_REMOVE_BUTTON,Txt_Remove);
-	 else
-	    Ale_ShowAlertAndButton2 (ActRemTL_PubGbl,NULL,NULL,
-	                             TL_PutParamsRemoveNote,Timeline,
-				     Btn_REMOVE_BUTTON,Txt_Remove);
-	}
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
-  }
-
-/*****************************************************************************/
-/********************* Put parameters to remove a note ***********************/
-/*****************************************************************************/
-
-static void TL_PutParamsRemoveNote (void *Timeline)
-  {
-   if (Timeline)
-     {
-      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
-      else
-	 Usr_PutHiddenParamWho (((struct TL_Timeline *) Timeline)->Who);
-      TL_PutHiddenParamNotCod (((struct TL_Timeline *) Timeline)->NotCod);
-     }
-  }
-
-/*****************************************************************************/
-/******************************* Remove a note *******************************/
-/*****************************************************************************/
-
-void TL_RemoveNoteUsr (void)
-  {
-   struct TL_Timeline Timeline;
-
-   /***** Reset timeline context *****/
-   TL_ResetTimeline (&Timeline);
-
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Show user's profile *****/
-   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
-
-   /***** Start section *****/
-   HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
-
-   /***** Remove a note *****/
-   TL_RemoveNote ();
-
-   /***** Write updated timeline after removing (user) *****/
-   TL_ShowTimelineUsr (&Timeline);
-
-   /***** End section *****/
-   HTM_SECTION_End ();
-  }
-
-void TL_RemoveNoteGbl (void)
-  {
-   struct TL_Timeline Timeline;
-
-   /***** Initialize timeline *****/
-   TL_InitTimelineGbl (&Timeline);
-
-   /***** Remove a note *****/
-   TL_RemoveNote ();
-
-   /***** Write updated timeline after removing (global) *****/
-   TL_ShowNoteAndTimelineGbl (&Timeline);
-  }
-
-static void TL_RemoveNote (void)
-  {
-   extern const char *Txt_The_original_post_no_longer_exists;
-   extern const char *Txt_TIMELINE_Post_removed;
-   struct TL_Note Not;
-   bool ItsMe;
-
-   /***** Get data of note *****/
-   Not.NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (&Not);
-
-   if (Not.NotCod > 0)
-     {
-      ItsMe = Usr_ItsMe (Not.UsrCod);
-      if (ItsMe)	// I am the author of this note
-	{
-	 /***** Delete note from database *****/
-	 TL_RemoveNoteMediaAndDBEntries (&Not);
-
-	 /***** Reset note *****/
-	 TL_ResetNote (&Not);
-
-	 /***** Message of success *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_TIMELINE_Post_removed);
-	}
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
-  }
-
-/*****************************************************************************/
-/*********************** Remove a note from database *************************/
-/*****************************************************************************/
-
-static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *Not)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long PubCod;
-   unsigned long NumComments;
-   unsigned long NumCom;
-   long MedCod;
-
-   /***** Remove comments associated to this note *****/
-   /* Get comments of this note */
-   NumComments = DB_QuerySELECT (&mysql_res,"can not get comments",
-				 "SELECT PubCod"
-				 " FROM tl_pubs"
-				 " WHERE NotCod=%ld AND PubType=%u",
-				 Not->NotCod,
-				 (unsigned) TL_PUB_COMMENT_TO_NOTE);
-
-   /* For each comment... */
-   for (NumCom = 0;
-	NumCom < NumComments;
-	NumCom++)
-     {
-      /* Get code of comment **/
-      row = mysql_fetch_row (mysql_res);
-      PubCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /* Remove media associated to comment
-	 and delete comment from database */
-      TL_RemoveCommentMediaAndDBEntries (PubCod);
-     }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Remove media associated to post *****/
-   if (Not->NoteType == TL_NOTE_POST)
-     {
-      /* Remove media associated to a post from database */
-      if (DB_QuerySELECT (&mysql_res,"can not get media",
-				 "SELECT MedCod"	// row[0]
-				 " FROM tl_posts"
-				 " WHERE PstCod=%ld",
-				 Not->Cod) == 1)   // Result should have a unique row
-        {
-	 /* Get media code */
-	 row = mysql_fetch_row (mysql_res);
-	 MedCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	 /* Remove media */
-	 Med_RemoveMedia (MedCod);
-        }
-
-      /* Free structure that stores the query result */
-      DB_FreeMySQLResult (&mysql_res);
-     }
-
-   /***** Mark possible notifications on the publications
-          of this note as removed *****/
-   /* Mark notifications of the original note as removed */
-   PubCod = TL_GetPubCodOfOriginalNote (Not->NotCod);
-   if (PubCod > 0)
-     {
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE  ,PubCod);
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
-     }
-
-   /***** Remove favs for this note *****/
-   DB_QueryDELETE ("can not remove favs for note",
-		   "DELETE FROM tl_notes_fav"
-		   " WHERE NotCod=%ld",
-		   Not->NotCod);
-
-   /***** Remove all the publications of this note *****/
-   DB_QueryDELETE ("can not remove a publication",
-		   "DELETE FROM tl_pubs"
-		   " WHERE NotCod=%ld",
-		   Not->NotCod);
-
-   /***** Remove note *****/
-   DB_QueryDELETE ("can not remove a note",
-		   "DELETE FROM tl_notes"
-	           " WHERE NotCod=%ld"
-	           " AND UsrCod=%ld",		// Extra check: I am the author
-		   Not->NotCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
-
-   if (Not->NoteType == TL_NOTE_POST)
-      /***** Remove post *****/
-      DB_QueryDELETE ("can not remove a post",
-		      "DELETE FROM tl_posts"
-		      " WHERE PstCod=%ld",
-		      Not->Cod);
-  }
-
-/*****************************************************************************/
 /*********************** Get code of note of a publication *******************/
 /*****************************************************************************/
 
-static long TL_GetNotCodFromPubCod (long PubCod)
+static long TL_Pub_GetNotCodFromPubCod (long PubCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3629,7 +1711,7 @@ static long TL_GetNotCodFromPubCod (long PubCod)
 /*************** Get code of publication of the original note ****************/
 /*****************************************************************************/
 
-long TL_GetPubCodOfOriginalNote (long NotCod)
+long TL_Not_GetPubCodOfOriginalNote (long NotCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3650,251 +1732,6 @@ long TL_GetPubCodOfOriginalNote (long NotCod)
    DB_FreeMySQLResult (&mysql_res);
 
    return OriginalPubCod;
-  }
-
-/*****************************************************************************/
-/**************** Request the removal of a comment in a note *****************/
-/*****************************************************************************/
-
-void TL_RequestRemComUsr (void)
-  {
-   struct TL_Timeline Timeline;
-
-   /***** Reset timeline context *****/
-   TL_ResetTimeline (&Timeline);
-
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Show user's profile *****/
-   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
-
-   /***** Start section *****/
-   HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
-
-   /***** Request the removal of comment in note *****/
-   TL_RequestRemovalComment (&Timeline);
-
-   /***** Write timeline again (user) *****/
-   TL_ShowTimelineUsr (&Timeline);
-
-   /***** End section *****/
-   HTM_SECTION_End ();
-  }
-
-void TL_RequestRemComGbl (void)
-  {
-   struct TL_Timeline Timeline;
-
-   /***** Initialize timeline *****/
-   TL_InitTimelineGbl (&Timeline);
-
-   /***** Request the removal of comment in note *****/
-   TL_RequestRemovalComment (&Timeline);
-
-   /***** Write timeline again (global) *****/
-   TL_ShowNoteAndTimelineGbl (&Timeline);
-  }
-
-static void TL_RequestRemovalComment (struct TL_Timeline *Timeline)
-  {
-   extern const char *Txt_The_comment_no_longer_exists;
-   extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
-   extern const char *Txt_Remove;
-   struct TL_Comment Com;
-   bool ItsMe;
-
-   /***** Initialize image *****/
-   Med_MediaConstructor (&Com.Content.Media);
-
-   /***** Get data of comment *****/
-   Com.PubCod = TL_GetParamPubCod ();
-   TL_GetDataOfCommByCod (&Com);
-
-   if (Com.PubCod > 0)
-     {
-      ItsMe = Usr_ItsMe (Com.UsrCod);
-      if (ItsMe)	// I am the author of this comment
-	{
-	 /***** Show question and button to remove comment *****/
-	 /* Start alert */
-	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_comment);
-
-	 /* Show comment */
-	 TL_WriteComment (Timeline,&Com,
-			  TL_TOP_MESSAGE_NONE,-1L,
-			  true);	// Alone
-
-	 /* End alert */
-	 Timeline->PubCod = Com.PubCod;	// Publication to be removed
-	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	    Ale_ShowAlertAndButton2 (ActRemTL_ComUsr,"timeline",NULL,
-	                             TL_PutParamsRemoveComment,Timeline,
-				     Btn_REMOVE_BUTTON,Txt_Remove);
-	 else
-	    Ale_ShowAlertAndButton2 (ActRemTL_ComGbl,NULL,NULL,
-	                             TL_PutParamsRemoveComment,Timeline,
-				     Btn_REMOVE_BUTTON,Txt_Remove);
-	}
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
-
-   /***** Free image *****/
-   Med_MediaDestructor (&Com.Content.Media);
-  }
-
-/*****************************************************************************/
-/******************** Put parameters to remove a comment *********************/
-/*****************************************************************************/
-
-static void TL_PutParamsRemoveComment (void *Timeline)
-  {
-   if (Timeline)
-     {
-      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
-      else
-	 Usr_PutHiddenParamWho (((struct TL_Timeline *) Timeline)->Who);
-      TL_PutHiddenParamPubCod (((struct TL_Timeline *) Timeline)->PubCod);
-     }
-  }
-
-/*****************************************************************************/
-/***************************** Remove a comment ******************************/
-/*****************************************************************************/
-
-void TL_RemoveComUsr (void)
-  {
-   struct TL_Timeline Timeline;
-
-   /***** Reset timeline context *****/
-   TL_ResetTimeline (&Timeline);
-
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Show user's profile *****/
-   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
-
-   /***** Start section *****/
-   HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
-
-   /***** Remove a comment *****/
-   TL_RemoveComment ();
-
-   /***** Write updated timeline after removing (user) *****/
-   TL_ShowTimelineUsr (&Timeline);
-
-   /***** End section *****/
-   HTM_SECTION_End ();
-  }
-
-void TL_RemoveComGbl (void)
-  {
-   struct TL_Timeline Timeline;
-
-   /***** Initialize timeline *****/
-   TL_InitTimelineGbl (&Timeline);
-
-   /***** Remove a comment *****/
-   TL_RemoveComment ();
-
-   /***** Write updated timeline after removing (global) *****/
-   TL_ShowNoteAndTimelineGbl (&Timeline);
-  }
-
-static void TL_RemoveComment (void)
-  {
-   extern const char *Txt_The_comment_no_longer_exists;
-   extern const char *Txt_Comment_removed;
-   struct TL_Comment Com;
-   bool ItsMe;
-
-   /***** Initialize image *****/
-   Med_MediaConstructor (&Com.Content.Media);
-
-   /***** Get data of comment *****/
-   Com.PubCod = TL_GetParamPubCod ();
-   TL_GetDataOfCommByCod (&Com);
-
-   if (Com.PubCod > 0)
-     {
-      ItsMe = Usr_ItsMe (Com.UsrCod);
-      if (ItsMe)	// I am the author of this comment
-	{
-	 /***** Remove media associated to comment
-	        and delete comment from database *****/
-	 TL_RemoveCommentMediaAndDBEntries (Com.PubCod);
-
-	 /***** Reset fields of comment *****/
-	 TL_ResetComment (&Com);
-
-	 /***** Message of success *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_Comment_removed);
-	}
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
-
-   /***** Free image *****/
-   Med_MediaDestructor (&Com.Content.Media);
-  }
-
-/*****************************************************************************/
-/*************** Remove comment media and database entries *******************/
-/*****************************************************************************/
-
-static void TL_RemoveCommentMediaAndDBEntries (long PubCod)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long MedCod;
-
-   /***** Remove media associated to comment *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get media",
-		       "SELECT MedCod"	// row[0]
-		       " FROM tl_comments"
-		       " WHERE PubCod=%ld",
-		       PubCod) == 1)   // Result should have a unique row
-     {
-      /* Get media code */
-      row = mysql_fetch_row (mysql_res);
-      MedCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /* Remove media */
-      Med_RemoveMedia (MedCod);
-     }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Mark possible notifications on this comment as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,PubCod);
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
-
-   /***** Remove favs for this comment *****/
-   DB_QueryDELETE ("can not remove favs for comment",
-		   "DELETE FROM tl_comments_fav"
-		   " WHERE PubCod=%ld",
-		   PubCod);
-
-   /***** Remove content of this comment *****/
-   DB_QueryDELETE ("can not remove a comment",
-		   "DELETE FROM tl_comments"
-		   " WHERE PubCod=%ld",
-		   PubCod);
-
-   /***** Remove this comment *****/
-   DB_QueryDELETE ("can not remove a comment",
-		   "DELETE FROM tl_pubs"
-	           " WHERE PubCod=%ld"
-	           " AND PublisherCod=%ld"	// Extra check: I am the author
-	           " AND PubType=%u",		// Extra check: it's a comment
-		   PubCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (unsigned) TL_PUB_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -4148,87 +1985,6 @@ void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
   }
 
 /*****************************************************************************/
-/******************** Get data of note using its code ************************/
-/*****************************************************************************/
-
-void TL_GetDataOfNoteByCod (struct TL_Note *Not)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   if (Not->NotCod > 0)
-     {
-      /***** Get data of note from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get data of note",
-			  "SELECT NotCod,"			// row[0]
-				 "NoteType,"			// row[1]
-				 "Cod,"				// row[2]
-				 "UsrCod,"			// row[3]
-				 "HieCod,"			// row[4]
-				 "Unavailable,"			// row[5]
-				 "UNIX_TIMESTAMP(TimeNote)"	// row[6]
-			  " FROM tl_notes"
-			  " WHERE NotCod=%ld",
-			  Not->NotCod))
-	{
-	 /***** Get data of note *****/
-	 row = mysql_fetch_row (mysql_res);
-	 TL_GetDataOfNoteFromRow (row,Not);
-	}
-      else
-	 /***** Reset fields of note *****/
-	 TL_ResetNote (Not);
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-   else
-      /***** Reset fields of note *****/
-      TL_ResetNote (Not);
-  }
-
-/*****************************************************************************/
-/******************* Get data of comment using its code **********************/
-/*****************************************************************************/
-
-void TL_GetDataOfCommByCod (struct TL_Comment *Com)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   if (Com->PubCod > 0)
-     {
-      /***** Get data of comment from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get data of comment",
-			  "SELECT tl_pubs.PubCod,"			// row[0]
-				 "tl_pubs.PublisherCod,"		// row[1]
-				 "tl_pubs.NotCod,"			// row[2]
-				 "UNIX_TIMESTAMP(tl_pubs.TimePublish),"	// row[3]
-				 "tl_comments.Txt,"			// row[4]
-				 "tl_comments.MedCod"			// row[5]
-			  " FROM tl_pubs,tl_comments"
-			  " WHERE tl_pubs.PubCod=%ld"
-			  " AND tl_pubs.PubType=%u"
-			  " AND tl_pubs.PubCod=tl_comments.PubCod",
-			  Com->PubCod,(unsigned) TL_PUB_COMMENT_TO_NOTE))
-	{
-	 /***** Get data of comment *****/
-	 row = mysql_fetch_row (mysql_res);
-	 TL_GetDataOfCommentFromRow (row,Com);
-	}
-      else
-	 /***** Reset fields of comment *****/
-	 TL_ResetComment (Com);
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-   else
-      /***** Reset fields of comment *****/
-      TL_ResetComment (Com);
-  }
-
-/*****************************************************************************/
 /***************** Get data of publication using its code ********************/
 /*****************************************************************************/
 
@@ -4268,49 +2024,6 @@ static void TL_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
   }
 
 /*****************************************************************************/
-/************************ Get data of note from row **************************/
-/*****************************************************************************/
-
-static void TL_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Note *Not)
-  {
-   /*
-   row[0]: NotCod
-   row[1]: NoteType
-   row[2]: Cod
-   row[3]: UsrCod
-   row[4]: HieCod
-   row[5]: Unavailable
-   row[5]: UNIX_TIMESTAMP(TimeNote)
-   */
-   /***** Get code (row[0]) *****/
-   Not->NotCod      = Str_ConvertStrCodToLongCod (row[0]);
-
-   /***** Get note type (row[1]) *****/
-   Not->NoteType    = TL_GetNoteTypeFromStr ((const char *) row[1]);
-
-   /***** Get file/post... code (row[2]) *****/
-   Not->Cod         = Str_ConvertStrCodToLongCod (row[2]);
-
-   /***** Get (from) user code (row[3]) *****/
-   Not->UsrCod      = Str_ConvertStrCodToLongCod (row[3]);
-
-   /***** Get hierarchy code (row[4]) *****/
-   Not->HieCod      = Str_ConvertStrCodToLongCod (row[4]);
-
-   /***** File/post... unavailable (row[5]) *****/
-   Not->Unavailable = (row[5][0] == 'Y');
-
-   /***** Get time of the note (row[6]) *****/
-   Not->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[6]);
-
-   /***** Get number of times this note has been shared *****/
-   TL_Sha_UpdateNumTimesANoteHasBeenShared (Not);
-
-   /***** Get number of times this note has been favourited *****/
-   TL_Fav_GetNumTimesANoteHasBeenFav (Not);
-  }
-
-/*****************************************************************************/
 /******* Get publication type from string number coming from database ********/
 /*****************************************************************************/
 
@@ -4326,98 +2039,16 @@ static TL_PubType_t TL_GetPubTypeFromStr (const char *Str)
   }
 
 /*****************************************************************************/
-/********* Get note type from string number coming from database *************/
-/*****************************************************************************/
-
-static TL_NoteType_t TL_GetNoteTypeFromStr (const char *Str)
-  {
-   unsigned UnsignedNum;
-
-   if (sscanf (Str,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < TL_NUM_NOTE_TYPES)
-         return (TL_NoteType_t) UnsignedNum;
-
-   return TL_NOTE_UNKNOWN;
-  }
-
-/*****************************************************************************/
-/********************** Get data of comment from row *************************/
-/*****************************************************************************/
-
-static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *Com)
-  {
-   /*
-   row[0]: PubCod
-   row[1]: PublisherCod
-   row[2]: NotCod
-   row[3]: TimePublish
-   row[4]: Txt
-   row[5]: MedCod
-   */
-   /***** Get code of comment (row[0]) *****/
-   Com->PubCod      = Str_ConvertStrCodToLongCod (row[0]);
-
-   /***** Get (from) user code (row[1]) *****/
-   Com->UsrCod      = Str_ConvertStrCodToLongCod (row[1]);
-
-   /***** Get code of note (row[2]) *****/
-   Com->NotCod      = Str_ConvertStrCodToLongCod (row[2]);
-
-   /***** Get time of the note (row[3]) *****/
-   Com->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[3]);
-
-   /***** Get text content (row[4]) *****/
-   Str_Copy (Com->Content.Txt,row[4],
-             Cns_MAX_BYTES_LONG_TEXT);
-
-   /***** Get number of times this comment has been favourited *****/
-   TL_Fav_GetNumTimesACommHasBeenFav (Com);
-
-   /***** Get media content (row[5]) *****/
-   Com->Content.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
-   Med_GetMediaDataByCod (&Com->Content.Media);
-  }
-
-/*****************************************************************************/
 /************************ Reset fields of publication ************************/
 /*****************************************************************************/
 
-static void TL_ResetPublication (struct TL_Publication *Pub)
+static void TL_Pub_ResetPublication (struct TL_Publication *Pub)
   {
    Pub->PubCod       = -1L;
    Pub->NotCod       = -1L;
    Pub->PublisherCod = -1L;
    Pub->PubType      = TL_PUB_UNKNOWN;
    Pub->TopMessage   = TL_TOP_MESSAGE_NONE;
-  }
-
-/*****************************************************************************/
-/*************************** Reset fields of note ****************************/
-/*****************************************************************************/
-
-static void TL_ResetNote (struct TL_Note *Not)
-  {
-   Not->NotCod      = -1L;
-   Not->NoteType    = TL_NOTE_UNKNOWN;
-   Not->UsrCod      = -1L;
-   Not->HieCod      = -1L;
-   Not->Cod         = -1L;
-   Not->Unavailable = false;
-   Not->DateTimeUTC = (time_t) 0;
-   Not->NumShared   = 0;
-  }
-
-/*****************************************************************************/
-/************************** Reset fields of comment **************************/
-/*****************************************************************************/
-
-static void TL_ResetComment (struct TL_Comment *Com)
-  {
-   Com->PubCod      = -1L;
-   Com->UsrCod      = -1L;
-   Com->NotCod      = -1L;
-   Com->DateTimeUTC = (time_t) 0;
-   Com->Content.Txt[0]  = '\0';
   }
 
 /*****************************************************************************/
@@ -4446,37 +2077,6 @@ static void TL_ClearTimelineThisSession (void)
   }
 
 /*****************************************************************************/
-/****** Add just retrieved notes to current timeline for this session ********/
-/*****************************************************************************/
-
-static void TL_AddNotesJustRetrievedToTimelineThisSession (void)
-  {
-   /* tl_timelines contains the distinct notes in timeline of each open session:
-mysql> SELECT SessionId,COUNT(*) FROM tl_timelines GROUP BY SessionId;
-+---------------------------------------------+----------+
-| SessionId                                   | COUNT(*) |
-+---------------------------------------------+----------+
-| u-X-R3gKki7eKMXrNCP8bGhwOAZuVngRy7FNGZFMKzI |       52 | --> 52 distinct notes
-| u1CoqL1YWl3_hR4wk4bI7vhnc-uRcCmIDyKYAgBB6kk |       10 |
-| u8xqamzkorHfY4BvYRMXjNhzHvQyigZUZemO0YiMn48 |       10 |
-| u_n2V_L3KrFjnd4SqZk0gxMFwZHRuWZ8_EIVTU9sdpI |       10 |
-| V6pGe1kGGS_uO5i__waqXKnuDkPYaDZHNAYr-Zv-GJQ |        2 |
-| vqDRz-iiM8v10Dl8ThwqIqmDRIklz8szJaqflwXZucs |       10 |
-| w11juqKPx6lg-f_pL2ZBYqlagU1mEepSvvk9L3gDGac |       10 | --> 10 distinct notes
-| wLg4e8KQljCcVuFWIkJjNeti89kAiwOZ3iyXdzm_eDk |       10 |
-| wnU85YrwJHhZGWIZhd7LQfQTPrclIWHfMF3DcB-Rcgw |        4 |
-| wRzRJFnHfzW61fZYnvMIaMRlkuWUeEyqXVQ6JeWA32k |       11 |
-+---------------------------------------------+----------+
-10 rows in set (0,01 sec)
-   */
-   DB_QueryINSERT ("can not insert notes in timeline",
-		   "INSERT IGNORE INTO tl_timelines"
-	           " (SessionId,NotCod)"
-	           " SELECT '%s',NotCod FROM tl_tmp_just_retrieved_notes",
-		   Gbl.Session.Id);
-  }
-
-/*****************************************************************************/
 /***************** Get notification of a new publication *********************/
 /*****************************************************************************/
 
@@ -4487,7 +2087,7 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct TL_Publication Pub;
-   struct TL_Note Not;
+   struct TL_Not_Note Not;
    struct TL_PostContent Content;
    size_t Length;
    bool ContentCopied = false;
@@ -4520,7 +2120,7 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       case TL_PUB_SHARED_NOTE:
 	 /* Get data of note */
 	 Not.NotCod = Pub.NotCod;
-	 TL_GetDataOfNoteByCod (&Not);
+	 TL_Not_GetDataOfNoteByCod (&Not);
 
 	 if (Not.NoteType == TL_NOTE_POST)
 	   {
@@ -4560,7 +2160,7 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	              Ntf_MAX_BYTES_SUMMARY);
 	   }
 	 else
-	    TL_GetNoteSummary (&Not,SummaryStr);
+	    TL_Not_GetNoteSummary (&Not,SummaryStr);
 	 break;
       case TL_PUB_COMMENT_TO_NOTE:
 	 /***** Get content of post from database *****/

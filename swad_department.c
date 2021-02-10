@@ -530,7 +530,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
    extern const char *Txt_Another_institution;
    unsigned NumDpt;
    struct Dpt_Department *Dpt;
-   struct Instit Ins;
+   struct Ins_Instit Ins;
    unsigned NumIns;
 
    /***** Begin table *****/

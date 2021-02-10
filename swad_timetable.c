@@ -1492,7 +1492,7 @@ static void TT_TimeTableDrawCell (const struct TT_Timetable *Timetable,
    char *ColSpanStr;
    char *ClassStr;
    TT_ClassType_t CT;
-   struct Course Crs;
+   struct Crs_Course Crs;
    struct GroupType *GrpTyp;
    struct Group *Grp;
    char *Room;

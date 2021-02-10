@@ -154,7 +154,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void);
 unsigned long Rec_GetFieldFromCrsRecord (long UsrCod,long FieldCod,MYSQL_RES **mysql_res);
 void Rec_GetFieldsCrsRecordFromForm (void);
 void Rec_UpdateCrsRecord (long UsrCod);
-void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Course *Crs);
+void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Crs_Course *Crs);
 void Rec_RemoveFieldsCrsRecordAll (long UsrCod);
 void Rec_AllocMemFieldsRecordsCrs (void);
 void Rec_FreeMemFieldsRecordsCrs (void);

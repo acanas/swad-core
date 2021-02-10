@@ -321,10 +321,10 @@ void Ntf_ShowMyNotifications (void)
    bool AllNotifications;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
    struct UsrData UsrDat;
-   struct Instit Ins;
-   struct Centre Ctr;
-   struct Degree Deg;
-   struct Course Crs;
+   struct Ins_Instit Ins;
+   struct Ctr_Centre Ctr;
+   struct Deg_Degree Deg;
+   struct Crs_Course Crs;
    long Cod;
    struct For_Forums Forums;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
@@ -1584,10 +1584,10 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    Lan_Language_t ToUsrLanguage;
    struct UsrData FromUsrDat;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
-   struct Instit Ins;
-   struct Centre Ctr;
-   struct Degree Deg;
-   struct Course Crs;
+   struct Ins_Instit Ins;
+   struct Ctr_Centre Ctr;
+   struct Deg_Degree Deg;
+   struct Crs_Course Crs;
    long Cod;
    struct For_Forum ForumSelected;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];

@@ -282,7 +282,7 @@ static void InsCfg_Map (void)
    unsigned Zoom;
    unsigned NumCtrs;
    unsigned NumCtr;
-   struct Centre Ctr;
+   struct Ctr_Centre Ctr;
 
    /***** Leaflet CSS *****/
    Map_LeafletCSS ();

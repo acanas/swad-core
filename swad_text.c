@@ -92,6 +92,7 @@
 #include "swad_test.h"
 #include "swad_test_visibility.h"
 #include "swad_timeline.h"
+#include "swad_timeline_note.h"
 #include "swad_timetable.h"
 #include "swad_user.h"
 
@@ -52546,7 +52547,7 @@ const char *Txt_Timeline_OF_A_USER =	// Warning: it is very important to include
 #endif
 
 
-const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
+const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	{
 	[TL_NOTE_UNKNOWN] =
 #if   L==1	// ca

@@ -67,14 +67,14 @@ typedef enum
 /**************************** Private variables ******************************/
 /*****************************************************************************/
 
-static struct Degree *Deg_EditingDeg = NULL;	// Static variable to keep the degree being edited
+static struct Deg_Degree *Deg_EditingDeg = NULL;	// Static variable to keep the degree being edited
 
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
 static void Deg_ListDegreesForEdition (void);
-static bool Deg_CheckIfICanEditADegree (struct Degree *Deg);
+static bool Deg_CheckIfICanEditADegree (struct Deg_Degree *Deg);
 static Deg_StatusTxt_t Deg_GetStatusTxtFromStatusBits (Deg_Status_t Status);
 static Deg_Status_t Deg_GetStatusBitsFromStatusTxt (Deg_StatusTxt_t StatusTxt);
 static void Deg_PutFormToCreateDegree (void);
@@ -86,7 +86,7 @@ static void Deg_ListDegrees (void);
 static bool Deg_CheckIfICanCreateDegrees (void);
 static void Deg_PutIconsListingDegrees (__attribute__((unused)) void *Args);
 static void Deg_PutIconToEditDegrees (void);
-static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
+static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg);
 
 static void Deg_EditDegreesInternal (void);
 static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args);
@@ -94,7 +94,7 @@ static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args);
 static void Deg_ReceiveFormRequestOrCreateDeg (unsigned Status);
 static void Deg_PutParamOtherDegCod (void *DegCod);
 
-static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
+static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row);
 
 static void Deg_UpdateDegNameDB (long DegCod,const char *FieldName,const char *NewDegName);
 
@@ -119,7 +119,7 @@ void Deg_SeeDegWithPendingCrss (void)
    MYSQL_ROW row;
    unsigned NumDegs;
    unsigned NumDeg;
-   struct Degree Deg;
+   struct Deg_Degree Deg;
    const char *BgColor;
 
    /***** Get degrees with pending courses *****/
@@ -217,7 +217,7 @@ void Deg_SeeDegWithPendingCrss (void)
 /******************** Draw degree logo and name with link ********************/
 /*****************************************************************************/
 
-void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
+void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Action,
                                         const char *ClassLink,const char *ClassLogo)
   {
    /***** Begin form *****/
@@ -338,7 +338,7 @@ static void Deg_ListDegreesForEdition (void)
    extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
    unsigned NumDeg;
    struct DegreeType *DegTyp;
-   struct Degree *Deg;
+   struct Deg_Degree *Deg;
    unsigned NumDegTyp;
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct UsrData UsrDat;
@@ -527,7 +527,7 @@ static void Deg_ListDegreesForEdition (void)
 /************** Check if I can edit, remove, etc. a degree *******************/
 /*****************************************************************************/
 
-static bool Deg_CheckIfICanEditADegree (struct Degree *Deg)
+static bool Deg_CheckIfICanEditADegree (struct Deg_Degree *Deg)
   {
    return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||		// I am a centre administrator or higher
                   ((Deg->Status & Deg_STATUS_BIT_PENDING) != 0 &&	// Degree is not yet activated
@@ -875,7 +875,7 @@ static void Deg_PutIconToEditDegrees (void)
 /************************ List one degree for seeing *************************/
 /*****************************************************************************/
 
-static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
+static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
   {
    extern const char *Txt_DEGREE_With_courses;
    extern const char *Txt_DEGREE_Without_courses;
@@ -1080,7 +1080,7 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
    if (Degs->Num) // Degrees found...
      {
       /***** Create list with degrees *****/
-      if ((Degs->Lst = (struct Degree *) calloc (Degs->Num,sizeof (struct Degree))) == NULL)
+      if ((Degs->Lst = (struct Deg_Degree *) calloc (Degs->Num,sizeof (struct Deg_Degree))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the degrees *****/
@@ -1110,7 +1110,7 @@ void Deg_GetListDegsInCurrentCtr (void)
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned NumDeg;
-   struct Degree *Deg;
+   struct Deg_Degree *Deg;
 
    /***** Get degrees of the current centre from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get degrees of a centre",
@@ -1125,8 +1125,8 @@ void Deg_GetListDegsInCurrentCtr (void)
       Gbl.Hierarchy.Degs.Num = (unsigned) NumRows;
 
       /***** Create list with degrees of this centre *****/
-      if ((Gbl.Hierarchy.Degs.Lst = (struct Degree *) calloc (Gbl.Hierarchy.Degs.Num,
-                                                                  sizeof (struct Degree))) == NULL)
+      if ((Gbl.Hierarchy.Degs.Lst = (struct Deg_Degree *) calloc (Gbl.Hierarchy.Degs.Num,
+                                                                  sizeof (struct Deg_Degree))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the degrees of this centre *****/
@@ -1323,7 +1323,7 @@ long Deg_GetAndCheckParamOtherDegCod (long MinCodAllowed)
 /*****************************************************************************/
 // Returns true if degree found
 
-bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
+bool Deg_GetDataOfDegreeByCod (struct Deg_Degree *Deg)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1367,7 +1367,7 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
 /********** Get data of a degree from a row resulting of a query *************/
 /*****************************************************************************/
 
-static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row)
+static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row)
   {
    /***** Get degree code (row[0]) *****/
    if ((Deg->DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
@@ -1403,7 +1403,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row)
 /************* Get the short name of a degree from its code ******************/
 /*****************************************************************************/
 
-void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg)
+void Deg_GetShortNameOfDegreeByCod (struct Deg_Degree *Deg)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1588,7 +1588,7 @@ void Deg_RenameDegreeFull (void)
 /************************ Change the name of a degree ************************/
 /*****************************************************************************/
 
-void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
+void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_name_of_the_degree_X_has_changed_to_Y;
@@ -2124,7 +2124,7 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
    extern const char *Txt_degrees;
    MYSQL_ROW row;
    unsigned NumDeg;
-   struct Degree Deg;
+   struct Deg_Degree Deg;
 
    /***** Query database *****/
    if (NumDegs)
@@ -2178,7 +2178,7 @@ static void Deg_EditingDegreeConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing degree.");
 
    /***** Allocate memory for degree *****/
-   if ((Deg_EditingDeg = (struct Degree *) malloc (sizeof (struct Degree))) == NULL)
+   if ((Deg_EditingDeg = (struct Deg_Degree *) malloc (sizeof (struct Deg_Degree))) == NULL)
       Lay_ShowErrorAndExit ("Error allocating memory for degree.");
 
    /***** Reset degree *****/

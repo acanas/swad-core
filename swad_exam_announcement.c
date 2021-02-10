@@ -45,6 +45,7 @@
 #include "swad_RSS.h"
 #include "swad_string.h"
 #include "swad_timeline.h"
+#include "swad_timeline_note.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -378,7 +379,7 @@ void ExaAnn_ReceiveExamAnn2 (void)
       ExaAnn_UpdateNumUsrsNotifiedByEMailAboutExamAnn (ExamAnns->HighlightExaCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new exam announcement *****/
-   TL_StoreAndPublishNote (TL_NOTE_EXAM_ANNOUNCEMENT,ExamAnns->HighlightExaCod);
+   TL_Not_StoreAndPublishNote (TL_NOTE_EXAM_ANNOUNCEMENT,ExamAnns->HighlightExaCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
@@ -496,7 +497,7 @@ void ExaAnn_RemoveExamAnn1 (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExaCod);
 
    /***** Mark possible social note as unavailable *****/
-   TL_MarkNoteAsUnavailable (TL_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
+   TL_Not_MarkNoteAsUnavailable (TL_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
@@ -1085,7 +1086,7 @@ static void ExaAnn_ShowExamAnn (struct ExaAnn_ExamAnnouncements *ExamAnns,
    extern const char *Txt_minute;
    extern const char *Txt_minutes;
    extern const char *Txt_Publish_announcement_OF_EXAM;
-   struct Instit Ins;
+   struct Ins_Instit Ins;
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
    unsigned Year;
    unsigned Hour;
@@ -1761,9 +1762,9 @@ static void ExaAnn_GetNotifContentExamAnn (const struct ExaAnn_ExamAnnouncements
    extern const char *Txt_EXAM_ANNOUNCEMENT_Material_allowed;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Other_information;
    extern const char *Txt_hours_ABBREVIATION;
-   struct Course Crs;
-   struct Degree Deg;
-   struct Instit Ins;
+   struct Crs_Course Crs;
+   struct Deg_Degree Deg;
+   struct Ins_Instit Ins;
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
 
    /***** Get data of course *****/

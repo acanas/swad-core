@@ -539,7 +539,7 @@ static void Rep_WriteSectionUsrInfo (void)
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
    char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
-   struct Instit Ins;
+   struct Ins_Instit Ins;
 
    /***** Start section *****/
    fprintf (Gbl.F.Rep,"<section>"
@@ -1160,8 +1160,8 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
    extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_unknown_removed_course;
    extern const char *Txt_no_course_selected;
-   struct Course Crs;
-   struct Degree Deg;
+   struct Crs_Course Crs;
+   struct Deg_Degree Deg;
 
    /***** Get course data *****/
    Crs.CrsCod = CrsCod;

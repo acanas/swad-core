@@ -62,7 +62,7 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Centre *Ctr_EditingCtr = NULL;	// Static variable to keep the centre being edited
+static struct Ctr_Centre *Ctr_EditingCtr = NULL;	// Static variable to keep the centre being edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -72,16 +72,16 @@ static void Ctr_ListCentres (void);
 static bool Ctr_CheckIfICanCreateCentres (void);
 static void Ctr_PutIconsListingCentres (__attribute__((unused)) void *Args);
 static void Ctr_PutIconToEditCentres (void);
-static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr);
+static void Ctr_ListOneCentreForSeeing (struct Ctr_Centre *Ctr,unsigned NumCtr);
 static void Ctr_GetParamCtrOrder (void);
 
 static void Ctr_EditCentresInternal (void);
 static void Ctr_PutIconsEditingCentres (__attribute__((unused)) void *Args);
 
-static void Ctr_GetDataOfCentreFromRow (struct Centre *Ctr,MYSQL_ROW row);
+static void Ctr_GetDataOfCentreFromRow (struct Ctr_Centre *Ctr,MYSQL_ROW row);
 
 static void Ctr_ListCentresForEdition (const struct Plc_Places *Places);
-static bool Ctr_CheckIfICanEditACentre (struct Centre *Ctr);
+static bool Ctr_CheckIfICanEditACentre (struct Ctr_Centre *Ctr);
 static Ctr_StatusTxt_t Ctr_GetStatusTxtFromStatusBits (Ctr_Status_t Status);
 static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
 
@@ -103,7 +103,7 @@ static unsigned Ctr_GetNumCtrsInCty (long CtyCod);
 static void Ctr_EditingCentreConstructor (void);
 static void Ctr_EditingCentreDestructor (void);
 
-static void Ctr_FormToGoToMap (struct Centre *Ctr);
+static void Ctr_FormToGoToMap (struct Ctr_Centre *Ctr);
 
 /*****************************************************************************/
 /******************* List centres with pending degrees ***********************/
@@ -120,7 +120,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
    MYSQL_ROW row;
    unsigned NumCtrs;
    unsigned NumCtr;
-   struct Centre Ctr;
+   struct Ctr_Centre Ctr;
    const char *BgColor;
 
    /***** Get centres with pending degrees *****/
@@ -214,7 +214,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 /******************** Draw centre logo and name with link ********************/
 /*****************************************************************************/
 
-void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
+void Ctr_DrawCentreLogoAndNameWithLink (struct Ctr_Centre *Ctr,Act_Action_t Action,
                                         const char *ClassLink,const char *ClassLogo)
   {
    /***** Begin form *****/
@@ -356,7 +356,7 @@ static void Ctr_PutIconToEditCentres (void)
 /************************* List one centre for seeing ************************/
 /*****************************************************************************/
 
-static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
+static void Ctr_ListOneCentreForSeeing (struct Ctr_Centre *Ctr,unsigned NumCtr)
   {
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
    struct Plc_Place Plc;
@@ -544,7 +544,7 @@ void Ctr_GetBasicListOfCentres (long InsCod)
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned NumCtr;
-   struct Centre *Ctr;
+   struct Ctr_Centre *Ctr;
 
    /***** Get centres from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get centres",
@@ -570,8 +570,8 @@ void Ctr_GetBasicListOfCentres (long InsCod)
       Gbl.Hierarchy.Ctrs.Num = (unsigned) NumRows;
 
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.Ctrs.Lst = (struct Centre *) calloc (NumRows,
-								  sizeof (struct Centre))) == NULL)
+      if ((Gbl.Hierarchy.Ctrs.Lst = (struct Ctr_Centre *) calloc (NumRows,
+								  sizeof (struct Ctr_Centre))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the centres *****/
@@ -612,7 +612,7 @@ void Ctr_GetFullListOfCentres (long InsCod)
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned NumCtr;
-   struct Centre *Ctr;
+   struct Ctr_Centre *Ctr;
 
    /***** Get centres from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get centres",
@@ -659,8 +659,8 @@ void Ctr_GetFullListOfCentres (long InsCod)
       Gbl.Hierarchy.Ctrs.Num = (unsigned) NumRows;
 
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.Ctrs.Lst = (struct Centre *) calloc (NumRows,
-								  sizeof (struct Centre))) == NULL)
+      if ((Gbl.Hierarchy.Ctrs.Lst = (struct Ctr_Centre *) calloc (NumRows,
+								  sizeof (struct Ctr_Centre))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the centres *****/
@@ -691,7 +691,7 @@ void Ctr_GetFullListOfCentres (long InsCod)
 /************************ Get data of centre by code *************************/
 /*****************************************************************************/
 
-bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
+bool Ctr_GetDataOfCentreByCod (struct Ctr_Centre *Ctr)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -748,7 +748,7 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
 /********** Get data of a centre from a row resulting of a query *************/
 /*****************************************************************************/
 
-static void Ctr_GetDataOfCentreFromRow (struct Centre *Ctr,MYSQL_ROW row)
+static void Ctr_GetDataOfCentreFromRow (struct Ctr_Centre *Ctr,MYSQL_ROW row)
   {
    /***** Get centre code (row[0]) *****/
    if ((Ctr->CtrCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
@@ -822,7 +822,7 @@ long Ctr_GetInsCodOfCentreByCod (long CtrCod)
 /*************** Get the short name of a centre from its code ****************/
 /*****************************************************************************/
 
-void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr)
+void Ctr_GetShortNameOfCentreByCod (struct Ctr_Centre *Ctr)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -937,7 +937,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
    unsigned NumCtr;
-   struct Centre *Ctr;
+   struct Ctr_Centre *Ctr;
    unsigned NumPlc;
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct UsrData UsrDat;
@@ -1135,7 +1135,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
 /************** Check if I can edit, remove, etc. a centre *******************/
 /*****************************************************************************/
 
-static bool Ctr_CheckIfICanEditACentre (struct Centre *Ctr)
+static bool Ctr_CheckIfICanEditACentre (struct Ctr_Centre *Ctr)
   {
    return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||		// I am an institution administrator or higher
                   ((Ctr->Status & Ctr_STATUS_BIT_PENDING) != 0 &&	// Centre is not yet activated
@@ -1361,7 +1361,7 @@ void Ctr_RenameCentreFull (void)
 /************************ Change the name of a centre ************************/
 /*****************************************************************************/
 
-void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName)
+void Ctr_RenameCentre (struct Ctr_Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_centre_X_already_exists;
    extern const char *Txt_The_centre_X_has_been_renamed_as_Y;
@@ -2224,7 +2224,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
    extern const char *Txt_centres;
    MYSQL_ROW row;
    unsigned NumCtr;
-   struct Centre Ctr;
+   struct Ctr_Centre Ctr;
 
    /***** Query database *****/
    if (NumCtrs)
@@ -2278,7 +2278,7 @@ static void Ctr_EditingCentreConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing centre.");
 
    /***** Allocate memory for centre *****/
-   if ((Ctr_EditingCtr = (struct Centre *) malloc (sizeof (struct Centre))) == NULL)
+   if ((Ctr_EditingCtr = (struct Ctr_Centre *) malloc (sizeof (struct Ctr_Centre))) == NULL)
       Lay_ShowErrorAndExit ("Error allocating memory for centre.");
 
    /***** Reset centre *****/
@@ -2306,7 +2306,7 @@ static void Ctr_EditingCentreDestructor (void)
 /************************ Form to go to centre map ***************************/
 /*****************************************************************************/
 
-static void Ctr_FormToGoToMap (struct Centre *Ctr)
+static void Ctr_FormToGoToMap (struct Ctr_Centre *Ctr)
   {
    extern const char *Txt_Map;
 
@@ -2324,7 +2324,7 @@ static void Ctr_FormToGoToMap (struct Centre *Ctr)
 /************************ Check if a centre has map **************************/
 /*****************************************************************************/
 
-bool Ctr_GetIfMapIsAvailable (const struct Centre *Ctr)
+bool Ctr_GetIfMapIsAvailable (const struct Ctr_Centre *Ctr)
   {
    /***** Coordinates 0, 0 means not set ==> don't show map *****/
    return (bool) (Ctr->Coord.Latitude ||

@@ -1,7 +1,7 @@
-// swad_timeline_favourite.h: social timeline favourites
+// swad_timeline.h: social timeline
 
-#ifndef _SWAD_TL_FAV
-#define _SWAD_TL_FAV
+#ifndef _SWAD_TL_COM
+#define _SWAD_TL_COM
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,7 +27,6 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include "swad_timeline_comment.h"
 #include "swad_timeline_note.h"
 
 /*****************************************************************************/
@@ -38,34 +37,45 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
+struct TL_Com_Comment
+  {
+   long PubCod;			// Unique code/identifier for each publication
+   long UsrCod;			// Publisher
+   long NotCod;			// Note code to which this comment belongs
+   time_t DateTimeUTC;		// Date-time of publication in UTC time
+   unsigned NumFavs;		// Number of times (users) this comment has been favourited
+   struct TL_PostContent Content;
+  };
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_Fav_PutFormToSeeAllFaversNote (long NotCod,
-                                       TL_HowManyUsrs_t HowManyUsrs);
-void TL_Fav_PutFormToSeeAllFaversComment (long PubCod,
-                                          TL_HowManyUsrs_t HowManyUsrs);
+void TL_Com_PutIconToToggleComment (const char UniqueId[Frm_MAX_BYTES_ID + 1]);
+void TL_Com_PutIconCommentDisabled (void);
 
-void TL_Fav_ShowAllFaversNoteUsr (void);
-void TL_Fav_ShowAllFaversNoteGbl (void);
-void TL_Fav_FavNoteUsr (void);
-void TL_Fav_FavNoteGbl (void);
-void TL_Fav_UnfNoteUsr (void);
-void TL_Fav_UnfNoteGbl (void);
-void TL_Fav_PutFormToFavUnfNote (const struct TL_Not_Note *Not,
-                                 TL_HowManyUsrs_t HowManyUsrs);
+void TL_Com_PutHiddenFormToWriteNewComment (const struct TL_Timeline *Timeline,
+	                                    long NotCod,
+                                            const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
+unsigned long TL_Com_GetNumCommentsInNote (long NotCod);
 
-void TL_Fav_ShowAllFaversComUsr (void);
-void TL_Fav_ShowAllFaversComGbl (void);
-void TL_Fav_FavCommentUsr (void);
-void TL_Fav_FavCommentGbl (void);
-void TL_Fav_UnfCommentUsr (void);
-void TL_Fav_UnfCommentGbl (void);
-void TL_Fav_PutFormToFavUnfComment (const struct TL_Com_Comment *Com,
-                                    TL_HowManyUsrs_t HowManyUsrs);
+void TL_Com_WriteCommentsInNote (struct TL_Timeline *Timeline,
+				 const struct TL_Not_Note *Not,
+				 unsigned NumComments);
 
-void TL_Fav_GetNumTimesANoteHasBeenFav (struct TL_Not_Note *Not);
-void TL_Fav_GetNumTimesACommHasBeenFav (struct TL_Com_Comment *Com);
+void TL_Com_ShowHiddenCommentsUsr (void);
+void TL_Com_ShowHiddenCommentsGbl (void);
+
+void TL_Com_ReceiveCommentUsr (void);
+void TL_Com_ReceiveCommentGbl (void);
+
+void TL_Com_RequestRemComUsr (void);
+void TL_Com_RequestRemComGbl (void);
+void TL_Com_RemoveComUsr (void);
+void TL_Com_RemoveComGbl (void);
+
+void TL_Com_RemoveCommentMediaAndDBEntries (long PubCod);
+
+void TL_Com_GetDataOfCommByCod (struct TL_Com_Comment *Com);
 
 #endif

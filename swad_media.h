@@ -104,7 +104,7 @@ typedef enum
   } Med_Type_t;
 
 /***** Struct used to get images/videos from forms *****/
-struct Media
+struct Med_Media
   {
    long MedCod;
    Med_Action_t Action;
@@ -138,26 +138,26 @@ struct ParamUploadMedia
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Med_MediaConstructor (struct Media *Media);
-void Med_MediaDestructor (struct Media *Media);
-void Med_ResetMedia (struct Media *Media);
+void Med_MediaConstructor (struct Med_Media *Media);
+void Med_MediaDestructor (struct Med_Media *Media);
+void Med_ResetMedia (struct Med_Media *Media);
 
-void Med_GetMediaDataByCod (struct Media *Media);
+void Med_GetMediaDataByCod (struct Med_Media *Media);
 
 void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput);
-void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMediaInForm,struct Media *Media,
-                           void (*GetMediaFromDB) (long CrsCod,long QstCod,int NumMediaInForm,struct Media *Media),
+void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMediaInForm,struct Med_Media *Media,
+                           void (*GetMediaFromDB) (long CrsCod,long QstCod,int NumMediaInForm,struct Med_Media *Media),
 			   const char *SectionForAlerts);
 void Med_SetParamNames (struct ParamUploadMedia *ParamUploadMedia,int NumMediaInForm);
 
-void Med_RemoveKeepOrStoreMedia (long CurrentMedCodInDB,struct Media *Media);
-void Med_MoveMediaToDefinitiveDir (struct Media *Media);
-void Med_StoreMediaInDB (struct Media *Media);
+void Med_RemoveKeepOrStoreMedia (long CurrentMedCodInDB,struct Med_Media *Media);
+void Med_MoveMediaToDefinitiveDir (struct Med_Media *Media);
+void Med_StoreMediaInDB (struct Med_Media *Media);
 
-void Med_ShowMedia (const struct Media *Media,
+void Med_ShowMedia (const struct Med_Media *Media,
                     const char *ClassContainer,const char *ClassMedia);
 
-long Med_CloneMedia (const struct Media *MediaSrc);
+long Med_CloneMedia (const struct Med_Media *MediaSrc);
 
 void Med_RemoveMediaFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res);
 void Med_RemoveMedia (long MedCod);

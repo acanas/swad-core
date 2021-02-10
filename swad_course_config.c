@@ -467,7 +467,7 @@ void CrsCfg_ChangeCrsDeg (void)
    extern const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
-   struct Degree NewDeg;
+   struct Deg_Degree NewDeg;
 
    /***** Get parameter with degree code *****/
    NewDeg.DegCod = Deg_GetAndCheckParamOtherDegCod (1);

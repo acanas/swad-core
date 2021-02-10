@@ -114,7 +114,7 @@ static void Rec_PutParamsStdTsts (__attribute__((unused)) void *Args);
 static void Rec_PutParamsWorks (__attribute__((unused)) void *Args);
 static void Rec_PutParamsStudent (__attribute__((unused)) void *Args);
 static void Rec_PutParamsMsgUsr (__attribute__((unused)) void *Args);
-static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks);
+static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks);
 static void Rec_ShowPhoto (struct UsrData *UsrDat);
 static void Rec_ShowFullName (struct UsrData *UsrDat);
 static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks);
@@ -133,9 +133,9 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutFo
 static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
                            unsigned NumPhone);
 static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm);
-static void Rec_ShowTeacherRows (struct UsrData *UsrDat,struct Instit *Ins,
+static void Rec_ShowTeacherRows (struct UsrData *UsrDat,struct Ins_Instit *Ins,
                                  bool ShowData);
-static void Rec_ShowInstitution (struct Instit *Ins,bool ShowData);
+static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData);
 static void Rec_ShowCentre (struct UsrData *UsrDat,bool ShowData);
 static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData);
 static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData);
@@ -1941,7 +1941,7 @@ void Rec_UpdateCrsRecord (long UsrCod)
 /************ Remove fields of record of a user in current course ************/
 /*****************************************************************************/
 
-void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Course *Crs)
+void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Crs_Course *Crs)
   {
    /***** Remove text of the field of record course *****/
    DB_QueryDELETE ("can not remove user's record in a course",
@@ -2165,7 +2165,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    bool StudentInCurrentCrs;
    bool TeacherInCurrentCrs;
    bool ShowTeacherRows;
-   struct Instit Ins;
+   struct Ins_Instit Ins;
    Act_Action_t NextAction;
 
    /***** Initializations *****/
@@ -2676,7 +2676,7 @@ static void Rec_PutParamsMsgUsr (__attribute__((unused)) void *Args)
 /*********************** Show institution in record card *********************/
 /*****************************************************************************/
 
-static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks)
+static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
   {
    /***** Institution logo *****/
    HTM_TD_Begin ("rowspan=\"4\" class=\"REC_C1_TOP CM\"");
@@ -3430,7 +3430,7 @@ static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
 /************************** Show user's institution **************************/
 /*****************************************************************************/
 
-static void Rec_ShowTeacherRows (struct UsrData *UsrDat,struct Instit *Ins,
+static void Rec_ShowTeacherRows (struct UsrData *UsrDat,struct Ins_Instit *Ins,
                                  bool ShowData)
   {
    /***** Institution *****/
@@ -3453,7 +3453,7 @@ static void Rec_ShowTeacherRows (struct UsrData *UsrDat,struct Instit *Ins,
 /************************** Show user's institution **************************/
 /*****************************************************************************/
 
-static void Rec_ShowInstitution (struct Instit *Ins,bool ShowData)
+static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData)
   {
    extern const char *Txt_Institution;
 
@@ -3487,7 +3487,7 @@ static void Rec_ShowInstitution (struct Instit *Ins,bool ShowData)
 static void Rec_ShowCentre (struct UsrData *UsrDat,bool ShowData)
   {
    extern const char *Txt_Centre;
-   struct Centre Ctr;
+   struct Ctr_Centre Ctr;
 
    /***** Centre *****/
    HTM_TR_Begin (NULL);
@@ -4083,7 +4083,7 @@ void Rec_ChgCountryOfMyInstitution (void)
 
 void Rec_UpdateMyInstitution (void)
   {
-   struct Instit Ins;
+   struct Ins_Instit Ins;
    unsigned NumCtrs;
    unsigned NumDpts;
 
@@ -4121,7 +4121,7 @@ void Rec_UpdateMyInstitution (void)
 
 void Rec_UpdateMyCentre (void)
   {
-   struct Centre Ctr;
+   struct Ctr_Centre Ctr;
 
    /***** Get my centre *****/
    /* Get centre code */

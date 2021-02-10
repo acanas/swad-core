@@ -356,7 +356,7 @@ void DegCfg_ChangeDegCtr (void)
   {
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y;
-   struct Centre NewCtr;
+   struct Ctr_Centre NewCtr;
 
    /***** Get parameter with centre code *****/
    NewCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);

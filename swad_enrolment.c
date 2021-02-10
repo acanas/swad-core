@@ -172,7 +172,7 @@ static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,Hie_Level_t 
 static void Enr_ReqAddAdm (Hie_Level_t Scope,long Cod,const char *InsCtrDegName);
 static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat);
 static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
-					  struct Course *Crs,
+					  struct Crs_Course *Crs,
                                           Enr_RemoveUsrProduction_t RemoveUsrWorks,
 					  Cns_QuietOrVerbose_t QuietOrVerbose);
 
@@ -1907,7 +1907,7 @@ void Enr_RemAllStdsThisCrs (void)
 /*****************************************************************************/
 // Returns the numbers of students in the course before deletion
 
-unsigned Enr_RemAllStdsInCrs (struct Course *Crs)
+unsigned Enr_RemAllStdsInCrs (struct Crs_Course *Crs)
   {
    unsigned NumStdsInCrs;
    unsigned NumUsr;
@@ -2257,8 +2257,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    unsigned long NumReqs = 0;	// Initialized to avoid warning
    unsigned long NumReq;
    long ReqCod;
-   struct Degree Deg;
-   struct Course Crs;
+   struct Deg_Degree Deg;
+   struct Crs_Course Crs;
    struct UsrData UsrDat;
    bool UsrExists;
    bool UsrBelongsToCrs;
@@ -4094,7 +4094,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
 /*****************************************************************************/
 
 static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
-					  struct Course *Crs,
+					  struct Crs_Course *Crs,
                                           Enr_RemoveUsrProduction_t RemoveUsrWorks,
 					  Cns_QuietOrVerbose_t QuietOrVerbose)
   {

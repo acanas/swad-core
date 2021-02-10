@@ -75,7 +75,7 @@ typedef enum
    Crs_ALL_COURSES_EXCEPT_REMOVED = 1,	// Courses with Status bit Crs_STATUS_BIT_REMOVED == 0
   } Crs_WhatCourses_t;
 
-struct Course
+struct Crs_Course
   {
    long CrsCod;
    char InstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD + 1];	// Institutional code of the course
@@ -90,7 +90,7 @@ struct Course
 struct ListCourses
   {
    unsigned Num;	// Number of courses
-   struct Course *Lst;	// List of courses
+   struct Crs_Course *Lst;	// List of courses
   };
 
 /*****************************************************************************/
@@ -131,15 +131,15 @@ void Crs_ReceiveFormReqCrs (void);
 void Crs_ReceiveFormNewCrs (void);
 
 void Crs_RemoveCourse (void);
-bool Crs_GetDataOfCourseByCod (struct Course *Crs);
+bool Crs_GetDataOfCourseByCod (struct Crs_Course *Crs);
 void Crs_RemoveCourseCompletely (long CrsCod);
 void Crs_ChangeInsCrsCod (void);
 void Crs_ChangeCrsYear (void);
-void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear);
-void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutionalCrsCod);
+void Crs_UpdateCrsYear (struct Crs_Course *Crs,unsigned NewYear);
+void Crs_UpdateInstitutionalCrsCod (struct Crs_Course *Crs,const char *NewInstitutionalCrsCod);
 void Crs_RenameCourseShort (void);
 void Crs_RenameCourseFull (void);
-void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullName);
+void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullName);
 bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name,long CrsCod,
                                           long DegCod,unsigned Year);
 void Crs_ChangeCrsStatus (void);

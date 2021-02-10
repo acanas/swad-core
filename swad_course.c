@@ -70,7 +70,7 @@ extern struct Globals Gbl;
 /**************************** Private variables ******************************/
 /*****************************************************************************/
 
-static struct Course *Crs_EditingCrs = NULL;	// Static variable to keep the course being edited
+static struct Crs_Course *Crs_EditingCrs = NULL;	// Static variable to keep the course being edited
 
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
@@ -90,17 +90,17 @@ static void Crs_PutIconsEditingCourses (__attribute__((unused)) void *Args);
 static void Crs_PutIconToViewCourses (void);
 static void Crs_ListCoursesForEdition (void);
 static void Crs_ListCoursesOfAYearForEdition (unsigned Year);
-static bool Crs_CheckIfICanEdit (struct Course *Crs);
+static bool Crs_CheckIfICanEdit (struct Crs_Course *Crs);
 static Crs_StatusTxt_t Crs_GetStatusTxtFromStatusBits (Crs_Status_t Status);
 static Crs_Status_t Crs_GetStatusBitsFromStatusTxt (Crs_StatusTxt_t StatusTxt);
 static void Crs_PutFormToCreateCourse (void);
 static void Crs_PutHeadCoursesForSeeing (void);
 static void Crs_PutHeadCoursesForEdition (void);
 static void Crs_ReceiveFormRequestOrCreateCrs (unsigned Status);
-static void Crs_GetParamsNewCourse (struct Course *Crs);
+static void Crs_GetParamsNewCourse (struct Crs_Course *Crs);
 
 static void Crs_CreateCourse (unsigned Status);
-static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row);
+static void Crs_GetDataOfCourseFromRow (struct Crs_Course *Crs,MYSQL_ROW row);
 
 static void Crs_GetShortNamesByCod (long CrsCod,
                                     char CrsShortName[Hie_MAX_BYTES_SHRT_NAME + 1],
@@ -155,10 +155,10 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    extern const char *Txt_My_courses;
    extern const char *Txt_System;
    struct Country Cty;
-   struct Instit Ins;
-   struct Centre Ctr;
-   struct Degree Deg;
-   struct Course Crs;
+   struct Ins_Instit Ins;
+   struct Ctr_Centre Ctr;
+   struct Deg_Degree Deg;
+   struct Crs_Course Crs;
    bool IsLastItemInLevel[1 + 5];
    bool Highlight;	// Highlight because degree, course, etc. is selected
    MYSQL_RES *mysql_resCty;
@@ -750,7 +750,7 @@ static void Crs_GetListCrssInCurrentDeg (Crs_WhatCourses_t WhatCourses)
    MYSQL_ROW row;
    unsigned NumCrss;
    unsigned NumCrs;
-   struct Course *Crs;
+   struct Crs_Course *Crs;
 
    /***** Get courses of a degree from database *****/
    switch (WhatCourses)
@@ -778,8 +778,8 @@ static void Crs_GetListCrssInCurrentDeg (Crs_WhatCourses_t WhatCourses)
    if (NumCrss) // Courses found...
      {
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.Crss.Lst = (struct Course *) calloc ((size_t) NumCrss,
-	                                                         sizeof (struct Course))) == NULL)
+      if ((Gbl.Hierarchy.Crss.Lst = (struct Crs_Course *) calloc ((size_t) NumCrss,
+	                                                         sizeof (struct Crs_Course))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the courses in degree *****/
@@ -985,7 +985,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
    unsigned NumCrs;
-   struct Course *Crs;
+   struct Crs_Course *Crs;
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
@@ -1195,7 +1195,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
-   struct Course *Crs;
+   struct Crs_Course *Crs;
    unsigned YearAux;
    unsigned NumCrs;
    struct UsrData UsrDat;
@@ -1364,7 +1364,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 /************** Check if I can edit, remove, etc. a course *******************/
 /*****************************************************************************/
 
-static bool Crs_CheckIfICanEdit (struct Course *Crs)
+static bool Crs_CheckIfICanEdit (struct Crs_Course *Crs)
   {
    return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||		// I am a degree administrator or higher
                   ((Crs->Status & Crs_STATUS_BIT_PENDING) != 0 &&	// Course is not yet activated
@@ -1655,7 +1655,7 @@ static void Crs_ReceiveFormRequestOrCreateCrs (unsigned Status)
 /************** Get the parameters of a new course from form *****************/
 /*****************************************************************************/
 
-static void Crs_GetParamsNewCourse (struct Course *Crs)
+static void Crs_GetParamsNewCourse (struct Crs_Course *Crs)
   {
    char YearStr[2 + 1];
 
@@ -1744,7 +1744,7 @@ void Crs_RemoveCourse (void)
 /********************* Get data of a course from its code ********************/
 /*****************************************************************************/
 
-bool Crs_GetDataOfCourseByCod (struct Course *Crs)
+bool Crs_GetDataOfCourseByCod (struct Crs_Course *Crs)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1793,7 +1793,7 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
 /********** Get data of a course from a row resulting of a query *************/
 /*****************************************************************************/
 
-static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
+static void Crs_GetDataOfCourseFromRow (struct Crs_Course *Crs,MYSQL_ROW row)
   {
    /***** Get course code (row[0]) *****/
    if ((Crs->CrsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
@@ -1893,7 +1893,7 @@ void Crs_RemoveCourseCompletely (long CrsCod)
 
 static void Crs_EmptyCourseCompletely (long CrsCod)
   {
-   struct Course Crs;
+   struct Crs_Course Crs;
    char PathRelCrs[PATH_MAX + 1];
 
    if (CrsCod > 0)
@@ -2148,7 +2148,7 @@ void Crs_ChangeCrsYear (void)
 /****************** Change the year/semester of a course *********************/
 /*****************************************************************************/
 
-void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear)
+void Crs_UpdateCrsYear (struct Crs_Course *Crs,unsigned NewYear)
   {
    /***** Update year/semester in table of courses *****/
    DB_QueryUPDATE ("can not update the year of a course",
@@ -2163,7 +2163,7 @@ void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear)
 /************* Change the institutional course code of a course **************/
 /*****************************************************************************/
 
-void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutionalCrsCod)
+void Crs_UpdateInstitutionalCrsCod (struct Crs_Course *Crs,const char *NewInstitutionalCrsCod)
   {
    /***** Update institutional course code in table of courses *****/
    DB_QueryUPDATE ("can not update the institutional code"
@@ -2204,7 +2204,7 @@ void Crs_RenameCourseFull (void)
 /************************ Change the name of a course ************************/
 /*****************************************************************************/
 
-void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullName)
+void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_course_X_already_exists;
    extern const char *Txt_The_name_of_the_course_X_has_changed_to_Y;
@@ -2722,7 +2722,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   struct Degree Deg;
+   struct Deg_Degree Deg;
    long CrsCod;
    unsigned NumStds;
    unsigned NumNETs;
@@ -2990,7 +2990,7 @@ static void Crs_EditingCourseConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing course.");
 
    /***** Allocate memory for course *****/
-   if ((Crs_EditingCrs = (struct Course *) malloc (sizeof (struct Course))) == NULL)
+   if ((Crs_EditingCrs = (struct Crs_Course *) malloc (sizeof (struct Crs_Course))) == NULL)
       Lay_ShowErrorAndExit ("Error allocating memory for course.");
 
    /***** Reset course *****/

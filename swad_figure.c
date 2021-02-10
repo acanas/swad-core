@@ -55,6 +55,7 @@
 #include "swad_survey.h"
 #include "swad_test.h"
 #include "swad_timeline.h"
+#include "swad_timeline_note.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -127,7 +128,7 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void);
 static void Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void);
 static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		          const char *TxtFigure);
-static unsigned Fig_GetInsAndStat (struct Instit *Ins,MYSQL_RES *mysql_res);
+static unsigned Fig_GetInsAndStat (struct Ins_Instit *Ins,MYSQL_RES *mysql_res);
 
 static void Fig_GetAndShowDegreeTypesStats (void);
 
@@ -1415,7 +1416,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
    unsigned NumOrder;
    unsigned NumberLastRow;
    unsigned NumberThisRow;
-   struct Instit Ins;
+   struct Ins_Instit Ins;
    bool TRIsOpen = false;
 
    /***** Query database *****/
@@ -1520,7 +1521,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 /******************** Get institution data and statistic *********************/
 /*****************************************************************************/
 
-static unsigned Fig_GetInsAndStat (struct Instit *Ins,MYSQL_RES *mysql_res)
+static unsigned Fig_GetInsAndStat (struct Ins_Instit *Ins,MYSQL_RES *mysql_res)
   {
    MYSQL_ROW row;
    unsigned NumberThisRow;
@@ -3392,11 +3393,11 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    extern const char *Txt_Number_of_posts_BR_per_user;
-   extern const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES];
+   extern const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES];
    extern const char *Txt_Total;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   TL_NoteType_t NoteType;
+   TL_Not_NoteType_t NoteType;
    unsigned long NumNotes;
    unsigned long NumRows;
    unsigned NumUsrs;
@@ -3433,8 +3434,8 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 								1 << Rol_TCH);
 
    /***** Get total number of following/followers from database *****/
-   for (NoteType  = (TL_NoteType_t) 0;
-	NoteType <= (TL_NoteType_t) (TL_NUM_NOTE_TYPES - 1);
+   for (NoteType  = (TL_Not_NoteType_t) 0;
+	NoteType <= (TL_Not_NoteType_t) (TL_NOT_NUM_NOTE_TYPES - 1);
 	NoteType++)
      {
       switch (Gbl.Scope.Current)

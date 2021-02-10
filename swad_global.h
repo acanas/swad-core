@@ -192,13 +192,13 @@ struct Globals
       struct ListCountries Ctys;// List of countries
       struct Country Cty;	// Current country
       struct ListInstits Inss;	// List of institutions in current country
-      struct Instit Ins;	// Current institution
+      struct Ins_Instit Ins;	// Current institution
       struct ListCentres Ctrs;	// List of centres in current institution
-      struct Centre Ctr;	// Current centre
+      struct Ctr_Centre Ctr;	// Current centre
       struct ListDegrees Degs;	// List of degrees in current centre
-      struct Degree Deg;	// Current degree
+      struct Deg_Degree Deg;	// Current degree
       struct ListCourses Crss;	// List of courses in current degree
-      struct Course Crs;	// Current course. Aditional info about course is stored in Gbl.Crs.
+      struct Crs_Course Crs;	// Current course. Aditional info about course is stored in Gbl.Crs.
      } Hierarchy;
    struct
      {

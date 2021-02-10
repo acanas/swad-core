@@ -260,7 +260,7 @@ void Brw_PutImplicitParamsFileBrowser (void *FilFolLnk);
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
 void Brw_RemoveGrpZones (long CrsCod,long GrpCod);
 
-void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs);
+void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Crs_Course *Crs);
 void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat);
 
 void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],

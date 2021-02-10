@@ -62,7 +62,7 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Instit *Ins_EditingIns = NULL;	// Static variable to keep the institution being edited
+static struct Ins_Instit *Ins_EditingIns = NULL;	// Static variable to keep the institution being edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -72,7 +72,7 @@ static void Ins_ListInstitutions (void);
 static bool Ins_CheckIfICanCreateInstitutions (void);
 static void Ins_PutIconsListingInstitutions (__attribute__((unused)) void *Args);
 static void Ins_PutIconToEditInstitutions (void);
-static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns);
+static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned NumIns);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
 static void Ins_GetParamInsOrder (void);
 
@@ -80,13 +80,13 @@ static void Ins_EditInstitutionsInternal (void);
 static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args);
 static void Ins_PutIconToViewInstitutions (void);
 
-static void Ins_GetDataOfInstitFromRow (struct Instit *Ins,MYSQL_ROW row);
+static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row);
 
-static void Ins_GetShrtNameAndCtyOfInstitution (struct Instit *Ins,
+static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
                                                 char CtyName[Hie_MAX_BYTES_FULL_NAME + 1]);
 
 static void Ins_ListInstitutionsForEdition (void);
-static bool Ins_CheckIfICanEdit (struct Instit *Ins);
+static bool Ins_CheckIfICanEdit (struct Ins_Instit *Ins);
 static Ins_StatusTxt_t Ins_GetStatusTxtFromStatusBits (Ins_Status_t Status);
 static Ins_Status_t Ins_GetStatusBitsFromStatusTxt (Ins_StatusTxt_t StatusTxt);
 
@@ -106,7 +106,7 @@ static void Ins_CreateInstitution (unsigned Status);
 static void Ins_EditingInstitutionConstructor ();
 static void Ins_EditingInstitutionDestructor ();
 
-static void Ins_FormToGoToMap (struct Instit *Ins);
+static void Ins_FormToGoToMap (struct Ins_Instit *Ins);
 
 /*****************************************************************************/
 /***************** List institutions with pending centres ********************/
@@ -123,7 +123,7 @@ void Ins_SeeInsWithPendingCtrs (void)
    MYSQL_ROW row;
    unsigned NumInss;
    unsigned NumIns;
-   struct Instit Ins;
+   struct Ins_Instit Ins;
    const char *BgColor;
 
    /***** Get institutions with pending centres *****/
@@ -220,7 +220,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 /********************** Draw institution logo with link **********************/
 /*****************************************************************************/
 
-void Ins_DrawInstitutionLogoWithLink (struct Instit *Ins,unsigned Size)
+void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size)
   {
    bool PutLink = !Gbl.Form.Inside;	// Don't put link to institution if already inside a form
 
@@ -243,7 +243,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Instit *Ins,unsigned Size)
 /****************** Draw institution logo and name with link *****************/
 /*****************************************************************************/
 
-void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Action,
+void Ins_DrawInstitutionLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t Action,
                                              const char *ClassLink,const char *ClassLogo)
   {
    /***** Begin form *****/
@@ -380,7 +380,7 @@ static void Ins_PutIconToEditInstitutions (void)
 /********************** List one institution for seeing **********************/
 /*****************************************************************************/
 
-static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
+static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned NumIns)
   {
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    const char *TxtClassNormal;
@@ -623,7 +623,7 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
    MYSQL_ROW row;
    unsigned long NumRows = 0;	// Initialized to avoid warning
    unsigned NumIns;
-   struct Instit *Ins;
+   struct Ins_Instit *Ins;
 
    /***** Get institutions from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get institutions",
@@ -645,8 +645,8 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
       Gbl.Hierarchy.Inss.Num = (unsigned) NumRows;
 
       /***** Create list with institutions *****/
-      if ((Gbl.Hierarchy.Inss.Lst = (struct Instit *)
-	                                calloc (NumRows,sizeof (struct Instit))) == NULL)
+      if ((Gbl.Hierarchy.Inss.Lst = (struct Ins_Instit *)
+	                                calloc (NumRows,sizeof (struct Ins_Instit))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
@@ -690,7 +690,7 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
    MYSQL_ROW row;
    unsigned long NumRows = 0;	// Initialized to avoid warning
    unsigned NumIns;
-   struct Instit *Ins;
+   struct Ins_Instit *Ins;
 
    /***** Get institutions from database *****/
    /* Query database */
@@ -729,8 +729,8 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
       Gbl.Hierarchy.Inss.Num = (unsigned) NumRows;
 
       /***** Create list with institutions *****/
-      if ((Gbl.Hierarchy.Inss.Lst = (struct Instit *)
-	                                calloc (NumRows,sizeof (struct Instit))) == NULL)
+      if ((Gbl.Hierarchy.Inss.Lst = (struct Ins_Instit *)
+	                                calloc (NumRows,sizeof (struct Ins_Instit))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
@@ -767,7 +767,7 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
 
 void Ins_WriteInstitutionNameAndCty (long InsCod)
   {
-   struct Instit Ins;
+   struct Ins_Instit Ins;
    char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get institution short name and country name *****/
@@ -782,7 +782,7 @@ void Ins_WriteInstitutionNameAndCty (long InsCod)
 /************************* Get data of an institution ************************/
 /*****************************************************************************/
 
-bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins)
+bool Ins_GetDataOfInstitutionByCod (struct Ins_Instit *Ins)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -831,7 +831,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins)
 /********** Get data of a centre from a row resulting of a query *************/
 /*****************************************************************************/
 
-static void Ins_GetDataOfInstitFromRow (struct Instit *Ins,MYSQL_ROW row)
+static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row)
   {
    /***** Get institution code (row[0]) *****/
    if ((Ins->InsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
@@ -870,7 +870,7 @@ void Ins_FlushCacheShortNameOfInstitution (void)
    Gbl.Cache.InstitutionShrtName.ShrtName[0] = '\0';
   }
 
-void Ins_GetShortNameOfInstitution (struct Instit *Ins)
+void Ins_GetShortNameOfInstitution (struct Ins_Instit *Ins)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -926,7 +926,7 @@ void Ins_FlushCacheFullNameAndCtyOfInstitution (void)
    Gbl.Cache.InstitutionShrtNameAndCty.CtyName[0] = '\0';
   }
 
-static void Ins_GetShrtNameAndCtyOfInstitution (struct Instit *Ins,
+static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
                                                 char CtyName[Hie_MAX_BYTES_FULL_NAME + 1])
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
@@ -1076,7 +1076,7 @@ static void Ins_ListInstitutionsForEdition (void)
   {
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    unsigned NumIns;
-   struct Instit *Ins;
+   struct Ins_Instit *Ins;
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct UsrData UsrDat;
    bool ICanEdit;
@@ -1244,7 +1244,7 @@ static void Ins_ListInstitutionsForEdition (void)
 /************ Check if I can edit, remove, etc. an institution ***************/
 /*****************************************************************************/
 
-static bool Ins_CheckIfICanEdit (struct Instit *Ins)
+static bool Ins_CheckIfICanEdit (struct Ins_Instit *Ins)
   {
    return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||		// I am a superuser
                   ((Ins->Status & Ins_STATUS_BIT_PENDING) != 0 &&		// Institution is not yet activated
@@ -1450,7 +1450,7 @@ void Ins_RenameInsFull (void)
 /******************** Change the name of an institution **********************/
 /*****************************************************************************/
 
-void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName)
+void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_The_institution_X_has_been_renamed_as_Y;
@@ -2123,7 +2123,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
    extern const char *Txt_institutions;
    MYSQL_ROW row;
    unsigned NumIns;
-   struct Instit Ins;
+   struct Ins_Instit Ins;
 
    /***** List the institutions (one row per institution) *****/
    if (NumInss)
@@ -2177,7 +2177,7 @@ static void Ins_EditingInstitutionConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing institution.");
 
    /***** Allocate memory for institution *****/
-   if ((Ins_EditingIns = (struct Instit *) malloc (sizeof (struct Instit))) == NULL)
+   if ((Ins_EditingIns = (struct Ins_Instit *) malloc (sizeof (struct Ins_Instit))) == NULL)
       Lay_ShowErrorAndExit ("Error allocating memory for institution.");
 
    /***** Reset institution *****/
@@ -2202,7 +2202,7 @@ static void Ins_EditingInstitutionDestructor (void)
 /********************* Form to go to institution map *************************/
 /*****************************************************************************/
 
-static void Ins_FormToGoToMap (struct Instit *Ins)
+static void Ins_FormToGoToMap (struct Ins_Instit *Ins)
   {
    extern const char *Txt_Map;
 

@@ -39,7 +39,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void RSS_UpdateRSSFileForACrs (struct Course *Crs);
+void RSS_UpdateRSSFileForACrs (struct Crs_Course *Crs);
 void RSS_BuildRSSLink (char RSSLink[Cns_MAX_BYTES_WWW + 1],long CrsCod);
 
 #endif

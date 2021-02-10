@@ -133,7 +133,7 @@ static unsigned long Pho_BuildQueryOfDegrees (Pho_HowOrderDegrees_t HowOrderDegr
 static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *NumStdsWithPhoto);
 static void Pho_UpdateDegStats (long DegCod,Usr_Sex_t Sex,unsigned NumStds,unsigned NumStdsWithPhoto,long TimeToComputeAvgPhoto);
 static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto);
-static void Pho_ShowDegreeAvgPhotoAndStat (const struct Degree *Deg,
+static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
                                            const struct Pho_DegPhotos *DegPhotos,
                                            Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
                                            Usr_Sex_t Sex,
@@ -2017,7 +2017,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
    extern const char *Txt_time;
    struct ListDegrees Degs;
    unsigned NumDeg;
-   struct Degree Deg;
+   struct Deg_Degree Deg;
    long EstimatedTimeToComputeAvgPhotoInMicroseconds;
    char StrEstimatedTimeToComputeAvgPhoto[Dat_MAX_BYTES_TIME + 1];
    bool Selected;
@@ -2144,7 +2144,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
    MYSQL_ROW row;
    unsigned long NumDeg;
    unsigned long NumDegs;
-   struct Degree Deg;
+   struct Deg_Degree Deg;
    unsigned NumDegsNotEmpty;
    int NumStds;
    int NumStdsWithPhoto;
@@ -2231,7 +2231,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
    unsigned NumDegsNotEmpty;
    int NumStds;
    int NumStdsWithPhoto;
-   struct Degree Deg;
+   struct Deg_Degree Deg;
    Usr_Sex_t Sex;
 
    /***** Get degrees from database *****/
@@ -2455,7 +2455,7 @@ static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto)
 /******************* Show the average photo of a degree **********************/
 /*****************************************************************************/
 
-static void Pho_ShowDegreeAvgPhotoAndStat (const struct Degree *Deg,
+static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
                                            const struct Pho_DegPhotos *DegPhotos,
                                            Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
                                            Usr_Sex_t Sex,

@@ -51,6 +51,7 @@
 #include "swad_profile.h"
 #include "swad_role.h"
 #include "swad_timeline.h"
+#include "swad_timeline_note.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -303,7 +304,7 @@ static void For_InsertPstIntoBannedPstTable (long PstCod);
 
 static long For_InsertForumPst (long ThrCod,long UsrCod,
                                 const char *Subject,const char *Content,
-                                struct Media *Media);
+                                struct Med_Media *Media);
 static bool For_RemoveForumPst (long PstCod,long MedCod);
 static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod);
 
@@ -337,7 +338,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
                             char Subject[Cns_MAX_BYTES_SUBJECT + 1],
                             char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
-                            struct Media *Media);
+                            struct Med_Media *Media);
 static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod);
 
 static void For_PutParamsForum (void *Forums);
@@ -553,7 +554,7 @@ static void For_InsertPstIntoBannedPstTable (long PstCod)
 
 static long For_InsertForumPst (long ThrCod,long UsrCod,
                                 const char *Subject,const char *Content,
-                                struct Media *Media)
+                                struct Med_Media *Media)
   {
    long PstCod;
 
@@ -1212,7 +1213,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    char OriginalContent[Cns_MAX_BYTES_LONG_TEXT + 1];
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Media Media;
+   struct Med_Media Media;
    bool Enabled;
 
    /***** Initialize structure with user's data *****/
@@ -1345,7 +1346,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
                             char Subject[Cns_MAX_BYTES_SUBJECT + 1],
                             char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
-                            struct Media *Media)
+                            struct Med_Media *Media)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2168,10 +2169,10 @@ void For_SetForumName (const struct For_Forum *Forum,
    extern const char *Txt_only_teachers;
    extern const char *Txt_only_teachers_NO_HTML[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Unknown_FORUM;
-   struct Instit Ins;
-   struct Centre Ctr;
-   struct Degree Deg;
-   struct Course Crs;
+   struct Ins_Instit Ins;
+   struct Ctr_Centre Ctr;
+   struct Deg_Degree Deg;
+   struct Crs_Course Crs;
 
    switch (Forum->Type)
      {
@@ -3933,7 +3934,7 @@ void For_ReceiveForumPost (void)
    unsigned NumUsrsToBeNotifiedByEMail;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Media Media;
+   struct Med_Media Media;
 
    /***** Reset forum *****/
    For_ResetForums (&Forums);
@@ -4021,7 +4022,7 @@ void For_ReceiveForumPost (void)
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM__SWAD__USRS:
-         TL_StoreAndPublishNote (TL_NOTE_FORUM_POST,PstCod);
+         TL_Not_StoreAndPublishNote (TL_NOTE_FORUM_POST,PstCod);
          break;
       default:
 	 break;
@@ -4063,7 +4064,7 @@ void For_RemovePost (void)
    time_t CreatTimeUTC;	// Creation time of a message
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char OriginalContent[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Media Media;
+   struct Med_Media Media;
    bool ItsMe;
    bool ThreadDeleted = false;
 
@@ -4109,7 +4110,7 @@ void For_RemovePost (void)
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM__SWAD__USRS:
-         TL_MarkNoteAsUnavailable (TL_NOTE_FORUM_POST,Forums.PstCod);
+         TL_Not_MarkNoteAsUnavailable (TL_NOTE_FORUM_POST,Forums.PstCod);
          break;
       default:
 	 break;

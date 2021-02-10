@@ -56,7 +56,7 @@ typedef enum
 
 #define Ins_MAX_INSTITS_PER_USR	 10	// Used in list of my institutions
 
-struct Instit
+struct Ins_Instit
   {
    long InsCod;
    long CtyCod;
@@ -83,7 +83,7 @@ typedef enum
 struct ListInstits
   {
    unsigned Num;		// Number of institutions
-   struct Instit *Lst;		// List of institutions
+   struct Ins_Instit *Lst;		// List of institutions
    Ins_Order_t SelectedOrder;	// Order of institutions
   };
 
@@ -93,8 +93,8 @@ struct ListInstits
 
 void Ins_SeeInsWithPendingCtrs (void);
 
-void Ins_DrawInstitutionLogoWithLink (struct Instit *Ins,unsigned Size);
-void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Action,
+void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size);
+void Ins_DrawInstitutionLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t Action,
                                              const char *ClassLink,const char *ClassLogo);
 
 void Ins_ShowInssOfCurrentCty (void);
@@ -103,9 +103,9 @@ void Ins_GetBasicListOfInstitutions (long CtyCod);
 void Ins_GetFullListOfInstitutions (long CtyCod);
 
 void Ins_WriteInstitutionNameAndCty (long InsCod);
-bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins);
+bool Ins_GetDataOfInstitutionByCod (struct Ins_Instit *Ins);
 void Ins_FlushCacheShortNameOfInstitution (void);
-void Ins_GetShortNameOfInstitution (struct Instit *Ins);
+void Ins_GetShortNameOfInstitution (struct Ins_Instit *Ins);
 void Ins_FlushCacheFullNameAndCtyOfInstitution (void);
 
 void Ins_FreeListInstitutions (void);
@@ -116,7 +116,7 @@ long Ins_GetAndCheckParamOtherInsCod (long MinCodAllowed);
 void Ins_RemoveInstitution (void);
 void Ins_RenameInsShort (void);
 void Ins_RenameInsFull (void);
-void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName);
+void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName);
 bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,
                                     const char *Name,
 				    long InsCod,

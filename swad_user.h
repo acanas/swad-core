@@ -421,12 +421,12 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (struct Country *Cty);
 unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCty (struct Country *Cty);
 
 void Usr_FlushCacheNumUsrsWhoClaimToBelongToIns (void);
-unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (struct Instit *Ins);
-unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToIns (struct Instit *Ins);
+unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins);
+unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins);
 
 void Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void);
-unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Centre *Ctr);
-unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Centre *Ctr);
+unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Centre *Ctr);
+unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Centre *Ctr);
 
 void Usr_GetListUsrs (Hie_Level_t Scope,Rol_Role_t Role);
 

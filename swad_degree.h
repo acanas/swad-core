@@ -66,7 +66,7 @@ typedef enum
    Deg_STATUS_REMOVED = 3,	// 1- (Status & Deg_STATUS_BIT_REMOVED)
   } Deg_StatusTxt_t;
 
-struct Degree
+struct Deg_Degree
   {
    long DegCod;					// Degree code
    long DegTypCod;				// Degree type code
@@ -81,7 +81,7 @@ struct Degree
 struct ListDegrees
   {
    unsigned Num;		// Number of degrees
-   struct Degree *Lst;		// List of degrees
+   struct Deg_Degree *Lst;		// List of degrees
   };
 
 /*****************************************************************************/
@@ -90,7 +90,7 @@ struct ListDegrees
 
 void Deg_SeeDegWithPendingCrss (void);
 
-void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
+void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Action,
                                         const char *ClassLink,const char *ClassLogo);
 
 void Deg_WriteSelectorOfDegree (void);
@@ -114,14 +114,14 @@ void Deg_RemoveDegree (void);
 void Deg_PutParamDegCod (long DegCod);
 long Deg_GetAndCheckParamOtherDegCod (long MinCodAllowed);
 
-bool Deg_GetDataOfDegreeByCod (struct Degree *Deg);
-void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg);
+bool Deg_GetDataOfDegreeByCod (struct Deg_Degree *Deg);
+void Deg_GetShortNameOfDegreeByCod (struct Deg_Degree *Deg);
 long Deg_GetCtrCodOfDegreeByCod (long DegCod);
 long Deg_GetInsCodOfDegreeByCod (long DegCod);
 void Deg_RemoveDegreeCompletely (long DegCod);
 void Deg_RenameDegreeShort (void);
 void Deg_RenameDegreeFull (void);
-void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName);
+void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName);
 bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
                                     long DegCod,long CtrCod);
 void Deg_ChangeDegreeType (void);

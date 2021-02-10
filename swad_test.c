@@ -124,7 +124,7 @@ static void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print);
 static bool Tst_CheckIfNextTstAllowed (void);
 static unsigned Tst_GetNumExamsGeneratedByMe (void);
 
-static void Tst_PutFormToEditQstMedia (const struct Media *Media,int NumMediaInForm,
+static void Tst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMediaInForm,
                                        bool OptionsDisabled);
 static void Tst_IncreaseMyNumAccessTst (void);
 static void Tst_UpdateLastAccTst (unsigned NumQsts);
@@ -204,7 +204,7 @@ static void Tst_FreeMediaOfQuestion (struct Tst_Question *Question);
 
 static long Tst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt);
 static void Tst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
-                                struct Media *Media);
+                                struct Med_Media *Media);
 
 static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
 static void Tst_GetQstFromForm (struct Tst_Question *Question);
@@ -842,7 +842,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
 /************* Put form to upload a new image for a test question ************/
 /*****************************************************************************/
 
-static void Tst_PutFormToEditQstMedia (const struct Media *Media,int NumMediaInForm,
+static void Tst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMediaInForm,
                                        bool OptionsDisabled)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -4100,7 +4100,7 @@ static long Tst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt)
 // NumOpt >= 0 ==> media associated to an answer option
 
 static void Tst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
-                                struct Media *Media)
+                                struct Med_Media *Media)
   {
    /***** Get media *****/
    Media->MedCod = Tst_GetMedCodFromDB (CrsCod,QstCod,NumOpt);

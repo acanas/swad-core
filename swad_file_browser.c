@@ -59,6 +59,7 @@
 #include "swad_role.h"
 #include "swad_string.h"
 #include "swad_timeline.h"
+#include "swad_timeline_note.h"
 #include "swad_zip.h"
 
 /*****************************************************************************/
@@ -6846,10 +6847,10 @@ static void Brw_WriteCurrentClipboard (void)
    extern const char *Txt_folder;
    extern const char *Txt_link;
    extern const char *Txt_all_files_inside_the_root_folder;
-   struct Instit Ins;
-   struct Centre Ctr;
-   struct Degree Deg;
-   struct Course Crs;
+   struct Ins_Instit Ins;
+   struct Ctr_Centre Ctr;
+   struct Deg_Degree Deg;
+   struct Crs_Course Crs;
    struct GroupData GrpDat;
    struct Prj_Project Prj;
    struct UsrData UsrDat;
@@ -7862,10 +7863,10 @@ static void Brw_PasteClipboard (void)
    extern const char *Txt_Links_copied;
    extern const char *Txt_Folders_copied;
    extern const char *Txt_You_can_not_paste_file_or_folder_here;
-   struct Instit Ins;
-   struct Centre Ctr;
-   struct Degree Deg;
-   struct Course Crs;
+   struct Ins_Instit Ins;
+   struct Ctr_Centre Ctr;
+   struct Deg_Degree Deg;
+   struct Crs_Course Crs;
    struct GroupData GrpDat;
    struct UsrData UsrDat;
    long PrjCod;
@@ -10277,28 +10278,28 @@ void Brw_ChgFileMetadata (void)
 	    switch (Gbl.FileBrowser.Type)
 	      {
 	       case Brw_ADMI_DOC_INS:
-		  TL_StoreAndPublishNote (TL_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod);
+		  TL_Not_StoreAndPublishNote (TL_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_INS:
-		  TL_StoreAndPublishNote (TL_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod);
+		  TL_Not_StoreAndPublishNote (TL_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_CTR:
-		  TL_StoreAndPublishNote (TL_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
+		  TL_Not_StoreAndPublishNote (TL_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_CTR:
-		  TL_StoreAndPublishNote (TL_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
+		  TL_Not_StoreAndPublishNote (TL_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_DEG:
-		  TL_StoreAndPublishNote (TL_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
+		  TL_Not_StoreAndPublishNote (TL_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_DEG:
-		  TL_StoreAndPublishNote (TL_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
+		  TL_Not_StoreAndPublishNote (TL_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_CRS:
-		  TL_StoreAndPublishNote (TL_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
+		  TL_Not_StoreAndPublishNote (TL_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_CRS:
-		  TL_StoreAndPublishNote (TL_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
+		  TL_Not_StoreAndPublishNote (TL_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       default:
 		  break;
@@ -11067,9 +11068,9 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
                                     long *CrsCod,
                                     long *GrpCod)
   {
-   struct Centre Ctr;
-   struct Degree Deg;
-   struct Course Crs;
+   struct Ctr_Centre Ctr;
+   struct Deg_Degree Deg;
+   struct Crs_Course Crs;
    struct GroupData GrpDat;
 
    switch (FileBrowser)
@@ -11200,7 +11201,7 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1])
           Set possible social note as unavailable.
           Important: do this before removing from files *****/
    Ntf_MarkNotifOneFileAsRemoved (Path);
-   TL_MarkNoteOneFileAsUnavailable (Path);
+   TL_Not_MarkNoteOneFileAsUnavailable (Path);
 
    /***** Remove from database the entries that store the marks properties *****/
    if (FileBrowser == Brw_ADMI_MRK_CRS ||
@@ -11244,7 +11245,7 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1])
           Set possible social notes as unavailable.
           Important: do this before removing from files *****/
    Ntf_MarkNotifChildrenOfFolderAsRemoved (Path);
-   TL_MarkNotesChildrenOfFolderAsUnavailable (Path);
+   TL_Not_MarkNotesChildrenOfFolderAsUnavailable (Path);
 
    /***** Remove from database the entries that store the marks properties *****/
    if (FileBrowser == Brw_ADMI_MRK_CRS ||
@@ -11745,7 +11746,7 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod)
 /***************** Remove the works of a user in a course ********************/
 /*****************************************************************************/
 
-void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs)
+void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Crs_Course *Crs)
   {
    char PathUsrInCrs[PATH_MAX + 1];
 
@@ -11772,7 +11773,7 @@ void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat)
    unsigned long NumRows;
    unsigned long NumRow;
    unsigned NumCrssWorksRemoved = 0;
-   struct Course Crs;
+   struct Crs_Course Crs;
 
    /***** Query database *****/
    if ((NumRows = Usr_GetCrssFromUsr (UsrDat->UsrCod,-1L,&mysql_res)) > 0) // If courses found

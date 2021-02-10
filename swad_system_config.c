@@ -229,8 +229,8 @@ static void SysCfg_Map (void)
    unsigned Zoom;
    unsigned NumCtrs;
    unsigned NumCtr;
-   struct Centre Ctr;
-   struct Instit Ins;
+   struct Ctr_Centre Ctr;
+   struct Ins_Instit Ins;
 
    /***** Leaflet CSS *****/
    Map_LeafletCSS ();

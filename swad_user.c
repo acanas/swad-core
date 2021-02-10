@@ -3585,7 +3585,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    bool ShowPhoto;
    bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
 	                    (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-   struct Instit Ins;
+   struct Ins_Instit Ins;
 
    /***** Start row *****/
    HTM_TR_Begin (NULL);
@@ -3673,8 +3673,8 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
   {
    char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
-   struct Instit Ins;
-   struct Centre Ctr;
+   struct Ins_Instit Ins;
+   struct Ctr_Centre Ctr;
    struct Dpt_Department Dpt;
 
    /***** Start row *****/
@@ -3762,7 +3762,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char Text[Cns_MAX_BYTES_TEXT + 1];
-   struct Instit Ins;
+   struct Ins_Instit Ins;
    bool ShowData = (Gbl.Usrs.Me.Role.Logged == Rol_TCH && UsrDat->Accepted) ||
                     Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
 
@@ -3863,12 +3863,12 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
   {
    char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
-   struct Instit Ins;
+   struct Ins_Instit Ins;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    bool ShowData = (ItsMe || UsrDat->Accepted ||
                     Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-   struct Centre Ctr;
+   struct Ctr_Centre Ctr;
    struct Dpt_Department Dpt;
 
    /***** Start row *****/
@@ -3941,7 +3941,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
   {
    char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
-   struct Instit Ins;
+   struct Ins_Instit Ins;
 
    /***** Start row *****/
    HTM_TR_Begin (NULL);
@@ -4307,7 +4307,7 @@ void Usr_FlushCacheNumUsrsWhoClaimToBelongToIns (void)
    Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs = 0;
   }
 
-unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (struct Instit *Ins)
+unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
   {
    /***** 1. Fast check: Trivial case *****/
    if (Ins->InsCod <= 0)
@@ -4340,7 +4340,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (struct Instit *Ins)
    return Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs;
   }
 
-unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToIns (struct Instit *Ins)
+unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
   {
    unsigned NumUsrsIns;
 
@@ -4363,7 +4363,7 @@ void Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void)
    Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs = 0;
   }
 
-unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Centre *Ctr)
+unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Centre *Ctr)
   {
    /***** 1. Fast check: Trivial case *****/
    if (Ctr->CtrCod <= 0)
@@ -4395,7 +4395,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Centre *Ctr)
    return Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs;
   }
 
-unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Centre *Ctr)
+unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Centre *Ctr)
   {
    unsigned NumUsrsCtr;
 

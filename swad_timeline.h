@@ -27,6 +27,11 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_form.h"
+#include "swad_media.h"
+#include "swad_notification.h"
+#include "swad_user.h"
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -38,39 +43,20 @@
 #define TL_DEF_USRS_SHOWN	5	// Default maximum number of users shown who have share/fav a note
 #define TL_MAX_USRS_SHOWN	1000	// Top     maximum number of users shown who have share/fav a note
 
+/*
+   Timeline images will be saved with:
+   · maximum width  of TL_IMAGE_SAVED_MAX_HEIGHT
+   · maximum height of TL_IMAGE_SAVED_MAX_HEIGHT
+   · maintaining the original aspect ratio (aspect ratio recommended: 3:2)
+*/
+#define TL_IMAGE_SAVED_MAX_WIDTH	768
+#define TL_IMAGE_SAVED_MAX_HEIGHT	768
+#define TL_IMAGE_SAVED_QUALITY		 90	// 1 to 100
+// in timeline posts, the quality should not be high in order to speed up the loading of images
+
 /*****************************************************************************/
 /******************************** Public types *******************************/
 /*****************************************************************************/
-
-#define TL_NUM_NOTE_TYPES	13
-// If the numbers assigned to each event type change,
-// it is necessary to change old numbers to new ones in database table tl_notes
-typedef enum
-  {
-   TL_NOTE_UNKNOWN		=  0,
-   /* Start tab */
-   TL_NOTE_POST			= 10,	// Post written directly in timeline
-   /* Institution tab */
-   TL_NOTE_INS_DOC_PUB_FILE	=  1,	// Public file in documents of institution
-   TL_NOTE_INS_SHA_PUB_FILE	=  2,	// Public file in shared files of institution
-   /* Centre tab */
-   TL_NOTE_CTR_DOC_PUB_FILE	=  3,	// Public file in documents of centre
-   TL_NOTE_CTR_SHA_PUB_FILE	=  4,	// Public file in shared files of centre
-   /* Degree tab */
-   TL_NOTE_DEG_DOC_PUB_FILE	=  5,	// Public file in documents of degree
-   TL_NOTE_DEG_SHA_PUB_FILE	=  6,	// Public file in shared files of degree
-   /* Course tab */
-   TL_NOTE_CRS_DOC_PUB_FILE	=  7,	// Public file in documents of course
-   TL_NOTE_CRS_SHA_PUB_FILE	=  8,	// Public file in shared files of course
-   /* Assessment tab */
-   TL_NOTE_EXAM_ANNOUNCEMENT	=  9,	// Exam announcement in a course
-   /* Users tab */
-   /* Messages tab */
-   TL_NOTE_NOTICE		= 12,	// A public notice in a course
-   TL_NOTE_FORUM_POST		= 11,	// Post in global/swad forums
-   /* Analytics tab */
-   /* Profile tab */
-  } TL_NoteType_t;
 
 #define TL_NUM_TOP_MESSAGES (1 + 6)
 typedef enum
@@ -144,40 +130,37 @@ struct TL_Publication
 struct TL_PostContent
   {
    char Txt[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Media Media;
+   struct Med_Media Media;
   };
 
-struct TL_Note
+typedef enum
   {
-   long NotCod;			// Unique code/identifier for each note
-   TL_NoteType_t NoteType;	// Timeline post, public file, exam announcement, notice, forum post...
-   long UsrCod;			// Publisher
-   long HieCod;			// Hierarchy code (institution/centre/degree/course)
-   long Cod;			// Code of file, forum post, notice, timeline post...
-   bool Unavailable;		// File, forum post, notice,... unavailable (removed)
-   time_t DateTimeUTC;		// Date-time of publication in UTC time
-   unsigned NumShared;		// Number of times (users) this note has been shared
-   unsigned NumFavs;		// Number of times (users) this note has been favourited
-  };
+   TL_DONT_HIGHLIGHT,
+   TL_HIGHLIGHT,
+  } TL_Highlight_t;
 
-struct TL_Comment
+typedef enum
   {
-   long PubCod;			// Unique code/identifier for each publication
-   long UsrCod;			// Publisher
-   long NotCod;			// Note code to which this comment belongs
-   time_t DateTimeUTC;		// Date-time of publication in UTC time
-   unsigned NumFavs;		// Number of times (users) this comment has been favourited
-   struct TL_PostContent Content;
-  };
+   TL_DONT_SHOW_ALONE,
+   TL_SHOW_ALONE,
+  } TL_ShowAlone_t;
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void TL_InitTimelineGbl (struct TL_Timeline *Timeline);
+
 void TL_ResetTimeline (struct TL_Timeline *Timeline);
+
 void TL_ShowTimelineGbl (void);
+void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline);
+void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
+	                                long NotCod);
 
 void TL_ShowTimelineUsr (struct TL_Timeline *Timeline);
+void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
+                                        long NotCod);
 
 void TL_RefreshNewTimelineGbl (void);
 
@@ -186,43 +169,34 @@ void TL_RefreshOldTimelineUsr (void);
 
 void TL_MarkMyNotifAsSeen (void);
 
+void TL_FormStart (const struct TL_Timeline *Timeline,
+	           Act_Action_t ActionGbl,
+                   Act_Action_t ActionUsr);
+
 void TL_GetParamWho (void);
 Usr_Who_t TL_GetGlobalWho (void);
 
-void TL_StoreAndPublishNote (TL_NoteType_t NoteType,long Cod);
-void TL_MarkNoteAsUnavailable (TL_NoteType_t NoteType,long Cod);
-void TL_MarkNoteOneFileAsUnavailable (const char *Path);
-void TL_MarkNotesChildrenOfFolderAsUnavailable (const char *Path);
+void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod);
 
-void TL_PublishNoteInTimeline (struct TL_Publication *Pub);
+void TL_WriteDateTime (time_t TimeUTC);
+
+void TL_GetAndWritePost (long PstCod);
+
+void TL_PublishPubInTimeline (struct TL_Publication *Pub);
+
+void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea);
 
 void TL_ReceivePostUsr (void);
 void TL_ReceivePostGbl (void);
 
-void TL_ShowHiddenCommentsUsr (void);
-void TL_ShowHiddenCommentsGbl (void);
+void TL_Com_ShowHiddenCommentsUsr (void);
+void TL_Com_ShowHiddenCommentsGbl (void);
 
 void TL_PutHiddenParamPubCod (long PubCod);
-long TL_GetParamNotCod (void);
 long TL_GetParamPubCod (void);
-
-void TL_ReceiveCommentUsr (void);
-void TL_ReceiveCommentGbl (void);
 
 void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
                              Ntf_NotifyEvent_t NotifyEvent);
-
-void TL_RequestRemNoteUsr (void);
-void TL_RequestRemNoteGbl (void);
-void TL_RemoveNoteUsr (void);
-void TL_RemoveNoteGbl (void);
-
-long TL_GetPubCodOfOriginalNote (long NotCod);
-
-void TL_RequestRemComUsr (void);
-void TL_RequestRemComGbl (void);
-void TL_RemoveComUsr (void);
-void TL_RemoveComGbl (void);
 
 void TL_RemoveUsrContent (long UsrCod);
 
@@ -235,9 +209,6 @@ void TL_PutFormToSeeAllFaversSharers (Act_Action_t ActionGbl,Act_Action_t Action
 void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
 		    const char *ParamFormat,long ParamCod,
 		    const char *Icon,const char *Title);
-
-void TL_GetDataOfNoteByCod (struct TL_Note *Not);
-void TL_GetDataOfCommByCod (struct TL_Comment *Com);
 
 void TL_ClearOldTimelinesDB (void);
 

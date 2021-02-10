@@ -3467,7 +3467,7 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
 
 static void Sta_WriteInstit (long InsCod)
   {
-   struct Instit Ins;
+   struct Ins_Instit Ins;
 
    /***** Start cell *****/
    if (InsCod > 0)	// Hit with an institution selected
@@ -3560,7 +3560,7 @@ static void Sta_ShowNumHitsPerCentre (Sta_CountType_t CountType,
 
 static void Sta_WriteCentre (long CtrCod)
   {
-   struct Centre Ctr;
+   struct Ctr_Centre Ctr;
 
    /***** Start cell *****/
    if (CtrCod > 0)	// Hit with a centre selected
@@ -3653,7 +3653,7 @@ static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
 
 static void Sta_WriteDegree (long DegCod)
   {
-   struct Degree Deg;
+   struct Deg_Degree Deg;
 
    /***** Start cell *****/
    if (DegCod > 0)	// Hit with a degree selected
@@ -3699,7 +3699,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
    struct Sta_Hits Hits;
    MYSQL_ROW row;
    bool CrsOK;
-   struct Course Crs;
+   struct Crs_Course Crs;
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);

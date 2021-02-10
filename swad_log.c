@@ -263,9 +263,9 @@ void Log_GetAndShowLastClicks (void)
    const char *ClassRow;
    time_t TimeDiff;
    struct Country Cty;
-   struct Instit Ins;
-   struct Centre Ctr;
-   struct Degree Deg;
+   struct Ins_Instit Ins;
+   struct Ctr_Centre Ctr;
+   struct Deg_Degree Deg;
 
    /***** Get last clicks from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get last clicks",

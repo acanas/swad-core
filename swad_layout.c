@@ -1711,9 +1711,9 @@ static void Lay_WriteFootFromHTMLFile (void)
 void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
                                 long InsCod,long DegCod,long CrsCod)
   {
-   struct Instit Ins;
-   struct Degree Deg;
-   struct Course Crs;
+   struct Ins_Instit Ins;
+   struct Deg_Degree Deg;
+   struct Crs_Course Crs;
 
    /***** Get data of institution *****/
    Ins.InsCod = InsCod;

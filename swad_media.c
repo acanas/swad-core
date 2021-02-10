@@ -120,9 +120,9 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Med_ResetMediaExceptURLAndTitle (struct Media *Media);
-static void Med_FreeMediaURL (struct Media *Media);
-static void Med_FreeMediaTitle (struct Media *Media);
+static void Med_ResetMediaExceptURLAndTitle (struct Med_Media *Media);
+static void Med_FreeMediaURL (struct Med_Media *Media);
+static void Med_FreeMediaTitle (struct Med_Media *Media);
 
 static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
 				      struct MediaUploader *MediaUploader);
@@ -132,46 +132,46 @@ static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTE
 
 static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction);
 static Med_FormType_t Usr_GetFormTypeFromForm (struct ParamUploadMedia *ParamUploadMedia);
-static void Usr_GetURLFromForm (const char *ParamName,struct Media *Media);
-static void Usr_GetTitleFromForm (const char *ParamName,struct Media *Media);
+static void Usr_GetURLFromForm (const char *ParamName,struct Med_Media *Media);
+static void Usr_GetTitleFromForm (const char *ParamName,struct Med_Media *Media);
 static void Med_GetAndProcessFileFromForm (const char *ParamFile,
-                                           struct Media *Media);
-static bool Med_DetectIfAnimated (struct Media *Media,
+                                           struct Med_Media *Media);
+static bool Med_DetectIfAnimated (struct Med_Media *Media,
 			          const char PathFileOrg[PATH_MAX + 1]);
 
-static void Med_ProcessJPG (struct Media *Media,
+static void Med_ProcessJPG (struct Med_Media *Media,
 			    const char PathFileOrg[PATH_MAX + 1]);
-static void Med_ProcessGIF (struct Media *Media,
+static void Med_ProcessGIF (struct Med_Media *Media,
 			    const char PathFileOrg[PATH_MAX + 1]);
-static void Med_ProcessVideo (struct Media *Media,
+static void Med_ProcessVideo (struct Med_Media *Media,
 			      const char PathFileOrg[PATH_MAX + 1]);
 
-static int Med_ResizeImage (struct Media *Media,
+static int Med_ResizeImage (struct Med_Media *Media,
                             const char PathFileOriginal[PATH_MAX + 1],
                             const char PathFileProcessed[PATH_MAX + 1]);
 static int Med_GetFirstFrame (const char PathFileOriginal[PATH_MAX + 1],
                               const char PathFileProcessed[PATH_MAX + 1]);
 
 static void Med_GetAndProcessYouTubeFromForm (const char *ParamURL,
-                                              struct Media *Media);
+                                              struct Med_Media *Media);
 static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
-                                            struct Media *Media);
+                                            struct Med_Media *Media);
 
-static bool Med_MoveTmpFileToDefDir (struct Media *Media,
+static bool Med_MoveTmpFileToDefDir (struct Med_Media *Media,
 				     const char PathMedPriv[PATH_MAX + 1],
 				     const char *Extension);
 
-static void Med_ShowJPG (const struct Media *Media,
+static void Med_ShowJPG (const struct Med_Media *Media,
 			 const char PathMedPriv[PATH_MAX + 1],
 			 const char *ClassMedia);
-static void Med_ShowGIF (const struct Media *Media,
+static void Med_ShowGIF (const struct Med_Media *Media,
 			 const char PathMedPriv[PATH_MAX + 1],
 			 const char *ClassMedia);
-static void Med_ShowVideo (const struct Media *Media,
+static void Med_ShowVideo (const struct Med_Media *Media,
 			   const char PathMedPriv[PATH_MAX + 1],
 			   const char *ClassMedia);
-static void Med_ShowYoutube (const struct Media *Media,const char *ClassMedia);
-static void Med_ShowEmbed (const struct Media *Media,const char *ClassMedia);
+static void Med_ShowYoutube (const struct Med_Media *Media,const char *ClassMedia);
+static void Med_ShowEmbed (const struct Med_Media *Media,const char *ClassMedia);
 static void Med_AlertThirdPartyCookies (void);
 
 static Med_Type_t Med_GetTypeFromStrInDB (const char *Str);
@@ -182,10 +182,10 @@ static const char *Med_GetStringTypeForDB (Med_Type_t Type);
 /*****************************************************************************/
 /********************** Media (image/video) constructor **********************/
 /*****************************************************************************/
-// Every struct Media must be initialized with this constructor function after it is declared
+// Every struct Med_Media must be initialized with this constructor function after it is declared
 // Every call to constructor must have a call to destructor
 
-void Med_MediaConstructor (struct Media *Media)
+void Med_MediaConstructor (struct Med_Media *Media)
   {
    Med_ResetMediaExceptURLAndTitle (Media);
    Media->URL   = NULL;
@@ -197,7 +197,7 @@ void Med_MediaConstructor (struct Media *Media)
 /*****************************************************************************/
 // Every call to constructor must have a call to destructor
 
-void Med_MediaDestructor (struct Media *Media)
+void Med_MediaDestructor (struct Med_Media *Media)
   {
    Med_ResetMedia (Media);
   }
@@ -207,7 +207,7 @@ void Med_MediaDestructor (struct Media *Media)
 /*****************************************************************************/
 // Media must be constructed before calling this function
 
-void Med_ResetMedia (struct Media *Media)
+void Med_ResetMedia (struct Med_Media *Media)
   {
    Med_ResetMediaExceptURLAndTitle (Media);
    Med_FreeMediaURL (Media);
@@ -218,7 +218,7 @@ void Med_ResetMedia (struct Media *Media)
 /***************** Reset media fields except URL and title *******************/
 /*****************************************************************************/
 
-static void Med_ResetMediaExceptURLAndTitle (struct Media *Media)
+static void Med_ResetMediaExceptURLAndTitle (struct Med_Media *Media)
   {
    Media->MedCod  = -1L;
    Media->Action  = Med_ACTION_NO_MEDIA;
@@ -231,7 +231,7 @@ static void Med_ResetMediaExceptURLAndTitle (struct Media *Media)
 /******************************* Free image URL ******************************/
 /*****************************************************************************/
 
-static void Med_FreeMediaURL (struct Media *Media)
+static void Med_FreeMediaURL (struct Med_Media *Media)
   {
    // Media->URL is initialized to NULL in constructor
    if (Media->URL)
@@ -245,7 +245,7 @@ static void Med_FreeMediaURL (struct Media *Media)
 /****************************** Free image title *****************************/
 /*****************************************************************************/
 
-static void Med_FreeMediaTitle (struct Media *Media)
+static void Med_FreeMediaTitle (struct Med_Media *Media)
   {
    // Media->Title is initialized to NULL in constructor
    if (Media->Title)
@@ -259,7 +259,7 @@ static void Med_FreeMediaTitle (struct Media *Media)
 /**** Get media name, title and URL from a query result and copy to struct ***/
 /*****************************************************************************/
 
-void Med_GetMediaDataByCod (struct Media *Media)
+void Med_GetMediaDataByCod (struct Med_Media *Media)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -510,8 +510,8 @@ static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTE
 // If NumMediaInForm  < 0, params have no suffix
 // If NumMediaInForm >= 0, the number is a suffix of the params
 
-void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMediaInForm,struct Media *Media,
-                           void (*GetMediaFromDB) (long CrsCod,long QstCod,int NumMediaInForm,struct Media *Media),
+void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMediaInForm,struct Med_Media *Media,
+                           void (*GetMediaFromDB) (long CrsCod,long QstCod,int NumMediaInForm,struct Med_Media *Media),
 			   const char *SectionForAlerts)
   {
    extern const char *Txt_Error_sending_or_processing_image_video;
@@ -663,7 +663,7 @@ static Med_FormType_t Usr_GetFormTypeFromForm (struct ParamUploadMedia *ParamUpl
 /********************* Get from form the type of form ************************/
 /*****************************************************************************/
 
-static void Usr_GetURLFromForm (const char *ParamName,struct Media *Media)
+static void Usr_GetURLFromForm (const char *ParamName,struct Med_Media *Media)
   {
    char URL[Cns_MAX_BYTES_WWW + 1];
    size_t Length;
@@ -688,7 +688,7 @@ static void Usr_GetURLFromForm (const char *ParamName,struct Media *Media)
 /********************* Get from form the type of form ************************/
 /*****************************************************************************/
 
-static void Usr_GetTitleFromForm (const char *ParamName,struct Media *Media)
+static void Usr_GetTitleFromForm (const char *ParamName,struct Med_Media *Media)
   {
    char Title[Med_MAX_BYTES_TITLE + 1];
    size_t Length;
@@ -714,7 +714,7 @@ static void Usr_GetTitleFromForm (const char *ParamName,struct Media *Media)
 /*****************************************************************************/
 
 static void Med_GetAndProcessFileFromForm (const char *ParamFile,
-                                           struct Media *Media)
+                                           struct Med_Media *Media)
   {
    struct Param *Param;
    char FileNameImgSrc[PATH_MAX + 1];
@@ -803,7 +803,7 @@ static void Med_GetAndProcessFileFromForm (const char *ParamFile,
 // Return true if animated
 // Return false if static or error
 
-static bool Med_DetectIfAnimated (struct Media *Media,
+static bool Med_DetectIfAnimated (struct Med_Media *Media,
 			          const char PathFileOrg[PATH_MAX + 1])
   {
    char PathFileTxtTmp[PATH_MAX + 1];
@@ -845,7 +845,7 @@ static bool Med_DetectIfAnimated (struct Media *Media,
 /************* Process original image generating processed JPG ***************/
 /*****************************************************************************/
 
-static void Med_ProcessJPG (struct Media *Media,
+static void Med_ProcessJPG (struct Med_Media *Media,
 			    const char PathFileOrg[PATH_MAX + 1])
   {
    extern const char *Txt_The_file_could_not_be_processed_successfully;
@@ -874,7 +874,7 @@ static void Med_ProcessJPG (struct Media *Media,
 /******* Process original GIF image generating processed PNG and GIF *********/
 /*****************************************************************************/
 
-static void Med_ProcessGIF (struct Media *Media,
+static void Med_ProcessGIF (struct Med_Media *Media,
 			    const char PathFileOrg[PATH_MAX + 1])
   {
    extern const char *Txt_The_file_could_not_be_processed_successfully;
@@ -943,7 +943,7 @@ static void Med_ProcessGIF (struct Media *Media,
 /*********** Process original MP4 video generating processed MP4 *************/
 /*****************************************************************************/
 
-static void Med_ProcessVideo (struct Media *Media,
+static void Med_ProcessVideo (struct Med_Media *Media,
 			      const char PathFileOrg[PATH_MAX + 1])
   {
    extern const char *Txt_The_file_could_not_be_processed_successfully;
@@ -989,7 +989,7 @@ static void Med_ProcessVideo (struct Media *Media,
 // Return 0 on success
 // Return != 0 on error
 
-static int Med_ResizeImage (struct Media *Media,
+static int Med_ResizeImage (struct Med_Media *Media,
                             const char PathFileOriginal[PATH_MAX + 1],
                             const char PathFileProcessed[PATH_MAX + 1])
   {
@@ -1041,7 +1041,7 @@ static int Med_GetFirstFrame (const char PathFileOriginal[PATH_MAX + 1],
 /*****************************************************************************/
 
 static void Med_GetAndProcessYouTubeFromForm (const char *ParamURL,
-                                              struct Media *Media)
+                                              struct Med_Media *Media)
   {
    extern const char Str_BIN_TO_BASE64URL[64 + 1];
    char *PtrHost   = NULL;
@@ -1206,7 +1206,7 @@ static void Med_GetAndProcessYouTubeFromForm (const char *ParamURL,
 /*****************************************************************************/
 
 static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
-                                            struct Media *Media)
+                                            struct Med_Media *Media)
   {
    extern const char Str_BIN_TO_BASE64URL[64 + 1];
    char *PtrHost = NULL;
@@ -1255,7 +1255,7 @@ static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
 /**** Remove media, keep media or store media, depending on media action *****/
 /*****************************************************************************/
 
-void Med_RemoveKeepOrStoreMedia (long CurrentMedCodInDB,struct Media *Media)
+void Med_RemoveKeepOrStoreMedia (long CurrentMedCodInDB,struct Med_Media *Media)
   {
    switch (Media->Action)
      {
@@ -1299,7 +1299,7 @@ void Med_RemoveKeepOrStoreMedia (long CurrentMedCodInDB,struct Media *Media)
 /**** Move temporary processed media file to definitive private directory ****/
 /*****************************************************************************/
 
-void Med_MoveMediaToDefinitiveDir (struct Media *Media)
+void Med_MoveMediaToDefinitiveDir (struct Med_Media *Media)
   {
    char PathMedPriv[PATH_MAX + 1];
 
@@ -1372,7 +1372,7 @@ void Med_MoveMediaToDefinitiveDir (struct Media *Media)
 // Return true on success
 // Return false on error
 
-static bool Med_MoveTmpFileToDefDir (struct Media *Media,
+static bool Med_MoveTmpFileToDefDir (struct Med_Media *Media,
 				     const char PathMedPriv[PATH_MAX + 1],
 				     const char *Extension)
   {
@@ -1403,7 +1403,7 @@ static bool Med_MoveTmpFileToDefDir (struct Media *Media,
 /************************ Store media into database **************************/
 /*****************************************************************************/
 
-void Med_StoreMediaInDB (struct Media *Media)
+void Med_StoreMediaInDB (struct Med_Media *Media)
   {
    /***** Insert media into database *****/
    Media->MedCod = DB_QueryINSERTandReturnCode ("can not create media",
@@ -1422,7 +1422,7 @@ void Med_StoreMediaInDB (struct Media *Media)
 /****** Show a user uploaded media (in a test question, timeline, etc.) ******/
 /*****************************************************************************/
 
-void Med_ShowMedia (const struct Media *Media,
+void Med_ShowMedia (const struct Med_Media *Media,
                     const char *ClassContainer,const char *ClassMedia)
   {
    bool PutLink;
@@ -1507,7 +1507,7 @@ void Med_ShowMedia (const struct Media *Media,
 /************************** Show a user uploaded JPG *************************/
 /*****************************************************************************/
 
-static void Med_ShowJPG (const struct Media *Media,
+static void Med_ShowJPG (const struct Med_Media *Media,
 			 const char PathMedPriv[PATH_MAX + 1],
 			 const char *ClassMedia)
   {
@@ -1563,7 +1563,7 @@ static void Med_ShowJPG (const struct Media *Media,
 /************************** Show a user uploaded GIF *************************/
 /*****************************************************************************/
 
-static void Med_ShowGIF (const struct Media *Media,
+static void Med_ShowGIF (const struct Med_Media *Media,
 			 const char PathMedPriv[PATH_MAX + 1],
 			 const char *ClassMedia)
   {
@@ -1663,7 +1663,7 @@ static void Med_ShowGIF (const struct Media *Media,
 /************************ Show a user uploaded video *************************/
 /*****************************************************************************/
 
-static void Med_ShowVideo (const struct Media *Media,
+static void Med_ShowVideo (const struct Med_Media *Media,
 			   const char PathMedPriv[PATH_MAX + 1],
 			   const char *ClassMedia)
   {
@@ -1729,7 +1729,7 @@ static void Med_ShowVideo (const struct Media *Media,
 /*********************** Show an embed YouTube video *************************/
 /*****************************************************************************/
 
-static void Med_ShowYoutube (const struct Media *Media,const char *ClassMedia)
+static void Med_ShowYoutube (const struct Med_Media *Media,const char *ClassMedia)
   {
    /***** Check if YouTube code exists *****/
    if (Media->Name[0])	// YouTube code
@@ -1769,7 +1769,7 @@ static void Med_ShowYoutube (const struct Media *Media,const char *ClassMedia)
 /*************************** Show an embed media *****************************/
 /*****************************************************************************/
 
-static void Med_ShowEmbed (const struct Media *Media,const char *ClassMedia)
+static void Med_ShowEmbed (const struct Med_Media *Media,const char *ClassMedia)
   {
    /***** Check if embed URL exists *****/
    if (Media->URL[0])	// Embed URL
@@ -1838,10 +1838,10 @@ static void Med_AlertThirdPartyCookies (void)
 #define Med_SRC 0
 #define Med_DST 1
 
-long Med_CloneMedia (const struct Media *MediaSrc)
+long Med_CloneMedia (const struct Med_Media *MediaSrc)
   {
    long MedCod = -1L;
-   struct Media MediaDst;
+   struct Med_Media MediaDst;
    struct
      {
       char Path[PATH_MAX + 1];
@@ -1990,7 +1990,7 @@ void Med_RemoveMedia (long MedCod)
   {
    char PathMedPriv[PATH_MAX + 1];
    char *FullPathMediaPriv;
-   struct Media Media;
+   struct Med_Media Media;
 
    /***** Trivial case *****/
    if (MedCod <= 0)

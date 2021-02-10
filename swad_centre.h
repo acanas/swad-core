@@ -60,7 +60,7 @@ typedef enum
 
 #define Ctr_MAX_CENTRES_PER_USR	 10 // Used in list of my centres
 
-struct Centre
+struct Ctr_Centre
   {
    long CtrCod;			// Centre code
    long InsCod;			// Institution code
@@ -89,7 +89,7 @@ typedef enum
 struct ListCentres
   {
    unsigned Num;		// Number of centres
-   struct Centre *Lst;		// List of centres
+   struct Ctr_Centre *Lst;		// List of centres
    Ctr_Order_t SelectedOrder;	// Order of centres
   };
 
@@ -99,7 +99,7 @@ struct ListCentres
 
 void Ctr_SeeCtrWithPendingDegs (void);
 
-void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
+void Ctr_DrawCentreLogoAndNameWithLink (struct Ctr_Centre *Ctr,Act_Action_t Action,
                                         const char *ClassLink,const char *ClassLogo);
 
 void Ctr_ShowCtrsOfCurrentIns (void);
@@ -109,9 +109,9 @@ void Ctr_PutIconToViewCentres (void);
 
 void Ctr_GetBasicListOfCentres (long InsCod);
 void Ctr_GetFullListOfCentres (long InsCod);
-bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr);
+bool Ctr_GetDataOfCentreByCod (struct Ctr_Centre *Ctr);
 long Ctr_GetInsCodOfCentreByCod (long CtrCod);
-void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr);
+void Ctr_GetShortNameOfCentreByCod (struct Ctr_Centre *Ctr);
 void Ctr_FreeListCentres (void);
 void Ctr_WriteSelectorOfCentre (void);
 void Ctr_PutParamCtrCod (long CtrCod);
@@ -121,7 +121,7 @@ void Ctr_ChangeCtrPlc (void);
 void Ctr_UpdateCtrPlcDB (long CtrCod,long NewPlcCod);
 void Ctr_RenameCentreShort (void);
 void Ctr_RenameCentreFull (void);
-void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
+void Ctr_RenameCentre (struct Ctr_Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
 bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
 				    long CtrCod,long InsCod);
 void Ctr_ChangeCtrWWW (void);
@@ -156,6 +156,6 @@ unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery,
 
 void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs);
 
-bool Ctr_GetIfMapIsAvailable (const struct Centre *Ctr);
+bool Ctr_GetIfMapIsAvailable (const struct Ctr_Centre *Ctr);
 
 #endif

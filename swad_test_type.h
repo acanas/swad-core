@@ -76,7 +76,7 @@ struct Tst_Question
    time_t EditTime;
    char *Stem;
    char *Feedback;
-   struct Media Media;
+   struct Med_Media Media;
    struct
      {
       Tst_AnswerType_t Type;
@@ -88,7 +88,7 @@ struct Tst_Question
 	 bool Correct;
 	 char *Text;
 	 char *Feedback;
-	 struct Media Media;
+	 struct Med_Media Media;
 	} Options[Tst_MAX_OPTIONS_PER_QUESTION];
       long Integer;
       double FloatingPoint[2];

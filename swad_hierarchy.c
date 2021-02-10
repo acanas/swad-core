@@ -659,9 +659,9 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
    MYSQL_ROW row;
    unsigned NumRow;
    unsigned NumRows;
-   struct Instit Ins;
-   struct Centre Ctr;
-   struct Degree Deg;
+   struct Ins_Instit Ins;
+   struct Ctr_Centre Ctr;
+   struct Deg_Degree Deg;
 
    /***** Get institutions, centres, degrees admin by user from database *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions,"

@@ -3336,10 +3336,10 @@ int swad__getNotifications (struct soap *soap,
    Ntf_NotifyEvent_t NotifyEvent;
    long EventTime;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
-   struct Instit Ins;
-   struct Centre Ctr;
-   struct Degree Deg;
-   struct Course Crs;
+   struct Ins_Instit Ins;
+   struct Ctr_Centre Ctr;
+   struct Deg_Degree Deg;
+   struct Crs_Course Crs;
    long Cod;
    struct For_Forum ForumSelected;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
