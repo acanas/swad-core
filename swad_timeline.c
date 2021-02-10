@@ -220,7 +220,11 @@ struct
   {
    unsigned Num;		// Number of publications
    struct TL_Publication *List;	// List of publications
-  } TL_Pubs;
+  } TL_Pubs =
+  {
+   .Num  = 0,
+   .List = NULL,
+  };
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -238,7 +242,7 @@ static void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
 
 static void TL_GetAndShowOldTimeline (struct TL_Timeline *Timeline);
 
-static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline);
+static void TL_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline);
 static unsigned TL_GetMaxPubsToGet (const struct TL_Timeline *Timeline);
 static long TL_GetPubCodFromSession (const char *FieldName);
 static void TL_UpdateLastPubCodIntoSession (void);
@@ -254,8 +258,12 @@ static void TL_CreateSubQueryRangeBottom (const struct TL_RangePubsToGet *RangeP
                                           struct TL_SubQueries *SubQueries);
 static void TL_CreateSubQueryRangeTop (const struct TL_RangePubsToGet *RangePubsToGet,
                                        struct TL_SubQueries *SubQueries);
+static void TL_AllocateListPubs (unsigned MaxPubsToGet);
+static void TL_FreeListPubs (void);
 static void TL_SelectTheMostRecentPub (const struct TL_SubQueries *SubQueries,
 				       struct TL_Publication *SocPub);
+static void TL_InsertNoteInJustRetrievedNotes (long NotCod);
+static void TL_InsertNoteInVisibleTimeline (long NotCod);
 
 static void TL_ShowTimeline (struct TL_Timeline *Timeline,
                              const char *Title,long NotCodToHighlight);
@@ -515,16 +523,16 @@ static void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
   {
    extern const char *Txt_Timeline;
 
-   /***** Build query to get timeline *****/
+   /***** Get list of pubications/notes to show in timeline *****/
    Timeline->UsrOrGbl  = TL_TIMELINE_GBL;
    Timeline->WhatToGet = TL_GET_RECENT_TIMELINE;
-   TL_BuildQueryToGetTimeline (Timeline);
+   TL_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show timeline *****/
    TL_ShowTimeline (Timeline,Txt_Timeline,NotCod);
 
    /***** Free memory used for publications *****/
-   free (TL_Pubs.List);
+   TL_FreeListPubs ();
 
    /***** Drop temporary tables *****/
    TL_DropTmpTablesUsedToQueryTimeline ();
@@ -548,10 +556,10 @@ static void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
   {
    extern const char *Txt_Timeline_OF_A_USER;
 
-   /***** Build query to show timeline with publications of a unique user *****/
+   /***** Get list of pubications/notes to show in timeline *****/
    Timeline->UsrOrGbl  = TL_TIMELINE_USR;
    Timeline->WhatToGet = TL_GET_RECENT_TIMELINE;
-   TL_BuildQueryToGetTimeline (Timeline);
+   TL_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show timeline *****/
    TL_ShowTimeline (Timeline,
@@ -561,7 +569,7 @@ static void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
    Str_FreeString ();
 
    /***** Free memory used for publications *****/
-   free (TL_Pubs.List);
+   TL_FreeListPubs ();
 
    /***** Drop temporary tables *****/
    TL_DropTmpTablesUsedToQueryTimeline ();
@@ -583,16 +591,16 @@ void TL_RefreshNewTimelineGbl (void)
       /***** Get which users *****/
       Timeline.Who = TL_GetGlobalWho ();
 
-      /***** Build query to get timeline *****/
+      /***** Get list of pubications/notes to show in timeline *****/
       Timeline.UsrOrGbl  = TL_TIMELINE_GBL;
       Timeline.WhatToGet = TL_GET_ONLY_NEW_PUBS;
-      TL_BuildQueryToGetTimeline (&Timeline);
+      TL_GetListPubsToShowInTimeline (&Timeline);
 
       /***** Show new timeline *****/
       TL_InsertNewPubsInTimeline (&Timeline);
 
       /***** Free memory used for publications *****/
-      free (TL_Pubs.List);
+      TL_FreeListPubs ();
 
       /***** Drop temporary tables *****/
       TL_DropTmpTablesUsedToQueryTimeline ();
@@ -642,14 +650,14 @@ void TL_RefreshOldTimelineUsr (void)
 
 static void TL_GetAndShowOldTimeline (struct TL_Timeline *Timeline)
   {
-   /***** Build query to get timeline *****/
-   TL_BuildQueryToGetTimeline (Timeline);
+   /***** Get list of pubications/notes to show in timeline *****/
+   TL_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show old timeline *****/
    TL_ShowOldPubsInTimeline (Timeline);
 
    /***** Free memory used for publications *****/
-   free (TL_Pubs.List);
+   TL_FreeListPubs ();
 
    /***** Drop temporary tables *****/
    TL_DropTmpTablesUsedToQueryTimeline ();
@@ -669,10 +677,10 @@ void TL_MarkMyNotifAsSeen (void)
   }
 
 /*****************************************************************************/
-/************************ Build query to get timeline ************************/
+/************ Get list of pubications/notes to show in timeline **************/
 /*****************************************************************************/
 
-static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline)
+static void TL_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
   {
    struct TL_SubQueries SubQueries;
    struct TL_RangePubsToGet RangePubsToGet;
@@ -755,11 +763,9 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline)
       but this query is slow (several seconds) with a big table.
    */
    /* Allocate memory to store publications */
-   if ((TL_Pubs.List = (struct TL_Publication *) malloc (MaxPubsToGet *
-                                                         sizeof (struct TL_Publication))) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for publication.");
+   TL_AllocateListPubs (MaxPubsToGet);
 
-   for (NumPub = 0, TL_Pubs.Num = 0;
+   for (NumPub = 0;
 	NumPub < MaxPubsToGet;
 	NumPub++)
      {
@@ -769,30 +775,18 @@ static void TL_BuildQueryToGetTimeline (struct TL_Timeline *Timeline)
 
       /* Select the most recent publication from tl_pubs */
       TL_SelectTheMostRecentPub (&SubQueries,&TL_Pubs.List[NumPub]);
-
-      if (TL_Pubs.List[NumPub].PubCod > 0)
-	{
-	 TL_Pubs.Num++;
-
-	 /* Insert publication in temporary table with just retrieved notes.
-	    This table will be used to not get notes already shown */
-	 DB_QueryINSERT ("can not store note code",
-			 "INSERT IGNORE INTO tl_tmp_just_retrieved_notes"
-			 " SET NotCod=%ld",
-			 TL_Pubs.List[NumPub].NotCod);
-
-	 /* Insert publication in temporary table with visible timeline.
-	    This table will be used to not get notes already shown */
-         if (Timeline->WhatToGet == TL_GET_ONLY_OLD_PUBS)
-	    DB_QueryINSERT ("can not store note code",
-			    "INSERT IGNORE INTO tl_tmp_visible_timeline"
-			    " SET NotCod=%ld",
-			    TL_Pubs.List[NumPub].NotCod);
-
-	 RangePubsToGet.Top = TL_Pubs.List[NumPub].PubCod;	// Narrow the range for the next iteration
-	}
-      else	// Nothing got ==> abort loop
+      if (TL_Pubs.List[NumPub].PubCod <= 0)	// Nothing got ==> abort loop
          break;	// Last publication
+
+      TL_Pubs.Num++;
+
+      /* Insert note in temporary tables with just retrieved notes.
+	 These tables will be used to not get notes already shown */
+      TL_InsertNoteInJustRetrievedNotes (TL_Pubs.List[NumPub].NotCod);
+      if (Timeline->WhatToGet == TL_GET_ONLY_OLD_PUBS)
+	 TL_InsertNoteInVisibleTimeline (TL_Pubs.List[NumPub].NotCod);
+
+      RangePubsToGet.Top = TL_Pubs.List[NumPub].PubCod;	// Narrow the range for the next iteration
      }
 
    /***** Update last publication code into session for next refresh *****/
@@ -1027,6 +1021,27 @@ static void TL_CreateSubQueryRangeTop (const struct TL_RangePubsToGet *RangePubs
   }
 
 /*****************************************************************************/
+/******** Allocate/free list to store publications/notes in timeline *********/
+/*****************************************************************************/
+
+static void TL_AllocateListPubs (unsigned MaxPubsToGet)
+  {
+   /***** Reset number of publications in list *****/
+   TL_Pubs.Num = 0;
+
+   /***** Allocate memory to store publications *****/
+   if ((TL_Pubs.List = (struct TL_Publication *) malloc (MaxPubsToGet *
+                                                         sizeof (struct TL_Publication))) == NULL)
+      Lay_ShowErrorAndExit ("Error allocating memory for publication.");
+  }
+
+static void TL_FreeListPubs (void)
+  {
+   /***** Free memory used for publications *****/
+   free (TL_Pubs.List);
+  }
+
+/*****************************************************************************/
 /************** Select the most recent publication from tl_pubs **************/
 /*****************************************************************************/
 
@@ -1060,6 +1075,30 @@ static void TL_SelectTheMostRecentPub (const struct TL_SubQueries *SubQueries,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/**** Insert note in temporary tables used to not get notes already shown ****/
+/*****************************************************************************/
+
+static void TL_InsertNoteInJustRetrievedNotes (long NotCod)
+  {
+   /* Insert note in temporary table with just retrieved notes.
+      This table will be used to not get notes already shown */
+   DB_QueryINSERT ("can not store note code",
+		   "INSERT IGNORE INTO tl_tmp_just_retrieved_notes"
+		   " SET NotCod=%ld",
+		   NotCod);
+  }
+
+static void TL_InsertNoteInVisibleTimeline (long NotCod)
+  {
+   /* Insert note in temporary table with visible timeline.
+      This table will be used to not get notes already shown */
+   DB_QueryINSERT ("can not store note code",
+		   "INSERT IGNORE INTO tl_tmp_visible_timeline"
+		   " SET NotCod=%ld",
+		   NotCod);
   }
 
 /*****************************************************************************/
