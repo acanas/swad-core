@@ -768,13 +768,13 @@ static void Lay_WriteScriptInit (void)
 	 break;
 
       /* Timeline */
-      case ActSeeSocTmlGbl:
-      case ActRcvSocPstGbl:
-      case ActRcvSocComGbl:
-      case ActReqRemSocPubGbl:
-      case ActRemSocPubGbl:
-      case ActReqRemSocComGbl:
-      case ActRemSocComGbl:
+      case ActSeeTmlGbl:
+      case ActRcvTL_PstGbl:
+      case ActRcvTL_ComGbl:
+      case ActReqRemTL_PubGbl:
+      case ActRemTL_PubGbl:
+      case ActReqRemTL_ComGbl:
+      case ActRemTL_ComGbl:
 	 RefreshNewTimeline = true;
 	 break;
 
@@ -874,31 +874,31 @@ static void Lay_WriteScriptParamsAJAX (void)
    switch (Gbl.Action.Act)
      {
       /* Parameters related with global timeline refreshing */
-      case ActSeeSocTmlGbl:
-      case ActRcvSocPstGbl:
-      case ActRcvSocComGbl:
-      case ActReqRemSocPubGbl:
-      case ActRemSocPubGbl:
-      case ActReqRemSocComGbl:
-      case ActRemSocComGbl:
+      case ActSeeTmlGbl:
+      case ActRcvTL_PstGbl:
+      case ActRcvTL_ComGbl:
+      case ActReqRemTL_PubGbl:
+      case ActRemTL_PubGbl:
+      case ActReqRemTL_ComGbl:
+      case ActRemTL_ComGbl:
 	 /* In all the actions related to view or editing global timeline ==>
 	    put parameters used by AJAX */
 	 // Refresh parameters
 	 HTM_TxtF ("var RefreshParamNxtActNewPub = \"act=%ld\";\n"
 		   "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
 	           "var RefreshParamWho = \"Who=%u\";\n",
-		   Act_GetActCod (ActRefNewSocPubGbl),
-		   Act_GetActCod (ActRefOldSocPubGbl),
+		   Act_GetActCod (ActRefNewTL_PubGbl),
+		   Act_GetActCod (ActRefOldTL_PubGbl),
 		   (unsigned) TL_GetGlobalWho ());	// Global variable got in a priori function
 	 break;
       /* Parameters related with user timeline refreshing */
       case ActSeeOthPubPrf:
-      case ActRcvSocPstUsr:
-      case ActRcvSocComUsr:
-      case ActReqRemSocPubUsr:
-      case ActRemSocPubUsr:
-      case ActReqRemSocComUsr:
-      case ActRemSocComUsr:
+      case ActRcvTL_PstUsr:
+      case ActRcvTL_ComUsr:
+      case ActReqRemTL_PubUsr:
+      case ActRemTL_PubUsr:
+      case ActReqRemTL_ComUsr:
+      case ActRemTL_ComUsr:
 	 /* In all the actions related to view or editing user's timeline ==>
 	    put parameters used by AJAX */
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
@@ -906,7 +906,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 // Refresh parameters
 	 HTM_TxtF ("var RefreshParamNxtActOldPub = \"act=%ld\";\n"
 		   "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
-		   Act_GetActCod (ActRefOldSocPubUsr),
+		   Act_GetActCod (ActRefOldTL_PubUsr),
 		   Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	 break;
       /* Parameters related with match refreshing (for students) */

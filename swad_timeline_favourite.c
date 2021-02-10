@@ -63,18 +63,18 @@ static void TL_Fav_PutFormToUnfNote (long ParamCod);
 static void TL_Fav_PutFormToFavComment (long ParamCod);
 static void TL_Fav_PutFormToUnfComment (long ParamCod);
 
-static void TL_Fav_FavNote (struct TL_Note *SocNot);
-static void TL_Fav_UnfNote (struct TL_Note *SocNot);
+static void TL_Fav_FavNote (struct TL_Note *Not);
+static void TL_Fav_UnfNote (struct TL_Note *Not);
 
-static void TL_Fav_FavComment (struct TL_Comment *SocCom);
-static void TL_Fav_UnfComment (struct TL_Comment *SocCom);
+static void TL_Fav_FavComment (struct TL_Comment *Com);
+static void TL_Fav_UnfComment (struct TL_Comment *Com);
 
 static bool TL_Fav_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod);
 static bool TL_Fav_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod);
 
-static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
+static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *Not,
 					           TL_HowManyUsrs_t HowManyUsrs);
-static void TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom,
+static void TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *Com,
 					           TL_HowManyUsrs_t HowManyUsrs);
 
 /*****************************************************************************/
@@ -108,7 +108,7 @@ static void TL_Fav_PutFormToFavNote (long ParamCod)
    extern const char *Txt_Mark_as_favourite;
 
    /***** Form and icon to mark note as favourite *****/
-   TL_FormFavSha (ActFavSocNotGbl,ActFavSocNotUsr,
+   TL_FormFavSha (ActFavTL_NotGbl,ActFavTL_NotUsr,
                   "NotCod=%ld",ParamCod,
 	          TL_ICON_FAV,Txt_Mark_as_favourite);
   }
@@ -118,7 +118,7 @@ static void TL_Fav_PutFormToUnfNote (long ParamCod)
    extern const char *Txt_TIMELINE_NOTE_Favourite;
 
    /***** Form and icon to unfav (remove mark as favourite) note *****/
-   TL_FormFavSha (ActUnfSocNotGbl,ActUnfSocNotUsr,
+   TL_FormFavSha (ActUnfTL_NotGbl,ActUnfTL_NotUsr,
                   "NotCod=%ld",ParamCod,
 	          TL_ICON_FAVED,Txt_TIMELINE_NOTE_Favourite);
   }
@@ -132,7 +132,7 @@ static void TL_Fav_PutFormToFavComment (long ParamCod)
    extern const char *Txt_Mark_as_favourite;
 
    /***** Form and icon to mark comment as favourite *****/
-   TL_FormFavSha (ActFavSocComGbl,ActFavSocComUsr,
+   TL_FormFavSha (ActFavTL_ComGbl,ActFavTL_ComUsr,
                   "PubCod=%ld",ParamCod,
 	          TL_ICON_FAV,Txt_Mark_as_favourite);
   }
@@ -142,7 +142,7 @@ static void TL_Fav_PutFormToUnfComment (long ParamCod)
    extern const char *Txt_TIMELINE_NOTE_Favourite;
 
    /***** Form and icon to unfav (remove mark as favourite) comment *****/
-   TL_FormFavSha (ActUnfSocComGbl,ActUnfSocComUsr,
+   TL_FormFavSha (ActUnfTL_ComGbl,ActUnfTL_ComUsr,
                   "PubCod=%ld",ParamCod,
 	          TL_ICON_FAVED,Txt_TIMELINE_NOTE_Favourite);
   }
@@ -162,14 +162,14 @@ void TL_Fav_ShowAllFaversNoteUsr (void)
 
 void TL_Fav_ShowAllFaversNoteGbl (void)
   {
-   struct TL_Note SocNot;
+   struct TL_Note Not;
 
    /***** Get data of note *****/
-   SocNot.NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (&SocNot);
+   Not.NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (&Not);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
-   TL_Fav_PutFormToFavUnfNote (&SocNot,TL_SHOW_ALL_USRS);
+   TL_Fav_PutFormToFavUnfNote (&Not,TL_SHOW_ALL_USRS);
   }
 
 void TL_Fav_FavNoteUsr (void)
@@ -183,13 +183,13 @@ void TL_Fav_FavNoteUsr (void)
 
 void TL_Fav_FavNoteGbl (void)
   {
-   struct TL_Note SocNot;
+   struct TL_Note Not;
 
    /***** Mark note as favourite *****/
-   TL_Fav_FavNote (&SocNot);
+   TL_Fav_FavNote (&Not);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   TL_Fav_PutFormToFavUnfNote (&SocNot,TL_SHOW_FEW_USRS);
+   TL_Fav_PutFormToFavUnfNote (&Not,TL_SHOW_FEW_USRS);
   }
 
 void TL_Fav_UnfNoteUsr (void)
@@ -203,58 +203,58 @@ void TL_Fav_UnfNoteUsr (void)
 
 void TL_Fav_UnfNoteGbl (void)
   {
-   struct TL_Note SocNot;
+   struct TL_Note Not;
 
    /***** Stop marking as favourite a previously favourited note *****/
-   TL_Fav_UnfNote (&SocNot);
+   TL_Fav_UnfNote (&Not);
 
    /***** Write HTML inside DIV with form to fav *****/
-   TL_Fav_PutFormToFavUnfNote (&SocNot,TL_SHOW_FEW_USRS);
+   TL_Fav_PutFormToFavUnfNote (&Not,TL_SHOW_FEW_USRS);
   }
 
-void TL_Fav_PutFormToFavUnfNote (const struct TL_Note *SocNot,
+void TL_Fav_PutFormToFavUnfNote (const struct TL_Note *Not,
                                  TL_HowManyUsrs_t HowManyUsrs)
   {
    bool IAmTheAuthor;
-   bool IAmAFaverOfThisSocNot;
+   bool IAmAFaverOfThisNot;
 
    /***** Put form to fav/unfav this note *****/
    HTM_DIV_Begin ("class=\"TL_ICO\"");
-   IAmTheAuthor = Usr_ItsMe (SocNot->UsrCod);
-   if (SocNot->Unavailable ||		// Unavailable notes can not be favourited
+   IAmTheAuthor = Usr_ItsMe (Not->UsrCod);
+   if (Not->Unavailable ||		// Unavailable notes can not be favourited
        IAmTheAuthor)			// I am the author
       /* Put disabled icon */
-      TL_Fav_PutDisabledIconFav (SocNot->NumFavs);
+      TL_Fav_PutDisabledIconFav (Not->NumFavs);
    else					// Available and I am not the author
      {
       /* Put icon to fav/unfav */
-      IAmAFaverOfThisSocNot = TL_Fav_CheckIfNoteIsFavedByUsr (SocNot->NotCod,
+      IAmAFaverOfThisNot = TL_Fav_CheckIfNoteIsFavedByUsr (Not->NotCod,
 							      Gbl.Usrs.Me.UsrDat.UsrCod);
-      if (IAmAFaverOfThisSocNot)	// I have favourited this note
-	 TL_Fav_PutFormToUnfNote (SocNot->NotCod);
+      if (IAmAFaverOfThisNot)	// I have favourited this note
+	 TL_Fav_PutFormToUnfNote (Not->NotCod);
       else				// I am not a faver of this note
-	 TL_Fav_PutFormToFavNote (SocNot->NotCod);
+	 TL_Fav_PutFormToFavNote (Not->NotCod);
      }
    HTM_DIV_End ();
 
    /***** Show who have marked this note as favourite *****/
-   TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (SocNot,HowManyUsrs);
+   TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (Not,HowManyUsrs);
   }
 
-static void TL_Fav_FavNote (struct TL_Note *SocNot)
+static void TL_Fav_FavNote (struct TL_Note *Not)
   {
    bool ItsMe;
    long OriginalPubCod;
 
    /***** Get data of note *****/
-   SocNot->NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (SocNot);
+   Not->NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (Not);
 
-   if (SocNot->NotCod > 0)
+   if (Not->NotCod > 0)
      {
-      ItsMe = Usr_ItsMe (SocNot->UsrCod);
+      ItsMe = Usr_ItsMe (Not->UsrCod);
       if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-	 if (!TL_Fav_CheckIfNoteIsFavedByUsr (SocNot->NotCod,
+	 if (!TL_Fav_CheckIfNoteIsFavedByUsr (Not->NotCod,
 					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
 	   {
 	    /***** Mark as favourite in database *****/
@@ -263,50 +263,50 @@ static void TL_Fav_FavNote (struct TL_Note *SocNot)
 			    " (NotCod,UsrCod,TimeFav)"
 			    " VALUES"
 			    " (%ld,%ld,NOW())",
-			    SocNot->NotCod,
+			    Not->NotCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	    /***** Update number of times this note is favourited *****/
-	    TL_Fav_GetNumTimesANoteHasBeenFav (SocNot);
+	    TL_Fav_GetNumTimesANoteHasBeenFav (Not);
 
 	    /***** Create notification about favourite post
 		   for the author of the post *****/
-	    OriginalPubCod = TL_GetPubCodOfOriginalNote (SocNot->NotCod);
+	    OriginalPubCod = TL_GetPubCodOfOriginalNote (Not->NotCod);
 	    if (OriginalPubCod > 0)
-	       TL_CreateNotifToAuthor (SocNot->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_FAV);
+	       TL_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_FAV);
 	   }
      }
   }
 
-static void TL_Fav_UnfNote (struct TL_Note *SocNot)
+static void TL_Fav_UnfNote (struct TL_Note *Not)
   {
    long OriginalPubCod;
    bool ItsMe;
 
    /***** Get data of note *****/
-   SocNot->NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (SocNot);
+   Not->NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (Not);
 
-   if (SocNot->NotCod > 0)
+   if (Not->NotCod > 0)
      {
-      ItsMe = Usr_ItsMe (SocNot->UsrCod);
-      if (SocNot->NumFavs &&
+      ItsMe = Usr_ItsMe (Not->UsrCod);
+      if (Not->NumFavs &&
 	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-	 if (TL_Fav_CheckIfNoteIsFavedByUsr (SocNot->NotCod,
+	 if (TL_Fav_CheckIfNoteIsFavedByUsr (Not->NotCod,
 					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
 	   {
 	    /***** Delete the mark as favourite from database *****/
 	    DB_QueryDELETE ("can not unfavourite note",
 			    "DELETE FROM tl_notes_fav"
 			    " WHERE NotCod=%ld AND UsrCod=%ld",
-			    SocNot->NotCod,
+			    Not->NotCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	    /***** Update number of times this note is favourited *****/
-	    TL_Fav_GetNumTimesANoteHasBeenFav (SocNot);
+	    TL_Fav_GetNumTimesANoteHasBeenFav (Not);
 
             /***** Mark possible notifications on this note as removed *****/
-	    OriginalPubCod = TL_GetPubCodOfOriginalNote (SocNot->NotCod);
+	    OriginalPubCod = TL_GetPubCodOfOriginalNote (Not->NotCod);
 	    if (OriginalPubCod > 0)
 	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,OriginalPubCod);
 	   }
@@ -328,16 +328,16 @@ void TL_Fav_ShowAllFaversComUsr (void)
 
 void TL_Fav_ShowAllFaversComGbl (void)
   {
-   struct TL_Comment SocCom;
+   struct TL_Comment Com;
 
    /***** Get data of comment *****/
-   Med_MediaConstructor (&SocCom.Content.Media);
-   SocCom.PubCod = TL_GetParamPubCod ();
-   TL_GetDataOfCommByCod (&SocCom);
-   Med_MediaDestructor (&SocCom.Content.Media);
+   Med_MediaConstructor (&Com.Content.Media);
+   Com.PubCod = TL_GetParamPubCod ();
+   TL_GetDataOfCommByCod (&Com);
+   Med_MediaDestructor (&Com.Content.Media);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
-   TL_Fav_PutFormToFavUnfComment (&SocCom,TL_SHOW_ALL_USRS);
+   TL_Fav_PutFormToFavUnfComment (&Com,TL_SHOW_ALL_USRS);
   }
 
 void TL_Fav_FavCommentUsr (void)
@@ -351,13 +351,13 @@ void TL_Fav_FavCommentUsr (void)
 
 void TL_Fav_FavCommentGbl (void)
   {
-   struct TL_Comment SocCom;
+   struct TL_Comment Com;
 
    /***** Mark comment as favourite *****/
-   TL_Fav_FavComment (&SocCom);
+   TL_Fav_FavComment (&Com);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   TL_Fav_PutFormToFavUnfComment (&SocCom,TL_SHOW_FEW_USRS);
+   TL_Fav_PutFormToFavUnfComment (&Com,TL_SHOW_FEW_USRS);
   }
 
 void TL_Fav_UnfCommentUsr (void)
@@ -371,61 +371,61 @@ void TL_Fav_UnfCommentUsr (void)
 
 void TL_Fav_UnfCommentGbl (void)
   {
-   struct TL_Comment SocCom;
+   struct TL_Comment Com;
 
    /***** Stop marking as favourite a previously favourited comment *****/
-   TL_Fav_UnfComment (&SocCom);
+   TL_Fav_UnfComment (&Com);
 
    /***** Write HTML inside DIV with form to fav *****/
-   TL_Fav_PutFormToFavUnfComment (&SocCom,TL_SHOW_FEW_USRS);
+   TL_Fav_PutFormToFavUnfComment (&Com,TL_SHOW_FEW_USRS);
   }
 
-void TL_Fav_PutFormToFavUnfComment (const struct TL_Comment *SocCom,
+void TL_Fav_PutFormToFavUnfComment (const struct TL_Comment *Com,
                                     TL_HowManyUsrs_t HowManyUsrs)
   {
    bool IAmTheAuthor;
-   bool IAmAFaverOfThisSocCom;
+   bool IAmAFaverOfThisCom;
 
    /***** Put form to fav/unfav this comment *****/
    HTM_DIV_Begin ("class=\"TL_ICO\"");
-   IAmTheAuthor = Usr_ItsMe (SocCom->UsrCod);
+   IAmTheAuthor = Usr_ItsMe (Com->UsrCod);
    if (IAmTheAuthor)			// I am the author
       /* Put disabled icon */
-      TL_Fav_PutDisabledIconFav (SocCom->NumFavs);
+      TL_Fav_PutDisabledIconFav (Com->NumFavs);
    else				// I am not the author
      {
       /* Put icon to mark this comment as favourite */
-      IAmAFaverOfThisSocCom = TL_Fav_CheckIfCommIsFavedByUsr (SocCom->PubCod,
+      IAmAFaverOfThisCom = TL_Fav_CheckIfCommIsFavedByUsr (Com->PubCod,
 							      Gbl.Usrs.Me.UsrDat.UsrCod);
-      if (IAmAFaverOfThisSocCom)	// I have favourited this comment
+      if (IAmAFaverOfThisCom)	// I have favourited this comment
 	 /* Put icon to unfav this publication and list of users */
-	 TL_Fav_PutFormToUnfComment (SocCom->PubCod);
+	 TL_Fav_PutFormToUnfComment (Com->PubCod);
       else				// I am not a favouriter
 	 /* Put icon to fav this publication and list of users */
-	 TL_Fav_PutFormToFavComment (SocCom->PubCod);
+	 TL_Fav_PutFormToFavComment (Com->PubCod);
      }
    HTM_DIV_End ();
 
    /***** Show who have marked this comment as favourite *****/
-   TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (SocCom,HowManyUsrs);
+   TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (Com,HowManyUsrs);
   }
 
-static void TL_Fav_FavComment (struct TL_Comment *SocCom)
+static void TL_Fav_FavComment (struct TL_Comment *Com)
   {
    bool IAmTheAuthor;
 
    /***** Initialize image *****/
-   Med_MediaConstructor (&SocCom->Content.Media);
+   Med_MediaConstructor (&Com->Content.Media);
 
    /***** Get data of comment *****/
-   SocCom->PubCod = TL_GetParamPubCod ();
-   TL_GetDataOfCommByCod (SocCom);
+   Com->PubCod = TL_GetParamPubCod ();
+   TL_GetDataOfCommByCod (Com);
 
-   if (SocCom->PubCod > 0)
+   if (Com->PubCod > 0)
      {
-      IAmTheAuthor = Usr_ItsMe (SocCom->UsrCod);
+      IAmTheAuthor = Usr_ItsMe (Com->UsrCod);
       if (!IAmTheAuthor)	// I am not the author
-	 if (!TL_Fav_CheckIfCommIsFavedByUsr (SocCom->PubCod,
+	 if (!TL_Fav_CheckIfCommIsFavedByUsr (Com->PubCod,
 					      Gbl.Usrs.Me.UsrDat.UsrCod)) // I have not yet favourited the comment
 	   {
 	    /***** Mark as favourite in database *****/
@@ -434,58 +434,58 @@ static void TL_Fav_FavComment (struct TL_Comment *SocCom)
 			    " (PubCod,UsrCod,TimeFav)"
 			    " VALUES"
 			    " (%ld,%ld,NOW())",
-			    SocCom->PubCod,
+			    Com->PubCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	    /* Update number of times this comment is favourited */
-	    TL_Fav_GetNumTimesACommHasBeenFav (SocCom);
+	    TL_Fav_GetNumTimesACommHasBeenFav (Com);
 
 	    /**** Create notification about favourite post
 		  for the author of the post ***/
-	    TL_CreateNotifToAuthor (SocCom->UsrCod,SocCom->PubCod,Ntf_EVENT_TIMELINE_FAV);
+	    TL_CreateNotifToAuthor (Com->UsrCod,Com->PubCod,Ntf_EVENT_TIMELINE_FAV);
 	   }
      }
 
    /***** Free image *****/
-   Med_MediaDestructor (&SocCom->Content.Media);
+   Med_MediaDestructor (&Com->Content.Media);
   }
 
-static void TL_Fav_UnfComment (struct TL_Comment *SocCom)
+static void TL_Fav_UnfComment (struct TL_Comment *Com)
   {
    bool IAmTheAuthor;
 
    /***** Initialize image *****/
-   Med_MediaConstructor (&SocCom->Content.Media);
+   Med_MediaConstructor (&Com->Content.Media);
 
    /***** Get data of comment *****/
-   SocCom->PubCod = TL_GetParamPubCod ();
-   TL_GetDataOfCommByCod (SocCom);
+   Com->PubCod = TL_GetParamPubCod ();
+   TL_GetDataOfCommByCod (Com);
 
-   if (SocCom->PubCod > 0)
+   if (Com->PubCod > 0)
      {
-      IAmTheAuthor = Usr_ItsMe (SocCom->UsrCod);
-      if (SocCom->NumFavs &&
+      IAmTheAuthor = Usr_ItsMe (Com->UsrCod);
+      if (Com->NumFavs &&
 	  !IAmTheAuthor)	// I am not the author
-	 if (TL_Fav_CheckIfCommIsFavedByUsr (SocCom->PubCod,
+	 if (TL_Fav_CheckIfCommIsFavedByUsr (Com->PubCod,
 					     Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the comment
 	   {
 	    /***** Delete the mark as favourite from database *****/
 	    DB_QueryDELETE ("can not unfavourite comment",
 			    "DELETE FROM tl_comments_fav"
 			    " WHERE PubCod=%ld AND UsrCod=%ld",
-			    SocCom->PubCod,
+			    Com->PubCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	    /***** Update number of times this comment is favourited *****/
-	    TL_Fav_GetNumTimesACommHasBeenFav (SocCom);
+	    TL_Fav_GetNumTimesACommHasBeenFav (Com);
 
             /***** Mark possible notifications on this comment as removed *****/
-            Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,SocCom->PubCod);
+            Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,Com->PubCod);
 	   }
      }
 
    /***** Free image *****/
-   Med_MediaDestructor (&SocCom->Content.Media);
+   Med_MediaDestructor (&Com->Content.Media);
   }
 
 /*****************************************************************************/
@@ -518,48 +518,48 @@ static bool TL_Fav_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod)
 /*************** Get number of times a note has been favourited **************/
 /*****************************************************************************/
 
-void TL_Fav_GetNumTimesANoteHasBeenFav (struct TL_Note *SocNot)
+void TL_Fav_GetNumTimesANoteHasBeenFav (struct TL_Note *Not)
   {
    /***** Get number of times (users) this note has been favourited *****/
-   SocNot->NumFavs =
+   Not->NumFavs =
    (unsigned) DB_QueryCOUNT ("can not get number of times"
 			     " a note has been favourited",
 			     "SELECT COUNT(*) FROM tl_notes_fav"
 			     " WHERE NotCod=%ld"
 			     " AND UsrCod<>%ld",	// Extra check
-			     SocNot->NotCod,
-			     SocNot->UsrCod);		// The author
+			     Not->NotCod,
+			     Not->UsrCod);		// The author
   }
 
 /*****************************************************************************/
 /************ Get number of times a comment has been favourited **************/
 /*****************************************************************************/
 
-void TL_Fav_GetNumTimesACommHasBeenFav (struct TL_Comment *SocCom)
+void TL_Fav_GetNumTimesACommHasBeenFav (struct TL_Comment *Com)
   {
    /***** Get number of times (users) this comment has been favourited *****/
-   SocCom->NumFavs =
+   Com->NumFavs =
    (unsigned) DB_QueryCOUNT ("can not get number of times"
 			     " a comment has been favourited",
 			     "SELECT COUNT(*) FROM tl_comments_fav"
 			     " WHERE PubCod=%ld"
 			     " AND UsrCod<>%ld",	// Extra check
-			     SocCom->PubCod,
-			     SocCom->UsrCod);		// The author
+			     Com->PubCod,
+			     Com->UsrCod);		// The author
   }
 
 /*****************************************************************************/
 /************ Show users who have marked this note as favourite **************/
 /*****************************************************************************/
 
-static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
+static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *Not,
 					           TL_HowManyUsrs_t HowManyUsrs)
   {
    MYSQL_RES *mysql_res;
    unsigned NumFirstUsrs;
 
    /***** Get users who have marked this note as favourite *****/
-   if (SocNot->NumFavs)
+   if (Not->NumFavs)
       /***** Get list of users from database *****/
       NumFirstUsrs =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get users",
@@ -567,8 +567,8 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
 				 " WHERE NotCod=%ld"
 				 " AND UsrCod<>%ld"	// Extra check
 				 " ORDER BY FavCod LIMIT %u",
-				 SocNot->NotCod,
-				 SocNot->UsrCod,
+				 Not->NotCod,
+				 Not->UsrCod,
 				 HowManyUsrs == TL_SHOW_FEW_USRS ? TL_DEF_USRS_SHOWN :
 				                                   TL_MAX_USRS_SHOWN);
    else
@@ -577,21 +577,21 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
    /***** Show users *****/
    /* Number of users */
    HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
-   TL_ShowNumSharersOrFavers (SocNot->NumFavs);
+   TL_ShowNumSharersOrFavers (Not->NumFavs);
    HTM_DIV_End ();
 
    /* List users one by one */
    HTM_DIV_Begin ("class=\"TL_USRS\"");
-   TL_ShowSharersOrFavers (&mysql_res,SocNot->NumFavs,NumFirstUsrs);
-   if (NumFirstUsrs < SocNot->NumFavs)		// Not all are shown
+   TL_ShowSharersOrFavers (&mysql_res,Not->NumFavs,NumFirstUsrs);
+   if (NumFirstUsrs < Not->NumFavs)		// Not all are shown
       /* Clickable ellipsis to show all users */
-      TL_PutFormToSeeAllFaversSharers (ActAllFavSocNotGbl,ActAllFavSocNotUsr,
-                                       "NotCod=%ld",SocNot->NotCod,
+      TL_PutFormToSeeAllFaversSharers (ActAllFavTL_NotGbl,ActAllFavTL_NotUsr,
+                                       "NotCod=%ld",Not->NotCod,
                                        HowManyUsrs);
    HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/
-   if (SocNot->NumFavs)
+   if (Not->NumFavs)
       DB_FreeMySQLResult (&mysql_res);
   }
 
@@ -599,14 +599,14 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
 /************ Show users who have marked this note as favourite **************/
 /*****************************************************************************/
 
-static void TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom,
+static void TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *Com,
 					           TL_HowManyUsrs_t HowManyUsrs)
   {
    MYSQL_RES *mysql_res;
    unsigned NumFirstUsrs;
 
    /***** Get users who have marked this comment as favourite *****/
-   if (SocCom->NumFavs)
+   if (Com->NumFavs)
       /***** Get list of users from database *****/
       NumFirstUsrs =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get users",
@@ -614,8 +614,8 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocC
 				 " WHERE PubCod=%ld"
 				 " AND UsrCod<>%ld"	// Extra check
 				 " ORDER BY FavCod LIMIT %u",
-				 SocCom->PubCod,
-				 SocCom->UsrCod,
+				 Com->PubCod,
+				 Com->UsrCod,
 				 HowManyUsrs == TL_SHOW_FEW_USRS ? TL_DEF_USRS_SHOWN :
 				                                   TL_MAX_USRS_SHOWN);
    else
@@ -624,20 +624,20 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocC
    /***** Show users *****/
    /* Number of users */
    HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
-   TL_ShowNumSharersOrFavers (SocCom->NumFavs);
+   TL_ShowNumSharersOrFavers (Com->NumFavs);
    HTM_DIV_End ();
 
    /* List users one by one */
    HTM_DIV_Begin ("class=\"TL_USRS\"");
-   TL_ShowSharersOrFavers (&mysql_res,SocCom->NumFavs,NumFirstUsrs);
-   if (NumFirstUsrs < SocCom->NumFavs)
+   TL_ShowSharersOrFavers (&mysql_res,Com->NumFavs,NumFirstUsrs);
+   if (NumFirstUsrs < Com->NumFavs)
       /* Clickable ellipsis to show all users */
-      TL_PutFormToSeeAllFaversSharers (ActAllFavSocComGbl,ActAllFavSocComUsr,
-                                       "PubCod=%ld",SocCom->PubCod,
+      TL_PutFormToSeeAllFaversSharers (ActAllFavTL_ComGbl,ActAllFavTL_ComUsr,
+                                       "PubCod=%ld",Com->PubCod,
                                        HowManyUsrs);
    HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/
-   if (SocCom->NumFavs)
+   if (Com->NumFavs)
       DB_FreeMySQLResult (&mysql_res);
   }

@@ -71,7 +71,7 @@ bool Prf_GetAndStoreAllUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
 void Prf_CreateNewUsrFigures (long UsrCod,bool CreatingMyOwnAccount);
 void Prf_RemoveUsrFigures (long UsrCod);
 void Prf_IncrementNumClicksUsr (long UsrCod);
-void Prf_IncrementNumSocPubUsr (long UsrCod);
+void Prf_IncrementNumPubsUsr (long UsrCod);
 void Prf_IncrementNumFileViewsUsr (long UsrCod);
 void Prf_IncrementNumForPstUsr (long UsrCod);
 void Prf_IncrementNumMsgSntUsr (long UsrCod);

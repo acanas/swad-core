@@ -1334,7 +1334,7 @@ void Prf_IncrementNumClicksUsr (long UsrCod)
 /********* Increment number of social publications sent by a user ************/
 /*****************************************************************************/
 
-void Prf_IncrementNumSocPubUsr (long UsrCod)
+void Prf_IncrementNumPubsUsr (long UsrCod)
   {
    /***** Increment number of social publications *****/
    // If NumSocPub < 0 ==> not yet calculated, so do nothing

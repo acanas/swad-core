@@ -106,10 +106,10 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
   {
    [Ntf_EVENT_UNKNOWN          ] = ActUnk,
    /* Start tab */
-   [Ntf_EVENT_TIMELINE_COMMENT ] = ActSeeSocTmlGbl,
-   [Ntf_EVENT_TIMELINE_FAV     ] = ActSeeSocTmlGbl,
-   [Ntf_EVENT_TIMELINE_SHARE   ] = ActSeeSocTmlGbl,
-   [Ntf_EVENT_TIMELINE_MENTION ] = ActSeeSocTmlGbl,
+   [Ntf_EVENT_TIMELINE_COMMENT ] = ActSeeTmlGbl,
+   [Ntf_EVENT_TIMELINE_FAV     ] = ActSeeTmlGbl,
+   [Ntf_EVENT_TIMELINE_SHARE   ] = ActSeeTmlGbl,
+   [Ntf_EVENT_TIMELINE_MENTION ] = ActSeeTmlGbl,
    [Ntf_EVENT_FOLLOWER         ] = ActSeeFlr,
    /* System tab */
    /* Country tab */
@@ -724,7 +724,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_TIMELINE_SHARE:
       case Ntf_EVENT_TIMELINE_MENTION:
 	 // Cod is the code of the social publishing
-         Frm_StartForm (ActSeeSocTmlGbl);
+         Frm_StartForm (ActSeeTmlGbl);
 	 TL_PutHiddenParamPubCod (Cod);
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
          Ntf_PutHiddenParamNotifyEvent (NotifyEvent);

@@ -188,7 +188,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request search"				// Precisa de tradução
 #endif
 	,
-	[ActSeeSocTmlGbl] =
+	[ActSeeTmlGbl] =
 #if   L==1	// ca
 	"Show timeline global"				// Necessita traducció
 #elif L==2	// de
@@ -440,7 +440,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Search"					// Precisa de tradução
 #endif
 	,
-	[ActRefNewSocPubGbl] =
+	[ActRefNewTL_PubGbl] =
 #if   L==1	// ca
 	"Refresh global timeline (new publications)"	// Necessita traducció
 #elif L==2	// de
@@ -461,7 +461,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Refresh global timeline (new publications)"	// Precisa de tradução
 #endif
 	,
-	[ActRefOldSocPubGbl] =
+	[ActRefOldTL_PubGbl] =
 #if   L==1	// ca
 	"Show previous publications in global timeline"	// Necessita traducció
 #elif L==2	// de
@@ -482,7 +482,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show previous publications in global timeline"	// Precisa de tradução
 #endif
 	,
-	[ActRcvSocPstGbl] =
+	[ActRcvTL_PstGbl] =
 #if   L==1	// ca
 	"Create post in global timeline"		// Necessita traducció
 #elif L==2	// de
@@ -503,7 +503,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create post in global timeline"		// Precisa de tradução
 #endif
 	,
-	[ActRcvSocComGbl] =
+	[ActRcvTL_ComGbl] =
 #if   L==1	// ca
 	"Create comment in global timeline"		// Necessita traducció
 #elif L==2	// de
@@ -524,7 +524,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create comment in global timeline"		// Precisa de tradução
 #endif
 	,
-	[ActShoHidSocComGbl] =
+	[ActShoHidTL_ComGbl] =
 #if   L==1	// ca
 	"Show hidden comments in global timeline"	// Necessita traducció
 #elif L==2	// de
@@ -545,7 +545,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show hidden comments in global timeline"	// Precisa de tradução
 #endif
 	,
-	[ActAllShaSocNotGbl] =
+	[ActAllShaTL_NotGbl] =
 #if   L==1	// ca
 	"Show who shared a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
@@ -566,7 +566,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show who shared a publication in global timeline"	// Precisa de tradução
 #endif
 	,
-	[ActAllFavSocNotGbl] =
+	[ActAllFavTL_NotGbl] =
 #if   L==1	// ca
 	"Show who favourited a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
@@ -587,7 +587,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show who favourited a publication in global timeline"	// Precisa de tradução
 #endif
 	,
-	[ActAllFavSocComGbl] =
+	[ActAllFavTL_ComGbl] =
 #if   L==1	// ca
 	"Show who favourited a comment in global timeline"	// Necessita traducció
 #elif L==2	// de
@@ -608,7 +608,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show who favourited a comment in global timeline"	// Precisa de tradução
 #endif
 	,
-	[ActShaSocNotGbl] =
+	[ActShaTL_NotGbl] =
 #if   L==1	// ca
 	"Share a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
@@ -629,7 +629,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Share a publication in global timeline"	// Precisa de tradução
 #endif
 	,
-	[ActUnsSocNotGbl] =
+	[ActUnsTL_NotGbl] =
 #if   L==1	// ca
 	"Unshare a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
@@ -650,7 +650,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unshare a publication in global timeline"	// Precisa de tradução
 #endif
 	,
-	[ActFavSocNotGbl] =
+	[ActFavTL_NotGbl] =
 #if   L==1	// ca
 	"Favourite a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
@@ -671,7 +671,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Favourite a publication in global timeline"	// Precisa de tradução
 #endif
 	,
-	[ActUnfSocNotGbl] =
+	[ActUnfTL_NotGbl] =
 #if   L==1	// ca
 	"Unfavourite a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
@@ -692,7 +692,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unfavourite a publication in global timeline"	// Precisa de tradução
 #endif
 	,
-	[ActFavSocComGbl] =
+	[ActFavTL_ComGbl] =
 #if   L==1	// ca
 	"Favourite a comment in global timeline"	// Necessita traducció
 #elif L==2	// de
@@ -713,7 +713,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Favourite a comment in global timeline"	// Precisa de tradução
 #endif
 	,
-	[ActUnfSocComGbl] =
+	[ActUnfTL_ComGbl] =
 #if   L==1	// ca
 	"Unfavourite a comment in global timeline"	// Necessita traducció
 #elif L==2	// de
@@ -734,7 +734,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unfavourite a comment in global timeline"	// Precisa de tradução
 #endif
 	,
-	[ActReqRemSocPubGbl] =
+	[ActReqRemTL_PubGbl] =
 #if   L==1	// ca
 	"Request deletion of a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
@@ -755,7 +755,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request deletion of a publication in global timeline"	// Precisa de tradução
 #endif
 	,
-	[ActRemSocPubGbl] =
+	[ActRemTL_PubGbl] =
 #if   L==1	// ca
 	"Delete a publication in global timeline"	// Necessita traducció
 #elif L==2	// de
@@ -776,7 +776,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Delete a publication in global timeline"	// Precisa de tradução
 #endif
 	,
-	[ActReqRemSocComGbl] =
+	[ActReqRemTL_ComGbl] =
 #if   L==1	// ca
 	"Request deletion of a comment in global timeline"	// Necessita traducció
 #elif L==2	// de
@@ -797,7 +797,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request deletion of a comment in global timeline"	// Precisa de tradução
 #endif
 	,
-	[ActRemSocComGbl] =
+	[ActRemTL_ComGbl] =
 #if   L==1	// ca
 	"Delete a comment in global timeline"		// Necessita traducció
 #elif L==2	// de
@@ -839,7 +839,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request to show public user profile"		// Precisa de tradução
 #endif
 	,
-	[ActRefOldSocPubUsr] =
+	[ActRefOldTL_PubUsr] =
 #if   L==1	// ca
 	"Show previous publications in user timeline"	// Necessita traducció
 #elif L==2	// de
@@ -860,7 +860,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show previous publications in user timeline"	// Precisa de tradução
 #endif
 	,
-	[ActRcvSocPstUsr] =
+	[ActRcvTL_PstUsr] =
 #if   L==1	// ca
 	"Create post in user timeline"			// Necessita traducció
 #elif L==2	// de
@@ -881,7 +881,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create post in user timeline"			// Precisa de tradução
 #endif
 	,
-	[ActRcvSocComUsr] =
+	[ActRcvTL_ComUsr] =
 #if   L==1	// ca
 	"Create comment in user timeline"		// Necessita traducció
 #elif L==2	// de
@@ -902,7 +902,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create comment in user timeline"		// Precisa de tradução
 #endif
 	,
-	[ActShoHidSocComUsr] =
+	[ActShoHidTL_ComUsr] =
 #if   L==1	// ca
 	"Show hidden comments in user timeline"		// Necessita traducció
 #elif L==2	// de
@@ -923,7 +923,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show hidden comments in user timeline"		// Precisa de tradução
 #endif
 	,
-	[ActAllShaSocNotUsr] =
+	[ActAllShaTL_NotUsr] =
 #if   L==1	// ca
 	"Show who shared a publication in user timeline"	// Necessita traducció
 #elif L==2	// de
@@ -944,7 +944,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show who shared a publication in user timeline"	// Precisa de tradução
 #endif
 	,
-	[ActAllFavSocNotUsr] =
+	[ActAllFavTL_NotUsr] =
 #if   L==1	// ca
 	"Show who favourited a publication in user timeline"	// Necessita traducció
 #elif L==2	// de
@@ -965,7 +965,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show who favourited a publication in user timeline"	// Precisa de tradução
 #endif
 	,
-	[ActAllFavSocComUsr] =
+	[ActAllFavTL_ComUsr] =
 #if   L==1	// ca
 	"Show who favourited a comment in user timeline"	// Necessita traducció
 #elif L==2	// de
@@ -986,7 +986,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show who favourited a comment in user timeline"	// Precisa de tradução
 #endif
 	,
-	[ActShaSocNotUsr] =
+	[ActShaTL_NotUsr] =
 #if   L==1	// ca
 	"Share a publication in user timeline"		// Necessita traducció
 #elif L==2	// de
@@ -1007,7 +1007,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Share a publication in user timeline"		// Precisa de tradução
 #endif
 	,
-	[ActUnsSocNotUsr] =
+	[ActUnsTL_NotUsr] =
 #if   L==1	// ca
 	"Unshare a publication in user timeline"	// Necessita traducció
 #elif L==2	// de
@@ -1028,7 +1028,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unshare a publication in user timeline"	// Precisa de tradução
 #endif
 	,
-	[ActFavSocNotUsr] =
+	[ActFavTL_NotUsr] =
 #if   L==1	// ca
 	"Favourite a publication in user timeline"	// Necessita traducció
 #elif L==2	// de
@@ -1049,7 +1049,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Favourite a publication in user timeline"	// Precisa de tradução
 #endif
 	,
-	[ActUnfSocNotUsr] =
+	[ActUnfTL_NotUsr] =
 #if   L==1	// ca
 	"Unfavourite a publication in user timeline"	// Necessita traducció
 #elif L==2	// de
@@ -1070,7 +1070,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unfavourite a publication in user timeline"	// Precisa de tradução
 #endif
 	,
-	[ActFavSocComUsr] =
+	[ActFavTL_ComUsr] =
 #if   L==1	// ca
 	"Favourite a comment in user timeline"		// Necessita traducció
 #elif L==2	// de
@@ -1091,7 +1091,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Favourite a comment in user timeline"		// Precisa de tradução
 #endif
 	,
-	[ActUnfSocComUsr] =
+	[ActUnfTL_ComUsr] =
 #if   L==1	// ca
 	"Unfavourite a comment in user timeline"	// Necessita traducció
 #elif L==2	// de
@@ -1112,7 +1112,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unfavourite a comment in user timeline"	// Precisa de tradução
 #endif
 	,
-	[ActReqRemSocPubUsr] =
+	[ActReqRemTL_PubUsr] =
 #if   L==1	// ca
 	"Request deletion of a publication in user timeline"	// Necessita traducció
 #elif L==2	// de
@@ -1133,7 +1133,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request deletion of a publication in user timeline"	// Precisa de tradução
 #endif
 	,
-	[ActRemSocPubUsr] =
+	[ActRemTL_PubUsr] =
 #if   L==1	// ca
 	"Delete a publication in user timeline"		// Necessita traducció
 #elif L==2	// de
@@ -1154,7 +1154,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Delete a publication in user timeline"		// Precisa de tradução
 #endif
 	,
-	[ActReqRemSocComUsr] =
+	[ActReqRemTL_ComUsr] =
 #if   L==1	// ca
 	"Request deletion of a comment in user timeline"	// Necessita traducció
 #elif L==2	// de
@@ -1175,7 +1175,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request deletion of a comment in user timeline"	// Precisa de tradução
 #endif
 	,
-	[ActRemSocComUsr] =
+	[ActRemTL_ComUsr] =
 #if   L==1	// ca
 	"Delete a comment in user timeline"	// Necessita traducció
 #elif L==2	// de

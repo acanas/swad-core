@@ -45,9 +45,9 @@ void TL_Sha_ShaNoteUsr (void);
 void TL_Sha_ShaNoteGbl (void);
 void TL_Sha_UnsNoteUsr (void);
 void TL_Sha_UnsNoteGbl (void);
-void TL_Sha_PutFormToShaUnsNote (const struct TL_Note *SocNot,
+void TL_Sha_PutFormToShaUnsNote (const struct TL_Note *Not,
                                  TL_HowManyUsrs_t HowManyUsrs);
 
-void TL_Sha_UpdateNumTimesANoteHasBeenShared (struct TL_Note *SocNot);
+void TL_Sha_UpdateNumTimesANoteHasBeenShared (struct TL_Note *Not);
 
 #endif

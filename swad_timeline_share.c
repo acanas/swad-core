@@ -60,12 +60,12 @@ static void TL_Sha_PutDisabledIconShare (unsigned NumShared);
 static void TL_Sha_PutFormToShaNote (long ParamCod);
 static void TL_Sha_PutFormToUnsNote (long ParamCod);
 
-static void TL_Sha_ShaNote (struct TL_Note *SocNot);
-static void TL_Sha_UnsNote (struct TL_Note *SocNot);
+static void TL_Sha_ShaNote (struct TL_Note *Not);
+static void TL_Sha_UnsNote (struct TL_Note *Not);
 
 static bool TL_Sha_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);
 
-static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
+static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Note *Not,
 					      TL_HowManyUsrs_t HowManyUsrs);
 
 /*****************************************************************************/
@@ -99,7 +99,7 @@ static void TL_Sha_PutFormToShaNote (long ParamCod)
    extern const char *Txt_Share;
 
    /***** Form and icon to mark note as favourite *****/
-   TL_FormFavSha (ActShaSocNotGbl,ActShaSocNotUsr,
+   TL_FormFavSha (ActShaTL_NotGbl,ActShaTL_NotUsr,
                   "NotCod=%ld",ParamCod,
 	          TL_ICON_SHARE,Txt_Share);
   }
@@ -109,7 +109,7 @@ static void TL_Sha_PutFormToUnsNote (long ParamCod)
    extern const char *Txt_TIMELINE_NOTE_Shared;
 
    /***** Form and icon to mark note as favourite *****/
-   TL_FormFavSha (ActUnsSocNotGbl,ActUnsSocNotUsr,
+   TL_FormFavSha (ActUnsTL_NotGbl,ActUnsTL_NotUsr,
                   "NotCod=%ld",ParamCod,
 	          TL_ICON_SHARED,Txt_TIMELINE_NOTE_Shared);
   }
@@ -129,14 +129,14 @@ void TL_Sha_ShowAllSharersNoteUsr (void)
 
 void TL_Sha_ShowAllSharersNoteGbl (void)
   {
-   struct TL_Note SocNot;
+   struct TL_Note Not;
 
    /***** Get data of note *****/
-   SocNot.NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (&SocNot);
+   Not.NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (&Not);
 
    /***** Write HTML inside DIV with form to share/unshare *****/
-   TL_Sha_PutFormToShaUnsNote (&SocNot,TL_SHOW_ALL_USRS);
+   TL_Sha_PutFormToShaUnsNote (&Not,TL_SHOW_ALL_USRS);
   }
 
 void TL_Sha_ShaNoteUsr (void)
@@ -150,47 +150,47 @@ void TL_Sha_ShaNoteUsr (void)
 
 void TL_Sha_ShaNoteGbl (void)
   {
-   struct TL_Note SocNot;
+   struct TL_Note Not;
 
    /***** Share note *****/
-   TL_Sha_ShaNote (&SocNot);
+   TL_Sha_ShaNote (&Not);
 
    /***** Write HTML inside DIV with form to unshare *****/
-   TL_Sha_PutFormToShaUnsNote (&SocNot,TL_SHOW_FEW_USRS);
+   TL_Sha_PutFormToShaUnsNote (&Not,TL_SHOW_FEW_USRS);
   }
 
-static void TL_Sha_ShaNote (struct TL_Note *SocNot)
+static void TL_Sha_ShaNote (struct TL_Note *Not)
   {
    // extern const char *Txt_The_original_post_no_longer_exists;
-   struct TL_Publication SocPub;
+   struct TL_Publication Pub;
    bool ItsMe;
    long OriginalPubCod;
 
    /***** Get data of note *****/
-   SocNot->NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (SocNot);
+   Not->NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (Not);
 
-   if (SocNot->NotCod > 0)
+   if (Not->NotCod > 0)
      {
-      ItsMe = Usr_ItsMe (SocNot->UsrCod);
+      ItsMe = Usr_ItsMe (Not->UsrCod);
       if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-         if (!TL_Sha_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
+         if (!TL_Sha_CheckIfNoteIsSharedByUsr (Not->NotCod,
 					    Gbl.Usrs.Me.UsrDat.UsrCod))	// Not yet shared by me
 	   {
 	    /***** Share (publish note in timeline) *****/
-	    SocPub.NotCod       = SocNot->NotCod;
-	    SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-	    SocPub.PubType      = TL_PUB_SHARED_NOTE;
-	    TL_PublishNoteInTimeline (&SocPub);	// Set SocPub.PubCod
+	    Pub.NotCod       = Not->NotCod;
+	    Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+	    Pub.PubType      = TL_PUB_SHARED_NOTE;
+	    TL_PublishNoteInTimeline (&Pub);	// Set Pub.PubCod
 
 	    /* Update number of times this note is shared */
-	    TL_Sha_UpdateNumTimesANoteHasBeenShared (SocNot);
+	    TL_Sha_UpdateNumTimesANoteHasBeenShared (Not);
 
 	    /**** Create notification about shared post
 		  for the author of the post ***/
-	    OriginalPubCod = TL_GetPubCodOfOriginalNote (SocNot->NotCod);
+	    OriginalPubCod = TL_GetPubCodOfOriginalNote (Not->NotCod);
 	    if (OriginalPubCod > 0)
-	       TL_CreateNotifToAuthor (SocNot->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_SHARE);
+	       TL_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_SHARE);
 	   }
      }
   }
@@ -210,31 +210,31 @@ void TL_Sha_UnsNoteUsr (void)
 
 void TL_Sha_UnsNoteGbl (void)
   {
-   struct TL_Note SocNot;
+   struct TL_Note Not;
 
    /***** Unshare note *****/
-   TL_Sha_UnsNote (&SocNot);
+   TL_Sha_UnsNote (&Not);
 
    /***** Write HTML inside DIV with form to share *****/
-   TL_Sha_PutFormToShaUnsNote (&SocNot,TL_SHOW_FEW_USRS);
+   TL_Sha_PutFormToShaUnsNote (&Not,TL_SHOW_FEW_USRS);
   }
 
-static void TL_Sha_UnsNote (struct TL_Note *SocNot)
+static void TL_Sha_UnsNote (struct TL_Note *Not)
   {
    // extern const char *Txt_The_original_post_no_longer_exists;
    long OriginalPubCod;
    bool ItsMe;
 
    /***** Get data of note *****/
-   SocNot->NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (SocNot);
+   Not->NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (Not);
 
-   if (SocNot->NotCod > 0)
+   if (Not->NotCod > 0)
      {
-      ItsMe = Usr_ItsMe (SocNot->UsrCod);
-      if (SocNot->NumShared &&
+      ItsMe = Usr_ItsMe (Not->UsrCod);
+      if (Not->NumShared &&
 	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-	 if (TL_Sha_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
+	 if (TL_Sha_CheckIfNoteIsSharedByUsr (Not->NotCod,
 					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I am a sharer
 	   {
 	    /***** Delete publication from database *****/
@@ -243,48 +243,48 @@ static void TL_Sha_UnsNote (struct TL_Note *SocNot)
 	                    " WHERE NotCod=%ld"
 	                    " AND PublisherCod=%ld"
 	                    " AND PubType=%u",
-			    SocNot->NotCod,
+			    Not->NotCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod,
 			    (unsigned) TL_PUB_SHARED_NOTE);
 
 	    /***** Update number of times this note is shared *****/
-	    TL_Sha_UpdateNumTimesANoteHasBeenShared (SocNot);
+	    TL_Sha_UpdateNumTimesANoteHasBeenShared (Not);
 
             /***** Mark possible notifications on this note as removed *****/
-	    OriginalPubCod = TL_GetPubCodOfOriginalNote (SocNot->NotCod);
+	    OriginalPubCod = TL_GetPubCodOfOriginalNote (Not->NotCod);
 	    if (OriginalPubCod > 0)
 	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE,OriginalPubCod);
 	   }
      }
   }
 
-void TL_Sha_PutFormToShaUnsNote (const struct TL_Note *SocNot,
+void TL_Sha_PutFormToShaUnsNote (const struct TL_Note *Not,
                                  TL_HowManyUsrs_t HowManyUsrs)
   {
    bool IAmTheAuthor;
-   bool IAmASharerOfThisSocNot;
+   bool IAmASharerOfThisNot;
 
    /***** Put form to share/unshare this note *****/
    HTM_DIV_Begin ("class=\"TL_ICO\"");
-   IAmTheAuthor = Usr_ItsMe (SocNot->UsrCod);
-   if (SocNot->Unavailable ||		// Unavailable notes can not be shared
+   IAmTheAuthor = Usr_ItsMe (Not->UsrCod);
+   if (Not->Unavailable ||		// Unavailable notes can not be shared
        IAmTheAuthor)			// I am the author
       /* Put disabled icon */
-      TL_Sha_PutDisabledIconShare (SocNot->NumShared);
+      TL_Sha_PutDisabledIconShare (Not->NumShared);
    else					// Available and I am not the author
      {
       /* Put icon to share/unshare */
-      IAmASharerOfThisSocNot = TL_Sha_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
+      IAmASharerOfThisNot = TL_Sha_CheckIfNoteIsSharedByUsr (Not->NotCod,
 							    Gbl.Usrs.Me.UsrDat.UsrCod);
-      if (IAmASharerOfThisSocNot)	// I have shared this note
-	 TL_Sha_PutFormToUnsNote (SocNot->NotCod);
+      if (IAmASharerOfThisNot)	// I have shared this note
+	 TL_Sha_PutFormToUnsNote (Not->NotCod);
       else				// I have not shared this note
-	 TL_Sha_PutFormToShaNote (SocNot->NotCod);
+	 TL_Sha_PutFormToShaNote (Not->NotCod);
      }
    HTM_DIV_End ();
 
    /***** Show who have shared this note *****/
-   TL_Sha_ShowUsrsWhoHaveSharedNote (SocNot,HowManyUsrs);
+   TL_Sha_ShowUsrsWhoHaveSharedNote (Not,HowManyUsrs);
   }
 
 /*****************************************************************************/
@@ -307,18 +307,18 @@ static bool TL_Sha_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod)
 /********** Get number of times a note has been shared in timeline ***********/
 /*****************************************************************************/
 
-void TL_Sha_UpdateNumTimesANoteHasBeenShared (struct TL_Note *SocNot)
+void TL_Sha_UpdateNumTimesANoteHasBeenShared (struct TL_Note *Not)
   {
    /***** Get number of times (users) this note has been shared *****/
-   SocNot->NumShared =
+   Not->NumShared =
    (unsigned) DB_QueryCOUNT ("can not get number of times"
 			     " a note has been shared",
 			     "SELECT COUNT(*) FROM tl_pubs"
 			     " WHERE NotCod=%ld"
 			     " AND PublisherCod<>%ld"
 			     " AND PubType=%u",
-			     SocNot->NotCod,
-			     SocNot->UsrCod,	// The author
+			     Not->NotCod,
+			     Not->UsrCod,	// The author
 			     (unsigned) TL_PUB_SHARED_NOTE);
   }
 
@@ -326,14 +326,14 @@ void TL_Sha_UpdateNumTimesANoteHasBeenShared (struct TL_Note *SocNot)
 /******************* Show users who have shared this note ********************/
 /*****************************************************************************/
 
-static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
+static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Note *Not,
 					      TL_HowManyUsrs_t HowManyUsrs)
   {
    MYSQL_RES *mysql_res;
    unsigned NumFirstUsrs;
 
    /***** Get users who have shared this note *****/
-   if (SocNot->NumShared)
+   if (Not->NumShared)
       NumFirstUsrs =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get users",
 				 "SELECT PublisherCod FROM tl_pubs"
@@ -341,8 +341,8 @@ static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
 				 " AND PublisherCod<>%ld"
 				 " AND PubType=%u"
 				 " ORDER BY PubCod LIMIT %u",
-				 SocNot->NotCod,
-				 SocNot->UsrCod,
+				 Not->NotCod,
+				 Not->UsrCod,
 				 (unsigned) TL_PUB_SHARED_NOTE,
 				 HowManyUsrs == TL_SHOW_FEW_USRS ? TL_DEF_USRS_SHOWN :
 				                                   TL_MAX_USRS_SHOWN);
@@ -352,20 +352,20 @@ static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
    /***** Show users *****/
    /* Number of users */
    HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
-   TL_ShowNumSharersOrFavers (SocNot->NumShared);
+   TL_ShowNumSharersOrFavers (Not->NumShared);
    HTM_DIV_End ();
 
    /* List users one by one */
    HTM_DIV_Begin ("class=\"TL_USRS\"");
-   TL_ShowSharersOrFavers (&mysql_res,SocNot->NumShared,NumFirstUsrs);
-   if (NumFirstUsrs < SocNot->NumShared)
+   TL_ShowSharersOrFavers (&mysql_res,Not->NumShared,NumFirstUsrs);
+   if (NumFirstUsrs < Not->NumShared)
       /* Clickable ellipsis to show all users */
-      TL_PutFormToSeeAllFaversSharers (ActAllShaSocNotGbl,ActAllShaSocNotUsr,
-		                       "NotCod=%ld",SocNot->NotCod,
+      TL_PutFormToSeeAllFaversSharers (ActAllShaTL_NotGbl,ActAllShaTL_NotUsr,
+		                       "NotCod=%ld",Not->NotCod,
                                        HowManyUsrs);
    HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/
-   if (SocNot->NumShared)
+   if (Not->NumShared)
       DB_FreeMySQLResult (&mysql_res);
   }

@@ -194,7 +194,7 @@ void TL_MarkNoteAsUnavailable (TL_NoteType_t NoteType,long Cod);
 void TL_MarkNoteOneFileAsUnavailable (const char *Path);
 void TL_MarkNotesChildrenOfFolderAsUnavailable (const char *Path);
 
-void TL_PublishNoteInTimeline (struct TL_Publication *SocPub);
+void TL_PublishNoteInTimeline (struct TL_Publication *Pub);
 
 void TL_ReceivePostUsr (void);
 void TL_ReceivePostGbl (void);
@@ -236,8 +236,8 @@ void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
 		    const char *ParamFormat,long ParamCod,
 		    const char *Icon,const char *Title);
 
-void TL_GetDataOfNoteByCod (struct TL_Note *SocNot);
-void TL_GetDataOfCommByCod (struct TL_Comment *SocCom);
+void TL_GetDataOfNoteByCod (struct TL_Note *Not);
+void TL_GetDataOfCommByCod (struct TL_Comment *Com);
 
 void TL_ClearOldTimelinesDB (void);
 

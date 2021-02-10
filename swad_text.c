@@ -19603,7 +19603,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar"
 #endif
 	,
-	//  2: ActSeeSocTmlGbl
+	//  2: ActSeeTmlGbl
 #if   L==1	// ca
 	"Timeline"
 #elif L==2	// de
@@ -21470,7 +21470,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar disciplinas, professores e documentos"
 #endif
 	,
-	//  2: ActSeeSocTmlGbl
+	//  2: ActSeeTmlGbl
 #if   L==1	// ca
 	"Timeline dels usuaris que segueixo o de tots els usuaris"
 #elif L==2	// de

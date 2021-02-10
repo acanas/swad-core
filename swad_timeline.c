@@ -223,7 +223,7 @@ Usr_Who_t TL_GlobalWho;
 
 static void TL_InitTimelineGbl (struct TL_Timeline *Timeline);
 static void TL_ShowHighlightedNote (struct TL_Timeline *Timeline,
-                                    struct TL_Note *SocNot);
+                                    struct TL_Note *Not);
 static void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline);
 
 static void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
@@ -252,7 +252,7 @@ static void TL_AllocateListPubs (struct TL_Timeline *Timeline,
                                  unsigned MaxPubsToGet);
 static void TL_FreeListPubs (const struct TL_Timeline *Timeline);
 static void TL_SelectTheMostRecentPub (const struct TL_SubQueries *SubQueries,
-				       struct TL_Publication *SocPub);
+				       struct TL_Publication *Pub);
 static void TL_InsertNoteInJustRetrievedNotes (long NotCod);
 static void TL_InsertNoteInVisibleTimeline (long NotCod);
 
@@ -279,7 +279,7 @@ static void TL_PutLinkToViewNewPublications (void);
 static void TL_PutLinkToViewOldPublications (void);
 
 static void TL_WriteNote (struct TL_Timeline *Timeline,
-	                  const struct TL_Note *SocNot,
+	                  const struct TL_Note *Not,
                           TL_TopMessage_t TopMessage,
                           long PublisherCod,	// Who did the action (publication, commenting, faving, sharing, mentioning)
                           TL_HighlightNote_t HighlightNote,	// Highlight note
@@ -288,11 +288,11 @@ static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod);
 static void TL_WriteAuthorNote (const struct UsrData *UsrDat);
 static void TL_WriteDateTime (time_t TimeUTC);
 static void TL_GetAndWritePost (long PstCod);
-static void TL_PutFormGoToAction (const struct TL_Note *SocNot,
+static void TL_PutFormGoToAction (const struct TL_Note *Not,
                                   const struct For_Forums *Forums);
-static void TL_GetNoteSummary (const struct TL_Note *SocNot,
+static void TL_GetNoteSummary (const struct TL_Note *Not,
                                char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
-static void TL_StoreAndPublishNoteInternal (TL_NoteType_t NoteType,long Cod,struct TL_Publication *SocPub);
+static void TL_StoreAndPublishNoteInternal (TL_NoteType_t NoteType,long Cod,struct TL_Publication *Pub);
 
 static void TL_PutFormToWriteNewPost (struct TL_Timeline *Timeline);
 static void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea);
@@ -306,7 +306,7 @@ static void TL_PutHiddenFormToWriteNewCommentToNote (const struct TL_Timeline *T
                                                      const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
 static unsigned long TL_GetNumCommentsInNote (long NotCod);
 static void TL_WriteCommentsInNote (struct TL_Timeline *Timeline,
-				    const struct TL_Note *SocNot,
+				    const struct TL_Note *Not,
 				    unsigned NumComments);
 static void TL_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
 			                 long NotCod,
@@ -324,7 +324,7 @@ static void TL_LinkToShowPreviousComments (const char IdComments[Frm_MAX_BYTES_I
 static void TL_PutIconToToggleComments (const char *UniqueId,
                                         const char *Icon,const char *Text);
 static void TL_WriteComment (struct TL_Timeline *Timeline,
-	                     struct TL_Comment *SocCom,
+	                     struct TL_Comment *Com,
                              TL_TopMessage_t TopMessage,long UsrCod,
                              bool ShowCommentAlone);	// Comment is shown alone, not in a list
 static void TL_WriteAuthorComment (struct UsrData *UsrDat);
@@ -342,7 +342,7 @@ static long TL_ReceiveComment (void);
 static void TL_RequestRemovalNote (struct TL_Timeline *Timeline);
 static void TL_PutParamsRemoveNote (void *Timeline);
 static void TL_RemoveNote (void);
-static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot);
+static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *Not);
 
 static long TL_GetNotCodFromPubCod (long PubCod);
 
@@ -352,15 +352,15 @@ static void TL_RemoveComment (void);
 static void TL_RemoveCommentMediaAndDBEntries (long PubCod);
 
 static void TL_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
-                                                struct TL_Publication *SocPub);
-static void TL_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Note *SocNot);
+                                                struct TL_Publication *Pub);
+static void TL_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Note *Not);
 static TL_PubType_t TL_GetPubTypeFromStr (const char *Str);
 static TL_NoteType_t TL_GetNoteTypeFromStr (const char *Str);
-static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *SocCom);
+static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *Com);
 
-static void TL_ResetPublication (struct TL_Publication *SocPub);
-static void TL_ResetNote (struct TL_Note *SocNot);
-static void TL_ResetComment (struct TL_Comment *SocCom);
+static void TL_ResetPublication (struct TL_Publication *Pub);
+static void TL_ResetNote (struct TL_Note *Not);
+static void TL_ResetComment (struct TL_Comment *Com);
 
 static void TL_ClearTimelineThisSession (void);
 static void TL_AddNotesJustRetrievedToTimelineThisSession (void);
@@ -421,10 +421,10 @@ void TL_ShowTimelineGbl (void)
 static void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline)
   {
    long PubCod;
-   struct TL_Note SocNot;
+   struct TL_Note Not;
 
    /***** Initialize note code to -1 ==> no highlighted note *****/
-   SocNot.NotCod = -1L;
+   Not.NotCod = -1L;
 
    /***** Get parameter with the code of a publication *****/
    // This parameter is optional. It can be provided by a notification.
@@ -433,15 +433,15 @@ static void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline)
 
    /***** If a note should be highlighted ==> get code of note from database *****/
    if (PubCod > 0)
-      SocNot.NotCod = TL_GetNotCodFromPubCod (PubCod);
+      Not.NotCod = TL_GetNotCodFromPubCod (PubCod);
 
    /***** If a note should be highlighted ==> show it above the timeline *****/
-   if (SocNot.NotCod > 0)
+   if (Not.NotCod > 0)
       /***** Show the note highlighted above the timeline *****/
-      TL_ShowHighlightedNote (Timeline,&SocNot);
+      TL_ShowHighlightedNote (Timeline,&Not);
 
    /***** Show timeline with possible highlighted note *****/
-   TL_ShowTimelineGblHighlightingNot (Timeline,SocNot.NotCod);
+   TL_ShowTimelineGblHighlightingNot (Timeline,Not.NotCod);
   }
 
 /*****************************************************************************/
@@ -449,7 +449,7 @@ static void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline)
 /*****************************************************************************/
 
 static void TL_ShowHighlightedNote (struct TL_Timeline *Timeline,
-                                    struct TL_Note *SocNot)
+                                    struct TL_Note *Not)
   {
    struct UsrData PublisherDat;
    Ntf_NotifyEvent_t NotifyEvent;
@@ -500,8 +500,8 @@ static void TL_ShowHighlightedNote (struct TL_Timeline *Timeline,
    NotifyEvent = Ntf_GetParamNotifyEvent ();
 
    /***** Show the note highlighted *****/
-   TL_GetDataOfNoteByCod (SocNot);
-   TL_WriteNote (Timeline,SocNot,
+   TL_GetDataOfNoteByCod (Not);
+   TL_WriteNote (Timeline,Not,
 		 TopMessages[NotifyEvent],PublisherDat.UsrCod,
 		 TL_HIGHLIGHT_NOTE,
 		 TL_SHOW_NOTE_ALONE);
@@ -1046,7 +1046,7 @@ static void TL_FreeListPubs (const struct TL_Timeline *Timeline)
 /*****************************************************************************/
 
 static void TL_SelectTheMostRecentPub (const struct TL_SubQueries *SubQueries,
-				       struct TL_Publication *SocPub)
+				       struct TL_Publication *Pub)
   {
    MYSQL_RES *mysql_res;
    unsigned NumPubs = 0;	// Initialized to avoid warning
@@ -1068,10 +1068,10 @@ static void TL_SelectTheMostRecentPub (const struct TL_SubQueries *SubQueries,
 
    if (NumPubs == 1)
       /* Get data of publication */
-      TL_GetDataOfPublicationFromNextRow (mysql_res,SocPub);
+      TL_GetDataOfPublicationFromNextRow (mysql_res,Pub);
    else
       /* Reset data of publication */
-      TL_ResetPublication (SocPub);
+      TL_ResetPublication (Pub);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1138,7 +1138,7 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
   {
    extern const char *Hlp_START_Timeline;
    unsigned long NumPub;
-   struct TL_Note SocNot;
+   struct TL_Note Not;
    bool GlobalTimeline = (Gbl.Usrs.Other.UsrDat.UsrCod <= 0);
    bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
@@ -1177,14 +1177,14 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
 	NumPub++)
      {
       /* Get data of note */
-      SocNot.NotCod = Timeline->Pubs.Lst[NumPub].NotCod;
-      TL_GetDataOfNoteByCod (&SocNot);
+      Not.NotCod = Timeline->Pubs.Lst[NumPub].NotCod;
+      TL_GetDataOfNoteByCod (&Not);
 
       /* Write note */
-      TL_WriteNote (Timeline,&SocNot,
+      TL_WriteNote (Timeline,&Not,
                     Timeline->Pubs.Lst[NumPub].TopMessage,
                     Timeline->Pubs.Lst[NumPub].PublisherCod,
-		    SocNot.NotCod == NotCodToHighlight ? TL_HIGHLIGHT_NOTE :
+		    Not.NotCod == NotCodToHighlight ? TL_HIGHLIGHT_NOTE :
 			                                 TL_DONT_HIGHLIGHT_NOTE,
 		    TL_DONT_SHOW_NOTE_ALONE);
      }
@@ -1256,7 +1256,7 @@ static void TL_PutFormWho (struct TL_Timeline *Timeline)
 	 HTM_DIV_Begin ("class=\"%s\"",
 			Who == Timeline->Who ? "PREF_ON" :
 					       "PREF_OFF");
-	 Frm_StartForm (ActSeeSocTmlGbl);
+	 Frm_StartForm (ActSeeTmlGbl);
 	 Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
 	 Usr_PutWhoIcon (Who);
 	 Frm_EndForm ();
@@ -1391,7 +1391,7 @@ static void TL_ShowWarningYouDontFollowAnyUser (void)
 static void TL_InsertNewPubsInTimeline (struct TL_Timeline *Timeline)
   {
    unsigned long NumPub;
-   struct TL_Note SocNot;
+   struct TL_Note Not;
 
    /***** List new publications timeline *****/
    for (NumPub = 0;
@@ -1399,11 +1399,11 @@ static void TL_InsertNewPubsInTimeline (struct TL_Timeline *Timeline)
 	NumPub++)
      {
       /* Get data of note */
-      SocNot.NotCod = Timeline->Pubs.Lst[NumPub].NotCod;
-      TL_GetDataOfNoteByCod (&SocNot);
+      Not.NotCod = Timeline->Pubs.Lst[NumPub].NotCod;
+      TL_GetDataOfNoteByCod (&Not);
 
       /* Write note */
-      TL_WriteNote (Timeline,&SocNot,
+      TL_WriteNote (Timeline,&Not,
                     Timeline->Pubs.Lst[NumPub].TopMessage,
                     Timeline->Pubs.Lst[NumPub].PublisherCod,
                     TL_DONT_HIGHLIGHT_NOTE,
@@ -1419,7 +1419,7 @@ static void TL_InsertNewPubsInTimeline (struct TL_Timeline *Timeline)
 static void TL_ShowOldPubsInTimeline (struct TL_Timeline *Timeline)
   {
    unsigned long NumPub;
-   struct TL_Note SocNot;
+   struct TL_Note Not;
 
    /***** List old publications in timeline *****/
    for (NumPub = 0;
@@ -1427,11 +1427,11 @@ static void TL_ShowOldPubsInTimeline (struct TL_Timeline *Timeline)
 	NumPub++)
      {
       /* Get data of note */
-      SocNot.NotCod = Timeline->Pubs.Lst[NumPub].NotCod;
-      TL_GetDataOfNoteByCod (&SocNot);
+      Not.NotCod = Timeline->Pubs.Lst[NumPub].NotCod;
+      TL_GetDataOfNoteByCod (&Not);
 
       /* Write note */
-      TL_WriteNote (Timeline,&SocNot,
+      TL_WriteNote (Timeline,&Not,
                     Timeline->Pubs.Lst[NumPub].TopMessage,
                     Timeline->Pubs.Lst[NumPub].PublisherCod,
                     TL_DONT_HIGHLIGHT_NOTE,
@@ -1499,7 +1499,7 @@ static void TL_PutLinkToViewOldPublications (void)
 /*****************************************************************************/
 
 static void TL_WriteNote (struct TL_Timeline *Timeline,
-	                  const struct TL_Note *SocNot,
+	                  const struct TL_Note *Not,
                           TL_TopMessage_t TopMessage,
                           long PublisherCod,	// Who did the action (publication, commenting, faving, sharing, mentioning)
                           TL_HighlightNote_t HighlightNote,	// Highlight note
@@ -1544,9 +1544,9 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
 		    (HighlightNote == TL_HIGHLIGHT_NOTE ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
 					                  "TL_WIDTH TL_SEP"));
 
-   if (SocNot->NotCod   <= 0 ||
-       SocNot->NoteType == TL_NOTE_UNKNOWN ||
-       SocNot->UsrCod   <= 0)
+   if (Not->NotCod   <= 0 ||
+       Not->NoteType == TL_NOTE_UNKNOWN ||
+       Not->UsrCod   <= 0)
       Ale_ShowAlert (Ale_ERROR,"Error in note.");
    else
      {
@@ -1563,7 +1563,7 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
       Usr_UsrDataConstructor (&AuthorDat);
 
       /***** Get author data *****/
-      AuthorDat.UsrCod = SocNot->UsrCod;
+      AuthorDat.UsrCod = Not->UsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&AuthorDat,Usr_DONT_GET_PREFS);
       IAmTheAuthor = Usr_ItsMe (AuthorDat.UsrCod);
 
@@ -1581,37 +1581,37 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
 
       /* Write author's full name and date-time */
       TL_WriteAuthorNote (&AuthorDat);
-      TL_WriteDateTime (SocNot->DateTimeUTC);
+      TL_WriteDateTime (Not->DateTimeUTC);
 
       /* Write content of the note */
-      if (SocNot->NoteType == TL_NOTE_POST)
+      if (Not->NoteType == TL_NOTE_POST)
 	 /* Write post content */
-	 TL_GetAndWritePost (SocNot->Cod);
+	 TL_GetAndWritePost (Not->Cod);
       else
 	{
 	 /* Reset forums */
          For_ResetForums (&Forums);
 
 	 /* Get location in hierarchy */
-	 if (!SocNot->Unavailable)
-	    switch (SocNot->NoteType)
+	 if (!Not->Unavailable)
+	    switch (Not->NoteType)
 	      {
 	       case TL_NOTE_INS_DOC_PUB_FILE:
 	       case TL_NOTE_INS_SHA_PUB_FILE:
 		  /* Get institution data */
-		  Ins.InsCod = SocNot->HieCod;
+		  Ins.InsCod = Not->HieCod;
 		  Ins_GetDataOfInstitutionByCod (&Ins);
 		  break;
 	       case TL_NOTE_CTR_DOC_PUB_FILE:
 	       case TL_NOTE_CTR_SHA_PUB_FILE:
 		  /* Get centre data */
-		  Ctr.CtrCod = SocNot->HieCod;
+		  Ctr.CtrCod = Not->HieCod;
 		  Ctr_GetDataOfCentreByCod (&Ctr);
 		  break;
 	       case TL_NOTE_DEG_DOC_PUB_FILE:
 	       case TL_NOTE_DEG_SHA_PUB_FILE:
 		  /* Get degree data */
-		  Deg.DegCod = SocNot->HieCod;
+		  Deg.DegCod = Not->HieCod;
 		  Deg_GetDataOfDegreeByCod (&Deg);
 		  break;
 	       case TL_NOTE_CRS_DOC_PUB_FILE:
@@ -1619,12 +1619,12 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
 	       case TL_NOTE_EXAM_ANNOUNCEMENT:
 	       case TL_NOTE_NOTICE:
 		  /* Get course data */
-		  Crs.CrsCod = SocNot->HieCod;
+		  Crs.CrsCod = Not->HieCod;
 		  Crs_GetDataOfCourseByCod (&Crs);
 		  break;
 	       case TL_NOTE_FORUM_POST:
 		  /* Get forum type of the post */
-		  For_GetForumTypeAndLocationOfAPost (SocNot->Cod,&Forums.Forum);
+		  For_GetForumTypeAndLocationOfAPost (Not->Cod,&Forums.Forum);
 		  For_SetForumName (&Forums.Forum,ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
 		  break;
 	       default:
@@ -1632,11 +1632,11 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
 	      }
 
 	 /* Write note type */
-	 TL_PutFormGoToAction (SocNot,&Forums);
+	 TL_PutFormGoToAction (Not,&Forums);
 
 	 /* Write location in hierarchy */
-	 if (!SocNot->Unavailable)
-	    switch (SocNot->NoteType)
+	 if (!Not->Unavailable)
+	    switch (Not->NoteType)
 	      {
 	       case TL_NOTE_INS_DOC_PUB_FILE:
 	       case TL_NOTE_INS_SHA_PUB_FILE:
@@ -1679,7 +1679,7 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
 	      }
 
 	 /* Write note summary */
-	 TL_GetNoteSummary (SocNot,SummaryStr);
+	 TL_GetNoteSummary (Not,SummaryStr);
 	 HTM_DIV_Begin ("class=\"TL_TXT\"");
 	 HTM_Txt (SummaryStr);
 	 HTM_DIV_End ();
@@ -1693,11 +1693,11 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
       Frm_SetUniqueId (IdNewComment);
 
       /* Get number of comments in this note */
-      NumComments = TL_GetNumCommentsInNote (SocNot->NotCod);
+      NumComments = TL_GetNumCommentsInNote (Not->NotCod);
 
       /* Put icon to add a comment */
       HTM_DIV_Begin ("class=\"TL_BOTTOM_LEFT\"");
-      if (SocNot->Unavailable)		// Unavailable notes can not be commented
+      if (Not->Unavailable)		// Unavailable notes can not be commented
 	 TL_PutIconCommentDisabled ();
       else
          TL_PutIconToToggleCommentNote (IdNewComment);
@@ -1712,20 +1712,20 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
       /* Foot column 1: Fav zone */
       HTM_DIV_Begin ("id=\"fav_not_%s_%u\" class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\"",
 	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_Fav_PutFormToFavUnfNote (SocNot,TL_SHOW_FEW_USRS);
+      TL_Fav_PutFormToFavUnfNote (Not,TL_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /* Foot column 2: Share zone */
       HTM_DIV_Begin ("id=\"sha_not_%s_%u\" class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\"",
 	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_Sha_PutFormToShaUnsNote (SocNot,TL_SHOW_FEW_USRS);
+      TL_Sha_PutFormToShaUnsNote (Not,TL_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /* Foot column 3: Icon to remove this note */
       HTM_DIV_Begin ("class=\"TL_REM\"");
       if (IAmTheAuthor)
 	 TL_PutFormToRemovePublication (Timeline,
-	                                SocNot->NotCod);
+	                                Not->NotCod);
       HTM_DIV_End ();
 
       /* End foot container */
@@ -1733,14 +1733,14 @@ static void TL_WriteNote (struct TL_Timeline *Timeline,
 
       /* Comments */
       if (NumComments)
-	 TL_WriteCommentsInNote (Timeline,SocNot,NumComments);
+	 TL_WriteCommentsInNote (Timeline,Not,NumComments);
 
       /* End container for buttons and comments */
       HTM_DIV_End ();
 
       /* Put hidden form to write a new comment */
       TL_PutHiddenFormToWriteNewCommentToNote (Timeline,
-                                               SocNot->NotCod,IdNewComment);
+                                               Not->NotCod,IdNewComment);
 
       /***** Free memory used for author's data *****/
       Usr_UsrDataDestructor (&AuthorDat);
@@ -1909,7 +1909,7 @@ static void TL_GetAndWritePost (long PstCod)
 /************* Put form to go to an action depending on the note *************/
 /*****************************************************************************/
 
-static void TL_PutFormGoToAction (const struct TL_Note *SocNot,
+static void TL_PutFormGoToAction (const struct TL_Note *Not,
                                   const struct For_Forums *Forums)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
@@ -1970,13 +1970,13 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot,
       /* Profile tab */
      };
 
-   if (SocNot->Unavailable ||	// File/notice... pointed by this note is unavailable
+   if (Not->Unavailable ||	// File/notice... pointed by this note is unavailable
        Gbl.Form.Inside)		// Inside another form
      {
       /***** Do not put form *****/
       HTM_DIV_Begin ("class=\"TL_FORM_OFF\"");
-      HTM_Txt (Txt_TIMELINE_NOTE[SocNot->NoteType]);
-      if (SocNot->Unavailable)
+      HTM_Txt (Txt_TIMELINE_NOTE[Not->NoteType]);
+      if (Not->Unavailable)
          HTM_TxtF ("&nbsp;(%s)",Txt_not_available);
       HTM_DIV_End ();
      }
@@ -1985,44 +1985,44 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot,
       HTM_DIV_Begin ("class=\"TL_FORM\"");
 
       /***** Begin form with parameters depending on the type of note *****/
-      switch (SocNot->NoteType)
+      switch (Not->NoteType)
 	{
 	 case TL_NOTE_INS_DOC_PUB_FILE:
 	 case TL_NOTE_INS_SHA_PUB_FILE:
-	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
-	    Brw_PutHiddenParamFilCod (SocNot->Cod);
-	    if (SocNot->HieCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
-	       Ins_PutParamInsCod (SocNot->HieCod);		// Go to another institution
+	    Frm_StartFormUnique (TL_DefaultActions[Not->NoteType]);
+	    Brw_PutHiddenParamFilCod (Not->Cod);
+	    if (Not->HieCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
+	       Ins_PutParamInsCod (Not->HieCod);		// Go to another institution
 	    break;
 	 case TL_NOTE_CTR_DOC_PUB_FILE:
 	 case TL_NOTE_CTR_SHA_PUB_FILE:
-	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
-	    Brw_PutHiddenParamFilCod (SocNot->Cod);
-	    if (SocNot->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current centre
-	       Ctr_PutParamCtrCod (SocNot->HieCod);		// Go to another centre
+	    Frm_StartFormUnique (TL_DefaultActions[Not->NoteType]);
+	    Brw_PutHiddenParamFilCod (Not->Cod);
+	    if (Not->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current centre
+	       Ctr_PutParamCtrCod (Not->HieCod);		// Go to another centre
 	    break;
 	 case TL_NOTE_DEG_DOC_PUB_FILE:
 	 case TL_NOTE_DEG_SHA_PUB_FILE:
-	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
-	    Brw_PutHiddenParamFilCod (SocNot->Cod);
-	    if (SocNot->HieCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
-	       Deg_PutParamDegCod (SocNot->HieCod);		// Go to another degree
+	    Frm_StartFormUnique (TL_DefaultActions[Not->NoteType]);
+	    Brw_PutHiddenParamFilCod (Not->Cod);
+	    if (Not->HieCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
+	       Deg_PutParamDegCod (Not->HieCod);		// Go to another degree
 	    break;
 	 case TL_NOTE_CRS_DOC_PUB_FILE:
 	 case TL_NOTE_CRS_SHA_PUB_FILE:
-	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
-	    Brw_PutHiddenParamFilCod (SocNot->Cod);
-	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
+	    Frm_StartFormUnique (TL_DefaultActions[Not->NoteType]);
+	    Brw_PutHiddenParamFilCod (Not->Cod);
+	    if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
+	       Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
 	    break;
 	 case TL_NOTE_EXAM_ANNOUNCEMENT:
-            Frm_SetAnchorStr (SocNot->Cod,&Anchor);
-	    Frm_StartFormUniqueAnchor (TL_DefaultActions[SocNot->NoteType],
+            Frm_SetAnchorStr (Not->Cod,&Anchor);
+	    Frm_StartFormUniqueAnchor (TL_DefaultActions[Not->NoteType],
 		                       Anchor);	// Locate on this specific exam
             Frm_FreeAnchorStr (Anchor);
-	    ExaAnn_PutHiddenParamExaCod (SocNot->Cod);
-	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
+	    ExaAnn_PutHiddenParamExaCod (Not->Cod);
+	    if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
+	       Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
 	    break;
 	 case TL_NOTE_POST:	// Not applicable
 	    return;
@@ -2035,29 +2035,29 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot,
 					 Forums->Forum.Location,
 					 Forums->Thread.Selected,
 					 -1L);
-	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
+	    if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
+	       Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
 	    break;
 	 case TL_NOTE_NOTICE:
-            Frm_SetAnchorStr (SocNot->Cod,&Anchor);
-	    Frm_StartFormUniqueAnchor (TL_DefaultActions[SocNot->NoteType],
+            Frm_SetAnchorStr (Not->Cod,&Anchor);
+	    Frm_StartFormUniqueAnchor (TL_DefaultActions[Not->NoteType],
 				       Anchor);
             Frm_FreeAnchorStr (Anchor);
-	    Not_PutHiddenParamNotCod (SocNot->Cod);
-	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
+	    Not_PutHiddenParamNotCod (Not->Cod);
+	    if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
+	       Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
 	    break;
 	 default:			// Not applicable
 	    return;
 	}
 
       /***** Icon and link to go to action *****/
-      HTM_BUTTON_SUBMIT_Begin (Txt_TIMELINE_NOTE[SocNot->NoteType],
+      HTM_BUTTON_SUBMIT_Begin (Txt_TIMELINE_NOTE[Not->NoteType],
 			       Str_BuildStringStr ("BT_LINK %s ICO_HIGHLIGHT",
 						   The_ClassFormInBoxBold[Gbl.Prefs.Theme]),
 			       NULL);
-      Ico_PutIcon (TL_Icons[SocNot->NoteType],Txt_TIMELINE_NOTE[SocNot->NoteType],"CONTEXT_ICO_x16");
-      HTM_TxtF ("&nbsp;%s",Txt_TIMELINE_NOTE[SocNot->NoteType]);
+      Ico_PutIcon (TL_Icons[Not->NoteType],Txt_TIMELINE_NOTE[Not->NoteType],"CONTEXT_ICO_x16");
+      HTM_TxtF ("&nbsp;%s",Txt_TIMELINE_NOTE[Not->NoteType]);
       HTM_BUTTON_End ();
       Str_FreeString ();
 
@@ -2072,12 +2072,12 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot,
 /********************** Get note summary and content *************************/
 /*****************************************************************************/
 
-static void TL_GetNoteSummary (const struct TL_Note *SocNot,
+static void TL_GetNoteSummary (const struct TL_Note *Not,
                                char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1])
   {
    SummaryStr[0] = '\0';
 
-   switch (SocNot->NoteType)
+   switch (Not->NoteType)
      {
       case TL_NOTE_UNKNOWN:
           break;
@@ -2089,19 +2089,19 @@ static void TL_GetNoteSummary (const struct TL_Note *SocNot,
       case TL_NOTE_DEG_SHA_PUB_FILE:
       case TL_NOTE_CRS_DOC_PUB_FILE:
       case TL_NOTE_CRS_SHA_PUB_FILE:
-	 Brw_GetSummaryAndContentOfFile (SummaryStr,NULL,SocNot->Cod,false);
+	 Brw_GetSummaryAndContentOfFile (SummaryStr,NULL,Not->Cod,false);
          break;
       case TL_NOTE_EXAM_ANNOUNCEMENT:
-         ExaAnn_GetSummaryAndContentExamAnn (SummaryStr,NULL,SocNot->Cod,false);
+         ExaAnn_GetSummaryAndContentExamAnn (SummaryStr,NULL,Not->Cod,false);
          break;
       case TL_NOTE_POST:
 	 // Not applicable
          break;
       case TL_NOTE_FORUM_POST:
-         For_GetSummaryAndContentForumPst (SummaryStr,NULL,SocNot->Cod,false);
+         For_GetSummaryAndContentForumPst (SummaryStr,NULL,Not->Cod,false);
          break;
       case TL_NOTE_NOTICE:
-         Not_GetSummaryAndContentNotice (SummaryStr,NULL,SocNot->Cod,false);
+         Not_GetSummaryAndContentNotice (SummaryStr,NULL,Not->Cod,false);
          break;
      }
   }
@@ -2112,12 +2112,12 @@ static void TL_GetNoteSummary (const struct TL_Note *SocNot,
 
 void TL_StoreAndPublishNote (TL_NoteType_t NoteType,long Cod)
   {
-   struct TL_Publication SocPub;
+   struct TL_Publication Pub;
 
-   TL_StoreAndPublishNoteInternal (NoteType,Cod,&SocPub);
+   TL_StoreAndPublishNoteInternal (NoteType,Cod,&Pub);
   }
 
-static void TL_StoreAndPublishNoteInternal (TL_NoteType_t NoteType,long Cod,struct TL_Publication *SocPub)
+static void TL_StoreAndPublishNoteInternal (TL_NoteType_t NoteType,long Cod,struct TL_Publication *Pub)
   {
    long HieCod;	// Hierarchy code (institution/centre/degree/course)
 
@@ -2147,7 +2147,7 @@ static void TL_StoreAndPublishNoteInternal (TL_NoteType_t NoteType,long Cod,stru
      }
 
    /***** Store note *****/
-   SocPub->NotCod =
+   Pub->NotCod =
    DB_QueryINSERTandReturnCode ("can not create new note",
 				"INSERT INTO tl_notes"
 				" (NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote)"
@@ -2157,9 +2157,9 @@ static void TL_StoreAndPublishNoteInternal (TL_NoteType_t NoteType,long Cod,stru
 				Cod,Gbl.Usrs.Me.UsrDat.UsrCod,HieCod);
 
    /***** Publish note in timeline *****/
-   SocPub->PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   SocPub->PubType      = TL_PUB_ORIGINAL_NOTE;
-   TL_PublishNoteInTimeline (SocPub);
+   Pub->PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+   Pub->PubType      = TL_PUB_ORIGINAL_NOTE;
+   TL_PublishNoteInTimeline (Pub);
   }
 
 /*****************************************************************************/
@@ -2307,23 +2307,23 @@ void TL_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
 /*****************************************************************************/
 /************************* Publish note in timeline **************************/
 /*****************************************************************************/
-// SocPub->PubCod is set by the function
+// Pub->PubCod is set by the function
 
-void TL_PublishNoteInTimeline (struct TL_Publication *SocPub)
+void TL_PublishNoteInTimeline (struct TL_Publication *Pub)
   {
    /***** Publish note in timeline *****/
-   SocPub->PubCod =
+   Pub->PubCod =
    DB_QueryINSERTandReturnCode ("can not publish note",
 				"INSERT INTO tl_pubs"
 				" (NotCod,PublisherCod,PubType,TimePublish)"
 				" VALUES"
 				" (%ld,%ld,%u,NOW())",
-				SocPub->NotCod,
-				SocPub->PublisherCod,
-				(unsigned) SocPub->PubType);
+				Pub->NotCod,
+				Pub->PublisherCod,
+				(unsigned) Pub->PubType);
 
    /***** Increment number of publications in user's figures *****/
-   Prf_IncrementNumSocPubUsr (SocPub->PublisherCod);
+   Prf_IncrementNumPubsUsr (Pub->PublisherCod);
   }
 
 /*****************************************************************************/
@@ -2356,7 +2356,7 @@ static void TL_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
 
    /* Form to write the post */
    HTM_DIV_Begin ("class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\"");
-   TL_FormStart (Timeline,ActRcvSocPstGbl,ActRcvSocPstUsr);
+   TL_FormStart (Timeline,ActRcvTL_PstGbl,ActRcvTL_PstUsr);
    TL_PutTextarea (Txt_New_TIMELINE_post,"TL_PST_TEXTAREA TL_RIGHT_WIDTH");
    Frm_EndForm ();
    HTM_DIV_End ();
@@ -2457,7 +2457,7 @@ static long TL_ReceivePost (void)
   {
    struct TL_PostContent Content;
    long PstCod;
-   struct TL_Publication SocPub;
+   struct TL_Publication Pub;
 
    /***** Get the content of the new post *****/
    Par_GetParAndChangeFormat ("Txt",Content.Txt,Cns_MAX_BYTES_LONG_TEXT,
@@ -2491,18 +2491,18 @@ static long TL_ReceivePost (void)
 				   Content.Media.MedCod);
 
       /* Insert post in notes */
-      TL_StoreAndPublishNoteInternal (TL_NOTE_POST,PstCod,&SocPub);
+      TL_StoreAndPublishNoteInternal (TL_NOTE_POST,PstCod,&Pub);
 
       /***** Analyze content and store notifications about mentions *****/
-      Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content.Txt);
+      Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (Pub.PubCod,Content.Txt);
      }
    else	// Text and image are empty
-      SocPub.NotCod = -1L;
+      Pub.NotCod = -1L;
 
    /***** Free image *****/
    Med_MediaDestructor (&Content.Media);
 
-   return SocPub.NotCod;
+   return Pub.NotCod;
   }
 
 /*****************************************************************************/
@@ -2566,7 +2566,7 @@ static void TL_PutHiddenFormToWriteNewCommentToNote (const struct TL_Timeline *T
    HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
 
    /* Begin form to write the post */
-   TL_FormStart (Timeline,ActRcvSocComGbl,ActRcvSocComUsr);
+   TL_FormStart (Timeline,ActRcvTL_ComGbl,ActRcvTL_ComUsr);
    TL_PutHiddenParamNotCod (NotCod);
 
    /* Textarea and button */
@@ -2600,7 +2600,7 @@ static unsigned long TL_GetNumCommentsInNote (long NotCod)
 /*****************************************************************************/
 
 static void TL_WriteCommentsInNote (struct TL_Timeline *Timeline,
-				    const struct TL_Note *SocNot,
+				    const struct TL_Note *Not,
 				    unsigned NumComments)
   {
    MYSQL_RES *mysql_res;
@@ -2644,7 +2644,7 @@ static void TL_WriteCommentsInNote (struct TL_Timeline *Timeline,
 			      " ORDER BY tl_pubs.PubCod DESC LIMIT %u"
 			      ") AS comments"
 			      " ORDER BY PubCod",
-			      SocNot->NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE,
+			      Not->NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE,
 			      NumFinalCommentsToGet);
 
    /*
@@ -2700,8 +2700,8 @@ static void TL_WriteCommentsInNote (struct TL_Timeline *Timeline,
 
       /***** Div which content will be updated via AJAX *****/
       HTM_DIV_Begin ("id=\"%s\" class=\"TL_RIGHT_WIDTH\"",IdComments);
-      TL_FormToShowHiddenComments (ActShoHidSocComGbl,ActShoHidSocComUsr,
-				   SocNot->NotCod,
+      TL_FormToShowHiddenComments (ActShoHidTL_ComGbl,ActShoHidTL_ComUsr,
+				   Not->NotCod,
 				   IdComments,
 				   NumInitialComments);
       HTM_DIV_End ();
@@ -2886,22 +2886,22 @@ static void TL_WriteOneCommentInList (struct TL_Timeline *Timeline,
                                       MYSQL_RES *mysql_res)
   {
    MYSQL_ROW row;
-   struct TL_Comment SocCom;
+   struct TL_Comment Com;
 
    /***** Initialize image *****/
-   Med_MediaConstructor (&SocCom.Content.Media);
+   Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
    row = mysql_fetch_row (mysql_res);
-   TL_GetDataOfCommentFromRow (row,&SocCom);
+   TL_GetDataOfCommentFromRow (row,&Com);
 
    /***** Write comment *****/
-   TL_WriteComment (Timeline,&SocCom,
+   TL_WriteComment (Timeline,&Com,
 		    TL_TOP_MESSAGE_NONE,-1L,
 		    false);	// Not alone
 
    /***** Free image *****/
-   Med_MediaDestructor (&SocCom.Content.Media);
+   Med_MediaDestructor (&Com.Content.Media);
   }
 
 /*****************************************************************************/
@@ -2967,7 +2967,7 @@ static void TL_PutIconToToggleComments (const char *UniqueId,
 /*****************************************************************************/
 
 static void TL_WriteComment (struct TL_Timeline *Timeline,
-	                     struct TL_Comment *SocCom,
+	                     struct TL_Comment *Com,
                              TL_TopMessage_t TopMessage,long UsrCod,
                              bool ShowCommentAlone)	// Comment is shown alone, not in a list
   {
@@ -3006,15 +3006,15 @@ static void TL_WriteComment (struct TL_Timeline *Timeline,
    else
       HTM_LI_Begin ("class=\"TL_COM\"");
 
-   if (SocCom->PubCod <= 0 ||
-       SocCom->NotCod <= 0 ||
-       SocCom->UsrCod <= 0)
+   if (Com->PubCod <= 0 ||
+       Com->NotCod <= 0 ||
+       Com->UsrCod <= 0)
       Ale_ShowAlert (Ale_ERROR,"Error in comment.");
    else
      {
       /***** Get author's data *****/
       Usr_UsrDataConstructor (&UsrDat);
-      UsrDat.UsrCod = SocCom->UsrCod;
+      UsrDat.UsrCod = Com->UsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
       IAmTheAuthor = Usr_ItsMe (UsrDat.UsrCod);
 
@@ -3033,18 +3033,18 @@ static void TL_WriteComment (struct TL_Timeline *Timeline,
       TL_WriteAuthorComment (&UsrDat);
 
       /* Write date and time */
-      TL_WriteDateTime (SocCom->DateTimeUTC);
+      TL_WriteDateTime (Com->DateTimeUTC);
 
       /* Write content of the comment */
-      if (SocCom->Content.Txt[0])
+      if (Com->Content.Txt[0])
 	{
 	 HTM_DIV_Begin ("class=\"TL_TXT\"");
-	 Msg_WriteMsgContent (SocCom->Content.Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
+	 Msg_WriteMsgContent (Com->Content.Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
 	 HTM_DIV_End ();
 	}
 
       /* Show image */
-      Med_ShowMedia (&SocCom->Content.Media,"TL_COM_MED_CONT TL_COMM_WIDTH",
+      Med_ShowMedia (&Com->Content.Media,"TL_COM_MED_CONT TL_COMM_WIDTH",
 	                                    "TL_COM_MED TL_COMM_WIDTH");
 
       /* Start foot container */
@@ -3053,13 +3053,13 @@ static void TL_WriteComment (struct TL_Timeline *Timeline,
       /* Fav zone */
       HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"TL_FAV_COM TL_FAV_WIDTH\"",
 	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_Fav_PutFormToFavUnfComment (SocCom,TL_SHOW_FEW_USRS);
+      TL_Fav_PutFormToFavUnfComment (Com,TL_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /* Put icon to remove this comment */
       HTM_DIV_Begin ("class=\"TL_REM\"");
       if (IAmTheAuthor && !ShowCommentAlone)
-	 TL_PutFormToRemoveComment (Timeline,SocCom->PubCod);
+	 TL_PutFormToRemoveComment (Timeline,Com->PubCod);
       HTM_DIV_End ();
 
       /* End foot container */
@@ -3111,7 +3111,7 @@ static void TL_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
    extern const char *Txt_Remove;
 
    /***** Form to remove publication *****/
-   TL_FormStart (Timeline,ActReqRemSocComGbl,ActReqRemSocComUsr);
+   TL_FormStart (Timeline,ActReqRemTL_ComGbl,ActReqRemTL_ComUsr);
    TL_PutHiddenParamPubCod (PubCod);
    Ico_PutIconLink ("trash.svg",Txt_Remove);
    Frm_EndForm ();
@@ -3127,7 +3127,7 @@ static void TL_PutFormToRemovePublication (const struct TL_Timeline *Timeline,
    extern const char *Txt_Remove;
 
    /***** Form to remove publication *****/
-   TL_FormStart (Timeline,ActReqRemSocPubGbl,ActReqRemSocPubUsr);
+   TL_FormStart (Timeline,ActReqRemTL_PubGbl,ActReqRemTL_PubUsr);
    TL_PutHiddenParamNotCod (NotCod);
    Ico_PutIconLink ("trash.svg",Txt_Remove);
    Frm_EndForm ();
@@ -3220,14 +3220,14 @@ static long TL_ReceiveComment (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    struct TL_PostContent Content;
-   struct TL_Note SocNot;
-   struct TL_Publication SocPub;
+   struct TL_Note Not;
+   struct TL_Publication Pub;
 
    /***** Get data of note *****/
-   SocNot.NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (&SocNot);
+   Not.NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (&Not);
 
-   if (SocNot.NotCod > 0)
+   if (Not.NotCod > 0)
      {
       /***** Get the content of the comment *****/
       Par_GetParAndChangeFormat ("Txt",Content.Txt,Cns_MAX_BYTES_LONG_TEXT,
@@ -3251,10 +3251,10 @@ static long TL_ReceiveComment (void)
 
 	 /***** Publish *****/
 	 /* Insert into publications */
-	 SocPub.NotCod       = SocNot.NotCod;
-	 SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-	 SocPub.PubType      = TL_PUB_COMMENT_TO_NOTE;
-	 TL_PublishNoteInTimeline (&SocPub);	// Set SocPub.PubCod
+	 Pub.NotCod       = Not.NotCod;
+	 Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+	 Pub.PubType      = TL_PUB_COMMENT_TO_NOTE;
+	 TL_PublishNoteInTimeline (&Pub);	// Set Pub.PubCod
 
 	 /* Insert comment content in the database */
 	 DB_QueryINSERT ("can not store comment content",
@@ -3262,15 +3262,15 @@ static long TL_ReceiveComment (void)
 	                 " (PubCod,Txt,MedCod)"
 			 " VALUES"
 			 " (%ld,'%s',%ld)",
-			 SocPub.PubCod,
+			 Pub.PubCod,
 			 Content.Txt,
 			 Content.Media.MedCod);
 
 	 /***** Store notifications about the new comment *****/
-	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,SocPub.PubCod);
+	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,Pub.PubCod);
 
 	 /***** Analyze content and store notifications about mentions *****/
-	 Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content.Txt);
+	 Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (Pub.PubCod,Content.Txt);
 	}
 
       /***** Free image *****/
@@ -3279,7 +3279,7 @@ static long TL_ReceiveComment (void)
    else
       Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
 
-   return SocNot.NotCod;
+   return Not.NotCod;
   }
 
 /*****************************************************************************/
@@ -3370,16 +3370,16 @@ static void TL_RequestRemovalNote (struct TL_Timeline *Timeline)
    extern const char *Txt_The_original_post_no_longer_exists;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_post;
    extern const char *Txt_Remove;
-   struct TL_Note SocNot;
+   struct TL_Note Not;
    bool ItsMe;
 
    /***** Get data of note *****/
-   SocNot.NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (&SocNot);
+   Not.NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (&Not);
 
-   if (SocNot.NotCod > 0)
+   if (Not.NotCod > 0)
      {
-      ItsMe = Usr_ItsMe (SocNot.UsrCod);
+      ItsMe = Usr_ItsMe (Not.UsrCod);
       if (ItsMe)	// I am the author of this note
 	{
 	 /***** Show question and button to remove note *****/
@@ -3387,19 +3387,19 @@ static void TL_RequestRemovalNote (struct TL_Timeline *Timeline)
 	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_post);
 
 	 /* Show note */
-	 TL_WriteNote (Timeline,&SocNot,
+	 TL_WriteNote (Timeline,&Not,
 		       TL_TOP_MESSAGE_NONE,-1L,
 		       TL_DONT_HIGHLIGHT_NOTE,
 		       TL_SHOW_NOTE_ALONE);
 
 	 /* End alert */
-	 Timeline->NotCod = SocNot.NotCod;	// Note to be removed
+	 Timeline->NotCod = Not.NotCod;	// Note to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	    Ale_ShowAlertAndButton2 (ActRemSocPubUsr,"timeline",NULL,
+	    Ale_ShowAlertAndButton2 (ActRemTL_PubUsr,"timeline",NULL,
 	                             TL_PutParamsRemoveNote,Timeline,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	 else
-	    Ale_ShowAlertAndButton2 (ActRemSocPubGbl,NULL,NULL,
+	    Ale_ShowAlertAndButton2 (ActRemTL_PubGbl,NULL,NULL,
 	                             TL_PutParamsRemoveNote,Timeline,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	}
@@ -3472,23 +3472,23 @@ static void TL_RemoveNote (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    extern const char *Txt_TIMELINE_Post_removed;
-   struct TL_Note SocNot;
+   struct TL_Note Not;
    bool ItsMe;
 
    /***** Get data of note *****/
-   SocNot.NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (&SocNot);
+   Not.NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (&Not);
 
-   if (SocNot.NotCod > 0)
+   if (Not.NotCod > 0)
      {
-      ItsMe = Usr_ItsMe (SocNot.UsrCod);
+      ItsMe = Usr_ItsMe (Not.UsrCod);
       if (ItsMe)	// I am the author of this note
 	{
 	 /***** Delete note from database *****/
-	 TL_RemoveNoteMediaAndDBEntries (&SocNot);
+	 TL_RemoveNoteMediaAndDBEntries (&Not);
 
 	 /***** Reset note *****/
-	 TL_ResetNote (&SocNot);
+	 TL_ResetNote (&Not);
 
 	 /***** Message of success *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_TIMELINE_Post_removed);
@@ -3502,7 +3502,7 @@ static void TL_RemoveNote (void)
 /*********************** Remove a note from database *************************/
 /*****************************************************************************/
 
-static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot)
+static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *Not)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3517,7 +3517,7 @@ static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot)
 				 "SELECT PubCod"
 				 " FROM tl_pubs"
 				 " WHERE NotCod=%ld AND PubType=%u",
-				 SocNot->NotCod,
+				 Not->NotCod,
 				 (unsigned) TL_PUB_COMMENT_TO_NOTE);
 
    /* For each comment... */
@@ -3538,14 +3538,14 @@ static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Remove media associated to post *****/
-   if (SocNot->NoteType == TL_NOTE_POST)
+   if (Not->NoteType == TL_NOTE_POST)
      {
       /* Remove media associated to a post from database */
       if (DB_QuerySELECT (&mysql_res,"can not get media",
 				 "SELECT MedCod"	// row[0]
 				 " FROM tl_posts"
 				 " WHERE PstCod=%ld",
-				 SocNot->Cod) == 1)   // Result should have a unique row
+				 Not->Cod) == 1)   // Result should have a unique row
         {
 	 /* Get media code */
 	 row = mysql_fetch_row (mysql_res);
@@ -3562,7 +3562,7 @@ static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot)
    /***** Mark possible notifications on the publications
           of this note as removed *****/
    /* Mark notifications of the original note as removed */
-   PubCod = TL_GetPubCodOfOriginalNote (SocNot->NotCod);
+   PubCod = TL_GetPubCodOfOriginalNote (Not->NotCod);
    if (PubCod > 0)
      {
       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
@@ -3574,28 +3574,28 @@ static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot)
    DB_QueryDELETE ("can not remove favs for note",
 		   "DELETE FROM tl_notes_fav"
 		   " WHERE NotCod=%ld",
-		   SocNot->NotCod);
+		   Not->NotCod);
 
    /***** Remove all the publications of this note *****/
    DB_QueryDELETE ("can not remove a publication",
 		   "DELETE FROM tl_pubs"
 		   " WHERE NotCod=%ld",
-		   SocNot->NotCod);
+		   Not->NotCod);
 
    /***** Remove note *****/
    DB_QueryDELETE ("can not remove a note",
 		   "DELETE FROM tl_notes"
 	           " WHERE NotCod=%ld"
 	           " AND UsrCod=%ld",		// Extra check: I am the author
-		   SocNot->NotCod,
+		   Not->NotCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   if (SocNot->NoteType == TL_NOTE_POST)
+   if (Not->NoteType == TL_NOTE_POST)
       /***** Remove post *****/
       DB_QueryDELETE ("can not remove a post",
 		      "DELETE FROM tl_posts"
 		      " WHERE PstCod=%ld",
-		      SocNot->Cod);
+		      Not->Cod);
   }
 
 /*****************************************************************************/
@@ -3701,19 +3701,19 @@ static void TL_RequestRemovalComment (struct TL_Timeline *Timeline)
    extern const char *Txt_The_comment_no_longer_exists;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
    extern const char *Txt_Remove;
-   struct TL_Comment SocCom;
+   struct TL_Comment Com;
    bool ItsMe;
 
    /***** Initialize image *****/
-   Med_MediaConstructor (&SocCom.Content.Media);
+   Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
-   SocCom.PubCod = TL_GetParamPubCod ();
-   TL_GetDataOfCommByCod (&SocCom);
+   Com.PubCod = TL_GetParamPubCod ();
+   TL_GetDataOfCommByCod (&Com);
 
-   if (SocCom.PubCod > 0)
+   if (Com.PubCod > 0)
      {
-      ItsMe = Usr_ItsMe (SocCom.UsrCod);
+      ItsMe = Usr_ItsMe (Com.UsrCod);
       if (ItsMe)	// I am the author of this comment
 	{
 	 /***** Show question and button to remove comment *****/
@@ -3721,18 +3721,18 @@ static void TL_RequestRemovalComment (struct TL_Timeline *Timeline)
 	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_comment);
 
 	 /* Show comment */
-	 TL_WriteComment (Timeline,&SocCom,
+	 TL_WriteComment (Timeline,&Com,
 			  TL_TOP_MESSAGE_NONE,-1L,
 			  true);	// Alone
 
 	 /* End alert */
-	 Timeline->PubCod = SocCom.PubCod;	// Publication to be removed
+	 Timeline->PubCod = Com.PubCod;	// Publication to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	    Ale_ShowAlertAndButton2 (ActRemSocComUsr,"timeline",NULL,
+	    Ale_ShowAlertAndButton2 (ActRemTL_ComUsr,"timeline",NULL,
 	                             TL_PutParamsRemoveComment,Timeline,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	 else
-	    Ale_ShowAlertAndButton2 (ActRemSocComGbl,NULL,NULL,
+	    Ale_ShowAlertAndButton2 (ActRemTL_ComGbl,NULL,NULL,
 	                             TL_PutParamsRemoveComment,Timeline,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	}
@@ -3741,7 +3741,7 @@ static void TL_RequestRemovalComment (struct TL_Timeline *Timeline)
       Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
 
    /***** Free image *****/
-   Med_MediaDestructor (&SocCom.Content.Media);
+   Med_MediaDestructor (&Com.Content.Media);
   }
 
 /*****************************************************************************/
@@ -3808,27 +3808,27 @@ static void TL_RemoveComment (void)
   {
    extern const char *Txt_The_comment_no_longer_exists;
    extern const char *Txt_Comment_removed;
-   struct TL_Comment SocCom;
+   struct TL_Comment Com;
    bool ItsMe;
 
    /***** Initialize image *****/
-   Med_MediaConstructor (&SocCom.Content.Media);
+   Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
-   SocCom.PubCod = TL_GetParamPubCod ();
-   TL_GetDataOfCommByCod (&SocCom);
+   Com.PubCod = TL_GetParamPubCod ();
+   TL_GetDataOfCommByCod (&Com);
 
-   if (SocCom.PubCod > 0)
+   if (Com.PubCod > 0)
      {
-      ItsMe = Usr_ItsMe (SocCom.UsrCod);
+      ItsMe = Usr_ItsMe (Com.UsrCod);
       if (ItsMe)	// I am the author of this comment
 	{
 	 /***** Remove media associated to comment
 	        and delete comment from database *****/
-	 TL_RemoveCommentMediaAndDBEntries (SocCom.PubCod);
+	 TL_RemoveCommentMediaAndDBEntries (Com.PubCod);
 
 	 /***** Reset fields of comment *****/
-	 TL_ResetComment (&SocCom);
+	 TL_ResetComment (&Com);
 
 	 /***** Message of success *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_Comment_removed);
@@ -3838,7 +3838,7 @@ static void TL_RemoveComment (void)
       Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
 
    /***** Free image *****/
-   Med_MediaDestructor (&SocCom.Content.Media);
+   Med_MediaDestructor (&Com.Content.Media);
   }
 
 /*****************************************************************************/
@@ -4151,12 +4151,12 @@ void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
 /******************** Get data of note using its code ************************/
 /*****************************************************************************/
 
-void TL_GetDataOfNoteByCod (struct TL_Note *SocNot)
+void TL_GetDataOfNoteByCod (struct TL_Note *Not)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   if (SocNot->NotCod > 0)
+   if (Not->NotCod > 0)
      {
       /***** Get data of note from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get data of note",
@@ -4169,34 +4169,34 @@ void TL_GetDataOfNoteByCod (struct TL_Note *SocNot)
 				 "UNIX_TIMESTAMP(TimeNote)"	// row[6]
 			  " FROM tl_notes"
 			  " WHERE NotCod=%ld",
-			  SocNot->NotCod))
+			  Not->NotCod))
 	{
 	 /***** Get data of note *****/
 	 row = mysql_fetch_row (mysql_res);
-	 TL_GetDataOfNoteFromRow (row,SocNot);
+	 TL_GetDataOfNoteFromRow (row,Not);
 	}
       else
 	 /***** Reset fields of note *****/
-	 TL_ResetNote (SocNot);
+	 TL_ResetNote (Not);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else
       /***** Reset fields of note *****/
-      TL_ResetNote (SocNot);
+      TL_ResetNote (Not);
   }
 
 /*****************************************************************************/
 /******************* Get data of comment using its code **********************/
 /*****************************************************************************/
 
-void TL_GetDataOfCommByCod (struct TL_Comment *SocCom)
+void TL_GetDataOfCommByCod (struct TL_Comment *Com)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   if (SocCom->PubCod > 0)
+   if (Com->PubCod > 0)
      {
       /***** Get data of comment from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get data of comment",
@@ -4210,22 +4210,22 @@ void TL_GetDataOfCommByCod (struct TL_Comment *SocCom)
 			  " WHERE tl_pubs.PubCod=%ld"
 			  " AND tl_pubs.PubType=%u"
 			  " AND tl_pubs.PubCod=tl_comments.PubCod",
-			  SocCom->PubCod,(unsigned) TL_PUB_COMMENT_TO_NOTE))
+			  Com->PubCod,(unsigned) TL_PUB_COMMENT_TO_NOTE))
 	{
 	 /***** Get data of comment *****/
 	 row = mysql_fetch_row (mysql_res);
-	 TL_GetDataOfCommentFromRow (row,SocCom);
+	 TL_GetDataOfCommentFromRow (row,Com);
 	}
       else
 	 /***** Reset fields of comment *****/
-	 TL_ResetComment (SocCom);
+	 TL_ResetComment (Com);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else
       /***** Reset fields of comment *****/
-      TL_ResetComment (SocCom);
+      TL_ResetComment (Com);
   }
 
 /*****************************************************************************/
@@ -4233,7 +4233,7 @@ void TL_GetDataOfCommByCod (struct TL_Comment *SocCom)
 /*****************************************************************************/
 
 static void TL_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
-                                                struct TL_Publication *SocPub)
+                                                struct TL_Publication *Pub)
   {
    static const TL_TopMessage_t TopMessages[TL_NUM_PUB_TYPES] =
      {
@@ -4254,24 +4254,24 @@ static void TL_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
    */
 
    /***** Get code of publication (row[0]) *****/
-   SocPub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
+   Pub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get note code (row[1]) *****/
-   SocPub->NotCod       = Str_ConvertStrCodToLongCod (row[1]);
+   Pub->NotCod       = Str_ConvertStrCodToLongCod (row[1]);
 
    /***** Get publisher's code (row[2]) *****/
-   SocPub->PublisherCod = Str_ConvertStrCodToLongCod (row[2]);
+   Pub->PublisherCod = Str_ConvertStrCodToLongCod (row[2]);
 
    /***** Get type of publication (row[3]) *****/
-   SocPub->PubType      = TL_GetPubTypeFromStr ((const char *) row[3]);
-   SocPub->TopMessage   = TopMessages[SocPub->PubType];
+   Pub->PubType      = TL_GetPubTypeFromStr ((const char *) row[3]);
+   Pub->TopMessage   = TopMessages[Pub->PubType];
   }
 
 /*****************************************************************************/
 /************************ Get data of note from row **************************/
 /*****************************************************************************/
 
-static void TL_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Note *SocNot)
+static void TL_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Note *Not)
   {
    /*
    row[0]: NotCod
@@ -4283,31 +4283,31 @@ static void TL_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Note *SocNot)
    row[5]: UNIX_TIMESTAMP(TimeNote)
    */
    /***** Get code (row[0]) *****/
-   SocNot->NotCod      = Str_ConvertStrCodToLongCod (row[0]);
+   Not->NotCod      = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get note type (row[1]) *****/
-   SocNot->NoteType    = TL_GetNoteTypeFromStr ((const char *) row[1]);
+   Not->NoteType    = TL_GetNoteTypeFromStr ((const char *) row[1]);
 
    /***** Get file/post... code (row[2]) *****/
-   SocNot->Cod         = Str_ConvertStrCodToLongCod (row[2]);
+   Not->Cod         = Str_ConvertStrCodToLongCod (row[2]);
 
    /***** Get (from) user code (row[3]) *****/
-   SocNot->UsrCod      = Str_ConvertStrCodToLongCod (row[3]);
+   Not->UsrCod      = Str_ConvertStrCodToLongCod (row[3]);
 
    /***** Get hierarchy code (row[4]) *****/
-   SocNot->HieCod      = Str_ConvertStrCodToLongCod (row[4]);
+   Not->HieCod      = Str_ConvertStrCodToLongCod (row[4]);
 
    /***** File/post... unavailable (row[5]) *****/
-   SocNot->Unavailable = (row[5][0] == 'Y');
+   Not->Unavailable = (row[5][0] == 'Y');
 
    /***** Get time of the note (row[6]) *****/
-   SocNot->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[6]);
+   Not->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[6]);
 
    /***** Get number of times this note has been shared *****/
-   TL_Sha_UpdateNumTimesANoteHasBeenShared (SocNot);
+   TL_Sha_UpdateNumTimesANoteHasBeenShared (Not);
 
    /***** Get number of times this note has been favourited *****/
-   TL_Fav_GetNumTimesANoteHasBeenFav (SocNot);
+   TL_Fav_GetNumTimesANoteHasBeenFav (Not);
   }
 
 /*****************************************************************************/
@@ -4344,7 +4344,7 @@ static TL_NoteType_t TL_GetNoteTypeFromStr (const char *Str)
 /********************** Get data of comment from row *************************/
 /*****************************************************************************/
 
-static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *SocCom)
+static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *Com)
   {
    /*
    row[0]: PubCod
@@ -4355,69 +4355,69 @@ static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *SocCom)
    row[5]: MedCod
    */
    /***** Get code of comment (row[0]) *****/
-   SocCom->PubCod      = Str_ConvertStrCodToLongCod (row[0]);
+   Com->PubCod      = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get (from) user code (row[1]) *****/
-   SocCom->UsrCod      = Str_ConvertStrCodToLongCod (row[1]);
+   Com->UsrCod      = Str_ConvertStrCodToLongCod (row[1]);
 
    /***** Get code of note (row[2]) *****/
-   SocCom->NotCod      = Str_ConvertStrCodToLongCod (row[2]);
+   Com->NotCod      = Str_ConvertStrCodToLongCod (row[2]);
 
    /***** Get time of the note (row[3]) *****/
-   SocCom->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[3]);
+   Com->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[3]);
 
    /***** Get text content (row[4]) *****/
-   Str_Copy (SocCom->Content.Txt,row[4],
+   Str_Copy (Com->Content.Txt,row[4],
              Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Get number of times this comment has been favourited *****/
-   TL_Fav_GetNumTimesACommHasBeenFav (SocCom);
+   TL_Fav_GetNumTimesACommHasBeenFav (Com);
 
    /***** Get media content (row[5]) *****/
-   SocCom->Content.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
-   Med_GetMediaDataByCod (&SocCom->Content.Media);
+   Com->Content.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
+   Med_GetMediaDataByCod (&Com->Content.Media);
   }
 
 /*****************************************************************************/
 /************************ Reset fields of publication ************************/
 /*****************************************************************************/
 
-static void TL_ResetPublication (struct TL_Publication *SocPub)
+static void TL_ResetPublication (struct TL_Publication *Pub)
   {
-   SocPub->PubCod       = -1L;
-   SocPub->NotCod       = -1L;
-   SocPub->PublisherCod = -1L;
-   SocPub->PubType      = TL_PUB_UNKNOWN;
-   SocPub->TopMessage   = TL_TOP_MESSAGE_NONE;
+   Pub->PubCod       = -1L;
+   Pub->NotCod       = -1L;
+   Pub->PublisherCod = -1L;
+   Pub->PubType      = TL_PUB_UNKNOWN;
+   Pub->TopMessage   = TL_TOP_MESSAGE_NONE;
   }
 
 /*****************************************************************************/
 /*************************** Reset fields of note ****************************/
 /*****************************************************************************/
 
-static void TL_ResetNote (struct TL_Note *SocNot)
+static void TL_ResetNote (struct TL_Note *Not)
   {
-   SocNot->NotCod      = -1L;
-   SocNot->NoteType    = TL_NOTE_UNKNOWN;
-   SocNot->UsrCod      = -1L;
-   SocNot->HieCod      = -1L;
-   SocNot->Cod         = -1L;
-   SocNot->Unavailable = false;
-   SocNot->DateTimeUTC = (time_t) 0;
-   SocNot->NumShared   = 0;
+   Not->NotCod      = -1L;
+   Not->NoteType    = TL_NOTE_UNKNOWN;
+   Not->UsrCod      = -1L;
+   Not->HieCod      = -1L;
+   Not->Cod         = -1L;
+   Not->Unavailable = false;
+   Not->DateTimeUTC = (time_t) 0;
+   Not->NumShared   = 0;
   }
 
 /*****************************************************************************/
 /************************** Reset fields of comment **************************/
 /*****************************************************************************/
 
-static void TL_ResetComment (struct TL_Comment *SocCom)
+static void TL_ResetComment (struct TL_Comment *Com)
   {
-   SocCom->PubCod      = -1L;
-   SocCom->UsrCod      = -1L;
-   SocCom->NotCod      = -1L;
-   SocCom->DateTimeUTC = (time_t) 0;
-   SocCom->Content.Txt[0]  = '\0';
+   Com->PubCod      = -1L;
+   Com->UsrCod      = -1L;
+   Com->NotCod      = -1L;
+   Com->DateTimeUTC = (time_t) 0;
+   Com->Content.Txt[0]  = '\0';
   }
 
 /*****************************************************************************/
@@ -4486,14 +4486,14 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct TL_Publication SocPub;
-   struct TL_Note SocNot;
+   struct TL_Publication Pub;
+   struct TL_Note Not;
    struct TL_PostContent Content;
    size_t Length;
    bool ContentCopied = false;
 
    /***** Return nothing on error *****/
-   SocPub.PubType = TL_PUB_UNKNOWN;
+   Pub.PubType = TL_PUB_UNKNOWN;
    SummaryStr[0] = '\0';	// Return nothing on error
    Content.Txt[0] = '\0';
 
@@ -4506,30 +4506,30 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 		       " FROM tl_pubs WHERE PubCod=%ld",
 		       PubCod) == 1)   // Result should have a unique row
       /* Get data of publication from row */
-      TL_GetDataOfPublicationFromNextRow (mysql_res,&SocPub);
+      TL_GetDataOfPublicationFromNextRow (mysql_res,&Pub);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get summary and content *****/
-   switch (SocPub.PubType)
+   switch (Pub.PubType)
      {
       case TL_PUB_UNKNOWN:
 	 break;
       case TL_PUB_ORIGINAL_NOTE:
       case TL_PUB_SHARED_NOTE:
 	 /* Get data of note */
-	 SocNot.NotCod = SocPub.NotCod;
-	 TL_GetDataOfNoteByCod (&SocNot);
+	 Not.NotCod = Pub.NotCod;
+	 TL_GetDataOfNoteByCod (&Not);
 
-	 if (SocNot.NoteType == TL_NOTE_POST)
+	 if (Not.NoteType == TL_NOTE_POST)
 	   {
 	    /***** Get content of post from database *****/
 	    if (DB_QuerySELECT (&mysql_res,"can not get the content of a post",
 			        "SELECT Txt"	// row[0]
 			        " FROM tl_posts"
 				" WHERE PstCod=%ld",
-				SocNot.Cod) == 1)   // Result should have a unique row
+				Not.Cod) == 1)   // Result should have a unique row
 	      {
 	       /***** Get row *****/
 	       row = mysql_fetch_row (mysql_res);
@@ -4560,7 +4560,7 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	              Ntf_MAX_BYTES_SUMMARY);
 	   }
 	 else
-	    TL_GetNoteSummary (&SocNot,SummaryStr);
+	    TL_GetNoteSummary (&Not,SummaryStr);
 	 break;
       case TL_PUB_COMMENT_TO_NOTE:
 	 /***** Get content of post from database *****/
@@ -4569,7 +4569,7 @@ void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 			     "SELECT Txt"	// row[0]
 			     " FROM tl_comments"
 			     " WHERE PubCod=%ld",
-			     SocPub.PubCod) == 1)   // Result should have a unique row
+			     Pub.PubCod) == 1)   // Result should have a unique row
 	   {
 	    /***** Get row *****/
 	    row = mysql_fetch_row (mysql_res);
