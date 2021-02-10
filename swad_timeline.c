@@ -246,7 +246,7 @@ static void TL_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline);
 static unsigned TL_GetMaxPubsToGet (const struct TL_Timeline *Timeline);
 static long TL_GetPubCodFromSession (const char *FieldName);
 static void TL_UpdateLastPubCodIntoSession (void);
-static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod);
+static void TL_UpdateFirstPubCodIntoSession (void);
 static void TL_CreateTmpTableCurrentTimeline (const struct TL_Timeline *Timeline);
 static void TL_CreateTmpTablePublishers (void);
 static void TL_DropTmpTablesUsedToQueryTimeline (void);
@@ -789,7 +789,7 @@ static void TL_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
       RangePubsToGet.Top = TL_Pubs.List[NumPub].PubCod;	// Narrow the range for the next iteration
      }
 
-   /***** Update last publication code into session for next refresh *****/
+   /***** Update last (more recent) publication code into session for next refresh *****/
    // Do this inmediately after getting the publications codes...
    // ...in order to not lose publications
    TL_UpdateLastPubCodIntoSession ();
@@ -847,7 +847,7 @@ static long TL_GetPubCodFromSession (const char *FieldName)
   }
 
 /*****************************************************************************/
-/*********************** Update last publication code ************************/
+/***************** Update the most recent publication code *******************/
 /*****************************************************************************/
 
 static void TL_UpdateLastPubCodIntoSession (void)
@@ -862,17 +862,18 @@ static void TL_UpdateLastPubCodIntoSession (void)
   }
 
 /*****************************************************************************/
-/*********************** Update first publication code ***********************/
+/******************** Update the oldest publication code *********************/
 /*****************************************************************************/
 
-static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod)
+static void TL_UpdateFirstPubCodIntoSession (void)
   {
    /***** Update last publication code *****/
    DB_QueryUPDATE ("can not update first publication code into session",
 		   "UPDATE sessions"
 		   " SET FirstPubCod=%ld"
 		   " WHERE SessionId='%s'",
-		   FirstPubCod,
+		   TL_Pubs.Num ? TL_Pubs.List[TL_Pubs.Num - 1].PubCod :	// The last element in list is the oldest
+	                         0L,
 		   Gbl.Session.Id);
   }
 
@@ -1190,9 +1191,8 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
      }
    HTM_UL_End ();
 
-   /***** Store first publication code into session *****/
-   TL_UpdateFirstPubCodIntoSession (TL_Pubs.Num ? TL_Pubs.List[NumPub].PubCod :
-	                                          0L);
+   /***** Store first (oldest) publication code into session *****/
+   TL_UpdateFirstPubCodIntoSession ();
 
    if (TL_Pubs.Num == TL_MAX_REC_PUBS_TO_GET_AND_SHOW)
      {
@@ -1442,9 +1442,8 @@ static void TL_ShowOldPubsInTimeline (struct TL_Timeline *Timeline)
                     TL_DONT_SHOW_NOTE_ALONE);
      }
 
-   /***** Store first publication code into session *****/
-   TL_UpdateFirstPubCodIntoSession (TL_Pubs.Num ? TL_Pubs.List[NumPub].PubCod :
-	                                          0L);
+   /***** Store first (oldest) publication code into session *****/
+   TL_UpdateFirstPubCodIntoSession ();
   }
 
 /*****************************************************************************/
