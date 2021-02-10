@@ -106,6 +106,11 @@ struct TL_Timeline
    TL_UsrOrGbl_t UsrOrGbl;
    Usr_Who_t Who;
    TL_WhatToGet_t WhatToGet;
+   struct
+     {
+      unsigned Num;			// Number of publications
+      struct TL_Publication *Lst;	// List of publications
+     } Pubs;
    long NotCod;		// Used as parameter about social note to be edited, removed...
    long PubCod;		// Used as parameter about social publishing to be edited, removed...
   };
