@@ -125,8 +125,6 @@ void TL_RefreshNewTimelineGbl (void);
 void TL_RefreshOldTimelineGbl (void);
 void TL_RefreshOldTimelineUsr (void);
 
-void TL_Ntf_MarkMyNotifAsSeen (void);
-
 void TL_FormStart (const struct TL_Timeline *Timeline,
 	           Act_Action_t ActionGbl,
                    Act_Action_t ActionUsr);

@@ -95,8 +95,6 @@ static void TL_Pub_UpdateFirstLastPubCodesIntoSession (const struct TL_Timeline 
 
 static struct TL_Pub_Publication *TL_Pub_SelectTheMostRecentPub (const struct TL_Pub_SubQueries *SubQueries);
 
-static void TL_Pub_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
-                                                    struct TL_Pub_Publication *Pub);
 static TL_Pub_PubType_t TL_Pub_GetPubTypeFromStr (const char *Str);
 
 /*****************************************************************************/
@@ -687,45 +685,6 @@ long TL_Pub_GetParamPubCod (void)
   }
 
 /*****************************************************************************/
-/*********** Create a notification for the author of a post/comment **********/
-/*****************************************************************************/
-
-void TL_Ntf_CreateNotifToAuthor (long AuthorCod,long PubCod,
-                                 Ntf_NotifyEvent_t NotifyEvent)
-  {
-   struct UsrData UsrDat;
-   bool CreateNotif;
-   bool NotifyByEmail;
-
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
-
-   UsrDat.UsrCod = AuthorCod;
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
-     {
-      /***** This fav must be notified by email? *****/
-      CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << NotifyEvent));
-      NotifyByEmail = CreateNotif &&
-		      (UsrDat.NtfEvents.SendEmail & (1 << NotifyEvent));
-
-      /***** Create notification for the author of the post.
-	     If this author wants to receive notifications by email,
-	     activate the sending of a notification *****/
-      if (CreateNotif)
-	 Ntf_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,PubCod,
-					(Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-									0),
-					Gbl.Hierarchy.Ins.InsCod,
-					Gbl.Hierarchy.Ctr.CtrCod,
-					Gbl.Hierarchy.Deg.DegCod,
-					Gbl.Hierarchy.Crs.CrsCod);
-     }
-
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDat);
-  }
-
-/*****************************************************************************/
 /*********************** Get code of note of a publication *******************/
 /*****************************************************************************/
 
@@ -756,8 +715,8 @@ long TL_Pub_GetNotCodFromPubCod (long PubCod)
 /***************** Get data of publication using its code ********************/
 /*****************************************************************************/
 
-static void TL_Pub_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
-                                                    struct TL_Pub_Publication *Pub)
+void TL_Pub_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
+                                             struct TL_Pub_Publication *Pub)
   {
    static const TL_TopMessage_t TopMessages[TL_NUM_PUB_TYPES] =
      {
@@ -804,137 +763,6 @@ static TL_Pub_PubType_t TL_Pub_GetPubTypeFromStr (const char *Str)
          return (TL_Pub_PubType_t) UnsignedNum;
 
    return TL_PUB_UNKNOWN;
-  }
-
-/*****************************************************************************/
-/***************** Get notification of a new publication *********************/
-/*****************************************************************************/
-
-void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                 char **ContentStr,
-                                 long PubCod,bool GetContent)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   struct TL_Pub_Publication Pub;
-   struct TL_Not_Note Not;
-   struct TL_Pst_PostContent Content;
-   size_t Length;
-   bool ContentCopied = false;
-
-   /***** Return nothing on error *****/
-   Pub.PubType = TL_PUB_UNKNOWN;
-   SummaryStr[0] = '\0';	// Return nothing on error
-   Content.Txt[0] = '\0';
-
-   /***** Get summary and content from post from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data of publication",
-		       "SELECT PubCod,"			// row[0]
-			      "NotCod,"			// row[1]
-			      "PublisherCod,"		// row[2]
-			      "PubType"			// row[3]
-		       " FROM tl_pubs WHERE PubCod=%ld",
-		       PubCod) == 1)   // Result should have a unique row
-      /* Get data of publication from row */
-      TL_Pub_GetDataOfPublicationFromNextRow (mysql_res,&Pub);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Get summary and content *****/
-   switch (Pub.PubType)
-     {
-      case TL_PUB_UNKNOWN:
-	 break;
-      case TL_PUB_ORIGINAL_NOTE:
-      case TL_PUB_SHARED_NOTE:
-	 /* Get data of note */
-	 Not.NotCod = Pub.NotCod;
-	 TL_Not_GetDataOfNoteByCod (&Not);
-
-	 if (Not.NoteType == TL_NOTE_POST)
-	   {
-	    /***** Get content of post from database *****/
-	    if (DB_QuerySELECT (&mysql_res,"can not get the content of a post",
-			        "SELECT Txt"	// row[0]
-			        " FROM tl_posts"
-				" WHERE PstCod=%ld",
-				Not.Cod) == 1)   // Result should have a unique row
-	      {
-	       /***** Get row *****/
-	       row = mysql_fetch_row (mysql_res);
-
-	       /****** Get content (row[0]) *****/
-	       Str_Copy (Content.Txt,row[0],
-	                 Cns_MAX_BYTES_LONG_TEXT);
-	      }
-
-	    /***** Free structure that stores the query result *****/
-            DB_FreeMySQLResult (&mysql_res);
-
-	    /***** Copy content string *****/
-	    if (GetContent)
-	      {
-	       Length = strlen (Content.Txt);
-	       if ((*ContentStr = (char *) malloc (Length + 1)) != NULL)
-		 {
-		  Str_Copy (*ContentStr,Content.Txt,
-		            Length);
-		  ContentCopied = true;
-		 }
-	      }
-
-	    /***** Copy summary string *****/
-	    Str_LimitLengthHTMLStr (Content.Txt,Ntf_MAX_CHARS_SUMMARY);
-	    Str_Copy (SummaryStr,Content.Txt,
-	              Ntf_MAX_BYTES_SUMMARY);
-	   }
-	 else
-	    TL_Not_GetNoteSummary (&Not,SummaryStr);
-	 break;
-      case TL_Pub_COMMENT_TO_NOTE:
-	 /***** Get content of post from database *****/
-	 if (DB_QuerySELECT (&mysql_res,"can not get the content"
-				        " of a comment to a note",
-			     "SELECT Txt"	// row[0]
-			     " FROM tl_comments"
-			     " WHERE PubCod=%ld",
-			     Pub.PubCod) == 1)   // Result should have a unique row
-	   {
-	    /***** Get row *****/
-	    row = mysql_fetch_row (mysql_res);
-
-	    /****** Get content (row[0]) *****/
-	    Str_Copy (Content.Txt,row[0],
-	              Cns_MAX_BYTES_LONG_TEXT);
-	   }
-
-	 /***** Free structure that stores the query result *****/
-	 DB_FreeMySQLResult (&mysql_res);
-
-	 /***** Copy content string *****/
-	 if (GetContent)
-	   {
-	    Length = strlen (Content.Txt);
-	    if ((*ContentStr = (char *) malloc (Length + 1)) != NULL)
-	      {
-	       Str_Copy (*ContentStr,Content.Txt,
-	                 Length);
-	       ContentCopied = true;
-	      }
-	   }
-
-	 /***** Copy summary string *****/
-	 Str_LimitLengthHTMLStr (Content.Txt,Ntf_MAX_CHARS_SUMMARY);
-	 Str_Copy (SummaryStr,Content.Txt,
-	           Ntf_MAX_BYTES_SUMMARY);
-	 break;
-     }
-
-   /***** Create empty content string if nothing copied *****/
-   if (GetContent && !ContentCopied)
-      if ((*ContentStr = (char *) malloc (1)) != NULL)
-         (*ContentStr)[0] = '\0';
   }
 
 /*****************************************************************************/

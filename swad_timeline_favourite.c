@@ -29,6 +29,7 @@
 #include "swad_global.h"
 #include "swad_timeline.h"
 #include "swad_timeline_favourite.h"
+#include "swad_timeline_notification.h"
 #include "swad_timeline_publication.h"
 
 /*****************************************************************************/

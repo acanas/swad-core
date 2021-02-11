@@ -82,14 +82,10 @@ void TL_Pub_PutLinkToViewOldPublications (void);
 void TL_Pub_PutHiddenParamPubCod (long PubCod);
 long TL_Pub_GetParamPubCod (void);
 
-void TL_Ntf_CreateNotifToAuthor (long AuthorCod,long PubCod,
-                                 Ntf_NotifyEvent_t NotifyEvent);
-
 long TL_Pub_GetNotCodFromPubCod (long PubCod);
 
-void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                 char **ContentStr,
-                                 long PubCod,bool GetContent);
+void TL_Pub_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
+                                             struct TL_Pub_Publication *Pub);
 
 void TL_Pub_PublishPubInTimeline (struct TL_Pub_Publication *Pub);
 

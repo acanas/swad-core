@@ -137,6 +137,7 @@ mysql> SHOW TABLES LIKE 'tl_%';
 #include "swad_timeline.h"
 #include "swad_timeline_favourite.h"
 #include "swad_timeline_note.h"
+#include "swad_timeline_notification.h"
 #include "swad_timeline_publication.h"
 #include "swad_timeline_share.h"
 #include "swad_timeline_who.h"
@@ -383,19 +384,6 @@ static void TL_GetAndShowOldTimeline (struct TL_Timeline *Timeline)
 
    /***** Free chained list of publications *****/
    TL_Pub_FreeListPubs (Timeline);
-  }
-
-/*****************************************************************************/
-/************ Mark all my notifications about timeline as seen ***************/
-/*****************************************************************************/
-// Must be executed as a priori function
-
-void TL_Ntf_MarkMyNotifAsSeen (void)
-  {
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_COMMENT,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_FAV    ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_SHARE  ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_MENTION,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
