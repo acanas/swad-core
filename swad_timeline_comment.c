@@ -573,6 +573,7 @@ static void TL_Com_WriteComment (struct TL_Timeline *Timeline,
 
    if (ShowCommentAlone == TL_SHOW_ALONE)
      {
+      /***** Box begin *****/
       Box_BoxBegin (NULL,NULL,
                     NULL,NULL,
                     NULL,Box_NOT_CLOSABLE);
@@ -657,6 +658,7 @@ static void TL_Com_WriteComment (struct TL_Timeline *Timeline,
 
    if (ShowCommentAlone == TL_SHOW_ALONE)
      {
+      /***** Box end *****/
       HTM_UL_End ();
       HTM_DIV_End ();
       Box_BoxEnd ();

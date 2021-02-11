@@ -431,7 +431,6 @@ void For_ResetForums (struct For_Forums *Forums)
    Forums->Thread.ToMove   = -1L;
 
    Forums->PstCod          = -1L;
-
   }
 
 /*****************************************************************************/

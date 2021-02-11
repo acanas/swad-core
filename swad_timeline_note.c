@@ -68,6 +68,14 @@ extern struct Globals Gbl;
 
 static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod);
 
+static void TL_Not_GetLocationInHierarchy (const struct TL_Not_Note *Not,
+	                                   struct Ins_Instit *Ins,
+                                           struct Ctr_Centre *Ctr,
+                                           struct Deg_Degree *Deg,
+                                           struct Crs_Course *Crs,
+                                           struct For_Forum *Forum,
+                                           char ForumName[For_MAX_BYTES_FORUM_NAME + 1]);
+
 static void TL_Not_PutFormGoToAction (const struct TL_Not_Note *Not,
                                       const struct For_Forums *Forums);
 
@@ -208,6 +216,7 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
    /***** Begin box ****/
    if (ShowNoteAlone == TL_SHOW_ALONE)
      {
+      /***** Box begin *****/
       Box_BoxBegin (NULL,NULL,
                     NULL,NULL,
                     NULL,Box_CLOSABLE);
@@ -275,42 +284,8 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
 
 	 /* Get location in hierarchy */
 	 if (!Not->Unavailable)
-	    switch (Not->NoteType)
-	      {
-	       case TL_NOTE_INS_DOC_PUB_FILE:
-	       case TL_NOTE_INS_SHA_PUB_FILE:
-		  /* Get institution data */
-		  Ins.InsCod = Not->HieCod;
-		  Ins_GetDataOfInstitutionByCod (&Ins);
-		  break;
-	       case TL_NOTE_CTR_DOC_PUB_FILE:
-	       case TL_NOTE_CTR_SHA_PUB_FILE:
-		  /* Get centre data */
-		  Ctr.CtrCod = Not->HieCod;
-		  Ctr_GetDataOfCentreByCod (&Ctr);
-		  break;
-	       case TL_NOTE_DEG_DOC_PUB_FILE:
-	       case TL_NOTE_DEG_SHA_PUB_FILE:
-		  /* Get degree data */
-		  Deg.DegCod = Not->HieCod;
-		  Deg_GetDataOfDegreeByCod (&Deg);
-		  break;
-	       case TL_NOTE_CRS_DOC_PUB_FILE:
-	       case TL_NOTE_CRS_SHA_PUB_FILE:
-	       case TL_NOTE_EXAM_ANNOUNCEMENT:
-	       case TL_NOTE_NOTICE:
-		  /* Get course data */
-		  Crs.CrsCod = Not->HieCod;
-		  Crs_GetDataOfCourseByCod (&Crs);
-		  break;
-	       case TL_NOTE_FORUM_POST:
-		  /* Get forum type of the post */
-		  For_GetForumTypeAndLocationOfAPost (Not->Cod,&Forums.Forum);
-		  For_SetForumName (&Forums.Forum,ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
-		  break;
-	       default:
-		  break;
-	      }
+	    TL_Not_GetLocationInHierarchy (Not,&Ins,&Ctr,&Deg,&Crs,
+	                                   &Forums.Forum,ForumName);
 
 	 /* Write note type */
 	 TL_Not_PutFormGoToAction (Not,&Forums);
@@ -432,6 +407,7 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
    /***** End box ****/
    if (ShowNoteAlone == TL_SHOW_ALONE)
      {
+      /***** Box end *****/
       HTM_UL_End ();
       Box_BoxEnd ();
      }
@@ -498,6 +474,56 @@ void TL_Not_WriteAuthorNote (const struct UsrData *UsrDat)
    HTM_Txt (UsrDat->FullName);
    HTM_BUTTON_End ();
    Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/*************** Write name and nickname of author of a note *****************/
+/*****************************************************************************/
+
+static void TL_Not_GetLocationInHierarchy (const struct TL_Not_Note *Not,
+	                                   struct Ins_Instit *Ins,
+                                           struct Ctr_Centre *Ctr,
+                                           struct Deg_Degree *Deg,
+                                           struct Crs_Course *Crs,
+                                           struct For_Forum *Forum,
+                                           char ForumName[For_MAX_BYTES_FORUM_NAME + 1])
+  {
+   switch (Not->NoteType)
+     {
+      case TL_NOTE_INS_DOC_PUB_FILE:
+      case TL_NOTE_INS_SHA_PUB_FILE:
+	 /* Get institution data */
+	 Ins->InsCod = Not->HieCod;
+	 Ins_GetDataOfInstitutionByCod (Ins);
+	 break;
+      case TL_NOTE_CTR_DOC_PUB_FILE:
+      case TL_NOTE_CTR_SHA_PUB_FILE:
+	 /* Get centre data */
+	 Ctr->CtrCod = Not->HieCod;
+	 Ctr_GetDataOfCentreByCod (Ctr);
+	 break;
+      case TL_NOTE_DEG_DOC_PUB_FILE:
+      case TL_NOTE_DEG_SHA_PUB_FILE:
+	 /* Get degree data */
+	 Deg->DegCod = Not->HieCod;
+	 Deg_GetDataOfDegreeByCod (Deg);
+	 break;
+      case TL_NOTE_CRS_DOC_PUB_FILE:
+      case TL_NOTE_CRS_SHA_PUB_FILE:
+      case TL_NOTE_EXAM_ANNOUNCEMENT:
+      case TL_NOTE_NOTICE:
+	 /* Get course data */
+	 Crs->CrsCod = Not->HieCod;
+	 Crs_GetDataOfCourseByCod (Crs);
+	 break;
+      case TL_NOTE_FORUM_POST:
+	 /* Get forum type of the post */
+	 For_GetForumTypeAndLocationOfAPost (Not->Cod,Forum);
+	 For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
+	 break;
+      default:
+	 break;
+     }
   }
 
 /*****************************************************************************/
