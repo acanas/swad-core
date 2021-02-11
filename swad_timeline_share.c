@@ -40,8 +40,8 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
-#define TL_ICON_SHARE		"share-alt.svg"
-#define TL_ICON_SHARED		"share-alt-green.svg"
+#define TL_Sha_ICON_SHARE	"share-alt.svg"
+#define TL_Sha_ICON_SHARED	"share-alt-green.svg"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -82,13 +82,13 @@ static void TL_Sha_PutDisabledIconShare (unsigned NumShared)
    /***** Disabled icon to share *****/
    if (NumShared)
      {
-      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_SHARE,
+      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_Sha_ICON_SHARE,
 		      Str_BuildStringLong (Txt_TIMELINE_NOTE_Shared_by_X_USERS,
 					   (long) NumShared));
       Str_FreeString ();
      }
    else
-      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_ICON_SHARE,
+      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_Sha_ICON_SHARE,
 		      Txt_TIMELINE_NOTE_Not_shared_by_anyone);
   }
 
@@ -101,9 +101,10 @@ static void TL_Sha_PutFormToShaNote (long ParamCod)
    extern const char *Txt_Share;
 
    /***** Form and icon to mark note as favourite *****/
-   TL_Usr_FormFavSha (ActShaTL_NotGbl,ActShaTL_NotUsr,
-                  "NotCod=%ld",ParamCod,
-	          TL_ICON_SHARE,Txt_Share);
+   TL_Usr_FormFavSha (ActShaTL_NotGbl,
+                      ActShaTL_NotUsr,
+                      "NotCod=%ld",ParamCod,
+	              TL_Sha_ICON_SHARE,Txt_Share);
   }
 
 static void TL_Sha_PutFormToUnsNote (long ParamCod)
@@ -111,9 +112,10 @@ static void TL_Sha_PutFormToUnsNote (long ParamCod)
    extern const char *Txt_TIMELINE_NOTE_Shared;
 
    /***** Form and icon to mark note as favourite *****/
-   TL_Usr_FormFavSha (ActUnsTL_NotGbl,ActUnsTL_NotUsr,
-                  "NotCod=%ld",ParamCod,
-	          TL_ICON_SHARED,Txt_TIMELINE_NOTE_Shared);
+   TL_Usr_FormFavSha (ActUnsTL_NotGbl,
+                      ActUnsTL_NotUsr,
+                      "NotCod=%ld",ParamCod,
+	              TL_Sha_ICON_SHARED,Txt_TIMELINE_NOTE_Shared);
   }
 
 /*****************************************************************************/
@@ -181,7 +183,7 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
 	    /***** Share (publish note in timeline) *****/
 	    Pub.NotCod       = Not->NotCod;
 	    Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-	    Pub.PubType      = TL_PUB_SHARED_NOTE;
+	    Pub.PubType      = TL_Pub_SHARED_NOTE;
 	    TL_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
 
 	    /* Update number of times this note is shared */
@@ -191,7 +193,8 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
 		  for the author of the post ***/
 	    OriginalPubCod = TL_Not_GetPubCodOfOriginalNote (Not->NotCod);
 	    if (OriginalPubCod > 0)
-	       TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_SHARE);
+	       TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,
+	                                   Ntf_EVENT_TIMELINE_SHARE);
 	   }
      }
   }
@@ -246,7 +249,7 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
 	                    " AND PubType=%u",
 			    Not->NotCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod,
-			    (unsigned) TL_PUB_SHARED_NOTE);
+			    (unsigned) TL_Pub_SHARED_NOTE);
 
 	    /***** Update number of times this note is shared *****/
 	    TL_Sha_UpdateNumTimesANoteHasBeenShared (Not);
@@ -301,7 +304,7 @@ static bool TL_Sha_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod)
 			  " AND PubType=%u",
 			  NotCod,
 			  UsrCod,
-			  (unsigned) TL_PUB_SHARED_NOTE) != 0);
+			  (unsigned) TL_Pub_SHARED_NOTE) != 0);
   }
 
 /*****************************************************************************/
@@ -320,7 +323,7 @@ void TL_Sha_UpdateNumTimesANoteHasBeenShared (struct TL_Not_Note *Not)
 			     " AND PubType=%u",
 			     Not->NotCod,
 			     Not->UsrCod,	// The author
-			     (unsigned) TL_PUB_SHARED_NOTE);
+			     (unsigned) TL_Pub_SHARED_NOTE);
   }
 
 /*****************************************************************************/
@@ -344,7 +347,7 @@ static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Not_Note *Not,
 				 " ORDER BY PubCod LIMIT %u",
 				 Not->NotCod,
 				 Not->UsrCod,
-				 (unsigned) TL_PUB_SHARED_NOTE,
+				 (unsigned) TL_Pub_SHARED_NOTE,
 				 HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
 				                                   TL_Usr_MAX_USRS_SHOWN);
    else
@@ -361,9 +364,10 @@ static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Not_Note *Not,
    TL_Usr_ShowSharersOrFavers (&mysql_res,Not->NumShared,NumFirstUsrs);
    if (NumFirstUsrs < Not->NumShared)
       /* Clickable ellipsis to show all users */
-      TL_Usr_PutFormToSeeAllFaversSharers (ActAllShaTL_NotGbl,ActAllShaTL_NotUsr,
-		                       "NotCod=%ld",Not->NotCod,
-                                       HowManyUsrs);
+      TL_Usr_PutFormToSeeAllFaversSharers (ActAllShaTL_NotGbl,
+                                           ActAllShaTL_NotUsr,
+		                           "NotCod=%ld",Not->NotCod,
+                                           HowManyUsrs);
    HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/

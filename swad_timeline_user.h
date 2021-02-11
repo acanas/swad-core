@@ -66,10 +66,12 @@ void TL_Usr_RemoveUsrContent (long UsrCod);
 void TL_Usr_ShowNumSharersOrFavers (unsigned NumUsrs);
 void TL_Usr_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 			         unsigned NumUsrs,unsigned NumFirstUsrs);
-void TL_Usr_PutFormToSeeAllFaversSharers (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+void TL_Usr_PutFormToSeeAllFaversSharers (Act_Action_t ActionGbl,
+                                          Act_Action_t ActionUsr,
 		                          const char *ParamFormat,long ParamCod,
                                           TL_Usr_HowManyUsrs_t HowManyUsrs);
-void TL_Usr_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+void TL_Usr_FormFavSha (Act_Action_t ActionGbl,
+                        Act_Action_t ActionUsr,
 		        const char *ParamFormat,long ParamCod,
 		        const char *Icon,const char *Title);
 

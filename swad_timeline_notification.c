@@ -26,19 +26,15 @@
 /*****************************************************************************/
 
 #include <stdbool.h>		// For boolean type
-// #include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
 #include "swad_global.h"
-// #include "swad_profile.h"
 #include "swad_timeline.h"
-// #include "swad_timeline_favourite.h"
 #include "swad_timeline_note.h"
 #include "swad_timeline_notification.h"
 #include "swad_timeline_post.h"
 #include "swad_timeline_publication.h"
-// #include "swad_timeline_share.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -118,7 +114,7 @@ void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    bool ContentCopied = false;
 
    /***** Return nothing on error *****/
-   Pub.PubType = TL_PUB_UNKNOWN;
+   Pub.PubType = TL_Pub_UNKNOWN;
    SummaryStr[0] = '\0';	// Return nothing on error
    Content.Txt[0] = '\0';
 
@@ -139,10 +135,10 @@ void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    /***** Get summary and content *****/
    switch (Pub.PubType)
      {
-      case TL_PUB_UNKNOWN:
+      case TL_Pub_UNKNOWN:
 	 break;
-      case TL_PUB_ORIGINAL_NOTE:
-      case TL_PUB_SHARED_NOTE:
+      case TL_Pub_ORIGINAL_NOTE:
+      case TL_Pub_SHARED_NOTE:
 	 /* Get data of note */
 	 Not.NotCod = Pub.NotCod;
 	 TL_Not_GetDataOfNoteByCod (&Not);

@@ -45,14 +45,14 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define TL_NUM_PUB_TYPES	4
+#define TL_Pub_NUM_PUB_TYPES	4
 // If the numbers assigned to each event type change,
 // it is necessary to change old numbers to new ones in database table tl_notes
 typedef enum
   {
-   TL_PUB_UNKNOWN		= 0,
-   TL_PUB_ORIGINAL_NOTE		= 1,
-   TL_PUB_SHARED_NOTE		= 2,
+   TL_Pub_UNKNOWN		= 0,
+   TL_Pub_ORIGINAL_NOTE		= 1,
+   TL_Pub_SHARED_NOTE		= 2,
    TL_Pub_COMMENT_TO_NOTE	= 3,
   } TL_Pub_PubType_t;
 
@@ -60,9 +60,8 @@ struct TL_Pub_Publication
   {
    long PubCod;
    long NotCod;
-   long PublisherCod;		// Sharer or writer of the publication
+   long PublisherCod;			// Sharer or writer of the publication
    TL_Pub_PubType_t PubType;
-   TL_TopMessage_t TopMessage;	// Used to show feedback on the action made
    struct TL_Pub_Publication *Next;	// Used for chained list
   };
 
@@ -75,6 +74,8 @@ void TL_Pub_FreeListPubs (struct TL_Timeline *Timeline);
 
 void TL_Pub_InsertNewPubsInTimeline (struct TL_Timeline *Timeline);
 void TL_Pub_ShowOldPubsInTimeline (struct TL_Timeline *Timeline);
+
+TL_TopMessage_t TL_Pub_GetTopMessage (TL_Pub_PubType_t PubType);
 
 void TL_Pub_PutLinkToViewNewPublications (void);
 void TL_Pub_PutLinkToViewOldPublications (void);

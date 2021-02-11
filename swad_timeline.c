@@ -470,7 +470,7 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
 
       /* Write note */
       TL_Not_WriteNote (Timeline,&Not,
-                        Pub->TopMessage,Pub->PublisherCod,
+                        TL_Pub_GetTopMessage (Pub->PubType),Pub->PublisherCod,
 		        Not.NotCod == NotCodToHighlight ? TL_HIGHLIGHT :
 			                                  TL_DONT_HIGHLIGHT,
 		        TL_DONT_SHOW_ALONE);
@@ -513,11 +513,13 @@ void TL_FormStart (const struct TL_Timeline *Timeline,
   {
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
+      /***** Start form in user timeline *****/
       Frm_StartFormAnchor (ActionUsr,"timeline");
       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
      }
    else
      {
+      /***** Start form in global timeline *****/
       Frm_StartForm (ActionGbl);
       Usr_PutHiddenParamWho (Timeline->Who);
      }

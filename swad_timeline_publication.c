@@ -577,7 +577,7 @@ void TL_Pub_InsertNewPubsInTimeline (struct TL_Timeline *Timeline)
 
       /* Write note */
       TL_Not_WriteNote (Timeline,&Not,
-                        Pub->TopMessage,Pub->PublisherCod,
+                        TL_Pub_GetTopMessage (Pub->PubType),Pub->PublisherCod,
                         TL_DONT_HIGHLIGHT,
                         TL_DONT_SHOW_ALONE);
      }
@@ -604,10 +604,27 @@ void TL_Pub_ShowOldPubsInTimeline (struct TL_Timeline *Timeline)
 
       /* Write note */
       TL_Not_WriteNote (Timeline,&Not,
-                        Pub->TopMessage,Pub->PublisherCod,
+                        TL_Pub_GetTopMessage (Pub->PubType),Pub->PublisherCod,
                         TL_DONT_HIGHLIGHT,
                         TL_DONT_SHOW_ALONE);
      }
+  }
+
+/*****************************************************************************/
+/************* Get a top message given the type of publication ***************/
+/*****************************************************************************/
+
+TL_TopMessage_t TL_Pub_GetTopMessage (TL_Pub_PubType_t PubType)
+  {
+   static const TL_TopMessage_t TopMessages[TL_Pub_NUM_PUB_TYPES] =
+     {
+      [TL_Pub_UNKNOWN        ] = TL_TOP_MESSAGE_NONE,
+      [TL_Pub_ORIGINAL_NOTE  ] = TL_TOP_MESSAGE_NONE,
+      [TL_Pub_SHARED_NOTE    ] = TL_TOP_MESSAGE_SHARED,
+      [TL_Pub_COMMENT_TO_NOTE] = TL_TOP_MESSAGE_COMMENTED,
+     };
+
+   return TopMessages[PubType];
   }
 
 /*****************************************************************************/
@@ -718,13 +735,6 @@ long TL_Pub_GetNotCodFromPubCod (long PubCod)
 void TL_Pub_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
                                              struct TL_Pub_Publication *Pub)
   {
-   static const TL_TopMessage_t TopMessages[TL_NUM_PUB_TYPES] =
-     {
-      [TL_PUB_UNKNOWN        ] = TL_TOP_MESSAGE_NONE,
-      [TL_PUB_ORIGINAL_NOTE  ] = TL_TOP_MESSAGE_NONE,
-      [TL_PUB_SHARED_NOTE    ] = TL_TOP_MESSAGE_SHARED,
-      [TL_Pub_COMMENT_TO_NOTE] = TL_TOP_MESSAGE_COMMENTED,
-     };
    MYSQL_ROW row;
 
    /***** Get next row from result *****/
@@ -747,7 +757,6 @@ void TL_Pub_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
 
    /***** Get type of publication (row[3]) *****/
    Pub->PubType      = TL_Pub_GetPubTypeFromStr ((const char *) row[3]);
-   Pub->TopMessage   = TopMessages[Pub->PubType];
   }
 
 /*****************************************************************************/
@@ -759,10 +768,10 @@ static TL_Pub_PubType_t TL_Pub_GetPubTypeFromStr (const char *Str)
    unsigned UnsignedNum;
 
    if (sscanf (Str,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < TL_NUM_PUB_TYPES)
+      if (UnsignedNum < TL_Pub_NUM_PUB_TYPES)
          return (TL_Pub_PubType_t) UnsignedNum;
 
-   return TL_PUB_UNKNOWN;
+   return TL_Pub_UNKNOWN;
   }
 
 /*****************************************************************************/

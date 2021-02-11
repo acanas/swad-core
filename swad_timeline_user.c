@@ -229,7 +229,8 @@ void TL_Usr_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 /********************* Form to show all favers/sharers ***********************/
 /*****************************************************************************/
 
-void TL_Usr_PutFormToSeeAllFaversSharers (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+void TL_Usr_PutFormToSeeAllFaversSharers (Act_Action_t ActionGbl,
+                                          Act_Action_t ActionUsr,
 		                          const char *ParamFormat,long ParamCod,
                                           TL_Usr_HowManyUsrs_t HowManyUsrs)
   {
@@ -239,9 +240,10 @@ void TL_Usr_PutFormToSeeAllFaversSharers (Act_Action_t ActionGbl,Act_Action_t Ac
      {
       case TL_Usr_SHOW_FEW_USRS:
 	 /***** Form and icon to mark note as favourite *****/
-	 TL_Usr_FormFavSha (ActionGbl,ActionUsr,
-	                ParamFormat,ParamCod,
-			TL_Usr_ICON_ELLIPSIS,Txt_View_all_USERS);
+	 TL_Usr_FormFavSha (ActionGbl,
+	                    ActionUsr,
+	                    ParamFormat,ParamCod,
+			    TL_Usr_ICON_ELLIPSIS,Txt_View_all_USERS);
 	 break;
       case TL_Usr_SHOW_ALL_USRS:
          Ico_PutIconOff (TL_Usr_ICON_ELLIPSIS,Txt_View_all_USERS);
@@ -253,7 +255,8 @@ void TL_Usr_PutFormToSeeAllFaversSharers (Act_Action_t ActionGbl,Act_Action_t Ac
 /******* Form to fav/unfav or share/unshare in global or user timeline *******/
 /*****************************************************************************/
 
-void TL_Usr_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+void TL_Usr_FormFavSha (Act_Action_t ActionGbl,
+                        Act_Action_t ActionUsr,
 		        const char *ParamFormat,long ParamCod,
 		        const char *Icon,const char *Title)
   {

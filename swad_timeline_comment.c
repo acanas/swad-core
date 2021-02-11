@@ -49,7 +49,7 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
-#define TL_COM_NUM_VISIBLE_COMMENTS	3	// Maximum number of comments visible before expanding them
+#define TL_Com_NUM_VISIBLE_COMMENTS	3	// Maximum number of comments visible before expanding them
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -208,15 +208,15 @@ void TL_Com_WriteCommentsInNote (struct TL_Timeline *Timeline,
           and how many final comments will be visible *****/
    // Never hide only one comment
    // So, the number of comments initially hidden must be 0 or >= 2
-   if (NumComments <= TL_COM_NUM_VISIBLE_COMMENTS + 1)
+   if (NumComments <= TL_Com_NUM_VISIBLE_COMMENTS + 1)
      {
       NumInitialComments    = 0;
       NumFinalCommentsToGet = NumComments;
      }
    else
      {
-      NumInitialComments    = NumComments - TL_COM_NUM_VISIBLE_COMMENTS;
-      NumFinalCommentsToGet = TL_COM_NUM_VISIBLE_COMMENTS;
+      NumInitialComments    = NumComments - TL_Com_NUM_VISIBLE_COMMENTS;
+      NumFinalCommentsToGet = TL_Com_NUM_VISIBLE_COMMENTS;
      }
 
    /***** Get last comments of this note from database *****/
@@ -419,7 +419,7 @@ void TL_Com_ShowHiddenCommentsGbl (void)
 
    /***** Write HTML inside DIV with hidden comments *****/
    NumInitialCommentsGot = TL_Com_WriteHiddenComments (&Timeline,
-                                                   NotCod,IdComments,NumInitialCommentsToGet);
+                                                       NotCod,IdComments,NumInitialCommentsToGet);
 
    /***** Link to show the first comments *****/
    TL_Com_LinkToShowPreviousComments (IdComments,NumInitialCommentsGot);
@@ -811,7 +811,6 @@ static long TL_Com_ReceiveComment (void)
 
    return Not.NotCod;
   }
-
 
 /*****************************************************************************/
 /**************** Request the removal of a comment in a note *****************/

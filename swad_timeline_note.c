@@ -753,7 +753,7 @@ void TL_Not_StoreAndPublishNoteInternal (TL_Not_NoteType_t NoteType,long Cod,str
 
    /***** Publish note in timeline *****/
    Pub->PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Pub->PubType      = TL_PUB_ORIGINAL_NOTE;
+   Pub->PubType      = TL_Pub_ORIGINAL_NOTE;
    TL_Pub_PublishPubInTimeline (Pub);
   }
 
@@ -1156,10 +1156,10 @@ static void TL_Not_RemoveNoteMediaAndDBEntries (struct TL_Not_Note *Not)
      {
       /* Remove media associated to a post from database */
       if (DB_QuerySELECT (&mysql_res,"can not get media",
-				 "SELECT MedCod"	// row[0]
-				 " FROM tl_posts"
-				 " WHERE PstCod=%ld",
-				 Not->Cod) == 1)   // Result should have a unique row
+			  "SELECT MedCod"	// row[0]
+			  " FROM tl_posts"
+			  " WHERE PstCod=%ld",
+			  Not->Cod) == 1)	// Result should have a unique row
         {
 	 /* Get media code */
 	 row = mysql_fetch_row (mysql_res);
@@ -1300,7 +1300,7 @@ long TL_Not_GetPubCodOfOriginalNote (long NotCod)
    if (DB_QuerySELECT (&mysql_res,"can not get code of publication",
 		       "SELECT PubCod FROM tl_pubs"
 		       " WHERE NotCod=%ld AND PubType=%u",
-		       NotCod,(unsigned) TL_PUB_ORIGINAL_NOTE) == 1)   // Result should have a unique row
+		       NotCod,(unsigned) TL_Pub_ORIGINAL_NOTE) == 1)   // Result should have a unique row
      {
       /* Get code of publication (row[0]) */
       row = mysql_fetch_row (mysql_res);
