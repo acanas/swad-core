@@ -75,6 +75,12 @@ static void TL_Not_GetLocationInHierarchy (const struct TL_Not_Note *Not,
                                            struct Crs_Course *Crs,
                                            struct For_Forum *Forum,
                                            char ForumName[For_MAX_BYTES_FORUM_NAME + 1]);
+static void TL_Not_WriteLocationInHierarchy (const struct TL_Not_Note *Not,
+	                                     const struct Ins_Instit *Ins,
+                                             const struct Ctr_Centre *Ctr,
+                                             const struct Deg_Degree *Deg,
+                                             const struct Crs_Course *Crs,
+                                             const char ForumName[For_MAX_BYTES_FORUM_NAME + 1]);
 
 static void TL_Not_PutFormGoToAction (const struct TL_Not_Note *Not,
                                       const struct For_Forums *Forums);
@@ -191,11 +197,6 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
                        TL_Highlight_t Highlight,		// Highlight note
                        TL_ShowAlone_t ShowNoteAlone)	// Note is shown alone, not in a list
   {
-   extern const char *Txt_Forum;
-   extern const char *Txt_Course;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Centre;
-   extern const char *Txt_Institution;
    struct UsrData AuthorDat;
    bool IAmTheAuthor;
    struct Ins_Instit Ins;
@@ -292,47 +293,8 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
 
 	 /* Write location in hierarchy */
 	 if (!Not->Unavailable)
-	    switch (Not->NoteType)
-	      {
-	       case TL_NOTE_INS_DOC_PUB_FILE:
-	       case TL_NOTE_INS_SHA_PUB_FILE:
-		  /* Write location (institution) in hierarchy */
-		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Ins.ShrtName);
-		  HTM_DIV_End ();
-		  break;
-	       case TL_NOTE_CTR_DOC_PUB_FILE:
-	       case TL_NOTE_CTR_SHA_PUB_FILE:
-		  /* Write location (centre) in hierarchy */
-		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  HTM_TxtF ("%s:&nbsp;%s",Txt_Centre,Ctr.ShrtName);
-		  HTM_DIV_End ();
-		  break;
-	       case TL_NOTE_DEG_DOC_PUB_FILE:
-	       case TL_NOTE_DEG_SHA_PUB_FILE:
-		  /* Write location (degree) in hierarchy */
-		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Deg.ShrtName);
-		  HTM_DIV_End ();
-		  break;
-	       case TL_NOTE_CRS_DOC_PUB_FILE:
-	       case TL_NOTE_CRS_SHA_PUB_FILE:
-	       case TL_NOTE_EXAM_ANNOUNCEMENT:
-	       case TL_NOTE_NOTICE:
-		  /* Write location (course) in hierarchy */
-		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Crs.ShrtName);
-		  HTM_DIV_End ();
-		  break;
-	       case TL_NOTE_FORUM_POST:
-		  /* Write forum name */
-		  HTM_DIV_Begin ("class=\"TL_LOC\"");
-		  HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
-		  HTM_DIV_End ();
-		  break;
-	       default:
-		  break;
-	      }
+	    TL_Not_WriteLocationInHierarchy (Not,&Ins,&Ctr,&Deg,&Crs,
+	                                     ForumName);
 
 	 /* Write note summary */
 	 TL_Not_GetNoteSummary (Not,SummaryStr);
@@ -477,7 +439,7 @@ void TL_Not_WriteAuthorNote (const struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/*************** Write name and nickname of author of a note *****************/
+/************************ Get location in hierarchy **************************/
 /*****************************************************************************/
 
 static void TL_Not_GetLocationInHierarchy (const struct TL_Not_Note *Not,
@@ -520,6 +482,66 @@ static void TL_Not_GetLocationInHierarchy (const struct TL_Not_Note *Not,
 	 /* Get forum type of the post */
 	 For_GetForumTypeAndLocationOfAPost (Not->Cod,Forum);
 	 For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
+	 break;
+      default:
+	 break;
+     }
+  }
+
+/*****************************************************************************/
+/*********************** Write location in hierarchy *************************/
+/*****************************************************************************/
+
+static void TL_Not_WriteLocationInHierarchy (const struct TL_Not_Note *Not,
+	                                     const struct Ins_Instit *Ins,
+                                             const struct Ctr_Centre *Ctr,
+                                             const struct Deg_Degree *Deg,
+                                             const struct Crs_Course *Crs,
+                                             const char ForumName[For_MAX_BYTES_FORUM_NAME + 1])
+  {
+   extern const char *Txt_Forum;
+   extern const char *Txt_Course;
+   extern const char *Txt_Degree;
+   extern const char *Txt_Centre;
+   extern const char *Txt_Institution;
+
+   switch (Not->NoteType)
+     {
+      case TL_NOTE_INS_DOC_PUB_FILE:
+      case TL_NOTE_INS_SHA_PUB_FILE:
+	 /* Write location (institution) in hierarchy */
+	 HTM_DIV_Begin ("class=\"TL_LOC\"");
+	 HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Ins->ShrtName);
+	 HTM_DIV_End ();
+	 break;
+      case TL_NOTE_CTR_DOC_PUB_FILE:
+      case TL_NOTE_CTR_SHA_PUB_FILE:
+	 /* Write location (centre) in hierarchy */
+	 HTM_DIV_Begin ("class=\"TL_LOC\"");
+	 HTM_TxtF ("%s:&nbsp;%s",Txt_Centre,Ctr->ShrtName);
+	 HTM_DIV_End ();
+	 break;
+      case TL_NOTE_DEG_DOC_PUB_FILE:
+      case TL_NOTE_DEG_SHA_PUB_FILE:
+	 /* Write location (degree) in hierarchy */
+	 HTM_DIV_Begin ("class=\"TL_LOC\"");
+	 HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Deg->ShrtName);
+	 HTM_DIV_End ();
+	 break;
+      case TL_NOTE_CRS_DOC_PUB_FILE:
+      case TL_NOTE_CRS_SHA_PUB_FILE:
+      case TL_NOTE_EXAM_ANNOUNCEMENT:
+      case TL_NOTE_NOTICE:
+	 /* Write location (course) in hierarchy */
+	 HTM_DIV_Begin ("class=\"TL_LOC\"");
+	 HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Crs->ShrtName);
+	 HTM_DIV_End ();
+	 break;
+      case TL_NOTE_FORUM_POST:
+	 /* Write forum name */
+	 HTM_DIV_Begin ("class=\"TL_LOC\"");
+	 HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
+	 HTM_DIV_End ();
 	 break;
       default:
 	 break;
