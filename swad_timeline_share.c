@@ -28,6 +28,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_timeline.h"
+#include "swad_timeline_publication.h"
 #include "swad_timeline_share.h"
 
 /*****************************************************************************/
@@ -161,8 +162,7 @@ void TL_Sha_ShaNoteGbl (void)
 
 static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
   {
-   // extern const char *Txt_The_original_post_no_longer_exists;
-   struct TL_Publication Pub;
+   struct TL_Pub_Publication Pub;
    bool ItsMe;
    long OriginalPubCod;
 
@@ -181,7 +181,7 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
 	    Pub.NotCod       = Not->NotCod;
 	    Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 	    Pub.PubType      = TL_PUB_SHARED_NOTE;
-	    TL_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
+	    TL_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
 
 	    /* Update number of times this note is shared */
 	    TL_Sha_UpdateNumTimesANoteHasBeenShared (Not);
@@ -190,7 +190,7 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
 		  for the author of the post ***/
 	    OriginalPubCod = TL_Not_GetPubCodOfOriginalNote (Not->NotCod);
 	    if (OriginalPubCod > 0)
-	       TL_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_SHARE);
+	       TL_Pub_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_SHARE);
 	   }
      }
   }

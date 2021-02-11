@@ -41,6 +41,7 @@
 #include "swad_profile.h"
 #include "swad_timeline.h"
 #include "swad_timeline_favourite.h"
+#include "swad_timeline_publication.h"
 #include "swad_timeline_share.h"
 
 /*****************************************************************************/
@@ -660,12 +661,12 @@ void TL_Not_GetNoteSummary (const struct TL_Not_Note *Not,
 
 void TL_Not_StoreAndPublishNote (TL_Not_NoteType_t NoteType,long Cod)
   {
-   struct TL_Publication Pub;
+   struct TL_Pub_Publication Pub;
 
    TL_Not_StoreAndPublishNoteInternal (NoteType,Cod,&Pub);
   }
 
-void TL_Not_StoreAndPublishNoteInternal (TL_Not_NoteType_t NoteType,long Cod,struct TL_Publication *Pub)
+void TL_Not_StoreAndPublishNoteInternal (TL_Not_NoteType_t NoteType,long Cod,struct TL_Pub_Publication *Pub)
   {
    long HieCod;	// Hierarchy code (institution/centre/degree/course)
 
@@ -707,7 +708,7 @@ void TL_Not_StoreAndPublishNoteInternal (TL_Not_NoteType_t NoteType,long Cod,str
    /***** Publish note in timeline *****/
    Pub->PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    Pub->PubType      = TL_PUB_ORIGINAL_NOTE;
-   TL_PublishPubInTimeline (Pub);
+   TL_Pub_PublishPubInTimeline (Pub);
   }
 
 /*****************************************************************************/
@@ -1084,7 +1085,7 @@ static void TL_Not_RemoveNoteMediaAndDBEntries (struct TL_Not_Note *Not)
 				 " FROM tl_pubs"
 				 " WHERE NotCod=%ld AND PubType=%u",
 				 Not->NotCod,
-				 (unsigned) TL_PUB_COMMENT_TO_NOTE);
+				 (unsigned) TL_Pub_COMMENT_TO_NOTE);
 
    /* For each comment... */
    for (NumCom = 0;
@@ -1309,3 +1310,27 @@ void TL_Not_GetDataOfNoteByCod (struct TL_Not_Note *Not)
       TL_Not_ResetNote (Not);
   }
 
+/*****************************************************************************/
+/******************* Clear unused old timelines in database ******************/
+/*****************************************************************************/
+
+void TL_Not_ClearOldTimelinesNotesFromDB (void)
+  {
+   /***** Remove timelines for expired sessions *****/
+   DB_QueryDELETE ("can not remove old timelines",
+		   "DELETE LOW_PRIORITY FROM tl_timelines"
+                   " WHERE SessionId NOT IN (SELECT SessionId FROM sessions)");
+  }
+
+/*****************************************************************************/
+/**************** Clear timeline for this session in database ****************/
+/*****************************************************************************/
+
+void TL_Not_ClearTimelineNotesThisSessionFromDB (void)
+  {
+   /***** Remove timeline for this session *****/
+   DB_QueryDELETE ("can not remove timeline",
+		   "DELETE FROM tl_timelines"
+		   " WHERE SessionId='%s'",
+		   Gbl.Session.Id);
+  }

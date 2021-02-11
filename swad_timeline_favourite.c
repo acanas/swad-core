@@ -29,6 +29,7 @@
 #include "swad_global.h"
 #include "swad_timeline.h"
 #include "swad_timeline_favourite.h"
+#include "swad_timeline_publication.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -273,7 +274,7 @@ static void TL_Fav_FavNote (struct TL_Not_Note *Not)
 		   for the author of the post *****/
 	    OriginalPubCod = TL_Not_GetPubCodOfOriginalNote (Not->NotCod);
 	    if (OriginalPubCod > 0)
-	       TL_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_FAV);
+	       TL_Pub_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_FAV);
 	   }
      }
   }
@@ -332,7 +333,7 @@ void TL_Fav_ShowAllFaversComGbl (void)
 
    /***** Get data of comment *****/
    Med_MediaConstructor (&Com.Content.Media);
-   Com.PubCod = TL_GetParamPubCod ();
+   Com.PubCod = TL_Pub_GetParamPubCod ();
    TL_Com_GetDataOfCommByCod (&Com);
    Med_MediaDestructor (&Com.Content.Media);
 
@@ -418,7 +419,7 @@ static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
    Med_MediaConstructor (&Com->Content.Media);
 
    /***** Get data of comment *****/
-   Com->PubCod = TL_GetParamPubCod ();
+   Com->PubCod = TL_Pub_GetParamPubCod ();
    TL_Com_GetDataOfCommByCod (Com);
 
    if (Com->PubCod > 0)
@@ -442,7 +443,7 @@ static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
 
 	    /**** Create notification about favourite post
 		  for the author of the post ***/
-	    TL_CreateNotifToAuthor (Com->UsrCod,Com->PubCod,Ntf_EVENT_TIMELINE_FAV);
+	    TL_Pub_CreateNotifToAuthor (Com->UsrCod,Com->PubCod,Ntf_EVENT_TIMELINE_FAV);
 	   }
      }
 
@@ -458,7 +459,7 @@ static void TL_Fav_UnfComment (struct TL_Com_Comment *Com)
    Med_MediaConstructor (&Com->Content.Media);
 
    /***** Get data of comment *****/
-   Com->PubCod = TL_GetParamPubCod ();
+   Com->PubCod = TL_Pub_GetParamPubCod ();
    TL_Com_GetDataOfCommByCod (Com);
 
    if (Com->PubCod > 0)

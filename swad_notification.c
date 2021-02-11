@@ -51,6 +51,7 @@
 #include "swad_parameter.h"
 #include "swad_survey.h"
 #include "swad_timeline.h"
+#include "swad_timeline_publication.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -725,7 +726,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_TIMELINE_MENTION:
 	 // Cod is the code of the social publishing
          Frm_StartForm (ActSeeTmlGbl);
-	 TL_PutHiddenParamPubCod (Cod);
+	 TL_Pub_PutHiddenParamPubCod (Cod);
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
          Ntf_PutHiddenParamNotifyEvent (NotifyEvent);
 	 break;
@@ -877,7 +878,7 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       case Ntf_EVENT_TIMELINE_SHARE:
       case Ntf_EVENT_TIMELINE_MENTION:
 	 // Cod is the code of the social publishing
-	 TL_GetNotifPublication (SummaryStr,ContentStr,Cod,GetContent);
+	 TL_Pub_GetNotifPublication (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_FOLLOWER:
          Fol_GetNotifFollower (SummaryStr,ContentStr);

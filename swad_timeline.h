@@ -94,8 +94,8 @@ struct TL_Timeline
    TL_WhatToGet_t WhatToGet;
    struct
      {
-      struct TL_Publication *Top;	// Points to first element in list of publications
-      struct TL_Publication *Bottom;	// Points to last  element in list of publications
+      struct TL_Pub_Publication *Top;	// Points to first element in list of publications
+      struct TL_Pub_Publication *Bottom;	// Points to last  element in list of publications
      } Pubs;
    long NotCod;		// Used as parameter about social note to be edited, removed...
    long PubCod;		// Used as parameter about social publishing to be edited, removed...
@@ -106,27 +106,6 @@ typedef enum
    TL_SHOW_FEW_USRS,	// Show a few first favers/sharers
    TL_SHOW_ALL_USRS,	// Show all favers/sharers
   } TL_HowManyUsrs_t;
-
-#define TL_NUM_PUB_TYPES	4
-// If the numbers assigned to each event type change,
-// it is necessary to change old numbers to new ones in database table tl_notes
-typedef enum
-  {
-   TL_PUB_UNKNOWN		= 0,
-   TL_PUB_ORIGINAL_NOTE		= 1,
-   TL_PUB_SHARED_NOTE		= 2,
-   TL_PUB_COMMENT_TO_NOTE	= 3,
-  } TL_PubType_t;
-
-struct TL_Publication
-  {
-   long PubCod;
-   long NotCod;
-   long PublisherCod;		// Sharer or writer of the publication
-   TL_PubType_t PubType;
-   TL_TopMessage_t TopMessage;	// Used to show feedback on the action made
-   struct TL_Publication *Next;	// Used for chained list
-  };
 
 struct TL_PostContent
   {
@@ -183,21 +162,10 @@ void TL_WriteDateTime (time_t TimeUTC);
 
 void TL_GetAndWritePost (long PstCod);
 
-void TL_PublishPubInTimeline (struct TL_Publication *Pub);
-
 void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea);
 
 void TL_ReceivePostUsr (void);
 void TL_ReceivePostGbl (void);
-
-void TL_Com_ShowHiddenCommentsUsr (void);
-void TL_Com_ShowHiddenCommentsGbl (void);
-
-void TL_PutHiddenParamPubCod (long PubCod);
-long TL_GetParamPubCod (void);
-
-void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
-                             Ntf_NotifyEvent_t NotifyEvent);
 
 void TL_RemoveUsrContent (long UsrCod);
 
@@ -210,13 +178,5 @@ void TL_PutFormToSeeAllFaversSharers (Act_Action_t ActionGbl,Act_Action_t Action
 void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
 		    const char *ParamFormat,long ParamCod,
 		    const char *Icon,const char *Title);
-
-void TL_ClearOldTimelinesDB (void);
-
-void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                             char **ContentStr,
-                             long PubCod,bool GetContent);
-
-unsigned long TL_GetNumPubsUsr (long UsrCod);
 
 #endif

@@ -47,6 +47,7 @@
 #include "swad_timeline.h"
 #include "swad_timeline_favourite.h"
 #include "swad_timeline_note.h"
+#include "swad_timeline_publication.h"
 #include "swad_timeline_share.h"
 
 /*****************************************************************************/
@@ -57,14 +58,7 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
-// Number of recent publishings got and shown the first time, before refreshing
-#define TL_MAX_REC_PUBS_TO_GET_AND_SHOW	   10	// Recent publishings to show (first time)
-#define TL_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// New publishings retrieved (big number)
-#define TL_MAX_OLD_PUBS_TO_GET_AND_SHOW	   20	// Old publishings are retrieved in packs of this size
-
 #define TL_MAX_CHARS_IN_POST	1000	// Maximum number of characters in a post
-
-#define TL_MAX_BYTES_SUBQUERY (128 - 1)
 
 /*
 mysql> SHOW TABLES LIKE 'tl_%';
@@ -164,21 +158,6 @@ mysql> SHOW TABLES LIKE 'tl_%';
 
 */
 
-struct TL_SubQueries
-  {
-   char *TablePublishers;
-   char Publishers[TL_MAX_BYTES_SUBQUERY + 1];
-   char RangeBottom[TL_MAX_BYTES_SUBQUERY + 1];
-   char RangeTop[TL_MAX_BYTES_SUBQUERY + 1];
-   char AlreadyExists[TL_MAX_BYTES_SUBQUERY + 1];
-  };
-
-struct TL_RangePubsToGet
-  {
-   long Top;
-   long Bottom;
-  };
-
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -199,24 +178,6 @@ Usr_Who_t TL_GlobalWho;
 
 static void TL_GetAndShowOldTimeline (struct TL_Timeline *Timeline);
 
-static void TL_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline);
-static unsigned TL_GetMaxPubsToGet (const struct TL_Timeline *Timeline);
-static long TL_GetPubCodFromSession (const char *FieldName);
-static void TL_UpdateFirstLastPubCodesIntoSession (const struct TL_Timeline *Timeline);
-static void TL_CreateTmpTableCurrentTimeline (const struct TL_Timeline *Timeline);
-static void TL_CreateTmpTablePublishers (void);
-static void TL_DropTmpTablesUsedToQueryTimeline (void);
-static void TL_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
-                                         struct TL_SubQueries *SubQueries);
-static void TL_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
-                                            struct TL_SubQueries *SubQueries);
-static void TL_CreateSubQueryRangeBottom (const struct TL_RangePubsToGet *RangePubsToGet,
-                                          struct TL_SubQueries *SubQueries);
-static void TL_CreateSubQueryRangeTop (const struct TL_RangePubsToGet *RangePubsToGet,
-                                       struct TL_SubQueries *SubQueries);
-static void TL_FreeListPubs (struct TL_Timeline *Timeline);
-static struct TL_Publication *TL_SelectTheMostRecentPub (const struct TL_SubQueries *SubQueries);
-
 static void TL_ShowTimeline (struct TL_Timeline *Timeline,
                              const char *Title,long NotCodToHighlight);
 static void TL_PutIconsTimeline (__attribute__((unused)) void *Args);
@@ -229,25 +190,9 @@ static void TL_SaveWhoInDB (struct TL_Timeline *Timeline);
 
 static void TL_ShowWarningYouDontFollowAnyUser (void);
 
-static void TL_InsertNewPubsInTimeline (struct TL_Timeline *Timeline);
-static void TL_ShowOldPubsInTimeline (struct TL_Timeline *Timeline);
-
-static void TL_PutLinkToViewNewPublications (void);
-static void TL_PutLinkToViewOldPublications (void);
-
 static void TL_PutFormToWriteNewPost (struct TL_Timeline *Timeline);
 
 static long TL_ReceivePost (void);
-
-static long TL_Pub_GetNotCodFromPubCod (long PubCod);
-
-static void TL_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
-                                                struct TL_Publication *Pub);
-static TL_PubType_t TL_GetPubTypeFromStr (const char *Str);
-
-// static void TL_Pub_ResetPublication (struct TL_Publication *Pub);
-
-static void TL_ClearTimelineThisSession (void);
 
 /*****************************************************************************/
 /************************ Initialize global timeline *************************/
@@ -313,7 +258,7 @@ void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline)
    /***** Get parameter with the code of a publication *****/
    // This parameter is optional. It can be provided by a notification.
    // If > 0 ==> the note is shown highlighted above the timeline
-   PubCod = TL_GetParamPubCod ();
+   PubCod = TL_Pub_GetParamPubCod ();
 
    /***** If a note should be highlighted ==> get code of note from database *****/
    if (PubCod > 0)
@@ -340,13 +285,13 @@ void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
    /***** Get list of pubications to show in timeline *****/
    Timeline->UsrOrGbl  = TL_TIMELINE_GBL;
    Timeline->WhatToGet = TL_GET_RECENT_TIMELINE;
-   TL_GetListPubsToShowInTimeline (Timeline);
+   TL_Pub_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show timeline *****/
    TL_ShowTimeline (Timeline,Txt_Timeline,NotCod);
 
    /***** Free chained list of publications *****/
-   TL_FreeListPubs (Timeline);
+   TL_Pub_FreeListPubs (Timeline);
   }
 
 /*****************************************************************************/
@@ -370,7 +315,7 @@ void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
    /***** Get list of pubications to show in timeline *****/
    Timeline->UsrOrGbl  = TL_TIMELINE_USR;
    Timeline->WhatToGet = TL_GET_RECENT_TIMELINE;
-   TL_GetListPubsToShowInTimeline (Timeline);
+   TL_Pub_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show timeline *****/
    TL_ShowTimeline (Timeline,
@@ -380,7 +325,7 @@ void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
    Str_FreeString ();
 
    /***** Free chained list of publications *****/
-   TL_FreeListPubs (Timeline);
+   TL_Pub_FreeListPubs (Timeline);
   }
 
 /*****************************************************************************/
@@ -402,13 +347,13 @@ void TL_RefreshNewTimelineGbl (void)
       /***** Get list of pubications to show in timeline *****/
       Timeline.UsrOrGbl  = TL_TIMELINE_GBL;
       Timeline.WhatToGet = TL_GET_ONLY_NEW_PUBS;
-      TL_GetListPubsToShowInTimeline (&Timeline);
+      TL_Pub_GetListPubsToShowInTimeline (&Timeline);
 
       /***** Show new timeline *****/
-      TL_InsertNewPubsInTimeline (&Timeline);
+      TL_Pub_InsertNewPubsInTimeline (&Timeline);
 
       /***** Free chained list of publications *****/
-      TL_FreeListPubs (&Timeline);
+      TL_Pub_FreeListPubs (&Timeline);
      }
   }
 
@@ -456,13 +401,13 @@ void TL_RefreshOldTimelineUsr (void)
 static void TL_GetAndShowOldTimeline (struct TL_Timeline *Timeline)
   {
    /***** Get list of pubications to show in timeline *****/
-   TL_GetListPubsToShowInTimeline (Timeline);
+   TL_Pub_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show old timeline *****/
-   TL_ShowOldPubsInTimeline (Timeline);
+   TL_Pub_ShowOldPubsInTimeline (Timeline);
 
    /***** Free chained list of publications *****/
-   TL_FreeListPubs (Timeline);
+   TL_Pub_FreeListPubs (Timeline);
   }
 
 /*****************************************************************************/
@@ -476,467 +421,6 @@ void TL_MarkMyNotifAsSeen (void)
    Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_FAV    ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
    Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_SHARE  ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
    Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_MENTION,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
-/*************** Get list of pubications to show in timeline *****************/
-/*****************************************************************************/
-
-static void TL_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
-  {
-   struct TL_SubQueries SubQueries;
-   struct TL_RangePubsToGet RangePubsToGet;
-   unsigned MaxPubsToGet = TL_GetMaxPubsToGet (Timeline);
-   unsigned NumPub;
-   struct TL_Publication *Pub;
-
-   /***** Clear timeline for this session in database *****/
-   if (Timeline->WhatToGet == TL_GET_RECENT_TIMELINE)
-      TL_ClearTimelineThisSession ();
-
-   /***** Create temporary table with notes in current timeline *****/
-   TL_CreateTmpTableCurrentTimeline (Timeline);
-
-   /***** Create temporary table and subquery with potential publishers *****/
-   TL_CreateSubQueryPublishers (Timeline,&SubQueries);
-
-   /***** Create subquery to get only notes not present in timeline *****/
-   TL_CreateSubQueryAlreadyExists (Timeline,&SubQueries);
-
-   /***** Get the publications in timeline *****/
-   /* Initialize range of pubs:
-
-              tl_pubs
-               _____
-              |_____|11
-              |_____|10
-             _|_____| 9 <-- RangePubsToGet.Top
-     Get    / |_____| 8
-    pubs   |  |_____| 7
-    from  <   |_____| 6
-    this   |  |_____| 5
-   range    \_|_____| 4
-              |_____| 3 <-- RangePubsToGet.Bottom
-              |_____| 2
-              |_____| 1
-                      0
-   */
-   switch (Timeline->WhatToGet)
-     {
-      case TL_GET_ONLY_NEW_PUBS:	 // Get the publications (without limit) newer than LastPubCod
-	 /* This query is made via AJAX automatically from time to time */
-         RangePubsToGet.Top    = 0;	// +Infinite
-	 RangePubsToGet.Bottom = TL_GetPubCodFromSession ("LastPubCod");
-	 break;
-      case TL_GET_ONLY_OLD_PUBS:	 // Get some limited publications older than FirstPubCod
-	 /* This query is made via AJAX
-	    when I click in link to get old publications */
-	 RangePubsToGet.Top    = TL_GetPubCodFromSession ("FirstPubCod");
-         RangePubsToGet.Bottom = 0;	// -Infinite
-	 break;
-      case TL_GET_RECENT_TIMELINE:	 // Get some limited recent publications
-      default:
-	 /* This is the first query to get initial timeline shown
-	    ==> no notes yet in current timeline table */
-         RangePubsToGet.Top    = 0;	// +Infinite
-         RangePubsToGet.Bottom = 0;	// -Infinite
-	 break;
-     }
-   /* Create subquery with bottom range of publications to get from tl_pubs.
-      Bottom publication code remains unchanged in all iterations of the next loop. */
-   TL_CreateSubQueryRangeBottom (&RangePubsToGet,&SubQueries);
-
-   /*
-      With the current approach, we select one by one
-      the publications and notes in a loop. In each iteration,
-      we get the more recent publication (original, shared or commment)
-      of every set of publications corresponding to the same note,
-      checking that the note is not already retrieved.
-      After getting a publication, its note code is stored
-      in order to not get it again.
-
-      As an alternative, we tried to get the maximum PubCod,
-      i.e more recent publication (original, shared or commment),
-      of every set of publications corresponding to the same note:
-      "SELECT MAX(PubCod) AS NewestPubCod FROM tl_pubs ...
-      " GROUP BY NotCod ORDER BY NewestPubCod DESC LIMIT ..."
-      but this query is slow (several seconds) with a big table.
-   */
-
-   /*
-   Chained list of publications:
-
-   Timeline->Pubs.Top   Pub #0
-         ______         ______         Pub #1
-        |______|------>|______|        ______        Pub #2
-                       |______|    -> |______|       ______        Pub #3
-                       |______|   /   |______|    ->|______|       ______
-                       |______|  /    |______|   /  |______|    ->|______|
-                       |_Next_|--     |______|  /   |______|   // |______|
-                                      |_Next_|--    |______|  //  |______|
-         ______                                     |_Next_|--/   |______|
-        |______|----------------------------------------------    |_NULL_|
-
-   Timeline->Pubs.Bottom
-
-   */
-   Timeline->Pubs.Top    =
-   Timeline->Pubs.Bottom = NULL;
-
-   for (NumPub = 0;
-	NumPub < MaxPubsToGet;
-	NumPub++)
-     {
-      /* Create subquery with top range of publications to get from tl_pubs
-         In each iteration of this loop, top publication code is changed to a lower value */
-      TL_CreateSubQueryRangeTop (&RangePubsToGet,&SubQueries);
-
-      /* Select the most recent publication from tl_pubs */
-      Pub = TL_SelectTheMostRecentPub (&SubQueries);
-
-      /* Chain the previous publication with the current one */
-      if (NumPub == 0)
-	 Timeline->Pubs.Top          = Pub;	// Pointer to top publication
-      else
-	 Timeline->Pubs.Bottom->Next = Pub;	// Chain the previous publication with the current one
-      Timeline->Pubs.Bottom = Pub;	// Update pointer to bottom publication
-
-      if (Pub == NULL)	// Nothing got ==> abort loop
-         break;	// Last publication
-
-      /* Insert note in temporary tables with just retrieved notes.
-	 These tables will be used to not get notes already shown */
-      TL_Not_InsertNoteInJustRetrievedNotes (Pub->NotCod);
-      if (Timeline->WhatToGet == TL_GET_ONLY_OLD_PUBS)
-	 TL_Not_InsertNoteInVisibleTimeline (Pub->NotCod);
-
-      /* Narrow the range for the next iteration */
-      RangePubsToGet.Top = Pub->PubCod;
-     }
-
-   /***** Update first (oldest) and last (more recent) publication codes
-          into session for next refresh *****/
-   TL_UpdateFirstLastPubCodesIntoSession (Timeline);
-
-   /***** Add notes just retrieved to current timeline for this session *****/
-   TL_Not_AddNotesJustRetrievedToTimelineThisSession ();
-
-   /***** Drop temporary tables *****/
-   TL_DropTmpTablesUsedToQueryTimeline ();
-  }
-
-/*****************************************************************************/
-/********* Get maximum number of publications to get from database ***********/
-/*****************************************************************************/
-
-static unsigned TL_GetMaxPubsToGet (const struct TL_Timeline *Timeline)
-  {
-   static const unsigned MaxPubsToGet[TL_NUM_WHAT_TO_GET] =
-     {
-      [TL_GET_RECENT_TIMELINE] = TL_MAX_REC_PUBS_TO_GET_AND_SHOW,
-      [TL_GET_ONLY_NEW_PUBS  ] = TL_MAX_NEW_PUBS_TO_GET_AND_SHOW,
-      [TL_GET_ONLY_OLD_PUBS  ] = TL_MAX_OLD_PUBS_TO_GET_AND_SHOW,
-     };
-
-   return MaxPubsToGet[Timeline->WhatToGet];
-  }
-
-/*****************************************************************************/
-/************* Get last/first publication code stored in session *************/
-/*****************************************************************************/
-// FieldName can be:
-// "LastPubCod"
-// "FirstPubCod"
-
-static long TL_GetPubCodFromSession (const char *FieldName)
-  {
-   extern const char *Txt_The_session_has_expired;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long PubCod;
-
-   /***** Get last publication code from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get publication code from session",
-		       "SELECT %s FROM sessions"
-		       " WHERE SessionId='%s'",
-		       FieldName,Gbl.Session.Id) != 1)
-      Lay_ShowErrorAndExit (Txt_The_session_has_expired);
-
-   /***** Get last publication code *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%ld",&PubCod) != 1)
-      PubCod = 0;
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return PubCod;
-  }
-
-/*****************************************************************************/
-/************* Update first (oldest) and last (more recent)    ***************/
-/************* publication codes into session for next refresh ***************/
-/*****************************************************************************/
-
-static void TL_UpdateFirstLastPubCodesIntoSession (const struct TL_Timeline *Timeline)
-  {
-   long FirstPubCod;
-
-   switch (Timeline->WhatToGet)
-     {
-      case TL_GET_ONLY_NEW_PUBS:
-	 DB_QueryUPDATE ("can not update first/last publication codes into session",
-			 "UPDATE sessions"
-			 " SET LastPubCod="
-			      "(SELECT IFNULL(MAX(PubCod),0)"
-			      " FROM tl_pubs)"	// The most recent publication
-			 " WHERE SessionId='%s'",
-			 Gbl.Session.Id);
-	 break;
-      case TL_GET_ONLY_OLD_PUBS:
-	 // The oldest publication code retrieved and shown
-	 FirstPubCod = Timeline->Pubs.Bottom ? Timeline->Pubs.Bottom->PubCod :
-			                       0;
-
-	 DB_QueryUPDATE ("can not update first/last publication codes into session",
-			 "UPDATE sessions"
-			 " SET FirstPubCod=%ld"
-			 " WHERE SessionId='%s'",
-			 FirstPubCod,
-			 Gbl.Session.Id);
-	 break;
-      case TL_GET_RECENT_TIMELINE:
-	 // The oldest publication code retrieved and shown
-	 FirstPubCod = Timeline->Pubs.Bottom ? Timeline->Pubs.Bottom->PubCod :
-			                       0;
-
-	 DB_QueryUPDATE ("can not update first/last publication codes into session",
-			 "UPDATE sessions"
-			 " SET FirstPubCod=%ld,"
-			      "LastPubCod="
-			      "(SELECT IFNULL(MAX(PubCod),0)"
-			      " FROM tl_pubs)"	// The most recent publication
-			 " WHERE SessionId='%s'",
-			 FirstPubCod,
-			 Gbl.Session.Id);
-	 break;
-     }
-  }
-
-/*****************************************************************************/
-/************* Create temporary tables used to query timeline ****************/
-/*****************************************************************************/
-
-static void TL_CreateTmpTableCurrentTimeline (const struct TL_Timeline *Timeline)
-  {
-   /***** Create temporary table with notes just retrieved *****/
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE tl_tmp_just_retrieved_notes "
-	     "(NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod))"
-	     " ENGINE=MEMORY");
-
-   if (Timeline->WhatToGet == TL_GET_ONLY_OLD_PUBS)
-      /***** Create temporary table with all notes visible in timeline *****/
-      DB_Query ("can not create temporary table",
-		"CREATE TEMPORARY TABLE tl_tmp_visible_timeline "
-		"(NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod))"
-		" ENGINE=MEMORY"
-		" SELECT NotCod FROM tl_timelines WHERE SessionId='%s'",
-		Gbl.Session.Id);
-  }
-
-static void TL_CreateTmpTablePublishers (void)
-  {
-   /***** Create temporary table with me and the users I follow *****/
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE tl_tmp_publishers "
-	     "(UsrCod INT NOT NULL,"
-	     "UNIQUE INDEX(UsrCod))"
-	     " ENGINE=MEMORY"
-	     " SELECT %ld AS UsrCod"		// Me
-	     " UNION"
-	     " SELECT FollowedCod AS UsrCod"	// Users I follow
-	     " FROM usr_follow"
-	     " WHERE FollowerCod=%ld",
-	     Gbl.Usrs.Me.UsrDat.UsrCod,
-	     Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
-/*************** Drop temporary tables used to query timeline ****************/
-/*****************************************************************************/
-
-static void TL_DropTmpTablesUsedToQueryTimeline (void)
-  {
-   DB_Query ("can not remove temporary tables",
-	     "DROP TEMPORARY TABLE IF EXISTS "
-             "tl_tmp_just_retrieved_notes,"
-             "tl_tmp_visible_timeline,"
-	     "tl_tmp_publishers");
-  }
-
-/*****************************************************************************/
-/******* Create temporary table and subquery with potential publishers *******/
-/*****************************************************************************/
-
-static void TL_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
-                                         struct TL_SubQueries *SubQueries)
-  {
-   /***** Create temporary table and subquery with potential publishers *****/
-   switch (Timeline->UsrOrGbl)
-     {
-      case TL_TIMELINE_USR:		// Show the timeline of a user
-	 SubQueries->TablePublishers = "";
-	 sprintf (SubQueries->Publishers,"tl_pubs.PublisherCod=%ld AND ",
-	          Gbl.Usrs.Other.UsrDat.UsrCod);
-	 break;
-      case TL_TIMELINE_GBL:		// Show the global timeline
-	 switch (Timeline->Who)
-	   {
-	    case Usr_WHO_ME:		// Show my timeline
-	       SubQueries->TablePublishers = "";
-	       snprintf (SubQueries->Publishers,sizeof (SubQueries->Publishers),
-	                 "tl_pubs.PublisherCod=%ld AND ",
-	                 Gbl.Usrs.Me.UsrDat.UsrCod);
-               break;
-	    case Usr_WHO_FOLLOWED:	// Show the timeline of the users I follow
-	       TL_CreateTmpTablePublishers ();
-	       SubQueries->TablePublishers = ",tl_tmp_publishers";
-	       Str_Copy (SubQueries->Publishers,
-			 "tl_pubs.PublisherCod=tl_tmp_publishers.UsrCod AND ",
-			 TL_MAX_BYTES_SUBQUERY);
-	       break;
-	    case Usr_WHO_ALL:		// Show the timeline of all users
-	       SubQueries->TablePublishers = "";
-	       SubQueries->Publishers[0] = '\0';
-	       break;
-	    default:
-	       Lay_WrongWhoExit ();
-	       break;
-	   }
-	 break;
-     }
-  }
-
-/*****************************************************************************/
-/********* Create subquery to get only notes not present in timeline *********/
-/*****************************************************************************/
-
-static void TL_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
-                                            struct TL_SubQueries *SubQueries)
-  {
-   switch (Timeline->WhatToGet)
-     {
-      case TL_GET_RECENT_TIMELINE:
-      case TL_GET_ONLY_NEW_PUBS:
-	 Str_Copy (SubQueries->AlreadyExists,
-		   " tl_pubs.NotCod NOT IN"
-		   " (SELECT NotCod FROM tl_tmp_just_retrieved_notes)",	// Avoid notes just retrieved
-		   TL_MAX_BYTES_SUBQUERY);
-         break;
-      case TL_GET_ONLY_OLD_PUBS:
-	 Str_Copy (SubQueries->AlreadyExists,
-		   " tl_pubs.NotCod NOT IN"
-		   " (SELECT NotCod FROM tl_tmp_visible_timeline)",	// Avoid notes already shown
-		   TL_MAX_BYTES_SUBQUERY);
-	 break;
-     }
-  }
-
-/*****************************************************************************/
-/***** Create subqueries with range of publications to get from tl_pubs ******/
-/*****************************************************************************/
-
-static void TL_CreateSubQueryRangeBottom (const struct TL_RangePubsToGet *RangePubsToGet,
-                                          struct TL_SubQueries *SubQueries)
-  {
-   if (RangePubsToGet->Bottom > 0)
-      sprintf (SubQueries->RangeBottom,"tl_pubs.PubCod>%ld AND ",
-	       RangePubsToGet->Bottom);
-   else
-      SubQueries->RangeBottom[0] = '\0';
-  }
-
-static void TL_CreateSubQueryRangeTop (const struct TL_RangePubsToGet *RangePubsToGet,
-                                       struct TL_SubQueries *SubQueries)
-  {
-   if (RangePubsToGet->Top > 0)
-      sprintf (SubQueries->RangeTop,"tl_pubs.PubCod<%ld AND ",
-	       RangePubsToGet->Top);
-   else
-      SubQueries->RangeTop[0] = '\0';
-  }
-
-/*****************************************************************************/
-/************** Free chained list of publications in timeline ****************/
-/*****************************************************************************/
-
-static void TL_FreeListPubs (struct TL_Timeline *Timeline)
-  {
-   struct TL_Publication *Pub;
-   struct TL_Publication *Next;
-
-   /***** Go over the list freeing memory *****/
-   for (Pub = Timeline->Pubs.Top;
-	Pub;
-	Pub = Next)
-     {
-      /* Save a copy of pointer to next element before freeing it */
-      Next = Pub->Next;
-
-      /* Free memory used for this publication */
-      free (Pub);
-     }
-
-   /***** Reset pointers to top and bottom elements *****/
-   Timeline->Pubs.Top    =
-   Timeline->Pubs.Bottom = NULL;
-  }
-
-/*****************************************************************************/
-/************** Select the most recent publication from tl_pubs **************/
-/*****************************************************************************/
-
-static struct TL_Publication *TL_SelectTheMostRecentPub (const struct TL_SubQueries *SubQueries)
-  {
-   MYSQL_RES *mysql_res;
-   unsigned NumPubs = 0;	// Initialized to avoid warning
-   struct TL_Publication *Pub;
-
-   NumPubs =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
-			      "SELECT tl_pubs.PubCod,"		// row[0]
-			             "tl_pubs.NotCod,"		// row[1]
-			             "tl_pubs.PublisherCod,"	// row[2]
-			             "tl_pubs.PubType"		// row[3]
-			      " FROM tl_pubs%s"
-			      " WHERE %s%s%s%s"
-			      " ORDER BY tl_pubs.PubCod DESC LIMIT 1",
-			      SubQueries->TablePublishers,
-			      SubQueries->RangeBottom,
-			      SubQueries->RangeTop,
-			      SubQueries->Publishers,
-			      SubQueries->AlreadyExists);
-
-   if (NumPubs == 1)
-     {
-      /* Allocate space for publication */
-      if ((Pub = (struct TL_Publication *) malloc (sizeof (struct TL_Publication))) == NULL)
-	 Lay_ShowErrorAndExit ("Error allocating memory publication.");
-
-      /* Get data of publication */
-      TL_GetDataOfPublicationFromNextRow (mysql_res,Pub);
-      Pub->Next = NULL;
-     }
-   else
-      Pub = NULL;
-      /* Reset data of publication */
-      // TL_Pub_ResetPublication (Pub);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return Pub;
   }
 
 /*****************************************************************************/
@@ -975,7 +459,7 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
                              const char *Title,long NotCodToHighlight)
   {
    extern const char *Hlp_START_Timeline;
-   struct TL_Publication *Pub;
+   struct TL_Pub_Publication *Pub;
    struct TL_Not_Note Not;
    unsigned NumPubs;
    bool GlobalTimeline = (Gbl.Usrs.Other.UsrDat.UsrCod <= 0);
@@ -998,7 +482,7 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
    if (GlobalTimeline)
      {
       /* Link to view new publications via AJAX */
-      TL_PutLinkToViewNewPublications ();
+      TL_Pub_PutLinkToViewNewPublications ();
 
       /* Hidden list where insert just received (not visible) publications via AJAX */
       HTM_UL_Begin ("id=\"just_now_timeline_list\" class=\"TL_LIST\"");
@@ -1031,10 +515,10 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
 
    /***** If the number of publications shown is the maximum,
           probably there will be more, so show link to get more *****/
-   if (NumPubs == TL_MAX_REC_PUBS_TO_GET_AND_SHOW)
+   if (NumPubs == TL_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW)
      {
       /* Link to view old publications via AJAX */
-      TL_PutLinkToViewOldPublications ();
+      TL_Pub_PutLinkToViewOldPublications ();
 
       /* Hidden list where insert old publications via AJAX */
       HTM_UL_Begin ("id=\"old_timeline_list\" class=\"TL_LIST\"");
@@ -1225,117 +709,6 @@ static void TL_ShowWarningYouDontFollowAnyUser (void)
   }
 
 /*****************************************************************************/
-/******************* Show new publications in timeline ***********************/
-/*****************************************************************************/
-// The publications are inserted as list elements of a hidden list
-
-static void TL_InsertNewPubsInTimeline (struct TL_Timeline *Timeline)
-  {
-   struct TL_Publication *Pub;
-   struct TL_Not_Note Not;
-
-   /***** List new publications timeline *****/
-   for (Pub = Timeline->Pubs.Top;
-	Pub;
-	Pub = Pub->Next)
-     {
-      /* Get data of note */
-      Not.NotCod = Pub->NotCod;
-      TL_Not_GetDataOfNoteByCod (&Not);
-
-      /* Write note */
-      TL_Not_WriteNote (Timeline,&Not,
-                        Pub->TopMessage,
-                        Pub->PublisherCod,
-                        TL_DONT_HIGHLIGHT,
-                        TL_DONT_SHOW_ALONE);
-     }
-  }
-
-/*****************************************************************************/
-/********************* Show old publications in timeline *********************/
-/*****************************************************************************/
-// The publications are inserted as list elements of a hidden list
-
-static void TL_ShowOldPubsInTimeline (struct TL_Timeline *Timeline)
-  {
-   struct TL_Publication *Pub;
-   struct TL_Not_Note Not;
-
-   /***** List old publications in timeline *****/
-   for (Pub = Timeline->Pubs.Top;
-	Pub;
-	Pub = Pub->Next)
-     {
-      /* Get data of note */
-      Not.NotCod = Pub->NotCod;
-      TL_Not_GetDataOfNoteByCod (&Not);
-
-      /* Write note */
-      TL_Not_WriteNote (Timeline,&Not,
-                        Pub->TopMessage,
-                        Pub->PublisherCod,
-                        TL_DONT_HIGHLIGHT,
-                        TL_DONT_SHOW_ALONE);
-     }
-  }
-
-/*****************************************************************************/
-/***************** Put link to view new publications in timeline *************/
-/*****************************************************************************/
-
-static void TL_PutLinkToViewNewPublications (void)
-  {
-   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
-   extern const char *Txt_See_new_activity;
-
-   /***** Link to view (show hidden) new publications *****/
-   // div is hidden. When new posts arrive to the client via AJAX, div is shown
-   HTM_DIV_Begin ("id=\"view_new_posts_container\""
-		  " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\""
-		  " style=\"display:none;\"");
-   HTM_A_Begin ("href=\"\" class=\"%s\""
-                " onclick=\"moveNewTimelineToTimeline();return false;\"",
-	        The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s (",Txt_See_new_activity);
-   HTM_SPAN_Begin ("id=\"view_new_posts_count\"");
-   HTM_Unsigned (0);
-   HTM_SPAN_End ();
-   HTM_Txt (")");
-   HTM_A_End ();
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/***************** Put link to view old publications in timeline *************/
-/*****************************************************************************/
-
-static void TL_PutLinkToViewOldPublications (void)
-  {
-   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
-   extern const char *Txt_See_more;
-
-   /***** Animated link to view old publications *****/
-   HTM_DIV_Begin ("id=\"view_old_posts_container\""
-	          " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\"");
-   HTM_A_Begin ("href=\"\" class=\"%s\" onclick=\""
-   		"document.getElementById('get_old_timeline').style.display='none';"	// Icon to be hidden on click
-		"document.getElementById('getting_old_timeline').style.display='';"	// Icon to be shown on click
-                "refreshOldTimeline();"
-		"return false;\"",
-	        The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
-   HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif","Txt_See_more",
-	    "class=\"ICO20x20\" id=\"get_old_timeline\"");
-   HTM_IMG (Cfg_URL_ICON_PUBLIC,"working16x16.gif",Txt_See_more,
-	    "class=\"ICO20x20\" style=\"display:none;\" id=\"getting_old_timeline\"");	// Animated icon hidden
-   HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif","Txt_See_more",
-	    "class=\"ICO20x20\" style=\"display:none;\" id=\"get_old_timeline\"");
-   HTM_TxtF ("&nbsp;%s",Txt_See_more);
-   HTM_A_End ();
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
 /*************** Write sharer/commenter if distinct to author ****************/
 /*****************************************************************************/
 
@@ -1459,28 +832,6 @@ void TL_GetAndWritePost (long PstCod)
 
    /***** Free image *****/
    Med_MediaDestructor (&Content.Media);
-  }
-
-/*****************************************************************************/
-/********************* Publish note/comment in timeline **********************/
-/*****************************************************************************/
-// Pub->PubCod is set by the function
-
-void TL_PublishPubInTimeline (struct TL_Publication *Pub)
-  {
-   /***** Publish note in timeline *****/
-   Pub->PubCod =
-   DB_QueryINSERTandReturnCode ("can not publish note/comment",
-				"INSERT INTO tl_pubs"
-				" (NotCod,PublisherCod,PubType,TimePublish)"
-				" VALUES"
-				" (%ld,%ld,%u,NOW())",
-				Pub->NotCod,
-				Pub->PublisherCod,
-				(unsigned) Pub->PubType);
-
-   /***** Increment number of publications in user's figures *****/
-   Prf_IncrementNumPubsUsr (Pub->PublisherCod);
   }
 
 /*****************************************************************************/
@@ -1614,7 +965,7 @@ static long TL_ReceivePost (void)
   {
    struct TL_PostContent Content;
    long PstCod;
-   struct TL_Publication Pub;
+   struct TL_Pub_Publication Pub;
 
    /***** Get the content of the new post *****/
    Par_GetParAndChangeFormat ("Txt",Content.Txt,Cns_MAX_BYTES_LONG_TEXT,
@@ -1660,91 +1011,6 @@ static long TL_ReceivePost (void)
    Med_MediaDestructor (&Content.Media);
 
    return Pub.NotCod;
-  }
-
-/*****************************************************************************/
-/*************** Put parameter with the code of a publication ****************/
-/*****************************************************************************/
-
-void TL_PutHiddenParamPubCod (long PubCod)
-  {
-   Par_PutHiddenParamLong (NULL,"PubCod",PubCod);
-  }
-
-/*****************************************************************************/
-/**************** Get parameter with the code of a publication ***************/
-/*****************************************************************************/
-
-long TL_GetParamPubCod (void)
-  {
-   /***** Get comment code *****/
-   return Par_GetParToLong ("PubCod");
-  }
-
-/*****************************************************************************/
-/*********** Create a notification for the author of a post/comment **********/
-/*****************************************************************************/
-
-void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
-                             Ntf_NotifyEvent_t NotifyEvent)
-  {
-   struct UsrData UsrDat;
-   bool CreateNotif;
-   bool NotifyByEmail;
-
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
-
-   UsrDat.UsrCod = AuthorCod;
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
-     {
-      /***** This fav must be notified by email? *****/
-      CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << NotifyEvent));
-      NotifyByEmail = CreateNotif &&
-		      (UsrDat.NtfEvents.SendEmail & (1 << NotifyEvent));
-
-      /***** Create notification for the author of the post.
-	     If this author wants to receive notifications by email,
-	     activate the sending of a notification *****/
-      if (CreateNotif)
-	 Ntf_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,PubCod,
-					(Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-									0),
-					Gbl.Hierarchy.Ins.InsCod,
-					Gbl.Hierarchy.Ctr.CtrCod,
-					Gbl.Hierarchy.Deg.DegCod,
-					Gbl.Hierarchy.Crs.CrsCod);
-     }
-
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDat);
-  }
-
-/*****************************************************************************/
-/*********************** Get code of note of a publication *******************/
-/*****************************************************************************/
-
-static long TL_Pub_GetNotCodFromPubCod (long PubCod)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long NotCod = -1L;
-
-   /***** Get code of note from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get code of note",
-		       "SELECT NotCod FROM tl_pubs"
-		       " WHERE PubCod=%ld",
-		       PubCod) == 1)   // Result should have a unique row
-     {
-      /* Get code of note */
-      row = mysql_fetch_row (mysql_res);
-      NotCod = Str_ConvertStrCodToLongCod (row[0]);
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NotCod;
   }
 
 /*****************************************************************************/
@@ -1794,7 +1060,7 @@ void TL_RemoveUsrContent (long UsrCod)
 	           " WHERE tl_pubs.PublisherCod=%ld"	// Author of the comment
                    " AND tl_pubs.PubType=%u"
 	           " AND tl_pubs.PubCod=tl_comments_fav.PubCod",
-		   UsrCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
+		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
 
    /* Remove all favs for all comments in all the notes of the user */
    DB_QueryDELETE ("can not remove comments",
@@ -1804,7 +1070,7 @@ void TL_RemoveUsrContent (long UsrCod)
 	           " AND tl_notes.NotCod=tl_pubs.NotCod"
                    " AND tl_pubs.PubType=%u"
 	           " AND tl_pubs.PubCod=tl_comments_fav.PubCod",
-		   UsrCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
+		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
 
    /***** Remove favs for notes *****/
    /* Remove all favs made by this user in any note */
@@ -1830,7 +1096,7 @@ void TL_RemoveUsrContent (long UsrCod)
 		   " AND tl_notes.NotCod=tl_pubs.NotCod"
                    " AND tl_pubs.PubType=%u"
 	           " AND tl_pubs.PubCod=tl_comments.PubCod",
-		   UsrCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
+		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
 
    /* Remove all the comments from any user in any note of the user */
    DB_QueryDELETE ("can not remove comments",
@@ -1839,7 +1105,7 @@ void TL_RemoveUsrContent (long UsrCod)
 	           " WHERE tl_notes.UsrCod=%ld"
 		   " AND tl_notes.NotCod=tl_pubs.NotCod"
                    " AND tl_pubs.PubType=%u",
-		   UsrCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
+		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
 
    /* Remove content of all the comments of the user in any note */
    DB_QueryDELETE ("can not remove comments",
@@ -1848,7 +1114,7 @@ void TL_RemoveUsrContent (long UsrCod)
 	           " WHERE tl_pubs.PublisherCod=%ld"
 	           " AND tl_pubs.PubType=%u"
 	           " AND tl_pubs.PubCod=tl_comments.PubCod",
-		   UsrCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
+		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
 
    /***** Remove all the posts of the user *****/
    DB_QueryDELETE ("can not remove posts",
@@ -2022,240 +1288,4 @@ void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
 
    /* Free allocated memory */
    free (OnSubmit);
-  }
-
-/*****************************************************************************/
-/***************** Get data of publication using its code ********************/
-/*****************************************************************************/
-
-static void TL_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
-                                                struct TL_Publication *Pub)
-  {
-   static const TL_TopMessage_t TopMessages[TL_NUM_PUB_TYPES] =
-     {
-      [TL_PUB_UNKNOWN        ] = TL_TOP_MESSAGE_NONE,
-      [TL_PUB_ORIGINAL_NOTE  ] = TL_TOP_MESSAGE_NONE,
-      [TL_PUB_SHARED_NOTE    ] = TL_TOP_MESSAGE_SHARED,
-      [TL_PUB_COMMENT_TO_NOTE] = TL_TOP_MESSAGE_COMMENTED,
-     };
-   MYSQL_ROW row;
-
-   /***** Get next row from result *****/
-   row = mysql_fetch_row (mysql_res);
-   /*
-   row[0]: PubCod
-   row[1]: NotCod
-   row[2]: PublisherCod
-   row[3]: PubType
-   */
-
-   /***** Get code of publication (row[0]) *****/
-   Pub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
-
-   /***** Get note code (row[1]) *****/
-   Pub->NotCod       = Str_ConvertStrCodToLongCod (row[1]);
-
-   /***** Get publisher's code (row[2]) *****/
-   Pub->PublisherCod = Str_ConvertStrCodToLongCod (row[2]);
-
-   /***** Get type of publication (row[3]) *****/
-   Pub->PubType      = TL_GetPubTypeFromStr ((const char *) row[3]);
-   Pub->TopMessage   = TopMessages[Pub->PubType];
-  }
-
-/*****************************************************************************/
-/******* Get publication type from string number coming from database ********/
-/*****************************************************************************/
-
-static TL_PubType_t TL_GetPubTypeFromStr (const char *Str)
-  {
-   unsigned UnsignedNum;
-
-   if (sscanf (Str,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < TL_NUM_PUB_TYPES)
-         return (TL_PubType_t) UnsignedNum;
-
-   return TL_PUB_UNKNOWN;
-  }
-
-/*****************************************************************************/
-/************************ Reset fields of publication ************************/
-/*****************************************************************************/
-/*
-static void TL_Pub_ResetPublication (struct TL_Publication *Pub)
-  {
-   Pub->PubCod       = -1L;
-   Pub->NotCod       = -1L;
-   Pub->PublisherCod = -1L;
-   Pub->PubType      = TL_PUB_UNKNOWN;
-   Pub->TopMessage   = TL_TOP_MESSAGE_NONE;
-  }
-*/
-/*****************************************************************************/
-/******************* Clear unused old timelines in database ******************/
-/*****************************************************************************/
-
-void TL_ClearOldTimelinesDB (void)
-  {
-   /***** Remove timelines for expired sessions *****/
-   DB_QueryDELETE ("can not remove old timelines",
-		   "DELETE LOW_PRIORITY FROM tl_timelines"
-                   " WHERE SessionId NOT IN (SELECT SessionId FROM sessions)");
-  }
-
-/*****************************************************************************/
-/**************** Clear timeline for this session in database ****************/
-/*****************************************************************************/
-
-static void TL_ClearTimelineThisSession (void)
-  {
-   /***** Remove timeline for this session *****/
-   DB_QueryDELETE ("can not remove timeline",
-		   "DELETE FROM tl_timelines"
-		   " WHERE SessionId='%s'",
-		   Gbl.Session.Id);
-  }
-
-/*****************************************************************************/
-/***************** Get notification of a new publication *********************/
-/*****************************************************************************/
-
-void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                             char **ContentStr,
-                             long PubCod,bool GetContent)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   struct TL_Publication Pub;
-   struct TL_Not_Note Not;
-   struct TL_PostContent Content;
-   size_t Length;
-   bool ContentCopied = false;
-
-   /***** Return nothing on error *****/
-   Pub.PubType = TL_PUB_UNKNOWN;
-   SummaryStr[0] = '\0';	// Return nothing on error
-   Content.Txt[0] = '\0';
-
-   /***** Get summary and content from post from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data of publication",
-		       "SELECT PubCod,"			// row[0]
-			      "NotCod,"			// row[1]
-			      "PublisherCod,"		// row[2]
-			      "PubType"			// row[3]
-		       " FROM tl_pubs WHERE PubCod=%ld",
-		       PubCod) == 1)   // Result should have a unique row
-      /* Get data of publication from row */
-      TL_GetDataOfPublicationFromNextRow (mysql_res,&Pub);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Get summary and content *****/
-   switch (Pub.PubType)
-     {
-      case TL_PUB_UNKNOWN:
-	 break;
-      case TL_PUB_ORIGINAL_NOTE:
-      case TL_PUB_SHARED_NOTE:
-	 /* Get data of note */
-	 Not.NotCod = Pub.NotCod;
-	 TL_Not_GetDataOfNoteByCod (&Not);
-
-	 if (Not.NoteType == TL_NOTE_POST)
-	   {
-	    /***** Get content of post from database *****/
-	    if (DB_QuerySELECT (&mysql_res,"can not get the content of a post",
-			        "SELECT Txt"	// row[0]
-			        " FROM tl_posts"
-				" WHERE PstCod=%ld",
-				Not.Cod) == 1)   // Result should have a unique row
-	      {
-	       /***** Get row *****/
-	       row = mysql_fetch_row (mysql_res);
-
-	       /****** Get content (row[0]) *****/
-	       Str_Copy (Content.Txt,row[0],
-	                 Cns_MAX_BYTES_LONG_TEXT);
-	      }
-
-	    /***** Free structure that stores the query result *****/
-            DB_FreeMySQLResult (&mysql_res);
-
-	    /***** Copy content string *****/
-	    if (GetContent)
-	      {
-	       Length = strlen (Content.Txt);
-	       if ((*ContentStr = (char *) malloc (Length + 1)) != NULL)
-		 {
-		  Str_Copy (*ContentStr,Content.Txt,
-		            Length);
-		  ContentCopied = true;
-		 }
-	      }
-
-	    /***** Copy summary string *****/
-	    Str_LimitLengthHTMLStr (Content.Txt,Ntf_MAX_CHARS_SUMMARY);
-	    Str_Copy (SummaryStr,Content.Txt,
-	              Ntf_MAX_BYTES_SUMMARY);
-	   }
-	 else
-	    TL_Not_GetNoteSummary (&Not,SummaryStr);
-	 break;
-      case TL_PUB_COMMENT_TO_NOTE:
-	 /***** Get content of post from database *****/
-	 if (DB_QuerySELECT (&mysql_res,"can not get the content"
-				        " of a comment to a note",
-			     "SELECT Txt"	// row[0]
-			     " FROM tl_comments"
-			     " WHERE PubCod=%ld",
-			     Pub.PubCod) == 1)   // Result should have a unique row
-	   {
-	    /***** Get row *****/
-	    row = mysql_fetch_row (mysql_res);
-
-	    /****** Get content (row[0]) *****/
-	    Str_Copy (Content.Txt,row[0],
-	              Cns_MAX_BYTES_LONG_TEXT);
-	   }
-
-	 /***** Free structure that stores the query result *****/
-	 DB_FreeMySQLResult (&mysql_res);
-
-	 /***** Copy content string *****/
-	 if (GetContent)
-	   {
-	    Length = strlen (Content.Txt);
-	    if ((*ContentStr = (char *) malloc (Length + 1)) != NULL)
-	      {
-	       Str_Copy (*ContentStr,Content.Txt,
-	                 Length);
-	       ContentCopied = true;
-	      }
-	   }
-
-	 /***** Copy summary string *****/
-	 Str_LimitLengthHTMLStr (Content.Txt,Ntf_MAX_CHARS_SUMMARY);
-	 Str_Copy (SummaryStr,Content.Txt,
-	           Ntf_MAX_BYTES_SUMMARY);
-	 break;
-     }
-
-   /***** Create empty content string if nothing copied *****/
-   if (GetContent && !ContentCopied)
-      if ((*ContentStr = (char *) malloc (1)) != NULL)
-         (*ContentStr)[0] = '\0';
-  }
-
-/*****************************************************************************/
-/****************** Get number of publications from a user *******************/
-/*****************************************************************************/
-
-unsigned long TL_GetNumPubsUsr (long UsrCod)
-  {
-   /***** Get number of posts from a user from database *****/
-   return DB_QueryCOUNT ("can not get number of publications from a user",
-			 "SELECT COUNT(*) FROM tl_pubs"
-			 " WHERE PublisherCod=%ld",
-			 UsrCod);
   }

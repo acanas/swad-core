@@ -38,6 +38,7 @@
 #include "swad_timeline.h"
 #include "swad_timeline_favourite.h"
 #include "swad_timeline_note.h"
+#include "swad_timeline_publication.h"
 #include "swad_timeline_share.h"
 
 /*****************************************************************************/
@@ -185,7 +186,7 @@ unsigned long TL_Com_GetNumCommentsInNote (long NotCod)
    return DB_QueryCOUNT ("can not get number of comments in a note",
 			 "SELECT COUNT(*) FROM tl_pubs"
 			 " WHERE NotCod=%ld AND PubType=%u",
-			 NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
+			 NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -237,7 +238,7 @@ void TL_Com_WriteCommentsInNote (struct TL_Timeline *Timeline,
 			      " ORDER BY tl_pubs.PubCod DESC LIMIT %u"
 			      ") AS comments"
 			      " ORDER BY PubCod",
-			      Not->NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE,
+			      Not->NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE,
 			      NumFinalCommentsToGet);
 
    /*
@@ -454,7 +455,7 @@ static unsigned TL_Com_WriteHiddenComments (struct TL_Timeline *Timeline,
 		   " AND tl_pubs.PubCod=tl_comments.PubCod"
 		   " ORDER BY tl_pubs.PubCod"
 		   " LIMIT %lu",
-		   NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE,
+		   NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE,
 		   NumInitialCommentsToGet);
 
    /***** List with comments *****/
@@ -699,7 +700,7 @@ static void TL_Com_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
 
    /***** Form to remove publication *****/
    TL_FormStart (Timeline,ActReqRemTL_ComGbl,ActReqRemTL_ComUsr);
-   TL_PutHiddenParamPubCod (PubCod);
+   TL_Pub_PutHiddenParamPubCod (PubCod);
    Ico_PutIconLink ("trash.svg",Txt_Remove);
    Frm_EndForm ();
   }
@@ -754,7 +755,7 @@ static long TL_Com_ReceiveComment (void)
    extern const char *Txt_The_original_post_no_longer_exists;
    struct TL_PostContent Content;
    struct TL_Not_Note Not;
-   struct TL_Publication Pub;
+   struct TL_Pub_Publication Pub;
 
    /***** Get data of note *****/
    Not.NotCod = TL_Not_GetParamNotCod ();
@@ -786,8 +787,8 @@ static long TL_Com_ReceiveComment (void)
 	 /* Insert into publications */
 	 Pub.NotCod       = Not.NotCod;
 	 Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-	 Pub.PubType      = TL_PUB_COMMENT_TO_NOTE;
-	 TL_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
+	 Pub.PubType      = TL_Pub_COMMENT_TO_NOTE;
+	 TL_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
 
 	 /* Insert comment content in the database */
 	 DB_QueryINSERT ("can not store comment content",
@@ -872,7 +873,7 @@ static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline)
    Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
-   Com.PubCod = TL_GetParamPubCod ();
+   Com.PubCod = TL_Pub_GetParamPubCod ();
    TL_Com_GetDataOfCommByCod (&Com);
 
    if (Com.PubCod > 0)
@@ -920,7 +921,7 @@ static void TL_Com_PutParamsRemoveComment (void *Timeline)
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
       else
 	 Usr_PutHiddenParamWho (((struct TL_Timeline *) Timeline)->Who);
-      TL_PutHiddenParamPubCod (((struct TL_Timeline *) Timeline)->PubCod);
+      TL_Pub_PutHiddenParamPubCod (((struct TL_Timeline *) Timeline)->PubCod);
      }
   }
 
@@ -979,7 +980,7 @@ static void TL_Com_RemoveComment (void)
    Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
-   Com.PubCod = TL_GetParamPubCod ();
+   Com.PubCod = TL_Pub_GetParamPubCod ();
    TL_Com_GetDataOfCommByCod (&Com);
 
    if (Com.PubCod > 0)
@@ -1058,7 +1059,7 @@ void TL_Com_RemoveCommentMediaAndDBEntries (long PubCod)
 	           " AND PubType=%u",		// Extra check: it's a comment
 		   PubCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (unsigned) TL_PUB_COMMENT_TO_NOTE);
+		   (unsigned) TL_Pub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -1084,7 +1085,7 @@ void TL_Com_GetDataOfCommByCod (struct TL_Com_Comment *Com)
 			  " WHERE tl_pubs.PubCod=%ld"
 			  " AND tl_pubs.PubType=%u"
 			  " AND tl_pubs.PubCod=tl_comments.PubCod",
-			  Com->PubCod,(unsigned) TL_PUB_COMMENT_TO_NOTE))
+			  Com->PubCod,(unsigned) TL_Pub_COMMENT_TO_NOTE))
 	{
 	 /***** Get data of comment *****/
 	 row = mysql_fetch_row (mysql_res);
