@@ -144,7 +144,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActRefNewTL_PubGbl	] = {1509,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_AJAX_RFRESH,TL_Who_GetParamWho			,TL_RefreshNewTimelineGbl	,NULL},
    [ActRefOldTL_PubGbl	] = {1510,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,TL_Who_GetParamWho			,TL_RefreshOldTimelineGbl	,NULL},
-   [ActRcvTL_PstGbl	] = {1492,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,TL_Who_GetParamWho			,TL_ReceivePostGbl		,NULL},
+   [ActRcvTL_PstGbl	] = {1492,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,TL_Who_GetParamWho			,TL_Pst_ReceivePostGbl		,NULL},
    [ActRcvTL_ComGbl	] = {1503,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,TL_Who_GetParamWho			,TL_Com_ReceiveCommentGbl		,NULL},
    [ActShoHidTL_ComGbl	] = {1806,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_Com_ShowHiddenCommentsGbl	,NULL},
    [ActAllShaTL_NotGbl	] = {1766,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_Sha_ShowAllSharersNoteGbl	,NULL},
@@ -164,7 +164,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActReqOthPubPrf	] = {1401,-1,TabUnk,ActSeeSocPrf	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_RequestUserProfile		,NULL},
 
    [ActRefOldTL_PubUsr	] = {1511,-1,TabUnk,ActSeeSocPrf	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_RefreshOldTimelineUsr	,NULL},
-   [ActRcvTL_PstUsr	] = {1498,-1,TabUnk,ActSeeSocPrf	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,TL_ReceivePostUsr		,NULL},
+   [ActRcvTL_PstUsr	] = {1498,-1,TabUnk,ActSeeSocPrf	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,TL_Pst_ReceivePostUsr		,NULL},
    [ActRcvTL_ComUsr	] = {1504,-1,TabUnk,ActSeeSocPrf	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,TL_Com_ReceiveCommentUsr		,NULL},
    [ActShoHidTL_ComUsr	] = {1807,-1,TabUnk,ActSeeSocPrf	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_Com_ShowHiddenCommentsUsr	,NULL},
    [ActAllShaTL_NotUsr	] = {1769,-1,TabUnk,ActSeeSocPrf	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_Sha_ShowAllSharersNoteUsr	,NULL},

@@ -107,12 +107,6 @@ typedef enum
    TL_SHOW_ALL_USRS,	// Show all favers/sharers
   } TL_HowManyUsrs_t;
 
-struct TL_PostContent
-  {
-   char Txt[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Med_Media Media;
-  };
-
 typedef enum
   {
    TL_DONT_HIGHLIGHT,
@@ -156,13 +150,6 @@ void TL_FormStart (const struct TL_Timeline *Timeline,
 void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod);
 
 void TL_WriteDateTime (time_t TimeUTC);
-
-void TL_GetAndWritePost (long PstCod);
-
-void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea);
-
-void TL_ReceivePostUsr (void);
-void TL_ReceivePostGbl (void);
 
 void TL_RemoveUsrContent (long UsrCod);
 

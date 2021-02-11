@@ -262,7 +262,7 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
       /* Write content of the note */
       if (Not->NoteType == TL_NOTE_POST)
 	 /* Write post content */
-	 TL_GetAndWritePost (Not->Cod);
+	 TL_Pst_GetAndWritePost (Not->Cod);
       else
 	{
 	 /* Reset forums */

@@ -820,7 +820,7 @@ void TL_Pub_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    MYSQL_ROW row;
    struct TL_Pub_Publication Pub;
    struct TL_Not_Note Not;
-   struct TL_PostContent Content;
+   struct TL_Pst_PostContent Content;
    size_t Length;
    bool ContentCopied = false;
 

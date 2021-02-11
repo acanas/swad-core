@@ -53,8 +53,6 @@ extern struct Globals Gbl;
 
 Usr_Who_t TL_GlobalWho;
 
-#define TL_DEFAULT_WHO	Usr_WHO_FOLLOWED
-
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -118,7 +116,7 @@ void TL_Who_GetParamWho (void)
 
    /***** If parameter Who is unknown, set it to default *****/
    if (Who == Usr_WHO_UNKNOWN)
-      Who = TL_DEFAULT_WHO;
+      Who = TL_Who_DEFAULT_WHO;
 
    /***** Set global variable *****/
    TL_Who_SetGlobalWho (Who);
@@ -164,7 +162,7 @@ void TL_Who_SaveWhoInDB (struct TL_Timeline *Timeline)
    if (Gbl.Usrs.Me.Logged)
      {
       if (Timeline->Who == Usr_WHO_UNKNOWN)
-	 Timeline->Who = TL_DEFAULT_WHO;
+	 Timeline->Who = TL_Who_DEFAULT_WHO;
 
       /***** Update which users in database *****/
       // Who is stored in usr_last for next time I log in

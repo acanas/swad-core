@@ -164,7 +164,7 @@ void TL_Com_PutHiddenFormToWriteNewComment (const struct TL_Timeline *Timeline,
    TL_Not_PutHiddenParamNotCod (NotCod);
 
    /* Textarea and button */
-   TL_PutTextarea (Txt_New_TIMELINE_comment,
+   TL_Pst_PutTextarea (Txt_New_TIMELINE_comment,
 	           "TL_COM_TEXTAREA TL_COMM_WIDTH");
 
    /* End form */
@@ -753,7 +753,7 @@ void TL_Com_ReceiveCommentGbl (void)
 static long TL_Com_ReceiveComment (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
-   struct TL_PostContent Content;
+   struct TL_Pst_PostContent Content;
    struct TL_Not_Note Not;
    struct TL_Pub_Publication Pub;
 
