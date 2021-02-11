@@ -40,22 +40,22 @@
 /*****************************************************************************/
 
 void HieCfg_Title (bool PutLink,
-		   Hie_Level_t LogoScope,
+		   Hie_Lvl_Level_t LogoScope,
 		   long LogoCod,
-                   char LogoShrtName[Hie_MAX_BYTES_SHRT_NAME + 1],
-		   char LogoFullName[Hie_MAX_BYTES_FULL_NAME + 1],
+                   char LogoShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
+		   char LogoFullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1],
 		   char LogoWWW[Cns_MAX_BYTES_WWW + 1],
-		   char TextFullName[Hie_MAX_BYTES_FULL_NAME + 1]);
+		   char TextFullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1]);
 void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
-		      const char FullName[Hie_MAX_BYTES_FULL_NAME + 1]);
+		      const char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1]);
 void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
-		      const char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1]);
+		      const char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
 void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 		 const char WWW[Cns_MAX_BYTES_WWW + 1]);
 void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod);
 void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm);
 void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap);
 void HieCfg_QR (const char *ParamName,long HieCod);
-void HieCfg_NumUsrsInCrss (Hie_Level_t Scope,long Cod,Rol_Role_t Role);
+void HieCfg_NumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role);
 
 #endif

@@ -38,6 +38,7 @@
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
 #include "swad_message.h"
@@ -226,7 +227,7 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Ctr_Centre *Ctr,Act_Action_t Acti
    Hie_FreeGoToMsg ();
 
    /***** Centre logo and name *****/
-   Lgo_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
+   Lgo_DrawLogo (Hie_Lvl_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
    HTM_TxtF ("&nbsp;%s",Ctr->FullName);
 
    /***** End link *****/
@@ -417,7 +418,7 @@ static void Ctr_ListOneCentreForSeeing (struct Ctr_Centre *Ctr,unsigned NumCtr)
 
    /***** Number of users in courses of this centre *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_CTR,Ctr->CtrCod,
+   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_Lvl_CTR,Ctr->CtrCod,
 					     1 << Rol_STD |
 					     1 << Rol_NET |
 					     1 << Rol_TCH));	// Any user
@@ -778,11 +779,11 @@ static void Ctr_GetDataOfCentreFromRow (struct Ctr_Centre *Ctr,MYSQL_ROW row)
 
    /***** Get the short name of the centre (row[8]) *****/
    Str_Copy (Ctr->ShrtName,row[8],
-	     Hie_MAX_BYTES_SHRT_NAME);
+	     Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 
    /***** Get the full name of the centre (row[9]) *****/
    Str_Copy (Ctr->FullName,row[9],
-	     Hie_MAX_BYTES_FULL_NAME);
+	     Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /***** Get the URL of the centre (row[10]) *****/
    Str_Copy (Ctr->WWW,row[10],
@@ -840,7 +841,7 @@ void Ctr_GetShortNameOfCentreByCod (struct Ctr_Centre *Ctr)
 	 row = mysql_fetch_row (mysql_res);
 
 	 Str_Copy (Ctr->ShrtName,row[0],
-	           Hie_MAX_BYTES_SHRT_NAME);
+	           Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -965,7 +966,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
       ICanEdit = Ctr_CheckIfICanEditACentre (Ctr);
       NumDegs = Deg_GetNumDegsInCtr (Ctr->CtrCod);
       NumUsrsCtr = Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr);
-      NumUsrsInCrssOfCtr = Usr_GetNumUsrsInCrss (Hie_CTR,Ctr->CtrCod,
+      NumUsrsInCrssOfCtr = Usr_GetNumUsrsInCrss (Hie_Lvl_CTR,Ctr->CtrCod,
 						 1 << Rol_STD |
 						 1 << Rol_NET |
 						 1 << Rol_TCH);	// Any user
@@ -990,7 +991,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
 
       /* Centre logo */
       HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr->FullName);
-      Lgo_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,20,NULL,true);
+      Lgo_DrawLogo (Hie_Lvl_CTR,Ctr->CtrCod,Ctr->ShrtName,20,NULL,true);
       HTM_TD_End ();
 
       /* Place */
@@ -1027,7 +1028,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
 	{
 	 Frm_StartForm (ActRenCtrSho);
 	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
-	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
+	 HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
 	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_SHORT_NAME\"");
 	 Frm_EndForm ();
@@ -1042,7 +1043,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
 	{
 	 Frm_StartForm (ActRenCtrFul);
 	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
-	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ctr->FullName,
+	 HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr->FullName,
 	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_FULL_NAME\"");
 	 Frm_EndForm ();
@@ -1244,7 +1245,7 @@ void Ctr_RemoveCentre (void)
    else if (Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr_EditingCtr))	// Centre has users who claim to belong to it
       Ale_ShowAlert (Ale_WARNING,
 		     Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre);
-   else if (Usr_GetNumUsrsInCrss (Hie_CTR,Ctr_EditingCtr->CtrCod,
+   else if (Usr_GetNumUsrsInCrss (Hie_Lvl_CTR,Ctr_EditingCtr->CtrCod,
 				  1 << Rol_STD |
 				  1 << Rol_NET |
 				  1 << Rol_TCH))			// Centre has users
@@ -1253,10 +1254,10 @@ void Ctr_RemoveCentre (void)
    else	// Centre has no degrees or users ==> remove it
      {
       /***** Remove all the threads and posts in forums of the centre *****/
-      For_RemoveForums (Hie_CTR,Ctr_EditingCtr->CtrCod);
+      For_RemoveForums (Hie_Lvl_CTR,Ctr_EditingCtr->CtrCod);
 
       /***** Remove surveys of the centre *****/
-      Svy_RemoveSurveys (Hie_CTR,Ctr_EditingCtr->CtrCod);
+      Svy_RemoveSurveys (Hie_Lvl_CTR,Ctr_EditingCtr->CtrCod);
 
       /***** Remove information related to files in centre *****/
       Brw_RemoveCtrFilesFromDB (Ctr_EditingCtr->CtrCod);
@@ -1370,20 +1371,20 @@ void Ctr_RenameCentre (struct Ctr_Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullNam
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentCtrName = NULL;		// Initialized to avoid warning
-   char NewCtrName[Hie_MAX_BYTES_FULL_NAME + 1];
+   char NewCtrName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
+         MaxBytes = Cns_HIERARCHY_MAX_BYTES_SHRT_NAME;
          CurrentCtrName = Ctr->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         MaxBytes = Hie_MAX_BYTES_FULL_NAME;
+         MaxBytes = Cns_HIERARCHY_MAX_BYTES_FULL_NAME;
          CurrentCtrName = Ctr->FullName;
          break;
      }
@@ -1636,7 +1637,7 @@ static void Ctr_PutFormToCreateCentre (const struct Plc_Places *Places)
 
    /***** Centre logo *****/
    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr_EditingCtr->FullName);
-   Lgo_DrawLogo (Hie_CTR,-1L,"",20,NULL,true);
+   Lgo_DrawLogo (Hie_Lvl_CTR,-1L,"",20,NULL,true);
    HTM_TD_End ();
 
    /***** Place *****/
@@ -1657,14 +1658,14 @@ static void Ctr_PutFormToCreateCentre (const struct Plc_Places *Places)
 
    /***** Centre short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName,
+   HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Centre full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName,
+   HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
@@ -1851,10 +1852,10 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (unsigned Status)
       Ale_ShowAlert (Ale_ERROR,"Wrong place.");
 
    /* Get centre short name */
-   Par_GetParToText ("ShortName",Ctr_EditingCtr->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
+   Par_GetParToText ("ShortName",Ctr_EditingCtr->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 
    /* Get centre full name */
-   Par_GetParToText ("FullName",Ctr_EditingCtr->FullName,Hie_MAX_BYTES_FULL_NAME);
+   Par_GetParToText ("FullName",Ctr_EditingCtr->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /* Get centre WWW */
    Par_GetParToText ("WWW",Ctr_EditingCtr->WWW,Cns_MAX_BYTES_WWW);
@@ -1923,12 +1924,12 @@ unsigned Ctr_GetCachedNumCtrsInSys (void)
    unsigned NumCtrs;
 
    /***** Get number of centres from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS,Hie_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS,Hie_Lvl_SYS,-1L,
 				   FigCch_UNSIGNED,&NumCtrs))
      {
       /***** Get current number of centres from database and update cache *****/
       NumCtrs = (unsigned) DB_GetNumRowsTable ("centres");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtrs);
      }
 
@@ -1963,7 +1964,7 @@ static unsigned Ctr_GetNumCtrsInCty (long CtyCod)
 			     " WHERE institutions.CtyCod=%ld"
 			     " AND institutions.InsCod=centres.InsCod",
 			     CtyCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_CTY,Gbl.Cache.NumCtrsInCty.CtyCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_Lvl_CTY,Gbl.Cache.NumCtrsInCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCtrsInCty.NumCtrs);
    return Gbl.Cache.NumCtrsInCty.NumCtrs;
   }
@@ -1973,7 +1974,7 @@ unsigned Ctr_GetCachedNumCtrsInCty (long CtyCod)
    unsigned NumCtrs;
 
    /***** Get number of centres from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS,Hie_CTY,CtyCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS,Hie_Lvl_CTY,CtyCod,
 				   FigCch_UNSIGNED,&NumCtrs))
       /***** Get current number of centres from database and update cache *****/
       NumCtrs = Ctr_GetNumCtrsInCty (CtyCod);
@@ -2008,7 +2009,7 @@ unsigned Ctr_GetNumCtrsInIns (long InsCod)
 			     "SELECT COUNT(*) FROM centres"
 			     " WHERE InsCod=%ld",
 			     InsCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_INS,Gbl.Cache.NumCtrsInIns.InsCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_Lvl_INS,Gbl.Cache.NumCtrsInIns.InsCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCtrsInIns.NumCtrs);
    return Gbl.Cache.NumCtrsInIns.NumCtrs;
   }
@@ -2018,7 +2019,7 @@ unsigned Ctr_GetCachedNumCtrsInIns (long InsCod)
    unsigned NumCtrs;
 
    /***** Get number of centres from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS,Hie_INS,InsCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS,Hie_Lvl_INS,InsCod,
 				   FigCch_UNSIGNED,&NumCtrs))
       /***** Get current number of centres from database and update cache *****/
       NumCtrs = Ctr_GetNumCtrsInIns (InsCod);
@@ -2035,7 +2036,7 @@ unsigned Ctr_GetCachedNumCtrsWithMapInSys (void)
    unsigned NumCtrsWithMap;
 
    /***** Get number of centres with map from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_Lvl_SYS,-1L,
                                    FigCch_UNSIGNED,&NumCtrsWithMap))
      {
       /***** Get current number of centres with map from database and update cache *****/
@@ -2044,7 +2045,7 @@ unsigned Ctr_GetCachedNumCtrsWithMapInSys (void)
 		       DB_QueryCOUNT ("can not get number of centres with map",
 				      "SELECT COUNT(*) FROM centres"
 				      " WHERE Latitude<>0 OR Longitude<>0");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_Lvl_SYS,-1L,
                                     FigCch_UNSIGNED,&NumCtrsWithMap);
      }
 
@@ -2060,7 +2061,7 @@ unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod)
    unsigned NumCtrsWithMap;
 
    /***** Get number of centres with map from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_CTY,CtyCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_Lvl_CTY,CtyCod,
                                    FigCch_UNSIGNED,&NumCtrsWithMap))
      {
       /***** Get current number of centres with map from database and update cache *****/
@@ -2072,7 +2073,7 @@ unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod)
 				      " AND institutions.InsCod=centres.InsCod"
 				     " AND (centres.Latitude<>0 OR centres.Longitude<>0)",
 				      CtyCod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_CTY,CtyCod,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_Lvl_CTY,CtyCod,
                                     FigCch_UNSIGNED,&NumCtrsWithMap);
      }
 
@@ -2088,7 +2089,7 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
    unsigned NumCtrsWithMap;
 
    /***** Get number of centres with map from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_INS,InsCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_MAP,Hie_Lvl_INS,InsCod,
                                    FigCch_UNSIGNED,&NumCtrsWithMap))
      {
       /***** Get current number of centres with map from database and update cache *****/
@@ -2099,7 +2100,7 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
 				    " WHERE InsCod=%ld"
 				    " AND (Latitude<>0 OR Longitude<>0)",
 				    InsCod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_INS,InsCod,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_Lvl_INS,InsCod,
                                     FigCch_UNSIGNED,&NumCtrsWithMap);
      }
 
@@ -2125,7 +2126,7 @@ unsigned Ctr_GetNumCtrsInPlc (long PlcCod)
 /*****************************************************************************/
 
 unsigned Ctr_GetCachedNumCtrsWithDegs (const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod)
+                                       Hie_Lvl_Level_t Scope,long Cod)
   {
    unsigned NumCtrsWithDegs;
 
@@ -2153,7 +2154,7 @@ unsigned Ctr_GetCachedNumCtrsWithDegs (const char *SubQuery,
 /*****************************************************************************/
 
 unsigned Ctr_GetCachedNumCtrsWithCrss (const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod)
+                                       Hie_Lvl_Level_t Scope,long Cod)
   {
    unsigned NumCtrsWithCrss;
 
@@ -2182,7 +2183,7 @@ unsigned Ctr_GetCachedNumCtrsWithCrss (const char *SubQuery,
 /*****************************************************************************/
 
 unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod)
+                                       Hie_Lvl_Level_t Scope,long Cod)
   {
    static const FigCch_FigureCached_t FigureCtrs[Rol_NUM_ROLES] =
      {

@@ -32,6 +32,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
+#include "swad_hierarchy.h"
 #include "swad_hierarchy_config.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
@@ -155,10 +156,10 @@ static void DegCfg_Configuration (bool PrintView)
       DegCfg_NumCrss ();
 
       /***** Number of users *****/
-      HieCfg_NumUsrsInCrss (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_TCH);
-      HieCfg_NumUsrsInCrss (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_NET);
-      HieCfg_NumUsrsInCrss (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_STD);
-      HieCfg_NumUsrsInCrss (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_UNK);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_TCH);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_NET);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_STD);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_UNK);
      }
 
    /***** End table *****/
@@ -185,7 +186,7 @@ static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
       // Only degree admins, centre admins, institution admins and system admins
       // have permission to upload logo of the degree
       /***** Link to upload logo of degree *****/
-      Lgo_PutIconToChangeLogo (Hie_DEG);
+      Lgo_PutIconToChangeLogo (Hie_Lvl_DEG);
   }
 
 /*****************************************************************************/
@@ -195,7 +196,7 @@ static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
 static void DegCfg_Title (bool PutLink)
   {
    HieCfg_Title (PutLink,
-		    Hie_DEG,				// Logo scope
+		    Hie_Lvl_DEG,				// Logo scope
 		    Gbl.Hierarchy.Deg.DegCod,		// Logo code
                     Gbl.Hierarchy.Deg.ShrtName,		// Logo short name
 		    Gbl.Hierarchy.Deg.FullName,		// Logo full name
@@ -254,7 +255,7 @@ static void DegCfg_Centre (bool PrintView,bool PutForm)
 				  "BT_LINK LT DAT",NULL);
          Hie_FreeGoToMsg ();
 	}
-      Lgo_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,Gbl.Hierarchy.Ctr.ShrtName,
+      Lgo_DrawLogo (Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Gbl.Hierarchy.Ctr.ShrtName,
 		    20,"LM",true);
       HTM_NBSP ();
       HTM_Txt (Gbl.Hierarchy.Ctr.FullName);

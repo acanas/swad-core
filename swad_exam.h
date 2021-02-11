@@ -98,9 +98,9 @@ unsigned Exa_GetNextQuestionIndexInExam (long ExaCod,unsigned QstInd);
 
 bool Exa_CheckIfEditable (const struct Exa_Exam *Exam);
 
-unsigned Exa_GetNumCoursesWithExams (Hie_Level_t Scope);
-unsigned Exa_GetNumExams (Hie_Level_t Scope);
-double Exa_GetNumQstsPerCrsExam (Hie_Level_t Scope);
+unsigned Exa_GetNumCoursesWithExams (Hie_Lvl_Level_t Scope);
+unsigned Exa_GetNumExams (Hie_Lvl_Level_t Scope);
+double Exa_GetNumQstsPerCrsExam (Hie_Lvl_Level_t Scope);
 
 void Exa_GetScoreRange (long ExaCod,double *MinScore,double *MaxScore);
 

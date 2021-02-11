@@ -36,6 +36,7 @@
 #include "swad_exam_announcement.h"
 #include "swad_forum.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_notice.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
@@ -69,17 +70,11 @@ extern struct Globals Gbl;
 static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod);
 
 static void TL_Not_GetLocationInHierarchy (const struct TL_Not_Note *Not,
-	                                   struct Ins_Instit *Ins,
-                                           struct Ctr_Centre *Ctr,
-                                           struct Deg_Degree *Deg,
-                                           struct Crs_Course *Crs,
+                                           struct Hie_Hierarchy *Hie,
                                            struct For_Forum *Forum,
                                            char ForumName[For_MAX_BYTES_FORUM_NAME + 1]);
 static void TL_Not_WriteLocationInHierarchy (const struct TL_Not_Note *Not,
-	                                     const struct Ins_Instit *Ins,
-                                             const struct Ctr_Centre *Ctr,
-                                             const struct Deg_Degree *Deg,
-                                             const struct Crs_Course *Crs,
+	                                     const struct Hie_Hierarchy *Hie,
                                              const char ForumName[For_MAX_BYTES_FORUM_NAME + 1]);
 
 static void TL_Not_PutFormGoToAction (const struct TL_Not_Note *Not,
@@ -199,10 +194,7 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
   {
    struct UsrData AuthorDat;
    bool IAmTheAuthor;
-   struct Ins_Instit Ins;
-   struct Ctr_Centre Ctr;
-   struct Deg_Degree Deg;
-   struct Crs_Course Crs;
+   struct Hie_Hierarchy Hie;
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
    struct For_Forums Forums;
@@ -239,10 +231,11 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
    else
      {
       /***** Initialize location in hierarchy *****/
-      Ins.InsCod = -1L;
-      Ctr.CtrCod = -1L;
-      Deg.DegCod = -1L;
-      Crs.CrsCod = -1L;
+      Hie.Cty.CtyCod = -1L;
+      Hie.Ins.InsCod = -1L;
+      Hie.Ctr.CtrCod = -1L;
+      Hie.Deg.DegCod = -1L;
+      Hie.Crs.CrsCod = -1L;
 
       /***** Write sharer/commenter if distinct to author *****/
       if (TopMessage != TL_TOP_MESSAGE_NONE)
@@ -285,16 +278,14 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
 
 	 /* Get location in hierarchy */
 	 if (!Not->Unavailable)
-	    TL_Not_GetLocationInHierarchy (Not,&Ins,&Ctr,&Deg,&Crs,
-	                                   &Forums.Forum,ForumName);
+	    TL_Not_GetLocationInHierarchy (Not,&Hie,&Forums.Forum,ForumName);
 
 	 /* Write note type */
 	 TL_Not_PutFormGoToAction (Not,&Forums);
 
 	 /* Write location in hierarchy */
 	 if (!Not->Unavailable)
-	    TL_Not_WriteLocationInHierarchy (Not,&Ins,&Ctr,&Deg,&Crs,
-	                                     ForumName);
+	    TL_Not_WriteLocationInHierarchy (Not,&Hie,ForumName);
 
 	 /* Write note summary */
 	 TL_Not_GetNoteSummary (Not,SummaryStr);
@@ -443,10 +434,7 @@ void TL_Not_WriteAuthorNote (const struct UsrData *UsrDat)
 /*****************************************************************************/
 
 static void TL_Not_GetLocationInHierarchy (const struct TL_Not_Note *Not,
-	                                   struct Ins_Instit *Ins,
-                                           struct Ctr_Centre *Ctr,
-                                           struct Deg_Degree *Deg,
-                                           struct Crs_Course *Crs,
+                                           struct Hie_Hierarchy *Hie,
                                            struct For_Forum *Forum,
                                            char ForumName[For_MAX_BYTES_FORUM_NAME + 1])
   {
@@ -455,28 +443,28 @@ static void TL_Not_GetLocationInHierarchy (const struct TL_Not_Note *Not,
       case TL_NOTE_INS_DOC_PUB_FILE:
       case TL_NOTE_INS_SHA_PUB_FILE:
 	 /* Get institution data */
-	 Ins->InsCod = Not->HieCod;
-	 Ins_GetDataOfInstitutionByCod (Ins);
+	 Hie->Ins.InsCod = Not->HieCod;
+	 Ins_GetDataOfInstitutionByCod (&Hie->Ins);
 	 break;
       case TL_NOTE_CTR_DOC_PUB_FILE:
       case TL_NOTE_CTR_SHA_PUB_FILE:
 	 /* Get centre data */
-	 Ctr->CtrCod = Not->HieCod;
-	 Ctr_GetDataOfCentreByCod (Ctr);
+	 Hie->Ctr.CtrCod = Not->HieCod;
+	 Ctr_GetDataOfCentreByCod (&Hie->Ctr);
 	 break;
       case TL_NOTE_DEG_DOC_PUB_FILE:
       case TL_NOTE_DEG_SHA_PUB_FILE:
 	 /* Get degree data */
-	 Deg->DegCod = Not->HieCod;
-	 Deg_GetDataOfDegreeByCod (Deg);
+	 Hie->Deg.DegCod = Not->HieCod;
+	 Deg_GetDataOfDegreeByCod (&Hie->Deg);
 	 break;
       case TL_NOTE_CRS_DOC_PUB_FILE:
       case TL_NOTE_CRS_SHA_PUB_FILE:
       case TL_NOTE_EXAM_ANNOUNCEMENT:
       case TL_NOTE_NOTICE:
 	 /* Get course data */
-	 Crs->CrsCod = Not->HieCod;
-	 Crs_GetDataOfCourseByCod (Crs);
+	 Hie->Crs.CrsCod = Not->HieCod;
+	 Crs_GetDataOfCourseByCod (&Hie->Crs);
 	 break;
       case TL_NOTE_FORUM_POST:
 	 /* Get forum type of the post */
@@ -493,10 +481,7 @@ static void TL_Not_GetLocationInHierarchy (const struct TL_Not_Note *Not,
 /*****************************************************************************/
 
 static void TL_Not_WriteLocationInHierarchy (const struct TL_Not_Note *Not,
-	                                     const struct Ins_Instit *Ins,
-                                             const struct Ctr_Centre *Ctr,
-                                             const struct Deg_Degree *Deg,
-                                             const struct Crs_Course *Crs,
+	                                     const struct Hie_Hierarchy *Hie,
                                              const char ForumName[For_MAX_BYTES_FORUM_NAME + 1])
   {
    extern const char *Txt_Forum;
@@ -511,21 +496,21 @@ static void TL_Not_WriteLocationInHierarchy (const struct TL_Not_Note *Not,
       case TL_NOTE_INS_SHA_PUB_FILE:
 	 /* Write location (institution) in hierarchy */
 	 HTM_DIV_Begin ("class=\"TL_LOC\"");
-	 HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Ins->ShrtName);
+	 HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Hie->Ins.ShrtName);
 	 HTM_DIV_End ();
 	 break;
       case TL_NOTE_CTR_DOC_PUB_FILE:
       case TL_NOTE_CTR_SHA_PUB_FILE:
 	 /* Write location (centre) in hierarchy */
 	 HTM_DIV_Begin ("class=\"TL_LOC\"");
-	 HTM_TxtF ("%s:&nbsp;%s",Txt_Centre,Ctr->ShrtName);
+	 HTM_TxtF ("%s:&nbsp;%s",Txt_Centre,Hie->Ctr.ShrtName);
 	 HTM_DIV_End ();
 	 break;
       case TL_NOTE_DEG_DOC_PUB_FILE:
       case TL_NOTE_DEG_SHA_PUB_FILE:
 	 /* Write location (degree) in hierarchy */
 	 HTM_DIV_Begin ("class=\"TL_LOC\"");
-	 HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Deg->ShrtName);
+	 HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Hie->Deg.ShrtName);
 	 HTM_DIV_End ();
 	 break;
       case TL_NOTE_CRS_DOC_PUB_FILE:
@@ -534,7 +519,7 @@ static void TL_Not_WriteLocationInHierarchy (const struct TL_Not_Note *Not,
       case TL_NOTE_NOTICE:
 	 /* Write location (course) in hierarchy */
 	 HTM_DIV_Begin ("class=\"TL_LOC\"");
-	 HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Crs->ShrtName);
+	 HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Hie->Crs.ShrtName);
 	 HTM_DIV_End ();
 	 break;
       case TL_NOTE_FORUM_POST:

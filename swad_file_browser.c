@@ -47,6 +47,7 @@
 #include "swad_file_MIME.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_logo.h"
@@ -6855,7 +6856,7 @@ static void Brw_WriteCurrentClipboard (void)
    struct Prj_Project Prj;
    struct UsrData UsrDat;
    char TxtClipboardZone[1024 +
-			 Hie_MAX_BYTES_SHRT_NAME +
+			 Cns_HIERARCHY_MAX_BYTES_SHRT_NAME +
 			 Grp_MAX_BYTES_GROUP_TYPE_NAME +
 			 Grp_MAX_BYTES_GROUP_NAME +
 			 Usr_MAX_BYTES_FULL_NAME +
@@ -12025,7 +12026,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
          HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (InsShortName),
 				  "BT_LINK LT DAT",NULL);
          Hie_FreeGoToMsg ();
-         Lgo_DrawLogo (Hie_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
+         Lgo_DrawLogo (Hie_Lvl_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
 	 HTM_TxtF ("&nbsp;%s",InsShortName);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -12041,7 +12042,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
          HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (CtrShortName),
 				  "BT_LINK LT DAT",NULL);
          Hie_FreeGoToMsg ();
-         Lgo_DrawLogo (Hie_CTR,CtrCod,CtrShortName,20,"LT",true);
+         Lgo_DrawLogo (Hie_Lvl_CTR,CtrCod,CtrShortName,20,"LT",true);
 	 HTM_TxtF ("&nbsp;%s",CtrShortName);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -12057,7 +12058,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
          HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (DegShortName),
 				  "BT_LINK LT DAT",NULL);
          Hie_FreeGoToMsg ();
-         Lgo_DrawLogo (Hie_DEG,DegCod,DegShortName,20,"LT",true);
+         Lgo_DrawLogo (Hie_Lvl_DEG,DegCod,DegShortName,20,"LT",true);
 	 HTM_TxtF ("&nbsp;%s",DegShortName);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();

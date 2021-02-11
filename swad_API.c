@@ -1060,8 +1060,8 @@ int swad__loginBySessionKey (struct soap *soap,
    loginBySessionKeyOut->userSurname2   = (char *) soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
    loginBySessionKeyOut->userPhoto      = (char *) soap_malloc (soap,Cns_MAX_BYTES_WWW + 1);
    loginBySessionKeyOut->userBirthday   = (char *) soap_malloc (soap,Dat_LENGTH_YYYYMMDD + 1);
-   loginBySessionKeyOut->degreeName     = (char *) soap_malloc (soap,Hie_MAX_BYTES_FULL_NAME + 1);
-   loginBySessionKeyOut->courseName     = (char *) soap_malloc (soap,Hie_MAX_BYTES_FULL_NAME + 1);
+   loginBySessionKeyOut->degreeName     = (char *) soap_malloc (soap,Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1);
+   loginBySessionKeyOut->courseName     = (char *) soap_malloc (soap,Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1);
 
    /***** Default values returned on error *****/
    loginBySessionKeyOut->userCode          = -1;
@@ -1110,7 +1110,7 @@ int swad__loginBySessionKey (struct soap *soap,
       Crs_GetDataOfCourseByCod (&Gbl.Hierarchy.Crs);
       loginBySessionKeyOut->courseCode = (int) Gbl.Hierarchy.Crs.CrsCod;
       Str_Copy (loginBySessionKeyOut->courseName,Gbl.Hierarchy.Crs.FullName,
-                Hie_MAX_BYTES_FULL_NAME);
+                Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
       /***** Get user code (row[0]) *****/
       Gbl.Usrs.Me.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
@@ -1121,7 +1121,7 @@ int swad__loginBySessionKey (struct soap *soap,
       Deg_GetDataOfDegreeByCod (&Gbl.Hierarchy.Deg);
       loginBySessionKeyOut->degreeCode = (int) Gbl.Hierarchy.Deg.DegCod;
       Str_Copy (loginBySessionKeyOut->degreeName,Gbl.Hierarchy.Deg.FullName,
-                Hie_MAX_BYTES_FULL_NAME);
+                Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
      }
    else
       UsrFound = false;
@@ -1413,15 +1413,15 @@ int swad__getCourses (struct soap *soap,
 
          /* Get course short name (row[1]) */
          getCoursesOut->coursesArray.__ptr[NumRow].courseShortName =
-            (char *) soap_malloc (soap,Hie_MAX_BYTES_SHRT_NAME + 1);
+            (char *) soap_malloc (soap,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1);
 	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumRow].courseShortName,row[1],
-	           Hie_MAX_BYTES_SHRT_NAME);
+	           Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 
          /* Get course full name (row[2]) */
          getCoursesOut->coursesArray.__ptr[NumRow].courseFullName =
-            (char *) soap_malloc (soap,Hie_MAX_BYTES_FULL_NAME + 1);
+            (char *) soap_malloc (soap,Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1);
 	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumRow].courseFullName,row[2],
-	           Hie_MAX_BYTES_FULL_NAME);
+	           Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
          /* Get role (row[3]) */
          if (sscanf (row[3],"%u",&Role) != 1)	// Role in this course
@@ -1877,7 +1877,7 @@ int swad__getUsers (struct soap *soap,
       Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Get list of users *****/
-   Usr_GetListUsrs (Hie_CRS,Role);
+   Usr_GetListUsrs (Hie_Lvl_CRS,Role);
    API_CopyListUsers (soap,
 		      Role,getUsersOut);
    Usr_FreeUsrsList (Role);
@@ -1917,7 +1917,7 @@ int swad__findUsers (struct soap *soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
-   if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+   if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
       /***** Check course *****/
       if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
 						      Gbl.Hierarchy.Crs.CrsCod,
@@ -1932,7 +1932,7 @@ int swad__findUsers (struct soap *soap,
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
 
-   if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+   if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
       /***** Check if I am a student, non-editing teacher or teacher in the course *****/
       if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
           Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
@@ -1941,7 +1941,7 @@ int swad__findUsers (struct soap *soap,
 				     "Request forbidden",
 				     "Requester must belong to course");
 
-   if (Gbl.Hierarchy.Level == Hie_CRS)
+   if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)
      {
       /***** Get degree of current course *****/
       if ((ReturnCode = API_GetCurrentDegCodFromCurrentCrsCod ()) != SOAP_OK)	// TODO: Is this necessary?
@@ -1962,8 +1962,8 @@ int swad__findUsers (struct soap *soap,
 
    if (Gbl.Search.Str[0])	// Search some users
      {
-      Gbl.Scope.Current = (Gbl.Hierarchy.Level == Hie_CRS) ? Hie_CRS :
-							     Hie_SYS;
+      Gbl.Scope.Current = (Gbl.Hierarchy.Level == Hie_Lvl_CRS) ? Hie_Lvl_CRS :
+							     Hie_Lvl_SYS;
       if (Sch_BuildSearchQuery (SearchQuery,
 				"CONCAT_WS(' ',FirstName,Surname1,Surname2)",
 				NULL,NULL))

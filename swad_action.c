@@ -58,6 +58,7 @@
 #include "swad_forum.h"
 #include "swad_game.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_holiday.h"
 #include "swad_ID.h"
 #include "swad_indicator.h"
@@ -3811,22 +3812,22 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
 
    switch (Gbl.Hierarchy.Level)
      {
-      case Hie_SYS:	// System
+      case Hie_Lvl_SYS:	// System
          Permission = Act_Actions[Action].PermissionSys;
 	 break;
-      case Hie_CTY:	// Country selected
+      case Hie_Lvl_CTY:	// Country selected
          Permission = Act_Actions[Action].PermissionCty;
 	 break;
-      case Hie_INS:	// Institution selected
+      case Hie_Lvl_INS:	// Institution selected
          Permission = Act_Actions[Action].PermissionIns;
 	 break;
-      case Hie_CTR:	// Centre selected
+      case Hie_Lvl_CTR:	// Centre selected
          Permission = Act_Actions[Action].PermissionCtr;
 	 break;
-      case Hie_DEG:	// Degree selected
+      case Hie_Lvl_DEG:	// Degree selected
          Permission = Act_Actions[Action].PermissionDeg;
 	 break;
-      case Hie_CRS:	// Course selected
+      case Hie_Lvl_CRS:	// Course selected
 	 Permission = Gbl.Usrs.Me.IBelongToCurrentCrs ? Act_Actions[Action].PermissionCrsIfIBelong :
 							Act_Actions[Action].PermissionCrsIfIDontBelong;
 	 break;
@@ -3982,18 +3983,18 @@ static const char *Act_GetActionTextFromDB (long ActCod)	// TODO: Remove when da
 
 void Act_AdjustActionWhenNoUsrLogged (void)
   {
-   static const Act_Action_t Actions[Hie_NUM_LEVELS] =
+   static const Act_Action_t Actions[Hie_Lvl_NUM_LEVELS] =
      {
-      [Hie_UNK] = ActUnk, 	// Unknown
-      [Hie_SYS] = ActFrmLogIn,	// System
-      [Hie_CTY] = ActSeeCtyInf,	// Country
-      [Hie_INS] = ActSeeInsInf,	// Institution
-      [Hie_CTR] = ActSeeCtrInf,	// Centre
-      [Hie_DEG] = ActSeeDegInf,	// Degree
-      [Hie_CRS] = ActSeeCrsInf,	// Course
+      [Hie_Lvl_UNK] = ActUnk, 		// Unknown
+      [Hie_Lvl_SYS] = ActFrmLogIn,	// System
+      [Hie_Lvl_CTY] = ActSeeCtyInf,	// Country
+      [Hie_Lvl_INS] = ActSeeInsInf,	// Institution
+      [Hie_Lvl_CTR] = ActSeeCtrInf,	// Centre
+      [Hie_Lvl_DEG] = ActSeeDegInf,	// Degree
+      [Hie_Lvl_CRS] = ActSeeCrsInf,	// Course
      };
 
-   if (Gbl.Hierarchy.Level >= Hie_NUM_LEVELS)
+   if (Gbl.Hierarchy.Level >= Hie_Lvl_NUM_LEVELS)
       Gbl.Hierarchy.Level = ActUnk;
 
    Gbl.Action.Act = Actions[Gbl.Hierarchy.Level];

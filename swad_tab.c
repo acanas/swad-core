@@ -165,9 +165,9 @@ static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
 	 return (Gbl.Hierarchy.Deg.DegCod > 0 &&	// Degree selected
 	         Gbl.Hierarchy.Crs.CrsCod <= 0);	// No course selected
       case TabCrs:
-	 return (Gbl.Hierarchy.Level == Hie_CRS);	// Course selected
+	 return (Gbl.Hierarchy.Level == Hie_Lvl_CRS);	// Course selected
       case TabAss:
-	 return (Gbl.Hierarchy.Level == Hie_CRS ||	// Course selected
+	 return (Gbl.Hierarchy.Level == Hie_Lvl_CRS ||	// Course selected
 	         Gbl.Usrs.Me.Role.Logged >= Rol_STD);	// I belong to course or I am an admin
       case TabFil:
       	 return (Gbl.Hierarchy.Ins.InsCod > 0 ||	// Institution selected

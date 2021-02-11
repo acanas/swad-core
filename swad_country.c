@@ -38,6 +38,7 @@
 #include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_HTML.h"
 #include "swad_survey.h"
 
@@ -59,7 +60,7 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Country *Cty_EditingCty = NULL;	// Static variable to keep the country being edited
+static struct Cty_Countr *Cty_EditingCty = NULL;	// Static variable to keep the country being edited
 long Cty_CurrentCtyCod = -1L;	// Used as parameter in contextual links
 
 /*****************************************************************************/
@@ -67,7 +68,7 @@ long Cty_CurrentCtyCod = -1L;	// Used as parameter in contextual links
 /*****************************************************************************/
 
 static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable);
-static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty);
+static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty);
 
 static void Cty_PutIconsListingCountries (__attribute__((unused)) void *Args);
 static void Cty_PutIconToEditCountries (void);
@@ -97,7 +98,7 @@ static void Cty_CreateCountry (void);
 static void Cty_EditingCountryConstructor (void);
 static void Cty_EditingCountryDestructor (void);
 
-static void Cty_FormToGoToMap (struct Country *Cty);
+static void Cty_FormToGoToMap (struct Cty_Countr *Cty);
 
 /*****************************************************************************/
 /***************** List countries with pending institutions ******************/
@@ -115,7 +116,7 @@ void Cty_SeeCtyWithPendingInss (void)
    MYSQL_ROW row;
    unsigned NumCtys;
    unsigned NumCty;
-   struct Country Cty;
+   struct Cty_Countr Cty;
    const char *BgColor;
 
    /***** Get countries with pending institutions *****/
@@ -290,7 +291,7 @@ void Cty_ListCountries2 (void)
 
    /* Number of users in courses of other countries */
    HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_CTY,0,
+   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_Lvl_CTY,0,
 					     1 << Rol_STD |
 					     1 << Rol_NET |
 					     1 << Rol_TCH));	// Any user
@@ -413,7 +414,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 /************************ List one country for seeing ************************/
 /*****************************************************************************/
 
-static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
+static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
   {
    const char *BgColor;
 
@@ -462,7 +463,7 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
 
    /***** Number of users in courses *****/
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_CTY,Cty->CtyCod,
+   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_Lvl_CTY,Cty->CtyCod,
 					     1 << Rol_STD |
 					     1 << Rol_NET |
 					     1 << Rol_TCH));	// Any user
@@ -510,7 +511,7 @@ static void Cty_PutIconToEditCountries (void)
 /********************* Draw country map and name with link *******************/
 /*****************************************************************************/
 
-void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
+void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Action,
                                         const char *ClassContainer,
                                         const char *ClassMap,
                                         const char *ClassLink)
@@ -551,7 +552,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
 /***************************** Draw country map ******************************/
 /*****************************************************************************/
 
-void Cty_DrawCountryMap (struct Country *Cty,const char *Class)
+void Cty_DrawCountryMap (struct Cty_Countr *Cty,const char *Class)
   {
    char *URL;
 
@@ -576,7 +577,7 @@ void Cty_DrawCountryMap (struct Country *Cty,const char *Class)
 /*********************** Check if country map exists *************************/
 /*****************************************************************************/
 
-bool Cty_CheckIfCountryPhotoExists (struct Country *Cty)
+bool Cty_CheckIfCountryPhotoExists (struct Cty_Countr *Cty)
   {
    char PathMap[PATH_MAX + 1];
 
@@ -753,7 +754,7 @@ void Cty_GetBasicListOfCountries (void)
    MYSQL_ROW row;
    unsigned long NumRows = 0;
    unsigned NumCty;
-   struct Country *Cty;
+   struct Cty_Countr *Cty;
    Lan_Language_t Lan;
 
    /***** Get countries from database *****/
@@ -767,8 +768,8 @@ void Cty_GetBasicListOfCountries (void)
       Gbl.Hierarchy.Ctys.Num = (unsigned) NumRows;
 
       /***** Create list with countries *****/
-      if ((Gbl.Hierarchy.Ctys.Lst = (struct Country *)
-	                                calloc (NumRows,sizeof (struct Country))) == NULL)
+      if ((Gbl.Hierarchy.Ctys.Lst = (struct Cty_Countr *)
+	                                calloc (NumRows,sizeof (struct Cty_Countr))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the countries *****/
@@ -837,7 +838,7 @@ void Cty_GetFullListOfCountries (void)
    MYSQL_ROW row;
    unsigned long NumRows = 0;
    unsigned NumCty;
-   struct Country *Cty;
+   struct Cty_Countr *Cty;
    Lan_Language_t Lan;
 
    /***** Get countries from database *****/
@@ -901,8 +902,8 @@ void Cty_GetFullListOfCountries (void)
       Gbl.Hierarchy.Ctys.Num = (unsigned) NumRows;
 
       /***** Create list with countries *****/
-      if ((Gbl.Hierarchy.Ctys.Lst = (struct Country *)
-	                                calloc (NumRows,sizeof (struct Country))) == NULL)
+      if ((Gbl.Hierarchy.Ctys.Lst = (struct Cty_Countr *)
+	                                calloc (NumRows,sizeof (struct Cty_Countr))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the countries *****/
@@ -1037,7 +1038,7 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
 /***************** Get basic data of country given its code ******************/
 /*****************************************************************************/
 
-bool Cty_GetDataOfCountryByCod (struct Country *Cty)
+bool Cty_GetDataOfCountryByCod (struct Cty_Countr *Cty)
   {
    extern const char *Txt_Another_country;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
@@ -1194,7 +1195,7 @@ static void Cty_ListCountriesForEdition (void)
   {
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    unsigned NumCty;
-   struct Country *Cty;
+   struct Cty_Countr *Cty;
    unsigned NumInss;
    unsigned NumUsrsCty;
    Lan_Language_t Lan;
@@ -1220,7 +1221,7 @@ static void Cty_ListCountriesForEdition (void)
 	  NumUsrsCty)					// Country has users
 	 // Deletion forbidden
 	 Ico_PutIconRemovalNotAllowed ();
-      else if (Usr_GetNumUsrsInCrss (Hie_CTY,Cty->CtyCod,
+      else if (Usr_GetNumUsrsInCrss (Hie_Lvl_CTY,Cty->CtyCod,
 				     1 << Rol_STD |
 				     1 << Rol_NET |
 				     1 << Rol_TCH))	// Country has users
@@ -1361,7 +1362,7 @@ void Cty_RemoveCountry (void)
    else if (Usr_GetNumUsrsWhoClaimToBelongToCty (Cty_EditingCty))	// Country has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_can_not_remove_a_country_with_institutions_or_users);
-   else if (Usr_GetNumUsrsInCrss (Hie_CTY,Cty_EditingCty->CtyCod,
+   else if (Usr_GetNumUsrsInCrss (Hie_Lvl_CTY,Cty_EditingCty->CtyCod,
 				  1 << Rol_STD |
 				  1 << Rol_NET |
 				  1 << Rol_TCH))			// Country has users
@@ -1370,7 +1371,7 @@ void Cty_RemoveCountry (void)
    else	// Country has no users ==> remove it
      {
       /***** Remove surveys of the country *****/
-      Svy_RemoveSurveys (Hie_CTY,Cty_EditingCty->CtyCod);
+      Svy_RemoveSurveys (Hie_Lvl_CTY,Cty_EditingCty->CtyCod);
 
       /***** Remove country *****/
       DB_QueryDELETE ("can not remove a country",
@@ -1922,12 +1923,12 @@ unsigned Cty_GetCachedNumCtysInSys (void)
    unsigned NumCtys;
 
    /***** Get number of countries from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS,Hie_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS,Hie_Lvl_SYS,-1L,
                                    FigCch_UNSIGNED,&NumCtys))
      {
       /***** Get current number of countries from database and update cache *****/
       NumCtys = (unsigned) DB_GetNumRowsTable ("countries");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS,Hie_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS,Hie_Lvl_SYS,-1L,
                                     FigCch_UNSIGNED,&NumCtys);
      }
 
@@ -1943,7 +1944,7 @@ unsigned Cty_GetCachedNumCtysWithInss (void)
    unsigned NumCtysWithInss;
 
    /***** Get number of countries with institutions from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_INSS,Hie_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_INSS,Hie_Lvl_SYS,-1L,
 				   FigCch_UNSIGNED,&NumCtysWithInss))
      {
       /***** Get current number of countries with institutions from cache *****/
@@ -1953,7 +1954,7 @@ unsigned Cty_GetCachedNumCtysWithInss (void)
 				       "SELECT COUNT(DISTINCT countries.CtyCod)"
 				       " FROM countries,institutions"
 				       " WHERE countries.CtyCod=institutions.CtyCod");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_INSS,Hie_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_INSS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithInss);
      }
 
@@ -1969,7 +1970,7 @@ unsigned Cty_GetCachedNumCtysWithCtrs (void)
    unsigned NumCtysWithCtrs;
 
    /***** Get number of countries with centres from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_CTRS,Hie_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_CTRS,Hie_Lvl_SYS,-1L,
 				   FigCch_UNSIGNED,&NumCtysWithCtrs))
      {
       /***** Get current number of countries with centres from database and update cache *****/
@@ -1979,7 +1980,7 @@ unsigned Cty_GetCachedNumCtysWithCtrs (void)
 				       " FROM countries,institutions,centres"
 				       " WHERE countries.CtyCod=institutions.CtyCod"
 				       " AND institutions.InsCod=centres.InsCod");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CTRS,Hie_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CTRS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithCtrs);
      }
 
@@ -1994,7 +1995,7 @@ unsigned Cty_GetCachedNumCtysWithDegs (void)
   {
    unsigned NumCtysWithDegs;
 
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_DEGS,Hie_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_DEGS,Hie_Lvl_SYS,-1L,
 				   FigCch_UNSIGNED,&NumCtysWithDegs))
      {
       NumCtysWithDegs = (unsigned)
@@ -2004,7 +2005,7 @@ unsigned Cty_GetCachedNumCtysWithDegs (void)
 				       " WHERE countries.CtyCod=institutions.CtyCod"
 				       " AND institutions.InsCod=centres.InsCod"
 				       " AND centres.CtrCod=degrees.CtrCod");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_DEGS,Hie_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_DEGS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithDegs);
      }
 
@@ -2020,7 +2021,7 @@ unsigned Cty_GetCachedNumCtysWithCrss (void)
    unsigned NumCtysWithCrss;
 
    /***** Get number of countries with courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_CRSS,Hie_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_CRSS,Hie_Lvl_SYS,-1L,
 				   FigCch_UNSIGNED,&NumCtysWithCrss))
      {
       /***** Get current number of countries with courses from database and update cache *****/
@@ -2032,7 +2033,7 @@ unsigned Cty_GetCachedNumCtysWithCrss (void)
 				       " AND institutions.InsCod=centres.InsCod"
 				       " AND centres.CtrCod=degrees.CtrCod"
 				       " AND degrees.DegCod=courses.DegCod");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CRSS,Hie_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CRSS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithCrss);
      }
 
@@ -2044,7 +2045,7 @@ unsigned Cty_GetCachedNumCtysWithCrss (void)
 /*****************************************************************************/
 
 unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod)
+                                       Hie_Lvl_Level_t Scope,long Cod)
   {
    static const FigCch_FigureCached_t FigureCtys[Rol_NUM_ROLES] =
      {
@@ -2087,7 +2088,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
    extern const char *Txt_countries;
    MYSQL_ROW row;
    unsigned NumCty;
-   struct Country Cty;
+   struct Cty_Countr Cty;
 
    /***** Query database *****/
    if (NumCtys)
@@ -2143,7 +2144,7 @@ static void Cty_EditingCountryConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing country.");
 
    /***** Allocate memory for country *****/
-   if ((Cty_EditingCty = (struct Country *) malloc (sizeof (struct Country))) == NULL)
+   if ((Cty_EditingCty = (struct Cty_Countr *) malloc (sizeof (struct Cty_Countr))) == NULL)
       Lay_ShowErrorAndExit ("Error allocating memory for country.");
 
    /***** Reset country *****/
@@ -2173,7 +2174,7 @@ static void Cty_EditingCountryDestructor (void)
 /************************ Form to go to country map **************************/
 /*****************************************************************************/
 
-static void Cty_FormToGoToMap (struct Country *Cty)
+static void Cty_FormToGoToMap (struct Cty_Countr *Cty)
   {
    extern const char *Txt_Map;
 

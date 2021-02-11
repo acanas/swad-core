@@ -31,7 +31,7 @@
 #include <stdbool.h>		// For boolean type
 
 #include "swad_action.h"
-#include "swad_hierarchy.h"
+#include "swad_hierarchy_level.h"
 #include "swad_institution.h"
 #include "swad_language.h"
 #include "swad_role_type.h"
@@ -45,7 +45,7 @@
 #define Cty_MAX_CHARS_NAME	(48 - 1)	// 47
 #define Cty_MAX_BYTES_NAME	((Cty_MAX_CHARS_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 767
 
-struct Country
+struct Cty_Countr
   {
    long CtyCod;
    char Alpha2[2 + 1];
@@ -69,7 +69,7 @@ typedef enum
 struct ListCountries
   {
    unsigned Num;		// Number of countries
-   struct Country *Lst;		// List of countries
+   struct Cty_Countr *Lst;	// List of countries
    Cty_Order_t SelectedOrder;	// Order of countries
   };
 
@@ -85,12 +85,12 @@ void Cty_ListCountries2 (void);
 
 bool Cty_CheckIfICanEditCountries (void);
 
-void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
+void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Action,
                                         const char *ClassContainer,
                                         const char *ClassMap,
                                         const char *ClassLink);
-void Cty_DrawCountryMap (struct Country *Cty,const char *Class);
-bool Cty_CheckIfCountryPhotoExists (struct Country *Cty);
+void Cty_DrawCountryMap (struct Cty_Countr *Cty,const char *Class);
+bool Cty_CheckIfCountryPhotoExists (struct Cty_Countr *Cty);
 
 void Cty_WriteScriptGoogleGeochart (void);
 void Cty_PutHiddenParamCtyOrder (void);
@@ -100,7 +100,7 @@ void Cty_GetFullListOfCountries (void);
 void Cty_FreeListCountries (void);
 void Cty_WriteSelectorOfCountry (void);
 void Cty_WriteCountryName (long CtyCod,const char *ClassLink);
-bool Cty_GetDataOfCountryByCod (struct Country *Cty);
+bool Cty_GetDataOfCountryByCod (struct Cty_Countr *Cty);
 void Cty_FlushCacheCountryName (void);
 void Cty_GetCountryName (long CtyCod,Lan_Language_t Language,
 			 char CtyName[Cty_MAX_BYTES_NAME + 1]);
@@ -120,7 +120,7 @@ unsigned Cty_GetCachedNumCtysWithDegs (void);
 unsigned Cty_GetCachedNumCtysWithCrss (void);
 
 unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod);
+                                       Hie_Lvl_Level_t Scope,long Cod);
 
 void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys);
 

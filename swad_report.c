@@ -538,7 +538,7 @@ static void Rep_WriteSectionUsrInfo (void)
    extern const char *Txt_Email;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
-   char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
+   char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
    struct Ins_Instit Ins;
 
    /***** Start section *****/
@@ -1191,11 +1191,11 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 	 /***** Write number of teachers / students in course *****/
 	 if (WriteNumUsrs)
 	    fprintf (Gbl.F.Rep," (%u %s / %u %s)",
-		     Usr_GetCachedNumUsrsInCrss (Hie_CRS,Crs.CrsCod,
+		     Usr_GetCachedNumUsrsInCrss (Hie_Lvl_CRS,Crs.CrsCod,
 				                 1 << Rol_NET |
 					         1 << Rol_TCH),
 		     Txt_teachers_ABBREVIATION,
-		     Usr_GetCachedNumUsrsInCrss (Hie_CRS,Crs.CrsCod,
+		     Usr_GetCachedNumUsrsInCrss (Hie_Lvl_CRS,Crs.CrsCod,
 				                 1 << Rol_STD),
 		     Txt_students_ABBREVIATION);
 	}

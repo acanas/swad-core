@@ -309,7 +309,7 @@ static void Cal_PutIconsCalendar (__attribute__((unused)) void *Args)
 				 NULL,NULL);
 
    /***** View holidays *****/
-   if (Gbl.Hierarchy.Level == Hie_INS)		// Institution selected
+   if (Gbl.Hierarchy.Level == Hie_Lvl_INS)		// Institution selected
       Hld_PutIconToSeeHlds ();
   }
 

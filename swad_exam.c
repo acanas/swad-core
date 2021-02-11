@@ -1883,7 +1883,7 @@ bool Exa_CheckIfEditable (const struct Exa_Exam *Exam)
 /*****************************************************************************/
 // Returns the number of courses with exams in this location
 
-unsigned Exa_GetNumCoursesWithExams (Hie_Level_t Scope)
+unsigned Exa_GetNumCoursesWithExams (Hie_Lvl_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1892,12 +1892,12 @@ unsigned Exa_GetNumCoursesWithExams (Hie_Level_t Scope)
    /***** Get number of courses with exams from database *****/
    switch (Scope)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with exams",
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM exa_exams");
          break;
-      case Hie_CTY:
+      case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with exams",
 			 "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
 			 " FROM institutions,centres,degrees,courses,exa_exams"
@@ -1908,7 +1908,7 @@ unsigned Exa_GetNumCoursesWithExams (Hie_Level_t Scope)
 			 " AND courses.CrsCod=exa_exams.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_INS:
+      case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with exams",
 			 "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
 			 " FROM centres,degrees,courses,exa_exams"
@@ -1918,7 +1918,7 @@ unsigned Exa_GetNumCoursesWithExams (Hie_Level_t Scope)
 			 " AND courses.CrsCod=exa_exams.CrsCod",
 		         Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with exams",
 			 "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
 			 " FROM degrees,courses,exa_exams"
@@ -1927,7 +1927,7 @@ unsigned Exa_GetNumCoursesWithExams (Hie_Level_t Scope)
 			 " AND courses.CrsCod=exa_exams.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_DEG:
+      case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with exams",
 			 "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
 			 " FROM courses,exa_exams"
@@ -1935,7 +1935,7 @@ unsigned Exa_GetNumCoursesWithExams (Hie_Level_t Scope)
 			 " AND courses.CrsCod=exa_exams.CrsCod",
 		         Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Hie_CRS:
+      case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with exams",
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM exa_exams"
@@ -1963,7 +1963,7 @@ unsigned Exa_GetNumCoursesWithExams (Hie_Level_t Scope)
 /*****************************************************************************/
 // Returns the number of exams in this location
 
-unsigned Exa_GetNumExams (Hie_Level_t Scope)
+unsigned Exa_GetNumExams (Hie_Lvl_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1972,12 +1972,12 @@ unsigned Exa_GetNumExams (Hie_Level_t Scope)
    /***** Get number of exams from database *****/
    switch (Scope)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of exams",
                          "SELECT COUNT(*)"
 			 " FROM exa_exams");
          break;
-      case Hie_CTY:
+      case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of exams",
                          "SELECT COUNT(*)"
 			 " FROM institutions,centres,degrees,courses,exa_exams"
@@ -1988,7 +1988,7 @@ unsigned Exa_GetNumExams (Hie_Level_t Scope)
 			 " AND courses.CrsCod=exa_exams.CrsCod",
 		         Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_INS:
+      case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of exams",
                          "SELECT COUNT(*)"
 			 " FROM centres,degrees,courses,exa_exams"
@@ -1998,7 +1998,7 @@ unsigned Exa_GetNumExams (Hie_Level_t Scope)
 			 " AND courses.CrsCod=exa_exams.CrsCod",
 		         Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of exams",
                          "SELECT COUNT(*)"
 			 " FROM degrees,courses,exa_exams"
@@ -2007,7 +2007,7 @@ unsigned Exa_GetNumExams (Hie_Level_t Scope)
 			 " AND courses.CrsCod=exa_exams.CrsCod",
 		         Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_DEG:
+      case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of exams",
                          "SELECT COUNT(*)"
 			 " FROM courses,exa_exams"
@@ -2015,7 +2015,7 @@ unsigned Exa_GetNumExams (Hie_Level_t Scope)
 			 " AND courses.CrsCod=exa_exams.CrsCod",
 		         Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Hie_CRS:
+      case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of exams",
                          "SELECT COUNT(*)"
 			 " FROM exa_exams"
@@ -2042,7 +2042,7 @@ unsigned Exa_GetNumExams (Hie_Level_t Scope)
 /************* Get average number of questions per course exam ***************/
 /*****************************************************************************/
 
-double Exa_GetNumQstsPerCrsExam (Hie_Level_t Scope)
+double Exa_GetNumQstsPerCrsExam (Hie_Lvl_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2051,7 +2051,7 @@ double Exa_GetNumQstsPerCrsExam (Hie_Level_t Scope)
    /***** Get number of questions per exam from database *****/
    switch (Scope)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
@@ -2059,7 +2059,7 @@ double Exa_GetNumQstsPerCrsExam (Hie_Level_t Scope)
 			 " WHERE exa_exams.ExaCod=exa_set_questions.ExaCod"
 			 " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable");
          break;
-      case Hie_CTY:
+      case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
@@ -2073,7 +2073,7 @@ double Exa_GetNumQstsPerCrsExam (Hie_Level_t Scope)
 			 " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
                          Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_INS:
+      case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
@@ -2086,7 +2086,7 @@ double Exa_GetNumQstsPerCrsExam (Hie_Level_t Scope)
 			 " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
 		         Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
@@ -2098,7 +2098,7 @@ double Exa_GetNumQstsPerCrsExam (Hie_Level_t Scope)
 			 " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_DEG:
+      case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
@@ -2109,7 +2109,7 @@ double Exa_GetNumQstsPerCrsExam (Hie_Level_t Scope)
 			 " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
 		         Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Hie_CRS:
+      case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"

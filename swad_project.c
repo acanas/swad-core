@@ -4585,7 +4585,7 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
 // Returns the number of courses with projects
 // in this location (all the platform, current degree or current course)
 
-unsigned Prj_GetNumCoursesWithProjects (Hie_Level_t Scope)
+unsigned Prj_GetNumCoursesWithProjects (Hie_Lvl_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -4594,13 +4594,13 @@ unsigned Prj_GetNumCoursesWithProjects (Hie_Level_t Scope)
    /***** Get number of courses with projects from database *****/
    switch (Scope)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with projects",
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM projects"
 			 " WHERE CrsCod>0");
          break;
-       case Hie_CTY:
+       case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with projects",
 			 "SELECT COUNT(DISTINCT projects.CrsCod)"
 			 " FROM institutions,centres,degrees,courses,projects"
@@ -4612,7 +4612,7 @@ unsigned Prj_GetNumCoursesWithProjects (Hie_Level_t Scope)
 			 " AND courses.CrsCod=projects.CrsCod",
                          Gbl.Hierarchy.Cty.CtyCod);
          break;
-       case Hie_INS:
+       case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with projects",
 			 "SELECT COUNT(DISTINCT projects.CrsCod)"
 			 " FROM centres,degrees,courses,projects"
@@ -4623,7 +4623,7 @@ unsigned Prj_GetNumCoursesWithProjects (Hie_Level_t Scope)
 			 " AND courses.CrsCod=projects.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with projects",
 			 "SELECT COUNT(DISTINCT projects.CrsCod)"
 			 " FROM degrees,courses,projects"
@@ -4633,7 +4633,7 @@ unsigned Prj_GetNumCoursesWithProjects (Hie_Level_t Scope)
 			 " AND courses.CrsCod=projects.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_DEG:
+      case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with projects",
 			 "SELECT COUNT(DISTINCT projects.CrsCod)"
 			 " FROM courses,projects"
@@ -4642,7 +4642,7 @@ unsigned Prj_GetNumCoursesWithProjects (Hie_Level_t Scope)
 			 " AND courses.CrsCod=projects.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Hie_CRS:
+      case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with projects",
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM projects"
@@ -4670,7 +4670,7 @@ unsigned Prj_GetNumCoursesWithProjects (Hie_Level_t Scope)
 /*****************************************************************************/
 // Returns the number of projects in this location
 
-unsigned Prj_GetNumProjects (Hie_Level_t Scope)
+unsigned Prj_GetNumProjects (Hie_Lvl_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -4679,13 +4679,13 @@ unsigned Prj_GetNumProjects (Hie_Level_t Scope)
    /***** Get number of projects from database *****/
    switch (Scope)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of projects",
 			 "SELECT COUNT(*)"
                          " FROM projects"
                          " WHERE CrsCod>0");
          break;
-      case Hie_CTY:
+      case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of projects",
 			 "SELECT COUNT(*)"
 			 " FROM institutions,centres,degrees,courses,projects"
@@ -4696,7 +4696,7 @@ unsigned Prj_GetNumProjects (Hie_Level_t Scope)
 			 " AND courses.CrsCod=projects.CrsCod",
                          Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_INS:
+      case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of projects",
 			 "SELECT COUNT(*)"
 			 " FROM centres,degrees,courses,projects"
@@ -4706,7 +4706,7 @@ unsigned Prj_GetNumProjects (Hie_Level_t Scope)
 			 " AND courses.CrsCod=projects.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of projects",
 			 "SELECT COUNT(*)"
 			 " FROM degrees,courses,projects"
@@ -4715,7 +4715,7 @@ unsigned Prj_GetNumProjects (Hie_Level_t Scope)
 			 " AND courses.CrsCod=projects.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_DEG:
+      case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of projects",
 			 "SELECT COUNT(*)"
 			 " FROM courses,projects"
@@ -4723,7 +4723,7 @@ unsigned Prj_GetNumProjects (Hie_Level_t Scope)
 			 " AND courses.CrsCod=projects.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Hie_CRS:
+      case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of projects",
 			 "SELECT COUNT(*)"
 			 " FROM projects"

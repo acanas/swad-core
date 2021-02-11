@@ -469,8 +469,8 @@ mysql> DESCRIBE centres;
 			"Latitude DOUBLE PRECISION NOT NULL DEFAULT 0,"
 			"Longitude DOUBLE PRECISION NOT NULL DEFAULT 0,"
 			"Altitude DOUBLE PRECISION NOT NULL DEFAULT 0,"
-			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
-			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_HIERARCHY_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_HIERARCHY_MAX_BYTES_FULL_NAME
 			"WWW VARCHAR(255) NOT NULL,"					// Cns_MAX_BYTES_WWW
 			"PhotoAttribution TEXT NOT NULL,"				// Med_MAX_BYTES_ATTRIBUTION
 		   "UNIQUE INDEX(CtrCod),"
@@ -648,8 +648,8 @@ mysql> DESCRIBE courses;
 			"InsCrsCod CHAR(7) NOT NULL,"
 			"Status TINYINT NOT NULL DEFAULT 0,"
 			"RequesterUsrCod INT NOT NULL DEFAULT -1,"
-			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
-			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_HIERARCHY_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_HIERARCHY_MAX_BYTES_FULL_NAME
 			"NumIndicators INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(CrsCod),"
 		   "INDEX(DegCod,Year),"
@@ -968,8 +968,8 @@ mysql> DESCRIBE degrees;
 			"DegTypCod INT NOT NULL,"
 			"Status TINYINT NOT NULL DEFAULT 0,"
 			"RequesterUsrCod INT NOT NULL DEFAULT -1,"
-			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
-			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_HIERARCHY_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_HIERARCHY_MAX_BYTES_FULL_NAME
 			"WWW VARCHAR(255) NOT NULL,"					// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(DegCod),"
 		   "INDEX(CtrCod),"
@@ -993,8 +993,8 @@ mysql> DESCRIBE departments;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS departments ("
 			"DptCod INT NOT NULL AUTO_INCREMENT,"
 			"InsCod INT NOT NULL,"
-			"ShortName VARCHAR(511) NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
-			"FullName VARCHAR(2047) NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"ShortName VARCHAR(511) NOT NULL,"	// Cns_HIERARCHY_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) NOT NULL,"	// Cns_HIERARCHY_MAX_BYTES_FULL_NAME
 			"WWW VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(DptCod),"
 		   "INDEX(InsCod))");
@@ -1308,7 +1308,7 @@ mysql> DESCRIBE exam_announcements;
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"Status TINYINT NOT NULL DEFAULT 0,"
 			"NumNotif INT NOT NULL DEFAULT 0,"
-			"CrsFullName VARCHAR(2047) NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"CrsFullName VARCHAR(2047) NOT NULL,"	// Cns_HIERARCHY_MAX_BYTES_FULL_NAME
 			"Year TINYINT NOT NULL,"
 			"ExamSession VARCHAR(2047) NOT NULL,"	// ExaAnn_MAX_BYTES_SESSION
 			"CallDate DATETIME NOT NULL,"
@@ -1935,8 +1935,8 @@ mysql> DESCRIBE institutions;
 			"CtyCod INT NOT NULL,"
 			"Status TINYINT NOT NULL DEFAULT 0,"
 			"RequesterUsrCod INT NOT NULL DEFAULT -1,"
-			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
-			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_HIERARCHY_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_HIERARCHY_MAX_BYTES_FULL_NAME
 			"WWW VARCHAR(255) NOT NULL,"					// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(InsCod),"
 		   "INDEX(CtyCod),"

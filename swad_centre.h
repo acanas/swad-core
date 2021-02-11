@@ -68,8 +68,8 @@ struct Ctr_Centre
    Ctr_Status_t Status;		// Centre status
    long RequesterUsrCod;	// User code of the person who requested the creation of this centre
    struct Coordinates Coord;	// Geographical coordinates
-   char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
-   char FullName[Hie_MAX_BYTES_FULL_NAME + 1];
+   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
+   char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct
      {
@@ -148,11 +148,11 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod);
 unsigned Ctr_GetNumCtrsInPlc (long PlcCod);
 
 unsigned Ctr_GetCachedNumCtrsWithDegs (const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod);
+                                       Hie_Lvl_Level_t Scope,long Cod);
 unsigned Ctr_GetCachedNumCtrsWithCrss (const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod);
+                                       Hie_Lvl_Level_t Scope,long Cod);
 unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod);
+                                       Hie_Lvl_Level_t Scope,long Cod);
 
 void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs);
 

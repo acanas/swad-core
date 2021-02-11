@@ -1858,7 +1858,7 @@ unsigned Agd_GetNumEventsFromUsr (long UsrCod)
 /*****************************************************************************/
 // Returns the number of users with events in a given scope
 
-unsigned Agd_GetNumUsrsWithEvents (Hie_Level_t Scope)
+unsigned Agd_GetNumUsrsWithEvents (Hie_Lvl_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1867,13 +1867,13 @@ unsigned Agd_GetNumUsrsWithEvents (Hie_Level_t Scope)
    /***** Get number of courses with events from database *****/
    switch (Scope)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
                          "SELECT COUNT(DISTINCT UsrCod)"
 			 " FROM agendas"
 			 " WHERE UsrCod>0");
          break;
-       case Hie_CTY:
+       case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
                          "SELECT COUNT(DISTINCT agendas.UsrCod)"
 			 " FROM institutions,centres,degrees,courses,crs_usr,agendas"
@@ -1886,7 +1886,7 @@ unsigned Agd_GetNumUsrsWithEvents (Hie_Level_t Scope)
 			 " AND crs_usr.UsrCod=agendas.UsrCod",
 		         Gbl.Hierarchy.Cty.CtyCod);
          break;
-       case Hie_INS:
+       case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
                          "SELECT COUNT(DISTINCT agendas.UsrCod)"
 			 " FROM centres,degrees,courses,crs_usr,agendas"
@@ -1898,7 +1898,7 @@ unsigned Agd_GetNumUsrsWithEvents (Hie_Level_t Scope)
 			 " AND crs_usr.UsrCod=agendas.UsrCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
                          "SELECT COUNT(DISTINCT agendas.UsrCod)"
 			 " FROM degrees,courses,crs_usr,agendas"
@@ -1909,7 +1909,7 @@ unsigned Agd_GetNumUsrsWithEvents (Hie_Level_t Scope)
 			 " AND crs_usr.UsrCod=agendas.UsrCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_DEG:
+      case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
                          "SELECT COUNT(DISTINCT agendas.UsrCod)"
 			 " FROM courses,crs_usr,agendas"
@@ -1919,7 +1919,7 @@ unsigned Agd_GetNumUsrsWithEvents (Hie_Level_t Scope)
 			 " AND crs_usr.UsrCod=agendas.UsrCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Hie_CRS:
+      case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
                          "SELECT COUNT(DISTINCT agendas.UsrCod)"
 			 " FROM crs_usr,agendas"
@@ -1948,7 +1948,7 @@ unsigned Agd_GetNumUsrsWithEvents (Hie_Level_t Scope)
 /*****************************************************************************/
 // Returns the number of events in a given scope
 
-unsigned Agd_GetNumEvents (Hie_Level_t Scope)
+unsigned Agd_GetNumEvents (Hie_Lvl_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1957,13 +1957,13 @@ unsigned Agd_GetNumEvents (Hie_Level_t Scope)
    /***** Get number of events from database *****/
    switch (Scope)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of events",
                          "SELECT COUNT(*)"
 			 " FROM agendas"
 			 " WHERE UsrCod>0");
          break;
-      case Hie_CTY:
+      case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of events",
                          "SELECT COUNT(*)"
 			 " FROM institutions,centres,degrees,courses,crs_usr,agendas"
@@ -1975,7 +1975,7 @@ unsigned Agd_GetNumEvents (Hie_Level_t Scope)
 			 " AND crs_usr.UsrCod=agendas.UsrCod",
                          Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_INS:
+      case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of events",
                          "SELECT COUNT(*)"
 			 " FROM centres,degrees,courses,crs_usr,agendas"
@@ -1986,7 +1986,7 @@ unsigned Agd_GetNumEvents (Hie_Level_t Scope)
 			 " AND crs_usr.UsrCod=agendas.UsrCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of events",
                          "SELECT COUNT(*)"
 			 " FROM degrees,courses,crs_usr,agendas"
@@ -1996,7 +1996,7 @@ unsigned Agd_GetNumEvents (Hie_Level_t Scope)
 			 " AND crs_usr.UsrCod=agendas.UsrCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_DEG:
+      case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of events",
                          "SELECT COUNT(*)"
 			 " FROM courses,crs_usr,agendas"
@@ -2005,7 +2005,7 @@ unsigned Agd_GetNumEvents (Hie_Level_t Scope)
 			 " AND crs_usr.UsrCod=agendas.UsrCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Hie_CRS:
+      case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of events",
                          "SELECT COUNT(*)"
 			 " FROM crs_usr,agendas"

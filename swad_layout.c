@@ -46,6 +46,7 @@
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_level.h"
 #include "swad_holiday.h"
 #include "swad_HTML.h"
 #include "swad_language.h"
@@ -446,7 +447,7 @@ static void Lay_WritePageTitle (void)
    if (Gbl.Params.GetMethod && Gbl.Hierarchy.Deg.DegCod > 0)
      {
       HTM_TxtF ("%s &gt; %s",Cfg_PLATFORM_SHORT_NAME,Gbl.Hierarchy.Deg.ShrtName);
-      if (Gbl.Hierarchy.Level == Hie_CRS)
+      if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)
          HTM_TxtF (" &gt; %s",Gbl.Hierarchy.Crs.ShrtName);
      }
    else
@@ -1162,7 +1163,7 @@ static void Lay_ShowLeftColumn (void)
    HTM_DIV_End ();
 
    /***** Notices (yellow notes) *****/
-   if (Gbl.Hierarchy.Level == Hie_CRS)
+   if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)
      {
       HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
       Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
@@ -1195,10 +1196,10 @@ static void Lay_ShowRightColumn (void)
      }
 
    /***** Number of connected users in the current course *****/
-   if (Gbl.Hierarchy.Level == Hie_CRS)	// There is a course selected
+   if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// There is a course selected
      {
       HTM_DIV_Begin ("id=\"courseconnected\" class=\"LEFT_RIGHT_CELL\"");	// Used for AJAX based refresh
-      Gbl.Scope.Current = Hie_CRS;
+      Gbl.Scope.Current = Hie_Lvl_CRS;
       Con_ShowConnectedUsrsBelongingToCurrentCrs ();
       HTM_DIV_End ();								// Used for AJAX based refresh
      }
@@ -1613,7 +1614,7 @@ void Lay_RefreshNotifsAndConnected (void)
   {
    unsigned NumUsr;
    bool ShowConnected = (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
-                        Gbl.Hierarchy.Level == Hie_CRS;	// Right column visible && There is a course selected
+                        Gbl.Hierarchy.Level == Hie_Lvl_CRS;	// Right column visible && There is a course selected
 
    /***** Sometimes, someone must do this work,
           so who best than processes that refresh via AJAX? *****/
@@ -1654,7 +1655,7 @@ void Lay_RefreshNotifsAndConnected (void)
    HTM_Txt ("|");
    if (ShowConnected)
      {
-      Gbl.Scope.Current = Hie_CRS;
+      Gbl.Scope.Current = Hie_Lvl_CRS;
       Con_ShowConnectedUsrsBelongingToCurrentCrs ();
      }
    HTM_Txt ("|");
@@ -1738,7 +1739,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
      {
       if (!PrintView)
          HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Ins.WWW);
-      Lgo_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,40,NULL,true);
+      Lgo_DrawLogo (Hie_Lvl_INS,Ins.InsCod,Ins.ShrtName,40,NULL,true);
       if (!PrintView)
          HTM_A_End ();
      }
@@ -1785,7 +1786,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
       if (!PrintView)
          HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
                       Deg.WWW);
-      Lgo_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,40,NULL,true);
+      Lgo_DrawLogo (Hie_Lvl_DEG,Deg.DegCod,Deg.ShrtName,40,NULL,true);
       if (!PrintView)
          HTM_A_End ();
      }

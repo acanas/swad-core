@@ -37,6 +37,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
+#include "swad_hierarchy.h"
 #include "swad_hierarchy_config.h"
 #include "swad_HTML.h"
 
@@ -170,10 +171,10 @@ static void CtyCfg_Configuration (bool PrintView)
       CtyCfg_NumCrss ();
 
       /***** Number of users in courses of this country *****/
-      HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_TCH);
-      HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_NET);
-      HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_STD);
-      HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_UNK);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_TCH);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_NET);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_STD);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_UNK);
      }
 
    /***** End table *****/
@@ -274,8 +275,8 @@ static void CtyCfg_Map (void)
    unsigned Zoom;
    unsigned NumCtrs;
    unsigned NumCtr;
-   struct Ctr_Centre Ctr;
    struct Ins_Instit Ins;
+   struct Ctr_Centre Ctr;
 
    /***** Leaflet CSS *****/
    Map_LeafletCSS ();

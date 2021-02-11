@@ -187,10 +187,10 @@ struct Globals
      } HTMLOutput;
    struct
      {
-      Hie_Level_t Level;	// Current level in the hierarchy: system, country, institution, centre, degree or course
+      Hie_Lvl_Level_t Level;	// Current level in the hierarchy: system, country, institution, centre, degree or course
       long Cod;			// Code of the current country, institution, centre, degree or course
       struct ListCountries Ctys;// List of countries
-      struct Country Cty;	// Current country
+      struct Cty_Countr Cty;	// Current country
       struct ListInstits Inss;	// List of institutions in current country
       struct Ins_Instit Ins;	// Current institution
       struct ListCentres Ctrs;	// List of centres in current institution
@@ -361,8 +361,8 @@ struct Globals
      } Record;
    struct
      {
-      Hie_Level_t Current;
-      Hie_Level_t Default;
+      Hie_Lvl_Level_t Current;
+      Hie_Lvl_Level_t Default;
       unsigned Allowed;
      } Scope;
    struct
@@ -453,13 +453,13 @@ struct Globals
       struct
 	{
 	 long InsCod;
-	 char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
+	 char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
 	} InstitutionShrtName;
       struct
 	{
 	 long InsCod;
-	 char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
-	 char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
+	 char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
+	 char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
 	} InstitutionShrtNameAndCty;
       struct
         {

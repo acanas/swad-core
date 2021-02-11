@@ -1692,7 +1692,7 @@ unsigned Att_GetNumAttEventsInCrs (long CrsCod)
 // Returns the number of courses with attendance events
 // in this location (all the platform, current degree or current course)
 
-unsigned Att_GetNumCoursesWithAttEvents (Hie_Level_t Scope)
+unsigned Att_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1701,13 +1701,13 @@ unsigned Att_GetNumCoursesWithAttEvents (Hie_Level_t Scope)
    /***** Get number of courses with attendance events from database *****/
    switch (Scope)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with attendance events",
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM att_events"
 			 " WHERE CrsCod>0");
          break;
-      case Hie_INS:
+      case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with attendance events",
 			 "SELECT COUNT(DISTINCT att_events.CrsCod)"
 			 " FROM centres,degrees,courses,att_events"
@@ -1718,7 +1718,7 @@ unsigned Att_GetNumCoursesWithAttEvents (Hie_Level_t Scope)
 			 " AND courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with attendance events",
 			 "SELECT COUNT(DISTINCT att_events.CrsCod)"
 			 " FROM degrees,courses,att_events"
@@ -1728,7 +1728,7 @@ unsigned Att_GetNumCoursesWithAttEvents (Hie_Level_t Scope)
 			 " AND courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_DEG:
+      case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with attendance events",
 			 "SELECT COUNT(DISTINCT att_events.CrsCod)"
 			 " FROM courses,att_events"
@@ -1737,7 +1737,7 @@ unsigned Att_GetNumCoursesWithAttEvents (Hie_Level_t Scope)
 			 " AND courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Hie_CRS:
+      case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with attendance events",
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM att_events"
@@ -1766,7 +1766,7 @@ unsigned Att_GetNumCoursesWithAttEvents (Hie_Level_t Scope)
 // Returns the number of attendance events
 // in this location (all the platform, current degree or current course)
 
-unsigned Att_GetNumAttEvents (Hie_Level_t Scope,unsigned *NumNotif)
+unsigned Att_GetNumAttEvents (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1775,13 +1775,13 @@ unsigned Att_GetNumAttEvents (Hie_Level_t Scope,unsigned *NumNotif)
    /***** Get number of attendance events from database *****/
    switch (Scope)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),SUM(NumNotif)"
 			 " FROM att_events"
 			 " WHERE CrsCod>0");
          break;
-      case Hie_INS:
+      case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),SUM(att_events.NumNotif)"
 			 " FROM centres,degrees,courses,att_events"
@@ -1791,7 +1791,7 @@ unsigned Att_GetNumAttEvents (Hie_Level_t Scope,unsigned *NumNotif)
 			 " AND courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),SUM(att_events.NumNotif)"
 			 " FROM degrees,courses,att_events"
@@ -1800,7 +1800,7 @@ unsigned Att_GetNumAttEvents (Hie_Level_t Scope,unsigned *NumNotif)
 			 " AND courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_DEG:
+      case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),SUM(att_events.NumNotif)"
 			 " FROM courses,att_events"
@@ -1808,7 +1808,7 @@ unsigned Att_GetNumAttEvents (Hie_Level_t Scope,unsigned *NumNotif)
 			 " AND courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Hie_CRS:
+      case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),SUM(NumNotif)"
 			 " FROM att_events"
@@ -1980,7 +1980,7 @@ static void Att_ListAttStudents (struct Att_Events *Events,
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order list of students in this course *****/
-   Usr_GetListUsrs (Hie_CRS,Rol_STD);
+   Usr_GetListUsrs (Hie_Lvl_CRS,Rol_STD);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Attendance,
@@ -2374,7 +2374,7 @@ void Att_RegisterStudentsInAttEvent (void)
 
    /***** 1. Get list of students in the groups selected: Gbl.Usrs.LstUsrs[Rol_STD] *****/
    /* Get list of students in the groups selected */
-   Usr_GetListUsrs (Hie_CRS,Rol_STD);
+   Usr_GetListUsrs (Hie_Lvl_CRS,Rol_STD);
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)	// If there are students in the groups selected...
      {

@@ -119,24 +119,24 @@ void Rol_SetMyRoles (void)
      {
       /* Check if I am and administrator of current institution */
       ICanBeInsAdm = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                          Hie_INS,
+                                          Hie_Lvl_INS,
                                           Gbl.Hierarchy.Ins.InsCod);
       if (Gbl.Hierarchy.Ctr.CtrCod > 0)
 	{
 	 /* Check if I am and administrator of current centre */
 	 ICanBeCtrAdm = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-	                                     Hie_CTR,
+	                                     Hie_Lvl_CTR,
 	                                     Gbl.Hierarchy.Ctr.CtrCod);
 	 if (Gbl.Hierarchy.Deg.DegCod > 0)
 	    /* Check if I am and administrator of current degree */
 	    ICanBeDegAdm = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-	                                        Hie_DEG,
+	                                        Hie_Lvl_DEG,
 	                                        Gbl.Hierarchy.Deg.DegCod);
 	}
      }
 
    /***** Check if I belong to current course *****/
-   if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+   if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
      {
       Gbl.Usrs.Me.IBelongToCurrentCrs = Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Me.UsrDat);
       if (Gbl.Usrs.Me.IBelongToCurrentCrs)
@@ -184,7 +184,7 @@ void Rol_SetMyRoles (void)
       Gbl.Usrs.Me.IBelongToCurrentIns = false;
 
    /***** Build my list of available roles for current course *****/
-   if (Gbl.Hierarchy.Level == Hie_CRS)
+   if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)
      {
       if (Gbl.Usrs.Me.IBelongToCurrentCrs)
          Gbl.Usrs.Me.Role.Available = (1 << Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role);

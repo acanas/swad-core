@@ -38,6 +38,7 @@
 #include "swad_firewall.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_level.h"
 #include "swad_MFU.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"

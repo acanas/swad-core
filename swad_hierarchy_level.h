@@ -1,7 +1,7 @@
-// swad_hierarchy.h: hierarchy (system, institution, centre, degree, course)
+// swad_hierarchy_level.h: hierarchy levels: system, institution, centre, degree, course
 
-#ifndef _SWAD_HIE
-#define _SWAD_HIE
+#ifndef _SWAD_HIE_LVL
+#define _SWAD_HIE_LVL
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,12 +27,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_centre.h"
-#include "swad_country.h"
-#include "swad_course.h"
-#include "swad_degree.h"
-#include "swad_institution.h"
-
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
@@ -41,32 +35,21 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-struct Hie_Hierarchy
+// Levels in the hierarchy
+#define Hie_Lvl_NUM_LEVELS	7
+typedef enum
   {
-   struct Cty_Countr Cty;
-   struct Ins_Instit Ins;
-   struct Ctr_Centre Ctr;
-   struct Deg_Degree Deg;
-   struct Crs_Course Crs;
-  };
+   Hie_Lvl_UNK = 0,	// Unknown
+   Hie_Lvl_SYS = 1,	// System
+   Hie_Lvl_CTY = 2,	// Country
+   Hie_Lvl_INS = 3,	// Institution
+   Hie_Lvl_CTR = 4,	// Centre
+   Hie_Lvl_DEG = 5,	// Degree
+   Hie_Lvl_CRS = 6,	// Course
+  } Hie_Lvl_Level_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
-
-void Hie_SeePending (void);
-
-void Hie_WriteMenuHierarchy (void);
-void Hie_WriteHierarchyInBreadcrumb (void);
-void Hie_WriteBigNameCtyInsCtrDegCrs (void);
-
-void Hie_SetHierarchyFromUsrLastHierarchy (void);
-void Hie_InitHierarchy (void);
-void Hie_ResetHierarchy (void);
-
-void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan);
-
-char *Hie_BuildGoToMsg (const char *Where);
-void Hie_FreeGoToMsg (void);
 
 #endif

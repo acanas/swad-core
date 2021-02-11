@@ -67,12 +67,12 @@ static struct DegreeType *DT_EditingDegTyp = NULL;	// Static variable to keep th
 /*************************** Private prototypes ******************************/
 /*****************************************************************************/
 
-static void DT_SeeDegreeTypes (Act_Action_t NextAction,Hie_Level_t Scope,
+static void DT_SeeDegreeTypes (Act_Action_t NextAction,Hie_Lvl_Level_t Scope,
                                DT_Order_t DefaultOrder);
 static DT_Order_t DT_GetParamDegTypOrder (DT_Order_t DefaultOrder);
 
 static void DT_ListDegreeTypes (Act_Action_t NextAction,
-                                Hie_Level_t Scope,
+                                Hie_Lvl_Level_t Scope,
                                 DT_Order_t SelectedOrder);
 
 static void DT_EditDegreeTypesInternal (void);
@@ -86,7 +86,7 @@ static void DT_ListDegreeTypesForEdition (void);
 static void DT_PutFormToCreateDegreeType (void);
 
 static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
-                                            Hie_Level_t Scope,
+                                            Hie_Lvl_Level_t Scope,
                                             DT_Order_t SelectedOrder);
 static void DT_PutHeadDegreeTypesForEdition (void);
 static void DT_CreateDegreeType (struct DegreeType *DegTyp);
@@ -111,7 +111,7 @@ void DT_WriteSelectorDegreeTypes (long SelectedDegTypCod)
 
    /***** Form to select degree types *****/
    /* Get list of degree types */
-   DT_GetListDegreeTypes (Hie_SYS,DT_ORDER_BY_DEGREE_TYPE);
+   DT_GetListDegreeTypes (Hie_Lvl_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /* List degree types */
    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
@@ -137,7 +137,7 @@ void DT_WriteSelectorDegreeTypes (long SelectedDegTypCod)
 
 void DT_SeeDegreeTypesInDegTab (void)
   {
-   DT_SeeDegreeTypes (ActSeeDegTyp,Hie_SYS,
+   DT_SeeDegreeTypes (ActSeeDegTyp,Hie_Lvl_SYS,
                       DT_ORDER_BY_DEGREE_TYPE);	// Default order if not specified
   }
 
@@ -147,7 +147,7 @@ void DT_SeeDegreeTypesInStaTab (void)
                       DT_ORDER_BY_NUM_DEGREES);	// Default order if not specified
   }
 
-static void DT_SeeDegreeTypes (Act_Action_t NextAction,Hie_Level_t Scope,
+static void DT_SeeDegreeTypes (Act_Action_t NextAction,Hie_Lvl_Level_t Scope,
                                DT_Order_t DefaultOrder)
   {
    DT_Order_t SelectedOrder;
@@ -185,7 +185,7 @@ static DT_Order_t DT_GetParamDegTypOrder (DT_Order_t DefaultOrder)
 // - statistic tab	=> NextAction = ActSeeUseGbl
 
 static void DT_ListDegreeTypes (Act_Action_t NextAction,
-                                Hie_Level_t Scope,
+                                Hie_Lvl_Level_t Scope,
                                 DT_Order_t SelectedOrder)
   {
    extern const char *Hlp_CENTRE_DegreeTypes;
@@ -262,7 +262,7 @@ static void DT_EditDegreeTypesInternal (void)
    extern const char *Txt_Types_of_degree;
 
    /***** Get list of degree types *****/
-   DT_GetListDegreeTypes (Hie_SYS,DT_ORDER_BY_DEGREE_TYPE);
+   DT_GetListDegreeTypes (Hie_Lvl_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Types_of_degree,
@@ -376,7 +376,7 @@ static void DT_PutIconsListingDegTypes (__attribute__((unused)) void *Args)
 
 static void DT_PutIconToEditDegTypes (__attribute__((unused)) void *Args)
   {
-   if (Gbl.Hierarchy.Level == Hie_CTR &&	// Only editable if centre tab is visible
+   if (Gbl.Hierarchy.Level == Hie_Lvl_CTR &&	// Only editable if centre tab is visible
        DT_CheckIfICanCreateDegreeTypes ())
       Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL,
 				   NULL,NULL);
@@ -503,7 +503,7 @@ static void DT_PutFormToCreateDegreeType (void)
 /*****************************************************************************/
 
 static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
-                                            Hie_Level_t Scope,
+                                            Hie_Lvl_Level_t Scope,
                                             DT_Order_t SelectedOrder)
   {
    extern const char *Txt_DEGREE_TYPES_HELP_ORDER[DT_NUM_ORDERS];
@@ -582,7 +582,7 @@ static void DT_CreateDegreeType (struct DegreeType *DegTyp)
 /**************** Create a list with all the degree types ********************/
 /*****************************************************************************/
 
-void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
+void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
   {
    static const char *OrderBySubQuery[DT_NUM_ORDERS] =
      {
@@ -596,7 +596,7 @@ void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
    /***** Get types of degree from database *****/
    switch (Scope)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
 	 /* Get
 	    all degree types with degrees
 	    union with
@@ -622,7 +622,7 @@ void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
 			 " ORDER BY %s",
 			 OrderBySubQuery[Order]);
          break;
-      case Hie_CTY:
+      case Hie_Lvl_CTY:
 	 /* Get only degree types with degrees in the current country */
 	 Gbl.DegTypes.Num = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get types of degree",
@@ -639,7 +639,7 @@ void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
 			 Gbl.Hierarchy.Cty.CtyCod,
 			 OrderBySubQuery[Order]);
          break;
-      case Hie_INS:
+      case Hie_Lvl_INS:
 	 /* Get only degree types with degrees in the current institution */
 	 Gbl.DegTypes.Num = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get types of degree",
@@ -655,7 +655,7 @@ void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
 			 Gbl.Hierarchy.Ins.InsCod,
 			 OrderBySubQuery[Order]);
 	 break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
 	 /* Get only degree types with degrees in the current centre */
 	 Gbl.DegTypes.Num = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get types of degree",
@@ -670,8 +670,8 @@ void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
 			 Gbl.Hierarchy.Ctr.CtrCod,
 			 OrderBySubQuery[Order]);
 	 break;
-      case Hie_DEG:
-      case Hie_CRS:
+      case Hie_Lvl_DEG:
+      case Hie_Lvl_CRS:
 	 /* Get only degree types with degrees in the current degree */
 	 Gbl.DegTypes.Num = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get types of degree",

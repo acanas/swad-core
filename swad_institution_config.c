@@ -37,6 +37,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
+#include "swad_hierarchy.h"
 #include "swad_hierarchy_config.h"
 #include "swad_HTML.h"
 #include "swad_institution.h"
@@ -182,10 +183,10 @@ static void InsCfg_Configuration (bool PrintView)
       InsCfg_NumDpts ();
 
       /***** Number of users in courses of this institution *****/
-      HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Ins.InsCod,Rol_TCH);
-      HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Ins.InsCod,Rol_NET);
-      HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Ins.InsCod,Rol_STD);
-      HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Ins.InsCod,Rol_UNK);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_TCH);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_NET);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_STD);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_UNK);
      }
 
    /***** End table *****/
@@ -221,7 +222,7 @@ static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
 
    if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
       /***** Icon to upload logo of institution *****/
-      Lgo_PutIconToChangeLogo (Hie_INS);
+      Lgo_PutIconToChangeLogo (Hie_Lvl_INS);
 
    /***** Put icon to view places *****/
    Plc_PutIconToViewPlaces ();
@@ -234,7 +235,7 @@ static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
 static void InsCfg_Title (bool PutLink)
   {
    HieCfg_Title (PutLink,
-		    Hie_INS,				// Logo scope
+		    Hie_Lvl_INS,				// Logo scope
 		    Gbl.Hierarchy.Ins.InsCod,		// Logo code
                     Gbl.Hierarchy.Ins.ShrtName,		// Logo short name
 		    Gbl.Hierarchy.Ins.FullName,		// Logo full name
@@ -549,7 +550,7 @@ static void InsCfg_NumDpts (void)
 
 void InsCfg_RequestLogo (void)
   {
-   Lgo_RequestLogo (Hie_INS);
+   Lgo_RequestLogo (Hie_Lvl_INS);
   }
 
 /*****************************************************************************/
@@ -558,7 +559,7 @@ void InsCfg_RequestLogo (void)
 
 void InsCfg_ReceiveLogo (void)
   {
-   Lgo_ReceiveLogo (Hie_INS);
+   Lgo_ReceiveLogo (Hie_Lvl_INS);
   }
 
 /*****************************************************************************/
@@ -567,7 +568,7 @@ void InsCfg_ReceiveLogo (void)
 
 void InsCfg_RemoveLogo (void)
   {
-   Lgo_RemoveLogo (Hie_INS);
+   Lgo_RemoveLogo (Hie_Lvl_INS);
   }
 
 /*****************************************************************************/
@@ -578,7 +579,7 @@ void InsCfg_ChangeInsCty (void)
   {
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_The_country_of_the_institution_X_has_changed_to_Y;
-   struct Country NewCty;
+   struct Cty_Countr NewCty;
 
    /***** Get the new country code for the institution *****/
    NewCty.CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);

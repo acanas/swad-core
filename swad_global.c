@@ -43,6 +43,7 @@
 #include "swad_exam_announcement.h"
 #include "swad_follow.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_icon.h"
 #include "swad_link.h"
 #include "swad_parameter.h"
@@ -290,7 +291,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.ClassPhoto.AllGroups = true;
    Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
 
-   Gbl.Scope.Current = Hie_CRS;
+   Gbl.Scope.Current = Hie_Lvl_CRS;
 
    Gbl.Usrs.Connected.TimeToRefreshInMs = Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS;
 

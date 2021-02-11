@@ -32,6 +32,7 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
 
@@ -382,7 +383,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
 
    HTM_DIV_Begin ("class=\"BC%s %s\"",
-		   (Gbl.Hierarchy.Level == Hie_CRS) ? "" :
+		   (Gbl.Hierarchy.Level == Hie_Lvl_CRS) ? "" :
 		  ((Gbl.Hierarchy.Deg.DegCod > 0) ? " BC_SEMIOFF" :
 						    " BC_OFF"),
 		  ClassTxt);
@@ -411,23 +412,23 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
    /***** Logo *****/
    switch (Gbl.Hierarchy.Level)
      {
-      case Hie_SYS:	// System
+      case Hie_Lvl_SYS:	// System
 	 Ico_PutIcon ("swad64x64.png",Cfg_PLATFORM_FULL_NAME,"ICO40x40 TOP_LOGO");
          break;
-      case Hie_CTY:	// Country
+      case Hie_Lvl_CTY:	// Country
          Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,"COUNTRY_MAP_TITLE");
          break;
-      case Hie_INS:	// Institution
-	 Lgo_DrawLogo (Hie_INS,Gbl.Hierarchy.Ins.InsCod,
+      case Hie_Lvl_INS:	// Institution
+	 Lgo_DrawLogo (Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod,
 		       Gbl.Hierarchy.Ins.ShrtName,40,"TOP_LOGO",false);
          break;
-      case Hie_CTR:	// Centre
-	 Lgo_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,
+      case Hie_Lvl_CTR:	// Centre
+	 Lgo_DrawLogo (Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,
 		       Gbl.Hierarchy.Ctr.ShrtName,40,"TOP_LOGO",false);
          break;
-      case Hie_DEG:	// Degree
-      case Hie_CRS:	// Course
-	 Lgo_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
+      case Hie_Lvl_DEG:	// Degree
+      case Hie_Lvl_CRS:	// Course
+	 Lgo_DrawLogo (Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod,
 		       Gbl.Hierarchy.Deg.ShrtName,40,"TOP_LOGO",false);
          break;
       default:
@@ -439,10 +440,10 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
      {
       HTM_DIV_Begin ("id=\"big_full_name\"");
-      HTM_Txt (	(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.FullName :// Full name
-	       ((Gbl.Hierarchy.Level == Hie_DEG) ? Gbl.Hierarchy.Deg.FullName :
-	       ((Gbl.Hierarchy.Level == Hie_CTR) ? Gbl.Hierarchy.Ctr.FullName :
-	       ((Gbl.Hierarchy.Level == Hie_INS) ? Gbl.Hierarchy.Ins.FullName :
+      HTM_Txt (	(Gbl.Hierarchy.Level == Hie_Lvl_CRS) ? Gbl.Hierarchy.Crs.FullName :// Full name
+	       ((Gbl.Hierarchy.Level == Hie_Lvl_DEG) ? Gbl.Hierarchy.Deg.FullName :
+	       ((Gbl.Hierarchy.Level == Hie_Lvl_CTR) ? Gbl.Hierarchy.Ctr.FullName :
+	       ((Gbl.Hierarchy.Level == Hie_Lvl_INS) ? Gbl.Hierarchy.Ins.FullName :
 	                                           Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))));
       HTM_DIV_End ();
 
@@ -451,10 +452,10 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
       HTM_DIV_End ();
 
       HTM_DIV_Begin ("id=\"big_short_name\"");
-      HTM_Txt (	(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.ShrtName :// Short name
-	       ((Gbl.Hierarchy.Level == Hie_DEG) ? Gbl.Hierarchy.Deg.ShrtName :
-	       ((Gbl.Hierarchy.Level == Hie_CTR) ? Gbl.Hierarchy.Ctr.ShrtName :
-	       ((Gbl.Hierarchy.Level == Hie_INS) ? Gbl.Hierarchy.Ins.ShrtName :
+      HTM_Txt (	(Gbl.Hierarchy.Level == Hie_Lvl_CRS) ? Gbl.Hierarchy.Crs.ShrtName :// Short name
+	       ((Gbl.Hierarchy.Level == Hie_Lvl_DEG) ? Gbl.Hierarchy.Deg.ShrtName :
+	       ((Gbl.Hierarchy.Level == Hie_Lvl_CTR) ? Gbl.Hierarchy.Ctr.ShrtName :
+	       ((Gbl.Hierarchy.Level == Hie_Lvl_INS) ? Gbl.Hierarchy.Ins.ShrtName :
 	                                           Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))));
       HTM_DIV_End ();
      }
@@ -488,19 +489,19 @@ void Hie_SetHierarchyFromUsrLastHierarchy (void)
    /***** Copy last hierarchy scope and code to current hierarchy *****/
    switch (Gbl.Usrs.Me.UsrLast.LastHie.Scope)
      {
-      case Hie_CTY:	// Country
+      case Hie_Lvl_CTY:	// Country
          Gbl.Hierarchy.Cty.CtyCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
 	 break;
-      case Hie_INS:	// Institution
+      case Hie_Lvl_INS:	// Institution
          Gbl.Hierarchy.Ins.InsCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
 	 break;
-      case Hie_CTR:	// Centre
+      case Hie_Lvl_CTR:	// Centre
          Gbl.Hierarchy.Ctr.CtrCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
 	 break;
-      case Hie_DEG:	// Degree
+      case Hie_Lvl_DEG:	// Degree
          Gbl.Hierarchy.Deg.DegCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
 	 break;
-      case Hie_CRS:	// Course
+      case Hie_Lvl_CRS:	// Course
          Gbl.Hierarchy.Crs.CrsCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
 	 break;
       default:
@@ -565,37 +566,37 @@ void Hie_InitHierarchy (void)
           depending on course code, degree code, etc. *****/
    if      (Gbl.Hierarchy.Crs.CrsCod > 0)	// Course selected
      {
-      Gbl.Hierarchy.Level = Hie_CRS;
+      Gbl.Hierarchy.Level = Hie_Lvl_CRS;
       Gbl.Hierarchy.Cod = Gbl.Hierarchy.Crs.CrsCod;
      }
    else if (Gbl.Hierarchy.Deg.DegCod > 0)	// Degree selected
      {
-      Gbl.Hierarchy.Level = Hie_DEG;
+      Gbl.Hierarchy.Level = Hie_Lvl_DEG;
       Gbl.Hierarchy.Cod = Gbl.Hierarchy.Deg.DegCod;
      }
    else if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Centre selected
      {
-      Gbl.Hierarchy.Level = Hie_CTR;
+      Gbl.Hierarchy.Level = Hie_Lvl_CTR;
       Gbl.Hierarchy.Cod = Gbl.Hierarchy.Ctr.CtrCod;
      }
    else if (Gbl.Hierarchy.Ins.InsCod > 0)	// Institution selected
      {
-      Gbl.Hierarchy.Level = Hie_INS;
+      Gbl.Hierarchy.Level = Hie_Lvl_INS;
       Gbl.Hierarchy.Cod = Gbl.Hierarchy.Ins.InsCod;
      }
    else if (Gbl.Hierarchy.Cty.CtyCod > 0)	// Country selected
      {
-      Gbl.Hierarchy.Level = Hie_CTY;
+      Gbl.Hierarchy.Level = Hie_Lvl_CTY;
       Gbl.Hierarchy.Cod = Gbl.Hierarchy.Cty.CtyCod;
      }
    else
      {
-      Gbl.Hierarchy.Level = Hie_SYS;
+      Gbl.Hierarchy.Level = Hie_Lvl_SYS;
       Gbl.Hierarchy.Cod = -1L;
      }
 
    /***** Initialize paths *****/
-   if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+   if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
      {
       /***** Paths of course directories *****/
       snprintf (Gbl.Crs.PathPriv,sizeof (Gbl.Crs.PathPriv),
@@ -644,7 +645,7 @@ void Hie_ResetHierarchy (void)
    Gbl.Hierarchy.Crs.CrsCod = -1L;
 
    /***** Hierarchy level and code *****/
-   Gbl.Hierarchy.Level = Hie_UNK;
+   Gbl.Hierarchy.Level = Hie_Lvl_UNK;
    Gbl.Hierarchy.Cod   = -1L;
   }
 
@@ -690,10 +691,10 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 				        " AND admin.Scope='%s'"
 				        " AND admin.Cod=degrees.DegCod)"
 				        " ORDER BY S,FullName",
-				        (unsigned) Hie_SYS,UsrCod,Sco_GetDBStrFromScope (Hie_SYS),
-				        (unsigned) Hie_INS,UsrCod,Sco_GetDBStrFromScope (Hie_INS),
-				        (unsigned) Hie_CTR,UsrCod,Sco_GetDBStrFromScope (Hie_CTR),
-				        (unsigned) Hie_DEG,UsrCod,Sco_GetDBStrFromScope (Hie_DEG));
+				        (unsigned) Hie_Lvl_SYS,UsrCod,Sco_GetDBStrFromScope (Hie_Lvl_SYS),
+				        (unsigned) Hie_Lvl_INS,UsrCod,Sco_GetDBStrFromScope (Hie_Lvl_INS),
+				        (unsigned) Hie_Lvl_CTR,UsrCod,Sco_GetDBStrFromScope (Hie_Lvl_CTR),
+				        (unsigned) Hie_Lvl_DEG,UsrCod,Sco_GetDBStrFromScope (Hie_Lvl_DEG));
    if (NumRows)
       /***** Get the list of degrees *****/
       for (NumRow = 1;
@@ -719,11 +720,11 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	 /* Get scope */
 	 switch (Sco_GetScopeFromUnsignedStr (row[0]))
 	   {
-	    case Hie_SYS:	// System
+	    case Hie_Lvl_SYS:	// System
 	       Ico_PutIcon ("swad64x64.png",Txt_all_degrees,"ICO16x16");
 	       HTM_TxtF ("&nbsp;%s",Txt_all_degrees);
 	       break;
-	    case Hie_INS:	// Institution
+	    case Hie_Lvl_INS:	// Institution
 	       Ins.InsCod = Str_ConvertStrCodToLongCod (row[1]);
 	       if (Ins.InsCod > 0)
 		 {
@@ -735,7 +736,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 						          "BT_LINK DAT_SMALL_NOBR","LT");
 		 }
 	       break;
-	    case Hie_CTR:	// Centre
+	    case Hie_Lvl_CTR:	// Centre
 	       Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[1]);
 	       if (Ctr.CtrCod > 0)
 		 {
@@ -747,7 +748,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 						     "BT_LINK DAT_SMALL_NOBR","LT");
 		 }
 	       break;
-	    case Hie_DEG:	// Degree
+	    case Hie_Lvl_DEG:	// Degree
 	       Deg.DegCod = Str_ConvertStrCodToLongCod (row[1]);
 	       if (Deg.DegCod > 0)
 		 {

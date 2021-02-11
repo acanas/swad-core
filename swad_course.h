@@ -30,7 +30,9 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 #include <stdbool.h>		// For boolean type
 
+#include "swad_constant.h"
 #include "swad_degree.h"
+#include "swad_hierarchy_level.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -83,8 +85,8 @@ struct Crs_Course
    unsigned Year;				// Year: 0 (optatives), 1, 2, 3...
    unsigned Status;				// Course status
    long RequesterUsrCod;			// User code of the person who requested the creation of this course
-   char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];	// Short name of course
-   char FullName[Hie_MAX_BYTES_FULL_NAME + 1];	// Full name of course
+   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];	// Short name of course
+   char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];	// Full name of course
   };
 
 struct ListCourses
@@ -118,7 +120,7 @@ unsigned Crs_GetNumCrssInDeg (long DegCod);
 unsigned Crs_GetCachedNumCrssInDeg (long DegCod);
 
 unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod);
+                                       Hie_Lvl_Level_t Scope,long Cod);
 
 void Crs_WriteSelectorOfCourse (void);
 void Crs_ShowCrssOfCurrentDeg (void);

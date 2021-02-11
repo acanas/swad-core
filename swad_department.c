@@ -397,11 +397,11 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
 
 	    /* Get the short name of the department (row[2]) */
 	    Str_Copy (Dpt->ShrtName,row[2],
-		      Hie_MAX_BYTES_SHRT_NAME);
+		      Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 
 	    /* Get the full name of the department (row[3]) */
 	    Str_Copy (Dpt->FullName,row[3],
-		      Hie_MAX_BYTES_FULL_NAME);
+		      Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
 	    /* Get the URL of the department (row[4]) */
 	    Str_Copy (Dpt->WWW,row[4],
@@ -438,9 +438,9 @@ void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt)
    if (Dpt->DptCod == 0)
      {
       Str_Copy (Dpt->ShrtName,Txt_Another_department,
-                Hie_MAX_BYTES_SHRT_NAME);
+                Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
       Str_Copy (Dpt->FullName,Txt_Another_department,
-                Hie_MAX_BYTES_FULL_NAME);
+                Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
      }
    else if (Dpt->DptCod > 0)
      {
@@ -472,11 +472,11 @@ void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt)
 
          /* Get the short name of the department (row[1]) */
          Str_Copy (Dpt->ShrtName,row[1],
-                   Hie_MAX_BYTES_SHRT_NAME);
+                   Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 
          /* Get the full name of the department (row[2]) */
          Str_Copy (Dpt->FullName,row[2],
-                   Hie_MAX_BYTES_FULL_NAME);
+                   Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
          /* Get the URL of the department (row[3]) */
          Str_Copy (Dpt->WWW,row[3],
@@ -588,7 +588,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenDptSho);
       Dpt_PutParamDptCod (&Dpt->DptCod);
-      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,
+      HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,
                       HTM_SUBMIT_ON_CHANGE,
 		      "class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
@@ -598,7 +598,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenDptFul);
       Dpt_PutParamDptCod (&Dpt->DptCod);
-      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt->FullName,
+      HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt->FullName,
                       HTM_SUBMIT_ON_CHANGE,
 		      "class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
@@ -757,20 +757,20 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
    const char *FieldName = NULL;	// Initialized to avoid warning
    size_t MaxBytes = 0;			// Initialized to avoid warning
    char *CurrentDptName = NULL;		// Initialized to avoid warning
-   char NewDptName[Hie_MAX_BYTES_FULL_NAME + 1];
+   char NewDptName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
+         MaxBytes = Cns_HIERARCHY_MAX_BYTES_SHRT_NAME;
          CurrentDptName = Dpt_EditingDpt->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         MaxBytes = Hie_MAX_BYTES_FULL_NAME;
+         MaxBytes = Cns_HIERARCHY_MAX_BYTES_FULL_NAME;
          CurrentDptName = Dpt_EditingDpt->FullName;
          break;
      }
@@ -958,14 +958,14 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Department short name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
+   HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Department full name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
+   HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
@@ -1030,10 +1030,10 @@ void Dpt_ReceiveFormNewDpt (void)
    Dpt_EditingDpt->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
 
    /* Get department short name */
-   Par_GetParToText ("ShortName",Dpt_EditingDpt->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
+   Par_GetParToText ("ShortName",Dpt_EditingDpt->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 
    /* Get department full name */
-   Par_GetParToText ("FullName",Dpt_EditingDpt->FullName,Hie_MAX_BYTES_FULL_NAME);
+   Par_GetParToText ("FullName",Dpt_EditingDpt->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /* Get department WWW */
    Par_GetParToText ("WWW",Dpt_EditingDpt->WWW,Cns_MAX_BYTES_WWW);

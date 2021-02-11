@@ -27,7 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_hierarchy.h"
+#include "swad_hierarchy_level.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -56,7 +56,7 @@ void Prg_MoveRightItem (void);
 
 void Prg_RemoveCrsItems (long CrsCod);
 
-unsigned Prg_GetNumCoursesWithItems (Hie_Level_t Scope);
-unsigned Prg_GetNumItems (Hie_Level_t Scope);
+unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope);
+unsigned Prg_GetNumItems (Hie_Lvl_Level_t Scope);
 
 #endif

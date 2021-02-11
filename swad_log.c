@@ -262,7 +262,7 @@ void Log_GetAndShowLastClicks (void)
    Act_Action_t Action;
    const char *ClassRow;
    time_t TimeDiff;
-   struct Country Cty;
+   struct Cty_Countr Cty;
    struct Ins_Instit Ins;
    struct Ctr_Centre Ctr;
    struct Deg_Degree Deg;

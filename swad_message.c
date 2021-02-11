@@ -43,6 +43,7 @@
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_group.h"
+#include "swad_hierarchy.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_message.h"
@@ -280,9 +281,9 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
       /***** Get and order lists of users from this course *****/
-      Usr_GetListUsrs (Hie_CRS,Rol_STD);
-      Usr_GetListUsrs (Hie_CRS,Rol_NET);
-      Usr_GetListUsrs (Hie_CRS,Rol_TCH);
+      Usr_GetListUsrs (Hie_Lvl_CRS,Rol_STD);
+      Usr_GetListUsrs (Hie_Lvl_CRS,Rol_NET);
+      Usr_GetListUsrs (Hie_Lvl_CRS,Rol_TCH);
       NumUsrsInCrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +	// Students
 	             Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +	// Non-editing teachers
 		     Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;		// Teachers
@@ -537,7 +538,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    extern const char *Txt_nicks_emails_or_IDs_separated_by_commas;
    char Nickname[Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
    unsigned ColSpan;
-   bool StdsAndTchsWritten = Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
+   bool StdsAndTchsWritten = Gbl.Hierarchy.Level == Hie_Lvl_CRS &&		// Course selected
                              (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// I belong to it
                               Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
@@ -1131,11 +1132,11 @@ static void Msg_GetParamMsgsCrsCod (struct Msg_Messages *Messages)
       Crs_GetDataOfCourseByCod (&Crs);
 
       Str_Copy (Messages->FilterCrsShrtName,Crs.ShrtName,
-                Hie_MAX_BYTES_SHRT_NAME);
+                Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
      }
    else
       Str_Copy (Messages->FilterCrsShrtName,Txt_any_course,
-                Hie_MAX_BYTES_SHRT_NAME);
+                Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -2229,7 +2230,7 @@ unsigned long Msg_GetNumMsgsSentByUsr (long UsrCod)
 /******** (all the platform, current degree or current course)      **********/
 /*****************************************************************************/
 
-unsigned Msg_GetNumMsgsSent (Hie_Level_t Scope,Msg_Status_t MsgStatus)
+unsigned Msg_GetNumMsgsSent (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
   {
    const char *Table = "msg_snt";
    unsigned NumMsgs = 0;	// Initialized to avoid warning
@@ -2248,10 +2249,10 @@ unsigned Msg_GetNumMsgsSent (Hie_Level_t Scope,Msg_Status_t MsgStatus)
      }
    switch (Scope)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
 	 NumMsgs = (unsigned) DB_GetNumRowsTable (Table);
          break;
-      case Hie_CTY:
+      case Hie_Lvl_CTY:
          NumMsgs =
          (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
 				   "SELECT COUNT(*)"
@@ -2265,7 +2266,7 @@ unsigned Msg_GetNumMsgsSent (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 				   Gbl.Hierarchy.Cty.CtyCod,
 				   Table);
          break;
-      case Hie_INS:
+      case Hie_Lvl_INS:
          NumMsgs =
          (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
 				   "SELECT COUNT(*)"
@@ -2278,7 +2279,7 @@ unsigned Msg_GetNumMsgsSent (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 				   Gbl.Hierarchy.Ins.InsCod,
 				   Table);
          break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
          NumMsgs =
          (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
 				   "SELECT COUNT(*)"
@@ -2290,7 +2291,7 @@ unsigned Msg_GetNumMsgsSent (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 				   Gbl.Hierarchy.Ctr.CtrCod,
 				   Table);
          break;
-      case Hie_DEG:
+      case Hie_Lvl_DEG:
          NumMsgs =
          (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
 				   "SELECT COUNT(*)"
@@ -2301,7 +2302,7 @@ unsigned Msg_GetNumMsgsSent (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 				   Gbl.Hierarchy.Deg.DegCod,
 				   Table);
          break;
-      case Hie_CRS:
+      case Hie_Lvl_CRS:
          NumMsgs =
          (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
 				   "SELECT COUNT(*)"
@@ -2323,7 +2324,7 @@ unsigned Msg_GetNumMsgsSent (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 /****** (all the platform, current degree or current course)          ********/
 /*****************************************************************************/
 
-unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
+unsigned Msg_GetNumMsgsReceived (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
   {
    char *Table;
    unsigned NumMsgs = 0;	// Initialized to avoid warning
@@ -2338,10 +2339,10 @@ unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
                                                  "msg_rcv_deleted";
          switch (Scope)
            {
-            case Hie_SYS:
+            case Hie_Lvl_SYS:
                NumMsgs = (unsigned) DB_GetNumRowsTable (Table);
                break;
-            case Hie_CTY:
+            case Hie_Lvl_CTY:
                NumMsgs =
                (unsigned) DB_QueryCOUNT ("can not get number"
         				 " of received messages",
@@ -2357,7 +2358,7 @@ unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 					 Gbl.Hierarchy.Cty.CtyCod,
 					 Table);
                break;
-            case Hie_INS:
+            case Hie_Lvl_INS:
                NumMsgs =
                (unsigned) DB_QueryCOUNT ("can not get number"
         				 " of received messages",
@@ -2372,7 +2373,7 @@ unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 					 Gbl.Hierarchy.Ins.InsCod,
 					 Table);
                break;
-            case Hie_CTR:
+            case Hie_Lvl_CTR:
                NumMsgs =
                (unsigned) DB_QueryCOUNT ("can not get number"
         				 " of received messages",
@@ -2386,7 +2387,7 @@ unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 					 Gbl.Hierarchy.Ctr.CtrCod,
 					 Table);
                break;
-            case Hie_DEG:
+            case Hie_Lvl_DEG:
                NumMsgs =
                (unsigned) DB_QueryCOUNT ("can not get number"
         				 " of received messages",
@@ -2399,7 +2400,7 @@ unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 					 Gbl.Hierarchy.Deg.DegCod,
 					 Table);
                break;
-            case Hie_CRS:
+            case Hie_Lvl_CRS:
                NumMsgs =
                (unsigned) DB_QueryCOUNT ("can not get number"
         				 " of received messages",
@@ -2419,7 +2420,7 @@ unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
       case Msg_STATUS_NOTIFIED:
          switch (Scope)
            {
-            case Hie_SYS:
+            case Hie_Lvl_SYS:
                NumMsgs =
                (unsigned) DB_QueryCOUNT ("can not get number"
         				 " of received messages",
@@ -2432,7 +2433,7 @@ unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 					 " FROM msg_rcv_deleted"
 					 " WHERE Notified='Y')");
                break;
-            case Hie_CTY:
+            case Hie_Lvl_CTY:
                NumMsgs =
                (unsigned) DB_QueryCOUNT ("can not get number"
         				 " of received messages",
@@ -2459,7 +2460,7 @@ unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 					 Gbl.Hierarchy.Cty.CtyCod,
 					 Gbl.Hierarchy.Cty.CtyCod);
                break;
-            case Hie_INS:
+            case Hie_Lvl_INS:
                NumMsgs =
                (unsigned) DB_QueryCOUNT ("can not get number"
         				 " of received messages",
@@ -2484,7 +2485,7 @@ unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 					 Gbl.Hierarchy.Ins.InsCod,
 					 Gbl.Hierarchy.Ins.InsCod);
                break;
-            case Hie_CTR:
+            case Hie_Lvl_CTR:
                NumMsgs =
                (unsigned) DB_QueryCOUNT ("can not get number"
         				 " of received messages",
@@ -2507,7 +2508,7 @@ unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 					 Gbl.Hierarchy.Ctr.CtrCod,
 					 Gbl.Hierarchy.Ctr.CtrCod);
                break;
-            case Hie_DEG:
+            case Hie_Lvl_DEG:
                NumMsgs =
                (unsigned) DB_QueryCOUNT ("can not get number"
         				 " of received messages",
@@ -2528,7 +2529,7 @@ unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 					 Gbl.Hierarchy.Deg.DegCod,
 					 Gbl.Hierarchy.Deg.DegCod);
                break;
-            case Hie_CRS:
+            case Hie_Lvl_CRS:
                NumMsgs =
                (unsigned) DB_QueryCOUNT ("can not get number"
         				 " of received messages",
@@ -2796,7 +2797,7 @@ static void Msg_GetDistinctCoursesInMyMessages (struct Msg_Messages *Messages)
            {
             Messages->Courses[Messages->NumCourses].CrsCod = Crs.CrsCod;
             Str_Copy (Messages->Courses[Messages->NumCourses].ShrtName,Crs.ShrtName,
-                      Hie_MAX_BYTES_SHRT_NAME);
+                      Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
             Messages->NumCourses++;
            }
      }

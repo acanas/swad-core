@@ -39,11 +39,11 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Lgo_DrawLogo (Hie_Level_t Scope,long Cod,const char *AltText,
+void Lgo_DrawLogo (Hie_Lvl_Level_t Scope,long Cod,const char *AltText,
                    unsigned Size,const char *Class,bool PutIconIfNotExists);
-void Lgo_PutIconToChangeLogo (Hie_Level_t Scope);
-void Lgo_RequestLogo (Hie_Level_t Scope);
-void Lgo_ReceiveLogo (Hie_Level_t Scope);
-void Lgo_RemoveLogo (Hie_Level_t Scope);
+void Lgo_PutIconToChangeLogo (Hie_Lvl_Level_t Scope);
+void Lgo_RequestLogo (Hie_Lvl_Level_t Scope);
+void Lgo_ReceiveLogo (Hie_Lvl_Level_t Scope);
+void Lgo_RemoveLogo (Hie_Lvl_Level_t Scope);
 
 #endif

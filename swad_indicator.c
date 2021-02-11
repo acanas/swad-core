@@ -237,17 +237,17 @@ void Ind_ReqIndicatorsCourses (void)
 static void Ind_GetParamsIndicators (struct Ind_Indicators *Indicators)
   {
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Hie_SYS |
-	               1 << Hie_CTY |
-		       1 << Hie_INS |
-		       1 << Hie_CTR |
-		       1 << Hie_DEG |
-		       1 << Hie_CRS;
-   Gbl.Scope.Default = Hie_CRS;
+   Gbl.Scope.Allowed = 1 << Hie_Lvl_SYS |
+	               1 << Hie_Lvl_CTY |
+		       1 << Hie_Lvl_INS |
+		       1 << Hie_Lvl_CTR |
+		       1 << Hie_Lvl_DEG |
+		       1 << Hie_Lvl_CRS;
+   Gbl.Scope.Default = Hie_Lvl_CRS;
    Sco_GetScope ("ScopeInd");
 
    /***** Get degree type code *****/
-   Indicators->DegTypCod = (Gbl.Scope.Current == Hie_SYS) ?
+   Indicators->DegTypCod = (Gbl.Scope.Current == Hie_Lvl_SYS) ?
 	                   DT_GetAndCheckParamOtherDegTypCod (-1L) :	// -1L (any degree type) is allowed here
                            -1L;
 
@@ -348,7 +348,7 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
 
    switch (Gbl.Scope.Current)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
          if (Indicators->DptCod >= 0)	// 0 means another department
            {
             if (Indicators->DegTypCod > 0)
@@ -400,7 +400,7 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
 					  " ORDER BY degrees.FullName,courses.FullName");
            }
          break;
-      case Hie_CTY:
+      case Hie_Lvl_CTY:
          if (Indicators->DptCod >= 0)	// 0 means another department
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -430,7 +430,7 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
 				       " ORDER BY degrees.FullName,courses.FullName",
 				       Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_INS:
+      case Hie_Lvl_INS:
          if (Indicators->DptCod >= 0)	// 0 means another department
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -458,7 +458,7 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
 				       " ORDER BY degrees.FullName,courses.FullName",
 				       Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
          if (Indicators->DptCod >= 0)	// 0 means another department
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -484,7 +484,7 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
 				       " ORDER BY degrees.FullName,courses.FullName",
 				       Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_DEG:
+      case Hie_Lvl_DEG:
          if (Indicators->DptCod >= 0)	// 0 means another department
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -510,7 +510,7 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
 				       " ORDER BY degrees.FullName,courses.FullName",
 				       Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Hie_CRS:
+      case Hie_Lvl_CRS:
          if (Indicators->DptCod >= 0)	// 0 means another department
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -1018,10 +1018,10 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 		  break;
 	       case Ind_INDICATORS_FULL:
 		  /* Get number of users */
-		  NumTchs = Usr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
+		  NumTchs = Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,CrsCod,
 				                  1 << Rol_NET |	// Non-editing teachers
 						  1 << Rol_TCH);	// Teachers
-		  NumStds = Usr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
+		  NumStds = Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,CrsCod,
 				                  1 << Rol_STD);	// Students
 
 		  HTM_TR_Begin (NULL);

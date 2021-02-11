@@ -66,10 +66,10 @@ struct Msg_Messages
    struct
      {
       long CrsCod;
-      char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
+      char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
      } Courses[Crs_MAX_COURSES_PER_USR];	// Distinct courses in my messages sent or received
    long FilterCrsCod;	// Show only messages sent from this course code
-   char FilterCrsShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
+   char FilterCrsShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
    char FilterFromTo[Usr_MAX_BYTES_FULL_NAME + 1];		// Show only messages from/to these users
    char FilterContent[Msg_MAX_BYTES_FILTER_CONTENT + 1];	// Show only messages that match this content
    bool ShowOnlyUnreadMsgs;	// Show only unread messages (this option is applicable only for received messages)
@@ -111,8 +111,8 @@ void Msg_ShowRecMsgs (void);
 
 unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod);
 unsigned long Msg_GetNumMsgsSentByUsr (long UsrCod);
-unsigned Msg_GetNumMsgsSent (Hie_Level_t Scope,Msg_Status_t MsgStatus);
-unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus);
+unsigned Msg_GetNumMsgsSent (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus);
+unsigned Msg_GetNumMsgsReceived (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus);
 
 void Msg_PutHiddenParamsMsgsFilters (void *Messages);
 void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],

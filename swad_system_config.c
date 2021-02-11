@@ -39,7 +39,7 @@
 #include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_help.h"
-#include "swad_hierarchy.h"
+#include "swad_hierarchy_level.h"
 #include "swad_hierarchy_config.h"
 #include "swad_HTML.h"
 #include "swad_role.h"
@@ -155,10 +155,10 @@ static void SysCfg_Configuration (bool PrintView)
       SysCfg_NumCrss ();
 
       /***** Number of users in courses of this country *****/
-      HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_TCH);
-      HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_NET);
-      HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_STD);
-      HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_UNK);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_SYS,-1L,Rol_TCH);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_SYS,-1L,Rol_NET);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_SYS,-1L,Rol_STD);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_SYS,-1L,Rol_UNK);
      }
 
    /***** End table *****/

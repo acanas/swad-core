@@ -38,6 +38,7 @@
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
 #include "swad_message.h"
@@ -136,7 +137,7 @@ void Deg_SeeDegWithPendingCrss (void)
 					      " AND courses.DegCod=degrees.DegCod"
 					      " GROUP BY courses.DegCod ORDER BY degrees.ShortName",
 					      Gbl.Usrs.Me.UsrDat.UsrCod,
-					      Sco_GetDBStrFromScope (Hie_DEG),
+					      Sco_GetDBStrFromScope (Hie_Lvl_DEG),
 					      (unsigned) Crs_STATUS_BIT_PENDING);
          break;
       case Rol_SYS_ADM:
@@ -229,7 +230,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Acti
    Hie_FreeGoToMsg ();
 
    /***** Degree logo and name *****/
-   Lgo_DrawLogo (Hie_DEG,Deg->DegCod,Deg->ShrtName,16,ClassLogo,true);
+   Lgo_DrawLogo (Hie_Lvl_DEG,Deg->DegCod,Deg->ShrtName,16,ClassLogo,true);
    HTM_TxtF ("&nbsp;%s",Deg->FullName);
 
    /***** End link *****/
@@ -364,7 +365,7 @@ static void Deg_ListDegreesForEdition (void)
 
       ICanEdit = Deg_CheckIfICanEditADegree (Deg);
       NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
-      NumUsrsInCrssOfDeg = Usr_GetNumUsrsInCrss (Hie_DEG,Deg->DegCod,
+      NumUsrsInCrssOfDeg = Usr_GetNumUsrsInCrss (Hie_Lvl_DEG,Deg->DegCod,
 						 1 << Rol_STD |
 						 1 << Rol_NET |
 						 1 << Rol_TCH);	// Any user
@@ -389,7 +390,7 @@ static void Deg_ListDegreesForEdition (void)
 
       /* Degree logo */
       HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg->FullName);
-      Lgo_DrawLogo (Hie_DEG,Deg->DegCod,Deg->ShrtName,20,NULL,true);
+      Lgo_DrawLogo (Hie_Lvl_DEG,Deg->DegCod,Deg->ShrtName,20,NULL,true);
       HTM_TD_End ();
 
       /* Degree short name */
@@ -398,7 +399,7 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Frm_StartForm (ActRenDegSho);
 	 Deg_PutParamOtherDegCod (&Deg->DegCod);
-	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Deg->ShrtName,
+	 HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Deg->ShrtName,
 	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_SHORT_NAME\"");
 	 Frm_EndForm ();
@@ -413,7 +414,7 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Frm_StartForm (ActRenDegFul);
 	 Deg_PutParamOtherDegCod (&Deg->DegCod);
-	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Deg->FullName,
+	 HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Deg->FullName,
 	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_FULL_NAME\"");
 	 Frm_EndForm ();
@@ -615,19 +616,19 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree logo *****/
    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg_EditingDeg->FullName);
-   Lgo_DrawLogo (Hie_DEG,-1L,"",20,NULL,true);
+   Lgo_DrawLogo (Hie_Lvl_DEG,-1L,"",20,NULL,true);
    HTM_TD_End ();
 
    /***** Degree short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName,
+   HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Degree full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName,
+   HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
@@ -939,7 +940,7 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
 
    /***** Number of users in courses of this degree *****/
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_DEG,Deg->DegCod,
+   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_Lvl_DEG,Deg->DegCod,
 				             1 << Rol_STD |
 				             1 << Rol_NET |
 				             1 << Rol_TCH));	// Any user
@@ -983,7 +984,7 @@ static void Deg_EditDegreesInternal (void)
    Deg_GetListDegsInCurrentCtr ();
 
    /***** Get list of degree types *****/
-   DT_GetListDegreeTypes (Hie_SYS,DT_ORDER_BY_DEGREE_TYPE);
+   DT_GetListDegreeTypes (Hie_Lvl_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /***** Write menu to select country, institution and centre *****/
    Hie_WriteMenuHierarchy ();
@@ -1204,10 +1205,10 @@ static void Deg_ReceiveFormRequestOrCreateDeg (unsigned Status)
    Deg_EditingDeg->CtrCod = Gbl.Hierarchy.Ctr.CtrCod;
 
    /* Get degree short name */
-   Par_GetParToText ("ShortName",Deg_EditingDeg->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
+   Par_GetParToText ("ShortName",Deg_EditingDeg->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 
    /* Get degree full name */
-   Par_GetParToText ("FullName",Deg_EditingDeg->FullName,Hie_MAX_BYTES_FULL_NAME);
+   Par_GetParToText ("FullName",Deg_EditingDeg->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /* Get degree type */
    Deg_EditingDeg->DegTypCod = DT_GetAndCheckParamOtherDegTypCod (1);
@@ -1388,11 +1389,11 @@ static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row)
 
    /***** Get degree short name (row[5]) *****/
    Str_Copy (Deg->ShrtName,row[5],
-             Hie_MAX_BYTES_SHRT_NAME);
+             Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 
    /***** Get degree full name (row[6]) *****/
    Str_Copy (Deg->FullName,row[6],
-             Hie_MAX_BYTES_FULL_NAME);
+             Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /***** Get WWW (row[7]) *****/
    Str_Copy (Deg->WWW,row[7],
@@ -1420,7 +1421,7 @@ void Deg_GetShortNameOfDegreeByCod (struct Deg_Degree *Deg)
 	 row = mysql_fetch_row (mysql_res);
 
 	 Str_Copy (Deg->ShrtName,row[0],
-	           Hie_MAX_BYTES_SHRT_NAME);
+	           Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -1527,10 +1528,10 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Remove all the threads and posts in forums of the degree *****/
-   For_RemoveForums (Hie_DEG,DegCod);
+   For_RemoveForums (Hie_Lvl_DEG,DegCod);
 
    /***** Remove surveys of the degree *****/
-   Svy_RemoveSurveys (Hie_DEG,DegCod);
+   Svy_RemoveSurveys (Hie_Lvl_DEG,DegCod);
 
    /***** Remove information related to files in degree *****/
    Brw_RemoveDegFilesFromDB (DegCod);
@@ -1546,7 +1547,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    /***** Remove administrators of this degree *****/
    DB_QueryDELETE ("can not remove administrators of a degree",
 		   "DELETE FROM admin WHERE Scope='%s' AND Cod=%ld",
-                   Sco_GetDBStrFromScope (Hie_DEG),DegCod);
+                   Sco_GetDBStrFromScope (Hie_Lvl_DEG),DegCod);
 
    /***** Remove the degree *****/
    DB_QueryDELETE ("can not remove a degree",
@@ -1597,20 +1598,20 @@ void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullNam
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentDegName = NULL;		// Initialized to avoid warning
-   char NewDegName[Hie_MAX_BYTES_FULL_NAME + 1];
+   char NewDegName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
+         MaxBytes = Cns_HIERARCHY_MAX_BYTES_SHRT_NAME;
          CurrentDegName = Deg->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         MaxBytes = Hie_MAX_BYTES_FULL_NAME;
+         MaxBytes = Cns_HIERARCHY_MAX_BYTES_FULL_NAME;
          CurrentDegName = Deg->FullName;
          break;
      }
@@ -1867,7 +1868,7 @@ static void Deg_PutParamGoToDeg (void *DegCod)
 
 void Deg_RequestLogo (void)
   {
-   Lgo_RequestLogo (Hie_DEG);
+   Lgo_RequestLogo (Hie_Lvl_DEG);
   }
 
 /*****************************************************************************/
@@ -1876,7 +1877,7 @@ void Deg_RequestLogo (void)
 
 void Deg_ReceiveLogo (void)
   {
-   Lgo_ReceiveLogo (Hie_DEG);
+   Lgo_ReceiveLogo (Hie_Lvl_DEG);
   }
 
 /*****************************************************************************/
@@ -1885,7 +1886,7 @@ void Deg_ReceiveLogo (void)
 
 void Deg_RemoveLogo (void)
   {
-   Lgo_RemoveLogo (Hie_DEG);
+   Lgo_RemoveLogo (Hie_Lvl_DEG);
   }
 
 /*****************************************************************************/
@@ -1897,12 +1898,12 @@ unsigned Deg_GetCachedNumDegsInSys (void)
    unsigned NumDegs;
 
    /***** Get number of degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_Lvl_SYS,-1L,
                                    FigCch_UNSIGNED,&NumDegs))
      {
       /***** Get current number of degrees from database and update cache *****/
       NumDegs = (unsigned) DB_GetNumRowsTable ("degrees");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_Lvl_SYS,-1L,
                                     FigCch_UNSIGNED,&NumDegs);
      }
 
@@ -1938,7 +1939,7 @@ unsigned Deg_GetNumDegsInCty (long CtyCod)
 			     " AND institutions.InsCod=centres.InsCod"
 			     " AND centres.CtrCod=degrees.CtrCod",
 			     CtyCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_CTY,Gbl.Cache.NumDegsInCty.CtyCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_Lvl_CTY,Gbl.Cache.NumDegsInCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInCty.NumDegs);
    return Gbl.Cache.NumDegsInCty.NumDegs;
   }
@@ -1948,7 +1949,7 @@ unsigned Deg_GetCachedNumDegsInCty (long CtyCod)
    unsigned NumDegs;
 
    /***** Get number of degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_CTY,CtyCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_Lvl_CTY,CtyCod,
 				   FigCch_UNSIGNED,&NumDegs))
       /***** Get current number of degrees from database and update cache *****/
       NumDegs = Deg_GetNumDegsInCty (CtyCod);
@@ -1985,7 +1986,7 @@ unsigned Deg_GetNumDegsInIns (long InsCod)
 			     " WHERE centres.InsCod=%ld"
 			     " AND centres.CtrCod=degrees.CtrCod",
 			     InsCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_INS,Gbl.Cache.NumDegsInIns.InsCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_Lvl_INS,Gbl.Cache.NumDegsInIns.InsCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInIns.NumDegs);
    return Gbl.Cache.NumDegsInIns.NumDegs;
   }
@@ -1995,7 +1996,7 @@ unsigned Deg_GetCachedNumDegsInIns (long InsCod)
    unsigned NumDegs;
 
    /***** Get number of degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_INS,InsCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_Lvl_INS,InsCod,
 				   FigCch_UNSIGNED,&NumDegs))
       /***** Get current number of degrees from database and update cache *****/
       NumDegs = Deg_GetNumDegsInIns (InsCod);
@@ -2030,7 +2031,7 @@ unsigned Deg_GetNumDegsInCtr (long CtrCod)
 			     "SELECT COUNT(*) FROM degrees"
 			     " WHERE CtrCod=%ld",
 			     CtrCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_CTR,Gbl.Cache.NumDegsInCtr.CtrCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_Lvl_CTR,Gbl.Cache.NumDegsInCtr.CtrCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInCtr.NumDegs);
    return Gbl.Cache.NumDegsInCtr.NumDegs;
   }
@@ -2040,7 +2041,7 @@ unsigned Deg_GetCachedNumDegsInCtr (long CtrCod)
    unsigned NumDegs;
 
    /***** Get number of degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_CTR,CtrCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,Hie_Lvl_CTR,CtrCod,
 				   FigCch_UNSIGNED,&NumDegs))
       /***** Get current number of degrees from database and update cache *****/
       NumDegs = Deg_GetNumDegsInCtr (CtrCod);
@@ -2053,7 +2054,7 @@ unsigned Deg_GetCachedNumDegsInCtr (long CtrCod)
 /*****************************************************************************/
 
 unsigned Deg_GetCachedNumDegsWithCrss (const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod)
+                                       Hie_Lvl_Level_t Scope,long Cod)
   {
    unsigned NumDegsWithCrss;
 
@@ -2082,7 +2083,7 @@ unsigned Deg_GetCachedNumDegsWithCrss (const char *SubQuery,
 /*****************************************************************************/
 
 unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod)
+                                       Hie_Lvl_Level_t Scope,long Cod)
   {
    static const FigCch_FigureCached_t FigureDegs[Rol_NUM_ROLES] =
      {

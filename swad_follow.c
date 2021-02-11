@@ -1373,7 +1373,7 @@ void Fol_GetAndShowRankingFollowers (void)
    /***** Get ranking from database *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
 	 NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT FollowedCod,COUNT(FollowerCod) AS N"
@@ -1381,7 +1381,7 @@ void Fol_GetAndShowRankingFollowers (void)
 				    " GROUP BY FollowedCod"
 				    " ORDER BY N DESC,FollowedCod LIMIT 100");
          break;
-      case Hie_CTY:
+      case Hie_Lvl_CTY:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
@@ -1396,7 +1396,7 @@ void Fol_GetAndShowRankingFollowers (void)
 				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
 				    Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_INS:
+      case Hie_Lvl_INS:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
@@ -1410,7 +1410,7 @@ void Fol_GetAndShowRankingFollowers (void)
 				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
 				    Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
@@ -1423,7 +1423,7 @@ void Fol_GetAndShowRankingFollowers (void)
 				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
 				    Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_DEG:
+      case Hie_Lvl_DEG:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
@@ -1435,7 +1435,7 @@ void Fol_GetAndShowRankingFollowers (void)
 				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
 				    Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Hie_CRS:
+      case Hie_Lvl_CRS:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"

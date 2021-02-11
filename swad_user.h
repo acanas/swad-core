@@ -228,7 +228,7 @@ struct UsrLast
    Sch_WhatToSearch_t WhatToSearch;	// Search courses, teachers, documents...?
    struct
      {
-      Hie_Level_t Scope;	// Course, degree, centre, etc.
+      Hie_Lvl_Level_t Scope;	// Course, degree, centre, etc.
       long Cod;			// Course code, degree code, centre code, etc.
      } LastHie;
    Act_Action_t LastAct;
@@ -298,7 +298,7 @@ void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat);
 
 void Usr_FlushCachesUsr (void);
 
-bool Usr_CheckIfUsrIsAdm (long UsrCod,Hie_Level_t Scope,long Cod);
+bool Usr_CheckIfUsrIsAdm (long UsrCod,Hie_Lvl_Level_t Scope,long Cod);
 void Usr_FlushCacheUsrIsSuperuser (void);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
 
@@ -363,7 +363,7 @@ unsigned long Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res)
 unsigned long Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res);
 unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res);
 void Usr_GetMainDeg (long UsrCod,
-		     char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1],
+		     char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
 		     Rol_Role_t *MaxRole);
 
 bool Usr_ChkIfEncryptedUsrCodExists (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64]);
@@ -417,8 +417,8 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToAnotherCty (void);
 unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToAnotherCty (void);
 
 void Usr_FlushCacheNumUsrsWhoClaimToBelongToCty (void);
-unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (struct Country *Cty);
-unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCty (struct Country *Cty);
+unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty);
+unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty);
 
 void Usr_FlushCacheNumUsrsWhoClaimToBelongToIns (void);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins);
@@ -428,7 +428,7 @@ void Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Centre *Ctr);
 unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Centre *Ctr);
 
-void Usr_GetListUsrs (Hie_Level_t Scope,Rol_Role_t Role);
+void Usr_GetListUsrs (Hie_Lvl_Level_t Scope,Rol_Role_t Role);
 
 void Usr_SearchListUsrs (Rol_Role_t Role);
 void Usr_CreateTmpTableAndSearchCandidateUsrs (const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1]);
@@ -517,13 +517,13 @@ bool Usr_ChkIfUsrCodExists (long UsrCod);
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 
 unsigned Usr_GetTotalNumberOfUsersInPlatform (void);
-unsigned Usr_GetNumUsrsInCrss (Hie_Level_t Scope,long Cod,unsigned Roles);
-unsigned Usr_GetCachedNumUsrsInCrss (Hie_Level_t Scope,long Cod,unsigned Roles);
+unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles);
+unsigned Usr_GetCachedNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles);
 
 unsigned Usr_GetCachedNumUsrsNotBelongingToAnyCrs (void);
 
-double Usr_GetCachedNumCrssPerUsr (Hie_Level_t Scope,long Cod,Rol_Role_t Role);
-double Usr_GetCachedNumUsrsPerCrs (Hie_Level_t Scope,long Cod,Rol_Role_t Role);
+double Usr_GetCachedNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role);
+double Usr_GetCachedNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role);
 
 bool Usr_CheckIfUsrBanned (long UsrCod);
 void Usr_RemoveUsrFromUsrBanned (long UsrCod);

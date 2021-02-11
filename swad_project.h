@@ -238,7 +238,7 @@ void Prj_UnloProjectEdition (void);
 void Prj_RemoveCrsProjects (long CrsCod);
 void Prj_RemoveUsrFromProjects (long UsrCod);
 
-unsigned Prj_GetNumCoursesWithProjects (Hie_Level_t Scope);
-unsigned Prj_GetNumProjects (Hie_Level_t Scope);
+unsigned Prj_GetNumCoursesWithProjects (Hie_Lvl_Level_t Scope);
+unsigned Prj_GetNumProjects (Hie_Lvl_Level_t Scope);
 
 #endif

@@ -62,8 +62,8 @@ struct Ins_Instit
    long CtyCod;
    Ins_Status_t Status;		// Institution status
    long RequesterUsrCod;	// User code of the person who requested the creation of this institution
-   char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
-   char FullName[Hie_MAX_BYTES_FULL_NAME + 1];
+   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
+   char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct
      {
@@ -136,13 +136,13 @@ unsigned Ins_GetNumInssInCty (long CtyCod);
 unsigned Ins_GetCachedNumInssInCty (long CtyCod);
 
 unsigned Ins_GetCachedNumInssWithCtrs (const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod);
+                                       Hie_Lvl_Level_t Scope,long Cod);
 unsigned Ins_GetCachedNumInssWithDegs (const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod);
+                                       Hie_Lvl_Level_t Scope,long Cod);
 unsigned Ins_GetCachedNumInssWithCrss (const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod);
+                                       Hie_Lvl_Level_t Scope,long Cod);
 unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod);
+                                       Hie_Lvl_Level_t Scope,long Cod);
 
 void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss);
 

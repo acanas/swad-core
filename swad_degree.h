@@ -31,7 +31,7 @@
 
 #include "swad_action.h"
 #include "swad_constant.h"
-#include "swad_hierarchy.h"
+#include "swad_hierarchy_level.h"
 #include "swad_role_type.h"
 #include "swad_string.h"
 
@@ -73,8 +73,8 @@ struct Deg_Degree
    long CtrCod;					// Centre code
    Deg_Status_t Status;				// Degree status
    long RequesterUsrCod;			// User code of the person who requested the creation of this degree
-   char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];	// Short name of degree
-   char FullName[Hie_MAX_BYTES_FULL_NAME + 1];	// Full name of degree
+   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];	// Short name of degree
+   char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];	// Full name of degree
    char WWW[Cns_MAX_BYTES_WWW + 1];
   };
 
@@ -149,9 +149,9 @@ unsigned Deg_GetNumDegsInCtr (long CtrCod);
 unsigned Deg_GetCachedNumDegsInCtr (long CtrCod);
 
 unsigned Deg_GetCachedNumDegsWithCrss (const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod);
+                                       Hie_Lvl_Level_t Scope,long Cod);
 unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod);
+                                       Hie_Lvl_Level_t Scope,long Cod);
 
 void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumCrss);
 

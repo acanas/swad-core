@@ -59,12 +59,12 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 void HieCfg_Title (bool PutLink,
-		   Hie_Level_t LogoScope,
+		   Hie_Lvl_Level_t LogoScope,
 		   long LogoCod,
-                   char LogoShrtName[Hie_MAX_BYTES_SHRT_NAME + 1],
-		   char LogoFullName[Hie_MAX_BYTES_FULL_NAME + 1],
+                   char LogoShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
+		   char LogoFullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1],
 		   char LogoWWW[Cns_MAX_BYTES_WWW + 1],
-		   char TextFullName[Hie_MAX_BYTES_FULL_NAME + 1])
+		   char TextFullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
   {
    HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
    if (PutLink)
@@ -84,7 +84,7 @@ void HieCfg_Title (bool PutLink,
 /*****************************************************************************/
 
 void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
-		      const char FullName[Hie_MAX_BYTES_FULL_NAME + 1])
+		      const char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
   {
    /***** Full name *****/
    HTM_TR_Begin (NULL);
@@ -100,7 +100,7 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
      {
       /* Form to change full name */
       Frm_StartForm (NextAction);
-      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,FullName,
+      HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,FullName,
                       HTM_SUBMIT_ON_CHANGE,
 		      "id=\"FullName\" class=\"INPUT_FULL_NAME\""
 		      " required=\"required\"");
@@ -118,7 +118,7 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 /*****************************************************************************/
 
 void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
-		      const char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1])
+		      const char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1])
   {
    extern const char *Txt_Short_name;
 
@@ -136,7 +136,7 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
      {
       /* Form to change short name */
       Frm_StartForm (NextAction);
-      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,ShrtName,
+      HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,ShrtName,
                       HTM_SUBMIT_ON_CHANGE,
 		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\""
 		      " required=\"required\"");
@@ -320,7 +320,7 @@ void HieCfg_QR (const char *ParamName,long HieCod)
 /************************ Number of users in courses *************************/
 /*****************************************************************************/
 
-void HieCfg_NumUsrsInCrss (Hie_Level_t Scope,long Cod,Rol_Role_t Role)
+void HieCfg_NumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role)
   {
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];

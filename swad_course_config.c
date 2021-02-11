@@ -35,6 +35,7 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_hierarchy_config.h"
 #include "swad_HTML.h"
 #include "swad_indicator.h"
@@ -158,10 +159,10 @@ void CrsCfg_Configuration (bool PrintView)
    else
      {
       /***** Number of users *****/
-      HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_TCH);
-      HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_NET);
-      HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_STD);
-      HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_UNK);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_TCH);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_NET);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_STD);
+      HieCfg_NumUsrsInCrss (Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_UNK);
 
       /***** Indicators *****/
       CrsCfg_Indicators ();
@@ -203,7 +204,7 @@ void CrsCfg_PrintConfiguration (void)
 static void CrsCfg_Title (bool PutLink)
   {
    HieCfg_Title (PutLink,
-		    Hie_DEG,				// Logo scope
+		    Hie_Lvl_DEG,				// Logo scope
 		    Gbl.Hierarchy.Deg.DegCod,		// Logo code
                     Gbl.Hierarchy.Deg.ShrtName,		// Logo short name
 		    Gbl.Hierarchy.Deg.FullName,		// Logo full name
@@ -262,7 +263,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 				  "BT_LINK LT DAT",NULL);
          Hie_FreeGoToMsg ();
 	}
-      Lgo_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Deg.ShrtName,
+      Lgo_DrawLogo (Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Deg.ShrtName,
 		    20,"LM",true);
       HTM_NBSP ();
       HTM_Txt (Gbl.Hierarchy.Deg.FullName);

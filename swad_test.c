@@ -225,9 +225,9 @@ static void Tst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod);
 static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
 static void Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
 
-static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
-static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType);
-static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType);
+static unsigned Tst_GetNumTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
+static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t AnsType);
+static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t AnsType);
 
 /*****************************************************************************/
 /********************* Request a self-assessment test ************************/
@@ -5389,7 +5389,7 @@ void Tst_GetTestStats (Tst_AnswerType_t AnsType,struct Tst_Stats *Stats)
 // Returns the number of test questions
 // in this location (all the platform, current degree or current course)
 
-static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats)
+static unsigned Tst_GetNumTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -5397,7 +5397,7 @@ static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsTy
    /***** Get number of test questions from database *****/
    switch (Scope)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
@@ -5409,7 +5409,7 @@ static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsTy
                             " WHERE AnsType='%s'",
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Hie_CTY:
+      case Hie_Lvl_CTY:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
@@ -5433,7 +5433,7 @@ static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsTy
 			    Gbl.Hierarchy.Cty.CtyCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Hie_INS:
+      case Hie_Lvl_INS:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
@@ -5455,7 +5455,7 @@ static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsTy
 			    Gbl.Hierarchy.Ins.InsCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
@@ -5475,7 +5475,7 @@ static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsTy
 			    Gbl.Hierarchy.Ctr.CtrCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Hie_DEG:
+      case Hie_Lvl_DEG:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
@@ -5493,7 +5493,7 @@ static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsTy
 			    Gbl.Hierarchy.Deg.DegCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Hie_CRS:
+      case Hie_Lvl_CRS:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
@@ -5546,7 +5546,7 @@ static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsTy
 // Returns the number of courses with test questions
 // in this location (all the platform, current degree or current course)
 
-static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType)
+static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t AnsType)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -5555,7 +5555,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerT
    /***** Get number of courses with test questions from database *****/
    switch (Scope)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -5569,7 +5569,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerT
                             " WHERE AnsType='%s'",
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Hie_CTY:
+      case Hie_Lvl_CTY:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -5595,7 +5595,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerT
 			    Gbl.Hierarchy.Cty.CtyCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Hie_INS:
+      case Hie_Lvl_INS:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -5619,7 +5619,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerT
 			    Gbl.Hierarchy.Ins.InsCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -5641,7 +5641,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerT
 			    Gbl.Hierarchy.Ctr.CtrCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Hie_DEG:
+      case Hie_Lvl_DEG:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -5661,7 +5661,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerT
 			    Gbl.Hierarchy.Deg.DegCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Hie_CRS:
+      case Hie_Lvl_CRS:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -5701,7 +5701,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerT
 // Returns the number of courses with pluggable test questions
 // in this location (all the platform, current degree or current course)
 
-static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType)
+static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t AnsType)
   {
    extern const char *TstCfg_PluggableDB[TstCfg_NUM_OPTIONS_PLUGGABLE];
    MYSQL_RES *mysql_res;
@@ -5711,7 +5711,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
    /***** Get number of courses with test questions from database *****/
    switch (Scope)
      {
-      case Hie_SYS:
+      case Hie_Lvl_SYS:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
@@ -5731,7 +5731,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
 			    Tst_StrAnswerTypesDB[AnsType],
 			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
          break;
-      case Hie_CTY:
+      case Hie_Lvl_CTY:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
@@ -5763,7 +5763,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
 			    Tst_StrAnswerTypesDB[AnsType],
 			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
          break;
-      case Hie_INS:
+      case Hie_Lvl_INS:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
@@ -5793,7 +5793,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
 			    Tst_StrAnswerTypesDB[AnsType],
 			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
          break;
-      case Hie_CTR:
+      case Hie_Lvl_CTR:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
@@ -5821,7 +5821,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
 			    Tst_StrAnswerTypesDB[AnsType],
 			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
          break;
-      case Hie_DEG:
+      case Hie_Lvl_DEG:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
@@ -5847,7 +5847,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
 			    Tst_StrAnswerTypesDB[AnsType],
 			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
          break;
-      case Hie_CRS:
+      case Hie_Lvl_CRS:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",

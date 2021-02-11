@@ -37,6 +37,7 @@
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_HTML.h"
 #include "swad_institution.h"
 #include "swad_logo.h"
@@ -83,7 +84,7 @@ static void Ins_PutIconToViewInstitutions (void);
 static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row);
 
 static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
-                                                char CtyName[Hie_MAX_BYTES_FULL_NAME + 1]);
+                                                char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1]);
 
 static void Ins_ListInstitutionsForEdition (void);
 static bool Ins_CheckIfICanEdit (struct Ins_Instit *Ins);
@@ -230,7 +231,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size)
       Ins_PutParamInsCod (Ins->InsCod);
       HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK",NULL);
      }
-   Lgo_DrawLogo (Hie_INS,Ins->InsCod,Ins->FullName,
+   Lgo_DrawLogo (Hie_Lvl_INS,Ins->InsCod,Ins->FullName,
 		 Size,NULL,true);
    if (PutLink)
      {
@@ -255,7 +256,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t
    Hie_FreeGoToMsg ();
 
    /***** Institution logo and name *****/
-   Lgo_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
+   Lgo_DrawLogo (Hie_Lvl_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
    HTM_TxtF ("&nbsp;%s",Ins->FullName);
 
    /***** End link *****/
@@ -442,7 +443,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
 
    /* Number of users in courses of this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_INS,Ins->InsCod,
+   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_Lvl_INS,Ins->InsCod,
 				             1 << Rol_STD |
 				             1 << Rol_NET |
 				             1 << Rol_TCH));	// Any user);
@@ -768,7 +769,7 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
 void Ins_WriteInstitutionNameAndCty (long InsCod)
   {
    struct Ins_Instit Ins;
-   char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
+   char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get institution short name and country name *****/
    Ins.InsCod = InsCod;
@@ -849,11 +850,11 @@ static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row)
 
    /***** Get the short name of the institution (row[4]) *****/
    Str_Copy (Ins->ShrtName,row[4],
-	     Hie_MAX_BYTES_SHRT_NAME);
+	     Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 
    /***** Get the full name of the institution (row[5]) *****/
    Str_Copy (Ins->FullName,row[5],
-	     Hie_MAX_BYTES_FULL_NAME);
+	     Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /***** Get the URL of the institution (row[6]) *****/
    Str_Copy (Ins->WWW,row[6],
@@ -886,7 +887,7 @@ void Ins_GetShortNameOfInstitution (struct Ins_Instit *Ins)
    if (Ins->InsCod == Gbl.Cache.InstitutionShrtName.InsCod)
      {
       Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtName.ShrtName,
-		Hie_MAX_BYTES_SHRT_NAME);
+		Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
       return;
      }
 
@@ -903,7 +904,7 @@ void Ins_GetShortNameOfInstitution (struct Ins_Instit *Ins)
       row = mysql_fetch_row (mysql_res);
 
       Str_Copy (Gbl.Cache.InstitutionShrtName.ShrtName,row[0],
-		Hie_MAX_BYTES_SHRT_NAME);
+		Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
      }
    else
       Gbl.Cache.InstitutionShrtName.ShrtName[0] = '\0';
@@ -912,7 +913,7 @@ void Ins_GetShortNameOfInstitution (struct Ins_Instit *Ins)
    DB_FreeMySQLResult (&mysql_res);
 
    Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtName.ShrtName,
-	     Hie_MAX_BYTES_SHRT_NAME);
+	     Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -927,7 +928,7 @@ void Ins_FlushCacheFullNameAndCtyOfInstitution (void)
   }
 
 static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
-                                                char CtyName[Hie_MAX_BYTES_FULL_NAME + 1])
+                                                char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
@@ -945,9 +946,9 @@ static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
    if (Ins->InsCod == Gbl.Cache.InstitutionShrtNameAndCty.InsCod)
      {
       Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,
-		Hie_MAX_BYTES_SHRT_NAME);
+		Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
       Str_Copy (CtyName,Gbl.Cache.InstitutionShrtNameAndCty.CtyName,
-		Hie_MAX_BYTES_FULL_NAME);
+		Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
       return;
      }
 
@@ -967,11 +968,11 @@ static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
 
       /* Get the short name of this institution (row[0]) */
       Str_Copy (Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,row[0],
-		Hie_MAX_BYTES_SHRT_NAME);
+		Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 
       /* Get the name of the country (row[1]) */
       Str_Copy (Gbl.Cache.InstitutionShrtNameAndCty.CtyName,row[1],
-		Hie_MAX_BYTES_FULL_NAME);
+		Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
      }
    else
      {
@@ -983,9 +984,9 @@ static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
    DB_FreeMySQLResult (&mysql_res);
 
    Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,
-	     Hie_MAX_BYTES_SHRT_NAME);
+	     Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
    Str_Copy (CtyName,Gbl.Cache.InstitutionShrtNameAndCty.CtyName,
-	     Hie_MAX_BYTES_FULL_NAME);
+	     Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -1103,7 +1104,7 @@ static void Ins_ListInstitutionsForEdition (void)
       ICanEdit = Ins_CheckIfICanEdit (Ins);
       NumCtrs = Ctr_GetNumCtrsInIns (Ins->InsCod);
       NumUsrsIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins);
-      NumUsrsInCrssOfIns = Usr_GetNumUsrsInCrss (Hie_INS,Ins->InsCod,
+      NumUsrsInCrssOfIns = Usr_GetNumUsrsInCrss (Hie_Lvl_INS,Ins->InsCod,
 						 1 << Rol_STD |
 						 1 << Rol_NET |
 						 1 << Rol_TCH);	// Any user
@@ -1130,7 +1131,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
       /* Institution logo */
       HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins->FullName);
-      Lgo_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
+      Lgo_DrawLogo (Hie_Lvl_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
       HTM_TD_End ();
 
       /* Institution short name */
@@ -1139,7 +1140,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Frm_StartForm (ActRenInsSho);
 	 Ins_PutParamOtherInsCod (&Ins->InsCod);
-	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
+	 HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
 	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_SHORT_NAME\"");
 	 Frm_EndForm ();
@@ -1154,7 +1155,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Frm_StartForm (ActRenInsFul);
 	 Ins_PutParamOtherInsCod (&Ins->InsCod);
-	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins->FullName,
+	 HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins->FullName,
 	                 HTM_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_FULL_NAME\"");
 	 Frm_EndForm ();
@@ -1373,7 +1374,7 @@ void Ins_RemoveInstitution (void)
       // Institution has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
-   else if (Usr_GetNumUsrsInCrss (Hie_INS,Ins_EditingIns->InsCod,
+   else if (Usr_GetNumUsrsInCrss (Hie_Lvl_INS,Ins_EditingIns->InsCod,
 				  1 << Rol_STD |
 				  1 << Rol_NET |
 				  1 << Rol_TCH))	// Any user
@@ -1383,10 +1384,10 @@ void Ins_RemoveInstitution (void)
    else	// Institution has no users ==> remove it
      {
       /***** Remove all the threads and posts in forums of the institution *****/
-      For_RemoveForums (Hie_INS,Ins_EditingIns->InsCod);
+      For_RemoveForums (Hie_Lvl_INS,Ins_EditingIns->InsCod);
 
       /***** Remove surveys of the institution *****/
-      Svy_RemoveSurveys (Hie_INS,Ins_EditingIns->InsCod);
+      Svy_RemoveSurveys (Hie_Lvl_INS,Ins_EditingIns->InsCod);
 
       /***** Remove information related to files in institution *****/
       Brw_RemoveInsFilesFromDB (Ins_EditingIns->InsCod);
@@ -1459,20 +1460,20 @@ void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFu
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentInsName = NULL;		// Initialized to avoid warning
-   char NewInsName[Hie_MAX_BYTES_FULL_NAME + 1];
+   char NewInsName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
+         MaxBytes = Cns_HIERARCHY_MAX_BYTES_SHRT_NAME;
          CurrentInsName = Ins->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         MaxBytes = Hie_MAX_BYTES_FULL_NAME;
+         MaxBytes = Cns_HIERARCHY_MAX_BYTES_FULL_NAME;
          CurrentInsName = Ins->FullName;
          break;
      }
@@ -1732,19 +1733,19 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Institution logo *****/
    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins_EditingIns->FullName);
-   Lgo_DrawLogo (Hie_INS,-1L,"",20,NULL,true);
+   Lgo_DrawLogo (Hie_Lvl_INS,-1L,"",20,NULL,true);
    HTM_TD_End ();
 
    /***** Institution short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,
+   HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Institution full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,
+   HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
@@ -1866,10 +1867,10 @@ static void Ins_ReceiveFormRequestOrCreateIns (unsigned Status)
    Ins_EditingIns->CtyCod = Gbl.Hierarchy.Cty.CtyCod;
 
    /* Get institution short name */
-   Par_GetParToText ("ShortName",Ins_EditingIns->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
+   Par_GetParToText ("ShortName",Ins_EditingIns->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 
    /* Get institution full name */
-   Par_GetParToText ("FullName",Ins_EditingIns->FullName,Hie_MAX_BYTES_FULL_NAME);
+   Par_GetParToText ("FullName",Ins_EditingIns->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /* Get institution WWW */
    Par_GetParToText ("WWW",Ins_EditingIns->WWW,Cns_MAX_BYTES_WWW);
@@ -1937,12 +1938,12 @@ unsigned Ins_GetCachedNumInssInSys (void)
    unsigned NumInss;
 
    /***** Get number of institutions from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,Hie_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,Hie_Lvl_SYS,-1L,
                                    FigCch_UNSIGNED,&NumInss))
      {
       /***** Get current number of institutions from database and update cache *****/
       NumInss = (unsigned) DB_GetNumRowsTable ("institutions");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,Hie_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,Hie_Lvl_SYS,-1L,
                                     FigCch_UNSIGNED,&NumInss);
      }
 
@@ -1974,7 +1975,7 @@ unsigned Ins_GetNumInssInCty (long CtyCod)
 			     " WHERE CtyCod=%ld",
 			     CtyCod);
    Gbl.Cache.NumInssInCty.Valid = true;
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,Hie_CTY,Gbl.Cache.NumInssInCty.CtyCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,Hie_Lvl_CTY,Gbl.Cache.NumInssInCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumInssInCty.NumInss);
    return Gbl.Cache.NumInssInCty.NumInss;
   }
@@ -1984,7 +1985,7 @@ unsigned Ins_GetCachedNumInssInCty (long CtyCod)
    unsigned NumInss;
 
    /***** Get number of institutions from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,Hie_CTY,CtyCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,Hie_Lvl_CTY,CtyCod,
                                    FigCch_UNSIGNED,&NumInss))
       /***** Get current number of institutions from database and update cache *****/
       NumInss = Ins_GetNumInssInCty (CtyCod);
@@ -1997,7 +1998,7 @@ unsigned Ins_GetCachedNumInssInCty (long CtyCod)
 /*****************************************************************************/
 
 unsigned Ins_GetCachedNumInssWithCtrs (const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod)
+                                       Hie_Lvl_Level_t Scope,long Cod)
   {
    unsigned NumInssWithCtrs;
 
@@ -2024,7 +2025,7 @@ unsigned Ins_GetCachedNumInssWithCtrs (const char *SubQuery,
 /*****************************************************************************/
 
 unsigned Ins_GetCachedNumInssWithDegs (const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod)
+                                       Hie_Lvl_Level_t Scope,long Cod)
   {
    unsigned NumInssWithDegs;
 
@@ -2052,7 +2053,7 @@ unsigned Ins_GetCachedNumInssWithDegs (const char *SubQuery,
 /*****************************************************************************/
 
 unsigned Ins_GetCachedNumInssWithCrss (const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod)
+                                       Hie_Lvl_Level_t Scope,long Cod)
   {
    unsigned NumInssWithCrss;
 
@@ -2081,7 +2082,7 @@ unsigned Ins_GetCachedNumInssWithCrss (const char *SubQuery,
 /*****************************************************************************/
 
 unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Level_t Scope,long Cod)
+                                       Hie_Lvl_Level_t Scope,long Cod)
   {
    static const FigCch_FigureCached_t FigureInss[Rol_NUM_ROLES] =
      {

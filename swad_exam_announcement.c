@@ -187,11 +187,11 @@ static long ExaAnn_GetParamsExamAnn (struct ExaAnn_ExamAnnouncements *ExamAnns)
    ExaCod = ExaAnn_GetParamExaCod ();
 
    /***** Get the name of the course (it is allowed to be different from the official name of the course) *****/
-   Par_GetParToText ("CrsName",ExamAnns->ExamAnn.CrsFullName,Hie_MAX_BYTES_FULL_NAME);
+   Par_GetParToText ("CrsName",ExamAnns->ExamAnn.CrsFullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
    // If the parameter is not present or is empty, initialize the string to the full name of the current course
    if (!ExamAnns->ExamAnn.CrsFullName[0])
       Str_Copy (ExamAnns->ExamAnn.CrsFullName,Gbl.Hierarchy.Crs.FullName,
-                Hie_MAX_BYTES_FULL_NAME);
+                Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /***** Get the year *****/
    ExamAnns->ExamAnn.Year = (unsigned)
@@ -983,7 +983,7 @@ static void ExaAnn_GetDataExamAnnFromDB (struct ExaAnn_ExamAnnouncements *ExamAn
 
    /* Name of the course (row[2]) */
    Str_Copy (ExamAnns->ExamAnn.CrsFullName,row[2],
-             Hie_MAX_BYTES_FULL_NAME);
+             Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /* Year (row[3]) */
    if (sscanf (row[3],"%u",&ExamAnns->ExamAnn.Year) != 1)
@@ -1166,7 +1166,7 @@ static void ExaAnn_ShowExamAnn (struct ExaAnn_ExamAnnouncements *ExamAnns,
    else
       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT\"",
                    Ins.WWW);
-   Lgo_DrawLogo (Hie_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
+   Lgo_DrawLogo (Hie_Lvl_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
    HTM_BR ();
    HTM_Txt (Ins.FullName);
    if (TypeViewExamAnnouncement == ExaAnn_PRINT_VIEW)
@@ -1217,7 +1217,7 @@ static void ExaAnn_ShowExamAnn (struct ExaAnn_ExamAnnouncements *ExamAnns,
    /* Data */
    HTM_TD_Begin ("class=\"EXAM LB\"");
    if (TypeViewExamAnnouncement == ExaAnn_FORM_VIEW)
-      HTM_INPUT_TEXT ("CrsName",Hie_MAX_CHARS_FULL_NAME,ExamAnns->ExamAnn.CrsFullName,
+      HTM_INPUT_TEXT ("CrsName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,ExamAnns->ExamAnn.CrsFullName,
                       HTM_DONT_SUBMIT_ON_CHANGE,
 		      "id=\"CrsName\" size=\"30\"");
    else
@@ -1703,7 +1703,7 @@ void ExaAnn_GetSummaryAndContentExamAnn (char SummaryStr[Ntf_MAX_BYTES_SUMMARY +
   {
    extern const char *Txt_hours_ABBREVIATION;
    struct ExaAnn_ExamAnnouncements ExamAnns;
-   char CrsNameAndDate[Hie_MAX_BYTES_FULL_NAME + (2 + Cns_MAX_BYTES_DATE + 7) + 1];
+   char CrsNameAndDate[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + (2 + Cns_MAX_BYTES_DATE + 7) + 1];
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
 
    /***** Reset exam announcements context *****/
@@ -1762,9 +1762,9 @@ static void ExaAnn_GetNotifContentExamAnn (const struct ExaAnn_ExamAnnouncements
    extern const char *Txt_EXAM_ANNOUNCEMENT_Material_allowed;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Other_information;
    extern const char *Txt_hours_ABBREVIATION;
-   struct Crs_Course Crs;
-   struct Deg_Degree Deg;
    struct Ins_Instit Ins;
+   struct Deg_Degree Deg;
+   struct Crs_Course Crs;
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
 
    /***** Get data of course *****/
