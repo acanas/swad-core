@@ -647,7 +647,7 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
 
       /***** Create list with institutions *****/
       if ((Gbl.Hierarchy.Inss.Lst = (struct Ins_Instit *)
-	                                calloc (NumRows,sizeof (struct Ins_Instit))) == NULL)
+	                            calloc (NumRows,sizeof (struct Ins_Instit))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
@@ -731,7 +731,7 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
 
       /***** Create list with institutions *****/
       if ((Gbl.Hierarchy.Inss.Lst = (struct Ins_Instit *)
-	                                calloc (NumRows,sizeof (struct Ins_Instit))) == NULL)
+	                            calloc (NumRows,sizeof (struct Ins_Instit))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/

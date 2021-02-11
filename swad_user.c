@@ -3864,12 +3864,12 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
    char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
    struct Ins_Instit Ins;
+   struct Ctr_Centre Ctr;
+   struct Dpt_Department Dpt;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    bool ShowData = (ItsMe || UsrDat->Accepted ||
                     Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-   struct Ctr_Centre Ctr;
-   struct Dpt_Department Dpt;
 
    /***** Start row *****/
    HTM_TR_Begin (NULL);

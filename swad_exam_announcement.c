@@ -37,6 +37,7 @@
 #include "swad_exam_announcement.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
 #include "swad_notification.h"
@@ -1762,22 +1763,20 @@ static void ExaAnn_GetNotifContentExamAnn (const struct ExaAnn_ExamAnnouncements
    extern const char *Txt_EXAM_ANNOUNCEMENT_Material_allowed;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Other_information;
    extern const char *Txt_hours_ABBREVIATION;
-   struct Ins_Instit Ins;
-   struct Deg_Degree Deg;
-   struct Crs_Course Crs;
+   struct Hie_Hierarchy Hie;
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
 
    /***** Get data of course *****/
-   Crs.CrsCod = ExamAnns->ExamAnn.CrsCod;
-   Crs_GetDataOfCourseByCod (&Crs);
+   Hie.Crs.CrsCod = ExamAnns->ExamAnn.CrsCod;
+   Crs_GetDataOfCourseByCod (&Hie.Crs);
 
    /***** Get data of degree *****/
-   Deg.DegCod = Crs.DegCod;
-   Deg_GetDataOfDegreeByCod (&Deg);
+   Hie.Deg.DegCod = Hie.Crs.DegCod;
+   Deg_GetDataOfDegreeByCod (&Hie.Deg);
 
    /***** Get data of institution *****/
-   Ins.InsCod = Deg_GetInsCodOfDegreeByCod (Deg.DegCod);
-   Ins_GetDataOfInstitutionByCod (&Ins);
+   Hie.Ins.InsCod = Deg_GetInsCodOfDegreeByCod (Hie.Deg.DegCod);
+   Ins_GetDataOfInstitutionByCod (&Hie.Ins);
 
    /***** Convert struct date to a date string *****/
    Dat_ConvDateToDateStr (&ExamAnns->ExamAnn.ExamDate,StrExamDate);
@@ -1798,8 +1797,8 @@ static void ExaAnn_GetNotifContentExamAnn (const struct ExaAnn_ExamAnnouncements
                             "%s: %s<br />"
                             "%s: %s<br />"
                             "%s: %s",
-                 Txt_Institution,Ins.FullName,
-                 Txt_Degree,Deg.FullName,
+                 Txt_Institution,Hie.Ins.FullName,
+                 Txt_Degree,Hie.Deg.FullName,
                  Txt_EXAM_ANNOUNCEMENT_Course,ExamAnns->ExamAnn.CrsFullName,
                  Txt_EXAM_ANNOUNCEMENT_Year_or_semester,Txt_YEAR_OF_DEGREE[ExamAnns->ExamAnn.Year],
                  Txt_EXAM_ANNOUNCEMENT_Session,ExamAnns->ExamAnn.Session,

@@ -43,6 +43,7 @@
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_HTML.h"
 #include "swad_mark.h"
 #include "swad_message.h"
@@ -323,10 +324,7 @@ void Ntf_ShowMyNotifications (void)
    bool AllNotifications;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
    struct UsrData UsrDat;
-   struct Ins_Instit Ins;
-   struct Ctr_Centre Ctr;
-   struct Deg_Degree Deg;
-   struct Crs_Course Crs;
+   struct Hie_Hierarchy Hie;
    long Cod;
    struct For_Forums Forums;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
@@ -414,20 +412,20 @@ void Ntf_ShowMyNotifications (void)
          Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);		// Get user's data from the database
 
          /* Get institution code (row[2]) */
-         Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
-         Ins_GetDataOfInstitutionByCod (&Ins);
+         Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
+         Ins_GetDataOfInstitutionByCod (&Hie.Ins);
 
           /* Get centre code (row[3]) */
-         Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
-         Ctr_GetDataOfCentreByCod (&Ctr);
+         Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
+         Ctr_GetDataOfCentreByCod (&Hie.Ctr);
 
          /* Get degree code (row[4]) */
-         Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
-         Deg_GetDataOfDegreeByCod (&Deg);
+         Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
+         Deg_GetDataOfDegreeByCod (&Hie.Deg);
 
          /* Get course code (row[5]) */
-         Crs.CrsCod = Str_ConvertStrCodToLongCod (row[5]);
-         Crs_GetDataOfCourseByCod (&Crs);
+         Hie.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[5]);
+         Crs_GetDataOfCourseByCod (&Hie.Crs);
 
          /* Get message/post/... code (row[6]) */
          Cod = Str_ConvertStrCodToLongCod (row[6]);
@@ -481,7 +479,7 @@ void Ntf_ShowMyNotifications (void)
 
          HTM_TD_Begin ("class=\"%s LT\" style=\"width:25px;\"",ClassBackground);
          if (PutLink)
-            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod,&Forums);
+            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
 
          if (PutLink)
            {
@@ -498,7 +496,7 @@ void Ntf_ShowMyNotifications (void)
          HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
          if (PutLink)
            {
-            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod,&Forums);
+            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
             HTM_BUTTON_SUBMIT_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
             HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
             HTM_BUTTON_End ();
@@ -523,7 +521,7 @@ void Ntf_ShowMyNotifications (void)
              NotifyEvent == Ntf_EVENT_FORUM_REPLY)
            {
             if (PutLink)
-               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod,&Forums);
+               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
 
             if (PutLink)
                HTM_BUTTON_SUBMIT_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
@@ -541,21 +539,21 @@ void Ntf_ShowMyNotifications (void)
          else
            {
             if (PutLink)
-               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod,&Forums);
+               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
 
             if (PutLink)
                HTM_BUTTON_SUBMIT_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
             else
                HTM_SPAN_Begin ("class=\"%s\"",ClassText);
 
-            if (Crs.CrsCod > 0)
-               HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Crs.ShrtName);
-            else if (Deg.DegCod > 0)
-               HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Deg.ShrtName);
-            else if (Ctr.CtrCod > 0)
-               HTM_TxtF ("%s:&nbsp;%s",Txt_Centre,Ctr.ShrtName);
-            else if (Ins.InsCod > 0)
-               HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Ins.ShrtName);
+            if (Hie.Crs.CrsCod > 0)
+               HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Hie.Crs.ShrtName);
+            else if (Hie.Deg.DegCod > 0)
+               HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Hie.Deg.ShrtName);
+            else if (Hie.Ctr.CtrCod > 0)
+               HTM_TxtF ("%s:&nbsp;%s",Txt_Centre,Hie.Ctr.ShrtName);
+            else if (Hie.Ins.InsCod > 0)
+               HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Hie.Ins.ShrtName);
             else
                HTM_Hyphen ();
 
@@ -585,7 +583,7 @@ void Ntf_ShowMyNotifications (void)
             ContentStr = NULL;
 
             Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
-                                           Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+                                           Cod,Hie.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
                                            false);
             HTM_TR_Begin (NULL);
 
@@ -1586,10 +1584,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    Lan_Language_t ToUsrLanguage;
    struct UsrData FromUsrDat;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
-   struct Ins_Instit Ins;
-   struct Ctr_Centre Ctr;
-   struct Deg_Degree Deg;
-   struct Crs_Course Crs;
+   struct Hie_Hierarchy Hie;
    long Cod;
    struct For_Forum ForumSelected;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
@@ -1665,20 +1660,20 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FromUsrDat,Usr_DONT_GET_PREFS);		// Get origin user's data from the database
 
 	    /* Get institution code (row[2]) */
-	    Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
-	    Ins_GetDataOfInstitutionByCod (&Ins);
+	    Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
+	    Ins_GetDataOfInstitutionByCod (&Hie.Ins);
 
 	    /* Get centre code (row[3]) */
-	    Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
-	    Ctr_GetDataOfCentreByCod (&Ctr);
+	    Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
+	    Ctr_GetDataOfCentreByCod (&Hie.Ctr);
 
 	    /* Get degree code (row[4]) */
-	    Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
-	    Deg_GetDataOfDegreeByCod (&Deg);
+	    Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
+	    Deg_GetDataOfDegreeByCod (&Hie.Deg);
 
 	    /* Get course code (row[5]) */
-	    Crs.CrsCod = Str_ConvertStrCodToLongCod (row[5]);
-	    Crs_GetDataOfCourseByCod (&Crs);
+	    Hie.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[5]);
+	    Crs_GetDataOfCourseByCod (&Hie.Crs);
 
 	    /* Get message/post/... code (row[6]) */
 	    Cod = Str_ConvertStrCodToLongCod (row[6]);
@@ -1716,10 +1711,10 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	       case Ntf_EVENT_NOTICE:
 	       case Ntf_EVENT_MESSAGE:
 	       case Ntf_EVENT_SURVEY:
-		  if (Crs.CrsCod > 0)
+		  if (Hie.Crs.CrsCod > 0)
 		     fprintf (FileMail,"%s: %s\n",
 			      Txt_Course_NO_HTML[ToUsrLanguage],
-			      Crs.FullName);
+			      Hie.Crs.FullName);
 		  break;
 	       case Ntf_EVENT_FORUM_POST_COURSE:
 	       case Ntf_EVENT_FORUM_REPLY:
@@ -1782,7 +1777,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	    *NumMails = 1;
 
 	    /* Update statistics about notifications */
-	    Ntf_UpdateNumNotifSent (Deg.DegCod,Crs.CrsCod,NotifyEvent,*NumNotif,*NumMails);
+	    Ntf_UpdateNumNotifSent (Hie.Deg.DegCod,Hie.Crs.CrsCod,NotifyEvent,*NumNotif,*NumMails);
 	   }
 
 	 /***** Mark all the pending notifications of this user as 'sent' *****/

@@ -34,6 +34,7 @@
 #include "swad_database.h"
 #include "swad_exam_log.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_HTML.h"
 #include "swad_log.h"
 #include "swad_profile.h"
@@ -262,10 +263,7 @@ void Log_GetAndShowLastClicks (void)
    Act_Action_t Action;
    const char *ClassRow;
    time_t TimeDiff;
-   struct Cty_Countr Cty;
-   struct Ins_Instit Ins;
-   struct Ctr_Centre Ctr;
-   struct Deg_Degree Deg;
+   struct Hie_Hierarchy Hie;
 
    /***** Get last clicks from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get last clicks",
@@ -319,56 +317,56 @@ void Log_GetAndShowLastClicks (void)
          TimeDiff = (time_t) 0;
 
       /* Get country code (row[4]) */
-      Cty.CtyCod = Str_ConvertStrCodToLongCod (row[4]);
-      Cty_GetCountryName (Cty.CtyCod,Gbl.Prefs.Language,
-			  Cty.Name[Gbl.Prefs.Language]);
+      Hie.Cty.CtyCod = Str_ConvertStrCodToLongCod (row[4]);
+      Cty_GetCountryName (Hie.Cty.CtyCod,Gbl.Prefs.Language,
+			  Hie.Cty.Name[Gbl.Prefs.Language]);
 
       /* Get institution code (row[5]) */
-      Ins.InsCod = Str_ConvertStrCodToLongCod (row[5]);
-      Ins_GetShortNameOfInstitution (&Ins);
+      Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[5]);
+      Ins_GetShortNameOfInstitution (&Hie.Ins);
 
       /* Get centre code (row[6]) */
-      Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[6]);
-      Ctr_GetShortNameOfCentreByCod (&Ctr);
+      Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[6]);
+      Ctr_GetShortNameOfCentreByCod (&Hie.Ctr);
 
       /* Get degree code (row[7]) */
-      Deg.DegCod = Str_ConvertStrCodToLongCod (row[7]);
-      Deg_GetShortNameOfDegreeByCod (&Deg);
+      Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[7]);
+      Deg_GetShortNameOfDegreeByCod (&Hie.Deg);
 
       /* Print table row */
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"LC_CLK %s\"",ClassRow);
-      HTM_Txt (row[0]);					// Click
+      HTM_Txt (row[0]);						// Click
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"LC_TIM %s\"",ClassRow);	// Elapsed time
+      HTM_TD_Begin ("class=\"LC_TIM %s\"",ClassRow);		// Elapsed time
       Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_ROL %s\"",ClassRow);
-      HTM_Txt (						// Role
+      HTM_Txt (							// Role
 	       Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_CTY %s\"",ClassRow);
-      HTM_Txt (Cty.Name[Gbl.Prefs.Language]);		// Country
+      HTM_Txt (Hie.Cty.Name[Gbl.Prefs.Language]);		// Country
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_INS %s\"",ClassRow);
-      HTM_Txt (Ins.ShrtName);				// Institution
+      HTM_Txt (Hie.Ins.ShrtName);				// Institution
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_CTR %s\"",ClassRow);
-      HTM_Txt (Ctr.ShrtName);				// Centre
+      HTM_Txt (Hie.Ctr.ShrtName);				// Centre
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_DEG %s\"",ClassRow);
-      HTM_Txt (Deg.ShrtName);				// Degree
+      HTM_Txt (Hie.Deg.ShrtName);				// Degree
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_ACT %s\"",ClassRow);
-      HTM_Txt (Act_GetActionText (Action));		// Action
+      HTM_Txt (Act_GetActionText (Action));			// Action
       HTM_TD_End ();
 
       HTM_TR_End ();

@@ -601,7 +601,7 @@ TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse 
 TODO: BUG: Cuando un tipo de grupo sólo tiene un grupo, inscribirse es voluntario, el estudiante sólo puede pertenecer a un grupo, y se inscribe en él, debería poder desapuntarse. Ahora no puede.
 TODO: Salvador Romero Cortés: @acanas opción para editar posts
 
-	Version 20.30:    Feb 11, 2021  Code refactoring in hierarchy. (? lines)
+	Version 20.30:    Feb 11, 2021  Code refactoring in hierarchy. (305853 lines)
 	Version 20.29.3:  Feb 11, 2021  Code refactoring in timeline. (305826 lines)
 	Version 20.29.2:  Feb 11, 2021  Code refactoring in timeline. (305806 lines)
 	Version 20.29.1:  Feb 11, 2021  Code refactoring in timeline. (305780 lines)

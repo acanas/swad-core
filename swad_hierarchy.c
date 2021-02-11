@@ -660,9 +660,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
    MYSQL_ROW row;
    unsigned NumRow;
    unsigned NumRows;
-   struct Ins_Instit Ins;
-   struct Ctr_Centre Ctr;
-   struct Deg_Degree Deg;
+   struct Hie_Hierarchy Hie;
 
    /***** Get institutions, centres, degrees admin by user from database *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions,"
@@ -725,38 +723,38 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	       HTM_TxtF ("&nbsp;%s",Txt_all_degrees);
 	       break;
 	    case Hie_Lvl_INS:	// Institution
-	       Ins.InsCod = Str_ConvertStrCodToLongCod (row[1]);
-	       if (Ins.InsCod > 0)
+	       Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[1]);
+	       if (Hie.Ins.InsCod > 0)
 		 {
 		  /* Get data of institution */
-		  Ins_GetDataOfInstitutionByCod (&Ins);
+		  Ins_GetDataOfInstitutionByCod (&Hie.Ins);
 
 		  /* Write institution logo and name */
-		  Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,
+		  Ins_DrawInstitutionLogoAndNameWithLink (&Hie.Ins,ActSeeInsInf,
 						          "BT_LINK DAT_SMALL_NOBR","LT");
 		 }
 	       break;
 	    case Hie_Lvl_CTR:	// Centre
-	       Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[1]);
-	       if (Ctr.CtrCod > 0)
+	       Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[1]);
+	       if (Hie.Ctr.CtrCod > 0)
 		 {
 		  /* Get data of centre */
-		  Ctr_GetDataOfCentreByCod (&Ctr);
+		  Ctr_GetDataOfCentreByCod (&Hie.Ctr);
 
 		  /* Write centre logo and name */
-		  Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
+		  Ctr_DrawCentreLogoAndNameWithLink (&Hie.Ctr,ActSeeCtrInf,
 						     "BT_LINK DAT_SMALL_NOBR","LT");
 		 }
 	       break;
 	    case Hie_Lvl_DEG:	// Degree
-	       Deg.DegCod = Str_ConvertStrCodToLongCod (row[1]);
-	       if (Deg.DegCod > 0)
+	       Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[1]);
+	       if (Hie.Deg.DegCod > 0)
 		 {
 		  /* Get data of degree */
-		  Deg_GetDataOfDegreeByCod (&Deg);
+		  Deg_GetDataOfDegreeByCod (&Hie.Deg);
 
 		  /* Write degree logo and name */
-		  Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
+		  Deg_DrawDegreeLogoAndNameWithLink (&Hie.Deg,ActSeeDegInf,
 						     "BT_LINK DAT_SMALL_NOBR","LT");
 		 }
 	       break;

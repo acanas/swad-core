@@ -6848,10 +6848,7 @@ static void Brw_WriteCurrentClipboard (void)
    extern const char *Txt_folder;
    extern const char *Txt_link;
    extern const char *Txt_all_files_inside_the_root_folder;
-   struct Ins_Instit Ins;
-   struct Ctr_Centre Ctr;
-   struct Deg_Degree Deg;
-   struct Crs_Course Crs;
+   struct Hie_Hierarchy Hie;
    struct GroupData GrpDat;
    struct Prj_Project Prj;
    struct UsrData UsrDat;
@@ -6873,151 +6870,151 @@ static void Brw_WriteCurrentClipboard (void)
    switch (Gbl.FileBrowser.Clipboard.FileBrowser)
      {
       case Brw_ADMI_DOC_INS:
-	 Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Ins_GetDataOfInstitutionByCod (&Ins);
+	 Hie.Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Ins_GetDataOfInstitutionByCod (&Hie.Ins);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_documents_management_area,
-                   Txt_institution,Ins.ShrtName);
+                   Txt_institution,Hie.Ins.ShrtName);
          break;
       case Brw_ADMI_SHR_INS:
-	 Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Ins_GetDataOfInstitutionByCod (&Ins);
+	 Hie.Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Ins_GetDataOfInstitutionByCod (&Hie.Ins);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_shared_files_area,
-                   Txt_institution,Ins.ShrtName);
+                   Txt_institution,Hie.Ins.ShrtName);
          break;
       case Brw_ADMI_DOC_CTR:
-	 Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 Hie.Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Ctr_GetDataOfCentreByCod (&Hie.Ctr);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_documents_management_area,
-                   Txt_centre,Ctr.ShrtName);
+                   Txt_centre,Hie.Ctr.ShrtName);
          break;
       case Brw_ADMI_SHR_CTR:
-	 Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 Hie.Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Ctr_GetDataOfCentreByCod (&Hie.Ctr);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_shared_files_area,
-                   Txt_centre,Ctr.ShrtName);
+                   Txt_centre,Hie.Ctr.ShrtName);
          break;
       case Brw_ADMI_DOC_DEG:
-	 Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Deg_GetDataOfDegreeByCod (&Deg);
+	 Hie.Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Deg_GetDataOfDegreeByCod (&Hie.Deg);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_documents_management_area,
-                   Txt_degree,Deg.ShrtName);
+                   Txt_degree,Hie.Deg.ShrtName);
          break;
       case Brw_ADMI_SHR_DEG:
-	 Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Deg_GetDataOfDegreeByCod (&Deg);
+	 Hie.Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Deg_GetDataOfDegreeByCod (&Hie.Deg);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_shared_files_area,
-                   Txt_degree,Deg.ShrtName);
+                   Txt_degree,Hie.Deg.ShrtName);
          break;
       case Brw_ADMI_DOC_CRS:
-	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Crs_GetDataOfCourseByCod (&Crs);
+	 Hie.Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Crs_GetDataOfCourseByCod (&Hie.Crs);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_documents_management_area,
-                   Txt_course,Crs.ShrtName);
+                   Txt_course,Hie.Crs.ShrtName);
          break;
       case Brw_ADMI_DOC_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
          Grp_GetDataOfGroupByCod (&GrpDat);
-	 Crs.CrsCod = GrpDat.CrsCod;
-	 Crs_GetDataOfCourseByCod (&Crs);
+	 Hie.Crs.CrsCod = GrpDat.CrsCod;
+	 Crs_GetDataOfCourseByCod (&Hie.Crs);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_documents_management_area,
-                   Txt_course,Crs.ShrtName,
+                   Txt_course,Hie.Crs.ShrtName,
                    Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_TCH_CRS:
-	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Crs_GetDataOfCourseByCod (&Crs);
+	 Hie.Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Crs_GetDataOfCourseByCod (&Hie.Crs);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_teachers_files_area,
-                   Txt_course,Crs.ShrtName);
+                   Txt_course,Hie.Crs.ShrtName);
          break;
       case Brw_ADMI_TCH_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
          Grp_GetDataOfGroupByCod (&GrpDat);
-	 Crs.CrsCod = GrpDat.CrsCod;
-	 Crs_GetDataOfCourseByCod (&Crs);
+	 Hie.Crs.CrsCod = GrpDat.CrsCod;
+	 Crs_GetDataOfCourseByCod (&Hie.Crs);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_teachers_files_area,
-                   Txt_course,Crs.ShrtName,
+                   Txt_course,Hie.Crs.ShrtName,
                    Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_SHR_CRS:
-	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Crs_GetDataOfCourseByCod (&Crs);
+	 Hie.Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Crs_GetDataOfCourseByCod (&Hie.Crs);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_shared_files_area,
-                   Txt_course,Crs.ShrtName);
+                   Txt_course,Hie.Crs.ShrtName);
          break;
       case Brw_ADMI_SHR_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
          Grp_GetDataOfGroupByCod (&GrpDat);
-	 Crs.CrsCod = GrpDat.CrsCod;
-	 Crs_GetDataOfCourseByCod (&Crs);
+	 Hie.Crs.CrsCod = GrpDat.CrsCod;
+	 Crs_GetDataOfCourseByCod (&Hie.Crs);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_shared_files_area,
-                   Txt_course,Crs.ShrtName,
+                   Txt_course,Hie.Crs.ShrtName,
                    Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_ASG_USR:
-	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Crs_GetDataOfCourseByCod (&Crs);
+	 Hie.Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Crs_GetDataOfCourseByCod (&Hie.Crs);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_assignments_area,
-                   Txt_course,Crs.ShrtName,
+                   Txt_course,Hie.Crs.ShrtName,
                    Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
       case Brw_ADMI_WRK_USR:
-	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Crs_GetDataOfCourseByCod (&Crs);
+	 Hie.Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Crs_GetDataOfCourseByCod (&Hie.Crs);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_works_area,
-                   Txt_course,Crs.ShrtName,
+                   Txt_course,Hie.Crs.ShrtName,
                    Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
       case Brw_ADMI_ASG_CRS:
-	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Crs_GetDataOfCourseByCod (&Crs);
+	 Hie.Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Crs_GetDataOfCourseByCod (&Hie.Crs);
          Usr_UsrDataConstructor (&UsrDat);
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
          Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_assignments_area,
-                   Txt_course,Crs.ShrtName,
+                   Txt_course,Hie.Crs.ShrtName,
                    Txt_user[UsrDat.Sex],UsrDat.FullName);
          Usr_UsrDataDestructor (&UsrDat);
          break;
       case Brw_ADMI_WRK_CRS:
-	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Crs_GetDataOfCourseByCod (&Crs);
+	 Hie.Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Crs_GetDataOfCourseByCod (&Hie.Crs);
          Usr_UsrDataConstructor (&UsrDat);
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
          Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_works_area,
-                   Txt_course,Crs.ShrtName,
+                   Txt_course,Hie.Crs.ShrtName,
                    Txt_user[UsrDat.Sex],UsrDat.FullName);
          Usr_UsrDataDestructor (&UsrDat);
          break;
@@ -7026,33 +7023,33 @@ static void Brw_WriteCurrentClipboard (void)
 	 Prj_AllocMemProject (&Prj);
          Prj.PrjCod = Gbl.FileBrowser.Clipboard.Cod;
          Prj_GetDataOfProjectByCod (&Prj);
-	 Crs.CrsCod = Prj.CrsCod;
-	 Crs_GetDataOfCourseByCod (&Crs);
+	 Hie.Crs.CrsCod = Prj.CrsCod;
+	 Crs_GetDataOfCourseByCod (&Hie.Crs);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Gbl.FileBrowser.Clipboard.FileBrowser == Brw_ADMI_DOC_PRJ ? Txt_project_documents :
                                                                                Txt_project_assessment,
-                   Txt_course,Crs.ShrtName,
+                   Txt_course,Hie.Crs.ShrtName,
                    Txt_project,Prj.Title);
          Prj_FreeMemProject (&Prj);
          break;
       case Brw_ADMI_MRK_CRS:
-	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Crs_GetDataOfCourseByCod (&Crs);
+	 Hie.Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Crs_GetDataOfCourseByCod (&Hie.Crs);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_marks_management_area,
-                   Txt_course,Crs.ShrtName);
+                   Txt_course,Hie.Crs.ShrtName);
          break;
       case Brw_ADMI_MRK_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
          Grp_GetDataOfGroupByCod (&GrpDat);
-	 Crs.CrsCod = GrpDat.CrsCod;
-	 Crs_GetDataOfCourseByCod (&Crs);
+	 Hie.Crs.CrsCod = GrpDat.CrsCod;
+	 Crs_GetDataOfCourseByCod (&Hie.Crs);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_marks_management_area,
-                   Txt_course,Crs.ShrtName,
+                   Txt_course,Hie.Crs.ShrtName,
                    Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_BRF_USR:
@@ -7864,10 +7861,7 @@ static void Brw_PasteClipboard (void)
    extern const char *Txt_Links_copied;
    extern const char *Txt_Folders_copied;
    extern const char *Txt_You_can_not_paste_file_or_folder_here;
-   struct Ins_Instit Ins;
-   struct Ctr_Centre Ctr;
-   struct Deg_Degree Deg;
-   struct Crs_Course Crs;
+   struct Hie_Hierarchy Hie;
    struct GroupData GrpDat;
    struct UsrData UsrDat;
    long PrjCod;
@@ -7888,39 +7882,39 @@ static void Brw_PasteClipboard (void)
         {
          case Brw_ADMI_DOC_INS:
          case Brw_ADMI_SHR_INS:
-            Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
-            if (Ins_GetDataOfInstitutionByCod (&Ins))
+            Hie.Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
+            if (Ins_GetDataOfInstitutionByCod (&Hie.Ins))
 	       snprintf (PathOrg,sizeof (PathOrg),
 		         "%s/%02u/%u/%s",
 		         Cfg_PATH_INS_PRIVATE,
-		         (unsigned) (Ins.InsCod % 100),
-		         (unsigned) Ins.InsCod,
+		         (unsigned) (Hie.Ins.InsCod % 100),
+		         (unsigned) Hie.Ins.InsCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
          case Brw_ADMI_DOC_CTR:
          case Brw_ADMI_SHR_CTR:
-            Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
-            if (Ctr_GetDataOfCentreByCod (&Ctr))
+            Hie.Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
+            if (Ctr_GetDataOfCentreByCod (&Hie.Ctr))
 	       snprintf (PathOrg,sizeof (PathOrg),
 		         "%s/%02u/%u/%s",
 		         Cfg_PATH_CTR_PRIVATE,
-		         (unsigned) (Ctr.CtrCod % 100),
-		         (unsigned) Ctr.CtrCod,
+		         (unsigned) (Hie.Ctr.CtrCod % 100),
+		         (unsigned) Hie.Ctr.CtrCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
          case Brw_ADMI_DOC_DEG:
          case Brw_ADMI_SHR_DEG:
-            Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
-            if (Deg_GetDataOfDegreeByCod (&Deg))
+            Hie.Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
+            if (Deg_GetDataOfDegreeByCod (&Hie.Deg))
 	       snprintf (PathOrg,sizeof (PathOrg),
 		         "%s/%02u/%u/%s",
 		         Cfg_PATH_DEG_PRIVATE,
-		         (unsigned) (Deg.DegCod % 100),
-		         (unsigned) Deg.DegCod,
+		         (unsigned) (Hie.Deg.DegCod % 100),
+		         (unsigned) Hie.Deg.DegCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
@@ -7929,11 +7923,11 @@ static void Brw_PasteClipboard (void)
          case Brw_ADMI_TCH_CRS:
          case Brw_ADMI_SHR_CRS:
          case Brw_ADMI_MRK_CRS:
-            Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
-            if (Crs_GetDataOfCourseByCod (&Crs))
+            Hie.Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+            if (Crs_GetDataOfCourseByCod (&Hie.Crs))
 	       snprintf (PathOrg,sizeof (PathOrg),
 		         "%s/%ld/%s",
-                         Cfg_PATH_CRS_PRIVATE,Crs.CrsCod,
+                         Cfg_PATH_CRS_PRIVATE,Hie.Crs.CrsCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
@@ -7944,11 +7938,11 @@ static void Brw_PasteClipboard (void)
          case Brw_ADMI_MRK_GRP:
 	    GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
 	    Grp_GetDataOfGroupByCod (&GrpDat);
-            Crs.CrsCod = GrpDat.CrsCod;
-            if (Crs_GetDataOfCourseByCod (&Crs))
+            Hie.Crs.CrsCod = GrpDat.CrsCod;
+            if (Crs_GetDataOfCourseByCod (&Hie.Crs))
 	       snprintf (PathOrg,sizeof (PathOrg),
 		         "%s/%ld/%s/%ld/%s",
-                         Cfg_PATH_CRS_PRIVATE,Crs.CrsCod,Cfg_FOLDER_GRP,
+                         Cfg_PATH_CRS_PRIVATE,Hie.Crs.CrsCod,Cfg_FOLDER_GRP,
 			 GrpDat.GrpCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
@@ -7956,15 +7950,15 @@ static void Brw_PasteClipboard (void)
             break;
          case Brw_ADMI_ASG_CRS:
          case Brw_ADMI_WRK_CRS:
-            Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
-            if (Crs_GetDataOfCourseByCod (&Crs))
+            Hie.Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+            if (Crs_GetDataOfCourseByCod (&Hie.Crs))
               {
                Usr_UsrDataConstructor (&UsrDat);
 	       UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
 	       Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);	// Check that user exists
 	       snprintf (PathOrg,sizeof (PathOrg),
 		         "%s/%ld/%s/%02u/%ld/%s",
-                         Cfg_PATH_CRS_PRIVATE,Crs.CrsCod,Cfg_FOLDER_USR,
+                         Cfg_PATH_CRS_PRIVATE,Hie.Crs.CrsCod,Cfg_FOLDER_USR,
 			 (unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
 			 Gbl.FileBrowser.Clipboard.WorksUsrCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
@@ -7975,11 +7969,11 @@ static void Brw_PasteClipboard (void)
             break;
          case Brw_ADMI_ASG_USR:
          case Brw_ADMI_WRK_USR:
-            Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
-            if (Crs_GetDataOfCourseByCod (&Crs))
+            Hie.Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+            if (Crs_GetDataOfCourseByCod (&Hie.Crs))
 	       snprintf (PathOrg,sizeof (PathOrg),
 		         "%s/%ld/%s/%02u/%ld/%s",
-                         Cfg_PATH_CRS_PRIVATE,Crs.CrsCod,Cfg_FOLDER_USR,
+                         Cfg_PATH_CRS_PRIVATE,Hie.Crs.CrsCod,Cfg_FOLDER_USR,
 			 (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
@@ -7989,11 +7983,11 @@ static void Brw_PasteClipboard (void)
          case Brw_ADMI_DOC_PRJ:
          case Brw_ADMI_ASS_PRJ:
             PrjCod = Gbl.FileBrowser.Clipboard.Cod;
-	    Crs.CrsCod = Prj_GetCourseOfProject (PrjCod);
-	    if (Crs_GetDataOfCourseByCod (&Crs))
+	    Hie.Crs.CrsCod = Prj_GetCourseOfProject (PrjCod);
+	    if (Crs_GetDataOfCourseByCod (&Hie.Crs))
 	       snprintf (PathOrg,sizeof (PathOrg),
 		         "%s/%ld/%s/%02u/%ld/%s",
-			Cfg_PATH_CRS_PRIVATE,Crs.CrsCod,Cfg_FOLDER_PRJ,
+			Cfg_PATH_CRS_PRIVATE,Hie.Crs.CrsCod,Cfg_FOLDER_PRJ,
 			(unsigned) (PrjCod % 100),
 			PrjCod,
 			Gbl.FileBrowser.Clipboard.FilFolLnk.Full);

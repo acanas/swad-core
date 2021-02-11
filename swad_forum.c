@@ -41,6 +41,7 @@
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_HTML.h"
 #include "swad_layout.h"
 #include "swad_logo.h"
@@ -2168,10 +2169,7 @@ void For_SetForumName (const struct For_Forum *Forum,
    extern const char *Txt_only_teachers;
    extern const char *Txt_only_teachers_NO_HTML[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Unknown_FORUM;
-   struct Ins_Instit Ins;
-   struct Ctr_Centre Ctr;
-   struct Deg_Degree Deg;
-   struct Crs_Course Crs;
+   struct Hie_Hierarchy Hie;
 
    switch (Forum->Type)
      {
@@ -2199,66 +2197,66 @@ void For_SetForumName (const struct For_Forum *Forum,
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_INSTIT_USRS:
-	 Ins.InsCod = Forum->Location;
-	 if (!Ins_GetDataOfInstitutionByCod (&Ins))
+	 Hie.Ins.InsCod = Forum->Location;
+	 if (!Ins_GetDataOfInstitutionByCod (&Hie.Ins))
 	    Lay_ShowErrorAndExit ("Institution not found.");
-         Str_Copy (ForumName,Ins.ShrtName,
+         Str_Copy (ForumName,Hie.Ins.ShrtName,
                    For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_INSTIT_TCHS:
-	 Ins.InsCod = Forum->Location;
-	 if (!Ins_GetDataOfInstitutionByCod (&Ins))
+	 Hie.Ins.InsCod = Forum->Location;
+	 if (!Ins_GetDataOfInstitutionByCod (&Hie.Ins))
 	    Lay_ShowErrorAndExit ("Institution not found.");
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
-                   "%s%s",Ins.ShrtName,
+                   "%s%s",Hie.Ins.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_CENTRE_USRS:
-	 Ctr.CtrCod = Forum->Location;
-	 if (!Ctr_GetDataOfCentreByCod (&Ctr))
+	 Hie.Ctr.CtrCod = Forum->Location;
+	 if (!Ctr_GetDataOfCentreByCod (&Hie.Ctr))
 	    Lay_ShowErrorAndExit ("Centre not found.");
-         Str_Copy (ForumName,Ctr.ShrtName,
+         Str_Copy (ForumName,Hie.Ctr.ShrtName,
                    For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_CENTRE_TCHS:
-	 Ctr.CtrCod = Forum->Location;
-	 if (!Ctr_GetDataOfCentreByCod (&Ctr))
+	 Hie.Ctr.CtrCod = Forum->Location;
+	 if (!Ctr_GetDataOfCentreByCod (&Hie.Ctr))
 	    Lay_ShowErrorAndExit ("Centre not found.");
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
-                   "%s%s",Ctr.ShrtName,
+                   "%s%s",Hie.Ctr.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_DEGREE_USRS:
-	 Deg.DegCod = Forum->Location;
-	 if (!Deg_GetDataOfDegreeByCod (&Deg))
+	 Hie.Deg.DegCod = Forum->Location;
+	 if (!Deg_GetDataOfDegreeByCod (&Hie.Deg))
 	    Lay_ShowErrorAndExit ("Degree not found.");
-         Str_Copy (ForumName,Deg.ShrtName,
+         Str_Copy (ForumName,Hie.Deg.ShrtName,
                    For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_DEGREE_TCHS:
-	 Deg.DegCod = Forum->Location;
-	 if (!Deg_GetDataOfDegreeByCod (&Deg))
+	 Hie.Deg.DegCod = Forum->Location;
+	 if (!Deg_GetDataOfDegreeByCod (&Hie.Deg))
 	    Lay_ShowErrorAndExit ("Degree not found.");
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
-                   "%s%s",Deg.ShrtName,
+                   "%s%s",Hie.Deg.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_COURSE_USRS:
-	 Crs.CrsCod = Forum->Location;
-	 if (!Crs_GetDataOfCourseByCod (&Crs))
+	 Hie.Crs.CrsCod = Forum->Location;
+	 if (!Crs_GetDataOfCourseByCod (&Hie.Crs))
 	    Lay_ShowErrorAndExit ("Course not found.");
-         Str_Copy (ForumName,Crs.ShrtName,
+         Str_Copy (ForumName,Hie.Crs.ShrtName,
                    For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_COURSE_TCHS:
-	 Crs.CrsCod = Forum->Location;
-	 if (!Crs_GetDataOfCourseByCod (&Crs))
+	 Hie.Crs.CrsCod = Forum->Location;
+	 if (!Crs_GetDataOfCourseByCod (&Hie.Crs))
 	    Lay_ShowErrorAndExit ("Course not found.");
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
-                   "%s%s",Crs.ShrtName,
+                   "%s%s",Hie.Crs.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
                                      Txt_only_teachers_NO_HTML[Language]);
          break;

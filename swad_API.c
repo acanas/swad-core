@@ -3336,10 +3336,7 @@ int swad__getNotifications (struct soap *soap,
    Ntf_NotifyEvent_t NotifyEvent;
    long EventTime;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
-   struct Ins_Instit Ins;
-   struct Ctr_Centre Ctr;
-   struct Deg_Degree Deg;
-   struct Crs_Course Crs;
+   struct Hie_Hierarchy Hie;
    long Cod;
    struct For_Forum ForumSelected;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
@@ -3424,13 +3421,13 @@ int swad__getNotifications (struct soap *soap,
          getNotificationsOut->notificationsArray.__ptr[NumNotif].eventTime = EventTime;
 
          /* Get course (row[7]) */
-         Crs.CrsCod = Str_ConvertStrCodToLongCod (row[7]);
-         Crs_GetDataOfCourseByCod (&Crs);
+         Hie.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[7]);
+         Crs_GetDataOfCourseByCod (&Hie.Crs);
 
          /* Get user's code of the user who caused the event (row[3]) */
          Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
-         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Crs.CrsCod))	// Get some user's data from database
+         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Hie.Crs.CrsCod))	// Get some user's data from database
            {
             getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname =
                (char *) soap_malloc (soap,Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1);
@@ -3473,16 +3470,16 @@ int swad__getNotifications (struct soap *soap,
            }
 
          /* Get institution (row[4]) */
-         Ins.InsCod = Str_ConvertStrCodToLongCod (row[4]);
-         Ins_GetDataOfInstitutionByCod (&Ins);
+         Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[4]);
+         Ins_GetDataOfInstitutionByCod (&Hie.Ins);
 
          /* Get centre (row[5]) */
-         Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[5]);
-         Ctr_GetDataOfCentreByCod (&Ctr);
+         Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[5]);
+         Ctr_GetDataOfCentreByCod (&Hie.Ctr);
 
          /* Get degree (row[6]) */
-         Deg.DegCod = Str_ConvertStrCodToLongCod (row[6]);
-         Deg_GetDataOfDegreeByCod (&Deg);
+         Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[6]);
+         Deg_GetDataOfDegreeByCod (&Hie.Deg);
 
          /* Get message/post/... code (row[8]) */
          Cod = Str_ConvertStrCodToLongCod (row[8]);
@@ -3501,18 +3498,18 @@ int swad__getNotifications (struct soap *soap,
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
                      Txt_Forum,ForumName);
            }
-         else if (Crs.CrsCod > 0)
+         else if (Hie.Crs.CrsCod > 0)
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Course,Crs.ShrtName);
-         else if (Deg.DegCod > 0)
+                     Txt_Course,Hie.Crs.ShrtName);
+         else if (Hie.Deg.DegCod > 0)
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Degree,Deg.ShrtName);
-         else if (Ctr.CtrCod > 0)
+                     Txt_Degree,Hie.Deg.ShrtName);
+         else if (Hie.Ctr.CtrCod > 0)
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Centre,Ctr.ShrtName);
-         else if (Ins.InsCod > 0)
+                     Txt_Centre,Hie.Ctr.ShrtName);
+         else if (Hie.Ins.InsCod > 0)
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Institution,Ins.ShrtName);
+                     Txt_Institution,Hie.Ins.ShrtName);
          else
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"-",
                       Ntf_MAX_BYTES_NOTIFY_LOCATION);
@@ -3525,7 +3522,7 @@ int swad__getNotifications (struct soap *soap,
          /* Get summary and content */
          ContentStr = NULL;
          Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
-                                        Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+                                        Cod,Hie.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
                                         true);
 
          Length = strlen (SummaryStr);
