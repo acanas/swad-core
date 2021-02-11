@@ -94,8 +94,8 @@ struct TL_Timeline
    TL_WhatToGet_t WhatToGet;
    struct
      {
-      unsigned Num;			// Number of publications
-      struct TL_Publication *Lst;	// List of publications
+      struct TL_Publication *Top;	// Points to first element in list of publications
+      struct TL_Publication *Bottom;	// Points to last  element in list of publications
      } Pubs;
    long NotCod;		// Used as parameter about social note to be edited, removed...
    long PubCod;		// Used as parameter about social publishing to be edited, removed...
@@ -125,6 +125,7 @@ struct TL_Publication
    long PublisherCod;		// Sharer or writer of the publication
    TL_PubType_t PubType;
    TL_TopMessage_t TopMessage;	// Used to show feedback on the action made
+   struct TL_Publication *Next;	// Used for chained list
   };
 
 struct TL_PostContent
