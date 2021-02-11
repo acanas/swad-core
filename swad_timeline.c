@@ -49,6 +49,7 @@
 #include "swad_timeline_note.h"
 #include "swad_timeline_publication.h"
 #include "swad_timeline_share.h"
+#include "swad_timeline_who.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -182,14 +183,6 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
                              const char *Title,long NotCodToHighlight);
 static void TL_PutIconsTimeline (__attribute__((unused)) void *Args);
 
-static void TL_PutFormWho (struct TL_Timeline *Timeline);
-static Usr_Who_t TL_GetWhoFromDB (void);
-static void TL_SetGlobalWho (Usr_Who_t Who);
-
-static void TL_SaveWhoInDB (struct TL_Timeline *Timeline);
-
-static void TL_ShowWarningYouDontFollowAnyUser (void);
-
 static void TL_PutFormToWriteNewPost (struct TL_Timeline *Timeline);
 
 static long TL_ReceivePost (void);
@@ -207,7 +200,7 @@ void TL_InitTimelineGbl (struct TL_Timeline *Timeline)
    TL_MarkMyNotifAsSeen ();
 
    /***** Get which users *****/
-   Timeline->Who = TL_GetGlobalWho ();
+   Timeline->Who = TL_Who_GetGlobalWho ();
   }
 
 /*****************************************************************************/
@@ -237,7 +230,7 @@ void TL_ShowTimelineGbl (void)
    TL_InitTimelineGbl (&Timeline);
 
    /***** Save which users in database *****/
-   TL_SaveWhoInDB (&Timeline);
+   TL_Who_SaveWhoInDB (&Timeline);
 
    /***** Show highlighted note and global timeline *****/
    TL_ShowNoteAndTimelineGbl (&Timeline);
@@ -342,7 +335,7 @@ void TL_RefreshNewTimelineGbl (void)
       TL_ResetTimeline (&Timeline);
 
       /***** Get which users *****/
-      Timeline.Who = TL_GetGlobalWho ();
+      Timeline.Who = TL_Who_GetGlobalWho ();
 
       /***** Get list of pubications to show in timeline *****/
       Timeline.UsrOrGbl  = TL_TIMELINE_GBL;
@@ -369,7 +362,7 @@ void TL_RefreshOldTimelineGbl (void)
    TL_ResetTimeline (&Timeline);
 
    /***** Get which users *****/
-   Timeline.Who = TL_GetGlobalWho ();
+   Timeline.Who = TL_Who_GetGlobalWho ();
 
    /***** Show old publications *****/
    Timeline.UsrOrGbl  = TL_TIMELINE_GBL;
@@ -472,7 +465,7 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
 
    /***** Put form to select users whom public activity is displayed *****/
    if (GlobalTimeline)
-      TL_PutFormWho (Timeline);
+      TL_Who_PutFormWho (Timeline);
 
    /***** Form to write a new post *****/
    if (GlobalTimeline || ItsMe)
@@ -556,155 +549,6 @@ void TL_FormStart (const struct TL_Timeline *Timeline,
      {
       Frm_StartForm (ActionGbl);
       Usr_PutHiddenParamWho (Timeline->Who);
-     }
-  }
-
-/*****************************************************************************/
-/******** Show form to select users whom public activity is displayed ********/
-/*****************************************************************************/
-
-static void TL_PutFormWho (struct TL_Timeline *Timeline)
-  {
-   Usr_Who_t Who;
-   unsigned Mask = 1 << Usr_WHO_ME       |
-	           1 << Usr_WHO_FOLLOWED |
-		   1 << Usr_WHO_ALL;
-
-   /***** Setting selector for which users *****/
-   Set_StartSettingsHead ();
-   Set_StartOneSettingSelector ();
-   for (Who  = (Usr_Who_t) 0;
-	Who <= (Usr_Who_t) (Usr_NUM_WHO - 1);
-	Who++)
-      if (Mask & (1 << Who))
-	{
-	 HTM_DIV_Begin ("class=\"%s\"",
-			Who == Timeline->Who ? "PREF_ON" :
-					       "PREF_OFF");
-	 Frm_StartForm (ActSeeTmlGbl);
-	 Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
-	 Usr_PutWhoIcon (Who);
-	 Frm_EndForm ();
-	 HTM_DIV_End ();
-	}
-   Set_EndOneSettingSelector ();
-   Set_EndSettingsHead ();
-
-   /***** Show warning if I do not follow anyone *****/
-   if (Timeline->Who == Usr_WHO_FOLLOWED)
-      TL_ShowWarningYouDontFollowAnyUser ();
-  }
-
-/*****************************************************************************/
-/********* Get parameter with which users to view in global timeline *********/
-/*****************************************************************************/
-
-void TL_GetParamWho (void)
-  {
-   Usr_Who_t Who;
-
-   /***** Get which users I want to see *****/
-   Who = Usr_GetHiddenParamWho ();
-
-   /***** If parameter Who is not present, get it from database *****/
-   if (Who == Usr_WHO_UNKNOWN)
-      Who = TL_GetWhoFromDB ();
-
-   /***** If parameter Who is unknown, set it to default *****/
-   if (Who == Usr_WHO_UNKNOWN)
-      Who = TL_DEFAULT_WHO;
-
-   /***** Set global variable *****/
-   TL_SetGlobalWho (Who);
-  }
-
-/*****************************************************************************/
-/********* Get which users to view in global timeline from database **********/
-/*****************************************************************************/
-
-static Usr_Who_t TL_GetWhoFromDB (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned UnsignedNum;
-   Usr_Who_t Who = Usr_WHO_UNKNOWN;
-
-   /***** Get which users from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get timeline users from user's last data",
-		       "SELECT TimelineUsrs"		   // row[0]
-		       " FROM usr_last WHERE UsrCod=%ld",
-		       Gbl.Usrs.Me.UsrDat.UsrCod) == 1)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get who */
-      if (sscanf (row[0],"%u",&UnsignedNum) == 1)
-         if (UnsignedNum < Usr_NUM_WHO)
-            Who = (Usr_Who_t) UnsignedNum;
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return Who;
-  }
-
-/*****************************************************************************/
-/******** Save which users to view in global timeline into database **********/
-/*****************************************************************************/
-
-static void TL_SaveWhoInDB (struct TL_Timeline *Timeline)
-  {
-   if (Gbl.Usrs.Me.Logged)
-     {
-      if (Timeline->Who == Usr_WHO_UNKNOWN)
-	 Timeline->Who = TL_DEFAULT_WHO;
-
-      /***** Update which users in database *****/
-      // Who is stored in usr_last for next time I log in
-      DB_QueryUPDATE ("can not update timeline users in user's last data",
-		      "UPDATE usr_last SET TimelineUsrs=%u"
-		      " WHERE UsrCod=%ld",
-		      (unsigned) Timeline->Who,
-		      Gbl.Usrs.Me.UsrDat.UsrCod);
-     }
-  }
-
-/*****************************************************************************/
-/**** Set/get global variable with which users to view in global timeline ****/
-/*****************************************************************************/
-
-static void TL_SetGlobalWho (Usr_Who_t Who)
-  {
-   TL_GlobalWho = Who;
-  }
-
-Usr_Who_t TL_GetGlobalWho (void)
-  {
-   return TL_GlobalWho;
-  }
-
-/*****************************************************************************/
-/********* Get parameter with which users to view in global timeline *********/
-/*****************************************************************************/
-
-static void TL_ShowWarningYouDontFollowAnyUser (void)
-  {
-   extern const char *Txt_You_dont_follow_any_user;
-   unsigned NumFollowing;
-   unsigned NumFollowers;
-
-   /***** Check if I follow someone *****/
-   Fol_GetNumFollow (Gbl.Usrs.Me.UsrDat.UsrCod,&NumFollowing,&NumFollowers);
-   if (!NumFollowing)
-     {
-      /***** Show warning if I do not follow anyone *****/
-      Ale_ShowAlert (Ale_WARNING,Txt_You_dont_follow_any_user);
-
-      /***** Contextual menu *****/
-      Mnu_ContextMenuBegin ();
-      Fol_PutLinkWhoToFollow ();	// Users to follow
-      Mnu_ContextMenuEnd ();
      }
   }
 

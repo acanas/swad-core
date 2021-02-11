@@ -61,6 +61,7 @@
 #include "swad_tab.h"
 #include "swad_theme.h"
 #include "swad_timeline.h"
+#include "swad_timeline_who.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -889,7 +890,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 	           "var RefreshParamWho = \"Who=%u\";\n",
 		   Act_GetActCod (ActRefNewTL_PubGbl),
 		   Act_GetActCod (ActRefOldTL_PubGbl),
-		   (unsigned) TL_GetGlobalWho ());	// Global variable got in a priori function
+		   (unsigned) TL_Who_GetGlobalWho ());	// Global variable got in a priori function
 	 break;
       /* Parameters related with user timeline refreshing */
       case ActSeeOthPubPrf:

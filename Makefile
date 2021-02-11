@@ -63,7 +63,7 @@ OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
        swad_test_import.o swad_test_print.o swad_test_visibility.o \
        swad_theme.o swad_timeline.o swad_timeline_comment.o \
        swad_timeline_favourite.o swad_timeline_note.o \
-       swad_timeline_publication.o swad_timeline_share.o \
+       swad_timeline_publication.o swad_timeline_share.o swad_timeline_who.o \
        swad_timetable.o \
        swad_user.o \
        swad_xml.o \

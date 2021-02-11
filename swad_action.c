@@ -98,6 +98,7 @@
 #include "swad_timeline_comment.h"
 #include "swad_timeline_favourite.h"
 #include "swad_timeline_share.h"
+#include "swad_timeline_who.h"
 #include "swad_timetable.h"
 #include "swad_zip.h"
 
@@ -126,7 +127,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabStr ******************************************************************
    [ActFrmLogIn		] = {1521, 0,TabStr,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WriteLandingPage		,"power-off"		},
    [ActReqSch		] = { 627, 1,TabStr,ActReqSch		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sch_ReqSysSearch		,"search"		},
-   [ActSeeTmlGbl	] = {1490, 2,TabStr,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,TL_GetParamWho			,TL_ShowTimelineGbl		,"comment-dots"		},
+   [ActSeeTmlGbl	] = {1490, 2,TabStr,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,TL_Who_GetParamWho		,TL_ShowTimelineGbl		,"comment-dots"		},
    [ActSeeSocPrf	] = {1520, 3,TabStr,ActSeeSocPrf	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_SeeSocialProfiles		,"user-circle"		},
    [ActSeeCal		] = {1622, 4,TabStr,ActSeeCal		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_ShowCalendar		,"calendar"		},
    [ActSeeNtf         	] = { 990, 5,TabStr,ActSeeNtf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ntf_ShowMyNotifications	,"bell"			},
@@ -141,10 +142,10 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActSch		] = { 628,-1,TabUnk,ActReqSch		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Sch_GetParamsSearch		,Sch_SysSearch			,NULL},
 
-   [ActRefNewTL_PubGbl	] = {1509,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_AJAX_RFRESH,TL_GetParamWho			,TL_RefreshNewTimelineGbl	,NULL},
-   [ActRefOldTL_PubGbl	] = {1510,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,TL_GetParamWho			,TL_RefreshOldTimelineGbl	,NULL},
-   [ActRcvTL_PstGbl	] = {1492,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,TL_GetParamWho			,TL_ReceivePostGbl		,NULL},
-   [ActRcvTL_ComGbl	] = {1503,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,TL_GetParamWho			,TL_Com_ReceiveCommentGbl		,NULL},
+   [ActRefNewTL_PubGbl	] = {1509,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_AJAX_RFRESH,TL_Who_GetParamWho			,TL_RefreshNewTimelineGbl	,NULL},
+   [ActRefOldTL_PubGbl	] = {1510,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,TL_Who_GetParamWho			,TL_RefreshOldTimelineGbl	,NULL},
+   [ActRcvTL_PstGbl	] = {1492,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,TL_Who_GetParamWho			,TL_ReceivePostGbl		,NULL},
+   [ActRcvTL_ComGbl	] = {1503,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,TL_Who_GetParamWho			,TL_Com_ReceiveCommentGbl		,NULL},
    [ActShoHidTL_ComGbl	] = {1806,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_Com_ShowHiddenCommentsGbl	,NULL},
    [ActAllShaTL_NotGbl	] = {1766,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_Sha_ShowAllSharersNoteGbl	,NULL},
    [ActAllFavTL_NotGbl	] = {1767,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_Fav_ShowAllFaversNoteGbl	,NULL},
@@ -155,10 +156,10 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActUnfTL_NotGbl	] = {1513,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_Fav_UnfNoteGbl			,NULL},
    [ActFavTL_ComGbl	] = {1516,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_Fav_FavCommentGbl		,NULL},
    [ActUnfTL_ComGbl	] = {1517,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_Fav_UnfCommentGbl		,NULL},
-   [ActReqRemTL_PubGbl	] = {1494,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,TL_GetParamWho			,TL_Not_RequestRemNoteGbl		,NULL},
-   [ActRemTL_PubGbl	] = {1493,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,TL_GetParamWho			,TL_Not_RemoveNoteGbl		,NULL},
-   [ActReqRemTL_ComGbl	] = {1505,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,TL_GetParamWho			,TL_Com_RequestRemComGbl		,NULL},
-   [ActRemTL_ComGbl	] = {1507,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,TL_GetParamWho			,TL_Com_RemoveComGbl		,NULL},
+   [ActReqRemTL_PubGbl	] = {1494,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,TL_Who_GetParamWho			,TL_Not_RequestRemNoteGbl		,NULL},
+   [ActRemTL_PubGbl	] = {1493,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,TL_Who_GetParamWho			,TL_Not_RemoveNoteGbl		,NULL},
+   [ActReqRemTL_ComGbl	] = {1505,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,TL_Who_GetParamWho			,TL_Com_RequestRemComGbl		,NULL},
+   [ActRemTL_ComGbl	] = {1507,-1,TabUnk,ActSeeTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,TL_Who_GetParamWho			,TL_Com_RemoveComGbl		,NULL},
 
    [ActReqOthPubPrf	] = {1401,-1,TabUnk,ActSeeSocPrf	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_RequestUserProfile		,NULL},
 

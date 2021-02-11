@@ -153,9 +153,6 @@ void TL_FormStart (const struct TL_Timeline *Timeline,
 	           Act_Action_t ActionGbl,
                    Act_Action_t ActionUsr);
 
-void TL_GetParamWho (void);
-Usr_Who_t TL_GetGlobalWho (void);
-
 void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod);
 
 void TL_WriteDateTime (time_t TimeUTC);
