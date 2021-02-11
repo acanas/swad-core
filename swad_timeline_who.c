@@ -25,30 +25,13 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
-#include <linux/limits.h>	// For PATH_MAX
-#include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For malloc and free
-#include <string.h>		// For string functions
-#include <sys/types.h>		// For time_t
-
 #include "swad_database.h"
-#include "swad_exam_announcement.h"
-#include "swad_figure.h"
 #include "swad_follow.h"
-#include "swad_form.h"
-#include "swad_forum.h"
 #include "swad_global.h"
-#include "swad_message.h"
-#include "swad_notice.h"
-#include "swad_photo.h"
-#include "swad_profile.h"
+#include "swad_parameter.h"
 #include "swad_setting.h"
 #include "swad_timeline.h"
-#include "swad_timeline_favourite.h"
-#include "swad_timeline_note.h"
-#include "swad_timeline_publication.h"
-#include "swad_timeline_share.h"
+#include "swad_timeline_who.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/

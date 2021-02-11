@@ -28,22 +28,14 @@
 #define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For malloc and free
-#include <string.h>		// For string functions
-#include <sys/types.h>		// For time_t
 
 #include "swad_database.h"
-#include "swad_exam_announcement.h"
 #include "swad_figure.h"
-#include "swad_follow.h"
-#include "swad_form.h"
-#include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_message.h"
-#include "swad_notice.h"
+#include "swad_notification.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
-#include "swad_setting.h"
 #include "swad_timeline.h"
 #include "swad_timeline_favourite.h"
 #include "swad_timeline_note.h"
@@ -855,33 +847,6 @@ static long TL_ReceivePost (void)
    Med_MediaDestructor (&Content.Media);
 
    return Pub.NotCod;
-  }
-
-/*****************************************************************************/
-/*************** Get code of publication of the original note ****************/
-/*****************************************************************************/
-
-long TL_Not_GetPubCodOfOriginalNote (long NotCod)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long OriginalPubCod = -1L;
-
-   /***** Get code of publication of the original note *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get code of publication",
-		       "SELECT PubCod FROM tl_pubs"
-		       " WHERE NotCod=%ld AND PubType=%u",
-		       NotCod,(unsigned) TL_PUB_ORIGINAL_NOTE) == 1)   // Result should have a unique row
-     {
-      /* Get code of publication (row[0]) */
-      row = mysql_fetch_row (mysql_res);
-      OriginalPubCod = Str_ConvertStrCodToLongCod (row[0]);
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return OriginalPubCod;
   }
 
 /*****************************************************************************/

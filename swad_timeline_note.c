@@ -1240,6 +1240,33 @@ static void TL_Not_ResetNote (struct TL_Not_Note *Not)
   }
 
 /*****************************************************************************/
+/*************** Get code of publication of the original note ****************/
+/*****************************************************************************/
+
+long TL_Not_GetPubCodOfOriginalNote (long NotCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long OriginalPubCod = -1L;
+
+   /***** Get code of publication of the original note *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get code of publication",
+		       "SELECT PubCod FROM tl_pubs"
+		       " WHERE NotCod=%ld AND PubType=%u",
+		       NotCod,(unsigned) TL_PUB_ORIGINAL_NOTE) == 1)   // Result should have a unique row
+     {
+      /* Get code of publication (row[0]) */
+      row = mysql_fetch_row (mysql_res);
+      OriginalPubCod = Str_ConvertStrCodToLongCod (row[0]);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return OriginalPubCod;
+  }
+
+/*****************************************************************************/
 /****** Add just retrieved notes to current timeline for this session ********/
 /*****************************************************************************/
 
