@@ -324,12 +324,12 @@ static void TL_Pub_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
    /***** Create temporary table and subquery with potential publishers *****/
    switch (Timeline->UsrOrGbl)
      {
-      case TL_TIMELINE_USR:		// Show the timeline of a user
+      case TL_Usr_TIMELINE_USR:		// Show the timeline of a user
 	 SubQueries->TablePublishers = "";
 	 sprintf (SubQueries->Publishers,"tl_pubs.PublisherCod=%ld AND ",
 	          Gbl.Usrs.Other.UsrDat.UsrCod);
 	 break;
-      case TL_TIMELINE_GBL:		// Show the global timeline
+      case TL_Usr_TIMELINE_GBL:		// Show the global timeline
 	 switch (Timeline->Who)
 	   {
 	    case Usr_WHO_ME:		// Show my timeline
@@ -579,8 +579,7 @@ void TL_Pub_InsertNewPubsInTimeline (struct TL_Timeline *Timeline)
 
       /* Write note */
       TL_Not_WriteNote (Timeline,&Not,
-                        Pub->TopMessage,
-                        Pub->PublisherCod,
+                        Pub->TopMessage,Pub->PublisherCod,
                         TL_DONT_HIGHLIGHT,
                         TL_DONT_SHOW_ALONE);
      }
@@ -607,8 +606,7 @@ void TL_Pub_ShowOldPubsInTimeline (struct TL_Timeline *Timeline)
 
       /* Write note */
       TL_Not_WriteNote (Timeline,&Not,
-                        Pub->TopMessage,
-                        Pub->PublisherCod,
+                        Pub->TopMessage,Pub->PublisherCod,
                         TL_DONT_HIGHLIGHT,
                         TL_DONT_SHOW_ALONE);
      }
@@ -692,7 +690,7 @@ long TL_Pub_GetParamPubCod (void)
 /*********** Create a notification for the author of a post/comment **********/
 /*****************************************************************************/
 
-void TL_Pub_CreateNotifToAuthor (long AuthorCod,long PubCod,
+void TL_Ntf_CreateNotifToAuthor (long AuthorCod,long PubCod,
                                  Ntf_NotifyEvent_t NotifyEvent)
   {
    struct UsrData UsrDat;
@@ -812,7 +810,7 @@ static TL_Pub_PubType_t TL_Pub_GetPubTypeFromStr (const char *Str)
 /***************** Get notification of a new publication *********************/
 /*****************************************************************************/
 
-void TL_Pub_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                  char **ContentStr,
                                  long PubCod,bool GetContent)
   {

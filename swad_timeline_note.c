@@ -66,6 +66,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod);
+
 static void TL_Not_PutFormGoToAction (const struct TL_Not_Note *Not,
                                       const struct For_Forums *Forums);
 
@@ -216,9 +218,9 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
    HTM_LI_Begin ("class=\"%s\"",
 		 ShowNoteAlone == TL_SHOW_ALONE ?
 		    (Highlight == TL_HIGHLIGHT ? "TL_WIDTH TL_NEW_PUB" :
-					                  "TL_WIDTH") :
+					         "TL_WIDTH") :
 		    (Highlight == TL_HIGHLIGHT ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
-					                  "TL_WIDTH TL_SEP"));
+					         "TL_WIDTH TL_SEP"));
 
    if (Not->NotCod   <= 0 ||
        Not->NoteType == TL_NOTE_UNKNOWN ||
@@ -233,7 +235,8 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
       Crs.CrsCod = -1L;
 
       /***** Write sharer/commenter if distinct to author *****/
-      TL_WriteTopMessage (TopMessage,PublisherCod);
+      if (TopMessage != TL_TOP_MESSAGE_NONE)
+         TL_Not_WriteTopMessage (TopMessage,PublisherCod);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&AuthorDat);
@@ -255,8 +258,10 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
       /* Begin right container */
       HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
 
-      /* Write author's full name and date-time */
+      /* Write author's full name and nickname */
       TL_Not_WriteAuthorNote (&AuthorDat);
+
+      /* Write date and time */
       TL_WriteDateTime (Not->DateTimeUTC);
 
       /* Write content of the note */
@@ -388,13 +393,13 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
       /* Foot column 1: Fav zone */
       HTM_DIV_Begin ("id=\"fav_not_%s_%u\" class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\"",
 	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_Fav_PutFormToFavUnfNote (Not,TL_SHOW_FEW_USRS);
+      TL_Fav_PutFormToFavUnfNote (Not,TL_Usr_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /* Foot column 2: Share zone */
       HTM_DIV_Begin ("id=\"sha_not_%s_%u\" class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\"",
 	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_Sha_PutFormToShaUnsNote (Not,TL_SHOW_FEW_USRS);
+      TL_Sha_PutFormToShaUnsNote (Not,TL_Usr_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /* Foot column 3: Icon to remove this note */
@@ -430,6 +435,47 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
       HTM_UL_End ();
       Box_BoxEnd ();
      }
+  }
+
+/*****************************************************************************/
+/*************** Write sharer/commenter if distinct to author ****************/
+/*****************************************************************************/
+
+static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod)
+  {
+   extern const char *Txt_My_public_profile;
+   extern const char *Txt_Another_user_s_profile;
+   extern const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES];
+   struct UsrData PublisherDat;
+   bool ItsMe = Usr_ItsMe (PublisherCod);
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&PublisherDat);
+
+   /***** Get user's data *****/
+   PublisherDat.UsrCod = PublisherCod;
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherDat,Usr_DONT_GET_PREFS))	// Really we only need EncryptedUsrCod and FullName
+     {
+      HTM_DIV_Begin ("class=\"TL_TOP_CONT TL_TOP_PUBLISHER TL_WIDTH\"");
+
+      /***** Show user's name inside form to go to user's public profile *****/
+      Frm_StartFormUnique (ActSeeOthPubPrf);
+      Usr_PutParamUsrCodEncrypted (PublisherDat.EncryptedUsrCod);
+      HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
+				       Txt_Another_user_s_profile,
+			       "BT_LINK TL_TOP_PUBLISHER",NULL);
+      HTM_Txt (PublisherDat.FullName);
+      HTM_BUTTON_End ();
+      Frm_EndForm ();
+
+      /***** Show action made *****/
+      HTM_TxtF (" %s:",Txt_TIMELINE_NOTE_TOP_MESSAGES[TopMessage]);
+
+      HTM_DIV_End ();
+     }
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&PublisherDat);
   }
 
 /*****************************************************************************/
@@ -863,7 +909,8 @@ static void TL_Not_PutFormToRemoveNote (const struct TL_Timeline *Timeline,
    extern const char *Txt_Remove;
 
    /***** Form to remove publication *****/
-   TL_FormStart (Timeline,ActReqRemTL_PubGbl,ActReqRemTL_PubUsr);
+   TL_FormStart (Timeline,ActReqRemTL_PubGbl,
+                          ActReqRemTL_PubUsr);
    TL_Not_PutHiddenParamNotCod (NotCod);
    Ico_PutIconLink ("trash.svg",Txt_Remove);
    Frm_EndForm ();
@@ -955,9 +1002,9 @@ static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
 
 	 /* Show note */
 	 TL_Not_WriteNote (Timeline,&Not,
-		       TL_TOP_MESSAGE_NONE,-1L,
-		       TL_DONT_HIGHLIGHT,
-		       TL_SHOW_ALONE);
+		           TL_TOP_MESSAGE_NONE,-1L,
+		           TL_DONT_HIGHLIGHT,
+		           TL_SHOW_ALONE);
 
 	 /* End alert */
 	 Timeline->NotCod = Not.NotCod;	// Note to be removed

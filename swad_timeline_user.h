@@ -1,7 +1,7 @@
-// swad_timeline_share.h: social timeline shared
+// swad_timeline_user.h: social timeline users
 
-#ifndef _SWAD_TL_SHA
-#define _SWAD_TL_SHA
+#ifndef _SWAD_TL_USR
+#define _SWAD_TL_USR
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,29 +27,50 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include "swad_timeline_note.h"
+#include "swad_form.h"
+#include "swad_media.h"
+#include "swad_notification.h"
+#include "swad_user.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
+#define TL_Usr_ICON_ELLIPSIS	"ellipsis-h.svg"
+
+#define TL_Usr_DEF_USRS_SHOWN	5	// Default maximum number of users shown who have share/fav a note
+#define TL_Usr_MAX_USRS_SHOWN	1000	// Top     maximum number of users shown who have share/fav a note
+
 /*****************************************************************************/
 /******************************** Public types *******************************/
 /*****************************************************************************/
+
+typedef enum
+  {
+   TL_Usr_TIMELINE_USR,		// Show the timeline of a user
+   TL_Usr_TIMELINE_GBL,		// Show the timeline of the users follwed by me
+  } TL_Usr_UsrOrGbl_t;
+
+typedef enum
+  {
+   TL_Usr_SHOW_FEW_USRS,	// Show a few first favers/sharers
+   TL_Usr_SHOW_ALL_USRS,	// Show all favers/sharers
+  } TL_Usr_HowManyUsrs_t;
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_Sha_ShowAllSharersNoteUsr (void);
-void TL_Sha_ShowAllSharersNoteGbl (void);
-void TL_Sha_ShaNoteUsr (void);
-void TL_Sha_ShaNoteGbl (void);
-void TL_Sha_UnsNoteUsr (void);
-void TL_Sha_UnsNoteGbl (void);
-void TL_Sha_PutFormToShaUnsNote (const struct TL_Not_Note *Not,
-                                 TL_Usr_HowManyUsrs_t HowManyUsrs);
+void TL_Usr_RemoveUsrContent (long UsrCod);
 
-void TL_Sha_UpdateNumTimesANoteHasBeenShared (struct TL_Not_Note *Not);
+void TL_Usr_ShowNumSharersOrFavers (unsigned NumUsrs);
+void TL_Usr_ShowSharersOrFavers (MYSQL_RES **mysql_res,
+			         unsigned NumUsrs,unsigned NumFirstUsrs);
+void TL_Usr_PutFormToSeeAllFaversSharers (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+		                          const char *ParamFormat,long ParamCod,
+                                          TL_Usr_HowManyUsrs_t HowManyUsrs);
+void TL_Usr_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+		        const char *ParamFormat,long ParamCod,
+		        const char *Icon,const char *Title);
 
 #endif

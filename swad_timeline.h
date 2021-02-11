@@ -31,17 +31,13 @@
 #include "swad_media.h"
 #include "swad_notification.h"
 #include "swad_user.h"
+#include "swad_timeline_user.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
 #define TL_TIMELINE_SECTION_ID	"timeline"
-
-#define TL_ICON_ELLIPSIS	"ellipsis-h.svg"
-
-#define TL_DEF_USRS_SHOWN	5	// Default maximum number of users shown who have share/fav a note
-#define TL_MAX_USRS_SHOWN	1000	// Top     maximum number of users shown who have share/fav a note
 
 /*
    Timeline images will be saved with:
@@ -70,12 +66,6 @@ typedef enum
    TL_TOP_MESSAGE_MENTIONED	= 6,
   } TL_TopMessage_t;
 
-typedef enum
-  {
-   TL_TIMELINE_USR,	// Show the timeline of a user
-   TL_TIMELINE_GBL,	// Show the timeline of the users follwed by me
-  } TL_UsrOrGbl_t;
-
 #define TL_NUM_WHAT_TO_GET 3
 typedef enum
   {
@@ -89,7 +79,7 @@ typedef enum
 
 struct TL_Timeline
   {
-   TL_UsrOrGbl_t UsrOrGbl;
+   TL_Usr_UsrOrGbl_t UsrOrGbl;
    Usr_Who_t Who;
    TL_WhatToGet_t WhatToGet;
    struct
@@ -100,12 +90,6 @@ struct TL_Timeline
    long NotCod;		// Used as parameter about social note to be edited, removed...
    long PubCod;		// Used as parameter about social publishing to be edited, removed...
   };
-
-typedef enum
-  {
-   TL_SHOW_FEW_USRS,	// Show a few first favers/sharers
-   TL_SHOW_ALL_USRS,	// Show all favers/sharers
-  } TL_HowManyUsrs_t;
 
 typedef enum
   {
@@ -141,26 +125,12 @@ void TL_RefreshNewTimelineGbl (void);
 void TL_RefreshOldTimelineGbl (void);
 void TL_RefreshOldTimelineUsr (void);
 
-void TL_MarkMyNotifAsSeen (void);
+void TL_Ntf_MarkMyNotifAsSeen (void);
 
 void TL_FormStart (const struct TL_Timeline *Timeline,
 	           Act_Action_t ActionGbl,
                    Act_Action_t ActionUsr);
 
-void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod);
-
 void TL_WriteDateTime (time_t TimeUTC);
-
-void TL_RemoveUsrContent (long UsrCod);
-
-void TL_ShowNumSharersOrFavers (unsigned NumUsrs);
-void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
-			     unsigned NumUsrs,unsigned NumFirstUsrs);
-void TL_PutFormToSeeAllFaversSharers (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
-		                      const char *ParamFormat,long ParamCod,
-                                      TL_HowManyUsrs_t HowManyUsrs);
-void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
-		    const char *ParamFormat,long ParamCod,
-		    const char *Icon,const char *Title);
 
 #endif

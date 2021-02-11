@@ -1118,7 +1118,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 		   UsrDat->UsrCod);
 
    /***** Remove social content associated to the user *****/
-   TL_RemoveUsrContent (UsrDat->UsrCod);
+   TL_Usr_RemoveUsrContent (UsrDat->UsrCod);
 
    /***** Remove user's figures *****/
    Prf_RemoveUsrFigures (UsrDat->UsrCod);

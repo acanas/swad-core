@@ -43,9 +43,9 @@
 /*****************************************************************************/
 
 void TL_Fav_PutFormToSeeAllFaversNote (long NotCod,
-                                       TL_HowManyUsrs_t HowManyUsrs);
+                                       TL_Usr_HowManyUsrs_t HowManyUsrs);
 void TL_Fav_PutFormToSeeAllFaversComment (long PubCod,
-                                          TL_HowManyUsrs_t HowManyUsrs);
+                                          TL_Usr_HowManyUsrs_t HowManyUsrs);
 
 void TL_Fav_ShowAllFaversNoteUsr (void);
 void TL_Fav_ShowAllFaversNoteGbl (void);
@@ -54,7 +54,7 @@ void TL_Fav_FavNoteGbl (void);
 void TL_Fav_UnfNoteUsr (void);
 void TL_Fav_UnfNoteGbl (void);
 void TL_Fav_PutFormToFavUnfNote (const struct TL_Not_Note *Not,
-                                 TL_HowManyUsrs_t HowManyUsrs);
+                                 TL_Usr_HowManyUsrs_t HowManyUsrs);
 
 void TL_Fav_ShowAllFaversComUsr (void);
 void TL_Fav_ShowAllFaversComGbl (void);
@@ -63,7 +63,7 @@ void TL_Fav_FavCommentGbl (void);
 void TL_Fav_UnfCommentUsr (void);
 void TL_Fav_UnfCommentGbl (void);
 void TL_Fav_PutFormToFavUnfComment (const struct TL_Com_Comment *Com,
-                                    TL_HowManyUsrs_t HowManyUsrs);
+                                    TL_Usr_HowManyUsrs_t HowManyUsrs);
 
 void TL_Fav_GetNumTimesANoteHasBeenFav (struct TL_Not_Note *Not);
 void TL_Fav_GetNumTimesACommHasBeenFav (struct TL_Com_Comment *Com);

@@ -150,7 +150,8 @@ void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
 
    /* Form to write the post */
    HTM_DIV_Begin ("class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\"");
-   TL_FormStart (Timeline,ActRcvTL_PstGbl,ActRcvTL_PstUsr);
+   TL_FormStart (Timeline,ActRcvTL_PstGbl,
+                          ActRcvTL_PstUsr);
    TL_Pst_PutTextarea (Txt_New_TIMELINE_post,"TL_PST_TEXTAREA TL_RIGHT_WIDTH");
    Frm_EndForm ();
    HTM_DIV_End ();

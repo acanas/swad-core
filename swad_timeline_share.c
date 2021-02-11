@@ -67,7 +67,7 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not);
 static bool TL_Sha_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);
 
 static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Not_Note *Not,
-					      TL_HowManyUsrs_t HowManyUsrs);
+					      TL_Usr_HowManyUsrs_t HowManyUsrs);
 
 /*****************************************************************************/
 /*********************** Put disabled icon to share **************************/
@@ -100,7 +100,7 @@ static void TL_Sha_PutFormToShaNote (long ParamCod)
    extern const char *Txt_Share;
 
    /***** Form and icon to mark note as favourite *****/
-   TL_FormFavSha (ActShaTL_NotGbl,ActShaTL_NotUsr,
+   TL_Usr_FormFavSha (ActShaTL_NotGbl,ActShaTL_NotUsr,
                   "NotCod=%ld",ParamCod,
 	          TL_ICON_SHARE,Txt_Share);
   }
@@ -110,7 +110,7 @@ static void TL_Sha_PutFormToUnsNote (long ParamCod)
    extern const char *Txt_TIMELINE_NOTE_Shared;
 
    /***** Form and icon to mark note as favourite *****/
-   TL_FormFavSha (ActUnsTL_NotGbl,ActUnsTL_NotUsr,
+   TL_Usr_FormFavSha (ActUnsTL_NotGbl,ActUnsTL_NotUsr,
                   "NotCod=%ld",ParamCod,
 	          TL_ICON_SHARED,Txt_TIMELINE_NOTE_Shared);
   }
@@ -137,7 +137,7 @@ void TL_Sha_ShowAllSharersNoteGbl (void)
    TL_Not_GetDataOfNoteByCod (&Not);
 
    /***** Write HTML inside DIV with form to share/unshare *****/
-   TL_Sha_PutFormToShaUnsNote (&Not,TL_SHOW_ALL_USRS);
+   TL_Sha_PutFormToShaUnsNote (&Not,TL_Usr_SHOW_ALL_USRS);
   }
 
 void TL_Sha_ShaNoteUsr (void)
@@ -157,7 +157,7 @@ void TL_Sha_ShaNoteGbl (void)
    TL_Sha_ShaNote (&Not);
 
    /***** Write HTML inside DIV with form to unshare *****/
-   TL_Sha_PutFormToShaUnsNote (&Not,TL_SHOW_FEW_USRS);
+   TL_Sha_PutFormToShaUnsNote (&Not,TL_Usr_SHOW_FEW_USRS);
   }
 
 static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
@@ -190,7 +190,7 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
 		  for the author of the post ***/
 	    OriginalPubCod = TL_Not_GetPubCodOfOriginalNote (Not->NotCod);
 	    if (OriginalPubCod > 0)
-	       TL_Pub_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_SHARE);
+	       TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_SHARE);
 	   }
      }
   }
@@ -216,7 +216,7 @@ void TL_Sha_UnsNoteGbl (void)
    TL_Sha_UnsNote (&Not);
 
    /***** Write HTML inside DIV with form to share *****/
-   TL_Sha_PutFormToShaUnsNote (&Not,TL_SHOW_FEW_USRS);
+   TL_Sha_PutFormToShaUnsNote (&Not,TL_Usr_SHOW_FEW_USRS);
   }
 
 static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
@@ -259,7 +259,7 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
   }
 
 void TL_Sha_PutFormToShaUnsNote (const struct TL_Not_Note *Not,
-                                 TL_HowManyUsrs_t HowManyUsrs)
+                                 TL_Usr_HowManyUsrs_t HowManyUsrs)
   {
    bool IAmTheAuthor;
    bool IAmASharerOfThisNot;
@@ -327,7 +327,7 @@ void TL_Sha_UpdateNumTimesANoteHasBeenShared (struct TL_Not_Note *Not)
 /*****************************************************************************/
 
 static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Not_Note *Not,
-					      TL_HowManyUsrs_t HowManyUsrs)
+					      TL_Usr_HowManyUsrs_t HowManyUsrs)
   {
    MYSQL_RES *mysql_res;
    unsigned NumFirstUsrs;
@@ -344,23 +344,23 @@ static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Not_Note *Not,
 				 Not->NotCod,
 				 Not->UsrCod,
 				 (unsigned) TL_PUB_SHARED_NOTE,
-				 HowManyUsrs == TL_SHOW_FEW_USRS ? TL_DEF_USRS_SHOWN :
-				                                   TL_MAX_USRS_SHOWN);
+				 HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
+				                                   TL_Usr_MAX_USRS_SHOWN);
    else
       NumFirstUsrs = 0;
 
    /***** Show users *****/
    /* Number of users */
    HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
-   TL_ShowNumSharersOrFavers (Not->NumShared);
+   TL_Usr_ShowNumSharersOrFavers (Not->NumShared);
    HTM_DIV_End ();
 
    /* List users one by one */
    HTM_DIV_Begin ("class=\"TL_USRS\"");
-   TL_ShowSharersOrFavers (&mysql_res,Not->NumShared,NumFirstUsrs);
+   TL_Usr_ShowSharersOrFavers (&mysql_res,Not->NumShared,NumFirstUsrs);
    if (NumFirstUsrs < Not->NumShared)
       /* Clickable ellipsis to show all users */
-      TL_PutFormToSeeAllFaversSharers (ActAllShaTL_NotGbl,ActAllShaTL_NotUsr,
+      TL_Usr_PutFormToSeeAllFaversSharers (ActAllShaTL_NotGbl,ActAllShaTL_NotUsr,
 		                       "NotCod=%ld",Not->NotCod,
                                        HowManyUsrs);
    HTM_DIV_End ();
