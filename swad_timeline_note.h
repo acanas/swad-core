@@ -124,4 +124,8 @@ void TL_Not_GetDataOfNoteByCod (struct TL_Not_Note *Not);
 void TL_Not_ClearOldTimelinesNotesFromDB (void);
 void TL_Not_ClearTimelineNotesThisSessionFromDB (void);
 
+void TL_Not_CreateTmpTablesWithNotesAlreadyRetrieved (const struct TL_Timeline *Timeline);
+void TL_Not_DropTmpTableJustRetrievedNotes (void);
+void TL_Not_DropTmpTableVisibleTimeline (void);
+
 #endif

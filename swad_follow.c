@@ -1481,3 +1481,31 @@ void Fol_RemoveUsrFromUsrFollow (long UsrCod)
    /***** Flush cache *****/
    Fol_FlushCacheFollow ();
   }
+
+/*****************************************************************************/
+/******* Create/drop temporary tables with me and the users I follow *********/
+/*****************************************************************************/
+
+void Fol_CreateTmpTableMeAndUsrsIFollow (void)
+  {
+   /***** Create temporary table with me and the users I follow *****/
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE fol_tmp_me_and_followed "
+	     "(UsrCod INT NOT NULL,"
+	     "UNIQUE INDEX(UsrCod))"
+	     " ENGINE=MEMORY"
+	     " SELECT %ld AS UsrCod"		// Me
+	     " UNION"
+	     " SELECT FollowedCod AS UsrCod"	// Users I follow
+	     " FROM usr_follow"
+	     " WHERE FollowerCod=%ld",
+	     Gbl.Usrs.Me.UsrDat.UsrCod,
+	     Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+void Fol_DropTmpTableMeAndUsrsIFollow (void)
+  {
+   /***** Drop temporary table with me and the users I follow *****/
+   DB_Query ("can not remove temporary table",
+	     "DROP TEMPORARY TABLE IF EXISTS fol_tmp_me_and_followed");
+  }

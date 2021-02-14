@@ -28,6 +28,7 @@
 #define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdio.h>		// For asprintf
+#include <stdlib.h>		// For malloc and free
 
 #include "swad_database.h"
 #include "swad_forum.h"

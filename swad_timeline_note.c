@@ -1441,3 +1441,39 @@ void TL_Not_ClearTimelineNotesThisSessionFromDB (void)
 		   " WHERE SessionId='%s'",
 		   Gbl.Session.Id);
   }
+
+/*****************************************************************************/
+/******** Create/drop temporary tables with notes already retrieved **********/
+/*****************************************************************************/
+
+void TL_Not_CreateTmpTablesWithNotesAlreadyRetrieved (const struct TL_Timeline *Timeline)
+  {
+   /***** Create temporary table with notes just retrieved *****/
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE tl_tmp_just_retrieved_notes "
+	     "(NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod))"
+	     " ENGINE=MEMORY");
+
+   if (Timeline->WhatToGet == TL_GET_ONLY_OLD_PUBS)
+      /***** Create temporary table with all notes visible in timeline *****/
+      DB_Query ("can not create temporary table",
+		"CREATE TEMPORARY TABLE tl_tmp_visible_timeline "
+		"(NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod))"
+		" ENGINE=MEMORY"
+		" SELECT NotCod FROM tl_timelines WHERE SessionId='%s'",
+		Gbl.Session.Id);
+  }
+
+void TL_Not_DropTmpTableJustRetrievedNotes (void)
+  {
+   /***** Drop temporary table with notes just retrieved *****/
+   DB_Query ("can not remove temporary table",
+	     "DROP TEMPORARY TABLE IF EXISTS tl_tmp_just_retrieved_notes");
+  }
+
+void TL_Not_DropTmpTableVisibleTimeline (void)
+  {
+   /***** Drop temporary table with all notes visible in timeline *****/
+   DB_Query ("can not remove temporary table",
+             "DROP TEMPORARY TABLE IF EXISTS tl_tmp_visible_timeline");
+  }

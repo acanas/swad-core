@@ -61,10 +61,10 @@ mysql> SHOW TABLES LIKE 'tl_%';
   |               |                (3863)       | |
   |Publication i+3|--                           | |
   |(original note)|  \                          | |
-  |_______________|   \       ___tl_notes____   | |     _exam_announcements_
-  |               |    \     |               |  | |    |                    |
-  |Publication i+2|--   ---->|     Note n    |<-+ |    | Exam announcement  | (5571)
-  |(original note)|  \       |(exam announc.)|-(2639)->|____________________|
+  |_______________|   \       ___tl_notes____   | |    exam_announcements
+  |               |    \     |               |  | |    |               |
+  |Publication i+2|--   ---->|     Note n    |<-+ |    | Exam announc. | (5571)
+  |(original note)|  \       |(exam announc.)|-(2639)->|_______________|
   |_______________|   \      |_______________|  12%     ____files____
   |               |    \     |               |    |    |             |
   |Publication i+1|--   ---->|    Note n-1   |-(64)--->| Public file | (1473406)
