@@ -371,7 +371,7 @@ static void Att_PutIconsInListOfAttEvents (void *Events)
 
       /***** Put icon to print my QR code *****/
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-			       Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
+			       Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
      }
   }
 
@@ -705,7 +705,7 @@ static void Att_GetListAttEvents (struct Att_Events *Events,
       Events->Num = (unsigned) NumRows;
 
       /***** Create list of attendance events *****/
-      if ((Events->Lst = (struct Att_Event *) calloc (NumRows,sizeof (struct Att_Event))) == NULL)
+      if ((Events->Lst = calloc (NumRows,sizeof (*Events->Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the attendance events codes *****/
@@ -804,8 +804,7 @@ bool Att_GetDataOfAttEventByCod (struct Att_Event *Event)
 	 Event->CommentTchVisible = (row[7][0] == 'Y');
 
 	 /* Get the title of the attendance event (row[8]) */
-	 Str_Copy (Event->Title,row[8],
-	           Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE);
+	 Str_Copy (Event->Title,row[8],sizeof (Event->Title) - 1);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -877,8 +876,7 @@ static void Att_GetAttEventDescriptionFromDB (long AttCod,char Description[Cns_M
       row = mysql_fetch_row (mysql_res);
 
       /* Get info text */
-      Str_Copy (Description,row[0],
-                Cns_MAX_BYTES_TEXT);
+      Str_Copy (Description,row[0],Cns_MAX_BYTES_TEXT);
      }
    else
       Description[0] = '\0';
@@ -2128,7 +2126,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    HTM_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
    HTM_INPUT_CHECKBOX ("UsrCodStd",HTM_DONT_SUBMIT_ON_CHANGE,
 		       "id=\"Std%u\" value=\"%s\"%s%s",
-	               NumUsr,UsrDat->EncryptedUsrCod,
+	               NumUsr,UsrDat->EnUsrCod,
 		       Present ? " checked=\"checked\"" : "",
 		       ICanChangeStdAttendance ? "" : " disabled=\"disabled\"");
    HTM_TD_End ();
@@ -2168,7 +2166,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
       HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
-   HTM_TxtF (", %s",UsrDat->FirstName);
+   HTM_TxtF (", %s",UsrDat->FrstName);
    HTM_TD_End ();
 
    /***** Student's comment: write form or text */
@@ -2176,7 +2174,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    if (ICanEditStdComment)	// Show with form
      {
       HTM_TEXTAREA_Begin ("name=\"CommentStd%s\" cols=\"40\" rows=\"3\"",
-	                  UsrDat->EncryptedUsrCod);
+	                  UsrDat->EnUsrCod);
       HTM_Txt (CommentStd);
       HTM_TEXTAREA_End ();
      }
@@ -2193,7 +2191,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    if (ICanEditTchComment)		// Show with form
      {
       HTM_TEXTAREA_Begin ("name=\"CommentTch%s\" cols=\"40\" rows=\"3\"",
-			  UsrDat->EncryptedUsrCod);
+			  UsrDat->EnUsrCod);
       HTM_Txt (CommentTch);
       HTM_TEXTAREA_End ();
      }
@@ -2253,7 +2251,7 @@ static void Att_PutParamsCodGrps (long AttCod)
    if (NumGrps) // Groups found...
      {
       MaxLengthGrpCods = NumGrps * (1 + 20) - 1;
-      if ((GrpCods = (char *) malloc (MaxLengthGrpCods + 1)) == NULL)
+      if ((GrpCods = malloc (MaxLengthGrpCods + 1)) == NULL)
 	 Lay_NotEnoughMemoryExit ();
       GrpCods[0] = '\0';
 
@@ -2310,7 +2308,7 @@ void Att_RegisterMeAsStdInAttEvent (void)
       Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Event.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                                         CommentStd,CommentTch);
       Par_GetParToHTML (Str_BuildStringStr ("CommentStd%s",
-					    Gbl.Usrs.Me.UsrDat.EncryptedUsrCod),
+					    Gbl.Usrs.Me.UsrDat.EnUsrCod),
 			CommentStd,Cns_MAX_BYTES_TEXT);
       Str_FreeString ();
 
@@ -2396,7 +2394,7 @@ void Att_RegisterStudentsInAttEvent (void)
       Ptr = Gbl.Usrs.Selected.List[Rol_STD];
       while (*Ptr)
 	{
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,UsrData.EncryptedUsrCod,
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,UsrData.EnUsrCod,
 	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&UsrData);
 	 if (UsrData.UsrCod > 0)	// Student exists in database
@@ -2427,7 +2425,7 @@ void Att_RegisterStudentsInAttEvent (void)
 	 /***** Get comments for this student *****/
 	 Att_CheckIfUsrIsPresentInAttEventAndGetComments (Event.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod,CommentStd,CommentTch);
 	 Par_GetParToHTML (Str_BuildStringStr ("CommentTch%s",
-					       Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].EncryptedUsrCod),
+					       Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].EnUsrCod),
 			   CommentTch,Cns_MAX_BYTES_TEXT);
 	 Str_FreeString ();
 
@@ -2603,12 +2601,10 @@ static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long Us
       Present = (row[0][0] == 'Y');
 
       /* Get student's comment (row[1]) */
-      Str_Copy (CommentStd,row[1],
-                Cns_MAX_BYTES_TEXT);
+      Str_Copy (CommentStd,row[1],Cns_MAX_BYTES_TEXT);
 
       /* Get teacher's comment (row[2]) */
-      Str_Copy (CommentTch,row[2],
-                Cns_MAX_BYTES_TEXT);
+      Str_Copy (CommentTch,row[2],Cns_MAX_BYTES_TEXT);
      }
    else	// User is not present
      {
@@ -2977,7 +2973,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
 
    /***** Allocate memory for list of attendance events selected *****/
    MaxSizeListAttCodsSelected = (size_t) Events->Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
-   if ((Events->StrAttCodsSelected = (char *) malloc (MaxSizeListAttCodsSelected + 1)) == NULL)
+   if ((Events->StrAttCodsSelected = malloc (MaxSizeListAttCodsSelected + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of attendance events selected *****/
@@ -3083,7 +3079,7 @@ static void Att_PutIconsMyAttList (void *Events)
 
       /***** Put icon to print my QR code *****/
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-			       Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
+			       Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
      }
   }
 
@@ -3113,7 +3109,7 @@ static void Att_PutIconsStdsAttList (void *Events)
 
       /***** Put icon to print my QR code *****/
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-			       Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
+			       Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
      }
   }
 
@@ -3422,9 +3418,7 @@ static void Att_WriteTableHeadSeveralAttEvents (const struct Att_Events *Events)
 
 	 /***** Put link to this attendance event *****/
 	 HTM_TH_Begin (1,1,"CM");
-	 snprintf (StrNumAttEvent,sizeof (StrNumAttEvent),
-		   "%u",
-		   NumAttEvent + 1);
+	 snprintf (StrNumAttEvent,sizeof (StrNumAttEvent),"%u",NumAttEvent + 1);
 	 Att_PutLinkAttEvent (&Events->Lst[NumAttEvent],
 			      Events->Lst[NumAttEvent].Title,
 			      StrNumAttEvent,
@@ -3487,7 +3481,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
       HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
-   HTM_TxtF (", %s",UsrDat->FirstName);
+   HTM_TxtF (", %s",UsrDat->FrstName);
    HTM_TD_End ();
 
    /***** Check/cross to show if the user is present/absent *****/
@@ -3646,7 +3640,7 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
       HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
-   HTM_TxtF (", %s",UsrDat->FirstName);
+   HTM_TxtF (", %s",UsrDat->FrstName);
    HTM_TD_End ();
 
    HTM_TR_End ();

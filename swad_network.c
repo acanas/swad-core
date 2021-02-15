@@ -231,8 +231,7 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
 	{
 	 /* Get URL */
 	 row = mysql_fetch_row (mysql_res);
-	 Str_Copy (URL,row[0],
-	           Cns_MAX_BYTES_WWW);
+	 Str_Copy (URL,row[0],sizeof (URL) - 1);
 
 	 /* Show the web / social network */
 	 Net_ShowAWebOrSocialNet (URL,
@@ -284,9 +283,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    HTM_SECTION_Begin (Net_MY_WEBS_ID);
 
    /***** Begin box *****/
-   snprintf (StrRecordWidth,sizeof (StrRecordWidth),
-	     "%upx",
-	     Rec_RECORD_WIDTH);
+   snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
    Box_BoxBegin (StrRecordWidth,Txt_Webs_social_networks,
 	         Net_PutIconsWebsSocialNetworks,NULL,
                  Hlp_PROFILE_Webs,Box_NOT_CLOSABLE);
@@ -313,8 +310,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get URL */
-	 Str_Copy (URL,row[0],
-	           Cns_MAX_BYTES_WWW);
+	 Str_Copy (URL,row[0],sizeof (URL) - 1);
 	}
       else
 	 URL[0] = '\0';
@@ -323,9 +319,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Row for this web / social network *****/
-      snprintf (StrName,sizeof (StrName),
-		"URL%u",
-		(unsigned) NumURL);
+      snprintf (StrName,sizeof (StrName),"URL%u",(unsigned) NumURL);
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"REC_C1_BOT LM\"");
@@ -400,9 +394,7 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
 	NumURL++)
      {
       /***** Get URL from the form *****/
-      snprintf (ParamName,sizeof (ParamName),
-		"URL%u",
-		(unsigned) NumURL);
+      snprintf (ParamName,sizeof (ParamName),"URL%u",(unsigned) NumURL);
       Par_GetParToText (ParamName,URL,Cns_MAX_BYTES_WWW);
 
       if (URL[0])
@@ -573,8 +565,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
       row = mysql_fetch_row (mysql_res);
 
       /* Get web / social network (row[0]) */
-      Str_Copy (NetName,row[0],
-                Net_MAX_BYTES_NETWORK_NAME);
+      Str_Copy (NetName,row[0],sizeof (NetName) - 1);
       for (Web  = (Net_WebsAndSocialNetworks_t) 0;
 	   Web <= (Net_WebsAndSocialNetworks_t) (Net_NUM_WEBS_AND_SOCIAL_NETWORKS - 1);
 	   Web++)

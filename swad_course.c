@@ -178,8 +178,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    char ClassHighlight[64];
 
    ClassNormal = The_ClassFormLinkInBox[Gbl.Prefs.Theme];
-   snprintf (ClassHighlight,sizeof (ClassHighlight),
-	     "%s LIGHT_BLUE",
+   snprintf (ClassHighlight,sizeof (ClassHighlight),"%s LIGHT_BLUE",
 	     The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme]);
 
    /***** Begin box *****/
@@ -775,8 +774,8 @@ static void Crs_GetListCrssInCurrentDeg (Crs_WhatCourses_t WhatCourses)
    if (NumCrss) // Courses found...
      {
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.Crss.Lst = (struct Crs_Course *) calloc ((size_t) NumCrss,
-	                                                         sizeof (struct Crs_Course))) == NULL)
+      if ((Gbl.Hierarchy.Crss.Lst = calloc (NumCrss,
+	                                    sizeof (*Gbl.Hierarchy.Ctys.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the courses in degree *****/
@@ -1804,7 +1803,7 @@ static void Crs_GetDataOfCourseFromRow (struct Crs_Course *Crs,MYSQL_ROW row)
 
    /***** Get institutional course code (row[3]) *****/
    Str_Copy (Crs->InstitutionalCrsCod,row[3],
-             Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
+             sizeof (Crs->InstitutionalCrsCod) - 1);
 
    /***** Get course status (row[4]) *****/
    if (sscanf (row[4],"%u",&(Crs->Status)) != 1)
@@ -1814,12 +1813,10 @@ static void Crs_GetDataOfCourseFromRow (struct Crs_Course *Crs,MYSQL_ROW row)
    Crs->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[5]);
 
    /***** Get the short name of the course (row[6]) *****/
-   Str_Copy (Crs->ShrtName,row[6],
-             Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+   Str_Copy (Crs->ShrtName,row[6],sizeof (Crs->ShrtName) - 1);
 
    /***** Get the full name of the course (row[7]) *****/
-   Str_Copy (Crs->FullName,row[7],
-             Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Str_Copy (Crs->FullName,row[7],sizeof (Crs->FullName) - 1);
   }
 
 /*****************************************************************************/
@@ -1848,10 +1845,8 @@ static void Crs_GetShortNamesByCod (long CrsCod,
 	 /***** Get the short name of this course *****/
 	 row = mysql_fetch_row (mysql_res);
 
-	 Str_Copy (CrsShortName,row[0],
-	           Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
-	 Str_Copy (DegShortName,row[1],
-	           Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+	 Str_Copy (CrsShortName,row[0],Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+	 Str_Copy (DegShortName,row[1],Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -2024,12 +2019,10 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 		      CrsCod);
 
       /***** Remove directories of the course *****/
-      snprintf (PathRelCrs,sizeof (PathRelCrs),
-	        "%s/%ld",
+      snprintf (PathRelCrs,sizeof (PathRelCrs),"%s/%ld",
 	        Cfg_PATH_CRS_PRIVATE,CrsCod);
       Fil_RemoveTree (PathRelCrs);
-      snprintf (PathRelCrs,sizeof (PathRelCrs),
-	        "%s/%ld",
+      snprintf (PathRelCrs,sizeof (PathRelCrs),"%s/%ld",
 	        Cfg_PATH_CRS_PUBLIC,CrsCod);
       Fil_RemoveTree (PathRelCrs);
      }
@@ -2170,7 +2163,7 @@ void Crs_UpdateInstitutionalCrsCod (struct Crs_Course *Crs,const char *NewInstit
 
    /***** Copy institutional course code *****/
    Str_Copy (Crs->InstitutionalCrsCod,NewInstitutionalCrsCod,
-             Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
+             sizeof (Crs->InstitutionalCrsCod) - 1);
   }
 
 /*****************************************************************************/
@@ -2261,8 +2254,7 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
 				CurrentCrsName,NewCrsName);
 
                /* Change current course name in order to display it properly */
-               Str_Copy (CurrentCrsName,NewCrsName,
-                         MaxBytes);
+               Str_Copy (CurrentCrsName,NewCrsName,MaxBytes);
               }
            }
          else	// The same name
@@ -2987,8 +2979,8 @@ static void Crs_EditingCourseConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing course.");
 
    /***** Allocate memory for course *****/
-   if ((Crs_EditingCrs = (struct Crs_Course *) malloc (sizeof (struct Crs_Course))) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for course.");
+   if ((Crs_EditingCrs = malloc (sizeof (*Crs_EditingCrs))) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Reset course *****/
    Crs_EditingCrs->CrsCod      = -1L;

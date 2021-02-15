@@ -345,7 +345,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
      }
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       if (Messages->ShowOnlyOneRecipient)
 	 Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
      }
@@ -450,7 +450,7 @@ static void Msg_PutParamsShowMorePotentialRecipients (const void *Messages)
       Msg_PutHiddenParamMsgCod (((struct Msg_Messages *) Messages)->Reply.OriginalMsgCod);
      }
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 
    /***** Hidden params to send subject and content *****/
    Msg_PutHiddenParamsSubjectAndContent ();
@@ -474,7 +474,7 @@ static void Msg_PutParamsWriteMsg (void *Messages)
 	}
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	{
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	 if (((struct Msg_Messages *) Messages)->ShowOnlyOneRecipient)
 	    Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
 	}
@@ -627,13 +627,9 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get subject */
-	 Str_Copy (Messages->Subject,row[0],
-	           Cns_MAX_BYTES_SUBJECT);
-
-	 /* Get content */
-	 Str_Copy (Content,row[1],
-	           Cns_MAX_BYTES_LONG_TEXT);
+	 /* Get subject (row[0]) and content (row[1]) */
+	 Str_Copy (Messages->Subject,row[0],sizeof (Messages->Subject) - 1);
+	 Str_Copy (Content          ,row[1],Cns_MAX_BYTES_LONG_TEXT);
 
 	 /* Free structure that stores the query result */
 	 DB_FreeMySQLResult (&mysql_res);
@@ -711,12 +707,10 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
 static void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat)
   {
-   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   char NickWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
-   snprintf (NicknameWithArroba,sizeof (NicknameWithArroba),
-	     "@%s",
-	     UsrDat->Nickname);
-   Par_PutHiddenParamString (NULL,"OtherRecipients",NicknameWithArroba);
+   snprintf (NickWithArroba,sizeof (NickWithArroba),"@%s",UsrDat->Nickname);
+   Par_PutHiddenParamString (NULL,"OtherRecipients",NickWithArroba);
   }
 
 /*****************************************************************************/
@@ -839,7 +833,7 @@ void Msg_RecMsgFromUsr (void)
    NumRecipients = 0;
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDstData.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDstData.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDstData);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDstData,Usr_DONT_GET_PREFS))		// Get recipient's data from the database
@@ -1132,11 +1126,11 @@ static void Msg_GetParamMsgsCrsCod (struct Msg_Messages *Messages)
       Crs_GetDataOfCourseByCod (&Crs);
 
       Str_Copy (Messages->FilterCrsShrtName,Crs.ShrtName,
-                Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+                sizeof (Messages->FilterCrsShrtName) - 1);
      }
    else
       Str_Copy (Messages->FilterCrsShrtName,Txt_any_course,
-                Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+                sizeof (Messages->FilterCrsShrtName) - 1);
   }
 
 /*****************************************************************************/
@@ -1184,13 +1178,10 @@ static void Msg_MakeFilterFromToSubquery (const struct Msg_Messages *Messages,
          if (strlen (FilterFromToSubquery) + strlen (SearchWord) + 512 >
              Msg_MAX_BYTES_MESSAGES_QUERY)	// Prevent string overflow
             break;
-         Str_Concat (FilterFromToSubquery,"%",
-                     Msg_MAX_BYTES_MESSAGES_QUERY);
-         Str_Concat (FilterFromToSubquery,SearchWord,
-                     Msg_MAX_BYTES_MESSAGES_QUERY);
+         Str_Concat (FilterFromToSubquery,"%",Msg_MAX_BYTES_MESSAGES_QUERY);
+         Str_Concat (FilterFromToSubquery,SearchWord,Msg_MAX_BYTES_MESSAGES_QUERY);
         }
-      Str_Concat (FilterFromToSubquery,"%'",
-                  Msg_MAX_BYTES_MESSAGES_QUERY);
+      Str_Concat (FilterFromToSubquery,"%'",Msg_MAX_BYTES_MESSAGES_QUERY);
      }
    else
       FilterFromToSubquery[0] = '\0';
@@ -2797,7 +2788,7 @@ static void Msg_GetDistinctCoursesInMyMessages (struct Msg_Messages *Messages)
            {
             Messages->Courses[Messages->NumCourses].CrsCod = Crs.CrsCod;
             Str_Copy (Messages->Courses[Messages->NumCourses].ShrtName,Crs.ShrtName,
-                      Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+                      sizeof (Messages->Courses[Messages->NumCourses].ShrtName) - 1);
             Messages->NumCourses++;
            }
      }
@@ -2992,8 +2983,7 @@ static void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 
      {
       /***** Get subject *****/
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Subject,row[0],
-                Cns_MAX_BYTES_SUBJECT);
+      Str_Copy (Subject,row[0],Cns_MAX_BYTES_SUBJECT);
      }
    else
       Subject[0] = '\0';
@@ -3028,8 +3018,7 @@ static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT 
    row = mysql_fetch_row (mysql_res);
 
    /****** Get content (row[0]) *****/
-   Str_Copy (Content,row[0],
-             Cns_MAX_BYTES_LONG_TEXT);
+   Str_Copy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Get media (row[1]) *****/
    Media->MedCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -3324,17 +3313,15 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 SummaryStr[Ntf_MAX_BYTES_SUMMARY] = '\0';
 	}
       else
-	 Str_Copy (SummaryStr,row[0],
-		   Ntf_MAX_BYTES_SUMMARY);
+	 Str_Copy (SummaryStr,row[0],Ntf_MAX_BYTES_SUMMARY);
 
       /***** Copy subject *****/
       if (GetContent)
 	{
 	 Length = strlen (row[1]);
-	 if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
-	    Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-	 Str_Copy (*ContentStr,row[1],
-		   Length);
+	 if ((*ContentStr = malloc (Length + 1)) == NULL)
+            Lay_NotEnoughMemoryExit ();
+	 Str_Copy (*ContentStr,row[1],Length);
 	}
      }
 
@@ -3546,7 +3533,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
    Grp_PutParamAllGroups ();
    Par_PutHiddenParamChar ("IsReply",'Y');
    Msg_PutHiddenParamMsgCod (MsgCod);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
 
    /****** Link and form end *****/
@@ -3887,7 +3874,7 @@ static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
    Frm_StartForm (ActBanUsrMsg);
    Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
 	                     Messages->CurrentPage);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    Msg_PutHiddenParamsMsgsFilters (Messages);
    Ico_PutIconLink ("unlock.svg",Txt_Sender_permitted_click_to_ban_him);
    Frm_EndForm ();
@@ -3905,7 +3892,7 @@ static void Msg_PutFormToUnbanSender (struct Msg_Messages *Messages,
    Frm_StartForm (ActUnbUsrMsg);
    Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
 	                     Messages->CurrentPage);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    Msg_PutHiddenParamsMsgsFilters (Messages);
    Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
    Frm_EndForm ();
@@ -4078,7 +4065,7 @@ void Msg_ListBannedUsrs (void)
             /* Put form to unban user */
             HTM_TD_Begin ("class=\"BM\"");
             Frm_StartForm (ActUnbUsrLst);
-            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+            Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
             Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
             Frm_EndForm ();
             HTM_TD_End ();

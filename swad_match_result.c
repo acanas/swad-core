@@ -29,7 +29,6 @@
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
@@ -308,7 +307,7 @@ static void MchRes_ListAllMchResultsInSelectedGames (struct Gam_Games *Games)
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
@@ -735,7 +734,7 @@ static void MchRes_BuildGamesSelectedCommas (struct Gam_Games *Games,
 
    /***** Allocate memory for subquery of games selected *****/
    MaxLength = (size_t) Games->NumSelected * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
-   if ((*GamesSelectedCommas = (char *) malloc (MaxLength + 1)) == NULL)
+   if ((*GamesSelectedCommas = malloc (MaxLength + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Build subquery with list of selected games *****/
@@ -1018,7 +1017,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	       case Usr_OTHER:
 		  Frm_StartForm (ActSeeOneMchResOth);
 		  Mch_PutParamsEdit (Games);
-		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		  break;
 	      }
 	    Ico_PutIconLink ("tasks.svg",Txt_Result);
@@ -1233,8 +1232,8 @@ void MchRes_ShowOneMchResult (void)
       HTM_TxtF ("&nbsp;%s",UsrDat->Surname1);
       if (UsrDat->Surname2[0])
 	 HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
-      if (UsrDat->FirstName[0])
-	 HTM_TxtF (", %s",UsrDat->FirstName);
+      if (UsrDat->FrstName[0])
+	 HTM_TxtF (", %s",UsrDat->FrstName);
       HTM_BR ();
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :

@@ -156,12 +156,10 @@ void Ann_ShowAllAnnouncements (void)
       	 Lay_ShowErrorAndExit ("Error when reading roles of announcement.");
 
       /* Get the content (row[3]) */
-      Str_Copy (Subject,row[3],
-                Cns_MAX_BYTES_SUBJECT);
+      Str_Copy (Subject,row[3],sizeof (Subject) - 1);
 
       /* Get the content (row[4]) and insert links */
-      Str_Copy (Content,row[4],
-                Cns_MAX_BYTES_TEXT);
+      Str_Copy (Content,row[4],sizeof (Content) - 1);
       Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
 
       /* Show the announcement */
@@ -248,12 +246,10 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 	    Lay_ShowErrorAndExit ("Wrong code of announcement.");
 
 	 /* Get the content (row[1]) */
-	 Str_Copy (Subject,row[1],
-	           Cns_MAX_BYTES_SUBJECT);
+	 Str_Copy (Subject,row[1],sizeof (Subject) - 1);
 
 	 /* Get the content (row[2]) and insert links */
-	 Str_Copy (Content,row[2],
-	           Cns_MAX_BYTES_TEXT);
+	 Str_Copy (Content,row[2],sizeof (Content) - 1);
 	 Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
 
 	 /* Show the announcement */

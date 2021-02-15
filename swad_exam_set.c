@@ -31,7 +31,6 @@
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
@@ -242,16 +241,13 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
 
       /* Get set index (row[2]) */
       Set->SetInd = Str_ConvertStrToUnsigned (row[2]);
-      snprintf (StrSetInd,sizeof (Set->SetInd),
-	        "%u",
-		Set->SetInd);
+      snprintf (StrSetInd,sizeof (Set->SetInd),"%u",Set->SetInd);
 
       /* Get set index (row[3]) */
       Set->NumQstsToPrint = Str_ConvertStrToUnsigned (row[3]);
 
       /* Get the title of the set (row[4]) */
-      Str_Copy (Set->Title,row[4],
-                ExaSet_MAX_BYTES_TITLE);
+      Str_Copy (Set->Title,row[4],sizeof (Set->Title) - 1);
      }
    else
       /* Initialize to empty set */
@@ -477,8 +473,7 @@ void ExaSet_ChangeSetTitle (void)
       ExaSet_UpdateSetTitleDB (&Set,NewTitle);
 
       /* Update title */
-      Str_Copy (Set.Title,NewTitle,
-		ExaSet_MAX_BYTES_TITLE);
+      Str_Copy (Set.Title,NewTitle,sizeof (Set.Title) - 1);
      }
 
    /***** Show current exam and its sets *****/
@@ -1085,16 +1080,13 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 
       /* Get set index (row[1]) */
       Set.SetInd = Str_ConvertStrToUnsigned (row[1]);
-      snprintf (StrSetInd,sizeof (Set.SetInd),
-	        "%u",
-		Set.SetInd);
+      snprintf (StrSetInd,sizeof (Set.SetInd),"%u",Set.SetInd);
 
       /* Get number of questions to exam (row[2]) */
       Set.NumQstsToPrint = Str_ConvertStrToUnsigned (row[2]);
 
       /* Get the title of the set (row[3]) */
-      Str_Copy (Set.Title,row[3],
-                ExaSet_MAX_BYTES_TITLE);
+      Str_Copy (Set.Title,row[3],sizeof (Set.Title) - 1);
 
       /* Initialize context */
       Exams->SetCod = Set.SetCod;
@@ -1433,15 +1425,13 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
       Question->Stem[0] = '\0';
       if (row[3])
 	 if (row[3][0])
-	    Str_Copy (Question->Stem,row[3],
-		      Cns_MAX_BYTES_TEXT);
+	    Str_Copy (Question->Stem,row[3],sizeof (Question->Stem) - 1);
 
       /* Get the feedback (row[4]) */
       Question->Feedback[0] = '\0';
       if (row[4])
 	 if (row[4][0])
-	    Str_Copy (Question->Feedback,row[4],
-		      Cns_MAX_BYTES_TEXT);
+	    Str_Copy (Question->Feedback,row[4],sizeof (Question->Feedback) - 1);
 
       /* Get media (row[5]) */
       Question->Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
@@ -1497,14 +1487,14 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
 	       if (row[1])
 		  if (row[1][0])
 		     Str_Copy (Question->Answer.Options[NumOpt].Text,row[1],
-			       Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+			       sizeof (Question->Answer.Options[NumOpt].Text) - 1);
 
 	       /* Get feedback (row[2]) */
 	       Question->Answer.Options[NumOpt].Feedback[0] = '\0';
 	       if (row[2])
 		  if (row[2][0])
 		     Str_Copy (Question->Answer.Options[NumOpt].Feedback,row[2],
-			       Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+			       sizeof (Question->Answer.Options[NumOpt].Feedback) - 1);
 
 	       /* Get media (row[3]) */
 	       Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -1679,7 +1669,7 @@ static void ExaSet_AllocateListSelectedQuestions (struct Exa_Exams *Exams)
   {
    if (!Exams->ListQuestions)
      {
-      if ((Exams->ListQuestions = (char *) malloc (ExaSet_MAX_BYTES_LIST_SELECTED_QUESTIONS + 1)) == NULL)
+      if ((Exams->ListQuestions = malloc (ExaSet_MAX_BYTES_LIST_SELECTED_QUESTIONS + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
       Exams->ListQuestions[0] = '\0';
      }

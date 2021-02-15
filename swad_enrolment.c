@@ -571,7 +571,7 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 		   "Comments='%s'"
 		   " WHERE UsrCod=%ld",
 	           UsrDat->Password,
-	           UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
+	           UsrDat->Surname1,UsrDat->Surname2,UsrDat->FrstName,
 	           Usr_StringsSexDB[UsrDat->Sex],
 	           UsrDat->CtyCod,
 	           UsrDat->Phone[0],
@@ -1183,7 +1183,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
      }
 
    /***** Get list of users' IDs *****/
-   if ((ListUsrsIDs = (char *) malloc (ID_MAX_BYTES_LIST_USRS_IDS + 1)) == NULL)
+   if ((ListUsrsIDs = malloc (ID_MAX_BYTES_LIST_USRS_IDS + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
    Par_GetParToText ("UsrsIDs",ListUsrsIDs,ID_MAX_BYTES_LIST_USRS_IDS);
 
@@ -1248,7 +1248,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 		  /***** Find users for this user's ID *****/
 		  ID_ReallocateListIDs (&UsrDat,1);	// Only one user's ID
 		  Str_Copy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail,
-			    ID_MAX_BYTES_USR_ID);
+			    sizeof (UsrDat.IDs.List[0].ID) - 1);
 		  Str_ConvertToUpperText (UsrDat.IDs.List[0].ID);
 		  ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false);
 		 }
@@ -1375,7 +1375,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	       /* Find users for this user's ID */
 	       ID_ReallocateListIDs (&UsrDat,1);	// Only one user's ID
 	       Str_Copy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail,
-			 ID_MAX_BYTES_USR_ID);
+			 sizeof (UsrDat.IDs.List[0].ID) - 1);
 	       Str_ConvertToUpperText (UsrDat.IDs.List[0].ID);
 	       ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false);
 	      }
@@ -2144,7 +2144,7 @@ void Enr_AskIfRejectSignUp (void)
 
 	    /* End alert */
 	    Ale_ShowAlertAndButton2 (ActRejSignUp,NULL,NULL,
-	                             Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+	                             Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 				     Btn_REMOVE_BUTTON,Txt_Reject);
            }
          else
@@ -2919,7 +2919,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
               }
             Frm_StartForm (NextAction);
             Crs_PutParamCrsCod (Crs.CrsCod);
-            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+            Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
             Btn_PutCreateButtonInline (Txt_Register);
             Frm_EndForm ();
             HTM_TD_End ();
@@ -2928,7 +2928,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             HTM_TD_Begin ("class=\"DAT LT\"");
             Frm_StartForm (ActReqRejSignUp);
             Crs_PutParamCrsCod (Crs.CrsCod);
-            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+            Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
             Btn_PutRemoveButtonInline (Txt_Reject);
             Frm_EndForm ();
             HTM_TD_End ();
@@ -3657,7 +3657,7 @@ static void Enr_ReqAddAdm (Hie_Lvl_Level_t Scope,long Cod,const char *InsCtrDegN
 
 	       /* End alert */
 	       Ale_ShowAlertAndButton2 (Enr_ActNewAdm[Scope],NULL,NULL,
-	                                Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+	                                Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 	                                Btn_CREATE_BUTTON,Txt_Register_user_IN_A_COURSE_OR_DEGREE);
               }
            }
@@ -4075,7 +4075,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
 	    break;
         }
       Frm_StartForm (NextAction);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       Pwd_AskForConfirmationOnDangerousAction ();
       Btn_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_course :
                                    Txt_Remove_user_from_this_course);
@@ -4227,7 +4227,7 @@ static void Enr_AskIfRemAdm (bool ItsMe,Hie_Lvl_Level_t Scope,
 
       /* End alert */
       Ale_ShowAlertAndButton2 (Enr_ActRemAdm[Scope],NULL,NULL,
-                               Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+                               Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
                                Btn_REMOVE_BUTTON,
                                ItsMe ? Txt_Remove_me_as_an_administrator :
                                        Txt_Remove_USER_as_an_administrator);

@@ -366,9 +366,8 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
       if (Holidays->Num) // Holidays found...
 	{
 	 /***** Create list of holidays *****/
-	 if ((Holidays->Lst = (struct Hld_Holiday *)
-		              calloc ((size_t) Holidays->Num,
-	                              sizeof (struct Hld_Holiday))) == NULL)
+	 if ((Holidays->Lst = calloc (Holidays->Num,
+	                              sizeof (*Holidays->Lst))) == NULL)
 	     Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the holidays *****/
@@ -390,7 +389,7 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
 
 	    /* Get the full name of the place (row[2]) */
 	    Str_Copy (Hld->PlaceFullName,row[2],
-	              Plc_MAX_BYTES_PLACE_FULL_NAME);
+	              sizeof (Hld->PlaceFullName) - 1);
 
 	    /* Get type (row[3]) */
 	    Hld->HldTyp = Hld_GetTypeOfHoliday (row[3]);
@@ -414,8 +413,7 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
 	      }
 
 	    /* Get the name of the holiday/non school period (row[6]) */
-	    Str_Copy (Hld->Name,row[6],
-	              Hld_MAX_BYTES_HOLIDAY_NAME);
+	    Str_Copy (Hld->Name,row[6],sizeof (Hld->Name) - 1);
 	   }
 	}
 
@@ -487,8 +485,7 @@ static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld)
       Hld->PlcCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get the full name of the place (row[1]) */
-      Str_Copy (Hld->PlaceFullName,row[1],
-                Plc_MAX_BYTES_PLACE_FULL_NAME);
+      Str_Copy (Hld->PlaceFullName,row[1],sizeof (Hld->PlaceFullName) - 1);
 
       /* Get type (row[2]) */
       Hld->HldTyp = Hld_GetTypeOfHoliday (row[2]);
@@ -512,8 +509,7 @@ static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld)
 	}
 
       /* Get the name of the holiday/non school period (row[5]) */
-      Str_Copy (Hld->Name,row[5],
-                Hld_MAX_BYTES_HOLIDAY_NAME);
+      Str_Copy (Hld->Name,row[5],sizeof (Hld->Name) - 1);
      }
 
   /***** Free structure that stores the query result *****/
@@ -769,7 +765,7 @@ void Hld_ChangeHolidayPlace (void)
                    NewPlace.PlcCod,Hld_EditingHld->HldCod);
    Hld_EditingHld->PlcCod = NewPlace.PlcCod;
    Str_Copy (Hld_EditingHld->PlaceFullName,NewPlace.FullName,
-             Plc_MAX_BYTES_PLACE_FULL_NAME);
+             sizeof (Hld_EditingHld->PlaceFullName) - 1);
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -938,7 +934,7 @@ void Hld_RenameHoliday (void)
 			 "UPDATE holidays SET Name='%s' WHERE HldCod=%ld",
 		         NewHldName,Hld_EditingHld->HldCod);
 	 Str_Copy (Hld_EditingHld->Name,NewHldName,
-		   Hld_MAX_BYTES_HOLIDAY_NAME);
+		   sizeof (Hld_EditingHld->Name) - 1);
 
 	 /***** Write message to show the change made *****/
          Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1203,8 +1199,8 @@ static void Hld_EditingHolidayConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing holiday.");
 
    /***** Allocate memory for holiday *****/
-   if ((Hld_EditingHld = (struct Hld_Holiday *) malloc (sizeof (struct Hld_Holiday))) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for holiday.");
+   if ((Hld_EditingHld = malloc (sizeof (*Hld_EditingHld))) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Reset place *****/
    Hld_EditingHld->HldCod = -1L;

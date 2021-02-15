@@ -187,10 +187,9 @@ static void TT_TimeTableConfigureIntervalsAndAllocateTimeTable (struct TT_Timeta
       for (Weekday = 0;
 	   Weekday < TT_DAYS_PER_WEEK;
 	   Weekday++)
-	 if ((TT_TimeTable[Weekday] = (struct TT_Cell *)
-				      malloc (Timetable->Config.IntervalsPerDay *
-					      sizeof (struct TT_Cell))) == NULL)
-	    Lay_ShowErrorAndExit ("Error allocating memory for timetable.");
+	 if ((TT_TimeTable[Weekday] = malloc (Timetable->Config.IntervalsPerDay *
+					      sizeof (*TT_TimeTable[Weekday]))) == NULL)
+            Lay_NotEnoughMemoryExit ();
      }
    else
      {
@@ -1018,7 +1017,7 @@ static void TT_FillTimeTableFromDB (struct TT_Timetable *Timetable,
 		     case TT_TUTORING_TIMETABLE:
 			Str_Copy (TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].Info,
 				  row[3],
-				  TT_MAX_BYTES_INFO);
+				  sizeof (TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].Info) - 1);
 			break;
 		    }
 
@@ -1136,7 +1135,7 @@ static void TT_ModifTimeTable (struct TT_Timetable *Timetable)
       TT_TimeTable[Timetable->Weekday][Timetable->Interval].Columns[Timetable->Column].DurationIntervals = Timetable->DurationIntervals;
       Str_Copy (TT_TimeTable[Timetable->Weekday][Timetable->Interval].Columns[Timetable->Column].Info,
                 Timetable->Info,
-                TT_MAX_BYTES_INFO);
+                sizeof (TT_TimeTable[Timetable->Weekday][Timetable->Interval].Columns[Timetable->Column].Info) - 1);
      }
   }
 
@@ -1387,9 +1386,9 @@ static unsigned TT_CalculateColsToDrawInCell (const struct TT_Timetable *Timetab
    if (TopCall)	// Top call, non recursive call
       /****** Allocate space to store list of intervals already checked
               and initialize to false by using calloc *****/
-      if ((TT_IntervalsChecked = (bool *) calloc (Timetable->Config.IntervalsPerDay,
-                                                  sizeof (bool))) == NULL)
-	 Lay_ShowErrorAndExit ("Error allocating memory for timetable.");
+      if ((TT_IntervalsChecked = calloc (Timetable->Config.IntervalsPerDay,
+                                         sizeof (*TT_IntervalsChecked))) == NULL)
+         Lay_NotEnoughMemoryExit ();
 
    ColumnsToDraw = TT_TimeTable[Weekday][Interval].NumColumns;
 

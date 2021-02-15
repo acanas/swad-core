@@ -156,8 +156,7 @@ void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	       row = mysql_fetch_row (mysql_res);
 
 	       /****** Get content (row[0]) *****/
-	       Str_Copy (Content.Txt,row[0],
-	                 Cns_MAX_BYTES_LONG_TEXT);
+	       Str_Copy (Content.Txt,row[0],sizeof (Content.Txt) - 1);
 	      }
 
 	    /***** Free structure that stores the query result *****/
@@ -167,18 +166,16 @@ void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	    if (GetContent)
 	      {
 	       Length = strlen (Content.Txt);
-	       if ((*ContentStr = (char *) malloc (Length + 1)) != NULL)
+	       if ((*ContentStr = malloc (Length + 1)) != NULL)
 		 {
-		  Str_Copy (*ContentStr,Content.Txt,
-		            Length);
+		  Str_Copy (*ContentStr,Content.Txt,Length);
 		  ContentCopied = true;
 		 }
 	      }
 
 	    /***** Copy summary string *****/
 	    Str_LimitLengthHTMLStr (Content.Txt,Ntf_MAX_CHARS_SUMMARY);
-	    Str_Copy (SummaryStr,Content.Txt,
-	              Ntf_MAX_BYTES_SUMMARY);
+	    Str_Copy (SummaryStr,Content.Txt,Ntf_MAX_BYTES_SUMMARY);
 	   }
 	 else
 	    TL_Not_GetNoteSummary (&Not,SummaryStr);
@@ -196,8 +193,7 @@ void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	    row = mysql_fetch_row (mysql_res);
 
 	    /****** Get content (row[0]) *****/
-	    Str_Copy (Content.Txt,row[0],
-	              Cns_MAX_BYTES_LONG_TEXT);
+	    Str_Copy (Content.Txt,row[0],sizeof (Content.Txt) - 1);
 	   }
 
 	 /***** Free structure that stores the query result *****/
@@ -207,24 +203,22 @@ void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 if (GetContent)
 	   {
 	    Length = strlen (Content.Txt);
-	    if ((*ContentStr = (char *) malloc (Length + 1)) != NULL)
+	    if ((*ContentStr = malloc (Length + 1)) != NULL)
 	      {
-	       Str_Copy (*ContentStr,Content.Txt,
-	                 Length);
+	       Str_Copy (*ContentStr,Content.Txt,Length);
 	       ContentCopied = true;
 	      }
 	   }
 
 	 /***** Copy summary string *****/
 	 Str_LimitLengthHTMLStr (Content.Txt,Ntf_MAX_CHARS_SUMMARY);
-	 Str_Copy (SummaryStr,Content.Txt,
-	           Ntf_MAX_BYTES_SUMMARY);
+	 Str_Copy (SummaryStr,Content.Txt,Ntf_MAX_BYTES_SUMMARY);
 	 break;
      }
 
    /***** Create empty content string if nothing copied *****/
    if (GetContent && !ContentCopied)
-      if ((*ContentStr = (char *) malloc (1)) != NULL)
+      if ((*ContentStr = malloc (1)) != NULL)
          (*ContentStr)[0] = '\0';
   }
 

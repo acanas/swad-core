@@ -397,8 +397,8 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
       Places->Num = (unsigned) NumRows;
 
       /***** Create list with courses in centre *****/
-      if ((Places->Lst = (struct Plc_Place *) calloc (NumRows,sizeof (struct Plc_Place))) == NULL)
-          Lay_NotEnoughMemoryExit ();
+      if ((Places->Lst = calloc (NumRows,sizeof (*Places->Lst))) == NULL)
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get the places *****/
       for (NumPlc = 0;
@@ -414,13 +414,9 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
          if ((Plc->PlcCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Wrong code of place.");
 
-         /* Get the short name of the place (row[1]) */
-         Str_Copy (Plc->ShrtName,row[1],
-                   Plc_MAX_BYTES_PLACE_SHRT_NAME);
-
-         /* Get the full name of the place (row[2]) */
-         Str_Copy (Plc->FullName,row[2],
-                   Plc_MAX_BYTES_PLACE_FULL_NAME);
+         /* Get the short (row[1]) and full (row[2]) names of the place */
+         Str_Copy (Plc->ShrtName,row[1],sizeof (Plc->ShrtName) - 1);
+         Str_Copy (Plc->FullName,row[2],sizeof (Plc->FullName) - 1);
 
          /* Get number of centres in this place (row[3]) */
          if (sscanf (row[3],"%u",&Plc->NumCtrs) != 1)
@@ -454,17 +450,13 @@ void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc)
    /***** Check if place code is correct *****/
    if (Plc->PlcCod < 0)
      {
-      Str_Copy (Plc->ShrtName,Txt_Place_unspecified,
-                Plc_MAX_BYTES_PLACE_SHRT_NAME);
-      Str_Copy (Plc->FullName,Txt_Place_unspecified,
-                Plc_MAX_BYTES_PLACE_FULL_NAME);
+      Str_Copy (Plc->ShrtName,Txt_Place_unspecified,sizeof (Plc->ShrtName) - 1);
+      Str_Copy (Plc->FullName,Txt_Place_unspecified,sizeof (Plc->FullName) - 1);
      }
    else if (Plc->PlcCod == 0)
      {
-      Str_Copy (Plc->ShrtName,Txt_Another_place,
-                Plc_MAX_BYTES_PLACE_SHRT_NAME);
-      Str_Copy (Plc->FullName,Txt_Another_place,
-                Plc_MAX_BYTES_PLACE_FULL_NAME);
+      Str_Copy (Plc->ShrtName,Txt_Another_place,sizeof (Plc->ShrtName) - 1);
+      Str_Copy (Plc->FullName,Txt_Another_place,sizeof (Plc->FullName) - 1);
      }
    else if (Plc->PlcCod > 0)
      {
@@ -496,13 +488,9 @@ void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc)
          /* Get row */
          row = mysql_fetch_row (mysql_res);
 
-         /* Get the short name of the place (row[0]) */
-         Str_Copy (Plc->ShrtName,row[0],
-                   Plc_MAX_BYTES_PLACE_SHRT_NAME);
-
-         /* Get the full name of the place (row[1]) */
-         Str_Copy (Plc->FullName,row[1],
-                   Plc_MAX_BYTES_PLACE_FULL_NAME);
+         /* Get the short (row[0]) and full (row[1]) names of the place */
+         Str_Copy (Plc->ShrtName,row[0],sizeof (Plc->ShrtName) - 1);
+         Str_Copy (Plc->FullName,row[1],sizeof (Plc->FullName) - 1);
 
          /* Get number of centres in this place (row[2]) */
          if (sscanf (row[2],"%u",&Plc->NumCtrs) != 1)
@@ -754,8 +742,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update place name *****/
-   Str_Copy (CurrentPlcName,NewPlcName,
-             MaxBytes);
+   Str_Copy (CurrentPlcName,NewPlcName,MaxBytes);
   }
 
 /*****************************************************************************/
@@ -952,8 +939,8 @@ static void Plc_EditingPlaceConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing place.");
 
    /***** Allocate memory for place *****/
-   if ((Plc_EditingPlc = (struct Plc_Place *) malloc (sizeof (struct Plc_Place))) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for place.");
+   if ((Plc_EditingPlc = malloc (sizeof (*Plc_EditingPlc))) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Reset place *****/
    Plc_EditingPlc->PlcCod      = -1L;

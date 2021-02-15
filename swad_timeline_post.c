@@ -91,8 +91,7 @@ void TL_Pst_GetAndWritePost (long PstCod)
       row = mysql_fetch_row (mysql_res);
 
       /****** Get content (row[0]) *****/
-      Str_Copy (Content.Txt,row[0],
-                Cns_MAX_BYTES_LONG_TEXT);
+      Str_Copy (Content.Txt,row[0],sizeof (Content.Txt) - 1);
 
       /***** Get media (row[1]) *****/
       Content.Media.MedCod = Str_ConvertStrCodToLongCod (row[1]);

@@ -646,8 +646,8 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
       Gbl.Hierarchy.Inss.Num = (unsigned) NumRows;
 
       /***** Create list with institutions *****/
-      if ((Gbl.Hierarchy.Inss.Lst = (struct Ins_Instit *)
-	                            calloc (NumRows,sizeof (struct Ins_Instit))) == NULL)
+      if ((Gbl.Hierarchy.Inss.Lst = calloc (NumRows,
+                                            sizeof (*Gbl.Hierarchy.Inss.Lst))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
@@ -730,8 +730,8 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
       Gbl.Hierarchy.Inss.Num = (unsigned) NumRows;
 
       /***** Create list with institutions *****/
-      if ((Gbl.Hierarchy.Inss.Lst = (struct Ins_Instit *)
-	                            calloc (NumRows,sizeof (struct Ins_Instit))) == NULL)
+      if ((Gbl.Hierarchy.Inss.Lst = calloc (NumRows,
+                                            sizeof (*Gbl.Hierarchy.Inss.Lst))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
@@ -849,16 +849,13 @@ static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row)
    Ins->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
    /***** Get the short name of the institution (row[4]) *****/
-   Str_Copy (Ins->ShrtName,row[4],
-	     Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+   Str_Copy (Ins->ShrtName,row[4],sizeof (Ins->ShrtName) - 1);
 
    /***** Get the full name of the institution (row[5]) *****/
-   Str_Copy (Ins->FullName,row[5],
-	     Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Str_Copy (Ins->FullName,row[5],sizeof (Ins->FullName) - 1);
 
    /***** Get the URL of the institution (row[6]) *****/
-   Str_Copy (Ins->WWW,row[6],
-	     Cns_MAX_BYTES_WWW);
+   Str_Copy (Ins->WWW     ,row[6],sizeof (Ins->WWW     ) - 1);
   }
 
 /*****************************************************************************/
@@ -887,7 +884,7 @@ void Ins_GetShortNameOfInstitution (struct Ins_Instit *Ins)
    if (Ins->InsCod == Gbl.Cache.InstitutionShrtName.InsCod)
      {
       Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtName.ShrtName,
-		Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+		sizeof (Ins->ShrtName) - 1);
       return;
      }
 
@@ -904,7 +901,7 @@ void Ins_GetShortNameOfInstitution (struct Ins_Instit *Ins)
       row = mysql_fetch_row (mysql_res);
 
       Str_Copy (Gbl.Cache.InstitutionShrtName.ShrtName,row[0],
-		Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+		sizeof (Gbl.Cache.InstitutionShrtName.ShrtName) - 1);
      }
    else
       Gbl.Cache.InstitutionShrtName.ShrtName[0] = '\0';
@@ -913,7 +910,7 @@ void Ins_GetShortNameOfInstitution (struct Ins_Instit *Ins)
    DB_FreeMySQLResult (&mysql_res);
 
    Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtName.ShrtName,
-	     Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+	     sizeof (Ins->ShrtName) - 1);
   }
 
 /*****************************************************************************/
@@ -946,7 +943,7 @@ static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
    if (Ins->InsCod == Gbl.Cache.InstitutionShrtNameAndCty.InsCod)
      {
       Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,
-		Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+		sizeof (Ins->ShrtName) - 1);
       Str_Copy (CtyName,Gbl.Cache.InstitutionShrtNameAndCty.CtyName,
 		Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
       return;
@@ -968,11 +965,11 @@ static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
 
       /* Get the short name of this institution (row[0]) */
       Str_Copy (Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,row[0],
-		Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+		sizeof (Gbl.Cache.InstitutionShrtNameAndCty.ShrtName) - 1);
 
       /* Get the name of the country (row[1]) */
       Str_Copy (Gbl.Cache.InstitutionShrtNameAndCty.CtyName,row[1],
-		Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+		sizeof (Gbl.Cache.InstitutionShrtNameAndCty.CtyName) - 1);
      }
    else
      {
@@ -984,7 +981,7 @@ static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
    DB_FreeMySQLResult (&mysql_res);
 
    Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,
-	     Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+	     sizeof (Ins->ShrtName) - 1);
    Str_Copy (CtyName,Gbl.Cache.InstitutionShrtNameAndCty.CtyName,
 	     Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
   }
@@ -1176,8 +1173,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	}
       else
 	{
-         Str_Copy (WWW,Ins->WWW,
-                   Cns_MAX_BYTES_WWW);
+         Str_Copy (WWW,Ins->WWW,sizeof (WWW) - 1);
          HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
          HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\"",
 		      Ins->WWW,Ins->WWW);
@@ -1393,11 +1389,10 @@ void Ins_RemoveInstitution (void)
       Brw_RemoveInsFilesFromDB (Ins_EditingIns->InsCod);
 
       /***** Remove directories of the institution *****/
-      snprintf (PathIns,sizeof (PathIns),
-	        "%s/%02u/%u",
+      snprintf (PathIns,sizeof (PathIns),"%s/%02u/%u",
 	        Cfg_PATH_INS_PUBLIC,
 	        (unsigned) (Ins_EditingIns->InsCod % 100),
-	        (unsigned) Ins_EditingIns->InsCod);
+	        (unsigned)  Ins_EditingIns->InsCod);
       Fil_RemoveTree (PathIns);
 
       /***** Remove institution *****/
@@ -1508,8 +1503,7 @@ void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFu
                              CurrentInsName,NewInsName);
 
 	    /* Change current institution name in order to display it properly */
-	    Str_Copy (CurrentInsName,NewInsName,
-	              MaxBytes);
+	    Str_Copy (CurrentInsName,NewInsName,MaxBytes);
            }
         }
       else	// The same name
@@ -1581,8 +1575,7 @@ void Ins_ChangeInsWWW (void)
      {
       /***** Update database changing old WWW by new WWW *****/
       Ins_UpdateInsWWWDB (Ins_EditingIns->InsCod,NewWWW);
-      Str_Copy (Ins_EditingIns->WWW,NewWWW,
-                Cns_MAX_BYTES_WWW);
+      Str_Copy (Ins_EditingIns->WWW,NewWWW,sizeof (Ins_EditingIns->WWW) - 1);
 
       /***** Write message to show the change made
 	     and put button to go to institution changed *****/
@@ -2178,8 +2171,8 @@ static void Ins_EditingInstitutionConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing institution.");
 
    /***** Allocate memory for institution *****/
-   if ((Ins_EditingIns = (struct Ins_Instit *) malloc (sizeof (struct Ins_Instit))) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for institution.");
+   if ((Ins_EditingIns = malloc (sizeof (*Ins_EditingIns))) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Reset institution *****/
    Ins_EditingIns->InsCod             = -1L;

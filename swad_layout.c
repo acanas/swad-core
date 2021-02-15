@@ -909,7 +909,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 HTM_TxtF ("var RefreshParamNxtActOldPub = \"act=%ld\";\n"
 		   "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
 		   Act_GetActCod (ActRefOldTL_PubUsr),
-		   Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+		   Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	 break;
       /* Parameters related with match refreshing (for students) */
       case ActJoiMch:

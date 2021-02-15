@@ -29,7 +29,6 @@
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
@@ -405,8 +404,7 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,lon
 	 Set.NumQstsToPrint = Str_ConvertStrToUnsigned (row[1]);
 
 	 /* Get the title of the set (row[2]) */
-	 Str_Copy (Set.Title,row[2],
-		   ExaSet_MAX_BYTES_TITLE);
+	 Str_Copy (Set.Title,row[2],sizeof (Set.Title) - 1);
 
 	 /***** Questions in this set *****/
 	 NumQstsFromSet = ExaPrn_GetSomeQstsFromSetToPrint (Print,&Set,&NumQstInPrint);
@@ -563,7 +561,7 @@ static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *Printed
       else
 	 snprintf (StrInd,sizeof (StrInd),",%u",Index);
       Str_Concat (PrintedQuestion->StrIndexes,StrInd,
-                  Tst_MAX_BYTES_INDEXES_ONE_QST);
+                  sizeof (PrintedQuestion->StrIndexes) - 1);
      }
 
    /***** Free structure that stores the query result *****/
@@ -648,11 +646,11 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 
 	 /* Get indexes for this question (row[3]) */
 	 Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[3],
-		   Tst_MAX_BYTES_INDEXES_ONE_QST);
+		   strlen (Print->PrintedQuestions[NumQst].StrIndexes) - 1);
 
 	 /* Get answers selected by user for this question (row[4]) */
 	 Str_Copy (Print->PrintedQuestions[NumQst].StrAnswers,row[4],
-		   Tst_MAX_BYTES_ANSWERS_ONE_QST);
+		   strlen (Print->PrintedQuestions[NumQst].StrAnswers) - 1);
 	}
 
    /***** Free structure that stores the query result *****/
@@ -870,13 +868,10 @@ static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
-   snprintf (Id,sizeof (Id),
-	     "Ans%010u",
-	     NumQst);
+   snprintf (Id,sizeof (Id),"Ans%010u",NumQst);
    HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"Ans\""
 	     " size=\"11\" maxlength=\"11\" value=\"%s\"",
-	     Id,
-	     Print->PrintedQuestions[NumQst].StrAnswers);
+	     Id,Print->PrintedQuestions[NumQst].StrAnswers);
    ExaPrn_WriteJSToUpdateExamPrint (Print,NumQst,Id,-1);
    HTM_Txt (" />");
   }
@@ -892,9 +887,7 @@ static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
-   snprintf (Id,sizeof (Id),
-	     "Ans%010u",
-	     NumQst);
+   snprintf (Id,sizeof (Id),"Ans%010u",NumQst);
    HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"Ans\""
 	     " size=\"11\" maxlength=\"%u\" value=\"%s\"",
 	     Id,Tst_MAX_BYTES_FLOAT_ANSWER,
@@ -918,9 +911,7 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
    /* Initially user has not answered the question ==> initially all the answers will be blank.
       If the user does not confirm the submission of their exam ==>
       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-   snprintf (Id,sizeof (Id),
-	     "Ans%010u",
-	     NumQst);
+   snprintf (Id,sizeof (Id),"Ans%010u",NumQst);
    HTM_TxtF ("<select id=\"%s\" name=\"Ans\"",Id);
    ExaPrn_WriteJSToUpdateExamPrint (Print,NumQst,Id,-1);
    HTM_Txt (" />");
@@ -968,9 +959,7 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 	 If the user does not confirm the submission of their exam ==>
 	 ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
       HTM_TD_Begin ("class=\"LT\"");
-      snprintf (Id,sizeof (Id),
-		"Ans%010u",
-		NumQst);
+      snprintf (Id,sizeof (Id),"Ans%010u",NumQst);
       HTM_TxtF ("<input type=\"%s\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"%s",
 		Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE ? "radio" :
 								 "checkbox",
@@ -1015,9 +1004,7 @@ static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
-   snprintf (Id,sizeof (Id),
-	     "Ans%010u",
-	     NumQst);
+   snprintf (Id,sizeof (Id),"Ans%010u",NumQst);
    HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"Ans\""
 	     " size=\"40\" maxlength=\"%u\" value=\"%s\"",
 	     Id,Tst_MAX_CHARS_ANSWERS_ONE_QST,
@@ -1427,7 +1414,7 @@ static void ExaPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question)
 
       /***** Copy answer text (row[0]) ******/
       Str_Copy (Question->Answer.Options[NumOpt].Text,row[0],
-                Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+                strlen (Question->Answer.Options[NumOpt].Text) - 1);
      }
 
    /***** Change format of answers text *****/
@@ -1457,8 +1444,7 @@ static void ExaPrn_GetAnswerFromDB (struct ExaPrn_Print *Print,long QstCod,
       row = mysql_fetch_row (mysql_res);
 
       /* Get answers selected by user for this question (row[0]) */
-      Str_Copy (StrAnswers,row[0],
-		Tst_MAX_BYTES_ANSWERS_ONE_QST);
+      Str_Copy (StrAnswers,row[0],strlen (StrAnswers) - 1);
      }
    else
       StrAnswers[0] = '\0';

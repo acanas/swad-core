@@ -726,16 +726,16 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 // Cod is the code of the social publishing
          Frm_StartForm (ActSeeTmlGbl);
 	 TL_Pub_PutHiddenParamPubCod (Cod);
-         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+         Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
          Ntf_PutHiddenParamNotifyEvent (NotifyEvent);
 	 break;
       case Ntf_EVENT_FOLLOWER:
-         if (UsrDat->EncryptedUsrCod[0])	// User's code found ==>
+         if (UsrDat->EnUsrCod[0])	// User's code found ==>
 					// go to user's public profile
            {
             Frm_StartForm (ActSeeOthPubPrf);
             /* Put param to go to follower's profile */
-            Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+            Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
            }
          else	// No user's code found ==> go to see my followers
             Frm_StartForm (ActSeeFlr);

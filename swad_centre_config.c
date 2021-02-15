@@ -228,12 +228,11 @@ static void CtrCfg_Configuration (bool PrintView)
    MapIsAvailable = Ctr_GetIfMapIsAvailable (&Gbl.Hierarchy.Ctr);
 
    /***** Check photo *****/
-   snprintf (PathPhoto,sizeof (PathPhoto),
-	     "%s/%02u/%u/%u.jpg",
+   snprintf (PathPhoto,sizeof (PathPhoto),"%s/%02u/%u/%u.jpg",
 	     Cfg_PATH_CTR_PUBLIC,
 	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
-	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod,
-	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod);
+	     (unsigned)  Gbl.Hierarchy.Ctr.CtrCod,
+	     (unsigned)  Gbl.Hierarchy.Ctr.CtrCod);
    PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
    if (MapIsAvailable || PhotoExists)
@@ -292,8 +291,7 @@ static void CtrCfg_PutIconToChangePhoto (void)
    bool PhotoExists;
 
    /***** Link to upload photo of centre *****/
-   snprintf (PathPhoto,sizeof (PathPhoto),
-	     "%s/%02u/%u/%u.jpg",
+   snprintf (PathPhoto,sizeof (PathPhoto),"%s/%02u/%u/%u.jpg",
 	     Cfg_PATH_CTR_PUBLIC,
 	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
 	     (unsigned)  Gbl.Hierarchy.Ctr.CtrCod,
@@ -531,10 +529,9 @@ static void CtrCfg_GetPhotoAttr (long CtrCod,char **PhotoAttribution)
 	 if (row[0][0])
 	   {
 	    Length = strlen (row[0]);
-	    if (((*PhotoAttribution) = (char *) malloc (Length + 1)) == NULL)
-	       Lay_ShowErrorAndExit ("Error allocating memory for photo attribution.");
-	    Str_Copy (*PhotoAttribution,row[0],
-	              Length);
+	    if (((*PhotoAttribution) = malloc (Length + 1)) == NULL)
+               Lay_NotEnoughMemoryExit ();
+	    Str_Copy (*PhotoAttribution,row[0],Length);
 	   }
      }
 
@@ -936,8 +933,7 @@ void CtrCfg_ReceivePhoto (void)
      }
 
    /* End the reception of image in a temporary file */
-   snprintf (PathFileImgTmp,sizeof (PathFileImgTmp),
-	     "%s/%s.%s",
+   snprintf (PathFileImgTmp,sizeof (PathFileImgTmp),"%s/%s.%s",
              Cfg_PATH_MEDIA_TMP_PRIVATE,Gbl.UniqueNameEncrypted,PtrExtension);
    if (!Fil_EndReceptionOfFile (PathFileImgTmp,Param))
      {
@@ -947,29 +943,25 @@ void CtrCfg_ReceivePhoto (void)
 
    /***** Creates public directories if not exist *****/
    Fil_CreateDirIfNotExists (Cfg_PATH_CTR_PUBLIC);
-   snprintf (Path,sizeof (Path),
-	     "%s/%02u",
-	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100));
+   snprintf (Path,sizeof (Path),"%s/%02u",
+	     Cfg_PATH_CTR_PUBLIC,(unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100));
    Fil_CreateDirIfNotExists (Path);
-   snprintf (Path,sizeof (Path),
-	     "%s/%02u/%u",
+   snprintf (Path,sizeof (Path),"%s/%02u/%u",
 	     Cfg_PATH_CTR_PUBLIC,
 	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
-	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod);
+	     (unsigned)  Gbl.Hierarchy.Ctr.CtrCod);
    Fil_CreateDirIfNotExists (Path);
 
    /***** Convert temporary file to public JPEG file *****/
-   snprintf (PathFileImg,sizeof (PathFileImg),
-	     "%s/%02u/%u/%u.jpg",
+   snprintf (PathFileImg,sizeof (PathFileImg),"%s/%02u/%u/%u.jpg",
 	     Cfg_PATH_CTR_PUBLIC,
 	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
-	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod,
-	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod);
+	     (unsigned)  Gbl.Hierarchy.Ctr.CtrCod,
+	     (unsigned)  Gbl.Hierarchy.Ctr.CtrCod);
 
    /* Call to program that makes the conversion */
    snprintf (Command,sizeof (Command),
-	     "convert %s -resize '%ux%u>' -quality %u %s",
+             "convert %s -resize '%ux%u>' -quality %u %s",
              PathFileImgTmp,
              Ctr_PHOTO_SAVED_MAX_WIDTH,
              Ctr_PHOTO_SAVED_MAX_HEIGHT,
@@ -1220,7 +1212,7 @@ void CtrCfg_ChangeCtrWWW (void)
       /***** Update database changing old WWW by new WWW *****/
       Ctr_UpdateCtrWWWDB (Gbl.Hierarchy.Ctr.CtrCod,NewWWW);
       Str_Copy (Gbl.Hierarchy.Ctr.WWW,NewWWW,
-                Cns_MAX_BYTES_WWW);
+                sizeof (Gbl.Hierarchy.Ctr.WWW) - 1);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,

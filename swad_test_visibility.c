@@ -155,7 +155,7 @@ unsigned TstVis_GetVisibilityFromForm (void)
 
    /***** Allocate memory for list of attendance events selected *****/
    MaxSizeListVisibilitySelected = TstVis_NUM_ITEMS_VISIBILITY * (Cns_MAX_DECIMAL_DIGITS_UINT + 1);
-   if ((StrVisibilitySelected = (char *) malloc (MaxSizeListVisibilitySelected + 1)) == NULL)
+   if ((StrVisibilitySelected = malloc (MaxSizeListVisibilitySelected + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of visibility items selected *****/

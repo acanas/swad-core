@@ -29,7 +29,6 @@
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
@@ -268,8 +267,7 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 	    Session->ExaCod = Exam->ExaCod;
 	    Session->TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;			// Now
 	    Session->TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (1 * 60 * 60);	// Now + 1 hour
-            Str_Copy (Session->Title,Exam->Title,
-                      ExaSes_MAX_BYTES_TITLE);
+            Str_Copy (Session->Title,Exam->Title,sizeof (Session->Title) - 1);
 
 	    /* Put form to create new session */
 	    ExaSes_PutFormSession (Session);	// Form to create session
@@ -890,8 +888,7 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
 
    /* Get the title of the session (row[7]) */
    if (row[7])
-      Str_Copy (Session->Title,row[7],
-		ExaSes_MAX_BYTES_TITLE);
+      Str_Copy (Session->Title,row[7],sizeof (Session->Title) - 1);
    else
       Session->Title[0] = '\0';
 

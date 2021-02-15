@@ -666,8 +666,8 @@ static void Prg_CreateLevels (void)
         4     1
         5     0	  <--- Used to create a new item
       */
-      if ((Prg_Gbl.Levels = (struct Level *) calloc ((size_t) (1 + MaxLevel + 1),
-					             sizeof (struct Level))) == NULL)
+      if ((Prg_Gbl.Levels = calloc (1 + MaxLevel + 1,
+                                    sizeof (*Prg_Gbl.Levels))) == NULL)
 	 Lay_NotEnoughMemoryExit ();
      }
    else
@@ -778,9 +778,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
    char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Initialize item index string *****/
-   snprintf (StrItemIndex,sizeof (StrItemIndex),
-	     "%u",
-	     Item->Hierarchy.Index);
+   snprintf (StrItemIndex,sizeof (StrItemIndex),"%u",Item->Hierarchy.Index);
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -992,9 +990,8 @@ static void Prg_GetListItems (void)
    if (Prg_Gbl.List.NumItems) // Items found...
      {
       /***** Create list of program items *****/
-      if ((Prg_Gbl.List.Items =
-	   (struct ProgramItemHierarchy *) calloc ((size_t) Prg_Gbl.List.NumItems,
-						   sizeof (struct ProgramItemHierarchy))) == NULL)
+      if ((Prg_Gbl.List.Items = calloc (Prg_Gbl.List.NumItems,
+				        sizeof (*Prg_Gbl.List.Items))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the program items codes *****/
@@ -1116,8 +1113,7 @@ static void Prg_GetDataOfItem (struct ProgramItem *Item,
       Item->Open = (row[7][0] == '1');
 
       /* Get the title of the program item (row[8]) */
-      Str_Copy (Item->Title,row[8],
-                Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
+      Str_Copy (Item->Title,row[8],sizeof (Item->Title) - 1);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1179,8 +1175,7 @@ static void Prg_GetItemTxtFromDB (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Txt,row[0],
-                Cns_MAX_BYTES_TEXT);
+      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
      }
    else
       Txt[0] = '\0';

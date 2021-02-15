@@ -2584,27 +2584,21 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
    Fil_WriteFileSizeFull ((double) SizeOfFileZones->Size,FileSizeStr);
 
    if (SizeOfFileZones->NumCrss == -1)	// Not applicable
-      Str_Copy (StrNumCrss,"-",
-                Cns_MAX_DECIMAL_DIGITS_UINT);
+      Str_Copy (StrNumCrss,"-",sizeof (StrNumCrss) - 1);
    else
-      snprintf (StrNumCrss,sizeof (StrNumCrss),
-	        "%d",
+      snprintf (StrNumCrss,sizeof (StrNumCrss),"%d",
 		SizeOfFileZones->NumCrss);
 
    if (SizeOfFileZones->NumGrps == -1)	// Not applicable
-      Str_Copy (StrNumGrps,"-",
-                Cns_MAX_DECIMAL_DIGITS_UINT);
+      Str_Copy (StrNumGrps,"-",sizeof (StrNumGrps) - 1);
    else
-      snprintf (StrNumGrps,sizeof (StrNumGrps),
-	        "%d",
+      snprintf (StrNumGrps,sizeof (StrNumGrps),"%d",
 		SizeOfFileZones->NumGrps);
 
    if (SizeOfFileZones->NumUsrs == -1)	// Not applicable
-      Str_Copy (StrNumUsrs,"-",
-                Cns_MAX_DECIMAL_DIGITS_UINT);
+      Str_Copy (StrNumUsrs,"-",sizeof (StrNumUsrs) - 1);
    else
-      snprintf (StrNumUsrs,sizeof (StrNumUsrs),
-	        "%d",
+      snprintf (StrNumUsrs,sizeof (StrNumUsrs),"%d",
 		SizeOfFileZones->NumUsrs);
 
    HTM_TR_Begin (NULL);
@@ -2656,22 +2650,17 @@ static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
 
    if (SizeOfFileZones->NumCrss == -1)	// Not applicable
      {
-      Str_Copy (StrNumFoldersPerCrs,"-",
-                Cns_MAX_DECIMAL_DIGITS_UINT);
-      Str_Copy (StrNumFilesPerCrs,"-",
-                Cns_MAX_DECIMAL_DIGITS_UINT);
-      Str_Copy (FileSizePerCrsStr,"-",
-                Fil_MAX_BYTES_FILE_SIZE_STRING);
+      Str_Copy (StrNumFoldersPerCrs,"-",sizeof (StrNumFoldersPerCrs) - 1);
+      Str_Copy (StrNumFilesPerCrs  ,"-",sizeof (StrNumFilesPerCrs  ) - 1);
+      Str_Copy (FileSizePerCrsStr  ,"-",sizeof (FileSizePerCrsStr  ) - 1);
      }
    else
      {
-      snprintf (StrNumFoldersPerCrs,sizeof (StrNumFoldersPerCrs),
-	        "%.1f",
+      snprintf (StrNumFoldersPerCrs,sizeof (StrNumFoldersPerCrs),"%.1f",
                 SizeOfFileZones->NumCrss ? (double) SizeOfFileZones->NumFolders /
         	                           (double) SizeOfFileZones->NumCrss :
         	                           0.0);
-      snprintf (StrNumFilesPerCrs,sizeof (StrNumFilesPerCrs),
-	        "%.1f",
+      snprintf (StrNumFilesPerCrs,sizeof (StrNumFilesPerCrs),"%.1f",
                 SizeOfFileZones->NumCrss ? (double) SizeOfFileZones->NumFiles /
         	                           (double) SizeOfFileZones->NumCrss :
         	                           0.0);
@@ -2714,22 +2703,17 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 
    if (SizeOfFileZones->NumUsrs == -1)	// Not applicable
      {
-      Str_Copy (StrNumFoldersPerUsr,"-",
-                Cns_MAX_DECIMAL_DIGITS_UINT);
-      Str_Copy (StrNumFilesPerUsr,"-",
-                Cns_MAX_DECIMAL_DIGITS_UINT);
-      Str_Copy (FileSizePerUsrStr,"-",
-                Fil_MAX_BYTES_FILE_SIZE_STRING);
+      Str_Copy (StrNumFoldersPerUsr,"-",sizeof (StrNumFoldersPerUsr) - 1);
+      Str_Copy (StrNumFilesPerUsr  ,"-",sizeof (StrNumFilesPerUsr  ) - 1);
+      Str_Copy (FileSizePerUsrStr  ,"-",sizeof (FileSizePerUsrStr  ) - 1);
      }
    else
      {
-      snprintf (StrNumFoldersPerUsr,sizeof (StrNumFoldersPerUsr),
-	        "%.1f",
+      snprintf (StrNumFoldersPerUsr,sizeof (StrNumFoldersPerUsr),"%.1f",
                 SizeOfFileZones->NumUsrs ? (double) SizeOfFileZones->NumFolders /
         	                           (double) SizeOfFileZones->NumUsrs :
         	                           0.0);
-      snprintf (StrNumFilesPerUsr,sizeof (StrNumFilesPerUsr),
-	        "%.1f",
+      snprintf (StrNumFilesPerUsr,sizeof (StrNumFilesPerUsr),"%.1f",
                 SizeOfFileZones->NumUsrs ? (double) SizeOfFileZones->NumFiles /
         	                           (double) SizeOfFileZones->NumUsrs :
         	                           0.0);

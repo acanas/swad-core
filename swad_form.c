@@ -57,9 +57,7 @@ static void Frm_StartFormInternal (Act_Action_t NextAction,bool PutParameterLoca
 void Frm_StartFormGoTo (Act_Action_t NextAction)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),
-	     "form_%d",
-	     Gbl.Form.Num);
+   snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),"form_%d",Gbl.Form.Num);
    Frm_StartFormInternal (NextAction,false,Gbl.Form.Id,NULL,NULL);	// Do not put now parameter location
   }
 
@@ -81,9 +79,7 @@ void Frm_StartFormOnSubmit (Act_Action_t NextAction,const char *OnSubmit)
 void Frm_StartFormAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),
-	     "form_%d",
-	     Gbl.Form.Num);
+   snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),"form_%d",Gbl.Form.Num);
    Frm_StartFormInternal (NextAction,true,Gbl.Form.Id,Anchor,OnSubmit);	// Do put now parameter location (if no open session)
   }
 
@@ -95,8 +91,7 @@ void Frm_StartFormUnique (Act_Action_t NextAction)
 void Frm_StartFormUniqueAnchor (Act_Action_t NextAction,const char *Anchor)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),
-	     "form_%s_%d",
+   snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),"form_%s_%d",
              Gbl.UniqueNameEncrypted,Gbl.Form.Num);
    Frm_StartFormInternal (NextAction,true,Gbl.Form.UniqueId,Anchor,NULL);	// Do put now parameter location (if no open session)
   }
@@ -104,8 +99,7 @@ void Frm_StartFormUniqueAnchor (Act_Action_t NextAction,const char *Anchor)
 void Frm_StartFormUniqueAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),
-	     "form_%s_%d",
+   snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),"form_%s_%d",
              Gbl.UniqueNameEncrypted,Gbl.Form.Num);
    Frm_StartFormInternal (NextAction,true,Gbl.Form.UniqueId,Anchor,OnSubmit);	// Do put now parameter location (if no open session)
   }
@@ -236,8 +230,7 @@ void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_
 	}
      }
 
-   snprintf (ParamsStr,Frm_MAX_BYTES_PARAMS_STR + 1,
-	     "%s%s%s",
+   snprintf (ParamsStr,Frm_MAX_BYTES_PARAMS_STR + 1,"%s%s%s",
 	     ParamAction,ParamSession,ParamLocation);
   }
 
@@ -263,8 +256,7 @@ void Frm_SetUniqueId (char UniqueId[Frm_MAX_BYTES_ID + 1])
           So, Id uses:
           - a name for this execution (Gbl.UniqueNameEncrypted)
           - a number for each element in this execution (CountForThisExecution) *****/
-   snprintf (UniqueId,Frm_MAX_BYTES_ID + 1,
-	     "id_%s_%u",
+   snprintf (UniqueId,Frm_MAX_BYTES_ID + 1,"id_%s_%u",
              Gbl.UniqueNameEncrypted,
              ++CountForThisExecution);
   }

@@ -130,9 +130,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
       HTM_LABEL_Begin (NULL);
       HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Header);
-      snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),
-		"%u",
-		Marks.Header);
+      snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),"%u",Marks.Header);
       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_HEADER],Cns_MAX_DECIMAL_DIGITS_UINT,StrHeadOrFoot,
                       HTM_SUBMIT_ON_CHANGE,
 		      "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\"",
@@ -150,9 +148,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
       HTM_LABEL_Begin (NULL);
       HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Footer);
-      snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),
-		"%u",
-		Marks.Footer);
+      snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),"%u",Marks.Footer);
       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_FOOTER],Cns_MAX_DECIMAL_DIGITS_UINT,StrHeadOrFoot,
                       HTM_SUBMIT_ON_CHANGE,
 		      "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\"",
@@ -599,8 +595,7 @@ void Mrk_ShowMyMarks (void)
 
    /***** Get the path of the file of marks *****/
    Brw_SetFullPathInTree ();
-   snprintf (PathPrivate,sizeof (PathPrivate),
-	     "%s/%s",
+   snprintf (PathPrivate,sizeof (PathPrivate),"%s/%s",
              Gbl.FileBrowser.Priv.PathAboveRootFolder,
              Gbl.FileBrowser.FilFolLnk.Full);
 
@@ -646,8 +641,7 @@ void Mrk_ShowMyMarks (void)
       Fil_CreateDirIfNotExists (Cfg_PATH_MARK_PRIVATE);
 
       /* Create a new temporary file *****/
-      snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),
-	        "%s/%s.html",
+      snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),"%s/%s.html",
 		Cfg_PATH_MARK_PRIVATE,Gbl.UniqueNameEncrypted);
       if ((FileUsrMarks = fopen (FileNameUsrMarks,"wb")) == NULL)
          Lay_ShowErrorAndExit ("Can not open file for my marks.");
@@ -752,12 +746,11 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
       /* Path (row[2]) */
       Str_Copy (FullPathInTreeFromDBMarksTable,row[2],
-		PATH_MAX);
+		sizeof (FullPathInTreeFromDBMarksTable) - 1);
       Str_SplitFullPathIntoPathAndFileName (FullPathInTreeFromDBMarksTable,
 					    PathUntilFileName,
 					    FileName);
-      Str_Copy (SummaryStr,FileName,
-		Cns_MAX_BYTES_TEXT);
+      Str_Copy (SummaryStr,FileName,Cns_MAX_BYTES_TEXT);
 
       if (GetContent)
 	{
@@ -772,13 +765,11 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 if (UsrDat.IDs.Num)
 	   {
 	    if (GrpCod > 0)
-	       snprintf (PathMarks,sizeof (PathMarks),
-			 "%s/%ld/grp/%ld/%s",
+	       snprintf (PathMarks,sizeof (PathMarks),"%s/%ld/grp/%ld/%s",
 			 Cfg_PATH_CRS_PRIVATE,CrsCod,GrpCod,
 			 FullPathInTreeFromDBMarksTable);
 	    else
-	       snprintf (PathMarks,sizeof (PathMarks),
-			 "%s/%ld/%s",
+	       snprintf (PathMarks,sizeof (PathMarks),"%s/%ld/%s",
 			 Cfg_PATH_CRS_PRIVATE,CrsCod,
 			 FullPathInTreeFromDBMarksTable);
 
@@ -787,8 +778,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	    Fil_CreateDirIfNotExists (Cfg_PATH_MARK_PRIVATE);
 
 	    /* Create a new temporary file *****/
-	    snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),
-		      "%s/%s.html",
+	    snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),"%s/%s.html",
 		      Cfg_PATH_MARK_PRIVATE,Gbl.UniqueNameEncrypted);
 	    if ((FileUsrMarks = fopen (FileNameUsrMarks,"wb")))
 	      {
@@ -799,11 +789,10 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 		  fclose (FileUsrMarks);
 
 		  Length = 9 + SizeOfMyMarks + 3;
-		  if ((*ContentStr = (char *) malloc (Length + 1)))
+		  if ((*ContentStr = malloc (Length + 1)))
 		    {
 		     /* 9 starting chars */
-		     Str_Copy (*ContentStr,"<![CDATA[",
-			       9);
+		     Str_Copy (*ContentStr,"<![CDATA[",9);
 
 		     /* Content */
 		     Ptr = (*ContentStr) + 9;
@@ -817,8 +806,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 		       }
 
 		     /* 3 ending chars */
-		     Str_Copy (Ptr,"]]>",
-			       3);
+		     Str_Copy (Ptr,"]]>",3);
 		    }
 		 }
 	       else

@@ -304,7 +304,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
 void Usr_UsrDataConstructor (struct UsrData *UsrDat)
   {
    /***** Allocate memory for the comments *****/
-   if ((UsrDat->Comments = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((UsrDat->Comments = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Initialize to zero the data of the user *****/
@@ -320,7 +320,7 @@ void Usr_UsrDataConstructor (struct UsrData *UsrDat)
 
 void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
   {
-   UsrDat->EncryptedUsrCod[0] = '\0';
+   UsrDat->EnUsrCod[0] = '\0';
    UsrDat->Nickname[0] = '\0';
    UsrDat->Password[0] = '\0';
    UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
@@ -331,7 +331,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Sex = Usr_SEX_UNKNOWN;
    UsrDat->Surname1[0]  = '\0';
    UsrDat->Surname2[0]  = '\0';
-   UsrDat->FirstName[0] = '\0';
+   UsrDat->FrstName[0] = '\0';
    UsrDat->FullName[0]  = '\0';
 
    UsrDat->Email[0] = '\0';
@@ -419,7 +419,8 @@ void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs
 
 void Usr_AllocateListUsrCods (struct ListUsrCods *ListUsrCods)
   {
-   if ((ListUsrCods->Lst = (long *) malloc (ListUsrCods->NumUsrs * sizeof (long))) == NULL)
+   if ((ListUsrCods->Lst = malloc (ListUsrCods->NumUsrs *
+                                   sizeof (*ListUsrCods->Lst))) == NULL)
       Lay_NotEnoughMemoryExit ();
   }
 
@@ -458,13 +459,13 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
    MYSQL_ROW row;
    unsigned long NumRows;
 
-   if (UsrDat->EncryptedUsrCod[0])
+   if (UsrDat->EnUsrCod[0])
      {
       /***** Get user's code from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get user's code",
 				"SELECT UsrCod FROM usr_data"
 				" WHERE EncryptedUsrCod='%s'",
-				UsrDat->EncryptedUsrCod);
+				UsrDat->EnUsrCod);
       if (NumRows != 1)
          Lay_ShowErrorAndExit ("Error when getting user's code.");
 
@@ -581,12 +582,10 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
    row = mysql_fetch_row (mysql_res);
 
    /* Get encrypted user's code (row[0]) */
-   Str_Copy (UsrDat->EncryptedUsrCod,row[0],
-             Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+   Str_Copy (UsrDat->EnUsrCod,row[0],sizeof (UsrDat->EnUsrCod) - 1);
 
    /* Get encrypted password (row[1]) */
-   Str_Copy (UsrDat->Password,row[1],
-             Pwd_BYTES_ENCRYPTED_PASSWORD);
+   Str_Copy (UsrDat->Password,row[1],sizeof (UsrDat->Password) - 1);
 
    /* Get roles */
    UsrDat->Roles.InCurrentCrs.Role = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
@@ -596,23 +595,19 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
 
    /* Get name (row[2], row[3], row[4]) */
-   Str_Copy (UsrDat->Surname1,row[2],
-             Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
-   Str_Copy (UsrDat->Surname2,row[3],
-             Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
-   Str_Copy (UsrDat->FirstName,row[4],
-             Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+   Str_Copy (UsrDat->Surname1,row[2],sizeof (UsrDat->Surname1) - 1);
+   Str_Copy (UsrDat->Surname2,row[3],sizeof (UsrDat->Surname2) - 1);
+   Str_Copy (UsrDat->FrstName,row[4],sizeof (UsrDat->FrstName) - 1);
    Str_ConvertToTitleType (UsrDat->Surname1 );
    Str_ConvertToTitleType (UsrDat->Surname2 );
-   Str_ConvertToTitleType (UsrDat->FirstName);
+   Str_ConvertToTitleType (UsrDat->FrstName);
    Usr_BuildFullName (UsrDat);	// Create full name using FirstName, Surname1 and Surname2
 
    /* Get sex (row[5]) */
    UsrDat->Sex = Usr_GetSexFromStr (row[5]);
 
    /* Get photo (row[6]) */
-   Str_Copy (UsrDat->Photo,row[6],
-             Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+   Str_Copy (UsrDat->Photo,row[6],sizeof (UsrDat->Photo) - 1);
 
    /* Get photo visibility (row[7]) */
    UsrDat->PhotoVisibility = Pri_GetVisibilityFromStr (row[7]);
@@ -635,16 +630,12 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
    UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[14]);
 
    /* Get office (row[15]) and office phone (row[16]) */
-   Str_Copy (UsrDat->Tch.Office,row[15],
-             Usr_MAX_BYTES_ADDRESS);
-   Str_Copy (UsrDat->Tch.OfficePhone,row[16],
-             Usr_MAX_BYTES_PHONE);
+   Str_Copy (UsrDat->Tch.Office     ,row[15],sizeof (UsrDat->Tch.Office     ) - 1);
+   Str_Copy (UsrDat->Tch.OfficePhone,row[16],sizeof (UsrDat->Tch.OfficePhone) - 1);
 
    /* Get phones (row[17]) and row[18] */
-   Str_Copy (UsrDat->Phone[0],row[17],
-             Usr_MAX_BYTES_PHONE);
-   Str_Copy (UsrDat->Phone[1],row[18],
-             Usr_MAX_BYTES_PHONE);
+   Str_Copy (UsrDat->Phone[0],row[17],sizeof (UsrDat->Phone[0]) - 1);
+   Str_Copy (UsrDat->Phone[1],row[18],sizeof (UsrDat->Phone[1]) - 1);
 
    /* Get birthday (row[19]) */
    Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[19]);
@@ -740,8 +731,7 @@ static void Usr_GetUsrCommentsFromString (char *Str,struct UsrData *UsrDat)
    /***** Check that memory for comments is allocated *****/
    if (UsrDat->Comments)
       /***** Copy comments from Str to Comments *****/
-      Str_Copy (UsrDat->Comments,Str,
-                Cns_MAX_BYTES_TEXT);
+      Str_Copy (UsrDat->Comments,Str,Cns_MAX_BYTES_TEXT - 1);
   }
 
 /*****************************************************************************/
@@ -860,21 +850,16 @@ static Usr_Sex_t Usr_GetSexFromStr (const char *Str)
 
 void Usr_BuildFullName (struct UsrData *UsrDat)
   {
-   Str_Copy (UsrDat->FullName,UsrDat->FirstName,
-             Usr_MAX_BYTES_FULL_NAME);
+   Str_Copy (UsrDat->FullName,UsrDat->FrstName,sizeof (UsrDat->FullName) - 1);
    if (UsrDat->Surname1[0])
      {
-      Str_Concat (UsrDat->FullName," ",
-                  Usr_MAX_BYTES_FULL_NAME);
-      Str_Concat (UsrDat->FullName,UsrDat->Surname1,
-                  Usr_MAX_BYTES_FULL_NAME);
+      Str_Concat (UsrDat->FullName," "             ,sizeof (UsrDat->FullName) - 1);
+      Str_Concat (UsrDat->FullName,UsrDat->Surname1,sizeof (UsrDat->FullName) - 1);
      }
    if (UsrDat->Surname2[0])
      {
-      Str_Concat (UsrDat->FullName," ",
-                  Usr_MAX_BYTES_FULL_NAME);
-      Str_Concat (UsrDat->FullName,UsrDat->Surname2,
-                  Usr_MAX_BYTES_FULL_NAME);
+      Str_Concat (UsrDat->FullName," "             ,sizeof (UsrDat->FullName) - 1);
+      Str_Concat (UsrDat->FullName,UsrDat->Surname2,sizeof (UsrDat->FullName) - 1);
      }
   }
 
@@ -885,7 +870,7 @@ void Usr_BuildFullName (struct UsrData *UsrDat)
 void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat)
   {
    /***** Write first name and surname 1 *****/
-   HTM_Txt (UsrDat->FirstName);
+   HTM_Txt (UsrDat->FrstName);
    HTM_BR ();
    HTM_Txt (UsrDat->Surname1);
 
@@ -1151,10 +1136,8 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
         {
          sprintf (UnsignedStr,"%u",(unsigned) Role);
          if (OthersRolesStr[0])	// Not empty
-	    Str_Concat (OthersRolesStr,",",
-			Usr_MAX_BYTES_ROLES_STR);
-	 Str_Concat (OthersRolesStr,UnsignedStr,
-		     Usr_MAX_BYTES_ROLES_STR);
+	    Str_Concat (OthersRolesStr,",",sizeof (OthersRolesStr) - 1);
+	 Str_Concat (OthersRolesStr,UnsignedStr,sizeof (OthersRolesStr) - 1);
         }
    NumUsrs =
    (unsigned) DB_QueryCOUNT ("can not get number of users",
@@ -2431,8 +2414,7 @@ void Usr_GetMainDeg (long UsrCod,
       row = mysql_fetch_row (mysql_res);
 
       /* Get degree name (row[0]) */
-      Str_Copy (ShrtName,row[0],
-                Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+      Str_Copy (ShrtName,row[0],Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 
       /* Get maximum role (row[1]) */
       *MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
@@ -2598,7 +2580,7 @@ void Usr_WelcomeUsr (void)
      {
       if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_Current_CGI_SWAD_Language)
         {
-         if (Gbl.Usrs.Me.UsrDat.FirstName[0])
+         if (Gbl.Usrs.Me.UsrDat.FrstName[0])
            {
 	    /***** New year greeting *****/
 	    if (Gbl.Now.Date.Day   == 1 &&
@@ -2616,7 +2598,7 @@ void Usr_WelcomeUsr (void)
 
 		  /* Start alert */
 		  Ale_ShowAlertAndButton1 (Ale_INFO,Txt_Happy_birthday_X,
-			                   Gbl.Usrs.Me.UsrDat.FirstName);
+			                   Gbl.Usrs.Me.UsrDat.FrstName);
 
 		  /* Show cake icon */
 		  HTM_IMG (Gbl.Prefs.URLIconSet,"birthday-cake.svg",NULL,
@@ -2690,11 +2672,10 @@ void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
    if (UsrDat->Birthday.Year  == 0 ||
        UsrDat->Birthday.Month == 0 ||
        UsrDat->Birthday.Day   == 0)
-      Str_Copy (BirthdayStrDB,"NULL",			// Without apostrophes
-                Usr_BIRTHDAY_STR_DB_LENGTH);
+      Str_Copy (BirthdayStrDB,"NULL",Usr_BIRTHDAY_STR_DB_LENGTH);	// Without apostrophes
    else
       snprintf (BirthdayStrDB,Usr_BIRTHDAY_STR_DB_LENGTH + 1,
-	        "'%04u-%02u-%02u'",	// With apostrophes
+                "'%04u-%02u-%02u'",	// With apostrophes
 	        UsrDat->Birthday.Year,
 	        UsrDat->Birthday.Month,
 	        UsrDat->Birthday.Day);
@@ -2787,8 +2768,8 @@ void Usr_WriteLoggedUsrHead (void)
                      "PHOTO18x24",Pho_ZOOM,false);
 
    /***** User's name *****/
-   if (Gbl.Usrs.Me.UsrDat.FirstName[0])
-      HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Me.UsrDat.FirstName);
+   if (Gbl.Usrs.Me.UsrDat.FrstName[0])
+      HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Me.UsrDat.FrstName);
 
    HTM_DIV_End ();
   }
@@ -2888,7 +2869,7 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
 
 	    Str_Copy (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,
 	              Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,
-	              ID_MAX_BYTES_USR_ID);
+	              sizeof (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID) - 1);
 	    Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
 
 	    /* Check if user's ID exists in database */
@@ -2934,9 +2915,9 @@ void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED
 
 void Usr_GetParamOtherUsrCodEncrypted (struct UsrData *UsrDat)
   {
-   Par_GetParToText ("OtherUsrCod",UsrDat->EncryptedUsrCod,
+   Par_GetParToText ("OtherUsrCod",UsrDat->EnUsrCod,
                      Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-   if (UsrDat->EncryptedUsrCod[0])        // If parameter exists...
+   if (UsrDat->EnUsrCod[0])        // If parameter exists...
      {
       Usr_GetUsrCodFromEncryptedUsrCod (UsrDat);
       if (UsrDat->UsrCod < 0)        // Check is user's code is valid
@@ -3184,7 +3165,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 	 ID_ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
 
 	 Str_Copy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,Gbl.Usrs.Me.UsrIdLogin,
-	           ID_MAX_BYTES_USR_ID);
+	           sizeof (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID) - 1);
 	 Str_ConvertToUpperText (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID);
 
 	 /* Check if user's ID exists in database, and get user's data */
@@ -3355,19 +3336,15 @@ static void Usr_SetMyPrefsAndRoles (void)
    Gbl.Prefs.Menu           = Gbl.Usrs.Me.UsrDat.Prefs.Menu;
    Gbl.Prefs.SideCols       = Gbl.Usrs.Me.UsrDat.Prefs.SideCols;
 
-   Gbl.Prefs.Theme = Gbl.Usrs.Me.UsrDat.Prefs.Theme;
-   snprintf (URL,sizeof (URL),
-	     "%s/%s",
+   Gbl.Prefs.Theme   = Gbl.Usrs.Me.UsrDat.Prefs.Theme;
+   snprintf (URL,sizeof (URL),"%s/%s",
 	     Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme]);
-   Str_Copy (Gbl.Prefs.URLTheme,URL,
-             PATH_MAX);
+   Str_Copy (Gbl.Prefs.URLTheme  ,URL,sizeof (Gbl.Prefs.URLTheme  ) - 1);
 
    Gbl.Prefs.IconSet = Gbl.Usrs.Me.UsrDat.Prefs.IconSet;
-   snprintf (URL,sizeof (URL),
-	     "%s/%s",
+   snprintf (URL,sizeof (URL),"%s/%s",
 	     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
-   Str_Copy (Gbl.Prefs.URLIconSet,URL,
-             PATH_MAX);
+   Str_Copy (Gbl.Prefs.URLIconSet,URL,sizeof (Gbl.Prefs.URLIconSet) - 1);
 
    /***** Construct the path to my directory *****/
    Usr_ConstructPathUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PathDir);
@@ -3593,17 +3570,14 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    /***** Checkbox to select user *****/
    // Two colors are used alternatively to better distinguish the rows
    if (UsrIsTheMsgSender)
-      Str_Copy (BgColor,"LIGHT_GREEN",
-                Usr_MAX_BYTES_BG_COLOR);
+      Str_Copy (BgColor,"LIGHT_GREEN",sizeof (BgColor) - 1);
    else
-      snprintf (BgColor,sizeof (BgColor),
-	        "COLOR%u",
-		Gbl.RowEvenOdd);
+      snprintf (BgColor,sizeof (BgColor),"COLOR%u",Gbl.RowEvenOdd);
 
    if (PutCheckBoxToSelectUsr)
      {
       HTM_TD_Begin ("class=\"CM %s\"",BgColor);
-      Usr_PutCheckboxToSelectUser (Role,UsrDat->EncryptedUsrCod,UsrIsTheMsgSender,
+      Usr_PutCheckboxToSelectUser (Role,UsrDat->EnUsrCod,UsrIsTheMsgSender,
 				   SelectedUsrs);
       HTM_TD_End ();
      }
@@ -3837,8 +3811,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
          if (Rec_GetFieldFromCrsRecord (UsrDat->UsrCod,Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,&mysql_res))
            {
             row = mysql_fetch_row (mysql_res);
-            Str_Copy (Text,row[0],
-                      Cns_MAX_BYTES_TEXT);
+            Str_Copy (Text,row[0],sizeof (Text) - 1);
             Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                               Text,Cns_MAX_BYTES_TEXT,false);        // Se convierte of HTML a HTML respetuoso
            }
@@ -4003,7 +3976,7 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
                 	                   "&nbsp;",
                      NULL,true,UsrDat->Accepted);
    Usr_WriteUsrData (BgColor,
-                     UsrDat->FirstName[0] ? UsrDat->FirstName :
+                     UsrDat->FrstName[0] ? UsrDat->FrstName :
                 	                    "&nbsp;",
                      NULL,true,UsrDat->Accepted);
   }
@@ -4021,9 +3994,7 @@ static void Usr_WriteEmail (struct UsrData *UsrDat,const char *BgColor)
      {
       ShowEmail = Mai_ICanSeeOtherUsrEmail (UsrDat);
       if (ShowEmail)
-         snprintf (MailLink,sizeof (MailLink),
-                   "mailto:%s",
-		   UsrDat->Email);
+         snprintf (MailLink,sizeof (MailLink),"mailto:%s",UsrDat->Email);
      }
    else
       ShowEmail = false;
@@ -4460,7 +4431,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
      }
 
    /***** Allocate space for query *****/
-   if ((*Query = (char *) malloc (Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1)) == NULL)
+   if ((*Query = malloc (Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Create query for users in the course *****/
@@ -4491,7 +4462,8 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
       Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
       /***** Allocate memory for list of booleans AddStdsWithoutGroupOf *****/
-      if ((AddStdsWithoutGroupOf = (bool *) calloc (Gbl.Crs.Grps.GrpTypes.Num,sizeof (bool))) == NULL)
+      if ((AddStdsWithoutGroupOf = calloc (Gbl.Crs.Grps.GrpTypes.Num,
+                                           sizeof (*AddStdsWithoutGroupOf))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Initialize vector of booleans that indicates whether it's necessary add to the list
@@ -4534,17 +4506,12 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
                   Str_Concat (*Query,NumPositiveCods ? " OR GrpCod='" :
                 				       " GrpCod='",
                 	      Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
-                  snprintf (LongStr,sizeof (LongStr),
-                	    "%ld",
-			    GrpCod);
-                  Str_Concat (*Query,LongStr,
-                              Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
-                  Str_Concat (*Query,"'",
-                              Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
+                  snprintf (LongStr,sizeof (LongStr),"%ld",GrpCod);
+                  Str_Concat (*Query,LongStr,Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
+                  Str_Concat (*Query,"'",Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
                   NumPositiveCods++;
                  }
-            Str_Concat (*Query,")",
-                        Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
+            Str_Concat (*Query,")",Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
            }
         }
 
@@ -4555,30 +4522,25 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
          if (AddStdsWithoutGroupOf[NumGrpTyp])
            {
             if (NumPositiveCods || NumNegativeCods)
-               Str_Concat (*Query," OR ",
-                           Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
+               Str_Concat (*Query," OR ",Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             else
-               Str_Concat (*Query," AND (",
-                           Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
+               Str_Concat (*Query," AND (",Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             /* Select all the students of the course who don't belong to any group of type GrpTypCod */
             Str_Concat (*Query,"crs_usr.UsrCod NOT IN"
 			       " (SELECT DISTINCT crs_grp_usr.UsrCod"
 			       " FROM crs_grp,crs_grp_usr"
 			       " WHERE crs_grp.GrpTypCod='",
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
-            snprintf (LongStr,sizeof (LongStr),
-        	      "%ld",
+            snprintf (LongStr,sizeof (LongStr),"%ld",
 		      Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-            Str_Concat (*Query,LongStr,
-                        Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
+            Str_Concat (*Query,LongStr,Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             Str_Concat (*Query,"' AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             NumNegativeCods++;
            }
       if (NumPositiveCods ||
           NumNegativeCods)
-         Str_Concat (*Query,")",
-                     Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
+         Str_Concat (*Query,")",Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
 
       /***** Free memory used by the list of booleans AddStdsWithoutGroupOf *****/
       free (AddStdsWithoutGroupOf);
@@ -5411,32 +5373,19 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
             /* Get user's code (row[0]) */
             UsrInList->UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-            /* Get encrypted user's code (row[1]) */
-	    Str_Copy (UsrInList->EncryptedUsrCod,row[1],
-	              Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-
-            /* Get encrypted password (row[2]) */
-	    Str_Copy (UsrInList->Password,row[2],
-	              Pwd_BYTES_ENCRYPTED_PASSWORD);
-
-            /* Get user's surname 1 (row[3]) */
-	    Str_Copy (UsrInList->Surname1,row[3],
-	              Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
-
-            /* Get user's surname 2 (row[4]) */
-	    Str_Copy (UsrInList->Surname2,row[4],
-	              Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
-
-            /* Get user's first name (row[5]) */
-	    Str_Copy (UsrInList->FirstName,row[5],
-	              Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+            /* Get encrypted user's code (row[1]), encrypted password (row[2]),
+               surname 1 (row[3]), surname 2 (row[4]), first name (row[5]), */
+	    Str_Copy (UsrInList->EnUsrCod,row[1],sizeof (UsrInList->EnUsrCod) - 1);
+	    Str_Copy (UsrInList->Password       ,row[2],sizeof (UsrInList->Password       ) - 1);
+	    Str_Copy (UsrInList->Surname1       ,row[3],sizeof (UsrInList->Surname1       ) - 1);
+	    Str_Copy (UsrInList->Surname2       ,row[4],sizeof (UsrInList->Surname2       ) - 1);
+	    Str_Copy (UsrInList->FrstName      ,row[5],sizeof (UsrInList->FrstName      ) - 1);
 
             /* Get user's sex (row[6]) */
             UsrInList->Sex = Usr_GetSexFromStr (row[6]);
 
             /* Get user's photo (row[7]) */
-	    Str_Copy (UsrInList->Photo,row[7],
-	              Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+	    Str_Copy (UsrInList->Photo          ,row[7],sizeof (UsrInList->Photo          ) - 1);
 
             /* Get user's photo visibility (row[8]) */
             UsrInList->PhotoVisibility = Pri_GetVisibilityFromStr (row[8]);
@@ -5535,18 +5484,13 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
 
 void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList *UsrInList)
   {
-   UsrDat->UsrCod                = UsrInList->UsrCod;
-   Str_Copy (UsrDat->EncryptedUsrCod,UsrInList->EncryptedUsrCod,
-             Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-   Str_Copy (UsrDat->Surname1,UsrInList->Surname1,
-             Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
-   Str_Copy (UsrDat->Surname2,UsrInList->Surname2,
-             Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
-   Str_Copy (UsrDat->FirstName,UsrInList->FirstName,
-             Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
-   UsrDat->Sex                   = UsrInList->Sex;
-   Str_Copy (UsrDat->Photo,UsrInList->Photo,
-             Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+   UsrDat->UsrCod                  = UsrInList->UsrCod;
+   Str_Copy (UsrDat->EnUsrCod,UsrInList->EnUsrCod,sizeof (UsrDat->EnUsrCod) - 1);
+   Str_Copy (UsrDat->Surname1,UsrInList->Surname1,sizeof (UsrDat->Surname1) - 1);
+   Str_Copy (UsrDat->Surname2,UsrInList->Surname2,sizeof (UsrDat->Surname2) - 1);
+   Str_Copy (UsrDat->FrstName,UsrInList->FrstName,sizeof (UsrDat->FrstName) - 1);
+   UsrDat->Sex                     = UsrInList->Sex;
+   Str_Copy (UsrDat->Photo   ,UsrInList->Photo   ,sizeof (UsrDat->Photo   ) - 1);
    UsrDat->PhotoVisibility         = UsrInList->PhotoVisibility;
    UsrDat->CtyCod                  = UsrInList->CtyCod;
    UsrDat->InsCod                  = UsrInList->InsCod;
@@ -5570,7 +5514,8 @@ if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
    }
 */
    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
-      if ((Gbl.Usrs.LstUsrs[Role].Lst = (struct UsrInList *) calloc (Gbl.Usrs.LstUsrs[Role].NumUsrs,sizeof (struct UsrInList))) == NULL)
+      if ((Gbl.Usrs.LstUsrs[Role].Lst = calloc (Gbl.Usrs.LstUsrs[Role].NumUsrs,
+                                                sizeof (*Gbl.Usrs.LstUsrs[Role].Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
   }
 
@@ -5659,9 +5604,9 @@ void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct SelectedUsrs *Sel
    if (!SelectedUsrs->List[Rol_UNK])
      {
       if ((SelectedUsrs->List[Rol_UNK] =
-	   (char *) malloc (Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1)) == NULL)
+	   malloc (Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
-      Str_Copy (SelectedUsrs->List[Rol_UNK],Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+      Str_Copy (SelectedUsrs->List[Rol_UNK],Gbl.Usrs.Other.UsrDat.EnUsrCod,
 		Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       SelectedUsrs->Filled = true;
      }
@@ -5882,7 +5827,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		  ID_ReallocateListIDs (&UsrDat,1);
 
 		  Str_Copy (UsrDat.IDs.List[0].ID,UsrIDNickOrEmail,
-		            ID_MAX_BYTES_USR_ID);
+		            sizeof (UsrDat.IDs.List[0].ID) - 1);
 
 		  /***** Check if a user exists having this user's ID *****/
 		  if (ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false))
@@ -5918,9 +5863,9 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 	       Usr_GetUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);	// Really only EncryptedUsrCod is needed
 
                /* Find if encrypted user's code is already in list */
-               if (!Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (UsrDat.EncryptedUsrCod,&Gbl.Usrs.Selected))        // If not in list ==> add it
+               if (!Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (UsrDat.EnUsrCod,&Gbl.Usrs.Selected))        // If not in list ==> add it
                  {
-                  LengthUsrCod = strlen (UsrDat.EncryptedUsrCod);
+                  LengthUsrCod = strlen (UsrDat.EnUsrCod);
 
                   /* Add encrypted user's code to list of users */
                   if (LengthSelectedUsrsCods == 0)	// First user in list
@@ -5929,7 +5874,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
                        {
                         /* Add user */
                         Str_Copy (Gbl.Usrs.Selected.List[Rol_UNK],
-                                  UsrDat.EncryptedUsrCod,
+                                  UsrDat.EnUsrCod,
                                   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
                         LengthSelectedUsrsCods = LengthUsrCod;
                        }
@@ -5945,7 +5890,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 
                         /* Add user */
                         Str_Copy (Gbl.Usrs.Selected.List[Rol_UNK] + LengthSelectedUsrsCods,
-                                  UsrDat.EncryptedUsrCod,
+                                  UsrDat.EnUsrCod,
                                   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
                         LengthSelectedUsrsCods += LengthUsrCod;
                        }
@@ -6002,7 +5947,7 @@ bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct SelectedUsr
    Ptr = SelectedUsrs->List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (UsrDat.UsrCod > 0)
@@ -6025,7 +5970,7 @@ unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct SelectedUsrs *
    Ptr = SelectedUsrs->List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (UsrDat.UsrCod > 0)
@@ -6045,7 +5990,7 @@ static void Usr_AllocateListSelectedEncryptedUsrCods (struct SelectedUsrs *Selec
    if (!SelectedUsrs->List[Role])
      {
       if ((SelectedUsrs->List[Role] =
-	   (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1)) == NULL)
+	   malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
       SelectedUsrs->List[Role][0] = '\0';
      }
@@ -6092,7 +6037,8 @@ void Usr_GetListSelectedUsrCods (struct SelectedUsrs *SelectedUsrs,
    struct UsrData UsrDat;
 
    /***** Create list of user codes *****/
-   if ((*LstSelectedUsrCods = (long *) calloc ((size_t) NumUsrsInList,sizeof (long))) == NULL)
+   if ((*LstSelectedUsrCods = calloc (NumUsrsInList,
+                                      sizeof (**LstSelectedUsrCods))) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Initialize structure with user's data *****/
@@ -6103,7 +6049,7 @@ void Usr_GetListSelectedUsrCods (struct SelectedUsrs *SelectedUsrs,
 	NumUsr < NumUsrsInList && *Ptr;
 	NumUsr++)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       (*LstSelectedUsrCods)[NumUsr] = UsrDat.UsrCod;
@@ -6134,7 +6080,7 @@ void Usr_CreateSubqueryUsrCods (long LstSelectedUsrCods[],
 
    /***** Allocate space for subquery *****/
    MaxLength = NumUsrsInList * (1 + Cns_MAX_DECIMAL_DIGITS_LONG);
-   if ((*SubQueryUsrs = (char *) malloc (MaxLength + 1)) == NULL)
+   if ((*SubQueryUsrs = malloc (MaxLength + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
    (*SubQueryUsrs)[0] = '\0';
 
@@ -6144,15 +6090,12 @@ void Usr_CreateSubqueryUsrCods (long LstSelectedUsrCods[],
 	NumUsr++)
       if (NumUsr)
 	{
-	 snprintf (SubQueryOneUsr,sizeof (SubQueryOneUsr),
-		   ",%ld",
+	 snprintf (SubQueryOneUsr,sizeof (SubQueryOneUsr),",%ld",
 		   LstSelectedUsrCods[NumUsr]);
-	 Str_Concat (*SubQueryUsrs,SubQueryOneUsr,
-		     MaxLength);
+	 Str_Concat (*SubQueryUsrs,SubQueryOneUsr,MaxLength);
 	}
       else
-	 snprintf (*SubQueryUsrs,sizeof (SubQueryOneUsr),
-		   "%ld",
+	 snprintf (*SubQueryUsrs,sizeof (SubQueryOneUsr),"%ld",
 		   LstSelectedUsrCods[NumUsr]);
   }
 
@@ -6169,7 +6112,7 @@ static void Usr_AllocateListOtherRecipients (void)
   {
    if (!Gbl.Usrs.ListOtherRecipients)
      {
-      if ((Gbl.Usrs.ListOtherRecipients = (char *) malloc (Nck_MAX_BYTES_LIST_NICKS + 1)) == NULL)
+      if ((Gbl.Usrs.ListOtherRecipients = malloc (Nck_MAX_BYTES_LIST_NICKS + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
       Gbl.Usrs.ListOtherRecipients[0] = '\0';
      }
@@ -6702,8 +6645,8 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
-      if ((GroupNames = (char *) malloc ((Grp_MAX_BYTES_GROUP_NAME + 3) *
-                                         Gbl.Crs.Grps.GrpTypes.NumGrpsTotal)) == NULL)
+      if ((GroupNames = malloc (Gbl.Crs.Grps.GrpTypes.NumGrpsTotal *
+                                (Grp_MAX_BYTES_GROUP_NAME + 3))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Begin table with list of students *****/
@@ -7013,7 +6956,7 @@ void Usr_ListAllDataStds (void)
       if (Gbl.Scope.Current == Hie_Lvl_CRS)
 	{
 	 Length = (Grp_MAX_BYTES_GROUP_NAME + 2) * Gbl.Crs.Grps.GrpTypes.NumGrpsTotal;
-         if ((GroupNames = (char *) malloc (Length + 1)) == NULL)
+         if ((GroupNames = malloc (Length + 1)) == NULL)
             Lay_NotEnoughMemoryExit ();
 	}
 
@@ -9096,7 +9039,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
 	 /***** Checkbox to select this user *****/
 	 if (PutCheckBoxToSelectUsr)
-	    Usr_PutCheckboxToSelectUser (Role,UsrDat.EncryptedUsrCod,UsrIsTheMsgSender,
+	    Usr_PutCheckboxToSelectUser (Role,UsrDat.EnUsrCod,UsrIsTheMsgSender,
 					 SelectedUsrs);
 
 	 /***** Show photo *****/
@@ -9109,8 +9052,8 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	 HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION\"");
 
 	 /* Name */
-	 if (UsrDat.FirstName[0])
-	    HTM_Txt (UsrDat.FirstName);
+	 if (UsrDat.FrstName[0])
+	    HTM_Txt (UsrDat.FrstName);
 	 else
 	    HTM_NBSP ();
 	 HTM_BR ();
@@ -9184,14 +9127,12 @@ void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1 + Cns_MAX_DECIM
    Fil_CreateDirIfNotExists (Cfg_PATH_USR_PRIVATE);
 
    /***** Path above user's ID *****/
-   snprintf (PathAboveUsr,sizeof (PathAboveUsr),
-	     "%s/%02u",
+   snprintf (PathAboveUsr,sizeof (PathAboveUsr),"%s/%02u",
 	     Cfg_PATH_USR_PRIVATE,(unsigned) (UsrCod % 100));
    Fil_CreateDirIfNotExists (PathAboveUsr);
 
    /***** Path for user *****/
-   snprintf (PathUsr,PATH_MAX + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1,
-	     "%s/%ld",
+   snprintf (PathUsr,PATH_MAX + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1,"%s/%ld",
 	     PathAboveUsr,UsrCod);
   }
 
@@ -9319,22 +9260,20 @@ unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
    /***** Build subquery for roles *****/
    if (MoreThanOneRole)
      {
-      Str_Copy (SubQueryRoles," IN (",Usr_MAX_BYTES_SUBQUERY_ROLES);
+      Str_Copy (SubQueryRoles," IN (",sizeof (SubQueryRoles) - 1);
       for (Role  = Rol_STD, FirstRole = true;
 	   Role <= Rol_TCH;
 	   Role++)
 	 if (Roles & (1 << Role))
 	   {
-	    snprintf (UnsignedStr,sizeof (UnsignedStr),
-		      "%u",
-		      (unsigned) Role);
+	    snprintf (UnsignedStr,sizeof (UnsignedStr),"%u",(unsigned) Role);
 	    if (FirstRole)	// Not the first role
 	       FirstRole = false;
 	    else
-	       Str_Concat (SubQueryRoles,",",Usr_MAX_BYTES_SUBQUERY_ROLES);
-	    Str_Concat (SubQueryRoles,UnsignedStr,Usr_MAX_BYTES_SUBQUERY_ROLES);
+	       Str_Concat (SubQueryRoles,",",sizeof (SubQueryRoles) - 1);
+	    Str_Concat (SubQueryRoles,UnsignedStr,sizeof (SubQueryRoles) - 1);
 	   }
-      Str_Concat (SubQueryRoles,")",Usr_MAX_BYTES_SUBQUERY_ROLES);
+      Str_Concat (SubQueryRoles,")",sizeof (SubQueryRoles) - 1);
      }
    else	// Only one role
       sprintf (SubQueryRoles,"=%u",FirstRoleRequested);
@@ -9904,7 +9843,7 @@ void Usr_RemoveUsrFromUsrBanned (long UsrCod)
 
 void Usr_PrintUsrQRCode (void)
   {
-   char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   char NewNickWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
@@ -9916,10 +9855,9 @@ void Usr_PrintUsrQRCode (void)
       /***** Show QR code *****/
       if (Gbl.Usrs.Other.UsrDat.Nickname[0])
 	{
-	 snprintf (NewNicknameWithArroba,sizeof (NewNicknameWithArroba),
-	           "@%s",
+	 snprintf (NewNickWithArroba,sizeof (NewNickWithArroba),"@%s",
 		   Gbl.Usrs.Other.UsrDat.Nickname);
-	 QR_ImageQRCode (NewNicknameWithArroba);
+	 QR_ImageQRCode (NewNickWithArroba);
 	}
 
       /***** End box *****/
@@ -10014,7 +9952,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
      {
       /* Begin form to go to user's record card */
       Frm_StartForm (NextAction);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       HTM_BUTTON_SUBMIT_Begin (UsrDat->FullName,"BT_LINK LT AUTHOR_TXT",NULL);
      }
 
@@ -10026,11 +9964,11 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
       HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
-   if (UsrDat->FirstName[0])
+   if (UsrDat->FrstName[0])
      {
       HTM_Comma ();
       HTM_BR ();
-      HTM_Txt (UsrDat->FirstName);
+      HTM_Txt (UsrDat->FrstName);
      }
 
    if (NextAction == ActUnk)

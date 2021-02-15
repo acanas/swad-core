@@ -585,9 +585,7 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
       Rooms->Num = (unsigned) NumRows;
 
       /***** Create list with courses in centre *****/
-      if ((Rooms->Lst = (struct Roo_Room *)
-		        calloc (NumRows,
-			        sizeof (struct Roo_Room))) == NULL)
+      if ((Rooms->Lst = calloc (NumRows,sizeof (*Rooms->Lst))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the rooms *****/
@@ -619,13 +617,9 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
 	       /* Get type (row[4]) */
 	       Room->Type = Roo_GetTypeFromString (row[4]);
 
-	       /* Get the short name of the room (row[5]) */
-	       Str_Copy (Room->ShrtName,row[5],
-			 Roo_MAX_BYTES_SHRT_NAME);
-
-	       /* Get the full name of the room (row[6]) */
-	       Str_Copy (Room->FullName,row[6],
-			 Roo_MAX_BYTES_FULL_NAME);
+	       /* Get the short (row[5]) and full (row[6]) names of the room  */
+	       Str_Copy (Room->ShrtName,row[5],sizeof (Room->ShrtName) - 1);
+	       Str_Copy (Room->FullName,row[6],sizeof (Room->FullName) - 1);
 
 	       /* Get seating capacity in this room (row[7]) */
 	       if (sscanf (row[7],"%u",&Room->Capacity) != 1)
@@ -634,8 +628,7 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
 	    case Roo_ONLY_SHRT_NAME:
 	    default:
 	       /* Get the short name of the room (row[1]) */
-	       Str_Copy (Room->ShrtName,row[1],
-			 Roo_MAX_BYTES_SHRT_NAME);
+	       Str_Copy (Room->ShrtName,row[1],sizeof (Room->ShrtName) - 1);
 	       break;
            }
         }
@@ -693,13 +686,9 @@ static void Roo_GetDataOfRoomByCod (struct Roo_Room *Room)
       /* Get type (row[3]) */
       Room->Type = Roo_GetTypeFromString (row[3]);
 
-      /* Get the short name of the room (row[4]) */
-      Str_Copy (Room->ShrtName,row[4],
-		Roo_MAX_BYTES_SHRT_NAME);
-
-      /* Get the full name of the room (row[5]) */
-      Str_Copy (Room->FullName,row[5],
-		Roo_MAX_BYTES_FULL_NAME);
+      /* Get the short (row[4]) and full (row[5]) names of the room  */
+      Str_Copy (Room->ShrtName,row[4],sizeof (Room->ShrtName) - 1);
+      Str_Copy (Room->FullName,row[5],sizeof (Room->FullName) - 1);
 
       /* Get seating capacity in this room (row[6]) */
       if (sscanf (row[6],"%u",&Room->Capacity) != 1)
@@ -721,16 +710,16 @@ static void Roo_GetBldShrtName (struct Roo_Room *Room,const char *BldShrtNameFro
 
    if (Room->BldCod < 0)
       Str_Copy (Room->BldShrtName,Txt_No_assigned_building,
-		Bld_MAX_BYTES_SHRT_NAME);
+		sizeof (Room->BldShrtName) - 1);
    else if (Room->BldCod == 0)
       Str_Copy (Room->BldShrtName,Txt_Another_building,
-		Bld_MAX_BYTES_SHRT_NAME);
+		sizeof (Room->BldShrtName) - 1);
    else	// Room->BldCod > 0
      {
       Room->BldShrtName[0] = '\0';
       if (BldShrtNameFromDB)
 	 Str_Copy (Room->BldShrtName,BldShrtNameFromDB,
-		   Bld_MAX_BYTES_SHRT_NAME);
+		   sizeof (Room->BldShrtName) - 1);
      }
   }
 
@@ -1288,8 +1277,7 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update room name *****/
-   Str_Copy (CurrentClaName,NewClaName,
-             MaxBytes);
+   Str_Copy (CurrentClaName,NewClaName,MaxBytes);
   }
 
 /*****************************************************************************/
@@ -1383,9 +1371,7 @@ void Roo_ChangeCapacity (void)
 static void Roo_WriteCapacity (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned Capacity)
   {
    if (Capacity <= Roo_MAX_CAPACITY)
-      snprintf (Str,Cns_MAX_DECIMAL_DIGITS_UINT + 1,
-		"%u",
-		Capacity);
+      snprintf (Str,Cns_MAX_DECIMAL_DIGITS_UINT + 1,"%u",Capacity);
    else
       Str[0] = '\0';
   }
@@ -1638,8 +1624,8 @@ static void Roo_EditingRoomConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing room.");
 
    /***** Allocate memory for room *****/
-   if ((Roo_EditingRoom = (struct Roo_Room *) malloc (sizeof (struct Roo_Room))) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for room.");
+   if ((Roo_EditingRoom = malloc (sizeof (*Roo_EditingRoom))) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Reset room *****/
    Roo_EditingRoom->RooCod         = -1L;

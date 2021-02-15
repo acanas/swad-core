@@ -355,9 +355,7 @@ void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
       Buildings->Num = (unsigned) NumRows;
 
       /***** Create list with courses in centre *****/
-      if ((Buildings->Lst = (struct Bld_Building *)
-	                     calloc (NumRows,
-	                             sizeof (struct Bld_Building))) == NULL)
+      if ((Buildings->Lst = calloc (NumRows,sizeof (*Buildings->Lst))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the buildings *****/
@@ -375,18 +373,17 @@ void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
             Lay_ShowErrorAndExit ("Wrong code of building.");
 
          /* Get the short name of the building (row[1]) */
-         Str_Copy (Building->ShrtName,row[1],
-                   Bld_MAX_BYTES_SHRT_NAME);
+         Str_Copy (Building->ShrtName,row[1],sizeof (Building->ShrtName) - 1);
 
          if (WhichData == Bld_ALL_DATA)
            {
 	    /* Get the full name of the building (row[2]) */
 	    Str_Copy (Building->FullName,row[2],
-		      Bld_MAX_BYTES_FULL_NAME);
+	              sizeof (Building->FullName) - 1);
 
 	    /* Get the full name of the building (row[3]) */
 	    Str_Copy (Building->Location,row[3],
-		      Bld_MAX_BYTES_LOCATION);
+		      sizeof (Building->Location) - 1);
            }
         }
      }
@@ -431,16 +428,13 @@ void Bld_GetDataOfBuildingByCod (struct Bld_Building *Building)
          row = mysql_fetch_row (mysql_res);
 
          /* Get the short name of the building (row[0]) */
-         Str_Copy (Building->ShrtName,row[0],
-                   Bld_MAX_BYTES_SHRT_NAME);
+         Str_Copy (Building->ShrtName,row[0],sizeof (Building->ShrtName) - 1);
 
          /* Get the full name of the building (row[1]) */
-         Str_Copy (Building->FullName,row[1],
-                   Bld_MAX_BYTES_FULL_NAME);
+         Str_Copy (Building->FullName,row[1],sizeof (Building->FullName) - 1);
 
          /* Get the location of the building (row[2]) */
-         Str_Copy (Building->Location,row[2],
-                   Bld_MAX_BYTES_LOCATION);
+         Str_Copy (Building->Location,row[2],sizeof (Building->Location) - 1);
         }
 
       /***** Free structure that stores the query result *****/
@@ -709,8 +703,7 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update building name *****/
-   Str_Copy (CurrentClaName,NewClaName,
-             MaxBytes);
+   Str_Copy (CurrentClaName,NewClaName,MaxBytes);
   }
 
 /*****************************************************************************/
@@ -772,7 +765,7 @@ void Bld_ChangeBuildingLocation (void)
       /* Update the table changing old name by new name */
       Bld_UpdateBuildingNameDB (Bld_EditingBuilding->BldCod,"Location",NewLocation);
       Str_Copy (Bld_EditingBuilding->Location,NewLocation,
-		Bld_MAX_BYTES_LOCATION);
+		sizeof (Bld_EditingBuilding->Location) - 1);
 
       /* Write message to show the change made */
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -958,8 +951,8 @@ static void Bld_EditingBuildingConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing building.");
 
    /***** Allocate memory for building *****/
-   if ((Bld_EditingBuilding = (struct Bld_Building *) malloc (sizeof (struct Bld_Building))) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for building.");
+   if ((Bld_EditingBuilding = malloc (sizeof (*Bld_EditingBuilding))) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Reset building *****/
    Bld_EditingBuilding->BldCod      = -1L;

@@ -28,7 +28,6 @@
 #define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For malloc and free
 
 #include "swad_database.h"
 #include "swad_forum.h"
@@ -347,7 +346,7 @@ static void TL_Com_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t
 		    NotCod,
 		    IdComments,
 		    NumInitialComments,
-		    Gbl.Usrs.Other.UsrDat.EncryptedUsrCod) < 0)
+		    Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
 	 Lay_NotEnoughMemoryExit ();
       Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
      }
@@ -678,7 +677,7 @@ static void TL_Com_WriteAuthorComment (struct UsrData *UsrDat)
 
    /***** Show user's name inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
 			            Txt_Another_user_s_profile,
 	                    "BT_LINK TL_COM_AUTHOR TL_COMM_AUTHOR_WIDTH DAT_BOLD",NULL);
@@ -915,7 +914,7 @@ static void TL_Com_PutParamsRemoveComment (void *Timeline)
    if (Timeline)
      {
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       else
 	 Usr_PutHiddenParamWho (((struct TL_Timeline *) Timeline)->Who);
       TL_Pub_PutHiddenParamPubCod (((struct TL_Timeline *) Timeline)->PubCod);
@@ -1127,8 +1126,7 @@ static void TL_Com_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Com_Comment 
    Com->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[3]);
 
    /***** Get text content (row[4]) *****/
-   Str_Copy (Com->Content.Txt,row[4],
-             Cns_MAX_BYTES_LONG_TEXT);
+   Str_Copy (Com->Content.Txt,row[4],sizeof (Com->Content.Txt) - 1);
 
    /***** Get number of times this comment has been favourited *****/
    TL_Fav_GetNumTimesACommHasBeenFav (Com);

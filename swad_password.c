@@ -127,7 +127,7 @@ bool Pwd_CheckPendingPassword (void)
       /* Get encrypted pending password */
       row = mysql_fetch_row (mysql_res);
       Str_Copy (Gbl.Usrs.Me.PendingPassword,row[0],
-                Pwd_BYTES_ENCRYPTED_PASSWORD);
+                sizeof (Gbl.Usrs.Me.PendingPassword) - 1);
      }
    else
       Gbl.Usrs.Me.PendingPassword[0] = '\0';
@@ -155,7 +155,7 @@ void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void)
 
    /***** Update my current password *****/
    Str_Copy (Gbl.Usrs.Me.UsrDat.Password,Gbl.Usrs.Me.PendingPassword,
-             Pwd_BYTES_ENCRYPTED_PASSWORD);
+             sizeof (Gbl.Usrs.Me.UsrDat.Password) - 1);
 
    /***** Remove my pending password from database
           since it is not longer necessary *****/
@@ -235,7 +235,7 @@ static void Pwd_CheckAndUpdateNewPwd (struct UsrData *UsrDat)
 	{
          /* Update user's data */
 	 Str_Copy (UsrDat->Password,NewEncryptedPassword,
-		   Pwd_BYTES_ENCRYPTED_PASSWORD);
+		   sizeof (UsrDat->Password) - 1);
 	 Ses_UpdateSessionDataInDB ();
 	 Enr_UpdateUsrData (UsrDat);
 
@@ -364,7 +364,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 
 	 // User has typed a user's ID
 	 Str_Copy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,Gbl.Usrs.Me.UsrIdLogin,
-	           ID_MAX_BYTES_USR_ID);
+	           sizeof (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID) - 1);
          Str_ConvertToUpperText (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID);
 
 	 /* Get users' codes for this ID */
@@ -669,9 +669,7 @@ void Pwd_ShowFormChgMyPwd (void)
    Frm_StartFormAnchor (ActChgMyPwd,Pwd_PASSWORD_SECTION_ID);
 
    /***** Begin box *****/
-   snprintf (StrRecordWidth,sizeof (StrRecordWidth),
-	     "%upx",
-	     Rec_RECORD_WIDTH);
+   snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
    Box_BoxBegin (StrRecordWidth,Txt_Password,
                  NULL,NULL,
 		 Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
@@ -833,7 +831,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 	 break;
      }
    Frm_StartFormAnchor (NextAction,Pwd_PASSWORD_SECTION_ID);
-   Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+   Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 
    /* New password */
    HTM_TABLE_BeginWidePadding (2);

@@ -29,7 +29,6 @@
 #define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For malloc and free
 
 #include "swad_database.h"
 #include "swad_global.h"
@@ -292,7 +291,7 @@ void TL_Usr_FormFavSha (Act_Action_t ActionGbl,
 		    Act_GetActCod (ActionUsr),
 		    Gbl.Session.Id,
 		    ParamStr,
-		    Gbl.Usrs.Other.UsrDat.EncryptedUsrCod) < 0)
+		    Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
 	 Lay_NotEnoughMemoryExit ();
       Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
      }

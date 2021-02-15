@@ -464,8 +464,7 @@ static void Deg_ListDegreesForEdition (void)
 	}
       else
 	{
-         Str_Copy (WWW,Deg->WWW,
-                   Cns_MAX_BYTES_WWW);
+         Str_Copy (WWW,Deg->WWW,sizeof (WWW) - 1);
          HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
          HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\"",
 		      Deg->WWW,Deg->WWW);
@@ -1081,7 +1080,7 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
    if (Degs->Num) // Degrees found...
      {
       /***** Create list with degrees *****/
-      if ((Degs->Lst = (struct Deg_Degree *) calloc (Degs->Num,sizeof (struct Deg_Degree))) == NULL)
+      if ((Degs->Lst = calloc (Degs->Num,sizeof (*Degs->Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the degrees *****/
@@ -1126,8 +1125,8 @@ void Deg_GetListDegsInCurrentCtr (void)
       Gbl.Hierarchy.Degs.Num = (unsigned) NumRows;
 
       /***** Create list with degrees of this centre *****/
-      if ((Gbl.Hierarchy.Degs.Lst = (struct Deg_Degree *) calloc (Gbl.Hierarchy.Degs.Num,
-                                                                  sizeof (struct Deg_Degree))) == NULL)
+      if ((Gbl.Hierarchy.Degs.Lst = calloc (Gbl.Hierarchy.Degs.Num,
+                                            sizeof (*Gbl.Hierarchy.Degs.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the degrees of this centre *****/
@@ -1388,16 +1387,13 @@ static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row)
    Deg->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
    /***** Get degree short name (row[5]) *****/
-   Str_Copy (Deg->ShrtName,row[5],
-             Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+   Str_Copy (Deg->ShrtName,row[5],sizeof (Deg->ShrtName) - 1);
 
    /***** Get degree full name (row[6]) *****/
-   Str_Copy (Deg->FullName,row[6],
-             Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Str_Copy (Deg->FullName,row[6],sizeof (Deg->FullName) - 1);
 
    /***** Get WWW (row[7]) *****/
-   Str_Copy (Deg->WWW,row[7],
-             Cns_MAX_BYTES_WWW);
+   Str_Copy (Deg->WWW,row[7],sizeof (Deg->WWW) - 1);
   }
 
 /*****************************************************************************/
@@ -1420,8 +1416,7 @@ void Deg_GetShortNameOfDegreeByCod (struct Deg_Degree *Deg)
 	 /***** Get the short name of this degree *****/
 	 row = mysql_fetch_row (mysql_res);
 
-	 Str_Copy (Deg->ShrtName,row[0],
-	           Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+	 Str_Copy (Deg->ShrtName,row[0],sizeof (Deg->ShrtName) - 1);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -1537,11 +1532,10 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    Brw_RemoveDegFilesFromDB (DegCod);
 
    /***** Remove directories of the degree *****/
-   snprintf (PathDeg,sizeof (PathDeg),
-	     "%s/%02u/%u",
+   snprintf (PathDeg,sizeof (PathDeg),"%s/%02u/%u",
 	     Cfg_PATH_DEG_PUBLIC,
 	     (unsigned) (DegCod % 100),
-	     (unsigned) DegCod);
+	     (unsigned)  DegCod);
    Fil_RemoveTree (PathDeg);
 
    /***** Remove administrators of this degree *****/
@@ -1646,8 +1640,7 @@ void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullNam
                              CurrentDegName,NewDegName);
 
 	    /* Change current degree name in order to display it properly */
-	    Str_Copy (CurrentDegName,NewDegName,
-	              MaxBytes);
+	    Str_Copy (CurrentDegName,NewDegName,MaxBytes);
            }
         }
       else	// The same name
@@ -1748,8 +1741,7 @@ void Deg_ChangeDegWWW (void)
      {
       /***** Update the table changing old WWW by new WWW *****/
       Deg_UpdateDegWWWDB (Deg_EditingDeg->DegCod,NewWWW);
-      Str_Copy (Deg_EditingDeg->WWW,NewWWW,
-                Cns_MAX_BYTES_WWW);
+      Str_Copy (Deg_EditingDeg->WWW,NewWWW,sizeof (Deg_EditingDeg->WWW) - 1);
 
       /***** Write alert to show the change made
 	     and put button to go to degree changed *****/
@@ -2179,8 +2171,8 @@ static void Deg_EditingDegreeConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing degree.");
 
    /***** Allocate memory for degree *****/
-   if ((Deg_EditingDeg = (struct Deg_Degree *) malloc (sizeof (struct Deg_Degree))) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for degree.");
+   if ((Deg_EditingDeg = malloc (sizeof (*Deg_EditingDeg))) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Reset degree *****/
    Deg_EditingDeg->DegCod          = -1L;

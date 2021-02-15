@@ -128,9 +128,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
 	 Par_PutHiddenParamUnsigned (NULL,"FirstDayOfWeek",FirstDayOfWeek);
 	 if (FuncParams)	// Extra parameters depending on the action
 	    FuncParams (Args);
-	 snprintf (Icon,sizeof (Icon),
-	           "first-day-of-week-%u.png",
-	           FirstDayOfWeek);
+	 snprintf (Icon,sizeof (Icon),"first-day-of-week-%u.png",FirstDayOfWeek);
 	 Ico_PutSettingIconLink (Icon,
 				 Str_BuildStringStr (Txt_First_day_of_the_week_X,
 						     Txt_DAYS_SMALL[FirstDayOfWeek]));

@@ -83,9 +83,9 @@ extern struct Globals Gbl;
 
 static void Acc_ShowFormCheckIfIHaveAccount (const char *Title);
 static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrData *UsrDat);
-static void Acc_ShowFormRequestNewAccountWithParams (const char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1],
+static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1],
                                                      const char *NewEmail);
-static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1],
+static bool Acc_GetParamsNewAccount (char NewNickWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1],
                                      char *NewEmail,
                                      char *NewEncryptedPassword);
 static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat);
@@ -313,7 +313,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    /***** Button to login with this account *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
    Frm_StartForm (ActLogInNew);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    Btn_PutCreateButtonInline (Txt_Its_me);
    Frm_EndForm ();
    HTM_TD_End ();
@@ -353,7 +353,7 @@ void Acc_ShowFormCreateMyAccount (void)
 /************ Show form to create a new account using parameters *************/
 /*****************************************************************************/
 
-static void Acc_ShowFormRequestNewAccountWithParams (const char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1],
+static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1],
                                                      const char *NewEmail)
   {
    extern const char *Hlp_PROFILE_SignUp;
@@ -363,7 +363,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNicknameWitho
    extern const char *Txt_HELP_nickname;
    extern const char *Txt_HELP_email;
    extern const char *Txt_Email;
-   char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   char NewNickWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
    /***** Begin form to enter some data of the new user *****/
    Frm_StartForm (ActCreUsrAcc);
@@ -374,12 +374,11 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNicknameWitho
                       Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE,2);
 
    /***** Nickname *****/
-   if (NewNicknameWithoutArroba[0])
-      snprintf (NewNicknameWithArroba,sizeof (NewNicknameWithArroba),
-	        "@%s",
-		NewNicknameWithoutArroba);
+   if (NewNickWithoutArroba[0])
+      snprintf (NewNickWithArroba,sizeof (NewNickWithArroba),"@%s",
+		NewNickWithoutArroba);
    else
-      NewNicknameWithArroba[0] = '\0';
+      NewNickWithArroba[0] = '\0';
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -388,7 +387,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNicknameWitho
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
    HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
-		   NewNicknameWithArroba,HTM_DONT_SUBMIT_ON_CHANGE,
+		   NewNickWithArroba,HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"NewNick\" size=\"18\" placeholder=\"%s\" required=\"required\"",
 		   Txt_HELP_nickname);
    HTM_TD_End ();
@@ -563,7 +562,7 @@ void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args)
 
    if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
       Lay_PutContextualLinkOnlyIcon (ActReqRemMyAcc,NULL,
-				     Acc_PutParamsToRemoveMyAccount,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
+				     Acc_PutParamsToRemoveMyAccount,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 				     "trash.svg",
 				     Txt_Remove_account);
   }
@@ -583,11 +582,11 @@ static void Acc_PutParamsToRemoveMyAccount (void *EncryptedUsrCod)
 
 bool Acc_CreateMyNewAccountAndLogIn (void)
   {
-   char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   char NewNickWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
    char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 
-   if (Acc_GetParamsNewAccount (NewNicknameWithoutArroba,NewEmail,NewEncryptedPassword))
+   if (Acc_GetParamsNewAccount (NewNickWithoutArroba,NewEmail,NewEncryptedPassword))
      {
       /***** User's has no ID *****/
       Gbl.Usrs.Me.UsrDat.IDs.Num = 0;
@@ -595,23 +594,23 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
 
       /***** Set password to the password typed by the user *****/
       Str_Copy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword,
-                Pwd_BYTES_ENCRYPTED_PASSWORD);
+                sizeof (Gbl.Usrs.Me.UsrDat.Password) - 1);
 
       /***** User does not exist in the platform, so create him/her! *****/
       Acc_CreateNewUsr (&Gbl.Usrs.Me.UsrDat,
                         true);	// I am creating my own account
 
       /***** Save nickname *****/
-      Nck_UpdateNickInDB (Gbl.Usrs.Me.UsrDat.UsrCod,NewNicknameWithoutArroba);
-      Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba,
-                Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
+      Nck_UpdateNickInDB (Gbl.Usrs.Me.UsrDat.UsrCod,NewNickWithoutArroba);
+      Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNickWithoutArroba,
+                sizeof (Gbl.Usrs.Me.UsrDat.Nickname) - 1);
 
       /***** Save email *****/
       if (Mai_UpdateEmailInDB (&Gbl.Usrs.Me.UsrDat,NewEmail))
 	{
 	 /* Email updated sucessfully */
 	 Str_Copy (Gbl.Usrs.Me.UsrDat.Email,NewEmail,
-	           Cns_MAX_BYTES_EMAIL_ADDRESS);
+	           sizeof (Gbl.Usrs.Me.UsrDat.Email) - 1);
 
 	 Gbl.Usrs.Me.UsrDat.EmailConfirmed = false;
 	}
@@ -621,7 +620,7 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
    else
      {
       /***** Show form again ******/
-      Acc_ShowFormRequestNewAccountWithParams (NewNicknameWithoutArroba,NewEmail);
+      Acc_ShowFormRequestNewAccountWithParams (NewNickWithoutArroba,NewEmail);
       return false;
      }
   }
@@ -631,7 +630,7 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
 /*****************************************************************************/
 // Return false on error
 
-static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1],
+static bool Acc_GetParamsNewAccount (char NewNickWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1],
                                      char *NewEmail,
                                      char *NewEncryptedPassword)
   {
@@ -639,44 +638,43 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
    extern const char *Txt_The_nickname_entered_X_is_not_valid_;
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
-   char NewNicknameWithArroba[1 + Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   char NewNickWithArroba[1 + Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char NewPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    bool Error = false;
 
    /***** Step 1/3: Get new nickname from form *****/
-   Par_GetParToText ("NewNick",NewNicknameWithArroba,
+   Par_GetParToText ("NewNick",NewNickWithArroba,
                      Nck_MAX_BYTES_NICKNAME_FROM_FORM);
 
    /* Remove arrobas at the beginning */
-   Str_Copy (NewNicknameWithoutArroba,NewNicknameWithArroba,
+   Str_Copy (NewNickWithoutArroba,NewNickWithArroba,
              Nck_MAX_BYTES_NICKNAME_FROM_FORM);
-   Str_RemoveLeadingArrobas (NewNicknameWithoutArroba);
+   Str_RemoveLeadingArrobas (NewNickWithoutArroba);
 
    /* Create a new version of the nickname with arroba */
-   snprintf (NewNicknameWithArroba,sizeof (NewNicknameWithArroba),
-	     "@%s",
-	     NewNicknameWithoutArroba);
+   snprintf (NewNickWithArroba,sizeof (NewNickWithArroba),"@%s",
+	     NewNickWithoutArroba);
 
-   if (Nck_CheckIfNickWithArrobaIsValid (NewNicknameWithArroba))        // If new nickname is valid
+   if (Nck_CheckIfNickWithArrobaIsValid (NewNickWithArroba))        // If new nickname is valid
      {
       /* Check if the new nickname
          matches any of the nicknames of other users */
       if (DB_QueryCOUNT ("can not check if nickname already existed",
 			 "SELECT COUNT(*) FROM usr_nicknames"
 			 " WHERE Nickname='%s' AND UsrCod<>%ld",
-			 NewNicknameWithoutArroba,
+			 NewNickWithoutArroba,
 			 Gbl.Usrs.Me.UsrDat.UsrCod))	// A nickname of another user is the same that this nickname
 	{
 	 Error = true;
 	 Ale_ShowAlert (Ale_WARNING,Txt_The_nickname_X_had_been_registered_by_another_user,
-		        NewNicknameWithoutArroba);
+		        NewNickWithoutArroba);
 	}
      }
    else        // New nickname is not valid
      {
       Error = true;
       Ale_ShowAlert (Ale_WARNING,Txt_The_nickname_entered_X_is_not_valid_,
-		     NewNicknameWithArroba,
+		     NewNickWithArroba,
 		     Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
 		     Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA);
      }
@@ -773,9 +771,9 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 				"'%s','%s',"
 				"%s,'%s',"
 				"%u,%u,-1,0)",
-				UsrDat->EncryptedUsrCod,
+				UsrDat->EnUsrCod,
 				UsrDat->Password,
-				UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
+				UsrDat->Surname1,UsrDat->Surname2,UsrDat->FrstName,
 				Usr_StringsSexDB[UsrDat->Sex],
 				The_ThemeId[UsrDat->Prefs.Theme],
 				Ico_IconSetId[UsrDat->Prefs.IconSet],
@@ -836,8 +834,8 @@ static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat)
         NumTry++)
      {
       Str_CreateRandomAlphanumStr (RandomStr,LENGTH_RANDOM_STR);
-      Cry_EncryptSHA256Base64 (RandomStr,UsrDat->EncryptedUsrCod);
-      if (!Usr_ChkIfEncryptedUsrCodExists (UsrDat->EncryptedUsrCod))
+      Cry_EncryptSHA256Base64 (RandomStr,UsrDat->EnUsrCod);
+      if (!Usr_ChkIfEncryptedUsrCodExists (UsrDat->EnUsrCod))
           break;
      }
    if (NumTry == MAX_TRY)
@@ -985,7 +983,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
 
       /* Show form to request confirmation */
       Frm_StartForm (ActRemUsrGbl);
-      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       Pwd_AskForConfirmationOnDangerousAction ();
       Btn_PutRemoveButton (Txt_Eliminate_user_account);
       Frm_EndForm ();

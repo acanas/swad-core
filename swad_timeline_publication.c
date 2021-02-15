@@ -235,8 +235,8 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
           into session for next refresh *****/
    TL_Pub_UpdateFirstLastPubCodesIntoSession (Timeline);
 
-   /***** Add notes just retrieved to current timeline for this session *****/
-   TL_Not_AddNotesJustRetrievedToTimelineThisSession ();
+   /***** Add notes just retrieved to visible timeline for this session *****/
+   TL_Not_AddNotesJustRetrievedToVisibleTimelineThisSession ();
 
    /***** Drop temporary tables *****/
    TL_Pub_DropTemporaryTables (Timeline);
@@ -304,7 +304,7 @@ static void TL_Pub_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
 	       SubQueries->TablePublishers = ",fol_tmp_me_and_followed";
 	       Str_Copy (SubQueries->Publishers,
 			 "tl_pubs.PublisherCod=fol_tmp_me_and_followed.UsrCod AND ",
-			 TL_Pub_MAX_BYTES_SUBQUERY);
+			 sizeof (SubQueries->Publishers) - 1);
 	       break;
 	    case Usr_WHO_ALL:		// Show the timeline of all users
 	       SubQueries->TablePublishers = "";
@@ -332,13 +332,13 @@ static void TL_Pub_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeli
 	 Str_Copy (SubQueries->AlreadyExists,
 		   " tl_pubs.NotCod NOT IN"
 		   " (SELECT NotCod FROM tl_tmp_just_retrieved_notes)",	// Avoid notes just retrieved
-		   TL_Pub_MAX_BYTES_SUBQUERY);
+		   sizeof (SubQueries->AlreadyExists) - 1);
          break;
       case TL_GET_ONLY_OLD_PUBS:	// Get only old publications
 	 Str_Copy (SubQueries->AlreadyExists,
 		   " tl_pubs.NotCod NOT IN"
 		   " (SELECT NotCod FROM tl_tmp_visible_timeline)",	// Avoid notes already shown
-		   TL_Pub_MAX_BYTES_SUBQUERY);
+		   sizeof (SubQueries->AlreadyExists) - 1);
 	 break;
      }
   }
@@ -503,8 +503,8 @@ static struct TL_Pub_Publication *TL_Pub_SelectTheMostRecentPub (const struct TL
    if (NumPubs == 1)
      {
       /* Allocate space for publication */
-      if ((Pub = (struct TL_Pub_Publication *) malloc (sizeof (struct TL_Pub_Publication))) == NULL)
-	 Lay_ShowErrorAndExit ("Error allocating memory publication.");
+      if ((Pub = malloc (sizeof (*Pub))) == NULL)
+         Lay_NotEnoughMemoryExit ();
 
       /* Get data of publication */
       TL_Pub_GetDataOfPublicationFromNextRow (mysql_res,Pub);

@@ -124,7 +124,7 @@ static void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print);
 static bool Tst_CheckIfNextTstAllowed (void);
 static unsigned Tst_GetNumExamsGeneratedByMe (void);
 
-static void Tst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMediaInForm,
+static void Tst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
                                        bool OptionsDisabled);
 static void Tst_IncreaseMyNumAccessTst (void);
 static void Tst_UpdateLastAccTst (unsigned NumQsts);
@@ -572,9 +572,7 @@ static void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print)
 	NumQst++)
      {
       /* Get answers selected by user for this question */
-      snprintf (StrAns,sizeof (StrAns),
-	        "Ans%010u",
-		NumQst);
+      snprintf (StrAns,sizeof (StrAns),"Ans%010u",NumQst);
       Par_GetParMultiToText (StrAns,Print->PrintedQuestions[NumQst].StrAnswers,
                              Tst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
       Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrAnswers);
@@ -816,10 +814,9 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
 	{
 	 /* Convert the stem, that is in HTML, to rigorous HTML */
 	 StemLength = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
-	 if ((StemRigorousHTML = (char *) malloc (StemLength + 1)) == NULL)
+	 if ((StemRigorousHTML = malloc (StemLength + 1)) == NULL)
 	    Lay_NotEnoughMemoryExit ();
-	 Str_Copy (StemRigorousHTML,Stem,
-		   StemLength);
+	 Str_Copy (StemRigorousHTML,Stem,StemLength);
 
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			   StemRigorousHTML,StemLength,false);
@@ -842,7 +839,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
 /************* Put form to upload a new image for a test question ************/
 /*****************************************************************************/
 
-static void Tst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMediaInForm,
+static void Tst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
                                        bool OptionsDisabled)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -855,7 +852,7 @@ static void Tst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
    if (Media->Name[0])
      {
       /***** Set names of parameters depending on number of image in form *****/
-      Med_SetParamNames (&ParamUploadMedia,NumMediaInForm);
+      Med_SetParamNames (&ParamUploadMedia,NumMedia);
 
       /***** Start container *****/
       HTM_DIV_Begin ("class=\"TEST_MED_EDIT_FORM\"");
@@ -892,14 +889,14 @@ static void Tst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
 		       OptionsDisabled ? " disabled=\"disabled\"" : "");
       HTM_TxtColonNBSP (Txt_Change_image_video);
       HTM_LABEL_End ();
-      Med_PutMediaUploader (NumMediaInForm,"TEST_MED_INPUT");
+      Med_PutMediaUploader (NumMedia,"TEST_MED_INPUT");
 
       /***** End container *****/
       HTM_DIV_End ();
      }
    else	// No current image
       /***** Attached media *****/
-      Med_PutMediaUploader (NumMediaInForm,"TEST_MED_INPUT");
+      Med_PutMediaUploader (NumMedia,"TEST_MED_INPUT");
   }
 
 /*****************************************************************************/
@@ -916,10 +913,9 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 	{
 	 /***** Convert the feedback, that is in HTML, to rigorous HTML *****/
 	 FeedbackLength = strlen (Feedback) * Str_MAX_BYTES_PER_CHAR;
-	 if ((FeedbackRigorousHTML = (char *) malloc (FeedbackLength + 1)) == NULL)
+	 if ((FeedbackRigorousHTML = malloc (FeedbackLength + 1)) == NULL)
 	    Lay_NotEnoughMemoryExit ();
-	 Str_Copy (FeedbackRigorousHTML,Feedback,
-	           FeedbackLength);
+	 Str_Copy (FeedbackRigorousHTML,Feedback,FeedbackLength);
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			   FeedbackRigorousHTML,FeedbackLength,false);
 
@@ -1481,9 +1477,8 @@ static void Tst_ShowFormConfigTst (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LB\"");
-   snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),
-             "%lu",
-	     TstCfg_GetConfigMinTimeNxtTstPerQst ());
+   snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),"%lu",
+             TstCfg_GetConfigMinTimeNxtTstPerQst ());
    HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DECIMAL_DIGITS_ULONG,StrMinTimeNxtTstPerQst,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"MinTimeNxtTstPerQst\" size=\"7\" required=\"required\"");
@@ -1537,9 +1532,7 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   snprintf (StrValue,sizeof (StrValue),
-	     "%u",
-	     Value);
+   snprintf (StrValue,sizeof (StrValue),"%u",Value);
    HTM_INPUT_TEXT (Field,Cns_MAX_DECIMAL_DIGITS_UINT,StrValue,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"%s\" size=\"3\" required=\"required\"",Field);
@@ -1750,41 +1743,30 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
    char CrsCodStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Allocate space for query *****/
-   if ((Query = (char *) malloc (Tst_MAX_BYTES_QUERY_TEST + 1)) == NULL)
+   if ((Query = malloc (Tst_MAX_BYTES_QUERY_TEST + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Select questions *****/
    /* Start query */
-   snprintf (Query,Tst_MAX_BYTES_QUERY_TEST + 1,
-	     "SELECT tst_questions.QstCod"	// row[0]
-	     " FROM tst_questions");
+   Str_Copy (Query,"SELECT tst_questions.QstCod"	// row[0]
+		   " FROM tst_questions",Tst_MAX_BYTES_QUERY_TEST);
    if (!Test->Tags.All)
-      Str_Concat (Query,",tst_question_tags,tst_tags",
-                  Tst_MAX_BYTES_QUERY_TEST);
+      Str_Concat (Query,",tst_question_tags,tst_tags",Tst_MAX_BYTES_QUERY_TEST);
 
-   Str_Concat (Query," WHERE tst_questions.CrsCod='",
-               Tst_MAX_BYTES_QUERY_TEST);
-   snprintf (CrsCodStr,sizeof (CrsCodStr),
-	     "%ld",
-	     Gbl.Hierarchy.Crs.CrsCod);
-   Str_Concat (Query,CrsCodStr,
-               Tst_MAX_BYTES_QUERY_TEST);
+   Str_Concat (Query," WHERE tst_questions.CrsCod='",Tst_MAX_BYTES_QUERY_TEST);
+   snprintf (CrsCodStr,sizeof (CrsCodStr),"%ld",Gbl.Hierarchy.Crs.CrsCod);
+   Str_Concat (Query,CrsCodStr,Tst_MAX_BYTES_QUERY_TEST);
    Str_Concat (Query,"' AND tst_questions.EditTime>=FROM_UNIXTIME('",
                Tst_MAX_BYTES_QUERY_TEST);
-   snprintf (LongStr,sizeof (LongStr),
-	     "%ld",
-	     (long) Gbl.DateRange.TimeUTC[Dat_START_TIME]);
-   Str_Concat (Query,LongStr,
-               Tst_MAX_BYTES_QUERY_TEST);
+   snprintf (LongStr,sizeof (LongStr),"%ld",
+             (long) Gbl.DateRange.TimeUTC[Dat_START_TIME]);
+   Str_Concat (Query,LongStr,Tst_MAX_BYTES_QUERY_TEST);
    Str_Concat (Query,"') AND tst_questions.EditTime<=FROM_UNIXTIME('",
                Tst_MAX_BYTES_QUERY_TEST);
-   snprintf (LongStr,sizeof (LongStr),
-	     "%ld",
+   snprintf (LongStr,sizeof (LongStr),"%ld",
 	     (long) Gbl.DateRange.TimeUTC[Dat_END_TIME]);
-   Str_Concat (Query,LongStr,
-               Tst_MAX_BYTES_QUERY_TEST);
-   Str_Concat (Query,"')",
-               Tst_MAX_BYTES_QUERY_TEST);
+   Str_Concat (Query,LongStr,Tst_MAX_BYTES_QUERY_TEST);
+   Str_Concat (Query,"')",Tst_MAX_BYTES_QUERY_TEST);
 
    /* Add the tags selected */
    if (!Test->Tags.All)
@@ -1793,10 +1775,8 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
 	                " AND tst_question_tags.TagCod=tst_tags.TagCod"
                         " AND tst_tags.CrsCod='",
                   Tst_MAX_BYTES_QUERY_TEST);
-      Str_Concat (Query,CrsCodStr,
-                  Tst_MAX_BYTES_QUERY_TEST);
-      Str_Concat (Query,"'",
-                  Tst_MAX_BYTES_QUERY_TEST);
+      Str_Concat (Query,CrsCodStr,Tst_MAX_BYTES_QUERY_TEST);
+      Str_Concat (Query,"'",Tst_MAX_BYTES_QUERY_TEST);
       LengthQuery = strlen (Query);
       NumItemInList = 0;
       Ptr = Test->Tags.List;
@@ -1810,14 +1790,11 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
                      NumItemInList ? " OR tst_tags.TagTxt='" :
                                      " AND (tst_tags.TagTxt='",
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,TagText,
-                     Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,"'",
-                     Tst_MAX_BYTES_QUERY_TEST);
+         Str_Concat (Query,TagText,Tst_MAX_BYTES_QUERY_TEST);
+         Str_Concat (Query,"'",Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Query,")",
-                  Tst_MAX_BYTES_QUERY_TEST);
+      Str_Concat (Query,")",Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* Add the types of answer selected */
@@ -1837,19 +1814,15 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
                      NumItemInList ? " OR tst_questions.AnsType='" :
                                      " AND (tst_questions.AnsType='",
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,Tst_StrAnswerTypesDB[AnsType],
-                     Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,"'",
-                     Tst_MAX_BYTES_QUERY_TEST);
+         Str_Concat (Query,Tst_StrAnswerTypesDB[AnsType],Tst_MAX_BYTES_QUERY_TEST);
+         Str_Concat (Query,"'",Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Query,")",
-                  Tst_MAX_BYTES_QUERY_TEST);
+      Str_Concat (Query,")",Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* End the query */
-   Str_Concat (Query," GROUP BY tst_questions.QstCod",
-               Tst_MAX_BYTES_QUERY_TEST);
+   Str_Concat (Query," GROUP BY tst_questions.QstCod",Tst_MAX_BYTES_QUERY_TEST);
 
    switch (Test->SelectedOrder)
      {
@@ -1915,7 +1888,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
       Lay_ShowErrorAndExit ("Wrong number of questions.");
 
    /***** Allocate space for query *****/
-   if ((Query = (char *) malloc (Tst_MAX_BYTES_QUERY_TEST + 1)) == NULL)
+   if ((Query = malloc (Tst_MAX_BYTES_QUERY_TEST + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Select questions without hidden tags *****/
@@ -1957,14 +1930,11 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
                      NumItemInList ? " OR tst_tags.TagTxt='" :
                                      " AND (tst_tags.TagTxt='",
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,TagText,
-                     Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,"'",
-                     Tst_MAX_BYTES_QUERY_TEST);
+         Str_Concat (Query,TagText,Tst_MAX_BYTES_QUERY_TEST);
+         Str_Concat (Query,"'",Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Query,")",
-                  Tst_MAX_BYTES_QUERY_TEST);
+      Str_Concat (Query,")",Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* Add answer types selected */
@@ -1984,24 +1954,17 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
                      NumItemInList ? " OR tst_questions.AnsType='" :
                                      " AND (tst_questions.AnsType='",
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,Tst_StrAnswerTypesDB[AnswerType],
-                     Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,"'",
-                     Tst_MAX_BYTES_QUERY_TEST);
+         Str_Concat (Query,Tst_StrAnswerTypesDB[AnswerType],Tst_MAX_BYTES_QUERY_TEST);
+         Str_Concat (Query,"'",Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Query,")",
-                  Tst_MAX_BYTES_QUERY_TEST);
+      Str_Concat (Query,")",Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* End query */
-   Str_Concat (Query," ORDER BY RAND() LIMIT ",
-               Tst_MAX_BYTES_QUERY_TEST);
-   snprintf (StrNumQsts,sizeof (StrNumQsts),
-	     "%u",
-	     Test->NumQsts);
-   Str_Concat (Query,StrNumQsts,
-               Tst_MAX_BYTES_QUERY_TEST);
+   Str_Concat (Query," ORDER BY RAND() LIMIT ",Tst_MAX_BYTES_QUERY_TEST);
+   snprintf (StrNumQsts,sizeof (StrNumQsts),"%u",Test->NumQsts);
+   Str_Concat (Query,StrNumQsts,Tst_MAX_BYTES_QUERY_TEST);
 /*
    if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
       Lay_ShowAlert (Lay_INFO,Query);
@@ -2115,12 +2078,10 @@ void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
       if (ErrorInIndex)
          Lay_ShowErrorAndExit ("Wrong index of answer.");
 
-      if (NumOpt == 0)
-	 snprintf (StrInd,sizeof (StrInd),"%u",Index);
-      else
-	 snprintf (StrInd,sizeof (StrInd),",%u",Index);
+      snprintf (StrInd,sizeof (StrInd),NumOpt ? ",%u" :
+						"%u",Index);
       Str_Concat (PrintedQuestion->StrIndexes,StrInd,
-                  Tst_MAX_BYTES_INDEXES_ONE_QST);
+                  sizeof (PrintedQuestion->StrIndexes) - 1);
      }
 
    /***** Free structure that stores the query result *****/
@@ -2920,9 +2881,7 @@ void Tst_WriteParamQstCod (unsigned NumQst,long QstCod)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
-   snprintf (StrAns,sizeof (StrAns),
-	     "Qst%010u",
-	     NumQst);
+   snprintf (StrAns,sizeof (StrAns),"Qst%010u",NumQst);
    Par_PutHiddenParamLong (NULL,StrAns,QstCod);
   }
 
@@ -3011,7 +2970,7 @@ static bool Tst_GetParamsTst (struct Tst_Test *Test,
    Test->Tags.All = Par_GetParToBool ("AllTags");
 
    /* Get the tags */
-   if ((Test->Tags.List = (char *) malloc (Tag_MAX_BYTES_TAGS_LIST + 1)) == NULL)
+   if ((Test->Tags.List = malloc (Tag_MAX_BYTES_TAGS_LIST + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
    Par_GetParMultiToText ("ChkTag",Test->Tags.List,Tag_MAX_BYTES_TAGS_LIST);
 
@@ -3044,8 +3003,7 @@ static bool Tst_GetParamsTst (struct Tst_Test *Test,
       case Tst_SELECT_QUESTIONS_FOR_GAME:
 	 /* The unique allowed type of answer in a game is unique choice */
 	 Test->AnswerTypes.All = false;
-	 snprintf (Test->AnswerTypes.List,sizeof (Test->AnswerTypes.List),
-	           "%u",
+	 snprintf (Test->AnswerTypes.List,sizeof (Test->AnswerTypes.List),"%u",
 		   (unsigned) Tst_ANS_UNIQUE_CHOICE);
 	 break;
       default:
@@ -3349,9 +3307,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
 
       /***** Input of a new tag *****/
       HTM_TD_Begin ("class=\"RM\"");
-      snprintf (StrTagTxt,sizeof (StrTagTxt),
-		"TagTxt%u",
-		IndTag);
+      snprintf (StrTagTxt,sizeof (StrTagTxt),"TagTxt%u",IndTag);
       HTM_INPUT_TEXT (StrTagTxt,Tag_MAX_CHARS_TAG,Question->Tags.Txt[IndTag],
                       HTM_DONT_SUBMIT_ON_CHANGE,
 		      "id=\"%s\" class=\"TAG_TXT\" onchange=\"changeSelTag('%u')\"",
@@ -3435,9 +3391,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
    HTM_TD_Begin ("class=\"LT\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_Integer_number);
-   snprintf (StrInteger,sizeof (StrInteger),
-	     "%ld",
-	     Question->Answer.Integer);
+   snprintf (StrInteger,sizeof (StrInteger),"%ld",Question->Answer.Integer);
    HTM_INPUT_TEXT ("AnsInt",Cns_MAX_DECIMAL_DIGITS_LONG,StrInteger,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"11\" required=\"required\"%s",
@@ -3643,8 +3597,7 @@ static void Tst_PutFloatInputField (const char *Label,const char *Field,
 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtF ("%s&nbsp;",Label);
-   snprintf (StrDouble,sizeof (StrDouble),
-	     "%.15lg",
+   snprintf (StrDouble,sizeof (StrDouble),"%.15lg",
 	     Question->Answer.FloatingPoint[Index]);
    HTM_INPUT_TEXT (Field,Tst_MAX_BYTES_FLOAT_ANSWER,StrDouble,
                    HTM_DONT_SUBMIT_ON_CHANGE,
@@ -3690,11 +3643,11 @@ void Tst_QstConstructor (struct Tst_Question *Question)
    Question->EditTime = (time_t) 0;
 
    /***** Allocate memory for stem and feedback *****/
-   if ((Question->Stem = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Question->Stem = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
    Question->Stem[0] = '\0';
 
-   if ((Question->Feedback = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Question->Feedback = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
    Question->Feedback[0] = '\0';
 
@@ -3760,14 +3713,14 @@ void Tst_QstDestructor (struct Tst_Question *Question)
 bool Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt)
   {
    if ((Question->Answer.Options[NumOpt].Text =
-	(char *) malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
+	malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
       Ale_CreateAlert (Ale_ERROR,NULL,
 		       "Not enough memory to store answer.");
       return false;
      }
    if ((Question->Answer.Options[NumOpt].Feedback =
-	(char *) malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
+	malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
       Ale_CreateAlert (Ale_ERROR,NULL,
 		       "Not enough memory to store feedback.");
@@ -3919,15 +3872,13 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
       Question->Stem[0] = '\0';
       if (row[3])
 	 if (row[3][0])
-	    Str_Copy (Question->Stem,row[3],
-		      Cns_MAX_BYTES_TEXT);
+	    Str_Copy (Question->Stem,row[3],Cns_MAX_BYTES_TEXT);
 
       /* Get the feedback (row[4]) */
       Question->Feedback[0] = '\0';
       if (row[4])
 	 if (row[4][0])
-	    Str_Copy (Question->Feedback,row[4],
-		      Cns_MAX_BYTES_TEXT);
+	    Str_Copy (Question->Feedback,row[4],Cns_MAX_BYTES_TEXT);
 
       /* Get media (row[5]) */
       Question->Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
@@ -3962,7 +3913,7 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
 	{
 	 row = mysql_fetch_row (mysql_res);
 	 Str_Copy (Question->Tags.Txt[NumRow],row[0],
-		   Tag_MAX_BYTES_TAG);
+	           sizeof (Question->Tags.Txt[NumRow]) - 1);
 	}
 
       /* Free structure that stores the query result */
@@ -4164,8 +4115,7 @@ void Tst_ReceiveQst (void)
       Tst_InsertOrUpdateQstTagsAnsIntoDB (&Test.Question);
 
       /***** Show the question just inserted in the database *****/
-      snprintf (Test.AnswerTypes.List,sizeof (Test.AnswerTypes.List),
-		"%u",
+      snprintf (Test.AnswerTypes.List,sizeof (Test.AnswerTypes.List),"%u",
 		(unsigned) Test.Question.Answer.Type);
       Tst_ListOneQstToEdit (&Test);
      }
@@ -4217,9 +4167,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
 	NumTag < Tag_MAX_TAGS_PER_QUESTION;
 	NumTag++)
      {
-      snprintf (TagStr,sizeof (TagStr),
-	        "TagTxt%u",
-		NumTag);
+      snprintf (TagStr,sizeof (TagStr),"TagTxt%u",NumTag);
       Par_GetParToText (TagStr,Question->Tags.Txt[NumTag],Tag_MAX_BYTES_TAG);
 
       if (Question->Tags.Txt[NumTag][0])
@@ -4303,9 +4251,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
 	       Ale_ShowAlertsAndExit ();
 
             /* Get answer */
-            snprintf (AnsStr,sizeof (AnsStr),
-        	      "AnsStr%u",
-		      NumOpt);
+            snprintf (AnsStr,sizeof (AnsStr),"AnsStr%u",NumOpt);
 	    Par_GetParToHTML (AnsStr,Question->Answer.Options[NumOpt].Text,
 	                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 	    if (Question->Answer.Type == Tst_ANS_TEXT)
@@ -4314,9 +4260,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
                Str_ReplaceSeveralSpacesForOne (Question->Answer.Options[NumOpt].Text);
 
             /* Get feedback */
-            snprintf (FbStr,sizeof (FbStr),
-        	      "FbStr%u",
-		      NumOpt);
+            snprintf (FbStr,sizeof (FbStr),"FbStr%u",NumOpt);
 	    Par_GetParToHTML (FbStr,Question->Answer.Options[NumOpt].Feedback,
 	                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 

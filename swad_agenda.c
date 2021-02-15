@@ -170,9 +170,7 @@ void Agd_PutParamAgd (void)
   {
    char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
-   snprintf (Nickname,sizeof (Nickname),
-	     "@%s",
-	     Gbl.Usrs.Other.UsrDat.Nickname);
+   snprintf (Nickname,sizeof (Nickname),"@%s",Gbl.Usrs.Other.UsrDat.Nickname);
    Par_PutHiddenParamString (NULL,"agd",Nickname);
   }
 
@@ -411,12 +409,12 @@ void Agd_ShowUsrAgenda (void)
 	 if (ItsMe)
 	    Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
 						     Gbl.Usrs.Me.UsrDat.FullName),
-			  Agd_PutIconsMyPublicAgenda,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
+			  Agd_PutIconsMyPublicAgenda,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
 	 else
 	    Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
 						     Gbl.Usrs.Other.UsrDat.FullName),
-			  Agd_PutIconsOtherPublicAgenda,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+			  Agd_PutIconsOtherPublicAgenda,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
          Str_FreeString ();
 
@@ -463,12 +461,12 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    if (ItsMe)
 	       Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
 							Gbl.Usrs.Me.UsrDat.FullName),
-			     Agd_PutIconToViewEditMyFullAgenda,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
+			     Agd_PutIconToViewEditMyFullAgenda,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 			     Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
 	    else
 	       Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
 							Gbl.Usrs.Other.UsrDat.FullName),
-			     Agd_PutIconsOtherPublicAgenda,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+			     Agd_PutIconsOtherPublicAgenda,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 			     Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
             Str_FreeString ();
 
@@ -650,7 +648,7 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
 	 case Agd_ANOTHER_AGENDA_TODAY:
 	 case Agd_ANOTHER_AGENDA:
 	    Frm_StartForm (ActSeeUsrAgd);
-	    Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	    Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
             Pag_PutHiddenParamPagNum (Pag_ANOTHER_AGENDA,Agenda->CurrentPage);
 	    break;
 	}
@@ -723,10 +721,8 @@ static void Agd_PutIconToShowQR (void)
    char URL[Cns_MAX_BYTES_WWW + 1];
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
-   snprintf (URL,sizeof (URL),
-	     "%s/%s?agd=@%s",
-             Cfg_URL_SWAD_CGI,
-             Lan_STR_LANG_ID[Gbl.Prefs.Language],
+   snprintf (URL,sizeof (URL),"%s/%s?agd=@%s",
+             Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language],
              Gbl.Usrs.Me.UsrDat.Nickname);
    QR_PutLinkToPrintQRCode (ActPrnAgdQR,
                             QR_PutParamQRString,URL);
@@ -1047,9 +1043,9 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
                                Agd_AgendaType_t AgendaType)
   {
    char *UsrSubQuery;
-   char Past__FutureEventsSubQuery[Agd_MAX_BYTES_SUBQUERY];
-   char PrivatPublicEventsSubQuery[Agd_MAX_BYTES_SUBQUERY];
-   char HiddenVisiblEventsSubQuery[Agd_MAX_BYTES_SUBQUERY];
+   char Past__FutureEventsSubQuery[Agd_MAX_BYTES_SUBQUERY + 1];
+   char PrivatPublicEventsSubQuery[Agd_MAX_BYTES_SUBQUERY + 1];
+   char HiddenVisiblEventsSubQuery[Agd_MAX_BYTES_SUBQUERY + 1];
    static const char *OrderBySubQuery[Dat_NUM_START_END_TIME] =
      {
       [Dat_START_TIME] = "StartTime,EndTime,Event,Location",
@@ -1083,19 +1079,19 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
 	       Str_Copy (Past__FutureEventsSubQuery,
 			 " AND DATE(StartTime)<=CURDATE()"
 			 " AND DATE(EndTime)>=CURDATE()",
-			 Agd_MAX_BYTES_SUBQUERY);	// Today events
+			 sizeof (Past__FutureEventsSubQuery) - 1);	// Today events
 	    else
 	       switch (Agenda->Past__FutureEvents)
 		 {
 		  case (1 << Agd_PAST___EVENTS):
 		     Str_Copy (Past__FutureEventsSubQuery,
 			       " AND DATE(StartTime)<=CURDATE()",
-			       Agd_MAX_BYTES_SUBQUERY);	// Past and today events
+			       sizeof (Past__FutureEventsSubQuery) - 1);	// Past and today events
 		     break;
 		  case (1 << Agd_FUTURE_EVENTS):
 		     Str_Copy (Past__FutureEventsSubQuery,
 			       " AND DATE(EndTime)>=CURDATE()",
-			       Agd_MAX_BYTES_SUBQUERY);	// Today and future events
+			       sizeof (Past__FutureEventsSubQuery) - 1);	// Today and future events
 		     break;
 		  default:
 		     Past__FutureEventsSubQuery[0] = '\0';	// All events
@@ -1105,11 +1101,11 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
 	      {
 	       case (1 << Agd_PRIVAT_EVENTS):
 		  Str_Copy (PrivatPublicEventsSubQuery," AND Public='N'",
-		            Agd_MAX_BYTES_SUBQUERY);	// Private events
+		            sizeof (PrivatPublicEventsSubQuery) - 1);	// Private events
 		  break;
 	       case (1 << Agd_PUBLIC_EVENTS):
 		  Str_Copy (PrivatPublicEventsSubQuery," AND Public='Y'",
-		            Agd_MAX_BYTES_SUBQUERY);	// Public events
+		            sizeof (PrivatPublicEventsSubQuery) - 1);	// Public events
 		  break;
 	       default:
 		  PrivatPublicEventsSubQuery[0] = '\0';	// All events
@@ -1119,11 +1115,11 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
 	      {
 	       case (1 << Agd_HIDDEN_EVENTS):
 		  Str_Copy (HiddenVisiblEventsSubQuery," AND Hidden='Y'",
-		            Agd_MAX_BYTES_SUBQUERY);	// Hidden events
+		            sizeof (HiddenVisiblEventsSubQuery) - 1);	// Hidden events
 		  break;
 	       case (1 << Agd_VISIBL_EVENTS):
 		  Str_Copy (HiddenVisiblEventsSubQuery," AND Hidden='N'",
-		            Agd_MAX_BYTES_SUBQUERY);	// Visible events
+		            sizeof (HiddenVisiblEventsSubQuery) - 1);	// Visible events
 		  break;
 	       default:
 		  HiddenVisiblEventsSubQuery[0] = '\0';	// All events
@@ -1140,15 +1136,15 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
 	    Str_Copy (Past__FutureEventsSubQuery,
 		      " AND DATE(StartTime)<=CURDATE()"
 		      " AND DATE(EndTime)>=CURDATE()",
-		      Agd_MAX_BYTES_SUBQUERY);		// Today events
+		      sizeof (Past__FutureEventsSubQuery) - 1);		// Today events
 	 else
 	    Str_Copy (Past__FutureEventsSubQuery,
 		      " AND DATE(EndTime)>=CURDATE()",
-		      Agd_MAX_BYTES_SUBQUERY);		// Today and future events
+		      sizeof (Past__FutureEventsSubQuery) - 1);		// Today and future events
 	 Str_Copy (PrivatPublicEventsSubQuery," AND Public='Y'",
-	           Agd_MAX_BYTES_SUBQUERY);		// Public events
+	           sizeof (PrivatPublicEventsSubQuery) - 1);		// Public events
 	 Str_Copy (HiddenVisiblEventsSubQuery," AND Hidden='N'",
-	           Agd_MAX_BYTES_SUBQUERY);		// Visible events
+	           sizeof (HiddenVisiblEventsSubQuery) - 1);		// Visible events
      }
 
    if (DoQuery)
@@ -1172,7 +1168,8 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
 	 Agenda->Num = (unsigned) NumRows;
 
 	 /***** Create list of events *****/
-	 if ((Agenda->LstAgdCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
+	 if ((Agenda->LstAgdCods = calloc (NumRows,
+	                                   sizeof (*Agenda->LstAgdCods))) == NULL)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the events codes *****/
@@ -1251,12 +1248,10 @@ static void Agd_GetDataOfEventByCod (struct Agd_Event *AgdEvent)
 	                	                   Dat_PRESENT));
 
       /* Get the event (row[7]) */
-      Str_Copy (AgdEvent->Event,row[7],
-                Agd_MAX_BYTES_EVENT);
+      Str_Copy (AgdEvent->Event   ,row[7],sizeof (AgdEvent->Event   ) - 1);
 
       /* Get the event (row[8]) */
-      Str_Copy (AgdEvent->Location,row[8],
-                Agd_MAX_BYTES_LOCATION);
+      Str_Copy (AgdEvent->Location,row[8],sizeof (AgdEvent->Location) - 1);
      }
    else
      {
@@ -1313,8 +1308,7 @@ static void Agd_GetEventTxtFromDB (struct Agd_Event *AgdEvent,
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Txt,row[0],
-                Cns_MAX_BYTES_TEXT);
+      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
      }
    else
       Txt[0] = '\0';

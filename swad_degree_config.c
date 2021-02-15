@@ -441,7 +441,7 @@ void DegCfg_ChangeDegWWW (void)
       /***** Update the table changing old WWW by new WWW *****/
       Deg_UpdateDegWWWDB (Gbl.Hierarchy.Deg.DegCod,NewWWW);
       Str_Copy (Gbl.Hierarchy.Deg.WWW,NewWWW,
-                Cns_MAX_BYTES_WWW);
+                sizeof (Gbl.Hierarchy.Deg.WWW) - 1);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,

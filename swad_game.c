@@ -30,7 +30,6 @@
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
@@ -919,7 +918,7 @@ void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
       Games->Num = (unsigned) NumRows;
 
       /***** Create list of games *****/
-      if ((Games->Lst = (struct Gam_GameSelected *) malloc (NumRows * sizeof (struct Gam_GameSelected))) == NULL)
+      if ((Games->Lst = malloc (NumRows * sizeof (*Games->Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the games codes *****/
@@ -963,7 +962,7 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
 
    /***** Allocate memory for list of games selected *****/
    MaxSizeListGamCodsSelected = Games->Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
-   if ((Games->GamCodsSelected = (char *) malloc (MaxSizeListGamCodsSelected + 1)) == NULL)
+   if ((Games->GamCodsSelected = malloc (MaxSizeListGamCodsSelected + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of games selected *****/
@@ -1062,8 +1061,7 @@ void Gam_GetDataOfGameByCod (struct Gam_Game *Game)
       Game->Visibility = TstVis_GetVisibilityFromStr (row[5]);
 
       /* Get the title of the game (row[6]) */
-      Str_Copy (Game->Title,row[6],
-                Gam_MAX_BYTES_TITLE);
+      Str_Copy (Game->Title,row[6],sizeof (Game->Title) - 1);
 
       /* Get number of questions */
       Game->NumQsts = Gam_GetNumQstsGame (Game->GamCod);
@@ -1148,8 +1146,7 @@ static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Txt,row[0],
-                Cns_MAX_BYTES_TEXT);
+      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
      }
    else
       Txt[0] = '\0';
@@ -2106,9 +2103,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 
       /* Get question index (row[0]) */
       QstInd = Str_ConvertStrToUnsigned (row[0]);
-      snprintf (StrQstInd,sizeof (StrQstInd),
-	        "%u",
-		QstInd);
+      snprintf (StrQstInd,sizeof (StrQstInd),"%u",QstInd);
 
       /* Get question code (row[1]) */
       Question.QstCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -2309,7 +2304,7 @@ static void Gam_AllocateListSelectedQuestions (struct Gam_Games *Games)
   {
    if (!Games->ListQuestions)
      {
-      if ((Games->ListQuestions = (char *) malloc (Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS + 1)) == NULL)
+      if ((Games->ListQuestions = malloc (Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
       Games->ListQuestions[0] = '\0';
      }

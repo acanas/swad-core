@@ -599,14 +599,11 @@ void Hie_InitHierarchy (void)
    if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
      {
       /***** Paths of course directories *****/
-      snprintf (Gbl.Crs.PathPriv,sizeof (Gbl.Crs.PathPriv),
-	        "%s/%ld",
+      snprintf (Gbl.Crs.PathPriv,sizeof (Gbl.Crs.PathPriv),"%s/%ld",
 	        Cfg_PATH_CRS_PRIVATE,Gbl.Hierarchy.Crs.CrsCod);
-      snprintf (Gbl.Crs.PathRelPubl,sizeof (Gbl.Crs.PathRelPubl),
-	        "%s/%ld",
+      snprintf (Gbl.Crs.PathRelPubl,sizeof (Gbl.Crs.PathRelPubl),"%s/%ld",
 	        Cfg_PATH_CRS_PUBLIC,Gbl.Hierarchy.Crs.CrsCod);
-      snprintf (Gbl.Crs.PathURLPubl,sizeof (Gbl.Crs.PathURLPubl),
-	        "%s/%ld",
+      snprintf (Gbl.Crs.PathURLPubl,sizeof (Gbl.Crs.PathURLPubl),"%s/%ld",
 	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Crs.CrsCod);
 
       /***** If any of the course directories does not exist, create it *****/

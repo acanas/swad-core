@@ -29,7 +29,6 @@
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
@@ -1022,8 +1021,7 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 
    /* Get the title of the match (row[5]) */
    if (row[5])
-      Str_Copy (Match->Title,row[5],
-		Mch_MAX_BYTES_TITLE);
+      Str_Copy (Match->Title,row[5],sizeof (Match->Title) - 1);
    else
       Match->Title[0] = '\0';
 
@@ -1878,15 +1876,12 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
       if ((LongNum = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong answer index.");
       AnsInd = (unsigned) LongNum;
-      snprintf (StrOneAnswer,sizeof (StrOneAnswer),
-		"%u",AnsInd);
+      snprintf (StrOneAnswer,sizeof (StrOneAnswer),"%u",AnsInd);
 
       /* Concatenate answer index to list of answers */
       if (NumAns)
-         Str_Concat (StrAnswersOneQst,",",
-		     Tst_MAX_BYTES_ANSWERS_ONE_QST);
-      Str_Concat (StrAnswersOneQst,StrOneAnswer,
-		  Tst_MAX_BYTES_ANSWERS_ONE_QST);
+         Str_Concat (StrAnswersOneQst,",",sizeof (StrAnswersOneQst) - 1);
+      Str_Concat (StrAnswersOneQst,StrOneAnswer,sizeof (StrAnswersOneQst) - 1);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1922,8 +1917,7 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
    row = mysql_fetch_row (mysql_res);
 
    /* Get indexes (row[0]) */
-   Str_Copy (StrIndexesOneQst,row[0],
-	     Tst_MAX_BYTES_INDEXES_ONE_QST);
+   Str_Copy (StrIndexesOneQst,row[0],sizeof (StrIndexesOneQst) - 1);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -4283,14 +4277,15 @@ void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print)
 
       /* Get indexes for this question (row[2]) */
       Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[2],
-                Tst_MAX_BYTES_INDEXES_ONE_QST);
+                sizeof (Print->PrintedQuestions[NumQst].StrIndexes) - 1);
 
       /* Get answers selected by user for this question */
       Mch_GetQstAnsFromDB (Print->MchCod,Print->UsrCod,QstInd,&UsrAnswer);
       if (UsrAnswer.AnsInd >= 0)	// UsrAnswer.AnsInd >= 0 ==> answer selected
 	{
-         snprintf (Print->PrintedQuestions[NumQst].StrAnswers,Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
-		   "%d",UsrAnswer.AnsInd);
+         snprintf (Print->PrintedQuestions[NumQst].StrAnswers,
+                   sizeof (Print->PrintedQuestions[NumQst].StrAnswers),
+                   "%d",UsrAnswer.AnsInd);
          Print->NumQsts.NotBlank++;
         }
       else				// UsrAnswer.AnsInd < 0 ==> no answer selected

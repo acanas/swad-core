@@ -192,7 +192,7 @@ static long ExaAnn_GetParamsExamAnn (struct ExaAnn_ExamAnnouncements *ExamAnns)
    // If the parameter is not present or is empty, initialize the string to the full name of the current course
    if (!ExamAnns->ExamAnn.CrsFullName[0])
       Str_Copy (ExamAnns->ExamAnn.CrsFullName,Gbl.Hierarchy.Crs.FullName,
-                Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+                sizeof (ExamAnns->ExamAnn.CrsFullName) - 1);
 
    /***** Get the year *****/
    ExamAnns->ExamAnn.Year = (unsigned)
@@ -260,25 +260,25 @@ static long ExaAnn_GetParamsExamAnn (struct ExaAnn_ExamAnnouncements *ExamAnns)
 
 static void ExaAnn_AllocMemExamAnn (struct ExaAnn_ExamAnnouncements *ExamAnns)
   {
-   if ((ExamAnns->ExamAnn.Place       = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((ExamAnns->ExamAnn.Place       = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
-   if ((ExamAnns->ExamAnn.Mode        = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((ExamAnns->ExamAnn.Mode        = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
-   if ((ExamAnns->ExamAnn.Structure   = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((ExamAnns->ExamAnn.Structure   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
-   if ((ExamAnns->ExamAnn.DocRequired = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((ExamAnns->ExamAnn.DocRequired = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
-   if ((ExamAnns->ExamAnn.MatRequired = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((ExamAnns->ExamAnn.MatRequired = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
-   if ((ExamAnns->ExamAnn.MatAllowed  = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((ExamAnns->ExamAnn.MatAllowed  = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
-   if ((ExamAnns->ExamAnn.OtherInfo   = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((ExamAnns->ExamAnn.OtherInfo   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
   }
 
@@ -896,7 +896,7 @@ void ExaAnn_CreateListExamAnns (struct ExaAnn_ExamAnnouncements *ExamAnns)
       if (NumExaAnns)
 	{
 	 /***** Allocate memory for the list *****/
-	 if ((ExamAnns->Lst = (struct ExaAnn_ExamCodeAndDate *) calloc (NumExaAnns,sizeof (struct ExaAnn_ExamCodeAndDate))) == NULL)
+	 if ((ExamAnns->Lst = calloc (NumExaAnns,sizeof (*ExamAnns->Lst))) == NULL)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the dates of the existing exam announcements *****/
@@ -984,7 +984,7 @@ static void ExaAnn_GetDataExamAnnFromDB (struct ExaAnn_ExamAnnouncements *ExamAn
 
    /* Name of the course (row[2]) */
    Str_Copy (ExamAnns->ExamAnn.CrsFullName,row[2],
-             Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+             sizeof (ExamAnns->ExamAnn.CrsFullName) - 1);
 
    /* Year (row[3]) */
    if (sscanf (row[3],"%u",&ExamAnns->ExamAnn.Year) != 1)
@@ -992,7 +992,7 @@ static void ExaAnn_GetDataExamAnnFromDB (struct ExaAnn_ExamAnnouncements *ExamAn
 
    /* Exam session (row[4]) */
    Str_Copy (ExamAnns->ExamAnn.Session,row[4],
-             ExaAnn_MAX_BYTES_SESSION);
+             sizeof (ExamAnns->ExamAnn.Session) - 1);
 
    /* Date of exam announcement (row[5]) */
    if (sscanf (row[5],"%04u-%02u-%02u %02u:%02u:%02u",
@@ -1013,8 +1013,8 @@ static void ExaAnn_GetDataExamAnnFromDB (struct ExaAnn_ExamAnnouncements *ExamAn
 	       &ExamAnns->ExamAnn.StartTime.Minute,
 	       &Second) != 6)
       Lay_ShowErrorAndExit ("Wrong date of exam.");
-   snprintf (ExamAnns->ExamAnn.ExamDate.YYYYMMDD,sizeof (ExamAnns->ExamAnn.ExamDate.YYYYMMDD),
-	     "%04u%02u%02u",
+   snprintf (ExamAnns->ExamAnn.ExamDate.YYYYMMDD,
+             sizeof (ExamAnns->ExamAnn.ExamDate.YYYYMMDD),"%04u%02u%02u",
              ExamAnns->ExamAnn.ExamDate.Year,
 	     ExamAnns->ExamAnn.ExamDate.Month,
 	     ExamAnns->ExamAnn.ExamDate.Day);
@@ -1025,31 +1025,31 @@ static void ExaAnn_GetDataExamAnnFromDB (struct ExaAnn_ExamAnnouncements *ExamAn
 
    /* Place (row[8]) */
    Str_Copy (ExamAnns->ExamAnn.Place,row[8],
-             Cns_MAX_BYTES_TEXT);
+             sizeof (ExamAnns->ExamAnn.Place) - 1);
 
    /* Exam mode (row[9]) */
    Str_Copy (ExamAnns->ExamAnn.Mode,row[9],
-             Cns_MAX_BYTES_TEXT);
+             sizeof (ExamAnns->ExamAnn.Mode) - 1);
 
    /* Structure (row[10]) */
    Str_Copy (ExamAnns->ExamAnn.Structure,row[10],
-             Cns_MAX_BYTES_TEXT);
+             sizeof (ExamAnns->ExamAnn.Structure) - 1);
 
    /* Documentation required (row[11]) */
    Str_Copy (ExamAnns->ExamAnn.DocRequired,row[11],
-             Cns_MAX_BYTES_TEXT);
+             sizeof (ExamAnns->ExamAnn.DocRequired) - 1);
 
    /* Material required (row[12]) */
    Str_Copy (ExamAnns->ExamAnn.MatRequired,row[12],
-             Cns_MAX_BYTES_TEXT);
+             sizeof (ExamAnns->ExamAnn.MatRequired) - 1);
 
    /* Material allowed (row[13]) */
    Str_Copy (ExamAnns->ExamAnn.MatAllowed,row[13],
-             Cns_MAX_BYTES_TEXT);
+             sizeof (ExamAnns->ExamAnn.MatAllowed) - 1);
 
    /* Other information for students (row[14]) */
    Str_Copy (ExamAnns->ExamAnn.OtherInfo,row[14],
-             Cns_MAX_BYTES_TEXT);
+             sizeof (ExamAnns->ExamAnn.OtherInfo) - 1);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1726,14 +1726,12 @@ void ExaAnn_GetSummaryAndContentExamAnn (char SummaryStr[Ntf_MAX_BYTES_SUMMARY +
    /***** Summary *****/
    /* Name of the course and date of exam */
    Dat_ConvDateToDateStr (&ExamAnns.ExamAnn.ExamDate,StrExamDate);
-   snprintf (CrsNameAndDate,sizeof (CrsNameAndDate),
-	     "%s, %s, %2u:%02u",
+   snprintf (CrsNameAndDate,sizeof (CrsNameAndDate),"%s, %s, %2u:%02u",
              ExamAnns.ExamAnn.CrsFullName,
              StrExamDate,
              ExamAnns.ExamAnn.StartTime.Hour,
              ExamAnns.ExamAnn.StartTime.Minute);
-   Str_Copy (SummaryStr,CrsNameAndDate,
-             Ntf_MAX_BYTES_SUMMARY);
+   Str_Copy (SummaryStr,CrsNameAndDate,Ntf_MAX_BYTES_SUMMARY);
 
    /***** Free memory of the exam announcement *****/
    ExaAnn_FreeMemExamAnn (&ExamAnns);

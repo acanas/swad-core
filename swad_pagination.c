@@ -263,7 +263,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_StartFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
                Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
                break;
             default:
                break;
@@ -390,7 +390,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_StartFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
                Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
                break;
             default:
                break;
@@ -503,7 +503,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_StartFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
                Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
                break;
             default:
                break;
@@ -628,7 +628,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Frm_StartFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
                   Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+                  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
                   break;
 	       default:
 		  break;
@@ -740,7 +740,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Frm_StartFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
 	       Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
 	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-	       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	       break;
             default:
                break;
@@ -853,7 +853,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Frm_StartFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
 	       Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
 	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-	       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	       break;
             default:
                break;

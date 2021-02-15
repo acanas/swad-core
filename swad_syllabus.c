@@ -118,7 +118,7 @@ static void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos);
 static void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreaseLevel);
 
 static void Syl_OpenSyllabusFile (const struct Syl_Syllabus *Syllabus,
-                                  char *PathFile);
+                                  char PathFile[PATH_MAX + 1]);
 
 /*****************************************************************************/
 /************************** Reset syllabus context ***************************/
@@ -371,8 +371,7 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
    unsigned NumItemsWithChildren = 0;
 
    /* Path of the private directory for the XML file with the syllabus */
-   snprintf (Syllabus->PathDir,sizeof (Syllabus->PathDir),
-	     "%s/%ld/%s",
+   snprintf (Syllabus->PathDir,sizeof (Syllabus->PathDir),"%s/%ld/%s",
 	     Cfg_PATH_CRS_PRIVATE,CrsCod,
 	     Syllabus->WhichSyllabus == Syl_LECTURES ? Cfg_SYLLABUS_FOLDER_LECTURES :
 		                                       Cfg_SYLLABUS_FOLDER_PRACTICALS);
@@ -393,8 +392,8 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
 	Syl_LstItemsSyllabus.NumItems++);
 
    /***** Allocate memory for the list of items *****/
-   if ((Syl_LstItemsSyllabus.Lst = (struct ItemSyllabus *) calloc (Syl_LstItemsSyllabus.NumItems + 1,
-                                                                   sizeof (struct ItemSyllabus))) == NULL)
+   if ((Syl_LstItemsSyllabus.Lst = calloc (Syl_LstItemsSyllabus.NumItems + 1,
+                                           sizeof (*Syl_LstItemsSyllabus.Lst))) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Return to the start of the list *****/
@@ -907,17 +906,13 @@ static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem)
       if (N > 1)
 	{
 	 if (StrDst)
-	    Str_Concat (StrDst,".",
-	                Syl_MAX_BYTES_ITEM_COD);
+	    Str_Concat (StrDst,".",Syl_MAX_BYTES_ITEM_COD);
 	 if (FileTgt)
 	    fprintf (FileTgt,".");
 	}
-      snprintf (InStr,sizeof (InStr),
-	        "%d",
-		CodItem[N]);
+      snprintf (InStr,sizeof (InStr),"%d",CodItem[N]);
       if (StrDst)
-	 Str_Concat (StrDst,InStr,
-	             Syl_MAX_BYTES_ITEM_COD);
+	 Str_Concat (StrDst,InStr,Syl_MAX_BYTES_ITEM_COD);
       if (FileTgt)
 	 fprintf (FileTgt,"%s",InStr);
      }
@@ -1379,15 +1374,12 @@ void Syl_ModifyItemSyllabus (void)
 /*****************************************************************************/
 
 void Syl_BuildPathFileSyllabus (const struct Syl_Syllabus *Syllabus,
-                                char *PathFile)
+                                char PathFile[PATH_MAX + 1])
   {
    char Path[PATH_MAX + 1 + NAME_MAX + 1];
 
-   snprintf (Path,sizeof (Path),
-	     "%s/%s",
-	     Syllabus->PathDir,Cfg_SYLLABUS_FILENAME);
-   Str_Copy (PathFile,Path,
-	     PATH_MAX);
+   snprintf (Path,sizeof (Path),"%s/%s",Syllabus->PathDir,Cfg_SYLLABUS_FILENAME);
+   Str_Copy (PathFile,Path,PATH_MAX);
   }
 
 /*****************************************************************************/
@@ -1395,7 +1387,7 @@ void Syl_BuildPathFileSyllabus (const struct Syl_Syllabus *Syllabus,
 /*****************************************************************************/
 
 static void Syl_OpenSyllabusFile (const struct Syl_Syllabus *Syllabus,
-                                  char *PathFile)
+                                  char PathFile[PATH_MAX + 1])
   {
    if (Gbl.F.XML == NULL) // If it's not open in this moment...
      {

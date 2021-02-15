@@ -543,8 +543,9 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
 	    Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;	// Course assignments
-	    Str_Copy (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
-		      Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+	    Str_Copy (Gbl.Usrs.Other.UsrDat.EnUsrCod,
+	              Gbl.Usrs.Me.UsrDat.EnUsrCod,
+		      sizeof (Gbl.Usrs.Other.UsrDat.EnUsrCod) - 1);
 	    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
 	    Frm_StartForm (ActFrmCreAsgCrs);
 	    break;
@@ -552,10 +553,11 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
             Rol_WrongRoleExit ();
 	    break;
         }
-      Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-   	        PATH_MAX);
+      Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,
+                Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+   	        sizeof (Gbl.FileBrowser.FilFolLnk.Path) - 1);
       Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,Asg->Folder,
-   	        NAME_MAX);
+   	        sizeof (Gbl.FileBrowser.FilFolLnk.Name) - 1);
       Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
       Ico_PutIconLink ("folder-open-yellow-plus.png",
@@ -720,7 +722,8 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
       Assignments->Num = (unsigned) NumRows;
 
       /***** Create list of assignments *****/
-      if ((Assignments->LstAsgCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
+      if ((Assignments->LstAsgCods = calloc (NumRows,
+                                             sizeof (*Assignments->LstAsgCods))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the assignments codes *****/
@@ -863,12 +866,10 @@ static void Asg_GetDataOfAssignment (struct Asg_Assignment *Asg,
       Asg->Open = (row[5][0] == '1');
 
       /* Get the title of the assignment (row[6]) */
-      Str_Copy (Asg->Title,row[6],
-                Asg_MAX_BYTES_ASSIGNMENT_TITLE);
+      Str_Copy (Asg->Title ,row[6],sizeof (Asg->Title ) - 1);
 
       /* Get the folder for the assignment files (row[7]) */
-      Str_Copy (Asg->Folder,row[7],
-                Brw_MAX_BYTES_FOLDER);
+      Str_Copy (Asg->Folder,row[7],sizeof (Asg->Folder) - 1);
       Asg->SendWork = (Asg->Folder[0] != '\0');
 
       /* Can I do this assignment? */
@@ -937,8 +938,7 @@ static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT 
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Txt,row[0],
-                Cns_MAX_BYTES_TEXT);
+      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
      }
    else
       Txt[0] = '\0';
@@ -979,17 +979,15 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       row = mysql_fetch_row (mysql_res);
 
       /***** Get summary *****/
-      Str_Copy (SummaryStr,row[0],
-		Ntf_MAX_BYTES_SUMMARY);
+      Str_Copy (SummaryStr,row[0],Ntf_MAX_BYTES_SUMMARY);
 
       /***** Get content *****/
       if (GetContent)
 	{
 	 Length = strlen (row[1]);
-	 if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
-	    Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-	 Str_Copy (*ContentStr,row[1],
-		   Length);
+	 if ((*ContentStr = malloc (Length + 1)) == NULL)
+            Lay_NotEnoughMemoryExit ();
+	 Str_Copy (*ContentStr,row[1],Length);
 	}
      }
 

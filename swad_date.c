@@ -309,8 +309,7 @@ bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDD)
       if (YYYYMMDD[0])
 	 if (sscanf (YYYYMMDD,"%04u%02u%02u",&(Date->Year),&(Date->Month),&(Date->Day)) == 3)
 	   {
-	    Str_Copy (Date->YYYYMMDD,YYYYMMDD,
-	              Dat_LENGTH_YYYYMMDD);
+	    Str_Copy (Date->YYYYMMDD,YYYYMMDD,sizeof (Date->YYYYMMDD) - 1);
 	    return true;
 	   }
 
@@ -415,22 +414,19 @@ void Dat_ConvDateToDateStr (const struct Date *Date,char StrDate[Cns_MAX_BYTES_D
       switch (Gbl.Prefs.DateFormat)
         {
 	 case Dat_FORMAT_YYYY_MM_DD:
-	    snprintf (StrDate,Cns_MAX_BYTES_DATE + 1,
-		      "%04u-%02u-%02u",
+	    snprintf (StrDate,Cns_MAX_BYTES_DATE + 1,"%04u-%02u-%02u",
 		      Date->Year,
 		      Date->Month,
 		      Date->Day);
 	    break;
 	 case Dat_FORMAT_DD_MONTH_YYYY:
-	    snprintf (StrDate,Cns_MAX_BYTES_DATE + 1,
-		      "%u&nbsp;%s&nbsp;%04u",
+	    snprintf (StrDate,Cns_MAX_BYTES_DATE + 1,"%u&nbsp;%s&nbsp;%04u",
 		      Date->Day,
 		      Txt_MONTHS_SMALL_SHORT[Date->Month - 1],
 		      Date->Year);
 	    break;
 	 case Dat_FORMAT_MONTH_DD_YYYY:
-	    snprintf (StrDate,Cns_MAX_BYTES_DATE + 1,
-		      "%s&nbsp;%u,&nbsp;%04u",
+	    snprintf (StrDate,Cns_MAX_BYTES_DATE + 1,"%s&nbsp;%u,&nbsp;%04u",
 		      Txt_MONTHS_SMALL_SHORT[Date->Month - 1],
 		      Date->Day,
 		      Date->Year);
@@ -831,13 +827,11 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1])
       /* Convert from minutes to +-hh:mm */
       // BrowserTimeZone must have space for strings in +hh:mm format (6 chars + \0)
       if (ClientUTCMinusLocal > 0)
-	 snprintf (BrowserTimeZone,Dat_MAX_BYTES_TIME_ZONE + 1,
-	           "-%02u:%02u",
+	 snprintf (BrowserTimeZone,Dat_MAX_BYTES_TIME_ZONE + 1,"-%02u:%02u",
 		   (unsigned) ClientUTCMinusLocal / 60,
 		   (unsigned) ClientUTCMinusLocal % 60);
       else	// ClientUTCMinusLocal <= 0
-	 snprintf (BrowserTimeZone,Dat_MAX_BYTES_TIME_ZONE + 1,
-	           "+%02u:%02u",
+	 snprintf (BrowserTimeZone,Dat_MAX_BYTES_TIME_ZONE + 1,"+%02u:%02u",
 		   (unsigned) (-ClientUTCMinusLocal) / 60,
 		   (unsigned) (-ClientUTCMinusLocal) % 60);
      }
@@ -1577,7 +1571,7 @@ void Dat_AssignDate (struct Date *DateDst,struct Date *DateSrc)
    DateDst->Day   = DateSrc->Day;
    DateDst->Week  = DateSrc->Week;
    Str_Copy (DateDst->YYYYMMDD,DateSrc->YYYYMMDD,
-             Dat_LENGTH_YYYYMMDD);
+             sizeof (DateDst->YYYYMMDD) - 1);
   }
 
 /*****************************************************************************/

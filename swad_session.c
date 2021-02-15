@@ -28,7 +28,6 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For sprintf
-#include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions
 
 #include "swad_connected.h"
@@ -80,8 +79,7 @@ void Ses_GetNumSessions (void)
 void Ses_CreateSession (void)
   {
    /***** Create a unique name for the session *****/
-   Str_Copy (Gbl.Session.Id,Gbl.UniqueNameEncrypted,
-             Cns_BYTES_SESSION_ID);
+   Str_Copy (Gbl.Session.Id,Gbl.UniqueNameEncrypted,sizeof (Gbl.Session.Id) - 1);
 
    /***** Check that session is not open *****/
    if (Ses_CheckIfSessionExists (Gbl.Session.Id))
@@ -288,7 +286,7 @@ bool Ses_GetSessionData (void)
 
       /***** Get password (row[1]) *****/
       Str_Copy (Gbl.Usrs.Me.LoginEncryptedPassword,row[1],
-                Pwd_BYTES_ENCRYPTED_PASSWORD);
+                sizeof (Gbl.Usrs.Me.LoginEncryptedPassword) - 1);
 
       /***** Get logged user type (row[2]) *****/
       if (sscanf (row[2],"%u",&Gbl.Usrs.Me.Role.FromSession) != 1)
@@ -321,8 +319,7 @@ bool Ses_GetSessionData (void)
 	    Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
 	 /* Get search string (row[9]) */
-	 Str_Copy (Gbl.Search.Str,row[9],
-	           Sch_MAX_BYTES_STRING_TO_FIND);
+	 Str_Copy (Gbl.Search.Str,row[9],sizeof (Gbl.Search.Str) - 1);
 	}
 
       Result = true;
@@ -440,8 +437,7 @@ void Ses_GetHiddenParFromDB (const char *ParamName,char *ParamValue,
 
          ParameterIsTooBig = (strlen (row[0]) > MaxBytes);
          if (!ParameterIsTooBig)
-	    Str_Copy (ParamValue,row[0],
-		      MaxBytes);
+	    Str_Copy (ParamValue,row[0],MaxBytes);
         }
 
       /***** Free structure that stores the query result *****/

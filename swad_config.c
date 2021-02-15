@@ -86,7 +86,7 @@ void Cfg_GetConfigFromFile (void)
    fseek (FileCfg,0L,SEEK_SET);
 
    /* Allocate memory for buffer */
-   if ((Config = (char *) malloc (Length + 1)) == NULL)
+   if ((Config = malloc (Length + 1)) == NULL)
      {
       fclose (FileCfg);
       Lay_NotEnoughMemoryExit ();

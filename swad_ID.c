@@ -121,7 +121,7 @@ void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
 
 	    /* Get ID from row[0] */
             Str_Copy (UsrDat->IDs.List[NumID].ID,row[0],
-                      ID_MAX_BYTES_USR_ID);
+                      sizeof (UsrDat->IDs.List[NumID].ID) - 1);
 
             /* Get if ID is confirmed from row[1] */
             UsrDat->IDs.List[NumID].Confirmed = (row[1][0] == 'Y');
@@ -146,7 +146,7 @@ void ID_ReallocateListIDs (struct UsrData *UsrDat,unsigned NumIDs)
    UsrDat->IDs.Num = NumIDs;
 
    /***** Allocate space for the list *****/
-   if ((UsrDat->IDs.List = (struct ListIDs *) malloc (NumIDs * sizeof (struct ListIDs))) == NULL)
+   if ((UsrDat->IDs.List = malloc (NumIDs * sizeof (*UsrDat->IDs.List))) == NULL)
       Lay_NotEnoughMemoryExit ();
   }
 
@@ -193,7 +193,7 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
 
       /***** Allocate memory for subquery string *****/
       MaxLength = 512 + UsrDat->IDs.Num * (1 + ID_MAX_BYTES_USR_ID + 1) - 1;
-      if ((SubQueryAllUsrs = (char *) malloc (MaxLength + 1)) == NULL)
+      if ((SubQueryAllUsrs = malloc (MaxLength + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
       SubQueryAllUsrs[0] = '\0';
 
@@ -203,12 +203,10 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
 	   NumID++)
 	{
 	 if (NumID)
-	    Str_Concat (SubQueryAllUsrs,",",
-	                MaxLength);
+	    Str_Concat (SubQueryAllUsrs,",",MaxLength);
 	 sprintf (SubQueryOneUsr,"'%s'",UsrDat->IDs.List[NumID].ID);
 
-	 Str_Concat (SubQueryAllUsrs,SubQueryOneUsr,
-	             MaxLength);
+	 Str_Concat (SubQueryAllUsrs,SubQueryOneUsr,MaxLength);
 	}
 
       if (CheckPassword)
@@ -435,7 +433,7 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
          if (!UsrDat->Password[0] &&	// User has no password (never logged)
 	     !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
 	     !UsrDat->Surname2[0] &&	// and who has no surname 2 (nobody filled user's surname 2)
-	     !UsrDat->FirstName[0] &&	// and who has no first name (nobody filled user's first name)
+	     !UsrDat->FrstName[0] &&	// and who has no first name (nobody filled user's first name)
              !UsrDat->Email[0])		// and who has no email (nobody filled user's email)
             return true;
 
@@ -491,7 +489,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
 	    break;
 	}
      }
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    Par_PutHiddenParamString (NULL,"UsrID",UsrDat->IDs.List[NumID].ID);
 
    /***** Put link *****/
@@ -517,9 +515,7 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
    /***** Begin box *****/
-   snprintf (StrRecordWidth,sizeof (StrRecordWidth),
-	     "%upx",
-	     Rec_RECORD_WIDTH);
+   snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
    Box_BoxBegin (StrRecordWidth,Txt_ID,
                  Acc_PutLinkToRemoveMyAccount,NULL,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
@@ -549,9 +545,7 @@ void ID_ShowFormChangeOtherUsrID (void)
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
    /***** Begin box *****/
-   snprintf (StrRecordWidth,sizeof (StrRecordWidth),
-	     "%upx",
-	     Rec_RECORD_WIDTH);
+   snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
    Box_BoxBegin (StrRecordWidth,Txt_ID,
                  NULL,NULL,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
@@ -704,7 +698,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 	       break;
 	   }
 	 Frm_StartFormAnchor (NextAction,ID_ID_SECTION_ID);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	}
       HTM_INPUT_TEXT ("NewID",ID_MAX_BYTES_USR_ID,
 		      UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
@@ -733,7 +727,7 @@ static void ID_PutParamsRemoveOtherID (void *ID)
   {
    if (ID)
      {
-      Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       Par_PutHiddenParamString (NULL,"UsrID",(char *) ID);
      }
   }

@@ -271,7 +271,7 @@ static void Dup_ListSimilarUsrs (void)
 
    /***** Make query *****/
    if (Gbl.Usrs.Other.UsrDat.Surname1[0] &&
-       Gbl.Usrs.Other.UsrDat.FirstName[0])	// Name and surname 1 not empty
+       Gbl.Usrs.Other.UsrDat.FrstName[0])	// Name and surname 1 not empty
       NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get similar users",
 					   "SELECT DISTINCT UsrCod FROM"
 					   "(SELECT DISTINCT UsrCod FROM usr_IDs"
@@ -283,7 +283,7 @@ static void Dup_ListSimilarUsrs (void)
 					   Gbl.Usrs.Other.UsrDat.UsrCod,
 					   Gbl.Usrs.Other.UsrDat.Surname1,
 					   Gbl.Usrs.Other.UsrDat.Surname2,
-					   Gbl.Usrs.Other.UsrDat.FirstName);
+					   Gbl.Usrs.Other.UsrDat.FrstName);
    else
       NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get similar users",
 					   "SELECT DISTINCT UsrCod FROM usr_IDs"
@@ -408,7 +408,7 @@ static void Dup_PutButtonToViewSimilarUsrs (const struct UsrData *UsrDat)
    extern const char *Txt_Similar_users;
 
    Frm_StartForm (ActLstSimUsr);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    Btn_PutConfirmButtonInline (Txt_Similar_users);
    Frm_EndForm ();
   }
@@ -422,7 +422,7 @@ static void Dup_PutButtonToEliminateUsrAccount (const struct UsrData *UsrDat)
    extern const char *Txt_Eliminate_user_account;
 
    Frm_StartForm (ActUpdOth);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    Par_PutHiddenParamUnsigned (NULL,"RegRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
    Btn_PutRemoveButtonInline (Txt_Eliminate_user_account);
    Frm_EndForm ();
@@ -437,7 +437,7 @@ static void Dup_PutButtonToRemoveFromListOfDupUsrs (const struct UsrData *UsrDat
    extern const char *Txt_Not_duplicated;
 
    Frm_StartForm (ActRemDupUsr);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    Btn_PutConfirmButtonInline (Txt_Not_duplicated);
    Frm_EndForm ();
   }

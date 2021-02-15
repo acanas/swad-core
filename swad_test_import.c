@@ -197,8 +197,7 @@ void TsI_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
    Brw_CreateDirDownloadTmp ();
 
    /***** Create public XML file with the questions *****/
-   snprintf (PathPubFile,sizeof (PathPubFile),
-	     "%s/%s/%s/test.xml",
+   snprintf (PathPubFile,sizeof (PathPubFile),"%s/%s/%s/test.xml",
              Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
              Gbl.FileBrowser.TmpPubDir.L,
              Gbl.FileBrowser.TmpPubDir.R);
@@ -424,8 +423,7 @@ void TsI_ImportQstsFromXML (void)
    else
      {
       /* End the reception of XML in a temporary file */
-      snprintf (FileNameXMLTmp,sizeof (FileNameXMLTmp),
-	        "%s/%s.xml",
+      snprintf (FileNameXMLTmp,sizeof (FileNameXMLTmp),"%s/%s.xml",
 		Cfg_PATH_TEST_PRIVATE,Gbl.UniqueNameEncrypted);
       if (Fil_EndReceptionOfFile (FileNameXMLTmp,Param))
          /***** Get questions from XML file and store them in database *****/
@@ -455,7 +453,7 @@ static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML)
    fseek (FileXML,0L,SEEK_SET);
 
    /***** Allocate memory for XML buffer *****/
-   if ((XMLBuffer = (char *) malloc (FileSize + 1)) == NULL)
+   if ((XMLBuffer = malloc (FileSize + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
    else
      {
@@ -569,7 +567,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 			     {
 			      Str_Copy (Question.Tags.Txt[Question.Tags.Num],
 					TagElem->Content,
-					Tag_MAX_BYTES_TAG);
+					sizeof (Question.Tags.Txt[Question.Tags.Num]) - 1);
 			      Question.Tags.Num++;
 			     }
 			  }
@@ -585,8 +583,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		     if (StemElem->Content)
 		       {
 			/* Convert stem from text to HTML (in database stem is stored in HTML) */
-			Str_Copy (Question.Stem,StemElem->Content,
-				  Cns_MAX_BYTES_TEXT);
+			Str_Copy (Question.Stem,StemElem->Content,Cns_MAX_BYTES_TEXT);
 			Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
 					  Question.Stem,Cns_MAX_BYTES_TEXT,true);
 		       }
@@ -602,8 +599,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		     if (FeedbackElem->Content)
 		       {
 			/* Convert feedback from text to HTML (in database feedback is stored in HTML) */
-			Str_Copy (Question.Feedback,FeedbackElem->Content,
-				  Cns_MAX_BYTES_TEXT);
+			Str_Copy (Question.Feedback,FeedbackElem->Content,Cns_MAX_BYTES_TEXT);
 			Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
 					  Question.Feedback,Cns_MAX_BYTES_TEXT,true);
 		       }
@@ -1004,7 +1000,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
             /* Convert the answer, that is in HTML, to rigorous HTML */
             AnswerTextLength = strlen (Question->Answer.Options[NumOpt].Text) *
         	               Str_MAX_BYTES_PER_CHAR;
-            if ((AnswerText = (char *) malloc (AnswerTextLength + 1)) == NULL)
+            if ((AnswerText = malloc (AnswerTextLength + 1)) == NULL)
                Lay_NotEnoughMemoryExit ();
             Str_Copy (AnswerText,Question->Answer.Options[NumOpt].Text,
                       AnswerTextLength);
@@ -1019,7 +1015,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 		 {
 	          AnswerFeedbackLength = strlen (Question->Answer.Options[NumOpt].Feedback) *
 					 Str_MAX_BYTES_PER_CHAR;
-	          if ((AnswerFeedback = (char *) malloc (AnswerFeedbackLength + 1)) == NULL)
+	          if ((AnswerFeedback = malloc (AnswerFeedbackLength + 1)) == NULL)
 		     Lay_NotEnoughMemoryExit ();
 		  Str_Copy (AnswerFeedback,
 		            Question->Answer.Options[NumOpt].Feedback,

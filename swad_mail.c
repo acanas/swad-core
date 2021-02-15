@@ -301,7 +301,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
       Gbl.Mails.Num = (unsigned) NumRows;
 
       /***** Create list with places *****/
-      if ((Gbl.Mails.Lst = (struct Mail *) calloc (NumRows,sizeof (struct Mail))) == NULL)
+      if ((Gbl.Mails.Lst = calloc (NumRows,sizeof (*Gbl.Mails.Lst))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the mail domains *****/
@@ -318,13 +318,9 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
          if ((Mai->MaiCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Wrong code of mail domain.");
 
-         /* Get the mail domain (row[1]) */
-         Str_Copy (Mai->Domain,row[1],
-                   Cns_MAX_BYTES_EMAIL_ADDRESS);
-
-         /* Get the mail domain info (row[2]) */
-         Str_Copy (Mai->Info,row[2],
-                   Mai_MAX_BYTES_MAIL_INFO);
+         /* Get the mail domain (row[1]) and the mail domain info (row[2]) */
+         Str_Copy (Mai->Domain,row[1],sizeof (Mai->Domain) - 1);
+         Str_Copy (Mai->Info  ,row[2],sizeof (Mai->Info  ) - 1);
 
          /* Get number of users (row[3]) */
          if (sscanf (row[3],"%u",&(Mai->NumUsrs)) != 1)
@@ -374,8 +370,7 @@ static void Mai_GetMailDomain (const char *Email,char MailDomain[Cns_MAX_BYTES_E
         {
          Ptr++;					// Skip '@'
          if (strchr (Ptr,(int) '@') == NULL)	// No more '@' found
-            Str_Copy (MailDomain,Ptr,
-                      Cns_MAX_BYTES_EMAIL_ADDRESS);
+            Str_Copy (MailDomain,Ptr,Cns_MAX_BYTES_EMAIL_ADDRESS);
         }
   }
 
@@ -442,13 +437,9 @@ void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
          /* Get row */
          row = mysql_fetch_row (mysql_res);
 
-         /* Get the short name of the mail (row[0]) */
-         Str_Copy (Mai->Domain,row[0],
-                   Cns_MAX_BYTES_EMAIL_ADDRESS);
-
-         /* Get the full name of the mail (row[1]) */
-         Str_Copy (Mai->Info,row[1],
-                   Mai_MAX_BYTES_MAIL_INFO);
+         /* Get the short & full name of the mail (row[0], row[1]) */
+         Str_Copy (Mai->Domain,row[0],sizeof (Mai->Domain) - 1);
+         Str_Copy (Mai->Info  ,row[1],sizeof (Mai->Info  ) - 1);
         }
 
       /***** Free structure that stores the query result *****/
@@ -691,8 +682,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update name *****/
-   Str_Copy (CurrentMaiName,NewMaiName,
-             MaxBytes);
+   Str_Copy (CurrentMaiName,NewMaiName,MaxBytes);
   }
 
 /*****************************************************************************/
@@ -944,7 +934,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
    while (*Ptr)
      {
       /* Get next user */
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
 
@@ -966,14 +956,12 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 	       LengthStrAddr ++;
 	       if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
 		  Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
-	       Str_Concat (StrAddresses,",",
-			   Mai_MAX_BYTES_STR_ADDR);
+	       Str_Concat (StrAddresses,",",sizeof (StrAddresses) - 1);
 	      }
 	    LengthStrAddr += strlen (UsrDat.Email);
 	    if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
 	       Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
-	    Str_Concat (StrAddresses,UsrDat.Email,
-			Mai_MAX_BYTES_STR_ADDR);
+	    Str_Concat (StrAddresses,UsrDat.Email,sizeof (StrAddresses) - 1);
 	    HTM_A_Begin ("href=\"mailto:%s?subject=%s\"",
 		         UsrDat.Email,Gbl.Hierarchy.Crs.FullName);
 	    HTM_Txt (UsrDat.Email);
@@ -1099,8 +1087,7 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
      {
       /* Get email */
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (UsrDat->Email,row[0],
-                Cns_MAX_BYTES_EMAIL_ADDRESS);
+      Str_Copy (UsrDat->Email,row[0],sizeof (UsrDat->Email) - 1);
       UsrDat->EmailConfirmed = (row[1][0] == 'Y');
       Found = true;
      }
@@ -1169,9 +1156,7 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
    /***** Begin box *****/
-   snprintf (StrRecordWidth,sizeof (StrRecordWidth),
-	     "%upx",
-	     Rec_RECORD_WIDTH);
+   snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
    Box_BoxBegin (StrRecordWidth,Txt_Email,
                  Acc_PutLinkToRemoveMyAccount,NULL,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
@@ -1202,9 +1187,7 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
    /***** Begin box *****/
-   snprintf (StrRecordWidth,sizeof (StrRecordWidth),
-	     "%upx",
-	     Rec_RECORD_WIDTH);
+   snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
    Box_BoxBegin (StrRecordWidth,Txt_Email,
                  NULL,NULL,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
@@ -1359,7 +1342,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 		  break;
 	      }
 	    Frm_StartFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	   }
 	 Par_PutHiddenParamString (NULL,"NewEmail",row[0]);
          Btn_PutConfirmButtonInline ((ItsMe && NumEmail == 1) ? Txt_Confirm_email :
@@ -1405,7 +1388,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	    break;
 	}
       Frm_StartFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
      }
    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrDat.Email,
 	            "id=\"NewEmail\" size=\"18\"");
@@ -1431,7 +1414,7 @@ static void Mai_PutParamsRemoveOtherEmail (void *Email)
   {
    if (Email)
      {
-      Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       Par_PutHiddenParamString (NULL,"Email",Email);
      }
   }
@@ -1792,8 +1775,7 @@ void Mai_ConfirmEmail (void)
       UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get user's email */
-      Str_Copy (Email,row[1],
-                Cns_MAX_BYTES_EMAIL_ADDRESS);
+      Str_Copy (Email,row[1],sizeof (Email) - 1);
 
       KeyIsCorrect = true;
      }
@@ -1861,8 +1843,7 @@ void Mai_ConfirmEmail (void)
 
 void Mai_CreateFileNameMail (char FileNameMail[PATH_MAX + 1],FILE **FileMail)
   {
-   snprintf (FileNameMail,PATH_MAX + 1,
-	     "%s/%s_mail.txt",
+   snprintf (FileNameMail,PATH_MAX + 1,"%s/%s_mail.txt",
              Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
    if ((*FileMail = fopen (FileNameMail,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not open file to send email.");
@@ -1879,7 +1860,7 @@ void Mai_WriteWelcomeNoteEMail (FILE *FileMail,struct UsrData *UsrDat)
 
    fprintf (FileMail,"%s %s:\n",
             Txt_Dear_NO_HTML[UsrDat->Sex][UsrDat->Prefs.Language],
-            UsrDat->FirstName[0] ? UsrDat->FirstName :
+            UsrDat->FrstName[0] ? UsrDat->FrstName :
                                    Txt_user_NO_HTML[UsrDat->Sex][UsrDat->Prefs.Language]);
   }
 
@@ -1958,8 +1939,8 @@ static void Mai_EditingMailDomainConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing mail domain.");
 
    /***** Allocate memory for mail domain *****/
-   if ((Mai_EditingMai = (struct Mail *) malloc (sizeof (struct Mail))) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for mail domain.");
+   if ((Mai_EditingMai = malloc (sizeof (*Mai_EditingMai))) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Reset place *****/
    Mai_EditingMai->MaiCod    = -1L;

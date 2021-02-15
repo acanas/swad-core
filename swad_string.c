@@ -305,12 +305,10 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 	    Gbl.Form.Num++;
 	    if (Gbl.Usrs.Me.Logged)
 	       snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),
-		         "form_%s_%d",
-			 Gbl.UniqueNameEncrypted,Gbl.Form.Num);
+		         "form_%s_%d",Gbl.UniqueNameEncrypted,Gbl.Form.Num);
 	    else
 	       snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),
-		         "form_%d",
-			 Gbl.Form.Num);
+		         "form_%d",Gbl.Form.Num);
 
 	    /* Store first part of anchor */
 	    Frm_SetParamsForm (ParamsStr,ActSeeOthPubPrf,true);
@@ -324,7 +322,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 			                   Gbl.Form.Id,
 		      ParamsStr);
 	    Anchor1NickLength = strlen (Anchor1Nick);
-	    if ((Links[NumLinks].Anchor1Nick = (char *) malloc (Anchor1NickLength + 1)) == NULL)
+	    if ((Links[NumLinks].Anchor1Nick = malloc (Anchor1NickLength + 1)) == NULL)
 	       Lay_NotEnoughMemoryExit ();
 	    strcpy (Links[NumLinks].Anchor1Nick,Anchor1Nick);
 	    Links[NumLinks].Anchor1NickLength = Anchor1NickLength;
@@ -337,7 +335,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 		      Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
 			                   Gbl.Form.Id);
 	    Anchor2NickLength = strlen (Anchor2Nick);
-	    if ((Links[NumLinks].Anchor2Nick = (char *) malloc (Anchor2NickLength + 1)) == NULL)
+	    if ((Links[NumLinks].Anchor2Nick = malloc (Anchor2NickLength + 1)) == NULL)
 	       Lay_NotEnoughMemoryExit ();
 	    strcpy (Links[NumLinks].Anchor2Nick,Anchor2Nick);
 	    Links[NumLinks].Anchor2NickLength = Anchor2NickLength;
@@ -1148,7 +1146,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
    if (ChangeTo != Str_DONT_CHANGE)
      {
       /***** Allocate memory for a destination string where to do the changes *****/
-      if ((StrDst = (char *) malloc (MaxLengthStr + 1)) == NULL)
+      if ((StrDst = malloc (MaxLengthStr + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Make the change *****/
@@ -1287,12 +1285,12 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                      Str_Concat (StrSpecialChar,
                                  ThereIsSpaceChar ? "&nbsp;" :
                         	                    " ",	// The first space
-                                 Str_MAX_BYTES_SPECIAL_CHAR);
+                                 sizeof (StrSpecialChar) - 1);
                      for (i = 1;
                 	  i < NumSpacesTab;
                 	  i++)					// Rest of spaces, except the first
                         Str_Concat (StrSpecialChar,"&nbsp;",	// Add a space
-                                    Str_MAX_BYTES_SPECIAL_CHAR);
+                                    sizeof (StrSpecialChar) - 1);
                      NumPrintableCharsFromReturn += NumSpacesTab;
                     }
                   else
@@ -1305,7 +1303,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                case 0x0A:  /* \n */
         	  if (ChangeTo == Str_TO_RIGOROUS_HTML)
                      Str_Copy (StrSpecialChar,"<br />",
-                               Str_MAX_BYTES_SPECIAL_CHAR);
+                               sizeof (StrSpecialChar) - 1);
         	  else
                     {
                      StrSpecialChar[0] = Str_LF[0];
@@ -1328,7 +1326,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                case 0x20:  /* Space */
         	  if (ChangeTo == Str_TO_RIGOROUS_HTML && ThereIsSpaceChar)
                      Str_Copy (StrSpecialChar,"&nbsp;",
-                               Str_MAX_BYTES_SPECIAL_CHAR);
+                               sizeof (StrSpecialChar) - 1);
         	  else
                     {
                      StrSpecialChar[0] = ' ';
@@ -1346,7 +1344,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
         	    }
         	  else
                      Str_Copy (StrSpecialChar,"&#34;",	// Double comilla is stored as HTML code to avoid problems when displaying it
-                	       Str_MAX_BYTES_SPECIAL_CHAR);
+                	       sizeof (StrSpecialChar) - 1);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -1371,7 +1369,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
         	    }
         	  else
                      Str_Copy (StrSpecialChar,"&#39;",	// Single comilla is stored as HTML entity to avoid problem when querying database (SQL code injection)
-                	       Str_MAX_BYTES_SPECIAL_CHAR);
+                	       sizeof (StrSpecialChar) - 1);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -1407,7 +1405,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
         	    }
         	  else
                      Str_Copy (StrSpecialChar,"&#60;", // "<" is stored as HTML code to avoid problems when displaying it
-                               Str_MAX_BYTES_SPECIAL_CHAR);
+                               sizeof (StrSpecialChar) - 1);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -1419,7 +1417,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
         	    }
         	  else
         	     Str_Copy (StrSpecialChar,"&#62;", // ">" is stored as HTML code to avoid problems when displaying it
-        	               Str_MAX_BYTES_SPECIAL_CHAR);
+        	               sizeof (StrSpecialChar) - 1);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -1444,7 +1442,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
         	    }
         	  else
                      Str_Copy (StrSpecialChar,"&#92;", // "\" is stored as HTML code to avoid problems when displaying it
-                               Str_MAX_BYTES_SPECIAL_CHAR);
+                               sizeof (StrSpecialChar) - 1);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -2579,16 +2577,14 @@ void Str_SplitFullPathIntoPathAndFileName (const char FullPath[PATH_MAX + 1],
    LengthUntilFileName = (size_t) (PtrFileName - FullPath);	// Last slash included
    if (LengthUntilFileName > 1)
      {
-      Str_Copy (PathWithoutFileName,FullPath,
-                PATH_MAX);
+      Str_Copy (PathWithoutFileName,FullPath,PATH_MAX);
       PathWithoutFileName[LengthUntilFileName - 1] = '\0';	// Do not copy ending slash
      }
    else
       PathWithoutFileName[0] = '\0';
 
    /***** Get FileName *****/
-   Str_Copy (FileName,PtrFileName,
-             NAME_MAX);
+   Str_Copy (FileName,PtrFileName,NAME_MAX);
   }
 
 /*****************************************************************************/
@@ -3043,8 +3039,7 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
    DstLength = strlen (Dst);
    if (DstLength > DstSize)
      {
-      snprintf (ErrorTxt,sizeof (ErrorTxt),
-	        "%lu-chars buffer has %lu chars!",
+      snprintf (ErrorTxt,sizeof (ErrorTxt),"%lu-chars buffer has %lu chars!",
                 DstSize,DstLength);
       Lay_ShowErrorAndExit (ErrorTxt);
      }

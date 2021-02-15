@@ -106,12 +106,11 @@ void Lgo_DrawLogo (Hie_Lvl_Level_t Scope,long Cod,const char *AltText,
 	   {
 	    Folder = Cfg_FOLDER_DEG;
 	    DegCod = Cod;
-	    snprintf (PathLogo,sizeof (PathLogo),
-		      "%s/%02u/%u/logo/%u.png",
+	    snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
 		      Cfg_PATH_DEG_PUBLIC,
 		      (unsigned) (DegCod % 100),
-		      (unsigned) DegCod,
-		      (unsigned) DegCod);
+		      (unsigned)  DegCod,
+		      (unsigned)  DegCod);
 	    LogoFound = Fil_CheckIfPathExists (PathLogo);
 	    if (LogoFound)
 	       Cod = DegCod;
@@ -125,12 +124,11 @@ void Lgo_DrawLogo (Hie_Lvl_Level_t Scope,long Cod,const char *AltText,
 	       CtrCod = Deg_GetCtrCodOfDegreeByCod (Cod);
 	    else
 	       CtrCod = Cod;
-	    snprintf (PathLogo,sizeof (PathLogo),
-		      "%s/%02u/%u/logo/%u.png",
+	    snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
 		      Cfg_PATH_CTR_PUBLIC,
 		      (unsigned) (CtrCod % 100),
-		      (unsigned) CtrCod,
-		      (unsigned) CtrCod);
+		      (unsigned)  CtrCod,
+		      (unsigned)  CtrCod);
 	    LogoFound = Fil_CheckIfPathExists (PathLogo);
 	    if (LogoFound)
 	       Cod = CtrCod;
@@ -146,12 +144,11 @@ void Lgo_DrawLogo (Hie_Lvl_Level_t Scope,long Cod,const char *AltText,
 	       InsCod = Ctr_GetInsCodOfCentreByCod (Cod);
 	    else
 	       InsCod = Cod;
-	    snprintf (PathLogo,sizeof (PathLogo),
-		      "%s/%02u/%u/logo/%u.png",
+	    snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
 		      Cfg_PATH_INS_PUBLIC,
 		      (unsigned) (InsCod % 100),
-		      (unsigned) InsCod,
-		      (unsigned) InsCod);
+		      (unsigned)  InsCod,
+		      (unsigned)  InsCod);
 	    LogoFound = Fil_CheckIfPathExists (PathLogo);
 	    if (LogoFound)
 	       Cod = InsCod;
@@ -233,12 +230,11 @@ void Lgo_PutIconToChangeLogo (Hie_Lvl_Level_t Scope)
      }
 
    /***** Check if logo exists *****/
-   snprintf (PathLogo,sizeof (PathLogo),
-	     "%s/%s/%02u/%u/logo/%u.png",
+   snprintf (PathLogo,sizeof (PathLogo),"%s/%s/%02u/%u/logo/%u.png",
 	     Cfg_PATH_SWAD_PUBLIC,Folder,
 	     (unsigned) (Cod % 100),
-	     (unsigned) Cod,
-	     (unsigned) Cod);
+	     (unsigned)  Cod,
+	     (unsigned)  Cod);
    LogoExists = Fil_CheckIfPathExists (PathLogo);
 
    /***** Link for changing / uploading the logo *****/
@@ -291,12 +287,11 @@ void Lgo_RequestLogo (Hie_Lvl_Level_t Scope)
      }
 
    /***** Check if logo exists *****/
-   snprintf (PathLogo,sizeof (PathLogo),
-	     "%s/%s/%02u/%u/logo/%u.png",
+   snprintf (PathLogo,sizeof (PathLogo),"%s/%s/%02u/%u/logo/%u.png",
 	     Cfg_PATH_SWAD_PUBLIC,Folder,
 	     (unsigned) (Cod % 100),
-	     (unsigned) Cod,
-	     (unsigned) Cod);
+	     (unsigned)  Cod,
+	     (unsigned)  Cod);
    if (!Fil_CheckIfPathExists (PathLogo))
       FunctionToDrawContextualIcons = NULL;
 
@@ -393,26 +388,18 @@ void Lgo_ReceiveLogo (Hie_Lvl_Level_t Scope)
      }
 
    /***** Creates directories if not exist *****/
-   snprintf (Path,sizeof (Path),
-	     "%s/%s",
-	     Cfg_PATH_SWAD_PUBLIC,Folder);
+   snprintf (Path,sizeof (Path),"%s/%s",Cfg_PATH_SWAD_PUBLIC,Folder);
    Fil_CreateDirIfNotExists (Path);
-   snprintf (Path,sizeof (Path),
-	     "%s/%s/%02u",
-	     Cfg_PATH_SWAD_PUBLIC,Folder,
+   snprintf (Path,sizeof (Path),"%s/%s/%02u",Cfg_PATH_SWAD_PUBLIC,Folder,
 	     (unsigned) (Cod % 100));
    Fil_CreateDirIfNotExists (Path);
-   snprintf (Path,sizeof (Path),
-	     "%s/%s/%02u/%u",
-	     Cfg_PATH_SWAD_PUBLIC,Folder,
+   snprintf (Path,sizeof (Path),"%s/%s/%02u/%u",Cfg_PATH_SWAD_PUBLIC,Folder,
 	     (unsigned) (Cod % 100),
-	     (unsigned) Cod);
+	     (unsigned)  Cod);
    Fil_CreateDirIfNotExists (Path);
-   snprintf (Path,sizeof (Path),
-	     "%s/%s/%02u/%u/logo",
-	     Cfg_PATH_SWAD_PUBLIC,Folder,
+   snprintf (Path,sizeof (Path),"%s/%s/%02u/%u/logo",Cfg_PATH_SWAD_PUBLIC,Folder,
 	     (unsigned) (Cod % 100),
-	     (unsigned) Cod);
+	     (unsigned)  Cod);
    Fil_CreateDirIfNotExists (Path);
 
    /***** Copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
@@ -432,12 +419,11 @@ void Lgo_ReceiveLogo (Hie_Lvl_Level_t Scope)
    else
      {
       /* End the reception of logo in a temporary file */
-      snprintf (FileNameLogo,sizeof (FileNameLogo),
-	        "%s/%s/%02u/%u/logo/%u.png",
+      snprintf (FileNameLogo,sizeof (FileNameLogo),"%s/%s/%02u/%u/logo/%u.png",
 	        Cfg_PATH_SWAD_PUBLIC,Folder,
 	        (unsigned) (Cod % 100),
-	        (unsigned) Cod,
-	        (unsigned) Cod);
+	        (unsigned)  Cod,
+	        (unsigned)  Cod);
       if (!Fil_EndReceptionOfFile (FileNameLogo,Param))
 	 Ale_ShowAlert (Ale_ERROR,"Error copying file.");
      }
@@ -473,11 +459,10 @@ void Lgo_RemoveLogo (Hie_Lvl_Level_t Scope)
      }
 
    /***** Remove logo *****/
-   snprintf (FileNameLogo,sizeof (FileNameLogo),
-	     "%s/%s/%02u/%u/logo/%u.png",
+   snprintf (FileNameLogo,sizeof (FileNameLogo),"%s/%s/%02u/%u/logo/%u.png",
 	     Cfg_PATH_SWAD_PUBLIC,Folder,
 	     (unsigned) (Cod % 100),
-	     (unsigned) Cod,
-	     (unsigned) Cod);
+	     (unsigned)  Cod,
+	     (unsigned)  Cod);
    Fil_RemoveTree (FileNameLogo);
   }

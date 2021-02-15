@@ -132,10 +132,9 @@ void Log_LogAccess (const char *Comments)
    if (Comments)
      {
       MaxLength = strlen (Comments) * Str_MAX_BYTES_PER_CHAR;
-      if ((CommentsDB = (char *) malloc (MaxLength + 1)) != NULL)
+      if ((CommentsDB = malloc (MaxLength + 1)) != NULL)
 	{
-	 Str_Copy (CommentsDB,Comments,
-	           MaxLength);
+	 Str_Copy (CommentsDB,Comments,MaxLength);
 	 Str_ChangeFormat (Str_FROM_TEXT,Str_TO_TEXT,
 			   CommentsDB,MaxLength,true);	// Avoid SQL injection
 	 DB_QueryINSERT ("can not log access (comments)",

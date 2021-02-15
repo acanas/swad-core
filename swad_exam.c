@@ -31,7 +31,6 @@
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
@@ -853,7 +852,7 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
       Exams->Num = (unsigned) NumRows;
 
       /***** Create list of exams *****/
-      if ((Exams->Lst = (struct Exa_ExamSelected *) malloc (NumRows * sizeof (struct Exa_ExamSelected))) == NULL)
+      if ((Exams->Lst = malloc (NumRows * sizeof (*Exams->Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the exams codes *****/
@@ -890,7 +889,7 @@ void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
 
    /***** Allocate memory for list of exams selected *****/
    MaxSizeListExaCodsSelected = Exams->Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
-   if ((Exams->ExaCodsSelected = (char *) malloc (MaxSizeListExaCodsSelected + 1)) == NULL)
+   if ((Exams->ExaCodsSelected = malloc (MaxSizeListExaCodsSelected + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of exams selected *****/
@@ -994,8 +993,7 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
       Exam->Visibility = TstVis_GetVisibilityFromStr (row[5]);
 
       /* Get the title of the exam (row[6]) */
-      Str_Copy (Exam->Title,row[6],
-                Exa_MAX_BYTES_TITLE);
+      Str_Copy (Exam->Title,row[6],sizeof (Exam->Title) - 1);
 
       /* Get number of sets */
       Exam->NumSets = ExaSet_GetNumSetsExam (Exam->ExaCod);
@@ -1083,8 +1081,7 @@ void Exa_GetExamTxtFromDB (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Txt,row[0],
-                Cns_MAX_BYTES_TEXT);
+      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
      }
    else
       Txt[0] = '\0';

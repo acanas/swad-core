@@ -321,8 +321,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
 					// the list of connected users
 					// is dynamically updated via AJAX
    HTM_BUTTON_SUBMIT_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
-   Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,
-             Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+   Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,sizeof (CourseName) - 1);
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
    HTM_TxtF ("%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
    HTM_BUTTON_End ();
@@ -851,7 +850,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	 Rol_WrongRoleExit ();
 	 break;
      }
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
    HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
    HTM_BUTTON_SUBMIT_Begin (Txt_View_record_for_this_course,ClassLink,NULL);
@@ -1075,7 +1074,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 		  default:
 		     Rol_WrongRoleExit ();
 		 }
-	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+	       Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
 	      }
 
             HTM_DIV_Begin ("class=\"CON_NAME_WIDE\"");	// Limited width

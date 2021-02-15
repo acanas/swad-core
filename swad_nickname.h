@@ -46,7 +46,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-bool Nck_CheckIfNickWithArrobaIsValid (const char *NicknameWithArroba);
+bool Nck_CheckIfNickWithArrobaIsValid (const char *NickWithArroba);
 
 bool Nck_GetNicknameFromUsrCod (long UsrCod,
                                 char Nickname[Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1]);

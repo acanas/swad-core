@@ -144,11 +144,11 @@ void Med_ResetMedia (struct Med_Media *Media);
 
 void Med_GetMediaDataByCod (struct Med_Media *Media);
 
-void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput);
-void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMediaInForm,struct Med_Media *Media,
-                           void (*GetMediaFromDB) (long CrsCod,long QstCod,int NumMediaInForm,struct Med_Media *Media),
+void Med_PutMediaUploader (int NumMedia,const char *ClassInput);
+void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMedia,struct Med_Media *Media,
+                           void (*GetMediaFromDB) (long CrsCod,long QstCod,int NumMedia,struct Med_Media *Media),
 			   const char *SectionForAlerts);
-void Med_SetParamNames (struct ParamUploadMedia *ParamUploadMedia,int NumMediaInForm);
+void Med_SetParamNames (struct ParamUploadMedia *ParamUpl,int NumMedia);
 
 void Med_RemoveKeepOrStoreMedia (long CurrentMedCodInDB,struct Med_Media *Media);
 void Med_MoveMediaToDefinitiveDir (struct Med_Media *Media);

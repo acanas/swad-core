@@ -695,9 +695,8 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
    if (Gbl.DegTypes.Num)
      {
       /***** Create a list of degree types *****/
-      if ((Gbl.DegTypes.Lst = (struct DegreeType *)
-				   calloc (Gbl.DegTypes.Num,
-					   sizeof (struct DegreeType))) == NULL)
+      if ((Gbl.DegTypes.Lst = calloc (Gbl.DegTypes.Num,
+			              sizeof (*Gbl.DegTypes.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get degree types *****/
@@ -714,7 +713,7 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
 
          /* Get degree type name (row[1]) */
          Str_Copy (Gbl.DegTypes.Lst[NumRow].DegTypName,row[1],
-                   Deg_MAX_BYTES_DEGREE_TYPE_NAME);
+                   sizeof (Gbl.DegTypes.Lst[NumRow].DegTypName) - 1);
 
          /* Number of degrees of this type (row[2]) */
          if (sscanf (row[2],"%u",&Gbl.DegTypes.Lst[NumRow].NumDegs) != 1)
@@ -881,8 +880,7 @@ bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
       row = mysql_fetch_row (mysql_res);
 
       /* Get the name of the degree type (row[0]) */
-      Str_Copy (DegTyp->DegTypName,row[0],
-                Deg_MAX_BYTES_DEGREE_TYPE_NAME);
+      Str_Copy (DegTyp->DegTypName,row[0],sizeof (DegTyp->DegTypName) - 1);
 
       /* Count number of degrees of this type */
       DegTyp->NumDegs = DT_CountNumDegsOfType (DegTyp->DegTypCod);
@@ -1011,7 +1009,7 @@ void DT_RenameDegreeType (void)
 
    /***** Set degree type name *****/
    Str_Copy (DT_EditingDegTyp->DegTypName,NewNameDegTyp,
-	     Deg_MAX_BYTES_DEGREE_TYPE_NAME);
+	     sizeof (DT_EditingDegTyp->DegTypName) - 1);
   }
 
 /*****************************************************************************/
@@ -1055,8 +1053,8 @@ static void DT_EditingDegreeTypeConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing degree type.");
 
    /***** Allocate memory for degree type *****/
-   if ((DT_EditingDegTyp = (struct DegreeType *) malloc (sizeof (struct DegreeType))) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for degree type.");
+   if ((DT_EditingDegTyp = malloc (sizeof (*DT_EditingDegTyp))) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Reset degree type *****/
    DT_EditingDegTyp->DegTypCod     = -1L;

@@ -3965,8 +3965,7 @@ static const char *Act_GetActionTextFromDB (long ActCod)	// TODO: Remove when da
      {
       /***** Get text *****/
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (ActTxt,row[0],
-                Act_MAX_BYTES_ACTION_TXT);
+      Str_Copy (ActTxt,row[0],sizeof (ActTxt) - 1);
      }
    else	// ActCod-Language not found on database
       ActTxt[0] = '\0';
@@ -4084,7 +4083,7 @@ void Act_AdjustCurrentAction (void)
           the only action possible
           is to show a form to change my shared record card *****/
    if ( Gbl.Usrs.Me.UsrDat.Sex == Usr_SEX_UNKNOWN ||
-       !Gbl.Usrs.Me.UsrDat.FirstName[0]           ||
+       !Gbl.Usrs.Me.UsrDat.FrstName[0]           ||
        !Gbl.Usrs.Me.UsrDat.Surname1 [0]           ||
         Gbl.Usrs.Me.UsrDat.CtyCod <= 0            ||
 	Gbl.Usrs.Me.UsrDat.InsCod < 0             ||

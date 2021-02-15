@@ -571,8 +571,8 @@ void Ctr_GetBasicListOfCentres (long InsCod)
       Gbl.Hierarchy.Ctrs.Num = (unsigned) NumRows;
 
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.Ctrs.Lst = (struct Ctr_Centre *) calloc (NumRows,
-								  sizeof (struct Ctr_Centre))) == NULL)
+      if ((Gbl.Hierarchy.Ctrs.Lst = calloc (NumRows,
+                                            sizeof (*Gbl.Hierarchy.Ctrs.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the centres *****/
@@ -660,8 +660,8 @@ void Ctr_GetFullListOfCentres (long InsCod)
       Gbl.Hierarchy.Ctrs.Num = (unsigned) NumRows;
 
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.Ctrs.Lst = (struct Ctr_Centre *) calloc (NumRows,
-								  sizeof (struct Ctr_Centre))) == NULL)
+      if ((Gbl.Hierarchy.Ctrs.Lst = calloc (NumRows,
+                                            sizeof (*Gbl.Hierarchy.Ctrs.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the centres *****/
@@ -778,16 +778,13 @@ static void Ctr_GetDataOfCentreFromRow (struct Ctr_Centre *Ctr,MYSQL_ROW row)
    Ctr->Coord.Altitude = Map_GetAltitudeFromStr (row[7]);
 
    /***** Get the short name of the centre (row[8]) *****/
-   Str_Copy (Ctr->ShrtName,row[8],
-	     Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+   Str_Copy (Ctr->ShrtName,row[8],sizeof (Ctr->ShrtName) - 1);
 
    /***** Get the full name of the centre (row[9]) *****/
-   Str_Copy (Ctr->FullName,row[9],
-	     Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Str_Copy (Ctr->FullName,row[9],sizeof (Ctr->FullName) - 1);
 
    /***** Get the URL of the centre (row[10]) *****/
-   Str_Copy (Ctr->WWW,row[10],
-	     Cns_MAX_BYTES_WWW);
+   Str_Copy (Ctr->WWW,row[10],sizeof (Ctr->WWW) - 1);
   }
 
 /*****************************************************************************/
@@ -840,8 +837,7 @@ void Ctr_GetShortNameOfCentreByCod (struct Ctr_Centre *Ctr)
 	 /***** Get the short name of this centre *****/
 	 row = mysql_fetch_row (mysql_res);
 
-	 Str_Copy (Ctr->ShrtName,row[0],
-	           Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+	 Str_Copy (Ctr->ShrtName,row[0],sizeof (Ctr->ShrtName) - 1);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -1064,8 +1060,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
 	}
       else
 	{
-         Str_Copy (WWW,Ctr->WWW,
-                   Cns_MAX_BYTES_WWW);
+         Str_Copy (WWW,Ctr->WWW,sizeof (WWW) - 1);
          HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
          HTM_A_Begin ("href=\"%s\" target=\"_blank\""
                       " class=\"DAT\" title=\"%s\"",Ctr->WWW,Ctr->WWW);
@@ -1266,11 +1261,10 @@ void Ctr_RemoveCentre (void)
       Roo_RemoveAllRoomsInCtr (Ctr_EditingCtr->CtrCod);
 
       /***** Remove directories of the centre *****/
-      snprintf (PathCtr,sizeof (PathCtr),
-	        "%s/%02u/%u",
+      snprintf (PathCtr,sizeof (PathCtr),"%s/%02u/%u",
 	        Cfg_PATH_CTR_PUBLIC,
 	        (unsigned) (Ctr_EditingCtr->CtrCod % 100),
-	        (unsigned) Ctr_EditingCtr->CtrCod);
+	        (unsigned)  Ctr_EditingCtr->CtrCod);
       Fil_RemoveTree (PathCtr);
 
       /***** Remove centre *****/
@@ -1421,8 +1415,7 @@ void Ctr_RenameCentre (struct Ctr_Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullNam
                              CurrentCtrName,NewCtrName);
 
 	    /* Change current centre name in order to display it properly */
-	    Str_Copy (CurrentCtrName,NewCtrName,
-	              MaxBytes);
+	    Str_Copy (CurrentCtrName,NewCtrName,MaxBytes);
            }
         }
       else	// The same name
@@ -1485,8 +1478,7 @@ void Ctr_ChangeCtrWWW (void)
      {
       /***** Update database changing old WWW by new WWW *****/
       Ctr_UpdateCtrWWWDB (Ctr_EditingCtr->CtrCod,NewWWW);
-      Str_Copy (Ctr_EditingCtr->WWW,NewWWW,
-		Cns_MAX_BYTES_WWW);
+      Str_Copy (Ctr_EditingCtr->WWW,NewWWW,sizeof (Ctr_EditingCtr->WWW) - 1);
 
       /***** Write message to show the change made
 	     and put button to go to centre changed *****/
@@ -2279,8 +2271,8 @@ static void Ctr_EditingCentreConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing centre.");
 
    /***** Allocate memory for centre *****/
-   if ((Ctr_EditingCtr = (struct Ctr_Centre *) malloc (sizeof (struct Ctr_Centre))) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for centre.");
+   if ((Ctr_EditingCtr = malloc (sizeof (*Ctr_EditingCtr))) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Reset centre *****/
    Ctr_EditingCtr->CtrCod          = -1L;

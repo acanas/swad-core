@@ -111,7 +111,7 @@ void Syl_LeftItemSyllabus (void);
 void Syl_InsertItemSyllabus (void);
 void Syl_ModifyItemSyllabus (void);
 void Syl_BuildPathFileSyllabus (const struct Syl_Syllabus *Syllabus,
-                                char *PathFile);
+                                char PathFile[PATH_MAX + 1]);
 void Syl_WriteStartFileSyllabus (FILE *FileSyllabus);
 void Syl_WriteAllItemsFileSyllabus (FILE *FileSyllabus);
 void Syl_WriteItemFileSyllabus (FILE *FileSyllabus,int Level,const char *Text);

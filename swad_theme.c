@@ -331,10 +331,8 @@ void The_PutIconsToSelectTheme (void)
         	                                               "PREF_OFF");
       Frm_StartForm (ActChgThe);
       Par_PutHiddenParamString (NULL,"Theme",The_ThemeId[Theme]);
-      snprintf (Icon,sizeof (Icon),
-		"%s/%s/theme_32x20.gif",
-		Cfg_ICON_FOLDER_THEMES,
-                The_ThemeId[Theme]);
+      snprintf (Icon,sizeof (Icon),"%s/%s/theme_32x20.gif",
+                Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme]);
       Ico_PutSettingIconLink (Icon,The_ThemeNames[Theme]);
       Frm_EndForm ();
       HTM_DIV_End ();
@@ -366,12 +364,9 @@ void The_ChangeTheme (void)
 
    /***** Get param theme *****/
    Gbl.Prefs.Theme = The_GetParamTheme ();
-   snprintf (Path,sizeof (Path),
-	     "%s/%s",
-             Cfg_URL_ICON_THEMES_PUBLIC,
-             The_ThemeId[Gbl.Prefs.Theme]);
-   Str_Copy (Gbl.Prefs.URLTheme,Path,
-             PATH_MAX);
+   snprintf (Path,sizeof (Path),"%s/%s",
+             Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme]);
+   Str_Copy (Gbl.Prefs.URLTheme,Path,sizeof (Gbl.Prefs.URLTheme) - 1);
 
    /***** Store theme in database *****/
    if (Gbl.Usrs.Me.Logged)

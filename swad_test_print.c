@@ -413,9 +413,7 @@ static void TstPrn_WriteIntAnsToFill (const struct TstPrn_PrintedQuestion *Print
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),
-	     "Ans%010u",
-	     NumQst);
+   snprintf (StrAns,sizeof (StrAns),"Ans%010u",NumQst);
    HTM_INPUT_TEXT (StrAns,11,PrintedQuestion->StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"11\"");
@@ -432,9 +430,7 @@ static void TstPrn_WriteFltAnsToFill (const struct TstPrn_PrintedQuestion *Print
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),
-	     "Ans%010u",
-	     NumQst);
+   snprintf (StrAns,sizeof (StrAns),"Ans%010u",NumQst);
    HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,PrintedQuestion->StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"11\"");
@@ -501,9 +497,7 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 	 ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
       HTM_TD_Begin ("class=\"LT\"");
 
-      snprintf (StrAns,sizeof (StrAns),
-		"Ans%010u",
-		NumQst);
+      snprintf (StrAns,sizeof (StrAns),"Ans%010u",NumQst);
       if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE)
 	 HTM_INPUT_RADIO (StrAns,false,
 			  "id=\"Ans%010u_%u\" value=\"%u\"%s"
@@ -557,9 +551,7 @@ static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *Print
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),
-	     "Ans%010u",
-	     NumQst);
+   snprintf (StrAns,sizeof (StrAns),"Ans%010u",NumQst);
    HTM_INPUT_TEXT (StrAns,Tst_MAX_CHARS_ANSWERS_ONE_QST,PrintedQuestion->StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"40\"");
@@ -1214,8 +1206,7 @@ void TstPrn_ComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
    if (PrintedQuestion->StrAnswers[0])	// If user has answered the answer
      {
       /* Filter the user answer */
-      Str_Copy (TextAnsUsr,PrintedQuestion->StrAnswers,
-                Tst_MAX_BYTES_ANSWERS_ONE_QST);
+      Str_Copy (TextAnsUsr,PrintedQuestion->StrAnswers,sizeof (TextAnsUsr) - 1);
 
       /* In order to compare student answer to stored answer,
 	 the text answers are stored avoiding two or more consecurive spaces */
@@ -1228,8 +1219,7 @@ void TstPrn_ComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 	   NumOpt++)
         {
          /* Filter this correct answer */
-         Str_Copy (TextAnsOK,Question->Answer.Options[NumOpt].Text,
-                   Tst_MAX_BYTES_ANSWERS_ONE_QST);
+         Str_Copy (TextAnsOK,Question->Answer.Options[NumOpt].Text,sizeof (TextAnsOK) - 1);
          Str_ConvertToComparable (TextAnsOK);
 
          /* Check is user answer is correct */
@@ -1728,8 +1718,7 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
    if (PrintedQuestion->StrAnswers[0])	// If user has answered the question
      {
       /* Filter the user answer */
-      Str_Copy (TextAnsUsr,PrintedQuestion->StrAnswers,
-                Tst_MAX_BYTES_ANSWERS_ONE_QST);
+      Str_Copy (TextAnsUsr,PrintedQuestion->StrAnswers,sizeof (TextAnsUsr) - 1);
 
       /* In order to compare student answer to stored answer,
 	 the text answers are stored avoiding two or more consecurive spaces */
@@ -1742,8 +1731,7 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
 	   NumOpt++)
         {
          /* Filter this correct answer */
-         Str_Copy (TextAnsOK,Question->Answer.Options[NumOpt].Text,
-                   Tst_MAX_BYTES_ANSWERS_ONE_QST);
+         Str_Copy (TextAnsOK,Question->Answer.Options[NumOpt].Text,sizeof (TextAnsOK) - 1);
          Str_ConvertToComparable (TextAnsOK);
 
          /* Check is user answer is correct */
@@ -1976,7 +1964,7 @@ static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
@@ -2451,8 +2439,8 @@ void TstPrn_ShowOnePrint (void)
       HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname1);
       if (Gbl.Usrs.Other.UsrDat.Surname2[0])
 	 HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname2);
-      if (Gbl.Usrs.Other.UsrDat.FirstName[0])
-	 HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FirstName);
+      if (Gbl.Usrs.Other.UsrDat.FrstName[0])
+	 HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FrstName);
       HTM_BR ();
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
@@ -2799,11 +2787,11 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
 
 	 /* Get indexes for this question (row[2]) */
 	 Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[2],
-		   Tst_MAX_BYTES_INDEXES_ONE_QST);
+		   sizeof (Print->PrintedQuestions[NumQst].StrIndexes) - 1);
 
 	 /* Get answers selected by user for this question (row[3]) */
 	 Str_Copy (Print->PrintedQuestions[NumQst].StrAnswers,row[3],
-		   Tst_MAX_BYTES_ANSWERS_ONE_QST);
+		   sizeof (Print->PrintedQuestions[NumQst].StrAnswers) - 1);
 	}
 
    /***** Free structure that stores the query result *****/

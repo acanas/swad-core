@@ -230,12 +230,11 @@ static void ExaLog_LogUsrAgent (long LogCod,long PrnCod)
       MaxBytes = strlen (UserAgent) * Str_MAX_BYTES_PER_CHAR;
    else
       MaxBytes = 0;
-   if ((UserAgentDB = (char *) malloc (MaxBytes + 1)) == NULL)
+   if ((UserAgentDB = malloc (MaxBytes + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
    if (UserAgent)
      {
-      Str_Copy (UserAgentDB,UserAgent,
-                MaxBytes);
+      Str_Copy (UserAgentDB,UserAgent,MaxBytes);
       Str_ChangeFormat (Str_FROM_TEXT,Str_TO_TEXT,
 			UserAgentDB,MaxBytes,true);
      }
@@ -379,16 +378,12 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	 ClickTimeUTC = Dat_GetUNIXTimeFromStr (row[3]);
 
 	 /* Get IP (row[4]) */
-	 Str_Copy (IP,row[4],
-		   Cns_MAX_BYTES_IP);
+	 Str_Copy (IP,row[4],sizeof (IP) - 1);
 
 	 /* Get session id (row[5]) */
-	 if (row[5])	// This row has a user agent stored in database
-	    Str_Copy (SessionId,row[5],
-		      Cns_BYTES_SESSION_ID);
-	 else
-	    Str_Copy (SessionId,"=",
-		      Cns_BYTES_SESSION_ID);
+	 Str_Copy (SessionId,row[5] ? row[5] :	// This row has a user agent stored in database
+		                      "=",
+		   sizeof (SessionId) - 1);
 
 	 /* Get session id (row[6]) */
 	 if (asprintf (&UserAgent,"%s",row[6] ? row[6] :

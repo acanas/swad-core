@@ -303,7 +303,7 @@ void Lnk_GetListLinks (void)
 	 Gbl.Links.Num = (unsigned) NumRows;
 
 	 /***** Create list with places *****/
-	 if ((Gbl.Links.Lst = (struct Link *) calloc (NumRows,sizeof (struct Link))) == NULL)
+	 if ((Gbl.Links.Lst = calloc (NumRows,sizeof (*Gbl.Links.Lst))) == NULL)
 	     Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the links *****/
@@ -320,17 +320,11 @@ void Lnk_GetListLinks (void)
 	    if ((Lnk->LnkCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	       Lay_ShowErrorAndExit ("Wrong code of institutional link.");
 
-	    /* Get the short name of the link (row[1]) */
-	    Str_Copy (Lnk->ShrtName,row[1],
-	              Lnk_MAX_BYTES_LINK_SHRT_NAME);
-
-	    /* Get the full name of the link (row[2]) */
-	    Str_Copy (Lnk->FullName,row[2],
-	              Lnk_MAX_BYTES_LINK_FULL_NAME);
-
-	    /* Get the URL of the link (row[3]) */
-	    Str_Copy (Lnk->WWW,row[3],
-	              Cns_MAX_BYTES_WWW);
+            /* Get the short name (row[0]), the full name (row[1])
+               and de URL (row[2]) of the link */
+	    Str_Copy (Lnk->ShrtName,row[1],sizeof (Lnk->ShrtName) - 1);
+	    Str_Copy (Lnk->FullName,row[2],sizeof (Lnk->FullName) - 1);
+	    Str_Copy (Lnk->WWW     ,row[3],sizeof (Lnk->WWW     ) - 1);
 	   }
 	}
       else
@@ -369,17 +363,11 @@ void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
          /* Get row */
          row = mysql_fetch_row (mysql_res);
 
-         /* Get the short name of the link (row[0]) */
-         Str_Copy (Lnk->ShrtName,row[0],
-                   Lnk_MAX_BYTES_LINK_SHRT_NAME);
-
-         /* Get the full name of the link (row[1]) */
-         Str_Copy (Lnk->FullName,row[1],
-                   Lnk_MAX_BYTES_LINK_FULL_NAME);
-
-         /* Get the URL of the link (row[2]) */
-         Str_Copy (Lnk->WWW,row[2],
-                   Cns_MAX_BYTES_WWW);
+         /* Get the short name (row[0]), the full name (row[1])
+            and de URL (row[2]) of the link */
+         Str_Copy (Lnk->ShrtName,row[0],sizeof (Lnk->ShrtName) - 1);
+         Str_Copy (Lnk->FullName,row[1],sizeof (Lnk->FullName) - 1);
+         Str_Copy (Lnk->WWW     ,row[2],sizeof (Lnk->WWW     ) - 1);
         }
 
       /***** Free structure that stores the query result *****/
@@ -622,8 +610,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update name *****/
-   Str_Copy (CurrentLnkName,NewLnkName,
-             MaxBytes);
+   Str_Copy (CurrentLnkName,NewLnkName,MaxBytes);
   }
 
 /*****************************************************************************/
@@ -692,8 +679,7 @@ void Lnk_ChangeLinkWWW (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update web *****/
-   Str_Copy (Lnk_EditingLnk->WWW,NewWWW,
-             Cns_MAX_BYTES_WWW);
+   Str_Copy (Lnk_EditingLnk->WWW,NewWWW,sizeof (Lnk_EditingLnk->WWW) - 1);
   }
 
 /*****************************************************************************/
@@ -870,8 +856,8 @@ static void Lnk_EditingLinkConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing link.");
 
    /***** Allocate memory for link *****/
-   if ((Lnk_EditingLnk = (struct Link *) malloc (sizeof (struct Link))) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for link.");
+   if ((Lnk_EditingLnk = malloc (sizeof (*Lnk_EditingLnk))) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Reset link *****/
    Lnk_EditingLnk->LnkCod      = -1L;

@@ -152,7 +152,7 @@ void ZIP_CreateZIPAsgWrk (void)
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
 
@@ -170,10 +170,8 @@ void ZIP_CreateZIPAsgWrk (void)
    Brw_CreateDirDownloadTmp ();
 
    /***** Relative path of the directory with the works to compress *****/
-   snprintf (Path,sizeof (Path),
-	     "%s/%s",
-	     Cfg_PATH_ZIP_PRIVATE,
-	     Gbl.FileBrowser.ZIP.TmpDir);
+   snprintf (Path,sizeof (Path),"%s/%s",
+	     Cfg_PATH_ZIP_PRIVATE,Gbl.FileBrowser.ZIP.TmpDir);
 
    /***** Change to directory of the assignments and works
           in order to start the path in the zip file from there *****/
@@ -181,17 +179,13 @@ void ZIP_CreateZIPAsgWrk (void)
       Lay_ShowErrorAndExit ("Can not change to temporary folder for compression.");
 
    /***** Create public zip file with the assignment and works *****/
-   snprintf (FileNameZIP,sizeof (FileNameZIP),
-	     "%s.zip",
-	     Txt_works_ZIP_FILE_NAME);
-   snprintf (PathFileZIP,sizeof (PathFileZIP),
-	     "%s/%s/%s/%s",
+   snprintf (FileNameZIP,sizeof (FileNameZIP),"%s.zip",Txt_works_ZIP_FILE_NAME);
+   snprintf (PathFileZIP,sizeof (PathFileZIP),"%s/%s/%s/%s",
 	     Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
              Gbl.FileBrowser.TmpPubDir.L,
              Gbl.FileBrowser.TmpPubDir.R,
              FileNameZIP);
-   snprintf (StrZip,sizeof (StrZip),
-	     "nice -n 19 zip -q -r '%s' *",
+   snprintf (StrZip,sizeof (StrZip),"nice -n 19 zip -q -r '%s' *",
              PathFileZIP);
    Result = system (StrZip);
 
@@ -208,8 +202,7 @@ void ZIP_CreateZIPAsgWrk (void)
       else
 	{
 	 /***** Create URL pointing to ZIP file *****/
-	 snprintf (URLWithSpaces,sizeof (URLWithSpaces),
-	           "%s/%s/%s/%s",
+	 snprintf (URLWithSpaces,sizeof (URLWithSpaces),"%s/%s/%s/%s",
 		   Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
 		   Gbl.FileBrowser.TmpPubDir.L,
 		   Gbl.FileBrowser.TmpPubDir.R,
@@ -240,9 +233,8 @@ static void ZIP_CreateTmpDirForCompression (void)
 
    /***** Create a new temporary directory *****/
    Str_Copy (Gbl.FileBrowser.ZIP.TmpDir,Gbl.UniqueNameEncrypted,
-             NAME_MAX);
-   snprintf (PathDirTmp,sizeof (PathDirTmp),
-	     "%s/%s",
+             sizeof (Gbl.FileBrowser.ZIP.TmpDir) - 1);
+   snprintf (PathDirTmp,sizeof (PathDirTmp),"%s/%s",
 	     Cfg_PATH_ZIP_PRIVATE,Gbl.FileBrowser.ZIP.TmpDir);
    if (mkdir (PathDirTmp,(mode_t) 0xFFF))
       Lay_ShowErrorAndExit ("Can not create temporary folder for compression.");
@@ -266,43 +258,32 @@ static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
           with a name that identifies the owner
           of the assignments and works *****/
    /* Create link name for this user */
-   Str_Copy (FullNameAndUsrID,UsrDat->Surname1,
-             NAME_MAX);
+   Str_Copy (FullNameAndUsrID,UsrDat->Surname1,sizeof (FullNameAndUsrID) - 1);
    if (UsrDat->Surname1[0] &&
        UsrDat->Surname2[0])
-      Str_Concat (FullNameAndUsrID,"_",	// Separation between surname 1 and surname 2
-                  NAME_MAX);
-   Str_Concat (FullNameAndUsrID,UsrDat->Surname2,
-               NAME_MAX);
+      Str_Concat (FullNameAndUsrID,"_",sizeof (FullNameAndUsrID) - 1);	// Separation between surname 1 and surname 2
+   Str_Concat (FullNameAndUsrID,UsrDat->Surname2,sizeof (FullNameAndUsrID) - 1);
    if ((UsrDat->Surname1[0] ||
 	UsrDat->Surname2[0]) &&
-       UsrDat->FirstName[0])
-      Str_Concat (FullNameAndUsrID,"_",	// Separation between surnames and first name
-                  NAME_MAX);
-   Str_Concat (FullNameAndUsrID,UsrDat->FirstName,
-               NAME_MAX);
+       UsrDat->FrstName[0])
+      Str_Concat (FullNameAndUsrID,"_",sizeof (FullNameAndUsrID) - 1);	// Separation between surnames and first name
+   Str_Concat (FullNameAndUsrID,UsrDat->FrstName,sizeof (FullNameAndUsrID) - 1);
    if ((UsrDat->Surname1[0] ||
 	UsrDat->Surname2[0] ||
-	UsrDat->FirstName[0]) &&
+	UsrDat->FrstName[0]) &&
        UsrDat->IDs.Num)
-      Str_Concat (FullNameAndUsrID,"-",	// Separation between name and ID
-                  NAME_MAX);
+      Str_Concat (FullNameAndUsrID,"-",sizeof (FullNameAndUsrID) - 1);	// Separation between name and ID
    if (UsrDat->IDs.Num)	// If this user has at least one ID
       Str_Concat (FullNameAndUsrID,UsrDat->IDs.List[0].ID,
-                  NAME_MAX);	// First user's ID
+                  sizeof (FullNameAndUsrID) - 1);	// First user's ID
    Str_ConvertToValidFileName (FullNameAndUsrID);
 
    /* Create path to folder and link */
    snprintf (PathFolderUsrInsideCrs,sizeof (PathFolderUsrInsideCrs),
 	     "%s/usr/%02u/%ld",
-	     Gbl.Crs.PathPriv,
-	     (unsigned) (UsrDat->UsrCod % 100),
-	     UsrDat->UsrCod);
-   snprintf (LinkTmpUsr,sizeof (LinkTmpUsr),
-	     "%s/%s/%s",
-	     Cfg_PATH_ZIP_PRIVATE,
-	     Gbl.FileBrowser.ZIP.TmpDir,
-	     FullNameAndUsrID);
+	     Gbl.Crs.PathPriv,(unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
+   snprintf (LinkTmpUsr,sizeof (LinkTmpUsr),"%s/%s/%s",
+	     Cfg_PATH_ZIP_PRIVATE,Gbl.FileBrowser.ZIP.TmpDir,FullNameAndUsrID);
 
    /* Try to create a link named LinkTmpUsr to PathFolderUsrInsideCrs */
    if (symlink (PathFolderUsrInsideCrs,LinkTmpUsr) != 0)
@@ -313,9 +294,7 @@ static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
 	{
 	 // Link exists ==> a former user share the same name and ID
 	 // (probably a unique user has created two or more accounts)
-	 snprintf (Link,sizeof (Link),
-	          "%s-%u",
-		  LinkTmpUsr,NumTry);
+	 snprintf (Link,sizeof (Link),"%s-%u",LinkTmpUsr,NumTry);
 	 if (symlink (PathFolderUsrInsideCrs,Link) == 0)
 	    Success = true;
 	}
@@ -374,12 +353,10 @@ static void ZIP_CompressFolderIntoZIP (void)
    Brw_CreateDirDownloadTmp ();
 
    /***** Create a copy of the directory to compress *****/
-   snprintf (Path,sizeof (Path),
-	     "%s/%s",
+   snprintf (Path,sizeof (Path),"%s/%s",
 	     Gbl.FileBrowser.Priv.PathAboveRootFolder,
 	     Gbl.FileBrowser.FilFolLnk.Full);
-   snprintf (PathCompression,sizeof (PathCompression),
-	     "%s/%s",
+   snprintf (PathCompression,sizeof (PathCompression),"%s/%s",
 	     Cfg_PATH_ZIP_PRIVATE,
 	     Gbl.FileBrowser.ZIP.TmpDir);	// Example: /var/www/swad/zip/<temporary_dir>
 
@@ -401,14 +378,12 @@ static void ZIP_CompressFolderIntoZIP (void)
 	            strcmp (Gbl.FileBrowser.FilFolLnk.Name,".") ? Gbl.FileBrowser.FilFolLnk.Name :
 							          Txt_ROOT_FOLDER_EXTERNAL_NAMES[Gbl.FileBrowser.Type]) < 0)
          Lay_NotEnoughMemoryExit ();
-      snprintf (PathFileZIP,sizeof (PathFileZIP),
-	        "%s/%s/%s/%s",
+      snprintf (PathFileZIP,sizeof (PathFileZIP),"%s/%s/%s/%s",
 	        Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
 	        Gbl.FileBrowser.TmpPubDir.L,
 	        Gbl.FileBrowser.TmpPubDir.R,
 	        FileNameZIP);
-      snprintf (StrZip,sizeof (StrZip),
-	        "nice -n 19 zip -q -5 -r '%s' *",
+      snprintf (StrZip,sizeof (StrZip),"nice -n 19 zip -q -5 -r '%s' *",
 	        PathFileZIP);
       Result = system (StrZip);
 
@@ -427,8 +402,7 @@ static void ZIP_CompressFolderIntoZIP (void)
       else
 	{
 	 /* Create URL pointing to ZIP file */
-	 snprintf (URLWithSpaces,sizeof (URLWithSpaces),
-		   "%s/%s/%s/%s",
+	 snprintf (URLWithSpaces,sizeof (URLWithSpaces),"%s/%s/%s/%s",
 		   Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
 		   Gbl.FileBrowser.TmpPubDir.L,
 		   Gbl.FileBrowser.TmpPubDir.R,
@@ -495,14 +469,11 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 	 if (strcmp (FileList[NumFile]->d_name,".") &&
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
-	    snprintf (PathFileInTree,sizeof (PathFileInTree),
-		      "%s/%s",
+	    snprintf (PathFileInTree,sizeof (PathFileInTree),"%s/%s",
 	              PathInTree,FileList[NumFile]->d_name);
-	    snprintf (PathFile,sizeof (PathFile),
-		      "%s/%s",
+	    snprintf (PathFile,sizeof (PathFile),"%s/%s",
 		      Path,FileList[NumFile]->d_name);
-	    snprintf (PathFileClone,sizeof (PathFileClone),
-		      "%s/%s",
+	    snprintf (PathFileClone,sizeof (PathFileClone),"%s/%s",
 		      PathClone,FileList[NumFile]->d_name);
 
 	    FileType = Brw_IS_UNKNOWN;

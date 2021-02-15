@@ -459,8 +459,7 @@ static unsigned Sch_SearchCountriesInDB (const char *RangeQuery)
       if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_COUNTRIES))
 	{
 	 /***** Split countries string into words *****/
-	 snprintf (FieldName,sizeof (FieldName),
-	           "Name_%s",
+	 snprintf (FieldName,sizeof (FieldName),"Name_%s",
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 	 if (Sch_BuildSearchQuery (SearchQuery,FieldName,NULL,NULL))
 	   {
@@ -1111,26 +1110,18 @@ bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
 	        Sch_MAX_BYTES_SEARCH_QUERY)	// Prevent string overflow
 	       break;
 	    if (NumWords)
-	       Str_Concat (SearchQuery," AND ",
-	                   Sch_MAX_BYTES_SEARCH_QUERY);
-	    Str_Concat (SearchQuery,FieldName,
-	                Sch_MAX_BYTES_SEARCH_QUERY);
-	    Str_Concat (SearchQuery," LIKE ",
-	                Sch_MAX_BYTES_SEARCH_QUERY);
+	       Str_Concat (SearchQuery," AND ",Sch_MAX_BYTES_SEARCH_QUERY);
+	    Str_Concat (SearchQuery,FieldName,Sch_MAX_BYTES_SEARCH_QUERY);
+	    Str_Concat (SearchQuery," LIKE ",Sch_MAX_BYTES_SEARCH_QUERY);
 	    if (CharSet)
 	       if (CharSet[0])
-		  Str_Concat (SearchQuery,CharSet,
-		              Sch_MAX_BYTES_SEARCH_QUERY);
-	    Str_Concat (SearchQuery,"'%",
-	                Sch_MAX_BYTES_SEARCH_QUERY);
-	    Str_Concat (SearchQuery,SearchWords[NumWords],
-	                Sch_MAX_BYTES_SEARCH_QUERY);
-	    Str_Concat (SearchQuery,"%'",
-	                Sch_MAX_BYTES_SEARCH_QUERY);
+		  Str_Concat (SearchQuery,CharSet,Sch_MAX_BYTES_SEARCH_QUERY);
+	    Str_Concat (SearchQuery,"'%",Sch_MAX_BYTES_SEARCH_QUERY);
+	    Str_Concat (SearchQuery,SearchWords[NumWords],Sch_MAX_BYTES_SEARCH_QUERY);
+	    Str_Concat (SearchQuery,"%'",Sch_MAX_BYTES_SEARCH_QUERY);
 	    if (Collate)
 	       if (Collate[0])
-		  Str_Concat (SearchQuery,Collate,
-		              Sch_MAX_BYTES_SEARCH_QUERY);
+		  Str_Concat (SearchQuery,Collate,Sch_MAX_BYTES_SEARCH_QUERY);
 	   }
 	}
 

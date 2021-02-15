@@ -814,7 +814,7 @@ void Prj_PutParams (struct Prj_Filter *Filter,
 
    /***** Put another user's code *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 
    /***** Put selected users' codes *****/
    if (Filter->Who == Usr_WHO_SELECTED)
@@ -2236,7 +2236,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
             HTM_Txt (Gbl.Usrs.Other.UsrDat.Surname1);
 	    if (Gbl.Usrs.Other.UsrDat.Surname2[0])
                HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname2);
-            HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FirstName);
+            HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FrstName);
             HTM_LI_End ();
 	   }
 	}
@@ -2506,7 +2506,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
    while (*Ptr)
      {
       /* Get next user */
-      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 
@@ -3072,7 +3072,8 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	 NumPrjsFromDB = (unsigned) NumRows;
 
 	 /***** Create list of projects *****/
-	 if ((Projects->LstPrjCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
+	 if ((Projects->LstPrjCods = calloc (NumRows,
+	                                     sizeof (*Projects->LstPrjCods))) == NULL)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the projects codes *****/
@@ -3226,25 +3227,13 @@ void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj)
 	 /* Get modification date/time (row[9] holds the modification UTC time) */
 	 Prj->ModifTime = Dat_GetUNIXTimeFromStr (row[9]);
 
-	 /* Get the title of the project (row[10]) */
-	 Str_Copy (Prj->Title,row[10],
-		   Prj_MAX_BYTES_PROJECT_TITLE);
-
-	 /* Get the description of the project (row[11]) */
-	 Str_Copy (Prj->Description,row[11],
-		   Cns_MAX_BYTES_TEXT);
-
-	 /* Get the required knowledge for the project (row[12]) */
-	 Str_Copy (Prj->Knowledge,row[12],
-		   Cns_MAX_BYTES_TEXT);
-
-	 /* Get the required materials for the project (row[13]) */
-	 Str_Copy (Prj->Materials,row[13],
-		   Cns_MAX_BYTES_TEXT);
-
-	 /* Get the URL of the project (row[14]) */
-	 Str_Copy (Prj->URL,row[14],
-		   Cns_MAX_BYTES_WWW);
+	 /* Get title (row[10]), description (row[11]), required knowledge (row[12]),
+	    required materials (row[13]) and URL (row[14]) of the project */
+	 Str_Copy (Prj->Title      ,row[10],sizeof (Prj->Title      ) - 1);
+	 Str_Copy (Prj->Description,row[11],Cns_MAX_BYTES_TEXT);
+	 Str_Copy (Prj->Knowledge  ,row[12],Cns_MAX_BYTES_TEXT);
+	 Str_Copy (Prj->Materials  ,row[13],Cns_MAX_BYTES_TEXT);
+	 Str_Copy (Prj->URL        ,row[14],sizeof (Prj->URL        ) - 1);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -3409,8 +3398,7 @@ void Prj_RemoveProject (void)
       Brw_RemovePrjFilesFromDB (Prj.PrjCod);
 
       /***** Remove directory of the project *****/
-      snprintf (PathRelPrj,sizeof (PathRelPrj),
-	        "%s/%ld/%s/%02u/%ld",
+      snprintf (PathRelPrj,sizeof (PathRelPrj),"%s/%ld/%s/%02u/%ld",
 	        Cfg_PATH_CRS_PRIVATE,Prj.CrsCod,Cfg_FOLDER_PRJ,
 	        (unsigned) (Prj.PrjCod % 100),Prj.PrjCod);
       Fil_RemoveTree (PathRelPrj);
@@ -3815,13 +3803,13 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 
 void Prj_AllocMemProject (struct Prj_Project *Prj)
   {
-   if ((Prj->Description = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Prj->Description = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
-   if ((Prj->Knowledge   = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Prj->Knowledge   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
-   if ((Prj->Materials   = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Prj->Materials   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
   }
 

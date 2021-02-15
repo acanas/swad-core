@@ -262,8 +262,7 @@ static void Set_PutIconsToSelectSideCols (void)
         	                                                     "PREF_OFF");
       Frm_StartForm (ActChgCol);
       Par_PutHiddenParamUnsigned (NULL,"SideCols",SideCols);
-      snprintf (Icon,sizeof (Icon),
-		"layout%u%u_32x20.gif",
+      snprintf (Icon,sizeof (Icon),"layout%u%u_32x20.gif",
                 SideCols >> 1,SideCols & 1);
       Ico_PutSettingIconLink (Icon,Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
       Frm_EndForm ();

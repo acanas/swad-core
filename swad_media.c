@@ -292,8 +292,7 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
 						       Med_STATUS_NONE;
 
       /***** Copy media name (row[1]) to struct *****/
-      Str_Copy (Media->Name,row[1],
-		Med_BYTES_NAME);
+      Str_Copy (Media->Name,row[1],sizeof (Media->Name) - 1);
 
       /***** Copy media URL (row[2]) to struct *****/
       // Media->URL can be empty or filled with previous value
@@ -306,10 +305,9 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
 	 if (Length > Cns_MAX_BYTES_WWW)
 	     Length = Cns_MAX_BYTES_WWW;
 
-	 if ((Media->URL = (char *) malloc (Length + 1)) == NULL)
-	    Lay_ShowErrorAndExit ("Error allocating memory for media URL.");
-	 Str_Copy (Media->URL,row[2],
-		   Length);
+	 if ((Media->URL = malloc (Length + 1)) == NULL)
+            Lay_NotEnoughMemoryExit ();
+	 Str_Copy (Media->URL,row[2],Length);
 	}
 
       /***** Copy media title (row[3]) to struct *****/
@@ -323,10 +321,9 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
 	 if (Length > Med_MAX_BYTES_TITLE)
 	     Length = Med_MAX_BYTES_TITLE;
 
-	 if ((Media->Title = (char *) malloc (Length + 1)) == NULL)
-	    Lay_ShowErrorAndExit ("Error allocating memory for media title.");
-	 Str_Copy (Media->Title,row[3],
-		   Length);
+	 if ((Media->Title = malloc (Length + 1)) == NULL)
+            Lay_NotEnoughMemoryExit ();
+	 Str_Copy (Media->Title,row[3],Length);
 	}
      }
    else
@@ -340,7 +337,7 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
 /********* Draw input fields to upload an image/video inside a form **********/
 /*****************************************************************************/
 
-void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
+void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
   {
    extern const char *Hlp_Multimedia;
    extern const char *Txt_Multimedia;
@@ -380,7 +377,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
      };
 
    /***** Set names of parameters depending on number of media in form *****/
-   Med_SetParamNames (&ParamUploadMedia,NumMediaInForm);
+   Med_SetParamNames (&ParamUploadMedia,NumMedia);
 
    /***** Create unique id for this media uploader *****/
    Frm_SetUniqueId (Id);
@@ -507,11 +504,11 @@ static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTE
 /******************** Get media (image/video) from form **********************/
 /*****************************************************************************/
 // Media constructor must be called before calling this function
-// If NumMediaInForm  < 0, params have no suffix
-// If NumMediaInForm >= 0, the number is a suffix of the params
+// If NumMedia  < 0, params have no suffix
+// If NumMedia >= 0, the number is a suffix of the params
 
-void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMediaInForm,struct Med_Media *Media,
-                           void (*GetMediaFromDB) (long CrsCod,long QstCod,int NumMediaInForm,struct Med_Media *Media),
+void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMedia,struct Med_Media *Media,
+                           void (*GetMediaFromDB) (long CrsCod,long QstCod,int NumMedia,struct Med_Media *Media),
 			   const char *SectionForAlerts)
   {
    extern const char *Txt_Error_sending_or_processing_image_video;
@@ -520,7 +517,7 @@ void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMediaInForm,struct Med
    Med_FormType_t FormType;
 
    /***** Set names of parameters depending on number of media in form *****/
-   Med_SetParamNames (&ParamUploadMedia,NumMediaInForm);
+   Med_SetParamNames (&ParamUploadMedia,NumMedia);
 
    /***** Get action and initialize media (image/video)
           (except title, that will be get after the media file) *****/
@@ -584,7 +581,7 @@ void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMediaInForm,struct Med
 
 	 /***** Get media name *****/
 	 if (GetMediaFromDB != NULL)
-	    GetMediaFromDB (CrsCod,QstCod,NumMediaInForm,Media);
+	    GetMediaFromDB (CrsCod,QstCod,NumMedia,Media);
 	 break;
       default:	// Unknown action
 	 Media->Action = Med_ACTION_NO_MEDIA;
@@ -595,41 +592,26 @@ void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMediaInForm,struct Med
 /*****************************************************************************/
 /********* Set parameters names depending on number of media in form *********/
 /*****************************************************************************/
-// If NumMediaInForm <  0, params have no suffix
-// If NumMediaInForm >= 0, the number is a suffix of the params
+// If NumMedia <  0, params have no suffix
+// If NumMedia >= 0, the number is a suffix of the params
 
-void Med_SetParamNames (struct ParamUploadMedia *ParamUploadMedia,int NumMediaInForm)
+void Med_SetParamNames (struct ParamUploadMedia *ParamUpl,int NumMedia)
   {
-   if (NumMediaInForm < 0)	// One unique media in form ==> no suffix needed
+   if (NumMedia < 0)	// One unique media in form ==> no suffix needed
      {
-      Str_Copy (ParamUploadMedia->Action  ,"MedAct",
-                Med_MAX_BYTES_PARAM_UPLOAD_MEDIA);
-      Str_Copy (ParamUploadMedia->FormType,"MedFrm",
-                Med_MAX_BYTES_PARAM_UPLOAD_MEDIA);
-      Str_Copy (ParamUploadMedia->File    ,"MedFil",
-                Med_MAX_BYTES_PARAM_UPLOAD_MEDIA);
-      Str_Copy (ParamUploadMedia->Title   ,"MedTit",
-                Med_MAX_BYTES_PARAM_UPLOAD_MEDIA);
-      Str_Copy (ParamUploadMedia->URL     ,"MedURL",
-                Med_MAX_BYTES_PARAM_UPLOAD_MEDIA);
+      Str_Copy (ParamUpl->Action  ,"MedAct",sizeof (ParamUpl->Action  ) - 1);
+      Str_Copy (ParamUpl->FormType,"MedFrm",sizeof (ParamUpl->FormType) - 1);
+      Str_Copy (ParamUpl->File    ,"MedFil",sizeof (ParamUpl->File    ) - 1);
+      Str_Copy (ParamUpl->Title   ,"MedTit",sizeof (ParamUpl->Title   ) - 1);
+      Str_Copy (ParamUpl->URL     ,"MedURL",sizeof (ParamUpl->URL     ) - 1);
      }
    else				// Several video/images in form ==> add suffix
      {
-      snprintf (ParamUploadMedia->Action  ,sizeof (ParamUploadMedia->Action),
-	        "MedAct%u",
-		NumMediaInForm);
-      snprintf (ParamUploadMedia->FormType,sizeof (ParamUploadMedia->Action),
-	        "MedFrm%u",
-		NumMediaInForm);
-      snprintf (ParamUploadMedia->File    ,sizeof (ParamUploadMedia->File),
-	        "MedFil%u",
-		NumMediaInForm);
-      snprintf (ParamUploadMedia->Title   ,sizeof (ParamUploadMedia->Title),
-	        "MedTit%u",
-		NumMediaInForm);
-      snprintf (ParamUploadMedia->URL     ,sizeof (ParamUploadMedia->URL),
-	        "MedURL%u",
-		NumMediaInForm);
+      snprintf (ParamUpl->Action  ,sizeof (ParamUpl->Action),"MedAct%u",NumMedia);
+      snprintf (ParamUpl->FormType,sizeof (ParamUpl->Action),"MedFrm%u",NumMedia);
+      snprintf (ParamUpl->File    ,sizeof (ParamUpl->File  ),"MedFil%u",NumMedia);
+      snprintf (ParamUpl->Title   ,sizeof (ParamUpl->Title ),"MedTit%u",NumMedia);
+      snprintf (ParamUpl->URL     ,sizeof (ParamUpl->URL   ),"MedURL%u",NumMedia);
      }
   }
 
@@ -677,10 +659,9 @@ static void Usr_GetURLFromForm (const char *ParamName,struct Med_Media *Media)
       /* Overwrite current URL (empty or coming from database)
          with the URL coming from the form */
       Med_FreeMediaURL (Media);
-      if ((Media->URL = (char *) malloc (Length + 1)) == NULL)
-	 Lay_ShowErrorAndExit ("Error allocating memory for media URL.");
-      Str_Copy (Media->URL,URL,
-                Length);
+      if ((Media->URL = malloc (Length + 1)) == NULL)
+         Lay_NotEnoughMemoryExit ();
+      Str_Copy (Media->URL,URL,Length);
      }
   }
 
@@ -702,10 +683,9 @@ static void Usr_GetTitleFromForm (const char *ParamName,struct Med_Media *Media)
       /* Overwrite current title (empty or coming from database)
          with the title coming from the form */
       Med_FreeMediaTitle (Media);
-      if ((Media->Title = (char *) malloc (Length + 1)) == NULL)
-	 Lay_ShowErrorAndExit ("Error allocating memory for media title.");
-      Str_Copy (Media->Title,Title,
-                Length);
+      if ((Media->Title = malloc (Length + 1)) == NULL)
+         Lay_NotEnoughMemoryExit ();
+      Str_Copy (Media->Title,Title,Length);
      }
   }
 
@@ -762,8 +742,7 @@ static void Med_GetAndProcessFileFromForm (const char *ParamFile,
    /***** End the reception of original not processed media
           (it may be very big) into a temporary file *****/
    Media->Status = Med_STATUS_NONE;
-   snprintf (PathFileOrg,sizeof (PathFileOrg),
-	     "%s/%s_original.%s",
+   snprintf (PathFileOrg,sizeof (PathFileOrg),"%s/%s_original.%s",
 	     Cfg_PATH_MEDIA_TMP_PRIVATE,Media->Name,PtrExtension);
 
    if (Fil_EndReceptionOfFile (PathFileOrg,Param))	// Success
@@ -813,13 +792,12 @@ static bool Med_DetectIfAnimated (struct Med_Media *Media,
    int NumFrames = 0;
 
    /***** Build path to temporary text file *****/
-   snprintf (PathFileTxtTmp,sizeof (PathFileTxtTmp),
-	     "%s/%s.txt",
+   snprintf (PathFileTxtTmp,sizeof (PathFileTxtTmp),"%s/%s.txt",
              Cfg_PATH_MEDIA_TMP_PRIVATE,Media->Name);
 
    /***** Execute system command to get number of frames in GIF *****/
    snprintf (Command,sizeof (Command),
-	     "identify -format '%%n\n' %s | head -1 > %s",
+             "identify -format '%%n\n' %s | head -1 > %s",
              PathFileOrg,PathFileTxtTmp);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
@@ -853,8 +831,7 @@ static void Med_ProcessJPG (struct Med_Media *Media,
 
    /***** Convert original media to temporary JPG processed file
 	  by calling to program that makes the conversion *****/
-   snprintf (PathFileJPGTmp,sizeof (PathFileJPGTmp),
-	     "%s/%s.%s",
+   snprintf (PathFileJPGTmp,sizeof (PathFileJPGTmp),"%s/%s.%s",
 	     Cfg_PATH_MEDIA_TMP_PRIVATE,Media->Name,Med_Extensions[Med_JPG]);
    if (Med_ResizeImage (Media,PathFileOrg,PathFileJPGTmp) == 0)	// On success ==> 0 is returned
       /* Success */
@@ -893,16 +870,15 @@ static void Med_ProcessGIF (struct Med_Media *Media,
 	 /* File size correct */
 	 /***** Get first frame of orifinal GIF file
 		and save it on temporary PNG file */
-	 snprintf (PathFilePNGTmp,sizeof (PathFilePNGTmp),
-		   "%s/%s.png",
+	 snprintf (PathFilePNGTmp,sizeof (PathFilePNGTmp),"%s/%s.png",
 		   Cfg_PATH_MEDIA_TMP_PRIVATE,Media->Name);
 	 if (Med_GetFirstFrame (PathFileOrg,PathFilePNGTmp) == 0)	// On success ==> 0 is returned
 	   {
 	    /* Success */
 	    /***** Move original GIF file to temporary GIF file *****/
-	    snprintf (PathFileGIFTmp,sizeof (PathFileGIFTmp),
-		      "%s/%s.%s",
-		      Cfg_PATH_MEDIA_TMP_PRIVATE,Media->Name,Med_Extensions[Med_GIF]);
+	    snprintf (PathFileGIFTmp,sizeof (PathFileGIFTmp),"%s/%s.%s",
+		      Cfg_PATH_MEDIA_TMP_PRIVATE,
+		      Media->Name,Med_Extensions[Med_GIF]);
 	    if (rename (PathFileOrg,PathFileGIFTmp))	// Fail
 	      {
 	       /* Remove temporary PNG file */
@@ -960,9 +936,9 @@ static void Med_ProcessVideo (struct Med_Media *Media,
 	{
 	 /* File size correct */
 	 /***** Move original video file to temporary MP4 file *****/
-	 snprintf (PathFileTmp,sizeof (PathFileTmp),
-		   "%s/%s.%s",
-		   Cfg_PATH_MEDIA_TMP_PRIVATE,Media->Name,Med_Extensions[Media->Type]);
+	 snprintf (PathFileTmp,sizeof (PathFileTmp),"%s/%s.%s",
+		   Cfg_PATH_MEDIA_TMP_PRIVATE,
+		   Media->Name,Med_Extensions[Media->Type]);
 	 if (rename (PathFileOrg,PathFileTmp))	// Fail
 	    /* Show error alert */
 	    Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
@@ -997,7 +973,7 @@ static int Med_ResizeImage (struct Med_Media *Media,
    int ReturnCode;
 
    snprintf (Command,sizeof (Command),
-	     "convert %s -resize '%ux%u>' -quality %u %s",
+             "convert %s -resize '%ux%u>' -quality %u %s",
              PathFileOriginal,
              Media->Width,
              Media->Height,
@@ -1023,8 +999,7 @@ static int Med_GetFirstFrame (const char PathFileOriginal[PATH_MAX + 1],
    char Command[128 + PATH_MAX * 2];
    int ReturnCode;
 
-   snprintf (Command,sizeof (Command),
-	     "convert '%s[0]' %s",
+   snprintf (Command,sizeof (Command),"convert '%s[0]' %s",
              PathFileOriginal,
              PathFileProcessed);
    ReturnCode = system (Command);
@@ -1314,8 +1289,7 @@ void Med_MoveMediaToDefinitiveDir (struct Med_Media *Media)
          case Med_WEBM:
          case Med_OGG:
 	    /***** Create private subdirectory for media if it does not exist *****/
-	    snprintf (PathMedPriv,sizeof (PathMedPriv),
-		      "%s/%c%c",
+	    snprintf (PathMedPriv,sizeof (PathMedPriv),"%s/%c%c",
 		      Cfg_PATH_MEDIA_PRIVATE,
 		      Media->Name[0],
 		      Media->Name[1]);
@@ -1380,13 +1354,11 @@ static bool Med_MoveTmpFileToDefDir (struct Med_Media *Media,
    char PathFile[PATH_MAX + 1];	// Full name of definitive processed file
 
    /***** Temporary processed media file *****/
-   snprintf (PathFileTmp,sizeof (PathFileTmp),
-	     "%s/%s.%s",
+   snprintf (PathFileTmp,sizeof (PathFileTmp),"%s/%s.%s",
 	     Cfg_PATH_MEDIA_TMP_PRIVATE,Media->Name,Extension);
 
    /***** Definitive processed media file *****/
-   snprintf (PathFile,sizeof (PathFile),
-	     "%s/%s.%s",
+   snprintf (PathFile,sizeof (PathFile),"%s/%s.%s",
 	     PathMedPriv,Media->Name,Extension);
 
    /***** Move JPG file *****/
@@ -1459,8 +1431,7 @@ void Med_ShowMedia (const struct Med_Media *Media,
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Media->URL);
 
 	 /* Build path to private directory with the media */
-	 snprintf (PathMedPriv,sizeof (PathMedPriv),
-		   "%s/%c%c",
+	 snprintf (PathMedPriv,sizeof (PathMedPriv),"%s/%c%c",
 		   Cfg_PATH_MEDIA_PRIVATE,
 		   Media->Name[0],
 		   Media->Name[1]);
@@ -1519,8 +1490,7 @@ static void Med_ShowJPG (const struct Med_Media *Media,
    bool Cached;
 
    /***** Build private path to JPG *****/
-   snprintf (FileNameJPG,sizeof (FileNameJPG),
-	     "%s.%s",
+   snprintf (FileNameJPG,sizeof (FileNameJPG),"%s.%s",
 	     Media->Name,Med_Extensions[Med_JPG]);
    if (asprintf (&FullPathJPGPriv,"%s/%s",
 	         PathMedPriv,FileNameJPG) < 0)
@@ -1539,8 +1509,7 @@ static void Med_ShowJPG (const struct Med_Media *Media,
 	 Brw_CreateDirDownloadTmp ();
 	 Brw_CreateTmpPublicLinkToPrivateFile (FullPathJPGPriv,FileNameJPG);
 
-	 snprintf (TmpPubDir,sizeof (TmpPubDir),
-	           "%s/%s",
+	 snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
 	           Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
 	 Ses_AddPublicDirToCache (FullPathJPGPriv,TmpPubDir);
 	}
@@ -1579,17 +1548,14 @@ static void Med_ShowGIF (const struct Med_Media *Media,
    bool Cached;
 
    /***** Build private path to animated GIF image *****/
-   snprintf (FileNameGIF,sizeof (FileNameGIF),
-	     "%s.%s",
+   snprintf (FileNameGIF,sizeof (FileNameGIF),"%s.%s",
 	     Media->Name,Med_Extensions[Med_GIF]);
    if (asprintf (&FullPathGIFPriv,"%s/%s",	// The animated GIF image
 		 PathMedPriv,FileNameGIF) < 0)
       Lay_NotEnoughMemoryExit ();
 
    /***** Build private path to static PNG image *****/
-   snprintf (FileNamePNG,sizeof (FileNamePNG),
-	     "%s.png",
-	     Media->Name);
+   snprintf (FileNamePNG,sizeof (FileNamePNG),"%s.png",Media->Name);
    if (asprintf (&FullPathPNGPriv,"%s/%s",
 		 PathMedPriv,FileNamePNG) < 0)
       Lay_NotEnoughMemoryExit ();
@@ -1608,8 +1574,7 @@ static void Med_ShowGIF (const struct Med_Media *Media,
 	 Brw_CreateTmpPublicLinkToPrivateFile (FullPathGIFPriv,FileNameGIF);
 	 Brw_CreateTmpPublicLinkToPrivateFile (FullPathPNGPriv,FileNamePNG);
 
-	 snprintf (TmpPubDir,sizeof (TmpPubDir),
-	           "%s/%s",
+	 snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
 	           Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
 	 Ses_AddPublicDirToCache (FullPathGIFPriv,TmpPubDir);
 	}
@@ -1675,8 +1640,7 @@ static void Med_ShowVideo (const struct Med_Media *Media,
    bool Cached;
 
    /***** Build private path to video *****/
-   snprintf (FileNameVideo,sizeof (FileNameVideo),
-	     "%s.%s",
+   snprintf (FileNameVideo,sizeof (FileNameVideo),"%s.%s",
 	     Media->Name,Med_Extensions[Media->Type]);
    if (asprintf (&FullPathVideoPriv,"%s/%s",
 	         PathMedPriv,FileNameVideo) < 0)
@@ -1695,8 +1659,7 @@ static void Med_ShowVideo (const struct Med_Media *Media,
 	 Brw_CreateDirDownloadTmp ();
 	 Brw_CreateTmpPublicLinkToPrivateFile (FullPathVideoPriv,FileNameVideo);
 
-	 snprintf (TmpPubDir,sizeof (TmpPubDir),
-	           "%s/%s",
+	 snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
 	           Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
 	 Ses_AddPublicDirToCache (FullPathVideoPriv,TmpPubDir);
 	}
@@ -1876,10 +1839,9 @@ long Med_CloneMedia (const struct Med_Media *MediaSrc)
       Length = strlen (MediaSrc->URL);
       if (Length > Cns_MAX_BYTES_WWW)
 	  Length = Cns_MAX_BYTES_WWW;
-      if ((MediaDst.URL = (char *) malloc (Length + 1)) == NULL)
-	 Lay_ShowErrorAndExit ("Error allocating memory for media URL.");
-      Str_Copy (MediaDst.URL,MediaSrc->URL,
-		Length);
+      if ((MediaDst.URL = malloc (Length + 1)) == NULL)
+         Lay_NotEnoughMemoryExit ();
+      Str_Copy (MediaDst.URL,MediaSrc->URL,Length);
      }
 
    /***** Copy media title *****/
@@ -1890,10 +1852,9 @@ long Med_CloneMedia (const struct Med_Media *MediaSrc)
       Length = strlen (MediaSrc->Title);
       if (Length > Cns_MAX_BYTES_WWW)
 	  Length = Cns_MAX_BYTES_WWW;
-      if ((MediaDst.Title = (char *) malloc (Length + 1)) == NULL)
-	 Lay_ShowErrorAndExit ("Error allocating memory for media title.");
-      Str_Copy (MediaDst.Title,MediaSrc->Title,
-		Length);
+      if ((MediaDst.Title = malloc (Length + 1)) == NULL)
+         Lay_NotEnoughMemoryExit ();
+      Str_Copy (MediaDst.Title,MediaSrc->Title,Length);
      }
 
    /***** Create duplicate of files *****/
@@ -1918,12 +1879,14 @@ long Med_CloneMedia (const struct Med_Media *MediaSrc)
 	 Fil_CreateDirIfNotExists (MediaPriv[Med_DST].Path);
 
 	 /* Build paths to private files */
-	 snprintf (MediaPriv[Med_SRC].FullPath,sizeof (MediaPriv[Med_SRC].FullPath),
-		   "%s/%s.%s",
-		   MediaPriv[Med_SRC].Path,MediaSrc->Name,Med_Extensions[MediaSrc->Type]);
-	 snprintf (MediaPriv[Med_DST].FullPath,sizeof (MediaPriv[Med_DST].FullPath),
-		   "%s/%s.%s",
-		   MediaPriv[Med_DST].Path,MediaDst.Name,Med_Extensions[MediaSrc->Type]);
+	 snprintf (MediaPriv[Med_SRC].FullPath,
+	           sizeof (MediaPriv[Med_SRC].FullPath),"%s/%s.%s",
+		   MediaPriv[Med_SRC].Path,
+		   MediaSrc->Name,Med_Extensions[MediaSrc->Type]);
+	 snprintf (MediaPriv[Med_DST].FullPath,
+	           sizeof (MediaPriv[Med_DST].FullPath),"%s/%s.%s",
+		   MediaPriv[Med_DST].Path,
+		   MediaDst.Name,Med_Extensions[MediaSrc->Type]);
 
 	 /* Copy file */
 	 Fil_FastCopyOfFiles (MediaPriv[Med_SRC].FullPath,
@@ -1932,11 +1895,11 @@ long Med_CloneMedia (const struct Med_Media *MediaSrc)
 	 if (MediaSrc->Type == Med_GIF)
 	   {
 	    /* Build private paths to PNG */
-	    snprintf (MediaPriv[Med_SRC].FullPath,sizeof (MediaPriv[Med_SRC].FullPath),
-		      "%s/%s.png",
+	    snprintf (MediaPriv[Med_SRC].FullPath,
+	              sizeof (MediaPriv[Med_SRC].FullPath),"%s/%s.png",
 		      MediaPriv[Med_SRC].Path,MediaSrc->Name);
-	    snprintf (MediaPriv[Med_DST].FullPath,sizeof (MediaPriv[Med_DST].FullPath),
-		      "%s/%s.png",
+	    snprintf (MediaPriv[Med_DST].FullPath,
+	              sizeof (MediaPriv[Med_DST].FullPath),"%s/%s.png",
 		      MediaPriv[Med_DST].Path,MediaDst.Name);
 
 	    /* Copy PNG file */
@@ -2014,8 +1977,7 @@ void Med_RemoveMedia (long MedCod)
 	 if (Media.Name[0])
 	   {
 	    /***** Build path to private directory with the media *****/
-	    snprintf (PathMedPriv,sizeof (PathMedPriv),
-		      "%s/%c%c",
+	    snprintf (PathMedPriv,sizeof (PathMedPriv),"%s/%c%c",
 		      Cfg_PATH_MEDIA_PRIVATE,
 		      Media.Name[0],
 		      Media.Name[1]);

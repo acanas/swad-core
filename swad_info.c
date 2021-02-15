@@ -754,15 +754,13 @@ static bool Inf_CheckPage (long CrsCod,Inf_InfoType_t InfoType)
 
    /***** Open file with web page *****/
    /* 1. Check if index.html exists */
-   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-	     "%s/index.html",
+   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
 	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
       return true;
 
    /* 2. If index.html does not exist, try index.htm */
-   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-	     "%s/index.htm",
+   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.htm",
 	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
       return true;
@@ -789,13 +787,11 @@ static bool Inf_CheckAndShowPage (void)
 
    /***** Open file with web page *****/
    /* 1. Check if index.html exists */
-   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-	     "%s/index.html",
+   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
 	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
      {
-      snprintf (URL,sizeof (URL),
-	        "%s/%ld/%s/index.html",
+      snprintf (URL,sizeof (URL),"%s/%ld/%s/index.html",
 	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Crs.CrsCod,
 	        Inf_FileNamesForInfoType[Gbl.Crs.Info.Type]);
       Inf_ShowPage (URL);
@@ -804,13 +800,11 @@ static bool Inf_CheckAndShowPage (void)
      }
 
    /* 2. If index.html does not exist, try index.htm */
-   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-	     "%s/index.htm",
+   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.htm",
 	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
      {
-      snprintf (URL,sizeof (URL),
-	        "%s/%ld/%s/index.htm",
+      snprintf (URL,sizeof (URL),"%s/%ld/%s/index.htm",
 	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Crs.CrsCod,
 	        Inf_FileNamesForInfoType[Gbl.Crs.Info.Type]);
       Inf_ShowPage (URL);
@@ -827,10 +821,8 @@ static bool Inf_CheckAndShowPage (void)
 
 void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char PathDir[PATH_MAX + 1])
   {
-   snprintf (PathDir,PATH_MAX + 1,
-	     "%s/%ld/%s",
-             Cfg_PATH_CRS_PUBLIC,CrsCod,
-             Inf_FileNamesForInfoType[InfoType]);
+   snprintf (PathDir,PATH_MAX + 1,"%s/%ld/%s",
+             Cfg_PATH_CRS_PUBLIC,CrsCod,Inf_FileNamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/
@@ -899,10 +891,8 @@ static bool Inf_CheckAndShowURL (void)
 static void Inf_BuildPathURL (long CrsCod,Inf_InfoType_t InfoType,
                               char PathFile[PATH_MAX + 1])
   {
-   snprintf (PathFile,PATH_MAX + 1,
-	     "%s/%ld/%s.url",
-	     Cfg_PATH_CRS_PRIVATE,CrsCod,
-	     Inf_FileNamesForInfoType[InfoType]);
+   snprintf (PathFile,PATH_MAX + 1,"%s/%ld/%s.url",
+	     Cfg_PATH_CRS_PRIVATE,CrsCod,Inf_FileNamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/
@@ -1669,13 +1659,11 @@ void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
 
       /* Get text in HTML format (not rigorous) */
       if (InfoTxtHTML)
-	 Str_Copy (InfoTxtHTML,row[0],
-	           Cns_MAX_BYTES_LONG_TEXT);
+	 Str_Copy (InfoTxtHTML,row[0],Cns_MAX_BYTES_LONG_TEXT);
 
       /* Get text in Markdown format */
       if (InfoTxtMD)
-	 Str_Copy (InfoTxtMD,row[1],
-	           Cns_MAX_BYTES_LONG_TEXT);
+	 Str_Copy (InfoTxtMD,row[1],Cns_MAX_BYTES_LONG_TEXT);
      }
    else
      {
@@ -1843,11 +1831,9 @@ static bool Inf_CheckAndShowRichTxt (void)
       /***** Store text into a temporary .md file in HTML output directory *****/
       // TODO: change to another directory?
       /* Create a unique name for the .md file */
-      snprintf (PathFileMD,sizeof (PathFileMD),
-	        "%s/%s.md",
+      snprintf (PathFileMD,sizeof (PathFileMD),"%s/%s.md",
 	        Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
-      snprintf (PathFileHTML,sizeof (PathFileHTML),
-	        "%s/%s.md.html",	// Do not use only .html because that is the output temporary file
+      snprintf (PathFileHTML,sizeof (PathFileHTML),"%s/%s.md.html",	// Do not use only .html because that is the output temporary file
 	        Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
 
       /* Open Markdown file for writing */
@@ -1875,8 +1861,7 @@ static bool Inf_CheckAndShowRichTxt (void)
       /* MathJax 3.0.1 */
 #ifdef Cfg_MATHJAX_LOCAL
       // Use the local copy of MathJax
-      snprintf (MathJaxURL,sizeof (MathJaxURL),
-	        "=%s/mathjax/tex-chtml.js",
+      snprintf (MathJaxURL,sizeof (MathJaxURL),"=%s/mathjax/tex-chtml.js",
 	        Cfg_URL_SWAD_PUBLIC);
 #else
       // Use the MathJax Content Delivery Network (CDN)
@@ -2052,8 +2037,7 @@ void Inf_RecAndChangePlainTxtInfo (void)
    /***** Get text with course information from form *****/
    Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
                      Cns_MAX_BYTES_LONG_TEXT,NULL);
-   Str_Copy (Txt_MarkdownFormat,Txt_HTMLFormat,
-             Cns_MAX_BYTES_LONG_TEXT);
+   Str_Copy (Txt_MarkdownFormat,Txt_HTMLFormat,sizeof (Txt_MarkdownFormat) - 1);
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
                      Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store in HTML format (not rigorous)
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_MARKDOWN,
@@ -2092,8 +2076,7 @@ void Inf_RecAndChangeRichTxtInfo (void)
    /***** Get text with course information from form *****/
    Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
                      Cns_MAX_BYTES_LONG_TEXT,NULL);
-   Str_Copy (Txt_MarkdownFormat,Txt_HTMLFormat,
-             Cns_MAX_BYTES_LONG_TEXT);
+   Str_Copy (Txt_MarkdownFormat,Txt_HTMLFormat,sizeof (Txt_MarkdownFormat) - 1);
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
                      Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store in HTML format (not rigorous)
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_MARKDOWN,
@@ -2231,8 +2214,7 @@ void Inf_ReceivePagInfo (void)
         {
          Fil_RemoveTree (PathRelDirHTML);
          Fil_CreateDirIfNotExists (PathRelDirHTML);
-         snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-                   "%s/index.html",
+         snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
 		   PathRelDirHTML);
          if (Fil_EndReceptionOfFile (PathRelFileHTML,Param))
            {
@@ -2246,8 +2228,7 @@ void Inf_ReceivePagInfo (void)
         {
          Fil_RemoveTree (PathRelDirHTML);
          Fil_CreateDirIfNotExists (PathRelDirHTML);
-         snprintf (PathRelFileZIP,sizeof (PathRelFileZIP),
-                   "%s/%s.zip",
+         snprintf (PathRelFileZIP,sizeof (PathRelFileZIP),"%s/%s.zip",
                    Gbl.Crs.PathPriv,
                    Inf_FileNamesForInfoType[Gbl.Crs.Info.Type]);
 
@@ -2256,15 +2237,13 @@ void Inf_ReceivePagInfo (void)
             Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_received_successfully);
 
             /* Uncompress ZIP */
-            snprintf (StrUnzip,sizeof (StrUnzip),
-        	      "unzip -qq -o %s -d %s",
+            snprintf (StrUnzip,sizeof (StrUnzip),"unzip -qq -o %s -d %s",
                       PathRelFileZIP,PathRelDirHTML);
             if (system (StrUnzip) == 0)
               {
                /* Check if uploaded file is index.html or index.htm */
                snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-        	         "%s/index.html",
-			 PathRelDirHTML);
+        	         "%s/index.html",PathRelDirHTML);
                if (Fil_CheckIfPathExists (PathRelFileHTML))
                  {
                   Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
@@ -2274,8 +2253,7 @@ void Inf_ReceivePagInfo (void)
 	       else
 	         {
 	          snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
-	        	    "%s/index.htm",
-			    PathRelDirHTML);
+	        	    "%s/index.htm",PathRelDirHTML);
 	          if (Fil_CheckIfPathExists (PathRelFileHTML))
                     {
                      Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);

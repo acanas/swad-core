@@ -139,16 +139,14 @@ void Prf_SeeSocialProfiles (void)
 /*****************************************************************************/
 
 char *Prf_GetURLPublicProfile (char URL[Cns_MAX_BYTES_WWW + 1],
-                               const char *NicknameWithoutArroba)
+                               const char *NickWithoutArroba)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    /***** Build URL using nickname *****/
-   snprintf (URL,Cns_MAX_BYTES_WWW + 1,
-	     "%s/%s?usr=@%s",
-	     Cfg_URL_SWAD_CGI,
-	     Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	     NicknameWithoutArroba);
+   snprintf (URL,Cns_MAX_BYTES_WWW + 1,"%s/%s?usr=@%s",
+	     Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	     NickWithoutArroba);
 
    return URL;
   }
@@ -162,7 +160,7 @@ void Prf_PutLinkMyPublicProfile (void)
    extern const char *Txt_My_public_profile;
 
    Lay_PutContextualLinkIconText (ActSeeOthPubPrf,NULL,
-				  Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
+				  Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 				  "user-circle.svg",
 				  Txt_My_public_profile);
   }
@@ -192,7 +190,7 @@ void Prf_RequestUserProfile (void)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Continue;
-   char NicknameWithArroba[1 + Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
+   char NickWithArroba[1 + Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
 
    if (Gbl.Usrs.Me.Logged)
      {
@@ -217,10 +215,9 @@ void Prf_RequestUserProfile (void)
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_Nickname);
 
-   snprintf (NicknameWithArroba,sizeof (NicknameWithArroba),
-	     "@%s",
+   snprintf (NickWithArroba,sizeof (NickWithArroba),"@%s",
 	     Gbl.Usrs.Me.UsrDat.Nickname);
-   HTM_INPUT_TEXT ("usr",Nck_MAX_BYTES_NICKNAME_FROM_FORM,NicknameWithArroba,
+   HTM_INPUT_TEXT ("usr",Nck_MAX_BYTES_NICKNAME_FROM_FORM,NickWithArroba,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"18\"");
    HTM_LABEL_End ();
@@ -522,7 +519,7 @@ static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
      }
    else	// First click time is unknown or user never logged
       /***** Button to fetch and store user's figures *****/
-      Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
+      Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
 
    Prf_EndListItem ();
   }
@@ -625,7 +622,7 @@ static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
      }
    else	// Number of clicks is unknown
       /***** Button to fetch and store user's figures *****/
-      Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
+      Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
 
    Prf_EndListItem ();
   }
@@ -662,7 +659,7 @@ static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
      }
    else	// Number of file views is unknown
       /***** Button to fetch and store user's figures *****/
-      Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
+      Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
 
    Prf_EndListItem ();
   }
@@ -699,7 +696,7 @@ static void Prf_ShowNumSocialPublications (const struct UsrData *UsrDat,
      }
    else	// Number of social publications is unknown
       /***** Button to fetch and store user's figures *****/
-      Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
+      Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
 
    Prf_EndListItem ();
   }
@@ -736,7 +733,7 @@ static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
      }
    else	// Number of forum posts is unknown
       /***** Button to fetch and store user's figures *****/
-      Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
+      Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
 
    Prf_EndListItem ();
   }
@@ -773,7 +770,7 @@ static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
      }
    else	// Number of messages sent is unknown
       /***** Button to fetch and store user's figures *****/
-      Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
+      Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
 
    Prf_EndListItem ();
   }
@@ -1272,8 +1269,7 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
 
    if (CreatingMyOwnAccount)
       // This is the first click
-      Str_Copy (SubQueryFirstClickTime,"NOW()",
-                Prf_MAX_BYTES_SUBQUERY_FIRST_CLICK_TIME);
+      Str_Copy (SubQueryFirstClickTime,"NOW()",sizeof (SubQueryFirstClickTime) - 1);
    else
       sprintf (SubQueryFirstClickTime,"FROM_UNIXTIME(%ld)",
 	       (long) UsrFigures->FirstClickTimeUTC);	//   0 ==> unknown first click time or user never logged
@@ -1788,7 +1784,7 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
    if (Visible)
      {
       Frm_StartForm (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,
 			       ItsMe ? "BT_LINK RANK_USR DAT_SMALL_N" :
 		                       "BT_LINK RANK_USR DAT_SMALL",

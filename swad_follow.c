@@ -557,7 +557,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
      {
       Frm_StartForm (IFollowUsr ? ActUnfUsr :
 	                          ActFolUsr);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,
 		       IFollowUsr ? "user-check.svg" :
 				    "user-plus.svg",
@@ -598,7 +598,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
      {
       /* Form to list users */
       Frm_StartFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       HTM_BUTTON_SUBMIT_Begin (Title,
 			       (Gbl.Action.Act == Action) ? "BT_LINK FOLLOW_NUM_B" :
 							    "BT_LINK FOLLOW_NUM",
@@ -624,7 +624,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
      {
       /* Form to list users */
       Frm_StartFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       HTM_BUTTON_SUBMIT_Begin (Title,
 			       (Gbl.Action.Act == Action) ? The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme] :
 							    The_ClassFormLinkOutBox    [Gbl.Prefs.Theme],
@@ -845,7 +845,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
      {
       /* Put form to go to public profile */
       Frm_StartForm (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       HTM_DIV_Begin ("class=\"FOLLOW_USR_NAME\"");	// Limited width
       HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,"BT_LINK LT DAT",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
@@ -902,7 +902,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
      {
       /* Put form to go to public profile */
       Frm_StartForm (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW\"");	// Limited width
       HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,"BT_LINK CON_NAME_FOLLOW CON_CRS",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
@@ -956,7 +956,7 @@ static void Fol_PutIconToFollow (struct UsrData *UsrDat)
 
    /***** Form to unfollow *****/
    Frm_StartForm (ActFolUsr);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",
 		    Txt_Follow,"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16");
    Frm_EndForm ();
@@ -972,7 +972,7 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
 
    /* Form to follow */
    Frm_StartForm (ActUnfUsr);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
 		    Txt_Unfollow,"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16");
    Frm_EndForm ();
@@ -1168,7 +1168,7 @@ static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
@@ -1217,7 +1217,7 @@ void Fol_FollowUsrs ()
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
@@ -1264,7 +1264,7 @@ void Fol_UnfollowUsrs (void)
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
@@ -1463,7 +1463,7 @@ void Fol_GetNotifFollower (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
   {
    SummaryStr[0] = '\0';	// Return nothing on error
 
-   if ((*ContentStr = (char *) malloc (1)))
+   if ((*ContentStr = malloc (1)))
       *ContentStr[0] = '\0';
   }
 

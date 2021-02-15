@@ -91,11 +91,9 @@ const char *Ico_GetIcon (const char *IconWithoutExtension)
         NumExt < Ico_NUM_ICON_EXTENSIONS;
         NumExt++)
      {
-      snprintf (IconWithExtension,sizeof (IconWithExtension),
-		"%s.%s",
+      snprintf (IconWithExtension,sizeof (IconWithExtension),"%s.%s",
 		IconWithoutExtension,Ico_IconExtensions[NumExt]);
-      snprintf (PathIcon,sizeof (PathIcon),
-		"%s/%s/%s",
+      snprintf (PathIcon,sizeof (PathIcon),"%s/%s/%s",
 		Cfg_PATH_ICON_SETS_PUBLIC,
 		Ico_IconSetId[Gbl.Prefs.IconSet],
 		IconWithExtension);
@@ -131,8 +129,7 @@ void Ico_PutIconsToSelectIconSet (void)
         	                                    "PREF_OFF");
       Frm_StartForm (ActChgIco);
       Par_PutHiddenParamString (NULL,"IconSet",Ico_IconSetId[IconSet]);
-      snprintf (Icon,sizeof (Icon),
-		"%s/%s/cog.svg",
+      snprintf (Icon,sizeof (Icon),"%s/%s/cog.svg",
 		Cfg_ICON_FOLDER_SETS,
                 Ico_IconSetId[IconSet]);
       Ico_PutSettingIconLink (Icon,Ico_IconSetNames[IconSet]);
@@ -162,8 +159,7 @@ void Ico_ChangeIconSet (void)
   {
    /***** Get param with icon set *****/
    Gbl.Prefs.IconSet = Ico_GetParamIconSet ();
-   snprintf (Gbl.Prefs.URLIconSet,sizeof (Gbl.Prefs.URLIconSet),
-	     "%s/%s",
+   snprintf (Gbl.Prefs.URLIconSet,sizeof (Gbl.Prefs.URLIconSet),"%s/%s",
              Cfg_URL_ICON_SETS_PUBLIC,
              Ico_IconSetId[Gbl.Prefs.IconSet]);
 

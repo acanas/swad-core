@@ -4058,8 +4058,7 @@ void DB_ExitOnMySQLError (const char *Message)
   {
    char BigErrorMsg[64 * 1024];
 
-   snprintf (BigErrorMsg,sizeof (BigErrorMsg),
-	     "Database error: %s (%s).",
+   snprintf (BigErrorMsg,sizeof (BigErrorMsg),"Database error: %s (%s).",
              Message,mysql_error (&Gbl.mysql));
    Lay_ShowErrorAndExit (BigErrorMsg);
   }

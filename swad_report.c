@@ -343,14 +343,12 @@ static void Rep_GetCurrentDateTimeUTC (struct Rep_Report *Report)
      {
       /* Date and time as strings */
       snprintf (Report->CurrentTimeUTC.StrDate,
-	        sizeof (Report->CurrentTimeUTC.StrDate),
-	        "%04d-%02d-%02d",
+	        sizeof (Report->CurrentTimeUTC.StrDate),"%04d-%02d-%02d",
 	        1900 + Report->tm_CurrentTime.tm_year,	// year
 	        1 + Report->tm_CurrentTime.tm_mon,	// month
 	        Report->tm_CurrentTime.tm_mday);		// day of the month
       snprintf (Report->CurrentTimeUTC.StrTime,
-	        sizeof (Report->CurrentTimeUTC.StrTime),
-	        "%02d:%02d:%02d",
+	        sizeof (Report->CurrentTimeUTC.StrTime),"%02d:%02d:%02d",
 	        Report->tm_CurrentTime.tm_hour,		// hours
 	        Report->tm_CurrentTime.tm_min,		// minutes
 	        Report->tm_CurrentTime.tm_sec);		// seconds
@@ -383,16 +381,14 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
 
    /***** Unique directory for the file with the report *****/
    /* 1. Create a directory using the leftmost 2 chars of a unique name */
-   snprintf (PathUniqueDirL,sizeof (PathUniqueDirL),
-	     "%s/%c%c",
+   snprintf (PathUniqueDirL,sizeof (PathUniqueDirL),"%s/%c%c",
              Cfg_PATH_REP_PUBLIC,
              Gbl.UniqueNameEncrypted[0],
              Gbl.UniqueNameEncrypted[1]);
    Fil_CreateDirIfNotExists (PathUniqueDirL);
 
    /* 2. Create a directory using the rightmost 41 chars of a unique name */
-   snprintf (PathUniqueDirR,sizeof (PathUniqueDirR),
-	     "%s/%s",
+   snprintf (PathUniqueDirR,sizeof (PathUniqueDirR),"%s/%s",
              PathUniqueDirL,
              &Gbl.UniqueNameEncrypted[2]);
    if (mkdir (PathUniqueDirR,(mode_t) 0xFFF))
@@ -402,22 +398,19 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
    snprintf (Report->FilenameReport,sizeof (Report->FilenameReport),
 	     "%s_%06u_%06u.html",
              Rep_FILENAME_ROOT,Report->CurrentTimeUTC.Date,Report->CurrentTimeUTC.Time);
-   snprintf (PathFileReport,sizeof (PathFileReport),
-	     "%s/%s",
+   snprintf (PathFileReport,sizeof (PathFileReport),"%s/%s",
              PathUniqueDirR,Report->FilenameReport);
    if ((Gbl.F.Rep = fopen (PathFileReport,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not create report file.");
 
    /***** Permalink *****/
-   snprintf (Permalink,sizeof (Permalink),
-	     "%s/%c%c/%s/%s",
+   snprintf (Permalink,sizeof (Permalink),"%s/%c%c/%s/%s",
              Cfg_URL_REP_PUBLIC,
              Gbl.UniqueNameEncrypted[0],
              Gbl.UniqueNameEncrypted[1],
              &Gbl.UniqueNameEncrypted[2],
              Report->FilenameReport);
-   Str_Copy (Report->Permalink,Permalink,
-	     Cns_MAX_BYTES_WWW);
+   Str_Copy (Report->Permalink,Permalink,sizeof (Report->Permalink) - 1);
   }
 
 /*****************************************************************************/
@@ -1439,8 +1432,7 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
       row = mysql_fetch_row (mysql_res);
 
       /* Remove report directory and file */
-      snprintf (PathUniqueDirReport,sizeof (PathUniqueDirReport),
-	        "%s/%s/%s",
+      snprintf (PathUniqueDirReport,sizeof (PathUniqueDirReport),"%s/%s/%s",
 	        Cfg_PATH_REP_PUBLIC,row[0],row[1]);
       Fil_RemoveTree (PathUniqueDirReport);
      }

@@ -663,8 +663,7 @@ void InsCfg_ChangeInsWWW (void)
      {
       /***** Update database changing old WWW by new WWW *****/
       Ins_UpdateInsWWWDB (Gbl.Hierarchy.Ins.InsCod,NewWWW);
-      Str_Copy (Gbl.Hierarchy.Ins.WWW,NewWWW,
-                Cns_MAX_BYTES_WWW);
+      Str_Copy (Gbl.Hierarchy.Ins.WWW,NewWWW,sizeof (Gbl.Hierarchy.Ins.WWW) - 1);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,

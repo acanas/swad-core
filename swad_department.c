@@ -372,9 +372,8 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
       if (Departments->Num) // Departments found...
 	{
 	 /***** Create list with courses in degree *****/
-	 if ((Departments->Lst = (struct Dpt_Department *)
-		                 calloc ((size_t) Departments->Num,
-	                                 sizeof (struct Dpt_Department))) == NULL)
+	 if ((Departments->Lst = calloc (Departments->Num,
+	                                 sizeof (*Departments->Lst))) == NULL)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the departments *****/
@@ -396,16 +395,13 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
 	       Lay_ShowErrorAndExit ("Wrong code of institution.");
 
 	    /* Get the short name of the department (row[2]) */
-	    Str_Copy (Dpt->ShrtName,row[2],
-		      Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+	    Str_Copy (Dpt->ShrtName,row[2],sizeof (Dpt->ShrtName) - 1);
 
 	    /* Get the full name of the department (row[3]) */
-	    Str_Copy (Dpt->FullName,row[3],
-		      Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+	    Str_Copy (Dpt->FullName,row[3],sizeof (Dpt->FullName) - 1);
 
 	    /* Get the URL of the department (row[4]) */
-	    Str_Copy (Dpt->WWW,row[4],
-		      Cns_MAX_BYTES_WWW);
+	    Str_Copy (Dpt->WWW,row[4],sizeof (Dpt->WWW) - 1);
 
 	    /* Get number of non-editing teachers and teachers in this department (row[5]) */
 	    if (sscanf (row[5],"%u",&Dpt->NumTchs) != 1)
@@ -437,10 +433,8 @@ void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt)
    /***** Check if department code is correct *****/
    if (Dpt->DptCod == 0)
      {
-      Str_Copy (Dpt->ShrtName,Txt_Another_department,
-                Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
-      Str_Copy (Dpt->FullName,Txt_Another_department,
-                Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+      Str_Copy (Dpt->ShrtName,Txt_Another_department,sizeof (Dpt->ShrtName) - 1);
+      Str_Copy (Dpt->FullName,Txt_Another_department,sizeof (Dpt->FullName) - 1);
      }
    else if (Dpt->DptCod > 0)
      {
@@ -471,16 +465,13 @@ void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt)
          Dpt->InsCod = Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get the short name of the department (row[1]) */
-         Str_Copy (Dpt->ShrtName,row[1],
-                   Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+         Str_Copy (Dpt->ShrtName,row[1],sizeof (Dpt->ShrtName) - 1);
 
          /* Get the full name of the department (row[2]) */
-         Str_Copy (Dpt->FullName,row[2],
-                   Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+         Str_Copy (Dpt->FullName,row[2],sizeof (Dpt->FullName) - 1);
 
          /* Get the URL of the department (row[3]) */
-         Str_Copy (Dpt->WWW,row[3],
-                   Cns_MAX_BYTES_WWW);
+         Str_Copy (Dpt->WWW,row[3],sizeof (Dpt->WWW) - 1);
 
          /* Get number of teachers in this department (row[4]) */
          if (sscanf (row[4],"%u",&Dpt->NumTchs) != 1)
@@ -817,8 +808,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update name *****/
-   Str_Copy (CurrentDptName,NewDptName,
-             MaxBytes);
+   Str_Copy (CurrentDptName,NewDptName,MaxBytes);
   }
 
 /*****************************************************************************/
@@ -886,8 +876,7 @@ void Dpt_ChangeDptWWW (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update web *****/
-   Str_Copy (Dpt_EditingDpt->WWW,NewWWW,
-             Cns_MAX_BYTES_WWW);
+   Str_Copy (Dpt_EditingDpt->WWW,NewWWW,sizeof (Dpt_EditingDpt->WWW) - 1);
   }
 
 /*****************************************************************************/
@@ -1197,8 +1186,8 @@ static void Dpt_EditingDepartmentConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing department.");
 
    /***** Allocate memory for department *****/
-   if ((Dpt_EditingDpt = (struct Dpt_Department *) malloc (sizeof (struct Dpt_Department))) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for department.");
+   if ((Dpt_EditingDpt = malloc (sizeof (*Dpt_EditingDpt))) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Reset department *****/
    Dpt_EditingDpt->DptCod      = -1L;

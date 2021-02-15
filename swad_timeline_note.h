@@ -117,7 +117,7 @@ void TL_Not_RemoveNoteGbl (void);
 
 long TL_Not_GetPubCodOfOriginalNote (long NotCod);
 
-void TL_Not_AddNotesJustRetrievedToTimelineThisSession (void);
+void TL_Not_AddNotesJustRetrievedToVisibleTimelineThisSession (void);
 
 void TL_Not_GetDataOfNoteByCod (struct TL_Not_Note *Not);
 

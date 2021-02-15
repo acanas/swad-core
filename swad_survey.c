@@ -1055,7 +1055,8 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
       Surveys->Num = (unsigned) NumRows;
 
       /***** Create list of surveys *****/
-      if ((Surveys->LstSvyCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
+      if ((Surveys->LstSvyCods = calloc (NumRows,
+                                         sizeof (*Surveys->LstSvyCods))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the surveys codes *****/
@@ -1301,8 +1302,7 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
       Svy->Status.Open = (row[8][0] == '1');
 
       /* Get the title of the survey (row[9]) */
-      Str_Copy (Svy->Title,row[9],
-                Svy_MAX_BYTES_SURVEY_TITLE);
+      Str_Copy (Svy->Title,row[9],strlen (Svy->Title) - 1);
 
       /* Get number of questions and number of users who have already answer this survey */
       Svy->NumQsts = Svy_GetNumQstsSvy (Svy->SvyCod);
@@ -1493,8 +1493,7 @@ static void Svy_GetSurveyTxtFromDB (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Txt,row[0],
-                Cns_MAX_BYTES_TEXT);
+      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
      }
    else
       Txt[0] = '\0';
@@ -1532,17 +1531,15 @@ void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       row = mysql_fetch_row (mysql_res);
 
       /***** Get summary *****/
-      Str_Copy (SummaryStr,row[0],
-		Ntf_MAX_BYTES_SUMMARY);
+      Str_Copy (SummaryStr,row[0],Ntf_MAX_BYTES_SUMMARY);
 
       /***** Get content *****/
       if (GetContent)
 	{
 	 Length = strlen (row[1]);
-	 if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
-	    Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-	 Str_Copy (*ContentStr,row[1],
-		   Length);
+	 if ((*ContentStr = malloc (Length + 1)) == NULL)
+            Lay_NotEnoughMemoryExit ();
+	 Str_Copy (*ContentStr,row[1],Length);
 	}
      }
 
@@ -2708,8 +2705,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
          SvyQst->AnswerType = Svy_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
          /* Get the stem of the question from the database (row[2]) */
-         Str_Copy (Txt,row[2],
-                   Cns_MAX_BYTES_TEXT);
+         Str_Copy (Txt,row[2],Cns_MAX_BYTES_TEXT);
 
          /* Free structure that stores the query result */
 	 DB_FreeMySQLResult (&mysql_res);
@@ -2728,8 +2724,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 	       /* Abort on error */
 	       Ale_ShowAlertsAndExit ();
 
-            Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],
-                      Svy_MAX_BYTES_ANSWER);
+            Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],Svy_MAX_BYTES_ANSWER);
            }
          /* Free structure that stores the query result */
 	 DB_FreeMySQLResult (&mysql_res);
@@ -2968,7 +2963,7 @@ static bool Svy_AllocateTextChoiceAnswer (struct Svy_Question *SvyQst,
                                           unsigned NumAns)
   {
    Svy_FreeTextChoiceAnswer (SvyQst,NumAns);
-   if ((SvyQst->AnsChoice[NumAns].Text = (char *) malloc (Svy_MAX_BYTES_ANSWER + 1)) == NULL)
+   if ((SvyQst->AnsChoice[NumAns].Text = malloc (Svy_MAX_BYTES_ANSWER + 1)) == NULL)
      {
       Ale_CreateAlert (Ale_ERROR,NULL,
 	               "Not enough memory to store answer.");
@@ -3057,9 +3052,7 @@ void Svy_ReceiveQst (void)
       if (!Svy_AllocateTextChoiceAnswer (&SvyQst,NumAns))
 	 /* Abort on error */
 	 Ale_ShowAlertsAndExit ();
-      snprintf (AnsStr,sizeof (AnsStr),
-	        "AnsStr%u",
-		NumAns);
+      snprintf (AnsStr,sizeof (AnsStr),"AnsStr%u",NumAns);
       Par_GetParToHTML (AnsStr,SvyQst.AnsChoice[NumAns].Text,Svy_MAX_BYTES_ANSWER);
      }
 
@@ -3438,10 +3431,9 @@ static void Svy_WriteQstStem (const char *Stem)
 
    /* Convert the stem, that is in HTML, to rigorous HTML */
    Length = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
-   if ((HeadingRigorousHTML = (char *) malloc (Length + 1)) == NULL)
+   if ((HeadingRigorousHTML = malloc (Length + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
-   Str_Copy (HeadingRigorousHTML,Stem,
-             Length);
+   Str_Copy (HeadingRigorousHTML,Stem,Length);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      HeadingRigorousHTML,Length,false);
 
@@ -3495,8 +3487,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
-	 Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],
-	           Svy_MAX_BYTES_ANSWER);
+	 Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],Svy_MAX_BYTES_ANSWER);
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			   SvyQst->AnsChoice[NumAns].Text,Svy_MAX_BYTES_ANSWER,false);
 
@@ -3507,9 +3498,8 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 	   {
 	    /* Write selector to choice this answer */
 	    HTM_TD_Begin ("class=\"LT\"");
-	    snprintf (StrAns,sizeof (StrAns),
-		      "Ans%010u",
-		      (unsigned) SvyQst->QstCod);
+	    snprintf (StrAns,sizeof (StrAns),"Ans%010u",
+	              (unsigned) SvyQst->QstCod);
 	    if (SvyQst->AnswerType == Svy_ANS_UNIQUE_CHOICE)
 	       HTM_INPUT_RADIO (StrAns,false,
 				"id=\"Ans%010u_%010u\" value=\"%u\""
@@ -3799,9 +3789,7 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
             Lay_ShowErrorAndExit ("Error: wrong question code.");
 
          /* Get possible parameter with the user's answer */
-         snprintf (ParamName,sizeof (ParamName),
-                   "Ans%010u",
-		   (unsigned) QstCod);
+         snprintf (ParamName,sizeof (ParamName),"Ans%010u",(unsigned) QstCod);
          // Lay_ShowAlert (Lay_INFO,ParamName);
          Par_GetParMultiToText (ParamName,StrAnswersIndexes,
                                 Svy_MAX_ANSWERS_PER_QUESTION * (Cns_MAX_DECIMAL_DIGITS_UINT + 1));

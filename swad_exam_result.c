@@ -29,7 +29,6 @@
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
@@ -371,7 +370,7 @@ static void ExaRes_ListAllResultsInSelectedExams (struct Exa_Exams *Exams)
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
@@ -782,7 +781,7 @@ static void ExaRes_BuildExamsSelectedCommas (struct Exa_Exams *Exams,
 
    /***** Allocate memory for subquery of exams selected *****/
    MaxLength = (size_t) Exams->NumSelected * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
-   if ((*ExamsSelectedCommas = (char *) malloc (MaxLength + 1)) == NULL)
+   if ((*ExamsSelectedCommas = malloc (MaxLength + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Build subquery with list of selected exams *****/
@@ -1164,7 +1163,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	       case Usr_OTHER:
 		  Frm_StartForm (ActSeeOneExaResOth);
 		  ExaSes_PutParamsEdit (Exams);
-		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		  break;
 	      }
 	    Ico_PutIconLink ("tasks.svg",Txt_Result);
@@ -1650,8 +1649,8 @@ void ExaRes_ShowExamResultUser (struct UsrData *UsrDat)
    HTM_TxtF ("&nbsp;%s",UsrDat->Surname1);
    if (UsrDat->Surname2[0])
       HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
-   if (UsrDat->FirstName[0])
-      HTM_TxtF (", %s",UsrDat->FirstName);
+   if (UsrDat->FrstName[0])
+      HTM_TxtF (", %s",UsrDat->FrstName);
    HTM_BR ();
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :

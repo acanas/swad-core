@@ -132,8 +132,8 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
    /***** Create unique identifier for this box *****/
    if (Closable == Box_CLOSABLE)
      {
-      if ((Gbl.Box.Ids[Gbl.Box.Nested] = (char *) malloc (Frm_MAX_BYTES_ID + 1)) == NULL)
-	 Lay_ShowErrorAndExit ("Error allocating memory for box id.");
+      if ((Gbl.Box.Ids[Gbl.Box.Nested] = malloc (Frm_MAX_BYTES_ID + 1)) == NULL)
+         Lay_NotEnoughMemoryExit ();
      }
    else
       Gbl.Box.Ids[Gbl.Box.Nested] = NULL;

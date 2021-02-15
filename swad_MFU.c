@@ -78,7 +78,8 @@ extern struct Globals Gbl;
 
 void MFU_AllocateMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxActionsShown)
   {
-   if ((ListMFUActions->Actions = (Act_Action_t *) malloc (sizeof (Act_Action_t) * MaxActionsShown)) == NULL)
+   if ((ListMFUActions->Actions = malloc (MaxActionsShown *
+                                          sizeof (*ListMFUActions->Actions))) == NULL)
       Lay_ShowErrorAndExit ("Can not allocate memory for list of most frequently used actions.");
   }
 
@@ -236,12 +237,9 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
         {
 	 /* Action string */
 	 Str_Copy (TabStr,Txt_TABS_TXT[Act_GetTab (Act_GetSuperAction (Action))],
-	           MFU_MAX_BYTES_TAB);
-	 Str_Copy (MenuStr,Title,
-	           MFU_MAX_BYTES_MENU);
-         snprintf (TabMenuStr,sizeof (TabMenuStr),
-                   "%s &gt; %s",
-		   TabStr,MenuStr);
+	           sizeof (TabStr) - 1);
+	 Str_Copy (MenuStr,Title,sizeof (MenuStr) - 1);
+         snprintf (TabMenuStr,sizeof (TabMenuStr),"%s &gt; %s",TabStr,MenuStr);
 
          /* Icon and text */
          HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
@@ -297,12 +295,9 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
         {
 	 /* Action string */
 	 Str_Copy (TabStr,Txt_TABS_TXT[Act_GetTab (Act_GetSuperAction (Action))],
-	           MFU_MAX_BYTES_TAB);
-	 Str_Copy (MenuStr,Title,
-	           MFU_MAX_BYTES_MENU);
-         snprintf (TabMenuStr,sizeof (TabMenuStr),
-                   "%s &gt; %s",
-		   TabStr,MenuStr);
+	           sizeof (TabStr) - 1);
+	 Str_Copy (MenuStr,Title,sizeof (MenuStr) - 1);
+         snprintf (TabMenuStr,sizeof (TabMenuStr),"%s &gt; %s",TabStr,MenuStr);
 
          /* Icon and text */
          HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");

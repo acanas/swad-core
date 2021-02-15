@@ -389,7 +389,7 @@ static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod
 
       /***** Show user's name inside form to go to user's public profile *****/
       Frm_StartFormUnique (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (PublisherDat.EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (PublisherDat.EnUsrCod);
       HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
 				       Txt_Another_user_s_profile,
 			       "BT_LINK TL_TOP_PUBLISHER",NULL);
@@ -419,7 +419,7 @@ void TL_Not_WriteAuthorNote (const struct UsrData *UsrDat)
 
    /***** Show user's name inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
 				    Txt_Another_user_s_profile,
 		            "BT_LINK TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH DAT_N_BOLD",
@@ -1064,7 +1064,7 @@ static void TL_Not_PutParamsRemoveNote (void *Timeline)
    if (Timeline)
      {
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       else
 	 Usr_PutHiddenParamWho (((struct TL_Timeline *) Timeline)->Who);
       TL_Not_PutHiddenParamNotCod (((struct TL_Timeline *) Timeline)->NotCod);
@@ -1350,7 +1350,7 @@ long TL_Not_GetPubCodOfOriginalNote (long NotCod)
 /****** Add just retrieved notes to current timeline for this session ********/
 /*****************************************************************************/
 
-void TL_Not_AddNotesJustRetrievedToTimelineThisSession (void)
+void TL_Not_AddNotesJustRetrievedToVisibleTimelineThisSession (void)
   {
    /* tl_timelines contains the distinct notes in timeline of each open session:
 mysql> SELECT SessionId,COUNT(*) FROM tl_timelines GROUP BY SessionId;

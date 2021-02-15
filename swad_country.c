@@ -533,7 +533,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Acti
 
    /***** Write country name *****/
    Str_Copy (CountryName,Cty->Name[Gbl.Prefs.Language],
-             Cty_MAX_BYTES_NAME);
+             sizeof (CountryName) - 1);
    HTM_TxtF ("&nbsp;%s&nbsp;",CountryName);
    HTM_TxtF ("(%s)",Cty->Alpha2);
 
@@ -581,8 +581,7 @@ bool Cty_CheckIfCountryPhotoExists (struct Cty_Countr *Cty)
   {
    char PathMap[PATH_MAX + 1];
 
-   snprintf (PathMap,sizeof (PathMap),
-	     "%s/%s/%s.png",
+   snprintf (PathMap,sizeof (PathMap),"%s/%s/%s.png",
 	     Cfg_PATH_ICON_COUNTRIES_PUBLIC,
 	     Cty->Alpha2,
 	     Cty->Alpha2);
@@ -768,8 +767,8 @@ void Cty_GetBasicListOfCountries (void)
       Gbl.Hierarchy.Ctys.Num = (unsigned) NumRows;
 
       /***** Create list with countries *****/
-      if ((Gbl.Hierarchy.Ctys.Lst = (struct Cty_Countr *)
-	                                calloc (NumRows,sizeof (struct Cty_Countr))) == NULL)
+      if ((Gbl.Hierarchy.Ctys.Lst = calloc (NumRows,
+                                            sizeof (*Gbl.Hierarchy.Ctys.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the countries *****/
@@ -787,8 +786,7 @@ void Cty_GetBasicListOfCountries (void)
             Lay_ShowErrorAndExit ("Wrong code of country.");
 
          /* Get Alpha-2 country code (row[1]) */
-         Str_Copy (Cty->Alpha2,row[1],
-                   2);
+         Str_Copy (Cty->Alpha2,row[1],sizeof (Cty->Alpha2) - 1);
 
 	 for (Lan  = (Lan_Language_t) 1;
 	      Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
@@ -800,7 +798,7 @@ void Cty_GetBasicListOfCountries (void)
 
 	 /* Get the name of the country in current language */
 	 Str_Copy (Cty->Name[Gbl.Prefs.Language],row[2],
-		   Cty_MAX_BYTES_NAME);
+		   sizeof (Cty->Name[Gbl.Prefs.Language]) - 1);
 
 	 /* Reset number of users who claim to belong to country */
 	 Cty->NumUsrsWhoClaimToBelongToCty.Valid = false;
@@ -850,27 +848,15 @@ void Cty_GetFullListOfCountries (void)
 	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	Lan++)
      {
-      snprintf (StrField,sizeof (StrField),
-		"countries.Name_%s,",
-		Lan_STR_LANG_ID[Lan]);
-      Str_Concat (SubQueryNam1,StrField,
-		  Cty_MAX_BYTES_SUBQUERY_CTYS);
-      snprintf (StrField,sizeof (StrField),
-		"Name_%s,",
-		Lan_STR_LANG_ID[Lan]);
-      Str_Concat (SubQueryNam2,StrField,
-		  Cty_MAX_BYTES_SUBQUERY_CTYS);
+      snprintf (StrField,sizeof (StrField),"countries.Name_%s,",Lan_STR_LANG_ID[Lan]);
+      Str_Concat (SubQueryNam1,StrField,sizeof (SubQueryNam1) - 1);
+      snprintf (StrField,sizeof (StrField),"Name_%s,",Lan_STR_LANG_ID[Lan]);
+      Str_Concat (SubQueryNam2,StrField,sizeof (SubQueryNam2) - 1);
 
-      snprintf (StrField,sizeof (StrField),
-		"countries.WWW_%s,",
-		Lan_STR_LANG_ID[Lan]);
-      Str_Concat (SubQueryWWW1,StrField,
-		  Cty_MAX_BYTES_SUBQUERY_CTYS);
-      snprintf (StrField,sizeof (StrField),
-		"WWW_%s,",
-		Lan_STR_LANG_ID[Lan]);
-      Str_Concat (SubQueryWWW2,StrField,
-		  Cty_MAX_BYTES_SUBQUERY_CTYS);
+      snprintf (StrField,sizeof (StrField),"countries.WWW_%s,",Lan_STR_LANG_ID[Lan]);
+      Str_Concat (SubQueryWWW1,StrField,sizeof (SubQueryWWW1) - 1);
+      snprintf (StrField,sizeof (StrField),"WWW_%s,",Lan_STR_LANG_ID[Lan]);
+      Str_Concat (SubQueryWWW2,StrField,sizeof (SubQueryWWW2) - 1);
      }
 
    /* Build order subquery */
@@ -902,8 +888,8 @@ void Cty_GetFullListOfCountries (void)
       Gbl.Hierarchy.Ctys.Num = (unsigned) NumRows;
 
       /***** Create list with countries *****/
-      if ((Gbl.Hierarchy.Ctys.Lst = (struct Cty_Countr *)
-	                                calloc (NumRows,sizeof (struct Cty_Countr))) == NULL)
+      if ((Gbl.Hierarchy.Ctys.Lst = calloc (NumRows,
+                                            sizeof (*Gbl.Hierarchy.Ctys.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the countries *****/
@@ -921,8 +907,7 @@ void Cty_GetFullListOfCountries (void)
             Lay_ShowErrorAndExit ("Wrong code of country.");
 
          /* Get Alpha-2 country code (row[1]) */
-         Str_Copy (Cty->Alpha2,row[1],
-                   2);
+         Str_Copy (Cty->Alpha2,row[1],sizeof (Cty->Alpha2) - 1);
 
 	 /* Get the name of the country in several languages */
 	 for (Lan  = (Lan_Language_t) 1;
@@ -930,9 +915,9 @@ void Cty_GetFullListOfCountries (void)
 	      Lan++)
 	   {
 	    Str_Copy (Cty->Name[Lan],row[1 + Lan],
-		      Cty_MAX_BYTES_NAME);
+	              sizeof (Cty->Name[Lan]) - 1);
 	    Str_Copy (Cty->WWW[Lan],row[1 + Lan_NUM_LANGUAGES + Lan],
-		      Cns_MAX_BYTES_WWW);
+		      sizeof (Cty->WWW[Lan]) - 1);
 	   }
 
 	 /* Get number of users who claim to belong to this country */
@@ -1069,7 +1054,7 @@ bool Cty_GetDataOfCountryByCod (struct Cty_Countr *Cty)
 	   Lan++)
          if (Lan == Gbl.Prefs.Language)
             Str_Copy (Cty->Name[Lan],Txt_Another_country,
-                      Cty_MAX_BYTES_NAME);
+                      sizeof (Cty->Name[Lan]) - 1);
          else
             Cty->Name[Lan][0] = '\0';
       return false;
@@ -1095,14 +1080,13 @@ bool Cty_GetDataOfCountryByCod (struct Cty_Countr *Cty)
       row = mysql_fetch_row (mysql_res);
 
       /* Get Alpha-2 country code (row[0]) */
-      Str_Copy (Cty->Alpha2,row[0],
-                2);
+      Str_Copy (Cty->Alpha2,row[0],sizeof (Cty->Alpha2) - 1);
 
       /* Get name and WWW of the country in current language */
       Str_Copy (Cty->Name[Gbl.Prefs.Language],row[1],
-		Cty_MAX_BYTES_NAME);
+                sizeof (Cty->Name[Gbl.Prefs.Language]) - 1);
       Str_Copy (Cty->WWW[Gbl.Prefs.Language],row[2],
-		Cns_MAX_BYTES_WWW);
+		sizeof (Cty->WWW[Gbl.Prefs.Language]) - 1);
      }
    else
       CtyFound = false;
@@ -1142,8 +1126,7 @@ void Cty_GetCountryName (long CtyCod,Lan_Language_t Language,
    if (CtyCod   == Gbl.Cache.CountryName.CtyCod &&
        Language == Gbl.Cache.CountryName.Language)
      {
-      Str_Copy (CtyName,Gbl.Cache.CountryName.CtyName,
-		Cty_MAX_BYTES_NAME);
+      Str_Copy (CtyName,Gbl.Cache.CountryName.CtyName,Cty_MAX_BYTES_NAME);
       return;
      }
 
@@ -1160,7 +1143,7 @@ void Cty_GetCountryName (long CtyCod,Lan_Language_t Language,
 
       /* Get the name of the country */
       Str_Copy (Gbl.Cache.CountryName.CtyName,row[0],
-		Cty_MAX_BYTES_NAME);
+		sizeof (Gbl.Cache.CountryName.CtyName) - 1);
      }
    else
       Gbl.Cache.CountryName.CtyName[0] = '\0';
@@ -1168,8 +1151,7 @@ void Cty_GetCountryName (long CtyCod,Lan_Language_t Language,
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
 
-   Str_Copy (CtyName,Gbl.Cache.CountryName.CtyName,
-	     Cty_MAX_BYTES_NAME);
+   Str_Copy (CtyName,Gbl.Cache.CountryName.CtyName,Cty_MAX_BYTES_NAME);
   }
 
 /*****************************************************************************/
@@ -1441,8 +1423,7 @@ void Cty_RenameCountry (void)
 	 else
 	   {
 	    /* Update the table changing old name by new name */
-	    snprintf (FieldName,sizeof (FieldName),
-		      "Name_%s",
+	    snprintf (FieldName,sizeof (FieldName),"Name_%s",
 		      Lan_STR_LANG_ID[Language]);
 	    Cty_UpdateCtyNameDB (Cty_EditingCty->CtyCod,FieldName,NewCtyName);
 
@@ -1453,7 +1434,7 @@ void Cty_RenameCountry (void)
 
 	    /* Update country name */
 	    Str_Copy (Cty_EditingCty->Name[Language],NewCtyName,
-		      Cty_MAX_BYTES_NAME);
+		      sizeof (Cty_EditingCty->Name[Language]) - 1);
 	   }
 	}
       else	// The same name
@@ -1556,7 +1537,7 @@ void Cty_ChangeCtyWWW (void)
 		   " WHERE CtyCod='%03ld'",
 	           Lan_STR_LANG_ID[Language],NewWWW,Cty_EditingCty->CtyCod);
    Str_Copy (Cty_EditingCty->WWW[Language],NewWWW,
-	     Cns_MAX_BYTES_WWW);
+	     sizeof (Cty_EditingCty->WWW[Language]) - 1);
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1644,9 +1625,7 @@ static void Cty_PutFormToCreateCountry (void)
    /***** Numerical country code (ISO 3166-1) *****/
    HTM_TD_Begin ("rowspan=\"%u\" class=\"RT\"",1 + Lan_NUM_LANGUAGES);
    if (Cty_EditingCty->CtyCod > 0)
-      snprintf (StrCtyCod,sizeof (StrCtyCod),
-		"%03ld",
-		Cty_EditingCty->CtyCod);
+      snprintf (StrCtyCod,sizeof (StrCtyCod),"%03ld",Cty_EditingCty->CtyCod);
    else
       StrCtyCod[0] = '\0';
    HTM_INPUT_TEXT ("OthCtyCod",3,StrCtyCod,HTM_DONT_SUBMIT_ON_CHANGE,
@@ -1687,9 +1666,7 @@ static void Cty_PutFormToCreateCountry (void)
 
       /* Name */
       HTM_TD_Begin ("class=\"LM\"");
-      snprintf (StrName,sizeof (StrName),
-		"Name_%s",
-		Lan_STR_LANG_ID[Lan]);
+      snprintf (StrName,sizeof (StrName),"Name_%s",Lan_STR_LANG_ID[Lan]);
       HTM_INPUT_TEXT (StrName,Cty_MAX_CHARS_NAME,Cty_EditingCty->Name[Lan],
                       HTM_DONT_SUBMIT_ON_CHANGE,
 		      "size=\"15\" required=\"required\"");
@@ -1697,9 +1674,7 @@ static void Cty_PutFormToCreateCountry (void)
 
       /* WWW */
       HTM_TD_Begin ("class=\"LM\"");
-      snprintf (StrName,sizeof (StrName),
-		"WWW_%s",
-		Lan_STR_LANG_ID[Lan]);
+      snprintf (StrName,sizeof (StrName),"WWW_%s",Lan_STR_LANG_ID[Lan]);
       HTM_INPUT_URL (StrName,Cty_EditingCty->WWW[Lan],HTM_DONT_SUBMIT_ON_CHANGE,
 		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
       HTM_TD_End ();
@@ -1810,9 +1785,7 @@ void Cty_ReceiveFormNewCountry (void)
         	 Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
         	 Lan++)
               {
-               snprintf (ParamName,sizeof (ParamName),
-        	         "Name_%s",
-			 Lan_STR_LANG_ID[Lan]);
+               snprintf (ParamName,sizeof (ParamName),"Name_%s",Lan_STR_LANG_ID[Lan]);
                Par_GetParToText (ParamName,Cty_EditingCty->Name[Lan],Cty_MAX_BYTES_NAME);
 
                if (Cty_EditingCty->Name[Lan][0])	// If there's a country name
@@ -1835,9 +1808,7 @@ void Cty_ReceiveFormNewCountry (void)
                   break;
                  }
 
-               snprintf (ParamName,sizeof (ParamName),
-        	         "WWW_%s",
-			 Lan_STR_LANG_ID[Lan]);
+               snprintf (ParamName,sizeof (ParamName),"WWW_%s",Lan_STR_LANG_ID[Lan]);
                Par_GetParToText (ParamName,Cty_EditingCty->WWW[Lan],Cns_MAX_BYTES_WWW);
               }
            }
@@ -1878,31 +1849,19 @@ static void Cty_CreateCountry (void)
 	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	Lan++)
      {
-      snprintf (StrField,sizeof (StrField),
-	        ",Name_%s",
-		Lan_STR_LANG_ID[Lan]);
-      Str_Concat (SubQueryNam1,StrField,
-                  Cty_MAX_BYTES_SUBQUERY_CTYS);
+      snprintf (StrField,sizeof (StrField),",Name_%s",Lan_STR_LANG_ID[Lan]);
+      Str_Concat (SubQueryNam1,StrField,sizeof (SubQueryNam1) - 1);
 
-      Str_Concat (SubQueryNam2,",'",
-                  Cty_MAX_BYTES_SUBQUERY_CTYS_NAME);
-      Str_Concat (SubQueryNam2,Cty_EditingCty->Name[Lan],
-                  Cty_MAX_BYTES_SUBQUERY_CTYS_NAME);
-      Str_Concat (SubQueryNam2,"'",
-                  Cty_MAX_BYTES_SUBQUERY_CTYS_NAME);
+      Str_Concat (SubQueryNam2,",'",sizeof (SubQueryNam2) - 1);
+      Str_Concat (SubQueryNam2,Cty_EditingCty->Name[Lan],sizeof (SubQueryNam2) - 1);
+      Str_Concat (SubQueryNam2,"'",sizeof (SubQueryNam2) - 1);
 
-      snprintf (StrField,sizeof (StrField),
-	        ",WWW_%s",
-		Lan_STR_LANG_ID[Lan]);
-      Str_Concat (SubQueryWWW1,StrField,
-                  Cty_MAX_BYTES_SUBQUERY_CTYS);
+      snprintf (StrField,sizeof (StrField),",WWW_%s",Lan_STR_LANG_ID[Lan]);
+      Str_Concat (SubQueryWWW1,StrField,sizeof (SubQueryWWW1) - 1);
 
-      Str_Concat (SubQueryWWW2,",'",
-                  Cty_MAX_BYTES_SUBQUERY_CTYS_WWW);
-      Str_Concat (SubQueryWWW2,Cty_EditingCty->WWW[Lan],
-                  Cty_MAX_BYTES_SUBQUERY_CTYS_WWW);
-      Str_Concat (SubQueryWWW2,"'",
-                  Cty_MAX_BYTES_SUBQUERY_CTYS_WWW);
+      Str_Concat (SubQueryWWW2,",'",sizeof (SubQueryWWW2) - 1);
+      Str_Concat (SubQueryWWW2,Cty_EditingCty->WWW[Lan],sizeof (SubQueryWWW2) - 1);
+      Str_Concat (SubQueryWWW2,"'",sizeof (SubQueryWWW2) - 1);
      }
    DB_QueryINSERT ("can not create country",
 		   "INSERT INTO countries"
@@ -2144,8 +2103,8 @@ static void Cty_EditingCountryConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing country.");
 
    /***** Allocate memory for country *****/
-   if ((Cty_EditingCty = (struct Cty_Countr *) malloc (sizeof (struct Cty_Countr))) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for country.");
+   if ((Cty_EditingCty = malloc (sizeof (*Cty_EditingCty))) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Reset country *****/
    Cty_EditingCty->CtyCod = -1L;

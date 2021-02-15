@@ -29,7 +29,6 @@
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For sscanf, asprintf, etc.
-#include <stdlib.h>		// For exit, system, malloc, calloc, free, etc.
 #include <string.h>
 
 #include "swad_box.h"
@@ -407,8 +406,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
      {
       /***** Begin box *****/
-      snprintf (StrWidth,sizeof (StrWidth),
-		"%upx",
+      snprintf (StrWidth,sizeof (StrWidth),"%upx",
 		Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
       Box_BoxBegin (StrWidth,Txt_Notices,
 		    Not_PutIconsListNotices,NULL,
@@ -435,8 +433,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
       UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get the content (row[3]) and insert links */
-      Str_Copy (Content,row[3],
-		Cns_MAX_BYTES_TEXT);
+      Str_Copy (Content,row[3],sizeof (Content) - 1);
 
       /* Inserting links is incompatible with limiting the length
 	 ==> don't insert links when limiting length */
@@ -469,8 +466,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
       case Not_LIST_BRIEF_NOTICES:
 	 /***** Link to RSS file *****/
 	 /* Create RSS file if not exists */
-	 snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),
-		   "%s/%ld/%s/%s",
+	 snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),"%s/%ld/%s/%s",
 		   Cfg_PATH_CRS_PUBLIC,
 		   Gbl.Hierarchy.Crs.CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
 	 if (!Fil_CheckIfPathExists (PathRelRSSFile))
@@ -586,8 +582,7 @@ static void Not_GetDataAndShowNotice (long NotCod)
       UsrCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Get the content (row[2]) and insert links*/
-      Str_Copy (Content,row[2],
-                Cns_MAX_BYTES_TEXT);
+      Str_Copy (Content,row[2],sizeof (Content) - 1);
       Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
 		       Not_MaxCharsURLOnScreen[Not_LIST_FULL_NOTICES]);
 
@@ -794,17 +789,15 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 SummaryStr[Ntf_MAX_BYTES_SUMMARY] = '\0';
 	}
       else
-	 Str_Copy (SummaryStr,row[0],
-		   Ntf_MAX_BYTES_SUMMARY);
+	 Str_Copy (SummaryStr,row[0],Ntf_MAX_BYTES_SUMMARY);
 
       /***** Copy content *****/
       if (GetContent)
 	{
 	 Length = strlen (row[0]);
-	 if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
-	    Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-	 Str_Copy (*ContentStr,row[0],
-		   Length);
+	 if ((*ContentStr = malloc (Length + 1)) == NULL)
+            Lay_NotEnoughMemoryExit ();
+	 Str_Copy (*ContentStr,row[0],Length);
 	}
      }
 

@@ -212,7 +212,8 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
    if (Gbl.Crs.Records.LstFields.Num)
      {
       /***** Create a list of fields *****/
-      if ((Gbl.Crs.Records.LstFields.Lst = (struct RecordField *) calloc (Gbl.Crs.Records.LstFields.Num,sizeof (struct RecordField))) == NULL)
+      if ((Gbl.Crs.Records.LstFields.Lst = calloc (Gbl.Crs.Records.LstFields.Num,
+                                                   sizeof (*Gbl.Crs.Records.LstFields.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the fields *****/
@@ -229,7 +230,7 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
 
          /* Name of the field (row[1]) */
          Str_Copy (Gbl.Crs.Records.LstFields.Lst[NumRow].Name,row[1],
-                   Rec_MAX_BYTES_NAME_FIELD);
+                   sizeof (Gbl.Crs.Records.LstFields.Lst[NumRow].Name) - 1);
 
          /* Number of lines (row[2]) */
          Gbl.Crs.Records.LstFields.Lst[NumRow].NumLines = Rec_ConvertToNumLinesField (row[2]);
@@ -291,8 +292,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgRowFie);
       Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
-      snprintf (StrNumLines,sizeof (StrNumLines),
-		"%u",
+      snprintf (StrNumLines,sizeof (StrNumLines),"%u",
 		Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
       HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
                       HTM_SUBMIT_ON_CHANGE,
@@ -362,8 +362,7 @@ void Rec_ShowFormCreateRecordField (void)
 
    /***** Number of lines in form ******/
    HTM_TD_Begin ("class=\"CM\"");
-   snprintf (StrNumLines,sizeof (StrNumLines),
-	     "%u",
+   snprintf (StrNumLines,sizeof (StrNumLines),"%u",
 	     Gbl.Crs.Records.Field.NumLines);
    HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
                    HTM_DONT_SUBMIT_ON_CHANGE,
@@ -692,8 +691,7 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
    row = mysql_fetch_row (mysql_res);
 
    /* Name of the field */
-   Str_Copy (Name,row[0],
-             Rec_MAX_BYTES_NAME_FIELD);
+   Str_Copy (Name,row[0],Rec_MAX_BYTES_NAME_FIELD);
 
    /* Number of lines of the field (row[1]) */
    *NumLines = Rec_ConvertToNumLinesField (row[1]);
@@ -782,7 +780,7 @@ void Rec_RenameField (void)
 
    /***** Show the form again *****/
    Str_Copy (Gbl.Crs.Records.Field.Name,NewFieldName,
-             Rec_MAX_BYTES_NAME_FIELD);
+             sizeof (Gbl.Crs.Records.Field.Name) - 1);
    Rec_ReqEditRecordFields ();
   }
 
@@ -971,15 +969,13 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))                // Get from the database the data of the student
 	{
          /* Start container for this user */
-	 snprintf (RecordSectionId,sizeof (RecordSectionId),
-	           "record_%u",
-		   NumUsr);
+	 snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
 	 HTM_SECTION_Begin (RecordSectionId);
 
 	 if (Gbl.Action.Act == ActPrnRecSevGst &&
@@ -1171,7 +1167,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))                // Get from the database the data of the student
@@ -1182,9 +1178,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
             UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 
             /* Start container for this user */
-	    snprintf (RecordSectionId,sizeof (RecordSectionId),
-		      "record_%u",
-		      NumUsr);
+	    snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
 	    HTM_SECTION_Begin (RecordSectionId);
 
 	    if (Gbl.Action.Act == ActPrnRecSevStd &&
@@ -1265,9 +1259,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    bool ShowOfficeHours;
 
    /***** Width for office hours *****/
-   snprintf (Width,sizeof (Width),
-	     "%upx",
-	     Rec_RECORD_WIDTH);
+   snprintf (Width,sizeof (Width),"%upx",Rec_RECORD_WIDTH);
 
    /***** Get if teacher has accepted enrolment in current course *****/
    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -1354,9 +1346,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
    /***** Width for office hours *****/
-   snprintf (Width,sizeof (Width),
-	     "%upx",
-	     Rec_RECORD_WIDTH);
+   snprintf (Width,sizeof (Width),"%upx",Rec_RECORD_WIDTH);
 
    /***** Assign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
@@ -1396,7 +1386,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))	// Get from the database the data of the student
@@ -1407,9 +1397,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
             UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 
             /* Start container for this user */
-	    snprintf (RecordSectionId,sizeof (RecordSectionId),
-		      "record_%u",
-		      NumUsr);
+	    snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
 	    HTM_SECTION_Begin (RecordSectionId);
 
 	    if (Gbl.Action.Act == ActPrnRecSevTch &&
@@ -1530,7 +1518,7 @@ static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours)
 
 static void Rec_PutParamsShowOfficeHoursOneTch (void)
   {
-   Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+   Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
   }
 
@@ -1707,7 +1695,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	    Frm_StartFormAnchor (ActRcvRecOthUsr,Anchor);
 	    Par_PutHiddenParamLong (NULL,"OriginalActCod",
 				    Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	    if (TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
 	       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	   }
@@ -1717,9 +1705,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
      }
 
    /***** Begin box and table *****/
-   snprintf (StrRecordWidth,sizeof (StrRecordWidth),
-	     "%upx",
-	     Rec_RECORD_WIDTH);
+   snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
    Box_BoxTableBegin (StrRecordWidth,NULL,
                       NULL,NULL,
                       Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
@@ -1821,8 +1807,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
            {
             if (ThisFieldHasText)
               {
-               Str_Copy (Text,row[0],
-                         Cns_MAX_BYTES_TEXT);
+               Str_Copy (Text,row[0],sizeof (Text));
                Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                                  Text,Cns_MAX_BYTES_TEXT,false);
                HTM_Txt (Text);
@@ -1881,8 +1866,7 @@ void Rec_GetFieldsCrsRecordFromForm (void)
       if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility))
         {
          /* Get text from the form */
-         snprintf (FieldParamName,sizeof (FieldParamName),
-                   "Field%ld",
+         snprintf (FieldParamName,sizeof (FieldParamName),"Field%ld",
 		   Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
          Par_GetParToHTML (FieldParamName,Gbl.Crs.Records.LstFields.Lst[NumField].Text,Cns_MAX_BYTES_TEXT);
         }
@@ -1994,7 +1978,7 @@ void Rec_AllocMemFieldsRecordsCrs (void)
 	NumField++)
       if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility))
          /* Allocate memory for the texts of the fields */
-         if ((Gbl.Crs.Records.LstFields.Lst[NumField].Text = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+         if ((Gbl.Crs.Records.LstFields.Lst[NumField].Text = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
             Lay_NotEnoughMemoryExit ();
   }
 
@@ -2300,7 +2284,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		  break;
 	      }
 	    Frm_StartForm (NextAction);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);	// Existing user
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
 	    break;
 	 case Rec_SHA_OTHER_NEW_USR_FORM:
 	    switch (Gbl.Action.Act)
@@ -2635,7 +2619,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 
 void Rec_PutParamUsrCodEncrypted (__attribute__((unused)) void *Args)
   {
-   Usr_PutParamUsrCodEncrypted (Gbl.Record.UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (Gbl.Record.UsrDat->EnUsrCod);
   }
 
 static void Rec_PutParamsMyTsts (__attribute__((unused)) void *Args)
@@ -2661,7 +2645,7 @@ static void Rec_PutParamsWorks (__attribute__((unused)) void *Args)
 
 static void Rec_PutParamsStudent (__attribute__((unused)) void *Args)
   {
-   Par_PutHiddenParamString (NULL,"UsrCodStd",Gbl.Record.UsrDat->EncryptedUsrCod);
+   Par_PutHiddenParamString (NULL,"UsrCodStd",Gbl.Record.UsrDat->EnUsrCod);
    Grp_PutParamAllGroups ();
   }
 
@@ -2747,7 +2731,7 @@ static void Rec_ShowFullName (struct UsrData *UsrDat)
    HTM_DIV_Begin ("class=\"REC_NAME\"");
 
    /***** First name *****/
-   HTM_Txt (UsrDat->FirstName);
+   HTM_Txt (UsrDat->FrstName);
    HTM_BR ();
 
    /***** Surname 1 *****/
@@ -2780,7 +2764,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 	 /* Put form to go to public profile */
          ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 	 Frm_StartForm (ActSeeOthPubPrf);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	 HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
 					  Txt_Another_user_s_profile,
 				  "BT_LINK REC_NICK",
@@ -3236,14 +3220,14 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
    HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT DAT_N LM\"");
    if (PutForm)
       HTM_INPUT_TEXT ("FirstName",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
-		      UsrDat->FirstName,
+		      UsrDat->FrstName,
 		      HTM_DONT_SUBMIT_ON_CHANGE,
 		      "id=\"FirstName\" class=\"REC_C2_BOT_INPUT\""
 		      " required=\"required\"");
-   else if (UsrDat->FirstName[0])
+   else if (UsrDat->FrstName[0])
      {
       HTM_STRONG_Begin ();
-      HTM_Txt (UsrDat->FirstName);
+      HTM_Txt (UsrDat->FrstName);
       HTM_STRONG_End ();
      }
    HTM_TD_End ();
@@ -3700,8 +3684,7 @@ void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat)
    Str_ConvertToTitleType (Surname1);
    // Surname 1 is mandatory, so avoid overwriting surname 1 with empty string
    if (Surname1[0])		// New surname 1 not empty
-      Str_Copy (UsrDat->Surname1,Surname1,
-                Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+      Str_Copy (UsrDat->Surname1,Surname1,sizeof (UsrDat->Surname1) - 1);
 
    /***** Get surname 2 *****/
    Par_GetParToText ("Surname2",UsrDat->Surname2,
@@ -3714,8 +3697,7 @@ void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat)
    Str_ConvertToTitleType (FirstName);
    // First name is mandatory, so avoid overwriting first name with empty string
    if (FirstName[0])		// New first name not empty
-      Str_Copy (UsrDat->FirstName,FirstName,
-                Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+      Str_Copy (UsrDat->FrstName,FirstName,sizeof (UsrDat->FrstName) - 1);
 
    /***** Build full name *****/
    Usr_BuildFullName (UsrDat);
@@ -3782,7 +3764,7 @@ void Rec_ShowMySharedRecordAndMore (void)
 						     (1 << Rol_TCH)));	// ...or a teacher in any course
 
    /***** If user has no name and surname, sex... *****/
-   if (!Gbl.Usrs.Me.UsrDat.FirstName[0] ||
+   if (!Gbl.Usrs.Me.UsrDat.FrstName[0] ||
        !Gbl.Usrs.Me.UsrDat.Surname1[0])			// 1. No name
       Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_name);
    else if (Gbl.Usrs.Me.UsrDat.Sex == Usr_SEX_UNKNOWN)	// 2. No sex

@@ -592,10 +592,9 @@ static void CtyCfg_GetMapAttr (long CtyCod,char **MapAttribution)
 	 if (row[0][0])
 	   {
 	    Length = strlen (row[0]);
-	    if ((*MapAttribution = (char *) malloc (Length + 1)) == NULL)
-	       Lay_ShowErrorAndExit ("Error allocating memory for map attribution.");
-	    Str_Copy (*MapAttribution,row[0],
-	              Length);
+	    if ((*MapAttribution = malloc (Length + 1)) == NULL)
+               Lay_NotEnoughMemoryExit ();
+	    Str_Copy (*MapAttribution,row[0],Length);
 	   }
      }
 

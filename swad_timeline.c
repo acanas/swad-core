@@ -296,7 +296,7 @@ void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
    /***** Show timeline *****/
    TL_ShowTimeline (Timeline,
                     Str_BuildStringStr (Txt_Timeline_OF_A_USER,
-					Gbl.Usrs.Other.UsrDat.FirstName),
+					Gbl.Usrs.Other.UsrDat.FrstName),
 		    NotCod);
    Str_FreeString ();
 
@@ -515,7 +515,7 @@ void TL_FormStart (const struct TL_Timeline *Timeline,
      {
       /***** Start form in user timeline *****/
       Frm_StartFormAnchor (ActionUsr,"timeline");
-      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
      }
    else
      {

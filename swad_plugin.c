@@ -131,9 +131,7 @@ void Plg_ListPlugins (void)
      {
       Plg = &(Gbl.Plugins.Lst[NumPlg]);
 
-      snprintf (URL,sizeof (URL),
-	        "%s%s",
-		Plg->URL,Gbl.Session.Id);
+      snprintf (URL,sizeof (URL),"%s%s",Plg->URL,Gbl.Session.Id);
 
       /* Plugin logo */
       // TODO: Change plugin icons to 32x32
@@ -242,7 +240,8 @@ static void Plg_GetListPlugins (void)
       Gbl.Plugins.Num = (unsigned) NumRows;
 
       /***** Create list with plugins *****/
-      if ((Gbl.Plugins.Lst = (struct Plugin *) calloc ((size_t) Gbl.Plugins.Num,sizeof (struct Plugin))) == NULL)
+      if ((Gbl.Plugins.Lst = calloc (Gbl.Plugins.Num,
+                                     sizeof (*Gbl.Plugins.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the plugins *****/
@@ -259,29 +258,14 @@ static void Plg_GetListPlugins (void)
          if ((Plg->PlgCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Wrong code of plugin.");
 
-         /* Get the name of the plugin (row[1]) */
-         Str_Copy (Plg->Name,row[1],
-                   Plg_MAX_BYTES_PLUGIN_NAME);
-
-         /* Get the description of the plugin (row[2]) */
-         Str_Copy (Plg->Description,row[2],
-                   Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
-
-         /* Get the logo of the plugin (row[3]) */
-         Str_Copy (Plg->Logo,row[3],
-                   Plg_MAX_BYTES_PLUGIN_LOGO);
-
-         /* Get the application key of the plugin (row[4]) */
-         Str_Copy (Plg->AppKey,row[4],
-                   Plg_MAX_BYTES_PLUGIN_APP_KEY);
-
-         /* Get the URL of the plugin (row[5]) */
-         Str_Copy (Plg->URL,row[5],
-                   Cns_MAX_BYTES_WWW);
-
-         /* Get the IP of the plugin (row[6]) */
-         Str_Copy (Plg->IP,row[6],
-                   Cns_MAX_BYTES_IP);
+         /* Get name (row[1]), description (row[2), logo (row[3]),
+          * application key (row[4]), URL (row[5]) and IP (row[6]) of the plugin */
+         Str_Copy (Plg->Name       ,row[1],sizeof (Plg->Name       ) - 1);
+         Str_Copy (Plg->Description,row[2],sizeof (Plg->Description) - 1);
+         Str_Copy (Plg->Logo       ,row[3],sizeof (Plg->Logo       ) - 1);
+         Str_Copy (Plg->AppKey     ,row[4],sizeof (Plg->AppKey     ) - 1);
+         Str_Copy (Plg->URL        ,row[5],sizeof (Plg->URL        ) - 1);
+         Str_Copy (Plg->IP         ,row[6],sizeof (Plg->IP         ) - 1);
         }
      }
    else
@@ -329,29 +313,14 @@ bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
       /* Get row */
       row = mysql_fetch_row (mysql_res);
 
-      /* Get the name of the plugin (row[0]) */
-      Str_Copy (Plg->Name,row[0],
-                Plg_MAX_BYTES_PLUGIN_NAME);
-
-      /* Get the description of the plugin (row[1]) */
-      Str_Copy (Plg->Description,row[1],
-                Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
-
-      /* Get the logo of the plugin (row[2]) */
-      Str_Copy (Plg->Logo,row[2],
-                Plg_MAX_BYTES_PLUGIN_LOGO);
-
-      /* Get the application key of the plugin (row[3]) */
-      Str_Copy (Plg->AppKey,row[3],
-                Plg_MAX_BYTES_PLUGIN_APP_KEY);
-
-      /* Get the URL of the plugin (row[4]) */
-      Str_Copy (Plg->URL,row[4],
-                Cns_MAX_BYTES_WWW);
-
-      /* Get the IP of the plugin (row[5]) */
-      Str_Copy (Plg->IP,row[5],
-                Cns_MAX_BYTES_IP);
+      /* Get name (row[0]), description (row[1]), logo (row[2]),
+         application key (row[3]), URL (row[4]) and IP (row[5]) of the plugin */
+      Str_Copy (Plg->Name       ,row[0],sizeof (Plg->Name       ) - 1);
+      Str_Copy (Plg->Description,row[1],sizeof (Plg->Description) - 1);
+      Str_Copy (Plg->Logo       ,row[2],sizeof (Plg->Logo       ) - 1);
+      Str_Copy (Plg->AppKey     ,row[3],sizeof (Plg->AppKey     ) - 1);
+      Str_Copy (Plg->URL        ,row[4],sizeof (Plg->URL        ) - 1);
+      Str_Copy (Plg->IP         ,row[5],sizeof (Plg->IP         ) - 1);
      }
    else
       PluginFound = false;
@@ -595,8 +564,7 @@ void Plg_RenamePlugin (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update name *****/
-   Str_Copy (Plg_EditingPlg->Name,NewPlgName,
-             Plg_MAX_BYTES_PLUGIN_NAME);
+   Str_Copy (Plg_EditingPlg->Name,NewPlgName,sizeof (Plg_EditingPlg->Name) - 1);
   }
 
 /*****************************************************************************/
@@ -654,7 +622,7 @@ void Plg_ChangePlgDescription (void)
 
    /***** Update description *****/
    Str_Copy (Plg_EditingPlg->Description,NewDescription,
-             Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
+             sizeof (Plg_EditingPlg->Description) - 1);
   }
 
 /*****************************************************************************/
@@ -697,8 +665,7 @@ void Plg_ChangePlgLogo (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update logo *****/
-   Str_Copy (Plg_EditingPlg->Logo,NewLogo,
-             Plg_MAX_BYTES_PLUGIN_LOGO);
+   Str_Copy (Plg_EditingPlg->Logo,NewLogo,sizeof (Plg_EditingPlg->Logo) - 1);
   }
 
 /*****************************************************************************/
@@ -742,7 +709,7 @@ void Plg_ChangePlgAppKey (void)
 
    /***** Update app key *****/
    Str_Copy (Plg_EditingPlg->AppKey,NewAppKey,
-             Plg_MAX_BYTES_PLUGIN_APP_KEY);
+             sizeof (Plg_EditingPlg->AppKey) - 1);
   }
 
 /*****************************************************************************/
@@ -785,8 +752,7 @@ void Plg_ChangePlgURL (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update URL *****/
-   Str_Copy (Plg_EditingPlg->URL,NewURL,
-             Cns_MAX_BYTES_WWW);
+   Str_Copy (Plg_EditingPlg->URL,NewURL,sizeof (Plg_EditingPlg->URL) - 1);
   }
 
 /*****************************************************************************/
@@ -829,8 +795,7 @@ void Plg_ChangePlgIP (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update IP *****/
-   Str_Copy (Plg_EditingPlg->IP,NewIP,
-             Cns_MAX_BYTES_IP);
+   Str_Copy (Plg_EditingPlg->IP,NewIP,sizeof (Plg_EditingPlg->IP) - 1);
   }
 
 /*****************************************************************************/
@@ -1059,8 +1024,8 @@ static void Plg_EditingPluginConstructor (void)
       Lay_ShowErrorAndExit ("Error initializing plugin.");
 
    /***** Allocate memory for plugin *****/
-   if ((Plg_EditingPlg = (struct Plugin *) malloc (sizeof (struct Plugin))) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for plugin.");
+   if ((Plg_EditingPlg = malloc (sizeof (*Plg_EditingPlg))) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Reset plugin *****/
    Plg_EditingPlg->PlgCod         = -1L;

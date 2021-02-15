@@ -100,7 +100,7 @@ void XML_WriteEndFile (FILE *FileTgt,const char *Type)
 void XML_GetTree (const char *XMLBuffer,struct XMLElement **XMLRootElem)
   {
    /***** Allocate space for the root element *****/
-   if ((*XMLRootElem = calloc (1,sizeof (struct XMLElement))) == NULL)
+   if ((*XMLRootElem = calloc (1,sizeof (**XMLRootElem))) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    Gbl.XMLPtr = XMLBuffer;
@@ -184,7 +184,7 @@ static void XML_GetElement (struct XMLElement *ParentElem)
          /* Copy content */
          if (ContentLength)
            {
-            if ((ParentElem->Content = (char *) malloc (ContentLength + 1)) == NULL)
+            if ((ParentElem->Content = malloc (ContentLength + 1)) == NULL)
                Lay_NotEnoughMemoryExit ();
             strncpy (ParentElem->Content,StartContent,ContentLength);
             ParentElem->Content[ContentLength] = '\0';
@@ -209,7 +209,7 @@ static void XML_GetElement (struct XMLElement *ParentElem)
                  Gbl.XMLPtr
          */
          /***** Allocate space for the child element *****/
-         if ((ChildElem = calloc (1,sizeof (struct XMLElement))) == NULL)
+         if ((ChildElem = calloc (1,sizeof (*ChildElem))) == NULL)
             Lay_NotEnoughMemoryExit ();
 
          /***** Adjust XML elements pointers *****/
@@ -221,7 +221,7 @@ static void XML_GetElement (struct XMLElement *ParentElem)
 
          /***** Get child tag name *****/
          ChildElem->TagNameLength = strcspn (Gbl.XMLPtr,">/ \t");
-         if ((ChildElem->TagName = (char *) malloc (ChildElem->TagNameLength + 1)) == NULL)
+         if ((ChildElem->TagName = malloc (ChildElem->TagNameLength + 1)) == NULL)
             Lay_NotEnoughMemoryExit ();
          strncpy (ChildElem->TagName,Gbl.XMLPtr,ChildElem->TagNameLength);
          ChildElem->TagName[ChildElem->TagNameLength] = '\0';
@@ -330,7 +330,7 @@ static void XML_GetAttributes (struct XMLElement *Elem)
                        Gbl.XMLPtr
          */
          /***** Allocate space for the attribute *****/
-         if ((Attribute = calloc (1,sizeof (struct XMLAttribute))) == NULL)
+         if ((Attribute = calloc (1,sizeof (*Attribute))) == NULL)
             Lay_NotEnoughMemoryExit ();
 
          /***** Adjust XML element and attribute pointers *****/
@@ -342,7 +342,7 @@ static void XML_GetAttributes (struct XMLElement *Elem)
 
          /***** Get attribute name *****/
          Attribute->AttributeNameLength = strcspn (Gbl.XMLPtr,"=");
-         if ((Attribute->AttributeName = (char *) malloc (Attribute->AttributeNameLength + 1)) == NULL)
+         if ((Attribute->AttributeName = malloc (Attribute->AttributeNameLength + 1)) == NULL)
             Lay_NotEnoughMemoryExit ();
          strncpy (Attribute->AttributeName,Gbl.XMLPtr,Attribute->AttributeNameLength);
          Attribute->AttributeName[Attribute->AttributeNameLength] = '\0';
@@ -374,7 +374,7 @@ static void XML_GetAttributes (struct XMLElement *Elem)
             Lay_ShowErrorAndExit (ErrorTxt);
            }
 
-         if ((Attribute->Content = (char *) malloc (Attribute->ContentLength + 1)) == NULL)
+         if ((Attribute->Content = malloc (Attribute->ContentLength + 1)) == NULL)
             Lay_NotEnoughMemoryExit ();
          strncpy (Attribute->Content,Gbl.XMLPtr,Attribute->ContentLength);
          Attribute->Content[Attribute->ContentLength] = '\0';

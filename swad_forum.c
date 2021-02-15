@@ -720,8 +720,7 @@ static void For_GetThrSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 
 
    /***** Write the subject of the thread *****/
    row = mysql_fetch_row (mysql_res);
-   Str_Copy (Subject,row[0],
-             Cns_MAX_BYTES_SUBJECT);
+   Str_Copy (Subject,row[0],Cns_MAX_BYTES_SUBJECT);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1031,8 +1030,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
          Ale_ShowAlert (AlertType,Message);
 
    /***** Begin box *****/
-   snprintf (FrameTitle,sizeof (FrameTitle),
-	     "%s: %s",
+   snprintf (FrameTitle,sizeof (FrameTitle),"%s: %s",
 	     Txt_Thread,Thread.Subject);
    Box_BoxBegin (NULL,FrameTitle,
                  For_PutIconNewPost,Forums,
@@ -1231,8 +1229,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 
    if (Enabled)
       /* Return this subject as last subject */
-      Str_Copy (LastSubject,Subject,
-                Cns_MAX_BYTES_SUBJECT);
+      Str_Copy (LastSubject,Subject,Cns_MAX_BYTES_SUBJECT);
 
    HTM_TR_Begin (NULL);
 
@@ -1320,8 +1317,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    HTM_TD_Begin ("class=\"MSG_TXT LT\"");
    if (Enabled)
      {
-      Str_Copy (Content,OriginalContent,
-                Cns_MAX_BYTES_LONG_TEXT);
+      Str_Copy (Content,OriginalContent,sizeof (Content) - 1);
       Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
 
       /***** Show image *****/
@@ -1376,12 +1372,10 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
    *CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 
    /***** Get subject (row[2]) *****/
-   Str_Copy (Subject,row[2],
-             Cns_MAX_BYTES_SUBJECT);
+   Str_Copy (Subject,row[2],Cns_MAX_BYTES_SUBJECT);
 
    /***** Get location (row[3]) *****/
-   Str_Copy (Content,row[3],
-             Cns_MAX_BYTES_LONG_TEXT);
+   Str_Copy (Content,row[3],Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Get media (row[4]) *****/
    Media->MedCod = Str_ConvertStrCodToLongCod (row[4]);
@@ -1416,20 +1410,18 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
       row = mysql_fetch_row (mysql_res);
 
       /***** Copy subject *****/
-      Str_Copy (SummaryStr,row[0],
-		Ntf_MAX_BYTES_SUMMARY);
+      Str_Copy (SummaryStr,row[0],Ntf_MAX_BYTES_SUMMARY);
 
       /***** Copy content *****/
       if (GetContent)
 	{
 	 Length = strlen (row[1]);
 
-	 if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
-	    Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
+	 if ((*ContentStr = malloc (Length + 1)) == NULL)
+            Lay_NotEnoughMemoryExit ();
 
 	 if (Length)
-	    Str_Copy (*ContentStr,row[1],
-		      Length);
+	    Str_Copy (*ContentStr,row[1],Length);
 	 else
 	    **ContentStr = '\0';
 	}
@@ -2179,20 +2171,18 @@ void For_SetForumName (const struct For_Forum *Forum,
                    For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_GLOBAL_TCHS:
-         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
-                   "%s%s",
+         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
                    UseHTMLEntities ? Txt_General :
                                      Txt_General_NO_HTML[Language],
                    UseHTMLEntities ? Txt_only_teachers :
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM__SWAD__USRS:
-         Str_Copy (ForumName,Cfg_PLATFORM_SHORT_NAME,
-                   For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,Cfg_PLATFORM_SHORT_NAME,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM__SWAD__TCHS:
-         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
-                   "%s%s",Cfg_PLATFORM_SHORT_NAME,
+         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
+                   Cfg_PLATFORM_SHORT_NAME,
                    UseHTMLEntities ? Txt_only_teachers :
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
@@ -2200,15 +2190,14 @@ void For_SetForumName (const struct For_Forum *Forum,
 	 Hie.Ins.InsCod = Forum->Location;
 	 if (!Ins_GetDataOfInstitutionByCod (&Hie.Ins))
 	    Lay_ShowErrorAndExit ("Institution not found.");
-         Str_Copy (ForumName,Hie.Ins.ShrtName,
-                   For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,Hie.Ins.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_INSTIT_TCHS:
 	 Hie.Ins.InsCod = Forum->Location;
 	 if (!Ins_GetDataOfInstitutionByCod (&Hie.Ins))
 	    Lay_ShowErrorAndExit ("Institution not found.");
-         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
-                   "%s%s",Hie.Ins.ShrtName,
+         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
+                   Hie.Ins.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
@@ -2216,15 +2205,14 @@ void For_SetForumName (const struct For_Forum *Forum,
 	 Hie.Ctr.CtrCod = Forum->Location;
 	 if (!Ctr_GetDataOfCentreByCod (&Hie.Ctr))
 	    Lay_ShowErrorAndExit ("Centre not found.");
-         Str_Copy (ForumName,Hie.Ctr.ShrtName,
-                   For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,Hie.Ctr.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_CENTRE_TCHS:
 	 Hie.Ctr.CtrCod = Forum->Location;
 	 if (!Ctr_GetDataOfCentreByCod (&Hie.Ctr))
 	    Lay_ShowErrorAndExit ("Centre not found.");
-         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
-                   "%s%s",Hie.Ctr.ShrtName,
+         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
+                   Hie.Ctr.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
@@ -2232,15 +2220,14 @@ void For_SetForumName (const struct For_Forum *Forum,
 	 Hie.Deg.DegCod = Forum->Location;
 	 if (!Deg_GetDataOfDegreeByCod (&Hie.Deg))
 	    Lay_ShowErrorAndExit ("Degree not found.");
-         Str_Copy (ForumName,Hie.Deg.ShrtName,
-                   For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,Hie.Deg.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_DEGREE_TCHS:
 	 Hie.Deg.DegCod = Forum->Location;
 	 if (!Deg_GetDataOfDegreeByCod (&Hie.Deg))
 	    Lay_ShowErrorAndExit ("Degree not found.");
-         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
-                   "%s%s",Hie.Deg.ShrtName,
+         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
+                   Hie.Deg.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
@@ -2248,21 +2235,19 @@ void For_SetForumName (const struct For_Forum *Forum,
 	 Hie.Crs.CrsCod = Forum->Location;
 	 if (!Crs_GetDataOfCourseByCod (&Hie.Crs))
 	    Lay_ShowErrorAndExit ("Course not found.");
-         Str_Copy (ForumName,Hie.Crs.ShrtName,
-                   For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,Hie.Crs.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_COURSE_TCHS:
 	 Hie.Crs.CrsCod = Forum->Location;
 	 if (!Crs_GetDataOfCourseByCod (&Hie.Crs))
 	    Lay_ShowErrorAndExit ("Course not found.");
-         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
-                   "%s%s",Hie.Crs.ShrtName,
+         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
+                   Hie.Crs.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
       default:
-         Str_Copy (ForumName,Txt_Unknown_FORUM,
-                   For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,Txt_Unknown_FORUM,For_MAX_BYTES_FORUM_NAME);
      }
   }
 
@@ -2504,9 +2489,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
          Ale_ShowAlert (AlertType,Message);
 
    /***** Begin box for threads of this forum *****/
-   snprintf (FrameTitle,sizeof (FrameTitle),
-	     "%s: %s",
-	     Txt_Forum,ForumName);
+   snprintf (FrameTitle,sizeof (FrameTitle),"%s: %s",Txt_Forum,ForumName);
    Box_BoxBegin (NULL,FrameTitle,
                  For_PutIconNewThread,Forums,
 		 Hlp_COMMUNICATION_Forums_threads,Box_NOT_CLOSABLE);
@@ -3520,12 +3503,9 @@ static void For_GetThreadData (struct For_Thread *Thr)
    Thr->WriteTime[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
 
    /***** Get the subject of this thread (row[6]) *****/
-   Str_Copy (Thr->Subject,row[6],
-             Cns_MAX_BYTES_SUBJECT);
+   Str_Copy (Thr->Subject,row[6],sizeof (Thr->Subject) - 1);
    if (!Thr->Subject[0])
-      snprintf (Thr->Subject,sizeof (Thr->Subject),
-	        "[%s]",
-		Txt_no_subject);
+      snprintf (Thr->Subject,sizeof (Thr->Subject),"[%s]",Txt_no_subject);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -4260,7 +4240,7 @@ void For_CutThread (void)
    if (Subject[0])
      {
       snprintf (Message,sizeof (Message),
-	        Txt_Thread_X_marked_to_be_moved,Subject);
+                Txt_Thread_X_marked_to_be_moved,Subject);
       For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,Message);
      }
    else
@@ -4301,8 +4281,7 @@ void For_PasteThread (void)
       if (Subject[0])
 	{
          snprintf (Message,sizeof (Message),
-	           Txt_The_thread_X_is_already_in_this_forum,
-                   Subject);
+                   Txt_The_thread_X_is_already_in_this_forum,Subject);
          For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_WARNING,Message);
         }
       else
@@ -4320,8 +4299,7 @@ void For_PasteThread (void)
       if (Subject[0])
 	{
          snprintf (Message,sizeof (Message),
-	           Txt_Thread_X_moved_to_this_forum,
-                   Subject);
+	           Txt_Thread_X_moved_to_this_forum,Subject);
          For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,Message);
 	}
       else

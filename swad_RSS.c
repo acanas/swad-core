@@ -66,14 +66,12 @@ void RSS_UpdateRSSFileForACrs (struct Crs_Course *Crs)
    struct tm *tm;
 
    /***** Create RSS directory if not exists *****/
-   snprintf (PathRelPublRSSDir,sizeof (PathRelPublRSSDir),
-	     "%s/%ld/%s",
+   snprintf (PathRelPublRSSDir,sizeof (PathRelPublRSSDir),"%s/%ld/%s",
 	     Cfg_PATH_CRS_PUBLIC,Crs->CrsCod,Cfg_RSS_FOLDER);
    Fil_CreateDirIfNotExists (PathRelPublRSSDir);
 
    /***** Create RSS file *****/
-   snprintf (PathRelPublRSSFile,sizeof (PathRelPublRSSFile),
-	     "%s/%s",
+   snprintf (PathRelPublRSSFile,sizeof (PathRelPublRSSFile),"%s/%s",
 	     PathRelPublRSSDir,Cfg_RSS_FILE);
    if ((FileRSS = fopen (PathRelPublRSSFile,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not create RSS file.");
@@ -196,8 +194,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
          fprintf (FileRSS,"<item>\n");
 
          /* Write title (first characters) of the notice */
-         Str_Copy (Content,row[3],
-                   Cns_MAX_BYTES_TEXT);
+         Str_Copy (Content,row[3],sizeof (Content) - 1);
          Str_LimitLengthHTMLStr (Content,40);	// Remove when notice has a Subject
          fprintf (FileRSS,"<title>%s: ",Txt_Notice);
          Str_FilePrintStrChangingBRToRetAndNBSPToSpace (FileRSS,Content);
@@ -208,16 +205,15 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
                   Cfg_URL_SWAD_CGI,Crs->CrsCod);
 
          /* Write full content of the notice */
-         Str_Copy (Content,row[3],
-                   Cns_MAX_BYTES_TEXT);
+         Str_Copy (Content,row[3],sizeof (Content) - 1);
          Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,40);
          fprintf (FileRSS,"<description><![CDATA[<p><em>%s %s %s:</em></p><p>%s</p>]]></description>\n",
-                  UsrDat.FirstName,UsrDat.Surname1,UsrDat.Surname2,Content);
+                  UsrDat.FrstName,UsrDat.Surname1,UsrDat.Surname2,Content);
 
          /* Write author */
          if (UsrDat.Email[0])
             fprintf (FileRSS,"<author>%s (%s %s %s)</author>\n",
-                     UsrDat.Email,UsrDat.FirstName,UsrDat.Surname1,UsrDat.Surname2);
+                     UsrDat.Email,UsrDat.FrstName,UsrDat.Surname1,UsrDat.Surname2);
 
          /* Write unique string for this item */
          fprintf (FileRSS,"<guid isPermaLink=\"false\">%s, course #%ld, notice #%ld</guid>\n",
@@ -326,7 +322,6 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Crs_Course *Crs)
 
 void RSS_BuildRSSLink (char RSSLink[Cns_MAX_BYTES_WWW + 1],long CrsCod)
   {
-   snprintf (RSSLink,Cns_MAX_BYTES_WWW + 1,
-	     "%s/%ld/%s/%s",
+   snprintf (RSSLink,Cns_MAX_BYTES_WWW + 1,"%s/%ld/%s/%s",
              Cfg_URL_CRS_PUBLIC,CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
   }

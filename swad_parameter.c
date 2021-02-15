@@ -86,8 +86,7 @@ bool Par_GetQueryString (void)
    char UnsignedLongStr[Cns_MAX_DECIMAL_DIGITS_ULONG + 1];
    unsigned long UnsignedLong;
 
-   Str_Copy (Method,getenv ("REQUEST_METHOD"),
-             Par_MAX_BYTES_METHOD);
+   Str_Copy (Method,getenv ("REQUEST_METHOD"),sizeof (Method) - 1);
 
    if (!strcmp (Method,"GET"))
      {
@@ -99,7 +98,7 @@ bool Par_GetQueryString (void)
       Gbl.Params.ContentLength = strlen (getenv ("QUERY_STRING"));
 
       /* Allocate memory for query string */
-      if ((Gbl.Params.QueryString = (char *) malloc (Gbl.Params.ContentLength + 1)) == NULL)
+      if ((Gbl.Params.QueryString = malloc (Gbl.Params.ContentLength + 1)) == NULL)
 	 return false;
 
       /* Copy query string from environment variable */
@@ -113,7 +112,7 @@ bool Par_GetQueryString (void)
       if (getenv ("CONTENT_LENGTH"))
 	{
          Str_Copy (UnsignedLongStr,getenv ("CONTENT_LENGTH"),
-                   Cns_MAX_DECIMAL_DIGITS_ULONG);
+                   sizeof (UnsignedLongStr) - 1);
          if (sscanf (UnsignedLongStr,"%lu",&UnsignedLong) != 1)
             return false;
          Gbl.Params.ContentLength = (size_t) UnsignedLong;
@@ -127,8 +126,7 @@ bool Par_GetQueryString (void)
       if (getenv ("CONTENT_TYPE") == NULL)
          return false;
 
-      Str_Copy (ContentType,getenv ("CONTENT_TYPE"),
-                Par_MAX_BYTES_CONTENT_TYPE);
+      Str_Copy (ContentType,getenv ("CONTENT_TYPE"),sizeof (ContentType) - 1);
 
       if (!strncmp (ContentType,"multipart/form-data",strlen ("multipart/form-data")))
         {
@@ -145,7 +143,7 @@ bool Par_GetQueryString (void)
          Gbl.ContentReceivedByCGI = Act_CONT_NORM;
 
 	 /* Allocate memory for query string */
-	 if ((Gbl.Params.QueryString = (char *) malloc (Gbl.Params.ContentLength + 1)) == NULL)
+	 if ((Gbl.Params.QueryString = malloc (Gbl.Params.ContentLength + 1)) == NULL)
 	    return false;
 
 	 /* Copy query string from stdin */
@@ -185,11 +183,9 @@ static void Par_GetBoundary (void)
 
    /***** Create boundary strings *****/
    snprintf (Gbl.Boundary.StrWithoutCRLF,sizeof (Gbl.Boundary.StrWithoutCRLF),
-	     "--%s",
-	     PtrToBoundary);
+	     "--%s",PtrToBoundary);
    snprintf (Gbl.Boundary.StrWithCRLF,sizeof (Gbl.Boundary.StrWithCRLF),
-	     "%c%c%s",
-	     0x0D,0x0A,Gbl.Boundary.StrWithoutCRLF);
+	     "%c%c%s",0x0D,0x0A,Gbl.Boundary.StrWithoutCRLF);
 
    /***** Compute lengths *****/
    Gbl.Boundary.LengthWithoutCRLF = strlen (Gbl.Boundary.StrWithoutCRLF);
@@ -261,8 +257,8 @@ static void Par_CreateListOfParamsFromQueryString (void)
 	)
      {
       /* Allocate space for a new parameter initialized to 0 */
-      if ((NewParam = (struct Param *) calloc (1,sizeof (struct Param))) == NULL)
-	 Lay_ShowErrorAndExit ("Error allocating memory for parameter");
+      if ((NewParam = calloc (1,sizeof (*NewParam))) == NULL)
+          Lay_NotEnoughMemoryExit ();
 
       /* Link the previous element in list with the current element */
       if (CurPos == 0)
@@ -337,8 +333,8 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 	 if (!strcasecmp (StrAux,StringBeforeParam)) // Start of a parameter
 	   {
 	    /* Allocate space for a new parameter initialized to 0 */
-	    if ((NewParam = (struct Param *) calloc (1,sizeof (struct Param))) == NULL)
-	       Lay_ShowErrorAndExit ("Error allocating memory for parameter");
+	    if ((NewParam = calloc (1,sizeof (*NewParam))) == NULL)
+               Lay_NotEnoughMemoryExit ();
 
 	    /* Link the previous element in list with the current element */
 	    if (CurPos == 0)
@@ -699,7 +695,7 @@ void Par_GetMainParameters (void)
 	 /* Set another user's nickname */
 	 Str_RemoveLeadingArrobas (Nickname);
          Str_Copy (Gbl.Usrs.Other.UsrDat.Nickname,Nickname,	// without arroba
-                   Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
+                   sizeof (Gbl.Usrs.Other.UsrDat.Nickname) - 1);
 
 	 // This user's code is used to go to public profile
 	 // and to refresh old publishings in user's timeline
@@ -715,7 +711,7 @@ void Par_GetMainParameters (void)
 	 /* Set another user's nickname */
 	 Str_RemoveLeadingArrobas (Nickname);
          Str_Copy (Gbl.Usrs.Other.UsrDat.Nickname,Nickname,	// without arroba
-                   Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
+                   sizeof (Gbl.Usrs.Other.UsrDat.Nickname) - 1);
 
 	 // This user's code is used to go to public agenda
 	 // If user does not exist ==> UsrCod = -1
@@ -801,18 +797,14 @@ void Par_GetMainParameters (void)
          Gbl.Prefs.Theme = The_THEME_DEFAULT;
 
       /***** Set path of theme *****/
-      snprintf (URL,sizeof (URL),
-	        "%s/%s",
+      snprintf (URL,sizeof (URL),"%s/%s",
                 Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme]);
-      Str_Copy (Gbl.Prefs.URLTheme,URL,
-                PATH_MAX);
+      Str_Copy (Gbl.Prefs.URLTheme,URL,sizeof (Gbl.Prefs.URLTheme) - 1);
 
       /***** Set path of icon set *****/
-      snprintf (URL,sizeof (URL),
-	        "%s/%s",
+      snprintf (URL,sizeof (URL),"%s/%s",
                 Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
-      Str_Copy (Gbl.Prefs.URLIconSet,URL,
-                PATH_MAX);
+      Str_Copy (Gbl.Prefs.URLIconSet,URL,sizeof (Gbl.Prefs.URLIconSet) - 1);
      }
 
    /***** Get country if exists (from menu) *****/

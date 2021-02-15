@@ -297,8 +297,7 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
       Banners->Num = (unsigned) NumRows;
 
       /***** Create list with banners *****/
-      if ((Banners->Lst = (struct Ban_Banner *)
-			  calloc (NumRows,sizeof (struct Ban_Banner))) == NULL)
+      if ((Banners->Lst = calloc (NumRows,sizeof (*Banners->Lst))) == NULL)
 	 Lay_NotEnoughMemoryExit ();
 
       /***** Get the banners *****/
@@ -319,20 +318,16 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
 	 Ban->Hidden = (row[1][0] == 'Y');
 
 	 /* Get the short name of the banner (row[2]) */
-	 Str_Copy (Ban->ShrtName,row[2],
-		   Ban_MAX_BYTES_SHRT_NAME);
+	 Str_Copy (Ban->ShrtName,row[2],sizeof (Ban->ShrtName) - 1);
 
 	 /* Get the full name of the banner (row[3]) */
-	 Str_Copy (Ban->FullName,row[3],
-		   Ban_MAX_BYTES_FULL_NAME);
+	 Str_Copy (Ban->FullName,row[3],sizeof (Ban->FullName) - 1);
 
 	 /* Get the image of the banner (row[4]) */
-	 Str_Copy (Ban->Img,row[4],
-		   Ban_MAX_BYTES_IMAGE);
+	 Str_Copy (Ban->Img     ,row[4],sizeof (Ban->Img     ) - 1);
 
 	 /* Get the URL of the banner (row[5]) */
-	 Str_Copy (Ban->WWW,row[5],
-		   Cns_MAX_BYTES_WWW);
+	 Str_Copy (Ban->WWW     ,row[5],sizeof (Ban->WWW     ) - 1);
 	}
      }
    else
@@ -373,20 +368,16 @@ void Ban_GetDataOfBannerByCod (struct Ban_Banner *Ban)
          Ban->Hidden = (row[0][0] == 'Y');
 
          /* Get the short name of the banner (row[1]) */
-         Str_Copy (Ban->ShrtName,row[1],
-                   Ban_MAX_BYTES_SHRT_NAME);
+         Str_Copy (Ban->ShrtName,row[1],sizeof (Ban->ShrtName) - 1);
 
          /* Get the full name of the banner (row[2]) */
-         Str_Copy (Ban->FullName,row[2],
-                   Ban_MAX_BYTES_FULL_NAME);
+         Str_Copy (Ban->FullName,row[2],sizeof (Ban->FullName) - 1);
 
          /* Get the image of the banner (row[3]) */
-         Str_Copy (Ban->Img,row[3],
-                   Ban_MAX_BYTES_IMAGE);
+         Str_Copy (Ban->Img     ,row[3],sizeof (Ban->Img     ) - 1);
 
          /* Get the URL of the banner (row[4]) */
-         Str_Copy (Ban->WWW,row[4],
-                   Cns_MAX_BYTES_WWW);
+         Str_Copy (Ban->WWW     ,row[4],sizeof (Ban->WWW     ) - 1);
         }
 
       /***** Free structure that stores the query result *****/
@@ -767,8 +758,7 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
      }
 
    /***** Update name *****/
-   Str_Copy (CurrentBanName,NewBanName,
-             MaxBytes);
+   Str_Copy (CurrentBanName,NewBanName,MaxBytes);
   }
 
 /*****************************************************************************/
@@ -841,8 +831,7 @@ void Ban_ChangeBannerImg (void)
 	               Txt_You_can_not_leave_the_image_empty);
 
    /***** Update image *****/
-   Str_Copy (Ban.Img,NewImg,
-             Ban_MAX_BYTES_IMAGE);
+   Str_Copy (Ban.Img,NewImg,sizeof (Ban.Img) - 1);
 
    /***** Set editing banner to use ot in a posterior function *****/
    Ban_SetEditingBanner (&Ban);
@@ -889,8 +878,7 @@ void Ban_ChangeBannerWWW (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update web *****/
-   Str_Copy (Ban.WWW,NewWWW,
-             Cns_MAX_BYTES_WWW);
+   Str_Copy (Ban.WWW,NewWWW,sizeof (Ban.WWW) - 1);
 
    /***** Set editing banner to use ot in a posterior function *****/
    Ban_SetEditingBanner (&Ban);
