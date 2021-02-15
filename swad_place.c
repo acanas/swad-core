@@ -455,8 +455,8 @@ void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc)
      }
    else if (Plc->PlcCod == 0)
      {
-      Str_Copy (Plc->ShrtName,Txt_Another_place,sizeof (Plc->ShrtName) - 1);
-      Str_Copy (Plc->FullName,Txt_Another_place,sizeof (Plc->FullName) - 1);
+      Str_Copy (Plc->ShrtName,Txt_Another_place    ,sizeof (Plc->ShrtName) - 1);
+      Str_Copy (Plc->FullName,Txt_Another_place    ,sizeof (Plc->FullName) - 1);
      }
    else if (Plc->PlcCod > 0)
      {

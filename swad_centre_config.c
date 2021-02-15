@@ -1211,8 +1211,7 @@ void CtrCfg_ChangeCtrWWW (void)
      {
       /***** Update database changing old WWW by new WWW *****/
       Ctr_UpdateCtrWWWDB (Gbl.Hierarchy.Ctr.CtrCod,NewWWW);
-      Str_Copy (Gbl.Hierarchy.Ctr.WWW,NewWWW,
-                sizeof (Gbl.Hierarchy.Ctr.WWW) - 1);
+      Str_Copy (Gbl.Hierarchy.Ctr.WWW,NewWWW,sizeof (Gbl.Hierarchy.Ctr.WWW) - 1);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,

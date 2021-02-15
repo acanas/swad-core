@@ -532,8 +532,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Acti
    Cty_DrawCountryMap (Cty,ClassMap);
 
    /***** Write country name *****/
-   Str_Copy (CountryName,Cty->Name[Gbl.Prefs.Language],
-             sizeof (CountryName) - 1);
+   Str_Copy (CountryName,Cty->Name[Gbl.Prefs.Language],sizeof (CountryName) - 1);
    HTM_TxtF ("&nbsp;%s&nbsp;",CountryName);
    HTM_TxtF ("(%s)",Cty->Alpha2);
 

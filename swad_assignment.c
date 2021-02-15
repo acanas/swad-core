@@ -543,8 +543,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
 	    Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;	// Course assignments
-	    Str_Copy (Gbl.Usrs.Other.UsrDat.EnUsrCod,
-	              Gbl.Usrs.Me.UsrDat.EnUsrCod,
+	    Str_Copy (Gbl.Usrs.Other.UsrDat.EnUsrCod,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 		      sizeof (Gbl.Usrs.Other.UsrDat.EnUsrCod) - 1);
 	    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
 	    Frm_StartForm (ActFrmCreAsgCrs);
@@ -553,8 +552,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
             Rol_WrongRoleExit ();
 	    break;
         }
-      Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,
-                Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+      Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
    	        sizeof (Gbl.FileBrowser.FilFolLnk.Path) - 1);
       Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,Asg->Folder,
    	        sizeof (Gbl.FileBrowser.FilFolLnk.Name) - 1);
@@ -865,10 +863,8 @@ static void Asg_GetDataOfAssignment (struct Asg_Assignment *Asg,
       /* Get whether the assignment is open or closed (row(5)) */
       Asg->Open = (row[5][0] == '1');
 
-      /* Get the title of the assignment (row[6]) */
+      /* Get the title (row[6]) and the folder (row[7]) of the assignment  */
       Str_Copy (Asg->Title ,row[6],sizeof (Asg->Title ) - 1);
-
-      /* Get the folder for the assignment files (row[7]) */
       Str_Copy (Asg->Folder,row[7],sizeof (Asg->Folder) - 1);
       Asg->SendWork = (Asg->Folder[0] != '\0');
 

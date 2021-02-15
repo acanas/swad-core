@@ -791,10 +791,8 @@ bool Att_GetDataOfAttEventByCod (struct Att_Event *Event)
 	 /* Get author of the attendance event (row[3]) */
 	 Event->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
-	 /* Get start date (row[4] holds the start UTC time) */
+	 /* Get start date (row[4]) and end date (row[5]) in UTC time */
 	 Event->TimeUTC[Att_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
-
-	 /* Get end   date (row[5] holds the end   UTC time) */
 	 Event->TimeUTC[Att_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
 
 	 /* Get whether the attendance event is open or closed (row(6)) */
@@ -2600,10 +2598,8 @@ static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long Us
       /* Get if present (row[0]) */
       Present = (row[0][0] == 'Y');
 
-      /* Get student's comment (row[1]) */
+      /* Get student's (row[1]) and teacher's (row[2]) comment */
       Str_Copy (CommentStd,row[1],Cns_MAX_BYTES_TEXT);
-
-      /* Get teacher's comment (row[2]) */
       Str_Copy (CommentTch,row[2],Cns_MAX_BYTES_TEXT);
      }
    else	// User is not present

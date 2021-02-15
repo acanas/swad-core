@@ -317,16 +317,11 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
 	 /* Get if banner is hidden (row[1]) */
 	 Ban->Hidden = (row[1][0] == 'Y');
 
-	 /* Get the short name of the banner (row[2]) */
+	 /* Get short name (row[2]), full name (row[3]),
+	    image (row[4]) and URL (row[5]) of the banner */
 	 Str_Copy (Ban->ShrtName,row[2],sizeof (Ban->ShrtName) - 1);
-
-	 /* Get the full name of the banner (row[3]) */
 	 Str_Copy (Ban->FullName,row[3],sizeof (Ban->FullName) - 1);
-
-	 /* Get the image of the banner (row[4]) */
 	 Str_Copy (Ban->Img     ,row[4],sizeof (Ban->Img     ) - 1);
-
-	 /* Get the URL of the banner (row[5]) */
 	 Str_Copy (Ban->WWW     ,row[5],sizeof (Ban->WWW     ) - 1);
 	}
      }
@@ -367,16 +362,11 @@ void Ban_GetDataOfBannerByCod (struct Ban_Banner *Ban)
          /* Get if the banner is hidden (row[0]) */
          Ban->Hidden = (row[0][0] == 'Y');
 
-         /* Get the short name of the banner (row[1]) */
+	 /* Get short name (row[1]), full name (row[2]),
+	    image (row[3]) and URL (row[4]) of the banner */
          Str_Copy (Ban->ShrtName,row[1],sizeof (Ban->ShrtName) - 1);
-
-         /* Get the full name of the banner (row[2]) */
          Str_Copy (Ban->FullName,row[2],sizeof (Ban->FullName) - 1);
-
-         /* Get the image of the banner (row[3]) */
          Str_Copy (Ban->Img     ,row[3],sizeof (Ban->Img     ) - 1);
-
-         /* Get the URL of the banner (row[4]) */
          Str_Copy (Ban->WWW     ,row[4],sizeof (Ban->WWW     ) - 1);
         }
 

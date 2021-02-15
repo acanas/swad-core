@@ -1221,7 +1221,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	    ListUsrCods.Lst = NULL;
 
 	    /* Check if string is a user's ID, user's nickname or user's email address */
-	    if (Nck_CheckIfNickWithArrobaIsValid (UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
+	    if (Nck_CheckIfNickWithArrIsValid (UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
 	      {
 	       if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.UsrIDNickOrEmail)) > 0)
 		 {
@@ -1346,7 +1346,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	 ListUsrCods.Lst = NULL;
 
 	 /* Check if the string is a user's ID, a user's nickname or a user's email address */
-	 if (Nck_CheckIfNickWithArrobaIsValid (UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
+	 if (Nck_CheckIfNickWithArrIsValid (UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
 	   {
 	    if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.UsrIDNickOrEmail)) > 0)
 	      {

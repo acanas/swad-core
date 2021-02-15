@@ -768,23 +768,16 @@ static void Ctr_GetDataOfCentreFromRow (struct Ctr_Centre *Ctr,MYSQL_ROW row)
    /***** Get requester user's code (row[4]) *****/
    Ctr->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
-   /***** Get latitude (row[5]) *****/
-   Ctr->Coord.Latitude = Map_GetLatitudeFromStr (row[5]);
-
-   /***** Get longitude (row[6]) *****/
+   /***** Get latitude (row[5], longitude (row[6]) and altitude (row[7])*****/
+   Ctr->Coord.Latitude  = Map_GetLatitudeFromStr  (row[5]);
    Ctr->Coord.Longitude = Map_GetLongitudeFromStr (row[6]);
+   Ctr->Coord.Altitude  = Map_GetAltitudeFromStr  (row[7]);
 
-   /***** Get altitude (row[7]) *****/
-   Ctr->Coord.Altitude = Map_GetAltitudeFromStr (row[7]);
-
-   /***** Get the short name of the centre (row[8]) *****/
-   Str_Copy (Ctr->ShrtName,row[8],sizeof (Ctr->ShrtName) - 1);
-
-   /***** Get the full name of the centre (row[9]) *****/
-   Str_Copy (Ctr->FullName,row[9],sizeof (Ctr->FullName) - 1);
-
-   /***** Get the URL of the centre (row[10]) *****/
-   Str_Copy (Ctr->WWW,row[10],sizeof (Ctr->WWW) - 1);
+   /***** Get short name (row[8]), full name (row[9])
+          and URL (row[10]) of the centre *****/
+   Str_Copy (Ctr->ShrtName,row[ 8],sizeof (Ctr->ShrtName) - 1);
+   Str_Copy (Ctr->FullName,row[ 9],sizeof (Ctr->FullName) - 1);
+   Str_Copy (Ctr->WWW     ,row[10],sizeof (Ctr->WWW     ) - 1);
   }
 
 /*****************************************************************************/
@@ -836,7 +829,6 @@ void Ctr_GetShortNameOfCentreByCod (struct Ctr_Centre *Ctr)
 	{
 	 /***** Get the short name of this centre *****/
 	 row = mysql_fetch_row (mysql_res);
-
 	 Str_Copy (Ctr->ShrtName,row[0],sizeof (Ctr->ShrtName) - 1);
 	}
 

@@ -104,7 +104,7 @@ Inf_InfoSrc_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB);
 
 void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
                            char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],
-                           char InfoTxtMD[Cns_MAX_BYTES_LONG_TEXT + 1]);
+                           char InfoTxtMD  [Cns_MAX_BYTES_LONG_TEXT + 1]);
 
 void Inf_EditPlainTxtInfo (void);
 void Inf_EditRichTxtInfo (void);

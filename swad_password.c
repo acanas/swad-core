@@ -333,7 +333,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 
    /***** Check if user exists *****/
    /* Check if user has typed his user's ID or his nickname */
-   if (Nck_CheckIfNickWithArrobaIsValid (Gbl.Usrs.Me.UsrIdLogin))	// 1: It's a nickname
+   if (Nck_CheckIfNickWithArrIsValid (Gbl.Usrs.Me.UsrIdLogin))	// 1: It's a nickname
      {
       if ((Gbl.Usrs.Me.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Gbl.Usrs.Me.UsrIdLogin)) > 0)
 	{

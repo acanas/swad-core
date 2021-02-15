@@ -1638,7 +1638,7 @@ static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD)
 
 void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
                            char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],
-                           char InfoTxtMD[Cns_MAX_BYTES_LONG_TEXT + 1])
+                           char InfoTxtMD  [Cns_MAX_BYTES_LONG_TEXT + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1663,14 +1663,14 @@ void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
 
       /* Get text in Markdown format */
       if (InfoTxtMD)
-	 Str_Copy (InfoTxtMD,row[1],Cns_MAX_BYTES_LONG_TEXT);
+	 Str_Copy (InfoTxtMD  ,row[1],Cns_MAX_BYTES_LONG_TEXT);
      }
    else
      {
       if (InfoTxtHTML)
          InfoTxtHTML[0] = '\0';
       if (InfoTxtMD)
-         InfoTxtMD[0]   = '\0';
+         InfoTxtMD  [0]   = '\0';
      }
 
    /***** Free structure that stores the query result *****/

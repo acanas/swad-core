@@ -337,7 +337,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
                                 bool LastPst,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1],
                                 bool NewPst,bool ICanModerateForum);
 static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
-                            char Subject[Cns_MAX_BYTES_SUBJECT + 1],
+                            char Subject[Cns_MAX_BYTES_SUBJECT   + 1],
                             char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
                             struct Med_Media *Media);
 static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod);
@@ -1340,7 +1340,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 /*****************************************************************************/
 
 static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
-                            char Subject[Cns_MAX_BYTES_SUBJECT + 1],
+                            char Subject[Cns_MAX_BYTES_SUBJECT   + 1],
                             char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
                             struct Med_Media *Media)
   {
@@ -1371,10 +1371,8 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
    /***** Get creation time (row[1]) *****/
    *CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 
-   /***** Get subject (row[2]) *****/
-   Str_Copy (Subject,row[2],Cns_MAX_BYTES_SUBJECT);
-
-   /***** Get location (row[3]) *****/
+   /***** Get subject (row[2]) and location (row[3]) *****/
+   Str_Copy (Subject,row[2],Cns_MAX_BYTES_SUBJECT  );
    Str_Copy (Content,row[3],Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Get media (row[4]) *****/

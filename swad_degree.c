@@ -1386,14 +1386,10 @@ static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row)
    /* Get requester user's code (row[4]) */
    Deg->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
-   /***** Get degree short name (row[5]) *****/
+   /***** Get degree short name (row[5]), full name (row[6]) and WWW (row[7]) *****/
    Str_Copy (Deg->ShrtName,row[5],sizeof (Deg->ShrtName) - 1);
-
-   /***** Get degree full name (row[6]) *****/
    Str_Copy (Deg->FullName,row[6],sizeof (Deg->FullName) - 1);
-
-   /***** Get WWW (row[7]) *****/
-   Str_Copy (Deg->WWW,row[7],sizeof (Deg->WWW) - 1);
+   Str_Copy (Deg->WWW     ,row[7],sizeof (Deg->WWW     ) - 1);
   }
 
 /*****************************************************************************/
@@ -1415,7 +1411,6 @@ void Deg_GetShortNameOfDegreeByCod (struct Deg_Degree *Deg)
 	{
 	 /***** Get the short name of this degree *****/
 	 row = mysql_fetch_row (mysql_res);
-
 	 Str_Copy (Deg->ShrtName,row[0],sizeof (Deg->ShrtName) - 1);
 	}
 

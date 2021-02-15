@@ -32,24 +32,24 @@
 /************************* Public types and constants ************************/
 /*****************************************************************************/
 
-#define Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA	 3
-#define Nck_MIN_BYTES_NICKNAME_WITHOUT_ARROBA	Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA
+#define Nck_MIN_CHARS_NICK_WITHOUT_ARROBA	 3
+#define Nck_MIN_BYTES_NICK_WITHOUT_ARROBA	Nck_MIN_CHARS_NICK_WITHOUT_ARROBA
 
-#define Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA	16
-#define Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA	Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA
+#define Nck_MAX_CHARS_NICK_WITHOUT_ARROBA	16
+#define Nck_MAX_BYTES_NICK_WITHOUT_ARROBA	Nck_MAX_CHARS_NICK_WITHOUT_ARROBA
 
-#define Nck_MAX_BYTES_NICKNAME_FROM_FORM	(128 - 1)	// For variables that store characters typed in a form
+#define Nck_MAX_BYTES_NICK_FROM_FORM	(128 - 1)	// For variables that store characters typed in a form
 
-#define Nck_MAX_BYTES_LIST_NICKS		((Nck_MAX_BYTES_NICKNAME_FROM_FORM + 2) * Cfg_MAX_USRS_IN_LIST)
+#define Nck_MAX_BYTES_LIST_NICKS		((Nck_MAX_BYTES_NICK_FROM_FORM + 2) * Cfg_MAX_USRS_IN_LIST)
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-bool Nck_CheckIfNickWithArrobaIsValid (const char *NickWithArroba);
+bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr);
 
 bool Nck_GetNicknameFromUsrCod (long UsrCod,
-                                char Nickname[Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1]);
+                                char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1]);
 long Nck_GetUsrCodFromNickname (const char *Nickname);
 
 void Nck_ShowFormChangeMyNickname (bool IMustFillNickname);

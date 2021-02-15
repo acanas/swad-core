@@ -3868,13 +3868,11 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
       /* Get shuffle (row[2]) */
       Question->Answer.Shuffle = (row[2][0] == 'Y');
 
-      /* Get the stem (row[3]) */
-      Question->Stem[0] = '\0';
+      /* Get the stem (row[3]) and the feedback (row[4]) */
+      Question->Stem    [0] = '\0';
       if (row[3])
 	 if (row[3][0])
-	    Str_Copy (Question->Stem,row[3],Cns_MAX_BYTES_TEXT);
-
-      /* Get the feedback (row[4]) */
+	    Str_Copy (Question->Stem    ,row[3],Cns_MAX_BYTES_TEXT);
       Question->Feedback[0] = '\0';
       if (row[4])
 	 if (row[4][0])
@@ -3961,14 +3959,12 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
 		  /* Abort on error */
 		  Ale_ShowAlertsAndExit ();
 
-	       /* Get text (row[1]) */
-	       Question->Answer.Options[NumOpt].Text[0] = '\0';
+	       /* Get text (row[1]) and feedback (row[2])*/
+	       Question->Answer.Options[NumOpt].Text   [0] = '\0';
 	       if (row[1])
 		  if (row[1][0])
-		     Str_Copy (Question->Answer.Options[NumOpt].Text,row[1],
+		     Str_Copy (Question->Answer.Options[NumOpt].Text    ,row[1],
 			       Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-
-	       /* Get feedback (row[2]) */
 	       Question->Answer.Options[NumOpt].Feedback[0] = '\0';
 	       if (row[2])
 		  if (row[2][0])

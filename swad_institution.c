@@ -848,13 +848,10 @@ static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row)
    /***** Get requester user's code (row[3]) *****/
    Ins->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
-   /***** Get the short name of the institution (row[4]) *****/
+   /***** Get short name (row[4]), full name (row[5])
+          and URL (row[6]) of the institution *****/
    Str_Copy (Ins->ShrtName,row[4],sizeof (Ins->ShrtName) - 1);
-
-   /***** Get the full name of the institution (row[5]) *****/
    Str_Copy (Ins->FullName,row[5],sizeof (Ins->FullName) - 1);
-
-   /***** Get the URL of the institution (row[6]) *****/
    Str_Copy (Ins->WWW     ,row[6],sizeof (Ins->WWW     ) - 1);
   }
 
@@ -963,18 +960,16 @@ static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
       /* Get row */
       row = mysql_fetch_row (mysql_res);
 
-      /* Get the short name of this institution (row[0]) */
+      /* Get short name (row[0]) and country name (row[1]) of this institution */
       Str_Copy (Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,row[0],
 		sizeof (Gbl.Cache.InstitutionShrtNameAndCty.ShrtName) - 1);
-
-      /* Get the name of the country (row[1]) */
-      Str_Copy (Gbl.Cache.InstitutionShrtNameAndCty.CtyName,row[1],
-		sizeof (Gbl.Cache.InstitutionShrtNameAndCty.CtyName) - 1);
+      Str_Copy (Gbl.Cache.InstitutionShrtNameAndCty.CtyName ,row[1],
+		sizeof (Gbl.Cache.InstitutionShrtNameAndCty.CtyName ) - 1);
      }
    else
      {
       Gbl.Cache.InstitutionShrtNameAndCty.ShrtName[0] = '\0';
-      Gbl.Cache.InstitutionShrtNameAndCty.CtyName[0] = '\0';
+      Gbl.Cache.InstitutionShrtNameAndCty.CtyName [0] = '\0';
      }
 
    /* Free structure that stores the query result */
@@ -982,7 +977,7 @@ static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
 
    Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,
 	     sizeof (Ins->ShrtName) - 1);
-   Str_Copy (CtyName,Gbl.Cache.InstitutionShrtNameAndCty.CtyName,
+   Str_Copy (CtyName      ,Gbl.Cache.InstitutionShrtNameAndCty.CtyName ,
 	     Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
   }
 

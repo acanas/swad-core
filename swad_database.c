@@ -3647,7 +3647,7 @@ mysql> DESCRIBE usr_nicknames;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_nicknames ("
 			"UsrCod INT NOT NULL,"
-			"Nickname CHAR(16) COLLATE latin1_spanish_ci NOT NULL,"	// Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA
+			"Nickname CHAR(16) COLLATE latin1_spanish_ci NOT NULL,"	// Nck_MAX_BYTES_NICK_WITHOUT_ARROBA
 			"CreatTime DATETIME NOT NULL,"
 		   "UNIQUE INDEX(UsrCod,Nickname),"
 		   "UNIQUE INDEX(Nickname))");

@@ -3229,11 +3229,11 @@ void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj)
 
 	 /* Get title (row[10]), description (row[11]), required knowledge (row[12]),
 	    required materials (row[13]) and URL (row[14]) of the project */
-	 Str_Copy (Prj->Title      ,row[10],sizeof (Prj->Title      ) - 1);
+	 Str_Copy (Prj->Title      ,row[10],sizeof (Prj->Title) - 1);
 	 Str_Copy (Prj->Description,row[11],Cns_MAX_BYTES_TEXT);
 	 Str_Copy (Prj->Knowledge  ,row[12],Cns_MAX_BYTES_TEXT);
 	 Str_Copy (Prj->Materials  ,row[13],Cns_MAX_BYTES_TEXT);
-	 Str_Copy (Prj->URL        ,row[14],sizeof (Prj->URL        ) - 1);
+	 Str_Copy (Prj->URL        ,row[14],sizeof (Prj->URL  ) - 1);
 	}
 
       /***** Free structure that stores the query result *****/

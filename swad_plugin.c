@@ -708,8 +708,7 @@ void Plg_ChangePlgAppKey (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update app key *****/
-   Str_Copy (Plg_EditingPlg->AppKey,NewAppKey,
-             sizeof (Plg_EditingPlg->AppKey) - 1);
+   Str_Copy (Plg_EditingPlg->AppKey,NewAppKey,sizeof (Plg_EditingPlg->AppKey) - 1);
   }
 
 /*****************************************************************************/

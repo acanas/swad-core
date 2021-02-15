@@ -536,7 +536,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    extern const char *Txt_Other_recipients;
    extern const char *Txt_Recipients;
    extern const char *Txt_nicks_emails_or_IDs_separated_by_commas;
-   char Nickname[Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
+   char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
    unsigned ColSpan;
    bool StdsAndTchsWritten = Gbl.Hierarchy.Level == Hie_Lvl_CRS &&		// Course selected
                              (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// I belong to it
@@ -707,10 +707,10 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
 static void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat)
   {
-   char NickWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   char NickWithArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1];
 
-   snprintf (NickWithArroba,sizeof (NickWithArroba),"@%s",UsrDat->Nickname);
-   Par_PutHiddenParamString (NULL,"OtherRecipients",NickWithArroba);
+   snprintf (NickWithArr,sizeof (NickWithArr),"@%s",UsrDat->Nickname);
+   Par_PutHiddenParamString (NULL,"OtherRecipients",NickWithArr);
   }
 
 /*****************************************************************************/

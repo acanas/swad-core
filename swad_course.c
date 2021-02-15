@@ -1802,8 +1802,7 @@ static void Crs_GetDataOfCourseFromRow (struct Crs_Course *Crs,MYSQL_ROW row)
    Crs->Year = Deg_ConvStrToYear (row[2]);
 
    /***** Get institutional course code (row[3]) *****/
-   Str_Copy (Crs->InstitutionalCrsCod,row[3],
-             sizeof (Crs->InstitutionalCrsCod) - 1);
+   Str_Copy (Crs->InstitutionalCrsCod,row[3],sizeof (Crs->InstitutionalCrsCod) - 1);
 
    /***** Get course status (row[4]) *****/
    if (sscanf (row[4],"%u",&(Crs->Status)) != 1)
@@ -1812,10 +1811,8 @@ static void Crs_GetDataOfCourseFromRow (struct Crs_Course *Crs,MYSQL_ROW row)
    /***** Get requester user'code (row[5]) *****/
    Crs->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[5]);
 
-   /***** Get the short name of the course (row[6]) *****/
+   /***** Get short name (row[6]) and full name (row[7]) of the course *****/
    Str_Copy (Crs->ShrtName,row[6],sizeof (Crs->ShrtName) - 1);
-
-   /***** Get the full name of the course (row[7]) *****/
    Str_Copy (Crs->FullName,row[7],sizeof (Crs->FullName) - 1);
   }
 
@@ -1842,9 +1839,8 @@ static void Crs_GetShortNamesByCod (long CrsCod,
 			  " AND courses.DegCod=degrees.DegCod",
 			  CrsCod) == 1)
 	{
-	 /***** Get the short name of this course *****/
+	 /***** Get the course short name and degree short name *****/
 	 row = mysql_fetch_row (mysql_res);
-
 	 Str_Copy (CrsShortName,row[0],Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 	 Str_Copy (DegShortName,row[1],Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 	}

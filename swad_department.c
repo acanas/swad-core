@@ -394,14 +394,11 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
 	    if ((Dpt->InsCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
 	       Lay_ShowErrorAndExit ("Wrong code of institution.");
 
-	    /* Get the short name of the department (row[2]) */
+	    /* Get short name (row[2]), full name (row[3])
+	       and URL (row[4]) of the department  */
 	    Str_Copy (Dpt->ShrtName,row[2],sizeof (Dpt->ShrtName) - 1);
-
-	    /* Get the full name of the department (row[3]) */
 	    Str_Copy (Dpt->FullName,row[3],sizeof (Dpt->FullName) - 1);
-
-	    /* Get the URL of the department (row[4]) */
-	    Str_Copy (Dpt->WWW,row[4],sizeof (Dpt->WWW) - 1);
+	    Str_Copy (Dpt->WWW     ,row[4],sizeof (Dpt->WWW     ) - 1);
 
 	    /* Get number of non-editing teachers and teachers in this department (row[5]) */
 	    if (sscanf (row[5],"%u",&Dpt->NumTchs) != 1)
@@ -464,14 +461,11 @@ void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt)
          /* Get the code of the institution (row[0]) */
          Dpt->InsCod = Str_ConvertStrCodToLongCod (row[0]);
 
-         /* Get the short name of the department (row[1]) */
+	 /* Get short name (row[1]), full name (row[2])
+	    and URL (row[3]) of the department  */
          Str_Copy (Dpt->ShrtName,row[1],sizeof (Dpt->ShrtName) - 1);
-
-         /* Get the full name of the department (row[2]) */
          Str_Copy (Dpt->FullName,row[2],sizeof (Dpt->FullName) - 1);
-
-         /* Get the URL of the department (row[3]) */
-         Str_Copy (Dpt->WWW,row[3],sizeof (Dpt->WWW) - 1);
+         Str_Copy (Dpt->WWW     ,row[3],sizeof (Dpt->WWW     ) - 1);
 
          /* Get number of teachers in this department (row[4]) */
          if (sscanf (row[4],"%u",&Dpt->NumTchs) != 1)

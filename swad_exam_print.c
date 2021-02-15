@@ -646,11 +646,11 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 
 	 /* Get indexes for this question (row[3]) */
 	 Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[3],
-		   strlen (Print->PrintedQuestions[NumQst].StrIndexes) - 1);
+		   sizeof (Print->PrintedQuestions[NumQst].StrIndexes) - 1);
 
 	 /* Get answers selected by user for this question (row[4]) */
 	 Str_Copy (Print->PrintedQuestions[NumQst].StrAnswers,row[4],
-		   strlen (Print->PrintedQuestions[NumQst].StrAnswers) - 1);
+		   sizeof (Print->PrintedQuestions[NumQst].StrAnswers) - 1);
 	}
 
    /***** Free structure that stores the query result *****/
@@ -1414,7 +1414,7 @@ static void ExaPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question)
 
       /***** Copy answer text (row[0]) ******/
       Str_Copy (Question->Answer.Options[NumOpt].Text,row[0],
-                strlen (Question->Answer.Options[NumOpt].Text) - 1);
+                Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
      }
 
    /***** Change format of answers text *****/

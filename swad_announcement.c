@@ -155,10 +155,8 @@ void Ann_ShowAllAnnouncements (void)
       if (sscanf (row[2],"%u",&Roles) != 1)
       	 Lay_ShowErrorAndExit ("Error when reading roles of announcement.");
 
-      /* Get the content (row[3]) */
+      /* Get the subject (row[3]), the content (row[4]), and insert links */
       Str_Copy (Subject,row[3],sizeof (Subject) - 1);
-
-      /* Get the content (row[4]) and insert links */
       Str_Copy (Content,row[4],sizeof (Content) - 1);
       Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
 
@@ -245,10 +243,8 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 	 if (sscanf (row[0],"%ld",&AnnCod) != 1)
 	    Lay_ShowErrorAndExit ("Wrong code of announcement.");
 
-	 /* Get the content (row[1]) */
+	 /* Get the subject (row[1]), the content (row[2]), and insert links */
 	 Str_Copy (Subject,row[1],sizeof (Subject) - 1);
-
-	 /* Get the content (row[2]) and insert links */
 	 Str_Copy (Content,row[2],sizeof (Content) - 1);
 	 Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
 

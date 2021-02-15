@@ -2840,7 +2840,7 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
    /***** Check if it's an ID, a nickname or an email address *****/
    if (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail[0])
      {
-      if (Nck_CheckIfNickWithArrobaIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
+      if (Nck_CheckIfNickWithArrIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
 	{
 	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail)) > 0)
 	   {
@@ -3137,7 +3137,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
      }
 
    /***** Check if user has typed his user's ID, his nickname or his email address *****/
-   if (Nck_CheckIfNickWithArrobaIsValid (Gbl.Usrs.Me.UsrIdLogin))	// 1: It's a nickname
+   if (Nck_CheckIfNickWithArrIsValid (Gbl.Usrs.Me.UsrIdLogin))	// 1: It's a nickname
      {
       // User is trying to log using his/her nickname
       if ((Gbl.Usrs.Me.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Gbl.Usrs.Me.UsrIdLogin)) <= 0)
@@ -5376,16 +5376,16 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
             /* Get encrypted user's code (row[1]), encrypted password (row[2]),
                surname 1 (row[3]), surname 2 (row[4]), first name (row[5]), */
 	    Str_Copy (UsrInList->EnUsrCod,row[1],sizeof (UsrInList->EnUsrCod) - 1);
-	    Str_Copy (UsrInList->Password       ,row[2],sizeof (UsrInList->Password       ) - 1);
-	    Str_Copy (UsrInList->Surname1       ,row[3],sizeof (UsrInList->Surname1       ) - 1);
-	    Str_Copy (UsrInList->Surname2       ,row[4],sizeof (UsrInList->Surname2       ) - 1);
-	    Str_Copy (UsrInList->FrstName      ,row[5],sizeof (UsrInList->FrstName      ) - 1);
+	    Str_Copy (UsrInList->Password,row[2],sizeof (UsrInList->Password) - 1);
+	    Str_Copy (UsrInList->Surname1,row[3],sizeof (UsrInList->Surname1) - 1);
+	    Str_Copy (UsrInList->Surname2,row[4],sizeof (UsrInList->Surname2) - 1);
+	    Str_Copy (UsrInList->FrstName,row[5],sizeof (UsrInList->FrstName) - 1);
 
             /* Get user's sex (row[6]) */
             UsrInList->Sex = Usr_GetSexFromStr (row[6]);
 
             /* Get user's photo (row[7]) */
-	    Str_Copy (UsrInList->Photo          ,row[7],sizeof (UsrInList->Photo          ) - 1);
+	    Str_Copy (UsrInList->Photo   ,row[7],sizeof (UsrInList->Photo   ) - 1);
 
             /* Get user's photo visibility (row[8]) */
             UsrInList->PhotoVisibility = Pri_GetVisibilityFromStr (row[8]);
@@ -5783,7 +5783,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 	    ListUsrCods.NumUsrs = 0;
 	    ListUsrCods.Lst = NULL;
 
-	    if (Nck_CheckIfNickWithArrobaIsValid (UsrIDNickOrEmail))	// 1: It's a nickname
+	    if (Nck_CheckIfNickWithArrIsValid (UsrIDNickOrEmail))	// 1: It's a nickname
 	      {
 	       if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrIDNickOrEmail)) > 0)
 		 {
@@ -9843,7 +9843,7 @@ void Usr_RemoveUsrFromUsrBanned (long UsrCod)
 
 void Usr_PrintUsrQRCode (void)
   {
-   char NewNickWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   char NewNickWithArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1];
 
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
@@ -9855,9 +9855,9 @@ void Usr_PrintUsrQRCode (void)
       /***** Show QR code *****/
       if (Gbl.Usrs.Other.UsrDat.Nickname[0])
 	{
-	 snprintf (NewNickWithArroba,sizeof (NewNickWithArroba),"@%s",
+	 snprintf (NewNickWithArr,sizeof (NewNickWithArr),"@%s",
 		   Gbl.Usrs.Other.UsrDat.Nickname);
-	 QR_ImageQRCode (NewNickWithArroba);
+	 QR_ImageQRCode (NewNickWithArr);
 	}
 
       /***** End box *****/

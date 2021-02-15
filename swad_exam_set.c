@@ -1425,13 +1425,13 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
       Question->Stem[0] = '\0';
       if (row[3])
 	 if (row[3][0])
-	    Str_Copy (Question->Stem,row[3],sizeof (Question->Stem) - 1);
+	    Str_Copy (Question->Stem    ,row[3],Cns_MAX_BYTES_TEXT);
 
       /* Get the feedback (row[4]) */
       Question->Feedback[0] = '\0';
       if (row[4])
 	 if (row[4][0])
-	    Str_Copy (Question->Feedback,row[4],sizeof (Question->Feedback) - 1);
+	    Str_Copy (Question->Feedback,row[4],Cns_MAX_BYTES_TEXT);
 
       /* Get media (row[5]) */
       Question->Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
@@ -1486,15 +1486,15 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
 	       Question->Answer.Options[NumOpt].Text[0] = '\0';
 	       if (row[1])
 		  if (row[1][0])
-		     Str_Copy (Question->Answer.Options[NumOpt].Text,row[1],
-			       sizeof (Question->Answer.Options[NumOpt].Text) - 1);
+		     Str_Copy (Question->Answer.Options[NumOpt].Text    ,row[1],
+			       Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	       /* Get feedback (row[2]) */
 	       Question->Answer.Options[NumOpt].Feedback[0] = '\0';
 	       if (row[2])
 		  if (row[2][0])
 		     Str_Copy (Question->Answer.Options[NumOpt].Feedback,row[2],
-			       sizeof (Question->Answer.Options[NumOpt].Feedback) - 1);
+			       Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	       /* Get media (row[3]) */
 	       Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);

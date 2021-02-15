@@ -74,7 +74,8 @@ static void Mai_GetParamMaiOrder (void);
 static void Mai_PutIconToEditMailDomains (__attribute__((unused)) void *Args);
 static void Mai_EditMailDomainsInternal (void);
 static void Mai_GetListMailDomainsAllowedForNotif (void);
-static void Mai_GetMailDomain (const char *Email,char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+static void Mai_GetMailDomain (const char *Email,
+                               char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 static void Mai_ListMailDomainsForEdition (void);
@@ -359,7 +360,8 @@ bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct UsrData *UsrDat)
 /********************** Get mailbox from email address ***********************/
 /*****************************************************************************/
 
-static void Mai_GetMailDomain (const char *Email,char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
+static void Mai_GetMailDomain (const char *Email,
+                               char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
    const char *Ptr;
 

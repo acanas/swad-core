@@ -139,14 +139,14 @@ void Prf_SeeSocialProfiles (void)
 /*****************************************************************************/
 
 char *Prf_GetURLPublicProfile (char URL[Cns_MAX_BYTES_WWW + 1],
-                               const char *NickWithoutArroba)
+                               const char *NickWithoutArr)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    /***** Build URL using nickname *****/
    snprintf (URL,Cns_MAX_BYTES_WWW + 1,"%s/%s?usr=@%s",
 	     Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	     NickWithoutArroba);
+	     NickWithoutArr);
 
    return URL;
   }
@@ -190,7 +190,7 @@ void Prf_RequestUserProfile (void)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Continue;
-   char NickWithArroba[1 + Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
+   char NickWithArr[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
 
    if (Gbl.Usrs.Me.Logged)
      {
@@ -215,9 +215,9 @@ void Prf_RequestUserProfile (void)
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_Nickname);
 
-   snprintf (NickWithArroba,sizeof (NickWithArroba),"@%s",
+   snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
 	     Gbl.Usrs.Me.UsrDat.Nickname);
-   HTM_INPUT_TEXT ("usr",Nck_MAX_BYTES_NICKNAME_FROM_FORM,NickWithArroba,
+   HTM_INPUT_TEXT ("usr",Nck_MAX_BYTES_NICK_FROM_FORM,NickWithArr,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"18\"");
    HTM_LABEL_End ();

@@ -660,7 +660,7 @@ void Par_GetMainParameters (void)
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    long ActCod;
-   char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   char Nickname[Nck_MAX_BYTES_NICK_FROM_FORM + 1];
    char URL[PATH_MAX + 1];
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
@@ -688,7 +688,7 @@ void Par_GetMainParameters (void)
    /***** Get another user's nickname, if exists
           (this nickname is used to go to another user's profile,
            not to get the logged user) *****/
-   if (Par_GetParToText ("usr",Nickname,Nck_MAX_BYTES_NICKNAME_FROM_FORM))
+   if (Par_GetParToText ("usr",Nickname,Nck_MAX_BYTES_NICK_FROM_FORM))
      {
       if (Nickname[0])
 	{
@@ -704,7 +704,7 @@ void Par_GetMainParameters (void)
          Gbl.Action.Act = Gbl.Action.Original = ActSeeOthPubPrf;	// Set default action if no other is specified
 	}
      }
-   else if (Par_GetParToText ("agd",Nickname,Nck_MAX_BYTES_NICKNAME_FROM_FORM))
+   else if (Par_GetParToText ("agd",Nickname,Nck_MAX_BYTES_NICK_FROM_FORM))
      {
       if (Nickname[0])
 	{
@@ -796,12 +796,10 @@ void Par_GetMainParameters (void)
       if (Gbl.Prefs.Theme == The_THEME_UNKNOWN)
          Gbl.Prefs.Theme = The_THEME_DEFAULT;
 
-      /***** Set path of theme *****/
+      /***** Set path of theme and path of icon set *****/
       snprintf (URL,sizeof (URL),"%s/%s",
-                Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme]);
-      Str_Copy (Gbl.Prefs.URLTheme,URL,sizeof (Gbl.Prefs.URLTheme) - 1);
-
-      /***** Set path of icon set *****/
+                Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme  ]);
+      Str_Copy (Gbl.Prefs.URLTheme  ,URL,sizeof (Gbl.Prefs.URLTheme  ) - 1);
       snprintf (URL,sizeof (URL),"%s/%s",
                 Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
       Str_Copy (Gbl.Prefs.URLIconSet,URL,sizeof (Gbl.Prefs.URLIconSet) - 1);

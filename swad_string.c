@@ -290,10 +290,10 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
          Links[NumLinks].NumActualBytes = (size_t) (PtrSrc - Links[NumLinks].PtrStart);
 
 	 /* A nick (without arroba) must have a number of characters
-            Nck_MIN_BYTES_NICKNAME_WITHOUT_ARROBA <= Length <= Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA */
+            Nck_MIN_BYTES_NICK_WITHOUT_ARROBA <= Length <= Nck_MAX_BYTES_NICK_WITHOUT_ARROBA */
 	 Length = Links[NumLinks].NumActualBytes - 1;	// Do not count the initial @
-	 IsNickname = (Length >= Nck_MIN_BYTES_NICKNAME_WITHOUT_ARROBA &&
-	               Length <= Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
+	 IsNickname = (Length >= Nck_MIN_BYTES_NICK_WITHOUT_ARROBA &&
+	               Length <= Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
 
 	 if (IsNickname)
 	   {
@@ -730,9 +730,9 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
          Nickname.Length = (size_t) (Ptr - Nickname.PtrStart);
 
 	 /* A nick (without arroba) must have a number of characters
-            Nck_MIN_BYTES_NICKNAME_WITHOUT_ARROBA <= Length <= Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA */
-	 IsNickname = (Nickname.Length >= Nck_MIN_BYTES_NICKNAME_WITHOUT_ARROBA &&
-	               Nickname.Length <= Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
+            Nck_MIN_BYTES_NICK_WITHOUT_ARROBA <= Length <= Nck_MAX_BYTES_NICK_WITHOUT_ARROBA */
+	 IsNickname = (Nickname.Length >= Nck_MIN_BYTES_NICK_WITHOUT_ARROBA &&
+	               Nickname.Length <= Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
 
 	 if (IsNickname)
 	   {
@@ -3068,7 +3068,7 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
 static char *Str_String = NULL;
 
 // fmt must be a string including "%s"
-// Str_FreeMsg() must be called after calling this function
+// Str_FreeString() must be called after calling this function
 
 char *Str_BuildStringStr (const char *fmt,const char *Str)
   {
@@ -3080,7 +3080,7 @@ char *Str_BuildStringStr (const char *fmt,const char *Str)
   }
 
 // fmt must be a string including "%ld"
-// Str_FreeMsg() must be called after calling this function
+// Str_FreeString() must be called after calling this function
 
 char *Str_BuildStringLong (const char *fmt,long Num)
   {
@@ -3091,7 +3091,7 @@ char *Str_BuildStringLong (const char *fmt,long Num)
    return Str_String;
   }
 
-// Str_FreeMsg() must be called after calling this function
+// Str_FreeString() must be called after calling this function
 
 char *Str_BuildStringLongStr (long Num,const char *Str)
   {

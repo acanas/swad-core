@@ -377,13 +377,9 @@ void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
 
          if (WhichData == Bld_ALL_DATA)
            {
-	    /* Get the full name of the building (row[2]) */
-	    Str_Copy (Building->FullName,row[2],
-	              sizeof (Building->FullName) - 1);
-
-	    /* Get the full name of the building (row[3]) */
-	    Str_Copy (Building->Location,row[3],
-		      sizeof (Building->Location) - 1);
+	    /* Get full name (row[2]) and location (row[3]) of the building */
+	    Str_Copy (Building->FullName,row[2],sizeof (Building->FullName) - 1);
+	    Str_Copy (Building->Location,row[3],sizeof (Building->Location) - 1);
            }
         }
      }
@@ -427,13 +423,10 @@ void Bld_GetDataOfBuildingByCod (struct Bld_Building *Building)
          /* Get row */
          row = mysql_fetch_row (mysql_res);
 
-         /* Get the short name of the building (row[0]) */
+         /* Get short name (row[0]), full name (row[1])
+            and location (row[2]) of the building */
          Str_Copy (Building->ShrtName,row[0],sizeof (Building->ShrtName) - 1);
-
-         /* Get the full name of the building (row[1]) */
          Str_Copy (Building->FullName,row[1],sizeof (Building->FullName) - 1);
-
-         /* Get the location of the building (row[2]) */
          Str_Copy (Building->Location,row[2],sizeof (Building->Location) - 1);
         }
 

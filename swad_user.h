@@ -165,7 +165,7 @@ struct UsrData
       struct ListIDs *List;
       unsigned Num;
      } IDs;
-   char Nickname        [Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
+   char Nickname        [Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
    char Password        [Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
    struct
      {

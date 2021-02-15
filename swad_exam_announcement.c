@@ -1020,36 +1020,22 @@ static void ExaAnn_GetDataExamAnnFromDB (struct ExaAnn_ExamAnnouncements *ExamAn
 	     ExamAnns->ExamAnn.ExamDate.Day);
 
    /* Approximate duration (row[7]) */
-   if (sscanf (row[7],"%02u:%02u:%02u",&ExamAnns->ExamAnn.Duration.Hour,&ExamAnns->ExamAnn.Duration.Minute,&Second) != 3)
+   if (sscanf (row[7],"%02u:%02u:%02u",
+               &ExamAnns->ExamAnn.Duration.Hour,
+               &ExamAnns->ExamAnn.Duration.Minute,
+               &Second) != 3)
       Lay_ShowErrorAndExit ("Wrong duration of exam.");
 
-   /* Place (row[8]) */
-   Str_Copy (ExamAnns->ExamAnn.Place,row[8],
-             sizeof (ExamAnns->ExamAnn.Place) - 1);
-
-   /* Exam mode (row[9]) */
-   Str_Copy (ExamAnns->ExamAnn.Mode,row[9],
-             sizeof (ExamAnns->ExamAnn.Mode) - 1);
-
-   /* Structure (row[10]) */
-   Str_Copy (ExamAnns->ExamAnn.Structure,row[10],
-             sizeof (ExamAnns->ExamAnn.Structure) - 1);
-
-   /* Documentation required (row[11]) */
-   Str_Copy (ExamAnns->ExamAnn.DocRequired,row[11],
-             sizeof (ExamAnns->ExamAnn.DocRequired) - 1);
-
-   /* Material required (row[12]) */
-   Str_Copy (ExamAnns->ExamAnn.MatRequired,row[12],
-             sizeof (ExamAnns->ExamAnn.MatRequired) - 1);
-
-   /* Material allowed (row[13]) */
-   Str_Copy (ExamAnns->ExamAnn.MatAllowed,row[13],
-             sizeof (ExamAnns->ExamAnn.MatAllowed) - 1);
-
-   /* Other information for students (row[14]) */
-   Str_Copy (ExamAnns->ExamAnn.OtherInfo,row[14],
-             sizeof (ExamAnns->ExamAnn.OtherInfo) - 1);
+   /* Place (row[8]), exam mode (row[9]), structure (row[10]),
+      documentation required (row[11]), material required (row[12]),
+      material allowed (row[13]) and other information for students (row[14]) */
+   Str_Copy (ExamAnns->ExamAnn.Place      ,row[ 8],Cns_MAX_BYTES_TEXT);
+   Str_Copy (ExamAnns->ExamAnn.Mode       ,row[ 9],Cns_MAX_BYTES_TEXT);
+   Str_Copy (ExamAnns->ExamAnn.Structure  ,row[10],Cns_MAX_BYTES_TEXT);
+   Str_Copy (ExamAnns->ExamAnn.DocRequired,row[11],Cns_MAX_BYTES_TEXT);
+   Str_Copy (ExamAnns->ExamAnn.MatRequired,row[12],Cns_MAX_BYTES_TEXT);
+   Str_Copy (ExamAnns->ExamAnn.MatAllowed ,row[13],Cns_MAX_BYTES_TEXT);
+   Str_Copy (ExamAnns->ExamAnn.OtherInfo  ,row[14],Cns_MAX_BYTES_TEXT);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
