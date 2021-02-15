@@ -371,13 +371,13 @@ static long For_WriteLinksToCrsForums (const struct For_Forums *Forums,
 				       long CrsCod,bool IsLastCrs,
                                        bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
 static void For_WriteLinkToForum (const struct For_Forums *Forums,
-	                          struct For_Forum *Forum,
+	                          const struct For_Forum *Forum,
                                   bool Highlight,
                                   unsigned Level,
                                   bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
-static unsigned For_GetNumThrsWithNewPstsInForum (struct For_Forum *Forum,
+static unsigned For_GetNumThrsWithNewPstsInForum (const struct For_Forum *Forum,
                                                   unsigned NumThreads);
-static unsigned For_GetNumOfThreadsInForumNewerThan (struct For_Forum *Forum,
+static unsigned For_GetNumOfThreadsInForumNewerThan (const struct For_Forum *Forum,
                                                      const char *Time);
 static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr);
 static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time);
@@ -387,7 +387,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
                                                        Ale_AlertType_t AlertType,const char *Message);
 static void For_PutIconNewThread (void *Forums);
 static void For_PutAllHiddenParamsNewThread (void *Forums);
-static unsigned For_GetNumThrsInForum (struct For_Forum *Forum);
+static unsigned For_GetNumThrsInForum (const struct For_Forum *Forum);
 static void For_ListForumThrs (struct For_Forums *Forums,
 	                       long ThrCods[Pag_ITEMS_PER_PAGE],
                                long ThrCodHighlighted,
@@ -407,7 +407,7 @@ static void For_PutAllHiddenParamsRemThread (void *Forums);
 
 static bool For_CheckIfICanMoveThreads (void);
 static long For_GetThrInMyClipboard (void);
-static bool For_CheckIfThrBelongsToForum (long ThrCod,struct For_Forum *Forum);
+static bool For_CheckIfThrBelongsToForum (long ThrCod,const struct For_Forum *Forum);
 static void For_MoveThrToCurrentForum (const struct For_Forums *Forums);
 static void For_InsertThrInClipboard (long ThrCod);
 static void For_RemoveExpiredThrsClipboards (void);
@@ -2038,7 +2038,7 @@ static long For_WriteLinksToCrsForums (const struct For_Forums *Forums,
 /*****************************************************************************/
 
 static void For_WriteLinkToForum (const struct For_Forums *Forums,
-	                          struct For_Forum *Forum,
+	                          const struct For_Forum *Forum,
                                   bool Highlight,
                                   unsigned Level,
                                   bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
@@ -2253,7 +2253,7 @@ void For_SetForumName (const struct For_Forum *Forum,
 /***** Get number of threads with new posts since my last read of a forum ****/
 /*****************************************************************************/
 
-static unsigned For_GetNumThrsWithNewPstsInForum (struct For_Forum *Forum,
+static unsigned For_GetNumThrsWithNewPstsInForum (const struct For_Forum *Forum,
                                                   unsigned NumThreads)
   {
    char SubQuery[256];
@@ -2268,14 +2268,13 @@ static unsigned For_GetNumThrsWithNewPstsInForum (struct For_Forum *Forum,
    else
       SubQuery[0] = '\0';
    NumRows = DB_QuerySELECT (&mysql_res,"can not get the date of reading of a forum",
-			     "SELECT MAX(forum_thr_read.ReadTime)"
+			     "SELECT IFNULL(MAX(forum_thr_read.ReadTime),FROM_UNIXTIME(0))"
 			     " FROM forum_thr_read,forum_thread"
 			     " WHERE forum_thr_read.UsrCod=%ld"
 			     " AND forum_thr_read.ThrCod=forum_thread.ThrCod"
 			     " AND forum_thread.ForumType=%u%s",
 			     Gbl.Usrs.Me.UsrDat.UsrCod,
 			     (unsigned) Forum->Type,SubQuery);
-
    if (NumRows)
      {
       /***** Get number of threads with a last message modify time > newest read time (row[0]) *****/
@@ -2293,7 +2292,7 @@ static unsigned For_GetNumThrsWithNewPstsInForum (struct For_Forum *Forum,
 /**** Get number of threads in forum with a modify time > a specified time ***/
 /*****************************************************************************/
 
-static unsigned For_GetNumOfThreadsInForumNewerThan (struct For_Forum *Forum,
+static unsigned For_GetNumOfThreadsInForumNewerThan (const struct For_Forum *Forum,
                                                      const char *Time)
   {
    char SubQuery[256];
@@ -3006,7 +3005,7 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 /******************* Get number of threads in a forum ************************/
 /*****************************************************************************/
 
-static unsigned For_GetNumThrsInForum (struct For_Forum *Forum)
+static unsigned For_GetNumThrsInForum (const struct For_Forum *Forum)
   {
    char SubQuery[256];
 
@@ -4350,7 +4349,7 @@ static long For_GetThrInMyClipboard (void)
 /***************** Get if a thread belongs to current forum ******************/
 /*****************************************************************************/
 
-static bool For_CheckIfThrBelongsToForum (long ThrCod,struct For_Forum *Forum)
+static bool For_CheckIfThrBelongsToForum (long ThrCod,const struct For_Forum *Forum)
   {
    char SubQuery[256];
 
