@@ -32,6 +32,7 @@
 #include "swad_message.h"
 #include "swad_profile.h"
 #include "swad_timeline.h"
+#include "swad_timeline_form.h"
 #include "swad_timeline_note.h"
 #include "swad_timeline_post.h"
 #include "swad_timeline_publication.h"
@@ -149,7 +150,7 @@ void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
 
    /* Form to write the post */
    HTM_DIV_Begin ("class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\"");
-   TL_FormStart (Timeline,TL_RECEIVE_POST);
+   TL_Frm_FormStart (Timeline,TL_Frm_RECEIVE_POST);
    TL_Pst_PutTextarea (Txt_New_TIMELINE_post,"TL_PST_TEXTAREA TL_RIGHT_WIDTH");
    Frm_EndForm ();
    HTM_DIV_End ();

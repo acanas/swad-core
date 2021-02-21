@@ -37,6 +37,7 @@
 #include "swad_profile.h"
 #include "swad_timeline.h"
 #include "swad_timeline_favourite.h"
+#include "swad_timeline_form.h"
 #include "swad_timeline_note.h"
 #include "swad_timeline_publication.h"
 #include "swad_timeline_share.h"
@@ -65,10 +66,6 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void TL_Com_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
-			                     long NotCod,
-					     char IdComments[Frm_MAX_BYTES_ID + 1],
-					     unsigned NumInitialComments);
 static unsigned TL_Com_WriteHiddenComments (struct TL_Timeline *Timeline,
                                             long NotCod,
 				            char IdComments[Frm_MAX_BYTES_ID + 1],
@@ -159,7 +156,7 @@ void TL_Com_PutHiddenFormToWriteNewComment (const struct TL_Timeline *Timeline,
    HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
 
    /* Begin form to write the post */
-   TL_FormStart (Timeline,TL_RECEIVE_COMM);
+   TL_Frm_FormStart (Timeline,TL_Frm_RECEIVE_COMM);
    TL_Not_PutHiddenParamNotCod (NotCod);
 
    /* Textarea and button */
@@ -293,10 +290,9 @@ void TL_Com_WriteCommentsInNote (struct TL_Timeline *Timeline,
 
       /***** Div which content will be updated via AJAX *****/
       HTM_DIV_Begin ("id=\"%s\" class=\"TL_RIGHT_WIDTH\"",IdComments);
-      TL_Com_FormToShowHiddenComments (ActShoHidTL_ComGbl,ActShoHidTL_ComUsr,
-				   Not->NotCod,
-				   IdComments,
-				   NumInitialComments);
+      TL_Frm_FormToShowHiddenComments (Not->NotCod,
+				       IdComments,
+				       NumInitialComments);
       HTM_DIV_End ();
      }
 
@@ -313,73 +309,6 @@ void TL_Com_WriteCommentsInNote (struct TL_Timeline *Timeline,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/********** Form to show hidden coments in global or user timeline ***********/
-/*****************************************************************************/
-
-static void TL_Com_FormToShowHiddenComments (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
-			                     long NotCod,
-					     char IdComments[Frm_MAX_BYTES_ID + 1],
-					     unsigned NumInitialComments)
-  {
-   extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
-   extern const char *Txt_See_the_previous_X_COMMENTS;
-   char *OnSubmit;
-
-   HTM_DIV_Begin ("id=\"exp_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\"",
-		  IdComments);
-
-   /***** Form and icon-text to show hidden comments *****/
-   /* Begin form */
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      if (asprintf (&OnSubmit,"toggleComments('%s');"
-	                      "updateDivHiddenComments(this,"
-			      "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u&OtherUsrCod=%s');"
-			      " return false;",	// return false is necessary to not submit form
-		    IdComments,
-		    Act_GetActCod (ActionUsr),
-		    Gbl.Session.Id,
-		    NotCod,
-		    IdComments,
-		    NumInitialComments,
-		    Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
-     }
-   else
-     {
-      if (asprintf (&OnSubmit,"toggleComments('%s');"
-	                      "updateDivHiddenComments(this,"
-			      "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u');"
-			      " return false;",	// return false is necessary to not submit form
-		    IdComments,
-		    Act_GetActCod (ActionGbl),
-		    Gbl.Session.Id,
-		    NotCod,
-		    IdComments,
-		    NumInitialComments) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
-     }
-
-   /* Put icon and text with link to show the first hidden comments */
-   HTM_BUTTON_SUBMIT_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
-   Ico_PutIconTextLink ("angle-up.svg",
-			Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
-					     (long) NumInitialComments));
-   Str_FreeString ();
-   HTM_BUTTON_End ();
-
-   /* End form */
-   Frm_EndForm ();
-
-   /* Free allocated memory */
-   free (OnSubmit);
-
-   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -695,7 +624,7 @@ static void TL_Com_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
    extern const char *Txt_Remove;
 
    /***** Form to remove publication *****/
-   TL_FormStart (Timeline,TL_REQ_REM_COMM);
+   TL_Frm_FormStart (Timeline,TL_Frm_REQ_REM_COMM);
    TL_Pub_PutHiddenParamPubCod (PubCod);
    Ico_PutIconLink ("trash.svg",Txt_Remove);
    Frm_EndForm ();

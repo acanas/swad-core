@@ -28,6 +28,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_timeline.h"
+#include "swad_timeline_form.h"
 #include "swad_timeline_notification.h"
 #include "swad_timeline_publication.h"
 #include "swad_timeline_share.h"
@@ -101,8 +102,7 @@ static void TL_Sha_PutFormToShaNote (long ParamCod)
    extern const char *Txt_Share;
 
    /***** Form and icon to mark note as favourite *****/
-   TL_Usr_FormFavSha (ActShaTL_NotGbl,
-                      ActShaTL_NotUsr,
+   TL_Frm_FormFavSha (TL_Frm_SHA_NOTE,
                       "NotCod=%ld",ParamCod,
 	              TL_Sha_ICON_SHARE,Txt_Share);
   }
@@ -112,8 +112,7 @@ static void TL_Sha_PutFormToUnsNote (long ParamCod)
    extern const char *Txt_TIMELINE_NOTE_Shared;
 
    /***** Form and icon to mark note as favourite *****/
-   TL_Usr_FormFavSha (ActUnsTL_NotGbl,
-                      ActUnsTL_NotUsr,
+   TL_Frm_FormFavSha (TL_Frm_UNS_NOTE,
                       "NotCod=%ld",ParamCod,
 	              TL_Sha_ICON_SHARED,Txt_TIMELINE_NOTE_Shared);
   }
@@ -349,7 +348,7 @@ static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Not_Note *Not,
 				 Not->UsrCod,
 				 (unsigned) TL_Pub_SHARED_NOTE,
 				 HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
-				                                   TL_Usr_MAX_USRS_SHOWN);
+				                                       TL_Usr_MAX_USRS_SHOWN);
    else
       NumFirstUsrs = 0;
 
@@ -364,8 +363,7 @@ static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Not_Note *Not,
    TL_Usr_ShowSharersOrFavers (&mysql_res,Not->NumShared,NumFirstUsrs);
    if (NumFirstUsrs < Not->NumShared)
       /* Clickable ellipsis to show all users */
-      TL_Usr_PutFormToSeeAllFaversSharers (ActAllShaTL_NotGbl,
-                                           ActAllShaTL_NotUsr,
+      TL_Frm_PutFormToSeeAllFaversSharers (TL_Frm_ALL_SHA_NOTE,
 		                           "NotCod=%ld",Not->NotCod,
                                            HowManyUsrs);
    HTM_DIV_End ();

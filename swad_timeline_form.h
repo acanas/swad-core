@@ -1,7 +1,7 @@
-// swad_timeline_user.h: social timeline users
+// swad_timeline_form.h: social timeline forms
 
-#ifndef _SWAD_TL_USR
-#define _SWAD_TL_USR
+#ifndef _SWAD_TL_FRM
+#define _SWAD_TL_FRM
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,42 +27,54 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include "swad_form.h"
-#include "swad_media.h"
-#include "swad_notification.h"
-#include "swad_user.h"
+// #include "swad_form.h"
+// #include "swad_media.h"
+// #include "swad_notification.h"
+// #include "swad_user.h"
+// #include "swad_timeline_user.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define TL_Usr_DEF_USRS_SHOWN	5	// Default maximum number of users shown who have share/fav a note
-#define TL_Usr_MAX_USRS_SHOWN	1000	// Top     maximum number of users shown who have share/fav a note
-
 /*****************************************************************************/
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
+#define TL_Frm_NUM_ACTIONS 14
 typedef enum
   {
-   TL_Usr_TIMELINE_USR,		// Show the timeline of a user
-   TL_Usr_TIMELINE_GBL,		// Show the timeline of the users follwed by me
-  } TL_Usr_UsrOrGbl_t;
-
-typedef enum
-  {
-   TL_Usr_SHOW_FEW_USRS,	// Show a few first favers/sharers
-   TL_Usr_SHOW_ALL_USRS,	// Show all favers/sharers
-  } TL_Usr_HowManyUsrs_t;
+   TL_Frm_RECEIVE_POST,	// Receive post
+   TL_Frm_RECEIVE_COMM,	// Receive comment
+   TL_Frm_REQ_REM_NOTE,	// Request removal note
+   TL_Frm_REQ_REM_COMM,	// Request removal comment
+   TL_Frm_SHA_NOTE,	// Share a note
+   TL_Frm_UNS_NOTE,	// Unshare a note
+   TL_Frm_FAV_NOTE,     // Favourite a note
+   TL_Frm_FAV_COMM,	// Favourite a comment
+   TL_Frm_UNF_NOTE,	// Unfavourite a note
+   TL_Frm_UNF_COMM,	// Unfavourite a comment
+   TL_Frm_ALL_SHA_NOTE,	// Show all sharers of note
+   TL_Frm_ALL_FAV_NOTE,	// Show all favouriters of note
+   TL_Frm_ALL_FAV_COMM,	// Show all favouriters of comment
+   TL_Frm_SHO_HID_COMM,	// Show / hide comments
+  } TL_Frm_Action_t;
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_Usr_RemoveUsrContent (long UsrCod);
+void TL_Frm_FormStart (const struct TL_Timeline *Timeline,TL_Frm_Action_t Action);
 
-void TL_Usr_ShowNumSharersOrFavers (unsigned NumUsrs);
-void TL_Usr_ShowSharersOrFavers (MYSQL_RES **mysql_res,
-			         unsigned NumUsrs,unsigned NumFirstUsrs);
+void TL_Frm_PutFormToSeeAllFaversSharers (TL_Frm_Action_t Action,
+		                          const char *ParamFormat,long ParamCod,
+                                          TL_Usr_HowManyUsrs_t HowManyUsrs);
+void TL_Frm_FormFavSha (TL_Frm_Action_t Action,
+		        const char *ParamFormat,long ParamCod,
+		        const char *Icon,const char *Title);
+
+void TL_Frm_FormToShowHiddenComments (long NotCod,
+				      char IdComments[Frm_MAX_BYTES_ID + 1],
+				      unsigned NumInitialComments);
 
 #endif

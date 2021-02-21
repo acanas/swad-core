@@ -42,6 +42,7 @@
 #include "swad_profile.h"
 #include "swad_timeline.h"
 #include "swad_timeline_favourite.h"
+#include "swad_timeline_form.h"
 #include "swad_timeline_publication.h"
 #include "swad_timeline_share.h"
 
@@ -942,7 +943,7 @@ static void TL_Not_PutFormToRemoveNote (const struct TL_Timeline *Timeline,
    extern const char *Txt_Remove;
 
    /***** Form to remove publication *****/
-   TL_FormStart (Timeline,TL_REQ_REM_NOTE);
+   TL_Frm_FormStart (Timeline,TL_Frm_REQ_REM_NOTE);
    TL_Not_PutHiddenParamNotCod (NotCod);
    Ico_PutIconLink ("trash.svg",Txt_Remove);
    Frm_EndForm ();

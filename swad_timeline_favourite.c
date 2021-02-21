@@ -29,6 +29,7 @@
 #include "swad_global.h"
 #include "swad_timeline.h"
 #include "swad_timeline_favourite.h"
+#include "swad_timeline_form.h"
 #include "swad_timeline_notification.h"
 #include "swad_timeline_publication.h"
 
@@ -110,9 +111,7 @@ static void TL_Fav_PutFormToFavNote (long ParamCod)
    extern const char *Txt_Mark_as_favourite;
 
    /***** Form and icon to mark note as favourite *****/
-   TL_Usr_FormFavSha (ActFavTL_NotGbl,
-                      ActFavTL_NotUsr,
-                      "NotCod=%ld",ParamCod,
+   TL_Frm_FormFavSha (TL_Frm_FAV_NOTE,"NotCod=%ld",ParamCod,
 	              TL_Fav_ICON_FAV,Txt_Mark_as_favourite);
   }
 
@@ -121,9 +120,7 @@ static void TL_Fav_PutFormToUnfNote (long ParamCod)
    extern const char *Txt_TIMELINE_NOTE_Favourite;
 
    /***** Form and icon to unfav (remove mark as favourite) note *****/
-   TL_Usr_FormFavSha (ActUnfTL_NotGbl,
-                      ActUnfTL_NotUsr,
-                      "NotCod=%ld",ParamCod,
+   TL_Frm_FormFavSha (TL_Frm_UNF_NOTE,"NotCod=%ld",ParamCod,
 	              TL_Fav_ICON_FAVED,Txt_TIMELINE_NOTE_Favourite);
   }
 
@@ -136,9 +133,7 @@ static void TL_Fav_PutFormToFavComment (long ParamCod)
    extern const char *Txt_Mark_as_favourite;
 
    /***** Form and icon to mark comment as favourite *****/
-   TL_Usr_FormFavSha (ActFavTL_ComGbl,
-                      ActFavTL_ComUsr,
-                      "PubCod=%ld",ParamCod,
+   TL_Frm_FormFavSha (TL_Frm_FAV_COMM,"PubCod=%ld",ParamCod,
 	              TL_Fav_ICON_FAV,Txt_Mark_as_favourite);
   }
 
@@ -147,9 +142,7 @@ static void TL_Fav_PutFormToUnfComment (long ParamCod)
    extern const char *Txt_TIMELINE_NOTE_Favourite;
 
    /***** Form and icon to unfav (remove mark as favourite) comment *****/
-   TL_Usr_FormFavSha (ActUnfTL_ComGbl,
-                      ActUnfTL_ComUsr,
-                      "PubCod=%ld",ParamCod,
+   TL_Frm_FormFavSha (TL_Frm_UNF_COMM,"PubCod=%ld",ParamCod,
 	              TL_Fav_ICON_FAVED,Txt_TIMELINE_NOTE_Favourite);
   }
 
@@ -593,8 +586,7 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Not_Note *Not
    TL_Usr_ShowSharersOrFavers (&mysql_res,Not->NumFavs,NumFirstUsrs);
    if (NumFirstUsrs < Not->NumFavs)		// Not all are shown
       /* Clickable ellipsis to show all users */
-      TL_Usr_PutFormToSeeAllFaversSharers (ActAllFavTL_NotGbl,
-                                           ActAllFavTL_NotUsr,
+      TL_Frm_PutFormToSeeAllFaversSharers (TL_Frm_ALL_FAV_NOTE,
                                            "NotCod=%ld",Not->NotCod,
                                            HowManyUsrs);
    HTM_DIV_End ();
@@ -641,8 +633,7 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Com_Comment *
    TL_Usr_ShowSharersOrFavers (&mysql_res,Com->NumFavs,NumFirstUsrs);
    if (NumFirstUsrs < Com->NumFavs)
       /* Clickable ellipsis to show all users */
-      TL_Usr_PutFormToSeeAllFaversSharers (ActAllFavTL_ComGbl,
-                                           ActAllFavTL_ComUsr,
+      TL_Frm_PutFormToSeeAllFaversSharers (TL_Frm_ALL_FAV_COMM,
                                            "PubCod=%ld",Com->PubCod,
                                            HowManyUsrs);
    HTM_DIV_End ();

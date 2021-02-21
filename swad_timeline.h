@@ -103,15 +103,6 @@ typedef enum
    TL_SHOW_ALONE,
   } TL_ShowAlone_t;
 
-#define TL_NUM_ACTIONS 4
-typedef enum
-  {
-   TL_RECEIVE_POST,	// Receive post
-   TL_RECEIVE_COMM,	// Receive comment
-   TL_REQ_REM_NOTE,	// Request removal note
-   TL_REQ_REM_COMM,	// Request removal comment
-  } TL_FormAction_t;
-
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -133,8 +124,6 @@ void TL_RefreshNewTimelineGbl (void);
 
 void TL_RefreshOldTimelineGbl (void);
 void TL_RefreshOldTimelineUsr (void);
-
-void TL_FormStart (const struct TL_Timeline *Timeline,TL_FormAction_t Action);
 
 void TL_WriteDateTime (time_t TimeUTC);
 
