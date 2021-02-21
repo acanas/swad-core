@@ -159,8 +159,7 @@ void TL_Com_PutHiddenFormToWriteNewComment (const struct TL_Timeline *Timeline,
    HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
 
    /* Begin form to write the post */
-   TL_FormStart (Timeline,ActRcvTL_ComGbl,
-                          ActRcvTL_ComUsr);
+   TL_FormStart (Timeline,TL_RECEIVE_COMM);
    TL_Not_PutHiddenParamNotCod (NotCod);
 
    /* Textarea and button */
@@ -696,8 +695,7 @@ static void TL_Com_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
    extern const char *Txt_Remove;
 
    /***** Form to remove publication *****/
-   TL_FormStart (Timeline,ActReqRemTL_ComGbl,
-                          ActReqRemTL_ComUsr);
+   TL_FormStart (Timeline,TL_REQ_REM_COMM);
    TL_Pub_PutHiddenParamPubCod (PubCod);
    Ico_PutIconLink ("trash.svg",Txt_Remove);
    Frm_EndForm ();

@@ -942,8 +942,7 @@ static void TL_Not_PutFormToRemoveNote (const struct TL_Timeline *Timeline,
    extern const char *Txt_Remove;
 
    /***** Form to remove publication *****/
-   TL_FormStart (Timeline,ActReqRemTL_PubGbl,
-                          ActReqRemTL_PubUsr);
+   TL_FormStart (Timeline,TL_REQ_REM_NOTE);
    TL_Not_PutHiddenParamNotCod (NotCod);
    Ico_PutIconLink ("trash.svg",Txt_Remove);
    Frm_EndForm ();

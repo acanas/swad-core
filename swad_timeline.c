@@ -507,20 +507,33 @@ static void TL_PutIconsTimeline (__attribute__((unused)) void *Args)
 /***************** Start a form in global or user timeline *******************/
 /*****************************************************************************/
 
-void TL_FormStart (const struct TL_Timeline *Timeline,
-	           Act_Action_t ActionGbl,
-                   Act_Action_t ActionUsr)
+void TL_FormStart (const struct TL_Timeline *Timeline,TL_FormAction_t Action)
   {
+   static const Act_Action_t ActionGbl[TL_NUM_ACTIONS] =
+     {
+      [TL_RECEIVE_POST] = ActRcvTL_PstGbl,
+      [TL_RECEIVE_COMM] = ActRcvTL_ComGbl,
+      [TL_REQ_REM_NOTE] = ActReqRemTL_PubGbl,
+      [TL_REQ_REM_COMM] = ActReqRemTL_ComGbl,
+     };
+   static const Act_Action_t ActionUsr[TL_NUM_ACTIONS] =
+     {
+      [TL_RECEIVE_POST] = ActRcvTL_PstUsr,
+      [TL_RECEIVE_COMM] = ActRcvTL_ComUsr,
+      [TL_REQ_REM_NOTE] = ActReqRemTL_PubUsr,
+      [TL_REQ_REM_COMM] = ActReqRemTL_ComUsr,
+     };
+
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
       /***** Start form in user timeline *****/
-      Frm_StartFormAnchor (ActionUsr,"timeline");
+      Frm_StartFormAnchor (ActionUsr[Action],"timeline");
       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
      }
    else
      {
       /***** Start form in global timeline *****/
-      Frm_StartForm (ActionGbl);
+      Frm_StartForm (ActionGbl[Action]);
       Usr_PutHiddenParamWho (Timeline->Who);
      }
   }
