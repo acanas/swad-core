@@ -83,6 +83,13 @@ static void TL_Not_WriteLocationInHierarchy (const struct TL_Not_Note *Not,
 static void TL_Not_PutFormGoToAction (const struct TL_Not_Note *Not,
                                       const struct For_Forums *Forums);
 
+static void TL_Not_WriteFootAndComments (const struct TL_Timeline *Timeline,
+					 const struct TL_Not_Note *Not,
+					 long AuthorUsrCod);
+static void TL_Not_WriteFoot (const struct TL_Timeline *Timeline,
+                              const struct TL_Not_Note *Not,
+                              long AuthorUsrCod);
+
 static void TL_Not_PutFormToRemoveNote (const struct TL_Timeline *Timeline,
                                         long NotCod);
 
@@ -196,12 +203,7 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
                        TL_ShowAlone_t ShowNoteAlone)	// Note is shown alone, not in a list
   {
    struct UsrData AuthorDat;
-   bool IAmTheAuthor;
-   unsigned NumComments;
    char IdNewComment[Frm_MAX_BYTES_ID + 1];
-   static unsigned NumDiv = 0;	// Used to create unique div id for fav and shared
-
-   NumDiv++;
 
    /***** Begin box ****/
    if (ShowNoteAlone == TL_SHOW_ALONE)
@@ -237,7 +239,6 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
       /***** Get author data *****/
       AuthorDat.UsrCod = Not->UsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&AuthorDat,Usr_DONT_GET_PREFS);
-      IAmTheAuthor = Usr_ItsMe (AuthorDat.UsrCod);
 
       /***** Left: write author's photo *****/
       TL_Not_ShowAuthorPhoto (&AuthorDat);
@@ -265,9 +266,6 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
       /* Create unique id for new comment */
       Frm_SetUniqueId (IdNewComment);
 
-      /* Get number of comments in this note */
-      NumComments = TL_Com_GetNumCommentsInNote (Not->NotCod);
-
       /* Put icon to add a comment */
       HTM_DIV_Begin ("class=\"TL_BOTTOM_LEFT\"");
       if (Not->Unavailable)	// Unavailable notes can not be commented
@@ -276,39 +274,8 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
          TL_Com_PutIconToToggleComment (IdNewComment);
       HTM_DIV_End ();
 
-      /* Start container for buttons and comments */
-      HTM_DIV_Begin ("class=\"TL_BOTTOM_RIGHT TL_RIGHT_WIDTH\"");
-
-      /* Start foot container */
-      HTM_DIV_Begin ("class=\"TL_FOOT TL_RIGHT_WIDTH\"");
-
-      /* Foot column 1: Fav zone */
-      HTM_DIV_Begin ("id=\"fav_not_%s_%u\" class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\"",
-	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_Fav_PutFormToFavUnfNote (Not,TL_Usr_SHOW_FEW_USRS);
-      HTM_DIV_End ();
-
-      /* Foot column 2: Share zone */
-      HTM_DIV_Begin ("id=\"sha_not_%s_%u\" class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\"",
-	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_Sha_PutFormToShaUnsNote (Not,TL_Usr_SHOW_FEW_USRS);
-      HTM_DIV_End ();
-
-      /* Foot column 3: Icon to remove this note */
-      HTM_DIV_Begin ("class=\"TL_REM\"");
-      if (IAmTheAuthor)
-	 TL_Not_PutFormToRemoveNote (Timeline,Not->NotCod);
-      HTM_DIV_End ();
-
-      /* End foot container */
-      HTM_DIV_End ();
-
-      /* Comments */
-      if (NumComments)
-	 TL_Com_WriteCommentsInNote (Timeline,Not,NumComments);
-
-      /* End container for buttons and comments */
-      HTM_DIV_End ();
+      /* Write foot and comments */
+      TL_Not_WriteFootAndComments (Timeline,Not,AuthorDat.UsrCod);
 
       /* Put hidden form to write a new comment */
       TL_Com_PutHiddenFormToWriteNewComment (Timeline,Not->NotCod,IdNewComment);
@@ -755,6 +722,80 @@ void TL_Not_GetNoteSummary (const struct TL_Not_Note *Not,
   }
 
 /*****************************************************************************/
+/******************** Write foot and comments of a note **********************/
+/*****************************************************************************/
+
+static void TL_Not_WriteFootAndComments (const struct TL_Timeline *Timeline,
+					 const struct TL_Not_Note *Not,
+					 long AuthorUsrCod)
+  {
+   /***** Begin container for foot and comments *****/
+   HTM_DIV_Begin ("class=\"TL_BOTTOM_RIGHT TL_RIGHT_WIDTH\"");
+
+   /***** Write foot of a note *****/
+   TL_Not_WriteFoot (Timeline,Not,AuthorUsrCod);
+
+   /***** Comments *****/
+   TL_Com_WriteCommentsInNote (Timeline,Not);
+
+   /***** End container for buttons and comments *****/
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/*************************** Write foot of a note ****************************/
+/*****************************************************************************/
+
+static void TL_Not_WriteFoot (const struct TL_Timeline *Timeline,
+                              const struct TL_Not_Note *Not,
+                              long AuthorUsrCod)
+  {
+   static unsigned NumDiv = 0;	// Used to create unique div id for fav and shared
+
+   NumDiv++;
+
+   /***** Begin foot container *****/
+   HTM_DIV_Begin ("class=\"TL_FOOT TL_RIGHT_WIDTH\"");
+
+   /***** Foot column 1: Fav zone *****/
+   HTM_DIV_Begin ("id=\"fav_not_%s_%u\" class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\"",
+		  Gbl.UniqueNameEncrypted,NumDiv);
+   TL_Fav_PutFormToFavUnfNote (Not,TL_Usr_SHOW_FEW_USRS);
+   HTM_DIV_End ();
+
+   /***** Foot column 2: Share zone *****/
+   HTM_DIV_Begin ("id=\"sha_not_%s_%u\" class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\"",
+		  Gbl.UniqueNameEncrypted,NumDiv);
+   TL_Sha_PutFormToShaUnsNote (Not,TL_Usr_SHOW_FEW_USRS);
+   HTM_DIV_End ();
+
+   /***** Foot column 3: Icon to remove this note *****/
+   HTM_DIV_Begin ("class=\"TL_REM\"");
+   if (Usr_ItsMe (AuthorUsrCod))	// I am the author
+      TL_Not_PutFormToRemoveNote (Timeline,Not->NotCod);
+   HTM_DIV_End ();
+
+   /***** End foot container *****/
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/**************************** Form to remove note ****************************/
+/*****************************************************************************/
+
+static void TL_Not_PutFormToRemoveNote (const struct TL_Timeline *Timeline,
+                                        long NotCod)
+  {
+   extern const char *Txt_Remove;
+
+   /***** Form to remove publication *****/
+   TL_Frm_FormStart (Timeline,TL_Frm_REQ_REM_NOTE);
+   TL_Not_PutHiddenParamNotCod (NotCod);
+   Ico_PutIconLink ("trash.svg",Txt_Remove);
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
 /***************** Store and publish a note into database ********************/
 /*****************************************************************************/
 
@@ -950,22 +991,6 @@ void TL_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
       default:
 	 break;
      }
-  }
-
-/*****************************************************************************/
-/************************ Form to remove publication *************************/
-/*****************************************************************************/
-
-static void TL_Not_PutFormToRemoveNote (const struct TL_Timeline *Timeline,
-                                        long NotCod)
-  {
-   extern const char *Txt_Remove;
-
-   /***** Form to remove publication *****/
-   TL_Frm_FormStart (Timeline,TL_Frm_REQ_REM_NOTE);
-   TL_Not_PutHiddenParamNotCod (NotCod);
-   Ico_PutIconLink ("trash.svg",Txt_Remove);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/

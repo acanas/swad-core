@@ -58,11 +58,9 @@ void TL_Com_PutIconCommentDisabled (void);
 void TL_Com_PutHiddenFormToWriteNewComment (const struct TL_Timeline *Timeline,
 	                                    long NotCod,
                                             const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
-unsigned long TL_Com_GetNumCommentsInNote (long NotCod);
 
-void TL_Com_WriteCommentsInNote (struct TL_Timeline *Timeline,
-				 const struct TL_Not_Note *Not,
-				 unsigned NumComments);
+void TL_Com_WriteCommentsInNote (const struct TL_Timeline *Timeline,
+				 const struct TL_Not_Note *Not);
 
 void TL_Com_ShowHiddenCommentsUsr (void);
 void TL_Com_ShowHiddenCommentsGbl (void);

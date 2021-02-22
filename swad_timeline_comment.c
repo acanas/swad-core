@@ -66,18 +66,20 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static unsigned long TL_Com_GetNumCommentsInNote (long NotCod);
+
 static unsigned TL_Com_WriteHiddenComments (struct TL_Timeline *Timeline,
                                             long NotCod,
 				            char IdComments[Frm_MAX_BYTES_ID + 1],
 					    unsigned NumInitialCommentsToGet);
-static void TL_Com_WriteOneCommentInList (struct TL_Timeline *Timeline,
+static void TL_Com_WriteOneCommentInList (const struct TL_Timeline *Timeline,
                                           MYSQL_RES *mysql_res);
 static void TL_Com_LinkToShowOnlyLatestComments (const char IdComments[Frm_MAX_BYTES_ID + 1]);
 static void TL_Com_LinkToShowPreviousComments (const char IdComments[Frm_MAX_BYTES_ID + 1],
 				               unsigned NumInitialComments);
 static void TL_Com_PutIconToToggleComments (const char *UniqueId,
                                             const char *Icon,const char *Text);
-static void TL_Com_WriteComment (struct TL_Timeline *Timeline,
+static void TL_Com_WriteComment (const struct TL_Timeline *Timeline,
 	                         struct TL_Com_Comment *Com,
                                  TL_ShowAlone_t ShowCommentAlone);	// Comment is shown alone, not in a list
 static void TL_Com_WriteAuthorComment (struct UsrData *UsrDat);
@@ -174,31 +176,26 @@ void TL_Com_PutHiddenFormToWriteNewComment (const struct TL_Timeline *Timeline,
   }
 
 /*****************************************************************************/
-/********************* Get number of comments in a note **********************/
-/*****************************************************************************/
-
-unsigned long TL_Com_GetNumCommentsInNote (long NotCod)
-  {
-   return DB_QueryCOUNT ("can not get number of comments in a note",
-			 "SELECT COUNT(*) FROM tl_pubs"
-			 " WHERE NotCod=%ld AND PubType=%u",
-			 NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
-  }
-
-/*****************************************************************************/
 /*********************** Write comments in a note ****************************/
 /*****************************************************************************/
 
-void TL_Com_WriteCommentsInNote (struct TL_Timeline *Timeline,
-				 const struct TL_Not_Note *Not,
-				 unsigned NumComments)
+void TL_Com_WriteCommentsInNote (const struct TL_Timeline *Timeline,
+				 const struct TL_Not_Note *Not)
   {
    MYSQL_RES *mysql_res;
+   unsigned NumComments;
    unsigned NumInitialComments;
    unsigned NumFinalCommentsToGet;
    unsigned NumFinalCommentsGot;
    unsigned NumCom;
    char IdComments[Frm_MAX_BYTES_ID + 1];
+
+   /***** Get number of comments in note *****/
+   NumComments = TL_Com_GetNumCommentsInNote (Not->NotCod);
+
+   /***** Trivial check: if no comments ==> nothing to do *****/
+   if (!NumComments)
+      return;
 
    /***** Compute how many initial comments will be hidden
           and how many final comments will be visible *****/
@@ -312,6 +309,18 @@ void TL_Com_WriteCommentsInNote (struct TL_Timeline *Timeline,
   }
 
 /*****************************************************************************/
+/********************* Get number of comments in a note **********************/
+/*****************************************************************************/
+
+static unsigned long TL_Com_GetNumCommentsInNote (long NotCod)
+  {
+   return DB_QueryCOUNT ("can not get number of comments in a note",
+			 "SELECT COUNT(*) FROM tl_pubs"
+			 " WHERE NotCod=%ld AND PubType=%u",
+			 NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
+  }
+
+/*****************************************************************************/
 /********************** Write hidden comments via AJAX ***********************/
 /*****************************************************************************/
 
@@ -404,7 +413,7 @@ static unsigned TL_Com_WriteHiddenComments (struct TL_Timeline *Timeline,
 /************************* Write a comment in list ***************************/
 /*****************************************************************************/
 
-static void TL_Com_WriteOneCommentInList (struct TL_Timeline *Timeline,
+static void TL_Com_WriteOneCommentInList (const struct TL_Timeline *Timeline,
                                           MYSQL_RES *mysql_res)
   {
    MYSQL_ROW row;
@@ -487,7 +496,7 @@ static void TL_Com_PutIconToToggleComments (const char *UniqueId,
 /******************************** Write comment ******************************/
 /*****************************************************************************/
 
-static void TL_Com_WriteComment (struct TL_Timeline *Timeline,
+static void TL_Com_WriteComment (const struct TL_Timeline *Timeline,
 	                         struct TL_Com_Comment *Com,
                                  TL_ShowAlone_t ShowCommentAlone)	// Comment is shown alone, not in a list
   {
