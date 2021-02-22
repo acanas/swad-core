@@ -70,6 +70,7 @@ extern struct Globals Gbl;
 
 static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod);
 
+static void TL_Not_GetAndWriteNoteNotPost (const struct TL_Not_Note *Not);
 static void TL_Not_GetLocationInHierarchy (const struct TL_Not_Note *Not,
                                            struct Hie_Hierarchy *Hie,
                                            struct For_Forum *Forum,
@@ -189,18 +190,14 @@ void TL_Not_InsertNoteInVisibleTimeline (long NotCod)
 void TL_Not_WriteNote (struct TL_Timeline *Timeline,
 	               const struct TL_Not_Note *Not,
                        TL_TopMessage_t TopMessage,
-                       long PublisherCod,	// Who did the action (publication, commenting, faving, sharing, mentioning)
-                       TL_Highlight_t Highlight,		// Highlight note
+                       long PublisherCod,		// Who did the action (publication, commenting, faving, sharing, mentioning)
+                       TL_Highlight_t Highlight,	// Highlight note
                        TL_ShowAlone_t ShowNoteAlone)	// Note is shown alone, not in a list
   {
    struct UsrData AuthorDat;
    bool IAmTheAuthor;
-   struct Hie_Hierarchy Hie;
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
-   struct For_Forums Forums;
-   char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
-   char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    unsigned NumComments;
    char IdNewComment[Frm_MAX_BYTES_ID + 1];
    static unsigned NumDiv = 0;	// Used to create unique div id for fav and shared
@@ -231,13 +228,6 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
       Ale_ShowAlert (Ale_ERROR,"Error in note.");
    else
      {
-      /***** Initialize location in hierarchy *****/
-      Hie.Cty.CtyCod = -1L;
-      Hie.Ins.InsCod = -1L;
-      Hie.Ctr.CtrCod = -1L;
-      Hie.Deg.DegCod = -1L;
-      Hie.Crs.CrsCod = -1L;
-
       /***** Write sharer/commenter if distinct to author *****/
       if (TopMessage != TL_TOP_MESSAGE_NONE)
          TL_Not_WriteTopMessage (TopMessage,PublisherCod);
@@ -269,31 +259,10 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
       TL_WriteDateTime (Not->DateTimeUTC);
 
       /* Write content of the note */
-      if (Not->NoteType == TL_NOTE_POST)
-	 /* Write post content */
+      if (Not->NoteType == TL_NOTE_POST)	// It's a post
 	 TL_Pst_GetAndWritePost (Not->Cod);
-      else
-	{
-	 /* Reset forums */
-         For_ResetForums (&Forums);
-
-	 /* Get location in hierarchy */
-	 if (!Not->Unavailable)
-	    TL_Not_GetLocationInHierarchy (Not,&Hie,&Forums.Forum,ForumName);
-
-	 /* Write note type */
-	 TL_Not_PutFormGoToAction (Not,&Forums);
-
-	 /* Write location in hierarchy */
-	 if (!Not->Unavailable)
-	    TL_Not_WriteLocationInHierarchy (Not,&Hie,ForumName);
-
-	 /* Write note summary */
-	 TL_Not_GetNoteSummary (Not,SummaryStr);
-	 HTM_DIV_Begin ("class=\"TL_TXT\"");
-	 HTM_Txt (SummaryStr);
-	 HTM_DIV_End ();
-	}
+      else					// Not a post
+	 TL_Not_GetAndWriteNoteNotPost (Not);
 
       /* End right container */
       HTM_DIV_End ();
@@ -348,8 +317,7 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
       HTM_DIV_End ();
 
       /* Put hidden form to write a new comment */
-      TL_Com_PutHiddenFormToWriteNewComment (Timeline,
-                                                   Not->NotCod,IdNewComment);
+      TL_Com_PutHiddenFormToWriteNewComment (Timeline,Not->NotCod,IdNewComment);
 
       /***** Free memory used for author's data *****/
       Usr_UsrDataDestructor (&AuthorDat);
@@ -431,6 +399,38 @@ void TL_Not_WriteAuthorNote (const struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
+/***************** Get and write a note which is not a post ******************/
+/*****************************************************************************/
+
+static void TL_Not_GetAndWriteNoteNotPost (const struct TL_Not_Note *Not)
+  {
+   struct Hie_Hierarchy Hie;
+   struct For_Forums Forums;
+   char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
+   char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
+
+   /* Reset forums */
+   For_ResetForums (&Forums);
+
+   /* Get location in hierarchy */
+   if (!Not->Unavailable)
+      TL_Not_GetLocationInHierarchy (Not,&Hie,&Forums.Forum,ForumName);
+
+   /* Write note type */
+   TL_Not_PutFormGoToAction (Not,&Forums);
+
+   /* Write location in hierarchy */
+   if (!Not->Unavailable)
+      TL_Not_WriteLocationInHierarchy (Not,&Hie,ForumName);
+
+   /* Write note summary */
+   TL_Not_GetNoteSummary (Not,SummaryStr);
+   HTM_DIV_Begin ("class=\"TL_TXT\"");
+   HTM_Txt (SummaryStr);
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
 /************************ Get location in hierarchy **************************/
 /*****************************************************************************/
 
@@ -439,6 +439,14 @@ static void TL_Not_GetLocationInHierarchy (const struct TL_Not_Note *Not,
                                            struct For_Forum *Forum,
                                            char ForumName[For_MAX_BYTES_FORUM_NAME + 1])
   {
+   /***** Initialize location in hierarchy *****/
+   Hie->Cty.CtyCod =
+   Hie->Ins.InsCod =
+   Hie->Ctr.CtrCod =
+   Hie->Deg.DegCod =
+   Hie->Crs.CrsCod = -1L;
+
+   /***** Get location in hierarchy *****/
    switch (Not->NoteType)
      {
       case TL_NOTE_INS_DOC_PUB_FILE:
