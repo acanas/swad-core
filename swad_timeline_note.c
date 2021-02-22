@@ -70,8 +70,11 @@ extern struct Globals Gbl;
 
 static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod);
 static void TL_Not_ShowAuthorPhoto (struct UsrData *UsrDat);
+static void TL_Not_WriteTop (const struct TL_Not_Note *Not,
+                             const struct UsrData *UsrDat);
 
-static void TL_Not_GetAndWriteNoteNotPost (const struct TL_Not_Note *Not);
+static void TL_Not_WriteContent (const struct TL_Not_Note *Not);
+static void TL_Not_GetAndWriteNoPost (const struct TL_Not_Note *Not);
 static void TL_Not_GetLocationInHierarchy (const struct TL_Not_Note *Not,
                                            struct Hie_Hierarchy *Hie,
                                            struct For_Forum *Forum,
@@ -83,12 +86,17 @@ static void TL_Not_WriteLocationInHierarchy (const struct TL_Not_Note *Not,
 static void TL_Not_PutFormGoToAction (const struct TL_Not_Note *Not,
                                       const struct For_Forums *Forums);
 
+static void TL_Not_WriteBottom (const struct TL_Timeline *Timeline,
+                                const struct TL_Not_Note *Not,
+                                const struct UsrData *UsrDat);
+static void TL_Not_WriteButtonToAddAComment (const struct TL_Not_Note *Not,
+                                             const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
 static void TL_Not_WriteFootAndComments (const struct TL_Timeline *Timeline,
 					 const struct TL_Not_Note *Not,
-					 long AuthorUsrCod);
+					 const struct UsrData *UsrDat);
 static void TL_Not_WriteFoot (const struct TL_Timeline *Timeline,
                               const struct TL_Not_Note *Not,
-                              long AuthorUsrCod);
+                              const struct UsrData *UsrDat);
 
 static void TL_Not_PutFormToRemoveNote (const struct TL_Timeline *Timeline,
                                         long NotCod);
@@ -159,12 +167,20 @@ void TL_Not_ShowHighlightedNote (struct TL_Timeline *Timeline,
    /* Get what he/she did */
    NotifyEvent = Ntf_GetParamNotifyEvent ();
 
-   /***** Show the note highlighted *****/
+   /***** Get data of the note *****/
    TL_Not_GetDataOfNoteByCod (Not);
-   TL_Not_WriteNote (Timeline,Not,
-		     TopMessages[NotifyEvent],PublisherDat.UsrCod,
-		     TL_HIGHLIGHT,
-		     TL_SHOW_ALONE);
+
+   /***** Show the note highlighted *****/
+   Box_BoxBegin (NULL,NULL,
+		 NULL,NULL,
+		 NULL,Box_CLOSABLE);
+   HTM_UL_Begin ("class=\"TL_LIST\"");
+   TL_Not_WriteNoteInList (Timeline,Not,
+		           TopMessages[NotifyEvent],PublisherDat.UsrCod,
+		           TL_HIGHLIGHT,
+		           TL_SHOW_ALONE);
+   HTM_UL_End ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -195,26 +211,13 @@ void TL_Not_InsertNoteInVisibleTimeline (long NotCod)
 /******************************** Write note *********************************/
 /*****************************************************************************/
 
-void TL_Not_WriteNote (struct TL_Timeline *Timeline,
-	               const struct TL_Not_Note *Not,
-                       TL_TopMessage_t TopMessage,
-                       long PublisherCod,		// Who did the action (publication, commenting, faving, sharing, mentioning)
-                       TL_Highlight_t Highlight,	// Highlight note
-                       TL_ShowAlone_t ShowNoteAlone)	// Note is shown alone, not in a list
+void TL_Not_WriteNoteInList (const struct TL_Timeline *Timeline,
+	                     const struct TL_Not_Note *Not,
+                             TL_TopMessage_t TopMessage,
+                             long PublisherCod,			// Who did the action (publication, commenting, faving, sharing, mentioning)
+                             TL_Highlight_t Highlight,		// Highlight note
+                             TL_ShowAlone_t ShowNoteAlone)	// Note is shown alone, not in a list
   {
-   struct UsrData AuthorDat;
-   char IdNewComment[Frm_MAX_BYTES_ID + 1];
-
-   /***** Begin box ****/
-   if (ShowNoteAlone == TL_SHOW_ALONE)
-     {
-      /***** Box begin *****/
-      Box_BoxBegin (NULL,NULL,
-                    NULL,NULL,
-                    NULL,Box_CLOSABLE);
-      HTM_UL_Begin ("class=\"TL_LIST\"");
-     }
-
    /***** Start list item *****/
    HTM_LI_Begin ("class=\"%s\"",
 		 ShowNoteAlone == TL_SHOW_ALONE ?
@@ -223,77 +226,22 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
 		    (Highlight == TL_HIGHLIGHT ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
 					         "TL_WIDTH TL_SEP"));
 
-   if (Not->NotCod   <= 0 ||
-       Not->NoteType == TL_NOTE_UNKNOWN ||
-       Not->UsrCod   <= 0)
-      Ale_ShowAlert (Ale_ERROR,"Error in note.");
-   else
+   if (Not->NotCod   > 0 &&
+       Not->UsrCod   > 0 &&
+       Not->NoteType != TL_NOTE_UNKNOWN)
      {
       /***** Write sharer/commenter if distinct to author *****/
       if (TopMessage != TL_TOP_MESSAGE_NONE)
          TL_Not_WriteTopMessage (TopMessage,PublisherCod);
 
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&AuthorDat);
-
-      /***** Get author data *****/
-      AuthorDat.UsrCod = Not->UsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&AuthorDat,Usr_DONT_GET_PREFS);
-
-      /***** Left: write author's photo *****/
-      TL_Not_ShowAuthorPhoto (&AuthorDat);
-
-      /***** Right: author's name, time, summary and buttons *****/
-      /* Begin right container */
-      HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
-
-      /* Write author's full name and nickname */
-      TL_Not_WriteAuthorNote (&AuthorDat);
-
-      /* Write date and time */
-      TL_WriteDateTime (Not->DateTimeUTC);
-
-      /* Write content of the note */
-      if (Not->NoteType == TL_NOTE_POST)	// It's a post
-	 TL_Pst_GetAndWritePost (Not->Cod);
-      else					// Not a post
-	 TL_Not_GetAndWriteNoteNotPost (Not);
-
-      /* End right container */
-      HTM_DIV_End ();
-
-      /***** Buttons and comments *****/
-      /* Create unique id for new comment */
-      Frm_SetUniqueId (IdNewComment);
-
-      /* Put icon to add a comment */
-      HTM_DIV_Begin ("class=\"TL_BOTTOM_LEFT\"");
-      if (Not->Unavailable)	// Unavailable notes can not be commented
-	 TL_Com_PutIconCommentDisabled ();
-      else
-         TL_Com_PutIconToToggleComment (IdNewComment);
-      HTM_DIV_End ();
-
-      /* Write foot and comments */
-      TL_Not_WriteFootAndComments (Timeline,Not,AuthorDat.UsrCod);
-
-      /* Put hidden form to write a new comment */
-      TL_Com_PutHiddenFormToWriteNewComment (Timeline,Not->NotCod,IdNewComment);
-
-      /***** Free memory used for author's data *****/
-      Usr_UsrDataDestructor (&AuthorDat);
+      /***** Write note *****/
+      TL_Not_WriteNote (Timeline,Not);
      }
+   else
+      Ale_ShowAlert (Ale_ERROR,"Error in note.");
 
    /***** End list item *****/
    HTM_LI_End ();
-
-   /***** End box ****/
-   if (ShowNoteAlone == TL_SHOW_ALONE)
-     {
-      /***** Box end *****/
-      HTM_UL_End ();
-      Box_BoxEnd ();
-     }
   }
 
 /*****************************************************************************/
@@ -338,6 +286,35 @@ static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod
   }
 
 /*****************************************************************************/
+/********************************* Show note *********************************/
+/*****************************************************************************/
+
+static void TL_Not_WriteNote (const struct TL_Timeline *Timeline,
+                              const struct TL_Not_Note *Not)
+  {
+   struct UsrData UsrDat;	// Author of the note
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** Get author data *****/
+   UsrDat.UsrCod = Not->UsrCod;
+   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+
+   /***** Left top: write author's photo *****/
+   TL_Not_ShowAuthorPhoto (&UsrDat);
+
+   /***** Right top: author's name, time, summary and buttons *****/
+   TL_Not_WriteTop (Not,&UsrDat);
+
+   /***** Bottom: buttons and comments *****/
+   TL_Not_WriteBottom (Timeline,Not,&UsrDat);
+
+   /***** Free memory used for author's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
+  }
+
+/*****************************************************************************/
 /*********************** Show photo of author of a note **********************/
 /*****************************************************************************/
 
@@ -346,6 +323,7 @@ static void TL_Not_ShowAuthorPhoto (struct UsrData *UsrDat)
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
 
+   /***** Show author's photo *****/
    HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
@@ -355,10 +333,33 @@ static void TL_Not_ShowAuthorPhoto (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
+/**** Write top right part of a note: author's name, time and note content ***/
+/*****************************************************************************/
+
+static void TL_Not_WriteTop (const struct TL_Not_Note *Not,
+                             const struct UsrData *UsrDat)
+  {
+   /***** Begin right container *****/
+   HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
+
+   /***** Write author's full name *****/
+   TL_Not_WriteAuthorName (UsrDat);
+
+   /***** Write date and time *****/
+   TL_WriteDateTime (Not->DateTimeUTC);
+
+   /***** Write content of the note *****/
+   TL_Not_WriteContent (Not);
+
+   /***** End right container *****/
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
 /*************** Write name and nickname of author of a note *****************/
 /*****************************************************************************/
 
-void TL_Not_WriteAuthorNote (const struct UsrData *UsrDat)
+void TL_Not_WriteAuthorName (const struct UsrData *UsrDat)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
@@ -377,31 +378,43 @@ void TL_Not_WriteAuthorNote (const struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
+/*********************** Get and write a note content ************************/
+/*****************************************************************************/
+
+static void TL_Not_WriteContent (const struct TL_Not_Note *Not)
+  {
+   if (Not->NoteType == TL_NOTE_POST)	// It's a post
+      TL_Pst_GetAndWritePost (Not->Cod);
+   else					// Not a post
+      TL_Not_GetAndWriteNoPost (Not);
+  }
+
+/*****************************************************************************/
 /***************** Get and write a note which is not a post ******************/
 /*****************************************************************************/
 
-static void TL_Not_GetAndWriteNoteNotPost (const struct TL_Not_Note *Not)
+static void TL_Not_GetAndWriteNoPost (const struct TL_Not_Note *Not)
   {
    struct Hie_Hierarchy Hie;
    struct For_Forums Forums;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
 
-   /* Reset forums */
+   /***** Reset forums *****/
    For_ResetForums (&Forums);
 
-   /* Get location in hierarchy */
+   /***** Get location in hierarchy *****/
    if (!Not->Unavailable)
       TL_Not_GetLocationInHierarchy (Not,&Hie,&Forums.Forum,ForumName);
 
-   /* Write note type */
+   /***** Write note type *****/
    TL_Not_PutFormGoToAction (Not,&Forums);
 
-   /* Write location in hierarchy */
+   /***** Write location in hierarchy *****/
    if (!Not->Unavailable)
       TL_Not_WriteLocationInHierarchy (Not,&Hie,ForumName);
 
-   /* Write note summary */
+   /***** Get and write note summary *****/
    TL_Not_GetNoteSummary (Not,SummaryStr);
    HTM_DIV_Begin ("class=\"TL_TXT\"");
    HTM_Txt (SummaryStr);
@@ -722,18 +735,56 @@ void TL_Not_GetNoteSummary (const struct TL_Not_Note *Not,
   }
 
 /*****************************************************************************/
+/************************ Write bottom part of a note ************************/
+/*****************************************************************************/
+
+static void TL_Not_WriteBottom (const struct TL_Timeline *Timeline,
+                                const struct TL_Not_Note *Not,
+                                const struct UsrData *UsrDat)	// Author
+  {
+   char IdNewComment[Frm_MAX_BYTES_ID + 1];
+
+   /***** Create unique id for new comment *****/
+   Frm_SetUniqueId (IdNewComment);
+
+   /***** Left: button to add a comment *****/
+   TL_Not_WriteButtonToAddAComment (Not,IdNewComment);
+
+   /***** Right: write foot and comments *****/
+   TL_Not_WriteFootAndComments (Timeline,Not,UsrDat);
+
+   /***** Put hidden form to write a new comment *****/
+   TL_Com_PutHiddenFormToWriteNewComment (Timeline,Not->NotCod,IdNewComment);
+  }
+
+/*****************************************************************************/
+/********************** Write button to add a comment ************************/
+/*****************************************************************************/
+
+static void TL_Not_WriteButtonToAddAComment (const struct TL_Not_Note *Not,
+                                             const char IdNewComment[Frm_MAX_BYTES_ID + 1])
+  {
+   HTM_DIV_Begin ("class=\"TL_BOTTOM_LEFT\"");
+   if (Not->Unavailable)	// Unavailable notes can not be commented
+      TL_Com_PutIconCommentDisabled ();
+   else
+      TL_Com_PutIconToToggleComment (IdNewComment);
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
 /******************** Write foot and comments of a note **********************/
 /*****************************************************************************/
 
 static void TL_Not_WriteFootAndComments (const struct TL_Timeline *Timeline,
 					 const struct TL_Not_Note *Not,
-					 long AuthorUsrCod)
+					 const struct UsrData *UsrDat)	// Author
   {
    /***** Begin container for foot and comments *****/
    HTM_DIV_Begin ("class=\"TL_BOTTOM_RIGHT TL_RIGHT_WIDTH\"");
 
    /***** Write foot of a note *****/
-   TL_Not_WriteFoot (Timeline,Not,AuthorUsrCod);
+   TL_Not_WriteFoot (Timeline,Not,UsrDat);
 
    /***** Comments *****/
    TL_Com_WriteCommentsInNote (Timeline,Not);
@@ -748,7 +799,7 @@ static void TL_Not_WriteFootAndComments (const struct TL_Timeline *Timeline,
 
 static void TL_Not_WriteFoot (const struct TL_Timeline *Timeline,
                               const struct TL_Not_Note *Not,
-                              long AuthorUsrCod)
+                              const struct UsrData *UsrDat)	// Author
   {
    static unsigned NumDiv = 0;	// Used to create unique div id for fav and shared
 
@@ -771,7 +822,7 @@ static void TL_Not_WriteFoot (const struct TL_Timeline *Timeline,
 
    /***** Foot column 3: Icon to remove this note *****/
    HTM_DIV_Begin ("class=\"TL_REM\"");
-   if (Usr_ItsMe (AuthorUsrCod))	// I am the author
+   if (Usr_ItsMe (UsrDat->UsrCod))	// I am the author
       TL_Not_PutFormToRemoveNote (Timeline,Not->NotCod);
    HTM_DIV_End ();
 
@@ -1075,10 +1126,16 @@ static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
 	 TL_Frm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_post);
 
 	 /* Show note */
-	 TL_Not_WriteNote (Timeline,&Not,
-		           TL_TOP_MESSAGE_NONE,-1L,
-		           TL_DONT_HIGHLIGHT,
-		           TL_SHOW_ALONE);
+	 Box_BoxBegin (NULL,NULL,
+		       NULL,NULL,
+		       NULL,Box_CLOSABLE);
+	 HTM_UL_Begin ("class=\"TL_LIST\"");
+	 TL_Not_WriteNoteInList (Timeline,&Not,
+		                 TL_TOP_MESSAGE_NONE,-1L,
+		                 TL_DONT_HIGHLIGHT,
+		                 TL_SHOW_ALONE);
+	 HTM_UL_End ();
+	 Box_BoxEnd ();
 
 	 /* End alert */
          Timeline->NotCod = Not.NotCod;	// Note to be removed

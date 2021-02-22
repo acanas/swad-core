@@ -146,7 +146,7 @@ void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
    HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
 
    /* Author name */
-   TL_Not_WriteAuthorNote (&Gbl.Usrs.Me.UsrDat);
+   TL_Not_WriteAuthorName (&Gbl.Usrs.Me.UsrDat);
 
    /* Form to write the post */
    HTM_DIV_Begin ("class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\"");
