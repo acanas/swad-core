@@ -790,7 +790,6 @@ static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline)
    extern const char *Txt_The_comment_no_longer_exists;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
    struct TL_Com_Comment Com;
-   bool ItsMe;
 
    /***** Initialize image *****/
    Med_MediaConstructor (&Com.Content.Media);
@@ -801,12 +800,11 @@ static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline)
 
    if (Com.PubCod > 0)
      {
-      ItsMe = Usr_ItsMe (Com.UsrCod);
-      if (ItsMe)	// I am the author of this comment
+      if (Usr_ItsMe (Com.UsrCod))	// I am the author of this comment
 	{
 	 /***** Show question and button to remove comment *****/
-	 /* Start alert */
-	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_comment);
+	 /* Begin alert */
+	 TL_Frm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_comment);
 
 	 /* Show comment */
 	 TL_Com_WriteComment (Timeline,&Com,

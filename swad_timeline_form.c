@@ -270,8 +270,13 @@ void TL_Frm_FormToShowHiddenComments (long NotCod,
   }
 
 /*****************************************************************************/
-/******************* End form to remove note / comment ***********************/
+/********************** Form to remove note / comment ************************/
 /*****************************************************************************/
+
+void TL_Frm_BeginAlertRemove (const char *QuestionTxt)
+  {
+   Ale_ShowAlertAndButton1 (Ale_QUESTION,QuestionTxt);
+  }
 
 void TL_Frm_EndAlertRemove (struct TL_Timeline *Timeline,TL_Frm_Action_t Action,
                             void (*FuncParams) (void *Args))

@@ -1017,7 +1017,6 @@ static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
    extern const char *Txt_The_original_post_no_longer_exists;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_post;
    struct TL_Not_Note Not;
-   bool ItsMe;
 
    /***** Get data of note *****/
    Not.NotCod = TL_Not_GetParamNotCod ();
@@ -1025,12 +1024,11 @@ static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
 
    if (Not.NotCod > 0)
      {
-      ItsMe = Usr_ItsMe (Not.UsrCod);
-      if (ItsMe)	// I am the author of this note
+      if (Usr_ItsMe (Not.UsrCod))	// I am the author of this note
 	{
 	 /***** Show question and button to remove note *****/
-	 /* Start alert */
-	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_post);
+	 /* Begin alert */
+	 TL_Frm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_post);
 
 	 /* Show note */
 	 TL_Not_WriteNote (Timeline,&Not,
