@@ -73,7 +73,7 @@ void Mai_ContEditAfterChgMai (void);
 void Mai_ReceiveFormNewMailDomain (void);
 
 void Mai_ReqUsrsToListEmails (void);
-void Mai_GetSelectedUsrsAndListEmails (void);
+void Mai_GetSelUsrsAndListEmails (void);
 
 bool Mai_CheckIfEmailIsValid (const char *Email);
 bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat);

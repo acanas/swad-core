@@ -67,7 +67,7 @@ static const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_
    [TabStr] =  {
 		[ 0] = ActFrmLogIn,
 		[ 1] = ActReqSch,
-		[ 2] = ActSeeTmlGbl,
+		[ 2] = ActSeeGblTL,
 		[ 3] = ActSeeSocPrf,
 		[ 4] = ActSeeCal,
 		[ 5] = ActSeeNtf,

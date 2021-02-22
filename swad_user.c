@@ -3105,7 +3105,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    /* Get the first option allowed */
 	    Action = Mnu_GetFirstActionAvailableInCurrentTab ();
 
-	 Gbl.Action.Act = (Action == ActUnk) ? ((Gbl.Usrs.Me.Logged) ? ActSeeTmlGbl :	// Default action if logged
+	 Gbl.Action.Act = (Action == ActUnk) ? ((Gbl.Usrs.Me.Logged) ? ActSeeGblTL :	// Default action if logged
 								       ActFrmLogIn) :		// Default action if not logged
 					       Action;
 	 Tab_SetCurrentTab ();

@@ -891,7 +891,7 @@ static void Mai_PutFormToSelectUsrsToListEmails (__attribute__((unused)) void *A
 /****** Get and check list of selected users, and show users' emails  ********/
 /*****************************************************************************/
 
-void Mai_GetSelectedUsrsAndListEmails (void)
+void Mai_GetSelUsrsAndListEmails (void)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
 				  Mai_ListEmails,NULL,				// when user(s) selected

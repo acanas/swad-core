@@ -85,7 +85,7 @@ void TL_Who_PutFormWho (struct TL_Timeline *Timeline)
 	 HTM_DIV_Begin ("class=\"%s\"",
 			Who == Timeline->Who ? "PREF_ON" :
 					       "PREF_OFF");
-	 Frm_StartForm (ActSeeTmlGbl);
+	 Frm_StartForm (ActSeeGblTL);
 	 Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
 	 Usr_PutWhoIcon (Who);
 	 Frm_EndForm ();
