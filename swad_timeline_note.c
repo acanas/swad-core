@@ -69,6 +69,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod);
+static void TL_Not_ShowAuthorPhoto (struct UsrData *UsrDat);
 
 static void TL_Not_GetAndWriteNoteNotPost (const struct TL_Not_Note *Not);
 static void TL_Not_GetLocationInHierarchy (const struct TL_Not_Note *Not,
@@ -196,8 +197,6 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
   {
    struct UsrData AuthorDat;
    bool IAmTheAuthor;
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
    unsigned NumComments;
    char IdNewComment[Frm_MAX_BYTES_ID + 1];
    static unsigned NumDiv = 0;	// Used to create unique div id for fav and shared
@@ -241,12 +240,7 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
       IAmTheAuthor = Usr_ItsMe (AuthorDat.UsrCod);
 
       /***** Left: write author's photo *****/
-      HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&AuthorDat,PhotoURL);
-      Pho_ShowUsrPhoto (&AuthorDat,ShowPhoto ? PhotoURL :
-					       NULL,
-			"PHOTO45x60",Pho_ZOOM,true);	// Use unique id
-      HTM_DIV_End ();
+      TL_Not_ShowAuthorPhoto (&AuthorDat);
 
       /***** Right: author's name, time, summary and buttons *****/
       /* Begin right container */
@@ -276,7 +270,7 @@ void TL_Not_WriteNote (struct TL_Timeline *Timeline,
 
       /* Put icon to add a comment */
       HTM_DIV_Begin ("class=\"TL_BOTTOM_LEFT\"");
-      if (Not->Unavailable)		// Unavailable notes can not be commented
+      if (Not->Unavailable)	// Unavailable notes can not be commented
 	 TL_Com_PutIconCommentDisabled ();
       else
          TL_Com_PutIconToToggleComment (IdNewComment);
@@ -374,6 +368,23 @@ static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&PublisherDat);
+  }
+
+/*****************************************************************************/
+/*********************** Show photo of author of a note **********************/
+/*****************************************************************************/
+
+static void TL_Not_ShowAuthorPhoto (struct UsrData *UsrDat)
+  {
+   bool ShowPhoto = false;
+   char PhotoURL[PATH_MAX + 1];
+
+   HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
+   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
+   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+					NULL,
+		     "PHOTO45x60",Pho_ZOOM,true);	// Use unique id
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
