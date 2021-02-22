@@ -41,22 +41,32 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define TL_Frm_NUM_ACTIONS 14
+#define TL_Frm_NUM_ACTIONS 16
 typedef enum
   {
    TL_Frm_RECEIVE_POST,	// Receive post
    TL_Frm_RECEIVE_COMM,	// Receive comment
+
    TL_Frm_REQ_REM_NOTE,	// Request removal note
    TL_Frm_REQ_REM_COMM,	// Request removal comment
+
+   TL_Frm_REM_NOTE,	// Remove note
+   TL_Frm_REM_COMM,	// Remove comment
+
    TL_Frm_SHA_NOTE,	// Share a note
    TL_Frm_UNS_NOTE,	// Unshare a note
+
    TL_Frm_FAV_NOTE,     // Favourite a note
    TL_Frm_FAV_COMM,	// Favourite a comment
+
    TL_Frm_UNF_NOTE,	// Unfavourite a note
    TL_Frm_UNF_COMM,	// Unfavourite a comment
+
    TL_Frm_ALL_SHA_NOTE,	// Show all sharers of note
+
    TL_Frm_ALL_FAV_NOTE,	// Show all favouriters of note
    TL_Frm_ALL_FAV_COMM,	// Show all favouriters of comment
+
    TL_Frm_SHO_HID_COMM,	// Show / hide comments
   } TL_Frm_Action_t;
 
@@ -76,5 +86,8 @@ void TL_Frm_FormFavSha (TL_Frm_Action_t Action,
 void TL_Frm_FormToShowHiddenComments (long NotCod,
 				      char IdComments[Frm_MAX_BYTES_ID + 1],
 				      unsigned NumInitialComments);
+
+void TL_Frm_EndAlertRemNote (struct TL_Timeline *Timeline);
+void TL_Frm_EndAlertRemComm (struct TL_Timeline *Timeline);
 
 #endif

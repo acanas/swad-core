@@ -32,7 +32,9 @@
 #include "swad_action.h"
 #include "swad_global.h"
 #include "swad_timeline.h"
+#include "swad_timeline_comment.h"
 #include "swad_timeline_form.h"
+#include "swad_timeline_note.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -50,6 +52,8 @@ const Act_Action_t TL_Frm_ActionGbl[TL_Frm_NUM_ACTIONS] =
    [TL_Frm_RECEIVE_COMM] = ActRcvTL_ComGbl,
    [TL_Frm_REQ_REM_NOTE] = ActReqRemTL_PubGbl,
    [TL_Frm_REQ_REM_COMM] = ActReqRemTL_ComGbl,
+   [TL_Frm_REM_NOTE    ] = ActRemTL_PubGbl,
+   [TL_Frm_REM_COMM    ] = ActRemTL_ComGbl,
    [TL_Frm_SHA_NOTE    ] = ActShaTL_NotGbl,
    [TL_Frm_UNS_NOTE    ] = ActUnsTL_NotGbl,
    [TL_Frm_FAV_NOTE    ] = ActFavTL_NotGbl,
@@ -67,6 +71,8 @@ const Act_Action_t TL_Frm_ActionUsr[TL_Frm_NUM_ACTIONS] =
    [TL_Frm_RECEIVE_COMM] = ActRcvTL_ComUsr,
    [TL_Frm_REQ_REM_NOTE] = ActReqRemTL_PubUsr,
    [TL_Frm_REQ_REM_COMM] = ActReqRemTL_ComUsr,
+   [TL_Frm_REM_NOTE    ] = ActRemTL_PubUsr,
+   [TL_Frm_REM_COMM    ] = ActRemTL_ComUsr,
    [TL_Frm_SHA_NOTE    ] = ActShaTL_NotUsr,
    [TL_Frm_UNS_NOTE    ] = ActUnsTL_NotUsr,
    [TL_Frm_FAV_NOTE    ] = ActFavTL_NotUsr,
@@ -261,4 +267,36 @@ void TL_Frm_FormToShowHiddenComments (long NotCod,
    free (OnSubmit);
 
    HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/*********************** End form to remove a note ***************************/
+/*****************************************************************************/
+
+void TL_Frm_EndAlertRemNote (struct TL_Timeline *Timeline)
+  {
+   extern const char *Txt_Remove;
+
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+      Ale_ShowAlertAndButton2 (TL_Frm_ActionUsr[TL_Frm_REM_NOTE],"timeline",NULL,
+			       TL_Not_PutParamsRemoveNote,Timeline,
+			       Btn_REMOVE_BUTTON,Txt_Remove);
+   else
+      Ale_ShowAlertAndButton2 (TL_Frm_ActionGbl[TL_Frm_REM_NOTE],NULL,NULL,
+			       TL_Not_PutParamsRemoveNote,Timeline,
+			       Btn_REMOVE_BUTTON,Txt_Remove);
+  }
+
+void TL_Frm_EndAlertRemComm (struct TL_Timeline *Timeline)
+  {
+   extern const char *Txt_Remove;
+
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+      Ale_ShowAlertAndButton2 (TL_Frm_ActionUsr[TL_Frm_REM_COMM],"timeline",NULL,
+			       TL_Com_PutParamsRemoveComment,Timeline,
+			       Btn_REMOVE_BUTTON,Txt_Remove);
+   else
+      Ale_ShowAlertAndButton2 (TL_Frm_ActionUsr[TL_Frm_REM_COMM],NULL,NULL,
+			       TL_Com_PutParamsRemoveComment,Timeline,
+			       Btn_REMOVE_BUTTON,Txt_Remove);
   }

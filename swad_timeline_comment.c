@@ -88,7 +88,6 @@ static void TL_Com_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
 static long TL_Com_ReceiveComment (void);
 
 static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline);
-static void TL_Com_PutParamsRemoveComment (void *Timeline);
 static void TL_Com_RemoveComment (void);
 
 static void TL_Com_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Com_Comment *Com);
@@ -789,7 +788,6 @@ static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline)
   {
    extern const char *Txt_The_comment_no_longer_exists;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
-   extern const char *Txt_Remove;
    struct TL_Com_Comment Com;
    bool ItsMe;
 
@@ -815,14 +813,7 @@ static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline)
 
 	 /* End alert */
 	 Timeline->PubCod = Com.PubCod;	// Publication to be removed
-	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	    Ale_ShowAlertAndButton2 (ActRemTL_ComUsr,"timeline",NULL,
-	                             TL_Com_PutParamsRemoveComment,Timeline,
-				     Btn_REMOVE_BUTTON,Txt_Remove);
-	 else
-	    Ale_ShowAlertAndButton2 (ActRemTL_ComGbl,NULL,NULL,
-	                             TL_Com_PutParamsRemoveComment,Timeline,
-				     Btn_REMOVE_BUTTON,Txt_Remove);
+	 TL_Frm_EndAlertRemComm (Timeline);
 	}
      }
    else
@@ -836,7 +827,7 @@ static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline)
 /******************** Put parameters to remove a comment *********************/
 /*****************************************************************************/
 
-static void TL_Com_PutParamsRemoveComment (void *Timeline)
+void TL_Com_PutParamsRemoveComment (void *Timeline)
   {
    if (Timeline)
      {

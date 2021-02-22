@@ -553,7 +553,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.33 (2021-02-21)"
+#define Log_PLATFORM_VERSION	"SWAD 20.33.1 (2021-02-22)"
 #define CSS_FILE		"swad20.8.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
@@ -601,8 +601,9 @@ TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse 
 TODO: BUG: Cuando un tipo de grupo sólo tiene un grupo, inscribirse es voluntario, el estudiante sólo puede pertenecer a un grupo, y se inscribe en él, debería poder desapuntarse. Ahora no puede.
 TODO: Salvador Romero Cortés: @acanas opción para editar posts
 
+	Version 20.33.1:  Feb 22, 2021  Code refactoring in timeline related to forms. (304888 lines)
 	Version 20.33:    Feb 21, 2021  New module swad_timeline_form. (304866 lines)
-	Version 20.32.2:  Feb 21, 2021  Code refactoring in timeline related to actions. (304771 lines)
+	Version 20.32.2:  Feb 21, 2021  Code refactoring in timeline related to forms. (304771 lines)
 	Version 20.32.1:  Feb 15, 2021  Fixed bug in forums. (304756 lines)
 	Version 20.32:    Feb 15, 2021  Fixed bugs in copy of strings.
 					Code refactoring in copy of strings. (304755 lines)

@@ -72,6 +72,7 @@ void TL_Com_ReceiveCommentGbl (void);
 
 void TL_Com_RequestRemComUsr (void);
 void TL_Com_RequestRemComGbl (void);
+void TL_Com_PutParamsRemoveComment (void *Timeline);
 void TL_Com_RemoveComUsr (void);
 void TL_Com_RemoveComGbl (void);
 

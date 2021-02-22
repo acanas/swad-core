@@ -85,7 +85,6 @@ static void TL_Not_PutFormToRemoveNote (const struct TL_Timeline *Timeline,
                                         long NotCod);
 
 static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline);
-static void TL_Not_PutParamsRemoveNote (void *Timeline);
 static void TL_Not_RemoveNote (void);
 static void TL_Not_RemoveNoteMediaAndDBEntries (struct TL_Not_Note *Not);
 
@@ -1016,7 +1015,6 @@ static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_post;
-   extern const char *Txt_Remove;
    struct TL_Not_Note Not;
    bool ItsMe;
 
@@ -1040,15 +1038,8 @@ static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
 		           TL_SHOW_ALONE);
 
 	 /* End alert */
-	 Timeline->NotCod = Not.NotCod;	// Note to be removed
-	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	    Ale_ShowAlertAndButton2 (ActRemTL_PubUsr,"timeline",NULL,
-	                             TL_Not_PutParamsRemoveNote,Timeline,
-				     Btn_REMOVE_BUTTON,Txt_Remove);
-	 else
-	    Ale_ShowAlertAndButton2 (ActRemTL_PubGbl,NULL,NULL,
-	                             TL_Not_PutParamsRemoveNote,Timeline,
-				     Btn_REMOVE_BUTTON,Txt_Remove);
+         Timeline->NotCod = Not.NotCod;	// Note to be removed
+	 TL_Frm_EndAlertRemNote (Timeline);
 	}
      }
    else
@@ -1059,7 +1050,7 @@ static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
 /********************* Put parameters to remove a note ***********************/
 /*****************************************************************************/
 
-static void TL_Not_PutParamsRemoveNote (void *Timeline)
+void TL_Not_PutParamsRemoveNote (void *Timeline)
   {
    if (Timeline)
      {
