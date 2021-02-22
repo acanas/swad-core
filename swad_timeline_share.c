@@ -165,7 +165,6 @@ void TL_Sha_ShaNoteGbl (void)
 static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
   {
    struct TL_Pub_Publication Pub;
-   bool ItsMe;
    long OriginalPubCod;
 
    /***** Get data of note *****/
@@ -173,9 +172,8 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
    TL_Not_GetDataOfNoteByCod (Not);
 
    if (Not->NotCod > 0)
-     {
-      ItsMe = Usr_ItsMe (Not->UsrCod);
-      if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
+      if (Gbl.Usrs.Me.Logged &&
+	  !Usr_ItsMe (Not->UsrCod))	// I am not the author
          if (!TL_Sha_CheckIfNoteIsSharedByUsr (Not->NotCod,
 					       Gbl.Usrs.Me.UsrDat.UsrCod))	// Not yet shared by me
 	   {
@@ -195,7 +193,6 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
 	       TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,
 	                                   Ntf_EVENT_TIMELINE_SHARE);
 	   }
-     }
   }
 
 /*****************************************************************************/
@@ -224,19 +221,16 @@ void TL_Sha_UnsNoteGbl (void)
 
 static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
   {
-   // extern const char *Txt_The_original_post_no_longer_exists;
    long OriginalPubCod;
-   bool ItsMe;
 
    /***** Get data of note *****/
    Not->NotCod = TL_Not_GetParamNotCod ();
    TL_Not_GetDataOfNoteByCod (Not);
 
    if (Not->NotCod > 0)
-     {
-      ItsMe = Usr_ItsMe (Not->UsrCod);
       if (Not->NumShared &&
-	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
+	  Gbl.Usrs.Me.Logged &&
+	  !Usr_ItsMe (Not->UsrCod))	// I am not the author
 	 if (TL_Sha_CheckIfNoteIsSharedByUsr (Not->NotCod,
 					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I am a sharer
 	   {
@@ -258,28 +252,22 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
 	    if (OriginalPubCod > 0)
 	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE,OriginalPubCod);
 	   }
-     }
   }
 
 void TL_Sha_PutFormToShaUnsNote (const struct TL_Not_Note *Not,
                                  TL_Usr_HowManyUsrs_t HowManyUsrs)
   {
-   bool IAmTheAuthor;
-   bool IAmASharerOfThisNot;
-
    /***** Put form to share/unshare this note *****/
    HTM_DIV_Begin ("class=\"TL_ICO\"");
-   IAmTheAuthor = Usr_ItsMe (Not->UsrCod);
    if (Not->Unavailable ||		// Unavailable notes can not be shared
-       IAmTheAuthor)			// I am the author
+       Usr_ItsMe (Not->UsrCod))		// I am the author
       /* Put disabled icon */
       TL_Sha_PutDisabledIconShare (Not->NumShared);
    else					// Available and I am not the author
      {
       /* Put icon to share/unshare */
-      IAmASharerOfThisNot = TL_Sha_CheckIfNoteIsSharedByUsr (Not->NotCod,
-							    Gbl.Usrs.Me.UsrDat.UsrCod);
-      if (IAmASharerOfThisNot)	// I have shared this note
+      if (TL_Sha_CheckIfNoteIsSharedByUsr (Not->NotCod,
+					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I have shared this note
 	 TL_Sha_PutFormToUnsNote (Not->NotCod);
       else				// I have not shared this note
 	 TL_Sha_PutFormToShaNote (Not->NotCod);

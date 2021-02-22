@@ -608,13 +608,12 @@ static void TL_Com_WriteAuthorName (const struct UsrData *UsrDat)	// Author
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Show user's name inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-   HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
-			            Txt_Another_user_s_profile,
+   HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
+			                                 Txt_Another_user_s_profile,
 	                    "BT_LINK TL_COM_AUTHOR TL_COMM_AUTHOR_WIDTH DAT_BOLD",NULL);
    HTM_Txt (UsrDat->FullName);
    HTM_BUTTON_End ();
@@ -955,7 +954,6 @@ static void TL_Com_RemoveComment (void)
    extern const char *Txt_The_comment_no_longer_exists;
    extern const char *Txt_Comment_removed;
    struct TL_Com_Comment Com;
-   bool ItsMe;
 
    /***** Initialize image *****/
    Med_MediaConstructor (&Com.Content.Media);
@@ -966,8 +964,7 @@ static void TL_Com_RemoveComment (void)
 
    if (Com.PubCod > 0)
      {
-      ItsMe = Usr_ItsMe (Com.UsrCod);
-      if (ItsMe)	// I am the author of this comment
+      if (Usr_ItsMe (Com.UsrCod))	// I am the author of this comment
 	{
 	 /***** Remove media associated to comment
 	        and delete comment from database *****/

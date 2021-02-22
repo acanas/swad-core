@@ -267,7 +267,6 @@ static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod
    extern const char *Txt_Another_user_s_profile;
    extern const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES];
    struct UsrData PublisherDat;
-   bool ItsMe = Usr_ItsMe (PublisherCod);
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&PublisherDat);
@@ -281,8 +280,8 @@ static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod
       /***** Show user's name inside form to go to user's public profile *****/
       Frm_StartFormUnique (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (PublisherDat.EnUsrCod);
-      HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
-				       Txt_Another_user_s_profile,
+      HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (PublisherCod) ? Txt_My_public_profile :
+				                          Txt_Another_user_s_profile,
 			       "BT_LINK TL_TOP_PUBLISHER",NULL);
       HTM_Txt (PublisherDat.FullName);
       HTM_BUTTON_End ();
@@ -374,13 +373,12 @@ void TL_Not_WriteAuthorName (const struct UsrData *UsrDat)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Show user's name inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-   HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
-				    Txt_Another_user_s_profile,
+   HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
+				                         Txt_Another_user_s_profile,
 		            "BT_LINK TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH DAT_N_BOLD",
 			    NULL);
    HTM_Txt (UsrDat->FullName);
@@ -1222,7 +1220,6 @@ static void TL_Not_RemoveNote (void)
    extern const char *Txt_The_original_post_no_longer_exists;
    extern const char *Txt_TIMELINE_Post_removed;
    struct TL_Not_Note Not;
-   bool ItsMe;
 
    /***** Get data of note *****/
    Not.NotCod = TL_Not_GetParamNotCod ();
@@ -1230,8 +1227,7 @@ static void TL_Not_RemoveNote (void)
 
    if (Not.NotCod > 0)
      {
-      ItsMe = Usr_ItsMe (Not.UsrCod);
-      if (ItsMe)	// I am the author of this note
+      if (Usr_ItsMe (Not.UsrCod))	// I am the author of this note
 	{
 	 /***** Delete note from database *****/
 	 TL_Not_RemoveNoteMediaAndDBEntries (&Not);

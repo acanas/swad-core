@@ -214,24 +214,19 @@ void TL_Fav_UnfNoteGbl (void)
 void TL_Fav_PutFormToFavUnfNote (const struct TL_Not_Note *Not,
                                  TL_Usr_HowManyUsrs_t HowManyUsrs)
   {
-   bool IAmTheAuthor;
-   bool IAmAFaverOfThisNot;
-
    /***** Put form to fav/unfav this note *****/
    HTM_DIV_Begin ("class=\"TL_ICO\"");
-   IAmTheAuthor = Usr_ItsMe (Not->UsrCod);
    if (Not->Unavailable ||		// Unavailable notes can not be favourited
-       IAmTheAuthor)			// I am the author
+       Usr_ItsMe (Not->UsrCod))		// I am the author
       /* Put disabled icon */
       TL_Fav_PutDisabledIconFav (Not->NumFavs);
    else					// Available and I am not the author
      {
       /* Put icon to fav/unfav */
-      IAmAFaverOfThisNot = TL_Fav_CheckIfNoteIsFavedByUsr (Not->NotCod,
-							   Gbl.Usrs.Me.UsrDat.UsrCod);
-      if (IAmAFaverOfThisNot)	// I have favourited this note
+      if (TL_Fav_CheckIfNoteIsFavedByUsr (Not->NotCod,
+					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited this note
 	 TL_Fav_PutFormToUnfNote (Not->NotCod);
-      else			// I am not a faver of this note
+      else								// I am not a faver of this note
 	 TL_Fav_PutFormToFavNote (Not->NotCod);
      }
    HTM_DIV_End ();
@@ -242,7 +237,6 @@ void TL_Fav_PutFormToFavUnfNote (const struct TL_Not_Note *Not,
 
 static void TL_Fav_FavNote (struct TL_Not_Note *Not)
   {
-   bool ItsMe;
    long OriginalPubCod;
 
    /***** Get data of note *****/
@@ -251,8 +245,8 @@ static void TL_Fav_FavNote (struct TL_Not_Note *Not)
 
    if (Not->NotCod > 0)
      {
-      ItsMe = Usr_ItsMe (Not->UsrCod);
-      if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
+      if (Gbl.Usrs.Me.Logged &&
+	  !Usr_ItsMe (Not->UsrCod))	// I am not the author
 	 if (!TL_Fav_CheckIfNoteIsFavedByUsr (Not->NotCod,
 					      Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
 	   {
@@ -281,17 +275,15 @@ static void TL_Fav_FavNote (struct TL_Not_Note *Not)
 static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
   {
    long OriginalPubCod;
-   bool ItsMe;
 
    /***** Get data of note *****/
    Not->NotCod = TL_Not_GetParamNotCod ();
    TL_Not_GetDataOfNoteByCod (Not);
 
    if (Not->NotCod > 0)
-     {
-      ItsMe = Usr_ItsMe (Not->UsrCod);
       if (Not->NumFavs &&
-	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
+	  Gbl.Usrs.Me.Logged &&
+	  !Usr_ItsMe (Not->UsrCod))	// I am not the author
 	 if (TL_Fav_CheckIfNoteIsFavedByUsr (Not->NotCod,
 					     Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
 	   {
@@ -310,7 +302,6 @@ static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
 	    if (OriginalPubCod > 0)
 	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,OriginalPubCod);
 	   }
-     }
   }
 
 /*****************************************************************************/
@@ -383,24 +374,19 @@ void TL_Fav_UnfCommentGbl (void)
 void TL_Fav_PutFormToFavUnfComment (const struct TL_Com_Comment *Com,
                                     TL_Usr_HowManyUsrs_t HowManyUsrs)
   {
-   bool IAmTheAuthor;
-   bool IAmAFaverOfThisCom;
-
    /***** Put form to fav/unfav this comment *****/
    HTM_DIV_Begin ("class=\"TL_ICO\"");
-   IAmTheAuthor = Usr_ItsMe (Com->UsrCod);
-   if (IAmTheAuthor)			// I am the author
+   if (Usr_ItsMe (Com->UsrCod))			// I am the author
       /* Put disabled icon */
       TL_Fav_PutDisabledIconFav (Com->NumFavs);
    else				// I am not the author
      {
       /* Put icon to mark this comment as favourite */
-      IAmAFaverOfThisCom = TL_Fav_CheckIfCommIsFavedByUsr (Com->PubCod,
-							   Gbl.Usrs.Me.UsrDat.UsrCod);
-      if (IAmAFaverOfThisCom)	// I have favourited this comment
+      if (TL_Fav_CheckIfCommIsFavedByUsr (Com->PubCod,
+                                          Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited this comment
 	 /* Put icon to unfav this publication and list of users */
 	 TL_Fav_PutFormToUnfComment (Com->PubCod);
-      else				// I am not a favouriter
+      else								// I am not a favouriter
 	 /* Put icon to fav this publication and list of users */
 	 TL_Fav_PutFormToFavComment (Com->PubCod);
      }
@@ -412,8 +398,6 @@ void TL_Fav_PutFormToFavUnfComment (const struct TL_Com_Comment *Com,
 
 static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
   {
-   bool IAmTheAuthor;
-
    /***** Initialize image *****/
    Med_MediaConstructor (&Com->Content.Media);
 
@@ -422,9 +406,7 @@ static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
    TL_Com_GetDataOfCommByCod (Com);
 
    if (Com->PubCod > 0)
-     {
-      IAmTheAuthor = Usr_ItsMe (Com->UsrCod);
-      if (!IAmTheAuthor)	// I am not the author
+      if (!Usr_ItsMe (Com->UsrCod))	// I am not the author
 	 if (!TL_Fav_CheckIfCommIsFavedByUsr (Com->PubCod,
 					      Gbl.Usrs.Me.UsrDat.UsrCod)) // I have not yet favourited the comment
 	   {
@@ -445,7 +427,6 @@ static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
 	    TL_Ntf_CreateNotifToAuthor (Com->UsrCod,Com->PubCod,
 	                                Ntf_EVENT_TIMELINE_FAV);
 	   }
-     }
 
    /***** Free image *****/
    Med_MediaDestructor (&Com->Content.Media);
@@ -453,8 +434,6 @@ static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
 
 static void TL_Fav_UnfComment (struct TL_Com_Comment *Com)
   {
-   bool IAmTheAuthor;
-
    /***** Initialize image *****/
    Med_MediaConstructor (&Com->Content.Media);
 
@@ -463,10 +442,8 @@ static void TL_Fav_UnfComment (struct TL_Com_Comment *Com)
    TL_Com_GetDataOfCommByCod (Com);
 
    if (Com->PubCod > 0)
-     {
-      IAmTheAuthor = Usr_ItsMe (Com->UsrCod);
       if (Com->NumFavs &&
-	  !IAmTheAuthor)	// I am not the author
+	  !Usr_ItsMe (Com->UsrCod))	// I am not the author
 	 if (TL_Fav_CheckIfCommIsFavedByUsr (Com->PubCod,
 					     Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the comment
 	   {
@@ -483,7 +460,6 @@ static void TL_Fav_UnfComment (struct TL_Com_Comment *Com)
             /***** Mark possible notifications on this comment as removed *****/
             Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,Com->PubCod);
 	   }
-     }
 
    /***** Free image *****/
    Med_MediaDestructor (&Com->Content.Media);

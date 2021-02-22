@@ -426,7 +426,6 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
    struct TL_Not_Note Not;
    unsigned NumPubs;
    bool GlobalTimeline = (Gbl.Usrs.Other.UsrDat.UsrCod <= 0);
-   bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Title,
@@ -438,7 +437,8 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
       TL_Who_PutFormWho (Timeline);
 
    /***** Form to write a new post *****/
-   if (GlobalTimeline || ItsMe)
+   if (GlobalTimeline ||
+       Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
       TL_Pst_PutFormToWriteNewPost (Timeline);
 
    /***** New publications refreshed dynamically via AJAX *****/
