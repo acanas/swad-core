@@ -87,7 +87,7 @@ void TL_Frm_FormToShowHiddenComments (long NotCod,
 				      char IdComments[Frm_MAX_BYTES_ID + 1],
 				      unsigned NumInitialComments);
 
-void TL_Frm_EndAlertRemNote (struct TL_Timeline *Timeline);
-void TL_Frm_EndAlertRemComm (struct TL_Timeline *Timeline);
+void TL_Frm_EndAlertRemove (struct TL_Timeline *Timeline,TL_Frm_Action_t Action,
+                            void (*FuncParams) (void *Args));
 
 #endif

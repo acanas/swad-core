@@ -88,6 +88,7 @@ static void TL_Com_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
 static long TL_Com_ReceiveComment (void);
 
 static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline);
+static void TL_Com_PutParamsRemoveComment (void *Timeline);
 static void TL_Com_RemoveComment (void);
 
 static void TL_Com_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Com_Comment *Com);
@@ -813,7 +814,8 @@ static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline)
 
 	 /* End alert */
 	 Timeline->PubCod = Com.PubCod;	// Publication to be removed
-	 TL_Frm_EndAlertRemComm (Timeline);
+	 TL_Frm_EndAlertRemove (Timeline,TL_Frm_REM_COMM,
+	                        TL_Com_PutParamsRemoveComment);
 	}
      }
    else
@@ -827,13 +829,13 @@ static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline)
 /******************** Put parameters to remove a comment *********************/
 /*****************************************************************************/
 
-void TL_Com_PutParamsRemoveComment (void *Timeline)
+static void TL_Com_PutParamsRemoveComment (void *Timeline)
   {
    if (Timeline)
      {
-      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// User's timeline
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-      else
+      else					// Global timeline
 	 Usr_PutHiddenParamWho (((struct TL_Timeline *) Timeline)->Who);
       TL_Pub_PutHiddenParamPubCod (((struct TL_Timeline *) Timeline)->PubCod);
      }

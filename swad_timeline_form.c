@@ -270,33 +270,20 @@ void TL_Frm_FormToShowHiddenComments (long NotCod,
   }
 
 /*****************************************************************************/
-/*********************** End form to remove a note ***************************/
+/******************* End form to remove note / comment ***********************/
 /*****************************************************************************/
 
-void TL_Frm_EndAlertRemNote (struct TL_Timeline *Timeline)
+void TL_Frm_EndAlertRemove (struct TL_Timeline *Timeline,TL_Frm_Action_t Action,
+                            void (*FuncParams) (void *Args))
   {
    extern const char *Txt_Remove;
 
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-      Ale_ShowAlertAndButton2 (TL_Frm_ActionUsr[TL_Frm_REM_NOTE],"timeline",NULL,
-			       TL_Not_PutParamsRemoveNote,Timeline,
+      Ale_ShowAlertAndButton2 (TL_Frm_ActionUsr[Action],"timeline",NULL,
+			       FuncParams,Timeline,
 			       Btn_REMOVE_BUTTON,Txt_Remove);
    else
-      Ale_ShowAlertAndButton2 (TL_Frm_ActionGbl[TL_Frm_REM_NOTE],NULL,NULL,
-			       TL_Not_PutParamsRemoveNote,Timeline,
-			       Btn_REMOVE_BUTTON,Txt_Remove);
-  }
-
-void TL_Frm_EndAlertRemComm (struct TL_Timeline *Timeline)
-  {
-   extern const char *Txt_Remove;
-
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-      Ale_ShowAlertAndButton2 (TL_Frm_ActionUsr[TL_Frm_REM_COMM],"timeline",NULL,
-			       TL_Com_PutParamsRemoveComment,Timeline,
-			       Btn_REMOVE_BUTTON,Txt_Remove);
-   else
-      Ale_ShowAlertAndButton2 (TL_Frm_ActionUsr[TL_Frm_REM_COMM],NULL,NULL,
-			       TL_Com_PutParamsRemoveComment,Timeline,
+      Ale_ShowAlertAndButton2 (TL_Frm_ActionGbl[Action],NULL,NULL,
+			       FuncParams,Timeline,
 			       Btn_REMOVE_BUTTON,Txt_Remove);
   }

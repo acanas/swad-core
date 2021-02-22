@@ -85,6 +85,7 @@ static void TL_Not_PutFormToRemoveNote (const struct TL_Timeline *Timeline,
                                         long NotCod);
 
 static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline);
+static void TL_Not_PutParamsRemoveNote (void *Timeline);
 static void TL_Not_RemoveNote (void);
 static void TL_Not_RemoveNoteMediaAndDBEntries (struct TL_Not_Note *Not);
 
@@ -1039,7 +1040,8 @@ static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
 
 	 /* End alert */
          Timeline->NotCod = Not.NotCod;	// Note to be removed
-	 TL_Frm_EndAlertRemNote (Timeline);
+	 TL_Frm_EndAlertRemove (Timeline,TL_Frm_REM_NOTE,
+	                        TL_Not_PutParamsRemoveNote);
 	}
      }
    else
@@ -1050,13 +1052,13 @@ static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
 /********************* Put parameters to remove a note ***********************/
 /*****************************************************************************/
 
-void TL_Not_PutParamsRemoveNote (void *Timeline)
+static void TL_Not_PutParamsRemoveNote (void *Timeline)
   {
    if (Timeline)
      {
-      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// User's timeline
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-      else
+      else					// Global timeline
 	 Usr_PutHiddenParamWho (((struct TL_Timeline *) Timeline)->Who);
       TL_Not_PutHiddenParamNotCod (((struct TL_Timeline *) Timeline)->NotCod);
      }

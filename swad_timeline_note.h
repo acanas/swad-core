@@ -112,7 +112,6 @@ long TL_Not_GetParamNotCod (void);
 
 void TL_Not_RequestRemNoteUsr (void);
 void TL_Not_RequestRemNoteGbl (void);
-void TL_Not_PutParamsRemoveNote (void *Timeline);
 void TL_Not_RemoveNoteUsr (void);
 void TL_Not_RemoveNoteGbl (void);
 
