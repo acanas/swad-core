@@ -90,12 +90,10 @@ void TL_Not_ShowHighlightedNote (struct TL_Timeline *Timeline,
 void TL_Not_InsertNoteInJustRetrievedNotes (long NotCod);
 void TL_Not_InsertNoteInVisibleTimeline (long NotCod);
 
-void TL_Not_WriteNoteInList (const struct TL_Timeline *Timeline,
-	                     const struct TL_Not_Note *Not,
-                             TL_TopMessage_t TopMessage,
-                             long PublisherCod,			// Who did the action (publication, commenting, faving, sharing, mentioning)
-                             TL_Highlight_t Highlight,		// Highlight note
-                             TL_ShowAlone_t ShowNoteAlone);	// Note is shown alone, not in a list
+void TL_Not_WriteNoteWithTopMsg (const struct TL_Timeline *Timeline,
+	                         const struct TL_Not_Note *Not,
+                                 TL_TopMessage_t TopMessage,
+                                 long PublisherCod);
 void TL_Not_WriteAuthorName (const struct UsrData *UsrDat);
 
 void TL_Not_GetNoteSummary (const struct TL_Not_Note *Not,

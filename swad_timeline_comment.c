@@ -80,8 +80,7 @@ static void TL_Com_LinkToShowPreviousComments (const char IdComments[Frm_MAX_BYT
 static void TL_Com_PutIconToToggleComments (const char *UniqueId,
                                             const char *Icon,const char *Text);
 static void TL_Com_WriteComment (const struct TL_Timeline *Timeline,
-	                         struct TL_Com_Comment *Com,
-                                 TL_ShowAlone_t ShowCommentAlone);	// Comment is shown alone, not in a list
+	                         struct TL_Com_Comment *Com);
 static void TL_Com_WriteAuthorComment (struct UsrData *UsrDat);
 
 static void TL_Com_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
@@ -427,8 +426,9 @@ static void TL_Com_WriteOneCommentInList (const struct TL_Timeline *Timeline,
    TL_Com_GetDataOfCommentFromRow (row,&Com);
 
    /***** Write comment *****/
-   TL_Com_WriteComment (Timeline,&Com,
-		        TL_DONT_SHOW_ALONE);
+   HTM_LI_Begin ("class=\"TL_COM\"");
+   TL_Com_WriteComment (Timeline,&Com);
+   HTM_LI_End ();
 
    /***** Free image *****/
    Med_MediaDestructor (&Com.Content.Media);
@@ -497,8 +497,7 @@ static void TL_Com_PutIconToToggleComments (const char *UniqueId,
 /*****************************************************************************/
 
 static void TL_Com_WriteComment (const struct TL_Timeline *Timeline,
-	                         struct TL_Com_Comment *Com,
-                                 TL_ShowAlone_t ShowCommentAlone)	// Comment is shown alone, not in a list
+	                         struct TL_Com_Comment *Com)
   {
    struct UsrData AuthorDat;
    bool IAmTheAuthor;
@@ -508,29 +507,9 @@ static void TL_Com_WriteComment (const struct TL_Timeline *Timeline,
 
    NumDiv++;
 
-   if (ShowCommentAlone == TL_SHOW_ALONE)
-     {
-      /***** Box begin *****/
-      Box_BoxBegin (NULL,NULL,
-                    NULL,NULL,
-                    NULL,Box_NOT_CLOSABLE);
-
-      HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
-      HTM_DIV_End ();
-
-      HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
-      HTM_UL_Begin ("class=\"LIST_LEFT\"");
-     }
-
-   /***** Start list item *****/
-   HTM_LI_Begin (ShowCommentAlone == TL_SHOW_ALONE ? NULL :
-	                                             "class=\"TL_COM\"");
-
-   if (Com->PubCod <= 0 ||
-       Com->NotCod <= 0 ||
-       Com->UsrCod <= 0)
-      Ale_ShowAlert (Ale_ERROR,"Error in comment.");
-   else
+   if (Com->PubCod > 0 &&
+       Com->NotCod > 0 &&
+       Com->UsrCod > 0)
      {
       /***** Get author's data *****/
       Usr_UsrDataConstructor (&AuthorDat);
@@ -578,8 +557,9 @@ static void TL_Com_WriteComment (const struct TL_Timeline *Timeline,
 
       /* Put icon to remove this comment */
       HTM_DIV_Begin ("class=\"TL_REM\"");
-      if (IAmTheAuthor &&
-	  ShowCommentAlone == TL_DONT_SHOW_ALONE)
+      // if (IAmTheAuthor &&
+      //    ShowCommentAlone == TL_DONT_SHOW_ALONE)
+      if (IAmTheAuthor)
 	 TL_Com_PutFormToRemoveComment (Timeline,Com->PubCod);
       HTM_DIV_End ();
 
@@ -589,17 +569,8 @@ static void TL_Com_WriteComment (const struct TL_Timeline *Timeline,
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&AuthorDat);
      }
-
-   /***** End list item *****/
-   HTM_LI_End ();
-
-   if (ShowCommentAlone == TL_SHOW_ALONE)
-     {
-      /***** Box end *****/
-      HTM_UL_End ();
-      HTM_DIV_End ();
-      Box_BoxEnd ();
-     }
+   else
+      Ale_ShowAlert (Ale_ERROR,"Error in comment.");
   }
 
 /*****************************************************************************/
@@ -816,8 +787,18 @@ static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline)
 	 TL_Frm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_comment);
 
 	 /* Show comment */
-	 TL_Com_WriteComment (Timeline,&Com,
-			      TL_SHOW_ALONE);
+	 Box_BoxBegin (NULL,NULL,
+		       NULL,NULL,
+		       NULL,Box_NOT_CLOSABLE);
+
+	 HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
+	 HTM_DIV_End ();
+
+	 HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
+	 TL_Com_WriteComment (Timeline,&Com);
+	 HTM_DIV_End ();
+
+	 Box_BoxEnd ();
 
 	 /* End alert */
 	 Timeline->PubCod = Com.PubCod;	// Publication to be removed

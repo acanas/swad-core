@@ -69,6 +69,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod);
+static void TL_Not_WriteNote (const struct TL_Timeline *Timeline,
+                              const struct TL_Not_Note *Not);
 static void TL_Not_ShowAuthorPhoto (struct UsrData *UsrDat);
 static void TL_Not_WriteTop (const struct TL_Not_Note *Not,
                              const struct UsrData *UsrDat);
@@ -174,12 +176,11 @@ void TL_Not_ShowHighlightedNote (struct TL_Timeline *Timeline,
    Box_BoxBegin (NULL,NULL,
 		 NULL,NULL,
 		 NULL,Box_CLOSABLE);
-   HTM_UL_Begin ("class=\"TL_LIST\"");
-   TL_Not_WriteNoteInList (Timeline,Not,
-		           TopMessages[NotifyEvent],PublisherDat.UsrCod,
-		           TL_HIGHLIGHT,
-		           TL_SHOW_ALONE);
-   HTM_UL_End ();
+   HTM_DIV_Begin ("class=\"TL_WIDTH TL_NEW_PUB\"");
+   TL_Not_WriteNoteWithTopMsg (Timeline,Not,
+		               TopMessages[NotifyEvent],
+		               PublisherDat.UsrCod);
+   HTM_DIV_End ();
    Box_BoxEnd ();
   }
 
@@ -211,21 +212,11 @@ void TL_Not_InsertNoteInVisibleTimeline (long NotCod)
 /******************************** Write note *********************************/
 /*****************************************************************************/
 
-void TL_Not_WriteNoteInList (const struct TL_Timeline *Timeline,
-	                     const struct TL_Not_Note *Not,
-                             TL_TopMessage_t TopMessage,
-                             long PublisherCod,			// Who did the action (publication, commenting, faving, sharing, mentioning)
-                             TL_Highlight_t Highlight,		// Highlight note
-                             TL_ShowAlone_t ShowNoteAlone)	// Note is shown alone, not in a list
+void TL_Not_WriteNoteWithTopMsg (const struct TL_Timeline *Timeline,
+	                         const struct TL_Not_Note *Not,
+                                 TL_TopMessage_t TopMessage,
+                                 long PublisherCod)	// Who did the action (publication, commenting, faving, sharing, mentioning)
   {
-   /***** Start list item *****/
-   HTM_LI_Begin ("class=\"%s\"",
-		 ShowNoteAlone == TL_SHOW_ALONE ?
-		    (Highlight == TL_HIGHLIGHT ? "TL_WIDTH TL_NEW_PUB" :
-					         "TL_WIDTH") :
-		    (Highlight == TL_HIGHLIGHT ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
-					         "TL_WIDTH TL_SEP"));
-
    if (Not->NotCod   > 0 &&
        Not->UsrCod   > 0 &&
        Not->NoteType != TL_NOTE_UNKNOWN)
@@ -239,9 +230,6 @@ void TL_Not_WriteNoteInList (const struct TL_Timeline *Timeline,
      }
    else
       Ale_ShowAlert (Ale_ERROR,"Error in note.");
-
-   /***** End list item *****/
-   HTM_LI_End ();
   }
 
 /*****************************************************************************/
@@ -1129,12 +1117,11 @@ static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
 	 Box_BoxBegin (NULL,NULL,
 		       NULL,NULL,
 		       NULL,Box_CLOSABLE);
-	 HTM_UL_Begin ("class=\"TL_LIST\"");
-	 TL_Not_WriteNoteInList (Timeline,&Not,
-		                 TL_TOP_MESSAGE_NONE,-1L,
-		                 TL_DONT_HIGHLIGHT,
-		                 TL_SHOW_ALONE);
-	 HTM_UL_End ();
+	 HTM_DIV_Begin ("class=\"TL_WIDTH\"");
+	 TL_Not_WriteNoteWithTopMsg (Timeline,&Not,
+		                     TL_TOP_MESSAGE_NONE,
+		                     -1L);
+         HTM_DIV_End ();
 	 Box_BoxEnd ();
 
 	 /* End alert */

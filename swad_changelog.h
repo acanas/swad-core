@@ -553,8 +553,8 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.33.8 (2021-02-22)"
-#define CSS_FILE		"swad20.8.css"
+#define Log_PLATFORM_VERSION	"SWAD 20.33.9 (2021-02-22)"
+#define CSS_FILE		"swad20.33.9.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
 TODO: Juan Miguel Boyero Corral: Este verano ha habido varias personas que han solicitado incluir la funcionalidad del apartado de Actividades en SWADroid. Si lo ves viable podríamos estudiarlo.
@@ -601,6 +601,7 @@ TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse 
 TODO: BUG: Cuando un tipo de grupo sólo tiene un grupo, inscribirse es voluntario, el estudiante sólo puede pertenecer a un grupo, y se inscribe en él, debería poder desapuntarse. Ahora no puede.
 TODO: Salvador Romero Cortés: @acanas opción para editar posts
 
+	Version 20.33.9:  Feb 22, 2021  Code refactoring related to writing a timeline comment. (304949 lines)
 	Version 20.33.8:  Feb 22, 2021  Code refactoring related to writing a timeline note. (304971 lines)
 	Version 20.33.7:  Feb 22, 2021  Code refactoring related to writing a timeline note. (304923 lines)
 	Version 20.33.6:  Feb 22, 2021  Code refactoring related to writing a timeline note. (304898 lines)

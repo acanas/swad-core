@@ -469,11 +469,12 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
       TL_Not_GetDataOfNoteByCod (&Not);
 
       /* Write note */
-      TL_Not_WriteNoteInList (Timeline,&Not,
-                              TL_Pub_GetTopMessage (Pub->PubType),Pub->PublisherCod,
-		              Not.NotCod == NotCodToHighlight ? TL_HIGHLIGHT :
-			                                        TL_DONT_HIGHLIGHT,
-		              TL_DONT_SHOW_ALONE);
+      HTM_LI_Begin ("class=\"%s\"",Not.NotCod == NotCodToHighlight ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
+							             "TL_WIDTH TL_SEP");
+      TL_Not_WriteNoteWithTopMsg (Timeline,&Not,
+                                  TL_Pub_GetTopMessage (Pub->PubType),
+                                  Pub->PublisherCod);
+      HTM_LI_End ();
      }
    HTM_UL_End ();
 

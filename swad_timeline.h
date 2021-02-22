@@ -90,7 +90,7 @@ struct TL_Timeline
    long NotCod;		// Used as parameter about social note to be edited, removed...
    long PubCod;		// Used as parameter about social publishing to be edited, removed...
   };
-
+/*
 typedef enum
   {
    TL_DONT_HIGHLIGHT,
@@ -102,7 +102,7 @@ typedef enum
    TL_DONT_SHOW_ALONE,
    TL_SHOW_ALONE,
   } TL_ShowAlone_t;
-
+*/
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
