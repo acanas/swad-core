@@ -540,9 +540,9 @@ void TL_Pub_InsertNewPubsInTimeline (struct TL_Timeline *Timeline)
 
       /* Write note */
       HTM_LI_Begin ("class=\"TL_WIDTH TL_SEP TL_NEW_PUB\"");
-      TL_Not_WriteNoteWithTopMsg (Timeline,&Not,
-                                  TL_Pub_GetTopMessage (Pub->PubType),
-                                  Pub->PublisherCod);
+      TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+                                          TL_Pub_GetTopMessage (Pub->PubType),
+                                          Pub->PublisherCod);
       HTM_LI_End ();
      }
   }
@@ -568,9 +568,9 @@ void TL_Pub_ShowOldPubsInTimeline (struct TL_Timeline *Timeline)
 
       /* Write note */
       HTM_LI_Begin ("class=\"TL_WIDTH TL_SEP\"");
-      TL_Not_WriteNoteWithTopMsg (Timeline,&Not,
-                                  TL_Pub_GetTopMessage (Pub->PubType),
-                                  Pub->PublisherCod);
+      TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+                                          TL_Pub_GetTopMessage (Pub->PubType),
+                                          Pub->PublisherCod);
       HTM_LI_End ();
      }
   }

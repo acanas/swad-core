@@ -72,8 +72,8 @@ static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod
 static void TL_Not_WriteNote (const struct TL_Timeline *Timeline,
                               const struct TL_Not_Note *Not);
 static void TL_Not_ShowAuthorPhoto (struct UsrData *UsrDat);
-static void TL_Not_WriteTop (const struct TL_Not_Note *Not,
-                             const struct UsrData *UsrDat);
+static void TL_Not_WriteAuthorTimeAndContent (const struct TL_Not_Note *Not,
+                                              const struct UsrData *UsrDat);
 
 static void TL_Not_WriteContent (const struct TL_Not_Note *Not);
 static void TL_Not_GetAndWriteNoPost (const struct TL_Not_Note *Not);
@@ -88,17 +88,17 @@ static void TL_Not_WriteLocationInHierarchy (const struct TL_Not_Note *Not,
 static void TL_Not_PutFormGoToAction (const struct TL_Not_Note *Not,
                                       const struct For_Forums *Forums);
 
-static void TL_Not_WriteBottom (const struct TL_Timeline *Timeline,
+static void TL_Not_WriteButtonsAndComments (const struct TL_Timeline *Timeline,
                                 const struct TL_Not_Note *Not,
                                 const struct UsrData *UsrDat);
 static void TL_Not_WriteButtonToAddAComment (const struct TL_Not_Note *Not,
                                              const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
-static void TL_Not_WriteFootAndComments (const struct TL_Timeline *Timeline,
-					 const struct TL_Not_Note *Not,
-					 const struct UsrData *UsrDat);
-static void TL_Not_WriteFoot (const struct TL_Timeline *Timeline,
-                              const struct TL_Not_Note *Not,
-                              const struct UsrData *UsrDat);
+static void TL_Not_WriteFavShaRemAndComments (const struct TL_Timeline *Timeline,
+					      const struct TL_Not_Note *Not,
+					      const struct UsrData *UsrDat);
+static void TL_Not_WriteFavShaRem (const struct TL_Timeline *Timeline,
+                                   const struct TL_Not_Note *Not,
+                                   const struct UsrData *UsrDat);
 
 static void TL_Not_PutFormToRemoveNote (const struct TL_Timeline *Timeline,
                                         long NotCod);
@@ -177,9 +177,9 @@ void TL_Not_ShowHighlightedNote (struct TL_Timeline *Timeline,
 		 NULL,NULL,
 		 NULL,Box_CLOSABLE);
    HTM_DIV_Begin ("class=\"TL_WIDTH TL_NEW_PUB\"");
-   TL_Not_WriteNoteWithTopMsg (Timeline,Not,
-		               TopMessages[NotifyEvent],
-		               PublisherDat.UsrCod);
+   TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,Not,
+		                       TopMessages[NotifyEvent],
+		                       PublisherDat.UsrCod);
    HTM_DIV_End ();
    Box_BoxEnd ();
   }
@@ -209,14 +209,39 @@ void TL_Not_InsertNoteInVisibleTimeline (long NotCod)
   }
 
 /*****************************************************************************/
-/******************************** Write note *********************************/
+/****************** Check and write note with top message ********************/
 /*****************************************************************************/
 
-void TL_Not_WriteNoteWithTopMsg (const struct TL_Timeline *Timeline,
-	                         const struct TL_Not_Note *Not,
-                                 TL_TopMessage_t TopMessage,
-                                 long PublisherCod)	// Who did the action (publication, commenting, faving, sharing, mentioning)
+void TL_Not_CheckAndWriteNoteWithTopMsg (const struct TL_Timeline *Timeline,
+	                                 const struct TL_Not_Note *Not,
+                                         TL_TopMessage_t TopMessage,
+                                         long PublisherCod)	// Who did the action (publication, commenting, faving, sharing, mentioning)
   {
+   /*__________________________________________
+   |                                           | \
+   | Top message:                              |   > top message
+   |___________________________________________| /
+   | _____  |                      |           | \              \
+   ||     | | Author's name        | Date-time |  |              |
+   ||Auth.| |______________________|___________|  |              |
+   ||photo| |                                  |  |  author's    |
+   ||_____| |                                  |   > name, time  |
+   |        |               Note               |  |  and content |
+   |        |             content              |  |              |
+   |        |                                  |  |              |
+   |        |__________________________________| /               |
+   |        |             |             |      | \               |
+   |        | Favs        | Shared      |Remove|  |               > note
+   |        |_____________|_____________|______|  |              |
+   |________|                                  |  |              |
+   |        |             List                 |  |  buttons     |
+   | Comment|              of                  |   > and         |
+   | icon   |           comments               |  |  comments    |
+   |________|__________________________________|  |              |
+            |                                  |  |              |
+            |    Form to write new comment     |  |              |
+            |__________________________________| /              /
+   */
    if (Not->NotCod   > 0 &&
        Not->UsrCod   > 0 &&
        Not->NoteType != TL_NOTE_UNKNOWN)
@@ -282,21 +307,19 @@ static void TL_Not_WriteNote (const struct TL_Timeline *Timeline,
   {
    struct UsrData UsrDat;	// Author of the note
 
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
-
    /***** Get author data *****/
+   Usr_UsrDataConstructor (&UsrDat);
    UsrDat.UsrCod = Not->UsrCod;
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
-   /***** Left top: write author's photo *****/
+   /***** Left top: author's photo *****/
    TL_Not_ShowAuthorPhoto (&UsrDat);
 
-   /***** Right top: author's name, time, summary and buttons *****/
-   TL_Not_WriteTop (Not,&UsrDat);
+   /***** Right top: author's name, time, and content *****/
+   TL_Not_WriteAuthorTimeAndContent (Not,&UsrDat);
 
    /***** Bottom: buttons and comments *****/
-   TL_Not_WriteBottom (Timeline,Not,&UsrDat);
+   TL_Not_WriteButtonsAndComments (Timeline,Not,&UsrDat);
 
    /***** Free memory used for author's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -324,10 +347,10 @@ static void TL_Not_ShowAuthorPhoto (struct UsrData *UsrDat)
 /**** Write top right part of a note: author's name, time and note content ***/
 /*****************************************************************************/
 
-static void TL_Not_WriteTop (const struct TL_Not_Note *Not,
-                             const struct UsrData *UsrDat)
+static void TL_Not_WriteAuthorTimeAndContent (const struct TL_Not_Note *Not,
+                                              const struct UsrData *UsrDat)
   {
-   /***** Begin right container *****/
+   /***** Begin top container *****/
    HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
 
    /***** Write author's full name *****/
@@ -339,7 +362,7 @@ static void TL_Not_WriteTop (const struct TL_Not_Note *Not,
    /***** Write content of the note *****/
    TL_Not_WriteContent (Not);
 
-   /***** End right container *****/
+   /***** End top container *****/
    HTM_DIV_End ();
   }
 
@@ -726,7 +749,7 @@ void TL_Not_GetNoteSummary (const struct TL_Not_Note *Not,
 /************************ Write bottom part of a note ************************/
 /*****************************************************************************/
 
-static void TL_Not_WriteBottom (const struct TL_Timeline *Timeline,
+static void TL_Not_WriteButtonsAndComments (const struct TL_Timeline *Timeline,
                                 const struct TL_Not_Note *Not,
                                 const struct UsrData *UsrDat)	// Author
   {
@@ -738,8 +761,8 @@ static void TL_Not_WriteBottom (const struct TL_Timeline *Timeline,
    /***** Left: button to add a comment *****/
    TL_Not_WriteButtonToAddAComment (Not,IdNewComment);
 
-   /***** Right: write foot and comments *****/
-   TL_Not_WriteFootAndComments (Timeline,Not,UsrDat);
+   /***** Right: write favs, shared and remove buttons, and comments *****/
+   TL_Not_WriteFavShaRemAndComments (Timeline,Not,UsrDat);
 
    /***** Put hidden form to write a new comment *****/
    TL_Com_PutHiddenFormToWriteNewComment (Timeline,Not->NotCod,IdNewComment);
@@ -761,33 +784,33 @@ static void TL_Not_WriteButtonToAddAComment (const struct TL_Not_Note *Not,
   }
 
 /*****************************************************************************/
-/******************** Write foot and comments of a note **********************/
+/******* Write favs, shared and remove buttons, and comments of a note *******/
 /*****************************************************************************/
 
-static void TL_Not_WriteFootAndComments (const struct TL_Timeline *Timeline,
-					 const struct TL_Not_Note *Not,
-					 const struct UsrData *UsrDat)	// Author
+static void TL_Not_WriteFavShaRemAndComments (const struct TL_Timeline *Timeline,
+					      const struct TL_Not_Note *Not,
+					      const struct UsrData *UsrDat)	// Author
   {
-   /***** Begin container for foot and comments *****/
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"TL_BOTTOM_RIGHT TL_RIGHT_WIDTH\"");
 
-   /***** Write foot of a note *****/
-   TL_Not_WriteFoot (Timeline,Not,UsrDat);
+   /***** Write favs, shared and remove buttons int the foot of a note *****/
+   TL_Not_WriteFavShaRem (Timeline,Not,UsrDat);
 
    /***** Comments *****/
    TL_Com_WriteCommentsInNote (Timeline,Not);
 
-   /***** End container for buttons and comments *****/
+   /***** End container *****/
    HTM_DIV_End ();
   }
 
 /*****************************************************************************/
-/*************************** Write foot of a note ****************************/
+/******* Write favs, shared and remove buttons in the foot of a note *********/
 /*****************************************************************************/
 
-static void TL_Not_WriteFoot (const struct TL_Timeline *Timeline,
-                              const struct TL_Not_Note *Not,
-                              const struct UsrData *UsrDat)	// Author
+static void TL_Not_WriteFavShaRem (const struct TL_Timeline *Timeline,
+                                   const struct TL_Not_Note *Not,
+                                   const struct UsrData *UsrDat)	// Author
   {
    static unsigned NumDiv = 0;	// Used to create unique div id for fav and shared
 
@@ -796,19 +819,19 @@ static void TL_Not_WriteFoot (const struct TL_Timeline *Timeline,
    /***** Begin foot container *****/
    HTM_DIV_Begin ("class=\"TL_FOOT TL_RIGHT_WIDTH\"");
 
-   /***** Foot column 1: Fav zone *****/
+   /***** Foot column 1: fav zone *****/
    HTM_DIV_Begin ("id=\"fav_not_%s_%u\" class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\"",
 		  Gbl.UniqueNameEncrypted,NumDiv);
    TL_Fav_PutFormToFavUnfNote (Not,TL_Usr_SHOW_FEW_USRS);
    HTM_DIV_End ();
 
-   /***** Foot column 2: Share zone *****/
+   /***** Foot column 2: share zone *****/
    HTM_DIV_Begin ("id=\"sha_not_%s_%u\" class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\"",
 		  Gbl.UniqueNameEncrypted,NumDiv);
    TL_Sha_PutFormToShaUnsNote (Not,TL_Usr_SHOW_FEW_USRS);
    HTM_DIV_End ();
 
-   /***** Foot column 3: Icon to remove this note *****/
+   /***** Foot column 3: icon to remove this note *****/
    HTM_DIV_Begin ("class=\"TL_REM\"");
    if (Usr_ItsMe (UsrDat->UsrCod))	// I am the author
       TL_Not_PutFormToRemoveNote (Timeline,Not->NotCod);
@@ -1118,9 +1141,9 @@ static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
 		       NULL,NULL,
 		       NULL,Box_CLOSABLE);
 	 HTM_DIV_Begin ("class=\"TL_WIDTH\"");
-	 TL_Not_WriteNoteWithTopMsg (Timeline,&Not,
-		                     TL_TOP_MESSAGE_NONE,
-		                     -1L);
+	 TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+		                             TL_TOP_MESSAGE_NONE,
+		                             -1L);
          HTM_DIV_End ();
 	 Box_BoxEnd ();
 

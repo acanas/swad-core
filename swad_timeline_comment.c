@@ -79,9 +79,18 @@ static void TL_Com_LinkToShowPreviousComments (const char IdComments[Frm_MAX_BYT
 				               unsigned NumInitialComments);
 static void TL_Com_PutIconToToggleComments (const char *UniqueId,
                                             const char *Icon,const char *Text);
+static void TL_Com_CheckAndWriteComment (const struct TL_Timeline *Timeline,
+	                                 struct TL_Com_Comment *Com);
 static void TL_Com_WriteComment (const struct TL_Timeline *Timeline,
 	                         struct TL_Com_Comment *Com);
-static void TL_Com_WriteAuthorComment (struct UsrData *UsrDat);
+static void TL_Com_ShowAuthorPhoto (struct UsrData *UsrDat);
+static void TL_Com_WriteAuthorTimeAndContent (struct TL_Com_Comment *Com,
+                                              const struct UsrData *UsrDat);
+static void TL_Com_WriteAuthorName (const struct UsrData *UsrDat);
+static void TL_Com_WriteContent (struct TL_Com_Comment *Com);
+static void TL_Com_WriteButtons (const struct TL_Timeline *Timeline,
+	                        const struct TL_Com_Comment *Com,
+                                const struct UsrData *UsrDat);
 
 static void TL_Com_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
 	                                   long PubCod);
@@ -162,7 +171,7 @@ void TL_Com_PutHiddenFormToWriteNewComment (const struct TL_Timeline *Timeline,
 
    /* Textarea and button */
    TL_Pst_PutTextarea (Txt_New_TIMELINE_comment,
-	           "TL_COM_TEXTAREA TL_COMM_WIDTH");
+	               "TL_COM_TEXTAREA TL_COMM_WIDTH");
 
    /* End form */
    Frm_EndForm ();
@@ -427,7 +436,7 @@ static void TL_Com_WriteOneCommentInList (const struct TL_Timeline *Timeline,
 
    /***** Write comment *****/
    HTM_LI_Begin ("class=\"TL_COM\"");
-   TL_Com_WriteComment (Timeline,&Com);
+   TL_Com_CheckAndWriteComment (Timeline,&Com);
    HTM_LI_End ();
 
    /***** Free image *****/
@@ -493,91 +502,109 @@ static void TL_Com_PutIconToToggleComments (const char *UniqueId,
   }
 
 /*****************************************************************************/
+/************************** Check and write comment **************************/
+/*****************************************************************************/
+
+static void TL_Com_CheckAndWriteComment (const struct TL_Timeline *Timeline,
+	                                 struct TL_Com_Comment *Com)
+  {
+   /*__________________________________________
+   | _____  |                      |           | \              \
+   ||     | | Author's name        | Date-time |  |              |
+   ||Auth.| |______________________|___________|  |              |
+   ||photo| |                                  |  |  author's    |
+   ||_____| |                                  |   > name, time  |
+   |        |             Comment              |  |  and content  > comment
+   |        |             content              |  |              |
+   |        |                                  |  |              |
+   |        |__________________________________| /               |
+   |        |                           |      | \               |
+   |        | Favs                      |Remove|   > buttons     |
+   |________|___________________________|______| /              /
+   */
+   if (Com->PubCod > 0 &&
+       Com->NotCod > 0 &&
+       Com->UsrCod > 0)
+      /***** Write comment *****/
+      TL_Com_WriteComment (Timeline,Com);
+   else
+      Ale_ShowAlert (Ale_ERROR,"Error in comment.");
+  }
+
+/*****************************************************************************/
 /******************************** Write comment ******************************/
 /*****************************************************************************/
 
 static void TL_Com_WriteComment (const struct TL_Timeline *Timeline,
 	                         struct TL_Com_Comment *Com)
   {
-   struct UsrData AuthorDat;
-   bool IAmTheAuthor;
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
-   static unsigned NumDiv = 0;	// Used to create unique div id for fav
+   struct UsrData UsrDat;	// Author of the comment
 
-   NumDiv++;
+   /***** Get author's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+   UsrDat.UsrCod = Com->UsrCod;
+   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
-   if (Com->PubCod > 0 &&
-       Com->NotCod > 0 &&
-       Com->UsrCod > 0)
-     {
-      /***** Get author's data *****/
-      Usr_UsrDataConstructor (&AuthorDat);
-      AuthorDat.UsrCod = Com->UsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&AuthorDat,Usr_DONT_GET_PREFS);
-      IAmTheAuthor = Usr_ItsMe (AuthorDat.UsrCod);
+   /***** Left: author's photo *****/
+   TL_Com_ShowAuthorPhoto (&UsrDat);
 
-      /***** Left: write author's photo *****/
-      HTM_DIV_Begin ("class=\"TL_COM_PHOTO\"");
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&AuthorDat,PhotoURL);
-      Pho_ShowUsrPhoto (&AuthorDat,ShowPhoto ? PhotoURL :
-					       NULL,
-			"PHOTO30x40",Pho_ZOOM,true);	// Use unique id
-      HTM_DIV_End ();
+   /***** Right: author's name, time, content, and buttons *****/
+   /* Begin container */
+   HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
 
-      /***** Right: author's name, time, content, image and buttons *****/
-      HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
+   /* Right top: author's name, time, and content */
+   TL_Com_WriteAuthorTimeAndContent (Com,&UsrDat);
 
-      /* Write author's full name and nickname */
-      TL_Com_WriteAuthorComment (&AuthorDat);
+   /* Right bottom: buttons */
+   TL_Com_WriteButtons (Timeline,Com,&UsrDat);
 
-      /* Write date and time */
-      TL_WriteDateTime (Com->DateTimeUTC);
+   /* End container */
+   HTM_DIV_End ();
 
-      /* Write content of the comment */
-      if (Com->Content.Txt[0])
-	{
-	 HTM_DIV_Begin ("class=\"TL_TXT\"");
-	 Msg_WriteMsgContent (Com->Content.Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
-	 HTM_DIV_End ();
-	}
-
-      /* Show image */
-      Med_ShowMedia (&Com->Content.Media,"TL_COM_MED_CONT TL_COMM_WIDTH",
-	                                 "TL_COM_MED TL_COMM_WIDTH");
-
-      /* Start foot container */
-      HTM_DIV_Begin ("class=\"TL_FOOT TL_COMM_WIDTH\"");
-
-      /* Fav zone */
-      HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"TL_FAV_COM TL_FAV_WIDTH\"",
-	             Gbl.UniqueNameEncrypted,NumDiv);
-      TL_Fav_PutFormToFavUnfComment (Com,TL_Usr_SHOW_FEW_USRS);
-      HTM_DIV_End ();
-
-      /* Put icon to remove this comment */
-      HTM_DIV_Begin ("class=\"TL_REM\"");
-      // if (IAmTheAuthor &&
-      //    ShowCommentAlone == TL_DONT_SHOW_ALONE)
-      if (IAmTheAuthor)
-	 TL_Com_PutFormToRemoveComment (Timeline,Com->PubCod);
-      HTM_DIV_End ();
-
-      /* End foot container */
-      HTM_DIV_End ();
-
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&AuthorDat);
-     }
-   else
-      Ale_ShowAlert (Ale_ERROR,"Error in comment.");
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/
-/********* Write name and nickname of author of a comment to a note **********/
+/********************* Show photo of author of a comment *********************/
 /*****************************************************************************/
 
-static void TL_Com_WriteAuthorComment (struct UsrData *UsrDat)
+static void TL_Com_ShowAuthorPhoto (struct UsrData *UsrDat)
+  {
+   bool ShowPhoto = false;
+   char PhotoURL[PATH_MAX + 1];
+
+   /***** Show author's photo *****/
+   HTM_DIV_Begin ("class=\"TL_COM_PHOTO\"");
+   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
+   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+				        NULL,
+		     "PHOTO30x40",Pho_ZOOM,true);	// Use unique id
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/**** Write top right part of a note: author's name, time and note content ***/
+/*****************************************************************************/
+
+static void TL_Com_WriteAuthorTimeAndContent (struct TL_Com_Comment *Com,
+                                              const struct UsrData *UsrDat)	// Author
+  {
+   /***** Write author's full name and nickname *****/
+   TL_Com_WriteAuthorName (UsrDat);
+
+   /***** Write date and time *****/
+   TL_WriteDateTime (Com->DateTimeUTC);
+
+   /***** Write content of the comment *****/
+   TL_Com_WriteContent (Com);
+  }
+
+/*****************************************************************************/
+/*************** Write name of author of a comment to a note *****************/
+/*****************************************************************************/
+
+static void TL_Com_WriteAuthorName (const struct UsrData *UsrDat)	// Author
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
@@ -592,6 +619,56 @@ static void TL_Com_WriteAuthorComment (struct UsrData *UsrDat)
    HTM_Txt (UsrDat->FullName);
    HTM_BUTTON_End ();
    Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/************************* Write content of comment **************************/
+/*****************************************************************************/
+
+static void TL_Com_WriteContent (struct TL_Com_Comment *Com)
+  {
+   /***** Write content of the comment *****/
+   if (Com->Content.Txt[0])
+     {
+      HTM_DIV_Begin ("class=\"TL_TXT\"");
+      Msg_WriteMsgContent (Com->Content.Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
+      HTM_DIV_End ();
+     }
+
+   /***** Show image *****/
+   Med_ShowMedia (&Com->Content.Media,"TL_COM_MED_CONT TL_COMM_WIDTH",
+				      "TL_COM_MED TL_COMM_WIDTH");
+  }
+
+/*****************************************************************************/
+/********************* Write bottom part of a comment ************************/
+/*****************************************************************************/
+
+static void TL_Com_WriteButtons (const struct TL_Timeline *Timeline,
+	                        const struct TL_Com_Comment *Com,
+                                const struct UsrData *UsrDat)
+  {
+   static unsigned NumDiv = 0;	// Used to create unique div id for fav
+
+   NumDiv++;
+
+   /***** Begin buttons container *****/
+   HTM_DIV_Begin ("class=\"TL_FOOT TL_COMM_WIDTH\"");
+
+   /***** Foot column 1: fav zone *****/
+   HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"TL_FAV_COM TL_FAV_WIDTH\"",
+		  Gbl.UniqueNameEncrypted,NumDiv);
+   TL_Fav_PutFormToFavUnfComment (Com,TL_Usr_SHOW_FEW_USRS);
+   HTM_DIV_End ();
+
+   /***** Foot column 2: icon to remove this comment *****/
+   HTM_DIV_Begin ("class=\"TL_REM\"");
+   if (Usr_ItsMe (UsrDat->UsrCod))	// I am the author
+      TL_Com_PutFormToRemoveComment (Timeline,Com->PubCod);
+   HTM_DIV_End ();
+
+   /***** End buttons container *****/
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -795,7 +872,7 @@ static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline)
 	 HTM_DIV_End ();
 
 	 HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
-	 TL_Com_WriteComment (Timeline,&Com);
+	 TL_Com_CheckAndWriteComment (Timeline,&Com);
 	 HTM_DIV_End ();
 
 	 Box_BoxEnd ();
