@@ -410,28 +410,28 @@ static void TL_Fav_PutFormToFavUnfNote (long NotCod)
   {
    extern const char *Txt_TIMELINE_Favourite;
    extern const char *Txt_TIMELINE_Mark_as_favourite;
-   bool FavUnf;
-   static TL_Frm_Action_t Action[2] =
+   struct TL_Form Form[2] =
      {
-      TL_Frm_FAV_NOTE,			// Not faved ==> fav
-      TL_Frm_UNF_NOTE,			// Faved     ==> unfav
+      [false] = // I have not faved ==> fav
+        {
+         .Action      = TL_Frm_FAV_NOTE,
+         .ParamFormat = "NotCod=%ld",
+         .ParamCod    = NotCod,
+         .Icon        = TL_Fav_ICON_FAV,
+         .Title       = Txt_TIMELINE_Mark_as_favourite,
+        },
+      [true] = // I have faved ==> unfav
+	{
+	 .Action      = TL_Frm_UNF_NOTE,
+	 .ParamFormat = "NotCod=%ld",
+	 .ParamCod    = NotCod,
+	 .Icon        = TL_Fav_ICON_FAVED,
+	 .Title       = Txt_TIMELINE_Favourite,
+	},
      };
-   static const char *Icon[2] =
-     {
-      TL_Fav_ICON_FAV,			// Not faved ==> put icon to fav
-      TL_Fav_ICON_FAVED,		// Faved     ==> put icon to unfav
-     };
-   const char *Title[2] =
-     {
-      Txt_TIMELINE_Mark_as_favourite,	// Not faved ==> put text to fav
-      Txt_TIMELINE_Favourite,		// Faved     ==> put text to unfav
-     };
-
-   /***** Select whether fav/unfav *****/
-   FavUnf = TL_Fav_CheckIfNoteIsFavedByUsr (NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);	// I have favourited this note
 
    /***** Form and icon to fav/unfav note *****/
-   TL_Frm_FormFavSha (Action[FavUnf],"NotCod=%ld",NotCod,Icon[FavUnf],Title[FavUnf]);
+   TL_Frm_FormFavSha (&Form[TL_Fav_CheckIfNoteIsFavedByUsr (NotCod,Gbl.Usrs.Me.UsrDat.UsrCod)]);
   }
 
 /*****************************************************************************/
@@ -442,28 +442,28 @@ static void TL_Fav_PutFormToFavUnfComm (long PubCod)
   {
    extern const char *Txt_TIMELINE_Favourite;
    extern const char *Txt_TIMELINE_Mark_as_favourite;
-   bool FavUnf;
-   static TL_Frm_Action_t Action[2] =
+   struct TL_Form Form[2] =
      {
-      TL_Frm_FAV_COMM,			// Not faved ==> fav
-      TL_Frm_UNF_COMM,			// Faved     ==> unfav
+      [false] = // I have not faved ==> fav
+        {
+         .Action      = TL_Frm_FAV_COMM,
+         .ParamFormat = "PubCod=%ld",
+         .ParamCod    = PubCod,
+         .Icon        = TL_Fav_ICON_FAV,
+         .Title       = Txt_TIMELINE_Mark_as_favourite,
+        },
+      [true] = // I have faved ==> unfav
+	{
+	 .Action      = TL_Frm_UNF_COMM,
+	 .ParamFormat = "PubCod=%ld",
+	 .ParamCod    = PubCod,
+	 .Icon        = TL_Fav_ICON_FAVED,
+	 .Title       = Txt_TIMELINE_Favourite,
+	},
      };
-   static const char *Icon[2] =
-     {
-      TL_Fav_ICON_FAV,			// Not faved ==> put icon to fav
-      TL_Fav_ICON_FAVED,		// Faved     ==> put icon to unfav
-     };
-   const char *Title[2] =
-     {
-      Txt_TIMELINE_Mark_as_favourite,	// Not faved ==> put text to fav
-      Txt_TIMELINE_Favourite,		// Faved     ==> put text to unfav
-     };
-
-   /***** Select whether fav/unfav *****/
-   FavUnf = TL_Fav_CheckIfNoteIsFavedByUsr (PubCod,Gbl.Usrs.Me.UsrDat.UsrCod);	// I have favourited this comment
 
    /***** Form and icon to fav/unfav *****/
-   TL_Frm_FormFavSha (Action[FavUnf],"PubCod=%ld",PubCod,Icon[FavUnf],Title[FavUnf]);
+   TL_Frm_FormFavSha (&Form[TL_Fav_CheckIfNoteIsFavedByUsr (PubCod,Gbl.Usrs.Me.UsrDat.UsrCod)]);
   }
 
 /*****************************************************************************/

@@ -128,15 +128,23 @@ void TL_Frm_PutFormToSeeAllFaversSharers (TL_Frm_Action_t Action,
                                           TL_Usr_HowManyUsrs_t HowManyUsrs)
   {
    extern const char *Txt_View_all_USERS;
+   struct TL_Form Form =
+     {
+      .Action      = Action,
+      .ParamFormat = ParamFormat,
+      .ParamCod    = ParamCod,
+      .Icon        = TL_Frm_ICON_ELLIPSIS,
+      .Title       = Txt_View_all_USERS,
+     };
 
    switch (HowManyUsrs)
      {
       case TL_Usr_SHOW_FEW_USRS:
-	 /***** Form and icon to mark note as favourite *****/
-	 TL_Frm_FormFavSha (Action,ParamFormat,ParamCod,
-			    TL_Frm_ICON_ELLIPSIS,Txt_View_all_USERS);
+	 /***** Form and icon to view all users *****/
+	 TL_Frm_FormFavSha (&Form);
 	 break;
       case TL_Usr_SHOW_ALL_USRS:
+	 /***** Disabled icon *****/
          Ico_PutIconOff (TL_Frm_ICON_ELLIPSIS,Txt_View_all_USERS);
 	 break;
      }
@@ -146,15 +154,13 @@ void TL_Frm_PutFormToSeeAllFaversSharers (TL_Frm_Action_t Action,
 /******* Form to fav/unfav or share/unshare in global or user timeline *******/
 /*****************************************************************************/
 
-void TL_Frm_FormFavSha (TL_Frm_Action_t Action,
-		        const char *ParamFormat,long ParamCod,
-		        const char *Icon,const char *Title)
+void TL_Frm_FormFavSha (const struct TL_Form *Form)
   {
    char *OnSubmit;
    char ParamStr[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Create parameter string *****/
-   sprintf (ParamStr,ParamFormat,ParamCod);
+   sprintf (ParamStr,Form->ParamFormat,Form->ParamCod);
 
    /*
    +---------------------------------------------------------------------------+
@@ -178,7 +184,7 @@ void TL_Frm_FormFavSha (TL_Frm_Action_t Action,
       if (asprintf (&OnSubmit,"updateDivFaversSharers(this,"
 			      "'act=%ld&ses=%s&%s&OtherUsrCod=%s');"
 			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (TL_Frm_ActionUsr[Action]),
+		    Act_GetActCod (TL_Frm_ActionUsr[Form->Action]),
 		    Gbl.Session.Id,
 		    ParamStr,
 		    Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
@@ -190,13 +196,13 @@ void TL_Frm_FormFavSha (TL_Frm_Action_t Action,
       if (asprintf (&OnSubmit,"updateDivFaversSharers(this,"
 			      "'act=%ld&ses=%s&%s');"
 			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (TL_Frm_ActionGbl[Action]),
+		    Act_GetActCod (TL_Frm_ActionGbl[Form->Action]),
 		    Gbl.Session.Id,
 		    ParamStr) < 0)
 	 Lay_NotEnoughMemoryExit ();
       Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
      }
-   Ico_PutIconLink (Icon,Title);
+   Ico_PutIconLink (Form->Icon,Form->Title);
    Frm_EndForm ();
 
    /* Free allocated memory */

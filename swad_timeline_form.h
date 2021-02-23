@@ -27,12 +27,6 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-// #include "swad_form.h"
-// #include "swad_media.h"
-// #include "swad_notification.h"
-// #include "swad_user.h"
-// #include "swad_timeline_user.h"
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -70,6 +64,15 @@ typedef enum
    TL_Frm_SHO_HID_COMM,	// Show / hide comments
   } TL_Frm_Action_t;
 
+struct TL_Form
+  {
+   TL_Frm_Action_t Action;
+   const char *ParamFormat;
+   long ParamCod;
+   const char *Icon;
+   const char *Title;
+  };
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -79,9 +82,7 @@ void TL_Frm_FormStart (const struct TL_Timeline *Timeline,TL_Frm_Action_t Action
 void TL_Frm_PutFormToSeeAllFaversSharers (TL_Frm_Action_t Action,
 		                          const char *ParamFormat,long ParamCod,
                                           TL_Usr_HowManyUsrs_t HowManyUsrs);
-void TL_Frm_FormFavSha (TL_Frm_Action_t Action,
-		        const char *ParamFormat,long ParamCod,
-		        const char *Icon,const char *Title);
+void TL_Frm_FormFavSha (const struct TL_Form *Form);
 
 void TL_Frm_FormToShowHiddenComments (long NotCod,
 				      char IdComments[Frm_MAX_BYTES_ID + 1],
