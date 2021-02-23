@@ -409,30 +409,29 @@ static void TL_Fav_PutDisabledIconFav (unsigned NumFavs)
 static void TL_Fav_PutFormToFavUnfNote (long NotCod)
   {
    extern const char *Txt_TIMELINE_Favourite;
-   extern const char *Txt_Mark_as_favourite;
-   TL_Frm_Action_t Action;
-   const char *Icon;
-   const char *Title;
+   extern const char *Txt_TIMELINE_Mark_as_favourite;
+   bool FavUnf;
+   static TL_Frm_Action_t Action[2] =
+     {
+      TL_Frm_FAV_NOTE,			// Not faved ==> fav
+      TL_Frm_UNF_NOTE,			// Faved     ==> unfav
+     };
+   static const char *Icon[2] =
+     {
+      TL_Fav_ICON_FAV,			// Not faved ==> put icon to fav
+      TL_Fav_ICON_FAVED,		// Faved     ==> put icon to unfav
+     };
+   const char *Title[2] =
+     {
+      Txt_TIMELINE_Mark_as_favourite,	// Not faved ==> put text to fav
+      Txt_TIMELINE_Favourite,		// Faved     ==> put text to unfav
+     };
 
    /***** Select whether fav/unfav *****/
-   if (TL_Fav_CheckIfNoteIsFavedByUsr (NotCod,
-				       Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited this note
-     {
-      /* Faved ==> put form and icon to unfav */
-      Action = TL_Frm_UNF_NOTE;
-      Icon   = TL_Fav_ICON_FAVED;
-      Title  = Txt_TIMELINE_Favourite;
-     }
-   else
-     {
-      /* Not faved ==> put form and icon to fav */
-      Action = TL_Frm_FAV_NOTE;
-      Icon   = TL_Fav_ICON_FAV;
-      Title  = Txt_Mark_as_favourite;
-     }
+   FavUnf = TL_Fav_CheckIfNoteIsFavedByUsr (NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);	// I have favourited this note
 
    /***** Form and icon to fav/unfav note *****/
-   TL_Frm_FormFavSha (Action,"NotCod=%ld",NotCod,Icon,Title);
+   TL_Frm_FormFavSha (Action[FavUnf],"NotCod=%ld",NotCod,Icon[FavUnf],Title[FavUnf]);
   }
 
 /*****************************************************************************/
@@ -442,30 +441,29 @@ static void TL_Fav_PutFormToFavUnfNote (long NotCod)
 static void TL_Fav_PutFormToFavUnfComm (long PubCod)
   {
    extern const char *Txt_TIMELINE_Favourite;
-   extern const char *Txt_Mark_as_favourite;
-   TL_Frm_Action_t Action;
-   const char *Icon;
-   const char *Title;
+   extern const char *Txt_TIMELINE_Mark_as_favourite;
+   bool FavUnf;
+   static TL_Frm_Action_t Action[2] =
+     {
+      TL_Frm_FAV_COMM,			// Not faved ==> fav
+      TL_Frm_UNF_COMM,			// Faved     ==> unfav
+     };
+   static const char *Icon[2] =
+     {
+      TL_Fav_ICON_FAV,			// Not faved ==> put icon to fav
+      TL_Fav_ICON_FAVED,		// Faved     ==> put icon to unfav
+     };
+   const char *Title[2] =
+     {
+      Txt_TIMELINE_Mark_as_favourite,	// Not faved ==> put text to fav
+      Txt_TIMELINE_Favourite,		// Faved     ==> put text to unfav
+     };
 
    /***** Select whether fav/unfav *****/
-   if (TL_Fav_CheckIfCommIsFavedByUsr (PubCod,
-				       Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited this comment
-     {
-      /* Faved ==> put form and icon to unfav */
-      Action = TL_Frm_UNF_COMM;
-      Icon   = TL_Fav_ICON_FAVED;
-      Title  = Txt_TIMELINE_Favourite;
-     }
-   else
-     {
-      /* Not faved ==> put form and icon to fav */
-      Action = TL_Frm_FAV_COMM;
-      Icon   = TL_Fav_ICON_FAV;
-      Title  = Txt_Mark_as_favourite;
-     }
+   FavUnf = TL_Fav_CheckIfNoteIsFavedByUsr (PubCod,Gbl.Usrs.Me.UsrDat.UsrCod);	// I have favourited this comment
 
    /***** Form and icon to fav/unfav *****/
-   TL_Frm_FormFavSha (Action,"PubCod=%ld",PubCod,Icon,Title);
+   TL_Frm_FormFavSha (Action[FavUnf],"PubCod=%ld",PubCod,Icon[FavUnf],Title[FavUnf]);
   }
 
 /*****************************************************************************/

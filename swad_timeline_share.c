@@ -254,29 +254,28 @@ static void TL_Sha_PutFormToShaUnsNote (long NotCod)
   {
    extern const char *Txt_TIMELINE_Shared;
    extern const char *Txt_TIMELINE_Share;
-   TL_Frm_Action_t Action;
-   const char *Icon;
-   const char *Title;
+   bool ShaUns;
+   static TL_Frm_Action_t Action[2] =
+     {
+      TL_Frm_SHA_NOTE,		// Not shared ==> share
+      TL_Frm_UNS_NOTE,		// Shared     ==> unshare
+     };
+   static const char *Icon[2] =
+     {
+      TL_Sha_ICON_SHARE,	// Not shared ==> put icon to share
+      TL_Sha_ICON_SHARED,	// Shared     ==> put icon to unshare
+     };
+   const char *Title[2] =
+     {
+      Txt_TIMELINE_Share,	// Not shared ==> put text to share
+      Txt_TIMELINE_Shared,	// Shared     ==> put text to unshare
+     };
 
    /***** Select whether share/unshare *****/
-   if (TL_Sha_CheckIfNoteIsSharedByUsr (NotCod,
-					Gbl.Usrs.Me.UsrDat.UsrCod))	// I have shared this note
-     {
-      /* Shared ==> put form and icon to unshare */
-      Action = TL_Frm_UNS_NOTE;
-      Icon   = TL_Sha_ICON_SHARED;
-      Title  = Txt_TIMELINE_Shared;
-     }
-   else
-     {
-      /* Not shared ==> put form and icon to share */
-      Action = TL_Frm_SHA_NOTE;
-      Icon   = TL_Sha_ICON_SHARE;
-      Title  = Txt_TIMELINE_Share;
-     }
+   ShaUns = TL_Sha_CheckIfNoteIsSharedByUsr (NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);	// I have shared this note
 
    /***** Form and icon to share/unshare note *****/
-   TL_Frm_FormFavSha (Action,"NotCod=%ld",NotCod,Icon,Title);
+   TL_Frm_FormFavSha (Action[ShaUns],"NotCod=%ld",NotCod,Icon[ShaUns],Title[ShaUns]);
   }
 
 /*****************************************************************************/

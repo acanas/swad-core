@@ -19077,7 +19077,7 @@ const char *Txt_Mark_all_NOTIFICATIONS_as_read =
 	"Marcar todas como lidas";
 #endif
 
-const char *Txt_Mark_as_favourite =
+const char *Txt_TIMELINE_Mark_as_favourite =
 #if   L==1	// ca
 	"Marca com favorit";
 #elif L==2	// de
