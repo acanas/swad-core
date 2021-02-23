@@ -53,7 +53,7 @@ void TL_Fav_FavNoteUsr (void);
 void TL_Fav_FavNoteGbl (void);
 void TL_Fav_UnfNoteUsr (void);
 void TL_Fav_UnfNoteGbl (void);
-void TL_Fav_PutFormToFavUnfNote (const struct TL_Not_Note *Not,
+void TL_Fav_PutIconToFavUnfNote (const struct TL_Not_Note *Not,
                                  TL_Usr_HowManyUsrs_t HowManyUsrs);
 
 void TL_Fav_ShowAllFaversComUsr (void);
@@ -62,7 +62,7 @@ void TL_Fav_FavCommentUsr (void);
 void TL_Fav_FavCommentGbl (void);
 void TL_Fav_UnfCommentUsr (void);
 void TL_Fav_UnfCommentGbl (void);
-void TL_Fav_PutFormToFavUnfComment (const struct TL_Com_Comment *Com,
+void TL_Fav_PutIconToFavUnfComment (const struct TL_Com_Comment *Com,
                                     TL_Usr_HowManyUsrs_t HowManyUsrs);
 
 void TL_Fav_GetNumTimesANoteHasBeenFav (struct TL_Not_Note *Not);

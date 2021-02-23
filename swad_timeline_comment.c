@@ -645,7 +645,7 @@ static void TL_Com_WriteContent (struct TL_Com_Comment *Com)
 
 static void TL_Com_WriteButtons (const struct TL_Timeline *Timeline,
 	                        const struct TL_Com_Comment *Com,
-                                const struct UsrData *UsrDat)
+                                const struct UsrData *UsrDat)	// Author
   {
    static unsigned NumDiv = 0;	// Used to create unique div id for fav
 
@@ -657,7 +657,7 @@ static void TL_Com_WriteButtons (const struct TL_Timeline *Timeline,
    /***** Foot column 1: fav zone *****/
    HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"TL_FAV_COM TL_FAV_WIDTH\"",
 		  Gbl.UniqueNameEncrypted,NumDiv);
-   TL_Fav_PutFormToFavUnfComment (Com,TL_Usr_SHOW_FEW_USRS);
+   TL_Fav_PutIconToFavUnfComment (Com,TL_Usr_SHOW_FEW_USRS);
    HTM_DIV_End ();
 
    /***** Foot column 2: icon to remove this comment *****/
@@ -758,8 +758,8 @@ static long TL_Com_ReceiveComment (void)
       Med_GetMediaFromForm (-1L,-1L,-1,&Content.Media,NULL,NULL);
       Ale_ShowAlerts (NULL);
 
-      if (Content.Txt[0] ||			// Text not empty
-	 Content.Media.Status == Med_PROCESSED)	// A media is attached
+      if (Content.Txt[0] ||				// Text not empty
+	  Content.Media.Status == Med_PROCESSED)	// A media is attached
 	{
 	 /***** Store media in filesystem and database *****/
 	 Med_RemoveKeepOrStoreMedia (-1L,&Content.Media);

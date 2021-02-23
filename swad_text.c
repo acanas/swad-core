@@ -42027,27 +42027,6 @@ const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS] =
 #endif
 	};
 
-const char *Txt_Share =
-#if   L==1	// ca
-	"Compartir";
-#elif L==2	// de
-	"Teilen";
-#elif L==3	// en
-	"Share";
-#elif L==4	// es
-	"Compartir";
-#elif L==5	// fr
-	"Partager";
-#elif L==6	// gn
-	"Compartir";	// Okoteve traducción
-#elif L==7	// it
-	"Condividere";
-#elif L==8	// pl
-	"Dzieli&cacute;";
-#elif L==9	// pt
-	"Compartilhar";
-#endif
-
 const char *Txt_Shared_files_area =
 #if   L==1	// ca
 	"Zona d'arxius compartits";
@@ -52546,6 +52525,89 @@ const char *Txt_Timeline_OF_A_USER =	// Warning: it is very important to include
 	"Timeline de %s";
 #endif
 
+const char *Txt_TIMELINE_Favourite =
+#if   L==1	// ca
+	"Favorit";
+#elif L==2	// de
+	"Favorit";
+#elif L==3	// en
+	"Favourite";
+#elif L==4	// es
+	"Favorito";
+#elif L==5	// fr
+	"Favori";
+#elif L==6	// gn
+	"Favorito";	// Okoteve traducción
+#elif L==7	// it
+	"Preferito";
+#elif L==8	// pl
+	"Ulubiony";
+#elif L==9	// pt
+	"Favorito";
+#endif
+
+const char *Txt_TIMELINE_Favourited_by_X_USERS =	// Warning: it is very important to include %ld in the following sentences
+#if   L==1	// ca
+	"Marcat com favorit per %ld";
+#elif L==2	// de
+	"Von %ld vorgemerkt";
+#elif L==3	// en
+	"Favourited by %ld";
+#elif L==4	// es
+	"Marcado como favorito por %ld";
+#elif L==5	// fr
+	"Ajout&eacute; aux favoris par %ld";
+#elif L==6	// gn
+	"Marcado como favorito por %ld";	// Okoteve traducción
+#elif L==7	// it
+	"Preferiti da %ld";
+#elif L==8	// pl
+	"Dodane do ulubionych przez %ld";
+#elif L==9	// pt
+	"Marcado como favorito por %ld";
+#endif
+
+const char *Txt_TIMELINE_Not_favourited_by_anyone =	// No favourited
+#if   L==1	// ca
+	"No marcat com favorit per ning&uacute;";
+#elif L==2	// de
+	"Niemand hat sie als Favorit markiert";
+#elif L==3	// en
+	"Not favourited by anyone";
+#elif L==4	// es
+	"No marcado como favorito por nadie";
+#elif L==5	// fr
+	"Personne n'a marqu&eacute; comme favori";
+#elif L==6	// gn
+	"No marcado como favorito por nadie";	// Okoteve traducción
+#elif L==7	// it
+	"Non preferiti da chiunque";
+#elif L==8	// pl
+	"Nie przez nikogo ulubionych";
+#elif L==9	// pt
+	"N&atilde;o marcado como favorito por qualquer pessoa";
+#endif
+
+const char *Txt_TIMELINE_Not_shared_by_anyone =	// No shared
+#if   L==1	// ca
+	"No compartit per ning&uacute;";
+#elif L==2	// de
+	"Nicht durch Dritte freigegebenen";
+#elif L==3	// en
+	"Not shared by anyone";
+#elif L==4	// es
+	"No compartido por nadie";
+#elif L==5	// fr
+	"Personne n'a partag&eacute;";
+#elif L==6	// gn
+	"No compartido por nadie";	// Okoteve traducción
+#elif L==7	// it
+	"Non condiviso da chiunque";
+#elif L==8	// pl
+	"Nie jest dzielona przez nikogo";
+#elif L==9	// pt
+	"N&atilde;o compartilhado por qualquer pessoa";
+#endif
 
 const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	{
@@ -52823,132 +52885,6 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 #endif
 	};
 
-const char *Txt_TIMELINE_NOTE_Favourite =
-#if   L==1	// ca
-	"Favorit";
-#elif L==2	// de
-	"Favorit";
-#elif L==3	// en
-	"Favourite";
-#elif L==4	// es
-	"Favorito";
-#elif L==5	// fr
-	"Favori";
-#elif L==6	// gn
-	"Favorito";	// Okoteve traducción
-#elif L==7	// it
-	"Preferito";
-#elif L==8	// pl
-	"Ulubiony";
-#elif L==9	// pt
-	"Favorito";
-#endif
-
-const char *Txt_TIMELINE_NOTE_Favourited_by_X_USERS =	// Warning: it is very important to include %ld in the following sentences
-#if   L==1	// ca
-	"Marcat com favorit per %ld";
-#elif L==2	// de
-	"Von %ld vorgemerkt";
-#elif L==3	// en
-	"Favourited by %ld";
-#elif L==4	// es
-	"Marcado como favorito por %ld";
-#elif L==5	// fr
-	"Ajout&eacute; aux favoris par %ld";
-#elif L==6	// gn
-	"Marcado como favorito por %ld";	// Okoteve traducción
-#elif L==7	// it
-	"Preferiti da %ld";
-#elif L==8	// pl
-	"Dodane do ulubionych przez %ld";
-#elif L==9	// pt
-	"Marcado como favorito por %ld";
-#endif
-
-const char *Txt_TIMELINE_NOTE_Shared =
-#if   L==1	// ca
-	"Compartit";
-#elif L==2	// de
-	"Geteilt";
-#elif L==3	// en
-	"Shared";
-#elif L==4	// es
-	"Compartido";
-#elif L==5	// fr
-	"Partag&eacute;";
-#elif L==6	// gn
-	"Compartido";	// Okoteve traducción
-#elif L==7	// it
-	"Condiviso";
-#elif L==8	// pl
-	"Udost&eogon;pnione";
-#elif L==9	// pt
-	"Compartilhado";
-#endif
-
-const char *Txt_TIMELINE_NOTE_Shared_by_X_USERS =	// Warning: it is very important to include %ld in the following sentences
-#if   L==1	// ca
-	"Compartit per %ld";
-#elif L==2	// de
-	"Von %ld geteilt";
-#elif L==3	// en
-	"Shared by %ld";
-#elif L==4	// es
-	"Compartido por %ld";
-#elif L==5	// fr
-	"Partag&eacute; par %ld";
-#elif L==6	// gn
-	"Compartido por %ld";	// Okoteve traducción
-#elif L==7	// it
-	"Condiviso da %ld";
-#elif L==8	// pl
-	"Udost&eogon;pnione przez %ld";
-#elif L==9	// pt
-	"Compartilhado por %ld";
-#endif
-
-const char *Txt_TIMELINE_NOTE_Not_favourited_by_anyone =	// No longer shared
-#if   L==1	// ca
-	"No marcat com favorit per ning&uacute;";
-#elif L==2	// de
-	"Niemand hat sie als Favorit markiert";
-#elif L==3	// en
-	"Not favourited by anyone";
-#elif L==4	// es
-	"No marcado como favorito por nadie";
-#elif L==5	// fr
-	"Personne n'a marqu&eacute; comme favori";
-#elif L==6	// gn
-	"No marcado como favorito por nadie";	// Okoteve traducción
-#elif L==7	// it
-	"Non preferiti da chiunque";
-#elif L==8	// pl
-	"Nie przez nikogo ulubionych";
-#elif L==9	// pt
-	"N&atilde;o marcado como favorito por qualquer pessoa";
-#endif
-
-const char *Txt_TIMELINE_NOTE_Not_shared_by_anyone =	// No longer shared
-#if   L==1	// ca
-	"No compartit per ning&uacute;";
-#elif L==2	// de
-	"Nicht durch Dritte freigegebenen";
-#elif L==3	// en
-	"Not shared by anyone";
-#elif L==4	// es
-	"No compartido por nadie";
-#elif L==5	// fr
-	"Personne n'a partag&eacute;";
-#elif L==6	// gn
-	"No compartido por nadie";	// Okoteve traducción
-#elif L==7	// it
-	"Non condiviso da chiunque";
-#elif L==8	// pl
-	"Nie jest dzielona przez nikogo";
-#elif L==9	// pt
-	"N&atilde;o compartilhado por qualquer pessoa";
-#endif
-
 const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES] =
 	{
 	[TL_TOP_MESSAGE_NONE] =
@@ -53209,6 +53145,69 @@ const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 	"Hor&aacute;rio de tutor"
 #endif
 	};
+
+const char *Txt_TIMELINE_Share =
+#if   L==1	// ca
+	"Compartir";
+#elif L==2	// de
+	"Teilen";
+#elif L==3	// en
+	"Share";
+#elif L==4	// es
+	"Compartir";
+#elif L==5	// fr
+	"Partager";
+#elif L==6	// gn
+	"Compartir";	// Okoteve traducción
+#elif L==7	// it
+	"Condividere";
+#elif L==8	// pl
+	"Dzieli&cacute;";
+#elif L==9	// pt
+	"Compartilhar";
+#endif
+
+const char *Txt_TIMELINE_Shared =
+#if   L==1	// ca
+	"Compartit";
+#elif L==2	// de
+	"Geteilt";
+#elif L==3	// en
+	"Shared";
+#elif L==4	// es
+	"Compartido";
+#elif L==5	// fr
+	"Partag&eacute;";
+#elif L==6	// gn
+	"Compartido";	// Okoteve traducción
+#elif L==7	// it
+	"Condiviso";
+#elif L==8	// pl
+	"Udost&eogon;pnione";
+#elif L==9	// pt
+	"Compartilhado";
+#endif
+
+const char *Txt_TIMELINE_Shared_by_X_USERS =	// Warning: it is very important to include %ld in the following sentences
+#if   L==1	// ca
+	"Compartit per %ld";
+#elif L==2	// de
+	"Von %ld geteilt";
+#elif L==3	// en
+	"Shared by %ld";
+#elif L==4	// es
+	"Compartido por %ld";
+#elif L==5	// fr
+	"Partag&eacute; par %ld";
+#elif L==6	// gn
+	"Compartido por %ld";	// Okoteve traducción
+#elif L==7	// it
+	"Condiviso da %ld";
+#elif L==8	// pl
+	"Udost&eogon;pnione przez %ld";
+#elif L==9	// pt
+	"Compartilhado por %ld";
+#endif
 
 const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 	{

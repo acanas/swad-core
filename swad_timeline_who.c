@@ -159,7 +159,7 @@ static Usr_Who_t TL_Who_GetWhoFromDB (void)
 
 void TL_Who_SaveWhoInDB (struct TL_Timeline *Timeline)
   {
-   if (Gbl.Usrs.Me.Logged)
+   if (Gbl.Usrs.Me.Logged)	// Save only if I am logged
      {
       if (Timeline->Who == Usr_WHO_UNKNOWN)
 	 Timeline->Who = TL_Who_DEFAULT_WHO;

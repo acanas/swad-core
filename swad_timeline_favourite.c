@@ -58,19 +58,15 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void TL_Fav_PutDisabledIconFav (unsigned NumFavs);
-
-static void TL_Fav_PutFormToFavNote (long ParamCod);
-static void TL_Fav_PutFormToUnfNote (long ParamCod);
-
-static void TL_Fav_PutFormToFavComment (long ParamCod);
-static void TL_Fav_PutFormToUnfComment (long ParamCod);
-
 static void TL_Fav_FavNote (struct TL_Not_Note *Not);
 static void TL_Fav_UnfNote (struct TL_Not_Note *Not);
 
 static void TL_Fav_FavComment (struct TL_Com_Comment *Com);
 static void TL_Fav_UnfComment (struct TL_Com_Comment *Com);
+
+static void TL_Fav_PutDisabledIconFav (unsigned NumFavs);
+static void TL_Fav_PutFormToFavUnfNote (long NotCod);
+static void TL_Fav_PutFormToFavUnfComm (long PubCod);
 
 static bool TL_Fav_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod);
 static bool TL_Fav_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod);
@@ -79,72 +75,6 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Not_Note *Not
 					           TL_Usr_HowManyUsrs_t HowManyUsrs);
 static void TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Com_Comment *Com,
 					           TL_Usr_HowManyUsrs_t HowManyUsrs);
-
-/*****************************************************************************/
-/****************** Put disabled icon to mark as favourite *******************/
-/*****************************************************************************/
-
-static void TL_Fav_PutDisabledIconFav (unsigned NumFavs)
-  {
-   extern const char *Txt_TIMELINE_NOTE_Favourited_by_X_USERS;
-   extern const char *Txt_TIMELINE_NOTE_Not_favourited_by_anyone;
-
-   /***** Disabled icon to mark as favourite *****/
-   if (NumFavs)
-     {
-      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_Fav_ICON_FAV,
-		      Str_BuildStringLong (Txt_TIMELINE_NOTE_Favourited_by_X_USERS,
-					   (long) NumFavs));
-      Str_FreeString ();
-     }
-   else
-      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_Fav_ICON_FAV,
-		      Txt_TIMELINE_NOTE_Not_favourited_by_anyone);
-  }
-
-/*****************************************************************************/
-/************************** Form to fav/unfav note ***************************/
-/*****************************************************************************/
-
-static void TL_Fav_PutFormToFavNote (long ParamCod)
-  {
-   extern const char *Txt_Mark_as_favourite;
-
-   /***** Form and icon to mark note as favourite *****/
-   TL_Frm_FormFavSha (TL_Frm_FAV_NOTE,"NotCod=%ld",ParamCod,
-	              TL_Fav_ICON_FAV,Txt_Mark_as_favourite);
-  }
-
-static void TL_Fav_PutFormToUnfNote (long ParamCod)
-  {
-   extern const char *Txt_TIMELINE_NOTE_Favourite;
-
-   /***** Form and icon to unfav (remove mark as favourite) note *****/
-   TL_Frm_FormFavSha (TL_Frm_UNF_NOTE,"NotCod=%ld",ParamCod,
-	              TL_Fav_ICON_FAVED,Txt_TIMELINE_NOTE_Favourite);
-  }
-
-/*****************************************************************************/
-/************************** Form to fav/unfav comment ************************/
-/*****************************************************************************/
-
-static void TL_Fav_PutFormToFavComment (long ParamCod)
-  {
-   extern const char *Txt_Mark_as_favourite;
-
-   /***** Form and icon to mark comment as favourite *****/
-   TL_Frm_FormFavSha (TL_Frm_FAV_COMM,"PubCod=%ld",ParamCod,
-	              TL_Fav_ICON_FAV,Txt_Mark_as_favourite);
-  }
-
-static void TL_Fav_PutFormToUnfComment (long ParamCod)
-  {
-   extern const char *Txt_TIMELINE_NOTE_Favourite;
-
-   /***** Form and icon to unfav (remove mark as favourite) comment *****/
-   TL_Frm_FormFavSha (TL_Frm_UNF_COMM,"PubCod=%ld",ParamCod,
-	              TL_Fav_ICON_FAVED,Txt_TIMELINE_NOTE_Favourite);
-  }
 
 /*****************************************************************************/
 /********************** Mark/unmark a note as favourite **********************/
@@ -168,7 +98,7 @@ void TL_Fav_ShowAllFaversNoteGbl (void)
    TL_Not_GetDataOfNoteByCod (&Not);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
-   TL_Fav_PutFormToFavUnfNote (&Not,TL_Usr_SHOW_ALL_USRS);
+   TL_Fav_PutIconToFavUnfNote (&Not,TL_Usr_SHOW_ALL_USRS);
   }
 
 void TL_Fav_FavNoteUsr (void)
@@ -188,7 +118,7 @@ void TL_Fav_FavNoteGbl (void)
    TL_Fav_FavNote (&Not);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   TL_Fav_PutFormToFavUnfNote (&Not,TL_Usr_SHOW_FEW_USRS);
+   TL_Fav_PutIconToFavUnfNote (&Not,TL_Usr_SHOW_FEW_USRS);
   }
 
 void TL_Fav_UnfNoteUsr (void)
@@ -208,10 +138,10 @@ void TL_Fav_UnfNoteGbl (void)
    TL_Fav_UnfNote (&Not);
 
    /***** Write HTML inside DIV with form to fav *****/
-   TL_Fav_PutFormToFavUnfNote (&Not,TL_Usr_SHOW_FEW_USRS);
+   TL_Fav_PutIconToFavUnfNote (&Not,TL_Usr_SHOW_FEW_USRS);
   }
 
-void TL_Fav_PutFormToFavUnfNote (const struct TL_Not_Note *Not,
+void TL_Fav_PutIconToFavUnfNote (const struct TL_Not_Note *Not,
                                  TL_Usr_HowManyUsrs_t HowManyUsrs)
   {
    /***** Put form to fav/unfav this note *****/
@@ -221,14 +151,7 @@ void TL_Fav_PutFormToFavUnfNote (const struct TL_Not_Note *Not,
       /* Put disabled icon */
       TL_Fav_PutDisabledIconFav (Not->NumFavs);
    else					// Available and I am not the author
-     {
-      /* Put icon to fav/unfav */
-      if (TL_Fav_CheckIfNoteIsFavedByUsr (Not->NotCod,
-					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited this note
-	 TL_Fav_PutFormToUnfNote (Not->NotCod);
-      else								// I am not a faver of this note
-	 TL_Fav_PutFormToFavNote (Not->NotCod);
-     }
+      TL_Fav_PutFormToFavUnfNote (Not->NotCod);
    HTM_DIV_End ();
 
    /***** Show who have marked this note as favourite *****/
@@ -245,8 +168,8 @@ static void TL_Fav_FavNote (struct TL_Not_Note *Not)
 
    if (Not->NotCod > 0)
      {
-      if (Gbl.Usrs.Me.Logged &&
-	  !Usr_ItsMe (Not->UsrCod))	// I am not the author
+      if (Gbl.Usrs.Me.Logged &&		// I am logged...
+	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
 	 if (!TL_Fav_CheckIfNoteIsFavedByUsr (Not->NotCod,
 					      Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
 	   {
@@ -282,8 +205,8 @@ static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
 
    if (Not->NotCod > 0)
       if (Not->NumFavs &&
-	  Gbl.Usrs.Me.Logged &&
-	  !Usr_ItsMe (Not->UsrCod))	// I am not the author
+	  Gbl.Usrs.Me.Logged &&		// I am logged...
+	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
 	 if (TL_Fav_CheckIfNoteIsFavedByUsr (Not->NotCod,
 					     Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
 	   {
@@ -305,7 +228,7 @@ static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
   }
 
 /*****************************************************************************/
-/********************* Mark/unmark a comment as favourite ************************/
+/********************* Mark/unmark a comment as favourite ********************/
 /*****************************************************************************/
 
 void TL_Fav_ShowAllFaversComUsr (void)
@@ -328,7 +251,7 @@ void TL_Fav_ShowAllFaversComGbl (void)
    Med_MediaDestructor (&Com.Content.Media);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
-   TL_Fav_PutFormToFavUnfComment (&Com,TL_Usr_SHOW_ALL_USRS);
+   TL_Fav_PutIconToFavUnfComment (&Com,TL_Usr_SHOW_ALL_USRS);
   }
 
 void TL_Fav_FavCommentUsr (void)
@@ -348,7 +271,7 @@ void TL_Fav_FavCommentGbl (void)
    TL_Fav_FavComment (&Com);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   TL_Fav_PutFormToFavUnfComment (&Com,TL_Usr_SHOW_FEW_USRS);
+   TL_Fav_PutIconToFavUnfComment (&Com,TL_Usr_SHOW_FEW_USRS);
   }
 
 void TL_Fav_UnfCommentUsr (void)
@@ -368,10 +291,10 @@ void TL_Fav_UnfCommentGbl (void)
    TL_Fav_UnfComment (&Com);
 
    /***** Write HTML inside DIV with form to fav *****/
-   TL_Fav_PutFormToFavUnfComment (&Com,TL_Usr_SHOW_FEW_USRS);
+   TL_Fav_PutIconToFavUnfComment (&Com,TL_Usr_SHOW_FEW_USRS);
   }
 
-void TL_Fav_PutFormToFavUnfComment (const struct TL_Com_Comment *Com,
+void TL_Fav_PutIconToFavUnfComment (const struct TL_Com_Comment *Com,
                                     TL_Usr_HowManyUsrs_t HowManyUsrs)
   {
    /***** Put form to fav/unfav this comment *****/
@@ -380,16 +303,7 @@ void TL_Fav_PutFormToFavUnfComment (const struct TL_Com_Comment *Com,
       /* Put disabled icon */
       TL_Fav_PutDisabledIconFav (Com->NumFavs);
    else				// I am not the author
-     {
-      /* Put icon to mark this comment as favourite */
-      if (TL_Fav_CheckIfCommIsFavedByUsr (Com->PubCod,
-                                          Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited this comment
-	 /* Put icon to unfav this publication and list of users */
-	 TL_Fav_PutFormToUnfComment (Com->PubCod);
-      else								// I am not a favouriter
-	 /* Put icon to fav this publication and list of users */
-	 TL_Fav_PutFormToFavComment (Com->PubCod);
-     }
+      TL_Fav_PutFormToFavUnfComm (Com->PubCod);
    HTM_DIV_End ();
 
    /***** Show who have marked this comment as favourite *****/
@@ -463,6 +377,95 @@ static void TL_Fav_UnfComment (struct TL_Com_Comment *Com)
 
    /***** Free image *****/
    Med_MediaDestructor (&Com->Content.Media);
+  }
+
+
+/*****************************************************************************/
+/****************** Put disabled icon to mark as favourite *******************/
+/*****************************************************************************/
+
+static void TL_Fav_PutDisabledIconFav (unsigned NumFavs)
+  {
+   extern const char *Txt_TIMELINE_Favourited_by_X_USERS;
+   extern const char *Txt_TIMELINE_Not_favourited_by_anyone;
+
+   /***** Disabled icon to mark as favourite *****/
+   if (NumFavs)
+     {
+      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_Fav_ICON_FAV,
+		      Str_BuildStringLong (Txt_TIMELINE_Favourited_by_X_USERS,
+					   (long) NumFavs));
+      Str_FreeString ();
+     }
+   else
+      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_Fav_ICON_FAV,
+		      Txt_TIMELINE_Not_favourited_by_anyone);
+  }
+
+/*****************************************************************************/
+/************************** Form to fav/unfav note ***************************/
+/*****************************************************************************/
+
+static void TL_Fav_PutFormToFavUnfNote (long NotCod)
+  {
+   extern const char *Txt_TIMELINE_Favourite;
+   extern const char *Txt_Mark_as_favourite;
+   TL_Frm_Action_t Action;
+   const char *Icon;
+   const char *Title;
+
+   /***** Select whether fav/unfav *****/
+   if (TL_Fav_CheckIfNoteIsFavedByUsr (NotCod,
+				       Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited this note
+     {
+      /* Faved ==> put form and icon to unfav */
+      Action = TL_Frm_UNF_NOTE;
+      Icon   = TL_Fav_ICON_FAVED;
+      Title  = Txt_TIMELINE_Favourite;
+     }
+   else
+     {
+      /* Not faved ==> put form and icon to fav */
+      Action = TL_Frm_FAV_NOTE;
+      Icon   = TL_Fav_ICON_FAV;
+      Title  = Txt_Mark_as_favourite;
+     }
+
+   /***** Form and icon to fav/unfav note *****/
+   TL_Frm_FormFavSha (Action,"NotCod=%ld",NotCod,Icon,Title);
+  }
+
+/*****************************************************************************/
+/************************** Form to fav/unfav comment ************************/
+/*****************************************************************************/
+
+static void TL_Fav_PutFormToFavUnfComm (long PubCod)
+  {
+   extern const char *Txt_TIMELINE_Favourite;
+   extern const char *Txt_Mark_as_favourite;
+   TL_Frm_Action_t Action;
+   const char *Icon;
+   const char *Title;
+
+   /***** Select whether fav/unfav *****/
+   if (TL_Fav_CheckIfCommIsFavedByUsr (PubCod,
+				       Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited this comment
+     {
+      /* Faved ==> put form and icon to unfav */
+      Action = TL_Frm_UNF_COMM;
+      Icon   = TL_Fav_ICON_FAVED;
+      Title  = Txt_TIMELINE_Favourite;
+     }
+   else
+     {
+      /* Not faved ==> put form and icon to fav */
+      Action = TL_Frm_FAV_COMM;
+      Icon   = TL_Fav_ICON_FAV;
+      Title  = Txt_Mark_as_favourite;
+     }
+
+   /***** Form and icon to fav/unfav *****/
+   TL_Frm_FormFavSha (Action,"PubCod=%ld",PubCod,Icon,Title);
   }
 
 /*****************************************************************************/

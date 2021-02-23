@@ -58,64 +58,16 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void TL_Sha_PutDisabledIconShare (unsigned NumShared);
-
-static void TL_Sha_PutFormToShaNote (long ParamCod);
-static void TL_Sha_PutFormToUnsNote (long ParamCod);
-
 static void TL_Sha_ShaNote (struct TL_Not_Note *Not);
 static void TL_Sha_UnsNote (struct TL_Not_Note *Not);
+
+static void TL_Sha_PutDisabledIconShare (unsigned NumShared);
+static void TL_Sha_PutFormToShaUnsNote (long NotCod);
 
 static bool TL_Sha_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);
 
 static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Not_Note *Not,
 					      TL_Usr_HowManyUsrs_t HowManyUsrs);
-
-/*****************************************************************************/
-/*********************** Put disabled icon to share **************************/
-/*****************************************************************************/
-
-static void TL_Sha_PutDisabledIconShare (unsigned NumShared)
-  {
-   extern const char *Txt_TIMELINE_NOTE_Shared_by_X_USERS;
-   extern const char *Txt_TIMELINE_NOTE_Not_shared_by_anyone;
-
-   /***** Disabled icon to share *****/
-   if (NumShared)
-     {
-      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_Sha_ICON_SHARE,
-		      Str_BuildStringLong (Txt_TIMELINE_NOTE_Shared_by_X_USERS,
-					   (long) NumShared));
-      Str_FreeString ();
-     }
-   else
-      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_Sha_ICON_SHARE,
-		      Txt_TIMELINE_NOTE_Not_shared_by_anyone);
-  }
-
-/*****************************************************************************/
-/*********************** Form to share/unshare note **************************/
-/*****************************************************************************/
-
-static void TL_Sha_PutFormToShaNote (long ParamCod)
-  {
-   extern const char *Txt_Share;
-
-   /***** Form and icon to mark note as favourite *****/
-   TL_Frm_FormFavSha (TL_Frm_SHA_NOTE,
-                      "NotCod=%ld",ParamCod,
-	              TL_Sha_ICON_SHARE,Txt_Share);
-  }
-
-static void TL_Sha_PutFormToUnsNote (long ParamCod)
-  {
-   extern const char *Txt_TIMELINE_NOTE_Shared;
-
-   /***** Form and icon to mark note as favourite *****/
-   TL_Frm_FormFavSha (TL_Frm_UNS_NOTE,
-                      "NotCod=%ld",ParamCod,
-	              TL_Sha_ICON_SHARED,Txt_TIMELINE_NOTE_Shared);
-  }
 
 /*****************************************************************************/
 /******************************** Share a note *******************************/
@@ -139,7 +91,7 @@ void TL_Sha_ShowAllSharersNoteGbl (void)
    TL_Not_GetDataOfNoteByCod (&Not);
 
    /***** Write HTML inside DIV with form to share/unshare *****/
-   TL_Sha_PutFormToShaUnsNote (&Not,TL_Usr_SHOW_ALL_USRS);
+   TL_Sha_PutIconToShaUnsNote (&Not,TL_Usr_SHOW_ALL_USRS);
   }
 
 void TL_Sha_ShaNoteUsr (void)
@@ -159,7 +111,7 @@ void TL_Sha_ShaNoteGbl (void)
    TL_Sha_ShaNote (&Not);
 
    /***** Write HTML inside DIV with form to unshare *****/
-   TL_Sha_PutFormToShaUnsNote (&Not,TL_Usr_SHOW_FEW_USRS);
+   TL_Sha_PutIconToShaUnsNote (&Not,TL_Usr_SHOW_FEW_USRS);
   }
 
 static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
@@ -172,8 +124,8 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
    TL_Not_GetDataOfNoteByCod (Not);
 
    if (Not->NotCod > 0)
-      if (Gbl.Usrs.Me.Logged &&
-	  !Usr_ItsMe (Not->UsrCod))	// I am not the author
+      if (Gbl.Usrs.Me.Logged &&		// I am logged...
+	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
          if (!TL_Sha_CheckIfNoteIsSharedByUsr (Not->NotCod,
 					       Gbl.Usrs.Me.UsrDat.UsrCod))	// Not yet shared by me
 	   {
@@ -216,7 +168,7 @@ void TL_Sha_UnsNoteGbl (void)
    TL_Sha_UnsNote (&Not);
 
    /***** Write HTML inside DIV with form to share *****/
-   TL_Sha_PutFormToShaUnsNote (&Not,TL_Usr_SHOW_FEW_USRS);
+   TL_Sha_PutIconToShaUnsNote (&Not,TL_Usr_SHOW_FEW_USRS);
   }
 
 static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
@@ -229,8 +181,8 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
 
    if (Not->NotCod > 0)
       if (Not->NumShared &&
-	  Gbl.Usrs.Me.Logged &&
-	  !Usr_ItsMe (Not->UsrCod))	// I am not the author
+	  Gbl.Usrs.Me.Logged &&		// I am logged...
+	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
 	 if (TL_Sha_CheckIfNoteIsSharedByUsr (Not->NotCod,
 					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I am a sharer
 	   {
@@ -254,7 +206,7 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
 	   }
   }
 
-void TL_Sha_PutFormToShaUnsNote (const struct TL_Not_Note *Not,
+void TL_Sha_PutIconToShaUnsNote (const struct TL_Not_Note *Not,
                                  TL_Usr_HowManyUsrs_t HowManyUsrs)
   {
    /***** Put form to share/unshare this note *****/
@@ -264,18 +216,67 @@ void TL_Sha_PutFormToShaUnsNote (const struct TL_Not_Note *Not,
       /* Put disabled icon */
       TL_Sha_PutDisabledIconShare (Not->NumShared);
    else					// Available and I am not the author
-     {
       /* Put icon to share/unshare */
-      if (TL_Sha_CheckIfNoteIsSharedByUsr (Not->NotCod,
-					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I have shared this note
-	 TL_Sha_PutFormToUnsNote (Not->NotCod);
-      else				// I have not shared this note
-	 TL_Sha_PutFormToShaNote (Not->NotCod);
-     }
+      TL_Sha_PutFormToShaUnsNote (Not->NotCod);
    HTM_DIV_End ();
 
    /***** Show who have shared this note *****/
    TL_Sha_ShowUsrsWhoHaveSharedNote (Not,HowManyUsrs);
+  }
+
+/*****************************************************************************/
+/*********************** Put disabled icon to share **************************/
+/*****************************************************************************/
+
+static void TL_Sha_PutDisabledIconShare (unsigned NumShared)
+  {
+   extern const char *Txt_TIMELINE_Shared_by_X_USERS;
+   extern const char *Txt_TIMELINE_Not_shared_by_anyone;
+
+   /***** Disabled icon to share *****/
+   if (NumShared)
+     {
+      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_Sha_ICON_SHARE,
+		      Str_BuildStringLong (Txt_TIMELINE_Shared_by_X_USERS,
+					   (long) NumShared));
+      Str_FreeString ();
+     }
+   else
+      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_Sha_ICON_SHARE,
+		      Txt_TIMELINE_Not_shared_by_anyone);
+  }
+
+/*****************************************************************************/
+/*********************** Form to share/unshare note **************************/
+/*****************************************************************************/
+
+static void TL_Sha_PutFormToShaUnsNote (long NotCod)
+  {
+   extern const char *Txt_TIMELINE_Shared;
+   extern const char *Txt_TIMELINE_Share;
+   TL_Frm_Action_t Action;
+   const char *Icon;
+   const char *Title;
+
+   /***** Select whether share/unshare *****/
+   if (TL_Sha_CheckIfNoteIsSharedByUsr (NotCod,
+					Gbl.Usrs.Me.UsrDat.UsrCod))	// I have shared this note
+     {
+      /* Shared ==> put form and icon to unshare */
+      Action = TL_Frm_UNS_NOTE;
+      Icon   = TL_Sha_ICON_SHARED;
+      Title  = Txt_TIMELINE_Shared;
+     }
+   else
+     {
+      /* Not shared ==> put form and icon to share */
+      Action = TL_Frm_SHA_NOTE;
+      Icon   = TL_Sha_ICON_SHARE;
+      Title  = Txt_TIMELINE_Share;
+     }
+
+   /***** Form and icon to share/unshare note *****/
+   TL_Frm_FormFavSha (Action,"NotCod=%ld",NotCod,Icon,Title);
   }
 
 /*****************************************************************************/

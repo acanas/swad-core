@@ -820,13 +820,13 @@ static void TL_Not_WriteFavShaRem (const struct TL_Timeline *Timeline,
    /***** Foot column 1: fav zone *****/
    HTM_DIV_Begin ("id=\"fav_not_%s_%u\" class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\"",
 		  Gbl.UniqueNameEncrypted,NumDiv);
-   TL_Fav_PutFormToFavUnfNote (Not,TL_Usr_SHOW_FEW_USRS);
+   TL_Fav_PutIconToFavUnfNote (Not,TL_Usr_SHOW_FEW_USRS);
    HTM_DIV_End ();
 
    /***** Foot column 2: share zone *****/
    HTM_DIV_Begin ("id=\"sha_not_%s_%u\" class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\"",
 		  Gbl.UniqueNameEncrypted,NumDiv);
-   TL_Sha_PutFormToShaUnsNote (Not,TL_Usr_SHOW_FEW_USRS);
+   TL_Sha_PutIconToShaUnsNote (Not,TL_Usr_SHOW_FEW_USRS);
    HTM_DIV_End ();
 
    /***** Foot column 3: icon to remove this note *****/
