@@ -50,6 +50,19 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
+/********************* Get number of comments in a note **********************/
+/*****************************************************************************/
+
+unsigned TL_DB_GetNumCommentsInNote (long NotCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of comments in a note",
+		  "SELECT COUNT(*) FROM tl_pubs"
+		  " WHERE NotCod=%ld AND PubType=%u",
+		  NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
+  }
+
+/*****************************************************************************/
 /*************** Get final comments of a note from database ******************/
 /*****************************************************************************/
 

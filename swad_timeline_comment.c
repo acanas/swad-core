@@ -67,8 +67,6 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static unsigned long TL_Com_GetNumCommentsInNote (long NotCod);
-
 static unsigned TL_Com_WriteHiddenComments (struct TL_Timeline *Timeline,
                                             long NotCod,
 				            char IdComments[Frm_MAX_BYTES_ID + 1],
@@ -200,7 +198,7 @@ void TL_Com_WriteCommentsInNote (const struct TL_Timeline *Timeline,
    char IdComments[Frm_MAX_BYTES_ID + 1];
 
    /***** Get number of comments in note *****/
-   NumComments = TL_Com_GetNumCommentsInNote (Not->NotCod);
+   NumComments = TL_DB_GetNumCommentsInNote (Not->NotCod);
 
    /***** Trivial check: if no comments ==> nothing to do *****/
    if (!NumComments)
@@ -225,28 +223,6 @@ void TL_Com_WriteCommentsInNote (const struct TL_Timeline *Timeline,
    NumFinalCommentsGot = TL_DB_GetFinalComments (Not->NotCod,
 				                 NumFinalCommentsToGet,
 				                 &mysql_res);
-   /*
-   NumFinalCommentsGot = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get comments",
-			      "SELECT * FROM "
-			      "("
-			      "SELECT tl_pubs.PubCod,"		// row[0]
-				     "tl_pubs.PublisherCod,"	// row[1]
-				     "tl_pubs.NotCod,"		// row[2]
-				     "UNIX_TIMESTAMP("
-				     "tl_pubs.TimePublish),"	// row[3]
-				     "tl_comments.Txt,"		// row[4]
-				     "tl_comments.MedCod"	// row[5]
-			      " FROM tl_pubs,tl_comments"
-			      " WHERE tl_pubs.NotCod=%ld"
-			      " AND tl_pubs.PubType=%u"
-			      " AND tl_pubs.PubCod=tl_comments.PubCod"
-			      " ORDER BY tl_pubs.PubCod DESC LIMIT %u"
-			      ") AS comments"
-			      " ORDER BY PubCod",
-			      Not->NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE,
-			      NumFinalCommentsToGet);
-   */
    /*
       Before clicking "See prev..."    -->    After clicking "See prev..."
     _________________________________       _________________________________
@@ -319,18 +295,6 @@ void TL_Com_WriteCommentsInNote (const struct TL_Timeline *Timeline,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/********************* Get number of comments in a note **********************/
-/*****************************************************************************/
-
-static unsigned long TL_Com_GetNumCommentsInNote (long NotCod)
-  {
-   return DB_QueryCOUNT ("can not get number of comments in a note",
-			 "SELECT COUNT(*) FROM tl_pubs"
-			 " WHERE NotCod=%ld AND PubType=%u",
-			 NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
