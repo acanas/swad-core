@@ -36,6 +36,7 @@
 #include "swad_photo.h"
 #include "swad_profile.h"
 #include "swad_timeline.h"
+#include "swad_timeline_database.h"
 #include "swad_timeline_favourite.h"
 #include "swad_timeline_form.h"
 #include "swad_timeline_note.h"
@@ -220,7 +221,11 @@ void TL_Com_WriteCommentsInNote (const struct TL_Timeline *Timeline,
       NumFinalCommentsToGet = TL_Com_NUM_VISIBLE_COMMENTS;
      }
 
-   /***** Get last comments of this note from database *****/
+   /***** Get final comments of this note from database *****/
+   NumFinalCommentsGot = TL_DB_GetFinalComments (Not->NotCod,
+				                 NumFinalCommentsToGet,
+				                 &mysql_res);
+   /*
    NumFinalCommentsGot = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get comments",
 			      "SELECT * FROM "
@@ -241,7 +246,7 @@ void TL_Com_WriteCommentsInNote (const struct TL_Timeline *Timeline,
 			      " ORDER BY PubCod",
 			      Not->NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE,
 			      NumFinalCommentsToGet);
-
+   */
    /*
       Before clicking "See prev..."    -->    After clicking "See prev..."
     _________________________________       _________________________________
