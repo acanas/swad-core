@@ -42,6 +42,9 @@
 /*****************************************************************************/
 
 unsigned TL_DB_GetNumCommentsInNote (long NotCod);
+unsigned TL_DB_GetInitialComments (long NotCod,
+				   unsigned NumInitialCommentsToGet,
+				   MYSQL_RES **mysql_res);
 unsigned TL_DB_GetFinalComments (long NotCod,
 				 unsigned NumFinalCommentsToGet,
 				 MYSQL_RES **mysql_res);

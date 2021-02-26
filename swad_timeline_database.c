@@ -63,6 +63,32 @@ unsigned TL_DB_GetNumCommentsInNote (long NotCod)
   }
 
 /*****************************************************************************/
+/************** Get initial comments of a note from database *****************/
+/*****************************************************************************/
+
+unsigned TL_DB_GetInitialComments (long NotCod,
+				   unsigned NumInitialCommentsToGet,
+				   MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get comments",
+		   "SELECT tl_pubs.PubCod,"				// row[0]
+			  "tl_pubs.PublisherCod,"			// row[1]
+			  "tl_pubs.NotCod,"				// row[2]
+			  "UNIX_TIMESTAMP(tl_pubs.TimePublish),"	// row[3]
+			  "tl_comments.Txt,"				// row[4]
+			  "tl_comments.MedCod"				// row[5]
+		   " FROM tl_pubs,tl_comments"
+		   " WHERE tl_pubs.NotCod=%ld"
+		   " AND tl_pubs.PubType=%u"
+		   " AND tl_pubs.PubCod=tl_comments.PubCod"
+		   " ORDER BY tl_pubs.PubCod"
+		   " LIMIT %lu",
+		   NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE,
+		   NumInitialCommentsToGet);
+  }
+
+/*****************************************************************************/
 /*************** Get final comments of a note from database ******************/
 /*****************************************************************************/
 
@@ -73,22 +99,21 @@ unsigned TL_DB_GetFinalComments (long NotCod,
    /***** Get final comments of a note from database *****/
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get comments",
-			     "SELECT * FROM "
-			     "("
-			     "SELECT tl_pubs.PubCod,"		// row[0]
-				     "tl_pubs.PublisherCod,"	// row[1]
-				     "tl_pubs.NotCod,"		// row[2]
-				     "UNIX_TIMESTAMP("
-				     "tl_pubs.TimePublish),"	// row[3]
-				     "tl_comments.Txt,"		// row[4]
-				     "tl_comments.MedCod"	// row[5]
-			     " FROM tl_pubs,tl_comments"
-			     " WHERE tl_pubs.NotCod=%ld"
-			     " AND tl_pubs.PubType=%u"
-			     " AND tl_pubs.PubCod=tl_comments.PubCod"
-			     " ORDER BY tl_pubs.PubCod DESC LIMIT %u"
-			     ") AS comments"
-			     " ORDER BY PubCod",
-			     NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE,
-			     NumFinalCommentsToGet);
+		   "SELECT * FROM "
+		   "("
+		   "SELECT tl_pubs.PubCod,"				// row[0]
+			  "tl_pubs.PublisherCod,"			// row[1]
+			  "tl_pubs.NotCod,"				// row[2]
+			  "UNIX_TIMESTAMP(tl_pubs.TimePublish),"	// row[3]
+			  "tl_comments.Txt,"				// row[4]
+			  "tl_comments.MedCod"				// row[5]
+	          " FROM tl_pubs,tl_comments"
+		  " WHERE tl_pubs.NotCod=%ld"
+		  " AND tl_pubs.PubType=%u"
+		  " AND tl_pubs.PubCod=tl_comments.PubCod"
+		  " ORDER BY tl_pubs.PubCod DESC LIMIT %u"
+		  ") AS comments"
+		  " ORDER BY PubCod",
+		  NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE,
+		  NumFinalCommentsToGet);
   }

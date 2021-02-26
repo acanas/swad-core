@@ -354,25 +354,11 @@ static unsigned TL_Com_WriteHiddenComments (struct TL_Timeline *Timeline,
    unsigned long NumCom;
 
    /***** Get comments of this note from database *****/
-   NumInitialCommentsGot = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get comments",
-		   "SELECT tl_pubs.PubCod,"		// row[0]
-			  "tl_pubs.PublisherCod,"	// row[1]
-			  "tl_pubs.NotCod,"		// row[2]
-			  "UNIX_TIMESTAMP("
-			  "tl_pubs.TimePublish),"	// row[3]
-			  "tl_comments.Txt,"		// row[4]
-			  "tl_comments.MedCod"		// row[5]
-		   " FROM tl_pubs,tl_comments"
-		   " WHERE tl_pubs.NotCod=%ld"
-		   " AND tl_pubs.PubType=%u"
-		   " AND tl_pubs.PubCod=tl_comments.PubCod"
-		   " ORDER BY tl_pubs.PubCod"
-		   " LIMIT %lu",
-		   NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE,
-		   NumInitialCommentsToGet);
+   NumInitialCommentsGot = TL_DB_GetInitialComments (NotCod,
+				                     NumInitialCommentsToGet,
+				                     &mysql_res);
 
-   /***** List with comments *****/
+   /***** List comments *****/
    HTM_UL_Begin ("id=\"com_%s\" class=\"TL_LIST\"",IdComments);
    for (NumCom = 0;
 	NumCom < NumInitialCommentsGot;
