@@ -51,5 +51,6 @@ unsigned TL_DB_GetFinalComments (long NotCod,
 				 MYSQL_RES **mysql_res);
 void TL_DB_InsertCommentContent (long PubCod,
 				 const struct TL_Pst_PostContent *Content);
+long TL_DB_GetMedCodFromComment (long PubCod);
 
 #endif

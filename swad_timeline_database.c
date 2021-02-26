@@ -66,6 +66,7 @@ unsigned TL_DB_GetNumCommentsInNote (long NotCod)
 /*****************************************************************************/
 /************** Get initial comments of a note from database *****************/
 /*****************************************************************************/
+// Returns the number of rows got
 
 unsigned TL_DB_GetInitialComments (long NotCod,
 				   unsigned NumInitialCommentsToGet,
@@ -92,6 +93,7 @@ unsigned TL_DB_GetInitialComments (long NotCod,
 /*****************************************************************************/
 /*************** Get final comments of a note from database ******************/
 /*****************************************************************************/
+// Returns the number of rows got
 
 unsigned TL_DB_GetFinalComments (long NotCod,
 				 unsigned NumFinalCommentsToGet,
@@ -135,4 +137,32 @@ void TL_DB_InsertCommentContent (long PubCod,
 		   PubCod,
 		   Content->Txt,
 		   Content->Media.MedCod);
+  }
+
+/*****************************************************************************/
+/******************* Insert comment content in database **********************/
+/*****************************************************************************/
+
+long TL_DB_GetMedCodFromComment (long PubCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long MedCod = -1L;
+
+   /***** Get code of media associated to comment *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get media code",
+		       "SELECT MedCod"	// row[0]
+		       " FROM tl_comments"
+		       " WHERE PubCod=%ld",
+		       PubCod) == 1)   // Result should have a unique row
+     {
+      /* Get media code */
+      row = mysql_fetch_row (mysql_res);
+      MedCod = Str_ConvertStrCodToLongCod (row[0]);
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   return MedCod;
   }

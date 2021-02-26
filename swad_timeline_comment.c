@@ -938,27 +938,15 @@ static void TL_Com_RemoveComment (void)
 
 void TL_Com_RemoveCommentMediaAndDBEntries (long PubCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    long MedCod;
 
    /***** Remove media associated to comment *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get media",
-		       "SELECT MedCod"	// row[0]
-		       " FROM tl_comments"
-		       " WHERE PubCod=%ld",
-		       PubCod) == 1)   // Result should have a unique row
-     {
-      /* Get media code */
-      row = mysql_fetch_row (mysql_res);
-      MedCod = Str_ConvertStrCodToLongCod (row[0]);
+   /* Get media code */
+   MedCod = TL_DB_GetMedCodFromComment (PubCod);
 
-      /* Remove media */
+   /* Remove media */
+   if (MedCod > 0)
       Med_RemoveMedia (MedCod);
-     }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
 
    /***** Mark possible notifications on this comment as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,PubCod);
