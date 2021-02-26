@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_database.h"
+#include "swad_timeline_post.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -48,5 +49,7 @@ unsigned TL_DB_GetInitialComments (long NotCod,
 unsigned TL_DB_GetFinalComments (long NotCod,
 				 unsigned NumFinalCommentsToGet,
 				 MYSQL_RES **mysql_res);
+void TL_DB_InsertCommentContent (long PubCod,
+				 const struct TL_Pst_PostContent *Content);
 
 #endif

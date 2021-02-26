@@ -27,6 +27,7 @@
 
 #include "swad_database.h"
 #include "swad_timeline.h"
+#include "swad_timeline_database.h"
 #include "swad_timeline_publication.h"
 
 /*****************************************************************************/
@@ -116,4 +117,22 @@ unsigned TL_DB_GetFinalComments (long NotCod,
 		  " ORDER BY PubCod",
 		  NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE,
 		  NumFinalCommentsToGet);
+  }
+
+/*****************************************************************************/
+/******************* Insert comment content in database **********************/
+/*****************************************************************************/
+
+void TL_DB_InsertCommentContent (long PubCod,
+				 const struct TL_Pst_PostContent *Content)
+  {
+   /***** Insert comment content in database *****/
+   DB_QueryINSERT ("can not store comment content",
+		   "INSERT INTO tl_comments"
+		   " (PubCod,Txt,MedCod)"
+		   " VALUES"
+		   " (%ld,'%s',%ld)",
+		   PubCod,
+		   Content->Txt,
+		   Content->Media.MedCod);
   }

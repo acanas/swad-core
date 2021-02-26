@@ -727,14 +727,7 @@ static long TL_Com_ReceiveComment (void)
 	 TL_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
 
 	 /* Insert comment content in the database */
-	 DB_QueryINSERT ("can not store comment content",
-			 "INSERT INTO tl_comments"
-	                 " (PubCod,Txt,MedCod)"
-			 " VALUES"
-			 " (%ld,'%s',%ld)",
-			 Pub.PubCod,
-			 Content.Txt,
-			 Content.Media.MedCod);
+	 TL_DB_InsertCommentContent (Pub.PubCod,&Content);
 
 	 /***** Store notifications about the new comment *****/
 	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,Pub.PubCod);
