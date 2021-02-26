@@ -52,5 +52,8 @@ unsigned TL_DB_GetFinalComments (long NotCod,
 void TL_DB_InsertCommentContent (long PubCod,
 				 const struct TL_Pst_PostContent *Content);
 long TL_DB_GetMedCodFromComment (long PubCod);
+void TL_DB_RemoveCommentFavs (long PubCod);
+void TL_DB_RemoveCommentContent (long PubCod);
+void TL_DB_RemoveCommentPub (long PubCod,long PublisherCod);
 
 #endif

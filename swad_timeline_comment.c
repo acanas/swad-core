@@ -938,15 +938,8 @@ static void TL_Com_RemoveComment (void)
 
 void TL_Com_RemoveCommentMediaAndDBEntries (long PubCod)
   {
-   long MedCod;
-
    /***** Remove media associated to comment *****/
-   /* Get media code */
-   MedCod = TL_DB_GetMedCodFromComment (PubCod);
-
-   /* Remove media */
-   if (MedCod > 0)
-      Med_RemoveMedia (MedCod);
+   Med_RemoveMedia (TL_DB_GetMedCodFromComment (PubCod));
 
    /***** Mark possible notifications on this comment as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,PubCod);
@@ -954,26 +947,13 @@ void TL_Com_RemoveCommentMediaAndDBEntries (long PubCod)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
 
    /***** Remove favs for this comment *****/
-   DB_QueryDELETE ("can not remove favs for comment",
-		   "DELETE FROM tl_comments_fav"
-		   " WHERE PubCod=%ld",
-		   PubCod);
+   TL_DB_RemoveCommentFavs (PubCod);
 
    /***** Remove content of this comment *****/
-   DB_QueryDELETE ("can not remove a comment",
-		   "DELETE FROM tl_comments"
-		   " WHERE PubCod=%ld",
-		   PubCod);
+   TL_DB_RemoveCommentContent (PubCod);
 
    /***** Remove this comment *****/
-   DB_QueryDELETE ("can not remove a comment",
-		   "DELETE FROM tl_pubs"
-	           " WHERE PubCod=%ld"
-	           " AND PublisherCod=%ld"	// Extra check: I am the author
-	           " AND PubType=%u",		// Extra check: it's a comment
-		   PubCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (unsigned) TL_Pub_COMMENT_TO_NOTE);
+   TL_DB_RemoveCommentPub (PubCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

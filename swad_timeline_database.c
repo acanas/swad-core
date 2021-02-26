@@ -147,7 +147,7 @@ long TL_DB_GetMedCodFromComment (long PubCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   long MedCod = -1L;
+   long MedCod = -1L;	// Default value
 
    /***** Get code of media associated to comment *****/
    if (DB_QuerySELECT (&mysql_res,"can not get media code",
@@ -165,4 +165,47 @@ long TL_DB_GetMedCodFromComment (long PubCod)
    DB_FreeMySQLResult (&mysql_res);
 
    return MedCod;
+  }
+
+/*****************************************************************************/
+/****************** Remove favs for comment from database ********************/
+/*****************************************************************************/
+
+void TL_DB_RemoveCommentFavs (long PubCod)
+  {
+   /***** Remove favs for comment *****/
+   DB_QueryDELETE ("can not remove favs for comment",
+		   "DELETE FROM tl_comments_fav"
+		   " WHERE PubCod=%ld",
+		   PubCod);
+  }
+
+/*****************************************************************************/
+/***************** Remove content of comment from database *******************/
+/*****************************************************************************/
+
+void TL_DB_RemoveCommentContent (long PubCod)
+  {
+   /***** Remove content of comment *****/
+   DB_QueryDELETE ("can not remove a comment",
+		   "DELETE FROM tl_comments"
+		   " WHERE PubCod=%ld",
+		   PubCod);
+  }
+
+/*****************************************************************************/
+/***************** Remove comment publication from database ******************/
+/*****************************************************************************/
+
+void TL_DB_RemoveCommentPub (long PubCod,long PublisherCod)
+  {
+   /***** Remove comment publication *****/
+   DB_QueryDELETE ("can not remove a comment",
+		   "DELETE FROM tl_pubs"
+	           " WHERE PubCod=%ld"
+	           " AND PublisherCod=%ld"	// Extra check: I am the author
+	           " AND PubType=%u",		// Extra check: it's a comment
+		   PubCod,
+		   PublisherCod,
+		   (unsigned) TL_Pub_COMMENT_TO_NOTE);
   }
