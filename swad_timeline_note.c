@@ -1341,17 +1341,7 @@ void TL_Not_GetDataOfNoteByCod (struct TL_Not_Note *Not)
    if (Not->NotCod > 0)
      {
       /***** Get data of note from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get data of note",
-			  "SELECT NotCod,"			// row[0]
-				 "NoteType,"			// row[1]
-				 "Cod,"				// row[2]
-				 "UsrCod,"			// row[3]
-				 "HieCod,"			// row[4]
-				 "Unavailable,"			// row[5]
-				 "UNIX_TIMESTAMP(TimeNote)"	// row[6]
-			  " FROM tl_notes"
-			  " WHERE NotCod=%ld",
-			  Not->NotCod))
+      if (TL_DB_GetDataOfNoteByCod (Not->NotCod,&mysql_res))
 	{
 	 /***** Get data of note *****/
 	 row = mysql_fetch_row (mysql_res);

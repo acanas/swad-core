@@ -53,6 +53,59 @@
 static long TL_DB_GetMedCodFromPub (long PubCod,const char *DBTable);
 
 /*****************************************************************************/
+/********************* Get data of note using its code ***********************/
+/*****************************************************************************/
+// Returns the number of rows got
+
+unsigned TL_DB_GetDataOfNoteByCod (long NotCod,MYSQL_RES **mysql_res)
+  {
+   /***** Trivial check: note code should be > 0 *****/
+   if (NotCod <= 0)
+      return 0;
+
+   /***** Get data of note from database *****/
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get data of note",
+		   "SELECT NotCod,"			// row[0]
+			  "NoteType,"			// row[1]
+			  "Cod,"			// row[2]
+			  "UsrCod,"			// row[3]
+			  "HieCod,"			// row[4]
+			  "Unavailable,"		// row[5]
+			  "UNIX_TIMESTAMP(TimeNote)"	// row[6]
+		   " FROM tl_notes"
+		   " WHERE NotCod=%ld",
+		   NotCod);
+  }
+
+/*****************************************************************************/
+/*************** Get code of publication of the original note ****************/
+/*****************************************************************************/
+
+long TL_DB_GetPubCodOfOriginalNote (long NotCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long OriginalPubCod = -1L;	// Default value
+
+   /***** Get code of publication of the original note *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get code of publication",
+		       "SELECT PubCod FROM tl_pubs"
+		       " WHERE NotCod=%ld AND PubType=%u",
+		       NotCod,(unsigned) TL_Pub_ORIGINAL_NOTE) == 1)   // Result should have a unique row
+     {
+      /* Get code of publication (row[0]) */
+      row = mysql_fetch_row (mysql_res);
+      OriginalPubCod = Str_ConvertStrCodToLongCod (row[0]);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return OriginalPubCod;
+  }
+
+/*****************************************************************************/
 /***************************** Create a new note *****************************/
 /*****************************************************************************/
 // Returns code of note just created
@@ -159,33 +212,6 @@ mysql> SELECT SessionId,COUNT(*) FROM tl_timelines GROUP BY SessionId;
 	           " (SessionId,NotCod)"
 	           " SELECT '%s',NotCod FROM tl_tmp_just_retrieved_notes",
 		   SessionId);
-  }
-
-/*****************************************************************************/
-/*************** Get code of publication of the original note ****************/
-/*****************************************************************************/
-
-long TL_DB_GetPubCodOfOriginalNote (long NotCod)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long OriginalPubCod = -1L;	// Default value
-
-   /***** Get code of publication of the original note *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get code of publication",
-		       "SELECT PubCod FROM tl_pubs"
-		       " WHERE NotCod=%ld AND PubType=%u",
-		       NotCod,(unsigned) TL_Pub_ORIGINAL_NOTE) == 1)   // Result should have a unique row
-     {
-      /* Get code of publication (row[0]) */
-      row = mysql_fetch_row (mysql_res);
-      OriginalPubCod = Str_ConvertStrCodToLongCod (row[0]);
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return OriginalPubCod;
   }
 
 /*****************************************************************************/
