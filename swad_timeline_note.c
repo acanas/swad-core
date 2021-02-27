@@ -1207,12 +1207,7 @@ static void TL_Not_RemoveNoteMediaAndDBEntries (struct TL_Not_Note *Not)
 
    /***** Remove comments associated to this note *****/
    /* Get comments of this note */
-   NumComments = DB_QuerySELECT (&mysql_res,"can not get comments",
-				 "SELECT PubCod"
-				 " FROM tl_pubs"
-				 " WHERE NotCod=%ld AND PubType=%u",
-				 Not->NotCod,
-				 (unsigned) TL_Pub_COMMENT_TO_NOTE);
+   NumComments = TL_DB_GetComments (Not->NotCod,&mysql_res);
 
    /* For each comment... */
    for (NumCom = 0;

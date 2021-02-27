@@ -57,6 +57,7 @@ void TL_DB_InsertNoteInVisibleTimeline (long NotCod);
 
 /* Comments */
 unsigned TL_DB_GetNumCommentsInNote (long NotCod);
+unsigned TL_DB_GetComments (long NotCod,MYSQL_RES **mysql_res);
 unsigned TL_DB_GetInitialComments (long NotCod,
 				   unsigned NumInitialCommentsToGet,
 				   MYSQL_RES **mysql_res);

@@ -142,6 +142,21 @@ unsigned TL_DB_GetNumCommentsInNote (long NotCod)
   }
 
 /*****************************************************************************/
+/************** Get publication codes of comments of a note from database *****************/
+/*****************************************************************************/
+// Returns the number of rows got
+
+unsigned TL_DB_GetComments (long NotCod,MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get comments",
+		   "SELECT PubCod"	// row[0]
+		   " FROM tl_pubs"
+		   " WHERE NotCod=%ld AND PubType=%u",
+		   NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
+  }
+
+/*****************************************************************************/
 /************** Get initial comments of a note from database *****************/
 /*****************************************************************************/
 // Returns the number of rows got
