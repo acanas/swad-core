@@ -131,12 +131,66 @@ void TL_DB_InsertNoteInVisibleTimeline (long NotCod)
   }
 
 /*****************************************************************************/
+/*************************** Remove favs for a note **************************/
+/*****************************************************************************/
+
+void TL_DB_RemoveNoteFavs (long NotCod)
+  {
+   /***** Remove favs for note *****/
+   DB_QueryDELETE ("can not remove favs for note",
+		   "DELETE FROM tl_notes_fav"
+		   " WHERE NotCod=%ld",
+		   NotCod);
+  }
+
+/*****************************************************************************/
+/******************** Remove all publications of this note *******************/
+/*****************************************************************************/
+
+void TL_DB_RemoveNotePubs (long NotCod)
+  {
+   /***** Remove all publications of this note *****/
+   DB_QueryDELETE ("can not remove a publication",
+		   "DELETE FROM tl_pubs"
+		   " WHERE NotCod=%ld",
+		   NotCod);
+  }
+
+/*****************************************************************************/
+/******************* Remove note publication from database *******************/
+/*****************************************************************************/
+
+void TL_DB_RemoveNote (long NotCod,long PublisherCod)
+  {
+   /***** Remove note *****/
+   DB_QueryDELETE ("can not remove a note",
+		   "DELETE FROM tl_notes"
+	           " WHERE NotCod=%ld"
+	           " AND UsrCod=%ld",		// Extra check: author
+		   NotCod,
+		   PublisherCod);
+  }
+
+/*****************************************************************************/
 /***************** Get code of media associated to post **********************/
 /*****************************************************************************/
 
 long TL_DB_GetMedCodFromPost (long PubCod)
   {
    return TL_DB_GetMedCodFromPub (PubCod,"tl_posts");
+  }
+
+/*****************************************************************************/
+/************************* Remove post from database *************************/
+/*****************************************************************************/
+
+void TL_DB_RemovePost (long PstCod)
+  {
+   /***** Remove post *****/
+   DB_QueryDELETE ("can not remove a post",
+		   "DELETE FROM tl_posts"
+		   " WHERE PstCod=%ld",
+		   PstCod);
   }
 
 /*****************************************************************************/

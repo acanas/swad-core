@@ -1233,7 +1233,6 @@ static void TL_Not_RemoveNoteMediaAndDBEntries (struct TL_Not_Note *Not)
 
    /***** Mark possible notifications on the publications
           of this note as removed *****/
-   /* Mark notifications of the original note as removed */
    PubCod = TL_Not_GetPubCodOfOriginalNote (Not->NotCod);
    if (PubCod > 0)
      {
@@ -1243,31 +1242,17 @@ static void TL_Not_RemoveNoteMediaAndDBEntries (struct TL_Not_Note *Not)
      }
 
    /***** Remove favs for this note *****/
-   DB_QueryDELETE ("can not remove favs for note",
-		   "DELETE FROM tl_notes_fav"
-		   " WHERE NotCod=%ld",
-		   Not->NotCod);
+   TL_DB_RemoveNoteFavs (Not->NotCod);
 
-   /***** Remove all the publications of this note *****/
-   DB_QueryDELETE ("can not remove a publication",
-		   "DELETE FROM tl_pubs"
-		   " WHERE NotCod=%ld",
-		   Not->NotCod);
+   /***** Remove all publications of this note *****/
+   TL_DB_RemoveNotePubs (Not->NotCod);
 
    /***** Remove note *****/
-   DB_QueryDELETE ("can not remove a note",
-		   "DELETE FROM tl_notes"
-	           " WHERE NotCod=%ld"
-	           " AND UsrCod=%ld",		// Extra check: I am the author
-		   Not->NotCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   TL_DB_RemoveNote (Not->NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    if (Not->NoteType == TL_NOTE_POST)
       /***** Remove post *****/
-      DB_QueryDELETE ("can not remove a post",
-		      "DELETE FROM tl_posts"
-		      " WHERE PstCod=%ld",
-		      Not->Cod);
+      TL_DB_RemovePost (Not->Cod);
   }
 
 /*****************************************************************************/

@@ -54,9 +54,13 @@ void TL_DB_MarkNotesChildrenOfFolderAsUnavailable (TL_Not_NoteType_t NoteType,
                                                    const char *Path);
 void TL_DB_InsertNoteInJustRetrievedNotes (long NotCod);
 void TL_DB_InsertNoteInVisibleTimeline (long NotCod);
+void TL_DB_RemoveNoteFavs (long NotCod);
+void TL_DB_RemoveNotePubs (long NotCod);
+void TL_DB_RemoveNote (long NotCod,long PublisherCod);
 
 /* Posts */
 long TL_DB_GetMedCodFromPost (long PubCod);
+void TL_DB_RemovePost (long PstCod);
 
 /* Comments */
 unsigned TL_DB_GetNumCommentsInNote (long NotCod);
