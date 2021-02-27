@@ -33,6 +33,7 @@
 #include "swad_global.h"
 #include "swad_profile.h"
 #include "swad_timeline.h"
+#include "swad_timeline_database.h"
 #include "swad_timeline_favourite.h"
 #include "swad_timeline_note.h"
 #include "swad_timeline_publication.h"
@@ -236,7 +237,7 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
    TL_Pub_UpdateFirstLastPubCodesIntoSession (Timeline);
 
    /***** Add notes just retrieved to visible timeline for this session *****/
-   TL_Not_AddNotesJustRetrievedToVisibleTimelineThisSession ();
+   TL_DB_AddNotesJustRetrievedToVisibleTimelineOfSession (Gbl.Session.Id);
 
    /***** Drop temporary tables *****/
    TL_Pub_DropTemporaryTables (Timeline);

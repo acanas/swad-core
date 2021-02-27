@@ -110,10 +110,6 @@ void TL_Not_RequestRemNoteGbl (void);
 void TL_Not_RemoveNoteUsr (void);
 void TL_Not_RemoveNoteGbl (void);
 
-long TL_Not_GetPubCodOfOriginalNote (long NotCod);
-
-void TL_Not_AddNotesJustRetrievedToVisibleTimelineThisSession (void);
-
 void TL_Not_GetDataOfNoteByCod (struct TL_Not_Note *Not);
 
 void TL_Not_ClearOldTimelinesNotesFromDB (void);

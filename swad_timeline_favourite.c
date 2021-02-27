@@ -28,6 +28,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_timeline.h"
+#include "swad_timeline_database.h"
 #include "swad_timeline_favourite.h"
 #include "swad_timeline_form.h"
 #include "swad_timeline_notification.h"
@@ -187,7 +188,7 @@ static void TL_Fav_FavNote (struct TL_Not_Note *Not)
 
 	    /***** Create notification about favourite post
 		   for the author of the post *****/
-	    OriginalPubCod = TL_Not_GetPubCodOfOriginalNote (Not->NotCod);
+	    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
 	    if (OriginalPubCod > 0)
 	       TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,
 	                                   Ntf_EVENT_TIMELINE_FAV);
@@ -221,7 +222,7 @@ static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
 	    TL_Fav_GetNumTimesANoteHasBeenFav (Not);
 
             /***** Mark possible notifications on this note as removed *****/
-	    OriginalPubCod = TL_Not_GetPubCodOfOriginalNote (Not->NotCod);
+	    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
 	    if (OriginalPubCod > 0)
 	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,OriginalPubCod);
 	   }

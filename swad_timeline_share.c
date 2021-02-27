@@ -140,7 +140,7 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
 
 	    /**** Create notification about shared post
 		  for the author of the post ***/
-	    OriginalPubCod = TL_Not_GetPubCodOfOriginalNote (Not->NotCod);
+	    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
 	    if (OriginalPubCod > 0)
 	       TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,
 	                                   Ntf_EVENT_TIMELINE_SHARE);
@@ -200,7 +200,7 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
 	    TL_Sha_UpdateNumTimesANoteHasBeenShared (Not);
 
             /***** Mark possible notifications on this note as removed *****/
-	    OriginalPubCod = TL_Not_GetPubCodOfOriginalNote (Not->NotCod);
+	    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
 	    if (OriginalPubCod > 0)
 	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE,OriginalPubCod);
 	   }

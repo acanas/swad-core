@@ -1233,7 +1233,7 @@ static void TL_Not_RemoveNoteMediaAndDBEntries (struct TL_Not_Note *Not)
 
    /***** Mark possible notifications on the publications
           of this note as removed *****/
-   PubCod = TL_Not_GetPubCodOfOriginalNote (Not->NotCod);
+   PubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
    if (PubCod > 0)
      {
       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
@@ -1327,64 +1327,6 @@ static void TL_Not_ResetNote (struct TL_Not_Note *Not)
    Not->Unavailable = false;
    Not->DateTimeUTC = (time_t) 0;
    Not->NumShared   = 0;
-  }
-
-/*****************************************************************************/
-/*************** Get code of publication of the original note ****************/
-/*****************************************************************************/
-
-long TL_Not_GetPubCodOfOriginalNote (long NotCod)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long OriginalPubCod = -1L;
-
-   /***** Get code of publication of the original note *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get code of publication",
-		       "SELECT PubCod FROM tl_pubs"
-		       " WHERE NotCod=%ld AND PubType=%u",
-		       NotCod,(unsigned) TL_Pub_ORIGINAL_NOTE) == 1)   // Result should have a unique row
-     {
-      /* Get code of publication (row[0]) */
-      row = mysql_fetch_row (mysql_res);
-      OriginalPubCod = Str_ConvertStrCodToLongCod (row[0]);
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return OriginalPubCod;
-  }
-
-/*****************************************************************************/
-/****** Add just retrieved notes to current timeline for this session ********/
-/*****************************************************************************/
-
-void TL_Not_AddNotesJustRetrievedToVisibleTimelineThisSession (void)
-  {
-   /* tl_timelines contains the distinct notes in timeline of each open session:
-mysql> SELECT SessionId,COUNT(*) FROM tl_timelines GROUP BY SessionId;
-+---------------------------------------------+----------+
-| SessionId                                   | COUNT(*) |
-+---------------------------------------------+----------+
-| u-X-R3gKki7eKMXrNCP8bGhwOAZuVngRy7FNGZFMKzI |       52 | --> 52 distinct notes
-| u1CoqL1YWl3_hR4wk4bI7vhnc-uRcCmIDyKYAgBB6kk |       10 |
-| u8xqamzkorHfY4BvYRMXjNhzHvQyigZUZemO0YiMn48 |       10 |
-| u_n2V_L3KrFjnd4SqZk0gxMFwZHRuWZ8_EIVTU9sdpI |       10 |
-| V6pGe1kGGS_uO5i__waqXKnuDkPYaDZHNAYr-Zv-GJQ |        2 |
-| vqDRz-iiM8v10Dl8ThwqIqmDRIklz8szJaqflwXZucs |       10 |
-| w11juqKPx6lg-f_pL2ZBYqlagU1mEepSvvk9L3gDGac |       10 | --> 10 distinct notes
-| wLg4e8KQljCcVuFWIkJjNeti89kAiwOZ3iyXdzm_eDk |       10 |
-| wnU85YrwJHhZGWIZhd7LQfQTPrclIWHfMF3DcB-Rcgw |        4 |
-| wRzRJFnHfzW61fZYnvMIaMRlkuWUeEyqXVQ6JeWA32k |       11 |
-+---------------------------------------------+----------+
-10 rows in set (0,01 sec)
-   */
-   DB_QueryINSERT ("can not insert notes in timeline",
-		   "INSERT IGNORE INTO tl_timelines"
-	           " (SessionId,NotCod)"
-	           " SELECT '%s',NotCod FROM tl_tmp_just_retrieved_notes",
-		   Gbl.Session.Id);
   }
 
 /*****************************************************************************/
