@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_database.h"
+#include "swad_file_browser.h"
 #include "swad_timeline_note.h"
 #include "swad_timeline_post.h"
 
@@ -47,6 +48,10 @@
 long TL_DB_CreateNewNote (TL_Not_NoteType_t NoteType,long Cod,
                           long PublisherCod,long HieCod);
 void TL_DB_MarkNoteAsUnavailable (TL_Not_NoteType_t NoteType,long Cod);
+void TL_DB_MarkNotesChildrenOfFolderAsUnavailable (TL_Not_NoteType_t NoteType,
+                                                   Brw_FileBrowser_t FileBrowser,
+                                                   long Cod,
+                                                   const char *Path);
 void TL_DB_InsertNoteInJustRetrievedNotes (long NotCod);
 void TL_DB_InsertNoteInVisibleTimeline (long NotCod);
 

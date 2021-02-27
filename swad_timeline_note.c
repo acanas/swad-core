@@ -951,7 +951,6 @@ void TL_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
-   long Cod = Brw_GetCodForFiles ();
    TL_Not_NoteType_t NoteType;
 
    switch (FileBrowser)
@@ -994,15 +993,9 @@ void TL_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
 	    default:
 	       return;
 	   }
-         DB_QueryUPDATE ("can not mark notes as unavailable",
-			 "UPDATE tl_notes SET Unavailable='Y'"
-		         " WHERE NoteType=%u AND Cod IN"
-	                 " (SELECT FilCod FROM files"
-			 " WHERE FileBrowser=%u AND Cod=%ld"
-			 " AND Path LIKE '%s/%%' AND Public='Y')",	// Only public files
-			 (unsigned) NoteType,
-			 (unsigned) FileBrowser,Cod,
-			 Path);
+         TL_DB_MarkNotesChildrenOfFolderAsUnavailable (NoteType,
+                                                       FileBrowser,Brw_GetCodForFiles (),
+                                                       Path);
          break;
       default:
 	 break;

@@ -76,11 +76,32 @@ long TL_DB_CreateNewNote (TL_Not_NoteType_t NoteType,long Cod,
 
 void TL_DB_MarkNoteAsUnavailable (TL_Not_NoteType_t NoteType,long Cod)
   {
-   /***** Mark the note as unavailable *****/
+   /***** Mark note as unavailable *****/
    DB_QueryUPDATE ("can not mark note as unavailable",
 		   "UPDATE tl_notes SET Unavailable='Y'"
 		   " WHERE NoteType=%u AND Cod=%ld",
 		   (unsigned) NoteType,Cod);
+  }
+
+/*****************************************************************************/
+/***** Mark possible notes involving children of a folder as unavailable *****/
+/*****************************************************************************/
+
+void TL_DB_MarkNotesChildrenOfFolderAsUnavailable (TL_Not_NoteType_t NoteType,
+                                                   Brw_FileBrowser_t FileBrowser,
+                                                   long Cod,
+                                                   const char *Path)
+  {
+   /***** Mark notes as unavailable *****/
+   DB_QueryUPDATE ("can not mark notes as unavailable",
+		   "UPDATE tl_notes SET Unavailable='Y'"
+		   " WHERE NoteType=%u AND Cod IN"
+		   " (SELECT FilCod FROM files"
+		   " WHERE FileBrowser=%u AND Cod=%ld"
+		   " AND Path LIKE '%s/%%' AND Public='Y')",	// Only public files
+		   (unsigned) NoteType,
+		   (unsigned) FileBrowser,Cod,
+		   Path);
   }
 
 /*****************************************************************************/
