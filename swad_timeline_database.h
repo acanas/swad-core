@@ -31,6 +31,7 @@
 #include "swad_file_browser.h"
 #include "swad_timeline_note.h"
 #include "swad_timeline_post.h"
+#include "swad_timeline_publication.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -91,6 +92,9 @@ void TL_DB_RemoveCommentContent (long PubCod);
 void TL_DB_RemoveCommentPub (long PubCod,long PublisherCod);
 
 /* Publications */
+unsigned TL_DB_SelectTheMostRecentPub (const struct TL_Pub_SubQueries *SubQueries,
+                                       MYSQL_RES **mysql_res);
+long TL_DB_GetNotCodFromPubCod (long PubCod);
 long TL_DB_GetPubCodFromSession (const char *FieldName,
                                  const char SessionId[Cns_BYTES_SESSION_ID + 1]);
 void TL_DB_UpdateFirstPubCodInSession (long FirstPubCod,

@@ -591,6 +591,57 @@ static long TL_DB_GetMedCodFromPub (long PubCod,const char *DBTable)
   }
 
 /*****************************************************************************/
+/******************** Select the most recent publication *********************/
+/*****************************************************************************/
+// Returns the number of rows got
+
+unsigned TL_DB_SelectTheMostRecentPub (const struct TL_Pub_SubQueries *SubQueries,
+                                       MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get publication",
+		   "SELECT tl_pubs.PubCod,"		// row[0]
+			  "tl_pubs.NotCod,"		// row[1]
+			  "tl_pubs.PublisherCod,"	// row[2]
+			  "tl_pubs.PubType"		// row[3]
+		   " FROM tl_pubs%s"
+		   " WHERE %s%s%s%s"
+		   " ORDER BY tl_pubs.PubCod DESC LIMIT 1",
+		   SubQueries->TablePublishers,
+		   SubQueries->RangeBottom,
+		   SubQueries->RangeTop,
+		   SubQueries->Publishers,
+		   SubQueries->AlreadyExists);
+  }
+
+/*****************************************************************************/
+/*********************** Get code of note of a publication *******************/
+/*****************************************************************************/
+
+long TL_DB_GetNotCodFromPubCod (long PubCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long NotCod = -1L;	// Default value
+
+   /***** Get code of note from database *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get code of note",
+		       "SELECT NotCod FROM tl_pubs"
+		       " WHERE PubCod=%ld",
+		       PubCod) == 1)   // Result should have a unique row
+     {
+      /* Get code of note */
+      row = mysql_fetch_row (mysql_res);
+      NotCod = Str_ConvertStrCodToLongCod (row[0]);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NotCod;
+  }
+
+/*****************************************************************************/
 /************* Get last/first publication code stored in session *************/
 /*****************************************************************************/
 // FieldName can be:

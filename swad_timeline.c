@@ -135,6 +135,7 @@ mysql> SHOW TABLES LIKE 'tl_%';
 #include "swad_photo.h"
 #include "swad_profile.h"
 #include "swad_timeline.h"
+#include "swad_timeline_database.h"
 #include "swad_timeline_favourite.h"
 #include "swad_timeline_note.h"
 #include "swad_timeline_notification.h"
@@ -238,7 +239,7 @@ void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline)
 
    /***** If a note should be highlighted ==> get code of note from database *****/
    if (PubCod > 0)
-      Not.NotCod = TL_Pub_GetNotCodFromPubCod (PubCod);
+      Not.NotCod = TL_DB_GetNotCodFromPubCod (PubCod);
 
    /***** If a note should be highlighted ==> show it above the timeline *****/
    if (Not.NotCod > 0)

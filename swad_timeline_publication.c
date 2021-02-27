@@ -47,16 +47,6 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
-#define TL_Pub_MAX_BYTES_SUBQUERY (128 - 1)
-struct TL_Pub_SubQueries
-  {
-   char *TablePublishers;
-   char Publishers   [TL_Pub_MAX_BYTES_SUBQUERY + 1];
-   char RangeBottom  [TL_Pub_MAX_BYTES_SUBQUERY + 1];
-   char RangeTop     [TL_Pub_MAX_BYTES_SUBQUERY + 1];
-   char AlreadyExists[TL_Pub_MAX_BYTES_SUBQUERY + 1];
-  };
-
 struct TL_Pub_RangePubsToGet
   {
    long Top;
@@ -424,25 +414,9 @@ void TL_Pub_FreeListPubs (struct TL_Timeline *Timeline)
 static struct TL_Pub_Publication *TL_Pub_SelectTheMostRecentPub (const struct TL_Pub_SubQueries *SubQueries)
   {
    MYSQL_RES *mysql_res;
-   unsigned NumPubs = 0;	// Initialized to avoid warning
    struct TL_Pub_Publication *Pub;
 
-   NumPubs =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
-			      "SELECT tl_pubs.PubCod,"		// row[0]
-			             "tl_pubs.NotCod,"		// row[1]
-			             "tl_pubs.PublisherCod,"	// row[2]
-			             "tl_pubs.PubType"		// row[3]
-			      " FROM tl_pubs%s"
-			      " WHERE %s%s%s%s"
-			      " ORDER BY tl_pubs.PubCod DESC LIMIT 1",
-			      SubQueries->TablePublishers,
-			      SubQueries->RangeBottom,
-			      SubQueries->RangeTop,
-			      SubQueries->Publishers,
-			      SubQueries->AlreadyExists);
-
-   if (NumPubs == 1)
+   if (TL_DB_SelectTheMostRecentPub (SubQueries,&mysql_res) == 1)
      {
       /* Allocate space for publication */
       if ((Pub = malloc (sizeof (*Pub))) == NULL)
@@ -606,33 +580,6 @@ long TL_Pub_GetParamPubCod (void)
   {
    /***** Get comment code *****/
    return Par_GetParToLong ("PubCod");
-  }
-
-/*****************************************************************************/
-/*********************** Get code of note of a publication *******************/
-/*****************************************************************************/
-
-long TL_Pub_GetNotCodFromPubCod (long PubCod)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long NotCod = -1L;
-
-   /***** Get code of note from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get code of note",
-		       "SELECT NotCod FROM tl_pubs"
-		       " WHERE PubCod=%ld",
-		       PubCod) == 1)   // Result should have a unique row
-     {
-      /* Get code of note */
-      row = mysql_fetch_row (mysql_res);
-      NotCod = Str_ConvertStrCodToLongCod (row[0]);
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NotCod;
   }
 
 /*****************************************************************************/

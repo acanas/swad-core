@@ -65,6 +65,16 @@ struct TL_Pub_Publication
    struct TL_Pub_Publication *Next;	// Used for chained list
   };
 
+#define TL_Pub_MAX_BYTES_SUBQUERY (128 - 1)
+struct TL_Pub_SubQueries
+  {
+   char *TablePublishers;
+   char Publishers   [TL_Pub_MAX_BYTES_SUBQUERY + 1];
+   char RangeBottom  [TL_Pub_MAX_BYTES_SUBQUERY + 1];
+   char RangeTop     [TL_Pub_MAX_BYTES_SUBQUERY + 1];
+   char AlreadyExists[TL_Pub_MAX_BYTES_SUBQUERY + 1];
+  };
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -82,8 +92,6 @@ void TL_Pub_PutLinkToViewOldPublications (void);
 
 void TL_Pub_PutHiddenParamPubCod (long PubCod);
 long TL_Pub_GetParamPubCod (void);
-
-long TL_Pub_GetNotCodFromPubCod (long PubCod);
 
 void TL_Pub_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
                                              struct TL_Pub_Publication *Pub);
