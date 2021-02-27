@@ -41,6 +41,7 @@
 #include "swad_photo.h"
 #include "swad_profile.h"
 #include "swad_timeline.h"
+#include "swad_timeline_database.h"
 #include "swad_timeline_favourite.h"
 #include "swad_timeline_form.h"
 #include "swad_timeline_publication.h"
@@ -182,30 +183,6 @@ void TL_Not_ShowHighlightedNote (struct TL_Timeline *Timeline,
 		                       PublisherDat.UsrCod);
    HTM_DIV_End ();
    Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
-/**** Insert note in temporary tables used to not get notes already shown ****/
-/*****************************************************************************/
-
-void TL_Not_InsertNoteInJustRetrievedNotes (long NotCod)
-  {
-   /* Insert note in temporary table with just retrieved notes.
-      This table will be used to not get notes already shown */
-   DB_QueryINSERT ("can not store note code",
-		   "INSERT IGNORE INTO tl_tmp_just_retrieved_notes"
-		   " SET NotCod=%ld",
-		   NotCod);
-  }
-
-void TL_Not_InsertNoteInVisibleTimeline (long NotCod)
-  {
-   /* Insert note in temporary table with visible timeline.
-      This table will be used to not get notes already shown */
-   DB_QueryINSERT ("can not store note code",
-		   "INSERT IGNORE INTO tl_tmp_visible_timeline"
-		   " SET NotCod=%ld",
-		   NotCod);
   }
 
 /*****************************************************************************/
@@ -895,18 +872,9 @@ void TL_Not_StoreAndPublishNoteInternal (TL_Not_NoteType_t NoteType,long Cod,str
          break;
      }
 
-   /***** Store note *****/
-   Pub->NotCod =
-   DB_QueryINSERTandReturnCode ("can not create new note",
-				"INSERT INTO tl_notes"
-				" (NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote)"
-				" VALUES"
-				" (%u,%ld,%ld,%ld,'N',NOW())",
-				(unsigned) NoteType,
-				Cod,Gbl.Usrs.Me.UsrDat.UsrCod,HieCod);
-
    /***** Publish note in timeline *****/
    Pub->PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+   Pub->NotCod       = TL_DB_CreateNewNote (NoteType,Cod,Pub->PublisherCod,HieCod);
    Pub->PubType      = TL_Pub_ORIGINAL_NOTE;
    TL_Pub_PublishPubInTimeline (Pub);
   }

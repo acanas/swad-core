@@ -223,9 +223,9 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
 
       /* Insert note in temporary tables with just retrieved notes.
 	 These tables will be used to not get notes already shown */
-      TL_Not_InsertNoteInJustRetrievedNotes (Pub->NotCod);
+      TL_DB_InsertNoteInJustRetrievedNotes (Pub->NotCod);
       if (Timeline->WhatToGet == TL_GET_ONLY_OLD_PUBS)	// Get only old publications
-	 TL_Not_InsertNoteInVisibleTimeline (Pub->NotCod);
+	 TL_DB_InsertNoteInVisibleTimeline (Pub->NotCod);
 
       /* Narrow the range for the next iteration */
       RangePubsToGet.Top = Pub->PubCod;

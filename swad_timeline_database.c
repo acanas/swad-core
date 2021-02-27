@@ -51,6 +51,50 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
+/***************************** Create a new note *****************************/
+/*****************************************************************************/
+// Returns code of note just created
+
+long TL_DB_CreateNewNote (TL_Not_NoteType_t NoteType,long Cod,
+                          long PublisherCod,long HieCod)
+  {
+   return
+   DB_QueryINSERTandReturnCode ("can not create new note",
+				"INSERT INTO tl_notes"
+				" (NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote)"
+				" VALUES"
+				" (%u,%ld,%ld,%ld,'N',NOW())",
+				(unsigned) NoteType,	// Post, file, exam, notice, forum
+				Cod,			// Post, file, exam, notice, forum code
+				PublisherCod,		// Publisher code
+				HieCod);		// Where in hierarchy
+  }
+
+/*****************************************************************************/
+/**** Insert note in temporary tables used to not get notes already shown ****/
+/*****************************************************************************/
+
+void TL_DB_InsertNoteInJustRetrievedNotes (long NotCod)
+  {
+   /* Insert note in temporary table with just retrieved notes.
+      This table will be used to not get notes already shown */
+   DB_QueryINSERT ("can not store note code",
+		   "INSERT IGNORE INTO tl_tmp_just_retrieved_notes"
+		   " SET NotCod=%ld",
+		   NotCod);
+  }
+
+void TL_DB_InsertNoteInVisibleTimeline (long NotCod)
+  {
+   /* Insert note in temporary table with visible timeline.
+      This table will be used to not get notes already shown */
+   DB_QueryINSERT ("can not store note code",
+		   "INSERT IGNORE INTO tl_tmp_visible_timeline"
+		   " SET NotCod=%ld",
+		   NotCod);
+  }
+
+/*****************************************************************************/
 /********************* Get number of comments in a note **********************/
 /*****************************************************************************/
 
@@ -134,7 +178,7 @@ unsigned TL_DB_GetDataOfCommByCod (long PubCod,MYSQL_RES **mysql_res)
 
    /***** Get data of comment from database *****/
    return (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get data of comment",
+   DB_QuerySELECT (mysql_res,"can not get data of comment",
 		   "SELECT tl_pubs.PubCod,"			// row[0]
 			  "tl_pubs.PublisherCod,"		// row[1]
 			  "tl_pubs.NotCod,"			// row[2]

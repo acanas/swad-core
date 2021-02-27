@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_database.h"
+#include "swad_timeline_note.h"
 #include "swad_timeline_post.h"
 
 /*****************************************************************************/
@@ -42,6 +43,13 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+/* Notes */
+long TL_DB_CreateNewNote (TL_Not_NoteType_t NoteType,long Cod,
+                          long PublisherCod,long HieCod);
+void TL_DB_InsertNoteInJustRetrievedNotes (long NotCod);
+void TL_DB_InsertNoteInVisibleTimeline (long NotCod);
+
+/* Comments */
 unsigned TL_DB_GetNumCommentsInNote (long NotCod);
 unsigned TL_DB_GetInitialComments (long NotCod,
 				   unsigned NumInitialCommentsToGet,

@@ -87,9 +87,6 @@ struct TL_Not_Note
 void TL_Not_ShowHighlightedNote (struct TL_Timeline *Timeline,
                                  struct TL_Not_Note *Not);
 
-void TL_Not_InsertNoteInJustRetrievedNotes (long NotCod);
-void TL_Not_InsertNoteInVisibleTimeline (long NotCod);
-
 void TL_Not_CheckAndWriteNoteWithTopMsg (const struct TL_Timeline *Timeline,
 	                                 const struct TL_Not_Note *Not,
                                          TL_TopMessage_t TopMessage,
