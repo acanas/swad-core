@@ -93,5 +93,10 @@ void TL_DB_RemoveCommentPub (long PubCod,long PublisherCod);
 /* Publications */
 long TL_DB_GetPubCodFromSession (const char *FieldName,
                                  const char SessionId[Cns_BYTES_SESSION_ID + 1]);
+void TL_DB_UpdateFirstPubCodInSession (long FirstPubCod,
+                                       const char SessionId[Cns_BYTES_SESSION_ID + 1]);
+void TL_DB_UpdateLastPubCodInSession (const char SessionId[Cns_BYTES_SESSION_ID + 1]);
+void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod,
+                                            const char SessionId[Cns_BYTES_SESSION_ID + 1]);
 
 #endif

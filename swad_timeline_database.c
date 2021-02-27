@@ -623,3 +623,51 @@ long TL_DB_GetPubCodFromSession (const char *FieldName,
 
    return PubCod;
   }
+
+/*****************************************************************************/
+/************** Update first publication code stored in session **************/
+/*****************************************************************************/
+
+void TL_DB_UpdateFirstPubCodInSession (long FirstPubCod,
+                                       const char SessionId[Cns_BYTES_SESSION_ID + 1])
+  {
+   DB_QueryUPDATE ("can not update first publication code into session",
+		   "UPDATE sessions"
+		   " SET FirstPubCod=%ld"
+		   " WHERE SessionId='%s'",
+		   FirstPubCod,
+		   SessionId);
+  }
+
+/*****************************************************************************/
+/*************** Update last publication code stored in session **************/
+/*****************************************************************************/
+
+void TL_DB_UpdateLastPubCodInSession (const char SessionId[Cns_BYTES_SESSION_ID + 1])
+  {
+   DB_QueryUPDATE ("can not update last publication code into session",
+		   "UPDATE sessions"
+		   " SET LastPubCod="
+			"(SELECT IFNULL(MAX(PubCod),0)"
+			" FROM tl_pubs)"	// The most recent publication
+		   " WHERE SessionId='%s'",
+		   SessionId);
+  }
+
+/*****************************************************************************/
+/********* Update first and last publication codes stored in session *********/
+/*****************************************************************************/
+
+void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod,
+                                            const char SessionId[Cns_BYTES_SESSION_ID + 1])
+  {
+   DB_QueryUPDATE ("can not update first/last publication codes into session",
+		   "UPDATE sessions"
+		   " SET FirstPubCod=%ld,"
+			"LastPubCod="
+			"(SELECT IFNULL(MAX(PubCod),0)"
+			" FROM tl_pubs)"	// The most recent publication
+		   " WHERE SessionId='%s'",
+		   FirstPubCod,
+		   SessionId);
+  }

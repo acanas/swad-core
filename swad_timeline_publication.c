@@ -373,41 +373,20 @@ static void TL_Pub_UpdateFirstLastPubCodesIntoSession (const struct TL_Timeline 
 
    switch (Timeline->WhatToGet)
      {
-      case TL_GET_ONLY_NEW_PUBS:
-	 DB_QueryUPDATE ("can not update first/last publication codes into session",
-			 "UPDATE sessions"
-			 " SET LastPubCod="
-			      "(SELECT IFNULL(MAX(PubCod),0)"
-			      " FROM tl_pubs)"	// The most recent publication
-			 " WHERE SessionId='%s'",
-			 Gbl.Session.Id);
+      case TL_GET_ONLY_NEW_PUBS:	// Get only new publications
+	 TL_DB_UpdateLastPubCodInSession (Gbl.Session.Id);
 	 break;
       case TL_GET_ONLY_OLD_PUBS:	// Get only old publications
 	 // The oldest publication code retrieved and shown
 	 FirstPubCod = Timeline->Pubs.Bottom ? Timeline->Pubs.Bottom->PubCod :
 			                       0;
-
-	 DB_QueryUPDATE ("can not update first/last publication codes into session",
-			 "UPDATE sessions"
-			 " SET FirstPubCod=%ld"
-			 " WHERE SessionId='%s'",
-			 FirstPubCod,
-			 Gbl.Session.Id);
+	 TL_DB_UpdateFirstPubCodInSession (FirstPubCod,Gbl.Session.Id);
 	 break;
-      case TL_GET_RECENT_TIMELINE:
+      case TL_GET_RECENT_TIMELINE:	// Get last publications
 	 // The oldest publication code retrieved and shown
 	 FirstPubCod = Timeline->Pubs.Bottom ? Timeline->Pubs.Bottom->PubCod :
 			                       0;
-
-	 DB_QueryUPDATE ("can not update first/last publication codes into session",
-			 "UPDATE sessions"
-			 " SET FirstPubCod=%ld,"
-			      "LastPubCod="
-			      "(SELECT IFNULL(MAX(PubCod),0)"
-			      " FROM tl_pubs)"	// The most recent publication
-			 " WHERE SessionId='%s'",
-			 FirstPubCod,
-			 Gbl.Session.Id);
+         TL_DB_UpdateFirstLastPubCodsInSession (FirstPubCod,Gbl.Session.Id);
 	 break;
      }
   }
