@@ -270,14 +270,7 @@ static long TL_Pst_ReceivePost (void)
 
       /***** Publish *****/
       /* Insert post content in the database */
-      PstCod =
-      DB_QueryINSERTandReturnCode ("can not create post",
-				   "INSERT INTO tl_posts"
-				   " (Txt,MedCod)"
-				   " VALUES"
-				   " ('%s',%ld)",
-				   Content.Txt,
-				   Content.Media.MedCod);
+      PstCod = TL_DB_CreateNewPost (&Content);
 
       /* Insert post in notes */
       TL_Not_StoreAndPublishNoteInternal (TL_NOTE_POST,PstCod,&Pub);

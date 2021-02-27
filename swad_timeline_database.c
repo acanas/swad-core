@@ -349,6 +349,24 @@ long TL_DB_GetMedCodFromPost (long PubCod)
   }
 
 /*****************************************************************************/
+/********************* Insert post content in database ***********************/
+/*****************************************************************************/
+// Returns code of just created post
+
+long TL_DB_CreateNewPost (const struct TL_Pst_PostContent *Content)
+  {
+   /***** Insert post content in the database *****/
+   return
+   DB_QueryINSERTandReturnCode ("can not create post",
+				"INSERT INTO tl_posts"
+				" (Txt,MedCod)"
+				" VALUES"
+				" ('%s',%ld)",
+				Content->Txt,
+				Content->Media.MedCod);
+  }
+
+/*****************************************************************************/
 /************************* Remove post from database *************************/
 /*****************************************************************************/
 
