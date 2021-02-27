@@ -160,6 +160,30 @@ void TL_DB_MarkNotesChildrenOfFolderAsUnavailable (TL_Not_NoteType_t NoteType,
   }
 
 /*****************************************************************************/
+/******* Create temporary tables used to not get notes already shown *********/
+/*****************************************************************************/
+
+void TL_DB_CreateTmpTableJustRetrievedNotes (void)
+  {
+   /***** Create temporary table with notes just retrieved *****/
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE tl_tmp_just_retrieved_notes "
+	     "(NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod))"
+	     " ENGINE=MEMORY");
+  }
+
+void TL_DB_CreateTmpTableVisibleTimeline (char SessionId[Cns_BYTES_SESSION_ID + 1])
+  {
+   /***** Create temporary table with all notes visible in timeline *****/
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE tl_tmp_visible_timeline "
+	     "(NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod))"
+	     " ENGINE=MEMORY"
+	     " SELECT NotCod FROM tl_timelines WHERE SessionId='%s'",
+	     SessionId);
+  }
+
+/*****************************************************************************/
 /**** Insert note in temporary tables used to not get notes already shown ****/
 /*****************************************************************************/
 
@@ -211,6 +235,49 @@ mysql> SELECT SessionId,COUNT(*) FROM tl_timelines GROUP BY SessionId;
 		   "INSERT IGNORE INTO tl_timelines"
 	           " (SessionId,NotCod)"
 	           " SELECT '%s',NotCod FROM tl_tmp_just_retrieved_notes",
+		   SessionId);
+  }
+
+/*****************************************************************************/
+/******** Drop temporary tables used to not get notes already shown **********/
+/*****************************************************************************/
+
+void TL_DB_DropTmpTableJustRetrievedNotes (void)
+  {
+   /***** Drop temporary table with notes just retrieved *****/
+   DB_Query ("can not remove temporary table",
+	     "DROP TEMPORARY TABLE IF EXISTS tl_tmp_just_retrieved_notes");
+  }
+
+void TL_DB_DropTmpTableVisibleTimeline (void)
+  {
+   /***** Drop temporary table with all notes visible in timeline *****/
+   DB_Query ("can not remove temporary table",
+             "DROP TEMPORARY TABLE IF EXISTS tl_tmp_visible_timeline");
+  }
+
+/*****************************************************************************/
+/******************* Clear unused old timelines in database ******************/
+/*****************************************************************************/
+
+void TL_DB_ClearOldTimelinesNotesFromDB (void)
+  {
+   /***** Remove timelines for expired sessions *****/
+   DB_QueryDELETE ("can not remove old timelines",
+		   "DELETE LOW_PRIORITY FROM tl_timelines"
+                   " WHERE SessionId NOT IN (SELECT SessionId FROM sessions)");
+  }
+
+/*****************************************************************************/
+/***************** Clear timeline for a session in database ******************/
+/*****************************************************************************/
+
+void TL_DB_ClearTimelineNotesOfSessionFromDB (char SessionId[Cns_BYTES_SESSION_ID + 1])
+  {
+   /***** Remove timeline for a session *****/
+   DB_QueryDELETE ("can not remove timeline",
+		   "DELETE FROM tl_timelines"
+		   " WHERE SessionId='%s'",
 		   SessionId);
   }
 

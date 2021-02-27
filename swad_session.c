@@ -34,7 +34,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
-#include "swad_timeline_note.h"
+#include "swad_timeline_database.h"
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
@@ -227,7 +227,7 @@ static void Ses_RemoveSessionFromDB (void)
 
    /***** Clear old unused social timelines in database *****/
    // This is necessary to prevent the table growing and growing
-   TL_Not_ClearOldTimelinesNotesFromDB ();
+   TL_DB_ClearOldTimelinesNotesFromDB ();
   }
 
 /*****************************************************************************/

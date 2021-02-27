@@ -54,9 +54,15 @@ void TL_DB_MarkNotesChildrenOfFolderAsUnavailable (TL_Not_NoteType_t NoteType,
                                                    Brw_FileBrowser_t FileBrowser,
                                                    long Cod,
                                                    const char *Path);
+void TL_DB_CreateTmpTableJustRetrievedNotes (void);
+void TL_DB_CreateTmpTableVisibleTimeline (char SessionId[Cns_BYTES_SESSION_ID + 1]);
 void TL_DB_InsertNoteInJustRetrievedNotes (long NotCod);
 void TL_DB_InsertNoteInVisibleTimeline (long NotCod);
 void TL_DB_AddNotesJustRetrievedToVisibleTimelineOfSession (char SessionId[Cns_BYTES_SESSION_ID + 1]);
+void TL_DB_DropTmpTableJustRetrievedNotes (void);
+void TL_DB_DropTmpTableVisibleTimeline (void);
+void TL_DB_ClearOldTimelinesNotesFromDB (void);
+void TL_DB_ClearTimelineNotesOfSessionFromDB (char SessionId[Cns_BYTES_SESSION_ID + 1]);
 void TL_DB_RemoveNoteFavs (long NotCod);
 void TL_DB_RemoveNotePubs (long NotCod);
 void TL_DB_RemoveNote (long NotCod,long PublisherCod);

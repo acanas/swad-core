@@ -77,8 +77,6 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void TL_Pub_DropTemporaryTables (const struct TL_Timeline *Timeline);
-
 static unsigned TL_Pub_GetMaxPubsToGet (const struct TL_Timeline *Timeline);
 
 static void TL_Pub_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
@@ -111,15 +109,21 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
 
    /***** Clear timeline for this session in database *****/
    if (Timeline->WhatToGet == TL_GET_RECENT_TIMELINE)
-      TL_Not_ClearTimelineNotesThisSessionFromDB ();
+      TL_DB_ClearTimelineNotesOfSessionFromDB (Gbl.Session.Id);
 
-   /***** Create temporary table with notes in current timeline *****/
-   TL_Not_CreateTmpTablesWithNotesAlreadyRetrieved (Timeline);
+   /***** Create temporary tables *****/
+   /* Create temporary table with notes just retrieved */
+   TL_DB_CreateTmpTableJustRetrievedNotes ();
 
-   /***** Create temporary table and subquery with potential publishers *****/
+   /* Create temporary table with all notes visible in timeline */
+   if (Timeline->WhatToGet == TL_GET_ONLY_OLD_PUBS)
+      TL_DB_CreateTmpTableVisibleTimeline (Gbl.Session.Id);
+
+   /***** Create subqueries *****/
+   /* Create subquery with potential publishers */
    TL_Pub_CreateSubQueryPublishers (Timeline,&SubQueries);
 
-   /***** Create subquery to get only notes not present in timeline *****/
+   /* Create subquery to get only notes not present in timeline */
    TL_Pub_CreateSubQueryAlreadyExists (Timeline,&SubQueries);
 
    /***** Get the publications in timeline *****/
@@ -240,21 +244,12 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
    TL_DB_AddNotesJustRetrievedToVisibleTimelineOfSession (Gbl.Session.Id);
 
    /***** Drop temporary tables *****/
-   TL_Pub_DropTemporaryTables (Timeline);
-  }
-
-/*****************************************************************************/
-/*************************** Drop temporary tables ***************************/
-/*****************************************************************************/
-
-static void TL_Pub_DropTemporaryTables (const struct TL_Timeline *Timeline)
-  {
-   /***** Drop temporary tables with notes already retrieved *****/
-   TL_Not_DropTmpTableJustRetrievedNotes ();
+   /* Drop temporary tables with notes already retrieved */
+   TL_DB_DropTmpTableJustRetrievedNotes ();
    if (Timeline->WhatToGet == TL_GET_ONLY_OLD_PUBS)	// Get only old publications
-      TL_Not_DropTmpTableVisibleTimeline ();
+      TL_DB_DropTmpTableVisibleTimeline ();
 
-   /**** Drop temporary table with me and users I follow ****/
+   /* Drop temporary table with me and users I follow */
    if (Timeline->UsrOrGbl == TL_Usr_TIMELINE_GBL)	// Show the global timeline
       if (Timeline->Who == Usr_WHO_FOLLOWED)		// Show the timeline of the users I follow
          Fol_DropTmpTableMeAndUsrsIFollow ();
