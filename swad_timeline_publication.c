@@ -88,7 +88,6 @@ static void TL_Pub_CreateSubQueryRangeBottom (const struct TL_Pub_RangePubsToGet
 static void TL_Pub_CreateSubQueryRangeTop (const struct TL_Pub_RangePubsToGet *RangePubsToGet,
                                            struct TL_Pub_SubQueries *SubQueries);
 
-static long TL_Pub_GetPubCodFromSession (const char *FieldName);
 static void TL_Pub_UpdateFirstLastPubCodesIntoSession (const struct TL_Timeline *Timeline);
 
 static struct TL_Pub_Publication *TL_Pub_SelectTheMostRecentPub (const struct TL_Pub_SubQueries *SubQueries);
@@ -150,13 +149,13 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
 					// newer than LastPubCod
 	 /* This query is made via AJAX automatically from time to time */
          RangePubsToGet.Top    = 0;	// +Infinite
-	 RangePubsToGet.Bottom = TL_Pub_GetPubCodFromSession ("LastPubCod");
+	 RangePubsToGet.Bottom = TL_DB_GetPubCodFromSession ("LastPubCod",Gbl.Session.Id);
 	 break;
       case TL_GET_ONLY_OLD_PUBS:	// Get some limited publications
 					// older than FirstPubCod
 	 /* This query is made via AJAX
 	    when I click in link to get old publications */
-	 RangePubsToGet.Top    = TL_Pub_GetPubCodFromSession ("FirstPubCod");
+	 RangePubsToGet.Top    = TL_DB_GetPubCodFromSession ("FirstPubCod",Gbl.Session.Id);
          RangePubsToGet.Bottom = 0;	// -Infinite
 	 break;
       case TL_GET_RECENT_TIMELINE:	// Get some limited recent publications
@@ -361,38 +360,6 @@ static void TL_Pub_CreateSubQueryRangeTop (const struct TL_Pub_RangePubsToGet *R
 	       RangePubsToGet->Top);
    else
       SubQueries->RangeTop[0] = '\0';
-  }
-
-/*****************************************************************************/
-/************* Get last/first publication code stored in session *************/
-/*****************************************************************************/
-// FieldName can be:
-// "LastPubCod"
-// "FirstPubCod"
-
-static long TL_Pub_GetPubCodFromSession (const char *FieldName)
-  {
-   extern const char *Txt_The_session_has_expired;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long PubCod;
-
-   /***** Get last publication code from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get publication code from session",
-		       "SELECT %s FROM sessions"
-		       " WHERE SessionId='%s'",
-		       FieldName,Gbl.Session.Id) != 1)
-      Lay_ShowErrorAndExit (Txt_The_session_has_expired);
-
-   /***** Get last publication code *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%ld",&PubCod) != 1)
-      PubCod = 0;
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return PubCod;
   }
 
 /*****************************************************************************/

@@ -589,3 +589,37 @@ static long TL_DB_GetMedCodFromPub (long PubCod,const char *DBTable)
 
    return MedCod;
   }
+
+/*****************************************************************************/
+/************* Get last/first publication code stored in session *************/
+/*****************************************************************************/
+// FieldName can be:
+// "LastPubCod"
+// "FirstPubCod"
+
+long TL_DB_GetPubCodFromSession (const char *FieldName,
+                                 const char SessionId[Cns_BYTES_SESSION_ID + 1])
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long PubCod;
+
+   /***** Get last publication code from database *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get publication code from session",
+		       "SELECT %s FROM sessions"
+		       " WHERE SessionId='%s'",
+		       FieldName,SessionId) == 1)
+     {
+      /***** Get last publication code *****/
+      row = mysql_fetch_row (mysql_res);
+      if (sscanf (row[0],"%ld",&PubCod) != 1)
+	 PubCod = 0;
+     }
+   else
+      PubCod = 0;
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return PubCod;
+  }

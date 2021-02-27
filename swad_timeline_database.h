@@ -90,4 +90,8 @@ void TL_DB_RemoveCommentFavs (long PubCod);
 void TL_DB_RemoveCommentContent (long PubCod);
 void TL_DB_RemoveCommentPub (long PubCod,long PublisherCod);
 
+/* Publications */
+long TL_DB_GetPubCodFromSession (const char *FieldName,
+                                 const char SessionId[Cns_BYTES_SESSION_ID + 1]);
+
 #endif
