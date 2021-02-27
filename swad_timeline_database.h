@@ -55,6 +55,9 @@ void TL_DB_MarkNotesChildrenOfFolderAsUnavailable (TL_Not_NoteType_t NoteType,
 void TL_DB_InsertNoteInJustRetrievedNotes (long NotCod);
 void TL_DB_InsertNoteInVisibleTimeline (long NotCod);
 
+/* Posts */
+long TL_DB_GetMedCodFromPost (long PubCod);
+
 /* Comments */
 unsigned TL_DB_GetNumCommentsInNote (long NotCod);
 unsigned TL_DB_GetComments (long NotCod,MYSQL_RES **mysql_res);

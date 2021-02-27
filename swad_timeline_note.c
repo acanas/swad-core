@@ -1228,25 +1228,8 @@ static void TL_Not_RemoveNoteMediaAndDBEntries (struct TL_Not_Note *Not)
 
    /***** Remove media associated to post *****/
    if (Not->NoteType == TL_NOTE_POST)
-     {
-      /* Remove media associated to a post from database */
-      if (DB_QuerySELECT (&mysql_res,"can not get media",
-			  "SELECT MedCod"	// row[0]
-			  " FROM tl_posts"
-			  " WHERE PstCod=%ld",
-			  Not->Cod) == 1)	// Result should have a unique row
-        {
-	 /* Get media code */
-	 row = mysql_fetch_row (mysql_res);
-	 MedCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	 /* Remove media */
+      if ((MedCod = TL_DB_GetMedCodFromPost (Not->Cod)) > 0)
 	 Med_RemoveMedia (MedCod);
-        }
-
-      /* Free structure that stores the query result */
-      DB_FreeMySQLResult (&mysql_res);
-     }
 
    /***** Mark possible notifications on the publications
           of this note as removed *****/

@@ -50,6 +50,8 @@
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static long TL_DB_GetMedCodFromPub (long PubCod,const char *DBTable);
+
 /*****************************************************************************/
 /***************************** Create a new note *****************************/
 /*****************************************************************************/
@@ -126,6 +128,15 @@ void TL_DB_InsertNoteInVisibleTimeline (long NotCod)
 		   "INSERT IGNORE INTO tl_tmp_visible_timeline"
 		   " SET NotCod=%ld",
 		   NotCod);
+  }
+
+/*****************************************************************************/
+/***************** Get code of media associated to post **********************/
+/*****************************************************************************/
+
+long TL_DB_GetMedCodFromPost (long PubCod)
+  {
+   return TL_DB_GetMedCodFromPub (PubCod,"tl_posts");
   }
 
 /*****************************************************************************/
@@ -265,26 +276,7 @@ void TL_DB_InsertCommentContent (long PubCod,
 
 long TL_DB_GetMedCodFromComment (long PubCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long MedCod = -1L;	// Default value
-
-   /***** Get code of media associated to comment *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get media code",
-		       "SELECT MedCod"	// row[0]
-		       " FROM tl_comments"
-		       " WHERE PubCod=%ld",
-		       PubCod) == 1)   // Result should have a unique row
-     {
-      /* Get media code */
-      row = mysql_fetch_row (mysql_res);
-      MedCod = Str_ConvertStrCodToLongCod (row[0]);
-     }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-
-   return MedCod;
+   return TL_DB_GetMedCodFromPub (PubCod,"tl_comments");
   }
 
 /*****************************************************************************/
@@ -328,4 +320,32 @@ void TL_DB_RemoveCommentPub (long PubCod,long PublisherCod)
 		   PubCod,
 		   PublisherCod,
 		   (unsigned) TL_Pub_COMMENT_TO_NOTE);
+  }
+
+/*****************************************************************************/
+/*************** Get code of media associated to post/comment ****************/
+/*****************************************************************************/
+
+static long TL_DB_GetMedCodFromPub (long PubCod,const char *DBTable)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long MedCod = -1L;	// Default value
+
+   /***** Get code of media associated to comment *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get media code",
+		       "SELECT MedCod"	// row[0]
+		       " FROM %s"
+		       " WHERE PubCod=%ld",
+		       DBTable,PubCod) == 1)   // Result should have a unique row
+     {
+      /* Get media code */
+      row = mysql_fetch_row (mysql_res);
+      MedCod = Str_ConvertStrCodToLongCod (row[0]);
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   return MedCod;
   }
