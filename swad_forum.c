@@ -52,7 +52,7 @@
 #include "swad_profile.h"
 #include "swad_role.h"
 #include "swad_timeline.h"
-#include "swad_timeline_note.h"
+#include "swad_timeline_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -4084,7 +4084,7 @@ void For_RemovePost (void)
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM__SWAD__USRS:
-         TL_Not_MarkNoteAsUnavailable (TL_NOTE_FORUM_POST,Forums.PstCod);
+         TL_DB_MarkNoteAsUnavailable (TL_NOTE_FORUM_POST,Forums.PstCod);
          break;
       default:
 	 break;

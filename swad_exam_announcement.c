@@ -46,7 +46,7 @@
 #include "swad_RSS.h"
 #include "swad_string.h"
 #include "swad_timeline.h"
-#include "swad_timeline_note.h"
+#include "swad_timeline_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -498,7 +498,7 @@ void ExaAnn_RemoveExamAnn1 (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExaCod);
 
    /***** Mark possible social note as unavailable *****/
-   TL_Not_MarkNoteAsUnavailable (TL_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
+   TL_DB_MarkNoteAsUnavailable (TL_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);

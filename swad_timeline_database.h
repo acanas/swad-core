@@ -46,6 +46,7 @@
 /* Notes */
 long TL_DB_CreateNewNote (TL_Not_NoteType_t NoteType,long Cod,
                           long PublisherCod,long HieCod);
+void TL_DB_MarkNoteAsUnavailable (TL_Not_NoteType_t NoteType,long Cod);
 void TL_DB_InsertNoteInJustRetrievedNotes (long NotCod);
 void TL_DB_InsertNoteInVisibleTimeline (long NotCod);
 

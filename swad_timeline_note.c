@@ -843,7 +843,8 @@ void TL_Not_StoreAndPublishNote (TL_Not_NoteType_t NoteType,long Cod)
    TL_Not_StoreAndPublishNoteInternal (NoteType,Cod,&Pub);
   }
 
-void TL_Not_StoreAndPublishNoteInternal (TL_Not_NoteType_t NoteType,long Cod,struct TL_Pub_Publication *Pub)
+void TL_Not_StoreAndPublishNoteInternal (TL_Not_NoteType_t NoteType,long Cod,
+                                         struct TL_Pub_Publication *Pub)
   {
    long HieCod;	// Hierarchy code (institution/centre/degree/course)
 
@@ -877,19 +878,6 @@ void TL_Not_StoreAndPublishNoteInternal (TL_Not_NoteType_t NoteType,long Cod,str
    Pub->NotCod       = TL_DB_CreateNewNote (NoteType,Cod,Pub->PublisherCod,HieCod);
    Pub->PubType      = TL_Pub_ORIGINAL_NOTE;
    TL_Pub_PublishPubInTimeline (Pub);
-  }
-
-/*****************************************************************************/
-/************************* Mark a note as unavailable ************************/
-/*****************************************************************************/
-
-void TL_Not_MarkNoteAsUnavailable (TL_Not_NoteType_t NoteType,long Cod)
-  {
-   /***** Mark the note as unavailable *****/
-   DB_QueryUPDATE ("can not mark note as unavailable",
-		   "UPDATE tl_notes SET Unavailable='Y'"
-		   " WHERE NoteType=%u AND Cod=%ld",
-		   (unsigned) NoteType,Cod);
   }
 
 /*****************************************************************************/
@@ -947,7 +935,7 @@ void TL_Not_MarkNoteOneFileAsUnavailable (const char *Path)
 	       default:
 		  return;
 	      }
-	    TL_Not_MarkNoteAsUnavailable (NoteType,FilCod);
+	    TL_DB_MarkNoteAsUnavailable (NoteType,FilCod);
 	   }
          break;
       default:

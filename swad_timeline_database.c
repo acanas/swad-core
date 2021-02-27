@@ -71,6 +71,19 @@ long TL_DB_CreateNewNote (TL_Not_NoteType_t NoteType,long Cod,
   }
 
 /*****************************************************************************/
+/************************* Mark a note as unavailable ************************/
+/*****************************************************************************/
+
+void TL_DB_MarkNoteAsUnavailable (TL_Not_NoteType_t NoteType,long Cod)
+  {
+   /***** Mark the note as unavailable *****/
+   DB_QueryUPDATE ("can not mark note as unavailable",
+		   "UPDATE tl_notes SET Unavailable='Y'"
+		   " WHERE NoteType=%u AND Cod=%ld",
+		   (unsigned) NoteType,Cod);
+  }
+
+/*****************************************************************************/
 /**** Insert note in temporary tables used to not get notes already shown ****/
 /*****************************************************************************/
 

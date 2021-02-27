@@ -42,7 +42,7 @@
 #include "swad_parameter.h"
 #include "swad_RSS.h"
 #include "swad_timeline.h"
-#include "swad_timeline_note.h"
+#include "swad_timeline_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -340,7 +340,7 @@ void Not_RemoveNotice (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_NOTICE,NotCod);
 
    /***** Mark possible social note as unavailable *****/
-   TL_Not_MarkNoteAsUnavailable (TL_NOTE_NOTICE,NotCod);
+   TL_DB_MarkNoteAsUnavailable (TL_NOTE_NOTICE,NotCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);

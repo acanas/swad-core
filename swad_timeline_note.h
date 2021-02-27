@@ -97,8 +97,8 @@ void TL_Not_GetNoteSummary (const struct TL_Not_Note *Not,
                             char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
 
 void TL_Not_StoreAndPublishNote (TL_Not_NoteType_t NoteType,long Cod);
-void TL_Not_StoreAndPublishNoteInternal (TL_Not_NoteType_t NoteType,long Cod,struct TL_Pub_Publication *Pub);
-void TL_Not_MarkNoteAsUnavailable (TL_Not_NoteType_t NoteType,long Cod);
+void TL_Not_StoreAndPublishNoteInternal (TL_Not_NoteType_t NoteType,long Cod,
+                                         struct TL_Pub_Publication *Pub);
 void TL_Not_MarkNoteOneFileAsUnavailable (const char *Path);
 void TL_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path);
 
