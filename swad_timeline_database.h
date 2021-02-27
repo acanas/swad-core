@@ -68,6 +68,7 @@ void TL_DB_RemoveNotePubs (long NotCod);
 void TL_DB_RemoveNote (long NotCod,long PublisherCod);
 
 /* Posts */
+unsigned TL_DB_GetPostByCod (long PstCod,MYSQL_RES **mysql_res);
 long TL_DB_GetMedCodFromPost (long PubCod);
 void TL_DB_RemovePost (long PstCod);
 

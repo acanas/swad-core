@@ -323,6 +323,23 @@ void TL_DB_RemoveNote (long NotCod,long PublisherCod)
   }
 
 /*****************************************************************************/
+/************** Get publication codes of comments of a note from database *****************/
+/*****************************************************************************/
+// Returns the number of rows got
+
+unsigned TL_DB_GetPostByCod (long PstCod,MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get the content"
+			     " of a post",
+		   "SELECT Txt,"		// row[0]
+			  "MedCod"		// row[1]
+		   " FROM tl_posts"
+		   " WHERE PstCod=%ld",
+		   PstCod);
+  }
+
+/*****************************************************************************/
 /***************** Get code of media associated to post **********************/
 /*****************************************************************************/
 

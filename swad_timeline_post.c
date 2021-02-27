@@ -32,6 +32,7 @@
 #include "swad_message.h"
 #include "swad_profile.h"
 #include "swad_timeline.h"
+#include "swad_timeline_database.h"
 #include "swad_timeline_form.h"
 #include "swad_timeline_note.h"
 #include "swad_timeline_post.h"
@@ -71,30 +72,24 @@ void TL_Pst_GetAndWritePost (long PstCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    struct TL_Pst_PostContent Content;
 
    /***** Initialize image *****/
    Med_MediaConstructor (&Content.Media);
 
    /***** Get post from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get the content"
-					" of a post",
-			     "SELECT Txt,"		// row[0]
-			            "MedCod"		// row[1]
-			     " FROM tl_posts"
-			     " WHERE PstCod=%ld",
-			     PstCod);
-
-   /***** Result should have a unique row *****/
-   if (NumRows == 1)
+   if (TL_DB_GetPostByCod (PstCod,&mysql_res) == 1)
      {
+      /* Get row */
       row = mysql_fetch_row (mysql_res);
-
-      /****** Get content (row[0]) *****/
+      /*
+      row[0]	Txt
+      row[1]	MedCod
+      */
+      /* Get content (row[0]) */
       Str_Copy (Content.Txt,row[0],sizeof (Content.Txt) - 1);
 
-      /***** Get media (row[1]) *****/
+      /* Get media (row[1]) */
       Content.Media.MedCod = Str_ConvertStrCodToLongCod (row[1]);
       Med_GetMediaDataByCod (&Content.Media);
      }

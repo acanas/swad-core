@@ -29,7 +29,6 @@
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdio.h>		// For asprintf
 
-#include "swad_database.h"
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_message.h"
