@@ -74,12 +74,12 @@ unsigned TL_DB_GetInitialComments (long NotCod,
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get comments",
-		   "SELECT tl_pubs.PubCod,"				// row[0]
-			  "tl_pubs.PublisherCod,"			// row[1]
-			  "tl_pubs.NotCod,"				// row[2]
-			  "UNIX_TIMESTAMP(tl_pubs.TimePublish),"	// row[3]
-			  "tl_comments.Txt,"				// row[4]
-			  "tl_comments.MedCod"				// row[5]
+		   "SELECT tl_pubs.PubCod,"			// row[0]
+			  "tl_pubs.PublisherCod,"		// row[1]
+			  "tl_pubs.NotCod,"			// row[2]
+			  "UNIX_TIMESTAMP(tl_pubs.TimePublish),"// row[3]
+			  "tl_comments.Txt,"			// row[4]
+			  "tl_comments.MedCod"			// row[5]
 		   " FROM tl_pubs,tl_comments"
 		   " WHERE tl_pubs.NotCod=%ld"
 		   " AND tl_pubs.PubType=%u"
@@ -104,12 +104,12 @@ unsigned TL_DB_GetFinalComments (long NotCod,
    DB_QuerySELECT (mysql_res,"can not get comments",
 		   "SELECT * FROM "
 		   "("
-		   "SELECT tl_pubs.PubCod,"				// row[0]
-			  "tl_pubs.PublisherCod,"			// row[1]
-			  "tl_pubs.NotCod,"				// row[2]
-			  "UNIX_TIMESTAMP(tl_pubs.TimePublish),"	// row[3]
-			  "tl_comments.Txt,"				// row[4]
-			  "tl_comments.MedCod"				// row[5]
+		   "SELECT tl_pubs.PubCod,"			// row[0]
+			  "tl_pubs.PublisherCod,"		// row[1]
+			  "tl_pubs.NotCod,"			// row[2]
+			  "UNIX_TIMESTAMP(tl_pubs.TimePublish),"// row[3]
+			  "tl_comments.Txt,"			// row[4]
+			  "tl_comments.MedCod"			// row[5]
 	          " FROM tl_pubs,tl_comments"
 		  " WHERE tl_pubs.NotCod=%ld"
 		  " AND tl_pubs.PubType=%u"
@@ -119,6 +119,33 @@ unsigned TL_DB_GetFinalComments (long NotCod,
 		  " ORDER BY PubCod",
 		  NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE,
 		  NumFinalCommentsToGet);
+  }
+
+/*****************************************************************************/
+/******************* Get data of comment using its code **********************/
+/*****************************************************************************/
+// Returns the number of rows got
+
+unsigned TL_DB_GetDataOfCommByCod (long PubCod,MYSQL_RES **mysql_res)
+  {
+   /***** Trivial check: publication code should be > 0 *****/
+   if (PubCod <= 0)
+      return 0;
+
+   /***** Get data of comment from database *****/
+   return (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get data of comment",
+		   "SELECT tl_pubs.PubCod,"			// row[0]
+			  "tl_pubs.PublisherCod,"		// row[1]
+			  "tl_pubs.NotCod,"			// row[2]
+			  "UNIX_TIMESTAMP(tl_pubs.TimePublish),"// row[3]
+			  "tl_comments.Txt,"			// row[4]
+			  "tl_comments.MedCod"			// row[5]
+		   " FROM tl_pubs,tl_comments"
+		   " WHERE tl_pubs.PubCod=%ld"
+		   " AND tl_pubs.PubType=%u"
+		   " AND tl_pubs.PubCod=tl_comments.PubCod",
+		   PubCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -140,7 +167,7 @@ void TL_DB_InsertCommentContent (long PubCod,
   }
 
 /*****************************************************************************/
-/******************* Insert comment content in database **********************/
+/**************** Get code of media associated to comment ********************/
 /*****************************************************************************/
 
 long TL_DB_GetMedCodFromComment (long PubCod)
@@ -187,7 +214,7 @@ void TL_DB_RemoveCommentFavs (long PubCod)
 void TL_DB_RemoveCommentContent (long PubCod)
   {
    /***** Remove content of comment *****/
-   DB_QueryDELETE ("can not remove a comment",
+   DB_QueryDELETE ("can not remove comment content",
 		   "DELETE FROM tl_comments"
 		   " WHERE PubCod=%ld",
 		   PubCod);
@@ -200,10 +227,10 @@ void TL_DB_RemoveCommentContent (long PubCod)
 void TL_DB_RemoveCommentPub (long PubCod,long PublisherCod)
   {
    /***** Remove comment publication *****/
-   DB_QueryDELETE ("can not remove a comment",
+   DB_QueryDELETE ("can not remove comment",
 		   "DELETE FROM tl_pubs"
 	           " WHERE PubCod=%ld"
-	           " AND PublisherCod=%ld"	// Extra check: I am the author
+	           " AND PublisherCod=%ld"	// Extra check: author
 	           " AND PubType=%u",		// Extra check: it's a comment
 		   PubCod,
 		   PublisherCod,

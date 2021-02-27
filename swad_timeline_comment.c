@@ -88,8 +88,8 @@ static void TL_Com_WriteAuthorTimeAndContent (struct TL_Com_Comment *Com,
 static void TL_Com_WriteAuthorName (const struct UsrData *UsrDat);
 static void TL_Com_WriteContent (struct TL_Com_Comment *Com);
 static void TL_Com_WriteButtons (const struct TL_Timeline *Timeline,
-	                        const struct TL_Com_Comment *Com,
-                                const struct UsrData *UsrDat);
+	                         const struct TL_Com_Comment *Com,
+                                 const struct UsrData *UsrDat);
 
 static void TL_Com_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
 	                                   long PubCod);
@@ -100,7 +100,8 @@ static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline);
 static void TL_Com_PutParamsRemoveComment (void *Timeline);
 static void TL_Com_RemoveComment (void);
 
-static void TL_Com_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Com_Comment *Com);
+static void TL_Com_GetDataOfCommentFromRow (MYSQL_ROW row,
+                                            struct TL_Com_Comment *Com);
 
 static void TL_Com_ResetComment (struct TL_Com_Comment *Com);
 
@@ -599,8 +600,8 @@ static void TL_Com_WriteContent (struct TL_Com_Comment *Com)
 /*****************************************************************************/
 
 static void TL_Com_WriteButtons (const struct TL_Timeline *Timeline,
-	                        const struct TL_Com_Comment *Com,
-                                const struct UsrData *UsrDat)	// Author
+	                         const struct TL_Com_Comment *Com,
+                                 const struct UsrData *UsrDat)	// Author
   {
    static unsigned NumDiv = 0;	// Used to create unique div id for fav
 
@@ -952,7 +953,7 @@ void TL_Com_RemoveCommentMediaAndDBEntries (long PubCod)
    /***** Remove content of this comment *****/
    TL_DB_RemoveCommentContent (PubCod);
 
-   /***** Remove this comment *****/
+   /***** Remove this comment publication *****/
    TL_DB_RemoveCommentPub (PubCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -968,18 +969,7 @@ void TL_Com_GetDataOfCommByCod (struct TL_Com_Comment *Com)
    if (Com->PubCod > 0)
      {
       /***** Get data of comment from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get data of comment",
-			  "SELECT tl_pubs.PubCod,"			// row[0]
-				 "tl_pubs.PublisherCod,"		// row[1]
-				 "tl_pubs.NotCod,"			// row[2]
-				 "UNIX_TIMESTAMP(tl_pubs.TimePublish),"	// row[3]
-				 "tl_comments.Txt,"			// row[4]
-				 "tl_comments.MedCod"			// row[5]
-			  " FROM tl_pubs,tl_comments"
-			  " WHERE tl_pubs.PubCod=%ld"
-			  " AND tl_pubs.PubType=%u"
-			  " AND tl_pubs.PubCod=tl_comments.PubCod",
-			  Com->PubCod,(unsigned) TL_Pub_COMMENT_TO_NOTE))
+      if (TL_DB_GetDataOfCommByCod (Com->PubCod,&mysql_res))
 	{
 	 /***** Get data of comment *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -1001,37 +991,33 @@ void TL_Com_GetDataOfCommByCod (struct TL_Com_Comment *Com)
 /********************** Get data of comment from row *************************/
 /*****************************************************************************/
 
-static void TL_Com_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Com_Comment *Com)
+static void TL_Com_GetDataOfCommentFromRow (MYSQL_ROW row,
+                                            struct TL_Com_Comment *Com)
   {
    /*
    row[0]: PubCod
-   row[1]: PublisherCod
+   row[1]: PublisherCod]
    row[2]: NotCod
    row[3]: TimePublish
    row[4]: Txt
    row[5]: MedCod
    */
-   /***** Get code of comment (row[0]) *****/
-   Com->PubCod      = Str_ConvertStrCodToLongCod (row[0]);
+   /***** Get code of comment (row[0]), publisher code (row[1])
+          and note code (row[2) *****/
+   Com->PubCod = Str_ConvertStrCodToLongCod (row[0]);
+   Com->UsrCod = Str_ConvertStrCodToLongCod (row[1]);
+   Com->NotCod = Str_ConvertStrCodToLongCod (row[2]);
 
-   /***** Get (from) user code (row[1]) *****/
-   Com->UsrCod      = Str_ConvertStrCodToLongCod (row[1]);
-
-   /***** Get code of note (row[2]) *****/
-   Com->NotCod      = Str_ConvertStrCodToLongCod (row[2]);
-
-   /***** Get time of the note (row[3]) *****/
+   /***** Get date-time of the note (row[3]) *****/
    Com->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[3]);
 
-   /***** Get text content (row[4]) *****/
+   /***** Get text content (row[4]) and media content (row[5]) *****/
    Str_Copy (Com->Content.Txt,row[4],sizeof (Com->Content.Txt) - 1);
+   Com->Content.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
+   Med_GetMediaDataByCod (&Com->Content.Media);
 
    /***** Get number of times this comment has been favourited *****/
    TL_Fav_GetNumTimesACommHasBeenFav (Com);
-
-   /***** Get media content (row[5]) *****/
-   Com->Content.Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
-   Med_GetMediaDataByCod (&Com->Content.Media);
   }
 
 /*****************************************************************************/
@@ -1040,9 +1026,10 @@ static void TL_Com_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Com_Comment 
 
 static void TL_Com_ResetComment (struct TL_Com_Comment *Com)
   {
-   Com->PubCod      = -1L;
-   Com->UsrCod      = -1L;
-   Com->NotCod      = -1L;
-   Com->DateTimeUTC = (time_t) 0;
-   Com->Content.Txt[0]  = '\0';
+   Com->PubCod         =
+   Com->UsrCod         =
+   Com->NotCod         = -1L;
+   Com->DateTimeUTC    = (time_t) 0;
+   Com->Content.Txt[0] = '\0';
+   Com->NumFavs        = 0;
   }
