@@ -69,9 +69,6 @@ static void TL_Fav_PutDisabledIconFav (unsigned NumFavs);
 static void TL_Fav_PutFormToFavUnfNote (long NotCod);
 static void TL_Fav_PutFormToFavUnfComm (long PubCod);
 
-static bool TL_Fav_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod);
-static bool TL_Fav_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod);
-
 static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Not_Note *Not,
 					           TL_Usr_HowManyUsrs_t HowManyUsrs);
 static void TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Com_Comment *Com,
@@ -171,7 +168,7 @@ static void TL_Fav_FavNote (struct TL_Not_Note *Not)
      {
       if (Gbl.Usrs.Me.Logged &&		// I am logged...
 	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
-	 if (!TL_Fav_CheckIfNoteIsFavedByUsr (Not->NotCod,
+	 if (!TL_DB_CheckIfNoteIsFavedByUsr (Not->NotCod,
 					      Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
 	   {
 	    /***** Mark note as favourite in database *****/
@@ -202,7 +199,7 @@ static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
       if (Not->NumFavs &&
 	  Gbl.Usrs.Me.Logged &&		// I am logged...
 	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
-	 if (TL_Fav_CheckIfNoteIsFavedByUsr (Not->NotCod,
+	 if (TL_DB_CheckIfNoteIsFavedByUsr (Not->NotCod,
 					     Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
 	   {
 	    /***** Delete the mark as favourite from database *****/
@@ -312,7 +309,7 @@ static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
 
    if (Com->PubCod > 0)
       if (!Usr_ItsMe (Com->UsrCod))	// I am not the author
-	 if (!TL_Fav_CheckIfCommIsFavedByUsr (Com->PubCod,
+	 if (!TL_DB_CheckIfCommIsFavedByUsr (Com->PubCod,
 					      Gbl.Usrs.Me.UsrDat.UsrCod)) // I have not yet favourited the comment
 	   {
 	    /***** Mark comment as favourite in database *****/
@@ -343,7 +340,7 @@ static void TL_Fav_UnfComment (struct TL_Com_Comment *Com)
    if (Com->PubCod > 0)
       if (Com->NumFavs &&
 	  !Usr_ItsMe (Com->UsrCod))	// I am not the author
-	 if (TL_Fav_CheckIfCommIsFavedByUsr (Com->PubCod,
+	 if (TL_DB_CheckIfCommIsFavedByUsr (Com->PubCod,
 					     Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the comment
 	   {
 	    /***** Delete the mark as favourite from database *****/
@@ -412,7 +409,7 @@ static void TL_Fav_PutFormToFavUnfNote (long NotCod)
      };
 
    /***** Form and icon to fav/unfav note *****/
-   TL_Frm_FormFavSha (&Form[TL_Fav_CheckIfNoteIsFavedByUsr (NotCod,Gbl.Usrs.Me.UsrDat.UsrCod)]);
+   TL_Frm_FormFavSha (&Form[TL_DB_CheckIfNoteIsFavedByUsr (NotCod,Gbl.Usrs.Me.UsrDat.UsrCod)]);
   }
 
 /*****************************************************************************/
@@ -444,33 +441,7 @@ static void TL_Fav_PutFormToFavUnfComm (long PubCod)
      };
 
    /***** Form and icon to fav/unfav *****/
-   TL_Frm_FormFavSha (&Form[TL_Fav_CheckIfNoteIsFavedByUsr (PubCod,Gbl.Usrs.Me.UsrDat.UsrCod)]);
-  }
-
-/*****************************************************************************/
-/****************** Check if a user has favourited a note ********************/
-/*****************************************************************************/
-
-static bool TL_Fav_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod)
-  {
-   return (DB_QueryCOUNT ("can not check if a user"
-			  " has favourited a note",
-			  "SELECT COUNT(*) FROM tl_notes_fav"
-			  " WHERE NotCod=%ld AND UsrCod=%ld",
-			  NotCod,UsrCod) != 0);
-  }
-
-/*****************************************************************************/
-/**************** Check if a user has favourited a comment *******************/
-/*****************************************************************************/
-
-static bool TL_Fav_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod)
-  {
-   return (DB_QueryCOUNT ("can not check if a user"
-			  " has favourited a comment",
-			  "SELECT COUNT(*) FROM tl_comments_fav"
-			  " WHERE PubCod=%ld AND UsrCod=%ld",
-			  PubCod,UsrCod) != 0);
+   TL_Frm_FormFavSha (&Form[TL_DB_CheckIfNoteIsFavedByUsr (PubCod,Gbl.Usrs.Me.UsrDat.UsrCod)]);
   }
 
 /*****************************************************************************/

@@ -848,6 +848,33 @@ void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
 		   Gbl.Session.Id);
   }
 
+
+/*****************************************************************************/
+/****************** Check if a user has favourited a note ********************/
+/*****************************************************************************/
+
+bool TL_DB_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod)
+  {
+   return (DB_QueryCOUNT ("can not check if a user"
+			  " has favourited a note",
+			  "SELECT COUNT(*) FROM tl_notes_fav"
+			  " WHERE NotCod=%ld AND UsrCod=%ld",
+			  NotCod,UsrCod) != 0);
+  }
+
+/*****************************************************************************/
+/**************** Check if a user has favourited a comment *******************/
+/*****************************************************************************/
+
+bool TL_DB_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod)
+  {
+   return (DB_QueryCOUNT ("can not check if a user"
+			  " has favourited a comment",
+			  "SELECT COUNT(*) FROM tl_comments_fav"
+			  " WHERE PubCod=%ld AND UsrCod=%ld",
+			  PubCod,UsrCod) != 0);
+  }
+
 /*****************************************************************************/
 /********************** Mark note as favourite in database *******************/
 /*****************************************************************************/

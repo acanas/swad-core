@@ -111,6 +111,8 @@ void TL_DB_UpdateLastPubCodInSession (void);
 void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod);
 
 /****************************** Favourites ***********************************/
+bool TL_DB_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod);
+bool TL_DB_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod);
 void TL_DB_MarkNoteAsFav (long NotCod);
 void TL_DB_MarkCommAsFav (long PubCod);
 void TL_DB_UnmarkNoteAsFav (long NotCod);
