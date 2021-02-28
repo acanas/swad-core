@@ -54,7 +54,20 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+/****************************** Publications *********************************/
 static long TL_DB_GetMedCodFromPub (long PubCod,const char *DBTable);
+
+/******************************* Favourites **********************************/
+static bool TL_DB_CheckIfFavedByUsr (const char *Table,const char *Field,
+                                     long Cod,long UsrCod);
+static unsigned TL_DB_GetNumTimesHasBeenFav (const char *Table,const char *Field,
+                                             long Cod,long UsrCod);
+static unsigned TL_DB_GetListUsrsHaveFaved (const char *Table,const char *Field,
+                                            long Cod,long UsrCod,
+                                            unsigned MaxUsrs,
+                                            MYSQL_RES **mysql_res);
+static void TL_DB_MarkAsFav (const char *Table,const char *Field,long Cod);
+static void TL_DB_UnmarkAsFav (const char *Table,const char *Field,long Cod);
 
 /*****************************************************************************/
 /********************* Get data of note using its code ***********************/
@@ -855,115 +868,143 @@ void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
 
 bool TL_DB_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod)
   {
-   return (DB_QueryCOUNT ("can not check if a user"
-			  " has favourited a note",
-			  "SELECT COUNT(*) FROM tl_notes_fav"
-			  " WHERE NotCod=%ld AND UsrCod=%ld",
-			  NotCod,UsrCod) != 0);
+   return TL_DB_CheckIfFavedByUsr ("tl_notes_fav","NotCod",NotCod,UsrCod);
   }
-
-/*****************************************************************************/
-/**************** Check if a user has favourited a comment *******************/
-/*****************************************************************************/
 
 bool TL_DB_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod)
   {
-   return (DB_QueryCOUNT ("can not check if a user"
-			  " has favourited a comment",
-			  "SELECT COUNT(*) FROM tl_comments_fav"
+   return TL_DB_CheckIfFavedByUsr ("tl_comments_fav","PubCod",PubCod,UsrCod);
+  }
+
+static bool TL_DB_CheckIfFavedByUsr (const char *Table,const char *Field,
+                                     long Cod,long UsrCod)
+  {
+   /***** Check if a user has favourited a note/comment from database *****/
+   return (DB_QueryCOUNT ("can not check if a user has favourited",
+			  "SELECT COUNT(*) FROM %s"
 			  " WHERE PubCod=%ld AND UsrCod=%ld",
-			  PubCod,UsrCod) != 0);
+			  Table,
+			  Field,Cod,UsrCod) != 0);
   }
 
 /*****************************************************************************/
-/*************** Get number of times a note has been favourited **************/
+/********* Get number of times a note/comment has been favourited ************/
 /*****************************************************************************/
 
 unsigned TL_DB_GetNumTimesANoteHasBeenFav (const struct TL_Not_Note *Not)
   {
-   /***** Get number of times (users) this note has been favourited *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of times"
-		  " a note has been favourited",
-		  "SELECT COUNT(*) FROM tl_notes_fav"
-		  " WHERE NotCod=%ld"
-		  " AND UsrCod<>%ld",	// Extra check
-		  Not->NotCod,
-		  Not->UsrCod);		// The author
+   return TL_DB_GetNumTimesHasBeenFav ("tl_notes_fav","NotCod",
+                                       Not->NotCod,Not->UsrCod);
   }
-
-/*****************************************************************************/
-/************ Get number of times a comment has been favourited **************/
-/*****************************************************************************/
 
 unsigned TL_DB_GetNumTimesACommHasBeenFav (const struct TL_Com_Comment *Com)
   {
-   /***** Get number of times (users) this comment has been favourited *****/
+   return TL_DB_GetNumTimesHasBeenFav ("tl_comments_fav","PubCod",
+                                       Com->PubCod,Com->UsrCod);
+  }
+
+static unsigned TL_DB_GetNumTimesHasBeenFav (const char *Table,const char *Field,
+                                             long Cod,long UsrCod)
+  {
+   /***** Get number of times (users) a note/comment has been favourited *****/
    return (unsigned)
-   DB_QueryCOUNT ("can not get number of times"
-		  " a comment has been favourited",
-		  "SELECT COUNT(*) FROM tl_comments_fav"
-		  " WHERE PubCod=%ld"
+   DB_QueryCOUNT ("can not get number of times has been favourited",
+		  "SELECT COUNT(*) FROM %s"
+		  " WHERE %s=%ld"
 		  " AND UsrCod<>%ld",	// Extra check
-		  Com->PubCod,
-		  Com->UsrCod);		// The author
+		  Table,
+		  Field,Cod,
+		  UsrCod);		// The author
   }
 
 /*****************************************************************************/
-/********************** Mark note as favourite in database *******************/
+/******* Get list of users who have marked a note/comment as favourite *******/
+/*****************************************************************************/
+
+unsigned TL_DB_GetListUsrsHaveFavedANote (const struct TL_Not_Note *Not,
+                                          unsigned MaxUsrs,
+                                          MYSQL_RES **mysql_res)
+  {
+   return TL_DB_GetListUsrsHaveFaved ("tl_notes_fav","NotCod",
+                                      Not->NotCod,Not->UsrCod,MaxUsrs,
+                                      mysql_res);
+  }
+
+unsigned TL_DB_GetListUsrsHaveFavedAComm (const struct TL_Com_Comment *Com,
+                                          unsigned MaxUsrs,
+                                          MYSQL_RES **mysql_res)
+  {
+   return TL_DB_GetListUsrsHaveFaved ("tl_comments_fav","PubCod",
+                                      Com->PubCod,Com->UsrCod,MaxUsrs,
+                                      mysql_res);
+  }
+
+static unsigned TL_DB_GetListUsrsHaveFaved (const char *Table,const char *Field,
+                                            long Cod,long UsrCod,
+                                            unsigned MaxUsrs,
+                                            MYSQL_RES **mysql_res)
+  {
+   /***** Get list of users who have marked a note/comment as favourite from database *****/
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get favers",
+		   "SELECT UsrCod"	// row[0]
+		   " FROM %s"
+		   " WHERE %s=%ld"
+		   " AND UsrCod<>%ld"	// Extra check
+		   " ORDER BY FavCod LIMIT %u",
+		   Table,
+		   Field,Cod,
+		   UsrCod,
+		   MaxUsrs);
+  }
+
+/*****************************************************************************/
+/**************** Mark note/comment as favourite in database *****************/
 /*****************************************************************************/
 
 void TL_DB_MarkNoteAsFav (long NotCod)
   {
-   /***** Insert note in favourited in database *****/
-   DB_QueryINSERT ("can not favourite note",
-		   "INSERT IGNORE INTO tl_notes_fav"
-		   " (NotCod,UsrCod,TimeFav)"
-		   " VALUES"
-		   " (%ld,%ld,NOW())",
-		   NotCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   TL_DB_MarkAsFav ("tl_notes_fav","NotCod",NotCod);
   }
-
-/*****************************************************************************/
-/********************** Mark note as favourite in database *******************/
-/*****************************************************************************/
 
 void TL_DB_MarkCommAsFav (long PubCod)
   {
-   /***** Insert comment in favourited in database *****/
+   TL_DB_MarkAsFav ("tl_comments_fav","PubCod",PubCod);
+  }
+
+static void TL_DB_MarkAsFav (const char *Table,const char *Field,long Cod)
+  {
+   /***** Insert in favourited in database *****/
    DB_QueryINSERT ("can not favourite comment",
-		   "INSERT IGNORE INTO tl_comments_fav"
-		   " (PubCod,UsrCod,TimeFav)"
+		   "INSERT IGNORE INTO %s"
+		   " (%s,UsrCod,TimeFav)"
 		   " VALUES"
 		   " (%ld,%ld,NOW())",
-		   PubCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Table,
+		   Field,
+		   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
-/********************* Unmark note as favourite in database ******************/
+/*************** Unmark note/comment as favourite in database ****************/
 /*****************************************************************************/
 
 void TL_DB_UnmarkNoteAsFav (long NotCod)
   {
-   /***** Delete the mark as favourite from database *****/
-   DB_QueryDELETE ("can not unfavourite note",
-		   "DELETE FROM tl_notes_fav"
-		   " WHERE NotCod=%ld AND UsrCod=%ld",
-		   NotCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   TL_DB_UnmarkAsFav ("tl_notes_fav","NotCod",NotCod);
   }
-
-/*****************************************************************************/
-/******************* Unmark comment as favourite in database *****************/
-/*****************************************************************************/
 
 void TL_DB_UnmarkCommAsFav (long PubCod)
   {
-   DB_QueryDELETE ("can not unfavourite comment",
-		   "DELETE FROM tl_comments_fav"
-		   " WHERE PubCod=%ld AND UsrCod=%ld",
-		   PubCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   TL_DB_UnmarkAsFav ("tl_comments_fav","PubCod",PubCod);
+  }
+
+static void TL_DB_UnmarkAsFav (const char *Table,const char *Field,long Cod)
+  {
+   /***** Delete the mark as favourite from database *****/
+   DB_QueryDELETE ("can not unfavourite",
+		   "DELETE FROM %s"
+		   " WHERE %s=%ld AND UsrCod=%ld",
+		   Table,
+		   Field,Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }

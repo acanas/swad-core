@@ -169,7 +169,7 @@ static void TL_Fav_FavNote (struct TL_Not_Note *Not)
       if (Gbl.Usrs.Me.Logged &&		// I am logged...
 	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
 	 if (!TL_DB_CheckIfNoteIsFavedByUsr (Not->NotCod,
-					      Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
+					     Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
 	   {
 	    /***** Mark note as favourite in database *****/
 	    TL_DB_MarkNoteAsFav (Not->NotCod);
@@ -200,7 +200,7 @@ static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
 	  Gbl.Usrs.Me.Logged &&		// I am logged...
 	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
 	 if (TL_DB_CheckIfNoteIsFavedByUsr (Not->NotCod,
-					     Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
+					    Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
 	   {
 	    /***** Delete the mark as favourite from database *****/
 	    TL_DB_UnmarkNoteAsFav (Not->NotCod);
@@ -457,16 +457,10 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Not_Note *Not
    /***** Get users who have marked this note as favourite *****/
    if (Not->NumFavs)
       /***** Get list of users from database *****/
-      NumFirstUsrs =
-      (unsigned) DB_QuerySELECT (&mysql_res,"can not get users",
-				 "SELECT UsrCod FROM tl_notes_fav"
-				 " WHERE NotCod=%ld"
-				 " AND UsrCod<>%ld"	// Extra check
-				 " ORDER BY FavCod LIMIT %u",
-				 Not->NotCod,
-				 Not->UsrCod,
-				 HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
-				                                       TL_Usr_MAX_USRS_SHOWN);
+      NumFirstUsrs = TL_DB_GetListUsrsHaveFavedANote (Not,
+                                                      HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
+				                                                            TL_Usr_MAX_USRS_SHOWN,
+                                                      &mysql_res);
    else
       NumFirstUsrs = 0;
 
@@ -504,16 +498,10 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Com_Comment *
    /***** Get users who have marked this comment as favourite *****/
    if (Com->NumFavs)
       /***** Get list of users from database *****/
-      NumFirstUsrs =
-      (unsigned) DB_QuerySELECT (&mysql_res,"can not get users",
-				 "SELECT UsrCod FROM tl_comments_fav"
-				 " WHERE PubCod=%ld"
-				 " AND UsrCod<>%ld"	// Extra check
-				 " ORDER BY FavCod LIMIT %u",
-				 Com->PubCod,
-				 Com->UsrCod,
-				 HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
-				                                       TL_Usr_MAX_USRS_SHOWN);
+      NumFirstUsrs = TL_DB_GetListUsrsHaveFavedAComm (Com,
+                                                      HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
+				                                                            TL_Usr_MAX_USRS_SHOWN,
+                                                      &mysql_res);
    else
       NumFirstUsrs = 0;
 
