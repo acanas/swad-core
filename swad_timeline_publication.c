@@ -46,12 +46,6 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
-struct TL_Pub_RangePubsToGet
-  {
-   long Top;
-   long Bottom;
-  };
-
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -67,15 +61,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static unsigned TL_Pub_GetMaxPubsToGet (const struct TL_Timeline *Timeline);
-
-static void TL_Pub_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
-                                             struct TL_Pub_SubQueries *SubQueries);
-static void TL_Pub_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
-                                                struct TL_Pub_SubQueries *SubQueries);
-static void TL_Pub_CreateSubQueryRangeBottom (const struct TL_Pub_RangePubsToGet *RangePubsToGet,
-                                              struct TL_Pub_SubQueries *SubQueries);
-static void TL_Pub_CreateSubQueryRangeTop (const struct TL_Pub_RangePubsToGet *RangePubsToGet,
-                                           struct TL_Pub_SubQueries *SubQueries);
 
 static void TL_Pub_UpdateFirstLastPubCodesIntoSession (const struct TL_Timeline *Timeline);
 
@@ -97,7 +82,7 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
 
    /***** Clear timeline for this session in database *****/
    if (Timeline->WhatToGet == TL_GET_RECENT_TIMELINE)
-      TL_DB_ClearTimelineNotesOfSessionFromDB (Gbl.Session.Id);
+      TL_DB_ClearTimelineNotesOfSessionFromDB ();
 
    /***** Create temporary tables *****/
    /* Create temporary table with notes just retrieved */
@@ -105,14 +90,14 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
 
    /* Create temporary table with all notes visible in timeline */
    if (Timeline->WhatToGet == TL_GET_ONLY_OLD_PUBS)
-      TL_DB_CreateTmpTableVisibleTimeline (Gbl.Session.Id);
+      TL_DB_CreateTmpTableVisibleTimeline ();
 
    /***** Create subqueries *****/
    /* Create subquery with potential publishers */
-   TL_Pub_CreateSubQueryPublishers (Timeline,&SubQueries);
+   TL_DB_CreateSubQueryPublishers (Timeline,&SubQueries);
 
    /* Create subquery to get only notes not present in timeline */
-   TL_Pub_CreateSubQueryAlreadyExists (Timeline,&SubQueries);
+   TL_DB_CreateSubQueryAlreadyExists (Timeline,&SubQueries);
 
    /***** Get the publications in timeline *****/
    /* Initialize range of pubs:
@@ -138,13 +123,13 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
 					// newer than LastPubCod
 	 /* This query is made via AJAX automatically from time to time */
          RangePubsToGet.Top    = 0;	// +Infinite
-	 RangePubsToGet.Bottom = TL_DB_GetPubCodFromSession ("LastPubCod",Gbl.Session.Id);
+	 RangePubsToGet.Bottom = TL_DB_GetPubCodFromSession ("LastPubCod");
 	 break;
       case TL_GET_ONLY_OLD_PUBS:	// Get some limited publications
 					// older than FirstPubCod
 	 /* This query is made via AJAX
 	    when I click in link to get old publications */
-	 RangePubsToGet.Top    = TL_DB_GetPubCodFromSession ("FirstPubCod",Gbl.Session.Id);
+	 RangePubsToGet.Top    = TL_DB_GetPubCodFromSession ("FirstPubCod");
          RangePubsToGet.Bottom = 0;	// -Infinite
 	 break;
       case TL_GET_RECENT_TIMELINE:	// Get some limited recent publications
@@ -157,7 +142,7 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
      }
    /* Create subquery with bottom range of publications to get from tl_pubs.
       Bottom pub. code remains unchanged in all iterations of the next loop. */
-   TL_Pub_CreateSubQueryRangeBottom (&RangePubsToGet,&SubQueries);
+   TL_DB_CreateSubQueryRangeBottom (&RangePubsToGet,&SubQueries);
 
    /* With the current approach, we select one by one
       the publications and notes in a loop. In each iteration,
@@ -199,7 +184,7 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
      {
       /* Create subquery with top range of publications to get from tl_pubs
          In each iteration of this loop, top publication code is changed to a lower value */
-      TL_Pub_CreateSubQueryRangeTop (&RangePubsToGet,&SubQueries);
+      TL_DB_CreateSubQueryRangeTop (&RangePubsToGet,&SubQueries);
 
       /* Select the most recent publication from tl_pubs */
       Pub = TL_Pub_SelectTheMostRecentPub (&SubQueries);
@@ -229,7 +214,7 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
    TL_Pub_UpdateFirstLastPubCodesIntoSession (Timeline);
 
    /***** Add notes just retrieved to visible timeline for this session *****/
-   TL_DB_AddNotesJustRetrievedToVisibleTimelineOfSession (Gbl.Session.Id);
+   TL_DB_AddNotesJustRetrievedToVisibleTimelineOfSession ();
 
    /***** Drop temporary tables *****/
    /* Drop temporary tables with notes already retrieved */
@@ -260,98 +245,6 @@ static unsigned TL_Pub_GetMaxPubsToGet (const struct TL_Timeline *Timeline)
   }
 
 /*****************************************************************************/
-/******* Create temporary table and subquery with potential publishers *******/
-/*****************************************************************************/
-
-static void TL_Pub_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
-                                             struct TL_Pub_SubQueries *SubQueries)
-  {
-   /***** Create temporary table and subquery with potential publishers *****/
-   switch (Timeline->UsrOrGbl)
-     {
-      case TL_Usr_TIMELINE_USR:		// Show the timeline of a user
-	 SubQueries->TablePublishers = "";
-	 sprintf (SubQueries->Publishers,"tl_pubs.PublisherCod=%ld AND ",
-	          Gbl.Usrs.Other.UsrDat.UsrCod);
-	 break;
-      case TL_Usr_TIMELINE_GBL:		// Show the global timeline
-	 switch (Timeline->Who)
-	   {
-	    case Usr_WHO_ME:		// Show my timeline
-	       SubQueries->TablePublishers = "";
-	       snprintf (SubQueries->Publishers,sizeof (SubQueries->Publishers),
-	                 "tl_pubs.PublisherCod=%ld AND ",
-	                 Gbl.Usrs.Me.UsrDat.UsrCod);
-               break;
-	    case Usr_WHO_FOLLOWED:	// Show the timeline of the users I follow
-	       Fol_CreateTmpTableMeAndUsrsIFollow ();
-	       SubQueries->TablePublishers = ",fol_tmp_me_and_followed";
-	       Str_Copy (SubQueries->Publishers,
-			 "tl_pubs.PublisherCod=fol_tmp_me_and_followed.UsrCod AND ",
-			 sizeof (SubQueries->Publishers) - 1);
-	       break;
-	    case Usr_WHO_ALL:		// Show the timeline of all users
-	       SubQueries->TablePublishers = "";
-	       SubQueries->Publishers[0] = '\0';
-	       break;
-	    default:
-	       Lay_WrongWhoExit ();
-	       break;
-	   }
-	 break;
-     }
-  }
-
-/*****************************************************************************/
-/********* Create subquery to get only notes not present in timeline *********/
-/*****************************************************************************/
-
-static void TL_Pub_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
-                                                struct TL_Pub_SubQueries *SubQueries)
-  {
-   switch (Timeline->WhatToGet)
-     {
-      case TL_GET_RECENT_TIMELINE:
-      case TL_GET_ONLY_NEW_PUBS:
-	 Str_Copy (SubQueries->AlreadyExists,
-		   " tl_pubs.NotCod NOT IN"
-		   " (SELECT NotCod FROM tl_tmp_just_retrieved_notes)",	// Avoid notes just retrieved
-		   sizeof (SubQueries->AlreadyExists) - 1);
-         break;
-      case TL_GET_ONLY_OLD_PUBS:	// Get only old publications
-	 Str_Copy (SubQueries->AlreadyExists,
-		   " tl_pubs.NotCod NOT IN"
-		   " (SELECT NotCod FROM tl_tmp_visible_timeline)",	// Avoid notes already shown
-		   sizeof (SubQueries->AlreadyExists) - 1);
-	 break;
-     }
-  }
-
-/*****************************************************************************/
-/***** Create subqueries with range of publications to get from tl_pubs ******/
-/*****************************************************************************/
-
-static void TL_Pub_CreateSubQueryRangeBottom (const struct TL_Pub_RangePubsToGet *RangePubsToGet,
-                                              struct TL_Pub_SubQueries *SubQueries)
-  {
-   if (RangePubsToGet->Bottom > 0)
-      sprintf (SubQueries->RangeBottom,"tl_pubs.PubCod>%ld AND ",
-	       RangePubsToGet->Bottom);
-   else
-      SubQueries->RangeBottom[0] = '\0';
-  }
-
-static void TL_Pub_CreateSubQueryRangeTop (const struct TL_Pub_RangePubsToGet *RangePubsToGet,
-                                           struct TL_Pub_SubQueries *SubQueries)
-  {
-   if (RangePubsToGet->Top > 0)
-      sprintf (SubQueries->RangeTop,"tl_pubs.PubCod<%ld AND ",
-	       RangePubsToGet->Top);
-   else
-      SubQueries->RangeTop[0] = '\0';
-  }
-
-/*****************************************************************************/
 /************* Update first (oldest) and last (more recent)    ***************/
 /************* publication codes into session for next refresh ***************/
 /*****************************************************************************/
@@ -363,19 +256,19 @@ static void TL_Pub_UpdateFirstLastPubCodesIntoSession (const struct TL_Timeline 
    switch (Timeline->WhatToGet)
      {
       case TL_GET_ONLY_NEW_PUBS:	// Get only new publications
-	 TL_DB_UpdateLastPubCodInSession (Gbl.Session.Id);
+	 TL_DB_UpdateLastPubCodInSession ();
 	 break;
       case TL_GET_ONLY_OLD_PUBS:	// Get only old publications
 	 // The oldest publication code retrieved and shown
 	 FirstPubCod = Timeline->Pubs.Bottom ? Timeline->Pubs.Bottom->PubCod :
 			                       0;
-	 TL_DB_UpdateFirstPubCodInSession (FirstPubCod,Gbl.Session.Id);
+	 TL_DB_UpdateFirstPubCodInSession (FirstPubCod);
 	 break;
       case TL_GET_RECENT_TIMELINE:	// Get last publications
 	 // The oldest publication code retrieved and shown
 	 FirstPubCod = Timeline->Pubs.Bottom ? Timeline->Pubs.Bottom->PubCod :
 			                       0;
-         TL_DB_UpdateFirstLastPubCodsInSession (FirstPubCod,Gbl.Session.Id);
+         TL_DB_UpdateFirstLastPubCodsInSession (FirstPubCod);
 	 break;
      }
   }

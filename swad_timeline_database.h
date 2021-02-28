@@ -56,17 +56,17 @@ void TL_DB_MarkNotesChildrenOfFolderAsUnavailable (TL_Not_NoteType_t NoteType,
                                                    long Cod,
                                                    const char *Path);
 void TL_DB_CreateTmpTableJustRetrievedNotes (void);
-void TL_DB_CreateTmpTableVisibleTimeline (char SessionId[Cns_BYTES_SESSION_ID + 1]);
+void TL_DB_CreateTmpTableVisibleTimeline (void);
 void TL_DB_InsertNoteInJustRetrievedNotes (long NotCod);
 void TL_DB_InsertNoteInVisibleTimeline (long NotCod);
-void TL_DB_AddNotesJustRetrievedToVisibleTimelineOfSession (char SessionId[Cns_BYTES_SESSION_ID + 1]);
+void TL_DB_AddNotesJustRetrievedToVisibleTimelineOfSession (void);
 void TL_DB_DropTmpTableJustRetrievedNotes (void);
 void TL_DB_DropTmpTableVisibleTimeline (void);
 void TL_DB_ClearOldTimelinesNotesFromDB (void);
-void TL_DB_ClearTimelineNotesOfSessionFromDB (char SessionId[Cns_BYTES_SESSION_ID + 1]);
+void TL_DB_ClearTimelineNotesOfSessionFromDB (void);
 void TL_DB_RemoveNoteFavs (long NotCod);
 void TL_DB_RemoveNotePubs (long NotCod);
-void TL_DB_RemoveNote (long NotCod,long PublisherCod);
+void TL_DB_RemoveNote (long NotCod);
 
 /* Posts */
 unsigned TL_DB_GetPostByCod (long PstCod,MYSQL_RES **mysql_res);
@@ -89,20 +89,25 @@ void TL_DB_InsertCommentContent (long PubCod,
 long TL_DB_GetMedCodFromComment (long PubCod);
 void TL_DB_RemoveCommentFavs (long PubCod);
 void TL_DB_RemoveCommentContent (long PubCod);
-void TL_DB_RemoveCommentPub (long PubCod,long PublisherCod);
+void TL_DB_RemoveCommentPub (long PubCod);
 
 /* Publications */
+void TL_DB_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
+                                     struct TL_Pub_SubQueries *SubQueries);
+void TL_DB_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
+                                        struct TL_Pub_SubQueries *SubQueries);
+void TL_DB_CreateSubQueryRangeBottom (const struct TL_Pub_RangePubsToGet *RangePubsToGet,
+                                      struct TL_Pub_SubQueries *SubQueries);
+void TL_DB_CreateSubQueryRangeTop (const struct TL_Pub_RangePubsToGet *RangePubsToGet,
+                                   struct TL_Pub_SubQueries *SubQueries);
 unsigned TL_DB_SelectTheMostRecentPub (const struct TL_Pub_SubQueries *SubQueries,
                                        MYSQL_RES **mysql_res);
 long TL_DB_GetNotCodFromPubCod (long PubCod);
-long TL_DB_GetPubCodFromSession (const char *FieldName,
-                                 const char SessionId[Cns_BYTES_SESSION_ID + 1]);
+long TL_DB_GetPubCodFromSession (const char *FieldName);
 unsigned long TL_DB_GetNumPubsUsr (long UsrCod);
 long TL_DB_CreateNewPub (const struct TL_Pub_Publication *Pub);
-void TL_DB_UpdateFirstPubCodInSession (long FirstPubCod,
-                                       const char SessionId[Cns_BYTES_SESSION_ID + 1]);
-void TL_DB_UpdateLastPubCodInSession (const char SessionId[Cns_BYTES_SESSION_ID + 1]);
-void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod,
-                                            const char SessionId[Cns_BYTES_SESSION_ID + 1]);
+void TL_DB_UpdateFirstPubCodInSession (long FirstPubCod);
+void TL_DB_UpdateLastPubCodInSession (void);
+void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod);
 
 #endif

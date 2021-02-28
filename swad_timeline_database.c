@@ -26,6 +26,8 @@
 /*****************************************************************************/
 
 #include "swad_database.h"
+#include "swad_follow.h"
+#include "swad_global.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
 #include "swad_timeline_publication.h"
@@ -41,6 +43,8 @@
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
+
+extern struct Globals Gbl;
 
 /*****************************************************************************/
 /************************* Private global variables **************************/
@@ -172,7 +176,7 @@ void TL_DB_CreateTmpTableJustRetrievedNotes (void)
 	     " ENGINE=MEMORY");
   }
 
-void TL_DB_CreateTmpTableVisibleTimeline (char SessionId[Cns_BYTES_SESSION_ID + 1])
+void TL_DB_CreateTmpTableVisibleTimeline (void)
   {
    /***** Create temporary table with all notes visible in timeline *****/
    DB_Query ("can not create temporary table",
@@ -180,7 +184,7 @@ void TL_DB_CreateTmpTableVisibleTimeline (char SessionId[Cns_BYTES_SESSION_ID + 
 	     "(NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod))"
 	     " ENGINE=MEMORY"
 	     " SELECT NotCod FROM tl_timelines WHERE SessionId='%s'",
-	     SessionId);
+	     Gbl.Session.Id);
   }
 
 /*****************************************************************************/
@@ -211,7 +215,7 @@ void TL_DB_InsertNoteInVisibleTimeline (long NotCod)
 /****** Add just retrieved notes to current timeline for this session ********/
 /*****************************************************************************/
 
-void TL_DB_AddNotesJustRetrievedToVisibleTimelineOfSession (char SessionId[Cns_BYTES_SESSION_ID + 1])
+void TL_DB_AddNotesJustRetrievedToVisibleTimelineOfSession (void)
   {
    /* tl_timelines contains the distinct notes in timeline of each open session:
 mysql> SELECT SessionId,COUNT(*) FROM tl_timelines GROUP BY SessionId;
@@ -235,7 +239,7 @@ mysql> SELECT SessionId,COUNT(*) FROM tl_timelines GROUP BY SessionId;
 		   "INSERT IGNORE INTO tl_timelines"
 	           " (SessionId,NotCod)"
 	           " SELECT '%s',NotCod FROM tl_tmp_just_retrieved_notes",
-		   SessionId);
+		   Gbl.Session.Id);
   }
 
 /*****************************************************************************/
@@ -272,13 +276,13 @@ void TL_DB_ClearOldTimelinesNotesFromDB (void)
 /***************** Clear timeline for a session in database ******************/
 /*****************************************************************************/
 
-void TL_DB_ClearTimelineNotesOfSessionFromDB (char SessionId[Cns_BYTES_SESSION_ID + 1])
+void TL_DB_ClearTimelineNotesOfSessionFromDB (void)
   {
    /***** Remove timeline for a session *****/
    DB_QueryDELETE ("can not remove timeline",
 		   "DELETE FROM tl_timelines"
 		   " WHERE SessionId='%s'",
-		   SessionId);
+		   Gbl.Session.Id);
   }
 
 /*****************************************************************************/
@@ -311,7 +315,7 @@ void TL_DB_RemoveNotePubs (long NotCod)
 /******************* Remove note publication from database *******************/
 /*****************************************************************************/
 
-void TL_DB_RemoveNote (long NotCod,long PublisherCod)
+void TL_DB_RemoveNote (long NotCod)
   {
    /***** Remove note *****/
    DB_QueryDELETE ("can not remove a note",
@@ -319,7 +323,7 @@ void TL_DB_RemoveNote (long NotCod,long PublisherCod)
 	           " WHERE NotCod=%ld"
 	           " AND UsrCod=%ld",		// Extra check: author
 		   NotCod,
-		   PublisherCod);
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -549,7 +553,7 @@ void TL_DB_RemoveCommentContent (long PubCod)
 /***************** Remove comment publication from database ******************/
 /*****************************************************************************/
 
-void TL_DB_RemoveCommentPub (long PubCod,long PublisherCod)
+void TL_DB_RemoveCommentPub (long PubCod)
   {
    /***** Remove comment publication *****/
    DB_QueryDELETE ("can not remove comment",
@@ -558,7 +562,7 @@ void TL_DB_RemoveCommentPub (long PubCod,long PublisherCod)
 	           " AND PublisherCod=%ld"	// Extra check: author
 	           " AND PubType=%u",		// Extra check: it's a comment
 		   PubCod,
-		   PublisherCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) TL_Pub_COMMENT_TO_NOTE);
   }
 
@@ -588,6 +592,98 @@ static long TL_DB_GetMedCodFromPub (long PubCod,const char *DBTable)
    DB_FreeMySQLResult (&mysql_res);
 
    return MedCod;
+  }
+
+/*****************************************************************************/
+/******* Create temporary table and subquery with potential publishers *******/
+/*****************************************************************************/
+
+void TL_DB_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
+                                     struct TL_Pub_SubQueries *SubQueries)
+  {
+   /***** Create temporary table and subquery with potential publishers *****/
+   switch (Timeline->UsrOrGbl)
+     {
+      case TL_Usr_TIMELINE_USR:		// Show the timeline of a user
+	 SubQueries->TablePublishers = "";
+	 sprintf (SubQueries->Publishers,"tl_pubs.PublisherCod=%ld AND ",
+	          Gbl.Usrs.Other.UsrDat.UsrCod);
+	 break;
+      case TL_Usr_TIMELINE_GBL:		// Show the global timeline
+	 switch (Timeline->Who)
+	   {
+	    case Usr_WHO_ME:		// Show my timeline
+	       SubQueries->TablePublishers = "";
+	       snprintf (SubQueries->Publishers,sizeof (SubQueries->Publishers),
+	                 "tl_pubs.PublisherCod=%ld AND ",
+	                 Gbl.Usrs.Me.UsrDat.UsrCod);
+               break;
+	    case Usr_WHO_FOLLOWED:	// Show the timeline of the users I follow
+	       Fol_CreateTmpTableMeAndUsrsIFollow ();
+	       SubQueries->TablePublishers = ",fol_tmp_me_and_followed";
+	       Str_Copy (SubQueries->Publishers,
+			 "tl_pubs.PublisherCod=fol_tmp_me_and_followed.UsrCod AND ",
+			 sizeof (SubQueries->Publishers) - 1);
+	       break;
+	    case Usr_WHO_ALL:		// Show the timeline of all users
+	       SubQueries->TablePublishers = "";
+	       SubQueries->Publishers[0] = '\0';
+	       break;
+	    default:
+	       Lay_WrongWhoExit ();
+	       break;
+	   }
+	 break;
+     }
+  }
+
+/*****************************************************************************/
+/********* Create subquery to get only notes not present in timeline *********/
+/*****************************************************************************/
+
+void TL_DB_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
+                                        struct TL_Pub_SubQueries *SubQueries)
+  {
+   switch (Timeline->WhatToGet)
+     {
+      case TL_GET_RECENT_TIMELINE:
+      case TL_GET_ONLY_NEW_PUBS:
+	 Str_Copy (SubQueries->AlreadyExists,
+		   " tl_pubs.NotCod NOT IN"
+		   " (SELECT NotCod FROM tl_tmp_just_retrieved_notes)",	// Avoid notes just retrieved
+		   sizeof (SubQueries->AlreadyExists) - 1);
+         break;
+      case TL_GET_ONLY_OLD_PUBS:	// Get only old publications
+	 Str_Copy (SubQueries->AlreadyExists,
+		   " tl_pubs.NotCod NOT IN"
+		   " (SELECT NotCod FROM tl_tmp_visible_timeline)",	// Avoid notes already shown
+		   sizeof (SubQueries->AlreadyExists) - 1);
+	 break;
+     }
+  }
+
+/*****************************************************************************/
+/***** Create subqueries with range of publications to get from tl_pubs ******/
+/*****************************************************************************/
+
+void TL_DB_CreateSubQueryRangeBottom (const struct TL_Pub_RangePubsToGet *RangePubsToGet,
+                                      struct TL_Pub_SubQueries *SubQueries)
+  {
+   if (RangePubsToGet->Bottom > 0)
+      sprintf (SubQueries->RangeBottom,"tl_pubs.PubCod>%ld AND ",
+	       RangePubsToGet->Bottom);
+   else
+      SubQueries->RangeBottom[0] = '\0';
+  }
+
+void TL_DB_CreateSubQueryRangeTop (const struct TL_Pub_RangePubsToGet *RangePubsToGet,
+                                   struct TL_Pub_SubQueries *SubQueries)
+  {
+   if (RangePubsToGet->Top > 0)
+      sprintf (SubQueries->RangeTop,"tl_pubs.PubCod<%ld AND ",
+	       RangePubsToGet->Top);
+   else
+      SubQueries->RangeTop[0] = '\0';
   }
 
 /*****************************************************************************/
@@ -648,8 +744,7 @@ long TL_DB_GetNotCodFromPubCod (long PubCod)
 // "LastPubCod"
 // "FirstPubCod"
 
-long TL_DB_GetPubCodFromSession (const char *FieldName,
-                                 const char SessionId[Cns_BYTES_SESSION_ID + 1])
+long TL_DB_GetPubCodFromSession (const char *FieldName)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -659,7 +754,7 @@ long TL_DB_GetPubCodFromSession (const char *FieldName,
    if (DB_QuerySELECT (&mysql_res,"can not get publication code from session",
 		       "SELECT %s FROM sessions"
 		       " WHERE SessionId='%s'",
-		       FieldName,SessionId) == 1)
+		       FieldName,Gbl.Session.Id) == 1)
      {
       /***** Get last publication code *****/
       row = mysql_fetch_row (mysql_res);
@@ -711,22 +806,21 @@ long TL_DB_CreateNewPub (const struct TL_Pub_Publication *Pub)
 /************** Update first publication code stored in session **************/
 /*****************************************************************************/
 
-void TL_DB_UpdateFirstPubCodInSession (long FirstPubCod,
-                                       const char SessionId[Cns_BYTES_SESSION_ID + 1])
+void TL_DB_UpdateFirstPubCodInSession (long FirstPubCod)
   {
    DB_QueryUPDATE ("can not update first publication code into session",
 		   "UPDATE sessions"
 		   " SET FirstPubCod=%ld"
 		   " WHERE SessionId='%s'",
 		   FirstPubCod,
-		   SessionId);
+		   Gbl.Session.Id);
   }
 
 /*****************************************************************************/
 /*************** Update last publication code stored in session **************/
 /*****************************************************************************/
 
-void TL_DB_UpdateLastPubCodInSession (const char SessionId[Cns_BYTES_SESSION_ID + 1])
+void TL_DB_UpdateLastPubCodInSession (void)
   {
    DB_QueryUPDATE ("can not update last publication code into session",
 		   "UPDATE sessions"
@@ -734,15 +828,14 @@ void TL_DB_UpdateLastPubCodInSession (const char SessionId[Cns_BYTES_SESSION_ID 
 			"(SELECT IFNULL(MAX(PubCod),0)"
 			" FROM tl_pubs)"	// The most recent publication
 		   " WHERE SessionId='%s'",
-		   SessionId);
+		   Gbl.Session.Id);
   }
 
 /*****************************************************************************/
 /********* Update first and last publication codes stored in session *********/
 /*****************************************************************************/
 
-void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod,
-                                            const char SessionId[Cns_BYTES_SESSION_ID + 1])
+void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
   {
    DB_QueryUPDATE ("can not update first/last publication codes into session",
 		   "UPDATE sessions"
@@ -752,5 +845,5 @@ void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod,
 			" FROM tl_pubs)"	// The most recent publication
 		   " WHERE SessionId='%s'",
 		   FirstPubCod,
-		   SessionId);
+		   Gbl.Session.Id);
   }

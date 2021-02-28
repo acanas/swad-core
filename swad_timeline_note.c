@@ -1247,7 +1247,7 @@ static void TL_Not_RemoveNoteMediaAndDBEntries (struct TL_Not_Note *Not)
    TL_DB_RemoveNotePubs (Not->NotCod);
 
    /***** Remove note *****/
-   TL_DB_RemoveNote (Not->NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   TL_DB_RemoveNote (Not->NotCod);
 
    if (Not->NoteType == TL_NOTE_POST)
       /***** Remove post *****/

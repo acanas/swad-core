@@ -65,6 +65,12 @@ struct TL_Pub_Publication
    struct TL_Pub_Publication *Next;	// Used for chained list
   };
 
+struct TL_Pub_RangePubsToGet
+  {
+   long Top;
+   long Bottom;
+  };
+
 #define TL_Pub_MAX_BYTES_SUBQUERY (128 - 1)
 struct TL_Pub_SubQueries
   {

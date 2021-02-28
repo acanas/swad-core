@@ -953,7 +953,7 @@ void TL_Com_RemoveCommentMediaAndDBEntries (long PubCod)
    TL_DB_RemoveCommentContent (PubCod);
 
    /***** Remove this comment publication *****/
-   TL_DB_RemoveCommentPub (PubCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   TL_DB_RemoveCommentPub (PubCod);
   }
 
 /*****************************************************************************/

@@ -81,5 +81,4 @@ void Fol_RemoveUsrFromUsrFollow (long UsrCod);
 void Fol_CreateTmpTableMeAndUsrsIFollow (void);
 void Fol_DropTmpTableMeAndUsrsIFollow (void);
 
-
 #endif
