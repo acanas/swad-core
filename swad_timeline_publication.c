@@ -636,15 +636,7 @@ static TL_Pub_PubType_t TL_Pub_GetPubTypeFromStr (const char *Str)
 void TL_Pub_PublishPubInTimeline (struct TL_Pub_Publication *Pub)
   {
    /***** Publish note in timeline *****/
-   Pub->PubCod =
-   DB_QueryINSERTandReturnCode ("can not publish note/comment",
-				"INSERT INTO tl_pubs"
-				" (NotCod,PublisherCod,PubType,TimePublish)"
-				" VALUES"
-				" (%ld,%ld,%u,NOW())",
-				Pub->NotCod,
-				Pub->PublisherCod,
-				(unsigned) Pub->PubType);
+   Pub->PubCod = TL_DB_CreateNewPub (Pub);
 
    /***** Increment number of publications in user's figures *****/
    Prf_IncrementNumPubsUsr (Pub->PublisherCod);

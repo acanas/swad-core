@@ -97,6 +97,7 @@ unsigned TL_DB_SelectTheMostRecentPub (const struct TL_Pub_SubQueries *SubQuerie
 long TL_DB_GetNotCodFromPubCod (long PubCod);
 long TL_DB_GetPubCodFromSession (const char *FieldName,
                                  const char SessionId[Cns_BYTES_SESSION_ID + 1]);
+long TL_DB_CreateNewPub (const struct TL_Pub_Publication *Pub);
 void TL_DB_UpdateFirstPubCodInSession (long FirstPubCod,
                                        const char SessionId[Cns_BYTES_SESSION_ID + 1]);
 void TL_DB_UpdateLastPubCodInSession (const char SessionId[Cns_BYTES_SESSION_ID + 1]);

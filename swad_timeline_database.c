@@ -676,6 +676,25 @@ long TL_DB_GetPubCodFromSession (const char *FieldName,
   }
 
 /*****************************************************************************/
+/********************* Insert new publication in database ********************/
+/*****************************************************************************/
+// Return just created publication code
+
+long TL_DB_CreateNewPub (const struct TL_Pub_Publication *Pub)
+  {
+   /***** Insert new publication in database *****/
+   return
+   DB_QueryINSERTandReturnCode ("can not publish note/comment",
+				"INSERT INTO tl_pubs"
+				" (NotCod,PublisherCod,PubType,TimePublish)"
+				" VALUES"
+				" (%ld,%ld,%u,NOW())",
+				Pub->NotCod,
+				Pub->PublisherCod,
+				(unsigned) Pub->PubType);
+  }
+
+/*****************************************************************************/
 /************** Update first publication code stored in session **************/
 /*****************************************************************************/
 
