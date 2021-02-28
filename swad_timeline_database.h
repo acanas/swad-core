@@ -45,7 +45,7 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-/* Notes */
+/*********************************** Notes ***********************************/
 unsigned TL_DB_GetDataOfNoteByCod (long NotCod,MYSQL_RES **mysql_res);
 long TL_DB_GetPubCodOfOriginalNote (long NotCod);
 long TL_DB_CreateNewNote (TL_Not_NoteType_t NoteType,long Cod,
@@ -68,13 +68,13 @@ void TL_DB_RemoveNoteFavs (long NotCod);
 void TL_DB_RemoveNotePubs (long NotCod);
 void TL_DB_RemoveNote (long NotCod);
 
-/* Posts */
+/********************************** Posts ************************************/
 unsigned TL_DB_GetPostByCod (long PstCod,MYSQL_RES **mysql_res);
 long TL_DB_GetMedCodFromPost (long PubCod);
 long TL_DB_CreateNewPost (const struct TL_Pst_PostContent *Content);
 void TL_DB_RemovePost (long PstCod);
 
-/* Comments */
+/******************************** Comments ***********************************/
 unsigned TL_DB_GetNumCommentsInNote (long NotCod);
 unsigned TL_DB_GetComments (long NotCod,MYSQL_RES **mysql_res);
 unsigned TL_DB_GetInitialComments (long NotCod,
@@ -91,7 +91,7 @@ void TL_DB_RemoveCommentFavs (long PubCod);
 void TL_DB_RemoveCommentContent (long PubCod);
 void TL_DB_RemoveCommentPub (long PubCod);
 
-/* Publications */
+/****************************** Publications *********************************/
 void TL_DB_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
                                      struct TL_Pub_SubQueries *SubQueries);
 void TL_DB_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
@@ -109,5 +109,9 @@ long TL_DB_CreateNewPub (const struct TL_Pub_Publication *Pub);
 void TL_DB_UpdateFirstPubCodInSession (long FirstPubCod);
 void TL_DB_UpdateLastPubCodInSession (void);
 void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod);
+
+/****************************** Favourites ***********************************/
+void TL_DB_MarkNoteAsFav (long NotCod);
+void TL_DB_MarkCommAsFav (long PubCod);
 
 #endif

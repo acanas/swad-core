@@ -174,14 +174,8 @@ static void TL_Fav_FavNote (struct TL_Not_Note *Not)
 	 if (!TL_Fav_CheckIfNoteIsFavedByUsr (Not->NotCod,
 					      Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
 	   {
-	    /***** Mark as favourite in database *****/
-	    DB_QueryINSERT ("can not favourite note",
-			    "INSERT IGNORE INTO tl_notes_fav"
-			    " (NotCod,UsrCod,TimeFav)"
-			    " VALUES"
-			    " (%ld,%ld,NOW())",
-			    Not->NotCod,
-			    Gbl.Usrs.Me.UsrDat.UsrCod);
+	    /***** Mark note as favourite in database *****/
+	    TL_DB_MarkNoteAsFav (Not->NotCod);
 
 	    /***** Update number of times this note is favourited *****/
 	    TL_Fav_GetNumTimesANoteHasBeenFav (Not);
@@ -325,14 +319,8 @@ static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
 	 if (!TL_Fav_CheckIfCommIsFavedByUsr (Com->PubCod,
 					      Gbl.Usrs.Me.UsrDat.UsrCod)) // I have not yet favourited the comment
 	   {
-	    /***** Mark as favourite in database *****/
-	    DB_QueryINSERT ("can not favourite comment",
-			    "INSERT IGNORE INTO tl_comments_fav"
-			    " (PubCod,UsrCod,TimeFav)"
-			    " VALUES"
-			    " (%ld,%ld,NOW())",
-			    Com->PubCod,
-			    Gbl.Usrs.Me.UsrDat.UsrCod);
+	    /***** Mark comment as favourite in database *****/
+	    TL_DB_MarkCommAsFav (Com->PubCod);
 
 	    /* Update number of times this comment is favourited */
 	    TL_Fav_GetNumTimesACommHasBeenFav (Com);

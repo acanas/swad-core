@@ -847,3 +847,35 @@ void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
 		   FirstPubCod,
 		   Gbl.Session.Id);
   }
+
+/*****************************************************************************/
+/********************** Mark note as favourite in database *******************/
+/*****************************************************************************/
+
+void TL_DB_MarkNoteAsFav (long NotCod)
+  {
+   /***** Insert note in favourited in database *****/
+   DB_QueryINSERT ("can not favourite note",
+		   "INSERT IGNORE INTO tl_notes_fav"
+		   " (NotCod,UsrCod,TimeFav)"
+		   " VALUES"
+		   " (%ld,%ld,NOW())",
+		   NotCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/********************** Mark note as favourite in database *******************/
+/*****************************************************************************/
+
+void TL_DB_MarkCommAsFav (long PubCod)
+  {
+   /***** Insert comment in favourited in database *****/
+   DB_QueryINSERT ("can not favourite comment",
+		   "INSERT IGNORE INTO tl_comments_fav"
+		   " (PubCod,UsrCod,TimeFav)"
+		   " VALUES"
+		   " (%ld,%ld,NOW())",
+		   PubCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
