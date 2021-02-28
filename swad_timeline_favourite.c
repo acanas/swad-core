@@ -69,10 +69,12 @@ static void TL_Fav_PutDisabledIconFav (unsigned NumFavs);
 static void TL_Fav_PutFormToFavUnfNote (long NotCod);
 static void TL_Fav_PutFormToFavUnfComm (long PubCod);
 
-static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Not_Note *Not,
-					           TL_Usr_HowManyUsrs_t HowManyUsrs);
-static void TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Com_Comment *Com,
-					           TL_Usr_HowManyUsrs_t HowManyUsrs);
+static void TL_Fav_ShowUsrsWhoHaveMarkedAsFav (const char *Table,const char *Field,
+                                               TL_Frm_Action_t Action,
+		                               const char *ParamFormat,
+                                               long Cod,long UsrCod,
+                                               unsigned NumFavs,
+					       TL_Usr_HowManyUsrs_t HowManyUsrs);
 
 /*****************************************************************************/
 /********************** Mark/unmark a note as favourite **********************/
@@ -153,7 +155,10 @@ void TL_Fav_PutIconToFavUnfNote (const struct TL_Not_Note *Not,
    HTM_DIV_End ();
 
    /***** Show who have marked this note as favourite *****/
-   TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (Not,HowManyUsrs);
+   TL_Fav_ShowUsrsWhoHaveMarkedAsFav ("tl_notes_fav","NotCod",
+                                      TL_Frm_ALL_FAV_NOTE,"NotCod=%ld",
+                                      Not->NotCod,Not->UsrCod,Not->NumFavs,
+                                      HowManyUsrs);
   }
 
 static void TL_Fav_FavNote (struct TL_Not_Note *Not)
@@ -295,7 +300,10 @@ void TL_Fav_PutIconToFavUnfComment (const struct TL_Com_Comment *Com,
    HTM_DIV_End ();
 
    /***** Show who have marked this comment as favourite *****/
-   TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (Com,HowManyUsrs);
+   TL_Fav_ShowUsrsWhoHaveMarkedAsFav ("tl_comments_fav","PubCod",
+                                      TL_Frm_ALL_FAV_COMM,"PubCod=%ld",
+                                      Com->PubCod,Com->UsrCod,Com->NumFavs,
+                                      HowManyUsrs);
   }
 
 static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
@@ -310,7 +318,7 @@ static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
    if (Com->PubCod > 0)
       if (!Usr_ItsMe (Com->UsrCod))	// I am not the author
 	 if (!TL_DB_CheckIfCommIsFavedByUsr (Com->PubCod,
-					      Gbl.Usrs.Me.UsrDat.UsrCod)) // I have not yet favourited the comment
+					     Gbl.Usrs.Me.UsrDat.UsrCod)) // I have not yet favourited the comment
 	   {
 	    /***** Mark comment as favourite in database *****/
 	    TL_DB_MarkCommAsFav (Com->PubCod);
@@ -445,83 +453,44 @@ static void TL_Fav_PutFormToFavUnfComm (long PubCod)
   }
 
 /*****************************************************************************/
-/************ Show users who have marked this note as favourite **************/
+/********** Show users who have marked a note/comment as favourite ***********/
 /*****************************************************************************/
 
-static void TL_Fav_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Not_Note *Not,
-					           TL_Usr_HowManyUsrs_t HowManyUsrs)
+static void TL_Fav_ShowUsrsWhoHaveMarkedAsFav (const char *Table,const char *Field,
+                                               TL_Frm_Action_t Action,
+		                               const char *ParamFormat,
+                                               long Cod,long UsrCod,
+                                               unsigned NumFavs,
+					       TL_Usr_HowManyUsrs_t HowManyUsrs)
   {
    MYSQL_RES *mysql_res;
    unsigned NumFirstUsrs;
 
    /***** Get users who have marked this note as favourite *****/
-   if (Not->NumFavs)
+   if (NumFavs)
       /***** Get list of users from database *****/
-      NumFirstUsrs = TL_DB_GetListUsrsHaveFavedANote (Not,
-                                                      HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
-				                                                            TL_Usr_MAX_USRS_SHOWN,
-                                                      &mysql_res);
+      NumFirstUsrs = TL_DB_GetListUsrsHaveFaved (Table,Field,Cod,UsrCod,
+                                                 HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
+				                                                       TL_Usr_MAX_USRS_SHOWN,
+                                                 &mysql_res);
    else
       NumFirstUsrs = 0;
 
    /***** Show users *****/
    /* Number of users */
    HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
-   TL_Usr_ShowNumSharersOrFavers (Not->NumFavs);
+   TL_Usr_ShowNumSharersOrFavers (NumFavs);
    HTM_DIV_End ();
 
    /* List users one by one */
    HTM_DIV_Begin ("class=\"TL_USRS\"");
-   TL_Usr_ShowSharersOrFavers (&mysql_res,Not->NumFavs,NumFirstUsrs);
-   if (NumFirstUsrs < Not->NumFavs)		// Not all are shown
+   TL_Usr_ShowSharersOrFavers (&mysql_res,NumFavs,NumFirstUsrs);
+   if (NumFirstUsrs < NumFavs)		// Not all are shown
       /* Clickable ellipsis to show all users */
-      TL_Frm_PutFormToSeeAllFaversSharers (TL_Frm_ALL_FAV_NOTE,
-                                           "NotCod=%ld",Not->NotCod,
-                                           HowManyUsrs);
+      TL_Frm_PutFormToSeeAllFaversSharers (Action,ParamFormat,Cod,HowManyUsrs);
    HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/
-   if (Not->NumFavs)
-      DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/************ Show users who have marked this note as favourite **************/
-/*****************************************************************************/
-
-static void TL_Fav_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Com_Comment *Com,
-					           TL_Usr_HowManyUsrs_t HowManyUsrs)
-  {
-   MYSQL_RES *mysql_res;
-   unsigned NumFirstUsrs;
-
-   /***** Get users who have marked this comment as favourite *****/
-   if (Com->NumFavs)
-      /***** Get list of users from database *****/
-      NumFirstUsrs = TL_DB_GetListUsrsHaveFavedAComm (Com,
-                                                      HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
-				                                                            TL_Usr_MAX_USRS_SHOWN,
-                                                      &mysql_res);
-   else
-      NumFirstUsrs = 0;
-
-   /***** Show users *****/
-   /* Number of users */
-   HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
-   TL_Usr_ShowNumSharersOrFavers (Com->NumFavs);
-   HTM_DIV_End ();
-
-   /* List users one by one */
-   HTM_DIV_Begin ("class=\"TL_USRS\"");
-   TL_Usr_ShowSharersOrFavers (&mysql_res,Com->NumFavs,NumFirstUsrs);
-   if (NumFirstUsrs < Com->NumFavs)
-      /* Clickable ellipsis to show all users */
-      TL_Frm_PutFormToSeeAllFaversSharers (TL_Frm_ALL_FAV_COMM,
-                                           "PubCod=%ld",Com->PubCod,
-                                           HowManyUsrs);
-   HTM_DIV_End ();
-
-   /***** Free structure that stores the query result *****/
-   if (Com->NumFavs)
+   if (NumFavs)
       DB_FreeMySQLResult (&mysql_res);
   }

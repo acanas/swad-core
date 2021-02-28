@@ -62,10 +62,6 @@ static bool TL_DB_CheckIfFavedByUsr (const char *Table,const char *Field,
                                      long Cod,long UsrCod);
 static unsigned TL_DB_GetNumTimesHasBeenFav (const char *Table,const char *Field,
                                              long Cod,long UsrCod);
-static unsigned TL_DB_GetListUsrsHaveFaved (const char *Table,const char *Field,
-                                            long Cod,long UsrCod,
-                                            unsigned MaxUsrs,
-                                            MYSQL_RES **mysql_res);
 static void TL_DB_MarkAsFav (const char *Table,const char *Field,long Cod);
 static void TL_DB_UnmarkAsFav (const char *Table,const char *Field,long Cod);
 
@@ -921,28 +917,10 @@ static unsigned TL_DB_GetNumTimesHasBeenFav (const char *Table,const char *Field
 /******* Get list of users who have marked a note/comment as favourite *******/
 /*****************************************************************************/
 
-unsigned TL_DB_GetListUsrsHaveFavedANote (const struct TL_Not_Note *Not,
-                                          unsigned MaxUsrs,
-                                          MYSQL_RES **mysql_res)
-  {
-   return TL_DB_GetListUsrsHaveFaved ("tl_notes_fav","NotCod",
-                                      Not->NotCod,Not->UsrCod,MaxUsrs,
-                                      mysql_res);
-  }
-
-unsigned TL_DB_GetListUsrsHaveFavedAComm (const struct TL_Com_Comment *Com,
-                                          unsigned MaxUsrs,
-                                          MYSQL_RES **mysql_res)
-  {
-   return TL_DB_GetListUsrsHaveFaved ("tl_comments_fav","PubCod",
-                                      Com->PubCod,Com->UsrCod,MaxUsrs,
-                                      mysql_res);
-  }
-
-static unsigned TL_DB_GetListUsrsHaveFaved (const char *Table,const char *Field,
-                                            long Cod,long UsrCod,
-                                            unsigned MaxUsrs,
-                                            MYSQL_RES **mysql_res)
+unsigned TL_DB_GetListUsrsHaveFaved (const char *Table,const char *Field,
+                                     long Cod,long UsrCod,
+                                     unsigned MaxUsrs,
+                                     MYSQL_RES **mysql_res)
   {
    /***** Get list of users who have marked a note/comment as favourite from database *****/
    return (unsigned)
