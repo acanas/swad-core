@@ -113,5 +113,7 @@ void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod);
 /****************************** Favourites ***********************************/
 void TL_DB_MarkNoteAsFav (long NotCod);
 void TL_DB_MarkCommAsFav (long PubCod);
+void TL_DB_UnmarkNoteAsFav (long NotCod);
+void TL_DB_UnmarkCommAsFav (long PubCod);
 
 #endif

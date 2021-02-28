@@ -206,11 +206,7 @@ static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
 					     Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
 	   {
 	    /***** Delete the mark as favourite from database *****/
-	    DB_QueryDELETE ("can not unfavourite note",
-			    "DELETE FROM tl_notes_fav"
-			    " WHERE NotCod=%ld AND UsrCod=%ld",
-			    Not->NotCod,
-			    Gbl.Usrs.Me.UsrDat.UsrCod);
+	    TL_DB_UnmarkNoteAsFav (Not->NotCod);
 
 	    /***** Update number of times this note is favourited *****/
 	    TL_Fav_GetNumTimesANoteHasBeenFav (Not);
@@ -351,11 +347,7 @@ static void TL_Fav_UnfComment (struct TL_Com_Comment *Com)
 					     Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the comment
 	   {
 	    /***** Delete the mark as favourite from database *****/
-	    DB_QueryDELETE ("can not unfavourite comment",
-			    "DELETE FROM tl_comments_fav"
-			    " WHERE PubCod=%ld AND UsrCod=%ld",
-			    Com->PubCod,
-			    Gbl.Usrs.Me.UsrDat.UsrCod);
+	    TL_DB_UnmarkCommAsFav (Com->PubCod);
 
 	    /***** Update number of times this comment is favourited *****/
 	    TL_Fav_GetNumTimesACommHasBeenFav (Com);

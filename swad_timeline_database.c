@@ -879,3 +879,30 @@ void TL_DB_MarkCommAsFav (long PubCod)
 		   PubCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
+
+/*****************************************************************************/
+/********************* Unmark note as favourite in database ******************/
+/*****************************************************************************/
+
+void TL_DB_UnmarkNoteAsFav (long NotCod)
+  {
+   /***** Delete the mark as favourite from database *****/
+   DB_QueryDELETE ("can not unfavourite note",
+		   "DELETE FROM tl_notes_fav"
+		   " WHERE NotCod=%ld AND UsrCod=%ld",
+		   NotCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/******************* Unmark comment as favourite in database *****************/
+/*****************************************************************************/
+
+void TL_DB_UnmarkCommAsFav (long PubCod)
+  {
+   DB_QueryDELETE ("can not unfavourite comment",
+		   "DELETE FROM tl_comments_fav"
+		   " WHERE PubCod=%ld AND UsrCod=%ld",
+		   PubCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
