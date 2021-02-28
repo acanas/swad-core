@@ -29,6 +29,7 @@
 
 #include "swad_database.h"
 #include "swad_file_browser.h"
+#include "swad_timeline_comment.h"
 #include "swad_timeline_note.h"
 #include "swad_timeline_post.h"
 #include "swad_timeline_publication.h"
@@ -113,6 +114,8 @@ void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod);
 /****************************** Favourites ***********************************/
 bool TL_DB_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod);
 bool TL_DB_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod);
+unsigned TL_DB_GetNumTimesANoteHasBeenFav (const struct TL_Not_Note *Not);
+unsigned TL_DB_GetNumTimesACommHasBeenFav (const struct TL_Com_Comment *Com);
 void TL_DB_MarkNoteAsFav (long NotCod);
 void TL_DB_MarkCommAsFav (long PubCod);
 void TL_DB_UnmarkNoteAsFav (long NotCod);

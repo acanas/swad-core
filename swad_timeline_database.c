@@ -876,6 +876,40 @@ bool TL_DB_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod)
   }
 
 /*****************************************************************************/
+/*************** Get number of times a note has been favourited **************/
+/*****************************************************************************/
+
+unsigned TL_DB_GetNumTimesANoteHasBeenFav (const struct TL_Not_Note *Not)
+  {
+   /***** Get number of times (users) this note has been favourited *****/
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of times"
+		  " a note has been favourited",
+		  "SELECT COUNT(*) FROM tl_notes_fav"
+		  " WHERE NotCod=%ld"
+		  " AND UsrCod<>%ld",	// Extra check
+		  Not->NotCod,
+		  Not->UsrCod);		// The author
+  }
+
+/*****************************************************************************/
+/************ Get number of times a comment has been favourited **************/
+/*****************************************************************************/
+
+unsigned TL_DB_GetNumTimesACommHasBeenFav (const struct TL_Com_Comment *Com)
+  {
+   /***** Get number of times (users) this comment has been favourited *****/
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of times"
+		  " a comment has been favourited",
+		  "SELECT COUNT(*) FROM tl_comments_fav"
+		  " WHERE PubCod=%ld"
+		  " AND UsrCod<>%ld",	// Extra check
+		  Com->PubCod,
+		  Com->UsrCod);		// The author
+  }
+
+/*****************************************************************************/
 /********************** Mark note as favourite in database *******************/
 /*****************************************************************************/
 

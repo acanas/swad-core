@@ -1294,7 +1294,7 @@ static void TL_Not_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Not_Note *Not)
    TL_Sha_UpdateNumTimesANoteHasBeenShared (Not);
 
    /***** Get number of times this note has been favourited *****/
-   TL_Fav_GetNumTimesANoteHasBeenFav (Not);
+   Not->NumFavs = TL_DB_GetNumTimesANoteHasBeenFav (Not);
   }
 
 /*****************************************************************************/

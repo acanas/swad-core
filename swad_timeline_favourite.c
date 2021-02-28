@@ -175,7 +175,7 @@ static void TL_Fav_FavNote (struct TL_Not_Note *Not)
 	    TL_DB_MarkNoteAsFav (Not->NotCod);
 
 	    /***** Update number of times this note is favourited *****/
-	    TL_Fav_GetNumTimesANoteHasBeenFav (Not);
+	    TL_DB_GetNumTimesANoteHasBeenFav (Not);
 
 	    /***** Create notification about favourite post
 		   for the author of the post *****/
@@ -206,7 +206,7 @@ static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
 	    TL_DB_UnmarkNoteAsFav (Not->NotCod);
 
 	    /***** Update number of times this note is favourited *****/
-	    TL_Fav_GetNumTimesANoteHasBeenFav (Not);
+	    TL_DB_GetNumTimesANoteHasBeenFav (Not);
 
             /***** Mark possible notifications on this note as removed *****/
 	    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
@@ -316,7 +316,7 @@ static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
 	    TL_DB_MarkCommAsFav (Com->PubCod);
 
 	    /* Update number of times this comment is favourited */
-	    TL_Fav_GetNumTimesACommHasBeenFav (Com);
+	    TL_DB_GetNumTimesACommHasBeenFav (Com);
 
 	    /**** Create notification about favourite post
 		  for the author of the post ***/
@@ -347,7 +347,7 @@ static void TL_Fav_UnfComment (struct TL_Com_Comment *Com)
 	    TL_DB_UnmarkCommAsFav (Com->PubCod);
 
 	    /***** Update number of times this comment is favourited *****/
-	    TL_Fav_GetNumTimesACommHasBeenFav (Com);
+	    TL_DB_GetNumTimesACommHasBeenFav (Com);
 
             /***** Mark possible notifications on this comment as removed *****/
             Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,Com->PubCod);
@@ -442,40 +442,6 @@ static void TL_Fav_PutFormToFavUnfComm (long PubCod)
 
    /***** Form and icon to fav/unfav *****/
    TL_Frm_FormFavSha (&Form[TL_DB_CheckIfNoteIsFavedByUsr (PubCod,Gbl.Usrs.Me.UsrDat.UsrCod)]);
-  }
-
-/*****************************************************************************/
-/*************** Get number of times a note has been favourited **************/
-/*****************************************************************************/
-
-void TL_Fav_GetNumTimesANoteHasBeenFav (struct TL_Not_Note *Not)
-  {
-   /***** Get number of times (users) this note has been favourited *****/
-   Not->NumFavs =
-   (unsigned) DB_QueryCOUNT ("can not get number of times"
-			     " a note has been favourited",
-			     "SELECT COUNT(*) FROM tl_notes_fav"
-			     " WHERE NotCod=%ld"
-			     " AND UsrCod<>%ld",	// Extra check
-			     Not->NotCod,
-			     Not->UsrCod);		// The author
-  }
-
-/*****************************************************************************/
-/************ Get number of times a comment has been favourited **************/
-/*****************************************************************************/
-
-void TL_Fav_GetNumTimesACommHasBeenFav (struct TL_Com_Comment *Com)
-  {
-   /***** Get number of times (users) this comment has been favourited *****/
-   Com->NumFavs =
-   (unsigned) DB_QueryCOUNT ("can not get number of times"
-			     " a comment has been favourited",
-			     "SELECT COUNT(*) FROM tl_comments_fav"
-			     " WHERE PubCod=%ld"
-			     " AND UsrCod<>%ld",	// Extra check
-			     Com->PubCod,
-			     Com->UsrCod);		// The author
   }
 
 /*****************************************************************************/

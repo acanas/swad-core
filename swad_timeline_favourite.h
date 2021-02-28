@@ -65,7 +65,4 @@ void TL_Fav_UnfCommentGbl (void);
 void TL_Fav_PutIconToFavUnfComment (const struct TL_Com_Comment *Com,
                                     TL_Usr_HowManyUsrs_t HowManyUsrs);
 
-void TL_Fav_GetNumTimesANoteHasBeenFav (struct TL_Not_Note *Not);
-void TL_Fav_GetNumTimesACommHasBeenFav (struct TL_Com_Comment *Com);
-
 #endif

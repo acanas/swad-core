@@ -1016,7 +1016,7 @@ static void TL_Com_GetDataOfCommentFromRow (MYSQL_ROW row,
    Med_GetMediaDataByCod (&Com->Content.Media);
 
    /***** Get number of times this comment has been favourited *****/
-   TL_Fav_GetNumTimesACommHasBeenFav (Com);
+   Com->NumFavs = TL_DB_GetNumTimesACommHasBeenFav (Com);
   }
 
 /*****************************************************************************/
