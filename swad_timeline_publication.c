@@ -28,7 +28,6 @@
 #include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions
 
-#include "swad_database.h"
 #include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_profile.h"
@@ -640,17 +639,4 @@ void TL_Pub_PublishPubInTimeline (struct TL_Pub_Publication *Pub)
 
    /***** Increment number of publications in user's figures *****/
    Prf_IncrementNumPubsUsr (Pub->PublisherCod);
-  }
-
-/*****************************************************************************/
-/****************** Get number of publications from a user *******************/
-/*****************************************************************************/
-
-unsigned long TL_Pub_GetNumPubsUsr (long UsrCod)
-  {
-   /***** Get number of posts from a user from database *****/
-   return DB_QueryCOUNT ("can not get number of publications from a user",
-			 "SELECT COUNT(*) FROM tl_pubs"
-			 " WHERE PublisherCod=%ld",
-			 UsrCod);
   }

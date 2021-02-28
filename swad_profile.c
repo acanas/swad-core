@@ -53,7 +53,7 @@
 #include "swad_setting.h"
 #include "swad_theme.h"
 #include "swad_timeline.h"
-#include "swad_timeline_publication.h"
+#include "swad_timeline_database.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -1127,7 +1127,7 @@ static void Prf_GetNumSocialPubsAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of forum posts from database *****/
-      UsrFigures.NumSocPub = TL_Pub_GetNumPubsUsr (UsrCod);
+      UsrFigures.NumSocPub = TL_DB_GetNumPubsUsr (UsrCod);
 
       /***** Update number of forum posts in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))

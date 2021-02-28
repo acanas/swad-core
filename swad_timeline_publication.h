@@ -98,6 +98,4 @@ void TL_Pub_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
 
 void TL_Pub_PublishPubInTimeline (struct TL_Pub_Publication *Pub);
 
-unsigned long TL_Pub_GetNumPubsUsr (long UsrCod);
-
 #endif

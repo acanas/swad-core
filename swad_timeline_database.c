@@ -676,6 +676,19 @@ long TL_DB_GetPubCodFromSession (const char *FieldName,
   }
 
 /*****************************************************************************/
+/****************** Get number of publications from a user *******************/
+/*****************************************************************************/
+
+unsigned long TL_DB_GetNumPubsUsr (long UsrCod)
+  {
+   /***** Get number of posts from a user from database *****/
+   return DB_QueryCOUNT ("can not get number of publications from a user",
+			 "SELECT COUNT(*) FROM tl_pubs"
+			 " WHERE PublisherCod=%ld",
+			 UsrCod);
+  }
+
+/*****************************************************************************/
 /********************* Insert new publication in database ********************/
 /*****************************************************************************/
 // Return just created publication code
