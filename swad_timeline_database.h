@@ -30,6 +30,7 @@
 #include "swad_database.h"
 #include "swad_file_browser.h"
 #include "swad_timeline_comment.h"
+#include "swad_timeline_favourite.h"
 #include "swad_timeline_note.h"
 #include "swad_timeline_post.h"
 #include "swad_timeline_publication.h"
@@ -116,7 +117,7 @@ bool TL_DB_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod);
 bool TL_DB_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod);
 unsigned TL_DB_GetNumTimesANoteHasBeenFav (const struct TL_Not_Note *Not);
 unsigned TL_DB_GetNumTimesACommHasBeenFav (const struct TL_Com_Comment *Com);
-unsigned TL_DB_GetListUsrsHaveFaved (const char *Table,const char *Field,
+unsigned TL_DB_GetListUsrsHaveFaved (TL_Fav_WhatToFav_t WhatToFav,
                                      long Cod,long UsrCod,
                                      unsigned MaxUsrs,
                                      MYSQL_RES **mysql_res);

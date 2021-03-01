@@ -917,11 +917,22 @@ static unsigned TL_DB_GetNumTimesHasBeenFav (const char *Table,const char *Field
 /******* Get list of users who have marked a note/comment as favourite *******/
 /*****************************************************************************/
 
-unsigned TL_DB_GetListUsrsHaveFaved (const char *Table,const char *Field,
+unsigned TL_DB_GetListUsrsHaveFaved (TL_Fav_WhatToFav_t WhatToFav,
                                      long Cod,long UsrCod,
                                      unsigned MaxUsrs,
                                      MYSQL_RES **mysql_res)
   {
+   const char *Table[TL_Fav_NUM_WHAT_TO_FAV] =
+     {
+      "tl_notes_fav",
+      "tl_comments_fav",
+     };
+   const char *Field[TL_Fav_NUM_WHAT_TO_FAV] =
+     {
+      "NotCod",
+      "PubCod",
+     };
+
    /***** Get list of users who have marked a note/comment as favourite from database *****/
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get favers",
@@ -930,8 +941,8 @@ unsigned TL_DB_GetListUsrsHaveFaved (const char *Table,const char *Field,
 		   " WHERE %s=%ld"
 		   " AND UsrCod<>%ld"	// Extra check
 		   " ORDER BY FavCod LIMIT %u",
-		   Table,
-		   Field,Cod,
+		   Table[WhatToFav],
+		   Field[WhatToFav],Cod,
 		   UsrCod,
 		   MaxUsrs);
   }
