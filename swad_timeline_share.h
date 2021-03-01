@@ -50,6 +50,4 @@ void TL_Sha_UnsNoteGbl (void);
 void TL_Sha_PutIconToShaUnsNote (const struct TL_Not_Note *Not,
                                  TL_Usr_HowManyUsrs_t HowManyUsrs);
 
-void TL_Sha_UpdateNumTimesANoteHasBeenShared (struct TL_Not_Note *Not);
-
 #endif

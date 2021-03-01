@@ -1014,6 +1014,24 @@ bool TL_DB_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod)
   }
 
 /*****************************************************************************/
+/********** Get number of times a note has been shared in timeline ***********/
+/*****************************************************************************/
+
+unsigned TL_DB_GetNumTimesANoteHasBeenShared (struct TL_Not_Note *Not)
+  {
+   /***** Get number of times (users) this note has been shared *****/
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of times a note has been shared",
+		  "SELECT COUNT(*) FROM tl_pubs"
+		  " WHERE NotCod=%ld"
+		  " AND PublisherCod<>%ld"
+		  " AND PubType=%u",
+		  Not->NotCod,
+		  Not->UsrCod,	// Author of the note
+		  (unsigned) TL_Pub_SHARED_NOTE);
+  }
+
+/*****************************************************************************/
 /****************** Remove shared publication from database ******************/
 /*****************************************************************************/
 

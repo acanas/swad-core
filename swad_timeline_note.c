@@ -1291,7 +1291,7 @@ static void TL_Not_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Not_Note *Not)
    Not->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[6]);
 
    /***** Get number of times this note has been shared *****/
-   TL_Sha_UpdateNumTimesANoteHasBeenShared (Not);
+   Not->NumShared = TL_DB_GetNumTimesANoteHasBeenShared (Not);
 
    /***** Get number of times this note has been favourited *****/
    Not->NumFavs = TL_DB_GetNumTimesANoteHasBeenFav (Not);

@@ -135,7 +135,7 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
 	    TL_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
 
 	    /* Update number of times this note is shared */
-	    TL_Sha_UpdateNumTimesANoteHasBeenShared (Not);
+	    Not->NumShared = TL_DB_GetNumTimesANoteHasBeenShared (Not);
 
 	    /**** Create notification about shared post
 		  for the author of the post ***/
@@ -189,7 +189,7 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
 	    TL_DB_RemoveSharedPub (Not->NotCod);
 
 	    /***** Update number of times this note is shared *****/
-	    TL_Sha_UpdateNumTimesANoteHasBeenShared (Not);
+	    Not->NumShared = TL_DB_GetNumTimesANoteHasBeenShared (Not);
 
             /***** Mark possible notifications on this note as removed *****/
 	    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
@@ -269,25 +269,6 @@ static void TL_Sha_PutFormToShaUnsNote (long NotCod)
    /***** Form and icon to share/unshare note *****/
    TL_Frm_FormFavSha (&Form[TL_DB_CheckIfNoteIsSharedByUsr (NotCod,
                                                             Gbl.Usrs.Me.UsrDat.UsrCod)]);
-  }
-
-/*****************************************************************************/
-/********** Get number of times a note has been shared in timeline ***********/
-/*****************************************************************************/
-
-void TL_Sha_UpdateNumTimesANoteHasBeenShared (struct TL_Not_Note *Not)
-  {
-   /***** Get number of times (users) this note has been shared *****/
-   Not->NumShared =
-   (unsigned) DB_QueryCOUNT ("can not get number of times"
-			     " a note has been shared",
-			     "SELECT COUNT(*) FROM tl_pubs"
-			     " WHERE NotCod=%ld"
-			     " AND PublisherCod<>%ld"
-			     " AND PubType=%u",
-			     Not->NotCod,
-			     Not->UsrCod,	// The author
-			     (unsigned) TL_Pub_SHARED_NOTE);
   }
 
 /*****************************************************************************/
