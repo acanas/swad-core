@@ -89,8 +89,8 @@ static void TL_Not_PutFormGoToAction (const struct TL_Not_Note *Not,
                                       const struct For_Forums *Forums);
 
 static void TL_Not_WriteButtonsAndComments (const struct TL_Timeline *Timeline,
-                                const struct TL_Not_Note *Not,
-                                const struct UsrData *UsrDat);
+                                            const struct TL_Not_Note *Not,
+                                            const struct UsrData *UsrDat);
 static void TL_Not_WriteButtonToAddAComment (const struct TL_Not_Note *Not,
                                              const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
 static void TL_Not_WriteFavShaRemAndComments (const struct TL_Timeline *Timeline,
@@ -724,8 +724,8 @@ void TL_Not_GetNoteSummary (const struct TL_Not_Note *Not,
 /*****************************************************************************/
 
 static void TL_Not_WriteButtonsAndComments (const struct TL_Timeline *Timeline,
-                                const struct TL_Not_Note *Not,
-                                const struct UsrData *UsrDat)	// Author
+                                            const struct TL_Not_Note *Not,
+                                            const struct UsrData *UsrDat)	// Author
   {
    char IdNewComment[Frm_MAX_BYTES_ID + 1];
 
@@ -1294,7 +1294,8 @@ static void TL_Not_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Not_Note *Not)
    Not->NumShared = TL_DB_GetNumTimesANoteHasBeenShared (Not);
 
    /***** Get number of times this note has been favourited *****/
-   Not->NumFavs = TL_DB_GetNumTimesANoteHasBeenFav (Not);
+   Not->NumFavs = TL_DB_GetNumTimesHasBeenFav (TL_Fav_NOTE,
+                                               Not->NotCod,Not->UsrCod);
   }
 
 /*****************************************************************************/

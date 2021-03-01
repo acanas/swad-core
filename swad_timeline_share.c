@@ -134,11 +134,11 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
 	    Pub.PubType      = TL_Pub_SHARED_NOTE;
 	    TL_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
 
-	    /* Update number of times this note is shared */
+	    /***** Update number of times this note is shared *****/
 	    Not->NumShared = TL_DB_GetNumTimesANoteHasBeenShared (Not);
 
-	    /**** Create notification about shared post
-		  for the author of the post ***/
+	    /***** Create notification about shared post
+		   for the author of the post *****/
 	    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
 	    if (OriginalPubCod > 0)
 	       TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,
@@ -284,17 +284,10 @@ static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Not_Note *Not,
    /***** Get users who have shared this note *****/
    if (Not->NumShared)
       NumFirstUsrs =
-      (unsigned) DB_QuerySELECT (&mysql_res,"can not get users",
-				 "SELECT PublisherCod FROM tl_pubs"
-				 " WHERE NotCod=%ld"
-				 " AND PublisherCod<>%ld"
-				 " AND PubType=%u"
-				 " ORDER BY PubCod LIMIT %u",
-				 Not->NotCod,
-				 Not->UsrCod,
-				 (unsigned) TL_Pub_SHARED_NOTE,
-				 HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
-				                                       TL_Usr_MAX_USRS_SHOWN);
+      TL_DB_GetListUsrsHaveShared (Not->NotCod,Not->UsrCod,
+                                   HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
+				                                         TL_Usr_MAX_USRS_SHOWN,
+                                   &mysql_res);
    else
       NumFirstUsrs = 0;
 

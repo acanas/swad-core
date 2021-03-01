@@ -40,6 +40,17 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
+static const char *TL_DB_Table[TL_Fav_NUM_WHAT_TO_FAV] =
+  {
+   [TL_Fav_NOTE] = "tl_notes_fav",
+   [TL_Fav_COMM] = "tl_comments_fav",
+  };
+static const char *TL_DB_Field[TL_Fav_NUM_WHAT_TO_FAV] =
+  {
+   [TL_Fav_NOTE] = "NotCod",
+   [TL_Fav_COMM] = "PubCod",
+  };
+
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -54,16 +65,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-/****************************** Publications *********************************/
 static long TL_DB_GetMedCodFromPub (long PubCod,const char *DBTable);
-
-/******************************* Favourites **********************************/
-static bool TL_DB_CheckIfFavedByUsr (const char *Table,const char *Field,
-                                     long Cod,long UsrCod);
-static unsigned TL_DB_GetNumTimesHasBeenFav (const char *Table,const char *Field,
-                                             long Cod,long UsrCod);
-static void TL_DB_MarkAsFav (const char *Table,const char *Field,long Cod);
-static void TL_DB_UnmarkAsFav (const char *Table,const char *Field,long Cod);
 
 /*****************************************************************************/
 /********************* Get data of note using its code ***********************/
@@ -861,45 +863,23 @@ void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
 /****************** Check if a user has favourited a note ********************/
 /*****************************************************************************/
 
-bool TL_DB_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod)
-  {
-   return TL_DB_CheckIfFavedByUsr ("tl_notes_fav","NotCod",NotCod,UsrCod);
-  }
-
-bool TL_DB_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod)
-  {
-   return TL_DB_CheckIfFavedByUsr ("tl_comments_fav","PubCod",PubCod,UsrCod);
-  }
-
-static bool TL_DB_CheckIfFavedByUsr (const char *Table,const char *Field,
-                                     long Cod,long UsrCod)
+bool TL_DB_CheckIfFavedByUsr (TL_Fav_WhatToFav_t WhatToFav,
+                              long Cod,long UsrCod)
   {
    /***** Check if a user has favourited a note/comment from database *****/
    return (DB_QueryCOUNT ("can not check if a user has favourited",
 			  "SELECT COUNT(*) FROM %s"
 			  " WHERE PubCod=%ld AND UsrCod=%ld",
-			  Table,
-			  Field,Cod,UsrCod) != 0);
+			  TL_DB_Table[WhatToFav],
+			  TL_DB_Field[WhatToFav],Cod,UsrCod) != 0);
   }
 
 /*****************************************************************************/
 /********* Get number of times a note/comment has been favourited ************/
 /*****************************************************************************/
 
-unsigned TL_DB_GetNumTimesANoteHasBeenFav (const struct TL_Not_Note *Not)
-  {
-   return TL_DB_GetNumTimesHasBeenFav ("tl_notes_fav","NotCod",
-                                       Not->NotCod,Not->UsrCod);
-  }
-
-unsigned TL_DB_GetNumTimesACommHasBeenFav (const struct TL_Com_Comment *Com)
-  {
-   return TL_DB_GetNumTimesHasBeenFav ("tl_comments_fav","PubCod",
-                                       Com->PubCod,Com->UsrCod);
-  }
-
-static unsigned TL_DB_GetNumTimesHasBeenFav (const char *Table,const char *Field,
-                                             long Cod,long UsrCod)
+unsigned TL_DB_GetNumTimesHasBeenFav (TL_Fav_WhatToFav_t WhatToFav,
+                                      long Cod,long UsrCod)
   {
    /***** Get number of times (users) a note/comment has been favourited *****/
    return (unsigned)
@@ -907,8 +887,8 @@ static unsigned TL_DB_GetNumTimesHasBeenFav (const char *Table,const char *Field
 		  "SELECT COUNT(*) FROM %s"
 		  " WHERE %s=%ld"
 		  " AND UsrCod<>%ld",	// Extra check
-		  Table,
-		  Field,Cod,
+		  TL_DB_Table[WhatToFav],
+		  TL_DB_Field[WhatToFav],Cod,
 		  UsrCod);		// The author
   }
 
@@ -921,17 +901,6 @@ unsigned TL_DB_GetListUsrsHaveFaved (TL_Fav_WhatToFav_t WhatToFav,
                                      unsigned MaxUsrs,
                                      MYSQL_RES **mysql_res)
   {
-   const char *Table[TL_Fav_NUM_WHAT_TO_FAV] =
-     {
-      [TL_Fav_NOTE] = "tl_notes_fav",
-      [TL_Fav_COMM] = "tl_comments_fav",
-     };
-   const char *Field[TL_Fav_NUM_WHAT_TO_FAV] =
-     {
-      [TL_Fav_NOTE] = "NotCod",
-      [TL_Fav_COMM] = "PubCod",
-     };
-
    /***** Get list of users who have marked a note/comment as favourite from database *****/
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get favers",
@@ -940,8 +909,8 @@ unsigned TL_DB_GetListUsrsHaveFaved (TL_Fav_WhatToFav_t WhatToFav,
 		   " WHERE %s=%ld"
 		   " AND UsrCod<>%ld"	// Extra check
 		   " ORDER BY FavCod LIMIT %u",
-		   Table[WhatToFav],
-		   Field[WhatToFav],Cod,
+		   TL_DB_Table[WhatToFav],
+		   TL_DB_Field[WhatToFav],Cod,
 		   UsrCod,
 		   MaxUsrs);
   }
@@ -950,17 +919,7 @@ unsigned TL_DB_GetListUsrsHaveFaved (TL_Fav_WhatToFav_t WhatToFav,
 /**************** Mark note/comment as favourite in database *****************/
 /*****************************************************************************/
 
-void TL_DB_MarkNoteAsFav (long NotCod)
-  {
-   TL_DB_MarkAsFav ("tl_notes_fav","NotCod",NotCod);
-  }
-
-void TL_DB_MarkCommAsFav (long PubCod)
-  {
-   TL_DB_MarkAsFav ("tl_comments_fav","PubCod",PubCod);
-  }
-
-static void TL_DB_MarkAsFav (const char *Table,const char *Field,long Cod)
+void TL_DB_MarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod)
   {
    /***** Insert in favourited in database *****/
    DB_QueryINSERT ("can not favourite comment",
@@ -968,8 +927,8 @@ static void TL_DB_MarkAsFav (const char *Table,const char *Field,long Cod)
 		   " (%s,UsrCod,TimeFav)"
 		   " VALUES"
 		   " (%ld,%ld,NOW())",
-		   Table,
-		   Field,
+		   TL_DB_Table[WhatToFav],
+		   TL_DB_Field[WhatToFav],
 		   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -977,24 +936,14 @@ static void TL_DB_MarkAsFav (const char *Table,const char *Field,long Cod)
 /*************** Unmark note/comment as favourite in database ****************/
 /*****************************************************************************/
 
-void TL_DB_UnmarkNoteAsFav (long NotCod)
-  {
-   TL_DB_UnmarkAsFav ("tl_notes_fav","NotCod",NotCod);
-  }
-
-void TL_DB_UnmarkCommAsFav (long PubCod)
-  {
-   TL_DB_UnmarkAsFav ("tl_comments_fav","PubCod",PubCod);
-  }
-
-static void TL_DB_UnmarkAsFav (const char *Table,const char *Field,long Cod)
+void TL_DB_UnmarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod)
   {
    /***** Delete the mark as favourite from database *****/
    DB_QueryDELETE ("can not unfavourite",
 		   "DELETE FROM %s"
 		   " WHERE %s=%ld AND UsrCod=%ld",
-		   Table,
-		   Field,Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
+		   TL_DB_Table[WhatToFav],
+		   TL_DB_Field[WhatToFav],Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -1029,6 +978,29 @@ unsigned TL_DB_GetNumTimesANoteHasBeenShared (struct TL_Not_Note *Not)
 		  Not->NotCod,
 		  Not->UsrCod,	// Author of the note
 		  (unsigned) TL_Pub_SHARED_NOTE);
+  }
+
+/*****************************************************************************/
+/***************** Get list of users who have shared a note ******************/
+/*****************************************************************************/
+
+unsigned TL_DB_GetListUsrsHaveShared (long NotCod,long UsrCod,
+                                      unsigned MaxUsrs,
+                                      MYSQL_RES **mysql_res)
+  {
+   /***** Get list of users who have shared a note from database *****/
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get users",
+		   "SELECT PublisherCod"	// row[0]
+		   " FROM tl_pubs"
+		   " WHERE NotCod=%ld"
+		   " AND PublisherCod<>%ld"
+		   " AND PubType=%u"
+		   " ORDER BY PubCod LIMIT %u",
+		   NotCod,
+		   UsrCod,
+		   (unsigned) TL_Pub_SHARED_NOTE,
+		   MaxUsrs);
   }
 
 /*****************************************************************************/

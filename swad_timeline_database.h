@@ -113,22 +113,23 @@ void TL_DB_UpdateLastPubCodInSession (void);
 void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod);
 
 /****************************** Favourites ***********************************/
-bool TL_DB_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod);
-bool TL_DB_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod);
-unsigned TL_DB_GetNumTimesANoteHasBeenFav (const struct TL_Not_Note *Not);
-unsigned TL_DB_GetNumTimesACommHasBeenFav (const struct TL_Com_Comment *Com);
+bool TL_DB_CheckIfFavedByUsr (TL_Fav_WhatToFav_t WhatToFav,
+                              long Cod,long UsrCod);
+unsigned TL_DB_GetNumTimesHasBeenFav (TL_Fav_WhatToFav_t WhatToFav,
+                                      long Cod,long UsrCod);
 unsigned TL_DB_GetListUsrsHaveFaved (TL_Fav_WhatToFav_t WhatToFav,
                                      long Cod,long UsrCod,
                                      unsigned MaxUsrs,
                                      MYSQL_RES **mysql_res);
-void TL_DB_MarkNoteAsFav (long NotCod);
-void TL_DB_MarkCommAsFav (long PubCod);
-void TL_DB_UnmarkNoteAsFav (long NotCod);
-void TL_DB_UnmarkCommAsFav (long PubCod);
+void TL_DB_MarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod);
+void TL_DB_UnmarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod);
 
 /******************************** Shared *************************************/
 bool TL_DB_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);
 unsigned TL_DB_GetNumTimesANoteHasBeenShared (struct TL_Not_Note *Not);
+unsigned TL_DB_GetListUsrsHaveShared (long NotCod,long UsrCod,
+                                      unsigned MaxUsrs,
+                                      MYSQL_RES **mysql_res);
 void TL_DB_RemoveSharedPub (long NotCod);
 
 #endif

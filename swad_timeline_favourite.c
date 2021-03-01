@@ -170,14 +170,15 @@ static void TL_Fav_FavNote (struct TL_Not_Note *Not)
      {
       if (Gbl.Usrs.Me.Logged &&		// I am logged...
 	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
-	 if (!TL_DB_CheckIfNoteIsFavedByUsr (Not->NotCod,
-					     Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
+	 if (!TL_DB_CheckIfFavedByUsr (TL_Fav_NOTE,Not->NotCod,
+				       Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
 	   {
 	    /***** Mark note as favourite in database *****/
-	    TL_DB_MarkNoteAsFav (Not->NotCod);
+	    TL_DB_MarkAsFav (TL_Fav_NOTE,Not->NotCod);
 
 	    /***** Update number of times this note is favourited *****/
-	    TL_DB_GetNumTimesANoteHasBeenFav (Not);
+	    Not->NumFavs = TL_DB_GetNumTimesHasBeenFav (TL_Fav_NOTE,
+	                                                Not->NotCod,Not->UsrCod);
 
 	    /***** Create notification about favourite post
 		   for the author of the post *****/
@@ -201,14 +202,15 @@ static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
       if (Not->NumFavs &&
 	  Gbl.Usrs.Me.Logged &&		// I am logged...
 	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
-	 if (TL_DB_CheckIfNoteIsFavedByUsr (Not->NotCod,
-					    Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
+	 if (TL_DB_CheckIfFavedByUsr (TL_Fav_NOTE,Not->NotCod,
+			              Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
 	   {
 	    /***** Delete the mark as favourite from database *****/
-	    TL_DB_UnmarkNoteAsFav (Not->NotCod);
+	    TL_DB_UnmarkAsFav (TL_Fav_NOTE,Not->NotCod);
 
 	    /***** Update number of times this note is favourited *****/
-	    TL_DB_GetNumTimesANoteHasBeenFav (Not);
+	    Not->NumFavs = TL_DB_GetNumTimesHasBeenFav (TL_Fav_NOTE,
+	                                                Not->NotCod,Not->UsrCod);
 
             /***** Mark possible notifications on this note as removed *****/
 	    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
@@ -313,17 +315,18 @@ static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
 
    if (Com->PubCod > 0)
       if (!Usr_ItsMe (Com->UsrCod))	// I am not the author
-	 if (!TL_DB_CheckIfCommIsFavedByUsr (Com->PubCod,
-					     Gbl.Usrs.Me.UsrDat.UsrCod)) // I have not yet favourited the comment
+	 if (!TL_DB_CheckIfFavedByUsr (TL_Fav_COMM,Com->PubCod,
+				       Gbl.Usrs.Me.UsrDat.UsrCod)) // I have not yet favourited the comment
 	   {
 	    /***** Mark comment as favourite in database *****/
-	    TL_DB_MarkCommAsFav (Com->PubCod);
+	    TL_DB_MarkAsFav (TL_Fav_COMM,Com->PubCod);
 
-	    /* Update number of times this comment is favourited */
-	    TL_DB_GetNumTimesACommHasBeenFav (Com);
+	    /***** Update number of times this comment is favourited *****/
+	    Com->NumFavs = TL_DB_GetNumTimesHasBeenFav (TL_Fav_COMM,
+	                                                Com->PubCod,Com->UsrCod);
 
-	    /**** Create notification about favourite post
-		  for the author of the post ***/
+	    /***** Create notification about favourite post
+		   for the author of the post *****/
 	    TL_Ntf_CreateNotifToAuthor (Com->UsrCod,Com->PubCod,
 	                                Ntf_EVENT_TIMELINE_FAV);
 	   }
@@ -344,14 +347,15 @@ static void TL_Fav_UnfComment (struct TL_Com_Comment *Com)
    if (Com->PubCod > 0)
       if (Com->NumFavs &&
 	  !Usr_ItsMe (Com->UsrCod))	// I am not the author
-	 if (TL_DB_CheckIfCommIsFavedByUsr (Com->PubCod,
-					     Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the comment
+	 if (TL_DB_CheckIfFavedByUsr (TL_Fav_COMM,Com->PubCod,
+				      Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the comment
 	   {
 	    /***** Delete the mark as favourite from database *****/
-	    TL_DB_UnmarkCommAsFav (Com->PubCod);
+	    TL_DB_UnmarkAsFav (TL_Fav_COMM,Com->PubCod);
 
 	    /***** Update number of times this comment is favourited *****/
-	    TL_DB_GetNumTimesACommHasBeenFav (Com);
+	    Com->NumFavs = TL_DB_GetNumTimesHasBeenFav (TL_Fav_COMM,
+	                                                Com->PubCod,Com->UsrCod);
 
             /***** Mark possible notifications on this comment as removed *****/
             Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,Com->PubCod);
@@ -413,7 +417,8 @@ static void TL_Fav_PutFormToFavUnfNote (long NotCod)
      };
 
    /***** Form and icon to fav/unfav note *****/
-   TL_Frm_FormFavSha (&Form[TL_DB_CheckIfNoteIsFavedByUsr (NotCod,Gbl.Usrs.Me.UsrDat.UsrCod)]);
+   TL_Frm_FormFavSha (&Form[TL_DB_CheckIfFavedByUsr (TL_Fav_NOTE,NotCod,
+                                                     Gbl.Usrs.Me.UsrDat.UsrCod)]);
   }
 
 /*****************************************************************************/
@@ -445,7 +450,8 @@ static void TL_Fav_PutFormToFavUnfComm (long PubCod)
      };
 
    /***** Form and icon to fav/unfav *****/
-   TL_Frm_FormFavSha (&Form[TL_DB_CheckIfNoteIsFavedByUsr (PubCod,Gbl.Usrs.Me.UsrDat.UsrCod)]);
+   TL_Frm_FormFavSha (&Form[TL_DB_CheckIfFavedByUsr (TL_Fav_COMM,PubCod,
+                                                     Gbl.Usrs.Me.UsrDat.UsrCod)]);
   }
 
 /*****************************************************************************/
