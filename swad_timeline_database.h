@@ -124,6 +124,7 @@ unsigned TL_DB_GetListUsrsHaveFaved (TL_Fav_WhatToFav_t WhatToFav,
                                      MYSQL_RES **mysql_res);
 void TL_DB_MarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod);
 void TL_DB_UnmarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod);
+void TL_DB_RemoveAllFavsMadeByUsr (TL_Fav_WhatToFav_t WhatToFav,long UsrCod);
 
 /******************************** Shared *************************************/
 bool TL_DB_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);

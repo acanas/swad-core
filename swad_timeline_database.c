@@ -974,6 +974,18 @@ void TL_DB_UnmarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod)
   }
 
 /*****************************************************************************/
+/************* Remove all favs made by this user in any comment **************/
+/*****************************************************************************/
+
+void TL_DB_RemoveAllFavsMadeByUsr (TL_Fav_WhatToFav_t WhatToFav,long UsrCod)
+  {
+   /* Remove all favs made by this user in any comment */
+   DB_QueryDELETE ("can not remove favs",
+		   "DELETE FROM %s WHERE UsrCod=%ld",
+		   TL_DB_Table[WhatToFav],UsrCod);
+  }
+
+/*****************************************************************************/
 /****************** Check if a user has published a note *********************/
 /*****************************************************************************/
 

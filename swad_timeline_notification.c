@@ -28,7 +28,6 @@
 #include <stdbool.h>		// For boolean type
 #include <string.h>		// For string functions
 
-#include "swad_database.h"
 #include "swad_global.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"

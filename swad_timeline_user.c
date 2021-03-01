@@ -34,6 +34,8 @@
 #include "swad_global.h"
 #include "swad_photo.h"
 #include "swad_timeline.h"
+#include "swad_timeline_database.h"
+#include "swad_timeline_favourite.h"
 #include "swad_timeline_note.h"
 #include "swad_timeline_publication.h"
 #include "swad_timeline_user.h"
@@ -68,10 +70,7 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
   {
    /***** Remove favs for comments *****/
    /* Remove all favs made by this user in any comment */
-   DB_QueryDELETE ("can not remove favs",
-		   "DELETE FROM tl_comments_fav"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
+   TL_DB_RemoveAllFavsMadeByUsr (TL_Fav_COMM,UsrCod);
 
    /* Remove all favs for all comments of this user */
    DB_QueryDELETE ("can not remove favs",
@@ -94,10 +93,7 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
 
    /***** Remove favs for notes *****/
    /* Remove all favs made by this user in any note */
-   DB_QueryDELETE ("can not remove favs",
-		   "DELETE FROM tl_notes_fav"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
+   TL_DB_RemoveAllFavsMadeByUsr (TL_Fav_NOTE,UsrCod);
 
    /* Remove all favs for all notes of this user */
    DB_QueryDELETE ("can not remove favs",
