@@ -338,17 +338,22 @@ void TL_DB_RemoveNote (long NotCod)
   }
 
 /*****************************************************************************/
-/************** Get publication codes of comments of a note from database *****************/
+/********************* Get data of post using its code ***********************/
 /*****************************************************************************/
 // Returns the number of rows got
 
 unsigned TL_DB_GetPostByCod (long PstCod,MYSQL_RES **mysql_res)
   {
+   /***** Trivial check: post code should be > 0 *****/
+   if (PstCod <= 0)
+      return 0;
+
+   /***** Get data of post from database *****/
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get the content"
 			     " of a post",
-		   "SELECT Txt,"		// row[0]
-			  "MedCod"		// row[1]
+		   "SELECT Txt,"	// row[0]
+			  "MedCod"	// row[1]
 		   " FROM tl_posts"
 		   " WHERE PstCod=%ld",
 		   PstCod);
@@ -719,6 +724,28 @@ unsigned TL_DB_SelectTheMostRecentPub (const struct TL_Pub_SubQueries *SubQuerie
 		   SubQueries->RangeTop,
 		   SubQueries->Publishers,
 		   SubQueries->AlreadyExists);
+  }
+
+/*****************************************************************************/
+/****************** Get data of publication using its code *******************/
+/*****************************************************************************/
+// Returns the number of rows got
+
+unsigned TL_DB_GetDataOfPubByCod (long PubCod,MYSQL_RES **mysql_res)
+  {
+   /***** Trivial check: publication code should be > 0 *****/
+   if (PubCod <= 0)
+      return 0;
+
+   /***** Get data of note from database *****/
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get data of publication",
+		   "SELECT PubCod,"		// row[0]
+		          "NotCod,"		// row[1]
+			  "PublisherCod,"	// row[2]
+			  "PubType"		// row[3]
+		   " FROM tl_pubs WHERE PubCod=%ld",
+		   PubCod);
   }
 
 /*****************************************************************************/

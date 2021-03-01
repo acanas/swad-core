@@ -31,6 +31,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_timeline.h"
+#include "swad_timeline_database.h"
 #include "swad_timeline_note.h"
 #include "swad_timeline_notification.h"
 #include "swad_timeline_post.h"
@@ -119,13 +120,7 @@ void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    Content.Txt[0] = '\0';
 
    /***** Get summary and content from post from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data of publication",
-		       "SELECT PubCod,"			// row[0]
-			      "NotCod,"			// row[1]
-			      "PublisherCod,"		// row[2]
-			      "PubType"			// row[3]
-		       " FROM tl_pubs WHERE PubCod=%ld",
-		       PubCod) == 1)   // Result should have a unique row
+   if (TL_DB_GetDataOfPubByCod (PubCod,&mysql_res) == 1)   // Result should have a unique row
       /* Get data of publication from row */
       TL_Pub_GetDataOfPublicationFromNextRow (mysql_res,&Pub);
 

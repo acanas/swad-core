@@ -104,6 +104,7 @@ void TL_DB_CreateSubQueryRangeTop (const struct TL_Pub_RangePubsToGet *RangePubs
                                    struct TL_Pub_SubQueries *SubQueries);
 unsigned TL_DB_SelectTheMostRecentPub (const struct TL_Pub_SubQueries *SubQueries,
                                        MYSQL_RES **mysql_res);
+unsigned TL_DB_GetDataOfPubByCod (long PubCod,MYSQL_RES **mysql_res);
 long TL_DB_GetNotCodFromPubCod (long PubCod);
 long TL_DB_GetPubCodFromSession (const char *FieldName);
 unsigned long TL_DB_GetNumPubsUsr (long UsrCod);
