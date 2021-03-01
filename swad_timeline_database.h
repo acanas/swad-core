@@ -69,6 +69,7 @@ void TL_DB_ClearTimelineNotesOfSessionFromDB (void);
 void TL_DB_RemoveNoteFavs (long NotCod);
 void TL_DB_RemoveNotePubs (long NotCod);
 void TL_DB_RemoveNote (long NotCod);
+void TL_DB_RemoveAllNotesUsr (long UsrCod);
 
 /********************************** Posts ************************************/
 unsigned TL_DB_GetPostByCod (long PstCod,MYSQL_RES **mysql_res);

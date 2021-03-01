@@ -154,11 +154,8 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
 		   " WHERE PublisherCod=%ld",
 		   UsrCod);
 
-   /***** Remove all the notes of the user *****/
-   DB_QueryDELETE ("can not remove notes",
-		   "DELETE FROM tl_notes"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
+   /***** Remove all notes of the user *****/
+   TL_DB_RemoveAllNotesUsr (UsrCod);
   }
 
 /*****************************************************************************/

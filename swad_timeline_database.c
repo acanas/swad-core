@@ -338,6 +338,18 @@ void TL_DB_RemoveNote (long NotCod)
   }
 
 /*****************************************************************************/
+/******************** Remove all notes created by a user *********************/
+/*****************************************************************************/
+
+void TL_DB_RemoveAllNotesUsr (long UsrCod)
+  {
+   /***** Remove all notes created by a user *****/
+   DB_QueryDELETE ("can not remove notes",
+		   "DELETE FROM tl_notes WHERE UsrCod=%ld",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
 /********************* Get data of post using its code ***********************/
 /*****************************************************************************/
 // Returns the number of rows got
