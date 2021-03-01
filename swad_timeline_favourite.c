@@ -299,7 +299,7 @@ void TL_Fav_PutIconToFavUnfComment (const struct TL_Com_Comment *Com,
    HTM_DIV_End ();
 
    /***** Show who have marked this comment as favourite *****/
-   TL_Fav_ShowUsrsWhoHaveMarkedAsFav (TL_Fav_NOTE,
+   TL_Fav_ShowUsrsWhoHaveMarkedAsFav (TL_Fav_COMM,
                                       Com->PubCod,Com->UsrCod,Com->NumFavs,
                                       HowManyUsrs);
   }

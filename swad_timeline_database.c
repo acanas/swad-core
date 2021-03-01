@@ -991,7 +991,7 @@ bool TL_DB_CheckIfFavedByUsr (TL_Fav_WhatToFav_t WhatToFav,
    /***** Check if a user has favourited a note/comment from database *****/
    return (DB_QueryCOUNT ("can not check if a user has favourited",
 			  "SELECT COUNT(*) FROM %s"
-			  " WHERE PubCod=%ld AND UsrCod=%ld",
+			  " WHERE %s=%ld AND UsrCod=%ld",
 			  TL_DB_Table[WhatToFav],
 			  TL_DB_Field[WhatToFav],Cod,UsrCod) != 0);
   }
