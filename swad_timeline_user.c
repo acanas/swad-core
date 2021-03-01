@@ -69,39 +69,21 @@ extern struct Globals Gbl;
 void TL_Usr_RemoveUsrContent (long UsrCod)
   {
    /***** Remove favs for comments *****/
-   /* Remove all favs made by this user in any comment */
+   /* Remove all favs made by this user to any comment */
    TL_DB_RemoveAllFavsMadeByUsr (TL_Fav_COMM,UsrCod);
 
-   /* Remove all favs for all comments of this user */
-   DB_QueryDELETE ("can not remove favs",
-		   "DELETE FROM tl_comments_fav"
-	           " USING tl_pubs,tl_comments_fav"
-	           " WHERE tl_pubs.PublisherCod=%ld"	// Author of the comment
-                   " AND tl_pubs.PubType=%u"
-	           " AND tl_pubs.PubCod=tl_comments_fav.PubCod",
-		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
+   /* Remove all favs to comments of this user */
+   TL_DB_RemoveAllFavsToPubsBy (TL_Fav_COMM,UsrCod);
 
-   /* Remove all favs for all comments in all the notes of the user */
-   DB_QueryDELETE ("can not remove comments",
-		   "DELETE FROM tl_comments_fav"
-	           " USING tl_notes,tl_pubs,tl_comments_fav"
-	           " WHERE tl_notes.UsrCod=%ld"	// Author of the note
-	           " AND tl_notes.NotCod=tl_pubs.NotCod"
-                   " AND tl_pubs.PubType=%u"
-	           " AND tl_pubs.PubCod=tl_comments_fav.PubCod",
-		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
+   /* Remove all favs to all comments in all notes authored by this user */
+   TL_DB_RemoveAllFavsToAllCommentsInAllNotesBy (UsrCod);
 
    /***** Remove favs for notes *****/
    /* Remove all favs made by this user in any note */
    TL_DB_RemoveAllFavsMadeByUsr (TL_Fav_NOTE,UsrCod);
 
-   /* Remove all favs for all notes of this user */
-   DB_QueryDELETE ("can not remove favs",
-		   "DELETE FROM tl_notes_fav"
-	           " USING tl_notes,tl_notes_fav"
-	           " WHERE tl_notes.UsrCod=%ld"	// Author of the note
-	           " AND tl_notes.NotCod=tl_notes_fav.NotCod",
-		   UsrCod);
+   /* Remove all favs to notes of this user */
+   TL_DB_RemoveAllFavsToPubsBy (TL_Fav_NOTE,UsrCod);
 
    /***** Remove comments *****/
    /* Remove content of all comments in all the notes of the user */
@@ -137,11 +119,12 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
    TL_DB_RemoveAllPostsUsr (UsrCod);
 
    /***** Remove publications *****/
-   /* Remove all publications of any user authored by the user */
-   TL_DB_RemoveAllPubsOfAnyUsrAuthoredBy (UsrCod);
+   /* Remove all publications (original or shared notes) published by any user
+      of notes authored by the user */
+   TL_DB_RemoveAllPubsPublishedByAnyUsrOfNotesAuthoredBy (UsrCod);
 
-   /* Remove all the publications of the user */
-   TL_DB_RemoveAllPubsUsr (UsrCod);
+   /* Remove all publications published by the user */
+   TL_DB_RemoveAllPubsPublishedBy (UsrCod);
 
    /***** Remove notes *****/
    /* Remove all notes of the user */

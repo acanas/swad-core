@@ -114,8 +114,8 @@ long TL_DB_CreateNewPub (const struct TL_Pub_Publication *Pub);
 void TL_DB_UpdateFirstPubCodInSession (long FirstPubCod);
 void TL_DB_UpdateLastPubCodInSession (void);
 void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod);
-void TL_DB_RemoveAllPubsOfAnyUsrAuthoredBy (long UsrCod);
-void TL_DB_RemoveAllPubsUsr (long UsrCod);
+void TL_DB_RemoveAllPubsPublishedByAnyUsrOfNotesAuthoredBy (long UsrCod);
+void TL_DB_RemoveAllPubsPublishedBy (long UsrCod);
 
 /****************************** Favourites ***********************************/
 bool TL_DB_CheckIfFavedByUsr (TL_Fav_WhatToFav_t WhatToFav,
@@ -129,6 +129,8 @@ unsigned TL_DB_GetListUsrsHaveFaved (TL_Fav_WhatToFav_t WhatToFav,
 void TL_DB_MarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod);
 void TL_DB_UnmarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod);
 void TL_DB_RemoveAllFavsMadeByUsr (TL_Fav_WhatToFav_t WhatToFav,long UsrCod);
+void TL_DB_RemoveAllFavsToPubsBy (TL_Fav_WhatToFav_t WhatToFav,long UsrCod);
+void TL_DB_RemoveAllFavsToAllCommentsInAllNotesBy (long UsrCod);
 
 /******************************** Shared *************************************/
 bool TL_DB_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);

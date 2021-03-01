@@ -50,6 +50,11 @@ static const char *TL_DB_Field[TL_Fav_NUM_WHAT_TO_FAV] =
    [TL_Fav_NOTE] = "NotCod",
    [TL_Fav_COMM] = "PubCod",
   };
+static TL_Pub_PubType_t TL_DB_PubType[TL_Fav_NUM_WHAT_TO_FAV] =
+  {
+   [TL_Fav_NOTE] = TL_Pub_ORIGINAL_NOTE,
+   [TL_Fav_COMM] = TL_Pub_COMMENT_TO_NOTE,
+  };
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -914,12 +919,14 @@ void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
   }
 
 /*****************************************************************************/
-/********** Remove all publications of any user authored by a user ***********/
+/** Remove all publications published by any user & authored by a given user */
 /*****************************************************************************/
 
-void TL_DB_RemoveAllPubsOfAnyUsrAuthoredBy (long UsrCod)
+void TL_DB_RemoveAllPubsPublishedByAnyUsrOfNotesAuthoredBy (long UsrCod)
   {
-   /***** Remove all publications of any user authored by the user *****/
+   /***** Remove all publications (original or shared notes)
+          published by any user
+          of notes authored by this user *****/
    DB_QueryDELETE ("can not remove publications",
 		   "DELETE FROM tl_pubs"
                    " USING tl_notes,tl_pubs"
@@ -929,12 +936,12 @@ void TL_DB_RemoveAllPubsOfAnyUsrAuthoredBy (long UsrCod)
   }
 
 /*****************************************************************************/
-/********************* Remove all publications of a user *********************/
+/**************** Remove all publications published by a user ****************/
 /*****************************************************************************/
 
-void TL_DB_RemoveAllPubsUsr (long UsrCod)
+void TL_DB_RemoveAllPubsPublishedBy (long UsrCod)
   {
-   /***** Remove all publications of user *****/
+   /***** Remove all publications published by the user *****/
    DB_QueryDELETE ("can not remove publications",
 		   "DELETE FROM tl_pubs WHERE PublisherCod=%ld",
 		   UsrCod);
@@ -1028,15 +1035,53 @@ void TL_DB_UnmarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod)
   }
 
 /*****************************************************************************/
-/************* Remove all favs made by this user in any comment **************/
+/********** Remove all favs made by a given user to any comment **************/
 /*****************************************************************************/
 
 void TL_DB_RemoveAllFavsMadeByUsr (TL_Fav_WhatToFav_t WhatToFav,long UsrCod)
   {
-   /* Remove all favs made by this user in any comment */
+   /* Remove all favs made by this user to any comment */
    DB_QueryDELETE ("can not remove favs",
 		   "DELETE FROM %s WHERE UsrCod=%ld",
 		   TL_DB_Table[WhatToFav],UsrCod);
+  }
+
+/*****************************************************************************/
+/************ Remove all favs to notes/comments of a given user **************/
+/*****************************************************************************/
+
+void TL_DB_RemoveAllFavsToPubsBy (TL_Fav_WhatToFav_t WhatToFav,long UsrCod)
+  {
+   /***** Remove all favs to notes/comments of this user *****/
+   DB_QueryDELETE ("can not remove favs",
+		   "DELETE FROM %s"
+	           " USING tl_pubs,%s"
+	           " WHERE tl_pubs.PublisherCod=%ld"	// Author of the comment
+                   " AND tl_pubs.PubType=%u"
+	           " AND tl_pubs.PubCod=%s.PubCod",
+	           TL_DB_Table[WhatToFav],
+	           TL_DB_Table[WhatToFav],
+		   UsrCod,
+		   (unsigned) TL_DB_PubType[WhatToFav],
+		   TL_DB_Table[WhatToFav]);
+  }
+
+/*****************************************************************************/
+/*** Remove all favs to all comments in all notes authored by a given user ***/
+/*****************************************************************************/
+
+void TL_DB_RemoveAllFavsToAllCommentsInAllNotesBy (long UsrCod)
+  {
+   /***** Remove all favs to all comments
+          in all notes authored by this user *****/
+   DB_QueryDELETE ("can not remove favs",
+		   "DELETE FROM tl_comments_fav"
+	           " USING tl_notes,tl_pubs,tl_comments_fav"
+	           " WHERE tl_notes.UsrCod=%ld"		// Author of the note
+	           " AND tl_notes.NotCod=tl_pubs.NotCod"
+                   " AND tl_pubs.PubType=%u"
+	           " AND tl_pubs.PubCod=tl_comments_fav.PubCod",
+		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
