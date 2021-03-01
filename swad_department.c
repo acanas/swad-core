@@ -152,7 +152,7 @@ void Dpt_SeeDepts (void)
       HTM_TH_Begin (1,1,Order == Dpt_ORDER_BY_NUM_TCHS ? "RM" :
 	                                                 "LM");
 
-      Frm_StartForm (ActSeeDpt);
+      Frm_BeginForm (ActSeeDpt);
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
       HTM_BUTTON_SUBMIT_Begin (Txt_DEPARTMENTS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
       if (Order == Departments.SelectedOrder)
@@ -553,7 +553,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 
       /* Institution */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActChgDptIns);
+      Frm_BeginForm (ActChgDptIns);
       Dpt_PutParamDptCod (&Dpt->DptCod);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"OthInsCod\" class=\"HIE_SEL_NARROW\"");
@@ -571,7 +571,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 
       /* Department short name */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActRenDptSho);
+      Frm_BeginForm (ActRenDptSho);
       Dpt_PutParamDptCod (&Dpt->DptCod);
       HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,
                       HTM_SUBMIT_ON_CHANGE,
@@ -581,7 +581,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 
       /* Department full name */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActRenDptFul);
+      Frm_BeginForm (ActRenDptFul);
       Dpt_PutParamDptCod (&Dpt->DptCod);
       HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt->FullName,
                       HTM_SUBMIT_ON_CHANGE,
@@ -591,7 +591,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 
       /* Department WWW */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActChgDptWWW);
+      Frm_BeginForm (ActChgDptWWW);
       Dpt_PutParamDptCod (&Dpt->DptCod);
       HTM_INPUT_URL ("WWW",Dpt->WWW,HTM_SUBMIT_ON_CHANGE,
 		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
@@ -905,7 +905,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    unsigned NumIns;
 
    /***** Begin form *****/
-   Frm_StartForm (ActNewDpt);
+   Frm_BeginForm (ActNewDpt);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_department,

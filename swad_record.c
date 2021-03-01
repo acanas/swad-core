@@ -279,7 +279,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 
       /* Name of the field */
       HTM_TD_Begin ("class=\"LM\"");
-      Frm_StartForm (ActRenFie);
+      Frm_BeginForm (ActRenFie);
       Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,
 		      Gbl.Crs.Records.LstFields.Lst[NumField].Name,
@@ -290,7 +290,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 
       /* Number of lines in the form */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActChgRowFie);
+      Frm_BeginForm (ActChgRowFie);
       Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       snprintf (StrNumLines,sizeof (StrNumLines),"%u",
 		Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
@@ -302,7 +302,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 
       /* Visibility of a field */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActChgVisFie);
+      Frm_BeginForm (ActChgVisFie);
       Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"Visibility\"");
@@ -337,7 +337,7 @@ void Rec_ShowFormCreateRecordField (void)
    char StrNumLines[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Begin form *****/
-   Frm_StartForm (ActNewFie);
+   Frm_BeginForm (ActNewFie);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_record_field,
@@ -951,7 +951,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
       Mnu_ContextMenuBegin ();
 
       /* Print view */
-      Frm_StartForm (ActPrnRecSevGst);
+      Frm_BeginForm (ActPrnRecSevGst);
       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
@@ -974,7 +974,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))                // Get from the database the data of the student
 	{
-         /* Start container for this user */
+         /* Begin container for this user */
 	 snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
 	 HTM_SECTION_Begin (RecordSectionId);
 
@@ -1048,7 +1048,7 @@ static void Rec_ShowRecordOneStdCrs (void)
       Rec_PutLinkToEditRecordFields ();
 
    /* Print view */
-   Frm_StartForm (ActPrnRecSevStd);
+   Frm_BeginForm (ActPrnRecSevStd);
    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
@@ -1060,7 +1060,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    /***** Show optional alert (result of editing data in course record) *****/
    Ale_ShowAlerts (NULL);
 
-   /***** Start container for this user *****/
+   /***** Begin container for this user *****/
    HTM_DIV_Begin ("class=\"REC_USR\"");
 
    /***** Shared record *****/
@@ -1152,7 +1152,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
          Rec_PutLinkToEditRecordFields ();
 
       /* Print view */
-      Frm_StartForm (ActPrnRecSevStd);
+      Frm_BeginForm (ActPrnRecSevStd);
       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
@@ -1177,7 +1177,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
                his/her inscription in the current course */
             UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 
-            /* Start container for this user */
+            /* Begin container for this user */
 	    snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
 	    HTM_SECTION_Begin (RecordSectionId);
 
@@ -1277,7 +1277,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    Rec_WriteFormShowOfficeHoursOneTch (ShowOfficeHours);
 
    /* Print view */
-   Frm_StartForm (ActPrnRecSevTch);
+   Frm_BeginForm (ActPrnRecSevTch);
    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
@@ -1289,7 +1289,7 @@ static void Rec_ShowRecordOneTchCrs (void)
 
    Mnu_ContextMenuEnd ();
 
-   /***** Start container for this user *****/
+   /***** Begin container for this user *****/
    HTM_DIV_Begin ("class=\"REC_USR\"");
 
    /***** Shared record *****/
@@ -1310,7 +1310,7 @@ static void Rec_ShowRecordOneTchCrs (void)
       HTM_DIV_End ();
      }
 
-   /***** Start container for this user *****/
+   /***** Begin container for this user *****/
    HTM_DIV_End ();
   }
 
@@ -1367,7 +1367,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
       Rec_WriteFormShowOfficeHoursSeveralTchs (ShowOfficeHours);
 
       /* Print view */
-      Frm_StartForm (ActPrnRecSevTch);
+      Frm_BeginForm (ActPrnRecSevTch);
       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
       Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
       Par_PutHiddenParamChar ("ShowOfficeHours",
@@ -1396,7 +1396,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
                his/her inscription in the current course */
             UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 
-            /* Start container for this user */
+            /* Begin container for this user */
 	    snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
 	    HTM_SECTION_Begin (RecordSectionId);
 
@@ -1677,7 +1677,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		  if (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
 		    {
 		     ICanEdit = true;
-		     Frm_StartForm (ActRcvRecCrs);
+		     Frm_BeginForm (ActRcvRecCrs);
 		     break;
 		    }
 	   }
@@ -2262,10 +2262,10 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       switch (TypeOfView)
         {
 	 case Rec_SHA_SIGN_UP_IN_CRS_FORM:
-            Frm_StartForm (ActSignUp);
+            Frm_BeginForm (ActSignUp);
             break;
 	 case Rec_SHA_MY_RECORD_FORM:
-	    Frm_StartForm (ActChgMyData);
+	    Frm_BeginForm (ActChgMyData);
             break;
          case Rec_SHA_OTHER_EXISTING_USR_FORM:
             switch (Gbl.Action.Act)
@@ -2283,7 +2283,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		  NextAction = ActUpdOth;
 		  break;
 	      }
-	    Frm_StartForm (NextAction);
+	    Frm_BeginForm (NextAction);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
 	    break;
 	 case Rec_SHA_OTHER_NEW_USR_FORM:
@@ -2302,7 +2302,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		  NextAction = ActCreOth;
 		  break;
 	      }
-	    Frm_StartForm (NextAction);
+	    Frm_BeginForm (NextAction);
 	    ID_PutParamOtherUsrIDPlain ();				// New user
 	    break;
          default:
@@ -2428,7 +2428,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
       ICanViewUsrProfile = Pri_ShowingIsAllowed (Gbl.Record.UsrDat->BaPrfVisibility,
 						 Gbl.Record.UsrDat);
 
-      /***** Start container *****/
+      /***** Begin container *****/
       HTM_DIV_Begin ("class=\"FRAME_ICO\"");
 
       if (ItsMe)
@@ -2669,7 +2669,7 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
       /* Form to go to the institution */
       if (PutFormLinks)
 	{
-	 Frm_StartFormGoTo (ActSeeInsInf);
+	 Frm_BeginFormGoTo (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins->InsCod);
 	 HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK",NULL);
 	}
@@ -2690,7 +2690,7 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
       /* Form to go to the institution */
       if (PutFormLinks)
 	{
-	 Frm_StartFormGoTo (ActSeeInsInf);
+	 Frm_BeginFormGoTo (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins->InsCod);
 	 HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK REC_HEAD LM",NULL);
 	}
@@ -2763,7 +2763,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 	{
 	 /* Put form to go to public profile */
          ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-	 Frm_StartForm (ActSeeOthPubPrf);
+	 Frm_BeginForm (ActSeeOthPubPrf);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	 HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
 					  Txt_Another_user_s_profile,
@@ -3780,7 +3780,7 @@ void Rec_ShowMySharedRecordAndMore (void)
 	 Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_department);
      }
 
-   /***** Start container *****/
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"REC_USR\"");
 
    /***** Left part *****/
@@ -3792,7 +3792,7 @@ void Rec_ShowMySharedRecordAndMore (void)
    HTM_DIV_End ();
 
    /***** Right part *****/
-   /* Start container for right part */
+   /* Begin container for right part */
    HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 
    /* My institution, centre and department */
@@ -3833,7 +3833,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    unsigned NumCtr;
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (Rec_MY_INS_CTR_DPT_ID);
 
    /***** Begin box and table *****/

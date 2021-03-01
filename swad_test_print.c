@@ -284,7 +284,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
    if (Print->NumQsts.All)
      {
       /***** Begin form *****/
-      Frm_StartForm (Action[RequestOrConfirm]);
+      Frm_BeginForm (Action[RequestOrConfirm]);
       TstPrn_PutParamPrnCod (Print->PrnCod);
       Par_PutHiddenParamUnsigned (NULL,"NumTst",NumExamsGeneratedByMe);
 
@@ -1885,7 +1885,7 @@ void TstPrn_SelDatesToSeeMyPrints (void)
      };
 
    /***** Begin form *****/
-   Frm_StartForm (ActSeeMyTstResCrs);
+   Frm_BeginForm (ActSeeMyTstResCrs);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Results,
@@ -2202,7 +2202,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	 HTM_TD_Begin ("class=\"RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanView.Result)
 	   {
-	    Frm_StartForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
+	    Frm_BeginForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
 						                 ActSeeOneTstResOth);
 	    TstPrn_PutParamPrnCod (Print.PrnCod);
 	    Ico_PutIconLink ("tasks.svg",Txt_View_test);

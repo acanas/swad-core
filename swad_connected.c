@@ -132,7 +132,7 @@ static void Con_PutIconToUpdateConnected (__attribute__((unused)) void *Args)
   {
    extern const char *Txt_Update;
 
-   Frm_StartForm (ActLstCon);
+   Frm_BeginForm (ActLstCon);
    Sco_PutParamScope ("ScopeCon",Gbl.Scope.Current);
    HTM_BUTTON_Animated_Begin (Txt_Update,"BT_LINK",NULL);
    Ico_PutCalculateIcon (Txt_Update);
@@ -169,7 +169,7 @@ void Con_ShowGlobalConnectedUsrs (void)
 
    /***** Number of sessions *****/
    /* Link to view more details about connected users */
-   Frm_StartFormUnique (ActLstCon);	// Must be unique because
+   Frm_BeginFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
    HTM_BUTTON_SUBMIT_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
@@ -266,7 +266,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    extern const char *Txt_from;
    struct ConnectedUsrs Usrs;
 
-   /***** Start container *****/
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"CONNECTED\"");
 
    /***** Number of connected users who belong to scope *****/
@@ -275,7 +275,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    HTM_TxtF ("%u %s ",Usrs.NumUsrs,Txt_from);
 
    /* Put form to change scope */
-   Frm_StartForm (ActLstCon);
+   Frm_BeginForm (ActLstCon);
    Sco_PutSelectorScope ("ScopeCon",HTM_SUBMIT_ON_CHANGE);
    Frm_EndForm ();
 
@@ -312,12 +312,12 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected
       return;
 
-   /***** Start container *****/
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"CONNECTED\"");
 
    /***** Number of connected users who belong to course *****/
    /* Link to view more details about connected users */
-   Frm_StartFormUnique (ActLstCon);	// Must be unique because
+   Frm_BeginFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
    HTM_BUTTON_SUBMIT_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
@@ -407,7 +407,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("colspan=\"3\" class=\"CT\"");
-	 Frm_StartFormUnique (ActLstCon);	// Must be unique because
+	 Frm_BeginFormUnique (ActLstCon);	// Must be unique because
 						// the list of connected users
 						// is dynamically updated via AJAX
 	 Sco_PutParamScope ("ScopeCon",Hie_Lvl_CRS);
@@ -840,11 +840,11 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    switch (Role)
      {
       case Rol_STD:
-	 Frm_StartFormUnique (ActSeeRecOneStd);
+	 Frm_BeginFormUnique (ActSeeRecOneStd);
 	 break;
       case Rol_NET:
       case Rol_TCH:
-	 Frm_StartFormUnique (ActSeeRecOneTch);
+	 Frm_BeginFormUnique (ActSeeRecOneTch);
 	 break;
       default:
 	 Rol_WrongRoleExit ();
@@ -1065,11 +1065,11 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	       switch (Role)
 		 {
 		  case Rol_STD:
-		     Frm_StartForm (ActSeeRecOneStd);
+		     Frm_BeginForm (ActSeeRecOneStd);
 		     break;
 		  case Rol_NET:
 		  case Rol_TCH:
-		     Frm_StartForm (ActSeeRecOneTch);
+		     Frm_BeginForm (ActSeeRecOneTch);
 		     break;
 		  default:
 		     Rol_WrongRoleExit ();

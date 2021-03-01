@@ -620,7 +620,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
    HTM_ARTICLE_Begin (Anchor);
    if (ExaSes_CheckIfICanAnswerThisSession (Exam,Session))
      {
-      Frm_StartForm (ActSeeExaPrn);
+      Frm_BeginForm (ActSeeExaPrn);
       Exa_PutParams (Exams);
       ExaSes_PutParamSesCod (Session->SesCod);
       HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
@@ -1272,11 +1272,11 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
      };
    bool ItsANewSession = Session->SesCod <= 0;
 
-   /***** Start section for a new exam session *****/
+   /***** Begin section for a new exam session *****/
    HTM_SECTION_Begin (ExaSes_NEW_SESSION_SECTION_ID);
 
    /***** Begin form *****/
-   Frm_StartForm (ItsANewSession ? ActNewExaSes :	// New session
+   Frm_BeginForm (ItsANewSession ? ActNewExaSes :	// New session
 	                           ActChgExaSes);	// Existing session
    Exa_PutParamExamCod (Session->ExaCod);
    if (!ItsANewSession)	// Existing session

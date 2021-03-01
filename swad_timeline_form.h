@@ -77,14 +77,15 @@ struct TL_Form
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_Frm_FormStart (const struct TL_Timeline *Timeline,TL_Frm_Action_t Action);
+void TL_Frm_BeginForm (const struct TL_Timeline *Timeline,TL_Frm_Action_t Action);
+void TL_Frm_EndForm (void);
 
 void TL_Frm_PutFormToSeeAllFaversSharers (TL_Frm_Action_t Action,
 		                          const char *ParamFormat,long ParamCod,
                                           TL_Usr_HowManyUsrs_t HowManyUsrs);
 void TL_Frm_FormFavSha (const struct TL_Form *Form);
 
-void TL_Frm_FormToShowHiddenComments (long NotCod,
+void TL_Frm_FormToShowHiddenComms (long NotCod,
 				      char IdComments[Frm_MAX_BYTES_ID + 1],
 				      unsigned NumInitialComments);
 

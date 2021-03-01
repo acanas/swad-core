@@ -307,7 +307,7 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test)
       /***** Check if minimum date-time of next access to test is older than now *****/
       if (Tst_CheckIfNextTstAllowed ())
         {
-         Frm_StartForm (ActSeeTst);
+         Frm_BeginForm (ActSeeTst);
 
          HTM_TABLE_BeginPadding (2);
 
@@ -461,7 +461,7 @@ void Tst_ReceiveTestDraft (void)
       TstPrn_UpdatePrintInDB (&Print);
 
       /***** Show question and button to send the test *****/
-      /* Start alert */
+      /* Begin alert */
       Ale_ShowAlert (Ale_WARNING,Txt_Please_review_your_answers_before_submitting_the_exam);
 
       /* Show the same test exam to be answered */
@@ -854,7 +854,7 @@ static void Tst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
       /***** Set names of parameters depending on number of image in form *****/
       Med_SetParamNames (&ParamUploadMedia,NumMedia);
 
-      /***** Start container *****/
+      /***** Begin container *****/
       HTM_DIV_Begin ("class=\"TEST_MED_EDIT_FORM\"");
 
       /***** Choice 1: No media *****/
@@ -1005,7 +1005,7 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
    /***** Get tags already present in the table of questions *****/
    if ((Test->Tags.Num = Tag_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
-      Frm_StartForm (ActLstTstQst);
+      Frm_BeginForm (ActLstTstQst);
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Tst_DEFAULT_ORDER);
 
       HTM_TABLE_BeginPadding (2);
@@ -1103,7 +1103,7 @@ static void Tst_ShowFormRequestSelectTestsForSet (struct Exa_Exams *Exams,
    /***** Get tags already present in the table of questions *****/
    if ((Test->Tags.Num = Tag_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
-      Frm_StartForm (ActLstTstQstForSet);
+      Frm_BeginForm (ActLstTstQstForSet);
       ExaSet_PutParamsOneSet (Exams);
 
       HTM_TABLE_BeginPadding (2);
@@ -1165,7 +1165,7 @@ static void Tst_ShowFormRequestSelectTestsForGame (struct Gam_Games *Games,
    /***** Get tags already present in the table of questions *****/
    if ((Test->Tags.Num = Tag_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
-      Frm_StartForm (ActGamLstTstQst);
+      Frm_BeginForm (ActGamLstTstQst);
       Gam_PutParams (Games);
 
       HTM_TABLE_BeginPadding (2);
@@ -1315,7 +1315,7 @@ static void Tst_PutButtonToAddQuestion (void)
   {
    extern const char *Txt_New_question;
 
-   Frm_StartForm (ActEdiOneTstQst);
+   Frm_BeginForm (ActEdiOneTstQst);
    Btn_PutConfirmButton (Txt_New_question);
    Frm_EndForm ();
   }
@@ -1419,7 +1419,7 @@ static void Tst_ShowFormConfigTst (void)
                  Hlp_ASSESSMENT_Tests_configuring_tests,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
-   Frm_StartForm (ActRcvCfgTst);
+   Frm_BeginForm (ActRcvCfgTst);
 
    /***** Tests are visible from plugins? *****/
    HTM_TABLE_BeginCenterPadding (2);
@@ -2216,7 +2216,7 @@ static void Tst_WriteHeadingRowQuestionsForEdition (struct Tst_Test *Test)
 
       if (Test->NumQsts > 1)
         {
-         Frm_StartForm (ActLstTstQst);
+         Frm_BeginForm (ActLstTstQst);
          Tst_PutParamsEditQst (Test);
          Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
          HTM_BUTTON_SUBMIT_Begin (Txt_TST_STR_ORDER_FULL[Order],"BT_LINK TIT_TBL",NULL);
@@ -2299,7 +2299,7 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
       if (Test->Question.Answer.Type == Tst_ANS_UNIQUE_CHOICE ||
 	  Test->Question.Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
 	{
-	 Frm_StartForm (ActChgShfTstQst);
+	 Frm_BeginForm (ActChgShfTstQst);
 	 Tst_PutParamsEditQst (Test);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Test->SelectedOrder);
 	 HTM_INPUT_CHECKBOX ("Shuffle",HTM_SUBMIT_ON_CHANGE,
@@ -2387,7 +2387,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exam
 		 Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
-   Frm_StartForm (ActAddQstToExa);
+   Frm_BeginForm (ActAddQstToExa);
    ExaSet_PutParamsOneSet (Exams);
 
    /***** Select all questions *****/
@@ -2472,7 +2472,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
 		 Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
-   Frm_StartForm (ActAddTstQstToGam);
+   Frm_BeginForm (ActAddTstQstToGam);
    Gam_PutParams (Games);
 
    /***** Select all questions *****/
@@ -3232,7 +3232,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
                     Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
-   Frm_StartForm (ActRcvTstQst);
+   Frm_BeginForm (ActRcvTstQst);
    Tst_PutParamQstCod (&Question->QstCod);
 
    /***** Begin table *****/

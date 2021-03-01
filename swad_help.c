@@ -271,7 +271,7 @@ static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
 
    /***** Button *****/
    HTM_TD_Begin ("class=\"LM\"");
-   Frm_StartForm (Action);
+   Frm_BeginForm (Action);
    Btn_PutButtonInline (Button,TxtButton);
    Frm_EndForm ();
    HTM_TD_End ();

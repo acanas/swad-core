@@ -588,7 +588,7 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 	 HTM_DIV_Begin ("class=\"%s\"",
 			(Projects->Filter.Who == Who) ? "PREF_ON" :
 						        "PREF_OFF");
-	 Frm_StartForm (Who == Usr_WHO_SELECTED ? ActReqUsrPrj :
+	 Frm_BeginForm (Who == Usr_WHO_SELECTED ? ActReqUsrPrj :
 	                                          ActSeePrj);
 	 Filter.Who    = Who;
 	 Filter.Assign = Projects->Filter.Assign;
@@ -624,7 +624,7 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
       HTM_DIV_Begin ("class=\"%s\"",
 		     (Projects->Filter.Assign & (1 << Assign)) ? "PREF_ON" :
 								 "PREF_OFF");
-      Frm_StartForm (ActSeePrj);
+      Frm_BeginForm (ActSeePrj);
       Filter.Who    = Projects->Filter.Who;
       Filter.Assign = Projects->Filter.Assign ^ (1 << Assign);	// Toggle
       Filter.Hidden = Projects->Filter.Hidden;
@@ -665,7 +665,7 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
       HTM_DIV_Begin ("class=\"%s\"",
 		     (Projects->Filter.Hidden & (1 << HidVis)) ? "PREF_ON" :
 								 "PREF_OFF");
-      Frm_StartForm (ActSeePrj);
+      Frm_BeginForm (ActSeePrj);
       Filter.Who    = Projects->Filter.Who;
       Filter.Assign = Projects->Filter.Assign;
       Filter.Hidden = Projects->Filter.Hidden ^ (1 << HidVis);	// Toggle
@@ -706,7 +706,7 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
       HTM_DIV_Begin ("class=\"%s\"",
 		     (Projects->Filter.Faulti & (1 << Faultiness)) ? "PREF_ON" :
 								     "PREF_OFF");
-      Frm_StartForm (ActSeePrj);
+      Frm_BeginForm (ActSeePrj);
       Filter.Who    = Projects->Filter.Who;
       Filter.Assign = Projects->Filter.Assign;
       Filter.Hidden = Projects->Filter.Hidden;
@@ -735,7 +735,7 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 
    /***** Begin form *****/
    HTM_DIV_Begin (NULL);
-   Frm_StartForm (ActSeePrj);
+   Frm_BeginForm (ActSeePrj);
    Filter.Who    = Projects->Filter.Who;
    Filter.Assign = Projects->Filter.Assign;
    Filter.Hidden = Projects->Filter.Hidden;
@@ -983,7 +983,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 	{
 	 case Prj_LIST_PROJECTS:
 	 case Prj_FILE_BROWSER_PROJECT:
-	    Frm_StartForm (ActSeePrj);
+	    Frm_BeginForm (ActSeePrj);
 	    Prj_PutParams (&Projects->Filter,
 			   Order,
 			   Projects->CurrentPage,
@@ -1125,7 +1125,7 @@ static void Prj_PutButtonToCreateNewPrj (struct Prj_Projects *Projects)
    extern const char *Txt_New_project;
 
    Projects->PrjCod = -1L;
-   Frm_StartForm (ActFrmNewPrj);
+   Frm_BeginForm (ActFrmNewPrj);
    Prj_PutCurrentParams (Projects);
    Btn_PutConfirmButton (Txt_New_project);
    Frm_EndForm ();
@@ -1357,7 +1357,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
      {
       if (ICanViewProjectFiles)
 	{
-	 Frm_StartForm (ActAdmDocPrj);
+	 Frm_BeginForm (ActAdmDocPrj);
 	 Prj_PutCurrentParams (Projects);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_Project_files,ClassLink,NULL);
 	 HTM_Txt (Prj->Title);
@@ -2611,7 +2611,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /***** Show question and button to remove user as a role from project *****/
-	 /* Start alert */
+	 /* Begin alert */
 	 Ale_ShowAlertAndButton1 (Ale_QUESTION,ItsMe ? Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y :
 			                               Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y,
 				  Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex],
@@ -2621,7 +2621,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 	 Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
 	 /* Show form to request confirmation */
-	 Frm_StartForm (ActionRemUsr[RoleInProject]);
+	 Frm_BeginForm (ActionRemUsr[RoleInProject]);
 	 Projects->PrjCod = Prj.PrjCod;
 	 Prj_PutCurrentParams (Projects);
 	 Btn_PutRemoveButton (Str_BuildStringStr (Txt_Remove_USER_from_this_project,
@@ -3625,7 +3625,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
    /***** 2. Project data *****/
    /* Start data form */
-   Frm_StartForm (ItsANewProject ? ActNewPrj :
+   Frm_BeginForm (ItsANewProject ? ActNewPrj :
 	                           ActChgPrj);
    Prj_PutCurrentParams (Projects);
 
@@ -4084,7 +4084,7 @@ void Prj_ShowFormConfig (void)
                  Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
-   Frm_StartForm (ActRcvCfgPrj);
+   Frm_BeginForm (ActRcvCfgPrj);
 
    /***** Projects are editable by non-editing teachers? *****/
    HTM_TABLE_BeginCenterPadding (2);
@@ -4407,7 +4407,7 @@ static void Prj_FormLockUnlock (const struct Prj_Project *Prj)
 		 Gbl.Session.Id,
 		 Prj->PrjCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   Frm_StartFormOnSubmit (ActUnk,OnSubmit);
+   Frm_BeginFormOnSubmit (ActUnk,OnSubmit);
    Ico_PutIconLink (Prj_LockIcons[Prj->Locked],Txt_LOCKED_UNLOCKED[Prj->Locked]);
    Frm_EndForm ();
 

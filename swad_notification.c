@@ -713,7 +713,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	       default:	// Not aplicable here
 		  break;
 	      }
-	    Frm_StartForm (Action);
+	    Frm_BeginForm (Action);
 	    if (GrpCod > 0)
 	       Grp_PutParamGrpCod (&GrpCod);
             Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
@@ -724,7 +724,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_TIMELINE_SHARE:
       case Ntf_EVENT_TIMELINE_MENTION:
 	 // Cod is the code of the social publishing
-         Frm_StartForm (ActSeeGblTL);
+         Frm_BeginForm (ActSeeGblTL);
 	 TL_Pub_PutHiddenParamPubCod (Cod);
          Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
          Ntf_PutHiddenParamNotifyEvent (NotifyEvent);
@@ -733,16 +733,16 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
          if (UsrDat->EnUsrCod[0])	// User's code found ==>
 					// go to user's public profile
            {
-            Frm_StartForm (ActSeeOthPubPrf);
+            Frm_BeginForm (ActSeeOthPubPrf);
             /* Put param to go to follower's profile */
             Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
            }
          else	// No user's code found ==> go to see my followers
-            Frm_StartForm (ActSeeFlr);
+            Frm_BeginForm (ActSeeFlr);
 	 break;
       case Ntf_EVENT_FORUM_POST_COURSE:
       case Ntf_EVENT_FORUM_REPLY:
-	 Frm_StartForm (For_ActionsSeeFor[Forums->Forum.Type]);
+	 Frm_BeginForm (For_ActionsSeeFor[Forums->Forum.Type]);
 	 For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                       1,	// Page of posts   = first
                                       Forums->ForumSet,
@@ -752,15 +752,15 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 				      -1L);
 	 break;
       case Ntf_EVENT_NOTICE:
-         Frm_StartForm (ActSeeOneNot);
+         Frm_BeginForm (ActSeeOneNot);
 	 Not_PutHiddenParamNotCod (Cod);
 	 break;
       case Ntf_EVENT_MESSAGE:
-         Frm_StartForm (ActExpRcvMsg);
+         Frm_BeginForm (ActExpRcvMsg);
 	 Msg_PutHiddenParamMsgCod (Cod);
 	 break;
       default:
-         Frm_StartForm (Ntf_DefaultActions[NotifyEvent]);
+         Frm_BeginForm (Ntf_DefaultActions[NotifyEvent]);
 	 break;
      }
 
@@ -1904,7 +1904,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
    Ntf_NotifyEvent_t NotifyEvent;
 
-   /***** Start section with settings on privacy *****/
+   /***** Begin section with settings on privacy *****/
    HTM_SECTION_Begin (Ntf_NOTIFICATIONS_ID);
 
    /***** Begin box *****/
@@ -1913,7 +1913,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
                  Hlp_PROFILE_Settings_notifications,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
-   Frm_StartForm (ActChgNtfPrf);
+   Frm_BeginForm (ActChgNtfPrf);
 
    /***** Warning if I can not receive email notifications *****/
    if (!Mai_CheckIfUsrCanReceiveEmailNotif (&Gbl.Usrs.Me.UsrDat))
@@ -2048,7 +2048,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
       NumNewNtfs = Ntf_GetNumberOfMyNewUnseenNtfs ();
 
    /***** Begin form *****/
-   Frm_StartFormId (ActSeeNewNtf,"form_ntf");
+   Frm_BeginFormId (ActSeeNewNtf,"form_ntf");
    HTM_BUTTON_SUBMIT_Begin (Txt_See_notifications,The_ClassNotif[Gbl.Prefs.Theme],NULL);
 
    /***** Number of unseen notifications *****/

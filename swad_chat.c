@@ -302,7 +302,7 @@ static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,
 
    HTM_LI_Begin (NULL);
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
-   Frm_StartForm (ActCht);
+   Frm_BeginForm (ActCht);
    Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShrtName,RoomFullName);
 
    HTM_BUTTON_SUBMIT_Begin (RoomFullName,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);

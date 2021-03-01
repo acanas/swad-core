@@ -88,7 +88,7 @@ void Pri_EditMyPrivacy (void)
    extern const char *Txt_Extended_public_profile;
    extern const char *Txt_Timeline;
 
-   /***** Start section with settings on privacy *****/
+   /***** Begin section with settings on privacy *****/
    HTM_SECTION_Begin (Pri_PRIVACY_ID);
 
    /***** If any of my settings about privacy is unknown *****/

@@ -83,13 +83,22 @@ void TL_Who_PutFormWho (struct TL_Timeline *Timeline)
 	Who++)
       if (Mask & (1 << Who))
 	{
+	 /* Begin container */
 	 HTM_DIV_Begin ("class=\"%s\"",
 			Who == Timeline->Who ? "PREF_ON" :
 					       "PREF_OFF");
-	 Frm_StartForm (ActSeeGblTL);
-	 Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
-	 Usr_PutWhoIcon (Who);
-	 Frm_EndForm ();
+
+	    /* Begin form */
+	    Frm_BeginForm (ActSeeGblTL);
+	    Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
+
+	       /* Icon to select which users */
+	       Usr_PutWhoIcon (Who);
+
+	    /* End form */
+	    Frm_EndForm ();
+
+	 /* End container */
 	 HTM_DIV_End ();
 	}
    Set_EndOneSettingSelector ();

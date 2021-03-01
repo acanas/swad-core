@@ -511,7 +511,7 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
    extern const char *Txt_ID;
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
    /***** Begin box *****/
@@ -541,7 +541,7 @@ void ID_ShowFormChangeOtherUsrID (void)
    extern const char *Txt_ID;
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
    /***** Begin box *****/

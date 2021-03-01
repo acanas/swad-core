@@ -212,11 +212,11 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
                                        Fol_SUGGEST_ONLY_USERS_WITH_PHOTO,
                                        &mysql_res)))
      {
-      /***** Start container *****/
+      /***** Begin container *****/
       HTM_DIV_Begin ("class=\"CONNECTED\"");
 
       /***** Title with link to suggest more users to follow *****/
-      Frm_StartForm (ActSeeSocPrf);
+      Frm_BeginForm (ActSeeSocPrf);
       HTM_BUTTON_SUBMIT_Begin (Txt_Who_to_follow,"BT_LINK CONNECTED_TXT",NULL);
       HTM_Txt (Txt_Who_to_follow);
       HTM_BUTTON_End ();
@@ -438,7 +438,7 @@ static void Fol_PutIconToUpdateWhoToFollow (void)
   {
    extern const char *Txt_Update;
 
-   Frm_StartForm (ActSeeSocPrf);
+   Frm_BeginForm (ActSeeSocPrf);
    HTM_BUTTON_Animated_Begin (Txt_Update,"BT_LINK",NULL);
    Ico_PutCalculateIcon (Txt_Update);
    HTM_BUTTON_End ();
@@ -519,7 +519,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
    extern const char *Txt_Follow;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (Fol_FOLLOW_SECTION_ID);
 
    /***** Followed users *****/
@@ -555,7 +555,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
    if (Gbl.Usrs.Me.Logged &&	// Logged
        !ItsMe)			// Not me!
      {
-      Frm_StartForm (IFollowUsr ? ActUnfUsr :
+      Frm_BeginForm (IFollowUsr ? ActUnfUsr :
 	                          ActFolUsr);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,
@@ -590,7 +590,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    extern const char *The_ClassFormLinkOutBox[The_NUM_THEMES];
    extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
 
-   /***** Start container *****/
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"FOLLOW_BOX\"");
 
    /***** Number *****/
@@ -844,7 +844,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
    if (Visible)
      {
       /* Put form to go to public profile */
-      Frm_StartForm (ActSeeOthPubPrf);
+      Frm_BeginForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       HTM_DIV_Begin ("class=\"FOLLOW_USR_NAME\"");	// Limited width
       HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,"BT_LINK LT DAT",NULL);
@@ -901,7 +901,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    if (Visible)
      {
       /* Put form to go to public profile */
-      Frm_StartForm (ActSeeOthPubPrf);
+      Frm_BeginForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW\"");	// Limited width
       HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,"BT_LINK CON_NAME_FOLLOW CON_CRS",NULL);
@@ -955,7 +955,7 @@ static void Fol_PutIconToFollow (struct UsrData *UsrDat)
    extern const char *Txt_Follow;
 
    /***** Form to unfollow *****/
-   Frm_StartForm (ActFolUsr);
+   Frm_BeginForm (ActFolUsr);
    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",
 		    Txt_Follow,"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16");
@@ -971,7 +971,7 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
    extern const char *Txt_Unfollow;
 
    /* Form to follow */
-   Frm_StartForm (ActUnfUsr);
+   Frm_BeginForm (ActUnfUsr);
    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
 		    Txt_Unfollow,"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16");

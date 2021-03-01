@@ -288,7 +288,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    Grp_ShowFormToSelectSeveralGroups (NULL,NULL,
                                       Grp_MY_GROUPS);
 
-   /***** Start section with user list *****/
+   /***** Begin section with user list *****/
    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (NumTotalUsrs)
@@ -3726,7 +3726,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
       HTM_TD_Begin ("class=\"LOG LT\"");
       if (CrsOK)
         {
-         Frm_StartFormGoTo (ActSeeCrsInf);
+         Frm_BeginFormGoTo (ActSeeCrsInf);
          Crs_PutParamCrsCod (Crs.CrsCod);
          HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),"BT_LINK LT LOG",NULL);
          Hie_FreeGoToMsg ();

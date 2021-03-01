@@ -98,23 +98,28 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
-/***************** Start a form in global or user timeline *******************/
+/***************** Begin a form in global or user timeline *******************/
 /*****************************************************************************/
 
-void TL_Frm_FormStart (const struct TL_Timeline *Timeline,TL_Frm_Action_t Action)
+void TL_Frm_BeginForm (const struct TL_Timeline *Timeline,TL_Frm_Action_t Action)
   {
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      /***** Start form in user timeline *****/
+      /***** Begin form in user timeline *****/
       Frm_StartFormAnchor (TL_Frm_ActionUsr[Action],"timeline");
       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
      }
    else
      {
-      /***** Start form in global timeline *****/
-      Frm_StartForm (TL_Frm_ActionGbl[Action]);
+      /***** Begin form in global timeline *****/
+      Frm_BeginForm (TL_Frm_ActionGbl[Action]);
       Usr_PutHiddenParamWho (Timeline->Who);
      }
+  }
+
+void TL_Frm_EndForm (void)
+  {
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -187,7 +192,7 @@ void TL_Frm_FormFavSha (const struct TL_Form *Form)
 		    ParamStr,
 		    Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
+      Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
      }
    else
      {
@@ -198,7 +203,7 @@ void TL_Frm_FormFavSha (const struct TL_Form *Form)
 		    Gbl.Session.Id,
 		    ParamStr) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
+      Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
      }
    Ico_PutIconLink (Form->Icon,Form->Title);
    Frm_EndForm ();
@@ -211,65 +216,67 @@ void TL_Frm_FormFavSha (const struct TL_Form *Form)
 /********** Form to show hidden coments in global or user timeline ***********/
 /*****************************************************************************/
 
-void TL_Frm_FormToShowHiddenComments (long NotCod,
-				      char IdComments[Frm_MAX_BYTES_ID + 1],
-				      unsigned NumInitialComments)
+void TL_Frm_FormToShowHiddenComms (long NotCod,
+				   char IdComms[Frm_MAX_BYTES_ID + 1],
+				   unsigned NumInitialComms)
   {
    extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
    extern const char *Txt_See_the_previous_X_COMMENTS;
    char *OnSubmit;
 
+   /***** Begin container *****/
    HTM_DIV_Begin ("id=\"exp_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\"",
-		  IdComments);
+                  IdComms);
 
-   /***** Form and icon-text to show hidden comments *****/
-   /* Begin form */
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      if (asprintf (&OnSubmit,"toggleComments('%s');"
-	                      "updateDivHiddenComments(this,"
-			      "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u&OtherUsrCod=%s');"
-			      " return false;",	// return false is necessary to not submit form
-		    IdComments,
-		    Act_GetActCod (TL_Frm_ActionUsr[TL_Frm_SHO_HID_COMM]),
-		    Gbl.Session.Id,
-		    NotCod,
-		    IdComments,
-		    NumInitialComments,
-		    Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
-     }
-   else
-     {
-      if (asprintf (&OnSubmit,"toggleComments('%s');"
-	                      "updateDivHiddenComments(this,"
-			      "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u');"
-			      " return false;",	// return false is necessary to not submit form
-		    IdComments,
-		    Act_GetActCod (TL_Frm_ActionGbl[TL_Frm_SHO_HID_COMM]),
-		    Gbl.Session.Id,
-		    NotCod,
-		    IdComments,
-		    NumInitialComments) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
-     }
+      /***** Form and icon-text to show hidden comments *****/
+      /* Begin form */
+      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+	{
+	 if (asprintf (&OnSubmit,"toggleComments('%s');"
+				 "updateDivHiddenComments(this,"
+				 "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u&OtherUsrCod=%s');"
+				 " return false;",	// return false is necessary to not submit form
+		       IdComms,
+		       Act_GetActCod (TL_Frm_ActionUsr[TL_Frm_SHO_HID_COMM]),
+		       Gbl.Session.Id,
+		       NotCod,
+		       IdComms,
+		       NumInitialComms,
+		       Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
+	}
+      else
+	{
+	 if (asprintf (&OnSubmit,"toggleComments('%s');"
+				 "updateDivHiddenComments(this,"
+				 "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u');"
+				 " return false;",	// return false is necessary to not submit form
+		       IdComms,
+		       Act_GetActCod (TL_Frm_ActionGbl[TL_Frm_SHO_HID_COMM]),
+		       Gbl.Session.Id,
+		       NotCod,
+		       IdComms,
+		       NumInitialComms) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
+	}
 
-   /* Put icon and text with link to show the first hidden comments */
-   HTM_BUTTON_SUBMIT_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
-   Ico_PutIconTextLink ("angle-up.svg",
-			Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
-					     (long) NumInitialComments));
-   Str_FreeString ();
-   HTM_BUTTON_End ();
+      /* Put icon and text with link to show the first hidden comments */
+      HTM_BUTTON_SUBMIT_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
+	 Ico_PutIconTextLink ("angle-up.svg",
+			      Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
+						   (long) NumInitialComms));
+	 Str_FreeString ();
+      HTM_BUTTON_End ();
 
-   /* End form */
-   Frm_EndForm ();
+      /* End form */
+      Frm_EndForm ();
 
-   /* Free allocated memory */
-   free (OnSubmit);
+      /* Free allocated memory */
+      free (OnSubmit);
 
+   /***** End container *****/
    HTM_DIV_End ();
   }
 

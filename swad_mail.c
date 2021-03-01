@@ -144,7 +144,7 @@ void Mai_SeeMailDomains (void)
      {
       HTM_TH_Begin (1,1,"LM");
 
-      Frm_StartForm (ActSeeMai);
+      Frm_BeginForm (ActSeeMai);
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
       HTM_BUTTON_SUBMIT_Begin (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
       if (Order == Gbl.Mails.SelectedOrder)
@@ -505,7 +505,7 @@ static void Mai_ListMailDomainsForEdition (void)
 
       /* Mail domain */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActRenMaiSho);
+      Frm_BeginForm (ActRenMaiSho);
       Mai_PutParamMaiCod (&Mai->MaiCod);
       HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
                       HTM_SUBMIT_ON_CHANGE,
@@ -515,7 +515,7 @@ static void Mai_ListMailDomainsForEdition (void)
 
       /* Mail domain info */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActRenMaiFul);
+      Frm_BeginForm (ActRenMaiFul);
       Mai_PutParamMaiCod (&Mai->MaiCod);
       HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
                       HTM_SUBMIT_ON_CHANGE,
@@ -741,7 +741,7 @@ static void Mai_PutFormToCreateMailDomain (void)
    extern const char *Txt_Create_email_domain;
 
    /***** Begin form *****/
-   Frm_StartForm (ActNewMai);
+   Frm_BeginForm (ActNewMai);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_email_domain,
@@ -1154,7 +1154,7 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
    extern const char *Txt_Email;
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
    /***** Begin box *****/
@@ -1185,7 +1185,7 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
    extern const char *Txt_Email;
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
    /***** Begin box *****/

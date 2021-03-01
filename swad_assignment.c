@@ -237,7 +237,7 @@ static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
 
       if (!PrintView)
 	{
-	 Frm_StartForm (ActSeeAsg);
+	 Frm_BeginForm (ActSeeAsg);
 	 WhichGroups = Grp_GetParamWhichGroups ();
 	 Grp_PutParamWhichGroups (&WhichGroups);
 	 Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Assignments->CurrentPage);
@@ -318,7 +318,7 @@ static void Asg_PutButtonToCreateNewAsg (void *Assignments)
      {
       ((struct Asg_Assignments *) Assignments)->AsgCodToEdit = -1L;
 
-      Frm_StartForm (ActFrmNewAsg);
+      Frm_BeginForm (ActFrmNewAsg);
       Asg_PutParams (Assignments);
       Btn_PutConfirmButton (Txt_New_assignment);
       Frm_EndForm ();
@@ -537,7 +537,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
         {
 	 case Rol_STD:
 	    Gbl.FileBrowser.Type = Brw_ADMI_ASG_USR;	// User assignments
-	    Frm_StartForm (ActFrmCreAsgUsr);
+	    Frm_BeginForm (ActFrmCreAsgUsr);
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
@@ -546,7 +546,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
 	    Str_Copy (Gbl.Usrs.Other.UsrDat.EnUsrCod,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 		      sizeof (Gbl.Usrs.Other.UsrDat.EnUsrCod) - 1);
 	    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
-	    Frm_StartForm (ActFrmCreAsgCrs);
+	    Frm_BeginForm (ActFrmCreAsgCrs);
 	    break;
 	 default:
             Rol_WrongRoleExit ();
@@ -1246,12 +1246,12 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Begin form *****/
    if (ItsANewAssignment)
      {
-      Frm_StartForm (ActNewAsg);
+      Frm_BeginForm (ActNewAsg);
       Assignments.AsgCodToEdit = -1L;
      }
    else
      {
-      Frm_StartForm (ActChgAsg);
+      Frm_BeginForm (ActChgAsg);
       Assignments.AsgCodToEdit = Asg.AsgCod;
      }
    Asg_PutParams (&Assignments);

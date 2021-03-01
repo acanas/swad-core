@@ -241,14 +241,19 @@ void TL_Sha_PutIconToShaUnsNote (const struct TL_Not_Note *Not,
                                  TL_Usr_HowManyUsrs_t HowManyUsrs)
   {
    /***** Put form to share/unshare this note *****/
+   /* Begin container */
    HTM_DIV_Begin ("class=\"TL_ICO\"");
-   if (Not->Unavailable ||		// Unavailable notes can not be shared
-       Usr_ItsMe (Not->UsrCod))		// I am the author
-      /* Put disabled icon */
-      TL_Sha_PutDisabledIconShare (Not->NumShared);
-   else					// Available and I am not the author
-      /* Put icon to share/unshare */
-      TL_Sha_PutFormToShaUnsNote (Not->NotCod);
+
+      /* Icon to share */
+      if (Not->Unavailable ||		// Unavailable notes can not be shared
+	  Usr_ItsMe (Not->UsrCod))		// I am the author
+	 /* Put disabled icon */
+	 TL_Sha_PutDisabledIconShare (Not->NumShared);
+      else					// Available and I am not the author
+	 /* Put icon to share/unshare */
+	 TL_Sha_PutFormToShaUnsNote (Not->NotCod);
+
+   /* End container */
    HTM_DIV_End ();
 
    /***** Show who have shared this note *****/
@@ -333,17 +338,17 @@ static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Not_Note *Not,
    /***** Show users *****/
    /* Number of users */
    HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
-   TL_Usr_ShowNumSharersOrFavers (Not->NumShared);
+      TL_Usr_ShowNumSharersOrFavers (Not->NumShared);
    HTM_DIV_End ();
 
    /* List users one by one */
    HTM_DIV_Begin ("class=\"TL_USRS\"");
-   TL_Usr_ShowSharersOrFavers (&mysql_res,Not->NumShared,NumFirstUsrs);
-   if (NumFirstUsrs < Not->NumShared)
-      /* Clickable ellipsis to show all users */
-      TL_Frm_PutFormToSeeAllFaversSharers (TL_Frm_ALL_SHA_NOTE,
-		                           "NotCod=%ld",Not->NotCod,
-                                           HowManyUsrs);
+      TL_Usr_ShowSharersOrFavers (&mysql_res,Not->NumShared,NumFirstUsrs);
+      if (NumFirstUsrs < Not->NumShared)
+	 /* Clickable ellipsis to show all users */
+	 TL_Frm_PutFormToSeeAllFaversSharers (TL_Frm_ALL_SHA_NOTE,
+					      "NotCod=%ld",Not->NotCod,
+					      HowManyUsrs);
    HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/

@@ -104,7 +104,7 @@ void Not_ShowFormNotice (void)
                   Gbl.Hierarchy.Crs.FullName);
 
    /***** Begin form *****/
-   Frm_StartForm (ActRcvNot);
+   Frm_BeginForm (ActRcvNot);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_New_notice,
@@ -293,7 +293,7 @@ void Not_RequestRemNotice (void)
    NotCod = Not_GetParamNotCod ();
 
    /***** Show question and button to remove this notice *****/
-   /* Start alert */
+   /* Begin alert */
    Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_notice);
 
    /* Show notice */
@@ -544,7 +544,7 @@ static void Not_PutButtonToAddNewNotice (void)
   {
    extern const char *Txt_New_notice;
 
-   Frm_StartForm (ActWriNot);
+   Frm_BeginForm (ActWriNot);
    Btn_PutConfirmButton (Txt_New_notice);
    Frm_EndForm ();
   }

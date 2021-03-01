@@ -1015,7 +1015,7 @@ static void Lay_WritePageTopHeading (void)
    HTM_DIV_Begin ("id=\"head_row_1_left\"");
 
    /* Begin form to go to home page */
-   Frm_StartFormGoTo (ActMnu);
+   Frm_BeginFormGoTo (ActMnu);
    Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
 
    HTM_DIV_Begin ("id=\"head_row_1_logo_small\"");
@@ -1346,11 +1346,11 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 			// jumping to the next line on narrow screens
 
    /***** Begin form *****/
-   Frm_StartForm (NextAction);
+   Frm_BeginForm (NextAction);
    if (FuncParams)
       FuncParams ();
 
-   /***** Start container and label *****/
+   /***** Begin container and label *****/
    HTM_DIV_Begin ("class=\"CONTEXT_OPT %s %s\" title=\"%s\"",
 		  Checked ? "CHECKBOX_CHECKED" :
 			    "CHECKBOX_UNCHECKED",

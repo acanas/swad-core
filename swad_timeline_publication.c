@@ -221,9 +221,9 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
       TL_DB_DropTmpTableVisibleTimeline ();
 
    /* Drop temporary table with me and users I follow */
-   if (Timeline->UsrOrGbl == TL_Usr_TIMELINE_GBL)	// Show the global timeline
-      if (Timeline->Who == Usr_WHO_FOLLOWED)		// Show the timeline of the users I follow
-         Fol_DropTmpTableMeAndUsrsIFollow ();
+   if (Timeline->UsrOrGbl == TL_Usr_TIMELINE_GBL &&	// Show the global timeline
+       Timeline->Who == Usr_WHO_FOLLOWED)		// Show the timeline of the users I follow
+      Fol_DropTmpTableMeAndUsrsIFollow ();
   }
 
 /*****************************************************************************/
@@ -346,9 +346,9 @@ void TL_Pub_InsertNewPubsInTimeline (struct TL_Timeline *Timeline)
 
       /* Write note */
       HTM_LI_Begin ("class=\"TL_WIDTH TL_SEP TL_NEW_PUB\"");
-      TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-                                          TL_Pub_GetTopMessage (Pub->PubType),
-                                          Pub->PublisherCod);
+	 TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+					     TL_Pub_GetTopMessage (Pub->PubType),
+					     Pub->PublisherCod);
       HTM_LI_End ();
      }
   }
@@ -374,9 +374,9 @@ void TL_Pub_ShowOldPubsInTimeline (struct TL_Timeline *Timeline)
 
       /* Write note */
       HTM_LI_Begin ("class=\"TL_WIDTH TL_SEP\"");
-      TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-                                          TL_Pub_GetTopMessage (Pub->PubType),
-                                          Pub->PublisherCod);
+	 TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+					     TL_Pub_GetTopMessage (Pub->PubType),
+					     Pub->PublisherCod);
       HTM_LI_End ();
      }
   }
@@ -408,19 +408,28 @@ void TL_Pub_PutLinkToViewNewPublications (void)
    extern const char *Txt_See_new_activity;
 
    /***** Link to view (show hidden) new publications *****/
+   /* Begin container */
    // div is hidden. When new posts arrive to the client via AJAX, div is shown
    HTM_DIV_Begin ("id=\"view_new_posts_container\""
 		  " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\""
 		  " style=\"display:none;\"");
-   HTM_A_Begin ("href=\"\" class=\"%s\""
-                " onclick=\"moveNewTimelineToTimeline();return false;\"",
-	        The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s (",Txt_See_new_activity);
-   HTM_SPAN_Begin ("id=\"view_new_posts_count\"");
-   HTM_Unsigned (0);
-   HTM_SPAN_End ();
-   HTM_Txt (")");
-   HTM_A_End ();
+
+      /* Begin anchor */
+      HTM_A_Begin ("href=\"\" class=\"%s\""
+		   " onclick=\"moveNewTimelineToTimeline();return false;\"",
+		   The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
+
+         /* Text */
+	 HTM_TxtF ("%s (",Txt_See_new_activity);
+	 HTM_SPAN_Begin ("id=\"view_new_posts_count\"");
+	    HTM_Unsigned (0);
+	 HTM_SPAN_End ();
+	 HTM_Txt (")");
+
+      /* End anchor */
+      HTM_A_End ();
+
+   /* End container */
    HTM_DIV_End ();
   }
 
@@ -434,22 +443,31 @@ void TL_Pub_PutLinkToViewOldPublications (void)
    extern const char *Txt_See_more;
 
    /***** Animated link to view old publications *****/
+   /* Begin container */
    HTM_DIV_Begin ("id=\"view_old_posts_container\""
 	          " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\"");
-   HTM_A_Begin ("href=\"\" class=\"%s\" onclick=\""
-   		"document.getElementById('get_old_timeline').style.display='none';"	// Icon to be hidden on click
-		"document.getElementById('getting_old_timeline').style.display='';"	// Icon to be shown on click
-                "refreshOldTimeline();"
-		"return false;\"",
-	        The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
-   HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif","Txt_See_more",
-	    "class=\"ICO20x20\" id=\"get_old_timeline\"");
-   HTM_IMG (Cfg_URL_ICON_PUBLIC,"working16x16.gif",Txt_See_more,
-	    "class=\"ICO20x20\" style=\"display:none;\" id=\"getting_old_timeline\"");	// Animated icon hidden
-   HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif","Txt_See_more",
-	    "class=\"ICO20x20\" style=\"display:none;\" id=\"get_old_timeline\"");
-   HTM_TxtF ("&nbsp;%s",Txt_See_more);
-   HTM_A_End ();
+
+      /* Begin anchor */
+      HTM_A_Begin ("href=\"\" class=\"%s\" onclick=\""
+		   "document.getElementById('get_old_timeline').style.display='none';"	// Icon to be hidden on click
+		   "document.getElementById('getting_old_timeline').style.display='';"	// Icon to be shown on click
+		   "refreshOldTimeline();"
+		   "return false;\"",
+		   The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
+
+         /* Icon and text */
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif","Txt_See_more",
+		  "class=\"ICO20x20\" id=\"get_old_timeline\"");
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"working16x16.gif",Txt_See_more,
+		  "class=\"ICO20x20\" style=\"display:none;\" id=\"getting_old_timeline\"");	// Animated icon hidden
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif","Txt_See_more",
+		  "class=\"ICO20x20\" style=\"display:none;\" id=\"get_old_timeline\"");
+	 HTM_TxtF ("&nbsp;%s",Txt_See_more);
+
+      /* End anchor */
+      HTM_A_End ();
+
+   /* End container */
    HTM_DIV_End ();
   }
 

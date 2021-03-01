@@ -372,7 +372,7 @@ static void CtrCfg_Latitude (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LB\"");
-   Frm_StartForm (ActChgCtrLatCfg);
+   Frm_BeginForm (ActChgCtrLatCfg);
    HTM_INPUT_FLOAT ("Latitude",
 		    -90.0,	// South Pole
 		    90.0,	// North Pole
@@ -397,7 +397,7 @@ static void CtrCfg_Longitude (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LB\"");
-   Frm_StartForm (ActChgCtrLgtCfg);
+   Frm_BeginForm (ActChgCtrLgtCfg);
    HTM_INPUT_FLOAT ("Longitude",
 		    -180.0,	// West
 		    180.0,	// East
@@ -422,7 +422,7 @@ static void CtrCfg_Altitude (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LB\"");
-   Frm_StartForm (ActChgCtrAltCfg);
+   Frm_BeginForm (ActChgCtrAltCfg);
    HTM_INPUT_FLOAT ("Altitude",
 		    -413.0,	// Dead Sea shore
 		    8848.0,	// Mount Everest
@@ -481,7 +481,7 @@ static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
    if (PutForm)
      {
       HTM_DIV_Begin ("class=\"CM\"");
-      Frm_StartForm (ActChgCtrPhoAtt);
+      Frm_BeginForm (ActChgCtrPhoAtt);
       HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"3\""
 			  " onchange=\"document.getElementById('%s').submit();return false;\"",
 			  Gbl.Form.Id);
@@ -577,7 +577,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
       Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Cty.CtyCod);
 
       /* Put form to select institution */
-      Frm_StartForm (ActChgCtrInsCfg);
+      Frm_BeginForm (ActChgCtrInsCfg);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"OthInsCod\" name=\"OthInsCod\""
 			" class=\"INPUT_SHORT_NAME\"");
@@ -597,7 +597,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
      {
       if (!PrintView)
 	{
-         Frm_StartFormGoTo (ActSeeInsInf);
+         Frm_BeginFormGoTo (ActSeeInsInf);
          Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
 	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Ins.ShrtName),
 				  "BT_LINK LT DAT",NULL);
@@ -675,7 +675,7 @@ static void CtrCfg_Place (bool PutForm)
       Plc_GetListPlaces (&Places);
 
       /* Put form to select place */
-      Frm_StartForm (ActChgCtrPlcCfg);
+      Frm_BeginForm (ActChgCtrPlcCfg);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"PlcCod\" class=\"INPUT_SHORT_NAME\"");
       HTM_OPTION (HTM_Type_STRING,"0",
@@ -766,7 +766,7 @@ static void CtrCfg_NumDegs (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LB\"");
-   Frm_StartFormGoTo (ActSeeDeg);
+   Frm_BeginFormGoTo (ActSeeDeg);
    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
    HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Degrees_of_CENTRE_X,
 	                                        Gbl.Hierarchy.Ctr.ShrtName),
@@ -843,7 +843,7 @@ void CtrCfg_RequestPhoto (void)
    extern const char *Txt_File_with_the_photo;
 
    /***** Begin form to upload photo *****/
-   Frm_StartForm (ActRecCtrPho);
+   Frm_BeginForm (ActRecCtrPho);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Photo,

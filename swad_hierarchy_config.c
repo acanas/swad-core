@@ -99,7 +99,7 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
    if (PutForm)
      {
       /* Form to change full name */
-      Frm_StartForm (NextAction);
+      Frm_BeginForm (NextAction);
       HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,FullName,
                       HTM_SUBMIT_ON_CHANGE,
 		      "id=\"FullName\" class=\"INPUT_FULL_NAME\""
@@ -135,7 +135,7 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
    if (PutForm)
      {
       /* Form to change short name */
-      Frm_StartForm (NextAction);
+      Frm_BeginForm (NextAction);
       HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,ShrtName,
                       HTM_SUBMIT_ON_CHANGE,
 		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\""
@@ -171,7 +171,7 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
    if (PutForm)
      {
       /* Form to change web */
-      Frm_StartForm (NextAction);
+      Frm_BeginForm (NextAction);
       HTM_INPUT_URL ("WWW",WWW,HTM_SUBMIT_ON_CHANGE,
 		     "id=\"WWW\" class=\"INPUT_WWW_WIDE\" required=\"required\"");
       Frm_EndForm ();
@@ -250,7 +250,7 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
    HTM_TD_Begin ("class=\"LB\"");
    if (PutForm)
      {
-      Frm_StartFormGoTo (ActSeeCtr);
+      Frm_BeginFormGoTo (ActSeeCtr);
       Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
       HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Centres_of_INSTITUTION_X,
 						   Gbl.Hierarchy.Ins.ShrtName),

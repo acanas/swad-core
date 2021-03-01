@@ -272,7 +272,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 	{
 	 HTM_TH_Begin (1,1,"LM");
 
-	 Frm_StartForm (ActSeeAtt);
+	 Frm_BeginForm (ActSeeAtt);
          WhichGroups = Grp_GetParamWhichGroups ();
 	 Grp_PutParamWhichGroups (&WhichGroups);
 	 Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
@@ -397,7 +397,7 @@ static void Att_PutButtonToCreateNewAttEvent (struct Att_Events *Events)
   {
    extern const char *Txt_New_event;
 
-   Frm_StartForm (ActFrmNewAtt);
+   Frm_BeginForm (ActFrmNewAtt);
    Att_PutParamsToCreateNewAttEvent (Events);
    Btn_PutConfirmButton (Txt_New_event);
    Frm_EndForm ();
@@ -939,7 +939,7 @@ void Att_AskRemAttEvent (void)
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
 
    /***** Button of confirmation of removing *****/
-   Frm_StartForm (ActRemAtt);
+   Frm_BeginForm (ActRemAtt);
    Att_PutParamAttCod (Event.AttCod);
    Dat_PutHiddenParamOrder (Events.SelectedOrder);
    WhichGroups = Grp_GetParamWhichGroups ();
@@ -1132,10 +1132,10 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Begin form *****/
    if (ItsANewAttEvent)
-      Frm_StartForm (ActNewAtt);
+      Frm_BeginForm (ActNewAtt);
    else
      {
-      Frm_StartForm (ActChgAtt);
+      Frm_BeginForm (ActChgAtt);
       Att_PutParamAttCod (Event.AttCod);
      }
    Dat_PutHiddenParamOrder (Events.SelectedOrder);
@@ -1913,7 +1913,7 @@ static void Att_ListAttOnlyMeAsStudent (struct Att_Event *Event)
    /***** Begin form *****/
    if (Event->Open)
      {
-      Frm_StartForm (ActRecAttMe);
+      Frm_BeginForm (ActRecAttMe);
       Att_PutParamAttCod (Event->AttCod);
      }
 
@@ -1987,7 +1987,7 @@ static void Att_ListAttStudents (struct Att_Events *Events,
    Grp_ShowFormToSelectSeveralGroups (Att_PutParamSelectedAttCod,Events,
                                       Grp_MY_GROUPS);
 
-   /***** Start section with user list *****/
+   /***** Begin section with user list *****/
    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
@@ -1999,7 +1999,7 @@ static void Att_ListAttStudents (struct Att_Events *Events,
       Usr_UsrDataConstructor (&UsrDat);
 
       /* Begin form */
-      Frm_StartForm (ActRecAttStd);
+      Frm_BeginForm (ActRecAttStd);
       Att_PutParamAttCod (Event->AttCod);
       Grp_PutParamsCodGrps ();
 
@@ -2213,7 +2213,7 @@ static void Att_PutLinkAttEvent (struct Att_Event *AttEvent,
 				 const char *Title,const char *Txt,
 				 const char *Class)
   {
-   Frm_StartForm (ActSeeOneAtt);
+   Frm_BeginForm (ActSeeOneAtt);
    Att_PutParamAttCod (AttEvent->AttCod);
    Att_PutParamsCodGrps (AttEvent->AttCod);
    HTM_BUTTON_SUBMIT_Begin (Title,Class,NULL);
@@ -3320,7 +3320,7 @@ static void Att_ListUsrsAttendanceTable (const struct Att_Events *Events,
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   /***** Start section with attendance table *****/
+   /***** Begin section with attendance table *****/
    HTM_SECTION_Begin (Att_ATTENDANCE_TABLE_ID);
 
    /***** Begin table *****/
@@ -3547,7 +3547,7 @@ static void Att_ListStdsWithAttEventsDetails (const struct Att_Events *Events,
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   /***** Start section with attendance details *****/
+   /***** Begin section with attendance details *****/
    HTM_SECTION_Begin (Att_ATTENDANCE_DETAILS_ID);
 
    /***** Begin box and table *****/

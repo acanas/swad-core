@@ -237,7 +237,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
       Deg_GetListDegsInCurrentCtr ();
 
       /* Put form to select degree */
-      Frm_StartForm (ActChgCrsDegCfg);
+      Frm_BeginForm (ActChgCrsDegCfg);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"OthDegCod\" name=\"OthDegCod\""
 			" class=\"INPUT_SHORT_NAME\"");
@@ -257,7 +257,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
      {
       if (!PrintView)
 	{
-         Frm_StartFormGoTo (ActSeeDegInf);
+         Frm_BeginFormGoTo (ActSeeDegInf);
          Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
 	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Deg.ShrtName),
 				  "BT_LINK LT DAT",NULL);
@@ -322,7 +322,7 @@ static void CrsCfg_Year (bool PutForm)
    HTM_TD_Begin ("class=\"DAT LB\"");
    if (PutForm)
      {
-      Frm_StartForm (ActChgCrsYeaCfg);
+      Frm_BeginForm (ActChgCrsYeaCfg);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"OthCrsYear\" name=\"OthCrsYear\"");
       for (Year = 0;
@@ -362,7 +362,7 @@ static void CrsCfg_InstitutionalCode (bool PutForm)
    HTM_TD_Begin ("class=\"DAT LB\"");
    if (PutForm)
      {
-      Frm_StartForm (ActChgInsCrsCodCfg);
+      Frm_BeginForm (ActChgInsCrsCodCfg);
       HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
 		      Gbl.Hierarchy.Crs.InstitutionalCrsCod,
 		      HTM_SUBMIT_ON_CHANGE,
@@ -441,7 +441,7 @@ static void CrsCfg_Indicators (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LB\"");
-   Frm_StartForm (ActReqStaCrs);
+   Frm_BeginForm (ActReqStaCrs);
    if (asprintf (&Title,"%u %s %u",
 	         IndicatorsCrs.NumIndicators,
 	         Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS) < 0)

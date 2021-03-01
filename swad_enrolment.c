@@ -207,7 +207,7 @@ void Enr_PutButtonInlineToRegisterStds (long CrsCod)
       if (!Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,CrsCod,
 				 1 << Rol_STD))	// No students in course
 	{
-	 Frm_StartForm (ActReqEnrSevStd);
+	 Frm_BeginForm (ActReqEnrSevStd);
 	 Crs_PutParamCrsCod (CrsCod);
 	 Btn_PutCreateButtonInline (Txt_Register_students);
 	 Frm_EndForm ();
@@ -394,7 +394,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
    extern const char *Txt_Continue;
 
    /***** Form to request user's ID, @nickname or email address *****/
-   Frm_StartForm (NextAction);
+   Frm_BeginForm (NextAction);
    if (FuncParams)
       FuncParams ();
    HTM_LABEL_Begin ("for=\"OtherUsrIDNickOrEMail\" class=\"%s RM\"",
@@ -439,13 +439,13 @@ void Enr_ReqAcceptRegisterInCrs (void)
    switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
      {
       case Rol_STD:
-	 Frm_StartForm (ActAccEnrStd);
+	 Frm_BeginForm (ActAccEnrStd);
 	 break;
       case Rol_NET:
-	 Frm_StartForm (ActAccEnrNET);
+	 Frm_BeginForm (ActAccEnrNET);
 	 break;
       case Rol_TCH:
-	 Frm_StartForm (ActAccEnrTch);
+	 Frm_BeginForm (ActAccEnrTch);
 	 break;
       default:
 	 Rol_WrongRoleExit ();
@@ -457,13 +457,13 @@ void Enr_ReqAcceptRegisterInCrs (void)
    switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
      {
       case Rol_STD:
-	 Frm_StartForm (ActRemMe_Std);
+	 Frm_BeginForm (ActRemMe_Std);
 	 break;
       case Rol_NET:
-	 Frm_StartForm (ActRemMe_NET);
+	 Frm_BeginForm (ActRemMe_NET);
 	 break;
       case Rol_TCH:
-	 Frm_StartForm (ActRemMe_Tch);
+	 Frm_BeginForm (ActRemMe_Tch);
 	 break;
       default:
 	 Rol_WrongRoleExit ();
@@ -739,7 +739,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	 Rol_WrongRoleExit ();
 	 break;
      }
-   Frm_StartForm (NextAction);
+   Frm_BeginForm (NextAction);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Title,
@@ -819,7 +819,7 @@ void Enr_AskRemoveOldUsrs (void)
    unsigned Months;
 
    /***** Begin form *****/
-   Frm_StartForm (ActRemOldUsr);
+   Frm_BeginForm (ActRemOldUsr);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Eliminate_old_users,
@@ -1858,13 +1858,13 @@ void Enr_AskRemAllStdsThisCrs (void)
    if (NumStds)
      {
       /***** Show question and button to remove students *****/
-      /* Start alert */
+      /* Begin alert */
       Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_,
                                NumStds,
                                Gbl.Hierarchy.Crs.FullName);
 
       /* Show form to request confirmation */
-      Frm_StartForm (ActRemAllStdCrs);
+      Frm_BeginForm (ActRemAllStdCrs);
       Grp_PutParamAllGroups ();
       Pwd_AskForConfirmationOnDangerousAction ();
       Btn_PutRemoveButton (Txt_Remove_all_students);
@@ -2133,7 +2133,7 @@ void Enr_AskIfRejectSignUp (void)
              Role == Rol_TCH)
            {
 	    /***** Show question and button to reject user's enrolment request *****/
-	    /* Start alert */
+	    /* Begin alert */
 	    Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_reject_the_enrolment_request_,
 				     Gbl.Usrs.Other.UsrDat.FullName,
 				     Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
@@ -2288,7 +2288,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
    /***** Selection of scope and roles *****/
    /* Begin form and table */
-   Frm_StartForm (ActUpdSignUpReq);
+   Frm_BeginForm (ActUpdSignUpReq);
    HTM_TABLE_BeginWideMarginPadding (2);
 
    /* Scope (whole platform, current centre, current degree or current course) */
@@ -2860,7 +2860,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             Deg.DegCod = Crs.DegCod;
             Deg_GetDataOfDegreeByCod (&Deg);
             HTM_TD_Begin (NULL);
-            Frm_StartFormGoTo (ActSeeCrsInf);
+            Frm_BeginFormGoTo (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
             HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),
 				     "BT_LINK LT DAT",NULL);
@@ -2917,7 +2917,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
         	  Rol_WrongRoleExit ();
         	  break;
               }
-            Frm_StartForm (NextAction);
+            Frm_BeginForm (NextAction);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
             Btn_PutCreateButtonInline (Txt_Register);
@@ -2926,7 +2926,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
             /***** Button to reject the request *****/
             HTM_TD_Begin ("class=\"DAT LT\"");
-            Frm_StartForm (ActReqRejSignUp);
+            Frm_BeginForm (ActReqRejSignUp);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
             Btn_PutRemoveButtonInline (Txt_Reject);
@@ -3648,7 +3648,7 @@ static void Enr_ReqAddAdm (Hie_Lvl_Level_t Scope,long Cod,const char *InsCtrDegN
             else
               {
 	       /***** Show question and button to register user as administrator *****/
-	       /* Start alert */
+	       /* Begin alert */
 	       Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X,
                                         InsCtrDegName);
 
@@ -4049,7 +4049,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
       ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /***** Show question and button to remove user as administrator *****/
-      /* Start alert */
+      /* Begin alert */
       Ale_ShowAlertAndButton1 (Ale_QUESTION,ItsMe ? Txt_Do_you_really_want_to_be_removed_from_the_course_X :
 		                                    Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X,
 	                       Gbl.Hierarchy.Crs.FullName);
@@ -4074,7 +4074,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
 	    Rol_WrongRoleExit ();
 	    break;
         }
-      Frm_StartForm (NextAction);
+      Frm_BeginForm (NextAction);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       Pwd_AskForConfirmationOnDangerousAction ();
       Btn_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_course :
@@ -4217,7 +4217,7 @@ static void Enr_AskIfRemAdm (bool ItsMe,Hie_Lvl_Level_t Scope,
    if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       /***** Show question and button to remove user as administrator *****/
-      /* Start alert */
+      /* Begin alert */
       Ale_ShowAlertAndButton1 (Ale_QUESTION,ItsMe ? Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X :
                                                     Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X,
                                InsCtrDegName);

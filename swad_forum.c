@@ -1764,7 +1764,7 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
    /***** Form to select which forums I want to see:
           - all my forums
           - only the forums of current institution/degree/course *****/
-   Frm_StartForm (ActSeeFor);
+   Frm_BeginForm (ActSeeFor);
    Dat_PutHiddenParamOrder (Forums->ThreadsOrder);
    HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE\"");
    HTM_UL_Begin (NULL);

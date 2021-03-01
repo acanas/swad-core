@@ -430,63 +430,68 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
                  TL_PutIconsTimeline,NULL,
                  Hlp_START_Timeline,Box_NOT_CLOSABLE);
 
-   /***** Put form to select users whom public activity is displayed *****/
-   if (GlobalTimeline)
-      TL_Who_PutFormWho (Timeline);
+      /***** Put form to select users whom public activity is displayed *****/
+      if (GlobalTimeline)
+	 TL_Who_PutFormWho (Timeline);
 
-   /***** Form to write a new post *****/
-   if (GlobalTimeline ||
-       Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
-      TL_Pst_PutFormToWriteNewPost (Timeline);
+      /***** Form to write a new post *****/
+      if (GlobalTimeline ||
+	  Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
+	 TL_Pst_PutFormToWriteNewPost (Timeline);
 
-   /***** New publications refreshed dynamically via AJAX *****/
-   if (GlobalTimeline)
-     {
-      /* Link to view new publications via AJAX */
-      TL_Pub_PutLinkToViewNewPublications ();
+      /***** New publications refreshed dynamically via AJAX *****/
+      if (GlobalTimeline)
+	{
+	 /* Link to view new publications via AJAX */
+	 TL_Pub_PutLinkToViewNewPublications ();
 
-      /* Hidden list where insert
-         just received (not visible) publications via AJAX */
-      HTM_UL_Begin ("id=\"just_now_timeline_list\" class=\"TL_LIST\"");
+	 /* Hidden list where insert
+	    just received (not visible) publications via AJAX */
+	 HTM_UL_Begin ("id=\"just_now_timeline_list\" class=\"TL_LIST\"");
+	 HTM_UL_End ();
+
+	 /* Hidden list where insert
+	    new (not visible) publications via AJAX */
+	 HTM_UL_Begin ("id=\"new_timeline_list\" class=\"TL_LIST\"");
+	 HTM_UL_End ();
+	}
+
+      /***** List recent publications in timeline *****/
+      /* Begin list */
+      HTM_UL_Begin ("id=\"timeline_list\" class=\"TL_LIST\"");
+
+	 /* For each publication in list... */
+	 for (Pub = Timeline->Pubs.Top, NumPubs = 0;
+	      Pub;
+	      Pub = Pub->Next, NumPubs++)
+	   {
+	    /* Get data of note */
+	    Not.NotCod = Pub->NotCod;
+	    TL_Not_GetDataOfNoteByCod (&Not);
+
+	    /* Write note */
+	    HTM_LI_Begin ("class=\"%s\"",Not.NotCod == NotCodToHighlight ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
+									   "TL_WIDTH TL_SEP");
+	       TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+						   TL_Pub_GetTopMessage (Pub->PubType),
+						   Pub->PublisherCod);
+	    HTM_LI_End ();
+	   }
+
+      /* End list */
       HTM_UL_End ();
 
-      /* Hidden list where insert
-         new (not visible) publications via AJAX */
-      HTM_UL_Begin ("id=\"new_timeline_list\" class=\"TL_LIST\"");
-      HTM_UL_End ();
-     }
+      /***** If the number of publications shown is the maximum,
+	     probably there will be more, so show link to get more *****/
+      if (NumPubs == TL_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW)
+	{
+	 /* Link to view old publications via AJAX */
+	 TL_Pub_PutLinkToViewOldPublications ();
 
-   /***** List recent publications in timeline *****/
-   HTM_UL_Begin ("id=\"timeline_list\" class=\"TL_LIST\"");
-   for (Pub = Timeline->Pubs.Top, NumPubs = 0;
-	Pub;
-	Pub = Pub->Next, NumPubs++)
-     {
-      /* Get data of note */
-      Not.NotCod = Pub->NotCod;
-      TL_Not_GetDataOfNoteByCod (&Not);
-
-      /* Write note */
-      HTM_LI_Begin ("class=\"%s\"",Not.NotCod == NotCodToHighlight ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
-							             "TL_WIDTH TL_SEP");
-      TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-                                          TL_Pub_GetTopMessage (Pub->PubType),
-                                          Pub->PublisherCod);
-      HTM_LI_End ();
-     }
-   HTM_UL_End ();
-
-   /***** If the number of publications shown is the maximum,
-          probably there will be more, so show link to get more *****/
-   if (NumPubs == TL_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW)
-     {
-      /* Link to view old publications via AJAX */
-      TL_Pub_PutLinkToViewOldPublications ();
-
-      /* Hidden list where insert old publications via AJAX */
-      HTM_UL_Begin ("id=\"old_timeline_list\" class=\"TL_LIST\"");
-      HTM_UL_End ();
-     }
+	 /* Hidden list where insert old publications via AJAX */
+	 HTM_UL_Begin ("id=\"old_timeline_list\" class=\"TL_LIST\"");
+	 HTM_UL_End ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();

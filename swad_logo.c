@@ -301,7 +301,7 @@ void Lgo_RequestLogo (Hie_Lvl_Level_t Scope)
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Begin form to upload logo *****/
-   Frm_StartForm (ActionRec);
+   Frm_BeginForm (ActionRec);
 
    /***** Write help message *****/
    Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y,

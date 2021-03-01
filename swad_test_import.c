@@ -164,7 +164,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    Ale_ShowAlert (Ale_INFO,Txt_You_need_an_XML_file_containing_a_list_of_questions);
 
    /***** Write a form to import questions *****/
-   Frm_StartForm (ActImpTstQst);
+   Frm_BeginForm (ActImpTstQst);
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_XML_file);
    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".xml",

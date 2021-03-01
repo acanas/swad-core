@@ -274,7 +274,7 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 	 HTM_TH_Begin (1,1,"LM");
 
 	 /* Form to change order */
-	 Frm_StartForm (ActSeeAllSvy);
+	 Frm_BeginForm (ActSeeAllSvy);
          WhichGroups = Grp_GetParamWhichGroups ();
 	 Grp_PutParamWhichGroups (&WhichGroups);
 	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
@@ -379,7 +379,7 @@ static void Svy_PutButtonToCreateNewSvy (struct Svy_Surveys *Surveys)
   {
    extern const char *Txt_New_survey;
 
-   Frm_StartForm (ActFrmNewSvy);
+   Frm_BeginForm (ActFrmNewSvy);
    Svy_PutParamsToCreateNewSvy (Surveys);
    Btn_PutConfirmButton (Txt_New_survey);
    Frm_EndForm ();
@@ -552,7 +552,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    else
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    HTM_ARTICLE_Begin (Anchor);
-   Frm_StartForm (ActSeeSvy);
+   Frm_BeginForm (ActSeeSvy);
    Svy_PutParamSvyCod (SvyCod);
    Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
    WhichGroups = Grp_GetParamWhichGroups ();
@@ -594,7 +594,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	{
 	 HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
 
-	 Frm_StartForm (ActSeeSvy);
+	 Frm_BeginForm (ActSeeSvy);
 	 Svy_PutParamSvyCod (Svy.SvyCod);
 	 Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
          WhichGroups = Grp_GetParamWhichGroups ();
@@ -610,7 +610,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	{
 	 HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
 
-	 Frm_StartForm (ActSeeSvy);
+	 Frm_BeginForm (ActSeeSvy);
 	 Svy_PutParamSvyCod (Svy.SvyCod);
 	 Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
          WhichGroups = Grp_GetParamWhichGroups ();
@@ -1717,7 +1717,7 @@ static void Svy_PutButtonToResetSurvey (struct Svy_Surveys *Surveys)
   {
    extern const char *Txt_Reset_survey;
 
-   Frm_StartForm (ActRstSvy);
+   Frm_BeginForm (ActRstSvy);
    Svy_PutParams (Surveys);
    Btn_PutRemoveButton (Txt_Reset_survey);
    Frm_EndForm ();
@@ -1931,7 +1931,7 @@ void Svy_RequestCreatOrEditSvy (void)
 
    /***** Begin form *****/
    Surveys.SvyCod = Svy.SvyCod;
-   Frm_StartForm (ItsANewSurvey ? ActNewSvy :
+   Frm_BeginForm (ItsANewSurvey ? ActNewSvy :
 	                          ActChgSvy);
    Svy_PutParams (&Surveys);
 
@@ -2751,7 +2751,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
                     Hlp_ASSESSMENT_Surveys_questions,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
-   Frm_StartForm (ActRcvSvyQst);
+   Frm_BeginForm (ActRcvSvyQst);
    Svy_PutParamSvyCod (SvyCod);
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
       Svy_PutParamQstCod (SvyQst->QstCod);
@@ -3277,7 +3277,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
       if (PutFormAnswerSurvey)
 	{
 	 /***** Begin form to send answers to survey *****/
-	 Frm_StartForm (ActAnsSvy);
+	 Frm_BeginForm (ActAnsSvy);
 	 Svy_PutParamSvyCod (Svy->SvyCod);
 	}
 
@@ -3414,7 +3414,7 @@ static void Svy_PutButtonToCreateNewQuestion (struct Svy_Surveys *Surveys)
   {
    extern const char *Txt_New_question;
 
-   Frm_StartForm (ActEdiOneSvyQst);
+   Frm_BeginForm (ActEdiOneSvyQst);
    Svy_PutParams (Surveys);
    Btn_PutConfirmButton (Txt_New_question);
    Frm_EndForm ();

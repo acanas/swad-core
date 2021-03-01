@@ -1557,7 +1557,7 @@ static void TT_TimeTableDrawCell (const struct TT_Timetable *Timetable,
 	 Lay_NotEnoughMemoryExit ();
      }
 
-   /* Start cell */
+   /* Begin cell */
    HTM_TD_Begin ("%s%sclass=\"%s\"",RowSpanStr,ColSpanStr,ClassStr);
 
    /* Free allocated memory for rowspan, colspan and class strings */
@@ -1567,9 +1567,9 @@ static void TT_TimeTableDrawCell (const struct TT_Timetable *Timetable,
 
    /***** Form to modify this cell *****/
    if (Timetable->View == TT_CRS_EDIT)
-      Frm_StartForm (ActChgCrsTT);
+      Frm_BeginForm (ActChgCrsTT);
    else if (Timetable->View == TT_TUT_EDIT)
-      Frm_StartForm (ActChgTut);
+      Frm_BeginForm (ActChgTut);
 
    /***** Draw cell depending on type of view *****/
    switch (Timetable->View)
@@ -1578,7 +1578,7 @@ static void TT_TimeTableDrawCell (const struct TT_Timetable *Timetable,
       case TT_TUT_VIEW:	// View tutoring timetable
 	 if (IntervalType != TT_FREE_INTERVAL) // If cell is not empty...
 	   {
-	    /***** Start cell *****/
+	    /***** Begin cell *****/
 	    HTM_DIV_Begin ("class=\"TT_CELL TT_TXT\"");
 
 	    /***** Course name *****/

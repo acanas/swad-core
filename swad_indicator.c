@@ -123,7 +123,7 @@ void Ind_ReqIndicatorsCourses (void)
 
    /***** Form to update indicators *****/
    /* Begin form and table */
-   Frm_StartForm (ActReqStaCrs);
+   Frm_BeginForm (ActReqStaCrs);
    HTM_TABLE_BeginWidePadding (2);
 
    /* Scope */
@@ -213,7 +213,7 @@ void Ind_ReqIndicatorsCourses (void)
       Ind_ShowTableOfCoursesWithIndicators (&Indicators,Ind_INDICATORS_BRIEF,NumCrss,mysql_res);
 
       /* Button to show more details */
-      Frm_StartForm (ActSeeAllStaCrs);
+      Frm_BeginForm (ActSeeAllStaCrs);
       Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
       Par_PutHiddenParamLong (NULL,"OthDegTypCod",Indicators.DegTypCod);
       Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,Indicators.DptCod);

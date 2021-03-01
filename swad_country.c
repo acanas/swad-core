@@ -380,7 +380,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 						        "RM");
       if (OrderSelectable)
 	{
-	 Frm_StartForm (ActSeeCty);
+	 Frm_BeginForm (ActSeeCty);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_COUNTRIES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
 	 if (Order == Gbl.Hierarchy.Ctys.SelectedOrder)
@@ -519,7 +519,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Acti
    char CountryName[Cty_MAX_BYTES_NAME + 1];
 
    /***** Begin form *****/
-   Frm_StartFormGoTo (Action);
+   Frm_BeginFormGoTo (Action);
    Cty_PutParamCtyCod (Cty->CtyCod);
    HTM_DIV_Begin ("class=\"%s\"",ClassContainer);
 
@@ -948,7 +948,7 @@ void Cty_WriteSelectorOfCountry (void)
    long CtyCod;
 
    /***** Begin form *****/
-   Frm_StartFormGoTo (ActSeeIns);
+   Frm_BeginFormGoTo (ActSeeIns);
    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 		     "id=\"cty\" name=\"cty\" class=\"HIE_SEL\"");
    HTM_OPTION (HTM_Type_STRING,"",Gbl.Hierarchy.Cty.CtyCod < 0,true,
@@ -1006,7 +1006,7 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
    if (PutForm)
      {
       /***** Write country name with link to country information *****/
-      Frm_StartForm (ActSeeCtyInf);
+      Frm_BeginForm (ActSeeCtyInf);
       Cty_PutParamCtyCod (CtyCod);
       HTM_BUTTON_SUBMIT_Begin (Act_GetActionText (ActSeeCtyInf),ClassLink,NULL);
       HTM_Txt (CtyName);
@@ -1251,7 +1251,7 @@ static void Cty_ListCountriesForEdition (void)
 
          /* Name */
          HTM_TD_Begin ("class=\"LT\"");
-         Frm_StartForm (ActRenCty);
+         Frm_BeginForm (ActRenCty);
          Cty_PutParamOtherCtyCod (&Cty->CtyCod);
          Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
 	 HTM_INPUT_TEXT ("Name",Cty_MAX_CHARS_NAME,Cty->Name[Lan],
@@ -1262,7 +1262,7 @@ static void Cty_ListCountriesForEdition (void)
 
          /* WWW */
          HTM_TD_Begin ("class=\"LT\"");
-         Frm_StartForm (ActChgCtyWWW);
+         Frm_BeginForm (ActChgCtyWWW);
          Cty_PutParamOtherCtyCod (&Cty->CtyCod);
          Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
 	 HTM_INPUT_URL ("WWW",Cty->WWW[Lan],HTM_SUBMIT_ON_CHANGE,
@@ -1605,7 +1605,7 @@ static void Cty_PutFormToCreateCountry (void)
    char StrName[32];
 
    /***** Begin form *****/
-   Frm_StartForm (ActNewCty);
+   Frm_BeginForm (ActNewCty);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_country,

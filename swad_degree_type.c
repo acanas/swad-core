@@ -230,7 +230,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,
    /***** Button to create degree type  *****/
    if (DT_CheckIfICanCreateDegreeTypes ())
      {
-      Frm_StartForm (ActEdiDegTyp);
+      Frm_BeginForm (ActEdiDegTyp);
       Btn_PutConfirmButton (Gbl.DegTypes.Num ? Txt_Create_another_type_of_degree :
 	                                            Txt_Create_type_of_degree);
       Frm_EndForm ();
@@ -417,7 +417,7 @@ static void DT_ListDegreeTypesForEdition (void)
 
       /* Name of degree type */
       HTM_TD_Begin ("class=\"LM\"");
-      Frm_StartForm (ActRenDegTyp);
+      Frm_BeginForm (ActRenDegTyp);
       DT_PutParamOtherDegTypCod (&Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
       HTM_INPUT_TEXT ("DegTypName",Deg_MAX_CHARS_DEGREE_TYPE_NAME,
 		      Gbl.DegTypes.Lst[NumDegTyp].DegTypName,
@@ -457,7 +457,7 @@ static void DT_PutFormToCreateDegreeType (void)
    extern const char *Txt_Create_type_of_degree;
 
    /***** Begin form *****/
-   Frm_StartForm (ActNewDegTyp);
+   Frm_BeginForm (ActNewDegTyp);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_type_of_degree,
@@ -521,7 +521,7 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
 						           "RM");
 
       /* Begin form to change order */
-      Frm_StartForm (NextAction);
+      Frm_BeginForm (NextAction);
       if (NextAction == ActSeeUseGbl)
 	{
 	 Figures.Scope      = Scope;

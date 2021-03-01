@@ -140,7 +140,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
                  Hlp_START_Search,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
-   Frm_StartForm (Action);
+   Frm_BeginForm (Action);
 
    /***** Scope (whole platform, current country, current institution,
                  current centre, current degree or current course) *****/
@@ -230,7 +230,7 @@ void Sch_PutFormToSearchInPageTopHeading (void)
    HTM_DIV_Begin ("id=\"head_row_1_search\"");
 
    /***** Put form *****/
-   Frm_StartForm (ActSch);
+   Frm_BeginForm (ActSch);
    Sco_PutParamScope ("ScopeSch",Hie_Lvl_SYS);
    Sch_PutInputStringToSearch ("head_search_text");
    Sch_PutMagnifyingGlassButton ("search-white.svg");

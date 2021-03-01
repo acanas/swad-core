@@ -222,7 +222,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Acti
                                         const char *ClassLink,const char *ClassLogo)
   {
    /***** Begin form *****/
-   Frm_StartFormGoTo (Action);
+   Frm_BeginFormGoTo (Action);
    Deg_PutParamDegCod (Deg->DegCod);
 
    /***** Link to action *****/
@@ -254,7 +254,7 @@ void Deg_WriteSelectorOfDegree (void)
    long DegCod;
 
    /***** Begin form *****/
-   Frm_StartFormGoTo (ActSeeCrs);
+   Frm_BeginFormGoTo (ActSeeCrs);
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"deg\" name=\"deg\" class=\"HIE_SEL\"");
@@ -397,7 +397,7 @@ static void Deg_ListDegreesForEdition (void)
       HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
-	 Frm_StartForm (ActRenDegSho);
+	 Frm_BeginForm (ActRenDegSho);
 	 Deg_PutParamOtherDegCod (&Deg->DegCod);
 	 HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Deg->ShrtName,
 	                 HTM_SUBMIT_ON_CHANGE,
@@ -412,7 +412,7 @@ static void Deg_ListDegreesForEdition (void)
       HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
-	 Frm_StartForm (ActRenDegFul);
+	 Frm_BeginForm (ActRenDegFul);
 	 Deg_PutParamOtherDegCod (&Deg->DegCod);
 	 HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Deg->FullName,
 	                 HTM_SUBMIT_ON_CHANGE,
@@ -427,7 +427,7 @@ static void Deg_ListDegreesForEdition (void)
       HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
-	 Frm_StartForm (ActChgDegTyp);
+	 Frm_BeginForm (ActChgDegTyp);
 	 Deg_PutParamOtherDegCod (&Deg->DegCod);
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"OthDegTypCod\" class=\"HIE_SEL_NARROW\"");
@@ -456,7 +456,7 @@ static void Deg_ListDegreesForEdition (void)
       HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
-	 Frm_StartForm (ActChgDegWWW);
+	 Frm_BeginForm (ActChgDegWWW);
 	 Deg_PutParamOtherDegCod (&Deg->DegCod);
 	 HTM_INPUT_URL ("WWW",Deg->WWW,HTM_SUBMIT_ON_CHANGE,
 			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
@@ -497,7 +497,7 @@ static void Deg_ListDegreesForEdition (void)
       if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM &&
 	  StatusTxt == Deg_STATUS_PENDING)
 	{
-	 Frm_StartForm (ActChgDegSta);
+	 Frm_BeginForm (ActChgDegSta);
 	 Deg_PutParamOtherDegCod (&Deg->DegCod);
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"Status\" class=\"INPUT_STATUS\"");
@@ -589,9 +589,9 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Begin form *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      Frm_StartForm (ActNewDeg);
+      Frm_BeginForm (ActNewDeg);
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
-      Frm_StartForm (ActReqDeg);
+      Frm_BeginForm (ActReqDeg);
    else
       Lay_NoPermissionExit ();
 
@@ -825,7 +825,7 @@ static void Deg_ListDegrees (void)
    /***** Button to create degree *****/
    if (Deg_CheckIfICanCreateDegrees ())
      {
-      Frm_StartForm (ActEdiDeg);
+      Frm_BeginForm (ActEdiDeg);
       Btn_PutConfirmButton (Gbl.Hierarchy.Degs.Num ? Txt_Create_another_degree :
 	                                                 Txt_Create_degree);
       Frm_EndForm ();

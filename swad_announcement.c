@@ -197,7 +197,7 @@ static void Ann_PutButtonToAddNewAnnouncement (void)
   {
    extern const char *Txt_New_announcement;
 
-   Frm_StartForm (ActWriAnn);
+   Frm_BeginForm (ActWriAnn);
    Btn_PutConfirmButton (Txt_New_announcement);
    Frm_EndForm ();
   }
@@ -396,7 +396,7 @@ void Ann_ShowFormAnnouncement (void)
    extern const char *Txt_Create_announcement;
 
    /***** Begin form *****/
-   Frm_StartForm (ActRcvAnn);
+   Frm_BeginForm (ActRcvAnn);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_announcement,

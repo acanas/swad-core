@@ -1845,7 +1845,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
      {
       /***** Begin form *****/
       if (PutFormToChangeGrps)
-	 Frm_StartForm (ActChgGrp);
+	 Frm_BeginForm (ActChgGrp);
 
       /***** List the groups the user belongs to for change *****/
       HTM_TABLE_BeginWidePadding (2);
@@ -1877,7 +1877,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
       /***** Button to create group *****/
       if (ICanEdit)
 	{
-	 Frm_StartForm (ActReqEdiGrp);
+	 Frm_BeginForm (ActReqEdiGrp);
 	 Btn_PutConfirmButton (Txt_Create_group);
 	 Frm_EndForm ();
 	}
@@ -3989,7 +3989,7 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    /***** Get data of the group type from database *****/
    Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
 
-   /***** Start section to edit group types *****/
+   /***** Begin section to edit group types *****/
    Grp_ReqEditGroupsInternal0 ();
 
    /***** Show question and button to remove type of group *****/
@@ -5003,7 +5003,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
       HTM_DIV_Begin ("class=\"%s\"",
 		      WhichGrps == Gbl.Crs.Grps.WhichGrps ? "PREF_ON" :
 							    "PREF_OFF");
-      Frm_StartForm (Action);
+      Frm_BeginForm (Action);
       Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
       if (FuncParams)	// Extra parameters depending on the action
 	 FuncParams (Args);

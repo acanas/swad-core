@@ -260,7 +260,7 @@ static void Set_PutIconsToSelectSideCols (void)
      {
       HTM_DIV_Begin ("class=\"%s\"",SideCols == Gbl.Prefs.SideCols ? "PREF_ON" :
         	                                                     "PREF_OFF");
-      Frm_StartForm (ActChgCol);
+      Frm_BeginForm (ActChgCol);
       Par_PutHiddenParamUnsigned (NULL,"SideCols",SideCols);
       snprintf (Icon,sizeof (Icon),"layout%u%u_32x20.gif",
                 SideCols >> 1,SideCols & 1);

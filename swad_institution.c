@@ -227,7 +227,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size)
 
    if (PutLink)
      {
-      Frm_StartForm (ActSeeInsInf);
+      Frm_BeginForm (ActSeeInsInf);
       Ins_PutParamInsCod (Ins->InsCod);
       HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK",NULL);
      }
@@ -248,7 +248,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t
                                              const char *ClassLink,const char *ClassLogo)
   {
    /***** Begin form *****/
-   Frm_StartFormGoTo (Action);
+   Frm_BeginFormGoTo (Action);
    Ins_PutParamInsCod (Ins->InsCod);
 
    /***** Link to action *****/
@@ -335,7 +335,7 @@ static void Ins_ListInstitutions (void)
    /***** Button to create institution *****/
    if (Ins_CheckIfICanCreateInstitutions ())
      {
-      Frm_StartForm (ActEdiIns);
+      Frm_BeginForm (ActEdiIns);
       Btn_PutConfirmButton (Gbl.Hierarchy.Inss.Num ? Txt_Create_another_institution :
 	                                                 Txt_Create_institution);
       Frm_EndForm ();
@@ -495,7 +495,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
       HTM_TH_Begin (1,1,ClassTH[Order]);
       if (OrderSelectable)
 	{
-	 Frm_StartForm (ActSeeIns);
+	 Frm_BeginForm (ActSeeIns);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],ClassButton[Order],NULL);
 	 if (Order == Gbl.Hierarchy.Inss.SelectedOrder)
@@ -1010,7 +1010,7 @@ void Ins_WriteSelectorOfInstitution (void)
    long InsCod;
 
    /***** Begin form *****/
-   Frm_StartFormGoTo (ActSeeCtr);
+   Frm_BeginFormGoTo (ActSeeCtr);
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"ins\" name=\"ins\" class=\"HIE_SEL\"");
@@ -1130,7 +1130,7 @@ static void Ins_ListInstitutionsForEdition (void)
       HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
-	 Frm_StartForm (ActRenInsSho);
+	 Frm_BeginForm (ActRenInsSho);
 	 Ins_PutParamOtherInsCod (&Ins->InsCod);
 	 HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
 	                 HTM_SUBMIT_ON_CHANGE,
@@ -1145,7 +1145,7 @@ static void Ins_ListInstitutionsForEdition (void)
       HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
-	 Frm_StartForm (ActRenInsFul);
+	 Frm_BeginForm (ActRenInsFul);
 	 Ins_PutParamOtherInsCod (&Ins->InsCod);
 	 HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins->FullName,
 	                 HTM_SUBMIT_ON_CHANGE,
@@ -1160,7 +1160,7 @@ static void Ins_ListInstitutionsForEdition (void)
       HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
-	 Frm_StartForm (ActChgInsWWW);
+	 Frm_BeginForm (ActChgInsWWW);
 	 Ins_PutParamOtherInsCod (&Ins->InsCod);
 	 HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
 			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
@@ -1206,7 +1206,7 @@ static void Ins_ListInstitutionsForEdition (void)
       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM &&
 	  StatusTxt == Ins_STATUS_PENDING)
 	{
-	 Frm_StartForm (ActChgInsSta);
+	 Frm_BeginForm (ActChgInsSta);
 	 Ins_PutParamOtherInsCod (&Ins->InsCod);
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"Status\" class=\"INPUT_STATUS\"");
@@ -1695,9 +1695,9 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Begin form *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Frm_StartForm (ActNewIns);
+      Frm_BeginForm (ActNewIns);
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
-      Frm_StartForm (ActReqIns);
+      Frm_BeginForm (ActReqIns);
    else
       Lay_NoPermissionExit ();
 

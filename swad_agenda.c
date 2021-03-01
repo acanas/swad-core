@@ -241,7 +241,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda
       HTM_DIV_Begin ("class=\"%s\"",
 	             (Agenda->Past__FutureEvents & (1 << PstFut)) ? "PREF_ON" :
 							            "PREF_OFF");
-      Frm_StartForm (ActSeeMyAgd);
+      Frm_BeginForm (ActSeeMyAgd);
       Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents ^ (1 << PstFut),	// Toggle
 		             Agenda->PrivatPublicEvents,
 		             Agenda->HiddenVisiblEvents,
@@ -278,7 +278,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
       HTM_DIV_Begin ("class=\"%s\"",
 	             (Agenda->PrivatPublicEvents & (1 << PrvPub)) ? "PREF_ON" :
 							            "PREF_OFF");
-      Frm_StartForm (ActSeeMyAgd);
+      Frm_BeginForm (ActSeeMyAgd);
       Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
 		             Agenda->PrivatPublicEvents ^ (1 << PrvPub),	// Toggle
 		             Agenda->HiddenVisiblEvents,
@@ -315,7 +315,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda
       HTM_DIV_Begin ("class=\"%s\"",
 	             (Agenda->HiddenVisiblEvents & (1 << HidVis)) ? "PREF_ON" :
 							            "PREF_OFF");
-      Frm_StartForm (ActSeeMyAgd);
+      Frm_BeginForm (ActSeeMyAgd);
       Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
 		             Agenda->PrivatPublicEvents,
 		             Agenda->HiddenVisiblEvents ^ (1 << HidVis),	// Toggle
@@ -642,12 +642,12 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
 	{
 	 case Agd_MY_AGENDA_TODAY:
 	 case Agd_MY_AGENDA:
-	    Frm_StartForm (ActSeeMyAgd);
+	    Frm_BeginForm (ActSeeMyAgd);
             Pag_PutHiddenParamPagNum (Pag_MY_AGENDA,Agenda->CurrentPage);
 	    break;
 	 case Agd_ANOTHER_AGENDA_TODAY:
 	 case Agd_ANOTHER_AGENDA:
-	    Frm_StartForm (ActSeeUsrAgd);
+	    Frm_BeginForm (ActSeeUsrAgd);
 	    Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
             Pag_PutHiddenParamPagNum (Pag_ANOTHER_AGENDA,Agenda->CurrentPage);
 	    break;
@@ -764,7 +764,7 @@ static void Agd_PutButtonToCreateNewEvent (const struct Agd_Agenda *Agenda)
   {
    extern const char *Txt_New_event;
 
-   Frm_StartForm (ActFrmNewEvtMyAgd);
+   Frm_BeginForm (ActFrmNewEvtMyAgd);
    Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
 		          Agenda->PrivatPublicEvents,
 		          Agenda->HiddenVisiblEvents,
@@ -1599,12 +1599,12 @@ void Agd_RequestCreatOrEditEvent (void)
    /***** Begin form *****/
    if (ItsANewEvent)
      {
-      Frm_StartForm (ActNewEvtMyAgd);
+      Frm_BeginForm (ActNewEvtMyAgd);
       Agenda.AgdCodToEdit = -1L;
      }
    else
      {
-      Frm_StartForm (ActChgEvtMyAgd);
+      Frm_BeginForm (ActChgEvtMyAgd);
       Agenda.AgdCodToEdit = AgdEvent.AgdCod;
      }
    Agd_PutCurrentParamsMyAgenda (&Agenda);

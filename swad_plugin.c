@@ -392,7 +392,7 @@ static void Plg_ListPluginsForEdition (void)
 
       /* Plugin name */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActRenPlg);
+      Frm_BeginForm (ActRenPlg);
       Plg_PutParamPlgCod (&Plg->PlgCod);
       HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,
                       HTM_SUBMIT_ON_CHANGE,
@@ -402,7 +402,7 @@ static void Plg_ListPluginsForEdition (void)
 
       /* Plugin description */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActChgPlgDes);
+      Frm_BeginForm (ActChgPlgDes);
       Plg_PutParamPlgCod (&Plg->PlgCod);
       HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,
                       HTM_SUBMIT_ON_CHANGE,
@@ -412,7 +412,7 @@ static void Plg_ListPluginsForEdition (void)
 
       /* Plugin logo */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActChgPlgLog);
+      Frm_BeginForm (ActChgPlgLog);
       Plg_PutParamPlgCod (&Plg->PlgCod);
       HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,
                       HTM_SUBMIT_ON_CHANGE,
@@ -422,7 +422,7 @@ static void Plg_ListPluginsForEdition (void)
 
       /* Plugin application key */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActChgPlgAppKey);
+      Frm_BeginForm (ActChgPlgAppKey);
       Plg_PutParamPlgCod (&Plg->PlgCod);
       HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,
                       HTM_SUBMIT_ON_CHANGE,
@@ -432,7 +432,7 @@ static void Plg_ListPluginsForEdition (void)
 
       /* Plugin URL */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActChgPlgURL);
+      Frm_BeginForm (ActChgPlgURL);
       Plg_PutParamPlgCod (&Plg->PlgCod);
       HTM_INPUT_URL ("URL",Plg->URL,HTM_SUBMIT_ON_CHANGE,
 		     "size=\"15\"");
@@ -441,7 +441,7 @@ static void Plg_ListPluginsForEdition (void)
 
       /* Plugin IP */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActChgPlgIP);
+      Frm_BeginForm (ActChgPlgIP);
       Plg_PutParamPlgCod (&Plg->PlgCod);
       HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,HTM_SUBMIT_ON_CHANGE,
 		      "size=\"10\"");
@@ -829,7 +829,7 @@ static void Plg_PutFormToCreatePlugin (void)
    extern const char *Txt_Create_plugin;
 
    /***** Begin form *****/
-   Frm_StartForm (ActNewPlg);
+   Frm_BeginForm (ActNewPlg);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_plugin,

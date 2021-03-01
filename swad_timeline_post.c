@@ -103,7 +103,7 @@ void TL_Pst_GetAndWritePost (long PstCod)
    if (Content.Txt[0])
      {
       HTM_DIV_Begin ("class=\"TL_TXT\"");
-      Msg_WriteMsgContent (Content.Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
+	 Msg_WriteMsgContent (Content.Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
       HTM_DIV_End ();
      }
 
@@ -125,35 +125,47 @@ void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
 
-   /***** Start list *****/
+   /***** Begin list *****/
    HTM_UL_Begin ("class=\"TL_LIST\"");
-   HTM_LI_Begin ("class=\"TL_WIDTH\"");
 
-   /***** Left: write author's photo (my photo) *****/
-   HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
-   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
-						     NULL,
-		     "PHOTO45x60",Pho_ZOOM,false);
-   HTM_DIV_End ();
+      /***** Begin list item *****/
+      HTM_LI_Begin ("class=\"TL_WIDTH\"");
 
-   /***** Right: author's name, time, textarea *****/
-   HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
+	 /***** Left: write author's photo (my photo) *****/
+         /* Begin container */
+	 HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
 
-   /* Author name */
-   TL_Not_WriteAuthorName (&Gbl.Usrs.Me.UsrDat);
+	    /* Author's photo */
+	    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
+	    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
+							      NULL,
+			      "PHOTO45x60",Pho_ZOOM,false);
 
-   /* Form to write the post */
-   HTM_DIV_Begin ("class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\"");
-   TL_Frm_FormStart (Timeline,TL_Frm_RECEIVE_POST);
-   TL_Pst_PutTextarea (Txt_New_TIMELINE_post,"TL_PST_TEXTAREA TL_RIGHT_WIDTH");
-   Frm_EndForm ();
-   HTM_DIV_End ();
+	 /* End container */
+	 HTM_DIV_End ();
 
-   HTM_DIV_End ();
+	 /***** Right: author's name, time, textarea *****/
+         /* Begin container */
+	 HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
+
+	    /* Author name */
+	    TL_Not_WriteAuthorName (&Gbl.Usrs.Me.UsrDat);
+
+	    /* Form to write the post */
+	    HTM_DIV_Begin ("class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\"");
+	       TL_Frm_BeginForm (Timeline,TL_Frm_RECEIVE_POST);
+		  TL_Pst_PutTextarea (Txt_New_TIMELINE_post,
+		                      "TL_PST_TEXTAREA TL_RIGHT_WIDTH");
+	       TL_Frm_EndForm ();
+	    HTM_DIV_End ();
+
+	 /* End container */
+	 HTM_DIV_End ();
+
+      /***** End list item *****/
+      HTM_LI_End ();
 
    /***** End list *****/
-   HTM_LI_End ();
    HTM_UL_End ();
   }
 
@@ -178,19 +190,19 @@ void TL_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
 		       IdDivImgButton);
    HTM_TEXTAREA_End ();
 
-   /***** Start concealable div *****/
+   /***** Begin hidden div *****/
    HTM_DIV_Begin ("id=\"%s\" style=\"display:none;\"",IdDivImgButton);
 
-   /***** Help on editor *****/
-   Lay_HelpPlainEditor ();
+      /***** Help on editor *****/
+      Lay_HelpPlainEditor ();
 
-   /***** Attached image (optional) *****/
-   Med_PutMediaUploader (-1,"TL_MED_INPUT_WIDTH");
+      /***** Attached image (optional) *****/
+      Med_PutMediaUploader (-1,"TL_MED_INPUT_WIDTH");
 
-   /***** Submit button *****/
-   HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT_INLINE BT_CREATE",NULL);
-   HTM_Txt (Txt_Post);
-   HTM_BUTTON_End ();
+      /***** Submit button *****/
+      HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT_INLINE BT_CREATE",NULL);
+	 HTM_Txt (Txt_Post);
+      HTM_BUTTON_End ();
 
    /***** End hidden div *****/
    HTM_DIV_End ();
@@ -214,13 +226,13 @@ void TL_Pst_ReceivePostUsr (void)
    /***** Show user's profile *****/
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
 
-   /***** Receive and store post, and
-          write updated timeline after publication (user) *****/
-   NotCod = TL_Pst_ReceivePost ();
-   TL_ShowTimelineUsrHighlightingNot (&Timeline,NotCod);
+      /***** Receive and store post, and
+	     write updated timeline after publication (user) *****/
+      NotCod = TL_Pst_ReceivePost ();
+      TL_ShowTimelineUsrHighlightingNot (&Timeline,NotCod);
 
    /***** End section *****/
    HTM_SECTION_End ();

@@ -133,7 +133,7 @@ void Dat_PutBoxToSelectDateFormat (void)
                  Hlp_PROFILE_Settings_dates,Box_NOT_CLOSABLE);
 
    /***** Form with list of options *****/
-   Frm_StartForm (ActChgDatFmt);
+   Frm_BeginForm (ActChgDatFmt);
 
    HTM_UL_Begin ("class=\"LIST_LEFT\"");
    for (Format  = (Dat_Format_t) 0;
@@ -328,12 +328,12 @@ void Dat_ShowClientLocalTime (void)
    extern const char *Txt_Show_agenda;
 
    /***** Draw the current date and time *****/
-   /* Start container */
+   /* Begin container */
    HTM_DIV_Begin ("id=\"current_date\"");
 
    /* Month with link to calendar */
    HTM_DIV_Begin ("id=\"current_month\"");
-   Frm_StartForm (ActSeeCal);
+   Frm_BeginForm (ActSeeCal);
    HTM_BUTTON_SUBMIT_Begin (Txt_Show_calendar,"BT_LINK CURRENT_MONTH",NULL);
    HTM_SPAN_Begin ("id=\"current_month_txt\"");
    // JavaScript will write HTML here
@@ -346,7 +346,7 @@ void Dat_ShowClientLocalTime (void)
    HTM_DIV_Begin ("id=\"current_day\"");
    if (Gbl.Usrs.Me.Logged)
      {
-      Frm_StartForm (ActSeeMyAgd);
+      Frm_BeginForm (ActSeeMyAgd);
       HTM_BUTTON_SUBMIT_Begin (Txt_Show_agenda,"BT_LINK CURRENT_DAY",NULL);
      }
    HTM_SPAN_Begin ("id=\"current_day_txt\"");

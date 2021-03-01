@@ -220,7 +220,7 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
    unsigned FigureTypeUnsigned;
 
    /***** Form to show statistic *****/
-   Frm_StartForm (ActSeeUseGbl);
+   Frm_BeginForm (ActSeeUseGbl);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Figures,
@@ -1487,7 +1487,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       HTM_TD_Begin ("class=\"%s LM\"",
 		             The_ClassFormInBox[Gbl.Prefs.Theme]);
 	       /* Icon and name of this institution */
-	       Frm_StartForm (ActSeeInsInf);
+	       Frm_BeginForm (ActSeeInsInf);
 	       Ins_PutParamInsCod (Ins.InsCod);
 	       HTM_BUTTON_SUBMIT_Begin (Ins.ShrtName,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
 	       if (Gbl.Usrs.Listing.WithPhotos)

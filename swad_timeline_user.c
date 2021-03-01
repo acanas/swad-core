@@ -73,7 +73,7 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
    TL_DB_RemoveAllFavsToPubsBy (TL_Fav_COMM,UsrCod);
 
    /* Remove all favs to all comments in all notes authored by this user */
-   TL_DB_RemoveAllFavsToAllCommentsInAllNotesBy (UsrCod);
+   TL_DB_RemoveAllFavsToAllCommsInAllNotesBy (UsrCod);
 
    /***** Remove favs for notes *****/
    /* Remove all favs made by this user to any note */
@@ -84,10 +84,10 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
 
    /***** Remove comments *****/
    /* Remove all comments in all the notes of this user */
-   TL_DB_RemoveAllCommentsInAllNotesOf (UsrCod);
+   TL_DB_RemoveAllCommsInAllNotesOf (UsrCod);
 
    /* Remove all comments made by this user in any note */
-   TL_DB_RemoveAllCommentsMadeBy (UsrCod);
+   TL_DB_RemoveAllCommsMadeBy (UsrCod);
 
    /***** Remove posts *****/
    /* Remove all posts of the user */
@@ -142,6 +142,7 @@ void TL_Usr_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 	      NumUsr++)
 	   {
 	    /***** Get user *****/
+	    /* Get row */
 	    row = mysql_fetch_row (*mysql_res);
 
 	    /* Get user's code (row[0]) */
@@ -150,11 +151,16 @@ void TL_Usr_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 	    /***** Get user's data and show user's photo *****/
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
 	      {
+	       /* Begin container */
                HTM_DIV_Begin ("class=\"TL_SHARER\"");
-	       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-	       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-	                                             NULL,
-	                         "PHOTO12x16",Pho_ZOOM,true);	// Use unique id
+
+                  /* User's photo */
+		  ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+		  Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+							NULL,
+				    "PHOTO12x16",Pho_ZOOM,true);	// Use unique id
+
+	       /* End container */
                HTM_DIV_End ();
 
                NumUsrsShown++;

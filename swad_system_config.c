@@ -348,7 +348,7 @@ static void SysCfg_NumCtys (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LB\"");
-   Frm_StartFormGoTo (ActSeeCty);
+   Frm_BeginFormGoTo (ActSeeCty);
    HTM_BUTTON_SUBMIT_Begin (Txt_Countries,"BT_LINK DAT",NULL);
    HTM_Unsigned (Cty_GetCachedNumCtysInSys ());
    HTM_BUTTON_End ();

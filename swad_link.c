@@ -113,7 +113,7 @@ void Lnk_SeeLinks (void)
    /***** Button to create link *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
-      Frm_StartForm (ActEdiLnk);
+      Frm_BeginForm (ActEdiLnk);
       Btn_PutConfirmButton (Txt_New_link);
       Frm_EndForm ();
      }
@@ -165,7 +165,7 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
      {
       HTM_DIV_Begin ("id=\"institutional_links\"");
 
-      Frm_StartForm (ActSeeLnk);
+      Frm_BeginForm (ActSeeLnk);
       HTM_BUTTON_SUBMIT_Begin (Txt_Links,"BT_LINK LINK_TITLE",NULL);
       HTM_TxtF ("%s",Txt_Links);
       HTM_BUTTON_End ();
@@ -427,7 +427,7 @@ static void Lnk_ListLinksForEdition (void)
 
       /* Link short name */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActRenLnkSho);
+      Frm_BeginForm (ActRenLnkSho);
       Lnk_PutParamLnkCod (&Lnk->LnkCod);
       HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
                       HTM_SUBMIT_ON_CHANGE,
@@ -437,7 +437,7 @@ static void Lnk_ListLinksForEdition (void)
 
       /* Link full name */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActRenLnkFul);
+      Frm_BeginForm (ActRenLnkFul);
       Lnk_PutParamLnkCod (&Lnk->LnkCod);
       HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
                       HTM_SUBMIT_ON_CHANGE,
@@ -447,7 +447,7 @@ static void Lnk_ListLinksForEdition (void)
 
       /* Link WWW */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActChgLnkWWW);
+      Frm_BeginForm (ActChgLnkWWW);
       Lnk_PutParamLnkCod (&Lnk->LnkCod);
       HTM_INPUT_URL ("WWW",Lnk->WWW,HTM_SUBMIT_ON_CHANGE,
 		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
@@ -709,7 +709,7 @@ static void Lnk_PutFormToCreateLink (void)
    extern const char *Txt_Create_link;
 
    /***** Begin form *****/
-   Frm_StartForm (ActNewLnk);
+   Frm_BeginForm (ActNewLnk);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_link,

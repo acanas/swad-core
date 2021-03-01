@@ -156,7 +156,7 @@ void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
    Syl_WhichSyllabus_t WhichSyl;
 
    /***** Form to select which syllabus I want to see (lectures/practicals) *****/
-   Frm_StartForm (ActSeeSyl);
+   Frm_BeginForm (ActSeeSyl);
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
@@ -260,7 +260,7 @@ bool Syl_CheckAndEditSyllabus (struct Syl_Syllabus *Syllabus)
       if (Syllabus->EditionIsActive)
 	{
 	 /***** Button to view *****/
-         Frm_StartForm (Inf_ActionsSeeInfo[Gbl.Crs.Info.Type]);
+         Frm_BeginForm (Inf_ActionsSeeInfo[Gbl.Crs.Info.Type]);
 	 Btn_PutConfirmButton (Txt_Done);
 	 Frm_EndForm ();
 	}
@@ -861,7 +861,7 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
    /***** Text of the item *****/
    HTM_TD_Begin ("colspan=\"%d\" class=\"LM COLOR%u\"",
 		 Syl_LstItemsSyllabus.NumLevels - Level + 1,Gbl.RowEvenOdd);
-   Frm_StartForm (NewItem ? (Gbl.Crs.Info.Type == Inf_LECTURES ? ActInsIteSylLec :
+   Frm_BeginForm (NewItem ? (Gbl.Crs.Info.Type == Inf_LECTURES ? ActInsIteSylLec :
 	                                                         ActInsIteSylPra) :
                             (Gbl.Crs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
                         	                                 ActModIteSylPra));

@@ -202,7 +202,7 @@ void Prf_RequestUserProfile (void)
      }
 
    /***** Begin form *****/
-   Frm_StartForm (ActSeeOthPubPrf);
+   Frm_BeginForm (ActSeeOthPubPrf);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Another_user_s_profile,
@@ -801,7 +801,7 @@ static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod)
    extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
    extern const char *Txt_Calculate;
 
-   Frm_StartForm (ActCalFig);
+   Frm_BeginForm (ActCalFig);
    Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
    HTM_BUTTON_Animated_Begin (Txt_Calculate,
 			      The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],
@@ -957,7 +957,7 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
    char *Title;
 
    /***** Rank in form to go to ranking *****/
-   Frm_StartForm (ActSeeUseGbl);
+   Frm_BeginForm (ActSeeUseGbl);
    Sco_PutParamScope ("ScopeSta",Hie_Lvl_SYS);
    Par_PutHiddenParamUnsigned (NULL,"FigureType",(unsigned) Fig_USERS_RANKING);
    if (asprintf (&Title,"#%lu %s %lu",Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)
@@ -1783,7 +1783,7 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
    HTM_TD_Begin ("class=\"COLOR%u\"",Gbl.RowEvenOdd);
    if (Visible)
      {
-      Frm_StartForm (ActSeeOthPubPrf);
+      Frm_BeginForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,
 			       ItsMe ? "BT_LINK RANK_USR DAT_SMALL_N" :

@@ -731,7 +731,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Mch_Match *Match,
    HTM_ARTICLE_Begin (Anchor);
 
    /***** Match title *****/
-   Frm_StartForm (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
+   Frm_BeginForm (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
 						       ActResMch);
    Mch_PutParamMchCod (Match->MchCod);
    HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
@@ -1484,11 +1484,11 @@ static void Mch_PutFormNewMatch (const struct Gam_Game *Game)
    extern const char *Txt_Title;
    extern const char *Txt_Play;
 
-   /***** Start section for a new match *****/
+   /***** Begin section for a new match *****/
    HTM_SECTION_Begin (Mch_NEW_MATCH_SECTION_ID);
 
    /***** Begin form *****/
-   Frm_StartForm (ActNewMch);
+   Frm_BeginForm (ActNewMch);
    Gam_PutParamGameCod (Game->GamCod);
    Gam_PutParamQstInd (0);	// Start by first question in game
 
@@ -2738,7 +2738,7 @@ static void Mch_PutCountdownAndHourglassIcon (struct Mch_Match *Match)
 
 static void Mch_PutFormsCountdown (struct Mch_Match *Match)
   {
-   /***** Start container *****/
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_HOURGLASS\"");
 
    /***** Put forms to start countdown *****/
@@ -2770,7 +2770,7 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
 		    Act_GetActCod (ActMchCntDwn),Gbl.Session.Id,
 		    Match->MchCod,Seconds) < 0)
 	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormOnSubmit (ActUnk,OnSubmit);
+      Frm_BeginFormOnSubmit (ActUnk,OnSubmit);
      }
 
    /***** Put icon *****/
@@ -3043,7 +3043,7 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
 							  "MCH_NUM_COL_OFF");
 
       /* Begin form */
-      Frm_StartForm (ActChgNumColMch);
+      Frm_BeginForm (ActChgNumColMch);
       Mch_PutParamMchCod (Match->MchCod);	// Current match being played
       Mch_PutParamNumCols (NumCols);		// Number of columns
 
@@ -3086,7 +3086,7 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
    HTM_DIV_Begin ("class=\"MCH_SHOW_RESULTS\"");
 
    /***** Begin form *****/
-   Frm_StartForm (ActChgVisResMchQst);
+   Frm_BeginForm (ActChgVisResMchQst);
    Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
    /***** Put icon with link *****/
@@ -3114,7 +3114,7 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
    extern const char *Txt_MATCH_QUESTION_Answered;
    extern const char *Txt_MATCH_QUESTION_Unanswered;
 
-   /***** Start container *****/
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_ANSWERED\"");
 
    /***** Put icon with link *****/
@@ -3123,7 +3123,7 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
        Answered)				// I have answered this question
      {
       /* Begin form */
-      Frm_StartForm (ActSeeMchAnsQstStd);
+      Frm_BeginForm (ActSeeMchAnsQstStd);
       Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
       HTM_BUTTON_OnMouseDown_Begin (Txt_View_my_answer,"BT_LINK DAT_SMALL_GREEN");
@@ -3164,7 +3164,7 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match)
    HTM_DIV_Begin ("class=\"MCH_REM_MY_ANS\"");
 
    /***** Begin form *****/
-   Frm_StartForm (ActRemMchAnsQstStd);
+   Frm_BeginForm (ActRemMchAnsQstStd);
    Mch_PutParamMchCod (Match->MchCod);		// Current match being played
    Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
 
@@ -3420,7 +3420,7 @@ static bool Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 	 Sumitting onmousedown instead of default onclick
 	 is necessary in order to be fast
 	 and not lose clicks due to refresh */
-      Frm_StartForm (ActAnsMchQstStd);
+      Frm_BeginForm (ActAnsMchQstStd);
       Mch_PutParamMchCod (Match->MchCod);		// Current match being played
       Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
       Mch_PutParamNumOpt (NumOpt);		// Number of button
@@ -3712,7 +3712,7 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
 			      long MchCod,const char *Icon,const char *Txt)
   {
    /***** Begin form *****/
-   Frm_StartFormId (NextAction,Id);
+   Frm_BeginFormId (NextAction,Id);
    Mch_PutParamMchCod (MchCod);
 
    /***** Put icon with link *****/
@@ -4383,7 +4383,7 @@ void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,boo
    unsigned i;
    unsigned BarWidth = 0;
 
-   /***** Start container *****/
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"MCH_RESULT\"");
 
    /***** Draw bar with a with proportional to the number of clicks *****/

@@ -259,7 +259,7 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
 	 HTM_TH_Begin (1,1,"LM");
 
 	 /* Form to change order */
-	 Frm_StartForm (ActSeeAllExa);
+	 Frm_BeginForm (ActSeeAllExa);
 	 Pag_PutHiddenParamPagNum (Pag_EXAMS,Exams->CurrentPage);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_EXAMS_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
@@ -387,7 +387,7 @@ static void Exa_PutButtonToCreateNewExam (struct Exa_Exams *Exams)
   {
    extern const char *Txt_New_exam;
 
-   Frm_StartForm (ActFrmNewExa);
+   Frm_BeginForm (ActFrmNewExa);
    Exa_PutParamsToCreateNewExam (Exams);
    Btn_PutConfirmButton (Txt_New_exam);
    Frm_EndForm ();
@@ -552,7 +552,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
    /* Exam title */
    Exams->ExaCod = Exam->ExaCod;
    HTM_ARTICLE_Begin (Anchor);
-   Frm_StartForm (ActSeeExa);
+   Frm_BeginForm (ActSeeExa);
    Exa_PutParams (Exams);
    HTM_BUTTON_SUBMIT_Begin (Txt_View_exam,
 			    Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
@@ -583,7 +583,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 
    Exams->ExaCod = Exam->ExaCod;
-   Frm_StartForm (ActSeeExa);
+   Frm_BeginForm (ActSeeExa);
    Exa_PutParams (Exams);
    HTM_BUTTON_SUBMIT_Begin (Txt_Sessions,
 			    Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
@@ -1482,7 +1482,7 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 
    /***** Begin form *****/
    Exams->ExaCod = Exam->ExaCod;
-   Frm_StartForm (ItsANewExam ? ActNewExa :
+   Frm_BeginForm (ItsANewExam ? ActNewExa :
 				ActChgExa);
    Exa_PutParams (Exams);
 

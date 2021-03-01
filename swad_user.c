@@ -2524,7 +2524,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    HTM_DIV_Begin ("class=\"CM\"");
 
    /***** Begin form *****/
-   Frm_StartForm (NextAction);
+   Frm_BeginForm (NextAction);
    if (FuncParams)
       FuncParams ();
 
@@ -2596,7 +2596,7 @@ void Usr_WelcomeUsr (void)
                   /* Mark my birthday as already congratulated */
                   Usr_InsertMyBirthday ();
 
-		  /* Start alert */
+		  /* Begin alert */
 		  Ale_ShowAlertAndButton1 (Ale_INFO,Txt_Happy_birthday_X,
 			                   Gbl.Usrs.Me.UsrDat.FrstName);
 
@@ -2722,7 +2722,7 @@ void Usr_PutFormLogIn (void)
    extern const char *Txt_Log_in;
 
    /***** Link to log in form *****/
-   Frm_StartForm (ActFrmLogIn);
+   Frm_BeginForm (ActFrmLogIn);
    Ico_PutIconLink ("sign-in-alt-white.svg",Txt_Log_in);
    Frm_EndForm ();
   }
@@ -2745,7 +2745,7 @@ void Usr_WriteLoggedUsrHead (void)
    /***** User's role *****/
    if (NumAvailableRoles == 1)
      {
-      Frm_StartForm (ActFrmRolSes);
+      Frm_BeginForm (ActFrmRolSes);
       HTM_BUTTON_SUBMIT_Begin (Txt_Role,
 			       Str_BuildStringStr ("BT_LINK %s",
 						   The_ClassUsr[Gbl.Prefs.Theme]),
@@ -2783,7 +2783,7 @@ void Usr_PutFormLogOut (void)
    extern const char *Txt_Log_out;
 
    /***** Link to log out form *****/
-   Frm_StartForm (ActLogOut);
+   Frm_BeginForm (ActLogOut);
    Ico_PutIconLink ("sign-out-alt-white.svg",Txt_Log_out);
    Frm_EndForm ();
   }
@@ -6265,7 +6265,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
    Grp_ShowFormToSelectSeveralGroups (FuncParams,Args,
                                       Grp_MY_GROUPS);
 
-   /***** Start section with user list *****/
+   /***** Begin section with user list *****/
    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (NumTotalUsrs)
@@ -6282,7 +6282,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
 
 	 /***** Form to select users and select date range ****/
          /* Begin form */
-         Frm_StartForm (NextAction);
+         Frm_BeginForm (NextAction);
 
          /* Hidden parameters */
          Grp_PutParamsCodGrps ();
@@ -7442,7 +7442,7 @@ void Usr_ListDataAdms (void)
 
    /***** Form to select scope *****/
    HTM_DIV_Begin ("class=\"CM\"");
-   Frm_StartForm (ActLstOth);
+   Frm_BeginForm (ActLstOth);
    Usr_PutParamListWithPhotos ();
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_Scope);
@@ -7456,7 +7456,7 @@ void Usr_ListDataAdms (void)
       /****** Show photos? *****/
       HTM_DIV_Begin ("class=\"PREF_CONT\"");
       HTM_DIV_Begin ("class=\"PREF_OFF\"");
-      Frm_StartForm (ActLstOth);
+      Frm_BeginForm (ActLstOth);
       Sco_PutParamCurrentScope (&Gbl.Scope.Current);
       Usr_PutCheckboxListWithPhotos ();
       Frm_EndForm ();
@@ -7915,7 +7915,7 @@ void Usr_SeeGuests (void)
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
       HTM_DIV_Begin ("class=\"CM\"");
-      Frm_StartForm (ActLstGst);
+      Frm_BeginForm (ActLstGst);
       Usr_PutParamsPrefsAboutUsrList ();
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       HTM_TxtColonNBSP (Txt_Scope);
@@ -7925,7 +7925,7 @@ void Usr_SeeGuests (void)
       HTM_DIV_End ();
      }
 
-   /***** Start section with user list *****/
+   /***** Begin section with user list *****/
    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
@@ -7951,7 +7951,7 @@ void Usr_SeeGuests (void)
 
          /* Begin form */
          if (PutForm)
-	    Frm_StartForm (ActDoActOnSevGst);
+	    Frm_BeginForm (ActDoActOnSevGst);
 
          /* Begin table */
 	 HTM_TABLE_BeginWide ();
@@ -8062,7 +8062,7 @@ void Usr_SeeStudents (void)
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
 	 HTM_DIV_Begin ("class=\"CM\"");
-	 Frm_StartForm (ActLstStd);
+	 Frm_BeginForm (ActLstStd);
 	 Usr_PutParamsPrefsAboutUsrList ();
 	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 HTM_TxtColonNBSP (Txt_Scope);
@@ -8080,7 +8080,7 @@ void Usr_SeeStudents (void)
       Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,&Gbl.Scope.Current,
                                          Grp_MY_GROUPS);
 
-   /***** Start section with user list *****/
+   /***** Begin section with user list *****/
    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
@@ -8112,7 +8112,7 @@ void Usr_SeeStudents (void)
          /* Begin form */
          if (PutForm)
            {
-	    Frm_StartForm (ActDoActOnSevStd);
+	    Frm_BeginForm (ActDoActOnSevStd);
 	    Grp_PutParamsCodGrps ();
            }
 
@@ -8243,7 +8243,7 @@ void Usr_SeeTeachers (void)
 
    /***** Form to select scope *****/
    HTM_DIV_Begin ("class=\"CM\"");
-   Frm_StartForm (ActLstTch);
+   Frm_BeginForm (ActLstTch);
    Usr_PutParamsPrefsAboutUsrList ();
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_Scope);
@@ -8257,7 +8257,7 @@ void Usr_SeeTeachers (void)
       Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,&Gbl.Scope.Current,
                                          Grp_MY_GROUPS);
 
-   /***** Start section with user list *****/
+   /***** Begin section with user list *****/
    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (NumUsrs)
@@ -8289,7 +8289,7 @@ void Usr_SeeTeachers (void)
          /* Begin form */
          if (PutForm)
            {
-            Frm_StartForm (ActDoActOnSevTch);
+            Frm_BeginForm (ActDoActOnSevTch);
 	    Grp_PutParamsCodGrps ();
            }
 
@@ -9951,7 +9951,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    else
      {
       /* Begin form to go to user's record card */
-      Frm_StartForm (NextAction);
+      Frm_BeginForm (NextAction);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       HTM_BUTTON_SUBMIT_Begin (UsrDat->FullName,"BT_LINK LT AUTHOR_TXT",NULL);
      }

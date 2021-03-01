@@ -1777,7 +1777,7 @@ static void Med_AlertThirdPartyCookies (void)
    extern const char *Txt_Settings;
 
    /***** Alert to inform about third party cookies *****/
-   /* Start alert */
+   /* Begin alert */
    Ale_ShowAlertAndButton1 (Ale_INFO,Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings);
 
    /* Put form to change cookies preferences */

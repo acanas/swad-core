@@ -464,7 +464,7 @@ void TL_DB_RemoveAllPostsUsr (long UsrCod)
 /********************* Get number of comments in a note **********************/
 /*****************************************************************************/
 
-unsigned TL_DB_GetNumCommentsInNote (long NotCod)
+unsigned TL_DB_GetNumCommsInNote (long NotCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of comments in a note",
@@ -478,7 +478,7 @@ unsigned TL_DB_GetNumCommentsInNote (long NotCod)
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned TL_DB_GetComments (long NotCod,MYSQL_RES **mysql_res)
+unsigned TL_DB_GetComms (long NotCod,MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get comments",
@@ -493,9 +493,9 @@ unsigned TL_DB_GetComments (long NotCod,MYSQL_RES **mysql_res)
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned TL_DB_GetInitialComments (long NotCod,
-				   unsigned NumInitialCommentsToGet,
-				   MYSQL_RES **mysql_res)
+unsigned TL_DB_GetInitialComms (long NotCod,
+				unsigned NumInitialCommsToGet,
+				MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get comments",
@@ -512,7 +512,7 @@ unsigned TL_DB_GetInitialComments (long NotCod,
 		   " ORDER BY tl_pubs.PubCod"
 		   " LIMIT %lu",
 		   NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE,
-		   NumInitialCommentsToGet);
+		   NumInitialCommsToGet);
   }
 
 /*****************************************************************************/
@@ -520,9 +520,8 @@ unsigned TL_DB_GetInitialComments (long NotCod,
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned TL_DB_GetFinalComments (long NotCod,
-				 unsigned NumFinalCommentsToGet,
-				 MYSQL_RES **mysql_res)
+unsigned TL_DB_GetFinalComms (long NotCod,unsigned NumFinalCommsToGet,
+			      MYSQL_RES **mysql_res)
   {
    /***** Get final comments of a note from database *****/
    return (unsigned)
@@ -543,7 +542,7 @@ unsigned TL_DB_GetFinalComments (long NotCod,
 		  ") AS comments"
 		  " ORDER BY PubCod",
 		  NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE,
-		  NumFinalCommentsToGet);
+		  NumFinalCommsToGet);
   }
 
 /*****************************************************************************/
@@ -577,8 +576,8 @@ unsigned TL_DB_GetDataOfCommByCod (long PubCod,MYSQL_RES **mysql_res)
 /******************* Insert comment content in database **********************/
 /*****************************************************************************/
 
-void TL_DB_InsertCommentContent (long PubCod,
-				 const struct TL_Pst_PostContent *Content)
+void TL_DB_InsertCommContent (long PubCod,
+			      const struct TL_Pst_PostContent *Content)
   {
    /***** Insert comment content in database *****/
    DB_QueryINSERT ("can not store comment content",
@@ -595,7 +594,7 @@ void TL_DB_InsertCommentContent (long PubCod,
 /**************** Get code of media associated to comment ********************/
 /*****************************************************************************/
 
-long TL_DB_GetMedCodFromComment (long PubCod)
+long TL_DB_GetMedCodFromComm (long PubCod)
   {
    return TL_DB_GetMedCod ("tl_comments","PubCod",PubCod);
   }
@@ -604,7 +603,7 @@ long TL_DB_GetMedCodFromComment (long PubCod)
 /****************** Remove favs for comment from database ********************/
 /*****************************************************************************/
 
-void TL_DB_RemoveCommentFavs (long PubCod)
+void TL_DB_RemoveCommFavs (long PubCod)
   {
    /***** Remove favs for comment *****/
    DB_QueryDELETE ("can not remove favs for comment",
@@ -617,7 +616,7 @@ void TL_DB_RemoveCommentFavs (long PubCod)
 /***************** Remove content of comment from database *******************/
 /*****************************************************************************/
 
-void TL_DB_RemoveCommentContent (long PubCod)
+void TL_DB_RemoveCommContent (long PubCod)
   {
    /***** Remove content of comment *****/
    DB_QueryDELETE ("can not remove comment content",
@@ -630,7 +629,7 @@ void TL_DB_RemoveCommentContent (long PubCod)
 /***************** Remove comment publication from database ******************/
 /*****************************************************************************/
 
-void TL_DB_RemoveCommentPub (long PubCod)
+void TL_DB_RemoveCommPub (long PubCod)
   {
    /***** Remove comment publication *****/
    DB_QueryDELETE ("can not remove comment",
@@ -647,7 +646,7 @@ void TL_DB_RemoveCommentPub (long PubCod)
 /*********** Remove all comments in all the notes of a given user ************/
 /*****************************************************************************/
 
-void TL_DB_RemoveAllCommentsInAllNotesOf (long UsrCod)
+void TL_DB_RemoveAllCommsInAllNotesOf (long UsrCod)
   {
    /***** Remove all comments in all notes of the user *****/
    DB_QueryDELETE ("can not remove comments",
@@ -664,7 +663,7 @@ void TL_DB_RemoveAllCommentsInAllNotesOf (long UsrCod)
 /*********** Remove all comments made by a given user in any note ************/
 /*****************************************************************************/
 
-void TL_DB_RemoveAllCommentsMadeBy (long UsrCod)
+void TL_DB_RemoveAllCommsMadeBy (long UsrCod)
   {
    /***** Remove all comments made by this user in any note *****/
    DB_QueryDELETE ("can not remove comments",
@@ -1133,7 +1132,7 @@ void TL_DB_RemoveAllFavsToPubsBy (TL_Fav_WhatToFav_t WhatToFav,long UsrCod)
 /*** Remove all favs to all comments in all notes authored by a given user ***/
 /*****************************************************************************/
 
-void TL_DB_RemoveAllFavsToAllCommentsInAllNotesBy (long UsrCod)
+void TL_DB_RemoveAllFavsToAllCommsInAllNotesBy (long UsrCod)
   {
    /***** Remove all favs to all comments
           in all notes authored by this user *****/

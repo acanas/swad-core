@@ -65,21 +65,21 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static unsigned TL_Com_WriteHiddenComments (struct TL_Timeline *Timeline,
-                                            long NotCod,
-				            char IdComments[Frm_MAX_BYTES_ID + 1],
-					    unsigned NumInitialCommentsToGet);
-static void TL_Com_WriteOneCommentInList (const struct TL_Timeline *Timeline,
-                                          MYSQL_RES *mysql_res);
-static void TL_Com_LinkToShowOnlyLatestComments (const char IdComments[Frm_MAX_BYTES_ID + 1]);
-static void TL_Com_LinkToShowPreviousComments (const char IdComments[Frm_MAX_BYTES_ID + 1],
-				               unsigned NumInitialComments);
-static void TL_Com_PutIconToToggleComments (const char *UniqueId,
-                                            const char *Icon,const char *Text);
-static void TL_Com_CheckAndWriteComment (const struct TL_Timeline *Timeline,
-	                                 struct TL_Com_Comment *Com);
-static void TL_Com_WriteComment (const struct TL_Timeline *Timeline,
-	                         struct TL_Com_Comment *Com);
+static unsigned TL_Com_WriteHiddenComms (struct TL_Timeline *Timeline,
+                                         long NotCod,
+				         char IdComms[Frm_MAX_BYTES_ID + 1],
+					 unsigned NumInitialCommsToGet);
+static void TL_Com_WriteOneCommInList (const struct TL_Timeline *Timeline,
+                                       MYSQL_RES *mysql_res);
+static void TL_Com_LinkToShowOnlyLatestComms (const char IdComms[Frm_MAX_BYTES_ID + 1]);
+static void TL_Com_LinkToShowPreviousComms (const char IdComms[Frm_MAX_BYTES_ID + 1],
+				            unsigned NumInitialComms);
+static void TL_Com_PutIconToToggleComms (const char *UniqueId,
+                                         const char *Icon,const char *Text);
+static void TL_Com_CheckAndWriteComm (const struct TL_Timeline *Timeline,
+	                              struct TL_Com_Comment *Com);
+static void TL_Com_WriteComm (const struct TL_Timeline *Timeline,
+	                      struct TL_Com_Comment *Com);
 static void TL_Com_ShowAuthorPhoto (struct UsrData *UsrDat);
 static void TL_Com_WriteAuthorTimeAndContent (struct TL_Com_Comment *Com,
                                               const struct UsrData *UsrDat);
@@ -89,34 +89,44 @@ static void TL_Com_WriteButtons (const struct TL_Timeline *Timeline,
 	                         const struct TL_Com_Comment *Com,
                                  const struct UsrData *UsrDat);
 
-static void TL_Com_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
-	                                   long PubCod);
+static void TL_Com_PutFormToRemoveComm (const struct TL_Timeline *Timeline,
+	                                long PubCod);
 
-static long TL_Com_ReceiveComment (void);
+static long TL_Com_ReceiveComm (void);
 
-static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline);
-static void TL_Com_PutParamsRemoveComment (void *Timeline);
-static void TL_Com_RemoveComment (void);
+static void TL_Com_RequestRemovalComm (struct TL_Timeline *Timeline);
+static void TL_Com_PutParamsRemoveComm (void *Timeline);
+static void TL_Com_RemoveComm (void);
 
-static void TL_Com_GetDataOfCommentFromRow (MYSQL_ROW row,
-                                            struct TL_Com_Comment *Com);
+static void TL_Com_GetDataOfCommFromRow (MYSQL_ROW row,
+                                         struct TL_Com_Comment *Com);
 
-static void TL_Com_ResetComment (struct TL_Com_Comment *Com);
+static void TL_Com_ResetComm (struct TL_Com_Comment *Com);
 
 /*****************************************************************************/
 /********* Put an icon to toggle on/off the form to comment a note ***********/
 /*****************************************************************************/
 
-void TL_Com_PutIconToToggleComment (const char UniqueId[Frm_MAX_BYTES_ID + 1])
+void TL_Com_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1])
   {
    extern const char *Txt_Comment;
 
    /***** Link to toggle on/off the form to comment a note *****/
+   /* Begin container */
    HTM_DIV_Begin ("id=\"%s_ico\" class=\"TL_ICO_COM_OFF\"",UniqueId);
-   HTM_A_Begin ("href=\"\" onclick=\"toggleNewComment ('%s');return false;\"",
-                UniqueId);
-   Ico_PutIcon ("comment-regular.svg",Txt_Comment,"CONTEXT_ICO_16x16");
-   HTM_A_End ();
+
+      /* Begin anchor */
+      HTM_A_Begin ("href=\"\" onclick=\"toggleNewComment ('%s');"
+	                               "return false;\"",
+		   UniqueId);
+
+         /* Icon to toggle comment */
+	 Ico_PutIcon ("comment-regular.svg",Txt_Comment,"CONTEXT_ICO_16x16");
+
+      /* End anchor */
+      HTM_A_End ();
+
+   /* End container */
    HTM_DIV_End ();
   }
 
@@ -124,13 +134,18 @@ void TL_Com_PutIconToToggleComment (const char UniqueId[Frm_MAX_BYTES_ID + 1])
 /********** Put an icon to toggle on/off the form to comment a note **********/
 /*****************************************************************************/
 
-void TL_Com_PutIconCommentDisabled (void)
+void TL_Com_PutIconCommDisabled (void)
   {
    extern const char *Txt_Comment;
 
    /***** Disabled icon to comment a note *****/
+   /* Begin container */
    HTM_DIV_Begin ("class=\"TL_ICO_COM_OFF TL_ICO_DISABLED\"");
-   Ico_PutIcon ("edit.svg",Txt_Comment,"ICO16x16");
+
+      /* Disabled icon */
+      Ico_PutIcon ("edit.svg",Txt_Comment,"ICO16x16");
+
+   /* End container */
    HTM_DIV_End ();
   }
 
@@ -138,44 +153,44 @@ void TL_Com_PutIconCommentDisabled (void)
 /************************* Form to comment a note ****************************/
 /*****************************************************************************/
 
-void TL_Com_PutHiddenFormToWriteNewComment (const struct TL_Timeline *Timeline,
-	                                    long NotCod,
-                                            const char IdNewComment[Frm_MAX_BYTES_ID + 1])
+void TL_Com_PutHiddenFormToWriteNewComm (const struct TL_Timeline *Timeline,
+	                                 long NotCod,
+                                         const char IdNewComm[Frm_MAX_BYTES_ID + 1])
   {
    extern const char *Txt_New_TIMELINE_comment;
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
 
-   /***** Start container *****/
+   /***** Begin container *****/
    HTM_DIV_Begin ("id=\"%s\" class=\"TL_FORM_NEW_COM TL_RIGHT_WIDTH\""
 		  " style=\"display:none;\"",
-	          IdNewComment);
+	          IdNewComm);
 
-   /***** Left: write author's photo (my photo) *****/
-   HTM_DIV_Begin ("class=\"TL_COM_PHOTO\"");
-   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
-					             NULL,
-		     "PHOTO30x40",Pho_ZOOM,true);	// Use unique id
-   HTM_DIV_End ();
+      /***** Left: write author's photo (my photo) *****/
+      HTM_DIV_Begin ("class=\"TL_COM_PHOTO\"");
+	 ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
+	 Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
+							   NULL,
+			   "PHOTO30x40",Pho_ZOOM,true);	// Use unique id
+      HTM_DIV_End ();
 
-   /***** Right: form to write the comment *****/
-   /* Start right container */
-   HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
+      /***** Right: form to write the comment *****/
+      /* Begin right container */
+      HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
 
-   /* Begin form to write the post */
-   TL_Frm_FormStart (Timeline,TL_Frm_RECEIVE_COMM);
-   TL_Not_PutHiddenParamNotCod (NotCod);
+	 /* Begin form to write the post */
+	 TL_Frm_BeginForm (Timeline,TL_Frm_RECEIVE_COMM);
+	 TL_Not_PutHiddenParamNotCod (NotCod);
 
-   /* Textarea and button */
-   TL_Pst_PutTextarea (Txt_New_TIMELINE_comment,
-	               "TL_COM_TEXTAREA TL_COMM_WIDTH");
+	    /* Textarea and button */
+	    TL_Pst_PutTextarea (Txt_New_TIMELINE_comment,
+				"TL_COM_TEXTAREA TL_COMM_WIDTH");
 
-   /* End form */
-   Frm_EndForm ();
+	 /* End form */
+	 TL_Frm_EndForm ();
 
-   /* End right container */
-   HTM_DIV_End ();
+      /* End right container */
+      HTM_DIV_End ();
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -185,42 +200,42 @@ void TL_Com_PutHiddenFormToWriteNewComment (const struct TL_Timeline *Timeline,
 /*********************** Write comments in a note ****************************/
 /*****************************************************************************/
 
-void TL_Com_WriteCommentsInNote (const struct TL_Timeline *Timeline,
-				 const struct TL_Not_Note *Not)
+void TL_Com_WriteCommsInNote (const struct TL_Timeline *Timeline,
+			      const struct TL_Not_Note *Not)
   {
    MYSQL_RES *mysql_res;
-   unsigned NumComments;
-   unsigned NumInitialComments;
-   unsigned NumFinalCommentsToGet;
-   unsigned NumFinalCommentsGot;
+   unsigned NumComms;
+   unsigned NumInitialComms;
+   unsigned NumFinalCommsToGet;
+   unsigned NumFinalCommsGot;
    unsigned NumCom;
-   char IdComments[Frm_MAX_BYTES_ID + 1];
+   char IdComms[Frm_MAX_BYTES_ID + 1];
 
    /***** Get number of comments in note *****/
-   NumComments = TL_DB_GetNumCommentsInNote (Not->NotCod);
+   NumComms = TL_DB_GetNumCommsInNote (Not->NotCod);
 
    /***** Trivial check: if no comments ==> nothing to do *****/
-   if (!NumComments)
+   if (!NumComms)
       return;
 
    /***** Compute how many initial comments will be hidden
           and how many final comments will be visible *****/
    // Never hide only one comment
    // So, the number of comments initially hidden must be 0 or >= 2
-   if (NumComments <= TL_Com_NUM_VISIBLE_COMMENTS + 1)
+   if (NumComms <= TL_Com_NUM_VISIBLE_COMMENTS + 1)
      {
-      NumInitialComments    = 0;
-      NumFinalCommentsToGet = NumComments;
+      NumInitialComms    = 0;
+      NumFinalCommsToGet = NumComms;
      }
    else
      {
-      NumInitialComments    = NumComments - TL_Com_NUM_VISIBLE_COMMENTS;
-      NumFinalCommentsToGet = TL_Com_NUM_VISIBLE_COMMENTS;
+      NumInitialComms    = NumComms - TL_Com_NUM_VISIBLE_COMMENTS;
+      NumFinalCommsToGet = TL_Com_NUM_VISIBLE_COMMENTS;
      }
 
    /***** Get final comments of this note from database *****/
-   NumFinalCommentsGot = TL_DB_GetFinalComments (Not->NotCod,
-				                 NumFinalCommentsToGet,
+   NumFinalCommsGot = TL_DB_GetFinalComms (Not->NotCod,
+				                 NumFinalCommsToGet,
 				                 &mysql_res);
    /*
       Before clicking "See prev..."    -->    After clicking "See prev..."
@@ -265,30 +280,28 @@ void TL_Com_WriteCommentsInNote (const struct TL_Timeline *Timeline,
    |_________________________________|     |_________________________________|
    */
    /***** Link to show initial hidden comments *****/
-   if (NumInitialComments)
+   if (NumInitialComms)
      {
       /***** Create unique id for list of hidden comments *****/
-      Frm_SetUniqueId (IdComments);
+      Frm_SetUniqueId (IdComms);
 
       /***** Link (initially hidden) to show only the latest comments *****/
-      TL_Com_LinkToShowOnlyLatestComments (IdComments);
+      TL_Com_LinkToShowOnlyLatestComms (IdComms);
 
       /***** Div which content will be updated via AJAX *****/
-      HTM_DIV_Begin ("id=\"%s\" class=\"TL_RIGHT_WIDTH\"",IdComments);
-      TL_Frm_FormToShowHiddenComments (Not->NotCod,
-				       IdComments,
-				       NumInitialComments);
+      HTM_DIV_Begin ("id=\"%s\" class=\"TL_RIGHT_WIDTH\"",IdComms);
+	 TL_Frm_FormToShowHiddenComms (Not->NotCod,IdComms,NumInitialComms);
       HTM_DIV_End ();
      }
 
    /***** List final visible comments *****/
-   if (NumFinalCommentsGot)
+   if (NumFinalCommsGot)
      {
       HTM_UL_Begin ("class=\"TL_LIST\"");
-      for (NumCom = 0;
-	   NumCom < NumFinalCommentsGot;
-	   NumCom++)
-	 TL_Com_WriteOneCommentInList (Timeline,mysql_res);
+	 for (NumCom = 0;
+	      NumCom < NumFinalCommsGot;
+	      NumCom++)
+	    TL_Com_WriteOneCommInList (Timeline,mysql_res);
       HTM_UL_End ();
      }
 
@@ -300,22 +313,22 @@ void TL_Com_WriteCommentsInNote (const struct TL_Timeline *Timeline,
 /********************** Write hidden comments via AJAX ***********************/
 /*****************************************************************************/
 
-void TL_Com_ShowHiddenCommentsUsr (void)
+void TL_Com_ShowHiddenCommsUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show hidden comments *****/
-   TL_Com_ShowHiddenCommentsGbl ();
+   TL_Com_ShowHiddenCommsGbl ();
   }
 
-void TL_Com_ShowHiddenCommentsGbl (void)
+void TL_Com_ShowHiddenCommsGbl (void)
   {
    struct TL_Timeline Timeline;
    long NotCod;
-   char IdComments[Frm_MAX_BYTES_ID + 1];
-   unsigned NumInitialCommentsToGet;
-   unsigned NumInitialCommentsGot;
+   char IdComms[Frm_MAX_BYTES_ID + 1];
+   unsigned NumInitialCommsToGet;
+   unsigned NumInitialCommsGot;
 
    /***** Reset timeline context *****/
    TL_ResetTimeline (&Timeline);
@@ -325,17 +338,17 @@ void TL_Com_ShowHiddenCommentsGbl (void)
    NotCod = TL_Not_GetParamNotCod ();
 
    /* Get identifier */
-   Par_GetParToText ("IdComments",IdComments,Frm_MAX_BYTES_ID);
+   Par_GetParToText ("IdComments",IdComms,Frm_MAX_BYTES_ID);
 
    /* Get number of comments to get */
-   NumInitialCommentsToGet = (unsigned) Par_GetParToLong ("NumHidCom");
+   NumInitialCommsToGet = (unsigned) Par_GetParToLong ("NumHidCom");
 
    /***** Write HTML inside DIV with hidden comments *****/
-   NumInitialCommentsGot = TL_Com_WriteHiddenComments (&Timeline,
-                                                       NotCod,IdComments,NumInitialCommentsToGet);
+   NumInitialCommsGot =
+   TL_Com_WriteHiddenComms (&Timeline,NotCod,IdComms,NumInitialCommsToGet);
 
    /***** Link to show the first comments *****/
-   TL_Com_LinkToShowPreviousComments (IdComments,NumInitialCommentsGot);
+   TL_Com_LinkToShowPreviousComms (IdComms,NumInitialCommsGot);
   }
 
 /*****************************************************************************/
@@ -343,40 +356,40 @@ void TL_Com_ShowHiddenCommentsGbl (void)
 /*****************************************************************************/
 // Returns the number of comments got
 
-static unsigned TL_Com_WriteHiddenComments (struct TL_Timeline *Timeline,
-                                            long NotCod,
-				            char IdComments[Frm_MAX_BYTES_ID + 1],
-					    unsigned NumInitialCommentsToGet)
+static unsigned TL_Com_WriteHiddenComms (struct TL_Timeline *Timeline,
+                                         long NotCod,
+				         char IdComms[Frm_MAX_BYTES_ID + 1],
+					 unsigned NumInitialCommsToGet)
   {
    MYSQL_RES *mysql_res;
-   unsigned long NumInitialCommentsGot;
+   unsigned long NumInitialCommsGot;
    unsigned long NumCom;
 
    /***** Get comments of this note from database *****/
-   NumInitialCommentsGot = TL_DB_GetInitialComments (NotCod,
-				                     NumInitialCommentsToGet,
-				                     &mysql_res);
+   NumInitialCommsGot = TL_DB_GetInitialComms (NotCod,
+				               NumInitialCommsToGet,
+				               &mysql_res);
 
    /***** List comments *****/
-   HTM_UL_Begin ("id=\"com_%s\" class=\"TL_LIST\"",IdComments);
-   for (NumCom = 0;
-	NumCom < NumInitialCommentsGot;
-	NumCom++)
-      TL_Com_WriteOneCommentInList (Timeline,mysql_res);
+   HTM_UL_Begin ("id=\"com_%s\" class=\"TL_LIST\"",IdComms);
+      for (NumCom = 0;
+	   NumCom < NumInitialCommsGot;
+	   NumCom++)
+	 TL_Com_WriteOneCommInList (Timeline,mysql_res);
    HTM_UL_End ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return NumInitialCommentsGot;
+   return NumInitialCommsGot;
   }
 
 /*****************************************************************************/
 /************************* Write a comment in list ***************************/
 /*****************************************************************************/
 
-static void TL_Com_WriteOneCommentInList (const struct TL_Timeline *Timeline,
-                                          MYSQL_RES *mysql_res)
+static void TL_Com_WriteOneCommInList (const struct TL_Timeline *Timeline,
+                                       MYSQL_RES *mysql_res)
   {
    MYSQL_ROW row;
    struct TL_Com_Comment Com;
@@ -386,11 +399,11 @@ static void TL_Com_WriteOneCommentInList (const struct TL_Timeline *Timeline,
 
    /***** Get data of comment *****/
    row = mysql_fetch_row (mysql_res);
-   TL_Com_GetDataOfCommentFromRow (row,&Com);
+   TL_Com_GetDataOfCommFromRow (row,&Com);
 
    /***** Write comment *****/
    HTM_LI_Begin ("class=\"TL_COM\"");
-   TL_Com_CheckAndWriteComment (Timeline,&Com);
+      TL_Com_CheckAndWriteComm (Timeline,&Com);
    HTM_LI_End ();
 
    /***** Free image *****/
@@ -401,16 +414,16 @@ static void TL_Com_WriteOneCommentInList (const struct TL_Timeline *Timeline,
 /****************** Link to show only the latest comments ********************/
 /*****************************************************************************/
 
-static void TL_Com_LinkToShowOnlyLatestComments (const char IdComments[Frm_MAX_BYTES_ID + 1])
+static void TL_Com_LinkToShowOnlyLatestComms (const char IdComms[Frm_MAX_BYTES_ID + 1])
   {
    extern const char *Txt_See_only_the_latest_COMMENTS;
 
    /***** Icon and text to show only the latest comments ****/
    HTM_DIV_Begin ("id=\"con_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\""
 		  " style=\"display:none;\"",	// Hidden
-		  IdComments);
-   TL_Com_PutIconToToggleComments (IdComments,"angle-down.svg",
-			           Txt_See_only_the_latest_COMMENTS);
+		  IdComms);
+      TL_Com_PutIconToToggleComms (IdComms,"angle-down.svg",
+				   Txt_See_only_the_latest_COMMENTS);
    HTM_DIV_End ();
   }
 
@@ -418,19 +431,19 @@ static void TL_Com_LinkToShowOnlyLatestComments (const char IdComments[Frm_MAX_B
 /********************* Link to show the first comments ***********************/
 /*****************************************************************************/
 
-static void TL_Com_LinkToShowPreviousComments (const char IdComments[Frm_MAX_BYTES_ID + 1],
-				               unsigned NumInitialComments)
+static void TL_Com_LinkToShowPreviousComms (const char IdComms[Frm_MAX_BYTES_ID + 1],
+				            unsigned NumInitialComms)
   {
    extern const char *Txt_See_the_previous_X_COMMENTS;
 
    /***** Icon and text to show only the latest comments ****/
    HTM_DIV_Begin ("id=\"exp_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\""
 	          " style=\"display:none;\"",	// Hidden
-		  IdComments);
-   TL_Com_PutIconToToggleComments (IdComments,"angle-up.svg",
-			           Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
-						        (long) NumInitialComments));
-   Str_FreeString ();
+		  IdComms);
+      TL_Com_PutIconToToggleComms (IdComms,"angle-up.svg",
+				      Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
+							   (long) NumInitialComms));
+      Str_FreeString ();
    HTM_DIV_End ();
   }
 
@@ -438,8 +451,8 @@ static void TL_Com_LinkToShowPreviousComments (const char IdComments[Frm_MAX_BYT
 /********** Put an icon to toggle on/off comments in a publication ***********/
 /*****************************************************************************/
 
-static void TL_Com_PutIconToToggleComments (const char *UniqueId,
-                                            const char *Icon,const char *Text)
+static void TL_Com_PutIconToToggleComms (const char *UniqueId,
+                                         const char *Icon,const char *Text)
   {
    extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
    char *OnClick;
@@ -449,7 +462,7 @@ static void TL_Com_PutIconToToggleComments (const char *UniqueId,
 
    /***** Link to toggle on/off some divs *****/
    HTM_BUTTON_BUTTON_Begin (Text,The_ClassFormLinkInBox[Gbl.Prefs.Theme],OnClick);
-   Ico_PutIconTextLink (Icon,Text);
+      Ico_PutIconTextLink (Icon,Text);
    HTM_BUTTON_End ();
 
    free (OnClick);
@@ -459,8 +472,8 @@ static void TL_Com_PutIconToToggleComments (const char *UniqueId,
 /************************** Check and write comment **************************/
 /*****************************************************************************/
 
-static void TL_Com_CheckAndWriteComment (const struct TL_Timeline *Timeline,
-	                                 struct TL_Com_Comment *Com)
+static void TL_Com_CheckAndWriteComm (const struct TL_Timeline *Timeline,
+	                              struct TL_Com_Comment *Com)
   {
    /*__________________________________________
    | _____  |                      |           | \              \
@@ -487,15 +500,15 @@ static void TL_Com_CheckAndWriteComment (const struct TL_Timeline *Timeline,
      }
 
    /***** Write comment *****/
-   TL_Com_WriteComment (Timeline,Com);
+   TL_Com_WriteComm (Timeline,Com);
   }
 
 /*****************************************************************************/
 /******************************** Write comment ******************************/
 /*****************************************************************************/
 
-static void TL_Com_WriteComment (const struct TL_Timeline *Timeline,
-	                         struct TL_Com_Comment *Com)
+static void TL_Com_WriteComm (const struct TL_Timeline *Timeline,
+	                      struct TL_Com_Comment *Com)
   {
    struct UsrData UsrDat;	// Author of the comment
 
@@ -511,11 +524,11 @@ static void TL_Com_WriteComment (const struct TL_Timeline *Timeline,
    /* Begin container */
    HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
 
-   /* Right top: author's name, time, and content */
-   TL_Com_WriteAuthorTimeAndContent (Com,&UsrDat);
+      /* Right top: author's name, time, and content */
+      TL_Com_WriteAuthorTimeAndContent (Com,&UsrDat);
 
-   /* Right bottom: buttons */
-   TL_Com_WriteButtons (Timeline,Com,&UsrDat);
+      /* Right bottom: buttons */
+      TL_Com_WriteButtons (Timeline,Com,&UsrDat);
 
    /* End container */
    HTM_DIV_End ();
@@ -534,11 +547,16 @@ static void TL_Com_ShowAuthorPhoto (struct UsrData *UsrDat)
    char PhotoURL[PATH_MAX + 1];
 
    /***** Show author's photo *****/
+   /* Begin container */
    HTM_DIV_Begin ("class=\"TL_COM_PHOTO\"");
-   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-				        NULL,
-		     "PHOTO30x40",Pho_ZOOM,true);	// Use unique id
+
+      /* Author's photo */
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+					   NULL,
+			"PHOTO30x40",Pho_ZOOM,true);	// Use unique id
+
+   /* End container */
    HTM_DIV_End ();
   }
 
@@ -569,13 +587,18 @@ static void TL_Com_WriteAuthorName (const struct UsrData *UsrDat)	// Author
    extern const char *Txt_Another_user_s_profile;
 
    /***** Show user's name inside form to go to user's public profile *****/
-   Frm_StartFormUnique (ActSeeOthPubPrf);
+   /* Begin form */
+   Frm_BeginFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-   HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
-			                                 Txt_Another_user_s_profile,
-	                    "BT_LINK TL_COM_AUTHOR TL_COMM_AUTHOR_WIDTH DAT_BOLD",NULL);
-   HTM_Txt (UsrDat->FullName);
-   HTM_BUTTON_End ();
+
+      /* Author's name */
+      HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
+							    Txt_Another_user_s_profile,
+			       "BT_LINK TL_COM_AUTHOR TL_COMM_AUTHOR_WIDTH DAT_BOLD",NULL);
+	 HTM_Txt (UsrDat->FullName);
+      HTM_BUTTON_End ();
+
+   /* End form */
    Frm_EndForm ();
   }
 
@@ -589,7 +612,7 @@ static void TL_Com_WriteContent (struct TL_Com_Comment *Com)
    if (Com->Content.Txt[0])
      {
       HTM_DIV_Begin ("class=\"TL_TXT\"");
-      Msg_WriteMsgContent (Com->Content.Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
+	 Msg_WriteMsgContent (Com->Content.Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
       HTM_DIV_End ();
      }
 
@@ -613,17 +636,17 @@ static void TL_Com_WriteButtons (const struct TL_Timeline *Timeline,
    /***** Begin buttons container *****/
    HTM_DIV_Begin ("class=\"TL_FOOT TL_COMM_WIDTH\"");
 
-   /***** Foot column 1: fav zone *****/
-   HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"TL_FAV_COM TL_FAV_WIDTH\"",
-		  Gbl.UniqueNameEncrypted,NumDiv);
-   TL_Fav_PutIconToFavUnfComment (Com,TL_Usr_SHOW_FEW_USRS);
-   HTM_DIV_End ();
+      /***** Foot column 1: fav zone *****/
+      HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"TL_FAV_COM TL_FAV_WIDTH\"",
+		     Gbl.UniqueNameEncrypted,NumDiv);
+	 TL_Fav_PutIconToFavUnfComm (Com,TL_Usr_SHOW_FEW_USRS);
+      HTM_DIV_End ();
 
-   /***** Foot column 2: icon to remove this comment *****/
-   HTM_DIV_Begin ("class=\"TL_REM\"");
-   if (Usr_ItsMe (UsrDat->UsrCod))	// I am the author
-      TL_Com_PutFormToRemoveComment (Timeline,Com->PubCod);
-   HTM_DIV_End ();
+      /***** Foot column 2: icon to remove this comment *****/
+      HTM_DIV_Begin ("class=\"TL_REM\"");
+      if (Usr_ItsMe (UsrDat->UsrCod))	// I am the author
+	 TL_Com_PutFormToRemoveComm (Timeline,Com->PubCod);
+      HTM_DIV_End ();
 
    /***** End buttons container *****/
    HTM_DIV_End ();
@@ -633,23 +656,28 @@ static void TL_Com_WriteButtons (const struct TL_Timeline *Timeline,
 /************************* Form to remove comment ****************************/
 /*****************************************************************************/
 
-static void TL_Com_PutFormToRemoveComment (const struct TL_Timeline *Timeline,
+static void TL_Com_PutFormToRemoveComm (const struct TL_Timeline *Timeline,
 	                                   long PubCod)
   {
    extern const char *Txt_Remove;
 
    /***** Form to remove publication *****/
-   TL_Frm_FormStart (Timeline,TL_Frm_REQ_REM_COMM);
+   /* Begin form */
+   TL_Frm_BeginForm (Timeline,TL_Frm_REQ_REM_COMM);
    TL_Pub_PutHiddenParamPubCod (PubCod);
-   Ico_PutIconLink ("trash.svg",Txt_Remove);
-   Frm_EndForm ();
+
+      /* Icon to remove */
+      Ico_PutIconLink ("trash.svg",Txt_Remove);
+
+   /* End form */
+   TL_Frm_EndForm ();
   }
 
 /*****************************************************************************/
 /******************************* Comment a note ******************************/
 /*****************************************************************************/
 
-void TL_Com_ReceiveCommentUsr (void)
+void TL_Com_ReceiveCommUsr (void)
   {
    struct TL_Timeline Timeline;
    long NotCod;
@@ -663,19 +691,19 @@ void TL_Com_ReceiveCommentUsr (void)
    /***** Show user's profile *****/
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
 
-   /***** Receive comment in a note
-          and write updated timeline after commenting (user) *****/
-   NotCod = TL_Com_ReceiveComment ();
-   TL_ShowTimelineUsrHighlightingNot (&Timeline,NotCod);
+      /***** Receive comment in a note
+	     and write updated timeline after commenting (user) *****/
+      NotCod = TL_Com_ReceiveComm ();
+      TL_ShowTimelineUsrHighlightingNot (&Timeline,NotCod);
 
    /***** End section *****/
    HTM_SECTION_End ();
   }
 
-void TL_Com_ReceiveCommentGbl (void)
+void TL_Com_ReceiveCommGbl (void)
   {
    struct TL_Timeline Timeline;
    long NotCod;
@@ -684,13 +712,13 @@ void TL_Com_ReceiveCommentGbl (void)
    TL_InitTimelineGbl (&Timeline);
 
    /***** Receive comment in a note *****/
-   NotCod = TL_Com_ReceiveComment ();
+   NotCod = TL_Com_ReceiveComm ();
 
    /***** Write updated timeline after commenting (global) *****/
    TL_ShowTimelineGblHighlightingNot (&Timeline,NotCod);
   }
 
-static long TL_Com_ReceiveComment (void)
+static long TL_Com_ReceiveComm (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    struct TL_Pst_PostContent Content;
@@ -736,7 +764,7 @@ static long TL_Com_ReceiveComment (void)
       TL_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
 
       /* Insert comment content in the database */
-      TL_DB_InsertCommentContent (Pub.PubCod,&Content);
+      TL_DB_InsertCommContent (Pub.PubCod,&Content);
 
       /***** Store notifications about the new comment *****/
       Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,Pub.PubCod);
@@ -768,14 +796,14 @@ void TL_Com_RequestRemComUsr (void)
    /***** Show user's profile *****/
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
 
-   /***** Request the removal of comment in note *****/
-   TL_Com_RequestRemovalComment (&Timeline);
+      /***** Request the removal of comment in note *****/
+      TL_Com_RequestRemovalComm (&Timeline);
 
-   /***** Write timeline again (user) *****/
-   TL_ShowTimelineUsr (&Timeline);
+      /***** Write timeline again (user) *****/
+      TL_ShowTimelineUsr (&Timeline);
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -789,13 +817,13 @@ void TL_Com_RequestRemComGbl (void)
    TL_InitTimelineGbl (&Timeline);
 
    /***** Request the removal of comment in note *****/
-   TL_Com_RequestRemovalComment (&Timeline);
+   TL_Com_RequestRemovalComm (&Timeline);
 
    /***** Write timeline again (global) *****/
    TL_ShowNoteAndTimelineGbl (&Timeline);
   }
 
-static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline)
+static void TL_Com_RequestRemovalComm (struct TL_Timeline *Timeline)
   {
    extern const char *Txt_The_comment_no_longer_exists;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
@@ -828,24 +856,24 @@ static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline)
    /* Begin alert */
    TL_Frm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_comment);
 
-   /* Show comment */
-   Box_BoxBegin (NULL,NULL,
-		 NULL,NULL,
-		 NULL,Box_NOT_CLOSABLE);
+      /* Show comment */
+      Box_BoxBegin (NULL,NULL,
+		    NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
 
-   HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
-   HTM_DIV_End ();
+	 HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
+	 HTM_DIV_End ();
 
-   HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
-   TL_Com_CheckAndWriteComment (Timeline,&Com);
-   HTM_DIV_End ();
+	 HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
+	    TL_Com_CheckAndWriteComm (Timeline,&Com);
+	 HTM_DIV_End ();
 
-   Box_BoxEnd ();
+      Box_BoxEnd ();
 
    /* End alert */
    Timeline->PubCod = Com.PubCod;	// Publication to be removed
    TL_Frm_EndAlertRemove (Timeline,TL_Frm_REM_COMM,
-			  TL_Com_PutParamsRemoveComment);
+			  TL_Com_PutParamsRemoveComm);
 
    /***** Free media *****/
    Med_MediaDestructor (&Com.Content.Media);
@@ -855,7 +883,7 @@ static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline)
 /******************** Put parameters to remove a comment *********************/
 /*****************************************************************************/
 
-static void TL_Com_PutParamsRemoveComment (void *Timeline)
+static void TL_Com_PutParamsRemoveComm (void *Timeline)
   {
    if (Timeline)
      {
@@ -884,14 +912,14 @@ void TL_Com_RemoveComUsr (void)
    /***** Show user's profile *****/
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
 
-   /***** Remove a comment *****/
-   TL_Com_RemoveComment ();
+      /***** Remove a comment *****/
+      TL_Com_RemoveComm ();
 
-   /***** Write updated timeline after removing (user) *****/
-   TL_ShowTimelineUsr (&Timeline);
+      /***** Write updated timeline after removing (user) *****/
+      TL_ShowTimelineUsr (&Timeline);
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -905,13 +933,13 @@ void TL_Com_RemoveComGbl (void)
    TL_InitTimelineGbl (&Timeline);
 
    /***** Remove a comment *****/
-   TL_Com_RemoveComment ();
+   TL_Com_RemoveComm ();
 
    /***** Write updated timeline after removing (global) *****/
    TL_ShowNoteAndTimelineGbl (&Timeline);
   }
 
-static void TL_Com_RemoveComment (void)
+static void TL_Com_RemoveComm (void)
   {
    extern const char *Txt_The_comment_no_longer_exists;
    extern const char *Txt_Comment_removed;
@@ -942,13 +970,13 @@ static void TL_Com_RemoveComment (void)
 
    /***** Remove media associated to comment
 	  and delete comment from database *****/
-   TL_Com_RemoveCommentMediaAndDBEntries (Com.PubCod);
+   TL_Com_RemoveCommMediaAndDBEntries (Com.PubCod);
 
    /***** Free media *****/
    Med_MediaDestructor (&Com.Content.Media);
 
    /***** Reset fields of comment *****/
-   TL_Com_ResetComment (&Com);
+   TL_Com_ResetComm (&Com);
 
    /***** Message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Comment_removed);
@@ -958,10 +986,10 @@ static void TL_Com_RemoveComment (void)
 /*************** Remove comment media and database entries *******************/
 /*****************************************************************************/
 
-void TL_Com_RemoveCommentMediaAndDBEntries (long PubCod)
+void TL_Com_RemoveCommMediaAndDBEntries (long PubCod)
   {
    /***** Remove media associated to comment *****/
-   Med_RemoveMedia (TL_DB_GetMedCodFromComment (PubCod));
+   Med_RemoveMedia (TL_DB_GetMedCodFromComm (PubCod));
 
    /***** Mark possible notifications on this comment as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,PubCod);
@@ -969,13 +997,13 @@ void TL_Com_RemoveCommentMediaAndDBEntries (long PubCod)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
 
    /***** Remove favs for this comment *****/
-   TL_DB_RemoveCommentFavs (PubCod);
+   TL_DB_RemoveCommFavs (PubCod);
 
    /***** Remove content of this comment *****/
-   TL_DB_RemoveCommentContent (PubCod);
+   TL_DB_RemoveCommContent (PubCod);
 
    /***** Remove this comment publication *****/
-   TL_DB_RemoveCommentPub (PubCod);
+   TL_DB_RemoveCommPub (PubCod);
   }
 
 /*****************************************************************************/
@@ -991,20 +1019,20 @@ void TL_Com_GetDataOfCommByCod (struct TL_Com_Comment *Com)
    if (Com->PubCod <= 0)
      {
       /***** Reset fields of comment *****/
-      TL_Com_ResetComment (Com);
+      TL_Com_ResetComm (Com);
       return;
      }
 
    /***** Get data of comment from database *****/
    if (TL_DB_GetDataOfCommByCod (Com->PubCod,&mysql_res))
      {
-      /***** Get data of comment *****/
+      /* Get data of comment */
       row = mysql_fetch_row (mysql_res);
-      TL_Com_GetDataOfCommentFromRow (row,Com);
+      TL_Com_GetDataOfCommFromRow (row,Com);
      }
    else
-      /***** Reset fields of comment *****/
-      TL_Com_ResetComment (Com);
+      /* Reset fields of comment */
+      TL_Com_ResetComm (Com);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1014,8 +1042,8 @@ void TL_Com_GetDataOfCommByCod (struct TL_Com_Comment *Com)
 /********************** Get data of comment from row *************************/
 /*****************************************************************************/
 
-static void TL_Com_GetDataOfCommentFromRow (MYSQL_ROW row,
-                                            struct TL_Com_Comment *Com)
+static void TL_Com_GetDataOfCommFromRow (MYSQL_ROW row,
+                                         struct TL_Com_Comment *Com)
   {
    /*
    row[0]: PubCod
@@ -1048,7 +1076,7 @@ static void TL_Com_GetDataOfCommentFromRow (MYSQL_ROW row,
 /************************** Reset fields of comment **************************/
 /*****************************************************************************/
 
-static void TL_Com_ResetComment (struct TL_Com_Comment *Com)
+static void TL_Com_ResetComm (struct TL_Com_Comment *Com)
   {
    Com->PubCod         =
    Com->UsrCod         =

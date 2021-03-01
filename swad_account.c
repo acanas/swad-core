@@ -158,7 +158,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    Ale_ShowAlert (Ale_INFO,Txt_If_you_think_you_may_have_been_registered_);
 
    /***** Form to request user's ID for possible account already created *****/
-   Frm_StartForm (ActChkUsrAcc);
+   Frm_BeginForm (ActChkUsrAcc);
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_ID);
    HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",HTM_DONT_SUBMIT_ON_CHANGE,
@@ -168,7 +168,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    Frm_EndForm ();
 
    /***** Form to skip this step *****/
-   Frm_StartForm (ActCreMyAcc);
+   Frm_BeginForm (ActCreMyAcc);
    Btn_PutConfirmButton (Txt_Skip_this_step);
    Frm_EndForm ();
 
@@ -312,7 +312,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
 
    /***** Button to login with this account *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Frm_StartForm (ActLogInNew);
+   Frm_BeginForm (ActLogInNew);
    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    Btn_PutCreateButtonInline (Txt_Its_me);
    Frm_EndForm ();
@@ -366,7 +366,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutAr
    char NewNickWithArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1];
 
    /***** Begin form to enter some data of the new user *****/
-   Frm_StartForm (ActCreUsrAcc);
+   Frm_BeginForm (ActCreUsrAcc);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Create_account,
@@ -437,7 +437,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
    Str_FreeString ();
 
    /***** Button to go to request the creation of a new account *****/
-   Frm_StartForm (ActFrmMyAcc);
+   Frm_BeginForm (ActFrmMyAcc);
    Btn_PutCreateButton (Txt_Create_account);
    Frm_EndForm ();
 
@@ -488,7 +488,7 @@ void Acc_ShowFormChgMyAccount (void)
         }
      }
 
-   /***** Start container for this user *****/
+   /***** Begin container for this user *****/
    HTM_DIV_Begin ("class=\"REC_USR\"");
 
    /***** Show form to change my password and my nickname ****/
@@ -503,7 +503,7 @@ void Acc_ShowFormChgMyAccount (void)
    ID_ShowFormChangeMyID (IShouldFillInMyIDNow);
    HTM_DIV_End ();
 
-   /***** Start container for this user *****/
+   /***** Begin container for this user *****/
    HTM_DIV_End ();
   }
 
@@ -527,7 +527,7 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
 				  &Gbl.Usrs.Other.UsrDat,NULL);
 
-	 /***** Start container for this user *****/
+	 /***** Begin container for this user *****/
 	 HTM_DIV_Begin ("class=\"REC_USR\"");
 
 	 /***** Show form to change password and nickname *****/
@@ -542,7 +542,7 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 	 ID_ShowFormChangeOtherUsrID ();
 	 HTM_DIV_End ();
 
-	 /***** Start container for this user *****/
+	 /***** Begin container for this user *****/
 	 HTM_DIV_End ();
 	}
       else
@@ -944,14 +944,14 @@ void Acc_AskIfRemoveMyAccount (void)
    extern const char *Txt_Eliminate_my_user_account;
 
    /***** Show question and button to remove my user account *****/
-   /* Start alert */
+   /* Begin alert */
    Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_completely_eliminate_your_user_account);
 
    /* Show my record */
    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Me.UsrDat);
 
    /* Show form to request confirmation */
-   Frm_StartForm (ActRemMyAcc);
+   Frm_BeginForm (ActRemMyAcc);
    Pwd_AskForConfirmationOnDangerousAction ();
    Btn_PutRemoveButton (Txt_Eliminate_my_user_account);
    Frm_EndForm ();
@@ -973,14 +973,14 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
    if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       /***** Show question and button to remove user account *****/
-      /* Start alert */
+      /* Begin alert */
       Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_completely_eliminate_the_following_user);
 
       /* Show user's record */
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
       /* Show form to request confirmation */
-      Frm_StartForm (ActRemUsrGbl);
+      Frm_BeginForm (ActRemUsrGbl);
       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       Pwd_AskForConfirmationOnDangerousAction ();
       Btn_PutRemoveButton (Txt_Eliminate_user_account);

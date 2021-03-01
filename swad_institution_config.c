@@ -368,7 +368,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
       Cty_GetBasicListOfCountries ();
 
       /* Put form to select country */
-      Frm_StartForm (ActChgInsCtyCfg);
+      Frm_BeginForm (ActChgInsCtyCfg);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"OthCtyCod\" name=\"OthCtyCod\""
 		        " class=\"INPUT_SHORT_NAME\"");
@@ -388,7 +388,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
      {
       if (!PrintView)
 	{
-         Frm_StartFormGoTo (ActSeeCtyInf);
+         Frm_BeginFormGoTo (ActSeeCtyInf);
          Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
 	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 				  "BT_LINK LT DAT",NULL);

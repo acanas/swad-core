@@ -62,8 +62,8 @@ extern struct Globals Gbl;
 static void TL_Fav_FavNote (struct TL_Not_Note *Not);
 static void TL_Fav_UnfNote (struct TL_Not_Note *Not);
 
-static void TL_Fav_FavComment (struct TL_Com_Comment *Com);
-static void TL_Fav_UnfComment (struct TL_Com_Comment *Com);
+static void TL_Fav_FavComm (struct TL_Com_Comment *Com);
+static void TL_Fav_UnfComm (struct TL_Com_Comment *Com);
 
 static void TL_Fav_PutDisabledIconFav (unsigned NumFavs);
 static void TL_Fav_PutFormToFavUnfNote (long NotCod);
@@ -144,12 +144,12 @@ void TL_Fav_PutIconToFavUnfNote (const struct TL_Not_Note *Not,
   {
    /***** Put form to fav/unfav this note *****/
    HTM_DIV_Begin ("class=\"TL_ICO\"");
-   if (Not->Unavailable ||		// Unavailable notes can not be favourited
-       Usr_ItsMe (Not->UsrCod))		// I am the author
-      /* Put disabled icon */
-      TL_Fav_PutDisabledIconFav (Not->NumFavs);
-   else					// Available and I am not the author
-      TL_Fav_PutFormToFavUnfNote (Not->NotCod);
+      if (Not->Unavailable ||		// Unavailable notes can not be favourited
+	  Usr_ItsMe (Not->UsrCod))		// I am the author
+	 /* Put disabled icon */
+	 TL_Fav_PutDisabledIconFav (Not->NumFavs);
+      else					// Available and I am not the author
+	 TL_Fav_PutFormToFavUnfNote (Not->NotCod);
    HTM_DIV_End ();
 
    /***** Show who have marked this note as favourite *****/
@@ -282,59 +282,59 @@ void TL_Fav_ShowAllFaversComGbl (void)
    Med_MediaDestructor (&Com.Content.Media);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
-   TL_Fav_PutIconToFavUnfComment (&Com,TL_Usr_SHOW_ALL_USRS);
+   TL_Fav_PutIconToFavUnfComm (&Com,TL_Usr_SHOW_ALL_USRS);
   }
 
-void TL_Fav_FavCommentUsr (void)
+void TL_Fav_FavCommUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Mark comment as favourite *****/
-   TL_Fav_FavCommentGbl ();
+   TL_Fav_FavCommGbl ();
   }
 
-void TL_Fav_FavCommentGbl (void)
+void TL_Fav_FavCommGbl (void)
   {
    struct TL_Com_Comment Com;
 
    /***** Mark comment as favourite *****/
-   TL_Fav_FavComment (&Com);
+   TL_Fav_FavComm (&Com);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   TL_Fav_PutIconToFavUnfComment (&Com,TL_Usr_SHOW_FEW_USRS);
+   TL_Fav_PutIconToFavUnfComm (&Com,TL_Usr_SHOW_FEW_USRS);
   }
 
-void TL_Fav_UnfCommentUsr (void)
+void TL_Fav_UnfCommUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Unfav a comment previously marked as favourite *****/
-   TL_Fav_UnfCommentGbl ();
+   TL_Fav_UnfCommGbl ();
   }
 
-void TL_Fav_UnfCommentGbl (void)
+void TL_Fav_UnfCommGbl (void)
   {
    struct TL_Com_Comment Com;
 
    /***** Stop marking as favourite a previously favourited comment *****/
-   TL_Fav_UnfComment (&Com);
+   TL_Fav_UnfComm (&Com);
 
    /***** Write HTML inside DIV with form to fav *****/
-   TL_Fav_PutIconToFavUnfComment (&Com,TL_Usr_SHOW_FEW_USRS);
+   TL_Fav_PutIconToFavUnfComm (&Com,TL_Usr_SHOW_FEW_USRS);
   }
 
-void TL_Fav_PutIconToFavUnfComment (const struct TL_Com_Comment *Com,
-                                    TL_Usr_HowManyUsrs_t HowManyUsrs)
+void TL_Fav_PutIconToFavUnfComm (const struct TL_Com_Comment *Com,
+                                 TL_Usr_HowManyUsrs_t HowManyUsrs)
   {
    /***** Put form to fav/unfav this comment *****/
    HTM_DIV_Begin ("class=\"TL_ICO\"");
-   if (Usr_ItsMe (Com->UsrCod))			// I am the author
-      /* Put disabled icon */
-      TL_Fav_PutDisabledIconFav (Com->NumFavs);
-   else				// I am not the author
-      TL_Fav_PutFormToFavUnfComm (Com->PubCod);
+      if (Usr_ItsMe (Com->UsrCod))	// I am the author
+	 /* Put disabled icon */
+	 TL_Fav_PutDisabledIconFav (Com->NumFavs);
+      else				// I am not the author
+	 TL_Fav_PutFormToFavUnfComm (Com->PubCod);
    HTM_DIV_End ();
 
    /***** Show who have marked this comment as favourite *****/
@@ -343,7 +343,7 @@ void TL_Fav_PutIconToFavUnfComment (const struct TL_Com_Comment *Com,
                                       HowManyUsrs);
   }
 
-static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
+static void TL_Fav_FavComm (struct TL_Com_Comment *Com)
   {
    extern const char *Txt_The_comment_no_longer_exists;
 
@@ -403,7 +403,7 @@ static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
    Med_MediaDestructor (&Com->Content.Media);
   }
 
-static void TL_Fav_UnfComment (struct TL_Com_Comment *Com)
+static void TL_Fav_UnfComm (struct TL_Com_Comment *Com)
   {
    extern const char *Txt_The_comment_no_longer_exists;
 
@@ -585,17 +585,17 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedAsFav (TL_Fav_WhatToFav_t WhatToFav,
    /***** Show users *****/
    /* Number of users */
    HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
-   TL_Usr_ShowNumSharersOrFavers (NumFavs);
+      TL_Usr_ShowNumSharersOrFavers (NumFavs);
    HTM_DIV_End ();
 
    /* List users one by one */
    HTM_DIV_Begin ("class=\"TL_USRS\"");
-   TL_Usr_ShowSharersOrFavers (&mysql_res,NumFavs,NumFirstUsrs);
-   if (NumFirstUsrs < NumFavs)		// Not all are shown
-      /* Clickable ellipsis to show all users */
-      TL_Frm_PutFormToSeeAllFaversSharers (Action[WhatToFav],
-                                           ParamFormat[WhatToFav],Cod,
-                                           HowManyUsrs);
+      TL_Usr_ShowSharersOrFavers (&mysql_res,NumFavs,NumFirstUsrs);
+      if (NumFirstUsrs < NumFavs)		// Not all are shown
+	 /* Clickable ellipsis to show all users */
+	 TL_Frm_PutFormToSeeAllFaversSharers (Action[WhatToFav],
+					      ParamFormat[WhatToFav],Cod,
+					      HowManyUsrs);
    HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/

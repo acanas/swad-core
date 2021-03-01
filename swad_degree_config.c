@@ -229,7 +229,7 @@ static void DegCfg_Centre (bool PrintView,bool PutForm)
       Ctr_GetBasicListOfCentres (Gbl.Hierarchy.Ins.InsCod);
 
       /* Put form to select centre */
-      Frm_StartForm (ActChgDegCtrCfg);
+      Frm_BeginForm (ActChgDegCtrCfg);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"OthCtrCod\" name=\"OthCtrCod\""
 			" class=\"INPUT_SHORT_NAME\"");
@@ -249,7 +249,7 @@ static void DegCfg_Centre (bool PrintView,bool PutForm)
      {
       if (!PrintView)
 	{
-         Frm_StartFormGoTo (ActSeeCtrInf);
+         Frm_BeginFormGoTo (ActSeeCtrInf);
          Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
 	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Ctr.ShrtName),
 				  "BT_LINK LT DAT",NULL);
@@ -335,7 +335,7 @@ static void DegCfg_NumCrss (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LB\"");
-   Frm_StartFormGoTo (ActSeeCrs);
+   Frm_BeginFormGoTo (ActSeeCrs);
    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
    HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Courses_of_DEGREE_X,
 					        Gbl.Hierarchy.Deg.ShrtName),

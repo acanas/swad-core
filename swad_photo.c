@@ -326,7 +326,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
 
    /***** Begin form *****/
    if (ItsMe)
-      Frm_StartForm (ActDetMyPho);
+      Frm_BeginForm (ActDetMyPho);
    else
      {
       switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
@@ -342,7 +342,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
 	    NextAction = ActDetOthPho;
 	    break;
 	}
-      Frm_StartForm (NextAction);
+      Frm_BeginForm (NextAction);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
      }
 
@@ -442,7 +442,7 @@ void Pho_ReqRemoveMyPhoto (void)
    if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL))
      {
       /***** Show question and button to remove my photo *****/
-      /* Start alert */
+      /* Begin alert */
       Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_your_photo);
 
       /* Show current photo */
@@ -508,7 +508,7 @@ void Pho_ReqRemoveUsrPhoto (void)
 	 if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL))
 	   {
 	    /***** Show question and button to remove user's photo *****/
-	    /* Start alert */
+	    /* Begin alert */
 	    Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_photo_of_X,
 	                             Gbl.Usrs.Other.UsrDat.FullName);
 
@@ -689,7 +689,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
               {
                NumFacesGreen++;
                if (ItsMe)
-        	  Frm_StartForm (ActUpdMyPho);
+        	  Frm_BeginForm (ActUpdMyPho);
                else
         	 {
                	  switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
@@ -705,7 +705,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
 			NextAction = ActUpdOthPho;
 			break;
 		    }
-		  Frm_StartForm (NextAction);
+		  Frm_BeginForm (NextAction);
                   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
         	 }
                Par_PutHiddenParamString (NULL,"FileName",StrFileName);
@@ -728,7 +728,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
          break;
      }
 
-   /***** Start alert to the user about the number of faces detected in the image*****/
+   /***** Begin alert to the user about the number of faces detected in the image*****/
    if (NumFacesTotal == 0)
       Ale_ShowAlertAndButton1 (Ale_WARNING,Txt_Could_not_detect_any_face_in_front_position_);
    else if (NumFacesTotal == 1)
@@ -888,7 +888,7 @@ static void Pho_UpdatePhoto2 (void)
    unsigned NumPhoto;
    char *Img;
 
-   /***** Start alert *****/
+   /***** Begin alert *****/
    Ale_ShowLastAlertAndButton1 ();
 
    /***** Show the three images resulting of the processing *****/
@@ -1182,9 +1182,9 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    if (PutLinkToPublicProfile)
      {
       if (FormUnique)
-	 Frm_StartFormUnique (ActSeeOthPubPrf);
+	 Frm_BeginFormUnique (ActSeeOthPubPrf);
       else
-	 Frm_StartForm (ActSeeOthPubPrf);
+	 Frm_BeginForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       HTM_BUTTON_SUBMIT_Begin (NULL,"BT_LINK",NULL);
      }
@@ -1790,7 +1790,7 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   Frm_StartForm (ActSeePhoDeg);
+   Frm_BeginForm (ActSeePhoDeg);
    Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
    Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
    Usr_PutParamsPrefsAboutUsrList ();
@@ -1854,7 +1854,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   Frm_StartForm (ActSeePhoDeg);
+   Frm_BeginForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
    Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
    Usr_PutParamsPrefsAboutUsrList ();
@@ -1918,7 +1918,7 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
 
    /* Data */
    HTM_TD_Begin ("class=\"LT\"");
-   Frm_StartForm (ActSeePhoDeg);
+   Frm_BeginForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
    Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
    Usr_PutParamsPrefsAboutUsrList ();
@@ -2010,7 +2010,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
       Mnu_ContextMenuBegin ();
 
       /* Begin form */
-      Frm_StartForm (ActCalPhoDeg);
+      Frm_BeginForm (ActCalPhoDeg);
       Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
       Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
       Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
@@ -2461,7 +2461,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
    /***** Put link to degree *****/
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
-      Frm_StartFormGoTo (ActSeeDegInf);
+      Frm_BeginFormGoTo (ActSeeDegInf);
       Deg_PutParamDegCod (Deg->DegCod);
       HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Deg->FullName),"BT_LINK",NULL);
       Hie_FreeGoToMsg ();

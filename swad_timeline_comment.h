@@ -52,28 +52,28 @@ struct TL_Com_Comment
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_Com_PutIconToToggleComment (const char UniqueId[Frm_MAX_BYTES_ID + 1]);
-void TL_Com_PutIconCommentDisabled (void);
+void TL_Com_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1]);
+void TL_Com_PutIconCommDisabled (void);
 
-void TL_Com_PutHiddenFormToWriteNewComment (const struct TL_Timeline *Timeline,
-	                                    long NotCod,
-                                            const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
+void TL_Com_PutHiddenFormToWriteNewComm (const struct TL_Timeline *Timeline,
+	                                 long NotCod,
+                                         const char IdNewComm[Frm_MAX_BYTES_ID + 1]);
 
-void TL_Com_WriteCommentsInNote (const struct TL_Timeline *Timeline,
-				 const struct TL_Not_Note *Not);
+void TL_Com_WriteCommsInNote (const struct TL_Timeline *Timeline,
+			      const struct TL_Not_Note *Not);
 
-void TL_Com_ShowHiddenCommentsUsr (void);
-void TL_Com_ShowHiddenCommentsGbl (void);
+void TL_Com_ShowHiddenCommsUsr (void);
+void TL_Com_ShowHiddenCommsGbl (void);
 
-void TL_Com_ReceiveCommentUsr (void);
-void TL_Com_ReceiveCommentGbl (void);
+void TL_Com_ReceiveCommUsr (void);
+void TL_Com_ReceiveCommGbl (void);
 
 void TL_Com_RequestRemComUsr (void);
 void TL_Com_RequestRemComGbl (void);
 void TL_Com_RemoveComUsr (void);
 void TL_Com_RemoveComGbl (void);
 
-void TL_Com_RemoveCommentMediaAndDBEntries (long PubCod);
+void TL_Com_RemoveCommMediaAndDBEntries (long PubCod);
 
 void TL_Com_GetDataOfCommByCod (struct TL_Com_Comment *Com);
 

@@ -65,7 +65,7 @@ void Coo_EditMyPrefsOnCookies (void)
    extern const char *Txt_Cookies;
    extern const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites;
 
-   /***** Start section with preferences about cookies *****/
+   /***** Begin section with preferences about cookies *****/
    HTM_SECTION_Begin (Coo_COOKIES_ID);
 
    /***** Begin box and table *****/
@@ -77,7 +77,7 @@ void Coo_EditMyPrefsOnCookies (void)
    /* Begin form */
    Frm_StartFormAnchor (ActChgCooPrf,Coo_COOKIES_ID);
 
-   /* Start container */
+   /* Begin container */
    HTM_DIV_Begin ("class=\"%s\"",
 	          (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies) ? "DAT_N LIGHT_BLUE" :
 								       "DAT");

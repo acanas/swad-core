@@ -474,7 +474,7 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
    unsigned RoleUnsigned;
    bool PutClassSelect;
 
-   Frm_StartForm (ActChgMyRol);
+   Frm_BeginForm (ActChgMyRol);
    PutClassSelect = false;
    if (ClassSelect)
       if (ClassSelect[0])

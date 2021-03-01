@@ -125,7 +125,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
 		    The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
 		    Gbl.RowEvenOdd);
-      Frm_StartForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
+      Frm_BeginForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
                                                ActChgNumRowHeaCrs);	// Course zone
       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
       HTM_LABEL_Begin (NULL);
@@ -143,7 +143,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
 		    The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
 		    Gbl.RowEvenOdd);
-      Frm_StartForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
+      Frm_BeginForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
 	                                       ActChgNumRowFooCrs);	// Course zone
       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
       HTM_LABEL_Begin (NULL);

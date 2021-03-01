@@ -237,7 +237,7 @@ void Mnu_WriteMenuThisTab (void)
 	 HTM_LI_Begin ("class=\"MENU_LIST_ITEM\"");
 
          /***** Begin form and link *****/
-         Frm_StartForm (NumAct);
+         Frm_BeginForm (NumAct);
          HTM_BUTTON_SUBMIT_Begin (Title,
 			          IsTheSelectedAction ? "BT_LINK MENU_OPT_ON" :
 					                "BT_LINK MENU_OPT_OFF",
@@ -288,7 +288,7 @@ void Mnu_PutIconsToSelectMenu (void)
      {
       HTM_DIV_Begin ("class=\"%s\"",Menu == Gbl.Prefs.Menu ? "PREF_ON" :
         	                                             "PREF_OFF");
-      Frm_StartForm (ActChgMnu);
+      Frm_BeginForm (ActChgMnu);
       Par_PutHiddenParamUnsigned (NULL,"Menu",(unsigned) Menu);
       Ico_PutSettingIconLink (Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu]);
       Frm_EndForm ();

@@ -290,7 +290,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 
    /***** Begin form *****/
    Exams->ExaCod = Exam->ExaCod;
-   Frm_StartForm (ActNewExaSet);
+   Frm_BeginForm (ActNewExaSet);
    Exa_PutParams (Exams);
 
    /***** Begin box and table *****/
@@ -2299,7 +2299,7 @@ static void ExaSet_PutButtonToAddNewQuestions (struct Exa_Exams *Exams)
   {
    extern const char *Txt_Add_questions;
 
-   Frm_StartForm (ActReqAddQstExaSet);
+   Frm_BeginForm (ActReqAddQstExaSet);
    ExaSet_PutParamsOneSet (Exams);
    Btn_PutConfirmButtonInline (Txt_Add_questions);
    Frm_EndForm ();

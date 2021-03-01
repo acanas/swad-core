@@ -216,7 +216,7 @@ void Roo_SeeRooms (void)
 	Order++)
      {
       HTM_TH_Begin (1,1,"LM");
-      Frm_StartForm (ActSeeRoo);
+      Frm_BeginForm (ActSeeRoo);
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
       HTM_BUTTON_SUBMIT_Begin (Txt_ROOMS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
       if (Order == Rooms.SelectedOrder)
@@ -306,7 +306,7 @@ void Roo_SeeRooms (void)
    /***** Button to create room *****/
    if (Roo_CheckIfICanCreateRooms ())
      {
-      Frm_StartForm (ActEdiRoo);
+      Frm_BeginForm (ActEdiRoo);
       Btn_PutConfirmButton (Txt_New_room);
       Frm_EndForm ();
      }
@@ -1404,7 +1404,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
    char MACstr[MAC_LENGTH_MAC_ADDRESS + 1];	// MAC address in xx:xx:xx:xx:xx:xx format
 
    /***** Begin form *****/
-   Frm_StartForm (ActNewRoo);
+   Frm_BeginForm (ActNewRoo);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_room,

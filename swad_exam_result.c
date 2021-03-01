@@ -1157,11 +1157,11 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    switch (MeOrOther)
 	      {
 	       case Usr_ME:
-		  Frm_StartForm (ActSeeOneExaResMe);
+		  Frm_BeginForm (ActSeeOneExaResMe);
 		  ExaSes_PutParamsEdit (Exams);
 		  break;
 	       case Usr_OTHER:
-		  Frm_StartForm (ActSeeOneExaResOth);
+		  Frm_BeginForm (ActSeeOneExaResOth);
 		  ExaSes_PutParamsEdit (Exams);
 		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		  break;

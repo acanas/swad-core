@@ -765,7 +765,7 @@ static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
    HTM_TABLE_End ();
 
    /***** Form to end/close this exam print *****/
-   Frm_StartFormId (ActEndExaPrn,"finished");
+   Frm_BeginFormId (ActEndExaPrn,"finished");
    ExaSes_PutParamsEdit (Exams);
    Btn_PutCreateButton (Txt_I_have_finished);
    Frm_EndForm ();
@@ -823,7 +823,7 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
 		  "TEST_MED_SHOW");
 
    /* Answers */
-   Frm_StartFormNoAction ();	// Form that can not be submitted, to avoid enter key to send it
+   Frm_BeginFormNoAction ();	// Form that can not be submitted, to avoid enter key to send it
    ExaPrn_WriteAnswersToFill (Print,NumQst,Question);
    Frm_EndForm ();
 
@@ -1122,7 +1122,7 @@ void ExaPrn_ReceivePrintAnswer (void)
       Ale_ShowAlert (Ale_INFO,Txt_You_dont_have_access_to_the_exam);
 
       /***** Form to end/close this exam print *****/
-      Frm_StartForm (ActEndExaPrn);
+      Frm_BeginForm (ActEndExaPrn);
       ExaSes_PutParamsEdit (&Exams);
       Btn_PutCreateButton (Txt_Continue);
       Frm_EndForm ();

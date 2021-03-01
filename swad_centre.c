@@ -219,7 +219,7 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Ctr_Centre *Ctr,Act_Action_t Acti
                                         const char *ClassLink,const char *ClassLogo)
   {
    /***** Begin form *****/
-   Frm_StartFormGoTo (Action);
+   Frm_BeginFormGoTo (Action);
    Ctr_PutParamCtrCod (Ctr->CtrCod);
 
    /***** Link to action *****/
@@ -307,7 +307,7 @@ static void Ctr_ListCentres (void)
    /***** Button to create centre *****/
    if (Ctr_CheckIfICanCreateCentres ())
      {
-      Frm_StartForm (ActEdiCtr);
+      Frm_BeginForm (ActEdiCtr);
       Btn_PutConfirmButton (Gbl.Hierarchy.Ctrs.Num ? Txt_Create_another_centre :
 	                                                 Txt_Create_centre);
       Frm_EndForm ();
@@ -866,7 +866,7 @@ void Ctr_WriteSelectorOfCentre (void)
    long CtrCod;
 
    /***** Begin form *****/
-   Frm_StartFormGoTo (ActSeeDeg);
+   Frm_BeginFormGoTo (ActSeeDeg);
 
    if (Gbl.Hierarchy.Ins.InsCod > 0)
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
@@ -986,7 +986,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
       HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
-	 Frm_StartForm (ActChgCtrPlc);
+	 Frm_BeginForm (ActChgCtrPlc);
 	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"PlcCod\" class=\"PLC_SEL\"");
@@ -1014,7 +1014,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
       HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
-	 Frm_StartForm (ActRenCtrSho);
+	 Frm_BeginForm (ActRenCtrSho);
 	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
 	 HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
 	                 HTM_SUBMIT_ON_CHANGE,
@@ -1029,7 +1029,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
       HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
-	 Frm_StartForm (ActRenCtrFul);
+	 Frm_BeginForm (ActRenCtrFul);
 	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
 	 HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr->FullName,
 	                 HTM_SUBMIT_ON_CHANGE,
@@ -1044,7 +1044,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
       HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
-	 Frm_StartForm (ActChgCtrWWW);
+	 Frm_BeginForm (ActChgCtrWWW);
 	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
 	 HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
 			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
@@ -1090,7 +1090,7 @@ static void Ctr_ListCentresForEdition (const struct Plc_Places *Places)
       if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM &&
 	  StatusTxt == Ctr_STATUS_PENDING)
 	{
-	 Frm_StartForm (ActChgCtrSta);
+	 Frm_BeginForm (ActChgCtrSta);
 	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"Status\" class=\"INPUT_STATUS\"");
@@ -1595,9 +1595,9 @@ static void Ctr_PutFormToCreateCentre (const struct Plc_Places *Places)
 
    /***** Begin form *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-      Frm_StartForm (ActNewCtr);
+      Frm_BeginForm (ActNewCtr);
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
-      Frm_StartForm (ActReqCtr);
+      Frm_BeginForm (ActReqCtr);
    else
       Lay_NoPermissionExit ();
 
@@ -1719,7 +1719,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 				                       "RM");
       if (OrderSelectable)
 	{
-	 Frm_StartForm (ActSeeCtr);
+	 Frm_BeginForm (ActSeeCtr);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_CENTRES_HELP_ORDER[Order],
 				  Order == Ctr_ORDER_BY_CENTRE ? "BT_LINK LM TIT_TBL" :

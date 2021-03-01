@@ -367,7 +367,7 @@ static void CtyCfg_MapImage (bool PrintView,bool PutLink)
    if (!PrintView && Cty_CheckIfICanEditCountries ())
      {
       HTM_DIV_Begin ("class=\"CM\"");
-      Frm_StartForm (ActChgCtyMapAtt);
+      Frm_BeginForm (ActChgCtyMapAtt);
       HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"3\""
 			  " onchange=\"document.getElementById('%s').submit();return false;\"",
 			  Gbl.Form.Id);
@@ -406,7 +406,7 @@ static void CtyCfg_Platform (bool PrintView)
    HTM_TD_Begin ("class=\"DAT LB\"");
    if (!PrintView)
      {
-      Frm_StartFormGoTo (ActSeeSysInf);
+      Frm_BeginFormGoTo (ActSeeSysInf);
       HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Cfg_PLATFORM_SHORT_NAME),
 			       "BT_LINK LT DAT",NULL);
       Hie_FreeGoToMsg ();
@@ -508,7 +508,7 @@ static void CtyCfg_NumInss (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"LB\"");
-   Frm_StartFormGoTo (ActSeeIns);
+   Frm_BeginFormGoTo (ActSeeIns);
    Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
    HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Institutions_of_COUNTRY_X,
 					        Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),

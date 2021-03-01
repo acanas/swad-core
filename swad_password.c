@@ -279,7 +279,7 @@ void Pwd_ShowFormSendNewPwd (void)
    extern const char *Txt_Get_a_new_password;
 
    /***** Begin form *****/
-   Frm_StartForm (ActSndNewPwd);
+   Frm_BeginForm (ActSndNewPwd);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Forgotten_password,
@@ -662,7 +662,7 @@ void Pwd_ShowFormChgMyPwd (void)
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
    bool IHaveAPasswordInDB = (bool) Gbl.Usrs.Me.UsrDat.Password[0];
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (Pwd_PASSWORD_SECTION_ID);
 
    /***** Begin form *****/
@@ -809,7 +809,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
                  NULL,NULL,
 		 NULL,Box_NOT_CLOSABLE);
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (Pwd_PASSWORD_SECTION_ID);
 
    /***** Show possible alerts *****/

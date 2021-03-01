@@ -211,7 +211,7 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[Cns_MAX_BYTES_WWW + 1];
 
-   /***** Start container *****/
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"REC_WEBS\"");
 
    /***** Show link to public profile *****/
@@ -279,7 +279,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
    char StrName[32];
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (Net_MY_WEBS_ID);
 
    /***** Begin box *****/

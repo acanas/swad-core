@@ -287,7 +287,7 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
 	 HTM_TH_Begin (1,1,"LM");
 
 	 /* Form to change order */
-	 Frm_StartForm (ActSeeAllGam);
+	 Frm_BeginForm (ActSeeAllGam);
 	 Pag_PutHiddenParamPagNum (Pag_GAMES,Games->CurrentPage);
 	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_GAMES_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
@@ -432,7 +432,7 @@ static void Gam_PutButtonToCreateNewGame (struct Gam_Games *Games)
   {
    extern const char *Txt_New_game;
 
-   Frm_StartForm (ActFrmNewGam);
+   Frm_BeginForm (ActFrmNewGam);
    Gam_PutParamsToCreateNewGame (Games);
    Btn_PutConfirmButton (Txt_New_game);
    Frm_EndForm ();
@@ -607,7 +607,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
    /* Game title */
    Games->GamCod = Game->GamCod;
    HTM_ARTICLE_Begin (Anchor);
-   Frm_StartForm (ActSeeGam);
+   Frm_BeginForm (ActSeeGam);
    Gam_PutParams (Games);
    HTM_BUTTON_SUBMIT_Begin (Txt_View_game,
 			    Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
@@ -638,7 +638,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 
    Games->GamCod = Game->GamCod;
-   Frm_StartForm (ActSeeGam);
+   Frm_BeginForm (ActSeeGam);
    Gam_PutParams (Games);
    HTM_BUTTON_SUBMIT_Begin (Txt_Matches,
 			    Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
@@ -1464,7 +1464,7 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 
    /***** Begin form *****/
    Games->GamCod = Game->GamCod;
-   Frm_StartForm (ItsANewGame ? ActNewGam :
+   Frm_BeginForm (ItsANewGame ? ActNewGam :
 				ActChgGam);
    Gam_PutParams (Games);
 
@@ -2201,7 +2201,7 @@ static void Gam_PutButtonToAddNewQuestions (struct Gam_Games *Games)
   {
    extern const char *Txt_Add_questions;
 
-   Frm_StartForm (ActAddOneGamQst);
+   Frm_BeginForm (ActAddOneGamQst);
    Gam_PutParams (Games);
    Btn_PutConfirmButton (Txt_Add_questions);
    Frm_EndForm ();

@@ -161,7 +161,7 @@ void Ban_SeeBanners (void)
    /***** Button to create banner *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
-      Frm_StartForm (ActEdiBan);
+      Frm_BeginForm (ActEdiBan);
       Btn_PutConfirmButton (Txt_New_banner);
       Frm_EndForm ();
      }
@@ -473,7 +473,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 
       /* Banner short name */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActRenBanSho);
+      Frm_BeginForm (ActRenBanSho);
       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
       HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
                       HTM_SUBMIT_ON_CHANGE,
@@ -483,7 +483,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 
       /* Banner full name */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActRenBanFul);
+      Frm_BeginForm (ActRenBanFul);
       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
       HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
                       HTM_SUBMIT_ON_CHANGE,
@@ -493,7 +493,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 
       /* Banner image */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActChgBanImg);
+      Frm_BeginForm (ActChgBanImg);
       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
       HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
                       HTM_SUBMIT_ON_CHANGE,
@@ -503,7 +503,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 
       /* Banner WWW */
       HTM_TD_Begin ("class=\"CM\"");
-      Frm_StartForm (ActChgBanWWW);
+      Frm_BeginForm (ActChgBanWWW);
       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
       HTM_INPUT_URL ("WWW",Ban->WWW,HTM_SUBMIT_ON_CHANGE,
 		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
@@ -904,7 +904,7 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
    extern const char *Txt_Create_banner;
 
    /***** Begin form *****/
-   Frm_StartForm (ActNewBan);
+   Frm_BeginForm (ActNewBan);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_banner,
@@ -1095,7 +1095,7 @@ void Ban_WriteMenuWithBanners (void)
      {
       /* Write data of this banner */
       HTM_DIV_Begin ("class=\"CM\"");
-      Frm_StartForm (ActClkBan);
+      Frm_BeginForm (ActClkBan);
       Ban_PutParamBanCod (Banners.Lst[NumBan].BanCod);
       Par_PutHiddenParamString (NULL,"URL",Banners.Lst[NumBan].WWW);
       HTM_INPUT_IMAGE (Cfg_URL_BANNER_PUBLIC,Banners.Lst[NumBan].Img,

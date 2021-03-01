@@ -88,14 +88,14 @@ static void TL_Not_WriteLocationInHierarchy (const struct TL_Not_Note *Not,
 static void TL_Not_PutFormGoToAction (const struct TL_Not_Note *Not,
                                       const struct For_Forums *Forums);
 
-static void TL_Not_WriteButtonsAndComments (const struct TL_Timeline *Timeline,
-                                            const struct TL_Not_Note *Not,
-                                            const struct UsrData *UsrDat);
-static void TL_Not_WriteButtonToAddAComment (const struct TL_Not_Note *Not,
-                                             const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
-static void TL_Not_WriteFavShaRemAndComments (const struct TL_Timeline *Timeline,
-					      const struct TL_Not_Note *Not,
-					      const struct UsrData *UsrDat);
+static void TL_Not_WriteButtonsAndComms (const struct TL_Timeline *Timeline,
+                                         const struct TL_Not_Note *Not,
+                                         const struct UsrData *UsrDat);
+static void TL_Not_WriteButtonToAddAComm (const struct TL_Not_Note *Not,
+                                          const char IdNewComm[Frm_MAX_BYTES_ID + 1]);
+static void TL_Not_WriteFavShaRemAndComms (const struct TL_Timeline *Timeline,
+					   const struct TL_Not_Note *Not,
+					   const struct UsrData *UsrDat);
 static void TL_Not_WriteFavShaRem (const struct TL_Timeline *Timeline,
                                    const struct TL_Not_Note *Not,
                                    const struct UsrData *UsrDat);
@@ -176,11 +176,11 @@ void TL_Not_ShowHighlightedNote (struct TL_Timeline *Timeline,
    Box_BoxBegin (NULL,NULL,
 		 NULL,NULL,
 		 NULL,Box_CLOSABLE);
-   HTM_DIV_Begin ("class=\"TL_WIDTH TL_NEW_PUB\"");
-   TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,Not,
-		                       TopMessages[NotifyEvent],
-		                       PublisherDat.UsrCod);
-   HTM_DIV_End ();
+      HTM_DIV_Begin ("class=\"TL_WIDTH TL_NEW_PUB\"");
+	 TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,Not,
+					     TopMessages[NotifyEvent],
+					     PublisherDat.UsrCod);
+      HTM_DIV_End ();
    Box_BoxEnd ();
   }
 
@@ -253,21 +253,23 @@ static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod
    PublisherDat.UsrCod = PublisherCod;
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherDat,Usr_DONT_GET_PREFS))	// Really we only need EncryptedUsrCod and FullName
      {
+      /***** Begin container *****/
       HTM_DIV_Begin ("class=\"TL_TOP_CONT TL_TOP_PUBLISHER TL_WIDTH\"");
 
-      /***** Show user's name inside form to go to user's public profile *****/
-      Frm_StartFormUnique (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (PublisherDat.EnUsrCod);
-      HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (PublisherCod) ? Txt_My_public_profile :
-				                          Txt_Another_user_s_profile,
-			       "BT_LINK TL_TOP_PUBLISHER",NULL);
-      HTM_Txt (PublisherDat.FullName);
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
+	 /***** Show user's name inside form to go to user's public profile *****/
+	 Frm_BeginFormUnique (ActSeeOthPubPrf);
+	 Usr_PutParamUsrCodEncrypted (PublisherDat.EnUsrCod);
+	    HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (PublisherCod) ? Txt_My_public_profile :
+								Txt_Another_user_s_profile,
+				     "BT_LINK TL_TOP_PUBLISHER",NULL);
+	       HTM_Txt (PublisherDat.FullName);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
 
-      /***** Show action made *****/
-      HTM_TxtF (" %s:",Txt_TIMELINE_NOTE_TOP_MESSAGES[TopMessage]);
+	 /***** Show action made *****/
+	 HTM_TxtF (" %s:",Txt_TIMELINE_NOTE_TOP_MESSAGES[TopMessage]);
 
+      /***** End container *****/
       HTM_DIV_End ();
      }
 
@@ -296,7 +298,7 @@ static void TL_Not_WriteNote (const struct TL_Timeline *Timeline,
    TL_Not_WriteAuthorTimeAndContent (Not,&UsrDat);
 
    /***** Bottom: buttons and comments *****/
-   TL_Not_WriteButtonsAndComments (Timeline,Not,&UsrDat);
+   TL_Not_WriteButtonsAndComms (Timeline,Not,&UsrDat);
 
    /***** Free memory used for author's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -312,11 +314,16 @@ static void TL_Not_ShowAuthorPhoto (struct UsrData *UsrDat)
    char PhotoURL[PATH_MAX + 1];
 
    /***** Show author's photo *****/
+   /* Begin container */
    HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
-   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-					NULL,
-		     "PHOTO45x60",Pho_ZOOM,true);	// Use unique id
+
+      /* Photo */
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+					   NULL,
+			"PHOTO45x60",Pho_ZOOM,true);	// Use unique id
+
+   /* End container */
    HTM_DIV_End ();
   }
 
@@ -330,14 +337,14 @@ static void TL_Not_WriteAuthorTimeAndContent (const struct TL_Not_Note *Not,
    /***** Begin top container *****/
    HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
 
-   /***** Write author's full name *****/
-   TL_Not_WriteAuthorName (UsrDat);
+      /***** Write author's full name *****/
+      TL_Not_WriteAuthorName (UsrDat);
 
-   /***** Write date and time *****/
-   TL_WriteDateTime (Not->DateTimeUTC);
+      /***** Write date and time *****/
+      TL_WriteDateTime (Not->DateTimeUTC);
 
-   /***** Write content of the note *****/
-   TL_Not_WriteContent (Not);
+      /***** Write content of the note *****/
+      TL_Not_WriteContent (Not);
 
    /***** End top container *****/
    HTM_DIV_End ();
@@ -353,14 +360,19 @@ void TL_Not_WriteAuthorName (const struct UsrData *UsrDat)
    extern const char *Txt_Another_user_s_profile;
 
    /***** Show user's name inside form to go to user's public profile *****/
-   Frm_StartFormUnique (ActSeeOthPubPrf);
+   /* Begin form */
+   Frm_BeginFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-   HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
-				                         Txt_Another_user_s_profile,
-		            "BT_LINK TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH DAT_N_BOLD",
-			    NULL);
-   HTM_Txt (UsrDat->FullName);
-   HTM_BUTTON_End ();
+
+      /* Author's name */
+      HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
+							    Txt_Another_user_s_profile,
+			       "BT_LINK TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH DAT_N_BOLD",
+			       NULL);
+	 HTM_Txt (UsrDat->FullName);
+      HTM_BUTTON_End ();
+
+   /* End form */
    Frm_EndForm ();
   }
 
@@ -402,9 +414,12 @@ static void TL_Not_GetAndWriteNoPost (const struct TL_Not_Note *Not)
       TL_Not_WriteLocationInHierarchy (Not,&Hie,ForumName);
 
    /***** Get and write note summary *****/
+   /* Get note summary */
    TL_Not_GetNoteSummary (Not,SummaryStr);
+
+   /* Write note summary */
    HTM_DIV_Begin ("class=\"TL_TXT\"");
-   HTM_Txt (SummaryStr);
+      HTM_Txt (SummaryStr);
    HTM_DIV_End ();
   }
 
@@ -483,21 +498,21 @@ static void TL_Not_WriteLocationInHierarchy (const struct TL_Not_Note *Not,
       case TL_NOTE_INS_SHA_PUB_FILE:
 	 /* Write location (institution) in hierarchy */
 	 HTM_DIV_Begin ("class=\"TL_LOC\"");
-	 HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Hie->Ins.ShrtName);
+	    HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Hie->Ins.ShrtName);
 	 HTM_DIV_End ();
 	 break;
       case TL_NOTE_CTR_DOC_PUB_FILE:
       case TL_NOTE_CTR_SHA_PUB_FILE:
 	 /* Write location (centre) in hierarchy */
 	 HTM_DIV_Begin ("class=\"TL_LOC\"");
-	 HTM_TxtF ("%s:&nbsp;%s",Txt_Centre,Hie->Ctr.ShrtName);
+	    HTM_TxtF ("%s:&nbsp;%s",Txt_Centre,Hie->Ctr.ShrtName);
 	 HTM_DIV_End ();
 	 break;
       case TL_NOTE_DEG_DOC_PUB_FILE:
       case TL_NOTE_DEG_SHA_PUB_FILE:
 	 /* Write location (degree) in hierarchy */
 	 HTM_DIV_Begin ("class=\"TL_LOC\"");
-	 HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Hie->Deg.ShrtName);
+	    HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Hie->Deg.ShrtName);
 	 HTM_DIV_End ();
 	 break;
       case TL_NOTE_CRS_DOC_PUB_FILE:
@@ -506,13 +521,13 @@ static void TL_Not_WriteLocationInHierarchy (const struct TL_Not_Note *Not,
       case TL_NOTE_NOTICE:
 	 /* Write location (course) in hierarchy */
 	 HTM_DIV_Begin ("class=\"TL_LOC\"");
-	 HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Hie->Crs.ShrtName);
+	    HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Hie->Crs.ShrtName);
 	 HTM_DIV_End ();
 	 break;
       case TL_NOTE_FORUM_POST:
 	 /* Write forum name */
 	 HTM_DIV_Begin ("class=\"TL_LOC\"");
-	 HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
+	    HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
 	 HTM_DIV_End ();
 	 break;
       default:
@@ -590,95 +605,103 @@ static void TL_Not_PutFormGoToAction (const struct TL_Not_Note *Not,
      {
       /***** Do not put form *****/
       HTM_DIV_Begin ("class=\"TL_FORM_OFF\"");
-      HTM_Txt (Txt_TIMELINE_NOTE[Not->NoteType]);
-      if (Not->Unavailable)
-         HTM_TxtF ("&nbsp;(%s)",Txt_not_available);
+	 HTM_Txt (Txt_TIMELINE_NOTE[Not->NoteType]);
+	 if (Not->Unavailable)
+	    HTM_TxtF ("&nbsp;(%s)",Txt_not_available);
       HTM_DIV_End ();
      }
    else			// Not inside another form
      {
+      /***** Begin container *****/
       HTM_DIV_Begin ("class=\"TL_FORM\"");
 
-      /***** Begin form with parameters depending on the type of note *****/
-      switch (Not->NoteType)
-	{
-	 case TL_NOTE_INS_DOC_PUB_FILE:
-	 case TL_NOTE_INS_SHA_PUB_FILE:
-	    Frm_StartFormUnique (TL_DefaultActions[Not->NoteType]);
-	    Brw_PutHiddenParamFilCod (Not->Cod);
-	    if (Not->HieCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
-	       Ins_PutParamInsCod (Not->HieCod);		// Go to another institution
-	    break;
-	 case TL_NOTE_CTR_DOC_PUB_FILE:
-	 case TL_NOTE_CTR_SHA_PUB_FILE:
-	    Frm_StartFormUnique (TL_DefaultActions[Not->NoteType]);
-	    Brw_PutHiddenParamFilCod (Not->Cod);
-	    if (Not->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current centre
-	       Ctr_PutParamCtrCod (Not->HieCod);		// Go to another centre
-	    break;
-	 case TL_NOTE_DEG_DOC_PUB_FILE:
-	 case TL_NOTE_DEG_SHA_PUB_FILE:
-	    Frm_StartFormUnique (TL_DefaultActions[Not->NoteType]);
-	    Brw_PutHiddenParamFilCod (Not->Cod);
-	    if (Not->HieCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
-	       Deg_PutParamDegCod (Not->HieCod);		// Go to another degree
-	    break;
-	 case TL_NOTE_CRS_DOC_PUB_FILE:
-	 case TL_NOTE_CRS_SHA_PUB_FILE:
-	    Frm_StartFormUnique (TL_DefaultActions[Not->NoteType]);
-	    Brw_PutHiddenParamFilCod (Not->Cod);
-	    if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-	       Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
-	    break;
-	 case TL_NOTE_EXAM_ANNOUNCEMENT:
-            Frm_SetAnchorStr (Not->Cod,&Anchor);
-	    Frm_StartFormUniqueAnchor (TL_DefaultActions[Not->NoteType],
-		                       Anchor);	// Locate on this specific exam
-            Frm_FreeAnchorStr (Anchor);
-	    ExaAnn_PutHiddenParamExaCod (Not->Cod);
-	    if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-	       Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
-	    break;
-	 case TL_NOTE_POST:	// Not applicable
-	    return;
-	 case TL_NOTE_FORUM_POST:
-	    Frm_StartFormUnique (For_ActionsSeeFor[Forums->Forum.Type]);
-	    For_PutAllHiddenParamsForum (1,	// Page of threads = first
-                                         1,	// Page of posts   = first
-                                         Forums->ForumSet,
-					 Forums->ThreadsOrder,
-					 Forums->Forum.Location,
-					 Forums->Thread.Selected,
-					 -1L);
-	    if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-	       Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
-	    break;
-	 case TL_NOTE_NOTICE:
-            Frm_SetAnchorStr (Not->Cod,&Anchor);
-	    Frm_StartFormUniqueAnchor (TL_DefaultActions[Not->NoteType],
-				       Anchor);
-            Frm_FreeAnchorStr (Anchor);
-	    Not_PutHiddenParamNotCod (Not->Cod);
-	    if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-	       Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
-	    break;
-	 default:			// Not applicable
-	    return;
-	}
+	 /***** Begin form with parameters depending on the type of note *****/
+	 switch (Not->NoteType)
+	   {
+	    case TL_NOTE_INS_DOC_PUB_FILE:
+	    case TL_NOTE_INS_SHA_PUB_FILE:
+	       Frm_BeginFormUnique (TL_DefaultActions[Not->NoteType]);
+	       Brw_PutHiddenParamFilCod (Not->Cod);
+	       if (Not->HieCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
+		  Ins_PutParamInsCod (Not->HieCod);		// Go to another institution
+	       break;
+	    case TL_NOTE_CTR_DOC_PUB_FILE:
+	    case TL_NOTE_CTR_SHA_PUB_FILE:
+	       Frm_BeginFormUnique (TL_DefaultActions[Not->NoteType]);
+	       Brw_PutHiddenParamFilCod (Not->Cod);
+	       if (Not->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current centre
+		  Ctr_PutParamCtrCod (Not->HieCod);		// Go to another centre
+	       break;
+	    case TL_NOTE_DEG_DOC_PUB_FILE:
+	    case TL_NOTE_DEG_SHA_PUB_FILE:
+	       Frm_BeginFormUnique (TL_DefaultActions[Not->NoteType]);
+	       Brw_PutHiddenParamFilCod (Not->Cod);
+	       if (Not->HieCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
+		  Deg_PutParamDegCod (Not->HieCod);		// Go to another degree
+	       break;
+	    case TL_NOTE_CRS_DOC_PUB_FILE:
+	    case TL_NOTE_CRS_SHA_PUB_FILE:
+	       Frm_BeginFormUnique (TL_DefaultActions[Not->NoteType]);
+	       Brw_PutHiddenParamFilCod (Not->Cod);
+	       if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
+		  Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
+	       break;
+	    case TL_NOTE_EXAM_ANNOUNCEMENT:
+	       Frm_SetAnchorStr (Not->Cod,&Anchor);
+	       Frm_BeginFormUniqueAnchor (TL_DefaultActions[Not->NoteType],
+					  Anchor);	// Locate on this specific exam
+	       Frm_FreeAnchorStr (Anchor);
+	       ExaAnn_PutHiddenParamExaCod (Not->Cod);
+	       if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
+		  Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
+	       break;
+	    case TL_NOTE_POST:	// Not applicable
+	       return;
+	    case TL_NOTE_FORUM_POST:
+	       Frm_BeginFormUnique (For_ActionsSeeFor[Forums->Forum.Type]);
+	       For_PutAllHiddenParamsForum (1,	// Page of threads = first
+					    1,	// Page of posts   = first
+					    Forums->ForumSet,
+					    Forums->ThreadsOrder,
+					    Forums->Forum.Location,
+					    Forums->Thread.Selected,
+					    -1L);
+	       if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
+		  Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
+	       break;
+	    case TL_NOTE_NOTICE:
+	       Frm_SetAnchorStr (Not->Cod,&Anchor);
+	       Frm_BeginFormUniqueAnchor (TL_DefaultActions[Not->NoteType],
+					  Anchor);
+	       Frm_FreeAnchorStr (Anchor);
+	       Not_PutHiddenParamNotCod (Not->Cod);
+	       if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
+		  Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
+	       break;
+	    default:			// Not applicable
+	       return;
+	   }
 
-      /***** Icon and link to go to action *****/
-      HTM_BUTTON_SUBMIT_Begin (Txt_TIMELINE_NOTE[Not->NoteType],
-			       Str_BuildStringStr ("BT_LINK %s ICO_HIGHLIGHT",
-						   The_ClassFormInBoxBold[Gbl.Prefs.Theme]),
-			       NULL);
-      Ico_PutIcon (TL_Icons[Not->NoteType],Txt_TIMELINE_NOTE[Not->NoteType],"CONTEXT_ICO_x16");
-      HTM_TxtF ("&nbsp;%s",Txt_TIMELINE_NOTE[Not->NoteType]);
-      HTM_BUTTON_End ();
-      Str_FreeString ();
+	    /***** Icon and link to go to action *****/
+	    /* Begin button */
+	    HTM_BUTTON_SUBMIT_Begin (Txt_TIMELINE_NOTE[Not->NoteType],
+				     Str_BuildStringStr ("BT_LINK %s ICO_HIGHLIGHT",
+							 The_ClassFormInBoxBold[Gbl.Prefs.Theme]),
+				     NULL);
+	    Str_FreeString ();
 
-      /***** End form *****/
-      Frm_EndForm ();
+	       /* Icon and text */
+	       Ico_PutIcon (TL_Icons[Not->NoteType],
+	                    Txt_TIMELINE_NOTE[Not->NoteType],"CONTEXT_ICO_x16");
+	       HTM_TxtF ("&nbsp;%s",Txt_TIMELINE_NOTE[Not->NoteType]);
 
+	    /* End button */
+	    HTM_BUTTON_End ();
+
+	 /***** End form *****/
+	 Frm_EndForm ();
+
+      /***** End container *****/
       HTM_DIV_End ();
      }
   }
@@ -725,37 +748,42 @@ void TL_Not_GetNoteSummary (const struct TL_Not_Note *Not,
 /************************ Write bottom part of a note ************************/
 /*****************************************************************************/
 
-static void TL_Not_WriteButtonsAndComments (const struct TL_Timeline *Timeline,
-                                            const struct TL_Not_Note *Not,
-                                            const struct UsrData *UsrDat)	// Author
+static void TL_Not_WriteButtonsAndComms (const struct TL_Timeline *Timeline,
+                                         const struct TL_Not_Note *Not,
+                                         const struct UsrData *UsrDat)	// Author
   {
-   char IdNewComment[Frm_MAX_BYTES_ID + 1];
+   char IdNewComm[Frm_MAX_BYTES_ID + 1];
 
    /***** Create unique id for new comment *****/
-   Frm_SetUniqueId (IdNewComment);
+   Frm_SetUniqueId (IdNewComm);
 
    /***** Left: button to add a comment *****/
-   TL_Not_WriteButtonToAddAComment (Not,IdNewComment);
+   TL_Not_WriteButtonToAddAComm (Not,IdNewComm);
 
    /***** Right: write favs, shared and remove buttons, and comments *****/
-   TL_Not_WriteFavShaRemAndComments (Timeline,Not,UsrDat);
+   TL_Not_WriteFavShaRemAndComms (Timeline,Not,UsrDat);
 
    /***** Put hidden form to write a new comment *****/
-   TL_Com_PutHiddenFormToWriteNewComment (Timeline,Not->NotCod,IdNewComment);
+   TL_Com_PutHiddenFormToWriteNewComm (Timeline,Not->NotCod,IdNewComm);
   }
 
 /*****************************************************************************/
 /********************** Write button to add a comment ************************/
 /*****************************************************************************/
 
-static void TL_Not_WriteButtonToAddAComment (const struct TL_Not_Note *Not,
-                                             const char IdNewComment[Frm_MAX_BYTES_ID + 1])
+static void TL_Not_WriteButtonToAddAComm (const struct TL_Not_Note *Not,
+                                          const char IdNewComm[Frm_MAX_BYTES_ID + 1])
   {
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"TL_BOTTOM_LEFT\"");
-   if (Not->Unavailable)	// Unavailable notes can not be commented
-      TL_Com_PutIconCommentDisabled ();
-   else
-      TL_Com_PutIconToToggleComment (IdNewComment);
+
+      /***** Button to add a comment *****/
+      if (Not->Unavailable)	// Unavailable notes can not be commented
+	 TL_Com_PutIconCommDisabled ();
+      else
+	 TL_Com_PutIconToToggleComm (IdNewComm);
+
+   /***** End container *****/
    HTM_DIV_End ();
   }
 
@@ -763,18 +791,18 @@ static void TL_Not_WriteButtonToAddAComment (const struct TL_Not_Note *Not,
 /******* Write favs, shared and remove buttons, and comments of a note *******/
 /*****************************************************************************/
 
-static void TL_Not_WriteFavShaRemAndComments (const struct TL_Timeline *Timeline,
-					      const struct TL_Not_Note *Not,
-					      const struct UsrData *UsrDat)	// Author
+static void TL_Not_WriteFavShaRemAndComms (const struct TL_Timeline *Timeline,
+					   const struct TL_Not_Note *Not,
+					   const struct UsrData *UsrDat)	// Author
   {
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"TL_BOTTOM_RIGHT TL_RIGHT_WIDTH\"");
 
-   /***** Write favs, shared and remove buttons int the foot of a note *****/
-   TL_Not_WriteFavShaRem (Timeline,Not,UsrDat);
+      /***** Write favs, shared and remove buttons int the foot of a note *****/
+      TL_Not_WriteFavShaRem (Timeline,Not,UsrDat);
 
-   /***** Comments *****/
-   TL_Com_WriteCommentsInNote (Timeline,Not);
+      /***** Comments *****/
+      TL_Com_WriteCommsInNote (Timeline,Not);
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -795,23 +823,25 @@ static void TL_Not_WriteFavShaRem (const struct TL_Timeline *Timeline,
    /***** Begin foot container *****/
    HTM_DIV_Begin ("class=\"TL_FOOT TL_RIGHT_WIDTH\"");
 
-   /***** Foot column 1: fav zone *****/
-   HTM_DIV_Begin ("id=\"fav_not_%s_%u\" class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\"",
-		  Gbl.UniqueNameEncrypted,NumDiv);
-   TL_Fav_PutIconToFavUnfNote (Not,TL_Usr_SHOW_FEW_USRS);
-   HTM_DIV_End ();
+      /***** Foot column 1: fav zone *****/
+      HTM_DIV_Begin ("id=\"fav_not_%s_%u\""
+	             " class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\"",
+		     Gbl.UniqueNameEncrypted,NumDiv);
+	 TL_Fav_PutIconToFavUnfNote (Not,TL_Usr_SHOW_FEW_USRS);
+      HTM_DIV_End ();
 
-   /***** Foot column 2: share zone *****/
-   HTM_DIV_Begin ("id=\"sha_not_%s_%u\" class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\"",
-		  Gbl.UniqueNameEncrypted,NumDiv);
-   TL_Sha_PutIconToShaUnsNote (Not,TL_Usr_SHOW_FEW_USRS);
-   HTM_DIV_End ();
+      /***** Foot column 2: share zone *****/
+      HTM_DIV_Begin ("id=\"sha_not_%s_%u\""
+	             " class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\"",
+		     Gbl.UniqueNameEncrypted,NumDiv);
+	 TL_Sha_PutIconToShaUnsNote (Not,TL_Usr_SHOW_FEW_USRS);
+      HTM_DIV_End ();
 
-   /***** Foot column 3: icon to remove this note *****/
-   HTM_DIV_Begin ("class=\"TL_REM\"");
-   if (Usr_ItsMe (UsrDat->UsrCod))	// I am the author
-      TL_Not_PutFormToRemoveNote (Timeline,Not->NotCod);
-   HTM_DIV_End ();
+      /***** Foot column 3: icon to remove this note *****/
+      HTM_DIV_Begin ("class=\"TL_REM\"");
+	 if (Usr_ItsMe (UsrDat->UsrCod))	// I am the author
+	    TL_Not_PutFormToRemoveNote (Timeline,Not->NotCod);
+      HTM_DIV_End ();
 
    /***** End foot container *****/
    HTM_DIV_End ();
@@ -827,10 +857,15 @@ static void TL_Not_PutFormToRemoveNote (const struct TL_Timeline *Timeline,
    extern const char *Txt_Remove;
 
    /***** Form to remove publication *****/
-   TL_Frm_FormStart (Timeline,TL_Frm_REQ_REM_NOTE);
+   /* Begin form */
+   TL_Frm_BeginForm (Timeline,TL_Frm_REQ_REM_NOTE);
    TL_Not_PutHiddenParamNotCod (NotCod);
-   Ico_PutIconLink ("trash.svg",Txt_Remove);
-   Frm_EndForm ();
+
+      /* Icon to remove */
+      Ico_PutIconLink ("trash.svg",Txt_Remove);
+
+   /* End form */
+   TL_Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1039,14 +1074,14 @@ void TL_Not_RequestRemNoteUsr (void)
    /***** Show user's profile *****/
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
 
-   /***** Request the removal of note *****/
-   TL_Not_RequestRemovalNote (&Timeline);
+      /***** Request the removal of note *****/
+      TL_Not_RequestRemovalNote (&Timeline);
 
-   /***** Write timeline again (user) *****/
-   TL_ShowTimelineUsr (&Timeline);
+      /***** Write timeline again (user) *****/
+      TL_ShowTimelineUsr (&Timeline);
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -1098,11 +1133,11 @@ static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
    Box_BoxBegin (NULL,NULL,
 		 NULL,NULL,
 		 NULL,Box_CLOSABLE);
-   HTM_DIV_Begin ("class=\"TL_WIDTH\"");
-   TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-				       TL_TOP_MESSAGE_NONE,
-				       -1L);
-   HTM_DIV_End ();
+      HTM_DIV_Begin ("class=\"TL_WIDTH\"");
+	 TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+					     TL_TOP_MESSAGE_NONE,
+					     -1L);
+      HTM_DIV_End ();
    Box_BoxEnd ();
 
    /* End alert */
@@ -1144,14 +1179,14 @@ void TL_Not_RemoveNoteUsr (void)
    /***** Show user's profile *****/
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
 
-   /***** Remove a note *****/
-   TL_Not_RemoveNote ();
+      /***** Remove a note *****/
+      TL_Not_RemoveNote ();
 
-   /***** Write updated timeline after removing (user) *****/
-   TL_ShowTimelineUsr (&Timeline);
+      /***** Write updated timeline after removing (user) *****/
+      TL_ShowTimelineUsr (&Timeline);
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -1214,18 +1249,18 @@ static void TL_Not_RemoveNoteMediaAndDBEntries (struct TL_Not_Note *Not)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long PubCod;
-   unsigned long NumComments;
-   unsigned long NumCom;
+   unsigned long NumComms;
+   unsigned long NumComm;
    long MedCod;
 
    /***** Remove comments associated to this note *****/
    /* Get comments of this note */
-   NumComments = TL_DB_GetComments (Not->NotCod,&mysql_res);
+   NumComms = TL_DB_GetComms (Not->NotCod,&mysql_res);
 
    /* For each comment... */
-   for (NumCom = 0;
-	NumCom < NumComments;
-	NumCom++)
+   for (NumComm = 0;
+	NumComm < NumComms;
+	NumComm++)
      {
       /* Get code of comment **/
       row = mysql_fetch_row (mysql_res);
@@ -1233,7 +1268,7 @@ static void TL_Not_RemoveNoteMediaAndDBEntries (struct TL_Not_Note *Not)
 
       /* Remove media associated to comment
 	 and delete comment from database */
-      TL_Com_RemoveCommentMediaAndDBEntries (PubCod);
+      TL_Com_RemoveCommMediaAndDBEntries (PubCod);
      }
 
    /* Free structure that stores the query result */

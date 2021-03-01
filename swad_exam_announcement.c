@@ -452,7 +452,7 @@ void ExaAnn_ReqRemoveExamAnn (void)
       Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
 
    /***** Show question and button to remove exam announcement *****/
-   /* Start alert */
+   /* Begin alert */
    Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_announcement_of_exam);
 
    /* Show announcement */
@@ -781,7 +781,7 @@ static void ExaAnn_PutButtonToCreateNewExamAnn (void)
   {
    extern const char *Txt_New_announcement_OF_EXAM;
 
-   Frm_StartForm (ActEdiExaAnn);
+   Frm_BeginForm (ActEdiExaAnn);
    Btn_PutConfirmButton (Txt_New_announcement_OF_EXAM);
    Frm_EndForm ();
   }

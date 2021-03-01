@@ -47,71 +47,71 @@ extern struct Globals Gbl;
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Frm_StartFormInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
+static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
                                    const char *Id,const char *Anchor,const char *OnSubmit);
 
 /*****************************************************************************/
 /******************************** Start a form *******************************/
 /*****************************************************************************/
 
-void Frm_StartFormGoTo (Act_Action_t NextAction)
+void Frm_BeginFormGoTo (Act_Action_t NextAction)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),"form_%d",Gbl.Form.Num);
-   Frm_StartFormInternal (NextAction,false,Gbl.Form.Id,NULL,NULL);	// Do not put now parameter location
+   Frm_BeginFormInternal (NextAction,false,Gbl.Form.Id,NULL,NULL);	// Do not put now parameter location
   }
 
-void Frm_StartForm (Act_Action_t NextAction)
+void Frm_BeginForm (Act_Action_t NextAction)
   {
-   Frm_StartFormAnchorOnSubmit (NextAction,NULL,NULL);
+   Frm_BeginFormAnchorOnSubmit (NextAction,NULL,NULL);
   }
 
 void Frm_StartFormAnchor (Act_Action_t NextAction,const char *Anchor)
   {
-   Frm_StartFormAnchorOnSubmit (NextAction,Anchor,NULL);
+   Frm_BeginFormAnchorOnSubmit (NextAction,Anchor,NULL);
   }
 
-void Frm_StartFormOnSubmit (Act_Action_t NextAction,const char *OnSubmit)
+void Frm_BeginFormOnSubmit (Act_Action_t NextAction,const char *OnSubmit)
   {
-   Frm_StartFormAnchorOnSubmit (NextAction,NULL,OnSubmit);
+   Frm_BeginFormAnchorOnSubmit (NextAction,NULL,OnSubmit);
   }
 
-void Frm_StartFormAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit)
+void Frm_BeginFormAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),"form_%d",Gbl.Form.Num);
-   Frm_StartFormInternal (NextAction,true,Gbl.Form.Id,Anchor,OnSubmit);	// Do put now parameter location (if no open session)
+   Frm_BeginFormInternal (NextAction,true,Gbl.Form.Id,Anchor,OnSubmit);	// Do put now parameter location (if no open session)
   }
 
-void Frm_StartFormUnique (Act_Action_t NextAction)
+void Frm_BeginFormUnique (Act_Action_t NextAction)
   {
-   Frm_StartFormUniqueAnchor (NextAction,NULL);
+   Frm_BeginFormUniqueAnchor (NextAction,NULL);
   }
 
-void Frm_StartFormUniqueAnchor (Act_Action_t NextAction,const char *Anchor)
-  {
-   Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),"form_%s_%d",
-             Gbl.UniqueNameEncrypted,Gbl.Form.Num);
-   Frm_StartFormInternal (NextAction,true,Gbl.Form.UniqueId,Anchor,NULL);	// Do put now parameter location (if no open session)
-  }
-
-void Frm_StartFormUniqueAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit)
+void Frm_BeginFormUniqueAnchor (Act_Action_t NextAction,const char *Anchor)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),"form_%s_%d",
              Gbl.UniqueNameEncrypted,Gbl.Form.Num);
-   Frm_StartFormInternal (NextAction,true,Gbl.Form.UniqueId,Anchor,OnSubmit);	// Do put now parameter location (if no open session)
+   Frm_BeginFormInternal (NextAction,true,Gbl.Form.UniqueId,Anchor,NULL);	// Do put now parameter location (if no open session)
   }
 
-void Frm_StartFormId (Act_Action_t NextAction,const char *Id)
+void Frm_BeginFormUniqueAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   Frm_StartFormInternal (NextAction,true,Id,NULL,NULL);	// Do put now parameter location (if no open session)
+   snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),"form_%s_%d",
+             Gbl.UniqueNameEncrypted,Gbl.Form.Num);
+   Frm_BeginFormInternal (NextAction,true,Gbl.Form.UniqueId,Anchor,OnSubmit);	// Do put now parameter location (if no open session)
+  }
+
+void Frm_BeginFormId (Act_Action_t NextAction,const char *Id)
+  {
+   Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
+   Frm_BeginFormInternal (NextAction,true,Id,NULL,NULL);	// Do put now parameter location (if no open session)
   }
 
 // Id can not be NULL
-static void Frm_StartFormInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
+static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
                                    const char *Id,const char *Anchor,const char *OnSubmit)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
@@ -158,7 +158,7 @@ static void Frm_StartFormInternal (Act_Action_t NextAction,bool PutParameterLoca
    ==> we use the value property of input fields to build the parameters sent using XMLHttp.send ==>
    ==> the value property is always codified in UTF-8 ==> accept-charset is irrelevant
 */
-void Frm_StartFormNoAction (void)
+void Frm_BeginFormNoAction (void)
   {
    if (!Gbl.Form.Inside)
      {

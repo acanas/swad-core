@@ -442,7 +442,7 @@ static void Inf_PutButtonToEditInfo (void)
   {
    extern const char *Txt_Edit;
 
-   Frm_StartForm (Inf_ActionsEditInfo[Gbl.Crs.Info.Type]);
+   Frm_BeginForm (Inf_ActionsEditInfo[Gbl.Crs.Info.Type]);
    Btn_PutConfirmButton (Txt_Edit);
    Frm_EndForm ();
   }
@@ -590,7 +590,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
       if (Gbl.Crs.Info.MustBeRead[InfoType])
         {
          HTM_LI_Begin (NULL);
-         Frm_StartForm (Inf_ActionsSeeInfo[InfoType]);
+         Frm_BeginForm (Inf_ActionsSeeInfo[InfoType]);
          HTM_BUTTON_SUBMIT_Begin (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),
                                   The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
          HTM_Txt (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
@@ -1059,7 +1059,7 @@ void Inf_FormsToSelSendInfo (void)
 	 HTM_TD_Begin ("class=\"DAT LT LIGHT_BLUE\"");
       else
 	 HTM_TD_Begin ("class=\"DAT LT\"");
-      Frm_StartForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
+      Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
 
       HTM_INPUT_RADIO ("InfoSrc",InfoSrc != InfoSrcSelected &&
 	                         (InfoSrc == Inf_INFO_SRC_NONE ||
@@ -1149,7 +1149,7 @@ void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *Txt_Edit;
 
-   Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
+   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
    Btn_PutConfirmButton (Txt_Edit);
    Frm_EndForm ();
   }
@@ -1162,7 +1162,7 @@ void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *Txt_Edit_plain_text;
 
-   Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
+   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
    Btn_PutConfirmButton (Txt_Edit_plain_text);
    Frm_EndForm ();
   }
@@ -1175,7 +1175,7 @@ void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *Txt_Edit_rich_text;
 
-   Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
+   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
    Btn_PutConfirmButton (Txt_Edit_rich_text);
    Frm_EndForm ();
   }
@@ -1191,7 +1191,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
    extern const char *Txt_Upload_file;
 
    /***** Begin form *****/
-   Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
+   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
 
    /***** File *****/
    HTM_DIV_Begin ("class=\"CM\"");
@@ -1226,7 +1226,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
    Inf_BuildPathURL (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,PathFile);
 
    /***** Begin form *****/
-   Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
+   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
 
    /***** Link *****/
    if ((FileURL = fopen (PathFile,"rb")) != NULL)
@@ -1937,7 +1937,7 @@ void Inf_EditPlainTxtInfo (void)
    Inf_AsignInfoType (&Gbl.Crs.Info,&Syllabus);
 
    /***** Begin form and box *****/
-   Frm_StartForm (Inf_ActionsRcvPlaTxtInfo[Gbl.Crs.Info.Type]);
+   Frm_BeginForm (Inf_ActionsRcvPlaTxtInfo[Gbl.Crs.Info.Type]);
    Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
                  NULL,NULL,
                  HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
@@ -1992,7 +1992,7 @@ void Inf_EditRichTxtInfo (void)
    Inf_AsignInfoType (&Gbl.Crs.Info,&Syllabus);
 
    /***** Begin form and box *****/
-   Frm_StartForm (Inf_ActionsRcvRchTxtInfo[Gbl.Crs.Info.Type]);
+   Frm_BeginForm (Inf_ActionsRcvRchTxtInfo[Gbl.Crs.Info.Type]);
    Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
                  NULL,NULL,
                  HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);

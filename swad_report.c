@@ -155,7 +155,7 @@ void Rep_ReqMyUsageReport (void)
    extern const char *Txt_Generate_report;
 
    /***** Form to show my usage report *****/
-   Frm_StartForm (ActSeeMyUsgRep);
+   Frm_BeginForm (ActSeeMyUsgRep);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Report_of_use_of_PLATFORM,
@@ -495,7 +495,7 @@ static void Rep_WriteSectionPlatform (void)
    extern const char *Txt_TAGLINE;
    extern const char *Txt_URL;
 
-   /***** Start section *****/
+   /***** Begin section *****/
    fprintf (Gbl.F.Rep,"<section>"
 	              "<h3>%s</h3>",
 	    Txt_Teaching_platform);
@@ -534,7 +534,7 @@ static void Rep_WriteSectionUsrInfo (void)
    char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
    struct Ins_Instit Ins;
 
-   /***** Start section *****/
+   /***** Begin section *****/
    fprintf (Gbl.F.Rep,"<section>"
 	              "<h3>%s</h3>",
 	    Txt_Personal_information);
@@ -596,7 +596,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
    unsigned NumFiles;
    unsigned NumPublicFiles;
 
-   /***** Start section *****/
+   /***** Begin section *****/
    fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s</h3>",
 	    Txt_Figures);
@@ -738,7 +738,7 @@ static void Rep_WriteSectionGlobalHits (struct Rep_Report *Report)
   {
    extern const char *Txt_Hits_per_year;
 
-   /***** Start section *****/
+   /***** Begin section *****/
    fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s</h3>",
 	    Txt_Hits_per_year);
@@ -772,7 +772,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
    Tab_Tab_t Tab;
    unsigned long NumClicks;
 
-   /***** Start section *****/
+   /***** Begin section *****/
    fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s</h3>",
 	    Txt_Hits_per_action);
@@ -853,7 +853,7 @@ static void Rep_WriteSectionCurrentCourses (struct Rep_Report *Report)
    extern const char *Txt_Courses;
    Rol_Role_t Role;
 
-   /***** Start section *****/
+   /***** Begin section *****/
    fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s",
             Txt_Courses);
@@ -885,7 +885,7 @@ static void Rep_WriteSectionHistoricCourses (struct Rep_Report *Report)
    extern const char *Txt_Only_courses_with_more_than_X_clicks_are_shown;
    Rol_Role_t Role;
 
-   /***** Start section *****/
+   /***** Begin section *****/
    fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s (%s)</h3>",
 	    Txt_Courses,Txt_historical_log);

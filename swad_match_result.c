@@ -1011,11 +1011,11 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	    switch (MeOrOther)
 	      {
 	       case Usr_ME:
-		  Frm_StartForm (ActSeeOneMchResMe);
+		  Frm_BeginForm (ActSeeOneMchResMe);
 		  Mch_PutParamsEdit (Games);
 		  break;
 	       case Usr_OTHER:
-		  Frm_StartForm (ActSeeOneMchResOth);
+		  Frm_BeginForm (ActSeeOneMchResOth);
 		  Mch_PutParamsEdit (Games);
 		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		  break;

@@ -133,7 +133,7 @@ void Bld_SeeBuildings (void)
 	Order++)
      {
       HTM_TH_Begin (1,1,"LM");
-      Frm_StartForm (ActSeeBld);
+      Frm_BeginForm (ActSeeBld);
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
       HTM_BUTTON_SUBMIT_Begin (Txt_BUILDINGS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
       if (Order == Buildings.SelectedOrder)
@@ -178,7 +178,7 @@ void Bld_SeeBuildings (void)
    /***** Button to create building *****/
    if (Bld_CheckIfICanCreateBuildings ())
      {
-      Frm_StartForm (ActEdiBld);
+      Frm_BeginForm (ActEdiBld);
       Btn_PutConfirmButton (Txt_New_building);
       Frm_EndForm ();
      }
@@ -797,7 +797,7 @@ static void Bld_PutFormToCreateBuilding (void)
    extern const char *Txt_Create_building;
 
    /***** Begin form *****/
-   Frm_StartForm (ActNewBld);
+   Frm_BeginForm (ActNewBld);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_building,

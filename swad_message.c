@@ -307,7 +307,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 	 Grp_ShowFormToSelectSeveralGroups (Msg_PutParamsWriteMsg,Messages,
 	                                    Grp_MY_GROUPS);
 
-	 /***** Start section with user list *****/
+	 /***** Begin section with user list *****/
          HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
 	 if (NumUsrsInCrs)
@@ -337,7 +337,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
      }
 
    /***** Begin form to select recipients and write the message *****/
-   Frm_StartForm (ActRcvMsgUsr);
+   Frm_BeginForm (ActRcvMsgUsr);
    if (Messages->Reply.IsReply)
      {
       Par_PutHiddenParamChar ("IsReply",'Y');
@@ -956,7 +956,7 @@ void Msg_ReqDelAllRecMsgs (void)
    Messages.ShowOnlyUnreadMsgs = Msg_GetParamOnlyUnreadMsgs ();
 
    /***** Show question and button to remove messages received *****/
-   /* Start alert */
+   /* Begin alert */
    if (Messages.FilterContent[0])
      {
       if (Messages.ShowOnlyUnreadMsgs)
@@ -1015,7 +1015,7 @@ void Msg_ReqDelAllSntMsgs (void)
    Msg_GetParamFilterContent (&Messages);
 
    /***** Show question and button to remove messages received *****/
-   /* Start alert */
+   /* Begin alert */
    if (Messages.FilterContent[0])
       Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
 			       Messages.FilterFromTo[0] ? Messages.FilterFromTo :
@@ -1890,7 +1890,7 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
                  HelpFilter[Messages->TypeOfMessages],Box_CLOSABLE);
 
    /* Form to see messages again */
-   Frm_StartForm (ActionSee[Messages->TypeOfMessages]);
+   Frm_BeginForm (ActionSee[Messages->TypeOfMessages]);
 
    HTM_DIV_Begin ("class=\"CM\"");
    Msg_ShowFormSelectCourseSentOrRecMsgs (Messages);
@@ -3359,7 +3359,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
         	                                "MSG_TIT_BG_NEW");
 
    /***** Begin form to expand/contract the message *****/
-   Frm_StartForm (Messages->TypeOfMessages == Msg_RECEIVED ? (Expanded ? ActConRcvMsg :
+   Frm_BeginForm (Messages->TypeOfMessages == Msg_RECEIVED ? (Expanded ? ActConRcvMsg :
 	                                                                          ActExpRcvMsg) :
                                                                       (Expanded ? ActConSntMsg :
                                                         	                  ActExpSntMsg));
@@ -3484,7 +3484,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
          else	// Message sent from another course
            {
             /* Write course, including link */
-            Frm_StartFormGoTo (ActSeeCrsInf);
+            Frm_BeginFormGoTo (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
             HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
             HTM_Txt ("(");
@@ -3524,10 +3524,10 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
 
    /***** Form start and parameters *****/
    if (FromThisCrs)
-      Frm_StartForm (ActReqMsgUsr);
+      Frm_BeginForm (ActReqMsgUsr);
    else	// Not the current course ==> go to another course
      {
-      Frm_StartFormGoTo (ActReqMsgUsr);
+      Frm_BeginFormGoTo (ActReqMsgUsr);
       Crs_PutParamCrsCod (CrsCod);
      }
    Grp_PutParamAllGroups ();
@@ -3772,7 +3772,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
-         Frm_StartForm (ActionSee[Messages->TypeOfMessages]);
+         Frm_BeginForm (ActionSee[Messages->TypeOfMessages]);
          Messages->MsgCod = MsgCod;	// Message to be expanded with all recipients visible
          Msg_PutHiddenParamsOneMsg (Messages);
          Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
@@ -3871,7 +3871,7 @@ static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
   {
    extern const char *Txt_Sender_permitted_click_to_ban_him;
 
-   Frm_StartForm (ActBanUsrMsg);
+   Frm_BeginForm (ActBanUsrMsg);
    Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
 	                     Messages->CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
@@ -3889,7 +3889,7 @@ static void Msg_PutFormToUnbanSender (struct Msg_Messages *Messages,
   {
    extern const char *Txt_Sender_banned_click_to_unban_him;
 
-   Frm_StartForm (ActUnbUsrMsg);
+   Frm_BeginForm (ActUnbUsrMsg);
    Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
 	                     Messages->CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
@@ -4064,7 +4064,7 @@ void Msg_ListBannedUsrs (void)
 
             /* Put form to unban user */
             HTM_TD_Begin ("class=\"BM\"");
-            Frm_StartForm (ActUnbUsrLst);
+            Frm_BeginForm (ActUnbUsrLst);
             Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
             Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
             Frm_EndForm ();

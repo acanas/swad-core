@@ -231,7 +231,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
    const struct UsrData *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
 	                                   &Gbl.Usrs.Other.UsrDat);
 
-   /***** Start section *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (Nck_NICKNAME_SECTION_ID);
 
    /***** Get my nicknames *****/
