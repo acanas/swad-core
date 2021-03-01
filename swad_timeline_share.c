@@ -65,8 +65,6 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not);
 static void TL_Sha_PutDisabledIconShare (unsigned NumShared);
 static void TL_Sha_PutFormToShaUnsNote (long NotCod);
 
-static bool TL_Sha_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);
-
 static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Not_Note *Not,
 					      TL_Usr_HowManyUsrs_t HowManyUsrs);
 
@@ -127,8 +125,8 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
    if (Not->NotCod > 0)
       if (Gbl.Usrs.Me.Logged &&		// I am logged...
 	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
-         if (!TL_Sha_CheckIfNoteIsSharedByUsr (Not->NotCod,
-					       Gbl.Usrs.Me.UsrDat.UsrCod))	// Not yet shared by me
+         if (!TL_DB_CheckIfNoteIsSharedByUsr (Not->NotCod,
+					      Gbl.Usrs.Me.UsrDat.UsrCod))	// Not yet shared by me
 	   {
 	    /***** Share (publish note in timeline) *****/
 	    Pub.NotCod       = Not->NotCod;
@@ -184,8 +182,8 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
       if (Not->NumShared &&
 	  Gbl.Usrs.Me.Logged &&		// I am logged...
 	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
-	 if (TL_Sha_CheckIfNoteIsSharedByUsr (Not->NotCod,
-					      Gbl.Usrs.Me.UsrDat.UsrCod))	// I am a sharer
+	 if (TL_DB_CheckIfNoteIsSharedByUsr (Not->NotCod,
+					     Gbl.Usrs.Me.UsrDat.UsrCod))	// I am a sharer
 	   {
 	    /***** Delete publication from database *****/
 	    TL_DB_RemoveSharedPub (Not->NotCod);
@@ -269,23 +267,8 @@ static void TL_Sha_PutFormToShaUnsNote (long NotCod)
      };
 
    /***** Form and icon to share/unshare note *****/
-   TL_Frm_FormFavSha (&Form[TL_Sha_CheckIfNoteIsSharedByUsr (NotCod,Gbl.Usrs.Me.UsrDat.UsrCod)]);
-  }
-
-/*****************************************************************************/
-/****************** Check if a user has published a note *********************/
-/*****************************************************************************/
-
-static bool TL_Sha_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod)
-  {
-   return (DB_QueryCOUNT ("can not check if a user has shared a note",
-			  "SELECT COUNT(*) FROM tl_pubs"
-			  " WHERE NotCod=%ld"
-			  " AND PublisherCod=%ld"
-			  " AND PubType=%u",
-			  NotCod,
-			  UsrCod,
-			  (unsigned) TL_Pub_SHARED_NOTE) != 0);
+   TL_Frm_FormFavSha (&Form[TL_DB_CheckIfNoteIsSharedByUsr (NotCod,
+                                                            Gbl.Usrs.Me.UsrDat.UsrCod)]);
   }
 
 /*****************************************************************************/

@@ -998,6 +998,22 @@ static void TL_DB_UnmarkAsFav (const char *Table,const char *Field,long Cod)
   }
 
 /*****************************************************************************/
+/****************** Check if a user has published a note *********************/
+/*****************************************************************************/
+
+bool TL_DB_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod)
+  {
+   return (DB_QueryCOUNT ("can not check if a user has shared a note",
+			  "SELECT COUNT(*) FROM tl_pubs"
+			  " WHERE NotCod=%ld"
+			  " AND PublisherCod=%ld"
+			  " AND PubType=%u",
+			  NotCod,
+			  UsrCod,
+			  (unsigned) TL_Pub_SHARED_NOTE) != 0);
+  }
+
+/*****************************************************************************/
 /****************** Remove shared publication from database ******************/
 /*****************************************************************************/
 

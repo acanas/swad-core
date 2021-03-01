@@ -127,6 +127,7 @@ void TL_DB_UnmarkNoteAsFav (long NotCod);
 void TL_DB_UnmarkCommAsFav (long PubCod);
 
 /******************************** Shared *************************************/
+bool TL_DB_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);
 void TL_DB_RemoveSharedPub (long NotCod);
 
 #endif
