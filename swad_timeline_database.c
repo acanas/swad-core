@@ -77,6 +77,21 @@ static long TL_DB_GetMedCodFromPub (long PubCod,const char *DBTable);
 /*****************************************************************************/
 // Returns the number of rows got
 
+unsigned TL_DB_GetWho (MYSQL_RES **mysql_res)
+  {
+   /***** Get which users from database *****/
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get timeline users",
+		   "SELECT TimelineUsrs"	// row[0]
+		   " FROM usr_last WHERE UsrCod=%ld",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/********************* Get data of note using its code ***********************/
+/*****************************************************************************/
+// Returns the number of rows got
+
 unsigned TL_DB_GetDataOfNoteByCod (long NotCod,MYSQL_RES **mysql_res)
   {
    /***** Trivial check: note code should be > 0 *****/

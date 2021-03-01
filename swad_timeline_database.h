@@ -47,6 +47,9 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+/****************************** Timeline from who ****************************/
+unsigned TL_DB_GetWho (MYSQL_RES **mysql_res);
+
 /*********************************** Notes ***********************************/
 unsigned TL_DB_GetDataOfNoteByCod (long NotCod,MYSQL_RES **mysql_res);
 long TL_DB_GetPubCodOfOriginalNote (long NotCod);
@@ -71,7 +74,7 @@ void TL_DB_RemoveNotePubs (long NotCod);
 void TL_DB_RemoveNote (long NotCod);
 void TL_DB_RemoveAllNotesUsr (long UsrCod);
 
-/********************************** Posts ************************************/
+/********************************* Posts *************************************/
 unsigned TL_DB_GetPostByCod (long PstCod,MYSQL_RES **mysql_res);
 long TL_DB_GetMedCodFromPost (long PubCod);
 long TL_DB_CreateNewPost (const struct TL_Pst_PostContent *Content);

@@ -552,11 +552,8 @@ enscript -2 --landscape --file-align=2 --highlight --line-numbers -o - * > swad1
 enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - * > swad17.26.7_color_2_columnas.ps
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
-*/
-#define Log_PLATFORM_VERSION	"SWAD 20.36.46 (2021-03-01)"
-#define CSS_FILE		"swad20.33.9.css"
-#define JS_FILE			"swad20.6.2.js"
-/*
+
+
 TODO: Juan Miguel Boyero Corral: Este verano ha habido varias personas que han solicitado incluir la funcionalidad del apartado de Actividades en SWADroid. Si lo ves viable podríamos estudiarlo.
 
 TODO: José Martínez Aroza: Si estoy viendo la lista de trabajos de un grupo de estudiantes y pulso F5 (reenviando datos) entonces sale el listado duplicado, y la siguiente vez triplicado, etc.
@@ -600,7 +597,12 @@ TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse 
 
 TODO: BUG: Cuando un tipo de grupo sólo tiene un grupo, inscribirse es voluntario, el estudiante sólo puede pertenecer a un grupo, y se inscribe en él, debería poder desapuntarse. Ahora no puede.
 TODO: Salvador Romero Cortés: @acanas opción para editar posts
-
+*/
+#define Log_PLATFORM_VERSION	"SWAD 20.36.47 (2021-03-01)"
+#define CSS_FILE		"swad20.33.9.css"
+#define JS_FILE			"swad20.6.2.js"
+/*
+	Version 20.36.47: Mar 01, 2021  Query moved to module swad_timeline_database. (305543 lines)
 	Version 20.36.46: Mar 01, 2021  Fixed bugs in timeline. (305529 lines)
 	Version 20.36.45: Mar 01, 2021  Queries moved to module swad_timeline_database. (305528 lines)
 	Version 20.36.44: Mar 01, 2021  Query moved to module swad_timeline_database. (305516 lines)

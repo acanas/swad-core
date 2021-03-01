@@ -31,6 +31,7 @@
 #include "swad_parameter.h"
 #include "swad_setting.h"
 #include "swad_timeline.h"
+#include "swad_timeline_database.h"
 #include "swad_timeline_who.h"
 
 /*****************************************************************************/
@@ -134,10 +135,7 @@ static Usr_Who_t TL_Who_GetWhoFromDB (void)
    Usr_Who_t Who = Usr_WHO_UNKNOWN;
 
    /***** Get which users from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get timeline users from user's last data",
-		       "SELECT TimelineUsrs"		   // row[0]
-		       " FROM usr_last WHERE UsrCod=%ld",
-		       Gbl.Usrs.Me.UsrDat.UsrCod) == 1)
+   if (TL_DB_GetWho (&mysql_res) == 1)
      {
       row = mysql_fetch_row (mysql_res);
 
