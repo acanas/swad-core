@@ -127,7 +127,6 @@ mysql> SHOW TABLES LIKE 'tl_%';
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdio.h>		// For asprintf
 
-#include "swad_database.h"
 #include "swad_figure.h"
 #include "swad_global.h"
 #include "swad_message.h"
@@ -136,11 +135,9 @@ mysql> SHOW TABLES LIKE 'tl_%';
 #include "swad_profile.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
-#include "swad_timeline_favourite.h"
 #include "swad_timeline_note.h"
 #include "swad_timeline_notification.h"
 #include "swad_timeline_publication.h"
-#include "swad_timeline_share.h"
 #include "swad_timeline_who.h"
 
 /*****************************************************************************/

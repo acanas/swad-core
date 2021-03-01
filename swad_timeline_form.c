@@ -32,9 +32,7 @@
 #include "swad_action.h"
 #include "swad_global.h"
 #include "swad_timeline.h"
-#include "swad_timeline_comment.h"
 #include "swad_timeline_form.h"
-#include "swad_timeline_note.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/

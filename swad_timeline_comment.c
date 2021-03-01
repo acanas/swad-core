@@ -40,7 +40,6 @@
 #include "swad_timeline_form.h"
 #include "swad_timeline_note.h"
 #include "swad_timeline_publication.h"
-#include "swad_timeline_share.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
