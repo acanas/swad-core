@@ -132,21 +132,19 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
 	           " AND tl_pubs.PubCod=tl_comments.PubCod",
 		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
 
-   /***** Remove all posts of the user *****/
+   /***** Remove posts *****/
+   /* Remove all posts of the user */
    TL_DB_RemoveAllPostsUsr (UsrCod);
 
-   /***** Remove all publications of any user authored by the user *****/
-   DB_QueryDELETE ("can not remove publications",
-		   "DELETE FROM tl_pubs"
-                   " USING tl_notes,tl_pubs"
-	           " WHERE tl_notes.UsrCod=%ld"
-                   " AND tl_notes.NotCod=tl_pubs.NotCod",
-		   UsrCod);
+   /***** Remove publications *****/
+   /* Remove all publications of any user authored by the user */
+   TL_DB_RemoveAllPubsOfAnyUsrAuthoredBy (UsrCod);
 
-   /***** Remove all the publications of the user *****/
+   /* Remove all the publications of the user */
    TL_DB_RemoveAllPubsUsr (UsrCod);
 
-   /***** Remove all notes of the user *****/
+   /***** Remove notes *****/
+   /* Remove all notes of the user */
    TL_DB_RemoveAllNotesUsr (UsrCod);
   }
 

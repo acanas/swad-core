@@ -914,6 +914,21 @@ void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
   }
 
 /*****************************************************************************/
+/********** Remove all publications of any user authored by a user ***********/
+/*****************************************************************************/
+
+void TL_DB_RemoveAllPubsOfAnyUsrAuthoredBy (long UsrCod)
+  {
+   /***** Remove all publications of any user authored by the user *****/
+   DB_QueryDELETE ("can not remove publications",
+		   "DELETE FROM tl_pubs"
+                   " USING tl_notes,tl_pubs"
+	           " WHERE tl_notes.UsrCod=%ld"
+                   " AND tl_notes.NotCod=tl_pubs.NotCod",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
 /********************* Remove all publications of a user *********************/
 /*****************************************************************************/
 

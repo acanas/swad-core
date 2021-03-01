@@ -114,6 +114,7 @@ long TL_DB_CreateNewPub (const struct TL_Pub_Publication *Pub);
 void TL_DB_UpdateFirstPubCodInSession (long FirstPubCod);
 void TL_DB_UpdateLastPubCodInSession (void);
 void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod);
+void TL_DB_RemoveAllPubsOfAnyUsrAuthoredBy (long UsrCod);
 void TL_DB_RemoveAllPubsUsr (long UsrCod);
 
 /****************************** Favourites ***********************************/
