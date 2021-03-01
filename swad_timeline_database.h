@@ -94,6 +94,8 @@ long TL_DB_GetMedCodFromComment (long PubCod);
 void TL_DB_RemoveCommentFavs (long PubCod);
 void TL_DB_RemoveCommentContent (long PubCod);
 void TL_DB_RemoveCommentPub (long PubCod);
+void TL_DB_RemoveAllCommentsInAllNotesOf (long UsrCod);
+void TL_DB_RemoveAllCommentsMadeBy (long UsrCod);
 
 /****************************** Publications *********************************/
 void TL_DB_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,

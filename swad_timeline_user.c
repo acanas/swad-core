@@ -30,7 +30,6 @@
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdio.h>		// For asprintf
 
-#include "swad_database.h"
 #include "swad_global.h"
 #include "swad_photo.h"
 #include "swad_timeline.h"
@@ -79,48 +78,27 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
    TL_DB_RemoveAllFavsToAllCommentsInAllNotesBy (UsrCod);
 
    /***** Remove favs for notes *****/
-   /* Remove all favs made by this user in any note */
+   /* Remove all favs made by this user to any note */
    TL_DB_RemoveAllFavsMadeByUsr (TL_Fav_NOTE,UsrCod);
 
    /* Remove all favs to notes of this user */
    TL_DB_RemoveAllFavsToPubsBy (TL_Fav_NOTE,UsrCod);
 
    /***** Remove comments *****/
-   /* Remove content of all comments in all the notes of the user */
-   DB_QueryDELETE ("can not remove comments",
-		   "DELETE FROM tl_comments"
-	           " USING tl_notes,tl_pubs,tl_comments"
-	           " WHERE tl_notes.UsrCod=%ld"
-		   " AND tl_notes.NotCod=tl_pubs.NotCod"
-                   " AND tl_pubs.PubType=%u"
-	           " AND tl_pubs.PubCod=tl_comments.PubCod",
-		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
+   /* Remove all comments in all the notes of this user */
+   TL_DB_RemoveAllCommentsInAllNotesOf (UsrCod);
 
-   /* Remove all comments from any user in any note of the user */
-   DB_QueryDELETE ("can not remove comments",
-		   "DELETE FROM tl_pubs"
-	           " USING tl_notes,tl_pubs"
-	           " WHERE tl_notes.UsrCod=%ld"
-		   " AND tl_notes.NotCod=tl_pubs.NotCod"
-                   " AND tl_pubs.PubType=%u",
-		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
-
-   /* Remove content of all comments of the user in any note */
-   DB_QueryDELETE ("can not remove comments",
-		   "DELETE FROM tl_comments"
-	           " USING tl_pubs,tl_comments"
-	           " WHERE tl_pubs.PublisherCod=%ld"
-	           " AND tl_pubs.PubType=%u"
-	           " AND tl_pubs.PubCod=tl_comments.PubCod",
-		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
+   /* Remove all comments made by this user in any note */
+   TL_DB_RemoveAllCommentsMadeBy (UsrCod);
 
    /***** Remove posts *****/
    /* Remove all posts of the user */
    TL_DB_RemoveAllPostsUsr (UsrCod);
 
    /***** Remove publications *****/
-   /* Remove all publications (original or shared notes) published by any user
-      of notes authored by the user */
+   /* Remove all publications (original, shared notes, comments)
+      published by any user
+      and related to notes authored by the user */
    TL_DB_RemoveAllPubsPublishedByAnyUsrOfNotesAuthoredBy (UsrCod);
 
    /* Remove all publications published by the user */

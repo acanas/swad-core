@@ -615,6 +615,39 @@ void TL_DB_RemoveCommentPub (long PubCod)
   }
 
 /*****************************************************************************/
+/*********** Remove all comments in all the notes of a given user ************/
+/*****************************************************************************/
+
+void TL_DB_RemoveAllCommentsInAllNotesOf (long UsrCod)
+  {
+   /***** Remove all comments in all notes of the user *****/
+   DB_QueryDELETE ("can not remove comments",
+		   "DELETE FROM tl_comments"
+	           " USING tl_notes,tl_pubs,tl_comments"
+	           " WHERE tl_notes.UsrCod=%ld"
+		   " AND tl_notes.NotCod=tl_pubs.NotCod"
+                   " AND tl_pubs.PubType=%u"
+	           " AND tl_pubs.PubCod=tl_comments.PubCod",
+		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
+  }
+
+/*****************************************************************************/
+/*********** Remove all comments made by a given user in any note ************/
+/*****************************************************************************/
+
+void TL_DB_RemoveAllCommentsMadeBy (long UsrCod)
+  {
+   /***** Remove all comments made by this user in any note *****/
+   DB_QueryDELETE ("can not remove comments",
+		   "DELETE FROM tl_comments"
+	           " USING tl_pubs,tl_comments"
+	           " WHERE tl_pubs.PublisherCod=%ld"
+	           " AND tl_pubs.PubType=%u"
+	           " AND tl_pubs.PubCod=tl_comments.PubCod",
+		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
+  }
+
+/*****************************************************************************/
 /*************** Get code of media associated to post/comment ****************/
 /*****************************************************************************/
 
@@ -919,14 +952,15 @@ void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
   }
 
 /*****************************************************************************/
-/** Remove all publications published by any user & authored by a given user */
+/************** Remove all publications published by any user ****************/
+/************** related to notes authored by a given user     ****************/
 /*****************************************************************************/
 
 void TL_DB_RemoveAllPubsPublishedByAnyUsrOfNotesAuthoredBy (long UsrCod)
   {
-   /***** Remove all publications (original or shared notes)
+   /***** Remove all publications (original notes, shared notes, comments)
           published by any user
-          of notes authored by this user *****/
+          and related to notes authored by this user *****/
    DB_QueryDELETE ("can not remove publications",
 		   "DELETE FROM tl_pubs"
                    " USING tl_notes,tl_pubs"
@@ -1040,7 +1074,7 @@ void TL_DB_UnmarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod)
 
 void TL_DB_RemoveAllFavsMadeByUsr (TL_Fav_WhatToFav_t WhatToFav,long UsrCod)
   {
-   /* Remove all favs made by this user to any comment */
+   /* Remove all favs made by this user to any note/comment */
    DB_QueryDELETE ("can not remove favs",
 		   "DELETE FROM %s WHERE UsrCod=%ld",
 		   TL_DB_Table[WhatToFav],UsrCod);
