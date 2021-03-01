@@ -412,6 +412,21 @@ void TL_DB_RemovePost (long PstCod)
   }
 
 /*****************************************************************************/
+/************************* Remove all posts of a user ************************/
+/*****************************************************************************/
+
+void TL_DB_RemoveAllPostsUsr (long UsrCod)
+  {
+   /***** Remove all posts of the user *****/
+   DB_QueryDELETE ("can not remove posts",
+		   "DELETE FROM tl_posts"
+		   " WHERE PstCod IN"
+		   " (SELECT Cod FROM tl_notes"
+	           " WHERE UsrCod=%ld AND NoteType=%u)",
+		   UsrCod,(unsigned) TL_NOTE_POST);
+  }
+
+/*****************************************************************************/
 /********************* Get number of comments in a note **********************/
 /*****************************************************************************/
 

@@ -104,7 +104,7 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
 		   UsrCod);
 
    /***** Remove comments *****/
-   /* Remove content of all the comments in all the notes of the user */
+   /* Remove content of all comments in all the notes of the user */
    DB_QueryDELETE ("can not remove comments",
 		   "DELETE FROM tl_comments"
 	           " USING tl_notes,tl_pubs,tl_comments"
@@ -114,7 +114,7 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
 	           " AND tl_pubs.PubCod=tl_comments.PubCod",
 		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
 
-   /* Remove all the comments from any user in any note of the user */
+   /* Remove all comments from any user in any note of the user */
    DB_QueryDELETE ("can not remove comments",
 		   "DELETE FROM tl_pubs"
 	           " USING tl_notes,tl_pubs"
@@ -123,7 +123,7 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
                    " AND tl_pubs.PubType=%u",
 		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
 
-   /* Remove content of all the comments of the user in any note */
+   /* Remove content of all comments of the user in any note */
    DB_QueryDELETE ("can not remove comments",
 		   "DELETE FROM tl_comments"
 	           " USING tl_pubs,tl_comments"
@@ -132,15 +132,10 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
 	           " AND tl_pubs.PubCod=tl_comments.PubCod",
 		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
 
-   /***** Remove all the posts of the user *****/
-   DB_QueryDELETE ("can not remove posts",
-		   "DELETE FROM tl_posts"
-		   " WHERE PstCod IN"
-		   " (SELECT Cod FROM tl_notes"
-	           " WHERE UsrCod=%ld AND NoteType=%u)",
-		   UsrCod,(unsigned) TL_NOTE_POST);
+   /***** Remove all posts of the user *****/
+   TL_DB_RemoveAllPostsUsr (UsrCod);
 
-   /***** Remove all the publications of any user authored by the user *****/
+   /***** Remove all publications of any user authored by the user *****/
    DB_QueryDELETE ("can not remove publications",
 		   "DELETE FROM tl_pubs"
                    " USING tl_notes,tl_pubs"
