@@ -49,6 +49,7 @@
 
 /****************************** Timeline from who ****************************/
 unsigned TL_DB_GetWho (MYSQL_RES **mysql_res);
+void TL_DB_UpdateWho (Usr_Who_t Who);
 
 /*********************************** Notes ***********************************/
 unsigned TL_DB_GetDataOfNoteByCod (long NotCod,MYSQL_RES **mysql_res);

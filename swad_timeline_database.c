@@ -73,7 +73,7 @@ extern struct Globals Gbl;
 static long TL_DB_GetMedCodFromPub (long PubCod,const char *DBTable);
 
 /*****************************************************************************/
-/********************* Get data of note using its code ***********************/
+/********************* Get which users to show in timeline *******************/
 /*****************************************************************************/
 // Returns the number of rows got
 
@@ -81,9 +81,23 @@ unsigned TL_DB_GetWho (MYSQL_RES **mysql_res)
   {
    /***** Get which users from database *****/
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get timeline users",
+   DB_QuerySELECT (mysql_res,"can not get which timeline users",
 		   "SELECT TimelineUsrs"	// row[0]
 		   " FROM usr_last WHERE UsrCod=%ld",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/********************* Get which users to show in timeline *******************/
+/*****************************************************************************/
+
+void TL_DB_UpdateWho (Usr_Who_t Who)
+  {
+   /***** Update which users in database *****/
+   DB_QueryUPDATE ("can not update which timeline users",
+		   "UPDATE usr_last SET TimelineUsrs=%u"
+		   " WHERE UsrCod=%ld",
+		   (unsigned) Who,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 

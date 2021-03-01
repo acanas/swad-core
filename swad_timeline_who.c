@@ -164,11 +164,7 @@ void TL_Who_SaveWhoInDB (struct TL_Timeline *Timeline)
 
       /***** Update which users in database *****/
       // Who is stored in usr_last for next time I log in
-      DB_QueryUPDATE ("can not update timeline users in user's last data",
-		      "UPDATE usr_last SET TimelineUsrs=%u"
-		      " WHERE UsrCod=%ld",
-		      (unsigned) Timeline->Who,
-		      Gbl.Usrs.Me.UsrDat.UsrCod);
+      TL_DB_UpdateWho (Timeline->Who);
      }
   }
 
