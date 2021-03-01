@@ -476,13 +476,18 @@ static void TL_Com_CheckAndWriteComment (const struct TL_Timeline *Timeline,
    |        | Favs                      |Remove|   > buttons     |
    |________|___________________________|______| /              /
    */
-   if (Com->PubCod > 0 &&
-       Com->NotCod > 0 &&
-       Com->UsrCod > 0)
-      /***** Write comment *****/
-      TL_Com_WriteComment (Timeline,Com);
-   else
+
+   /***** Trivial check: codes *****/
+   if (Com->PubCod <= 0 ||
+       Com->NotCod <= 0 ||
+       Com->UsrCod <= 0)
+     {
       Ale_ShowAlert (Ale_ERROR,"Error in comment.");
+      return;
+     }
+
+   /***** Write comment *****/
+   TL_Com_WriteComment (Timeline,Com);
   }
 
 /*****************************************************************************/
@@ -696,50 +701,52 @@ static long TL_Com_ReceiveComment (void)
    Not.NotCod = TL_Not_GetParamNotCod ();
    TL_Not_GetDataOfNoteByCod (&Not);
 
-   if (Not.NotCod > 0)
+   /***** Trivial check: note code *****/
+   if (Not.NotCod <= 0)
      {
-      /***** Get the content of the comment *****/
-      Par_GetParAndChangeFormat ("Txt",Content.Txt,Cns_MAX_BYTES_LONG_TEXT,
-				 Str_TO_RIGOROUS_HTML,true);
-
-      /***** Initialize image *****/
-      Med_MediaConstructor (&Content.Media);
-
-      /***** Get attached image (action, file and title) *****/
-      Content.Media.Width   = TL_IMAGE_SAVED_MAX_WIDTH;
-      Content.Media.Height  = TL_IMAGE_SAVED_MAX_HEIGHT;
-      Content.Media.Quality = TL_IMAGE_SAVED_QUALITY;
-      Med_GetMediaFromForm (-1L,-1L,-1,&Content.Media,NULL,NULL);
-      Ale_ShowAlerts (NULL);
-
-      if (Content.Txt[0] ||				// Text not empty
-	  Content.Media.Status == Med_PROCESSED)	// A media is attached
-	{
-	 /***** Store media in filesystem and database *****/
-	 Med_RemoveKeepOrStoreMedia (-1L,&Content.Media);
-
-	 /***** Publish *****/
-	 /* Insert into publications */
-	 Pub.NotCod       = Not.NotCod;
-	 Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-	 Pub.PubType      = TL_Pub_COMMENT_TO_NOTE;
-	 TL_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
-
-	 /* Insert comment content in the database */
-	 TL_DB_InsertCommentContent (Pub.PubCod,&Content);
-
-	 /***** Store notifications about the new comment *****/
-	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,Pub.PubCod);
-
-	 /***** Analyze content and store notifications about mentions *****/
-	 Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (Pub.PubCod,Content.Txt);
-	}
-
-      /***** Free image *****/
-      Med_MediaDestructor (&Content.Media);
-     }
-   else
       Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      return -1L;
+     }
+
+   /***** Get the content of the comment *****/
+   Par_GetParAndChangeFormat ("Txt",Content.Txt,Cns_MAX_BYTES_LONG_TEXT,
+			      Str_TO_RIGOROUS_HTML,true);
+
+   /***** Initialize image *****/
+   Med_MediaConstructor (&Content.Media);
+
+   /***** Get attached image (action, file and title) *****/
+   Content.Media.Width   = TL_IMAGE_SAVED_MAX_WIDTH;
+   Content.Media.Height  = TL_IMAGE_SAVED_MAX_HEIGHT;
+   Content.Media.Quality = TL_IMAGE_SAVED_QUALITY;
+   Med_GetMediaFromForm (-1L,-1L,-1,&Content.Media,NULL,NULL);
+   Ale_ShowAlerts (NULL);
+
+   if (Content.Txt[0] ||			// Text not empty
+       Content.Media.Status == Med_PROCESSED)	// A media is attached
+     {
+      /***** Store media in filesystem and database *****/
+      Med_RemoveKeepOrStoreMedia (-1L,&Content.Media);
+
+      /***** Publish *****/
+      /* Insert into publications */
+      Pub.NotCod       = Not.NotCod;
+      Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+      Pub.PubType      = TL_Pub_COMMENT_TO_NOTE;
+      TL_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
+
+      /* Insert comment content in the database */
+      TL_DB_InsertCommentContent (Pub.PubCod,&Content);
+
+      /***** Store notifications about the new comment *****/
+      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,Pub.PubCod);
+
+      /***** Analyze content and store notifications about mentions *****/
+      Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (Pub.PubCod,Content.Txt);
+     }
+
+   /***** Free image *****/
+   Med_MediaDestructor (&Content.Media);
 
    return Not.NotCod;
   }
@@ -794,45 +801,53 @@ static void TL_Com_RequestRemovalComment (struct TL_Timeline *Timeline)
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
    struct TL_Com_Comment Com;
 
-   /***** Initialize image *****/
+   /***** Initialize media *****/
    Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
    Com.PubCod = TL_Pub_GetParamPubCod ();
    TL_Com_GetDataOfCommByCod (&Com);
 
-   if (Com.PubCod > 0)
+   /***** Trivial check 1: publication code *****/
+   if (Com.PubCod <= 0)
      {
-      if (Usr_ItsMe (Com.UsrCod))	// I am the author of this comment
-	{
-	 /***** Show question and button to remove comment *****/
-	 /* Begin alert */
-	 TL_Frm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_comment);
-
-	 /* Show comment */
-	 Box_BoxBegin (NULL,NULL,
-		       NULL,NULL,
-		       NULL,Box_NOT_CLOSABLE);
-
-	 HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
-	 HTM_DIV_End ();
-
-	 HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
-	 TL_Com_CheckAndWriteComment (Timeline,&Com);
-	 HTM_DIV_End ();
-
-	 Box_BoxEnd ();
-
-	 /* End alert */
-	 Timeline->PubCod = Com.PubCod;	// Publication to be removed
-	 TL_Frm_EndAlertRemove (Timeline,TL_Frm_REM_COMM,
-	                        TL_Com_PutParamsRemoveComment);
-	}
-     }
-   else
+      Med_MediaDestructor (&Com.Content.Media);
       Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
+      return;
+     }
 
-   /***** Free image *****/
+   /***** Trivial check 2: only if I am the author of this comment *****/
+   if (!Usr_ItsMe (Com.UsrCod))
+     {
+      Med_MediaDestructor (&Com.Content.Media);
+      Ale_ShowAlert (Ale_ERROR,"You are not the author.");
+      return;
+     }
+
+   /***** Show question and button to remove comment *****/
+   /* Begin alert */
+   TL_Frm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_comment);
+
+   /* Show comment */
+   Box_BoxBegin (NULL,NULL,
+		 NULL,NULL,
+		 NULL,Box_NOT_CLOSABLE);
+
+   HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
+   HTM_DIV_End ();
+
+   HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
+   TL_Com_CheckAndWriteComment (Timeline,&Com);
+   HTM_DIV_End ();
+
+   Box_BoxEnd ();
+
+   /* End alert */
+   Timeline->PubCod = Com.PubCod;	// Publication to be removed
+   TL_Frm_EndAlertRemove (Timeline,TL_Frm_REM_COMM,
+			  TL_Com_PutParamsRemoveComment);
+
+   /***** Free media *****/
    Med_MediaDestructor (&Com.Content.Media);
   }
 
@@ -902,33 +917,41 @@ static void TL_Com_RemoveComment (void)
    extern const char *Txt_Comment_removed;
    struct TL_Com_Comment Com;
 
-   /***** Initialize image *****/
+   /***** Initialize media *****/
    Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
    Com.PubCod = TL_Pub_GetParamPubCod ();
    TL_Com_GetDataOfCommByCod (&Com);
 
-   if (Com.PubCod > 0)
+   /***** Trivial check 1: publication code *****/
+   if (Com.PubCod <= 0)
      {
-      if (Usr_ItsMe (Com.UsrCod))	// I am the author of this comment
-	{
-	 /***** Remove media associated to comment
-	        and delete comment from database *****/
-	 TL_Com_RemoveCommentMediaAndDBEntries (Com.PubCod);
-
-	 /***** Reset fields of comment *****/
-	 TL_Com_ResetComment (&Com);
-
-	 /***** Message of success *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_Comment_removed);
-	}
-     }
-   else
+      Med_MediaDestructor (&Com.Content.Media);
       Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
+      return;
+     }
 
-   /***** Free image *****/
+   /***** Trivial check 2: only if I am the author of this comment *****/
+   if (!Usr_ItsMe (Com.UsrCod))
+     {
+      Med_MediaDestructor (&Com.Content.Media);
+      Ale_ShowAlert (Ale_ERROR,"You are not the author.");
+      return;
+     }
+
+   /***** Remove media associated to comment
+	  and delete comment from database *****/
+   TL_Com_RemoveCommentMediaAndDBEntries (Com.PubCod);
+
+   /***** Free media *****/
    Med_MediaDestructor (&Com.Content.Media);
+
+   /***** Reset fields of comment *****/
+   TL_Com_ResetComment (&Com);
+
+   /***** Message of success *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Comment_removed);
   }
 
 /*****************************************************************************/
@@ -964,25 +987,27 @@ void TL_Com_GetDataOfCommByCod (struct TL_Com_Comment *Com)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   if (Com->PubCod > 0)
+   /***** Trivial check: publication code should be > 0 *****/
+   if (Com->PubCod <= 0)
      {
-      /***** Get data of comment from database *****/
-      if (TL_DB_GetDataOfCommByCod (Com->PubCod,&mysql_res))
-	{
-	 /***** Get data of comment *****/
-	 row = mysql_fetch_row (mysql_res);
-	 TL_Com_GetDataOfCommentFromRow (row,Com);
-	}
-      else
-	 /***** Reset fields of comment *****/
-	 TL_Com_ResetComment (Com);
+      /***** Reset fields of comment *****/
+      TL_Com_ResetComment (Com);
+      return;
+     }
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+   /***** Get data of comment from database *****/
+   if (TL_DB_GetDataOfCommByCod (Com->PubCod,&mysql_res))
+     {
+      /***** Get data of comment *****/
+      row = mysql_fetch_row (mysql_res);
+      TL_Com_GetDataOfCommentFromRow (row,Com);
      }
    else
       /***** Reset fields of comment *****/
       TL_Com_ResetComment (Com);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

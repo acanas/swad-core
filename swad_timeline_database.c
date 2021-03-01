@@ -70,7 +70,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static long TL_DB_GetMedCodFromPub (long PubCod,const char *DBTable);
+static long TL_DB_GetMedCod (const char *Table,const char *Field,long Cod);
 
 /*****************************************************************************/
 /********************* Get which users to show in timeline *******************/
@@ -409,9 +409,9 @@ unsigned TL_DB_GetPostByCod (long PstCod,MYSQL_RES **mysql_res)
 /***************** Get code of media associated to post **********************/
 /*****************************************************************************/
 
-long TL_DB_GetMedCodFromPost (long PubCod)
+long TL_DB_GetMedCodFromPost (long PstCod)
   {
-   return TL_DB_GetMedCodFromPub (PubCod,"tl_posts");
+   return TL_DB_GetMedCod ("tl_posts","PstCod",PstCod);
   }
 
 /*****************************************************************************/
@@ -597,7 +597,7 @@ void TL_DB_InsertCommentContent (long PubCod,
 
 long TL_DB_GetMedCodFromComment (long PubCod)
   {
-   return TL_DB_GetMedCodFromPub (PubCod,"tl_comments");
+   return TL_DB_GetMedCod ("tl_comments","PubCod",PubCod);
   }
 
 /*****************************************************************************/
@@ -680,7 +680,7 @@ void TL_DB_RemoveAllCommentsMadeBy (long UsrCod)
 /*************** Get code of media associated to post/comment ****************/
 /*****************************************************************************/
 
-static long TL_DB_GetMedCodFromPub (long PubCod,const char *DBTable)
+static long TL_DB_GetMedCod (const char *Table,const char *Field,long Cod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -690,8 +690,8 @@ static long TL_DB_GetMedCodFromPub (long PubCod,const char *DBTable)
    if (DB_QuerySELECT (&mysql_res,"can not get media code",
 		       "SELECT MedCod"	// row[0]
 		       " FROM %s"
-		       " WHERE PubCod=%ld",
-		       DBTable,PubCod) == 1)   // Result should have a unique row
+		       " WHERE %s=%ld",
+		      Table,Field,Cod) == 1)   // Result should have a unique row
      {
       /* Get media code */
       row = mysql_fetch_row (mysql_res);

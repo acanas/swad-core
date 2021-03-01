@@ -115,6 +115,7 @@ void TL_Sha_ShaNoteGbl (void)
 
 static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
   {
+   extern const char *Txt_The_original_post_no_longer_exists;
    struct TL_Pub_Publication Pub;
    long OriginalPubCod;
 
@@ -122,28 +123,47 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
    Not->NotCod = TL_Not_GetParamNotCod ();
    TL_Not_GetDataOfNoteByCod (Not);
 
-   if (Not->NotCod > 0)
-      if (Gbl.Usrs.Me.Logged &&		// I am logged...
-	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
-         if (!TL_DB_CheckIfNoteIsSharedByUsr (Not->NotCod,
-					      Gbl.Usrs.Me.UsrDat.UsrCod))	// Not yet shared by me
-	   {
-	    /***** Share (publish note in timeline) *****/
-	    Pub.NotCod       = Not->NotCod;
-	    Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-	    Pub.PubType      = TL_Pub_SHARED_NOTE;
-	    TL_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
+   /***** Trivial check 1: note code should be > 0 *****/
+   if (Not->NotCod <= 0)
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      return;
+     }
 
-	    /***** Update number of times this note is shared *****/
-	    Not->NumShared = TL_DB_GetNumTimesANoteHasBeenShared (Not);
+   /***** Trivial check 2: Am I logged? *****/
+   if (!Gbl.Usrs.Me.Logged)
+     {
+      Ale_ShowAlert (Ale_ERROR,"You are not logged.");
+      return;
+     }
 
-	    /***** Create notification about shared post
-		   for the author of the post *****/
-	    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
-	    if (OriginalPubCod > 0)
-	       TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,
-	                                   Ntf_EVENT_TIMELINE_SHARE);
-	   }
+   /***** Trivial check 3: Am I the author? *****/
+   if (Usr_ItsMe (Not->UsrCod))
+     {
+      Ale_ShowAlert (Ale_ERROR,"You can not share/unshare your own posts.");
+      return;
+     }
+
+   /***** Trivial check 4: Is note already shared by me? *****/
+   if (TL_DB_CheckIfNoteIsSharedByUsr (Not->NotCod,Gbl.Usrs.Me.UsrDat.UsrCod))
+      // Don't show error message
+      return;
+
+   /***** Share (publish note in timeline) *****/
+   Pub.NotCod       = Not->NotCod;
+   Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+   Pub.PubType      = TL_Pub_SHARED_NOTE;
+   TL_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
+
+   /***** Update number of times this note is shared *****/
+   Not->NumShared = TL_DB_GetNumTimesANoteHasBeenShared (Not);
+
+   /***** Create notification about shared post
+	  for the author of the post *****/
+   OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
+   if (OriginalPubCod > 0)
+      TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,
+				  Ntf_EVENT_TIMELINE_SHARE);
   }
 
 /*****************************************************************************/
@@ -172,30 +192,49 @@ void TL_Sha_UnsNoteGbl (void)
 
 static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
   {
+   extern const char *Txt_The_original_post_no_longer_exists;
    long OriginalPubCod;
 
    /***** Get data of note *****/
    Not->NotCod = TL_Not_GetParamNotCod ();
    TL_Not_GetDataOfNoteByCod (Not);
 
-   if (Not->NotCod > 0)
-      if (Not->NumShared &&
-	  Gbl.Usrs.Me.Logged &&		// I am logged...
-	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
-	 if (TL_DB_CheckIfNoteIsSharedByUsr (Not->NotCod,
-					     Gbl.Usrs.Me.UsrDat.UsrCod))	// I am a sharer
-	   {
-	    /***** Delete publication from database *****/
-	    TL_DB_RemoveSharedPub (Not->NotCod);
+   /***** Trivial check 1: note code should be > 0 *****/
+   if (Not->NotCod <= 0)
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      return;
+     }
 
-	    /***** Update number of times this note is shared *****/
-	    Not->NumShared = TL_DB_GetNumTimesANoteHasBeenShared (Not);
+   /***** Trivial check 2: Am I logged? *****/
+   if (!Gbl.Usrs.Me.Logged)
+     {
+      Ale_ShowAlert (Ale_ERROR,"You are not logged.");
+      return;
+     }
 
-            /***** Mark possible notifications on this note as removed *****/
-	    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
-	    if (OriginalPubCod > 0)
-	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE,OriginalPubCod);
-	   }
+   /***** Trivial check 3: Am I the author? *****/
+   if (Usr_ItsMe (Not->UsrCod))
+     {
+      Ale_ShowAlert (Ale_ERROR,"You can not share/unshare your own posts.");
+      return;
+     }
+
+   /***** Trivial check 4: Is note already shared by me? *****/
+   if (!TL_DB_CheckIfNoteIsSharedByUsr (Not->NotCod,Gbl.Usrs.Me.UsrDat.UsrCod))
+      // Don't show error message
+      return;
+
+   /***** Delete publication from database *****/
+   TL_DB_RemoveSharedPub (Not->NotCod);
+
+   /***** Update number of times this note is shared *****/
+   Not->NumShared = TL_DB_GetNumTimesANoteHasBeenShared (Not);
+
+   /***** Mark possible notifications on this note as removed *****/
+   OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
+   if (OriginalPubCod > 0)
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE,OriginalPubCod);
   }
 
 void TL_Sha_PutIconToShaUnsNote (const struct TL_Not_Note *Not,

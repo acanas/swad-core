@@ -160,63 +160,102 @@ void TL_Fav_PutIconToFavUnfNote (const struct TL_Not_Note *Not,
 
 static void TL_Fav_FavNote (struct TL_Not_Note *Not)
   {
+   extern const char *Txt_The_original_post_no_longer_exists;
    long OriginalPubCod;
 
    /***** Get data of note *****/
    Not->NotCod = TL_Not_GetParamNotCod ();
    TL_Not_GetDataOfNoteByCod (Not);
 
-   if (Not->NotCod > 0)
+   /***** Trivial check 1: note code should be > 0 *****/
+   if (Not->NotCod <= 0)
      {
-      if (Gbl.Usrs.Me.Logged &&		// I am logged...
-	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
-	 if (!TL_DB_CheckIfFavedByUsr (TL_Fav_NOTE,Not->NotCod,
-				       Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
-	   {
-	    /***** Mark note as favourite in database *****/
-	    TL_DB_MarkAsFav (TL_Fav_NOTE,Not->NotCod);
-
-	    /***** Update number of times this note is favourited *****/
-	    Not->NumFavs = TL_DB_GetNumTimesHasBeenFav (TL_Fav_NOTE,
-	                                                Not->NotCod,Not->UsrCod);
-
-	    /***** Create notification about favourite post
-		   for the author of the post *****/
-	    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
-	    if (OriginalPubCod > 0)
-	       TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,
-	                                   Ntf_EVENT_TIMELINE_FAV);
-	   }
+      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      return;
      }
+
+   /***** Trivial check 2: I must be logged *****/
+   if (!Gbl.Usrs.Me.Logged)
+     {
+      Ale_ShowAlert (Ale_ERROR,"You are not logged.");
+      return;
+     }
+
+   /***** Trivial check 3: The author can not fav his/her own notes *****/
+   if (Usr_ItsMe (Not->UsrCod))
+     {
+      Ale_ShowAlert (Ale_ERROR,"You can not fav/unfav your own posts.");
+      return;
+     }
+
+   /***** Trivial check 4: Have I faved this note? *****/
+   if (TL_DB_CheckIfFavedByUsr (TL_Fav_NOTE,Not->NotCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod))
+      // Don't show error message
+      return;
+
+   /***** Mark note as favourite in database *****/
+   TL_DB_MarkAsFav (TL_Fav_NOTE,Not->NotCod);
+
+   /***** Update number of times this note is favourited *****/
+   Not->NumFavs = TL_DB_GetNumTimesHasBeenFav (TL_Fav_NOTE,
+					       Not->NotCod,Not->UsrCod);
+
+   /***** Create notification about favourite post
+	  for the author of the post *****/
+   OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
+   if (OriginalPubCod > 0)
+      TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,
+				  Ntf_EVENT_TIMELINE_FAV);
   }
 
 static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
   {
+   extern const char *Txt_The_original_post_no_longer_exists;
    long OriginalPubCod;
 
    /***** Get data of note *****/
    Not->NotCod = TL_Not_GetParamNotCod ();
    TL_Not_GetDataOfNoteByCod (Not);
 
-   if (Not->NotCod > 0)
-      if (Not->NumFavs &&
-	  Gbl.Usrs.Me.Logged &&		// I am logged...
-	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
-	 if (TL_DB_CheckIfFavedByUsr (TL_Fav_NOTE,Not->NotCod,
-			              Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
-	   {
-	    /***** Delete the mark as favourite from database *****/
-	    TL_DB_UnmarkAsFav (TL_Fav_NOTE,Not->NotCod);
+   /***** Trivial check 1: note code should be > 0 *****/
+   if (Not->NotCod <= 0)
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      return;
+     }
 
-	    /***** Update number of times this note is favourited *****/
-	    Not->NumFavs = TL_DB_GetNumTimesHasBeenFav (TL_Fav_NOTE,
-	                                                Not->NotCod,Not->UsrCod);
+   /***** Trivial check 2: I must be logged *****/
+   if (!Gbl.Usrs.Me.Logged)
+     {
+      Ale_ShowAlert (Ale_ERROR,"You are not logged.");
+      return;
+     }
 
-            /***** Mark possible notifications on this note as removed *****/
-	    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
-	    if (OriginalPubCod > 0)
-	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,OriginalPubCod);
-	   }
+   /***** Trivial check 3: The author can not unfav his/her own notes *****/
+   if (Usr_ItsMe (Not->UsrCod))
+     {
+      Ale_ShowAlert (Ale_ERROR,"You can not fav/unfav your own posts.");
+      return;
+     }
+
+   /***** Trivial check 4: Have I faved this note? *****/
+   if (!TL_DB_CheckIfFavedByUsr (TL_Fav_NOTE,Not->NotCod,
+				 Gbl.Usrs.Me.UsrDat.UsrCod))
+      // Don't show error message
+      return;
+
+   /***** Delete the mark as favourite from database *****/
+   TL_DB_UnmarkAsFav (TL_Fav_NOTE,Not->NotCod);
+
+   /***** Update number of times this note is favourited *****/
+   Not->NumFavs = TL_DB_GetNumTimesHasBeenFav (TL_Fav_NOTE,
+					       Not->NotCod,Not->UsrCod);
+
+   /***** Mark possible notifications on this note as removed *****/
+   OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
+   if (OriginalPubCod > 0)
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,OriginalPubCod);
   }
 
 /*****************************************************************************/
@@ -306,6 +345,8 @@ void TL_Fav_PutIconToFavUnfComment (const struct TL_Com_Comment *Com,
 
 static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
   {
+   extern const char *Txt_The_comment_no_longer_exists;
+
    /***** Initialize image *****/
    Med_MediaConstructor (&Com->Content.Media);
 
@@ -313,23 +354,50 @@ static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
    Com->PubCod = TL_Pub_GetParamPubCod ();
    TL_Com_GetDataOfCommByCod (Com);
 
-   if (Com->PubCod > 0)
-      if (!Usr_ItsMe (Com->UsrCod))	// I am not the author
-	 if (!TL_DB_CheckIfFavedByUsr (TL_Fav_COMM,Com->PubCod,
-				       Gbl.Usrs.Me.UsrDat.UsrCod)) // I have not yet favourited the comment
-	   {
-	    /***** Mark comment as favourite in database *****/
-	    TL_DB_MarkAsFav (TL_Fav_COMM,Com->PubCod);
+   /***** Trivial check 1: publication code should be > 0 *****/
+   if (Com->PubCod <= 0)
+     {
+      Med_MediaDestructor (&Com->Content.Media);
+      Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
+      return;
+     }
 
-	    /***** Update number of times this comment is favourited *****/
-	    Com->NumFavs = TL_DB_GetNumTimesHasBeenFav (TL_Fav_COMM,
-	                                                Com->PubCod,Com->UsrCod);
+   /***** Trivial check 2: I must be logged *****/
+   if (!Gbl.Usrs.Me.Logged)
+     {
+      Med_MediaDestructor (&Com->Content.Media);
+      Ale_ShowAlert (Ale_ERROR,"You are not logged.");
+      return;
+     }
 
-	    /***** Create notification about favourite post
-		   for the author of the post *****/
-	    TL_Ntf_CreateNotifToAuthor (Com->UsrCod,Com->PubCod,
-	                                Ntf_EVENT_TIMELINE_FAV);
-	   }
+   /***** Trivial check 3: The author can not fav his/her own comments *****/
+   if (Usr_ItsMe (Com->UsrCod))
+     {
+      Med_MediaDestructor (&Com->Content.Media);
+      Ale_ShowAlert (Ale_ERROR,"You can not fav/unfav your own comments.");
+      return;
+     }
+
+   /***** Trivial check 4: Have I faved this comment? *****/
+   if (TL_DB_CheckIfFavedByUsr (TL_Fav_COMM,Com->PubCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod))
+     {
+      Med_MediaDestructor (&Com->Content.Media);
+      // Don't show error message
+      return;
+     }
+
+   /***** Mark comment as favourite in database *****/
+   TL_DB_MarkAsFav (TL_Fav_COMM,Com->PubCod);
+
+   /***** Update number of times this comment is favourited *****/
+   Com->NumFavs = TL_DB_GetNumTimesHasBeenFav (TL_Fav_COMM,
+					       Com->PubCod,Com->UsrCod);
+
+   /***** Create notification about favourite post
+	  for the author of the post *****/
+   TL_Ntf_CreateNotifToAuthor (Com->UsrCod,Com->PubCod,
+			       Ntf_EVENT_TIMELINE_FAV);
 
    /***** Free image *****/
    Med_MediaDestructor (&Com->Content.Media);
@@ -337,6 +405,8 @@ static void TL_Fav_FavComment (struct TL_Com_Comment *Com)
 
 static void TL_Fav_UnfComment (struct TL_Com_Comment *Com)
   {
+   extern const char *Txt_The_comment_no_longer_exists;
+
    /***** Initialize image *****/
    Med_MediaConstructor (&Com->Content.Media);
 
@@ -344,27 +414,52 @@ static void TL_Fav_UnfComment (struct TL_Com_Comment *Com)
    Com->PubCod = TL_Pub_GetParamPubCod ();
    TL_Com_GetDataOfCommByCod (Com);
 
-   if (Com->PubCod > 0)
-      if (Com->NumFavs &&
-	  !Usr_ItsMe (Com->UsrCod))	// I am not the author
-	 if (TL_DB_CheckIfFavedByUsr (TL_Fav_COMM,Com->PubCod,
-				      Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the comment
-	   {
-	    /***** Delete the mark as favourite from database *****/
-	    TL_DB_UnmarkAsFav (TL_Fav_COMM,Com->PubCod);
+   /***** Trivial check 1: publication code should be > 0 *****/
+   if (Com->PubCod <= 0)
+     {
+      Med_MediaDestructor (&Com->Content.Media);
+      Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
+      return;
+     }
 
-	    /***** Update number of times this comment is favourited *****/
-	    Com->NumFavs = TL_DB_GetNumTimesHasBeenFav (TL_Fav_COMM,
-	                                                Com->PubCod,Com->UsrCod);
+   /***** Trivial check 2: I must be logged *****/
+   if (!Gbl.Usrs.Me.Logged)
+     {
+      Med_MediaDestructor (&Com->Content.Media);
+      Ale_ShowAlert (Ale_ERROR,"You are not logged.");
+      return;
+     }
 
-            /***** Mark possible notifications on this comment as removed *****/
-            Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,Com->PubCod);
-	   }
+   /***** Trivial check 3: The author can not fav its own notes *****/
+   if (Usr_ItsMe (Com->UsrCod))
+     {
+      Med_MediaDestructor (&Com->Content.Media);
+      Ale_ShowAlert (Ale_ERROR,"You can not fav/unfav your own comments.");
+      return;
+     }
+
+   /***** Trivial check 4: Have I faved this comment? *****/
+   if (!TL_DB_CheckIfFavedByUsr (TL_Fav_COMM,Com->PubCod,
+				 Gbl.Usrs.Me.UsrDat.UsrCod))
+     {
+      Med_MediaDestructor (&Com->Content.Media);
+      // Don't show error message
+      return;
+     }
+
+   /***** Delete the mark as favourite from database *****/
+   TL_DB_UnmarkAsFav (TL_Fav_COMM,Com->PubCod);
+
+   /***** Update number of times this comment is favourited *****/
+   Com->NumFavs = TL_DB_GetNumTimesHasBeenFav (TL_Fav_COMM,
+					       Com->PubCod,Com->UsrCod);
+
+   /***** Mark possible notifications on this comment as removed *****/
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,Com->PubCod);
 
    /***** Free image *****/
    Med_MediaDestructor (&Com->Content.Media);
   }
-
 
 /*****************************************************************************/
 /****************** Put disabled icon to mark as favourite *******************/

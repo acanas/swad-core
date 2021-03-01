@@ -218,19 +218,21 @@ void TL_Not_CheckAndWriteNoteWithTopMsg (const struct TL_Timeline *Timeline,
             |    Form to write new comment     |  |              |
             |__________________________________| /              /
    */
-   if (Not->NotCod   > 0 &&
-       Not->UsrCod   > 0 &&
-       Not->NoteType != TL_NOTE_UNKNOWN)
+   /***** Trivial check: codes *****/
+   if (Not->NotCod   <= 0 ||
+       Not->UsrCod   <= 0 ||
+       Not->NoteType == TL_NOTE_UNKNOWN)
      {
-      /***** Write sharer/commenter if distinct to author *****/
-      if (TopMessage != TL_TOP_MESSAGE_NONE)
-         TL_Not_WriteTopMessage (TopMessage,PublisherCod);
-
-      /***** Write note *****/
-      TL_Not_WriteNote (Timeline,Not);
-     }
-   else
       Ale_ShowAlert (Ale_ERROR,"Error in note.");
+      return;
+     }
+
+   /***** Write sharer/commenter if distinct to author *****/
+   if (TopMessage != TL_TOP_MESSAGE_NONE)
+      TL_Not_WriteTopMessage (TopMessage,PublisherCod);
+
+   /***** Write note *****/
+   TL_Not_WriteNote (Timeline,Not);
   }
 
 /*****************************************************************************/
@@ -1074,33 +1076,39 @@ static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
    Not.NotCod = TL_Not_GetParamNotCod ();
    TL_Not_GetDataOfNoteByCod (&Not);
 
-   if (Not.NotCod > 0)
+   /***** Trivial check 1: note code should be > 0 *****/
+   if (Not.NotCod <= 0)
      {
-      if (Usr_ItsMe (Not.UsrCod))	// I am the author of this note
-	{
-	 /***** Show question and button to remove note *****/
-	 /* Begin alert */
-	 TL_Frm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_post);
-
-	 /* Show note */
-	 Box_BoxBegin (NULL,NULL,
-		       NULL,NULL,
-		       NULL,Box_CLOSABLE);
-	 HTM_DIV_Begin ("class=\"TL_WIDTH\"");
-	 TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-		                             TL_TOP_MESSAGE_NONE,
-		                             -1L);
-         HTM_DIV_End ();
-	 Box_BoxEnd ();
-
-	 /* End alert */
-         Timeline->NotCod = Not.NotCod;	// Note to be removed
-	 TL_Frm_EndAlertRemove (Timeline,TL_Frm_REM_NOTE,
-	                        TL_Not_PutParamsRemoveNote);
-	}
-     }
-   else
       Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      return;
+     }
+
+   /***** Trivial check 2: Am I the author of this note *****/
+   if (!Usr_ItsMe (Not.UsrCod))
+     {
+      Ale_ShowAlert (Ale_ERROR,"You are not the author.");
+      return;
+     }
+
+   /***** Show question and button to remove note *****/
+   /* Begin alert */
+   TL_Frm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_post);
+
+   /* Show note */
+   Box_BoxBegin (NULL,NULL,
+		 NULL,NULL,
+		 NULL,Box_CLOSABLE);
+   HTM_DIV_Begin ("class=\"TL_WIDTH\"");
+   TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+				       TL_TOP_MESSAGE_NONE,
+				       -1L);
+   HTM_DIV_End ();
+   Box_BoxEnd ();
+
+   /* End alert */
+   Timeline->NotCod = Not.NotCod;	// Note to be removed
+   TL_Frm_EndAlertRemove (Timeline,TL_Frm_REM_NOTE,
+			  TL_Not_PutParamsRemoveNote);
   }
 
 /*****************************************************************************/
@@ -1173,22 +1181,28 @@ static void TL_Not_RemoveNote (void)
    Not.NotCod = TL_Not_GetParamNotCod ();
    TL_Not_GetDataOfNoteByCod (&Not);
 
-   if (Not.NotCod > 0)
+   /***** Trivial check 1: note code should be > 0 *****/
+   if (Not.NotCod <= 0)
      {
-      if (Usr_ItsMe (Not.UsrCod))	// I am the author of this note
-	{
-	 /***** Delete note from database *****/
-	 TL_Not_RemoveNoteMediaAndDBEntries (&Not);
-
-	 /***** Reset note *****/
-	 TL_Not_ResetNote (&Not);
-
-	 /***** Message of success *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_TIMELINE_Post_removed);
-	}
-     }
-   else
       Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      return;
+     }
+
+   /***** Trivial check 2: Am I the author of this note *****/
+   if (!Usr_ItsMe (Not.UsrCod))
+     {
+      Ale_ShowAlert (Ale_ERROR,"You are not the author.");
+      return;
+     }
+
+   /***** Delete note from database *****/
+   TL_Not_RemoveNoteMediaAndDBEntries (&Not);
+
+   /***** Reset note *****/
+   TL_Not_ResetNote (&Not);
+
+   /***** Message of success *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_TIMELINE_Post_removed);
   }
 
 /*****************************************************************************/
@@ -1338,23 +1352,25 @@ void TL_Not_GetDataOfNoteByCod (struct TL_Not_Note *Not)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   if (Not->NotCod > 0)
+   /***** Trivial check: note code should be > 0 *****/
+   if (Not->NotCod <= 0)
      {
-      /***** Get data of note from database *****/
-      if (TL_DB_GetDataOfNoteByCod (Not->NotCod,&mysql_res))
-	{
-	 /***** Get data of note *****/
-	 row = mysql_fetch_row (mysql_res);
-	 TL_Not_GetDataOfNoteFromRow (row,Not);
-	}
-      else
-	 /***** Reset fields of note *****/
-	 TL_Not_ResetNote (Not);
+      /***** Reset fields of note *****/
+      TL_Not_ResetNote (Not);
+      return;
+     }
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+   /***** Get data of note from database *****/
+   if (TL_DB_GetDataOfNoteByCod (Not->NotCod,&mysql_res))
+     {
+      /***** Get data of note *****/
+      row = mysql_fetch_row (mysql_res);
+      TL_Not_GetDataOfNoteFromRow (row,Not);
      }
    else
       /***** Reset fields of note *****/
       TL_Not_ResetNote (Not);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
