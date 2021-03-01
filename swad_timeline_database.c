@@ -857,7 +857,6 @@ void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
 		   Gbl.Session.Id);
   }
 
-
 /*****************************************************************************/
 /****************** Check if a user has favourited a note ********************/
 /*****************************************************************************/
@@ -924,13 +923,13 @@ unsigned TL_DB_GetListUsrsHaveFaved (TL_Fav_WhatToFav_t WhatToFav,
   {
    const char *Table[TL_Fav_NUM_WHAT_TO_FAV] =
      {
-      "tl_notes_fav",
-      "tl_comments_fav",
+      [TL_Fav_NOTE] = "tl_notes_fav",
+      [TL_Fav_COMM] = "tl_comments_fav",
      };
    const char *Field[TL_Fav_NUM_WHAT_TO_FAV] =
      {
-      "NotCod",
-      "PubCod",
+      [TL_Fav_NOTE] = "NotCod",
+      [TL_Fav_COMM] = "PubCod",
      };
 
    /***** Get list of users who have marked a note/comment as favourite from database *****/
@@ -996,4 +995,21 @@ static void TL_DB_UnmarkAsFav (const char *Table,const char *Field,long Cod)
 		   " WHERE %s=%ld AND UsrCod=%ld",
 		   Table,
 		   Field,Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/****************** Remove shared publication from database ******************/
+/*****************************************************************************/
+
+void TL_DB_RemoveSharedPub (long NotCod)
+  {
+   /***** Remove shared publication *****/
+   DB_QueryDELETE ("can not remove a publication",
+		   "DELETE FROM tl_pubs"
+		   " WHERE NotCod=%ld"
+		   " AND PublisherCod=%ld"
+		   " AND PubType=%u",	// Extra check: shared note
+		   NotCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   (unsigned) TL_Pub_SHARED_NOTE);
   }

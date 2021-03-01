@@ -185,17 +185,10 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
 	  Gbl.Usrs.Me.Logged &&		// I am logged...
 	  !Usr_ItsMe (Not->UsrCod))	// ...but I am not the author
 	 if (TL_Sha_CheckIfNoteIsSharedByUsr (Not->NotCod,
-					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I am a sharer
+					      Gbl.Usrs.Me.UsrDat.UsrCod))	// I am a sharer
 	   {
 	    /***** Delete publication from database *****/
-	    DB_QueryDELETE ("can not remove a publication",
-			    "DELETE FROM tl_pubs"
-	                    " WHERE NotCod=%ld"
-	                    " AND PublisherCod=%ld"
-	                    " AND PubType=%u",
-			    Not->NotCod,
-			    Gbl.Usrs.Me.UsrDat.UsrCod,
-			    (unsigned) TL_Pub_SHARED_NOTE);
+	    TL_DB_RemoveSharedPub (Not->NotCod);
 
 	    /***** Update number of times this note is shared *****/
 	    TL_Sha_UpdateNumTimesANoteHasBeenShared (Not);

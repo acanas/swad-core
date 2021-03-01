@@ -457,15 +457,15 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedAsFav (TL_Fav_WhatToFav_t WhatToFav,
                                                unsigned NumFavs,
 					       TL_Usr_HowManyUsrs_t HowManyUsrs)
   {
-   TL_Frm_Action_t Action[TL_Fav_NUM_WHAT_TO_FAV] =
+   static const TL_Frm_Action_t Action[TL_Fav_NUM_WHAT_TO_FAV] =
      {
-      TL_Frm_ALL_FAV_NOTE,
-      TL_Frm_ALL_FAV_COMM,
+      [TL_Fav_NOTE] = TL_Frm_ALL_FAV_NOTE,
+      [TL_Fav_COMM] = TL_Frm_ALL_FAV_COMM,
      };
-   const char *ParamFormat[TL_Fav_NUM_WHAT_TO_FAV] =
+   static const char *ParamFormat[TL_Fav_NUM_WHAT_TO_FAV] =
      {
-      "NotCod=%ld",
-      "PubCod=%ld",
+      [TL_Fav_NOTE] = "NotCod=%ld",
+      [TL_Fav_COMM] = "PubCod=%ld",
      };
    MYSQL_RES *mysql_res;
    unsigned NumFirstUsrs;
@@ -473,10 +473,11 @@ static void TL_Fav_ShowUsrsWhoHaveMarkedAsFav (TL_Fav_WhatToFav_t WhatToFav,
    /***** Get users who have marked this note as favourite *****/
    if (NumFavs)
       /***** Get list of users from database *****/
-      NumFirstUsrs = TL_DB_GetListUsrsHaveFaved (WhatToFav,Cod,UsrCod,
-                                                 HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
-				                                                       TL_Usr_MAX_USRS_SHOWN,
-                                                 &mysql_res);
+      NumFirstUsrs =
+      TL_DB_GetListUsrsHaveFaved (WhatToFav,Cod,UsrCod,
+                                  HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
+				                                        TL_Usr_MAX_USRS_SHOWN,
+                                  &mysql_res);
    else
       NumFirstUsrs = 0;
 

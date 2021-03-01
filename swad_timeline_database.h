@@ -126,4 +126,7 @@ void TL_DB_MarkCommAsFav (long PubCod);
 void TL_DB_UnmarkNoteAsFav (long NotCod);
 void TL_DB_UnmarkCommAsFav (long PubCod);
 
+/******************************** Shared *************************************/
+void TL_DB_RemoveSharedPub (long NotCod);
+
 #endif
