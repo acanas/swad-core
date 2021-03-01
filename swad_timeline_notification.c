@@ -140,17 +140,13 @@ void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 	 if (Not.NoteType == TL_NOTE_POST)
 	   {
-	    /***** Get content of post from database *****/
-	    if (DB_QuerySELECT (&mysql_res,"can not get the content of a post",
-			        "SELECT Txt"	// row[0]
-			        " FROM tl_posts"
-				" WHERE PstCod=%ld",
-				Not.Cod) == 1)   // Result should have a unique row
+	    /***** Get post from database *****/
+            if (TL_DB_GetPostByCod (Not.Cod,&mysql_res) == 1)   // Result should have a unique row
 	      {
-	       /***** Get row *****/
+	       /* Get row */
 	       row = mysql_fetch_row (mysql_res);
 
-	       /****** Get content (row[0]) *****/
+	       /* Get only text content (row[0]) */
 	       Str_Copy (Content.Txt,row[0],sizeof (Content.Txt) - 1);
 	      }
 
@@ -176,19 +172,14 @@ void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	    TL_Not_GetNoteSummary (&Not,SummaryStr);
 	 break;
       case TL_Pub_COMMENT_TO_NOTE:
-	 /***** Get content of post from database *****/
-	 if (DB_QuerySELECT (&mysql_res,"can not get the content"
-				        " of a comment to a note",
-			     "SELECT Txt"	// row[0]
-			     " FROM tl_comments"
-			     " WHERE PubCod=%ld",
-			     Pub.PubCod) == 1)   // Result should have a unique row
+	 /***** Get content of comment from database *****/
+	 if (TL_DB_GetDataOfCommByCod (Pub.PubCod,&mysql_res) == 1)   // Result should have a unique row
 	   {
-	    /***** Get row *****/
+	    /* Get row */
 	    row = mysql_fetch_row (mysql_res);
 
-	    /****** Get content (row[0]) *****/
-	    Str_Copy (Content.Txt,row[0],sizeof (Content.Txt) - 1);
+	    /* Get only text content (row[4]) */
+	    Str_Copy (Content.Txt,row[4],sizeof (Content.Txt) - 1);
 	   }
 
 	 /***** Free structure that stores the query result *****/
