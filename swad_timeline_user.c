@@ -149,10 +149,7 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
 		   UsrCod);
 
    /***** Remove all the publications of the user *****/
-   DB_QueryDELETE ("can not remove publications",
-		   "DELETE FROM tl_pubs"
-		   " WHERE PublisherCod=%ld",
-		   UsrCod);
+   TL_DB_RemoveAllPubsUsr (UsrCod);
 
    /***** Remove all notes of the user *****/
    TL_DB_RemoveAllNotesUsr (UsrCod);

@@ -343,7 +343,7 @@ void TL_DB_RemoveNote (long NotCod)
 
 void TL_DB_RemoveAllNotesUsr (long UsrCod)
   {
-   /***** Remove all notes created by a user *****/
+   /***** Remove all notes created by user *****/
    DB_QueryDELETE ("can not remove notes",
 		   "DELETE FROM tl_notes WHERE UsrCod=%ld",
 		   UsrCod);
@@ -896,6 +896,18 @@ void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
 		   " WHERE SessionId='%s'",
 		   FirstPubCod,
 		   Gbl.Session.Id);
+  }
+
+/*****************************************************************************/
+/********************* Remove all publications of a user *********************/
+/*****************************************************************************/
+
+void TL_DB_RemoveAllPubsUsr (long UsrCod)
+  {
+   /***** Remove all publications of user *****/
+   DB_QueryDELETE ("can not remove publications",
+		   "DELETE FROM tl_pubs WHERE PublisherCod=%ld",
+		   UsrCod);
   }
 
 /*****************************************************************************/
