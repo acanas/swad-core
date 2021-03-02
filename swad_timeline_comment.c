@@ -73,6 +73,8 @@ static unsigned TL_Com_WriteHiddenComms (struct TL_Timeline *Timeline,
                                          long NotCod,
 				         char IdComms[Frm_MAX_BYTES_ID + 1],
 					 unsigned NumInitialCommsToGet);
+static void TL_Com_ListComms (const struct TL_Timeline *Timeline,
+			      MYSQL_RES *mysql_res,unsigned NumComms);
 static void TL_Com_WriteOneCommInList (const struct TL_Timeline *Timeline,
                                        MYSQL_RES *mysql_res);
 static void TL_Com_LinkToShowOnlyLatestComms (const char IdComms[Frm_MAX_BYTES_ID + 1]);
@@ -232,7 +234,6 @@ void TL_Com_WriteCommsInNote (const struct TL_Timeline *Timeline,
    unsigned NumInitialComms;
    unsigned NumFinalCommsToGet;
    unsigned NumFinalCommsGot;
-   unsigned NumCom;
    char IdComms[Frm_MAX_BYTES_ID + 1];
 
    /***** Get number of comments in note *****/
@@ -258,9 +259,8 @@ void TL_Com_WriteCommsInNote (const struct TL_Timeline *Timeline,
      }
 
    /***** Get final comments of this note from database *****/
-   NumFinalCommsGot = TL_DB_GetFinalComms (Not->NotCod,
-				                 NumFinalCommsToGet,
-				                 &mysql_res);
+   NumFinalCommsGot = TL_DB_GetFinalComms (Not->NotCod,NumFinalCommsToGet,
+				           &mysql_res);
    /*
       Before clicking "See prev..."    -->    After clicking "See prev..."
     _________________________________       _________________________________
@@ -322,10 +322,7 @@ void TL_Com_WriteCommsInNote (const struct TL_Timeline *Timeline,
    if (NumFinalCommsGot)
      {
       HTM_UL_Begin ("class=\"TL_LIST\"");
-	 for (NumCom = 0;
-	      NumCom < NumFinalCommsGot;
-	      NumCom++)
-	    TL_Com_WriteOneCommInList (Timeline,mysql_res);
+	 TL_Com_ListComms (Timeline,mysql_res,NumFinalCommsGot);
       HTM_UL_End ();
      }
 
@@ -358,13 +355,9 @@ void TL_Com_ShowHiddenCommsGbl (void)
    TL_ResetTimeline (&Timeline);
 
    /***** Get parameters *****/
-   /* Get note code */
+   /* Get note code, identifier and number of comments to get */
    NotCod = TL_Not_GetParamNotCod ();
-
-   /* Get identifier */
    Par_GetParToText ("IdComments",IdComms,Frm_MAX_BYTES_ID);
-
-   /* Get number of comments to get */
    NumInitialCommsToGet = (unsigned) Par_GetParToLong ("NumHidCom");
 
    /***** Write HTML inside DIV with hidden comments *****/
@@ -387,7 +380,6 @@ static unsigned TL_Com_WriteHiddenComms (struct TL_Timeline *Timeline,
   {
    MYSQL_RES *mysql_res;
    unsigned long NumInitialCommsGot;
-   unsigned long NumCom;
 
    /***** Get comments of this note from database *****/
    NumInitialCommsGot = TL_DB_GetInitialComms (NotCod,
@@ -396,16 +388,29 @@ static unsigned TL_Com_WriteHiddenComms (struct TL_Timeline *Timeline,
 
    /***** List comments *****/
    HTM_UL_Begin ("id=\"com_%s\" class=\"TL_LIST\"",IdComms);
-      for (NumCom = 0;
-	   NumCom < NumInitialCommsGot;
-	   NumCom++)
-	 TL_Com_WriteOneCommInList (Timeline,mysql_res);
+      TL_Com_ListComms (Timeline,mysql_res,NumInitialCommsGot);
    HTM_UL_End ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
    return NumInitialCommsGot;
+  }
+
+/*****************************************************************************/
+/*********************** Write comments in a note ****************************/
+/*****************************************************************************/
+
+static void TL_Com_ListComms (const struct TL_Timeline *Timeline,
+			      MYSQL_RES *mysql_res,unsigned NumComms)
+  {
+   unsigned NumCom;
+
+   /***** List comments one by one *****/
+   for (NumCom = 0;
+	NumCom < NumComms;
+	NumCom++)
+      TL_Com_WriteOneCommInList (Timeline,mysql_res);
   }
 
 /*****************************************************************************/
@@ -465,8 +470,8 @@ static void TL_Com_LinkToShowPreviousComms (const char IdComms[Frm_MAX_BYTES_ID 
 	          " style=\"display:none;\"",	// Hidden
 		  IdComms);
       TL_Com_PutIconToToggleComms (IdComms,"angle-up.svg",
-				      Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
-							   (long) NumInitialComms));
+				   Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
+							(long) NumInitialComms));
       Str_FreeString ();
    HTM_DIV_End ();
   }
@@ -857,18 +862,21 @@ static void TL_Com_RequestRemovalComm (struct TL_Timeline *Timeline)
    /* Begin alert */
    TL_Frm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_comment);
 
-      /* Show comment */
+      /* Begin box for the comment */
       Box_BoxBegin (NULL,NULL,
 		    NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
 
+         /* Indent the comment */
 	 HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
 	 HTM_DIV_End ();
 
+	 /* Show the comment */
 	 HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
 	    TL_Com_CheckAndWriteComm (Timeline,&Com);
 	 HTM_DIV_End ();
 
+      /* End box */
       Box_BoxEnd ();
 
    /* End alert */
