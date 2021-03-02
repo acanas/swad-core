@@ -170,6 +170,8 @@ static void TL_PutIconsTimeline (__attribute__((unused)) void *Args);
 static unsigned TL_ListRecentPubs (struct TL_Timeline *Timeline,
                                    long NotCodToHighlight);
 
+static void TL_PutHiddenList (const char *Id);
+
 /*****************************************************************************/
 /************************ Initialize global timeline *************************/
 /*****************************************************************************/
@@ -443,15 +445,11 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
 	 /* Link to view new publications via AJAX */
 	 TL_Pub_PutLinkToViewNewPubs ();
 
-	 /* Hidden list where insert
-	    just received (not visible) publications via AJAX */
-	 HTM_UL_Begin ("id=\"just_now_timeline_list\" class=\"TL_LIST\"");
-	 HTM_UL_End ();
-
-	 /* Hidden list where insert
-	    new (not visible) publications via AJAX */
-	 HTM_UL_Begin ("id=\"new_timeline_list\" class=\"TL_LIST\"");
-	 HTM_UL_End ();
+	 /* Hidden lists to insert publications received via AJAX:
+	    1. just received (not visible) publications
+	    2. new (not visible) publications */
+	 TL_PutHiddenList ("just_now_timeline_list");
+	 TL_PutHiddenList ("new_timeline_list");
 	}
 
       /***** List recent publications in timeline *****/
@@ -464,9 +462,8 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
 	 /* Link to view old publications via AJAX */
 	 TL_Pub_PutLinkToViewOldPubs ();
 
-	 /* Hidden list where insert old publications via AJAX */
-	 HTM_UL_Begin ("id=\"old_timeline_list\" class=\"TL_LIST\"");
-	 HTM_UL_End ();
+	 /* Hidden list to insert old publications via AJAX */
+	 TL_PutHiddenList ("old_timeline_list");
 	}
 
    /***** End box *****/
@@ -508,8 +505,9 @@ static unsigned TL_ListRecentPubs (struct TL_Timeline *Timeline,
 	 TL_Not_GetDataOfNoteByCod (&Not);
 
 	 /* Write list item (note) */
-	 HTM_LI_Begin ("class=\"%s\"",Not.NotCod == NotCodToHighlight ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
-									"TL_WIDTH TL_SEP");
+	 HTM_LI_Begin ("class=\"%s\"",
+	               Not.NotCod == NotCodToHighlight ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
+							 "TL_WIDTH TL_SEP");
 	    TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
 						TL_Pub_GetTopMessage (Pub->PubType),
 						Pub->PublisherCod);
@@ -520,6 +518,16 @@ static unsigned TL_ListRecentPubs (struct TL_Timeline *Timeline,
    HTM_UL_End ();
 
    return NumNotesShown;
+  }
+
+/*****************************************************************************/
+/*********** Put a hidden list where publications will be inserted ***********/
+/*****************************************************************************/
+
+static void TL_PutHiddenList (const char *Id)
+  {
+   HTM_UL_Begin ("id=\"%s\" class=\"TL_LIST\"",Id);
+   HTM_UL_End ();
   }
 
 /*****************************************************************************/
