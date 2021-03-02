@@ -62,6 +62,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline);
+
 static long TL_Pst_ReceivePost (void);
 
 /*****************************************************************************/
@@ -99,7 +101,7 @@ void TL_Pst_GetAndWritePost (long PstCod)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Write content *****/
+   /***** Write content text *****/
    if (Content.Txt[0])
      {
       HTM_DIV_Begin ("class=\"TL_TXT\"");
@@ -107,7 +109,7 @@ void TL_Pst_GetAndWritePost (long PstCod)
       HTM_DIV_End ();
      }
 
-   /***** Show image *****/
+   /***** Show media *****/
    Med_ShowMedia (&Content.Media,"TL_PST_MED_CONT TL_RIGHT_WIDTH",
 	                         "TL_PST_MED TL_RIGHT_WIDTH");
 
@@ -119,10 +121,8 @@ void TL_Pst_GetAndWritePost (long PstCod)
 /********************** Form to write a new publication **********************/
 /*****************************************************************************/
 
-void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
+void TL_Pst_PutPhotoAndFormToWriteNewPost (struct TL_Timeline *Timeline)
   {
-   extern const char *Txt_New_TIMELINE_post;
-
    /***** Begin list *****/
    HTM_UL_Begin ("class=\"TL_LIST\"");
 
@@ -130,38 +130,47 @@ void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
       HTM_LI_Begin ("class=\"TL_WIDTH\"");
 
 	 /***** Left: write author's photo (my photo) *****/
-         /* Begin container */
-	 HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
-
-	    /* Author's photo */
-	    Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Me.UsrDat,"PHOTO45x60",Pho_ZOOM,false);
-
-	 /* End container */
-	 HTM_DIV_End ();
+         TL_Not_ShowAuthorPhoto (&Gbl.Usrs.Me.UsrDat,false);	// Don't use unique id
 
 	 /***** Right: author's name, time, textarea *****/
-         /* Begin container */
-	 HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
-
-	    /* Author name */
-	    TL_Not_WriteAuthorName (&Gbl.Usrs.Me.UsrDat);
-
-	    /* Form to write the post */
-	    HTM_DIV_Begin ("class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\"");
-	       TL_Frm_BeginForm (Timeline,TL_Frm_RECEIVE_POST);
-		  TL_Pst_PutTextarea (Txt_New_TIMELINE_post,
-		                      "TL_PST_TEXTAREA TL_RIGHT_WIDTH");
-	       TL_Frm_EndForm ();
-	    HTM_DIV_End ();
-
-	 /* End container */
-	 HTM_DIV_End ();
+         TL_Pst_PutFormToWriteNewPost (Timeline);
 
       /***** End list item *****/
       HTM_LI_End ();
 
    /***** End list *****/
    HTM_UL_End ();
+  }
+
+/*****************************************************************************/
+/**************** Author's name, time, and form with textarea ****************/
+/*****************************************************************************/
+
+static void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
+  {
+   extern const char *Txt_New_TIMELINE_post;
+
+   /***** Begin container *****/
+   HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
+
+      /***** Author name *****/
+      TL_Not_WriteAuthorName (&Gbl.Usrs.Me.UsrDat);
+
+      /***** Form to write the post *****/
+      /* Begin container */
+      HTM_DIV_Begin ("class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\"");
+
+         /* Form with textarea */
+	 TL_Frm_BeginForm (Timeline,TL_Frm_RECEIVE_POST);
+	    TL_Pst_PutTextarea (Txt_New_TIMELINE_post,
+				"TL_PST_TEXTAREA TL_RIGHT_WIDTH");
+	 TL_Frm_EndForm ();
+
+      /* End container */
+      HTM_DIV_End ();
+
+   /***** End container *****/
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

@@ -91,6 +91,7 @@ void TL_Not_CheckAndWriteNoteWithTopMsg (const struct TL_Timeline *Timeline,
 	                                 const struct TL_Not_Note *Not,
                                          TL_TopMessage_t TopMessage,
                                          long PublisherCod);
+void TL_Not_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique);
 void TL_Not_WriteAuthorName (const struct UsrData *UsrDat);
 
 void TL_Not_GetNoteSummary (const struct TL_Not_Note *Not,

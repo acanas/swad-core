@@ -71,7 +71,6 @@ extern struct Globals Gbl;
 static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod);
 static void TL_Not_WriteNote (const struct TL_Timeline *Timeline,
                               const struct TL_Not_Note *Not);
-static void TL_Not_ShowAuthorPhoto (struct UsrData *UsrDat);
 static void TL_Not_WriteAuthorTimeAndContent (const struct TL_Not_Note *Not,
                                               const struct UsrData *UsrDat);
 
@@ -306,7 +305,7 @@ static void TL_Not_WriteNote (const struct TL_Timeline *Timeline,
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
    /***** Left top: author's photo *****/
-   TL_Not_ShowAuthorPhoto (&UsrDat);
+   TL_Not_ShowAuthorPhoto (&UsrDat,true);	// Use unique id
 
    /***** Right top: author's name, time, and content *****/
    TL_Not_WriteAuthorTimeAndContent (Not,&UsrDat);
@@ -322,14 +321,14 @@ static void TL_Not_WriteNote (const struct TL_Timeline *Timeline,
 /*********************** Show photo of author of a note **********************/
 /*****************************************************************************/
 
-static void TL_Not_ShowAuthorPhoto (struct UsrData *UsrDat)
+void TL_Not_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique)
   {
    /***** Show author's photo *****/
    /* Begin container */
    HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
 
       /* Photo */
-      Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO45x60",Pho_ZOOM,true);	// Use unique id
+      Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO45x60",Pho_ZOOM,FormUnique);
 
    /* End container */
    HTM_DIV_End ();

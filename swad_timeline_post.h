@@ -46,7 +46,7 @@ struct TL_Pst_PostContent
 /*****************************************************************************/
 
 void TL_Pst_GetAndWritePost (long PstCod);
-void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline);
+void TL_Pst_PutPhotoAndFormToWriteNewPost (struct TL_Timeline *Timeline);
 
 void TL_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea);
 

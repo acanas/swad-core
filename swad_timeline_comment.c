@@ -195,7 +195,7 @@ static void TL_Com_ShowAuthorPhoto (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/************************* Form to comment a note ****************************/
+/**************************** Form with textarea *****************************/
 /*****************************************************************************/
 
 static void TL_Com_PutFormToWriteNewComm (const struct TL_Timeline *Timeline,
@@ -203,22 +203,21 @@ static void TL_Com_PutFormToWriteNewComm (const struct TL_Timeline *Timeline,
   {
    extern const char *Txt_New_TIMELINE_comment;
 
-   /***** Form to write the comment *****/
-   /* Begin container */
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
 
-      /* Begin form to write the post */
+      /***** Begin form to write the post *****/
       TL_Frm_BeginForm (Timeline,TL_Frm_RECEIVE_COMM);
       TL_Not_PutHiddenParamNotCod (NotCod);
 
-	 /* Textarea and button */
+	 /***** Textarea and button *****/
 	 TL_Pst_PutTextarea (Txt_New_TIMELINE_comment,
 			     "TL_COM_TEXTAREA TL_COMM_WIDTH");
 
-      /* End form */
+      /***** End form *****/
       TL_Frm_EndForm ();
 
-   /* End container */
+   /***** End container *****/
    HTM_DIV_End ();
   }
 

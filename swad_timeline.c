@@ -437,7 +437,7 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
       /***** Form to write a new post *****/
       if (GlobalTimeline ||
 	  Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
-	 TL_Pst_PutFormToWriteNewPost (Timeline);
+	 TL_Pst_PutPhotoAndFormToWriteNewPost (Timeline);
 
       /***** New publications refreshed dynamically via AJAX *****/
       if (GlobalTimeline)
