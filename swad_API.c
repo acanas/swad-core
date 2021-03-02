@@ -753,7 +753,7 @@ int swad__createAccount (struct soap *soap,
    createAccountOut->wsKey[0] = '\0';
 
    /***** Get plugin code *****/
-   if ((ReturnCode = API_GetPlgCodFromAppKey (soap,(const char *) appKey)) != SOAP_OK)
+   if ((ReturnCode = API_GetPlgCodFromAppKey (soap,appKey)) != SOAP_OK)
       return ReturnCode;
 
    /***** Check parameters used to create the new account *****/
@@ -896,8 +896,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    loginByUserPasswordKeyOut->userRole          = 0;	// unknown
 
    /***** Get plugin code *****/
-   if ((ReturnCode = API_GetPlgCodFromAppKey (soap,
-					      (const char *) appKey)) != SOAP_OK)
+   if ((ReturnCode = API_GetPlgCodFromAppKey (soap,appKey)) != SOAP_OK)
       return ReturnCode;
 
    /***** Check if user's email, @nickname or ID are valid *****/
@@ -1070,8 +1069,7 @@ int swad__loginBySessionKey (struct soap *soap,
    loginBySessionKeyOut->courseName[0]     = '\0';
 
    /***** Get plugin code *****/
-   if ((ReturnCode = API_GetPlgCodFromAppKey (soap,
-					      (const char *) appKey)) != SOAP_OK)
+   if ((ReturnCode = API_GetPlgCodFromAppKey (soap,appKey)) != SOAP_OK)
       return ReturnCode;
 
    /***** Check length of session identifier *****/
@@ -1254,8 +1252,7 @@ int swad__getNewPassword (struct soap *soap,
    getNewPasswordOut->success = 0;	// error
 
    /***** Get plugin code *****/
-   if ((ReturnCode = API_GetPlgCodFromAppKey (soap,
-					      (const char *) appKey)) != SOAP_OK)
+   if ((ReturnCode = API_GetPlgCodFromAppKey (soap,appKey)) != SOAP_OK)
       return ReturnCode;
 
    /***** Check if user's email, @nickname or ID are valid *****/
@@ -3365,7 +3362,7 @@ int swad__getNotifications (struct soap *soap,
          getNotificationsOut->notificationsArray.__ptr[NumNotif].notifCode = (int) NtfCod;
 
          /* Get notification event type (row[1]) */
-         NotifyEvent = Ntf_GetNotifyEventFromStr ((const char *) row[1]);
+         NotifyEvent = Ntf_GetNotifyEventFromStr (row[1]);
          getNotificationsOut->notificationsArray.__ptr[NumNotif].eventType =
             soap_malloc (soap,Ntf_MAX_BYTES_NOTIFY_EVENT + 1);
          Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].eventType,

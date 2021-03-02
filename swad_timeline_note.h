@@ -113,4 +113,6 @@ void TL_Not_RemoveNoteGbl (void);
 
 void TL_Not_GetDataOfNoteByCod (struct TL_Not_Note *Not);
 
+bool TL_Not_CheckICanFavShaNote (struct TL_Not_Note *Not);
+
 #endif

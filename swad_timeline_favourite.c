@@ -143,37 +143,14 @@ void TL_Fav_UnfNoteGbl (void)
 
 static void TL_Fav_FavNote (struct TL_Not_Note *Not)
   {
-   extern const char *Txt_The_original_post_no_longer_exists;
    long OriginalPubCod;
 
-   /***** Get data of note *****/
-   Not->NotCod = TL_Not_GetParamNotCod ();
-   TL_Not_GetDataOfNoteByCod (Not);
-
-   /***** Trivial check 1: note code should be > 0 *****/
-   if (Not->NotCod <= 0)
-     {
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+   /***** Get data of note and do some checks *****/
+   if (!TL_Not_CheckICanFavShaNote (Not))
       return;
-     }
 
-   /***** Trivial check 2: I must be logged *****/
-   if (!Gbl.Usrs.Me.Logged)
-     {
-      Ale_ShowAlert (Ale_ERROR,"You are not logged.");
-      return;
-     }
-
-   /***** Trivial check 3: The author can not fav his/her own notes *****/
-   if (Usr_ItsMe (Not->UsrCod))
-     {
-      Ale_ShowAlert (Ale_ERROR,"You can not fav/unfav your own posts.");
-      return;
-     }
-
-   /***** Trivial check 4: Have I faved this note? *****/
-   if (TL_DB_CheckIfFavedByUsr (TL_Fav_NOTE,Not->NotCod,
-				Gbl.Usrs.Me.UsrDat.UsrCod))
+   /***** Trivial check: Have I faved this note? *****/
+   if (TL_DB_CheckIfFavedByUsr (TL_Fav_NOTE,Not->NotCod,Gbl.Usrs.Me.UsrDat.UsrCod))
       // Don't show error message
       return;
 
@@ -194,37 +171,14 @@ static void TL_Fav_FavNote (struct TL_Not_Note *Not)
 
 static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
   {
-   extern const char *Txt_The_original_post_no_longer_exists;
    long OriginalPubCod;
 
-   /***** Get data of note *****/
-   Not->NotCod = TL_Not_GetParamNotCod ();
-   TL_Not_GetDataOfNoteByCod (Not);
-
-   /***** Trivial check 1: note code should be > 0 *****/
-   if (Not->NotCod <= 0)
-     {
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+   /***** Get data of note and do some checks *****/
+   if (!TL_Not_CheckICanFavShaNote (Not))
       return;
-     }
 
-   /***** Trivial check 2: I must be logged *****/
-   if (!Gbl.Usrs.Me.Logged)
-     {
-      Ale_ShowAlert (Ale_ERROR,"You are not logged.");
-      return;
-     }
-
-   /***** Trivial check 3: The author can not unfav his/her own notes *****/
-   if (Usr_ItsMe (Not->UsrCod))
-     {
-      Ale_ShowAlert (Ale_ERROR,"You can not fav/unfav your own posts.");
-      return;
-     }
-
-   /***** Trivial check 4: Have I faved this note? *****/
-   if (!TL_DB_CheckIfFavedByUsr (TL_Fav_NOTE,Not->NotCod,
-				 Gbl.Usrs.Me.UsrDat.UsrCod))
+   /***** Trivial check: Have I faved this note? *****/
+   if (!TL_DB_CheckIfFavedByUsr (TL_Fav_NOTE,Not->NotCod,Gbl.Usrs.Me.UsrDat.UsrCod))
       // Don't show error message
       return;
 

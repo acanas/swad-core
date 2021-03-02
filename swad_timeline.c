@@ -443,7 +443,7 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
       if (GlobalTimeline)
 	{
 	 /* Link to view new publications via AJAX */
-	 TL_Pub_PutLinkToViewNewPublications ();
+	 TL_Pub_PutLinkToViewNewPubs ();
 
 	 /* Hidden list where insert
 	    just received (not visible) publications via AJAX */
@@ -486,7 +486,7 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
       if (NumPubs == TL_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW)
 	{
 	 /* Link to view old publications via AJAX */
-	 TL_Pub_PutLinkToViewOldPublications ();
+	 TL_Pub_PutLinkToViewOldPubs ();
 
 	 /* Hidden list where insert old publications via AJAX */
 	 HTM_UL_Begin ("id=\"old_timeline_list\" class=\"TL_LIST\"");

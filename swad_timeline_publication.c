@@ -313,7 +313,7 @@ static struct TL_Pub_Publication *TL_Pub_SelectTheMostRecentPub (const struct TL
          Lay_NotEnoughMemoryExit ();
 
       /* Get data of publication */
-      TL_Pub_GetDataOfPublicationFromNextRow (mysql_res,Pub);
+      TL_Pub_GetDataOfPubFromNextRow (mysql_res,Pub);
       Pub->Next = NULL;
      }
    else
@@ -402,7 +402,7 @@ TL_TopMessage_t TL_Pub_GetTopMessage (TL_Pub_PubType_t PubType)
 /***************** Put link to view new publications in timeline *************/
 /*****************************************************************************/
 
-void TL_Pub_PutLinkToViewNewPublications (void)
+void TL_Pub_PutLinkToViewNewPubs (void)
   {
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_See_new_activity;
@@ -437,7 +437,7 @@ void TL_Pub_PutLinkToViewNewPublications (void)
 /***************** Put link to view old publications in timeline *************/
 /*****************************************************************************/
 
-void TL_Pub_PutLinkToViewOldPublications (void)
+void TL_Pub_PutLinkToViewOldPubs (void)
   {
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_See_more;
@@ -494,8 +494,8 @@ long TL_Pub_GetParamPubCod (void)
 /***************** Get data of publication using its code ********************/
 /*****************************************************************************/
 
-void TL_Pub_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
-                                             struct TL_Pub_Publication *Pub)
+void TL_Pub_GetDataOfPubFromNextRow (MYSQL_RES *mysql_res,
+                                     struct TL_Pub_Publication *Pub)
   {
    MYSQL_ROW row;
 
@@ -518,7 +518,7 @@ void TL_Pub_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
    Pub->PublisherCod = Str_ConvertStrCodToLongCod (row[2]);
 
    /***** Get type of publication (row[3]) *****/
-   Pub->PubType      = TL_Pub_GetPubTypeFromStr ((const char *) row[3]);
+   Pub->PubType      = TL_Pub_GetPubTypeFromStr (row[3]);
   }
 
 /*****************************************************************************/

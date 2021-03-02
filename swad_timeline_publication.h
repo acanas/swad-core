@@ -93,14 +93,14 @@ void TL_Pub_ShowOldPubsInTimeline (struct TL_Timeline *Timeline);
 
 TL_TopMessage_t TL_Pub_GetTopMessage (TL_Pub_PubType_t PubType);
 
-void TL_Pub_PutLinkToViewNewPublications (void);
-void TL_Pub_PutLinkToViewOldPublications (void);
+void TL_Pub_PutLinkToViewNewPubs (void);
+void TL_Pub_PutLinkToViewOldPubs (void);
 
 void TL_Pub_PutHiddenParamPubCod (long PubCod);
 long TL_Pub_GetParamPubCod (void);
 
-void TL_Pub_GetDataOfPublicationFromNextRow (MYSQL_RES *mysql_res,
-                                             struct TL_Pub_Publication *Pub);
+void TL_Pub_GetDataOfPubFromNextRow (MYSQL_RES *mysql_res,
+                                     struct TL_Pub_Publication *Pub);
 
 void TL_Pub_PublishPubInTimeline (struct TL_Pub_Publication *Pub);
 

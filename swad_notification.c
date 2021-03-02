@@ -405,7 +405,7 @@ void Ntf_ShowMyNotifications (void)
          row = mysql_fetch_row (mysql_res);
 
          /* Get event type (row[0]) */
-         NotifyEvent = Ntf_GetNotifyEventFromStr ((const char *) row[0]);
+         NotifyEvent = Ntf_GetNotifyEventFromStr (row[0]);
 
          /* Get (from) user code (row[1]) */
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -1653,7 +1653,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Get event type (row[0]) */
-	    NotifyEvent = Ntf_GetNotifyEventFromStr ((const char *) row[0]);
+	    NotifyEvent = Ntf_GetNotifyEventFromStr (row[0]);
 
 	    /* Get origin user code (row[1]) */
 	    FromUsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);

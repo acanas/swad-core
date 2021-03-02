@@ -87,7 +87,7 @@ void QR_PutLinkToPrintQRCode (Act_Action_t Action,
 
 void QR_PutParamQRString (void *QRString)
   {
-   Par_PutHiddenParamString (NULL,"QRString",(const char *) QRString);
+   Par_PutHiddenParamString (NULL,"QRString",QRString);
   }
 
 /*****************************************************************************/
