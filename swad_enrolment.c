@@ -2263,8 +2263,6 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    struct UsrData UsrDat;
    bool UsrExists;
    bool UsrBelongsToCrs;
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
    Rol_Role_t DesiredRole;
    Act_Action_t NextAction;
 
@@ -2878,10 +2876,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
             /***** User photo *****/
             HTM_TD_Begin ("class=\"DAT CT\" style=\"width:22px;\"");
-            ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-            Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-                        	                  NULL,
-                              "PHOTO21x28",Pho_ZOOM,false);
+            Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO21x28",Pho_ZOOM,false);
             HTM_TD_End ();
 
             /***** User name *****/

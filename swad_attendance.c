@@ -2070,8 +2070,6 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
                                           struct Att_Event *Event)
   {
    bool Present;
-   char PhotoURL[PATH_MAX + 1];
-   bool ShowPhoto;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
    bool ItsMe;
@@ -2141,10 +2139,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                                           NULL,
-                        "PHOTO45x60",Pho_ZOOM,false);
+      Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO45x60",Pho_ZOOM,false);
       HTM_TD_End ();
      }
 
@@ -3434,8 +3429,6 @@ static void Att_WriteTableHeadSeveralAttEvents (const struct Att_Events *Events)
 static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
                                              unsigned NumUsr,struct UsrData *UsrDat)
   {
-   char PhotoURL[PATH_MAX + 1];
-   bool ShowPhoto;
    unsigned NumAttEvent;
    bool Present;
    unsigned NumTimesPresent;
@@ -3454,10 +3447,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                                           NULL,
-                        "PHOTO21x28",Pho_ZOOM,false);
+      Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
       HTM_TD_End ();
      }
 
@@ -3588,8 +3578,6 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
   {
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
-   char PhotoURL[PATH_MAX + 1];
-   bool ShowPhoto;
    unsigned NumAttEvent;
    unsigned UniqueId;
    char *Id;
@@ -3612,10 +3600,7 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 
    /***** Show student's photo *****/
    HTM_TD_Begin ("colspan=\"2\" class=\"RM COLOR%u\"",Gbl.RowEvenOdd);
-   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-				        NULL,
-		     "PHOTO21x28",Pho_ZOOM,false);
+   Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
    HTM_TD_End ();
 
    /***** Write user's ID ******/

@@ -984,12 +984,29 @@ void Pho_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod)
   }
 
 /*****************************************************************************/
+/********************* Show a user's photo if allowed ************************/
+/*****************************************************************************/
+
+void Pho_ShowUsrPhotoIfAllowed (struct UsrData *UsrDat,
+                                const char *ClassPhoto,Pho_Zoom_t Zoom,
+                                bool FormUnique)
+  {
+   char PhotoURL[PATH_MAX + 1];
+   bool ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
+
+   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+					NULL,
+		     ClassPhoto,Zoom,FormUnique);
+  }
+
+/*****************************************************************************/
 /********************* Check if user's photo can be shown ********************/
 /*****************************************************************************/
 // Returns true if the photo can be shown and false if not.
 // Public photo means two different things depending on the user's type
 
-bool Pho_ShowingUsrPhotoIsAllowed (struct UsrData *UsrDat,char PhotoURL[PATH_MAX + 1])
+bool Pho_ShowingUsrPhotoIsAllowed (struct UsrData *UsrDat,
+                                   char PhotoURL[PATH_MAX + 1])
   {
    bool ICanSeePhoto;
 
@@ -1058,102 +1075,7 @@ bool Pho_CheckIfPrivPhotoExists (long UsrCod,char PathPrivRelPhoto[PATH_MAX + 1]
   }
 
 /*****************************************************************************/
-/************************** Remove a user's photo ****************************/
-/*****************************************************************************/
-// Returns true on success, false on error
-
-bool Pho_RemovePhoto (struct UsrData *UsrDat)
-  {
-   extern const char *Txt_Photo_removed;
-   char PathPrivRelPhoto[PATH_MAX + 1];
-   char PathPublPhoto[PATH_MAX + 1];
-   unsigned NumErrors = 0;
-
-   if (UsrDat->Photo[0])
-     {
-      /***** Clear photo name in database *****/
-      Pho_ClearPhotoName (UsrDat->UsrCod);
-
-      /***** Remove public link *****/
-      snprintf (PathPublPhoto,sizeof (PathPublPhoto),"%s/%s.jpg",
-                Cfg_PATH_PHOTO_PUBLIC,UsrDat->Photo);
-      if (Fil_CheckIfPathExists (PathPublPhoto))	// Public link exists
-         if (unlink (PathPublPhoto))			// Remove public link
-            NumErrors++;
-
-      /***** Remove photo *****/
-      snprintf (PathPrivRelPhoto,sizeof (PathPrivRelPhoto),"%s/%02u/%ld.jpg",
-                Cfg_PATH_PHOTO_PRIVATE,
-                (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
-      if (Fil_CheckIfPathExists (PathPrivRelPhoto))        // Photo exists
-        {
-         if (unlink (PathPrivRelPhoto))                        // Remove photo
-            NumErrors++;
-        }
-
-      /***** Remove original photo *****/
-      snprintf (PathPrivRelPhoto,sizeof (PathPrivRelPhoto),
-                "%s/%02u/%ld_original.jpg",
-                Cfg_PATH_PHOTO_PRIVATE,
-                (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
-      if (Fil_CheckIfPathExists (PathPrivRelPhoto))		// Original photo exists
-         if (unlink (PathPrivRelPhoto))				// Remove original photo
-            NumErrors++;
-
-      /***** Clear photo name in user's data *****/
-      UsrDat->Photo[0] = '\0';
-     }
-
-   if (NumErrors)
-     {
-      Ale_CreateAlert (Ale_ERROR,NULL,
-		       "Error removing photo.");
-      return false;
-     }
-   else
-     {
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_Photo_removed);
-      return true;
-     }
-  }
-
-/*****************************************************************************/
-/****************** Clear photo name of an user in database ******************/
-/*****************************************************************************/
-
-static void Pho_ClearPhotoName (long UsrCod)
-  {
-   /***** Clear photo name in user's data *****/
-   DB_QueryUPDATE ("can not clear the name of a user's photo",
-		   "UPDATE usr_data SET Photo='' WHERE UsrCod=%ld",
-		   UsrCod);
-  }
-
-/*****************************************************************************/
-/***************** Update photo name of an user in database ******************/
-/*****************************************************************************/
-
-void Pho_UpdatePhotoName (struct UsrData *UsrDat)
-  {
-   char PathPublPhoto[PATH_MAX + 1];
-
-   /***** Update photo name in database *****/
-   DB_QueryUPDATE ("can not update the name of a user's photo",
-		   "UPDATE usr_data SET Photo='%s' WHERE UsrCod=%ld",
-                   Gbl.UniqueNameEncrypted,UsrDat->UsrCod);
-
-   /***** Remove the old symbolic link to photo *****/
-   snprintf (PathPublPhoto,sizeof (PathPublPhoto),"%s/%s.jpg",
-             Cfg_PATH_PHOTO_PUBLIC,UsrDat->Photo);
-   unlink (PathPublPhoto);                // Remove public link
-
-   /***** Update photo name in user's data *****/
-   Str_Copy (UsrDat->Photo,Gbl.UniqueNameEncrypted,sizeof (UsrDat->Photo) - 1);
-  }
-
-/*****************************************************************************/
-/****************** Write code to show the photo of a user *******************/
+/*************************** Show a user's photo *****************************/
 /*****************************************************************************/
 
 void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
@@ -1300,6 +1222,101 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       HTM_BUTTON_End ();
       Frm_EndForm ();
      }
+  }
+
+/*****************************************************************************/
+/************************** Remove a user's photo ****************************/
+/*****************************************************************************/
+// Returns true on success, false on error
+
+bool Pho_RemovePhoto (struct UsrData *UsrDat)
+  {
+   extern const char *Txt_Photo_removed;
+   char PathPrivRelPhoto[PATH_MAX + 1];
+   char PathPublPhoto[PATH_MAX + 1];
+   unsigned NumErrors = 0;
+
+   if (UsrDat->Photo[0])
+     {
+      /***** Clear photo name in database *****/
+      Pho_ClearPhotoName (UsrDat->UsrCod);
+
+      /***** Remove public link *****/
+      snprintf (PathPublPhoto,sizeof (PathPublPhoto),"%s/%s.jpg",
+                Cfg_PATH_PHOTO_PUBLIC,UsrDat->Photo);
+      if (Fil_CheckIfPathExists (PathPublPhoto))	// Public link exists
+         if (unlink (PathPublPhoto))			// Remove public link
+            NumErrors++;
+
+      /***** Remove photo *****/
+      snprintf (PathPrivRelPhoto,sizeof (PathPrivRelPhoto),"%s/%02u/%ld.jpg",
+                Cfg_PATH_PHOTO_PRIVATE,
+                (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
+      if (Fil_CheckIfPathExists (PathPrivRelPhoto))        // Photo exists
+        {
+         if (unlink (PathPrivRelPhoto))                        // Remove photo
+            NumErrors++;
+        }
+
+      /***** Remove original photo *****/
+      snprintf (PathPrivRelPhoto,sizeof (PathPrivRelPhoto),
+                "%s/%02u/%ld_original.jpg",
+                Cfg_PATH_PHOTO_PRIVATE,
+                (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
+      if (Fil_CheckIfPathExists (PathPrivRelPhoto))		// Original photo exists
+         if (unlink (PathPrivRelPhoto))				// Remove original photo
+            NumErrors++;
+
+      /***** Clear photo name in user's data *****/
+      UsrDat->Photo[0] = '\0';
+     }
+
+   if (NumErrors)
+     {
+      Ale_CreateAlert (Ale_ERROR,NULL,
+		       "Error removing photo.");
+      return false;
+     }
+   else
+     {
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_Photo_removed);
+      return true;
+     }
+  }
+
+/*****************************************************************************/
+/****************** Clear photo name of an user in database ******************/
+/*****************************************************************************/
+
+static void Pho_ClearPhotoName (long UsrCod)
+  {
+   /***** Clear photo name in user's data *****/
+   DB_QueryUPDATE ("can not clear the name of a user's photo",
+		   "UPDATE usr_data SET Photo='' WHERE UsrCod=%ld",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/***************** Update photo name of an user in database ******************/
+/*****************************************************************************/
+
+void Pho_UpdatePhotoName (struct UsrData *UsrDat)
+  {
+   char PathPublPhoto[PATH_MAX + 1];
+
+   /***** Update photo name in database *****/
+   DB_QueryUPDATE ("can not update the name of a user's photo",
+		   "UPDATE usr_data SET Photo='%s' WHERE UsrCod=%ld",
+                   Gbl.UniqueNameEncrypted,UsrDat->UsrCod);
+
+   /***** Remove the old symbolic link to photo *****/
+   snprintf (PathPublPhoto,sizeof (PathPublPhoto),"%s/%s.jpg",
+             Cfg_PATH_PHOTO_PUBLIC,UsrDat->Photo);
+   unlink (PathPublPhoto);                // Remove public link
+
+   /***** Update photo name in user's data *****/
+   Str_Copy (UsrDat->Photo,Gbl.UniqueNameEncrypted,sizeof (UsrDat->Photo) - 1);
   }
 
 /*****************************************************************************/

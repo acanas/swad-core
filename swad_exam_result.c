@@ -1632,31 +1632,26 @@ static void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 void ExaRes_ShowExamResultUser (struct UsrData *UsrDat)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
 
    /***** Row begin *****/
    HTM_TR_Begin (NULL);
 
-   /***** Label *****/
-   HTM_TD_Begin ("class=\"DAT_N RT\"");
-   HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
-   HTM_TD_End ();
+      /***** Label *****/
+      HTM_TD_Begin ("class=\"DAT_N RT\"");
+	 HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+      HTM_TD_End ();
 
-   /***** User's data *****/
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_TxtF ("&nbsp;%s",UsrDat->Surname1);
-   if (UsrDat->Surname2[0])
-      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
-   if (UsrDat->FrstName[0])
-      HTM_TxtF (", %s",UsrDat->FrstName);
-   HTM_BR ();
-   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-					NULL,
-		     "PHOTO45x60",Pho_ZOOM,false);
-   HTM_TD_End ();
+      /***** User's data *****/
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 ID_WriteUsrIDs (UsrDat,NULL);
+	 HTM_TxtF ("&nbsp;%s",UsrDat->Surname1);
+	 if (UsrDat->Surname2[0])
+	    HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
+	 if (UsrDat->FrstName[0])
+	    HTM_TxtF (", %s",UsrDat->FrstName);
+	 HTM_BR ();
+	 Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO45x60",Pho_ZOOM,false);
+      HTM_TD_End ();
 
    /***** Row end *****/
    HTM_TR_End ();

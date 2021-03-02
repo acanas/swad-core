@@ -122,8 +122,6 @@ void TL_Pst_GetAndWritePost (long PstCod)
 void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
   {
    extern const char *Txt_New_TIMELINE_post;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
 
    /***** Begin list *****/
    HTM_UL_Begin ("class=\"TL_LIST\"");
@@ -136,10 +134,7 @@ void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
 	 HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
 
 	    /* Author's photo */
-	    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
-	    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
-							      NULL,
-			      "PHOTO45x60",Pho_ZOOM,false);
+	    Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Me.UsrDat,"PHOTO45x60",Pho_ZOOM,false);
 
 	 /* End container */
 	 HTM_DIV_End ();

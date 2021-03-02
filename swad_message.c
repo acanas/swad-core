@@ -500,27 +500,21 @@ static void Msg_PutHiddenParamsSubjectAndContent (void)
 
 static void Msg_ShowOneUniqueRecipient (void)
   {
-   char PhotoURL[PATH_MAX + 1];
-   bool ShowPhoto;
-
    /***** Show user's photo *****/
-   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
-					                NULL,
-		     "PHOTO21x28",Pho_ZOOM,false);
+   Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,"PHOTO21x28",Pho_ZOOM,false);
 
    /****** Write user's IDs ******/
    HTM_DIV_Begin ("class=\"MSG_TO_ONE_RCP %s\"",
 		  Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_N" :
 						   "DAT_SMALL_NOBR");
-   ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
+      ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
    HTM_DIV_End ();
 
    /***** Write user's name *****/
    HTM_DIV_Begin ("class=\"MSG_TO_ONE_RCP %s\"",
 		  Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_N" :
 						   "DAT_SMALL_NOBR");
-   HTM_Txt (Gbl.Usrs.Other.UsrDat.FullName);
+      HTM_Txt (Gbl.Usrs.Other.UsrDat.FullName);
    HTM_DIV_End ();
 
    /***** Hidden parameter with user's nickname *****/
@@ -3393,8 +3387,6 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor)
   {
    extern const char *Txt_Unknown_or_without_photo;
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
    bool WriteAuthor;
 
    /***** Write author name or don't write it? *****/
@@ -3405,51 +3397,47 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
 
    /***** Begin table and row *****/
    HTM_TABLE_BeginPadding (2);
-   HTM_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-   /***** Start first column with author's photo
-          (if author has a web page, put a link to it) *****/
-   if (BgColor)
-      HTM_TD_Begin ("class=\"CT %s\" style=\"width:30px;\"",BgColor);
-   else
-      HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
+	 /***** Start first column with author's photo
+		(if author has a web page, put a link to it) *****/
+	 if (BgColor)
+	    HTM_TD_Begin ("class=\"CT %s\" style=\"width:30px;\"",BgColor);
+	 else
+	    HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
 
-   if (WriteAuthor)
-     {
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                                           NULL,
-                        "PHOTO30x40",Pho_ZOOM,false);
-     }
-   else
-      Ico_PutIcon ("usr_bl.jpg",Txt_Unknown_or_without_photo,"PHOTO30x40");
-   HTM_TD_End ();
+	 if (WriteAuthor)
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO30x40",Pho_ZOOM,false);
+	 else
+	    Ico_PutIcon ("usr_bl.jpg",Txt_Unknown_or_without_photo,"PHOTO30x40");
 
-   /***** Second column with user name (if author has a web page, put a link to it) *****/
-   if (WriteAuthor)
-     {
-      if (BgColor)
-	 HTM_TD_Begin ("class=\"LT %s\"",BgColor);
-      else
-	 HTM_TD_Begin ("class=\"LT\"");
+	 HTM_TD_End ();
 
-      HTM_DIV_Begin ("class=\"AUTHOR_2_LINES\"");	// Limited width
-      Usr_WriteFirstNameBRSurnames (UsrDat);
-      HTM_DIV_End ();
-     }
-   else
-     {
-      if (BgColor)
-         HTM_TD_Begin ("class=\"LM %s\"",BgColor);
-      else
-	 HTM_TD_Begin ("class=\"LM\"");
-     }
+	 /***** Second column with user name (if author has a web page, put a link to it) *****/
+	 if (WriteAuthor)
+	   {
+	    if (BgColor)
+	       HTM_TD_Begin ("class=\"LT %s\"",BgColor);
+	    else
+	       HTM_TD_Begin ("class=\"LT\"");
 
-   /***** End second column *****/
-   HTM_TD_End ();
+	    HTM_DIV_Begin ("class=\"AUTHOR_2_LINES\"");	// Limited width
+	       Usr_WriteFirstNameBRSurnames (UsrDat);
+	    HTM_DIV_End ();
+	   }
+	 else
+	   {
+	    if (BgColor)
+	       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
+	    else
+	       HTM_TD_Begin ("class=\"LM\"");
+	   }
 
-   /***** End row and table *****/
-   HTM_TR_End ();
+	 /***** End second column *****/
+	 HTM_TD_End ();
+
+      /***** End row and table *****/
+      HTM_TR_End ();
    HTM_TABLE_End ();
   }
 
@@ -3555,50 +3543,45 @@ static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
    extern const char *Txt_MSG_Sent;
    extern const char *Txt_MSG_Sent_and_deleted;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
 
    HTM_TABLE_Begin (NULL);
-   HTM_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-   /***** Put an icon to show if user has read the message *****/
-   HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
-   Ico_PutIcon (Deleted ? "share-red.svg" :
-        	          "share.svg",
-	        Deleted ? Txt_MSG_Sent_and_deleted :
-                          Txt_MSG_Sent,
-		"ICO16x16");
-   HTM_TD_End ();
+	 /***** Put an icon to show if user has read the message *****/
+	 HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
+	    Ico_PutIcon (Deleted ? "share-red.svg" :
+				   "share.svg",
+			 Deleted ? Txt_MSG_Sent_and_deleted :
+				   Txt_MSG_Sent,
+			 "ICO16x16");
+	 HTM_TD_End ();
 
-   /***** Put user's photo *****/
-   HTM_TD_Begin ("class=\"CM\" style=\"width:30px;\"");
-   ShowPhoto = (Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL));
-   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                	                NULL,
-                     "PHOTO21x28",Pho_ZOOM,false);
-   HTM_TD_End ();
+	 /***** Put user's photo *****/
+	 HTM_TD_Begin ("class=\"CM\" style=\"width:30px;\"");
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+	 HTM_TD_End ();
 
-   /***** Write user's name *****/
-   HTM_TD_Begin ("class=\"AUTHOR_TXT LM\"");
-   if (UsrDat->UsrCod > 0)
-     {
-      HTM_Txt (UsrDat->FullName);
-      if (Act_GetSuperAction (Gbl.Action.Act) == ActSeeRcvMsg)
-	{
-         HTM_NBSP ();
-         if (Msg_CheckIfUsrIsBanned (UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod))
-            // Sender is banned
-            Msg_PutFormToUnbanSender (Messages,UsrDat);
-         else
-            // Sender is not banned
-            Msg_PutFormToBanSender (Messages,UsrDat);
-	}
-     }
-   else
-      HTM_TxtF ("[%s]",Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
-   HTM_TD_End ();
+	 /***** Write user's name *****/
+	 HTM_TD_Begin ("class=\"AUTHOR_TXT LM\"");
+	    if (UsrDat->UsrCod > 0)
+	      {
+	       HTM_Txt (UsrDat->FullName);
+	       if (Act_GetSuperAction (Gbl.Action.Act) == ActSeeRcvMsg)
+		 {
+		  HTM_NBSP ();
+		  if (Msg_CheckIfUsrIsBanned (UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod))
+		     // Sender is banned
+		     Msg_PutFormToUnbanSender (Messages,UsrDat);
+		  else
+		     // Sender is not banned
+		     Msg_PutFormToBanSender (Messages,UsrDat);
+		 }
+	      }
+	    else
+	       HTM_TxtF ("[%s]",Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
    HTM_TABLE_End ();
   }
 
@@ -4021,8 +4004,6 @@ void Msg_ListBannedUsrs (void)
    MYSQL_ROW row;
    unsigned NumUsr,NumUsrs;
    struct UsrData UsrDat;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
 
    /***** Get my banned users *****/
    NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get banned users",
@@ -4072,10 +4053,7 @@ void Msg_ListBannedUsrs (void)
 
             /* Show photo */
             HTM_TD_Begin ("class=\"LM\" style=\"width:30px;\"");
-            ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-            Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-                        	                  NULL,
-                              "PHOTO21x28",Pho_ZOOM,false);
+            Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO21x28",Pho_ZOOM,false);
             HTM_TD_End ();
 
             /* Write user's full name */

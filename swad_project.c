@@ -2033,8 +2033,6 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
    bool WriteRow;
    unsigned NumUsr;
    unsigned NumUsrs;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
    const char *ClassLabel;
    const char *ClassData;
    static const Act_Action_t ActionReqRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
@@ -2142,10 +2140,7 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 
 	    /* Put user's photo */
 	    HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");
-	    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
-								 NULL,
-			      "PHOTO21x28",Pho_ZOOM,false);
+	    Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,"PHOTO21x28",Pho_ZOOM,false);
 	    HTM_TD_End ();
 
 	    /* Write user's name */

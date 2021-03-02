@@ -785,8 +785,6 @@ static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Rol
 static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
   {
    extern const char *Txt_View_record_for_this_course;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
    const char *ClassTxt;
    const char *ClassLink;
    long UsrCod;
@@ -816,10 +814,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 
    /***** Show photo *****/
    HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
-   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                	                NULL,
-                     "PHOTO21x28",Pho_ZOOM,true);
+   Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,true);
    HTM_TD_End ();
 
    /***** Write full name and link *****/
@@ -891,8 +886,6 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    unsigned NumUsr;
    bool ThisCrs;
    time_t TimeDiff;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
    const char *ClassTxt;
    const char *ClassLink;
    struct UsrData UsrDat;
@@ -1042,10 +1035,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
 	    /***** Show photo *****/
 	    HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
-	    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-	    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-						  NULL,
-			      "PHOTO21x28",Pho_ZOOM,false);
+	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO21x28",Pho_ZOOM,false);
 	    HTM_TD_End ();
 
 	    /***** Write full name and link *****/

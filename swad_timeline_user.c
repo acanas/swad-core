@@ -125,8 +125,6 @@ void TL_Usr_ShowSharersOrFavers (MYSQL_RES **mysql_res,
    unsigned NumUsr;
    unsigned NumUsrsShown = 0;
    struct UsrData UsrDat;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
 
    if (NumUsrs)
      {
@@ -155,10 +153,7 @@ void TL_Usr_ShowSharersOrFavers (MYSQL_RES **mysql_res,
                HTM_DIV_Begin ("class=\"TL_SHARER\"");
 
                   /* User's photo */
-		  ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-		  Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-							NULL,
-				    "PHOTO12x16",Pho_ZOOM,true);	// Use unique id
+		  Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO12x16",Pho_ZOOM,true);	// Use unique id
 
 	       /* End container */
                HTM_DIV_End ();

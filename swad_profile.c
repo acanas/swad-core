@@ -1756,42 +1756,35 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsMe)
   {
    extern const char *Txt_Another_user_s_profile;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
    HTM_TD_Begin ("class=\"RM %s COLOR%u\"",
 		 ItsMe ? "DAT_SMALL_N" :
 		         "DAT_SMALL",
                  Gbl.RowEvenOdd);
-   HTM_TxtF ("#%u",Rank);
+      HTM_TxtF ("#%u",Rank);
    HTM_TD_End ();
 
    /***** Check if I can see the public profile *****/
    HTM_TD_Begin ("class=\"RANK_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
-   if (Visible)
-     {
-      /***** User's photo *****/
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-					   NULL,
-			"PHOTO30x40",Pho_ZOOM,false);
-     }
+      if (Visible)
+	 /***** User's photo *****/
+	 Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO30x40",Pho_ZOOM,false);
    HTM_TD_End ();
 
    /***** Put form to go to public profile *****/
    HTM_TD_Begin ("class=\"COLOR%u\"",Gbl.RowEvenOdd);
-   if (Visible)
-     {
-      Frm_BeginForm (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-      HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,
-			       ItsMe ? "BT_LINK RANK_USR DAT_SMALL_N" :
-		                       "BT_LINK RANK_USR DAT_SMALL",
-			       NULL);	// Limited width
-      Usr_WriteFirstNameBRSurnames (UsrDat);
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
+      if (Visible)
+	{
+	 Frm_BeginForm (ActSeeOthPubPrf);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,
+				     ItsMe ? "BT_LINK RANK_USR DAT_SMALL_N" :
+					     "BT_LINK RANK_USR DAT_SMALL",
+				     NULL);	// Limited width
+	       Usr_WriteFirstNameBRSurnames (UsrDat);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
+	}
    HTM_TD_End ();
   }

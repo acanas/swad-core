@@ -2710,14 +2710,9 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
 
 static void Rec_ShowPhoto (struct UsrData *UsrDat)
   {
-   char PhotoURL[PATH_MAX + 1];
-   bool ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-
    /***** User's photo *****/
    HTM_TD_Begin ("rowspan=\"3\" class=\"REC_C3_TOP CT\"");
-   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                	                NULL,
-		     "PHOTO186x248",Pho_ZOOM,false);
+      Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO186x248",Pho_ZOOM,false);
    HTM_TD_End ();
   }
 

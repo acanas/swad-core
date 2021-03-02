@@ -823,52 +823,47 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
   {
    extern const char *Txt_Another_user_s_profile;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Show user's photo *****/
    HTM_TD_Begin ("class=\"FOLLOW_PHOTO\"");
-   if (Visible)
-     {
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-					   NULL,
-			"PHOTO60x80",Pho_ZOOM,false);
-     }
+      if (Visible)
+	 Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO60x80",Pho_ZOOM,false);
    HTM_TD_End ();
 
    /***** Show user's name and icon to follow/unfollow *****/
    HTM_TD_Begin ("class=\"FOLLOW_USR\"");
-   if (Visible)
-     {
-      /* Put form to go to public profile */
-      Frm_BeginForm (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-      HTM_DIV_Begin ("class=\"FOLLOW_USR_NAME\"");	// Limited width
-      HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,"BT_LINK LT DAT",NULL);
-      Usr_WriteFirstNameBRSurnames (UsrDat);
-      HTM_BUTTON_End ();
-      HTM_DIV_End ();
-      Frm_EndForm ();
-     }
 
-   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-   if (!Gbl.Usrs.Me.Logged ||	// Not logged
-       ItsMe)			// It's me
-      /* Inactive icon to follow/unfollow */
-      Fol_PutInactiveIconToFollowUnfollow ();
-   else				// It's not me
-     {
-      /* Put form to follow / unfollow */
-      if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))	// I follow user
-	 /* Form to unfollow */
-	 Fol_PutIconToUnfollow (UsrDat);
-      else if (Visible)	// I do not follow this user and I can follow
-	 /* Form to follow */
-	 Fol_PutIconToFollow (UsrDat);
-     }
+      if (Visible)
+	{
+	 /* Put form to go to public profile */
+	 Frm_BeginForm (ActSeeOthPubPrf);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    HTM_DIV_Begin ("class=\"FOLLOW_USR_NAME\"");	// Limited width
+	       HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,"BT_LINK LT DAT",NULL);
+		  Usr_WriteFirstNameBRSurnames (UsrDat);
+	       HTM_BUTTON_End ();
+	    HTM_DIV_End ();
+	 Frm_EndForm ();
+	}
+
+      ItsMe = Usr_ItsMe (UsrDat->UsrCod);
+      if (!Gbl.Usrs.Me.Logged ||	// Not logged
+	  ItsMe)			// It's me
+	 /* Inactive icon to follow/unfollow */
+	 Fol_PutInactiveIconToFollowUnfollow ();
+      else				// It's not me
+	{
+	 /* Put form to follow / unfollow */
+	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))	// I follow user
+	    /* Form to unfollow */
+	    Fol_PutIconToUnfollow (UsrDat);
+	 else if (Visible)	// I do not follow this user and I can follow
+	    /* Form to follow */
+	    Fol_PutIconToFollow (UsrDat);
+	}
+
    HTM_TD_End ();
   }
 
@@ -879,56 +874,52 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
   {
    extern const char *Txt_Another_user_s_profile;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Show user's photo *****/
    HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
-   if (Visible)
-     {
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-					    NULL,
-			"PHOTO21x28",Pho_ZOOM,false);
-     }
-   HTM_TD_End ();
 
-   /***** User's name *****/
-   HTM_TD_Begin ("class=\"CON_NAME_FOLLOW COLOR%u\"",Gbl.RowEvenOdd);
-   if (Visible)
-     {
-      /* Put form to go to public profile */
-      Frm_BeginForm (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-      HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW\"");	// Limited width
-      HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,"BT_LINK CON_NAME_FOLLOW CON_CRS",NULL);
-      Usr_WriteFirstNameBRSurnames (UsrDat);
-      HTM_BUTTON_End ();
-      HTM_DIV_End ();
-      Frm_EndForm ();
-     }
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
+	 if (Visible)
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+      HTM_TD_End ();
 
-   /***** Icon to follow *****/
-   HTM_TD_Begin ("class=\"CON_ICON_FOLLOW RM COLOR%u\"",Gbl.RowEvenOdd);
-   if (!Gbl.Usrs.Me.Logged ||	// Not logged
-       ItsMe)			// It's me
-      /* Inactive icon to follow/unfollow */
-      Fol_PutInactiveIconToFollowUnfollow ();
-   else				// It's not me
-     {
-      /* Put form to follow / unfollow */
-      if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))	// I follow user
-	 /* Form to unfollow */
-	 Fol_PutIconToUnfollow (UsrDat);
-      else if (Visible)	// I do not follow this user and I can follow
-	 /* Form to follow */
-	 Fol_PutIconToFollow (UsrDat);
-     }
-   HTM_TD_End ();
+      /***** User's name *****/
+      HTM_TD_Begin ("class=\"CON_NAME_FOLLOW COLOR%u\"",Gbl.RowEvenOdd);
+	 if (Visible)
+	   {
+	    /* Put form to go to public profile */
+	    Frm_BeginForm (ActSeeOthPubPrf);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	       HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW\"");	// Limited width
+		  HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,
+		                           "BT_LINK CON_NAME_FOLLOW CON_CRS",NULL);
+		     Usr_WriteFirstNameBRSurnames (UsrDat);
+		  HTM_BUTTON_End ();
+	       HTM_DIV_End ();
+	    Frm_EndForm ();
+	   }
+      HTM_TD_End ();
+
+      /***** Icon to follow *****/
+      HTM_TD_Begin ("class=\"CON_ICON_FOLLOW RM COLOR%u\"",Gbl.RowEvenOdd);
+      if (!Gbl.Usrs.Me.Logged ||	// Not logged
+	  ItsMe)			// It's me
+	 /* Inactive icon to follow/unfollow */
+	 Fol_PutInactiveIconToFollowUnfollow ();
+      else				// It's not me
+	{
+	 /* Put form to follow / unfollow */
+	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))	// I follow user
+	    /* Form to unfollow */
+	    Fol_PutIconToUnfollow (UsrDat);
+	 else if (Visible)	// I do not follow this user and I can follow
+	    /* Form to follow */
+	    Fol_PutIconToFollow (UsrDat);
+	}
+      HTM_TD_End ();
+
    HTM_TR_End ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;

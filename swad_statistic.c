@@ -1742,8 +1742,6 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
    struct Sta_Hits Hits;
    unsigned BarWidth;
    struct UsrData UsrDat;
-   char PhotoURL[PATH_MAX + 1];
-   bool ShowPhoto;
 
    /***** Initialize user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1780,10 +1778,7 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 
       /* Show the photo */
       HTM_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-                                            NULL,
-                        "PHOTO15x20",Pho_ZOOM,false);
+      Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO15x20",Pho_ZOOM,false);
       HTM_TD_End ();
 
       /* Write the user's ID if user is a student in current course */

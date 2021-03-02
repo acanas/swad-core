@@ -310,18 +310,12 @@ static void TL_Not_WriteNote (const struct TL_Timeline *Timeline,
 
 static void TL_Not_ShowAuthorPhoto (struct UsrData *UsrDat)
   {
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
-
    /***** Show author's photo *****/
    /* Begin container */
    HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
 
       /* Photo */
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-					   NULL,
-			"PHOTO45x60",Pho_ZOOM,true);	// Use unique id
+      Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO45x60",Pho_ZOOM,true);	// Use unique id
 
    /* End container */
    HTM_DIV_End ();

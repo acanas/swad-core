@@ -3369,67 +3369,63 @@ static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError
 static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
   {
    extern const char *Txt_View_record_for_this_course;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
    Act_Action_t NextAction;
 
    /***** Show user's photo *****/
    HTM_TD_Begin ("class=\"OWNER_WORKS_PHOTO\"");
-   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                	                NULL,
-                     "PHOTO60x80",Pho_ZOOM,false);
+      Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO60x80",Pho_ZOOM,false);
    HTM_TD_End ();
 
    /***** Begin form to send a message to this user *****/
    HTM_TD_Begin ("class=\"LT\"");
 
-   HTM_DIV_Begin ("class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
+      HTM_DIV_Begin ("class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
 
-   switch (UsrDat->Roles.InCurrentCrs.Role)
-     {
-      case Rol_STD:
-	 NextAction = ActSeeRecOneStd;
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-	 NextAction = ActSeeRecOneTch;
-	 break;
-      default:
-	 NextAction = ActUnk;
-	 Rol_WrongRoleExit ();
-	 break;
-     }
-   Frm_BeginForm (NextAction);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	 switch (UsrDat->Roles.InCurrentCrs.Role)
+	   {
+	    case Rol_STD:
+	       NextAction = ActSeeRecOneStd;
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       NextAction = ActSeeRecOneTch;
+	       break;
+	    default:
+	       NextAction = ActUnk;
+	       Rol_WrongRoleExit ();
+	       break;
+	   }
+	 Frm_BeginForm (NextAction);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
-   /***** Show user's ID *****/
-   ID_WriteUsrIDs (UsrDat,NULL);
+	    /***** Show user's ID *****/
+	    ID_WriteUsrIDs (UsrDat,NULL);
 
-   /***** Show user's name *****/
-   HTM_BR ();
+	    /***** Show user's name *****/
+	    HTM_BR ();
 
-   HTM_BUTTON_SUBMIT_Begin (Txt_View_record_for_this_course,"BT_LINK AUTHOR_TXT",NULL);
-   HTM_Txt (UsrDat->Surname1);
-   if (UsrDat->Surname2[0])
-      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
-   if (UsrDat->FrstName[0])
-      HTM_TxtF (", %s",UsrDat->FrstName);
-   HTM_BUTTON_End ();
+	    HTM_BUTTON_SUBMIT_Begin (Txt_View_record_for_this_course,"BT_LINK AUTHOR_TXT",NULL);
+	       HTM_Txt (UsrDat->Surname1);
+	       if (UsrDat->Surname2[0])
+		  HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
+	       if (UsrDat->FrstName[0])
+		  HTM_TxtF (", %s",UsrDat->FrstName);
+	    HTM_BUTTON_End ();
 
-   /***** Show user's email *****/
-   if (UsrDat->Email[0])
-     {
-      HTM_BR ();
-      HTM_A_Begin ("href=\"mailto:%s\" target=\"_blank\" class=\"AUTHOR_TXT\"",
-	           UsrDat->Email);
-      HTM_Txt (UsrDat->Email);
-      HTM_A_End ();
-     }
-   Frm_EndForm ();
+	    /***** Show user's email *****/
+	    if (UsrDat->Email[0])
+	      {
+	       HTM_BR ();
+	       HTM_A_Begin ("href=\"mailto:%s\" target=\"_blank\""
+			    " class=\"AUTHOR_TXT\"",
+			    UsrDat->Email);
+		  HTM_Txt (UsrDat->Email);
+	       HTM_A_End ();
+	      }
 
-   HTM_DIV_End ();
+	 Frm_EndForm ();
 
+      HTM_DIV_End ();
 
    HTM_TD_End ();
   }
@@ -6463,8 +6459,6 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
   {
    extern const char *Txt_Unknown_or_without_photo;
    bool ShowUsr = false;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
    struct UsrData UsrDat;
 
    if (Level && UsrCod > 0)
@@ -6479,13 +6473,8 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
 
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
    if (ShowUsr)
-     {
       /***** Show photo *****/
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-                                            NULL,
-                        "PHOTO15x20B",Pho_ZOOM,false);
-     }
+      Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO15x20B",Pho_ZOOM,false);
    else
       Ico_PutIcon ("usr_bl.jpg",Txt_Unknown_or_without_photo,"PHOTO15x20B");
 
@@ -9334,8 +9323,6 @@ void Brw_ShowFileMetadata (void)
    bool ICanEdit;
    bool ICanChangePublic = false;
    bool FileHasPublisher;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
    Brw_License_t License;
    unsigned LicenseUnsigned;
 
@@ -9486,10 +9473,7 @@ void Brw_ShowFileMetadata (void)
 	 if (FileHasPublisher)
 	   {
 	    /* Show photo */
-	    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&PublisherUsrDat,PhotoURL);
-	    Pho_ShowUsrPhoto (&PublisherUsrDat,ShowPhoto ? PhotoURL :
-	                	                           NULL,
-	                      "PHOTO15x20",Pho_ZOOM,false);
+	    Pho_ShowUsrPhotoIfAllowed (&PublisherUsrDat,"PHOTO15x20",Pho_ZOOM,false);
 
 	    /* Write name */
 	    HTM_NBSP ();

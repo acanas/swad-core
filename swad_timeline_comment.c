@@ -181,18 +181,12 @@ void TL_Com_PutPhotoAndFormToWriteNewComm (const struct TL_Timeline *Timeline,
 
 static void TL_Com_ShowAuthorPhoto (struct UsrData *UsrDat)
   {
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
-
    /***** Show author's photo *****/
    /* Begin container */
    HTM_DIV_Begin ("class=\"TL_COM_PHOTO\"");
 
       /* Author's photo */
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-					   NULL,
-			"PHOTO30x40",Pho_ZOOM,true);	// Use unique id
+      Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO30x40",Pho_ZOOM,true);	// Use unique id
 
    /* End container */
    HTM_DIV_End ();

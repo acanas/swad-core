@@ -2384,8 +2384,6 @@ void TstPrn_ShowOnePrint (void)
    extern const char *Txt_Grade;
    extern const char *Txt_Tags;
    struct TstPrn_Print Print;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
    Dat_StartEndTime_t StartEndTime;
    char *Id;
    struct TstRes_ICanView ICanView;
@@ -2442,10 +2440,7 @@ void TstPrn_ShowOnePrint (void)
       if (Gbl.Usrs.Other.UsrDat.FrstName[0])
 	 HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FrstName);
       HTM_BR ();
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
-							   NULL,
-			"PHOTO45x60",Pho_ZOOM,false);
+      Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,"PHOTO45x60",Pho_ZOOM,false);
       HTM_TD_End ();
 
       HTM_TR_End ();

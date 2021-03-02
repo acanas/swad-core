@@ -1159,8 +1159,6 @@ void MchRes_ShowOneMchResult (void)
    Dat_StartEndTime_t StartEndTime;
    char *Id;
    struct MchPrn_Print Print;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
    struct MchRes_ICanView ICanView;
 
    /***** Reset games context *****/
@@ -1205,157 +1203,154 @@ void MchRes_ShowOneMchResult (void)
       Box_BoxBegin (NULL,Match.Title,
                     NULL,NULL,
                     Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
-      Lay_WriteHeaderClassPhoto (false,false,
-				 Gbl.Hierarchy.Ins.InsCod,
-				 Gbl.Hierarchy.Deg.DegCod,
-				 Gbl.Hierarchy.Crs.CrsCod);
+	 Lay_WriteHeaderClassPhoto (false,false,
+				    Gbl.Hierarchy.Ins.InsCod,
+				    Gbl.Hierarchy.Deg.DegCod,
+				    Gbl.Hierarchy.Crs.CrsCod);
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (10);
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWideMarginPadding (10);
 
-      /***** User *****/
-      /* Get data of the user who answer the match */
-      if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS))
-	 Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
-      if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
-         Lay_NoPermissionExit ();
+	    /***** User *****/
+	    /* Get data of the user who answer the match */
+	    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS))
+	       Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
+	    if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
+	       Lay_NoPermissionExit ();
 
-      /* User */
-      HTM_TR_Begin (NULL);
+	    /* User */
+	    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+		  HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+	       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LB\"");
-      ID_WriteUsrIDs (UsrDat,NULL);
-      HTM_TxtF ("&nbsp;%s",UsrDat->Surname1);
-      if (UsrDat->Surname2[0])
-	 HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
-      if (UsrDat->FrstName[0])
-	 HTM_TxtF (", %s",UsrDat->FrstName);
-      HTM_BR ();
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-					   NULL,
-			"PHOTO45x60",Pho_ZOOM,false);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT LB\"");
+		  ID_WriteUsrIDs (UsrDat,NULL);
+		  HTM_TxtF ("&nbsp;%s",UsrDat->Surname1);
+		  if (UsrDat->Surname2[0])
+		     HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
+		  if (UsrDat->FrstName[0])
+		     HTM_TxtF (", %s",UsrDat->FrstName);
+		  HTM_BR ();
+		  Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO45x60",Pho_ZOOM,false);
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
+	    HTM_TR_End ();
 
-      /***** Start/end time (for user in this match) *****/
-      for (StartEndTime  = (Dat_StartEndTime_t) 0;
-	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	   StartEndTime++)
-	{
-	 HTM_TR_Begin (NULL);
+	    /***** Start/end time (for user in this match) *****/
+	    for (StartEndTime  = (Dat_StartEndTime_t) 0;
+		 StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+		 StartEndTime++)
+	      {
+	       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT_N RT\"");
-	 HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
-	 HTM_TD_End ();
+		  HTM_TD_Begin ("class=\"DAT_N RT\"");
+		     HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
+		  HTM_TD_End ();
 
-	 if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"DAT LB\"",Id);
-	 Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
-				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				       true,true,true,0x7);
-	 HTM_TD_End ();
-         free (Id);
+		  if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
+		     Lay_NotEnoughMemoryExit ();
+		  HTM_TD_Begin ("id=\"%s\" class=\"DAT LB\"",Id);
+		     Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
+						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+						   true,true,true,0x7);
+		  HTM_TD_End ();
+		  free (Id);
 
-	 HTM_TR_End ();
-	}
+	       HTM_TR_End ();
+	      }
 
-      /***** Number of questions *****/
-      HTM_TR_Begin (NULL);
+	    /***** Number of questions *****/
+	    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_Questions);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+		  HTM_TxtColon (Txt_Questions);
+	       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LB\"");
-      HTM_Unsigned (Print.NumQsts.All);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT LB\"");
+		  HTM_Unsigned (Print.NumQsts.All);
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
+	    HTM_TR_End ();
 
-      /***** Number of answers *****/
-      HTM_TR_Begin (NULL);
+	    /***** Number of answers *****/
+	    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_Answers);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+		  HTM_TxtColon (Txt_Answers);
+	       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LB\"");
-      HTM_Unsigned (Print.NumQsts.NotBlank);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT LB\"");
+		  HTM_Unsigned (Print.NumQsts.NotBlank);
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
+	    HTM_TR_End ();
 
-      /***** Score *****/
-      HTM_TR_Begin (NULL);
+	    /***** Score *****/
+	    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_Score);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+		  HTM_TxtColon (Txt_Score);
+	       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LB\"");
-      if (ICanView.Score)
-	{
-         HTM_STRONG_Begin ();
-         HTM_Double2Decimals (Print.Score);
-	 HTM_Txt ("/");
-	 HTM_Unsigned (Print.NumQsts.All);
-         HTM_STRONG_End ();
-	}
-      else
-         Ico_PutIconNotVisible ();
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT LB\"");
+		  if (ICanView.Score)
+		    {
+		     HTM_STRONG_Begin ();
+			HTM_Double2Decimals (Print.Score);
+			HTM_Txt ("/");
+			HTM_Unsigned (Print.NumQsts.All);
+		     HTM_STRONG_End ();
+		    }
+		  else
+		     Ico_PutIconNotVisible ();
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
+	    HTM_TR_End ();
 
-      /***** Grade *****/
-      HTM_TR_Begin (NULL);
+	    /***** Grade *****/
+	    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_Grade);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+		  HTM_TxtColon (Txt_Grade);
+	       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LB\"");
-      if (ICanView.Score)
-	{
-         HTM_STRONG_Begin ();
-         TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Game.MaxGrade);
-         HTM_STRONG_End ();
-	}
-      else
-         Ico_PutIconNotVisible ();
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT LB\"");
+		  if (ICanView.Score)
+		    {
+		     HTM_STRONG_Begin ();
+			TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Game.MaxGrade);
+		     HTM_STRONG_End ();
+		    }
+		  else
+		     Ico_PutIconNotVisible ();
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
+	    HTM_TR_End ();
 
-      /***** Tags present in this result *****/
-      HTM_TR_Begin (NULL);
+	    /***** Tags present in this result *****/
+	    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_Tags);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+		  HTM_TxtColon (Txt_Tags);
+	       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LB\"");
-      Gam_ShowTstTagsPresentInAGame (Match.GamCod);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT LB\"");
+		  Gam_ShowTstTagsPresentInAGame (Match.GamCod);
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
+	    HTM_TR_End ();
 
-      /***** Write answers and solutions *****/
-      TstPrn_ShowPrintAnswers (UsrDat,
-                               Print.NumQsts.All,
-                               Print.PrintedQuestions,
-                               Print.TimeUTC,
-                               Game.Visibility);
+	    /***** Write answers and solutions *****/
+	    TstPrn_ShowPrintAnswers (UsrDat,
+				     Print.NumQsts.All,
+				     Print.PrintedQuestions,
+				     Print.TimeUTC,
+				     Game.Visibility);
 
-      /***** End table *****/
-      HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
       /***** End box *****/
       Box_BoxEnd ();

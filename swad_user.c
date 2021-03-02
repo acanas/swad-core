@@ -2736,8 +2736,6 @@ void Usr_WriteLoggedUsrHead (void)
    extern const char *The_ClassUsr[The_NUM_THEMES];
    extern const char *Txt_Role;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
    unsigned NumAvailableRoles = Rol_GetNumAvailableRoles ();
 
    HTM_DIV_Begin ("class=\"HEAD_USR %s\"",The_ClassUsr[Gbl.Prefs.Theme]);
@@ -2762,10 +2760,7 @@ void Usr_WriteLoggedUsrHead (void)
    HTM_NBSP ();
 
    /***** Show my photo *****/
-   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
-                	                             NULL,
-                     "PHOTO18x24",Pho_ZOOM,false);
+   Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Me.UsrDat,"PHOTO18x24",Pho_ZOOM,false);
 
    /***** User's name *****/
    if (Gbl.Usrs.Me.UsrDat.FrstName[0])
@@ -3558,8 +3553,6 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
    char BgColor[Usr_MAX_BYTES_BG_COLOR + 1];
-   char PhotoURL[PATH_MAX + 1];
-   bool ShowPhoto;
    bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
 	                    (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
    struct Ins_Instit Ins;
@@ -3567,73 +3560,71 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    /***** Start row *****/
    HTM_TR_Begin (NULL);
 
-   /***** Checkbox to select user *****/
-   // Two colors are used alternatively to better distinguish the rows
-   if (UsrIsTheMsgSender)
-      Str_Copy (BgColor,"LIGHT_GREEN",sizeof (BgColor) - 1);
-   else
-      snprintf (BgColor,sizeof (BgColor),"COLOR%u",Gbl.RowEvenOdd);
+      /***** Checkbox to select user *****/
+      // Two colors are used alternatively to better distinguish the rows
+      if (UsrIsTheMsgSender)
+	 Str_Copy (BgColor,"LIGHT_GREEN",sizeof (BgColor) - 1);
+      else
+	 snprintf (BgColor,sizeof (BgColor),"COLOR%u",Gbl.RowEvenOdd);
 
-   if (PutCheckBoxToSelectUsr)
-     {
-      HTM_TD_Begin ("class=\"CM %s\"",BgColor);
-      Usr_PutCheckboxToSelectUser (Role,UsrDat->EnUsrCod,UsrIsTheMsgSender,
-				   SelectedUsrs);
+      if (PutCheckBoxToSelectUsr)
+	{
+	 HTM_TD_Begin ("class=\"CM %s\"",BgColor);
+	    Usr_PutCheckboxToSelectUser (Role,UsrDat->EnUsrCod,UsrIsTheMsgSender,
+					 SelectedUsrs);
+	 HTM_TD_End ();
+	}
+
+      /***** User has accepted enrolment? *****/
+      if (UsrIsTheMsgSender)
+	 HTM_TD_Begin ("class=\"BM_SEL %s\" title=\"%s\"",
+		       UsrDat->Accepted ? "USR_LIST_NUM_N" :
+					  "USR_LIST_NUM",
+		       UsrDat->Accepted ? Txt_Enrolment_confirmed :
+					  Txt_Enrolment_not_confirmed);
+      else
+	 HTM_TD_Begin ("class=\"BM%u %s\" title=\"%s\"",
+		       Gbl.RowEvenOdd,
+		       UsrDat->Accepted ? "USR_LIST_NUM_N" :
+					  "USR_LIST_NUM",
+		       UsrDat->Accepted ? Txt_Enrolment_confirmed :
+					  Txt_Enrolment_not_confirmed);
+      HTM_Txt (UsrDat->Accepted ? "&check;" :
+				  "&cross;");
       HTM_TD_End ();
-     }
 
-   /***** User has accepted enrolment? *****/
-   if (UsrIsTheMsgSender)
-      HTM_TD_Begin ("class=\"BM_SEL %s\" title=\"%s\"",
+      /***** Write number of user in the list *****/
+      HTM_TD_Begin ("class=\"%s RM %s\"",
 		    UsrDat->Accepted ? "USR_LIST_NUM_N" :
 				       "USR_LIST_NUM",
-		    UsrDat->Accepted ? Txt_Enrolment_confirmed :
-				       Txt_Enrolment_not_confirmed);
-   else
-      HTM_TD_Begin ("class=\"BM%u %s\" title=\"%s\"",
-		    Gbl.RowEvenOdd,
-		    UsrDat->Accepted ? "USR_LIST_NUM_N" :
-				       "USR_LIST_NUM",
-		    UsrDat->Accepted ? Txt_Enrolment_confirmed :
-				       Txt_Enrolment_not_confirmed);
-   HTM_Txt (UsrDat->Accepted ? "&check;" :
-        	               "&cross;");
-   HTM_TD_End ();
-
-   /***** Write number of user in the list *****/
-   HTM_TD_Begin ("class=\"%s RM %s\"",
-	         UsrDat->Accepted ? "USR_LIST_NUM_N" :
-				    "USR_LIST_NUM",
-	         BgColor);
-   HTM_Unsigned (NumUsr);
-   HTM_TD_End ();
-
-   if (Gbl.Usrs.Listing.WithPhotos)
-     {
-      /***** Show user's photo *****/
-      HTM_TD_Begin ("class=\"CM %s\"",BgColor);
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                                           NULL,
-                        "PHOTO21x28",Pho_ZOOM,false);
+		    BgColor);
+	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
-     }
 
-   /****** Write user's IDs ******/
-   HTM_TD_Begin ("class=\"%s LM %s\"",
-		 UsrDat->Accepted ? "DAT_SMALL_N" :
-				    "DAT_SMALL",
-		 BgColor);
-   ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_TD_End ();
+      if (Gbl.Usrs.Listing.WithPhotos)
+	{
+	 /***** Show user's photo *****/
+	 HTM_TD_Begin ("class=\"CM %s\"",BgColor);
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+	 HTM_TD_End ();
+	}
 
-   /***** Write rest of main user's data *****/
-   Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor);
-   HTM_TD_Begin ("class=\"LM %s\"",BgColor);
-   Ins_DrawInstitutionLogoWithLink (&Ins,25);
-   HTM_TD_End ();
+      /****** Write user's IDs ******/
+      HTM_TD_Begin ("class=\"%s LM %s\"",
+		    UsrDat->Accepted ? "DAT_SMALL_N" :
+				       "DAT_SMALL",
+		    BgColor);
+	 ID_WriteUsrIDs (UsrDat,NULL);
+      HTM_TD_End ();
+
+      /***** Write rest of main user's data *****/
+      Ins.InsCod = UsrDat->InsCod;
+      Ins_GetDataOfInstitutionByCod (&Ins);
+      Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor);
+
+      HTM_TD_Begin ("class=\"LM %s\"",BgColor);
+	 Ins_DrawInstitutionLogoWithLink (&Ins,25);
+      HTM_TD_End ();
 
    /***** End row *****/
    HTM_TR_End ();
@@ -3645,8 +3636,6 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
 static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
   {
-   char PhotoURL[PATH_MAX + 1];
-   bool ShowPhoto;
    struct Ins_Instit Ins;
    struct Ctr_Centre Ctr;
    struct Dpt_Department Dpt;
@@ -3654,71 +3643,68 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    /***** Start row *****/
    HTM_TR_Begin (NULL);
 
-   if (Gbl.Usrs.Listing.WithPhotos)
-     {
-      /***** Show guest's photo *****/
-      HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                                           NULL,
-                        "PHOTO21x28",Pho_NO_ZOOM,false);
+      if (Gbl.Usrs.Listing.WithPhotos)
+	{
+	 /***** Show guest's photo *****/
+	 HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_NO_ZOOM,false);
+	 HTM_TD_End ();
+	}
+
+      /****** Write user's ID ******/
+      HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
+	 ID_WriteUsrIDs (UsrDat,NULL);
+	 HTM_NBSP ();
       HTM_TD_End ();
-     }
 
-   /****** Write user's ID ******/
-   HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_NBSP ();
-   HTM_TD_End ();
+      /***** Write rest of guest's main data *****/
+      Ins.InsCod = UsrDat->InsCod;
+      Ins_GetDataOfInstitutionByCod (&Ins);
+      Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+      Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+			Ins.FullName,
+			NULL,true,false);
 
-   /***** Write rest of guest's main data *****/
-   Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
-   Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     Ins.FullName,
-	             NULL,true,false);
-
-   /***** Write the rest of the data of the guest *****/
-   if (UsrDat->Tch.CtrCod > 0)
-     {
-      Ctr.CtrCod = UsrDat->Tch.CtrCod;
-      Ctr_GetDataOfCentreByCod (&Ctr);
-     }
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
-	                                      "&nbsp;",
-	             NULL,true,false);
-   if (UsrDat->Tch.DptCod > 0)
-     {
-      Dpt.DptCod = UsrDat->Tch.DptCod;
-      Dpt_GetDataOfDepartmentByCod (&Dpt);
-     }
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->Tch.DptCod > 0 ? Dpt.FullName :
-	                                      "&nbsp;",
-	             NULL,true,false);
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->Tch.Office[0] ? UsrDat->Tch.Office :
-	                                     "&nbsp;",
-	             NULL,true,false);
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->Tch.OfficePhone[0] ? UsrDat->Tch.OfficePhone :
-	                                          "&nbsp;",
-	             NULL,true,false);
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->Phone[0][0] ? UsrDat->Phone[0] :
-	                                   "&nbsp;",
-	             NULL,true,false);
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->Phone[1][0] ? UsrDat->Phone[1] :
-	                                   "&nbsp;",
-	             NULL,true,false);
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->StrBirthday[0] ? UsrDat->StrBirthday :
-	                                      "&nbsp;",
-	             NULL,true,false);
+      /***** Write the rest of the data of the guest *****/
+      if (UsrDat->Tch.CtrCod > 0)
+	{
+	 Ctr.CtrCod = UsrDat->Tch.CtrCod;
+	 Ctr_GetDataOfCentreByCod (&Ctr);
+	}
+      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+			UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
+						 "&nbsp;",
+			NULL,true,false);
+      if (UsrDat->Tch.DptCod > 0)
+	{
+	 Dpt.DptCod = UsrDat->Tch.DptCod;
+	 Dpt_GetDataOfDepartmentByCod (&Dpt);
+	}
+      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+			UsrDat->Tch.DptCod > 0 ? Dpt.FullName :
+						 "&nbsp;",
+			NULL,true,false);
+      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+			UsrDat->Tch.Office[0] ? UsrDat->Tch.Office :
+						"&nbsp;",
+			NULL,true,false);
+      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+			UsrDat->Tch.OfficePhone[0] ? UsrDat->Tch.OfficePhone :
+						     "&nbsp;",
+			NULL,true,false);
+      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+			UsrDat->Phone[0][0] ? UsrDat->Phone[0] :
+					      "&nbsp;",
+			NULL,true,false);
+      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+			UsrDat->Phone[1][0] ? UsrDat->Phone[1] :
+					      "&nbsp;",
+			NULL,true,false);
+      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+			UsrDat->StrBirthday[0] ? UsrDat->StrBirthday :
+						 "&nbsp;",
+			NULL,true,false);
 
    /***** End row *****/
    HTM_TR_End ();
@@ -3730,8 +3716,6 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 
 static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
   {
-   char PhotoURL[PATH_MAX + 1];
-   bool ShowPhoto;
    unsigned NumGrpTyp,NumField;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3747,10 +3731,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
      {
       /***** Show student's photo *****/
       HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                                           NULL,
-                        "PHOTO21x28",Pho_NO_ZOOM,false);
+	 Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_NO_ZOOM,false);
       HTM_TD_End ();
      }
 
@@ -3759,8 +3740,8 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 		 UsrDat->Accepted ? "DAT_SMALL_N" :
 				    "DAT_SMALL",
 		 Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_NBSP ();
+      ID_WriteUsrIDs (UsrDat,NULL);
+      HTM_NBSP ();
    HTM_TD_End ();
 
    /***** Write rest of main student's data *****/
@@ -3834,8 +3815,6 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 
 static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
   {
-   char PhotoURL[PATH_MAX + 1];
-   bool ShowPhoto;
    struct Ins_Instit Ins;
    struct Ctr_Centre Ctr;
    struct Dpt_Department Dpt;
@@ -3850,10 +3829,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
      {
       /***** Show teacher's photo *****/
       HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                                           NULL,
-                        "PHOTO21x28",Pho_NO_ZOOM,false);
+	 Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_NO_ZOOM,false);
       HTM_TD_End ();
      }
 
@@ -3912,8 +3888,6 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
   {
-   char PhotoURL[PATH_MAX + 1];
-   bool ShowPhoto;
    struct Ins_Instit Ins;
 
    /***** Start row *****/
@@ -3928,10 +3902,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
      {
       /***** Show administrator's photo *****/
       HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                                           NULL,
-                        "PHOTO21x28",Pho_ZOOM,false);
+	 Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
       HTM_TD_End ();
      }
 
@@ -8979,10 +8950,8 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
   {
    unsigned NumUsr;
    bool TRIsOpen = false;
-   bool ShowPhoto;
    bool UsrIsTheMsgSender;
    const char *ClassPhoto = "PHOTO21x28";	// Default photo size
-   char PhotoURL[PATH_MAX + 1];
    struct UsrData UsrDat;
 
    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
@@ -9043,10 +9012,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 					 SelectedUsrs);
 
 	 /***** Show photo *****/
-	 ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-	 Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-					       NULL,
-			   ClassPhoto,Pho_ZOOM,false);
+	 Pho_ShowUsrPhotoIfAllowed (&UsrDat,ClassPhoto,Pho_ZOOM,false);
 
 	 /***** Photo foot *****/
 	 HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION\"");
@@ -9906,8 +9872,6 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
 
 void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
   {
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
    Act_Action_t NextAction;
 
    /***** Show user's photo *****/
@@ -9916,10 +9880,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
 	            NumRows + 1,Gbl.RowEvenOdd);
    else
       HTM_TD_Begin ("class=\"LT LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                	                NULL,
-                     "PHOTO45x60",Pho_ZOOM,false);
+   Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO45x60",Pho_ZOOM,false);
    HTM_TD_End ();
 
    /***** User's IDs and name *****/
