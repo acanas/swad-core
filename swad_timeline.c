@@ -244,19 +244,17 @@ void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline)
 
    /***** If a note should be highlighted ==> show it above the timeline *****/
    if (Not.NotCod > 0)
-      /***** Show the note highlighted above the timeline *****/
       TL_Not_ShowHighlightedNote (Timeline,&Not);
 
    /***** Show timeline with possible highlighted note *****/
-   TL_ShowTimelineGblHighlightingNot (Timeline,Not.NotCod);
+   TL_ShowTimelineGblHighlighting (Timeline,Not.NotCod);
   }
 
 /*****************************************************************************/
 /******************* Show global timeline highlighting a note ****************/
 /*****************************************************************************/
 
-void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
-	                                long NotCod)
+void TL_ShowTimelineGblHighlighting (struct TL_Timeline *Timeline,long NotCod)
   {
    extern const char *Txt_Timeline;
 
@@ -278,15 +276,14 @@ void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
 
 void TL_ShowTimelineUsr (struct TL_Timeline *Timeline)
   {
-   TL_ShowTimelineUsrHighlightingNot (Timeline,-1L);
+   TL_ShowTimelineUsrHighlighting (Timeline,-1L);
   }
 
 /*****************************************************************************/
 /************ Show timeline of a selected user highlighting a note ***********/
 /*****************************************************************************/
 
-void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
-                                        long NotCod)
+void TL_ShowTimelineUsrHighlighting (struct TL_Timeline *Timeline,long NotCod)
   {
    extern const char *Txt_Timeline_OF_A_USER;
 

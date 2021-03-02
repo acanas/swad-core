@@ -703,7 +703,7 @@ void TL_Com_ReceiveCommUsr (void)
       /***** Receive comment in a note
 	     and write updated timeline after commenting (user) *****/
       NotCod = TL_Com_ReceiveComm ();
-      TL_ShowTimelineUsrHighlightingNot (&Timeline,NotCod);
+      TL_ShowTimelineUsrHighlighting (&Timeline,NotCod);
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -721,7 +721,7 @@ void TL_Com_ReceiveCommGbl (void)
    NotCod = TL_Com_ReceiveComm ();
 
    /***** Write updated timeline after commenting (global) *****/
-   TL_ShowTimelineGblHighlightingNot (&Timeline,NotCod);
+   TL_ShowTimelineGblHighlighting (&Timeline,NotCod);
   }
 
 static long TL_Com_ReceiveComm (void)

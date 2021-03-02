@@ -113,12 +113,10 @@ void TL_ResetTimeline (struct TL_Timeline *Timeline);
 
 void TL_ShowTimelineGbl (void);
 void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline);
-void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
-	                                long NotCod);
+void TL_ShowTimelineGblHighlighting (struct TL_Timeline *Timeline,long NotCod);
 
 void TL_ShowTimelineUsr (struct TL_Timeline *Timeline);
-void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
-                                        long NotCod);
+void TL_ShowTimelineUsrHighlighting (struct TL_Timeline *Timeline,long NotCod);
 
 void TL_RefreshNewTimelineGbl (void);
 

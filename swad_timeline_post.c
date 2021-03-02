@@ -236,7 +236,7 @@ void TL_Pst_ReceivePostUsr (void)
       /***** Receive and store post, and
 	     write updated timeline after publication (user) *****/
       NotCod = TL_Pst_ReceivePost ();
-      TL_ShowTimelineUsrHighlightingNot (&Timeline,NotCod);
+      TL_ShowTimelineUsrHighlighting (&Timeline,NotCod);
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -254,7 +254,7 @@ void TL_Pst_ReceivePostGbl (void)
    NotCod = TL_Pst_ReceivePost ();
 
    /***** Write updated timeline after publication (global) *****/
-   TL_ShowTimelineGblHighlightingNot (&Timeline,NotCod);
+   TL_ShowTimelineGblHighlighting (&Timeline,NotCod);
   }
 
 // Returns the code of the note just created
