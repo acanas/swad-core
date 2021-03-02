@@ -311,31 +311,6 @@ void TL_Fav_UnfCommGbl (void)
                            TL_Usr_SHOW_FEW_USRS);
   }
 
-/*****************************************************************************/
-/**************** Put icon to fav/unfav and list of favers *******************/
-/*****************************************************************************/
-
-void TL_Fav_PutIconToFavUnf (TL_Fav_WhatToFav_t WhatToFav,
-                             long Cod,long UsrCod,unsigned NumFavs,
-                             TL_Usr_HowManyUsrs_t HowManyUsrs)
-  {
-   /***** Put form to fav/unfav this comment *****/
-   /* Begin container */
-   HTM_DIV_Begin ("class=\"TL_ICO\"");
-
-      /* Icon to fav/unfav */
-      if (Usr_ItsMe (UsrCod))	// I am the author ==> I can not fav/unfav
-	 TL_Fav_PutDisabledIconFav (NumFavs);
-      else			// I am not the author
-	 TL_Fav_PutFormToFavUnf (WhatToFav,Cod);
-
-   /* End container */
-   HTM_DIV_End ();
-
-   /***** Show who have marked this comment as favourite *****/
-   TL_Fav_ShowUsrsWhoHaveMarkedAsFav (WhatToFav,Cod,UsrCod,NumFavs,HowManyUsrs);
-  }
-
 static void TL_Fav_FavComm (struct TL_Com_Comment *Com)
   {
    extern const char *Txt_The_comment_no_longer_exists;
@@ -452,6 +427,31 @@ static void TL_Fav_UnfComm (struct TL_Com_Comment *Com)
 
    /***** Free image *****/
    Med_MediaDestructor (&Com->Content.Media);
+  }
+
+/*****************************************************************************/
+/**************** Put icon to fav/unfav and list of favers *******************/
+/*****************************************************************************/
+
+void TL_Fav_PutIconToFavUnf (TL_Fav_WhatToFav_t WhatToFav,
+                             long Cod,long UsrCod,unsigned NumFavs,
+                             TL_Usr_HowManyUsrs_t HowManyUsrs)
+  {
+   /***** Put form to fav/unfav this comment *****/
+   /* Begin container */
+   HTM_DIV_Begin ("class=\"TL_ICO\"");
+
+      /* Icon to fav/unfav */
+      if (Usr_ItsMe (UsrCod))	// I am the author ==> I can not fav/unfav
+	 TL_Fav_PutDisabledIconFav (NumFavs);
+      else			// I am not the author
+	 TL_Fav_PutFormToFavUnf (WhatToFav,Cod);
+
+   /* End container */
+   HTM_DIV_End ();
+
+   /***** Show who have marked this comment as favourite *****/
+   TL_Fav_ShowUsrsWhoHaveMarkedAsFav (WhatToFav,Cod,UsrCod,NumFavs,HowManyUsrs);
   }
 
 /*****************************************************************************/

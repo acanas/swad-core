@@ -173,14 +173,23 @@ void TL_Not_ShowHighlightedNote (struct TL_Timeline *Timeline,
    TL_Not_GetDataOfNoteByCod (Not);
 
    /***** Show the note highlighted *****/
+   /* Begin box */
    Box_BoxBegin (NULL,NULL,
 		 NULL,NULL,
 		 NULL,Box_CLOSABLE);
+
+      /* Begin container */
       HTM_DIV_Begin ("class=\"TL_WIDTH TL_NEW_PUB\"");
+
+         /* Check and write note with top message */
 	 TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,Not,
 					     TopMessages[NotifyEvent],
 					     PublisherDat.UsrCod);
+
+      /* End container */
       HTM_DIV_End ();
+
+   /* End box */
    Box_BoxEnd ();
   }
 
@@ -256,14 +265,19 @@ static void TL_Not_WriteTopMessage (TL_TopMessage_t TopMessage,long PublisherCod
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"TL_TOP_CONT TL_TOP_PUBLISHER TL_WIDTH\"");
 
-	 /***** Show user's name inside form to go to user's public profile *****/
+	 /***** Show publisher's name inside form to go to user's public profile *****/
+         /* Begin form */
 	 Frm_BeginFormUnique (ActSeeOthPubPrf);
 	 Usr_PutParamUsrCodEncrypted (PublisherDat.EnUsrCod);
+
+	    /* Publisher's name */
 	    HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (PublisherCod) ? Txt_My_public_profile :
 								Txt_Another_user_s_profile,
 				     "BT_LINK TL_TOP_PUBLISHER",NULL);
 	       HTM_Txt (PublisherDat.FullName);
 	    HTM_BUTTON_End ();
+
+	 /* End form */
 	 Frm_EndForm ();
 
 	 /***** Show action made *****/
@@ -465,7 +479,9 @@ static void TL_Not_GetLocationInHierarchy (const struct TL_Not_Note *Not,
       case TL_NOTE_FORUM_POST:
 	 /* Get forum type of the post */
 	 For_GetForumTypeAndLocationOfAPost (Not->Cod,Forum);
-	 For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
+
+	 /* Set forum name in recipient's language */
+	 For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,false);
 	 break;
       default:
 	 break;
@@ -598,10 +614,15 @@ static void TL_Not_PutFormGoToAction (const struct TL_Not_Note *Not,
        Gbl.Form.Inside)		// Inside another form
      {
       /***** Do not put form *****/
+      /* Begin container */
       HTM_DIV_Begin ("class=\"TL_FORM_OFF\"");
+
+         /* Text ("not available") */
 	 HTM_Txt (Txt_TIMELINE_NOTE[Not->NoteType]);
 	 if (Not->Unavailable)
 	    HTM_TxtF ("&nbsp;(%s)",Txt_not_available);
+
+      /* End container */
       HTM_DIV_End ();
      }
    else			// Not inside another form
