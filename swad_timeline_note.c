@@ -821,7 +821,8 @@ static void TL_Not_WriteFavShaRem (const struct TL_Timeline *Timeline,
       HTM_DIV_Begin ("id=\"fav_not_%s_%u\""
 	             " class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\"",
 		     Gbl.UniqueNameEncrypted,NumDiv);
-	 TL_Fav_PutIconToFavUnfNote (Not,TL_Usr_SHOW_FEW_USRS);
+	 TL_Fav_PutIconToFavUnf (TL_Fav_NOTE,Not->NotCod,Not->UsrCod,Not->NumFavs,
+				 TL_Usr_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /***** Foot column 2: share zone *****/

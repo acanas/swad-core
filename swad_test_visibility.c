@@ -121,19 +121,25 @@ void TstVis_PutVisibilityCheckboxes (unsigned SelectedVisibility)
    TstVis_Visibility_t Visibility;
    bool ItemVisible;
 
+   /***** Write list of checkboxes for visibility *****/
    for (Visibility  = (TstVis_Visibility_t) 0;
 	Visibility <= (TstVis_Visibility_t) (TstVis_NUM_ITEMS_VISIBILITY - 1);
 	Visibility++)
      {
-      ItemVisible = (SelectedVisibility & (1 << Visibility)) != 0;
+      /* Begin label */
       HTM_LABEL_Begin ("class=\"DAT\"");
-      HTM_INPUT_CHECKBOX ("Visibility",HTM_DONT_SUBMIT_ON_CHANGE,
-		          "value=\"%u\"%s",
-		          (unsigned) Visibility,
-		          ItemVisible ? " checked=\"checked\"" :
-		        	        "");
-      Ico_PutIconOn (Icons[Visibility],Txt_TST_STR_VISIBILITY[Visibility]);
-      HTM_Txt (Txt_TST_STR_VISIBILITY[Visibility]);
+
+         /* Checkbox with icon and text */
+         ItemVisible = (SelectedVisibility & (1 << Visibility)) != 0;
+	 HTM_INPUT_CHECKBOX ("Visibility",HTM_DONT_SUBMIT_ON_CHANGE,
+			     "value=\"%u\"%s",
+			     (unsigned) Visibility,
+			     ItemVisible ? " checked=\"checked\"" :
+					   "");
+	 Ico_PutIconOn (Icons[Visibility],Txt_TST_STR_VISIBILITY[Visibility]);
+	 HTM_Txt (Txt_TST_STR_VISIBILITY[Visibility]);
+
+      /* End label */
       HTM_LABEL_End ();
       HTM_BR ();
      }
