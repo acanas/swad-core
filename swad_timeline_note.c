@@ -1118,7 +1118,7 @@ void TL_Not_RequestRemNoteGbl (void)
 
 static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
   {
-   extern const char *Txt_The_original_post_no_longer_exists;
+   extern const char *Txt_The_post_no_longer_exists;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_post;
    struct TL_Not_Note Not;
 
@@ -1129,7 +1129,7 @@ static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
    /***** Trivial check 1: note code should be > 0 *****/
    if (Not.NotCod <= 0)
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
       return;
      }
 
@@ -1223,7 +1223,7 @@ void TL_Not_RemoveNoteGbl (void)
 
 static void TL_Not_RemoveNote (void)
   {
-   extern const char *Txt_The_original_post_no_longer_exists;
+   extern const char *Txt_The_post_no_longer_exists;
    extern const char *Txt_TIMELINE_Post_removed;
    struct TL_Not_Note Not;
 
@@ -1234,7 +1234,7 @@ static void TL_Not_RemoveNote (void)
    /***** Trivial check 1: note code should be > 0 *****/
    if (Not.NotCod <= 0)
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
       return;
      }
 
@@ -1423,40 +1423,4 @@ void TL_Not_GetDataOfNoteByCod (struct TL_Not_Note *Not)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/******************** Check if I can fav/share a note ************************/
-/*****************************************************************************/
-
-bool TL_Not_CheckICanFavShaNote (struct TL_Not_Note *Not)
-  {
-   extern const char *Txt_The_original_post_no_longer_exists;
-
-   /***** Get data of note *****/
-   Not->NotCod = TL_Not_GetParamNotCod ();
-   TL_Not_GetDataOfNoteByCod (Not);
-
-   /***** Trivial check 1: note code should be > 0 *****/
-   if (Not->NotCod <= 0)
-     {
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
-      return false;
-     }
-
-   /***** Trivial check 2: I must be logged *****/
-   if (!Gbl.Usrs.Me.Logged)
-     {
-      Ale_ShowAlert (Ale_ERROR,"You are not logged.");
-      return false;
-     }
-
-   /***** Trivial check 3: The author can not unfav his/her own notes *****/
-   if (Usr_ItsMe (Not->UsrCod))
-     {
-      Ale_ShowAlert (Ale_ERROR,"You can not fav/share your own posts.");
-      return false;
-     }
-
-   return true;
   }

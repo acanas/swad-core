@@ -118,13 +118,16 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
    struct TL_Pub_Publication Pub;
    long OriginalPubCod;
 
-   /***** Get data of note and do some checks *****/
-   if (!TL_Not_CheckICanFavShaNote (Not))
+   /***** Get data of note *****/
+   Not->NotCod = TL_Not_GetParamNotCod ();
+   TL_Not_GetDataOfNoteByCod (Not);
+
+   /***** Do some checks *****/
+   if (!TL_Usr_CheckICanFavSha (Not->NotCod,Not->UsrCod))
       return;
 
    /***** Trivial check: Is note already shared by me? *****/
    if (TL_DB_CheckIfNoteIsSharedByUsr (Not->NotCod,Gbl.Usrs.Me.UsrDat.UsrCod))
-      // Don't show error message
       return;
 
    /***** Share (publish note in timeline) *****/
@@ -172,13 +175,12 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
   {
    long OriginalPubCod;
 
-   /***** Get data of note and do some checks *****/
-   if (!TL_Not_CheckICanFavShaNote (Not))
-      return;
+   /***** Get data of note *****/
+   Not->NotCod = TL_Not_GetParamNotCod ();
+   TL_Not_GetDataOfNoteByCod (Not);
 
-   /***** Trivial check: Is note already shared by me? *****/
-   if (!TL_DB_CheckIfNoteIsSharedByUsr (Not->NotCod,Gbl.Usrs.Me.UsrDat.UsrCod))
-      // Don't show error message
+   /***** Do some checks *****/
+   if (!TL_Usr_CheckICanFavSha (Not->NotCod,Not->UsrCod))
       return;
 
    /***** Delete publication from database *****/

@@ -726,7 +726,7 @@ void TL_Com_ReceiveCommGbl (void)
 
 static long TL_Com_ReceiveComm (void)
   {
-   extern const char *Txt_The_original_post_no_longer_exists;
+   extern const char *Txt_The_post_no_longer_exists;
    struct TL_Pst_PostContent Content;
    struct TL_Not_Note Not;
    struct TL_Pub_Publication Pub;
@@ -738,7 +738,7 @@ static long TL_Com_ReceiveComm (void)
    /***** Trivial check: note code *****/
    if (Not.NotCod <= 0)
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
       return -1L;
      }
 
@@ -831,7 +831,7 @@ void TL_Com_RequestRemComGbl (void)
 
 static void TL_Com_RequestRemovalComm (struct TL_Timeline *Timeline)
   {
-   extern const char *Txt_The_comment_no_longer_exists;
+   extern const char *Txt_The_post_no_longer_exists;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
    struct TL_Com_Comment Com;
 
@@ -846,7 +846,7 @@ static void TL_Com_RequestRemovalComm (struct TL_Timeline *Timeline)
    if (Com.PubCod <= 0)
      {
       Med_MediaDestructor (&Com.Content.Media);
-      Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
+      Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
       return;
      }
 
@@ -950,7 +950,7 @@ void TL_Com_RemoveComGbl (void)
 
 static void TL_Com_RemoveComm (void)
   {
-   extern const char *Txt_The_comment_no_longer_exists;
+   extern const char *Txt_The_post_no_longer_exists;
    extern const char *Txt_Comment_removed;
    struct TL_Com_Comment Com;
 
@@ -965,7 +965,7 @@ static void TL_Com_RemoveComm (void)
    if (Com.PubCod <= 0)
      {
       Med_MediaDestructor (&Com.Content.Media);
-      Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
+      Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
       return;
      }
 
@@ -1093,43 +1093,4 @@ static void TL_Com_ResetComm (struct TL_Com_Comment *Com)
    Com->DateTimeUTC    = (time_t) 0;
    Com->Content.Txt[0] = '\0';
    Com->NumFavs        = 0;
-  }
-
-/*****************************************************************************/
-/******************* Check if I can fav/share a comment **********************/
-/*****************************************************************************/
-
-bool TL_Com_CheckICanFavShaComm (struct TL_Com_Comment *Com)
-  {
-   extern const char *Txt_The_comment_no_longer_exists;
-
-   /***** Get data of comment *****/
-   Com->PubCod = TL_Pub_GetParamPubCod ();
-   TL_Com_GetDataOfCommByCod (Com);
-
-   /***** Trivial check 1: publication code should be > 0 *****/
-   if (Com->PubCod <= 0)
-     {
-      Med_MediaDestructor (&Com->Content.Media);
-      Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
-      return false;
-     }
-
-   /***** Trivial check 2: I must be logged *****/
-   if (!Gbl.Usrs.Me.Logged)
-     {
-      Med_MediaDestructor (&Com->Content.Media);
-      Ale_ShowAlert (Ale_ERROR,"You are not logged.");
-      return false;
-     }
-
-   /***** Trivial check 3: The author can not fav his/her own comments *****/
-   if (Usr_ItsMe (Com->UsrCod))
-     {
-      Med_MediaDestructor (&Com->Content.Media);
-      Ale_ShowAlert (Ale_ERROR,"You can not fav/unfav your own comments.");
-      return false;
-     }
-
-   return true;
   }

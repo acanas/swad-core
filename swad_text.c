@@ -46594,27 +46594,6 @@ const char *Txt_The_centre_X_has_been_renamed_as_Y =	// Warning: it is very impo
 	"O centro <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
 
-const char *Txt_The_comment_no_longer_exists =
-#if   L==1	// ca
-	"El comentari ja no existeix.";
-#elif L==2	// de
-	"Der Kommentar nicht mehr existiert.";
-#elif L==3	// en
-	"The comment no longer exists.";
-#elif L==4	// es
-	"El comentario ya no existe.";
-#elif L==5	// fr
-	"Le commentaire a disparu.";
-#elif L==6	// gn
-	"El comentario ya no existe.";	// Okoteve traducción
-#elif L==7	// it
-	"Il commento non esiste pi&ugrave;.";
-#elif L==8	// pl
-	"Komentarz ju&zdot; nie istnieje.";
-#elif L==9	// pt
-	"O coment&aacute;rio n&atilde;o existe mais.";
-#endif
-
 const char *Txt_The_configuration_of_the_projects_has_been_updated =
 #if   L==1	// ca
 	"La configuraci&oacute; dels projectes s'ha actualitzat.";
@@ -49660,25 +49639,25 @@ const char *Txt_The_photo_no_longer_exists =
 	"La foto n&atilde;o existe mais.";
 #endif
 
-const char *Txt_The_original_post_no_longer_exists =
+const char *Txt_The_post_no_longer_exists =
 #if   L==1	// ca
-	"La publicaci&oacute; original ja no existeix.";
+	"La publicaci&oacute; ja no existeix.";
 #elif L==2	// de
-	"Der urspr&uuml;ngliche Post nicht mehr existiert.";
+	"Der Post nicht mehr existiert.";
 #elif L==3	// en
-	"The original post no longer exists.";
+	"The post no longer exists.";
 #elif L==4	// es
-	"La publicaci&oacute;n original ya no existe.";
+	"La publicaci&oacute;n ya no existe.";
 #elif L==5	// fr
-	"Le post original a disparu.";
+	"Le post a disparu.";
 #elif L==6	// gn
-	"La publicaci&oacute;n original ya no existe.";	// Okoteve traducción
+	"La publicaci&oacute;n ya no existe.";	// Okoteve traducción
 #elif L==7	// it
-	"La pubblicazione originale non esiste pi&ugrave;.";
+	"La pubblicazione non esiste pi&ugrave;.";
 #elif L==8	// pl
-	"Oryginalna publikacja ju&zdot; nie istnieje.";
+	"Publikacja ju&zdot; nie istnieje.";
 #elif L==9	// pt
-	"A publica&ccedil;&atilde;o original n&atilde;o existe mais.";
+	"A publica&ccedil;&atilde;o n&atilde;o existe mais.";
 #endif
 
 const char *Txt_The_password_can_not_consist_only_of_digits =

@@ -64,5 +64,6 @@ void TL_Usr_RemoveUsrContent (long UsrCod);
 void TL_Usr_ShowNumSharersOrFavers (unsigned NumUsrs);
 void TL_Usr_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 			         unsigned NumUsrs,unsigned NumFirstUsrs);
+bool TL_Usr_CheckICanFavSha (long Cod,long UsrCod);
 
 #endif

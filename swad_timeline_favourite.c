@@ -145,13 +145,16 @@ static void TL_Fav_FavNote (struct TL_Not_Note *Not)
   {
    long OriginalPubCod;
 
-   /***** Get data of note and do some checks *****/
-   if (!TL_Not_CheckICanFavShaNote (Not))
+   /***** Get data of note *****/
+   Not->NotCod = TL_Not_GetParamNotCod ();
+   TL_Not_GetDataOfNoteByCod (Not);
+
+   /***** Do some checks *****/
+   if (!TL_Usr_CheckICanFavSha (Not->NotCod,Not->UsrCod))
       return;
 
    /***** Trivial check: Have I faved this note? *****/
    if (TL_DB_CheckIfFavedByUsr (TL_Fav_NOTE,Not->NotCod,Gbl.Usrs.Me.UsrDat.UsrCod))
-      // Don't show error message
       return;
 
    /***** Mark note as favourite in database *****/
@@ -173,13 +176,16 @@ static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
   {
    long OriginalPubCod;
 
-   /***** Get data of note and do some checks *****/
-   if (!TL_Not_CheckICanFavShaNote (Not))
+   /***** Get data of note *****/
+   Not->NotCod = TL_Not_GetParamNotCod ();
+   TL_Not_GetDataOfNoteByCod (Not);
+
+   /***** Do some checks *****/
+   if (!TL_Usr_CheckICanFavSha (Not->NotCod,Not->UsrCod))
       return;
 
    /***** Trivial check: Have I faved this note? *****/
    if (!TL_DB_CheckIfFavedByUsr (TL_Fav_NOTE,Not->NotCod,Gbl.Usrs.Me.UsrDat.UsrCod))
-      // Don't show error message
       return;
 
    /***** Delete the mark as favourite from database *****/
@@ -270,8 +276,12 @@ static void TL_Fav_FavComm (struct TL_Com_Comment *Com)
    /***** Initialize image *****/
    Med_MediaConstructor (&Com->Content.Media);
 
-   /***** Get data of comment and do some checks *****/
-   if (!TL_Com_CheckICanFavShaComm (Com))
+   /***** Get data of comment *****/
+   Com->PubCod = TL_Pub_GetParamPubCod ();
+   TL_Com_GetDataOfCommByCod (Com);
+
+   /***** Do some checks *****/
+   if (!TL_Usr_CheckICanFavSha (Com->PubCod,Com->UsrCod))
      {
       Med_MediaDestructor (&Com->Content.Media);
       return;
@@ -282,7 +292,6 @@ static void TL_Fav_FavComm (struct TL_Com_Comment *Com)
 				Gbl.Usrs.Me.UsrDat.UsrCod))
      {
       Med_MediaDestructor (&Com->Content.Media);
-      // Don't show error message
       return;
      }
 
@@ -307,8 +316,12 @@ static void TL_Fav_UnfComm (struct TL_Com_Comment *Com)
    /***** Initialize image *****/
    Med_MediaConstructor (&Com->Content.Media);
 
-   /***** Get data of comment and do some checks *****/
-   if (!TL_Com_CheckICanFavShaComm (Com))
+   /***** Get data of comment *****/
+   Com->PubCod = TL_Pub_GetParamPubCod ();
+   TL_Com_GetDataOfCommByCod (Com);
+
+   /***** Do some checks *****/
+   if (!TL_Usr_CheckICanFavSha (Com->PubCod,Com->UsrCod))
      {
       Med_MediaDestructor (&Com->Content.Media);
       return;
@@ -319,7 +332,6 @@ static void TL_Fav_UnfComm (struct TL_Com_Comment *Com)
 				 Gbl.Usrs.Me.UsrDat.UsrCod))
      {
       Med_MediaDestructor (&Com->Content.Media);
-      // Don't show error message
       return;
      }
 
