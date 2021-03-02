@@ -65,6 +65,10 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void TL_Com_ShowAuthorPhoto (struct UsrData *UsrDat);
+static void TL_Com_PutFormToWriteNewComm (const struct TL_Timeline *Timeline,
+	                                  long NotCod);
+
 static unsigned TL_Com_WriteHiddenComms (struct TL_Timeline *Timeline,
                                          long NotCod,
 				         char IdComms[Frm_MAX_BYTES_ID + 1],
@@ -80,7 +84,6 @@ static void TL_Com_CheckAndWriteComm (const struct TL_Timeline *Timeline,
 	                              struct TL_Com_Comment *Com);
 static void TL_Com_WriteComm (const struct TL_Timeline *Timeline,
 	                      struct TL_Com_Comment *Com);
-static void TL_Com_ShowAuthorPhoto (struct UsrData *UsrDat);
 static void TL_Com_WriteAuthorTimeAndContent (struct TL_Com_Comment *Com,
                                               const struct UsrData *UsrDat);
 static void TL_Com_WriteAuthorName (const struct UsrData *UsrDat);
@@ -153,46 +156,73 @@ void TL_Com_PutIconCommDisabled (void)
 /************************* Form to comment a note ****************************/
 /*****************************************************************************/
 
-void TL_Com_PutHiddenFormToWriteNewComm (const struct TL_Timeline *Timeline,
-	                                 long NotCod,
-                                         const char IdNewComm[Frm_MAX_BYTES_ID + 1])
+void TL_Com_PutPhotoAndFormToWriteNewComm (const struct TL_Timeline *Timeline,
+	                                   long NotCod,
+                                           const char IdNewComm[Frm_MAX_BYTES_ID + 1])
   {
-   extern const char *Txt_New_TIMELINE_comment;
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
-
    /***** Begin container *****/
    HTM_DIV_Begin ("id=\"%s\" class=\"TL_FORM_NEW_COM TL_RIGHT_WIDTH\""
 		  " style=\"display:none;\"",
 	          IdNewComm);
 
       /***** Left: write author's photo (my photo) *****/
-      HTM_DIV_Begin ("class=\"TL_COM_PHOTO\"");
-	 ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
-	 Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
-							   NULL,
-			   "PHOTO30x40",Pho_ZOOM,true);	// Use unique id
-      HTM_DIV_End ();
+      TL_Com_ShowAuthorPhoto (&Gbl.Usrs.Me.UsrDat);
 
       /***** Right: form to write the comment *****/
-      /* Begin right container */
-      HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
-
-	 /* Begin form to write the post */
-	 TL_Frm_BeginForm (Timeline,TL_Frm_RECEIVE_COMM);
-	 TL_Not_PutHiddenParamNotCod (NotCod);
-
-	    /* Textarea and button */
-	    TL_Pst_PutTextarea (Txt_New_TIMELINE_comment,
-				"TL_COM_TEXTAREA TL_COMM_WIDTH");
-
-	 /* End form */
-	 TL_Frm_EndForm ();
-
-      /* End right container */
-      HTM_DIV_End ();
+      TL_Com_PutFormToWriteNewComm (Timeline,NotCod);
 
    /***** End container *****/
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/********************* Show photo of author of a comment *********************/
+/*****************************************************************************/
+
+static void TL_Com_ShowAuthorPhoto (struct UsrData *UsrDat)
+  {
+   bool ShowPhoto = false;
+   char PhotoURL[PATH_MAX + 1];
+
+   /***** Show author's photo *****/
+   /* Begin container */
+   HTM_DIV_Begin ("class=\"TL_COM_PHOTO\"");
+
+      /* Author's photo */
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+					   NULL,
+			"PHOTO30x40",Pho_ZOOM,true);	// Use unique id
+
+   /* End container */
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/************************* Form to comment a note ****************************/
+/*****************************************************************************/
+
+static void TL_Com_PutFormToWriteNewComm (const struct TL_Timeline *Timeline,
+	                                  long NotCod)
+  {
+   extern const char *Txt_New_TIMELINE_comment;
+
+   /***** Form to write the comment *****/
+   /* Begin container */
+   HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
+
+      /* Begin form to write the post */
+      TL_Frm_BeginForm (Timeline,TL_Frm_RECEIVE_COMM);
+      TL_Not_PutHiddenParamNotCod (NotCod);
+
+	 /* Textarea and button */
+	 TL_Pst_PutTextarea (Txt_New_TIMELINE_comment,
+			     "TL_COM_TEXTAREA TL_COMM_WIDTH");
+
+      /* End form */
+      TL_Frm_EndForm ();
+
+   /* End container */
    HTM_DIV_End ();
   }
 
@@ -535,29 +565,6 @@ static void TL_Com_WriteComm (const struct TL_Timeline *Timeline,
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
-  }
-
-/*****************************************************************************/
-/********************* Show photo of author of a comment *********************/
-/*****************************************************************************/
-
-static void TL_Com_ShowAuthorPhoto (struct UsrData *UsrDat)
-  {
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
-
-   /***** Show author's photo *****/
-   /* Begin container */
-   HTM_DIV_Begin ("class=\"TL_COM_PHOTO\"");
-
-      /* Author's photo */
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-					   NULL,
-			"PHOTO30x40",Pho_ZOOM,true);	// Use unique id
-
-   /* End container */
-   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

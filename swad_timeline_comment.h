@@ -55,9 +55,9 @@ struct TL_Com_Comment
 void TL_Com_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1]);
 void TL_Com_PutIconCommDisabled (void);
 
-void TL_Com_PutHiddenFormToWriteNewComm (const struct TL_Timeline *Timeline,
-	                                 long NotCod,
-                                         const char IdNewComm[Frm_MAX_BYTES_ID + 1]);
+void TL_Com_PutPhotoAndFormToWriteNewComm (const struct TL_Timeline *Timeline,
+	                                   long NotCod,
+                                           const char IdNewComm[Frm_MAX_BYTES_ID + 1]);
 
 void TL_Com_WriteCommsInNote (const struct TL_Timeline *Timeline,
 			      const struct TL_Not_Note *Not);

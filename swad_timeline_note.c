@@ -764,7 +764,7 @@ static void TL_Not_WriteButtonsAndComms (const struct TL_Timeline *Timeline,
    TL_Not_WriteFavShaRemAndComms (Timeline,Not,UsrDat);
 
    /***** Put hidden form to write a new comment *****/
-   TL_Com_PutHiddenFormToWriteNewComm (Timeline,Not->NotCod,IdNewComm);
+   TL_Com_PutPhotoAndFormToWriteNewComm (Timeline,Not->NotCod,IdNewComm);
   }
 
 /*****************************************************************************/
