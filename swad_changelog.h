@@ -598,10 +598,11 @@ TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse 
 TODO: BUG: Cuando un tipo de grupo sólo tiene un grupo, inscribirse es voluntario, el estudiante sólo puede pertenecer a un grupo, y se inscribe en él, debería poder desapuntarse. Ahora no puede.
 TODO: Salvador Romero Cortés: @acanas opción para editar posts
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.39.1 (2021-03-02)"
+#define Log_PLATFORM_VERSION	"SWAD 20.39.2 (2021-03-02)"
 #define CSS_FILE		"swad20.33.9.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
+	Version 20.39.2:  Mar 02, 2021  Code refactoring in timeline database. (305612 lines)
 	Version 20.39.1:  Mar 02, 2021  Code refactoring in timeline comments. (305618 lines)
 	Version 20.39:    Mar 02, 2021  Code refactoring in user's photo. (305610 lines)
 	Version 20.38.1:  Mar 02, 2021  Code refactoring in timeline comments. (305768 lines)

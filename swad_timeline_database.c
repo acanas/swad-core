@@ -141,8 +141,8 @@ long TL_DB_GetPubCodOfOriginalNote (long NotCod)
    if (DB_QuerySELECT (&mysql_res,"can not get code of publication",
 		       "SELECT PubCod FROM tl_pubs"
 		       " WHERE NotCod=%ld AND PubType=%u",
-		       NotCod,(unsigned) TL_Pub_ORIGINAL_NOTE) == 1)   // Result should have a unique row
-     {
+		       NotCod,(unsigned) TL_Pub_ORIGINAL_NOTE) == 1)
+     {	// Result should have a unique row
       /* Get code of publication (row[0]) */
       row = mysql_fetch_row (mysql_res);
       OriginalPubCod = Str_ConvertStrCodToLongCod (row[0]);
@@ -753,22 +753,16 @@ void TL_DB_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
 void TL_DB_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
                                         struct TL_Pub_SubQueries *SubQueries)
   {
-   switch (Timeline->WhatToGet)
+   static const char *Table[TL_NUM_WHAT_TO_GET] =
      {
-      case TL_GET_RECENT_TIMELINE:
-      case TL_GET_ONLY_NEW_PUBS:
-	 Str_Copy (SubQueries->AlreadyExists,
-		   " tl_pubs.NotCod NOT IN"
-		   " (SELECT NotCod FROM tl_tmp_just_retrieved_notes)",	// Avoid notes just retrieved
-		   sizeof (SubQueries->AlreadyExists) - 1);
-         break;
-      case TL_GET_ONLY_OLD_PUBS:	// Get only old publications
-	 Str_Copy (SubQueries->AlreadyExists,
-		   " tl_pubs.NotCod NOT IN"
-		   " (SELECT NotCod FROM tl_tmp_visible_timeline)",	// Avoid notes already shown
-		   sizeof (SubQueries->AlreadyExists) - 1);
-	 break;
-     }
+      [TL_GET_RECENT_TIMELINE] = "tl_tmp_just_retrieved_notes",	// Avoid notes just retrieved
+      [TL_GET_ONLY_NEW_PUBS  ] = "tl_tmp_just_retrieved_notes",	// Avoid notes just retrieved
+      [TL_GET_ONLY_OLD_PUBS  ] = "tl_tmp_visible_timeline",	// Avoid notes already shown
+     };
+
+   snprintf (SubQueries->AlreadyExists,sizeof (SubQueries->AlreadyExists),
+	     " tl_pubs.NotCod NOT IN (SELECT NotCod FROM %s)",
+	     Table[Timeline->WhatToGet]);
   }
 
 /*****************************************************************************/
