@@ -267,40 +267,17 @@ void TL_Fav_UnfCommGbl (void)
 
 static void TL_Fav_FavComm (struct TL_Com_Comment *Com)
   {
-   extern const char *Txt_The_comment_no_longer_exists;
-
    /***** Initialize image *****/
    Med_MediaConstructor (&Com->Content.Media);
 
-   /***** Get data of comment *****/
-   Com->PubCod = TL_Pub_GetParamPubCod ();
-   TL_Com_GetDataOfCommByCod (Com);
-
-   /***** Trivial check 1: publication code should be > 0 *****/
-   if (Com->PubCod <= 0)
+   /***** Get data of comment and do some checks *****/
+   if (!TL_Com_CheckICanFavShaComm (Com))
      {
       Med_MediaDestructor (&Com->Content.Media);
-      Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
       return;
      }
 
-   /***** Trivial check 2: I must be logged *****/
-   if (!Gbl.Usrs.Me.Logged)
-     {
-      Med_MediaDestructor (&Com->Content.Media);
-      Ale_ShowAlert (Ale_ERROR,"You are not logged.");
-      return;
-     }
-
-   /***** Trivial check 3: The author can not fav his/her own comments *****/
-   if (Usr_ItsMe (Com->UsrCod))
-     {
-      Med_MediaDestructor (&Com->Content.Media);
-      Ale_ShowAlert (Ale_ERROR,"You can not fav/unfav your own comments.");
-      return;
-     }
-
-   /***** Trivial check 4: Have I faved this comment? *****/
+   /***** Trivial check: Have I faved this comment? *****/
    if (TL_DB_CheckIfFavedByUsr (TL_Fav_COMM,Com->PubCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod))
      {
@@ -327,36 +304,13 @@ static void TL_Fav_FavComm (struct TL_Com_Comment *Com)
 
 static void TL_Fav_UnfComm (struct TL_Com_Comment *Com)
   {
-   extern const char *Txt_The_comment_no_longer_exists;
-
    /***** Initialize image *****/
    Med_MediaConstructor (&Com->Content.Media);
 
-   /***** Get data of comment *****/
-   Com->PubCod = TL_Pub_GetParamPubCod ();
-   TL_Com_GetDataOfCommByCod (Com);
-
-   /***** Trivial check 1: publication code should be > 0 *****/
-   if (Com->PubCod <= 0)
+   /***** Get data of comment and do some checks *****/
+   if (!TL_Com_CheckICanFavShaComm (Com))
      {
       Med_MediaDestructor (&Com->Content.Media);
-      Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
-      return;
-     }
-
-   /***** Trivial check 2: I must be logged *****/
-   if (!Gbl.Usrs.Me.Logged)
-     {
-      Med_MediaDestructor (&Com->Content.Media);
-      Ale_ShowAlert (Ale_ERROR,"You are not logged.");
-      return;
-     }
-
-   /***** Trivial check 3: The author can not fav its own notes *****/
-   if (Usr_ItsMe (Com->UsrCod))
-     {
-      Med_MediaDestructor (&Com->Content.Media);
-      Ale_ShowAlert (Ale_ERROR,"You can not fav/unfav your own comments.");
       return;
      }
 

@@ -77,4 +77,6 @@ void TL_Com_RemoveCommMediaAndDBEntries (long PubCod);
 
 void TL_Com_GetDataOfCommByCod (struct TL_Com_Comment *Com);
 
+bool TL_Com_CheckICanFavShaComm (struct TL_Com_Comment *Com);
+
 #endif

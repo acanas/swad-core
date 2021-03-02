@@ -1094,3 +1094,42 @@ static void TL_Com_ResetComm (struct TL_Com_Comment *Com)
    Com->Content.Txt[0] = '\0';
    Com->NumFavs        = 0;
   }
+
+/*****************************************************************************/
+/******************* Check if I can fav/share a comment **********************/
+/*****************************************************************************/
+
+bool TL_Com_CheckICanFavShaComm (struct TL_Com_Comment *Com)
+  {
+   extern const char *Txt_The_comment_no_longer_exists;
+
+   /***** Get data of comment *****/
+   Com->PubCod = TL_Pub_GetParamPubCod ();
+   TL_Com_GetDataOfCommByCod (Com);
+
+   /***** Trivial check 1: publication code should be > 0 *****/
+   if (Com->PubCod <= 0)
+     {
+      Med_MediaDestructor (&Com->Content.Media);
+      Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
+      return false;
+     }
+
+   /***** Trivial check 2: I must be logged *****/
+   if (!Gbl.Usrs.Me.Logged)
+     {
+      Med_MediaDestructor (&Com->Content.Media);
+      Ale_ShowAlert (Ale_ERROR,"You are not logged.");
+      return false;
+     }
+
+   /***** Trivial check 3: The author can not fav his/her own comments *****/
+   if (Usr_ItsMe (Com->UsrCod))
+     {
+      Med_MediaDestructor (&Com->Content.Media);
+      Ale_ShowAlert (Ale_ERROR,"You can not fav/unfav your own comments.");
+      return false;
+     }
+
+   return true;
+  }
