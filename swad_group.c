@@ -4993,7 +4993,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
    Grp_WhichGroups_t WhichGrps;
 
    /***** Start setting selector *****/
-   Set_StartOneSettingSelector ();
+   Set_BeginOneSettingSelector ();
 
    /***** Put icons to select which groups *****/
    for (WhichGrps  = Grp_MY_GROUPS;

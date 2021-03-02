@@ -232,7 +232,7 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
       case Rol_SYS_ADM:
 	 if (Gbl.Crs.Grps.NumGrps)
 	   {
-	    Set_StartSettingsHead ();
+	    Set_BeginSettingsHead ();
 	    Grp_ShowFormToSelWhichGrps (ActSeeExa,
 					Exa_PutParams,Exams);
 	    Set_EndSettingsHead ();

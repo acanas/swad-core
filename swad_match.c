@@ -358,7 +358,7 @@ void Mch_ListMatches (struct Gam_Games *Games,
       case Rol_SYS_ADM:
 	 if (Gbl.Crs.Grps.NumGrps)
 	   {
-	    Set_StartSettingsHead ();
+	    Set_BeginSettingsHead ();
 	    Grp_ShowFormToSelWhichGrps (ActSeeGam,
 					Gam_PutParams,Games);
 	    Set_EndSettingsHead ();
@@ -2556,7 +2556,7 @@ static void Mch_ShowLeftColumnTch (struct Mch_Match *Match)
    Mch_PutMatchControlButtons (Match);
 
    /***** Put forms to choice which projects to show *****/
-   Set_StartSettingsHead ();
+   Set_BeginSettingsHead ();
    Mch_ShowFormColumns (Match);
    Set_EndSettingsHead ();
 
@@ -3031,7 +3031,7 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
      };
 
    /***** Begin selector *****/
-   Set_StartOneSettingSelector ();
+   Set_BeginOneSettingSelector ();
 
    for (NumCols  = 1;
 	NumCols <= Mch_MAX_COLS;

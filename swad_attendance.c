@@ -249,7 +249,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.Crs.Grps.NumGrps)
      {
-      Set_StartSettingsHead ();
+      Set_BeginSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeAtt,
                                   Att_ParamsWhichGroupsToShow,&Events);
       Set_EndSettingsHead ();

@@ -203,7 +203,7 @@ static void Agd_ShowMyAgenda (struct Agd_Agenda *Agenda)
 		 Hlp_PROFILE_Agenda,Box_NOT_CLOSABLE);
 
    /***** Put forms to choice which events to show *****/
-   Set_StartSettingsHead ();
+   Set_BeginSettingsHead ();
    Agd_ShowFormToSelPast__FutureEvents (Agenda);
    Agd_ShowFormToSelPrivatPublicEvents (Agenda);
    Agd_ShowFormToSelHiddenVisiblEvents (Agenda);
@@ -233,7 +233,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda
       [Agd_FUTURE_EVENTS] = "calendar-plus.svg",
      };
 
-   Set_StartOneSettingSelector ();
+   Set_BeginOneSettingSelector ();
    for (PstFut = Agd_PAST___EVENTS;
 	PstFut <= Agd_FUTURE_EVENTS;
 	PstFut++)
@@ -270,7 +270,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
       [Agd_PUBLIC_EVENTS] = "unlock.svg",
      };
 
-   Set_StartOneSettingSelector ();
+   Set_BeginOneSettingSelector ();
    for (PrvPub = Agd_PRIVAT_EVENTS;
 	PrvPub <= Agd_PUBLIC_EVENTS;
 	PrvPub++)
@@ -307,7 +307,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda
       [Agd_VISIBL_EVENTS] = "eye-green.svg",
      };
 
-   Set_StartOneSettingSelector ();
+   Set_BeginOneSettingSelector ();
    for (HidVis = Agd_HIDDEN_EVENTS;
 	HidVis <= Agd_VISIBL_EVENTS;
 	HidVis++)

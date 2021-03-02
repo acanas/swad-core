@@ -280,8 +280,8 @@ void Mnu_PutIconsToSelectMenu (void)
    Box_BoxBegin (NULL,Txt_Menu,
                  Mnu_PutIconsMenu,NULL,
                  Hlp_PROFILE_Settings_menu,Box_NOT_CLOSABLE);
-   Set_StartSettingsHead ();
-   Set_StartOneSettingSelector ();
+   Set_BeginSettingsHead ();
+   Set_BeginOneSettingSelector ();
    for (Menu  = (Mnu_Menu_t) 0;
 	Menu <= (Mnu_Menu_t) (Mnu_NUM_MENUS - 1);
 	Menu++)

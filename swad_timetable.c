@@ -382,7 +382,7 @@ void TT_ShowClassTimeTable (void)
    else
      {
       /***** Setting selector *****/
-      Set_StartSettingsHead ();
+      Set_BeginSettingsHead ();
 
       /* Select whether show only my groups or all groups */
       if ( Timetable.Type == TT_MY_TIMETABLE ||

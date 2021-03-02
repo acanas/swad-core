@@ -123,47 +123,42 @@ void TL_Usr_ShowSharersOrFavers (MYSQL_RES **mysql_res,
   {
    MYSQL_ROW row;
    unsigned NumUsr;
-   unsigned NumUsrsShown = 0;
    struct UsrData UsrDat;
 
-   if (NumUsrs)
+   /***** Trivial check 1: are there favers or sharers? *****/
+   if (!NumUsrs)
+      return;
+
+   /***** Trivial check 1: number of favers or sharers to show *****/
+   if (!NumFirstUsrs)
+      return;
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** List users *****/
+   for (NumUsr = 0;
+	NumUsr < NumFirstUsrs;
+	NumUsr++)
      {
-      /***** A list of users has been got from database *****/
-      if (NumFirstUsrs)
+      /***** Get user's code *****/
+      row = mysql_fetch_row (*mysql_res);
+      UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+      /***** Get user's data and show user's photo *****/
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
 	{
-	 /***** Initialize structure with user's data *****/
-	 Usr_UsrDataConstructor (&UsrDat);
+	 /* Begin container */
+	 HTM_DIV_Begin ("class=\"TL_SHARER\"");
 
-	 /***** List users *****/
-	 for (NumUsr = 0;
-	      NumUsr < NumFirstUsrs;
-	      NumUsr++)
-	   {
-	    /***** Get user *****/
-	    /* Get row */
-	    row = mysql_fetch_row (*mysql_res);
+	    /* User's photo */
+	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO12x16",Pho_ZOOM,true);	// Use unique id
 
-	    /* Get user's code (row[0]) */
-	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	    /***** Get user's data and show user's photo *****/
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
-	      {
-	       /* Begin container */
-               HTM_DIV_Begin ("class=\"TL_SHARER\"");
-
-                  /* User's photo */
-		  Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO12x16",Pho_ZOOM,true);	// Use unique id
-
-	       /* End container */
-               HTM_DIV_End ();
-
-               NumUsrsShown++;
-              }
-	   }
-
-	 /***** Free memory used for user's data *****/
-	 Usr_UsrDataDestructor (&UsrDat);
+	 /* End container */
+	 HTM_DIV_End ();
 	}
      }
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
   }

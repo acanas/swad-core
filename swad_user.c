@@ -6108,8 +6108,8 @@ void Usr_FreeListOtherRecipients (void)
 
 void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Args)
   {
-   Set_StartSettingsHead ();
-   Set_StartOneSettingSelector ();
+   Set_BeginSettingsHead ();
+   Set_BeginOneSettingSelector ();
 
    /***** Select Usr_LIST_AS_CLASS_PHOTO *****/
    HTM_DIV_Begin ("class=\"%s\"",

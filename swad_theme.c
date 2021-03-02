@@ -321,8 +321,8 @@ void The_PutIconsToSelectTheme (void)
    Box_BoxBegin (NULL,Txt_Theme_SKIN,
                  The_PutIconsTheme,NULL,
                  Hlp_PROFILE_Settings_theme,Box_NOT_CLOSABLE);
-   Set_StartSettingsHead ();
-   Set_StartOneSettingSelector ();
+   Set_BeginSettingsHead ();
+   Set_BeginOneSettingSelector ();
    for (Theme  = (The_Theme_t) 0;
 	Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
 	Theme++)

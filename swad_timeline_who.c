@@ -76,32 +76,32 @@ void TL_Who_PutFormWho (struct TL_Timeline *Timeline)
 		   1 << Usr_WHO_ALL;
 
    /***** Setting selector for which users *****/
-   Set_StartSettingsHead ();
-   Set_StartOneSettingSelector ();
-   for (Who  = (Usr_Who_t) 0;
-	Who <= (Usr_Who_t) (Usr_NUM_WHO - 1);
-	Who++)
-      if (Mask & (1 << Who))
-	{
-	 /* Begin container */
-	 HTM_DIV_Begin ("class=\"%s\"",
-			Who == Timeline->Who ? "PREF_ON" :
-					       "PREF_OFF");
+   Set_BeginSettingsHead ();
+      Set_BeginOneSettingSelector ();
+	 for (Who  = (Usr_Who_t) 0;
+	      Who <= (Usr_Who_t) (Usr_NUM_WHO - 1);
+	      Who++)
+	    if (Mask & (1 << Who))
+	      {
+	       /* Begin container */
+	       HTM_DIV_Begin ("class=\"%s\"",
+			      Who == Timeline->Who ? "PREF_ON" :
+						     "PREF_OFF");
 
-	    /* Begin form */
-	    Frm_BeginForm (ActSeeGblTL);
-	    Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
+		  /* Begin form */
+		  Frm_BeginForm (ActSeeGblTL);
+		  Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
 
-	       /* Icon to select which users */
-	       Usr_PutWhoIcon (Who);
+		     /* Icon to select which users */
+		     Usr_PutWhoIcon (Who);
 
-	    /* End form */
-	    Frm_EndForm ();
+		  /* End form */
+		  Frm_EndForm ();
 
-	 /* End container */
-	 HTM_DIV_End ();
-	}
-   Set_EndOneSettingSelector ();
+	       /* End container */
+	       HTM_DIV_End ();
+	      }
+      Set_EndOneSettingSelector ();
    Set_EndSettingsHead ();
 
    /***** Show warning if I do not follow anyone *****/
@@ -210,7 +210,7 @@ static void TL_Who_ShowWarningYouDontFollowAnyUser (void)
 
       /***** Contextual menu *****/
       Mnu_ContextMenuBegin ();
-      Fol_PutLinkWhoToFollow ();	// Users to follow
+	 Fol_PutLinkWhoToFollow ();	// Users to follow
       Mnu_ContextMenuEnd ();
      }
   }

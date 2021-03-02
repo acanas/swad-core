@@ -118,8 +118,8 @@ void Ico_PutIconsToSelectIconSet (void)
    Box_BoxBegin (NULL,Txt_Icons,
                  Ico_PutIconsIconSet,NULL,
                  Hlp_PROFILE_Settings_icons,Box_NOT_CLOSABLE);
-   Set_StartSettingsHead ();
-   Set_StartOneSettingSelector ();
+   Set_BeginSettingsHead ();
+   Set_BeginOneSettingSelector ();
    for (IconSet  = (Ico_IconSet_t) 0;
 	IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
 	IconSet++)

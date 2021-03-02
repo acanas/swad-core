@@ -165,8 +165,10 @@ extern struct Globals Gbl;
 static void TL_GetAndShowOldTimeline (struct TL_Timeline *Timeline);
 
 static void TL_ShowTimeline (struct TL_Timeline *Timeline,
-                             const char *Title,long NotCodToHighlight);
+                             long NotCodToHighlight,const char *Title);
 static void TL_PutIconsTimeline (__attribute__((unused)) void *Args);
+static unsigned TL_ListRecentPubs (struct TL_Timeline *Timeline,
+                                   long NotCodToHighlight);
 
 /*****************************************************************************/
 /************************ Initialize global timeline *************************/
@@ -262,7 +264,7 @@ void TL_ShowTimelineGblHighlightingNot (struct TL_Timeline *Timeline,
    TL_Pub_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show timeline *****/
-   TL_ShowTimeline (Timeline,Txt_Timeline,NotCod);
+   TL_ShowTimeline (Timeline,NotCod,Txt_Timeline);
 
    /***** Free chained list of publications *****/
    TL_Pub_FreeListPubs (Timeline);
@@ -292,10 +294,9 @@ void TL_ShowTimelineUsrHighlightingNot (struct TL_Timeline *Timeline,
    TL_Pub_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show timeline *****/
-   TL_ShowTimeline (Timeline,
+   TL_ShowTimeline (Timeline,NotCod,
                     Str_BuildStringStr (Txt_Timeline_OF_A_USER,
-					Gbl.Usrs.Other.UsrDat.FrstName),
-		    NotCod);
+					Gbl.Usrs.Other.UsrDat.FrstName));
    Str_FreeString ();
 
    /***** Free chained list of publications *****/
@@ -417,13 +418,11 @@ static void TL_GetAndShowOldTimeline (struct TL_Timeline *Timeline)
             \ |_____|
 */
 static void TL_ShowTimeline (struct TL_Timeline *Timeline,
-                             const char *Title,long NotCodToHighlight)
+                             long NotCodToHighlight,const char *Title)
   {
    extern const char *Hlp_START_Timeline;
-   struct TL_Pub_Publication *Pub;
-   struct TL_Not_Note Not;
-   unsigned NumPubs;
    bool GlobalTimeline = (Gbl.Usrs.Other.UsrDat.UsrCod <= 0);
+   unsigned NumNotesShown;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Title,
@@ -435,8 +434,7 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
 	 TL_Who_PutFormWho (Timeline);
 
       /***** Form to write a new post *****/
-      if (GlobalTimeline ||
-	  Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
+      if (GlobalTimeline || Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
 	 TL_Pst_PutPhotoAndFormToWriteNewPost (Timeline);
 
       /***** New publications refreshed dynamically via AJAX *****/
@@ -457,33 +455,11 @@ static void TL_ShowTimeline (struct TL_Timeline *Timeline,
 	}
 
       /***** List recent publications in timeline *****/
-      /* Begin list */
-      HTM_UL_Begin ("id=\"timeline_list\" class=\"TL_LIST\"");
-
-	 /* For each publication in list... */
-	 for (Pub = Timeline->Pubs.Top, NumPubs = 0;
-	      Pub;
-	      Pub = Pub->Next, NumPubs++)
-	   {
-	    /* Get data of note */
-	    Not.NotCod = Pub->NotCod;
-	    TL_Not_GetDataOfNoteByCod (&Not);
-
-	    /* Write note */
-	    HTM_LI_Begin ("class=\"%s\"",Not.NotCod == NotCodToHighlight ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
-									   "TL_WIDTH TL_SEP");
-	       TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-						   TL_Pub_GetTopMessage (Pub->PubType),
-						   Pub->PublisherCod);
-	    HTM_LI_End ();
-	   }
-
-      /* End list */
-      HTM_UL_End ();
+      NumNotesShown = TL_ListRecentPubs (Timeline,NotCodToHighlight);
 
       /***** If the number of publications shown is the maximum,
 	     probably there will be more, so show link to get more *****/
-      if (NumPubs == TL_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW)
+      if (NumNotesShown == TL_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW)
 	{
 	 /* Link to view old publications via AJAX */
 	 TL_Pub_PutLinkToViewOldPubs ();
@@ -505,6 +481,45 @@ static void TL_PutIconsTimeline (__attribute__((unused)) void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_TIMELINE);
+  }
+
+/*****************************************************************************/
+/******************* List recent publications in timeline ********************/
+/*****************************************************************************/
+// Returns number of notes shown
+
+static unsigned TL_ListRecentPubs (struct TL_Timeline *Timeline,
+                                   long NotCodToHighlight)
+  {
+   unsigned NumNotesShown;
+   struct TL_Pub_Publication *Pub;
+   struct TL_Not_Note Not;
+
+   /***** Begin list *****/
+   HTM_UL_Begin ("id=\"timeline_list\" class=\"TL_LIST\"");
+
+      /***** For each publication in list... *****/
+      for (Pub = Timeline->Pubs.Top, NumNotesShown = 0;
+	   Pub;
+	   Pub = Pub->Next, NumNotesShown++)
+	{
+	 /* Get data of note */
+	 Not.NotCod = Pub->NotCod;
+	 TL_Not_GetDataOfNoteByCod (&Not);
+
+	 /* Write list item (note) */
+	 HTM_LI_Begin ("class=\"%s\"",Not.NotCod == NotCodToHighlight ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
+									"TL_WIDTH TL_SEP");
+	    TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+						TL_Pub_GetTopMessage (Pub->PubType),
+						Pub->PublisherCod);
+	 HTM_LI_End ();
+	}
+
+   /***** End list *****/
+   HTM_UL_End ();
+
+   return NumNotesShown;
   }
 
 /*****************************************************************************/

@@ -48,9 +48,9 @@ void Set_RemoveOldSettingsFromIP (void);
 void Set_ChangeSideCols (void);
 unsigned Set_GetParamSideCols (void);
 
-void Set_StartSettingsHead (void);
+void Set_BeginSettingsHead (void);
 void Set_EndSettingsHead (void);
-void Set_StartOneSettingSelector (void);
+void Set_BeginOneSettingSelector (void);
 void Set_EndOneSettingSelector (void);
 
 #endif

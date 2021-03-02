@@ -167,7 +167,7 @@ static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.Crs.Grps.NumGrps)
      {
-      Set_StartSettingsHead ();
+      Set_BeginSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeAsg,
                                   Asg_ParamsWhichGroupsToShow,Assignments);
       Set_EndSettingsHead ();

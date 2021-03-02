@@ -482,7 +482,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 
       /***** Put forms to choice which projects to show *****/
       /* 1st. row */
-      Set_StartSettingsHead ();
+      Set_BeginSettingsHead ();
       Prj_ShowFormToFilterByMy_All ((struct Prj_Projects *) Projects);
       Prj_ShowFormToFilterByAssign ((struct Prj_Projects *) Projects);
       switch (Gbl.Usrs.Me.Role.Logged)
@@ -579,7 +579,7 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 	           1 << Usr_WHO_SELECTED |
 		   1 << Usr_WHO_ALL;
 
-   Set_StartOneSettingSelector ();
+   Set_BeginOneSettingSelector ();
    for (Who  = (Usr_Who_t) 1;
 	Who <= (Usr_Who_t) (Usr_NUM_WHO - 1);
 	Who++)
@@ -616,7 +616,7 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
    struct Prj_Filter Filter;
    Prj_AssignedNonassig_t Assign;
 
-   Set_StartOneSettingSelector ();
+   Set_BeginOneSettingSelector ();
    for (Assign  = (Prj_AssignedNonassig_t) 0;
 	Assign <= (Prj_AssignedNonassig_t) (Prj_NUM_ASSIGNED_NONASSIG - 1);
 	Assign++)
@@ -657,7 +657,7 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
       [Prj_VISIBL] = "eye-green.svg",
      };
 
-   Set_StartOneSettingSelector ();
+   Set_BeginOneSettingSelector ();
    for (HidVis  = (Prj_HiddenVisibl_t) 0;
 	HidVis <= (Prj_HiddenVisibl_t) (Prj_NUM_HIDDEN_VISIBL - 1);
 	HidVis++)
@@ -698,7 +698,7 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
       [Prj_FAULTLESS] = "check-circle.svg",
      };
 
-   Set_StartOneSettingSelector ();
+   Set_BeginOneSettingSelector ();
    for (Faultiness  = (Prj_Faultiness_t) 0;
 	Faultiness <= (Prj_Faultiness_t) (Prj_NUM_FAULTINESS - 1);
 	Faultiness++)

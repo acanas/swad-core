@@ -86,7 +86,7 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
    Box_BoxBegin (NULL,Txt_Calendar,
                  Cal_PutIconsFirstDayOfWeek,NULL,
                  Hlp_PROFILE_Settings_calendar,Box_NOT_CLOSABLE);
-   Set_StartSettingsHead ();
+   Set_BeginSettingsHead ();
    Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,
                                     NULL,NULL);
    Set_EndSettingsHead ();
@@ -115,7 +115,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
    unsigned FirstDayOfWeek;
    char Icon[32 + 1];
 
-   Set_StartOneSettingSelector ();
+   Set_BeginOneSettingSelector ();
    for (FirstDayOfWeek = 0;	// Monday
 	FirstDayOfWeek <= 6;	// Sunday
 	FirstDayOfWeek++)
@@ -264,7 +264,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
    /***** Preference selector to change first day of week *****/
    if (!PrintView)
      {
-      Set_StartSettingsHead ();
+      Set_BeginSettingsHead ();
       Cal_ShowFormToSelFirstDayOfWeek (ActionChangeCalendar1stDay,
                                        NULL,NULL);
       Set_EndSettingsHead ();

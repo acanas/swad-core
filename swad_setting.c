@@ -252,8 +252,8 @@ static void Set_PutIconsToSelectSideCols (void)
    Box_BoxBegin (NULL,Txt_Columns,
                  Set_PutIconsSideColumns,NULL,
                  Hlp_PROFILE_Settings_columns,Box_NOT_CLOSABLE);
-   Set_StartSettingsHead ();
-   Set_StartOneSettingSelector ();
+   Set_BeginSettingsHead ();
+   Set_BeginOneSettingSelector ();
    for (SideCols = 0;
 	SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	SideCols++)
@@ -337,7 +337,7 @@ unsigned Set_GetParamSideCols (void)
                 |  +-----------------+  +-----------------+  |
                 +--------------------------------------------+
 */
-void Set_StartSettingsHead (void)
+void Set_BeginSettingsHead (void)
   {
    HTM_DIV_Begin ("class=\"PREF_CONTS\"");
   }
@@ -347,7 +347,7 @@ void Set_EndSettingsHead (void)
    HTM_DIV_End ();
   }
 
-void Set_StartOneSettingSelector (void)
+void Set_BeginOneSettingSelector (void)
   {
    HTM_DIV_Begin ("class=\"PREF_CONT\"");
   }

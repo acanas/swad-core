@@ -249,7 +249,7 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.Crs.Grps.NumGrps)
      {
-      Set_StartSettingsHead ();
+      Set_BeginSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeAllSvy,
                                   Svy_ParamsWhichGroupsToShow,Surveys);
       Set_EndSettingsHead ();
