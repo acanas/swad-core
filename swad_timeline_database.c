@@ -422,7 +422,7 @@ long TL_DB_GetMedCodFromPost (long PstCod)
 /*****************************************************************************/
 // Returns code of just created post
 
-long TL_DB_CreateNewPost (const struct TL_Pst_PostContent *Content)
+long TL_DB_CreateNewPost (const struct TL_Pst_Content *Content)
   {
    /***** Insert post content in the database *****/
    return
@@ -580,7 +580,7 @@ unsigned TL_DB_GetDataOfCommByCod (long PubCod,MYSQL_RES **mysql_res)
 /*****************************************************************************/
 
 void TL_DB_InsertCommContent (long PubCod,
-			      const struct TL_Pst_PostContent *Content)
+			      const struct TL_Pst_Content *Content)
   {
    /***** Insert comment content in database *****/
    DB_QueryINSERT ("can not store comment content",

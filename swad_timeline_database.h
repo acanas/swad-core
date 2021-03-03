@@ -78,7 +78,7 @@ void TL_DB_RemoveAllNotesUsr (long UsrCod);
 /********************************* Posts *************************************/
 unsigned TL_DB_GetPostByCod (long PstCod,MYSQL_RES **mysql_res);
 long TL_DB_GetMedCodFromPost (long PubCod);
-long TL_DB_CreateNewPost (const struct TL_Pst_PostContent *Content);
+long TL_DB_CreateNewPost (const struct TL_Pst_Content *Content);
 void TL_DB_RemovePost (long PstCod);
 void TL_DB_RemoveAllPostsUsr (long UsrCod);
 
@@ -92,7 +92,7 @@ unsigned TL_DB_GetFinalComms (long NotCod,unsigned NumFinalCommsToGet,
 			      MYSQL_RES **mysql_res);
 unsigned TL_DB_GetDataOfCommByCod (long PubCod,MYSQL_RES **mysql_res);
 void TL_DB_InsertCommContent (long PubCod,
-			      const struct TL_Pst_PostContent *Content);
+			      const struct TL_Pst_Content *Content);
 long TL_DB_GetMedCodFromComm (long PubCod);
 void TL_DB_RemoveCommFavs (long PubCod);
 void TL_DB_RemoveCommContent (long PubCod);

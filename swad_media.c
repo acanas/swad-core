@@ -1401,7 +1401,8 @@ void Med_ShowMedia (const struct Med_Media *Media,
    char PathMedPriv[PATH_MAX + 1];
 
    /***** If no media to show ==> nothing to do *****/
-   if (Media->Status != Med_STORED_IN_DB ||
+   if (Media->MedCod <= 0 ||
+       Media->Status != Med_STORED_IN_DB ||
        Media->Type == Med_TYPE_NONE)
       return;
 

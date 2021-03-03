@@ -45,7 +45,7 @@ struct TL_Com_Comment
    long NotCod;			// Note code to which this comment belongs
    time_t DateTimeUTC;		// Date-time of publication in UTC time
    unsigned NumFavs;		// Number of times (users) this comment has been favourited
-   struct TL_Pst_PostContent Content;
+   struct TL_Pst_Content Content;
   };
 
 /*****************************************************************************/

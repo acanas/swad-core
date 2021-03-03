@@ -62,6 +62,9 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void TL_Pst_GetPostContent (long PstCod,struct TL_Pst_Content *Content);
+static void TL_Pst_ShowPostContent (struct TL_Pst_Content *Content);
+
 static void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline);
 
 static long TL_Pst_ReceivePost (void);
@@ -72,12 +75,30 @@ static long TL_Pst_ReceivePost (void);
 
 void TL_Pst_GetAndWritePost (long PstCod)
   {
+   struct TL_Pst_Content Content;
+
+   /***** Initialize media *****/
+   Med_MediaConstructor (&Content.Media);
+
+   /***** Get post content from database *****/
+   TL_Pst_GetPostContent (PstCod,&Content);
+
+   /***** Show post content *****/
+   TL_Pst_ShowPostContent (&Content);
+
+   /***** Free media *****/
+   Med_MediaDestructor (&Content.Media);
+  }
+
+/*****************************************************************************/
+/****************************** Get post content *****************************/
+/*****************************************************************************/
+// Media must be initialized before calling this function
+
+static void TL_Pst_GetPostContent (long PstCod,struct TL_Pst_Content *Content)
+  {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct TL_Pst_PostContent Content;
-
-   /***** Initialize image *****/
-   Med_MediaConstructor (&Content.Media);
 
    /***** Get post from database *****/
    if (TL_DB_GetPostByCod (PstCod,&mysql_res) == 1)
@@ -89,33 +110,37 @@ void TL_Pst_GetAndWritePost (long PstCod)
       row[1]	MedCod
       */
       /* Get content (row[0]) */
-      Str_Copy (Content.Txt,row[0],sizeof (Content.Txt) - 1);
+      Str_Copy (Content->Txt,row[0],sizeof (Content->Txt) - 1);
 
       /* Get media (row[1]) */
-      Content.Media.MedCod = Str_ConvertStrCodToLongCod (row[1]);
-      Med_GetMediaDataByCod (&Content.Media);
+      Content->Media.MedCod = Str_ConvertStrCodToLongCod (row[1]);
+      Med_GetMediaDataByCod (&Content->Media);
      }
    else
-      Content.Txt[0] = '\0';
+      Content->Txt[0] = '\0';
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
 
+/*****************************************************************************/
+/****************************** Get post content *****************************/
+/*****************************************************************************/
+
+static void TL_Pst_ShowPostContent (struct TL_Pst_Content *Content)
+  {
    /***** Write content text *****/
-   if (Content.Txt[0])
+   if (Content->Txt[0])
      {
       HTM_DIV_Begin ("class=\"TL_TXT\"");
-	 Msg_WriteMsgContent (Content.Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
+	 Msg_WriteMsgContent (Content->Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
       HTM_DIV_End ();
      }
 
    /***** Show media *****/
-   Med_ShowMedia (&Content.Media,"TL_PST_MED_CONT TL_RIGHT_WIDTH",
-	                         "TL_PST_MED TL_RIGHT_WIDTH");
-
-   /***** Free image *****/
-   Med_MediaDestructor (&Content.Media);
-  }
+   Med_ShowMedia (&Content->Media,"TL_PST_MED_CONT TL_RIGHT_WIDTH",
+	                          "TL_PST_MED TL_RIGHT_WIDTH");
+   }
 
 /*****************************************************************************/
 /********************** Form to write a new publication **********************/
@@ -260,7 +285,7 @@ void TL_Pst_ReceivePostGbl (void)
 // Returns the code of the note just created
 static long TL_Pst_ReceivePost (void)
   {
-   struct TL_Pst_PostContent Content;
+   struct TL_Pst_Content Content;
    long PstCod;
    struct TL_Pub_Publication Pub;
 

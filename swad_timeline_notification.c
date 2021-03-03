@@ -109,7 +109,7 @@ void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    MYSQL_ROW row;
    struct TL_Pub_Publication Pub;
    struct TL_Not_Note Not;
-   struct TL_Pst_PostContent Content;
+   struct TL_Pst_Content Content;
    size_t Length;
    bool ContentCopied = false;
 

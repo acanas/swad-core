@@ -35,7 +35,7 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-struct TL_Pst_PostContent
+struct TL_Pst_Content
   {
    char Txt[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Med_Media Media;

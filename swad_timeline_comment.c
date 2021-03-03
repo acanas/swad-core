@@ -738,7 +738,7 @@ void TL_Com_ReceiveCommGbl (void)
 static long TL_Com_ReceiveComm (void)
   {
    extern const char *Txt_The_post_no_longer_exists;
-   struct TL_Pst_PostContent Content;
+   struct TL_Pst_Content Content;
    struct TL_Not_Note Not;
    struct TL_Pub_Publication Pub;
 
