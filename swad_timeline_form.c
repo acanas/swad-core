@@ -304,59 +304,65 @@ void TL_Frm_FormToShowHiddenComms (long NotCod,
    extern const char *Txt_See_the_previous_X_COMMENTS;
    char *OnSubmit;
 
-   /***** Begin container *****/
-   HTM_DIV_Begin ("id=\"exp_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\"",
-                  IdComms);
+   /***** Begin container which content will be updated via AJAX *****/
+   HTM_DIV_Begin ("id=\"%s\" class=\"TL_RIGHT_WIDTH\"",IdComms);
 
-      /***** Form and icon-text to show hidden comments *****/
-      /* Begin form */
-      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	{
-	 if (asprintf (&OnSubmit,"toggleComments('%s');"
-				 "updateDivHiddenComments(this,"
-				 "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u&OtherUsrCod=%s');"
-				 " return false;",	// return false is necessary to not submit form
-		       IdComms,
-		       Act_GetActCod (TL_Frm_ActionUsr[TL_Frm_SHO_HID_COMM]),
-		       Gbl.Session.Id,
-		       NotCod,
-		       IdComms,
-		       NumInitialComms,
-		       Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
-	}
-      else
-	{
-	 if (asprintf (&OnSubmit,"toggleComments('%s');"
-				 "updateDivHiddenComments(this,"
-				 "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u');"
-				 " return false;",	// return false is necessary to not submit form
-		       IdComms,
-		       Act_GetActCod (TL_Frm_ActionGbl[TL_Frm_SHO_HID_COMM]),
-		       Gbl.Session.Id,
-		       NotCod,
-		       IdComms,
-		       NumInitialComms) < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
-	}
+      /***** Begin container *****/
+      HTM_DIV_Begin ("id=\"exp_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\"",
+		     IdComms);
 
-      /* Put icon and text with link to show the first hidden comments */
-      HTM_BUTTON_SUBMIT_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
-	 Ico_PutIconTextLink ("angle-up.svg",
-			      Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
-						   (long) NumInitialComms));
-	 Str_FreeString ();
-      HTM_BUTTON_End ();
+	 /***** Form and icon-text to show hidden comments *****/
+	 /* Begin form */
+	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+	   {
+	    if (asprintf (&OnSubmit,"toggleComments('%s');"
+				    "updateDivHiddenComments(this,"
+				    "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u&OtherUsrCod=%s');"
+				    " return false;",	// return false is necessary to not submit form
+			  IdComms,
+			  Act_GetActCod (TL_Frm_ActionUsr[TL_Frm_SHO_HID_COMM]),
+			  Gbl.Session.Id,
+			  NotCod,
+			  IdComms,
+			  NumInitialComms,
+			  Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
+	       Lay_NotEnoughMemoryExit ();
+	    Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
+	   }
+	 else
+	   {
+	    if (asprintf (&OnSubmit,"toggleComments('%s');"
+				    "updateDivHiddenComments(this,"
+				    "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u');"
+				    " return false;",	// return false is necessary to not submit form
+			  IdComms,
+			  Act_GetActCod (TL_Frm_ActionGbl[TL_Frm_SHO_HID_COMM]),
+			  Gbl.Session.Id,
+			  NotCod,
+			  IdComms,
+			  NumInitialComms) < 0)
+	       Lay_NotEnoughMemoryExit ();
+	    Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
+	   }
 
-      /* End form */
-      Frm_EndForm ();
+	 /* Put icon and text with link to show the first hidden comments */
+	 HTM_BUTTON_SUBMIT_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
+	    Ico_PutIconTextLink ("angle-up.svg",
+				 Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
+						      (long) NumInitialComms));
+	    Str_FreeString ();
+	 HTM_BUTTON_End ();
 
-      /* Free allocated memory */
-      free (OnSubmit);
+	 /* End form */
+	 Frm_EndForm ();
 
-   /***** End container *****/
+	 /* Free allocated memory */
+	 free (OnSubmit);
+
+      /***** End container *****/
+      HTM_DIV_End ();
+
+   /***** Begin container which content will be updated via AJAX *****/
    HTM_DIV_End ();
   }
 

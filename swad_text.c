@@ -40968,25 +40968,25 @@ const char *Txt_See_notifications =
 	"Ver notifica&ccedil;&otilde;es";
 #endif
 
-const char *Txt_See_only_the_latest_COMMENTS =
+const char *Txt_See_only_the_latest_X_COMMENTS =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
-	"Veure nom&eacute;s els &uacute;ltims";
+	"Veure nom&eacute;s els %ld &uacute;ltims";
 #elif L==2	// de
-	"Nur die neuesten anzeigen";
+	"Nur die neuesten %ld anzeigen";
 #elif L==3	// en
-	"See only the latest";
+	"See only the %ld latest";
 #elif L==4	// es
-	"Ver s&oacute;lo los &uacute;ltimos";
+	"Ver s&oacute;lo los %ld &uacute;ltimos";
 #elif L==5	// fr
-	"Voir seulement les derni&egrave;res";
+	"Voir seulement les %ld derni&egrave;res";
 #elif L==6	// gn
-	"Ver s&oacute;lo los &uacute;ltimos";	// Okoteve traducción
+	"Ver s&oacute;lo los %ld &uacute;ltimos";	// Okoteve traducción
 #elif L==7	// it
-	"Vedi solo le ultime";
+	"Vedi solo le ultime %ld";
 #elif L==8	// pl
-	"Zobacz tylko najnowsze";
+	"Zobacz tylko najnowsze %ld";
 #elif L==9	// pt
-	"Ver apenas os &uacute;ltimos";
+	"Ver apenas os %ld &uacute;ltimos";
 #endif
 
 const char *Txt_See_the_previous_X_COMMENTS =	// Warning: it is very important to include %ld in the following sentences

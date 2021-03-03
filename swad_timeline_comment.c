@@ -51,6 +51,13 @@
 
 #define TL_Com_NUM_VISIBLE_COMMENTS	3	// Maximum number of comments visible before expanding them
 
+#define TL_Com_NUM_CONTRACT_EXPAND	2
+typedef enum
+  {
+   TL_Com_CONTRACT = 0,
+   TL_Com_EXPAND   = 1,
+  } TL_Com_ContractExpand_t;
+
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -74,12 +81,12 @@ static unsigned TL_Com_WriteHiddenComms (struct TL_Timeline *Timeline,
 				         char IdComms[Frm_MAX_BYTES_ID + 1],
 					 unsigned NumInitialCommsToGet);
 static void TL_Com_ListComms (const struct TL_Timeline *Timeline,
-			      MYSQL_RES *mysql_res,unsigned NumComms);
+                              unsigned NumComms,MYSQL_RES *mysql_res);
 static void TL_Com_WriteOneCommInList (const struct TL_Timeline *Timeline,
                                        MYSQL_RES *mysql_res);
-static void TL_Com_LinkToShowOnlyLatestComms (const char IdComms[Frm_MAX_BYTES_ID + 1]);
-static void TL_Com_LinkToShowPreviousComms (const char IdComms[Frm_MAX_BYTES_ID + 1],
-				            unsigned NumInitialComms);
+static void TL_Com_LinkToShowComms (TL_Com_ContractExpand_t ConExp,
+                                    const char IdComms[Frm_MAX_BYTES_ID + 1],
+                                    unsigned NumComms);
 static void TL_Com_PutIconToToggleComms (const char *UniqueId,
                                          const char *Icon,const char *Text);
 static void TL_Com_CheckAndWriteComm (const struct TL_Timeline *Timeline,
@@ -232,7 +239,7 @@ void TL_Com_WriteCommsInNote (const struct TL_Timeline *Timeline,
    unsigned NumComms;
    unsigned NumInitialComms;
    unsigned NumFinalCommsToGet;
-   unsigned NumFinalCommsGot;
+   unsigned NumFinalComms;
    char IdComms[Frm_MAX_BYTES_ID + 1];
 
    /***** Get number of comments in note *****/
@@ -258,8 +265,7 @@ void TL_Com_WriteCommsInNote (const struct TL_Timeline *Timeline,
      }
 
    /***** Get final comments of this note from database *****/
-   NumFinalCommsGot = TL_DB_GetFinalComms (Not->NotCod,NumFinalCommsToGet,
-				           &mysql_res);
+   NumFinalComms = TL_DB_GetFinalComms (Not->NotCod,NumFinalCommsToGet,&mysql_res);
    /*
       Before clicking "See prev..."    -->    After clicking "See prev..."
     _________________________________       _________________________________
@@ -267,7 +273,7 @@ void TL_Com_WriteCommsInNote (const struct TL_Timeline *Timeline,
    |            (hidden)             |     |            (visible)            |
    |  _____________________________  |     |  _____________________________  |
    | |    v See only the latest    | |     | |    v See only the latest    | |
-   | |_____________________________| |     | |_____________________________| |
+   | |_________(contract)__________| |     | |_________(contract)__________| |
    |_________________________________|     |_________________________________|
     _________________________________       _________________________________
    |            div <id>             |     |        div <id> updated         |
@@ -287,18 +293,18 @@ void TL_Com_WriteCommsInNote (const struct TL_Timeline *Timeline,
    | | |          form           | | |     | |                             | |
    | | |  _____________________  | | |     | |    _____________________    | |
    | | | | ^ See prev.comments | | | |     | |   | ^ See prev.comments |   | |
-   | | | |_____________________| | | |     | |   |_____________________|   | |
+   | | | |_______(expand)______| | | |     | |   |_______(expand)______|   | |
    | | |_________________________| | |     | |                             | |
    | |_____________________________| |     | |_____________________________| |
    |_________________________________|     |_________________________________|
     _________________________________       _________________________________
-   |           ul com_<id>           |     |           ul com_<id>           |
+   |                ul               |     |                ul               |
    |    _________________________    |     |    _________________________    |
-   |   |     li (comment 1)      |   |     |   |     li (comment 1)      |   |
+   |   |     li (comment n+1)    |   |     |   |     li (comment n+1)    |   |
    |   |_________________________|   |     |   |_________________________|   |
    |   |           ...           |   |     |   |           ...           |   |
    |   |_________________________|   |     |   |_________________________|   |
-   |   |     li (comment n)      |   |     |   |     li (comment n)      |   |
+   |   |     li (comment m)      |   |     |   |     li (comment m)      |   |
    |   |_________________________|   |     |   |_________________________|   |
    |_________________________________|     |_________________________________|
    */
@@ -309,19 +315,18 @@ void TL_Com_WriteCommsInNote (const struct TL_Timeline *Timeline,
       Frm_SetUniqueId (IdComms);
 
       /***** Link (initially hidden) to show only the latest comments *****/
-      TL_Com_LinkToShowOnlyLatestComms (IdComms);
+      TL_Com_LinkToShowComms (TL_Com_CONTRACT,IdComms,NumFinalComms);
 
-      /***** Div which content will be updated via AJAX *****/
-      HTM_DIV_Begin ("id=\"%s\" class=\"TL_RIGHT_WIDTH\"",IdComms);
-	 TL_Frm_FormToShowHiddenComms (Not->NotCod,IdComms,NumInitialComms);
-      HTM_DIV_End ();
+      /***** Div with form to show hidden coments,
+             which content will be updated via AJAX *****/
+      TL_Frm_FormToShowHiddenComms (Not->NotCod,IdComms,NumInitialComms);
      }
 
    /***** List final visible comments *****/
-   if (NumFinalCommsGot)
+   if (NumFinalComms)
      {
-      HTM_UL_Begin ("class=\"TL_LIST\"");
-	 TL_Com_ListComms (Timeline,mysql_res,NumFinalCommsGot);
+      HTM_UL_Begin ("class=\"TL_LIST\"");	// Never hidden, always visible
+	 TL_Com_ListComms (Timeline,NumFinalComms,mysql_res);
       HTM_UL_End ();
      }
 
@@ -364,7 +369,7 @@ void TL_Com_ShowHiddenCommsGbl (void)
    TL_Com_WriteHiddenComms (&Timeline,NotCod,IdComms,NumInitialCommsToGet);
 
    /***** Link to show the first comments *****/
-   TL_Com_LinkToShowPreviousComms (IdComms,NumInitialCommsGot);
+   TL_Com_LinkToShowComms (TL_Com_EXPAND,IdComms,NumInitialCommsGot);
   }
 
 /*****************************************************************************/
@@ -387,7 +392,7 @@ static unsigned TL_Com_WriteHiddenComms (struct TL_Timeline *Timeline,
 
    /***** List comments *****/
    HTM_UL_Begin ("id=\"com_%s\" class=\"TL_LIST\"",IdComms);
-      TL_Com_ListComms (Timeline,mysql_res,NumInitialCommsGot);
+      TL_Com_ListComms (Timeline,NumInitialCommsGot,mysql_res);
    HTM_UL_End ();
 
    /***** Free structure that stores the query result *****/
@@ -401,7 +406,7 @@ static unsigned TL_Com_WriteHiddenComms (struct TL_Timeline *Timeline,
 /*****************************************************************************/
 
 static void TL_Com_ListComms (const struct TL_Timeline *Timeline,
-			      MYSQL_RES *mysql_res,unsigned NumComms)
+                              unsigned NumComms,MYSQL_RES *mysql_res)
   {
    unsigned NumCom;
 
@@ -439,39 +444,43 @@ static void TL_Com_WriteOneCommInList (const struct TL_Timeline *Timeline,
   }
 
 /*****************************************************************************/
-/****************** Link to show only the latest comments ********************/
+/**** Link to "show only the latest comments" / "show the first comments" ****/
 /*****************************************************************************/
 
-static void TL_Com_LinkToShowOnlyLatestComms (const char IdComms[Frm_MAX_BYTES_ID + 1])
+static void TL_Com_LinkToShowComms (TL_Com_ContractExpand_t ConExp,
+                                    const char IdComms[Frm_MAX_BYTES_ID + 1],
+                                    unsigned NumComms)
   {
-   extern const char *Txt_See_only_the_latest_COMMENTS;
-
-   /***** Icon and text to show only the latest comments ****/
-   HTM_DIV_Begin ("id=\"con_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\""
-		  " style=\"display:none;\"",	// Hidden
-		  IdComms);
-      TL_Com_PutIconToToggleComms (IdComms,"angle-down.svg",
-				   Txt_See_only_the_latest_COMMENTS);
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/********************* Link to show the first comments ***********************/
-/*****************************************************************************/
-
-static void TL_Com_LinkToShowPreviousComms (const char IdComms[Frm_MAX_BYTES_ID + 1],
-				            unsigned NumInitialComms)
-  {
+   extern const char *Txt_See_only_the_latest_X_COMMENTS;
    extern const char *Txt_See_the_previous_X_COMMENTS;
+   static const char *Id[TL_Com_NUM_CONTRACT_EXPAND] =
+     {
+      "con",					// contract
+      "exp",					// expand
+     };
+   static const char *Icon[TL_Com_NUM_CONTRACT_EXPAND] =
+     {
+      "angle-down.svg",				// contract
+      "angle-up.svg",				// expand
+     };
+   const char *Text[TL_Com_NUM_CONTRACT_EXPAND] =
+     {
+      Txt_See_only_the_latest_X_COMMENTS,	// contract
+      Txt_See_the_previous_X_COMMENTS,		// expand
+     };
 
    /***** Icon and text to show only the latest comments ****/
-   HTM_DIV_Begin ("id=\"exp_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\""
-	          " style=\"display:none;\"",	// Hidden
-		  IdComms);
-      TL_Com_PutIconToToggleComms (IdComms,"angle-up.svg",
-				   Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
-							(long) NumInitialComms));
+   /* Begin container */
+   HTM_DIV_Begin ("id=\"%s_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\""
+		  " style=\"display:none;\"",	// Hidden
+		  Id[ConExp],IdComms);
+
+      /* Icon and text */
+      TL_Com_PutIconToToggleComms (IdComms,Icon[ConExp],
+				   Str_BuildStringLong (Text[ConExp],(long) NumComms));
       Str_FreeString ();
+
+   /* End container */
    HTM_DIV_End ();
   }
 
