@@ -494,6 +494,7 @@ static void TL_Com_PutIconToToggleComms (const char *UniqueId,
    extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
    char *OnClick;
 
+   /***** Build onclick text *****/
    if (asprintf (&OnClick,"toggleComments('%s')",UniqueId) < 0)
       Lay_NotEnoughMemoryExit ();
 
@@ -502,6 +503,7 @@ static void TL_Com_PutIconToToggleComms (const char *UniqueId,
       Ico_PutIconTextLink (Icon,Text);
    HTM_BUTTON_End ();
 
+   /***** Free onclick text *****/
    free (OnClick);
   }
 
@@ -842,7 +844,6 @@ void TL_Com_RequestRemComGbl (void)
 
 static void TL_Com_RequestRemovalComm (struct TL_Timeline *Timeline)
   {
-   extern const char *Txt_The_post_no_longer_exists;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
    struct TL_Com_Comment Com;
 
@@ -853,19 +854,10 @@ static void TL_Com_RequestRemovalComm (struct TL_Timeline *Timeline)
    Com.PubCod = TL_Pub_GetParamPubCod ();
    TL_Com_GetDataOfCommByCod (&Com);
 
-   /***** Trivial check 1: publication code *****/
-   if (Com.PubCod <= 0)
+   /***** Do some checks *****/
+   if (!TL_Usr_CheckIfICanRemove (Com.PubCod,Com.UsrCod))
      {
       Med_MediaDestructor (&Com.Content.Media);
-      Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
-      return;
-     }
-
-   /***** Trivial check 2: only if I am the author of this comment *****/
-   if (!Usr_ItsMe (Com.UsrCod))
-     {
-      Med_MediaDestructor (&Com.Content.Media);
-      Ale_ShowAlert (Ale_ERROR,"You are not the author.");
       return;
      }
 

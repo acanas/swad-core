@@ -233,32 +233,6 @@ static void TL_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
-/***************** Check if I can fav/share a note/comment *******************/
-/*****************************************************************************/
-
-bool TL_Usr_CheckICanFavSha (long Cod,long UsrCod)
-  {
-   extern const char *Txt_The_post_no_longer_exists;
-
-   /***** Trivial check 1: note/comment code should be > 0 *****/
-   if (Cod <= 0)
-     {
-      Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
-      return false;
-     }
-
-   /***** Trivial check 2: I must be logged
-			   I can not fav/share my own notes/comments *****/
-   if (!Gbl.Usrs.Me.Logged || Usr_ItsMe (UsrCod))
-     {
-      Lay_NoPermissionExit ();
-      return false;	// Not reached
-     }
-
-   return true;
-  }
-
-/*****************************************************************************/
 /************* Check if a user has faved/shared a note/comment ***************/
 /*****************************************************************************/
 
@@ -364,4 +338,56 @@ static void TL_Usr_PutDisabledIconFavSha (TL_Usr_FavSha_t FavSha,
      }
    else
       Ico_PutDivIcon ("TL_ICO_DISABLED",Icon[FavSha],TitleWithoutUsrs[FavSha]);
+  }
+
+/*****************************************************************************/
+/***************** Check if I can fav/share a note/comment *******************/
+/*****************************************************************************/
+
+bool TL_Usr_CheckIfICanFavSha (long Cod,long UsrCod)
+  {
+   extern const char *Txt_The_post_no_longer_exists;
+
+   /***** Trivial check 1: note/comment code should be > 0 *****/
+   if (Cod <= 0)
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
+      return false;
+     }
+
+   /***** Trivial check 2: I must be logged
+			   I can not fav/share my own notes/comments *****/
+   if (!Gbl.Usrs.Me.Logged || Usr_ItsMe (UsrCod))
+     {
+      Lay_NoPermissionExit ();
+      return false;	// Not reached
+     }
+
+   return true;
+  }
+
+/*****************************************************************************/
+/***************** Check if I can fav/share a note/comment *******************/
+/*****************************************************************************/
+
+bool TL_Usr_CheckIfICanRemove (long Cod,long UsrCod)
+  {
+   extern const char *Txt_The_post_no_longer_exists;
+
+   /***** Trivial check 1: note/comment code should be > 0 *****/
+   if (Cod <= 0)
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
+      return false;
+     }
+
+   /***** Trivial check 2: I must be logged
+			   I can only remove my own notes/comments *****/
+   if (!Gbl.Usrs.Me.Logged || !Usr_ItsMe (UsrCod))
+     {
+      Lay_NoPermissionExit ();
+      return false;	// Not reached
+     }
+
+   return true;
   }

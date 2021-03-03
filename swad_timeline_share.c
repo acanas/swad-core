@@ -122,7 +122,7 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
    TL_Not_GetDataOfNoteByCod (Not);
 
    /***** Do some checks *****/
-   if (!TL_Usr_CheckICanFavSha (Not->NotCod,Not->UsrCod))
+   if (!TL_Usr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod))
       return;
 
    /***** Trivial check: Is note already shared by me? *****/
@@ -181,7 +181,7 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
    TL_Not_GetDataOfNoteByCod (Not);
 
    /***** Do some checks *****/
-   if (!TL_Usr_CheckICanFavSha (Not->NotCod,Not->UsrCod))
+   if (!TL_Usr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod))
       return;
 
    /***** Delete publication from database *****/

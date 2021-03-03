@@ -146,7 +146,7 @@ static void TL_Fav_FavNote (struct TL_Not_Note *Not)
    TL_Not_GetDataOfNoteByCod (Not);
 
    /***** Do some checks *****/
-   if (!TL_Usr_CheckICanFavSha (Not->NotCod,Not->UsrCod))
+   if (!TL_Usr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod))
       return;
 
    /***** Trivial check: Have I faved this note? *****/
@@ -177,7 +177,7 @@ static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
    TL_Not_GetDataOfNoteByCod (Not);
 
    /***** Do some checks *****/
-   if (!TL_Usr_CheckICanFavSha (Not->NotCod,Not->UsrCod))
+   if (!TL_Usr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod))
       return;
 
    /***** Trivial check: Have I faved this note? *****/
@@ -285,7 +285,7 @@ static void TL_Fav_FavComm (struct TL_Com_Comment *Com)
    TL_Com_GetDataOfCommByCod (Com);
 
    /***** Do some checks *****/
-   if (!TL_Usr_CheckICanFavSha (Com->PubCod,Com->UsrCod))
+   if (!TL_Usr_CheckIfICanFavSha (Com->PubCod,Com->UsrCod))
      {
       Med_MediaDestructor (&Com->Content.Media);
       return;
@@ -324,7 +324,7 @@ static void TL_Fav_UnfComm (struct TL_Com_Comment *Com)
    TL_Com_GetDataOfCommByCod (Com);
 
    /***** Do some checks *****/
-   if (!TL_Usr_CheckICanFavSha (Com->PubCod,Com->UsrCod))
+   if (!TL_Usr_CheckIfICanFavSha (Com->PubCod,Com->UsrCod))
      {
       Med_MediaDestructor (&Com->Content.Media);
       return;

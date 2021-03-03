@@ -1121,7 +1121,6 @@ void TL_Not_RequestRemNoteGbl (void)
 
 static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
   {
-   extern const char *Txt_The_post_no_longer_exists;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_post;
    struct TL_Not_Note Not;
 
@@ -1129,19 +1128,9 @@ static void TL_Not_RequestRemovalNote (struct TL_Timeline *Timeline)
    Not.NotCod = TL_Not_GetParamNotCod ();
    TL_Not_GetDataOfNoteByCod (&Not);
 
-   /***** Trivial check 1: note code should be > 0 *****/
-   if (Not.NotCod <= 0)
-     {
-      Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
+   /***** Do some checks *****/
+   if (!TL_Usr_CheckIfICanRemove (Not.NotCod,Not.UsrCod))
       return;
-     }
-
-   /***** Trivial check 2: Am I the author of this note *****/
-   if (!Usr_ItsMe (Not.UsrCod))
-     {
-      Ale_ShowAlert (Ale_ERROR,"You are not the author.");
-      return;
-     }
 
    /***** Show question and button to remove note *****/
    /* Begin alert */
