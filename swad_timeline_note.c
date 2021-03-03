@@ -841,16 +841,18 @@ static void TL_Not_WriteFavShaRem (const struct TL_Timeline *Timeline,
       HTM_DIV_Begin ("id=\"fav_not_%s_%u\""
 	             " class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\"",
 		     Gbl.UniqueNameEncrypted,NumDiv);
-	 TL_Fav_PutIconToFavUnf (TL_Usr_FAV_UNF_NOTE,
-	                         Not->NotCod,Not->UsrCod,Not->NumFavs,
-				 TL_Usr_SHOW_FEW_USRS);
+	 TL_Usr_PutIconFavSha (TL_Usr_FAV_UNF_NOTE,
+	                       Not->NotCod,Not->UsrCod,Not->NumFavs,
+			       TL_Usr_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /***** Foot column 2: share zone *****/
       HTM_DIV_Begin ("id=\"sha_not_%s_%u\""
 	             " class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\"",
 		     Gbl.UniqueNameEncrypted,NumDiv);
-	 TL_Sha_PutIconToShaUnsNote (Not,TL_Usr_SHOW_FEW_USRS);
+	 TL_Usr_PutIconFavSha (TL_Usr_SHA_UNS_NOTE,
+	                       Not->NotCod,Not->UsrCod,Not->NumShared,
+	                       TL_Usr_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /***** Foot column 3: icon to remove this note *****/

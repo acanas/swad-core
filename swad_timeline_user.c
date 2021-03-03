@@ -288,6 +288,31 @@ unsigned TL_Usr_GetListFaversOrSharers (TL_Usr_FavSha_t FavSha,
   }
 
 /*****************************************************************************/
+/**************** Put icon to fav/unfav and list of favers *******************/
+/*****************************************************************************/
+
+void TL_Usr_PutIconFavSha (TL_Usr_FavSha_t FavSha,
+                           long Cod,long UsrCod,unsigned NumUsrs,
+                           TL_Usr_HowManyUsrs_t HowManyUsrs)
+  {
+   /***** Put form to fav/unfav or share/unshare this note/comment *****/
+   /* Begin container */
+   HTM_DIV_Begin ("class=\"TL_ICO\"");
+
+      /* Icon to fav/unfav or share/unshare this note/comment */
+      if (Usr_ItsMe (UsrCod))	// I am the author ==> I can not fav/unfav or share/unshare
+         TL_Usr_PutDisabledIconFavSha (FavSha,NumUsrs);
+      else			// I am not the author
+	 TL_Frm_PutFormToFavUnfShaUns (FavSha,Cod);
+
+   /* End container */
+   HTM_DIV_End ();
+
+   /***** Show who have faved/shared this note/comment *****/
+   TL_Usr_GetAndShowSharersOrFavers (FavSha,Cod,UsrCod,NumUsrs,HowManyUsrs);
+  }
+
+/*****************************************************************************/
 /****************** Put disabled icon to mark as favourite *******************/
 /*****************************************************************************/
 

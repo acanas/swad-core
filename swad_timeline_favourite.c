@@ -84,9 +84,9 @@ void TL_Fav_ShowAllFaversNoteGbl (void)
    TL_Not_GetDataOfNoteByCod (&Not);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
-   TL_Fav_PutIconToFavUnf (TL_Usr_FAV_UNF_NOTE,
-                           Not.NotCod,Not.UsrCod,Not.NumFavs,
-                           TL_Usr_SHOW_ALL_USRS);
+   TL_Usr_PutIconFavSha (TL_Usr_FAV_UNF_NOTE,
+                         Not.NotCod,Not.UsrCod,Not.NumFavs,
+                         TL_Usr_SHOW_ALL_USRS);
   }
 
 void TL_Fav_FavNoteUsr (void)
@@ -106,9 +106,9 @@ void TL_Fav_FavNoteGbl (void)
    TL_Fav_FavNote (&Not);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   TL_Fav_PutIconToFavUnf (TL_Usr_FAV_UNF_NOTE,
-                           Not.NotCod,Not.UsrCod,Not.NumFavs,
-                           TL_Usr_SHOW_FEW_USRS);
+   TL_Usr_PutIconFavSha (TL_Usr_FAV_UNF_NOTE,
+                         Not.NotCod,Not.UsrCod,Not.NumFavs,
+                         TL_Usr_SHOW_FEW_USRS);
   }
 
 void TL_Fav_UnfNoteUsr (void)
@@ -128,9 +128,9 @@ void TL_Fav_UnfNoteGbl (void)
    TL_Fav_UnfNote (&Not);
 
    /***** Write HTML inside DIV with form to fav *****/
-   TL_Fav_PutIconToFavUnf (TL_Usr_FAV_UNF_NOTE,
-                           Not.NotCod,Not.UsrCod,Not.NumFavs,
-                           TL_Usr_SHOW_FEW_USRS);
+   TL_Usr_PutIconFavSha (TL_Usr_FAV_UNF_NOTE,
+                         Not.NotCod,Not.UsrCod,Not.NumFavs,
+                         TL_Usr_SHOW_FEW_USRS);
   }
 
 static void TL_Fav_FavNote (struct TL_Not_Note *Not)
@@ -219,9 +219,9 @@ void TL_Fav_ShowAllFaversComGbl (void)
    Med_MediaDestructor (&Com.Content.Media);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
-   TL_Fav_PutIconToFavUnf (TL_Usr_FAV_UNF_COMM,
-                           Com.PubCod,Com.UsrCod,Com.NumFavs,
-                           TL_Usr_SHOW_ALL_USRS);
+   TL_Usr_PutIconFavSha (TL_Usr_FAV_UNF_COMM,
+                         Com.PubCod,Com.UsrCod,Com.NumFavs,
+                         TL_Usr_SHOW_ALL_USRS);
   }
 
 void TL_Fav_FavCommUsr (void)
@@ -241,9 +241,9 @@ void TL_Fav_FavCommGbl (void)
    TL_Fav_FavComm (&Com);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   TL_Fav_PutIconToFavUnf (TL_Usr_FAV_UNF_COMM,
-                           Com.PubCod,Com.UsrCod,Com.NumFavs,
-                           TL_Usr_SHOW_FEW_USRS);
+   TL_Usr_PutIconFavSha (TL_Usr_FAV_UNF_COMM,
+                         Com.PubCod,Com.UsrCod,Com.NumFavs,
+                         TL_Usr_SHOW_FEW_USRS);
   }
 
 void TL_Fav_UnfCommUsr (void)
@@ -263,9 +263,9 @@ void TL_Fav_UnfCommGbl (void)
    TL_Fav_UnfComm (&Com);
 
    /***** Write HTML inside DIV with form to fav *****/
-   TL_Fav_PutIconToFavUnf (TL_Usr_FAV_UNF_COMM,
-                           Com.PubCod,Com.UsrCod,Com.NumFavs,
-                           TL_Usr_SHOW_FEW_USRS);
+   TL_Usr_PutIconFavSha (TL_Usr_FAV_UNF_COMM,
+                         Com.PubCod,Com.UsrCod,Com.NumFavs,
+                         TL_Usr_SHOW_FEW_USRS);
   }
 
 static void TL_Fav_FavComm (struct TL_Com_Comment *Com)
@@ -344,29 +344,4 @@ static void TL_Fav_UnfComm (struct TL_Com_Comment *Com)
 
    /***** Free image *****/
    Med_MediaDestructor (&Com->Content.Media);
-  }
-
-/*****************************************************************************/
-/**************** Put icon to fav/unfav and list of favers *******************/
-/*****************************************************************************/
-
-void TL_Fav_PutIconToFavUnf (TL_Usr_FavSha_t FavSha,
-                             long Cod,long UsrCod,unsigned NumUsrs,
-                             TL_Usr_HowManyUsrs_t HowManyUsrs)
-  {
-   /***** Put form to fav/unfav this comment *****/
-   /* Begin container */
-   HTM_DIV_Begin ("class=\"TL_ICO\"");
-
-      /* Icon to fav/unfav */
-      if (Usr_ItsMe (UsrCod))	// I am the author ==> I can not fav/unfav
-         TL_Usr_PutDisabledIconFavSha (FavSha,NumUsrs);
-      else			// I am not the author
-	 TL_Frm_PutFormToFavUnfShaUns (FavSha,Cod);
-
-   /* End container */
-   HTM_DIV_End ();
-
-   /***** Show who have faved this note/comment *****/
-   TL_Usr_GetAndShowSharersOrFavers (FavSha,Cod,UsrCod,NumUsrs,HowManyUsrs);
   }

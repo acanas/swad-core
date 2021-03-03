@@ -50,7 +50,5 @@ void TL_Sha_ShaNoteUsr (void);
 void TL_Sha_ShaNoteGbl (void);
 void TL_Sha_UnsNoteUsr (void);
 void TL_Sha_UnsNoteGbl (void);
-void TL_Sha_PutIconToShaUnsNote (const struct TL_Not_Note *Not,
-                                 TL_Usr_HowManyUsrs_t HowManyUsrs);
 
 #endif

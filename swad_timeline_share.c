@@ -81,7 +81,9 @@ void TL_Sha_ShowAllSharersNoteGbl (void)
    TL_Not_GetDataOfNoteByCod (&Not);
 
    /***** Write HTML inside DIV with form to share/unshare *****/
-   TL_Sha_PutIconToShaUnsNote (&Not,TL_Usr_SHOW_ALL_USRS);
+   TL_Usr_PutIconFavSha (TL_Usr_SHA_UNS_NOTE,
+	                 Not.NotCod,Not.UsrCod,Not.NumShared,
+	                 TL_Usr_SHOW_ALL_USRS);
   }
 
 void TL_Sha_ShaNoteUsr (void)
@@ -101,7 +103,9 @@ void TL_Sha_ShaNoteGbl (void)
    TL_Sha_ShaNote (&Not);
 
    /***** Write HTML inside DIV with form to unshare *****/
-   TL_Sha_PutIconToShaUnsNote (&Not,TL_Usr_SHOW_FEW_USRS);
+   TL_Usr_PutIconFavSha (TL_Usr_SHA_UNS_NOTE,
+	                 Not.NotCod,Not.UsrCod,Not.NumShared,
+	                 TL_Usr_SHOW_FEW_USRS);
   }
 
 static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
@@ -160,7 +164,9 @@ void TL_Sha_UnsNoteGbl (void)
    TL_Sha_UnsNote (&Not);
 
    /***** Write HTML inside DIV with form to share *****/
-   TL_Sha_PutIconToShaUnsNote (&Not,TL_Usr_SHOW_FEW_USRS);
+   TL_Usr_PutIconFavSha (TL_Usr_SHA_UNS_NOTE,
+	                 Not.NotCod,Not.UsrCod,Not.NumShared,
+	                 TL_Usr_SHOW_FEW_USRS);
   }
 
 static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
@@ -185,29 +191,4 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
    if (OriginalPubCod > 0)
       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE,OriginalPubCod);
-  }
-
-void TL_Sha_PutIconToShaUnsNote (const struct TL_Not_Note *Not,
-                                 TL_Usr_HowManyUsrs_t HowManyUsrs)
-  {
-   /***** Put form to share/unshare this note *****/
-   /* Begin container */
-   HTM_DIV_Begin ("class=\"TL_ICO\"");
-
-      /* Icon to share */
-      if (Not->Unavailable ||		// Unavailable notes can not be shared
-	  Usr_ItsMe (Not->UsrCod))	// I am the author
-	 /* Put disabled icon */
-         TL_Usr_PutDisabledIconFavSha (TL_Usr_SHA_UNS_NOTE,Not->NumShared);
-      else				// Available and I am not the author
-	 /* Put icon to share/unshare */
-         TL_Frm_PutFormToFavUnfShaUns (TL_Usr_SHA_UNS_NOTE,Not->NotCod);
-
-
-   /* End container */
-   HTM_DIV_End ();
-
-   /***** Show who have shared this note *****/
-   TL_Usr_GetAndShowSharersOrFavers (TL_Usr_SHA_UNS_NOTE,
-                                     Not->NotCod,Not->UsrCod,Not->NumShared,HowManyUsrs);
   }

@@ -644,9 +644,10 @@ static void TL_Com_WriteButtons (const struct TL_Timeline *Timeline,
       /***** Foot column 1: fav zone *****/
       HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"TL_FAV_COM TL_FAV_WIDTH\"",
 		     Gbl.UniqueNameEncrypted,NumDiv);
-	 TL_Fav_PutIconToFavUnf (TL_Usr_FAV_UNF_COMM,
-	                         Com->PubCod,Com->UsrCod,Com->NumFavs,
-				 TL_Usr_SHOW_FEW_USRS);
+	 TL_Usr_PutIconFavSha (TL_Usr_FAV_UNF_COMM,
+	                       Com->PubCod,Com->UsrCod,Com->NumFavs,
+			       TL_Usr_SHOW_FEW_USRS);
+
       HTM_DIV_End ();
 
       /***** Foot column 2: icon to remove this comment *****/

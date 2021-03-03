@@ -55,8 +55,4 @@ void TL_Fav_FavCommGbl (void);
 void TL_Fav_UnfCommUsr (void);
 void TL_Fav_UnfCommGbl (void);
 
-void TL_Fav_PutIconToFavUnf (TL_Usr_FavSha_t FavSha,
-                             long Cod,long UsrCod,unsigned NumUsrs,
-                             TL_Usr_HowManyUsrs_t HowManyUsrs);
-
 #endif
