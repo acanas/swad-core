@@ -32,7 +32,6 @@
 #include "swad_action.h"
 #include "swad_global.h"
 #include "swad_timeline.h"
-#include "swad_timeline_database.h"
 #include "swad_timeline_favourite.h"
 #include "swad_timeline_form.h"
 #include "swad_timeline_share.h"

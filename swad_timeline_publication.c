@@ -322,6 +322,7 @@ static struct TL_Pub_Publication *TL_Pub_SelectTheMostRecentPub (const struct TL
    MYSQL_RES *mysql_res;
    struct TL_Pub_Publication *Pub;
 
+   /***** Select the most recent publication from database *****/
    if (TL_DB_SelectTheMostRecentPub (SubQueries,&mysql_res) == 1)
      {
       /* Allocate space for publication */
@@ -351,7 +352,7 @@ void TL_Pub_InsertNewPubsInTimeline (struct TL_Timeline *Timeline)
    struct TL_Pub_Publication *Pub;
    struct TL_Not_Note Not;
 
-   /***** List new publications timeline *****/
+   /***** List new publications in timeline *****/
    for (Pub = Timeline->Pubs.Top;
 	Pub;
 	Pub = Pub->Next)
@@ -523,17 +524,11 @@ void TL_Pub_GetDataOfPubFromNextRow (MYSQL_RES *mysql_res,
    row[2]: PublisherCod
    row[3]: PubType
    */
-
-   /***** Get code of publication (row[0]) *****/
+   /***** Get code of publication (row[0]), code of note (row[1]),
+          publisher's code (row[2]) and type of publication (row[3]) *****/
    Pub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
-
-   /***** Get note code (row[1]) *****/
    Pub->NotCod       = Str_ConvertStrCodToLongCod (row[1]);
-
-   /***** Get publisher's code (row[2]) *****/
    Pub->PublisherCod = Str_ConvertStrCodToLongCod (row[2]);
-
-   /***** Get type of publication (row[3]) *****/
    Pub->PubType      = TL_Pub_GetPubTypeFromStr (row[3]);
   }
 
@@ -545,6 +540,7 @@ static TL_Pub_PubType_t TL_Pub_GetPubTypeFromStr (const char *Str)
   {
    unsigned UnsignedNum;
 
+   /***** Get publication type from string *****/
    if (sscanf (Str,"%u",&UnsignedNum) == 1)
       if (UnsignedNum < TL_Pub_NUM_PUB_TYPES)
          return (TL_Pub_PubType_t) UnsignedNum;
