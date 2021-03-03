@@ -841,7 +841,8 @@ static void TL_Not_WriteFavShaRem (const struct TL_Timeline *Timeline,
       HTM_DIV_Begin ("id=\"fav_not_%s_%u\""
 	             " class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\"",
 		     Gbl.UniqueNameEncrypted,NumDiv);
-	 TL_Fav_PutIconToFavUnf (TL_Fav_NOTE,Not->NotCod,Not->UsrCod,Not->NumFavs,
+	 TL_Fav_PutIconToFavUnf (TL_Usr_FAV_UNF_NOTE,
+	                         Not->NotCod,Not->UsrCod,Not->NumFavs,
 				 TL_Usr_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
@@ -1355,11 +1356,11 @@ static void TL_Not_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Not_Note *Not)
    Not->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[6]);
 
    /***** Get number of times this note has been shared *****/
-   Not->NumShared = TL_DB_GetNumTimesANoteHasBeenShared (Not);
+   Not->NumShared = TL_DB_GetNumSharers (Not->NotCod,Not->UsrCod);
 
    /***** Get number of times this note has been favourited *****/
-   Not->NumFavs = TL_DB_GetNumTimesHasBeenFav (TL_Fav_NOTE,
-                                               Not->NotCod,Not->UsrCod);
+   Not->NumFavs = TL_DB_GetNumFavers (TL_Usr_FAV_UNF_NOTE,
+                                      Not->NotCod,Not->UsrCod);
   }
 
 /*****************************************************************************/

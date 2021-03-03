@@ -278,8 +278,8 @@ static long TL_Pst_ReceivePost (void)
    Med_GetMediaFromForm (-1L,-1L,-1,&Content.Media,NULL,NULL);
    Ale_ShowAlerts (NULL);
 
-   if (Content.Txt[0] ||		// Text not empty
-      Content.Media.Status == Med_PROCESSED)	// A media is attached
+   if (Content.Txt[0] ||			// Text not empty
+       Content.Media.Status == Med_PROCESSED)	// A media is attached
      {
       /***** Store media in filesystem and database *****/
       Med_RemoveKeepOrStoreMedia (-1L,&Content.Media);

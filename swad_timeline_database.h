@@ -123,26 +123,22 @@ void TL_DB_RemoveAllPubsPublishedByAnyUsrOfNotesAuthoredBy (long UsrCod);
 void TL_DB_RemoveAllPubsPublishedBy (long UsrCod);
 
 /****************************** Favourites ***********************************/
-bool TL_DB_CheckIfFavedByUsr (TL_Fav_WhatToFav_t WhatToFav,
-                              long Cod,long UsrCod);
-unsigned TL_DB_GetNumTimesHasBeenFav (TL_Fav_WhatToFav_t WhatToFav,
-                                      long Cod,long UsrCod);
-unsigned TL_DB_GetListUsrsHaveFaved (TL_Fav_WhatToFav_t WhatToFav,
-                                     long Cod,long UsrCod,
-                                     unsigned MaxUsrs,
-                                     MYSQL_RES **mysql_res);
-void TL_DB_MarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod);
-void TL_DB_UnmarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod);
-void TL_DB_RemoveAllFavsMadeByUsr (TL_Fav_WhatToFav_t WhatToFav,long UsrCod);
-void TL_DB_RemoveAllFavsToPubsBy (TL_Fav_WhatToFav_t WhatToFav,long UsrCod);
+bool TL_DB_CheckIfFavedByUsr (TL_Usr_FavSha_t FavSha,long Cod,long UsrCod);
+unsigned TL_DB_GetNumFavers (TL_Usr_FavSha_t FavSha,long Cod,long UsrCod);
+unsigned TL_DB_GetFavers (TL_Usr_FavSha_t FavSha,
+                          long Cod,long UsrCod,unsigned MaxUsrs,
+                          MYSQL_RES **mysql_res);
+void TL_DB_MarkAsFav (TL_Usr_FavSha_t FavSha,long Cod);
+void TL_DB_UnmarkAsFav (TL_Usr_FavSha_t FavSha,long Cod);
+void TL_DB_RemoveAllFavsMadeByUsr (TL_Usr_FavSha_t FavSha,long UsrCod);
+void TL_DB_RemoveAllFavsToPubsBy (TL_Usr_FavSha_t FavSha,long UsrCod);
 void TL_DB_RemoveAllFavsToAllCommsInAllNotesBy (long UsrCod);
 
 /******************************** Shared *************************************/
-bool TL_DB_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);
-unsigned TL_DB_GetNumTimesANoteHasBeenShared (struct TL_Not_Note *Not);
-unsigned TL_DB_GetListUsrsHaveShared (long NotCod,long UsrCod,
-                                      unsigned MaxUsrs,
-                                      MYSQL_RES **mysql_res);
+bool TL_DB_CheckIfSharedByUsr (long NotCod,long UsrCod);
+unsigned TL_DB_GetNumSharers (long NotCod,long UsrCod);
+unsigned TL_DB_GetSharers (long NotCod,long UsrCod,unsigned MaxUsrs,
+                           MYSQL_RES **mysql_res);
 void TL_DB_RemoveSharedPub (long NotCod);
 
 #endif

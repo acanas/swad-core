@@ -32,7 +32,10 @@
 #include "swad_action.h"
 #include "swad_global.h"
 #include "swad_timeline.h"
+#include "swad_timeline_database.h"
+#include "swad_timeline_favourite.h"
 #include "swad_timeline_form.h"
+#include "swad_timeline_share.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -96,6 +99,83 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+/*****************************************************************************/
+/******************** Form to fav/unfav or share/unshare *********************/
+/*****************************************************************************/
+
+void TL_Frm_PutFormToFavUnfShaUns (TL_Usr_FavSha_t FavSha,long Cod)
+  {
+   extern const char *Txt_TIMELINE_Mark_as_favourite;
+   extern const char *Txt_TIMELINE_Favourite;
+   extern const char *Txt_TIMELINE_Share;
+   extern const char *Txt_TIMELINE_Shared;
+   struct TL_Form Form[TL_Usr_NUM_FAV_SHA][2] =
+     {
+      [TL_Usr_FAV_UNF_NOTE] =
+	{
+	 [false] = // I have not faved ==> fav
+	   {
+	    .Action      = TL_Frm_FAV_NOTE,
+	    .ParamFormat = "NotCod=%ld",
+	    .ParamCod    = Cod,
+	    .Icon        = TL_Fav_ICON_FAV,
+	    .Title       = Txt_TIMELINE_Mark_as_favourite,
+	   },
+	 [true] = // I have faved ==> unfav
+	   {
+	    .Action      = TL_Frm_UNF_NOTE,
+	    .ParamFormat = "NotCod=%ld",
+	    .ParamCod    = Cod,
+	    .Icon        = TL_Fav_ICON_FAVED,
+	    .Title       = Txt_TIMELINE_Favourite,
+	   },
+	},
+      [TL_Usr_FAV_UNF_COMM] =
+	{
+	 [false] = // I have not faved ==> fav
+	   {
+	    .Action      = TL_Frm_FAV_COMM,
+	    .ParamFormat = "PubCod=%ld",
+	    .ParamCod    = Cod,
+	    .Icon        = TL_Fav_ICON_FAV,
+	    .Title       = Txt_TIMELINE_Mark_as_favourite,
+	   },
+	 [true] = // I have faved ==> unfav
+	   {
+	    .Action      = TL_Frm_UNF_COMM,
+	    .ParamFormat = "PubCod=%ld",
+	    .ParamCod    = Cod,
+	    .Icon        = TL_Fav_ICON_FAVED,
+	    .Title       = Txt_TIMELINE_Favourite,
+	   },
+	},
+      [TL_Usr_SHA_UNS_NOTE] =
+	{
+	 [false] = // I have not shared ==> share
+	   {
+	    .Action      = TL_Frm_SHA_NOTE,
+	    .ParamFormat = "NotCod=%ld",
+	    .ParamCod    = Cod,
+	    .Icon        = TL_Sha_ICON_SHARE,
+	    .Title       = Txt_TIMELINE_Share,
+	   },
+	 [true] = // I have shared ==> unshare
+	   {
+	    .Action      = TL_Frm_UNS_NOTE,
+	    .ParamFormat = "NotCod=%ld",
+	    .ParamCod    = Cod,
+	    .Icon        = TL_Sha_ICON_SHARED,
+	    .Title       = Txt_TIMELINE_Shared,
+	   },
+	},
+     };
+   bool FavedShared;
+
+   /***** Form and icon to fav/unfav note *****/
+   FavedShared = TL_Usr_CheckIfFavedSharedByUsr (FavSha,Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   TL_Frm_FormFavSha (&Form[FavSha][FavedShared]);
+  }
 
 /*****************************************************************************/
 /***************** Begin a form in global or user timeline *******************/

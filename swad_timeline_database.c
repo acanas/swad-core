@@ -40,20 +40,23 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
-static const char *TL_DB_Table[TL_Fav_NUM_WHAT_TO_FAV] =
+static const char *TL_DB_TableFav[TL_Usr_NUM_FAV_SHA] =
   {
-   [TL_Fav_NOTE] = "tl_notes_fav",
-   [TL_Fav_COMM] = "tl_comments_fav",
+   [TL_Usr_FAV_UNF_NOTE] = "tl_notes_fav",
+   [TL_Usr_FAV_UNF_COMM] = "tl_comments_fav",
+   [TL_Usr_SHA_UNS_NOTE] = NULL,		// Not used
   };
-static const char *TL_DB_Field[TL_Fav_NUM_WHAT_TO_FAV] =
+static const char *TL_DB_FieldFav[TL_Usr_NUM_FAV_SHA] =
   {
-   [TL_Fav_NOTE] = "NotCod",
-   [TL_Fav_COMM] = "PubCod",
+   [TL_Usr_FAV_UNF_NOTE] = "NotCod",
+   [TL_Usr_FAV_UNF_COMM] = "PubCod",
+   [TL_Usr_SHA_UNS_NOTE] = NULL,		// Not used
   };
-static TL_Pub_PubType_t TL_DB_PubType[TL_Fav_NUM_WHAT_TO_FAV] =
+static TL_Pub_PubType_t TL_DB_PubTypeFav[TL_Usr_NUM_FAV_SHA] =
   {
-   [TL_Fav_NOTE] = TL_Pub_ORIGINAL_NOTE,
-   [TL_Fav_COMM] = TL_Pub_COMMENT_TO_NOTE,
+   [TL_Usr_FAV_UNF_NOTE] = TL_Pub_ORIGINAL_NOTE,
+   [TL_Usr_FAV_UNF_COMM] = TL_Pub_COMMENT_TO_NOTE,
+   [TL_Usr_SHA_UNS_NOTE] = TL_Pub_UNKNOWN,	// Not used
   };
 
 /*****************************************************************************/
@@ -881,7 +884,7 @@ long TL_DB_GetPubCodFromSession (const char *FieldName)
 		       " WHERE SessionId='%s'",
 		       FieldName,Gbl.Session.Id) == 1)
      {
-      /***** Get last publication code *****/
+      /* Get last publication code */
       row = mysql_fetch_row (mysql_res);
       if (sscanf (row[0],"%ld",&PubCod) != 1)
 	 PubCod = 0;
@@ -1007,23 +1010,21 @@ void TL_DB_RemoveAllPubsPublishedBy (long UsrCod)
 /****************** Check if a user has favourited a note ********************/
 /*****************************************************************************/
 
-bool TL_DB_CheckIfFavedByUsr (TL_Fav_WhatToFav_t WhatToFav,
-                              long Cod,long UsrCod)
+bool TL_DB_CheckIfFavedByUsr (TL_Usr_FavSha_t FavSha,long Cod,long UsrCod)
   {
    /***** Check if a user has favourited a note/comment from database *****/
    return (DB_QueryCOUNT ("can not check if a user has favourited",
 			  "SELECT COUNT(*) FROM %s"
 			  " WHERE %s=%ld AND UsrCod=%ld",
-			  TL_DB_Table[WhatToFav],
-			  TL_DB_Field[WhatToFav],Cod,UsrCod) != 0);
+			  TL_DB_TableFav[FavSha],
+			  TL_DB_FieldFav[FavSha],Cod,UsrCod) != 0);
   }
 
 /*****************************************************************************/
 /********* Get number of times a note/comment has been favourited ************/
 /*****************************************************************************/
 
-unsigned TL_DB_GetNumTimesHasBeenFav (TL_Fav_WhatToFav_t WhatToFav,
-                                      long Cod,long UsrCod)
+unsigned TL_DB_GetNumFavers (TL_Usr_FavSha_t FavSha,long Cod,long UsrCod)
   {
    /***** Get number of times (users) a note/comment has been favourited *****/
    return (unsigned)
@@ -1031,8 +1032,8 @@ unsigned TL_DB_GetNumTimesHasBeenFav (TL_Fav_WhatToFav_t WhatToFav,
 		  "SELECT COUNT(*) FROM %s"
 		  " WHERE %s=%ld"
 		  " AND UsrCod<>%ld",	// Extra check
-		  TL_DB_Table[WhatToFav],
-		  TL_DB_Field[WhatToFav],Cod,
+		  TL_DB_TableFav[FavSha],
+		  TL_DB_FieldFav[FavSha],Cod,
 		  UsrCod);		// The author
   }
 
@@ -1040,10 +1041,9 @@ unsigned TL_DB_GetNumTimesHasBeenFav (TL_Fav_WhatToFav_t WhatToFav,
 /******* Get list of users who have marked a note/comment as favourite *******/
 /*****************************************************************************/
 
-unsigned TL_DB_GetListUsrsHaveFaved (TL_Fav_WhatToFav_t WhatToFav,
-                                     long Cod,long UsrCod,
-                                     unsigned MaxUsrs,
-                                     MYSQL_RES **mysql_res)
+unsigned TL_DB_GetFavers (TL_Usr_FavSha_t FavSha,
+                          long Cod,long UsrCod,unsigned MaxUsrs,
+                          MYSQL_RES **mysql_res)
   {
    /***** Get list of users who have marked a note/comment as favourite from database *****/
    return (unsigned)
@@ -1053,8 +1053,8 @@ unsigned TL_DB_GetListUsrsHaveFaved (TL_Fav_WhatToFav_t WhatToFav,
 		   " WHERE %s=%ld"
 		   " AND UsrCod<>%ld"	// Extra check
 		   " ORDER BY FavCod LIMIT %u",
-		   TL_DB_Table[WhatToFav],
-		   TL_DB_Field[WhatToFav],Cod,
+		   TL_DB_TableFav[FavSha],
+		   TL_DB_FieldFav[FavSha],Cod,
 		   UsrCod,
 		   MaxUsrs);
   }
@@ -1063,7 +1063,7 @@ unsigned TL_DB_GetListUsrsHaveFaved (TL_Fav_WhatToFav_t WhatToFav,
 /**************** Mark note/comment as favourite in database *****************/
 /*****************************************************************************/
 
-void TL_DB_MarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod)
+void TL_DB_MarkAsFav (TL_Usr_FavSha_t FavSha,long Cod)
   {
    /***** Insert in favourited in database *****/
    DB_QueryINSERT ("can not favourite comment",
@@ -1071,8 +1071,8 @@ void TL_DB_MarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod)
 		   " (%s,UsrCod,TimeFav)"
 		   " VALUES"
 		   " (%ld,%ld,NOW())",
-		   TL_DB_Table[WhatToFav],
-		   TL_DB_Field[WhatToFav],
+		   TL_DB_TableFav[FavSha],
+		   TL_DB_FieldFav[FavSha],
 		   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -1080,33 +1080,33 @@ void TL_DB_MarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod)
 /*************** Unmark note/comment as favourite in database ****************/
 /*****************************************************************************/
 
-void TL_DB_UnmarkAsFav (TL_Fav_WhatToFav_t WhatToFav,long Cod)
+void TL_DB_UnmarkAsFav (TL_Usr_FavSha_t FavSha,long Cod)
   {
    /***** Delete the mark as favourite from database *****/
    DB_QueryDELETE ("can not unfavourite",
 		   "DELETE FROM %s"
 		   " WHERE %s=%ld AND UsrCod=%ld",
-		   TL_DB_Table[WhatToFav],
-		   TL_DB_Field[WhatToFav],Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
+		   TL_DB_TableFav[FavSha],
+		   TL_DB_FieldFav[FavSha],Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
 /********** Remove all favs made by a given user to any comment **************/
 /*****************************************************************************/
 
-void TL_DB_RemoveAllFavsMadeByUsr (TL_Fav_WhatToFav_t WhatToFav,long UsrCod)
+void TL_DB_RemoveAllFavsMadeByUsr (TL_Usr_FavSha_t FavSha,long UsrCod)
   {
    /* Remove all favs made by this user to any note/comment */
    DB_QueryDELETE ("can not remove favs",
 		   "DELETE FROM %s WHERE UsrCod=%ld",
-		   TL_DB_Table[WhatToFav],UsrCod);
+		   TL_DB_TableFav[FavSha],UsrCod);
   }
 
 /*****************************************************************************/
 /************ Remove all favs to notes/comments of a given user **************/
 /*****************************************************************************/
 
-void TL_DB_RemoveAllFavsToPubsBy (TL_Fav_WhatToFav_t WhatToFav,long UsrCod)
+void TL_DB_RemoveAllFavsToPubsBy (TL_Usr_FavSha_t FavSha,long UsrCod)
   {
    /***** Remove all favs to notes/comments of this user *****/
    DB_QueryDELETE ("can not remove favs",
@@ -1115,11 +1115,11 @@ void TL_DB_RemoveAllFavsToPubsBy (TL_Fav_WhatToFav_t WhatToFav,long UsrCod)
 	           " WHERE tl_pubs.PublisherCod=%ld"	// Author of the comment
                    " AND tl_pubs.PubType=%u"
 	           " AND tl_pubs.PubCod=%s.PubCod",
-	           TL_DB_Table[WhatToFav],
-	           TL_DB_Table[WhatToFav],
+	           TL_DB_TableFav[FavSha],
+	           TL_DB_TableFav[FavSha],
 		   UsrCod,
-		   (unsigned) TL_DB_PubType[WhatToFav],
-		   TL_DB_Table[WhatToFav]);
+		   (unsigned) TL_DB_PubTypeFav[FavSha],
+		   TL_DB_TableFav[FavSha]);
   }
 
 /*****************************************************************************/
@@ -1144,7 +1144,7 @@ void TL_DB_RemoveAllFavsToAllCommsInAllNotesBy (long UsrCod)
 /****************** Check if a user has published a note *********************/
 /*****************************************************************************/
 
-bool TL_DB_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod)
+bool TL_DB_CheckIfSharedByUsr (long NotCod,long UsrCod)
   {
    return (DB_QueryCOUNT ("can not check if a user has shared a note",
 			  "SELECT COUNT(*) FROM tl_pubs"
@@ -1160,7 +1160,7 @@ bool TL_DB_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod)
 /********** Get number of times a note has been shared in timeline ***********/
 /*****************************************************************************/
 
-unsigned TL_DB_GetNumTimesANoteHasBeenShared (struct TL_Not_Note *Not)
+unsigned TL_DB_GetNumSharers (long NotCod,long UsrCod)
   {
    /***** Get number of times (users) this note has been shared *****/
    return (unsigned)
@@ -1169,8 +1169,8 @@ unsigned TL_DB_GetNumTimesANoteHasBeenShared (struct TL_Not_Note *Not)
 		  " WHERE NotCod=%ld"
 		  " AND PublisherCod<>%ld"
 		  " AND PubType=%u",
-		  Not->NotCod,
-		  Not->UsrCod,	// Author of the note
+		  NotCod,
+		  UsrCod,	// Author of the note
 		  (unsigned) TL_Pub_SHARED_NOTE);
   }
 
@@ -1178,9 +1178,8 @@ unsigned TL_DB_GetNumTimesANoteHasBeenShared (struct TL_Not_Note *Not)
 /***************** Get list of users who have shared a note ******************/
 /*****************************************************************************/
 
-unsigned TL_DB_GetListUsrsHaveShared (long NotCod,long UsrCod,
-                                      unsigned MaxUsrs,
-                                      MYSQL_RES **mysql_res)
+unsigned TL_DB_GetSharers (long NotCod,long UsrCod,unsigned MaxUsrs,
+                           MYSQL_RES **mysql_res)
   {
    /***** Get list of users who have shared a note from database *****/
    return (unsigned)

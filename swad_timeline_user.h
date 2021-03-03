@@ -55,15 +55,30 @@ typedef enum
    TL_Usr_SHOW_ALL_USRS,	// Show all favers/sharers
   } TL_Usr_HowManyUsrs_t;
 
+#define TL_Usr_NUM_FAV_SHA 3
+typedef enum
+  {
+   TL_Usr_FAV_UNF_NOTE = 0,
+   TL_Usr_FAV_UNF_COMM = 1,
+   TL_Usr_SHA_UNS_NOTE = 2,
+  } TL_Usr_FavSha_t;
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
 void TL_Usr_RemoveUsrContent (long UsrCod);
 
+void TL_Usr_GetAndShowSharersOrFavers (TL_Usr_FavSha_t FavSha,
+                                       long Cod,long UsrCod,unsigned NumUsrs,
+			               TL_Usr_HowManyUsrs_t HowManyUsrs);
 void TL_Usr_ShowNumSharersOrFavers (unsigned NumUsrs);
-void TL_Usr_ShowSharersOrFavers (MYSQL_RES **mysql_res,
+void TL_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
 			         unsigned NumUsrs,unsigned NumFirstUsrs);
 bool TL_Usr_CheckICanFavSha (long Cod,long UsrCod);
+bool TL_Usr_CheckIfFavedSharedByUsr (TL_Usr_FavSha_t FavSha,long Cod,long UsrCod);
+unsigned TL_Usr_GetListFaversOrSharers (TL_Usr_FavSha_t FavSha,
+                                        long Cod,long UsrCod,unsigned MaxUsrs,
+                                        MYSQL_RES **mysql_res);
 
 #endif

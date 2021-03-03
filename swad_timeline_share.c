@@ -42,9 +42,6 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
-#define TL_Sha_ICON_SHARE	"share-alt.svg"
-#define TL_Sha_ICON_SHARED	"share-alt-green.svg"
-
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -63,10 +60,6 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not);
 static void TL_Sha_UnsNote (struct TL_Not_Note *Not);
 
 static void TL_Sha_PutDisabledIconShare (unsigned NumShared);
-static void TL_Sha_PutFormToShaUnsNote (long NotCod);
-
-static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Not_Note *Not,
-					      TL_Usr_HowManyUsrs_t HowManyUsrs);
 
 /*****************************************************************************/
 /******************************** Share a note *******************************/
@@ -127,7 +120,8 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
       return;
 
    /***** Trivial check: Is note already shared by me? *****/
-   if (TL_DB_CheckIfNoteIsSharedByUsr (Not->NotCod,Gbl.Usrs.Me.UsrDat.UsrCod))
+   if (TL_Usr_CheckIfFavedSharedByUsr (TL_Usr_SHA_UNS_NOTE,Not->NotCod,
+                                       Gbl.Usrs.Me.UsrDat.UsrCod))
       return;
 
    /***** Share (publish note in timeline) *****/
@@ -137,7 +131,7 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
    TL_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
 
    /***** Update number of times this note is shared *****/
-   Not->NumShared = TL_DB_GetNumTimesANoteHasBeenShared (Not);
+   Not->NumShared = TL_DB_GetNumSharers (Not->NotCod,Not->UsrCod);
 
    /***** Create notification about shared post
 	  for the author of the post *****/
@@ -187,7 +181,7 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
    TL_DB_RemoveSharedPub (Not->NotCod);
 
    /***** Update number of times this note is shared *****/
-   Not->NumShared = TL_DB_GetNumTimesANoteHasBeenShared (Not);
+   Not->NumShared = TL_DB_GetNumSharers (Not->NotCod,Not->UsrCod);
 
    /***** Mark possible notifications on this note as removed *****/
    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
@@ -204,18 +198,20 @@ void TL_Sha_PutIconToShaUnsNote (const struct TL_Not_Note *Not,
 
       /* Icon to share */
       if (Not->Unavailable ||		// Unavailable notes can not be shared
-	  Usr_ItsMe (Not->UsrCod))		// I am the author
+	  Usr_ItsMe (Not->UsrCod))	// I am the author
 	 /* Put disabled icon */
 	 TL_Sha_PutDisabledIconShare (Not->NumShared);
-      else					// Available and I am not the author
+      else				// Available and I am not the author
 	 /* Put icon to share/unshare */
-	 TL_Sha_PutFormToShaUnsNote (Not->NotCod);
+         TL_Frm_PutFormToFavUnfShaUns (TL_Usr_SHA_UNS_NOTE,Not->NotCod);
+
 
    /* End container */
    HTM_DIV_End ();
 
    /***** Show who have shared this note *****/
-   TL_Sha_ShowUsrsWhoHaveSharedNote (Not,HowManyUsrs);
+   TL_Usr_GetAndShowSharersOrFavers (TL_Usr_SHA_UNS_NOTE,
+                                     Not->NotCod,Not->UsrCod,Not->NumShared,HowManyUsrs);
   }
 
 /*****************************************************************************/
@@ -238,78 +234,4 @@ static void TL_Sha_PutDisabledIconShare (unsigned NumShared)
    else
       Ico_PutDivIcon ("TL_ICO_DISABLED",TL_Sha_ICON_SHARE,
 		      Txt_TIMELINE_Not_shared_by_anyone);
-  }
-
-/*****************************************************************************/
-/*********************** Form to share/unshare note **************************/
-/*****************************************************************************/
-
-static void TL_Sha_PutFormToShaUnsNote (long NotCod)
-  {
-   extern const char *Txt_TIMELINE_Shared;
-   extern const char *Txt_TIMELINE_Share;
-   struct TL_Form Form[2] =
-     {
-      [false] = // I have not shared ==> share
-        {
-         .Action      = TL_Frm_SHA_NOTE,
-         .ParamFormat = "NotCod=%ld",
-         .ParamCod    = NotCod,
-         .Icon        = TL_Sha_ICON_SHARE,
-         .Title       = Txt_TIMELINE_Share,
-        },
-      [true] = // I have shared ==> unshare
-	{
-	 .Action      = TL_Frm_UNS_NOTE,
-	 .ParamFormat = "NotCod=%ld",
-	 .ParamCod    = NotCod,
-	 .Icon        = TL_Sha_ICON_SHARED,
-	 .Title       = Txt_TIMELINE_Shared,
-	},
-     };
-
-   /***** Form and icon to share/unshare note *****/
-   TL_Frm_FormFavSha (&Form[TL_DB_CheckIfNoteIsSharedByUsr (NotCod,
-                                                            Gbl.Usrs.Me.UsrDat.UsrCod)]);
-  }
-
-/*****************************************************************************/
-/******************* Show users who have shared this note ********************/
-/*****************************************************************************/
-
-static void TL_Sha_ShowUsrsWhoHaveSharedNote (const struct TL_Not_Note *Not,
-					      TL_Usr_HowManyUsrs_t HowManyUsrs)
-  {
-   MYSQL_RES *mysql_res;
-   unsigned NumFirstUsrs;
-
-   /***** Get users who have shared this note *****/
-   if (Not->NumShared)
-      NumFirstUsrs =
-      TL_DB_GetListUsrsHaveShared (Not->NotCod,Not->UsrCod,
-                                   HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
-				                                         TL_Usr_MAX_USRS_SHOWN,
-                                   &mysql_res);
-   else
-      NumFirstUsrs = 0;
-
-   /***** Show users *****/
-   /* Number of users */
-   HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
-      TL_Usr_ShowNumSharersOrFavers (Not->NumShared);
-   HTM_DIV_End ();
-
-   /* List users one by one */
-   HTM_DIV_Begin ("class=\"TL_USRS\"");
-      TL_Usr_ShowSharersOrFavers (&mysql_res,Not->NumShared,NumFirstUsrs);
-      if (NumFirstUsrs < Not->NumShared)
-	 /* Clickable ellipsis to show all users */
-	 TL_Frm_PutFormToSeeAllFaversSharers (TL_Frm_ALL_SHA_NOTE,
-					      "NotCod=%ld",Not->NotCod,
-					      HowManyUsrs);
-   HTM_DIV_End ();
-
-   /***** Free structure that stores the query result *****/
-   if (Not->NumShared)
-      DB_FreeMySQLResult (&mysql_res);
   }

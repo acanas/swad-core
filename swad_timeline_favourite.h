@@ -34,12 +34,8 @@
 /************************ Public constants and types *************************/
 /*****************************************************************************/
 
-#define TL_Fav_NUM_WHAT_TO_FAV 2
-typedef enum
-  {
-   TL_Fav_NOTE = 0,
-   TL_Fav_COMM = 1,
-  } TL_Fav_WhatToFav_t;
+#define TL_Fav_ICON_FAV		"heart.svg"
+#define TL_Fav_ICON_FAVED	"heart-red.svg"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -59,8 +55,8 @@ void TL_Fav_FavCommGbl (void);
 void TL_Fav_UnfCommUsr (void);
 void TL_Fav_UnfCommGbl (void);
 
-void TL_Fav_PutIconToFavUnf (TL_Fav_WhatToFav_t WhatToFav,
-                             long Cod,long UsrCod,unsigned NumFavs,
+void TL_Fav_PutIconToFavUnf (TL_Usr_FavSha_t FavSha,
+                             long Cod,long UsrCod,unsigned NumUsrs,
                              TL_Usr_HowManyUsrs_t HowManyUsrs);
 
 #endif

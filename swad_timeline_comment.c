@@ -644,7 +644,8 @@ static void TL_Com_WriteButtons (const struct TL_Timeline *Timeline,
       /***** Foot column 1: fav zone *****/
       HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"TL_FAV_COM TL_FAV_WIDTH\"",
 		     Gbl.UniqueNameEncrypted,NumDiv);
-	 TL_Fav_PutIconToFavUnf (TL_Fav_COMM,Com->PubCod,Com->UsrCod,Com->NumFavs,
+	 TL_Fav_PutIconToFavUnf (TL_Usr_FAV_UNF_COMM,
+	                         Com->PubCod,Com->UsrCod,Com->NumFavs,
 				 TL_Usr_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
@@ -1077,8 +1078,8 @@ static void TL_Com_GetDataOfCommFromRow (MYSQL_ROW row,
    Med_GetMediaDataByCod (&Com->Content.Media);
 
    /***** Get number of times this comment has been favourited *****/
-   Com->NumFavs = TL_DB_GetNumTimesHasBeenFav (TL_Fav_COMM,
-                                               Com->PubCod,Com->UsrCod);
+   Com->NumFavs = TL_DB_GetNumFavers (TL_Usr_FAV_UNF_COMM,
+                                      Com->PubCod,Com->UsrCod);
   }
 
 /*****************************************************************************/

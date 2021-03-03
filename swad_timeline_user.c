@@ -35,6 +35,7 @@
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
 #include "swad_timeline_favourite.h"
+#include "swad_timeline_form.h"
 #include "swad_timeline_user.h"
 
 /*****************************************************************************/
@@ -67,20 +68,20 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
   {
    /***** Remove favs for comments *****/
    /* Remove all favs made by this user to any comment */
-   TL_DB_RemoveAllFavsMadeByUsr (TL_Fav_COMM,UsrCod);
+   TL_DB_RemoveAllFavsMadeByUsr (TL_Usr_FAV_UNF_COMM,UsrCod);
 
    /* Remove all favs to comments of this user */
-   TL_DB_RemoveAllFavsToPubsBy (TL_Fav_COMM,UsrCod);
+   TL_DB_RemoveAllFavsToPubsBy (TL_Usr_FAV_UNF_COMM,UsrCod);
 
    /* Remove all favs to all comments in all notes authored by this user */
    TL_DB_RemoveAllFavsToAllCommsInAllNotesBy (UsrCod);
 
    /***** Remove favs for notes *****/
    /* Remove all favs made by this user to any note */
-   TL_DB_RemoveAllFavsMadeByUsr (TL_Fav_NOTE,UsrCod);
+   TL_DB_RemoveAllFavsMadeByUsr (TL_Usr_FAV_UNF_NOTE,UsrCod);
 
    /* Remove all favs to notes of this user */
-   TL_DB_RemoveAllFavsToPubsBy (TL_Fav_NOTE,UsrCod);
+   TL_DB_RemoveAllFavsToPubsBy (TL_Usr_FAV_UNF_NOTE,UsrCod);
 
    /***** Remove comments *****/
    /* Remove all comments in all the notes of this user */
@@ -108,6 +109,60 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
   }
 
 /*****************************************************************************/
+/************** Show users who have faved/shared a note/comment **************/
+/*****************************************************************************/
+
+void TL_Usr_GetAndShowSharersOrFavers (TL_Usr_FavSha_t FavSha,
+                                       long Cod,long UsrCod,unsigned NumUsrs,
+				       TL_Usr_HowManyUsrs_t HowManyUsrs)
+  {
+   static const TL_Frm_Action_t Action[TL_Usr_NUM_FAV_SHA] =
+     {
+      [TL_Usr_FAV_UNF_NOTE] = TL_Frm_ALL_FAV_NOTE,
+      [TL_Usr_FAV_UNF_COMM] = TL_Frm_ALL_FAV_COMM,
+      [TL_Usr_SHA_UNS_NOTE] = TL_Frm_ALL_SHA_NOTE,
+     };
+   static const char *ParamFormat[TL_Usr_NUM_FAV_SHA] =
+     {
+      [TL_Usr_FAV_UNF_NOTE] = "NotCod=%ld",
+      [TL_Usr_FAV_UNF_COMM] = "PubCod=%ld",
+      [TL_Usr_SHA_UNS_NOTE] = "NotCod=%ld",
+     };
+   MYSQL_RES *mysql_res;
+   unsigned NumFirstUsrs;
+
+   /***** Get users who have faved/shared *****/
+   if (NumUsrs)
+      NumFirstUsrs =
+      TL_Usr_GetListFaversOrSharers (FavSha,Cod,UsrCod,
+                                     HowManyUsrs == TL_Usr_SHOW_FEW_USRS ? TL_Usr_DEF_USRS_SHOWN :
+				                                           TL_Usr_MAX_USRS_SHOWN,
+                                     &mysql_res);
+   else
+      NumFirstUsrs = 0;
+
+   /***** Show users *****/
+   /* Number of users */
+   HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
+      TL_Usr_ShowNumSharersOrFavers (NumUsrs);
+   HTM_DIV_End ();
+
+   /* List users one by one */
+   HTM_DIV_Begin ("class=\"TL_USRS\"");
+      TL_Usr_ListSharersOrFavers (&mysql_res,NumUsrs,NumFirstUsrs);
+      if (NumFirstUsrs < NumUsrs)		// Not all are shown
+	 /* Clickable ellipsis to show all users */
+	 TL_Frm_PutFormToSeeAllFaversSharers (Action[FavSha],
+					      ParamFormat[FavSha],Cod,
+					      HowManyUsrs);
+   HTM_DIV_End ();
+
+   /***** Free structure that stores the query result *****/
+   if (NumUsrs)
+      DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
 /************************ Show sharers or favouriters ************************/
 /*****************************************************************************/
 
@@ -118,7 +173,7 @@ void TL_Usr_ShowNumSharersOrFavers (unsigned NumUsrs)
    HTM_TxtF ("&nbsp;%u",NumUsrs);
   }
 
-void TL_Usr_ShowSharersOrFavers (MYSQL_RES **mysql_res,
+void TL_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
 			         unsigned NumUsrs,unsigned NumFirstUsrs)
   {
    MYSQL_ROW row;
@@ -187,4 +242,46 @@ bool TL_Usr_CheckICanFavSha (long Cod,long UsrCod)
      }
 
    return true;
+  }
+
+/*****************************************************************************/
+/************* Check if a user has faved/shared a note/comment ***************/
+/*****************************************************************************/
+
+bool TL_Usr_CheckIfFavedSharedByUsr (TL_Usr_FavSha_t FavSha,long Cod,long UsrCod)
+  {
+   switch (FavSha)
+     {
+      case TL_Usr_FAV_UNF_NOTE:
+      case TL_Usr_FAV_UNF_COMM:
+	 return TL_DB_CheckIfFavedByUsr (FavSha,Cod,UsrCod);
+      case TL_Usr_SHA_UNS_NOTE:
+	 return TL_DB_CheckIfSharedByUsr (Cod,UsrCod);
+      default:
+         Lay_ShowErrorAndExit ("Wrong fav/share action.");
+     }
+
+   return false;	// Not reached
+  }
+
+/*****************************************************************************/
+/******* Get list of users who have marked a note/comment as favourite *******/
+/*****************************************************************************/
+
+unsigned TL_Usr_GetListFaversOrSharers (TL_Usr_FavSha_t FavSha,
+                                        long Cod,long UsrCod,unsigned MaxUsrs,
+                                        MYSQL_RES **mysql_res)
+  {
+   switch (FavSha)
+     {
+      case TL_Usr_FAV_UNF_NOTE:
+      case TL_Usr_FAV_UNF_COMM:
+	 return TL_DB_GetFavers (FavSha,Cod,UsrCod,MaxUsrs,mysql_res);
+      case TL_Usr_SHA_UNS_NOTE:
+	 return TL_DB_GetSharers (Cod,UsrCod,MaxUsrs,mysql_res);
+      default:
+         Lay_ShowErrorAndExit ("Wrong fav/share action.");
+     }
+
+   return 0;	// Not reached
   }

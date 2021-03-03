@@ -77,6 +77,8 @@ struct TL_Form
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void TL_Frm_PutFormToFavUnfShaUns (TL_Usr_FavSha_t FavSha,long Cod);
+
 void TL_Frm_BeginForm (const struct TL_Timeline *Timeline,TL_Frm_Action_t Action);
 void TL_Frm_EndForm (void);
 
@@ -86,8 +88,8 @@ void TL_Frm_PutFormToSeeAllFaversSharers (TL_Frm_Action_t Action,
 void TL_Frm_FormFavSha (const struct TL_Form *Form);
 
 void TL_Frm_FormToShowHiddenComms (long NotCod,
-				      char IdComments[Frm_MAX_BYTES_ID + 1],
-				      unsigned NumInitialComments);
+				   char IdComms[Frm_MAX_BYTES_ID + 1],
+				   unsigned NumInitialComms);
 
 void TL_Frm_BeginAlertRemove (const char *QuestionTxt);
 void TL_Frm_EndAlertRemove (struct TL_Timeline *Timeline,TL_Frm_Action_t Action,
