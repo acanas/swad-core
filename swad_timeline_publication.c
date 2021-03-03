@@ -58,6 +58,9 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void TL_Pub_InitializeRangeOfPubs (TL_WhatToGet_t WhatToGet,
+                                          struct TL_Pub_RangePubsToGet *RangePubsToGet);
+
 static unsigned TL_Pub_GetMaxPubsToGet (const struct TL_Timeline *Timeline);
 
 static void TL_Pub_UpdateFirstLastPubCodesIntoSession (const struct TL_Timeline *Timeline);
@@ -98,46 +101,9 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
    TL_DB_CreateSubQueryAlreadyExists (Timeline,&SubQueries);
 
    /***** Get the publications in timeline *****/
-   /* Initialize range of pubs:
+   /* Initialize range of pubs */
+   TL_Pub_InitializeRangeOfPubs (Timeline->WhatToGet,&RangePubsToGet);
 
-              tl_pubs
-               _____
-              |_____|11
-              |_____|10
-             _|_____| 9 <-- RangePubsToGet.Top
-     Get    / |_____| 8
-    pubs   |  |_____| 7
-    from  <   |_____| 6
-    this   |  |_____| 5
-   range    \_|_____| 4
-              |_____| 3 <-- RangePubsToGet.Bottom
-              |_____| 2
-              |_____| 1
-                      0
-   */
-   switch (Timeline->WhatToGet)
-     {
-      case TL_GET_ONLY_NEW_PUBS:	// Get the publications (without limit)
-					// newer than LastPubCod
-	 /* This query is made via AJAX automatically from time to time */
-         RangePubsToGet.Top    = 0;	// +Infinite
-	 RangePubsToGet.Bottom = TL_DB_GetPubCodFromSession ("LastPubCod");
-	 break;
-      case TL_GET_ONLY_OLD_PUBS:	// Get some limited publications
-					// older than FirstPubCod
-	 /* This query is made via AJAX
-	    when I click in link to get old publications */
-	 RangePubsToGet.Top    = TL_DB_GetPubCodFromSession ("FirstPubCod");
-         RangePubsToGet.Bottom = 0;	// -Infinite
-	 break;
-      case TL_GET_RECENT_TIMELINE:	// Get some limited recent publications
-      default:
-	 /* This is the first query to get initial timeline shown
-	    ==> no notes yet in current timeline table */
-         RangePubsToGet.Top    = 0;	// +Infinite
-         RangePubsToGet.Bottom = 0;	// -Infinite
-	 break;
-     }
    /* Create subquery with bottom range of publications to get from tl_pubs.
       Bottom pub. code remains unchanged in all iterations of the next loop. */
    TL_DB_CreateSubQueryRangeBottom (&RangePubsToGet,&SubQueries);
@@ -224,6 +190,55 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
    if (Timeline->UsrOrGbl == TL_Usr_TIMELINE_GBL &&	// Show the global timeline
        Timeline->Who == Usr_WHO_FOLLOWED)		// Show the timeline of the users I follow
       Fol_DropTmpTableMeAndUsrsIFollow ();
+  }
+
+/*****************************************************************************/
+/*************** Get list of pubications to show in timeline *****************/
+/*****************************************************************************/
+
+static void TL_Pub_InitializeRangeOfPubs (TL_WhatToGet_t WhatToGet,
+                                          struct TL_Pub_RangePubsToGet *RangePubsToGet)
+  {
+   /* Initialize range of pubs:
+
+              tl_pubs
+               _____
+              |_____|11
+              |_____|10
+             _|_____| 9 <-- RangePubsToGet.Top
+     Get    / |_____| 8
+    pubs   |  |_____| 7
+    from  <   |_____| 6
+    this   |  |_____| 5
+   range    \_|_____| 4
+              |_____| 3 <-- RangePubsToGet.Bottom
+              |_____| 2
+              |_____| 1
+                      0
+   */
+   /* Default range */
+   RangePubsToGet->Top    = 0;	// +Infinite
+   RangePubsToGet->Bottom = 0;	// -Infinite
+
+   switch (WhatToGet)
+     {
+      case TL_GET_ONLY_NEW_PUBS:	// Get the publications (without limit)
+					// newer than LastPubCod
+	 /* This query is made via AJAX automatically from time to time */
+	 RangePubsToGet->Bottom = TL_DB_GetPubCodFromSession ("LastPubCod");
+	 break;
+      case TL_GET_ONLY_OLD_PUBS:	// Get some limited publications
+					// older than FirstPubCod
+	 /* This query is made via AJAX
+	    when I click in link to get old publications */
+	 RangePubsToGet->Top    = TL_DB_GetPubCodFromSession ("FirstPubCod");
+	 break;
+      case TL_GET_RECENT_TIMELINE:	// Get some limited recent publications
+      default:
+	 /* This is the first query to get initial timeline shown
+	    ==> no notes yet in current timeline table */
+	 break;
+     }
   }
 
 /*****************************************************************************/
