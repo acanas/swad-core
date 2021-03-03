@@ -81,6 +81,9 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
    unsigned NumPub;
    struct TL_Pub_Publication *Pub;
 
+   /***** Initialize range of publications *****/
+   TL_Pub_InitializeRangeOfPubs (Timeline->WhatToGet,&RangePubsToGet);
+
    /***** Clear timeline for this session in database *****/
    if (Timeline->WhatToGet == TL_GET_RECENT_TIMELINE)
       TL_DB_ClearTimelineNotesOfSessionFromDB ();
@@ -100,30 +103,12 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
    /* Create subquery to get only notes not present in timeline */
    TL_DB_CreateSubQueryAlreadyExists (Timeline,&SubQueries);
 
-   /***** Get the publications in timeline *****/
-   /* Initialize range of pubs */
-   TL_Pub_InitializeRangeOfPubs (Timeline->WhatToGet,&RangePubsToGet);
-
    /* Create subquery with bottom range of publications to get from tl_pubs.
-      Bottom pub. code remains unchanged in all iterations of the next loop. */
-   TL_DB_CreateSubQueryRangeBottom (&RangePubsToGet,&SubQueries);
+      Bottom pub. code remains unchanged in all iterations of the loop. */
+   TL_DB_CreateSubQueryRangeBottom (RangePubsToGet.Bottom,&SubQueries);
 
-   /* With the current approach, we select one by one
-      the publications and notes in a loop. In each iteration,
-      we get the most recent publication (original, shared or commment)
-      of every set of publications corresponding to the same note,
-      checking that the note is not already retrieved.
-      After getting a publication, its note code is stored
-      in order to not get it again.
-
-      As an alternative, we tried to get the maximum PubCod,
-      i.e more recent publication (original, shared or commment),
-      of every set of publications corresponding to the same note:
-      "SELECT MAX(PubCod) AS NewestPubCod FROM tl_pubs ...
-      " GROUP BY NotCod ORDER BY NewestPubCod DESC LIMIT ..."
-      but this query is slow (several seconds) with a big table.
-
-   Chained list of publications:
+   /***** Initialize list of publications *****/
+   /* Chained list of publications:
 
    Timeline->Pubs.Top   Pub #0
          ______         ______         Pub #1
@@ -142,13 +127,29 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
    Timeline->Pubs.Top    =
    Timeline->Pubs.Bottom = NULL;
 
+   /***** Get the publications in timeline *****/
+   /* With the current approach, we select one by one
+      the publications and notes in a loop. In each iteration,
+      we get the most recent publication (original, shared or commment)
+      of every set of publications corresponding to the same note,
+      checking that the note is not already retrieved.
+      After getting a publication, its note code is stored
+      in order to not get it again.
+
+      As an alternative, we tried to get the maximum PubCod,
+      i.e more recent publication (original, shared or commment),
+      of every set of publications corresponding to the same note:
+      "SELECT MAX(PubCod) AS NewestPubCod FROM tl_pubs ...
+      " GROUP BY NotCod ORDER BY NewestPubCod DESC LIMIT ..."
+      but this query is slow (several seconds) with a big table.
+   */
    for (NumPub = 0;
 	NumPub < MaxPubsToGet;
 	NumPub++)
      {
       /* Create subquery with top range of publications to get from tl_pubs
          In each iteration of this loop, top publication code is changed to a lower value */
-      TL_DB_CreateSubQueryRangeTop (&RangePubsToGet,&SubQueries);
+      TL_DB_CreateSubQueryRangeTop (RangePubsToGet.Top,&SubQueries);
 
       /* Select the most recent publication from tl_pubs */
       Pub = TL_Pub_SelectTheMostRecentPub (&SubQueries);

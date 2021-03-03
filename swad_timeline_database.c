@@ -772,22 +772,18 @@ void TL_DB_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
 /***** Create subqueries with range of publications to get from tl_pubs ******/
 /*****************************************************************************/
 
-void TL_DB_CreateSubQueryRangeBottom (const struct TL_Pub_RangePubsToGet *RangePubsToGet,
-                                      struct TL_Pub_SubQueries *SubQueries)
+void TL_DB_CreateSubQueryRangeBottom (long Bottom,struct TL_Pub_SubQueries *SubQueries)
   {
-   if (RangePubsToGet->Bottom > 0)
-      sprintf (SubQueries->RangeBottom,"tl_pubs.PubCod>%ld AND ",
-	       RangePubsToGet->Bottom);
+   if (Bottom > 0)
+      sprintf (SubQueries->RangeBottom,"tl_pubs.PubCod>%ld AND ",Bottom);
    else
       SubQueries->RangeBottom[0] = '\0';
   }
 
-void TL_DB_CreateSubQueryRangeTop (const struct TL_Pub_RangePubsToGet *RangePubsToGet,
-                                   struct TL_Pub_SubQueries *SubQueries)
+void TL_DB_CreateSubQueryRangeTop (long Top,struct TL_Pub_SubQueries *SubQueries)
   {
-   if (RangePubsToGet->Top > 0)
-      sprintf (SubQueries->RangeTop,"tl_pubs.PubCod<%ld AND ",
-	       RangePubsToGet->Top);
+   if (Top > 0)
+      sprintf (SubQueries->RangeTop,"tl_pubs.PubCod<%ld AND ",Top);
    else
       SubQueries->RangeTop[0] = '\0';
   }

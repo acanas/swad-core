@@ -105,10 +105,8 @@ void TL_DB_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
                                      struct TL_Pub_SubQueries *SubQueries);
 void TL_DB_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
                                         struct TL_Pub_SubQueries *SubQueries);
-void TL_DB_CreateSubQueryRangeBottom (const struct TL_Pub_RangePubsToGet *RangePubsToGet,
-                                      struct TL_Pub_SubQueries *SubQueries);
-void TL_DB_CreateSubQueryRangeTop (const struct TL_Pub_RangePubsToGet *RangePubsToGet,
-                                   struct TL_Pub_SubQueries *SubQueries);
+void TL_DB_CreateSubQueryRangeBottom (long Bottom,struct TL_Pub_SubQueries *SubQueries);
+void TL_DB_CreateSubQueryRangeTop (long Top,struct TL_Pub_SubQueries *SubQueries);
 unsigned TL_DB_SelectTheMostRecentPub (const struct TL_Pub_SubQueries *SubQueries,
                                        MYSQL_RES **mysql_res);
 unsigned TL_DB_GetDataOfPubByCod (long PubCod,MYSQL_RES **mysql_res);
