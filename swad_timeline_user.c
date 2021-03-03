@@ -36,6 +36,7 @@
 #include "swad_timeline_database.h"
 #include "swad_timeline_favourite.h"
 #include "swad_timeline_form.h"
+#include "swad_timeline_share.h"
 #include "swad_timeline_user.h"
 
 /*****************************************************************************/
@@ -284,4 +285,44 @@ unsigned TL_Usr_GetListFaversOrSharers (TL_Usr_FavSha_t FavSha,
      }
 
    return 0;	// Not reached
+  }
+
+/*****************************************************************************/
+/****************** Put disabled icon to mark as favourite *******************/
+/*****************************************************************************/
+
+void TL_Usr_PutDisabledIconFavSha (TL_Usr_FavSha_t FavSha,unsigned NumUsrs)
+  {
+   extern const char *Txt_TIMELINE_Favourited_by_X_USERS;
+   extern const char *Txt_TIMELINE_Not_favourited_by_anyone;
+   extern const char *Txt_TIMELINE_Shared_by_X_USERS;
+   extern const char *Txt_TIMELINE_Not_shared_by_anyone;
+   static const char *Icon[TL_Usr_NUM_FAV_SHA] =
+     {
+      [TL_Usr_FAV_UNF_NOTE] = TL_Fav_ICON_FAV,
+      [TL_Usr_FAV_UNF_COMM] = TL_Fav_ICON_FAV,
+      [TL_Usr_SHA_UNS_NOTE] = TL_Sha_ICON_SHARE,
+     };
+   const char *TitleWithUsrs[TL_Usr_NUM_FAV_SHA] =
+     {
+      [TL_Usr_FAV_UNF_NOTE] = Txt_TIMELINE_Favourited_by_X_USERS,
+      [TL_Usr_FAV_UNF_COMM] = Txt_TIMELINE_Favourited_by_X_USERS,
+      [TL_Usr_SHA_UNS_NOTE] = Txt_TIMELINE_Shared_by_X_USERS,
+     };
+   const char *TitleWithoutUsrs[TL_Usr_NUM_FAV_SHA] =
+     {
+      [TL_Usr_FAV_UNF_NOTE] = Txt_TIMELINE_Not_favourited_by_anyone,
+      [TL_Usr_FAV_UNF_COMM] = Txt_TIMELINE_Not_favourited_by_anyone,
+      [TL_Usr_SHA_UNS_NOTE] = Txt_TIMELINE_Not_shared_by_anyone,
+     };
+
+   /***** Disabled icon to fav/share *****/
+   if (NumUsrs)
+     {
+      Ico_PutDivIcon ("TL_ICO_DISABLED",Icon[FavSha],
+		      Str_BuildStringLong (TitleWithUsrs[FavSha],(long) NumUsrs));
+      Str_FreeString ();
+     }
+   else
+      Ico_PutDivIcon ("TL_ICO_DISABLED",Icon[FavSha],TitleWithoutUsrs[FavSha]);
   }

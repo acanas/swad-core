@@ -81,4 +81,6 @@ unsigned TL_Usr_GetListFaversOrSharers (TL_Usr_FavSha_t FavSha,
                                         long Cod,long UsrCod,unsigned MaxUsrs,
                                         MYSQL_RES **mysql_res);
 
+void TL_Usr_PutDisabledIconFavSha (TL_Usr_FavSha_t FavSha,unsigned NumUsrs);
+
 #endif

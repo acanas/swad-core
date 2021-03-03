@@ -62,8 +62,6 @@ static void TL_Fav_UnfNote (struct TL_Not_Note *Not);
 static void TL_Fav_FavComm (struct TL_Com_Comment *Com);
 static void TL_Fav_UnfComm (struct TL_Com_Comment *Com);
 
-static void TL_Fav_PutDisabledIconFav (unsigned NumUsrs);
-
 /*****************************************************************************/
 /********************** Mark/unmark a note as favourite **********************/
 /*****************************************************************************/
@@ -362,7 +360,7 @@ void TL_Fav_PutIconToFavUnf (TL_Usr_FavSha_t FavSha,
 
       /* Icon to fav/unfav */
       if (Usr_ItsMe (UsrCod))	// I am the author ==> I can not fav/unfav
-	 TL_Fav_PutDisabledIconFav (NumUsrs);
+         TL_Usr_PutDisabledIconFavSha (FavSha,NumUsrs);
       else			// I am not the author
 	 TL_Frm_PutFormToFavUnfShaUns (FavSha,Cod);
 
@@ -371,26 +369,4 @@ void TL_Fav_PutIconToFavUnf (TL_Usr_FavSha_t FavSha,
 
    /***** Show who have faved this note/comment *****/
    TL_Usr_GetAndShowSharersOrFavers (FavSha,Cod,UsrCod,NumUsrs,HowManyUsrs);
-  }
-
-/*****************************************************************************/
-/****************** Put disabled icon to mark as favourite *******************/
-/*****************************************************************************/
-
-static void TL_Fav_PutDisabledIconFav (unsigned NumUsrs)
-  {
-   extern const char *Txt_TIMELINE_Favourited_by_X_USERS;
-   extern const char *Txt_TIMELINE_Not_favourited_by_anyone;
-
-   /***** Disabled icon to mark as favourite *****/
-   if (NumUsrs)
-     {
-      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_Fav_ICON_FAV,
-		      Str_BuildStringLong (Txt_TIMELINE_Favourited_by_X_USERS,
-					   (long) NumUsrs));
-      Str_FreeString ();
-     }
-   else
-      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_Fav_ICON_FAV,
-		      Txt_TIMELINE_Not_favourited_by_anyone);
   }

@@ -59,8 +59,6 @@ extern struct Globals Gbl;
 static void TL_Sha_ShaNote (struct TL_Not_Note *Not);
 static void TL_Sha_UnsNote (struct TL_Not_Note *Not);
 
-static void TL_Sha_PutDisabledIconShare (unsigned NumShared);
-
 /*****************************************************************************/
 /******************************** Share a note *******************************/
 /*****************************************************************************/
@@ -200,7 +198,7 @@ void TL_Sha_PutIconToShaUnsNote (const struct TL_Not_Note *Not,
       if (Not->Unavailable ||		// Unavailable notes can not be shared
 	  Usr_ItsMe (Not->UsrCod))	// I am the author
 	 /* Put disabled icon */
-	 TL_Sha_PutDisabledIconShare (Not->NumShared);
+         TL_Usr_PutDisabledIconFavSha (TL_Usr_SHA_UNS_NOTE,Not->NumShared);
       else				// Available and I am not the author
 	 /* Put icon to share/unshare */
          TL_Frm_PutFormToFavUnfShaUns (TL_Usr_SHA_UNS_NOTE,Not->NotCod);
@@ -212,26 +210,4 @@ void TL_Sha_PutIconToShaUnsNote (const struct TL_Not_Note *Not,
    /***** Show who have shared this note *****/
    TL_Usr_GetAndShowSharersOrFavers (TL_Usr_SHA_UNS_NOTE,
                                      Not->NotCod,Not->UsrCod,Not->NumShared,HowManyUsrs);
-  }
-
-/*****************************************************************************/
-/*********************** Put disabled icon to share **************************/
-/*****************************************************************************/
-
-static void TL_Sha_PutDisabledIconShare (unsigned NumShared)
-  {
-   extern const char *Txt_TIMELINE_Shared_by_X_USERS;
-   extern const char *Txt_TIMELINE_Not_shared_by_anyone;
-
-   /***** Disabled icon to share *****/
-   if (NumShared)
-     {
-      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_Sha_ICON_SHARE,
-		      Str_BuildStringLong (Txt_TIMELINE_Shared_by_X_USERS,
-					   (long) NumShared));
-      Str_FreeString ();
-     }
-   else
-      Ico_PutDivIcon ("TL_ICO_DISABLED",TL_Sha_ICON_SHARE,
-		      Txt_TIMELINE_Not_shared_by_anyone);
   }
