@@ -69,21 +69,11 @@ typedef enum
 
 void TL_Usr_RemoveUsrContent (long UsrCod);
 
-void TL_Usr_GetAndShowSharersOrFavers (TL_Usr_FavSha_t FavSha,
-                                       long Cod,long UsrCod,unsigned NumUsrs,
-			               TL_Usr_HowManyUsrs_t HowManyUsrs);
-void TL_Usr_ShowNumSharersOrFavers (unsigned NumUsrs);
-void TL_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
-			         unsigned NumUsrs,unsigned NumFirstUsrs);
 bool TL_Usr_CheckICanFavSha (long Cod,long UsrCod);
 bool TL_Usr_CheckIfFavedSharedByUsr (TL_Usr_FavSha_t FavSha,long Cod,long UsrCod);
-unsigned TL_Usr_GetListFaversOrSharers (TL_Usr_FavSha_t FavSha,
-                                        long Cod,long UsrCod,unsigned MaxUsrs,
-                                        MYSQL_RES **mysql_res);
 
 void TL_Usr_PutIconFavSha (TL_Usr_FavSha_t FavSha,
                            long Cod,long UsrCod,unsigned NumUsrs,
                            TL_Usr_HowManyUsrs_t HowManyUsrs);
-void TL_Usr_PutDisabledIconFavSha (TL_Usr_FavSha_t FavSha,unsigned NumUsrs);
 
 #endif

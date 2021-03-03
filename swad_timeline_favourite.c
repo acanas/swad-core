@@ -63,7 +63,7 @@ static void TL_Fav_FavComm (struct TL_Com_Comment *Com);
 static void TL_Fav_UnfComm (struct TL_Com_Comment *Com);
 
 /*****************************************************************************/
-/********************** Mark/unmark a note as favourite **********************/
+/************************** Show all favers of a note ************************/
 /*****************************************************************************/
 
 void TL_Fav_ShowAllFaversNoteUsr (void)
@@ -88,6 +88,10 @@ void TL_Fav_ShowAllFaversNoteGbl (void)
                          Not.NotCod,Not.UsrCod,Not.NumFavs,
                          TL_Usr_SHOW_ALL_USRS);
   }
+
+/*****************************************************************************/
+/********************** Mark/unmark a note as favourite **********************/
+/*****************************************************************************/
 
 void TL_Fav_FavNoteUsr (void)
   {
@@ -161,8 +165,7 @@ static void TL_Fav_FavNote (struct TL_Not_Note *Not)
 	  for the author of the post *****/
    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
    if (OriginalPubCod > 0)
-      TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,
-				  Ntf_EVENT_TIMELINE_FAV);
+      TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TL_FAV);
   }
 
 static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
@@ -192,11 +195,11 @@ static void TL_Fav_UnfNote (struct TL_Not_Note *Not)
    /***** Mark possible notifications on this note as removed *****/
    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
    if (OriginalPubCod > 0)
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,OriginalPubCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV,OriginalPubCod);
   }
 
 /*****************************************************************************/
-/********************* Mark/unmark a comment as favourite ********************/
+/************************** Show all favers of a note ************************/
 /*****************************************************************************/
 
 void TL_Fav_ShowAllFaversComUsr (void)
@@ -223,6 +226,10 @@ void TL_Fav_ShowAllFaversComGbl (void)
                          Com.PubCod,Com.UsrCod,Com.NumFavs,
                          TL_Usr_SHOW_ALL_USRS);
   }
+
+/*****************************************************************************/
+/********************* Mark/unmark a comment as favourite ********************/
+/*****************************************************************************/
 
 void TL_Fav_FavCommUsr (void)
   {
@@ -301,8 +308,7 @@ static void TL_Fav_FavComm (struct TL_Com_Comment *Com)
 
    /***** Create notification about favourite post
 	  for the author of the post *****/
-   TL_Ntf_CreateNotifToAuthor (Com->UsrCod,Com->PubCod,
-			       Ntf_EVENT_TIMELINE_FAV);
+   TL_Ntf_CreateNotifToAuthor (Com->UsrCod,Com->PubCod,Ntf_EVENT_TL_FAV);
 
    /***** Free image *****/
    Med_MediaDestructor (&Com->Content.Media);
@@ -340,7 +346,7 @@ static void TL_Fav_UnfComm (struct TL_Com_Comment *Com)
 				      Com->PubCod,Com->UsrCod);
 
    /***** Mark possible notifications on this comment as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,Com->PubCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV,Com->PubCod);
 
    /***** Free image *****/
    Med_MediaDestructor (&Com->Content.Media);

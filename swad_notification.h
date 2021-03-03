@@ -55,10 +55,10 @@ typedef enum				// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
   {
    Ntf_EVENT_UNKNOWN		=  0,
    /* Start tab */
-   Ntf_EVENT_TIMELINE_COMMENT	= 10,	// New comment to one of my social publishings (notes or comments)
-   Ntf_EVENT_TIMELINE_FAV	= 11,	// New fav of one of my social publishings (notes or comments)
-   Ntf_EVENT_TIMELINE_SHARE	= 12,	// New sharing of one of my social notes
-   Ntf_EVENT_TIMELINE_MENTION	= 13,	// New mention
+   Ntf_EVENT_TL_COMMENT		= 10,	// New comment to one of my social publishings (notes or comments)
+   Ntf_EVENT_TL_FAV		= 11,	// New fav of one of my social publishings (notes or comments)
+   Ntf_EVENT_TL_SHARE		= 12,	// New sharing of one of my social notes
+   Ntf_EVENT_TL_MENTION		= 13,	// New mention
    Ntf_EVENT_FOLLOWER		= 14,
    /* System tab */
    /* Country tab */

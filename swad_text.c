@@ -27898,7 +27898,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	"Novos pedidos de inscri&ccedil;&atilde;o"
 #endif
 	,
-	[Ntf_EVENT_TIMELINE_COMMENT] =
+	[Ntf_EVENT_TL_COMMENT] =
 #if   L==1	// ca
 	"Nous comentaris als meus missatges socials"
 #elif L==2	// de
@@ -27919,7 +27919,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	"Novos coment&aacute;rio &agrave;s minhos posts sociais"
 #endif
 	,
-	[Ntf_EVENT_TIMELINE_FAV] =
+	[Ntf_EVENT_TL_FAV] =
 #if   L==1	// ca
 	"Nous favorits als meus missatges socials"
 #elif L==2	// de
@@ -27940,7 +27940,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	"Novos favoritos &agrave;s minhos posts sociais"
 #endif
 	,
-	[Ntf_EVENT_TIMELINE_SHARE] =
+	[Ntf_EVENT_TL_SHARE] =
 #if   L==1	// ca
 	"Noves comparticions dels meus missatges socials"
 #elif L==2	// de
@@ -27961,7 +27961,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	"Novas partilhas de minhos posts sociais"
 #endif
 	,
-	[Ntf_EVENT_TIMELINE_MENTION] =
+	[Ntf_EVENT_TL_MENTION] =
 #if   L==1	// ca
 	"Noves mencions"
 #elif L==2	// de
@@ -28342,7 +28342,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	"Pedido de inscri&ccedil;&atilde;o"
 #endif
 	,
-	[Ntf_EVENT_TIMELINE_COMMENT] =
+	[Ntf_EVENT_TL_COMMENT] =
 #if   L==1	// ca
 	"Comentari a un missatge social"
 #elif L==2	// de
@@ -28363,7 +28363,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	"Coment&aacute;rio a um post sociais"
 #endif
 	,
-	[Ntf_EVENT_TIMELINE_FAV] =
+	[Ntf_EVENT_TL_FAV] =
 #if   L==1	// ca
 	"Missatge social marcat com favorit"
 #elif L==2	// de
@@ -28384,7 +28384,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	"Post sociais marcado como favorito"
 #endif
 	,
-	[Ntf_EVENT_TIMELINE_SHARE] =
+	[Ntf_EVENT_TL_SHARE] =
 #if   L==1	// ca
 	"Missatge social compartit"
 #elif L==2	// de
@@ -28405,7 +28405,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	"Post sociais compartido"
 #endif
 	,
-	[Ntf_EVENT_TIMELINE_MENTION] =
+	[Ntf_EVENT_TL_MENTION] =
 #if   L==1	// ca
 	"Menci&oacute;"
 #elif L==2	// de

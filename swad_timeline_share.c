@@ -60,7 +60,7 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not);
 static void TL_Sha_UnsNote (struct TL_Not_Note *Not);
 
 /*****************************************************************************/
-/******************************** Share a note *******************************/
+/****************************** Show all sharers *****************************/
 /*****************************************************************************/
 
 void TL_Sha_ShowAllSharersNoteUsr (void)
@@ -85,6 +85,10 @@ void TL_Sha_ShowAllSharersNoteGbl (void)
 	                 Not.NotCod,Not.UsrCod,Not.NumShared,
 	                 TL_Usr_SHOW_ALL_USRS);
   }
+
+/*****************************************************************************/
+/******************************** Share a note *******************************/
+/*****************************************************************************/
 
 void TL_Sha_ShaNoteUsr (void)
   {
@@ -139,8 +143,7 @@ static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
 	  for the author of the post *****/
    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
    if (OriginalPubCod > 0)
-      TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,
-				  Ntf_EVENT_TIMELINE_SHARE);
+      TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TL_SHARE);
   }
 
 /*****************************************************************************/
@@ -190,5 +193,5 @@ static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
    /***** Mark possible notifications on this note as removed *****/
    OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
    if (OriginalPubCod > 0)
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE,OriginalPubCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_SHARE,OriginalPubCod);
   }

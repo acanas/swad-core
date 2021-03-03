@@ -214,8 +214,8 @@ void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void TL_Ntf_MarkMyNotifAsSeen (void)
   {
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_COMMENT,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_FAV    ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_SHARE  ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_MENTION,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_TL_COMMENT,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_TL_FAV    ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_TL_SHARE  ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_TL_MENTION,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
   }

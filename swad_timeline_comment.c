@@ -775,7 +775,7 @@ static long TL_Com_ReceiveComm (void)
       TL_DB_InsertCommContent (Pub.PubCod,&Content);
 
       /***** Store notifications about the new comment *****/
-      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,Pub.PubCod);
+      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TL_COMMENT,Pub.PubCod);
 
       /***** Analyze content and store notifications about mentions *****/
       Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (Pub.PubCod,Content.Txt);
@@ -1003,9 +1003,9 @@ void TL_Com_RemoveCommMediaAndDBEntries (long PubCod)
    Med_RemoveMedia (TL_DB_GetMedCodFromComm (PubCod));
 
    /***** Mark possible notifications on this comment as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,PubCod);
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_COMMENT,PubCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV    ,PubCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_MENTION,PubCod);
 
    /***** Remove favs for this comment *****/
    TL_DB_RemoveCommFavs (PubCod);

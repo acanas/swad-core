@@ -749,11 +749,11 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
 		  Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
 		  /* Create notification for the mentioned user *****/
-		  CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << Ntf_EVENT_TIMELINE_MENTION));
+		  CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << Ntf_EVENT_TL_MENTION));
 		  if (CreateNotif)
 		    {
-		     NotifyByEmail = (UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_TIMELINE_MENTION));
-		     Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_TIMELINE_MENTION,&UsrDat,PubCod,
+		     NotifyByEmail = (UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_TL_MENTION));
+		     Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_TL_MENTION,&UsrDat,PubCod,
 						    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 										    0),
 						    Gbl.Hierarchy.Ins.InsCod,

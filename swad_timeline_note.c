@@ -126,10 +126,10 @@ void TL_Not_ShowHighlightedNote (struct TL_Timeline *Timeline,
      {
       [Ntf_EVENT_UNKNOWN          ] = TL_TOP_MESSAGE_NONE,
       /* Start tab */
-      [Ntf_EVENT_TIMELINE_COMMENT ] = TL_TOP_MESSAGE_COMMENTED,
-      [Ntf_EVENT_TIMELINE_FAV     ] = TL_TOP_MESSAGE_FAVED,
-      [Ntf_EVENT_TIMELINE_SHARE   ] = TL_TOP_MESSAGE_SHARED,
-      [Ntf_EVENT_TIMELINE_MENTION ] = TL_TOP_MESSAGE_MENTIONED,
+      [Ntf_EVENT_TL_COMMENT       ] = TL_TOP_MESSAGE_COMMENTED,
+      [Ntf_EVENT_TL_FAV           ] = TL_TOP_MESSAGE_FAVED,
+      [Ntf_EVENT_TL_SHARE         ] = TL_TOP_MESSAGE_SHARED,
+      [Ntf_EVENT_TL_MENTION       ] = TL_TOP_MESSAGE_MENTIONED,
       [Ntf_EVENT_FOLLOWER         ] = TL_TOP_MESSAGE_NONE,
       /* System tab */
       /* Country tab */
@@ -1302,9 +1302,9 @@ static void TL_Not_RemoveNoteMediaAndDBEntries (struct TL_Not_Note *Not)
    PubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
    if (PubCod > 0)
      {
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE  ,PubCod);
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV    ,PubCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_SHARE  ,PubCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_MENTION,PubCod);
      }
 
    /***** Remove favs for this note *****/

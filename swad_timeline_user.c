@@ -61,6 +61,19 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void TL_Usr_GetAndShowSharersOrFavers (TL_Usr_FavSha_t FavSha,
+                                              long Cod,long UsrCod,unsigned NumUsrs,
+				              TL_Usr_HowManyUsrs_t HowManyUsrs);
+static void TL_Usr_ShowNumSharersOrFavers (unsigned NumUsrs);
+static void TL_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
+			                unsigned NumUsrs,unsigned NumFirstUsrs);
+static unsigned TL_Usr_GetListFaversOrSharers (TL_Usr_FavSha_t FavSha,
+                                               long Cod,long UsrCod,unsigned MaxUsrs,
+                                               MYSQL_RES **mysql_res);
+
+static void TL_Usr_PutDisabledIconFavSha (TL_Usr_FavSha_t FavSha,
+                                          unsigned NumUsrs);
+
 /*****************************************************************************/
 /************* Remove all the content of a user from database ****************/
 /*****************************************************************************/
@@ -113,9 +126,9 @@ void TL_Usr_RemoveUsrContent (long UsrCod)
 /************** Show users who have faved/shared a note/comment **************/
 /*****************************************************************************/
 
-void TL_Usr_GetAndShowSharersOrFavers (TL_Usr_FavSha_t FavSha,
-                                       long Cod,long UsrCod,unsigned NumUsrs,
-				       TL_Usr_HowManyUsrs_t HowManyUsrs)
+static void TL_Usr_GetAndShowSharersOrFavers (TL_Usr_FavSha_t FavSha,
+                                              long Cod,long UsrCod,unsigned NumUsrs,
+				              TL_Usr_HowManyUsrs_t HowManyUsrs)
   {
    static const TL_Frm_Action_t Action[TL_Usr_NUM_FAV_SHA] =
      {
@@ -167,15 +180,15 @@ void TL_Usr_GetAndShowSharersOrFavers (TL_Usr_FavSha_t FavSha,
 /************************ Show sharers or favouriters ************************/
 /*****************************************************************************/
 
-void TL_Usr_ShowNumSharersOrFavers (unsigned NumUsrs)
+static void TL_Usr_ShowNumSharersOrFavers (unsigned NumUsrs)
   {
    /***** Show number of sharers or favers
           (users who have shared or marked this note as favourite) *****/
    HTM_TxtF ("&nbsp;%u",NumUsrs);
   }
 
-void TL_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
-			         unsigned NumUsrs,unsigned NumFirstUsrs)
+static void TL_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
+			                unsigned NumUsrs,unsigned NumFirstUsrs)
   {
    MYSQL_ROW row;
    unsigned NumUsr;
@@ -269,9 +282,9 @@ bool TL_Usr_CheckIfFavedSharedByUsr (TL_Usr_FavSha_t FavSha,long Cod,long UsrCod
 /******* Get list of users who have marked a note/comment as favourite *******/
 /*****************************************************************************/
 
-unsigned TL_Usr_GetListFaversOrSharers (TL_Usr_FavSha_t FavSha,
-                                        long Cod,long UsrCod,unsigned MaxUsrs,
-                                        MYSQL_RES **mysql_res)
+static unsigned TL_Usr_GetListFaversOrSharers (TL_Usr_FavSha_t FavSha,
+                                               long Cod,long UsrCod,unsigned MaxUsrs,
+                                               MYSQL_RES **mysql_res)
   {
    switch (FavSha)
      {
@@ -316,7 +329,8 @@ void TL_Usr_PutIconFavSha (TL_Usr_FavSha_t FavSha,
 /****************** Put disabled icon to mark as favourite *******************/
 /*****************************************************************************/
 
-void TL_Usr_PutDisabledIconFavSha (TL_Usr_FavSha_t FavSha,unsigned NumUsrs)
+static void TL_Usr_PutDisabledIconFavSha (TL_Usr_FavSha_t FavSha,
+                                          unsigned NumUsrs)
   {
    extern const char *Txt_TIMELINE_Favourited_by_X_USERS;
    extern const char *Txt_TIMELINE_Not_favourited_by_anyone;

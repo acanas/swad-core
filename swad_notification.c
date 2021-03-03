@@ -71,10 +71,10 @@ const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
    [Ntf_EVENT_UNKNOWN          ] = "unknown",
    /* Start tab */
-   [Ntf_EVENT_TIMELINE_COMMENT ] = "timelineComment",
-   [Ntf_EVENT_TIMELINE_FAV     ] = "timelineFav",
-   [Ntf_EVENT_TIMELINE_SHARE   ] = "timelineShare",
-   [Ntf_EVENT_TIMELINE_MENTION ] = "timelineMention",
+   [Ntf_EVENT_TL_COMMENT       ] = "timelineComment",
+   [Ntf_EVENT_TL_FAV           ] = "timelineFav",
+   [Ntf_EVENT_TL_SHARE         ] = "timelineShare",
+   [Ntf_EVENT_TL_MENTION       ] = "timelineMention",
    [Ntf_EVENT_FOLLOWER         ] = "follower",
    /* System tab */
    /* Country tab */
@@ -109,10 +109,10 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
   {
    [Ntf_EVENT_UNKNOWN          ] = ActUnk,
    /* Start tab */
-   [Ntf_EVENT_TIMELINE_COMMENT ] = ActSeeGblTL,
-   [Ntf_EVENT_TIMELINE_FAV     ] = ActSeeGblTL,
-   [Ntf_EVENT_TIMELINE_SHARE   ] = ActSeeGblTL,
-   [Ntf_EVENT_TIMELINE_MENTION ] = ActSeeGblTL,
+   [Ntf_EVENT_TL_COMMENT       ] = ActSeeGblTL,
+   [Ntf_EVENT_TL_FAV           ] = ActSeeGblTL,
+   [Ntf_EVENT_TL_SHARE         ] = ActSeeGblTL,
+   [Ntf_EVENT_TL_MENTION       ] = ActSeeGblTL,
    [Ntf_EVENT_FOLLOWER         ] = ActSeeFlr,
    /* System tab */
    /* Country tab */
@@ -152,10 +152,10 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
    [Ntf_EVENT_UNKNOWN          ] = "NotifyNtfEventUnknown",
    /* Start tab */
-   [Ntf_EVENT_TIMELINE_COMMENT ] = "NotifyNtfEventTimelineComment",
-   [Ntf_EVENT_TIMELINE_FAV     ] = "NotifyNtfEventTimelineFav",
-   [Ntf_EVENT_TIMELINE_SHARE   ] = "NotifyNtfEventTimelineShare",
-   [Ntf_EVENT_TIMELINE_MENTION ] = "NotifyNtfEventTimelineMention",
+   [Ntf_EVENT_TL_COMMENT       ] = "NotifyNtfEventTimelineComment",
+   [Ntf_EVENT_TL_FAV           ] = "NotifyNtfEventTimelineFav",
+   [Ntf_EVENT_TL_SHARE         ] = "NotifyNtfEventTimelineShare",
+   [Ntf_EVENT_TL_MENTION       ] = "NotifyNtfEventTimelineMention",
    [Ntf_EVENT_FOLLOWER         ] = "NotifyNtfEventFollower",
    /* System tab */
    /* Country tab */
@@ -191,10 +191,10 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
    [Ntf_EVENT_UNKNOWN          ] = "EmailNtfEventUnknown",
    /* Start tab */
-   [Ntf_EVENT_TIMELINE_COMMENT ] = "EmailNtfEventTimelineComment",
-   [Ntf_EVENT_TIMELINE_FAV     ] = "EmailNtfEventTimelineFav",
-   [Ntf_EVENT_TIMELINE_SHARE   ] = "EmailNtfEventTimelineShare",
-   [Ntf_EVENT_TIMELINE_MENTION ] = "EmailNtfEventTimelineMention",
+   [Ntf_EVENT_TL_COMMENT       ] = "EmailNtfEventTimelineComment",
+   [Ntf_EVENT_TL_FAV           ] = "EmailNtfEventTimelineFav",
+   [Ntf_EVENT_TL_SHARE         ] = "EmailNtfEventTimelineShare",
+   [Ntf_EVENT_TL_MENTION       ] = "EmailNtfEventTimelineMention",
    [Ntf_EVENT_FOLLOWER         ] = "EmailNtfEventSocialFollower",
    /* System tab */
    /* Country tab */
@@ -230,10 +230,10 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
   {
    [Ntf_EVENT_UNKNOWN          ] = "question.svg",
    /* Start tab */
-   [Ntf_EVENT_TIMELINE_COMMENT ] = "comment-dots.svg",
-   [Ntf_EVENT_TIMELINE_FAV     ] = "star.svg",
-   [Ntf_EVENT_TIMELINE_SHARE   ] = "share-alt.svg",
-   [Ntf_EVENT_TIMELINE_MENTION ] = "at.svg",
+   [Ntf_EVENT_TL_COMMENT       ] = "comment-dots.svg",
+   [Ntf_EVENT_TL_FAV           ] = "star.svg",
+   [Ntf_EVENT_TL_SHARE         ] = "share-alt.svg",
+   [Ntf_EVENT_TL_MENTION       ] = "at.svg",
    [Ntf_EVENT_FOLLOWER         ] = "user-plus.svg",
    /* System tab */
    /* Country tab */
@@ -719,10 +719,10 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
             Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
 	   }
 	 break;
-      case Ntf_EVENT_TIMELINE_COMMENT:
-      case Ntf_EVENT_TIMELINE_FAV:
-      case Ntf_EVENT_TIMELINE_SHARE:
-      case Ntf_EVENT_TIMELINE_MENTION:
+      case Ntf_EVENT_TL_COMMENT:
+      case Ntf_EVENT_TL_FAV:
+      case Ntf_EVENT_TL_SHARE:
+      case Ntf_EVENT_TL_MENTION:
 	 // Cod is the code of the social publishing
          Frm_BeginForm (ActSeeGblTL);
 	 TL_Pub_PutHiddenParamPubCod (Cod);
@@ -872,10 +872,10 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       case Ntf_EVENT_ENROLMENT_REQUEST:
 	 Enr_GetNotifEnrolmentRequest (SummaryStr,ContentStr,Cod,GetContent);
          break;
-      case Ntf_EVENT_TIMELINE_COMMENT:
-      case Ntf_EVENT_TIMELINE_FAV:
-      case Ntf_EVENT_TIMELINE_SHARE:
-      case Ntf_EVENT_TIMELINE_MENTION:
+      case Ntf_EVENT_TL_COMMENT:
+      case Ntf_EVENT_TL_FAV:
+      case Ntf_EVENT_TL_SHARE:
+      case Ntf_EVENT_TL_MENTION:
 	 // Cod is the code of the social publishing
 	 TL_Ntf_GetNotifPublication (SummaryStr,ContentStr,Cod,GetContent);
          break;
@@ -1291,7 +1291,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 				      Sco_GetDBStrFromScope (Hie_Lvl_DEG),Gbl.Hierarchy.Deg.DegCod,
 				      Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
-      case Ntf_EVENT_TIMELINE_COMMENT:	// New comment to one of my social notes or comments
+      case Ntf_EVENT_TL_COMMENT:	// New comment to one of my social notes or comments
          // Cod is the code of the social publishing
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
@@ -1302,9 +1302,9 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 				   " AND PublisherCod<>%ld",
 				   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
-      case Ntf_EVENT_TIMELINE_FAV:		// New favourite to one of my social notes or comments
-      case Ntf_EVENT_TIMELINE_SHARE:		// New sharing of one of my social notes
-      case Ntf_EVENT_TIMELINE_MENTION:
+      case Ntf_EVENT_TL_FAV:		// New favourite to one of my social notes or comments
+      case Ntf_EVENT_TL_SHARE:		// New sharing of one of my social notes
+      case Ntf_EVENT_TL_MENTION:
       case Ntf_EVENT_FOLLOWER:
 	 // This function should not be called in these cases
          return 0;
@@ -1692,10 +1692,10 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	    switch (NotifyEvent)
 	      {
 	       case Ntf_EVENT_UNKNOWN:
-	       case Ntf_EVENT_TIMELINE_COMMENT:
-	       case Ntf_EVENT_TIMELINE_FAV:
-	       case Ntf_EVENT_TIMELINE_SHARE:
-	       case Ntf_EVENT_TIMELINE_MENTION:
+	       case Ntf_EVENT_TL_COMMENT:
+	       case Ntf_EVENT_TL_FAV:
+	       case Ntf_EVENT_TL_SHARE:
+	       case Ntf_EVENT_TL_MENTION:
 	       case Ntf_EVENT_FOLLOWER:
 		  break;
 	       case Ntf_EVENT_DOCUMENT_FILE:
