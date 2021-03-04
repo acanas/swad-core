@@ -46,7 +46,7 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
-#define TL_Pst_MAX_CHARS_IN_POST	1000	// Maximum number of characters in a post
+#define Tml_Pst_MAX_CHARS_IN_POST	1000	// Maximum number of characters in a post
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -62,29 +62,29 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void TL_Pst_GetPostContent (long PstCod,struct TL_Pst_Content *Content);
-static void TL_Pst_ShowPostContent (struct TL_Pst_Content *Content);
+static void Tml_Pst_GetPostContent (long PstCod,struct Tml_Pst_Content *Content);
+static void Tml_Pst_ShowPostContent (struct Tml_Pst_Content *Content);
 
-static void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline);
+static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline);
 
-static long TL_Pst_ReceivePost (void);
+static long Tml_Pst_ReceivePost (void);
 
 /*****************************************************************************/
 /***************** Get from database and write public post *******************/
 /*****************************************************************************/
 
-void TL_Pst_GetAndWritePost (long PstCod)
+void Tml_Pst_GetAndWritePost (long PstCod)
   {
-   struct TL_Pst_Content Content;
+   struct Tml_Pst_Content Content;
 
    /***** Initialize media *****/
    Med_MediaConstructor (&Content.Media);
 
    /***** Get post content from database *****/
-   TL_Pst_GetPostContent (PstCod,&Content);
+   Tml_Pst_GetPostContent (PstCod,&Content);
 
    /***** Show post content *****/
-   TL_Pst_ShowPostContent (&Content);
+   Tml_Pst_ShowPostContent (&Content);
 
    /***** Free media *****/
    Med_MediaDestructor (&Content.Media);
@@ -95,13 +95,13 @@ void TL_Pst_GetAndWritePost (long PstCod)
 /*****************************************************************************/
 // Media must be initialized before calling this function
 
-static void TL_Pst_GetPostContent (long PstCod,struct TL_Pst_Content *Content)
+static void Tml_Pst_GetPostContent (long PstCod,struct Tml_Pst_Content *Content)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get post from database *****/
-   if (TL_DB_GetPostByCod (PstCod,&mysql_res) == 1)
+   if (Tml_DB_GetPostByCod (PstCod,&mysql_res) == 1)
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -127,7 +127,7 @@ static void TL_Pst_GetPostContent (long PstCod,struct TL_Pst_Content *Content)
 /****************************** Get post content *****************************/
 /*****************************************************************************/
 
-static void TL_Pst_ShowPostContent (struct TL_Pst_Content *Content)
+static void Tml_Pst_ShowPostContent (struct Tml_Pst_Content *Content)
   {
    /***** Write content text *****/
    if (Content->Txt[0])
@@ -146,7 +146,7 @@ static void TL_Pst_ShowPostContent (struct TL_Pst_Content *Content)
 /********************** Form to write a new publication **********************/
 /*****************************************************************************/
 
-void TL_Pst_PutPhotoAndFormToWriteNewPost (struct TL_Timeline *Timeline)
+void Tml_Pst_PutPhotoAndFormToWriteNewPost (struct Tml_Timeline *Timeline)
   {
    /***** Begin list *****/
    HTM_UL_Begin ("class=\"TL_LIST\"");
@@ -155,10 +155,10 @@ void TL_Pst_PutPhotoAndFormToWriteNewPost (struct TL_Timeline *Timeline)
       HTM_LI_Begin ("class=\"TL_WIDTH\"");
 
 	 /***** Left: write author's photo (my photo) *****/
-         TL_Not_ShowAuthorPhoto (&Gbl.Usrs.Me.UsrDat,false);	// Don't use unique id
+         Tml_Not_ShowAuthorPhoto (&Gbl.Usrs.Me.UsrDat,false);	// Don't use unique id
 
 	 /***** Right: author's name, time, textarea *****/
-         TL_Pst_PutFormToWriteNewPost (Timeline);
+         Tml_Pst_PutFormToWriteNewPost (Timeline);
 
       /***** End list item *****/
       HTM_LI_End ();
@@ -171,7 +171,7 @@ void TL_Pst_PutPhotoAndFormToWriteNewPost (struct TL_Timeline *Timeline)
 /**************** Author's name, time, and form with textarea ****************/
 /*****************************************************************************/
 
-static void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
+static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
   {
    extern const char *Txt_New_TIMELINE_post;
 
@@ -179,17 +179,17 @@ static void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
    HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
 
       /***** Author name *****/
-      TL_Not_WriteAuthorName (&Gbl.Usrs.Me.UsrDat);
+      Tml_Not_WriteAuthorName (&Gbl.Usrs.Me.UsrDat);
 
       /***** Form to write the post *****/
       /* Begin container */
       HTM_DIV_Begin ("class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\"");
 
          /* Form with textarea */
-	 TL_Frm_BeginForm (Timeline,TL_Frm_RECEIVE_POST);
-	    TL_Pst_PutTextarea (Txt_New_TIMELINE_post,
+	 Tml_Frm_BeginForm (Timeline,Tml_Frm_RECEIVE_POST);
+	    Tml_Pst_PutTextarea (Txt_New_TIMELINE_post,
 				"TL_PST_TEXTAREA TL_RIGHT_WIDTH");
-	 TL_Frm_EndForm ();
+	 Tml_Frm_EndForm ();
 
       /* End container */
       HTM_DIV_End ();
@@ -202,7 +202,7 @@ static void TL_Pst_PutFormToWriteNewPost (struct TL_Timeline *Timeline)
 /*** Put textarea and button inside a form to submit a new post or comment ***/
 /*****************************************************************************/
 
-void TL_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
+void Tml_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
   {
    extern const char *Txt_Post;
    char IdDivImgButton[Frm_MAX_BYTES_ID + 1];
@@ -214,7 +214,7 @@ void TL_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
    HTM_TEXTAREA_Begin ("name=\"Txt\" rows=\"1\" maxlength=\"%u\""
                        " placeholder=\"%s&hellip;\" class=\"%s\""
 	               " onfocus=\"expandTextarea(this,'%s','6');\"",
-		       TL_Pst_MAX_CHARS_IN_POST,
+		       Tml_Pst_MAX_CHARS_IN_POST,
 		       Placeholder,ClassTextArea,
 		       IdDivImgButton);
    HTM_TEXTAREA_End ();
@@ -241,13 +241,13 @@ void TL_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
 /******************* Receive and store a new public post *********************/
 /*****************************************************************************/
 
-void TL_Pst_ReceivePostUsr (void)
+void Tml_Pst_ReceivePostUsr (void)
   {
-   struct TL_Timeline Timeline;
+   struct Tml_Timeline Timeline;
    long NotCod;
 
    /***** Reset timeline context *****/
-   TL_ResetTimeline (&Timeline);
+   Tml_ResetTimeline (&Timeline);
 
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
@@ -260,34 +260,34 @@ void TL_Pst_ReceivePostUsr (void)
 
       /***** Receive and store post, and
 	     write updated timeline after publication (user) *****/
-      NotCod = TL_Pst_ReceivePost ();
-      TL_ShowTimelineUsrHighlighting (&Timeline,NotCod);
+      NotCod = Tml_Pst_ReceivePost ();
+      Tml_ShowTimelineUsrHighlighting (&Timeline,NotCod);
 
    /***** End section *****/
    HTM_SECTION_End ();
   }
 
-void TL_Pst_ReceivePostGbl (void)
+void Tml_Pst_ReceivePostGbl (void)
   {
-   struct TL_Timeline Timeline;
+   struct Tml_Timeline Timeline;
    long NotCod;
 
    /***** Initialize timeline *****/
-   TL_InitTimelineGbl (&Timeline);
+   Tml_InitTimelineGbl (&Timeline);
 
    /***** Receive and store post *****/
-   NotCod = TL_Pst_ReceivePost ();
+   NotCod = Tml_Pst_ReceivePost ();
 
    /***** Write updated timeline after publication (global) *****/
-   TL_ShowTimelineGblHighlighting (&Timeline,NotCod);
+   Tml_ShowTimelineGblHighlighting (&Timeline,NotCod);
   }
 
 // Returns the code of the note just created
-static long TL_Pst_ReceivePost (void)
+static long Tml_Pst_ReceivePost (void)
   {
-   struct TL_Pst_Content Content;
+   struct Tml_Pst_Content Content;
    long PstCod;
-   struct TL_Pub_Publication Pub;
+   struct Tml_Pub_Publication Pub;
 
    /***** Get the content of the new post *****/
    Par_GetParAndChangeFormat ("Txt",Content.Txt,Cns_MAX_BYTES_LONG_TEXT,
@@ -297,9 +297,9 @@ static long TL_Pst_ReceivePost (void)
    Med_MediaConstructor (&Content.Media);
 
    /***** Get attached image (action, file and title) *****/
-   Content.Media.Width   = TL_IMAGE_SAVED_MAX_WIDTH;
-   Content.Media.Height  = TL_IMAGE_SAVED_MAX_HEIGHT;
-   Content.Media.Quality = TL_IMAGE_SAVED_QUALITY;
+   Content.Media.Width   = Tml_IMAGE_SAVED_MAX_WIDTH;
+   Content.Media.Height  = Tml_IMAGE_SAVED_MAX_HEIGHT;
+   Content.Media.Quality = Tml_IMAGE_SAVED_QUALITY;
    Med_GetMediaFromForm (-1L,-1L,-1,&Content.Media,NULL,NULL);
    Ale_ShowAlerts (NULL);
 
@@ -311,10 +311,10 @@ static long TL_Pst_ReceivePost (void)
 
       /***** Publish *****/
       /* Insert post content in the database */
-      PstCod = TL_DB_CreateNewPost (&Content);
+      PstCod = Tml_DB_CreateNewPost (&Content);
 
       /* Insert post in notes */
-      TL_Not_StoreAndPublishNoteInternal (TL_NOTE_POST,PstCod,&Pub);
+      Tml_Not_StoreAndPublishNoteInternal (TL_NOTE_POST,PstCod,&Pub);
 
       /***** Analyze content and store notifications about mentions *****/
       Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (Pub.PubCod,Content.Txt);

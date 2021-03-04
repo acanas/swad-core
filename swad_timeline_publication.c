@@ -58,54 +58,54 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void TL_Pub_InitializeRangeOfPubs (TL_WhatToGet_t WhatToGet,
-                                          struct TL_Pub_RangePubsToGet *RangePubsToGet);
+static void Tml_Pub_InitializeRangeOfPubs (Tml_WhatToGet_t WhatToGet,
+                                          struct Tml_Pub_RangePubsToGet *RangePubsToGet);
 
-static unsigned TL_Pub_GetMaxPubsToGet (const struct TL_Timeline *Timeline);
+static unsigned Tml_Pub_GetMaxPubsToGet (const struct Tml_Timeline *Timeline);
 
-static void TL_Pub_UpdateFirstLastPubCodesIntoSession (const struct TL_Timeline *Timeline);
+static void Tml_Pub_UpdateFirstLastPubCodesIntoSession (const struct Tml_Timeline *Timeline);
 
-static struct TL_Pub_Publication *TL_Pub_SelectTheMostRecentPub (const struct TL_Pub_SubQueries *SubQueries);
+static struct Tml_Pub_Publication *Tml_Pub_SelectTheMostRecentPub (const struct Tml_Pub_SubQueries *SubQueries);
 
-static TL_Pub_PubType_t TL_Pub_GetPubTypeFromStr (const char *Str);
+static Tml_Pub_PubType_t Tml_Pub_GetPubTypeFromStr (const char *Str);
 
 /*****************************************************************************/
 /*************** Get list of pubications to show in timeline *****************/
 /*****************************************************************************/
 
-void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
+void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
   {
-   struct TL_Pub_SubQueries SubQueries;
-   struct TL_Pub_RangePubsToGet RangePubsToGet;
-   unsigned MaxPubsToGet = TL_Pub_GetMaxPubsToGet (Timeline);
+   struct Tml_Pub_SubQueries SubQueries;
+   struct Tml_Pub_RangePubsToGet RangePubsToGet;
+   unsigned MaxPubsToGet = Tml_Pub_GetMaxPubsToGet (Timeline);
    unsigned NumPub;
-   struct TL_Pub_Publication *Pub;
+   struct Tml_Pub_Publication *Pub;
 
    /***** Initialize range of publications *****/
-   TL_Pub_InitializeRangeOfPubs (Timeline->WhatToGet,&RangePubsToGet);
+   Tml_Pub_InitializeRangeOfPubs (Timeline->WhatToGet,&RangePubsToGet);
 
    /***** Clear timeline for this session in database *****/
-   if (Timeline->WhatToGet == TL_GET_RECENT_TIMELINE)
-      TL_DB_ClearTimelineNotesOfSessionFromDB ();
+   if (Timeline->WhatToGet == Tml_GET_RECENT_TIMELINE)
+      Tml_DB_ClearTimelineNotesOfSessionFromDB ();
 
    /***** Create temporary tables *****/
    /* Create temporary table with notes just retrieved */
-   TL_DB_CreateTmpTableJustRetrievedNotes ();
+   Tml_DB_CreateTmpTableJustRetrievedNotes ();
 
    /* Create temporary table with all notes visible in timeline */
-   if (Timeline->WhatToGet == TL_GET_ONLY_OLD_PUBS)
-      TL_DB_CreateTmpTableVisibleTimeline ();
+   if (Timeline->WhatToGet == Tml_GET_ONLY_OLD_PUBS)
+      Tml_DB_CreateTmpTableVisibleTimeline ();
 
    /***** Create subqueries *****/
    /* Create subquery with potential publishers */
-   TL_DB_CreateSubQueryPublishers (Timeline,&SubQueries);
+   Tml_DB_CreateSubQueryPublishers (Timeline,&SubQueries);
 
    /* Create subquery to get only notes not present in timeline */
-   TL_DB_CreateSubQueryAlreadyExists (Timeline,&SubQueries);
+   Tml_DB_CreateSubQueryAlreadyExists (Timeline,&SubQueries);
 
    /* Create subquery with bottom range of publications to get from tl_pubs.
       Bottom pub. code remains unchanged in all iterations of the loop. */
-   TL_DB_CreateSubQueryRangeBottom (RangePubsToGet.Bottom,&SubQueries);
+   Tml_DB_CreateSubQueryRangeBottom (RangePubsToGet.Bottom,&SubQueries);
 
    /***** Initialize list of publications *****/
    /* Chained list of publications:
@@ -149,10 +149,10 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
      {
       /* Create subquery with top range of publications to get from tl_pubs
          In each iteration of this loop, top publication code is changed to a lower value */
-      TL_DB_CreateSubQueryRangeTop (RangePubsToGet.Top,&SubQueries);
+      Tml_DB_CreateSubQueryRangeTop (RangePubsToGet.Top,&SubQueries);
 
       /* Select the most recent publication from tl_pubs */
-      Pub = TL_Pub_SelectTheMostRecentPub (&SubQueries);
+      Pub = Tml_Pub_SelectTheMostRecentPub (&SubQueries);
 
       /* Chain the previous publication with the current one */
       if (NumPub == 0)
@@ -166,9 +166,9 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
 
       /* Insert note in temporary tables with just retrieved notes.
 	 These tables will be used to not get notes already shown */
-      TL_DB_InsertNoteInJustRetrievedNotes (Pub->NotCod);
-      if (Timeline->WhatToGet == TL_GET_ONLY_OLD_PUBS)	// Get only old publications
-	 TL_DB_InsertNoteInVisibleTimeline (Pub->NotCod);
+      Tml_DB_InsertNoteInJustRetrievedNotes (Pub->NotCod);
+      if (Timeline->WhatToGet == Tml_GET_ONLY_OLD_PUBS)	// Get only old publications
+	 Tml_DB_InsertNoteInVisibleTimeline (Pub->NotCod);
 
       /* Narrow the range for the next iteration */
       RangePubsToGet.Top = Pub->PubCod;
@@ -176,19 +176,19 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
 
    /***** Update first (oldest) and last (more recent) publication codes
           into session for next refresh *****/
-   TL_Pub_UpdateFirstLastPubCodesIntoSession (Timeline);
+   Tml_Pub_UpdateFirstLastPubCodesIntoSession (Timeline);
 
    /***** Add notes just retrieved to visible timeline for this session *****/
-   TL_DB_AddNotesJustRetrievedToVisibleTimelineOfSession ();
+   Tml_DB_AddNotesJustRetrievedToVisibleTimelineOfSession ();
 
    /***** Drop temporary tables *****/
    /* Drop temporary tables with notes already retrieved */
-   TL_DB_DropTmpTableJustRetrievedNotes ();
-   if (Timeline->WhatToGet == TL_GET_ONLY_OLD_PUBS)	// Get only old publications
-      TL_DB_DropTmpTableVisibleTimeline ();
+   Tml_DB_DropTmpTableJustRetrievedNotes ();
+   if (Timeline->WhatToGet == Tml_GET_ONLY_OLD_PUBS)	// Get only old publications
+      Tml_DB_DropTmpTableVisibleTimeline ();
 
    /* Drop temporary table with me and users I follow */
-   if (Timeline->UsrOrGbl == TL_Usr_TIMELINE_GBL &&	// Show the global timeline
+   if (Timeline->UsrOrGbl == Tml_Usr_TIMELINE_GBL &&	// Show the global timeline
        Timeline->Who == Usr_WHO_FOLLOWED)		// Show the timeline of the users I follow
       Fol_DropTmpTableMeAndUsrsIFollow ();
   }
@@ -197,8 +197,8 @@ void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline)
 /*************** Get list of pubications to show in timeline *****************/
 /*****************************************************************************/
 
-static void TL_Pub_InitializeRangeOfPubs (TL_WhatToGet_t WhatToGet,
-                                          struct TL_Pub_RangePubsToGet *RangePubsToGet)
+static void Tml_Pub_InitializeRangeOfPubs (Tml_WhatToGet_t WhatToGet,
+                                          struct Tml_Pub_RangePubsToGet *RangePubsToGet)
   {
    /* Initialize range of pubs:
 
@@ -223,18 +223,18 @@ static void TL_Pub_InitializeRangeOfPubs (TL_WhatToGet_t WhatToGet,
 
    switch (WhatToGet)
      {
-      case TL_GET_ONLY_NEW_PUBS:	// Get the publications (without limit)
+      case Tml_GET_ONLY_NEW_PUBS:	// Get the publications (without limit)
 					// newer than LastPubCod
 	 /* This query is made via AJAX automatically from time to time */
-	 RangePubsToGet->Bottom = TL_DB_GetPubCodFromSession ("LastPubCod");
+	 RangePubsToGet->Bottom = Tml_DB_GetPubCodFromSession ("LastPubCod");
 	 break;
-      case TL_GET_ONLY_OLD_PUBS:	// Get some limited publications
+      case Tml_GET_ONLY_OLD_PUBS:	// Get some limited publications
 					// older than FirstPubCod
 	 /* This query is made via AJAX
 	    when I click in link to get old publications */
-	 RangePubsToGet->Top    = TL_DB_GetPubCodFromSession ("FirstPubCod");
+	 RangePubsToGet->Top    = Tml_DB_GetPubCodFromSession ("FirstPubCod");
 	 break;
-      case TL_GET_RECENT_TIMELINE:	// Get some limited recent publications
+      case Tml_GET_RECENT_TIMELINE:	// Get some limited recent publications
       default:
 	 /* This is the first query to get initial timeline shown
 	    ==> no notes yet in current timeline table */
@@ -246,13 +246,13 @@ static void TL_Pub_InitializeRangeOfPubs (TL_WhatToGet_t WhatToGet,
 /********* Get maximum number of publications to get from database ***********/
 /*****************************************************************************/
 
-static unsigned TL_Pub_GetMaxPubsToGet (const struct TL_Timeline *Timeline)
+static unsigned Tml_Pub_GetMaxPubsToGet (const struct Tml_Timeline *Timeline)
   {
-   static const unsigned MaxPubsToGet[TL_NUM_WHAT_TO_GET] =
+   static const unsigned MaxPubsToGet[Tml_NUM_WHAT_TO_GET] =
      {
-      [TL_GET_RECENT_TIMELINE] = TL_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW,
-      [TL_GET_ONLY_NEW_PUBS  ] = TL_Pub_MAX_NEW_PUBS_TO_GET_AND_SHOW,
-      [TL_GET_ONLY_OLD_PUBS  ] = TL_Pub_MAX_OLD_PUBS_TO_GET_AND_SHOW,
+      [Tml_GET_RECENT_TIMELINE] = Tml_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW,
+      [Tml_GET_ONLY_NEW_PUBS  ] = Tml_Pub_MAX_NEW_PUBS_TO_GET_AND_SHOW,
+      [Tml_GET_ONLY_OLD_PUBS  ] = Tml_Pub_MAX_OLD_PUBS_TO_GET_AND_SHOW,
      };
 
    return MaxPubsToGet[Timeline->WhatToGet];
@@ -263,26 +263,26 @@ static unsigned TL_Pub_GetMaxPubsToGet (const struct TL_Timeline *Timeline)
 /************* publication codes into session for next refresh ***************/
 /*****************************************************************************/
 
-static void TL_Pub_UpdateFirstLastPubCodesIntoSession (const struct TL_Timeline *Timeline)
+static void Tml_Pub_UpdateFirstLastPubCodesIntoSession (const struct Tml_Timeline *Timeline)
   {
    long FirstPubCod;
 
    switch (Timeline->WhatToGet)
      {
-      case TL_GET_ONLY_NEW_PUBS:	// Get only new publications
-	 TL_DB_UpdateLastPubCodInSession ();
+      case Tml_GET_ONLY_NEW_PUBS:	// Get only new publications
+	 Tml_DB_UpdateLastPubCodInSession ();
 	 break;
-      case TL_GET_ONLY_OLD_PUBS:	// Get only old publications
+      case Tml_GET_ONLY_OLD_PUBS:	// Get only old publications
 	 // The oldest publication code retrieved and shown
 	 FirstPubCod = Timeline->Pubs.Bottom ? Timeline->Pubs.Bottom->PubCod :
 			                       0;
-	 TL_DB_UpdateFirstPubCodInSession (FirstPubCod);
+	 Tml_DB_UpdateFirstPubCodInSession (FirstPubCod);
 	 break;
-      case TL_GET_RECENT_TIMELINE:	// Get last publications
+      case Tml_GET_RECENT_TIMELINE:	// Get last publications
 	 // The oldest publication code retrieved and shown
 	 FirstPubCod = Timeline->Pubs.Bottom ? Timeline->Pubs.Bottom->PubCod :
 			                       0;
-         TL_DB_UpdateFirstLastPubCodsInSession (FirstPubCod);
+         Tml_DB_UpdateFirstLastPubCodsInSession (FirstPubCod);
 	 break;
      }
   }
@@ -291,10 +291,10 @@ static void TL_Pub_UpdateFirstLastPubCodesIntoSession (const struct TL_Timeline 
 /************** Free chained list of publications in timeline ****************/
 /*****************************************************************************/
 
-void TL_Pub_FreeListPubs (struct TL_Timeline *Timeline)
+void Tml_Pub_FreeListPubs (struct Tml_Timeline *Timeline)
   {
-   struct TL_Pub_Publication *Pub;
-   struct TL_Pub_Publication *Next;
+   struct Tml_Pub_Publication *Pub;
+   struct Tml_Pub_Publication *Next;
 
    /***** Go over the list freeing memory *****/
    for (Pub = Timeline->Pubs.Top;
@@ -317,20 +317,20 @@ void TL_Pub_FreeListPubs (struct TL_Timeline *Timeline)
 /************** Select the most recent publication from tl_pubs **************/
 /*****************************************************************************/
 
-static struct TL_Pub_Publication *TL_Pub_SelectTheMostRecentPub (const struct TL_Pub_SubQueries *SubQueries)
+static struct Tml_Pub_Publication *Tml_Pub_SelectTheMostRecentPub (const struct Tml_Pub_SubQueries *SubQueries)
   {
    MYSQL_RES *mysql_res;
-   struct TL_Pub_Publication *Pub;
+   struct Tml_Pub_Publication *Pub;
 
    /***** Select the most recent publication from database *****/
-   if (TL_DB_SelectTheMostRecentPub (SubQueries,&mysql_res) == 1)
+   if (Tml_DB_SelectTheMostRecentPub (SubQueries,&mysql_res) == 1)
      {
       /* Allocate space for publication */
       if ((Pub = malloc (sizeof (*Pub))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /* Get data of publication */
-      TL_Pub_GetDataOfPubFromNextRow (mysql_res,Pub);
+      Tml_Pub_GetDataOfPubFromNextRow (mysql_res,Pub);
       Pub->Next = NULL;
      }
    else
@@ -347,10 +347,10 @@ static struct TL_Pub_Publication *TL_Pub_SelectTheMostRecentPub (const struct TL
 /*****************************************************************************/
 // The publications are inserted as list elements of a hidden list
 
-void TL_Pub_InsertNewPubsInTimeline (struct TL_Timeline *Timeline)
+void Tml_Pub_InsertNewPubsInTimeline (struct Tml_Timeline *Timeline)
   {
-   struct TL_Pub_Publication *Pub;
-   struct TL_Not_Note Not;
+   struct Tml_Pub_Publication *Pub;
+   struct Tml_Not_Note Not;
 
    /***** List new publications in timeline *****/
    for (Pub = Timeline->Pubs.Top;
@@ -359,12 +359,12 @@ void TL_Pub_InsertNewPubsInTimeline (struct TL_Timeline *Timeline)
      {
       /* Get data of note */
       Not.NotCod = Pub->NotCod;
-      TL_Not_GetDataOfNoteByCod (&Not);
+      Tml_Not_GetDataOfNoteByCod (&Not);
 
       /* Write note */
       HTM_LI_Begin ("class=\"TL_WIDTH TL_SEP TL_NEW_PUB\"");
-	 TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-					     TL_Pub_GetTopMessage (Pub->PubType),
+	 Tml_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+					     Tml_Pub_GetTopMessage (Pub->PubType),
 					     Pub->PublisherCod);
       HTM_LI_End ();
      }
@@ -375,10 +375,10 @@ void TL_Pub_InsertNewPubsInTimeline (struct TL_Timeline *Timeline)
 /*****************************************************************************/
 // The publications are inserted as list elements of a hidden list
 
-void TL_Pub_ShowOldPubsInTimeline (struct TL_Timeline *Timeline)
+void Tml_Pub_ShowOldPubsInTimeline (struct Tml_Timeline *Timeline)
   {
-   struct TL_Pub_Publication *Pub;
-   struct TL_Not_Note Not;
+   struct Tml_Pub_Publication *Pub;
+   struct Tml_Not_Note Not;
 
    /***** List old publications in timeline *****/
    for (Pub = Timeline->Pubs.Top;
@@ -387,12 +387,12 @@ void TL_Pub_ShowOldPubsInTimeline (struct TL_Timeline *Timeline)
      {
       /* Get data of note */
       Not.NotCod = Pub->NotCod;
-      TL_Not_GetDataOfNoteByCod (&Not);
+      Tml_Not_GetDataOfNoteByCod (&Not);
 
       /* Write note */
       HTM_LI_Begin ("class=\"TL_WIDTH TL_SEP\"");
-	 TL_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-					     TL_Pub_GetTopMessage (Pub->PubType),
+	 Tml_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+					     Tml_Pub_GetTopMessage (Pub->PubType),
 					     Pub->PublisherCod);
       HTM_LI_End ();
      }
@@ -402,14 +402,14 @@ void TL_Pub_ShowOldPubsInTimeline (struct TL_Timeline *Timeline)
 /************* Get a top message given the type of publication ***************/
 /*****************************************************************************/
 
-TL_TopMessage_t TL_Pub_GetTopMessage (TL_Pub_PubType_t PubType)
+Tml_TopMessage_t Tml_Pub_GetTopMessage (Tml_Pub_PubType_t PubType)
   {
-   static const TL_TopMessage_t TopMessages[TL_Pub_NUM_PUB_TYPES] =
+   static const Tml_TopMessage_t TopMessages[Tml_Pub_NUM_PUB_TYPES] =
      {
-      [TL_Pub_UNKNOWN        ] = TL_TOP_MESSAGE_NONE,
-      [TL_Pub_ORIGINAL_NOTE  ] = TL_TOP_MESSAGE_NONE,
-      [TL_Pub_SHARED_NOTE    ] = TL_TOP_MESSAGE_SHARED,
-      [TL_Pub_COMMENT_TO_NOTE] = TL_TOP_MESSAGE_COMMENTED,
+      [Tml_Pub_UNKNOWN        ] = Tml_TOP_MESSAGE_NONE,
+      [Tml_Pub_ORIGINAL_NOTE  ] = Tml_TOP_MESSAGE_NONE,
+      [Tml_Pub_SHARED_NOTE    ] = Tml_TOP_MESSAGE_SHARED,
+      [Tml_Pub_COMMENT_TO_NOTE] = Tml_TOP_MESSAGE_COMMENTED,
      };
 
    return TopMessages[PubType];
@@ -419,7 +419,7 @@ TL_TopMessage_t TL_Pub_GetTopMessage (TL_Pub_PubType_t PubType)
 /***************** Put link to view new publications in timeline *************/
 /*****************************************************************************/
 
-void TL_Pub_PutLinkToViewNewPubs (void)
+void Tml_Pub_PutLinkToViewNewPubs (void)
   {
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_See_new_activity;
@@ -454,7 +454,7 @@ void TL_Pub_PutLinkToViewNewPubs (void)
 /***************** Put link to view old publications in timeline *************/
 /*****************************************************************************/
 
-void TL_Pub_PutLinkToViewOldPubs (void)
+void Tml_Pub_PutLinkToViewOldPubs (void)
   {
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_See_more;
@@ -492,7 +492,7 @@ void TL_Pub_PutLinkToViewOldPubs (void)
 /*************** Put parameter with the code of a publication ****************/
 /*****************************************************************************/
 
-void TL_Pub_PutHiddenParamPubCod (long PubCod)
+void Tml_Pub_PutHiddenParamPubCod (long PubCod)
   {
    Par_PutHiddenParamLong (NULL,"PubCod",PubCod);
   }
@@ -501,7 +501,7 @@ void TL_Pub_PutHiddenParamPubCod (long PubCod)
 /**************** Get parameter with the code of a publication ***************/
 /*****************************************************************************/
 
-long TL_Pub_GetParamPubCod (void)
+long Tml_Pub_GetParamPubCod (void)
   {
    /***** Get comment code *****/
    return Par_GetParToLong ("PubCod");
@@ -511,8 +511,8 @@ long TL_Pub_GetParamPubCod (void)
 /***************** Get data of publication using its code ********************/
 /*****************************************************************************/
 
-void TL_Pub_GetDataOfPubFromNextRow (MYSQL_RES *mysql_res,
-                                     struct TL_Pub_Publication *Pub)
+void Tml_Pub_GetDataOfPubFromNextRow (MYSQL_RES *mysql_res,
+                                      struct Tml_Pub_Publication *Pub)
   {
    MYSQL_ROW row;
 
@@ -529,23 +529,23 @@ void TL_Pub_GetDataOfPubFromNextRow (MYSQL_RES *mysql_res,
    Pub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
    Pub->NotCod       = Str_ConvertStrCodToLongCod (row[1]);
    Pub->PublisherCod = Str_ConvertStrCodToLongCod (row[2]);
-   Pub->PubType      = TL_Pub_GetPubTypeFromStr (row[3]);
+   Pub->PubType      = Tml_Pub_GetPubTypeFromStr (row[3]);
   }
 
 /*****************************************************************************/
 /******* Get publication type from string number coming from database ********/
 /*****************************************************************************/
 
-static TL_Pub_PubType_t TL_Pub_GetPubTypeFromStr (const char *Str)
+static Tml_Pub_PubType_t Tml_Pub_GetPubTypeFromStr (const char *Str)
   {
    unsigned UnsignedNum;
 
    /***** Get publication type from string *****/
    if (sscanf (Str,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < TL_Pub_NUM_PUB_TYPES)
-         return (TL_Pub_PubType_t) UnsignedNum;
+      if (UnsignedNum < Tml_Pub_NUM_PUB_TYPES)
+         return (Tml_Pub_PubType_t) UnsignedNum;
 
-   return TL_Pub_UNKNOWN;
+   return Tml_Pub_UNKNOWN;
   }
 
 /*****************************************************************************/
@@ -553,10 +553,10 @@ static TL_Pub_PubType_t TL_Pub_GetPubTypeFromStr (const char *Str)
 /*****************************************************************************/
 // Pub->PubCod is set by the function
 
-void TL_Pub_PublishPubInTimeline (struct TL_Pub_Publication *Pub)
+void Tml_Pub_PublishPubInTimeline (struct Tml_Pub_Publication *Pub)
   {
    /***** Publish note in timeline *****/
-   Pub->PubCod = TL_DB_CreateNewPub (Pub);
+   Pub->PubCod = Tml_DB_CreateNewPub (Pub);
 
    /***** Increment number of publications in user's figures *****/
    Prf_IncrementNumPubsUsr (Pub->PublisherCod);

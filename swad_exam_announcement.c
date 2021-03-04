@@ -380,7 +380,7 @@ void ExaAnn_ReceiveExamAnn2 (void)
       ExaAnn_UpdateNumUsrsNotifiedByEMailAboutExamAnn (ExamAnns->HighlightExaCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new exam announcement *****/
-   TL_Not_StoreAndPublishNote (TL_NOTE_EXAM_ANNOUNCEMENT,ExamAnns->HighlightExaCod);
+   Tml_Not_StoreAndPublishNote (TL_NOTE_EXAM_ANNOUNCEMENT,ExamAnns->HighlightExaCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
@@ -498,7 +498,7 @@ void ExaAnn_RemoveExamAnn1 (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExaCod);
 
    /***** Mark possible social note as unavailable *****/
-   TL_DB_MarkNoteAsUnavailable (TL_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
+   Tml_DB_MarkNoteAsUnavailable (TL_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);

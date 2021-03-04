@@ -40,23 +40,23 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
-static const char *TL_DB_TableFav[TL_Usr_NUM_FAV_SHA] =
+static const char *Tml_DB_TableFav[Tml_Usr_NUM_FAV_SHA] =
   {
-   [TL_Usr_FAV_UNF_NOTE] = "tl_notes_fav",
-   [TL_Usr_FAV_UNF_COMM] = "tl_comments_fav",
-   [TL_Usr_SHA_UNS_NOTE] = NULL,		// Not used
+   [Tml_Usr_FAV_UNF_NOTE] = "tl_notes_fav",
+   [Tml_Usr_FAV_UNF_COMM] = "tl_comments_fav",
+   [Tml_Usr_SHA_UNS_NOTE] = NULL,		// Not used
   };
-static const char *TL_DB_FieldFav[TL_Usr_NUM_FAV_SHA] =
+static const char *Tml_DB_FieldFav[Tml_Usr_NUM_FAV_SHA] =
   {
-   [TL_Usr_FAV_UNF_NOTE] = "NotCod",
-   [TL_Usr_FAV_UNF_COMM] = "PubCod",
-   [TL_Usr_SHA_UNS_NOTE] = NULL,		// Not used
+   [Tml_Usr_FAV_UNF_NOTE] = "NotCod",
+   [Tml_Usr_FAV_UNF_COMM] = "PubCod",
+   [Tml_Usr_SHA_UNS_NOTE] = NULL,		// Not used
   };
-static TL_Pub_PubType_t TL_DB_PubTypeFav[TL_Usr_NUM_FAV_SHA] =
+static Tml_Pub_PubType_t Tml_DB_PubTypeFav[Tml_Usr_NUM_FAV_SHA] =
   {
-   [TL_Usr_FAV_UNF_NOTE] = TL_Pub_ORIGINAL_NOTE,
-   [TL_Usr_FAV_UNF_COMM] = TL_Pub_COMMENT_TO_NOTE,
-   [TL_Usr_SHA_UNS_NOTE] = TL_Pub_UNKNOWN,	// Not used
+   [Tml_Usr_FAV_UNF_NOTE] = Tml_Pub_ORIGINAL_NOTE,
+   [Tml_Usr_FAV_UNF_COMM] = Tml_Pub_COMMENT_TO_NOTE,
+   [Tml_Usr_SHA_UNS_NOTE] = Tml_Pub_UNKNOWN,	// Not used
   };
 
 /*****************************************************************************/
@@ -73,14 +73,14 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static long TL_DB_GetMedCod (const char *Table,const char *Field,long Cod);
+static long Tml_DB_GetMedCod (const char *Table,const char *Field,long Cod);
 
 /*****************************************************************************/
 /********************* Get which users to show in timeline *******************/
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned TL_DB_GetWho (MYSQL_RES **mysql_res)
+unsigned Tml_DB_GetWho (MYSQL_RES **mysql_res)
   {
    /***** Get which users from database *****/
    return (unsigned)
@@ -94,7 +94,7 @@ unsigned TL_DB_GetWho (MYSQL_RES **mysql_res)
 /********************* Get which users to show in timeline *******************/
 /*****************************************************************************/
 
-void TL_DB_UpdateWho (Usr_Who_t Who)
+void Tml_DB_UpdateWho (Usr_Who_t Who)
   {
    /***** Update which users in database *****/
    DB_QueryUPDATE ("can not update which timeline users",
@@ -109,7 +109,7 @@ void TL_DB_UpdateWho (Usr_Who_t Who)
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned TL_DB_GetDataOfNoteByCod (long NotCod,MYSQL_RES **mysql_res)
+unsigned Tml_DB_GetDataOfNoteByCod (long NotCod,MYSQL_RES **mysql_res)
   {
    /***** Trivial check: note code should be > 0 *****/
    if (NotCod <= 0)
@@ -134,7 +134,7 @@ unsigned TL_DB_GetDataOfNoteByCod (long NotCod,MYSQL_RES **mysql_res)
 /*************** Get code of publication of the original note ****************/
 /*****************************************************************************/
 
-long TL_DB_GetPubCodOfOriginalNote (long NotCod)
+long Tml_DB_GetPubCodOfOriginalNote (long NotCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -144,7 +144,7 @@ long TL_DB_GetPubCodOfOriginalNote (long NotCod)
    if (DB_QuerySELECT (&mysql_res,"can not get code of publication",
 		       "SELECT PubCod FROM tl_pubs"
 		       " WHERE NotCod=%ld AND PubType=%u",
-		       NotCod,(unsigned) TL_Pub_ORIGINAL_NOTE) == 1)
+		       NotCod,(unsigned) Tml_Pub_ORIGINAL_NOTE) == 1)
      {	// Result should have a unique row
       /* Get code of publication (row[0]) */
       row = mysql_fetch_row (mysql_res);
@@ -162,8 +162,8 @@ long TL_DB_GetPubCodOfOriginalNote (long NotCod)
 /*****************************************************************************/
 // Returns code of note just created
 
-long TL_DB_CreateNewNote (TL_Not_NoteType_t NoteType,long Cod,
-                          long PublisherCod,long HieCod)
+long Tml_DB_CreateNewNote (Tml_Not_NoteType_t NoteType,long Cod,
+                           long PublisherCod,long HieCod)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create new note",
@@ -181,7 +181,7 @@ long TL_DB_CreateNewNote (TL_Not_NoteType_t NoteType,long Cod,
 /************************* Mark a note as unavailable ************************/
 /*****************************************************************************/
 
-void TL_DB_MarkNoteAsUnavailable (TL_Not_NoteType_t NoteType,long Cod)
+void Tml_DB_MarkNoteAsUnavailable (Tml_Not_NoteType_t NoteType,long Cod)
   {
    /***** Mark note as unavailable *****/
    DB_QueryUPDATE ("can not mark note as unavailable",
@@ -194,10 +194,9 @@ void TL_DB_MarkNoteAsUnavailable (TL_Not_NoteType_t NoteType,long Cod)
 /***** Mark possible notes involving children of a folder as unavailable *****/
 /*****************************************************************************/
 
-void TL_DB_MarkNotesChildrenOfFolderAsUnavailable (TL_Not_NoteType_t NoteType,
-                                                   Brw_FileBrowser_t FileBrowser,
-                                                   long Cod,
-                                                   const char *Path)
+void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (Tml_Not_NoteType_t NoteType,
+                                                    Brw_FileBrowser_t FileBrowser,
+                                                    long Cod,const char *Path)
   {
    /***** Mark notes as unavailable *****/
    DB_QueryUPDATE ("can not mark notes as unavailable",
@@ -215,7 +214,7 @@ void TL_DB_MarkNotesChildrenOfFolderAsUnavailable (TL_Not_NoteType_t NoteType,
 /******* Create temporary tables used to not get notes already shown *********/
 /*****************************************************************************/
 
-void TL_DB_CreateTmpTableJustRetrievedNotes (void)
+void Tml_DB_CreateTmpTableJustRetrievedNotes (void)
   {
    /***** Create temporary table with notes just retrieved *****/
    DB_Query ("can not create temporary table",
@@ -224,7 +223,7 @@ void TL_DB_CreateTmpTableJustRetrievedNotes (void)
 	     " ENGINE=MEMORY");
   }
 
-void TL_DB_CreateTmpTableVisibleTimeline (void)
+void Tml_DB_CreateTmpTableVisibleTimeline (void)
   {
    /***** Create temporary table with all notes visible in timeline *****/
    DB_Query ("can not create temporary table",
@@ -239,7 +238,7 @@ void TL_DB_CreateTmpTableVisibleTimeline (void)
 /**** Insert note in temporary tables used to not get notes already shown ****/
 /*****************************************************************************/
 
-void TL_DB_InsertNoteInJustRetrievedNotes (long NotCod)
+void Tml_DB_InsertNoteInJustRetrievedNotes (long NotCod)
   {
    /* Insert note in temporary table with just retrieved notes.
       This table will be used to not get notes already shown */
@@ -249,7 +248,7 @@ void TL_DB_InsertNoteInJustRetrievedNotes (long NotCod)
 		   NotCod);
   }
 
-void TL_DB_InsertNoteInVisibleTimeline (long NotCod)
+void Tml_DB_InsertNoteInVisibleTimeline (long NotCod)
   {
    /* Insert note in temporary table with visible timeline.
       This table will be used to not get notes already shown */
@@ -263,7 +262,7 @@ void TL_DB_InsertNoteInVisibleTimeline (long NotCod)
 /****** Add just retrieved notes to current timeline for this session ********/
 /*****************************************************************************/
 
-void TL_DB_AddNotesJustRetrievedToVisibleTimelineOfSession (void)
+void Tml_DB_AddNotesJustRetrievedToVisibleTimelineOfSession (void)
   {
    /* tl_timelines contains the distinct notes in timeline of each open session:
 mysql> SELECT SessionId,COUNT(*) FROM tl_timelines GROUP BY SessionId;
@@ -294,14 +293,14 @@ mysql> SELECT SessionId,COUNT(*) FROM tl_timelines GROUP BY SessionId;
 /******** Drop temporary tables used to not get notes already shown **********/
 /*****************************************************************************/
 
-void TL_DB_DropTmpTableJustRetrievedNotes (void)
+void Tml_DB_DropTmpTableJustRetrievedNotes (void)
   {
    /***** Drop temporary table with notes just retrieved *****/
    DB_Query ("can not remove temporary table",
 	     "DROP TEMPORARY TABLE IF EXISTS tl_tmp_just_retrieved_notes");
   }
 
-void TL_DB_DropTmpTableVisibleTimeline (void)
+void Tml_DB_DropTmpTableVisibleTimeline (void)
   {
    /***** Drop temporary table with all notes visible in timeline *****/
    DB_Query ("can not remove temporary table",
@@ -312,7 +311,7 @@ void TL_DB_DropTmpTableVisibleTimeline (void)
 /******************* Clear unused old timelines in database ******************/
 /*****************************************************************************/
 
-void TL_DB_ClearOldTimelinesNotesFromDB (void)
+void Tml_DB_ClearOldTimelinesNotesFromDB (void)
   {
    /***** Remove timelines for expired sessions *****/
    DB_QueryDELETE ("can not remove old timelines",
@@ -324,7 +323,7 @@ void TL_DB_ClearOldTimelinesNotesFromDB (void)
 /***************** Clear timeline for a session in database ******************/
 /*****************************************************************************/
 
-void TL_DB_ClearTimelineNotesOfSessionFromDB (void)
+void Tml_DB_ClearTimelineNotesOfSessionFromDB (void)
   {
    /***** Remove timeline for a session *****/
    DB_QueryDELETE ("can not remove timeline",
@@ -337,7 +336,7 @@ void TL_DB_ClearTimelineNotesOfSessionFromDB (void)
 /*************************** Remove favs for a note **************************/
 /*****************************************************************************/
 
-void TL_DB_RemoveNoteFavs (long NotCod)
+void Tml_DB_RemoveNoteFavs (long NotCod)
   {
    /***** Remove favs for note *****/
    DB_QueryDELETE ("can not remove favs for note",
@@ -350,7 +349,7 @@ void TL_DB_RemoveNoteFavs (long NotCod)
 /******************** Remove all publications of this note *******************/
 /*****************************************************************************/
 
-void TL_DB_RemoveNotePubs (long NotCod)
+void Tml_DB_RemoveNotePubs (long NotCod)
   {
    /***** Remove all publications of this note *****/
    DB_QueryDELETE ("can not remove a publication",
@@ -363,7 +362,7 @@ void TL_DB_RemoveNotePubs (long NotCod)
 /******************* Remove note publication from database *******************/
 /*****************************************************************************/
 
-void TL_DB_RemoveNote (long NotCod)
+void Tml_DB_RemoveNote (long NotCod)
   {
    /***** Remove note *****/
    DB_QueryDELETE ("can not remove a note",
@@ -378,7 +377,7 @@ void TL_DB_RemoveNote (long NotCod)
 /******************** Remove all notes created by a user *********************/
 /*****************************************************************************/
 
-void TL_DB_RemoveAllNotesUsr (long UsrCod)
+void Tml_DB_RemoveAllNotesUsr (long UsrCod)
   {
    /***** Remove all notes created by user *****/
    DB_QueryDELETE ("can not remove notes",
@@ -391,7 +390,7 @@ void TL_DB_RemoveAllNotesUsr (long UsrCod)
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned TL_DB_GetPostByCod (long PstCod,MYSQL_RES **mysql_res)
+unsigned Tml_DB_GetPostByCod (long PstCod,MYSQL_RES **mysql_res)
   {
    /***** Trivial check: post code should be > 0 *****/
    if (PstCod <= 0)
@@ -412,9 +411,9 @@ unsigned TL_DB_GetPostByCod (long PstCod,MYSQL_RES **mysql_res)
 /***************** Get code of media associated to post **********************/
 /*****************************************************************************/
 
-long TL_DB_GetMedCodFromPost (long PstCod)
+long Tml_DB_GetMedCodFromPost (long PstCod)
   {
-   return TL_DB_GetMedCod ("tl_posts","PstCod",PstCod);
+   return Tml_DB_GetMedCod ("tl_posts","PstCod",PstCod);
   }
 
 /*****************************************************************************/
@@ -422,7 +421,7 @@ long TL_DB_GetMedCodFromPost (long PstCod)
 /*****************************************************************************/
 // Returns code of just created post
 
-long TL_DB_CreateNewPost (const struct TL_Pst_Content *Content)
+long Tml_DB_CreateNewPost (const struct Tml_Pst_Content *Content)
   {
    /***** Insert post content in the database *****/
    return
@@ -439,7 +438,7 @@ long TL_DB_CreateNewPost (const struct TL_Pst_Content *Content)
 /************************* Remove post from database *************************/
 /*****************************************************************************/
 
-void TL_DB_RemovePost (long PstCod)
+void Tml_DB_RemovePost (long PstCod)
   {
    /***** Remove post *****/
    DB_QueryDELETE ("can not remove a post",
@@ -452,7 +451,7 @@ void TL_DB_RemovePost (long PstCod)
 /************************* Remove all posts of a user ************************/
 /*****************************************************************************/
 
-void TL_DB_RemoveAllPostsUsr (long UsrCod)
+void Tml_DB_RemoveAllPostsUsr (long UsrCod)
   {
    /***** Remove all posts of the user *****/
    DB_QueryDELETE ("can not remove posts",
@@ -467,13 +466,13 @@ void TL_DB_RemoveAllPostsUsr (long UsrCod)
 /********************* Get number of comments in a note **********************/
 /*****************************************************************************/
 
-unsigned TL_DB_GetNumCommsInNote (long NotCod)
+unsigned Tml_DB_GetNumCommsInNote (long NotCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of comments in a note",
 		  "SELECT COUNT(*) FROM tl_pubs"
 		  " WHERE NotCod=%ld AND PubType=%u",
-		  NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
+		  NotCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -481,14 +480,14 @@ unsigned TL_DB_GetNumCommsInNote (long NotCod)
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned TL_DB_GetComms (long NotCod,MYSQL_RES **mysql_res)
+unsigned Tml_DB_GetComms (long NotCod,MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get comments",
 		   "SELECT PubCod"	// row[0]
 		   " FROM tl_pubs"
 		   " WHERE NotCod=%ld AND PubType=%u",
-		   NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
+		   NotCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -496,9 +495,8 @@ unsigned TL_DB_GetComms (long NotCod,MYSQL_RES **mysql_res)
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned TL_DB_GetInitialComms (long NotCod,
-				unsigned NumInitialCommsToGet,
-				MYSQL_RES **mysql_res)
+unsigned Tml_DB_GetInitialComms (long NotCod,unsigned NumInitialCommsToGet,
+				 MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get comments",
@@ -514,7 +512,7 @@ unsigned TL_DB_GetInitialComms (long NotCod,
 		   " AND tl_pubs.PubCod=tl_comments.PubCod"
 		   " ORDER BY tl_pubs.PubCod"
 		   " LIMIT %lu",
-		   NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE,
+		   NotCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE,
 		   NumInitialCommsToGet);
   }
 
@@ -523,8 +521,8 @@ unsigned TL_DB_GetInitialComms (long NotCod,
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned TL_DB_GetFinalComms (long NotCod,unsigned NumFinalCommsToGet,
-			      MYSQL_RES **mysql_res)
+unsigned Tml_DB_GetFinalComms (long NotCod,unsigned NumFinalCommsToGet,
+			       MYSQL_RES **mysql_res)
   {
    /***** Get final comments of a note from database *****/
    return (unsigned)
@@ -544,7 +542,7 @@ unsigned TL_DB_GetFinalComms (long NotCod,unsigned NumFinalCommsToGet,
 		  " ORDER BY tl_pubs.PubCod DESC LIMIT %u"
 		  ") AS comments"
 		  " ORDER BY PubCod",
-		  NotCod,(unsigned) TL_Pub_COMMENT_TO_NOTE,
+		  NotCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE,
 		  NumFinalCommsToGet);
   }
 
@@ -553,7 +551,7 @@ unsigned TL_DB_GetFinalComms (long NotCod,unsigned NumFinalCommsToGet,
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned TL_DB_GetDataOfCommByCod (long PubCod,MYSQL_RES **mysql_res)
+unsigned Tml_DB_GetDataOfCommByCod (long PubCod,MYSQL_RES **mysql_res)
   {
    /***** Trivial check: publication code should be > 0 *****/
    if (PubCod <= 0)
@@ -572,15 +570,15 @@ unsigned TL_DB_GetDataOfCommByCod (long PubCod,MYSQL_RES **mysql_res)
 		   " WHERE tl_pubs.PubCod=%ld"
 		   " AND tl_pubs.PubType=%u"
 		   " AND tl_pubs.PubCod=tl_comments.PubCod",
-		   PubCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
+		   PubCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
 /******************* Insert comment content in database **********************/
 /*****************************************************************************/
 
-void TL_DB_InsertCommContent (long PubCod,
-			      const struct TL_Pst_Content *Content)
+void Tml_DB_InsertCommContent (long PubCod,
+			       const struct Tml_Pst_Content *Content)
   {
    /***** Insert comment content in database *****/
    DB_QueryINSERT ("can not store comment content",
@@ -597,16 +595,16 @@ void TL_DB_InsertCommContent (long PubCod,
 /**************** Get code of media associated to comment ********************/
 /*****************************************************************************/
 
-long TL_DB_GetMedCodFromComm (long PubCod)
+long Tml_DB_GetMedCodFromComm (long PubCod)
   {
-   return TL_DB_GetMedCod ("tl_comments","PubCod",PubCod);
+   return Tml_DB_GetMedCod ("tl_comments","PubCod",PubCod);
   }
 
 /*****************************************************************************/
 /****************** Remove favs for comment from database ********************/
 /*****************************************************************************/
 
-void TL_DB_RemoveCommFavs (long PubCod)
+void Tml_DB_RemoveCommFavs (long PubCod)
   {
    /***** Remove favs for comment *****/
    DB_QueryDELETE ("can not remove favs for comment",
@@ -619,7 +617,7 @@ void TL_DB_RemoveCommFavs (long PubCod)
 /***************** Remove content of comment from database *******************/
 /*****************************************************************************/
 
-void TL_DB_RemoveCommContent (long PubCod)
+void Tml_DB_RemoveCommContent (long PubCod)
   {
    /***** Remove content of comment *****/
    DB_QueryDELETE ("can not remove comment content",
@@ -632,7 +630,7 @@ void TL_DB_RemoveCommContent (long PubCod)
 /***************** Remove comment publication from database ******************/
 /*****************************************************************************/
 
-void TL_DB_RemoveCommPub (long PubCod)
+void Tml_DB_RemoveCommPub (long PubCod)
   {
    /***** Remove comment publication *****/
    DB_QueryDELETE ("can not remove comment",
@@ -642,14 +640,14 @@ void TL_DB_RemoveCommPub (long PubCod)
 	           " AND PubType=%u",		// Extra check: it's a comment
 		   PubCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (unsigned) TL_Pub_COMMENT_TO_NOTE);
+		   (unsigned) Tml_Pub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
 /*********** Remove all comments in all the notes of a given user ************/
 /*****************************************************************************/
 
-void TL_DB_RemoveAllCommsInAllNotesOf (long UsrCod)
+void Tml_DB_RemoveAllCommsInAllNotesOf (long UsrCod)
   {
    /***** Remove all comments in all notes of the user *****/
    DB_QueryDELETE ("can not remove comments",
@@ -659,14 +657,14 @@ void TL_DB_RemoveAllCommsInAllNotesOf (long UsrCod)
 		   " AND tl_notes.NotCod=tl_pubs.NotCod"
                    " AND tl_pubs.PubType=%u"
 	           " AND tl_pubs.PubCod=tl_comments.PubCod",
-		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
+		   UsrCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
 /*********** Remove all comments made by a given user in any note ************/
 /*****************************************************************************/
 
-void TL_DB_RemoveAllCommsMadeBy (long UsrCod)
+void Tml_DB_RemoveAllCommsMadeBy (long UsrCod)
   {
    /***** Remove all comments made by this user in any note *****/
    DB_QueryDELETE ("can not remove comments",
@@ -675,14 +673,14 @@ void TL_DB_RemoveAllCommsMadeBy (long UsrCod)
 	           " WHERE tl_pubs.PublisherCod=%ld"
 	           " AND tl_pubs.PubType=%u"
 	           " AND tl_pubs.PubCod=tl_comments.PubCod",
-		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
+		   UsrCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
 /*************** Get code of media associated to post/comment ****************/
 /*****************************************************************************/
 
-static long TL_DB_GetMedCod (const char *Table,const char *Field,long Cod)
+static long Tml_DB_GetMedCod (const char *Table,const char *Field,long Cod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -710,18 +708,18 @@ static long TL_DB_GetMedCod (const char *Table,const char *Field,long Cod)
 /******* Create temporary table and subquery with potential publishers *******/
 /*****************************************************************************/
 
-void TL_DB_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
-                                     struct TL_Pub_SubQueries *SubQueries)
+void Tml_DB_CreateSubQueryPublishers (const struct Tml_Timeline *Timeline,
+                                      struct Tml_Pub_SubQueries *SubQueries)
   {
    /***** Create temporary table and subquery with potential publishers *****/
    switch (Timeline->UsrOrGbl)
      {
-      case TL_Usr_TIMELINE_USR:		// Show the timeline of a user
+      case Tml_Usr_TIMELINE_USR:		// Show the timeline of a user
 	 SubQueries->TablePublishers = "";
 	 sprintf (SubQueries->Publishers,"tl_pubs.PublisherCod=%ld AND ",
 	          Gbl.Usrs.Other.UsrDat.UsrCod);
 	 break;
-      case TL_Usr_TIMELINE_GBL:		// Show the global timeline
+      case Tml_Usr_TIMELINE_GBL:		// Show the global timeline
 	 switch (Timeline->Who)
 	   {
 	    case Usr_WHO_ME:		// Show my timeline
@@ -753,14 +751,14 @@ void TL_DB_CreateSubQueryPublishers (const struct TL_Timeline *Timeline,
 /********* Create subquery to get only notes not present in timeline *********/
 /*****************************************************************************/
 
-void TL_DB_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
-                                        struct TL_Pub_SubQueries *SubQueries)
+void Tml_DB_CreateSubQueryAlreadyExists (const struct Tml_Timeline *Timeline,
+                                         struct Tml_Pub_SubQueries *SubQueries)
   {
-   static const char *Table[TL_NUM_WHAT_TO_GET] =
+   static const char *Table[Tml_NUM_WHAT_TO_GET] =
      {
-      [TL_GET_RECENT_TIMELINE] = "tl_tmp_just_retrieved_notes",	// Avoid notes just retrieved
-      [TL_GET_ONLY_NEW_PUBS  ] = "tl_tmp_just_retrieved_notes",	// Avoid notes just retrieved
-      [TL_GET_ONLY_OLD_PUBS  ] = "tl_tmp_visible_timeline",	// Avoid notes already shown
+      [Tml_GET_RECENT_TIMELINE] = "tl_tmp_just_retrieved_notes",	// Avoid notes just retrieved
+      [Tml_GET_ONLY_NEW_PUBS  ] = "tl_tmp_just_retrieved_notes",	// Avoid notes just retrieved
+      [Tml_GET_ONLY_OLD_PUBS  ] = "tl_tmp_visible_timeline",	// Avoid notes already shown
      };
 
    snprintf (SubQueries->AlreadyExists,sizeof (SubQueries->AlreadyExists),
@@ -772,7 +770,7 @@ void TL_DB_CreateSubQueryAlreadyExists (const struct TL_Timeline *Timeline,
 /***** Create subqueries with range of publications to get from tl_pubs ******/
 /*****************************************************************************/
 
-void TL_DB_CreateSubQueryRangeBottom (long Bottom,struct TL_Pub_SubQueries *SubQueries)
+void Tml_DB_CreateSubQueryRangeBottom (long Bottom,struct Tml_Pub_SubQueries *SubQueries)
   {
    if (Bottom > 0)
       sprintf (SubQueries->RangeBottom,"tl_pubs.PubCod>%ld AND ",Bottom);
@@ -780,7 +778,7 @@ void TL_DB_CreateSubQueryRangeBottom (long Bottom,struct TL_Pub_SubQueries *SubQ
       SubQueries->RangeBottom[0] = '\0';
   }
 
-void TL_DB_CreateSubQueryRangeTop (long Top,struct TL_Pub_SubQueries *SubQueries)
+void Tml_DB_CreateSubQueryRangeTop (long Top,struct Tml_Pub_SubQueries *SubQueries)
   {
    if (Top > 0)
       sprintf (SubQueries->RangeTop,"tl_pubs.PubCod<%ld AND ",Top);
@@ -793,8 +791,8 @@ void TL_DB_CreateSubQueryRangeTop (long Top,struct TL_Pub_SubQueries *SubQueries
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned TL_DB_SelectTheMostRecentPub (const struct TL_Pub_SubQueries *SubQueries,
-                                       MYSQL_RES **mysql_res)
+unsigned Tml_DB_SelectTheMostRecentPub (const struct Tml_Pub_SubQueries *SubQueries,
+                                        MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get publication",
@@ -817,7 +815,7 @@ unsigned TL_DB_SelectTheMostRecentPub (const struct TL_Pub_SubQueries *SubQuerie
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned TL_DB_GetDataOfPubByCod (long PubCod,MYSQL_RES **mysql_res)
+unsigned Tml_DB_GetDataOfPubByCod (long PubCod,MYSQL_RES **mysql_res)
   {
    /***** Trivial check: publication code should be > 0 *****/
    if (PubCod <= 0)
@@ -838,7 +836,7 @@ unsigned TL_DB_GetDataOfPubByCod (long PubCod,MYSQL_RES **mysql_res)
 /*********************** Get code of note of a publication *******************/
 /*****************************************************************************/
 
-long TL_DB_GetNotCodFromPubCod (long PubCod)
+long Tml_DB_GetNotCodFromPubCod (long PubCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -868,7 +866,7 @@ long TL_DB_GetNotCodFromPubCod (long PubCod)
 // "LastPubCod"
 // "FirstPubCod"
 
-long TL_DB_GetPubCodFromSession (const char *FieldName)
+long Tml_DB_GetPubCodFromSession (const char *FieldName)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -898,7 +896,7 @@ long TL_DB_GetPubCodFromSession (const char *FieldName)
 /****************** Get number of publications from a user *******************/
 /*****************************************************************************/
 
-unsigned long TL_DB_GetNumPubsUsr (long UsrCod)
+unsigned long Tml_DB_GetNumPubsUsr (long UsrCod)
   {
    /***** Get number of posts from a user from database *****/
    return DB_QueryCOUNT ("can not get number of publications from a user",
@@ -912,7 +910,7 @@ unsigned long TL_DB_GetNumPubsUsr (long UsrCod)
 /*****************************************************************************/
 // Return just created publication code
 
-long TL_DB_CreateNewPub (const struct TL_Pub_Publication *Pub)
+long Tml_DB_CreateNewPub (const struct Tml_Pub_Publication *Pub)
   {
    /***** Insert new publication in database *****/
    return
@@ -930,7 +928,7 @@ long TL_DB_CreateNewPub (const struct TL_Pub_Publication *Pub)
 /************** Update first publication code stored in session **************/
 /*****************************************************************************/
 
-void TL_DB_UpdateFirstPubCodInSession (long FirstPubCod)
+void Tml_DB_UpdateFirstPubCodInSession (long FirstPubCod)
   {
    DB_QueryUPDATE ("can not update first publication code into session",
 		   "UPDATE sessions"
@@ -944,7 +942,7 @@ void TL_DB_UpdateFirstPubCodInSession (long FirstPubCod)
 /*************** Update last publication code stored in session **************/
 /*****************************************************************************/
 
-void TL_DB_UpdateLastPubCodInSession (void)
+void Tml_DB_UpdateLastPubCodInSession (void)
   {
    DB_QueryUPDATE ("can not update last publication code into session",
 		   "UPDATE sessions"
@@ -959,7 +957,7 @@ void TL_DB_UpdateLastPubCodInSession (void)
 /********* Update first and last publication codes stored in session *********/
 /*****************************************************************************/
 
-void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
+void Tml_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
   {
    DB_QueryUPDATE ("can not update first/last publication codes into session",
 		   "UPDATE sessions"
@@ -977,7 +975,7 @@ void TL_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
 /************** related to notes authored by a given user     ****************/
 /*****************************************************************************/
 
-void TL_DB_RemoveAllPubsPublishedByAnyUsrOfNotesAuthoredBy (long UsrCod)
+void Tml_DB_RemoveAllPubsPublishedByAnyUsrOfNotesAuthoredBy (long UsrCod)
   {
    /***** Remove all publications (original notes, shared notes, comments)
           published by any user
@@ -994,7 +992,7 @@ void TL_DB_RemoveAllPubsPublishedByAnyUsrOfNotesAuthoredBy (long UsrCod)
 /**************** Remove all publications published by a user ****************/
 /*****************************************************************************/
 
-void TL_DB_RemoveAllPubsPublishedBy (long UsrCod)
+void Tml_DB_RemoveAllPubsPublishedBy (long UsrCod)
   {
    /***** Remove all publications published by the user *****/
    DB_QueryDELETE ("can not remove publications",
@@ -1006,21 +1004,21 @@ void TL_DB_RemoveAllPubsPublishedBy (long UsrCod)
 /****************** Check if a user has favourited a note ********************/
 /*****************************************************************************/
 
-bool TL_DB_CheckIfFavedByUsr (TL_Usr_FavSha_t FavSha,long Cod,long UsrCod)
+bool Tml_DB_CheckIfFavedByUsr (Tml_Usr_FavSha_t FavSha,long Cod,long UsrCod)
   {
    /***** Check if a user has favourited a note/comment from database *****/
    return (DB_QueryCOUNT ("can not check if a user has favourited",
 			  "SELECT COUNT(*) FROM %s"
 			  " WHERE %s=%ld AND UsrCod=%ld",
-			  TL_DB_TableFav[FavSha],
-			  TL_DB_FieldFav[FavSha],Cod,UsrCod) != 0);
+			  Tml_DB_TableFav[FavSha],
+			  Tml_DB_FieldFav[FavSha],Cod,UsrCod) != 0);
   }
 
 /*****************************************************************************/
 /********* Get number of times a note/comment has been favourited ************/
 /*****************************************************************************/
 
-unsigned TL_DB_GetNumFavers (TL_Usr_FavSha_t FavSha,long Cod,long UsrCod)
+unsigned Tml_DB_GetNumFavers (Tml_Usr_FavSha_t FavSha,long Cod,long UsrCod)
   {
    /***** Get number of times (users) a note/comment has been favourited *****/
    return (unsigned)
@@ -1028,8 +1026,8 @@ unsigned TL_DB_GetNumFavers (TL_Usr_FavSha_t FavSha,long Cod,long UsrCod)
 		  "SELECT COUNT(*) FROM %s"
 		  " WHERE %s=%ld"
 		  " AND UsrCod<>%ld",	// Extra check
-		  TL_DB_TableFav[FavSha],
-		  TL_DB_FieldFav[FavSha],Cod,
+		  Tml_DB_TableFav[FavSha],
+		  Tml_DB_FieldFav[FavSha],Cod,
 		  UsrCod);		// The author
   }
 
@@ -1037,9 +1035,9 @@ unsigned TL_DB_GetNumFavers (TL_Usr_FavSha_t FavSha,long Cod,long UsrCod)
 /******* Get list of users who have marked a note/comment as favourite *******/
 /*****************************************************************************/
 
-unsigned TL_DB_GetFavers (TL_Usr_FavSha_t FavSha,
-                          long Cod,long UsrCod,unsigned MaxUsrs,
-                          MYSQL_RES **mysql_res)
+unsigned Tml_DB_GetFavers (Tml_Usr_FavSha_t FavSha,
+                           long Cod,long UsrCod,unsigned MaxUsrs,
+                           MYSQL_RES **mysql_res)
   {
    /***** Get list of users who have marked a note/comment as favourite from database *****/
    return (unsigned)
@@ -1049,8 +1047,8 @@ unsigned TL_DB_GetFavers (TL_Usr_FavSha_t FavSha,
 		   " WHERE %s=%ld"
 		   " AND UsrCod<>%ld"	// Extra check
 		   " ORDER BY FavCod LIMIT %u",
-		   TL_DB_TableFav[FavSha],
-		   TL_DB_FieldFav[FavSha],Cod,
+		   Tml_DB_TableFav[FavSha],
+		   Tml_DB_FieldFav[FavSha],Cod,
 		   UsrCod,
 		   MaxUsrs);
   }
@@ -1059,7 +1057,7 @@ unsigned TL_DB_GetFavers (TL_Usr_FavSha_t FavSha,
 /**************** Mark note/comment as favourite in database *****************/
 /*****************************************************************************/
 
-void TL_DB_MarkAsFav (TL_Usr_FavSha_t FavSha,long Cod)
+void Tml_DB_MarkAsFav (Tml_Usr_FavSha_t FavSha,long Cod)
   {
    /***** Insert in favourited in database *****/
    DB_QueryINSERT ("can not favourite comment",
@@ -1067,8 +1065,8 @@ void TL_DB_MarkAsFav (TL_Usr_FavSha_t FavSha,long Cod)
 		   " (%s,UsrCod,TimeFav)"
 		   " VALUES"
 		   " (%ld,%ld,NOW())",
-		   TL_DB_TableFav[FavSha],
-		   TL_DB_FieldFav[FavSha],
+		   Tml_DB_TableFav[FavSha],
+		   Tml_DB_FieldFav[FavSha],
 		   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -1076,33 +1074,33 @@ void TL_DB_MarkAsFav (TL_Usr_FavSha_t FavSha,long Cod)
 /*************** Unmark note/comment as favourite in database ****************/
 /*****************************************************************************/
 
-void TL_DB_UnmarkAsFav (TL_Usr_FavSha_t FavSha,long Cod)
+void Tml_DB_UnmarkAsFav (Tml_Usr_FavSha_t FavSha,long Cod)
   {
    /***** Delete the mark as favourite from database *****/
    DB_QueryDELETE ("can not unfavourite",
 		   "DELETE FROM %s"
 		   " WHERE %s=%ld AND UsrCod=%ld",
-		   TL_DB_TableFav[FavSha],
-		   TL_DB_FieldFav[FavSha],Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Tml_DB_TableFav[FavSha],
+		   Tml_DB_FieldFav[FavSha],Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
 /********** Remove all favs made by a given user to any comment **************/
 /*****************************************************************************/
 
-void TL_DB_RemoveAllFavsMadeByUsr (TL_Usr_FavSha_t FavSha,long UsrCod)
+void Tml_DB_RemoveAllFavsMadeByUsr (Tml_Usr_FavSha_t FavSha,long UsrCod)
   {
    /* Remove all favs made by this user to any note/comment */
    DB_QueryDELETE ("can not remove favs",
 		   "DELETE FROM %s WHERE UsrCod=%ld",
-		   TL_DB_TableFav[FavSha],UsrCod);
+		   Tml_DB_TableFav[FavSha],UsrCod);
   }
 
 /*****************************************************************************/
 /************ Remove all favs to notes/comments of a given user **************/
 /*****************************************************************************/
 
-void TL_DB_RemoveAllFavsToPubsBy (TL_Usr_FavSha_t FavSha,long UsrCod)
+void Tml_DB_RemoveAllFavsToPubsBy (Tml_Usr_FavSha_t FavSha,long UsrCod)
   {
    /***** Remove all favs to notes/comments of this user *****/
    DB_QueryDELETE ("can not remove favs",
@@ -1111,18 +1109,18 @@ void TL_DB_RemoveAllFavsToPubsBy (TL_Usr_FavSha_t FavSha,long UsrCod)
 	           " WHERE tl_pubs.PublisherCod=%ld"	// Author of the comment
                    " AND tl_pubs.PubType=%u"
 	           " AND tl_pubs.PubCod=%s.PubCod",
-	           TL_DB_TableFav[FavSha],
-	           TL_DB_TableFav[FavSha],
+	           Tml_DB_TableFav[FavSha],
+	           Tml_DB_TableFav[FavSha],
 		   UsrCod,
-		   (unsigned) TL_DB_PubTypeFav[FavSha],
-		   TL_DB_TableFav[FavSha]);
+		   (unsigned) Tml_DB_PubTypeFav[FavSha],
+		   Tml_DB_TableFav[FavSha]);
   }
 
 /*****************************************************************************/
 /*** Remove all favs to all comments in all notes authored by a given user ***/
 /*****************************************************************************/
 
-void TL_DB_RemoveAllFavsToAllCommsInAllNotesBy (long UsrCod)
+void Tml_DB_RemoveAllFavsToAllCommsInAllNotesBy (long UsrCod)
   {
    /***** Remove all favs to all comments
           in all notes authored by this user *****/
@@ -1133,14 +1131,14 @@ void TL_DB_RemoveAllFavsToAllCommsInAllNotesBy (long UsrCod)
 	           " AND tl_notes.NotCod=tl_pubs.NotCod"
                    " AND tl_pubs.PubType=%u"
 	           " AND tl_pubs.PubCod=tl_comments_fav.PubCod",
-		   UsrCod,(unsigned) TL_Pub_COMMENT_TO_NOTE);
+		   UsrCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
 /****************** Check if a user has published a note *********************/
 /*****************************************************************************/
 
-bool TL_DB_CheckIfSharedByUsr (long NotCod,long UsrCod)
+bool Tml_DB_CheckIfSharedByUsr (long NotCod,long UsrCod)
   {
    return (DB_QueryCOUNT ("can not check if a user has shared a note",
 			  "SELECT COUNT(*) FROM tl_pubs"
@@ -1149,14 +1147,14 @@ bool TL_DB_CheckIfSharedByUsr (long NotCod,long UsrCod)
 			  " AND PubType=%u",
 			  NotCod,
 			  UsrCod,
-			  (unsigned) TL_Pub_SHARED_NOTE) != 0);
+			  (unsigned) Tml_Pub_SHARED_NOTE) != 0);
   }
 
 /*****************************************************************************/
 /********** Get number of times a note has been shared in timeline ***********/
 /*****************************************************************************/
 
-unsigned TL_DB_GetNumSharers (long NotCod,long UsrCod)
+unsigned Tml_DB_GetNumSharers (long NotCod,long UsrCod)
   {
    /***** Get number of times (users) this note has been shared *****/
    return (unsigned)
@@ -1167,15 +1165,15 @@ unsigned TL_DB_GetNumSharers (long NotCod,long UsrCod)
 		  " AND PubType=%u",
 		  NotCod,
 		  UsrCod,	// Author of the note
-		  (unsigned) TL_Pub_SHARED_NOTE);
+		  (unsigned) Tml_Pub_SHARED_NOTE);
   }
 
 /*****************************************************************************/
 /***************** Get list of users who have shared a note ******************/
 /*****************************************************************************/
 
-unsigned TL_DB_GetSharers (long NotCod,long UsrCod,unsigned MaxUsrs,
-                           MYSQL_RES **mysql_res)
+unsigned Tml_DB_GetSharers (long NotCod,long UsrCod,unsigned MaxUsrs,
+                            MYSQL_RES **mysql_res)
   {
    /***** Get list of users who have shared a note from database *****/
    return (unsigned)
@@ -1188,7 +1186,7 @@ unsigned TL_DB_GetSharers (long NotCod,long UsrCod,unsigned MaxUsrs,
 		   " ORDER BY PubCod LIMIT %u",
 		   NotCod,
 		   UsrCod,
-		   (unsigned) TL_Pub_SHARED_NOTE,
+		   (unsigned) Tml_Pub_SHARED_NOTE,
 		   MaxUsrs);
   }
 
@@ -1196,7 +1194,7 @@ unsigned TL_DB_GetSharers (long NotCod,long UsrCod,unsigned MaxUsrs,
 /****************** Remove shared publication from database ******************/
 /*****************************************************************************/
 
-void TL_DB_RemoveSharedPub (long NotCod)
+void Tml_DB_RemoveSharedPub (long NotCod)
   {
    /***** Remove shared publication *****/
    DB_QueryDELETE ("can not remove a publication",
@@ -1206,5 +1204,5 @@ void TL_DB_RemoveSharedPub (long NotCod)
 		   " AND PubType=%u",	// Extra check: shared note
 		   NotCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (unsigned) TL_Pub_SHARED_NOTE);
+		   (unsigned) Tml_Pub_SHARED_NOTE);
   }

@@ -55,142 +55,142 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void TL_Sha_ShaNote (struct TL_Not_Note *Not);
-static void TL_Sha_UnsNote (struct TL_Not_Note *Not);
+static void Tml_Sha_ShaNote (struct Tml_Not_Note *Not);
+static void Tml_Sha_UnsNote (struct Tml_Not_Note *Not);
 
 /*****************************************************************************/
 /****************************** Show all sharers *****************************/
 /*****************************************************************************/
 
-void TL_Sha_ShowAllSharersNoteUsr (void)
+void Tml_Sha_ShowAllSharersNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show all sharers *****/
-   TL_Sha_ShowAllSharersNoteGbl ();
+   Tml_Sha_ShowAllSharersNoteGbl ();
   }
 
-void TL_Sha_ShowAllSharersNoteGbl (void)
+void Tml_Sha_ShowAllSharersNoteGbl (void)
   {
-   struct TL_Not_Note Not;
+   struct Tml_Not_Note Not;
 
    /***** Get data of note *****/
-   Not.NotCod = TL_Not_GetParamNotCod ();
-   TL_Not_GetDataOfNoteByCod (&Not);
+   Not.NotCod = Tml_Not_GetParamNotCod ();
+   Tml_Not_GetDataOfNoteByCod (&Not);
 
    /***** Write HTML inside DIV with form to share/unshare *****/
-   TL_Usr_PutIconFavSha (TL_Usr_SHA_UNS_NOTE,
+   Tml_Usr_PutIconFavSha (Tml_Usr_SHA_UNS_NOTE,
 	                 Not.NotCod,Not.UsrCod,Not.NumShared,
-	                 TL_Usr_SHOW_ALL_USRS);
+	                 Tml_Usr_SHOW_ALL_USRS);
   }
 
 /*****************************************************************************/
 /******************************** Share a note *******************************/
 /*****************************************************************************/
 
-void TL_Sha_ShaNoteUsr (void)
+void Tml_Sha_ShaNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Share note *****/
-   TL_Sha_ShaNoteGbl ();
+   Tml_Sha_ShaNoteGbl ();
   }
 
-void TL_Sha_ShaNoteGbl (void)
+void Tml_Sha_ShaNoteGbl (void)
   {
-   struct TL_Not_Note Not;
+   struct Tml_Not_Note Not;
 
    /***** Share note *****/
-   TL_Sha_ShaNote (&Not);
+   Tml_Sha_ShaNote (&Not);
 
    /***** Write HTML inside DIV with form to unshare *****/
-   TL_Usr_PutIconFavSha (TL_Usr_SHA_UNS_NOTE,
+   Tml_Usr_PutIconFavSha (Tml_Usr_SHA_UNS_NOTE,
 	                 Not.NotCod,Not.UsrCod,Not.NumShared,
-	                 TL_Usr_SHOW_FEW_USRS);
+	                 Tml_Usr_SHOW_FEW_USRS);
   }
 
-static void TL_Sha_ShaNote (struct TL_Not_Note *Not)
+static void Tml_Sha_ShaNote (struct Tml_Not_Note *Not)
   {
-   struct TL_Pub_Publication Pub;
+   struct Tml_Pub_Publication Pub;
    long OriginalPubCod;
 
    /***** Get data of note *****/
-   Not->NotCod = TL_Not_GetParamNotCod ();
-   TL_Not_GetDataOfNoteByCod (Not);
+   Not->NotCod = Tml_Not_GetParamNotCod ();
+   Tml_Not_GetDataOfNoteByCod (Not);
 
    /***** Do some checks *****/
-   if (!TL_Usr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod))
+   if (!Tml_Usr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod))
       return;
 
    /***** Trivial check: Is note already shared by me? *****/
-   if (TL_Usr_CheckIfFavedSharedByUsr (TL_Usr_SHA_UNS_NOTE,Not->NotCod,
+   if (Tml_Usr_CheckIfFavedSharedByUsr (Tml_Usr_SHA_UNS_NOTE,Not->NotCod,
                                        Gbl.Usrs.Me.UsrDat.UsrCod))
       return;
 
    /***** Share (publish note in timeline) *****/
    Pub.NotCod       = Not->NotCod;
    Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Pub.PubType      = TL_Pub_SHARED_NOTE;
-   TL_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
+   Pub.PubType      = Tml_Pub_SHARED_NOTE;
+   Tml_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
 
    /***** Update number of times this note is shared *****/
-   Not->NumShared = TL_DB_GetNumSharers (Not->NotCod,Not->UsrCod);
+   Not->NumShared = Tml_DB_GetNumSharers (Not->NotCod,Not->UsrCod);
 
    /***** Create notification about shared post
 	  for the author of the post *****/
-   OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
+   OriginalPubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod);
    if (OriginalPubCod > 0)
-      TL_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TL_SHARE);
+      Tml_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TL_SHARE);
   }
 
 /*****************************************************************************/
 /******************** Unshare a previously shared note ***********************/
 /*****************************************************************************/
 
-void TL_Sha_UnsNoteUsr (void)
+void Tml_Sha_UnsNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Unshare note *****/
-   TL_Sha_UnsNoteGbl ();
+   Tml_Sha_UnsNoteGbl ();
   }
 
-void TL_Sha_UnsNoteGbl (void)
+void Tml_Sha_UnsNoteGbl (void)
   {
-   struct TL_Not_Note Not;
+   struct Tml_Not_Note Not;
 
    /***** Unshare note *****/
-   TL_Sha_UnsNote (&Not);
+   Tml_Sha_UnsNote (&Not);
 
    /***** Write HTML inside DIV with form to share *****/
-   TL_Usr_PutIconFavSha (TL_Usr_SHA_UNS_NOTE,
+   Tml_Usr_PutIconFavSha (Tml_Usr_SHA_UNS_NOTE,
 	                 Not.NotCod,Not.UsrCod,Not.NumShared,
-	                 TL_Usr_SHOW_FEW_USRS);
+	                 Tml_Usr_SHOW_FEW_USRS);
   }
 
-static void TL_Sha_UnsNote (struct TL_Not_Note *Not)
+static void Tml_Sha_UnsNote (struct Tml_Not_Note *Not)
   {
    long OriginalPubCod;
 
    /***** Get data of note *****/
-   Not->NotCod = TL_Not_GetParamNotCod ();
-   TL_Not_GetDataOfNoteByCod (Not);
+   Not->NotCod = Tml_Not_GetParamNotCod ();
+   Tml_Not_GetDataOfNoteByCod (Not);
 
    /***** Do some checks *****/
-   if (!TL_Usr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod))
+   if (!Tml_Usr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod))
       return;
 
    /***** Delete publication from database *****/
-   TL_DB_RemoveSharedPub (Not->NotCod);
+   Tml_DB_RemoveSharedPub (Not->NotCod);
 
    /***** Update number of times this note is shared *****/
-   Not->NumShared = TL_DB_GetNumSharers (Not->NotCod,Not->UsrCod);
+   Not->NumShared = Tml_DB_GetNumSharers (Not->NotCod,Not->UsrCod);
 
    /***** Mark possible notifications on this note as removed *****/
-   OriginalPubCod = TL_DB_GetPubCodOfOriginalNote (Not->NotCod);
+   OriginalPubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod);
    if (OriginalPubCod > 0)
       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_SHARE,OriginalPubCod);
   }

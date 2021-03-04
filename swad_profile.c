@@ -236,7 +236,7 @@ void Prf_RequestUserProfile (void)
 
 void Prf_GetUsrDatAndShowUserProfile (void)
   {
-   struct TL_Timeline Timeline;
+   struct Tml_Timeline Timeline;
    bool ItsMe;
    bool ProfileShown = false;
 
@@ -254,11 +254,11 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 	 if (Gbl.Usrs.Me.Logged)	// Timeline visible only by logged users
 	   {
 	    /* Reset timeline context */
-            TL_ResetTimeline (&Timeline);
+            Tml_ResetTimeline (&Timeline);
 
 	    /* Show timeline */
 	    HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
-   	    TL_ShowTimelineUsr (&Timeline);
+   	    Tml_ShowTimelineUsr (&Timeline);
 	    HTM_SECTION_End ();
 	   }
 	}
@@ -1127,7 +1127,7 @@ static void Prf_GetNumSocialPubsAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of forum posts from database *****/
-      UsrFigures.NumSocPub = TL_DB_GetNumPubsUsr (UsrCod);
+      UsrFigures.NumSocPub = Tml_DB_GetNumPubsUsr (UsrCod);
 
       /***** Update number of forum posts in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))

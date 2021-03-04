@@ -1,7 +1,7 @@
 // swad_timeline_favourite.h: social timeline favourites
 
-#ifndef _SWAD_TL_FAV
-#define _SWAD_TL_FAV
+#ifndef _SWAD_TML_FAV
+#define _SWAD_TML_FAV
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -31,25 +31,25 @@
 /************************ Public constants and types *************************/
 /*****************************************************************************/
 
-#define TL_Fav_ICON_FAV		"heart.svg"
-#define TL_Fav_ICON_FAVED	"heart-red.svg"
+#define Tml_Fav_ICON_FAV		"heart.svg"
+#define Tml_Fav_ICON_FAVED	"heart-red.svg"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void TL_Fav_ShowAllFaversNoteUsr (void);
-void TL_Fav_ShowAllFaversNoteGbl (void);
-void TL_Fav_FavNoteUsr (void);
-void TL_Fav_FavNoteGbl (void);
-void TL_Fav_UnfNoteUsr (void);
-void TL_Fav_UnfNoteGbl (void);
+void Tml_Fav_ShowAllFaversNoteUsr (void);
+void Tml_Fav_ShowAllFaversNoteGbl (void);
+void Tml_Fav_FavNoteUsr (void);
+void Tml_Fav_FavNoteGbl (void);
+void Tml_Fav_UnfNoteUsr (void);
+void Tml_Fav_UnfNoteGbl (void);
 
-void TL_Fav_ShowAllFaversComUsr (void);
-void TL_Fav_ShowAllFaversComGbl (void);
-void TL_Fav_FavCommUsr (void);
-void TL_Fav_FavCommGbl (void);
-void TL_Fav_UnfCommUsr (void);
-void TL_Fav_UnfCommGbl (void);
+void Tml_Fav_ShowAllFaversComUsr (void);
+void Tml_Fav_ShowAllFaversComGbl (void);
+void Tml_Fav_FavCommUsr (void);
+void Tml_Fav_FavCommGbl (void);
+void Tml_Fav_UnfCommUsr (void);
+void Tml_Fav_UnfCommGbl (void);
 
 #endif

@@ -156,7 +156,7 @@ void Not_ReceiveNotice (void)
       Not_UpdateNumUsrsNotifiedByEMailAboutNotice (NotCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new notice *****/
-   TL_Not_StoreAndPublishNote (TL_NOTE_NOTICE,NotCod);
+   Tml_Not_StoreAndPublishNote (TL_NOTE_NOTICE,NotCod);
 
    /***** Set notice to be highlighted *****/
    Gbl.Crs.Notices.HighlightNotCod = NotCod;
@@ -340,7 +340,7 @@ void Not_RemoveNotice (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_NOTICE,NotCod);
 
    /***** Mark possible social note as unavailable *****/
-   TL_DB_MarkNoteAsUnavailable (TL_NOTE_NOTICE,NotCod);
+   Tml_DB_MarkNoteAsUnavailable (TL_NOTE_NOTICE,NotCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);

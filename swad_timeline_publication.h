@@ -1,7 +1,7 @@
 // swad_timeline_publication.h: social timeline publications
 
-#ifndef _SWAD_TL_PUB
-#define _SWAD_TL_PUB
+#ifndef _SWAD_TML_PUB
+#define _SWAD_TML_PUB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -37,71 +37,71 @@
 /*****************************************************************************/
 
 // Number of recent publishings got and shown the first time, before refreshing
-#define TL_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW	   10	// Recent publishings to show (first time)
-#define TL_Pub_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// New publishings retrieved (big number)
-#define TL_Pub_MAX_OLD_PUBS_TO_GET_AND_SHOW	   20	// Old publishings are retrieved in packs of this size
+#define Tml_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW	   10	// Recent publishings to show (first time)
+#define Tml_Pub_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// New publishings retrieved (big number)
+#define Tml_Pub_MAX_OLD_PUBS_TO_GET_AND_SHOW	   20	// Old publishings are retrieved in packs of this size
 
 /*****************************************************************************/
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define TL_Pub_NUM_PUB_TYPES	4
+#define Tml_Pub_NUM_PUB_TYPES	4
 // If the numbers assigned to each event type change,
 // it is necessary to change old numbers to new ones in database table tl_notes
 typedef enum
   {
-   TL_Pub_UNKNOWN		= 0,
-   TL_Pub_ORIGINAL_NOTE		= 1,
-   TL_Pub_SHARED_NOTE		= 2,
-   TL_Pub_COMMENT_TO_NOTE	= 3,
-  } TL_Pub_PubType_t;
+   Tml_Pub_UNKNOWN		= 0,
+   Tml_Pub_ORIGINAL_NOTE		= 1,
+   Tml_Pub_SHARED_NOTE		= 2,
+   Tml_Pub_COMMENT_TO_NOTE	= 3,
+  } Tml_Pub_PubType_t;
 
-struct TL_Pub_Publication
+struct Tml_Pub_Publication
   {
    long PubCod;
    long NotCod;
    long PublisherCod;			// Sharer or writer of the publication
-   TL_Pub_PubType_t PubType;
-   struct TL_Pub_Publication *Next;	// Used for chained list
+   Tml_Pub_PubType_t PubType;
+   struct Tml_Pub_Publication *Next;	// Used for chained list
   };
 
-struct TL_Pub_RangePubsToGet
+struct Tml_Pub_RangePubsToGet
   {
    long Top;
    long Bottom;
   };
 
-#define TL_Pub_MAX_BYTES_SUBQUERY (128 - 1)
-struct TL_Pub_SubQueries
+#define Tml_Pub_MAX_BYTES_SUBQUERY (128 - 1)
+struct Tml_Pub_SubQueries
   {
    char *TablePublishers;
-   char Publishers   [TL_Pub_MAX_BYTES_SUBQUERY + 1];
-   char RangeBottom  [TL_Pub_MAX_BYTES_SUBQUERY + 1];
-   char RangeTop     [TL_Pub_MAX_BYTES_SUBQUERY + 1];
-   char AlreadyExists[TL_Pub_MAX_BYTES_SUBQUERY + 1];
+   char Publishers   [Tml_Pub_MAX_BYTES_SUBQUERY + 1];
+   char RangeBottom  [Tml_Pub_MAX_BYTES_SUBQUERY + 1];
+   char RangeTop     [Tml_Pub_MAX_BYTES_SUBQUERY + 1];
+   char AlreadyExists[Tml_Pub_MAX_BYTES_SUBQUERY + 1];
   };
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_Pub_GetListPubsToShowInTimeline (struct TL_Timeline *Timeline);
-void TL_Pub_FreeListPubs (struct TL_Timeline *Timeline);
+void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline);
+void Tml_Pub_FreeListPubs (struct Tml_Timeline *Timeline);
 
-void TL_Pub_InsertNewPubsInTimeline (struct TL_Timeline *Timeline);
-void TL_Pub_ShowOldPubsInTimeline (struct TL_Timeline *Timeline);
+void Tml_Pub_InsertNewPubsInTimeline (struct Tml_Timeline *Timeline);
+void Tml_Pub_ShowOldPubsInTimeline (struct Tml_Timeline *Timeline);
 
-TL_TopMessage_t TL_Pub_GetTopMessage (TL_Pub_PubType_t PubType);
+Tml_TopMessage_t Tml_Pub_GetTopMessage (Tml_Pub_PubType_t PubType);
 
-void TL_Pub_PutLinkToViewNewPubs (void);
-void TL_Pub_PutLinkToViewOldPubs (void);
+void Tml_Pub_PutLinkToViewNewPubs (void);
+void Tml_Pub_PutLinkToViewOldPubs (void);
 
-void TL_Pub_PutHiddenParamPubCod (long PubCod);
-long TL_Pub_GetParamPubCod (void);
+void Tml_Pub_PutHiddenParamPubCod (long PubCod);
+long Tml_Pub_GetParamPubCod (void);
 
-void TL_Pub_GetDataOfPubFromNextRow (MYSQL_RES *mysql_res,
-                                     struct TL_Pub_Publication *Pub);
+void Tml_Pub_GetDataOfPubFromNextRow (MYSQL_RES *mysql_res,
+                                      struct Tml_Pub_Publication *Pub);
 
-void TL_Pub_PublishPubInTimeline (struct TL_Pub_Publication *Pub);
+void Tml_Pub_PublishPubInTimeline (struct Tml_Pub_Publication *Pub);
 
 #endif

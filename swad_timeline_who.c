@@ -58,17 +58,17 @@ Usr_Who_t TL_GlobalWho;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static Usr_Who_t TL_Who_GetWhoFromDB (void);
+static Usr_Who_t Tml_Who_GetWhoFromDB (void);
 
-static void TL_Who_SetGlobalWho (Usr_Who_t Who);
+static void Tml_Who_SetGlobalWho (Usr_Who_t Who);
 
-static void TL_Who_ShowWarningYouDontFollowAnyUser (void);
+static void Tml_Who_ShowWarningYouDontFollowAnyUser (void);
 
 /*****************************************************************************/
 /******** Show form to select users whom public activity is displayed ********/
 /*****************************************************************************/
 
-void TL_Who_PutFormWho (struct TL_Timeline *Timeline)
+void Tml_Who_PutFormWho (struct Tml_Timeline *Timeline)
   {
    Usr_Who_t Who;
    unsigned Mask = 1 << Usr_WHO_ME       |
@@ -106,14 +106,14 @@ void TL_Who_PutFormWho (struct TL_Timeline *Timeline)
 
    /***** Show warning if I do not follow anyone *****/
    if (Timeline->Who == Usr_WHO_FOLLOWED)
-      TL_Who_ShowWarningYouDontFollowAnyUser ();
+      Tml_Who_ShowWarningYouDontFollowAnyUser ();
   }
 
 /*****************************************************************************/
 /********* Get parameter with which users to view in global timeline *********/
 /*****************************************************************************/
 
-void TL_Who_GetParamWho (void)
+void Tml_Who_GetParamWho (void)
   {
    Usr_Who_t Who;
 
@@ -122,21 +122,21 @@ void TL_Who_GetParamWho (void)
 
    /***** If parameter Who is not present, get it from database *****/
    if (Who == Usr_WHO_UNKNOWN)
-      Who = TL_Who_GetWhoFromDB ();
+      Who = Tml_Who_GetWhoFromDB ();
 
    /***** If parameter Who is unknown, set it to default *****/
    if (Who == Usr_WHO_UNKNOWN)
-      Who = TL_Who_DEFAULT_WHO;
+      Who = Tml_Who_DEFAULT_WHO;
 
    /***** Set global variable *****/
-   TL_Who_SetGlobalWho (Who);
+   Tml_Who_SetGlobalWho (Who);
   }
 
 /*****************************************************************************/
 /********* Get which users to view in global timeline from database **********/
 /*****************************************************************************/
 
-static Usr_Who_t TL_Who_GetWhoFromDB (void)
+static Usr_Who_t Tml_Who_GetWhoFromDB (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -144,7 +144,7 @@ static Usr_Who_t TL_Who_GetWhoFromDB (void)
    Usr_Who_t Who = Usr_WHO_UNKNOWN;
 
    /***** Get which users from database *****/
-   if (TL_DB_GetWho (&mysql_res) == 1)
+   if (Tml_DB_GetWho (&mysql_res) == 1)
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -164,16 +164,16 @@ static Usr_Who_t TL_Who_GetWhoFromDB (void)
 /******** Save which users to view in global timeline into database **********/
 /*****************************************************************************/
 
-void TL_Who_SaveWhoInDB (struct TL_Timeline *Timeline)
+void Tml_Who_SaveWhoInDB (struct Tml_Timeline *Timeline)
   {
    if (Gbl.Usrs.Me.Logged)	// Save only if I am logged
      {
       if (Timeline->Who == Usr_WHO_UNKNOWN)
-	 Timeline->Who = TL_Who_DEFAULT_WHO;
+	 Timeline->Who = Tml_Who_DEFAULT_WHO;
 
       /***** Update which users in database *****/
       // Who is stored in usr_last for next time I log in
-      TL_DB_UpdateWho (Timeline->Who);
+      Tml_DB_UpdateWho (Timeline->Who);
      }
   }
 
@@ -181,12 +181,12 @@ void TL_Who_SaveWhoInDB (struct TL_Timeline *Timeline)
 /**** Set/get global variable with which users to view in global timeline ****/
 /*****************************************************************************/
 
-static void TL_Who_SetGlobalWho (Usr_Who_t Who)
+static void Tml_Who_SetGlobalWho (Usr_Who_t Who)
   {
    TL_GlobalWho = Who;
   }
 
-Usr_Who_t TL_Who_GetGlobalWho (void)
+Usr_Who_t Tml_Who_GetGlobalWho (void)
   {
    return TL_GlobalWho;
   }
@@ -195,7 +195,7 @@ Usr_Who_t TL_Who_GetGlobalWho (void)
 /********* Get parameter with which users to view in global timeline *********/
 /*****************************************************************************/
 
-static void TL_Who_ShowWarningYouDontFollowAnyUser (void)
+static void Tml_Who_ShowWarningYouDontFollowAnyUser (void)
   {
    extern const char *Txt_You_dont_follow_any_user;
    unsigned NumFollowing;

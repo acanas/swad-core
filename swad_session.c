@@ -227,7 +227,7 @@ static void Ses_RemoveSessionFromDB (void)
 
    /***** Clear old unused social timelines in database *****/
    // This is necessary to prevent the table growing and growing
-   TL_DB_ClearOldTimelinesNotesFromDB ();
+   Tml_DB_ClearOldTimelinesNotesFromDB ();
   }
 
 /*****************************************************************************/

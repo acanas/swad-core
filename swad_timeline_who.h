@@ -1,7 +1,7 @@
 // swad_timeline_who.c: select users whom timeline is displayed
 
-#ifndef _SWAD_TL_WHO
-#define _SWAD_TL_WHO
+#ifndef _SWAD_TML_WHO
+#define _SWAD_TML_WHO
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -33,7 +33,7 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define TL_Who_DEFAULT_WHO	Usr_WHO_FOLLOWED
+#define Tml_Who_DEFAULT_WHO	Usr_WHO_FOLLOWED
 
 /*****************************************************************************/
 /******************************** Public types *******************************/
@@ -43,12 +43,12 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_Who_PutFormWho (struct TL_Timeline *Timeline);
+void Tml_Who_PutFormWho (struct Tml_Timeline *Timeline);
 
-void TL_Who_GetParamWho (void);
+void Tml_Who_GetParamWho (void);
 
-void TL_Who_SaveWhoInDB (struct TL_Timeline *Timeline);
+void Tml_Who_SaveWhoInDB (struct Tml_Timeline *Timeline);
 
-Usr_Who_t TL_Who_GetGlobalWho (void);
+Usr_Who_t Tml_Who_GetGlobalWho (void);
 
 #endif

@@ -3381,7 +3381,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    extern const char *Txt_Total;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   TL_Not_NoteType_t NoteType;
+   Tml_Not_NoteType_t NoteType;
    unsigned long NumNotes;
    unsigned long NumRows;
    unsigned NumUsrs;
@@ -3418,8 +3418,8 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 								1 << Rol_TCH);
 
    /***** Get total number of following/followers from database *****/
-   for (NoteType  = (TL_Not_NoteType_t) 0;
-	NoteType <= (TL_Not_NoteType_t) (TL_NOT_NUM_NOTE_TYPES - 1);
+   for (NoteType  = (Tml_Not_NoteType_t) 0;
+	NoteType <= (Tml_Not_NoteType_t) (TL_NOT_NUM_NOTE_TYPES - 1);
 	NoteType++)
      {
       switch (Gbl.Scope.Current)

@@ -1,7 +1,7 @@
 // swad_timeline_form.h: social timeline forms
 
-#ifndef _SWAD_TL_FRM
-#define _SWAD_TL_FRM
+#ifndef _SWAD_TML_FRM
+#define _SWAD_TML_FRM
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -35,38 +35,38 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define TL_Frm_NUM_ACTIONS 16
+#define Tml_Frm_NUM_ACTIONS 16
 typedef enum
   {
-   TL_Frm_RECEIVE_POST,	// Receive post
-   TL_Frm_RECEIVE_COMM,	// Receive comment
+   Tml_Frm_RECEIVE_POST,	// Receive post
+   Tml_Frm_RECEIVE_COMM,	// Receive comment
 
-   TL_Frm_REQ_REM_NOTE,	// Request removal note
-   TL_Frm_REQ_REM_COMM,	// Request removal comment
+   Tml_Frm_REQ_REM_NOTE,	// Request removal note
+   Tml_Frm_REQ_REM_COMM,	// Request removal comment
 
-   TL_Frm_REM_NOTE,	// Remove note
-   TL_Frm_REM_COMM,	// Remove comment
+   Tml_Frm_REM_NOTE,	// Remove note
+   Tml_Frm_REM_COMM,	// Remove comment
 
-   TL_Frm_SHA_NOTE,	// Share a note
-   TL_Frm_UNS_NOTE,	// Unshare a note
+   Tml_Frm_SHA_NOTE,	// Share a note
+   Tml_Frm_UNS_NOTE,	// Unshare a note
 
-   TL_Frm_FAV_NOTE,     // Favourite a note
-   TL_Frm_FAV_COMM,	// Favourite a comment
+   Tml_Frm_FAV_NOTE,     // Favourite a note
+   Tml_Frm_FAV_COMM,	// Favourite a comment
 
-   TL_Frm_UNF_NOTE,	// Unfavourite a note
-   TL_Frm_UNF_COMM,	// Unfavourite a comment
+   Tml_Frm_UNF_NOTE,	// Unfavourite a note
+   Tml_Frm_UNF_COMM,	// Unfavourite a comment
 
-   TL_Frm_ALL_SHA_NOTE,	// Show all sharers of note
+   Tml_Frm_ALL_SHA_NOTE,	// Show all sharers of note
 
-   TL_Frm_ALL_FAV_NOTE,	// Show all favouriters of note
-   TL_Frm_ALL_FAV_COMM,	// Show all favouriters of comment
+   Tml_Frm_ALL_FAV_NOTE,	// Show all favouriters of note
+   Tml_Frm_ALL_FAV_COMM,	// Show all favouriters of comment
 
-   TL_Frm_SHO_HID_COMM,	// Show / hide comments
-  } TL_Frm_Action_t;
+   Tml_Frm_SHO_HID_COMM,	// Show / hide comments
+  } Tml_Frm_Action_t;
 
 struct TL_Form
   {
-   TL_Frm_Action_t Action;
+   Tml_Frm_Action_t Action;
    const char *ParamFormat;
    long ParamCod;
    const char *Icon;
@@ -77,22 +77,22 @@ struct TL_Form
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_Frm_PutFormToFavUnfShaUns (TL_Usr_FavSha_t FavSha,long Cod);
+void Tml_Frm_PutFormToFavUnfShaUns (Tml_Usr_FavSha_t FavSha,long Cod);
 
-void TL_Frm_BeginForm (const struct TL_Timeline *Timeline,TL_Frm_Action_t Action);
-void TL_Frm_EndForm (void);
+void Tml_Frm_BeginForm (const struct Tml_Timeline *Timeline,Tml_Frm_Action_t Action);
+void Tml_Frm_EndForm (void);
 
-void TL_Frm_PutFormToSeeAllFaversSharers (TL_Frm_Action_t Action,
+void Tml_Frm_PutFormToSeeAllFaversSharers (Tml_Frm_Action_t Action,
 		                          const char *ParamFormat,long ParamCod,
-                                          TL_Usr_HowManyUsrs_t HowManyUsrs);
-void TL_Frm_FormFavSha (const struct TL_Form *Form);
+                                          Tml_Usr_HowManyUsrs_t HowManyUsrs);
+void Tml_Frm_FormFavSha (const struct TL_Form *Form);
 
-void TL_Frm_FormToShowHiddenComms (long NotCod,
+void Tml_Frm_FormToShowHiddenComms (long NotCod,
 				   char IdComms[Frm_MAX_BYTES_ID + 1],
 				   unsigned NumInitialComms);
 
-void TL_Frm_BeginAlertRemove (const char *QuestionTxt);
-void TL_Frm_EndAlertRemove (struct TL_Timeline *Timeline,TL_Frm_Action_t Action,
+void Tml_Frm_BeginAlertRemove (const char *QuestionTxt);
+void Tml_Frm_EndAlertRemove (struct Tml_Timeline *Timeline,Tml_Frm_Action_t Action,
                             void (*FuncParams) (void *Args));
 
 #endif

@@ -62,8 +62,8 @@ extern struct Globals Gbl;
 /*********** Create a notification for the author of a post/comment **********/
 /*****************************************************************************/
 
-void TL_Ntf_CreateNotifToAuthor (long AuthorCod,long PubCod,
-                                 Ntf_NotifyEvent_t NotifyEvent)
+void Tml_Ntf_CreateNotifToAuthor (long AuthorCod,long PubCod,
+                                  Ntf_NotifyEvent_t NotifyEvent)
   {
    struct UsrData UsrDat;
    bool CreateNotif;
@@ -101,27 +101,27 @@ void TL_Ntf_CreateNotifToAuthor (long AuthorCod,long PubCod,
 /***************** Get notification of a new publication *********************/
 /*****************************************************************************/
 
-void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                 char **ContentStr,
-                                 long PubCod,bool GetContent)
+void Tml_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+                                  char **ContentStr,
+                                  long PubCod,bool GetContent)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct TL_Pub_Publication Pub;
-   struct TL_Not_Note Not;
-   struct TL_Pst_Content Content;
+   struct Tml_Pub_Publication Pub;
+   struct Tml_Not_Note Not;
+   struct Tml_Pst_Content Content;
    size_t Length;
    bool ContentCopied = false;
 
    /***** Return nothing on error *****/
-   Pub.PubType = TL_Pub_UNKNOWN;
+   Pub.PubType = Tml_Pub_UNKNOWN;
    SummaryStr[0] = '\0';	// Return nothing on error
    Content.Txt[0] = '\0';
 
    /***** Get summary and content from post from database *****/
-   if (TL_DB_GetDataOfPubByCod (PubCod,&mysql_res) == 1)   // Result should have a unique row
+   if (Tml_DB_GetDataOfPubByCod (PubCod,&mysql_res) == 1)   // Result should have a unique row
       /* Get data of publication from row */
-      TL_Pub_GetDataOfPubFromNextRow (mysql_res,&Pub);
+      Tml_Pub_GetDataOfPubFromNextRow (mysql_res,&Pub);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -129,18 +129,18 @@ void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    /***** Get summary and content *****/
    switch (Pub.PubType)
      {
-      case TL_Pub_UNKNOWN:
+      case Tml_Pub_UNKNOWN:
 	 break;
-      case TL_Pub_ORIGINAL_NOTE:
-      case TL_Pub_SHARED_NOTE:
+      case Tml_Pub_ORIGINAL_NOTE:
+      case Tml_Pub_SHARED_NOTE:
 	 /* Get data of note */
 	 Not.NotCod = Pub.NotCod;
-	 TL_Not_GetDataOfNoteByCod (&Not);
+	 Tml_Not_GetDataOfNoteByCod (&Not);
 
 	 if (Not.NoteType == TL_NOTE_POST)
 	   {
 	    /***** Get post from database *****/
-            if (TL_DB_GetPostByCod (Not.Cod,&mysql_res) == 1)   // Result should have a unique row
+            if (Tml_DB_GetPostByCod (Not.Cod,&mysql_res) == 1)   // Result should have a unique row
 	      {
 	       /* Get row */
 	       row = mysql_fetch_row (mysql_res);
@@ -168,11 +168,11 @@ void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	    Str_Copy (SummaryStr,Content.Txt,Ntf_MAX_BYTES_SUMMARY);
 	   }
 	 else
-	    TL_Not_GetNoteSummary (&Not,SummaryStr);
+	    Tml_Not_GetNoteSummary (&Not,SummaryStr);
 	 break;
-      case TL_Pub_COMMENT_TO_NOTE:
+      case Tml_Pub_COMMENT_TO_NOTE:
 	 /***** Get content of comment from database *****/
-	 if (TL_DB_GetDataOfCommByCod (Pub.PubCod,&mysql_res) == 1)   // Result should have a unique row
+	 if (Tml_DB_GetDataOfCommByCod (Pub.PubCod,&mysql_res) == 1)   // Result should have a unique row
 	   {
 	    /* Get row */
 	    row = mysql_fetch_row (mysql_res);
@@ -212,7 +212,7 @@ void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 /*****************************************************************************/
 // Must be executed as a priori function
 
-void TL_Ntf_MarkMyNotifAsSeen (void)
+void Tml_Ntf_MarkMyNotifAsSeen (void)
   {
    Ntf_MarkNotifAsSeen (Ntf_EVENT_TL_COMMENT,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
    Ntf_MarkNotifAsSeen (Ntf_EVENT_TL_FAV    ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);

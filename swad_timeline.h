@@ -1,7 +1,7 @@
 // swad_timeline.h: social timeline
 
-#ifndef _SWAD_TL
-#define _SWAD_TL
+#ifndef _SWAD_TML
+#define _SWAD_TML
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -45,84 +45,72 @@
    · maximum height of TL_IMAGE_SAVED_MAX_HEIGHT
    · maintaining the original aspect ratio (aspect ratio recommended: 3:2)
 */
-#define TL_IMAGE_SAVED_MAX_WIDTH	768
-#define TL_IMAGE_SAVED_MAX_HEIGHT	768
-#define TL_IMAGE_SAVED_QUALITY		 90	// 1 to 100
+#define Tml_IMAGE_SAVED_MAX_WIDTH	768
+#define Tml_IMAGE_SAVED_MAX_HEIGHT	768
+#define Tml_IMAGE_SAVED_QUALITY		 90	// 1 to 100
 // in timeline posts, the quality should not be high in order to speed up the loading of images
 
 /*****************************************************************************/
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define TL_NUM_TOP_MESSAGES (1 + 6)
+#define Tml_NUM_TOP_MESSAGES (1 + 6)
 typedef enum
   {
-   TL_TOP_MESSAGE_NONE		= 0,
-   TL_TOP_MESSAGE_COMMENTED	= 1,
-   TL_TOP_MESSAGE_FAVED		= 2,
-   TL_TOP_MESSAGE_UNFAVED	= 3,
-   TL_TOP_MESSAGE_SHARED	= 4,
-   TL_TOP_MESSAGE_UNSHARED	= 5,
-   TL_TOP_MESSAGE_MENTIONED	= 6,
-  } TL_TopMessage_t;
+   Tml_TOP_MESSAGE_NONE		= 0,
+   Tml_TOP_MESSAGE_COMMENTED	= 1,
+   Tml_TOP_MESSAGE_FAVED		= 2,
+   Tml_TOP_MESSAGE_UNFAVED	= 3,
+   Tml_TOP_MESSAGE_SHARED	= 4,
+   Tml_TOP_MESSAGE_UNSHARED	= 5,
+   Tml_TOP_MESSAGE_MENTIONED	= 6,
+  } Tml_TopMessage_t;
 
-#define TL_NUM_WHAT_TO_GET 3
+#define Tml_NUM_WHAT_TO_GET 3
 typedef enum
   {
-   TL_GET_RECENT_TIMELINE,	// Recent timeline is shown when the user clicks on action menu,...
+   Tml_GET_RECENT_TIMELINE,	// Recent timeline is shown when the user clicks on action menu,...
 				// or after editing timeline
-   TL_GET_ONLY_NEW_PUBS,	// New publications are retrieved via AJAX
+   Tml_GET_ONLY_NEW_PUBS,	// New publications are retrieved via AJAX
 				// automatically from time to time
-   TL_GET_ONLY_OLD_PUBS,	// Old publications are retrieved via AJAX
+   Tml_GET_ONLY_OLD_PUBS,	// Old publications are retrieved via AJAX
 				// when the user clicks on link at bottom of timeline
-  } TL_WhatToGet_t;
+  } Tml_WhatToGet_t;
 
-struct TL_Timeline
+struct Tml_Timeline
   {
-   TL_Usr_UsrOrGbl_t UsrOrGbl;
+   Tml_Usr_UsrOrGbl_t UsrOrGbl;
    Usr_Who_t Who;
-   TL_WhatToGet_t WhatToGet;
+   Tml_WhatToGet_t WhatToGet;
    struct
      {
-      struct TL_Pub_Publication *Top;	// Points to first element in list of publications
-      struct TL_Pub_Publication *Bottom;	// Points to last  element in list of publications
+      struct Tml_Pub_Publication *Top;	// Points to first element in list of publications
+      struct Tml_Pub_Publication *Bottom;	// Points to last  element in list of publications
      } Pubs;
    long NotCod;		// Used as parameter about social note to be edited, removed...
    long PubCod;		// Used as parameter about social publishing to be edited, removed...
   };
-/*
-typedef enum
-  {
-   TL_DONT_HIGHLIGHT,
-   TL_HIGHLIGHT,
-  } TL_Highlight_t;
 
-typedef enum
-  {
-   TL_DONT_SHOW_ALONE,
-   TL_SHOW_ALONE,
-  } TL_ShowAlone_t;
-*/
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_InitTimelineGbl (struct TL_Timeline *Timeline);
+void Tml_InitTimelineGbl (struct Tml_Timeline *Timeline);
 
-void TL_ResetTimeline (struct TL_Timeline *Timeline);
+void Tml_ResetTimeline (struct Tml_Timeline *Timeline);
 
-void TL_ShowTimelineGbl (void);
-void TL_ShowNoteAndTimelineGbl (struct TL_Timeline *Timeline);
-void TL_ShowTimelineGblHighlighting (struct TL_Timeline *Timeline,long NotCod);
+void Tml_ShowTimelineGbl (void);
+void Tml_ShowNoteAndTimelineGbl (struct Tml_Timeline *Timeline);
+void Tml_ShowTimelineGblHighlighting (struct Tml_Timeline *Timeline,long NotCod);
 
-void TL_ShowTimelineUsr (struct TL_Timeline *Timeline);
-void TL_ShowTimelineUsrHighlighting (struct TL_Timeline *Timeline,long NotCod);
+void Tml_ShowTimelineUsr (struct Tml_Timeline *Timeline);
+void Tml_ShowTimelineUsrHighlighting (struct Tml_Timeline *Timeline,long NotCod);
 
-void TL_RefreshNewTimelineGbl (void);
+void Tml_RefreshNewTimelineGbl (void);
 
-void TL_RefreshOldTimelineGbl (void);
-void TL_RefreshOldTimelineUsr (void);
+void Tml_RefreshOldTimelineGbl (void);
+void Tml_RefreshOldTimelineUsr (void);
 
-void TL_WriteDateTime (time_t TimeUTC);
+void Tml_WriteDateTime (time_t TimeUTC);
 
 #endif

@@ -52864,12 +52864,12 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 #endif
 	};
 
-const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES] =
+const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[Tml_NUM_TOP_MESSAGES] =
 	{
-	[TL_TOP_MESSAGE_NONE] =
+	[Tml_TOP_MESSAGE_NONE] =
 	""
 	,
-	[TL_TOP_MESSAGE_COMMENTED] =
+	[Tml_TOP_MESSAGE_COMMENTED] =
 #if   L==1	// ca
 	"ha comentat"
 #elif L==2	// de
@@ -52890,7 +52890,7 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES] =
 	"comentou"
 #endif
 	,
-	[TL_TOP_MESSAGE_FAVED] =
+	[Tml_TOP_MESSAGE_FAVED] =
 #if   L==1	// ca
 	"ha marcat com favorit"
 #elif L==2	// de
@@ -52911,7 +52911,7 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES] =
 	"marcou como favorito"
 #endif
 	,
-	[TL_TOP_MESSAGE_UNFAVED] =
+	[Tml_TOP_MESSAGE_UNFAVED] =
 #if   L==1	// ca
 	"ha desmarcat com favorit"
 #elif L==2	// de
@@ -52932,7 +52932,7 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES] =
 	"desmarcou como favorito"
 #endif
 	,
-	[TL_TOP_MESSAGE_SHARED] =
+	[Tml_TOP_MESSAGE_SHARED] =
 #if   L==1	// ca
 	"ha compartit"
 #elif L==2	// de
@@ -52953,7 +52953,7 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES] =
 	"compartilhou"
 #endif
 	,
-	[TL_TOP_MESSAGE_UNSHARED] =
+	[Tml_TOP_MESSAGE_UNSHARED] =
 #if   L==1	// ca
 	"ha deixat de compartir"
 #elif L==2	// de
@@ -52974,7 +52974,7 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES] =
 	"parou compartilhar"
 #endif
 	,
-	[TL_TOP_MESSAGE_MENTIONED] =
+	[Tml_TOP_MESSAGE_MENTIONED] =
 #if   L==1	// ca
 	"li ha esmentat"
 #elif L==2	// de

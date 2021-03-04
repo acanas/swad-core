@@ -1,7 +1,7 @@
 // swad_timeline_share.h: social timeline shared
 
-#ifndef _SWAD_TL_SHA
-#define _SWAD_TL_SHA
+#ifndef _SWAD_TML_SHA
+#define _SWAD_TML_SHA
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -31,8 +31,8 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define TL_Sha_ICON_SHARE	"share-alt.svg"
-#define TL_Sha_ICON_SHARED	"share-alt-green.svg"
+#define Tml_Sha_ICON_SHARE	"share-alt.svg"
+#define Tml_Sha_ICON_SHARED	"share-alt-green.svg"
 
 /*****************************************************************************/
 /******************************** Public types *******************************/
@@ -42,11 +42,11 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_Sha_ShowAllSharersNoteUsr (void);
-void TL_Sha_ShowAllSharersNoteGbl (void);
-void TL_Sha_ShaNoteUsr (void);
-void TL_Sha_ShaNoteGbl (void);
-void TL_Sha_UnsNoteUsr (void);
-void TL_Sha_UnsNoteGbl (void);
+void Tml_Sha_ShowAllSharersNoteUsr (void);
+void Tml_Sha_ShowAllSharersNoteGbl (void);
+void Tml_Sha_ShaNoteUsr (void);
+void Tml_Sha_ShaNoteGbl (void);
+void Tml_Sha_UnsNoteUsr (void);
+void Tml_Sha_UnsNoteGbl (void);
 
 #endif

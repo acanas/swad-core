@@ -1,7 +1,7 @@
 // swad_timeline.h: social timeline
 
-#ifndef _SWAD_TL_COM
-#define _SWAD_TL_COM
+#ifndef _SWAD_TML_COM
+#define _SWAD_TML_COM
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -38,43 +38,43 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-struct TL_Com_Comment
+struct Tml_Com_Comment
   {
    long PubCod;			// Unique code/identifier for each publication
    long UsrCod;			// Publisher
    long NotCod;			// Note code to which this comment belongs
    time_t DateTimeUTC;		// Date-time of publication in UTC time
    unsigned NumFavs;		// Number of times (users) this comment has been favourited
-   struct TL_Pst_Content Content;
+   struct Tml_Pst_Content Content;
   };
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_Com_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1]);
-void TL_Com_PutIconCommDisabled (void);
+void Tml_Com_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1]);
+void Tml_Com_PutIconCommDisabled (void);
 
-void TL_Com_PutPhotoAndFormToWriteNewComm (const struct TL_Timeline *Timeline,
-	                                   long NotCod,
-                                           const char IdNewComm[Frm_MAX_BYTES_ID + 1]);
+void Tml_Com_PutPhotoAndFormToWriteNewComm (const struct Tml_Timeline *Timeline,
+	                                    long NotCod,
+                                            const char IdNewComm[Frm_MAX_BYTES_ID + 1]);
 
-void TL_Com_WriteCommsInNote (const struct TL_Timeline *Timeline,
-			      const struct TL_Not_Note *Not);
+void Tml_Com_WriteCommsInNote (const struct Tml_Timeline *Timeline,
+			       const struct Tml_Not_Note *Not);
 
-void TL_Com_ShowHiddenCommsUsr (void);
-void TL_Com_ShowHiddenCommsGbl (void);
+void Tml_Com_ShowHiddenCommsUsr (void);
+void Tml_Com_ShowHiddenCommsGbl (void);
 
-void TL_Com_ReceiveCommUsr (void);
-void TL_Com_ReceiveCommGbl (void);
+void Tml_Com_ReceiveCommUsr (void);
+void Tml_Com_ReceiveCommGbl (void);
 
-void TL_Com_RequestRemComUsr (void);
-void TL_Com_RequestRemComGbl (void);
-void TL_Com_RemoveComUsr (void);
-void TL_Com_RemoveComGbl (void);
+void Tml_Com_RequestRemComUsr (void);
+void Tml_Com_RequestRemComGbl (void);
+void Tml_Com_RemoveComUsr (void);
+void Tml_Com_RemoveComGbl (void);
 
-void TL_Com_RemoveCommMediaAndDBEntries (long PubCod);
+void Tml_Com_RemoveCommMediaAndDBEntries (long PubCod);
 
-void TL_Com_GetDataOfCommByCod (struct TL_Com_Comment *Com);
+void Tml_Com_GetDataOfCommByCod (struct Tml_Com_Comment *Com);
 
 #endif

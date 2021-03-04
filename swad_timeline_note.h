@@ -1,7 +1,7 @@
 // swad_timeline_note.h: social timeline notes
 
-#ifndef _SWAD_TL_NOT
-#define _SWAD_TL_NOT
+#ifndef _SWAD_TML_NOT
+#define _SWAD_TML_NOT
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -65,12 +65,12 @@ typedef enum
    TL_NOTE_FORUM_POST		= 11,	// Post in global/swad forums
    /* Analytics tab */
    /* Profile tab */
-  } TL_Not_NoteType_t;
+  } Tml_Not_NoteType_t;
 
-struct TL_Not_Note
+struct Tml_Not_Note
   {
    long NotCod;			// Unique code/identifier for each note
-   TL_Not_NoteType_t NoteType;	// Timeline post, public file, exam announcement, notice, forum post...
+   Tml_Not_NoteType_t NoteType;	// Timeline post, public file, exam announcement, notice, forum post...
    long UsrCod;			// Publisher
    long HieCod;			// Hierarchy code (institution/centre/degree/course)
    long Cod;			// Code of file, forum post, notice, timeline post...
@@ -84,33 +84,33 @@ struct TL_Not_Note
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_Not_ShowHighlightedNote (struct TL_Timeline *Timeline,
-                                 struct TL_Not_Note *Not);
+void Tml_Not_ShowHighlightedNote (struct Tml_Timeline *Timeline,
+                                  struct Tml_Not_Note *Not);
 
-void TL_Not_CheckAndWriteNoteWithTopMsg (const struct TL_Timeline *Timeline,
-	                                 const struct TL_Not_Note *Not,
-                                         TL_TopMessage_t TopMessage,
-                                         long PublisherCod);
-void TL_Not_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique);
-void TL_Not_WriteAuthorName (const struct UsrData *UsrDat);
+void Tml_Not_CheckAndWriteNoteWithTopMsg (const struct Tml_Timeline *Timeline,
+	                                  const struct Tml_Not_Note *Not,
+                                          Tml_TopMessage_t TopMessage,
+                                          long PublisherCod);
+void Tml_Not_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique);
+void Tml_Not_WriteAuthorName (const struct UsrData *UsrDat);
 
-void TL_Not_GetNoteSummary (const struct TL_Not_Note *Not,
-                            char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
+void Tml_Not_GetNoteSummary (const struct Tml_Not_Note *Not,
+                             char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
 
-void TL_Not_StoreAndPublishNote (TL_Not_NoteType_t NoteType,long Cod);
-void TL_Not_StoreAndPublishNoteInternal (TL_Not_NoteType_t NoteType,long Cod,
-                                         struct TL_Pub_Publication *Pub);
-void TL_Not_MarkNoteOneFileAsUnavailable (const char *Path);
-void TL_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path);
+void Tml_Not_StoreAndPublishNote (Tml_Not_NoteType_t NoteType,long Cod);
+void Tml_Not_StoreAndPublishNoteInternal (Tml_Not_NoteType_t NoteType,long Cod,
+                                          struct Tml_Pub_Publication *Pub);
+void Tml_Not_MarkNoteOneFileAsUnavailable (const char *Path);
+void Tml_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path);
 
-void TL_Not_PutHiddenParamNotCod (long NotCod);
-long TL_Not_GetParamNotCod (void);
+void Tml_Not_PutHiddenParamNotCod (long NotCod);
+long Tml_Not_GetParamNotCod (void);
 
-void TL_Not_RequestRemNoteUsr (void);
-void TL_Not_RequestRemNoteGbl (void);
-void TL_Not_RemoveNoteUsr (void);
-void TL_Not_RemoveNoteGbl (void);
+void Tml_Not_RequestRemNoteUsr (void);
+void Tml_Not_RequestRemNoteGbl (void);
+void Tml_Not_RemoveNoteUsr (void);
+void Tml_Not_RemoveNoteGbl (void);
 
-void TL_Not_GetDataOfNoteByCod (struct TL_Not_Note *Not);
+void Tml_Not_GetDataOfNoteByCod (struct Tml_Not_Note *Not);
 
 #endif

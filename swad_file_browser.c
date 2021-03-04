@@ -10154,28 +10154,28 @@ void Brw_ChgFileMetadata (void)
 	    switch (Gbl.FileBrowser.Type)
 	      {
 	       case Brw_ADMI_DOC_INS:
-		  TL_Not_StoreAndPublishNote (TL_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (TL_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_INS:
-		  TL_Not_StoreAndPublishNote (TL_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (TL_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_CTR:
-		  TL_Not_StoreAndPublishNote (TL_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (TL_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_CTR:
-		  TL_Not_StoreAndPublishNote (TL_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (TL_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_DEG:
-		  TL_Not_StoreAndPublishNote (TL_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (TL_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_DEG:
-		  TL_Not_StoreAndPublishNote (TL_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (TL_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_CRS:
-		  TL_Not_StoreAndPublishNote (TL_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (TL_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_CRS:
-		  TL_Not_StoreAndPublishNote (TL_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (TL_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       default:
 		  break;
@@ -11076,7 +11076,7 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1])
           Set possible social note as unavailable.
           Important: do this before removing from files *****/
    Ntf_MarkNotifOneFileAsRemoved (Path);
-   TL_Not_MarkNoteOneFileAsUnavailable (Path);
+   Tml_Not_MarkNoteOneFileAsUnavailable (Path);
 
    /***** Remove from database the entries that store the marks properties *****/
    if (FileBrowser == Brw_ADMI_MRK_CRS ||
@@ -11120,7 +11120,7 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1])
           Set possible social notes as unavailable.
           Important: do this before removing from files *****/
    Ntf_MarkNotifChildrenOfFolderAsRemoved (Path);
-   TL_Not_MarkNotesChildrenOfFolderAsUnavailable (Path);
+   Tml_Not_MarkNotesChildrenOfFolderAsUnavailable (Path);
 
    /***** Remove from database the entries that store the marks properties *****/
    if (FileBrowser == Brw_ADMI_MRK_CRS ||

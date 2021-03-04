@@ -4006,7 +4006,7 @@ void For_ReceiveForumPost (void)
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM__SWAD__USRS:
-         TL_Not_StoreAndPublishNote (TL_NOTE_FORUM_POST,PstCod);
+         Tml_Not_StoreAndPublishNote (TL_NOTE_FORUM_POST,PstCod);
          break;
       default:
 	 break;
@@ -4094,7 +4094,7 @@ void For_RemovePost (void)
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM__SWAD__USRS:
-         TL_DB_MarkNoteAsUnavailable (TL_NOTE_FORUM_POST,Forums.PstCod);
+         Tml_DB_MarkNoteAsUnavailable (TL_NOTE_FORUM_POST,Forums.PstCod);
          break;
       default:
 	 break;

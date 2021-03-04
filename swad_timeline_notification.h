@@ -1,7 +1,7 @@
 // swad_timeline_notification.h: social timeline notifications
 
-#ifndef _SWAD_TL_NTF
-#define _SWAD_TL_NTF
+#ifndef _SWAD_TML_NTF
+#define _SWAD_TML_NTF
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -41,13 +41,13 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_Ntf_CreateNotifToAuthor (long AuthorCod,long PubCod,
-                                 Ntf_NotifyEvent_t NotifyEvent);
+void Tml_Ntf_CreateNotifToAuthor (long AuthorCod,long PubCod,
+                                  Ntf_NotifyEvent_t NotifyEvent);
 
-void TL_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                 char **ContentStr,
-                                 long PubCod,bool GetContent);
+void Tml_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+                                  char **ContentStr,
+                                  long PubCod,bool GetContent);
 
-void TL_Ntf_MarkMyNotifAsSeen (void);
+void Tml_Ntf_MarkMyNotifAsSeen (void);
 
 #endif

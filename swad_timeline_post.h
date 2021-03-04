@@ -1,7 +1,7 @@
 // swad_timeline_post.h: social timeline posts
 
-#ifndef _SWAD_TL_PST
-#define _SWAD_TL_PST
+#ifndef _SWAD_TML_PST
+#define _SWAD_TML_PST
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -35,7 +35,7 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-struct TL_Pst_Content
+struct Tml_Pst_Content
   {
    char Txt[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Med_Media Media;
@@ -45,12 +45,12 @@ struct TL_Pst_Content
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TL_Pst_GetAndWritePost (long PstCod);
-void TL_Pst_PutPhotoAndFormToWriteNewPost (struct TL_Timeline *Timeline);
+void Tml_Pst_GetAndWritePost (long PstCod);
+void Tml_Pst_PutPhotoAndFormToWriteNewPost (struct Tml_Timeline *Timeline);
 
-void TL_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea);
+void Tml_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea);
 
-void TL_Pst_ReceivePostUsr (void);
-void TL_Pst_ReceivePostGbl (void);
+void Tml_Pst_ReceivePostUsr (void);
+void Tml_Pst_ReceivePostGbl (void);
 
 #endif
