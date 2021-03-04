@@ -23,18 +23,18 @@
 */
 
 /*
-mysql> SHOW TABLES LIKE 'tl_%';
-+-----------------------+
-| Tables_in_swad (tl_%) |
-+-----------------------+
-| tl_comments           |
-| tl_comments_fav       |
-| tl_notes              |
-| tl_notes_fav          |
-| tl_posts              |
-| tl_pubs               |
-| tl_timelines          |
-+-----------------------+
+mysql> SHOW TABLES LIKE 'tml_%';
++------------------------+
+| Tables_in_swad (tml_%) |
++------------------------+
+| tml_comments           |
+| tml_comments_fav       |
+| tml_notes              |
+| tml_notes_fav          |
+| tml_posts              |
+| tml_pubs               |
+| tml_timelines          |
++------------------------+
 7 rows in set (0.00 sec)
 
    The timeline is a set of publications.
@@ -45,7 +45,7 @@ mysql> SHOW TABLES LIKE 'tl_%';
 
     *Numbers are got from swad.ugr.es on february 2020
 
-   ____tl_pubs____             _tl_comments_
+   ____tml_pubs___             _tml_comments
   |               |           |             |
   | Publication p |---------->|  Comment c  |-----+
   |   (comment)   |           | (to note 2) |     |
@@ -61,7 +61,7 @@ mysql> SHOW TABLES LIKE 'tl_%';
   |               |                (3863)       | |
   |Publication i+3|--                           | |
   |(original note)|  \                          | |
-  |_______________|   \       ___tl_notes____   | |    exam_announcements
+  |_______________|   \       ___tml_notes___   | |    exam_announcements
   |               |    \     |               |  | |    |               |
   |Publication i+2|--   ---->|     Note n    |<-+ |    | Exam announc. | (5571)
   |(original note)|  \       |(exam announc.)|-(2639)->|_______________|
@@ -73,7 +73,7 @@ mysql> SHOW TABLES LIKE 'tl_%';
   |               |    \     |               |    |    |         |
   | Publication i |--   ---->|    Note n-2   |-(16693)>| Notice  | (14793)
   |(original note)|  \       |    (notice)   |  73%    |_________|
-  |_______________|   \      |_______________|    |     __tl_posts___
+  |_______________|   \      |_______________|    |     __tml_posts__
   |               |    \     |               |    |    |             |
   ·      ...      ·     ---->|    Note n-3   |-(3119)->|    Post s   |
   ·      ...      ·          |   (tl. post)  |  14%    |             |

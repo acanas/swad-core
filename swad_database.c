@@ -3038,9 +3038,9 @@ mysql> DESCRIBE timetable_tut;
 			"Info VARCHAR(2047) NOT NULL DEFAULT '',"	// TT_MAX_BYTES_INFO
 		   "INDEX(UsrCod))");
 
-   /***** Table tl_comments *****/
+   /***** Table tml_comments *****/
 /*
-mysql> DESCRIBE tl_comments;
+mysql> DESCRIBE tml_comments;
 +--------+------------+------+-----+---------+-------+
 | Field  | Type       | Null | Key | Default | Extra |
 +--------+------------+------+-----+---------+-------+
@@ -3050,7 +3050,7 @@ mysql> DESCRIBE tl_comments;
 +--------+------------+------+-----+---------+-------+
 3 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tl_comments ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tml_comments ("
 			"PubCod BIGINT NOT NULL,"
 			"Txt LONGTEXT NOT NULL,"
 			"MedCod INT NOT NULL DEFAULT -1,"
@@ -3058,9 +3058,9 @@ mysql> DESCRIBE tl_comments;
 		   "FULLTEXT(Txt),"
 		   "INDEX(MedCod)) ENGINE = MYISAM");
 
-   /***** Table tl_comments_fav *****/
+   /***** Table tml_comments_fav *****/
 /*
-mysql> DESCRIBE tl_comments_fav;
+mysql> DESCRIBE tml_comments_fav;
 +---------+------------+------+-----+---------+----------------+
 | Field   | Type       | Null | Key | Default | Extra          |
 +---------+------------+------+-----+---------+----------------+
@@ -3071,7 +3071,7 @@ mysql> DESCRIBE tl_comments_fav;
 +---------+------------+------+-----+---------+----------------+
 4 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tl_comments_fav ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tml_comments_fav ("
 			"FavCod BIGINT AUTO_INCREMENT,"
 			"PubCod BIGINT NOT NULL,"
 			"UsrCod INT NOT NULL,"
@@ -3080,9 +3080,9 @@ mysql> DESCRIBE tl_comments_fav;
 		   "UNIQUE INDEX(PubCod,UsrCod),"
 		   "INDEX(UsrCod))");
 
-   /***** Table tl_notes *****/
+   /***** Table tml_notes *****/
 /*
-mysql> DESCRIBE tl_notes;
+mysql> DESCRIBE tml_notes;
 +-------------+---------------+------+-----+---------+----------------+
 | Field       | Type          | Null | Key | Default | Extra          |
 +-------------+---------------+------+-----+---------+----------------+
@@ -3096,7 +3096,7 @@ mysql> DESCRIBE tl_notes;
 +-------------+---------------+------+-----+---------+----------------+
 7 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tl_notes ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tml_notes ("
 			"NotCod BIGINT NOT NULL AUTO_INCREMENT,"
 			"NoteType TINYINT NOT NULL,"
 			"Cod INT NOT NULL DEFAULT -1,"
@@ -3109,9 +3109,9 @@ mysql> DESCRIBE tl_notes;
 		   "INDEX(UsrCod),"
 		   "INDEX(TimeNote))");
 
-   /***** Table tl_notes_fav *****/
+   /***** Table tml_notes_fav *****/
 /*
-mysql> DESCRIBE tl_notes_fav;
+mysql> DESCRIBE tml_notes_fav;
 +---------+------------+------+-----+---------+----------------+
 | Field   | Type       | Null | Key | Default | Extra          |
 +---------+------------+------+-----+---------+----------------+
@@ -3122,7 +3122,7 @@ mysql> DESCRIBE tl_notes_fav;
 +---------+------------+------+-----+---------+----------------+
 4 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tl_notes_fav ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tml_notes_fav ("
 			"FavCod BIGINT AUTO_INCREMENT,"
 			"NotCod BIGINT NOT NULL,"
 			"UsrCod INT NOT NULL,"
@@ -3131,9 +3131,9 @@ mysql> DESCRIBE tl_notes_fav;
 		   "UNIQUE INDEX(NotCod,UsrCod),"
 		   "INDEX(UsrCod))");
 
-   /***** Table tl_posts *****/
+   /***** Table tml_posts *****/
 /*
-mysql> DESCRIBE tl_posts;
+mysql> DESCRIBE tml_posts;
 +--------+----------+------+-----+---------+----------------+
 | Field  | Type     | Null | Key | Default | Extra          |
 +--------+----------+------+-----+---------+----------------+
@@ -3143,7 +3143,7 @@ mysql> DESCRIBE tl_posts;
 +--------+----------+------+-----+---------+----------------+
 3 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tl_posts ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tml_posts ("
 			"PubCod INT NOT NULL AUTO_INCREMENT,"
 			"Txt LONGTEXT NOT NULL,"
 			"MedCod INT NOT NULL DEFAULT -1,"
@@ -3151,9 +3151,9 @@ mysql> DESCRIBE tl_posts;
 		   "FULLTEXT(Txt),"
 		   "INDEX(MedCod)) ENGINE = MYISAM");
 
-   /***** Table tl_pubs *****/
+   /***** Table tml_pubs *****/
 /*
-mysql> DESCRIBE tl_pubs;
+mysql> DESCRIBE tml_pubs;
 +--------------+------------+------+-----+---------+----------------+
 | Field        | Type       | Null | Key | Default | Extra          |
 +--------------+------------+------+-----+---------+----------------+
@@ -3165,7 +3165,7 @@ mysql> DESCRIBE tl_pubs;
 +--------------+------------+------+-----+---------+----------------+
 5 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tl_pubs ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tml_pubs ("
 			"PubCod BIGINT NOT NULL AUTO_INCREMENT,"
 			"NotCod BIGINT NOT NULL,"
 			"PublisherCod INT NOT NULL,"
@@ -3177,9 +3177,9 @@ mysql> DESCRIBE tl_pubs;
 		   "INDEX(PubType),"
 		   "INDEX(TimePublish))");
 
-   /***** Table tl_timelines *****/
+   /***** Table tml_timelines *****/
 /*
-mysql> DESCRIBE tl_timelines;
+mysql> DESCRIBE tml_timelines;
 +-----------+------------+------+-----+---------+-------+
 | Field     | Type       | Null | Key | Default | Extra |
 +-----------+------------+------+-----+---------+-------+
@@ -3188,7 +3188,7 @@ mysql> DESCRIBE tl_timelines;
 +-----------+------------+------+-----+---------+-------+
 2 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tl_timelines ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tml_timelines ("
 			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
 			"NotCod BIGINT NOT NULL,"
 		   "UNIQUE INDEX(SessionId,NotCod))");

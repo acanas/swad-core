@@ -600,10 +600,20 @@ TODO: Salvador Romero Cortés: @acanas opción para editar posts
 
 TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates(), por ejemplo al cambiar el color de la gráfica de accesos por día y hora, no se respeta la zona horaria.
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.43 (2021-03-04)"
+#define Log_PLATFORM_VERSION	"SWAD 20.44 (2021-03-04)"
 #define CSS_FILE		"swad20.33.9.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
+	Version 20.44:    Mar 04, 2021  Timeline database tables renamed. (305618 lines)
+					7 change necessary in database:
+RENAME TABLE tl_comments TO tml_comments;
+RENAME TABLE tl_comments_fav TO tml_comments_fav;
+RENAME TABLE tl_notes TO tml_notes;
+RENAME TABLE tl_notes_fav TO tml_notes_fav;
+RENAME TABLE tl_posts TO tml_posts;
+RENAME TABLE tl_pubs TO tml_pubs;
+RENAME TABLE tl_timelines TO tml_timelines;
+
 	Version 20.43:    Mar 04, 2021  Code refactoring in timeline. (305609 lines)
 	Version 20.42:    Mar 04, 2021  Fixed bugs in GROUP BY, caused by upgrading MySQL 5 (order by default) to MySQL 8 (no order by default). (305624 lines)
 					3 change necessary in database:

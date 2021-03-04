@@ -39,7 +39,7 @@
 
 #define TL_NOT_NUM_NOTE_TYPES	13
 // If the numbers assigned to each event type change,
-// it is necessary to change old numbers to new ones in database table tl_notes
+// it is necessary to change old numbers to new ones in database table tml_notes
 typedef enum
   {
    TL_NOTE_UNKNOWN		=  0,

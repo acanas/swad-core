@@ -1442,9 +1442,9 @@ CREATE TABLE IF NOT EXISTS timetable_tut (
 	INDEX(UsrCod));
 
 --
--- Table tl_comments: stores the content of comments to timeline notes
+-- Table tml_comments: stores the content of comments to timeline notes
 --
-CREATE TABLE IF NOT EXISTS tl_comments (
+CREATE TABLE IF NOT EXISTS tml_comments (
 	PubCod BIGINT NOT NULL,
 	Txt LONGTEXT NOT NULL,
 	MedCod INT NOT NULL DEFAULT -1,
@@ -1452,9 +1452,9 @@ CREATE TABLE IF NOT EXISTS tl_comments (
 	FULLTEXT(Txt),
 	INDEX(MedCod)) ENGINE = MYISAM;
 --
--- Table tl_comments_fav: stores users who marked timeline comments as favourite
+-- Table tml_comments_fav: stores users who marked timeline comments as favourite
 --
-CREATE TABLE IF NOT EXISTS tl_comments_fav (
+CREATE TABLE IF NOT EXISTS tml_comments_fav (
 	FavCod BIGINT AUTO_INCREMENT,
 	PubCod BIGINT NOT NULL,
 	UsrCod INT NOT NULL,
@@ -1463,9 +1463,9 @@ CREATE TABLE IF NOT EXISTS tl_comments_fav (
 	UNIQUE INDEX(PubCod,UsrCod),
 	INDEX(UsrCod));
 --
--- Table tl_notes: stores timeline notes
+-- Table tml_notes: stores timeline notes
 --
-CREATE TABLE IF NOT EXISTS tl_notes (
+CREATE TABLE IF NOT EXISTS tml_notes (
 	NotCod BIGINT NOT NULL AUTO_INCREMENT,
 	NoteType TINYINT NOT NULL,
 	Cod INT NOT NULL DEFAULT -1,
@@ -1478,9 +1478,9 @@ CREATE TABLE IF NOT EXISTS tl_notes (
 	INDEX(UsrCod),
 	INDEX(TimeNote));
 --
--- Table tl_notes_fav: stores users who marked timeline notes as favourite
+-- Table tml_notes_fav: stores users who marked timeline notes as favourite
 --
-CREATE TABLE IF NOT EXISTS tl_notes_fav (
+CREATE TABLE IF NOT EXISTS tml_notes_fav (
 	FavCod BIGINT AUTO_INCREMENT,
 	NotCod BIGINT NOT NULL,
 	UsrCod INT NOT NULL,
@@ -1489,9 +1489,9 @@ CREATE TABLE IF NOT EXISTS tl_notes_fav (
 	UNIQUE INDEX(NotCod,UsrCod),
 	INDEX(UsrCod));
 --
--- Table tl_posts: stores timeline posts (public comments written by users)
+-- Table tml_posts: stores timeline posts (public comments written by users)
 --
-CREATE TABLE IF NOT EXISTS tl_posts (
+CREATE TABLE IF NOT EXISTS tml_posts (
 	PstCod INT NOT NULL AUTO_INCREMENT,
 	Txt LONGTEXT NOT NULL,
 	MedCod INT NOT NULL DEFAULT -1,
@@ -1499,9 +1499,9 @@ CREATE TABLE IF NOT EXISTS tl_posts (
 	FULLTEXT(Content),
 	INDEX(MedCod)) ENGINE = MYISAM;
 --
--- Table tl_pubs: stores timeline publications (original notes, sharede notes or comments)
+-- Table tml_pubs: stores timeline publications (original notes, sharede notes or comments)
 --
-CREATE TABLE IF NOT EXISTS tl_pubs (
+CREATE TABLE IF NOT EXISTS tml_pubs (
 	PubCod BIGINT NOT NULL AUTO_INCREMENT,
 	NotCod BIGINT NOT NULL,
 	PublisherCod INT NOT NULL,
@@ -1513,9 +1513,9 @@ CREATE TABLE IF NOT EXISTS tl_pubs (
 	INDEX(PubType),
 	INDEX(TimePublish));
 --
--- Table tl_timelines: stores notes published in timeline for every active session
+-- Table tml_timelines: stores notes published in timeline for every active session
 --
-CREATE TABLE IF NOT EXISTS tl_timelines (
+CREATE TABLE IF NOT EXISTS tml_timelines (
 	SessionId CHAR(43) NOT NULL,
 	NotCod BIGINT NOT NULL,
 	UNIQUE INDEX(SessionId,NotCod));

@@ -47,7 +47,7 @@
 
 #define Tml_Pub_NUM_PUB_TYPES	4
 // If the numbers assigned to each event type change,
-// it is necessary to change old numbers to new ones in database table tl_notes
+// it is necessary to change old numbers to new ones in database table tml_notes
 typedef enum
   {
    Tml_Pub_UNKNOWN		= 0,

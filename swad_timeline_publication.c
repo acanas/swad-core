@@ -103,7 +103,7 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
    /* Create subquery to get only notes not present in timeline */
    Tml_DB_CreateSubQueryAlreadyExists (Timeline,&SubQueries);
 
-   /* Create subquery with bottom range of publications to get from tl_pubs.
+   /* Create subquery with bottom range of publications to get from tml_pubs.
       Bottom pub. code remains unchanged in all iterations of the loop. */
    Tml_DB_CreateSubQueryRangeBottom (RangePubsToGet.Bottom,&SubQueries);
 
@@ -139,7 +139,7 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
       As an alternative, we tried to get the maximum PubCod,
       i.e more recent publication (original, shared or commment),
       of every set of publications corresponding to the same note:
-      "SELECT MAX(PubCod) AS NewestPubCod FROM tl_pubs ...
+      "SELECT MAX(PubCod) AS NewestPubCod FROM tml_pubs ...
       " GROUP BY NotCod ORDER BY NewestPubCod DESC LIMIT ..."
       but this query is slow (several seconds) with a big table.
    */
@@ -147,11 +147,11 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
 	NumPub < MaxPubsToGet;
 	NumPub++)
      {
-      /* Create subquery with top range of publications to get from tl_pubs
+      /* Create subquery with top range of publications to get from tml_pubs
          In each iteration of this loop, top publication code is changed to a lower value */
       Tml_DB_CreateSubQueryRangeTop (RangePubsToGet.Top,&SubQueries);
 
-      /* Select the most recent publication from tl_pubs */
+      /* Select the most recent publication from tml_pubs */
       Pub = Tml_Pub_SelectTheMostRecentPub (&SubQueries);
 
       /* Chain the previous publication with the current one */
@@ -202,7 +202,7 @@ static void Tml_Pub_InitializeRangeOfPubs (Tml_WhatToGet_t WhatToGet,
   {
    /* Initialize range of pubs:
 
-              tl_pubs
+              tml_pubs
                _____
               |_____|11
               |_____|10
@@ -314,7 +314,7 @@ void Tml_Pub_FreeListPubs (struct Tml_Timeline *Timeline)
   }
 
 /*****************************************************************************/
-/************** Select the most recent publication from tl_pubs **************/
+/************** Select the most recent publication from tml_pubs *************/
 /*****************************************************************************/
 
 static struct Tml_Pub_Publication *Tml_Pub_SelectTheMostRecentPub (const struct Tml_Pub_SubQueries *SubQueries)

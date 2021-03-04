@@ -1295,9 +1295,9 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          // Cod is the code of the social publishing
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
-				   "SELECT DISTINCT(PublisherCod) FROM tl_pubs"
+				   "SELECT DISTINCT(PublisherCod) FROM tml_pubs"
 				   " WHERE NotCod="
-				   "(SELECT NotCod FROM tl_pubs"
+				   "(SELECT NotCod FROM tml_pubs"
 				   " WHERE PubCod=%ld)"
 				   " AND PublisherCod<>%ld",
 				   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);

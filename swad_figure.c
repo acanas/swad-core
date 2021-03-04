@@ -3428,71 +3428,71 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 				      "SELECT COUNT(*),"
 					     "COUNT(DISTINCT UsrCod)"
-				      " FROM tl_notes WHERE NoteType=%u",
+				      " FROM tml_notes WHERE NoteType=%u",
 				      NoteType);
 	    break;
 	 case Hie_Lvl_CTY:
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				      "SELECT COUNT(DISTINCT tl_notes.NotCod),"
-					     "COUNT(DISTINCT tl_notes.UsrCod)"
-				      " FROM institutions,centres,degrees,courses,crs_usr,tl_notes"
+				      "SELECT COUNT(DISTINCT tml_notes.NotCod),"
+					     "COUNT(DISTINCT tml_notes.UsrCod)"
+				      " FROM institutions,centres,degrees,courses,crs_usr,tml_notes"
 				      " WHERE institutions.CtyCod=%ld"
 				      " AND institutions.InsCod=centres.InsCod"
 				      " AND centres.CtrCod=degrees.CtrCod"
 				      " AND degrees.DegCod=courses.DegCod"
 				      " AND courses.CrsCod=crs_usr.CrsCod"
-				      " AND crs_usr.UsrCod=tl_notes.UsrCod"
-				      " AND tl_notes.NoteType=%u",
+				      " AND crs_usr.UsrCod=tml_notes.UsrCod"
+				      " AND tml_notes.NoteType=%u",
 				      Gbl.Hierarchy.Cty.CtyCod,
 				      (unsigned) NoteType);
 	    break;
 	 case Hie_Lvl_INS:
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				      "SELECT COUNT(DISTINCT tl_notes.NotCod),"
-					     "COUNT(DISTINCT tl_notes.UsrCod)"
-				      " FROM centres,degrees,courses,crs_usr,tl_notes"
+				      "SELECT COUNT(DISTINCT tml_notes.NotCod),"
+					     "COUNT(DISTINCT tml_notes.UsrCod)"
+				      " FROM centres,degrees,courses,crs_usr,tml_notes"
 				      " WHERE centres.InsCod=%ld"
 				      " AND centres.CtrCod=degrees.CtrCod"
 				      " AND degrees.DegCod=courses.DegCod"
 				      " AND courses.CrsCod=crs_usr.CrsCod"
-				      " AND crs_usr.UsrCod=tl_notes.UsrCod"
-				      " AND tl_notes.NoteType=%u",
+				      " AND crs_usr.UsrCod=tml_notes.UsrCod"
+				      " AND tml_notes.NoteType=%u",
 				      Gbl.Hierarchy.Ins.InsCod,
 				      (unsigned) NoteType);
 	    break;
 	 case Hie_Lvl_CTR:
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				      "SELECT COUNT(DISTINCT tl_notes.NotCod),"
-					     "COUNT(DISTINCT tl_notes.UsrCod)"
-				      " FROM degrees,courses,crs_usr,tl_notes"
+				      "SELECT COUNT(DISTINCT tml_notes.NotCod),"
+					     "COUNT(DISTINCT tml_notes.UsrCod)"
+				      " FROM degrees,courses,crs_usr,tml_notes"
 				      " WHERE degrees.CtrCod=%ld"
 				      " AND degrees.DegCod=courses.DegCod"
 				      " AND courses.CrsCod=crs_usr.CrsCod"
-				      " AND crs_usr.UsrCod=tl_notes.UsrCod"
-				      " AND tl_notes.NoteType=%u",
+				      " AND crs_usr.UsrCod=tml_notes.UsrCod"
+				      " AND tml_notes.NoteType=%u",
 				      Gbl.Hierarchy.Ctr.CtrCod,
 				      (unsigned) NoteType);
 	    break;
 	 case Hie_Lvl_DEG:
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				      "SELECT COUNT(DISTINCT tl_notes.NotCod),"
-					     "COUNT(DISTINCT tl_notes.UsrCod)"
-				      " FROM courses,crs_usr,tl_notes"
+				      "SELECT COUNT(DISTINCT tml_notes.NotCod),"
+					     "COUNT(DISTINCT tml_notes.UsrCod)"
+				      " FROM courses,crs_usr,tml_notes"
 				      " WHERE courses.DegCod=%ld"
 				      " AND courses.CrsCod=crs_usr.CrsCod"
-				      " AND crs_usr.UsrCod=tl_notes.UsrCod"
-				      " AND tl_notes.NoteType=%u",
+				      " AND crs_usr.UsrCod=tml_notes.UsrCod"
+				      " AND tml_notes.NoteType=%u",
 				      Gbl.Hierarchy.Deg.DegCod,
 				      (unsigned) NoteType);
 	    break;
 	 case Hie_Lvl_CRS:
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				      "SELECT COUNT(DISTINCT tl_notes.NotCod),"
-					     "COUNT(DISTINCT tl_notes.UsrCod)"
-				      " FROM crs_usr,tl_notes"
+				      "SELECT COUNT(DISTINCT tml_notes.NotCod),"
+					     "COUNT(DISTINCT tml_notes.UsrCod)"
+				      " FROM crs_usr,tml_notes"
 				      " WHERE crs_usr.CrsCod=%ld"
-				      " AND crs_usr.UsrCod=tl_notes.UsrCod"
-				      " AND tl_notes.NoteType=%u",
+				      " AND crs_usr.UsrCod=tml_notes.UsrCod"
+				      " AND tml_notes.NoteType=%u",
 				      Gbl.Hierarchy.Crs.CrsCod,
 				      (unsigned) NoteType);
 	    break;
@@ -3559,61 +3559,61 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 				   "SELECT COUNT(*),"
 					  "COUNT(DISTINCT UsrCod)"
-				   " FROM tl_notes");
+				   " FROM tml_notes");
 	 break;
       case Hie_Lvl_CTY:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				   "SELECT COUNT(DISTINCT tl_notes.NotCod),"
-					  "COUNT(DISTINCT tl_notes.UsrCod)"
-				   " FROM institutions,centres,degrees,courses,crs_usr,tl_notes"
+				   "SELECT COUNT(DISTINCT tml_notes.NotCod),"
+					  "COUNT(DISTINCT tml_notes.UsrCod)"
+				   " FROM institutions,centres,degrees,courses,crs_usr,tml_notes"
 				   " WHERE institutions.CtyCod=%ld"
 				   " AND institutions.InsCod=centres.InsCod"
 				   " AND centres.CtrCod=degrees.CtrCod"
 				   " AND degrees.DegCod=courses.DegCod"
 				   " AND courses.CrsCod=crs_usr.CrsCod"
-				   " AND crs_usr.UsrCod=tl_notes.UsrCod",
+				   " AND crs_usr.UsrCod=tml_notes.UsrCod",
 				   Gbl.Hierarchy.Cty.CtyCod);
 	 break;
       case Hie_Lvl_INS:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				   "SELECT COUNT(DISTINCT tl_notes.NotCod),"
-					  "COUNT(DISTINCT tl_notes.UsrCod)"
-				   " FROM centres,degrees,courses,crs_usr,tl_notes"
+				   "SELECT COUNT(DISTINCT tml_notes.NotCod),"
+					  "COUNT(DISTINCT tml_notes.UsrCod)"
+				   " FROM centres,degrees,courses,crs_usr,tml_notes"
 				   " WHERE centres.InsCod=%ld"
 				   " AND centres.CtrCod=degrees.CtrCod"
 				   " AND degrees.DegCod=courses.DegCod"
 				   " AND courses.CrsCod=crs_usr.CrsCod"
-				   " AND crs_usr.UsrCod=tl_notes.UsrCod",
+				   " AND crs_usr.UsrCod=tml_notes.UsrCod",
 				   Gbl.Hierarchy.Ins.InsCod);
 	 break;
       case Hie_Lvl_CTR:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				   "SELECT COUNT(DISTINCT tl_notes.NotCod),"
-					  "COUNT(DISTINCT tl_notes.UsrCod)"
-				   " FROM degrees,courses,crs_usr,tl_notes"
+				   "SELECT COUNT(DISTINCT tml_notes.NotCod),"
+					  "COUNT(DISTINCT tml_notes.UsrCod)"
+				   " FROM degrees,courses,crs_usr,tml_notes"
 				   " WHERE degrees.CtrCod=%ld"
 				   " AND degrees.DegCod=courses.DegCod"
 				   " AND courses.CrsCod=crs_usr.CrsCod"
-				   " AND crs_usr.UsrCod=tl_notes.UsrCod",
+				   " AND crs_usr.UsrCod=tml_notes.UsrCod",
 				   Gbl.Hierarchy.Ctr.CtrCod);
 	 break;
       case Hie_Lvl_DEG:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				   "SELECT COUNT(DISTINCT tl_notes.NotCod),"
-					  "COUNT(DISTINCT tl_notes.UsrCod)"
-				   " FROM courses,crs_usr,tl_notes"
+				   "SELECT COUNT(DISTINCT tml_notes.NotCod),"
+					  "COUNT(DISTINCT tml_notes.UsrCod)"
+				   " FROM courses,crs_usr,tml_notes"
 				   " WHERE courses.DegCod=%ld"
 				   " AND courses.CrsCod=crs_usr.CrsCod"
-				   " AND crs_usr.UsrCod=tl_notes.UsrCod",
+				   " AND crs_usr.UsrCod=tml_notes.UsrCod",
 				   Gbl.Hierarchy.Deg.DegCod);
 	 break;
       case Hie_Lvl_CRS:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-				   "SELECT COUNT(DISTINCT tl_notes.NotCod),"
-					  "COUNT(DISTINCT tl_notes.UsrCod)"
-				   " FROM crs_usr,tl_notes"
+				   "SELECT COUNT(DISTINCT tml_notes.NotCod),"
+					  "COUNT(DISTINCT tml_notes.UsrCod)"
+				   " FROM crs_usr,tml_notes"
 				   " WHERE crs_usr.CrsCod=%ld"
-				   " AND crs_usr.UsrCod=tl_notes.UsrCod",
+				   " AND crs_usr.UsrCod=tml_notes.UsrCod",
 				   Gbl.Hierarchy.Crs.CrsCod);
 	 break;
       default:
