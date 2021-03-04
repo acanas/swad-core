@@ -1260,83 +1260,116 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    switch (Stats.ClicksGroupedBy)
      {
       case Sta_CLICKS_CRS_DETAILED_LIST:
-	 Str_Concat (Query," ORDER BY F",Sta_MAX_BYTES_QUERY_ACCESS);
+	 Str_Concat (Query," ORDER BY F",
+	             Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_USR:
-	 sprintf (QueryAux," GROUP BY %s.UsrCod ORDER BY Num DESC",LogTable);
+	 sprintf (QueryAux," GROUP BY %s.UsrCod"
+		           " ORDER BY Num DESC",
+		  LogTable);
          Str_Concat (Query,QueryAux,Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_DAY:
       case Sta_CLICKS_GBL_PER_DAY:
-	 Str_Concat (Query," GROUP BY Day DESC",Sta_MAX_BYTES_QUERY_ACCESS);
+	 Str_Concat (Query," GROUP BY Day"
+		           " ORDER BY Day DESC",
+		     Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_DAY_AND_HOUR:
       case Sta_CLICKS_GBL_PER_DAY_AND_HOUR:
-	 Str_Concat (Query," GROUP BY Day DESC,Hour",Sta_MAX_BYTES_QUERY_ACCESS);
+	 Str_Concat (Query," GROUP BY Day,Hour"
+		           " ORDER BY Day DESC,Hour",
+		     Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_WEEK:
       case Sta_CLICKS_GBL_PER_WEEK:
-	 Str_Concat (Query," GROUP BY Week DESC",Sta_MAX_BYTES_QUERY_ACCESS);
+	 Str_Concat (Query," GROUP BY Week"
+		           " ORDER BY Week DESC",
+		     Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_MONTH:
       case Sta_CLICKS_GBL_PER_MONTH:
-	 Str_Concat (Query," GROUP BY Month DESC",Sta_MAX_BYTES_QUERY_ACCESS);
+	 Str_Concat (Query," GROUP BY Month"
+		           " ORDER BY Month DESC",
+		     Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_YEAR:
       case Sta_CLICKS_GBL_PER_YEAR:
-	 Str_Concat (Query," GROUP BY Year DESC",Sta_MAX_BYTES_QUERY_ACCESS);
+	 Str_Concat (Query," GROUP BY Year"
+		           " ORDER BY Year DESC",
+		     Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_HOUR:
       case Sta_CLICKS_GBL_PER_HOUR:
-	 Str_Concat (Query," GROUP BY Hour",Sta_MAX_BYTES_QUERY_ACCESS);
+	 Str_Concat (Query," GROUP BY Hour"
+		           " ORDER BY Hour",
+		     Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_MINUTE:
       case Sta_CLICKS_GBL_PER_MINUTE:
-	 Str_Concat (Query," GROUP BY Minute",Sta_MAX_BYTES_QUERY_ACCESS);
+	 Str_Concat (Query," GROUP BY Minute"
+		           " ORDER BY Minute",
+		     Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_ACTION:
       case Sta_CLICKS_GBL_PER_ACTION:
-	 sprintf (QueryAux," GROUP BY %s.ActCod ORDER BY Num DESC",LogTable);
+	 sprintf (QueryAux," GROUP BY %s.ActCod"
+		           " ORDER BY Num DESC",
+		  LogTable);
          Str_Concat (Query,QueryAux,Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_PLUGIN:
-         Str_Concat (Query," GROUP BY log_ws.PlgCod ORDER BY Num DESC",
+         Str_Concat (Query," GROUP BY log_ws.PlgCod"
+        	           " ORDER BY Num DESC",
                      Sta_MAX_BYTES_QUERY_ACCESS);
          break;
       case Sta_CLICKS_GBL_PER_API_FUNCTION:
-         Str_Concat (Query," GROUP BY log_ws.FunCod ORDER BY Num DESC",
+         Str_Concat (Query," GROUP BY log_ws.FunCod"
+        	           " ORDER BY Num DESC",
                      Sta_MAX_BYTES_QUERY_ACCESS);
          break;
       case Sta_CLICKS_GBL_PER_BANNER:
-         Str_Concat (Query," GROUP BY log_banners.BanCod ORDER BY Num DESC",
+         Str_Concat (Query," GROUP BY log_banners.BanCod"
+        	           " ORDER BY Num DESC",
                      Sta_MAX_BYTES_QUERY_ACCESS);
          break;
       case Sta_CLICKS_GBL_PER_COUNTRY:
-	 sprintf (QueryAux," GROUP BY %s.CtyCod ORDER BY Num DESC",LogTable);
+	 sprintf (QueryAux," GROUP BY %s.CtyCod"
+		           " ORDER BY Num DESC",
+		  LogTable);
          Str_Concat (Query,QueryAux,Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_INSTITUTION:
-	 sprintf (QueryAux," GROUP BY %s.InsCod ORDER BY Num DESC",LogTable);
+	 sprintf (QueryAux," GROUP BY %s.InsCod"
+		           " ORDER BY Num DESC",
+		  LogTable);
          Str_Concat (Query,QueryAux,Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_CENTRE:
-	 sprintf (QueryAux," GROUP BY %s.CtrCod ORDER BY Num DESC",LogTable);
+	 sprintf (QueryAux," GROUP BY %s.CtrCod"
+		           " ORDER BY Num DESC",
+		  LogTable);
          Str_Concat (Query,QueryAux,Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_DEGREE:
-	 sprintf (QueryAux," GROUP BY %s.DegCod ORDER BY Num DESC",LogTable);
+	 sprintf (QueryAux," GROUP BY %s.DegCod"
+		           " ORDER BY Num DESC",
+		  LogTable);
          Str_Concat (Query,QueryAux,Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_COURSE:
-	 sprintf (QueryAux," GROUP BY %s.CrsCod ORDER BY Num DESC",LogTable);
+	 sprintf (QueryAux," GROUP BY %s.CrsCod"
+		           " ORDER BY Num DESC",
+		  LogTable);
          Str_Concat (Query,QueryAux,Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
      }
    /***** Write query for debug *****/
    /*
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Ale_ShowFixedAlert (Ale_INFO,Query);
+      Ale_ShowAlert (Ale_INFO,Query);
    */
+
    /***** Make the query *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get clicks",
 			     "%s",

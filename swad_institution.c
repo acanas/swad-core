@@ -139,7 +139,8 @@ void Ins_SeeInsWithPendingCtrs (void)
 				    " WHERE (centres.Status & %u)<>0"
 				    " AND centres.InsCod=ins_admin.InsCod AND ins_admin.UsrCod=%ld"
 				    " AND centres.InsCod=institutions.InsCod"
-				    " GROUP BY centres.InsCod ORDER BY institutions.ShortName",
+				    " GROUP BY centres.InsCod"
+				    " ORDER BY institutions.ShortName",
 				    (unsigned) Ctr_STATUS_BIT_PENDING,
 				    Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
@@ -151,7 +152,8 @@ void Ins_SeeInsWithPendingCtrs (void)
 				    " FROM centres,institutions"
 				    " WHERE (centres.Status & %u)<>0"
 				    " AND centres.InsCod=institutions.InsCod"
-				    " GROUP BY centres.InsCod ORDER BY institutions.ShortName",
+				    " GROUP BY centres.InsCod"
+				    " ORDER BY institutions.ShortName",
 				    (unsigned) Ctr_STATUS_BIT_PENDING);
          break;
       default:	// Forbidden for other users

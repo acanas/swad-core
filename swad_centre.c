@@ -136,7 +136,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
 					      " AND degrees.CtrCod=ctr_admin.CtrCod"
 					      " AND ctr_admin.UsrCod=%ld"
 					      " AND degrees.CtrCod=centres.CtrCod"
-					      " GROUP BY degrees.CtrCod ORDER BY centres.ShortName",
+					      " GROUP BY degrees.CtrCod"
+					      " ORDER BY centres.ShortName",
 					      (unsigned) Deg_STATUS_BIT_PENDING,
 					      Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
@@ -147,7 +148,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
 					      " FROM degrees,centres"
 					      " WHERE (degrees.Status & %u)<>0"
 					      " AND degrees.CtrCod=centres.CtrCod"
-					      " GROUP BY degrees.CtrCod ORDER BY centres.ShortName",
+					      " GROUP BY degrees.CtrCod"
+					      " ORDER BY centres.ShortName",
 					      (unsigned) Deg_STATUS_BIT_PENDING);
          break;
       default:	// Forbidden for other users

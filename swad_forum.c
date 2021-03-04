@@ -621,20 +621,30 @@ static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod)
    MYSQL_ROW row;
    unsigned NumPsts;
 
-   /***** Get number of posts in the thread that holds a post from database *****/
-   DB_QuerySELECT (&mysql_res,"can not get number of posts"
-			      " in a thread of a forum",
-		   "SELECT COUNT(PstCod),ThrCod FROM forum_post"
-		   " WHERE ThrCod IN"
-		   " (SELECT ThrCod FROM forum_post"
-		   " WHERE PstCod=%ld) GROUP BY ThrCod;",
-		   PstCod);
+   /***** Initialize default values *****/
+   *ThrCod = -1L;
+   NumPsts = 0;
 
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumPsts) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of posts in a thread of a forum.");
-   if (sscanf (row[1],"%ld",ThrCod) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of posts in a thread of a forum.");
+   /***** Trivial check: PstCod should be > 0 *****/
+   if (PstCod <= 0)
+      return NumPsts;
+
+   /***** Get number of posts in the thread that holds a post from database *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get number of posts in a thread",
+		       "SELECT COUNT(PstCod),"	// row[0]
+		              "ThrCod"		// row[1]
+		       " FROM forum_post"
+		       " WHERE ThrCod IN"
+		       " (SELECT ThrCod FROM forum_post WHERE PstCod=%ld)"
+		       " GROUP BY ThrCod;",
+		       PstCod) == 1)	// Result should have one row
+     {
+      row = mysql_fetch_row (mysql_res);
+      if (sscanf (row[0],"%u",&NumPsts) != 1)
+	 Lay_ShowErrorAndExit ("Error when getting number of posts in a thread.");
+      if (sscanf (row[1],"%ld",ThrCod) != 1)
+	 Lay_ShowErrorAndExit ("Error when getting number of posts in a thread.");
+     }
    DB_FreeMySQLResult (&mysql_res);
 
    return NumPsts;

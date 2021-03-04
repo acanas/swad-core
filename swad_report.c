@@ -783,7 +783,8 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
 			     " FROM log"
 			     " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
 			     " AND UsrCod=%ld"
-			     " GROUP BY ActCod ORDER BY N DESC LIMIT %u",
+			     " GROUP BY ActCod"
+			     " ORDER BY N DESC LIMIT %u",
 			     (long) Report->UsrFigures.FirstClickTimeUTC,
 			     Gbl.Usrs.Me.UsrDat.UsrCod,
 			     Rep_MAX_ACTIONS);
@@ -1240,7 +1241,8 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
 			     "COUNT(*) FROM log"
 			     " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
 			     " AND UsrCod=%ld%s%s"
-			     " GROUP BY Year DESC",
+			     " GROUP BY Year"
+			     " ORDER BY Year DESC",
 			     (long) Report->UsrFigures.FirstClickTimeUTC,
 			     Gbl.Usrs.Me.UsrDat.UsrCod,
 			     SubQueryCrs,

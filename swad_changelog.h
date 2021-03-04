@@ -597,11 +597,19 @@ TODO: DNI de un estudiante sale erróneamente como ******* en lugar de mostrarse 
 
 TODO: BUG: Cuando un tipo de grupo sólo tiene un grupo, inscribirse es voluntario, el estudiante sólo puede pertenecer a un grupo, y se inscribe en él, debería poder desapuntarse. Ahora no puede.
 TODO: Salvador Romero Cortés: @acanas opción para editar posts
+
+TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates(), por ejemplo al cambiar el color de la gráfica de accesos por día y hora, no se respeta la zona horaria.
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.41.5 (2021-03-03)"
+#define Log_PLATFORM_VERSION	"SWAD 20.42 (2021-03-04)"
 #define CSS_FILE		"swad20.33.9.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
+	Version 20.42:    Mar 04, 2021  Fixed bugs in GROUP BY, caused by upgrading MySQL 5 (order by default) to MySQL 8 (no order by default). (305624 lines)
+					3 change necessary in database:
+DROP TABLE IF EXISTS crs_usr_backup_delete_me;
+DROP TABLE IF EXISTS crs_usr_old_backup_delete_me;
+DROP TABLE IF EXISTS log_full;
+
 	Version 20.41.5:  Mar 03, 2021  Code refactoring in timeline. (305569 lines)
 	Version 20.41.4:  Mar 03, 2021  Code refactoring in timeline publications. (305577 lines)
 	Version 20.41.3:  Mar 03, 2021  Code refactoring in timeline publications. (305580 lines)

@@ -135,7 +135,8 @@ void Deg_SeeDegWithPendingCrss (void)
 					      " AND admin.Cod=courses.DegCod"
 					      " AND (courses.Status & %u)<>0"
 					      " AND courses.DegCod=degrees.DegCod"
-					      " GROUP BY courses.DegCod ORDER BY degrees.ShortName",
+					      " GROUP BY courses.DegCod"
+					      " ORDER BY degrees.ShortName",
 					      Gbl.Usrs.Me.UsrDat.UsrCod,
 					      Sco_GetDBStrFromScope (Hie_Lvl_DEG),
 					      (unsigned) Crs_STATUS_BIT_PENDING);
@@ -147,7 +148,8 @@ void Deg_SeeDegWithPendingCrss (void)
 					      " FROM courses,degrees"
 					      " WHERE (courses.Status & %u)<>0"
 					      " AND courses.DegCod=degrees.DegCod"
-					      " GROUP BY courses.DegCod ORDER BY degrees.ShortName",
+					      " GROUP BY courses.DegCod"
+					      " ORDER BY degrees.ShortName",
 					      (unsigned) Crs_STATUS_BIT_PENDING);
          break;
       default:	// Forbidden for other users
