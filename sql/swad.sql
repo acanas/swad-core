@@ -1368,23 +1368,6 @@ CREATE TABLE IF NOT EXISTS sta_notif (
 	NumMails INT NOT NULL,
 	UNIQUE INDEX(DegCod,CrsCod,NotifyEvent));
 --
--- Table surveys: stores the surveys
---
-CREATE TABLE IF NOT EXISTS surveys (
-	SvyCod INT NOT NULL AUTO_INCREMENT,
-	Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',
-	Cod INT NOT NULL DEFAULT -1,
-	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
-	NumNotif INT NOT NULL DEFAULT 0,
-	Roles INT NOT NULL DEFAULT 0,
-	UsrCod INT NOT NULL,
-	StartTime DATETIME NOT NULL,
-	EndTime DATETIME NOT NULL,
-	Title VARCHAR(2047) NOT NULL,
-	Txt TEXT NOT NULL,
-	UNIQUE INDEX(SvyCod),
-	INDEX(Scope,Cod));
---
 -- Table svy_answers: stores the answers to the surveys
 --
 CREATE TABLE IF NOT EXISTS svy_answers (
@@ -1411,6 +1394,23 @@ CREATE TABLE IF NOT EXISTS svy_questions (
 	Stem TEXT NOT NULL,
 	UNIQUE INDEX(QstCod),
 	INDEX(SvyCod));
+--
+-- Table svy_surveys: stores the surveys
+--
+CREATE TABLE IF NOT EXISTS svy_surveys (
+	SvyCod INT NOT NULL AUTO_INCREMENT,
+	Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',
+	Cod INT NOT NULL DEFAULT -1,
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	NumNotif INT NOT NULL DEFAULT 0,
+	Roles INT NOT NULL DEFAULT 0,
+	UsrCod INT NOT NULL,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
+	Title VARCHAR(2047) NOT NULL,
+	Txt TEXT NOT NULL,
+	UNIQUE INDEX(SvyCod),
+	INDEX(Scope,Cod));
 --
 -- Table svy_users: stores the users who have answer the surveys
 --

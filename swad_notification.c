@@ -1353,23 +1353,25 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
 				   "(SELECT crs_usr.UsrCod"
-				   " FROM surveys,crs_usr"
-				   " WHERE surveys.SvyCod=%ld"
-				   " AND surveys.SvyCod NOT IN"
+				   " FROM svy_surveys,crs_usr"
+				   " WHERE svy_surveys.SvyCod=%ld"
+				   " AND svy_surveys.SvyCod NOT IN"
 				   " (SELECT SvyCod FROM svy_grp WHERE SvyCod=%ld)"
-				   " AND surveys.Scope='%s' AND surveys.Cod=crs_usr.CrsCod"
+				   " AND svy_surveys.Scope='%s'"
+				   " AND svy_surveys.Cod=crs_usr.CrsCod"
 				   " AND crs_usr.UsrCod<>%ld"
-				   " AND (surveys.Roles&(1<<crs_usr.Role))<>0)"
+				   " AND (svy_surveys.Roles&(1<<crs_usr.Role))<>0)"
 				   " UNION "
 				   "(SELECT DISTINCT crs_grp_usr.UsrCod"
-				   " FROM svy_grp,crs_grp_usr,surveys,crs_usr"
+				   " FROM svy_grp,crs_grp_usr,svy_surveys,crs_usr"
 				   " WHERE svy_grp.SvyCod=%ld"
 				   " AND svy_grp.GrpCod=crs_grp_usr.GrpCod"
 				   " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
 				   " AND crs_grp_usr.UsrCod<>%ld"
-				   " AND svy_grp.SvyCod=surveys.SvyCod"
-				   " AND surveys.Scope='%s' AND surveys.Cod=crs_usr.CrsCod"
-				   " AND (surveys.Roles&(1<<crs_usr.Role))<>0)",
+				   " AND svy_grp.SvyCod=svy_surveys.SvyCod"
+				   " AND svy_surveys.Scope='%s'"
+				   " AND svy_surveys.Cod=crs_usr.CrsCod"
+				   " AND (svy_surveys.Roles&(1<<crs_usr.Role))<>0)",
 				   Cod,
 				   Cod,
 				   Sco_GetDBStrFromScope (Hie_Lvl_CRS),
