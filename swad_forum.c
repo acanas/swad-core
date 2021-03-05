@@ -2686,27 +2686,27 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
          else if (CtrCod > 0)	// DegCod <= 0 && CtrCod > 0 ==> Number of degree forums for a centre
 	    DB_QuerySELECT (&mysql_res,"can not get number of forums of a type",
 			    "SELECT COUNT(DISTINCT forum_thread.Location)"
-			    " FROM forum_thread,degrees"
+			    " FROM forum_thread,deg_degrees"
 			    " WHERE forum_thread.ForumType=%u"
-			    " AND forum_thread.Location=degrees.DegCod"
-			    " AND degrees.CtrCod=%ld",
+			    " AND forum_thread.Location=deg_degrees.DegCod"
+			    " AND deg_degrees.CtrCod=%ld",
 		            (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of degree forums for an institution
 	    DB_QuerySELECT (&mysql_res,"can not get number of forums of a type",
 			    "SELECT COUNT(DISTINCT forum_thread.Location)"
-			    " FROM forum_thread,degrees,centres"
+			    " FROM forum_thread,deg_degrees,centres"
 			    " WHERE forum_thread.ForumType=%u"
-			    " AND forum_thread.Location=degrees.DegCod"
-			    " AND degrees.CtrCod=centres.CtrCod"
+			    " AND forum_thread.Location=deg_degrees.DegCod"
+			    " AND deg_degrees.CtrCod=centres.CtrCod"
 			    " AND centres.InsCod=%ld",
 		            (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of degree forums for a country
 	    DB_QuerySELECT (&mysql_res,"can not get number of forums of a type",
 			    "SELECT COUNT(DISTINCT forum_thread.Location)"
-			    " FROM forum_thread,degrees,centres,institutions"
+			    " FROM forum_thread,deg_degrees,centres,institutions"
 			    " WHERE forum_thread.ForumType=%u"
-			    " AND forum_thread.Location=degrees.DegCod"
-			    " AND degrees.CtrCod=centres.CtrCod"
+			    " AND forum_thread.Location=deg_degrees.DegCod"
+			    " AND deg_degrees.CtrCod=centres.CtrCod"
 			    " AND centres.InsCod=institutions.InsCod"
 			    " AND institutions.CtyCod=%ld",
 		            (unsigned) ForumType,CtyCod);
@@ -2737,30 +2737,30 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
          else if (CtrCod > 0)	// DegCod <= 0 && CtrCod > 0 ==> Number of course forums for a centre
 	    DB_QuerySELECT (&mysql_res,"can not get number of forums of a type",
 			    "SELECT COUNT(DISTINCT forum_thread.Location)"
-			    " FROM forum_thread,courses,degrees"
+			    " FROM forum_thread,courses,deg_degrees"
 			    " WHERE forum_thread.ForumType=%u"
 			    " AND forum_thread.Location=courses.CrsCod"
-			    " AND courses.DegCod=degrees.DegCod"
-			    " AND degrees.CtrCod=%ld",
+			    " AND courses.DegCod=deg_degrees.DegCod"
+			    " AND deg_degrees.CtrCod=%ld",
 		            (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of course forums for an institution
 	    DB_QuerySELECT (&mysql_res,"can not get number of forums of a type",
 			    "SELECT COUNT(DISTINCT forum_thread.Location)"
-			    " FROM forum_thread,courses,degrees,centres"
+			    " FROM forum_thread,courses,deg_degrees,centres"
 			    " WHERE forum_thread.ForumType=%u"
 			    " AND forum_thread.Location=courses.CrsCod"
-			    " AND courses.DegCod=degrees.DegCod"
-			    " AND degrees.CtrCod=centres.CtrCod"
+			    " AND courses.DegCod=deg_degrees.DegCod"
+			    " AND deg_degrees.CtrCod=centres.CtrCod"
 			    " AND centres.InsCod=%ld",
 		            (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of course forums for a country
 	    DB_QuerySELECT (&mysql_res,"can not get number of forums of a type",
 			    "SELECT COUNT(DISTINCT forum_thread.Location)"
-			    " FROM forum_thread,courses,degrees,centres,institutions"
+			    " FROM forum_thread,courses,deg_degrees,centres,institutions"
 			    " WHERE forum_thread.ForumType=%u"
 			    " AND forum_thread.Location=courses.CrsCod"
-			    " AND courses.DegCod=degrees.DegCod"
-			    " AND degrees.CtrCod=centres.CtrCod"
+			    " AND courses.DegCod=deg_degrees.DegCod"
+			    " AND deg_degrees.CtrCod=centres.CtrCod"
 			    " AND centres.InsCod=institutions.InsCod"
 			    " AND institutions.CtyCod=%ld",
 		            (unsigned) ForumType,CtyCod);
@@ -2900,20 +2900,20 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
 				      " in forums of a type",
 				      "SELECT COUNT(*)"
-				      " FROM forum_thread,degrees"
+				      " FROM forum_thread,deg_degrees"
 				      " WHERE forum_thread.ForumType=%u"
-				      " AND forum_thread.Location=degrees.DegCod"
-				      " AND degrees.CtrCod=%ld",
+				      " AND forum_thread.Location=deg_degrees.DegCod"
+				      " AND deg_degrees.CtrCod=%ld",
 				      (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of threads in degree forums for an institution
             NumThrs =
 	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
 				      " in forums of a type",
 				      "SELECT COUNT(*)"
-				      " FROM forum_thread,degrees,centres"
+				      " FROM forum_thread,deg_degrees,centres"
 				      " WHERE forum_thread.ForumType=%u"
-				      " AND forum_thread.Location=degrees.DegCod"
-				      " AND degrees.CtrCod=centres.CtrCod"
+				      " AND forum_thread.Location=deg_degrees.DegCod"
+				      " AND deg_degrees.CtrCod=centres.CtrCod"
 				      " AND centres.InsCod=%ld",
 				      (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of threads in degree forums for a country
@@ -2921,10 +2921,10 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
 				      " in forums of a type",
 				      "SELECT COUNT(*)"
-				      " FROM forum_thread,degrees,centres,institutions"
+				      " FROM forum_thread,deg_degrees,centres,institutions"
 				      " WHERE forum_thread.ForumType=%u"
-				      " AND forum_thread.Location=degrees.DegCod"
-				      " AND degrees.CtrCod=centres.CtrCod"
+				      " AND forum_thread.Location=deg_degrees.DegCod"
+				      " AND deg_degrees.CtrCod=centres.CtrCod"
 				      " AND centres.InsCod=institutions.InsCod"
 				      " AND institutions.CtyCod=%ld",
 				      (unsigned) ForumType,CtyCod);
@@ -2963,22 +2963,22 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
 				      " in forums of a type",
 				      "SELECT COUNT(*)"
-				      " FROM forum_thread,courses,degrees"
+				      " FROM forum_thread,courses,deg_degrees"
 				      " WHERE forum_thread.ForumType=%u"
 				      " AND forum_thread.Location=courses.CrsCod"
-				      " AND courses.DegCod=degrees.DegCod"
-				      " AND degrees.CtrCod=%ld",
+				      " AND courses.DegCod=deg_degrees.DegCod"
+				      " AND deg_degrees.CtrCod=%ld",
 				      (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of threads in course forums for an institution
             NumThrs =
 	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
 				      " in forums of a type",
 				      "SELECT COUNT(*)"
-				      " FROM forum_thread,courses,degrees,centres"
+				      " FROM forum_thread,courses,deg_degrees,centres"
 				      " WHERE forum_thread.ForumType=%u"
 				      " AND forum_thread.Location=courses.CrsCod"
-				      " AND courses.DegCod=degrees.DegCod"
-				      " AND degrees.CtrCod=centres.CtrCod"
+				      " AND courses.DegCod=deg_degrees.DegCod"
+				      " AND deg_degrees.CtrCod=centres.CtrCod"
 				      " AND centres.InsCod=%ld",
 				      (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of threads in course forums for a country
@@ -2986,11 +2986,11 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
 				      " in forums of a type",
 				      "SELECT COUNT(*)"
-				      " FROM forum_thread,courses,degrees,centres,institutions"
+				      " FROM forum_thread,courses,deg_degrees,centres,institutions"
 				      " WHERE forum_thread.ForumType=%u"
 				      " AND forum_thread.Location=courses.CrsCod"
-				      " AND courses.DegCod=degrees.DegCod"
-				      " AND degrees.CtrCod=centres.CtrCod"
+				      " AND courses.DegCod=deg_degrees.DegCod"
+				      " AND deg_degrees.CtrCod=centres.CtrCod"
 				      " AND centres.InsCod=institutions.InsCod"
 				      " AND institutions.CtyCod=%ld",
 				      (unsigned) ForumType,CtyCod);
@@ -3144,20 +3144,20 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),SUM(forum_post.NumNotif)"
-			    " FROM forum_thread,degrees,forum_post "
+			    " FROM forum_thread,deg_degrees,forum_post "
 			    " WHERE forum_thread.ForumType=%u"
-			    " AND forum_thread.Location=degrees.DegCod"
-			    " AND degrees.CtrCod=%ld"
+			    " AND forum_thread.Location=deg_degrees.DegCod"
+			    " AND deg_degrees.CtrCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
                             (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of posts in degree forums for an institution
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),SUM(forum_post.NumNotif)"
-			    " FROM forum_thread,degrees,centres,forum_post"
+			    " FROM forum_thread,deg_degrees,centres,forum_post"
 			    " WHERE forum_thread.ForumType=%u"
-			    " AND forum_thread.Location=degrees.DegCod"
-			    " AND degrees.CtrCod=centres.CtrCod"
+			    " AND forum_thread.Location=deg_degrees.DegCod"
+			    " AND deg_degrees.CtrCod=centres.CtrCod"
 			    " AND centres.InsCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
                             (unsigned) ForumType,InsCod);
@@ -3165,10 +3165,10 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),SUM(forum_post.NumNotif)"
-			    " FROM forum_thread,degrees,centres,institutions,forum_post"
+			    " FROM forum_thread,deg_degrees,centres,institutions,forum_post"
 			    " WHERE forum_thread.ForumType=%u"
-			    " AND forum_thread.Location=degrees.DegCod"
-			    " AND degrees.CtrCod=centres.CtrCod"
+			    " AND forum_thread.Location=deg_degrees.DegCod"
+			    " AND deg_degrees.CtrCod=centres.CtrCod"
 			    " AND centres.InsCod=institutions.InsCod"
 			    " AND institutions.CtyCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
@@ -3207,22 +3207,22 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 	    DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),SUM(forum_post.NumNotif)"
-			    " FROM forum_thread,courses,degrees,forum_post "
+			    " FROM forum_thread,courses,deg_degrees,forum_post "
 			    " WHERE forum_thread.ForumType=%u"
 			    " AND forum_thread.Location=courses.CrsCod"
-			    " AND courses.DegCod=degrees.DegCod"
-			    " AND degrees.CtrCod=%ld"
+			    " AND courses.DegCod=deg_degrees.DegCod"
+			    " AND deg_degrees.CtrCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
 		            (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of posts in course forums for an institution
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),SUM(forum_post.NumNotif)"
-			    " FROM forum_thread,courses,degrees,centres,forum_post"
+			    " FROM forum_thread,courses,deg_degrees,centres,forum_post"
 			    " WHERE forum_thread.ForumType=%u"
 			    " AND forum_thread.Location=courses.CrsCod"
-			    " AND courses.DegCod=degrees.DegCod"
-			    " AND degrees.CtrCod=centres.CtrCod"
+			    " AND courses.DegCod=deg_degrees.DegCod"
+			    " AND deg_degrees.CtrCod=centres.CtrCod"
 			    " AND centres.InsCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
                             (unsigned) ForumType,InsCod);
@@ -3230,11 +3230,11 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),SUM(forum_post.NumNotif)"
-			    " FROM forum_thread,courses,degrees,centres,institutions,forum_post"
+			    " FROM forum_thread,courses,deg_degrees,centres,institutions,forum_post"
 			    " WHERE forum_thread.ForumType=%u"
 			    " AND forum_thread.Location=courses.CrsCod"
-			    " AND courses.DegCod=degrees.DegCod"
-			    " AND degrees.CtrCod=centres.CtrCod"
+			    " AND courses.DegCod=deg_degrees.DegCod"
+			    " AND deg_degrees.CtrCod=centres.CtrCod"
 			    " AND centres.InsCod=institutions.InsCod"
 			    " AND institutions.CtyCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",

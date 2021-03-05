@@ -1706,10 +1706,10 @@ unsigned Att_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
       case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with attendance events",
 			 "SELECT COUNT(DISTINCT att_events.CrsCod)"
-			 " FROM centres,degrees,courses,att_events"
+			 " FROM centres,deg_degrees,courses,att_events"
 			 " WHERE centres.InsCod=%ld"
-			 " AND centres.CtrCod=degrees.CtrCod"
-			 " AND degrees.DegCod=courses.DegCod"
+			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " AND deg_degrees.DegCod=courses.DegCod"
 			 " AND courses.Status=0"
 			 " AND courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
@@ -1717,9 +1717,9 @@ unsigned Att_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
       case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with attendance events",
 			 "SELECT COUNT(DISTINCT att_events.CrsCod)"
-			 " FROM degrees,courses,att_events"
-			 " WHERE degrees.CtrCod=%ld"
-			 " AND degrees.DegCod=courses.DegCod"
+			 " FROM deg_degrees,courses,att_events"
+			 " WHERE deg_degrees.CtrCod=%ld"
+			 " AND deg_degrees.DegCod=courses.DegCod"
 			 " AND courses.Status=0"
 			 " AND courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
@@ -1780,19 +1780,19 @@ unsigned Att_GetNumAttEvents (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
       case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),SUM(att_events.NumNotif)"
-			 " FROM centres,degrees,courses,att_events"
+			 " FROM centres,deg_degrees,courses,att_events"
 			 " WHERE centres.InsCod=%ld"
-			 " AND centres.CtrCod=degrees.CtrCod"
-			 " AND degrees.DegCod=courses.DegCod"
+			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " AND deg_degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),SUM(att_events.NumNotif)"
-			 " FROM degrees,courses,att_events"
-			 " WHERE degrees.CtrCod=%ld"
-			 " AND degrees.DegCod=courses.DegCod"
+			 " FROM deg_degrees,courses,att_events"
+			 " WHERE deg_degrees.CtrCod=%ld"
+			 " AND deg_degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;

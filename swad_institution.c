@@ -2027,9 +2027,9 @@ unsigned Ins_GetCachedNumInssWithDegs (const char *SubQuery,
       NumInssWithDegs = (unsigned)
 	                DB_QueryCOUNT ("can not get number of institutions with degrees",
 				       "SELECT COUNT(DISTINCT institutions.InsCod)"
-				       " FROM institutions,centres,degrees"
+				       " FROM institutions,centres,deg_degrees"
 				       " WHERE %sinstitutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=degrees.CtrCod",
+				       " AND centres.CtrCod=deg_degrees.CtrCod",
 				       SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_DEGS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumInssWithDegs);
@@ -2055,10 +2055,10 @@ unsigned Ins_GetCachedNumInssWithCrss (const char *SubQuery,
       NumInssWithCrss = (unsigned)
 	                DB_QueryCOUNT ("can not get number of institutions with courses",
 				       "SELECT COUNT(DISTINCT institutions.InsCod)"
-				       " FROM institutions,centres,degrees,courses"
+				       " FROM institutions,centres,deg_degrees,courses"
 				       " WHERE %sinstitutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=degrees.CtrCod"
-				       " AND degrees.DegCod=courses.DegCod",
+				       " AND centres.CtrCod=deg_degrees.CtrCod"
+				       " AND deg_degrees.DegCod=courses.DegCod",
 				       SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_CRSS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumInssWithCrss);
@@ -2090,10 +2090,10 @@ unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery,
       NumInssWithUsrs = (unsigned)
 	                DB_QueryCOUNT ("can not get number of institutions with users",
 				       "SELECT COUNT(DISTINCT institutions.InsCod)"
-				       " FROM institutions,centres,degrees,courses,crs_usr"
+				       " FROM institutions,centres,deg_degrees,courses,crs_usr"
 				       " WHERE %sinstitutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=degrees.CtrCod"
-				       " AND degrees.DegCod=courses.DegCod"
+				       " AND centres.CtrCod=deg_degrees.CtrCod"
+				       " AND deg_degrees.DegCod=courses.DegCod"
 				       " AND courses.CrsCod=crs_usr.CrsCod"
 				       " AND crs_usr.Role=%u",
 				       SubQuery,(unsigned) Role);

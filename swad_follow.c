@@ -1376,11 +1376,11 @@ void Fol_GetAndShowRankingFollowers (void)
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-				    " FROM institutions,centres,degrees,courses,crs_usr,usr_follow"
+				    " FROM institutions,centres,deg_degrees,courses,crs_usr,usr_follow"
 				    " WHERE institutions.CtyCod=%ld"
 				    " AND institutions.InsCod=centres.InsCod"
-				    " AND centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
+				    " AND centres.CtrCod=deg_degrees.CtrCod"
+				    " AND deg_degrees.DegCod=courses.DegCod"
 				    " AND courses.CrsCod=crs_usr.CrsCod"
 				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
 				    " GROUP BY usr_follow.FollowedCod"
@@ -1391,10 +1391,10 @@ void Fol_GetAndShowRankingFollowers (void)
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-				    " FROM centres,degrees,courses,crs_usr,usr_follow"
+				    " FROM centres,deg_degrees,courses,crs_usr,usr_follow"
 				    " WHERE centres.InsCod=%ld"
-				    " AND centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
+				    " AND centres.CtrCod=deg_degrees.CtrCod"
+				    " AND deg_degrees.DegCod=courses.DegCod"
 				    " AND courses.CrsCod=crs_usr.CrsCod"
 				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
 				    " GROUP BY usr_follow.FollowedCod"
@@ -1405,9 +1405,9 @@ void Fol_GetAndShowRankingFollowers (void)
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-				    " FROM degrees,courses,crs_usr,usr_follow"
-				    " WHERE degrees.CtrCod=%ld"
-				    " AND degrees.DegCod=courses.DegCod"
+				    " FROM deg_degrees,courses,crs_usr,usr_follow"
+				    " WHERE deg_degrees.CtrCod=%ld"
+				    " AND deg_degrees.DegCod=courses.DegCod"
 				    " AND courses.CrsCod=crs_usr.CrsCod"
 				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
 				    " GROUP BY usr_follow.FollowedCod"

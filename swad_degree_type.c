@@ -605,10 +605,10 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
 	 DB_QuerySELECT (&mysql_res,"can not get types of degree",
 			 "(SELECT deg_types.DegTypCod,"			// row[0]
 				 "deg_types.DegTypName,"		// row[1]
-				 "COUNT(degrees.DegCod) AS NumDegs"	// row[2]
-			 " FROM degrees,deg_types"
-			 " WHERE degrees.DegTypCod=deg_types.DegTypCod"
-			 " GROUP BY degrees.DegTypCod)"
+				 "COUNT(deg_degrees.DegCod) AS NumDegs"	// row[2]
+			 " FROM deg_degrees,deg_types"
+			 " WHERE deg_degrees.DegTypCod=deg_types.DegTypCod"
+			 " GROUP BY deg_degrees.DegTypCod)"
 			 " UNION "
 			 "(SELECT DegTypCod,"				// row[0]
 				 "DegTypName,"				// row[1]
@@ -618,7 +618,7 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
 				 // and order will be wrong
 			 " FROM deg_types"
 			 " WHERE DegTypCod NOT IN"
-			 " (SELECT DegTypCod FROM degrees))"
+			 " (SELECT DegTypCod FROM deg_degrees))"
 			 " ORDER BY %s",
 			 OrderBySubQuery[Order]);
          break;
@@ -628,13 +628,13 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
 	 DB_QuerySELECT (&mysql_res,"can not get types of degree",
 			 "SELECT deg_types.DegTypCod,"			// row[0]
 			        "deg_types.DegTypName,"			// row[1]
-			        "COUNT(degrees.DegCod) AS NumDegs"	// row[2]
-			 " FROM institutions,centres,degrees,deg_types"
+			        "COUNT(deg_degrees.DegCod) AS NumDegs"	// row[2]
+			 " FROM institutions,centres,deg_degrees,deg_types"
 			 " WHERE institutions.CtyCod=%ld"
 			 " AND institutions.InsCod=centres.InsCod"
-			 " AND centres.CtrCod=degrees.CtrCod"
-			 " AND degrees.DegTypCod=deg_types.DegTypCod"
-			 " GROUP BY degrees.DegTypCod"
+			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
+			 " GROUP BY deg_degrees.DegTypCod"
 			 " ORDER BY %s",
 			 Gbl.Hierarchy.Cty.CtyCod,
 			 OrderBySubQuery[Order]);
@@ -645,12 +645,12 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
 	 DB_QuerySELECT (&mysql_res,"can not get types of degree",
 			 "SELECT deg_types.DegTypCod,"			// row[0]
 			        "deg_types.DegTypName,"			// row[1]
-			        "COUNT(degrees.DegCod) AS NumDegs"	// row[2]
-			 " FROM centres,degrees,deg_types"
+			        "COUNT(deg_degrees.DegCod) AS NumDegs"	// row[2]
+			 " FROM centres,deg_degrees,deg_types"
 			 " WHERE centres.InsCod=%ld"
-			 " AND centres.CtrCod=degrees.CtrCod"
-			 " AND degrees.DegTypCod=deg_types.DegTypCod"
-			 " GROUP BY degrees.DegTypCod"
+			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
+			 " GROUP BY deg_degrees.DegTypCod"
 			 " ORDER BY %s",
 			 Gbl.Hierarchy.Ins.InsCod,
 			 OrderBySubQuery[Order]);
@@ -661,11 +661,11 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
 	 DB_QuerySELECT (&mysql_res,"can not get types of degree",
 			 "SELECT deg_types.DegTypCod,"			// row[0]
 			        "deg_types.DegTypName,"			// row[1]
-			        "COUNT(degrees.DegCod) AS NumDegs"	// row[2]
-			 " FROM degrees,deg_types"
-			 " WHERE degrees.CtrCod=%ld"
-			 " AND degrees.DegTypCod=deg_types.DegTypCod"
-			 " GROUP BY degrees.DegTypCod"
+			        "COUNT(deg_degrees.DegCod) AS NumDegs"	// row[2]
+			 " FROM deg_degrees,deg_types"
+			 " WHERE deg_degrees.CtrCod=%ld"
+			 " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
+			 " GROUP BY deg_degrees.DegTypCod"
 			 " ORDER BY %s",
 			 Gbl.Hierarchy.Ctr.CtrCod,
 			 OrderBySubQuery[Order]);
@@ -677,11 +677,11 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
 	 DB_QuerySELECT (&mysql_res,"can not get types of degree",
 			 "SELECT deg_types.DegTypCod,"			// row[0]
 			        "deg_types.DegTypName,"			// row[1]
-			        "COUNT(degrees.DegCod) AS NumDegs"	// row[2]
-			 " FROM degrees,deg_types"
-			 " WHERE degrees.DegCod=%ld"
-			 " AND degrees.DegTypCod=deg_types.DegTypCod"
-			 " GROUP BY degrees.DegTypCod"
+			        "COUNT(deg_degrees.DegCod) AS NumDegs"	// row[2]
+			 " FROM deg_degrees,deg_types"
+			 " WHERE deg_degrees.DegCod=%ld"
+			 " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
+			 " GROUP BY deg_degrees.DegTypCod"
 			 " ORDER BY %s",
 			 Gbl.Hierarchy.Deg.DegCod,
 			 OrderBySubQuery[Order]);
@@ -846,7 +846,7 @@ static unsigned DT_CountNumDegsOfType (long DegTypCod)
    /***** Get number of degrees of a type from database *****/
    return
    (unsigned) DB_QueryCOUNT ("can not get number of degrees of a type",
-			     "SELECT COUNT(*) FROM degrees"
+			     "SELECT COUNT(*) FROM deg_degrees"
 			     " WHERE DegTypCod=%ld",
 			     DegTypCod);
   }
@@ -918,7 +918,8 @@ static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
 
    /***** Get degrees of a type from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get degrees of a type",
-			     "SELECT DegCod FROM degrees WHERE DegTypCod=%ld",
+			     "SELECT DegCod FROM deg_degrees"
+			     " WHERE DegTypCod=%ld",
 			     DegTypCod);
 
    /* Get degrees of this type */

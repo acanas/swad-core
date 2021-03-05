@@ -1426,12 +1426,12 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
              choose it as least recently updated *****/
    /* Get one degree with students not yet computed */
    NumRows = DB_QuerySELECT (&mysql_res,"can not get degrees",
-			     "SELECT DISTINCT degrees.DegCod"
-			     " FROM degrees,courses,crs_usr"
-			     " WHERE degrees.DegCod=courses.DegCod"
+			     "SELECT DISTINCT deg_degrees.DegCod"
+			     " FROM deg_degrees,courses,crs_usr"
+			     " WHERE deg_degrees.DegCod=courses.DegCod"
 			     " AND courses.CrsCod=crs_usr.CrsCod"
 			     " AND crs_usr.Role=%u"
-			     " AND degrees.DegCod NOT IN"
+			     " AND deg_degrees.DegCod NOT IN"
 			     " (SELECT DISTINCT DegCod FROM sta_degrees)"
 			     " LIMIT 1",
 			     (unsigned) Rol_STD);
@@ -1492,7 +1492,7 @@ void Pho_RemoveObsoleteStatDegrees (void)
   {
    DB_QueryDELETE ("can not remove old degrees from stats",
 		   "DELETE FROM sta_degrees"
-		   " WHERE DegCod NOT IN (SELECT DegCod FROM degrees)");
+		   " WHERE DegCod NOT IN (SELECT DegCod FROM deg_degrees)");
   }
 
 /*****************************************************************************/
@@ -2326,45 +2326,45 @@ static unsigned long Pho_BuildQueryOfDegrees (Pho_HowOrderDegrees_t HowOrderDegr
      {
       case Pho_NUMBER_OF_STUDENTS:
          NumDegs = DB_QuerySELECT (mysql_res,"can not get degrees",
-				   "SELECT degrees.DegCod"
-				   " FROM degrees,sta_degrees"
+				   "SELECT deg_degrees.DegCod"
+				   " FROM deg_degrees,sta_degrees"
 				   " WHERE sta_degrees.Sex='all'"
 				   " AND sta_degrees.NumStds>0"
-				   " AND degrees.DegCod=sta_degrees.DegCod"
+				   " AND deg_degrees.DegCod=sta_degrees.DegCod"
 				   " ORDER BY sta_degrees.NumStds DESC,"
-				   "sta_degrees.NumStdsWithPhoto DESC,"
-				   "degrees.ShortName");
+				             "sta_degrees.NumStdsWithPhoto DESC,"
+				             "deg_degrees.ShortName");
          break;
       case Pho_NUMBER_OF_PHOTOS:
          NumDegs = DB_QuerySELECT (mysql_res,"can not get degrees",
-				   "SELECT degrees.DegCod"
-				   " FROM degrees,sta_degrees"
+				   "SELECT deg_degrees.DegCod"
+				   " FROM deg_degrees,sta_degrees"
 				   " WHERE sta_degrees.Sex='all'"
 				   " AND sta_degrees.NumStds>0"
-				   " AND degrees.DegCod=sta_degrees.DegCod"
+				   " AND deg_degrees.DegCod=sta_degrees.DegCod"
 				   " ORDER BY sta_degrees.NumStdsWithPhoto DESC,"
-				   "sta_degrees.NumStds DESC,"
-				   "degrees.ShortName");
+				             "sta_degrees.NumStds DESC,"
+				             "deg_degrees.ShortName");
          break;
       case Pho_PERCENT:
          NumDegs = DB_QuerySELECT (mysql_res,"can not get degrees",
-				   "SELECT degrees.DegCod"
-				   " FROM degrees,sta_degrees"
+				   "SELECT deg_degrees.DegCod"
+				   " FROM deg_degrees,sta_degrees"
 				   " WHERE sta_degrees.Sex='all'"
 				   " AND sta_degrees.NumStds>0"
-				   " AND degrees.DegCod=sta_degrees.DegCod"
+				   " AND deg_degrees.DegCod=sta_degrees.DegCod"
 				   " ORDER BY sta_degrees.NumStdsWithPhoto/"
-				   "sta_degrees.NumStds DESC,"
-				   "degrees.ShortName");
+				             "sta_degrees.NumStds DESC,"
+				             "deg_degrees.ShortName");
          break;
       case Pho_DEGREE_NAME:
          NumDegs = DB_QuerySELECT (mysql_res,"can not get degrees",
-				   "SELECT degrees.DegCod"
-				   " FROM degrees,sta_degrees"
+				   "SELECT deg_degrees.DegCod"
+				   " FROM deg_degrees,sta_degrees"
 				   " WHERE sta_degrees.Sex='all'"
 				   " AND sta_degrees.NumStds>0"
-				   " AND degrees.DegCod=sta_degrees.DegCod"
-				   " ORDER BY degrees.ShortName");
+				   " AND deg_degrees.DegCod=sta_degrees.DegCod"
+				   " ORDER BY deg_degrees.ShortName");
          break;
      }
 

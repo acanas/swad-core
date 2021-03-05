@@ -416,16 +416,9 @@ CREATE TABLE IF NOT EXISTS debug (
 	Txt TEXT NOT NULL,
 	INDEX(DebugTime));
 --
--- Table deg_types: stores the types of degree
+-- Table deg_degrees: stores the degrees
 --
-CREATE TABLE IF NOT EXISTS deg_types (
-	DegTypCod INT NOT NULL AUTO_INCREMENT,
-	DegTypName VARCHAR(511) NOT NULL,
-	UNIQUE INDEX(DegTypCod));
---
--- Table degrees: stores the degrees
---
-CREATE TABLE IF NOT EXISTS degrees (
+CREATE TABLE IF NOT EXISTS deg_degrees (
 	DegCod INT NOT NULL AUTO_INCREMENT,
 	CtrCod INT NOT NULL,
 	DegTypCod INT NOT NULL,
@@ -438,6 +431,13 @@ CREATE TABLE IF NOT EXISTS degrees (
 	INDEX(CtrCod),
 	INDEX(DegTypCod),
 	INDEX(Status));
+--
+-- Table deg_types: stores the types of degree
+--
+CREATE TABLE IF NOT EXISTS deg_types (
+	DegTypCod INT NOT NULL AUTO_INCREMENT,
+	DegTypName VARCHAR(511) NOT NULL,
+	UNIQUE INDEX(DegTypCod));
 --
 -- Table departments: stores the departments
 --

@@ -2241,11 +2241,11 @@ unsigned Msg_GetNumMsgsSent (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
          NumMsgs =
          (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
 				   "SELECT COUNT(*)"
-				   " FROM institutions,centres,degrees,courses,%s"
+				   " FROM institutions,centres,deg_degrees,courses,%s"
 				   " WHERE institutions.CtyCod=%ld"
 				   " AND institutions.InsCod=centres.InsCod"
-				   " AND centres.CtrCod=degrees.CtrCod"
-				   " AND degrees.DegCod=courses.DegCod"
+				   " AND centres.CtrCod=deg_degrees.CtrCod"
+				   " AND deg_degrees.DegCod=courses.DegCod"
 				   " AND courses.CrsCod=%s.CrsCod",
 				   Table,
 				   Gbl.Hierarchy.Cty.CtyCod,
@@ -2255,10 +2255,10 @@ unsigned Msg_GetNumMsgsSent (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
          NumMsgs =
          (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
 				   "SELECT COUNT(*)"
-				   " FROM centres,degrees,courses,%s"
+				   " FROM centres,deg_degrees,courses,%s"
 				   " WHERE centres.InsCod=%ld"
-				   " AND centres.CtrCod=degrees.CtrCod"
-				   " AND degrees.DegCod=courses.DegCod"
+				   " AND centres.CtrCod=deg_degrees.CtrCod"
+				   " AND deg_degrees.DegCod=courses.DegCod"
 				   " AND courses.CrsCod=%s.CrsCod",
 				   Table,
 				   Gbl.Hierarchy.Ins.InsCod,
@@ -2268,9 +2268,9 @@ unsigned Msg_GetNumMsgsSent (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
          NumMsgs =
          (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
 				   "SELECT COUNT(*)"
-				   " FROM degrees,courses,%s"
-				   " WHERE degrees.CtrCod=%ld"
-				   " AND degrees.DegCod=courses.DegCod"
+				   " FROM deg_degrees,courses,%s"
+				   " WHERE deg_degrees.CtrCod=%ld"
+				   " AND deg_degrees.DegCod=courses.DegCod"
 				   " AND courses.CrsCod=%s.CrsCod",
 				   Table,
 				   Gbl.Hierarchy.Ctr.CtrCod,
@@ -2332,11 +2332,11 @@ unsigned Msg_GetNumMsgsReceived (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
                (unsigned) DB_QueryCOUNT ("can not get number"
         				 " of received messages",
 					 "SELECT COUNT(*)"
-					 " FROM institutions,centres,degrees,courses,%s,msg_snt"
+					 " FROM institutions,centres,deg_degrees,courses,%s,msg_snt"
 					 " WHERE institutions.CtyCod=%ld"
 					 " AND institutions.InsCod=centres.InsCod"
-					 " AND centres.CtrCod=degrees.CtrCod"
-					 " AND degrees.DegCod=courses.DegCod"
+					 " AND centres.CtrCod=deg_degrees.CtrCod"
+					 " AND deg_degrees.DegCod=courses.DegCod"
 					 " AND courses.CrsCod=msg_snt.CrsCod"
 					 " AND msg_snt.MsgCod=%s.MsgCod",
 					 Table,
@@ -2348,10 +2348,10 @@ unsigned Msg_GetNumMsgsReceived (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
                (unsigned) DB_QueryCOUNT ("can not get number"
         				 " of received messages",
 					 "SELECT COUNT(*)"
-					 " FROM centres,degrees,courses,%s,msg_snt"
+					 " FROM centres,deg_degrees,courses,%s,msg_snt"
 					 " WHERE centres.InsCod=%ld"
-					 " AND centres.CtrCod=degrees.CtrCod"
-					 " AND degrees.DegCod=courses.DegCod"
+					 " AND centres.CtrCod=deg_degrees.CtrCod"
+					 " AND deg_degrees.DegCod=courses.DegCod"
 					 " AND courses.CrsCod=msg_snt.CrsCod"
 					 " AND msg_snt.MsgCod=%s.MsgCod",
 					 Table,
@@ -2363,9 +2363,9 @@ unsigned Msg_GetNumMsgsReceived (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
                (unsigned) DB_QueryCOUNT ("can not get number"
         				 " of received messages",
 					 "SELECT COUNT(*)"
-					 " FROM degrees,courses,%s,msg_snt"
-					 " WHERE degrees.CtrCod=%ld"
-					 " AND degrees.DegCod=courses.DegCod"
+					 " FROM deg_degrees,courses,%s,msg_snt"
+					 " WHERE deg_degrees.CtrCod=%ld"
+					 " AND deg_degrees.DegCod=courses.DegCod"
 					 " AND courses.CrsCod=msg_snt.CrsCod"
 					 " AND msg_snt.MsgCod=%s.MsgCod",
 					 Table,
@@ -2424,21 +2424,21 @@ unsigned Msg_GetNumMsgsReceived (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
         				 " of received messages",
 					 "SELECT "
 					 "(SELECT COUNT(*)"
-					 " FROM institutions,centres,degrees,courses,msg_snt,msg_rcv"
+					 " FROM institutions,centres,deg_degrees,courses,msg_snt,msg_rcv"
 					 " WHERE institutions.CtyCod=%ld"
 					 " AND institutions.InsCod=centres.InsCod"
-					 " AND centres.CtrCod=degrees.CtrCod"
-					 " AND degrees.DegCod=courses.DegCod"
+					 " AND centres.CtrCod=deg_degrees.CtrCod"
+					 " AND deg_degrees.DegCod=courses.DegCod"
 					 " AND courses.CrsCod=msg_snt.CrsCod"
 					 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
 					 " AND msg_rcv.Notified='Y')"
 					 " + "
 					 "(SELECT COUNT(*)"
-					 " FROM institutions,centres,degrees,courses,msg_snt,msg_rcv_deleted"
+					 " FROM institutions,centres,deg_degrees,courses,msg_snt,msg_rcv_deleted"
 					 " WHERE institutions.CtyCod=%ld"
 					 " AND institutions.InsCod=centres.InsCod"
-					 " AND centres.CtrCod=degrees.CtrCod"
-					 " AND degrees.DegCod=courses.DegCod"
+					 " AND centres.CtrCod=deg_degrees.CtrCod"
+					 " AND deg_degrees.DegCod=courses.DegCod"
 					 " AND courses.CrsCod=msg_snt.CrsCod"
 					 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
 					 " AND msg_rcv_deleted.Notified='Y')",
@@ -2451,19 +2451,19 @@ unsigned Msg_GetNumMsgsReceived (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
         				 " of received messages",
 					 "SELECT "
 					 "(SELECT COUNT(*)"
-					 " FROM centres,degrees,courses,msg_snt,msg_rcv"
+					 " FROM centres,deg_degrees,courses,msg_snt,msg_rcv"
 					 " WHERE centres.InsCod=%ld"
-					 " AND centres.CtrCod=degrees.CtrCod"
-					 " AND degrees.DegCod=courses.DegCod"
+					 " AND centres.CtrCod=deg_degrees.CtrCod"
+					 " AND deg_degrees.DegCod=courses.DegCod"
 					 " AND courses.CrsCod=msg_snt.CrsCod"
 					 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
 					 " AND msg_rcv.Notified='Y')"
 					 " + "
 					 "(SELECT COUNT(*)"
-					 " FROM centres,degrees,courses,msg_snt,msg_rcv_deleted"
+					 " FROM centres,deg_degrees,courses,msg_snt,msg_rcv_deleted"
 					 " WHERE centres.InsCod=%ld"
-					 " AND centres.CtrCod=degrees.CtrCod"
-					 " AND degrees.DegCod=courses.DegCod"
+					 " AND centres.CtrCod=deg_degrees.CtrCod"
+					 " AND deg_degrees.DegCod=courses.DegCod"
 					 " AND courses.CrsCod=msg_snt.CrsCod"
 					 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
 					 " AND msg_rcv_deleted.Notified='Y')",
@@ -2476,17 +2476,17 @@ unsigned Msg_GetNumMsgsReceived (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
         				 " of received messages",
 					 "SELECT "
 					 "(SELECT COUNT(*)"
-					 " FROM degrees,courses,msg_snt,msg_rcv"
-					 " WHERE degrees.CtrCod=%ld"
-					 " AND degrees.DegCod=courses.DegCod"
+					 " FROM deg_degrees,courses,msg_snt,msg_rcv"
+					 " WHERE deg_degrees.CtrCod=%ld"
+					 " AND deg_degrees.DegCod=courses.DegCod"
 					 " AND courses.CrsCod=msg_snt.CrsCod"
 					 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
 					 " AND msg_rcv.Notified='Y')"
 					 " + "
 					 "(SELECT COUNT(*)"
-					 " FROM degrees,courses,msg_snt,msg_rcv_deleted"
-					 " WHERE degrees.CtrCod=%ld"
-					 " AND degrees.DegCod=courses.DegCod"
+					 " FROM deg_degrees,courses,msg_snt,msg_rcv_deleted"
+					 " WHERE deg_degrees.CtrCod=%ld"
+					 " AND deg_degrees.DegCod=courses.DegCod"
 					 " AND courses.CrsCod=msg_snt.CrsCod"
 					 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
 					 " AND msg_rcv_deleted.Notified='Y')",

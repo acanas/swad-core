@@ -809,7 +809,8 @@ static void Fig_GetAndShowHierarchyWithCrss (void)
 	 NumDegsWithCrss = Deg_GetCachedNumDegsWithCrss (SubQuery,Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
-	 sprintf (SubQuery,"degrees.CtrCod=%ld AND ",Gbl.Hierarchy.Ctr.CtrCod);
+	 sprintf (SubQuery,"deg_degrees.CtrCod=%ld AND ",
+	          Gbl.Hierarchy.Ctr.CtrCod);
 	 NumDegsWithCrss = Deg_GetCachedNumDegsWithCrss (SubQuery,Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
 	 break;
       case Hie_Lvl_DEG:
@@ -872,7 +873,8 @@ static void Fig_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
          NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
-         sprintf (SubQuery,"degrees.CtrCod=%ld AND ",Gbl.Hierarchy.Ctr.CtrCod);
+         sprintf (SubQuery,"deg_degrees.CtrCod=%ld AND ",
+                  Gbl.Hierarchy.Ctr.CtrCod);
          NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
          NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
          NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
@@ -1140,8 +1142,8 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
 	 NumInss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
 				    "SELECT centres.InsCod,COUNT(*) AS N"
-				    " FROM centres,degrees"
-				    " WHERE centres.CtrCod=degrees.CtrCod"
+				    " FROM centres,deg_degrees"
+				    " WHERE centres.CtrCod=deg_degrees.CtrCod"
 				    " GROUP BY InsCod"
 				    " ORDER BY N DESC");
          break;
@@ -1149,10 +1151,10 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
 	 NumInss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
 				    "SELECT centres.InsCod,COUNT(*) AS N"
-				    " FROM institutions,centres,degrees"
+				    " FROM institutions,centres,deg_degrees"
 				    " WHERE institutions.CtyCod=%ld"
 				    " AND institutions.InsCod=centres.InsCod"
-				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND centres.CtrCod=deg_degrees.CtrCod"
 				    " GROUP BY centres.InsCod"
 				    " ORDER BY N DESC",
 				    Gbl.Hierarchy.Cty.CtyCod);
@@ -1164,9 +1166,9 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
 	 NumInss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
 				    "SELECT centres.InsCod,COUNT(*) AS N"
-				    " FROM centres,degrees"
+				    " FROM centres,deg_degrees"
 				    " WHERE centres.InsCod=%ld"
-				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND centres.CtrCod=deg_degrees.CtrCod"
 				    " GROUP BY centres.InsCod"
 				    " ORDER BY N DESC",
 				    Gbl.Hierarchy.Ins.InsCod);
@@ -1209,9 +1211,9 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
 	 NumInss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
 				    "SELECT centres.InsCod,COUNT(*) AS N"
-				    " FROM centres,degrees,courses"
-				    " WHERE centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
+				    " FROM centres,deg_degrees,courses"
+				    " WHERE centres.CtrCod=deg_degrees.CtrCod"
+				    " AND deg_degrees.DegCod=courses.DegCod"
 				    " GROUP BY InsCod"
 				    " ORDER BY N DESC");
          break;
@@ -1219,11 +1221,11 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
 	 NumInss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
 				    "SELECT centres.InsCod,COUNT(*) AS N"
-				    " FROM institutions,centres,degrees,courses"
+				    " FROM institutions,centres,deg_degrees,courses"
 				    " WHERE institutions.CtyCod=%ld"
 				    " AND institutions.InsCod=centres.InsCod"
-				    " AND centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
+				    " AND centres.CtrCod=deg_degrees.CtrCod"
+				    " AND deg_degrees.DegCod=courses.DegCod"
 				    " GROUP BY centres.InsCod"
 				    " ORDER BY N DESC",
 				    Gbl.Hierarchy.Cty.CtyCod);
@@ -1235,10 +1237,10 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
 	 NumInss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
 				    "SELECT centres.InsCod,COUNT(*) AS N"
-				    " FROM centres,degrees,courses"
+				    " FROM centres,deg_degrees,courses"
 				    " WHERE centres.InsCod=%ld"
-				    " AND centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
+				    " AND centres.CtrCod=deg_degrees.CtrCod"
+				    " AND deg_degrees.DegCod=courses.DegCod"
 				    " GROUP BY centres.InsCod"
 				    " ORDER BY N DESC",
 				    Gbl.Hierarchy.Ins.InsCod);
@@ -1281,9 +1283,9 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void)
 	 NumInss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
 				    "SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
-				    " FROM centres,degrees,courses,crs_usr"
-				    " WHERE centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
+				    " FROM centres,deg_degrees,courses,crs_usr"
+				    " WHERE centres.CtrCod=deg_degrees.CtrCod"
+				    " AND deg_degrees.DegCod=courses.DegCod"
 				    " AND courses.CrsCod=crs_usr.CrsCod"
 				    " GROUP BY InsCod"
 				    " ORDER BY N DESC");
@@ -1292,11 +1294,11 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void)
 	 NumInss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
 				    "SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
-				    " FROM institutions,centres,degrees,courses,crs_usr"
+				    " FROM institutions,centres,deg_degrees,courses,crs_usr"
 				    " WHERE institutions.CtyCod=%ld"
 				    " AND institutions.InsCod=centres.InsCod"
-				    " AND centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
+				    " AND centres.CtrCod=deg_degrees.CtrCod"
+				    " AND deg_degrees.DegCod=courses.DegCod"
 				    " AND courses.CrsCod=crs_usr.CrsCod"
 				    " GROUP BY centres.InsCod"
 				    " ORDER BY N DESC",
@@ -1309,10 +1311,10 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void)
 	 NumInss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
 				    "SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
-				    " FROM centres,degrees,courses,crs_usr"
+				    " FROM centres,deg_degrees,courses,crs_usr"
 				    " WHERE centres.InsCod=%ld"
-				    " AND centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
+				    " AND centres.CtrCod=deg_degrees.CtrCod"
+				    " AND deg_degrees.DegCod=courses.DegCod"
 				    " AND courses.CrsCod=crs_usr.CrsCod"
 				    " GROUP BY centres.InsCod"
 				    " ORDER BY N DESC",
@@ -1776,11 +1778,11 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "file_browser_size.NumFolders,"
 				      "file_browser_size.NumFiles,"
 				      "file_browser_size.TotalSize"
-			       " FROM institutions,centres,degrees,courses,file_browser_size"
+			       " FROM institutions,centres,deg_degrees,courses,file_browser_size"
 			       " WHERE institutions.CtyCod=%ld"
 			       " AND institutions.InsCod=centres.InsCod"
-			       " AND centres.CtrCod=degrees.CtrCod"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=file_browser_size.Cod"
 			       " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
 	                       " UNION "
@@ -1790,11 +1792,11 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "file_browser_size.NumFolders,"
 				      "file_browser_size.NumFiles,"
 				      "file_browser_size.TotalSize"
-			       " FROM institutions,centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
+			       " FROM institutions,centres,deg_degrees,courses,crs_grp_types,crs_grp,file_browser_size"
 			       " WHERE institutions.CtyCod=%ld"
 	                       " AND institutions.InsCod=centres.InsCod"
-			       " AND centres.CtrCod=degrees.CtrCod"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=crs_grp_types.CrsCod"
 			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			       " AND crs_grp.GrpCod=file_browser_size.Cod"
@@ -1825,11 +1827,11 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(file_browser_size.NumFolders),"
 				      "SUM(file_browser_size.NumFiles),"
 				      "SUM(file_browser_size.TotalSize)"
-			       " FROM institutions,centres,degrees,courses,file_browser_size"
+			       " FROM institutions,centres,deg_degrees,courses,file_browser_size"
 			       " WHERE institutions.CtyCod=%ld"
 	                       " AND institutions.InsCod=centres.InsCod"
-			       " AND centres.CtrCod=degrees.CtrCod"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=file_browser_size.Cod"
 			       " and file_browser_size.FileBrowser=%u",
 			       Gbl.Hierarchy.Cty.CtyCod,(unsigned) FileBrowser);
@@ -1846,11 +1848,11 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(file_browser_size.NumFolders),"
 				      "SUM(file_browser_size.NumFiles),"
 				      "SUM(file_browser_size.TotalSize)"
-			       " FROM institutions,centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
+			       " FROM institutions,centres,deg_degrees,courses,crs_grp_types,crs_grp,file_browser_size"
 			       " WHERE institutions.CtyCod=%ld"
 	                       " AND institutions.InsCod=centres.InsCod"
-			       " AND centres.CtrCod=degrees.CtrCod"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=crs_grp_types.CrsCod"
 			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			       " AND crs_grp.GrpCod=file_browser_size.Cod"
@@ -1867,11 +1869,11 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(file_browser_size.NumFolders),"
 				      "SUM(file_browser_size.NumFiles),"
 				      "SUM(file_browser_size.TotalSize)"
-			       " FROM institutions,centres,degrees,courses,file_browser_size"
+			       " FROM institutions,centres,deg_degrees,courses,file_browser_size"
 			       " WHERE institutions.CtyCod=%ld"
 	                       " AND institutions.InsCod=centres.InsCod"
-			       " AND centres.CtrCod=degrees.CtrCod"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=file_browser_size.Cod"
 	                       " AND file_browser_size.FileBrowser=%u",
 			       Gbl.Hierarchy.Cty.CtyCod,(unsigned) FileBrowser);
@@ -1885,11 +1887,11 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(file_browser_size.NumFolders),"
 				      "SUM(file_browser_size.NumFiles),"
 				      "SUM(file_browser_size.TotalSize)"
-			       " FROM institutions,centres,degrees,courses,crs_usr,file_browser_size"
+			       " FROM institutions,centres,deg_degrees,courses,crs_usr,file_browser_size"
 			       " WHERE institutions.CtyCod=%ld"
 	                       " AND institutions.InsCod=centres.InsCod"
-			       " AND centres.CtrCod=degrees.CtrCod"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=crs_usr.CrsCod"
 			       " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
 			       " AND file_browser_size.FileBrowser=%u",
@@ -1921,10 +1923,10 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "file_browser_size.NumFolders,"
 				      "file_browser_size.NumFiles,"
 				      "file_browser_size.TotalSize"
-			       " FROM centres,degrees,courses,file_browser_size"
+			       " FROM centres,deg_degrees,courses,file_browser_size"
 			       " WHERE centres.InsCod=%ld"
-			       " AND centres.CtrCod=degrees.CtrCod"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=file_browser_size.Cod"
 			       " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
 	                       " UNION "
@@ -1934,10 +1936,10 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "file_browser_size.NumFolders,"
 				      "file_browser_size.NumFiles,"
 				      "file_browser_size.TotalSize"
-			       " FROM centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
+			       " FROM centres,deg_degrees,courses,crs_grp_types,crs_grp,file_browser_size"
 			       " WHERE centres.InsCod=%ld"
-			       " AND centres.CtrCod=degrees.CtrCod"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=crs_grp_types.CrsCod"
 			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			       " AND crs_grp.GrpCod=file_browser_size.Cod"
@@ -1968,10 +1970,10 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(file_browser_size.NumFolders),"
 				      "SUM(file_browser_size.NumFiles),"
 				      "SUM(file_browser_size.TotalSize)"
-			       " FROM centres,degrees,courses,file_browser_size"
+			       " FROM centres,deg_degrees,courses,file_browser_size"
 			       " WHERE centres.InsCod=%ld"
-			       " AND centres.CtrCod=degrees.CtrCod"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=file_browser_size.Cod"
 			       " and file_browser_size.FileBrowser=%u",
 			       Gbl.Hierarchy.Ins.InsCod,(unsigned) FileBrowser);
@@ -1988,10 +1990,10 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(file_browser_size.NumFolders),"
 				      "SUM(file_browser_size.NumFiles),"
 				      "SUM(file_browser_size.TotalSize)"
-			       " FROM centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
+			       " FROM centres,deg_degrees,courses,crs_grp_types,crs_grp,file_browser_size"
 			       " WHERE centres.InsCod=%ld"
-			       " AND centres.CtrCod=degrees.CtrCod"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=crs_grp_types.CrsCod"
 			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			       " AND crs_grp.GrpCod=file_browser_size.Cod"
@@ -2008,10 +2010,10 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(file_browser_size.NumFolders),"
 				      "SUM(file_browser_size.NumFiles),"
 				      "SUM(file_browser_size.TotalSize)"
-			       " FROM centres,degrees,courses,file_browser_size"
+			       " FROM centres,deg_degrees,courses,file_browser_size"
 			       " WHERE centres.InsCod=%ld"
-			       " AND centres.CtrCod=degrees.CtrCod"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=file_browser_size.Cod"
 	                       " AND file_browser_size.FileBrowser=%u",
 			       Gbl.Hierarchy.Ins.InsCod,(unsigned) FileBrowser);
@@ -2025,10 +2027,10 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(file_browser_size.NumFolders),"
 				      "SUM(file_browser_size.NumFiles),"
 				      "SUM(file_browser_size.TotalSize)"
-			       " FROM centres,degrees,courses,crs_usr,file_browser_size"
+			       " FROM centres,deg_degrees,courses,crs_usr,file_browser_size"
 			       " WHERE centres.InsCod=%ld"
-			       " AND centres.CtrCod=degrees.CtrCod"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=crs_usr.CrsCod"
 			       " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
 			       " AND file_browser_size.FileBrowser=%u",
@@ -2060,9 +2062,9 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "file_browser_size.NumFolders,"
 				      "file_browser_size.NumFiles,"
 				      "file_browser_size.TotalSize"
-			       " FROM degrees,courses,file_browser_size"
-			       " WHERE degrees.CtrCod=%ld"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " FROM deg_degrees,courses,file_browser_size"
+			       " WHERE deg_degrees.CtrCod=%ld"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=file_browser_size.Cod"
 			       " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
 	                       " UNION "
@@ -2072,9 +2074,9 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "file_browser_size.NumFolders,"
 				      "file_browser_size.NumFiles,"
 				      "file_browser_size.TotalSize"
-			       " FROM degrees,courses,crs_grp_types,crs_grp,file_browser_size"
-			       " WHERE degrees.CtrCod=%ld"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " FROM deg_degrees,courses,crs_grp_types,crs_grp,file_browser_size"
+			       " WHERE deg_degrees.CtrCod=%ld"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=crs_grp_types.CrsCod"
 			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			       " AND crs_grp.GrpCod=file_browser_size.Cod"
@@ -2105,9 +2107,9 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(file_browser_size.NumFolders),"
 				      "SUM(file_browser_size.NumFiles),"
 				      "SUM(file_browser_size.TotalSize)"
-			       " FROM degrees,courses,file_browser_size"
-			       " WHERE degrees.CtrCod=%ld"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " FROM deg_degrees,courses,file_browser_size"
+			       " WHERE deg_degrees.CtrCod=%ld"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=file_browser_size.Cod"
 			       " AND file_browser_size.FileBrowser=%u",
 			       Gbl.Hierarchy.Ctr.CtrCod,(unsigned) FileBrowser);
@@ -2124,9 +2126,9 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(file_browser_size.NumFolders),"
 				      "SUM(file_browser_size.NumFiles),"
 				      "SUM(file_browser_size.TotalSize)"
-			       " FROM degrees,courses,crs_grp_types,crs_grp,file_browser_size"
-			       " WHERE degrees.CtrCod=%ld"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " FROM deg_degrees,courses,crs_grp_types,crs_grp,file_browser_size"
+			       " WHERE deg_degrees.CtrCod=%ld"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=crs_grp_types.CrsCod"
 			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			       " AND crs_grp.GrpCod=file_browser_size.Cod"
@@ -2143,9 +2145,9 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(file_browser_size.NumFolders),"
 				      "SUM(file_browser_size.NumFiles),"
 				      "SUM(file_browser_size.TotalSize)"
-			       " FROM degrees,courses,file_browser_size"
-			       " WHERE degrees.CtrCod=%ld"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " FROM deg_degrees,courses,file_browser_size"
+			       " WHERE deg_degrees.CtrCod=%ld"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=file_browser_size.Cod"
 			       " AND file_browser_size.FileBrowser=%u",
 			       Gbl.Hierarchy.Ctr.CtrCod,(unsigned) FileBrowser);
@@ -2159,9 +2161,9 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(file_browser_size.NumFolders),"
 				      "SUM(file_browser_size.NumFiles),"
 				      "SUM(file_browser_size.TotalSize)"
-			       " FROM degrees,courses,crs_usr,file_browser_size"
-			       " WHERE degrees.CtrCod=%ld"
-			       " AND degrees.DegCod=courses.DegCod"
+			       " FROM deg_degrees,courses,crs_usr,file_browser_size"
+			       " WHERE deg_degrees.CtrCod=%ld"
+			       " AND deg_degrees.DegCod=courses.DegCod"
 			       " AND courses.CrsCod=crs_usr.CrsCod"
 			       " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
 			       " AND file_browser_size.FileBrowser=%u",
@@ -2828,11 +2830,11 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,Brw_License_t Licen
          NumRows =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of OERs",
 				    "SELECT files.Public,COUNT(*)"
-				    " FROM institutions,centres,degrees,courses,files"
+				    " FROM institutions,centres,deg_degrees,courses,files"
 				    " WHERE institutions.CtyCod=%ld"
 				    " AND institutions.InsCod=centres.InsCod"
-				    " AND centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
+				    " AND centres.CtrCod=deg_degrees.CtrCod"
+				    " AND deg_degrees.DegCod=courses.DegCod"
 				    " AND courses.CrsCod=files.Cod"
 				    " AND files.FileBrowser IN (%u,%u)"
 				    " AND files.License=%u"
@@ -2846,10 +2848,10 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,Brw_License_t Licen
          NumRows =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of OERs",
 				    "SELECT files.Public,COUNT(*)"
-				    " FROM centres,degrees,courses,files"
+				    " FROM centres,deg_degrees,courses,files"
 				    " WHERE centres.InsCod=%ld"
-				    " AND centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
+				    " AND centres.CtrCod=deg_degrees.CtrCod"
+				    " AND deg_degrees.DegCod=courses.DegCod"
 				    " AND courses.CrsCod=files.Cod"
 				    " AND files.FileBrowser IN (%u,%u)"
 				    " AND files.License=%u"
@@ -2863,9 +2865,9 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,Brw_License_t Licen
          NumRows =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of OERs",
 				    "SELECT files.Public,COUNT(*)"
-				    " FROM degrees,courses,files"
-				    " WHERE degrees.CtrCod=%ld"
-				    " AND degrees.DegCod=courses.DegCod"
+				    " FROM deg_degrees,courses,files"
+				    " WHERE deg_degrees.CtrCod=%ld"
+				    " AND deg_degrees.DegCod=courses.DegCod"
 				    " AND courses.CrsCod=files.Cod"
 				    " AND files.FileBrowser IN (%u,%u)"
 				    " AND files.License=%u"
@@ -3435,11 +3437,11 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 				      "SELECT COUNT(DISTINCT tml_notes.NotCod),"
 					     "COUNT(DISTINCT tml_notes.UsrCod)"
-				      " FROM institutions,centres,degrees,courses,crs_usr,tml_notes"
+				      " FROM institutions,centres,deg_degrees,courses,crs_usr,tml_notes"
 				      " WHERE institutions.CtyCod=%ld"
 				      " AND institutions.InsCod=centres.InsCod"
-				      " AND centres.CtrCod=degrees.CtrCod"
-				      " AND degrees.DegCod=courses.DegCod"
+				      " AND centres.CtrCod=deg_degrees.CtrCod"
+				      " AND deg_degrees.DegCod=courses.DegCod"
 				      " AND courses.CrsCod=crs_usr.CrsCod"
 				      " AND crs_usr.UsrCod=tml_notes.UsrCod"
 				      " AND tml_notes.NoteType=%u",
@@ -3450,10 +3452,10 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 				      "SELECT COUNT(DISTINCT tml_notes.NotCod),"
 					     "COUNT(DISTINCT tml_notes.UsrCod)"
-				      " FROM centres,degrees,courses,crs_usr,tml_notes"
+				      " FROM centres,deg_degrees,courses,crs_usr,tml_notes"
 				      " WHERE centres.InsCod=%ld"
-				      " AND centres.CtrCod=degrees.CtrCod"
-				      " AND degrees.DegCod=courses.DegCod"
+				      " AND centres.CtrCod=deg_degrees.CtrCod"
+				      " AND deg_degrees.DegCod=courses.DegCod"
 				      " AND courses.CrsCod=crs_usr.CrsCod"
 				      " AND crs_usr.UsrCod=tml_notes.UsrCod"
 				      " AND tml_notes.NoteType=%u",
@@ -3464,9 +3466,9 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 				      "SELECT COUNT(DISTINCT tml_notes.NotCod),"
 					     "COUNT(DISTINCT tml_notes.UsrCod)"
-				      " FROM degrees,courses,crs_usr,tml_notes"
-				      " WHERE degrees.CtrCod=%ld"
-				      " AND degrees.DegCod=courses.DegCod"
+				      " FROM deg_degrees,courses,crs_usr,tml_notes"
+				      " WHERE deg_degrees.CtrCod=%ld"
+				      " AND deg_degrees.DegCod=courses.DegCod"
 				      " AND courses.CrsCod=crs_usr.CrsCod"
 				      " AND crs_usr.UsrCod=tml_notes.UsrCod"
 				      " AND tml_notes.NoteType=%u",
@@ -3565,11 +3567,11 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 				   "SELECT COUNT(DISTINCT tml_notes.NotCod),"
 					  "COUNT(DISTINCT tml_notes.UsrCod)"
-				   " FROM institutions,centres,degrees,courses,crs_usr,tml_notes"
+				   " FROM institutions,centres,deg_degrees,courses,crs_usr,tml_notes"
 				   " WHERE institutions.CtyCod=%ld"
 				   " AND institutions.InsCod=centres.InsCod"
-				   " AND centres.CtrCod=degrees.CtrCod"
-				   " AND degrees.DegCod=courses.DegCod"
+				   " AND centres.CtrCod=deg_degrees.CtrCod"
+				   " AND deg_degrees.DegCod=courses.DegCod"
 				   " AND courses.CrsCod=crs_usr.CrsCod"
 				   " AND crs_usr.UsrCod=tml_notes.UsrCod",
 				   Gbl.Hierarchy.Cty.CtyCod);
@@ -3578,10 +3580,10 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 				   "SELECT COUNT(DISTINCT tml_notes.NotCod),"
 					  "COUNT(DISTINCT tml_notes.UsrCod)"
-				   " FROM centres,degrees,courses,crs_usr,tml_notes"
+				   " FROM centres,deg_degrees,courses,crs_usr,tml_notes"
 				   " WHERE centres.InsCod=%ld"
-				   " AND centres.CtrCod=degrees.CtrCod"
-				   " AND degrees.DegCod=courses.DegCod"
+				   " AND centres.CtrCod=deg_degrees.CtrCod"
+				   " AND deg_degrees.DegCod=courses.DegCod"
 				   " AND courses.CrsCod=crs_usr.CrsCod"
 				   " AND crs_usr.UsrCod=tml_notes.UsrCod",
 				   Gbl.Hierarchy.Ins.InsCod);
@@ -3590,9 +3592,9 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 				   "SELECT COUNT(DISTINCT tml_notes.NotCod),"
 					  "COUNT(DISTINCT tml_notes.UsrCod)"
-				   " FROM degrees,courses,crs_usr,tml_notes"
-				   " WHERE degrees.CtrCod=%ld"
-				   " AND degrees.DegCod=courses.DegCod"
+				   " FROM deg_degrees,courses,crs_usr,tml_notes"
+				   " WHERE deg_degrees.CtrCod=%ld"
+				   " AND deg_degrees.DegCod=courses.DegCod"
 				   " AND courses.CrsCod=crs_usr.CrsCod"
 				   " AND crs_usr.UsrCod=tml_notes.UsrCod",
 				   Gbl.Hierarchy.Ctr.CtrCod);
@@ -3748,11 +3750,11 @@ static void Fig_GetAndShowFollowStats (void)
 	    (unsigned) DB_QueryCOUNT ("can not get the total number"
 				      " of following/followers",
 				      "SELECT COUNT(DISTINCT usr_follow.%s)"
-				      " FROM institutions,centres,degrees,courses,crs_usr,usr_follow"
+				      " FROM institutions,centres,deg_degrees,courses,crs_usr,usr_follow"
 				      " WHERE institutions.CtyCod=%ld"
 				      " AND institutions.InsCod=centres.InsCod"
-				      " AND centres.CtrCod=degrees.CtrCod"
-				      " AND degrees.DegCod=courses.DegCod"
+				      " AND centres.CtrCod=deg_degrees.CtrCod"
+				      " AND deg_degrees.DegCod=courses.DegCod"
 				      " AND courses.CrsCod=crs_usr.CrsCod"
 				      " AND crs_usr.UsrCod=usr_follow.%s",
 				      FieldDB[Fol],
@@ -3764,10 +3766,10 @@ static void Fig_GetAndShowFollowStats (void)
 	    (unsigned) DB_QueryCOUNT ("can not get the total number"
 				      " of following/followers",
 				      "SELECT COUNT(DISTINCT usr_follow.%s)"
-				      " FROM centres,degrees,courses,crs_usr,usr_follow"
+				      " FROM centres,deg_degrees,courses,crs_usr,usr_follow"
 				      " WHERE centres.InsCod=%ld"
-				      " AND centres.CtrCod=degrees.CtrCod"
-				      " AND degrees.DegCod=courses.DegCod"
+				      " AND centres.CtrCod=deg_degrees.CtrCod"
+				      " AND deg_degrees.DegCod=courses.DegCod"
 				      " AND courses.CrsCod=crs_usr.CrsCod"
 				      " AND crs_usr.UsrCod=usr_follow.%s",
 				      FieldDB[Fol],
@@ -3779,9 +3781,9 @@ static void Fig_GetAndShowFollowStats (void)
 	    (unsigned) DB_QueryCOUNT ("can not get the total number"
 				      " of following/followers",
 				      "SELECT COUNT(DISTINCT usr_follow.%s)"
-				      " FROM degrees,courses,crs_usr,usr_follow"
-				      " WHERE degrees.CtrCod=%ld"
-				      " AND degrees.DegCod=courses.DegCod"
+				      " FROM deg_degrees,courses,crs_usr,usr_follow"
+				      " WHERE deg_degrees.CtrCod=%ld"
+				      " AND deg_degrees.DegCod=courses.DegCod"
 				      " AND courses.CrsCod=crs_usr.CrsCod"
 				      " AND crs_usr.UsrCod=usr_follow.%s",
 				      FieldDB[Fol],
@@ -3862,11 +3864,11 @@ static void Fig_GetAndShowFollowStats (void)
 				       " per survey",
 			    "SELECT AVG(N) FROM "
 			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			    " FROM institutions,centres,degrees,courses,crs_usr,usr_follow"
+			    " FROM institutions,centres,deg_degrees,courses,crs_usr,usr_follow"
 			    " WHERE institutions.CtyCod=%ld"
 			    " AND institutions.InsCod=centres.InsCod"
-			    " AND centres.CtrCod=degrees.CtrCod"
-			    " AND degrees.DegCod=courses.DegCod"
+			    " AND centres.CtrCod=deg_degrees.CtrCod"
+			    " AND deg_degrees.DegCod=courses.DegCod"
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " AND crs_usr.UsrCod=usr_follow.%s"
 			    " GROUP BY %s) AS F",
@@ -3880,10 +3882,10 @@ static void Fig_GetAndShowFollowStats (void)
 				       " per survey",
 			    "SELECT AVG(N) FROM "
 			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			    " FROM centres,degrees,courses,crs_usr,usr_follow"
+			    " FROM centres,deg_degrees,courses,crs_usr,usr_follow"
 			    " WHERE centres.InsCod=%ld"
-			    " AND centres.CtrCod=degrees.CtrCod"
-			    " AND degrees.DegCod=courses.DegCod"
+			    " AND centres.CtrCod=deg_degrees.CtrCod"
+			    " AND deg_degrees.DegCod=courses.DegCod"
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " AND crs_usr.UsrCod=usr_follow.%s"
 			    " GROUP BY %s) AS F",
@@ -3897,9 +3899,9 @@ static void Fig_GetAndShowFollowStats (void)
 				       " per survey",
 			    "SELECT AVG(N) FROM "
 			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			    " FROM degrees,courses,crs_usr,usr_follow"
-			    " WHERE degrees.CtrCod=%ld"
-			    " AND degrees.DegCod=courses.DegCod"
+			    " FROM deg_degrees,courses,crs_usr,usr_follow"
+			    " WHERE deg_degrees.CtrCod=%ld"
+			    " AND deg_degrees.DegCod=courses.DegCod"
 			    " AND courses.CrsCod=crs_usr.CrsCod"
 			    " AND crs_usr.UsrCod=usr_follow.%s"
 			    " GROUP BY %s) AS F",
@@ -4400,11 +4402,11 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
             DB_QuerySELECT (&mysql_res,"can not get the number"
         			       " of notifications by email",
         		    "SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
-                            " FROM institutions,centres,degrees,sta_notif"
+                            " FROM institutions,centres,deg_degrees,sta_notif"
                             " WHERE institutions.CtyCod=%ld"
                             " AND institutions.InsCod=centres.InsCod"
-                            " AND centres.CtrCod=degrees.CtrCod"
-                            " AND degrees.DegCod=sta_notif.DegCod"
+                            " AND centres.CtrCod=deg_degrees.CtrCod"
+                            " AND deg_degrees.DegCod=sta_notif.DegCod"
                             " AND sta_notif.NotifyEvent=%u",
 			    Gbl.Hierarchy.Cty.CtyCod,(unsigned) NotifyEvent);
             break;
@@ -4412,10 +4414,10 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
             DB_QuerySELECT (&mysql_res,"can not get the number"
         			       " of notifications by email",
         		    "SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
-                            " FROM centres,degrees,sta_notif"
+                            " FROM centres,deg_degrees,sta_notif"
                             " WHERE centres.InsCod=%ld"
-                            " AND centres.CtrCod=degrees.CtrCod"
-                            " AND degrees.DegCod=sta_notif.DegCod"
+                            " AND centres.CtrCod=deg_degrees.CtrCod"
+                            " AND deg_degrees.DegCod=sta_notif.DegCod"
                             " AND sta_notif.NotifyEvent=%u",
 			    Gbl.Hierarchy.Ins.InsCod,(unsigned) NotifyEvent);
             break;
@@ -4423,9 +4425,9 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
             DB_QuerySELECT (&mysql_res,"can not get the number"
         			       " of notifications by email",
         		    "SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
-                            " FROM degrees,sta_notif"
-                            " WHERE degrees.CtrCod=%ld"
-                            " AND degrees.DegCod=sta_notif.DegCod"
+                            " FROM deg_degrees,sta_notif"
+                            " WHERE deg_degrees.CtrCod=%ld"
+                            " AND deg_degrees.DegCod=sta_notif.DegCod"
                             " AND sta_notif.NotifyEvent=%u",
 			    Gbl.Hierarchy.Ctr.CtrCod,(unsigned) NotifyEvent);
             break;
@@ -5567,11 +5569,11 @@ unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 	 (unsigned) DB_QueryCOUNT ("can not get the number of users"
 				   " who have chosen an option",
 				   "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-				   " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+				   " FROM institutions,centres,deg_degrees,courses,crs_usr,usr_data"
 				   " WHERE institutions.CtyCod=%ld"
 				   " AND institutions.InsCod=centres.InsCod"
-				   " AND centres.CtrCod=degrees.CtrCod"
-				   " AND degrees.DegCod=courses.DegCod"
+				   " AND centres.CtrCod=deg_degrees.CtrCod"
+				   " AND deg_degrees.DegCod=courses.DegCod"
 				   " AND courses.CrsCod=crs_usr.CrsCod"
 				   " AND crs_usr.UsrCod=usr_data.UsrCod"
 				   " AND %s",
@@ -5582,10 +5584,10 @@ unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 	 (unsigned) DB_QueryCOUNT ("can not get the number of users"
 				   " who have chosen an option",
 				   "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-				   " FROM centres,degrees,courses,crs_usr,usr_data"
+				   " FROM centres,deg_degrees,courses,crs_usr,usr_data"
 				   " WHERE centres.InsCod=%ld"
-				   " AND centres.CtrCod=degrees.CtrCod"
-				   " AND degrees.DegCod=courses.DegCod"
+				   " AND centres.CtrCod=deg_degrees.CtrCod"
+				   " AND deg_degrees.DegCod=courses.DegCod"
 				   " AND courses.CrsCod=crs_usr.CrsCod"
 				   " AND crs_usr.UsrCod=usr_data.UsrCod"
 				   " AND %s",
@@ -5596,9 +5598,9 @@ unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 	 (unsigned) DB_QueryCOUNT ("can not get the number of users"
 				   " who have chosen an option",
 				   "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-				   " FROM degrees,courses,crs_usr,usr_data"
-				   " WHERE degrees.CtrCod=%ld"
-				   " AND degrees.DegCod=courses.DegCod"
+				   " FROM deg_degrees,courses,crs_usr,usr_data"
+				   " WHERE deg_degrees.CtrCod=%ld"
+				   " AND deg_degrees.DegCod=courses.DegCod"
 				   " AND courses.CrsCod=crs_usr.CrsCod"
 				   " AND crs_usr.UsrCod=usr_data.UsrCod"
 				   " AND %s",

@@ -6098,16 +6098,16 @@ int swad__getLastLocation (struct soap *soap,
    */
    if (DB_QueryCOUNT ("can not get session data",
 		       "SELECT COUNT(*) FROM "
-		       "(SELECT DISTINCT degrees.CtrCod"
-		       " FROM crs_usr,courses,degrees"
+		       "(SELECT DISTINCT deg_degrees.CtrCod"
+		       " FROM crs_usr,courses,deg_degrees"
 		       " WHERE crs_usr.UsrCod=%ld"
 		       " AND crs_usr.CrsCod=courses.CrsCod"
-		       " AND courses.DegCod=degrees.DegCod) AS C1,"	// centres of my courses
-		       "(SELECT DISTINCT degrees.CtrCod"
-		       " FROM crs_usr,courses,degrees"
+		       " AND courses.DegCod=deg_degrees.DegCod) AS C1,"	// centres of my courses
+		       "(SELECT DISTINCT deg_degrees.CtrCod"
+		       " FROM crs_usr,courses,deg_degrees"
 		       " WHERE crs_usr.UsrCod=%d"
 		       " AND crs_usr.CrsCod=courses.CrsCod"
-		       " AND courses.DegCod=degrees.DegCod) AS C2"	// centres of user's courses
+		       " AND courses.DegCod=deg_degrees.DegCod) AS C2"	// centres of user's courses
 		       " WHERE C1.CtrCod=C2.CtrCod",
 	               Gbl.Usrs.Me.UsrDat.UsrCod,
 	               userCode))

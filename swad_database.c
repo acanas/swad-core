@@ -926,9 +926,9 @@ mysql> DESCRIBE deg_types;
 			"DegTypName VARCHAR(511) NOT NULL,"	// Deg_MAX_BYTES_DEGREE_TYPE_NAME
 		   "UNIQUE INDEX(DegTypCod))");
 
-   /***** Table degrees *****/
+   /***** Table deg_degrees *****/
 /*
-mysql> DESCRIBE degrees;
+mysql> DESCRIBE deg_degrees;
 +-----------------+---------------+------+-----+---------+----------------+
 | Field           | Type          | Null | Key | Default | Extra          |
 +-----------------+---------------+------+-----+---------+----------------+
@@ -943,7 +943,7 @@ mysql> DESCRIBE degrees;
 +-----------------+---------------+------+-----+---------+----------------+
 8 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS degrees ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS deg_degrees ("
 			"DegCod INT NOT NULL AUTO_INCREMENT,"
 			"CtrCod INT NOT NULL,"
 			"DegTypCod INT NOT NULL,"

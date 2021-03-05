@@ -130,13 +130,13 @@ void Ctr_SeeCtrWithPendingDegs (void)
       case Rol_CTR_ADM:
          NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centres"
 							 " with pending degrees",
-					      "SELECT degrees.CtrCod,COUNT(*)"
-					      " FROM degrees,ctr_admin,centres"
-					      " WHERE (degrees.Status & %u)<>0"
-					      " AND degrees.CtrCod=ctr_admin.CtrCod"
+					      "SELECT deg_degrees.CtrCod,COUNT(*)"
+					      " FROM deg_degrees,ctr_admin,centres"
+					      " WHERE (deg_degrees.Status & %u)<>0"
+					      " AND deg_degrees.CtrCod=ctr_admin.CtrCod"
 					      " AND ctr_admin.UsrCod=%ld"
-					      " AND degrees.CtrCod=centres.CtrCod"
-					      " GROUP BY degrees.CtrCod"
+					      " AND deg_degrees.CtrCod=centres.CtrCod"
+					      " GROUP BY deg_degrees.CtrCod"
 					      " ORDER BY centres.ShortName",
 					      (unsigned) Deg_STATUS_BIT_PENDING,
 					      Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -144,11 +144,11 @@ void Ctr_SeeCtrWithPendingDegs (void)
       case Rol_SYS_ADM:
          NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centres"
 							 " with pending degrees",
-					      "SELECT degrees.CtrCod,COUNT(*)"
-					      " FROM degrees,centres"
-					      " WHERE (degrees.Status & %u)<>0"
-					      " AND degrees.CtrCod=centres.CtrCod"
-					      " GROUP BY degrees.CtrCod"
+					      "SELECT deg_degrees.CtrCod,COUNT(*)"
+					      " FROM deg_degrees,centres"
+					      " WHERE (deg_degrees.Status & %u)<>0"
+					      " AND deg_degrees.CtrCod=centres.CtrCod"
+					      " GROUP BY deg_degrees.CtrCod"
 					      " ORDER BY centres.ShortName",
 					      (unsigned) Deg_STATUS_BIT_PENDING);
          break;
@@ -2124,9 +2124,9 @@ unsigned Ctr_GetCachedNumCtrsWithDegs (const char *SubQuery,
       NumCtrsWithDegs = (unsigned)
 	                DB_QueryCOUNT ("can not get number of centres with degrees",
 				       "SELECT COUNT(DISTINCT centres.CtrCod)"
-				       " FROM institutions,centres,degrees"
+				       " FROM institutions,centres,deg_degrees"
 				       " WHERE %sinstitutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=degrees.CtrCod",
+				       " AND centres.CtrCod=deg_degrees.CtrCod",
 				       SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_DEGS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumCtrsWithDegs);
@@ -2152,10 +2152,10 @@ unsigned Ctr_GetCachedNumCtrsWithCrss (const char *SubQuery,
       NumCtrsWithCrss = (unsigned)
 	                DB_QueryCOUNT ("can not get number of centres with courses",
 				       "SELECT COUNT(DISTINCT centres.CtrCod)"
-				       " FROM institutions,centres,degrees,courses"
+				       " FROM institutions,centres,deg_degrees,courses"
 				       " WHERE %sinstitutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=degrees.CtrCod"
-				       " AND degrees.DegCod=courses.DegCod",
+				       " AND centres.CtrCod=deg_degrees.CtrCod"
+				       " AND deg_degrees.DegCod=courses.DegCod",
 				       SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_CRSS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumCtrsWithCrss);
@@ -2187,10 +2187,10 @@ unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery,
       NumCtrsWithUsrs = (unsigned)
 	                DB_QueryCOUNT ("can not get number of centres with users",
 				       "SELECT COUNT(DISTINCT centres.CtrCod)"
-				       " FROM institutions,centres,degrees,courses,crs_usr"
+				       " FROM institutions,centres,deg_degrees,courses,crs_usr"
 				       " WHERE %sinstitutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=degrees.CtrCod"
-				       " AND degrees.DegCod=courses.DegCod"
+				       " AND centres.CtrCod=deg_degrees.CtrCod"
+				       " AND deg_degrees.DegCod=courses.DegCod"
 				       " AND courses.CrsCod=crs_usr.CrsCod"
 				       " AND crs_usr.Role=%u",
 				       SubQuery,(unsigned) Role);

@@ -1959,10 +1959,10 @@ unsigned Cty_GetCachedNumCtysWithDegs (void)
       NumCtysWithDegs = (unsigned)
 	                DB_QueryCOUNT ("can not get number of countries with degrees",
 				       "SELECT COUNT(DISTINCT countries.CtyCod)"
-				       " FROM countries,institutions,centres,degrees"
+				       " FROM countries,institutions,centres,deg_degrees"
 				       " WHERE countries.CtyCod=institutions.CtyCod"
 				       " AND institutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=degrees.CtrCod");
+				       " AND centres.CtrCod=deg_degrees.CtrCod");
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_DEGS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithDegs);
      }
@@ -1986,11 +1986,11 @@ unsigned Cty_GetCachedNumCtysWithCrss (void)
       NumCtysWithCrss = (unsigned)
 	                DB_QueryCOUNT ("can not get number of countries with courses",
 				       "SELECT COUNT(DISTINCT countries.CtyCod)"
-				       " FROM countries,institutions,centres,degrees,courses"
+				       " FROM countries,institutions,centres,deg_degrees,courses"
 				       " WHERE countries.CtyCod=institutions.CtyCod"
 				       " AND institutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=degrees.CtrCod"
-				       " AND degrees.DegCod=courses.DegCod");
+				       " AND centres.CtrCod=deg_degrees.CtrCod"
+				       " AND deg_degrees.DegCod=courses.DegCod");
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CRSS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithCrss);
      }
@@ -2021,11 +2021,11 @@ unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery,
       NumCtysWithUsrs = (unsigned)
 	                DB_QueryCOUNT ("can not get number of countries with users",
 				       "SELECT COUNT(DISTINCT countries.CtyCod)"
-				       " FROM countries,institutions,centres,degrees,courses,crs_usr"
+				       " FROM countries,institutions,centres,deg_degrees,courses,crs_usr"
 				       " WHERE %scountries.CtyCod=institutions.CtyCod"
 				       " AND institutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=degrees.CtrCod"
-				       " AND degrees.DegCod=courses.DegCod"
+				       " AND centres.CtrCod=deg_degrees.CtrCod"
+				       " AND deg_degrees.DegCod=courses.DegCod"
 				       " AND courses.CrsCod=crs_usr.CrsCod"
 				       " AND crs_usr.Role=%u",
 				       SubQuery,(unsigned) Role);
