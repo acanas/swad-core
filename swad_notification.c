@@ -1279,7 +1279,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	    // ==> send notification to administrators or superusers
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					         " to be notified",
-				      "SELECT UsrCod FROM admin"
+				      "SELECT UsrCod FROM usr_admins"
 				      " WHERE (Scope='%s'"
 				      " OR (Scope='%s' AND Cod=%ld)"
 				      " OR (Scope='%s' AND Cod=%ld)"

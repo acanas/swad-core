@@ -165,25 +165,6 @@ mysql> DESCRIBE actions_MFU;
 			"LastClick DATETIME NOT NULL,"
 		   "UNIQUE INDEX(UsrCod,ActCod))");
 
-/***** Table admin *****/
-/*
-mysql> DESCRIBE admin;
-+--------+-------------------------------+------+-----+---------+-------+
-| Field  | Type                          | Null | Key | Default | Extra |
-+--------+-------------------------------+------+-----+---------+-------+
-| UsrCod | int(11)                       | NO   | PRI | NULL    |       |
-| Scope  | enum('Sys','Ins','Ctr','Deg') | NO   | PRI | NULL    |       |
-| Cod    | int(11)                       | NO   | PRI | NULL    |       |
-+--------+-------------------------------+------+-----+---------+-------+
-3 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS admin ("
-			"UsrCod INT NOT NULL,"
-			"Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,"
-			"Cod INT NOT NULL,"
-		   "UNIQUE INDEX(UsrCod,Scope,Cod),"
-		   "INDEX (Scope,Cod))");
-
    /***** Table agendas *****/
 /*
 mysql> DESCRIBE agendas;
@@ -3379,6 +3360,46 @@ mysql> DESCRIBE tst_tags;
 		   "UNIQUE INDEX(TagCod),"
 		   "INDEX(CrsCod,ChangeTime))");
 
+/***** Table usr_IDs *****/
+/*
+mysql> DESCRIBE usr_IDs;
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| UsrCod    | int(11)       | NO   | PRI | NULL    |       |
+| UsrID     | char(16)      | NO   | PRI | NULL    |       |
+| CreatTime | datetime      | NO   |     | NULL    |       |
+| Confirmed | enum('N','Y') | NO   |     | N       |       |
++-----------+---------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_IDs ("
+			"UsrCod INT NOT NULL,"
+			"UsrID CHAR(16) NOT NULL,"	// ID_MAX_BYTES_USR_ID
+			"CreatTime DATETIME NOT NULL,"
+			"Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',"
+		   "UNIQUE INDEX(UsrCod,UsrID),"
+		   "INDEX(UsrID))");
+
+/***** Table usr_admins *****/
+/*
+mysql> DESCRIBE usr_admins;
++--------+-------------------------------+------+-----+---------+-------+
+| Field  | Type                          | Null | Key | Default | Extra |
++--------+-------------------------------+------+-----+---------+-------+
+| UsrCod | int(11)                       | NO   | PRI | NULL    |       |
+| Scope  | enum('Sys','Ins','Ctr','Deg') | NO   | PRI | NULL    |       |
+| Cod    | int(11)                       | NO   | PRI | NULL    |       |
++--------+-------------------------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_admins ("
+			"UsrCod INT NOT NULL,"
+			"Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,"
+			"Cod INT NOT NULL,"
+		   "UNIQUE INDEX(UsrCod,Scope,Cod),"
+		   "INDEX (Scope,Cod))");
+
    /***** Table usr_banned *****/
 /*
 mysql> DESCRIBE usr_banned;
@@ -3580,27 +3601,6 @@ mysql> DESCRIBE usr_follow;
 		   "UNIQUE INDEX (FollowerCod,FollowedCod),"
 		   "UNIQUE INDEX (FollowedCod,FollowerCod),"
 		   "INDEX (FollowTime))");
-
-/***** Table usr_IDs *****/
-/*
-mysql> DESCRIBE usr_IDs;
-+-----------+---------------+------+-----+---------+-------+
-| Field     | Type          | Null | Key | Default | Extra |
-+-----------+---------------+------+-----+---------+-------+
-| UsrCod    | int(11)       | NO   | PRI | NULL    |       |
-| UsrID     | char(16)      | NO   | PRI | NULL    |       |
-| CreatTime | datetime      | NO   |     | NULL    |       |
-| Confirmed | enum('N','Y') | NO   |     | N       |       |
-+-----------+---------------+------+-----+---------+-------+
-4 rows in set (0.01 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_IDs ("
-			"UsrCod INT NOT NULL,"
-			"UsrID CHAR(16) NOT NULL,"	// ID_MAX_BYTES_USR_ID
-			"CreatTime DATETIME NOT NULL,"
-			"Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',"
-		   "UNIQUE INDEX(UsrCod,UsrID),"
-		   "INDEX(UsrID))");
 
    /***** Table usr_last *****/
 /*

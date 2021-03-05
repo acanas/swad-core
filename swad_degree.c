@@ -130,9 +130,10 @@ void Deg_SeeDegWithPendingCrss (void)
          NumDegs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get degrees"
 							 " with pending courses",
 					      "SELECT courses.DegCod,COUNT(*)"
-					      " FROM admin,courses,degrees"
-					      " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
-					      " AND admin.Cod=courses.DegCod"
+					      " FROM usr_admins,courses,degrees"
+					      " WHERE usr_admins.UsrCod=%ld"
+					      " AND usr_admins.Scope='%s'"
+					      " AND usr_admins.Cod=courses.DegCod"
 					      " AND (courses.Status & %u)<>0"
 					      " AND courses.DegCod=degrees.DegCod"
 					      " GROUP BY courses.DegCod"
@@ -1537,7 +1538,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
 
    /***** Remove administrators of this degree *****/
    DB_QueryDELETE ("can not remove administrators of a degree",
-		   "DELETE FROM admin WHERE Scope='%s' AND Cod=%ld",
+		   "DELETE FROM usr_admins WHERE Scope='%s' AND Cod=%ld",
                    Sco_GetDBStrFromScope (Hie_Lvl_DEG),DegCod);
 
    /***** Remove the degree *****/

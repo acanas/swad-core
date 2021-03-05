@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS actions_MFU (
 --
 -- Table ann_seen: stores users who have seen global announcements
 --
-CREATE TABLE IF NOT EXISTS admin (
+CREATE TABLE IF NOT EXISTS usr_admins (
 	UsrCod INT NOT NULL,
 	Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,
 	Cod INT NOT NULL,
