@@ -2659,77 +2659,72 @@ void Gam_RequestNewMatch (void)
 
 unsigned Gam_GetNumCoursesWithGames (Hie_Lvl_Level_t Scope)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumCourses;
-
    /***** Get number of courses with games from database *****/
    switch (Scope)
      {
       case Hie_Lvl_SYS:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM gam_games");
-         break;
       case Hie_Lvl_CTY:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
-			 " FROM institutions,centres,deg_degrees,courses,gam_games"
+			 " FROM institutions,"
+			       "centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "gam_games"
 			 " WHERE institutions.CtyCod=%ld"
 			 " AND institutions.InsCod=centres.InsCod"
 			 " AND centres.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=gam_games.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=gam_games.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
-         break;
       case Hie_Lvl_INS:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
-			 " FROM centres,deg_degrees,courses,gam_games"
+			 " FROM centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "gam_games"
 			 " WHERE centres.InsCod=%ld"
 			 " AND centres.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=gam_games.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=gam_games.CrsCod",
 		         Gbl.Hierarchy.Ins.InsCod);
-         break;
       case Hie_Lvl_CTR:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
-			 " FROM deg_degrees,courses,gam_games"
+			 " FROM deg_degrees,"
+			       "crs_courses,"
+			       "gam_games"
 			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=gam_games.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=gam_games.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
-         break;
       case Hie_Lvl_DEG:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
-			 " FROM courses,gam_games"
-			 " WHERE courses.DegCod=%ld"
-			 " AND courses.CrsCod=gam_games.CrsCod",
+			 " FROM crs_courses,"
+			       "gam_games"
+			 " WHERE crs_courses.DegCod=%ld"
+			 " AND crs_courses.CrsCod=gam_games.CrsCod",
 		         Gbl.Hierarchy.Deg.DegCod);
-         break;
       case Hie_Lvl_CRS:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM gam_games"
 			 " WHERE CrsCod=%ld",
                          Gbl.Hierarchy.Crs.CrsCod);
-         break;
       default:
-	 Lay_WrongScopeExit ();
-	 break;
+	 return 0;
      }
-
-   /***** Get number of games *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumCourses) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of courses with games.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumCourses;
   }
 
 /*****************************************************************************/
@@ -2739,77 +2734,72 @@ unsigned Gam_GetNumCoursesWithGames (Hie_Lvl_Level_t Scope)
 
 unsigned Gam_GetNumGames (Hie_Lvl_Level_t Scope)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumGames;
-
    /***** Get number of games from database *****/
    switch (Scope)
      {
       case Hie_Lvl_SYS:
-         DB_QuerySELECT (&mysql_res,"can not get number of games",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
 			 " FROM gam_games");
-         break;
       case Hie_Lvl_CTY:
-         DB_QuerySELECT (&mysql_res,"can not get number of games",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
-			 " FROM institutions,centres,deg_degrees,courses,gam_games"
+			 " FROM institutions,"
+			       "centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "gam_games"
 			 " WHERE institutions.CtyCod=%ld"
 			 " AND institutions.InsCod=centres.InsCod"
 			 " AND centres.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=gam_games.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=gam_games.CrsCod",
 		         Gbl.Hierarchy.Cty.CtyCod);
-         break;
       case Hie_Lvl_INS:
-         DB_QuerySELECT (&mysql_res,"can not get number of games",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
-			 " FROM centres,deg_degrees,courses,gam_games"
+			 " FROM centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "gam_games"
 			 " WHERE centres.InsCod=%ld"
 			 " AND centres.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=gam_games.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=gam_games.CrsCod",
 		         Gbl.Hierarchy.Ins.InsCod);
-         break;
       case Hie_Lvl_CTR:
-         DB_QuerySELECT (&mysql_res,"can not get number of games",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
-			 " FROM deg_degrees,courses,gam_games"
+			 " FROM deg_degrees,"
+			       "crs_courses,"
+			       "gam_games"
 			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=gam_games.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=gam_games.CrsCod",
 		         Gbl.Hierarchy.Ctr.CtrCod);
-         break;
       case Hie_Lvl_DEG:
-         DB_QuerySELECT (&mysql_res,"can not get number of games",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
-			 " FROM courses,gam_games"
-			 " WHERE courses.DegCod=%ld"
-			 " AND courses.CrsCod=gam_games.CrsCod",
+			 " FROM crs_courses,"
+			       "gam_games"
+			 " WHERE crs_courses.DegCod=%ld"
+			 " AND crs_courses.CrsCod=gam_games.CrsCod",
 		         Gbl.Hierarchy.Deg.DegCod);
-         break;
       case Hie_Lvl_CRS:
-         DB_QuerySELECT (&mysql_res,"can not get number of games",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
 			 " FROM gam_games"
 			 " WHERE CrsCod=%ld",
                          Gbl.Hierarchy.Crs.CrsCod);
-         break;
       default:
-	 Lay_WrongScopeExit ();
-	 break;
+	 return 0;
      }
-
-   /***** Get number of games *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumGames) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of games.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumGames;
   }
 
 /*****************************************************************************/
@@ -2829,7 +2819,8 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			 " FROM gam_games,gam_questions"
+			 " FROM gam_games,"
+			       "gam_questions"
 			 " WHERE gam_games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable");
          break;
@@ -2837,12 +2828,17 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			 " FROM institutions,centres,deg_degrees,courses,gam_games,gam_questions"
+			 " FROM institutions,"
+			       "centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "gam_games,"
+			       "gam_questions"
 			 " WHERE institutions.CtyCod=%ld"
 			 " AND institutions.InsCod=centres.InsCod"
 			 " AND centres.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=gam_games.CrsCod"
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=gam_games.CrsCod"
 			 " AND gam_games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
                          Gbl.Hierarchy.Cty.CtyCod);
@@ -2851,11 +2847,15 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			 " FROM centres,deg_degrees,courses,gam_games,gam_questions"
+			 " FROM centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "gam_games,"
+			       "gam_questions"
 			 " WHERE centres.InsCod=%ld"
 			 " AND centres.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=gam_games.CrsCod"
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=gam_games.CrsCod"
 			 " AND gam_games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
 		         Gbl.Hierarchy.Ins.InsCod);
@@ -2864,10 +2864,13 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			 " FROM deg_degrees,courses,gam_games,gam_questions"
+			 " FROM deg_degrees,"
+			       "crs_courses,"
+			       "gam_games,"
+			       "gam_questions"
 			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=gam_games.CrsCod"
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=gam_games.CrsCod"
 			 " AND gam_games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
                          Gbl.Hierarchy.Ctr.CtrCod);
@@ -2876,9 +2879,11 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			 " FROM courses,gam_games,gam_questions"
-			 " WHERE courses.DegCod=%ld"
-			 " AND courses.CrsCod=gam_games.CrsCod"
+			 " FROM crs_courses,"
+			       "gam_games,"
+			       "gam_questions"
+			 " WHERE crs_courses.DegCod=%ld"
+			 " AND crs_courses.CrsCod=gam_games.CrsCod"
 			 " AND gam_games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
 		         Gbl.Hierarchy.Deg.DegCod);
@@ -2887,7 +2892,8 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			 " FROM gam_games,gam_questions"
+			 " FROM gam_games,"
+			       "gam_questions"
 			 " WHERE gam_games.Cod=%ld"
 			 " AND gam_games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",

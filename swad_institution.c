@@ -2053,13 +2053,16 @@ unsigned Ins_GetCachedNumInssWithCrss (const char *SubQuery,
      {
       /***** Get current number of institutions with courses from database and update cache *****/
       NumInssWithCrss = (unsigned)
-	                DB_QueryCOUNT ("can not get number of institutions with courses",
-				       "SELECT COUNT(DISTINCT institutions.InsCod)"
-				       " FROM institutions,centres,deg_degrees,courses"
-				       " WHERE %sinstitutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=deg_degrees.CtrCod"
-				       " AND deg_degrees.DegCod=courses.DegCod",
-				       SubQuery);
+      DB_QueryCOUNT ("can not get number of institutions with courses",
+		     "SELECT COUNT(DISTINCT institutions.InsCod)"
+		     " FROM institutions,"
+		           "centres,"
+		           "deg_degrees,"
+		           "crs_courses"
+		     " WHERE %sinstitutions.InsCod=centres.InsCod"
+		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " AND deg_degrees.DegCod=crs_courses.DegCod",
+		     SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_CRSS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumInssWithCrss);
      }
@@ -2088,15 +2091,19 @@ unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery,
      {
       /***** Get current number of institutions with users from database and update cache *****/
       NumInssWithUsrs = (unsigned)
-	                DB_QueryCOUNT ("can not get number of institutions with users",
-				       "SELECT COUNT(DISTINCT institutions.InsCod)"
-				       " FROM institutions,centres,deg_degrees,courses,crs_usr"
-				       " WHERE %sinstitutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=deg_degrees.CtrCod"
-				       " AND deg_degrees.DegCod=courses.DegCod"
-				       " AND courses.CrsCod=crs_usr.CrsCod"
-				       " AND crs_usr.Role=%u",
-				       SubQuery,(unsigned) Role);
+      DB_QueryCOUNT ("can not get number of institutions with users",
+		     "SELECT COUNT(DISTINCT institutions.InsCod)"
+		     " FROM institutions,"
+		           "centres,"
+		           "deg_degrees,"
+		           "crs_courses,"
+		           "crs_usr"
+		     " WHERE %sinstitutions.InsCod=centres.InsCod"
+		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " AND deg_degrees.DegCod=crs_courses.DegCod"
+		     " AND crs_courses.CrsCod=crs_usr.CrsCod"
+		     " AND crs_usr.Role=%u",
+		     SubQuery,(unsigned) Role);
       FigCch_UpdateFigureIntoCache (FigureInss[Role],Scope,Cod,
 				    FigCch_UNSIGNED,&NumInssWithUsrs);
      }

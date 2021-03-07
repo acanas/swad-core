@@ -1840,43 +1840,53 @@ unsigned Asg_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope)
        case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with assignments",
                          "SELECT COUNT(DISTINCT assignments.CrsCod)"
-			 " FROM institutions,centres,deg_degrees,courses,assignments"
+			 " FROM institutions,"
+			       "centres,"
+			       "deg_degrees,"
+			       "courses,"
+			       "assignments"
 			 " WHERE institutions.CtyCod=%ld"
 			 " AND institutions.InsCod=centres.InsCod"
 			 " AND centres.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.Status=0"
-			 " AND courses.CrsCod=assignments.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.Status=0"
+			 " AND crs_courses.CrsCod=assignments.CrsCod",
                          Gbl.Hierarchy.Cty.CtyCod);
          break;
        case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with assignments",
                          "SELECT COUNT(DISTINCT assignments.CrsCod)"
-			 " FROM centres,deg_degrees,courses,assignments"
+			 " FROM centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "assignments"
 			 " WHERE centres.InsCod=%ld"
 			 " AND centres.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.Status=0"
-			 " AND courses.CrsCod=assignments.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.Status=0"
+			 " AND crs_courses.CrsCod=assignments.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with assignments",
                          "SELECT COUNT(DISTINCT assignments.CrsCod)"
-			 " FROM deg_degrees,courses,assignments"
+			 " FROM deg_degrees,"
+			       "crs_courses,"
+			       "assignments"
 			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.Status=0"
-			 " AND courses.CrsCod=assignments.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.Status=0"
+			 " AND crs_courses.CrsCod=assignments.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with assignments",
                          "SELECT COUNT(DISTINCT assignments.CrsCod)"
-			 " FROM courses,assignments"
-			 " WHERE courses.DegCod=%ld"
-			 " AND courses.Status=0"
-			 " AND courses.CrsCod=assignments.CrsCod",
+			 " FROM crs_courses,"
+			       "assignments"
+			 " WHERE crs_courses.DegCod=%ld"
+			 " AND crs_courses.Status=0"
+			 " AND crs_courses.CrsCod=assignments.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_Lvl_CRS:
@@ -1919,51 +1929,67 @@ unsigned Asg_GetNumAssignments (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
      {
       case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
-                         "SELECT COUNT(*),SUM(NumNotif)"
+                         "SELECT COUNT(*),"			// row[0]
+                                "SUM(NumNotif)"			// row[1]
 			 " FROM assignments"
 			 " WHERE CrsCod>0");
          break;
       case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
-                         "SELECT COUNT(*),SUM(assignments.NumNotif)"
-			 " FROM institutions,centres,deg_degrees,courses,assignments"
+                         "SELECT COUNT(*),"			// row[0]
+                                "SUM(assignments.NumNotif)"	// row[1]
+			 " FROM institutions,"
+			       "centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "assignments"
 			 " WHERE institutions.CtyCod=%ld"
 			 " AND institutions.InsCod=centres.InsCod"
 			 " AND centres.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=assignments.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=assignments.CrsCod",
                          Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
-                         "SELECT COUNT(*),SUM(assignments.NumNotif)"
-			 " FROM centres,deg_degrees,courses,assignments"
+                         "SELECT COUNT(*),"			// row[0]
+                                "SUM(assignments.NumNotif)"	// row[1]
+			 " FROM centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "assignments"
 			 " WHERE centres.InsCod=%ld"
 			 " AND centres.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=assignments.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=assignments.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
-                         "SELECT COUNT(*),SUM(assignments.NumNotif)"
-			 " FROM deg_degrees,courses,assignments"
+                         "SELECT COUNT(*),"
+                                "SUM(assignments.NumNotif)"
+			 " FROM deg_degrees,"
+			       "crs_courses,"
+			       "assignments"
 			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=assignments.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=assignments.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
-                         "SELECT COUNT(*),SUM(assignments.NumNotif)"
-			 " FROM courses,assignments"
-			 " WHERE courses.DegCod=%ld"
-			 " AND courses.CrsCod=assignments.CrsCod",
+                         "SELECT COUNT(*),"
+                                "SUM(assignments.NumNotif)"
+			 " FROM crs_courses,"
+			       "assignments"
+			 " WHERE crs_courses.DegCod=%ld"
+			 " AND crs_courses.CrsCod=assignments.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
-                         "SELECT COUNT(*),SUM(NumNotif)"
+                         "SELECT COUNT(*),"
+                                "SUM(NumNotif)"
 			 " FROM assignments"
 			 " WHERE CrsCod=%ld",
                          Gbl.Hierarchy.Crs.CrsCod);

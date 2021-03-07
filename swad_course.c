@@ -415,7 +415,7 @@ unsigned Crs_GetCachedNumCrssInSys (void)
                                    FigCch_UNSIGNED,&NumCrss))
      {
       /***** Get current number of courses from database and update cache *****/
-      NumCrss = (unsigned) DB_GetNumRowsTable ("courses");
+      NumCrss = (unsigned) DB_GetNumRowsTable ("crs_courses");
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_Lvl_SYS,-1L,
                                     FigCch_UNSIGNED,&NumCrss);
      }
@@ -445,15 +445,18 @@ unsigned Crs_GetNumCrssInCty (long CtyCod)
 
    /***** 3. Slow: number of courses in a country from database *****/
    Gbl.Cache.NumCrssInCty.CtyCod  = CtyCod;
-   Gbl.Cache.NumCrssInCty.NumCrss =
-   (unsigned) DB_QueryCOUNT ("can not get the number of courses in a country",
-			     "SELECT COUNT(*)"
-			     " FROM institutions,centres,deg_degrees,courses"
-			     " WHERE institutions.CtyCod=%ld"
-			     " AND institutions.InsCod=centres.InsCod"
-			     " AND centres.CtrCod=deg_degrees.CtrCod"
-			     " AND deg_degrees.DegCod=courses.DegCod",
-			     CtyCod);
+   Gbl.Cache.NumCrssInCty.NumCrss = (unsigned)
+   DB_QueryCOUNT ("can not get the number of courses in a country",
+		  "SELECT COUNT(*)"
+		  " FROM institutions,"
+		        "centres,"
+		        "deg_degrees,"
+		        "crs_courses"
+		  " WHERE institutions.CtyCod=%ld"
+		  " AND institutions.InsCod=centres.InsCod"
+		  " AND centres.CtrCod=deg_degrees.CtrCod"
+		  " AND deg_degrees.DegCod=crs_courses.DegCod",
+		  CtyCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_Lvl_CTY,Gbl.Cache.NumCrssInCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInCty.NumCrss);
    return Gbl.Cache.NumCrssInCty.NumCrss;
@@ -494,14 +497,16 @@ unsigned Crs_GetNumCrssInIns (long InsCod)
 
    /***** 3. Slow: number of courses in an institution from database *****/
    Gbl.Cache.NumCrssInIns.InsCod  = InsCod;
-   Gbl.Cache.NumCrssInIns.NumCrss =
-   (unsigned) DB_QueryCOUNT ("can not get the number of courses"
-			     " in an institution",
-			     "SELECT COUNT(*) FROM centres,deg_degrees,courses"
-			     " WHERE centres.InsCod=%ld"
-			     " AND centres.CtrCod=deg_degrees.CtrCod"
-			     " AND deg_degrees.DegCod=courses.DegCod",
-			     InsCod);
+   Gbl.Cache.NumCrssInIns.NumCrss = (unsigned)
+   DB_QueryCOUNT ("can not get the number of courses in an institution",
+		  "SELECT COUNT(*)"
+		  " FROM centres,"
+		        "deg_degrees,"
+		        "crs_courses"
+		  " WHERE centres.InsCod=%ld"
+		  " AND centres.CtrCod=deg_degrees.CtrCod"
+		  " AND deg_degrees.DegCod=crs_courses.DegCod",
+		  InsCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_Lvl_INS,Gbl.Cache.NumCrssInIns.InsCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInIns.NumCrss);
    return Gbl.Cache.NumCrssInIns.NumCrss;
@@ -542,12 +547,14 @@ unsigned Crs_GetNumCrssInCtr (long CtrCod)
 
    /***** 3. Slow: number of courses in a centre from database *****/
    Gbl.Cache.NumCrssInCtr.CtrCod  = CtrCod;
-   Gbl.Cache.NumCrssInCtr.NumCrss =
-   (unsigned) DB_QueryCOUNT ("can not get the number of courses in a centre",
-			     "SELECT COUNT(*) FROM deg_degrees,courses"
-			     " WHERE deg_degrees.CtrCod=%ld"
-			     " AND deg_degrees.DegCod=courses.DegCod",
-			     CtrCod);
+   Gbl.Cache.NumCrssInCtr.NumCrss = (unsigned)
+   DB_QueryCOUNT ("can not get the number of courses in a centre",
+		  "SELECT COUNT(*)"
+		  " FROM deg_degrees,"
+		        "crs_courses"
+		  " WHERE deg_degrees.CtrCod=%ld"
+		  " AND deg_degrees.DegCod=crs_courses.DegCod",
+		  CtrCod);
    return Gbl.Cache.NumCrssInCtr.NumCrss;
   }
 
@@ -590,11 +597,10 @@ unsigned Crs_GetNumCrssInDeg (long DegCod)
 
    /***** 3. Slow: number of courses in a degree from database *****/
    Gbl.Cache.NumCrssInDeg.DegCod  = DegCod;
-   Gbl.Cache.NumCrssInDeg.NumCrss =
-   (unsigned) DB_QueryCOUNT ("can not get the number of courses in a degree",
-			     "SELECT COUNT(*) FROM courses"
-			     " WHERE DegCod=%ld",
-			     DegCod);
+   Gbl.Cache.NumCrssInDeg.NumCrss = (unsigned)
+   DB_QueryCOUNT ("can not get the number of courses in a degree",
+		  "SELECT COUNT(*) FROM crs_courses WHERE DegCod=%ld",
+		  DegCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_Lvl_DEG,Gbl.Cache.NumCrssInDeg.DegCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInDeg.NumCrss);
    return Gbl.Cache.NumCrssInDeg.NumCrss;
@@ -634,15 +640,19 @@ unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery,
      {
       /***** Get current number of courses with users from database and update cache *****/
       NumCrssWithUsrs = (unsigned)
-	                DB_QueryCOUNT ("can not get number of courses with users",
-				       "SELECT COUNT(DISTINCT courses.CrsCod)"
-				       " FROM institutions,centres,deg_degrees,courses,crs_usr"
-				       " WHERE %sinstitutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=deg_degrees.CtrCod"
-				       " AND deg_degrees.DegCod=courses.DegCod"
-				       " AND courses.CrsCod=crs_usr.CrsCod"
-				       " AND crs_usr.Role=%u",
-				       SubQuery,(unsigned) Role);
+      DB_QueryCOUNT ("can not get number of courses with users",
+		     "SELECT COUNT(DISTINCT crs_courses.CrsCod)"
+		     " FROM institutions,"
+		           "centres,"
+		           "deg_degrees,"
+		           "crs_courses,"
+		           "crs_usr"
+		     " WHERE %sinstitutions.InsCod=centres.InsCod"
+		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " AND deg_degrees.DegCod=crs_courses.DegCod"
+		     " AND crs_courses.CrsCod=crs_usr.CrsCod"
+		     " AND crs_usr.Role=%u",
+		     SubQuery,(unsigned) Role);
       FigCch_UpdateFigureIntoCache (FigureCrss[Role],Scope,Cod,
 				    FigCch_UNSIGNED,&NumCrssWithUsrs);
      }
@@ -678,12 +688,14 @@ void Crs_WriteSelectorOfCourse (void)
    if (Gbl.Hierarchy.Deg.DegCod > 0)
      {
       /***** Get courses belonging to the current degree from database *****/
-      NumCrss = (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses"
-						      " of a degree",
-					   "SELECT CrsCod,ShortName FROM courses"
-					   " WHERE DegCod=%ld"
-					   " ORDER BY ShortName",
-					   Gbl.Hierarchy.Deg.DegCod);
+      NumCrss = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get courses of a degree",
+		      "SELECT CrsCod,"
+		             "ShortName"
+		      " FROM crs_courses"
+		      " WHERE DegCod=%ld"
+		      " ORDER BY ShortName",
+		      Gbl.Hierarchy.Deg.DegCod);
 
       /***** Get courses of this degree *****/
       for (NumCrs = 0;
@@ -752,21 +764,37 @@ static void Crs_GetListCrssInCurrentDeg (Crs_WhatCourses_t WhatCourses)
    switch (WhatCourses)
      {
       case Crs_ACTIVE_COURSES:
-         NumCrss = (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses"
-							 " of a degree",
-					      "SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
-					      " FROM courses WHERE DegCod=%ld AND Status=0"
-					      " ORDER BY Year,ShortName",
-					      Gbl.Hierarchy.Deg.DegCod);
+         NumCrss = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get courses of a degree",
+			 "SELECT CrsCod,"
+			        "DegCod,"
+			        "Year,"
+			        "InsCrsCod,"
+			        "Status,"
+			        "RequesterUsrCod,"
+			        "ShortName,"
+			        "FullName"
+			 " FROM crs_courses"
+			 " WHERE DegCod=%ld AND Status=0"
+			 " ORDER BY Year,ShortName",
+			 Gbl.Hierarchy.Deg.DegCod);
          break;
       case Crs_ALL_COURSES_EXCEPT_REMOVED:
-         NumCrss = (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses"
-							 " of a degree",
-					      "SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
-					      " FROM courses WHERE DegCod=%ld AND (Status & %u)=0"
-					      " ORDER BY Year,ShortName",
-					      Gbl.Hierarchy.Deg.DegCod,
-					      (unsigned) Crs_STATUS_BIT_REMOVED);
+         NumCrss = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get courses of a degree",
+			 "SELECT CrsCod,"
+			        "DegCod,"
+			        "Year,"
+			        "InsCrsCod,"
+			        "Status,"
+			        "RequesterUsrCod,"
+			        "ShortName,"
+			        "FullName"
+			 " FROM crs_courses"
+			 " WHERE DegCod=%ld AND (Status & %u)=0"
+			 " ORDER BY Year,ShortName",
+			 Gbl.Hierarchy.Deg.DegCod,
+			 (unsigned) Crs_STATUS_BIT_REMOVED);
          break;
       default:
 	 break;
@@ -1679,7 +1707,7 @@ static void Crs_CreateCourse (unsigned Status)
    /***** Insert new course into pending requests *****/
    Crs_EditingCrs->CrsCod =
    DB_QueryINSERTandReturnCode ("can not create a new course",
-				"INSERT INTO courses"
+				"INSERT INTO crs_courses"
 				" (DegCod,Year,InsCrsCod,Status,RequesterUsrCod,"
 				"ShortName,FullName)"
 				" VALUES"
@@ -1767,7 +1795,8 @@ bool Crs_GetDataOfCourseByCod (struct Crs_Course *Crs)
 			         "RequesterUsrCod,"	// row[5]
 			         "ShortName,"		// row[6]
 			         "FullName"		// row[7]
-			  " FROM courses WHERE CrsCod=%ld",
+			  " FROM crs_courses"
+			  " WHERE CrsCod=%ld",
 			  Crs->CrsCod)) // Course found...
 	{
 	 /***** Get data of the course *****/
@@ -1833,10 +1862,12 @@ static void Crs_GetShortNamesByCod (long CrsCod,
      {
       /***** Get the short name of a degree from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get the short name of a course",
-			  "SELECT courses.ShortName,deg_degrees.ShortName"
-			  " FROM courses,deg_degrees"
-			  " WHERE courses.CrsCod=%ld"
-			  " AND courses.DegCod=deg_degrees.DegCod",
+			  "SELECT crs_courses.ShortName,"
+			         "deg_degrees.ShortName"
+			  " FROM crs_courses,"
+			        "deg_degrees"
+			  " WHERE crs_courses.CrsCod=%ld"
+			  " AND crs_courses.DegCod=deg_degrees.DegCod",
 			  CrsCod) == 1)
 	{
 	 /***** Get the course short name and degree short name *****/
@@ -1868,7 +1899,7 @@ void Crs_RemoveCourseCompletely (long CrsCod)
 
       /***** Remove course from table of courses in database *****/
       DB_QueryDELETE ("can not remove a course",
-		      "DELETE FROM courses WHERE CrsCod=%ld",
+		      "DELETE FROM crs_courses WHERE CrsCod=%ld",
 		      CrsCod);
      }
   }
@@ -2138,7 +2169,7 @@ void Crs_UpdateCrsYear (struct Crs_Course *Crs,unsigned NewYear)
   {
    /***** Update year/semester in table of courses *****/
    DB_QueryUPDATE ("can not update the year of a course",
-		   "UPDATE courses SET Year=%u WHERE CrsCod=%ld",
+		   "UPDATE crs_courses SET Year=%u WHERE CrsCod=%ld",
 	           NewYear,Crs->CrsCod);
 
    /***** Copy course year/semester *****/
@@ -2154,7 +2185,7 @@ void Crs_UpdateInstitutionalCrsCod (struct Crs_Course *Crs,const char *NewInstit
    /***** Update institutional course code in table of courses *****/
    DB_QueryUPDATE ("can not update the institutional code"
 	           " of the current course",
-		   "UPDATE courses SET InsCrsCod='%s' WHERE CrsCod=%ld",
+		   "UPDATE crs_courses SET InsCrsCod='%s' WHERE CrsCod=%ld",
                    NewInstitutionalCrsCod,Crs->CrsCod);
 
    /***** Copy institutional course code *****/
@@ -2275,7 +2306,7 @@ bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name
    /***** Get number of courses in a year of a degree and with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name"
 	                  " of a course already existed",
-			  "SELECT COUNT(*) FROM courses"
+			  "SELECT COUNT(*) FROM crs_courses"
 			  " WHERE DegCod=%ld AND Year=%u"
 			  " AND %s='%s' AND CrsCod<>%ld",
 			  DegCod,Year,FieldName,Name,CrsCod) != 0);
@@ -2289,7 +2320,7 @@ static void Crs_UpdateCrsNameDB (long CrsCod,const char *FieldName,const char *N
   {
    /***** Update course changing old name by new name *****/
    DB_QueryUPDATE ("can not update the name of a course",
-		   "UPDATE courses SET %s='%s' WHERE CrsCod=%ld",
+		   "UPDATE crs_courses SET %s='%s' WHERE CrsCod=%ld",
 	           FieldName,NewCrsName,CrsCod);
   }
 
@@ -2326,7 +2357,7 @@ void Crs_ChangeCrsStatus (void)
 
    /***** Update status in table of courses *****/
    DB_QueryUPDATE ("can not update the status of a course",
-		   "UPDATE courses SET Status=%u WHERE CrsCod=%ld",
+		   "UPDATE crs_courses SET Status=%u WHERE CrsCod=%ld",
                    (unsigned) Status,Crs_EditingCrs->CrsCod);
    Crs_EditingCrs->Status = Status;
 
@@ -2571,22 +2602,28 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
       if (asprintf (&SubQuery," AND crs_usr.Role=%u",(unsigned) Role) < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
-   NumCrss = (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses of a user",
-				        "SELECT deg_degrees.DegCod,"	// row[0]
-				               "courses.CrsCod,"	// row[1]
-				               "deg_degrees.ShortName,"	// row[2]
-				               "deg_degrees.FullName,"	// row[3]
-				               "courses.Year,"		// row[4]
-				               "courses.FullName,"	// row[5]
-				               "centres.ShortName,"	// row[6]
-				               "crs_usr.Accepted"	// row[7]
-				        " FROM crs_usr,courses,deg_degrees,centres"
-				        " WHERE crs_usr.UsrCod=%ld%s"
-				        " AND crs_usr.CrsCod=courses.CrsCod"
-				        " AND courses.DegCod=deg_degrees.DegCod"
-				        " AND deg_degrees.CtrCod=centres.CtrCod"
-				        " ORDER BY deg_degrees.FullName,courses.Year,courses.FullName",
-				        UsrDat->UsrCod,SubQuery);
+   NumCrss = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get courses of a user",
+		   "SELECT deg_degrees.DegCod,"		// row[0]
+			  "crs_courses.CrsCod,"		// row[1]
+			  "deg_degrees.ShortName,"	// row[2]
+			  "deg_degrees.FullName,"	// row[3]
+			  "crs_courses.Year,"		// row[4]
+			  "crs_courses.FullName,"	// row[5]
+			  "centres.ShortName,"		// row[6]
+			  "crs_usr.Accepted"		// row[7]
+		   " FROM crs_usr,"
+		         "crs_courses,"
+		         "deg_degrees,"
+		         "centres"
+		   " WHERE crs_usr.UsrCod=%ld%s"
+		   " AND crs_usr.CrsCod=crs_courses.CrsCod"
+		   " AND crs_courses.DegCod=deg_degrees.DegCod"
+		   " AND deg_degrees.CtrCod=centres.CtrCod"
+		   " ORDER BY deg_degrees.FullName,"
+		             "crs_courses.Year,"
+		             "crs_courses.FullName",
+		   UsrDat->UsrCod,SubQuery);
 
    /***** Free allocated memory for subquery *****/
    free (SubQuery);
@@ -2725,14 +2762,14 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    bool Accepted;
    static unsigned RowEvenOdd = 1;
    /*
-   SELECT deg_degrees.DegCod	row[0]
-	  courses.CrsCod	row[1]
-	  deg_degrees.ShortName	row[2]
-	  deg_degrees.FullName	row[3]
-	  courses.Year		row[4]
-	  courses.FullName	row[5]
-	  centres.ShortName	row[6]
-	  crs_usr.Accepted	row[7]	(only if WriteColumnAccepted == true)
+   SELECT deg_degrees.DegCod		row[0]
+	  crs_courses.CrsCod		row[1]
+	  deg_degrees.ShortName		row[2]
+	  deg_degrees.FullName		row[3]
+	  crs_courses.Year		row[4]
+	  crs_courses.FullName		row[5]
+	  centres.ShortName		row[6]
+	  crs_usr.Accepted		row[7]	(only if WriteColumnAccepted == true)
    */
 
    /***** Get degree code (row[0]) *****/
@@ -2939,8 +2976,9 @@ void Crs_RemoveOldCrss (void)
 
    /***** Get old courses from database *****/
    NumCrss = DB_QuerySELECT (&mysql_res,"can not get old courses",
-			     "SELECT CrsCod FROM crs_last WHERE"
-			     " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
+			     "SELECT CrsCod"
+			     " FROM crs_last"
+			     " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
 			     " AND CrsCod NOT IN (SELECT DISTINCT CrsCod FROM crs_usr)",
 			     SecondsWithoutAccess);
    if (NumCrss)

@@ -1944,12 +1944,12 @@ static unsigned Ctr_GetNumCtrsInCty (long CtyCod)
 
    /***** 3. Slow: number of centres in a country from database *****/
    Gbl.Cache.NumCtrsInCty.CtyCod  = CtyCod;
-   Gbl.Cache.NumCtrsInCty.NumCtrs =
-   (unsigned) DB_QueryCOUNT ("can not get number of centres in a country",
-			     "SELECT COUNT(*) FROM institutions,centres"
-			     " WHERE institutions.CtyCod=%ld"
-			     " AND institutions.InsCod=centres.InsCod",
-			     CtyCod);
+   Gbl.Cache.NumCtrsInCty.NumCtrs = (unsigned)
+   DB_QueryCOUNT ("can not get number of centres in a country",
+		  "SELECT COUNT(*) FROM institutions,centres"
+		  " WHERE institutions.CtyCod=%ld"
+		  " AND institutions.InsCod=centres.InsCod",
+		  CtyCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_Lvl_CTY,Gbl.Cache.NumCtrsInCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCtrsInCty.NumCtrs);
    return Gbl.Cache.NumCtrsInCty.NumCtrs;
@@ -1990,11 +1990,11 @@ unsigned Ctr_GetNumCtrsInIns (long InsCod)
 
    /***** 3. Slow: number of centres in an institution from database *****/
    Gbl.Cache.NumCtrsInIns.InsCod  = InsCod;
-   Gbl.Cache.NumCtrsInIns.NumCtrs =
-   (unsigned) DB_QueryCOUNT ("can not get number of centres in an institution",
-			     "SELECT COUNT(*) FROM centres"
-			     " WHERE InsCod=%ld",
-			     InsCod);
+   Gbl.Cache.NumCtrsInIns.NumCtrs = (unsigned)
+   DB_QueryCOUNT ("can not get number of centres in an institution",
+		  "SELECT COUNT(*) FROM centres"
+		  " WHERE InsCod=%ld",
+		  InsCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_Lvl_INS,Gbl.Cache.NumCtrsInIns.InsCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCtrsInIns.NumCtrs);
    return Gbl.Cache.NumCtrsInIns.NumCtrs;
@@ -2028,9 +2028,9 @@ unsigned Ctr_GetCachedNumCtrsWithMapInSys (void)
       /***** Get current number of centres with map from database and update cache *****/
       /* Ccoordinates 0, 0 means not set ==> don't show map */
       NumCtrsWithMap = (unsigned)
-		       DB_QueryCOUNT ("can not get number of centres with map",
-				      "SELECT COUNT(*) FROM centres"
-				      " WHERE Latitude<>0 OR Longitude<>0");
+      DB_QueryCOUNT ("can not get number of centres with map",
+		     "SELECT COUNT(*) FROM centres"
+		     " WHERE Latitude<>0 OR Longitude<>0");
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_Lvl_SYS,-1L,
                                     FigCch_UNSIGNED,&NumCtrsWithMap);
      }
@@ -2053,12 +2053,12 @@ unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod)
       /***** Get current number of centres with map from database and update cache *****/
       /* Ccoordinates 0, 0 means not set ==> don't show map */
       NumCtrsWithMap = (unsigned)
-		       DB_QueryCOUNT ("ccan not get number of centres with map",
-				      "SELECT COUNT(*) FROM institutions,centres"
-				      " WHERE institutions.CtyCod=%ld"
-				      " AND institutions.InsCod=centres.InsCod"
-				     " AND (centres.Latitude<>0 OR centres.Longitude<>0)",
-				      CtyCod);
+      DB_QueryCOUNT ("can not get number of centres with map",
+		     "SELECT COUNT(*) FROM institutions,centres"
+		     " WHERE institutions.CtyCod=%ld"
+		     " AND institutions.InsCod=centres.InsCod"
+		     " AND (centres.Latitude<>0 OR centres.Longitude<>0)",
+		     CtyCod);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_Lvl_CTY,CtyCod,
                                     FigCch_UNSIGNED,&NumCtrsWithMap);
      }
@@ -2081,11 +2081,11 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
       /***** Get current number of centres with map from database and update cache *****/
       /* Ccoordinates 0, 0 means not set ==> don't show map */
       NumCtrsWithMap = (unsigned)
-		       DB_QueryCOUNT ("can not get number of centres with map",
-				    "SELECT COUNT(*) FROM centres"
-				    " WHERE InsCod=%ld"
-				    " AND (Latitude<>0 OR Longitude<>0)",
-				    InsCod);
+      DB_QueryCOUNT ("can not get number of centres with map",
+		     "SELECT COUNT(*) FROM centres"
+		     " WHERE InsCod=%ld"
+		     " AND (Latitude<>0 OR Longitude<>0)",
+		     InsCod);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_Lvl_INS,InsCod,
                                     FigCch_UNSIGNED,&NumCtrsWithMap);
      }
@@ -2100,11 +2100,11 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
 unsigned Ctr_GetNumCtrsInPlc (long PlcCod)
   {
    /***** Get number of centres (of the current institution) in a place *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get the number of centres in a place",
-			     "SELECT COUNT(*) FROM centres"
-			     " WHERE InsCod=%ld AND PlcCod=%ld",
-			     Gbl.Hierarchy.Ins.InsCod,PlcCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of centres in a place",
+		  "SELECT COUNT(*) FROM centres"
+		  " WHERE InsCod=%ld AND PlcCod=%ld",
+		  Gbl.Hierarchy.Ins.InsCod,PlcCod);
   }
 
 /*****************************************************************************/
@@ -2122,12 +2122,12 @@ unsigned Ctr_GetCachedNumCtrsWithDegs (const char *SubQuery,
      {
       /***** Get current number of centres with degrees from database and update cache *****/
       NumCtrsWithDegs = (unsigned)
-	                DB_QueryCOUNT ("can not get number of centres with degrees",
-				       "SELECT COUNT(DISTINCT centres.CtrCod)"
-				       " FROM institutions,centres,deg_degrees"
-				       " WHERE %sinstitutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=deg_degrees.CtrCod",
-				       SubQuery);
+      DB_QueryCOUNT ("can not get number of centres with degrees",
+		     "SELECT COUNT(DISTINCT centres.CtrCod)"
+		     " FROM institutions,centres,deg_degrees"
+		     " WHERE %sinstitutions.InsCod=centres.InsCod"
+		     " AND centres.CtrCod=deg_degrees.CtrCod",
+		     SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_DEGS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumCtrsWithDegs);
      }
@@ -2150,13 +2150,16 @@ unsigned Ctr_GetCachedNumCtrsWithCrss (const char *SubQuery,
      {
       /***** Get number of centres with courses *****/
       NumCtrsWithCrss = (unsigned)
-	                DB_QueryCOUNT ("can not get number of centres with courses",
-				       "SELECT COUNT(DISTINCT centres.CtrCod)"
-				       " FROM institutions,centres,deg_degrees,courses"
-				       " WHERE %sinstitutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=deg_degrees.CtrCod"
-				       " AND deg_degrees.DegCod=courses.DegCod",
-				       SubQuery);
+      DB_QueryCOUNT ("can not get number of centres with courses",
+		     "SELECT COUNT(DISTINCT centres.CtrCod)"
+		     " FROM institutions,"
+			   "centres,"
+			   "deg_degrees,"
+			   "crs_courses"
+		     " WHERE %sinstitutions.InsCod=centres.InsCod"
+		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " AND deg_degrees.DegCod=crs_courses.DegCod",
+		     SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_CRSS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumCtrsWithCrss);
      }
@@ -2185,15 +2188,19 @@ unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery,
      {
       /***** Get current number of centres with users from database and update cache *****/
       NumCtrsWithUsrs = (unsigned)
-	                DB_QueryCOUNT ("can not get number of centres with users",
-				       "SELECT COUNT(DISTINCT centres.CtrCod)"
-				       " FROM institutions,centres,deg_degrees,courses,crs_usr"
-				       " WHERE %sinstitutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=deg_degrees.CtrCod"
-				       " AND deg_degrees.DegCod=courses.DegCod"
-				       " AND courses.CrsCod=crs_usr.CrsCod"
-				       " AND crs_usr.Role=%u",
-				       SubQuery,(unsigned) Role);
+      DB_QueryCOUNT ("can not get number of centres with users",
+		     "SELECT COUNT(DISTINCT centres.CtrCod)"
+		     " FROM institutions,"
+			   "centres,"
+			   "deg_degrees,"
+			   "crs_courses,"
+			   "crs_usr"
+		     " WHERE %sinstitutions.InsCod=centres.InsCod"
+		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " AND deg_degrees.DegCod=crs_courses.DegCod"
+		     " AND crs_courses.CrsCod=crs_usr.CrsCod"
+		     " AND crs_usr.Role=%u",
+		     SubQuery,(unsigned) Role);
       FigCch_UpdateFigureIntoCache (FigureCtrs[Role],Scope,Cod,
 				    FigCch_UNSIGNED,&NumCtrsWithUsrs);
      }

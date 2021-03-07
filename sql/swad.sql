@@ -260,9 +260,9 @@ CREATE TABLE IF NOT EXISTS countries (
 	INDEX(Name_pl),
 	INDEX(Name_pt));
 --
--- Table courses: stores the courses/subjects
+-- Table crs_courses: stores the courses/subjects
 --
-CREATE TABLE IF NOT EXISTS courses (
+CREATE TABLE IF NOT EXISTS crs_courses (
 	CrsCod INT NOT NULL AUTO_INCREMENT,
 	DegCod INT NOT NULL DEFAULT -1,
 	Year TINYINT NOT NULL DEFAULT 0,

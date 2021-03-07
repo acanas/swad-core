@@ -2182,82 +2182,77 @@ void Prg_RemoveCrsItems (long CrsCod)
 
 unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumCourses;
-
    /***** Get number of courses with program items from database *****/
    switch (Scope)
      {
       case Hie_Lvl_SYS:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with program items",
-                         "SELECT COUNT(DISTINCT CrsCod)"
-			 " FROM prg_items"
-			 " WHERE CrsCod>0");
-         break;
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with program items",
+                        "SELECT COUNT(DISTINCT CrsCod)"
+			" FROM prg_items"
+			" WHERE CrsCod>0");
        case Hie_Lvl_CTY:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with program items",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with program items",
                          "SELECT COUNT(DISTINCT prg_items.CrsCod)"
-			 " FROM institutions,centres,deg_degrees,courses,prg_items"
+			 " FROM institutions,"
+			       "centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "prg_items"
 			 " WHERE institutions.CtyCod=%ld"
 			 " AND institutions.InsCod=centres.InsCod"
 			 " AND centres.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.Status=0"
-			 " AND courses.CrsCod=prg_items.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.Status=0"
+			 " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Cty.CtyCod);
-         break;
        case Hie_Lvl_INS:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with program items",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with program items",
                          "SELECT COUNT(DISTINCT prg_items.CrsCod)"
-			 " FROM centres,deg_degrees,courses,prg_items"
+			 " FROM centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "prg_items"
 			 " WHERE centres.InsCod=%ld"
 			 " AND centres.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.Status=0"
-			 " AND courses.CrsCod=prg_items.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.Status=0"
+			 " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
-         break;
       case Hie_Lvl_CTR:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with program items",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with program items",
                          "SELECT COUNT(DISTINCT prg_items.CrsCod)"
-			 " FROM deg_degrees,courses,prg_items"
+			 " FROM deg_degrees,"
+			       "crs_courses,"
+			       "prg_items"
 			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.Status=0"
-			 " AND courses.CrsCod=prg_items.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.Status=0"
+			 " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
-         break;
       case Hie_Lvl_DEG:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with program items",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with program items",
                          "SELECT COUNT(DISTINCT prg_items.CrsCod)"
-			 " FROM courses,prg_items"
-			 " WHERE courses.DegCod=%ld"
-			 " AND courses.Status=0"
-			 " AND courses.CrsCod=prg_items.CrsCod",
+			 " FROM crs_courses,"
+			       "prg_items"
+			 " WHERE crs_courses.DegCod=%ld"
+			 " AND crs_courses.Status=0"
+			 " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
-         break;
       case Hie_Lvl_CRS:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with program items",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with program items",
                          "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM prg_items"
 			 " WHERE CrsCod=%ld",
                          Gbl.Hierarchy.Crs.CrsCod);
-         break;
       default:
-	 Lay_WrongScopeExit ();
-	 break;
+	 return 0;
      }
-
-   /***** Get number of courses *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumCourses) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of courses with program items.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumCourses;
   }
 
 /*****************************************************************************/
@@ -2267,76 +2262,77 @@ unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope)
 
 unsigned Prg_GetNumItems (Hie_Lvl_Level_t Scope)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumItems;
-
    /***** Get number of program items from database *****/
    switch (Scope)
      {
       case Hie_Lvl_SYS:
-         DB_QuerySELECT (&mysql_res,"can not get number of program items",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of program items",
                          "SELECT COUNT(*)"
 			 " FROM prg_items"
 			 " WHERE CrsCod>0");
          break;
       case Hie_Lvl_CTY:
-         DB_QuerySELECT (&mysql_res,"can not get number of program items",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of program items",
                          "SELECT COUNT(*)"
-			 " FROM institutions,centres,deg_degrees,courses,prg_items"
+			 " FROM institutions,"
+			       "centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "prg_items"
 			 " WHERE institutions.CtyCod=%ld"
 			 " AND institutions.InsCod=centres.InsCod"
 			 " AND centres.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=prg_items.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_Lvl_INS:
-         DB_QuerySELECT (&mysql_res,"can not get number of program items",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of program items",
                          "SELECT COUNT(*)"
-			 " FROM centres,deg_degrees,courses,prg_items"
+			 " FROM centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "prg_items"
 			 " WHERE centres.InsCod=%ld"
 			 " AND centres.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=prg_items.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
-         DB_QuerySELECT (&mysql_res,"can not get number of program items",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of program items",
                          "SELECT COUNT(*)"
-			 " FROM deg_degrees,courses,prg_items"
+			 " FROM deg_degrees,"
+			       "crs_courses,"
+			       "prg_items"
 			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=prg_items.CrsCod",
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_Lvl_DEG:
-         DB_QuerySELECT (&mysql_res,"can not get number of program items",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of program items",
                          "SELECT COUNT(*)"
-			 " FROM courses,prg_items"
-			 " WHERE courses.DegCod=%ld"
-			 " AND courses.CrsCod=prg_items.CrsCod",
+			 " FROM crs_courses,"
+			       "prg_items"
+			 " WHERE crs_courses.DegCod=%ld"
+			 " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_Lvl_CRS:
-         DB_QuerySELECT (&mysql_res,"can not get number of program items",
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of program items",
                          "SELECT COUNT(*)"
 			 " FROM prg_items"
 			 " WHERE CrsCod=%ld",
                          Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
-	 Lay_WrongScopeExit ();
-	 break;
+	 return 0;
      }
-
-   /***** Get number of program items *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumItems) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of program items.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumItems;
   }

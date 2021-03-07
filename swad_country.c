@@ -1984,13 +1984,17 @@ unsigned Cty_GetCachedNumCtysWithCrss (void)
      {
       /***** Get current number of countries with courses from database and update cache *****/
       NumCtysWithCrss = (unsigned)
-	                DB_QueryCOUNT ("can not get number of countries with courses",
-				       "SELECT COUNT(DISTINCT countries.CtyCod)"
-				       " FROM countries,institutions,centres,deg_degrees,courses"
-				       " WHERE countries.CtyCod=institutions.CtyCod"
-				       " AND institutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=deg_degrees.CtrCod"
-				       " AND deg_degrees.DegCod=courses.DegCod");
+      DB_QueryCOUNT ("can not get number of countries with courses",
+		     "SELECT COUNT(DISTINCT countries.CtyCod)"
+		     " FROM countries,"
+		           "institutions,"
+		           "centres,"
+		           "deg_degrees,"
+		           "crs_courses"
+		     " WHERE countries.CtyCod=institutions.CtyCod"
+		     " AND institutions.InsCod=centres.InsCod"
+		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " AND deg_degrees.DegCod=crs_courses.DegCod");
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CRSS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithCrss);
      }
@@ -2019,16 +2023,21 @@ unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery,
      {
       /***** Get current number of countries with users from database and update cache *****/
       NumCtysWithUsrs = (unsigned)
-	                DB_QueryCOUNT ("can not get number of countries with users",
-				       "SELECT COUNT(DISTINCT countries.CtyCod)"
-				       " FROM countries,institutions,centres,deg_degrees,courses,crs_usr"
-				       " WHERE %scountries.CtyCod=institutions.CtyCod"
-				       " AND institutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=deg_degrees.CtrCod"
-				       " AND deg_degrees.DegCod=courses.DegCod"
-				       " AND courses.CrsCod=crs_usr.CrsCod"
-				       " AND crs_usr.Role=%u",
-				       SubQuery,(unsigned) Role);
+      DB_QueryCOUNT ("can not get number of countries with users",
+		     "SELECT COUNT(DISTINCT countries.CtyCod)"
+		     " FROM countries,"
+		           "institutions,"
+		           "centres,"
+		           "deg_degrees,"
+		           "crs_courses,"
+		           "crs_usr"
+		     " WHERE %scountries.CtyCod=institutions.CtyCod"
+		     " AND institutions.InsCod=centres.InsCod"
+		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " AND deg_degrees.DegCod=crs_courses.DegCod"
+		     " AND crs_courses.CrsCod=crs_usr.CrsCod"
+		     " AND crs_usr.Role=%u",
+		     SubQuery,(unsigned) Role);
       FigCch_UpdateFigureIntoCache (FigureCtys[Role],Scope,Cod,
 				    FigCch_UNSIGNED,&NumCtysWithUsrs);
      }

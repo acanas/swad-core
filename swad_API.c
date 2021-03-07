@@ -491,7 +491,7 @@ static int API_CheckCourseAndGroupCodes (struct soap *soap,
 
    /***** Query if course code already exists in database *****/
    if (DB_QueryCOUNT ("can not get course",
-		      "SELECT COUNT(*) FROM courses"
+		      "SELECT COUNT(*) FROM crs_courses"
 		      " WHERE CrsCod=%ld",
 		      CrsCod) != 1)
       return soap_sender_fault (soap,
@@ -589,7 +589,7 @@ static int API_GetCurrentDegCodFromCurrentCrsCod (void)
 
    /***** Check that key does not exist in database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get the degree of a course",
-		       "SELECT DegCod FROM courses WHERE CrsCod=%ld",
+		       "SELECT DegCod FROM crs_courses WHERE CrsCod=%ld",
 		       Gbl.Hierarchy.Crs.CrsCod))	// Course found in table of courses
      {
       row = mysql_fetch_row (mysql_res);
@@ -1361,14 +1361,15 @@ int swad__getCourses (struct soap *soap,
    /***** Query my courses from database *****/
    NumRows =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's courses",
-			      "SELECT courses.CrsCod,"
-				     "courses.ShortName,"
-				     "courses.FullName,"
+			      "SELECT crs_courses.CrsCod,"
+				     "crs_courses.ShortName,"
+				     "crs_courses.FullName,"
 				     "crs_usr.Role"
-			      " FROM crs_usr,courses"
+			      " FROM crs_usr,"
+			            "crs_courses"
 			      " WHERE crs_usr.UsrCod=%ld"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " ORDER BY courses.FullName",
+			      " AND crs_usr.CrsCod=crs_courses.CrsCod"
+			      " ORDER BY crs_courses.FullName",
 			      Gbl.Usrs.Me.UsrDat.UsrCod);
 
    getCoursesOut->numCourses = (int) NumRows;
@@ -4634,20 +4635,26 @@ int swad__getTrivialQuestion (struct soap *soap,
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    NumRows =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get test questions",
-			      "SELECT DISTINCTROW tst_questions.QstCod,"
-			      "tst_questions.AnsType,tst_questions.Shuffle,"
-			      "tst_questions.Stem,tst_questions.Feedback,"
-			      "tst_questions.Score/tst_questions.NumHits AS S"
-			      " FROM courses,tst_questions"
-			      " WHERE courses.DegCod IN (%s)"
-			      " AND courses.CrsCod=tst_questions.CrsCod"
+			      "SELECT DISTINCTROW "
+			             "tst_questions.QstCod,"
+			             "tst_questions.AnsType,"
+			             "tst_questions.Shuffle,"
+			             "tst_questions.Stem,"
+			             "tst_questions.Feedback,"
+			             "tst_questions.Score/tst_questions.NumHits AS S"
+			      " FROM crs_courses,"
+			            "tst_questions"
+			      " WHERE crs_courses.DegCod IN (%s)"
+			      " AND crs_courses.CrsCod=tst_questions.CrsCod"
 			      " AND tst_questions.AnsType='unique_choice'"
 			      " AND tst_questions.NumHits>0"
 			      " AND tst_questions.QstCod NOT IN"
 			      " (SELECT tst_question_tags.QstCod"
-			      " FROM courses,tst_tags,tst_question_tags"
-			      " WHERE courses.DegCod IN (%s)"
-			      " AND courses.CrsCod=tst_tags.CrsCod"
+			      " FROM crs_courses,"
+			            "tst_tags,"
+			            "tst_question_tags"
+			      " WHERE crs_courses.DegCod IN (%s)"
+			      " AND crs_courses.CrsCod=tst_tags.CrsCod"
 			      " AND tst_tags.TagHidden='Y'"
 			      " AND tst_tags.TagCod=tst_question_tags.TagCod)"
 			      " HAVING S>='%f' AND S<='%f'"
@@ -6099,15 +6106,19 @@ int swad__getLastLocation (struct soap *soap,
    if (DB_QueryCOUNT ("can not get session data",
 		       "SELECT COUNT(*) FROM "
 		       "(SELECT DISTINCT deg_degrees.CtrCod"
-		       " FROM crs_usr,courses,deg_degrees"
+		       " FROM crs_usr,"
+		             "crs_courses,"
+		             "deg_degrees"
 		       " WHERE crs_usr.UsrCod=%ld"
-		       " AND crs_usr.CrsCod=courses.CrsCod"
-		       " AND courses.DegCod=deg_degrees.DegCod) AS C1,"	// centres of my courses
+		       " AND crs_usr.CrsCod=crs_courses.CrsCod"
+		       " AND crs_courses.DegCod=deg_degrees.DegCod) AS C1,"	// centres of my courses
 		       "(SELECT DISTINCT deg_degrees.CtrCod"
-		       " FROM crs_usr,courses,deg_degrees"
+		       " FROM crs_usr,"
+		             "crs_courses,"
+		             "deg_degrees"
 		       " WHERE crs_usr.UsrCod=%d"
-		       " AND crs_usr.CrsCod=courses.CrsCod"
-		       " AND courses.DegCod=deg_degrees.DegCod) AS C2"	// centres of user's courses
+		       " AND crs_usr.CrsCod=crs_courses.CrsCod"
+		       " AND crs_courses.DegCod=deg_degrees.DegCod) AS C2"	// centres of user's courses
 		       " WHERE C1.CtrCod=C2.CtrCod",
 	               Gbl.Usrs.Me.UsrDat.UsrCod,
 	               userCode))

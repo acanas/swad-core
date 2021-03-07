@@ -3877,94 +3877,83 @@ static unsigned Svy_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod)
 
 unsigned Svy_GetNumCoursesWithCrsSurveys (Hie_Lvl_Level_t Scope)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumCourses;
-
    /***** Get number of courses with surveys from database *****/
    switch (Scope)
      {
       case Hie_Lvl_SYS:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses"
-				    " with surveys",
+	 return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with surveys",
 			 "SELECT COUNT(DISTINCT Cod)"
                          " FROM svy_surveys"
                          " WHERE Scope='%s'",
 			 Sco_GetDBStrFromScope (Hie_Lvl_CRS));
-         break;
       case Hie_Lvl_CTY:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses"
-				    " with surveys",
-			 "SELECT COUNT(DISTINCT svy_surveys.Cod)"
-                         " FROM institutions,centres,deg_degrees,courses,svy_surveys"
-			 " WHERE institutions.CtyCod=%ld"
-			 " AND institutions.InsCod=centres.InsCod"
-                         " AND centres.CtrCod=deg_degrees.CtrCod"
-                         " AND deg_degrees.DegCod=courses.DegCod"
-                         " AND courses.CrsCod=svy_surveys.Cod"
-                         " AND svy_surveys.Scope='%s'",
-			 Gbl.Hierarchy.Ins.InsCod,
-			 Sco_GetDBStrFromScope (Hie_Lvl_CRS));
-         break;
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with surveys",
+			"SELECT COUNT(DISTINCT svy_surveys.Cod)"
+                        " FROM institutions,"
+                              "centres,"
+                              "deg_degrees,"
+                              "crs_courses,"
+                              "svy_surveys"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=deg_degrees.CtrCod"
+                        " AND deg_degrees.DegCod=crs_courses.DegCod"
+                        " AND crs_courses.CrsCod=svy_surveys.Cod"
+                        " AND svy_surveys.Scope='%s'",
+			Gbl.Hierarchy.Ins.InsCod,
+			Sco_GetDBStrFromScope (Hie_Lvl_CRS));
       case Hie_Lvl_INS:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses"
-				    " with surveys",
-			 "SELECT COUNT(DISTINCT svy_surveys.Cod)"
-                         " FROM centres,deg_degrees,courses,svy_surveys"
-                         " WHERE centres.InsCod=%ld"
-                         " AND centres.CtrCod=deg_degrees.CtrCod"
-                         " AND deg_degrees.DegCod=courses.DegCod"
-                         " AND courses.CrsCod=svy_surveys.Cod"
-                         " AND svy_surveys.Scope='%s'",
-			 Gbl.Hierarchy.Ins.InsCod,
-			 Sco_GetDBStrFromScope (Hie_Lvl_CRS));
-         break;
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with surveys",
+		        "SELECT COUNT(DISTINCT svy_surveys.Cod)"
+		        " FROM centres,"
+			      "deg_degrees,"
+			      "crs_courses,"
+			      "svy_surveys"
+		        " WHERE centres.InsCod=%ld"
+		        " AND centres.CtrCod=deg_degrees.CtrCod"
+		        " AND deg_degrees.DegCod=crs_courses.DegCod"
+		        " AND crs_courses.CrsCod=svy_surveys.Cod"
+		        " AND svy_surveys.Scope='%s'",
+		        Gbl.Hierarchy.Ins.InsCod,
+		        Sco_GetDBStrFromScope (Hie_Lvl_CRS));
       case Hie_Lvl_CTR:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses"
-				    " with surveys",
-			 "SELECT COUNT(DISTINCT svy_surveys.Cod)"
-                         " FROM deg_degrees,courses,svy_surveys"
-                         " WHERE deg_degrees.CtrCod=%ld"
-                         " AND deg_degrees.DegCod=courses.DegCod"
-                         " AND courses.CrsCod=svy_surveys.Cod"
-                         " AND svy_surveys.Scope='%s'",
-			 Gbl.Hierarchy.Ctr.CtrCod,
-			 Sco_GetDBStrFromScope (Hie_Lvl_CRS));
-         break;
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with surveys",
+			"SELECT COUNT(DISTINCT svy_surveys.Cod)"
+                        " FROM deg_degrees,"
+                              "crs_courses,"
+                              "svy_surveys"
+                        " WHERE deg_degrees.CtrCod=%ld"
+                        " AND deg_degrees.DegCod=crs_courses.DegCod"
+                        " AND crs_courses.CrsCod=svy_surveys.Cod"
+                        " AND svy_surveys.Scope='%s'",
+			Gbl.Hierarchy.Ctr.CtrCod,
+			Sco_GetDBStrFromScope (Hie_Lvl_CRS));
       case Hie_Lvl_DEG:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses"
-				    " with surveys",
-			 "SELECT COUNT(DISTINCT svy_surveys.Cod)"
-                         " FROM courses,svy_surveys"
-                         " WHERE courses.DegCod=%ld"
-                         " AND courses.CrsCod=svy_surveys.Cod"
-                         " AND svy_surveys.Scope='%s'",
-		 	 Gbl.Hierarchy.Deg.DegCod,
-			 Sco_GetDBStrFromScope (Hie_Lvl_CRS));
-         break;
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with surveys",
+			"SELECT COUNT(DISTINCT svy_surveys.Cod)"
+                        " FROM crs_courses,"
+                              "svy_surveys"
+                        " WHERE crs_courses.DegCod=%ld"
+                        " AND crs_courses.CrsCod=svy_surveys.Cod"
+                        " AND svy_surveys.Scope='%s'",
+		 	Gbl.Hierarchy.Deg.DegCod,
+			Sco_GetDBStrFromScope (Hie_Lvl_CRS));
       case Hie_Lvl_CRS:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses"
-				    " with surveys",
-			 "SELECT COUNT(DISTINCT Cod)"
-			 " FROM svy_surveys"
-			 " WHERE Scope='%s' AND Cod=%ld",
-			 Sco_GetDBStrFromScope (Hie_Lvl_CRS),
-			 Gbl.Hierarchy.Crs.CrsCod);
-         break;
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with surveys",
+			"SELECT COUNT(DISTINCT Cod)"
+			" FROM svy_surveys"
+			" WHERE Scope='%s' AND Cod=%ld",
+			Sco_GetDBStrFromScope (Hie_Lvl_CRS),
+			Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Lay_WrongScopeExit ();
-	 break;
+	 return 0;
      }
-
-   /***** Get number of surveys *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumCourses) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of courses with surveys.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumCourses;
   }
 
 /*****************************************************************************/
@@ -3984,60 +3973,76 @@ unsigned Svy_GetNumCrsSurveys (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
      {
       case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
-			 "SELECT COUNT(*),SUM(NumNotif)"
+			 "SELECT COUNT(*),"
+			        "SUM(NumNotif)"
                          " FROM svy_surveys"
                          " WHERE Scope='%s'",
 			 Sco_GetDBStrFromScope (Hie_Lvl_CRS));
          break;
       case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
-			 "SELECT COUNT(*),SUM(svy_surveys.NumNotif)"
-                         " FROM institutions,centres,deg_degrees,courses,svy_surveys"
+			 "SELECT COUNT(*),"
+			        "SUM(svy_surveys.NumNotif)"
+                         " FROM institutions,"
+                               "centres,"
+                               "deg_degrees,"
+                               "crs_courses,"
+                               "svy_surveys"
                          " WHERE institutions.CtyCod=%ld"
                          " AND institutions.InsCod=centres.InsCod"
                          " AND centres.CtrCod=deg_degrees.CtrCod"
-                         " AND deg_degrees.DegCod=courses.DegCod"
-                         " AND courses.CrsCod=svy_surveys.Cod"
+                         " AND deg_degrees.DegCod=crs_courses.DegCod"
+                         " AND crs_courses.CrsCod=svy_surveys.Cod"
                          " AND svy_surveys.Scope='%s'",
 			 Gbl.Hierarchy.Cty.CtyCod,
 			 Sco_GetDBStrFromScope (Hie_Lvl_CRS));
          break;
       case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
-			 "SELECT COUNT(*),SUM(svy_surveys.NumNotif)"
-                         " FROM centres,deg_degrees,courses,svy_surveys"
+			 "SELECT COUNT(*),"
+			        "SUM(svy_surveys.NumNotif)"
+                         " FROM centres,"
+                               "deg_degrees,"
+                               "crs_courses,"
+                               "svy_surveys"
                          " WHERE centres.InsCod=%ld"
                          " AND centres.CtrCod=deg_degrees.CtrCod"
-                         " AND deg_degrees.DegCod=courses.DegCod"
-                         " AND courses.CrsCod=svy_surveys.Cod"
+                         " AND deg_degrees.DegCod=crs_courses.DegCod"
+                         " AND crs_courses.CrsCod=svy_surveys.Cod"
                          " AND svy_surveys.Scope='%s'",
 			 Gbl.Hierarchy.Ins.InsCod,
 			 Sco_GetDBStrFromScope (Hie_Lvl_CRS));
          break;
       case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
-			 "SELECT COUNT(*),SUM(svy_surveys.NumNotif)"
-                         " FROM deg_degrees,courses,svy_surveys"
+			 "SELECT COUNT(*),"
+			        "SUM(svy_surveys.NumNotif)"
+                         " FROM deg_degrees,"
+                               "crs_courses,"
+                               "svy_surveys"
                          " WHERE deg_degrees.CtrCod=%ld"
-                         " AND deg_degrees.DegCod=courses.DegCod"
-                         " AND courses.CrsCod=svy_surveys.Cod"
+                         " AND deg_degrees.DegCod=crs_courses.DegCod"
+                         " AND crs_courses.CrsCod=svy_surveys.Cod"
                          " AND svy_surveys.Scope='%s'",
 			 Gbl.Hierarchy.Ctr.CtrCod,
 			 Sco_GetDBStrFromScope (Hie_Lvl_CRS));
          break;
       case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
-			 "SELECT COUNT(*),SUM(svy_surveys.NumNotif)"
-                         " FROM courses,svy_surveys"
-                         " WHERE courses.DegCod=%ld"
-                         " AND courses.CrsCod=svy_surveys.Cod"
+			 "SELECT COUNT(*),"
+			        "SUM(svy_surveys.NumNotif)"
+                         " FROM crs_courses,"
+                               "svy_surveys"
+                         " WHERE crs_courses.DegCod=%ld"
+                         " AND crs_courses.CrsCod=svy_surveys.Cod"
                          " AND svy_surveys.Scope='%s'",
 			 Gbl.Hierarchy.Deg.DegCod,
 			 Sco_GetDBStrFromScope (Hie_Lvl_CRS));
          break;
       case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
-			 "SELECT COUNT(*),SUM(NumNotif)"
+			 "SELECT COUNT(*),"
+			        "SUM(NumNotif)"
                          " FROM svy_surveys"
                          " WHERE svy_surveys.Scope='%s'"
                          " AND CrsCod=%ld",
@@ -4087,7 +4092,8 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope)
 				    " per survey",
 			 "SELECT AVG(NumQsts) FROM"
                          " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
-                         " FROM svy_surveys,svy_questions"
+                         " FROM svy_surveys,"
+                               "svy_questions"
                          " WHERE svy_surveys.Scope='%s'"
                          " AND svy_surveys.SvyCod=svy_questions.SvyCod"
                          " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
@@ -4098,12 +4104,17 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope)
 				    " per survey",
 			 "SELECT AVG(NumQsts) FROM"
                          " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
-                         " FROM institutions,centres,deg_degrees,courses,svy_surveys,svy_questions"
+                         " FROM institutions,"
+                               "centres,"
+                               "deg_degrees,"
+                               "crs_courses,"
+                               "svy_surveys,"
+                               "svy_questions"
                          " WHERE institutions.CtyCod=%ld"
                          " AND institutions.InsCod=centres.InsCod"
                          " AND centres.CtrCod=deg_degrees.CtrCod"
-                         " AND deg_degrees.DegCod=courses.DegCod"
-                         " AND courses.CrsCod=svy_surveys.Cod"
+                         " AND deg_degrees.DegCod=crs_courses.DegCod"
+                         " AND crs_courses.CrsCod=svy_surveys.Cod"
                          " AND svy_surveys.Scope='%s'"
                          " AND svy_surveys.SvyCod=svy_questions.SvyCod"
                          " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
@@ -4115,11 +4126,15 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope)
 				    " per survey",
 			 "SELECT AVG(NumQsts) FROM"
                          " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
-                         " FROM centres,deg_degrees,courses,svy_surveys,svy_questions"
+                         " FROM centres,"
+                               "deg_degrees,"
+                               "crs_courses,"
+                               "svy_surveys,"
+                               "svy_questions"
                          " WHERE centres.InsCod=%ld"
                          " AND centres.CtrCod=deg_degrees.CtrCod"
-                         " AND deg_degrees.DegCod=courses.DegCod"
-                         " AND courses.CrsCod=svy_surveys.Cod"
+                         " AND deg_degrees.DegCod=crs_courses.DegCod"
+                         " AND crs_courses.CrsCod=svy_surveys.Cod"
                          " AND svy_surveys.Scope='%s'"
                          " AND svy_surveys.SvyCod=svy_questions.SvyCod"
                          " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
@@ -4131,10 +4146,13 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope)
 				    " per survey",
 			 "SELECT AVG(NumQsts) FROM"
                          " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
-                         " FROM deg_degrees,courses,svy_surveys,svy_questions"
+                         " FROM deg_degrees,"
+                               "crs_courses,"
+                               "svy_surveys,"
+                               "svy_questions"
                          " WHERE deg_degrees.CtrCod=%ld"
-                         " AND deg_degrees.DegCod=courses.DegCod"
-                         " AND courses.CrsCod=svy_surveys.Cod"
+                         " AND deg_degrees.DegCod=crs_courses.DegCod"
+                         " AND crs_courses.CrsCod=svy_surveys.Cod"
                          " AND svy_surveys.Scope='%s'"
                          " AND svy_surveys.SvyCod=svy_questions.SvyCod"
                          " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
@@ -4146,9 +4164,11 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope)
 				    " per survey",
 			 "SELECT AVG(NumQsts) FROM"
                          " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
-                         " FROM courses,svy_surveys,svy_questions"
-                         " WHERE courses.DegCod=%ld"
-                         " AND courses.CrsCod=svy_surveys.Cod"
+                         " FROM crs_courses,"
+                               "svy_surveys,"
+                               "svy_questions"
+                         " WHERE crs_courses.DegCod=%ld"
+                         " AND crs_courses.CrsCod=svy_surveys.Cod"
                          " AND svy_surveys.Scope='%s'"
                          " AND svy_surveys.SvyCod=svy_questions.SvyCod"
                          " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
@@ -4160,7 +4180,8 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope)
 				    " per survey",
 			 "SELECT AVG(NumQsts) FROM"
                          " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
-                         " FROM svy_surveys,svy_questions"
+                         " FROM svy_surveys,"
+                               "svy_questions"
                          " WHERE svy_surveys.Scope='%s' AND svy_surveys.Cod=%ld"
                          " AND svy_surveys.SvyCod=svy_questions.SvyCod"
                          " GROUP BY svy_questions.SvyCod) AS NumQstsTable",

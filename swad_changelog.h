@@ -600,10 +600,14 @@ TODO: Salvador Romero Cortés: @acanas opción para editar posts
 
 TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates(), por ejemplo al cambiar el color de la gráfica de accesos por día y hora, no se respeta la zona horaria.
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.44.3 (2021-03-06)"
+#define Log_PLATFORM_VERSION	"SWAD 20.44.4 (2021-03-06)"
 #define CSS_FILE		"swad20.33.9.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
+	Version 20.44.4:  Mar 06, 2021  Degrees database table renamed. (307021 lines)
+					1 change necessary in database:
+RENAME TABLE courses TO crs_courses;
+
 	Version 20.44.3:  Mar 06, 2021  Degrees database table renamed. (306004 lines)
 					1 change necessary in database:
 RENAME TABLE degrees TO deg_degrees;

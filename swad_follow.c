@@ -1365,77 +1365,110 @@ void Fol_GetAndShowRankingFollowers (void)
    switch (Gbl.Scope.Current)
      {
       case Hie_Lvl_SYS:
-	 NumUsrs =
-         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
-				    "SELECT FollowedCod,COUNT(FollowerCod) AS N"
-				    " FROM usr_follow"
-				    " GROUP BY FollowedCod"
-				    " ORDER BY N DESC,FollowedCod LIMIT 100");
+	 NumUsrs = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get ranking",
+			 "SELECT FollowedCod,"
+			        "COUNT(FollowerCod) AS N"
+			 " FROM usr_follow"
+			 " GROUP BY FollowedCod"
+			 " ORDER BY N DESC,"
+			           "FollowedCod"
+			 " LIMIT 100");
          break;
       case Hie_Lvl_CTY:
-         NumUsrs =
-         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
-				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-				    " FROM institutions,centres,deg_degrees,courses,crs_usr,usr_follow"
-				    " WHERE institutions.CtyCod=%ld"
-				    " AND institutions.InsCod=centres.InsCod"
-				    " AND centres.CtrCod=deg_degrees.CtrCod"
-				    " AND deg_degrees.DegCod=courses.DegCod"
-				    " AND courses.CrsCod=crs_usr.CrsCod"
-				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
-				    " GROUP BY usr_follow.FollowedCod"
-				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-				    Gbl.Hierarchy.Cty.CtyCod);
+         NumUsrs = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get ranking",
+			 "SELECT usr_follow.FollowedCod,"
+			        "COUNT(DISTINCT usr_follow.FollowerCod) AS N"
+			 " FROM institutions,"
+			       "centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "crs_usr,"
+			       "usr_follow"
+			 " WHERE institutions.CtyCod=%ld"
+			 " AND institutions.InsCod=centres.InsCod"
+			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=usr_follow.FollowedCod"
+			 " GROUP BY usr_follow.FollowedCod"
+			 " ORDER BY N DESC,"
+			           "usr_follow.FollowedCod"
+			 " LIMIT 100",
+			 Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_Lvl_INS:
-         NumUsrs =
-         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
-				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-				    " FROM centres,deg_degrees,courses,crs_usr,usr_follow"
-				    " WHERE centres.InsCod=%ld"
-				    " AND centres.CtrCod=deg_degrees.CtrCod"
-				    " AND deg_degrees.DegCod=courses.DegCod"
-				    " AND courses.CrsCod=crs_usr.CrsCod"
-				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
-				    " GROUP BY usr_follow.FollowedCod"
-				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-				    Gbl.Hierarchy.Ins.InsCod);
+         NumUsrs = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get ranking",
+			 "SELECT usr_follow.FollowedCod,"
+			        "COUNT(DISTINCT usr_follow.FollowerCod) AS N"
+			 " FROM centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "crs_usr,"
+			       "usr_follow"
+			 " WHERE centres.InsCod=%ld"
+			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=usr_follow.FollowedCod"
+			 " GROUP BY usr_follow.FollowedCod"
+			 " ORDER BY N DESC,"
+			           "usr_follow.FollowedCod"
+			 " LIMIT 100",
+			 Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
-         NumUsrs =
-         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
-				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-				    " FROM deg_degrees,courses,crs_usr,usr_follow"
-				    " WHERE deg_degrees.CtrCod=%ld"
-				    " AND deg_degrees.DegCod=courses.DegCod"
-				    " AND courses.CrsCod=crs_usr.CrsCod"
-				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
-				    " GROUP BY usr_follow.FollowedCod"
-				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-				    Gbl.Hierarchy.Ctr.CtrCod);
+         NumUsrs = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get ranking",
+			 "SELECT usr_follow.FollowedCod,"
+			        "COUNT(DISTINCT usr_follow.FollowerCod) AS N"
+			 " FROM deg_degrees,"
+			       "crs_courses,"
+			       "crs_usr,"
+			       "usr_follow"
+			 " WHERE deg_degrees.CtrCod=%ld"
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=usr_follow.FollowedCod"
+			 " GROUP BY usr_follow.FollowedCod"
+			 " ORDER BY N DESC,"
+			           "usr_follow.FollowedCod"
+			 " LIMIT 100",
+			 Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_Lvl_DEG:
-         NumUsrs =
-         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
-				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-				    " FROM courses,crs_usr,usr_follow"
-				    " WHERE courses.DegCod=%ld"
-				    " AND courses.CrsCod=crs_usr.CrsCod"
-				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
-				    " GROUP BY usr_follow.FollowedCod"
-				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-				    Gbl.Hierarchy.Deg.DegCod);
+         NumUsrs = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get ranking",
+			 "SELECT usr_follow.FollowedCod,"
+			        "COUNT(DISTINCT usr_follow.FollowerCod) AS N"
+			 " FROM crs_courses,"
+			       "crs_usr,"
+			       "usr_follow"
+			 " WHERE crs_courses.DegCod=%ld"
+			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=usr_follow.FollowedCod"
+			 " GROUP BY usr_follow.FollowedCod"
+			 " ORDER BY N DESC,"
+			           "usr_follow.FollowedCod"
+			 " LIMIT 100",
+			 Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_Lvl_CRS:
-         NumUsrs =
-         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
-				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-				    " FROM crs_usr,usr_follow"
-				    " WHERE crs_usr.CrsCod=%ld"
-				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
-				    " GROUP BY usr_follow.FollowedCod"
-				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-				    Gbl.Hierarchy.Crs.CrsCod);
+         NumUsrs = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get ranking",
+			 "SELECT usr_follow.FollowedCod,"
+			        "COUNT(DISTINCT usr_follow.FollowerCod) AS N"
+			 " FROM crs_usr,"
+			       "usr_follow"
+			 " WHERE crs_usr.CrsCod=%ld"
+			 " AND crs_usr.UsrCod=usr_follow.FollowedCod"
+			 " GROUP BY usr_follow.FollowedCod"
+			 " ORDER BY N DESC,"
+			           "usr_follow.FollowedCod"
+			 " LIMIT 100",
+			 Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
          Lay_WrongScopeExit ();

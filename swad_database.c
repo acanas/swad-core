@@ -604,9 +604,9 @@ mysql> DESCRIBE countries;
 		   "INDEX(Name_pl),"
 		   "INDEX(Name_pt))");	// ISO 3166-1 country codes
 
-   /***** Table courses *****/
+   /***** Table crs_courses *****/
 /*
-mysql> DESCRIBE courses;
+mysql> DESCRIBE crs_courses;
 +-----------------+---------------+------+-----+---------+----------------+
 | Field           | Type          | Null | Key | Default | Extra          |
 +-----------------+---------------+------+-----+---------+----------------+
@@ -622,7 +622,7 @@ mysql> DESCRIBE courses;
 +-----------------+---------------+------+-----+---------+----------------+
 9 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS courses ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_courses ("
 			"CrsCod INT NOT NULL AUTO_INCREMENT,"
 			"DegCod INT NOT NULL DEFAULT -1,"
 			"Year TINYINT NOT NULL DEFAULT 0,"

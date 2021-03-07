@@ -110,9 +110,9 @@ void Ann_ShowAllAnnouncements (void)
       NumAnnouncements = (unsigned) DB_QuerySELECT (&mysql_res,"can not get announcements",
 	                                            "SELECT AnnCod,Status,Roles,Subject,Content"
 						    " FROM announcements"
-						    " WHERE (Roles&%u)<>0 "
+						    " WHERE (Roles&%u)<>0 "	// All my roles in different courses
 						    " ORDER BY AnnCod DESC",
-						    (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);	// All my roles in different courses
+						    (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);
      }
    else // No user logged
      {
@@ -220,12 +220,12 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
    NumAnnouncements = (unsigned) DB_QuerySELECT (&mysql_res,"can not get announcements",
 	                                         "SELECT AnnCod,Subject,Content FROM announcements"
-						 " WHERE Status=%u AND (Roles&%u)<>0 "
+						 " WHERE Status=%u AND (Roles&%u)<>0 "	// All my roles in different courses
 						 " AND AnnCod NOT IN"
 						 " (SELECT AnnCod FROM ann_seen WHERE UsrCod=%ld)"
 						 " ORDER BY AnnCod DESC",	// Newest first
 						 (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
-						 (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss,	// All my roles in different courses
+						 (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss,
 						 Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show the announcements *****/

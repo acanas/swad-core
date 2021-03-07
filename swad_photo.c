@@ -1425,16 +1425,19 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
    /***** 1. If a degree is not in table of computed degrees,
              choose it as least recently updated *****/
    /* Get one degree with students not yet computed */
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get degrees",
-			     "SELECT DISTINCT deg_degrees.DegCod"
-			     " FROM deg_degrees,courses,crs_usr"
-			     " WHERE deg_degrees.DegCod=courses.DegCod"
-			     " AND courses.CrsCod=crs_usr.CrsCod"
-			     " AND crs_usr.Role=%u"
-			     " AND deg_degrees.DegCod NOT IN"
-			     " (SELECT DISTINCT DegCod FROM sta_degrees)"
-			     " LIMIT 1",
-			     (unsigned) Rol_STD);
+   NumRows =
+   DB_QuerySELECT (&mysql_res,"can not get degrees",
+		   "SELECT DISTINCT deg_degrees.DegCod"
+		   " FROM deg_degrees,"
+		         "crs_courses,"
+		         "crs_usr"
+		   " WHERE deg_degrees.DegCod=crs_courses.DegCod"
+		   " AND crs_courses.CrsCod=crs_usr.CrsCod"
+		   " AND crs_usr.Role=%u"
+		   " AND deg_degrees.DegCod NOT IN"
+		   " (SELECT DISTINCT DegCod FROM sta_degrees)"
+		   " LIMIT 1",
+		 (unsigned) Rol_STD);
 
    /* If number of rows is 1, then get the degree code */
    if (NumRows == 1)
@@ -1454,17 +1457,19 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
       /***** 2. If all the degrees are in table,
                 choose the least recently updated that has students *****/
       /* Get degrees from database */
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get degrees",
-				"SELECT sta_degrees.DegCod"
-				" FROM sta_degrees,courses,crs_usr"
-				" WHERE sta_degrees.TimeAvgPhoto<"
-				"FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
-				" AND sta_degrees.DegCod=courses.DegCod"
-				" AND courses.CrsCod=crs_usr.CrsCod"
-				" AND crs_usr.Role=%u"
-				" ORDER BY sta_degrees.TimeAvgPhoto LIMIT 1",
-				Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO,
-				(unsigned) Rol_STD);
+      NumRows =
+      DB_QuerySELECT (&mysql_res,"can not get degrees",
+		      "SELECT sta_degrees.DegCod"
+		      " FROM sta_degrees,"
+		            "crs_courses,"
+		            "crs_usr"
+		      " WHERE sta_degrees.TimeAvgPhoto<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
+		      " AND sta_degrees.DegCod=crs_courses.DegCod"
+		      " AND crs_courses.CrsCod=crs_usr.CrsCod"
+		      " AND crs_usr.Role=%u"
+		      " ORDER BY sta_degrees.TimeAvgPhoto LIMIT 1",
+		      Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO,
+		      (unsigned) Rol_STD);
 
       /* If number of rows is 1, then get the degree code */
       if (NumRows == 1)

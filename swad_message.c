@@ -2218,7 +2218,6 @@ unsigned long Msg_GetNumMsgsSentByUsr (long UsrCod)
 unsigned Msg_GetNumMsgsSent (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
   {
    const char *Table = "msg_snt";
-   unsigned NumMsgs = 0;	// Initialized to avoid warning
 
    /***** Get the number of messages sent from this location
           (all the platform, current degree or current course) from database *****/
@@ -2235,73 +2234,74 @@ unsigned Msg_GetNumMsgsSent (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
    switch (Scope)
      {
       case Hie_Lvl_SYS:
-	 NumMsgs = (unsigned) DB_GetNumRowsTable (Table);
-         break;
+	 return (unsigned) DB_GetNumRowsTable (Table);
       case Hie_Lvl_CTY:
-         NumMsgs =
-         (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
-				   "SELECT COUNT(*)"
-				   " FROM institutions,centres,deg_degrees,courses,%s"
-				   " WHERE institutions.CtyCod=%ld"
-				   " AND institutions.InsCod=centres.InsCod"
-				   " AND centres.CtrCod=deg_degrees.CtrCod"
-				   " AND deg_degrees.DegCod=courses.DegCod"
-				   " AND courses.CrsCod=%s.CrsCod",
-				   Table,
-				   Gbl.Hierarchy.Cty.CtyCod,
-				   Table);
-         break;
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of sent messages",
+		        "SELECT COUNT(*)"
+		        " FROM institutions,"
+		              "centres,"
+		              "deg_degrees,"
+		              "crs_courses,"
+		              "%s"
+		        " WHERE institutions.CtyCod=%ld"
+		        " AND institutions.InsCod=centres.InsCod"
+		        " AND centres.CtrCod=deg_degrees.CtrCod"
+		        " AND deg_degrees.DegCod=crs_courses.DegCod"
+		        " AND crs_courses.CrsCod=%s.CrsCod",
+		        Table,
+		        Gbl.Hierarchy.Cty.CtyCod,
+		        Table);
       case Hie_Lvl_INS:
-         NumMsgs =
-         (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
-				   "SELECT COUNT(*)"
-				   " FROM centres,deg_degrees,courses,%s"
-				   " WHERE centres.InsCod=%ld"
-				   " AND centres.CtrCod=deg_degrees.CtrCod"
-				   " AND deg_degrees.DegCod=courses.DegCod"
-				   " AND courses.CrsCod=%s.CrsCod",
-				   Table,
-				   Gbl.Hierarchy.Ins.InsCod,
-				   Table);
-         break;
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of sent messages",
+		        "SELECT COUNT(*)"
+		        " FROM centres,"
+		              "deg_degrees,"
+		              "crs_courses,"
+		              "%s"
+		        " WHERE centres.InsCod=%ld"
+		        " AND centres.CtrCod=deg_degrees.CtrCod"
+		        " AND deg_degrees.DegCod=crs_courses.DegCod"
+		        " AND crs_courses.CrsCod=%s.CrsCod",
+		        Table,
+		        Gbl.Hierarchy.Ins.InsCod,
+		        Table);
       case Hie_Lvl_CTR:
-         NumMsgs =
-         (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
-				   "SELECT COUNT(*)"
-				   " FROM deg_degrees,courses,%s"
-				   " WHERE deg_degrees.CtrCod=%ld"
-				   " AND deg_degrees.DegCod=courses.DegCod"
-				   " AND courses.CrsCod=%s.CrsCod",
-				   Table,
-				   Gbl.Hierarchy.Ctr.CtrCod,
-				   Table);
-         break;
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of sent messages",
+		        "SELECT COUNT(*)"
+		        " FROM deg_degrees,"
+		              "crs_courses,"
+		              "%s"
+		        " WHERE deg_degrees.CtrCod=%ld"
+		        " AND deg_degrees.DegCod=crs_courses.DegCod"
+		        " AND crs_courses.CrsCod=%s.CrsCod",
+		        Table,
+		        Gbl.Hierarchy.Ctr.CtrCod,
+		        Table);
       case Hie_Lvl_DEG:
-         NumMsgs =
-         (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
-				   "SELECT COUNT(*)"
-				   " FROM courses,%s"
-				   " WHERE courses.DegCod=%ld"
-				   " AND courses.CrsCod=%s.CrsCod",
-				   Table,
-				   Gbl.Hierarchy.Deg.DegCod,
-				   Table);
-         break;
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of sent messages",
+		        "SELECT COUNT(*)"
+		        " FROM crs_courses,"
+		              "%s"
+		        " WHERE crs_courses.DegCod=%ld"
+		        " AND crs_courses.CrsCod=%s.CrsCod",
+		        Table,
+		        Gbl.Hierarchy.Deg.DegCod,
+		        Table);
       case Hie_Lvl_CRS:
-         NumMsgs =
-         (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
-				   "SELECT COUNT(*)"
-				   " FROM %s"
-				   " WHERE CrsCod=%ld",
-				   Table,
-				   Gbl.Hierarchy.Crs.CrsCod);
-         break;
+         return (unsigned)
+	 DB_QueryCOUNT ("can not get number of sent messages",
+		        "SELECT COUNT(*)"
+		        " FROM %s"
+		        " WHERE CrsCod=%ld",
+		        Table,
+		        Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Lay_WrongScopeExit ();
-	 break;
+	 return 0;
      }
-
-   return NumMsgs;
   }
 
 /*****************************************************************************/
@@ -2312,7 +2312,6 @@ unsigned Msg_GetNumMsgsSent (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
 unsigned Msg_GetNumMsgsReceived (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
   {
    char *Table;
-   unsigned NumMsgs = 0;	// Initialized to avoid warning
 
    /***** Get the number of unique messages sent from this location
           (all the platform, current degree or current course) from database *****/
@@ -2325,222 +2324,244 @@ unsigned Msg_GetNumMsgsReceived (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus)
          switch (Scope)
            {
             case Hie_Lvl_SYS:
-               NumMsgs = (unsigned) DB_GetNumRowsTable (Table);
-               break;
+               return (unsigned) DB_GetNumRowsTable (Table);
             case Hie_Lvl_CTY:
-               NumMsgs =
-               (unsigned) DB_QueryCOUNT ("can not get number"
-        				 " of received messages",
-					 "SELECT COUNT(*)"
-					 " FROM institutions,centres,deg_degrees,courses,%s,msg_snt"
-					 " WHERE institutions.CtyCod=%ld"
-					 " AND institutions.InsCod=centres.InsCod"
-					 " AND centres.CtrCod=deg_degrees.CtrCod"
-					 " AND deg_degrees.DegCod=courses.DegCod"
-					 " AND courses.CrsCod=msg_snt.CrsCod"
-					 " AND msg_snt.MsgCod=%s.MsgCod",
-					 Table,
-					 Gbl.Hierarchy.Cty.CtyCod,
-					 Table);
-               break;
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT COUNT(*)"
+			      " FROM institutions,"
+			            "centres,"
+			            "deg_degrees,"
+			            "crs_courses,"
+			            "%s,"
+			            "msg_snt"
+			      " WHERE institutions.CtyCod=%ld"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=%s.MsgCod",
+			      Table,
+			      Gbl.Hierarchy.Cty.CtyCod,
+			      Table);
             case Hie_Lvl_INS:
-               NumMsgs =
-               (unsigned) DB_QueryCOUNT ("can not get number"
-        				 " of received messages",
-					 "SELECT COUNT(*)"
-					 " FROM centres,deg_degrees,courses,%s,msg_snt"
-					 " WHERE centres.InsCod=%ld"
-					 " AND centres.CtrCod=deg_degrees.CtrCod"
-					 " AND deg_degrees.DegCod=courses.DegCod"
-					 " AND courses.CrsCod=msg_snt.CrsCod"
-					 " AND msg_snt.MsgCod=%s.MsgCod",
-					 Table,
-					 Gbl.Hierarchy.Ins.InsCod,
-					 Table);
-               break;
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT COUNT(*)"
+			      " FROM centres,"
+			            "deg_degrees,"
+			            "crs_courses,"
+			            "%s,"
+			            "msg_snt"
+			      " WHERE centres.InsCod=%ld"
+			      " AND centres.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=%s.MsgCod",
+			      Table,
+			      Gbl.Hierarchy.Ins.InsCod,
+			      Table);
             case Hie_Lvl_CTR:
-               NumMsgs =
-               (unsigned) DB_QueryCOUNT ("can not get number"
-        				 " of received messages",
-					 "SELECT COUNT(*)"
-					 " FROM deg_degrees,courses,%s,msg_snt"
-					 " WHERE deg_degrees.CtrCod=%ld"
-					 " AND deg_degrees.DegCod=courses.DegCod"
-					 " AND courses.CrsCod=msg_snt.CrsCod"
-					 " AND msg_snt.MsgCod=%s.MsgCod",
-					 Table,
-					 Gbl.Hierarchy.Ctr.CtrCod,
-					 Table);
-               break;
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT COUNT(*)"
+			      " FROM deg_degrees,"
+			            "crs_courses,"
+			            "%s,"
+			            "msg_snt"
+			      " WHERE deg_degrees.CtrCod=%ld"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=%s.MsgCod",
+			      Table,
+			      Gbl.Hierarchy.Ctr.CtrCod,
+			      Table);
             case Hie_Lvl_DEG:
-               NumMsgs =
-               (unsigned) DB_QueryCOUNT ("can not get number"
-        				 " of received messages",
-					 "SELECT COUNT(*)"
-					 " FROM courses,%s,msg_snt"
-					 " WHERE courses.DegCod=%ld"
-					 " AND courses.CrsCod=msg_snt.CrsCod"
-					 " AND msg_snt.MsgCod=%s.MsgCod",
-					 Table,
-					 Gbl.Hierarchy.Deg.DegCod,
-					 Table);
-               break;
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT COUNT(*)"
+			      " FROM crs_courses,"
+			            "%s,"
+			            "msg_snt"
+			      " WHERE crs_courses.DegCod=%ld"
+			      " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=%s.MsgCod",
+			      Table,
+			      Gbl.Hierarchy.Deg.DegCod,
+			      Table);
             case Hie_Lvl_CRS:
-               NumMsgs =
-               (unsigned) DB_QueryCOUNT ("can not get number"
-        				 " of received messages",
-					 "SELECT COUNT(*)"
-					 " FROM msg_snt,%s"
-					 " WHERE msg_snt.CrsCod=%ld"
-					 " AND msg_snt.MsgCod=%s.MsgCod",
-					 Table,
-					 Gbl.Hierarchy.Crs.CrsCod,
-					 Table);
-               break;
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT COUNT(*)"
+			      " FROM msg_snt,"
+			            "%s"
+			      " WHERE msg_snt.CrsCod=%ld"
+			      " AND msg_snt.MsgCod=%s.MsgCod",
+			      Table,
+			      Gbl.Hierarchy.Crs.CrsCod,
+			      Table);
+            case Hie_Lvl_UNK:
 	    default:
-	       Lay_WrongScopeExit ();
-	       break;
+	       return 0;
            }
-         break;
+         return 0;
       case Msg_STATUS_NOTIFIED:
          switch (Scope)
            {
             case Hie_Lvl_SYS:
-               NumMsgs =
-               (unsigned) DB_QueryCOUNT ("can not get number"
-        				 " of received messages",
-					 "SELECT "
-					 "(SELECT COUNT(*)"
-					 " FROM msg_rcv"
-					 " WHERE Notified='Y')"
-					 " + "
-					 "(SELECT COUNT(*)"
-					 " FROM msg_rcv_deleted"
-					 " WHERE Notified='Y')");
-               break;
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT "
+			      "(SELECT COUNT(*)"
+			      " FROM msg_rcv"
+			      " WHERE Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			      " FROM msg_rcv_deleted"
+			      " WHERE Notified='Y')");
             case Hie_Lvl_CTY:
-               NumMsgs =
-               (unsigned) DB_QueryCOUNT ("can not get number"
-        				 " of received messages",
-					 "SELECT "
-					 "(SELECT COUNT(*)"
-					 " FROM institutions,centres,deg_degrees,courses,msg_snt,msg_rcv"
-					 " WHERE institutions.CtyCod=%ld"
-					 " AND institutions.InsCod=centres.InsCod"
-					 " AND centres.CtrCod=deg_degrees.CtrCod"
-					 " AND deg_degrees.DegCod=courses.DegCod"
-					 " AND courses.CrsCod=msg_snt.CrsCod"
-					 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-					 " AND msg_rcv.Notified='Y')"
-					 " + "
-					 "(SELECT COUNT(*)"
-					 " FROM institutions,centres,deg_degrees,courses,msg_snt,msg_rcv_deleted"
-					 " WHERE institutions.CtyCod=%ld"
-					 " AND institutions.InsCod=centres.InsCod"
-					 " AND centres.CtrCod=deg_degrees.CtrCod"
-					 " AND deg_degrees.DegCod=courses.DegCod"
-					 " AND courses.CrsCod=msg_snt.CrsCod"
-					 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-					 " AND msg_rcv_deleted.Notified='Y')",
-					 Gbl.Hierarchy.Cty.CtyCod,
-					 Gbl.Hierarchy.Cty.CtyCod);
-               break;
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT "
+			      "(SELECT COUNT(*)"
+			      " FROM institutions,"
+			            "centres,"
+			            "deg_degrees,"
+			            "crs_courses,"
+			            "msg_snt,"
+			            "msg_rcv"
+			      " WHERE institutions.CtyCod=%ld"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+			      " AND msg_rcv.Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			      " FROM institutions,"
+			            "centres,"
+			            "deg_degrees,"
+			            "crs_courses,"
+			            "msg_snt,"
+			            "msg_rcv_deleted"
+			      " WHERE institutions.CtyCod=%ld"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+			      " AND msg_rcv_deleted.Notified='Y')",
+			      Gbl.Hierarchy.Cty.CtyCod,
+			      Gbl.Hierarchy.Cty.CtyCod);
             case Hie_Lvl_INS:
-               NumMsgs =
-               (unsigned) DB_QueryCOUNT ("can not get number"
-        				 " of received messages",
-					 "SELECT "
-					 "(SELECT COUNT(*)"
-					 " FROM centres,deg_degrees,courses,msg_snt,msg_rcv"
-					 " WHERE centres.InsCod=%ld"
-					 " AND centres.CtrCod=deg_degrees.CtrCod"
-					 " AND deg_degrees.DegCod=courses.DegCod"
-					 " AND courses.CrsCod=msg_snt.CrsCod"
-					 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-					 " AND msg_rcv.Notified='Y')"
-					 " + "
-					 "(SELECT COUNT(*)"
-					 " FROM centres,deg_degrees,courses,msg_snt,msg_rcv_deleted"
-					 " WHERE centres.InsCod=%ld"
-					 " AND centres.CtrCod=deg_degrees.CtrCod"
-					 " AND deg_degrees.DegCod=courses.DegCod"
-					 " AND courses.CrsCod=msg_snt.CrsCod"
-					 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-					 " AND msg_rcv_deleted.Notified='Y')",
-					 Gbl.Hierarchy.Ins.InsCod,
-					 Gbl.Hierarchy.Ins.InsCod);
-               break;
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT "
+			      "(SELECT COUNT(*)"
+			      " FROM centres,"
+			            "deg_degrees,"
+			            "crs_courses,"
+			            "msg_snt,"
+			            "msg_rcv"
+			      " WHERE centres.InsCod=%ld"
+			      " AND centres.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+			      " AND msg_rcv.Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			      " FROM centres,"
+			            "deg_degrees,"
+			            "crs_courses,"
+			            "msg_snt,"
+			            "msg_rcv_deleted"
+			      " WHERE centres.InsCod=%ld"
+			      " AND centres.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+			      " AND msg_rcv_deleted.Notified='Y')",
+			      Gbl.Hierarchy.Ins.InsCod,
+			      Gbl.Hierarchy.Ins.InsCod);
             case Hie_Lvl_CTR:
-               NumMsgs =
-               (unsigned) DB_QueryCOUNT ("can not get number"
-        				 " of received messages",
-					 "SELECT "
-					 "(SELECT COUNT(*)"
-					 " FROM deg_degrees,courses,msg_snt,msg_rcv"
-					 " WHERE deg_degrees.CtrCod=%ld"
-					 " AND deg_degrees.DegCod=courses.DegCod"
-					 " AND courses.CrsCod=msg_snt.CrsCod"
-					 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-					 " AND msg_rcv.Notified='Y')"
-					 " + "
-					 "(SELECT COUNT(*)"
-					 " FROM deg_degrees,courses,msg_snt,msg_rcv_deleted"
-					 " WHERE deg_degrees.CtrCod=%ld"
-					 " AND deg_degrees.DegCod=courses.DegCod"
-					 " AND courses.CrsCod=msg_snt.CrsCod"
-					 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-					 " AND msg_rcv_deleted.Notified='Y')",
-					 Gbl.Hierarchy.Ctr.CtrCod,
-					 Gbl.Hierarchy.Ctr.CtrCod);
-               break;
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT "
+			      "(SELECT COUNT(*)"
+			      " FROM deg_degrees,"
+			            "crs_courses,"
+			            "msg_snt,"
+			            "msg_rcv"
+			      " WHERE deg_degrees.CtrCod=%ld"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+			      " AND msg_rcv.Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			      " FROM deg_degrees,"
+			            "crs_courses,"
+			            "msg_snt,"
+			            "msg_rcv_deleted"
+			      " WHERE deg_degrees.CtrCod=%ld"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+			      " AND msg_rcv_deleted.Notified='Y')",
+			      Gbl.Hierarchy.Ctr.CtrCod,
+			      Gbl.Hierarchy.Ctr.CtrCod);
             case Hie_Lvl_DEG:
-               NumMsgs =
-               (unsigned) DB_QueryCOUNT ("can not get number"
-        				 " of received messages",
-					 "SELECT "
-					 "(SELECT COUNT(*)"
-					 " FROM courses,msg_snt,msg_rcv"
-					 " WHERE courses.DegCod=%ld"
-					 " AND courses.CrsCod=msg_snt.CrsCod"
-					 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-					 " AND msg_rcv.Notified='Y')"
-					 " + "
-					 "(SELECT COUNT(*)"
-					 " FROM courses,msg_snt,msg_rcv_deleted"
-					 " WHERE courses.DegCod=%ld"
-					 " AND courses.CrsCod=msg_snt.CrsCod"
-					 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-					 " AND msg_rcv_deleted.Notified='Y')",
-					 Gbl.Hierarchy.Deg.DegCod,
-					 Gbl.Hierarchy.Deg.DegCod);
-               break;
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT "
+			      "(SELECT COUNT(*)"
+			      " FROM crs_courses,"
+			            "msg_snt,"
+			            "msg_rcv"
+			      " WHERE crs_courses.DegCod=%ld"
+			      " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+			      " AND msg_rcv.Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			      " FROM crs_courses,"
+			            "msg_snt,"
+			            "msg_rcv_deleted"
+			      " WHERE crs_courses.DegCod=%ld"
+			      " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+			      " AND msg_rcv_deleted.Notified='Y')",
+			      Gbl.Hierarchy.Deg.DegCod,
+			      Gbl.Hierarchy.Deg.DegCod);
             case Hie_Lvl_CRS:
-               NumMsgs =
-               (unsigned) DB_QueryCOUNT ("can not get number"
-        				 " of received messages",
-					 "SELECT "
-					 "(SELECT COUNT(*)"
-					 " FROM msg_snt,msg_rcv"
-					 " WHERE msg_snt.CrsCod=%ld"
-					 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-					 " AND msg_rcv.Notified='Y')"
-					 " + "
-					 "(SELECT COUNT(*)"
-					 " FROM msg_snt,msg_rcv_deleted"
-					 " WHERE msg_snt.CrsCod=%ld"
-					 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-					 " AND msg_rcv_deleted.Notified='Y')",
-					 Gbl.Hierarchy.Crs.CrsCod,
-					 Gbl.Hierarchy.Crs.CrsCod);
-               break;
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT "
+			      "(SELECT COUNT(*)"
+			      " FROM msg_snt,"
+			            "msg_rcv"
+			      " WHERE msg_snt.CrsCod=%ld"
+			      " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+			      " AND msg_rcv.Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			      " FROM msg_snt,"
+			            "msg_rcv_deleted"
+			      " WHERE msg_snt.CrsCod=%ld"
+			      " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+			      " AND msg_rcv_deleted.Notified='Y')",
+			      Gbl.Hierarchy.Crs.CrsCod,
+			      Gbl.Hierarchy.Crs.CrsCod);
+            case Hie_Lvl_UNK:
 	    default:
-	       Lay_WrongScopeExit ();
-	       break;
+	       return 0;
            }
-         break;
+         return 0;
+      default:
+         return 0;
      }
-
-   return NumMsgs;
   }
 
 /*****************************************************************************/
@@ -2744,25 +2765,30 @@ static void Msg_GetDistinctCoursesInMyMessages (struct Msg_Messages *Messages)
    switch (Messages->TypeOfMessages)
      {
       case Msg_RECEIVED:
-         NumRows = DB_QuerySELECT (&mysql_res,"can not get distinct courses"
-					      " in your messages",""
-				   "SELECT DISTINCT courses.CrsCod,courses.ShortName"
-				   " FROM msg_rcv,msg_snt,courses"
-				   " WHERE msg_rcv.UsrCod=%ld"
-				   " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-				   " AND msg_snt.CrsCod=courses.CrsCod"
-				   " ORDER BY courses.ShortName",
-				   Gbl.Usrs.Me.UsrDat.UsrCod);
+         NumRows =
+         DB_QuerySELECT (&mysql_res,"can not get distinct courses in your messages",
+			 "SELECT DISTINCT crs_courses.CrsCod,"
+			                 "crs_courses.ShortName"
+			 " FROM msg_rcv,"
+			       "msg_snt,"
+			       "crs_courses"
+			 " WHERE msg_rcv.UsrCod=%ld"
+			 " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+			 " AND msg_snt.CrsCod=crs_courses.CrsCod"
+			 " ORDER BY crs_courses.ShortName",
+			 Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Msg_SENT:
-         NumRows = DB_QuerySELECT (&mysql_res,"can not get distinct courses"
-					      " in your messages",
-				   "SELECT DISTINCT courses.CrsCod,courses.ShortName"
-				   " FROM msg_snt,courses"
-				   " WHERE msg_snt.UsrCod=%ld"
-				   " AND msg_snt.CrsCod=courses.CrsCod"
-				   " ORDER BY courses.ShortName",
-				   Gbl.Usrs.Me.UsrDat.UsrCod);
+         NumRows =
+         DB_QuerySELECT (&mysql_res,"can not get distinct courses in your messages",
+			  "SELECT DISTINCT crs_courses.CrsCod,"
+			                  "crs_courses.ShortName"
+			  " FROM msg_snt,"
+			        "crs_courses"
+			  " WHERE msg_snt.UsrCod=%ld"
+			  " AND msg_snt.CrsCod=crs_courses.CrsCod"
+			  " ORDER BY crs_courses.ShortName",
+			  Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       default: // Not aplicable here
          break;

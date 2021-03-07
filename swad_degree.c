@@ -127,31 +127,36 @@ void Deg_SeeDegWithPendingCrss (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_DEG_ADM:
-         NumDegs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get degrees"
-							 " with pending courses",
-					      "SELECT courses.DegCod,COUNT(*)"
-					      " FROM usr_admins,courses,deg_degrees"
-					      " WHERE usr_admins.UsrCod=%ld"
-					      " AND usr_admins.Scope='%s'"
-					      " AND usr_admins.Cod=courses.DegCod"
-					      " AND (courses.Status & %u)<>0"
-					      " AND courses.DegCod=deg_degrees.DegCod"
-					      " GROUP BY courses.DegCod"
-					      " ORDER BY deg_degrees.ShortName",
-					      Gbl.Usrs.Me.UsrDat.UsrCod,
-					      Sco_GetDBStrFromScope (Hie_Lvl_DEG),
-					      (unsigned) Crs_STATUS_BIT_PENDING);
+         NumDegs = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get degrees with pending courses",
+			 "SELECT crs_courses.DegCod,"
+			        "COUNT(*)"
+			 " FROM usr_admins,"
+			       "crs_courses,"
+			       "deg_degrees"
+			 " WHERE usr_admins.UsrCod=%ld"
+			 " AND usr_admins.Scope='%s'"
+			 " AND usr_admins.Cod=crs_courses.DegCod"
+			 " AND (crs_courses.Status & %u)<>0"
+			 " AND crs_courses.DegCod=deg_degrees.DegCod"
+			 " GROUP BY crs_courses.DegCod"
+			 " ORDER BY deg_degrees.ShortName",
+			 Gbl.Usrs.Me.UsrDat.UsrCod,
+			 Sco_GetDBStrFromScope (Hie_Lvl_DEG),
+			 (unsigned) Crs_STATUS_BIT_PENDING);
          break;
       case Rol_SYS_ADM:
-         NumDegs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get degrees"
-							 " with pending courses",
-					      "SELECT courses.DegCod,COUNT(*)"
-					      " FROM courses,deg_degrees"
-					      " WHERE (courses.Status & %u)<>0"
-					      " AND courses.DegCod=deg_degrees.DegCod"
-					      " GROUP BY courses.DegCod"
-					      " ORDER BY deg_degrees.ShortName",
-					      (unsigned) Crs_STATUS_BIT_PENDING);
+         NumDegs = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get degrees with pending courses",
+			 "SELECT crs_courses.DegCod,"
+			        "COUNT(*)"
+			 " FROM crs_courses,"
+			       "deg_degrees"
+			 " WHERE (crs_courses.Status & %u)<>0"
+			 " AND crs_courses.DegCod=deg_degrees.DegCod"
+			 " GROUP BY crs_courses.DegCod"
+			 " ORDER BY deg_degrees.ShortName",
+			 (unsigned) Crs_STATUS_BIT_PENDING);
          break;
       default:	// Forbidden for other users
 	 return;
@@ -1068,23 +1073,25 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
    unsigned NumDeg;
 
    /***** Get degrees admin by me from database *****/
-   Degs->Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get degrees"
-						     " admin by you",
-					  "SELECT DISTINCTROW "
-					         "deg_degrees.DegCod,"		// row[0]
-					         "deg_degrees.CtrCod,"		// row[1]
-					         "deg_degrees.DegTypCod,"	// row[2]
-					         "deg_degrees.Status,"		// row[3]
-					         "deg_degrees.RequesterUsrCod,"	// row[4]
-					         "deg_degrees.ShortName,"	// row[5]
-					         "deg_degrees.FullName,"	// row[6]
-					         "deg_degrees.WWW"		// row[7]
-					  " FROM deg_degrees,courses,crs_usr"
-					  " WHERE deg_degrees.DegCod=courses.DegCod"
-					  " AND courses.CrsCod=crs_usr.CrsCod"
-					  " AND crs_usr.Role=%u"
-					  " ORDER BY deg_degrees.ShortName",
-					  (unsigned) Rol_STD);
+   Degs->Num = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get degrees admin by you",
+		   "SELECT DISTINCTROW "
+			  "deg_degrees.DegCod,"			// row[0]
+			  "deg_degrees.CtrCod,"			// row[1]
+			  "deg_degrees.DegTypCod,"		// row[2]
+			  "deg_degrees.Status,"			// row[3]
+			  "deg_degrees.RequesterUsrCod,"	// row[4]
+			  "deg_degrees.ShortName,"		// row[5]
+			  "deg_degrees.FullName,"		// row[6]
+			  "deg_degrees.WWW"			// row[7]
+		   " FROM deg_degrees,"
+		         "crs_courses,"
+		         "crs_usr"
+		   " WHERE deg_degrees.DegCod=crs_courses.DegCod"
+		   " AND crs_courses.CrsCod=crs_usr.CrsCod"
+		   " AND crs_usr.Role=%u"
+		   " ORDER BY deg_degrees.ShortName",
+		   (unsigned) Rol_STD);
 
    if (Degs->Num) // Degrees found...
      {
@@ -1518,7 +1525,8 @@ void Deg_RemoveDegreeCompletely (long DegCod)
 
    /***** Get courses of a degree from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get courses of a degree",
-			     "SELECT CrsCod FROM courses"
+			     "SELECT CrsCod"
+			     " FROM crs_courses"
 			     " WHERE DegCod=%ld",
 			     DegCod);
 
@@ -2076,13 +2084,16 @@ unsigned Deg_GetCachedNumDegsWithCrss (const char *SubQuery,
      {
       /***** Get current number of degrees with courses from database and update cache *****/
       NumDegsWithCrss = (unsigned)
-	                DB_QueryCOUNT ("can not get number of degrees with courses",
-				       "SELECT COUNT(DISTINCT deg_degrees.DegCod)"
-				       " FROM institutions,centres,deg_degrees,courses"
-				       " WHERE %sinstitutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=deg_degrees.CtrCod"
-				       " AND deg_degrees.DegCod=courses.DegCod",
-				       SubQuery);
+      DB_QueryCOUNT ("can not get number of degrees with courses",
+		     "SELECT COUNT(DISTINCT deg_degrees.DegCod)"
+		     " FROM institutions,"
+		           "centres,"
+		           "deg_degrees,"
+		           "crs_courses"
+		     " WHERE %sinstitutions.InsCod=centres.InsCod"
+		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " AND deg_degrees.DegCod=crs_courses.DegCod",
+		     SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS_WITH_CRSS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumDegsWithCrss);
      }
@@ -2111,15 +2122,19 @@ unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery,
      {
       /***** Get current number of degrees with users from database and update cache *****/
       NumDegsWithUsrs = (unsigned)
-	                DB_QueryCOUNT ("can not get number of degrees with users",
-				       "SELECT COUNT(DISTINCT deg_degrees.DegCod)"
-				       " FROM institutions,centres,deg_degrees,courses,crs_usr"
-				       " WHERE %sinstitutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=deg_degrees.CtrCod"
-				       " AND deg_degrees.DegCod=courses.DegCod"
-				       " AND courses.CrsCod=crs_usr.CrsCod"
-				       " AND crs_usr.Role=%u",
-				       SubQuery,(unsigned) Role);
+      DB_QueryCOUNT ("can not get number of degrees with users",
+		     "SELECT COUNT(DISTINCT deg_degrees.DegCod)"
+		     " FROM institutions,"
+		           "centres,"
+		           "deg_degrees,"
+		           "crs_courses,"
+		           "crs_usr"
+		     " WHERE %sinstitutions.InsCod=centres.InsCod"
+		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " AND deg_degrees.DegCod=crs_courses.DegCod"
+		     " AND crs_courses.CrsCod=crs_usr.CrsCod"
+		     " AND crs_usr.Role=%u",
+		     SubQuery,(unsigned) Role);
       FigCch_UpdateFigureIntoCache (FigureDegs[Role],Scope,Cod,
 				    FigCch_UNSIGNED,&NumDegsWithUsrs);
      }

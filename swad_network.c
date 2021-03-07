@@ -454,88 +454,104 @@ void Net_ShowWebAndSocialNetworksStats (void)
    switch (Gbl.Scope.Current)
      {
       case Hie_Lvl_SYS:
-         NumRows =
-         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
-					       " with webs / social networks",
-				    "SELECT Web,COUNT(*) AS N"
-				    " FROM usr_webs"
-				    " GROUP BY Web"
-				    " ORDER BY N DESC,Web");
+         NumRows = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get number of users"
+				    " with webs / social networks",
+			 "SELECT Web,"
+			        "COUNT(*) AS N"
+			 " FROM usr_webs"
+			 " GROUP BY Web"
+			 " ORDER BY N DESC,Web");
          break;
       case Hie_Lvl_CTY:
-         NumRows =
-         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
-					       " with webs / social networks",
-				    "SELECT usr_webs.Web,"
-				    "COUNT(DISTINCT usr_webs.UsrCod) AS N"
-				    " FROM institutions,centres,deg_degrees,courses,crs_usr,usr_webs"
-				    " WHERE institutions.CtyCod=%ld"
-				    " AND institutions.InsCod=centres.InsCod"
-				    " AND centres.CtrCod=deg_degrees.CtrCod"
-				    " AND deg_degrees.DegCod=courses.DegCod"
-				    " AND courses.CrsCod=crs_usr.CrsCod"
-				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
-				    " GROUP BY usr_webs.Web"
-				    " ORDER BY N DESC,usr_webs.Web",
-				    Gbl.Hierarchy.Cty.CtyCod);
+         NumRows = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get number of users"
+				    " with webs / social networks",
+			 "SELECT usr_webs.Web,"
+			        "COUNT(DISTINCT usr_webs.UsrCod) AS N"
+			 " FROM institutions,"
+			       "centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "crs_usr,"
+			       "usr_webs"
+			 " WHERE institutions.CtyCod=%ld"
+			 " AND institutions.InsCod=centres.InsCod"
+			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=usr_webs.UsrCod"
+			 " GROUP BY usr_webs.Web"
+			 " ORDER BY N DESC,usr_webs.Web",
+			 Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_Lvl_INS:
-         NumRows =
-         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
-					       " with webs / social networks",
-				    "SELECT usr_webs.Web,"
-				    "COUNT(DISTINCT usr_webs.UsrCod) AS N"
-				    " FROM centres,deg_degrees,courses,crs_usr,usr_webs"
-				    " WHERE centres.InsCod=%ld"
-				    " AND centres.CtrCod=deg_degrees.CtrCod"
-				    " AND deg_degrees.DegCod=courses.DegCod"
-				    " AND courses.CrsCod=crs_usr.CrsCod"
-				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
-				    " GROUP BY usr_webs.Web"
-				    " ORDER BY N DESC,usr_webs.Web",
-				    Gbl.Hierarchy.Ins.InsCod);
+         NumRows = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get number of users"
+				    " with webs / social networks",
+			 "SELECT usr_webs.Web,"
+			        "COUNT(DISTINCT usr_webs.UsrCod) AS N"
+			 " FROM centres,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "crs_usr,"
+			       "usr_webs"
+			 " WHERE centres.InsCod=%ld"
+			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=usr_webs.UsrCod"
+			 " GROUP BY usr_webs.Web"
+			 " ORDER BY N DESC,usr_webs.Web",
+			 Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
-         NumRows =
-         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
-					       " with webs / social networks",
-				    "SELECT usr_webs.Web,"
-				    "COUNT(DISTINCT usr_webs.UsrCod) AS N"
-				    " FROM deg_degrees,courses,crs_usr,usr_webs"
-				    " WHERE deg_degrees.CtrCod=%ld"
-				    " AND deg_degrees.DegCod=courses.DegCod"
-				    " AND courses.CrsCod=crs_usr.CrsCod"
-				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
-				    " GROUP BY usr_webs.Web"
-				    " ORDER BY N DESC,usr_webs.Web",
-				    Gbl.Hierarchy.Ctr.CtrCod);
+         NumRows = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get number of users"
+				    " with webs / social networks",
+			 "SELECT usr_webs.Web,"
+			        "COUNT(DISTINCT usr_webs.UsrCod) AS N"
+			 " FROM deg_degrees,"
+			       "crs_courses,"
+			       "crs_usr,"
+			       "usr_webs"
+			 " WHERE deg_degrees.CtrCod=%ld"
+			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=usr_webs.UsrCod"
+			 " GROUP BY usr_webs.Web"
+			 " ORDER BY N DESC,usr_webs.Web",
+			 Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_Lvl_DEG:
-         NumRows =
-         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
-					       " with webs / social networks",
-				    "SELECT usr_webs.Web,"
-				    "COUNT(DISTINCT usr_webs.UsrCod) AS N"
-				    " FROM courses,crs_usr,usr_webs"
-				    " WHERE courses.DegCod=%ld"
-				    " AND courses.CrsCod=crs_usr.CrsCod"
-				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
-				    " GROUP BY usr_webs.Web"
-				    " ORDER BY N DESC,usr_webs.Web",
-				    Gbl.Hierarchy.Deg.DegCod);
+         NumRows = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get number of users"
+				    " with webs / social networks",
+			 "SELECT usr_webs.Web,"
+			        "COUNT(DISTINCT usr_webs.UsrCod) AS N"
+			 " FROM crs_courses,"
+			       "crs_usr,"
+			       "usr_webs"
+			 " WHERE crs_courses.DegCod=%ld"
+			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=usr_webs.UsrCod"
+			 " GROUP BY usr_webs.Web"
+			 " ORDER BY N DESC,usr_webs.Web",
+			 Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_Lvl_CRS:
-         NumRows =
-         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
-					       " with webs / social networks",
-				    "SELECT usr_webs.Web,"
-				    "COUNT(DISTINCT usr_webs.UsrCod) AS N"
-				    " FROM crs_usr,usr_webs"
-				    " WHERE crs_usr.CrsCod=%ld"
-				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
-				    " GROUP BY usr_webs.Web"
-				    " ORDER BY N DESC,usr_webs.Web",
-				    Gbl.Hierarchy.Crs.CrsCod);
+         NumRows = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get number of users"
+				    " with webs / social networks",
+			 "SELECT usr_webs.Web,"
+			        "COUNT(DISTINCT usr_webs.UsrCod) AS N"
+			 " FROM crs_usr,"
+			       "usr_webs"
+			 " WHERE crs_usr.CrsCod=%ld"
+			 " AND crs_usr.UsrCod=usr_webs.UsrCod"
+			 " GROUP BY usr_webs.Web"
+			 " ORDER BY N DESC,usr_webs.Web",
+			 Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
