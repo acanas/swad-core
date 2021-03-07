@@ -205,7 +205,7 @@ void Hld_SeeHolidays (void)
       else	// No holidays created in the current institution
 	 Ale_ShowAlert (Ale_INFO,Txt_No_holidays);
 
-      /***** Button to create centre *****/
+      /***** Button to create center *****/
       if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)	// Institution admin or system admin
 	{
 	 Frm_BeginForm (ActEdiHld);

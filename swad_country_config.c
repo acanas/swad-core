@@ -159,7 +159,7 @@ static void CtyCfg_Configuration (bool PrintView)
 
       /***** Number of users who claim to belong to this country,
              number of institutions,
-             number of centres,
+             number of centers,
              number of degrees,
              number of courses *****/
       CtyCfg_NumUsrs ();
@@ -235,26 +235,27 @@ static void CtyCfg_Title (bool PutLink)
   }
 
 /*****************************************************************************/
-/********* Get average coordinates of centres in current institution *********/
+/********* Get average coordinates of centers in current institution *********/
 /*****************************************************************************/
 
 static void CtyCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
   {
    char *Query;
 
-   /***** Get average coordinates of centres of current country
+   /***** Get average coordinates of centers of current country
           with both coordinates set
           (coordinates 0, 0 means not set ==> don't show map) *****/
    if (asprintf (&Query,
-		 "SELECT AVG(centres.Latitude),"					// row[0]
-			"AVG(centres.Longitude),"					// row[1]
-			"GREATEST(MAX(centres.Latitude)-MIN(centres.Latitude),"
-				 "MAX(centres.Longitude)-MIN(centres.Longitude))"	// row[2]
-		 " FROM institutions,centres"
+		 "SELECT AVG(ctr_centers.Latitude),"						// row[0]
+			"AVG(ctr_centers.Longitude),"						// row[1]
+			"GREATEST(MAX(ctr_centers.Latitude)-MIN(ctr_centers.Latitude),"
+				 "MAX(ctr_centers.Longitude)-MIN(ctr_centers.Longitude))"	// row[2]
+		 " FROM institutions,"
+		       "ctr_centers"
 		 " WHERE institutions.CtyCod=%ld"
-		 " AND institutions.InsCod=centres.InsCod"
-		 " AND centres.Latitude<>0"
-		 " AND centres.Longitude<>0",
+		 " AND institutions.InsCod=ctr_centers.InsCod"
+		 " AND ctr_centers.Latitude<>0"
+		 " AND ctr_centers.Longitude<>0",
 		 Gbl.Hierarchy.Cty.CtyCod) < 0)
       Lay_NotEnoughMemoryExit ();
    Map_GetCoordAndZoom (Coord,Zoom,Query);
@@ -276,7 +277,7 @@ static void CtyCfg_Map (void)
    unsigned NumCtrs;
    unsigned NumCtr;
    struct Ins_Instit Ins;
-   struct Ctr_Centre Ctr;
+   struct Ctr_Center Ctr;
 
    /***** Leaflet CSS *****/
    Map_LeafletCSS ();
@@ -298,30 +299,30 @@ static void CtyCfg_Map (void)
    /* Add Mapbox Streets tile layer to our map */
    Map_AddTileLayer ();
 
-   /* Get centres with coordinates */
-   NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centres"
+   /* Get centers with coordinates */
+   NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centers"
 						   " with coordinates",
-					"SELECT centres.CtrCod"	// row[0]
-					" FROM institutions,centres"
+					"SELECT ctr_centers.CtrCod"	// row[0]
+					" FROM institutions,ctr_centers"
 					" WHERE institutions.CtyCod=%ld"
-					" AND institutions.InsCod=centres.InsCod"
-					" AND centres.Latitude<>0"
-					" AND centres.Longitude<>0",
+					" AND institutions.InsCod=ctr_centers.InsCod"
+					" AND ctr_centers.Latitude<>0"
+					" AND ctr_centers.Longitude<>0",
 					Gbl.Hierarchy.Cty.CtyCod);
 
-   /* Add a marker and a popup for each centre */
+   /* Add a marker and a popup for each center */
    for (NumCtr = 0;
 	NumCtr < NumCtrs;
 	NumCtr++)
      {
-      /* Get next centre */
+      /* Get next center */
       row = mysql_fetch_row (mysql_res);
 
-      /* Get centre code (row[0]) */
+      /* Get center code (row[0]) */
       Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get data of centre */
-      Ctr_GetDataOfCentreByCod (&Ctr);
+      /* Get data of center */
+      Ctr_GetDataOfCenterByCod (&Ctr);
 
       /* Get data of institution */
       Ins.InsCod = Ctr.InsCod;

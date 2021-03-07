@@ -270,22 +270,22 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Frm_EndForm ();
 	 HTM_LI_End ();
 
-	 /***** Get my centres in this institution *****/
+	 /***** Get my centers in this institution *****/
 	 NumCtrs = (unsigned) Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                          Hie.Ins.InsCod,&mysql_resCtr);
 	 for (NumCtr = 0;
 	      NumCtr < NumCtrs;
 	      NumCtr++)
 	   {
-	    /***** Get next centre *****/
+	    /***** Get next center *****/
 	    row = mysql_fetch_row (mysql_resCtr);
 
-	    /***** Get data of this centre *****/
+	    /***** Get data of this center *****/
 	    Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
-	    if (!Ctr_GetDataOfCentreByCod (&Hie.Ctr))
-	       Lay_ShowErrorAndExit ("Centre not found.");
+	    if (!Ctr_GetDataOfCenterByCod (&Hie.Ctr))
+	       Lay_ShowErrorAndExit ("Center not found.");
 
-	    /***** Write link to centre *****/
+	    /***** Write link to center *****/
 	    Highlight = (Gbl.Hierarchy.Level == Hie_Lvl_CTR &&
 			 Gbl.Hierarchy.Ctr.CtrCod == Hie.Ctr.CtrCod);
 	    HTM_LI_Begin ("class=\"%s\"",Highlight ? ClassHighlight :
@@ -304,7 +304,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Frm_EndForm ();
 	    HTM_LI_End ();
 
-	    /***** Get my degrees in this centre *****/
+	    /***** Get my degrees in this center *****/
 	    NumDegs = (unsigned) Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                             Hie.Ctr.CtrCod,&mysql_resDeg);
 	    for (NumDeg = 0;
@@ -449,12 +449,12 @@ unsigned Crs_GetNumCrssInCty (long CtyCod)
    DB_QueryCOUNT ("can not get the number of courses in a country",
 		  "SELECT COUNT(*)"
 		  " FROM institutions,"
-		        "centres,"
+		        "ctr_centers,"
 		        "deg_degrees,"
 		        "crs_courses"
 		  " WHERE institutions.CtyCod=%ld"
-		  " AND institutions.InsCod=centres.InsCod"
-		  " AND centres.CtrCod=deg_degrees.CtrCod"
+		  " AND institutions.InsCod=ctr_centers.InsCod"
+		  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		  " AND deg_degrees.DegCod=crs_courses.DegCod",
 		  CtyCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_Lvl_CTY,Gbl.Cache.NumCrssInCty.CtyCod,
@@ -500,11 +500,11 @@ unsigned Crs_GetNumCrssInIns (long InsCod)
    Gbl.Cache.NumCrssInIns.NumCrss = (unsigned)
    DB_QueryCOUNT ("can not get the number of courses in an institution",
 		  "SELECT COUNT(*)"
-		  " FROM centres,"
+		  " FROM ctr_centers,"
 		        "deg_degrees,"
 		        "crs_courses"
-		  " WHERE centres.InsCod=%ld"
-		  " AND centres.CtrCod=deg_degrees.CtrCod"
+		  " WHERE ctr_centers.InsCod=%ld"
+		  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		  " AND deg_degrees.DegCod=crs_courses.DegCod",
 		  InsCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_Lvl_INS,Gbl.Cache.NumCrssInIns.InsCod,
@@ -526,7 +526,7 @@ unsigned Crs_GetCachedNumCrssInIns (long InsCod)
   }
 
 /*****************************************************************************/
-/******************** Get number of courses in a centre **********************/
+/******************** Get number of courses in a center **********************/
 /*****************************************************************************/
 
 void Crs_FlushCacheNumCrssInCtr (void)
@@ -545,10 +545,10 @@ unsigned Crs_GetNumCrssInCtr (long CtrCod)
    if (CtrCod == Gbl.Cache.NumCrssInCtr.CtrCod)
       return Gbl.Cache.NumCrssInCtr.NumCrss;
 
-   /***** 3. Slow: number of courses in a centre from database *****/
+   /***** 3. Slow: number of courses in a center from database *****/
    Gbl.Cache.NumCrssInCtr.CtrCod  = CtrCod;
    Gbl.Cache.NumCrssInCtr.NumCrss = (unsigned)
-   DB_QueryCOUNT ("can not get the number of courses in a centre",
+   DB_QueryCOUNT ("can not get the number of courses in a center",
 		  "SELECT COUNT(*)"
 		  " FROM deg_degrees,"
 		        "crs_courses"
@@ -643,12 +643,12 @@ unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery,
       DB_QueryCOUNT ("can not get number of courses with users",
 		     "SELECT COUNT(DISTINCT crs_courses.CrsCod)"
 		     " FROM institutions,"
-		           "centres,"
+		           "ctr_centers,"
 		           "deg_degrees,"
 		           "crs_courses,"
 		           "crs_usr"
-		     " WHERE %sinstitutions.InsCod=centres.InsCod"
-		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		     " AND deg_degrees.DegCod=crs_courses.DegCod"
 		     " AND crs_courses.CrsCod=crs_usr.CrsCod"
 		     " AND crs_usr.Role=%u",
@@ -738,7 +738,7 @@ void Crs_ShowCrssOfCurrentDeg (void)
    /***** Get list of courses in this degree *****/
    Crs_GetListCrssInCurrentDeg (Crs_ALL_COURSES_EXCEPT_REMOVED);
 
-   /***** Write menu to select country, institution, centre and degree *****/
+   /***** Write menu to select country, institution, center and degree *****/
    Hie_WriteMenuHierarchy ();
 
    /***** Show list of courses *****/
@@ -1128,13 +1128,13 @@ static void Crs_EditCoursesInternal (void)
    extern const char *Hlp_DEGREE_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
 
-   /***** Get list of degrees in this centre *****/
+   /***** Get list of degrees in this center *****/
    Deg_GetListDegsInCurrentCtr ();
 
    /***** Get list of courses in this degree *****/
    Crs_GetListCrssInCurrentDeg (Crs_ALL_COURSES_EXCEPT_REMOVED);
 
-   /***** Write menu to select country, institution, centre and degree *****/
+   /***** Write menu to select country, institution, center and degree *****/
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
@@ -1157,7 +1157,7 @@ static void Crs_EditCoursesInternal (void)
    /***** Free list of courses in this degree *****/
    Crs_FreeListCoursesInCurrentDegree ();
 
-   /***** Free list of degrees in this centre *****/
+   /***** Free list of degrees in this center *****/
    Deg_FreeListDegs (&Gbl.Hierarchy.Degs);
   }
 
@@ -2610,16 +2610,16 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
 			  "deg_degrees.FullName,"	// row[3]
 			  "crs_courses.Year,"		// row[4]
 			  "crs_courses.FullName,"	// row[5]
-			  "centres.ShortName,"		// row[6]
+			  "ctr_centers.ShortName,"	// row[6]
 			  "crs_usr.Accepted"		// row[7]
 		   " FROM crs_usr,"
 		         "crs_courses,"
 		         "deg_degrees,"
-		         "centres"
+		         "ctr_centers"
 		   " WHERE crs_usr.UsrCod=%ld%s"
 		   " AND crs_usr.CrsCod=crs_courses.CrsCod"
 		   " AND crs_courses.DegCod=deg_degrees.DegCod"
-		   " AND deg_degrees.CtrCod=centres.CtrCod"
+		   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 		   " ORDER BY deg_degrees.FullName,"
 		             "crs_courses.Year,"
 		             "crs_courses.FullName",
@@ -2768,7 +2768,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	  deg_degrees.FullName		row[3]
 	  crs_courses.Year		row[4]
 	  crs_courses.FullName		row[5]
-	  centres.ShortName		row[6]
+	  ctr_centers.ShortName		row[6]
 	  crs_usr.Accepted		row[7]	(only if WriteColumnAccepted == true)
    */
 
@@ -2822,7 +2822,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    HTM_TD_End ();
 
    /***** Write degree logo, degree short name (row[2])
-          and centre short name (row[6]) *****/
+          and center short name (row[6]) *****/
    HTM_TD_Begin ("class=\"LT %s\"",BgColor);
    Frm_BeginFormGoTo (ActSeeDegInf);
    Deg_PutParamDegCod (Deg.DegCod);

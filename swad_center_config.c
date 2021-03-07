@@ -1,4 +1,4 @@
-// swad_centre_config.c: configuration of current centre
+// swad_center_config.c: configuration of current center
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -33,7 +33,7 @@
 #include <string.h>		// For string functions
 #include <unistd.h>		// For unlink
 
-#include "swad_centre.h"
+#include "swad_center.h"
 #include "swad_database.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
@@ -55,7 +55,7 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-// Centre photo will be saved with:
+// Center photo will be saved with:
 // - maximum width of Ctr_PHOTO_SAVED_MAX_HEIGHT
 // - maximum height of Ctr_PHOTO_SAVED_MAX_HEIGHT
 // - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
@@ -104,7 +104,7 @@ static void CtrCfg_UpdateCtrCoordinateDB (long CtrCod,
 					  const char *CoordField,double NewCoord);
 
 /*****************************************************************************/
-/****************** Show information of the current centre *******************/
+/****************** Show information of the current center *******************/
 /*****************************************************************************/
 
 void CtrCfg_ShowConfiguration (void)
@@ -116,7 +116,7 @@ void CtrCfg_ShowConfiguration (void)
   }
 
 /*****************************************************************************/
-/****************** Print information of the current centre ******************/
+/****************** Print information of the current center ******************/
 /*****************************************************************************/
 
 void CtrCfg_PrintConfiguration (void)
@@ -125,12 +125,12 @@ void CtrCfg_PrintConfiguration (void)
   }
 
 /*****************************************************************************/
-/******************* Information of the current centre ***********************/
+/******************* Information of the current center ***********************/
 /*****************************************************************************/
 
 static void CtrCfg_Configuration (bool PrintView)
   {
-   extern const char *Hlp_CENTRE_Information;
+   extern const char *Hlp_CENTER_Information;
    bool PutLink;
    bool PutFormIns;
    bool PutFormName;
@@ -143,7 +143,7 @@ static void CtrCfg_Configuration (bool PrintView)
    bool PhotoExists;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Ctr.CtrCod <= 0)	// No centre selected
+   if (Gbl.Hierarchy.Ctr.CtrCod <= 0)	// No center selected
       return;
 
    /***** Initializations *****/
@@ -163,7 +163,7 @@ static void CtrCfg_Configuration (bool PrintView)
    else
       Box_BoxBegin (NULL,NULL,
                     CtrCfg_PutIconsCtrConfig,NULL,
-		    Hlp_CENTRE_Information,Box_NOT_CLOSABLE);
+		    Hlp_CENTER_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
    CtrCfg_Title (PutLink);
@@ -177,7 +177,7 @@ static void CtrCfg_Configuration (bool PrintView)
    /***** Institution *****/
    CtrCfg_Institution (PrintView,PutFormIns);
 
-   /***** Centre name *****/
+   /***** Center name *****/
    CtrCfg_FullName (PutFormName);
    CtrCfg_ShrtName (PutFormName);
 
@@ -192,25 +192,25 @@ static void CtrCfg_Configuration (bool PrintView)
       CtrCfg_Altitude ();
      }
 
-   /***** Centre WWW *****/
+   /***** Center WWW *****/
    CtrCfg_WWW (PrintView,PutFormWWW);
 
-   /***** Shortcut to the centre *****/
+   /***** Shortcut to the center *****/
    CtrCfg_Shortcut (PrintView);
 
    if (PrintView)
-      /***** QR code with link to the centre *****/
+      /***** QR code with link to the center *****/
       CtrCfg_QR ();
    else
      {
-      /***** Number of users who claim to belong to this centre,
+      /***** Number of users who claim to belong to this center,
              number of degrees,
              number of courses *****/
       CtrCfg_NumUsrs ();
       CtrCfg_NumDegs ();
       CtrCfg_NumCrss ();
 
-      /***** Number of users in courses of this centre *****/
+      /***** Number of users in courses of this center *****/
       HieCfg_NumUsrsInCrss (Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_TCH);
       HieCfg_NumUsrsInCrss (Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_NET);
       HieCfg_NumUsrsInCrss (Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_STD);
@@ -239,11 +239,11 @@ static void CtrCfg_Configuration (bool PrintView)
      {
       HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
 
-      /***** Centre map *****/
+      /***** Center map *****/
       if (MapIsAvailable)
 	 CtrCfg_Map ();
 
-      /***** Centre photo *****/
+      /***** Center photo *****/
       if (PhotoExists)
 	 CtrCfg_Photo (PrintView,PutFormPhoto,PutLink,PathPhoto);
 
@@ -255,12 +255,12 @@ static void CtrCfg_Configuration (bool PrintView)
   }
 
 /*****************************************************************************/
-/************ Put contextual icons in configuration of a centre **************/
+/************ Put contextual icons in configuration of a center **************/
 /*****************************************************************************/
 
 static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) void *Args)
   {
-   /***** Put icon to print info about centre *****/
+   /***** Put icon to print info about center *****/
    Ico_PutContextualIconToPrint (ActPrnCtrInf,
 				 NULL,NULL);
 
@@ -268,19 +268,19 @@ static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) void *Args)
    Plc_PutIconToViewPlaces ();
 
    if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      // Only centre admins, institution admins and system admins
-      // have permission to upload logo and photo of the centre
+      // Only center admins, institution admins and system admins
+      // have permission to upload logo and photo of the center
      {
-      /***** Put icon to upload logo of centre *****/
+      /***** Put icon to upload logo of center *****/
       Lgo_PutIconToChangeLogo (Hie_Lvl_CTR);
 
-      /***** Put icon to upload photo of centre *****/
+      /***** Put icon to upload photo of center *****/
       CtrCfg_PutIconToChangePhoto ();
      }
   }
 
 /*****************************************************************************/
-/************* Put contextual icons to upload photo of centre ****************/
+/************* Put contextual icons to upload photo of center ****************/
 /*****************************************************************************/
 
 static void CtrCfg_PutIconToChangePhoto (void)
@@ -290,7 +290,7 @@ static void CtrCfg_PutIconToChangePhoto (void)
    char PathPhoto[PATH_MAX + 1];
    bool PhotoExists;
 
-   /***** Link to upload photo of centre *****/
+   /***** Link to upload photo of center *****/
    snprintf (PathPhoto,sizeof (PathPhoto),"%s/%02u/%u/%u.jpg",
 	     Cfg_PATH_CTR_PUBLIC,
 	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
@@ -305,7 +305,7 @@ static void CtrCfg_PutIconToChangePhoto (void)
   }
 
 /*****************************************************************************/
-/******************** Show title in centre configuration *********************/
+/******************** Show title in center configuration *********************/
 /*****************************************************************************/
 
 static void CtrCfg_Title (bool PutLink)
@@ -320,7 +320,7 @@ static void CtrCfg_Title (bool PutLink)
   }
 
 /*****************************************************************************/
-/****************************** Draw centre map ******************************/
+/****************************** Draw center map ******************************/
 /*****************************************************************************/
 
 #define CtrCfg_MAP_CONTAINER_ID "ctr_mapid"
@@ -357,7 +357,7 @@ static void CtrCfg_Map (void)
   }
 
 /*****************************************************************************/
-/************************** Edit centre coordinates **************************/
+/************************** Edit center coordinates **************************/
 /*****************************************************************************/
 
 static void CtrCfg_Latitude (void)
@@ -436,7 +436,7 @@ static void CtrCfg_Altitude (void)
   }
 
 /*****************************************************************************/
-/***************************** Draw centre photo *****************************/
+/***************************** Draw center photo *****************************/
 /*****************************************************************************/
 
 static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
@@ -469,8 +469,8 @@ static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
 		 (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
       Lay_NotEnoughMemoryExit ();
    HTM_IMG (URL,Icon,Gbl.Hierarchy.Ctr.FullName,
-	    "class=\"%s\"",PrintView ? "CENTRE_PHOTO_PRINT CENTRE_PHOTO_WIDTH" :
-				       "CENTRE_PHOTO_SHOW CENTRE_PHOTO_WIDTH");
+	    "class=\"%s\"",PrintView ? "CENTER_PHOTO_PRINT CENTER_PHOTO_WIDTH" :
+				       "CENTER_PHOTO_SHOW CENTER_PHOTO_WIDTH");
    free (Icon);
    free (URL);
    if (PutLink)
@@ -517,14 +517,14 @@ static void CtrCfg_GetPhotoAttr (long CtrCod,char **PhotoAttribution)
 
    /***** Get photo attribution from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get photo attribution",
-		       "SELECT PhotoAttribution"
-		       " FROM centres WHERE CtrCod=%ld",
+		       "SELECT PhotoAttribution FROM ctr_centers"
+		       " WHERE CtrCod=%ld",
 		       CtrCod))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
 
-      /* Get the attribution of the photo of the centre (row[0]) */
+      /* Get the attribution of the photo of the center (row[0]) */
       if (row[0])
 	 if (row[0][0])
 	   {
@@ -553,7 +553,7 @@ static void CtrCfg_FreePhotoAttr (char **PhotoAttribution)
   }
 
 /*****************************************************************************/
-/***************** Show institution in centre configuration ******************/
+/***************** Show institution in center configuration ******************/
 /*****************************************************************************/
 
 static void CtrCfg_Institution (bool PrintView,bool PutForm)
@@ -593,7 +593,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
       /* Free list of institutions */
       Ins_FreeListInstitutions ();
      }
-   else	// I can not move centre to another institution
+   else	// I can not move center to another institution
      {
       if (!PrintView)
 	{
@@ -619,19 +619,19 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
   }
 
 /*****************************************************************************/
-/************** Show centre full name in centre configuration ****************/
+/************** Show center full name in center configuration ****************/
 /*****************************************************************************/
 
 static void CtrCfg_FullName (bool PutForm)
   {
-   extern const char *Txt_Centre;
+   extern const char *Txt_Center;
 
-   HieCfg_FullName (PutForm,Txt_Centre,ActRenCtrFulCfg,
+   HieCfg_FullName (PutForm,Txt_Center,ActRenCtrFulCfg,
 		       Gbl.Hierarchy.Ctr.FullName);
   }
 
 /*****************************************************************************/
-/************** Show centre short name in centre configuration ***************/
+/************** Show center short name in center configuration ***************/
 /*****************************************************************************/
 
 static void CtrCfg_ShrtName (bool PutForm)
@@ -640,7 +640,7 @@ static void CtrCfg_ShrtName (bool PutForm)
   }
 
 /*****************************************************************************/
-/**************** Show centre place in centre configuration ******************/
+/**************** Show center place in center configuration ******************/
 /*****************************************************************************/
 
 static void CtrCfg_Place (bool PutForm)
@@ -693,7 +693,7 @@ static void CtrCfg_Place (bool PutForm)
       /* Free list of places */
       Plc_FreeListPlaces (&Places);
      }
-   else	// I can not change centre place
+   else	// I can not change center place
       HTM_Txt (Plc.FullName);
    HTM_TD_End ();
 
@@ -701,7 +701,7 @@ static void CtrCfg_Place (bool PutForm)
   }
 
 /*****************************************************************************/
-/***************** Show centre WWW in centre configuration *******************/
+/***************** Show center WWW in center configuration *******************/
 /*****************************************************************************/
 
 static void CtrCfg_WWW (bool PrintView,bool PutForm)
@@ -710,7 +710,7 @@ static void CtrCfg_WWW (bool PrintView,bool PutForm)
   }
 
 /*****************************************************************************/
-/*************** Show centre shortcut in centre configuration ****************/
+/*************** Show center shortcut in center configuration ****************/
 /*****************************************************************************/
 
 static void CtrCfg_Shortcut (bool PrintView)
@@ -719,7 +719,7 @@ static void CtrCfg_Shortcut (bool PrintView)
   }
 
 /*****************************************************************************/
-/****************** Show centre QR in centre configuration *******************/
+/****************** Show center QR in center configuration *******************/
 /*****************************************************************************/
 
 static void CtrCfg_QR (void)
@@ -728,18 +728,18 @@ static void CtrCfg_QR (void)
   }
 
 /*****************************************************************************/
-/*** Show number of users who claim to belong to centre in centre config. ****/
+/*** Show number of users who claim to belong to center in center config. ****/
 /*****************************************************************************/
 
 static void CtrCfg_NumUsrs (void)
   {
-   extern const char *Txt_Users_of_the_centre;
+   extern const char *Txt_Users_of_the_center;
 
    /***** Number of users *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_centre);
+   Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_center);
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
@@ -750,13 +750,13 @@ static void CtrCfg_NumUsrs (void)
   }
 
 /*****************************************************************************/
-/************** Show number of degrees in centre configuration ***************/
+/************** Show number of degrees in center configuration ***************/
 /*****************************************************************************/
 
 static void CtrCfg_NumDegs (void)
   {
    extern const char *Txt_Degrees;
-   extern const char *Txt_Degrees_of_CENTRE_X;
+   extern const char *Txt_Degrees_of_CENTER_X;
 
    /***** Number of degrees *****/
    HTM_TR_Begin (NULL);
@@ -768,7 +768,7 @@ static void CtrCfg_NumDegs (void)
    HTM_TD_Begin ("class=\"LB\"");
    Frm_BeginFormGoTo (ActSeeDeg);
    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-   HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Degrees_of_CENTRE_X,
+   HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Degrees_of_CENTER_X,
 	                                        Gbl.Hierarchy.Ctr.ShrtName),
 			    "BT_LINK DAT",NULL);
    Str_FreeString ();
@@ -781,7 +781,7 @@ static void CtrCfg_NumDegs (void)
   }
 
 /*****************************************************************************/
-/************** Show number of courses in centre configuration ***************/
+/************** Show number of courses in center configuration ***************/
 /*****************************************************************************/
 
 static void CtrCfg_NumCrss (void)
@@ -803,7 +803,7 @@ static void CtrCfg_NumCrss (void)
   }
 
 /*****************************************************************************/
-/*********** Show a form for sending a logo of the current centre ************/
+/*********** Show a form for sending a logo of the current center ************/
 /*****************************************************************************/
 
 void CtrCfg_RequestLogo (void)
@@ -812,7 +812,7 @@ void CtrCfg_RequestLogo (void)
   }
 
 /*****************************************************************************/
-/***************** Receive the logo of the current centre ********************/
+/***************** Receive the logo of the current center ********************/
 /*****************************************************************************/
 
 void CtrCfg_ReceiveLogo (void)
@@ -821,7 +821,7 @@ void CtrCfg_ReceiveLogo (void)
   }
 
 /*****************************************************************************/
-/****************** Remove the logo of the current centre ********************/
+/****************** Remove the logo of the current center ********************/
 /*****************************************************************************/
 
 void CtrCfg_RemoveLogo (void)
@@ -830,7 +830,7 @@ void CtrCfg_RemoveLogo (void)
   }
 
 /*****************************************************************************/
-/*********** Show a form for sending a photo of the current centre ***********/
+/*********** Show a form for sending a photo of the current center ***********/
 /*****************************************************************************/
 
 void CtrCfg_RequestPhoto (void)
@@ -876,7 +876,7 @@ void CtrCfg_RequestPhoto (void)
   }
 
 /*****************************************************************************/
-/****************** Receive a photo of the current centre ********************/
+/****************** Receive a photo of the current center ********************/
 /*****************************************************************************/
 
 void CtrCfg_ReceivePhoto (void)
@@ -985,12 +985,12 @@ void CtrCfg_ReceivePhoto (void)
    /***** Remove temporary file *****/
    unlink (PathFileImgTmp);
 
-   /***** Show the centre information again *****/
+   /***** Show the center information again *****/
    CtrCfg_ShowConfiguration ();
   }
 
 /*****************************************************************************/
-/**************** Change the attribution of a centre photo *******************/
+/**************** Change the attribution of a center photo *******************/
 /*****************************************************************************/
 
 void CtrCfg_ChangeCtrPhotoAttr (void)
@@ -998,28 +998,28 @@ void CtrCfg_ChangeCtrPhotoAttr (void)
    char NewPhotoAttribution[Med_MAX_BYTES_ATTRIBUTION + 1];
 
    /***** Get parameters from form *****/
-   /* Get the new photo attribution for the centre */
+   /* Get the new photo attribution for the center */
    Par_GetParToText ("Attribution",NewPhotoAttribution,Med_MAX_BYTES_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
    DB_QueryUPDATE ("can not update the photo attribution"
-		   " of the current centre",
-		   "UPDATE centres SET PhotoAttribution='%s'"
+		   " of the current center",
+		   "UPDATE ctr_centers SET PhotoAttribution='%s'"
 		   " WHERE CtrCod=%ld",
 	           NewPhotoAttribution,Gbl.Hierarchy.Ctr.CtrCod);
 
-   /***** Show the centre information again *****/
+   /***** Show the center information again *****/
    CtrCfg_ShowConfiguration ();
   }
 
 /*****************************************************************************/
-/********************* Change the institution of a centre ********************/
+/********************* Change the institution of a center ********************/
 /*****************************************************************************/
 
 void CtrCfg_ChangeCtrIns (void)
   {
-   extern const char *Txt_The_centre_X_already_exists;
-   extern const char *Txt_The_centre_X_has_been_moved_to_the_institution_Y;
+   extern const char *Txt_The_center_X_already_exists;
+   extern const char *Txt_The_center_X_has_been_moved_to_the_institution_Y;
    struct Ins_Instit NewIns;
 
    /***** Get parameter with institution code *****/
@@ -1031,14 +1031,14 @@ void CtrCfg_ChangeCtrIns (void)
       /***** Get data of new institution *****/
       Ins_GetDataOfInstitutionByCod (&NewIns);
 
-      /***** Check if it already exists a centre with the same name in the new institution *****/
+      /***** Check if it already exists a center with the same name in the new institution *****/
       if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",
                                          Gbl.Hierarchy.Ctr.ShrtName,
                                          Gbl.Hierarchy.Ctr.CtrCod,
                                          NewIns.InsCod))
 	 /***** Create warning message *****/
 	 Ale_CreateAlert (Ale_WARNING,NULL,
-	                  Txt_The_centre_X_already_exists,
+	                  Txt_The_center_X_already_exists,
 		          Gbl.Hierarchy.Ctr.ShrtName);
       else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",
                                               Gbl.Hierarchy.Ctr.FullName,
@@ -1046,77 +1046,77 @@ void CtrCfg_ChangeCtrIns (void)
                                               NewIns.InsCod))
 	 /***** Create warning message *****/
 	 Ale_CreateAlert (Ale_WARNING,NULL,
-	                  Txt_The_centre_X_already_exists,
+	                  Txt_The_center_X_already_exists,
 		          Gbl.Hierarchy.Ctr.FullName);
       else
 	{
-	 /***** Update institution in table of centres *****/
+	 /***** Update institution in table of centers *****/
 	 CtrCfg_UpdateCtrInsDB (Gbl.Hierarchy.Ctr.CtrCod,NewIns.InsCod);
 	 Gbl.Hierarchy.Ctr.InsCod =
 	 Gbl.Hierarchy.Ins.InsCod = NewIns.InsCod;
 
-	 /***** Initialize again current course, degree, centre... *****/
+	 /***** Initialize again current course, degree, center... *****/
 	 Hie_InitHierarchy ();
 
 	 /***** Create message to show the change made *****/
          Ale_CreateAlert (Ale_SUCCESS,NULL,
-                          Txt_The_centre_X_has_been_moved_to_the_institution_Y,
+                          Txt_The_center_X_has_been_moved_to_the_institution_Y,
 		          Gbl.Hierarchy.Ctr.FullName,NewIns.FullName);
 	}
      }
   }
 
 /*****************************************************************************/
-/******************* Update institution in table of centres ******************/
+/******************* Update institution in table of centers ******************/
 /*****************************************************************************/
 
 static void CtrCfg_UpdateCtrInsDB (long CtrCod,long InsCod)
   {
-   /***** Update institution in table of centres *****/
-   DB_QueryUPDATE ("can not update the institution of a centre",
-		   "UPDATE centres SET InsCod=%ld WHERE CtrCod=%ld",
+   /***** Update institution in table of centers *****/
+   DB_QueryUPDATE ("can not update the institution of a center",
+		   "UPDATE ctr_centers SET InsCod=%ld WHERE CtrCod=%ld",
                    InsCod,CtrCod);
   }
 
 /*****************************************************************************/
-/************************ Change the place of a centre ***********************/
+/************************ Change the place of a center ***********************/
 /*****************************************************************************/
 
 void CtrCfg_ChangeCtrPlc (void)
   {
-   extern const char *Txt_The_place_of_the_centre_has_changed;
+   extern const char *Txt_The_place_of_the_center_has_changed;
    long NewPlcCod;
 
    /***** Get parameter with place code *****/
    NewPlcCod = Plc_GetParamPlcCod ();
 
-   /***** Update place in table of centres *****/
+   /***** Update place in table of centers *****/
    Ctr_UpdateCtrPlcDB (Gbl.Hierarchy.Ctr.CtrCod,NewPlcCod);
    Gbl.Hierarchy.Ctr.PlcCod = NewPlcCod;
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_place_of_the_centre_has_changed);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_place_of_the_center_has_changed);
 
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();
   }
 
 /*****************************************************************************/
-/*************** Change the name of a centre in configuration ****************/
+/*************** Change the name of a center in configuration ****************/
 /*****************************************************************************/
 
-void CtrCfg_RenameCentreShort (void)
+void CtrCfg_RenameCenterShort (void)
   {
-   Ctr_RenameCentre (&Gbl.Hierarchy.Ctr,Cns_SHRT_NAME);
+   Ctr_RenameCenter (&Gbl.Hierarchy.Ctr,Cns_SHRT_NAME);
   }
 
-void CtrCfg_RenameCentreFull (void)
+void CtrCfg_RenameCenterFull (void)
   {
-   Ctr_RenameCentre (&Gbl.Hierarchy.Ctr,Cns_FULL_NAME);
+   Ctr_RenameCenter (&Gbl.Hierarchy.Ctr,Cns_FULL_NAME);
   }
 
 /*****************************************************************************/
-/********************** Change the latitude of a centre **********************/
+/********************** Change the latitude of a center **********************/
 /*****************************************************************************/
 
 void CtrCfg_ChangeCtrLatitude (void)
@@ -1137,7 +1137,7 @@ void CtrCfg_ChangeCtrLatitude (void)
   }
 
 /*****************************************************************************/
-/********************** Change the longitude of a centre **********************/
+/********************** Change the longitude of a center **********************/
 /*****************************************************************************/
 
 void CtrCfg_ChangeCtrLongitude (void)
@@ -1158,7 +1158,7 @@ void CtrCfg_ChangeCtrLongitude (void)
   }
 
 /*****************************************************************************/
-/********************** Change the latitude of a centre **********************/
+/********************** Change the latitude of a center **********************/
 /*****************************************************************************/
 
 void CtrCfg_ChangeCtrAltitude (void)
@@ -1187,14 +1187,14 @@ static void CtrCfg_UpdateCtrCoordinateDB (long CtrCod,
   {
    /***** Update database changing old coordinate by new coordinate *****/
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
-   DB_QueryUPDATE ("can not update a coordinate of a centre",
-		   "UPDATE centres SET %s='%.15lg' WHERE CtrCod=%ld",
+   DB_QueryUPDATE ("can not update a coordinate of a center",
+		   "UPDATE ctr_centers SET %s='%.15lg' WHERE CtrCod=%ld",
 	           CoordField,NewCoord,CtrCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
 /*****************************************************************************/
-/************************* Change the URL of a centre ************************/
+/************************* Change the URL of a center ************************/
 /*****************************************************************************/
 
 void CtrCfg_ChangeCtrWWW (void)
@@ -1203,7 +1203,7 @@ void CtrCfg_ChangeCtrWWW (void)
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    /***** Get parameters from form *****/
-   /* Get the new WWW for the centre */
+   /* Get the new WWW for the center */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Check if new WWW is empty *****/
@@ -1225,7 +1225,7 @@ void CtrCfg_ChangeCtrWWW (void)
   }
 
 /*****************************************************************************/
-/** Show message of success after changing a centre in centre configuration **/
+/** Show message of success after changing a center in center configuration **/
 /*****************************************************************************/
 
 void CtrCfg_ContEditAfterChgCtr (void)

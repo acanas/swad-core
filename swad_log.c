@@ -250,7 +250,7 @@ void Log_GetAndShowLastClicks (void)
    extern const char *Txt_Role;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
-   extern const char *Txt_Centre;
+   extern const char *Txt_Center;
    extern const char *Txt_Degree;
    extern const char *Txt_Action;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -287,7 +287,7 @@ void Log_GetAndShowLastClicks (void)
    HTM_TH (1,1,"LC_ROL",Txt_Role);		// Role
    HTM_TH (1,1,"LC_CTY",Txt_Country);		// Country
    HTM_TH (1,1,"LC_INS",Txt_Institution);	// Institution
-   HTM_TH (1,1,"LC_CTR",Txt_Centre);		// Centre
+   HTM_TH (1,1,"LC_CTR",Txt_Center);		// Center
    HTM_TH (1,1,"LC_DEG",Txt_Degree);		// Degree
    HTM_TH (1,1,"LC_ACT",Txt_Action);		// Action
 
@@ -324,9 +324,9 @@ void Log_GetAndShowLastClicks (void)
       Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[5]);
       Ins_GetShortNameOfInstitution (&Hie.Ins);
 
-      /* Get centre code (row[6]) */
+      /* Get center code (row[6]) */
       Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[6]);
-      Ctr_GetShortNameOfCentreByCod (&Hie.Ctr);
+      Ctr_GetShortNameOfCenterByCod (&Hie.Ctr);
 
       /* Get degree code (row[7]) */
       Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[7]);
@@ -357,7 +357,7 @@ void Log_GetAndShowLastClicks (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_CTR %s\"",ClassRow);
-      HTM_Txt (Hie.Ctr.ShrtName);				// Centre
+      HTM_Txt (Hie.Ctr.ShrtName);				// Center
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LC_DEG %s\"",ClassRow);

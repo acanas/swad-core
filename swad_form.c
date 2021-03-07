@@ -209,7 +209,7 @@ void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_
 			 "<input type=\"hidden\" name=\"ins\" value=\"%ld\" />",
 			 Gbl.Hierarchy.Ins.InsCod);
 	       break;
-	    case Hie_Lvl_CTR:	// Centre
+	    case Hie_Lvl_CTR:	// Center
 	       snprintf (ParamLocation,sizeof (ParamLocation),
 			 "<input type=\"hidden\" name=\"ctr\" value=\"%ld\" />",
 			 Gbl.Hierarchy.Ctr.CtrCod);

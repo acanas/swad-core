@@ -288,7 +288,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActRenHld		(ActChgInsSta + 42)
 
 /*****************************************************************************/
-/********************************* Centre tab ********************************/
+/********************************* Center tab ********************************/
 /*****************************************************************************/
 // Actions in menu
 #define ActSeeCtrInf		(ActRenHld +  1)

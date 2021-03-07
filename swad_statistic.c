@@ -81,7 +81,7 @@ static const unsigned Sta_CellPadding[Sta_NUM_CLICKS_GROUPED_BY] =
    [Sta_CLICKS_GBL_PER_BANNER      ] = 1,
    [Sta_CLICKS_GBL_PER_COUNTRY     ] = 1,
    [Sta_CLICKS_GBL_PER_INSTITUTION ] = 1,
-   [Sta_CLICKS_GBL_PER_CENTRE      ] = 1,
+   [Sta_CLICKS_GBL_PER_CENTER      ] = 1,
    [Sta_CLICKS_GBL_PER_DEGREE      ] = 1,
    [Sta_CLICKS_GBL_PER_COURSE      ] = 1,
   };
@@ -160,10 +160,10 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
                                            unsigned long NumRows,
                                            MYSQL_RES *mysql_res);
 static void Sta_WriteInstit (long InsCod);
-static void Sta_ShowNumHitsPerCentre (Sta_CountType_t CountType,
+static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
                                       unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
-static void Sta_WriteCentre (long CtrCod);
+static void Sta_WriteCenter (long CtrCod);
 static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
                                       unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
@@ -531,7 +531,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
    /***** Selection of action *****/
    Sta_WriteSelectorAction (Stats);
 
-   /***** Clicks made from anywhere, current centre, current degree or current course *****/
+   /***** Clicks made from anywhere, current center, current degree or current course *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -1056,7 +1056,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    	           "SELECT SQL_NO_CACHE InsCod,%s AS Num FROM %s",
                    StrQueryCountType,LogTable);
 	 break;
-      case Sta_CLICKS_GBL_PER_CENTRE:
+      case Sta_CLICKS_GBL_PER_CENTER:
          snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
    	           "SELECT SQL_NO_CACHE CtrCod,%s AS Num FROM %s",
                    StrQueryCountType,LogTable);
@@ -1345,7 +1345,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 		  LogTable);
          Str_Concat (Query,QueryAux,Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
-      case Sta_CLICKS_GBL_PER_CENTRE:
+      case Sta_CLICKS_GBL_PER_CENTER:
 	 sprintf (QueryAux," GROUP BY %s.CtrCod"
 		           " ORDER BY Num DESC",
 		  LogTable);
@@ -1446,8 +1446,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          case Sta_CLICKS_GBL_PER_INSTITUTION:
 	    Sta_ShowNumHitsPerInstitution (Stats.CountType,NumRows,mysql_res);
 	    break;
-         case Sta_CLICKS_GBL_PER_CENTRE:
-	    Sta_ShowNumHitsPerCentre (Stats.CountType,NumRows,mysql_res);
+         case Sta_CLICKS_GBL_PER_CENTER:
+	    Sta_ShowNumHitsPerCenter (Stats.CountType,NumRows,mysql_res);
 	    break;
 	 case Sta_CLICKS_GBL_PER_DEGREE:
 	    Sta_ShowNumHitsPerDegree (Stats.CountType,NumRows,mysql_res);
@@ -3494,15 +3494,15 @@ static void Sta_WriteInstit (long InsCod)
   }
 
 /*****************************************************************************/
-/******* Show a listing with the number of hits distributed by centre ********/
+/******* Show a listing with the number of hits distributed by center ********/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerCentre (Sta_CountType_t CountType,
+static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
                                       unsigned long NumRows,
                                       MYSQL_RES *mysql_res)
   {
    extern const char *Txt_No_INDEX;
-   extern const char *Txt_Centre;
+   extern const char *Txt_Center;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned long NumRow;
    unsigned long Ranking;
@@ -3514,12 +3514,12 @@ static void Sta_ShowNumHitsPerCentre (Sta_CountType_t CountType,
    HTM_TR_Begin (NULL);
 
    HTM_TH (1,1,"CT",Txt_No_INDEX);
-   HTM_TH (1,1,"CT",Txt_Centre);
+   HTM_TH (1,1,"CT",Txt_Center);
    HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
 
    HTM_TR_End ();
 
-   /***** Compute maximum number of hits per centre *****/
+   /***** Compute maximum number of hits per center *****/
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
@@ -3528,21 +3528,21 @@ static void Sta_ShowNumHitsPerCentre (Sta_CountType_t CountType,
 	NumRow <= NumRows;
 	NumRow++)
      {
-      /* Get centre code */
+      /* Get center code */
       row = mysql_fetch_row (mysql_res);
       CtrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       HTM_TR_Begin (NULL);
 
-      /* Write ranking of this centre */
+      /* Write ranking of this center */
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (CtrCod > 0)
          HTM_UnsignedLong (++Ranking);
       HTM_NBSP ();
       HTM_TD_End ();
 
-      /* Write centre */
-      Sta_WriteCentre (CtrCod);
+      /* Write center */
+      Sta_WriteCenter (CtrCod);
 
       /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetDoubleFromStr (row[1]);
@@ -3554,30 +3554,30 @@ static void Sta_ShowNumHitsPerCentre (Sta_CountType_t CountType,
   }
 
 /*****************************************************************************/
-/************************* Write centre with an icon *************************/
+/************************* Write center with an icon *************************/
 /*****************************************************************************/
 
-static void Sta_WriteCentre (long CtrCod)
+static void Sta_WriteCenter (long CtrCod)
   {
-   struct Ctr_Centre Ctr;
+   struct Ctr_Center Ctr;
 
    /***** Start cell *****/
-   if (CtrCod > 0)	// Hit with a centre selected
+   if (CtrCod > 0)	// Hit with a center selected
      {
-      /***** Get data of centre *****/
+      /***** Get data of center *****/
       Ctr.CtrCod = CtrCod;
-      Ctr_GetDataOfCentreByCod (&Ctr);
+      Ctr_GetDataOfCenterByCod (&Ctr);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LOG LM\" title=\"%s\"",Ctr.FullName);
 
-      /***** Form to go to centre *****/
-      Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
+      /***** Form to go to center *****/
+      Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
                                          "BT_LINK LT LOG","CT");
      }
-   else			// Hit with no centre selected
+   else			// Hit with no center selected
      {
-      /***** No centre selected *****/
+      /***** No center selected *****/
       HTM_TD_Begin ("class=\"LOG LM\"");
       HTM_Txt ("&nbsp;-&nbsp;");
      }

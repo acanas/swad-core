@@ -1,4 +1,4 @@
-// swad_hierarchy_config.h: hierarchy (country, institution, centre, degree, course) configuration
+// swad_hierarchy_config.h: hierarchy (country, institution, center, degree, course) configuration
 
 #ifndef _SWAD_HIE_CFG
 #define _SWAD_HIE_CFG

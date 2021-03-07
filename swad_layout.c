@@ -1566,7 +1566,7 @@ static void Lay_WriteAboutZone (void)
    /***** Start about zone *****/
    HTM_Txt ("<address id=\"about_zone\" class=\"ABOUT\">");
 
-   /***** Institution and centre hosting the platform *****/
+   /***** Institution and center hosting the platform *****/
    HTM_A_Begin ("href=\"%s\" class=\"ABOUT\" target=\"_blank\"",Cfg_ABOUT_URL);
    HTM_IMG (Cfg_URL_ICON_PUBLIC,Cfg_ABOUT_LOGO,Cfg_ABOUT_NAME,
 	    "style=\"width:%upx; height:%upx;\"",

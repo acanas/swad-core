@@ -504,15 +504,15 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
 			              "MIN(usr_data.Sex)"			// row[2]
 			       " FROM institutions,"
-			             "centres,"
+			             "ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr,"
 			             "connected,"
 			             "usr_data"
 			       " WHERE institutions.CtyCod=%ld"
-			       " AND institutions.InsCod=centres.InsCod"
-			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND institutions.InsCod=ctr_centers.InsCod"
+			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			       " AND crs_usr.UsrCod=connected.UsrCod"
@@ -526,21 +526,21 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       "SELECT COUNT(DISTINCT connected.UsrCod),"	// row[0]
 			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
 			              "MIN(usr_data.Sex)"			// row[2]
-			       " FROM centres,"
+			       " FROM ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr,"
 			             "connected,"
 			             "usr_data"
-			       " WHERE centres.InsCod=%ld"
-			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " WHERE ctr_centers.InsCod=%ld"
+			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			       " AND crs_usr.UsrCod=connected.UsrCod"
 			       " AND connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Ins.InsCod);
 	       break;
-	    case Hie_Lvl_CTR:		// Show connected users in the current centre
+	    case Hie_Lvl_CTR:		// Show connected users in the current center
 	       DB_QuerySELECT (&mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -636,15 +636,15 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
 			              "MIN(usr_data.Sex)"			// row[2]
 			       " FROM institutions,"
-			             "centres,"
+			             "ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr,"
 			             "connected,"
 			             "usr_data"
 			       " WHERE institutions.CtyCod=%ld"
-			       " AND institutions.InsCod=centres.InsCod"
-			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND institutions.InsCod=ctr_centers.InsCod"
+			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			       " AND crs_usr.Role=%u"
@@ -660,14 +660,14 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       "SELECT COUNT(DISTINCT connected.UsrCod),"	// row[0]
 			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
 			              "MIN(usr_data.Sex)"			// row[2]
-			       " FROM centres,"
+			       " FROM ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr,"
 			             "connected,"
 			             "usr_data"
-			       " WHERE centres.InsCod=%ld"
-			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " WHERE ctr_centers.InsCod=%ld"
+			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			       " AND crs_usr.Role=%u"
@@ -676,7 +676,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       Gbl.Hierarchy.Ins.InsCod,
 			       (unsigned) Role);
 	       break;
-	    case Hie_Lvl_CTR:		// Show connected users in the current centre
+	    case Hie_Lvl_CTR:		// Show connected users in the current center
 	       DB_QuerySELECT (&mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -996,14 +996,14 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			              "UNIX_TIMESTAMP()-"
 			              "UNIX_TIMESTAMP(connected.LastTime) AS Dif"	// row[2]
 			       " FROM institutions,"
-			             "centres,"
+			             "ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr,"
 			             "connected"
 			       " WHERE institutions.CtyCod=%ld"
-			       " AND institutions.InsCod=centres.InsCod"
-			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND institutions.InsCod=ctr_centers.InsCod"
+			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			       " AND crs_usr.Role=%u"
@@ -1021,13 +1021,13 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			              "connected.LastCrsCod,"				// row[1]
 				      "UNIX_TIMESTAMP()-"
 				      "UNIX_TIMESTAMP(connected.LastTime) AS Dif"	// row[2]
-			       " FROM centres,"
+			       " FROM ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr,"
 			             "connected"
-			       " WHERE centres.InsCod=%ld"
-			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " WHERE ctr_centers.InsCod=%ld"
+			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			       " AND crs_usr.Role=%u"
@@ -1036,7 +1036,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			       Gbl.Hierarchy.Ins.InsCod,
 			       (unsigned) Role);
 	       break;
-	    case Hie_Lvl_CTR:		// Show connected users in the current centre
+	    case Hie_Lvl_CTR:		// Show connected users in the current center
 	       NumUsrs = (unsigned)
 	       DB_QuerySELECT (&mysql_res,"can not get list of connected users"
 					  " who belong to this location",

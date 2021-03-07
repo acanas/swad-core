@@ -157,9 +157,9 @@ static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
 	         Gbl.Hierarchy.Ins.InsCod <= 0);	// No institution selected
       case TabIns:
 	 return (Gbl.Hierarchy.Ins.InsCod > 0 &&	// Institution selected
-	         Gbl.Hierarchy.Ctr.CtrCod <= 0);	// No centre selected
+	         Gbl.Hierarchy.Ctr.CtrCod <= 0);	// No center selected
       case TabCtr:
-	 return (Gbl.Hierarchy.Ctr.CtrCod > 0 &&	// Centre selected
+	 return (Gbl.Hierarchy.Ctr.CtrCod > 0 &&	// Center selected
 	         Gbl.Hierarchy.Deg.DegCod <= 0);	// No degree selected
       case TabDeg:
 	 return (Gbl.Hierarchy.Deg.DegCod > 0 &&	// Degree selected
@@ -216,7 +216,7 @@ void Tab_SetCurrentTab (void)
   {
    Gbl.Action.Tab = Act_GetTab (Gbl.Action.Act);
 
-   /***** Change action and tab if country, institution, centre or degree
+   /***** Change action and tab if country, institution, center or degree
           are incompatible with the current tab *****/
    switch (Gbl.Action.Tab)
      {
@@ -238,9 +238,9 @@ void Tab_SetCurrentTab (void)
 	  }
 	break;
       case TabCtr:
-	 if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No centre selected
+	 if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No center selected
 	   {
-	    if (Gbl.Hierarchy.Ins.InsCod > 0)		// Institution selected, but no centre selected
+	    if (Gbl.Hierarchy.Ins.InsCod > 0)		// Institution selected, but no center selected
 	       Gbl.Action.Act = ActSeeCtr;
 	    else if (Gbl.Hierarchy.Cty.CtyCod > 0)	// Country selected, but no institution selected
 	       Gbl.Action.Act = ActSeeIns;
@@ -252,9 +252,9 @@ void Tab_SetCurrentTab (void)
       case TabDeg:
          if (Gbl.Hierarchy.Deg.DegCod <= 0)		// No degree selected
 	   {
-	    if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Centre selected, but no degree selected
+	    if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Center selected, but no degree selected
 	       Gbl.Action.Act = ActSeeDeg;
-	    else if (Gbl.Hierarchy.Ins.InsCod > 0)	// Institution selected, but no centre selected
+	    else if (Gbl.Hierarchy.Ins.InsCod > 0)	// Institution selected, but no center selected
 	       Gbl.Action.Act = ActSeeCtr;
 	    else if (Gbl.Hierarchy.Cty.CtyCod > 0)	// Country selected, but no institution selected
 	       Gbl.Action.Act = ActSeeIns;
@@ -276,7 +276,7 @@ void Tab_SetCurrentTab (void)
 
 void Tab_DisableIncompatibleTabs (void)
   {
-   /***** Set country, institution, centre, degree and course depending on the current tab.
+   /***** Set country, institution, center, degree and course depending on the current tab.
           This will disable tabs incompatible with the current one. *****/
    switch (Gbl.Action.Tab)
      {

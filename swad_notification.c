@@ -79,7 +79,7 @@ const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    /* System tab */
    /* Country tab */
    /* Institution tab */
-   /* Centre tab */
+   /* Center tab */
    /* Degree tab */
    /* Course tab */
    /* Assessment tab */
@@ -117,7 +117,7 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    /* System tab */
    /* Country tab */
    /* Institution tab */
-   /* Centre tab */
+   /* Center tab */
    /* Degree tab */
    /* Course tab */
    /* Assessment tab */
@@ -160,7 +160,7 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    /* System tab */
    /* Country tab */
    /* Institution tab */
-   /* Centre tab */
+   /* Center tab */
    /* Degree tab */
    /* Course tab */
    /* Assessment tab */
@@ -199,7 +199,7 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    /* System tab */
    /* Country tab */
    /* Institution tab */
-   /* Centre tab */
+   /* Center tab */
    /* Degree tab */
    /* Course tab */
    /* Assessment tab */
@@ -238,7 +238,7 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    /* System tab */
    /* Country tab */
    /* Institution tab */
-   /* Centre tab */
+   /* Center tab */
    /* Degree tab */
    /* Course tab */
    /* Assessment tab */
@@ -311,7 +311,7 @@ void Ntf_ShowMyNotifications (void)
    extern const char *Txt_Forum;
    extern const char *Txt_Course;
    extern const char *Txt_Degree;
-   extern const char *Txt_Centre;
+   extern const char *Txt_Center;
    extern const char *Txt_Institution;
    extern const char *Txt_NOTIFICATION_STATUS[Ntf_NUM_STATUS_TXT];
    extern const char *Txt_You_have_no_notifications;
@@ -415,9 +415,9 @@ void Ntf_ShowMyNotifications (void)
          Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
          Ins_GetDataOfInstitutionByCod (&Hie.Ins);
 
-          /* Get centre code (row[3]) */
+          /* Get center code (row[3]) */
          Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
-         Ctr_GetDataOfCentreByCod (&Hie.Ctr);
+         Ctr_GetDataOfCenterByCod (&Hie.Ctr);
 
          /* Get degree code (row[4]) */
          Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
@@ -551,7 +551,7 @@ void Ntf_ShowMyNotifications (void)
             else if (Hie.Deg.DegCod > 0)
                HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Hie.Deg.ShrtName);
             else if (Hie.Ctr.CtrCod > 0)
-               HTM_TxtF ("%s:&nbsp;%s",Txt_Centre,Hie.Ctr.ShrtName);
+               HTM_TxtF ("%s:&nbsp;%s",Txt_Center,Hie.Ctr.ShrtName);
             else if (Hie.Ins.InsCod > 0)
                HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Hie.Ins.ShrtName);
             else
@@ -764,7 +764,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 break;
      }
 
-   /***** Parameter to go to another course/degree/centre/institution *****/
+   /***** Parameter to go to another course/degree/center/institution *****/
    if (Gbl.Form.Inside)
      {
       if (CrsCod > 0)					// Course specified
@@ -777,10 +777,10 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 if (DegCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
 	    Deg_PutParamDegCod (DegCod);		// Go to another degree
 	}
-      else if (CtrCod > 0)				// Centre specified
+      else if (CtrCod > 0)				// Center specified
 	{
-	 if (CtrCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current centre
-	    Ctr_PutParamCtrCod (CtrCod);		// Go to another centre
+	 if (CtrCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current center
+	    Ctr_PutParamCtrCod (CtrCod);		// Go to another center
 	}
       else if (InsCod > 0)				// Institution specified
 	{
@@ -1392,8 +1392,8 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	 case For_FORUM_INSTIT_TCHS:
             InsCod = ForumSelected.Location;
             break;
-	 case For_FORUM_CENTRE_USRS:
-	 case For_FORUM_CENTRE_TCHS:
+	 case For_FORUM_CENTER_USRS:
+	 case For_FORUM_CENTER_TCHS:
             CtrCod = ForumSelected.Location;
             break;
 	 case For_FORUM_DEGREE_USRS:
@@ -1665,9 +1665,9 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	    Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
 	    Ins_GetDataOfInstitutionByCod (&Hie.Ins);
 
-	    /* Get centre code (row[3]) */
+	    /* Get center code (row[3]) */
 	    Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
-	    Ctr_GetDataOfCentreByCod (&Hie.Ctr);
+	    Ctr_GetDataOfCenterByCod (&Hie.Ctr);
 
 	    /* Get degree code (row[4]) */
 	    Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);

@@ -359,14 +359,14 @@ a:hover						/* Default ==> underlined */
     		}
 	}
 
-/****** Breadcrumb (platform/country/institution/centre/degree/course) *******/
+/****** Breadcrumb (platform/country/institution/center/degree/course) *******/
 #head_row_2_hierarchy
 	{
 	display:table-cell;
 	text-align:center;
 	vertical-align:middle;
 	}
-.TOP_LOGO	/* Institution / Centre / Degree logo in top title */
+.TOP_LOGO	/* Institution / Center / Degree logo in top title */
 	{
 	height:40px;
 	margin-right:10px;
@@ -461,7 +461,7 @@ a:hover						/* Default ==> underlined */
 	margin:-1px 0 1px 0;
 	}
 
-/******** Big name of country, institution, centre, degree or course *********/
+/******** Big name of country, institution, center, degree or course *********/
 #main_title
 	{
 	margin:0;
@@ -643,11 +643,10 @@ a:hover						/* Default ==> underlined */
 		{
 		font-size:9pt;
 		font-weight:bold;
-		line-height:100%;
 		max-width:30px;
 		white-space:nowrap;
 		overflow:hidden;
-		margin:0 auto;
+		padding-top:2px;
 		text-transform:uppercase;
 		}
 	}
@@ -692,11 +691,10 @@ a:hover						/* Default ==> underlined */
 		{
 		font-size:9pt;
 		font-weight:bold;
-		line-height:100%;
 		max-width:50px;
 		white-space:nowrap;
 		overflow:hidden;
-		margin:0 auto;
+		padding-top:2px;
 		text-transform:uppercase;
 		}
 	}
@@ -741,11 +739,10 @@ a:hover						/* Default ==> underlined */
 		{
 		font-size:9pt;
 		font-weight:bold;
-		line-height:100%;
 		max-width:100px;
 		white-space:nowrap;
 		overflow:hidden;
-		margin:0 auto;
+		padding-top:2px;
 		text-transform:uppercase;
 		}
 	}
@@ -1328,7 +1325,7 @@ a:hover						/* Default ==> underlined */
 		height:260px;
 		margin:10px;
 		}
-	.CENTRE_PHOTO_WIDTH	{width:260px;}
+	.CENTER_PHOTO_WIDTH	{width:260px;}
 	#AttributionArea
 		{
 		box-sizing:border-box;
@@ -1345,7 +1342,7 @@ a:hover						/* Default ==> underlined */
 		height:360px;
 		margin:10px;
 		}
-	.COUNTRY_MAP_WIDTH, .CENTRE_PHOTO_WIDTH	{width:460px;}
+	.COUNTRY_MAP_WIDTH, .CENTER_PHOTO_WIDTH	{width:460px;}
 	#AttributionArea
 		{
 		box-sizing:border-box;
@@ -1366,19 +1363,19 @@ a:hover						/* Default ==> underlined */
 	height:460px;
 	margin:9px auto;
 	}
-.CENTRE_PHOTO_SHOW
+.CENTER_PHOTO_SHOW
 	{
 	box-sizing:border-box;
 	padding:2px;
 	margin:9px auto;
 	border:solid 1px #EEE;
 	}
-a:hover img.CENTRE_PHOTO_SHOW
+a:hover img.CENTER_PHOTO_SHOW
 	{
 	border:solid 1px #CCC;
         box-shadow:1px 1px 6px #999;
 	}
-.CENTRE_PHOTO_PRINT
+.CENTER_PHOTO_PRINT
 	{
 	box-sizing:border-box;
 	padding:2px;
@@ -2050,7 +2047,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	text-align:center;
 	}
 
-/********** Title of country, institution, centre, degree, course ************/
+/********** Title of country, institution, center, degree, course ************/
 .TITLE_LOCATION
 	{
 	color:#808080;
@@ -2104,7 +2101,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	vertical-align:middle;
 	}
 
-/******************* Web of institution, centre, degree **********************/
+/******************* Web of institution, center, degree **********************/
 .EXTERNAL_WWW_SHORT
 	{
 	box-sizing:border-box;
@@ -4098,7 +4095,7 @@ a.PAG:hover, .PAG_CUR
 	max-width:500px;
 	}
 
-/************* Forms to edit institution, centre, degree, course *************/
+/************* Forms to edit institution, center, degree, course *************/
 .CODE
 	{
 	box-sizing:border-box;

@@ -200,7 +200,7 @@ struct UsrData
    long InsCod;		// Institution
    struct
      {
-      long CtrCod;	// Centre
+      long CtrCod;	// Center
       long DptCod;	// Department
       char Office	[Usr_MAX_BYTES_ADDRESS + 1];
       char OfficePhone	[Usr_MAX_BYTES_PHONE  + 1];
@@ -228,8 +228,8 @@ struct UsrLast
    Sch_WhatToSearch_t WhatToSearch;	// Search courses, teachers, documents...?
    struct
      {
-      Hie_Lvl_Level_t Scope;	// Course, degree, centre, etc.
-      long Cod;			// Course code, degree code, centre code, etc.
+      Hie_Lvl_Level_t Scope;	// Course, degree, center, etc.
+      long Cod;			// Course code, degree code, center code, etc.
      } LastHie;
    Act_Action_t LastAct;
    Rol_Role_t LastRole;
@@ -331,13 +331,13 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod);
 
 void Usr_GetMyCountrs (void);
 void Usr_GetMyInstits (void);
-void Usr_GetMyCentres (void);
+void Usr_GetMyCenters (void);
 void Usr_GetMyDegrees (void);
 void Usr_GetMyCourses (void);
 
 void Usr_FreeMyCountrs (void);
 void Usr_FreeMyInstits (void);
-void Usr_FreeMyCentres (void);
+void Usr_FreeMyCenters (void);
 void Usr_FreeMyDegrees (void);
 void Usr_FreeMyCourses (void);
 
@@ -425,8 +425,8 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins);
 unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins);
 
 void Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void);
-unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Centre *Ctr);
-unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Centre *Ctr);
+unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr);
+unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr);
 
 void Usr_GetListUsrs (Hie_Lvl_Level_t Scope,Rol_Role_t Role);
 

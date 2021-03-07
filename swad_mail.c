@@ -1914,8 +1914,8 @@ bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
 	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,
 	                                    Gbl.Hierarchy.Deg.DegCod);
       case Rol_CTR_ADM:
-	 /* If I am an administrator of current centre,
-	    I only can see the user's email of users from current centre */
+	 /* If I am an administrator of current center,
+	    I only can see the user's email of users from current center */
 	 return Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,
 	                                    Gbl.Hierarchy.Ctr.CtrCod);
       case Rol_INS_ADM:

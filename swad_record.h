@@ -176,7 +176,7 @@ void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat);
 void Rec_ShowMySharedRecordAndMore (void);
 void Rec_ChgCountryOfMyInstitution (void);
 void Rec_UpdateMyInstitution (void);
-void Rec_UpdateMyCentre (void);
+void Rec_UpdateMyCenter (void);
 void Rec_UpdateMyDepartment (void);
 void Rec_UpdateMyOffice (void);
 void Rec_UpdateMyOfficePhone (void);

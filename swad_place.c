@@ -152,7 +152,7 @@ void Plc_SeePlaces (void)
 	}
       HTM_TR_End ();
 
-      /***** Write all places and their nuber of centres *****/
+      /***** Write all places and their nuber of centers *****/
       for (NumPlc = 0;
 	   NumPlc < Places.Num;
 	   NumPlc++)
@@ -179,7 +179,7 @@ void Plc_SeePlaces (void)
       HTM_TD_End ();
       HTM_TR_End ();
 
-      /***** Write centres (of the current institution) with other place *****/
+      /***** Write centers (of the current institution) with other place *****/
       NumCtrsInOtherPlcs = Ctr_GetNumCtrsInPlc (0);
       HTM_TR_Begin (NULL);
 
@@ -194,7 +194,7 @@ void Plc_SeePlaces (void)
       HTM_TR_End ();
       NumCtrsWithPlc += NumCtrsInOtherPlcs;
 
-      /***** Write centres (of the current institution) with no place *****/
+      /***** Write centers (of the current institution) with no place *****/
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -258,8 +258,8 @@ static void Plc_PutIconsListingPlaces (__attribute__((unused)) void *Args)
    if (Plc_CheckIfICanCreatePlaces ())
       Plc_PutIconToEditPlaces ();
 
-   /***** Put icon to view centres *****/
-   Ctr_PutIconToViewCentres ();
+   /***** Put icon to view centers *****/
+   Ctr_PutIconToViewCenters ();
   }
 
 /*****************************************************************************/
@@ -328,8 +328,8 @@ static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args)
    /***** Put icon to view places *****/
    Plc_PutIconToViewPlaces ();
 
-   /***** Put icon to view centres *****/
-   Ctr_PutIconToViewCentres ();
+   /***** Put icon to view centers *****/
+   Ctr_PutIconToViewCenters ();
   }
 
 /*****************************************************************************/
@@ -369,10 +369,11 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
 				     "places.ShortName,"
 				     "places.FullName,"
 				     "COUNT(*) AS NumCtrs"
-			     " FROM places,centres"
+			     " FROM places,"
+			           "ctr_centers"
 			     " WHERE places.InsCod=%ld"
-			     " AND places.PlcCod=centres.PlcCod"
-			     " AND centres.InsCod=%ld"
+			     " AND places.PlcCod=ctr_centers.PlcCod"
+			     " AND ctr_centers.InsCod=%ld"
 			     " GROUP BY places.PlcCod)"
 			     " UNION "
 			     "(SELECT PlcCod,"
@@ -382,7 +383,7 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
 			     " FROM places"
 			     " WHERE InsCod=%ld"
 			     " AND PlcCod NOT IN"
-			     " (SELECT DISTINCT PlcCod FROM centres"
+			     " (SELECT DISTINCT PlcCod FROM ctr_centers"
 			     " WHERE InsCod=%ld))"
 			     " ORDER BY %s",
 			     Gbl.Hierarchy.Ins.InsCod,
@@ -396,7 +397,7 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
      {
       Places->Num = (unsigned) NumRows;
 
-      /***** Create list with courses in centre *****/
+      /***** Create list with courses in center *****/
       if ((Places->Lst = calloc (NumRows,sizeof (*Places->Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
@@ -418,7 +419,7 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
          Str_Copy (Plc->ShrtName,row[1],sizeof (Plc->ShrtName) - 1);
          Str_Copy (Plc->FullName,row[2],sizeof (Plc->FullName) - 1);
 
-         /* Get number of centres in this place (row[3]) */
+         /* Get number of centers in this place (row[3]) */
          if (sscanf (row[3],"%u",&Plc->NumCtrs) != 1)
             Plc->NumCtrs = 0;
         }
@@ -465,10 +466,11 @@ void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc)
 			        "(SELECT places.ShortName,"
 					"places.FullName,"
 					"COUNT(*)"
-				" FROM places,centres"
+				" FROM places,"
+				      "ctr_centers"
 				" WHERE places.PlcCod=%ld"
-				" AND places.PlcCod=centres.PlcCod"
-				" AND centres.PlcCod=%ld"
+				" AND places.PlcCod=ctr_centers.PlcCod"
+				" AND ctr_centers.PlcCod=%ld"
 				" GROUP BY places.PlcCod)"
 				" UNION "
 				"(SELECT ShortName,"
@@ -477,7 +479,7 @@ void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc)
 				" FROM places"
 				" WHERE PlcCod=%ld"
 				" AND PlcCod NOT IN"
-				" (SELECT DISTINCT PlcCod FROM centres))",
+				" (SELECT DISTINCT PlcCod FROM ctr_centers))",
 				Plc->PlcCod,
 				Plc->PlcCod,
 				Plc->PlcCod);
@@ -492,7 +494,7 @@ void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc)
          Str_Copy (Plc->ShrtName,row[0],sizeof (Plc->ShrtName) - 1);
          Str_Copy (Plc->FullName,row[1],sizeof (Plc->FullName) - 1);
 
-         /* Get number of centres in this place (row[2]) */
+         /* Get number of centers in this place (row[2]) */
          if (sscanf (row[2],"%u",&Plc->NumCtrs) != 1)
             Plc->NumCtrs = 0;
         }
@@ -541,7 +543,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 
       /* Put icon to remove place */
       HTM_TD_Begin ("class=\"BM\"");
-      if (Plc->NumCtrs)	// Place has centres ==> deletion forbidden
+      if (Plc->NumCtrs)	// Place has centers ==> deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
 	 Ico_PutContextualIconToRemove (ActRemPlc,NULL,
@@ -573,7 +575,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
       Frm_EndForm ();
       HTM_TD_End ();
 
-      /* Number of centres */
+      /* Number of centers */
       HTM_TD_Begin ("class=\"DAT RM\"");
       HTM_Unsigned (Plc->NumCtrs);
       HTM_TD_End ();
@@ -611,7 +613,7 @@ long Plc_GetParamPlcCod (void)
 
 void Plc_RemovePlace (void)
   {
-   extern const char *Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_place;
+   extern const char *Txt_To_remove_a_place_you_must_first_remove_all_centers_of_that_place;
    extern const char *Txt_Place_X_removed;
 
    /***** Place constructor *****/
@@ -624,11 +626,11 @@ void Plc_RemovePlace (void)
    /***** Get data of the place from database *****/
    Plc_GetDataOfPlaceByCod (Plc_EditingPlc);
 
-   /***** Check if this place has centres *****/
-   if (Plc_EditingPlc->NumCtrs)	// Place has centres ==> don't remove
+   /***** Check if this place has centers *****/
+   if (Plc_EditingPlc->NumCtrs)	// Place has centers ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_place);
-   else			// Place has no centres ==> remove it
+	               Txt_To_remove_a_place_you_must_first_remove_all_centers_of_that_place);
+   else			// Place has no centers ==> remove it
      {
       /***** Remove place *****/
       DB_QueryDELETE ("can not remove a place",
@@ -833,7 +835,7 @@ static void Plc_PutFormToCreatePlace (void)
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
-   /***** Number of centres *****/
+   /***** Number of centers *****/
    HTM_TD_Begin ("class=\"DAT RM\"");
    HTM_Unsigned (0);
    HTM_TD_End ();
@@ -856,7 +858,7 @@ static void Plc_PutHeadPlaces (void)
    extern const char *Txt_Code;
    extern const char *Txt_Short_name;
    extern const char *Txt_Full_name;
-   extern const char *Txt_Centres;
+   extern const char *Txt_Centers;
 
    HTM_TR_Begin (NULL);
 
@@ -864,7 +866,7 @@ static void Plc_PutHeadPlaces (void)
    HTM_TH (1,1,"RM",Txt_Code);
    HTM_TH (1,1,"LM",Txt_Short_name);
    HTM_TH (1,1,"LM",Txt_Full_name);
-   HTM_TH (1,1,"RM",Txt_Centres);
+   HTM_TH (1,1,"RM",Txt_Centers);
 
    HTM_TR_End ();
   }

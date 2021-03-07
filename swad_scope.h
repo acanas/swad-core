@@ -1,4 +1,4 @@
-// swad_scope.h: scope (platform, centre, degree, course...)
+// swad_scope.h: scope (platform, center, degree, course...)
 
 #ifndef _SWAD_SCO
 #define _SWAD_SCO

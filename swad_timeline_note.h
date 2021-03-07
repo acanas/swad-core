@@ -48,9 +48,9 @@ typedef enum
    /* Institution tab */
    TL_NOTE_INS_DOC_PUB_FILE	=  1,	// Public file in documents of institution
    TL_NOTE_INS_SHA_PUB_FILE	=  2,	// Public file in shared files of institution
-   /* Centre tab */
-   TL_NOTE_CTR_DOC_PUB_FILE	=  3,	// Public file in documents of centre
-   TL_NOTE_CTR_SHA_PUB_FILE	=  4,	// Public file in shared files of centre
+   /* Center tab */
+   TL_NOTE_CTR_DOC_PUB_FILE	=  3,	// Public file in documents of center
+   TL_NOTE_CTR_SHA_PUB_FILE	=  4,	// Public file in shared files of center
    /* Degree tab */
    TL_NOTE_DEG_DOC_PUB_FILE	=  5,	// Public file in documents of degree
    TL_NOTE_DEG_SHA_PUB_FILE	=  6,	// Public file in shared files of degree
@@ -72,7 +72,7 @@ struct Tml_Not_Note
    long NotCod;			// Unique code/identifier for each note
    Tml_Not_NoteType_t NoteType;	// Timeline post, public file, exam announcement, notice, forum post...
    long UsrCod;			// Publisher
-   long HieCod;			// Hierarchy code (institution/centre/degree/course)
+   long HieCod;			// Hierarchy code (institution/center/degree/course)
    long Cod;			// Code of file, forum post, notice, timeline post...
    bool Unavailable;		// File, forum post, notice,... unavailable (removed)
    time_t DateTimeUTC;		// Date-time of publication in UTC time

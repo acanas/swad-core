@@ -1576,15 +1576,15 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActSeePen] =
 #if   L==1	// ca
-	"Institutions, centres, titulacions i assignatures pendents d'activar"
+	"Institutions, centers, titulacions i assignatures pendents d'activar"
 #elif L==2	// de
 	"Anh&auml;ngig Hochschulen, Lehrinstitute, Studiengang und Kursen"
 #elif L==3	// en
-	"Pending institutions, centres, degrees and courses"
+	"Pending institutions, centers, degrees and courses"
 #elif L==4	// es
 	"Instituciones, centros, titulaciones y asignaturas pendientes de activar"
 #elif L==5	// fr
-	"&Eacute;tablissements, centres, &eacute;tudes et mati&egrave;res en attente"
+	"&Eacute;tablissements, centers, &eacute;tudes et mati&egrave;res en attente"
 #elif L==6	// gn
 	"Instituciones, centros, titulaciones y asignaturas pendientes de activar"	// Okoteve traducción
 #elif L==7	// it
@@ -2672,7 +2672,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"List centres"
+	"List centers"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2924,7 +2924,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Edit centres"
+	"Edit centers"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2945,7 +2945,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request the creation of a request for a new centre (a teacher makes the petition to an administrator)"
+	"Request the creation of a request for a new center (a teacher makes the petition to an administrator)"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2966,7 +2966,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request the creation of a centre"
+	"Request the creation of a center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -2987,7 +2987,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove centre"
+	"Remove center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3008,7 +3008,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request change of the place of a centre"
+	"Request change of the place of a center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3029,7 +3029,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change short name centre"
+	"Change short name center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3050,7 +3050,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change full name centre"
+	"Change full name center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3071,7 +3071,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change web of centre"
+	"Change web of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3092,7 +3092,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request change of status of a centre"
+	"Request change of status of a center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3533,7 +3533,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show information on the centre"
+	"Show information on the center"
 #elif L==4	// es
 	"Mostrar informaci&oacute;n sobre el centro"
 #elif L==5	// fr
@@ -3554,7 +3554,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"List degrees in a centre"
+	"List degrees in a center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3575,7 +3575,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"List buildings in a centre"
+	"List buildings in a center"
 #elif L==4	// es
 	"Listar edificios de un centro"
 #elif L==5	// fr
@@ -3596,7 +3596,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"List rooms in a centre"
+	"List rooms in a center"
 #elif L==4	// es
 	"Listar salas de un centro"
 #elif L==5	// fr
@@ -3617,7 +3617,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Print information on the centre"
+	"Print information on the center"
 #elif L==4	// es
 	"Imprimir informaci&oacute;n sobre el centro"
 #elif L==5	// fr
@@ -3638,7 +3638,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request change of the institution of a centre in centre configuration"
+	"Request change of the institution of a center in center configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3659,7 +3659,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change short name centre in centre configuration"
+	"Change short name center in center configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3680,7 +3680,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change full name centre in centre configuration"
+	"Change full name center in center configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3701,7 +3701,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change place of centre in centre configuration"
+	"Change place of center in center configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3722,7 +3722,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change latitude of centre in centre configuration"
+	"Change latitude of center in center configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3743,7 +3743,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change longitude of centre in centre configuration"
+	"Change longitude of center in center configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3764,7 +3764,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change altitude of centre in centre configuration"
+	"Change altitude of center in center configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3785,7 +3785,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change web of centre in centre configuration"
+	"Change web of center in center configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3806,7 +3806,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show form to send the logo of the current centre"
+	"Show form to send the logo of the current center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3827,7 +3827,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive and store the logo of the current centre"
+	"Receive and store the logo of the current center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3848,7 +3848,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove the logo of the current centre"
+	"Remove the logo of the current center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3869,7 +3869,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show form to send the photo of the current centre"
+	"Show form to send the photo of the current center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3890,7 +3890,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive and store the photo of the current centre"
+	"Receive and store the photo of the current center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -3911,7 +3911,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change attribution of centre photo"
+	"Change attribution of center photo"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -4583,7 +4583,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request change of the centre of a degree in degree configuration"
+	"Request change of the center of a degree in degree configuration"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -12500,7 +12500,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Documents zone of the centre (see or admin)"
+	"Documents zone of the center (see or admin)"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -12521,7 +12521,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the shared files zone of the centre"
+	"Admin the shared files zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13718,7 +13718,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change to see centre documents"
+	"Change to see center documents"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13739,7 +13739,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"See the files of the documents zone of the centre"
+	"See the files of the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13760,7 +13760,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Expand a folder in centre documents"
+	"Expand a folder in center documents"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13781,7 +13781,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Contract a folder in centre documents"
+	"Contract a folder in center documents"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13802,7 +13802,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Compress a folder in centre documents"
+	"Compress a folder in center documents"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13823,7 +13823,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the documents zone of the centre"
+	"Ask for metadata of a file of the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13844,7 +13844,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Download a file in documents zone of the centre"
+	"Download a file in documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13865,7 +13865,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change to administrate centre documents"
+	"Change to administrate center documents"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13886,7 +13886,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the files of the documents zone of the centre"
+	"Admin the files of the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13907,7 +13907,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a file in the documents zone of the centre"
+	"Request removal of a file in the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13928,7 +13928,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a file in the documents zone of the centre"
+	"Remove a file in the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13949,7 +13949,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a folder empty the documents zone of the centre"
+	"Remove a folder empty the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13970,7 +13970,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Set source of copy in the documents zone of the centre"
+	"Set source of copy in the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13991,7 +13991,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Paste a folder or file in the documents zone of the centre"
+	"Paste a folder or file in the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14012,7 +14012,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a folder no empty in the documents zone of the centre"
+	"Remove a folder no empty in the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14033,7 +14033,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Form to crear a folder or file in the documents zone of the centre"
+	"Form to crear a folder or file in the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14054,7 +14054,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Create a new folder in the documents zone of the centre"
+	"Create a new folder in the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14075,7 +14075,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Create a new link in the documents zone of the centre"
+	"Create a new link in the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14096,7 +14096,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Rename a folder in the documents zone of the centre"
+	"Rename a folder in the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14117,7 +14117,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a file in the documents zone of the centre using Dropzone.js"
+	"Receive a file in the documents zone of the center using Dropzone.js"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14138,7 +14138,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a file in the documents zone of the centre using the classic way"
+	"Receive a file in the documents zone of the center using the classic way"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14159,7 +14159,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Expand a folder when administrating the documents zone of the centre"
+	"Expand a folder when administrating the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14180,7 +14180,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Contract a folder when administrating the documents zone of the centre"
+	"Contract a folder when administrating the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14201,7 +14201,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Compress a folder when administrating the documents zone of the centre"
+	"Compress a folder when administrating the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14222,7 +14222,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show hidden folder or file of the documents zone of the centre"
+	"Show hidden folder or file of the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14243,7 +14243,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Hide folder or file of the documents zone of the centre"
+	"Hide folder or file of the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14264,7 +14264,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the documents zone of the centre"
+	"Ask for metadata of a file of the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14285,7 +14285,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change metadata of a file of the documents zone of the centre"
+	"Change metadata of a file of the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14306,7 +14306,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Download a file of the documents zone of the centre"
+	"Download a file of the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14327,7 +14327,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a shared file of the centre"
+	"Request removal of a shared file of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14348,7 +14348,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a shared file of the centre"
+	"Remove a shared file of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14369,7 +14369,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove an empty shared folder of the centre"
+	"Remove an empty shared folder of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14390,7 +14390,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Set source of copy in shared zone of the centre"
+	"Set source of copy in shared zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14411,7 +14411,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Paste a folder or file in shared zone of the centre"
+	"Paste a folder or file in shared zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14432,7 +14432,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a folder no empty of shared zone of the centre"
+	"Remove a folder no empty of shared zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14453,7 +14453,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Form to crear a folder or file in shared zone of the centre"
+	"Form to crear a folder or file in shared zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14474,7 +14474,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Create a new folder in shared zone of the centre"
+	"Create a new folder in shared zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14495,7 +14495,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Create a new link in shared zone of the centre"
+	"Create a new link in shared zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14516,7 +14516,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Rename a folder in shared zone of the centre"
+	"Rename a folder in shared zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14537,7 +14537,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a file in shared zone of the centre using Dropzone.js"
+	"Receive a file in shared zone of the center using Dropzone.js"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14558,7 +14558,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a file in shared zone of the centre using the classic way"
+	"Receive a file in shared zone of the center using the classic way"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14579,7 +14579,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Expand a folder in shared zone of the centre"
+	"Expand a folder in shared zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14600,7 +14600,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Contract a folder in shared zone of the centre"
+	"Contract a folder in shared zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14621,7 +14621,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Compress a folder in shared zone of the centre"
+	"Compress a folder in shared zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14642,7 +14642,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the shared zone of the centre"
+	"Ask for metadata of a file of the shared zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14663,7 +14663,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change metadata of a file of the shared zone of the centre"
+	"Change metadata of a file of the shared zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14684,7 +14684,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Download a file of the shared zone of the centre"
+	"Download a file of the shared zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -24218,7 +24218,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Register an administrador in this centre"
+	"Register an administrador in this center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -24239,7 +24239,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove an administrador of this centre"
+	"Remove an administrador of this center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -25793,7 +25793,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show top level of forum of users of the centre"
+	"Show top level of forum of users of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -25814,7 +25814,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show top level of forum of teachers of the centre"
+	"Show top level of forum of teachers of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -26045,7 +26045,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show the messages of a thread of the forum of users of the centre"
+	"Show the messages of a thread of the forum of users of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -26066,7 +26066,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show the messages of a thread of the forum of teachers of the centre"
+	"Show the messages of a thread of the forum of teachers of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -26297,7 +26297,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive the first message of a new thread of forum of users of centre"
+	"Receive the first message of a new thread of forum of users of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -26318,7 +26318,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive the first message of a new thread of forum of teachers of centre"
+	"Receive the first message of a new thread of forum of teachers of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -26549,7 +26549,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a message of answer in a thread existente in the forum of users of centre"
+	"Receive a message of answer in a thread existente in the forum of users of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -26570,7 +26570,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a message of answer in a thread existente in the forum of teachers of centre"
+	"Receive a message of answer in a thread existente in the forum of teachers of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -26801,7 +26801,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request the removal of a thread of forum of users of centre"
+	"Request the removal of a thread of forum of users of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -26822,7 +26822,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request the removal of a thread of forum of teachers of centre"
+	"Request the removal of a thread of forum of teachers of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27053,7 +27053,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a thread of forum of users of centre"
+	"Remove a thread of forum of users of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27074,7 +27074,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a thread of forum of teachers of centre"
+	"Remove a thread of forum of teachers of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27305,7 +27305,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Cut a thread of forum of users of centre"
+	"Cut a thread of forum of users of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27326,7 +27326,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Cut a thread of forum of teachers of centre"
+	"Cut a thread of forum of teachers of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27557,7 +27557,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Paste a thread of forum of users of centre"
+	"Paste a thread of forum of users of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27578,7 +27578,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Paste a thread of forum of teachers of centre"
+	"Paste a thread of forum of teachers of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27809,7 +27809,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a message of forum of users of centre"
+	"Remove a message of forum of users of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -27830,7 +27830,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a message of forum of teachers of centre"
+	"Remove a message of forum of teachers of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28061,7 +28061,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Enable a message of forum of users of centre"
+	"Enable a message of forum of users of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28082,7 +28082,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Enable a message of forum of teachers of centre"
+	"Enable a message of forum of teachers of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28313,7 +28313,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Disable a message of forum of users of centre"
+	"Disable a message of forum of users of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -28334,7 +28334,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Disable a message of forum of teachers of centre"
+	"Disable a message of forum of teachers of center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -30056,7 +30056,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change my centre"
+	"Change my center"
 #elif L==4	// es
 	""
 #elif L==5	// fr

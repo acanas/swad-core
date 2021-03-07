@@ -600,10 +600,15 @@ TODO: Salvador Romero Cortés: @acanas opción para editar posts
 
 TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates(), por ejemplo al cambiar el color de la gráfica de accesos por día y hora, no se respeta la zona horaria.
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.44.4 (2021-03-06)"
-#define CSS_FILE		"swad20.33.9.css"
+#define Log_PLATFORM_VERSION	"SWAD 20.45 (2021-03-07)"
+#define CSS_FILE		"swad20.45.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
+	Version 20.45:    Mar 06, 2021  Centers database table renamed.
+				        All variables and files related to centers renamed. (307106 lines)
+					1 change necessary in database:
+RENAME TABLE centres TO ctr_centers;
+
 	Version 20.44.4:  Mar 06, 2021  Degrees database table renamed. (307021 lines)
 					1 change necessary in database:
 RENAME TABLE courses TO crs_courses;
@@ -1724,7 +1729,7 @@ sudo cp -a icon/iconset/nuvola/tools.svg /var/www/html/swad/icon/iconset/nuvola/
 	Version 19.105:   Dec 29, 2019	New module swad_institution_config for institution configuration. (249614 lines)
 	Version 19.104.2: Dec 29, 2019	Code refactoring in degree configuration. (249541 lines)
 	Version 19.104.1: Dec 29, 2019	Code refactoring in course configuration. (249536 lines)
-	Version 19.104:   Dec 29, 2019	New module swad_centre_config for centre configuration. (249534 lines)
+	Version 19.104:   Dec 29, 2019	New module swad_center_config for centre configuration. (249534 lines)
 	Version 19.103:   Dec 29, 2019	New module swad_degree_config for degree configuration. (249457 lines)
 	Version 19.102:   Dec 29, 2019	New module swad_course_config for course configuration. (249397 lines)
 	Version 19.101.5: Dec 28, 2019	Country information is splitted into two columns. (249330 lines)
@@ -11711,7 +11716,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 	Versión  8.2.3:  19/oct/2008	Las titulaciones de la orla de fotos promedio de titulaciones se pueden ordenar según cuatro criterios. (56051 líneas)
 	Versión  8.2.2:  18/oct/2008	Continúa la implementación de nuevas estadísticas de titulaciones en forma de lista. (55890 líneas)
 	Versión  8.2.1:  18/oct/2008	Comienza la implementación de nuevas estadísticas de titulaciones en forma de lista. (55837 líneas)
-	Versión  8.2:    17/oct/2008	Nuevos módulos swad_centre y swad_department para la edición de centros y departamentos. (55775 líneas)
+	Versión  8.2:    17/oct/2008	Nuevos módulos swad_center y swad_department para la edición de centros y departamentos. (55775 líneas)
 	Versión  8.1:    16/oct/2008	Nuevo módulo swad_syllabus para la edición de los temarios. (55671 líneas)
 	Versión  8.0:    15/oct/2008	Para seleccionar el idioma, en lugar de usar banderitas, se usa un selector desplegable. (55641 líneas)
 	Versión  7.73.1: 29/sep/2008	Cambiadas las fiestas para el curso 2008-2009. (55606 líneas)

@@ -323,13 +323,13 @@
 #define Cfg_PATH_INS_PRIVATE			Cfg_PATH_SWAD_PRIVATE "/" Cfg_FOLDER_INS
 #define Cfg_PATH_INS_PUBLIC			Cfg_PATH_SWAD_PUBLIC "/" Cfg_FOLDER_INS
 
-/* Folders for centres, inside public and private swad directories */
+/* Folders for centers, inside public and private swad directories */
 #define Cfg_FOLDER_CTR				"ctr"			// If not exists, it should be created during installation inside swad private and public directory!
 #define Cfg_PATH_CTR_PRIVATE			Cfg_PATH_SWAD_PRIVATE "/" Cfg_FOLDER_CTR
 #define Cfg_PATH_CTR_PUBLIC			Cfg_PATH_SWAD_PUBLIC "/" Cfg_FOLDER_CTR
 #define Cfg_URL_CTR_PUBLIC			Cfg_URL_SWAD_PUBLIC "/" Cfg_FOLDER_CTR
 
-/* Folders for centres, inside public and private swad directories */
+/* Folders for centers, inside public and private swad directories */
 #define Cfg_FOLDER_DEG				"deg"			// If not exists, it should be created during installation inside swad private and public directory!
 #define Cfg_PATH_DEG_PRIVATE			Cfg_PATH_SWAD_PRIVATE "/" Cfg_FOLDER_DEG
 #define Cfg_PATH_DEG_PUBLIC			Cfg_PATH_SWAD_PUBLIC "/" Cfg_FOLDER_DEG

@@ -266,7 +266,7 @@ static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,
       if (AlertTextGroups[0])
          Ale_ShowAlert (AlertTypeGroups,AlertTextGroups);
 
-   /***** Get list of rooms in this centre *****/
+   /***** Get list of rooms in this center *****/
    Roo_GetListRooms (&Rooms,Roo_ONLY_SHRT_NAME);
 
    /***** Put form to edit groups *****/
@@ -276,7 +276,7 @@ static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,
    /***** End groups section *****/
    HTM_SECTION_End ();
 
-   /***** Free list of rooms in this centre *****/
+   /***** Free list of rooms in this center *****/
    Roo_FreeListRooms (&Rooms);
 
    /***** Free list of groups types and groups in this course *****/

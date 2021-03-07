@@ -233,7 +233,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
    HTM_TD_Begin ("class=\"DAT LB\"");
    if (PutForm)
      {
-      /* Get list of degrees of the current centre */
+      /* Get list of degrees of the current center */
       Deg_GetListDegsInCurrentCtr ();
 
       /* Put form to select degree */
@@ -250,7 +250,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
       HTM_SELECT_End ();
       Frm_EndForm ();
 
-      /* Free list of degrees of the current centre */
+      /* Free list of degrees of the current center */
       Deg_FreeListDegs (&Gbl.Hierarchy.Degs);
      }
    else	// I can not move course to another degree
@@ -501,7 +501,7 @@ void CrsCfg_ChangeCrsDeg (void)
 	 Gbl.Hierarchy.Crs.DegCod =
 	 Gbl.Hierarchy.Deg.DegCod = NewDeg.DegCod;
 
-	 /***** Initialize again current course, degree, centre... *****/
+	 /***** Initialize again current course, degree, center... *****/
       	 Hie_InitHierarchy ();
 
 	 /***** Create alert to show the change made *****/

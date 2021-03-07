@@ -62,7 +62,7 @@ extern struct Globals Gbl;
 static void DegCfg_Configuration (bool PrintView);
 static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args);
 static void DegCfg_Title (bool PutLink);
-static void DegCfg_Centre (bool PrintView,bool PutForm);
+static void DegCfg_Center (bool PrintView,bool PutForm);
 static void DegCfg_FullName (bool PutForm);
 static void DegCfg_ShrtName (bool PutForm);
 static void DegCfg_WWW (bool PrintView,bool PutForm);
@@ -134,8 +134,8 @@ static void DegCfg_Configuration (bool PrintView)
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
 
-   /***** Centre *****/
-   DegCfg_Centre (PrintView,PutFormCtr);
+   /***** Center *****/
+   DegCfg_Center (PrintView,PutFormCtr);
 
    /***** Degree name *****/
    DegCfg_FullName (PutFormName);
@@ -183,7 +183,7 @@ static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
 				 NULL,NULL);
 
    if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-      // Only degree admins, centre admins, institution admins and system admins
+      // Only degree admins, center admins, institution admins and system admins
       // have permission to upload logo of the degree
       /***** Link to upload logo of degree *****/
       Lgo_PutIconToChangeLogo (Hie_Lvl_DEG);
@@ -205,30 +205,30 @@ static void DegCfg_Title (bool PutLink)
   }
 
 /*****************************************************************************/
-/******************** Show centre in degree configuration ********************/
+/******************** Show center in degree configuration ********************/
 /*****************************************************************************/
 
-static void DegCfg_Centre (bool PrintView,bool PutForm)
+static void DegCfg_Center (bool PrintView,bool PutForm)
   {
-   extern const char *Txt_Centre;
+   extern const char *Txt_Center;
    unsigned NumCtr;
 
-   /***** Centre *****/
+   /***** Center *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
    Frm_LabelColumn ("RT",PutForm ? "OthCtrCod" :
 	                           NULL,
-		    Txt_Centre);
+		    Txt_Center);
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
    if (PutForm)
      {
-      /* Get list of centres of the current institution */
-      Ctr_GetBasicListOfCentres (Gbl.Hierarchy.Ins.InsCod);
+      /* Get list of centers of the current institution */
+      Ctr_GetBasicListOfCenters (Gbl.Hierarchy.Ins.InsCod);
 
-      /* Put form to select centre */
+      /* Put form to select center */
       Frm_BeginForm (ActChgDegCtrCfg);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"OthCtrCod\" name=\"OthCtrCod\""
@@ -242,10 +242,10 @@ static void DegCfg_Centre (bool PrintView,bool PutForm)
       HTM_SELECT_End ();
       Frm_EndForm ();
 
-      /* Free list of centres */
-      Ctr_FreeListCentres ();
+      /* Free list of centers */
+      Ctr_FreeListCenters ();
      }
-   else	// I can not move degree to another centre
+   else	// I can not move degree to another center
      {
       if (!PrintView)
 	{
@@ -350,25 +350,25 @@ static void DegCfg_NumCrss (void)
   }
 
 /*****************************************************************************/
-/************************ Change the centre of a degree **********************/
+/************************ Change the center of a degree **********************/
 /*****************************************************************************/
 
 void DegCfg_ChangeDegCtr (void)
   {
    extern const char *Txt_The_degree_X_already_exists;
-   extern const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y;
-   struct Ctr_Centre NewCtr;
+   extern const char *Txt_The_degree_X_has_been_moved_to_the_center_Y;
+   struct Ctr_Center NewCtr;
 
-   /***** Get parameter with centre code *****/
+   /***** Get parameter with center code *****/
    NewCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
 
-   /***** Check if centre has changed *****/
+   /***** Check if center has changed *****/
    if (NewCtr.CtrCod != Gbl.Hierarchy.Deg.CtrCod)
      {
-      /***** Get data of new centre *****/
-      Ctr_GetDataOfCentreByCod (&NewCtr);
+      /***** Get data of new center *****/
+      Ctr_GetDataOfCenterByCod (&NewCtr);
 
-      /***** Check if it already exists a degree with the same name in the new centre *****/
+      /***** Check if it already exists a degree with the same name in the new center *****/
       if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Gbl.Hierarchy.Deg.ShrtName,Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod))
          Ale_CreateAlert (Ale_WARNING,
                           Txt_The_degree_X_already_exists,
@@ -379,17 +379,17 @@ void DegCfg_ChangeDegCtr (void)
 		          Gbl.Hierarchy.Deg.FullName);
       else
 	{
-	 /***** Update centre in table of degrees *****/
+	 /***** Update center in table of degrees *****/
 	 DegCfg_UpdateDegCtrDB (Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod);
 	 Gbl.Hierarchy.Deg.CtrCod =
 	 Gbl.Hierarchy.Ctr.CtrCod = NewCtr.CtrCod;
 
-	 /***** Initialize again current course, degree, centre... *****/
+	 /***** Initialize again current course, degree, center... *****/
 	 Hie_InitHierarchy ();
 
 	 /***** Create alert to show the change made *****/
          Ale_CreateAlert (Ale_SUCCESS,NULL,
-                          Txt_The_degree_X_has_been_moved_to_the_centre_Y,
+                          Txt_The_degree_X_has_been_moved_to_the_center_Y,
 		          Gbl.Hierarchy.Deg.FullName,
 		          Gbl.Hierarchy.Ctr.FullName);
 	}
@@ -397,13 +397,13 @@ void DegCfg_ChangeDegCtr (void)
   }
 
 /*****************************************************************************/
-/********************** Update centre in table of degrees ********************/
+/********************** Update center in table of degrees ********************/
 /*****************************************************************************/
 
 static void DegCfg_UpdateDegCtrDB (long DegCod,long CtrCod)
   {
-   /***** Update centre in table of degrees *****/
-   DB_QueryUPDATE ("can not update the centre of a degree",
+   /***** Update center in table of degrees *****/
+   DB_QueryUPDATE ("can not update the center of a degree",
 		   "UPDATE deg_degrees SET CtrCod=%ld WHERE DegCod=%ld",
                    CtrCod,DegCod);
   }

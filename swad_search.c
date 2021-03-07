@@ -70,7 +70,7 @@ static void Sch_GetParamSearch (void);
 static void Sch_SearchInDB (void);
 static unsigned Sch_SearchCountriesInDB (const char *RangeQuery);
 static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery);
-static unsigned Sch_SearchCentresInDB (const char *RangeQuery);
+static unsigned Sch_SearchCentersInDB (const char *RangeQuery);
 static unsigned Sch_SearchDegreesInDB (const char *RangeQuery);
 static unsigned Sch_SearchCoursesInDB (const char *RangeQuery);
 static unsigned Sch_SearchUsrsInDB (Rol_Role_t Role);
@@ -104,7 +104,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    extern const char *Txt_all;
    extern const char *Txt_countries;
    extern const char *Txt_institutions;
-   extern const char *Txt_centres;
+   extern const char *Txt_centers;
    extern const char *Txt_degrees;
    extern const char *Txt_courses;
    extern const char *Txt_users[Usr_NUM_SEXS];
@@ -119,7 +119,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
       [Sch_SEARCH_ALL                ] = Txt_all,
       [Sch_SEARCH_COUNTRIES          ] = Txt_countries,
       [Sch_SEARCH_INSTITS            ] = Txt_institutions,
-      [Sch_SEARCH_CENTRES            ] = Txt_centres,
+      [Sch_SEARCH_CENTERS            ] = Txt_centers,
       [Sch_SEARCH_DEGREES            ] = Txt_degrees,
       [Sch_SEARCH_COURSES            ] = Txt_courses,
       [Sch_SEARCH_USERS              ] = Txt_users[Usr_SEX_UNKNOWN],
@@ -143,7 +143,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    Frm_BeginForm (Action);
 
    /***** Scope (whole platform, current country, current institution,
-                 current centre, current degree or current course) *****/
+                 current center, current degree or current course) *****/
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_Scope);
@@ -206,7 +206,7 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
       [Sch_SEARCH_ALL                ] = 0x3FF,
       [Sch_SEARCH_COUNTRIES          ] = 0x3FF,
       [Sch_SEARCH_INSTITS            ] = 0x3FF,
-      [Sch_SEARCH_CENTRES            ] = 0x3FF,
+      [Sch_SEARCH_CENTERS            ] = 0x3FF,
       [Sch_SEARCH_DEGREES            ] = 0x3FF,
       [Sch_SEARCH_COURSES            ] = 0x3FF,
       [Sch_SEARCH_USERS              ] = 0x3FF,
@@ -334,7 +334,7 @@ void Sch_SysSearch (void)
   }
 
 /*****************************************************************************/
-/**** Search institutions, centres, degrees, courses, teachers, documents ****/
+/**** Search institutions, centers, degrees, courses, teachers, documents ****/
 /*****************************************************************************/
 
 static void Sch_SearchInDB (void)
@@ -362,7 +362,7 @@ static void Sch_SearchInDB (void)
                   Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
-         sprintf (RangeQuery," AND centres.CtrCod=%ld",
+         sprintf (RangeQuery," AND ctr_centers.CtrCod=%ld",
                   Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_Lvl_DEG:
@@ -382,7 +382,7 @@ static void Sch_SearchInDB (void)
       case Sch_SEARCH_ALL:
 	 NumResults  = Sch_SearchCountriesInDB (RangeQuery);
 	 NumResults += Sch_SearchInstitutionsInDB (RangeQuery);
-	 NumResults += Sch_SearchCentresInDB (RangeQuery);
+	 NumResults += Sch_SearchCentersInDB (RangeQuery);
 	 NumResults += Sch_SearchDegreesInDB (RangeQuery);
 	 NumResults += Sch_SearchCoursesInDB (RangeQuery);
 	 NumResults += Sch_SearchUsrsInDB (Rol_TCH);	// Non-editing teachers and teachers
@@ -398,8 +398,8 @@ static void Sch_SearchInDB (void)
       case Sch_SEARCH_INSTITS:
 	 NumResults = Sch_SearchInstitutionsInDB (RangeQuery);
 	 break;
-      case Sch_SEARCH_CENTRES:
-	 NumResults = Sch_SearchCentresInDB (RangeQuery);
+      case Sch_SEARCH_CENTERS:
+	 NumResults = Sch_SearchCentersInDB (RangeQuery);
 	 break;
       case Sch_SEARCH_DEGREES:
 	 NumResults = Sch_SearchDegreesInDB (RangeQuery);
@@ -518,11 +518,11 @@ static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery)
   }
 
 /*****************************************************************************/
-/************************* Search centres in database ************************/
+/************************* Search centers in database ************************/
 /*****************************************************************************/
-// Returns number of centres found
+// Returns number of centers found
 
-static unsigned Sch_SearchCentresInDB (const char *RangeQuery)
+static unsigned Sch_SearchCentersInDB (const char *RangeQuery)
   {
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
    MYSQL_RES *mysql_res;
@@ -532,20 +532,24 @@ static unsigned Sch_SearchCentresInDB (const char *RangeQuery)
    if (Gbl.Scope.Current != Hie_Lvl_DEG &&
        Gbl.Scope.Current != Hie_Lvl_CRS)
       /***** Check user's permission *****/
-      if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_CENTRES))
-	 /***** Split centre string into words *****/
-	 if (Sch_BuildSearchQuery (SearchQuery,"centres.FullName",NULL,NULL))
+      if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_CENTERS))
+	 /***** Split center string into words *****/
+	 if (Sch_BuildSearchQuery (SearchQuery,"ctr_centers.FullName",NULL,NULL))
 	   {
-	    /***** Query database and list centres found *****/
-	    NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centres",
-						 "SELECT centres.CtrCod"
-						 " FROM centres,institutions,countries"
-						 " WHERE %s"
-						 " AND centres.InsCod=institutions.InsCod"
-						 " AND institutions.CtyCod=countries.CtyCod"
-						 "%s"
-						 " ORDER BY centres.FullName,institutions.FullName",
-						 SearchQuery,RangeQuery);
+	    /***** Query database and list centers found *****/
+	    NumCtrs = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get centers",
+			    "SELECT ctr_centers.CtrCod"
+			    " FROM ctr_centers,"
+			          "institutions,"
+			          "countries"
+			    " WHERE %s"
+			    " AND ctr_centers.InsCod=institutions.InsCod"
+			    " AND institutions.CtyCod=countries.CtyCod"
+			    "%s"
+			    " ORDER BY ctr_centers.FullName,"
+			              "institutions.FullName",
+			    SearchQuery,RangeQuery);
 	    Ctr_ListCtrsFound (&mysql_res,NumCtrs);
 	    return NumCtrs;
 	   }
@@ -572,17 +576,20 @@ static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
 	 if (Sch_BuildSearchQuery (SearchQuery,"deg_degrees.FullName",NULL,NULL))
 	   {
 	    /***** Query database and list degrees found *****/
-	    NumDegs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get degrees",
-						 "SELECT deg_degrees.DegCod"
-						 " FROM deg_degrees,centres,institutions,countries"
-						 " WHERE %s"
-						 " AND deg_degrees.CtrCod=centres.CtrCod"
-						 " AND centres.InsCod=institutions.InsCod"
-						 " AND institutions.CtyCod=countries.CtyCod"
-						 "%s"
-						 " ORDER BY deg_degrees.FullName,"
-						           "institutions.FullName",
-						 SearchQuery,RangeQuery);
+	    NumDegs = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get degrees",
+			    "SELECT deg_degrees.DegCod"
+			    " FROM deg_degrees,"
+			          "ctr_centers,"
+			          "institutions,countries"
+			    " WHERE %s"
+			    " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			    " AND ctr_centers.InsCod=institutions.InsCod"
+			    " AND institutions.CtyCod=countries.CtyCod"
+			    "%s"
+			    " ORDER BY deg_degrees.FullName,"
+				      "institutions.FullName",
+			    SearchQuery,RangeQuery);
 	    Deg_ListDegsFound (&mysql_res,NumDegs);
 	    return NumDegs;
 	   }
@@ -615,16 +622,16 @@ static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
 			        "deg_degrees.FullName,"		// row[3]
 			        "crs_courses.Year,"		// row[4]
 			        "crs_courses.FullName,"		// row[5]
-			        "centres.ShortName"		// row[6]
+			        "ctr_centers.ShortName"		// row[6]
 		         " FROM crs_courses,"
 		               "deg_degrees,"
-		               "centres,"
+		               "ctr_centers,"
 		               "institutions,"
 		               "countries"
 		         " WHERE %s"
 		         " AND crs_courses.DegCod=deg_degrees.DegCod"
-		         " AND deg_degrees.CtrCod=centres.CtrCod"
-		         " AND centres.InsCod=institutions.InsCod"
+		         " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		         " AND ctr_centers.InsCod=institutions.InsCod"
 		         " AND institutions.CtyCod=countries.CtyCod"
 		         "%s"
 		         " ORDER BY crs_courses.FullName,"
@@ -705,7 +712,7 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 		         " FROM files,"
 		               "crs_courses,"
 		               "deg_degrees,"
-		               "centres,"
+		               "ctr_centers,"
 		               "institutions,"
 		               "countries"
 		         " WHERE files.Public='Y' AND %s"
@@ -714,12 +721,12 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 		         " AND institutions.CtyCod=countries.CtyCod"
 		         "%s"
 		         " UNION "
-		         "SELECT files.FilCod,"	// Centre
+		         "SELECT files.FilCod,"	// Center
 			        "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			        "institutions.InsCod,"
 			        "institutions.ShortName AS InsShortName,"
-			        "centres.CtrCod,"
-			        "centres.ShortName AS CtrShortName,"
+			        "ctr_centers.CtrCod,"
+			        "ctr_centers.ShortName AS CtrShortName,"
 			        "-1 AS DegCod,"
 			        "'' AS DegShortName,"
 			        "-1 AS CrsCod,"
@@ -728,13 +735,13 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 		         " FROM files,"
 		               "crs_courses,"
 		               "deg_degrees,"
-		               "centres,"
+		               "ctr_centers,"
 		               "institutions,"
 		               "countries"
 		         " WHERE files.Public='Y' AND %s"
 		         " AND files.FileBrowser IN (%u,%u)"
-		         " AND files.Cod=centres.CtrCod"
-		         " AND centres.InsCod=institutions.InsCod"
+		         " AND files.Cod=ctr_centers.CtrCod"
+		         " AND ctr_centers.InsCod=institutions.InsCod"
 		         " AND institutions.CtyCod=countries.CtyCod"
 		         "%s"
 		         " UNION "
@@ -742,8 +749,8 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 			        "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			        "institutions.InsCod,"
 			        "institutions.ShortName AS InsShortName,"
-			        "centres.CtrCod,"
-			        "centres.ShortName AS CtrShortName,"
+			        "ctr_centers.CtrCod,"
+			        "ctr_centers.ShortName AS CtrShortName,"
 			        "deg_degrees.DegCod,"
 			        "deg_degrees.ShortName AS DegShortName,"
 			        "-1,'' AS CrsShortName,"
@@ -751,14 +758,14 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 		         " FROM files,"
 		               "crs_courses,"
 		               "deg_degrees,"
-		               "centres,"
+		               "ctr_centers,"
 		               "institutions,"
 		               "countries"
 		         " WHERE files.Public='Y' AND %s"
 		         " AND files.FileBrowser IN (%u,%u)"
 		         " AND files.Cod=deg_degrees.DegCod"
-		         " AND deg_degrees.CtrCod=centres.CtrCod"
-		         " AND centres.InsCod=institutions.InsCod"
+		         " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		         " AND ctr_centers.InsCod=institutions.InsCod"
 		         " AND institutions.CtyCod=countries.CtyCod"
 		         "%s"
 		         " UNION "
@@ -766,8 +773,8 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 			        "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			        "institutions.InsCod,"
 			        "institutions.ShortName AS InsShortName,"
-			        "centres.CtrCod,"
-			        "centres.ShortName AS CtrShortName,"
+			        "ctr_centers.CtrCod,"
+			        "ctr_centers.ShortName AS CtrShortName,"
 			        "deg_degrees.DegCod,"
 			        "deg_degrees.ShortName AS DegShortName,"
 			        "crs_courses.CrsCod,"
@@ -776,15 +783,15 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 		         " FROM files,"
 		               "crs_courses,"
 		               "deg_degrees,"
-		               "centres,"
+		               "ctr_centers,"
 		               "institutions,"
 		               "countries"
 		         " WHERE files.Public='Y' AND %s"
 		         " AND files.FileBrowser IN (%u,%u)"
 		         " AND files.Cod=crs_courses.CrsCod"
 		         " AND crs_courses.DegCod=deg_degrees.DegCod"
-		         " AND deg_degrees.CtrCod=centres.CtrCod"
-		         " AND centres.InsCod=institutions.InsCod"
+		         " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		         " AND ctr_centers.InsCod=institutions.InsCod"
 		         " AND institutions.CtyCod=countries.CtyCod"
 		         "%s"
 		         ") AS selected_files"
@@ -882,8 +889,8 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 			        "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			        "institutions.InsCod,"
 			        "institutions.ShortName AS InsShortName,"
-			        "centres.CtrCod,"
-			        "centres.ShortName AS CtrShortName,"
+			        "ctr_centers.CtrCod,"
+			        "ctr_centers.ShortName AS CtrShortName,"
 			        "deg_degrees.DegCod,"
 			        "deg_degrees.ShortName AS DegShortName,"
 			        "crs_courses.CrsCod,"
@@ -892,15 +899,15 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		         " FROM files,"
 		               "crs_courses,"
 		               "deg_degrees,"
-		               "centres,"
+		               "ctr_centers,"
 		               "institutions,"
 		               "countries"
 		         " WHERE files.FilCod IN (SELECT FilCod FROM my_files_crs) AND %s"
 		         " AND files.FileBrowser IN (%u,%u,%u,%u)"
 		         " AND files.Cod=crs_courses.CrsCod"
 		         " AND crs_courses.DegCod=deg_degrees.DegCod"
-		         " AND deg_degrees.CtrCod=centres.CtrCod"
-		         " AND centres.InsCod=institutions.InsCod"
+		         " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		         " AND ctr_centers.InsCod=institutions.InsCod"
 		         " AND institutions.CtyCod=countries.CtyCod"
 		         "%s"
 		         " UNION "
@@ -908,8 +915,8 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 			        "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			        "institutions.InsCod,"
 			        "institutions.ShortName AS InsShortName,"
-			        "centres.CtrCod,"
-			        "centres.ShortName AS CtrShortName,"
+			        "ctr_centers.CtrCod,"
+			        "ctr_centers.ShortName AS CtrShortName,"
 			        "deg_degrees.DegCod,"
 			        "deg_degrees.ShortName AS DegShortName,"
 			        "crs_courses.CrsCod,"
@@ -920,7 +927,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		               "crs_grp_types,"
 		               "crs_courses,"
 		               "deg_degrees,"
-		               "centres,"
+		               "ctr_centers,"
 		               "institutions,"
 		               "countries"
 		         " WHERE files.FilCod IN (SELECT FilCod FROM my_files_grp) AND %s"
@@ -929,8 +936,8 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		         " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
 		         " AND crs_grp_types.CrsCod=crs_courses.CrsCod"
 		         " AND crs_courses.DegCod=deg_degrees.DegCod"
-		         " AND deg_degrees.CtrCod=centres.CtrCod"
-		         " AND centres.InsCod=institutions.InsCod"
+		         " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		         " AND ctr_centers.InsCod=institutions.InsCod"
 		         " AND institutions.CtyCod=countries.CtyCod"
 		         "%s"
 		         ") AS selected_files"
@@ -1005,7 +1012,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 		         " FROM files,"
 		               "crs_courses,"
 		               "deg_degrees,"
-		               "centres,"
+		               "ctr_centers,"
 		               "institutions,"
 		               "countries"
 		         " WHERE files.PublisherUsrCod=%ld AND %s"
@@ -1014,12 +1021,12 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 		         " AND institutions.CtyCod=countries.CtyCod"
 		         "%s"
 		         " UNION "
-		         "SELECT files.FilCod,"	// Centre
+		         "SELECT files.FilCod,"	// Center
 			        "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			        "institutions.InsCod,"
 			        "institutions.ShortName AS InsShortName,"
-			        "centres.CtrCod,"
-			        "centres.ShortName AS CtrShortName,"
+			        "ctr_centers.CtrCod,"
+			        "ctr_centers.ShortName AS CtrShortName,"
 			        "-1 AS DegCod,"
 			        "'' AS DegShortName,"
 			        "-1 AS CrsCod,"
@@ -1028,13 +1035,13 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 		         " FROM files,"
 		               "crs_courses,"
 		               "deg_degrees,"
-		               "centres,"
+		               "ctr_centers,"
 		               "institutions,"
 		               "countries"
 		         " WHERE files.PublisherUsrCod=%ld AND %s"
 		         " AND files.FileBrowser IN (%u,%u)"
-		         " AND files.Cod=centres.CtrCod"
-		         " AND centres.InsCod=institutions.InsCod"
+		         " AND files.Cod=ctr_centers.CtrCod"
+		         " AND ctr_centers.InsCod=institutions.InsCod"
 		         " AND institutions.CtyCod=countries.CtyCod"
 		         "%s"
 		         " UNION "
@@ -1042,8 +1049,8 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			        "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			        "institutions.InsCod,"
 			        "institutions.ShortName AS InsShortName,"
-			        "centres.CtrCod,"
-			        "centres.ShortName AS CtrShortName,"
+			        "ctr_centers.CtrCod,"
+			        "ctr_centers.ShortName AS CtrShortName,"
 			        "deg_degrees.DegCod,"
 			        "deg_degrees.ShortName AS DegShortName,"
 			        "-1 AS CrsCod,"
@@ -1052,14 +1059,14 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 		         " FROM files,"
 		               "crs_courses,"
 		               "deg_degrees,"
-		               "centres,"
+		               "ctr_centers,"
 		               "institutions,"
 		               "countries"
 		         " WHERE files.PublisherUsrCod=%ld AND %s"
 		         " AND files.FileBrowser IN (%u,%u)"
 		         " AND files.Cod=deg_degrees.DegCod"
-		         " AND deg_degrees.CtrCod=centres.CtrCod"
-		         " AND centres.InsCod=institutions.InsCod"
+		         " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		         " AND ctr_centers.InsCod=institutions.InsCod"
 		         " AND institutions.CtyCod=countries.CtyCod"
 		         "%s"
 		         " UNION "
@@ -1067,8 +1074,8 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			        "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			        "institutions.InsCod,"
 			        "institutions.ShortName AS InsShortName,"
-			        "centres.CtrCod,"
-			        "centres.ShortName AS CtrShortName,"
+			        "ctr_centers.CtrCod,"
+			        "ctr_centers.ShortName AS CtrShortName,"
 			        "deg_degrees.DegCod,"
 			        "deg_degrees.ShortName AS DegShortName,"
 			        "crs_courses.CrsCod,"
@@ -1077,15 +1084,15 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 		         " FROM files,"
 		               "crs_courses,"
 		               "deg_degrees,"
-		               "centres,"
+		               "ctr_centers,"
 		               "institutions,"
 		               "countries"
 		         " WHERE files.PublisherUsrCod=%ld AND %s"
 		         " AND files.FileBrowser IN (%u,%u,%u,%u)"
 		         " AND files.Cod=crs_courses.CrsCod"
 		         " AND crs_courses.DegCod=deg_degrees.DegCod"
-		         " AND deg_degrees.CtrCod=centres.CtrCod"
-		         " AND centres.InsCod=institutions.InsCod"
+		         " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		         " AND ctr_centers.InsCod=institutions.InsCod"
 		         " AND institutions.CtyCod=countries.CtyCod"
 		         "%s"
 		         " UNION "
@@ -1093,8 +1100,8 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			        "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			        "institutions.InsCod,"
 			        "institutions.ShortName AS InsShortName,"
-			        "centres.CtrCod,"
-			        "centres.ShortName AS CtrShortName,"
+			        "ctr_centers.CtrCod,"
+			        "ctr_centers.ShortName AS CtrShortName,"
 			        "deg_degrees.DegCod,"
 			        "deg_degrees.ShortName AS DegShortName,"
 			        "crs_courses.CrsCod,"
@@ -1105,7 +1112,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 		               "crs_grp_types,"
 		               "crs_courses,"
 		               "deg_degrees,"
-		               "centres,"
+		               "ctr_centers,"
 		               "institutions,"
 		               "countries"
 		         " WHERE files.PublisherUsrCod=%ld AND %s"
@@ -1114,8 +1121,8 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 		         " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
 		         " AND crs_grp_types.CrsCod=crs_courses.CrsCod"
 		         " AND crs_courses.DegCod=deg_degrees.DegCod"
-		         " AND deg_degrees.CtrCod=centres.CtrCod"
-		         " AND centres.InsCod=institutions.InsCod"
+		         " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		         " AND ctr_centers.InsCod=institutions.InsCod"
 		         " AND institutions.CtyCod=countries.CtyCod"
 		         "%s"
 		         " UNION "

@@ -455,7 +455,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    extern const char *Txt_Scope;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
-   extern const char *Txt_Centre;
+   extern const char *Txt_Center;
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
    extern const char *Txt_Users;
@@ -661,8 +661,8 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       case Hie_Lvl_INS:	// Institution
          HTM_TxtF ("%s&nbsp;%s",Txt_Institution,Gbl.Hierarchy.Ins.ShrtName);
 	 break;
-      case Hie_Lvl_CTR:	// Centre
-         HTM_TxtF ("%s&nbsp;%s",Txt_Centre,Gbl.Hierarchy.Ctr.ShrtName);
+      case Hie_Lvl_CTR:	// Center
+         HTM_TxtF ("%s&nbsp;%s",Txt_Center,Gbl.Hierarchy.Ctr.ShrtName);
 	 break;
       case Hie_Lvl_DEG:	// Degree
          HTM_TxtF ("%s&nbsp;%s",Txt_Degree,Gbl.Hierarchy.Deg.ShrtName);
@@ -957,11 +957,11 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
    Cods[Hie_Lvl_SYS] = -1L;				// System
    Cods[Hie_Lvl_CTY] = Gbl.Hierarchy.Cty.CtyCod;	// Country
    Cods[Hie_Lvl_INS] = Gbl.Hierarchy.Ins.InsCod;	// Institution
-   Cods[Hie_Lvl_CTR] = Gbl.Hierarchy.Ctr.CtrCod;	// Centre
+   Cods[Hie_Lvl_CTR] = Gbl.Hierarchy.Ctr.CtrCod;	// Center
    Cods[Hie_Lvl_DEG] = Gbl.Hierarchy.Deg.DegCod;	// Degree
    Cods[Hie_Lvl_CRS] = Gbl.Hierarchy.Crs.CrsCod;	// Course
 
-   /* Fill subqueries for system, country, institution, centre and degree */
+   /* Fill subqueries for system, country, institution, center and degree */
    for (Scope  = Hie_Lvl_SYS;
 	Scope <= Hie_Lvl_DEG;
 	Scope++)
@@ -1172,7 +1172,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 	    if (Gbl.Hierarchy.Ins.InsCod > 0)			// Institution selected
 	      {
 	       *ScopesAllowed |= 1 << Hie_Lvl_INS;
-	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Centre selected
+	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Center selected
 		 {
 		  *ScopesAllowed |= 1 << Hie_Lvl_CTR;
 		  if (Gbl.Hierarchy.Deg.DegCod > 0)		// Degree selected
@@ -1184,7 +1184,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 	      }
 	   }
 	 break;
-      case Rol_CTR_ADM:	// Centre administrator *******************************
+      case Rol_CTR_ADM:	// Center administrator *******************************
 	 *ScopesAllowed = 1 << Hie_Lvl_SYS;
 	 *HiddenAllowed = 0;
 	 if (Gbl.Hierarchy.Cty.CtyCod > 0)			// Country selected
@@ -1193,10 +1193,10 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 	    if (Gbl.Hierarchy.Ins.InsCod > 0)			// Institution selected
 	      {
 	       *ScopesAllowed |= 1 << Hie_Lvl_INS;
-	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Centre selected
+	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Center selected
 		 {
 		  *ScopesAllowed |= 1 << Hie_Lvl_CTR;
-		  *HiddenAllowed |= 1 << Hie_Lvl_CTR;		// A centre admin can view hidden centre surveys
+		  *HiddenAllowed |= 1 << Hie_Lvl_CTR;		// A center admin can view hidden center surveys
 		 }
 	      }
 	   }
@@ -1225,10 +1225,10 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 	      {
 	       *ScopesAllowed |= 1 << Hie_Lvl_INS;
 	       *HiddenAllowed |= 1 << Hie_Lvl_INS;		// A system admin can view hidden institution surveys
-	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Centre selected
+	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Center selected
 		 {
 		  *ScopesAllowed |= 1 << Hie_Lvl_CTR;
-	          *HiddenAllowed |= 1 << Hie_Lvl_CTR;		// A system admin can view hidden centre surveys
+	          *HiddenAllowed |= 1 << Hie_Lvl_CTR;		// A system admin can view hidden center surveys
 		  if (Gbl.Hierarchy.Deg.DegCod > 0)		// Degree selected
 		    {
 		     *ScopesAllowed |= 1 << Hie_Lvl_DEG;
@@ -1279,7 +1279,7 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
       if ((Svy->Scope = Sco_GetScopeFromDBStr (row[1])) == Hie_Lvl_UNK)
          Lay_ShowErrorAndExit ("Wrong survey scope.");
 
-      /* Get code of the country, institution, centre, degree or course (row[2]) */
+      /* Get code of the country, institution, center, degree or course (row[2]) */
       Svy->Cod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get whether the survey is hidden (row[3]) */
@@ -1326,7 +1326,7 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
 	 case Hie_Lvl_INS:	// Institution
             Svy->Status.IBelongToScope = Usr_CheckIfIBelongToIns (Svy->Cod);
 	    break;
-	 case Hie_Lvl_CTR:	// Centre
+	 case Hie_Lvl_CTR:	// Center
             Svy->Status.IBelongToScope = Usr_CheckIfIBelongToCtr (Svy->Cod);
 	    break;
 	 case Hie_Lvl_DEG:	// Degree
@@ -2074,7 +2074,7 @@ static void Svy_SetDefaultAndAllowedScope (struct Svy_Survey *Svy)
 	    ICanEdit = true;
 	   }
          break;
-      case Rol_CTR_ADM:	// Centre admins only can edit centre surveys
+      case Rol_CTR_ADM:	// Center admins only can edit center surveys
 	 if (Svy->Scope == Hie_Lvl_UNK)		// Scope not defined
 	    Svy->Scope = Hie_Lvl_CTR;
 	 if (Svy->Scope == Hie_Lvl_CTR)
@@ -2540,7 +2540,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 
 /*****************************************************************************/
 /************ Remove all the surveys of a place on the hierarchy *************/
-/************ (country, institution, centre, degree or course)   *************/
+/************ (country, institution, center, degree or course)   *************/
 /*****************************************************************************/
 
 void Svy_RemoveSurveys (Hie_Lvl_Level_t Scope,long Cod)
@@ -3892,13 +3892,13 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Hie_Lvl_Level_t Scope)
          DB_QueryCOUNT ("can not get number of courses with surveys",
 			"SELECT COUNT(DISTINCT svy_surveys.Cod)"
                         " FROM institutions,"
-                              "centres,"
+                              "ctr_centers,"
                               "deg_degrees,"
                               "crs_courses,"
                               "svy_surveys"
 			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=deg_degrees.CtrCod"
+			" AND institutions.InsCod=ctr_centers.InsCod"
+                        " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
                         " AND deg_degrees.DegCod=crs_courses.DegCod"
                         " AND crs_courses.CrsCod=svy_surveys.Cod"
                         " AND svy_surveys.Scope='%s'",
@@ -3908,12 +3908,12 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Hie_Lvl_Level_t Scope)
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with surveys",
 		        "SELECT COUNT(DISTINCT svy_surveys.Cod)"
-		        " FROM centres,"
+		        " FROM ctr_centers,"
 			      "deg_degrees,"
 			      "crs_courses,"
 			      "svy_surveys"
-		        " WHERE centres.InsCod=%ld"
-		        " AND centres.CtrCod=deg_degrees.CtrCod"
+		        " WHERE ctr_centers.InsCod=%ld"
+		        " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		        " AND deg_degrees.DegCod=crs_courses.DegCod"
 		        " AND crs_courses.CrsCod=svy_surveys.Cod"
 		        " AND svy_surveys.Scope='%s'",
@@ -3984,13 +3984,13 @@ unsigned Svy_GetNumCrsSurveys (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
 			 "SELECT COUNT(*),"
 			        "SUM(svy_surveys.NumNotif)"
                          " FROM institutions,"
-                               "centres,"
+                               "ctr_centers,"
                                "deg_degrees,"
                                "crs_courses,"
                                "svy_surveys"
                          " WHERE institutions.CtyCod=%ld"
-                         " AND institutions.InsCod=centres.InsCod"
-                         " AND centres.CtrCod=deg_degrees.CtrCod"
+                         " AND institutions.InsCod=ctr_centers.InsCod"
+                         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
                          " AND deg_degrees.DegCod=crs_courses.DegCod"
                          " AND crs_courses.CrsCod=svy_surveys.Cod"
                          " AND svy_surveys.Scope='%s'",
@@ -4001,12 +4001,12 @@ unsigned Svy_GetNumCrsSurveys (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
 			 "SELECT COUNT(*),"
 			        "SUM(svy_surveys.NumNotif)"
-                         " FROM centres,"
+                         " FROM ctr_centers,"
                                "deg_degrees,"
                                "crs_courses,"
                                "svy_surveys"
-                         " WHERE centres.InsCod=%ld"
-                         " AND centres.CtrCod=deg_degrees.CtrCod"
+                         " WHERE ctr_centers.InsCod=%ld"
+                         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
                          " AND deg_degrees.DegCod=crs_courses.DegCod"
                          " AND crs_courses.CrsCod=svy_surveys.Cod"
                          " AND svy_surveys.Scope='%s'",
@@ -4105,14 +4105,14 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope)
 			 "SELECT AVG(NumQsts) FROM"
                          " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
                          " FROM institutions,"
-                               "centres,"
+                               "ctr_centers,"
                                "deg_degrees,"
                                "crs_courses,"
                                "svy_surveys,"
                                "svy_questions"
                          " WHERE institutions.CtyCod=%ld"
-                         " AND institutions.InsCod=centres.InsCod"
-                         " AND centres.CtrCod=deg_degrees.CtrCod"
+                         " AND institutions.InsCod=ctr_centers.InsCod"
+                         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
                          " AND deg_degrees.DegCod=crs_courses.DegCod"
                          " AND crs_courses.CrsCod=svy_surveys.Cod"
                          " AND svy_surveys.Scope='%s'"
@@ -4126,13 +4126,13 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope)
 				    " per survey",
 			 "SELECT AVG(NumQsts) FROM"
                          " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
-                         " FROM centres,"
+                         " FROM ctr_centers,"
                                "deg_degrees,"
                                "crs_courses,"
                                "svy_surveys,"
                                "svy_questions"
-                         " WHERE centres.InsCod=%ld"
-                         " AND centres.CtrCod=deg_degrees.CtrCod"
+                         " WHERE ctr_centers.InsCod=%ld"
+                         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
                          " AND deg_degrees.DegCod=crs_courses.DegCod"
                          " AND crs_courses.CrsCod=svy_surveys.Cod"
                          " AND svy_surveys.Scope='%s'"

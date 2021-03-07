@@ -1,4 +1,4 @@
-// swad_hierarchy.h: hierarchy (system, institution, centre, degree, course)
+// swad_hierarchy.h: hierarchy (system, institution, center, degree, course)
 
 #ifndef _SWAD_HIE
 #define _SWAD_HIE
@@ -27,7 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_centre.h"
+#include "swad_center.h"
 #include "swad_country.h"
 #include "swad_course.h"
 #include "swad_degree.h"
@@ -45,7 +45,7 @@ struct Hie_Hierarchy
   {
    struct Cty_Countr Cty;
    struct Ins_Instit Ins;
-   struct Ctr_Centre Ctr;
+   struct Ctr_Center Ctr;
    struct Deg_Degree Deg;
    struct Crs_Course Crs;
   };

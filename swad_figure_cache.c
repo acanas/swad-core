@@ -106,7 +106,7 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
       [Hie_Lvl_SYS] = (time_t) (24UL * 60UL * 60UL),	// System
       [Hie_Lvl_CTY] = (time_t) (12UL * 60UL * 60UL),	// Country
       [Hie_Lvl_INS] = (time_t) ( 6UL * 60UL * 60UL),	// Institution
-      [Hie_Lvl_CTR] = (time_t) ( 3UL * 60UL * 60UL),	// Centre
+      [Hie_Lvl_CTR] = (time_t) ( 3UL * 60UL * 60UL),	// Center
       [Hie_Lvl_DEG] = (time_t) ( 1UL * 60UL * 60UL),	// Degree
       [Hie_Lvl_CRS] = (time_t) (              60UL),	// Course
      };

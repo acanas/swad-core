@@ -1,4 +1,4 @@
-// swad_room.h: classrooms, laboratories, offices or other rooms in a centre
+// swad_room.h: classrooms, laboratories, offices or other rooms in a center
 
 #ifndef _SWAD_ROO
 #define _SWAD_ROO
@@ -77,7 +77,7 @@ typedef enum
 struct Roo_Room
   {
    long RooCod;						// Room code
-   long CtrCod;						// Centre code
+   long CtrCod;						// Center code
    long BldCod;						// Building code
    char BldShrtName[Bld_MAX_BYTES_SHRT_NAME + 1];	// Building short name
    int  Floor;						// Room floor

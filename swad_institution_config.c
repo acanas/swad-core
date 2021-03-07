@@ -170,7 +170,7 @@ static void InsCfg_Configuration (bool PrintView)
       NumCtrs = Ctr_GetCachedNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod);
 
       /***** Number of users who claim to belong to this institution,
-             number of centres,
+             number of centers,
              number of degrees,
              number of courses,
              number of departments *****/
@@ -244,14 +244,14 @@ static void InsCfg_Title (bool PutLink)
   }
 
 /*****************************************************************************/
-/********* Get average coordinates of centres in current institution *********/
+/********* Get average coordinates of centers in current institution *********/
 /*****************************************************************************/
 
 static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
   {
    char *Query;
 
-   /***** Get average coordinates of centres of current institution
+   /***** Get average coordinates of centers of current institution
           with both coordinates set
           (coordinates 0, 0 means not set ==> don't show map) *****/
    if (asprintf (&Query,
@@ -259,7 +259,7 @@ static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
 			"AVG(Longitude),"				// row[1]
 			"GREATEST(MAX(Latitude)-MIN(Latitude),"
 				 "MAX(Longitude)-MIN(Longitude))"	// row[2]
-		 " FROM centres"
+		 " FROM ctr_centers"
 		 " WHERE InsCod=%ld"
 		 " AND Latitude<>0"
 		 " AND Longitude<>0",
@@ -270,7 +270,7 @@ static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
   }
 
 /*****************************************************************************/
-/****************************** Draw centre map ******************************/
+/****************************** Draw center map ******************************/
 /*****************************************************************************/
 
 #define InsCfg_MAP_CONTAINER_ID "ins_mapid"
@@ -283,7 +283,7 @@ static void InsCfg_Map (void)
    unsigned Zoom;
    unsigned NumCtrs;
    unsigned NumCtr;
-   struct Ctr_Centre Ctr;
+   struct Ctr_Center Ctr;
 
    /***** Leaflet CSS *****/
    Map_LeafletCSS ();
@@ -305,29 +305,29 @@ static void InsCfg_Map (void)
    /* Add Mapbox Streets tile layer to our map */
    Map_AddTileLayer ();
 
-   /* Get centres with coordinates */
-   NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centres"
+   /* Get centers with coordinates */
+   NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centers"
 						   " with coordinates",
 					"SELECT CtrCod"	// row[0]
-					" FROM centres"
+					" FROM ctr_centers"
 					" WHERE InsCod=%ld"
 					" AND Latitude<>0"
 					" AND Longitude<>0",
 					Gbl.Hierarchy.Ins.InsCod);
 
-   /* Add a marker and a popup for each centre */
+   /* Add a marker and a popup for each center */
    for (NumCtr = 0;
 	NumCtr < NumCtrs;
 	NumCtr++)
      {
-      /* Get next centre */
+      /* Get next center */
       row = mysql_fetch_row (mysql_res);
 
-      /* Get centre code (row[0]) */
+      /* Get center code (row[0]) */
       Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get data of centre */
-      Ctr_GetDataOfCentreByCod (&Ctr);
+      /* Get data of center */
+      Ctr_GetDataOfCenterByCod (&Ctr);
 
       /* Add marker */
       Map_AddMarker (&Ctr.Coord);
@@ -606,7 +606,7 @@ void InsCfg_ChangeInsCty (void)
          Gbl.Hierarchy.Ins.CtyCod =
          Gbl.Hierarchy.Cty.CtyCod = NewCty.CtyCod;
 
-	 /***** Initialize again current course, degree, centre... *****/
+	 /***** Initialize again current course, degree, center... *****/
 	 Hie_InitHierarchy ();
 
 	 /***** Write message to show the change made *****/

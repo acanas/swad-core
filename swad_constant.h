@@ -110,7 +110,7 @@ typedef enum
    Cns_VERBOSE,
   } Cns_QuietOrVerbose_t;
 
-// Related with names of centres, degrees, courses,...
+// Related with names of centers, degrees, courses,...
 typedef enum
   {
    Cns_SHRT_NAME,

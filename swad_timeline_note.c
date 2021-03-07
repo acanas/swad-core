@@ -132,7 +132,7 @@ void Tml_Not_ShowHighlightedNote (struct Tml_Timeline *Timeline,
       /* System tab */
       /* Country tab */
       /* Institution tab */
-      /* Centre tab */
+      /* Center tab */
       /* Degree tab */
       /* Course tab */
       /* Assessment tab */
@@ -455,9 +455,9 @@ static void Tml_Not_GetLocationInHierarchy (const struct Tml_Not_Note *Not,
 	 break;
       case TL_NOTE_CTR_DOC_PUB_FILE:
       case TL_NOTE_CTR_SHA_PUB_FILE:
-	 /* Get centre data */
+	 /* Get center data */
 	 Hie->Ctr.CtrCod = Not->HieCod;
-	 Ctr_GetDataOfCentreByCod (&Hie->Ctr);
+	 Ctr_GetDataOfCenterByCod (&Hie->Ctr);
 	 break;
       case TL_NOTE_DEG_DOC_PUB_FILE:
       case TL_NOTE_DEG_SHA_PUB_FILE:
@@ -496,7 +496,7 @@ static void Tml_Not_WriteLocationInHierarchy (const struct Tml_Not_Note *Not,
    extern const char *Txt_Forum;
    extern const char *Txt_Course;
    extern const char *Txt_Degree;
-   extern const char *Txt_Centre;
+   extern const char *Txt_Center;
    extern const char *Txt_Institution;
 
    switch (Not->NoteType)
@@ -510,9 +510,9 @@ static void Tml_Not_WriteLocationInHierarchy (const struct Tml_Not_Note *Not,
 	 break;
       case TL_NOTE_CTR_DOC_PUB_FILE:
       case TL_NOTE_CTR_SHA_PUB_FILE:
-	 /* Write location (centre) in hierarchy */
+	 /* Write location (center) in hierarchy */
 	 HTM_DIV_Begin ("class=\"TL_LOC\"");
-	    HTM_TxtF ("%s:&nbsp;%s",Txt_Centre,Hie->Ctr.ShrtName);
+	    HTM_TxtF ("%s:&nbsp;%s",Txt_Center,Hie->Ctr.ShrtName);
 	 HTM_DIV_End ();
 	 break;
       case TL_NOTE_DEG_DOC_PUB_FILE:
@@ -562,7 +562,7 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
       /* Institution tab */
       [TL_NOTE_INS_DOC_PUB_FILE ] = ActReqDatSeeDocIns,
       [TL_NOTE_INS_SHA_PUB_FILE ] = ActReqDatShaIns,
-      /* Centre tab */
+      /* Center tab */
       [TL_NOTE_CTR_DOC_PUB_FILE ] = ActReqDatSeeDocCtr,
       [TL_NOTE_CTR_SHA_PUB_FILE ] = ActReqDatShaCtr,
       /* Degree tab */
@@ -588,7 +588,7 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
       /* Institution tab */
       [TL_NOTE_INS_DOC_PUB_FILE ] = "file.svg",
       [TL_NOTE_INS_SHA_PUB_FILE ] = "file.svg",
-      /* Centre tab */
+      /* Center tab */
       [TL_NOTE_CTR_DOC_PUB_FILE ] = "file.svg",
       [TL_NOTE_CTR_SHA_PUB_FILE ] = "file.svg",
       /* Degree tab */
@@ -641,8 +641,8 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
 	    case TL_NOTE_CTR_SHA_PUB_FILE:
 	       Frm_BeginFormUnique (TL_DefaultActions[Not->NoteType]);
 	       Brw_PutHiddenParamFilCod (Not->Cod);
-	       if (Not->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current centre
-		  Ctr_PutParamCtrCod (Not->HieCod);		// Go to another centre
+	       if (Not->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current center
+		  Ctr_PutParamCtrCod (Not->HieCod);		// Go to another center
 	       break;
 	    case TL_NOTE_DEG_DOC_PUB_FILE:
 	    case TL_NOTE_DEG_SHA_PUB_FILE:
@@ -898,7 +898,7 @@ void Tml_Not_StoreAndPublishNote (Tml_Not_NoteType_t NoteType,long Cod)
 void Tml_Not_StoreAndPublishNoteInternal (Tml_Not_NoteType_t NoteType,long Cod,
                                           struct Tml_Pub_Publication *Pub)
   {
-   long HieCod;	// Hierarchy code (institution/centre/degree/course)
+   long HieCod;	// Hierarchy code (institution/center/degree/course)
 
    switch (NoteType)
      {

@@ -2672,13 +2672,13 @@ unsigned Gam_GetNumCoursesWithGames (Hie_Lvl_Level_t Scope)
          DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
 			 " FROM institutions,"
-			       "centres,"
+			       "ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "gam_games"
 			 " WHERE institutions.CtyCod=%ld"
-			 " AND institutions.InsCod=centres.InsCod"
-			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " AND institutions.InsCod=ctr_centers.InsCod"
+			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=gam_games.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
@@ -2686,12 +2686,12 @@ unsigned Gam_GetNumCoursesWithGames (Hie_Lvl_Level_t Scope)
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
-			 " FROM centres,"
+			 " FROM ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "gam_games"
-			 " WHERE centres.InsCod=%ld"
-			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " WHERE ctr_centers.InsCod=%ld"
+			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=gam_games.CrsCod",
 		         Gbl.Hierarchy.Ins.InsCod);
@@ -2747,13 +2747,13 @@ unsigned Gam_GetNumGames (Hie_Lvl_Level_t Scope)
          DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
 			 " FROM institutions,"
-			       "centres,"
+			       "ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "gam_games"
 			 " WHERE institutions.CtyCod=%ld"
-			 " AND institutions.InsCod=centres.InsCod"
-			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " AND institutions.InsCod=ctr_centers.InsCod"
+			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=gam_games.CrsCod",
 		         Gbl.Hierarchy.Cty.CtyCod);
@@ -2761,12 +2761,12 @@ unsigned Gam_GetNumGames (Hie_Lvl_Level_t Scope)
          return (unsigned)
          DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
-			 " FROM centres,"
+			 " FROM ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "gam_games"
-			 " WHERE centres.InsCod=%ld"
-			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " WHERE ctr_centers.InsCod=%ld"
+			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=gam_games.CrsCod",
 		         Gbl.Hierarchy.Ins.InsCod);
@@ -2829,14 +2829,14 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
 			 " FROM institutions,"
-			       "centres,"
+			       "ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "gam_games,"
 			       "gam_questions"
 			 " WHERE institutions.CtyCod=%ld"
-			 " AND institutions.InsCod=centres.InsCod"
-			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " AND institutions.InsCod=ctr_centers.InsCod"
+			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=gam_games.CrsCod"
 			 " AND gam_games.GamCod=gam_questions.GamCod"
@@ -2847,13 +2847,13 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			 " FROM centres,"
+			 " FROM ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "gam_games,"
 			       "gam_questions"
-			 " WHERE centres.InsCod=%ld"
-			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " WHERE ctr_centers.InsCod=%ld"
+			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=gam_games.CrsCod"
 			 " AND gam_games.GamCod=gam_questions.GamCod"

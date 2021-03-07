@@ -1,4 +1,4 @@
-// swad_centre.h: centres
+// swad_center.h: centers
 
 #ifndef _SWAD_CTR
 #define _SWAD_CTR
@@ -41,8 +41,8 @@
 
 typedef enum
   {
-   Ctr_STATUS_BIT_PENDING = (1 << 0),	// Centre is requested, but not yet activated
-   Ctr_STATUS_BIT_REMOVED = (1 << 1),	// Centre has been removed
+   Ctr_STATUS_BIT_PENDING = (1 << 0),	// Center is requested, but not yet activated
+   Ctr_STATUS_BIT_REMOVED = (1 << 1),	// Center has been removed
   } Ctr_Status_Bits_t;
 
 typedef unsigned Ctr_Status_t;
@@ -58,15 +58,15 @@ typedef enum
    Ctr_STATUS_REMOVED = 3,	// 1- (Status & Ctr_STATUS_BIT_REMOVED)
   } Ctr_StatusTxt_t;
 
-#define Ctr_MAX_CENTRES_PER_USR	 10 // Used in list of my centres
+#define Ctr_MAX_CENTERS_PER_USR	 10 // Used in list of my centers
 
-struct Ctr_Centre
+struct Ctr_Center
   {
-   long CtrCod;			// Centre code
+   long CtrCod;			// Center code
    long InsCod;			// Institution code
    long PlcCod;			// Place code
-   Ctr_Status_t Status;		// Centre status
-   long RequesterUsrCod;	// User code of the person who requested the creation of this centre
+   Ctr_Status_t Status;		// Center status
+   long RequesterUsrCod;	// User code of the person who requested the creation of this center
    struct Coordinates Coord;	// Geographical coordinates
    char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
@@ -81,16 +81,16 @@ struct Ctr_Centre
 #define Ctr_NUM_ORDERS 2
 typedef enum
   {
-   Ctr_ORDER_BY_CENTRE   = 0,
+   Ctr_ORDER_BY_CENTER   = 0,
    Ctr_ORDER_BY_NUM_USRS = 1,
   } Ctr_Order_t;
-#define Ctr_ORDER_DEFAULT Ctr_ORDER_BY_CENTRE
+#define Ctr_ORDER_DEFAULT Ctr_ORDER_BY_CENTER
 
-struct ListCentres
+struct ListCenters
   {
-   unsigned Num;		// Number of centres
-   struct Ctr_Centre *Lst;		// List of centres
-   Ctr_Order_t SelectedOrder;	// Order of centres
+   unsigned Num;		// Number of centers
+   struct Ctr_Center *Lst;	// List of centers
+   Ctr_Order_t SelectedOrder;	// Order of centers
   };
 
 /*****************************************************************************/
@@ -99,29 +99,29 @@ struct ListCentres
 
 void Ctr_SeeCtrWithPendingDegs (void);
 
-void Ctr_DrawCentreLogoAndNameWithLink (struct Ctr_Centre *Ctr,Act_Action_t Action,
+void Ctr_DrawCenterLogoAndNameWithLink (struct Ctr_Center *Ctr,Act_Action_t Action,
                                         const char *ClassLink,const char *ClassLogo);
 
 void Ctr_ShowCtrsOfCurrentIns (void);
-void Ctr_EditCentres (void);
+void Ctr_EditCenters (void);
 
-void Ctr_PutIconToViewCentres (void);
+void Ctr_PutIconToViewCenters (void);
 
-void Ctr_GetBasicListOfCentres (long InsCod);
-void Ctr_GetFullListOfCentres (long InsCod);
-bool Ctr_GetDataOfCentreByCod (struct Ctr_Centre *Ctr);
-long Ctr_GetInsCodOfCentreByCod (long CtrCod);
-void Ctr_GetShortNameOfCentreByCod (struct Ctr_Centre *Ctr);
-void Ctr_FreeListCentres (void);
-void Ctr_WriteSelectorOfCentre (void);
+void Ctr_GetBasicListOfCenters (long InsCod);
+void Ctr_GetFullListOfCenters (long InsCod);
+bool Ctr_GetDataOfCenterByCod (struct Ctr_Center *Ctr);
+long Ctr_GetInsCodOfCenterByCod (long CtrCod);
+void Ctr_GetShortNameOfCenterByCod (struct Ctr_Center *Ctr);
+void Ctr_FreeListCenters (void);
+void Ctr_WriteSelectorOfCenter (void);
 void Ctr_PutParamCtrCod (long CtrCod);
 long Ctr_GetAndCheckParamOtherCtrCod (long MinCodAllowed);
-void Ctr_RemoveCentre (void);
+void Ctr_RemoveCenter (void);
 void Ctr_ChangeCtrPlc (void);
 void Ctr_UpdateCtrPlcDB (long CtrCod,long NewPlcCod);
-void Ctr_RenameCentreShort (void);
-void Ctr_RenameCentreFull (void);
-void Ctr_RenameCentre (struct Ctr_Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
+void Ctr_RenameCenterShort (void);
+void Ctr_RenameCenterFull (void);
+void Ctr_RenameCenter (struct Ctr_Center *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
 bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
 				    long CtrCod,long InsCod);
 void Ctr_ChangeCtrWWW (void);
@@ -156,6 +156,6 @@ unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery,
 
 void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs);
 
-bool Ctr_GetIfMapIsAvailable (const struct Ctr_Centre *Ctr);
+bool Ctr_GetIfMapIsAvailable (const struct Ctr_Center *Ctr);
 
 #endif

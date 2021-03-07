@@ -42,31 +42,31 @@ typedef enum
    //--------------------------------------------------------------------------
    FigCch_NUM_CTYS		=  1,	// Number of countries
    FigCch_NUM_INSS		=  2,	// Number of institutions
-   FigCch_NUM_CTRS		=  3,	// Number of centres
-   FigCch_NUM_CTRS_WITH_MAP	=  4,	// Number of centres with map
+   FigCch_NUM_CTRS		=  3,	// Number of centers
+   FigCch_NUM_CTRS_WITH_MAP	=  4,	// Number of centers with map
    FigCch_NUM_DEGS		=  5,	// Number of degrees
    FigCch_NUM_CRSS		=  6,	// Number of courses
    //--------------------------------------------------------------------------
    FigCch_NUM_CTYS_WITH_INSS	=  7,	// Number of countries with institutions
-   FigCch_NUM_CTYS_WITH_CTRS	=  8,	// Number of countries with centres
+   FigCch_NUM_CTYS_WITH_CTRS	=  8,	// Number of countries with centers
    FigCch_NUM_CTYS_WITH_DEGS	=  9,	// Number of countries with degrees
    FigCch_NUM_CTYS_WITH_CRSS	= 10,	// Number of countries with courses
    FigCch_NUM_CTYS_WITH_TCHS	= 11,	// Number of countries with teachers
    FigCch_NUM_CTYS_WITH_NETS	= 12,	// Number of countries with non-editing teachers
    FigCch_NUM_CTYS_WITH_STDS	= 13,	// Number of countries with students
    //--------------------------------------------------------------------------
-   FigCch_NUM_INSS_WITH_CTRS	= 14,	// Number of institutions with centres
+   FigCch_NUM_INSS_WITH_CTRS	= 14,	// Number of institutions with centers
    FigCch_NUM_INSS_WITH_DEGS	= 15,	// Number of institutions with degrees
    FigCch_NUM_INSS_WITH_CRSS	= 16,	// Number of institutions with courses
    FigCch_NUM_INSS_WITH_TCHS	= 17,	// Number of institutions with teachers
    FigCch_NUM_INSS_WITH_NETS	= 18,	// Number of institutions with non-editing teachers
    FigCch_NUM_INSS_WITH_STDS	= 19,	// Number of institutions with students
    //--------------------------------------------------------------------------
-   FigCch_NUM_CTRS_WITH_DEGS	= 20,	// Number of centres with degrees
-   FigCch_NUM_CTRS_WITH_CRSS	= 21,	// Number of centres with courses
-   FigCch_NUM_CTRS_WITH_TCHS	= 22,	// Number of centres with teachers
-   FigCch_NUM_CTRS_WITH_NETS	= 23,	// Number of centres with non-editing teachers
-   FigCch_NUM_CTRS_WITH_STDS	= 24,	// Number of centres with students
+   FigCch_NUM_CTRS_WITH_DEGS	= 20,	// Number of centers with degrees
+   FigCch_NUM_CTRS_WITH_CRSS	= 21,	// Number of centers with courses
+   FigCch_NUM_CTRS_WITH_TCHS	= 22,	// Number of centers with teachers
+   FigCch_NUM_CTRS_WITH_NETS	= 23,	// Number of centers with non-editing teachers
+   FigCch_NUM_CTRS_WITH_STDS	= 24,	// Number of centers with students
    //--------------------------------------------------------------------------
    FigCch_NUM_DEGS_WITH_CRSS	= 25,	// Number of degrees with courses
    FigCch_NUM_DEGS_WITH_TCHS	= 26,	// Number of degrees with teachers
@@ -96,7 +96,7 @@ typedef enum
    //--------------------------------------------------------------------------
    FigCch_NUM_USRS_BELONG_CTY	= 46,	// Number of users who claim to belong to country
    FigCch_NUM_USRS_BELONG_INS	= 47,	// Number of users who claim to belong to institution
-   FigCch_NUM_USRS_BELONG_CTR	= 48,	// Number of users who claim to belong to centre
+   FigCch_NUM_USRS_BELONG_CTR	= 48,	// Number of users who claim to belong to center
   } FigCch_FigureCached_t;
 
 #define FigCch_NUM_TYPES 2

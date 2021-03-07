@@ -4584,13 +4584,13 @@ unsigned Prj_GetNumCoursesWithProjects (Hie_Lvl_Level_t Scope)
          DB_QueryCOUNT ("can not get number of courses with projects",
 			"SELECT COUNT(DISTINCT projects.CrsCod)"
 			" FROM institutions,"
-			      "centres,"
+			      "ctr_centers,"
 			      "deg_degrees,"
 			      "crs_courses,"
 			      "projects"
 			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=deg_degrees.CtrCod"
+			" AND institutions.InsCod=ctr_centers.InsCod"
+			" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			" AND deg_degrees.DegCod=crs_courses.DegCod"
 			" AND crs_courses.Status=0"
 			" AND crs_courses.CrsCod=projects.CrsCod",
@@ -4599,12 +4599,12 @@ unsigned Prj_GetNumCoursesWithProjects (Hie_Lvl_Level_t Scope)
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with projects",
 			"SELECT COUNT(DISTINCT projects.CrsCod)"
-			" FROM centres,"
+			" FROM ctr_centers,"
 			      "deg_degrees,"
 			      "crs_courses,"
 			      "projects"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=deg_degrees.CtrCod"
+			" WHERE ctr_centers.InsCod=%ld"
+			" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			" AND deg_degrees.DegCod=crs_courses.DegCod"
 			" AND crs_courses.Status=0"
 			" AND crs_courses.CrsCod=projects.CrsCod",
@@ -4667,13 +4667,13 @@ unsigned Prj_GetNumProjects (Hie_Lvl_Level_t Scope)
          DB_QueryCOUNT ("can not get number of projects",
 			"SELECT COUNT(*)"
 			" FROM institutions,"
-			      "centres,"
+			      "ctr_centers,"
 			      "deg_degrees,"
 			      "crs_courses,"
 			      "projects"
 			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=deg_degrees.CtrCod"
+			" AND institutions.InsCod=ctr_centers.InsCod"
+			" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			" AND deg_degrees.DegCod=crs_courses.DegCod"
 			" AND crs_courses.CrsCod=projects.CrsCod",
                         Gbl.Hierarchy.Cty.CtyCod);
@@ -4682,12 +4682,12 @@ unsigned Prj_GetNumProjects (Hie_Lvl_Level_t Scope)
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
 			"SELECT COUNT(*)"
-			" FROM centres,"
+			" FROM ctr_centers,"
 			      "deg_degrees,"
 			      "crs_courses,"
 			      "projects"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=deg_degrees.CtrCod"
+			" WHERE ctr_centers.InsCod=%ld"
+			" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			" AND deg_degrees.DegCod=crs_courses.DegCod"
 			" AND crs_courses.CrsCod=projects.CrsCod",
                         Gbl.Hierarchy.Ins.InsCod);

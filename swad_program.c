@@ -2196,13 +2196,13 @@ unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope)
          DB_QueryCOUNT ("can not get number of courses with program items",
                          "SELECT COUNT(DISTINCT prg_items.CrsCod)"
 			 " FROM institutions,"
-			       "centres,"
+			       "ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "prg_items"
 			 " WHERE institutions.CtyCod=%ld"
-			 " AND institutions.InsCod=centres.InsCod"
-			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " AND institutions.InsCod=ctr_centers.InsCod"
+			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.Status=0"
 			 " AND crs_courses.CrsCod=prg_items.CrsCod",
@@ -2211,12 +2211,12 @@ unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope)
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with program items",
                          "SELECT COUNT(DISTINCT prg_items.CrsCod)"
-			 " FROM centres,"
+			 " FROM ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "prg_items"
-			 " WHERE centres.InsCod=%ld"
-			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " WHERE ctr_centers.InsCod=%ld"
+			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.Status=0"
 			 " AND crs_courses.CrsCod=prg_items.CrsCod",
@@ -2277,13 +2277,13 @@ unsigned Prg_GetNumItems (Hie_Lvl_Level_t Scope)
          DB_QueryCOUNT ("can not get number of program items",
                          "SELECT COUNT(*)"
 			 " FROM institutions,"
-			       "centres,"
+			       "ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "prg_items"
 			 " WHERE institutions.CtyCod=%ld"
-			 " AND institutions.InsCod=centres.InsCod"
-			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " AND institutions.InsCod=ctr_centers.InsCod"
+			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Cty.CtyCod);
@@ -2292,12 +2292,12 @@ unsigned Prg_GetNumItems (Hie_Lvl_Level_t Scope)
          return (unsigned)
          DB_QueryCOUNT ("can not get number of program items",
                          "SELECT COUNT(*)"
-			 " FROM centres,"
+			 " FROM ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "prg_items"
-			 " WHERE centres.InsCod=%ld"
-			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " WHERE ctr_centers.InsCod=%ld"
+			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);

@@ -36,7 +36,7 @@
 #include "swad_API.h"
 #include "swad_assignment.h"
 #include "swad_box.h"
-#include "swad_centre.h"
+#include "swad_center.h"
 #include "swad_connected.h"
 #include "swad_config.h"
 #include "swad_country.h"
@@ -187,15 +187,15 @@ struct Globals
      } HTMLOutput;
    struct
      {
-      Hie_Lvl_Level_t Level;	// Current level in the hierarchy: system, country, institution, centre, degree or course
-      long Cod;			// Code of the current country, institution, centre, degree or course
+      Hie_Lvl_Level_t Level;	// Current level in the hierarchy: system, country, institution, center, degree or course
+      long Cod;			// Code of the current country, institution, center, degree or course
       struct ListCountries Ctys;// List of countries
       struct Cty_Countr Cty;	// Current country
       struct ListInstits Inss;	// List of institutions in current country
       struct Ins_Instit Ins;	// Current institution
-      struct ListCentres Ctrs;	// List of centres in current institution
-      struct Ctr_Centre Ctr;	// Current centre
-      struct ListDegrees Degs;	// List of degrees in current centre
+      struct ListCenters Ctrs;	// List of centers in current institution
+      struct Ctr_Center Ctr;	// Current center
+      struct ListDegrees Degs;	// List of degrees in current center
       struct Deg_Degree Deg;	// Current degree
       struct ListCourses Crss;	// List of courses in current degree
       struct Crs_Course Crs;	// Current course. Aditional info about course is stored in Gbl.Crs.
@@ -285,13 +285,13 @@ struct Globals
            } MyInss;
          struct
            {
-            bool Filled;	// My centres are already filled?
+            bool Filled;	// My centers are already filled?
             unsigned Num;
             struct
               {
                long CtrCod;
                Rol_Role_t MaxRole;
-              } Ctrs[Ctr_MAX_CENTRES_PER_USR];
+              } Ctrs[Ctr_MAX_CENTERS_PER_USR];
            } MyCtrs;
          struct
            {
@@ -411,7 +411,7 @@ struct Globals
       struct
         {
          Brw_FileBrowser_t FileBrowser;	// Type of the file browser
-         long Cod;			// Code of the institution/centre/degree/course/group related to the file browser with the clipboard
+         long Cod;			// Code of the institution/center/degree/course/group related to the file browser with the clipboard
 	 long WorksUsrCod;		// User code of the user related to the works file browser with the clipboard
          unsigned Level;
          struct FilFolLnk FilFolLnk;

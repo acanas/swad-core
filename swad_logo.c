@@ -1,4 +1,4 @@
-// swad_logo.c: logo of institution, centre or degree
+// swad_logo.c: logo of institution, center or degree
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -99,7 +99,7 @@ void Lgo_DrawLogo (Hie_Lvl_Level_t Scope,long Cod,const char *AltText,
    /***** Path to logo *****/
    if (HieIcon[Scope])	// Scope is correct
      {
-      if (Cod > 0)	// Institution, centre or degree exists
+      if (Cod > 0)	// Institution, center or degree exists
 	{
 	 /* Degree */
 	 if (Scope == Hie_Lvl_DEG)
@@ -116,7 +116,7 @@ void Lgo_DrawLogo (Hie_Lvl_Level_t Scope,long Cod,const char *AltText,
 	       Cod = DegCod;
 	   }
 
-	 /* Centre */
+	 /* Center */
 	 if (!LogoFound && Scope != Hie_Lvl_INS)
 	   {
 	    Folder = Cfg_FOLDER_CTR;
@@ -141,7 +141,7 @@ void Lgo_DrawLogo (Hie_Lvl_Level_t Scope,long Cod,const char *AltText,
 	    if (Scope == Hie_Lvl_DEG)		// && !LogoFound
 	       InsCod = Deg_GetInsCodOfDegreeByCod (Cod);
 	    else if (Scope == Hie_Lvl_CTR)	// && !LogoFound
-	       InsCod = Ctr_GetInsCodOfCentreByCod (Cod);
+	       InsCod = Ctr_GetInsCodOfCenterByCod (Cod);
 	    else
 	       InsCod = Cod;
 	    snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
@@ -194,7 +194,7 @@ void Lgo_DrawLogo (Hie_Lvl_Level_t Scope,long Cod,const char *AltText,
 
 /*****************************************************************************/
 /************* Put an icon to go to the action used to request ***************/
-/************* the logo of institution, centre or degree       ***************/
+/************* the logo of institution, center or degree       ***************/
 /*****************************************************************************/
 
 void Lgo_PutIconToChangeLogo (Hie_Lvl_Level_t Scope)
@@ -246,7 +246,7 @@ void Lgo_PutIconToChangeLogo (Hie_Lvl_Level_t Scope)
   }
 
 /*****************************************************************************/
-/**** Show a form for sending a logo of the institution, centre or degree ****/
+/**** Show a form for sending a logo of the institution, center or degree ****/
 /*****************************************************************************/
 
 void Lgo_RequestLogo (Hie_Lvl_Level_t Scope)
@@ -353,7 +353,7 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem)
   }
 
 /*****************************************************************************/
-/******* Receive the logo of the current institution, centre or degree *******/
+/******* Receive the logo of the current institution, center or degree *******/
 /*****************************************************************************/
 
 void Lgo_ReceiveLogo (Hie_Lvl_Level_t Scope)
@@ -430,7 +430,7 @@ void Lgo_ReceiveLogo (Hie_Lvl_Level_t Scope)
   }
 
 /*****************************************************************************/
-/******* Remove the logo of the current institution, centre or degree ********/
+/******* Remove the logo of the current institution, center or degree ********/
 /*****************************************************************************/
 
 void Lgo_RemoveLogo (Hie_Lvl_Level_t Scope)

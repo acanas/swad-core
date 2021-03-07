@@ -361,7 +361,7 @@ void Gbl_Cleanup (void)
       Ses_RemoveHiddenParFromThisSession ();
    Usr_FreeMyCourses ();
    Usr_FreeMyDegrees ();
-   Usr_FreeMyCentres ();
+   Usr_FreeMyCenters ();
    Usr_FreeMyInstits ();
    Usr_FreeMyCountrs ();
    Usr_UsrDataDestructor (&Gbl.Usrs.Me.UsrDat);
@@ -373,7 +373,7 @@ void Gbl_Cleanup (void)
    Deg_FreeListDegs (&Gbl.Hierarchy.Degs);
    DT_FreeListDegreeTypes ();
    Ins_FreeListInstitutions ();
-   Ctr_FreeListCentres ();
+   Ctr_FreeListCenters ();
    Cty_FreeListCountries ();
    Lnk_FreeListLinks ();
    Plg_FreeListPlugins ();

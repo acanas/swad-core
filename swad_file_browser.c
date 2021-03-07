@@ -1532,7 +1532,7 @@ void Brw_GetParAndInitFileBrowser (void)
          Gbl.FileBrowser.Type = Brw_ADMI_SHR_INS;
          break;
 
-      /***** Documents of centre *****/
+      /***** Documents of center *****/
       case ActSeeAdmDocCtr:	// Access to a documents zone from menu
       case ActChgToSeeDocCtr:	// Access to see a documents zone
       case ActSeeDocCtr:
@@ -1568,7 +1568,7 @@ void Brw_GetParAndInitFileBrowser (void)
 	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_CTR;
          break;
 
-      /***** Shared files of centre *****/
+      /***** Shared files of center *****/
       case ActAdmShaCtr:
       case ActReqRemFilShaCtr:
       case ActRemFilShaCtr:
@@ -2497,17 +2497,17 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_SHOW_DOC_CTR:
       case Brw_ADMI_DOC_CTR:
       case Brw_ADMI_SHR_CTR:
-	 /* Create a directory for centres */
+	 /* Create a directory for centers */
 	 Fil_CreateDirIfNotExists (Cfg_PATH_CTR_PRIVATE);
 
-	 /* Create a directory for all centres which codes end in
-	    centre-code mod 100 */
+	 /* Create a directory for all centers which codes end in
+	    center-code mod 100 */
 	 snprintf (Path,sizeof (Path),"%s/%02u",
 		   Cfg_PATH_CTR_PRIVATE,
 		   (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
-	 /* Create path to the current centre */
+	 /* Create path to the current center */
 	 snprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,
 	           sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder),
 	           "%s/%02u/%u",
@@ -3904,9 +3904,9 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
    extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_institution;
    extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_institution;
    extern const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_institution;
-   extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_centre;
-   extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_centre;
-   extern const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_centre;
+   extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_center;
+   extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_center;
+   extern const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_center;
    extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degree;
    extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_degree;
    extern const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_degree;
@@ -3961,15 +3961,15 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
 	 break;
       case Brw_SHOW_DOC_CTR:
          snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_only_for_reading_by_students_and_teachers_of_the_centre);
+                   Txt_accessible_only_for_reading_by_students_and_teachers_of_the_center);
 	 break;
       case Brw_ADMI_DOC_CTR:
          snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_for_reading_and_writing_by_administrators_of_the_centre);
+                   Txt_accessible_for_reading_and_writing_by_administrators_of_the_center);
 	 break;
       case Brw_ADMI_SHR_CTR:
          snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_centre);
+                   Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_center);
 	 break;
       case Brw_SHOW_DOC_DEG:
          snprintf (Subtitle,sizeof (Subtitle),"(%s)",
@@ -4216,13 +4216,13 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
   }
 
 /*****************************************************************************/
-/************ Remove files related to a centre from the database *************/
+/************ Remove files related to a center from the database *************/
 /*****************************************************************************/
 
 void Brw_RemoveCtrFilesFromDB (long CtrCod)
   {
    /***** Remove from database the entries that store the file views *****/
-   DB_QueryDELETE ("can not remove file views to files of a centre",
+   DB_QueryDELETE ("can not remove file views to files of a center",
 		   "DELETE FROM file_view USING file_view,files"
 		   " WHERE files.FileBrowser IN (%u,%u) AND files.Cod=%ld"
 		   " AND files.FilCod=file_view.FilCod",
@@ -4231,7 +4231,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 	           CtrCod);
 
    /***** Remove from database expanded folders *****/
-   DB_QueryDELETE ("can not remove expanded folders of a centre",
+   DB_QueryDELETE ("can not remove expanded folders of a center",
 		   "DELETE LOW_PRIORITY FROM expanded_folders"
 		   " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CTR,
@@ -4239,7 +4239,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 	           CtrCod);
 
    /***** Remove from database the entries that store clipboards *****/
-   DB_QueryDELETE ("can not remove clipboards related to files of a centre",
+   DB_QueryDELETE ("can not remove clipboards related to files of a center",
 		   "DELETE FROM clipboard"
 		   " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CTR,
@@ -4247,7 +4247,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 	           CtrCod);
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
-   DB_QueryDELETE ("can not remove file last visits to files of a centre",
+   DB_QueryDELETE ("can not remove file last visits to files of a center",
 		   "DELETE FROM file_browser_last"
 		   " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CTR,
@@ -4255,7 +4255,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 	           CtrCod);
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
-   DB_QueryDELETE ("can not remove sizes of file zones of a centre",
+   DB_QueryDELETE ("can not remove sizes of file zones of a center",
 		   "DELETE FROM file_browser_size"
 		   " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CTR,
@@ -4263,7 +4263,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 	           CtrCod);
 
    /***** Remove from database the entries that store the data files *****/
-   DB_QueryDELETE ("can not remove files of a centre",
+   DB_QueryDELETE ("can not remove files of a center",
 		   "DELETE FROM files"
 		   " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CTR,
@@ -6757,7 +6757,7 @@ static void Brw_WriteCurrentClipboard (void)
    extern const char *Txt_marks_management_area;
    extern const char *Txt_temporary_private_storage_area;
    extern const char *Txt_institution;
-   extern const char *Txt_centre;
+   extern const char *Txt_center;
    extern const char *Txt_degree;
    extern const char *Txt_course;
    extern const char *Txt_group;
@@ -6807,19 +6807,19 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_DOC_CTR:
 	 Hie.Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Ctr_GetDataOfCentreByCod (&Hie.Ctr);
+	 Ctr_GetDataOfCenterByCod (&Hie.Ctr);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_documents_management_area,
-                   Txt_centre,Hie.Ctr.ShrtName);
+                   Txt_center,Hie.Ctr.ShrtName);
          break;
       case Brw_ADMI_SHR_CTR:
 	 Hie.Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
-	 Ctr_GetDataOfCentreByCod (&Hie.Ctr);
+	 Ctr_GetDataOfCenterByCod (&Hie.Ctr);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_shared_files_area,
-                   Txt_centre,Hie.Ctr.ShrtName);
+                   Txt_center,Hie.Ctr.ShrtName);
          break;
       case Brw_ADMI_DOC_DEG:
 	 Hie.Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
@@ -7043,7 +7043,7 @@ static bool Brw_GetMyClipboard (void)
         {
          Gbl.FileBrowser.Clipboard.FileBrowser = (Brw_FileBrowser_t) UnsignedNum;
 
-         /* Get institution/centre/degree/course/group code (row[1]) */
+         /* Get institution/center/degree/course/group code (row[1]) */
          Gbl.FileBrowser.Clipboard.Cod = Str_ConvertStrCodToLongCod (row[1]);
 
          /* Get works user's code (row[2]) */
@@ -7095,7 +7095,7 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
 	 case Brw_ADMI_DOC_CTR:
          case Brw_ADMI_SHR_CTR:
             if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Ctr.CtrCod)
-               return true;		// I am in the centre of the clipboard
+               return true;		// I am in the center of the clipboard
             break;
 	 case Brw_ADMI_DOC_DEG:
          case Brw_ADMI_SHR_DEG:
@@ -7758,7 +7758,7 @@ void Brw_PasteIntoFileBrowser (void)
 // Source:
 //	Type of file browser:		Gbl.FileBrowser.Clipboard.FileBrowser
 //	Possible institution:		Gbl.FileBrowser.Clipboard.InsCod
-//	Possible centre:		Gbl.FileBrowser.Clipboard.CtrCod
+//	Possible center:		Gbl.FileBrowser.Clipboard.CtrCod
 //	Possible degree:		Gbl.FileBrowser.Clipboard.DegCod
 //	Possible course:		Gbl.FileBrowser.Clipboard.CrsCod
 //	Possible student in works:	Gbl.FileBrowser.Clipboard.WorksUsrCod
@@ -7766,7 +7766,7 @@ void Brw_PasteIntoFileBrowser (void)
 // Destination:
 //	Type of file browser:		Gbl.FileBrowser.Type
 //	Possible institution:		Gbl.Hierarchy.Ins.InsCod
-//	Possible centre:		Gbl.Hierarchy.Ctr.CtrCod
+//	Possible center:		Gbl.Hierarchy.Ctr.CtrCod
 //	Possible degree:		Gbl.Hierarchy.Deg.DegCod
 //	Possible course:		Gbl.Hierarchy.Crs.CrsCod
 //	Possible student in works:	Gbl.Usrs.Other.UsrDat.UsrCod
@@ -7814,7 +7814,7 @@ static void Brw_PasteClipboard (void)
          case Brw_ADMI_DOC_CTR:
          case Brw_ADMI_SHR_CTR:
             Hie.Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
-            if (Ctr_GetDataOfCentreByCod (&Hie.Ctr))
+            if (Ctr_GetDataOfCenterByCod (&Hie.Ctr))
 	       snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
 		         Cfg_PATH_CTR_PRIVATE,
 		         (unsigned) (Hie.Ctr.CtrCod % 100),
@@ -10293,7 +10293,7 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
 	 if (UnsignedNum < Brw_NUM_TYPES_FILE_BROWSER)
             FileMetadata->FileBrowser = (Brw_FileBrowser_t) UnsignedNum;
 
-      /* Get institution/centre/degree/course/group code (row[2]) */
+      /* Get institution/center/degree/course/group code (row[2]) */
       FileMetadata->Cod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get the user's code of the owner of a zone of files (row[3]) */
@@ -10422,7 +10422,7 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
 	 if (UnsignedNum < Brw_NUM_TYPES_FILE_BROWSER)
             FileMetadata->FileBrowser = (Brw_FileBrowser_t) UnsignedNum;
 
-      /* Get institution/centre/degree/course/group code (row[2]) */
+      /* Get institution/center/degree/course/group code (row[2]) */
       FileMetadata->Cod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get the user's code of the owner of a zone of files (row[3]) */
@@ -10943,7 +10943,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
                                     long *CrsCod,
                                     long *GrpCod)
   {
-   struct Ctr_Centre Ctr;
+   struct Ctr_Center Ctr;
    struct Deg_Degree Deg;
    struct Crs_Course Crs;
    struct GroupData GrpDat;
@@ -10961,12 +10961,12 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
          break;
       case Brw_ADMI_DOC_CTR:
       case Brw_ADMI_SHR_CTR:
-	 /* Cod stores the centre code */
+	 /* Cod stores the center code */
 	 *GrpCod = -1L;
 	 *CrsCod = -1L;
 	 *DegCod = -1L;
 	 *CtrCod = Ctr.CtrCod = Cod;
-	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 Ctr_GetDataOfCenterByCod (&Ctr);
 	 *InsCod = Ctr.InsCod;
          break;
       case Brw_ADMI_DOC_DEG:
@@ -10977,7 +10977,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 *DegCod = Deg.DegCod = Cod;
 	 Deg_GetDataOfDegreeByCod (&Deg);
 	 *CtrCod = Ctr.CtrCod = Deg.CtrCod;
-	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 Ctr_GetDataOfCenterByCod (&Ctr);
 	 *InsCod = Ctr.InsCod;
          break;
       case Brw_ADMI_DOC_CRS:
@@ -10993,7 +10993,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 *DegCod = Deg.DegCod = Crs.DegCod;
 	 Deg_GetDataOfDegreeByCod (&Deg);
 	 *CtrCod = Ctr.CtrCod = Deg.CtrCod;
-	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 Ctr_GetDataOfCenterByCod (&Ctr);
 	 *InsCod = Ctr.InsCod;
 	 break;
       case Brw_ADMI_DOC_GRP:
@@ -11008,7 +11008,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 *DegCod = Deg.DegCod = Crs.DegCod;
 	 Deg_GetDataOfDegreeByCod (&Deg);
 	 *CtrCod = Ctr.CtrCod = Deg.CtrCod;
-	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 Ctr_GetDataOfCenterByCod (&Ctr);
 	 *InsCod = Ctr.InsCod;
 	 break;
       case Brw_ADMI_DOC_PRJ:
@@ -11020,7 +11020,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 *DegCod = Deg.DegCod = Crs.DegCod;
 	 Deg_GetDataOfDegreeByCod (&Deg);
 	 *CtrCod = Ctr.CtrCod = Deg.CtrCod;
-	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 Ctr_GetDataOfCenterByCod (&Ctr);
 	 *InsCod = Ctr.InsCod;
 	 break;
       default:
@@ -11737,7 +11737,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
 			const char *TitleSingular,const char *TitlePlural)
   {
    extern const char *Txt_Institution;
-   extern const char *Txt_Centre;
+   extern const char *Txt_Center;
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
    extern const char *Txt_File_zone;
@@ -11766,7 +11766,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
 
       HTM_TH (1,1,"BM",NULL);
       HTM_TH (1,1,"LM",Txt_Institution);
-      HTM_TH (1,1,"LM",Txt_Centre);
+      HTM_TH (1,1,"LM",Txt_Center);
       HTM_TH (1,1,"LM",Txt_Degree);
       HTM_TH (1,1,"LM",Txt_Course);
       HTM_TH (1,1,"LM",Txt_File_zone);
@@ -11861,7 +11861,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       InsCod = Str_ConvertStrCodToLongCod (row[2]);
       InsShortName = row[3];
 
-      /***** Get centre code (row[4]) *****/
+      /***** Get center code (row[4]) *****/
       CtrCod = Str_ConvertStrCodToLongCod (row[4]);
       CtrShortName = row[5];
 
@@ -11904,7 +11904,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	}
       HTM_TD_End ();
 
-      /***** Write centre logo, centre short name *****/
+      /***** Write center logo, center short name *****/
       HTM_TD_Begin ("class=\"LT %s\"",BgColor);
       if (CtrCod > 0)
 	{
@@ -12025,7 +12025,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       else if (CtrCod > 0)
 	{
 	 Frm_BeginFormGoTo (Action);
-	 Ctr_PutParamCtrCod (CtrCod);	// Go to centre
+	 Ctr_PutParamCtrCod (CtrCod);	// Go to center
 	}
       else if (InsCod > 0)
 	{

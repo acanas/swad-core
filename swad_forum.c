@@ -70,8 +70,8 @@ const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_COURSE_TCHS] = ActSeeForCrsTch,
    [For_FORUM_DEGREE_USRS] = ActSeeForDegUsr,
    [For_FORUM_DEGREE_TCHS] = ActSeeForDegTch,
-   [For_FORUM_CENTRE_USRS] = ActSeeForCtrUsr,
-   [For_FORUM_CENTRE_TCHS] = ActSeeForCtrTch,
+   [For_FORUM_CENTER_USRS] = ActSeeForCtrUsr,
+   [For_FORUM_CENTER_TCHS] = ActSeeForCtrTch,
    [For_FORUM_INSTIT_USRS] = ActSeeForInsUsr,
    [For_FORUM_INSTIT_TCHS] = ActSeeForInsTch,
    [For_FORUM_GLOBAL_USRS] = ActSeeForGenUsr,
@@ -87,8 +87,8 @@ const Act_Action_t For_ActionsSeePstFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_COURSE_TCHS] = ActSeePstForCrsTch,
    [For_FORUM_DEGREE_USRS] = ActSeePstForDegUsr,
    [For_FORUM_DEGREE_TCHS] = ActSeePstForDegTch,
-   [For_FORUM_CENTRE_USRS] = ActSeePstForCtrUsr,
-   [For_FORUM_CENTRE_TCHS] = ActSeePstForCtrTch,
+   [For_FORUM_CENTER_USRS] = ActSeePstForCtrUsr,
+   [For_FORUM_CENTER_TCHS] = ActSeePstForCtrTch,
    [For_FORUM_INSTIT_USRS] = ActSeePstForInsUsr,
    [For_FORUM_INSTIT_TCHS] = ActSeePstForInsTch,
    [For_FORUM_GLOBAL_USRS] = ActSeePstForGenUsr,
@@ -104,8 +104,8 @@ const Act_Action_t For_ActionsRecThrFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_COURSE_TCHS] = ActRcvThrForCrsTch,
    [For_FORUM_DEGREE_USRS] = ActRcvThrForDegUsr,
    [For_FORUM_DEGREE_TCHS] = ActRcvThrForDegTch,
-   [For_FORUM_CENTRE_USRS] = ActRcvThrForCtrUsr,
-   [For_FORUM_CENTRE_TCHS] = ActRcvThrForCtrTch,
+   [For_FORUM_CENTER_USRS] = ActRcvThrForCtrUsr,
+   [For_FORUM_CENTER_TCHS] = ActRcvThrForCtrTch,
    [For_FORUM_INSTIT_USRS] = ActRcvThrForInsUsr,
    [For_FORUM_INSTIT_TCHS] = ActRcvThrForInsTch,
    [For_FORUM_GLOBAL_USRS] = ActRcvThrForGenUsr,
@@ -121,8 +121,8 @@ const Act_Action_t For_ActionsRecRepFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_COURSE_TCHS] = ActRcvRepForCrsTch,
    [For_FORUM_DEGREE_USRS] = ActRcvRepForDegUsr,
    [For_FORUM_DEGREE_TCHS] = ActRcvRepForDegTch,
-   [For_FORUM_CENTRE_USRS] = ActRcvRepForCtrUsr,
-   [For_FORUM_CENTRE_TCHS] = ActRcvRepForCtrTch,
+   [For_FORUM_CENTER_USRS] = ActRcvRepForCtrUsr,
+   [For_FORUM_CENTER_TCHS] = ActRcvRepForCtrTch,
    [For_FORUM_INSTIT_USRS] = ActRcvRepForInsUsr,
    [For_FORUM_INSTIT_TCHS] = ActRcvRepForInsTch,
    [For_FORUM_GLOBAL_USRS] = ActRcvRepForGenUsr,
@@ -138,8 +138,8 @@ const Act_Action_t For_ActionsReqDelThr[For_NUM_TYPES_FORUM] =
    [For_FORUM_COURSE_TCHS] = ActReqDelThrCrsTch,
    [For_FORUM_DEGREE_USRS] = ActReqDelThrDegUsr,
    [For_FORUM_DEGREE_TCHS] = ActReqDelThrDegTch,
-   [For_FORUM_CENTRE_USRS] = ActReqDelThrCtrUsr,
-   [For_FORUM_CENTRE_TCHS] = ActReqDelThrCtrTch,
+   [For_FORUM_CENTER_USRS] = ActReqDelThrCtrUsr,
+   [For_FORUM_CENTER_TCHS] = ActReqDelThrCtrTch,
    [For_FORUM_INSTIT_USRS] = ActReqDelThrInsUsr,
    [For_FORUM_INSTIT_TCHS] = ActReqDelThrInsTch,
    [For_FORUM_GLOBAL_USRS] = ActReqDelThrGenUsr,
@@ -155,8 +155,8 @@ const Act_Action_t For_ActionsDelThrFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_COURSE_TCHS] = ActDelThrForCrsTch,
    [For_FORUM_DEGREE_USRS] = ActDelThrForDegUsr,
    [For_FORUM_DEGREE_TCHS] = ActDelThrForDegTch,
-   [For_FORUM_CENTRE_USRS] = ActDelThrForCtrUsr,
-   [For_FORUM_CENTRE_TCHS] = ActDelThrForCtrTch,
+   [For_FORUM_CENTER_USRS] = ActDelThrForCtrUsr,
+   [For_FORUM_CENTER_TCHS] = ActDelThrForCtrTch,
    [For_FORUM_INSTIT_USRS] = ActDelThrForInsUsr,
    [For_FORUM_INSTIT_TCHS] = ActDelThrForInsTch,
    [For_FORUM_GLOBAL_USRS] = ActDelThrForGenUsr,
@@ -172,8 +172,8 @@ const Act_Action_t For_ActionsCutThrFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_COURSE_TCHS] = ActCutThrForCrsTch,
    [For_FORUM_DEGREE_USRS] = ActCutThrForDegUsr,
    [For_FORUM_DEGREE_TCHS] = ActCutThrForDegTch,
-   [For_FORUM_CENTRE_USRS] = ActCutThrForCtrUsr,
-   [For_FORUM_CENTRE_TCHS] = ActCutThrForCtrTch,
+   [For_FORUM_CENTER_USRS] = ActCutThrForCtrUsr,
+   [For_FORUM_CENTER_TCHS] = ActCutThrForCtrTch,
    [For_FORUM_INSTIT_USRS] = ActCutThrForInsUsr,
    [For_FORUM_INSTIT_TCHS] = ActCutThrForInsTch,
    [For_FORUM_GLOBAL_USRS] = ActCutThrForGenUsr,
@@ -189,8 +189,8 @@ const Act_Action_t For_ActionsPasThrFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_COURSE_TCHS] = ActPasThrForCrsTch,
    [For_FORUM_DEGREE_USRS] = ActPasThrForDegUsr,
    [For_FORUM_DEGREE_TCHS] = ActPasThrForDegTch,
-   [For_FORUM_CENTRE_USRS] = ActPasThrForCtrUsr,
-   [For_FORUM_CENTRE_TCHS] = ActPasThrForCtrTch,
+   [For_FORUM_CENTER_USRS] = ActPasThrForCtrUsr,
+   [For_FORUM_CENTER_TCHS] = ActPasThrForCtrTch,
    [For_FORUM_INSTIT_USRS] = ActPasThrForInsUsr,
    [For_FORUM_INSTIT_TCHS] = ActPasThrForInsTch,
    [For_FORUM_GLOBAL_USRS] = ActPasThrForGenUsr,
@@ -206,8 +206,8 @@ const Act_Action_t For_ActionsDelPstFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_COURSE_TCHS] = ActDelPstForCrsTch,
    [For_FORUM_DEGREE_USRS] = ActDelPstForDegUsr,
    [For_FORUM_DEGREE_TCHS] = ActDelPstForDegTch,
-   [For_FORUM_CENTRE_USRS] = ActDelPstForCtrUsr,
-   [For_FORUM_CENTRE_TCHS] = ActDelPstForCtrTch,
+   [For_FORUM_CENTER_USRS] = ActDelPstForCtrUsr,
+   [For_FORUM_CENTER_TCHS] = ActDelPstForCtrTch,
    [For_FORUM_INSTIT_USRS] = ActDelPstForInsUsr,
    [For_FORUM_INSTIT_TCHS] = ActDelPstForInsTch,
    [For_FORUM_GLOBAL_USRS] = ActDelPstForGenUsr,
@@ -223,8 +223,8 @@ const Act_Action_t For_ActionsEnbPstFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_COURSE_TCHS] = ActEnbPstForCrsTch,
    [For_FORUM_DEGREE_USRS] = ActEnbPstForDegUsr,
    [For_FORUM_DEGREE_TCHS] = ActEnbPstForDegTch,
-   [For_FORUM_CENTRE_USRS] = ActEnbPstForCtrUsr,
-   [For_FORUM_CENTRE_TCHS] = ActEnbPstForCtrTch,
+   [For_FORUM_CENTER_USRS] = ActEnbPstForCtrUsr,
+   [For_FORUM_CENTER_TCHS] = ActEnbPstForCtrTch,
    [For_FORUM_INSTIT_USRS] = ActEnbPstForInsUsr,
    [For_FORUM_INSTIT_TCHS] = ActEnbPstForInsTch,
    [For_FORUM_GLOBAL_USRS] = ActEnbPstForGenUsr,
@@ -240,8 +240,8 @@ const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_COURSE_TCHS] = ActDisPstForCrsTch,
    [For_FORUM_DEGREE_USRS] = ActDisPstForDegUsr,
    [For_FORUM_DEGREE_TCHS] = ActDisPstForDegTch,
-   [For_FORUM_CENTRE_USRS] = ActDisPstForCtrUsr,
-   [For_FORUM_CENTRE_TCHS] = ActDisPstForCtrTch,
+   [For_FORUM_CENTER_USRS] = ActDisPstForCtrUsr,
+   [For_FORUM_CENTER_TCHS] = ActDisPstForCtrTch,
    [For_FORUM_INSTIT_USRS] = ActDisPstForInsUsr,
    [For_FORUM_INSTIT_TCHS] = ActDisPstForInsTch,
    [For_FORUM_GLOBAL_USRS] = ActDisPstForGenUsr,
@@ -263,8 +263,8 @@ static const unsigned PermissionThreadDeletion[For_NUM_TYPES_FORUM] =
    [For_FORUM_COURSE_TCHS] = 0x3F0,
    [For_FORUM_DEGREE_USRS] = 0x3E0,
    [For_FORUM_DEGREE_TCHS] = 0x3E0,
-   [For_FORUM_CENTRE_USRS] = 0x3C0,
-   [For_FORUM_CENTRE_TCHS] = 0x3C0,
+   [For_FORUM_CENTER_USRS] = 0x3C0,
+   [For_FORUM_CENTER_TCHS] = 0x3C0,
    [For_FORUM_INSTIT_USRS] = 0x380,
    [For_FORUM_INSTIT_TCHS] = 0x380,
    [For_FORUM_GLOBAL_USRS] = 0x300,
@@ -1070,8 +1070,8 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
          case For_FORUM_INSTIT_TCHS:
             ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM);
             break;
-         case For_FORUM_CENTRE_USRS:
-         case For_FORUM_CENTRE_TCHS:
+         case For_FORUM_CENTER_USRS:
+         case For_FORUM_CENTER_TCHS:
             ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM);
             break;
          case For_FORUM_DEGREE_USRS:
@@ -1521,14 +1521,14 @@ static void For_PutParamForumSet (For_ForumSet_t ForumSet)
 
 /*****************************************************************************/
 /************** Put hidden parameter with code of            *****************/
-/************** forum institution, centre, degree and course *****************/
+/************** forum institution, center, degree and course *****************/
 /*****************************************************************************/
 
 static void For_PutParamForumLocation (long Location)
   {
    if (Location > 0)
       /***** Put a hidden parameter with the
-             institution, centre, degree or course of the forum *****/
+             institution, center, degree or course of the forum *****/
       Par_PutHiddenParamLong (NULL,"Location",Location);
   }
 
@@ -1634,7 +1634,7 @@ static void For_ShowForumList (struct For_Forums *Forums)
 		  else
 		     ICanSeeDegForum = Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod);
 
-		  /***** Links to forums of current centre *****/
+		  /***** Links to forums of current center *****/
 		  if (For_WriteLinksToCtrForums (Forums,
 			                         Gbl.Hierarchy.Ctr.CtrCod,
 		                                 true,
@@ -1672,19 +1672,19 @@ static void For_ShowForumList (struct For_Forums *Forums)
                                        (NumMyIns == Gbl.Usrs.Me.MyInss.Num - 1),
                                        IsLastItemInLevel);
 
-            /* Get my centres in this institution from database */
+            /* Get my centers in this institution from database */
             if ((NumCtrs = Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
                                                InsCod,
-                                               &mysql_resCtr)) > 0) // Centres found in this institution
+                                               &mysql_resCtr)) > 0) // Centers found in this institution
                for (NumCtr = 0;
         	    NumCtr < NumCtrs;
         	    NumCtr++)
                  {
-                  /* Get next centre */
+                  /* Get next center */
                   row = mysql_fetch_row (mysql_resCtr);
                   CtrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-                  /* Links to forums of this centre */
+                  /* Links to forums of this center */
                   if (For_WriteLinksToCtrForums (Forums,
                                                  CtrCod,
                                                  (NumCtr == NumCtrs - 1),
@@ -1693,7 +1693,7 @@ static void For_ShowForumList (struct For_Forums *Forums)
 		     /* Get my degrees in this institution from database */
 		     if ((NumDegs = Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
 		                                        CtrCod,
-		                                        &mysql_resDeg)) > 0) // Degrees found in this centre
+		                                        &mysql_resDeg)) > 0) // Degrees found in this center
 			for (NumDeg = 0;
 			     NumDeg < NumDegs;
 			     NumDeg++)
@@ -1915,9 +1915,9 @@ static long For_WriteLinksToInsForums (const struct For_Forums *Forums,
   }
 
 /*****************************************************************************/
-/************************ Write links to centre forums ***********************/
+/************************ Write links to center forums ***********************/
 /*****************************************************************************/
-// Returns centre code
+// Returns center code
 
 static long For_WriteLinksToCtrForums (const struct For_Forums *Forums,
 				       long CtrCod,bool IsLastCtr,
@@ -1935,20 +1935,20 @@ static long For_WriteLinksToCtrForums (const struct For_Forums *Forums,
 	                     MaxRoleInCtr == Rol_NET ||
 	                     MaxRoleInCtr == Rol_TCH);
 
-      /***** Link to the forum of users from this centre *****/
-      Forum.Type = For_FORUM_CENTRE_USRS;
+      /***** Link to the forum of users from this center *****/
+      Forum.Type = For_FORUM_CENTER_USRS;
       Forum.Location = CtrCod;
-      Highlight = (Forums->Forum.Type == For_FORUM_CENTRE_USRS &&
+      Highlight = (Forums->Forum.Type == For_FORUM_CENTER_USRS &&
 	           Forums->Forum.Location == CtrCod);
       IsLastItemInLevel[2] = (IsLastCtr && !ICanSeeTeacherForum);
       For_WriteLinkToForum (Forums,&Forum,Highlight,2,IsLastItemInLevel);
 
-      /***** Link to forum of teachers from this centre *****/
+      /***** Link to forum of teachers from this center *****/
       if (ICanSeeTeacherForum)
         {
-	 Forum.Type = For_FORUM_CENTRE_TCHS;
+	 Forum.Type = For_FORUM_CENTER_TCHS;
 	 Forum.Location = CtrCod;
-	 Highlight = (Forums->Forum.Type == For_FORUM_CENTRE_TCHS &&
+	 Highlight = (Forums->Forum.Type == For_FORUM_CENTER_TCHS &&
 		      Forums->Forum.Location == CtrCod);
          IsLastItemInLevel[2] = IsLastCtr;
          For_WriteLinkToForum (Forums,&Forum,Highlight,2,IsLastItemInLevel);
@@ -2124,8 +2124,8 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
       case For_FORUM_INSTIT_TCHS:
          Lgo_DrawLogo (Hie_Lvl_INS,Forum->Location,ForumName,16,NULL,true);
          break;
-      case For_FORUM_CENTRE_USRS:
-      case For_FORUM_CENTRE_TCHS:
+      case For_FORUM_CENTER_USRS:
+      case For_FORUM_CENTER_TCHS:
          Lgo_DrawLogo (Hie_Lvl_CTR,Forum->Location,ForumName,16,NULL,true);
          break;
       case For_FORUM_DEGREE_USRS:
@@ -2209,16 +2209,16 @@ void For_SetForumName (const struct For_Forum *Forum,
                    UseHTMLEntities ? Txt_only_teachers :
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
-      case For_FORUM_CENTRE_USRS:
+      case For_FORUM_CENTER_USRS:
 	 Hie.Ctr.CtrCod = Forum->Location;
-	 if (!Ctr_GetDataOfCentreByCod (&Hie.Ctr))
-	    Lay_ShowErrorAndExit ("Centre not found.");
+	 if (!Ctr_GetDataOfCenterByCod (&Hie.Ctr))
+	    Lay_ShowErrorAndExit ("Center not found.");
          Str_Copy (ForumName,Hie.Ctr.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
-      case For_FORUM_CENTRE_TCHS:
+      case For_FORUM_CENTER_TCHS:
 	 Hie.Ctr.CtrCod = Forum->Location;
-	 if (!Ctr_GetDataOfCentreByCod (&Hie.Ctr))
-	    Lay_ShowErrorAndExit ("Centre not found.");
+	 if (!Ctr_GetDataOfCenterByCod (&Hie.Ctr))
+	    Lay_ShowErrorAndExit ("Center not found.");
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
                    Hie.Ctr.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
@@ -2644,10 +2644,10 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 			 " FROM forum_thread"
 			 " WHERE ForumType=%u",
 			 (unsigned) ForumType);
-      case For_FORUM_CENTRE_USRS:
-      case For_FORUM_CENTRE_TCHS:
+      case For_FORUM_CENTER_USRS:
+      case For_FORUM_CENTER_TCHS:
          if (CtrCod > 0)
-            // CtrCod > 0 ==> 0 <= number of centre forums for a centre <= 1
+            // CtrCod > 0 ==> 0 <= number of center forums for a center <= 1
             return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
 			   "SELECT COUNT(DISTINCT Location)"
@@ -2657,32 +2657,32 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
                            (unsigned) ForumType,CtrCod);
 
          if (InsCod > 0)
-            // CtrCod <= 0 && InsCod > 0 ==> Number of centre forums for an institution
+            // CtrCod <= 0 && InsCod > 0 ==> Number of center forums for an institution
 	    return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
 			   "SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,"
-			         "centres"
+			         "ctr_centers"
 			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=centres.CtrCod"
-			   " AND centres.InsCod=%ld",
+			   " AND forum_thread.Location=ctr_centers.CtrCod"
+			   " AND ctr_centers.InsCod=%ld",
 		           (unsigned) ForumType,InsCod);
 
          if (CtyCod > 0)
-            // InsCod <= 0 && CtyCod > 0 ==> Number of centre forums for a country
+            // InsCod <= 0 && CtyCod > 0 ==> Number of center forums for a country
 	    return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
 			   "SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,"
-			         "centres,"
+			         "ctr_centers,"
 			         "institutions"
 			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=centres.CtrCod"
-			   " AND centres.InsCod=institutions.InsCod"
+			   " AND forum_thread.Location=ctr_centers.CtrCod"
+			   " AND ctr_centers.InsCod=institutions.InsCod"
 			   " AND institutions.CtyCod=%ld",
 		           (unsigned) ForumType,CtyCod);
 
-         // InsCod <= 0 ==> Number of centre forums for the whole platform
+         // InsCod <= 0 ==> Number of center forums for the whole platform
          return (unsigned)
          DB_QueryCOUNT ("can not get number of forums of a type",
 		        "SELECT COUNT(DISTINCT Location)"
@@ -2702,7 +2702,7 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
                            (unsigned) ForumType,DegCod);
 
          if (CtrCod > 0)
-            // DegCod <= 0 && CtrCod > 0 ==> Number of degree forums for a centre
+            // DegCod <= 0 && CtrCod > 0 ==> Number of degree forums for a center
 	    return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
 			   "SELECT COUNT(DISTINCT forum_thread.Location)"
@@ -2720,11 +2720,11 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 			   "SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,"
 			         "deg_degrees,"
-			         "centres"
+			         "ctr_centers"
 			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=deg_degrees.DegCod"
-			   " AND deg_degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod=%ld",
+			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			   " AND ctr_centers.InsCod=%ld",
 		           (unsigned) ForumType,InsCod);
 
          if (CtyCod > 0)
@@ -2734,12 +2734,12 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 			   "SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,"
 			         "deg_degrees,"
-			         "centres,"
+			         "ctr_centers,"
 			         "institutions"
 			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=deg_degrees.DegCod"
-			   " AND deg_degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod=institutions.InsCod"
+			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			   " AND ctr_centers.InsCod=institutions.InsCod"
 			   " AND institutions.CtyCod=%ld",
 		           (unsigned) ForumType,CtyCod);
 
@@ -2775,7 +2775,7 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 		           (unsigned) ForumType,DegCod);
 
          if (CtrCod > 0)
-            // DegCod <= 0 && CtrCod > 0 ==> Number of course forums for a centre
+            // DegCod <= 0 && CtrCod > 0 ==> Number of course forums for a center
 	    return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
 			   "SELECT COUNT(DISTINCT forum_thread.Location)"
@@ -2796,12 +2796,12 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 			   " FROM forum_thread,"
 			         "crs_courses,"
 			         "deg_degrees,"
-			         "centres"
+			         "ctr_centers"
 			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=crs_courses.CrsCod"
 			   " AND crs_courses.DegCod=deg_degrees.DegCod"
-			   " AND deg_degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod=%ld",
+			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			   " AND ctr_centers.InsCod=%ld",
 		           (unsigned) ForumType,InsCod);
 
          if (CtyCod > 0)
@@ -2812,13 +2812,13 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 			   " FROM forum_thread,"
 			         "crs_courses,"
 			         "deg_degrees,"
-			         "centres,"
+			         "ctr_centers,"
 			         "institutions"
 			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=crs_courses.CrsCod"
 			   " AND crs_courses.DegCod=deg_degrees.DegCod"
-			   " AND deg_degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod=institutions.InsCod"
+			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			   " AND ctr_centers.InsCod=institutions.InsCod"
 			   " AND institutions.CtyCod=%ld",
 		           (unsigned) ForumType,CtyCod);
 
@@ -2886,10 +2886,10 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 		        " FROM forum_thread"
 		        " WHERE ForumType=%u",
 		        (unsigned) ForumType);
-      case For_FORUM_CENTRE_USRS:
-      case For_FORUM_CENTRE_TCHS:
+      case For_FORUM_CENTER_USRS:
+      case For_FORUM_CENTER_TCHS:
          if (CtrCod > 0)
-            // CtrCod > 0 ==> 0 <= Number of threads in centre forums for a centre <= 1
+            // CtrCod > 0 ==> 0 <= Number of threads in center forums for a center <= 1
             return (unsigned)
             DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -2899,32 +2899,32 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   (unsigned) ForumType,CtrCod);
 
          if (InsCod > 0)
-            // CtrCod <= 0 && InsCod > 0 ==> Number of threads in centre forums for an institution
+            // CtrCod <= 0 && InsCod > 0 ==> Number of threads in center forums for an institution
             return (unsigned)
             DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
 			   " FROM forum_thread,"
-			         "centres"
+			         "ctr_centers"
 			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=centres.CtrCod"
-			   " AND centres.InsCod=%ld",
+			   " AND forum_thread.Location=ctr_centers.CtrCod"
+			   " AND ctr_centers.InsCod=%ld",
 			   (unsigned) ForumType,InsCod);
 
          if (CtyCod > 0)
-            // InsCod <= 0 && CtyCod > 0 ==> Number of threads in centre forums for a country
+            // InsCod <= 0 && CtyCod > 0 ==> Number of threads in center forums for a country
 	    return (unsigned)
 	    DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
 			   " FROM forum_thread,"
-			         "centres,"
+			         "ctr_centers,"
 			         "institutions"
 			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=centres.CtrCod"
-			   " AND centres.InsCod=institutions.InsCod"
+			   " AND forum_thread.Location=ctr_centers.CtrCod"
+			   " AND ctr_centers.InsCod=institutions.InsCod"
 			   " AND institutions.CtyCod=%ld",
 			   (unsigned) ForumType,CtyCod);
 
-         // InsCod <= 0 ==> Number of threads in centre forums for the whole platform
+         // InsCod <= 0 ==> Number of threads in center forums for the whole platform
          return (unsigned)
          DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 		        "SELECT COUNT(*)"
@@ -2944,7 +2944,7 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   (unsigned) ForumType,DegCod);
 
          if (CtrCod > 0)
-            // DegCod <= 0 && CtrCod > 0 ==> Number of threads in degree forums for a centre
+            // DegCod <= 0 && CtrCod > 0 ==> Number of threads in degree forums for a center
             return (unsigned)
             DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -2962,11 +2962,11 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			  "SELECT COUNT(*)"
 			  " FROM forum_thread,"
 			        "deg_degrees,"
-			        "centres"
+			        "ctr_centers"
 			  " WHERE forum_thread.ForumType=%u"
 			  " AND forum_thread.Location=deg_degrees.DegCod"
-			  " AND deg_degrees.CtrCod=centres.CtrCod"
-			  " AND centres.InsCod=%ld",
+			  " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			  " AND ctr_centers.InsCod=%ld",
 			  (unsigned) ForumType,InsCod);
 
          if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of threads in degree forums for a country
@@ -2975,12 +2975,12 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   "SELECT COUNT(*)"
 			   " FROM forum_thread,"
 			         "deg_degrees,"
-			         "centres,"
+			         "ctr_centers,"
 			         "institutions"
 			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=deg_degrees.DegCod"
-			   " AND deg_degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod=institutions.InsCod"
+			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			   " AND ctr_centers.InsCod=institutions.InsCod"
 			   " AND institutions.CtyCod=%ld",
 			   (unsigned) ForumType,CtyCod);
 
@@ -3016,7 +3016,7 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   (unsigned) ForumType,DegCod);
 
          if (CtrCod > 0)
-            // DegCod <= 0 && CtrCod > 0 ==> Number of threads in course forums for a centre
+            // DegCod <= 0 && CtrCod > 0 ==> Number of threads in course forums for a center
 	    return (unsigned)
 	    DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
@@ -3037,12 +3037,12 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   " FROM forum_thread,"
 			         "crs_courses,"
 			         "deg_degrees,"
-			         "centres"
+			         "ctr_centers"
 			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=crs_courses.CrsCod"
 			   " AND crs_courses.DegCod=deg_degrees.DegCod"
-			   " AND deg_degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod=%ld",
+			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			   " AND ctr_centers.InsCod=%ld",
 			   (unsigned) ForumType,InsCod);
 
          if (CtyCod > 0)
@@ -3053,13 +3053,13 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   " FROM forum_thread,"
 			         "crs_courses,"
 			         "deg_degrees,"
-			         "centres,"
+			         "ctr_centers,"
 			         "institutions"
 			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=crs_courses.CrsCod"
 			   " AND crs_courses.DegCod=deg_degrees.DegCod"
-			   " AND deg_degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod=institutions.InsCod"
+			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			   " AND ctr_centers.InsCod=institutions.InsCod"
 			   " AND institutions.CtyCod=%ld",
 			   (unsigned) ForumType,CtyCod);
 
@@ -3161,9 +3161,9 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
 		            (unsigned) ForumType);
          break;
-      case For_FORUM_CENTRE_USRS:
-      case For_FORUM_CENTRE_TCHS:
-         if (CtrCod > 0)	// CtrCod > 0 ==> Number of posts in centre forums for a centre
+      case For_FORUM_CENTER_USRS:
+      case For_FORUM_CENTER_TCHS:
+         if (CtrCod > 0)	// CtrCod > 0 ==> Number of posts in center forums for a center
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"
@@ -3174,35 +3174,35 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			    " AND forum_thread.Location=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
                             (unsigned) ForumType,CtrCod);
-         else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of posts in centre forums for an institution
+         else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of posts in center forums for an institution
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"
 			           "SUM(forum_post.NumNotif)"
 			    " FROM forum_thread,"
-			          "centres,"
+			          "ctr_centers,"
 			          "forum_post"
 			    " WHERE forum_thread.ForumType=%u"
-			    " AND forum_thread.Location=centres.CtrCod"
-			    " AND centres.InsCod=%ld"
+			    " AND forum_thread.Location=ctr_centers.CtrCod"
+			    " AND ctr_centers.InsCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
                             (unsigned) ForumType,InsCod);
-         else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of posts in centre forums for a country
+         else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of posts in center forums for a country
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"
 			           "SUM(forum_post.NumNotif)"
 			    " FROM forum_thread,"
-			          "centres,"
+			          "ctr_centers,"
 			          "institutions,"
 			          "forum_post"
 			    " WHERE forum_thread.ForumType=%u"
-			    " AND forum_thread.Location=centres.CtrCod"
-			    " AND centres.InsCod=institutions.InsCod"
+			    " AND forum_thread.Location=ctr_centers.CtrCod"
+			    " AND ctr_centers.InsCod=institutions.InsCod"
 			    " AND institutions.CtyCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
                             (unsigned) ForumType,CtyCod);
-         else			// InsCod <= 0 ==> Number of posts in centre forums for the whole platform
+         else			// InsCod <= 0 ==> Number of posts in center forums for the whole platform
 	    DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"
@@ -3226,7 +3226,7 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			    " AND forum_thread.Location=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
                             (unsigned) ForumType,DegCod);
-         else if (CtrCod > 0)	// DegCod <= 0 && CtrCod > 0 ==> Number of posts in degree forums for a centre
+         else if (CtrCod > 0)	// DegCod <= 0 && CtrCod > 0 ==> Number of posts in degree forums for a center
             DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"
@@ -3246,12 +3246,12 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			           "SUM(forum_post.NumNotif)"
 			    " FROM forum_thread,"
 			          "deg_degrees,"
-			          "centres,"
+			          "ctr_centers,"
 			          "forum_post"
 			    " WHERE forum_thread.ForumType=%u"
 			    " AND forum_thread.Location=deg_degrees.DegCod"
-			    " AND deg_degrees.CtrCod=centres.CtrCod"
-			    " AND centres.InsCod=%ld"
+			    " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			    " AND ctr_centers.InsCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
                             (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of posts in degree forums for a country
@@ -3261,13 +3261,13 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			           "SUM(forum_post.NumNotif)"
 			    " FROM forum_thread,"
 			          "deg_degrees,"
-			          "centres,"
+			          "ctr_centers,"
 			          "institutions,"
 			          "forum_post"
 			    " WHERE forum_thread.ForumType=%u"
 			    " AND forum_thread.Location=deg_degrees.DegCod"
-			    " AND deg_degrees.CtrCod=centres.CtrCod"
-			    " AND centres.InsCod=institutions.InsCod"
+			    " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			    " AND ctr_centers.InsCod=institutions.InsCod"
 			    " AND institutions.CtyCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
                             (unsigned) ForumType,CtyCod);
@@ -3308,7 +3308,7 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			    " AND crs_courses.DegCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
 		            (unsigned) ForumType,DegCod);
-         else if (CtrCod > 0)	// DegCod <= 0 && CtrCod > 0 ==> Number of posts in course forums for a centre
+         else if (CtrCod > 0)	// DegCod <= 0 && CtrCod > 0 ==> Number of posts in course forums for a center
 	    DB_QuerySELECT (&mysql_res,"can not get the total number"
 				       " of forums of a type",
 			    "SELECT COUNT(*),"
@@ -3331,13 +3331,13 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			    " FROM forum_thread,"
 			          "crs_courses,"
 			          "deg_degrees,"
-			          "centres,"
+			          "ctr_centers,"
 			          "forum_post"
 			    " WHERE forum_thread.ForumType=%u"
 			    " AND forum_thread.Location=crs_courses.CrsCod"
 			    " AND crs_courses.DegCod=deg_degrees.DegCod"
-			    " AND deg_degrees.CtrCod=centres.CtrCod"
-			    " AND centres.InsCod=%ld"
+			    " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			    " AND ctr_centers.InsCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
                             (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of posts in course forums for a country
@@ -3348,14 +3348,14 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			    " FROM forum_thread,"
 			          "crs_courses,"
 			          "deg_degrees,"
-			          "centres,"
+			          "ctr_centers,"
 			          "institutions,"
 			          "forum_post"
 			    " WHERE forum_thread.ForumType=%u"
 			    " AND forum_thread.Location=crs_courses.CrsCod"
 			    " AND crs_courses.DegCod=deg_degrees.DegCod"
-			    " AND deg_degrees.CtrCod=centres.CtrCod"
-			    " AND centres.InsCod=institutions.InsCod"
+			    " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			    " AND ctr_centers.InsCod=institutions.InsCod"
 			    " AND institutions.CtyCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
                             (unsigned) ForumType,CtyCod);
@@ -3695,13 +3695,13 @@ static void For_GetParamsForums (struct For_Forums *Forums)
    /***** Set forum type *****/
    For_SetForumType (Forums);
 
-   /***** Get parameter with code of course, degree, centre or institution *****/
+   /***** Get parameter with code of course, degree, center or institution *****/
    switch (Forums->Forum.Type)
      {
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
-      case For_FORUM_CENTRE_USRS:
-      case For_FORUM_CENTRE_TCHS:
+      case For_FORUM_CENTER_USRS:
+      case For_FORUM_CENTER_TCHS:
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
       case For_FORUM_COURSE_USRS:
@@ -3805,7 +3805,7 @@ static void For_SetForumType (struct For_Forums *Forums)
       case ActCutThrForCtrUsr:	case ActPasThrForCtrUsr:
       case ActDelPstForCtrUsr:
       case ActEnbPstForCtrUsr:	case ActDisPstForCtrUsr:
-         Forums->Forum.Type = For_FORUM_CENTRE_USRS;
+         Forums->Forum.Type = For_FORUM_CENTER_USRS;
          break;
       case ActSeeForCtrTch:	case ActSeePstForCtrTch:
       case ActRcvThrForCtrTch:	case ActRcvRepForCtrTch:
@@ -3813,7 +3813,7 @@ static void For_SetForumType (struct For_Forums *Forums)
       case ActCutThrForCtrTch:	case ActPasThrForCtrTch:
       case ActDelPstForCtrTch:
       case ActEnbPstForCtrTch:	case ActDisPstForCtrTch:
-	 Forums->Forum.Type = For_FORUM_CENTRE_TCHS;
+	 Forums->Forum.Type = For_FORUM_CENTER_TCHS;
 	 break;
       case ActSeeForDegUsr:	case ActSeePstForDegUsr:
       case ActRcvThrForDegUsr:	case ActRcvRepForDegUsr:
@@ -3887,14 +3887,14 @@ static void For_RestrictAccess (const struct For_Forums *Forums)
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
-      case For_FORUM_CENTRE_USRS:
+      case For_FORUM_CENTER_USRS:
 	 MaxRole = Rol_GetMyMaxRoleInCtr (Forums->Forum.Location);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole >= Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
-      case For_FORUM_CENTRE_TCHS:
+      case For_FORUM_CENTER_TCHS:
 	 MaxRole = Rol_GetMyMaxRoleInCtr (Forums->Forum.Location);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
@@ -4526,8 +4526,8 @@ static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
 		         Forums->Forum.Location,
 		         Forums->Thread.Current);
          break;
-      case For_FORUM_CENTRE_USRS:
-      case For_FORUM_CENTRE_TCHS:
+      case For_FORUM_CENTER_USRS:
+      case For_FORUM_CENTER_TCHS:
          DB_QueryUPDATE ("can not move a thread to current forum",
 			 "UPDATE forum_thread"
 			 " SET ForumType=%u,Location=%ld"
@@ -4633,7 +4633,7 @@ void For_RemoveForums (Hie_Lvl_Level_t Scope,long ForumLocation)
       [Hie_Lvl_SYS] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Not removable
       [Hie_Lvl_CTY] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// No forums for this scope
       [Hie_Lvl_INS] = {For_FORUM_INSTIT_USRS,For_FORUM_INSTIT_TCHS},
-      [Hie_Lvl_CTR] = {For_FORUM_CENTRE_USRS,For_FORUM_CENTRE_TCHS},
+      [Hie_Lvl_CTR] = {For_FORUM_CENTER_USRS,For_FORUM_CENTER_TCHS},
       [Hie_Lvl_DEG] = {For_FORUM_DEGREE_USRS,For_FORUM_DEGREE_TCHS},
       [Hie_Lvl_CRS] = {For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS},
      };

@@ -181,14 +181,14 @@ static DT_Order_t DT_GetParamDegTypOrder (DT_Order_t DefaultOrder)
 /***************************** List degree types *****************************/
 /*****************************************************************************/
 // This function can be called from:
-// - centre tab		=> NextAction = ActSeeDegTyp
+// - center tab		=> NextAction = ActSeeDegTyp
 // - statistic tab	=> NextAction = ActSeeUseGbl
 
 static void DT_ListDegreeTypes (Act_Action_t NextAction,
                                 Hie_Lvl_Level_t Scope,
                                 DT_Order_t SelectedOrder)
   {
-   extern const char *Hlp_CENTRE_DegreeTypes;
+   extern const char *Hlp_CENTER_DegreeTypes;
    extern const char *Hlp_ANALYTICS_Figures_types_of_degree;
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_No_types_of_degree;
@@ -201,7 +201,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,
       case ActSeeDegTyp:
 	 Box_BoxBegin (NULL,Txt_Types_of_degree,
 	               DT_PutIconsListingDegTypes,NULL,
-		       Hlp_CENTRE_DegreeTypes,Box_NOT_CLOSABLE);
+		       Hlp_CENTER_DegreeTypes,Box_NOT_CLOSABLE);
 	 break;
       case ActSeeUseGbl:
 	 Box_BoxBegin (NULL,Txt_Types_of_degree,
@@ -258,7 +258,7 @@ void DT_EditDegreeTypes (void)
 
 static void DT_EditDegreeTypesInternal (void)
   {
-   extern const char *Hlp_CENTRE_DegreeTypes_edit;
+   extern const char *Hlp_CENTER_DegreeTypes_edit;
    extern const char *Txt_Types_of_degree;
 
    /***** Get list of degree types *****/
@@ -267,7 +267,7 @@ static void DT_EditDegreeTypesInternal (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Types_of_degree,
                  DT_PutIconsEditingDegreeTypes,NULL,
-                 Hlp_CENTRE_DegreeTypes_edit,Box_NOT_CLOSABLE);
+                 Hlp_CENTER_DegreeTypes_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new degree type *****/
    DT_PutFormToCreateDegreeType ();
@@ -376,7 +376,7 @@ static void DT_PutIconsListingDegTypes (__attribute__((unused)) void *Args)
 
 static void DT_PutIconToEditDegTypes (__attribute__((unused)) void *Args)
   {
-   if (Gbl.Hierarchy.Level == Hie_Lvl_CTR &&	// Only editable if centre tab is visible
+   if (Gbl.Hierarchy.Level == Hie_Lvl_CTR &&	// Only editable if center tab is visible
        DT_CheckIfICanCreateDegreeTypes ())
       Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL,
 				   NULL,NULL);
@@ -629,10 +629,13 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
 			 "SELECT deg_types.DegTypCod,"			// row[0]
 			        "deg_types.DegTypName,"			// row[1]
 			        "COUNT(deg_degrees.DegCod) AS NumDegs"	// row[2]
-			 " FROM institutions,centres,deg_degrees,deg_types"
+			 " FROM institutions,"
+			       "ctr_centers,"
+			       "deg_degrees,"
+			       "deg_types"
 			 " WHERE institutions.CtyCod=%ld"
-			 " AND institutions.InsCod=centres.InsCod"
-			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " AND institutions.InsCod=ctr_centers.InsCod"
+			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 			 " GROUP BY deg_degrees.DegTypCod"
 			 " ORDER BY %s",
@@ -646,9 +649,11 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
 			 "SELECT deg_types.DegTypCod,"			// row[0]
 			        "deg_types.DegTypName,"			// row[1]
 			        "COUNT(deg_degrees.DegCod) AS NumDegs"	// row[2]
-			 " FROM centres,deg_degrees,deg_types"
-			 " WHERE centres.InsCod=%ld"
-			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " FROM ctr_centers,"
+			       "deg_degrees,"
+			       "deg_types"
+			 " WHERE ctr_centers.InsCod=%ld"
+			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 			 " GROUP BY deg_degrees.DegTypCod"
 			 " ORDER BY %s",
@@ -656,7 +661,7 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
 			 OrderBySubQuery[Order]);
 	 break;
       case Hie_Lvl_CTR:
-	 /* Get only degree types with degrees in the current centre */
+	 /* Get only degree types with degrees in the current center */
 	 Gbl.DegTypes.Num = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get types of degree",
 			 "SELECT deg_types.DegTypCod,"			// row[0]

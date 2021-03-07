@@ -110,16 +110,16 @@ static void Ins_EditingInstitutionDestructor ();
 static void Ins_FormToGoToMap (struct Ins_Instit *Ins);
 
 /*****************************************************************************/
-/***************** List institutions with pending centres ********************/
+/***************** List institutions with pending centers ********************/
 /*****************************************************************************/
 
 void Ins_SeeInsWithPendingCtrs (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
-   extern const char *Txt_Institutions_with_pending_centres;
+   extern const char *Txt_Institutions_with_pending_centers;
    extern const char *Txt_Institution;
-   extern const char *Txt_Centres_ABBREVIATION;
-   extern const char *Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed;
+   extern const char *Txt_Centers_ABBREVIATION;
+   extern const char *Txt_There_are_no_institutions_with_requests_for_centers_to_be_confirmed;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumInss;
@@ -127,19 +127,23 @@ void Ins_SeeInsWithPendingCtrs (void)
    struct Ins_Instit Ins;
    const char *BgColor;
 
-   /***** Get institutions with pending centres *****/
+   /***** Get institutions with pending centers *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_INS_ADM:
          NumInss =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions"
-					       " with pending centres",
-				    "SELECT centres.InsCod,COUNT(*)"
-				    " FROM centres,ins_admin,institutions"
-				    " WHERE (centres.Status & %u)<>0"
-				    " AND centres.InsCod=ins_admin.InsCod AND ins_admin.UsrCod=%ld"
-				    " AND centres.InsCod=institutions.InsCod"
-				    " GROUP BY centres.InsCod"
+					       " with pending centers",
+				    "SELECT ctr_centers.InsCod,"
+				           "COUNT(*)"
+				    " FROM ctr_centers,"
+				          "ins_admin,"
+				          "institutions"
+				    " WHERE (ctr_centers.Status & %u)<>0"
+				    " AND ctr_centers.InsCod=ins_admin.InsCod"
+				    " AND ins_admin.UsrCod=%ld"
+				    " AND ctr_centers.InsCod=institutions.InsCod"
+				    " GROUP BY ctr_centers.InsCod"
 				    " ORDER BY institutions.ShortName",
 				    (unsigned) Ctr_STATUS_BIT_PENDING,
 				    Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -147,12 +151,13 @@ void Ins_SeeInsWithPendingCtrs (void)
       case Rol_SYS_ADM:
          NumInss =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions"
-					       " with pending centres",
-				    "SELECT centres.InsCod,COUNT(*)"
-				    " FROM centres,institutions"
-				    " WHERE (centres.Status & %u)<>0"
-				    " AND centres.InsCod=institutions.InsCod"
-				    " GROUP BY centres.InsCod"
+					       " with pending centers",
+				    "SELECT ctr_centers.InsCod,"
+				           "COUNT(*)"
+				    " FROM ctr_centers,institutions"
+				    " WHERE (ctr_centers.Status & %u)<>0"
+				    " AND ctr_centers.InsCod=institutions.InsCod"
+				    " GROUP BY ctr_centers.InsCod"
 				    " ORDER BY institutions.ShortName",
 				    (unsigned) Ctr_STATUS_BIT_PENDING);
          break;
@@ -164,7 +169,7 @@ void Ins_SeeInsWithPendingCtrs (void)
    if (NumInss)
      {
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Institutions_with_pending_centres,
+      Box_BoxTableBegin (NULL,Txt_Institutions_with_pending_centers,
                          NULL,NULL,
                          Hlp_SYSTEM_Pending,Box_NOT_CLOSABLE,2);
 
@@ -172,7 +177,7 @@ void Ins_SeeInsWithPendingCtrs (void)
       HTM_TR_Begin (NULL);
 
       HTM_TH (1,1,"LM",Txt_Institution);
-      HTM_TH (1,1,"RM",Txt_Centres_ABBREVIATION);
+      HTM_TH (1,1,"RM",Txt_Centers_ABBREVIATION);
 
       HTM_TR_End ();
 
@@ -181,7 +186,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 	   NumIns < NumInss;
 	   NumIns++)
         {
-         /* Get next centre */
+         /* Get next center */
          row = mysql_fetch_row (mysql_res);
 
          /* Get institution code (row[0]) */
@@ -199,7 +204,7 @@ void Ins_SeeInsWithPendingCtrs (void)
                                                  "BT_LINK DAT_NOBR","CM");
          HTM_TD_End ();
 
-         /* Number of pending centres (row[1]) */
+         /* Number of pending centers (row[1]) */
          HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
          HTM_Txt (row[1]);
          HTM_TD_End ();
@@ -213,7 +218,7 @@ void Ins_SeeInsWithPendingCtrs (void)
       Box_BoxTableEnd ();
      }
    else
-      Ale_ShowAlert (Ale_INFO,Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed);
+      Ale_ShowAlert (Ale_INFO,Txt_There_are_no_institutions_with_requests_for_centers_to_be_confirmed);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -423,7 +428,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
    HTM_TD_End ();
 
    /***** Other stats *****/
-   /* Number of centres in this institution */
+   /* Number of centers in this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
    HTM_Unsigned (Ctr_GetCachedNumCtrsInIns (Ins->InsCod));
    HTM_TD_End ();
@@ -472,7 +477,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
    extern const char *Txt_INSTITUTIONS_HELP_ORDER[2];
    extern const char *Txt_INSTITUTIONS_ORDER[2];
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
-   extern const char *Txt_Centres_ABBREVIATION;
+   extern const char *Txt_Centers_ABBREVIATION;
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_Departments_ABBREVIATION;
@@ -514,7 +519,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
       HTM_TH_End ();
      }
 
-   HTM_TH (1,1,"RM",Txt_Centres_ABBREVIATION);
+   HTM_TH (1,1,"RM",Txt_Centers_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Departments_ABBREVIATION);
@@ -831,7 +836,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Ins_Instit *Ins)
   }
 
 /*****************************************************************************/
-/********** Get data of a centre from a row resulting of a query *************/
+/********** Get data of a center from a row resulting of a query *************/
 /*****************************************************************************/
 
 static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row)
@@ -1108,10 +1113,10 @@ static void Ins_ListInstitutionsForEdition (void)
       /* Put icon to remove institution */
       HTM_TD_Begin ("class=\"BM\"");
       if (!ICanEdit ||
-	  NumCtrs ||		// Institution has centres
+	  NumCtrs ||		// Institution has centers
 	  NumUsrsIns ||		// Institution has users
 	  NumUsrsInCrssOfIns)	// Institution has users
-	 // Institution has centres or users ==> deletion forbidden
+	 // Institution has centers or users ==> deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
 	 Ico_PutContextualIconToRemove (ActRemIns,NULL,
@@ -1185,7 +1190,7 @@ static void Ins_ListInstitutionsForEdition (void)
       HTM_Unsigned (NumUsrsIns);
       HTM_TD_End ();
 
-      /* Number of centres */
+      /* Number of centers */
       HTM_TD_Begin ("class=\"DAT RM\"");
       HTM_Unsigned (NumCtrs);
       HTM_TD_End ();
@@ -1343,7 +1348,7 @@ static long Ins_GetParamOtherInsCod (void)
 
 void Ins_RemoveInstitution (void)
   {
-   extern const char *Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution;
+   extern const char *Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution;
    extern const char *Txt_Institution_X_removed;
    char PathIns[PATH_MAX + 1];
 
@@ -1360,20 +1365,20 @@ void Ins_RemoveInstitution (void)
    if (!Ins_CheckIfICanEdit (Ins_EditingIns))
       Lay_NoPermissionExit ();
    else if (Ctr_GetNumCtrsInIns (Ins_EditingIns->InsCod))
-      // Institution has centres ==> don't remove
+      // Institution has centers ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
+	               Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution);
    else if (Usr_GetNumUsrsWhoClaimToBelongToIns (Ins_EditingIns))
       // Institution has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
+	               Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution);
    else if (Usr_GetNumUsrsInCrss (Hie_Lvl_INS,Ins_EditingIns->InsCod,
 				  1 << Rol_STD |
 				  1 << Rol_NET |
 				  1 << Rol_TCH))	// Any user
       // Institution has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
+	               Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution);
    else	// Institution has no users ==> remove it
      {
       /***** Remove all the threads and posts in forums of the institution *****/
@@ -1751,7 +1756,7 @@ static void Ins_PutFormToCreateInstitution (void)
    HTM_Unsigned (0);
    HTM_TD_End ();
 
-   /***** Number of centres *****/
+   /***** Number of centers *****/
    HTM_TD_Begin ("class=\"DAT RM\"");
    HTM_Unsigned (0);
    HTM_TD_End ();
@@ -1790,7 +1795,7 @@ static void Ins_PutHeadInstitutionsForEdition (void)
    extern const char *Txt_Full_name_of_the_institution;
    extern const char *Txt_WWW;
    extern const char *Txt_Users;
-   extern const char *Txt_Centres_ABBREVIATION;
+   extern const char *Txt_Centers_ABBREVIATION;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Requester;
 
@@ -1803,7 +1808,7 @@ static void Ins_PutHeadInstitutionsForEdition (void)
    HTM_TH (1,1,"LM",Txt_Full_name_of_the_institution);
    HTM_TH (1,1,"LM",Txt_WWW);
    HTM_TH (1,1,"RM",Txt_Users);
-   HTM_TH (1,1,"RM",Txt_Centres_ABBREVIATION);
+   HTM_TH (1,1,"RM",Txt_Centers_ABBREVIATION);
    HTM_TH_Begin (1,1,"RM");
    HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
    HTM_BR ();
@@ -1984,7 +1989,7 @@ unsigned Ins_GetCachedNumInssInCty (long CtyCod)
   }
 
 /*****************************************************************************/
-/***************** Get number of institutions with centres *******************/
+/***************** Get number of institutions with centers *******************/
 /*****************************************************************************/
 
 unsigned Ins_GetCachedNumInssWithCtrs (const char *SubQuery,
@@ -1992,17 +1997,18 @@ unsigned Ins_GetCachedNumInssWithCtrs (const char *SubQuery,
   {
    unsigned NumInssWithCtrs;
 
-   /***** Get number of institutions with centres from cache *****/
+   /***** Get number of institutions with centers from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_CTRS,Scope,Cod,
 				   FigCch_UNSIGNED,&NumInssWithCtrs))
      {
-      /***** Get current number of institutions with centres from database and update cache *****/
+      /***** Get current number of institutions with centers from database and update cache *****/
       NumInssWithCtrs = (unsigned)
-	                DB_QueryCOUNT ("can not get number of institutions with centres",
-				       "SELECT COUNT(DISTINCT institutions.InsCod)"
-				       " FROM institutions,centres"
-				       " WHERE %sinstitutions.InsCod=centres.InsCod",
-				       SubQuery);
+      DB_QueryCOUNT ("can not get number of institutions with centers",
+		     "SELECT COUNT(DISTINCT institutions.InsCod)"
+		     " FROM institutions,"
+			   "ctr_centers"
+		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod",
+		     SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_CTRS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumInssWithCtrs);
      }
@@ -2025,12 +2031,14 @@ unsigned Ins_GetCachedNumInssWithDegs (const char *SubQuery,
      {
       /***** Get current number of institutions with degrees from database and update cache *****/
       NumInssWithDegs = (unsigned)
-	                DB_QueryCOUNT ("can not get number of institutions with degrees",
-				       "SELECT COUNT(DISTINCT institutions.InsCod)"
-				       " FROM institutions,centres,deg_degrees"
-				       " WHERE %sinstitutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=deg_degrees.CtrCod",
-				       SubQuery);
+      DB_QueryCOUNT ("can not get number of institutions with degrees",
+		     "SELECT COUNT(DISTINCT institutions.InsCod)"
+		     " FROM institutions,"
+		           "ctr_centers,"
+		           "deg_degrees"
+		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
+		     SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_DEGS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumInssWithDegs);
      }
@@ -2056,11 +2064,11 @@ unsigned Ins_GetCachedNumInssWithCrss (const char *SubQuery,
       DB_QueryCOUNT ("can not get number of institutions with courses",
 		     "SELECT COUNT(DISTINCT institutions.InsCod)"
 		     " FROM institutions,"
-		           "centres,"
+		           "ctr_centers,"
 		           "deg_degrees,"
 		           "crs_courses"
-		     " WHERE %sinstitutions.InsCod=centres.InsCod"
-		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		     " AND deg_degrees.DegCod=crs_courses.DegCod",
 		     SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_CRSS,Scope,Cod,
@@ -2094,12 +2102,12 @@ unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery,
       DB_QueryCOUNT ("can not get number of institutions with users",
 		     "SELECT COUNT(DISTINCT institutions.InsCod)"
 		     " FROM institutions,"
-		           "centres,"
+		           "ctr_centers,"
 		           "deg_degrees,"
 		           "crs_courses,"
 		           "crs_usr"
-		     " WHERE %sinstitutions.InsCod=centres.InsCod"
-		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		     " AND deg_degrees.DegCod=crs_courses.DegCod"
 		     " AND crs_courses.CrsCod=crs_usr.CrsCod"
 		     " AND crs_usr.Role=%u",
@@ -2215,7 +2223,7 @@ static void Ins_FormToGoToMap (struct Ins_Instit *Ins)
   }
 
 /*****************************************************************************/
-/********** Check if any of the centres in an institution has map ************/
+/********** Check if any of the centers in an institution has map ************/
 /*****************************************************************************/
 
 bool Ins_GetIfMapIsAvailable (long InsCod)
@@ -2224,11 +2232,11 @@ bool Ins_GetIfMapIsAvailable (long InsCod)
    MYSQL_ROW row;
    bool MapIsAvailable = false;
 
-   /***** Get if any centre in current institution has a coordinate set
+   /***** Get if any center in current institution has a coordinate set
           (coordinates 0, 0 means not set ==> don't show map) *****/
    if (DB_QuerySELECT (&mysql_res,"can not get if map is available",
 		       "SELECT EXISTS"
-		       "(SELECT * FROM centres"
+		       "(SELECT * FROM ctr_centers"
 		       " WHERE InsCod=%ld"
 		       " AND (Latitude<>0 OR Longitude<>0))",
 		       InsCod))

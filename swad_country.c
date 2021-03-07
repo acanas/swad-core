@@ -274,7 +274,7 @@ void Cty_ListCountries2 (void)
    HTM_Unsigned (Ins_GetCachedNumInssInCty (0));
    HTM_TD_End ();
 
-   /* Number of centres in other countries */
+   /* Number of centers in other countries */
    HTM_TD_Begin ("class=\"DAT RM\"");
    HTM_Unsigned (Ctr_GetCachedNumCtrsInCty (0));
    HTM_TD_End ();
@@ -319,7 +319,7 @@ void Cty_ListCountries2 (void)
    HTM_Unsigned (Ins_GetCachedNumInssInCty (-1L));
    HTM_TD_End ();
 
-   /* Number of centres with unknown country */
+   /* Number of centers with unknown country */
    HTM_TD_Begin ("class=\"DAT RM\"");
    HTM_Unsigned (Ctr_GetCachedNumCtrsInCty (-1L));
    HTM_TD_End ();
@@ -363,7 +363,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
    extern const char *Txt_COUNTRIES_HELP_ORDER[2];
    extern const char *Txt_COUNTRIES_ORDER[2];
    extern const char *Txt_Institutions_ABBREVIATION;
-   extern const char *Txt_Centres_ABBREVIATION;
+   extern const char *Txt_Centers_ABBREVIATION;
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
@@ -398,7 +398,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
      }
 
    HTM_TH (1,1,"RM",Txt_Institutions_ABBREVIATION);
-   HTM_TH (1,1,"RM",Txt_Centres_ABBREVIATION);
+   HTM_TH (1,1,"RM",Txt_Centers_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
    HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
    HTM_TH_Begin (1,1,"RM");
@@ -446,7 +446,7 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
    HTM_Unsigned (Ins_GetCachedNumInssInCty (Cty->CtyCod));
    HTM_TD_End ();
 
-   /***** Number of centres *****/
+   /***** Number of centers *****/
    HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
    HTM_Unsigned (Ctr_GetCachedNumCtrsInCty (Cty->CtyCod));
    HTM_TD_End ();
@@ -1920,24 +1920,26 @@ unsigned Cty_GetCachedNumCtysWithInss (void)
   }
 
 /*****************************************************************************/
-/******************* Get number of countries with centres ********************/
+/******************* Get number of countries with centers ********************/
 /*****************************************************************************/
 
 unsigned Cty_GetCachedNumCtysWithCtrs (void)
   {
    unsigned NumCtysWithCtrs;
 
-   /***** Get number of countries with centres from cache *****/
+   /***** Get number of countries with centers from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_CTRS,Hie_Lvl_SYS,-1L,
 				   FigCch_UNSIGNED,&NumCtysWithCtrs))
      {
-      /***** Get current number of countries with centres from database and update cache *****/
+      /***** Get current number of countries with centers from database and update cache *****/
       NumCtysWithCtrs = (unsigned)
-	                DB_QueryCOUNT ("can not get number of countries with centres",
-				       "SELECT COUNT(DISTINCT countries.CtyCod)"
-				       " FROM countries,institutions,centres"
-				       " WHERE countries.CtyCod=institutions.CtyCod"
-				       " AND institutions.InsCod=centres.InsCod");
+      DB_QueryCOUNT ("can not get number of countries with centers",
+		     "SELECT COUNT(DISTINCT countries.CtyCod)"
+		     " FROM countries,"
+		           "institutions,"
+		           "ctr_centers"
+		     " WHERE countries.CtyCod=institutions.CtyCod"
+		     " AND institutions.InsCod=ctr_centers.InsCod");
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CTRS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithCtrs);
      }
@@ -1957,12 +1959,15 @@ unsigned Cty_GetCachedNumCtysWithDegs (void)
 				   FigCch_UNSIGNED,&NumCtysWithDegs))
      {
       NumCtysWithDegs = (unsigned)
-	                DB_QueryCOUNT ("can not get number of countries with degrees",
-				       "SELECT COUNT(DISTINCT countries.CtyCod)"
-				       " FROM countries,institutions,centres,deg_degrees"
-				       " WHERE countries.CtyCod=institutions.CtyCod"
-				       " AND institutions.InsCod=centres.InsCod"
-				       " AND centres.CtrCod=deg_degrees.CtrCod");
+      DB_QueryCOUNT ("can not get number of countries with degrees",
+		     "SELECT COUNT(DISTINCT countries.CtyCod)"
+		     " FROM countries,"
+		           "institutions,"
+		           "ctr_centers,"
+		           "deg_degrees"
+		     " WHERE countries.CtyCod=institutions.CtyCod"
+		     " AND institutions.InsCod=ctr_centers.InsCod"
+		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod");
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_DEGS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithDegs);
      }
@@ -1988,12 +1993,12 @@ unsigned Cty_GetCachedNumCtysWithCrss (void)
 		     "SELECT COUNT(DISTINCT countries.CtyCod)"
 		     " FROM countries,"
 		           "institutions,"
-		           "centres,"
+		           "ctr_centers,"
 		           "deg_degrees,"
 		           "crs_courses"
 		     " WHERE countries.CtyCod=institutions.CtyCod"
-		     " AND institutions.InsCod=centres.InsCod"
-		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " AND institutions.InsCod=ctr_centers.InsCod"
+		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		     " AND deg_degrees.DegCod=crs_courses.DegCod");
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CRSS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithCrss);
@@ -2027,13 +2032,13 @@ unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery,
 		     "SELECT COUNT(DISTINCT countries.CtyCod)"
 		     " FROM countries,"
 		           "institutions,"
-		           "centres,"
+		           "ctr_centers,"
 		           "deg_degrees,"
 		           "crs_courses,"
 		           "crs_usr"
 		     " WHERE %scountries.CtyCod=institutions.CtyCod"
-		     " AND institutions.InsCod=centres.InsCod"
-		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " AND institutions.InsCod=ctr_centers.InsCod"
+		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		     " AND deg_degrees.DegCod=crs_courses.DegCod"
 		     " AND crs_courses.CrsCod=crs_usr.CrsCod"
 		     " AND crs_usr.Role=%u",
@@ -2156,7 +2161,7 @@ static void Cty_FormToGoToMap (struct Cty_Countr *Cty)
   }
 
 /*****************************************************************************/
-/************ Check if any of the centres in a country has map ***************/
+/************ Check if any of the centers in a country has map ***************/
 /*****************************************************************************/
 
 bool Cty_GetIfMapIsAvailable (long CtyCod)
@@ -2165,14 +2170,17 @@ bool Cty_GetIfMapIsAvailable (long CtyCod)
    MYSQL_ROW row;
    bool MapIsAvailable = false;
 
-   /***** Get if any centre in current country has a coordinate set
+   /***** Get if any center in current country has a coordinate set
           (coordinates 0, 0 means not set ==> don't show map) *****/
    if (DB_QuerySELECT (&mysql_res,"can not get if map is available",
 		       "SELECT EXISTS"
-		       "(SELECT * FROM institutions,centres"
+		       "(SELECT *"
+		       " FROM institutions,"
+		             "ctr_centers"
 		       " WHERE institutions.CtyCod=%ld"
-		       " AND institutions.InsCod=centres.InsCod"
-		       " AND (centres.Latitude<>0 OR centres.Longitude<>0))",
+		       " AND institutions.InsCod=ctr_centers.InsCod"
+		       " AND (ctr_centers.Latitude<>0"
+		         " OR ctr_centers.Longitude<>0))",
 		       CtyCod))
      {
       /* Get if map is available */

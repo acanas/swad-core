@@ -130,7 +130,7 @@ static void SysCfg_Configuration (bool PrintView)
    /***** Shortcut to the country *****/
    SysCfg_Shortcut (PrintView);
 
-   /***** Get number of centres with map *****/
+   /***** Get number of centers with map *****/
    NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInSys ();
 
    if (PrintView)
@@ -138,12 +138,12 @@ static void SysCfg_Configuration (bool PrintView)
       SysCfg_QR ();
    else
      {
-      /***** Get number of centres *****/
+      /***** Get number of centers *****/
       NumCtrs = Ctr_GetCachedNumCtrsInSys ();
 
       /***** Number of countries,
              number of institutions,
-             number of centres,
+             number of centers,
              number of degrees,
              number of courses *****/
       SysCfg_NumCtys ();
@@ -193,21 +193,21 @@ static void SysCfg_PutIconToPrint (__attribute__((unused)) void *Args)
   }
 
 /*****************************************************************************/
-/********* Get average coordinates of centres in current institution *********/
+/********* Get average coordinates of centers in current institution *********/
 /*****************************************************************************/
 
 static void SysCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
   {
    char *Query;
 
-   /***** Get average coordinates of centres with both coordinates set
+   /***** Get average coordinates of centers with both coordinates set
           (coordinates 0, 0 means not set ==> don't show map) *****/
    if (asprintf (&Query,
 		 "SELECT AVG(Latitude),"				// row[0]
 			"AVG(Longitude),"				// row[1]
 			"GREATEST(MAX(Latitude)-MIN(Latitude),"
 				 "MAX(Longitude)-MIN(Longitude))"	// row[2]
-		 " FROM centres"
+		 " FROM ctr_centers"
 		 " WHERE Latitude<>0"
 		 " AND Longitude<>0") < 0)
       Lay_NotEnoughMemoryExit ();
@@ -230,7 +230,7 @@ static void SysCfg_Map (void)
    unsigned NumCtrs;
    unsigned NumCtr;
    struct Ins_Instit Ins;
-   struct Ctr_Centre Ctr;
+   struct Ctr_Center Ctr;
 
    /***** Leaflet CSS *****/
    Map_LeafletCSS ();
@@ -252,27 +252,27 @@ static void SysCfg_Map (void)
    /* Add Mapbox Streets tile layer to our map */
    Map_AddTileLayer ();
 
-   /* Get centres with coordinates */
-   NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centres"
-						   " with coordinates",
-					"SELECT CtrCod"	// row[0]
-					" FROM centres"
-					" WHERE centres.Latitude<>0"
-					" AND centres.Longitude<>0");
+   /* Get centers with coordinates */
+   NumCtrs = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get centers with coordinates",
+		   "SELECT CtrCod"	// row[0]
+		   " FROM ctr_centers"
+		   " WHERE ctr_centers.Latitude<>0"
+		   " AND ctr_centers.Longitude<>0");
 
-   /* Add a marker and a popup for each centre */
+   /* Add a marker and a popup for each center */
    for (NumCtr = 0;
 	NumCtr < NumCtrs;
 	NumCtr++)
      {
-      /* Get next centre */
+      /* Get next center */
       row = mysql_fetch_row (mysql_res);
 
-      /* Get centre code (row[0]) */
+      /* Get center code (row[0]) */
       Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get data of centre */
-      Ctr_GetDataOfCentreByCod (&Ctr);
+      /* Get data of center */
+      Ctr_GetDataOfCenterByCod (&Ctr);
 
       /* Get data of institution */
       Ins.InsCod = Ctr.InsCod;

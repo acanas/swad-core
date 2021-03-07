@@ -1,4 +1,4 @@
-// swad_logo.h: logo of institution, centre or degree
+// swad_logo.h: logo of institution, center or degree
 
 #ifndef _SWAD_LGO
 #define _SWAD_LGO

@@ -1,4 +1,4 @@
-// swad_centre_config.h: configuration of current centre
+// swad_center_config.h: configuration of current center
 
 #ifndef _SWAD_CTR_CFG
 #define _SWAD_CTR_CFG
@@ -45,8 +45,8 @@ void CtrCfg_RequestPhoto (void);
 void CtrCfg_ReceivePhoto (void);
 void CtrCfg_ChangeCtrPhotoAttr (void);
 void CtrCfg_ChangeCtrIns (void);
-void CtrCfg_RenameCentreShort (void);
-void CtrCfg_RenameCentreFull (void);
+void CtrCfg_RenameCenterShort (void);
+void CtrCfg_RenameCenterFull (void);
 void CtrCfg_ChangeCtrPlc (void);
 void CtrCfg_ChangeCtrLatitude (void);
 void CtrCfg_ChangeCtrLongitude (void);

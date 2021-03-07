@@ -1706,12 +1706,12 @@ unsigned Att_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
       case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with attendance events",
 			 "SELECT COUNT(DISTINCT att_events.CrsCod)"
-			 " FROM centres,"
+			 " FROM ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "att_events"
-			 " WHERE centres.InsCod=%ld"
-			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " WHERE ctr_centers.InsCod=%ld"
+			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.Status=0"
 			 " AND crs_courses.CrsCod=att_events.CrsCod",
@@ -1787,12 +1787,12 @@ unsigned Att_GetNumAttEvents (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
          DB_QuerySELECT (&mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),"
 			        "SUM(att_events.NumNotif)"
-			 " FROM centres,"
+			 " FROM ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "att_events"
-			 " WHERE centres.InsCod=%ld"
-			 " AND centres.CtrCod=deg_degrees.CtrCod"
+			 " WHERE ctr_centers.InsCod=%ld"
+			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);

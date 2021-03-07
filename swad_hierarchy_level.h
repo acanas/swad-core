@@ -1,4 +1,4 @@
-// swad_hierarchy_level.h: hierarchy levels: system, institution, centre, degree, course
+// swad_hierarchy_level.h: hierarchy levels: system, institution, center, degree, course
 
 #ifndef _SWAD_HIE_LVL
 #define _SWAD_HIE_LVL
@@ -43,7 +43,7 @@ typedef enum
    Hie_Lvl_SYS = 1,	// System
    Hie_Lvl_CTY = 2,	// Country
    Hie_Lvl_INS = 3,	// Institution
-   Hie_Lvl_CTR = 4,	// Centre
+   Hie_Lvl_CTR = 4,	// Center
    Hie_Lvl_DEG = 5,	// Degree
    Hie_Lvl_CRS = 6,	// Course
   } Hie_Lvl_Level_t;

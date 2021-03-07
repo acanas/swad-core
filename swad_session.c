@@ -298,7 +298,7 @@ bool Ses_GetSessionData (void)
       /***** Get institution code (row[4]) *****/
       Gbl.Hierarchy.Ins.InsCod = Str_ConvertStrCodToLongCod (row[4]);
 
-      /***** Get centre code (row[5]) *****/
+      /***** Get center code (row[5]) *****/
       Gbl.Hierarchy.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[5]);
 
       /***** Get degree code (row[6]) *****/

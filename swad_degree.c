@@ -276,16 +276,16 @@ void Deg_WriteSelectorOfDegree (void)
 
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
      {
-      /***** Get degrees belonging to the current centre from database *****/
+      /***** Get degrees belonging to the current center from database *****/
       NumDegs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get degrees"
-						      " of a centre",
+						      " of a center",
 					   "SELECT DegCod,ShortName"
 					   " FROM deg_degrees"
 					   " WHERE CtrCod=%ld"
 					   " ORDER BY ShortName",
 					   Gbl.Hierarchy.Ctr.CtrCod);
 
-      /***** Get degrees of this centre *****/
+      /***** Get degrees of this center *****/
       for (NumDeg = 0;
 	   NumDeg < NumDegs;
 	   NumDeg++)
@@ -314,28 +314,28 @@ void Deg_WriteSelectorOfDegree (void)
   }
 
 /*****************************************************************************/
-/************* Show the degrees belonging to the current centre **************/
+/************* Show the degrees belonging to the current center **************/
 /*****************************************************************************/
 
 void Deg_ShowDegsOfCurrentCtr (void)
   {
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Ctr.CtrCod <= 0)	// No centre selected
+   if (Gbl.Hierarchy.Ctr.CtrCod <= 0)	// No center selected
       return;
 
-   /***** Get list of centres and degrees *****/
-   Ctr_GetBasicListOfCentres (Gbl.Hierarchy.Ins.InsCod);
+   /***** Get list of centers and degrees *****/
+   Ctr_GetBasicListOfCenters (Gbl.Hierarchy.Ins.InsCod);
    Deg_GetListDegsInCurrentCtr ();
 
-   /***** Write menu to select country, institution and centre *****/
+   /***** Write menu to select country, institution and center *****/
    Hie_WriteMenuHierarchy ();
 
    /***** Show list of degrees *****/
    Deg_ListDegrees ();
 
-   /***** Free list of degrees and centres *****/
+   /***** Free list of degrees and centers *****/
    Deg_FreeListDegs (&Gbl.Hierarchy.Degs);
-   Ctr_FreeListCentres ();
+   Ctr_FreeListCenters ();
   }
 
 /*****************************************************************************/
@@ -537,7 +537,7 @@ static void Deg_ListDegreesForEdition (void)
 
 static bool Deg_CheckIfICanEditADegree (struct Deg_Degree *Deg)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||		// I am a centre administrator or higher
+   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||		// I am a center administrator or higher
                   ((Deg->Status & Deg_STATUS_BIT_PENDING) != 0 &&	// Degree is not yet activated
                    Gbl.Usrs.Me.UsrDat.UsrCod == Deg->RequesterUsrCod));	// I am the requester
   }
@@ -793,26 +793,26 @@ static void Deg_CreateDegree (unsigned Status)
   }
 
 /*****************************************************************************/
-/************** List degrees belonging to the current centre *****************/
+/************** List degrees belonging to the current center *****************/
 /*****************************************************************************/
 
 static void Deg_ListDegrees (void)
   {
-   extern const char *Hlp_CENTRE_Degrees;
-   extern const char *Txt_Degrees_of_CENTRE_X;
+   extern const char *Hlp_CENTER_Degrees;
+   extern const char *Txt_Degrees_of_CENTER_X;
    extern const char *Txt_No_degrees;
    extern const char *Txt_Create_another_degree;
    extern const char *Txt_Create_degree;
    unsigned NumDeg;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Degrees_of_CENTRE_X,
+   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Degrees_of_CENTER_X,
 				          Gbl.Hierarchy.Ctr.ShrtName),
 		 Deg_PutIconsListingDegrees,NULL,
-                 Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
+                 Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
-   if (Gbl.Hierarchy.Degs.Num)	// There are degrees in the current centre
+   if (Gbl.Hierarchy.Degs.Num)	// There are degrees in the current center
      {
       /***** Write heading *****/
       HTM_TABLE_BeginWideMarginPadding (2);
@@ -827,7 +827,7 @@ static void Deg_ListDegrees (void)
       /***** End table *****/
       HTM_TABLE_End ();
      }
-   else	// No degrees created in the current centre
+   else	// No degrees created in the current center
       Ale_ShowAlert (Ale_INFO,Txt_No_degrees);
 
    /***** Button to create degree *****/
@@ -983,24 +983,24 @@ void Deg_EditDegrees (void)
 
 static void Deg_EditDegreesInternal (void)
   {
-   extern const char *Hlp_CENTRE_Degrees;
-   extern const char *Txt_Degrees_of_CENTRE_X;
+   extern const char *Hlp_CENTER_Degrees;
+   extern const char *Txt_Degrees_of_CENTER_X;
    extern const char *Txt_No_types_of_degree;
 
-   /***** Get list of degrees in the current centre *****/
+   /***** Get list of degrees in the current center *****/
    Deg_GetListDegsInCurrentCtr ();
 
    /***** Get list of degree types *****/
    DT_GetListDegreeTypes (Hie_Lvl_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
-   /***** Write menu to select country, institution and centre *****/
+   /***** Write menu to select country, institution and center *****/
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Degrees_of_CENTRE_X,
+   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Degrees_of_CENTER_X,
 				          Gbl.Hierarchy.Ctr.ShrtName),
 		 Deg_PutIconsEditingDegrees,NULL,
-                 Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
+                 Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
    if (Gbl.DegTypes.Num)
@@ -1028,7 +1028,7 @@ static void Deg_EditDegreesInternal (void)
    /***** Free list of degree types *****/
    DT_FreeListDegreeTypes ();
 
-   /***** Free list of degrees in the current centre *****/
+   /***** Free list of degrees in the current center *****/
    Deg_FreeListDegs (&Gbl.Hierarchy.Degs);
   }
 
@@ -1117,7 +1117,7 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
   }
 
 /*****************************************************************************/
-/************ Get a list with the degrees of the current centre **************/
+/************ Get a list with the degrees of the current center **************/
 /*****************************************************************************/
 
 void Deg_GetListDegsInCurrentCtr (void)
@@ -1128,8 +1128,8 @@ void Deg_GetListDegsInCurrentCtr (void)
    unsigned NumDeg;
    struct Deg_Degree *Deg;
 
-   /***** Get degrees of the current centre from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get degrees of a centre",
+   /***** Get degrees of the current center from database *****/
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get degrees of a center",
 			     "SELECT DegCod,"		// row[0]
 			            "CtrCod,"		// row[1]
 			            "DegTypCod,"	// row[2]
@@ -1148,12 +1148,12 @@ void Deg_GetListDegsInCurrentCtr (void)
      {
       Gbl.Hierarchy.Degs.Num = (unsigned) NumRows;
 
-      /***** Create list with degrees of this centre *****/
+      /***** Create list with degrees of this center *****/
       if ((Gbl.Hierarchy.Degs.Lst = calloc (Gbl.Hierarchy.Degs.Num,
                                             sizeof (*Gbl.Hierarchy.Degs.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
-      /***** Get the degrees of this centre *****/
+      /***** Get the degrees of this center *****/
       for (NumDeg = 0;
 	   NumDeg < Gbl.Hierarchy.Degs.Num;
 	   NumDeg++)
@@ -1224,7 +1224,7 @@ static void Deg_ReceiveFormRequestOrCreateDeg (unsigned Status)
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_degree;
 
    /***** Get parameters from form *****/
-   /* Set degree centre */
+   /* Set degree center */
    Deg_EditingDeg->CtrCod = Gbl.Hierarchy.Ctr.CtrCod;
 
    /* Get degree short name */
@@ -1403,7 +1403,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row)
    if ((Deg->DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
       Lay_ShowErrorAndExit ("Wrong code of degree.");
 
-   /***** Get centre code (row[1]) *****/
+   /***** Get center code (row[1]) *****/
    Deg->CtrCod = Str_ConvertStrCodToLongCod (row[1]);
 
    /***** Get the code of the degree type (row[2]) *****/
@@ -1450,7 +1450,7 @@ void Deg_GetShortNameOfDegreeByCod (struct Deg_Degree *Deg)
   }
 
 /*****************************************************************************/
-/************* Get the centre code of a degree from its code *****************/
+/************* Get the center code of a degree from its code *****************/
 /*****************************************************************************/
 
 long Deg_GetCtrCodOfDegreeByCod (long DegCod)
@@ -1461,12 +1461,12 @@ long Deg_GetCtrCodOfDegreeByCod (long DegCod)
 
    if (DegCod > 0)
      {
-      /***** Get the centre code of a degree from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get the centre of a degree",
+      /***** Get the center code of a degree from database *****/
+      if (DB_QuerySELECT (&mysql_res,"can not get the center of a degree",
 			  "SELECT CtrCod FROM deg_degrees WHERE DegCod=%ld",
 			  DegCod) == 1)
 	{
-	 /***** Get the centre code of this degree *****/
+	 /***** Get the center code of this degree *****/
 	 row = mysql_fetch_row (mysql_res);
 	 CtrCod = Str_ConvertStrCodToLongCod (row[0]);
 	}
@@ -1492,10 +1492,11 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod)
      {
       /***** Get the institution code of a degree from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get the institution of a degree",
-			  "SELECT centres.InsCod"
-			  " FROM deg_degrees,centres"
+			  "SELECT ctr_centers.InsCod"
+			  " FROM deg_degrees,"
+			        "ctr_centers"
 			  " WHERE deg_degrees.DegCod=%ld"
-			  " AND deg_degrees.CtrCod=centres.CtrCod",
+			  " AND deg_degrees.CtrCod=ctr_centers.CtrCod",
 			  DegCod) == 1)
 	{
 	 /***** Get the institution code of this degree *****/
@@ -1951,14 +1952,16 @@ unsigned Deg_GetNumDegsInCty (long CtyCod)
 
    /***** 3. Slow: number of degrees in a country from database *****/
    Gbl.Cache.NumDegsInCty.CtyCod  = CtyCod;
-   Gbl.Cache.NumDegsInCty.NumDegs =
-   (unsigned) DB_QueryCOUNT ("can not get the number of degrees in a country",
-			     "SELECT COUNT(*)"
-			     " FROM institutions,centres,deg_degrees"
-			     " WHERE institutions.CtyCod=%ld"
-			     " AND institutions.InsCod=centres.InsCod"
-			     " AND centres.CtrCod=deg_degrees.CtrCod",
-			     CtyCod);
+   Gbl.Cache.NumDegsInCty.NumDegs = (unsigned)
+   DB_QueryCOUNT ("can not get the number of degrees in a country",
+		  "SELECT COUNT(*)"
+		  " FROM institutions,"
+		        "ctr_centers,"
+		        "deg_degrees"
+		  " WHERE institutions.CtyCod=%ld"
+		  " AND institutions.InsCod=ctr_centers.InsCod"
+		  " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
+		  CtyCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_Lvl_CTY,Gbl.Cache.NumDegsInCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInCty.NumDegs);
    return Gbl.Cache.NumDegsInCty.NumDegs;
@@ -1999,13 +2002,14 @@ unsigned Deg_GetNumDegsInIns (long InsCod)
 
    /***** 3. Slow: number of degrees in an institution from database *****/
    Gbl.Cache.NumDegsInIns.InsCod  = InsCod;
-   Gbl.Cache.NumDegsInIns.NumDegs =
-   (unsigned) DB_QueryCOUNT ("can not get the number of degrees"
-	                     " in an institution",
-			     "SELECT COUNT(*) FROM centres,deg_degrees"
-			     " WHERE centres.InsCod=%ld"
-			     " AND centres.CtrCod=deg_degrees.CtrCod",
-			     InsCod);
+   Gbl.Cache.NumDegsInIns.NumDegs = (unsigned)
+   DB_QueryCOUNT ("can not get the number of degrees in an institution",
+		  "SELECT COUNT(*)"
+		  " FROM ctr_centers,"
+		        "deg_degrees"
+		  " WHERE ctr_centers.InsCod=%ld"
+		  " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
+		  InsCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_Lvl_INS,Gbl.Cache.NumDegsInIns.InsCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInIns.NumDegs);
    return Gbl.Cache.NumDegsInIns.NumDegs;
@@ -2025,7 +2029,7 @@ unsigned Deg_GetCachedNumDegsInIns (long InsCod)
   }
 
 /*****************************************************************************/
-/******************** Get number of degrees in a centre **********************/
+/******************** Get number of degrees in a center **********************/
 /*****************************************************************************/
 
 void Deg_FlushCacheNumDegsInCtr (void)
@@ -2044,10 +2048,10 @@ unsigned Deg_GetNumDegsInCtr (long CtrCod)
    if (CtrCod == Gbl.Cache.NumDegsInCtr.CtrCod)
       return Gbl.Cache.NumDegsInCtr.NumDegs;
 
-   /***** 3. Slow: number of degrees in a centre from database *****/
+   /***** 3. Slow: number of degrees in a center from database *****/
    Gbl.Cache.NumDegsInCtr.CtrCod  = CtrCod;
    Gbl.Cache.NumDegsInCtr.NumDegs =
-   (unsigned) DB_QueryCOUNT ("can not get the number of degrees in a centre",
+   (unsigned) DB_QueryCOUNT ("can not get the number of degrees in a center",
 			     "SELECT COUNT(*) FROM deg_degrees"
 			     " WHERE CtrCod=%ld",
 			     CtrCod);
@@ -2070,7 +2074,7 @@ unsigned Deg_GetCachedNumDegsInCtr (long CtrCod)
   }
 
 /*****************************************************************************/
-/********************* Get number of centres with courses ********************/
+/********************* Get number of centers with courses ********************/
 /*****************************************************************************/
 
 unsigned Deg_GetCachedNumDegsWithCrss (const char *SubQuery,
@@ -2087,11 +2091,11 @@ unsigned Deg_GetCachedNumDegsWithCrss (const char *SubQuery,
       DB_QueryCOUNT ("can not get number of degrees with courses",
 		     "SELECT COUNT(DISTINCT deg_degrees.DegCod)"
 		     " FROM institutions,"
-		           "centres,"
+		           "ctr_centers,"
 		           "deg_degrees,"
 		           "crs_courses"
-		     " WHERE %sinstitutions.InsCod=centres.InsCod"
-		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		     " AND deg_degrees.DegCod=crs_courses.DegCod",
 		     SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS_WITH_CRSS,Scope,Cod,
@@ -2125,12 +2129,12 @@ unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery,
       DB_QueryCOUNT ("can not get number of degrees with users",
 		     "SELECT COUNT(DISTINCT deg_degrees.DegCod)"
 		     " FROM institutions,"
-		           "centres,"
+		           "ctr_centers,"
 		           "deg_degrees,"
 		           "crs_courses,"
 		           "crs_usr"
-		     " WHERE %sinstitutions.InsCod=centres.InsCod"
-		     " AND centres.CtrCod=deg_degrees.CtrCod"
+		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		     " AND deg_degrees.DegCod=crs_courses.DegCod"
 		     " AND crs_courses.CrsCod=crs_usr.CrsCod"
 		     " AND crs_usr.Role=%u",

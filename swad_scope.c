@@ -1,4 +1,4 @@
-// swad_scope.c: scope (platform, centre, degree, course...)
+// swad_scope.c: scope (platform, center, degree, course...)
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -68,7 +68,7 @@ void Sco_PutSelectorScope (const char *ParamName,HTM_SubmitOnChange_t SubmitOnCh
    extern const char *Txt_System;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
-   extern const char *Txt_Centre;
+   extern const char *Txt_Center;
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
    Hie_Lvl_Level_t Scope;
@@ -146,7 +146,7 @@ void Sco_PutSelectorScope (const char *ParamName,HTM_SubmitOnChange_t SubmitOnCh
 		  HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
 			      Gbl.Scope.Current == Scope,false,
 			      "%s: %s",
-			      Txt_Centre,
+			      Txt_Center,
 			      Gbl.Hierarchy.Ctr.ShrtName);
 		  break;
 	       case Hie_Lvl_DEG:

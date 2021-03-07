@@ -630,7 +630,7 @@ static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName)
      {
       "cty",	// To enter directly to a country
       "ins",	// To enter directly to an institution
-      "ctr",	// To enter directly to a centre
+      "ctr",	// To enter directly to a center
       "deg",	// To enter directly to a degree
       "crs",	// To enter directly to a course
       "usr",	// To enter directly to a user's profile
@@ -664,7 +664,7 @@ void Par_GetMainParameters (void)
    char URL[PATH_MAX + 1];
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
-   /***** Reset codes of country, institution, centre, degree and course *****/
+   /***** Reset codes of country, institution, center, degree and course *****/
    Gbl.Hierarchy.Cty.CtyCod =
    Gbl.Hierarchy.Ins.InsCod =
    Gbl.Hierarchy.Ctr.CtrCod =
@@ -826,7 +826,7 @@ void Par_GetMainParameters (void)
       Gbl.Hierarchy.Crs.CrsCod = -1L;
      }
 
-   /***** Get centre if exists (from menu) *****/
+   /***** Get center if exists (from menu) *****/
    Par_GetParToText ("ctr",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter "ctr" available
      {

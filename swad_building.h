@@ -1,4 +1,4 @@
-// swad_building.h: buildings in a centre
+// swad_building.h: buildings in a center
 
 #ifndef _SWAD_BLD
 #define _SWAD_BLD
@@ -48,7 +48,7 @@ struct Bld_Building
    long InsCod;
    char ShrtName[Bld_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Bld_MAX_BYTES_FULL_NAME + 1];
-   char Location[Bld_MAX_BYTES_LOCATION + 1];	// Examples: Campus North, City centre
+   char Location[Bld_MAX_BYTES_LOCATION + 1];	// Examples: Campus North, City center
   };
 
 #define Bld_NUM_ORDERS 3

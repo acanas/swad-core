@@ -1,4 +1,4 @@
-// swad_building.c: buildings in a centre
+// swad_building.c: buildings in a center
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -99,7 +99,7 @@ void Bld_ResetBuildings (struct Bld_Buildings *Buildings)
 
 void Bld_SeeBuildings (void)
   {
-   extern const char *Hlp_CENTRE_Buildings;
+   extern const char *Hlp_CENTER_Buildings;
    extern const char *Txt_Buildings;
    extern const char *Txt_BUILDINGS_HELP_ORDER[Bld_NUM_ORDERS];
    extern const char *Txt_BUILDINGS_ORDER[Bld_NUM_ORDERS];
@@ -110,7 +110,7 @@ void Bld_SeeBuildings (void)
    unsigned RowEvenOdd;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No centre selected
+   if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No center selected
       return;
 
    /***** Reset buildings context *****/
@@ -125,7 +125,7 @@ void Bld_SeeBuildings (void)
    /***** Table head *****/
    Box_BoxBegin (NULL,Txt_Buildings,
                  Bld_PutIconsListingBuildings,NULL,
-		 Hlp_CENTRE_Buildings,Box_NOT_CLOSABLE);
+		 Hlp_CENTER_Buildings,Box_NOT_CLOSABLE);
    HTM_TABLE_BeginWideMarginPadding (2);
    HTM_TR_Begin (NULL);
    for (Order  = (Bld_Order_t) 0;
@@ -250,7 +250,7 @@ void Bld_EditBuildings (void)
 
 static void Bld_EditBuildingsInternal (void)
   {
-   extern const char *Hlp_CENTRE_Buildings_edit;
+   extern const char *Hlp_CENTER_Buildings_edit;
    extern const char *Txt_Buildings;
    struct Bld_Buildings Buildings;
 
@@ -263,7 +263,7 @@ static void Bld_EditBuildingsInternal (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Buildings,
                  Bld_PutIconsEditingBuildings,NULL,
-                 Hlp_CENTRE_Buildings_edit,Box_NOT_CLOSABLE);
+                 Hlp_CENTER_Buildings_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new building *****/
    Bld_PutFormToCreateBuilding ();
@@ -354,7 +354,7 @@ void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
      {
       Buildings->Num = (unsigned) NumRows;
 
-      /***** Create list with courses in centre *****/
+      /***** Create list with courses in center *****/
       if ((Buildings->Lst = calloc (NumRows,sizeof (*Buildings->Lst))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
@@ -584,12 +584,12 @@ void Bld_RemoveBuilding (void)
   }
 
 /*****************************************************************************/
-/******************** Remove all buildings in a centre ***********************/
+/******************** Remove all buildings in a center ***********************/
 /*****************************************************************************/
 
 void Bld_RemoveAllBuildingsInCtr (long CtrCod)
   {
-   /***** Remove all buildings in centre *****/
+   /***** Remove all buildings in center *****/
    DB_QueryDELETE ("can not remove buildings",
 		   "DELETE FROM buildings"
                    " WHERE CtrCod=%ld",

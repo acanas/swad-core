@@ -63,7 +63,7 @@ typedef enum				// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
    /* System tab */
    /* Country tab */
    /* Institution tab */
-   /* Centre tab */
+   /* Center tab */
    /* Degree tab */
    /* Course tab */
    /* Assessment tab */

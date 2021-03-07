@@ -54,7 +54,7 @@ typedef enum
    Rol_NET	= 4,	// Non-editing teacher in the current course
    Rol_TCH	= 5,	// Teacher in the current course
    Rol_DEG_ADM	= 6,	// Degree administrator
-   Rol_CTR_ADM	= 7,	// Centre administrator
+   Rol_CTR_ADM	= 7,	// Center administrator
    // -------------------------------------------------------------------------
    Rol_INS_ADM	= 8,	// Institution administrator
    Rol_SYS_ADM	= 9,	// System administrator (superuser)

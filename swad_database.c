@@ -420,9 +420,9 @@ mysql> DESCRIBE buildings;
 		   "UNIQUE INDEX(BldCod),"
 		   "INDEX(CtrCod))");
 
-   /***** Table centres *****/
+   /***** Table ctr_centers *****/
 /*
-mysql> DESCRIBE centres;
+mysql> DESCRIBE ctr_centers;
 +------------------+---------------+------+-----+---------+----------------+
 | Field            | Type          | Null | Key | Default | Extra          |
 +------------------+---------------+------+-----+---------+----------------+
@@ -441,7 +441,7 @@ mysql> DESCRIBE centres;
 +------------------+---------------+------+-----+---------+----------------+
 12 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS centres ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS ctr_centers ("
 			"CtrCod INT NOT NULL AUTO_INCREMENT,"
 			"InsCod INT NOT NULL,"
 			"PlcCod INT NOT NULL,"

@@ -32,7 +32,7 @@
 #include "swad_banner.h"
 #include "swad_building.h"
 #include "swad_calendar.h"
-#include "swad_centre_config.h"
+#include "swad_center_config.h"
 #include "swad_config.h"
 #include "swad_cookie.h"
 #include "swad_country.h"
@@ -290,13 +290,13 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRecInsLog	] = { 699,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,InsCfg_ReceiveLogo		,InsCfg_ShowConfiguration	,NULL},
    [ActRemInsLog	] = {1341,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,InsCfg_RemoveLogo		,InsCfg_ShowConfiguration	,NULL},
 
-   [ActEdiCtr		] = { 681,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_EditCentres		,NULL},
+   [ActEdiCtr		] = { 681,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_EditCenters		,NULL},
    [ActReqCtr		] = {1208,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_ReceiveFormReqCtr		,Ctr_ContEditAfterChgCtr	,NULL},
    [ActNewCtr		] = { 685,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_ReceiveFormNewCtr		,Ctr_ContEditAfterChgCtr	,NULL},
-   [ActRemCtr		] = { 686,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_RemoveCentre		,Ctr_ContEditAfterChgCtr	,NULL},
+   [ActRemCtr		] = { 686,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_RemoveCenter		,Ctr_ContEditAfterChgCtr	,NULL},
    [ActChgCtrPlc	] = { 706,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_ChangeCtrPlc		,Ctr_ContEditAfterChgCtr	,NULL},
-   [ActRenCtrSho	] = { 682,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_RenameCentreShort		,Ctr_ContEditAfterChgCtr	,NULL},
-   [ActRenCtrFul	] = { 684,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_RenameCentreFull		,Ctr_ContEditAfterChgCtr	,NULL},
+   [ActRenCtrSho	] = { 682,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_RenameCenterShort		,Ctr_ContEditAfterChgCtr	,NULL},
+   [ActRenCtrFul	] = { 684,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_RenameCenterFull		,Ctr_ContEditAfterChgCtr	,NULL},
    [ActChgCtrWWW	] = { 683,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_ChangeCtrWWW		,Ctr_ContEditAfterChgCtr	,NULL},
    [ActChgCtrSta	] = {1209,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_ChangeCtrStatus		,Ctr_ContEditAfterChgCtr	,NULL},
 
@@ -333,8 +333,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // Actions not in menu:
    [ActPrnCtrInf	] = {1152,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,CtrCfg_PrintConfiguration	,NULL},
    [ActChgCtrInsCfg	] = {1589,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CtrCfg_ChangeCtrIns		,CtrCfg_ContEditAfterChgCtr	,NULL},
-   [ActRenCtrShoCfg	] = {1595,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CtrCfg_RenameCentreShort	,CtrCfg_ContEditAfterChgCtr	,NULL},
-   [ActRenCtrFulCfg	] = {1594,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CtrCfg_RenameCentreFull	,CtrCfg_ContEditAfterChgCtr	,NULL},
+   [ActRenCtrShoCfg	] = {1595,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CtrCfg_RenameCenterShort	,CtrCfg_ContEditAfterChgCtr	,NULL},
+   [ActRenCtrFulCfg	] = {1594,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,CtrCfg_RenameCenterFull	,CtrCfg_ContEditAfterChgCtr	,NULL},
    [ActChgCtrPlcCfg	] = {1648,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrPlc		,NULL},
    [ActChgCtrLatCfg	] = {1815,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrLatitude	,NULL},
    [ActChgCtrLgtCfg	] = {1816,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrLongitude	,NULL},
@@ -1790,7 +1790,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActChgCtyMyIns	] = {1166,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ChgCountryOfMyInstitution	,NULL},
    [ActChgMyIns		] = {1167,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_UpdateMyInstitution	,NULL},
-   [ActChgMyCtr		] = {1168,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_UpdateMyCentre		,NULL},
+   [ActChgMyCtr		] = {1168,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_UpdateMyCenter		,NULL},
    [ActChgMyDpt		] = {1169,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_UpdateMyDepartment		,NULL},
    [ActChgMyOff		] = {1170,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_UpdateMyOffice		,NULL},
    [ActChgMyOffPho	] = {1171,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_UpdateMyOfficePhone	,NULL},
@@ -3821,7 +3821,7 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
       case Hie_Lvl_INS:	// Institution selected
          Permission = Act_Actions[Action].PermissionIns;
 	 break;
-      case Hie_Lvl_CTR:	// Centre selected
+      case Hie_Lvl_CTR:	// Center selected
          Permission = Act_Actions[Action].PermissionCtr;
 	 break;
       case Hie_Lvl_DEG:	// Degree selected
@@ -3988,7 +3988,7 @@ void Act_AdjustActionWhenNoUsrLogged (void)
       [Hie_Lvl_SYS] = ActFrmLogIn,	// System
       [Hie_Lvl_CTY] = ActSeeCtyInf,	// Country
       [Hie_Lvl_INS] = ActSeeInsInf,	// Institution
-      [Hie_Lvl_CTR] = ActSeeCtrInf,	// Centre
+      [Hie_Lvl_CTR] = ActSeeCtrInf,	// Center
       [Hie_Lvl_DEG] = ActSeeDegInf,	// Degree
       [Hie_Lvl_CRS] = ActSeeCrsInf,	// Course
      };
@@ -4078,7 +4078,7 @@ void Act_AdjustCurrentAction (void)
              - my country
              - my institution
           or if I'm a teacher and I haven't filled
-             - my centre
+             - my center
              - my department,
           the only action possible
           is to show a form to change my shared record card *****/

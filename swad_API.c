@@ -3281,7 +3281,7 @@ int swad__getNotifications (struct soap *soap,
    extern const char *Txt_Forum;
    extern const char *Txt_Course;
    extern const char *Txt_Degree;
-   extern const char *Txt_Centre;
+   extern const char *Txt_Center;
    extern const char *Txt_Institution;
    int ReturnCode;
    MYSQL_RES *mysql_res;
@@ -3427,9 +3427,9 @@ int swad__getNotifications (struct soap *soap,
          Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[4]);
          Ins_GetDataOfInstitutionByCod (&Hie.Ins);
 
-         /* Get centre (row[5]) */
+         /* Get center (row[5]) */
          Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[5]);
-         Ctr_GetDataOfCentreByCod (&Hie.Ctr);
+         Ctr_GetDataOfCenterByCod (&Hie.Ctr);
 
          /* Get degree (row[6]) */
          Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[6]);
@@ -3460,7 +3460,7 @@ int swad__getNotifications (struct soap *soap,
                      Txt_Degree,Hie.Deg.ShrtName);
          else if (Hie.Ctr.CtrCod > 0)
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Centre,Hie.Ctr.ShrtName);
+                     Txt_Center,Hie.Ctr.ShrtName);
          else if (Hie.Ins.InsCod > 0)
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
                      Txt_Institution,Hie.Ins.ShrtName);
@@ -5992,9 +5992,9 @@ int swad__getLocation (struct soap *soap,
 			     "SELECT institutions.InsCod,"	// row[ 0]
 				    "institutions.ShortName,"	// row[ 1]
 				    "institutions.FullName,"	// row[ 2]
-				    "centres.CtrCod,"		// row[ 3]
-				    "centres.ShortName,"	// row[ 4]
-				    "centres.FullName,"		// row[ 5]
+				    "ctr_centers.CtrCod,"	// row[ 3]
+				    "ctr_centers.ShortName,"	// row[ 4]
+				    "ctr_centers.FullName,"	// row[ 5]
 				    "buildings.BldCod,"		// row[ 6]
 				    "buildings.ShortName,"	// row[ 7]
 				    "buildings.FullName,"	// row[ 8]
@@ -6002,12 +6002,16 @@ int swad__getLocation (struct soap *soap,
 				    "rooms.RooCod,"		// row[10]
 				    "rooms.ShortName,"		// row[11]
 				    "rooms.FullName"		// row[12]
-				    " FROM room_MAC,rooms,buildings,centres,institutions"
+				    " FROM room_MAC,"
+				          "rooms,"
+				          "buildings,"
+				          "ctr_centers,"
+				          "institutions"
 				    " WHERE room_MAC.MAC=%llu"
 				    " AND room_MAC.RooCod=rooms.RooCod"
 				    " AND rooms.BldCod=buildings.BldCod"
-				    " AND buildings.CtrCod=centres.CtrCod"
-				    " AND centres.InsCod=institutions.InsCod"
+				    " AND buildings.CtrCod=ctr_centers.CtrCod"
+				    " AND ctr_centers.InsCod=institutions.InsCod"
 				    " ORDER BY rooms.Capacity,"	// Get the biggest room
 				              "rooms.ShortName"
 				              " DESC LIMIT 1",
@@ -6111,14 +6115,14 @@ int swad__getLastLocation (struct soap *soap,
 		             "deg_degrees"
 		       " WHERE crs_usr.UsrCod=%ld"
 		       " AND crs_usr.CrsCod=crs_courses.CrsCod"
-		       " AND crs_courses.DegCod=deg_degrees.DegCod) AS C1,"	// centres of my courses
+		       " AND crs_courses.DegCod=deg_degrees.DegCod) AS C1,"	// centers of my courses
 		       "(SELECT DISTINCT deg_degrees.CtrCod"
 		       " FROM crs_usr,"
 		             "crs_courses,"
 		             "deg_degrees"
 		       " WHERE crs_usr.UsrCod=%d"
 		       " AND crs_usr.CrsCod=crs_courses.CrsCod"
-		       " AND crs_courses.DegCod=deg_degrees.DegCod) AS C2"	// centres of user's courses
+		       " AND crs_courses.DegCod=deg_degrees.DegCod) AS C2"	// centers of user's courses
 		       " WHERE C1.CtrCod=C2.CtrCod",
 	               Gbl.Usrs.Me.UsrDat.UsrCod,
 	               userCode))
@@ -6129,9 +6133,9 @@ int swad__getLastLocation (struct soap *soap,
 				"SELECT institutions.InsCod,"				// row[ 0]
 				       "institutions.ShortName,"			// row[ 1]
 				       "institutions.FullName,"				// row[ 2]
-				       "centres.CtrCod,"				// row[ 3]
-				       "centres.ShortName,"				// row[ 4]
-				       "centres.FullName,"				// row[ 5]
+				       "ctr_centers.CtrCod,"				// row[ 3]
+				       "ctr_centers.ShortName,"				// row[ 4]
+				       "ctr_centers.FullName,"				// row[ 5]
 				       "buildings.BldCod,"				// row[ 6]
 				       "buildings.ShortName,"				// row[ 7]
 				       "buildings.FullName,"				// row[ 8]
@@ -6140,7 +6144,11 @@ int swad__getLastLocation (struct soap *soap,
 				       "rooms.ShortName,"				// row[11]
 				       "rooms.FullName,"				// row[12]
 				       "UNIX_TIMESTAMP(room_check_in.CheckInTime)"	// row[13]
-				       " FROM room_check_in,rooms,buildings,centres,institutions"
+				       " FROM room_check_in,"
+				             "rooms,"
+				             "buildings,"
+				             "ctr_centers,"
+				             "institutions"
 				       " WHERE room_check_in.UsrCod=%d"
 				       " AND room_check_in.ChkCod="
 				       "(SELECT ChkCod FROM room_check_in"
@@ -6148,8 +6156,8 @@ int swad__getLastLocation (struct soap *soap,
 				       " ORDER BY ChkCod DESC LIMIT 1)"	// Faster than SELECT MAX
 				       " AND room_check_in.RooCod=rooms.RooCod"
 				       " AND rooms.BldCod=buildings.BldCod"
-				       " AND buildings.CtrCod=centres.CtrCod"
-				       " AND centres.InsCod=institutions.InsCod",
+				       " AND buildings.CtrCod=ctr_centers.CtrCod"
+				       " AND ctr_centers.InsCod=institutions.InsCod",
 				userCode,userCode);
       API_GetDataOfLocation (soap,
 			     &(getLastLocationOut->location),
@@ -6188,9 +6196,9 @@ static void API_GetDataOfLocation (struct soap *soap,
       institutions.InsCod			// row[ 0]
       institutions.ShortName			// row[ 1]
       institutions.FullName			// row[ 2]
-      centres.CtrCod				// row[ 3]
-      centres.ShortName				// row[ 4]
-      centres.FullName				// row[ 5]
+      ctr_centers.CtrCod			// row[ 3]
+      ctr_centers.ShortName			// row[ 4]
+      ctr_centers.FullName			// row[ 5]
       buildings.BldCod				// row[ 6]
       buildings.ShortName			// row[ 7]
       buildings.FullName			// row[ 8]

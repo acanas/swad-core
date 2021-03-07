@@ -27,7 +27,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include "swad_centre.h"
+#include "swad_center.h"
 #include "swad_constant.h"
 #include "swad_role_type.h"
 

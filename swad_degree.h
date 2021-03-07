@@ -70,7 +70,7 @@ struct Deg_Degree
   {
    long DegCod;					// Degree code
    long DegTypCod;				// Degree type code
-   long CtrCod;					// Centre code
+   long CtrCod;					// Center code
    Deg_Status_t Status;				// Degree status
    long RequesterUsrCod;			// User code of the person who requested the creation of this degree
    char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];	// Short name of degree

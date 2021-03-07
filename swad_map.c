@@ -164,7 +164,7 @@ void Map_AddPopup (const char *Title,const char *Subtitle,bool Open)
   }
 
 /*****************************************************************************/
-/********* Get average coordinates of centres in current institution *********/
+/********* Get average coordinates of centers in current institution *********/
 /*****************************************************************************/
 
 void Map_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom,

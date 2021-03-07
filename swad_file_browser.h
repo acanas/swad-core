@@ -126,7 +126,7 @@ struct FileMetadata
   {
    long FilCod;
    Brw_FileBrowser_t FileBrowser;
-   long Cod;	// Code of institution, centre, degree, course or group
+   long Cod;	// Code of institution, center, degree, course or group
    long ZoneUsrCod;
    long PublisherUsrCod;
    struct FilFolLnk FilFolLnk;

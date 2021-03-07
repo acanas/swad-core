@@ -59,7 +59,7 @@ struct Svy_Survey
   {
    long SvyCod;
    Hie_Lvl_Level_t Scope;
-   long Cod;		// Country, institution, centre, degree or course code
+   long Cod;		// Country, institution, center, degree or course code
    unsigned Roles;	// Example: if survey can be made by students, Roles == (1 << Rol_STD)
    long UsrCod;
    char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1];

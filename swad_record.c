@@ -136,7 +136,7 @@ static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
 static void Rec_ShowTeacherRows (struct UsrData *UsrDat,struct Ins_Instit *Ins,
                                  bool ShowData);
 static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData);
-static void Rec_ShowCentre (struct UsrData *UsrDat,bool ShowData);
+static void Rec_ShowCenter (struct UsrData *UsrDat,bool ShowData);
 static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData);
 static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData);
 static void Rec_ShowOfficePhone (struct UsrData *UsrDat,bool ShowData);
@@ -3415,8 +3415,8 @@ static void Rec_ShowTeacherRows (struct UsrData *UsrDat,struct Ins_Instit *Ins,
    /***** Institution *****/
    Rec_ShowInstitution (Ins,ShowData);
 
-   /***** Centre *****/
-   Rec_ShowCentre (UsrDat,ShowData);
+   /***** Center *****/
+   Rec_ShowCenter (UsrDat,ShowData);
 
    /***** Department *****/
    Rec_ShowDepartment (UsrDat,ShowData);
@@ -3460,19 +3460,19 @@ static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData)
   }
 
 /*****************************************************************************/
-/*************************** Show user's centre ******************************/
+/*************************** Show user's center ******************************/
 /*****************************************************************************/
 
-static void Rec_ShowCentre (struct UsrData *UsrDat,bool ShowData)
+static void Rec_ShowCenter (struct UsrData *UsrDat,bool ShowData)
   {
-   extern const char *Txt_Centre;
-   struct Ctr_Centre Ctr;
+   extern const char *Txt_Center;
+   struct Ctr_Center Ctr;
 
-   /***** Centre *****/
+   /***** Center *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Centre);
+   Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Center);
 
    /* Data */
    HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
@@ -3481,7 +3481,7 @@ static void Rec_ShowCentre (struct UsrData *UsrDat,bool ShowData)
       if (UsrDat->Tch.CtrCod > 0)
 	{
 	 Ctr.CtrCod = UsrDat->Tch.CtrCod;
-	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 Ctr_GetDataOfCenterByCod (&Ctr);
 	 if (Ctr.WWW[0])
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
 		         Ctr.WWW);
@@ -3642,7 +3642,7 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 	 break;
       case Rol_TCH:		// I am logged as teacher
       case Rol_DEG_ADM:		// I am logged as degree admin
-      case Rol_CTR_ADM:		// I am logged as centre admin
+      case Rol_CTR_ADM:		// I am logged as center admin
       case Rol_INS_ADM:		// I am logged as institution admin
 	 if (Role == Rol_STD ||
 	     Role == Rol_NET ||
@@ -3734,7 +3734,7 @@ static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/**** Show my shared record and a form to edit my institution, centre... *****/
+/**** Show my shared record and a form to edit my institution, center... *****/
 /*****************************************************************************/
 
 void Rec_ShowMySharedRecordAndMore (void)
@@ -3744,7 +3744,7 @@ void Rec_ShowMySharedRecordAndMore (void)
    extern const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality;
    extern const char *Txt_Please_select_the_country_of_your_institution;
    extern const char *Txt_Please_select_your_institution;
-   extern const char *Txt_Please_select_your_centre;
+   extern const char *Txt_Please_select_your_center;
    extern const char *Txt_Please_select_your_department;
    bool IAmATeacher;
 
@@ -3769,8 +3769,8 @@ void Rec_ShowMySharedRecordAndMore (void)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_institution);
    else if (IAmATeacher)
      {
-      if (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0)		// 6. No centre
-	 Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_centre);
+      if (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0)		// 6. No center
+	 Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_center);
       else if (Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)	// 7. No deparment
 	 Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_department);
      }
@@ -3790,7 +3790,7 @@ void Rec_ShowMySharedRecordAndMore (void)
    /* Begin container for right part */
    HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 
-   /* My institution, centre and department */
+   /* My institution, center and department */
    Rec_ShowFormMyInsCtrDpt (IAmATeacher);
 
    /* My webs / social networks */
@@ -3807,19 +3807,19 @@ void Rec_ShowMySharedRecordAndMore (void)
   }
 
 /*****************************************************************************/
-/********* Show form to edit my institution, centre and department ***********/
+/********* Show form to edit my institution, center and department ***********/
 /*****************************************************************************/
 
 static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
   {
    extern const char *Hlp_PROFILE_Institution;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Institution_centre_and_department;
+   extern const char *Txt_Institution_center_and_department;
    extern const char *Txt_Institution;
    extern const char *Txt_Country;
    extern const char *Txt_Another_institution;
-   extern const char *Txt_Centre;
-   extern const char *Txt_Another_centre;
+   extern const char *Txt_Center;
+   extern const char *Txt_Another_center;
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
@@ -3834,7 +3834,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    /***** Begin box and table *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
    Box_BoxTableBegin (StrRecordWidth,
-                      IAmATeacher ? Txt_Institution_centre_and_department :
+                      IAmATeacher ? Txt_Institution_center_and_department :
 	                            Txt_Institution,
 	              NULL,NULL,
 	              Hlp_PROFILE_Institution,Box_NOT_CLOSABLE,2);
@@ -3915,23 +3915,23 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
    if (IAmATeacher)
      {
-      /***** Centre *****/
+      /***** Center *****/
       HTM_TR_Begin (NULL);
 
       /* Label */
       Frm_LabelColumn ("REC_C1_BOT RM","OthCtrCod",
-		       Str_BuildStringStr ("%s*",Txt_Centre));
+		       Str_BuildStringStr ("%s*",Txt_Center));
       Str_FreeString ();
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 
-      /* Get list of centres in this institution */
-      Ctr_FreeListCentres ();
+      /* Get list of centers in this institution */
+      Ctr_FreeListCenters ();
       if (Gbl.Usrs.Me.UsrDat.InsCod > 0)
-	 Ctr_GetBasicListOfCentres (Gbl.Usrs.Me.UsrDat.InsCod);
+	 Ctr_GetBasicListOfCenters (Gbl.Usrs.Me.UsrDat.InsCod);
 
-      /* Begin form to select centre */
+      /* Begin form to select center */
       Frm_StartFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"OthCtrCod\" name=\"OthCtrCod\""
@@ -3941,7 +3941,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		  NULL);
       HTM_OPTION (HTM_Type_STRING,"0",
 		  Gbl.Usrs.Me.UsrDat.Tch.CtrCod == 0,false,
-		  Txt_Another_centre);
+		  Txt_Another_center);
       for (NumCtr = 0;
 	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
 	   NumCtr++)
@@ -4029,7 +4029,7 @@ void Rec_ChgCountryOfMyInstitution (void)
    /***** Get country code of my institution *****/
    Gbl.Usrs.Me.UsrDat.InsCtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
 
-   /***** When country changes, the institution, centre and department must be reset *****/
+   /***** When country changes, the institution, center and department must be reset *****/
    NumInss = Ins_GetNumInssInCty (Gbl.Usrs.Me.UsrDat.InsCtyCod);
    if (NumInss)
      {
@@ -4040,12 +4040,12 @@ void Rec_ChgCountryOfMyInstitution (void)
    else	// Country has no institutions
      {
       Gbl.Usrs.Me.UsrDat.InsCod     = 0;	// Another institution
-      Gbl.Usrs.Me.UsrDat.Tch.CtrCod = 0;	// Another centre
+      Gbl.Usrs.Me.UsrDat.Tch.CtrCod = 0;	// Another center
       Gbl.Usrs.Me.UsrDat.Tch.DptCod = 0;	// Another department
     }
 
-   /***** Update institution, centre and department *****/
-   Enr_UpdateInstitutionCentreDepartment ();
+   /***** Update institution, center and department *****/
+   Enr_UpdateInstitutionCenterDepartment ();
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -4076,35 +4076,35 @@ void Rec_UpdateMyInstitution (void)
    /* Set institution code */
    Gbl.Usrs.Me.UsrDat.InsCod = Ins.InsCod;
 
-   /***** When institution changes, the centre and department must be reset *****/
+   /***** When institution changes, the center and department must be reset *****/
    NumCtrs = Ctr_GetNumCtrsInIns (Gbl.Usrs.Me.UsrDat.InsCod);
    NumDpts = Dpt_GetNumDptsInIns (Gbl.Usrs.Me.UsrDat.InsCod);
    Gbl.Usrs.Me.UsrDat.Tch.CtrCod = (NumCtrs ? -1L : 0);
    Gbl.Usrs.Me.UsrDat.Tch.DptCod = (NumDpts ? -1L : 0);
 
-   /***** Update institution, centre and department *****/
-   Enr_UpdateInstitutionCentreDepartment ();
+   /***** Update institution, center and department *****/
+   Enr_UpdateInstitutionCenterDepartment ();
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
-/******************* Receive form data to change my centre *******************/
+/******************* Receive form data to change my center *******************/
 /*****************************************************************************/
 
-void Rec_UpdateMyCentre (void)
+void Rec_UpdateMyCenter (void)
   {
-   struct Ctr_Centre Ctr;
+   struct Ctr_Center Ctr;
 
-   /***** Get my centre *****/
-   /* Get centre code */
-   Ctr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (0);	// 0 (another centre) is allowed here
+   /***** Get my center *****/
+   /* Get center code */
+   Ctr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (0);	// 0 (another center) is allowed here
 
-   /* Get institution of centre */
+   /* Get institution of center */
    if (Ctr.CtrCod > 0)
      {
-      Ctr_GetDataOfCentreByCod (&Ctr);
+      Ctr_GetDataOfCenterByCod (&Ctr);
       if (Gbl.Usrs.Me.UsrDat.InsCod != Ctr.InsCod)
 	{
 	 Gbl.Usrs.Me.UsrDat.InsCod = Ctr.InsCod;
@@ -4112,11 +4112,11 @@ void Rec_UpdateMyCentre (void)
 	}
      }
 
-   /* Set centre code */
+   /* Set center code */
    Gbl.Usrs.Me.UsrDat.Tch.CtrCod = Ctr.CtrCod;
 
-   /***** Update institution, centre and department *****/
-   Enr_UpdateInstitutionCentreDepartment ();
+   /***** Update institution, center and department *****/
+   Enr_UpdateInstitutionCenterDepartment ();
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -4145,9 +4145,9 @@ void Rec_UpdateMyDepartment (void)
 	}
      }
 
-   /***** Update institution, centre and department *****/
+   /***** Update institution, center and department *****/
    Gbl.Usrs.Me.UsrDat.Tch.DptCod = Dpt.DptCod;
-   Enr_UpdateInstitutionCentreDepartment ();
+   Enr_UpdateInstitutionCenterDepartment ();
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();

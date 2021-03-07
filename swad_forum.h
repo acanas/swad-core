@@ -27,7 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_centre.h"
+#include "swad_center.h"
 #include "swad_degree.h"
 #include "swad_institution.h"
 #include "swad_notification.h"
@@ -54,8 +54,8 @@ typedef enum
    For_FORUM_COURSE_TCHS	=  1,	// TODO: Change to 12 (also in database)
    For_FORUM_DEGREE_USRS	=  2,	// TODO: Change to  9 (also in database)
    For_FORUM_DEGREE_TCHS	=  3,	// TODO: Change to 10 (also in database)
-   For_FORUM_CENTRE_USRS	=  4,	// TODO: Change to  7 (also in database)
-   For_FORUM_CENTRE_TCHS	=  5,	// TODO: Change to  8 (also in database)
+   For_FORUM_CENTER_USRS	=  4,	// TODO: Change to  7 (also in database)
+   For_FORUM_CENTER_TCHS	=  5,	// TODO: Change to  8 (also in database)
    For_FORUM_INSTIT_USRS	=  6,	// TODO: Change to  5 (also in database)
    For_FORUM_INSTIT_TCHS	=  7,	// TODO: Change to  6 (also in database)
    For_FORUM_GLOBAL_USRS	=  8,	// TODO: Change to  1 (also in database)
@@ -68,7 +68,7 @@ typedef enum
 struct For_Forum
   {
    For_ForumType_t Type;	// Type of forum
-   long Location;		// Code of institution, centre, degree or course
+   long Location;		// Code of institution, center, degree or course
   };
 
 struct For_Thread

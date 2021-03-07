@@ -114,7 +114,7 @@ void Rol_SetMyRoles (void)
 	 Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.Role.FromSession;	// Role from session
      }
 
-   /***** Check if I am administrator of current institution/centre/degree *****/
+   /***** Check if I am administrator of current institution/center/degree *****/
    if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
       /* Check if I am and administrator of current institution */
@@ -123,7 +123,7 @@ void Rol_SetMyRoles (void)
                                           Gbl.Hierarchy.Ins.InsCod);
       if (Gbl.Hierarchy.Ctr.CtrCod > 0)
 	{
-	 /* Check if I am and administrator of current centre */
+	 /* Check if I am and administrator of current center */
 	 ICanBeCtrAdm = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                     Hie_Lvl_CTR,
 	                                     Gbl.Hierarchy.Ctr.CtrCod);
@@ -161,7 +161,7 @@ void Rol_SetMyRoles (void)
    else
       Gbl.Usrs.Me.IBelongToCurrentDeg = false;
 
-   /***** Check if I belong to current centre *****/
+   /***** Check if I belong to current center *****/
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
      {
       if (Gbl.Usrs.Me.IBelongToCurrentDeg)
@@ -284,7 +284,7 @@ Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod)
   }
 
 /*****************************************************************************/
-/********************** Get my maximum role in a centre **********************/
+/********************** Get my maximum role in a center **********************/
 /*****************************************************************************/
 
 Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod)
@@ -293,10 +293,10 @@ Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod)
 
    if (CtrCod > 0)
      {
-      /***** Fill the list with the centres I belong to (if not already filled) *****/
-      Usr_GetMyCentres ();
+      /***** Fill the list with the centers I belong to (if not already filled) *****/
+      Usr_GetMyCenters ();
 
-      /***** Check if the centre passed as parameter is any of my centres *****/
+      /***** Check if the center passed as parameter is any of my centers *****/
       for (NumMyCtr = 0;
            NumMyCtr < Gbl.Usrs.Me.MyCtrs.Num;
            NumMyCtr++)
@@ -304,7 +304,7 @@ Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod)
             return Gbl.Usrs.Me.MyCtrs.Ctrs[NumMyCtr].MaxRole;
       return Rol_GST;
      }
-   return Rol_UNK;   // No centre
+   return Rol_UNK;   // No center
   }
 
 /*****************************************************************************/

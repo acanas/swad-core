@@ -57,12 +57,12 @@ typedef enum
    Enr_REG_REM_ONE_USR_UNKNOWN_ACTION   =  0,
    Enr_REGISTER_MODIFY_ONE_USR_IN_CRS   =  1,
    Enr_REGISTER_ONE_DEGREE_ADMIN        =  2,
-   Enr_REGISTER_ONE_CENTRE_ADMIN        =  3,
+   Enr_REGISTER_ONE_CENTER_ADMIN        =  3,
    Enr_REGISTER_ONE_INSTITUTION_ADMIN   =  4,
    Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE =  5,
    Enr_REMOVE_ONE_USR_FROM_CRS          =  6,
    Enr_REMOVE_ONE_DEGREE_ADMIN          =  7,
-   Enr_REMOVE_ONE_CENTRE_ADMIN          =  8,
+   Enr_REMOVE_ONE_CENTER_ADMIN          =  8,
    Enr_REMOVE_ONE_INSTITUTION_ADMIN     =  9,
    Enr_ELIMINATE_ONE_USR_FROM_PLATFORM  = 10,
   } Enr_RegRemOneUsrAction_t;
@@ -87,7 +87,7 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                             long CrsCod,long UsrCod);
 void Enr_UpdateUsrData (struct UsrData *UsrDat);
 void Enr_FilterUsrDat (struct UsrData *UsrDat);
-void Enr_UpdateInstitutionCentreDepartment (void);
+void Enr_UpdateInstitutionCenterDepartment (void);
 
 void Enr_ReqAdminStds (void);
 void Enr_ReqAdminNonEditingTchs (void);

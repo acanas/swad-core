@@ -597,12 +597,12 @@ void Enr_FilterUsrDat (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/**************** Update institution, centre and department ******************/
+/**************** Update institution, center and department ******************/
 /*****************************************************************************/
 
-void Enr_UpdateInstitutionCentreDepartment (void)
+void Enr_UpdateInstitutionCenterDepartment (void)
   {
-   DB_QueryUPDATE ("can not update institution, centre and department",
+   DB_QueryUPDATE ("can not update institution, center and department",
 		   "UPDATE usr_data"
 		   " SET InsCtyCod=%ld,InsCod=%ld,CtrCod=%ld,DptCod=%ld"
 		   " WHERE UsrCod=%ld",
@@ -1490,7 +1490,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
       if (Gbl.Hierarchy.Ctr.CtrCod > 0)
 	{
-	 /***** Check if the other user is administrator of the current centre *****/
+	 /***** Check if the other user is administrator of the current center *****/
 	 UsrIsCtrAdmin = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
 					      Hie_Lvl_CTR,
 					      Gbl.Hierarchy.Ctr.CtrCod);
@@ -1525,7 +1525,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	       OptionsShown = true;
 	      }
 
-	 /***** Register user as administrator of centre *****/
+	 /***** Register user as administrator of center *****/
 	 if (!UsrIsCtrAdmin && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
 	   {
 	    Enr_PutActionRegOneCtrAdm (&OptionChecked);
@@ -1567,7 +1567,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	       OptionsShown = true;
 	      }
 
-          /***** Remove user as an administrator of the centre *****/
+          /***** Remove user as an administrator of the center *****/
 	  if (UsrIsCtrAdmin && (ItsMe || Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))
 	   {
 	    Enr_PutActionRemUsrAsCtrAdm (&OptionChecked,ItsMe);
@@ -1632,15 +1632,15 @@ static void Enr_PutActionRegOneDegAdm (bool *OptionChecked)
   }
 
 /*****************************************************************************/
-/**************** Put action to register user as centre admin ****************/
+/**************** Put action to register user as center admin ****************/
 /*****************************************************************************/
 
 static void Enr_PutActionRegOneCtrAdm (bool *OptionChecked)
   {
-   extern const char *Txt_Register_USER_as_an_administrator_of_the_centre_X;
+   extern const char *Txt_Register_USER_as_an_administrator_of_the_center_X;
 
-   Enr_StartRegRemOneUsrAction (Enr_REGISTER_ONE_CENTRE_ADMIN,OptionChecked);
-   HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_centre_X,
+   Enr_StartRegRemOneUsrAction (Enr_REGISTER_ONE_CENTER_ADMIN,OptionChecked);
+   HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_center_X,
 	     Gbl.Hierarchy.Ctr.ShrtName);
    Enr_EndRegRemOneUsrAction ();
   }
@@ -1705,17 +1705,17 @@ static void Enr_PutActionRemUsrAsDegAdm (bool *OptionChecked,bool ItsMe)
   }
 
 /*****************************************************************************/
-/***************** Put action to remove user as centre admin *****************/
+/***************** Put action to remove user as center admin *****************/
 /*****************************************************************************/
 
 static void Enr_PutActionRemUsrAsCtrAdm (bool *OptionChecked,bool ItsMe)
   {
-   extern const char *Txt_Remove_me_as_an_administrator_of_the_centre_X;
-   extern const char *Txt_Remove_USER_as_an_administrator_of_the_centre_X;
+   extern const char *Txt_Remove_me_as_an_administrator_of_the_center_X;
+   extern const char *Txt_Remove_USER_as_an_administrator_of_the_center_X;
 
-   Enr_StartRegRemOneUsrAction (Enr_REMOVE_ONE_CENTRE_ADMIN,OptionChecked);
-   HTM_TxtF (ItsMe ? Txt_Remove_me_as_an_administrator_of_the_centre_X :
-		     Txt_Remove_USER_as_an_administrator_of_the_centre_X,
+   Enr_StartRegRemOneUsrAction (Enr_REMOVE_ONE_CENTER_ADMIN,OptionChecked);
+   HTM_TxtF (ItsMe ? Txt_Remove_me_as_an_administrator_of_the_center_X :
+		     Txt_Remove_USER_as_an_administrator_of_the_center_X,
 	     Gbl.Hierarchy.Ctr.ShrtName);
    Enr_EndRegRemOneUsrAction ();
   }
@@ -2289,7 +2289,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    Frm_BeginForm (ActUpdSignUpReq);
    HTM_TABLE_BeginWideMarginPadding (2);
 
-   /* Scope (whole platform, current centre, current degree or current course) */
+   /* Scope (whole platform, current center, current degree or current course) */
    HTM_TR_Begin (NULL);
 
    /* Label */
@@ -2369,7 +2369,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			       RolesSelected);
                break;
             case Rol_CTR_ADM:
-               // Requests in all centres administrated by me
+               // Requests in all centers administrated by me
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_usr_requests.ReqCod,"
@@ -2401,14 +2401,14 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			              "crs_usr_requests.Role,"
 			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
 			       " FROM usr_admins,"
-			             "centres,"
+			             "ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr_requests"
 			       " WHERE usr_admins.UsrCod=%ld"
 			       " AND usr_admins.Scope='%s'"
-			       " AND usr_admins.Cod=centres.InsCod"
-			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND usr_admins.Cod=ctr_centers.InsCod"
+			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
 			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
@@ -2449,7 +2449,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
 			       " FROM crs_usr,"
 			             "institutions,"
-			             "centres,"
+			             "ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr_requests"
@@ -2457,8 +2457,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			       " AND crs_usr.Role=%u"
 			       " AND crs_usr.CrsCod=crs_courses.CrsCod"
 			       " AND crs_courses.DegCod=deg_degrees.DegCod"
-			       " AND deg_degrees.CtrCod=centres.CtrCod"
-			       " AND centres.InsCod=institutions.InsCod"
+			       " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			       " AND ctr_centers.InsCod=institutions.InsCod"
 			       " AND institutions.CtyCod=%ld"
 			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
 			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
@@ -2479,15 +2479,15 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
 			       " FROM usr_admins,"
 			             "institutions,"
-			             "centres,"
+			             "ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr_requests"
 			       " WHERE usr_admins.UsrCod=%ld"
 			       " AND usr_admins.Scope='%s'"
 			       " AND usr_admins.Cod=deg_degrees.DegCod"
-			       " AND deg_degrees.CtrCod=centres.CtrCod"
-			       " AND centres.InsCod=institutions.InsCod"
+			       " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			       " AND ctr_centers.InsCod=institutions.InsCod"
 			       " AND institutions.CtyCod=%ld"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
@@ -2499,7 +2499,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			       RolesSelected);
                break;
             case Rol_CTR_ADM:
-               // Requests in centres of this country administrated by me
+               // Requests in centers of this country administrated by me
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_usr_requests.ReqCod,"
@@ -2509,16 +2509,16 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
 			       " FROM usr_admins,"
 			             "institutions,"
-			             "centres,"
+			             "ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr_requests"
 			       " WHERE usr_admins.UsrCod=%ld"
 			       " AND usr_admins.Scope='%s'"
-			       " AND usr_admins.Cod=centres.CtrCod"
-			       " AND centres.InsCod=institutions.InsCod"
+			       " AND usr_admins.Cod=ctr_centers.CtrCod"
+			       " AND ctr_centers.InsCod=institutions.InsCod"
 			       " AND institutions.CtyCod=%ld"
-			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
 			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
@@ -2540,7 +2540,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
 			       " FROM usr_admins,"
 			             "institutions,"
-			             "centres,"
+			             "ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr_requests"
@@ -2548,8 +2548,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			       " AND usr_admins.Scope='%s'"
 			       " AND usr_admins.Cod=institutions.InsCod"
 			       " AND institutions.CtyCod=%ld"
-			       " AND institutions.InsCod=centres.InsCod"
-			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND institutions.InsCod=ctr_centers.InsCod"
+			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
 			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
@@ -2569,13 +2569,13 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			              "crs_usr_requests.Role,"
 			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
 			       " FROM institutions,"
-			             "centres,"
+			             "ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr_requests"
 			       " WHERE institutions.CtyCod=%ld"
-			       " AND institutions.InsCod=centres.InsCod"
-			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND institutions.InsCod=ctr_centers.InsCod"
+			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
 			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
@@ -2601,7 +2601,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			              "crs_usr_requests.Role,"
 			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
 			       " FROM crs_usr,"
-			             "centres,"
+			             "ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr_requests"
@@ -2609,8 +2609,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			       " AND crs_usr.Role=%u"
 			       " AND crs_usr.CrsCod=crs_courses.CrsCod"
 			       " AND crs_courses.DegCod=deg_degrees.DegCod"
-			       " AND deg_degrees.CtrCod=centres.CtrCod"
-			       " AND centres.InsCod=%ld"
+			       " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			       " AND ctr_centers.InsCod=%ld"
 			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
 			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
@@ -2629,15 +2629,15 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			              "crs_usr_requests.Role,"
 			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
 			       " FROM usr_admins,"
-			             "centres,"
+			             "ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr_requests"
 			       " WHERE usr_admins.UsrCod=%ld"
 			       " AND usr_admins.Scope='%s'"
 			       " AND usr_admins.Cod=deg_degrees.DegCod"
-			       " AND deg_degrees.CtrCod=centres.CtrCod"
-			       " AND centres.InsCod=%ld"
+			       " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			       " AND ctr_centers.InsCod=%ld"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
 			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
@@ -2648,7 +2648,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			       RolesSelected);
                break;
             case Rol_CTR_ADM:
-               // Requests in centres of this institution administrated by me
+               // Requests in centers of this institution administrated by me
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_usr_requests.ReqCod,"
@@ -2657,15 +2657,15 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			              "crs_usr_requests.Role,"
 			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
 			       " FROM usr_admins,"
-			             "centres,"
+			             "ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr_requests"
 			       " WHERE usr_admins.UsrCod=%ld"
 			       " AND usr_admins.Scope='%s'"
-			       " AND usr_admins.Cod=centres.CtrCod"
-			       " AND centres.InsCod=%ld"
-			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " AND usr_admins.Cod=ctr_centers.CtrCod"
+			       " AND ctr_centers.InsCod=%ld"
+			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
 			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
@@ -2684,12 +2684,12 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			              "crs_usr_requests.UsrCod,"
 			              "crs_usr_requests.Role,"
 			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM centres,"
+			       " FROM ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr_requests"
-			       " WHERE centres.InsCod=%ld"
-			       " AND centres.CtrCod=deg_degrees.CtrCod"
+			       " WHERE ctr_centers.InsCod=%ld"
+			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
 			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
@@ -2702,11 +2702,11 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                break;
            }
          break;
-      case Hie_Lvl_CTR:                // Show requesters for the current centre
+      case Hie_Lvl_CTR:                // Show requesters for the current center
          switch (Gbl.Usrs.Me.Role.Logged)
            {
             case Rol_TCH:
-               // Requests in courses of this centre in which I am teacher
+               // Requests in courses of this center in which I am teacher
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_usr_requests.ReqCod,"
@@ -2732,7 +2732,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			       RolesSelected);
                break;
             case Rol_DEG_ADM:
-               // Requests in degrees of this centre administrated by me
+               // Requests in degrees of this center administrated by me
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_usr_requests.ReqCod,"
@@ -2757,10 +2757,10 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			       Gbl.Hierarchy.Ctr.CtrCod,
 			       RolesSelected);
                break;
-            case Rol_CTR_ADM:	// If I am logged as admin of this centre     , I can view all the requesters from this centre
-            case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this centre
+            case Rol_CTR_ADM:	// If I am logged as admin of this center     , I can view all the requesters from this center
+            case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this center
             case Rol_SYS_ADM:
-               // Request in any course of this centre
+               // Request in any course of this center
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_usr_requests.ReqCod,"
@@ -2812,7 +2812,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			       RolesSelected);
                break;
             case Rol_DEG_ADM:	// If I am logged as admin of this degree     , I can view all the requesters from this degree
-            case Rol_CTR_ADM:	// If I am logged as admin of this centre     , I can view all the requesters from this degree
+            case Rol_CTR_ADM:	// If I am logged as admin of this center     , I can view all the requesters from this degree
             case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this degree
             case Rol_SYS_ADM:
                // Requests in any course of this degree
@@ -2842,7 +2842,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
            {
             case Rol_TCH:	// If I am logged as teacher of this course   , I can view all the requesters from this course
             case Rol_DEG_ADM:	// If I am logged as admin of this degree     , I can view all the requesters from this course
-            case Rol_CTR_ADM:	// If I am logged as admin of this centre     , I can view all the requesters from this course
+            case Rol_CTR_ADM:	// If I am logged as admin of this center     , I can view all the requesters from this course
             case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this course
             case Rol_SYS_ADM:
                // Requests in this course
@@ -3405,7 +3405,7 @@ void Enr_AddAdmToIns (void)
   }
 
 /*****************************************************************************/
-/******************* Add an administrator to current centre ******************/
+/******************* Add an administrator to current center ******************/
 /*****************************************************************************/
 
 void Enr_AddAdmToCtr (void)
@@ -3435,13 +3435,13 @@ static void Enr_AddAdm (Hie_Lvl_Level_t Scope,long Cod,const char *InsCtrDegName
       /***** Get plain user's ID of the user to add/modify *****/
       if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
         {
-         /* Check if I am allowed to register user as administrator in institution/centre/degree */
+         /* Check if I am allowed to register user as administrator in institution/center/degree */
 	 ICanRegister = ((Scope == Hie_Lvl_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
                          (Scope == Hie_Lvl_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
                          (Scope == Hie_Lvl_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
          if (ICanRegister)
            {
-            /***** Register administrator in current institution/centre/degree in database *****/
+            /***** Register administrator in current institution/center/degree in database *****/
             Enr_RegisterAdmin (&Gbl.Usrs.Other.UsrDat,Scope,
                                Cod,InsCtrDegName);
 
@@ -3465,13 +3465,13 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Hie_Lvl_Level_t Scope,long
    extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
    extern const char *Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y;
 
-   /***** Check if user was and administrator of current institution/centre/degree *****/
+   /***** Check if user was and administrator of current institution/center/degree *****/
    if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_is_already_an_administrator_of_Y,
                      UsrDat->FullName,InsCtrDegName);
-   else        // User was not administrator of current institution/centre/degree
+   else        // User was not administrator of current institution/center/degree
      {
-      /***** Insert or replace administrator in current institution/centre/degree *****/
+      /***** Insert or replace administrator in current institution/center/degree *****/
       DB_QueryREPLACE ("can not create administrator",
 		       "REPLACE INTO usr_admins"
 		       " (UsrCod,Scope,Cod)"
@@ -3581,7 +3581,7 @@ static void Enr_ReqRemAdmOfIns (void)
   }
 
 /*****************************************************************************/
-/********* Ask for remove of an administrator from current centre ************/
+/********* Ask for remove of an administrator from current center ************/
 /*****************************************************************************/
 
 static void Enr_ReqRemAdmOfCtr (void)
@@ -3611,7 +3611,7 @@ void Enr_RemAdmIns (void)
   }
 
 /*****************************************************************************/
-/*************** Remove an administrator from current centre *****************/
+/*************** Remove an administrator from current center *****************/
 /*****************************************************************************/
 
 void Enr_RemAdmCtr (void)
@@ -3654,9 +3654,9 @@ static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,Hie_Lvl_Leve
                        (Scope == Hie_Lvl_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
          if (ICanRemove)
            {
-            /* Check if the other user is an admin of the current institution/centre/degree */
+            /* Check if the other user is an admin of the current institution/center/degree */
             if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Scope,Cod))
-              {                // The other user is an administrator of current institution/centre/degree ==> ask for removing or remove her/him
+              {                // The other user is an administrator of current institution/center/degree ==> ask for removing or remove her/him
                switch (ReqDelOrDelUsr)
                  {
                   case Enr_REQUEST_REMOVE_USR:     // Ask if remove administrator from current institution
@@ -3706,13 +3706,13 @@ static void Enr_ReqAddAdm (Hie_Lvl_Level_t Scope,long Cod,const char *InsCtrDegN
       /***** Get user's identificator of the user to register as admin *****/
       if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
         {
-         /* Check if I am allowed to register user as administrator in institution/centre/degree */
+         /* Check if I am allowed to register user as administrator in institution/center/degree */
 	 ICanRegister = ((Scope == Hie_Lvl_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
                          (Scope == Hie_Lvl_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
                          (Scope == Hie_Lvl_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
          if (ICanRegister)
            {
-            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Scope,Cod))        // User is already an administrator of current institution/centre/degree
+            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Scope,Cod))        // User is already an administrator of current institution/center/degree
               {
                Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_an_administrator_of_Y,
                               Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
@@ -3995,7 +3995,7 @@ void Enr_ModifyUsr1 (void)
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
-	 case Enr_REGISTER_ONE_CENTRE_ADMIN:
+	 case Enr_REGISTER_ONE_CENTER_ADMIN:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
@@ -4015,7 +4015,7 @@ void Enr_ModifyUsr1 (void)
 	    if (!ItsMe && Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
-	 case Enr_REMOVE_ONE_CENTRE_ADMIN:
+	 case Enr_REMOVE_ONE_CENTER_ADMIN:
 	    if (!ItsMe && Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
@@ -4060,7 +4060,7 @@ void Enr_ModifyUsr2 (void)
 	    Enr_ReqAddAdm (Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod,
 			   Gbl.Hierarchy.Deg.FullName);
 	    break;
-	 case Enr_REGISTER_ONE_CENTRE_ADMIN:
+	 case Enr_REGISTER_ONE_CENTER_ADMIN:
 	    Enr_ReqAddAdm (Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,
 			   Gbl.Hierarchy.Ctr.FullName);
 	    break;
@@ -4077,7 +4077,7 @@ void Enr_ModifyUsr2 (void)
 	 case Enr_REMOVE_ONE_DEGREE_ADMIN:
             Enr_ReqRemAdmOfDeg ();
 	    break;
-	 case Enr_REMOVE_ONE_CENTRE_ADMIN:
+	 case Enr_REMOVE_ONE_CENTER_ADMIN:
             Enr_ReqRemAdmOfCtr ();
 	    break;
 	 case Enr_REMOVE_ONE_INSTITUTION_ADMIN:
@@ -4310,7 +4310,7 @@ static void Enr_AskIfRemAdm (bool ItsMe,Hie_Lvl_Level_t Scope,
   }
 
 /*****************************************************************************/
-/**** Remove an administrator from current institution, centre or degree *****/
+/**** Remove an administrator from current institution, center or degree *****/
 /*****************************************************************************/
 
 static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Hie_Lvl_Level_t Scope,
@@ -4319,7 +4319,7 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Hie_Lvl_Level_t Scope,
    extern const char *Txt_THE_USER_X_has_been_removed_as_administrator_of_Y;
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_Y;
 
-   if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))        // User is administrator of current institution/centre/degree
+   if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))        // User is administrator of current institution/center/degree
      {
       /***** Remove user from the table of admins *****/
       DB_QueryDELETE ("can not remove an administrator",
@@ -4330,7 +4330,7 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Hie_Lvl_Level_t Scope,
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_administrator_of_Y,
                      UsrDat->FullName,InsCtrDegName);
      }
-   else        // User is not an administrator of the current institution/centre/degree
+   else        // User is not an administrator of the current institution/center/degree
       Ale_ShowAlert (Ale_ERROR,Txt_THE_USER_X_is_not_an_administrator_of_Y,
                      UsrDat->FullName,InsCtrDegName);
   }

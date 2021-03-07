@@ -626,7 +626,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
    /* Get department (row[13]) */
    UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[13]);
 
-   /* Get centre (row[14]) */
+   /* Get center (row[14]) */
    UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[14]);
 
    /* Get office (row[15]) and office phone (row[16]) */
@@ -787,7 +787,7 @@ static void Usr_GetMyLastData (void)
             break;
          case Hie_Lvl_CTY:	// Country
          case Hie_Lvl_INS:	// Institution
-         case Hie_Lvl_CTR:	// Centre
+         case Hie_Lvl_CTR:	// Center
          case Hie_Lvl_DEG:	// Degree
          case Hie_Lvl_CRS:	// Course
             Gbl.Usrs.Me.UsrLast.LastHie.Cod = Str_ConvertStrCodToLongCod (row[2]);
@@ -899,14 +899,14 @@ void Usr_FlushCachesUsr (void)
   }
 
 /*****************************************************************************/
-/***** Check if a user is an administrator of a degree/centre/institution ****/
+/***** Check if a user is an administrator of a degree/center/institution ****/
 /*****************************************************************************/
 
 bool Usr_CheckIfUsrIsAdm (long UsrCod,Hie_Lvl_Level_t Scope,long Cod)
   {
    /***** Get if a user is administrator of a degree from database *****/
    return (DB_QueryCOUNT ("can not check if a user is administrator",
-			  "SELECT COUNT(*) FROM admin"
+			  "SELECT COUNT(*) FROM usr_admins"
 			  " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
 			  UsrCod,Sco_GetDBStrFromScope (Scope),Cod) != 0);
   }
@@ -997,10 +997,10 @@ bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat)
 	       return true;
 	 return false;
       case Rol_CTR_ADM:
-	 /* If I am an administrator of current centre,
-	    I only can edit from current centre who have accepted */
+	 /* If I am an administrator of current center,
+	    I only can edit from current center who have accepted */
 	 if (Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,Gbl.Hierarchy.Ctr.CtrCod))
-	    // Centre admins can't edit superusers' data
+	    // Center admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
 	       return true;
 	 return false;
@@ -1594,10 +1594,10 @@ void Usr_GetMyInstits (void)
   }
 
 /*****************************************************************************/
-/***** Get all my centres (those of my courses) and store them in a list *****/
+/***** Get all my centers (those of my courses) and store them in a list *****/
 /*****************************************************************************/
 
-void Usr_GetMyCentres (void)
+void Usr_GetMyCenters (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1605,25 +1605,25 @@ void Usr_GetMyCentres (void)
    unsigned NumCtrs;
    long CtrCod;
 
-   /***** If my centres are yet filled, there's nothing to do *****/
+   /***** If my centers are yet filled, there's nothing to do *****/
    if (!Gbl.Usrs.Me.MyCtrs.Filled)
      {
       Gbl.Usrs.Me.MyCtrs.Num = 0;
 
-      /***** Get my centres from database *****/
-      if ((NumCtrs = (unsigned) Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res)) > 0) // Centres found
+      /***** Get my centers from database *****/
+      if ((NumCtrs = (unsigned) Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res)) > 0) // Centers found
          for (NumCtr = 0;
               NumCtr < NumCtrs;
               NumCtr++)
            {
-            /* Get next centre */
+            /* Get next center */
             row = mysql_fetch_row (mysql_res);
 
-            /* Get centre code */
+            /* Get center code */
             if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
               {
-               if (Gbl.Usrs.Me.MyCtrs.Num == Ctr_MAX_CENTRES_PER_USR)
-                  Lay_ShowErrorAndExit ("Maximum number of centres of a user exceeded.");
+               if (Gbl.Usrs.Me.MyCtrs.Num == Ctr_MAX_CENTERS_PER_USR)
+                  Lay_ShowErrorAndExit ("Maximum number of centers of a user exceeded.");
 
                Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].CtrCod = CtrCod;
                Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
@@ -1635,7 +1635,7 @@ void Usr_GetMyCentres (void)
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
 
-      /***** Set boolean that indicates that my centres are yet filled *****/
+      /***** Set boolean that indicates that my centers are yet filled *****/
       Gbl.Usrs.Me.MyCtrs.Filled = true;
      }
   }
@@ -1793,10 +1793,10 @@ void Usr_FreeMyInstits (void)
   }
 
 /*****************************************************************************/
-/************************ Free the list of my centres ************************/
+/************************ Free the list of my centers ************************/
 /*****************************************************************************/
 
-void Usr_FreeMyCentres (void)
+void Usr_FreeMyCenters (void)
   {
    if (Gbl.Usrs.Me.MyCtrs.Filled)
      {
@@ -1878,24 +1878,24 @@ bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
    Gbl.Cache.UsrBelongsToIns.UsrCod = UsrCod;
    Gbl.Cache.UsrBelongsToIns.InsCod = InsCod;
    Gbl.Cache.UsrBelongsToIns.Belongs =
-      (DB_QueryCOUNT ("can not check if a user belongs to an institution",
-		      "SELECT COUNT(DISTINCT centres.InsCod)"
-		      " FROM crs_usr,"
-		            "crs_courses,"
-		            "deg_degrees,"
-		            "centres"
-		      " WHERE crs_usr.UsrCod=%ld"
-		      " AND crs_usr.Accepted='Y'"	// Only if user accepted
-		      " AND crs_usr.CrsCod=crs_courses.CrsCod"
-		      " AND crs_courses.DegCod=deg_degrees.DegCod"
-		      " AND deg_degrees.CtrCod=centres.CtrCod"
-		      " AND centres.InsCod=%ld",
-		      UsrCod,InsCod) != 0);
+   (DB_QueryCOUNT ("can not check if a user belongs to an institution",
+		   "SELECT COUNT(DISTINCT ctr_centers.InsCod)"
+		   " FROM crs_usr,"
+			 "crs_courses,"
+			 "deg_degrees,"
+			 "ctr_centers"
+		   " WHERE crs_usr.UsrCod=%ld"
+		   " AND crs_usr.Accepted='Y'"	// Only if user accepted
+		   " AND crs_usr.CrsCod=crs_courses.CrsCod"
+		   " AND crs_courses.DegCod=deg_degrees.DegCod"
+		   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		   " AND ctr_centers.InsCod=%ld",
+		   UsrCod,InsCod) != 0);
    return Gbl.Cache.UsrBelongsToIns.Belongs;
   }
 
 /*****************************************************************************/
-/******************* Check if a user belongs to a centre *********************/
+/******************* Check if a user belongs to a center *********************/
 /*****************************************************************************/
 
 void Usr_FlushCacheUsrBelongsToCtr (void)
@@ -1917,11 +1917,11 @@ bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
        CtrCod == Gbl.Cache.UsrBelongsToCtr.CtrCod)
       return Gbl.Cache.UsrBelongsToCtr.Belongs;
 
-   /***** 3. Slow check: Get is user belongs to centre from database *****/
+   /***** 3. Slow check: Get is user belongs to center from database *****/
    Gbl.Cache.UsrBelongsToCtr.UsrCod = UsrCod;
    Gbl.Cache.UsrBelongsToCtr.CtrCod = CtrCod;
    Gbl.Cache.UsrBelongsToCtr.Belongs =
-      (DB_QueryCOUNT ("can not check if a user belongs to a centre",
+      (DB_QueryCOUNT ("can not check if a user belongs to a center",
 		      "SELECT COUNT(DISTINCT deg_degrees.CtrCod)"
 		      " FROM crs_usr,"
 		            "crs_courses,"
@@ -2128,17 +2128,17 @@ bool Usr_CheckIfIBelongToIns (long InsCod)
   }
 
 /*****************************************************************************/
-/*********************** Check if I belong to a centre ***********************/
+/*********************** Check if I belong to a center ***********************/
 /*****************************************************************************/
 
 bool Usr_CheckIfIBelongToCtr (long CtrCod)
   {
    unsigned NumMyCtr;
 
-   /***** Fill the list with the centres I belong to *****/
-   Usr_GetMyCentres ();
+   /***** Fill the list with the centers I belong to *****/
+   Usr_GetMyCenters ();
 
-   /***** Check if the centre passed as parameter is any of my centres *****/
+   /***** Check if the center passed as parameter is any of my centers *****/
    for (NumMyCtr = 0;
         NumMyCtr < Gbl.Usrs.Me.MyCtrs.Num;
         NumMyCtr++)
@@ -2206,14 +2206,14 @@ unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res)
 			      " FROM crs_usr,"
 			            "crs_courses,"
 			            "deg_degrees,"
-			            "centres,"
+			            "ctr_centers,"
 			            "institutions,"
 			            "countries"
 			      " WHERE crs_usr.UsrCod=%ld"
 			      " AND crs_usr.CrsCod=crs_courses.CrsCod"
 			      " AND crs_courses.DegCod=deg_degrees.DegCod"
-			      " AND deg_degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod=institutions.InsCod"
+			      " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			      " AND ctr_centers.InsCod=institutions.InsCod"
 			      " AND institutions.CtyCod=countries.CtyCod"
 			      " GROUP BY countries.CtyCod"
 			      " ORDER BY countries.Name_%s",
@@ -2236,13 +2236,13 @@ unsigned long Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res)
 			     " FROM crs_usr,"
 			           "crs_courses,"
 			           "deg_degrees,"
-			           "centres,"
+			           "ctr_centers,"
 			           "institutions"
 			     " WHERE crs_usr.UsrCod=%ld"
 			     " AND crs_usr.CrsCod=crs_courses.CrsCod"
 			     " AND crs_courses.DegCod=deg_degrees.DegCod"
-			     " AND deg_degrees.CtrCod=centres.CtrCod"
-			     " AND centres.InsCod=institutions.InsCod"
+			     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			     " AND ctr_centers.InsCod=institutions.InsCod"
 			     " AND institutions.CtyCod=%ld"
 			     " GROUP BY institutions.InsCod"
 			     " ORDER BY institutions.ShortName",
@@ -2255,58 +2255,58 @@ unsigned long Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res)
 			     " FROM crs_usr,"
 			           "crs_courses,"
 			           "deg_degrees,"
-			           "centres,"
+			           "ctr_centers,"
 			           "institutions"
 			     " WHERE crs_usr.UsrCod=%ld"
 			     " AND crs_usr.CrsCod=crs_courses.CrsCod"
 			     " AND crs_courses.DegCod=deg_degrees.DegCod"
-			     " AND deg_degrees.CtrCod=centres.CtrCod"
-			     " AND centres.InsCod=institutions.InsCod"
+			     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			     " AND ctr_centers.InsCod=institutions.InsCod"
 			     " GROUP BY institutions.InsCod"
 			     " ORDER BY institutions.ShortName",
 			     UsrCod);
   }
 
 /*****************************************************************************/
-/***************** Get the centres of a user from database *******************/
+/***************** Get the centers of a user from database *******************/
 /*****************************************************************************/
 // Returns the number of rows of the result
 
 unsigned long Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res)
   {
-   /***** Get from database the centres a user belongs to *****/
+   /***** Get from database the centers a user belongs to *****/
    if (InsCod > 0)
-      return DB_QuerySELECT (mysql_res,"can not check the centres"
+      return DB_QuerySELECT (mysql_res,"can not check the centers"
 				       " a user belongs to",
-			     "SELECT centres.CtrCod,"
+			     "SELECT ctr_centers.CtrCod,"
 				    "MAX(crs_usr.Role)"
 			     " FROM crs_usr,"
 				   "crs_courses,"
 				   "deg_degrees,"
-				   "centres"
+				   "ctr_centers"
 			     " WHERE crs_usr.UsrCod=%ld"
 			     " AND crs_usr.CrsCod=crs_courses.CrsCod"
 			     " AND crs_courses.DegCod=deg_degrees.DegCod"
-			     " AND deg_degrees.CtrCod=centres.CtrCod"
-			     " AND centres.InsCod=%ld"
-			     " GROUP BY centres.CtrCod"
-			     " ORDER BY centres.ShortName",
+			     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			     " AND ctr_centers.InsCod=%ld"
+			     " GROUP BY ctr_centers.CtrCod"
+			     " ORDER BY ctr_centers.ShortName",
 			     UsrCod,InsCod);
    else
-      return DB_QuerySELECT (mysql_res,"can not check the centres"
+      return DB_QuerySELECT (mysql_res,"can not check the centers"
 				       " a user belongs to",
 			     "SELECT deg_degrees.CtrCod,"
 			            "MAX(crs_usr.Role)"
 			     " FROM crs_usr,"
 			           "crs_courses,"
 			           "deg_degrees,"
-			           "centres"
+			           "ctr_centers"
 			     " WHERE crs_usr.UsrCod=%ld"
 			     " AND crs_usr.CrsCod=crs_courses.CrsCod"
 			     " AND crs_courses.DegCod=deg_degrees.DegCod"
-			     " AND deg_degrees.CtrCod=centres.CtrCod"
-			     " GROUP BY centres.CtrCod"
-			     " ORDER BY centres.ShortName",
+			     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			     " GROUP BY ctr_centers.CtrCod"
+			     " ORDER BY ctr_centers.ShortName",
 			     UsrCod);
   }
 
@@ -3382,7 +3382,7 @@ static void Usr_SetMyPrefsAndRoles (void)
 	 // role and action will be got from last data
          GetRoleAndActionFromLastData = true;
         }
-      else	// Country (and may be institution, centre, degree or course) selected
+      else	// Country (and may be institution, center, degree or course) selected
 	 // Role and action will be got from last data
 	 // only if I am in the same hierarchy location that the stored one
 	 GetRoleAndActionFromLastData =
@@ -3646,7 +3646,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
   {
    struct Ins_Instit Ins;
-   struct Ctr_Centre Ctr;
+   struct Ctr_Center Ctr;
    struct Dpt_Department Dpt;
 
    /***** Start row *****/
@@ -3679,7 +3679,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
       if (UsrDat->Tch.CtrCod > 0)
 	{
 	 Ctr.CtrCod = UsrDat->Tch.CtrCod;
-	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 Ctr_GetDataOfCenterByCod (&Ctr);
 	}
       Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
 			UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
@@ -3825,7 +3825,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
   {
    struct Ins_Instit Ins;
-   struct Ctr_Centre Ctr;
+   struct Ctr_Center Ctr;
    struct Dpt_Department Dpt;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    bool ShowData = (ItsMe || UsrDat->Accepted ||
@@ -3864,7 +3864,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
    if (ShowData && UsrDat->Tch.CtrCod > 0)
      {
       Ctr.CtrCod = UsrDat->Tch.CtrCod;
-      Ctr_GetDataOfCentreByCod (&Ctr);
+      Ctr_GetDataOfCenterByCod (&Ctr);
      }
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      (ShowData && UsrDat->Tch.CtrCod > 0) ? Ctr.FullName :
@@ -4101,15 +4101,15 @@ unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod)
 		        "crs_usr,"
 		        "crs_courses,"
 		        "deg_degrees,"
-		        "centres"
+		        "ctr_centers"
 		  " WHERE usr_data.InsCod=%ld"			// User in the current institution...
 		  " AND usr_data.DptCod=%ld"			// ...and the specified department...
 		  " AND usr_data.UsrCod=crs_usr.UsrCod"		// ...who is...
 		  " AND crs_usr.Role IN (%u,%u)"		// ...a teacher...
 		  " AND crs_usr.CrsCod=crs_courses.CrsCod"	// ...in a course...
 		  " AND crs_courses.DegCod=deg_degrees.DegCod"	// ...of a degree...
-		  " AND deg_degrees.CtrCod=centres.InsCod"	// ...of a centre...
-		  " AND centres.InsCod=%ld",			// ...of the current institution
+		  " AND deg_degrees.CtrCod=ctr_centers.InsCod"	// ...of a center...
+		  " AND ctr_centers.InsCod=%ld",		// ...of the current institution
 		  Gbl.Hierarchy.Ins.InsCod,DptCod,
 		  (unsigned) Rol_NET,(unsigned) Rol_TCH,
 		  Gbl.Hierarchy.Ins.InsCod);
@@ -4308,7 +4308,7 @@ unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
   }
 
 /*****************************************************************************/
-/*********** Get number of users who claim to belong to a centre *************/
+/*********** Get number of users who claim to belong to a center *************/
 /*****************************************************************************/
 
 void Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void)
@@ -4317,7 +4317,7 @@ void Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void)
    Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs = 0;
   }
 
-unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Centre *Ctr)
+unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr)
   {
    /***** 1. Fast check: Trivial case *****/
    if (Ctr->CtrCod <= 0)
@@ -4335,7 +4335,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Centre *Ctr)
       return Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs;
      }
 
-   /***** 4. Slow: number of users who claim to belong to a centre
+   /***** 4. Slow: number of users who claim to belong to a center
                    from database *****/
    Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod  = Ctr->CtrCod;
    Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs =
@@ -4349,14 +4349,14 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Centre *Ctr)
    return Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs;
   }
 
-unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Centre *Ctr)
+unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr)
   {
    unsigned NumUsrsCtr;
 
-   /***** Get number of users who claim to belong to centre from cache *****/
+   /***** Get number of users who claim to belong to center from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTR,Hie_Lvl_CTR,Ctr->CtrCod,
                                    FigCch_UNSIGNED,&NumUsrsCtr))
-      /***** Get current number of users who claim to belong to centre from database and update cache *****/
+      /***** Get current number of users who claim to belong to center from database and update cache *****/
       NumUsrsCtr = Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr);
 
    return NumUsrsCtr;
@@ -4605,14 +4605,14 @@ void Usr_GetListUsrs (Hie_Lvl_Level_t Scope,Rol_Role_t Role)
 			      "crs_usr,"
 			      "crs_courses,"
 			      "deg_degrees,"
-			      "centres,"
+			      "ctr_centers,"
 			      "institutions"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role=%u"
 			" AND crs_usr.CrsCod=crs_courses.CrsCod"
 			" AND crs_courses.DegCod=deg_degrees.DegCod"
-			" AND deg_degrees.CtrCod=centres.CtrCod"
-			" AND centres.InsCod=institutions.InsCod"
+			" AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			" AND ctr_centers.InsCod=institutions.InsCod"
 			" AND institutions.CtyCod=%ld"
 			" ORDER BY usr_data.Surname1,"
 			          "usr_data.Surname2,"
@@ -4630,13 +4630,13 @@ void Usr_GetListUsrs (Hie_Lvl_Level_t Scope,Rol_Role_t Role)
 			      "crs_usr,"
 			      "crs_courses,"
 			      "deg_degrees,"
-			      "centres"
+			      "ctr_centers"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role=%u"
 			" AND crs_usr.CrsCod=crs_courses.CrsCod"
 			" AND crs_courses.DegCod=deg_degrees.DegCod"
-			" AND deg_degrees.CtrCod=centres.CtrCod"
-			" AND centres.InsCod=%ld"
+			" AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			" AND ctr_centers.InsCod=%ld"
 			" ORDER BY usr_data.Surname1,"
 			          "usr_data.Surname2,"
 			          "usr_data.FirstName,"
@@ -4646,7 +4646,7 @@ void Usr_GetListUsrs (Hie_Lvl_Level_t Scope,Rol_Role_t Role)
 			Gbl.Hierarchy.Ins.InsCod);
 	 break;
       case Hie_Lvl_CTR:
-	 /* Get users in courses from the current centre */
+	 /* Get users in courses from the current center */
 	 DB_BuildQuery (&Query,
 			"SELECT %s"
 			" FROM usr_data,"
@@ -4768,14 +4768,14 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			            "crs_usr,"
 			            "crs_courses,"
 			            "deg_degrees,"
-			            "centres,"
+			            "ctr_centers,"
 			            "institutions,"
 			            "usr_data"
 			     " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=crs_courses.CrsCod"
 			      " AND crs_courses.DegCod=deg_degrees.DegCod"
-			      " AND deg_degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod=institutions.InsCod"
+			      " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			      " AND ctr_centers.InsCod=institutions.InsCod"
 			      " AND institutions.CtyCod=%ld"
 			      " AND %s",
 			      QueryFields,
@@ -4790,20 +4790,20 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			            "crs_usr,"
 			            "crs_courses,"
 			            "deg_degrees,"
-			            "centres,"
+			            "ctr_centers,"
 			            "usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=crs_courses.CrsCod"
 			      " AND crs_courses.DegCod=deg_degrees.DegCod"
-			      " AND deg_degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod=%ld"
+			      " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			      " AND ctr_centers.InsCod=%ld"
 			      " AND %s",
 			      QueryFields,
 			      Gbl.Hierarchy.Ins.InsCod,
 			      OrderQuery);
 	       break;
 	    case Hie_Lvl_CTR:
-	       /* Search users in courses from the current centre */
+	       /* Search users in courses from the current center */
 	       DB_BuildQuery (&Query,
 			      "SELECT %s"
 			      " FROM candidate_users,"
@@ -4915,15 +4915,15 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			            "crs_usr,"
 			            "crs_courses,"
 			            "deg_degrees,"
-			            "centres,"
+			            "ctr_centers,"
 			            "institutions,"
 			            "usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      "%s"
 			      " AND crs_usr.CrsCod=crs_courses.CrsCod"
 			      " AND crs_courses.DegCod=deg_degrees.DegCod"
-			      " AND deg_degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod=institutions.InsCod"
+			      " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			      " AND ctr_centers.InsCod=institutions.InsCod"
 			      " AND institutions.CtyCod=%ld"
 			      " AND %s",
 			      QueryFields,
@@ -4939,14 +4939,14 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			            "crs_usr,"
 			            "crs_courses,"
 			            "deg_degrees,"
-			            "centres,"
+			            "ctr_centers,"
 			            "usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      "%s"
 			      " AND crs_usr.CrsCod=crs_courses.CrsCod"
 			      " AND crs_courses.DegCod=deg_degrees.DegCod"
-			      " AND deg_degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod=%ld"
+			      " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			      " AND ctr_centers.InsCod=%ld"
 			      " AND %s",
 			      QueryFields,
 			      SubQueryRole,
@@ -4954,7 +4954,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      OrderQuery);
 	       break;
 	    case Hie_Lvl_CTR:
-	       /* Search users in courses from the current centre */
+	       /* Search users in courses from the current center */
 	       DB_BuildQuery (&Query,
 			      "SELECT %s"
 			      " FROM candidate_users,"
@@ -5113,7 +5113,7 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
 			QueryFields);
          break;
       case Hie_Lvl_CTY:	// System admins
-				// and admins of the institutions, centres and degrees in the current country
+				// and admins of the institutions, centers and degrees in the current country
          DB_BuildQuery (&Query,
                         "SELECT %s"
                         " FROM usr_data"
@@ -5130,22 +5130,22 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
 			" OR UsrCod IN "
 			"(SELECT usr_admins.UsrCod"
 			" FROM usr_admins,"
-			      "centres,"
+			      "ctr_centers,"
 			      "institutions"
 			" WHERE usr_admins.Scope='%s'"
-			" AND usr_admins.Cod=centres.CtrCod"
-			" AND centres.InsCod=institutions.InsCod"
+			" AND usr_admins.Cod=ctr_centers.CtrCod"
+			" AND ctr_centers.InsCod=institutions.InsCod"
 			" AND institutions.CtyCod=%ld)"
 			" OR UsrCod IN "
 			"(SELECT usr_admins.UsrCod"
 			" FROM usr_admins,"
 			      "deg_degrees,"
-			      "centres,"
+			      "ctr_centers,"
 			      "institutions"
 			" WHERE usr_admins.Scope='%s'"
 			" AND usr_admins.Cod=deg_degrees.DegCod"
-			" AND deg_degrees.CtrCod=centres.CtrCod"
-			" AND centres.InsCod=institutions.InsCod"
+			" AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			" AND ctr_centers.InsCod=institutions.InsCod"
 			" AND institutions.CtyCod=%ld)"
 			" ORDER BY Surname1,"
 			          "Surname2,"
@@ -5159,7 +5159,7 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
          break;
       case Hie_Lvl_INS:	// System admins,
 				// admins of the current institution,
-				// and admins of the centres and degrees in the current institution
+				// and admins of the centers and degrees in the current institution
          DB_BuildQuery (&Query,
                         "SELECT %s"
                         " FROM usr_data"
@@ -5174,19 +5174,19 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
 			" OR UsrCod IN "
 			"(SELECT usr_admins.UsrCod"
 			" FROM usr_admins,"
-			      "centres"
+			      "ctr_centers"
 			" WHERE usr_admins.Scope='%s'"
-			" AND usr_admins.Cod=centres.CtrCod"
-			" AND centres.InsCod=%ld)"
+			" AND usr_admins.Cod=ctr_centers.CtrCod"
+			" AND ctr_centers.InsCod=%ld)"
 			" OR UsrCod IN "
 			"(SELECT usr_admins.UsrCod"
 			" FROM usr_admins,"
 			      "deg_degrees,"
-			      "centres"
+			      "ctr_centers"
 			" WHERE usr_admins.Scope='%s'"
 			" AND usr_admins.Cod=deg_degrees.DegCod"
-			" AND deg_degrees.CtrCod=centres.CtrCod"
-			" AND centres.InsCod=%ld)"
+			" AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			" AND ctr_centers.InsCod=%ld)"
 			" ORDER BY Surname1,"
 			          "Surname2,"
 			          "FirstName,"
@@ -5199,8 +5199,8 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
          break;
       case Hie_Lvl_CTR:	// System admins,
 				// admins of the current institution,
-				// admins and the current centre,
-				// and admins of the degrees in the current centre
+				// admins and the current center,
+				// and admins of the degrees in the current center
 	 DB_BuildQuery (&Query,
 			"SELECT %s"
 			" FROM usr_data"
@@ -5234,7 +5234,7 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
 			Sco_GetDBStrFromScope (Hie_Lvl_DEG),Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_Lvl_DEG:	// System admins
-				// and admins of the current institution, centre or degree
+				// and admins of the current institution, center or degree
          DB_BuildQuery (&Query,
 			"SELECT %s"
 			" FROM usr_data"
@@ -5501,7 +5501,7 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
 			break;
 		     case Hie_Lvl_CTY:	// Country
 		     case Hie_Lvl_INS:	// Institution
-		     case Hie_Lvl_CTR:	// Centre
+		     case Hie_Lvl_CTR:	// Center
 		     case Hie_Lvl_DEG:	// Degree
 			// Query result has not a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_UNK;
@@ -5517,7 +5517,7 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
                case Rol_GST:        // Guests have no courses,...
             	    	    	    	// ...so they have not accepted...
                                         // ...inscription in any course
-               case Rol_DEG_ADM:	// Any admin (degree, centre, institution or system)
+               case Rol_DEG_ADM:	// Any admin (degree, center, institution or system)
 	          UsrInList->RoleInCurrentCrsDB = Rol_UNK;
 	          UsrInList->Accepted = false;
 	          break;
@@ -5532,7 +5532,7 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
 		     case Hie_Lvl_SYS:	// System
 		     case Hie_Lvl_CTY:	// Country
 		     case Hie_Lvl_INS:	// Institution
-		     case Hie_Lvl_CTR:	// Centre
+		     case Hie_Lvl_CTR:	// Center
 		     case Hie_Lvl_DEG:	// Degree
 			// Query result has not a column with the acceptation
 	                UsrInList->RoleInCurrentCrsDB = Rol_UNK;
@@ -6862,7 +6862,7 @@ void Usr_ListAllDataGsts (void)
    extern const char *Txt_First_name;
    extern const char *Txt_Institution;
    extern const char *Txt_Email;
-   extern const char *Txt_Centre;
+   extern const char *Txt_Center;
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
@@ -6881,7 +6881,7 @@ void Usr_ListAllDataGsts (void)
    FieldNames[ 4] = Txt_First_name;
    FieldNames[ 5] = Txt_Email;
    FieldNames[ 6] = Txt_Institution;
-   FieldNames[ 7] = Txt_Centre;
+   FieldNames[ 7] = Txt_Center;
    FieldNames[ 8] = Txt_Department;
    FieldNames[ 9] = Txt_Office;
    FieldNames[10] = Txt_Phone;
@@ -7214,7 +7214,7 @@ void Usr_ListAllDataTchs (void)
    extern const char *Txt_First_name;
    extern const char *Txt_Institution;
    extern const char *Txt_Email;
-   extern const char *Txt_Centre;
+   extern const char *Txt_Center;
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
@@ -7230,7 +7230,7 @@ void Usr_ListAllDataTchs (void)
    FieldNames[ 4] = Txt_First_name;
    FieldNames[ 5] = Txt_Email;
    FieldNames[ 6] = Txt_Institution;
-   FieldNames[ 7] = Txt_Centre;
+   FieldNames[ 7] = Txt_Center;
    FieldNames[ 8] = Txt_Department;
    FieldNames[ 9] = Txt_Office;
    FieldNames[10] = Txt_Phone;
@@ -9380,13 +9380,13 @@ unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
             DB_QueryCOUNT ("can not get number of users",
 			   "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 			   " FROM institutions,"
-				 "centres,"
+				 "ctr_centers,"
 				 "deg_degrees,"
 				 "crs_courses,"
 				 "crs_usr"
 			   " WHERE institutions.CtyCod=%ld"
-			   " AND institutions.InsCod=centres.InsCod"
-			   " AND centres.CtrCod=deg_degrees.CtrCod"
+			   " AND institutions.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_usr.CrsCod",
 			   Cod);
@@ -9395,13 +9395,13 @@ unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
             DB_QueryCOUNT ("can not get number of users",
 			   "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 			   " FROM institutions,"
-				 "centres,"
+				 "ctr_centers,"
 				 "deg_degrees,"
 				 "crs_courses,"
 				 "crs_usr"
 			   " WHERE institutions.CtyCod=%ld"
-			   " AND institutions.InsCod=centres.InsCod"
-			   " AND centres.CtrCod=deg_degrees.CtrCod"
+			   " AND institutions.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			   " AND crs_usr.Role%s",
@@ -9412,12 +9412,12 @@ unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
             NumUsrs = (unsigned)
             DB_QueryCOUNT ("can not get number of users",
 			   "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-			   " FROM centres,"
+			   " FROM ctr_centers,"
 				 "deg_degrees,"
 				 "crs_courses,"
 				 "crs_usr"
-			   " WHERE centres.InsCod=%ld"
-			   " AND centres.CtrCod=deg_degrees.CtrCod"
+			   " WHERE ctr_centers.InsCod=%ld"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_usr.CrsCod",
 			   Cod);
@@ -9425,12 +9425,12 @@ unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
             NumUsrs = (unsigned)
             DB_QueryCOUNT ("can not get number of users",
 			   "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-			   " FROM centres,"
+			   " FROM ctr_centers,"
 				 "deg_degrees,"
 				 "crs_courses,"
 				 "crs_usr"
-			   " WHERE centres.InsCod=%ld"
-			   " AND centres.CtrCod=deg_degrees.CtrCod"
+			   " WHERE ctr_centers.InsCod=%ld"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			   " AND crs_usr.Role%s",
@@ -9605,13 +9605,13 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 			    "SELECT AVG(NumCrss) FROM "
 			    "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
 			    " FROM institutions,"
-			          "centres,"
+			          "ctr_centers,"
 			          "deg_degrees,"
 			          "crs_courses,"
 			          "crs_usr"
 			    " WHERE institutions.CtyCod=%ld"
-			    " AND institutions.InsCod=centres.InsCod"
-			    " AND centres.CtrCod=deg_degrees.CtrCod"
+			    " AND institutions.InsCod=ctr_centers.InsCod"
+			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			    " AND deg_degrees.DegCod=crs_courses.DegCod"
 			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			    " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
@@ -9621,13 +9621,13 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 			    "SELECT AVG(NumCrss) FROM "
 			    "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
 			    " FROM institutions,"
-			          "centres,"
+			          "ctr_centers,"
 			          "deg_degrees,"
 			          "crs_courses,"
 			          "crs_usr"
 			    " WHERE institutions.CtyCod=%ld"
-			    " AND institutions.InsCod=centres.InsCod"
-			    " AND centres.CtrCod=deg_degrees.CtrCod"
+			    " AND institutions.InsCod=ctr_centers.InsCod"
+			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			    " AND deg_degrees.DegCod=crs_courses.DegCod"
 			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			    " AND crs_usr.Role=%u"
@@ -9640,12 +9640,12 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
 			    "SELECT AVG(NumCrss) FROM "
 			    "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
-			    " FROM centres,"
+			    " FROM ctr_centers,"
 			          "deg_degrees,"
 			          "crs_courses,"
 			          "crs_usr"
-			    " WHERE centres.InsCod=%ld"
-			    " AND centres.CtrCod=deg_degrees.CtrCod"
+			    " WHERE ctr_centers.InsCod=%ld"
+			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			    " AND deg_degrees.DegCod=crs_courses.DegCod"
 			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			    " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
@@ -9654,12 +9654,12 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
 			    "SELECT AVG(NumCrss) FROM "
 			    "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
-			    " FROM centres,"
+			    " FROM ctr_centers,"
 			          "deg_degrees,"
 			          "crs_courses,"
 			          "crs_usr"
-			    " WHERE centres.InsCod=%ld"
-			    " AND centres.CtrCod=deg_degrees.CtrCod"
+			    " WHERE ctr_centers.InsCod=%ld"
+			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			    " AND deg_degrees.DegCod=crs_courses.DegCod"
 			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			    " AND crs_usr.Role=%u"
@@ -9794,13 +9794,13 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 			    "SELECT AVG(NumUsrs) FROM "
 			    "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
 			    " FROM institutions,"
-			          "centres,"
+			          "ctr_centers,"
 			          "deg_degrees,"
 			          "crs_courses,"
 			          "crs_usr"
 			    " WHERE institutions.CtyCod=%ld"
-			    " AND institutions.InsCod=centres.InsCod"
-			    " AND centres.CtrCod=deg_degrees.CtrCod"
+			    " AND institutions.InsCod=ctr_centers.InsCod"
+			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			    " AND deg_degrees.DegCod=crs_courses.DegCod"
 			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			    " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
@@ -9810,13 +9810,13 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 			    "SELECT AVG(NumUsrs) FROM "
 			    "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
 			    " FROM institutions,"
-			          "centres,"
+			          "ctr_centers,"
 			          "deg_degrees,"
 			          "crs_courses,"
 			          "crs_usr"
 			    " WHERE institutions.CtyCod=%ld"
-			    " AND institutions.InsCod=centres.InsCod"
-			    " AND centres.CtrCod=deg_degrees.CtrCod"
+			    " AND institutions.InsCod=ctr_centers.InsCod"
+			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			    " AND deg_degrees.DegCod=crs_courses.DegCod"
 			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			    " AND crs_usr.Role=%u"
@@ -9829,12 +9829,12 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
 			    "SELECT AVG(NumUsrs) FROM "
 			    "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
-			    " FROM centres,"
+			    " FROM ctr_centers,"
 			          "deg_degrees,"
 			          "crs_courses,"
 			          "crs_usr"
-			    " WHERE centres.InsCod=%ld"
-			    " AND centres.CtrCod=deg_degrees.CtrCod"
+			    " WHERE ctr_centers.InsCod=%ld"
+			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			    " AND deg_degrees.DegCod=crs_courses.DegCod"
 			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			    " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
@@ -9843,12 +9843,12 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
 			    "SELECT AVG(NumUsrs) FROM "
 			    "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
-			    " FROM centres,"
+			    " FROM ctr_centers,"
 			          "deg_degrees,"
 			          "crs_courses,"
 			          "crs_usr"
-			    " WHERE centres.InsCod=%ld"
-			    " AND centres.CtrCod=deg_degrees.CtrCod"
+			    " WHERE ctr_centers.InsCod=%ld"
+			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			    " AND deg_degrees.DegCod=crs_courses.DegCod"
 			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
 			    " AND crs_usr.Role=%u"

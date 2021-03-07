@@ -1,4 +1,4 @@
-// swad_hierarchy.c: hierarchy (system, institution, centre, degree, course)
+// swad_hierarchy.c: hierarchy (system, institution, center, degree, course)
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -59,7 +59,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
-/********** List pending institutions, centres, degrees and courses **********/
+/********** List pending institutions, centers, degrees and courses **********/
 /*****************************************************************************/
 
 void Hie_SeePending (void)
@@ -67,10 +67,10 @@ void Hie_SeePending (void)
    /***** List countries with pending institutions *****/
    Cty_SeeCtyWithPendingInss ();
 
-   /***** List institutions with pending centres *****/
+   /***** List institutions with pending centers *****/
    Ins_SeeInsWithPendingCtrs ();
 
-   /***** List centres with pending degrees *****/
+   /***** List centers with pending degrees *****/
    Ctr_SeeCtrWithPendingDegs ();
 
    /***** List degrees with pending courses *****/
@@ -78,14 +78,14 @@ void Hie_SeePending (void)
   }
 
 /*****************************************************************************/
-/*** Write menu to select country, institution, centre, degree and course ****/
+/*** Write menu to select country, institution, center, degree and course ****/
 /*****************************************************************************/
 
 void Hie_WriteMenuHierarchy (void)
   {
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
-   extern const char *Txt_Centre;
+   extern const char *Txt_Center;
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
 
@@ -125,15 +125,15 @@ void Hie_WriteMenuHierarchy (void)
       if (Gbl.Hierarchy.Ins.InsCod > 0)
         {
          /***** Write a 3rd selector
-                with all the centres of selected institution *****/
+                with all the centers of selected institution *****/
          HTM_TR_Begin (NULL);
 
          /* Label */
-         Frm_LabelColumn ("RT","ctr",Txt_Centre);
+         Frm_LabelColumn ("RT","ctr",Txt_Center);
 
          /* Data */
          HTM_TD_Begin ("class=\"LT\"");
-         Ctr_WriteSelectorOfCentre ();
+         Ctr_WriteSelectorOfCenter ();
          HTM_TD_End ();
 
          HTM_TR_End ();
@@ -141,7 +141,7 @@ void Hie_WriteMenuHierarchy (void)
          if (Gbl.Hierarchy.Ctr.CtrCod > 0)
            {
             /***** Write a 4th selector
-                   with all the degrees of selected centre *****/
+                   with all the degrees of selected center *****/
             HTM_TR_Begin (NULL);
 
             /* Label */
@@ -188,7 +188,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
    extern const char *Txt_System;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
-   extern const char *Txt_Centre;
+   extern const char *Txt_Center;
    extern const char *Txt_Degree;
    const char *ClassTxt = The_ClassBreadcrumb[Gbl.Prefs.Theme];
    char *ClassLink;
@@ -251,7 +251,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       /***** Separator *****/
       HTM_Txt ("&nbsp;&gt;&nbsp;");
 
-      /***** Form to see centres of this institution *****/
+      /***** Form to see centers of this institution *****/
       Frm_BeginFormGoTo (ActSeeCtr);
       Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
       HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Ins.FullName,ClassLink,NULL);
@@ -290,14 +290,14 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_End ();
      }
 
-   if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Centre selected...
+   if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Center selected...
      {
       HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
 
       /***** Separator *****/
       HTM_Txt ("&nbsp;&gt;&nbsp;");
 
-      /***** Form to see degrees of this centre *****/
+      /***** Form to see degrees of this center *****/
       Frm_BeginFormGoTo (ActSeeDeg);
       Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
       HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Ctr.FullName,ClassLink,NULL);
@@ -314,10 +314,10 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       /***** Separator *****/
       HTM_Txt ("&nbsp;&gt;&nbsp;");
 
-      /***** Form to go to select centres *****/
+      /***** Form to go to select centers *****/
       Frm_BeginFormGoTo (ActSeeCtr);
-      HTM_BUTTON_SUBMIT_Begin (Txt_Centre,ClassLink,NULL);
-      HTM_Txt (Txt_Centre);
+      HTM_BUTTON_SUBMIT_Begin (Txt_Center,ClassLink,NULL);
+      HTM_Txt (Txt_Center);
       HTM_BUTTON_End ();
       Frm_EndForm ();
 
@@ -330,8 +330,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       /***** Separator *****/
       HTM_Txt ("&nbsp;&gt;&nbsp;");
 
-      /***** Hidden centre *****/
-      HTM_Txt (Txt_Centre);
+      /***** Hidden center *****/
+      HTM_Txt (Txt_Center);
 
       HTM_DIV_End ();
      }
@@ -422,7 +422,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
 	 Lgo_DrawLogo (Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod,
 		       Gbl.Hierarchy.Ins.ShrtName,40,"TOP_LOGO",false);
          break;
-      case Hie_Lvl_CTR:	// Centre
+      case Hie_Lvl_CTR:	// Center
 	 Lgo_DrawLogo (Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,
 		       Gbl.Hierarchy.Ctr.ShrtName,40,"TOP_LOGO",false);
          break;
@@ -495,7 +495,7 @@ void Hie_SetHierarchyFromUsrLastHierarchy (void)
       case Hie_Lvl_INS:	// Institution
          Gbl.Hierarchy.Ins.InsCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
 	 break;
-      case Hie_Lvl_CTR:	// Centre
+      case Hie_Lvl_CTR:	// Center
          Gbl.Hierarchy.Ctr.CtrCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
 	 break;
       case Hie_Lvl_DEG:	// Degree
@@ -508,12 +508,12 @@ void Hie_SetHierarchyFromUsrLastHierarchy (void)
 	 break;
      }
 
-   /****** Initialize again current course, degree, centre... ******/
+   /****** Initialize again current course, degree, center... ******/
    Hie_InitHierarchy ();
   }
 
 /*****************************************************************************/
-/**** Initialize current country, institution, centre, degree and course *****/
+/**** Initialize current country, institution, center, degree and course *****/
 /*****************************************************************************/
 
 void Hie_InitHierarchy (void)
@@ -539,10 +539,10 @@ void Hie_InitHierarchy (void)
          Hie_ResetHierarchy ();
      }
 
-   /***** If centre code is available, get centre data *****/
+   /***** If center code is available, get center data *****/
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
      {
-      if (Ctr_GetDataOfCentreByCod (&Gbl.Hierarchy.Ctr))	// Centre found
+      if (Ctr_GetDataOfCenterByCod (&Gbl.Hierarchy.Ctr))	// Center found
          Gbl.Hierarchy.Ins.InsCod = Gbl.Hierarchy.Ctr.InsCod;
       else
          Hie_ResetHierarchy ();
@@ -574,7 +574,7 @@ void Hie_InitHierarchy (void)
       Gbl.Hierarchy.Level = Hie_Lvl_DEG;
       Gbl.Hierarchy.Cod = Gbl.Hierarchy.Deg.DegCod;
      }
-   else if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Centre selected
+   else if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Center selected
      {
       Gbl.Hierarchy.Level = Hie_Lvl_CTR;
       Gbl.Hierarchy.Cod = Gbl.Hierarchy.Ctr.CtrCod;
@@ -619,7 +619,7 @@ void Hie_InitHierarchy (void)
   }
 
 /*****************************************************************************/
-/******* Reset current country, institution, centre, degree and course *******/
+/******* Reset current country, institution, center, degree and course *******/
 /*****************************************************************************/
 
 void Hie_ResetHierarchy (void)
@@ -630,7 +630,7 @@ void Hie_ResetHierarchy (void)
    /***** Institution *****/
    Gbl.Hierarchy.Ins.InsCod = -1L;
 
-   /***** Centre *****/
+   /***** Center *****/
    Gbl.Hierarchy.Ctr.CtrCod = -1L;
    Gbl.Hierarchy.Ctr.InsCod = -1L;
    Gbl.Hierarchy.Ctr.PlcCod = -1L;
@@ -647,7 +647,7 @@ void Hie_ResetHierarchy (void)
   }
 
 /*****************************************************************************/
-/***** Write institutions, centres and degrees administrated by an admin *****/
+/***** Write institutions, centers and degrees administrated by an admin *****/
 /*****************************************************************************/
 
 void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
@@ -659,9 +659,9 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
    unsigned NumRows;
    struct Hie_Hierarchy Hie;
 
-   /***** Get institutions, centres, degrees admin by user from database *****/
+   /***** Get institutions, centers, degrees admin by user from database *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions,"
-						   " centres, degrees"
+						   " centers, degrees"
 						   " admin by a user",
 				        "(SELECT %u AS S,-1 AS Cod,'' AS FullName"
 				        " FROM usr_admins"
@@ -676,11 +676,12 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 				        " UNION "
 				        "(SELECT %u AS S,"
 				                "usr_admins.Cod,"
-				                "centres.FullName"
-				        " FROM usr_admins,centres"
+				                "ctr_centers.FullName"
+				        " FROM usr_admins,"
+				              "ctr_centers"
 				        " WHERE usr_admins.UsrCod=%ld"
 				        " AND usr_admins.Scope='%s'"
-				        " AND usr_admins.Cod=centres.CtrCod)"
+				        " AND usr_admins.Cod=ctr_centers.CtrCod)"
 				        " UNION "
 				        "(SELECT %u AS S,"
 				                "usr_admins.Cod,"
@@ -709,11 +710,11 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		      "","ICO25x25");
          HTM_TD_End ();
 
-         /***** Write institution, centre, degree *****/
+         /***** Write institution, center, degree *****/
          HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL_NOBR LT COLOR%u\"",
                        ColSpan - 1,Gbl.RowEvenOdd);
 
-         /* Get next institution, centre, degree */
+         /* Get next institution, center, degree */
          row = mysql_fetch_row (mysql_res);
 
 	 /* Get scope */
@@ -735,15 +736,15 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 						          "BT_LINK DAT_SMALL_NOBR","LT");
 		 }
 	       break;
-	    case Hie_Lvl_CTR:	// Centre
+	    case Hie_Lvl_CTR:	// Center
 	       Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[1]);
 	       if (Hie.Ctr.CtrCod > 0)
 		 {
-		  /* Get data of centre */
-		  Ctr_GetDataOfCentreByCod (&Hie.Ctr);
+		  /* Get data of center */
+		  Ctr_GetDataOfCenterByCod (&Hie.Ctr);
 
-		  /* Write centre logo and name */
-		  Ctr_DrawCentreLogoAndNameWithLink (&Hie.Ctr,ActSeeCtrInf,
+		  /* Write center logo and name */
+		  Ctr_DrawCenterLogoAndNameWithLink (&Hie.Ctr,ActSeeCtrInf,
 						     "BT_LINK DAT_SMALL_NOBR","LT");
 		 }
 	       break;
@@ -775,7 +776,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 /*****************************************************************************/
 /********************* Build a "Go to <where>" message ***********************/
 /*****************************************************************************/
-// Where is a hierarchy member (country, institution, centre, degree or course
+// Where is a hierarchy member (country, institution, center, degree or course
 // Hie_FreeGoToMsg() must be called after calling this function
 
 char *Hie_BuildGoToMsg (const char *Where)

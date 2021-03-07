@@ -1,4 +1,4 @@
-// swad_hierarchy_config.c: hierarchy (country, institution, centre, degree, course) configuration
+// swad_hierarchy_config.c: hierarchy (country, institution, center, degree, course) configuration
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -232,19 +232,19 @@ void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod)
   }
 
 /*****************************************************************************/
-/************************** Show number of centres ***************************/
+/************************** Show number of centers ***************************/
 /*****************************************************************************/
 
 void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
   {
-   extern const char *Txt_Centres;
-   extern const char *Txt_Centres_of_INSTITUTION_X;
+   extern const char *Txt_Centers;
+   extern const char *Txt_Centers_of_INSTITUTION_X;
 
-   /***** Number of centres *****/
+   /***** Number of centers *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Centres);
+   Frm_LabelColumn ("RT",NULL,Txt_Centers);
 
    /* Data */
    HTM_TD_Begin ("class=\"LB\"");
@@ -252,7 +252,7 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
      {
       Frm_BeginFormGoTo (ActSeeCtr);
       Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-      HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Centres_of_INSTITUTION_X,
+      HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Centers_of_INSTITUTION_X,
 						   Gbl.Hierarchy.Ins.ShrtName),
 			       "BT_LINK DAT",NULL);
       Str_FreeString ();
@@ -269,18 +269,18 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
   }
 
 /*****************************************************************************/
-/********************* Show number of centres with map ***********************/
+/********************* Show number of centers with map ***********************/
 /*****************************************************************************/
 
 void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap)
   {
-   extern const char *Txt_Centres_with_map;
+   extern const char *Txt_Centers_with_map;
 
-   /***** Number of centres with map *****/
+   /***** Number of centers with map *****/
    HTM_TR_Begin (NULL);
 
    /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Centres_with_map);
+   Frm_LabelColumn ("RT",NULL,Txt_Centers_with_map);
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");

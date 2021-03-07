@@ -52,7 +52,7 @@ typedef enum
    Sch_SEARCH_ALL			=  1,
    Sch_SEARCH_COUNTRIES			=  2,
    Sch_SEARCH_INSTITS			=  3,
-   Sch_SEARCH_CENTRES			=  4,
+   Sch_SEARCH_CENTERS			=  4,
    Sch_SEARCH_DEGREES			=  5,
    Sch_SEARCH_COURSES			=  6,
    Sch_SEARCH_USERS			=  7,

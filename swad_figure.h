@@ -38,7 +38,7 @@ typedef enum
   {
    Fig_USERS,			// Number of users
    Fig_USERS_RANKING,		// Users' ranking
-   Fig_HIERARCHY,		// Number of countries, institutions, centres, degrees and courses
+   Fig_HIERARCHY,		// Number of countries, institutions, centers, degrees and courses
    Fig_INSTITS,			// Number of users in each institution
    Fig_DEGREE_TYPES,		// Number of degrees in each type of degree
    Fig_FOLDERS_AND_FILES,	// Number of folders and files

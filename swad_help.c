@@ -73,7 +73,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
   {
    extern const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS];
    extern const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrolment_in_them;
-   extern const char *Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them;
+   extern const char *Txt_If_you_can_not_find_your_institution_your_center_your_degree_or_your_courses_you_can_create_them;
    extern const char *Txt_What_would_you_like_to_do;
    extern const char *Txt_Register_students_in_COURSE_X;
    extern const char *Txt_Register_students;
@@ -89,9 +89,9 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_Select_or_create_another_degree_in_X;
    extern const char *Txt_Select_or_create_one_degree_in_X;
    extern const char *Txt_Degrees;
-   extern const char *Txt_Select_or_create_another_centre_in_X;
-   extern const char *Txt_Select_or_create_one_centre_in_X;
-   extern const char *Txt_Centres;
+   extern const char *Txt_Select_or_create_another_center_in_X;
+   extern const char *Txt_Select_or_create_one_center_in_X;
+   extern const char *Txt_Centers;
    extern const char *Txt_Select_or_create_another_institution_in_X;
    extern const char *Txt_Select_or_create_one_institution_in_X;
    extern const char *Txt_Institutions;
@@ -123,7 +123,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
       Ale_ShowAlert (Ale_INFO,"%s<br />%s<br />%s",
 	             Txt_You_are_not_enroled_in_any_course[Gbl.Usrs.Me.UsrDat.Sex],
 	             Txt_You_can_search_for_courses_select_them_and_request_your_enrolment_in_them,
-	             Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them);
+	             Txt_If_you_can_not_find_your_institution_your_center_your_degree_or_your_courses_you_can_create_them);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_What_would_you_like_to_do,
@@ -192,7 +192,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 				              Btn_CONFIRM_BUTTON,Txt_Courses);
 	 Str_FreeString ();
 	}
-      else if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Centre selected
+      else if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Center selected
 	{
 	 /* Select a degree */
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Gbl.Hierarchy.Deg.DegCod > 0 ? Txt_Select_or_create_another_degree_in_X :
@@ -204,12 +204,12 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	}
       else if (Gbl.Hierarchy.Ins.InsCod > 0)	// Institution selected
 	{
-	 /* Select a centre */
-	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Gbl.Hierarchy.Ctr.CtrCod > 0 ? Txt_Select_or_create_another_centre_in_X :
-											         Txt_Select_or_create_one_centre_in_X,
+	 /* Select a center */
+	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Gbl.Hierarchy.Ctr.CtrCod > 0 ? Txt_Select_or_create_another_center_in_X :
+											         Txt_Select_or_create_one_center_in_X,
 							          Gbl.Hierarchy.Ins.ShrtName),
 				              ActSeeCtr,
-				              Btn_CONFIRM_BUTTON,Txt_Centres);
+				              Btn_CONFIRM_BUTTON,Txt_Centers);
 	 Str_FreeString ();
 	}
       else if (Gbl.Hierarchy.Cty.CtyCod > 0)	// Country selected

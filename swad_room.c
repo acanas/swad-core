@@ -1,4 +1,4 @@
-// swad_room.c: classrooms, laboratories, offices or other rooms in a centre
+// swad_room.c: classrooms, laboratories, offices or other rooms in a center
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -177,7 +177,7 @@ void Roo_ResetRooms (struct Roo_Rooms *Rooms)
 
 void Roo_SeeRooms (void)
   {
-   extern const char *Hlp_CENTRE_Rooms;
+   extern const char *Hlp_CENTER_Rooms;
    extern const char *Txt_Rooms;
    extern const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS];
    extern const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS];
@@ -191,7 +191,7 @@ void Roo_SeeRooms (void)
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No centre selected
+   if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No center selected
       return;
 
    /***** Reset rooms context *****/
@@ -206,7 +206,7 @@ void Roo_SeeRooms (void)
    /***** Table head *****/
    Box_BoxBegin (NULL,Txt_Rooms,
                  Roo_PutIconsListingRooms,NULL,
-		 Hlp_CENTRE_Rooms,Box_NOT_CLOSABLE);
+		 Hlp_CENTER_Rooms,Box_NOT_CLOSABLE);
    HTM_TABLE_BeginWideMarginPadding (2);
    HTM_TR_Begin (NULL);
 
@@ -466,7 +466,7 @@ void Roo_EditRooms (void)
 
 static void Roo_EditRoomsInternal (void)
   {
-   extern const char *Hlp_CENTRE_Rooms_edit;
+   extern const char *Hlp_CENTER_Rooms_edit;
    extern const char *Txt_Rooms;
    struct Bld_Buildings Buildings;
    struct Roo_Rooms Rooms;
@@ -482,7 +482,7 @@ static void Roo_EditRoomsInternal (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Rooms,
                  Roo_PutIconsEditingRooms,NULL,
-                 Hlp_CENTRE_Rooms_edit,Box_NOT_CLOSABLE);
+                 Hlp_CENTER_Rooms_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new room *****/
    Roo_PutFormToCreateRoom (&Buildings);
@@ -584,7 +584,7 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
      {
       Rooms->Num = (unsigned) NumRows;
 
-      /***** Create list with courses in centre *****/
+      /***** Create list with courses in center *****/
       if ((Rooms->Lst = calloc (NumRows,sizeof (*Rooms->Lst))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
@@ -1015,12 +1015,12 @@ void Roo_RemoveRoom (void)
   }
 
 /*****************************************************************************/
-/********************** Remove all rooms in a centre *************************/
+/********************** Remove all rooms in a center *************************/
 /*****************************************************************************/
 
 void Roo_RemoveAllRoomsInCtr (long CtrCod)
   {
-   /***** Remove all rooms in centre *****/
+   /***** Remove all rooms in center *****/
    DB_QueryDELETE ("can not remove rooms",
 		   "DELETE FROM rooms"
                    " WHERE CtrCod=%ld",

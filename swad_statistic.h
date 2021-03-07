@@ -102,7 +102,7 @@ typedef enum
    Sta_CLICKS_GBL_PER_BANNER			= 20,
    Sta_CLICKS_GBL_PER_COUNTRY			= 21,
    Sta_CLICKS_GBL_PER_INSTITUTION		= 22,
-   Sta_CLICKS_GBL_PER_CENTRE			= 23,
+   Sta_CLICKS_GBL_PER_CENTER			= 23,
    Sta_CLICKS_GBL_PER_DEGREE			= 24,
    Sta_CLICKS_GBL_PER_COURSE			= 25,
   } Sta_ClicksGroupedBy_t;

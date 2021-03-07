@@ -59,7 +59,7 @@
 #include "swad_action.h"
 #include "swad_assignment.h"
 #include "swad_building.h"
-#include "swad_centre.h"
+#include "swad_center.h"
 #include "swad_config.h"
 #include "swad_country.h"
 #include "swad_course.h"
@@ -549,17 +549,17 @@ const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other
 	" para visualizar conte&uacute;do multimídia de outros sites";
 #endif
 
-const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_centre =
+const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_center =
 #if   L==1	// ca
-	"accessible per a lectura i escriptura per administradors del centre";
+	"accessible per a lectura i escriptura per administradors del center";
 #elif L==2	// de
 	"zum Schreiben zug&auml;nglich f&uuml;r Administratoren der Lehrinstitut";
 #elif L==3	// en
-	"accessible for reading and writing by administrators of the centre";
+	"accessible for reading and writing by administrators of the center";
 #elif L==4	// es
 	"accesible para lectura y escritura por administradores del centro";
 #elif L==5	// fr
-	"accessible en lecture et en &eacute;criture par les administrateurs du centre";
+	"accessible en lecture et en &eacute;criture par les administrateurs du center";
 #elif L==6	// gn
 	"accesible para lectura y escritura por administradores del centro";	// Okoteve traducción
 #elif L==7	// it
@@ -663,17 +663,17 @@ const char *Txt_accessible_for_reading_and_writing_by_project_tutors_and_evaluat
 	"acess&iacute;vel para leitura e escrita por tutores e avaliadores do projeto";
 #endif
 
-const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_centre =
+const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_center =
 #if   L==1	// ca
-	"accessible per a lectura i escriptura per estudiants i professors del centre";
+	"accessible per a lectura i escriptura per estudiants i professors del center";
 #elif L==2	// de
 	"zum Schreiben zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Lehrinstitut";
 #elif L==3	// en
-	"accessible for reading and writing by students and teachers of the centre";
+	"accessible for reading and writing by students and teachers of the center";
 #elif L==4	// es
 	"accesible para lectura y escritura por estudiantes y profesores del centro";
 #elif L==5	// fr
-	"accessible en lecture et en &eacute;criture par les &eacute;tudiants et les enseignants du centre";
+	"accessible en lecture et en &eacute;criture par les &eacute;tudiants et les enseignants du center";
 #elif L==6	// gn
 	"accesible para lectura y escritura por estudiantes y profesores del centro";	// Okoteve traducción
 #elif L==7	// it
@@ -840,17 +840,17 @@ const char *Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_cours
 	"acess&iacute;vel apenas para leitura por voc&ecirc; e os professores da disciplina";
 #endif
 
-const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_centre =
+const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_center =
 #if   L==1	// ca
-	"accessible nom&eacute;s per a lectura per estudiants i professors del centre";
+	"accessible nom&eacute;s per a lectura per estudiants i professors del center";
 #elif L==2	// de
 	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Lehrinstitut";
 #elif L==3	// en
-	"accessible only for reading by students and teachers of the centre";
+	"accessible only for reading by students and teachers of the center";
 #elif L==4	// es
 	"accesible solo para lectura por estudiantes y profesores del centro";
 #elif L==5	// fr
-	"accessible uniquement pour la lecture par les &eacute;tudiants et les enseignants du centre";
+	"accessible uniquement pour la lecture par les &eacute;tudiants et les enseignants du center";
 #elif L==6	// gn
 	"accesible solo para lectura por estudiantes y profesores del centro";	// Okoteve traducción
 #elif L==7	// it
@@ -1824,17 +1824,17 @@ const char *Txt_Another_building =
 	"Outro edif&iacute;cio";
 #endif
 
-const char *Txt_Another_centre =
+const char *Txt_Another_center =
 #if   L==1	// ca
-	"Un altre centre";
+	"Un altre center";
 #elif L==2	// de
 	"Ein weiteres Lehrinstitut";
 #elif L==3	// en
-	"Another centre";
+	"Another center";
 #elif L==4	// es
 	"Otro centro";
 #elif L==5	// fr
-	"Un autre centre";
+	"Un autre center";
 #elif L==6	// gn
 	"Otro centro";	// Okoteve traducción
 #elif L==7	// it
@@ -3675,17 +3675,17 @@ const char *Txt_Capacity_OF_A_ROOM =
 	"Capacidade";
 #endif
 
-const char *Txt_Centre =
+const char *Txt_Center =
 #if   L==1	// ca
-	"Centre";
+	"Center";
 #elif L==2	// de
 	"Lehrinstitut";
 #elif L==3	// en
-	"Centre";
+	"Center";
 #elif L==4	// es
 	"Centro";
 #elif L==5	// fr
-	"Centre";
+	"Center";
 #elif L==6	// gn
 	"Mbo'ehao";
 #elif L==7	// it
@@ -3696,17 +3696,17 @@ const char *Txt_Centre =
 	"Centro";
 #endif
 
-const char *Txt_centre =
+const char *Txt_center =
 #if   L==1	// ca
-	"centre";
+	"center";
 #elif L==2	// de
 	"Lehrinstitut";
 #elif L==3	// en
-	"centre";
+	"center";
 #elif L==4	// es
 	"centro";
 #elif L==5	// fr
-	"centre";
+	"center";
 #elif L==6	// gn
 	"mbo'ehao";
 #elif L==7	// it
@@ -3717,17 +3717,17 @@ const char *Txt_centre =
 	"centro";
 #endif
 
-const char *Txt_Centre_X_removed =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Center_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Centre <strong>%s</strong> eliminat.";
+	"Center <strong>%s</strong> eliminat.";
 #elif L==2	// de
 	"Lehrinstitut <strong>%s</strong> entfernt.";
 #elif L==3	// en
-	"Centre <strong>%s</strong> removed.";
+	"Center <strong>%s</strong> removed.";
 #elif L==4	// es
 	"Centro <strong>%s</strong> eliminado.";
 #elif L==5	// fr
-	"Centre <strong>%s</strong> removed.";		// Besoin de traduction
+	"Center <strong>%s</strong> removed.";		// Besoin de traduction
 #elif L==6	// gn
 	"Centro <strong>%s</strong> eliminado.";	// Okoteve traducción
 #elif L==7	// it
@@ -3738,7 +3738,7 @@ const char *Txt_Centre_X_removed =	// Warning: it is very important to include %
 	"Centro <strong>%s</strong> removido.";
 #endif
 
-const char *Txt_CENTRE_STATUS[Crs_NUM_STATUS_TXT] =
+const char *Txt_CENTER_STATUS[Crs_NUM_STATUS_TXT] =
 	{
  	[Ctr_STATUS_UNKNOWN] =
 #if   L==1	// ca
@@ -3825,17 +3825,17 @@ const char *Txt_CENTRE_STATUS[Crs_NUM_STATUS_TXT] =
 #endif
 	};
 
-const char *Txt_Centres =
+const char *Txt_Centers =
 #if   L==1	// ca
-	"Centres";
+	"Centers";
 #elif L==2	// de
 	"Lehrinstitute";
 #elif L==3	// en
-	"Centres";
+	"Centers";
 #elif L==4	// es
 	"Centros";
 #elif L==5	// fr
-	"Centres";
+	"Centers";
 #elif L==6	// gn
 	"Mbo'ehao";
 #elif L==7	// it
@@ -3846,7 +3846,7 @@ const char *Txt_Centres =
 	"Centros";
 #endif
 
-const char *Txt_Centres_ABBREVIATION =
+const char *Txt_Centers_ABBREVIATION =
 #if   L==1	// ca
 	"Cent.";
 #elif L==2	// de
@@ -3867,17 +3867,17 @@ const char *Txt_Centres_ABBREVIATION =
 	"Cent.";
 #endif
 
-const char *Txt_centres =
+const char *Txt_centers =
 #if   L==1	// ca
-	"centres";
+	"centers";
 #elif L==2	// de
 	"Lehrinstitute";
 #elif L==3	// en
-	"centres";
+	"centers";
 #elif L==4	// es
 	"centros";
 #elif L==5	// fr
-	"centres";
+	"centers";
 #elif L==6	// gn
 	"mbo'ehao";
 #elif L==7	// it
@@ -3888,19 +3888,19 @@ const char *Txt_centres =
 	"centros";
 #endif
 
-const char *Txt_CENTRES_HELP_ORDER[Ctr_NUM_ORDERS] =
+const char *Txt_CENTERS_HELP_ORDER[Ctr_NUM_ORDERS] =
 	{
- 	[Ctr_ORDER_BY_CENTRE] =
+ 	[Ctr_ORDER_BY_CENTER] =
 #if   L==1	// ca
-	"Ordenar per centre"
+	"Ordenar per center"
 #elif L==2	// de
 	"Nach Lehrinstitut Sortieren"
 #elif L==3	// en
-	"Sort by centre"
+	"Sort by center"
 #elif L==4	// es
 	"Ordenar por centro"
 #elif L==5	// fr
-	"Trier par centre"
+	"Trier par center"
 #elif L==6	// gn
 	"Ordenar por centro"	// Okoteve traducción
 #elif L==7	// it
@@ -3933,17 +3933,17 @@ const char *Txt_CENTRES_HELP_ORDER[Ctr_NUM_ORDERS] =
 #endif
 	};
 
-const char *Txt_Centres_of_INSTITUTION_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Centers_of_INSTITUTION_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Centres de %s";
+	"Centers de %s";
 #elif L==2	// de
 	"Lehrinstitute von %s";
 #elif L==3	// en
-	"Centres of %s";
+	"Centers of %s";
 #elif L==4	// es
 	"Centros de %s";
 #elif L==5	// fr
-	"Centres de %s";
+	"Centers de %s";
 #elif L==6	// gn
 	"Centros de %s";	// Okoteve traducción
 #elif L==7	// it
@@ -3954,19 +3954,19 @@ const char *Txt_Centres_of_INSTITUTION_X =	// Warning: it is very important to i
 	"Centros de %s";
 #endif
 
-const char *Txt_CENTRES_ORDER[Ctr_NUM_ORDERS] =
+const char *Txt_CENTERS_ORDER[Ctr_NUM_ORDERS] =
 	{
- 	[Ctr_ORDER_BY_CENTRE] =
+ 	[Ctr_ORDER_BY_CENTER] =
 #if   L==1	// ca
-	"Centre"
+	"Center"
 #elif L==2	// de
 	"Lehrinstitut"
 #elif L==3	// en
-	"Centre"
+	"Center"
 #elif L==4	// es
 	"Centro"
 #elif L==5	// fr
-	"Centre"
+	"Center"
 #elif L==6	// gn
 	"Mbo'ehao"
 #elif L==7	// it
@@ -3979,15 +3979,15 @@ const char *Txt_CENTRES_ORDER[Ctr_NUM_ORDERS] =
 	,
  	[Ctr_ORDER_BY_NUM_USRS] =
 #if   L==1	// ca
-	"Usuaris del centre"
+	"Usuaris del center"
 #elif L==2	// de
 	"Benutzer der Lehrinstitut"
 #elif L==3	// en
-	"Users of the centre"
+	"Users of the center"
 #elif L==4	// es
 	"Usuarios del centro"
 #elif L==5	// fr
-	"Utilisateurs du centre"
+	"Utilisateurs du center"
 #elif L==6	// gn
 	"Usuarios del centro"	// Okoteve traducción
 #elif L==7	// it
@@ -3999,17 +3999,17 @@ const char *Txt_CENTRES_ORDER[Ctr_NUM_ORDERS] =
 #endif
 	};
 
-const char *Txt_Centres_with_map =
+const char *Txt_Centers_with_map =
 #if   L==1	// ca
-	"Centres amb mapa";
+	"Centers amb mapa";
 #elif L==2	// de
 	"Lehrinstitute mit Karte";
 #elif L==3	// en
-	"Centres with map";
+	"Centers with map";
 #elif L==4	// es
 	"Centros con mapa";
 #elif L==5	// fr
-	"Centres avec carte";
+	"Centers avec carte";
 #elif L==6	// gn
 	"Centros con mapa";	// Okoteve traducción
 #elif L==7	// it
@@ -4020,17 +4020,17 @@ const char *Txt_Centres_with_map =
 	"Centros com mapa";
 #endif
 
-const char *Txt_Centres_with_pending_degrees =
+const char *Txt_Centers_with_pending_degrees =
 #if   L==1	// ca
-	"Centres amb titulacions pendents d'activar";
+	"Centers amb titulacions pendents d'activar";
 #elif L==2	// de
 	"Lehrinstitute mit anh&auml;ngig Studiengang";
 #elif L==3	// en
-	"Centres with pending degrees";
+	"Centers with pending degrees";
 #elif L==4	// es
 	"Centros con titulaciones pendientes de activar";
 #elif L==5	// fr
-	"Centres avec des &eacute;tudes en attente";
+	"Centers avec des &eacute;tudes en attente";
 #elif L==6	// gn
 	"Centros con titulaciones pendientes de activar";	// Okoteve traducción
 #elif L==7	// it
@@ -4804,7 +4804,7 @@ const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_reque
 	" Despr&eacute;s podr&agrave; sol&middot;licitar la seva inscripci&oacute; en assignatures."
 	" Si no hi ha una assignatura,"
 	" vost&egrave; pot crear abans de sol&middot;licitar la seva inscripci&oacute; en ella"
-	" (el mateix &eacute;s aplicable a institucions, centres i titulacions).";
+	" (el mateix &eacute;s aplicable a institucions, centers i titulacions).";
 #elif L==2	// de
 	"Herzlichen Gl&uuml;ckwunsch! Du hast Dein Benutzerkonto <strong>@%s</strong> erstellt."
 	" Jetzt %s finden Sie einige Daten in Ihrem Profil."
@@ -4819,7 +4819,7 @@ const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_reque
 	" Then you will be able to apply for enrolment in courses."
 	" If a course does not exist,"
 	" you can create it before applying for enrolment in it"
-	" (the same applies to institutions, centres and degrees).";
+	" (the same applies to institutions, centers and degrees).";
 #elif L==4	// es
 	"&iexcl;Enhorabuena! Ha creado su cuenta <strong>@%s</strong>."
 	" Ahora %s le solicitar&aacute; algunos datos para completar su perfil."
@@ -4833,7 +4833,7 @@ const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_reque
 	" Vous serez alors en mesure de demander l'inscription &agrave; des mati&egrave;res."
 	" Si une mati&egrave;re ne existe pas,"
 	" vous pouvez le cr&eacute;er avant de demander l'inscription en elle"
-	" (la m&ecirc;me chose se applique aux institutions, centres et degr&eacute;s).";
+	" (la m&ecirc;me chose se applique aux institutions, centers et degr&eacute;s).";
 #elif L==6	// gn
 	"&iexcl;Enhorabuena! Ha creado su cuenta <strong>@%s</strong>."
 	" Ahora %s le solicitar&aacute; algunos datos para completar su perfil."
@@ -5734,17 +5734,17 @@ const char *Txt_Create_announcement =
 	"Criar an&uacute;ncio";
 #endif
 
-const char *Txt_Create_another_centre =
+const char *Txt_Create_another_center =
 #if   L==1	// ca
-	"Crear un altre centre";
+	"Crear un altre center";
 #elif L==2	// de
 	"Erstellen Sie ein anderes Lehrinstitut";
 #elif L==3	// en
-	"Create another centre";
+	"Create another center";
 #elif L==4	// es
 	"Crear otro centro";
 #elif L==5	// fr
-	"Cr&eacute;er un autre centre";
+	"Cr&eacute;er un autre center";
 #elif L==6	// gn
 	"Crear otro centro";	// Okoteve traducción
 #elif L==7	// it
@@ -5902,17 +5902,17 @@ const char *Txt_Create_building =
 	"Criar edif&iacute;cio";
 #endif
 
-const char *Txt_Create_centre =
+const char *Txt_Create_center =
 #if   L==1	// ca
-	"Crear centre";
+	"Crear center";
 #elif L==2	// de
 	"Lehrinstitut eingeben";
 #elif L==3	// en
-	"Create centre";
+	"Create center";
 #elif L==4	// es
 	"Crear centro";
 #elif L==5	// fr
-	"Cr&eacute;er centre";
+	"Cr&eacute;er center";
 #elif L==6	// gn
 	"Crear centro";		// Okoteve traducción
 #elif L==7	// it
@@ -6637,17 +6637,17 @@ const char *Txt_Created_new_building_X =	// Warning: it is very important to inc
 	"Criado novo edif&iacute;cio <strong>%s</strong>.";
 #endif
 
-const char *Txt_Created_new_centre_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Created_new_center_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Creat nou centre <strong>%s</strong>.";	// Necessita traduccio
+	"Creat nou center <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
 	"Neues Lehrinstitut <strong>%s</strong> eingegeben.";
 #elif L==3	// en
-	"Created new centre <strong>%s</strong>.";
+	"Created new center <strong>%s</strong>.";
 #elif L==4	// es
 	"Creado nuevo centro <strong>%s</strong>.";
 #elif L==5	// fr
-	"Cr&eacute;&eacute; nouveau centre <strong>%s</strong>.";
+	"Cr&eacute;&eacute; nouveau center <strong>%s</strong>.";
 #elif L==6	// gn
 	"Creado nuevo centro <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
@@ -8129,7 +8129,7 @@ const char *Txt_degrees =
 	"graus";
 #endif
 
-const char *Txt_Degrees_of_CENTRE_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Degrees_of_CENTER_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Titulacions de %s";
 #elif L==2	// de
@@ -14542,17 +14542,17 @@ const char *Txt_Full_name_of_the_degree =
 	"Nome completo do grau";
 #endif
 
-const char *Txt_Full_name_of_the_centre =
+const char *Txt_Full_name_of_the_center =
 #if   L==1	// ca
-	"Nom complet del centre";
+	"Nom complet del center";
 #elif L==2	// de
 	"Vollst&auml;ndiger Name der Lehrinstitut";
 #elif L==3	// en
-	"Full name of the centre";
+	"Full name of the center";
 #elif L==4	// es
 	"Nombre completo del centro";
 #elif L==5	// fr
-	"Nom complet du centre";
+	"Nom complet du center";
 #elif L==6	// gn
 	"Nombre completo del centro";	// Okoteve traducción
 #elif L==7	// it
@@ -16331,21 +16331,21 @@ const char *Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID =	// W
 	" voc&ecirc; deve indicar seu ID.";
 #endif
 
-const char *Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them =
+const char *Txt_If_you_can_not_find_your_institution_your_center_your_degree_or_your_courses_you_can_create_them =
 #if   L==1	// ca
-	"Si no trobes la seva instituci&oacute;, el seu centre,"
+	"Si no trobes la seva instituci&oacute;, el seu center,"
 	" la seva titulaci&oacute; o les seves assignatures, pot crear-los.";
 #elif L==2	// de
 	"Wenn Sie Ihre Institution, Ihre Zentrum, Ihr Studium"
 	" oder Ihre Kurse nicht finden k&oacute;nnen, k&oacute;nnen Sie sie erstellen.";
 #elif L==3	// en
-	"If you can not find your institution, your centre,"
+	"If you can not find your institution, your center,"
 	" your degree or your courses, you can create them.";
 #elif L==4	// es
 	"Si no encuentra su instituci&oacute;n, su centro,"
 	" su titulaci&oacute;n o sus asignaturas, puede crearlos.";
 #elif L==5	// fr
-	"Si vous ne trouvez pas votre &eacute;tablissement, votre centre,"
+	"Si vous ne trouvez pas votre &eacute;tablissement, votre center,"
 	" votre &eacute;tude ou de vos mati&egrave;res, vous pouvez les cr&eacute;er.";
 #elif L==6	// gn
 	"Si no encuentra su instituci&oacute;n, su centro,"
@@ -17400,17 +17400,17 @@ const char *Txt_institution =
 	"institu&ccedil;&atilde;o";
 #endif
 
-const char *Txt_Institution_centre_and_department =
+const char *Txt_Institution_center_and_department =
 #if   L==1	// ca
-	"Instituci&oacute;, centre i departament";
+	"Instituci&oacute;, center i departament";
 #elif L==2	// de
 	"Hochschule, Lehrinstitut und Abteilung";
 #elif L==3	// en
-	"Institution, centre and department";
+	"Institution, center and department";
 #elif L==4	// es
 	"Instituci&oacute;n, centro y departamento";
 #elif L==5	// fr
-	"&Eacute;tablissement, centre et d&eacute;partement";
+	"&Eacute;tablissement, center et d&eacute;partement";
 #elif L==6	// gn
 	"Mbo'ehao, mbo'ehao, peh&#7869;";
 #elif L==7	// it
@@ -17680,17 +17680,17 @@ const char *Txt_INSTITUTIONS_HELP_ORDER[Ins_NUM_ORDERS] =
 #endif
 	};
 
-const char *Txt_Institutions_by_number_of_centres =
+const char *Txt_Institutions_by_number_of_centers =
 #if   L==1	// ca
-	"Institucions segons nombre de centres";
+	"Institucions segons nombre de centers";
 #elif L==2	// de
 	"Hochschulen nach der Anzahl der Lehrinstitute";
 #elif L==3	// en
-	"Institutions by number of centres";
+	"Institutions by number of centers";
 #elif L==4	// es
 	"Instituciones seg&uacute;n n&uacute;mero de centros";
 #elif L==5	// fr
-	"&Eacute;tablissements par nombre de centres";
+	"&Eacute;tablissements par nombre de centers";
 #elif L==6	// gn
 	"Instituciones seg&uacute;n n&uacute;mero de centros";	// Okoteve traducción
 #elif L==7	// it
@@ -17851,17 +17851,17 @@ const char *Txt_INSTITUTIONS_ORDER[Ins_NUM_ORDERS] =
 #endif
 	};
 
-const char *Txt_Institutions_with_pending_centres =
+const char *Txt_Institutions_with_pending_centers =
 #if   L==1	// ca
-	"Institucions amb centres pendents d'activar";
+	"Institucions amb centers pendents d'activar";
 #elif L==2	// de
 	"Hochschulen mit anh&auml;ngig Lehrinstitute";
 #elif L==3	// en
-	"Institutions with pending centres";
+	"Institutions with pending centers";
 #elif L==4	// es
 	"Instituciones con centros pendientes de activar";
 #elif L==5	// fr
-	"&Eacute;tablissements avec des centres en attente";
+	"&Eacute;tablissements avec des centers en attente";
 #elif L==6	// gn
 	"Instituciones con centros pendientes de activar";	// Okoteve traducción
 #elif L==7	// it
@@ -19913,15 +19913,15 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  1: ActSeeCtr
 #if   L==1	// ca
-	"Centres"
+	"Centers"
 #elif L==2	// de
 	"Lehrinstitute"
 #elif L==3	// en
-	"Centres"
+	"Centers"
 #elif L==4	// es
 	"Centros"
 #elif L==5	// fr
-	"Centres"
+	"Centers"
 #elif L==6	// gn
 	"Mbo'ehao"
 #elif L==7	// it
@@ -21609,15 +21609,15 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  2: ActSeePen
 #if   L==1	// ca
-	"Institutions, centres, titulacions i assignatures pendents d'activar"
+	"Institutions, centers, titulacions i assignatures pendents d'activar"
 #elif L==2	// de
 	"Anh&auml;ngig Hochschulen, Lehrinstitute, Studiengang und Kursen"
 #elif L==3	// en
-	"Pending institutions, centres, degrees and courses"
+	"Pending institutions, centers, degrees and courses"
 #elif L==4	// es
 	"Instituciones, centros, titulaciones y asignaturas pendientes de activar"
 #elif L==5	// fr
-	"&Eacute;tablissements, centres, &eacute;tudes et mati&egrave;res en attente"
+	"&Eacute;tablissements, centers, &eacute;tudes et mati&egrave;res en attente"
 #elif L==6	// gn
 	"Instituciones, centros, titulaciones y asignaturas pendientes de activar"	// Okoteve traducción
 #elif L==7	// it
@@ -21780,15 +21780,15 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  1: ActSeeCtr
 #if   L==1	// ca
-	"Llista de centres"
+	"Llista de centers"
 #elif L==2	// de
 	"Lehrinstitute"
 #elif L==3	// en
-	"List of centres of the current institution"
+	"List of centers of the current institution"
 #elif L==4	// es
 	"Lista de centros (facultades, escuelas&hellip;) de esta instituci&oacute;n"
 #elif L==5	// fr
-	"Centres"
+	"Centers"
 #elif L==6	// gn
 	"Lista de centros (facultades, escuelas&hellip;) de esta instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
@@ -21802,19 +21802,19 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	//  2: ActSeePlc
 #if   L==1	// ca
 	"Llocs o seus de la instituci&oacute;"
-	" on s'ubica cada un dels centres."
+	" on s'ubica cada un dels centers."
 #elif L==2	// de
 	"Standorte oder Hauptsitze der Institution,"
 	" an der sich jedes Zentrum befindet."
 #elif L==3	// en
 	"Places or headquarters of the institution"
-	" where each of the centres is located."
+	" where each of the centers is located."
 #elif L==4	// es
 	"Lugares o sedes de la instituci&oacute;n"
 	" donde se ubica cada uno de los centros."
 #elif L==5	// fr
 	"Emplacements ou si&egrave;ges de l'institution"
-	" o&ugrave; est situ&eacute; chacun des centres."
+	" o&ugrave; est situ&eacute; chacun des centers."
 #elif L==6	// gn
 	"Lugares o sedes de la instituci&oacute;n"
 	" donde se ubica cada uno de los centros."
@@ -21884,15 +21884,15 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	{
 	//  0: ActSeeCtrInf
 #if   L==1	// ca
-	"Informaci&oacute; d'aquest centre"
+	"Informaci&oacute; d'aquest center"
 #elif L==2	// de
 	"Information dieses Lehrinstitut"
 #elif L==3	// en
-	"Information on this centre"
+	"Information on this center"
 #elif L==4	// es
 	"Informaci&oacute;n sobre este centro"
 #elif L==5	// fr
-	"Information de cet centre"
+	"Information de cet center"
 #elif L==6	// gn
 	"Informaci&oacute;n sobre este centro"// Okoteve traducción
 #elif L==7	// it
@@ -21905,11 +21905,11 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  1: ActSeeDeg
 #if   L==1	// ca
-	"Titulacions d'aquest centre"
+	"Titulacions d'aquest center"
 #elif L==2	// de
 	"Studiengang"
 #elif L==3	// en
-	"List of degrees of the current centre"
+	"List of degrees of the current center"
 #elif L==4	// es
 	"Lista de titulaciones (carreras, m&aacute;steres&hellip;) de este centro"
 #elif L==5	// fr
@@ -21926,7 +21926,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  2: ActSeeBld
 #if   L==1	// ca
-	"Edificis de el centre educatiu"
+	"Edificis de el center educatiu"
 #elif L==2	// de
 	"Geb&auml;ude des Bildungszentrums"
 #elif L==3	// en
@@ -21934,7 +21934,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4	// es
 	"Edificios del centro educativo"
 #elif L==5	// fr
-	"B&acirc;timents du centre &eacute;ducatif"
+	"B&acirc;timents du center &eacute;ducatif"
 #elif L==6	// gn
 	"Edificios del centro educativo"	// Okoteve traducción
 #elif L==7	// it
@@ -22461,7 +22461,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==2	// de
 	"Dokumente"
 #elif L==3	// en
-	"Documents of the centre uploaded by administrators"
+	"Documents of the center uploaded by administrators"
 #elif L==4	// es
 	"Documentos del centro subidos por administradores"
 #elif L==5	// fr
@@ -22479,12 +22479,12 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	//  3: ActAdmShaCtr
 #if   L==1	// ca
 	"Arxius compartits per professors i estudiants"
-	" del centre"
+	" del center"
 #elif L==2	// de
 	"Freigegebene Dateien"
 #elif L==3	// en
 	"Files shared by teachers and students"
-	" of the centre"
+	" of the center"
 #elif L==4	// es
 	"Archivos compartidos por profesores y estudiantes"
 	" del centro"
@@ -25187,17 +25187,17 @@ const char *Txt_New_building =
 	"Novo edif&iacute;cio";
 #endif
 
-const char *Txt_New_centre =
+const char *Txt_New_center =
 #if   L==1	// ca
-	"Nou centre (facultat, escola, institut, divisi&oacute;, edifici...)";
+	"Nou center (facultat, escola, institut, divisi&oacute;, edifici...)";
 #elif L==2	// de
 	"Neues Lehrinstitut (Fakult&auml;t, Schule, Hochschule, Abteilung, Geb&auml;ude...)";
 #elif L==3	// en
-	"New centre (faculty, school, college, division, building...)";
+	"New center (faculty, school, college, division, building...)";
 #elif L==4	// es
 	"Nuevo centro (facultad, escuela, instituto, divisi&oacute;n, edificio...)";
 #elif L==5	// fr
-	"Nouveau centre (facult&eacute;, &eacute;cole, universit&eacute;, division, b&acirc;timent...)";
+	"Nouveau center (facult&eacute;, &eacute;cole, universit&eacute;, division, b&acirc;timent...)";
 #elif L==6	// gn
 	"Nuevo centro (facultad, escuela, instituto, divisi&oacute;n, edificio...)";	// Okoteve traducción
 #elif L==7	// it
@@ -26300,17 +26300,17 @@ const char *Txt_no_course_selected =
 	"nenhuma disciplina seleccionada";
 #endif
 
-const char *Txt_No_centres =
+const char *Txt_No_centers =
 #if   L==1	// ca
-	"No hi ha centres.";
+	"No hi ha centers.";
 #elif L==2	// de
 	"Keine Lehrinstitute.";
 #elif L==3	// en
-	"No centres.";
+	"No centers.";
 #elif L==4	// es
 	"No hay centros.";
 #elif L==5	// fr
-	"Il n'y a pas de centres.";
+	"Il n'y a pas de centers.";
 #elif L==6	// gn
 	"No hay centros.";	// Okoteve traducción
 #elif L==7	// it
@@ -30780,15 +30780,15 @@ const char *Txt_PLACES_ORDER[Plc_NUM_ORDERS] =
 	,
 	[Plc_ORDER_BY_NUM_CTRS] =
 #if   L==1	// ca
-	"Centres"
+	"Centers"
 #elif L==2	// de
 	"Lehrinstitute"
 #elif L==3	// en
-	"Centres"
+	"Centers"
 #elif L==4	// es
 	"Centros"
 #elif L==5	// fr
-	"Centres"
+	"Centers"
 #elif L==6	// gn
 	"Mbo'ehao"
 #elif L==7	// it
@@ -31134,17 +31134,17 @@ const char *Txt_Please_select_the_country_of_your_institution =
 	"Por favor, selecione o pa&iacute;s da sua institui&ccedil;&atilde;o.";
 #endif
 
-const char *Txt_Please_select_your_centre =
+const char *Txt_Please_select_your_center =
 #if   L==1	// ca
-	"Si us plau, seleccioneu el seu centre.";
+	"Si us plau, seleccioneu el seu center.";
 #elif L==2	// de
 	"Bitte w&auml;hlen Sie Ihre Zentrum aus.";
 #elif L==3	// en
-	"Please, select your centre.";
+	"Please, select your center.";
 #elif L==4	// es
 	"Por favor, seleccione su centro.";
 #elif L==5	// fr
-	"S'il vous pla&iacute;t, s&eacute;lectionnez votre centre.";
+	"S'il vous pla&iacute;t, s&eacute;lectionnez votre center.";
 #elif L==6	// gn
 	"Por favor, seleccione su centro.";	// Okoteve traducción
 #elif L==7	// it
@@ -33799,22 +33799,22 @@ const char *Txt_Register_USER_in_the_course_X =	// Warning: it is very important
 	"Registrar na disciplina <strong>%s</strong>";
 #endif
 
-const char *Txt_Register_USER_as_an_administrator_of_the_centre_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Register_USER_as_an_administrator_of_the_center_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Inscriure com a administrador/a"
-	" del centre <strong>%s</strong>";
+	" del center <strong>%s</strong>";
 #elif L==2	// de
 	"Anmeldung als Administrator"
 	" des Lehrinstitut <strong>%s</strong>";
 #elif L==3	// en
 	"Register as an administrator"
-	" of the centre <strong>%s</strong>";
+	" of the center <strong>%s</strong>";
 #elif L==4	// es
 	"Inscribir como administrador/a"
 	" del centro <strong>%s</strong>";
 #elif L==5	// fr
 	"Inscrire en tant qu'administrateur"
-	" du centre <strong>%s</strong>";
+	" du center <strong>%s</strong>";
 #elif L==6	// gn
 	"Inscribir como administrador/a"
 	" del centro <strong>%s</strong>";	// Okoteve traducción
@@ -34309,22 +34309,22 @@ const char *Txt_Remove_me_as_an_administrator =
 	"Tirar me como administrador";
 #endif
 
-const char *Txt_Remove_me_as_an_administrator_of_the_centre_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Remove_me_as_an_administrator_of_the_center_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Eliminarme com a administrador/a"
-	" del centre <strong>%s</strong>";
+	" del center <strong>%s</strong>";
 #elif L==2	// de
 	"Entfernen Sie mir als Administrator"
 	" des Lehrinstitute <strong>%s</strong>";
 #elif L==3	// en
 	"Remove me as an administrator"
-	" of the centre <strong>%s</strong>";
+	" of the center <strong>%s</strong>";
 #elif L==4	// es
 	"Eliminarme como administrador/a"
 	" del centro <strong>%s</strong>";
 #elif L==5	// fr
 	"Enlever-moi en tant qu'administrateur"
-	" du centre <strong>%s</strong>";
+	" du center <strong>%s</strong>";
 #elif L==6	// gn
 	"Eliminarme como administrador/a"
 	" del centro <strong>%s</strong>";	// Okoteve traducción
@@ -34777,22 +34777,22 @@ const char *Txt_Remove_USER_as_an_administrator =
 	"Tirar como administrador";
 #endif
 
-const char *Txt_Remove_USER_as_an_administrator_of_the_centre_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Remove_USER_as_an_administrator_of_the_center_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Eliminar com a administrador/a"
-	" del centre <strong>%s</strong>";
+	" del center <strong>%s</strong>";
 #elif L==2	// de
 	"Entfernen als Administrator"
 	" des Lehrinstitute <strong>%s</strong>";
 #elif L==3	// en
 	"Remove as an administrator"
-	" of the centre <strong>%s</strong>";
+	" of the center <strong>%s</strong>";
 #elif L==4	// es
 	"Eliminar como administrador/a"
 	" del centro <strong>%s</strong>";
 #elif L==5	// fr
 	"Enlever en tant qu'administrateur"
-	" du centre <strong>%s</strong>";
+	" du center <strong>%s</strong>";
 #elif L==6	// gn
 	"Eliminar como administrador/a"
 	" del centro <strong>%s</strong>";	// Okoteve traducción
@@ -35438,15 +35438,15 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 	,
 	[Sta_ROLE_CTR_ADMINS] =
 #if   L==1	// ca
-	"administradors de centres"
+	"administradors de centers"
 #elif L==2	// de
 	"Administratoren von Lehrinstitute"
 #elif L==3	// en
-	"administrators of centres"
+	"administrators of centers"
 #elif L==4	// es
 	"administradores de centros"
 #elif L==5	// fr
-	"administrateurs de centres"
+	"administrateurs de centers"
 #elif L==6	// gn
 	"administradores de centros"	// Okoteve traducción
 #elif L==7	// it
@@ -36218,15 +36218,15 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	,
 	[Rol_CTR_ADM][Usr_SEX_UNKNOWN] =
 #if   L==1	// ca
-	"Admin. centre"
+	"Admin. center"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
 #elif L==3	// en
-	"Admin. centre"
+	"Admin. center"
 #elif L==4	// es
 	"Admin. centro"
 #elif L==5	// fr
-	"Admin. centre"
+	"Admin. center"
 #elif L==6	// gn
 	"Admin. centro"	// Okoteve traducción
 #elif L==7	// it
@@ -36239,15 +36239,15 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	,
 	[Rol_CTR_ADM][Usr_SEX_FEMALE] =
 #if   L==1	// ca
-	"Admin. centre"
+	"Admin. center"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
 #elif L==3	// en
-	"Admin. centre"
+	"Admin. center"
 #elif L==4	// es
 	"Admin. centro"
 #elif L==5	// fr
-	"Admin. centre"
+	"Admin. center"
 #elif L==6	// gn
 	"Admin. centro"	// Okoteve traducción
 #elif L==7	// it
@@ -36260,15 +36260,15 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	,
 	[Rol_CTR_ADM][Usr_SEX_MALE] =
 #if   L==1	// ca
-	"Admin. centre"
+	"Admin. center"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
 #elif L==3	// en
-	"Admin. centre"
+	"Admin. center"
 #elif L==4	// es
 	"Admin. centro"
 #elif L==5	// fr
-	"Admin. centre"
+	"Admin. center"
 #elif L==6	// gn
 	"Admin. centro"	// Okoteve traducción
 #elif L==7	// it
@@ -36281,15 +36281,15 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	,
 	[Rol_CTR_ADM][Usr_SEX_ALL] =
 #if   L==1	// ca
-	"Admin. centre"
+	"Admin. center"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
 #elif L==3	// en
-	"Admin. centre"
+	"Admin. center"
 #elif L==4	// es
 	"Admin. centro"
 #elif L==5	// fr
-	"Admin. centre"
+	"Admin. center"
 #elif L==6	// gn
 	"Admin. centro"	// Okoteve traducción
 #elif L==7	// it
@@ -37061,15 +37061,15 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	,
 	[Rol_CTR_ADM][Usr_SEX_UNKNOWN] =
 #if   L==1	// ca
-	"admin. centre"
+	"admin. center"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
 #elif L==3	// en
-	"admin. centre"
+	"admin. center"
 #elif L==4	// es
 	"admin. centro"
 #elif L==5	// fr
-	"admin. centre"
+	"admin. center"
 #elif L==6	// gn
 	"admin. centro"	// Okoteve traducción
 #elif L==7	// it
@@ -37082,15 +37082,15 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	,
 	[Rol_CTR_ADM][Usr_SEX_FEMALE] =
 #if   L==1	// ca
-	"admin. centre"
+	"admin. center"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
 #elif L==3	// en
-	"admin. centre"
+	"admin. center"
 #elif L==4	// es
 	"admin. centro"
 #elif L==5	// fr
-	"admin. centre"
+	"admin. center"
 #elif L==6	// gn
 	"admin. centro"	// Okoteve traducción
 #elif L==7	// it
@@ -37103,15 +37103,15 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	,
 	[Rol_CTR_ADM][Usr_SEX_MALE] =
 #if   L==1	// ca
-	"admin. centre"
+	"admin. center"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
 #elif L==3	// en
-	"admin. centre"
+	"admin. center"
 #elif L==4	// es
 	"admin. centro"
 #elif L==5	// fr
-	"admin. centre"
+	"admin. center"
 #elif L==6	// gn
 	"admin. centro"	// Okoteve traducción
 #elif L==7	// it
@@ -37124,15 +37124,15 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	,
 	[Rol_CTR_ADM][Usr_SEX_ALL] =
 #if   L==1	// ca
-	"admin. centre"
+	"admin. center"
 #elif L==2	// de
 	"Admin. Lehrinstitut"
 #elif L==3	// en
-	"admin. centre"
+	"admin. center"
 #elif L==4	// es
 	"admin. centro"
 #elif L==5	// fr
-	"admin. centre"
+	"admin. center"
 #elif L==6	// gn
 	"admin. centro"	// Okoteve traducción
 #elif L==7	// it
@@ -41052,13 +41052,13 @@ const char *Txt_Select_one_country =
 	"Selecionar um pa&iacute;s";
 #endif
 
-const char *Txt_Select_or_create_another_centre_in_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Select_or_create_another_center_in_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Seleccionar o crear un altre centre en la instituci&oacute; <strong>%s</strong>";
+	"Seleccionar o crear un altre center en la instituci&oacute; <strong>%s</strong>";
 #elif L==2	// de
 	"W&auml;hlen oder erstellen Sie einen anderen Lehrinstitut der Hochschule <strong>%s</strong>";
 #elif L==3	// en
-	"Select or create another centre in the institution <strong>%s</strong>";
+	"Select or create another center in the institution <strong>%s</strong>";
 #elif L==4	// es
 	"Seleccionar o crear otro centro en la instituci&oacute;n <strong>%s</strong>";
 #elif L==5	// fr
@@ -41068,7 +41068,7 @@ const char *Txt_Select_or_create_another_centre_in_X =	// Warning: it is very im
 #elif L==7	// it
 	"Selezionare o creare un altro centro di istituzione <strong>%s</strong>";
 #elif L==8	// pl
-	"Select or create another centre in the institution <strong>%s</strong>";	// Potrzebujesz tlumaczenie
+	"Select or create another center in the institution <strong>%s</strong>";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Selecionar ou criar um outro centro da institu&ccedil;&atilde;o <strong>%s</strong>";
 #endif
@@ -41136,13 +41136,13 @@ const char *Txt_Select_or_create_another_institution_in_X =	// Warning: it is ve
 	"Selecionar ou criar outra institu&ccedil;&atilde;o de <strong>%s</strong>";
 #endif
 
-const char *Txt_Select_or_create_one_centre_in_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Select_or_create_one_center_in_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Seleccionar o crear un centre en <strong>%s</strong>";
+	"Seleccionar o crear un center en <strong>%s</strong>";
 #elif L==2	// de
 	"W&auml;hlen oder erstellen Sie einen Lehrinstitut von <strong>%s</strong>";
 #elif L==3	// en
-	"Select or create one centre in <strong>%s</strong>";
+	"Select or create one center in <strong>%s</strong>";
 #elif L==4	// es
 	"Seleccionar o crear un centro en <strong>%s</strong>";
 #elif L==5	// fr
@@ -42111,17 +42111,17 @@ const char *Txt_Short_name_of_the_degree =
 	"Nome abreviado do grau";
 #endif
 
-const char *Txt_Short_name_of_the_centre =
+const char *Txt_Short_name_of_the_center =
 #if   L==1	// ca
-	"Nom breu del centre";
+	"Nom breu del center";
 #elif L==2	// de
 	"Kurzname der Lehrinstitut";
 #elif L==3	// en
-	"Short name of the centre";
+	"Short name of the center";
 #elif L==4	// es
 	"Nombre breve del centro";
 #elif L==5	// fr
-	"Nom abr&eacute;g&eacute; du centre";
+	"Nom abr&eacute;g&eacute; du center";
 #elif L==6	// gn
 	"Nombre breve del centro";	// Okoteve traducción
 #elif L==7	// it
@@ -43184,17 +43184,17 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 	"institu&ccedil;&atilde;o"
 #endif
 	,
-	[Sta_CLICKS_GBL_PER_CENTRE] =
+	[Sta_CLICKS_GBL_PER_CENTER] =
 #if   L==1	// ca
-	"centre"
+	"center"
 #elif L==2	// de
 	"Lehrinstitut"
 #elif L==3	// en
-	"centre"
+	"center"
 #elif L==4	// es
 	"centro"
 #elif L==5	// fr
-	"centre"
+	"center"
 #elif L==6	// gn
 	"mbo'ehao"
 #elif L==7	// it
@@ -45466,15 +45466,15 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	,
 	[TabCtr] =
 #if   L==1	// ca
-	"Centre"
+	"Center"
 #elif L==2	// de
 	"Lehrinstitut"
 #elif L==3	// en
-	"Centre"
+	"Center"
 #elif L==4	// es
 	"Centro"
 #elif L==5	// fr
-	"Centre"
+	"Center"
 #elif L==6	// gn
 	"Mbo'ehao"
 #elif L==7	// it
@@ -46522,74 +46522,74 @@ const char *Txt_The_capacity_of_room_X_is_now_Y =	// Warning: it is very importa
 	"A capacidade da sala <strong>%s</strong> &eacute; agora <strong>%u</strong>.";
 #endif
 
-const char *Txt_The_centre_X_already_exists =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_center_X_already_exists =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"El centro <strong>%s</strong> ya existe.";		// Necessita traduccio
 #elif L==2	// de
 	"Es wurde bereits ein Lehrinstitut mit dem Namen <strong>%s</strong> eingegeben.";
 #elif L==3	// en
-	"The centre <strong>%s</strong> already exists.";
+	"The center <strong>%s</strong> already exists.";
 #elif L==4	// es
 	"El centro <strong>%s</strong> ya existe.";
 #elif L==5	// fr
-	"The centre <strong>%s</strong> already exists.";	// Besoin de traduction
+	"The center <strong>%s</strong> already exists.";	// Besoin de traduction
 #elif L==6	// gn
 	"El centro <strong>%s</strong> ya existe.";		// Okoteve traducción
 #elif L==7	// it
 	"Il centro <strong>%s</strong> gi&agrave; esiste.";
 #elif L==8	// pl
-	"The centre <strong>%s</strong> already exists.";	// Potrzebujesz tlumaczenie
+	"The center <strong>%s</strong> already exists.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"O centro <strong>%s</strong> j&aacute; existe.";
 #endif
 
-const char *Txt_The_centre_X_has_been_moved_to_the_institution_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_The_center_X_has_been_moved_to_the_institution_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"El centro <strong>%s</strong> se ha movido"
 	" a la instituci&oacute;n <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
-	"The centre <strong>%s</strong> has been moved"
+	"The center <strong>%s</strong> has been moved"
 	" to the institution <strong>%s</strong>.";		// Need Übersetzung
 #elif L==3	// en
-	"The centre <strong>%s</strong> has been moved"
+	"The center <strong>%s</strong> has been moved"
 	" to the institution <strong>%s</strong>.";
 #elif L==4	// es
 	"El centro <strong>%s</strong> se ha movido"
 	" a la instituci&oacute;n <strong>%s</strong>.";
 #elif L==5	// fr
-	"The centre <strong>%s</strong> has been moved"
+	"The center <strong>%s</strong> has been moved"
 	" to the institution <strong>%s</strong>.";		// Besoin de traduction
 #elif L==6	// gn
 	"El centro <strong>%s</strong> se ha movido"
 	" a la instituci&oacute;n <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"Il centre <strong>%s</strong> &egrave; stato spostato"
+	"Il center <strong>%s</strong> &egrave; stato spostato"
 	" alla istituzione <strong>%s</strong>.";
 #elif L==8	// pl
-	"The centre <strong>%s</strong> has been moved"
+	"The center <strong>%s</strong> has been moved"
 	" to the institution <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"O centro <strong>%s</strong> foi transferido"
 	" para a institui&ccedil;&atilde;o <strong>%s</strong>.";
 #endif
 
-const char *Txt_The_centre_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_The_center_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"El centro <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
-	"The centre <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Need Übersetzung
+	"The center <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Need Übersetzung
 #elif L==3	// en
-	"The centre <strong>%s</strong> has been renamed as <strong>%s</strong>.";
+	"The center <strong>%s</strong> has been renamed as <strong>%s</strong>.";
 #elif L==4	// es
 	"El centro <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
 #elif L==5	// fr
-	"The centre <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Besoin de traduction
+	"The center <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Besoin de traduction
 #elif L==6	// gn
 	"El centro <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
 	"Il centro <strong>%s</strong> &egrave; stato rinominato <strong>%s</strong>.";
 #elif L==8	// pl
-	"The centre <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
+	"The center <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"O centro <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
@@ -47155,22 +47155,22 @@ const char *Txt_The_degree_X_already_exists =	// Warning: it is very important t
 	"O grau <strong>%s</strong> j&aacute; existe.";
 #endif
 
-const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_The_degree_X_has_been_moved_to_the_center_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"La titulaci&oacute;n <strong>%s</strong> se ha movido"
 	" al centro <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
 	"The degree <strong>%s</strong> has been moved"
-	" to the centre <strong>%s</strong>.";		// Need Übersetzung
+	" to the center <strong>%s</strong>.";		// Need Übersetzung
 #elif L==3	// en
 	"The degree <strong>%s</strong> has been moved"
-	" to the centre <strong>%s</strong>.";
+	" to the center <strong>%s</strong>.";
 #elif L==4	// es
 	"La titulaci&oacute;n <strong>%s</strong> se ha movido"
 	" al centro <strong>%s</strong>.";
 #elif L==5	// fr
 	"The degree <strong>%s</strong> has been moved"
-	" to the centre <strong>%s</strong>.";		// Besoin de traduction
+	" to the center <strong>%s</strong>.";		// Besoin de traduction
 #elif L==6	// gn
 	"La titulaci&oacute;n <strong>%s</strong> se ha movido"
 	" al centro <strong>%s</strong>.";		// Okoteve traducción
@@ -47179,7 +47179,7 @@ const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y =	// Warning: it is 
 	" al centro <strong>%s</strong>.";
 #elif L==8	// pl
 	"The degree <strong>%s</strong> has been moved"
-	" to the centre <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+	" to the center <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"O grau <strong>%s</strong> foi movido"
 	" para o centro <strong>%s</strong>.";
@@ -48268,23 +48268,23 @@ const char *Txt_The_institution_X_has_been_renamed_as_Y =	// Warning: it is very
 	"A institui&ccedil;&atilde;o <strong>%s</strong> foi renomeada como <strong>%s</strong>.";
 #endif
 
-const char *Txt_The_institution_of_the_centre_has_changed =
+const char *Txt_The_institution_of_the_center_has_changed =
 #if   L==1	// ca
 	"La instituci&oacute;n del centro ha cambiado.";	// Necessita traduccio
 #elif L==2	// de
-	"The institution of the centre has changed.";		// Need Übersetzung
+	"The institution of the center has changed.";		// Need Übersetzung
 #elif L==3	// en
-	"The institution of the centre has changed.";
+	"The institution of the center has changed.";
 #elif L==4	// es
 	"La instituci&oacute;n del centro ha cambiado.";
 #elif L==5	// fr
-	"The institution of the centre .";			// Besoin de traduction
+	"The institution of the center .";			// Besoin de traduction
 #elif L==6	// gn
 	"La instituci&oacute;n del centro ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
 	"L'istituzione del centro &egrave; cambiata.";
 #elif L==8	// pl
-	"The institution of the centre has changed.";		// Potrzebujesz tlumaczenie
+	"The institution of the center has changed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"A institui&ccedil;&atilde;o do centro mudou.";
 #endif
@@ -48781,23 +48781,23 @@ const char *Txt_The_name_of_the_building_X_has_not_changed =	// Warning: it is v
 	"O nome do edif&iacute;cio <strong>%s</strong> n&atilde;o foi alterado.";
 #endif
 
-const char *Txt_The_name_of_the_centre_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_name_of_the_center_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"El nombre del centro <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
 #elif L==2	// de
-	"The name of the centre <strong>%s</strong> has not changed.";	// Need Übersetzung
+	"The name of the center <strong>%s</strong> has not changed.";	// Need Übersetzung
 #elif L==3	// en
-	"The name of the centre <strong>%s</strong> has not changed.";
+	"The name of the center <strong>%s</strong> has not changed.";
 #elif L==4	// es
 	"El nombre del centro <strong>%s</strong> no ha cambiado.";
 #elif L==5	// fr
-	"The name of the centre <strong>%s</strong> has not changed.";	// Besoin de traduction
+	"The name of the center <strong>%s</strong> has not changed.";	// Besoin de traduction
 #elif L==6	// gn
 	"El nombre del centro <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
 	"Il nome del centro <strong>%s</strong> non &egrave; cambiato.";
 #elif L==8	// pl
-	"The name of the centre <strong>%s</strong> has not changed.";	// Potrzebujesz tlumaczenie
+	"The name of the center <strong>%s</strong> has not changed.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"O nome do centro <strong>%s</strong> n&atilde;o foi alterado.";
 #endif
@@ -49825,23 +49825,23 @@ const char *Txt_The_place_X_has_been_renamed_as_Y =	// Warning: it is very impor
 	"A localiza&ccedil;&atilde;o <strong>%s</strong> foi renomeada como <strong>%s</strong>.";
 #endif
 
-const char *Txt_The_place_of_the_centre_has_changed =
+const char *Txt_The_place_of_the_center_has_changed =
 #if   L==1	// ca
 	"El lugar del centro ha cambiado.";		// Necessita traduccio
 #elif L==2	// de
-	"The place of the centre has changed.";		// Need Übersetzung
+	"The place of the center has changed.";		// Need Übersetzung
 #elif L==3	// en
-	"The place of the centre has changed.";
+	"The place of the center has changed.";
 #elif L==4	// es
 	"El lugar del centro ha cambiado.";
 #elif L==5	// fr
-	"The place of the centre has changed.";		// Besoin de traduction
+	"The place of the center has changed.";		// Besoin de traduction
 #elif L==6	// gn
 	"El lugar del centro ha cambiado.";		// Okoteve traducción
 #elif L==7	// it
 	"Il luogo del centro &egrave; cambiato.";
 #elif L==8	// pl
-	"The place of the centre has changed.";		// Potrzebujesz tlumaczenie
+	"The place of the center has changed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"A localiza&ccedil;&atilde;o do centro mudou.";
 #endif
@@ -50260,23 +50260,23 @@ const char *Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X =	// Warning:
 	" excede o m&aacute;ximo permitido (%s).";
 #endif
 
-const char *Txt_The_status_of_the_centre_X_has_changed =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_status_of_the_center_X_has_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"El estado del centro <strong>%s</strong> ha cambiado.";	// Necessita traduccio
 #elif L==2	// de
-	"The status of the centre <strong>%s</strong> has changed.";	// Need Übersetzung
+	"The status of the center <strong>%s</strong> has changed.";	// Need Übersetzung
 #elif L==3	// en
-	"The status of the centre <strong>%s</strong> has changed.";
+	"The status of the center <strong>%s</strong> has changed.";
 #elif L==4	// es
 	"El estado del centro <strong>%s</strong> ha cambiado.";
 #elif L==5	// fr
-	"The status of the centre <strong>%s</strong> has changed.";	// Besoin de traduction
+	"The status of the center <strong>%s</strong> has changed.";	// Besoin de traduction
 #elif L==6	// gn
 	"El estado del centro <strong>%s</strong> ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
 	"Il stato del centro <strong>%s</strong> &egrave; cambiato.";
 #elif L==8	// pl
-	"The status of the centre <strong>%s</strong> has changed.";	// Potrzebujesz tlumaczenie
+	"The status of the center <strong>%s</strong> has changed.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"O status do centro <strong>%s</strong> foi alterado.";
 #endif
@@ -51601,17 +51601,17 @@ const char *Txt_There_are_no_accesses_with_the_selected_search_criteria =
 	"N&atilde;o h&aacute; acessos com os crit&eacute;rios de pesquisa selecionados.";
 #endif
 
-const char *Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed =
+const char *Txt_There_are_no_centers_with_requests_for_degrees_to_be_confirmed =
 #if   L==1	// ca
-	"No hi ha centres"
+	"No hi ha centers"
 	" amb sol&middot;licituds de titulacions"
 	" pendents de confirmar.";
 #elif L==2	// de
-	"There are no centres"
+	"There are no centers"
 	" with requests for degrees"
 	" to be confirmed.";		// Need Übersetzung
 #elif L==3	// en
-	"There are no centres"
+	"There are no centers"
 	" with requests for degrees"
 	" to be confirmed.";
 #elif L==4	// es
@@ -51619,7 +51619,7 @@ const char *Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed =
 	" con solicitudes de titulaciones"
 	" pendientes de confirmar.";
 #elif L==5	// fr
-	"Il n'y a pas de centres"
+	"Il n'y a pas de centers"
 	" avec demandes de degr&eacute;s"
 	" &agrave; confirmer.";
 #elif L==6	// gn
@@ -51631,7 +51631,7 @@ const char *Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed =
 	" con richieste di gradi"
 	" pendenti de confermare.";
 #elif L==8	// pl
-	"There are no centres"
+	"There are no centers"
 	" with requests for degrees"
 	" to be confirmed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
@@ -51718,18 +51718,18 @@ const char *Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed =
 	" pendentes de confirma&ccedil;&atilde;o.";
 #endif
 
-const char *Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed =
+const char *Txt_There_are_no_institutions_with_requests_for_centers_to_be_confirmed =
 #if   L==1	// ca
 	"No hi ha institucions"
-	" amb sol&middot;licituds de centres"
+	" amb sol&middot;licituds de centers"
 	" pendents de confirmar.";
 #elif L==2	// de
 	"There are no institutions"
-	" with requests for centres"
+	" with requests for centers"
 	" to be confirmed.";		// Need Übersetzung
 #elif L==3	// en
 	"There are no institutions"
-	" with requests for centres"
+	" with requests for centers"
 	" to be confirmed.";
 #elif L==4	// es
 	"No hay instituciones"
@@ -51737,7 +51737,7 @@ const char *Txt_There_are_no_institutions_with_requests_for_centres_to_be_confir
 	" pendientes de confirmar.";
 #elif L==5	// fr
 	"Il n'y a pas d'&eacute;tablissements"
-	" avec demandes de centres"
+	" avec demandes de centers"
 	" &agrave; confirmer.";
 #elif L==6	// gn
 	"No hay instituciones"
@@ -51749,7 +51749,7 @@ const char *Txt_There_are_no_institutions_with_requests_for_centres_to_be_confir
 	" pendenti de confermare.";
 #elif L==8	// pl
 	"There are no institutions"
-	" with requests for centres"
+	" with requests for centers"
 	" to be confirmed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"N&atilde;o h&aacute; institui&ccedil;&otilde;es"
@@ -52655,15 +52655,15 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	,
 	[TL_NOTE_CTR_DOC_PUB_FILE] =
 #if   L==1	// ca
-	"Document p&uacute;blic (centre)"
+	"Document p&uacute;blic (center)"
 #elif L==2	// de
 	"&Ouml;ffentliche Dokumentdatei (Lehrinstitut)"
 #elif L==3	// en
-	"Public document file (centre)"
+	"Public document file (center)"
 #elif L==4	// es
 	"Documento p&uacute;blico (centro)"
 #elif L==5	// fr
-	"Fichier de document public (centre)"
+	"Fichier de document public (center)"
 #elif L==6	// gn
 	"Documento p&uacute;blico (centro)"	// Okoteve traducción
 #elif L==7	// it
@@ -52676,15 +52676,15 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	,
 	[TL_NOTE_CTR_SHA_PUB_FILE] =
 #if   L==1	// ca
-	"Arxiu compartit p&uacute;blic (centre)"
+	"Arxiu compartit p&uacute;blic (center)"
 #elif L==2	// de
 	"&Ouml;ffentliche Freigegebene Datei (Lehrinstitut)"
 #elif L==3	// en
-	"Public shared file (centre)"
+	"Public shared file (center)"
 #elif L==4	// es
 	"Archivo compartido p&uacute;blico (centro)"
 #elif L==5	// fr
-	"Fichier partag&eacute; public (centre)"
+	"Fichier partag&eacute; public (center)"
 #elif L==6	// gn
 	"Archivo compartido p&uacute;blico (centro)"	// Okoteve traducción
 #elif L==7	// it
@@ -53317,22 +53317,22 @@ const char *Txt_Title_attribution =
 	"T&iacute;tulo/atribui&ccedil;&atilde;o";
 #endif
 
-const char *Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre =
+const char *Txt_To_remove_a_center_you_must_first_remove_all_degrees_and_teachers_in_the_center =
 #if   L==1	// ca
 	"Para eliminar un centro, primero debe eliminar"
 	" todas las titulaciones y todos los profesores de ese centro.";	// Necessita traduccio
 #elif L==2	// de
-	"To remove a centre, you must first remove"
-	" all degrees and teachers in the centre.";				// Need Übersetzung
+	"To remove a center, you must first remove"
+	" all degrees and teachers in the center.";				// Need Übersetzung
 #elif L==3	// en
-	"To remove a centre, you must first remove"
-	" all degrees and teachers in the centre.";
+	"To remove a center, you must first remove"
+	" all degrees and teachers in the center.";
 #elif L==4	// es
 	"Para eliminar un centro, primero debe eliminar"
 	" todas las titulaciones y todos los profesores de ese centro.";
 #elif L==5	// fr
-	"To remove a centre, you must first remove"
-	" all degrees and teachers in the centre.";				// Besoin de traduction
+	"To remove a center, you must first remove"
+	" all degrees and teachers in the center.";				// Besoin de traduction
 #elif L==6	// gn
 	"Para eliminar un centro, primero debe eliminar"
 	" todas las titulaciones y todos los profesores de ese centro.";	// Okoteve traducción
@@ -53340,8 +53340,8 @@ const char *Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teacher
 	"Per rimuovere un centro, devi prima rimuovere"
 	" tutte le lauree e professori di quel centro.";
 #elif L==8	// pl
-	"To remove a centre, you must first remove"
-	" all degrees and teachers in the centre.";				// Potrzebujesz tlumaczenie
+	"To remove a center, you must first remove"
+	" all degrees and teachers in the center.";				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Para remover um centro, voc&ecirc; deve primeiro remover"
 	" todos os graus e professores no centro.";
@@ -53437,22 +53437,22 @@ const char *Txt_To_remove_a_department_you_must_first_remove_all_teachers_in_the
 	" todos os professores do departamento.";
 #endif
 
-const char *Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_place =
+const char *Txt_To_remove_a_place_you_must_first_remove_all_centers_of_that_place =
 #if   L==1	// ca
 	"Para eliminar un lugar, primero debe eliminar"
 	" todos los centros de ese lugar.";		// Necessita traduccio
 #elif L==2	// de
 	"To remove a place, you must first remove"
-	" all centres of that place.";			// Need Übersetzung
+	" all centers of that place.";			// Need Übersetzung
 #elif L==3	// en
 	"To remove a place, you must first remove"
-	" all centres of that place.";
+	" all centers of that place.";
 #elif L==4	// es
 	"Para eliminar un lugar, primero debe eliminar"
 	" todos los centros de ese lugar.";
 #elif L==5	// fr
 	"To remove a place, you must first remove"
-	" all centres of that place.";			// Besoin de traduction
+	" all centers of that place.";			// Besoin de traduction
 #elif L==6	// gn
 	"Para eliminar un lugar, primero debe eliminar"
 	" todos los centros de ese lugar.";		// Okoteve traducción
@@ -53461,7 +53461,7 @@ const char *Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_plac
 	" tutte le centri di quel luogo.";
 #elif L==8	// pl
 	"To remove a place, you must first remove"
-	" all centres of that place.";			// Potrzebujesz tlumaczenie
+	" all centers of that place.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Para remover uma localiza&ccedil;&atilde;o, voc&ecirc; deve primeiro remover"
 	" todos os centros da localiza&ccedil;&atilde;o.";
@@ -53497,22 +53497,22 @@ const char *Txt_To_remove_a_type_of_degree_you_must_first_remove_all_degrees_of_
 	" todos os graus desse tipo.";
 #endif
 
-const char *Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution =
+const char *Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution =
 #if   L==1	// ca
 	"Para eliminar una instituci&oacute;n, primero debe eliminar"
 	" todos los centros y todos los usuarios de esa instituci&oacute;n.";	// Necessita traduccio
 #elif L==2	// de
 	"To remove an institution, you must first remove"
-	" all centres and users in the institution.";				// Need Übersetzung
+	" all centers and users in the institution.";				// Need Übersetzung
 #elif L==3	// en
 	"To remove an institution, you must first remove"
-	" all centres and users in the institution.";
+	" all centers and users in the institution.";
 #elif L==4	// es
 	"Para eliminar una instituci&oacute;n, primero debe eliminar"
 	" todos los centros y todos los usuarios de esa instituci&oacute;n.";
 #elif L==5	// fr
 	"To remove an institution, you must first remove"
-	" all centres and users in the institution.";				// Besoin de traduction
+	" all centers and users in the institution.";				// Besoin de traduction
 #elif L==6	// gn
 	"Para eliminar una instituci&oacute;n, primero debe eliminar"
 	" todos centros y todos los usuarios de esa instituci&oacute;n.";	// Okoteve traducción
@@ -53521,7 +53521,7 @@ const char *Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_u
 	" tutti gli centri e utenti di quell'istituzione.";
 #elif L==8	// pl
 	"To remove an institution, you must first remove"
-	" all centres and users in the institution.";				// Potrzebujesz tlumaczenie
+	" all centers and users in the institution.";				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Para remover uma institui&ccedil;&atilde;o, voc&ecirc; deve primeiro remover"
 	" todos os centros e usu&aacute;rios da institui&ccedil;&atilde;o.";
@@ -55787,17 +55787,17 @@ const char *Txt_Users_in_courses =
 	"Utilizadores em disciplinas";
 #endif
 
-const char *Txt_Users_of_the_centre =
+const char *Txt_Users_of_the_center =
 #if   L==1	// ca
-	"Usuaris del centre";
+	"Usuaris del center";
 #elif L==2	// de
 	"Benutzer der Lehrinstitut";
 #elif L==3	// en
-	"Users of the centre";
+	"Users of the center";
 #elif L==4	// es
 	"Usuarios del centro";
 #elif L==5	// fr
-	"Utilisateurs du centre";
+	"Utilisateurs du center";
 #elif L==6	// gn
 	"Usuarios del centro";	// Okoteve traducción
 #elif L==7	// it
@@ -59278,22 +59278,22 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_bui
 	" do novo edif&iacute;cio.";
 #endif
 
-const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_centre =
+const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_center =
 #if   L==1	// ca
 	"Debe especificar el nombre breve y el nombre completo"
 	" del nuevo centro.";		// Necessita traduccio
 #elif L==2	// de
 	"You must specify the short name and the full name"
-	" of the new centre.";		// Need Übersetzung
+	" of the new center.";		// Need Übersetzung
 #elif L==3	// en
 	"You must specify the short name and the full name"
-	" of the new centre.";
+	" of the new center.";
 #elif L==4	// es
 	"Debe especificar el nombre breve y el nombre completo"
 	" del nuevo centro.";
 #elif L==5	// fr
 	"You must specify the short name and the full name"
-	" of the new centre.";		// Besoin de traduction
+	" of the new center.";		// Besoin de traduction
 #elif L==6	// gn
 	"Debe especificar el nombre breve y el nombre completo"
 	" del nuevo centro.";		// Okoteve traducción
@@ -59302,7 +59302,7 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_cen
 	" del nuovo centro.";
 #elif L==8	// pl
 	"You must specify the short name and the full name"
-	" of the new centre.";		// Potrzebujesz tlumaczenie
+	" of the new center.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
 	" do novo centro.";
@@ -59737,22 +59737,22 @@ const char *Txt_You_must_specify_the_URL_of_the_new_link =
 	"Voc&ecirc; deve especificar o URL do novo link.";
 #endif
 
-const char *Txt_You_must_specify_the_web_address_of_the_new_centre =
+const char *Txt_You_must_specify_the_web_address_of_the_new_center =
 #if   L==1	// ca
 	"Debe especificar la direcci&oacute;n web"
 	" del nuevo centro.";				// Necessita traduccio
 #elif L==2	// de
 	"You must specify the web address"
-	" of the new centre.";				// Need Übersetzung
+	" of the new center.";				// Need Übersetzung
 #elif L==3	// en
 	"You must specify the web address"
-	" of the new centre.";
+	" of the new center.";
 #elif L==4	// es
 	"Debe especificar la direcci&oacute;n web"
 	" del nuevo centro.";
 #elif L==5	// fr
 	"You must specify the web address"
-	" of the new centre.";				// Besoin de traduction
+	" of the new center.";				// Besoin de traduction
 #elif L==6	// gn
 	"Debe especificar la direcci&oacute;n web"
 	" del nuevo centro.";				// Okoteve traducción
@@ -59761,7 +59761,7 @@ const char *Txt_You_must_specify_the_web_address_of_the_new_centre =
 	" del nuovo centro.";
 #elif L==8	// pl
 	"You must specify the web address"
-	" of the new centre.";				// Potrzebujesz tlumaczenie
+	" of the new center.";				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o endere&ccedil;o web"
 	" do novo centro.";
