@@ -2671,13 +2671,13 @@ unsigned Gam_GetNumCoursesWithGames (Hie_Lvl_Level_t Scope)
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
-			 " FROM institutions,"
+			 " FROM ins_instits,"
 			       "ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "gam_games"
-			 " WHERE institutions.CtyCod=%ld"
-			 " AND institutions.InsCod=ctr_centers.InsCod"
+			 " WHERE ins_instits.CtyCod=%ld"
+			 " AND ins_instits.InsCod=ctr_centers.InsCod"
 			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=gam_games.CrsCod",
@@ -2746,13 +2746,13 @@ unsigned Gam_GetNumGames (Hie_Lvl_Level_t Scope)
          return (unsigned)
          DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
-			 " FROM institutions,"
+			 " FROM ins_instits,"
 			       "ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "gam_games"
-			 " WHERE institutions.CtyCod=%ld"
-			 " AND institutions.InsCod=ctr_centers.InsCod"
+			 " WHERE ins_instits.CtyCod=%ld"
+			 " AND ins_instits.InsCod=ctr_centers.InsCod"
 			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=gam_games.CrsCod",
@@ -2828,14 +2828,14 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			 " FROM institutions,"
+			 " FROM ins_instits,"
 			       "ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "gam_games,"
 			       "gam_questions"
-			 " WHERE institutions.CtyCod=%ld"
-			 " AND institutions.InsCod=ctr_centers.InsCod"
+			 " WHERE ins_instits.CtyCod=%ld"
+			 " AND ins_instits.InsCod=ctr_centers.InsCod"
 			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=gam_games.CrsCod"

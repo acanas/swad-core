@@ -503,15 +503,15 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       "SELECT COUNT(DISTINCT connected.UsrCod),"	// row[0]
 			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
 			              "MIN(usr_data.Sex)"			// row[2]
-			       " FROM institutions,"
+			       " FROM ins_instits,"
 			             "ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr,"
 			             "connected,"
 			             "usr_data"
-			       " WHERE institutions.CtyCod=%ld"
-			       " AND institutions.InsCod=ctr_centers.InsCod"
+			       " WHERE ins_instits.CtyCod=%ld"
+			       " AND ins_instits.InsCod=ctr_centers.InsCod"
 			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr.CrsCod"
@@ -635,15 +635,15 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       "SELECT COUNT(DISTINCT connected.UsrCod),"	// row[0]
 			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
 			              "MIN(usr_data.Sex)"			// row[2]
-			       " FROM institutions,"
+			       " FROM ins_instits,"
 			             "ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr,"
 			             "connected,"
 			             "usr_data"
-			       " WHERE institutions.CtyCod=%ld"
-			       " AND institutions.InsCod=ctr_centers.InsCod"
+			       " WHERE ins_instits.CtyCod=%ld"
+			       " AND ins_instits.InsCod=ctr_centers.InsCod"
 			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr.CrsCod"
@@ -995,14 +995,14 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			              "connected.LastCrsCod,"				// row[1]
 			              "UNIX_TIMESTAMP()-"
 			              "UNIX_TIMESTAMP(connected.LastTime) AS Dif"	// row[2]
-			       " FROM institutions,"
+			       " FROM ins_instits,"
 			             "ctr_centers,"
 			             "deg_degrees,"
 			             "crs_courses,"
 			             "crs_usr,"
 			             "connected"
-			       " WHERE institutions.CtyCod=%ld"
-			       " AND institutions.InsCod=ctr_centers.InsCod"
+			       " WHERE ins_instits.CtyCod=%ld"
+			       " AND ins_instits.InsCod=ctr_centers.InsCod"
 			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			       " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " AND crs_courses.CrsCod=crs_usr.CrsCod"

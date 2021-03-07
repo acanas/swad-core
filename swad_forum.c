@@ -2631,10 +2631,10 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
             DB_QueryCOUNT ("can not get number of forums of a type",
 			   "SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,"
-			         "institutions"
+			         "ins_instits"
 			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=institutions.InsCod"
-			   " AND institutions.CtyCod=%ld",
+			   " AND forum_thread.Location=ins_instits.InsCod"
+			   " AND ins_instits.CtyCod=%ld",
 		           (unsigned) ForumType,CtyCod);
 
          // CtyCod <= 0 ==> Number of institutions forums for the whole platform
@@ -2675,11 +2675,11 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 			   "SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,"
 			         "ctr_centers,"
-			         "institutions"
+			         "ins_instits"
 			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=ctr_centers.CtrCod"
-			   " AND ctr_centers.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod=%ld",
+			   " AND ctr_centers.InsCod=ins_instits.InsCod"
+			   " AND ins_instits.CtyCod=%ld",
 		           (unsigned) ForumType,CtyCod);
 
          // InsCod <= 0 ==> Number of center forums for the whole platform
@@ -2735,12 +2735,12 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 			   " FROM forum_thread,"
 			         "deg_degrees,"
 			         "ctr_centers,"
-			         "institutions"
+			         "ins_instits"
 			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=deg_degrees.DegCod"
 			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			   " AND ctr_centers.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod=%ld",
+			   " AND ctr_centers.InsCod=ins_instits.InsCod"
+			   " AND ins_instits.CtyCod=%ld",
 		           (unsigned) ForumType,CtyCod);
 
          // InsCod <= 0 ==> Number of degree forums for the whole platform
@@ -2813,13 +2813,13 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 			         "crs_courses,"
 			         "deg_degrees,"
 			         "ctr_centers,"
-			         "institutions"
+			         "ins_instits"
 			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=crs_courses.CrsCod"
 			   " AND crs_courses.DegCod=deg_degrees.DegCod"
 			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			   " AND ctr_centers.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod=%ld",
+			   " AND ctr_centers.InsCod=ins_instits.InsCod"
+			   " AND ins_instits.CtyCod=%ld",
 		           (unsigned) ForumType,CtyCod);
 
          // InsCod <= 0 ==> Number of course forums for the whole platform
@@ -2873,10 +2873,10 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 	    DB_QueryCOUNT ("can not get the number of threads in forums of a type",
 			   "SELECT COUNT(*)"
 			   " FROM forum_thread,"
-			         "institutions"
+			         "ins_instits"
 			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=institutions.InsCod"
-			   " AND institutions.CtyCod=%ld",
+			   " AND forum_thread.Location=ins_instits.InsCod"
+			   " AND ins_instits.CtyCod=%ld",
 			   (unsigned) ForumType,CtyCod);
 
          // InsCod <= 0 ==> Number of threads in institution forums for the whole platform
@@ -2917,11 +2917,11 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   "SELECT COUNT(*)"
 			   " FROM forum_thread,"
 			         "ctr_centers,"
-			         "institutions"
+			         "ins_instits"
 			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=ctr_centers.CtrCod"
-			   " AND ctr_centers.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod=%ld",
+			   " AND ctr_centers.InsCod=ins_instits.InsCod"
+			   " AND ins_instits.CtyCod=%ld",
 			   (unsigned) ForumType,CtyCod);
 
          // InsCod <= 0 ==> Number of threads in center forums for the whole platform
@@ -2976,12 +2976,12 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   " FROM forum_thread,"
 			         "deg_degrees,"
 			         "ctr_centers,"
-			         "institutions"
+			         "ins_instits"
 			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=deg_degrees.DegCod"
 			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			   " AND ctr_centers.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod=%ld",
+			   " AND ctr_centers.InsCod=ins_instits.InsCod"
+			   " AND ins_instits.CtyCod=%ld",
 			   (unsigned) ForumType,CtyCod);
 
          // InsCod <= 0 ==> Number of threads in degree forums for the whole platform
@@ -3054,13 +3054,13 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			         "crs_courses,"
 			         "deg_degrees,"
 			         "ctr_centers,"
-			         "institutions"
+			         "ins_instits"
 			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=crs_courses.CrsCod"
 			   " AND crs_courses.DegCod=deg_degrees.DegCod"
 			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			   " AND ctr_centers.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod=%ld",
+			   " AND ctr_centers.InsCod=ins_instits.InsCod"
+			   " AND ins_instits.CtyCod=%ld",
 			   (unsigned) ForumType,CtyCod);
 
          // InsCod <= 0 ==> Number of threads in course forums for the whole platform
@@ -3143,11 +3143,11 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			    "SELECT COUNT(*),"
 			           "SUM(forum_post.NumNotif)"
 			    " FROM forum_thread,"
-			          "institutions,"
+			          "ins_instits,"
 			          "forum_post"
 			    " WHERE forum_thread.ForumType=%u"
-			    " AND forum_thread.Location=institutions.InsCod"
-			    " AND institutions.CtyCod=%ld"
+			    " AND forum_thread.Location=ins_instits.InsCod"
+			    " AND ins_instits.CtyCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
                             (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of posts in institution forums for the whole platform
@@ -3194,12 +3194,12 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			           "SUM(forum_post.NumNotif)"
 			    " FROM forum_thread,"
 			          "ctr_centers,"
-			          "institutions,"
+			          "ins_instits,"
 			          "forum_post"
 			    " WHERE forum_thread.ForumType=%u"
 			    " AND forum_thread.Location=ctr_centers.CtrCod"
-			    " AND ctr_centers.InsCod=institutions.InsCod"
-			    " AND institutions.CtyCod=%ld"
+			    " AND ctr_centers.InsCod=ins_instits.InsCod"
+			    " AND ins_instits.CtyCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
                             (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of posts in center forums for the whole platform
@@ -3262,13 +3262,13 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			    " FROM forum_thread,"
 			          "deg_degrees,"
 			          "ctr_centers,"
-			          "institutions,"
+			          "ins_instits,"
 			          "forum_post"
 			    " WHERE forum_thread.ForumType=%u"
 			    " AND forum_thread.Location=deg_degrees.DegCod"
 			    " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			    " AND ctr_centers.InsCod=institutions.InsCod"
-			    " AND institutions.CtyCod=%ld"
+			    " AND ctr_centers.InsCod=ins_instits.InsCod"
+			    " AND ins_instits.CtyCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
                             (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of posts in degree forums for the whole platform
@@ -3349,14 +3349,14 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			          "crs_courses,"
 			          "deg_degrees,"
 			          "ctr_centers,"
-			          "institutions,"
+			          "ins_instits,"
 			          "forum_post"
 			    " WHERE forum_thread.ForumType=%u"
 			    " AND forum_thread.Location=crs_courses.CrsCod"
 			    " AND crs_courses.DegCod=deg_degrees.DegCod"
 			    " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			    " AND ctr_centers.InsCod=institutions.InsCod"
-			    " AND institutions.CtyCod=%ld"
+			    " AND ctr_centers.InsCod=ins_instits.InsCod"
+			    " AND ins_instits.CtyCod=%ld"
 			    " AND forum_thread.ThrCod=forum_post.ThrCod",
                             (unsigned) ForumType,CtyCod);
          else			// CrsCod <= 0 && DegCod <= 0 && CtrCod <= 0 ==> Number of posts in course forums for the whole platform

@@ -1895,9 +1895,9 @@ mysql> DESCRIBE holidays;
 		   "INDEX(InsCod),"
 		   "INDEX(PlcCod))");
 
-   /***** Table institutions *****/
+   /***** Table ins_instits *****/
 /*
-mysql> DESCRIBE institutions;
+mysql> DESCRIBE ins_instits;
 +-----------------+---------------+------+-----+---------+----------------+
 | Field           | Type          | Null | Key | Default | Extra          |
 +-----------------+---------------+------+-----+---------+----------------+
@@ -1911,7 +1911,7 @@ mysql> DESCRIBE institutions;
 +-----------------+---------------+------+-----+---------+----------------+
 7 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS institutions ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS ins_instits ("
 			"InsCod INT NOT NULL AUTO_INCREMENT,"
 			"CtyCod INT NOT NULL,"
 			"Status TINYINT NOT NULL DEFAULT 0,"

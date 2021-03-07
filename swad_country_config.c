@@ -250,10 +250,10 @@ static void CtyCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
 			"AVG(ctr_centers.Longitude),"						// row[1]
 			"GREATEST(MAX(ctr_centers.Latitude)-MIN(ctr_centers.Latitude),"
 				 "MAX(ctr_centers.Longitude)-MIN(ctr_centers.Longitude))"	// row[2]
-		 " FROM institutions,"
+		 " FROM ins_instits,"
 		       "ctr_centers"
-		 " WHERE institutions.CtyCod=%ld"
-		 " AND institutions.InsCod=ctr_centers.InsCod"
+		 " WHERE ins_instits.CtyCod=%ld"
+		 " AND ins_instits.InsCod=ctr_centers.InsCod"
 		 " AND ctr_centers.Latitude<>0"
 		 " AND ctr_centers.Longitude<>0",
 		 Gbl.Hierarchy.Cty.CtyCod) < 0)
@@ -303,9 +303,10 @@ static void CtyCfg_Map (void)
    NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centers"
 						   " with coordinates",
 					"SELECT ctr_centers.CtrCod"	// row[0]
-					" FROM institutions,ctr_centers"
-					" WHERE institutions.CtyCod=%ld"
-					" AND institutions.InsCod=ctr_centers.InsCod"
+					" FROM ins_instits,"
+					      "ctr_centers"
+					" WHERE ins_instits.CtyCod=%ld"
+					" AND ins_instits.InsCod=ctr_centers.InsCod"
 					" AND ctr_centers.Latitude<>0"
 					" AND ctr_centers.Longitude<>0",
 					Gbl.Hierarchy.Cty.CtyCod);

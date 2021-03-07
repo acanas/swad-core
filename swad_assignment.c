@@ -1840,13 +1840,13 @@ unsigned Asg_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope)
        case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with assignments",
                          "SELECT COUNT(DISTINCT assignments.CrsCod)"
-			 " FROM institutions,"
+			 " FROM ins_instits,"
 			       "ctr_centers,"
 			       "deg_degrees,"
 			       "courses,"
 			       "assignments"
-			 " WHERE institutions.CtyCod=%ld"
-			 " AND institutions.InsCod=ctr_centers.InsCod"
+			 " WHERE ins_instits.CtyCod=%ld"
+			 " AND ins_instits.InsCod=ctr_centers.InsCod"
 			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.Status=0"
@@ -1938,13 +1938,13 @@ unsigned Asg_GetNumAssignments (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]
                                 "SUM(assignments.NumNotif)"	// row[1]
-			 " FROM institutions,"
+			 " FROM ins_instits,"
 			       "ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "assignments"
-			 " WHERE institutions.CtyCod=%ld"
-			 " AND institutions.InsCod=ctr_centers.InsCod"
+			 " WHERE ins_instits.CtyCod=%ld"
+			 " AND ins_instits.InsCod=ctr_centers.InsCod"
 			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=assignments.CrsCod",

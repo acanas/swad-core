@@ -629,12 +629,12 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
 			 "SELECT deg_types.DegTypCod,"			// row[0]
 			        "deg_types.DegTypName,"			// row[1]
 			        "COUNT(deg_degrees.DegCod) AS NumDegs"	// row[2]
-			 " FROM institutions,"
+			 " FROM ins_instits,"
 			       "ctr_centers,"
 			       "deg_degrees,"
 			       "deg_types"
-			 " WHERE institutions.CtyCod=%ld"
-			 " AND institutions.InsCod=ctr_centers.InsCod"
+			 " WHERE ins_instits.CtyCod=%ld"
+			 " AND ins_instits.InsCod=ctr_centers.InsCod"
 			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 			 " GROUP BY deg_degrees.DegTypCod"

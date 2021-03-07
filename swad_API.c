@@ -5989,9 +5989,9 @@ int swad__getLocation (struct soap *soap,
    /***** Get list of locations *****/
    NumLocs = (unsigned)
 	     DB_QuerySELECT (&mysql_res,"can not get matches",
-			     "SELECT institutions.InsCod,"	// row[ 0]
-				    "institutions.ShortName,"	// row[ 1]
-				    "institutions.FullName,"	// row[ 2]
+			     "SELECT ins_instits.InsCod,"	// row[ 0]
+				    "ins_instits.ShortName,"	// row[ 1]
+				    "ins_instits.FullName,"	// row[ 2]
 				    "ctr_centers.CtrCod,"	// row[ 3]
 				    "ctr_centers.ShortName,"	// row[ 4]
 				    "ctr_centers.FullName,"	// row[ 5]
@@ -6006,12 +6006,12 @@ int swad__getLocation (struct soap *soap,
 				          "rooms,"
 				          "buildings,"
 				          "ctr_centers,"
-				          "institutions"
+				          "ins_instits"
 				    " WHERE room_MAC.MAC=%llu"
 				    " AND room_MAC.RooCod=rooms.RooCod"
 				    " AND rooms.BldCod=buildings.BldCod"
 				    " AND buildings.CtrCod=ctr_centers.CtrCod"
-				    " AND ctr_centers.InsCod=institutions.InsCod"
+				    " AND ctr_centers.InsCod=ins_instits.InsCod"
 				    " ORDER BY rooms.Capacity,"	// Get the biggest room
 				              "rooms.ShortName"
 				              " DESC LIMIT 1",
@@ -6130,9 +6130,9 @@ int swad__getLastLocation (struct soap *soap,
       /***** Get list of locations *****/
       NumLocs = (unsigned)
 		DB_QuerySELECT (&mysql_res,"can not get matches",
-				"SELECT institutions.InsCod,"				// row[ 0]
-				       "institutions.ShortName,"			// row[ 1]
-				       "institutions.FullName,"				// row[ 2]
+				"SELECT ins_instits.InsCod,"				// row[ 0]
+				       "ins_instits.ShortName,"			// row[ 1]
+				       "ins_instits.FullName,"				// row[ 2]
 				       "ctr_centers.CtrCod,"				// row[ 3]
 				       "ctr_centers.ShortName,"				// row[ 4]
 				       "ctr_centers.FullName,"				// row[ 5]
@@ -6148,7 +6148,7 @@ int swad__getLastLocation (struct soap *soap,
 				             "rooms,"
 				             "buildings,"
 				             "ctr_centers,"
-				             "institutions"
+				             "ins_instits"
 				       " WHERE room_check_in.UsrCod=%d"
 				       " AND room_check_in.ChkCod="
 				       "(SELECT ChkCod FROM room_check_in"
@@ -6157,7 +6157,7 @@ int swad__getLastLocation (struct soap *soap,
 				       " AND room_check_in.RooCod=rooms.RooCod"
 				       " AND rooms.BldCod=buildings.BldCod"
 				       " AND buildings.CtrCod=ctr_centers.CtrCod"
-				       " AND ctr_centers.InsCod=institutions.InsCod",
+				       " AND ctr_centers.InsCod=ins_instits.InsCod",
 				userCode,userCode);
       API_GetDataOfLocation (soap,
 			     &(getLastLocationOut->location),
@@ -6193,9 +6193,9 @@ static void API_GetDataOfLocation (struct soap *soap,
       /* Get row */
       row = mysql_fetch_row (*mysql_res);
       /*
-      institutions.InsCod			// row[ 0]
-      institutions.ShortName			// row[ 1]
-      institutions.FullName			// row[ 2]
+      ins_instits.InsCod			// row[ 0]
+      ins_instits.ShortName			// row[ 1]
+      ins_instits.FullName			// row[ 2]
       ctr_centers.CtrCod			// row[ 3]
       ctr_centers.ShortName			// row[ 4]
       ctr_centers.FullName			// row[ 5]

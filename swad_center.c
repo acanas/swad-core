@@ -1953,10 +1953,10 @@ static unsigned Ctr_GetNumCtrsInCty (long CtyCod)
    Gbl.Cache.NumCtrsInCty.NumCtrs = (unsigned)
    DB_QueryCOUNT ("can not get number of centers in a country",
 		  "SELECT COUNT(*)"
-		  " FROM institutions,"
+		  " FROM ins_instits,"
 		        "ctr_centers"
-		  " WHERE institutions.CtyCod=%ld"
-		  " AND institutions.InsCod=ctr_centers.InsCod",
+		  " WHERE ins_instits.CtyCod=%ld"
+		  " AND ins_instits.InsCod=ctr_centers.InsCod",
 		  CtyCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_Lvl_CTY,Gbl.Cache.NumCtrsInCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCtrsInCty.NumCtrs);
@@ -2062,10 +2062,10 @@ unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod)
       NumCtrsWithMap = (unsigned)
       DB_QueryCOUNT ("can not get number of centers with map",
 		     "SELECT COUNT(*)"
-		     " FROM institutions,"
+		     " FROM ins_instits,"
 		           "ctr_centers"
-		     " WHERE institutions.CtyCod=%ld"
-		     " AND institutions.InsCod=ctr_centers.InsCod"
+		     " WHERE ins_instits.CtyCod=%ld"
+		     " AND ins_instits.InsCod=ctr_centers.InsCod"
 		     " AND (ctr_centers.Latitude<>0"
 		       " OR ctr_centers.Longitude<>0)",
 		     CtyCod);
@@ -2134,7 +2134,7 @@ unsigned Ctr_GetCachedNumCtrsWithDegs (const char *SubQuery,
       NumCtrsWithDegs = (unsigned)
       DB_QueryCOUNT ("can not get number of centers with degrees",
 		     "SELECT COUNT(DISTINCT ctr_centers.CtrCod)"
-		     " FROM institutions,"
+		     " FROM ins_instits,"
 		           "ctr_centers,"
 		           "deg_degrees"
 		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
@@ -2164,7 +2164,7 @@ unsigned Ctr_GetCachedNumCtrsWithCrss (const char *SubQuery,
       NumCtrsWithCrss = (unsigned)
       DB_QueryCOUNT ("can not get number of centers with courses",
 		     "SELECT COUNT(DISTINCT ctr_centers.CtrCod)"
-		     " FROM institutions,"
+		     " FROM ins_instits,"
 			   "ctr_centers,"
 			   "deg_degrees,"
 			   "crs_courses"
@@ -2202,7 +2202,7 @@ unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery,
       NumCtrsWithUsrs = (unsigned)
       DB_QueryCOUNT ("can not get number of centers with users",
 		     "SELECT COUNT(DISTINCT ctr_centers.CtrCod)"
-		     " FROM institutions,"
+		     " FROM ins_instits,"
 			   "ctr_centers,"
 			   "deg_degrees,"
 			   "crs_courses,"

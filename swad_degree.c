@@ -1955,11 +1955,11 @@ unsigned Deg_GetNumDegsInCty (long CtyCod)
    Gbl.Cache.NumDegsInCty.NumDegs = (unsigned)
    DB_QueryCOUNT ("can not get the number of degrees in a country",
 		  "SELECT COUNT(*)"
-		  " FROM institutions,"
+		  " FROM ins_instits,"
 		        "ctr_centers,"
 		        "deg_degrees"
-		  " WHERE institutions.CtyCod=%ld"
-		  " AND institutions.InsCod=ctr_centers.InsCod"
+		  " WHERE ins_instits.CtyCod=%ld"
+		  " AND ins_instits.InsCod=ctr_centers.InsCod"
 		  " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
 		  CtyCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_Lvl_CTY,Gbl.Cache.NumDegsInCty.CtyCod,
@@ -2090,7 +2090,7 @@ unsigned Deg_GetCachedNumDegsWithCrss (const char *SubQuery,
       NumDegsWithCrss = (unsigned)
       DB_QueryCOUNT ("can not get number of degrees with courses",
 		     "SELECT COUNT(DISTINCT deg_degrees.DegCod)"
-		     " FROM institutions,"
+		     " FROM ins_instits,"
 		           "ctr_centers,"
 		           "deg_degrees,"
 		           "crs_courses"
@@ -2128,7 +2128,7 @@ unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery,
       NumDegsWithUsrs = (unsigned)
       DB_QueryCOUNT ("can not get number of degrees with users",
 		     "SELECT COUNT(DISTINCT deg_degrees.DegCod)"
-		     " FROM institutions,"
+		     " FROM ins_instits,"
 		           "ctr_centers,"
 		           "deg_degrees,"
 		           "crs_courses,"

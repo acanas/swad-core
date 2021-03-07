@@ -448,12 +448,12 @@ unsigned Crs_GetNumCrssInCty (long CtyCod)
    Gbl.Cache.NumCrssInCty.NumCrss = (unsigned)
    DB_QueryCOUNT ("can not get the number of courses in a country",
 		  "SELECT COUNT(*)"
-		  " FROM institutions,"
+		  " FROM ins_instits,"
 		        "ctr_centers,"
 		        "deg_degrees,"
 		        "crs_courses"
-		  " WHERE institutions.CtyCod=%ld"
-		  " AND institutions.InsCod=ctr_centers.InsCod"
+		  " WHERE ins_instits.CtyCod=%ld"
+		  " AND ins_instits.InsCod=ctr_centers.InsCod"
 		  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		  " AND deg_degrees.DegCod=crs_courses.DegCod",
 		  CtyCod);
@@ -642,7 +642,7 @@ unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery,
       NumCrssWithUsrs = (unsigned)
       DB_QueryCOUNT ("can not get number of courses with users",
 		     "SELECT COUNT(DISTINCT crs_courses.CrsCod)"
-		     " FROM institutions,"
+		     " FROM ins_instits,"
 		           "ctr_centers,"
 		           "deg_degrees,"
 		           "crs_courses,"
