@@ -112,7 +112,7 @@ int main (void)
      {
       /***** Get parameters *****/
       Par_CreateListOfParams ();
-      Par_GetMainParameters ();
+      Par_GetMainParams ();
 
       /***** Mitigate DoS attacks *****/
       FW_CheckFirewallAndExitIfBanned ();

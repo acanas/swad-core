@@ -654,7 +654,7 @@ static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName)
 /****************** Get the parameters sent to this CGI **********************/
 /*****************************************************************************/
 
-void Par_GetMainParameters (void)
+void Par_GetMainParams (void)
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *The_ThemeId[The_NUM_THEMES];
