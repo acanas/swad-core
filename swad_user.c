@@ -2201,22 +2201,22 @@ unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res)
    return
    (unsigned) DB_QuerySELECT (mysql_res,"can not get the countries"
 					" a user belongs to",
-			      "SELECT countries.CtyCod,"
-			             "MAX(crs_usr.Role)"
+			      "SELECT cty_countrs.CtyCod,"	// row[0]
+			             "MAX(crs_usr.Role)"	// row[1]
 			      " FROM crs_usr,"
 			            "crs_courses,"
 			            "deg_degrees,"
 			            "ctr_centers,"
 			            "ins_instits,"
-			            "countries"
+			            "cty_countrs"
 			      " WHERE crs_usr.UsrCod=%ld"
 			      " AND crs_usr.CrsCod=crs_courses.CrsCod"
 			      " AND crs_courses.DegCod=deg_degrees.DegCod"
 			      " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			      " AND ctr_centers.InsCod=ins_instits.InsCod"
-			      " AND ins_instits.CtyCod=countries.CtyCod"
-			      " GROUP BY countries.CtyCod"
-			      " ORDER BY countries.Name_%s",
+			      " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+			      " GROUP BY cty_countrs.CtyCod"
+			      " ORDER BY cty_countrs.Name_%s",
 			      UsrCod,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
   }
 

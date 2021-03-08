@@ -165,26 +165,6 @@ CREATE TABLE IF NOT EXISTS buildings (
 	UNIQUE INDEX(BldCod),
 	INDEX(CtrCod));
 --
--- Table ctr_centers: centers (faculties, schools...)
---
-CREATE TABLE IF NOT EXISTS ctr_centers (
-	CtrCod INT NOT NULL AUTO_INCREMENT,
-	InsCod INT NOT NULL,
-	PlcCod INT NOT NULL DEFAULT -1,
-	Status TINYINT NOT NULL DEFAULT 0,
-	RequesterUsrCod INT NOT NULL DEFAULT -1,
-	Latitude DOUBLE PRECISION NOT NULL DEFAULT 0,
-	Longitude DOUBLE PRECISION NOT NULL DEFAULT 0,
-	Altitude DOUBLE PRECISION NOT NULL DEFAULT 0,
-	ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,
-	FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,
-	WWW VARCHAR(255) NOT NULL,
-	PhotoAttribution TEXT NOT NULL,
-	UNIQUE INDEX(CtrCod),
-	INDEX(InsCod),
-	INDEX(PlcCod),
-	INDEX(Status));
---
 -- Table chat: stores number of users in each chat room (this table is not used now)
 --
 CREATE TABLE IF NOT EXISTS chat (
@@ -223,42 +203,6 @@ CREATE TABLE IF NOT EXISTS connected (
 	UNIQUE INDEX(UsrCod),
 	INDEX(RoleInLastCrs),
 	INDEX(LastCrsCod));
---
--- Table countries: stores the countries
---
-CREATE TABLE IF NOT EXISTS countries (
-	CtyCod INT NOT NULL,
-	Alpha2 CHAR(2) NOT NULL,
-	MapAttribution TEXT NOT NULL,
-	Name_ca VARCHAR(767) NOT NULL,
-	Name_de VARCHAR(767) NOT NULL,
-	Name_en VARCHAR(767) NOT NULL,
-	Name_es VARCHAR(767) NOT NULL,
-	Name_fr VARCHAR(767) NOT NULL,
-	Name_gn VARCHAR(767) NOT NULL,
-	Name_it VARCHAR(767) NOT NULL,
-	Name_pl VARCHAR(767) NOT NULL,
-	Name_pt VARCHAR(767) NOT NULL,
-	WWW_ca VARCHAR(255) NOT NULL,
-	WWW_de VARCHAR(255) NOT NULL,
-	WWW_en VARCHAR(255) NOT NULL,
-	WWW_es VARCHAR(255) NOT NULL,
-	WWW_fr VARCHAR(255) NOT NULL,
-	WWW_gn VARCHAR(255) NOT NULL,
-	WWW_it VARCHAR(255) NOT NULL,
-	WWW_pl VARCHAR(255) NOT NULL,
-	WWW_pt VARCHAR(255) NOT NULL,
-	UNIQUE INDEX(CtyCod),
-	UNIQUE INDEX(Alpha2),
-	INDEX(Name_ca),
-	INDEX(Name_de),
-	INDEX(Name_en),
-	INDEX(Name_es),
-	INDEX(Name_fr),
-	INDEX(Name_gn),
-	INDEX(Name_it),
-	INDEX(Name_pl),
-	INDEX(Name_pt));
 --
 -- Table crs_courses: stores the courses/subjects
 --
@@ -408,6 +352,62 @@ CREATE TABLE IF NOT EXISTS crs_usr_requests (
 	UNIQUE INDEX(ReqCod),
 	UNIQUE INDEX(CrsCod,UsrCod),
 	INDEX(UsrCod));
+--
+-- Table ctr_centers: centers (faculties, schools...)
+--
+CREATE TABLE IF NOT EXISTS ctr_centers (
+	CtrCod INT NOT NULL AUTO_INCREMENT,
+	InsCod INT NOT NULL,
+	PlcCod INT NOT NULL DEFAULT -1,
+	Status TINYINT NOT NULL DEFAULT 0,
+	RequesterUsrCod INT NOT NULL DEFAULT -1,
+	Latitude DOUBLE PRECISION NOT NULL DEFAULT 0,
+	Longitude DOUBLE PRECISION NOT NULL DEFAULT 0,
+	Altitude DOUBLE PRECISION NOT NULL DEFAULT 0,
+	ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,
+	FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,
+	WWW VARCHAR(255) NOT NULL,
+	PhotoAttribution TEXT NOT NULL,
+	UNIQUE INDEX(CtrCod),
+	INDEX(InsCod),
+	INDEX(PlcCod),
+	INDEX(Status));
+--
+-- Table cty_countrs: stores the countries
+--
+CREATE TABLE IF NOT EXISTS cty_countrs (
+	CtyCod INT NOT NULL,
+	Alpha2 CHAR(2) NOT NULL,
+	MapAttribution TEXT NOT NULL,
+	Name_ca VARCHAR(767) NOT NULL,
+	Name_de VARCHAR(767) NOT NULL,
+	Name_en VARCHAR(767) NOT NULL,
+	Name_es VARCHAR(767) NOT NULL,
+	Name_fr VARCHAR(767) NOT NULL,
+	Name_gn VARCHAR(767) NOT NULL,
+	Name_it VARCHAR(767) NOT NULL,
+	Name_pl VARCHAR(767) NOT NULL,
+	Name_pt VARCHAR(767) NOT NULL,
+	WWW_ca VARCHAR(255) NOT NULL,
+	WWW_de VARCHAR(255) NOT NULL,
+	WWW_en VARCHAR(255) NOT NULL,
+	WWW_es VARCHAR(255) NOT NULL,
+	WWW_fr VARCHAR(255) NOT NULL,
+	WWW_gn VARCHAR(255) NOT NULL,
+	WWW_it VARCHAR(255) NOT NULL,
+	WWW_pl VARCHAR(255) NOT NULL,
+	WWW_pt VARCHAR(255) NOT NULL,
+	UNIQUE INDEX(CtyCod),
+	UNIQUE INDEX(Alpha2),
+	INDEX(Name_ca),
+	INDEX(Name_de),
+	INDEX(Name_en),
+	INDEX(Name_es),
+	INDEX(Name_fr),
+	INDEX(Name_gn),
+	INDEX(Name_it),
+	INDEX(Name_pl),
+	INDEX(Name_pt));
 --
 -- Table debug: used for debugging purposes
 --

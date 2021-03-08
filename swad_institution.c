@@ -959,12 +959,12 @@ static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
 
    if (DB_QuerySELECT (&mysql_res,"can not get short name and country"
 				  " of an institution",
-		       "SELECT ins_instits.ShortName,"
-		              "countries.Name_%s"
+		       "SELECT ins_instits.ShortName,"	// row[0]
+		              "cty_countrs.Name_%s"	// row[1]
 		       " FROM ins_instits,"
-		             "countries"
+		             "cty_countrs"
 		       " WHERE ins_instits.InsCod=%ld"
-		       " AND ins_instits.CtyCod=countries.CtyCod",
+		       " AND ins_instits.CtyCod=cty_countrs.CtyCod",
 		       Lan_STR_LANG_ID[Gbl.Prefs.Language],Ins->InsCod) == 1)
      {
       /* Get row */

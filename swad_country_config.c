@@ -583,7 +583,9 @@ static void CtyCfg_GetMapAttr (long CtyCod,char **MapAttribution)
 
    /***** Get photo attribution from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get photo attribution",
-		       "SELECT MapAttribution FROM countries WHERE CtyCod=%ld",
+		       "SELECT MapAttribution"
+		       " FROM cty_countrs"
+		       " WHERE CtyCod=%ld",
 	               CtyCod))
      {
       /* Get row */
@@ -631,7 +633,8 @@ void CtyCfg_ChangeCtyMapAttr (void)
 
    /***** Update the table changing old attribution by new attribution *****/
    DB_QueryUPDATE ("can not update the map attribution of a country",
-		   "UPDATE countries SET MapAttribution='%s'"
+		   "UPDATE cty_countrs"
+		   " SET MapAttribution='%s'"
 		   " WHERE CtyCod='%03ld'",
 	           NewMapAttribution,Gbl.Hierarchy.Cty.CtyCod);
 

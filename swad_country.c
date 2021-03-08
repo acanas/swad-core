@@ -129,11 +129,11 @@ void Cty_SeeCtyWithPendingInss (void)
 			 "SELECT ins_instits.CtyCod,"
 				"COUNT(*)"
 			 " FROM ins_instits,"
-			       "countries"
+			       "cty_countrs"
 			 " WHERE (ins_instits.Status & %u)<>0"
-			 " AND ins_instits.CtyCod=countries.CtyCod"
+			 " AND ins_instits.CtyCod=cty_countrs.CtyCod"
 			 " GROUP BY ins_instits.CtyCod"
-			 " ORDER BY countries.Name_%s",
+			 " ORDER BY cty_countrs.Name_%s",
 			 (unsigned) Ins_STATUS_BIT_PENDING,
 			 Lan_STR_LANG_ID[Gbl.Prefs.Language]);
          break;
@@ -760,8 +760,11 @@ void Cty_GetBasicListOfCountries (void)
 
    /***** Get countries from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get countries",
-			     "SELECT CtyCod,Alpha2,Name_%s"
-			     " FROM countries ORDER BY Name_%s",
+			     "SELECT CtyCod,"	// row[0]
+			            "Alpha2,"	// row[1]
+			            "Name_%s"	// row[2]
+			     " FROM cty_countrs"
+			     " ORDER BY Name_%s",
 			     Lan_STR_LANG_ID[Gbl.Prefs.Language],
 			     Lan_STR_LANG_ID[Gbl.Prefs.Language]);
    if (NumRows) // Countries found...
@@ -850,12 +853,12 @@ void Cty_GetFullListOfCountries (void)
 	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	Lan++)
      {
-      snprintf (StrField,sizeof (StrField),"countries.Name_%s,",Lan_STR_LANG_ID[Lan]);
+      snprintf (StrField,sizeof (StrField),"cty_countrs.Name_%s,",Lan_STR_LANG_ID[Lan]);
       Str_Concat (SubQueryNam1,StrField,sizeof (SubQueryNam1) - 1);
       snprintf (StrField,sizeof (StrField),"Name_%s,",Lan_STR_LANG_ID[Lan]);
       Str_Concat (SubQueryNam2,StrField,sizeof (SubQueryNam2) - 1);
 
-      snprintf (StrField,sizeof (StrField),"countries.WWW_%s,",Lan_STR_LANG_ID[Lan]);
+      snprintf (StrField,sizeof (StrField),"cty_countrs.WWW_%s,",Lan_STR_LANG_ID[Lan]);
       Str_Concat (SubQueryWWW1,StrField,sizeof (SubQueryWWW1) - 1);
       snprintf (StrField,sizeof (StrField),"WWW_%s,",Lan_STR_LANG_ID[Lan]);
       Str_Concat (SubQueryWWW2,StrField,sizeof (SubQueryWWW2) - 1);
@@ -868,14 +871,22 @@ void Cty_GetFullListOfCountries (void)
 
    /* Query database */
    NumRows = DB_QuerySELECT (&mysql_res,"can not get countries",
-			     "(SELECT countries.CtyCod,countries.Alpha2,"
-			     "%s%sCOUNT(*) AS NumUsrs"
-			     " FROM countries,usr_data"
-			     " WHERE countries.CtyCod=usr_data.CtyCod"
-			     " GROUP BY countries.CtyCod)"
+			     "(SELECT cty_countrs.CtyCod,"	// row[0]
+			             "cty_countrs.Alpha2,"	// row[1]
+			             "%s"			// row[...]
+			             "%s"			// row[...]
+			             "COUNT(*) AS NumUsrs"	// row[...]
+			     " FROM cty_countrs,"
+			           "usr_data"
+			     " WHERE cty_countrs.CtyCod=usr_data.CtyCod"
+			     " GROUP BY cty_countrs.CtyCod)"
 			     " UNION "
-			     "(SELECT CtyCod,Alpha2,%s%s0 AS NumUsrs"
-			     " FROM countries"
+			     "(SELECT CtyCod,"			// row[0]
+			             "Alpha2,"			// row[1]
+			             "%s"			// row[...]
+			             "%s"			// row[...]
+			             "0 AS NumUsrs"		// row[...]
+			     " FROM cty_countrs"
 			     " WHERE CtyCod NOT IN"
 			     " (SELECT DISTINCT CtyCod FROM usr_data))"
 			     " ORDER BY %s",
@@ -958,12 +969,14 @@ void Cty_WriteSelectorOfCountry (void)
 	       "[%s]",Txt_Country);
 
    /***** Get countries from database *****/
-   NumCtys = (unsigned) DB_QuerySELECT (&mysql_res,"can not get countries",
-				        "SELECT DISTINCT CtyCod,Name_%s"
-					" FROM countries"
-					" ORDER BY countries.Name_%s",
-					Lan_STR_LANG_ID[Gbl.Prefs.Language],
-					Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+   NumCtys = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get countries",
+		   "SELECT DISTINCT CtyCod,"	// row[0]
+				   "Name_%s"	// row[1]
+		   " FROM cty_countrs"
+		   " ORDER BY Name_%s",
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 
    /***** List countries *****/
    for (NumCty = 0;
@@ -1066,8 +1079,10 @@ bool Cty_GetDataOfCountryByCod (struct Cty_Countr *Cty)
 
    /***** Get data of a country from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a country",
-			     "SELECT Alpha2,Name_%s,WWW_%s"
-			     " FROM countries"
+			     "SELECT Alpha2,"	// row[0]
+			            "Name_%s,"	// row[1]
+			            "WWW_%s"	// row[2]
+			     " FROM cty_countrs"
 			     " WHERE CtyCod='%03ld'",
 			     Lan_STR_LANG_ID[Gbl.Prefs.Language],
 			     Lan_STR_LANG_ID[Gbl.Prefs.Language],
@@ -1137,7 +1152,9 @@ void Cty_GetCountryName (long CtyCod,Lan_Language_t Language,
    Gbl.Cache.CountryName.Language = Language;
 
    if (DB_QuerySELECT (&mysql_res,"can not get the name of a country",
-		       "SELECT Name_%s FROM countries WHERE CtyCod='%03ld'",
+		       "SELECT Name_%s"		// row[0]
+		       " FROM cty_countrs"
+		       " WHERE CtyCod='%03ld'",
 	               Lan_STR_LANG_ID[Language],CtyCod)) // Country found...
      {
       /* Get row */
@@ -1359,7 +1376,8 @@ void Cty_RemoveCountry (void)
 
       /***** Remove country *****/
       DB_QueryDELETE ("can not remove a country",
-		      "DELETE FROM countries WHERE CtyCod='%03ld'",
+		      "DELETE FROM cty_countrs"
+		      " WHERE CtyCod='%03ld'",
 		      Cty_EditingCty->CtyCod);
 
       /***** Flush cache *****/
@@ -1457,7 +1475,8 @@ static bool Cty_CheckIfNumericCountryCodeExists (long CtyCod)
    /***** Get number of countries with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the numeric code"
 	                  " of a country already existed",
-			  "SELECT COUNT(*) FROM countries"
+			  "SELECT COUNT(*)"
+			  " FROM cty_countrs"
 			  " WHERE CtyCod='%03ld'",
 			  CtyCod) != 0);
   }
@@ -1471,7 +1490,8 @@ static bool Cty_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1])
    /***** Get number of countries with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the alphabetic code"
 	                  " of a country already existed",
-			  "SELECT COUNT(*) FROM countries"
+			  "SELECT COUNT(*)"
+			  " FROM cty_countrs"
 			  " WHERE Alpha2='%s'",
 			  Alpha2) != 0);
   }
@@ -1487,9 +1507,12 @@ static bool Cty_CheckIfCountryNameExists (Lan_Language_t Language,const char *Na
    /***** Get number of countries with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name"
 	                  " of a country already existed",
-			  "SELECT COUNT(*) FROM countries"
-			  " WHERE Name_%s='%s' AND CtyCod<>'%03ld'",
-			  Lan_STR_LANG_ID[Language],Name,CtyCod) != 0);
+			  "SELECT COUNT(*)"
+			  " FROM cty_countrs"
+			  " WHERE Name_%s='%s'"
+			  " AND CtyCod<>'%03ld'",
+			  Lan_STR_LANG_ID[Language],Name,
+			  CtyCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1500,8 +1523,11 @@ static void Cty_UpdateCtyNameDB (long CtyCod,const char *FieldName,const char *N
   {
    /***** Update country changing old name by new name */
    DB_QueryUPDATE ("can not update the name of a country",
-		   "UPDATE countries SET %s='%s' WHERE CtyCod='%03ld'",
-	           FieldName,NewCtyName,CtyCod);
+		   "UPDATE cty_countrs"
+		   " SET %s='%s'"
+		   " WHERE CtyCod='%03ld'",
+	           FieldName,NewCtyName,
+	           CtyCod);
 
    /***** Flush cache *****/
    Cty_FlushCacheCountryName ();
@@ -1535,7 +1561,8 @@ void Cty_ChangeCtyWWW (void)
 
    /***** Update the table changing old WWW by new WWW *****/
    DB_QueryUPDATE ("can not update the web of a country",
-		   "UPDATE countries SET WWW_%s='%s'"
+		   "UPDATE cty_countrs"
+		   " SET WWW_%s='%s'"
 		   " WHERE CtyCod='%03ld'",
 	           Lan_STR_LANG_ID[Language],NewWWW,Cty_EditingCty->CtyCod);
    Str_Copy (Cty_EditingCty->WWW[Language],NewWWW,
@@ -1866,7 +1893,7 @@ static void Cty_CreateCountry (void)
       Str_Concat (SubQueryWWW2,"'",sizeof (SubQueryWWW2) - 1);
      }
    DB_QueryINSERT ("can not create country",
-		   "INSERT INTO countries"
+		   "INSERT INTO cty_countrs"
 		   " (CtyCod,Alpha2,MapAttribution%s%s)"
 		   " VALUES"
 		   " ('%03ld','%s',''%s%s)",
@@ -1888,7 +1915,7 @@ unsigned Cty_GetCachedNumCtysInSys (void)
                                    FigCch_UNSIGNED,&NumCtys))
      {
       /***** Get current number of countries from database and update cache *****/
-      NumCtys = (unsigned) DB_GetNumRowsTable ("countries");
+      NumCtys = (unsigned) DB_GetNumRowsTable ("cty_countrs");
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS,Hie_Lvl_SYS,-1L,
                                     FigCch_UNSIGNED,&NumCtys);
      }
@@ -1911,10 +1938,10 @@ unsigned Cty_GetCachedNumCtysWithInss (void)
       /***** Get current number of countries with institutions from cache *****/
       NumCtysWithInss = (unsigned)
       DB_QueryCOUNT ("can not get number of countries with institutions",
-		     "SELECT COUNT(DISTINCT countries.CtyCod)"
-		     " FROM countries,"
+		     "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
+		     " FROM cty_countrs,"
 			   "ins_instits"
-		     " WHERE countries.CtyCod=ins_instits.CtyCod");
+		     " WHERE cty_countrs.CtyCod=ins_instits.CtyCod");
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_INSS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithInss);
      }
@@ -1937,11 +1964,11 @@ unsigned Cty_GetCachedNumCtysWithCtrs (void)
       /***** Get current number of countries with centers from database and update cache *****/
       NumCtysWithCtrs = (unsigned)
       DB_QueryCOUNT ("can not get number of countries with centers",
-		     "SELECT COUNT(DISTINCT countries.CtyCod)"
-		     " FROM countries,"
+		     "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
+		     " FROM cty_countrs,"
 		           "ins_instits,"
 		           "ctr_centers"
-		     " WHERE countries.CtyCod=ins_instits.CtyCod"
+		     " WHERE cty_countrs.CtyCod=ins_instits.CtyCod"
 		     " AND ins_instits.InsCod=ctr_centers.InsCod");
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CTRS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithCtrs);
@@ -1963,12 +1990,12 @@ unsigned Cty_GetCachedNumCtysWithDegs (void)
      {
       NumCtysWithDegs = (unsigned)
       DB_QueryCOUNT ("can not get number of countries with degrees",
-		     "SELECT COUNT(DISTINCT countries.CtyCod)"
-		     " FROM countries,"
+		     "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
+		     " FROM cty_countrs,"
 		           "ins_instits,"
 		           "ctr_centers,"
 		           "deg_degrees"
-		     " WHERE countries.CtyCod=ins_instits.CtyCod"
+		     " WHERE cty_countrs.CtyCod=ins_instits.CtyCod"
 		     " AND ins_instits.InsCod=ctr_centers.InsCod"
 		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod");
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_DEGS,Hie_Lvl_SYS,-1L,
@@ -1993,13 +2020,13 @@ unsigned Cty_GetCachedNumCtysWithCrss (void)
       /***** Get current number of countries with courses from database and update cache *****/
       NumCtysWithCrss = (unsigned)
       DB_QueryCOUNT ("can not get number of countries with courses",
-		     "SELECT COUNT(DISTINCT countries.CtyCod)"
-		     " FROM countries,"
+		     "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
+		     " FROM cty_countrs,"
 		           "ins_instits,"
 		           "ctr_centers,"
 		           "deg_degrees,"
 		           "crs_courses"
-		     " WHERE countries.CtyCod=ins_instits.CtyCod"
+		     " WHERE cty_countrs.CtyCod=ins_instits.CtyCod"
 		     " AND ins_instits.InsCod=ctr_centers.InsCod"
 		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		     " AND deg_degrees.DegCod=crs_courses.DegCod");
@@ -2032,14 +2059,14 @@ unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery,
       /***** Get current number of countries with users from database and update cache *****/
       NumCtysWithUsrs = (unsigned)
       DB_QueryCOUNT ("can not get number of countries with users",
-		     "SELECT COUNT(DISTINCT countries.CtyCod)"
-		     " FROM countries,"
+		     "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
+		     " FROM cty_countrs,"
 		           "ins_instits,"
 		           "ctr_centers,"
 		           "deg_degrees,"
 		           "crs_courses,"
 		           "crs_usr"
-		     " WHERE %scountries.CtyCod=ins_instits.CtyCod"
+		     " WHERE %scty_countrs.CtyCod=ins_instits.CtyCod"
 		     " AND ins_instits.InsCod=ctr_centers.InsCod"
 		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		     " AND deg_degrees.DegCod=crs_courses.DegCod"
