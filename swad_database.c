@@ -124,9 +124,9 @@ mysql> DESCRIBE IP_prefs;
 		   "INDEX(UsrCod),"
 		   "INDEX(LastChange))");
 
-   /***** Table actions *****/
+   /***** Table act_actions *****/
 /*
-mysql> DESCRIBE actions;
+mysql> DESCRIBE act_actions;
 +----------+---------------+------+-----+---------+-------+
 | Field    | Type          | Null | Key | Default | Extra |
 +----------+---------------+------+-----+---------+-------+
@@ -137,7 +137,7 @@ mysql> DESCRIBE actions;
 +----------+---------------+------+-----+---------+-------+
 4 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS actions ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS act_actions ("
 			"ActCod INT NOT NULL DEFAULT -1,"
 			"Language CHAR(2) NOT NULL,"
 			"Obsolete ENUM('N','Y') NOT NULL DEFAULT 'N',"
@@ -145,9 +145,9 @@ mysql> DESCRIBE actions;
 		   "UNIQUE INDEX(ActCod,Language),"
 		   "INDEX(Txt))");
 
-   /***** Table actions_MFU *****/
+   /***** Table act_MFU *****/
 /*
-mysql> DESCRIBE actions_MFU;
+mysql> DESCRIBE act_MFU;
 +-----------+----------+------+-----+---------+-------+
 | Field     | Type     | Null | Key | Default | Extra |
 +-----------+----------+------+-----+---------+-------+
@@ -158,7 +158,7 @@ mysql> DESCRIBE actions_MFU;
 +-----------+----------+------+-----+---------+-------+
 4 rows in set (0.01 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS actions_MFU ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS act_MFU ("
 			"UsrCod INT NOT NULL,"
 			"ActCod INT NOT NULL,"
 			"Score FLOAT NOT NULL,"

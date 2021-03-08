@@ -17,10 +17,10 @@ CREATE TABLE IF NOT EXISTS IP_prefs (
 	INDEX(UsrCod),
 	INDEX(LastChange));
 --
--- Table actions: stores the text that describes each of the actions.
+-- Table act_actions: stores the text that describes each of the actions.
 -- Each action has a numeric code associated to it that persists over time.
 --
-CREATE TABLE IF NOT EXISTS actions (
+CREATE TABLE IF NOT EXISTS act_actions (
 	ActCod INT NOT NULL DEFAULT -1,
 	Language CHAR(2) NOT NULL,
 	Obsolete ENUM('N','Y') NOT NULL DEFAULT 'N',
@@ -28,9 +28,9 @@ CREATE TABLE IF NOT EXISTS actions (
 	UNIQUE INDEX(ActCod,Language),
 	INDEX(Txt));
 --
--- Table actions_MFU: stores the recent actions more frequently made by each user
+-- Table act_MFU: stores the recent actions more frequently made by each user
 --
-CREATE TABLE IF NOT EXISTS actions_MFU (
+CREATE TABLE IF NOT EXISTS act_MFU (
 	UsrCod INT NOT NULL,
 	ActCod INT NOT NULL,
 	Score FLOAT NOT NULL,

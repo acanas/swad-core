@@ -1555,23 +1555,23 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActSeeCty] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"List countries"	// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"List countries"	// Need Übersetzung
 #elif L==3	// en
 	"List countries"
 #elif L==4	// es
-	""
+	"Listar pa&iacute;ses"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"List countries"	// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Listar pa&iacute;ses"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"List countries"	// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"List countries"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"List countries"	// Precisa de tradução
 #endif
 	,
 	[ActSeePen] =
@@ -1597,44 +1597,44 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActSeeLnk] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"See institutional links"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"See institutional links"		// Need Übersetzung
 #elif L==3	// en
 	"See institutional links"
 #elif L==4	// es
-	""
+	"Ver enlaces institucionales"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"See institutional links"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver enlaces institucionales"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"See institutional links"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"See institutional links"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"See institutional links"		// Precisa de tradução
 #endif
 	,
 	[ActLstPlg] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"List plugins"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"List plugins"			// Need Übersetzung
 #elif L==3	// en
 	"List plugins"
 #elif L==4	// es
-	""
+	"Listar complementos"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"List plugins"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Listar complementos"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"List plugins"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"List plugins"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"List plugins"			// Precisa de tradução
 #endif
 	,
 	[ActMtn] =
@@ -1660,149 +1660,149 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActPrnSysInf] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Print information on the platform"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Print information on the platform"			// Need Übersetzung
 #elif L==3	// en
 	"Print information on the platform"
 #elif L==4	// es
 	"Imprimir informaci&oacute;n sobre la plataforma"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Print information on the platform"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Imprimir informaci&oacute;n sobre la plataforma"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Print information on the platform"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Print information on the platform"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Print information on the platform"			// Precisa de tradução
 #endif
 	,
 	[ActEdiCty] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Edit countries"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Edit countries"		// Need Übersetzung
 #elif L==3	// en
 	"Edit countries"
 #elif L==4	// es
-	""
+	"Editar pa&iacute;ses"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Edit countries"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar pa&iacute;ses"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Edit countries"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Edit countries"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Edit countries"		// Precisa de tradução
 #endif
 	,
 	[ActNewCty] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Request the creation of a country"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Request the creation of a country"			// Need Übersetzung
 #elif L==3	// en
 	"Request the creation of a country"
 #elif L==4	// es
-	""
+	"Solicitar la creaci&oacute;n de un pa&iacute;s"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Request the creation of a country"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la creaci&oacute;n de un pa&iacute;s"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Request the creation of a country"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Request the creation of a country"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Request the creation of a country"			// Precisa de tradução
 #endif
 	,
 	[ActRemCty] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Remove a country"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Remove a country"			// Need Übersetzung
 #elif L==3	// en
 	"Remove a country"
 #elif L==4	// es
-	""
+	"Eliminar un pa&iacute;s"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Remove a country"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un pa&iacute;s"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Remove a country"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Remove a country"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Remove a country"			// Precisa de tradução
 #endif
 	,
 	[ActRenCty] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Change the name of a country"			// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Change the name of a country"			// Need Übersetzung
 #elif L==3	// en
 	"Change the name of a country"
 #elif L==4	// es
-	""
+	"Cambiar el nombre de un pa&iacute;s"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Change the name of a country"			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el nombre de un pa&iacute;s"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Change the name of a country"			// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Change the name of a country"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Change the name of a country"			// Precisa de tradução
 #endif
 	,
 	[ActChgCtyWWW] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Change the web of country"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Change the web of country"		// Need Übersetzung
 #elif L==3	// en
-	"Change web of country"
+	"Change the web of country"
 #elif L==4	// es
-	""
+	"Cambiar la web de un pa&iacute;s"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Change the web of country"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la web de un pa&iacute;s"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Change the web of country"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Change the web of country"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Change the web of country"		// Precisa de tradução
 #endif
 	,
 	[ActSeeBan] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"See banners"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"See banners"		// Need Übersetzung
 #elif L==3	// en
 	"See banners"
 #elif L==4	// es
-	""
+	"Ver banners"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"See banners"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver banners"		// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"See banners"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"See banners"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"See banners"		// Precisa de tradução
 #endif
 	,
 	[ActEdiBan] =

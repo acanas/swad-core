@@ -110,8 +110,11 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
 
    /***** Get most frequently used actions *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get most frequently used actions",
-			     "SELECT ActCod FROM actions_MFU"
-			     " WHERE UsrCod=%ld ORDER BY Score DESC,LastClick DESC",
+			     "SELECT ActCod"	// row[0]
+			     " FROM act_MFU"
+			     " WHERE UsrCod=%ld"
+			     " ORDER BY Score DESC,"
+			               "LastClick DESC",
 			     Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Write list of frequently used actions *****/
@@ -152,13 +155,14 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
    if (Gbl.Usrs.Me.UsrDat.UsrCod > 0)
      {
       /***** Get my most frequently used actions *****/
-      NumActions =
-      (unsigned) DB_QuerySELECT (&mysql_res,"can not get"
-					    " most frequently used actions",
-				 "SELECT ActCod FROM actions_MFU"
-				 " WHERE UsrCod=%ld"
-				 " ORDER BY LastClick DESC,Score DESC",
-				 Gbl.Usrs.Me.UsrDat.UsrCod);
+      NumActions = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get the most frequently used actions",
+		      "SELECT ActCod"	// row[0]
+		      " FROM act_MFU"
+		      " WHERE UsrCod=%ld"
+		      " ORDER BY LastClick DESC,"
+		                "Score DESC",
+		      Gbl.Usrs.Me.UsrDat.UsrCod);
 
       /***** Loop over list of frequently used actions *****/
       for (NumAct = 0;
@@ -349,9 +353,12 @@ void MFU_UpdateMFUActions (void)
 
    /***** Get current score *****/
    if (DB_QuerySELECT (&mysql_res,"can not get score for current action",
-	               "SELECT Score FROM actions_MFU"
-		       " WHERE UsrCod=%ld AND ActCod=%ld",
-		       Gbl.Usrs.Me.UsrDat.UsrCod,ActCod))
+	               "SELECT Score"	// row[0]
+	               " FROM act_MFU"
+		       " WHERE UsrCod=%ld"
+		       " AND ActCod=%ld",
+		       Gbl.Usrs.Me.UsrDat.UsrCod,
+		       ActCod))
      {
       row = mysql_fetch_row (mysql_res);
       if (sscanf (row[0],"%lf",&Score) != 1)
@@ -368,7 +375,7 @@ void MFU_UpdateMFUActions (void)
 
    /***** Update score for the current action *****/
    DB_QueryREPLACE ("can not update most frequently used actions",
-		    "REPLACE INTO actions_MFU"
+		    "REPLACE INTO act_MFU"
 		    " (UsrCod,ActCod,Score,LastClick)"
 		    " VALUES"
 		    " (%ld,%ld,'%15lg',NOW())",
@@ -376,7 +383,8 @@ void MFU_UpdateMFUActions (void)
 
    /***** Update score for other actions *****/
    DB_QueryUPDATE ("can not update most frequently used actions",
-		   "UPDATE actions_MFU SET Score=GREATEST(Score*'%.15lg','%.15lg')"
+		   "UPDATE act_MFU"
+		   " SET Score=GREATEST(Score*'%.15lg','%.15lg')"
 		   " WHERE UsrCod=%ld AND ActCod<>%ld",
                    MFU_DECREASE_FACTOR,MFU_MIN_SCORE,
                    Gbl.Usrs.Me.UsrDat.UsrCod,ActCod);

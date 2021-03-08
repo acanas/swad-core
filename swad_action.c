@@ -3959,8 +3959,10 @@ static const char *Act_GetActionTextFromDB (long ActCod)	// TODO: Remove when da
 
    /***** Get test for an action from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get text for an action",
-	               "SELECT Txt FROM actions"
-	               " WHERE ActCod=%ld AND Language='%s'",
+	               "SELECT Txt"	// row[0]
+	               " FROM act_actions"
+	               " WHERE ActCod=%ld"
+	               " AND Language='%s'",
                        ActCod,Lan_STR_LANG_ID[Lan_LANGUAGE_ES]))
      {
       /***** Get text *****/
