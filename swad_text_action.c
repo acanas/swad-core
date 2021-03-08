@@ -8764,9 +8764,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Administer project documents"
+	"Manage the documents of a project"
 #elif L==4	// es
-	"Administrar documentos de un proyecto"
+	"Administrar los documentos de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -8850,7 +8850,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Set source of copy in project documents"
 #elif L==4	// es
-	""
+	"Establecer origen de copia en los documentos de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -8871,7 +8871,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Paste a folder or file into project documents"
 #elif L==4	// es
-	""
+	"Pegar una carpeta o un archivo en los documentos de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -8892,7 +8892,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Remove a non empty folder from project documents"
 #elif L==4	// es
-	""
+	"Eliminar una carpeta no vac&iacute;a de los documentos de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -8913,7 +8913,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Form to create a folder or file in project documents"
 #elif L==4	// es
-	""
+	"Formulario para crear una carpeta o un archivo en los documentos de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -8934,7 +8934,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Create a new folder in project documents"
 #elif L==4	// es
-	""
+	"Crear una nueva carpeta en los documentos de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -8955,7 +8955,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Create a new link in project documents"
 #elif L==4	// es
-	""
+	"Crear un nuevo enlace en los documentos de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -8976,7 +8976,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Rename a folder in project documents"
 #elif L==4	// es
-	""
+	"Renombrar una carpeta en los documentos de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -8995,9 +8995,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a file in project documents using Dropzone.js"
+	"Send a file in project documents using Dropzone.js"
 #elif L==4	// es
-	""
+	"Enviar un archivo en los documentos de un proyecto usando Dropzone.js"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9016,9 +9016,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a file in project documents using the classic way"
+	"Send a file in project documents using the classic way"
 #elif L==4	// es
-	""
+	"Enviar un archivo en los documentos de un proyecto de la forma cl&aacute;sica"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9039,7 +9039,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Expand a folder in project documents"
 #elif L==4	// es
-	""
+	"Expandir una carpeta en los documentos de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9060,7 +9060,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Contract a folder in project documents"
 #elif L==4	// es
-	""
+	"Contraer una carpeta en los documentos de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9081,7 +9081,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Compress a folder in project documents"
 #elif L==4	// es
-	""
+	"Comprimir una carpeta en los documentos de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9100,9 +9100,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file in project documents"
+	"See metadata of a file in project documents"
 #elif L==4	// es
-	""
+	"Ver metadatos de un archivo en los documentos de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9123,7 +9123,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Change metadata of a file in project documents"
 #elif L==4	// es
-	""
+	"Cambiar los metadatos de un archivo en los documentos de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9144,7 +9144,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Download a file from project documents"
 #elif L==4	// es
-	""
+	"Descargar un archivo en los documentos de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9163,9 +9163,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin. project assessment"
+	"Manage a project assessment"
 #elif L==4	// es
-	""
+	"Administrar la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9186,7 +9186,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Request removal of a file from project assessment"
 #elif L==4	// es
-	""
+	"Solicitar la eliminaci&oacute;n de un archivo de la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9207,7 +9207,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Remove a file from project assessment"
 #elif L==4	// es
-	""
+	"Eliminar un archivo de la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9228,7 +9228,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Remove an empty folder from project assessment"
 #elif L==4	// es
-	""
+	"Eliminar una carpeta vac&iacute;a de la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9249,7 +9249,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Set source of copy in project assessment"
 #elif L==4	// es
-	""
+	"Establecer origen de copia en la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9270,7 +9270,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Paste a folder or file into project assessment"
 #elif L==4	// es
-	""
+	"Pegar una carpeta o archivo en la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9291,7 +9291,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Remove a non empty folder from project assessment"
 #elif L==4	// es
-	""
+	"Eliminar una carpeta no vac&iacute;a de la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9312,7 +9312,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Form to create a folder or file in project assessment"
 #elif L==4	// es
-	""
+	"Formulario para crear una carpeta o archivo en la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9333,7 +9333,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Create a new folder in project assessment"
 #elif L==4	// es
-	""
+	"Crear una nueva carpeta en la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9354,7 +9354,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Create a new link in project assessment"
 #elif L==4	// es
-	""
+	"Creat un nuevo enlace en la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9375,7 +9375,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Rename a folder in project assessment"
 #elif L==4	// es
-	""
+	"Renombrar una carpeta en la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9394,9 +9394,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a file in project assessment using Dropzone.js"
+	"Enviar a file in project assessment using Dropzone.js"
 #elif L==4	// es
-	""
+	"Enviar un archivo a la zona de evaluaci&oacute;n de un proyecto usando Dropzone.js"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9415,9 +9415,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a file in project assessment using the classic way"
+	"Enviar a file in project assessment using the classic way"
 #elif L==4	// es
-	""
+	"Enviar un archivo a la zona de evaluaci&oacute;n de un proyecto de forma clásica"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9438,7 +9438,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Expand a folder in project assessment"
 #elif L==4	// es
-	""
+	"Expandir una carpeta en la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9459,7 +9459,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Contract a folder in project assessment"
 #elif L==4	// es
-	""
+	"Contraer una carpeta en la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9480,7 +9480,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Compress a folder in project assessment"
 #elif L==4	// es
-	""
+	"Comprimir una carpeta en la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9499,9 +9499,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file in project assessment"
+	"See metadata of a file in project assessment"
 #elif L==4	// es
-	""
+	"Ver metadatos de un archivo en la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9522,7 +9522,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Change metadata of a file in project assessment"
 #elif L==4	// es
-	""
+	"Cambiar metadatos de un archivo en la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -9543,7 +9543,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Download a file from project assessment"
 #elif L==4	// es
-	""
+	"Descargar un archivo de la zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11557,9 +11557,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Refresh current question when playing a game (as student)"
+	"Refresh current question while playing a match (as student)"
 #elif L==4	// es
-	""
+	"Refrescar pregunta actual mientras se juega una partida (como estudiante)"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11578,9 +11578,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show all my matches results in the current course"
+	"See all my matches results in the current course"
 #elif L==4	// es
-	""
+	"Ver todos mis resultados en partidas de la asignatura actual"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11599,9 +11599,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show all my matches results in a given game"
+	"See all my matches results in a given game"
 #elif L==4	// es
-	""
+	"Ver todos mis resultados en partidas de un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11620,9 +11620,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show all my matches results in a given match"
+	"See my results in a given match"
 #elif L==4	// es
-	""
+	"Ver mis resultados en una partida"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11641,9 +11641,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show one match result of me as student"
+	"See details of a match result of me as student"
 #elif L==4	// es
-	""
+	"Ver detalles del resultado de una partida m&iacute;a como estudiante"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11664,7 +11664,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Select users and range of dates to see matches results"
 #elif L==4	// es
-	""
+	"Seleccionar usuarios y rango de fechas para ver resultados de partidas"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11683,9 +11683,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show all matches results of selected users in the current course"
+	"See all matches results of selected users in the current course"
 #elif L==4	// es
-	""
+	"Ver resultados de todas las partidas de los usuarios seleccionados en la asignatura actual"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11704,9 +11704,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show all matches results in a given game"
+	"See all matches results in a given game"
 #elif L==4	// es
-	""
+	"Ver todos los resultados de las partidas de un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11725,9 +11725,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show all matches results in a given game"
+	"See results de un usuario in a given match"
 #elif L==4	// es
-	""
+	"Ver los resultados de un usuario en una partida"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11746,9 +11746,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show one match result of other user"
+	"See details of a match result of other user"
 #elif L==4	// es
-	""
+	"Ver detalles del resultado de la partida de otro usuario"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11767,9 +11767,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change visibility of match results for students"
+	"Change the visibility of match results"
 #elif L==4	// es
-	""
+	"Cambiar la visibilidad de los resultados de partidas"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11830,13 +11830,13 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Edit game"
+	"Edit a game"
 #elif L==4	// es
-	"Editar juego"
+	"Editar un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	"Editar juego"		// Okoteve traducción
+	"Editar un juego"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -11851,13 +11851,13 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Create new game"
+	"Create a new game"
 #elif L==4	// es
-	"Crear nuevo juego"
+	"Crear un nuevo juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	"Crear nuevo juego"	// Okoteve traducción
+	"Crear un nuevo juego"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -11872,13 +11872,13 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Modify data of an existing game"
+	"Modify the data of a game"
 #elif L==4	// es
-	"Modificar datos de un juego existente"
+	"Modificar los datos de un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	"Modificar datos de un juego existente"	// Okoteve traducción
+	"Modificar los datos de un juego"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -11895,7 +11895,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Request the removal of a game"
 #elif L==4	// es
-	""
+	"Solicitar la eliminaci&oacute;n de un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11914,9 +11914,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove game"
+	"Remove a game"
 #elif L==4	// es
-	""
+	"Eliminar un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11935,9 +11935,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Hide game"
+	"Hide a game"
 #elif L==4	// es
-	""
+	"Ocultar un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11956,9 +11956,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show game"
+	"Show a game"
 #elif L==4	// es
-	""
+	"Mostrar un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11979,7 +11979,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Add a new question to a game"
 #elif L==4	// es
-	""
+	"A&ntilde;adir una nueva pregunta a un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -11998,9 +11998,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"List test questions to select one or several questions"
+	"List questions to add some of them to a game"
 #elif L==4	// es
-	""
+	"Listar preguntas para a&ntilde;adir algunas de ellas a un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12019,9 +12019,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Add selected test questions to game"
+	"Add the selected test questions to a game"
 #elif L==4	// es
-	""
+	"A&ntilde;adir las preguntas seleccionadas a un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12042,7 +12042,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Request the removal of a question of a game"
 #elif L==4	// es
-	""
+	"Solicitar la eliminaci&oacute;n de una pregunta de un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12063,7 +12063,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Confirm the removal of a question of a game"
 #elif L==4	// es
-	""
+	"Confirmar la eliminaci&oacute;n de una pregunta de un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12084,7 +12084,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Move up a question of a game"
 #elif L==4	// es
-	""
+	"Mover hacia arriba una pregunta en un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12105,7 +12105,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Move down a question of a game"
 #elif L==4	// es
-	""
+	"Mover hacia abajo una pregunta en un juego"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12124,9 +12124,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show one survey"
+	"Show a survey"
 #elif L==4	// es
-	""
+	"Mostrar una encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12147,7 +12147,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Answer a survey"
 #elif L==4	// es
-	""
+	"Responder una encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12168,7 +12168,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Form to create a new survey"
 #elif L==4	// es
-	""
+	"Formulario para crear una nueva encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12187,9 +12187,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Edit one survey"
+	"Edit a survey"
 #elif L==4	// es
-	""
+	"Editar una encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12208,9 +12208,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Create new survey"
+	"Create a new survey"
 #elif L==4	// es
-	""
+	"Crear una nueva encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12229,9 +12229,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Modify data of an existing survey"
+	"Change a survey"
 #elif L==4	// es
-	""
+	"Cambiar una encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12252,7 +12252,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Request the removal of a survey"
 #elif L==4	// es
-	""
+	"Solicitar la eliminaci&oacute;n de una encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12271,9 +12271,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove survey"
+	"Remove a survey"
 #elif L==4	// es
-	""
+	"Eliminar una encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12294,7 +12294,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Request the reset of answers of a survey"
 #elif L==4	// es
-	""
+	"Solicitar la puesta a cero de las preguntas de una encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12315,7 +12315,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Reset answers of survey"
 #elif L==4	// es
-	""
+	"Poner a cero las respuestas de una encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12334,9 +12334,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Hide survey"
+	"Hide a survey"
 #elif L==4	// es
-	""
+	"Ocultar una encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12355,9 +12355,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show survey"
+	"Unhide a survey"
 #elif L==4	// es
-	""
+	"Mostrar una encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12378,7 +12378,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Edit a new question for a survey"
 #elif L==4	// es
-	""
+	"Editar una nueva pregunta para una encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12397,9 +12397,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a question of a survey"
+	"Create a question of a survey"
 #elif L==4	// es
-	""
+	"Crear una pregunta de una encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12420,7 +12420,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Request the removal of a question of a survey"
 #elif L==4	// es
-	""
+	"Solicitar la eliminaci&oacute;n de una pregunta de una encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12441,7 +12441,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Confirm the removal of a question of a survey"
 #elif L==4	// es
-	""
+	"Confirmar la eliminaci&oacute;n de una pregunta de una encuesta"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12460,9 +12460,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Documents zone of the institution (see or admin)"
+	"Documents zone of the institution (see or manage)"
 #elif L==4	// es
-	""
+	"Zona de documentos de la instituci&oacute;n (ver o administrar)"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12481,9 +12481,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the shared files zone of the institution"
+	"Manage the shared files zone of the institution"
 #elif L==4	// es
-	""
+	"Administrar la zona de archivos compartidos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12502,9 +12502,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Documents zone of the center (see or admin)"
+	"Documents zone of the center (see or manage)"
 #elif L==4	// es
-	""
+	"Zona de documentos del centro (ver o administrar)"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12523,9 +12523,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the shared files zone of the center"
+	"Manage the shared files zone of the center"
 #elif L==4	// es
-	""
+	"Administrar la zona de documentos compartidos del centro"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12544,9 +12544,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Documents zone of the degree (see or admin)"
+	"Documents zone of the degree (see or manage)"
 #elif L==4	// es
-	""
+	"Zona de documentos de la titulaci&oacute;n (ver o administrar)"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12565,9 +12565,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the shared files zone of the degree"
+	"Manage the shared files zone of the degree"
 #elif L==4	// es
-	""
+	"Administrar la zona de archivos compartidos de la titulaci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12586,9 +12586,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Documents zone of the course (see or admin)"
+	"Documents zone of the course (see or manage)"
 #elif L==4	// es
-	""
+	"Zona de documentos de la asignatura (ver o administrar)"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12607,9 +12607,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request the administration of the files of the teachers' zone of the course or of a group"
+	"Request the management of the files of the teachers' zone of the course or of a group"
 #elif L==4	// es
-	""
+	"Solicitar la administraci&oacute;n de la zona de archivos de los profesores de la asignatura o de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12628,9 +12628,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request the administration of the files of the shared zone of the course or of a group"
+	"Request the management of the files of the shared zone of the course or of a group"
 #elif L==4	// es
-	""
+	"Solicitar la administraci&oacute;n de la zona de archivos compartidos de la asignatura o de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12649,9 +12649,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"One user sends works of the course"
+	"Manage the assignments/works of a user"
 #elif L==4	// es
-	""
+	"Administrar las actividades/trabajos de un usuario"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12670,9 +12670,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"A teacher requests edition of works sent to the course"
+	"Manage the assignments/works in the course"
 #elif L==4	// es
-	""
+	"Administrar las actividades/trabajos en una asignatura"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12691,9 +12691,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Marks zone (see or admin)"
+	"Marks zone (see or manage)"
 #elif L==4	// es
-	""
+	"Zona de calificaciones (ver o administrar)"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12712,9 +12712,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show the briefcase of private archives"
+	"Manage the briefcase of private archives"
 #elif L==4	// es
-	""
+	"Gestionar el malet&iacute;n de archivos privados"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12733,9 +12733,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change to see institution documents"
+	"Change to view mode of the documents zone of the institution "
 #elif L==4	// es
-	""
+	"Cambiar a modo vista de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12756,7 +12756,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"See the files of the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Ver los archivos de la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12777,7 +12777,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Expand a folder in institution documents"
 #elif L==4	// es
-	""
+	"Expandir una carpeta en la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12798,7 +12798,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Contract a folder in institution documents"
 #elif L==4	// es
-	""
+	"Contraer una carpeta en la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12819,7 +12819,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Compress a folder in institution documents"
 #elif L==4	// es
-	""
+	"Comprimir una carpeta en la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12838,9 +12838,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the documents zone of the institution"
+	"See the metadata of a file of the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Ver los metadatos de un archivo de la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12861,7 +12861,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Download a file in documents zone of the institution"
 #elif L==4	// es
-	""
+	"Descargar un archivo de la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12880,9 +12880,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change to administrate institution documents"
+	"Change to administration mode of institution documents"
 #elif L==4	// es
-	""
+	"Cambiar modo de administraci&oacute;n de los documentos de una instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12901,9 +12901,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the files of the documents zone of the institution"
+	"Manage the files of the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Administrar los archivos de la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12924,7 +12924,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Request removal of a file in the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Solicitar la eliminaci&oacute;n de un archivo de la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12945,7 +12945,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Remove a file in the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Eliminar un archivo de la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12966,7 +12966,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Remove a folder empty the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Eliminar una carpeta vac&iacute;a de la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -12987,7 +12987,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Set source of copy in the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Establecer origen de copia en la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -13008,7 +13008,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Paste a folder or file in the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Pegar una carpeta o archivo en la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -13029,7 +13029,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Remove a folder no empty in the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Eliminar una carpeta no vac&iacute;a de la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -13050,7 +13050,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Form to crear a folder or file in the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Formulario para crear una carpeta o un archivo en la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -13071,7 +13071,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Create a new folder in the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Crear una nueva carpeta en la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -13092,7 +13092,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Create a new link in the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Crear una nuevo enlace la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -13113,7 +13113,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Rename a folder in the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Renombrar una carpeta en la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -13132,9 +13132,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a file in the documents zone of the institution using Dropzone.js"
+	"Send a file to the documents zone of the institution using Dropzone.js"
 #elif L==4	// es
-	""
+	"Enviar un archivo a una zona de documentos de la instituci&oacute;n usando Dropzone.js"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -13153,9 +13153,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a file in the documents zone of the institution using the classic way"
+	"Send a file in the documents zone of the institution using the classic way"
 #elif L==4	// es
-	""
+	"Enviar un archivo a una zona de documentos de la instituci&oacute;n de forma cl&aacute;sica"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -13174,9 +13174,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Expand a folder when administrating the documents zone of the institution"
+	"Expand a folder when managing the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Expandir una carpeta al administrar la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -13197,7 +13197,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Contract a folder when administrating the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Contraer una carpeta al administrar la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -13218,7 +13218,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Compress a folder when administrating the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Comprimir una carpeta al administrar la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -13237,9 +13237,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show hidden folder or file of the documents zone of the institution"
+	"Unhide a folder or file of the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Mostrar una carpeta o un archivo al administrar la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -13258,9 +13258,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Hide folder or file of the documents zone of the institution"
+	"Hide a folder or file of the documents zone of the institution"
 #elif L==4	// es
-	""
+	"Ocultar una carpeta o un archivo al administrar la zona de documentos de la instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -13279,7 +13279,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the documents zone of the institution"
+	"See the metadata of a file of the documents zone of the institution"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13657,7 +13657,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the shared zone of the institution"
+	"See the metadata of a file of the shared zone of the institution"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13825,7 +13825,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the documents zone of the center"
+	"See the metadata of a file of the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -13888,7 +13888,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the files of the documents zone of the center"
+	"Manage the files of the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14266,7 +14266,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the documents zone of the center"
+	"See the metadata of a file of the documents zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14644,7 +14644,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the shared zone of the center"
+	"See the metadata of a file of the shared zone of the center"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14812,7 +14812,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the documents zone of the degree"
+	"See the metadata of a file of the documents zone of the degree"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -14875,7 +14875,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the files of the documents zone of the degree"
+	"Manage the files of the documents zone of the degree"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -15253,7 +15253,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the documents zone of the degree"
+	"See the metadata of a file of the documents zone of the degree"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -15631,7 +15631,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the shared zone of the degree"
+	"See the metadata of a file of the shared zone of the degree"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -15799,7 +15799,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the documents zone of the course"
+	"See the metadata of a file of the documents zone of the course"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -15925,7 +15925,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the documents zone of a group"
+	"See the metadata of a file of the documents zone of a group"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -15988,7 +15988,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the files of the documents zone of the course"
+	"Manage the files of the documents zone of the course"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -16366,7 +16366,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the documents zone"
+	"See the metadata of a file of the documents zone"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -16429,7 +16429,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the files of the documents zone of a group"
+	"Manage the files of the documents zone of a group"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -16807,7 +16807,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the documents zone of a group"
+	"See the metadata of a file of the documents zone of a group"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -16891,7 +16891,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the teachers' files zone of the course"
+	"Manage the teachers' files zone of the course"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -17227,7 +17227,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the teachers' zone of the course"
+	"See the metadata of a file of the teachers' zone of the course"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -17290,7 +17290,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the teachers' files zone of a group"
+	"Manage the teachers' files zone of a group"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -17626,7 +17626,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the teachers' zone of a group"
+	"See the metadata of a file of the teachers' zone of a group"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -17710,7 +17710,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the shared files zone of the course"
+	"Manage the shared files zone of the course"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -18046,7 +18046,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the shared zone of the course"
+	"See the metadata of a file of the shared zone of the course"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -18109,7 +18109,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the shared files zone of a group"
+	"Manage the shared files zone of a group"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -18445,7 +18445,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the shared zone of a group"
+	"See the metadata of a file of the shared zone of a group"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -18508,7 +18508,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Edit all the works sent to the course"
+	"Manage all assignments/works in a course"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -18844,7 +18844,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of assignments of a user"
+	"See the metadata of a file of assignments of a user"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -19222,7 +19222,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of works of a user"
+	"See the metadata of a file of works of a user"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -19600,7 +19600,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of assignments in a course"
+	"See the metadata of a file of assignments in a course"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -19978,7 +19978,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of works in a course"
+	"See the metadata of a file of works in a course"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -20125,7 +20125,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the marks zone of the course"
+	"See the metadata of a file of the marks zone of the course"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -20230,7 +20230,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file of the marks zone of a group"
+	"See the metadata of a file of the marks zone of a group"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -20272,7 +20272,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change to admin marks in course/group"
+	"Change to manage marks in course/group"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -20293,7 +20293,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the files of the zone of marks in course"
+	"Manage the files of the zone of marks in course"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -20650,7 +20650,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file in marks administration in course"
+	"See the metadata of a file in marks administration in course"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -20755,7 +20755,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Admin the files of the zone of marks in group"
+	"Manage the files of the zone of marks in group"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -21112,7 +21112,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file in marks administration in group"
+	"See the metadata of a file in marks administration in group"
 #elif L==4	// es
 	""
 #elif L==5	// fr
@@ -21532,7 +21532,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Ask for metadata of a file in the briefcase"
+	"See the metadata of a file in the briefcase"
 #elif L==4	// es
 	""
 #elif L==5	// fr
