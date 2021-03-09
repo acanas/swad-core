@@ -16450,9 +16450,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request the removal of a file in the document zone of a group"
+	"Request the removal of a file from the document zone of a group"
 #elif L==4	// es
-	""
+	"Solicitar la eliminaci&oacute;n de un archivo de la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16471,9 +16471,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a file in the document zone of a group"
+	"Remove a file from the document zone of a group"
 #elif L==4	// es
-	""
+	"Eliminar un archivo de la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16492,9 +16492,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove an empty folder in the document zone of a group"
+	"Remove an empty folder from the document zone of a group"
 #elif L==4	// es
-	""
+	"Eliminar una carpeta vac&iacute;a de la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16515,7 +16515,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Set source of copy in the document zone of a group"
 #elif L==4	// es
-	""
+	"Establecer el origen de copia en la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16536,7 +16536,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Paste a folder or file in the document zone of a group"
 #elif L==4	// es
-	""
+	"Pegar una carpeta o un archivo en la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16555,9 +16555,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a folder no empty in the document zone of a group"
+	"Remove a non-empty folder from the document zone of a group"
 #elif L==4	// es
-	""
+	"Eliminar una carpeta no vac&iacute;a de la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16578,7 +16578,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Form to crear a folder or file in the document zone of a group"
 #elif L==4	// es
-	""
+	"Formulario para crear una carpeta o un archivo en la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16599,7 +16599,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Create a new folder in the document zone of a group"
 #elif L==4	// es
-	""
+	"Crear una nueva carpeta en la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16620,7 +16620,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Create a new link in the document zone of a group"
 #elif L==4	// es
-	""
+	"Crear un nuevo enlace en la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16641,7 +16641,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Rename a folder in the document zone of a group"
 #elif L==4	// es
-	""
+	"Renombrar una carpeta en la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16660,9 +16660,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Send a file in the document zone of a group using Dropzone.js"
+	"Send a file to the document zone of a group using Dropzone.js"
 #elif L==4	// es
-	""
+	"Enviar un archivo a la zona de documentos de un grupo mediante Dropzone.js"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16681,9 +16681,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Send a file in the document zone of a group using the classic way"
+	"Send a file to the document zone of a group using the classic way"
 #elif L==4	// es
-	""
+	"Enviar un archivo a la zona de documentos de un grupo de forma tradicional"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16702,9 +16702,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Expand a folder when administrating the document zone of a group"
+	"Expand a folder when managing the document zone of a group"
 #elif L==4	// es
-	""
+	"Expandir una carpeta al administrar la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16723,9 +16723,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Contract a folder when administrating the document zone of a group"
+	"Contract a folder when mamaging the document zone of a group"
 #elif L==4	// es
-	""
+	"Contraer una carpeta al administrar la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16744,9 +16744,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Compress a folder when administrating the document zone of a group"
+	"Compress a folder when managing the document zone of a group"
 #elif L==4	// es
-	""
+	"Comprimir una carpeta al administrar la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16765,9 +16765,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show hidden folder or file of download"
+	"Unhide a folder or file in the document zone of a group"
 #elif L==4	// es
-	""
+	"Mostrar una carpeta o un archivo en la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16786,9 +16786,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Hide folder or file of download"
+	"Hide a folder or file in the document zone of a group"
 #elif L==4	// es
-	""
+	"Ocultar una carpeta o un archivo en la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16807,9 +16807,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"See the metadata of a file of the document zone of a group"
+	"See the metadata of a file in the document zone of a group"
 #elif L==4	// es
-	""
+	"Ver los metadatos de un archivo en la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16828,9 +16828,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change the metadata of a file of the document zone of a group"
+	"Change the metadata of a file in the document zone of a group"
 #elif L==4	// es
-	""
+	"Cambiar los metadatos de un archivo en la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -16851,7 +16851,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Download a file from the document zone of a group"
 #elif L==4	// es
-	""
+	"Descargar un archivo de la zona de documentos de un grupo"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
