@@ -24178,9 +24178,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Register an administrador in this institution"
+	"Register an administrador in an institution"
 #elif L==4	// es
-	""
+	"Inscribir un administrador en una instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24199,9 +24199,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove an administrador of this institution"
+	"Remove an administrador from an institution"
 #elif L==4	// es
-	""
+	"Eliminar un administrador de una instituci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24220,9 +24220,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Register an administrador in this center"
+	"Register an administrador in a center"
 #elif L==4	// es
-	""
+	"Inscribir un administrador en un centro"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24241,9 +24241,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove an administrador of this center"
+	"Remove an administrador from a center"
 #elif L==4	// es
-	""
+	"Eliminar un administrador de un centro"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24262,9 +24262,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Register an administrador in this degree"
+	"Register an administrador in a degree"
 #elif L==4	// es
-	""
+	"Inscribir un administrador en una titulaci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24283,9 +24283,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove an administrador of this degree"
+	"Remove an administrador from a degree"
 #elif L==4	// es
-	""
+	"Eliminar un administrador en una titulaci&oacute;n"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24304,9 +24304,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a form with IDs of students to be registered/removed to/from current course"
+	"Register/remove several students in/from a course"
 #elif L==4	// es
-	""
+	"Inscribir/eliminar varios estudiantes en/de una asignatura"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24325,9 +24325,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a form with IDs of non-editing teachers to be registered/removed to/from current course"
+	"Register/remove several non-editing teachers in/from a course"
 #elif L==4	// es
-	""
+	"Inscribir/eliminar varios profesores no editores en/de una asignatura"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24346,9 +24346,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Receive a form with IDs of teachers to be registered/removed to/from current course"
+	"Register/remove several teachers in/from a course"
 #elif L==4	// es
-	""
+	"Inscribir/eliminar varios profesores en/de una asignatura"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24367,9 +24367,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Confirm another user's ID"
+	"Confirm a user's ID"
 #elif L==4	// es
-	""
+	"Confirmar el ID de un usuario"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24388,9 +24388,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Confirm another user's ID"
+	"Confirm a student's ID"
 #elif L==4	// es
-	""
+	"Confirmar el ID de un estudiante"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24409,9 +24409,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Confirm another user's ID"
+	"Confirm a teacher's ID"
 #elif L==4	// es
-	""
+	"Confirmar el ID de un profesor"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24430,9 +24430,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show forms to the change another account"
+	"Forms to the change a user's account"
 #elif L==4	// es
-	""
+	"Formularios para cambiar la cuenta de un usuario"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24451,9 +24451,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show forms to the change another account"
+	"Forms to the change a student's account"
 #elif L==4	// es
-	""
+	"Formularios para cambiar la cuenta de un estudiante"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24472,9 +24472,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Show forms to the change another account"
+	"Forms to the change a teacher's account"
 #elif L==4	// es
-	""
+	"Formularios para cambiar la cuenta de un profesor"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24493,9 +24493,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove one of another user's old nicknames"
+	"Remove a user's nickname"
 #elif L==4	// es
-	""
+	"Eliminar el apodo de un usuario"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24514,9 +24514,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove one of another user's old nicknames"
+	"Remove a student's nickname"
 #elif L==4	// es
-	""
+	"Eliminar el apodo de un estudiante"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24535,9 +24535,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove one of another user's old nicknames"
+	"Remove a teacher's nickname"
 #elif L==4	// es
-	""
+	"Eliminar el apodo de un profesor"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24556,9 +24556,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change another user's nickname"
+	"Change a user's nickname"
 #elif L==4	// es
-	""
+	"Cambiar el apodo de un usuario"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24577,9 +24577,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change another user's nickname"
+	"Change a student's nickname"
 #elif L==4	// es
-	""
+	"Cambiar el apodo de un estudiante"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24598,9 +24598,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change another user's nickname"
+	"Change a teacher's nickname"
 #elif L==4	// es
-	""
+	"Cambiar el apodo de un profesor"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24619,9 +24619,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove one of the IDs of another user"
+	"Remove a user's ID"
 #elif L==4	// es
-	""
+	"Eliminar el ID de un usuario"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24640,9 +24640,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove one of the IDs of another user"
+	"Remove a student's ID"
 #elif L==4	// es
-	""
+	"Eliminar el ID de un estudiante"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24661,9 +24661,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove one of the IDs of another user"
+	"Remove a teacher's ID"
 #elif L==4	// es
-	""
+	"Eliminar el ID de un profesor"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24682,9 +24682,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Create a new user's ID for another user"
+	"Create a new user's ID"
 #elif L==4	// es
-	""
+	"Crear un nuevo ID de un usuario"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24703,9 +24703,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Create a new user's ID for another user"
+	"Create a new student's ID"
 #elif L==4	// es
-	""
+	"Crear un nuevo ID de un estudiante"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24724,9 +24724,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Create a new user's ID for another user"
+	"Create a new teacher's ID"
 #elif L==4	// es
-	""
+	"Crear un nuevo ID de un profesor"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24745,9 +24745,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change the password of another user"
+	"Change a user's password "
 #elif L==4	// es
-	""
+	"Cambiar la contrase&ntilde;a de un usuario"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24766,9 +24766,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change the password of another user"
+	"Change a student's password "
 #elif L==4	// es
-	""
+	"Cambiar la contrase&ntilde;a de un estudiante"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24787,9 +24787,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Change the password of another user"
+	"Change a teacher's password "
 #elif L==4	// es
-	""
+	"Cambiar la contrase&ntilde;a de un profesor"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24808,9 +24808,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove one of the email of another user"
+	"Remove a user's email"
 #elif L==4	// es
-	""
+	"Eliminar el correo electr&oacute;nico de un usuario"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24829,9 +24829,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove one of the email of another user"
+	"Remove a student's email"
 #elif L==4	// es
-	""
+	"Eliminar el correo electr&oacute;nico de un estudiante"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24850,9 +24850,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove one of the email of another user"
+	"Remove a teacher's email"
 #elif L==4	// es
-	""
+	"Eliminar el correo electr&oacute;nico de un profesor"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24871,9 +24871,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Create a new user's email for another user"
+	"Create a new user's email"
 #elif L==4	// es
-	""
+	"Crear un nuevo correo electr&oacute;nico de un usuario"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24892,9 +24892,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Create a new user's email for another user"
+	"Create a new student's email"
 #elif L==4	// es
-	""
+	"Crear un nuevo correo electr&oacute;nico de un estudiante"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24913,9 +24913,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Create a new user's email for another user"
+	"Create a new teacher's email"
 #elif L==4	// es
-	""
+	"Crear un nuevo correo electr&oacute;nico de un profesor"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24934,9 +24934,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a student from the current course"
+	"Remove a student from a course"
 #elif L==4	// es
-	""
+	"Eliminar un estudiante de una asignatura"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24955,9 +24955,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a non-editing teacher from the current course"
+	"Remove a non-editing teacher from a course"
 #elif L==4	// es
-	""
+	"Eliminar un profesor no editor de una asignatura"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24976,9 +24976,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove a teacher from the current course"
+	"Remove a teacher from a course"
 #elif L==4	// es
-	""
+	"Eliminar un profesor de una asignatura"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -24999,7 +24999,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Eliminate completely a user from the platform"
 #elif L==4	// es
-	""
+	"Eliminar un usuario completamente de la plataforma"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -25018,9 +25018,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request the removal of all the students from the current course"
+	"Request the removal of all the students from a course"
 #elif L==4	// es
-	""
+	"Solicitar la eliminaci&oacute;n de todos los estudiantes de una asignatura"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -25039,9 +25039,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove all the students from the current course"
+	"Remove all the students from a course"
 #elif L==4	// es
-	""
+	"Eliminar todos los estudiantes de una asignatura"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -25062,7 +25062,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Request the complete elimination of old users"
 #elif L==4	// es
-	""
+	"Solicitar la eliminaci&oacute;n completa de usuarios antiguos"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -25083,7 +25083,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Eliminate completely old users"
 #elif L==4	// es
-	""
+	"Eliminar completamente usuarios antiguos"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -25104,7 +25104,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"List possible duplicate users"
 #elif L==4	// es
-	""
+	"Listar posibles usuarios duplicados"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -25125,7 +25125,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"List users similar to a given one (possible duplicates)"
 #elif L==4	// es
-	""
+	"Listar usuarios similares a uno dado (posibles duplicados)"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -25144,9 +25144,9 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Remove user from list of possible duplicate users"
+	"Remove a user from a list of possible duplicate users"
 #elif L==4	// es
-	""
+	"Eliminar a un usuario de una lista de posibles usuarios duplicados"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -25167,7 +25167,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Request follow several students"
 #elif L==4	// es
-	""
+	"Solicitar seguir a varios estudiantes"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -25188,7 +25188,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Request follow several teachers"
 #elif L==4	// es
-	""
+	"Solicitar seguir a varios profesores"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -25209,7 +25209,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Request unfollow several students"
 #elif L==4	// es
-	""
+	"Solicitar dejar de seguir a varios estudiantes"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -25230,7 +25230,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Request unfollow several teachers"
 #elif L==4	// es
-	""
+	"Solicitar dejar de seguir a varios profesores"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -25251,7 +25251,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Follow several students"
 #elif L==4	// es
-	""
+	"Seguir a varios estudiantes"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -25272,7 +25272,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Follow several teachers"
 #elif L==4	// es
-	""
+	"Seguir a varios profesores"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -25293,7 +25293,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Unfollow several students"
 #elif L==4	// es
-	""
+	"Dejar de seguir a varios estudiantes"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
@@ -25314,7 +25314,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Unfollow several teachers"
 #elif L==4	// es
-	""
+	"Dejar de seguir a varios profesores"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
