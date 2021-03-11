@@ -3743,8 +3743,6 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static const char *Act_GetActionTextFromDB (long ActCod);	// TODO: Remove when database table actions is removed
-
 /*****************************************************************************/
 /****************** Get action from permanent action code ********************/
 /*****************************************************************************/
@@ -3936,46 +3934,10 @@ const char *Act_GetActionText (Act_Action_t Action)
 
    if (Action >= 0 && Action < Act_NUM_ACTIONS)
       if (Txt_Actions[Action])
-	{
 	 if (Txt_Actions[Action][0])
 	    return Txt_Actions[Action];
 
-	 return Act_GetActionTextFromDB (Act_GetActCod (Action));	// TODO: Remove when database table actions is removed
-	}
-
    return "?";
-  }
-
-/*****************************************************************************/
-/********************* Get text for action from database *********************/
-/*****************************************************************************/
-
-static const char *Act_GetActionTextFromDB (long ActCod)	// TODO: Remove when database table actions is removed
-  {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   static char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
-
-   /***** Get test for an action from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get text for an action",
-	               "SELECT Txt"	// row[0]
-	               " FROM act_actions"
-	               " WHERE ActCod=%ld"
-	               " AND Language='%s'",
-                       ActCod,Lan_STR_LANG_ID[Lan_LANGUAGE_ES]))
-     {
-      /***** Get text *****/
-      row = mysql_fetch_row (mysql_res);
-      Str_Copy (ActTxt,row[0],sizeof (ActTxt) - 1);
-     }
-   else	// ActCod-Language not found on database
-      ActTxt[0] = '\0';
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return ActTxt;
   }
 
 /*****************************************************************************/

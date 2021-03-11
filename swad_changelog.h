@@ -600,11 +600,15 @@ TODO: Salvador Romero Cortés: @acanas opción para editar posts
 
 TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates(), por ejemplo al cambiar el color de la gráfica de accesos por día y hora, no se respeta la zona horaria.
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.46 (2021-03-11)"
+#define Log_PLATFORM_VERSION	"SWAD 20.47 (2021-03-11)"
 #define CSS_FILE		"swad20.45.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
+
+	Version 20.47:    Mar 11, 2021  Database table with action texts removed. (307125 lines)
+					1 change necessary in database:
+DROP TABLE IF EXISTS act_actions;
 
 	Version 20.46:    Mar 11, 2021  All actions translated to English and Spanish. (307184 lines)
 	Version 20.45.14: Mar 11, 2021  Some actions translated. (307183 lines)

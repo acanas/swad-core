@@ -124,27 +124,6 @@ mysql> DESCRIBE IP_prefs;
 		   "INDEX(UsrCod),"
 		   "INDEX(LastChange))");
 
-   /***** Table act_actions *****/
-/*
-mysql> DESCRIBE act_actions;
-+----------+---------------+------+-----+---------+-------+
-| Field    | Type          | Null | Key | Default | Extra |
-+----------+---------------+------+-----+---------+-------+
-| ActCod   | int(11)       | NO   | PRI | -1      |       |
-| Language | char(2)       | NO   | PRI | es      |       |
-| Obsolete | enum('N','Y') | NO   |     | N       |       |
-| Txt      | varchar(255)  | NO   | MUL | NULL    |       |
-+----------+---------------+------+-----+---------+-------+
-4 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS act_actions ("
-			"ActCod INT NOT NULL DEFAULT -1,"
-			"Language CHAR(2) NOT NULL,"
-			"Obsolete ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"Txt VARCHAR(255) NOT NULL,"	// Act_MAX_BYTES_ACTION_TXT
-		   "UNIQUE INDEX(ActCod,Language),"
-		   "INDEX(Txt))");
-
    /***** Table act_MFU *****/
 /*
 mysql> DESCRIBE act_MFU;
