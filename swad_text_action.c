@@ -9417,11 +9417,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Enviar a file in the assessment zone of a project using the classic way"
 #elif L==4	// es
-	"Enviar un archivo a la zona de evaluaci&oacute;n de un proyecto de forma clásica"
+	"Enviar un archivo a la zona de evaluaci&oacute;n de un proyecto de forma tradicional"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	"Enviar un archivo a la zona de evaluaci&oacute;n de un proyecto de forma clásica"	// Okoteve traducción
+	"Enviar un archivo a la zona de evaluaci&oacute;n de un proyecto de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -13155,11 +13155,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Send a file in the documents zone of an institution using the classic way"
 #elif L==4	// es
-	"Enviar un archivo a una zona de documentos de una instituci&oacute;n de forma cl&aacute;sica"
+	"Enviar un archivo a una zona de documentos de una instituci&oacute;n de forma tradicional"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	"Enviar un archivo a una zona de documentos de una instituci&oacute;n de forma cl&aacute;sica"	// Okoteve traducción
+	"Enviar un archivo a una zona de documentos de una instituci&oacute;n de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -13575,11 +13575,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Send a file to shared zone of an institution using the classic way"
 #elif L==4	// es
-	"Enviar un archivo a la zona compartida de una instituci&oacute;n de forma cl&aacute;sica"
+	"Enviar un archivo a la zona compartida de una instituci&oacute;n de forma tradicional"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	"Enviar un archivo a la zona compartida de una instituci&oacute;n de forma cl&aacute;sica"	// Okoteve traducción
+	"Enviar un archivo a la zona compartida de una instituci&oacute;n de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -13936,7 +13936,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo de la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -13957,7 +13957,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -13978,7 +13978,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia en la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -13999,7 +13999,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar una carpeta o archivo en la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14020,7 +14020,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&iacute;a en la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14041,7 +14041,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14062,7 +14062,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14083,7 +14083,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo enlace en la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14104,7 +14104,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14125,7 +14125,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de documentos de un centro usando Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14142,11 +14142,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Send a file to the documents zone of a center using the classic way"
 #elif L==4	// es
-	"Enviar un archivo a la zona de documentos de un centro de forma cl&aacute;sica"
+	"Enviar un archivo a la zona de documentos de un centro de forma tradicional"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de documentos de un centro de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14167,7 +14167,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta al administrar la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14188,7 +14188,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta al administrar la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14209,7 +14209,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta al administrar la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14230,7 +14230,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar una carpeta o archivo en la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14251,7 +14251,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ocultar una carpeta o archivo en la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14272,7 +14272,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14293,7 +14293,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14314,7 +14314,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona de documentos de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14335,7 +14335,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo compartido de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14356,7 +14356,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo compartido de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14377,7 +14377,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta compartido vac&iacute;a de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14398,7 +14398,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia en la zona compartida de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14419,7 +14419,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar una carpeta o archivo en la zona compartida de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14440,7 +14440,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&iacute;a de la zona compartida de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14461,7 +14461,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en la zona compartida de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14482,7 +14482,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en la zona compartida de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14503,7 +14503,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo enlace en la zona compartida de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14524,7 +14524,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en la zona compartida de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14545,7 +14545,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona compartida de un centro usando Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14562,11 +14562,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Send a file to shared zone of a center using the classic way"
 #elif L==4	// es
-	"Enviar un archivo a la zona compartida de un centro de forma cl&aacute;sica"
+	"Enviar un archivo a la zona compartida de un centro de forma tradicional"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona compartida de un centro de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14587,7 +14587,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en la zona compartida de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14608,7 +14608,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en la zona compartida de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14629,7 +14629,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en la zona compartida de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14650,7 +14650,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona compartida de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14671,7 +14671,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en la zona compartida de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14692,7 +14692,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona compartida de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14713,7 +14713,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la zona de documentos de la titulaci&oacute;n a modo vista"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14734,7 +14734,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los archivos de la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14755,7 +14755,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14776,7 +14776,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14797,7 +14797,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14818,7 +14818,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14839,7 +14839,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14860,7 +14860,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la zona de documentos de una titulaci&oacute;n a modo administraci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14881,7 +14881,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Administrar la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14902,7 +14902,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo de la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14923,7 +14923,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo de la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14944,7 +14944,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14965,7 +14965,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -14986,7 +14986,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar una carpeta o archivo en la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15007,7 +15007,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&iacute;a de la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15028,7 +15028,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15049,7 +15049,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15070,7 +15070,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo enlace en la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15091,7 +15091,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15112,7 +15112,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de documentos de una titulaci&oacute;n usando Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15133,7 +15133,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de documentos de una titulaci&oacute;n de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15154,7 +15154,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta al administrar la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15175,7 +15175,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta al administrar la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15196,7 +15196,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta al administrar la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15217,7 +15217,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar una carpeta o archivo en la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15238,7 +15238,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ocultar una carpeta o archivo en la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15259,7 +15259,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15280,7 +15280,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15301,7 +15301,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona de documentos de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15322,7 +15322,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo compartido de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15343,7 +15343,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo de la zona compartida de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15364,7 +15364,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de la zona compartida de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15385,7 +15385,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia en la zona compartida de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15406,7 +15406,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar una carpeta o archivo en la zona compartida de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15427,7 +15427,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&iacute;a de la zona compartida de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15448,7 +15448,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en la zona compartida de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15469,7 +15469,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en la zona compartida de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15490,7 +15490,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo enlace en la zona compartida de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15511,7 +15511,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en la zona compartida de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15532,7 +15532,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona compartida de una titulaci&oacute;n usando Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15553,7 +15553,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona compartida de una titulaci&oacute;n de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15574,7 +15574,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en la zona compartida de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15595,7 +15595,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en la zona compartida de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15616,7 +15616,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en la zona compartida de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15637,7 +15637,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona compartida de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15658,7 +15658,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en la zona compartida de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15679,7 +15679,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona compartida de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15700,7 +15700,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la zona de documentos de una asignatura/grupo a modo vista"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15721,7 +15721,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los archivos de la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15742,7 +15742,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15763,7 +15763,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15784,7 +15784,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15805,7 +15805,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15826,7 +15826,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar los metadatos de un archivo de la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15847,7 +15847,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los archivos de la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15868,7 +15868,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15889,7 +15889,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15910,7 +15910,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15931,7 +15931,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15952,7 +15952,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15973,7 +15973,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la zona de documentos de una asignatura/grupo a modo administraci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -15994,7 +15994,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Administrar la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16015,7 +16015,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo de la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16036,7 +16036,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo de la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16057,7 +16057,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16078,7 +16078,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia en la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16099,7 +16099,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar una carpeta o archivo en la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16120,7 +16120,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&iacute;a de la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16141,7 +16141,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16162,7 +16162,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16183,7 +16183,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo enlace en la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16204,7 +16204,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16225,7 +16225,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de documentos de una asignatura usando Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16246,7 +16246,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de documentos de una asignatura de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16267,7 +16267,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta al administrar la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16288,7 +16288,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta al administrar la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16309,7 +16309,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta al administrar la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16330,7 +16330,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar una carpeta o archivo en la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16351,7 +16351,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ocultar una carpeta o archivo en la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16372,7 +16372,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16393,7 +16393,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16414,7 +16414,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona de documentos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16435,7 +16435,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Administrar la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16456,7 +16456,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo de la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16477,7 +16477,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo de la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16498,7 +16498,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16519,7 +16519,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia en la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16540,7 +16540,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar una carpeta o archivo en la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16561,7 +16561,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&iacute;a de la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16582,7 +16582,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16603,7 +16603,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16624,7 +16624,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo enlace en la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16645,7 +16645,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16666,7 +16666,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de documentos de un grupo mediante Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16687,7 +16687,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de documentos de un grupo de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16708,7 +16708,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta al administrar la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16729,7 +16729,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta al administrar la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16750,7 +16750,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta al administrar la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16771,7 +16771,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar una carpeta o archivo en la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16792,7 +16792,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ocultar una carpeta o archivo en la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16813,7 +16813,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16834,7 +16834,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16855,7 +16855,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona de documentos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16876,7 +16876,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la zona de documentos de profesores de una asignatura/grupo a modo administraci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16897,7 +16897,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Administrar la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16918,7 +16918,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo de la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16939,7 +16939,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo de la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16960,7 +16960,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -16981,7 +16981,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia en la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17002,7 +17002,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar una carpeta o archivo en la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17023,7 +17023,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&iacute;a de la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17044,7 +17044,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17065,7 +17065,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17086,7 +17086,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo enlace en la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17107,7 +17107,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17128,7 +17128,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de documentos de profesores de una asignatura usando Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17149,7 +17149,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de documentos de profesores de una asignatura de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17170,7 +17170,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17191,7 +17191,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17212,7 +17212,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17233,7 +17233,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17254,7 +17254,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17275,7 +17275,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona de documentos de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17296,7 +17296,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Administrar la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17317,7 +17317,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo de la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17338,7 +17338,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo de la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17359,7 +17359,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17380,7 +17380,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia en la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17401,7 +17401,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar una carpeta o archivo en la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17422,7 +17422,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&iacute;a de la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17443,7 +17443,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17464,7 +17464,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17485,7 +17485,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo enlace en la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17506,7 +17506,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17527,7 +17527,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de documentos de profesores de un grupo usando Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17548,7 +17548,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de documentos de profesores de un grupo de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17569,7 +17569,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17590,7 +17590,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17611,7 +17611,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17632,7 +17632,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17653,7 +17653,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17674,7 +17674,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona de documentos de profesores de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17695,7 +17695,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la zona de archivos compartidos de una asignatura/grupo a modo administraci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17716,7 +17716,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Administrar la zona de archivos compartidos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17737,7 +17737,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo compartido de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17758,7 +17758,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo de la zona de archivos compartidos una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17779,7 +17779,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de la zona de archivos compartidos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17800,7 +17800,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia en la zona de archivos compartidos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17821,7 +17821,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar una carpeta o archivo en la zona de archivos compartidos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17842,7 +17842,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de la zona de archivos compartidos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17863,7 +17863,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en la zona de archivos compartidos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17884,7 +17884,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en la zona de archivos compartidos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17905,7 +17905,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo enlace en la zona de archivos compartidos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17926,7 +17926,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en la zona de archivos compartidos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17947,7 +17947,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de archivos compartidos de una asignatura usando Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17968,7 +17968,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de archivos compartidos de una asignatura de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -17989,7 +17989,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en la zona de archivos compartidos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18010,7 +18010,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contract una carpeta en la zona de archivos compartidos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18031,7 +18031,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en la zona de archivos compartidos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18052,7 +18052,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de archivos compartidos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18073,7 +18073,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en la zona de archivos compartidos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18094,7 +18094,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona de archivos compartidos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18115,7 +18115,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Administrar la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18136,7 +18136,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo de la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18157,7 +18157,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo de la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18178,7 +18178,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18199,7 +18199,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia en la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18220,7 +18220,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar una carpeta o archivo en la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18241,7 +18241,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&iacute;a de la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18262,7 +18262,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18283,7 +18283,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18304,7 +18304,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo enlace en la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18325,7 +18325,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18346,7 +18346,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de archivos compartidos de un grupo usando Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18367,7 +18367,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de archivos compartidos de un grupo de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18388,7 +18388,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18409,7 +18409,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18430,7 +18430,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18451,7 +18451,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18472,7 +18472,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18493,7 +18493,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona de archivos compartidos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18514,7 +18514,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Gestionar todas las actividades/trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18535,7 +18535,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo de las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18556,7 +18556,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo de las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18577,7 +18577,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18598,7 +18598,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia en las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18619,7 +18619,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un archivo o una carpeta en las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18640,7 +18640,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&iacute;a de las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18661,7 +18661,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18682,7 +18682,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18703,7 +18703,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo enlace en las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18724,7 +18724,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18745,7 +18745,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un nuevo archivo a las actividades de un usuario usando Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18766,7 +18766,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un nuevo archivo a las actividades de un usuario de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18787,7 +18787,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18808,7 +18808,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18829,7 +18829,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18850,7 +18850,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18871,7 +18871,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18892,7 +18892,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de las actividades de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18913,7 +18913,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo de los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18934,7 +18934,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo de los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18955,7 +18955,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18976,7 +18976,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia en los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -18997,7 +18997,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un archivo or carpeta en los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19018,7 +19018,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&iacute;a de los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19039,7 +19039,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19060,7 +19060,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19081,7 +19081,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo enlace en los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19102,7 +19102,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19123,7 +19123,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a los trabajos de un usuario usando Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19144,7 +19144,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a los trabajos de un usuario de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19165,7 +19165,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19186,7 +19186,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19207,7 +19207,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19228,7 +19228,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19249,7 +19249,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19270,7 +19270,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de los trabajos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19291,7 +19291,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo en la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19312,7 +19312,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo en la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19333,7 +19333,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&acute;a de la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19354,7 +19354,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia en la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19375,7 +19375,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un archivo o una carpeta en la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19396,7 +19396,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&acute;a de la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19417,7 +19417,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19438,7 +19438,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19459,7 +19459,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo enlace en la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19480,7 +19480,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19501,7 +19501,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de actividades de una asignatura usando Dropzone.js" // Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19522,7 +19522,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de actividades de una asignatura de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19543,7 +19543,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19564,7 +19564,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19585,7 +19585,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19606,7 +19606,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19627,7 +19627,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19648,7 +19648,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona de actividades de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19669,7 +19669,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo de la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19690,7 +19690,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo de la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19711,7 +19711,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19732,7 +19732,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia en la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19753,7 +19753,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un archivo o carpeta en la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19774,7 +19774,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&iacute;a de la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19795,7 +19795,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19816,7 +19816,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19837,7 +19837,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo enlace en la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19858,7 +19858,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19879,7 +19879,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de trabajos de una asignatura usando Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19900,7 +19900,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de trabajos de una asignatura de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19921,7 +19921,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19942,7 +19942,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19963,7 +19963,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -19984,7 +19984,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20005,7 +20005,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20026,7 +20026,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona de trabajos de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20047,7 +20047,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la zona de calificaciones de una asignatura/grupo a modo vista"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20068,7 +20068,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver la zona de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20089,7 +20089,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en la zona de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20110,7 +20110,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en la zona de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20131,7 +20131,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20152,7 +20152,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Acceso individualizado a un archivo de calificaciones en una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20173,7 +20173,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver la zona de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20194,7 +20194,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en la zona de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20215,7 +20215,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en la zona de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20236,7 +20236,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20257,7 +20257,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Acceso individualizado a un archivo de calificaciones en un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20278,7 +20278,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la zona de calificaciones de una asignatura/grupo a modo administraci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20299,7 +20299,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Gestionar la zona de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20320,7 +20320,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20341,7 +20341,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20362,7 +20362,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20383,7 +20383,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20404,7 +20404,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar una carpeta o archivo en la zona de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20425,7 +20425,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&iacute;a de la zona de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20446,7 +20446,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en la zona de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20467,7 +20467,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en la zona de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20488,7 +20488,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en la zona de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20509,7 +20509,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de calificaciones de una asignatura usando Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20530,7 +20530,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de calificaciones de una asignatura de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20551,7 +20551,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en la zona de administración de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20572,7 +20572,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en la zona de administraci&oacute;n de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20593,7 +20593,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en la zona de administraci&oacute;n de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20614,7 +20614,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar una carpeta o archivo en la zona de administraci&oacute;n de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20635,7 +20635,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ocultar una carpeta o archivo en la zona de administraci&oacute;n de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20656,7 +20656,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de administraci&oacute;n de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20677,7 +20677,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en la zona de administraci&oacute;n de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20698,7 +20698,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona de administraci&oacute;n de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20719,7 +20719,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el n&uacute;mero de filas de cabecera de un archivo de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20740,7 +20740,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el n&uacute;mero de filas de pie de un archivo de calificaciones de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20761,7 +20761,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Administrar la zona de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20782,7 +20782,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo de la zona de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20803,7 +20803,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo de la zona de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20824,7 +20824,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de la zona de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20845,7 +20845,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia en la zona de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20866,7 +20866,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar una carpeta o archivo en la zona de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20887,7 +20887,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&iacute;a de la zona de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20908,7 +20908,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en la zona de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20929,7 +20929,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en la zona de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20950,7 +20950,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en la zona de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20971,7 +20971,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de calificaciones de un grupo usando Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -20992,7 +20992,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a la zona de calificaciones de un grupo de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21013,7 +21013,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en la zona de administraci&oacute;n de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21034,7 +21034,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en la zona de administraci&oacute;n de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21055,7 +21055,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en la zona de administraci&oacute;n de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21076,7 +21076,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar una carpeta de la zona de administraci&oacute;n de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21097,7 +21097,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ocultar una carpeta de la zona de administraci&oacute;n de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21118,7 +21118,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en la zona de administraci&oacute;n de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21139,7 +21139,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en la zona de administraci&oacute;n de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21160,7 +21160,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de la zona de administraci&oacute;n de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21181,7 +21181,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el n&uacute;mero de filas de cabecera de un archivo de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21202,7 +21202,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el n&uacute;mero de filas de pie de un archivo de calificaciones de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21223,7 +21223,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un archivo de un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21244,7 +21244,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un archivo de un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21265,7 +21265,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta vac&iacute;a de un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21286,7 +21286,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Establecer origen de copia en un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21307,7 +21307,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar una carpeta o archivo en un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21328,7 +21328,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una carpeta no vac&iacute;a de un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21349,7 +21349,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva carpeta o archivo en un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21370,7 +21370,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva carpeta en un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21391,7 +21391,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo enlace en un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21412,7 +21412,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar una carpeta en un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21433,7 +21433,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a un malet&iacute;n using Dropzone.js"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21454,7 +21454,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un archivo a un malet&iacute;n de forma tradicional"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21475,7 +21475,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Expandir una carpeta en un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21496,7 +21496,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Contraer una carpeta en un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21517,7 +21517,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprimir una carpeta en un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21538,7 +21538,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los metadatos de un archivo en un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21559,7 +21559,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar los metadatos de un archivo en un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21580,7 +21580,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Descargar un archivo de un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21601,7 +21601,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de archivos antiguos de un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21622,7 +21622,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar archivos antiguos de un malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21643,7 +21643,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la selecci&oacute;n de grupos de estudiantes"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21664,7 +21664,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar foto de clase o lista de estudiantes"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21685,7 +21685,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar foto de clase o lista de profesores"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21706,7 +21706,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar foto de clase o lista de invitados"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21727,7 +21727,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar eventos de asistencia"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21748,7 +21748,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar mi inscripci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21769,7 +21769,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar solicitudes de inscripci&oacute;n pendientes en la asignatura actual"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21790,7 +21790,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Listar usuarios conectados"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21811,7 +21811,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar mis grupos"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21832,7 +21832,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la edici&oacute;n de grupos"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21853,7 +21853,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la creaci&oacute;n de un tipo de grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21874,7 +21874,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un tipo de grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21895,7 +21895,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un tipo de grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21916,7 +21916,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar un tipo de grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21937,7 +21937,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar si es obligatorio registrarse en grupos de un tipo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21958,7 +21958,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar si es posible registrarse en varios grupos de un tipo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -21979,7 +21979,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la fecha en la que los grupos de un tipo se abrir&aacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22000,7 +22000,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22021,7 +22021,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22042,7 +22042,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22063,7 +22063,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Abrir un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22084,7 +22084,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cerrar un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22105,7 +22105,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Habilitar zonas de archivos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22126,7 +22126,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inhabilitar zonas de archivos de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22147,7 +22147,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el tipo de grupo de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22168,7 +22168,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22189,7 +22189,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la sala de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22210,7 +22210,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el n&uacute;mero m&aacute;ximo de estudiantes de un grupo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22231,7 +22231,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Listar los datos principales de los administradores"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22252,7 +22252,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar la foto de clase de invitados lista para imprimir"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22273,7 +22273,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar la foto de clase de estudiantes lista para imprimir"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22294,7 +22294,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar la foto de clase de profesores lista para imprimir"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22315,7 +22315,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Listar los datos completos de los invitados"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22336,7 +22336,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Listar los datos completos de los estudiantes"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22357,7 +22357,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Listar los datos completos de los profesores"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22378,7 +22378,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver la ficha de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22399,7 +22399,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver la ficha de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22420,7 +22420,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Realizar una acci&oacute;n sobre varios invitados seleccionados"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22441,7 +22441,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Realizar una acci&oacute;n sobre varios estudiantes seleccionados"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22462,7 +22462,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Realizar una acci&oacute;n sobre varios profesores seleccionados"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22483,7 +22483,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver las fichas de varios invitados seleccionados"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22504,7 +22504,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver las fichas de varios estudiantes seleccionados"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22525,7 +22525,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver las fichas de varios profesores seleccionados"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22546,7 +22546,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver las fichas de varios invitados seleccionados lista para imprimir"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22567,7 +22567,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver las fichas de varios estudiantes seleccionados lista para imprimir"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22588,7 +22588,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver las fichas de varios profesores seleccionados lista para imprimir"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22609,7 +22609,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Actualizar los campos de la ficha del estudiante en una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22630,7 +22630,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar los campos de fichas de estudiantes"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22651,7 +22651,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un campo de ficha"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22672,7 +22672,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un campo de ficha"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22693,7 +22693,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un campo de ficha"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22714,7 +22714,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Renombrar un campo de ficha"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22735,7 +22735,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el n&uacute;mero de l&iacute;neas del formulario de un campo de ficha"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22756,7 +22756,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la visibilidad de un campo de ficha"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22777,7 +22777,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Actualizar campos de mi ficha en una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22798,7 +22798,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver formulario para iniciar sesi&oacute;n y ver la agenda p&uacute;blica de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22819,7 +22819,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver la agenda p&uacute;blica de un usuario tras iniciar sesi&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22840,7 +22840,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver la agenda p&uacute;blica de un usuario tras cambiar idioma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22861,7 +22861,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver la agenda p&uacute;blica de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22876,13 +22876,13 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request the enrolment/removing of several students to / from current course"
+	"Request the enrolment/removing of several students to/from a course"
 #elif L==4	// es
-	""
+	"Solicitar la inscripci&oacute;n/eliminaci&oacute;n de varios estudiantes a/de un asignatura"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la inscripci&oacute;n/eliminaci&oacute;n de varios estudiantes a/de un asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22897,13 +22897,13 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request the enrolment/removing of several non-editing teachers to / from current course"
+	"Request the enrolment/removing of several non-editing teachers to/from a course"
 #elif L==4	// es
-	""
+	"Solicitar la inscripci&oacute;n/eliminaci&oacute;n de varios profesores no editores a/de un asignatura"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la inscripci&oacute;n/eliminaci&oacute;n de varios profesores no editores a/de un asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22918,13 +22918,13 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"Request the enrolment/removing of several teachers to / from current course"
+	"Request the enrolment/removing of several teachers to/from a course"
 #elif L==4	// es
-	""
+	"Solicitar la inscripci&oacute;n/eliminaci&oacute;n de varios profesores a/de un asignatura"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la inscripci&oacute;n/eliminaci&oacute;n de varios profesores a/de un asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22941,11 +22941,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Request listing of attendance of several students to several events"
 #elif L==4	// es
-	""
+	"Solicitar el listado de asistencia de varios estudiantes a varios eventos"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar el listado de asistencia de varios estudiantes a varios eventos"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22962,11 +22962,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"List my attendance as student to several events"
 #elif L==4	// es
-	""
+	"Listar mi asistencia como estudiante a varios eventos"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Listar mi asistencia como estudiante a varios eventos"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -22983,11 +22983,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Print my attendance as student to several events"
 #elif L==4	// es
-	""
+	"Imprimir mi asistencia como estudiante a varios eventos"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Imprimir mi asistencia como estudiante a varios eventos"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23002,13 +23002,13 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==2	// de
 	""			// Need Übersetzung
 #elif L==3	// en
-	"List attendance of several students to several events"
+	"List the attendance of several students to several events"
 #elif L==4	// es
-	""
+	"Listar la asistencia de varios estudiantes a varios eventos"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Listar la asistencia de varios estudiantes a varios eventos"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23025,11 +23025,11 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==3	// en
 	"Print attendance of several students to several events"
 #elif L==4	// es
-	""
+	"Imprimir la asistencia de varios estudiantes a varios eventos"
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Imprimir la asistencia de varios estudiantes a varios eventos"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23050,7 +23050,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar un nuevo evento de asistencia"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23071,7 +23071,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar un evento de asistencia"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23092,7 +23092,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo evento de asistencia"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23113,7 +23113,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar un evento de asistencia"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23134,7 +23134,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un evento de asistencia"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23155,7 +23155,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un evento de asistencia"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23176,7 +23176,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ocultar un evento de asistencia"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23197,7 +23197,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar un evento de asistencia"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23218,7 +23218,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Listar estudiantes que asistieron a un evento"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23239,7 +23239,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Guardar estudiantes que asistieron a un evento y comentarios"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23260,7 +23260,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Guardar mis comentarios como estudiante en un evento de asistencia"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23281,7 +23281,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar mi inscripci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23302,7 +23302,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Actualizar solicitudes de inscripci&oacute;n pendientes"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23323,7 +23323,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar el rechazo a la inscripci&oacute;n de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23344,7 +23344,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Rechazar la inscripci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23365,7 +23365,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar el ID de un usuario para inscripci&oacute;n/eliminaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23386,7 +23386,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar el ID de un estudiante para inscripci&oacute;n/eliminaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23407,7 +23407,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar el ID de un profesor para inscripci&oacute;n/eliminaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23428,7 +23428,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la inscripcion/eliminaci&oacute;n de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23449,7 +23449,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la inscripci&oacute;n/eliminaci&oacute;n de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23470,7 +23470,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la inscripci&oacute;n/eliminaci&oacute;n de un profesor no editor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23491,7 +23491,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la inscripci&oacute;n/eliminaci&oacute;n de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23512,7 +23512,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar la foto de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23533,7 +23533,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar la foto de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23554,7 +23554,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar la foto de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23575,7 +23575,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar la foto de un usuario y detectar rostros en ella"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23596,7 +23596,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar la foto de un estudiante y detectar rostros en ella"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23617,7 +23617,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar la foto de un profesor y detectar rostros en ella"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23638,7 +23638,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Actualizar la foto de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23659,7 +23659,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Actualizar la foto de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23680,7 +23680,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Actualizar la foto de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23701,7 +23701,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de la foto de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23722,7 +23722,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de la foto de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23743,7 +23743,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de la foto de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23764,7 +23764,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar la foto de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23785,7 +23785,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar la foto de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23806,7 +23806,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar la foto de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23827,7 +23827,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo invitado"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23848,7 +23848,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23869,7 +23869,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo profesor no editor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23890,7 +23890,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23911,7 +23911,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Actualizar los datos y grupos de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23932,7 +23932,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Actualizar los datos y grupos de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23953,7 +23953,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Actualizar los datos y grupos de un profesor no editor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23974,7 +23974,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Actualizar los datos y grupos de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -23995,7 +23995,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver si aceptar o rechazar mi inscripci&oacute;n como estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24016,7 +24016,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver si aceptar o rechazar mi inscripci&oacute;n como profesor no editor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24037,7 +24037,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver si aceptar o rechazar mi inscripci&oacute;n como profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24058,7 +24058,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Aceptar mi inscripci&oacute;n como estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24079,7 +24079,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Aceptar mi inscripci&oacute;n como profesor no editor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24100,7 +24100,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Aceptar mi inscripci&oacute;n como profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24121,7 +24121,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Rechazar mi inscripci&oacute;n como estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24142,7 +24142,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Rechazar mi inscripci&oacute;n como profesor no editor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24163,7 +24163,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Rechazar mi inscripci&oacute;n como profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24184,7 +24184,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inscribir un administrador en una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24205,7 +24205,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un administrador de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24226,7 +24226,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inscribir un administrador en un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24247,7 +24247,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un administrador de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24268,7 +24268,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inscribir un administrador en una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24289,7 +24289,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un administrador en una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24310,7 +24310,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inscribir/eliminar varios estudiantes en/de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24331,7 +24331,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inscribir/eliminar varios profesores no editores en/de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24352,7 +24352,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inscribir/eliminar varios profesores en/de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24373,7 +24373,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Confirmar el ID de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24394,7 +24394,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Confirmar el ID de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24415,7 +24415,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Confirmar el ID de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24436,7 +24436,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Formularios para cambiar la cuenta de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24457,7 +24457,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Formularios para cambiar la cuenta de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24478,7 +24478,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Formularios para cambiar la cuenta de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24499,7 +24499,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar el apodo de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24520,7 +24520,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar el apodo de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24541,7 +24541,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar el apodo de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24562,7 +24562,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el apodo de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24583,7 +24583,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el apodo de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24604,7 +24604,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el apodo de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24625,7 +24625,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar el ID de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24646,7 +24646,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar el ID de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24667,7 +24667,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar el ID de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24688,7 +24688,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo ID de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24709,7 +24709,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo ID de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24730,7 +24730,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo ID de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24751,7 +24751,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la contrase&ntilde;a de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24772,7 +24772,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la contrase&ntilde;a de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24793,7 +24793,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la contrase&ntilde;a de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24814,7 +24814,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar el correo electr&oacute;nico de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24835,7 +24835,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar el correo electr&oacute;nico de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24856,7 +24856,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar el correo electr&oacute;nico de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24877,7 +24877,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo correo electr&oacute;nico de un usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24898,7 +24898,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo correo electr&oacute;nico de un estudiante"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24919,7 +24919,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo correo electr&oacute;nico de un profesor"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24940,7 +24940,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un estudiante de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24961,7 +24961,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un profesor no editor de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -24982,7 +24982,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un profesor de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25003,7 +25003,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un usuario completamente de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25024,7 +25024,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de todos los estudiantes de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25045,7 +25045,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar todos los estudiantes de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25066,7 +25066,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n completa de usuarios antiguos"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25087,7 +25087,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar completamente usuarios antiguos"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25108,7 +25108,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Listar posibles usuarios duplicados"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25129,7 +25129,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Listar usuarios similares a uno dado (posibles duplicados)"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25150,7 +25150,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar a un usuario de una lista de posibles usuarios duplicados"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25171,7 +25171,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar seguir a varios estudiantes"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25192,7 +25192,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar seguir a varios profesores"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25213,7 +25213,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar dejar de seguir a varios estudiantes"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25234,7 +25234,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar dejar de seguir a varios profesores"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25255,7 +25255,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Seguir a varios estudiantes"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25276,7 +25276,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Seguir a varios profesores"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25297,7 +25297,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Dejar de seguir a varios estudiantes"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25318,7 +25318,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Dejar de seguir a varios profesores"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25339,7 +25339,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar anuncios globales"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25360,7 +25360,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver todos los avisos"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25381,7 +25381,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver el nivel superior de los foros"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25402,7 +25402,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver las salas de chat"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25444,7 +25444,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Seleccionar usuarios para enviarles un correo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25465,7 +25465,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver formulario para crear un nuevo anuncio global"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25486,7 +25486,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo anuncio global"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25507,7 +25507,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ocultar un anuncio global"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25528,7 +25528,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar un anuncio global"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25549,7 +25549,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un anuncio global"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25570,7 +25570,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar (expandir) un aviso"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25591,7 +25591,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Escribir un nuevo aviso"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25612,7 +25612,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo aviso"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25633,7 +25633,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ocultar un aviso"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25654,7 +25654,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar un aviso"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25675,7 +25675,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un aviso"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25696,7 +25696,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un aviso"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25717,7 +25717,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver el nivel superior del foro de usuarios de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25738,7 +25738,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver el nivel superior del foro de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25759,7 +25759,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver el nivel superior del foro de usuarios de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25780,7 +25780,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver el nivel superior del foro de profesores de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25801,7 +25801,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver el nivel superior del foro de usuarios de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25822,7 +25822,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver el nivel superior del foro de profesores de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25843,7 +25843,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver el nivel superior del foro de usuarios de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25864,7 +25864,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver el nivel superior del foro de profesores de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25885,7 +25885,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver el nivel superior del foro de usuarios general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25906,7 +25906,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver el nivel superior del foro de profesores general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25927,7 +25927,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver el nivel superior del foro de usuarios de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25948,7 +25948,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver el nivel superior del foro de profesores de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25969,7 +25969,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los mensajes de un hilo del foro de usuarios de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -25990,7 +25990,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los mensajes de un hilo del foro de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26011,7 +26011,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los mensajes de un hilo del foro de usuarios de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26032,7 +26032,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los mensajes de un hilo del foro de profesores de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26053,7 +26053,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los mensajes de un hilo del foro de usuarios de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26074,7 +26074,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los mensajes de un hilo del foro de profesores de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26095,7 +26095,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los mensajes de un hilo del foro de usuarios de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26116,7 +26116,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los mensajes de un hilo del foro de profesores de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26137,7 +26137,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los mensajes de un hilo del foro de usuarios general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26158,7 +26158,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los mensajes de un hilo del foro de profesores general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26179,7 +26179,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los mensajes de un hilo del foro de usuarios de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26200,7 +26200,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver los mensajes de un hilo del foro de profesores de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26221,7 +26221,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar el primer mensaje de un nuevo hilo del foro de usuarios de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26242,7 +26242,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar el primer mensaje de un nuevo hilo del foro de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26263,7 +26263,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar el primer mensaje de un nuevo hilo del foro de usuarios de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26284,7 +26284,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar el primer mensaje de un nuevo hilo del foro de profesores de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26305,7 +26305,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar el primer mensaje de un nuevo hilo del foro de usuarios de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26326,7 +26326,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar el primer mensaje de un nuevo hilo del foro de profesores de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26347,7 +26347,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar el primer mensaje de un nuevo hilo del foro de usuarios de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26368,7 +26368,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar el primer mensaje de un nuevo hilo del foro de profesores de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26389,7 +26389,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar el primer mensaje de un nuevo hilo del foro de usuarios general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26410,7 +26410,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar el primer mensaje de un nuevo hilo del foro de profesores general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26431,7 +26431,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar el primer mensaje de un nuevo hilo del foro de usuarios de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26452,7 +26452,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar el primer mensaje de un nuevo hilo del foro de profesores de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26473,7 +26473,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un mensaje de respuesta en un hilo del foro de usuarios de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26494,7 +26494,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un mensaje de respuesta en un hilo del foro de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26515,7 +26515,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un mensaje de respuesta en un hilo del foro de usuarios de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26536,7 +26536,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un mensaje de respuesta en un hilo del foro de profesores de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26557,7 +26557,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un mensaje de respuesta en un hilo del foro de usuarios de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26578,7 +26578,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un mensaje de respuesta en un hilo del foro de profesores de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26599,7 +26599,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un mensaje de respuesta en un hilo del foro de usuarios de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26620,7 +26620,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un mensaje de respuesta en un hilo del foro de profesores de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26641,7 +26641,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un mensaje de respuesta en un hilo del foro de usuarios general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26662,7 +26662,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un mensaje de respuesta en un hilo del foro de profesores general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26683,7 +26683,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un mensaje de respuesta en un hilo del foro de usuarios de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26704,7 +26704,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un mensaje de respuesta en un hilo del foro de profesores de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26725,7 +26725,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un hilo del foro de usuarios de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26746,7 +26746,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un hilo del foro de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26767,7 +26767,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un hilo del foro de usuarios de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26788,7 +26788,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un hilo del foro de profesores de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26809,7 +26809,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un hilo del foro de usuarios de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26830,7 +26830,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un hilo del foro de profesores de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26851,7 +26851,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un hilo del foro de usuarios de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26872,7 +26872,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un hilo del foro de profesores de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26893,7 +26893,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un hilo del foro de usuarios general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26914,7 +26914,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un hilo del foro de profesores general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26935,7 +26935,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un hilo del foro de usuarios de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26956,7 +26956,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un hilo del foro de profesores de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26977,7 +26977,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un hilo del foro de usuarios de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -26998,7 +26998,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un hilo del foro de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27019,7 +27019,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un hilo del foro de usuarios de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27040,7 +27040,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un hilo del foro de profesores de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27061,7 +27061,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un hilo del foro de usuarios de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27082,7 +27082,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un hilo del foro de profesores de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27103,7 +27103,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un hilo del foro de usuarios de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27124,7 +27124,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un hilo del foro de profesores de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27145,7 +27145,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un hilo del foro de usuarios general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27166,7 +27166,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un hilo del foro de profesores general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27187,7 +27187,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un hilo del foro de usuarios de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27208,7 +27208,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un hilo del foro de profesores de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27229,7 +27229,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cortar un hilo del foro de usuarios de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27250,7 +27250,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cortar un hilo del foro de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27271,7 +27271,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cortar un hilo del foro de usuarios de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27292,7 +27292,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cortar un hilo del foro de profesores de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27313,7 +27313,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cortar un hilo del foro de usuarios de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27324,23 +27324,23 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActCutThrForCtrTch] =
 #if   L==1	// ca
-	""			// Necessita traducció
+	"Cut a thread of forum of teachers of center"		// Necessita traducció
 #elif L==2	// de
-	""			// Need Übersetzung
+	"Cut a thread of forum of teachers of center"		// Need Übersetzung
 #elif L==3	// en
 	"Cut a thread of forum of teachers of center"
 #elif L==4	// es
 	"Cortar un hilo del foro de profesores de un centro"
 #elif L==5	// fr
-	""			// Besoin de traduction
+	"Cut a thread of forum of teachers of center"		// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cortar un hilo del foro de profesores de un centro"	// Okoteve traducción
 #elif L==7	// it
-	""			// Bisogno di traduzione
+	"Cut a thread of forum of teachers of center"		// Bisogno di traduzione
 #elif L==8	// pl
-	""			// Potrzebujesz tlumaczenie
+	"Cut a thread of forum of teachers of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	""			// Precisa de tradução
+	"Cut a thread of forum of teachers of center"		// Precisa de tradução
 #endif
 	,
 	[ActCutThrForInsUsr] =
@@ -27355,7 +27355,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cortar un hilo del foro de usuarios de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27376,7 +27376,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cortar un hilo del foro de profesores de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27397,7 +27397,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cortar un hilo del foro de usuarios general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27418,7 +27418,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cortar un hilo del foro de profesores general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27439,7 +27439,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cortar un hilo del foro de usuarios de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27460,7 +27460,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cortar un hilo del foro de profesores de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27481,7 +27481,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un hilo del foro de usuarios de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27502,7 +27502,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un hilo del foro de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27523,7 +27523,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un hilo del foro de usuarios de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27544,7 +27544,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un hilo del foro de profesores de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27565,7 +27565,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un hilo del foro de usuarios de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27586,7 +27586,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un hilo del foro de profesores de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27607,7 +27607,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un hilo del foro de usuarios de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27628,7 +27628,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un hilo del foro de profesores de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27649,7 +27649,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un hilo del foro de usuarios general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27670,7 +27670,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un hilo del foro de profesores general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27691,7 +27691,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un hilo del foro de usuarios de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27712,7 +27712,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Pegar un hilo del foro de profesores de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27733,7 +27733,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un mensaje del foro de usuarios de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27754,7 +27754,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un mensaje del foro de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27775,7 +27775,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un mensaje del foro de usuarios de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27796,7 +27796,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un mensaje del foro de profesores de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27817,7 +27817,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un mensaje del foro de usuarios de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27838,7 +27838,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un mensaje del foro de profesores de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27859,7 +27859,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un mensaje del foro de usuarios de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27880,7 +27880,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un mensaje del foro de profesores de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27901,7 +27901,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un mensaje del foro de usuarios general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27922,7 +27922,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un mensaje del foro de profesores general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27943,7 +27943,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un mensaje del foro de usuarios de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27964,7 +27964,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un mensaje del foro de profesores de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -27985,7 +27985,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Habilitar un mensaje del foro de usuarios de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28006,7 +28006,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Habilitar un mensaje del foro de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28027,7 +28027,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Habilitar un mensaje del foro de usuarios de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28048,7 +28048,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Habilitar un mensaje del foro de profesores de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28069,7 +28069,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Habilitar un mensaje del foro de usuarios de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28090,7 +28090,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Habilitar un mensaje del foro de profesores de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28111,7 +28111,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Habilitar un mensaje del foro de usuarios de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28132,7 +28132,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Habilitar un mensaje del foro de profesores de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28153,7 +28153,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Habilitar un mensaje del foro de usuarios general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28174,7 +28174,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Habilitar un mensaje del foro de profesores general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28195,7 +28195,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Habilitar un mensaje del foro de usuarios de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28216,7 +28216,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Habilitar un mensaje del foro de profesores de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28237,7 +28237,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inhabilitar un mensaje del foro de usuarios de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28258,7 +28258,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inhabilitar un mensaje del foro de profesores de una asignatura"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28279,7 +28279,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inhabilitar un mensaje del foro de usuarios de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28300,7 +28300,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inhabilitar un mensaje del foro de profesores de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28321,7 +28321,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inhabilitar un mensaje del foro de usuarios de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28342,7 +28342,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inhabilitar un mensaje del foro de profesores de un centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28363,7 +28363,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inhabilitar un mensaje del foro de usuarios de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28384,7 +28384,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inhabilitar un mensaje del foro de profesofres de una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28405,7 +28405,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inhabilitar un mensaje del foro de usuarios general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28426,7 +28426,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inhabilitar un mensaje del foro de profesores general"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28447,7 +28447,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inhabilitar un mensaje del foro de usuarios de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28468,7 +28468,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Inhabilitar un mensaje del foro de profesores de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28489,7 +28489,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Entrar en una sala de chat para chatear"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28552,7 +28552,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar un mensaje a otros usuarios"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28573,7 +28573,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de todos los mensajes enviados a otros usuarios"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28594,7 +28594,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de todos los mensajes recibidos de otros usuarios"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28615,7 +28615,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar todos los mensajes enviados a otros usuarios"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28636,7 +28636,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar todos los mensajes recibidos de otros usuarios"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28657,7 +28657,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un mensaje enviado a otros usuarios"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28678,7 +28678,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un mensaje recibido de otros usuarios"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28699,7 +28699,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver (expandir) un mensaje enviado"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28720,7 +28720,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver (expandir) un mensaje recibido"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28741,7 +28741,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ocultar (contraer) un mensaje enviado"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28762,7 +28762,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ocultar (contraer) un mensaje recibido"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28783,7 +28783,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Listar usuarios baneados"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28804,7 +28804,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Banear el emisor de un mensaje al mostrar los mensajes recibidos"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28825,7 +28825,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Permitir el emisor de un mensaje al mostrar los mensajes recibidos"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28846,7 +28846,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Permitir un usuario al listar los usuarios baneados"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28867,7 +28867,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver direcciones para enviar un correo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28888,7 +28888,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar ver el uso de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28909,7 +28909,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver una foto de clase con las fotos promedio de los estudiantes de cada titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28930,7 +28930,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar estad&iacute;sticas de asignaturas"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28951,7 +28951,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar consulta de clics a la plataforma completa"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28972,7 +28972,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar mi informe de uso"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -28993,7 +28993,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver acciones m&aacute;s frecuentemente usadas"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29014,7 +29014,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver uso de la plataforma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29035,7 +29035,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver vista de impresi&oacute;n de la foto de clase con las fotos promedio de los estudiantes de cada titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29056,7 +29056,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Calcular las fotos promedio de los estudiantes de una titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29077,7 +29077,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Consultar clics a la plataforma completa"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29098,7 +29098,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar consulta de clics en la asignatura actual"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29119,7 +29119,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Consultar clics en la asignatura actual"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29140,7 +29140,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver estad&iacute;sticas de asignaturas"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29161,7 +29161,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Listar los &uacute;ltimos clics"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29182,7 +29182,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Refrescar los &ucute;ltimos clics en tiempo real"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29203,7 +29203,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver mi informe de uso"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29224,7 +29224,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver formulario para cerrar sesi&oacute;n y para cambiar el rol"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29245,7 +29245,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Seleccionar una de mis asignaturas"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29266,7 +29266,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver el horario de todas mis asignaturas"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29287,7 +29287,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver mi agenda completa (organizador personal)"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29308,7 +29308,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver formulario para crear o cambiar mi cuenta"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29329,7 +29329,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la edici&oacute;n de la ficha con los datos personales del usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29350,7 +29350,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver formularios para editar ajustes"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29371,7 +29371,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el rol de usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29392,7 +29392,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar un nuevo evento en mi agenda"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29413,7 +29413,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar un evento de mi agenda"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29434,7 +29434,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo evento en mi agenda"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29455,7 +29455,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Modificar los datos de un evento de mi agenda"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29476,7 +29476,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de un evento de mi agenda"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29497,7 +29497,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar un evento de mi agenda"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29518,7 +29518,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ocultar un evento de mi agenda"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29539,7 +29539,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Mostrar un evento de mi agenda"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29560,7 +29560,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Hacer privado un evento de mi agenda"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29581,7 +29581,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Hacer p&uacute;blico un evento de mi agenda"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29602,7 +29602,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver c&oacute;digo QR de agenda listo para imprimir"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29623,7 +29623,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Comprobar si ya existe una nueva cuenta sin contrase&ntilde;a asociada a un ID"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29644,7 +29644,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar una nueva cuenta"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29665,7 +29665,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear una nueva cuenta"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29686,7 +29686,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar uno de mis ID de usuario"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29707,7 +29707,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Crear un nuevo ID de usuario para m&iacute;"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29728,7 +29728,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar uno de mis antiguos apodos"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29749,7 +29749,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar mi apodo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29770,7 +29770,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar una de mis antiguas direcciones de correo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29791,7 +29791,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar mi direcci&oacute;n de correo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29812,7 +29812,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Confirmar direcci&oacute;n de correo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29833,7 +29833,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar mi contrase&ntilde;a"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29854,7 +29854,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de mi cuenta"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29875,7 +29875,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar mi cuenta"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29896,7 +29896,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Actualizar mis datos personales"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29917,7 +29917,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar el env&iacute;o de mi foto"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29938,7 +29938,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Enviar mi foto y detectar rostros en ella"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29959,7 +29959,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Actualizar mi foto"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -29980,7 +29980,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la eliminaci&oacute;n de mi foto"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30001,7 +30001,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Eliminar mi foto"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30022,7 +30022,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el pa&iacute;s de mi instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30043,7 +30043,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar mi instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30064,7 +30064,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar mi centro"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30085,7 +30085,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar mi departamento"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30106,7 +30106,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar mi despacho"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30127,7 +30127,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el tel&eacute;fono de mi despacho"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30148,7 +30148,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar la edici&oacute;n de mis redes sociales"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30169,7 +30169,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar mi web y mis redes sociales"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30190,7 +30190,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar tema"		// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30211,7 +30211,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Solicitar cambio de idioma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30232,7 +30232,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar idioma"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30253,7 +30253,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar primer d&iacute;a de la semana"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30274,7 +30274,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar formato de fechas"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30295,7 +30295,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar columnas laterales"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30316,7 +30316,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar conjunto de iconos"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30337,7 +30337,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar men&uacute;"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30358,7 +30358,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la privacidad de mi foto"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30379,7 +30379,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la privacidad de mi perfil de usuario b&aacute;sico"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30400,7 +30400,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar la privacidad de mi perfil de usuario extendido"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30421,7 +30421,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el ajuste sobre cookies de terceros"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30442,7 +30442,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar si notificar por correo"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30463,7 +30463,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver mi c&oacute;digo QR listo para imprimir"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30484,7 +30484,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Ver la vista de impresi&oacute;n del horario de todas mis asignaturas"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30505,7 +30505,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Editar mi horario de tutor&iacute;as"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30526,7 +30526,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Modificar mi horario de tutor&iacute;as"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
@@ -30547,7 +30547,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==5	// fr
 	""			// Besoin de traduction
 #elif L==6	// gn
-	""			// Okoteve traducción
+	"Cambiar el primer d&iacute;a de la semana y mostrar el horario de tutor&iacute;as"	// Okoteve traducción
 #elif L==7	// it
 	""			// Bisogno di traduzione
 #elif L==8	// pl
