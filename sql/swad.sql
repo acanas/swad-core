@@ -40,16 +40,9 @@ CREATE TABLE IF NOT EXISTS agd_agendas (
 	UNIQUE INDEX(AgdCod),
 	INDEX(UsrCod,Public));
 --
--- Table ann_seen: stores users who have seen global announcements
+-- Table ann_announcements: stores global announcements
 --
-CREATE TABLE IF NOT EXISTS ann_seen (
-	AnnCod INT NOT NULL,
-	UsrCod INT NOT NULL,
-	UNIQUE INDEX(AnnCod,UsrCod));
---
--- Table announcements: stores global announcements
---
-CREATE TABLE IF NOT EXISTS announcements (
+CREATE TABLE IF NOT EXISTS ann_announcements (
 	AnnCod INT NOT NULL AUTO_INCREMENT,
 	Status TINYINT NOT NULL DEFAULT 0,
 	Roles INT NOT NULL DEFAULT 0,
@@ -57,6 +50,13 @@ CREATE TABLE IF NOT EXISTS announcements (
 	Content TEXT NOT NULL,
 	UNIQUE INDEX(AnnCod),
 	INDEX(Status));
+--
+-- Table ann_seen: stores users who have seen global announcements
+--
+CREATE TABLE IF NOT EXISTS ann_seen (
+	AnnCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	UNIQUE INDEX(AnnCod,UsrCod));
 --
 -- Table asg_grp: stores the groups associated to assigments
 --

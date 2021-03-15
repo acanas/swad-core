@@ -99,8 +99,12 @@ void Ann_ShowAllAnnouncements (void)
      {
       /* Select all announcements */
       NumAnnouncements = (unsigned) DB_QuerySELECT (&mysql_res,"can not get announcements",
-	                                            "SELECT AnnCod,Status,Roles,Subject,Content"
-						    " FROM announcements"
+	                                            "SELECT AnnCod,"	// row[0]
+	                                                   "Status,"	// row[1]
+	                                                   "Roles,"	// row[2]
+	                                                   "Subject,"	// row[3]
+	                                                   "Content"	// row[4]
+						    " FROM ann_announcements"
 						    " ORDER BY AnnCod DESC");
      }
    else if (Gbl.Usrs.Me.Logged)
@@ -108,8 +112,12 @@ void Ann_ShowAllAnnouncements (void)
       /* Select only announcements I can see */
       Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
       NumAnnouncements = (unsigned) DB_QuerySELECT (&mysql_res,"can not get announcements",
-	                                            "SELECT AnnCod,Status,Roles,Subject,Content"
-						    " FROM announcements"
+	                                            "SELECT AnnCod,"	// row[0]
+	                                                   "Status,"	// row[1]
+	                                                   "Roles,"	// row[2]
+	                                                   "Subject,"	// row[3]
+	                                                   "Content"	// row[4]
+						    " FROM ann_announcements"
 						    " WHERE (Roles&%u)<>0 "	// All my roles in different courses
 						    " ORDER BY AnnCod DESC",
 						    (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);
@@ -118,8 +126,12 @@ void Ann_ShowAllAnnouncements (void)
      {
       /* Select only active announcements for unknown users */
       NumAnnouncements = (unsigned) DB_QuerySELECT (&mysql_res,"can not get announcements",
-	                                            "SELECT AnnCod,Status,Roles,Subject,Content"
-						    " FROM announcements"
+	                                            "SELECT AnnCod,"	// row[0]
+	                                                   "Status,"	// row[1]
+	                                                   "Roles,"	// row[2]
+	                                                   "Subject,"	// row[3]
+	                                                   "Content"	// row[4]
+						    " FROM ann_announcements"
 						    " WHERE Status=%u AND (Roles&%u)<>0 "
 						    " ORDER BY AnnCod DESC",
 						    (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
@@ -219,10 +231,16 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
    /***** Select announcements not seen *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
    NumAnnouncements = (unsigned) DB_QuerySELECT (&mysql_res,"can not get announcements",
-	                                         "SELECT AnnCod,Subject,Content FROM announcements"
-						 " WHERE Status=%u AND (Roles&%u)<>0 "	// All my roles in different courses
-						 " AND AnnCod NOT IN"
-						 " (SELECT AnnCod FROM ann_seen WHERE UsrCod=%ld)"
+	                                         "SELECT AnnCod,"	// row[0]
+	                                                "Subject,"	// row[1]
+	                                                "Content"	// row[2]
+	                                         " FROM ann_announcements"
+						 " WHERE Status=%u"
+						   " AND (Roles&%u)<>0 "	// All my roles in different courses
+						   " AND AnnCod NOT IN"
+						       " (SELECT AnnCod"
+						       " FROM ann_seen"
+						       " WHERE UsrCod=%ld)"
 						 " ORDER BY AnnCod DESC",	// Newest first
 						 (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
 						 (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss,
@@ -502,7 +520,7 @@ static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const cha
   {
    /***** Select announcements not seen *****/
    DB_QueryINSERT ("can not create announcement",
-		   "INSERT INTO announcements"
+		   "INSERT INTO ann_announcements"
 		   " (Roles,Subject,Content)"
 		   " VALUES"
 		   " (%u,'%s','%s')",
@@ -522,9 +540,11 @@ void Ann_HideActiveAnnouncement (void)
 
    /***** Set global announcement as hidden *****/
    DB_QueryUPDATE ("can not hide announcement",
-		   "UPDATE announcements SET Status=%u"
+		   "UPDATE ann_announcements"
+		   " SET Status=%u"
 		   " WHERE AnnCod=%ld",
-                   (unsigned) Ann_OBSOLETE_ANNOUNCEMENT,AnnCod);
+                   (unsigned) Ann_OBSOLETE_ANNOUNCEMENT,
+                   AnnCod);
   }
 
 /*****************************************************************************/
@@ -540,9 +560,11 @@ void Ann_RevealHiddenAnnouncement (void)
 
    /***** Set global announcement as shown *****/
    DB_QueryUPDATE ("can not reveal announcement",
-		   "UPDATE announcements SET Status=%u"
+		   "UPDATE ann_announcements"
+		   " SET Status=%u"
 		   " WHERE AnnCod=%ld",
-                   (unsigned) Ann_ACTIVE_ANNOUNCEMENT,AnnCod);
+                   (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
+                   AnnCod);
   }
 
 /*****************************************************************************/
@@ -559,7 +581,8 @@ void Ann_RemoveAnnouncement (void)
 
    /***** Remove announcement *****/
    DB_QueryDELETE ("can not remove announcement",
-		   "DELETE FROM announcements WHERE AnnCod=%ld",
+		   "DELETE FROM ann_announcements"
+		   " WHERE AnnCod=%ld",
 		   AnnCod);
 
    /***** Remove users who have seen the announcement *****/
@@ -605,6 +628,7 @@ void Ann_RemoveUsrFromSeenAnnouncements (long UsrCod)
   {
    /***** Remove user from seen announcements *****/
    DB_QueryDELETE ("can not remove user from seen announcements",
-		   "DELETE FROM ann_seen WHERE UsrCod=%ld",
+		   "DELETE FROM ann_seen"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }

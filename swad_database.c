@@ -175,6 +175,29 @@ mysql> DESCRIBE agd_agendas;
 		   "UNIQUE INDEX(AgdCod),"
 		   "INDEX(UsrCod,Public,Hidden))");
 
+   /***** Table ann_announcements *****/
+/*
+mysql> DESCRIBE ann_announcements;
++---------+------------+------+-----+---------+----------------+
+| Field   | Type       | Null | Key | Default | Extra          |
++---------+------------+------+-----+---------+----------------+
+| AnnCod  | int(11)    | NO   | PRI | NULL    | auto_increment |
+| Status  | tinyint(4) | NO   | MUL | 0       |                |
+| Roles   | int(11)    | NO   |     | 0       |                |
+| Subject | text       | NO   |     | NULL    |                |
+| Content | text       | NO   |     | NULL    |                |
++---------+------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS ann_announcements ("
+			"AnnCod INT NOT NULL AUTO_INCREMENT,"
+			"Status TINYINT NOT NULL DEFAULT 0,"
+			"Roles INT NOT NULL DEFAULT 0,"
+			"Subject TEXT NOT NULL,"	// Cns_MAX_BYTES_SUBJECT
+			"Content TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(AnnCod),"
+		   "INDEX(Status))");
+
    /***** Table ann_seen *****/
 /*
 mysql> DESCRIBE ann_seen;
@@ -190,29 +213,6 @@ mysql> DESCRIBE ann_seen;
 			"AnnCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
 		   "UNIQUE INDEX(AnnCod,UsrCod))");
-
-   /***** Table announcements *****/
-/*
-mysql> DESCRIBE announcements;
-+---------+------------+------+-----+---------+----------------+
-| Field   | Type       | Null | Key | Default | Extra          |
-+---------+------------+------+-----+---------+----------------+
-| AnnCod  | int(11)    | NO   | PRI | NULL    | auto_increment |
-| Status  | tinyint(4) | NO   | MUL | 0       |                |
-| Roles   | int(11)    | NO   |     | 0       |                |
-| Subject | text       | NO   |     | NULL    |                |
-| Content | text       | NO   |     | NULL    |                |
-+---------+------------+------+-----+---------+----------------+
-5 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS announcements ("
-			"AnnCod INT NOT NULL AUTO_INCREMENT,"
-			"Status TINYINT NOT NULL DEFAULT 0,"
-			"Roles INT NOT NULL DEFAULT 0,"
-			"Subject TEXT NOT NULL,"	// Cns_MAX_BYTES_SUBJECT
-			"Content TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
-		   "UNIQUE INDEX(AnnCod),"
-		   "INDEX(Status))");
 
    /***** Table asg_grp *****/
 /*
