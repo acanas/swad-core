@@ -2729,12 +2729,22 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
 
    /***** Get assignment folders from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get folders of assignments",
-			     "SELECT Folder FROM assignments"
-			     " WHERE CrsCod=%ld AND Hidden='N' AND Folder<>''"
-			     " AND (AsgCod NOT IN (SELECT AsgCod FROM asg_grp) OR"
-			     " AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
-			     " WHERE crs_grp_usr.UsrCod=%ld"
-			     " AND asg_grp.GrpCod=crs_grp_usr.GrpCod))",
+			     "SELECT Folder"		// row[0]
+			      " FROM asg_assignments"
+			     " WHERE CrsCod=%ld"
+			       " AND Hidden='N'"
+			       " AND Folder<>''"
+			       " AND ("
+			             "AsgCod NOT IN"
+			             " (SELECT AsgCod FROM asg_grp)"
+			             " OR "
+			             "AsgCod IN"
+			             " (SELECT asg_grp.AsgCod"
+			                " FROM asg_grp,"
+			                      "crs_grp_usr"
+			               " WHERE crs_grp_usr.UsrCod=%ld"
+			                 " AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
+			            ")",
 			     Gbl.Hierarchy.Crs.CrsCod,ZoneUsrCod);
 
    /***** Create one folder for each assignment *****/

@@ -695,11 +695,22 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
    if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
       NumRows = DB_QuerySELECT (&mysql_res,"can not get assignments",
 	                        "SELECT AsgCod"
-				" FROM assignments"
+				" FROM asg_assignments"
 				" WHERE CrsCod=%ld%s"
-				" AND (AsgCod NOT IN (SELECT AsgCod FROM asg_grp) OR"
-				" AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
-				" WHERE crs_grp_usr.UsrCod=%ld AND asg_grp.GrpCod=crs_grp_usr.GrpCod))"
+				  " AND ("
+					// Assignment is for the whole course
+                                        "AsgCod NOT IN"
+                                        " (SELECT AsgCod"
+				           " FROM asg_grp)"	// Not associated to any group
+				       " OR"
+					// Assignment is for some of my groups
+				       " AsgCod IN"
+				       " (SELECT asg_grp.AsgCod"
+				          " FROM asg_grp,"
+				                "crs_grp_usr"
+				         " WHERE crs_grp_usr.UsrCod=%ld"
+				           " AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
+				       ")"
 				" ORDER BY %s",
 				Gbl.Hierarchy.Crs.CrsCod,
 				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
@@ -708,7 +719,7 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
       NumRows = DB_QuerySELECT (&mysql_res,"can not get assignments",
 	                        "SELECT AsgCod"
-				" FROM assignments"
+				" FROM asg_assignments"
 				" WHERE CrsCod=%ld%s"
 				" ORDER BY %s",
 				Gbl.Hierarchy.Crs.CrsCod,
@@ -765,9 +776,11 @@ void Asg_GetDataOfAssignmentByCod (struct Asg_Assignment *Asg)
 				       "NOW() BETWEEN StartTime AND EndTime,"	// row[5]
 				       "Title,"					// row[6]
 				       "Folder"					// row[7]
-				" FROM assignments"
-				" WHERE AsgCod=%ld AND CrsCod=%ld",
-				Asg->AsgCod,Gbl.Hierarchy.Crs.CrsCod);
+				" FROM asg_assignments"
+				" WHERE AsgCod=%ld"
+				  " AND CrsCod=%ld",
+				Asg->AsgCod,
+				Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Get data of assignment *****/
       Asg_GetDataOfAssignment (Asg,&mysql_res,NumRows);
@@ -801,9 +814,11 @@ void Asg_GetDataOfAssignmentByFolder (struct Asg_Assignment *Asg)
 				       "NOW() BETWEEN StartTime AND EndTime,"	// row[5]
 				       "Title,"					// row[6]
 				       "Folder"					// row[7]
-				" FROM assignments"
-				" WHERE CrsCod=%ld AND Folder='%s'",
-				Gbl.Hierarchy.Crs.CrsCod,Asg->Folder);
+				" FROM asg_assignments"
+				" WHERE CrsCod=%ld"
+				  " AND Folder='%s'",
+				Gbl.Hierarchy.Crs.CrsCod,
+				Asg->Folder);
 
       /***** Get data of assignment *****/
       Asg_GetDataOfAssignment (Asg,&mysql_res,NumRows);
@@ -925,9 +940,12 @@ static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT 
 
    /***** Get text of assignment from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get assignment text",
-	                     "SELECT Txt FROM assignments"
-			     " WHERE AsgCod=%ld AND CrsCod=%ld",
-			     AsgCod,Gbl.Hierarchy.Crs.CrsCod);
+	                     "SELECT Txt"		// row[0]
+	                     " FROM asg_assignments"
+			     " WHERE AsgCod=%ld"
+			       " AND CrsCod=%ld",
+			     AsgCod,
+			     Gbl.Hierarchy.Crs.CrsCod);
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
@@ -964,7 +982,9 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
    /***** Build query *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get assignment title and text",
-	                     "SELECT Title,Txt FROM assignments"
+	                     "SELECT Title,"		// row[0]
+	                            "Txt"		// row[1]
+	                     " FROM asg_assignments"
 	                     " WHERE AsgCod=%ld",
 			     AsgCod);
 
@@ -1082,8 +1102,11 @@ void Asg_RemoveAssignment (void)
 
    /***** Remove assignment *****/
    DB_QueryDELETE ("can not remove assignment",
-		   "DELETE FROM assignments WHERE AsgCod=%ld AND CrsCod=%ld",
-                   Asg.AsgCod,Gbl.Hierarchy.Crs.CrsCod);
+		   "DELETE FROM asg_assignments"
+		   " WHERE AsgCod=%ld"
+		     " AND CrsCod=%ld",
+                   Asg.AsgCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Asg.AsgCod);
@@ -1122,9 +1145,12 @@ void Asg_HideAssignment (void)
 
    /***** Hide assignment *****/
    DB_QueryUPDATE ("can not hide assignment",
-		   "UPDATE assignments SET Hidden='Y'"
-		   " WHERE AsgCod=%ld AND CrsCod=%ld",
-                   Asg.AsgCod,Gbl.Hierarchy.Crs.CrsCod);
+		   "UPDATE asg_assignments"
+		   " SET Hidden='Y'"
+		   " WHERE AsgCod=%ld"
+		     " AND CrsCod=%ld",
+                   Asg.AsgCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show all assignments again *****/
    Asg_ShowAllAssignments (&Assignments);
@@ -1156,9 +1182,12 @@ void Asg_ShowAssignment (void)
 
    /***** Hide assignment *****/
    DB_QueryUPDATE ("can not show assignment",
-		   "UPDATE assignments SET Hidden='N'"
-		   " WHERE AsgCod=%ld AND CrsCod=%ld",
-                   Asg.AsgCod,Gbl.Hierarchy.Crs.CrsCod);
+		   "UPDATE asg_assignments"
+		   " SET Hidden='N'"
+		   " WHERE AsgCod=%ld"
+		     " AND CrsCod=%ld",
+                   Asg.AsgCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show all assignments again *****/
    Asg_ShowAllAssignments (&Assignments);
@@ -1172,9 +1201,10 @@ static bool Asg_CheckIfSimilarAssignmentExists (const char *Field,const char *Va
   {
    /***** Get number of assignments with a field value from database *****/
    return (DB_QueryCOUNT ("can not get similar assignments",
-			  "SELECT COUNT(*) FROM assignments"
+			  "SELECT COUNT(*)"
+			  " FROM asg_assignments"
 			  " WHERE CrsCod=%ld"
-			  " AND %s='%s' AND AsgCod<>%ld",
+			    " AND %s='%s' AND AsgCod<>%ld",
 			  Gbl.Hierarchy.Crs.CrsCod,
 			  Field,Value,AsgCod) != 0);
   }
@@ -1572,11 +1602,12 @@ void Asg_ReceiveFormAssignment (void)
 static void Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,unsigned NumUsrsToBeNotifiedByEMail)
   {
    /***** Update number of users notified *****/
-   DB_QueryUPDATE ("can not update the number of notifications"
-		   " of an assignment",
-		   "UPDATE assignments SET NumNotif=NumNotif+%u"
+   DB_QueryUPDATE ("can not update the number of notifs. of an assignment",
+		   "UPDATE asg_ssignments"
+		   " SET NumNotif=NumNotif+%u"
 		   " WHERE AsgCod=%ld",
-                   NumUsrsToBeNotifiedByEMail,AsgCod);
+                   NumUsrsToBeNotifiedByEMail,
+                   AsgCod);
   }
 
 /*****************************************************************************/
@@ -1588,7 +1619,7 @@ static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt)
    /***** Create a new assignment *****/
    Asg->AsgCod =
    DB_QueryINSERTandReturnCode ("can not create new assignment",
-				"INSERT INTO assignments"
+				"INSERT INTO asg_assignments"
 				" (CrsCod,UsrCod,StartTime,EndTime,Title,Folder,Txt)"
 				" VALUES"
 				" (%ld,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
@@ -1614,17 +1645,21 @@ static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt)
   {
    /***** Update the data of the assignment *****/
    DB_QueryUPDATE ("can not update assignment",
-		   "UPDATE assignments SET "
-		   "StartTime=FROM_UNIXTIME(%ld),"
-		   "EndTime=FROM_UNIXTIME(%ld),"
-		   "Title='%s',Folder='%s',Txt='%s'"
-		   " WHERE AsgCod=%ld AND CrsCod=%ld",
+		   "UPDATE asg_assignments"
+		   " SET StartTime=FROM_UNIXTIME(%ld),"
+		        "EndTime=FROM_UNIXTIME(%ld),"
+		        "Title='%s',"
+		        "Folder='%s',"
+		        "Txt='%s'"
+		   " WHERE AsgCod=%ld"
+		     " AND CrsCod=%ld",
                    Asg->TimeUTC[Dat_START_TIME],
                    Asg->TimeUTC[Dat_END_TIME  ],
                    Asg->Title,
                    Asg->Folder,
                    Txt,
-                   Asg->AsgCod,Gbl.Hierarchy.Crs.CrsCod);
+                   Asg->AsgCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Update groups *****/
    /* Remove old groups */
@@ -1768,16 +1803,18 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
 void Asg_RemoveCrsAssignments (long CrsCod)
   {
    /***** Remove groups *****/
-   DB_QueryDELETE ("can not remove all the groups associated"
-		   " to assignments of a course",
-		   "DELETE FROM asg_grp USING assignments,asg_grp"
-		   " WHERE assignments.CrsCod=%ld"
-		   " AND assignments.AsgCod=asg_grp.AsgCod",
+   DB_QueryDELETE ("can not remove groups associated to assignments in a course",
+		   "DELETE FROM asg_grp"
+		   " USING asg_assignments,"
+		          "asg_grp"
+		   " WHERE asg_assignments.CrsCod=%ld"
+		     " AND asg_assignments.AsgCod=asg_grp.AsgCod",
                    CrsCod);
 
    /***** Remove assignments *****/
-   DB_QueryDELETE ("can not remove all the assignments of a course",
-		   "DELETE FROM assignments WHERE CrsCod=%ld",
+   DB_QueryDELETE ("can not remove all assignments in a course",
+		   "DELETE FROM asg_assignments"
+		   " WHERE CrsCod=%ld",
 		   CrsCod);
   }
 
@@ -1795,19 +1832,22 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
 	 // Students and teachers can do assignments depending on groups
 	 /***** Get if I can do an assignment from database *****/
 	 return (DB_QueryCOUNT ("can not check if I can do an assignment",
-			        "SELECT COUNT(*) FROM assignments"
+			        "SELECT COUNT(*)"
+			        " FROM asg_assignments"
 				" WHERE AsgCod=%ld"
-				" AND "
-				"("
-				// Assignment is for the whole course
-				"AsgCod NOT IN (SELECT AsgCod FROM asg_grp)"
-				" OR "
-				// Assignment is for specific groups
-				"AsgCod IN"
-				" (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
-				" WHERE crs_grp_usr.UsrCod=%ld"
-				" AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
-				")",
+				  " AND ("
+					// Assignment is for the whole course
+					"AsgCod NOT IN"
+					" (SELECT AsgCod FROM asg_grp)"
+					" OR "
+					// Assignment is for some of my groups
+					"AsgCod IN"
+					" (SELECT asg_grp.AsgCod"
+					   " FROM asg_grp,"
+					         "crs_grp_usr"
+					  " WHERE crs_grp_usr.UsrCod=%ld"
+					    " AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
+				       ")",
 				AsgCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
       case Rol_SYS_ADM:
          return true;
@@ -1824,92 +1864,78 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
 
 unsigned Asg_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumCourses;
-
    /***** Get number of courses with assignments from database *****/
    switch (Scope)
      {
       case Hie_Lvl_SYS:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with assignments",
-                         "SELECT COUNT(DISTINCT CrsCod)"
-			 " FROM assignments"
-			 " WHERE CrsCod>0");
-         break;
+	 return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with assignments",
+                        "SELECT COUNT(DISTINCT CrsCod)"
+			" FROM asg_assignments"
+			" WHERE CrsCod>0");
        case Hie_Lvl_CTY:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with assignments",
-                         "SELECT COUNT(DISTINCT assignments.CrsCod)"
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "courses,"
-			       "assignments"
-			 " WHERE ins_instits.CtyCod=%ld"
-			 " AND ins_instits.InsCod=ctr_centers.InsCod"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.Status=0"
-			 " AND crs_courses.CrsCod=assignments.CrsCod",
-                         Gbl.Hierarchy.Cty.CtyCod);
-         break;
+	 return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with assignments",
+                        "SELECT COUNT(DISTINCT asg_assignments.CrsCod)"
+			" FROM ins_instits,"
+			      "ctr_centers,"
+			      "deg_degrees,"
+			      "courses,"
+			      "asg_assignments"
+			" WHERE ins_instits.CtyCod=%ld"
+			" AND ins_instits.InsCod=ctr_centers.InsCod"
+			" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			" AND deg_degrees.DegCod=crs_courses.DegCod"
+			" AND crs_courses.Status=0"
+			" AND crs_courses.CrsCod=asg_assignments.CrsCod",
+                        Gbl.Hierarchy.Cty.CtyCod);
        case Hie_Lvl_INS:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with assignments",
-                         "SELECT COUNT(DISTINCT assignments.CrsCod)"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "assignments"
-			 " WHERE ctr_centers.InsCod=%ld"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.Status=0"
-			 " AND crs_courses.CrsCod=assignments.CrsCod",
-                         Gbl.Hierarchy.Ins.InsCod);
-         break;
+	 return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with assignments",
+                        "SELECT COUNT(DISTINCT asg_assignments.CrsCod)"
+			" FROM ctr_centers,"
+			      "deg_degrees,"
+			      "crs_courses,"
+			      "asg_assignments"
+			" WHERE ctr_centers.InsCod=%ld"
+			" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			" AND deg_degrees.DegCod=crs_courses.DegCod"
+			" AND crs_courses.Status=0"
+			" AND crs_courses.CrsCod=asg_assignments.CrsCod",
+                        Gbl.Hierarchy.Ins.InsCod);
       case Hie_Lvl_CTR:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with assignments",
-                         "SELECT COUNT(DISTINCT assignments.CrsCod)"
-			 " FROM deg_degrees,"
-			       "crs_courses,"
-			       "assignments"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.Status=0"
-			 " AND crs_courses.CrsCod=assignments.CrsCod",
-                         Gbl.Hierarchy.Ctr.CtrCod);
-         break;
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with assignments",
+                        "SELECT COUNT(DISTINCT asg_assignments.CrsCod)"
+			" FROM deg_degrees,"
+			      "crs_courses,"
+			      "asg_assignments"
+			" WHERE deg_degrees.CtrCod=%ld"
+			" AND deg_degrees.DegCod=crs_courses.DegCod"
+			" AND crs_courses.Status=0"
+			" AND crs_courses.CrsCod=asg_assignments.CrsCod",
+                        Gbl.Hierarchy.Ctr.CtrCod);
       case Hie_Lvl_DEG:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with assignments",
-                         "SELECT COUNT(DISTINCT assignments.CrsCod)"
-			 " FROM crs_courses,"
-			       "assignments"
-			 " WHERE crs_courses.DegCod=%ld"
-			 " AND crs_courses.Status=0"
-			 " AND crs_courses.CrsCod=assignments.CrsCod",
-                         Gbl.Hierarchy.Deg.DegCod);
-         break;
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with assignments",
+                        "SELECT COUNT(DISTINCT asg_assignments.CrsCod)"
+			" FROM crs_courses,"
+			      "asg_assignments"
+			" WHERE crs_courses.DegCod=%ld"
+			" AND crs_courses.Status=0"
+			" AND crs_courses.CrsCod=asg_assignments.CrsCod",
+                        Gbl.Hierarchy.Deg.DegCod);
       case Hie_Lvl_CRS:
-         DB_QuerySELECT (&mysql_res,"can not get number of courses with assignments",
-                         "SELECT COUNT(DISTINCT CrsCod)"
-			 " FROM assignments"
-			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.CrsCod);
-         break;
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with assignments",
+                        "SELECT COUNT(DISTINCT CrsCod)"
+			" FROM asg_assignments"
+			" WHERE CrsCod=%ld",
+                        Gbl.Hierarchy.Crs.CrsCod);
       default:
 	 Lay_WrongScopeExit ();
-	 break;
+	 return 0;
      }
-
-   /***** Get number of courses *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumCourses) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of courses with assignments.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumCourses;
   }
 
 /*****************************************************************************/
@@ -1931,66 +1957,66 @@ unsigned Asg_GetNumAssignments (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]
                                 "SUM(NumNotif)"			// row[1]
-			 " FROM assignments"
+			 " FROM asg_assignments"
 			 " WHERE CrsCod>0");
          break;
       case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]
-                                "SUM(assignments.NumNotif)"	// row[1]
+                                "SUM(asg_assignments.NumNotif)"	// row[1]
 			 " FROM ins_instits,"
 			       "ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
-			       "assignments"
+			       "asg_assignments"
 			 " WHERE ins_instits.CtyCod=%ld"
 			 " AND ins_instits.InsCod=ctr_centers.InsCod"
 			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=assignments.CrsCod",
+			 " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                          Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]
-                                "SUM(assignments.NumNotif)"	// row[1]
+                                "SUM(asg_assignments.NumNotif)"	// row[1]
 			 " FROM ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
-			       "assignments"
+			       "asg_assignments"
 			 " WHERE ctr_centers.InsCod=%ld"
 			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=assignments.CrsCod",
+			 " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"
-                                "SUM(assignments.NumNotif)"
+                                "SUM(asg_assignments.NumNotif)"
 			 " FROM deg_degrees,"
 			       "crs_courses,"
-			       "assignments"
+			       "asg_assignments"
 			 " WHERE deg_degrees.CtrCod=%ld"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=assignments.CrsCod",
+			 " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"
-                                "SUM(assignments.NumNotif)"
+                                "SUM(asg_assignments.NumNotif)"
 			 " FROM crs_courses,"
-			       "assignments"
+			       "asg_assignments"
 			 " WHERE crs_courses.DegCod=%ld"
-			 " AND crs_courses.CrsCod=assignments.CrsCod",
+			 " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"
                                 "SUM(NumNotif)"
-			 " FROM assignments"
+			 " FROM asg_assignments"
 			 " WHERE CrsCod=%ld",
                          Gbl.Hierarchy.Crs.CrsCod);
          break;
@@ -2026,9 +2052,10 @@ unsigned Asg_GetNumAssignments (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
 unsigned Asg_GetNumAssignmentsInCrs (long CrsCod)
   {
    /***** Get number of assignments in a course from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of assignments in course",
-			     "SELECT COUNT(*) FROM assignments"
-			     " WHERE CrsCod=%ld",
-			     CrsCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of assignments in course",
+		  "SELECT COUNT(*)"
+		   " FROM asg_assignments"
+		  " WHERE CrsCod=%ld",
+		  CrsCod);
   }

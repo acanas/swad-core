@@ -58,16 +58,9 @@ CREATE TABLE IF NOT EXISTS ann_seen (
 	UsrCod INT NOT NULL,
 	UNIQUE INDEX(AnnCod,UsrCod));
 --
--- Table asg_grp: stores the groups associated to assigments
+-- Table asg_assignments: stores the assignments proposed by the teachers to their students
 --
-CREATE TABLE IF NOT EXISTS asg_grp (
-	AsgCod INT NOT NULL,
-	GrpCod INT NOT NULL,
-	UNIQUE INDEX(AsgCod,GrpCod));
---
--- Table assignments: stores the assignments proposed by the teachers to their students
---
-CREATE TABLE IF NOT EXISTS assignments (
+CREATE TABLE IF NOT EXISTS asg_assignments (
 	AsgCod INT NOT NULL AUTO_INCREMENT,
 	CrsCod INT NOT NULL DEFAULT -1,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
@@ -80,6 +73,13 @@ CREATE TABLE IF NOT EXISTS assignments (
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(AsgCod),
 	INDEX(CrsCod,Hidden));
+--
+-- Table asg_grp: stores the groups associated to assigments
+--
+CREATE TABLE IF NOT EXISTS asg_grp (
+	AsgCod INT NOT NULL,
+	GrpCod INT NOT NULL,
+	UNIQUE INDEX(AsgCod,GrpCod));
 --
 -- Table att_events: stores events used to control attendance
 --

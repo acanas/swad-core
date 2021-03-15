@@ -214,25 +214,9 @@ mysql> DESCRIBE ann_seen;
 			"UsrCod INT NOT NULL,"
 		   "UNIQUE INDEX(AnnCod,UsrCod))");
 
-   /***** Table asg_grp *****/
+   /***** Table asg_assignments *****/
 /*
-mysql> DESCRIBE asg_grp;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| AsgCod | int(11) | NO   | PRI | NULL    |       |
-| GrpCod | int(11) | NO   | PRI | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS asg_grp ("
-			"AsgCod INT NOT NULL,"
-			"GrpCod INT NOT NULL,"
-		   "UNIQUE INDEX(AsgCod,GrpCod))");
-
-   /***** Table assignments *****/
-/*
-mysql> DESCRIBE assignments;
+mysql> DESCRIBE asg_assignments;
 +-----------+----------------+------+-----+---------+----------------+
 | Field     | Type           | Null | Key | Default | Extra          |
 +-----------+----------------+------+-----+---------+----------------+
@@ -249,7 +233,7 @@ mysql> DESCRIBE assignments;
 +-----------+----------------+------+-----+---------+----------------+
 10 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS assignments ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS asg_assignments ("
 			"AsgCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
@@ -262,6 +246,22 @@ mysql> DESCRIBE assignments;
 			"Txt TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(AsgCod),"
 		   "INDEX(CrsCod,Hidden))");
+
+   /***** Table asg_grp *****/
+/*
+mysql> DESCRIBE asg_grp;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| AsgCod | int(11) | NO   | PRI | NULL    |       |
+| GrpCod | int(11) | NO   | PRI | NULL    |       |
++--------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS asg_grp ("
+			"AsgCod INT NOT NULL,"
+			"GrpCod INT NOT NULL,"
+		   "UNIQUE INDEX(AsgCod,GrpCod))");
 
    /***** Table att_events *****/
 /*

@@ -1230,19 +1230,23 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          // Cases 1 and 2 are mutually exclusive, so the union returns the case 1 or 2
          NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
-				   "(SELECT crs_usr.UsrCod"
-				   " FROM assignments,crs_usr"
-				   " WHERE assignments.AsgCod=%ld"
-				   " AND assignments.AsgCod NOT IN"
-				   " (SELECT AsgCod FROM asg_grp WHERE AsgCod=%ld)"
-				   " AND assignments.CrsCod=crs_usr.CrsCod"
-				   " AND crs_usr.UsrCod<>%ld)"
+				   "(SELECT crs_usr.UsrCod"	// row[0]
+				     " FROM asg_assignments,"
+				           "crs_usr"
+				   " WHERE asg_assignments.AsgCod=%ld"
+				     " AND asg_assignments.AsgCod NOT IN"
+				         " (SELECT AsgCod"
+				            " FROM asg_grp"
+				           " WHERE AsgCod=%ld)"
+				     " AND asg_assignments.CrsCod=crs_usr.CrsCod"
+				     " AND crs_usr.UsrCod<>%ld)"
 				   " UNION "
 				   "(SELECT DISTINCT crs_grp_usr.UsrCod"
-				   " FROM asg_grp,crs_grp_usr"
-				   " WHERE asg_grp.AsgCod=%ld"
-				   " AND asg_grp.GrpCod=crs_grp_usr.GrpCod"
-				   " AND crs_grp_usr.UsrCod<>%ld)",
+				     " FROM asg_grp,"
+				           "crs_grp_usr"
+				    " WHERE asg_grp.AsgCod=%ld"
+				      " AND asg_grp.GrpCod=crs_grp_usr.GrpCod"
+				      " AND crs_grp_usr.UsrCod<>%ld)",
 				   Cod,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,
 				   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
