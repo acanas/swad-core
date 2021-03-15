@@ -144,9 +144,9 @@ mysql> DESCRIBE act_MFU;
 			"LastClick DATETIME NOT NULL,"
 		   "UNIQUE INDEX(UsrCod,ActCod))");
 
-   /***** Table agendas *****/
+   /***** Table agd_agendas *****/
 /*
-mysql> DESCRIBE agendas;
+mysql> DESCRIBE agd_agendas;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
@@ -162,7 +162,7 @@ mysql> DESCRIBE agendas;
 +-----------+---------------+------+-----+---------+----------------+
 9 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS agendas ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS agd_agendas ("
 			"AgdCod INT NOT NULL AUTO_INCREMENT,"
 			"UsrCod INT NOT NULL,"
 			"Public ENUM('N','Y') NOT NULL DEFAULT 'N',"

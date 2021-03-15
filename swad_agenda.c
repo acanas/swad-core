@@ -1151,7 +1151,7 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
      {
       /* Make query */
       NumRows = DB_QuerySELECT (&mysql_res,"can not get agenda events",
-	                        "SELECT AgdCod FROM agendas"
+	                        "SELECT AgdCod FROM agd_agendas"
 				" WHERE %s%s%s%s"
 				" ORDER BY %s",
 				UsrSubQuery,
@@ -1204,15 +1204,20 @@ static void Agd_GetDataOfEventByCod (struct Agd_Event *AgdEvent)
 
    /***** Get data of event from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get agenda event data",
-	               "SELECT AgdCod,Public,Hidden,"
-		       "UNIX_TIMESTAMP(StartTime),"
-		       "UNIX_TIMESTAMP(EndTime),"
-		       "NOW()>EndTime,"		// Past event?
-		       "NOW()<StartTime,"	// Future event?
-		       "Event,Location"
-		       " FROM agendas"
-		       " WHERE AgdCod=%ld AND UsrCod=%ld",
-		       AgdEvent->AgdCod,AgdEvent->UsrCod)) // Event found...
+	               "SELECT AgdCod,"				// row[0]
+	                      "Public,"				// row[1]
+	                      "Hidden,"				// row[2]
+		              "UNIX_TIMESTAMP(StartTime),"	// row[3]
+		              "UNIX_TIMESTAMP(EndTime),"	// row[4]
+		              "NOW()>EndTime,"			// row[5]	Past event?
+		              "NOW()<StartTime,"		// row[6]	Future event?
+		              "Event,"				// row[7]
+		              "Location"			// row[8]
+		       " FROM agd_agendas"
+		       " WHERE AgdCod=%ld"
+		       " AND UsrCod=%ld",
+		       AgdEvent->AgdCod,
+		       AgdEvent->UsrCod))	// Event found...
      {
       /* Get row:
       row[0] AgdCod
@@ -1294,9 +1299,12 @@ static void Agd_GetEventTxtFromDB (struct Agd_Event *AgdEvent,
 
    /***** Get text of event from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get event text",
-	                     "SELECT Txt FROM agendas"
-			     " WHERE AgdCod=%ld AND UsrCod=%ld",
-			     AgdEvent->AgdCod,AgdEvent->UsrCod);
+	                     "SELECT Txt"	// row[0]
+	                     " FROM agd_agendas"
+			     " WHERE AgdCod=%ld"
+			     " AND UsrCod=%ld",
+			     AgdEvent->AgdCod,
+			     AgdEvent->UsrCod);
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
@@ -1388,8 +1396,11 @@ void Agd_RemoveEvent (void)
 
    /***** Remove event *****/
    DB_QueryDELETE ("can not remove event",
-		   "DELETE FROM agendas WHERE AgdCod=%ld AND UsrCod=%ld",
-                   AgdEvent.AgdCod,AgdEvent.UsrCod);
+		   "DELETE FROM agd_agendas"
+		   " WHERE AgdCod=%ld"
+		   " AND UsrCod=%ld",
+                   AgdEvent.AgdCod,
+                   AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_removed,
@@ -1424,9 +1435,12 @@ void Agd_HideEvent (void)
 
    /***** Set event private *****/
    DB_QueryUPDATE ("can not hide event",
-		   "UPDATE agendas SET Hidden='Y'"
-		   " WHERE AgdCod=%ld AND UsrCod=%ld",
-                   AgdEvent.AgdCod,AgdEvent.UsrCod);
+		   "UPDATE agd_agendas"
+		   " SET Hidden='Y'"
+		   " WHERE AgdCod=%ld"
+		   " AND UsrCod=%ld",
+                   AgdEvent.AgdCod,
+                   AgdEvent.UsrCod);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda (&Agenda);
@@ -1457,9 +1471,12 @@ void Agd_UnhideEvent (void)
 
    /***** Set event public *****/
    DB_QueryUPDATE ("can not show event",
-		   "UPDATE agendas SET Hidden='N'"
-		   " WHERE AgdCod=%ld AND UsrCod=%ld",
-                   AgdEvent.AgdCod,AgdEvent.UsrCod);
+		   "UPDATE agd_agendas"
+		   " SET Hidden='N'"
+		   " WHERE AgdCod=%ld"
+		   " AND UsrCod=%ld",
+                   AgdEvent.AgdCod,
+                   AgdEvent.UsrCod);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda (&Agenda);
@@ -1491,9 +1508,12 @@ void Agd_MakeEventPrivate (void)
 
    /***** Make event private *****/
    DB_QueryUPDATE ("can not make event private",
-		   "UPDATE agendas SET Public='N'"
-		   " WHERE AgdCod=%ld AND UsrCod=%ld",
-                   AgdEvent.AgdCod,AgdEvent.UsrCod);
+		   "UPDATE agd_agendas"
+		   " SET Public='N'"
+		   " WHERE AgdCod=%ld"
+		   " AND UsrCod=%ld",
+                   AgdEvent.AgdCod,
+                   AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_is_now_private,
@@ -1529,9 +1549,12 @@ void Agd_MakeEventPublic (void)
 
    /***** Make event public *****/
    DB_QueryUPDATE ("can not make event public",
-		   "UPDATE agendas SET Public='Y'"
-		   " WHERE AgdCod=%ld AND UsrCod=%ld",
-                   AgdEvent.AgdCod,AgdEvent.UsrCod);
+		   "UPDATE agd_agendas"
+		   " SET Public='Y'"
+		   " WHERE AgdCod=%ld"
+		   " AND UsrCod=%ld",
+                   AgdEvent.AgdCod,
+                   AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_is_now_visible_to_users_of_your_courses,
@@ -1785,7 +1808,7 @@ static void Agd_CreateEvent (struct Agd_Event *AgdEvent,const char *Txt)
    /***** Create a new event *****/
    AgdEvent->AgdCod =
    DB_QueryINSERTandReturnCode ("can not create new event",
-				"INSERT INTO agendas"
+				"INSERT INTO agd_agendas"
 				" (UsrCod,StartTime,EndTime,Event,Location,Txt)"
 				" VALUES"
 				" (%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
@@ -1806,11 +1829,14 @@ static void Agd_UpdateEvent (struct Agd_Event *AgdEvent,const char *Txt)
   {
    /***** Update the data of the event *****/
    DB_QueryUPDATE ("can not update event",
-		   "UPDATE agendas SET "
-		   "StartTime=FROM_UNIXTIME(%ld),"
-		   "EndTime=FROM_UNIXTIME(%ld),"
-		   "Event='%s',Location='%s',Txt='%s'"
-		   " WHERE AgdCod=%ld AND UsrCod=%ld",
+		   "UPDATE agd_agendas"
+		   " SET StartTime=FROM_UNIXTIME(%ld),"
+		        "EndTime=FROM_UNIXTIME(%ld),"
+		        "Event='%s',"
+		        "Location='%s',"
+		        "Txt='%s'"
+		   " WHERE AgdCod=%ld"
+		     " AND UsrCod=%ld",
                    AgdEvent->TimeUTC[Dat_START_TIME],
                    AgdEvent->TimeUTC[Dat_END_TIME  ],
                    AgdEvent->Event,AgdEvent->Location,Txt,
@@ -1825,7 +1851,8 @@ void Agd_RemoveUsrEvents (long UsrCod)
   {
    /***** Remove events *****/
    DB_QueryDELETE ("can not remove all the events of a user",
-		   "DELETE FROM agendas WHERE UsrCod=%ld",
+		   "DELETE FROM agd_agendas"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
 
@@ -1837,7 +1864,8 @@ unsigned Agd_GetNumEventsFromUsr (long UsrCod)
   {
    /***** Get number of events in a course from database *****/
    return (unsigned) DB_QueryCOUNT ("can not get number of events from user",
-				    "SELECT COUNT(*) FROM agendas"
+				    "SELECT COUNT(*)"
+				    " FROM agd_agendas"
 				    " WHERE UsrCod=%ld",
 				    UsrCod);
   }
@@ -1859,75 +1887,76 @@ unsigned Agd_GetNumUsrsWithEvents (Hie_Lvl_Level_t Scope)
       case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
                          "SELECT COUNT(DISTINCT UsrCod)"
-			 " FROM agendas"
+			 " FROM agd_agendas"
 			 " WHERE UsrCod>0");
          break;
        case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
-                         "SELECT COUNT(DISTINCT agendas.UsrCod)"
+                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
 			 " FROM ins_instits,"
 			       "ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "crs_usr,"
-			       "agendas"
+			       "agd_agendas"
 			 " WHERE ins_instits.CtyCod=%ld"
 			 " AND ins_instits.InsCod=ctr_centers.InsCod"
 			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.Status=0"
 			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agendas.UsrCod",
+			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
 		         Gbl.Hierarchy.Cty.CtyCod);
          break;
        case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
-                         "SELECT COUNT(DISTINCT agendas.UsrCod)"
+                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
 			 " FROM ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "crs_usr,"
-			       "agendas"
+			       "agd_agendas"
 			 " WHERE ctr_centers.InsCod=%ld"
 			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.Status=0"
 			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agendas.UsrCod",
+			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
-                         "SELECT COUNT(DISTINCT agendas.UsrCod)"
+                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
 			 " FROM deg_degrees,"
 			       "crs_courses,"
 			       "crs_usr,"
-			       "agendas"
+			       "agd_agendas"
 			 " WHERE deg_degrees.CtrCod=%ld"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.Status=0"
 			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agendas.UsrCod",
+			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
-                         "SELECT COUNT(DISTINCT agendas.UsrCod)"
+                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
 			 " FROM crs_courses,"
 			       "crs_usr,"
-			       "agendas"
+			       "agd_agendas"
 			 " WHERE crs_courses.DegCod=%ld"
 			 " AND crs_courses.Status=0"
 			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agendas.UsrCod",
+			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
-                         "SELECT COUNT(DISTINCT agendas.UsrCod)"
-			 " FROM crs_usr,agendas"
+                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
+			 " FROM crs_usr,"
+			       "agd_agendas"
 			 " WHERE crs_usr.CrsCod=%ld"
-			 " AND crs_usr.UsrCod=agendas.UsrCod",
+			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
@@ -1963,7 +1992,7 @@ unsigned Agd_GetNumEvents (Hie_Lvl_Level_t Scope)
       case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of events",
                          "SELECT COUNT(*)"
-			 " FROM agendas"
+			 " FROM agd_agendas"
 			 " WHERE UsrCod>0");
          break;
       case Hie_Lvl_CTY:
@@ -1974,13 +2003,13 @@ unsigned Agd_GetNumEvents (Hie_Lvl_Level_t Scope)
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "crs_usr,"
-			       "agendas"
+			       "agd_agendas"
 			 " WHERE ins_instits.CtyCod=%ld"
 			 " AND ins_instits.InsCod=ctr_centers.InsCod"
 			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agendas.UsrCod",
+			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_Lvl_INS:
@@ -1990,12 +2019,12 @@ unsigned Agd_GetNumEvents (Hie_Lvl_Level_t Scope)
 			       "deg_degrees,"
 			       "crs_courses,"
 			       "crs_usr,"
-			       "agendas"
+			       "agd_agendas"
 			 " WHERE ctr_centers.InsCod=%ld"
 			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agendas.UsrCod",
+			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
@@ -2004,11 +2033,11 @@ unsigned Agd_GetNumEvents (Hie_Lvl_Level_t Scope)
 			 " FROM deg_degrees,"
 			       "crs_courses,"
 			       "crs_usr,"
-			       "agendas"
+			       "agd_agendas"
 			 " WHERE deg_degrees.CtrCod=%ld"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agendas.UsrCod",
+			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_Lvl_DEG:
@@ -2016,18 +2045,19 @@ unsigned Agd_GetNumEvents (Hie_Lvl_Level_t Scope)
                          "SELECT COUNT(*)"
 			 " FROM crs_courses,"
 			       "crs_usr,"
-			       "agendas"
+			       "agd_agendas"
 			 " WHERE crs_courses.DegCod=%ld"
 			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agendas.UsrCod",
+			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of events",
                          "SELECT COUNT(*)"
-			 " FROM crs_usr,agendas"
+			 " FROM crs_usr,"
+			       "agd_agendas"
 			 " WHERE crs_usr.CrsCod=%ld"
-			 " AND crs_usr.UsrCod=agendas.UsrCod",
+			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:

@@ -26,18 +26,9 @@ CREATE TABLE IF NOT EXISTS act_MFU (
 	LastClick DATETIME NOT NULL,
 	UNIQUE INDEX(UsrCod,ActCod));
 --
--- Table ann_seen: stores users who have seen global announcements
---
-CREATE TABLE IF NOT EXISTS usr_admins (
-	UsrCod INT NOT NULL,
-	Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,
-	Cod INT NOT NULL,
-	UNIQUE INDEX(UsrCod,Scope,Cod),
-	INDEX(Scope,Cod));
---
 -- Table agendas: stores users' agendas
 --
-CREATE TABLE IF NOT EXISTS agendas (
+CREATE TABLE IF NOT EXISTS agd_agendas (
 	AgdCod INT NOT NULL AUTO_INCREMENT,
 	UsrCod INT NOT NULL,
 	Public ENUM('N','Y') NOT NULL DEFAULT 'N',
@@ -1596,6 +1587,15 @@ CREATE TABLE IF NOT EXISTS tst_tags (
 	TagHidden ENUM('N','Y') NOT NULL,
 	UNIQUE INDEX(TagCod),
 	INDEX(CrsCod,ChangeTime));
+--
+-- Table usr_admins: stores users who manage degrees, centres, institutions and system
+--
+CREATE TABLE IF NOT EXISTS usr_admins (
+	UsrCod INT NOT NULL,
+	Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,
+	Cod INT NOT NULL,
+	UNIQUE INDEX(UsrCod,Scope,Cod),
+	INDEX(Scope,Cod));
 --
 -- Table usr_banned: stores users banned for ranking
 --
