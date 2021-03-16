@@ -2698,7 +2698,8 @@ static bool Usr_CheckIfMyBirthdayHasNotBeenCongratulated (void)
   {
    /***** Delete old birthdays *****/
    return (DB_QueryCOUNT ("can not check if my birthday has been congratulated",
-			  "SELECT COUNT(*) FROM birthdays_today"
+			  "SELECT COUNT(*)"
+			   " FROM usr_birthdays_today"
 			  " WHERE UsrCod=%ld",
 			  Gbl.Usrs.Me.UsrDat.UsrCod) == 0);
   }
@@ -2711,11 +2712,12 @@ static void Usr_InsertMyBirthday (void)
   {
    /***** Delete old birthdays *****/
    DB_QueryDELETE ("can not delete old birthdays",
-		   "DELETE FROM birthdays_today WHERE Today<>CURDATE()");
+		   "DELETE FROM usr_birthdays_today"
+		   " WHERE Today<>CURDATE()");
 
    /***** Insert new birthday *****/
    DB_QueryINSERT ("can not insert birthday",
-		   "INSERT INTO birthdays_today"
+		   "INSERT INTO usr_birthdays_today"
 	           " (UsrCod,Today)"
 	           " VALUES"
 	           " (%ld,CURDATE())",

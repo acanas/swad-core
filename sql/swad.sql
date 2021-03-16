@@ -126,14 +126,6 @@ CREATE TABLE IF NOT EXISTS ban_banners (
 	UNIQUE INDEX(BanCod),
 	INDEX(Hidden));
 --
--- Table birthdays_today: stores birthdays already congratulated today
---
-CREATE TABLE IF NOT EXISTS birthdays_today (
-	UsrCod INT NOT NULL,
-	Today DATE NOT NULL,
-	UNIQUE INDEX(UsrCod),
-	INDEX(Today));
---
 -- Table buildings: buildings in a center
 --
 CREATE TABLE IF NOT EXISTS buildings (
@@ -1602,6 +1594,14 @@ CREATE TABLE IF NOT EXISTS usr_admins (
 CREATE TABLE IF NOT EXISTS usr_banned (
 	UsrCod INT NOT NULL,
 	UNIQUE INDEX(UsrCod));
+--
+-- Table usr_birthdays_today: stores birthdays already congratulated today
+--
+CREATE TABLE IF NOT EXISTS usr_birthdays_today (
+	UsrCod INT NOT NULL,
+	Today DATE NOT NULL,
+	UNIQUE INDEX(UsrCod),
+	INDEX(Today));
 --
 -- Table usr_data: stores users' data
 --

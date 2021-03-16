@@ -358,24 +358,6 @@ mysql> DESCRIBE ban_banners;
 		   "UNIQUE INDEX(BanCod),"
 		   "INDEX(Hidden))");
 
-   /***** Table birthdays_today *****/
-   // Stores birthdays already congratulated today
-/*
-mysql> DESCRIBE birthdays_today;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| UsrCod | int(11) | NO   | PRI | NULL    |       |
-| Today  | date    | NO   | MUL | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-2 rows in set (0.09 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS birthdays_today ("
-			"UsrCod INT NOT NULL,"
-			"Today DATE NOT NULL,"
-		   "UNIQUE INDEX(UsrCod),"
-		   "INDEX(Today))");
-
    /***** Table buildings *****/
 /*
 mysql> DESCRIBE buildings;
@@ -3393,6 +3375,24 @@ mysql> DESCRIBE usr_banned;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_banned ("
 			"UsrCod INT NOT NULL,"
 		   "UNIQUE INDEX(UsrCod))");
+
+   /***** Table usr_birthdays_today *****/
+   // Stores birthdays already congratulated today
+/*
+mysql> DESCRIBE usr_birthdays_today;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| UsrCod | int(11) | NO   | PRI | NULL    |       |
+| Today  | date    | NO   | MUL | NULL    |       |
++--------+---------+------+-----+---------+-------+
+2 rows in set (0.09 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_birthdays_today ("
+			"UsrCod INT NOT NULL,"
+			"Today DATE NOT NULL,"
+		   "UNIQUE INDEX(UsrCod),"
+		   "INDEX(Today))");
 
    /***** Table usr_data *****/
 /*
