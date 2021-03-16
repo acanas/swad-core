@@ -333,9 +333,9 @@ mysql> DESCRIBE att_usr;
 		   "UNIQUE INDEX(AttCod,UsrCod),"
 		   "INDEX(UsrCod))");
 
-   /***** Table banners *****/
+   /***** Table ban_banners *****/
 /*
-mysql> DESCRIBE banners;
+mysql> DESCRIBE ban_banners;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
@@ -348,7 +348,7 @@ mysql> DESCRIBE banners;
 +-----------+---------------+------+-----+---------+----------------+
 6 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS banners ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS ban_banners ("
 			"BanCod INT NOT NULL AUTO_INCREMENT,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"ShortName VARCHAR(511) NOT NULL,"	// Ban_MAX_BYTES_SHRT_NAME

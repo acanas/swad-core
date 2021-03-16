@@ -114,9 +114,9 @@ CREATE TABLE IF NOT EXISTS att_usr (
 	UNIQUE INDEX(AttCod,UsrCod),
 	INDEX(UsrCod));
 --
--- Table banners: stores advertising banners
+-- Table ban_banners: stores advertising banners
 --
-CREATE TABLE IF NOT EXISTS banners (
+CREATE TABLE IF NOT EXISTS ban_banners (
 	BanCod INT NOT NULL AUTO_INCREMENT,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
 	ShortName VARCHAR(511) NOT NULL,

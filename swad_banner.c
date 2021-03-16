@@ -141,8 +141,13 @@ void Ban_SeeBanners (void)
 
    /***** Get list of banners *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get banners",
-			     "SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
-			     " FROM banners"
+			     "SELECT BanCod,"		// row[0]
+			            "Hidden,"		// row[1]
+			            "ShortName,"	// row[2]
+			            "FullName,"		// row[3]
+			            "Img,"		// row[4]
+			            "WWW"		// row[5]
+			     " FROM ban_banners"
 			     " WHERE Hidden='N'"
 			     " ORDER BY ShortName");
    Ban_GetListBanners (&Banners,&mysql_res,NumRows);
@@ -257,8 +262,14 @@ static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
 
    /***** Get list of banners *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get banners",
-			     "SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
-			     " FROM banners ORDER BY ShortName");
+			     "SELECT BanCod,"		// row[0]
+			            "Hidden,"		// row[1]
+			            "ShortName,"	// row[2]
+			            "FullName,"		// row[3]
+			            "Img,"		// row[4]
+			            "WWW"		// row[5]
+			      " FROM ban_banners"
+			     " ORDER BY ShortName");
    Ban_GetListBanners (Banners,&mysql_res,NumRows);
 
    /***** Begin box *****/
@@ -351,8 +362,13 @@ void Ban_GetDataOfBannerByCod (struct Ban_Banner *Ban)
      {
       /***** Get data of a banner from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a banner",
-				"SELECT Hidden,ShortName,FullName,Img,WWW"
-			        " FROM banners WHERE BanCod=%ld",
+				"SELECT Hidden,"	// row[0]
+				       "ShortName,"	// row[1]
+				       "FullName,"	// row[2]
+				       "Img,"		// row[3]
+				       "WWW"		// row[4]
+			         " FROM ban_banners"
+			        " WHERE BanCod=%ld",
 			        Ban->BanCod);
       if (NumRows) // Banner found...
         {
@@ -566,7 +582,8 @@ void Ban_RemoveBanner (void)
 
    /***** Remove banner *****/
    DB_QueryDELETE ("can not remove a banner",
-		   "DELETE FROM banners WHERE BanCod=%ld",
+		   "DELETE FROM ban_banners"
+		   " WHERE BanCod=%ld",
 		   Ban.BanCod);
 
    /***** Write message to show the change made *****/
@@ -630,7 +647,8 @@ static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide)
    /***** Mark file as hidden/visible in database *****/
    if (Ban->Hidden != Hide)
       DB_QueryUPDATE ("can not change status of a banner in database",
-		      "UPDATE banners SET Hidden='%c'"
+		      "UPDATE ban_banners"
+		        " SET Hidden='%c'"
 		      " WHERE BanCod=%ld",
 	              Hide ? 'Y' :
 		             'N',
@@ -758,11 +776,13 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
 static bool Ban_CheckIfBannerNameExists (const char *FieldName,const char *Name,long BanCod)
   {
    /***** Get number of banners with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of a banner"
-			  " already existed",
-		          "SELECT COUNT(*) FROM banners"
-			  " WHERE %s='%s' AND BanCod<>%ld",
-			  FieldName,Name,BanCod) != 0);
+   return (DB_QueryCOUNT ("can not check if the name of a banner already existed",
+		          "SELECT COUNT(*)"
+		           " FROM ban_banners"
+			  " WHERE %s='%s'"
+			    " AND BanCod<>%ld",
+			  FieldName,Name,
+			  BanCod) != 0);
   }
 
 /*****************************************************************************/
@@ -774,8 +794,11 @@ static void Ban_UpdateBanNameDB (long BanCod,const char *FieldName,
   {
    /***** Update banner changing old name by new name *****/
    DB_QueryUPDATE ("can not update the name of a banner",
-		   "UPDATE banners SET %s='%s' WHERE BanCod=%ld",
-	           FieldName,NewBanName,BanCod);
+		   "UPDATE ban_banners"
+		     " SET %s='%s'"
+		   " WHERE BanCod=%ld",
+	           FieldName,NewBanName,
+	           BanCod);
   }
 
 /*****************************************************************************/
@@ -808,8 +831,11 @@ void Ban_ChangeBannerImg (void)
      {
       /* Update the table changing old image by new image */
       DB_QueryUPDATE ("can not update the image of a banner",
-		      "UPDATE banners SET Img='%s' WHERE BanCod=%ld",
-                      NewImg,Ban.BanCod);
+		      "UPDATE ban_banners"
+		        " SET Img='%s'"
+		      " WHERE BanCod=%ld",
+                      NewImg,
+                      Ban.BanCod);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -856,8 +882,11 @@ void Ban_ChangeBannerWWW (void)
      {
       /* Update the table changing old WWW by new WWW */
       DB_QueryUPDATE ("can not update the web of a banner",
-		      "UPDATE banners SET WWW='%s' WHERE BanCod=%ld",
-                      NewWWW,Ban.BanCod);
+		      "UPDATE ban_banners"
+		        " SET WWW='%s'"
+		      " WHERE BanCod=%ld",
+                      NewWWW,
+                      Ban.BanCod);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1056,11 +1085,14 @@ static void Ban_CreateBanner (const struct Ban_Banner *Ban)
   {
    /***** Create a new banner *****/
    DB_QueryINSERT ("can not create banner",
-		   "INSERT INTO banners"
+		   "INSERT INTO ban_banners"
 		   " (Hidden,ShortName,FullName,Img,WWW)"
 		   " VALUES"
 		   " ('N','%s','%s','%s','%s')",
-                   Ban->ShrtName,Ban->FullName,Ban->Img,Ban->WWW);
+                   Ban->ShrtName,
+                   Ban->FullName,
+                   Ban->Img,
+                   Ban->WWW);
   }
 
 /*****************************************************************************/
@@ -1080,11 +1112,18 @@ void Ban_WriteMenuWithBanners (void)
    /***** Get random banner *****/
    // The banner(s) will change once in a while
    NumRows = DB_QuerySELECT (&mysql_res,"can not get banners",
-			     "SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
-			     " FROM banners"
+			     "SELECT BanCod,"		// row[0]
+			            "Hidden,"		// row[1]
+			            "ShortName,"	// row[2]
+			            "FullName,"		// row[3]
+			            "Img,"		// row[4]
+			            "WWW"		// row[5]
+			      " FROM ban_banners"
 			     " WHERE Hidden='N'"
-			     " ORDER BY RAND(%lu) LIMIT %u",
-			     (unsigned long) (Gbl.StartExecutionTimeUTC / Cfg_TIME_TO_CHANGE_BANNER),
+			     " ORDER BY RAND(%lu)"
+			     " LIMIT %u",
+			     (unsigned long) (Gbl.StartExecutionTimeUTC /
+				              Cfg_TIME_TO_CHANGE_BANNER),
 			     Cfg_NUMBER_OF_BANNERS);
    Ban_GetListBanners (&Banners,&mysql_res,NumRows);
 
