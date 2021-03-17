@@ -158,17 +158,6 @@ CREATE TABLE IF NOT EXISTS cht_rooms (
 	NumUsrs INT NOT NULL,
 	UNIQUE INDEX(RoomCode));
 --
--- Table connected: users currently connected to the platform
---
-CREATE TABLE IF NOT EXISTS connected (
-	UsrCod INT NOT NULL,
-	RoleInLastCrs TINYINT NOT NULL DEFAULT 0,
-	LastCrsCod INT NOT NULL DEFAULT -1,
-	LastTime DATETIME NOT NULL,
-	UNIQUE INDEX(UsrCod),
-	INDEX(RoleInLastCrs),
-	INDEX(LastCrsCod));
---
 -- Table crs_courses: stores the courses/subjects
 --
 CREATE TABLE IF NOT EXISTS crs_courses (
@@ -1602,6 +1591,17 @@ CREATE TABLE IF NOT EXISTS usr_birthdays_today (
 	Today DATE NOT NULL,
 	UNIQUE INDEX(UsrCod),
 	INDEX(Today));
+--
+-- Table usr_connected: users currently connected to the platform
+--
+CREATE TABLE IF NOT EXISTS usr_connected (
+	UsrCod INT NOT NULL,
+	RoleInLastCrs TINYINT NOT NULL DEFAULT 0,
+	LastCrsCod INT NOT NULL DEFAULT -1,
+	LastTime DATETIME NOT NULL,
+	UNIQUE INDEX(UsrCod),
+	INDEX(RoleInLastCrs),
+	INDEX(LastCrsCod));
 --
 -- Table usr_data: stores users' data
 --

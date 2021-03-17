@@ -1105,12 +1105,14 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 
    /***** Remove user from table of connected users *****/
    DB_QueryDELETE ("can not remove a user from table of connected users",
-		   "DELETE FROM connected WHERE UsrCod=%ld",
+		   "DELETE FROM usr_connected"
+		   " WHERE UsrCod=%ld",
 		   UsrDat->UsrCod);
 
    /***** Remove all sessions of this user *****/
    DB_QueryDELETE ("can not remove sessions of a user",
-		   "DELETE FROM sessions WHERE UsrCod=%ld",
+		   "DELETE FROM sessions"
+		   " WHERE UsrCod=%ld",
 		   UsrDat->UsrCod);
 
    /***** Remove social content associated to the user *****/

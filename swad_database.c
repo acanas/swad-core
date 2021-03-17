@@ -425,28 +425,6 @@ mysql> DESCRIBE cht_rooms;
 			"NumUsrs INT NOT NULL,"
 		   "UNIQUE INDEX(RoomCode))");
 
-   /***** Table connected *****/
-/*
-mysql> DESCRIBE connected;
-+---------------+------------+------+-----+---------+-------+
-| Field         | Type       | Null | Key | Default | Extra |
-+---------------+------------+------+-----+---------+-------+
-| UsrCod        | int(11)    | NO   | PRI | NULL    |       |
-| RoleInLastCrs | tinyint(4) | NO   | MUL | 0       |       |
-| LastCrsCod    | int(11)    | NO   | MUL | -1      |       |
-| LastTime      | datetime   | NO   |     | NULL    |       |
-+---------------+------------+------+-----+---------+-------+
-4 rows in set (0,00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS connected ("
-			"UsrCod INT NOT NULL,"
-			"RoleInLastCrs TINYINT NOT NULL DEFAULT 0,"
-			"LastCrsCod INT NOT NULL DEFAULT -1,"
-			"LastTime DATETIME NOT NULL,"
-		   "UNIQUE INDEX(UsrCod),"
-		   "INDEX(RoleInLastCrs),"
-		   "INDEX(LastCrsCod))");
-
    /***** Table crs_courses *****/
 /*
 mysql> DESCRIBE crs_courses;
@@ -3393,6 +3371,28 @@ mysql> DESCRIBE usr_birthdays_today;
 			"Today DATE NOT NULL,"
 		   "UNIQUE INDEX(UsrCod),"
 		   "INDEX(Today))");
+
+   /***** Table usr_connected *****/
+/*
+mysql> DESCRIBE usr_connected;
++---------------+------------+------+-----+---------+-------+
+| Field         | Type       | Null | Key | Default | Extra |
++---------------+------------+------+-----+---------+-------+
+| UsrCod        | int(11)    | NO   | PRI | NULL    |       |
+| RoleInLastCrs | tinyint(4) | NO   | MUL | 0       |       |
+| LastCrsCod    | int(11)    | NO   | MUL | -1      |       |
+| LastTime      | datetime   | NO   |     | NULL    |       |
++---------------+------------+------+-----+---------+-------+
+4 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_connected ("
+			"UsrCod INT NOT NULL,"
+			"RoleInLastCrs TINYINT NOT NULL DEFAULT 0,"
+			"LastCrsCod INT NOT NULL DEFAULT -1,"
+			"LastTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(UsrCod),"
+		   "INDEX(RoleInLastCrs),"
+		   "INDEX(LastCrsCod))");
 
    /***** Table usr_data *****/
 /*
