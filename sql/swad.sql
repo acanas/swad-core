@@ -393,9 +393,9 @@ CREATE TABLE IF NOT EXISTS deg_types (
 	DegTypName VARCHAR(511) NOT NULL,
 	UNIQUE INDEX(DegTypCod));
 --
--- Table departments: stores the departments
+-- Table dpt_departments: stores the departments
 --
-CREATE TABLE IF NOT EXISTS departments (
+CREATE TABLE IF NOT EXISTS dpt_departments (
 	DptCod INT NOT NULL AUTO_INCREMENT,
 	InsCod INT NOT NULL,
 	ShortName VARCHAR(511) NOT NULL,

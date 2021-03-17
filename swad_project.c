@@ -2832,7 +2832,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
       [Prj_ORDER_TITLE     ] = "projects.Title,"
 			       "projects.CreatTime DESC,"
 			       "projects.ModifTime DESC",
-      [Prj_ORDER_DEPARTMENT] = "departments.FullName,"
+      [Prj_ORDER_DEPARTMENT] = "dpt_departments.FullName,"
 			       "projects.CreatTime DESC,"
 			       "projects.ModifTime DESC,"
 			       "projects.Title",
@@ -2930,11 +2930,12 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	       case Prj_ORDER_TITLE:
 		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
 					    "SELECT projects.PrjCod"
-					    " FROM projects,prj_usr"
+					     " FROM projects,"
+					           "prj_usr"
 					    " WHERE projects.CrsCod=%ld"
 					    "%s%s%s"
-					    " AND projects.PrjCod=prj_usr.PrjCod"
-					    " AND prj_usr.UsrCod=%ld"
+					      " AND projects.PrjCod=prj_usr.PrjCod"
+					      " AND prj_usr.UsrCod=%ld"
 					    " GROUP BY projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 					    " ORDER BY %s",
 					    Gbl.Hierarchy.Crs.CrsCod,
@@ -2945,12 +2946,13 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	       case Prj_ORDER_DEPARTMENT:
 		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
 					    "SELECT projects.PrjCod"
-					    " FROM prj_usr,projects LEFT JOIN departments"
-					    " ON projects.DptCod=departments.DptCod"
+					     " FROM prj_usr,"
+					           "projects LEFT JOIN dpt_departments"
+					       " ON projects.DptCod=dpt_departments.DptCod"
 					    " WHERE projects.CrsCod=%ld"
 					    "%s%s%s"
-					    " AND projects.PrjCod=prj_usr.PrjCod"
-					    " AND prj_usr.UsrCod=%ld"
+					      " AND projects.PrjCod=prj_usr.PrjCod"
+					      " AND prj_usr.UsrCod=%ld"
 					    " GROUP BY projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 					    " ORDER BY %s",
 					    Gbl.Hierarchy.Crs.CrsCod,
@@ -2996,12 +2998,13 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 		  case Prj_ORDER_DEPARTMENT:
 		     NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
 					       "SELECT projects.PrjCod"
-					       " FROM prj_usr,projects LEFT JOIN departments"
-					       " ON projects.DptCod=departments.DptCod"
+					        " FROM prj_usr,"
+					              "projects LEFT JOIN dpt_departments"
+					          " ON projects.DptCod=dpt_departments.DptCod"
 					       " WHERE projects.CrsCod=%ld"
 					       "%s%s%s"
-					       " AND projects.PrjCod=prj_usr.PrjCod"
-					       " AND prj_usr.UsrCod IN (%s)"
+					         " AND projects.PrjCod=prj_usr.PrjCod"
+					         " AND prj_usr.UsrCod IN (%s)"
 					       " GROUP BY projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 					       " ORDER BY %s",
 					       Gbl.Hierarchy.Crs.CrsCod,
@@ -3029,7 +3032,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	       case Prj_ORDER_TITLE:
 		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
 					    "SELECT projects.PrjCod"
-					    " FROM projects"
+					     " FROM projects"
 					    " WHERE projects.CrsCod=%ld"
 					    "%s%s%s"
 					    " ORDER BY %s",
@@ -3040,8 +3043,8 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	       case Prj_ORDER_DEPARTMENT:
 		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
 					    "SELECT projects.PrjCod"
-					    " FROM projects LEFT JOIN departments"
-					    " ON projects.DptCod=departments.DptCod"
+					     " FROM projects LEFT JOIN dpt_departments"
+					       " ON projects.DptCod=dpt_departments.DptCod"
 					    " WHERE projects.CrsCod=%ld"
 					    "%s%s%s"
 					    " ORDER BY %s",

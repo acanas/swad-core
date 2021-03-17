@@ -880,9 +880,9 @@ mysql> DESCRIBE deg_degrees;
 		   "INDEX(DegTypCod),"
 		   "INDEX(Status))");
 
-   /***** Table departments *****/
+   /***** Table dpt_departments *****/
 /*
-mysql> DESCRIBE departments;
+mysql> DESCRIBE dpt_departments;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
@@ -894,7 +894,7 @@ mysql> DESCRIBE departments;
 +-----------+---------------+------+-----+---------+----------------+
 5 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS departments ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS dpt_departments ("
 			"DptCod INT NOT NULL AUTO_INCREMENT,"
 			"InsCod INT NOT NULL,"
 			"ShortName VARCHAR(511) NOT NULL,"	// Cns_HIERARCHY_MAX_BYTES_SHRT_NAME

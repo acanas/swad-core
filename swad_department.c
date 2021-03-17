@@ -339,36 +339,39 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
      {
       /***** Get departments from database *****/
       Departments->Num = (unsigned)
-	                 DB_QuerySELECT (&mysql_res,"can not get departments",
-				         "(SELECT departments.DptCod,"		// row[0]
-				                 "departments.InsCod,"		// row[1]
-				                 "departments.ShortName,"	// row[2]
-				                 "departments.FullName,"	// row[3]
-				                 "departments.WWW,"		// row[4]
-				                 "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[5]
-				         " FROM departments,usr_data,crs_usr"
-				         " WHERE departments.InsCod=%ld"
-				         " AND departments.DptCod=usr_data.DptCod"
-				         " AND usr_data.UsrCod=crs_usr.UsrCod"
-				         " AND crs_usr.Role IN (%u,%u)"
-				         " GROUP BY departments.DptCod)"
-				         " UNION "
-				         "(SELECT DptCod,"			// row[0]
-				                 "InsCod,"			// row[1]
-				                 "ShortName,"			// row[2]
-				                 "FullName,"			// row[3]
-				                 "WWW,"				// row[4]
-				                 "0 AS NumTchs"			// row[5]
-				         " FROM departments"
-				         " WHERE InsCod=%ld AND DptCod NOT IN"
-				         " (SELECT DISTINCT usr_data.DptCod"
-				         " FROM usr_data,crs_usr"
-				         " WHERE crs_usr.Role IN (%u,%u)"
-				         " AND crs_usr.UsrCod=usr_data.UsrCod))"
-				         " ORDER BY %s",
-				         InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
-				         InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
-				         OrderBySubQuery[Departments->SelectedOrder]);
+      DB_QuerySELECT (&mysql_res,"can not get departments",
+		      "(SELECT dpt_departments.DptCod,"				// row[0]
+			      "dpt_departments.InsCod,"				// row[1]
+			      "dpt_departments.ShortName,"			// row[2]
+			      "dpt_departments.FullName,"			// row[3]
+			      "dpt_departments.WWW,"				// row[4]
+			      "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[5]
+		        " FROM dpt_departments,"
+		              "usr_data,"
+		              "crs_usr"
+		       " WHERE dpt_departments.InsCod=%ld"
+		         " AND dpt_departments.DptCod=usr_data.DptCod"
+		         " AND usr_data.UsrCod=crs_usr.UsrCod"
+		         " AND crs_usr.Role IN (%u,%u)"
+		       " GROUP BY dpt_departments.DptCod)"
+		      " UNION "
+		      "(SELECT DptCod,"						// row[0]
+			      "InsCod,"						// row[1]
+			      "ShortName,"					// row[2]
+			      "FullName,"					// row[3]
+			      "WWW,"						// row[4]
+			      "0 AS NumTchs"					// row[5]
+		        " FROM dpt_departments"
+		       " WHERE InsCod=%ld"
+		       " AND DptCod NOT IN"
+			   " (SELECT DISTINCT usr_data.DptCod"
+			    " FROM usr_data,crs_usr"
+			   " WHERE crs_usr.Role IN (%u,%u)"
+			     " AND crs_usr.UsrCod=usr_data.UsrCod))"
+		      " ORDER BY %s",
+		      InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
+		      InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
+		      OrderBySubQuery[Departments->SelectedOrder]);
       if (Departments->Num) // Departments found...
 	{
 	 /***** Create list with courses in degree *****/
@@ -436,23 +439,37 @@ void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt)
    else if (Dpt->DptCod > 0)
      {
       /***** Get data of a department from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a department",
-				"(SELECT departments.InsCod,departments.ShortName,departments.FullName,departments.WWW,"
-				"COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
-				" FROM departments,usr_data,crs_usr"
-				" WHERE departments.DptCod=%ld"
-				" AND departments.DptCod=usr_data.DptCod"
-				" AND usr_data.UsrCod=crs_usr.UsrCod"
-				" AND crs_usr.Role=%u"
-				" GROUP BY departments.DptCod)"
-				" UNION "
-				"(SELECT InsCod,ShortName,FullName,WWW,0"
-				" FROM departments"
-				" WHERE DptCod=%ld AND DptCod NOT IN"
-				" (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
-				" WHERE crs_usr.Role=%u AND crs_usr.UsrCod=usr_data.UsrCod))",
-				Dpt->DptCod,(unsigned) Rol_TCH,
-				Dpt->DptCod,(unsigned) Rol_TCH);
+      NumRows =
+      DB_QuerySELECT (&mysql_res,"can not get data of a department",
+		      "(SELECT dpt_departments.InsCod,"				// row[0]
+			      "dpt_departments.ShortName,"			// row[1]
+			      "dpt_departments.FullName,"			// row[2]
+			      "dpt_departments.WWW,"				// row[3]
+			      "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[4]
+		        " FROM dpt_departments,"
+			      "usr_data,"
+			      "crs_usr"
+		       " WHERE dpt_departments.DptCod=%ld"
+		         " AND dpt_departments.DptCod=usr_data.DptCod"
+		         " AND usr_data.UsrCod=crs_usr.UsrCod"
+		         " AND crs_usr.Role=%u"
+		       " GROUP BY dpt_departments.DptCod)"
+		      " UNION "
+		      "(SELECT InsCod,"						// row[0]
+		              "ShortName,"					// row[1]
+		              "FullName,"					// row[2]
+		              "WWW,"						// row[3]
+		              "0"						// row[4]
+		        " FROM dpt_departments"
+		       " WHERE DptCod=%ld"
+		         " AND DptCod NOT IN"
+		             " (SELECT DISTINCT usr_data.DptCod"
+		                " FROM usr_data,"
+		                      "crs_usr"
+		               " WHERE crs_usr.Role=%u"
+		                 " AND crs_usr.UsrCod=usr_data.UsrCod))",
+		      Dpt->DptCod,(unsigned) Rol_TCH,
+		      Dpt->DptCod,(unsigned) Rol_TCH);
       if (NumRows) // Department found...
         {
          /* Get row */
@@ -498,12 +515,11 @@ void Dpt_FreeListDepartments (struct Dpt_Departments *Departments)
 unsigned Dpt_GetNumDepartmentsInInstitution (long InsCod)
   {
    /***** Get number of departments in an institution from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of departments"
-	                     " in an institution",
-			     "SELECT COUNT(*) FROM departments"
-			     " WHERE InsCod=%ld",
-			     InsCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of departments in an institution",
+		  "SELECT COUNT(*) FROM dpt_departments"
+		  " WHERE InsCod=%ld",
+		  InsCod);
   }
 
 /*****************************************************************************/
@@ -661,7 +677,8 @@ void Dpt_RemoveDepartment (void)
      {
       /***** Remove department *****/
       DB_QueryDELETE ("can not remove a department",
-		      "DELETE FROM departments WHERE DptCod=%ld",
+		      "DELETE FROM dpt_departments"
+		      " WHERE DptCod=%ld",
 		      Dpt_EditingDpt->DptCod);
 
       /***** Write message to show the change made *****/
@@ -695,8 +712,11 @@ void Dpt_ChangeDepartIns (void)
 
    /***** Update institution in table of departments *****/
    DB_QueryUPDATE ("can not update the institution of a department",
-		   "UPDATE departments SET InsCod=%ld WHERE DptCod=%ld",
-                   NewInsCod,Dpt_EditingDpt->DptCod);
+		   "UPDATE dpt_departments"
+		     " SET InsCod=%ld"
+		   " WHERE DptCod=%ld",
+                   NewInsCod,
+                   Dpt_EditingDpt->DptCod);
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -812,11 +832,12 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
 static bool Dpt_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,long DptCod)
   {
    /***** Get number of departments with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name"
-	                  " of a department already existed",
-			  "SELECT COUNT(*) FROM departments"
-			  " WHERE %s='%s' AND DptCod<>%ld",
-			  FieldName,Name,DptCod) != 0);
+   return (DB_QueryCOUNT ("can not check if the department name already existed",
+			  "SELECT COUNT(*) FROM dpt_departments"
+			  " WHERE %s='%s'"
+			    " AND DptCod<>%ld",
+			  FieldName,Name,
+			  DptCod) != 0);
   }
 
 /*****************************************************************************/
@@ -827,8 +848,11 @@ static void Dpt_UpdateDegNameDB (long DptCod,const char *FieldName,const char *N
   {
    /***** Update department changing old name by new name *****/
    DB_QueryUPDATE ("can not update the name of a department",
-		   "UPDATE departments SET %s='%s' WHERE DptCod=%ld",
-	           FieldName,NewDptName,DptCod);
+		   "UPDATE dpt_departments"
+		     " SET %s='%s'"
+		   " WHERE DptCod=%ld",
+	           FieldName,NewDptName,
+	           DptCod);
   }
 
 /******************************************************************************/
@@ -858,8 +882,11 @@ void Dpt_ChangeDptWWW (void)
      {
       /* Update the table changing old WWW by new WWW */
       DB_QueryUPDATE ("can not update the web of a department",
-		      "UPDATE departments SET WWW='%s' WHERE DptCod=%ld",
-                      NewWWW,Dpt_EditingDpt->DptCod);
+		      "UPDATE dpt_departments"
+		        " SET WWW='%s'"
+		      " WHERE DptCod=%ld",
+                      NewWWW,
+                      Dpt_EditingDpt->DptCod);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1060,11 +1087,14 @@ static void Dpt_CreateDepartment (struct Dpt_Department *Dpt)
   {
    /***** Create a new department *****/
    DB_QueryINSERT ("can not create a new department",
-		   "INSERT INTO departments"
+		   "INSERT INTO dpt_departments"
 		   " (InsCod,ShortName,FullName,WWW)"
 		   " VALUES"
 		   " (%ld,'%s','%s','%s')",
-                   Dpt->InsCod,Dpt->ShrtName,Dpt->FullName,Dpt->WWW);
+                   Dpt->InsCod,
+                   Dpt->ShrtName,
+                   Dpt->FullName,
+                   Dpt->WWW);
   }
 
 /*****************************************************************************/
@@ -1099,12 +1129,11 @@ unsigned Dpt_GetNumDptsInIns (long InsCod)
 
    /***** 3. Slow: number of departments of an institution from database *****/
    Gbl.Cache.NumDptsInIns.InsCod  = InsCod;
-   Gbl.Cache.NumDptsInIns.NumDpts =
-   (unsigned) DB_QueryCOUNT ("can not get number of departments"
-			     " in an institution",
-			     "SELECT COUNT(*) FROM departments"
-			     " WHERE InsCod=%ld",
-			     InsCod);
+   Gbl.Cache.NumDptsInIns.NumDpts = (unsigned)
+   DB_QueryCOUNT ("can not get number of departments in an institution",
+		  "SELECT COUNT(*) FROM departments"
+		  " WHERE InsCod=%ld",
+		  InsCod);
    return Gbl.Cache.NumDptsInIns.NumDpts;
   }
 
