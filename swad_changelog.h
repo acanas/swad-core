@@ -600,11 +600,15 @@ TODO: Salvador Romero Cortés: @acanas opción para editar posts
 
 TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates(), por ejemplo al cambiar el color de la gráfica de accesos por día y hora, no se respeta la zona horaria.
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.50.8 (2021-03-17)"
+#define Log_PLATFORM_VERSION	"SWAD 20.50.9 (2021-03-17)"
 #define CSS_FILE		"swad20.45.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
+
+	Version 20.50.9:  Mar 17, 2021  Clipboard database table renamed. (307404 lines)
+					1 change necessary in database:
+RENAME TABLE clipboard TO brw_clipboards;
 
 	Version 20.50.8:  Mar 17, 2021  Clicks-without-photo database table renamed. (307324 lines)
 					1 change necessary in database:

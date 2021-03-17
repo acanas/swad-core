@@ -137,16 +137,9 @@ CREATE TABLE IF NOT EXISTS bld_buildings (
 	UNIQUE INDEX(BldCod),
 	INDEX(CtrCod));
 --
--- Table cht_rooms: stores number of users in each chat room (this table is not used now)
+-- Table brw_clipboards: clipboard (paths used to copy-paste folders and files)
 --
-CREATE TABLE IF NOT EXISTS cht_rooms (
-	RoomCode VARCHAR(16) NOT NULL,
-	NumUsrs INT NOT NULL,
-	UNIQUE INDEX(RoomCode));
---
--- Table clipboard: clipboard (paths used to copy-paste folders and files)
---
-CREATE TABLE IF NOT EXISTS clipboard (
+CREATE TABLE IF NOT EXISTS brw_clipboards (
 	UsrCod INT NOT NULL,
 	FileBrowser TINYINT NOT NULL,
 	Cod INT NOT NULL DEFAULT -1,
@@ -157,6 +150,13 @@ CREATE TABLE IF NOT EXISTS clipboard (
 	UNIQUE INDEX(UsrCod),
 	INDEX(FileBrowser,Cod),
 	INDEX(WorksUsrCod));
+--
+-- Table cht_rooms: stores number of users in each chat room (this table is not used now)
+--
+CREATE TABLE IF NOT EXISTS cht_rooms (
+	RoomCode VARCHAR(16) NOT NULL,
+	NumUsrs INT NOT NULL,
+	UNIQUE INDEX(RoomCode));
 --
 -- Table connected: users currently connected to the platform
 --

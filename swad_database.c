@@ -381,6 +381,34 @@ mysql> DESCRIBE bld_buildings;
 		   "UNIQUE INDEX(BldCod),"
 		   "INDEX(CtrCod))");
 
+   /***** Table brw_clipboards *****/
+/*
+mysql> DESCRIBE brw_clipboards;
++-------------+------------+------+-----+-------------------+-----------------------------+
+| Field       | Type       | Null | Key | Default           | Extra                       |
++-------------+------------+------+-----+-------------------+-----------------------------+
+| UsrCod      | int(11)    | NO   | PRI | NULL              |                             |
+| FileBrowser | tinyint(4) | NO   | MUL | NULL              |                             |
+| Cod         | int(11)    | NO   |     | -1                |                             |
+| WorksUsrCod | int(11)    | NO   | MUL | NULL              |                             |
+| FileType    | tinyint(4) | NO   |     | 0                 |                             |
+| Path        | text       | NO   |     | NULL              |                             |
+| CopyTime    | timestamp  | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+------------+------+-----+-------------------+-----------------------------+
+7 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_clipboards ("
+			"UsrCod INT NOT NULL,"
+			"FileBrowser TINYINT NOT NULL,"
+			"Cod INT NOT NULL DEFAULT -1,"
+			"WorksUsrCod INT NOT NULL,"
+			"FileType TINYINT NOT NULL DEFAULT 0,"
+			"Path TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
+			"CopyTime TIMESTAMP,"
+		   "UNIQUE INDEX(UsrCod),"
+		   "INDEX(FileBrowser,Cod),"
+		   "INDEX(WorksUsrCod))");
+
    /***** Table cht_rooms *****/
 /*
 mysql> DESCRIBE cht_rooms;
@@ -396,34 +424,6 @@ mysql> DESCRIBE cht_rooms;
 			"RoomCode VARCHAR(16) NOT NULL,"	// Cht_MAX_BYTES_ROOM_CODE
 			"NumUsrs INT NOT NULL,"
 		   "UNIQUE INDEX(RoomCode))");
-
-   /***** Table clipboard *****/
-/*
-mysql> DESCRIBE clipboard;
-+-------------+------------+------+-----+-------------------+-----------------------------+
-| Field       | Type       | Null | Key | Default           | Extra                       |
-+-------------+------------+------+-----+-------------------+-----------------------------+
-| UsrCod      | int(11)    | NO   | PRI | NULL              |                             |
-| FileBrowser | tinyint(4) | NO   | MUL | NULL              |                             |
-| Cod         | int(11)    | NO   |     | -1                |                             |
-| WorksUsrCod | int(11)    | NO   | MUL | NULL              |                             |
-| FileType    | tinyint(4) | NO   |     | 0                 |                             |
-| Path        | text       | NO   |     | NULL              |                             |
-| CopyTime    | timestamp  | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
-+-------------+------------+------+-----+-------------------+-----------------------------+
-7 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS clipboard ("
-			"UsrCod INT NOT NULL,"
-			"FileBrowser TINYINT NOT NULL,"
-			"Cod INT NOT NULL DEFAULT -1,"
-			"WorksUsrCod INT NOT NULL,"
-			"FileType TINYINT NOT NULL DEFAULT 0,"
-			"Path TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
-			"CopyTime TIMESTAMP,"
-		   "UNIQUE INDEX(UsrCod),"
-		   "INDEX(FileBrowser,Cod),"
-		   "INDEX(WorksUsrCod))");
 
    /***** Table connected *****/
 /*
