@@ -397,22 +397,6 @@ mysql> DESCRIBE cht_rooms;
 			"NumUsrs INT NOT NULL,"
 		   "UNIQUE INDEX(RoomCode))");
 
-   /***** Table clicks_without_photo *****/
-/*
-mysql> DESCRIBE clicks_without_photo;
-+-----------+---------+------+-----+---------+-------+
-| Field     | Type    | Null | Key | Default | Extra |
-+-----------+---------+------+-----+---------+-------+
-| UsrCod    | int(11) | NO   | PRI | NULL    |       |
-| NumClicks | int(11) | NO   |     | NULL    |       |
-+-----------+---------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS clicks_without_photo ("
-			"UsrCod INT NOT NULL,"
-			"NumClicks INT NOT NULL,"
-		   "UNIQUE INDEX(UsrCod))");
-
    /***** Table clipboard *****/
 /*
 mysql> DESCRIBE clipboard;
@@ -2471,6 +2455,22 @@ mysql> DESCRIBE pending_passwd;
 			"PendingPassword CHAR(86) COLLATE latin1_bin NOT NULL,"	// Pwd_BYTES_ENCRYPTED_PASSWORD
 			"DateAndTime DATETIME NOT NULL,"
 		   "PRIMARY KEY (UsrCod))");
+
+   /***** Table pho_clicks_without_photo *****/
+/*
+mysql> DESCRIBE pho_clicks_without_photo;
++-----------+---------+------+-----+---------+-------+
+| Field     | Type    | Null | Key | Default | Extra |
++-----------+---------+------+-----+---------+-------+
+| UsrCod    | int(11) | NO   | PRI | NULL    |       |
+| NumClicks | int(11) | NO   |     | NULL    |       |
++-----------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS pho_clicks_without_photo ("
+			"UsrCod INT NOT NULL,"
+			"NumClicks INT NOT NULL,"
+		   "UNIQUE INDEX(UsrCod))");
 
    /***** Table places *****/
 /*

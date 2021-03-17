@@ -932,7 +932,8 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
    /***** Get number of clicks without photo from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of clicks"
 				        " without photo",
-			     "SELECT NumClicks FROM clicks_without_photo"
+			     "SELECT NumClicks"
+			      " FROM pho_clicks_without_photo"
 			     " WHERE UsrCod=%ld",
 			     Gbl.Usrs.Me.UsrDat.UsrCod);
 
@@ -947,8 +948,9 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
       if (NumClicks <= Pho_MAX_CLICKS_WITHOUT_PHOTO)
         {
          DB_QueryUPDATE ("can not update number of clicks without photo",
-			 "UPDATE clicks_without_photo"
-			 " SET NumClicks=NumClicks+1 WHERE UsrCod=%ld",
+			 "UPDATE pho_clicks_without_photo"
+			   " SET NumClicks=NumClicks+1"
+			 " WHERE UsrCod=%ld",
 		         Gbl.Usrs.Me.UsrDat.UsrCod);
          NumClicks++;
         }
@@ -957,7 +959,7 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
      {
       /* Add the user, with one access */
       DB_QueryINSERT ("can not create number of clicks without photo",
-		      "INSERT INTO clicks_without_photo"
+		      "INSERT INTO pho_clicks_without_photo"
 		      " (UsrCod,NumClicks)"
 		      " VALUES"
 		      " (%ld,1)",
@@ -979,7 +981,8 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
 void Pho_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod)
   {
    DB_QueryDELETE ("can not remove a user from the list of users without photo",
-		   "DELETE FROM clicks_without_photo WHERE UsrCod=%ld",
+		   "DELETE FROM pho_clicks_without_photo"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
 

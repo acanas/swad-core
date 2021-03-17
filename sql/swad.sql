@@ -144,13 +144,6 @@ CREATE TABLE IF NOT EXISTS cht_rooms (
 	NumUsrs INT NOT NULL,
 	UNIQUE INDEX(RoomCode));
 --
--- Table clicks_without_photo: stores the number of clicks that remains to each user before being required to submit his/her photo
---
-CREATE TABLE IF NOT EXISTS clicks_without_photo (
-	UsrCod INT NOT NULL,
-	NumClicks INT NOT NULL,
-	UNIQUE INDEX(UsrCod));
---
 -- Table clipboard: clipboard (paths used to copy-paste folders and files)
 --
 CREATE TABLE IF NOT EXISTS clipboard (
@@ -1184,6 +1177,13 @@ CREATE TABLE IF NOT EXISTS pending_passwd (
 	PendingPassword CHAR(86) COLLATE latin1_bin NOT NULL,
 	DateAndTime DATETIME NOT NULL,
 	PRIMARY KEY(UsrCod));
+--
+-- Table pho_clicks_without_photo: stores the number of clicks that remains to each user before being required to submit his/her photo
+--
+CREATE TABLE IF NOT EXISTS pho_clicks_without_photo (
+	UsrCod INT NOT NULL,
+	NumClicks INT NOT NULL,
+	UNIQUE INDEX(UsrCod));
 --
 -- Table places: stores the places associated to each institution, used in holidays
 --
