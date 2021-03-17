@@ -244,9 +244,12 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
    /***** Get chat rooms with connected users from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get chat rooms"
 					" with connected users",
-			     "SELECT RoomCode,NumUsrs FROM chat"
+			     "SELECT RoomCode,"		// row[0]
+			            "NumUsrs"		// row[1]
+			      " FROM cht_rooms"
 			     " WHERE NumUsrs>0"
-			     " ORDER BY NumUsrs DESC,RoomCode");
+			     " ORDER BY NumUsrs DESC,"
+			               "RoomCode");
    if (NumRows > 0) // If not empty chat rooms found
      {
       /***** Begin box and table *****/
@@ -353,7 +356,9 @@ static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode)
    /***** Get number of users connected to chat rooms from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get number of users"
 				  " connected to a chat room",
-		       "SELECT NumUsrs FROM chat WHERE RoomCode='%s'",
+		       "SELECT NumUsrs"
+		        " FROM cht_rooms"
+		       " WHERE RoomCode='%s'",
 		       RoomCode))
      {
       /* Get number of users connected to the chat room */

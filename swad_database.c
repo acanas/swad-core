@@ -381,9 +381,9 @@ mysql> DESCRIBE bld_buildings;
 		   "UNIQUE INDEX(BldCod),"
 		   "INDEX(CtrCod))");
 
-   /***** Table chat *****/
+   /***** Table cht_rooms *****/
 /*
-mysql> DESCRIBE chat;
+mysql> DESCRIBE cht_rooms;
 +----------+-------------+------+-----+---------+-------+
 | Field    | Type        | Null | Key | Default | Extra |
 +----------+-------------+------+-----+---------+-------+

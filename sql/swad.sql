@@ -137,9 +137,9 @@ CREATE TABLE IF NOT EXISTS bld_buildings (
 	UNIQUE INDEX(BldCod),
 	INDEX(CtrCod));
 --
--- Table chat: stores number of users in each chat room (this table is not used now)
+-- Table cht_rooms: stores number of users in each chat room (this table is not used now)
 --
-CREATE TABLE IF NOT EXISTS chat (
+CREATE TABLE IF NOT EXISTS cht_rooms (
 	RoomCode VARCHAR(16) NOT NULL,
 	NumUsrs INT NOT NULL,
 	UNIQUE INDEX(RoomCode));
