@@ -5995,26 +5995,26 @@ int swad__getLocation (struct soap *soap,
 				    "ctr_centers.CtrCod,"	// row[ 3]
 				    "ctr_centers.ShortName,"	// row[ 4]
 				    "ctr_centers.FullName,"	// row[ 5]
-				    "buildings.BldCod,"		// row[ 6]
-				    "buildings.ShortName,"	// row[ 7]
-				    "buildings.FullName,"	// row[ 8]
+				    "bld_buildings.BldCod,"	// row[ 6]
+				    "bld_buildings.ShortName,"	// row[ 7]
+				    "bld_buildings.FullName,"	// row[ 8]
 				    "rooms.Floor,"		// row[ 9]
 				    "rooms.RooCod,"		// row[10]
 				    "rooms.ShortName,"		// row[11]
 				    "rooms.FullName"		// row[12]
-				    " FROM room_MAC,"
-				          "rooms,"
-				          "buildings,"
-				          "ctr_centers,"
-				          "ins_instits"
-				    " WHERE room_MAC.MAC=%llu"
-				    " AND room_MAC.RooCod=rooms.RooCod"
-				    " AND rooms.BldCod=buildings.BldCod"
-				    " AND buildings.CtrCod=ctr_centers.CtrCod"
-				    " AND ctr_centers.InsCod=ins_instits.InsCod"
-				    " ORDER BY rooms.Capacity,"	// Get the biggest room
-				              "rooms.ShortName"
-				              " DESC LIMIT 1",
+			      " FROM room_MAC,"
+				    "rooms,"
+				    "bld_buildings,"
+				    "ctr_centers,"
+				    "ins_instits"
+			     " WHERE room_MAC.MAC=%llu"
+			       " AND room_MAC.RooCod=rooms.RooCod"
+			       " AND rooms.BldCod=bld_buildings.BldCod"
+			       " AND bld_buildings.CtrCod=ctr_centers.CtrCod"
+			       " AND ctr_centers.InsCod=ins_instits.InsCod"
+			     " ORDER BY rooms.Capacity DESC,"	// Get the biggest room
+				       "rooms.ShortName"
+			     " LIMIT 1",
 			     MACnum);
 
    API_GetDataOfLocation (soap,
@@ -6131,33 +6131,35 @@ int swad__getLastLocation (struct soap *soap,
       NumLocs = (unsigned)
 		DB_QuerySELECT (&mysql_res,"can not get matches",
 				"SELECT ins_instits.InsCod,"				// row[ 0]
-				       "ins_instits.ShortName,"			// row[ 1]
+				       "ins_instits.ShortName,"				// row[ 1]
 				       "ins_instits.FullName,"				// row[ 2]
 				       "ctr_centers.CtrCod,"				// row[ 3]
 				       "ctr_centers.ShortName,"				// row[ 4]
 				       "ctr_centers.FullName,"				// row[ 5]
-				       "buildings.BldCod,"				// row[ 6]
-				       "buildings.ShortName,"				// row[ 7]
-				       "buildings.FullName,"				// row[ 8]
+				       "bld_buildings.BldCod,"				// row[ 6]
+				       "bld_buildings.ShortName,"			// row[ 7]
+				       "bld_buildings.FullName,"			// row[ 8]
 				       "rooms.Floor,"					// row[ 9]
 				       "rooms.RooCod,"					// row[10]
 				       "rooms.ShortName,"				// row[11]
 				       "rooms.FullName,"				// row[12]
 				       "UNIX_TIMESTAMP(room_check_in.CheckInTime)"	// row[13]
-				       " FROM room_check_in,"
-				             "rooms,"
-				             "buildings,"
-				             "ctr_centers,"
-				             "ins_instits"
-				       " WHERE room_check_in.UsrCod=%d"
-				       " AND room_check_in.ChkCod="
-				       "(SELECT ChkCod FROM room_check_in"
-				       " WHERE UsrCod=%d"
-				       " ORDER BY ChkCod DESC LIMIT 1)"	// Faster than SELECT MAX
-				       " AND room_check_in.RooCod=rooms.RooCod"
-				       " AND rooms.BldCod=buildings.BldCod"
-				       " AND buildings.CtrCod=ctr_centers.CtrCod"
-				       " AND ctr_centers.InsCod=ins_instits.InsCod",
+			        " FROM room_check_in,"
+				      "rooms,"
+				      "bld_buildings,"
+				      "ctr_centers,"
+				      "ins_instits"
+			       " WHERE room_check_in.UsrCod=%d"
+			         " AND room_check_in.ChkCod="
+			              "(SELECT ChkCod"
+			                " FROM room_check_in"
+			               " WHERE UsrCod=%d"
+			               " ORDER BY ChkCod DESC"
+			               " LIMIT 1)"	// Faster than SELECT MAX
+			         " AND room_check_in.RooCod=rooms.RooCod"
+			         " AND rooms.BldCod=bld_buildings.BldCod"
+			         " AND bld_buildings.CtrCod=ctr_centers.CtrCod"
+			         " AND ctr_centers.InsCod=ins_instits.InsCod",
 				userCode,userCode);
       API_GetDataOfLocation (soap,
 			     &(getLastLocationOut->location),
@@ -6199,9 +6201,9 @@ static void API_GetDataOfLocation (struct soap *soap,
       ctr_centers.CtrCod			// row[ 3]
       ctr_centers.ShortName			// row[ 4]
       ctr_centers.FullName			// row[ 5]
-      buildings.BldCod				// row[ 6]
-      buildings.ShortName			// row[ 7]
-      buildings.FullName			// row[ 8]
+      bld_buildings.BldCod			// row[ 6]
+      bld_buildings.ShortName			// row[ 7]
+      bld_buildings.FullName			// row[ 8]
       rooms.Floor				// row[ 9]
       rooms.RooCod				// row[10]
       rooms.ShortName				// row[11]

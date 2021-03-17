@@ -327,11 +327,11 @@ void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
      {
       case Bld_ALL_DATA:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get buildings",
-				   "SELECT BldCod,"
-					  "ShortName,"
-					  "FullName,"
-					  "Location"
-				   " FROM buildings"
+				   "SELECT BldCod,"		// row[0]
+					  "ShortName,"		// row[1]
+					  "FullName,"		// row[2]
+					  "Location"		// row[3]
+				    " FROM bld_buildings"
 				   " WHERE CtrCod=%ld"
 				   " ORDER BY %s",
 				   Gbl.Hierarchy.Ctr.CtrCod,
@@ -340,9 +340,9 @@ void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
       case Bld_ONLY_SHRT_NAME:
       default:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get buildings",
-				   "SELECT BldCod,"
-					  "ShortName"
-				   " FROM buildings"
+				   "SELECT BldCod,"		// row[0]
+					  "ShortName"		// row[1]
+				    " FROM bld_buildings"
 				   " WHERE CtrCod=%ld"
 				   " ORDER BY ShortName",
 				   Gbl.Hierarchy.Ctr.CtrCod);
@@ -413,7 +413,7 @@ void Bld_GetDataOfBuildingByCod (struct Bld_Building *Building)
 			        "SELECT ShortName,"	// row[0]
 				       "FullName,"	// row[1]
 				       "Location"	// row[2]
-				" FROM buildings"
+				 " FROM bld_buildings"
 				" WHERE BldCod=%ld",
 				Building->BldCod);
 
@@ -574,7 +574,8 @@ void Bld_RemoveBuilding (void)
 
    /***** Remove building *****/
    DB_QueryDELETE ("can not remove a building",
-		   "DELETE FROM buildings WHERE BldCod=%ld",
+		   "DELETE FROM bld_buildings"
+		   " WHERE BldCod=%ld",
 		   Bld_EditingBuilding->BldCod);
 
    /***** Create message to show the change made *****/
@@ -708,9 +709,11 @@ static bool Bld_CheckIfBuildingNameExists (const char *FieldName,const char *Nam
    /***** Get number of buildings with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of a building"
 			  " already existed",
-			  "SELECT COUNT(*) FROM buildings"
+			  "SELECT COUNT(*)"
+			   " FROM bld_buildings"
 			  " WHERE CtrCod=%ld"
-			  " AND %s='%s' AND BldCod<>%ld",
+			    " AND %s='%s'"
+			    " AND BldCod<>%ld",
 			  Gbl.Hierarchy.Ctr.CtrCod,
 			  FieldName,Name,BldCod) != 0);
   }
@@ -723,7 +726,9 @@ static void Bld_UpdateBuildingNameDB (long BldCod,const char *FieldName,const ch
   {
    /***** Update building changing old name by new name */
    DB_QueryUPDATE ("can not update the name of a building",
-		   "UPDATE buildings SET %s='%s' WHERE BldCod=%ld",
+		   "UPDATE bld_buildings"
+		     " SET %s='%s'"
+		   " WHERE BldCod=%ld",
 		   FieldName,NewBuildingName,BldCod);
   }
 

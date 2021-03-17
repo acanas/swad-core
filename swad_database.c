@@ -358,9 +358,9 @@ mysql> DESCRIBE ban_banners;
 		   "UNIQUE INDEX(BanCod),"
 		   "INDEX(Hidden))");
 
-   /***** Table buildings *****/
+   /***** Table bld_buildings *****/
 /*
-mysql> DESCRIBE buildings;
+mysql> DESCRIBE bld_buildings;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
@@ -372,7 +372,7 @@ mysql> DESCRIBE buildings;
 +-----------+---------------+------+-----+---------+----------------+
 5 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS buildings ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS bld_buildings ("
 			"BldCod INT NOT NULL AUTO_INCREMENT,"
 			"CtrCod INT NOT NULL,"
 			"ShortName VARCHAR(511) NOT NULL,"	// Bld_MAX_BYTES_SHRT_NAME

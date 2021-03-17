@@ -532,12 +532,24 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
   {
    static const char *OrderBySubQuery[Roo_NUM_ORDERS] =
      {
-      [Roo_ORDER_BY_BUILDING ] = "buildings.ShortName,rooms.Floor,rooms.ShortName",
-      [Roo_ORDER_BY_FLOOR    ] = "rooms.Floor,buildings.ShortName,rooms.ShortName",
-      [Roo_ORDER_BY_TYPE     ] = "rooms.Type,buildings.ShortName,rooms.Floor,rooms.ShortName",
-      [Roo_ORDER_BY_SHRT_NAME] = "rooms.ShortName,rooms.FullName",
-      [Roo_ORDER_BY_FULL_NAME] = "rooms.FullName,rooms.ShortName",
-      [Roo_ORDER_BY_CAPACITY ] = "rooms.Capacity DESC,buildings.ShortName,rooms.Floor,rooms.ShortName",
+      [Roo_ORDER_BY_BUILDING ] = "bld_buildings.ShortName,"
+	                         "rooms.Floor,"
+	                         "rooms.ShortName",
+      [Roo_ORDER_BY_FLOOR    ] = "rooms.Floor,"
+	                         "bld_buildings.ShortName,"
+	                         "rooms.ShortName",
+      [Roo_ORDER_BY_TYPE     ] = "rooms.Type,"
+	                         "bld_buildings.ShortName,"
+	                         "rooms.Floor,"
+	                         "rooms.ShortName",
+      [Roo_ORDER_BY_SHRT_NAME] = "rooms.ShortName,"
+	                         "rooms.FullName",
+      [Roo_ORDER_BY_FULL_NAME] = "rooms.FullName,"
+	                         "rooms.ShortName",
+      [Roo_ORDER_BY_CAPACITY ] = "rooms.Capacity DESC,"
+	                         "bld_buildings.ShortName,"
+	                         "rooms.Floor,"
+	                         "rooms.ShortName",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -552,14 +564,14 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get rooms",
 				   "SELECT rooms.RooCod,"		// row[0]
 	                           	  "rooms.BldCod,"		// row[1]
-	                                  "buildings.ShortName,"	// row[2]
+	                                  "bld_buildings.ShortName,"	// row[2]
 					  "rooms.Floor,"		// row[3]
 					  "rooms.Type,"			// row[4]
 					  "rooms.ShortName,"		// row[5]
 					  "rooms.FullName,"		// row[6]
 					  "rooms.Capacity"		// row[7]
-				   " FROM rooms LEFT JOIN buildings"
-				   " ON rooms.BldCod=buildings.BldCod"
+				   " FROM rooms LEFT JOIN bld_buildings"
+				   " ON rooms.BldCod=bld_buildings.BldCod"
 				   " WHERE rooms.CtrCod=%ld"
 				   " ORDER BY %s",
 				   Gbl.Hierarchy.Ctr.CtrCod,
@@ -570,8 +582,8 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get rooms",
 				   "SELECT rooms.RooCod,"		// row[0]
 					  "rooms.ShortName"		// row[1]
-				   " FROM rooms LEFT JOIN buildings"
-				   " ON rooms.BldCod=buildings.BldCod"
+				   " FROM rooms LEFT JOIN bld_buildings"
+				   " ON rooms.BldCod=bld_buildings.BldCod"
 				   " WHERE rooms.CtrCod=%ld"
 				   " ORDER BY %s",
 				   Gbl.Hierarchy.Ctr.CtrCod,
@@ -657,14 +669,14 @@ static void Roo_GetDataOfRoomByCod (struct Roo_Room *Room)
    /***** Get data of a room from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a room",
 			     "SELECT rooms.BldCod,"		// row[0]
-	                            "buildings.ShortName,"	// row[1]
+	                            "bld_buildings.ShortName,"	// row[1]
 				    "rooms.Floor,"		// row[2]
 				    "rooms.Type,"		// row[3]
 				    "rooms.ShortName,"		// row[4]
 				    "rooms.FullName,"		// row[5]
 				    "rooms.Capacity"		// row[6]
-			     " FROM rooms LEFT JOIN buildings"
-			     " ON rooms.BldCod=buildings.BldCod"
+			     " FROM rooms LEFT JOIN bld_buildings"
+			     " ON rooms.BldCod=bld_buildings.BldCod"
 			     " WHERE rooms.RooCod=%ld",
 			     Room->RooCod);
 

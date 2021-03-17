@@ -126,9 +126,9 @@ CREATE TABLE IF NOT EXISTS ban_banners (
 	UNIQUE INDEX(BanCod),
 	INDEX(Hidden));
 --
--- Table buildings: buildings in a center
+-- Table bld_buildings: buildings in a center
 --
-CREATE TABLE IF NOT EXISTS buildings (
+CREATE TABLE IF NOT EXISTS bld_buildings (
 	BldCod INT NOT NULL AUTO_INCREMENT,
 	CtrCod INT NOT NULL,
 	ShortName VARCHAR(511) NOT NULL,
