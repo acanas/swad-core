@@ -52,7 +52,7 @@ extern struct Globals Gbl;
 
 static void Ses_RemoveSessionFromDB (void);
 
-static bool Ses_CheckIfHiddenParIsAlreadyInDB (const char *ParamName);
+static bool Ses_CheckIfParamIsAlreadyInDB (const char *ParamName);
 
 static void Ses_DeletePublicDirFromCache (const char *FullPathMediaPriv);
 
@@ -131,7 +131,7 @@ void Ses_CloseSession (void)
       Con_RemoveOldConnected ();
 
       /***** Remove unused data associated to expired sessions *****/
-      Ses_RemoveHiddenParFromExpiredSessions ();
+      Ses_RemoveParamsFromExpiredSessions ();
       Ses_RemovePublicDirsFromExpiredSessions ();
 
       /***** Now, user is not logged in *****/
@@ -332,24 +332,24 @@ bool Ses_GetSessionData (void)
   }
 
 /*****************************************************************************/
-/******************* Insert hidden parameter in the database *****************/
+/******************* Insert session parameter in the database ****************/
 /*****************************************************************************/
 
-void Ses_InsertHiddenParInDB (const char *ParamName,const char *ParamValue)
+void Ses_InsertParamInDB (const char *ParamName,const char *ParamValue)
   {
-   /***** Before of inserting the first hidden parameter passed to the next action,
+   /***** Before of inserting the first session parameter passed to the next action,
 	  delete all the parameters coming from the previous action *****/
-   Ses_RemoveHiddenParFromThisSession ();
+   Ses_RemoveParamFromThisSession ();
 
    /***** For a unique session-parameter,
           don't insert a parameter more than one time *****/
    if (ParamName)
       if (ParamName[0])
-         if (!Ses_CheckIfHiddenParIsAlreadyInDB (ParamName))
+         if (!Ses_CheckIfParamIsAlreadyInDB (ParamName))
 	   {
-	    /***** Insert parameter in the database *****/
-	    DB_QueryINSERT ("can not create hidden parameter",
-			    "INSERT INTO hidden_params"
+	    /***** Insert session parameter in the database *****/
+	    DB_QueryINSERT ("can not create session parameter",
+			    "INSERT INTO ses_params"
 			    " (SessionId,ParamName,ParamValue)"
 			    " VALUES"
 			    " ('%s','%s','%s')",
@@ -357,21 +357,22 @@ void Ses_InsertHiddenParInDB (const char *ParamName,const char *ParamValue)
 			    ParamName,
 			    ParamValue ? ParamValue :
 					 "");
-	    Gbl.HiddenParamsInsertedIntoDB = true;
+	    Gbl.Session.ParamsInsertedIntoDB = true;
 	   }
   }
 
 /*****************************************************************************/
-/************ Remove hidden parameters of a session from database ************/
+/************ Remove session parameters of a session from database ***********/
 /*****************************************************************************/
 
-void Ses_RemoveHiddenParFromThisSession (void)
+void Ses_RemoveParamFromThisSession (void)
   {
    if (Gbl.Session.IsOpen &&			// There is an open session
-       !Gbl.HiddenParamsInsertedIntoDB)		// No params just inserted
-      /***** Remove hidden parameters of this session *****/
-      DB_QueryDELETE ("can not remove hidden parameters of current session",
-		      "DELETE FROM hidden_params WHERE SessionId='%s'",
+       !Gbl.Session.ParamsInsertedIntoDB)		// No params just inserted
+      /***** Remove session parameters of this session *****/
+      DB_QueryDELETE ("can not remove session parameters of current session",
+		      "DELETE FROM ses_params"
+		      " WHERE SessionId='%s'",
 		      Gbl.Session.Id);
   }
 
@@ -379,37 +380,38 @@ void Ses_RemoveHiddenParFromThisSession (void)
 /********* Remove expired hidden parameters (from expired sessions) **********/
 /*****************************************************************************/
 
-void Ses_RemoveHiddenParFromExpiredSessions (void)
+void Ses_RemoveParamsFromExpiredSessions (void)
   {
-   /***** Remove hidden parameters from expired sessions *****/
-   DB_QueryDELETE ("can not remove hidden parameters of expired sessions",
-		   "DELETE FROM hidden_params"
+   /***** Remove session parameters from expired sessions *****/
+   DB_QueryDELETE ("can not remove session parameters of expired sessions",
+		   "DELETE FROM ses_params"
                    " WHERE SessionId NOT IN"
-                   " (SELECT SessionId FROM sessions)");
+                   " (SELECT SessionId"
+                      " FROM sessions)");
   }
 
 /*****************************************************************************/
-/*************** Check if a hidden parameter existed in database *************/
+/************** Check if a session parameter existed in database *************/
 /*****************************************************************************/
 // Return true if the parameter already existed in database
 
-static bool Ses_CheckIfHiddenParIsAlreadyInDB (const char *ParamName)
+static bool Ses_CheckIfParamIsAlreadyInDB (const char *ParamName)
   {
-   return (DB_QueryCOUNT ("can not check if a hidden parameter"
+   return (DB_QueryCOUNT ("can not check if a session parameter"
 			  " is already in database",
-			  "SELECT COUNT(*) FROM hidden_params"
+			  "SELECT COUNT(*)"
+			   " FROM ses_params"
 			  " WHERE SessionId='%s'"
-			  " AND ParamName='%s'",
+			    " AND ParamName='%s'",
 			  Gbl.Session.Id,
 			  ParamName) != 0);
   }
 
 /*****************************************************************************/
-/***************** Get hidden parameter from the database ********************/
+/***************** Get session parameter from the database *******************/
 /*****************************************************************************/
 
-void Ses_GetHiddenParFromDB (const char *ParamName,char *ParamValue,
-                             size_t MaxBytes)
+void Ses_GetParamFromDB (const char *ParamName,char *ParamValue,size_t MaxBytes)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -420,12 +422,12 @@ void Ses_GetHiddenParFromDB (const char *ParamName,char *ParamValue,
    ParamValue[0] = '\0';
    if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
      {
-      /***** Get a hidden parameter from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get a hidden parameter",
+      /***** Get a session parameter from database *****/
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get a session parameter",
 				"SELECT ParamValue"
-				" FROM hidden_params"
+				 " FROM ses_params"
 				" WHERE SessionId='%s'"
-				" AND ParamName='%s'",
+				  " AND ParamName='%s'",
 				Gbl.Session.Id,
 				ParamName);
 
@@ -447,7 +449,7 @@ void Ses_GetHiddenParFromDB (const char *ParamName,char *ParamValue,
    if (ParameterIsTooBig)
      {
       snprintf (ErrorTxt,sizeof (ErrorTxt),
-	        "Hidden parameter <strong>%s</strong> too large,"
+	        "Session parameter <strong>%s</strong> too large,"
                 " it exceed the maximum allowed size (%lu bytes).",
                 ParamName,(unsigned long) MaxBytes);
       Lay_ShowErrorAndExit (ErrorTxt);

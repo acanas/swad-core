@@ -1772,24 +1772,6 @@ mysql> DESCRIBE mch_times;
 			"ElapsedTime TIME NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(MchCod,QstInd))");
 
-   /***** Table hidden_params *****/
-/*
-mysql> DESCRIBE hidden_params;
-+------------+--------------+------+-----+---------+-------+
-| Field      | Type         | Null | Key | Default | Extra |
-+------------+--------------+------+-----+---------+-------+
-| SessionId  | char(43)     | NO   | MUL | NULL    |       |
-| ParamName  | varchar(255) | NO   |     | NULL    |       |
-| ParamValue | longtext     | NO   |     | NULL    |       |
-+------------+--------------+------+-----+---------+-------+
-3 rows in set (0.01 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS hidden_params ("
-			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
-			"ParamName VARCHAR(255) NOT NULL,"
-			"ParamValue LONGTEXT NOT NULL,"
-		   "INDEX(SessionId))");
-
    /***** Table holidays *****/
 /*
 mysql> DESCRIBE holidays;
@@ -2702,6 +2684,24 @@ mysql> DESCRIBE room_check_in;
 		   "UNIQUE INDEX(ChkCod),"
 		   "INDEX(UsrCod,CheckInTime),"
 		   "INDEX(CheckInTime))");
+
+   /***** Table ses_params *****/
+/*
+mysql> DESCRIBE ses_params;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| SessionId  | char(43)     | NO   | MUL | NULL    |       |
+| ParamName  | varchar(255) | NO   |     | NULL    |       |
+| ParamValue | longtext     | NO   |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS ses_params ("
+			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
+			"ParamName VARCHAR(255) NOT NULL,"
+			"ParamValue LONGTEXT NOT NULL,"
+		   "INDEX(SessionId))");
 
    /***** Table sessions *****/
 /*

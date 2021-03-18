@@ -816,14 +816,6 @@ CREATE TABLE IF NOT EXISTS mch_times (
 	ElapsedTime TIME NOT NULL DEFAULT 0,
 	UNIQUE INDEX(MchCod,QstInd));
 --
--- Table hidden_params: stores some hidden parameters passed from a page to another using database instead of forms
---
-CREATE TABLE IF NOT EXISTS hidden_params (
-	SessionId CHAR(43) NOT NULL,
-	ParamName VARCHAR(255) NOT NULL,
-	ParamValue LONGTEXT NOT NULL,
-	INDEX(SessionId));
---
 -- Table holidays: stores the holidays in each institution
 --
 CREATE TABLE IF NOT EXISTS holidays (
@@ -1283,6 +1275,14 @@ CREATE TABLE IF NOT EXISTS room_check_in (
 	UNIQUE INDEX(ChkCod),
 	INDEX(UsrCod,CheckInTime),
 	INDEX(CheckInTime));
+--
+-- Table ses_params: stores some hidden parameters passed from a page to another using database instead of forms
+--
+CREATE TABLE IF NOT EXISTS ses_params (
+	SessionId CHAR(43) NOT NULL,
+	ParamName VARCHAR(255) NOT NULL,
+	ParamValue LONGTEXT NOT NULL,
+	INDEX(SessionId));
 --
 -- Table sessions: stores the information of open sessions
 --

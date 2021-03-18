@@ -5718,7 +5718,7 @@ void Usr_PutHiddenParSelectedUsrsCods (struct SelectedUsrs *SelectedUsrs)
 
    /* Put the parameter *****/
    if (Gbl.Session.IsOpen)
-      Ses_InsertHiddenParInDB (ParamName,SelectedUsrs->List[Rol_UNK]);
+      Ses_InsertParamInDB (ParamName,SelectedUsrs->List[Rol_UNK]);
    else
       Par_PutHiddenParamString (NULL,ParamName,SelectedUsrs->List[Rol_UNK]);
 
@@ -5748,7 +5748,7 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs)
       Usr_AllocateListSelectedEncryptedUsrCods (SelectedUsrs,Rol_UNK);
       if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
 	{
-	 Ses_GetHiddenParFromDB (ParamName,SelectedUsrs->List[Rol_UNK],
+	 Ses_GetParamFromDB (ParamName,SelectedUsrs->List[Rol_UNK],
 				 Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 	 Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,SelectedUsrs->List[Rol_UNK],
 			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);

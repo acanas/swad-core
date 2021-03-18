@@ -136,8 +136,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.DB.DatabaseIsOpen = false;
    Gbl.DB.LockedTables = false;
 
-   Gbl.HiddenParamsInsertedIntoDB = false;
-
    Gbl.Prefs.Language       = Txt_Current_CGI_SWAD_Language;
    Gbl.Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
    Gbl.Prefs.DateFormat     = Dat_FORMAT_DEFAULT;		// Default date format
@@ -153,6 +151,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Session.IsOpen = false;
    Gbl.Session.HasBeenDisconnected = false;
    Gbl.Session.Id[0] = '\0';
+   Gbl.Session.ParamsInsertedIntoDB = false;
 
    Gbl.Usrs.Me.UsrIdLogin[0] = '\0';
    Gbl.Usrs.Me.LoginPlainPassword[0] = '\0';
@@ -160,7 +159,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Me.UsrDat.UsrIDNickOrEmail[0] = '\0';
    Usr_UsrDataConstructor (&Gbl.Usrs.Me.UsrDat);
    Usr_ResetMyLastData ();
-   Gbl.Session.Id[0] = '\0';
    Gbl.Usrs.Me.Logged = false;
    Gbl.Usrs.Me.Role.Available = 0;
    Gbl.Usrs.Me.Role.FromSession              =
@@ -358,7 +356,7 @@ void Gbl_Cleanup (void)
    if (!Gbl.Action.UsesAJAX &&
        !Gbl.WebService.IsWebService &&
        Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
-      Ses_RemoveHiddenParFromThisSession ();
+      Ses_RemoveParamFromThisSession ();
    Usr_FreeMyCourses ();
    Usr_FreeMyDegrees ();
    Usr_FreeMyCenters ();

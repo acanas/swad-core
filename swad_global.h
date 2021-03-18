@@ -132,8 +132,6 @@ struct Globals
       bool LockedTables;
      } DB;
 
-   bool HiddenParamsInsertedIntoDB;	// If parameters are inserted in the database in this execution
-
    /* To compute execution time of the program */
    struct timeval tvStart;
    struct timeval tvPageCreated;
@@ -165,6 +163,7 @@ struct Globals
       bool HasBeenDisconnected;
       char Id[Cns_BYTES_SESSION_ID + 1];
       long UsrCod;
+      bool ParamsInsertedIntoDB;	// If parameters are inserted in the database in this session
      } Session;
 
    struct
