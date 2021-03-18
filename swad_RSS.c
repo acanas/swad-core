@@ -253,14 +253,18 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Crs_Course *Crs)
    if (Gbl.DB.DatabaseIsOpen)
      {
       /***** Get exam announcements (only future exams) in current course from database *****/
-      NumExamAnnouncements = DB_QuerySELECT (&mysql_res,"can not get exam announcements",
-					     "SELECT ExaCod,UNIX_TIMESTAMP(CallDate) AS T,"
-					     "DATE_FORMAT(ExamDate,'%%d/%%m/%%Y %%H:%%i')"
-					     " FROM exam_announcements"
-					     " WHERE CrsCod=%ld AND Status=%u AND ExamDate>=NOW()"
-					     " ORDER BY T",
-					     Gbl.Hierarchy.Crs.CrsCod,
-					     (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
+      NumExamAnnouncements =
+      DB_QuerySELECT (&mysql_res,"can not get exam announcements",
+		      "SELECT ExaCod,"						// row[0]
+			     "UNIX_TIMESTAMP(CallDate) AS T,"			// row[1]
+			     "DATE_FORMAT(ExamDate,'%%d/%%m/%%Y %%H:%%i')"	// row[2]
+		       " FROM cfe_calls_for_exams"
+		      " WHERE CrsCod=%ld"
+		        " AND Status=%u"
+		        " AND ExamDate>=NOW()"
+		      " ORDER BY T",
+		      Gbl.Hierarchy.Crs.CrsCod,
+		      (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
 
       /***** Write items with notices *****/
       if (NumExamAnnouncements)

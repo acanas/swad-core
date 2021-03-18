@@ -151,6 +151,30 @@ CREATE TABLE IF NOT EXISTS brw_clipboards (
 	INDEX(FileBrowser,Cod),
 	INDEX(WorksUsrCod));
 --
+-- Table cfe_calls_for_exams: stores the calls for examination
+--
+CREATE TABLE IF NOT EXISTS cfe_calls_for_exams (
+	ExaCod INT NOT NULL AUTO_INCREMENT,
+	CrsCod INT NOT NULL DEFAULT -1,
+	Status TINYINT NOT NULL DEFAULT 0,
+	NumNotif INT NOT NULL DEFAULT 0,
+	CrsFullName VARCHAR(2047) NOT NULL,
+	Year TINYINT NOT NULL,
+	ExamSession VARCHAR(2047) NOT NULL,
+	CallDate DATETIME NOT NULL,
+	ExamDate DATETIME NOT NULL,
+	Duration TIME NOT NULL,
+	Place TEXT NOT NULL,
+	ExamMode TEXT NOT NULL,
+	Structure TEXT NOT NULL,
+	DocRequired TEXT NOT NULL,
+	MatRequired TEXT NOT NULL,
+	MatAllowed TEXT NOT NULL,
+	OtherInfo TEXT NOT NULL,
+	UNIQUE INDEX(ExaCod),
+	INDEX(CrsCod,Status),
+	INDEX(Status));
+--
 -- Table cht_rooms: stores number of users in each chat room (this table is not used now)
 --
 CREATE TABLE IF NOT EXISTS cht_rooms (
@@ -533,30 +557,6 @@ CREATE TABLE IF NOT EXISTS exa_sets (
 	Title VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(SetCod),
 	UNIQUE INDEX(ExaCod,SetInd));
---
--- Table exam_announcements: stores the calls for examination
---
-CREATE TABLE IF NOT EXISTS exam_announcements (
-	ExaCod INT NOT NULL AUTO_INCREMENT,
-	CrsCod INT NOT NULL DEFAULT -1,
-	Status TINYINT NOT NULL DEFAULT 0,
-	NumNotif INT NOT NULL DEFAULT 0,
-	CrsFullName VARCHAR(2047) NOT NULL,
-	Year TINYINT NOT NULL,
-	ExamSession VARCHAR(2047) NOT NULL,
-	CallDate DATETIME NOT NULL,
-	ExamDate DATETIME NOT NULL,
-	Duration TIME NOT NULL,
-	Place TEXT NOT NULL,
-	ExamMode TEXT NOT NULL,
-	Structure TEXT NOT NULL,
-	DocRequired TEXT NOT NULL,
-	MatRequired TEXT NOT NULL,
-	MatAllowed TEXT NOT NULL,
-	OtherInfo TEXT NOT NULL,
-	UNIQUE INDEX(ExaCod),
-	INDEX(CrsCod,Status),
-	INDEX(Status));
 --
 -- Table expanded_folders: stores the expanded folders for each user
 --

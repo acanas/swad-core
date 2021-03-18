@@ -1931,22 +1931,26 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       /***** Remove information of the course ****/
       /* Remove timetable of the course */
       DB_QueryDELETE ("can not remove the timetable of a course",
-		      "DELETE FROM timetable_crs WHERE CrsCod=%ld",
+		      "DELETE FROM timetable_crs"
+		      " WHERE CrsCod=%ld",
 		      CrsCod);
 
       /* Remove other information of the course */
       DB_QueryDELETE ("can not remove info sources of a course",
-		      "DELETE FROM crs_info_src WHERE CrsCod=%ld",
+		      "DELETE FROM crs_info_src"
+		      " WHERE CrsCod=%ld",
 		      CrsCod);
 
       DB_QueryDELETE ("can not remove info of a course",
-		      "DELETE FROM crs_info_txt WHERE CrsCod=%ld",
+		      "DELETE FROM crs_info_txt"
+		      " WHERE CrsCod=%ld",
 		      CrsCod);
 
       /***** Remove exam announcements in the course *****/
       /* Mark all exam announcements in the course as deleted */
       DB_QueryUPDATE ("can not remove exam announcements of a course",
-		      "UPDATE exam_announcements SET Status=%u"
+		      "UPDATE cfe_calls_for_exams"
+		        " SET Status=%u"
 		      " WHERE CrsCod=%ld",
 	              (unsigned) Cfe_DELETED_CALL_FOR_EXAM,CrsCod);
 
@@ -1954,14 +1958,16 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       /* Remove content of course cards */
       DB_QueryDELETE ("can not remove content of cards in a course",
 		      "DELETE FROM crs_records"
-		      " USING crs_record_fields,crs_records"
+		      " USING crs_record_fields,"
+		             "crs_records"
 		      " WHERE crs_record_fields.CrsCod=%ld"
-		      " AND crs_record_fields.FieldCod=crs_records.FieldCod",
+		        " AND crs_record_fields.FieldCod=crs_records.FieldCod",
 	              CrsCod);
 
       /* Remove definition of fields in course cards */
       DB_QueryDELETE ("can not remove fields of cards in a course",
-		      "DELETE FROM crs_record_fields WHERE CrsCod=%ld",
+		      "DELETE FROM crs_record_fields"
+		      " WHERE CrsCod=%ld",
 		      CrsCod);
 
       /***** Remove information related to files in course,

@@ -409,6 +409,54 @@ mysql> DESCRIBE brw_clipboards;
 		   "INDEX(FileBrowser,Cod),"
 		   "INDEX(WorksUsrCod))");
 
+   /***** Table cfe_calls_for_exams *****/
+/*
+mysql> DESCRIBE cfe_calls_for_exams;
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| ExaCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CrsCod      | int(11)       | NO   | MUL | -1      |                |
+| Status      | tinyint(4)    | NO   | MUL | 0       |                |
+| NumNotif    | int(11)       | NO   |     | 0       |                |
+| CrsFullName | varchar(2047) | NO   |     | NULL    |                |
+| Year        | tinyint(4)    | NO   |     | NULL    |                |
+| ExamSession | varchar(2047) | NO   |     | NULL    |                |
+| CallDate    | datetime      | NO   |     | NULL    |                |
+| ExamDate    | datetime      | NO   |     | NULL    |                |
+| Duration    | time          | NO   |     | NULL    |                |
+| Place       | text          | NO   |     | NULL    |                |
+| ExamMode    | text          | NO   |     | NULL    |                |
+| Structure   | text          | NO   |     | NULL    |                |
+| DocRequired | text          | NO   |     | NULL    |                |
+| MatRequired | text          | NO   |     | NULL    |                |
+| MatAllowed  | text          | NO   |     | NULL    |                |
+| OtherInfo   | text          | NO   |     | NULL    |                |
++-------------+---------------+------+-----+---------+----------------+
+17 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS cfe_calls_for_exams ("
+			"ExaCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"Status TINYINT NOT NULL DEFAULT 0,"
+			"NumNotif INT NOT NULL DEFAULT 0,"
+			"CrsFullName VARCHAR(2047) NOT NULL,"	// Cns_HIERARCHY_MAX_BYTES_FULL_NAME
+			"Year TINYINT NOT NULL,"
+			"ExamSession VARCHAR(2047) NOT NULL,"	// Cfe_MAX_BYTES_SESSION
+			"CallDate DATETIME NOT NULL,"
+			"ExamDate DATETIME NOT NULL,"
+			"Duration TIME NOT NULL,"
+			"Place TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
+			"ExamMode TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
+			"Structure TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
+			"DocRequired TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
+			"MatRequired TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
+			"MatAllowed TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
+			"OtherInfo TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(ExaCod),"
+		   "INDEX(CrsCod,Status),"
+		   "INDEX(Status))");
+
    /***** Table cht_rooms *****/
 /*
 mysql> DESCRIBE cht_rooms;
@@ -1180,54 +1228,6 @@ mysql> DESCRIBE exa_sets;
 			"Title VARCHAR(2047) NOT NULL,"	// ExaSet_MAX_BYTES_TITLE
 		   "UNIQUE INDEX(SetCod),"
 		   "UNIQUE INDEX(ExaCod,SetInd))");
-
-   /***** Table exam_announcements *****/
-/*
-mysql> DESCRIBE exam_announcements;
-+-------------+---------------+------+-----+---------+----------------+
-| Field       | Type          | Null | Key | Default | Extra          |
-+-------------+---------------+------+-----+---------+----------------+
-| ExaCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
-| CrsCod      | int(11)       | NO   | MUL | -1      |                |
-| Status      | tinyint(4)    | NO   | MUL | 0       |                |
-| NumNotif    | int(11)       | NO   |     | 0       |                |
-| CrsFullName | varchar(2047) | NO   |     | NULL    |                |
-| Year        | tinyint(4)    | NO   |     | NULL    |                |
-| ExamSession | varchar(2047) | NO   |     | NULL    |                |
-| CallDate    | datetime      | NO   |     | NULL    |                |
-| ExamDate    | datetime      | NO   |     | NULL    |                |
-| Duration    | time          | NO   |     | NULL    |                |
-| Place       | text          | NO   |     | NULL    |                |
-| ExamMode    | text          | NO   |     | NULL    |                |
-| Structure   | text          | NO   |     | NULL    |                |
-| DocRequired | text          | NO   |     | NULL    |                |
-| MatRequired | text          | NO   |     | NULL    |                |
-| MatAllowed  | text          | NO   |     | NULL    |                |
-| OtherInfo   | text          | NO   |     | NULL    |                |
-+-------------+---------------+------+-----+---------+----------------+
-17 rows in set (0,00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exam_announcements ("
-			"ExaCod INT NOT NULL AUTO_INCREMENT,"
-			"CrsCod INT NOT NULL DEFAULT -1,"
-			"Status TINYINT NOT NULL DEFAULT 0,"
-			"NumNotif INT NOT NULL DEFAULT 0,"
-			"CrsFullName VARCHAR(2047) NOT NULL,"	// Cns_HIERARCHY_MAX_BYTES_FULL_NAME
-			"Year TINYINT NOT NULL,"
-			"ExamSession VARCHAR(2047) NOT NULL,"	// Cfe_MAX_BYTES_SESSION
-			"CallDate DATETIME NOT NULL,"
-			"ExamDate DATETIME NOT NULL,"
-			"Duration TIME NOT NULL,"
-			"Place TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
-			"ExamMode TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
-			"Structure TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
-			"DocRequired TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
-			"MatRequired TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
-			"MatAllowed TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
-			"OtherInfo TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
-		   "UNIQUE INDEX(ExaCod),"
-		   "INDEX(CrsCod,Status),"
-		   "INDEX(Status))");
 
    /***** Table expanded_folders *****/
 /*

@@ -61,9 +61,9 @@ mysql> SHOW TABLES LIKE 'tml_%';
   |               |                (3863)       | |
   |Publication i+3|--                           | |
   |(original note)|  \                          | |
-  |_______________|   \       ___tml_notes___   | |    exam_announcements
+  |_______________|   \       ___tml_notes___   | |     _calls_for_exams
   |               |    \     |               |  | |    |               |
-  |Publication i+2|--   ---->|     Note n    |<-+ |    | Exam announc. | (5571)
+  |Publication i+2|--   ---->|     Note n    |<-+ |    | Call for exam | (5571)
   |(original note)|  \       |(exam announc.)|-(2639)->|_______________|
   |_______________|   \      |_______________|  12%     ____files____
   |               |    \     |               |    |    |             |
