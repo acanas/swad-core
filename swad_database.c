@@ -455,9 +455,9 @@ mysql> DESCRIBE brw_last;
 		   "LastClick DATETIME NOT NULL,"
 		   "UNIQUE INDEX(UsrCod,FileBrowser,Cod))");
 
-   /***** Table file_browser_size *****/
+   /***** Table brw_sizes *****/
 /*
-mysql> DESCRIBE file_browser_size;
+mysql> DESCRIBE brw_sizes;
 +-------------+------------+------+-----+---------+-------+
 | Field       | Type       | Null | Key | Default | Extra |
 +-------------+------------+------+-----+---------+-------+
@@ -471,7 +471,7 @@ mysql> DESCRIBE file_browser_size;
 +-------------+------------+------+-----+---------+-------+
 7 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_browser_size ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_sizes ("
 			"FileBrowser TINYINT NOT NULL,"
 			"Cod INT NOT NULL DEFAULT -1,"
 			"ZoneUsrCod INT NOT NULL DEFAULT -1,"

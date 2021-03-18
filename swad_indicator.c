@@ -1491,14 +1491,16 @@ static unsigned long Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod)
    DB_QuerySELECT (&mysql_res,"can not get the number of files",
 		   "SELECT"
 		   " (SELECT COALESCE(SUM(NumFiles),0)"
-		   " FROM file_browser_size"
-		   " WHERE FileBrowser=%u AND Cod=%ld) +"
-		   " (SELECT COALESCE(SUM(file_browser_size.NumFiles),0)"
-		   " FROM crs_grp_types,crs_grp,file_browser_size"
-		   " WHERE crs_grp_types.CrsCod=%ld"
-		   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		   " AND file_browser_size.FileBrowser=%u"
-		   " AND file_browser_size.Cod=crs_grp.GrpCod)",
+		      " FROM brw_sizes"
+		     " WHERE FileBrowser=%u AND Cod=%ld) +"
+		   " (SELECT COALESCE(SUM(brw_sizes.NumFiles),0)"
+		      " FROM crs_grp_types,"
+		            "crs_grp,"
+		            "brw_sizes"
+		     " WHERE crs_grp_types.CrsCod=%ld"
+		       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+		       " AND brw_sizes.FileBrowser=%u"
+		       " AND brw_sizes.Cod=crs_grp.GrpCod)",
 		   (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOC_CRS],
 		   CrsCod,
 		   CrsCod,
@@ -1532,14 +1534,16 @@ static unsigned long Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod)
    DB_QuerySELECT (&mysql_res,"can not get the number of files",
 		   "SELECT"
 		   " (SELECT COALESCE(SUM(NumFiles),0)"
-		   " FROM file_browser_size"
-		   " WHERE FileBrowser=%u AND Cod=%ld) +"
-		   " (SELECT COALESCE(SUM(file_browser_size.NumFiles),0)"
-		   " FROM crs_grp_types,crs_grp,file_browser_size"
-		   " WHERE crs_grp_types.CrsCod=%ld"
-		   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		   " AND file_browser_size.FileBrowser=%u"
-		   " AND file_browser_size.Cod=crs_grp.GrpCod)",
+		      " FROM brw_sizes"
+		     " WHERE FileBrowser=%u AND Cod=%ld) +"
+		   " (SELECT COALESCE(SUM(brw_sizes.NumFiles),0)"
+		      " FROM crs_grp_types,"
+		            "crs_grp,"
+		            "brw_sizes"
+		     " WHERE crs_grp_types.CrsCod=%ld"
+		       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+		       " AND brw_sizes.FileBrowser=%u"
+		       " AND brw_sizes.Cod=crs_grp.GrpCod)",
 	           (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHR_CRS],
 	           CrsCod,
 	           CrsCod,
@@ -1572,8 +1576,9 @@ static unsigned long Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod)
    /***** Get number of files in document zones of a course from database *****/
    DB_QuerySELECT (&mysql_res,"can not get the number of files",
 		   "SELECT COALESCE(SUM(NumFiles),0)"
-		   " FROM file_browser_size"
-		   " WHERE FileBrowser=%u AND Cod=%ld",
+		    " FROM brw_sizes"
+		   " WHERE FileBrowser=%u"
+		     " AND Cod=%ld",
 	           (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_ASG_USR],
 	           CrsCod);
 
@@ -1604,8 +1609,9 @@ static unsigned long Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod)
    /***** Get number of files in document zones of a course from database *****/
    DB_QuerySELECT (&mysql_res,"can not get the number of files",
 		   "SELECT COALESCE(SUM(NumFiles),0)"
-		   " FROM file_browser_size"
-		   " WHERE FileBrowser=%u AND Cod=%ld",
+		    " FROM brw_sizes"
+		   " WHERE FileBrowser=%u"
+		     " AND Cod=%ld",
 	           (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_WRK_USR],
 	           CrsCod);
 

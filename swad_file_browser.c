@@ -91,7 +91,7 @@ struct Brw_NumObjects
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-// Browsers types for database "files" and "file_browser_size" tables
+// Browsers types for database "files" and "brw_sizes" tables
 const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = Brw_UNKNOWN,
@@ -4151,7 +4151,7 @@ static void Brw_StoreSizeOfFileTreeInDB (void)
 
    /***** Update size of the file browser in database *****/
    DB_QueryREPLACE ("can not store the size of a file browser",
-		    "REPLACE INTO file_browser_size"
+		    "REPLACE INTO brw_sizes"
 		    " (FileBrowser,Cod,ZoneUsrCod,"
 		    "NumLevels,NumFolders,NumFiles,TotalSize)"
 		    " VALUES"
@@ -4216,7 +4216,7 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
    /***** Remove from database the entries that store
           the sizes of the file zones *****/
    DB_QueryDELETE ("can not remove sizes of file zones of an institution",
-		   "DELETE FROM file_browser_size"
+		   "DELETE FROM brw_sizes"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_INS,
@@ -4280,7 +4280,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    DB_QueryDELETE ("can not remove sizes of file zones of a center",
-		   "DELETE FROM file_browser_size"
+		   "DELETE FROM brw_sizes"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CTR,
@@ -4343,7 +4343,7 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    DB_QueryDELETE ("can not remove sizes of file zones of a degree",
-		   "DELETE FROM file_browser_size"
+		   "DELETE FROM brw_sizes"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_DEG,
@@ -4549,7 +4549,7 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    /***** Remove from database the entries that store the sizes of the file zones *****/
    /* Remove from course file zones */
    DB_QueryDELETE ("can not remove sizes of file zones of a course",
-		   "DELETE FROM file_browser_size"
+		   "DELETE FROM brw_sizes"
 		   " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CRS,
@@ -4562,7 +4562,7 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /* Remove from group file zones */
    DB_QueryDELETE ("can not remove sizes of file zones of a course",
-		   "DELETE FROM file_browser_size"
+		   "DELETE FROM brw_sizes"
 		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
 		     " AND Cod IN %s",
 	           (unsigned) Brw_ADMI_DOC_GRP,
@@ -4573,7 +4573,7 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /* Remove from project file zones */
    DB_QueryDELETE ("can not remove sizes of file zones of a course",
-		   "DELETE FROM file_browser_size"
+		   "DELETE FROM brw_sizes"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod IN %s",
 	           (unsigned) Brw_ADMI_DOC_PRJ,
@@ -4680,7 +4680,7 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    DB_QueryDELETE ("can not remove sizes of file zones of a group",
-		   "DELETE FROM file_browser_size"
+		   "DELETE FROM brw_sizes"
 		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
 		   " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_GRP,
@@ -4748,7 +4748,7 @@ void Brw_RemovePrjFilesFromDB (long PrjCod)
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    DB_QueryDELETE ("can not remove sizes of file zones of a project",
-		   "DELETE FROM file_browser_size"
+		   "DELETE FROM brw_sizes"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_PRJ,
@@ -4909,7 +4909,7 @@ void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod)
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    DB_QueryDELETE ("can not remove file browser sizes",
-		   "DELETE FROM file_browser_size"
+		   "DELETE FROM brw_sizes"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld"
 		     " AND ZoneUsrCod=%ld",
@@ -4965,7 +4965,7 @@ void Brw_RemoveUsrFilesFromDB (long UsrCod)
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    DB_QueryDELETE ("can not remove sizes of user's file zones",
-		   "DELETE FROM file_browser_size"
+		   "DELETE FROM brw_sizes"
 		   " WHERE ZoneUsrCod=%ld",
 	           UsrCod);
 

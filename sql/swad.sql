@@ -173,9 +173,9 @@ CREATE TABLE IF NOT EXISTS brw_last (
 	LastClick DATETIME NOT NULL,
 	UNIQUE INDEX(UsrCod,FileBrowser,Cod));
 --
--- Table file_browser_size: stores the sizes of the file zones
+-- Table brw_sizes: stores the sizes of the file zones
 --
-CREATE TABLE IF NOT EXISTS file_browser_size (
+CREATE TABLE IF NOT EXISTS brw_sizes (
 	FileBrowser TINYINT NOT NULL,
 	Cod INT NOT NULL DEFAULT -1,
 	ZoneUsrCod INT NOT NULL DEFAULT -1,
