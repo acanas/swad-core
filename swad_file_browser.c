@@ -4174,11 +4174,11 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of an institution",
 		   "DELETE FROM file_view"
-		   " USING files,"
+		   " USING brw_files,"
 		          "file_view"
-		   " WHERE files.FileBrowser IN (%u,%u)"
-		     " AND files.Cod=%ld"
-		     " AND files.FilCod=file_view.FilCod",
+		   " WHERE brw_files.FileBrowser IN (%u,%u)"
+		     " AND brw_files.Cod=%ld"
+		     " AND brw_files.FilCod=file_view.FilCod",
 	           (unsigned) Brw_ADMI_DOC_INS,
 	           (unsigned) Brw_ADMI_SHR_INS,
 	           InsCod);
@@ -4225,7 +4225,7 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
 
    /***** Remove from database the entries that store the data files *****/
    DB_QueryDELETE ("can not remove files of an institution",
-		   "DELETE FROM files"
+		   "DELETE FROM brw_files"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_INS,
@@ -4242,11 +4242,11 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of a center",
 		   "DELETE FROM file_view"
-		   " USING files,"
+		   " USING brw_files,"
 		          "file_view"
-		   " WHERE files.FileBrowser IN (%u,%u)"
-		     " AND files.Cod=%ld"
-		     " AND files.FilCod=file_view.FilCod",
+		   " WHERE brw_files.FileBrowser IN (%u,%u)"
+		     " AND brw_files.Cod=%ld"
+		     " AND brw_files.FilCod=file_view.FilCod",
 	           (unsigned) Brw_ADMI_DOC_CTR,
 	           (unsigned) Brw_ADMI_SHR_CTR,
 	           CtrCod);
@@ -4289,7 +4289,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 
    /***** Remove from database the entries that store the data files *****/
    DB_QueryDELETE ("can not remove files of a center",
-		   "DELETE FROM files"
+		   "DELETE FROM brw_files"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CTR,
@@ -4306,10 +4306,11 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of a degree",
 		   "DELETE FROM file_view"
-		   " USING files,file_view"
-		   " WHERE files.FileBrowser IN (%u,%u)"
-		     " AND files.Cod=%ld"
-		     " AND files.FilCod=file_view.FilCod",
+		   " USING brw_files,"
+		          "file_view"
+		   " WHERE brw_files.FileBrowser IN (%u,%u)"
+		     " AND brw_files.Cod=%ld"
+		     " AND brw_files.FilCod=file_view.FilCod",
 	           (unsigned) Brw_ADMI_DOC_DEG,
 	           (unsigned) Brw_ADMI_SHR_DEG,
 	           DegCod);
@@ -4352,7 +4353,7 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
 
    /***** Remove from database the entries that store the data files *****/
    DB_QueryDELETE ("can not remove files of a degree",
-		   "DELETE FROM files"
+		   "DELETE FROM brw_files"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_DEG,
@@ -4388,11 +4389,11 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    DB_QueryDELETE ("can not remove the properties of marks"
 		   " associated to a course",
 		   "DELETE FROM marks_properties"
-		   " USING files,"
+		   " USING brw_files,"
 		          "marks_properties"
-		   " WHERE files.FileBrowser=%u"
-		     " AND files.Cod=%ld"
-		     " AND files.FilCod=marks_properties.FilCod",
+		   " WHERE brw_files.FileBrowser=%u"
+		     " AND brw_files.Cod=%ld"
+		     " AND brw_files.FilCod=marks_properties.FilCod",
 	           (unsigned) Brw_ADMI_MRK_CRS,
 	           CrsCod);
 
@@ -4400,11 +4401,11 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    /* Remove from course file zones */
    DB_QueryDELETE ("can not remove file views to files of a course",
 		   "DELETE FROM file_view"
-		   " USING files,"
+		   " USING brw_files,"
 		          "file_view"
-		   " WHERE files.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
-		     " AND files.Cod=%ld"
-		     " AND files.FilCod=file_view.FilCod",
+		   " WHERE brw_files.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
+		     " AND brw_files.Cod=%ld"
+		     " AND brw_files.FilCod=file_view.FilCod",
 	           (unsigned) Brw_ADMI_DOC_CRS,
 	           (unsigned) Brw_ADMI_TCH_CRS,
 	           (unsigned) Brw_ADMI_SHR_CRS,
@@ -4416,11 +4417,11 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    /* Remove from group file zones */
    DB_QueryDELETE ("can not remove file views to files of a course",
 		   "DELETE FROM file_view"
-		   " USING files,"
+		   " USING brw_files,"
 		          "file_view"
-		   " WHERE files.FileBrowser IN (%u,%u,%u,%u)"
-		     " AND files.Cod IN %s"
-		     " AND files.FilCod=file_view.FilCod",
+		   " WHERE brw_files.FileBrowser IN (%u,%u,%u,%u)"
+		     " AND brw_files.Cod IN %s"
+		     " AND brw_files.FilCod=file_view.FilCod",
 	           (unsigned) Brw_ADMI_DOC_GRP,
 	           (unsigned) Brw_ADMI_TCH_GRP,
 	           (unsigned) Brw_ADMI_SHR_GRP,
@@ -4430,11 +4431,11 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    /* Remove from project file zones */
    DB_QueryDELETE ("can not remove file views to files of a course",
 		   "DELETE FROM file_view"
-		   " USING files,"
+		   " USING brw_files,"
 		          "file_view"
-		   " WHERE files.FileBrowser IN (%u,%u)"
-		     " AND files.Cod IN %s"
-		     " AND files.FilCod=file_view.FilCod",
+		   " WHERE brw_files.FileBrowser IN (%u,%u)"
+		     " AND brw_files.Cod IN %s"
+		     " AND brw_files.FilCod=file_view.FilCod",
 	           (unsigned) Brw_ADMI_DOC_PRJ,
 	           (unsigned) Brw_ADMI_ASS_PRJ,
 	           SubqueryPrj);
@@ -4583,7 +4584,7 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    /***** Remove from database the entries that store the data files *****/
    /* Remove from course file zones */
    DB_QueryDELETE ("can not remove files of a course",
-		   "DELETE FROM files"
+		   "DELETE FROM brw_files"
 		   " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CRS,
@@ -4596,7 +4597,7 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /* Remove from group file zones */
    DB_QueryDELETE ("can not remove files of a course",
-		   "DELETE FROM files"
+		   "DELETE FROM brw_files"
 		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
 		     " AND Cod IN %s",
 	           (unsigned) Brw_ADMI_DOC_GRP,
@@ -4607,7 +4608,7 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /* Remove from project file zones */
    DB_QueryDELETE ("can not remove files of a course",
-		   "DELETE FROM files"
+		   "DELETE FROM brw_files"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod IN %s",
 	           (unsigned) Brw_ADMI_DOC_PRJ,
@@ -4625,20 +4626,22 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
    DB_QueryDELETE ("can not remove the properties of marks"
 		   " associated to a group",
 		   "DELETE FROM marks_properties"
-		   " USING files,"
+		   " USING brw_files,"
 		          "marks_properties"
-		   " WHERE files.FileBrowser=%u"
-		     " AND files.Cod=%ld"
-		     " AND files.FilCod=marks_properties.FilCod",
+		   " WHERE brw_files.FileBrowser=%u"
+		     " AND brw_files.Cod=%ld"
+		     " AND brw_files.FilCod=marks_properties.FilCod",
 	           (unsigned) Brw_ADMI_MRK_GRP,
 	           GrpCod);
 
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of a group",
-		   "DELETE FROM file_view USING file_view,files"
-		   " WHERE files.FileBrowser IN (%u,%u,%u,%u)"
-		   " AND files.Cod=%ld"
-		   " AND files.FilCod=file_view.FilCod",
+		   "DELETE FROM file_view"
+		   " USING brw_files,"
+		          "file_view"
+		   " WHERE brw_files.FileBrowser IN (%u,%u,%u,%u)"
+		     " AND brw_files.Cod=%ld"
+		     " AND brw_files.FilCod=file_view.FilCod",
 	           (unsigned) Brw_ADMI_DOC_GRP,
 	           (unsigned) Brw_ADMI_TCH_GRP,
 	           (unsigned) Brw_ADMI_SHR_GRP,
@@ -4691,9 +4694,9 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
 
    /***** Remove from database the entries that store the data files *****/
    DB_QueryDELETE ("can not remove files of a group",
-		   "DELETE FROM files"
+		   "DELETE FROM brw_files"
 		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		   " AND Cod=%ld",
+		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_GRP,
 	           (unsigned) Brw_ADMI_TCH_GRP,
 	           (unsigned) Brw_ADMI_SHR_GRP,
@@ -4710,11 +4713,11 @@ void Brw_RemovePrjFilesFromDB (long PrjCod)
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of a project",
 		   "DELETE FROM file_view"
-		   " USING files,"
+		   " USING brw_files,"
 		          "file_view"
-		   " WHERE files.FileBrowser IN (%u,%u)"
-		     " AND files.Cod=%ld"
-		     " AND files.FilCod=file_view.FilCod",
+		   " WHERE brw_files.FileBrowser IN (%u,%u)"
+		     " AND brw_files.Cod=%ld"
+		     " AND brw_files.FilCod=file_view.FilCod",
 	           (unsigned) Brw_ADMI_DOC_PRJ,
 	           (unsigned) Brw_ADMI_ASS_PRJ,
 	           PrjCod);
@@ -4757,7 +4760,7 @@ void Brw_RemovePrjFilesFromDB (long PrjCod)
 
    /***** Remove from database the entries that store the data files *****/
    DB_QueryDELETE ("can not remove files of a project",
-		   "DELETE FROM files"
+		   "DELETE FROM brw_files"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_PRJ,
@@ -4877,12 +4880,12 @@ void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod)
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views",
 		   "DELETE FROM file_view"
-		   " USING files,"
+		   " USING brw_files,"
 		          "file_view"
-		   " WHERE files.FileBrowser IN (%u,%u)"
-		     " AND files.Cod=%ld"
-		     " AND files.ZoneUsrCod=%ld"
-		     " AND files.FilCod=file_view.FilCod",
+		   " WHERE brw_files.FileBrowser IN (%u,%u)"
+		     " AND brw_files.Cod=%ld"
+		     " AND brw_files.ZoneUsrCod=%ld"
+		     " AND brw_files.FilCod=file_view.FilCod",
 	           (unsigned) Brw_ADMI_ASG_USR,
 	           (unsigned) Brw_ADMI_WRK_USR,
 	           CrsCod,UsrCod);
@@ -4919,7 +4922,7 @@ void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod)
 
    /***** Remove from database the entries that store the data files *****/
    DB_QueryDELETE ("can not remove files",
-		   "DELETE FROM files"
+		   "DELETE FROM brw_files"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld"
 		     " AND ZoneUsrCod=%ld",
@@ -4939,10 +4942,10 @@ void Brw_RemoveUsrFilesFromDB (long UsrCod)
    // in order to take into account his/her views
    DB_QueryDELETE ("can not remove file views to files of a user",
 		   "DELETE FROM file_view"
-		   " USING files,"
+		   " USING brw_files,"
 		          "file_view"
-		   " WHERE files.ZoneUsrCod=%ld"
-		     " AND files.FilCod=file_view.FilCod",
+		   " WHERE brw_files.ZoneUsrCod=%ld"
+		     " AND brw_files.FilCod=file_view.FilCod",
 	           UsrCod);
 
    /***** Remove from database expanded folders *****/
@@ -4971,7 +4974,7 @@ void Brw_RemoveUsrFilesFromDB (long UsrCod)
 
    /***** Remove from database the entries that store the data files *****/
    DB_QueryDELETE ("can not remove files in user's file zones",
-		   "DELETE FROM files"
+		   "DELETE FROM brw_files"
 		   " WHERE ZoneUsrCod=%ld",
 	           UsrCod);
   }
@@ -9363,9 +9366,12 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
 
    /***** Get if a file or folder is hidden from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not check if a file is hidden",
-		       "SELECT Hidden FROM files"
-		       " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-		       " AND Path='%s'",
+		       "SELECT Hidden"		// row[0]
+		        " FROM brw_files"	// row[1]
+		       " WHERE FileBrowser=%u"
+		         " AND Cod=%ld"
+		         " AND ZoneUsrCod=%ld"
+		         " AND Path='%s'",
 		       (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		       Cod,ZoneUsrCod,
 		       Path))
@@ -9400,10 +9406,12 @@ bool Brw_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata)
       2) the argument Path begins by 'x/', where x is a path stored in database
    */
    return (DB_QueryCOUNT ("can not check if a file or folder is hidden",
-			  "SELECT COUNT(*) FROM files"
-			  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-			  " AND Hidden='Y'"
-			  " AND (Path='%s' OR LOCATE(CONCAT(Path,'/'),'%s')=1)",
+			  "SELECT COUNT(*) FROM brw_files"
+			  " WHERE FileBrowser=%u"
+			    " AND Cod=%ld"
+			    " AND ZoneUsrCod=%ld"
+			    " AND Hidden='Y'"
+			    " AND (Path='%s' OR LOCATE(CONCAT(Path,'/'),'%s')=1)",
 			  FileMetadata->FileBrowser,
 			  FileMetadata->Cod,
 			  FileMetadata->ZoneUsrCod,
@@ -10355,9 +10363,12 @@ long Brw_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
 
    /***** Get code of a file from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get file code",
-		       "SELECT FilCod FROM files"
-		       " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-		       " AND Path='%s'%s",
+		       "SELECT FilCod"
+		        " FROM brw_files"
+		       " WHERE FileBrowser=%u"
+		         " AND Cod=%ld"
+		         " AND ZoneUsrCod=%ld"
+		         " AND Path='%s'%s",
 		       (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		       Cod,ZoneUsrCod,
 		       Path,
@@ -10395,11 +10406,21 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
 
    /***** Get metadata of a file from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get file metadata",
-		       "SELECT FilCod,FileBrowser,Cod,ZoneUsrCod,"
-		       "PublisherUsrCod,FileType,Path,Hidden,Public,License"
-		       " FROM files"
-		       " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-		       " AND Path='%s'",
+		       "SELECT FilCod,"			// row[0]
+		              "FileBrowser,"		// row[1]
+		              "Cod,"			// row[2]
+		              "ZoneUsrCod,"		// row[3]
+		              "PublisherUsrCod,"	// row[4]
+		              "FileType,"		// row[5]
+		              "Path,"			// row[6]
+		              "Hidden,"			// row[7]
+		              "Public,"			// row[8]
+		              "License"			// row[9]
+		        " FROM brw_files"
+		       " WHERE FileBrowser=%u"
+		         " AND Cod=%ld"
+		         " AND ZoneUsrCod=%ld"
+		         " AND Path='%s'",
 		       (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		       Cod,ZoneUsrCod,
 		       Gbl.FileBrowser.FilFolLnk.Full))
@@ -10527,9 +10548,17 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
 
    /***** Get metadata of a file from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get file metadata",
-		       "SELECT FilCod,FileBrowser,Cod,ZoneUsrCod,"
-		       "PublisherUsrCod,FileType,Path,Hidden,Public,License"
-		       " FROM files"
+		       "SELECT FilCod,"			// row[0]
+		              "FileBrowser,"		// row[1]
+		              "Cod,"			// row[2]
+		              "ZoneUsrCod,"		// row[3]
+		              "PublisherUsrCod,"	// row[4]
+		              "FileType,"		// row[5]
+		              "Path,"			// row[6]
+		              "Hidden,"			// row[7]
+		              "Public,"			// row[8]
+		              "License"			// row[9]
+		        " FROM brw_files"
 		       " WHERE FilCod=%ld",
 		       FileMetadata->FilCod))
      {
@@ -10908,9 +10937,13 @@ static bool Brw_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
 
    /***** Get if a file or folder is public from database *****/
    return (DB_QueryCOUNT ("can not check if a folder contains public files",
-			  "SELECT COUNT(*) FROM files"
-			  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-			  " AND Path LIKE '%s/%%' AND Public='Y'",
+			  "SELECT COUNT(*)"
+			   " FROM brw_files"
+			  " WHERE FileBrowser=%u"
+			    " AND Cod=%ld"
+			    " AND ZoneUsrCod=%ld"
+			    " AND Path LIKE '%s/%%'"
+			    " AND Public='Y'",
 			  (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 			  Cod,ZoneUsrCod,
 			  Path) != 0);
@@ -10925,9 +10958,10 @@ unsigned Brw_GetNumFilesUsr (long UsrCod)
    /***** Get current number of files published by a user from database *****/
    return
    (unsigned) DB_QueryCOUNT ("can not get number of files from a user",
-			     "SELECT COUNT(*) FROM files"
+			     "SELECT COUNT(*)"
+			      " FROM brw_files"
 			     " WHERE PublisherUsrCod=%ld"
-			     " AND FileType IN (%u,%u)",
+			       " AND FileType IN (%u,%u)",
 			     UsrCod,
 			     (unsigned) Brw_IS_FILE,
 			     (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
@@ -10942,10 +10976,11 @@ unsigned Brw_GetNumPublicFilesUsr (long UsrCod)
    /***** Get current number of public files published by a user from database *****/
    return
    (unsigned) DB_QueryCOUNT ("can not get number of public files from a user",
-			     "SELECT COUNT(*) FROM files"
+			     "SELECT COUNT(*)"
+			      " FROM brw_files"
 			     " WHERE PublisherUsrCod=%ld"
-			     " AND FileType IN (%u,%u)"
-			     " AND Public='Y'",
+			       " AND FileType IN (%u,%u)"
+			       " AND Public='Y'",
 			     UsrCod,
 			     (unsigned) Brw_IS_FILE,
 			     (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
@@ -10962,9 +10997,12 @@ static void Brw_ChangeFileOrFolderHiddenInDB (const char Path[PATH_MAX + 1],bool
 
    /***** Mark file as hidden in database *****/
    DB_QueryUPDATE ("can not change status of a file in database",
-		   "UPDATE files SET Hidden='%c'"
-		   " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-		   " AND Path='%s'",
+		   "UPDATE brw_files"
+		     " SET Hidden='%c'"
+		   " WHERE FileBrowser=%u"
+		     " AND Cod=%ld"
+		     " AND ZoneUsrCod=%ld"
+		     " AND Path='%s'",
 	           IsHidden ? 'Y' :
 			      'N',
 	           (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
@@ -10988,9 +11026,14 @@ static void Brw_ChangeFilePublicInDB (struct FileMetadata *FileMetadata,
 
    /***** Change publisher, public and license of file in database *****/
    DB_QueryUPDATE ("can not change metadata of a file in database",
-		   "UPDATE files SET Public='%c',License=%u"
-		   " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-		   " AND FilCod=%ld AND Path='%s'",
+		   "UPDATE brw_files"
+		     " SET Public='%c',"
+		          "License=%u"
+		   " WHERE FileBrowser=%u"
+		     " AND Cod=%ld"
+		     " AND ZoneUsrCod=%ld"
+		     " AND FilCod=%ld"
+		     " AND Path='%s'",
 	           IsPublic ? 'Y' :
 			      'N',
 	           (unsigned) License,
@@ -11169,7 +11212,7 @@ long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
    /***** Add path to the database *****/
    return
    DB_QueryINSERTandReturnCode ("can not add path to database",
-				"INSERT INTO files"
+				"INSERT INTO brw_files"
 				" (FileBrowser,Cod,ZoneUsrCod,"
 				"PublisherUsrCod,FileType,Path,Hidden,Public,License)"
 				" VALUES"
@@ -11206,26 +11249,33 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1])
        FileBrowser == Brw_ADMI_MRK_GRP)
       DB_QueryDELETE ("can not remove properties of marks from database",
 		      "DELETE FROM marks_properties"
-		      " USING files,marks_properties"
-		      " WHERE files.FileBrowser=%u AND files.Cod=%ld"
-		      " AND files.Path='%s'"
-		      " AND files.FilCod=marks_properties.FilCod",
+		      " USING brw_files,"
+		             "marks_properties"
+		      " WHERE brw_files.FileBrowser=%u"
+		        " AND brw_files.Cod=%ld"
+		        " AND brw_files.Path='%s'"
+		        " AND brw_files.FilCod=marks_properties.FilCod",
 	              (unsigned) FileBrowser,Cod,Path);
 
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views from database",
-		  "DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser=%u AND files.Cod=%ld"
-		  " AND files.ZoneUsrCod=%ld"
-		  " AND files.Path='%s'"
-		  " AND files.FilCod=file_view.FilCod",
+		  "DELETE FROM file_view"
+		  " USING brw_files,"
+		         "file_view"
+		  " WHERE brw_files.FileBrowser=%u"
+		    " AND brw_files.Cod=%ld"
+		    " AND brw_files.ZoneUsrCod=%ld"
+		    " AND brw_files.Path='%s'"
+		    " AND brw_files.FilCod=file_view.FilCod",
 	          (unsigned) FileBrowser,Cod,ZoneUsrCod,Path);
 
    /***** Remove from database the entry that stores the data of a file *****/
    DB_QueryDELETE ("can not remove path from database",
-		   "DELETE FROM files"
-		   " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-		   " AND Path='%s'",
+		   "DELETE FROM brw_files"
+		   " WHERE FileBrowser=%u"
+		     " AND Cod=%ld"
+		     " AND ZoneUsrCod=%ld"
+		     " AND Path='%s'",
 	           (unsigned) FileBrowser,Cod,ZoneUsrCod,Path);
   }
 
@@ -11250,26 +11300,33 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1])
        FileBrowser == Brw_ADMI_MRK_GRP)
       DB_QueryDELETE ("can not remove properties of marks from database",
 		      "DELETE FROM marks_properties"
-		      " USING files,marks_properties"
-		      " WHERE files.FileBrowser=%u AND files.Cod=%ld"
-		      " AND files.Path LIKE '%s/%%'"
-		      " AND files.FilCod=marks_properties.FilCod",
+		      " USING brw_files,"
+		             "marks_properties"
+		      " WHERE brw_files.FileBrowser=%u"
+		        " AND brw_files.Cod=%ld"
+		        " AND brw_files.Path LIKE '%s/%%'"
+		        " AND brw_files.FilCod=marks_properties.FilCod",
 	              (unsigned) FileBrowser,Cod,Path);
 
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views from database",
-		  "DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser=%u AND files.Cod=%ld"
-		  " AND files.ZoneUsrCod=%ld"
-		  " AND files.Path LIKE '%s/%%'"
-		  " AND files.FilCod=file_view.FilCod",
+		  "DELETE FROM file_view"
+		  " USING brw_files,"
+		         "file_view"
+		  " WHERE brw_files.FileBrowser=%u"
+		    " AND brw_files.Cod=%ld"
+		    " AND brw_files.ZoneUsrCod=%ld"
+		    " AND brw_files.Path LIKE '%s/%%'"
+		    " AND brw_files.FilCod=file_view.FilCod",
                   (unsigned) FileBrowser,Cod,ZoneUsrCod,Path);
 
    /***** Remove from database the entries that store the data of files *****/
    DB_QueryDELETE ("can not remove paths from database",
-		   "DELETE FROM files"
-		   " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-		   " AND Path LIKE '%s/%%'",
+		   "DELETE FROM brw_files"
+		   " WHERE FileBrowser=%u"
+		     " AND Cod=%ld"
+		     " AND ZoneUsrCod=%ld"
+		     " AND Path LIKE '%s/%%'",
                    (unsigned) FileBrowser,Cod,ZoneUsrCod,Path);
   }
 
@@ -11285,8 +11342,12 @@ static void Brw_RenameOneFolderInDB (const char OldPath[PATH_MAX + 1],
 
    /***** Update file or folder in table of common files *****/
    DB_QueryUPDATE ("can not update folder name in a common zone",
-		   "UPDATE files SET Path='%s'"
-		   " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld AND Path='%s'",
+		   "UPDATE brw_files"
+		     " SET Path='%s'"
+		   " WHERE FileBrowser=%u"
+		     " AND Cod=%ld"
+		     " AND ZoneUsrCod=%ld"
+		     " AND Path='%s'",
 		   NewPath,
 		   (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		   Cod,ZoneUsrCod,
@@ -11306,9 +11367,12 @@ static void Brw_RenameChildrenFilesOrFoldersInDB (const char OldPath[PATH_MAX + 
 
    /***** Update children of a folder in table of files *****/
    DB_QueryUPDATE ("can not rename file or folder names in a common zone",
-		   "UPDATE files SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-		   " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-		   " AND Path LIKE '%s/%%'",
+		   "UPDATE brw_files"
+		     " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
+		   " WHERE FileBrowser=%u"
+		     " AND Cod=%ld"
+		     " AND ZoneUsrCod=%ld"
+		     " AND Path LIKE '%s/%%'",
 	           NewPath,StartFinalSubpathNotChanged,
 	           (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 	           Cod,ZoneUsrCod,
@@ -11662,9 +11726,11 @@ static long Brw_GetPublisherOfSubtree (void)
    /***** Get all common files that are equal to full path (including filename)
 	  or that are under that full path from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get publishers of files",
-			     "SELECT DISTINCT(PublisherUsrCod) FROM files"
-			     " WHERE FileBrowser=%u AND Cod=%ld"
-			     " AND (Path='%s' OR Path LIKE '%s/%%')",
+			     "SELECT DISTINCT(PublisherUsrCod)"
+			      " FROM brw_files"
+			     " WHERE FileBrowser=%u"
+			       " AND Cod=%ld"
+			       " AND (Path='%s' OR Path LIKE '%s/%%')",
 			     (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 			     Cod,
 			     Gbl.FileBrowser.FilFolLnk.Full,

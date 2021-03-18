@@ -2965,9 +2965,9 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,Brw_License_t Licen
       case Hie_Lvl_SYS:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of OERs",
-			 "SELECT Public,"
-			        "COUNT(*)"
-			 " FROM files"
+			 "SELECT Public,"		// row[0]
+			        "COUNT(*)"		// row[1]
+			  " FROM brw_files"
 			 " WHERE License=%u"
 			 " GROUP BY Public",
 			 (unsigned) License);
@@ -2975,21 +2975,21 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,Brw_License_t Licen
       case Hie_Lvl_CTY:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of OERs",
-			 "SELECT files.Public,"
-			        "COUNT(*)"
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "files"
+			 "SELECT brw_files.Public,"	// row[0]
+			        "COUNT(*)"		// row[1]
+			  " FROM ins_instits,"
+			        "ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "brw_files"
 			 " WHERE ins_instits.CtyCod=%ld"
-			 " AND ins_instits.InsCod=ctr_centers.InsCod"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=files.Cod"
-			 " AND files.FileBrowser IN (%u,%u)"
-			 " AND files.License=%u"
-			 " GROUP BY files.Public",
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=brw_files.Cod"
+			   " AND brw_files.FileBrowser IN (%u,%u)"
+			   " AND brw_files.License=%u"
+			 " GROUP BY brw_files.Public",
 			 Gbl.Hierarchy.Cty.CtyCod,
 			 (unsigned) Brw_ADMI_DOC_CRS,
 			 (unsigned) Brw_ADMI_SHR_CRS,
@@ -2998,19 +2998,19 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,Brw_License_t Licen
       case Hie_Lvl_INS:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of OERs",
-			 "SELECT files.Public,"
-			        "COUNT(*)"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "files"
+			 "SELECT brw_files.Public,"	// row[0]
+			        "COUNT(*)"		// row[1]
+			  " FROM ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "brw_files"
 			 " WHERE ctr_centers.InsCod=%ld"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=files.Cod"
-			 " AND files.FileBrowser IN (%u,%u)"
-			 " AND files.License=%u"
-			 " GROUP BY files.Public",
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=brw_files.Cod"
+			   " AND brw_files.FileBrowser IN (%u,%u)"
+			   " AND brw_files.License=%u"
+			 " GROUP BY brw_files.Public",
 			 Gbl.Hierarchy.Ins.InsCod,
 			 (unsigned) Brw_ADMI_DOC_CRS,
 			 (unsigned) Brw_ADMI_SHR_CRS,
@@ -3019,17 +3019,17 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,Brw_License_t Licen
       case Hie_Lvl_CTR:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of OERs",
-			 "SELECT files.Public,"
-			        "COUNT(*)"
-			 " FROM deg_degrees,"
-			       "crs_courses,"
-			       "files"
+			 "SELECT brw_files.Public,"	// row[0]
+			        "COUNT(*)"		// row[1]
+			  " FROM deg_degrees,"
+			        "crs_courses,"
+			        "brw_files"
 			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=files.Cod"
-			 " AND files.FileBrowser IN (%u,%u)"
-			 " AND files.License=%u"
-			 " GROUP BY files.Public",
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=brw_files.Cod"
+			   " AND brw_files.FileBrowser IN (%u,%u)"
+			   " AND brw_files.License=%u"
+			 " GROUP BY brw_files.Public",
 			 Gbl.Hierarchy.Ctr.CtrCod,
 			 (unsigned) Brw_ADMI_DOC_CRS,
 			 (unsigned) Brw_ADMI_SHR_CRS,
@@ -3038,15 +3038,15 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,Brw_License_t Licen
       case Hie_Lvl_DEG:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of OERs",
-			 "SELECT files.Public,"
-			        "COUNT(*)"
-			 " FROM crs_courses,"
-			       "files"
+			 "SELECT brw_files.Public,"	// row[0]
+			        "COUNT(*)"		// row[1]
+			  " FROM crs_courses,"
+			        "brw_files"
 			 " WHERE crs_courses.DegCod=%ld"
-			 " AND crs_courses.CrsCod=files.Cod"
-			 " AND files.FileBrowser IN (%u,%u)"
-			 " AND files.License=%u"
-			 " GROUP BY files.Public",
+			   " AND crs_courses.CrsCod=brw_files.Cod"
+			   " AND brw_files.FileBrowser IN (%u,%u)"
+			   " AND brw_files.License=%u"
+			 " GROUP BY brw_files.Public",
 			 Gbl.Hierarchy.Deg.DegCod,
 			 (unsigned) Brw_ADMI_DOC_CRS,
 			 (unsigned) Brw_ADMI_SHR_CRS,
@@ -3055,12 +3055,12 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,Brw_License_t Licen
       case Hie_Lvl_CRS:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of OERs",
-			 "SELECT Public,"
-			        "COUNT(*)"
-			 " FROM files"
+			 "SELECT Public,"		// row[0]
+			        "COUNT(*)"		// row[1]
+			  " FROM brw_files"
 			 " WHERE Cod=%ld"
-			 " AND FileBrowser IN (%u,%u)"
-			 " AND License=%u"
+			   " AND FileBrowser IN (%u,%u)"
+			   " AND License=%u"
 			 " GROUP BY Public",
 			 Gbl.Hierarchy.Crs.CrsCod,
 			 (unsigned) Brw_ADMI_DOC_CRS,

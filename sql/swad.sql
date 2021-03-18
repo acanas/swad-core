@@ -164,6 +164,40 @@ CREATE TABLE IF NOT EXISTS brw_expanded_folders (
 	INDEX(FileBrowser,Cod),
 	INDEX(WorksUsrCod));
 --
+-- Table file_cache: stores the media private paths linked from public directories in current session 
+--
+CREATE TABLE IF NOT EXISTS file_cache (
+	SessionId CHAR(43) NOT NULL,
+	PrivPath TEXT COLLATE latin1_bin NOT NULL,
+	TmpPubDir TEXT COLLATE latin1_bin NOT NULL,
+	INDEX(SessionId));
+--
+-- Table file_view: stores the number of times each user has seen each file
+--
+CREATE TABLE IF NOT EXISTS file_view (
+	FilCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	NumViews INT NOT NULL DEFAULT 0,
+	UNIQUE INDEX(FilCod,UsrCod),INDEX(UsrCod));
+--
+-- Table brw_files: stores metadata about each file
+--
+CREATE TABLE IF NOT EXISTS brw_files (
+	FilCod INT NOT NULL AUTO_INCREMENT,
+	FileBrowser TINYINT NOT NULL,
+	Cod INT NOT NULL DEFAULT -1,
+	ZoneUsrCod INT NOT NULL DEFAULT -1,
+	PublisherUsrCod INT NOT NULL,
+	FileType TINYINT NOT NULL DEFAULT 0,
+	Path TEXT COLLATE latin1_bin NOT NULL,
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	Public ENUM('N','Y') NOT NULL DEFAULT 'N',
+	License TINYINT NOT NULL DEFAULT 0,
+	UNIQUE INDEX(FilCod),
+	INDEX(FileBrowser,Cod,ZoneUsrCod),
+	INDEX(ZoneUsrCod),
+	INDEX(PublisherUsrCod));
+--
 -- Table brw_last: stores the last click of every user in each file browser zone
 --
 CREATE TABLE IF NOT EXISTS brw_last (
@@ -603,40 +637,6 @@ CREATE TABLE IF NOT EXISTS fig_figures (
 	ValueDouble DOUBLE PRECISION NOT NULL DEFAULT 0.0,
 	LastUpdate TIMESTAMP,
 	UNIQUE INDEX(Figure,Scope,Cod));
---
--- Table file_cache: stores the media private paths linked from public directories in current session 
---
-CREATE TABLE IF NOT EXISTS file_cache (
-	SessionId CHAR(43) NOT NULL,
-	PrivPath TEXT COLLATE latin1_bin NOT NULL,
-	TmpPubDir TEXT COLLATE latin1_bin NOT NULL,
-	INDEX(SessionId));
---
--- Table file_view: stores the number of times each user has seen each file
---
-CREATE TABLE IF NOT EXISTS file_view (
-	FilCod INT NOT NULL,
-	UsrCod INT NOT NULL,
-	NumViews INT NOT NULL DEFAULT 0,
-	UNIQUE INDEX(FilCod,UsrCod),INDEX(UsrCod));
---
--- Table files: stores metadata about each file
---
-CREATE TABLE IF NOT EXISTS files (
-	FilCod INT NOT NULL AUTO_INCREMENT,
-	FileBrowser TINYINT NOT NULL,
-	Cod INT NOT NULL DEFAULT -1,
-	ZoneUsrCod INT NOT NULL DEFAULT -1,
-	PublisherUsrCod INT NOT NULL,
-	FileType TINYINT NOT NULL DEFAULT 0,
-	Path TEXT COLLATE latin1_bin NOT NULL,
-	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
-	Public ENUM('N','Y') NOT NULL DEFAULT 'N',
-	License TINYINT NOT NULL DEFAULT 0,
-	UNIQUE INDEX(FilCod),
-	INDEX(FileBrowser,Cod,ZoneUsrCod),
-	INDEX(ZoneUsrCod),
-	INDEX(PublisherUsrCod));
 --
 -- Table firewall_banned: stores the banned IPs in order to mitigate denial of service attacks
 --

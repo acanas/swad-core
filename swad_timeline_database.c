@@ -200,11 +200,16 @@ void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (Tml_Not_NoteType_t NoteType,
   {
    /***** Mark notes as unavailable *****/
    DB_QueryUPDATE ("can not mark notes as unavailable",
-		   "UPDATE tml_notes SET Unavailable='Y'"
-		   " WHERE NoteType=%u AND Cod IN"
-		   " (SELECT FilCod FROM files"
-		   " WHERE FileBrowser=%u AND Cod=%ld"
-		   " AND Path LIKE '%s/%%' AND Public='Y')",	// Only public files
+		   "UPDATE tml_notes"
+		     " SET Unavailable='Y'"
+		   " WHERE NoteType=%u"
+		     " AND Cod IN"
+			 " (SELECT FilCod"
+			    " FROM brw_files"
+			   " WHERE FileBrowser=%u"
+			     " AND Cod=%ld"
+			     " AND Path LIKE '%s/%%'"
+			     " AND Public='Y')",	// Only public files
 		   (unsigned) NoteType,
 		   (unsigned) FileBrowser,Cod,
 		   Path);

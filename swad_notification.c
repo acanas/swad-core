@@ -1101,11 +1101,15 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
 	       return;
 	   }
 	 DB_QueryUPDATE ("can not set notification(s) as removed",
-			 "UPDATE notif SET Status=(Status | %u)"
-			 " WHERE NotifyEvent=%u AND Cod IN"
-			 " (SELECT FilCod FROM files"
-			 " WHERE FileBrowser=%u AND Cod=%ld"
-			 " AND Path LIKE '%s/%%')",
+			 "UPDATE notif"
+			   " SET Status=(Status | %u)"
+			 " WHERE NotifyEvent=%u"
+			   " AND Cod IN"
+			       " (SELECT FilCod"
+				  " FROM brw_files"
+				 " WHERE FileBrowser=%u"
+				   " AND Cod=%ld"
+				   " AND Path LIKE '%s/%%')",
 		         (unsigned) Ntf_STATUS_BIT_REMOVED,
 		         (unsigned) NotifyEvent,
 		         (unsigned) FileBrowser,Cod,
@@ -1124,10 +1128,14 @@ void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod)
   {
    /***** Set notifications as removed *****/
    DB_QueryUPDATE ("can not set notification(s) as removed",
-		   "UPDATE notif SET Status=(Status | %u)"
-		   " WHERE NotifyEvent IN (%u,%u,%u,%u) AND Cod IN"
-		   " (SELECT FilCod FROM files"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u) AND Cod=%ld)",
+		   "UPDATE notif"
+		     " SET Status=(Status | %u)"
+		   " WHERE NotifyEvent IN (%u,%u,%u,%u)"
+		     " AND Cod IN"
+			 " (SELECT FilCod"
+			    " FROM brw_files"
+			   " WHERE FileBrowser IN (%u,%u,%u,%u)"
+			     " AND Cod=%ld)",
 	           (unsigned) Ntf_STATUS_BIT_REMOVED,
 	           (unsigned) Ntf_EVENT_DOCUMENT_FILE,
 	           (unsigned) Ntf_EVENT_TEACHERS_FILE,

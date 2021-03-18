@@ -177,13 +177,16 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
       get the number of rows of the more recent file. */
    NumRows = DB_QuerySELECT (&mysql_res,"can not get the number of rows"
 				        " in header and footer",
-			     "SELECT marks_properties.%s,marks_properties.%s"
-			     " FROM files,marks_properties"
-			     " WHERE files.FileBrowser=%u"
-			     " AND files.Cod=%ld"
-			     " AND files.Path='%s'"
-			     " AND files.FilCod=marks_properties.FilCod"
-			     " ORDER BY files.FilCod DESC LIMIT 1",	// On duplicate entries, get the more recent
+			     "SELECT marks_properties.%s,"	// row[0]
+			            "marks_properties.%s"	// row[1]
+			     " FROM brw_files,"
+			           "marks_properties"
+			     " WHERE brw_files.FileBrowser=%u"
+			       " AND brw_files.Cod=%ld"
+			       " AND brw_files.Path='%s'"
+			       " AND brw_files.FilCod=marks_properties.FilCod"
+			     " ORDER BY brw_files.FilCod DESC"
+			     " LIMIT 1",	// On duplicate entries, get the more recent
 			     Mrk_HeadOrFootStr[Brw_HEADER],
 			     Mrk_HeadOrFootStr[Brw_FOOTER],
 			     (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
@@ -252,10 +255,13 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
       /***** Update properties of marks in the database *****/
       Cod = Brw_GetCodForFiles ();
       DB_QueryUPDATE ("can not update properties of marks",
-		      "UPDATE marks_properties,files"
+		      "UPDATE marks_properties,"
+		             "brw_files"
 		      " SET marks_properties.%s=%u"
-		      " WHERE files.FileBrowser=%u AND files.Cod=%ld AND files.Path='%s'"
-		      " AND files.FilCod=marks_properties.FilCod",
+		      " WHERE brw_files.FileBrowser=%u"
+		        " AND brw_files.Cod=%ld"
+		        " AND brw_files.Path='%s'"
+		        " AND brw_files.FilCod=marks_properties.FilCod",
 		      Mrk_HeadOrFootStr[HeaderOrFooter],NumRows,
 		      (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		      Cod,
@@ -723,11 +729,15 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    /***** Get subject of message from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get the number of rows"
 				  " in header and footer",
-		       "SELECT files.FileBrowser,files.Cod,files.Path,"
-		       "marks_properties.Header,marks_properties.Footer"
-		       " FROM files,marks_properties"
-		       " WHERE files.FilCod=%ld"
-		       " AND files.FilCod=marks_properties.FilCod",
+		       "SELECT brw_files.FileBrowser,"
+		              "brw_files.Cod,"
+		              "brw_files.Path,"
+		              "marks_properties.Header,"
+		              "marks_properties.Footer"
+		        " FROM brw_files,"
+		              "marks_properties"
+		       " WHERE brw_files.FilCod=%ld"
+		         " AND brw_files.FilCod=marks_properties.FilCod",
 			MrkCod) == 1)	// Result should have a unique row
      {
       /***** Get data of this file of marks *****/

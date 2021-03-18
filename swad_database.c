@@ -435,6 +435,78 @@ mysql> DESCRIBE brw_expanded_folders;
 		   "INDEX(FileBrowser,Cod),"
 		   "INDEX(WorksUsrCod))");
 
+   /***** Table file_cache *****/
+/*
+mysql> DESCRIBE file_cache;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| SessionId | char(43) | NO   | MUL | NULL    |       |
+| PrivPath  | text     | NO   |     | NULL    |       |
+| TmpPubDir | text     | NO   |     | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_cache ("
+			"SessionId CHAR(43) NOT NULL,"			// Cns_BYTES_SESSION_ID
+			"PrivPath VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
+			"TmpPubDir VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
+		   "UNIQUE INDEX(SessionId))");
+
+   /***** Table file_view *****/
+/*
+mysql> DESCRIBE file_view;
++----------+---------+------+-----+---------+-------+
+| Field    | Type    | Null | Key | Default | Extra |
++----------+---------+------+-----+---------+-------+
+| FilCod   | int(11) | NO   | PRI | NULL    |       |
+| UsrCod   | int(11) | NO   | PRI | NULL    |       |
+| NumViews | int(11) | NO   |     | 0       |       |
++----------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_view ("
+			"FilCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"NumViews INT NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(FilCod,UsrCod),"
+		   "INDEX(UsrCod))");
+
+   /***** Table brw_files *****/
+/*
+mysql> DESCRIBE brw_files;
++-----------------+---------------+------+-----+---------+----------------+
+| Field           | Type          | Null | Key | Default | Extra          |
++-----------------+---------------+------+-----+---------+----------------+
+| FilCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
+| FileBrowser     | tinyint(4)    | NO   | MUL | NULL    |                |
+| Cod             | int(11)       | NO   |     | -1      |                |
+| ZoneUsrCod      | int(11)       | NO   | MUL | -1      |                |
+| PublisherUsrCod | int(11)       | NO   | MUL | NULL    |                |
+| FileType        | tinyint(4)    | NO   |     | 0       |                |
+| Path            | text          | NO   |     | NULL    |                |
+| Hidden          | enum('N','Y') | NO   |     | N       |                |
+| Public          | enum('N','Y') | NO   |     | N       |                |
+| License         | tinyint(4)    | NO   |     | 0       |                |
++-----------------+---------------+------+-----+---------+----------------+
+10 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_files ("
+			"FilCod INT NOT NULL AUTO_INCREMENT,"
+			"FileBrowser TINYINT NOT NULL,"
+			"Cod INT NOT NULL DEFAULT -1,"
+			"ZoneUsrCod INT NOT NULL DEFAULT -1,"
+			"PublisherUsrCod INT NOT NULL,"
+			"FileType TINYINT NOT NULL DEFAULT 0,"
+			"Path TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Public ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"License TINYINT NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(FilCod),"
+		   "INDEX(FileBrowser,Cod,ZoneUsrCod),"
+		   "INDEX(ZoneUsrCod),"
+		   "INDEX(PublisherUsrCod))");
+
    /***** Table brw_last *****/
 /*
 mysql> DESCRIBE brw_last;
@@ -1325,78 +1397,6 @@ mysql> DESCRIBE fig_figures;
 			"ValueDouble DOUBLE PRECISION NOT NULL,"
 			"LastUpdate TIMESTAMP,"
 		   "UNIQUE INDEX(Figure,Scope,Cod))");
-
-   /***** Table file_cache *****/
-/*
-mysql> DESCRIBE file_cache;
-+-----------+----------+------+-----+---------+-------+
-| Field     | Type     | Null | Key | Default | Extra |
-+-----------+----------+------+-----+---------+-------+
-| SessionId | char(43) | NO   | MUL | NULL    |       |
-| PrivPath  | text     | NO   |     | NULL    |       |
-| TmpPubDir | text     | NO   |     | NULL    |       |
-+-----------+----------+------+-----+---------+-------+
-3 rows in set (0.01 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_cache ("
-			"SessionId CHAR(43) NOT NULL,"			// Cns_BYTES_SESSION_ID
-			"PrivPath VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
-			"TmpPubDir VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
-		   "UNIQUE INDEX(SessionId))");
-
-   /***** Table file_view *****/
-/*
-mysql> DESCRIBE file_view;
-+----------+---------+------+-----+---------+-------+
-| Field    | Type    | Null | Key | Default | Extra |
-+----------+---------+------+-----+---------+-------+
-| FilCod   | int(11) | NO   | PRI | NULL    |       |
-| UsrCod   | int(11) | NO   | PRI | NULL    |       |
-| NumViews | int(11) | NO   |     | 0       |       |
-+----------+---------+------+-----+---------+-------+
-3 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_view ("
-			"FilCod INT NOT NULL,"
-			"UsrCod INT NOT NULL,"
-			"NumViews INT NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(FilCod,UsrCod),"
-		   "INDEX(UsrCod))");
-
-   /***** Table files *****/
-/*
-mysql> DESCRIBE files;
-+-----------------+---------------+------+-----+---------+----------------+
-| Field           | Type          | Null | Key | Default | Extra          |
-+-----------------+---------------+------+-----+---------+----------------+
-| FilCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
-| FileBrowser     | tinyint(4)    | NO   | MUL | NULL    |                |
-| Cod             | int(11)       | NO   |     | -1      |                |
-| ZoneUsrCod      | int(11)       | NO   | MUL | -1      |                |
-| PublisherUsrCod | int(11)       | NO   | MUL | NULL    |                |
-| FileType        | tinyint(4)    | NO   |     | 0       |                |
-| Path            | text          | NO   |     | NULL    |                |
-| Hidden          | enum('N','Y') | NO   |     | N       |                |
-| Public          | enum('N','Y') | NO   |     | N       |                |
-| License         | tinyint(4)    | NO   |     | 0       |                |
-+-----------------+---------------+------+-----+---------+----------------+
-10 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS files ("
-			"FilCod INT NOT NULL AUTO_INCREMENT,"
-			"FileBrowser TINYINT NOT NULL,"
-			"Cod INT NOT NULL DEFAULT -1,"
-			"ZoneUsrCod INT NOT NULL DEFAULT -1,"
-			"PublisherUsrCod INT NOT NULL,"
-			"FileType TINYINT NOT NULL DEFAULT 0,"
-			"Path TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
-			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"Public ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"License TINYINT NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(FilCod),"
-		   "INDEX(FileBrowser,Cod,ZoneUsrCod),"
-		   "INDEX(ZoneUsrCod),"
-		   "INDEX(PublisherUsrCod))");
 
    /***** Table firewall_banned *****/
 /*
