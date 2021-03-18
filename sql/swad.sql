@@ -656,17 +656,17 @@ CREATE TABLE IF NOT EXISTS fir_log (
 	INDEX(ClickTime),
 	INDEX(IP));
 --
--- Table forum_disabled_post: stores the forum post that have been disabled
+-- Table for_disabled_posts: stores the forum post that have been disabled
 --
-CREATE TABLE IF NOT EXISTS forum_disabled_post (
+CREATE TABLE IF NOT EXISTS for_disabled_posts (
 	PstCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	DisableTime DATETIME NOT NULL,
 	UNIQUE INDEX(PstCod));
 --
--- Table forum_post: stores the forum posts
+-- Table for_posts: stores the forum posts
 --
-CREATE TABLE IF NOT EXISTS forum_post (
+CREATE TABLE IF NOT EXISTS ffor_posts(
 	PstCod INT NOT NULL AUTO_INCREMENT,
 	ThrCod INT NOT NULL,
 	UsrCod INT NOT NULL,

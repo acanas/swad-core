@@ -1435,9 +1435,9 @@ mysql> DESCRIBE fir_log;
 		   "INDEX(ClickTime),"
 		   "INDEX(IP))");
 
-   /***** Table forum_disabled_post *****/
+   /***** Table for_disabled_posts *****/
 /*
-mysql> DESCRIBE forum_disabled_post;
+mysql> DESCRIBE for_disabled_posts;
 +-------------+----------+------+-----+---------+-------+
 | Field       | Type     | Null | Key | Default | Extra |
 +-------------+----------+------+-----+---------+-------+
@@ -1447,15 +1447,15 @@ mysql> DESCRIBE forum_disabled_post;
 +-------------+----------+------+-----+---------+-------+
 3 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS forum_disabled_post ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS for_disabled_posts ("
 			"PstCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
 			"DisableTime DATETIME NOT NULL,"
 		   "UNIQUE INDEX(PstCod))");
 
-   /***** Table forum_post *****/
+   /***** Table for_posts *****/
 /*
-mysql> DESCRIBE forum_post;
+mysql> DESCRIBE for_posts;
 +-----------+----------+------+-----+---------+----------------+
 | Field     | Type     | Null | Key | Default | Extra          |
 +-----------+----------+------+-----+---------+----------------+
@@ -1471,7 +1471,7 @@ mysql> DESCRIBE forum_post;
 +-----------+----------+------+-----+---------+----------------+
 9 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS forum_post ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS for_posts ("
 			"PstCod INT NOT NULL AUTO_INCREMENT,"
 			"ThrCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"

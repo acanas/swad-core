@@ -1350,9 +1350,11 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_FORUM_REPLY:
          NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
-				   "SELECT DISTINCT(UsrCod) FROM forum_post"
-				   " WHERE ThrCod = (SELECT ThrCod FROM forum_post"
-				   " WHERE PstCod=%ld)"
+				   "SELECT DISTINCT(UsrCod)"
+				    " FROM for_posts"
+				   " WHERE ThrCod = (SELECT ThrCod"
+				                     " FROM for_posts"
+				                    " WHERE PstCod=%ld)"
 				   " AND UsrCod<>%ld",
 				   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
