@@ -172,9 +172,9 @@ CREATE TABLE IF NOT EXISTS brw_file_caches (
 	TmpPubDir TEXT COLLATE latin1_bin NOT NULL,
 	INDEX(SessionId));
 --
--- Table file_view: stores the number of times each user has seen each file
+-- Table brw_file_views: stores the number of times each user has seen each file
 --
-CREATE TABLE IF NOT EXISTS file_view (
+CREATE TABLE IF NOT EXISTS brw_file_views (
 	FilCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	NumViews INT NOT NULL DEFAULT 0,

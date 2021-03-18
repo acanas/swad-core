@@ -453,9 +453,9 @@ mysql> DESCRIBE brw_file_caches;
 			"TmpPubDir VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
 		   "UNIQUE INDEX(SessionId))");
 
-   /***** Table file_view *****/
+   /***** Table brw_file_views *****/
 /*
-mysql> DESCRIBE file_view;
+mysql> DESCRIBE brw_file_views;
 +----------+---------+------+-----+---------+-------+
 | Field    | Type    | Null | Key | Default | Extra |
 +----------+---------+------+-----+---------+-------+
@@ -465,7 +465,7 @@ mysql> DESCRIBE file_view;
 +----------+---------+------+-----+---------+-------+
 3 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_view ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_file_views ("
 			"FilCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
 			"NumViews INT NOT NULL DEFAULT 0,"
