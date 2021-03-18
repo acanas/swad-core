@@ -59,19 +59,19 @@ extern struct Globals Gbl;
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void FW_BanIP (void);
+static void Fir_BanIP (void);
 
-static void FW_WriteHTML (const char *Title,const char *H1);
+static void Fir_WriteHTML (const char *Title,const char *H1);
 
 /*****************************************************************************/
 /************************** Log access into firewall *************************/
 /*****************************************************************************/
 
-void FW_LogAccess (void)
+void Fir_LogAccess (void)
   {
    /***** Log access in firewall recent log *****/
    DB_QueryINSERT ("can not log access into firewall_log",
-		   "INSERT INTO firewall_log"
+		   "INSERT INTO fir_log"
 		   " (ClickTime,IP)"
 		   " VALUES"
 		   " (NOW(),'%s')",
@@ -82,11 +82,11 @@ void FW_LogAccess (void)
 /********************** Remove old clicks from firewall **********************/
 /*****************************************************************************/
 
-void FW_PurgeFirewall (void)
+void Fir_PurgeFirewall (void)
   {
    /***** Remove old clicks *****/
    DB_QueryDELETE ("can not purge firewall log",
-		   "DELETE LOW_PRIORITY FROM firewall_log"
+		   "DELETE LOW_PRIORITY FROM fir_log"
 		   " WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    (unsigned long) Fw_TIME_TO_DELETE_OLD_CLICKS);
   }
@@ -95,14 +95,16 @@ void FW_PurgeFirewall (void)
 /*************************** Check if IP is banned ***************************/
 /*****************************************************************************/
 
-void FW_CheckFirewallAndExitIfBanned (void)
+void Fir_CheckFirewallAndExitIfBanned (void)
   {
    unsigned long NumCurrentBans;
 
    /***** Get number of current bans from database *****/
    NumCurrentBans = DB_QueryCOUNT ("can not check firewall log",
-		                   "SELECT COUNT(*) FROM firewall_banned"
-			           " WHERE IP='%s' AND UnbanTime>NOW()",
+		                   "SELECT COUNT(*)"
+		                    " FROM fir_banned"
+			           " WHERE IP='%s'"
+			             " AND UnbanTime>NOW()",
 			           Gbl.IP);
 
    /***** Exit with status 403 if banned *****/
@@ -114,7 +116,7 @@ void FW_CheckFirewallAndExitIfBanned (void)
       /* Return status 403 Forbidden */
       fprintf (stdout,"Content-Type: text/html; charset=windows-1252\n"
 	              "Status: 403\r\n\r\n");
-      FW_WriteHTML ("Forbidden","You are temporarily banned");
+      Fir_WriteHTML ("Forbidden","You are temporarily banned");
 
       /* Close database connection and exit */
       DB_CloseDBConnection ();
@@ -126,13 +128,14 @@ void FW_CheckFirewallAndExitIfBanned (void)
 /**************** Check if too many connections from this IP *****************/
 /*****************************************************************************/
 
-void FW_CheckFirewallAndExitIfTooManyRequests (void)
+void Fir_CheckFirewallAndExitIfTooManyRequests (void)
   {
    unsigned long NumClicks;
 
    /***** Get number of clicks from database *****/
    NumClicks = DB_QueryCOUNT ("can not check firewall log",
-		              "SELECT COUNT(*) FROM firewall_log"
+		              "SELECT COUNT(*)"
+		              " FROM fir_log"
 			      " WHERE IP='%s'"
 			      " AND ClickTime>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 			      Gbl.IP,
@@ -145,14 +148,14 @@ void FW_CheckFirewallAndExitIfTooManyRequests (void)
    if (NumClicks > Fw_MAX_CLICKS_IN_INTERVAL)
      {
       /* Ban this IP */
-      FW_BanIP ();
+      Fir_BanIP ();
 
       /* Return status 429 Too Many Requests */
       fprintf (stdout,"Content-Type: text/html; charset=windows-1252\n"
                       "Retry-After: %lu\n"
 	              "Status: 429\r\n\r\n",
 	       (unsigned long) Fw_TIME_BANNED);
-      FW_WriteHTML ("Too Many Requests","Please stop that");
+      Fir_WriteHTML ("Too Many Requests","Please stop that");
 
       /* Close database connection and exit */
       DB_CloseDBConnection ();
@@ -164,11 +167,11 @@ void FW_CheckFirewallAndExitIfTooManyRequests (void)
 /********************************* Ban an IP *********************************/
 /*****************************************************************************/
 
-static void FW_BanIP (void)
+static void Fir_BanIP (void)
   {
    /***** Insert IP into table of banned IPs *****/
    DB_QueryINSERT ("can not ban IP",
-		   "INSERT INTO firewall_banned"
+		   "INSERT INTO fir_banned"
 		   " (IP,BanTime,UnbanTime)"
 		   " VALUES"
 		   " ('%s',NOW(),FROM_UNIXTIME(UNIX_TIMESTAMP()+%lu))",
@@ -179,7 +182,7 @@ static void FW_BanIP (void)
 /********************************* Ban an IP *********************************/
 /*****************************************************************************/
 
-static void FW_WriteHTML (const char *Title,const char *H1)
+static void Fir_WriteHTML (const char *Title,const char *H1)
   {
    fprintf (stdout,"<html>"
 		   "<head>"

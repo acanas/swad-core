@@ -1398,9 +1398,9 @@ mysql> DESCRIBE fig_figures;
 			"LastUpdate TIMESTAMP,"
 		   "UNIQUE INDEX(Figure,Scope,Cod))");
 
-   /***** Table firewall_banned *****/
+   /***** Table fir_banned *****/
 /*
-mysql> DESCRIBE firewall_banned;
+mysql> DESCRIBE fir_banned;
 +-----------+----------+------+-----+---------+-------+
 | Field     | Type     | Null | Key | Default | Extra |
 +-----------+----------+------+-----+---------+-------+
@@ -1410,7 +1410,7 @@ mysql> DESCRIBE firewall_banned;
 +-----------+----------+------+-----+---------+-------+
 3 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS firewall_banned ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS fir_banned ("
 			"IP CHAR(15) NOT NULL,"		// Cns_MAX_BYTES_IP
 			"BanTime DATETIME NOT NULL,"
 			"UnbanTime DATETIME NOT NULL,"
@@ -1418,9 +1418,9 @@ mysql> DESCRIBE firewall_banned;
 		   "INDEX(BanTime),"
 		   "INDEX(UnbanTime));");
 
-   /***** Table firewall_log *****/
+   /***** Table fir_log *****/
 /*
-mysql> DESCRIBE firewall_log;
+mysql> DESCRIBE fir_log;
 +-----------+----------+------+-----+---------+-------+
 | Field     | Type     | Null | Key | Default | Extra |
 +-----------+----------+------+-----+---------+-------+
@@ -1429,7 +1429,7 @@ mysql> DESCRIBE firewall_log;
 +-----------+----------+------+-----+---------+-------+
 2 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS firewall_log ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS fir_log ("
 			"ClickTime DATETIME NOT NULL,"
 			"IP CHAR(15) NOT NULL,"	// Cns_MAX_BYTES_IP
 		   "INDEX(ClickTime),"

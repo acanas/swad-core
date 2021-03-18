@@ -115,9 +115,9 @@ int main (void)
       Par_GetMainParams ();
 
       /***** Mitigate DoS attacks *****/
-      FW_CheckFirewallAndExitIfBanned ();
-      FW_LogAccess ();
-      FW_CheckFirewallAndExitIfTooManyRequests ();
+      Fir_CheckFirewallAndExitIfBanned ();
+      Fir_LogAccess ();
+      Fir_CheckFirewallAndExitIfTooManyRequests ();
 
       Hie_InitHierarchy ();
       if (!Gbl.WebService.IsWebService)

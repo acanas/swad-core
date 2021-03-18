@@ -638,9 +638,9 @@ CREATE TABLE IF NOT EXISTS fig_figures (
 	LastUpdate TIMESTAMP,
 	UNIQUE INDEX(Figure,Scope,Cod));
 --
--- Table firewall_banned: stores the banned IPs in order to mitigate denial of service attacks
+-- Table fir_banned: stores the banned IPs in order to mitigate denial of service attacks
 --
-CREATE TABLE IF NOT EXISTS firewall_banned (
+CREATE TABLE IF NOT EXISTS fir_banned (
 	IP CHAR(15) NOT NULL,
 	BanTime DATETIME NOT NULL,
 	UnbanTime DATETIME NOT NULL,
@@ -648,9 +648,9 @@ CREATE TABLE IF NOT EXISTS firewall_banned (
 	INDEX(BanTime),
 	INDEX(UnbanTime));
 --
--- Table firewall_log: stores the most recent IPs in order to mitigate denial of service attacks
+-- Table fir_log: stores the most recent IPs in order to mitigate denial of service attacks
 --
-CREATE TABLE IF NOT EXISTS firewall_log (
+CREATE TABLE IF NOT EXISTS fir_log (
 	ClickTime DATETIME NOT NULL,
 	IP CHAR(15) NOT NULL,
 	INDEX(ClickTime),

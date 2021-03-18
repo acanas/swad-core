@@ -35,10 +35,10 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void FW_LogAccess (void);
-void FW_PurgeFirewall (void);
+void Fir_LogAccess (void);
+void Fir_PurgeFirewall (void);
 
-void FW_CheckFirewallAndExitIfBanned (void);
-void FW_CheckFirewallAndExitIfTooManyRequests (void);
+void Fir_CheckFirewallAndExitIfBanned (void);
+void Fir_CheckFirewallAndExitIfTooManyRequests (void);
 
 #endif
