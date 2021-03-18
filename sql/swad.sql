@@ -844,9 +844,9 @@ CREATE TABLE IF NOT EXISTS institutions (
 	INDEX(CtyCod),
 	INDEX(Status));
 --
--- Table links: stores the global institutional links shown on right part of page
+-- Table lnk_links: stores the global institutional links shown on right part of page
 --
-CREATE TABLE IF NOT EXISTS links (
+CREATE TABLE IF NOT EXISTS lnk_links (
 	LnkCod INT NOT NULL AUTO_INCREMENT,
 	ShortName VARCHAR(511) NOT NULL,
 	FullName VARCHAR(2047) NOT NULL,
@@ -1122,9 +1122,9 @@ CREATE TABLE IF NOT EXISTS notices_deleted (
 	INDEX(UsrCod),
 	INDEX(CreatTime));
 --
--- Table notif: stores the notifications of events
+-- Table ntf_notifications: stores the notifications of events
 --
-CREATE TABLE IF NOT EXISTS notif (
+CREATE TABLE IF NOT EXISTS ntf_notifications (
 	NtfCod INT NOT NULL AUTO_INCREMENT,
 	NotifyEvent TINYINT NOT NULL,
 	ToUsrCod INT NOT NULL,

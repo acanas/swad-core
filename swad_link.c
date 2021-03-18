@@ -295,8 +295,12 @@ void Lnk_GetListLinks (void)
      {
       /***** Get institutional links from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get institutional links",
-				"SELECT LnkCod,ShortName,FullName,WWW"
-			        " FROM links ORDER BY ShortName");
+				"SELECT LnkCod,"	// row[0]
+				       "ShortName,"	// row[1]
+				       "FullName,"	// row[2]
+				       "WWW"		// row[3]
+			         " FROM lnk_links"
+			        " ORDER BY ShortName");
 
       if (NumRows) // Places found...
 	{
@@ -354,7 +358,10 @@ void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
       /***** Get data of an institutional link from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get data"
 					   " of an institutional link",
-				"SELECT ShortName,FullName,WWW FROM links"
+				"SELECT ShortName,"	// row[0]
+				       "FullName,"	// row[1]
+				       "WWW"		// row[2]
+				 " FROM lnk_links"
 				" WHERE LnkCod=%ld",
 				Lnk->LnkCod);
 
@@ -501,7 +508,8 @@ void Lnk_RemoveLink (void)
 
    /***** Remove link *****/
    DB_QueryDELETE ("can not remove an institutional link",
-		   "DELETE FROM links WHERE LnkCod=%ld",
+		   "DELETE FROM lnk_links"
+		   " WHERE LnkCod=%ld",
 		   Lnk_EditingLnk->LnkCod);
 
    /***** Write message to show the change made *****/
@@ -622,8 +630,10 @@ static bool Lnk_CheckIfLinkNameExists (const char *FieldName,const char *Name,lo
    /***** Get number of links with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of an institutional link"
 			  " already existed",
-			  "SELECT COUNT(*) FROM links"
-			  " WHERE %s='%s' AND LnkCod<>%ld",
+			  "SELECT COUNT(*)"
+			   " FROM lnk_links"
+			  " WHERE %s='%s'"
+			    " AND LnkCod<>%ld",
 			  FieldName,Name,LnkCod) != 0);
   }
 
@@ -635,7 +645,9 @@ static void Lnk_UpdateLnkNameDB (long LnkCod,const char *FieldName,const char *N
   {
    /***** Update institutional link changing old name by new name */
    DB_QueryUPDATE ("can not update the name of an institutional link",
-		   "UPDATE links SET %s='%s' WHERE LnkCod=%ld",
+		   "UPDATE lnk_links"
+		     " SET %s='%s'"
+		   " WHERE LnkCod=%ld",
 	           FieldName,NewLnkName,LnkCod);
   }
 
@@ -667,7 +679,9 @@ void Lnk_ChangeLinkWWW (void)
      {
       /***** Update the table changing old WWW by new WWW *****/
       DB_QueryUPDATE ("can not update the web of an institutional link",
-		      "UPDATE links SET WWW='%s' WHERE LnkCod=%ld",
+		      "UPDATE lnk_links"
+		        " SET WWW='%s'"
+		      " WHERE LnkCod=%ld",
                       NewWWW,Lnk_EditingLnk->LnkCod);
 
       /***** Message to show the change made *****/
@@ -838,7 +852,7 @@ static void Lnk_CreateLink (struct Link *Lnk)
   {
    /***** Create a new link *****/
    DB_QueryINSERT ("can not create institutional link",
-		   "INSERT INTO links"
+		   "INSERT INTO lnk_links"
 		   " (ShortName,FullName,WWW)"
 		   " VALUES"
 		   " ('%s','%s','%s')",

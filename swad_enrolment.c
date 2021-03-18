@@ -3074,11 +3074,12 @@ static void Enr_RemoveExpiredEnrolmentRequests (void)
    /***** Mark possible notifications as removed
           Important: do this before removing the request *****/
    DB_QueryUPDATE ("can not set notification(s) as removed",
-		   "UPDATE notif,crs_usr_requests"
-		   " SET notif.Status=(notif.Status | %u)"
-		   " WHERE notif.NotifyEvent=%u"
-		   " AND notif.Cod=crs_usr_requests.ReqCod"
-		   " AND crs_usr_requests.RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+		   "UPDATE ntf_notifications,"
+		          "crs_usr_requests"
+		     " SET ntf_notifications.Status=(ntf_notifications.Status | %u)"
+		   " WHERE ntf_notifications.NotifyEvent=%u"
+		     " AND ntf_notifications.Cod=crs_usr_requests.ReqCod"
+		     " AND crs_usr_requests.RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 	           (unsigned) Ntf_STATUS_BIT_REMOVED,
 	           (unsigned) Ntf_EVENT_ENROLMENT_REQUEST,
 	           Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);

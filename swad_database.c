@@ -1828,9 +1828,9 @@ mysql> DESCRIBE ins_instits;
 		   "INDEX(CtyCod),"
 		   "INDEX(Status))");
 
-   /***** Table links *****/
+   /***** Table lnk_links *****/
 /*
-mysql> DESCRIBE links;
+mysql> DESCRIBE lnk_links;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
@@ -1841,7 +1841,7 @@ mysql> DESCRIBE links;
 +-----------+---------------+------+-----+---------+----------------+
 4 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS links ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS lnk_links ("
 			"LnkCod INT NOT NULL AUTO_INCREMENT,"
 			"ShortName VARCHAR(511) NOT NULL,"	// Lnk_MAX_BYTES_LINK_SHRT_NAME
 			"FullName VARCHAR(2047) NOT NULL,"	// Lnk_MAX_BYTES_LINK_FULL_NAME
@@ -2338,9 +2338,9 @@ mysql> DESCRIBE notices_deleted;
 		   "INDEX(UsrCod),"
 		   "INDEX(CreatTime))");
 
-   /***** Table notif *****/
+   /***** Table ntf_notifications *****/
 /*
-mysql> DESCRIBE notif;
+mysql> DESCRIBE ntf_notifications;
 +-------------+------------+------+-----+---------+----------------+
 | Field       | Type       | Null | Key | Default | Extra          |
 +-------------+------------+------+-----+---------+----------------+
@@ -2359,7 +2359,7 @@ mysql> DESCRIBE notif;
 11 rows in set (0.02 sec)
 */
 // TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS notif ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS ntf_notifications ("
 			"NtfCod INT NOT NULL AUTO_INCREMENT,"
 			"NotifyEvent TINYINT NOT NULL,"
 			"ToUsrCod INT NOT NULL,"

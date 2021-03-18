@@ -3342,8 +3342,9 @@ int swad__getNotifications (struct soap *soap,
 				     "CrsCod,"				// row[7]
 				     "Cod,"				// row[8]
 				     "Status"				// row[9]
-			      " FROM notif"
-			      " WHERE ToUsrCod=%ld AND TimeNotif>=FROM_UNIXTIME(%ld)"
+			       " FROM ntf_notifications"
+			      " WHERE ToUsrCod=%ld"
+			        " AND TimeNotif>=FROM_UNIXTIME(%ld)"
 			      " ORDER BY TimeNotif DESC",
 			      Gbl.Usrs.Me.UsrDat.UsrCod,beginTime);
 
@@ -3612,8 +3613,10 @@ int swad__markNotificationsAsRead (struct soap *soap,
            {
 	    /***** Mark notification as read in the database *****/
 	    DB_QueryUPDATE ("can not mark notification as read",
-			    "UPDATE notif SET Status=(Status | %u)"
-			    " WHERE NtfCod=%ld AND ToUsrCod=%ld",
+			    "UPDATE ntf_notifications"
+			      " SET Status=(Status | %u)"
+			    " WHERE NtfCod=%ld"
+			      " AND ToUsrCod=%ld",
 			    (unsigned) Ntf_STATUS_BIT_READ,
 			    (long) NtfCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
@@ -3891,7 +3894,7 @@ static int API_SendMessageToUsr (long OriginalMsgCod,
    /***** Create notification for this recipient.
           If this recipient wants to receive notifications by email, activate the sending of a notification *****/
    DB_QueryINSERT ("can not create new notification event",
-		   "INSERT INTO notif"
+		   "INSERT INTO ntf_notifications"
 	           " (NotifyEvent,ToUsrCod,FromUsrCod,InsCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
                    " VALUES"
                    " (%u,%ld,%ld,-1,-1,-1,%ld,NOW(),%u)",

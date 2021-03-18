@@ -347,13 +347,21 @@ void Ntf_ShowMyNotifications (void)
       sprintf (SubQuery," AND (Status&%u)=0",
                Ntf_STATUS_BIT_READ |
                Ntf_STATUS_BIT_REMOVED);
-   NumNotifications = DB_QuerySELECT (&mysql_res,"can not get your notifications",
-				      "SELECT NotifyEvent,FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,"
-				      "Cod,UNIX_TIMESTAMP(TimeNotif),Status"
-				      " FROM notif"
-				      " WHERE ToUsrCod=%ld%s"
-				      " ORDER BY TimeNotif DESC",
-				      Gbl.Usrs.Me.UsrDat.UsrCod,SubQuery);
+   NumNotifications =
+   DB_QuerySELECT (&mysql_res,"can not get your notifications",
+		   "SELECT NotifyEvent,"		// row[0]
+			  "FromUsrCod,"			// row[1]
+			  "InsCod,"			// row[2]
+			  "CtrCod,"			// row[3]
+			  "DegCod,"			// row[4]
+			  "CrsCod,"			// row[5]
+			  "Cod,"			// row[6]
+			  "UNIX_TIMESTAMP(TimeNotif),"	// row[7]
+			  "Status"			// row[8]
+		    " FROM ntf_notifications"
+		   " WHERE ToUsrCod=%ld%s"
+		   " ORDER BY TimeNotif DESC",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,SubQuery);
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -913,24 +921,37 @@ void Ntf_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long CrsCod,lon
       if (Cod > 0)		// Set only one notification
 				// for the user as seen
          DB_QueryUPDATE ("can not set notification(s) as seen",
-			 "UPDATE notif SET Status=(Status | %u)"
-			 " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND Cod=%ld",
+			 "UPDATE ntf_notifications"
+			   " SET Status=(Status | %u)"
+			 " WHERE ToUsrCod=%ld"
+			   " AND NotifyEvent=%u"
+			   " AND Cod=%ld",
                          (unsigned) Ntf_STATUS_BIT_READ,
-                         ToUsrCod,(unsigned) NotifyEvent,Cod);
+                         ToUsrCod,
+                         (unsigned) NotifyEvent,
+                         Cod);
       else if (CrsCod > 0)	// Set all notifications of this type
 				// in the current course for the user as seen
          DB_QueryUPDATE ("can not set notification(s) as seen",
-			 "UPDATE notif SET Status=(Status | %u)"
-			 " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND CrsCod=%ld",
+			 "UPDATE ntf_notifications"
+			   " SET Status=(Status | %u)"
+			 " WHERE ToUsrCod=%ld"
+			   " AND NotifyEvent=%u"
+			   " AND CrsCod=%ld",
                          (unsigned) Ntf_STATUS_BIT_READ,
-                         ToUsrCod,(unsigned) NotifyEvent,Gbl.Hierarchy.Crs.CrsCod);
+                         ToUsrCod,
+                         (unsigned) NotifyEvent,
+                         Gbl.Hierarchy.Crs.CrsCod);
       else			// Set all notifications of this type
 				// for the user as seen
          DB_QueryUPDATE ("can not set notification(s) as seen",
-			 "UPDATE notif SET Status=(Status | %u)"
-			 " WHERE ToUsrCod=%ld AND NotifyEvent=%u",
+			 "UPDATE ntf_notifications"
+			   " SET Status=(Status | %u)"
+			 " WHERE ToUsrCod=%ld"
+			   " AND NotifyEvent=%u",
                          (unsigned) Ntf_STATUS_BIT_READ,
-                         ToUsrCod,(unsigned) NotifyEvent);
+                         ToUsrCod,
+                         (unsigned) NotifyEvent);
      }
   }
 
@@ -942,8 +963,10 @@ void Ntf_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
    /***** Set notification as removed *****/
    DB_QueryUPDATE ("can not set notification(s) as removed",
-		   "UPDATE notif SET Status=(Status | %u)"
-		   " WHERE NotifyEvent=%u AND Cod=%ld",
+		   "UPDATE ntf_notifications"
+		     " SET Status=(Status | %u)"
+		   " WHERE NotifyEvent=%u"
+		     " AND Cod=%ld",
 	           (unsigned) Ntf_STATUS_BIT_REMOVED,
 	           (unsigned) NotifyEvent,Cod);
   }
@@ -957,18 +980,26 @@ void Ntf_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long
    /***** Set notification as removed *****/
    if (Cod > 0)	// Set only one notification as removed
       DB_QueryUPDATE ("can not set notification(s) as removed",
-		      "UPDATE notif SET Status=(Status | %u)"
-		      " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND Cod=%ld",
+		      "UPDATE ntf_notifications"
+		        " SET Status=(Status | %u)"
+		      " WHERE ToUsrCod=%ld"
+		        " AND NotifyEvent=%u"
+		        " AND Cod=%ld",
 	              (unsigned) Ntf_STATUS_BIT_REMOVED,
-	              ToUsrCod,(unsigned) NotifyEvent,
+	              ToUsrCod,
+	              (unsigned) NotifyEvent,
 		      Cod);
    else		// Set all notifications of this type,
 		// in the current course for the user, as removed
       DB_QueryUPDATE ("can not set notification(s) as removed",
-		      "UPDATE notif SET Status=(Status | %u)"
-		      " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND CrsCod=%ld",
+		      "UPDATE ntf_notifications"
+		        " SET Status=(Status | %u)"
+		      " WHERE ToUsrCod=%ld"
+		        " AND NotifyEvent=%u"
+		        " AND CrsCod=%ld",
 	              (unsigned) Ntf_STATUS_BIT_REMOVED,
-	              ToUsrCod,(unsigned) NotifyEvent,
+	              ToUsrCod,
+	              (unsigned) NotifyEvent,
 		      Gbl.Hierarchy.Crs.CrsCod);
   }
 
@@ -986,20 +1017,24 @@ void Ntf_MarkNotifInCrsAsRemoved (long ToUsrCod,long CrsCod)
           except notifications about new messages *****/
    if (ToUsrCod > 0)	// If the user code is specified
       DB_QueryUPDATE ("can not set notification(s) as removed",
-		      "UPDATE notif SET Status=(Status | %u)"
+		      "UPDATE ntf_notifications"
+		        " SET Status=(Status | %u)"
 		      " WHERE ToUsrCod=%ld"
-		      " AND CrsCod=%ld"
-		      " AND NotifyEvent<>%u",	// messages will remain available
+		        " AND CrsCod=%ld"
+		        " AND NotifyEvent<>%u",	// messages will remain available
 	              (unsigned) Ntf_STATUS_BIT_REMOVED,
 	              ToUsrCod,
-	              CrsCod,(unsigned) Ntf_EVENT_MESSAGE);
+	              CrsCod,
+	              (unsigned) Ntf_EVENT_MESSAGE);
    else			// User code not specified ==> any user
       DB_QueryUPDATE ("can not set notification(s) as removed",
-		      "UPDATE notif SET Status=(Status | %u)"
+		      "UPDATE ntf_notifications"
+		        " SET Status=(Status | %u)"
 		      " WHERE CrsCod=%ld"
-		      " AND NotifyEvent<>%u",	// messages will remain available
+		        " AND NotifyEvent<>%u",	// messages will remain available
 	              (unsigned) Ntf_STATUS_BIT_REMOVED,
-	              CrsCod,(unsigned) Ntf_EVENT_MESSAGE);
+	              CrsCod,
+	              (unsigned) Ntf_EVENT_MESSAGE);
   }
 
 /*****************************************************************************/
@@ -1101,7 +1136,7 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
 	       return;
 	   }
 	 DB_QueryUPDATE ("can not set notification(s) as removed",
-			 "UPDATE notif"
+			 "UPDATE ntf_notifications"
 			   " SET Status=(Status | %u)"
 			 " WHERE NotifyEvent=%u"
 			   " AND Cod IN"
@@ -1128,7 +1163,7 @@ void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod)
   {
    /***** Set notifications as removed *****/
    DB_QueryUPDATE ("can not set notification(s) as removed",
-		   "UPDATE notif"
+		   "UPDATE ntf_notifications"
 		     " SET Status=(Status | %u)"
 		   " WHERE NotifyEvent IN (%u,%u,%u,%u)"
 		     " AND Cod IN"
@@ -1483,7 +1518,7 @@ void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
   {
    /***** Store notify event *****/
    DB_QueryINSERT ("can not create new notification event",
-		   "INSERT INTO notif"
+		   "INSERT INTO ntf_notifications"
 		   " (NotifyEvent,ToUsrCod,FromUsrCod,"
 		   "InsCod,CtrCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
 		   " VALUES"
@@ -1529,11 +1564,12 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
    // !(Status & (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED))
    if ((NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					     " who must be notified",
-				  "SELECT DISTINCT ToUsrCod FROM notif"
+				  "SELECT DISTINCT ToUsrCod"
+				   " FROM ntf_notifications"
 				  " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
-				  " AND (Status & %u)<>0"
-				  " AND (Status & %u)=0"
-				  " AND (Status & %u)=0",
+				    " AND (Status & %u)<>0"
+				    " AND (Status & %u)=0"
+				    " AND (Status & %u)=0",
 				  Cfg_TIME_TO_SEND_PENDING_NOTIF,
 				  (unsigned) Ntf_STATUS_BIT_EMAIL,
 				  (unsigned) Ntf_STATUS_BIT_SENT,
@@ -1572,7 +1608,7 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
 
    /***** Delete old notifications ******/
    DB_QueryDELETE ("can not remove old notifications",
-		   "DELETE LOW_PRIORITY FROM notif"
+		   "DELETE LOW_PRIORITY FROM ntf_notifications"
 		   " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    Cfg_TIME_TO_DELETE_OLD_NOTIF);
   }
@@ -1627,11 +1663,13 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 				       "DegCod,"
 				       "CrsCod,"
 				       "Cod"
-				" FROM notif WHERE ToUsrCod=%ld"
-				" AND (Status & %u)<>0"
-				" AND (Status & %u)=0"
-				" AND (Status & %u)=0"
-				" ORDER BY TimeNotif,NotifyEvent",
+				 " FROM ntf_notifications"
+				" WHERE ToUsrCod=%ld"
+				  " AND (Status & %u)<>0"
+				  " AND (Status & %u)=0"
+				  " AND (Status & %u)=0"
+				" ORDER BY TimeNotif,"
+				          "NotifyEvent",
 				ToUsrDat->UsrCod,
 				(unsigned) Ntf_STATUS_BIT_EMAIL,
 				(unsigned) Ntf_STATUS_BIT_SENT,
@@ -1798,10 +1836,14 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
 	 /***** Mark all the pending notifications of this user as 'sent' *****/
 	 DB_QueryUPDATE ("can not set pending notifications of a user as sent",
-			 "UPDATE notif SET Status=(Status | %u)"
+			 "UPDATE ntf_notifications"
+			   " SET Status=(Status | %u)"
 			 " WHERE ToUsrCod=%ld"
-			 " AND (Status & %u)<>0 AND (Status & %u)=0  AND (Status & %u)=0",
-		         (unsigned) Ntf_STATUS_BIT_SENT,ToUsrDat->UsrCod,
+			   " AND (Status & %u)<>0"
+			   " AND (Status & %u)=0"
+			   " AND (Status & %u)=0",
+		         (unsigned) Ntf_STATUS_BIT_SENT,
+		         ToUsrDat->UsrCod,
 		         (unsigned) Ntf_STATUS_BIT_EMAIL,
 		         (unsigned) Ntf_STATUS_BIT_SENT,
 		         (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
@@ -1896,7 +1938,8 @@ void Ntf_MarkAllNotifAsSeen (void)
   {
    /***** Set all my notifications as seen *****/
    DB_QueryUPDATE ("can not set notification(s) as seen",
-		   "UPDATE notif SET Status=(Status | %u)"
+		   "UPDATE ntf_notifications"
+		     " SET Status=(Status | %u)"
 		   " WHERE ToUsrCod=%ld",
 	           (unsigned) Ntf_STATUS_BIT_READ,
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -2099,8 +2142,10 @@ static unsigned Ntf_GetNumberOfAllMyUnseenNtfs (void)
   {
    /***** Get number of places with a name from database *****/
    return DB_QueryCOUNT ("can not get number of unseen notifications",
-			 "SELECT COUNT(*) FROM notif"
-			 " WHERE ToUsrCod=%ld AND (Status & %u)=0",
+			 "SELECT COUNT(*)"
+			  " FROM ntf_notifications"
+			 " WHERE ToUsrCod=%ld"
+			   " AND (Status & %u)=0",
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
 			 (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
   }
@@ -2113,9 +2158,11 @@ static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void)
   {
    /***** Get number of places with a name from database *****/
    return DB_QueryCOUNT ("can not get number of unseen notifications",
-			 "SELECT COUNT(*) FROM notif"
-			 " WHERE ToUsrCod=%ld AND (Status & %u)=0"
-			 " AND TimeNotif>FROM_UNIXTIME(%ld)",
+			 "SELECT COUNT(*)"
+			  " FROM ntf_notifications"
+			 " WHERE ToUsrCod=%ld"
+			   " AND (Status & %u)=0"
+			   " AND TimeNotif>FROM_UNIXTIME(%ld)",
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
 			 (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED),
 			 Gbl.Usrs.Me.UsrLast.LastAccNotif);
@@ -2129,6 +2176,7 @@ void Ntf_RemoveUsrNtfs (long ToUsrCod)
   {
    /***** Delete notifications of a user ******/
    DB_QueryDELETE ("can not remove notifications of a user",
-		   "DELETE LOW_PRIORITY FROM notif WHERE ToUsrCod=%ld",
+		   "DELETE LOW_PRIORITY FROM ntf_notifications"
+		   " WHERE ToUsrCod=%ld",
                    ToUsrCod);
   }
