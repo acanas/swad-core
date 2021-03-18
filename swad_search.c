@@ -1301,7 +1301,9 @@ static void Sch_SaveLastSearchIntoSession (void)
 
       /***** Save last search in session *****/
       DB_QueryUPDATE ("can not update last search in session",
-		      "UPDATE sessions SET WhatToSearch=%u,SearchStr='%s'"
+		      "UPDATE ses_sessions"
+		        " SET WhatToSearch=%u,"
+		             "SearchStr='%s'"
 		      " WHERE SessionId='%s'",
 		      (unsigned) Gbl.Search.WhatToSearch,
 		      Gbl.Search.Str,
@@ -1311,7 +1313,8 @@ static void Sch_SaveLastSearchIntoSession (void)
       // WhatToSearch is stored in usr_last for next time I log in
       // In other existing sessions distinct to this, WhatToSearch will remain unchanged
       DB_QueryUPDATE ("can not update type of search in user's last data",
-		      "UPDATE usr_last SET WhatToSearch=%u"
+		      "UPDATE usr_last"
+		        " SET WhatToSearch=%u"
 		      " WHERE UsrCod=%ld",
 		      (unsigned) Gbl.Search.WhatToSearch,
 		      Gbl.Usrs.Me.UsrDat.UsrCod);

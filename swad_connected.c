@@ -449,7 +449,8 @@ void Con_RemoveOldConnected (void)
    DB_QueryDELETE ("can not remove old users from list of connected users",
 		   "DELETE FROM usr_connected"
 		   " WHERE UsrCod NOT IN"
-		   " (SELECT DISTINCT(UsrCod) FROM sessions)");
+		         " (SELECT DISTINCT(UsrCod)"
+		          " FROM ses_sessions)");
   }
 
 /*****************************************************************************/

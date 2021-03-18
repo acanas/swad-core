@@ -434,7 +434,8 @@ static int API_CheckIdSession (struct soap *soap,
 
    /***** Query if session identifier already exists in database *****/
    if (DB_QueryCOUNT ("can not get session data",
-		      "SELECT COUNT(*) FROM sessions"
+		      "SELECT COUNT(*)"
+		       " FROM ses_sessions"
 		      " WHERE SessionId='%s'",
                       IdSession) != 1)
       return soap_receiver_fault (soap,
@@ -1086,7 +1087,10 @@ int swad__loginBySessionKey (struct soap *soap,
    /***** Query data of the session from database *****/
    NumRows =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get session data",
-			      "SELECT UsrCod,DegCod,CrsCod FROM sessions"
+			      "SELECT UsrCod,"	// row[0]
+			             "DegCod,"	// row[1]
+			             "CrsCod"	// row[2]
+			       " FROM ses_sessions"
 			      " WHERE SessionId='%s'",
 			      sessionID);
    if (NumRows == 1)	// Session found in table of sessions

@@ -2703,9 +2703,9 @@ mysql> DESCRIBE ses_params;
 			"ParamValue LONGTEXT NOT NULL,"
 		   "INDEX(SessionId))");
 
-   /***** Table sessions *****/
+   /***** Table ses_sessions *****/
 /*
-mysql> DESCRIBE sessions;
+mysql> DESCRIBE ses_sessions;
 +----------------+---------------+------+-----+---------+-------+
 | Field          | Type          | Null | Key | Default | Extra |
 +----------------+---------------+------+-----+---------+-------+
@@ -2730,7 +2730,7 @@ mysql> DESCRIBE sessions;
 +----------------+---------------+------+-----+---------+-------+
 18 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS sessions ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS ses_sessions ("
 			"SessionId CHAR(43) NOT NULL,"				// Cns_BYTES_SESSION_ID
 			"UsrCod INT NOT NULL,"
 			"Password CHAR(86) COLLATE latin1_bin NOT NULL,"	// Pwd_BYTES_ENCRYPTED_PASSWORD

@@ -929,7 +929,9 @@ void Pag_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned Nu
   {
    /***** Save last page of received/sent messages *****/
    DB_QueryUPDATE ("can not update last page of messages",
-		   "UPDATE sessions SET %s=%u WHERE SessionId='%s'",
+		   "UPDATE ses_sessions"
+		     " SET %s=%u"
+		   " WHERE SessionId='%s'",
                    WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
         	                                           "LastPageMsgSnt",
                    NumPage,Gbl.Session.Id);
@@ -948,7 +950,8 @@ unsigned Pag_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate)
 
    /***** Get last page of received/sent messages from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get last page of messages",
-			     "SELECT %s FROM sessions"
+			     "SELECT %s"		// row[0]
+			      " FROM ses_sessions"
 			     " WHERE SessionId='%s'",
 			     WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
 								     "LastPageMsgSnt",

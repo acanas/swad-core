@@ -1284,9 +1284,9 @@ CREATE TABLE IF NOT EXISTS ses_params (
 	ParamValue LONGTEXT NOT NULL,
 	INDEX(SessionId));
 --
--- Table sessions: stores the information of open sessions
+-- Table ses_sessions: stores the information of open sessions
 --
-CREATE TABLE IF NOT EXISTS sessions (
+CREATE TABLE IF NOT EXISTS ses_sessions (
 	SessionId CHAR(43) NOT NULL,
 	UsrCod INT NOT NULL,
 	Password CHAR(86) COLLATE latin1_bin NOT NULL,

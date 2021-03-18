@@ -105,7 +105,8 @@ bool Ses_CheckIfSessionExists (const char *IdSes)
   {
    /***** Get if session already exists in database *****/
    return (DB_QueryCOUNT ("can not check if a session already existed",
-			  "SELECT COUNT(*) FROM sessions"
+			  "SELECT COUNT(*)"
+			   " FROM ses_sessions"
 			  " WHERE SessionId='%s'",
 			  IdSes) != 0);
   }
@@ -161,7 +162,7 @@ void Ses_InsertSessionInDB (void)
       Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
    DB_QueryINSERT ("can not create session",
-		   "INSERT INTO sessions"
+		   "INSERT INTO ses_sessions"
 	           " (SessionId,UsrCod,Password,Role,"
                    "CtyCod,InsCod,CtrCod,DegCod,CrsCod,LastTime,LastRefresh,WhatToSearch)"
                    " VALUES"
@@ -187,9 +188,17 @@ void Ses_UpdateSessionDataInDB (void)
   {
    /***** Update session in database *****/
    DB_QueryUPDATE ("can not update session",
-		   "UPDATE sessions SET UsrCod=%ld,Password='%s',Role=%u,"
-                   "CtyCod=%ld,InsCod=%ld,CtrCod=%ld,DegCod=%ld,CrsCod=%ld,"
-                   "LastTime=NOW(),LastRefresh=NOW()"
+		   "UPDATE ses_sessions"
+		     " SET UsrCod=%ld,"
+		          "Password='%s',"
+		          "Role=%u,"
+                          "CtyCod=%ld,"
+                          "InsCod=%ld,"
+                          "CtrCod=%ld,"
+                          "DegCod=%ld,"
+                          "CrsCod=%ld,"
+                          "LastTime=NOW(),"
+                          "LastRefresh=NOW()"
                    " WHERE SessionId='%s'",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Usrs.Me.UsrDat.Password,
@@ -210,7 +219,9 @@ void Ses_UpdateSessionLastRefreshInDB (void)
   {
    /***** Update session in database *****/
    DB_QueryUPDATE ("can not update session",
-		   "UPDATE sessions SET LastRefresh=NOW() WHERE SessionId='%s'",
+		   "UPDATE ses_sessions"
+		     " SET LastRefresh=NOW()"
+		   " WHERE SessionId='%s'",
 		   Gbl.Session.Id);
   }
 
@@ -222,7 +233,8 @@ static void Ses_RemoveSessionFromDB (void)
   {
    /***** Remove current session *****/
    DB_QueryDELETE ("can not remove a session",
-		   "DELETE FROM sessions WHERE SessionId='%s'",
+		   "DELETE FROM ses_sessions"
+		   " WHERE SessionId='%s'",
 		   Gbl.Session.Id);
 
    /***** Clear old unused social timelines in database *****/
@@ -242,12 +254,12 @@ void Ses_RemoveExpiredSessions (void)
       or (when there was at least one refresh (navigator supports AJAX)
           and last refresh is too old (browser probably was closed)) */
    DB_QueryDELETE ("can not remove expired sessions",
-		   "DELETE LOW_PRIORITY FROM sessions WHERE"
-                   " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
-                   " OR "
-                   "(LastRefresh>LastTime+INTERVAL 1 SECOND"
-                   " AND"
-                   " LastRefresh<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu))",
+		   "DELETE LOW_PRIORITY FROM ses_sessions"
+		   " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
+                      " OR "
+                         "(LastRefresh>LastTime+INTERVAL 1 SECOND"
+                         " AND"
+                         " LastRefresh<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu))",
                    Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_CLICK,
                    Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_REFRESH);
   }
@@ -275,7 +287,7 @@ bool Ses_GetSessionData (void)
 			      "CrsCod,"		// row[7]
 			      "WhatToSearch,"	// row[8]
 			      "SearchStr"	// row[9]
-		       " FROM sessions"
+		        " FROM ses_sessions"
 		       " WHERE SessionId='%s'",
 		       Gbl.Session.Id))
      {
@@ -387,7 +399,7 @@ void Ses_RemoveParamsFromExpiredSessions (void)
 		   "DELETE FROM ses_params"
                    " WHERE SessionId NOT IN"
                    " (SELECT SessionId"
-                      " FROM sessions)");
+                      " FROM ses_sessions)");
   }
 
 /*****************************************************************************/
@@ -569,5 +581,6 @@ void Ses_RemovePublicDirsFromExpiredSessions (void)
    DB_QueryDELETE ("can not remove public directories in expired sessions",
 		   "DELETE FROM brw_file_caches"
                    " WHERE SessionId NOT IN"
-                   " (SELECT SessionId FROM sessions)");
+                         " (SELECT SessionId"
+                          " FROM ses_sessions)");
   }

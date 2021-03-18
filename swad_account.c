@@ -1111,7 +1111,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 
    /***** Remove all sessions of this user *****/
    DB_QueryDELETE ("can not remove sessions of a user",
-		   "DELETE FROM sessions"
+		   "DELETE FROM ses_sessions"
 		   " WHERE UsrCod=%ld",
 		   UsrDat->UsrCod);
 

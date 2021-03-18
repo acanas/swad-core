@@ -321,7 +321,9 @@ void Tml_DB_ClearOldTimelinesNotesFromDB (void)
    /***** Remove timelines for expired sessions *****/
    DB_QueryDELETE ("can not remove old timelines",
 		   "DELETE LOW_PRIORITY FROM tml_timelines"
-                   " WHERE SessionId NOT IN (SELECT SessionId FROM sessions)");
+                   " WHERE SessionId NOT IN"
+                         " (SELECT SessionId"
+                            " FROM ses_sessions)");
   }
 
 /*****************************************************************************/
@@ -879,7 +881,8 @@ long Tml_DB_GetPubCodFromSession (const char *FieldName)
 
    /***** Get last publication code from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get publication code from session",
-		       "SELECT %s FROM sessions"
+		       "SELECT %s"		// row[0]
+		        " FROM ses_sessions"
 		       " WHERE SessionId='%s'",
 		       FieldName,Gbl.Session.Id) == 1)
      {
@@ -936,8 +939,8 @@ long Tml_DB_CreateNewPub (const struct Tml_Pub_Publication *Pub)
 void Tml_DB_UpdateFirstPubCodInSession (long FirstPubCod)
   {
    DB_QueryUPDATE ("can not update first publication code into session",
-		   "UPDATE sessions"
-		   " SET FirstPubCod=%ld"
+		   "UPDATE ses_sessions"
+		     " SET FirstPubCod=%ld"
 		   " WHERE SessionId='%s'",
 		   FirstPubCod,
 		   Gbl.Session.Id);
@@ -950,10 +953,10 @@ void Tml_DB_UpdateFirstPubCodInSession (long FirstPubCod)
 void Tml_DB_UpdateLastPubCodInSession (void)
   {
    DB_QueryUPDATE ("can not update last publication code into session",
-		   "UPDATE sessions"
-		   " SET LastPubCod="
-			"(SELECT IFNULL(MAX(PubCod),0)"
-			" FROM tml_pubs)"	// The most recent publication
+		   "UPDATE ses_sessions"
+		     " SET LastPubCod="
+			  "(SELECT IFNULL(MAX(PubCod),0)"
+			  " FROM tml_pubs)"	// The most recent publication
 		   " WHERE SessionId='%s'",
 		   Gbl.Session.Id);
   }
@@ -965,11 +968,11 @@ void Tml_DB_UpdateLastPubCodInSession (void)
 void Tml_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
   {
    DB_QueryUPDATE ("can not update first/last publication codes into session",
-		   "UPDATE sessions"
-		   " SET FirstPubCod=%ld,"
-			"LastPubCod="
-			"(SELECT IFNULL(MAX(PubCod),0)"
-			" FROM tml_pubs)"	// The most recent publication
+		   "UPDATE ses_sessions"
+		     " SET FirstPubCod=%ld,"
+			  "LastPubCod="
+			  "(SELECT IFNULL(MAX(PubCod),0)"
+			  " FROM tml_pubs)"	// The most recent publication
 		   " WHERE SessionId='%s'",
 		   FirstPubCod,
 		   Gbl.Session.Id);
