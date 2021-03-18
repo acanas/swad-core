@@ -816,9 +816,9 @@ CREATE TABLE IF NOT EXISTS mch_times (
 	ElapsedTime TIME NOT NULL DEFAULT 0,
 	UNIQUE INDEX(MchCod,QstInd));
 --
--- Table holidays: stores the holidays in each institution
+-- Table hld_holidays: stores the holidays in each institution
 --
-CREATE TABLE IF NOT EXISTS holidays (
+CREATE TABLE IF NOT EXISTS hld_holidays (
 	HldCod INT NOT NULL AUTO_INCREMENT,
 	InsCod INT NOT NULL,
 	PlcCod INT NOT NULL DEFAULT -1,

@@ -1772,9 +1772,9 @@ mysql> DESCRIBE mch_times;
 			"ElapsedTime TIME NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(MchCod,QstInd))");
 
-   /***** Table holidays *****/
+   /***** Table hld_holidays *****/
 /*
-mysql> DESCRIBE holidays;
+mysql> DESCRIBE hld_holidays;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
@@ -1788,7 +1788,7 @@ mysql> DESCRIBE holidays;
 +-----------+---------------+------+-----+---------+----------------+
 7 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS holidays ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS hld_holidays ("
 			"HldCod INT NOT NULL AUTO_INCREMENT,"
 			"InsCod INT NOT NULL,"
 			"PlcCod INT NOT NULL DEFAULT -1,"

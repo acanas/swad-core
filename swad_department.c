@@ -1104,7 +1104,7 @@ static void Dpt_CreateDepartment (struct Dpt_Department *Dpt)
 unsigned Dpt_GetTotalNumberOfDepartments (void)
   {
    /***** Get number of departments from database *****/
-   return (unsigned) DB_GetNumRowsTable ("departments");
+   return (unsigned) DB_GetNumRowsTable ("dpt_departments");
   }
 
 /*****************************************************************************/

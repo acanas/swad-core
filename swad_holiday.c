@@ -331,38 +331,39 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
 	 Hld_FreeListHolidays (Holidays);
 
       /***** Get holidays from database *****/
-      Holidays->Num =
-      (unsigned) DB_QuerySELECT (&mysql_res,"can not get holidays",
-				 "(SELECT holidays.HldCod,"
-				         "holidays.PlcCod,"
-				         "places.FullName as Place,"
-				         "holidays.HldTyp,"
-				         "DATE_FORMAT(holidays.StartDate,'%%Y%%m%%d') AS StartDate,"
-				         "DATE_FORMAT(holidays.EndDate,'%%Y%%m%%d') AS EndDate,"
-				         "holidays.Name"
-				 " FROM holidays,places"
-				 " WHERE holidays.InsCod=%ld"
-				 " AND holidays.PlcCod=places.PlcCod"
-				 " AND places.InsCod=%ld)"
-				 " UNION "
-				 "(SELECT HldCod,"
-					 "PlcCod,"
-					 "'' as Place,"
-					 "HldTyp,"
-				         "DATE_FORMAT(StartDate,'%%Y%%m%%d') AS StartDate,"
-					 "DATE_FORMAT(EndDate,'%%Y%%m%%d') AS EndDate,"
-					 "Name"
-				 " FROM holidays"
-				 " WHERE InsCod=%ld"
-				 " AND PlcCod NOT IN"
-				 "(SELECT DISTINCT PlcCod FROM places"
-				 " WHERE InsCod=%ld))"
-				 " ORDER BY %s",
-				 Gbl.Hierarchy.Ins.InsCod,
-				 Gbl.Hierarchy.Ins.InsCod,
-				 Gbl.Hierarchy.Ins.InsCod,
-				 Gbl.Hierarchy.Ins.InsCod,
-				 OrderBySubQuery[Holidays->SelectedOrder]);
+      Holidays->Num = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get holidays",
+		      "(SELECT hld_holidays.HldCod,"						// row[0]
+			      "hld_holidays.PlcCod,"						// row[1]
+			      "places.FullName as Place,"					// row[2]
+			      "hld_holidays.HldTyp,"						// row[3]
+			      "DATE_FORMAT(hld_holidays.StartDate,'%%Y%%m%%d') AS StartDate,"	// row[4]
+			      "DATE_FORMAT(hld_holidays.EndDate,'%%Y%%m%%d') AS EndDate,"	// row[5]
+			      "hld_holidays.Name"						// row[6]
+		       " FROM hld_holidays,places"
+		      " WHERE hld_holidays.InsCod=%ld"
+		        " AND hld_holidays.PlcCod=places.PlcCod"
+		        " AND places.InsCod=%ld)"
+		      " UNION "
+		      "(SELECT HldCod,"								// row[0]
+			      "PlcCod,"								// row[1]
+			      "'' as Place,"							// row[2]
+			      "HldTyp,"								// row[3]
+			       "DATE_FORMAT(StartDate,'%%Y%%m%%d') AS StartDate,"		// row[4]
+			     "DATE_FORMAT(EndDate,'%%Y%%m%%d') AS EndDate,"			// row[5]
+			      "Name"								// row[6]
+		       " FROM hld_holidays"
+		      " WHERE InsCod=%ld"
+		        " AND PlcCod NOT IN"
+			     "(SELECT DISTINCT PlcCod"
+			       " FROM places"
+			      " WHERE InsCod=%ld))"
+		      " ORDER BY %s",
+		      Gbl.Hierarchy.Ins.InsCod,
+		      Gbl.Hierarchy.Ins.InsCod,
+		      Gbl.Hierarchy.Ins.InsCod,
+		      Gbl.Hierarchy.Ins.InsCod,
+		      OrderBySubQuery[Holidays->SelectedOrder]);
       if (Holidays->Num) // Holidays found...
 	{
 	 /***** Create list of holidays *****/
@@ -447,17 +448,17 @@ static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld)
 
    /***** Get data of holiday from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get data of a holiday",
-		       "(SELECT holidays.PlcCod,"
-		               "places.FullName as Place,"
-		               "holidays.HldTyp,"
-		               "DATE_FORMAT(holidays.StartDate,'%%Y%%m%%d'),"
-		               "DATE_FORMAT(holidays.EndDate,'%%Y%%m%%d'),"
-		               "holidays.Name"
-		       " FROM holidays,places"
-		       " WHERE holidays.HldCod=%ld"
-		       " AND holidays.InsCod=%ld"
-		       " AND holidays.PlcCod=places.PlcCod"
-		       " AND places.InsCod=%ld)"
+		       "(SELECT hld_holidays.PlcCod,"					// row[0]
+		               "places.FullName as Place,"				// row[1]
+		               "hld_holidays.HldTyp,"					// row[2]
+		               "DATE_FORMAT(hld_holidays.StartDate,'%%Y%%m%%d'),"	// row[3]
+		               "DATE_FORMAT(hld_holidays.EndDate,'%%Y%%m%%d'),"		// row[4]
+		               "hld_holidays.Name"					// row[5]
+		        " FROM hld_holidays,places"
+		       " WHERE hld_holidays.HldCod=%ld"
+		         " AND hld_holidays.InsCod=%ld"
+		         " AND hld_holidays.PlcCod=places.PlcCod"
+		         " AND places.InsCod=%ld)"
 		       " UNION "
 		       "(SELECT PlcCod,"
 		               "'' as Place,"
@@ -465,12 +466,13 @@ static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld)
 		               "DATE_FORMAT(StartDate,'%%Y%%m%%d'),"
 		               "DATE_FORMAT(EndDate,'%%Y%%m%%d'),"
 		               "Name"
-		       " FROM holidays"
+		        " FROM hld_holidays"
 		       " WHERE HldCod=%ld"
-		       " AND InsCod=%ld"
-		       " AND PlcCod NOT IN"
-		       "(SELECT DISTINCT PlcCod FROM places"
-		       " WHERE InsCod=%ld))",
+		         " AND InsCod=%ld"
+		         " AND PlcCod NOT IN"
+		              "(SELECT DISTINCT PlcCod"
+		                " FROM places"
+		               " WHERE InsCod=%ld))",
 		       Hld->HldCod,
 		       Gbl.Hierarchy.Ins.InsCod,
 		       Gbl.Hierarchy.Ins.InsCod,
@@ -724,7 +726,8 @@ void Hld_RemoveHoliday (void)
 
    /***** Remove holiday *****/
    DB_QueryDELETE ("can not remove a holiday",
-		   "DELETE FROM holidays WHERE HldCod=%ld",
+		   "DELETE FROM hld_holidays"
+		   " WHERE HldCod=%ld",
 		   Hld_EditingHld->HldCod);
 
    /***** Write message to show the change made *****/
@@ -761,7 +764,9 @@ void Hld_ChangeHolidayPlace (void)
 
    /***** Update the place in database *****/
    DB_QueryUPDATE ("can not update the place of a holiday",
-		   "UPDATE holidays SET PlcCod=%ld WHERE HldCod=%ld",
+		   "UPDATE hld_holidays"
+		     " SET PlcCod=%ld"
+		   " WHERE HldCod=%ld",
                    NewPlace.PlcCod,Hld_EditingHld->HldCod);
    Hld_EditingHld->PlcCod = NewPlace.PlcCod;
    Str_Copy (Hld_EditingHld->PlaceFullName,NewPlace.FullName,
@@ -797,9 +802,12 @@ void Hld_ChangeHolidayType (void)
    /***** Update holiday/no school period in database *****/
    Dat_AssignDate (&Hld_EditingHld->EndDate,&Hld_EditingHld->StartDate);
    DB_QueryUPDATE ("can not update the type of a holiday",
-		   "UPDATE holidays SET HldTyp=%u,EndDate=StartDate"
+		   "UPDATE hld_holidays"
+		     " SET HldTyp=%u,"
+		          "EndDate=StartDate"
 		   " WHERE HldCod=%ld",
-	           (unsigned) Hld_EditingHld->HldTyp,Hld_EditingHld->HldCod);
+	           (unsigned) Hld_EditingHld->HldTyp,
+	           Hld_EditingHld->HldCod);
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -882,7 +890,9 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
 
    /***** Update the date in database *****/
    DB_QueryUPDATE ("can not update the date of a holiday",
-		   "UPDATE holidays SET %s='%04u%02u%02u' WHERE HldCod=%ld",
+		   "UPDATE hld_holidays"
+		     " SET %s='%04u%02u%02u'"
+		   " WHERE HldCod=%ld",
 	           StrStartOrEndDate,
 	           NewDate.Year,
 	           NewDate.Month,
@@ -931,8 +941,11 @@ void Hld_RenameHoliday (void)
          /***** If degree was in database... *****/
 	 /* Update the table changing old name by new name */
 	 DB_QueryUPDATE ("can not update the text of a holiday",
-			 "UPDATE holidays SET Name='%s' WHERE HldCod=%ld",
-		         NewHldName,Hld_EditingHld->HldCod);
+			 "UPDATE hld_holidays"
+			   " SET Name='%s'"
+			 " WHERE HldCod=%ld",
+		         NewHldName,
+		         Hld_EditingHld->HldCod);
 	 Str_Copy (Hld_EditingHld->Name,NewHldName,
 		   sizeof (Hld_EditingHld->Name) - 1);
 
@@ -1174,11 +1187,13 @@ static void Hld_CreateHoliday (struct Hld_Holiday *Hld)
   {
    /***** Create a new holiday or no school period *****/
    DB_QueryINSERT ("can not create holiday",
-		   "INSERT INTO holidays"
+		   "INSERT INTO hld_holidays"
 		   " (InsCod,PlcCod,HldTyp,StartDate,EndDate,Name)"
 		   " VALUES"
 		   " (%ld,%ld,%u,'%04u%02u%02u','%04u%02u%02u','%s')",
-	           Gbl.Hierarchy.Ins.InsCod,Hld->PlcCod,(unsigned) Hld->HldTyp,
+	           Gbl.Hierarchy.Ins.InsCod,
+	           Hld->PlcCod,
+	           (unsigned) Hld->HldTyp,
 	           Hld->StartDate.Year,
 	           Hld->StartDate.Month,
 	           Hld->StartDate.Day,
