@@ -1525,9 +1525,9 @@ mysql> DESCRIBE forum_thr_read;
 			"ReadTime DATETIME NOT NULL,"
 		   "UNIQUE INDEX(ThrCod,UsrCod))");
 
-   /***** Table forum_thread *****/
+   /***** Table for_threads *****/
 /*
-mysql> DESCRIBE forum_thread;
+mysql> DESCRIBE for_threads;
 +-------------+------------+------+-----+---------+----------------+
 | Field       | Type       | Null | Key | Default | Extra          |
 +-------------+------------+------+-----+---------+----------------+
@@ -1539,7 +1539,7 @@ mysql> DESCRIBE forum_thread;
 +-------------+------------+------+-----+---------+----------------+
 5 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS forum_thread ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS for_threads ("
 			"ThrCod INT NOT NULL AUTO_INCREMENT,"
 			"ForumType TINYINT NOT NULL,"
 			"Location INT NOT NULL DEFAULT -1,"

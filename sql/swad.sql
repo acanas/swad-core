@@ -700,9 +700,9 @@ CREATE TABLE IF NOT EXISTS forum_thr_read (
 	ReadTime DATETIME NOT NULL,
 	UNIQUE INDEX(ThrCod,UsrCod));
 --
--- Table forum_thread: stores the forum threads
+-- Table for_threads: stores the forum threads
 --
-CREATE TABLE IF NOT EXISTS forum_thread (
+CREATE TABLE IF NOT EXISTS for_threads (
 	ThrCod INT NOT NULL AUTO_INCREMENT,
 	ForumType TINYINT NOT NULL,
 	Location INT NOT NULL DEFAULT -1,
