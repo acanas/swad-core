@@ -29,8 +29,8 @@
 
 #include "swad_box.h"
 #include "swad_calendar.h"
+#include "swad_call_for_exam.h"
 #include "swad_database.h"
-#include "swad_exam_announcement.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -219,7 +219,7 @@ void Cal_DrawCurrentMonth (void)
 	     Lan_STR_LANG_ID[Gbl.Prefs.Language]);
    Frm_SetParamsForm (ParamsStr,ActSeeCal,true);
    HTM_TxtF ("'%s',",ParamsStr);
-   Frm_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
+   Frm_SetParamsForm (ParamsStr,ActSeeDatCfe,true);
    HTM_TxtF ("'%s');",ParamsStr);
    HTM_SCRIPT_End ();
   }
@@ -288,7 +288,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 	     Lan_STR_LANG_ID[Gbl.Prefs.Language]);
    Frm_SetParamsForm (ParamsStr,ActionSeeCalendar,true);
    HTM_TxtF ("'%s',",ParamsStr);
-   Frm_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
+   Frm_SetParamsForm (ParamsStr,ActSeeDatCfe,true);
    HTM_TxtF ("'%s');",ParamsStr);
    HTM_SCRIPT_End ();
 

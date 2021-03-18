@@ -469,12 +469,12 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Lan_NU
 	[Lan_LANGUAGE_PL     ] = "Nowe zadania",
 	[Lan_LANGUAGE_PT     ] = "Nova atividade",
 	},
-[Ntf_EVENT_EXAM_ANNOUNCEMENT] =
+[Ntf_EVENT_CALL_FOR_EXAM] =
 	{
 	[Lan_LANGUAGE_UNKNOWN] = "",
 	[Lan_LANGUAGE_CA     ] = "Nova convocatòria d'examen",
 	[Lan_LANGUAGE_DE     ] = "Neue Aufrufe für Prüfung",
-	[Lan_LANGUAGE_EN     ] = "New announcement of exam",
+	[Lan_LANGUAGE_EN     ] = "New call for exam",
 	[Lan_LANGUAGE_ES     ] = "Nueva convocatoria de examen",
 	[Lan_LANGUAGE_FR     ] = "Nouvelle convocation à un examen",
 	[Lan_LANGUAGE_GN     ] = "Nueva convocatoria de examen",		// Okoteve traducción

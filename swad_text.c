@@ -1761,48 +1761,6 @@ const char *Txt_Announcements =
 	"An&uacute;ncios";
 #endif
 
-const char *Txt_Announcement_of_exam_removed =
-#if   L==1	// ca
-	"Convocat&ograve;ria d'examen eliminada.";
-#elif L==2	// de
-	"Aufruf zur Pr&uuml;fung entfernt.";
-#elif L==3	// en
-	"Announcement of exam removed.";
-#elif L==4	// es
-	"Convocatoria de examen eliminada.";
-#elif L==5	// fr
-	"Convocation pour l'examen supprim&eacute;.";
-#elif L==6	// gn
-	"Convocatoria de examen eliminada.";	// Okoteve traducción
-#elif L==7	// it
-	"Appello d'esame rimosso.";
-#elif L==8	// pl
-	"Ogloszenie egzamin usuniete.";
-#elif L==9	// pt
-	"Chamada para exame removida.";
-#endif
-
-const char *Txt_Announcements_of_exams =
-#if   L==1	// ca
-	"Convocat&ograve;ries d'ex&agrave;mens";
-#elif L==2	// de
-	"Aufrufe f&uuml;r Pr&uuml;fung";
-#elif L==3	// en
-	"Announcements of exams";
-#elif L==4	// es
-	"Convocatorias de ex&aacute;menes";
-#elif L==5	// fr
-	"Convocations &agrave; examens";
-#elif L==6	// gn
-	"Convocatorias de ex&aacute;menes";	// Okoteve traducción
-#elif L==7	// it
-	"Appelli d'esame";
-#elif L==8	// pl
-	"Ogloszenia egzamin&oacute;w";
-#elif L==9	// pt
-	"Chamadas para exames";
-#endif
-
 const char *Txt_Another_building =
 #if   L==1	// ca
 	"Un altre edifici";
@@ -3492,6 +3450,321 @@ const char *Txt_Calendar =
 	"Calend&aacute;rio";
 #endif
 
+const char *Txt_CALL_FOR_EXAM =
+#if   L==1	// ca
+	"CONVOCAT&Ograve;RIA D'EXAMEN";
+#elif L==2	// de
+	"PR&Uuml;FUNGSAUFRUF";
+#elif L==3	// en
+	"CALL FOR EXAM";
+#elif L==4	// es
+	"CONVOCATORIA DE EXAMEN";
+#elif L==5	// fr
+	"CONVOCATION &Agrave; UN EXAMEN";
+#elif L==6	// gn
+	"CONVOCATORIA DE EXAMEN";	// Okoteve traducción
+#elif L==7	// it
+	"APPELLO D'ESAME";
+#elif L==8	// pl
+	"OGLOSZENIE egzaminu";
+#elif L==9	// pt
+	"CHAMADA DE EXAME";
+#endif
+
+const char *Txt_CALL_FOR_EXAM_Approximate_duration =
+#if   L==1	// ca
+	"Duraci&oacute;n aproximada";	// Necessita traduccio
+#elif L==2	// de
+	"Voraussichtliche Dauer";
+#elif L==3	// en
+	"Approximate duration";
+#elif L==4	// es
+	"Duraci&oacute;n aproximada";
+#elif L==5	// fr
+	"Dur&eacute;e approximative";
+#elif L==6	// gn
+	"Duraci&oacute;n aproximada";	// Okoteve traducción
+#elif L==7	// it
+	"Durata approssimativa";
+#elif L==8	// pl
+	"Przyblizony czas trwania";
+#elif L==9	// pt
+	"Dura&ccedil;&atilde;o aproximada";
+#endif
+
+const char *Txt_CALL_FOR_EXAM_Course =
+#if   L==1	// ca
+	"Assignatura";
+#elif L==2	// de
+	"Kurs";
+#elif L==3	// en
+	"Course";
+#elif L==4	// es
+	"Asignatura";
+#elif L==5	// fr
+	"Mati&egrave;re";
+#elif L==6	// gn
+	"Mbo'esyry";
+#elif L==7	// it
+	"Corso";
+#elif L==8	// pl
+	"Kurs";
+#elif L==9	// pt
+	"Disciplina";
+#endif
+
+const char *Txt_CALL_FOR_EXAM_Documentation_required =
+#if   L==1	// ca
+	"Documentaci&oacute;n exigida";	// Necessita traduccio
+#elif L==2	// de
+	"Ausweis erforderlich";
+#elif L==3	// en
+	"ID required";
+#elif L==4	// es
+	"Documentaci&oacute;n exigida";
+#elif L==5	// fr
+	"Pi&egrave;ce d'identité obligatoire";
+#elif L==6	// gn
+	"Documentaci&oacute;n exigida";	// Okoteve traducción
+#elif L==7	// it
+	"Documentazione richiesta";
+#elif L==8	// pl
+	"ID wymagane";
+#elif L==9	// pt
+	"Documenta&ccedil;&atilde;o necess&aacute;ria";
+#endif
+
+const char *Txt_CALL_FOR_EXAM_Exam_date =
+#if   L==1	// ca
+	"Fecha del examen";	// Necessita traduccio
+#elif L==2	// de
+	"Pr&uuml;fungsdatum";
+#elif L==3	// en
+	"Exam date";
+#elif L==4	// es
+	"Fecha del examen";
+#elif L==5	// fr
+	"Date de l'examen";
+#elif L==6	// gn
+	"Fecha del examen";	// Okoteve traducción
+#elif L==7	// it
+	"Data d'esame";
+#elif L==8	// pl
+	"Termin egzaminu";
+#elif L==9	// pt
+	"Exame data";
+#endif
+
+const char *Txt_CALL_FOR_EXAM_Material_allowed =
+#if   L==1	// ca
+	"Material permitido";	// Necessita traduccio
+#elif L==2	// de
+	"Erlaubte Unterlagen";
+#elif L==3	// en
+	"Material allowed";
+#elif L==4	// es
+	"Material permitido";
+#elif L==5	// fr
+	"Mat&eacute;riel autoris&eacute;";
+#elif L==6	// gn
+	"Material permitido";	// Okoteve traducción
+#elif L==7	// it
+	"Materiale permesso";
+#elif L==8	// pl
+	"Material dozwolone";
+#elif L==9	// pt
+	"Material autorizado";
+#endif
+
+const char *Txt_CALL_FOR_EXAM_Material_required =
+#if   L==1	// ca
+	"Material obligatorio";	// Necessita traduccio
+#elif L==2	// de
+	"Erforderliche Unterlagen";
+#elif L==3	// en
+	"Material required";
+#elif L==4	// es
+	"Material obligatorio";
+#elif L==5	// fr
+	"Mat&eacute;riel n&eacute;cessaire";
+#elif L==6	// gn
+	"Material obligatorio";	// Okoteve traducción
+#elif L==7	// it
+	"Materiale richiesto";
+#elif L==8	// pl
+	"Materialy niezbedne do";
+#elif L==9	// pt
+	"Material obrigat&oacute;rio";
+#endif
+
+const char *Txt_CALL_FOR_EXAM_Mode =
+#if   L==1	// ca
+	"Modalidad<br />(escrito, oral,&hellip;)";	// Necessita traduccio
+#elif L==2	// de
+	"Pr&uuml;fungsart<br />(schriftlich, m&uuml;ndlich,&hellip;)";
+#elif L==3	// en
+	"Mode<br />(written, oral,&hellip;)";
+#elif L==4	// es
+	"Modalidad<br />(escrito, oral,&hellip;)";
+#elif L==5	// fr
+	"Mode<br />(&eacute;crit, oral,&hellip;)";
+#elif L==6	// gn
+	"Modalidad<br />(escrito, oral,&hellip;)";	// Okoteve traducción
+#elif L==7	// it
+	"Modalit&agrave;<br />(scritto, orale,&hellip;)";
+#elif L==8	// pl
+	"Tryb<br />(pisemnej, ustnej,&hellip;)";
+#elif L==9	// pt
+	"Modalidade<br />(escrita, oral,&hellip;)";
+#endif
+
+const char *Txt_CALL_FOR_EXAM_Other_information =
+#if   L==1	// ca
+	"Otras indicaciones";	// Necessita traduccio
+#elif L==2	// de
+	"Weitere Informationen";
+#elif L==3	// en
+	"Other information";
+#elif L==4	// es
+	"Otras indicaciones";
+#elif L==5	// fr
+	"Autres informations";
+#elif L==6	// gn
+	"Otras indicaciones";	// Okoteve traducción
+#elif L==7	// it
+	"Altre informazioni";
+#elif L==8	// pl
+	"Inne informacje";
+#elif L==9	// pt
+	"Outras informa&ccedil;&otilde;es";
+#endif
+
+const char *Txt_CALL_FOR_EXAM_Place_of_exam =
+#if   L==1	// ca
+	"Lugar de realizaci&oacute;n";	// Necessita traduccio
+#elif L==2	// de
+	"Pr&uuml;fungsort";
+#elif L==3	// en
+	"Place of exam";
+#elif L==4	// es
+	"Lugar de realizaci&oacute;n";
+#elif L==5	// fr
+	"Lieu de l'examen";
+#elif L==6	// gn
+	"Lugar de realizaci&oacute;n";	// Okoteve traducción
+#elif L==7	// it
+	"Luogo d'esame";
+#elif L==8	// pl
+	"Miejsce egzaminu";
+#elif L==9	// pt
+	"Local do exame";
+#endif
+
+const char *Txt_CALL_FOR_EXAM_Session =
+#if   L==1	// ca
+	"Convocatoria<br />(junio, septiembre,&hellip;)";	// Necessita traduccio
+#elif L==2	// de
+	"Einberufung<br />(Juni, September,&hellip;)";
+#elif L==3	// en
+	"Session<br />(june, september,&hellip;)";
+#elif L==4	// es
+	"Convocatoria<br />(junio, septiembre,&hellip;)";
+#elif L==5	// fr
+	"P&eacute;riode<br />(juin, septembre,&hellip;)";
+#elif L==6	// gn
+	"Convocatoria<br />(junio, septiembre,&hellip;)";	// Okoteve traducción
+#elif L==7	// it
+	"Sessione<br />(giugno, settembre,&hellip;)";
+#elif L==8	// pl
+	"Sesja<br />(czerwiec, wrzesien,&hellip;)";
+#elif L==9	// pt
+	"Per&iacute;odo<br />(junho, setembro,&hellip;)";
+#endif
+
+const char *Txt_CALL_FOR_EXAM_Start_time =
+#if   L==1	// ca
+	"Hora de inicio";	// Necessita traduccio
+#elif L==2	// de
+	"Beginn um";
+#elif L==3	// en
+	"Start time";
+#elif L==4	// es
+	"Hora de inicio";
+#elif L==5	// fr
+	"Heure de d&eacute;but";
+#elif L==6	// gn
+	"Hora de inicio";	// Okoteve traducción
+#elif L==7	// it
+	"Ora d'inizio";
+#elif L==8	// pl
+	"Czas rozpoczecia";
+#elif L==9	// pt
+	"Hora de in&iacute;cio";
+#endif
+
+const char *Txt_CALL_FOR_EXAM_Structure_of_the_exam =
+#if   L==1	// ca
+	"Estructura del examen";	// Necessita traduccio
+#elif L==2	// de
+	"Pr&uuml;fungsstruktur";
+#elif L==3	// en
+	"Structure of the exam";
+#elif L==4	// es
+	"Estructura del examen";
+#elif L==5	// fr
+	"Structure de l'examen";
+#elif L==6	// gn
+	"Estructura del examen";	// Okoteve traducción
+#elif L==7	// it
+	"Struttura d'esame";
+#elif L==8	// pl
+	"Struktura egzaminu";
+#elif L==9	// pt
+	"Estrutura do exame";
+#endif
+
+const char *Txt_CALL_FOR_EXAM_Year_or_semester =	// 1, 2, 3..., not 1984, 2038...
+#if   L==1	// ca
+	"Any o semestre";
+#elif L==2	// de
+	"Jahr oder Semester";
+#elif L==3	// en
+	"Year or semester";
+#elif L==4	// es
+	"A&ntilde;o o semestre";
+#elif L==5	// fr
+	"Ann&eacute;e ou semestre";
+#elif L==6	// gn
+	"A&ntilde;o o semestre";	// Okoteve traducción
+#elif L==7	// it
+	"Anno o semestre";
+#elif L==8	// pl
+	"Rok lub semestr";
+#elif L==9	// pt
+	"Ano ou semestre";
+#endif
+
+const char *Txt_Call_for_exam_removed =
+#if   L==1	// ca
+	"Convocat&ograve;ria d'examen eliminada.";
+#elif L==2	// de
+	"Aufruf zur Pr&uuml;fung entfernt.";
+#elif L==3	// en
+	"Call for exam removed.";
+#elif L==4	// es
+	"Convocatoria de examen eliminada.";
+#elif L==5	// fr
+	"Convocation pour l'examen supprim&eacute;.";
+#elif L==6	// gn
+	"Convocatoria de examen eliminada.";	// Okoteve traducción
+#elif L==7	// it
+	"Appello d'esame rimosso.";
+#elif L==8	// pl
+	"Ogloszenie egzamin usuniete.";
+#elif L==9	// pt
+	"Chamada para exame removida.";
+#endif
+
 const char *Txt_Call_the_roll =
 #if   L==1	// ca
 	"Passar llista";
@@ -3511,6 +3784,27 @@ const char *Txt_Call_the_roll =
 	"Imienne";
 #elif L==9	// pt
 	"Lista de presen&ccedil;a";
+#endif
+
+const char *Txt_Calls_for_exams =
+#if   L==1	// ca
+	"Convocat&ograve;ries d'ex&agrave;mens";
+#elif L==2	// de
+	"Aufrufe f&uuml;r Pr&uuml;fung";
+#elif L==3	// en
+	"Calls for exams";
+#elif L==4	// es
+	"Convocatorias de ex&aacute;menes";
+#elif L==5	// fr
+	"Convocations &agrave; examens";
+#elif L==6	// gn
+	"Convocatorias de ex&aacute;menes";	// Okoteve traducción
+#elif L==7	// it
+	"Appelli d'esame";
+#elif L==8	// pl
+	"Ogloszenia egzamin&oacute;w";
+#elif L==9	// pt
+	"Chamadas para exames";
 #endif
 
 const char *Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
@@ -5094,7 +5388,6 @@ const char *Txt_Could_not_detect_any_face_in_front_position_ =
 	"N&atilde;o foi poss&iacute;vel detectar nenhum rosto na posi&ccedil;&atilde;o frontal.";
 #endif
 
-
 const char *Txt_Countdown =
 #if   L==1	// ca
 	"Compte enrere";
@@ -6553,27 +6846,6 @@ const char *Txt_Create_ZIP_file =
 	"Criar arquivo ZIP";
 #endif
 
-const char *Txt_Created_new_announcement_of_exam =
-#if   L==1	// ca
-	"Creada nueva convocatoria de examen.";	// Necessita traduccio
-#elif L==2	// de
-	"Neuer Aufruf zur Pr&uuml;fung erstellt.";
-#elif L==3	// en
-	"Created new announcement of exam.";
-#elif L==4	// es
-	"Creada nueva convocatoria de examen.";
-#elif L==5	// fr
-	"Cr&eacute;&eacute; nouvelle convocation &agrave; un examen.";
-#elif L==6	// gn
-	"Creada nueva convocatoria de examen.";	// Okoteve traducción
-#elif L==7	// it
-	"Creato nuovo appello d'esame.";
-#elif L==8	// pl
-	"Utworzono nowe ogloszenie egzamin.";
-#elif L==9	// pt
-	"Criado nova chamada para exame.";
-#endif
-
 const char *Txt_Created_new_assignment_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Creada nova activitat <strong>%s</strong>.";
@@ -6635,6 +6907,27 @@ const char *Txt_Created_new_building_X =	// Warning: it is very important to inc
 	"Utworzono nowe budynek <strong>%s</strong>.";
 #elif L==9	// pt
 	"Criado novo edif&iacute;cio <strong>%s</strong>.";
+#endif
+
+const char *Txt_Created_new_call_for_exam =
+#if   L==1	// ca
+	"Creada nueva convocatoria de examen.";	// Necessita traduccio
+#elif L==2	// de
+	"Neuer Aufruf zur Pr&uuml;fung erstellt.";
+#elif L==3	// en
+	"Created new call for exam.";
+#elif L==4	// es
+	"Creada nueva convocatoria de examen.";
+#elif L==5	// fr
+	"Cr&eacute;&eacute; nouvelle convocation &agrave; un examen.";
+#elif L==6	// gn
+	"Creada nueva convocatoria de examen.";	// Okoteve traducción
+#elif L==7	// it
+	"Creato nuovo appello d'esame.";
+#elif L==8	// pl
+	"Utworzono nowe ogloszenie egzamin.";
+#elif L==9	// pt
+	"Criado nova chamada para exame.";
 #endif
 
 const char *Txt_Created_new_center_X =	// Warning: it is very important to include %s in the following sentences
@@ -9248,13 +9541,13 @@ const char *Txt_Do_you_really_want_to_remove_the_folder_X =	// Warning: it is ve
 	" o diret&oacute;rio <strong>%s</strong> e todo o seu conte&uacute;do?";
 #endif
 
-const char *Txt_Do_you_really_want_to_remove_the_following_announcement_of_exam =
+const char *Txt_Do_you_really_want_to_remove_the_following_call_for_exam =
 #if   L==1	// ca
 	"De veres voleu eliminar la seg&uuml;ent convocat&ograve;ria d'examen?";
 #elif L==2	// de
 	"Wollen Sie wirklich, um die folgende Aufruf f&uuml;r Pr&uuml;fung?";
 #elif L==3	// en
-	"Do you really want to remove the following announcement of exam?";
+	"Do you really want to remove the following call for exam?";
 #elif L==4	// es
 	"&iquest;Realmente desea eliminar la siguiente convocatoria de examen?";
 #elif L==5	// fr
@@ -11729,300 +12022,6 @@ const char *Txt_Exam =
 	"Egzamin";
 #elif L==9	// pt
 	"Exame";
-#endif
-
-const char *Txt_EXAM_ANNOUNCEMENT =
-#if   L==1	// ca
-	"CONVOCAT&Ograve;RIA D'EXAMEN";
-#elif L==2	// de
-	"PR&Uuml;FUNGSAUFRUF";
-#elif L==3	// en
-	"ANNOUNCEMENT OF EXAM";
-#elif L==4	// es
-	"CONVOCATORIA DE EXAMEN";
-#elif L==5	// fr
-	"CONVOCATION &Agrave; UN EXAMEN";
-#elif L==6	// gn
-	"CONVOCATORIA DE EXAMEN";	// Okoteve traducción
-#elif L==7	// it
-	"APPELLO D'ESAME";
-#elif L==8	// pl
-	"OGLOSZENIE egzaminu";
-#elif L==9	// pt
-	"CHAMADA DE EXAME";
-#endif
-
-const char *Txt_EXAM_ANNOUNCEMENT_Approximate_duration =
-#if   L==1	// ca
-	"Duraci&oacute;n aproximada";	// Necessita traduccio
-#elif L==2	// de
-	"Voraussichtliche Dauer";
-#elif L==3	// en
-	"Approximate duration";
-#elif L==4	// es
-	"Duraci&oacute;n aproximada";
-#elif L==5	// fr
-	"Dur&eacute;e approximative";
-#elif L==6	// gn
-	"Duraci&oacute;n aproximada";	// Okoteve traducción
-#elif L==7	// it
-	"Durata approssimativa";
-#elif L==8	// pl
-	"Przyblizony czas trwania";
-#elif L==9	// pt
-	"Dura&ccedil;&atilde;o aproximada";
-#endif
-
-const char *Txt_EXAM_ANNOUNCEMENT_Course =
-#if   L==1	// ca
-	"Assignatura";
-#elif L==2	// de
-	"Kurs";
-#elif L==3	// en
-	"Course";
-#elif L==4	// es
-	"Asignatura";
-#elif L==5	// fr
-	"Mati&egrave;re";
-#elif L==6	// gn
-	"Mbo'esyry";
-#elif L==7	// it
-	"Corso";
-#elif L==8	// pl
-	"Kurs";
-#elif L==9	// pt
-	"Disciplina";
-#endif
-
-const char *Txt_EXAM_ANNOUNCEMENT_Documentation_required =
-#if   L==1	// ca
-	"Documentaci&oacute;n exigida";	// Necessita traduccio
-#elif L==2	// de
-	"Ausweis erforderlich";
-#elif L==3	// en
-	"ID required";
-#elif L==4	// es
-	"Documentaci&oacute;n exigida";
-#elif L==5	// fr
-	"Pi&egrave;ce d'identité obligatoire";
-#elif L==6	// gn
-	"Documentaci&oacute;n exigida";	// Okoteve traducción
-#elif L==7	// it
-	"Documentazione richiesta";
-#elif L==8	// pl
-	"ID wymagane";
-#elif L==9	// pt
-	"Documenta&ccedil;&atilde;o necess&aacute;ria";
-#endif
-
-const char *Txt_EXAM_ANNOUNCEMENT_Exam_date =
-#if   L==1	// ca
-	"Fecha del examen";	// Necessita traduccio
-#elif L==2	// de
-	"Pr&uuml;fungsdatum";
-#elif L==3	// en
-	"Exam date";
-#elif L==4	// es
-	"Fecha del examen";
-#elif L==5	// fr
-	"Date de l'examen";
-#elif L==6	// gn
-	"Fecha del examen";	// Okoteve traducción
-#elif L==7	// it
-	"Data d'esame";
-#elif L==8	// pl
-	"Termin egzaminu";
-#elif L==9	// pt
-	"Exame data";
-#endif
-
-const char *Txt_EXAM_ANNOUNCEMENT_Material_allowed =
-#if   L==1	// ca
-	"Material permitido";	// Necessita traduccio
-#elif L==2	// de
-	"Erlaubte Unterlagen";
-#elif L==3	// en
-	"Material allowed";
-#elif L==4	// es
-	"Material permitido";
-#elif L==5	// fr
-	"Mat&eacute;riel autoris&eacute;";
-#elif L==6	// gn
-	"Material permitido";	// Okoteve traducción
-#elif L==7	// it
-	"Materiale permesso";
-#elif L==8	// pl
-	"Material dozwolone";
-#elif L==9	// pt
-	"Material autorizado";
-#endif
-
-const char *Txt_EXAM_ANNOUNCEMENT_Material_required =
-#if   L==1	// ca
-	"Material obligatorio";	// Necessita traduccio
-#elif L==2	// de
-	"Erforderliche Unterlagen";
-#elif L==3	// en
-	"Material required";
-#elif L==4	// es
-	"Material obligatorio";
-#elif L==5	// fr
-	"Mat&eacute;riel n&eacute;cessaire";
-#elif L==6	// gn
-	"Material obligatorio";	// Okoteve traducción
-#elif L==7	// it
-	"Materiale richiesto";
-#elif L==8	// pl
-	"Materialy niezbedne do";
-#elif L==9	// pt
-	"Material obrigat&oacute;rio";
-#endif
-
-const char *Txt_EXAM_ANNOUNCEMENT_Mode =
-#if   L==1	// ca
-	"Modalidad<br />(escrito, oral,&hellip;)";	// Necessita traduccio
-#elif L==2	// de
-	"Pr&uuml;fungsart<br />(schriftlich, m&uuml;ndlich,&hellip;)";
-#elif L==3	// en
-	"Mode<br />(written, oral,&hellip;)";
-#elif L==4	// es
-	"Modalidad<br />(escrito, oral,&hellip;)";
-#elif L==5	// fr
-	"Mode<br />(&eacute;crit, oral,&hellip;)";
-#elif L==6	// gn
-	"Modalidad<br />(escrito, oral,&hellip;)";	// Okoteve traducción
-#elif L==7	// it
-	"Modalit&agrave;<br />(scritto, orale,&hellip;)";
-#elif L==8	// pl
-	"Tryb<br />(pisemnej, ustnej,&hellip;)";
-#elif L==9	// pt
-	"Modalidade<br />(escrita, oral,&hellip;)";
-#endif
-
-const char *Txt_EXAM_ANNOUNCEMENT_Other_information =
-#if   L==1	// ca
-	"Otras indicaciones";	// Necessita traduccio
-#elif L==2	// de
-	"Weitere Informationen";
-#elif L==3	// en
-	"Other information";
-#elif L==4	// es
-	"Otras indicaciones";
-#elif L==5	// fr
-	"Autres informations";
-#elif L==6	// gn
-	"Otras indicaciones";	// Okoteve traducción
-#elif L==7	// it
-	"Altre informazioni";
-#elif L==8	// pl
-	"Inne informacje";
-#elif L==9	// pt
-	"Outras informa&ccedil;&otilde;es";
-#endif
-
-const char *Txt_EXAM_ANNOUNCEMENT_Place_of_exam =
-#if   L==1	// ca
-	"Lugar de realizaci&oacute;n";	// Necessita traduccio
-#elif L==2	// de
-	"Pr&uuml;fungsort";
-#elif L==3	// en
-	"Place of exam";
-#elif L==4	// es
-	"Lugar de realizaci&oacute;n";
-#elif L==5	// fr
-	"Lieu de l'examen";
-#elif L==6	// gn
-	"Lugar de realizaci&oacute;n";	// Okoteve traducción
-#elif L==7	// it
-	"Luogo d'esame";
-#elif L==8	// pl
-	"Miejsce egzaminu";
-#elif L==9	// pt
-	"Local do exame";
-#endif
-
-const char *Txt_EXAM_ANNOUNCEMENT_Session =
-#if   L==1	// ca
-	"Convocatoria<br />(junio, septiembre,&hellip;)";	// Necessita traduccio
-#elif L==2	// de
-	"Einberufung<br />(Juni, September,&hellip;)";
-#elif L==3	// en
-	"Session<br />(june, september,&hellip;)";
-#elif L==4	// es
-	"Convocatoria<br />(junio, septiembre,&hellip;)";
-#elif L==5	// fr
-	"P&eacute;riode<br />(juin, septembre,&hellip;)";
-#elif L==6	// gn
-	"Convocatoria<br />(junio, septiembre,&hellip;)";	// Okoteve traducción
-#elif L==7	// it
-	"Sessione<br />(giugno, settembre,&hellip;)";
-#elif L==8	// pl
-	"Sesja<br />(czerwiec, wrzesien,&hellip;)";
-#elif L==9	// pt
-	"Per&iacute;odo<br />(junho, setembro,&hellip;)";
-#endif
-
-const char *Txt_EXAM_ANNOUNCEMENT_Start_time =
-#if   L==1	// ca
-	"Hora de inicio";	// Necessita traduccio
-#elif L==2	// de
-	"Beginn um";
-#elif L==3	// en
-	"Start time";
-#elif L==4	// es
-	"Hora de inicio";
-#elif L==5	// fr
-	"Heure de d&eacute;but";
-#elif L==6	// gn
-	"Hora de inicio";	// Okoteve traducción
-#elif L==7	// it
-	"Ora d'inizio";
-#elif L==8	// pl
-	"Czas rozpoczecia";
-#elif L==9	// pt
-	"Hora de in&iacute;cio";
-#endif
-
-const char *Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam =
-#if   L==1	// ca
-	"Estructura del examen";	// Necessita traduccio
-#elif L==2	// de
-	"Pr&uuml;fungsstruktur";
-#elif L==3	// en
-	"Structure of the exam";
-#elif L==4	// es
-	"Estructura del examen";
-#elif L==5	// fr
-	"Structure de l'examen";
-#elif L==6	// gn
-	"Estructura del examen";	// Okoteve traducción
-#elif L==7	// it
-	"Struttura d'esame";
-#elif L==8	// pl
-	"Struktura egzaminu";
-#elif L==9	// pt
-	"Estrutura do exame";
-#endif
-
-const char *Txt_EXAM_ANNOUNCEMENT_Year_or_semester =	// 1, 2, 3..., not 1984, 2038...
-#if   L==1	// ca
-	"Any o semestre";
-#elif L==2	// de
-	"Jahr oder Semester";
-#elif L==3	// en
-	"Year or semester";
-#elif L==4	// es
-	"A&ntilde;o o semestre";
-#elif L==5	// fr
-	"Ann&eacute;e ou semestre";
-#elif L==6	// gn
-	"A&ntilde;o o semestre";	// Okoteve traducción
-#elif L==7	// it
-	"Anno o semestre";
-#elif L==8	// pl
-	"Rok lub semestr";
-#elif L==9	// pt
-	"Ano ou semestre";
 #endif
 
 const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS] =
@@ -18567,13 +18566,13 @@ const char *Txt_Link_X_removed =	// Warning: it is very important to include %s 
 	"Liga&ccedil;&atilde;o <strong>%s</strong> removida.";
 #endif
 
-const char *Txt_Link_to_announcement_of_exam =
+const char *Txt_Link_to_call_for_exam =
 #if   L==1	// ca
 	"Enlla&ccedil; a convocat&ograve;ria d'examen";
 #elif L==2	// de
 	"Link zu Aufruf f&uuml;r Pr&uuml;fung";
 #elif L==3	// en
-	"Link to announcement of exam";
+	"Link to call for exam";
 #elif L==4	// es
 	"Enlace a convocatoria de examen";
 #elif L==5	// fr
@@ -22282,7 +22281,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==2	// de
 	"Pr&uuml;fungsaufruf"
 #elif L==3	// en
-	"Announcements of exams"
+	"Calls for exams"
 #elif L==4	// es
 	"Listado de convocatorias de ex&aacute;menes de esta asignatura"
 #elif L==5	// fr
@@ -25124,7 +25123,7 @@ const char *Txt_New_announcement =
 	"Novo an&uacute;ncio";
 #endif
 
-const char *Txt_New_announcement_OF_EXAM =
+const char *Txt_New_call_FOR_EXAM =
 #if   L==1	// ca
 	"Nova convocat&ograve;ria";
 #elif L==2	// de
@@ -26153,27 +26152,6 @@ const char *Txt_No_announcements =
 	"N&atilde;o h&aacute; an&uacute;ncios";
 #endif
 
-const char *Txt_No_announcements_of_exams_of_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"No hay convocatorias de examen de <strong>%s</strong>.";	// Necessita traduccio
-#elif L==2	// de
-	"Keine Aufrufe f&uuml;r Pr&uuml;fung von <strong>%s</strong>.";
-#elif L==3	// en
-	"No announcements of exams of <strong>%s</strong>.";
-#elif L==4	// es
-	"No hay convocatorias de examen de <strong>%s</strong>.";
-#elif L==5	// fr
-	"Aucune convocation &agrave; un examen de <strong>%s</strong>.";
-#elif L==6	// gn
-	"No hay convocatorias de examen de <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7	// it
-	"Nessun appello d'esame di <strong>%s</strong>.";
-#elif L==8	// pl
-	"Brak ogloszen egzamin&oacute;w <strong>%s</strong>.";
-#elif L==9	// pt
-	"N&atilde;o chamadas para exame de <strong>%s</strong>.";
-#endif
-
 const char *Txt_No_assigned_building =
 #if   L==1	// ca
 	"Sense edifici assignat";
@@ -26256,6 +26234,27 @@ const char *Txt_No_banners =
 	"Brak banners.";
 #elif L==9	// pt
 	"N&atilde;o h&aacute; banners.";
+#endif
+
+const char *Txt_No_calls_for_exams_of_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"No hay convocatorias de examen de <strong>%s</strong>.";	// Necessita traduccio
+#elif L==2	// de
+	"Keine Aufrufe f&uuml;r Pr&uuml;fung von <strong>%s</strong>.";
+#elif L==3	// en
+	"No calls for exams of <strong>%s</strong>.";
+#elif L==4	// es
+	"No hay convocatorias de examen de <strong>%s</strong>.";
+#elif L==5	// fr
+	"Aucune convocation &agrave; un examen de <strong>%s</strong>.";
+#elif L==6	// gn
+	"No hay convocatorias de examen de <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"Nessun appello d'esame di <strong>%s</strong>.";
+#elif L==8	// pl
+	"Brak ogloszen egzamin&oacute;w <strong>%s</strong>.";
+#elif L==9	// pt
+	"N&atilde;o chamadas para exame de <strong>%s</strong>.";
 #endif
 
 const char *Txt_no_course_of_origin =	// Means: "message sent from any course"
@@ -27793,13 +27792,13 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	"Novas atividades"
 #endif
 	,
-	[Ntf_EVENT_EXAM_ANNOUNCEMENT] =
+	[Ntf_EVENT_CALL_FOR_EXAM] =
 #if   L==1	// ca
 	"Noves convocat&ograve;ries d'examen"
 #elif L==2	// de
 	"Neue Aufrufe f&uuml;r Pr&uuml;fung"
 #elif L==3	// en
-	"New announcements of exam"
+	"New calls for exam"
 #elif L==4	// es
 	"Nuevas convocatorias de examen"
 #elif L==5	// fr
@@ -28237,13 +28236,13 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	"Atividade"
 #endif
 	,
-	[Ntf_EVENT_EXAM_ANNOUNCEMENT] =
+	[Ntf_EVENT_CALL_FOR_EXAM] =
 #if   L==1	// ca
 	"Convocat&ograve;ria d'examen"
 #elif L==2	// de
 	"Aufrufe für Pr&uuml;fung"
 #elif L==3	// en
-	"Announcement of exam"
+	"Call for exam"
 #elif L==4	// es
 	"Convocatoria de examen"
 #elif L==5	// fr
@@ -32851,13 +32850,13 @@ const char *Txt_Public_views =
 	"Acessos p&uacute;blicos";
 #endif
 
-const char *Txt_Publish_announcement_OF_EXAM =
+const char *Txt_Publish_call_FOR_EXAM =
 #if   L==1	// ca
 	"Publicar convocat&ograve;ria";
 #elif L==2	// de
 	"Ver&ouml;ffentlichen Aufruf";
 #elif L==3	// en
-	"Publish announcement";
+	"Publish call";
 #elif L==4	// es
 	"Publicar convocatoria";
 #elif L==5	// fr
@@ -46252,27 +46251,6 @@ const char *Txt_The_alphabetical_code_X_is_not_correct =	// Warning: it is very 
 	"O c&oacute;digo alfab&eacute;tico ISO 3166-1 %s n&atilde;o est&aacute; correto.";
 #endif
 
-const char *Txt_The_announcement_of_exam_has_been_successfully_updated =
-#if   L==1	// ca
-	"La convocat&ograve;ria d'examen s'ha actualitzat correctament.";
-#elif L==2	// de
-	"Der Aufruf zur Pr&uuml;fung wurde erfolgreich aktualisiert.";
-#elif L==3	// en
-	"The announcement of exam has been successfully updated.";
-#elif L==4	// es
-	"La convocatoria de examen se ha actualizado correctamente.";
-#elif L==5	// fr
-	"La convocation pour l'examen a &eacute;t&eacute; mis &agrave; jour avec succ&egrave;s.";
-#elif L==6	// gn
-	"La convocatoria de examen se ha actualizado correctamente.";	// Okoteve traducción
-#elif L==7	// it
-	"L'apello d'esame &egrave; stata aggiornata con successo.";
-#elif L==8	// pl
-	"Ogloszenie egzamin zosta&lstrok; pomy&sacute;lnie zaktualizowany.";
-#elif L==9	// pt
-	"A chamada para exame foi atualizada com sucesso.";
-#endif
-
 const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
 	"Las respuestas de la pregunta con c&oacute;digo <strong>%ld</strong>"
@@ -46478,6 +46456,27 @@ const char *Txt_The_building_of_room_X_is_now_Y =	// Warning: it is very importa
 	"Budynek klasy <strong>%s</strong> wynosi teraz <strong>%s</strong>.";
 #elif L==9	// pt
 	"O edif&iacute;cio da sala <strong>%s</strong> &eacute; agora <strong>%s</strong>.";
+#endif
+
+const char *Txt_The_call_for_exam_has_been_successfully_updated =
+#if   L==1	// ca
+	"La convocat&ograve;ria d'examen s'ha actualitzat correctament.";
+#elif L==2	// de
+	"Der Aufruf zur Pr&uuml;fung wurde erfolgreich aktualisiert.";
+#elif L==3	// en
+	"The call for exam has been successfully updated.";
+#elif L==4	// es
+	"La convocatoria de examen se ha actualizado correctamente.";
+#elif L==5	// fr
+	"La convocation pour l'examen a &eacute;t&eacute; mis &agrave; jour avec succ&egrave;s.";
+#elif L==6	// gn
+	"La convocatoria de examen se ha actualizado correctamente.";	// Okoteve traducción
+#elif L==7	// it
+	"L'apello d'esame &egrave; stata aggiornata con successo.";
+#elif L==8	// pl
+	"Ogloszenie egzamin zosta&lstrok; pomy&sacute;lnie zaktualizowany.";
+#elif L==9	// pt
+	"A chamada para exame foi atualizada com sucesso.";
 #endif
 
 const char *Txt_The_capacity_of_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -52779,13 +52778,13 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	"Arquivo compartilhado p&uacute;blico (disciplina)"
 #endif
 	,
-	[TL_NOTE_EXAM_ANNOUNCEMENT] =
+	[TL_NOTE_CALL_FOR_EXAM] =
 #if   L==1	// ca
 	"Convocat&ograve;ria d'examen"
 #elif L==2	// de
 	"Aufrufe für Pr&uuml;fung"
 #elif L==3	// en
-	"Announcement of exam"
+	"Call for exam"
 #elif L==4	// es
 	"Convocatoria de examen"
 #elif L==5	// fr

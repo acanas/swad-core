@@ -160,7 +160,7 @@ void QR_LinkTo (unsigned Size,const char *ParamName,long Cod)
 
 void QR_ExamAnnnouncement (void)
   {
-   extern const char *Txt_Link_to_announcement_of_exam;
+   extern const char *Txt_Link_to_call_for_exam;
    char *URL;
 
    /***** Show QR code with direct link to the exam announcement *****/
@@ -171,7 +171,7 @@ void QR_ExamAnnnouncement (void)
                  Cfg_URL_SWAD_CGI,Gbl.Hierarchy.Crs.CrsCod,
 		 Act_GetActCod (ActSeeAllExaAnn)) < 0)
       Lay_NotEnoughMemoryExit ();
-   HTM_IMG (URL,NULL,Txt_Link_to_announcement_of_exam,
+   HTM_IMG (URL,NULL,Txt_Link_to_call_for_exam,
 	    "style=\"width:250px;height:250px;\"");
    free (URL);
 

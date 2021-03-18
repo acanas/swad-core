@@ -58,7 +58,7 @@ typedef enum
    TL_NOTE_CRS_DOC_PUB_FILE	=  7,	// Public file in documents of course
    TL_NOTE_CRS_SHA_PUB_FILE	=  8,	// Public file in shared files of course
    /* Assessment tab */
-   TL_NOTE_EXAM_ANNOUNCEMENT	=  9,	// Exam announcement in a course
+   TL_NOTE_CALL_FOR_EXAM	=  9,	// Exam announcement in a course
    /* Users tab */
    /* Messages tab */
    TL_NOTE_NOTICE		= 12,	// A public notice in a course

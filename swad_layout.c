@@ -34,11 +34,11 @@
 #include "swad_banner.h"
 #include "swad_box.h"
 #include "swad_calendar.h"
+#include "swad_call_for_exam.h"
 #include "swad_changelog.h"
 #include "swad_config.h"
 #include "swad_connected.h"
 #include "swad_database.h"
-#include "swad_exam_announcement.h"
 #include "swad_exam_session.h"
 #include "swad_firewall.h"
 #include "swad_follow.h"
@@ -495,7 +495,7 @@ static void Lay_WriteScripts (void)
    extern const char *Txt_DAYS_SMALL[7];
    extern const char *Txt_Exam_of_X;
    struct Hld_Holidays Holidays;
-   struct ExaAnn_ExamAnnouncements ExamAnns;
+   struct Cfe_CallsForExams ExamAnns;
    unsigned DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
    unsigned NumHld;
    unsigned NumExamAnnouncement;	// Number of exam announcement
@@ -542,10 +542,10 @@ static void Lay_WriteScripts (void)
       Hld_GetListHolidays (&Holidays);
 
       /***** Reset exam announcements context *****/
-      ExaAnn_ResetExamAnns (&ExamAnns);
+      Cfe_ResetCallsForExams (&ExamAnns);
 
       /***** Create list of exam announcements *****/
-      ExaAnn_CreateListExamAnns (&ExamAnns);
+      Cfe_CreateListCallsForExams (&ExamAnns);
 
       /***** Write script to initialize variables used to draw months *****/
       HTM_SCRIPT_Begin (NULL,NULL);
@@ -579,7 +579,7 @@ static void Lay_WriteScripts (void)
 
       HTM_TxtF ("\tvar LstExamAnnouncements = [];\n");
       for (NumExamAnnouncement = 0;
-	   NumExamAnnouncement < ExamAnns.NumExaAnns;
+	   NumExamAnnouncement < ExamAnns.NumCallsForExams;
 	   NumExamAnnouncement++)
 	 HTM_TxtF ("LstExamAnnouncements.push({ ExaCod: %ld, Year: %u, Month: %u, Day: %u });\n",
 		   ExamAnns.Lst[NumExamAnnouncement].ExaCod,
@@ -590,7 +590,7 @@ static void Lay_WriteScripts (void)
       HTM_SCRIPT_End ();
 
       /***** Free list of exam announcements *****/
-      ExaAnn_FreeListExamAnns (&ExamAnns);
+      Cfe_FreeListCallsForExams (&ExamAnns);
 
       /***** Free list of holidays *****/
       Hld_FreeListHolidays (&Holidays);

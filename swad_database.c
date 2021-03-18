@@ -1214,7 +1214,7 @@ mysql> DESCRIBE exam_announcements;
 			"NumNotif INT NOT NULL DEFAULT 0,"
 			"CrsFullName VARCHAR(2047) NOT NULL,"	// Cns_HIERARCHY_MAX_BYTES_FULL_NAME
 			"Year TINYINT NOT NULL,"
-			"ExamSession VARCHAR(2047) NOT NULL,"	// ExaAnn_MAX_BYTES_SESSION
+			"ExamSession VARCHAR(2047) NOT NULL,"	// Cfe_MAX_BYTES_SESSION
 			"CallDate DATETIME NOT NULL,"
 			"ExamDate DATETIME NOT NULL,"
 			"Duration TIME NOT NULL,"

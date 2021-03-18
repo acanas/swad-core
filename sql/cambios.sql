@@ -10645,7 +10645,7 @@ UPDATE usr_data SET EmailNtfEvents=(((EmailNtfEvents & ~0x7F) << 1) | (EmailNtfE
 
    /* Assessment tab */
    Ntf_EVENT_ASSIGNMENT			=  3,	// old  3
-   Ntf_EVENT_EXAM_ANNOUNCEMENT		=  4,	// old  4
+   Ntf_EVENT_CALL_FOR_EXAM		=  4,	// old  4
    Ntf_EVENT_MARKS_FILE			=  5,	// old  5
 
    /* Enrollment tab */

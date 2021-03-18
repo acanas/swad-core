@@ -31,8 +31,8 @@
 
 #include "swad_alert.h"
 #include "swad_box.h"
+#include "swad_call_for_exam.h"
 #include "swad_course.h"
-#include "swad_exam_announcement.h"
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
@@ -138,7 +138,7 @@ void Tml_Not_ShowHighlightedNote (struct Tml_Timeline *Timeline,
       /* Assessment tab */
       [Ntf_EVENT_ASSIGNMENT       ] = Tml_TOP_MESSAGE_NONE,
       [Ntf_EVENT_SURVEY           ] = Tml_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_EXAM_ANNOUNCEMENT] = Tml_TOP_MESSAGE_NONE,
+      [Ntf_EVENT_CALL_FOR_EXAM] = Tml_TOP_MESSAGE_NONE,
       /* Files tab */
       [Ntf_EVENT_DOCUMENT_FILE    ] = Tml_TOP_MESSAGE_NONE,
       [Ntf_EVENT_TEACHERS_FILE    ] = Tml_TOP_MESSAGE_NONE,
@@ -467,7 +467,7 @@ static void Tml_Not_GetLocationInHierarchy (const struct Tml_Not_Note *Not,
 	 break;
       case TL_NOTE_CRS_DOC_PUB_FILE:
       case TL_NOTE_CRS_SHA_PUB_FILE:
-      case TL_NOTE_EXAM_ANNOUNCEMENT:
+      case TL_NOTE_CALL_FOR_EXAM:
       case TL_NOTE_NOTICE:
 	 /* Get course data */
 	 Hie->Crs.CrsCod = Not->HieCod;
@@ -524,7 +524,7 @@ static void Tml_Not_WriteLocationInHierarchy (const struct Tml_Not_Note *Not,
 	 break;
       case TL_NOTE_CRS_DOC_PUB_FILE:
       case TL_NOTE_CRS_SHA_PUB_FILE:
-      case TL_NOTE_EXAM_ANNOUNCEMENT:
+      case TL_NOTE_CALL_FOR_EXAM:
       case TL_NOTE_NOTICE:
 	 /* Write location (course) in hierarchy */
 	 HTM_DIV_Begin ("class=\"TL_LOC\"");
@@ -572,7 +572,7 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
       [TL_NOTE_CRS_DOC_PUB_FILE ] = ActReqDatSeeDocCrs,
       [TL_NOTE_CRS_SHA_PUB_FILE ] = ActReqDatShaCrs,
       /* Assessment tab */
-      [TL_NOTE_EXAM_ANNOUNCEMENT] = ActSeeOneExaAnn,
+      [TL_NOTE_CALL_FOR_EXAM] = ActSeeOneCfe,
       /* Users tab */
       /* Messages tab */
       [TL_NOTE_NOTICE           ] = ActSeeOneNot,
@@ -598,7 +598,7 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
       [TL_NOTE_CRS_DOC_PUB_FILE ] = "file.svg",
       [TL_NOTE_CRS_SHA_PUB_FILE ] = "file.svg",
       /* Assessment tab */
-      [TL_NOTE_EXAM_ANNOUNCEMENT] = "bullhorn.svg",
+      [TL_NOTE_CALL_FOR_EXAM] = "bullhorn.svg",
       /* Users tab */
       /* Messages tab */
       [TL_NOTE_NOTICE           ] = "sticky-note.svg",
@@ -658,12 +658,12 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
 	       if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 		  Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
 	       break;
-	    case TL_NOTE_EXAM_ANNOUNCEMENT:
+	    case TL_NOTE_CALL_FOR_EXAM:
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
 	       Frm_BeginFormUniqueAnchor (TL_DefaultActions[Not->NoteType],
 					  Anchor);	// Locate on this specific exam
 	       Frm_FreeAnchorStr (Anchor);
-	       ExaAnn_PutHiddenParamExaCod (Not->Cod);
+	       Cfe_PutHiddenParamExaCod (Not->Cod);
 	       if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 		  Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
 	       break;
@@ -741,8 +741,8 @@ void Tml_Not_GetNoteSummary (const struct Tml_Not_Note *Not,
       case TL_NOTE_CRS_SHA_PUB_FILE:
 	 Brw_GetSummaryAndContentOfFile (SummaryStr,NULL,Not->Cod,false);
          break;
-      case TL_NOTE_EXAM_ANNOUNCEMENT:
-         ExaAnn_GetSummaryAndContentExamAnn (SummaryStr,NULL,Not->Cod,false);
+      case TL_NOTE_CALL_FOR_EXAM:
+         Cfe_GetSummaryAndContentCallForExam (SummaryStr,NULL,Not->Cod,false);
          break;
       case TL_NOTE_POST:
 	 // Not applicable
@@ -916,7 +916,7 @@ void Tml_Not_StoreAndPublishNoteInternal (Tml_Not_NoteType_t NoteType,long Cod,
 	 break;
       case TL_NOTE_CRS_DOC_PUB_FILE:
       case TL_NOTE_CRS_SHA_PUB_FILE:
-      case TL_NOTE_EXAM_ANNOUNCEMENT:
+      case TL_NOTE_CALL_FOR_EXAM:
       case TL_NOTE_NOTICE:
 	 HieCod = Gbl.Hierarchy.Crs.CrsCod;
 	 break;

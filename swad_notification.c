@@ -33,11 +33,11 @@
 
 #include "swad_action.h"
 #include "swad_box.h"
+#include "swad_call_for_exam.h"
 #include "swad_config.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_enrolment.h"
-#include "swad_exam_announcement.h"
 #include "swad_figure.h"
 #include "swad_follow.h"
 #include "swad_form.h"
@@ -85,7 +85,7 @@ const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    /* Assessment tab */
    [Ntf_EVENT_ASSIGNMENT       ] = "assignment",
    [Ntf_EVENT_SURVEY           ] = "survey",
-   [Ntf_EVENT_EXAM_ANNOUNCEMENT] = "examAnnouncement",
+   [Ntf_EVENT_CALL_FOR_EXAM] = "examAnnouncement",
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = "documentFile",
    [Ntf_EVENT_TEACHERS_FILE    ] = "teachersFile",
@@ -123,7 +123,7 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    /* Assessment tab */
    [Ntf_EVENT_ASSIGNMENT       ] = ActSeeAsg,
    [Ntf_EVENT_SURVEY           ] = ActSeeAllSvy,
-   [Ntf_EVENT_EXAM_ANNOUNCEMENT] = ActSeeAllExaAnn,
+   [Ntf_EVENT_CALL_FOR_EXAM] = ActSeeAllExaAnn,
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = ActSeeAdmDocCrsGrp,
    [Ntf_EVENT_TEACHERS_FILE    ] = ActAdmTchCrsGrp,
@@ -166,7 +166,7 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    /* Assessment tab */
    [Ntf_EVENT_ASSIGNMENT       ] = "NotifyNtfEventAssignment",
    [Ntf_EVENT_SURVEY           ] = "NotifyNtfEventSurvey",
-   [Ntf_EVENT_EXAM_ANNOUNCEMENT] = "NotifyNtfEventExamAnnouncement",
+   [Ntf_EVENT_CALL_FOR_EXAM] = "NotifyNtfEventExamAnnouncement",
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = "NotifyNtfEventDocumentFile",
    [Ntf_EVENT_TEACHERS_FILE    ] = "NotifyNtfEventTeachersFile",
@@ -205,7 +205,7 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    /* Assessment tab */
    [Ntf_EVENT_ASSIGNMENT       ] = "EmailNtfEventAssignment",
    [Ntf_EVENT_SURVEY           ] = "EmailNtfEventSurvey",
-   [Ntf_EVENT_EXAM_ANNOUNCEMENT] = "EmailNtfEventExamAnnouncement",
+   [Ntf_EVENT_CALL_FOR_EXAM] = "EmailNtfEventExamAnnouncement",
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = "EmailNtfEventDocumentFile",
    [Ntf_EVENT_TEACHERS_FILE    ] = "EmailNtfEventTeachersFile",
@@ -244,7 +244,7 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    /* Assessment tab */
    [Ntf_EVENT_ASSIGNMENT       ] = "edit.svg",
    [Ntf_EVENT_SURVEY           ] = "poll.svg",
-   [Ntf_EVENT_EXAM_ANNOUNCEMENT] = "bullhorn.svg",
+   [Ntf_EVENT_CALL_FOR_EXAM] = "bullhorn.svg",
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = "file.svg",
    [Ntf_EVENT_TEACHERS_FILE    ] = "file.svg",
@@ -858,8 +858,8 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       case Ntf_EVENT_ASSIGNMENT:
          Asg_GetNotifAssignment (SummaryStr,ContentStr,Cod,GetContent);
          break;
-      case Ntf_EVENT_EXAM_ANNOUNCEMENT:
-         ExaAnn_GetSummaryAndContentExamAnn (SummaryStr,ContentStr,Cod,GetContent);
+      case Ntf_EVENT_CALL_FOR_EXAM:
+         Cfe_GetSummaryAndContentCallForExam (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_MARKS_FILE:
          Mrk_GetNotifMyMarks (SummaryStr,ContentStr,Cod,UsrCod,GetContent);
@@ -1250,7 +1250,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 				   Cod,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,
 				   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
-      case Ntf_EVENT_EXAM_ANNOUNCEMENT:
+      case Ntf_EVENT_CALL_FOR_EXAM:
       case Ntf_EVENT_NOTICE:
          NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
@@ -1708,7 +1708,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	       case Ntf_EVENT_TEACHERS_FILE:
 	       case Ntf_EVENT_SHARED_FILE:
 	       case Ntf_EVENT_ASSIGNMENT:
-	       case Ntf_EVENT_EXAM_ANNOUNCEMENT:
+	       case Ntf_EVENT_CALL_FOR_EXAM:
 	       case Ntf_EVENT_MARKS_FILE:
 	       case Ntf_EVENT_ENROLMENT_STD:
 	       case Ntf_EVENT_ENROLMENT_NET:

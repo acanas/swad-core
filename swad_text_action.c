@@ -9556,7 +9556,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from the assessment zone of a project"		// Precisa de tradução
 #endif
 	,
-	[ActSeeOneExaAnn] =
+	[ActSeeOneCfe] =
 #if   L==1	// ca
 	"See one exam announcement"		// Necessita traducció
 #elif L==2	// de
@@ -9577,7 +9577,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See one exam announcement"		// Precisa de tradução
 #endif
 	,
-	[ActSeeDatExaAnn] =
+	[ActSeeDatCfe] =
 #if   L==1	// ca
 	"See exam announcements of a given date"	// Necessita traducció
 #elif L==2	// de
@@ -9598,7 +9598,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See exam announcements of a given date"	// Precisa de tradução
 #endif
 	,
-	[ActEdiExaAnn] =
+	[ActEdiCfe] =
 #if   L==1	// ca
 	"Edit an exam announcement"		// Necessita traducció
 #elif L==2	// de
@@ -9619,7 +9619,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit an exam announcement"		// Precisa de tradução
 #endif
 	,
-	[ActRcvExaAnn] =
+	[ActRcvCfe] =
 #if   L==1	// ca
 	"Send an exam announcement"		// Necessita traducció
 #elif L==2	// de
@@ -9640,7 +9640,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send an exam announcement"		// Precisa de tradução
 #endif
 	,
-	[ActPrnExaAnn] =
+	[ActPrnCfe] =
 #if   L==1	// ca
 	"See an exam announcement ready to be printed"		// Necessita traducció
 #elif L==2	// de
@@ -9661,7 +9661,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See an exam announcement ready to be printed"		// Precisa de tradução
 #endif
 	,
-	[ActReqRemExaAnn] =
+	[ActReqRemCfe] =
 #if   L==1	// ca
 	"Request removal of an exam announcement"			// Necessita traducció
 #elif L==2	// de
@@ -9682,7 +9682,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of an exam announcement"			// Precisa de tradução
 #endif
 	,
-	[ActRemExaAnn] =
+	[ActRemCfe] =
 #if   L==1	// ca
 	"Remove exam announcement"		// Necessita traducció
 #elif L==2	// de
@@ -9703,7 +9703,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove exam announcement"		// Precisa de tradução
 #endif
 	,
-	[ActHidExaAnn] =
+	[ActHidCfe] =
 #if   L==1	// ca
 	"Hide exam announcement"		// Necessita traducció
 #elif L==2	// de
@@ -9724,7 +9724,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide exam announcement"		// Precisa de tradução
 #endif
 	,
-	[ActUnhExaAnn] =
+	[ActUnhCfe] =
 #if   L==1	// ca
 	"Unhide exam announcement"		// Necessita traducció
 #elif L==2	// de

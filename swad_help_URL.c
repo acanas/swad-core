@@ -1873,67 +1873,67 @@ const char *Hlp_ASSESSMENT_Surveys_questions =
 	"ASSESSMENT.Surveys.en#questions";
 #endif
 
-const char *Hlp_ASSESSMENT_Announcements =
+const char *Hlp_ASSESSMENT_Calls_for_exams =
 #if   L==1
-	"ASSESSMENT.Announcements.es";
+	"ASSESSMENT.Calls_for_exams.es";
 #elif L==2
-	"ASSESSMENT.Announcements.en";
+	"ASSESSMENT.Calls_for_exams.en";
 #elif L==3
-	"ASSESSMENT.Announcements.en";
+	"ASSESSMENT.Calls_for_exams.en";
 #elif L==4
-	"ASSESSMENT.Announcements.es";
+	"ASSESSMENT.Calls_for_exams.es";
 #elif L==5
-	"ASSESSMENT.Announcements.en";
+	"ASSESSMENT.Calls_for_exams.en";
 #elif L==6
-	"ASSESSMENT.Announcements.es";
+	"ASSESSMENT.Calls_for_exams.es";
 #elif L==7
-	"ASSESSMENT.Announcements.en";
+	"ASSESSMENT.Calls_for_exams.en";
 #elif L==8
-	"ASSESSMENT.Announcements.en";
+	"ASSESSMENT.Calls_for_exams.en";
 #elif L==9
-	"ASSESSMENT.Announcements.en";
+	"ASSESSMENT.Calls_for_exams.en";
 #endif
 
-const char *Hlp_ASSESSMENT_Announcements_new_announcement =
+const char *Hlp_ASSESSMENT_Calls_for_exam_new_call =
 #if   L==1
-	"ASSESSMENT.Announcements.es#nueva-convocatoria";
+	"ASSESSMENT.Calls_for_exams.es#nueva-convocatoria";
 #elif L==2
-	"ASSESSMENT.Announcements.en#new-announcement";
+	"ASSESSMENT.Calls_for_exams.en#new-call";
 #elif L==3
-	"ASSESSMENT.Announcements.en#new-announcement";
+	"ASSESSMENT.Calls_for_exams.en#new-call";
 #elif L==4
-	"ASSESSMENT.Announcements.es#nueva-convocatoria";
+	"ASSESSMENT.Calls_for_exams.es#nueva-convocatoria";
 #elif L==5
-	"ASSESSMENT.Announcements.en#new-announcement";
+	"ASSESSMENT.Calls_for_exams.en#new-call";
 #elif L==6
-	"ASSESSMENT.Announcements.es#nueva-convocatoria";
+	"ASSESSMENT.Calls_for_exams.es#nueva-convocatoria";
 #elif L==7
-	"ASSESSMENT.Announcements.en#new-announcement";
+	"ASSESSMENT.Calls_for_exams.en#new-call";
 #elif L==8
-	"ASSESSMENT.Announcements.en#new-announcement";
+	"ASSESSMENT.Calls_for_exams.en#new-call";
 #elif L==9
-	"ASSESSMENT.Announcements.en#new-announcement";
+	"ASSESSMENT.Calls_for_exams.en#new-call";
 #endif
 
 const char *Hlp_ASSESSMENT_Announcements_edit_announcement =
 #if   L==1
-	"ASSESSMENT.Announcements.es#editar-convocatoria";
+	"ASSESSMENT.Calls_for_exams.es#editar-convocatoria";
 #elif L==2
-	"ASSESSMENT.Announcements.en#edit-announcement";
+	"ASSESSMENT.Calls_for_exams.en#edit-call";
 #elif L==3
-	"ASSESSMENT.Announcements.en#edit-announcement";
+	"ASSESSMENT.Calls_for_exams.en#edit-call";
 #elif L==4
-	"ASSESSMENT.Announcements.es#editar-convocatoria";
+	"ASSESSMENT.Calls_for_exams.es#editar-convocatoria";
 #elif L==5
-	"ASSESSMENT.Announcements.en#edit-announcement";
+	"ASSESSMENT.Calls_for_exams.en#edit-call";
 #elif L==6
-	"ASSESSMENT.Announcements.es#editar-convocatoria";
+	"ASSESSMENT.Calls_for_exams.es#editar-convocatoria";
 #elif L==7
-	"ASSESSMENT.Announcements.en#edit-announcement";
+	"ASSESSMENT.Calls_for_exams.en#edit-call";
 #elif L==8
-	"ASSESSMENT.Announcements.en#edit-announcement";
+	"ASSESSMENT.Calls_for_exams.en#edit-call";
 #elif L==9
-	"ASSESSMENT.Announcements.en#edit-announcement";
+	"ASSESSMENT.Calls_for_exams.en#edit-call";
 #endif
 
 /***** FILES tab *****/

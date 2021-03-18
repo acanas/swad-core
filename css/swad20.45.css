@@ -3272,13 +3272,13 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 
 /***************************** Exam announcement *****************************/
 /* Bottom space is used for signatures */
-.EXA_ANN_VISIBLE
+.CALL_FOR_EXAM_VISIBLE
 	{
 	box-sizing:border-box;
 	width:100%;
 	padding:25px 25px 125px 25px;
 	}
-.EXA_ANN_HIDDEN
+.CALL_FOR_EXAM_HIDDEN
 	{
 	box-sizing:border-box;
 	width:100%;
