@@ -1255,22 +1255,22 @@ mysql> DESCRIBE exa_sets;
 		   "UNIQUE INDEX(SetCod),"
 		   "UNIQUE INDEX(ExaCod,SetInd))");
 
-   /***** Table figures *****/
+   /***** Table fig_figures *****/
    /*
-mysql> DESCRIBE figures;
-+-------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
-| Field       | Type                                      | Null | Key | Default           | Extra                       |
-+-------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
-| Figure      | int(11)                                   | NO   | PRI | NULL              |                             |
-| Scope       | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | PRI | Sys               |                             |
-| Cod         | int(11)                                   | NO   | PRI | -1                |                             |
-| ValueInt    | int(11)                                   | NO   |     | 0                 |                             |
-| ValueDouble | double                                    | NO   |     | 0                 |                             |
-| LastUpdate  | timestamp                                 | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
-+-------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
-6 rows in set (0.00 sec)
+mysql> DESCRIBE fig_figures;
++-------------+-------------------------------------------+------+-----+-------------------+-----------------------------------------------+
+| Field       | Type                                      | Null | Key | Default           | Extra                                         |
++-------------+-------------------------------------------+------+-----+-------------------+-----------------------------------------------+
+| Figure      | int                                       | NO   | PRI | NULL              |                                               |
+| Scope       | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | PRI | Sys               |                                               |
+| Cod         | int                                       | NO   | PRI | -1                |                                               |
+| ValueInt    | int                                       | NO   |     | 0                 |                                               |
+| ValueDouble | double                                    | NO   |     | 0                 |                                               |
+| LastUpdate  | timestamp                                 | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++-------------+-------------------------------------------+------+-----+-------------------+-----------------------------------------------+
+6 rows in set (0.01 sec)
    */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS figures ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS fig_figures ("
 			"Figure INT NOT NULL,"
 			"Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',"
 			"Cod INT NOT NULL DEFAULT -1,"

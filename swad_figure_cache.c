@@ -69,7 +69,7 @@ void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
      {
       case FigCch_UNSIGNED:
 	 DB_QueryREPLACE ("can not update cached figure value",
-			  "REPLACE INTO figures"
+			  "REPLACE INTO fig_figures"
 			  " (Figure,Scope,Cod,ValueInt,ValueDouble)"
 			  " VALUES"
 			  " (%u,'%s',%ld,%u,'0.0')",
@@ -79,7 +79,7 @@ void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
       case FigCch_DOUBLE:
          Str_SetDecimalPointToUS ();	// To write the decimal point as a dot
 	 DB_QueryREPLACE ("can not update cached figure value",
-			  "REPLACE INTO figures"
+			  "REPLACE INTO fig_figures"
 			  " (Figure,Scope,Cod,ValueInt,ValueDouble)"
 			  " VALUES"
 			  " (%u,'%s',%ld,0,'%.15lg')",
@@ -137,10 +137,12 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
 
    /***** Get figure's value if cached and recent *****/
    if (DB_QuerySELECT (&mysql_res,"can not get cached figure value",
-		       "SELECT %s"
-		       " FROM figures"
-		       " WHERE Figure=%u AND Scope='%s' AND Cod=%ld"
-		       " AND LastUpdate>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+		       "SELECT %s"		// row[0]
+		       " FROM fig_figures"
+		       " WHERE Figure=%u"
+		         " AND Scope='%s'"
+		         " AND Cod=%ld"
+		         " AND LastUpdate>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 		       Field[Type],
 		       (unsigned) Figure,Sco_GetDBStrFromScope (Scope),Cod,
 		       TimeCached[Scope]))

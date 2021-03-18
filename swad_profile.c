@@ -830,7 +830,8 @@ void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
 					       "NumFileViews,"				// row[4]
 					       "NumForPst,"				// row[5]
 					       "NumMsgSnt"				// row[6]
-				        " FROM usr_figures WHERE UsrCod=%ld",
+				         " FROM usr_figures"
+				        " WHERE UsrCod=%ld",
 				        UsrCod);
    if (NumRows)
      {
@@ -1074,9 +1075,10 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
 			 "UPDATE usr_figures"
-			 " SET FirstClickTime=FROM_UNIXTIME(%ld)"
+			   " SET FirstClickTime=FROM_UNIXTIME(%ld)"
 			 " WHERE UsrCod=%ld",
-		         (long) UsrFigures.FirstClickTimeUTC,UsrCod);
+		         (long) UsrFigures.FirstClickTimeUTC,
+		         UsrCod);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
@@ -1105,9 +1107,11 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
       /***** Update number of clicks in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
-			 "UPDATE usr_figures SET NumClicks=%ld"
+			 "UPDATE usr_figures"
+			   " SET NumClicks=%ld"
 			 " WHERE UsrCod=%ld",
-		         UsrFigures.NumClicks,UsrCod);
+		         UsrFigures.NumClicks,
+		         UsrCod);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
@@ -1132,9 +1136,11 @@ static void Prf_GetNumSocialPubsAndStoreAsUsrFigure (long UsrCod)
       /***** Update number of forum posts in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
-			 "UPDATE usr_figures SET NumSocPub=%ld"
+			 "UPDATE usr_figures"
+			   " SET NumSocPub=%ld"
 			 " WHERE UsrCod=%ld",
-		         UsrFigures.NumSocPub,UsrCod);
+		         UsrFigures.NumSocPub,
+		         UsrCod);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
@@ -1186,9 +1192,11 @@ static void Prf_GetNumForumPostsAndStoreAsUsrFigure (long UsrCod)
       /***** Update number of forum posts in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
-			 "UPDATE usr_figures SET NumForPst=%ld"
+			 "UPDATE usr_figures"
+			   " SET NumForPst=%ld"
 			 " WHERE UsrCod=%ld",
-		         UsrFigures.NumForPst,UsrCod);
+		         UsrFigures.NumForPst,
+		         UsrCod);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
@@ -1213,9 +1221,11 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod)
       /***** Update number of messages sent in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
-			 "UPDATE usr_figures SET NumMsgSnt=%ld"
+			 "UPDATE usr_figures"
+			   " SET NumMsgSnt=%ld"
 			 " WHERE UsrCod=%ld",
-		         UsrFigures.NumMsgSnt,UsrCod);
+		         UsrFigures.NumMsgSnt,
+		         UsrCod);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
@@ -1297,7 +1307,8 @@ void Prf_RemoveUsrFigures (long UsrCod)
   {
    /***** Remove user's figures *****/
    DB_QueryDELETE ("can not delete user's figures",
-		   "DELETE FROM usr_figures WHERE UsrCod=%ld",
+		   "DELETE FROM usr_figures"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
 
@@ -1308,7 +1319,8 @@ void Prf_RemoveUsrFigures (long UsrCod)
 static bool Prf_CheckIfUsrFiguresExists (long UsrCod)
   {
    return (DB_QueryCOUNT ("can not get user's first click",
-			  "SELECT COUNT(*) FROM usr_figures"
+			  "SELECT COUNT(*)"
+			   " FROM usr_figures"
 			  " WHERE UsrCod=%ld",
 			  UsrCod) != 0);
   }
@@ -1322,8 +1334,10 @@ void Prf_IncrementNumClicksUsr (long UsrCod)
    /***** Increment number of clicks *****/
    // If NumClicks < 0 ==> not yet calculated, so do nothing
    DB_QueryINSERT ("can not increment user's clicks",
-		   "UPDATE IGNORE usr_figures SET NumClicks=NumClicks+1"
-		   " WHERE UsrCod=%ld AND NumClicks>=0",
+		   "UPDATE IGNORE usr_figures"
+		     " SET NumClicks=NumClicks+1"
+		   " WHERE UsrCod=%ld"
+		     " AND NumClicks>=0",
 	           UsrCod);
   }
 

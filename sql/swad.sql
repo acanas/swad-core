@@ -571,9 +571,9 @@ CREATE TABLE IF NOT EXISTS exa_sets (
 	UNIQUE INDEX(SetCod),
 	UNIQUE INDEX(ExaCod,SetInd));
 --
--- Table figures: stores cached figures for quick retrieval of figures (i.e. number of students in the platform)
+-- Table fig_figures: stores cached figures for quick retrieval of figures (i.e. number of students in the platform)
 --
-CREATE TABLE IF NOT EXISTS figures (
+CREATE TABLE IF NOT EXISTS fig_figures (
 	Figure INT NOT NULL,
 	Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',
 	Cod INT NOT NULL DEFAULT -1,
