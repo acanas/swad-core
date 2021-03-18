@@ -164,9 +164,9 @@ CREATE TABLE IF NOT EXISTS brw_expanded_folders (
 	INDEX(FileBrowser,Cod),
 	INDEX(WorksUsrCod));
 --
--- Table file_cache: stores the media private paths linked from public directories in current session 
+-- Table brw_file_caches: stores the media private paths linked from public directories in current session 
 --
-CREATE TABLE IF NOT EXISTS file_cache (
+CREATE TABLE IF NOT EXISTS brw_file_caches (
 	SessionId CHAR(43) NOT NULL,
 	PrivPath TEXT COLLATE latin1_bin NOT NULL,
 	TmpPubDir TEXT COLLATE latin1_bin NOT NULL,

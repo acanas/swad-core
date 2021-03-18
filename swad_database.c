@@ -435,9 +435,9 @@ mysql> DESCRIBE brw_expanded_folders;
 		   "INDEX(FileBrowser,Cod),"
 		   "INDEX(WorksUsrCod))");
 
-   /***** Table file_cache *****/
+   /***** Table brw_file_caches *****/
 /*
-mysql> DESCRIBE file_cache;
+mysql> DESCRIBE brw_file_caches;
 +-----------+----------+------+-----+---------+-------+
 | Field     | Type     | Null | Key | Default | Extra |
 +-----------+----------+------+-----+---------+-------+
@@ -447,7 +447,7 @@ mysql> DESCRIBE file_cache;
 +-----------+----------+------+-----+---------+-------+
 3 rows in set (0.01 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_cache ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_file_caches ("
 			"SessionId CHAR(43) NOT NULL,"			// Cns_BYTES_SESSION_ID
 			"PrivPath VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
 			"TmpPubDir VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
