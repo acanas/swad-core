@@ -987,9 +987,9 @@ CREATE TABLE IF NOT EXISTS log_ws (
 	INDEX(PlgCod),
 	INDEX(FunCod));
 --
--- Table mail_domains: stores e-mail domains to which sending of notifications is allowed
+-- Table ntf_mail_domains: stores e-mail domains to which sending of notifications is allowed
 --
-CREATE TABLE IF NOT EXISTS mail_domains (
+CREATE TABLE IF NOT EXISTS ntf_mail_domains (
 	MaiCod INT NOT NULL AUTO_INCREMENT,
 	Domain VARCHAR(255) NOT NULL,
 	Info VARCHAR(2047) NOT NULL,

@@ -2065,9 +2065,9 @@ mysql> DESCRIBE log_ws;
 		   "INDEX(PlgCod),"
 		   "INDEX(FunCod))");
 
-   /***** Table mail_domains *****/
+   /***** Table ntf_mail_domains *****/
 /*
-mysql> DESCRIBE mail_domains;
+mysql> DESCRIBE ntf_mail_domains;
 +--------+---------------+------+-----+---------+----------------+
 | Field  | Type          | Null | Key | Default | Extra          |
 +--------+---------------+------+-----+---------+----------------+
@@ -2077,7 +2077,7 @@ mysql> DESCRIBE mail_domains;
 +--------+---------------+------+-----+---------+----------------+
 3 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mail_domains ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS ntf_mail_domains ("
 			"MaiCod INT NOT NULL AUTO_INCREMENT,"
 			"Domain VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_EMAIL_ADDRESS
 			"Info VARCHAR(2047) NOT NULL,"	// Mai_MAX_BYTES_MAIL_INFO

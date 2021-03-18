@@ -280,20 +280,20 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
 
    /***** Get mail domains from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get mail domains",
-			     "(SELECT mail_domains.MaiCod,"
-				     "mail_domains.Domain AS Domain,"
-				     "mail_domains.Info AS Info,"
-				     "T1.N AS N"
-			     " FROM mail_domains,T1"
-			     " WHERE mail_domains.Domain=T1.Domain COLLATE 'latin1_bin')"
+			     "(SELECT ntf_mail_domains.MaiCod,"			// row[0]
+				     "ntf_mail_domains.Domain AS Domain,"	// row[1]
+				     "ntf_mail_domains.Info AS Info,"		// row[2]
+				     "T1.N AS N"				// row[3]
+			       " FROM ntf_mail_domains,T1"
+			      " WHERE ntf_mail_domains.Domain=T1.Domain COLLATE 'latin1_bin')"
 			     " UNION "
-			     "(SELECT MaiCod,"
-				     "Domain,"
-				     "Info,"
-				     "0 AS N"
-			     " FROM mail_domains"
-			     " WHERE Domain NOT IN"
-			     " (SELECT Domain COLLATE 'latin1_bin' FROM T2))"
+			     "(SELECT MaiCod,"					// row[0]
+				     "Domain,"					// row[1]
+				     "Info,"					// row[2]
+				     "0 AS N"					// row[3]
+			       " FROM ntf_mail_domains"
+			      " WHERE Domain NOT IN"
+			            " (SELECT Domain COLLATE 'latin1_bin' FROM T2))"
 			     " ORDER BY %s",	// COLLATE necessary to avoid error in comparisons
 			     OrderBySubQuery[Gbl.Mails.SelectedOrder]);
 
@@ -385,7 +385,8 @@ static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MA
    /***** Get number of mail_domains with a name from database *****/
    return (DB_QueryCOUNT ("can not check if a mail domain"
 			  " is allowed for notifications",
-			  "SELECT COUNT(*) FROM mail_domains"
+			  "SELECT COUNT(*)"
+			   " FROM ntf_mail_domains"
 			  " WHERE Domain='%s'",
 			  MailDomain) != 0);
   }
@@ -430,7 +431,9 @@ void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
       /***** Get data of a mail domain from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get data"
 					   " of a mail domain",
-				"SELECT Domain,Info FROM mail_domains"
+				"SELECT Domain,"	// row[0]
+				       "Info"		// row[1]
+				 " FROM ntf_mail_domains"
 				" WHERE MaiCod=%ld",
 				Mai->MaiCod);
 
@@ -575,7 +578,8 @@ void Mai_RemoveMailDomain (void)
 
    /***** Remove mail *****/
    DB_QueryDELETE ("can not remove a mail domain",
-		   "DELETE FROM mail_domains WHERE MaiCod=%ld",
+		   "DELETE FROM ntf_mail_domains"
+		   " WHERE MaiCod=%ld",
 		   Mai_EditingMai->MaiCod);
 
    /***** Write message to show the change made *****/
@@ -696,8 +700,10 @@ static bool Mai_CheckIfMailDomainNameExists (const char *FieldName,const char *N
    /***** Get number of mail_domains with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name"
 			  " of a mail domain already existed",
-			  "SELECT COUNT(*) FROM mail_domains"
-			  " WHERE %s='%s' AND MaiCod<>%ld",
+			  "SELECT COUNT(*)"
+			   " FROM ntf_mail_domains"
+			  " WHERE %s='%s'"
+			    " AND MaiCod<>%ld",
 			  FieldName,Name,MaiCod) != 0);
   }
 
@@ -709,7 +715,9 @@ static void Mai_UpdateMailDomainNameDB (long MaiCod,const char *FieldName,const 
   {
    /***** Update mail domain changing old name by new name */
    DB_QueryUPDATE ("can not update the name of a mail domain",
-		   "UPDATE mail_domains SET %s='%s' WHERE MaiCod=%ld",
+		   "UPDATE ntf_mail_domains"
+		     " SET %s='%s'"
+		   " WHERE MaiCod=%ld",
 	           FieldName,NewMaiName,MaiCod);
   }
 
@@ -855,11 +863,12 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
   {
    /***** Create a new mail *****/
    DB_QueryINSERT ("can not create mail domain",
-		   "INSERT INTO mail_domains"
+		   "INSERT INTO ntf_mail_domains"
 		   " (Domain,Info)"
 		   " VALUES"
 		   " ('%s','%s')",
-	           Mai->Domain,Mai->Info);
+	           Mai->Domain,
+	           Mai->Info);
   }
 
 /*****************************************************************************/
