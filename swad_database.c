@@ -409,6 +409,32 @@ mysql> DESCRIBE brw_clipboards;
 		   "INDEX(FileBrowser,Cod),"
 		   "INDEX(WorksUsrCod))");
 
+   /***** Table brw_expanded_folders *****/
+/*
+mysql> DESCRIBE brw_expanded_folders;
++-------------+------------+------+-----+---------+-------+
+| Field       | Type       | Null | Key | Default | Extra |
++-------------+------------+------+-----+---------+-------+
+| UsrCod      | int(11)    | NO   | MUL | NULL    |       |
+| FileBrowser | tinyint(4) | NO   | MUL | NULL    |       |
+| Cod         | int(11)    | NO   |     | -1      |       |
+| WorksUsrCod | int(11)    | NO   | MUL | NULL    |       |
+| Path        | text       | NO   |     | NULL    |       |
+| ClickTime   | datetime   | NO   |     | NULL    |       |
++-------------+------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_expanded_folders ("
+			"UsrCod INT NOT NULL,"
+			"FileBrowser TINYINT NOT NULL,"
+			"Cod INT NOT NULL DEFAULT -1,"
+			"WorksUsrCod INT NOT NULL,"
+			"Path TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
+			"ClickTime DATETIME NOT NULL,"
+		   "INDEX(UsrCod,FileBrowser,Cod),"
+		   "INDEX(FileBrowser,Cod),"
+		   "INDEX(WorksUsrCod))");
+
    /***** Table cfe_calls_for_exams *****/
 /*
 mysql> DESCRIBE cfe_calls_for_exams;
@@ -1228,32 +1254,6 @@ mysql> DESCRIBE exa_sets;
 			"Title VARCHAR(2047) NOT NULL,"	// ExaSet_MAX_BYTES_TITLE
 		   "UNIQUE INDEX(SetCod),"
 		   "UNIQUE INDEX(ExaCod,SetInd))");
-
-   /***** Table expanded_folders *****/
-/*
-mysql> DESCRIBE expanded_folders;
-+-------------+------------+------+-----+---------+-------+
-| Field       | Type       | Null | Key | Default | Extra |
-+-------------+------------+------+-----+---------+-------+
-| UsrCod      | int(11)    | NO   | MUL | NULL    |       |
-| FileBrowser | tinyint(4) | NO   | MUL | NULL    |       |
-| Cod         | int(11)    | NO   |     | -1      |       |
-| WorksUsrCod | int(11)    | NO   | MUL | NULL    |       |
-| Path        | text       | NO   |     | NULL    |       |
-| ClickTime   | datetime   | NO   |     | NULL    |       |
-+-------------+------------+------+-----+---------+-------+
-6 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS expanded_folders ("
-			"UsrCod INT NOT NULL,"
-			"FileBrowser TINYINT NOT NULL,"
-			"Cod INT NOT NULL DEFAULT -1,"
-			"WorksUsrCod INT NOT NULL,"
-			"Path TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
-			"ClickTime DATETIME NOT NULL,"
-		   "INDEX(UsrCod,FileBrowser,Cod),"
-		   "INDEX(FileBrowser,Cod),"
-		   "INDEX(WorksUsrCod))");
 
    /***** Table figures *****/
    /*

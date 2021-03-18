@@ -607,6 +607,10 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
+	Version 20.51.2:  Mar 18, 2021  Expanded folders database table renamed. (307539 lines)
+					1 change necessary in database:
+RENAME TABLE expanded_folders TO brw_expanded_folders;
+
 	Version 20.51.1:  Mar 18, 2021  Calls for exams database table renamed. (? lines)
 					1 change necessary in database:
 RENAME TABLE exam_announcements TO cfe_calls_for_exams;

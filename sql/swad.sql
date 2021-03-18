@@ -151,6 +151,19 @@ CREATE TABLE IF NOT EXISTS brw_clipboards (
 	INDEX(FileBrowser,Cod),
 	INDEX(WorksUsrCod));
 --
+-- Table brw_expanded_folders: stores the expanded folders for each user
+--
+CREATE TABLE IF NOT EXISTS brw_expanded_folders (
+	UsrCod INT NOT NULL,
+	FileBrowser TINYINT NOT NULL,
+	Cod INT NOT NULL DEFAULT -1,
+	WorksUsrCod INT NOT NULL,
+	Path TEXT COLLATE latin1_bin NOT NULL,
+	ClickTime DATETIME NOT NULL,
+	INDEX(UsrCod,FileBrowser,Cod),
+	INDEX(FileBrowser,Cod),
+	INDEX(WorksUsrCod));
+--
 -- Table cfe_calls_for_exams: stores the calls for examination
 --
 CREATE TABLE IF NOT EXISTS cfe_calls_for_exams (
@@ -557,19 +570,6 @@ CREATE TABLE IF NOT EXISTS exa_sets (
 	Title VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(SetCod),
 	UNIQUE INDEX(ExaCod,SetInd));
---
--- Table expanded_folders: stores the expanded folders for each user
---
-CREATE TABLE IF NOT EXISTS expanded_folders (
-	UsrCod INT NOT NULL,
-	FileBrowser TINYINT NOT NULL,
-	Cod INT NOT NULL DEFAULT -1,
-	WorksUsrCod INT NOT NULL,
-	Path TEXT COLLATE latin1_bin NOT NULL,
-	ClickTime DATETIME NOT NULL,
-	INDEX(UsrCod,FileBrowser,Cod),
-	INDEX(FileBrowser,Cod),
-	INDEX(WorksUsrCod));
 --
 -- Table figures: stores cached figures for quick retrieval of figures (i.e. number of students in the platform)
 --
