@@ -273,8 +273,8 @@ static const Brw_FileBrowser_t Brw_FileBrowserForDB_expanded_folders[Brw_NUM_TYP
    [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
   };
 
-// Browsers types for database "file_browser_last" table
-// Assignments and works are stored as one in file_browser_last...
+// Browsers types for database "brw_last" table
+// Assignments and works are stored as one in brw_last...
 // ...because a user views them at the same time
 static const Brw_FileBrowser_t Brw_FileBrowserForDB_file_browser_last[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -4206,7 +4206,7 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
           the last time users visited file zones *****/
    DB_QueryDELETE ("can not remove file last visits"
 		   " to files of an institution",
-		   "DELETE FROM file_browser_last"
+		   "DELETE FROM brw_last"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_INS,
@@ -4271,7 +4271,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
    DB_QueryDELETE ("can not remove file last visits to files of a center",
-		   "DELETE FROM file_browser_last"
+		   "DELETE FROM brw_last"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CTR,
@@ -4334,7 +4334,7 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
    DB_QueryDELETE ("can not remove file last visits to files of a degree",
-		   "DELETE FROM file_browser_last"
+		   "DELETE FROM brw_last"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_DEG,
@@ -4512,11 +4512,11 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 	           SubqueryPrj);
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
-   // Assignments and works are stored as one in file_browser_last...
+   // Assignments and works are stored as one in brw_last...
    // ...because a user views them at the same time
    /* Remove from course file zones */
    DB_QueryDELETE ("can not remove file last visits to files of a course",
-		   "DELETE FROM file_browser_last"
+		   "DELETE FROM brw_last"
 		   " WHERE FileBrowser IN (%u,%u,%u,%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CRS,
@@ -4528,7 +4528,7 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /* Remove from group file zones */
     DB_QueryDELETE ("can not remove file last visits to files of a course",
-		    "DELETE FROM file_browser_last"
+		    "DELETE FROM brw_last"
 		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
 		     " AND Cod IN %s",
 	           (unsigned) Brw_ADMI_DOC_GRP,
@@ -4539,7 +4539,7 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /* Remove from project file zones */
    DB_QueryDELETE ("can not remove file last visits to files of a course",
-		   "DELETE FROM file_browser_last"
+		   "DELETE FROM brw_last"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod IN %s",
 	           (unsigned) Brw_ADMI_DOC_PRJ,
@@ -4669,7 +4669,7 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
    DB_QueryDELETE ("can not remove file last visits to files of a group",
-		   "DELETE FROM file_browser_last"
+		   "DELETE FROM brw_last"
 		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
 		   " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_GRP,
@@ -4739,7 +4739,7 @@ void Brw_RemovePrjFilesFromDB (long PrjCod)
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
    DB_QueryDELETE ("can not remove file last visits to files of a project",
-		   "DELETE FROM file_browser_last"
+		   "DELETE FROM brw_last"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_PRJ,
@@ -4836,11 +4836,11 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod)
 	           CrsCod);
 
    /***** Remove from database the entries that store the last time user visited file zones *****/
-   // Assignments and works are stored as one in file_browser_last...
+   // Assignments and works are stored as one in brw_last...
    // ...because a user views them at the same time
    DB_QueryDELETE ("can not remove file last visits to files of a course"
 		   " from a user",
-		   "DELETE FROM file_browser_last"
+		   "DELETE FROM brw_last"
 		   " WHERE UsrCod=%ld"
 		     " AND ("
 			    "(FileBrowser IN (%u,%u,%u,%u,%u)"
@@ -4959,7 +4959,7 @@ void Brw_RemoveUsrFilesFromDB (long UsrCod)
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
    DB_QueryDELETE ("can not remove user's last visits to file zones",
-		   "DELETE FROM file_browser_last"
+		   "DELETE FROM brw_last"
 		   " WHERE UsrCod=%ld",	// User's last visits to all zones
 	           UsrCod);
 
@@ -5206,9 +5206,11 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
      }
    NumRows = DB_QuerySELECT (&mysql_res,"can not get date-time"
 					" of last access to a file browser",
-			     "SELECT UNIX_TIMESTAMP(LastClick)"
-			     " FROM file_browser_last"
-			     " WHERE UsrCod=%ld AND FileBrowser=%u AND Cod=%ld",
+			     "SELECT UNIX_TIMESTAMP(LastClick)"	// row[0]
+			      " FROM brw_last"
+			     " WHERE UsrCod=%ld"
+			       " AND FileBrowser=%u"
+			       " AND Cod=%ld",
 			     Gbl.Usrs.Me.UsrDat.UsrCod,
 			     (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
 			     Cod);
@@ -5232,7 +5234,7 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
 
    /***** Update date of my last access to file browser in this course *****/
    DB_QueryREPLACE ("can not update date of last access to a file browser",
-		    "REPLACE INTO file_browser_last"
+		    "REPLACE INTO brw_last"
 		    " (UsrCod,FileBrowser,Cod,LastClick)"
 		    " VALUES"
 		    " (%ld,%u,%ld,NOW())",

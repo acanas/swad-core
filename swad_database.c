@@ -435,6 +435,53 @@ mysql> DESCRIBE brw_expanded_folders;
 		   "INDEX(FileBrowser,Cod),"
 		   "INDEX(WorksUsrCod))");
 
+   /***** Table brw_last *****/
+/*
+mysql> DESCRIBE brw_last;
++-------------+------------+------+-----+---------+-------+
+| Field       | Type       | Null | Key | Default | Extra |
++-------------+------------+------+-----+---------+-------+
+| UsrCod      | int(11)    | NO   | PRI | NULL    |       |
+| FileBrowser | tinyint(4) | NO   | PRI | NULL    |       |
+| Cod         | int(11)    | NO   | PRI | -1      |       |
+| LastClick   | datetime   | NO   |     | NULL    |       |
++-------------+------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_last ("
+			"UsrCod INT NOT NULL,"
+			"FileBrowser TINYINT NOT NULL,"
+			"Cod INT NOT NULL DEFAULT -1,"
+		   "LastClick DATETIME NOT NULL,"
+		   "UNIQUE INDEX(UsrCod,FileBrowser,Cod))");
+
+   /***** Table file_browser_size *****/
+/*
+mysql> DESCRIBE file_browser_size;
++-------------+------------+------+-----+---------+-------+
+| Field       | Type       | Null | Key | Default | Extra |
++-------------+------------+------+-----+---------+-------+
+| FileBrowser | tinyint(4) | NO   | PRI | NULL    |       |
+| Cod         | int(11)    | NO   | PRI | -1      |       |
+| ZoneUsrCod  | int(11)    | NO   | PRI | -1      |       |
+| NumLevels   | int(11)    | NO   |     | NULL    |       |
+| NumFolders  | int(11)    | NO   |     | NULL    |       |
+| NumFiles    | int(11)    | NO   |     | NULL    |       |
+| TotalSize   | bigint(20) | NO   |     | NULL    |       |
++-------------+------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_browser_size ("
+			"FileBrowser TINYINT NOT NULL,"
+			"Cod INT NOT NULL DEFAULT -1,"
+			"ZoneUsrCod INT NOT NULL DEFAULT -1,"
+			"NumLevels INT NOT NULL,"
+			"NumFolders INT NOT NULL,"
+			"NumFiles INT NOT NULL,"
+			"TotalSize BIGINT NOT NULL,"
+		   "UNIQUE INDEX(FileBrowser,Cod,ZoneUsrCod),"
+		   "INDEX(ZoneUsrCod))");
+
    /***** Table cfe_calls_for_exams *****/
 /*
 mysql> DESCRIBE cfe_calls_for_exams;
@@ -1278,53 +1325,6 @@ mysql> DESCRIBE fig_figures;
 			"ValueDouble DOUBLE PRECISION NOT NULL,"
 			"LastUpdate TIMESTAMP,"
 		   "UNIQUE INDEX(Figure,Scope,Cod))");
-
-   /***** Table file_browser_last *****/
-/*
-mysql> DESCRIBE file_browser_last;
-+-------------+------------+------+-----+---------+-------+
-| Field       | Type       | Null | Key | Default | Extra |
-+-------------+------------+------+-----+---------+-------+
-| UsrCod      | int(11)    | NO   | PRI | NULL    |       |
-| FileBrowser | tinyint(4) | NO   | PRI | NULL    |       |
-| Cod         | int(11)    | NO   | PRI | -1      |       |
-| LastClick   | datetime   | NO   |     | NULL    |       |
-+-------------+------------+------+-----+---------+-------+
-4 rows in set (0.01 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_browser_last ("
-			"UsrCod INT NOT NULL,"
-			"FileBrowser TINYINT NOT NULL,"
-			"Cod INT NOT NULL DEFAULT -1,"
-		   "LastClick DATETIME NOT NULL,"
-		   "UNIQUE INDEX(UsrCod,FileBrowser,Cod))");
-
-   /***** Table file_browser_size *****/
-/*
-mysql> DESCRIBE file_browser_size;
-+-------------+------------+------+-----+---------+-------+
-| Field       | Type       | Null | Key | Default | Extra |
-+-------------+------------+------+-----+---------+-------+
-| FileBrowser | tinyint(4) | NO   | PRI | NULL    |       |
-| Cod         | int(11)    | NO   | PRI | -1      |       |
-| ZoneUsrCod  | int(11)    | NO   | PRI | -1      |       |
-| NumLevels   | int(11)    | NO   |     | NULL    |       |
-| NumFolders  | int(11)    | NO   |     | NULL    |       |
-| NumFiles    | int(11)    | NO   |     | NULL    |       |
-| TotalSize   | bigint(20) | NO   |     | NULL    |       |
-+-------------+------------+------+-----+---------+-------+
-7 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_browser_size ("
-			"FileBrowser TINYINT NOT NULL,"
-			"Cod INT NOT NULL DEFAULT -1,"
-			"ZoneUsrCod INT NOT NULL DEFAULT -1,"
-			"NumLevels INT NOT NULL,"
-			"NumFolders INT NOT NULL,"
-			"NumFiles INT NOT NULL,"
-			"TotalSize BIGINT NOT NULL,"
-		   "UNIQUE INDEX(FileBrowser,Cod,ZoneUsrCod),"
-		   "INDEX(ZoneUsrCod))");
 
    /***** Table file_cache *****/
 /*

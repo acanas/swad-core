@@ -164,6 +164,28 @@ CREATE TABLE IF NOT EXISTS brw_expanded_folders (
 	INDEX(FileBrowser,Cod),
 	INDEX(WorksUsrCod));
 --
+-- Table brw_last: stores the last click of every user in each file browser zone
+--
+CREATE TABLE IF NOT EXISTS brw_last (
+	UsrCod INT NOT NULL,
+	FileBrowser TINYINT NOT NULL,
+	Cod INT NOT NULL DEFAULT -1,
+	LastClick DATETIME NOT NULL,
+	UNIQUE INDEX(UsrCod,FileBrowser,Cod));
+--
+-- Table file_browser_size: stores the sizes of the file zones
+--
+CREATE TABLE IF NOT EXISTS file_browser_size (
+	FileBrowser TINYINT NOT NULL,
+	Cod INT NOT NULL DEFAULT -1,
+	ZoneUsrCod INT NOT NULL DEFAULT -1,
+	NumLevels INT NOT NULL,
+	NumFolders INT NOT NULL,
+	NumFiles INT NOT NULL,
+	TotalSize BIGINT NOT NULL,
+	UNIQUE INDEX(FileBrowser,Cod,ZoneUsrCod),
+	INDEX(ZoneUsrCod));
+--
 -- Table cfe_calls_for_exams: stores the calls for examination
 --
 CREATE TABLE IF NOT EXISTS cfe_calls_for_exams (
@@ -581,28 +603,6 @@ CREATE TABLE IF NOT EXISTS fig_figures (
 	ValueDouble DOUBLE PRECISION NOT NULL DEFAULT 0.0,
 	LastUpdate TIMESTAMP,
 	UNIQUE INDEX(Figure,Scope,Cod));
---
--- Table file_browser_last: stores the last click of every user in each file browser zone
---
-CREATE TABLE IF NOT EXISTS file_browser_last (
-	UsrCod INT NOT NULL,
-	FileBrowser TINYINT NOT NULL,
-	Cod INT NOT NULL DEFAULT -1,
-	LastClick DATETIME NOT NULL,
-	UNIQUE INDEX(UsrCod,FileBrowser,Cod));
---
--- Table file_browser_size: stores the sizes of the file zones
---
-CREATE TABLE IF NOT EXISTS file_browser_size (
-	FileBrowser TINYINT NOT NULL,
-	Cod INT NOT NULL DEFAULT -1,
-	ZoneUsrCod INT NOT NULL DEFAULT -1,
-	NumLevels INT NOT NULL,
-	NumFolders INT NOT NULL,
-	NumFiles INT NOT NULL,
-	TotalSize BIGINT NOT NULL,
-	UNIQUE INDEX(FileBrowser,Cod,ZoneUsrCod),
-	INDEX(ZoneUsrCod));
 --
 -- Table file_cache: stores the media private paths linked from public directories in current session 
 --
