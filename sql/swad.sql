@@ -656,9 +656,18 @@ CREATE TABLE IF NOT EXISTS fir_log (
 	INDEX(ClickTime),
 	INDEX(IP));
 --
--- Table for_disabled_posts: stores the forum post that have been disabled
+-- Table for_clipboards: stores the clipboards used to move threads from one forum to another
 --
-CREATE TABLE IF NOT EXISTS for_disabled_posts (
+CREATE TABLE IF NOT EXISTS for_clipboards (
+	ThrCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	TimeInsert TIMESTAMP NOT NULL,
+	UNIQUE INDEX(ThrCod),
+	UNIQUE INDEX(UsrCod));
+--
+-- Table for_disabled: stores the forum posts that have been disabled
+--
+CREATE TABLE IF NOT EXISTS for_disabled (
 	PstCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	DisableTime DATETIME NOT NULL,
@@ -683,18 +692,9 @@ CREATE TABLE IF NOT EXISTS ffor_posts(
 	INDEX(ModifTime),
 	INDEX(MedCod));
 --
--- Table forum_thr_clip: stores the clipboards used to move threads from one forum to another
+-- Table for_read: stores the threads read by each user
 --
-CREATE TABLE IF NOT EXISTS forum_thr_clip (
-	ThrCod INT NOT NULL,
-	UsrCod INT NOT NULL,
-	TimeInsert TIMESTAMP NOT NULL,
-	UNIQUE INDEX(ThrCod),
-	UNIQUE INDEX(UsrCod));
---
--- Table forum_thr_read: stores the threads read by each user
---
-CREATE TABLE IF NOT EXISTS forum_thr_read (
+CREATE TABLE IF NOT EXISTS for_read (
 	ThrCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	ReadTime DATETIME NOT NULL,

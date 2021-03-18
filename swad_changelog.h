@@ -600,12 +600,18 @@ TODO: Salvador Romero Cortés: @acanas opción para editar posts
 
 TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates(), por ejemplo al cambiar el color de la gráfica de accesos por día y hora, no se respeta la zona horaria.
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.51.11 (2021-03-18)"
+#define Log_PLATFORM_VERSION	"SWAD 20.51.12 (2021-03-18)"
 #define CSS_FILE		"swad20.45.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
+
+	Version 20.51.12: Mar 18, 2021  Forum threads database tables renamed. (307859 lines)
+					3 changes necessary in database:
+RENAME TABLE forum_thr_clip TO for_clipboards;
+RENAME TABLE forum_thr_read TO for_read;
+RENAME TABLE for_disabled_posts TO for_disabled;
 
 	Version 20.51.11: Mar 18, 2021  Forum theads database table renamed. (307844 lines)
 					1 change necessary in database:

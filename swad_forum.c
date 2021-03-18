@@ -517,7 +517,7 @@ static bool For_GetIfPstIsEnabled (long PstCod)
       /***** Get if post is disabled from database *****/
       return (DB_QueryCOUNT ("can not check if a post of a forum is disabled",
 			     "SELECT COUNT(*)"
-			      " FROM for_disabled_posts"
+			      " FROM for_disabled"
 			     " WHERE PstCod=%ld",
 			     PstCod) == 0);	// Post is enabled if it does not appear in table of disabled posts
    else
@@ -532,7 +532,7 @@ static void For_DeletePstFromDisabledPstTable (long PstCod)
   {
    /***** Remove post from disabled posts table *****/
    DB_QueryDELETE ("can not unban a post of a forum",
-		   "DELETE FROM for_disabled_posts"
+		   "DELETE FROM for_disabled"
 		   " WHERE PstCod=%ld",
 		   PstCod);
   }
@@ -545,7 +545,7 @@ static void For_InsertPstIntoBannedPstTable (long PstCod)
   {
    /***** Remove post from banned posts table *****/
    DB_QueryREPLACE ("can not ban a post of a forum",
-		    "REPLACE INTO for_disabled_posts"
+		    "REPLACE INTO for_disabled"
 		    " (PstCod,UsrCod,DisableTime)"
 		    " VALUES"
 		    " (%ld,%ld,NOW())",
@@ -704,11 +704,11 @@ static void For_RemoveThreadAndItsPsts (long ThrCod)
   {
    /***** Delete banned posts in thread *****/
    DB_QueryDELETE ("can not unban the posts of a thread of a forum",
-		   "DELETE FROM for_disabled_posts"
+		   "DELETE FROM for_disabled"
 		    "USING for_posts,"
-		          "for_disabled_posts"
+		          "for_disabled"
 		   " WHERE for_posts.ThrCod=%ld"
-		     " AND for_posts.PstCod=for_disabled_posts.PstCod",
+		     " AND for_posts.PstCod=for_disabled.PstCod",
                    ThrCod);
 
    /***** Delete thread posts *****/
@@ -852,7 +852,7 @@ static long For_GetLastPstCod (long ThrCod)
 /*****************************************************************************/
 /************* Update read date of a thread for the current user *************/
 /*****************************************************************************/
-// Update forum_thr_read table indicating that this thread page and previous ones
+// Update for_read table indicating that this thread page and previous ones
 // have been read and have no new posts for the current user
 // (even if any previous pages have been no read actually)
 // Note that database is not updated with the current time,
@@ -861,10 +861,10 @@ static long For_GetLastPstCod (long ThrCod)
 static void For_UpdateThrReadTime (long ThrCod,
                                    time_t CreatTimeUTCOfTheMostRecentPostRead)
   {
-   /***** Insert or replace pair ThrCod-UsrCod in forum_thr_read *****/
+   /***** Insert or replace pair ThrCod-UsrCod in for_read *****/
    DB_QueryREPLACE ("can not update the status of reading"
 		    " of a thread of a forum",
-		    "REPLACE INTO forum_thr_read"
+		    "REPLACE INTO for_read"
 		    " (ThrCod,UsrCod,ReadTime)"
 		    " VALUES"
 		    " (%ld,%ld,FROM_UNIXTIME(%ld))",
@@ -882,7 +882,8 @@ static unsigned For_GetNumOfReadersOfThr (long ThrCod)
    return
    (unsigned) DB_QueryCOUNT ("can not get the number of readers"
 	                     " of a thread of a forum",
-			     "SELECT COUNT(*) FROM forum_thr_read"
+			     "SELECT COUNT(*)"
+			      " FROM for_read"
 			     " WHERE ThrCod=%ld",
 			     ThrCod);
   }
@@ -978,9 +979,10 @@ static time_t For_GetThrReadTime (long ThrCod)
    /***** Get read time of a thread from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get date of reading"
 				  " of a thread of a forum",
-		       "SELECT UNIX_TIMESTAMP(ReadTime)"
-		       " FROM forum_thr_read"
-		       " WHERE ThrCod=%ld AND UsrCod=%ld",
+		       "SELECT UNIX_TIMESTAMP(ReadTime)"	// row[0]
+		        " FROM for_read"
+		       " WHERE ThrCod=%ld"
+		         " AND UsrCod=%ld",
 		       ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod))
      {
       /***** There is a row ==> get read time *****/
@@ -1003,10 +1005,11 @@ static time_t For_GetThrReadTime (long ThrCod)
 
 static void For_DeleteThrFromReadThrs (long ThrCod)
   {
-   /***** Delete pairs ThrCod-UsrCod in forum_thr_read for a thread *****/
+   /***** Delete pairs ThrCod-UsrCod in for_read for a thread *****/
    DB_QueryDELETE ("can not remove the status of reading"
 		   " of a thread of a forum",
-		   "DELETE FROM forum_thr_read WHERE ThrCod=%ld",
+		   "DELETE FROM for_read"
+		   " WHERE ThrCod=%ld",
 		   ThrCod);
   }
 
@@ -1016,10 +1019,11 @@ static void For_DeleteThrFromReadThrs (long ThrCod)
 
 void For_RemoveUsrFromReadThrs (long UsrCod)
   {
-   /***** Delete pairs ThrCod-UsrCod in forum_thr_read for a user *****/
+   /***** Delete pairs ThrCod-UsrCod in for_read for a user *****/
    DB_QueryDELETE ("can not remove the status of reading by a user"
 		   " of all the threads of a forum",
-		   "DELETE FROM forum_thr_read WHERE UsrCod=%ld",
+		   "DELETE FROM for_read"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
 
@@ -1148,7 +1152,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
          NewPst = (CreatTimeUTC > ReadTimeUTC);
 
          if (NewPst && NumRow == PaginationPsts.LastItemVisible)
-            /* Update forum_thr_read table indicating that this thread page and previous ones
+            /* Update for_read table indicating that this thread page and previous ones
                have been read and have no new posts for the current user
                (even if any previous pages have been no read actually).
                Note that database is not updated with the current time,
@@ -2314,12 +2318,12 @@ static unsigned For_GetNumThrsWithNewPstsInForum (const struct For_Forum *Forum,
    else
       SubQuery[0] = '\0';
    NumRows = DB_QuerySELECT (&mysql_res,"can not get the date of reading of a forum",
-			     "SELECT IFNULL(MAX(forum_thr_read.ReadTime),"	// row[0]
-			            "FROM_UNIXTIME(0))"				// row[1]
-			      " FROM forum_thr_read,"
+			     "SELECT IFNULL(MAX(for_read.ReadTime),"	// row[0]
+			            "FROM_UNIXTIME(0))"			// row[1]
+			      " FROM for_read,"
 			            "for_threads"
-			     " WHERE forum_thr_read.UsrCod=%ld"
-			       " AND forum_thr_read.ThrCod=for_threads.ThrCod"
+			     " WHERE for_read.UsrCod=%ld"
+			       " AND for_read.ThrCod=for_threads.ThrCod"
 			       " AND for_threads.ForumType=%u%s",
 			     Gbl.Usrs.Me.UsrDat.UsrCod,
 			     (unsigned) Forum->Type,SubQuery);
@@ -2379,8 +2383,10 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
    /***** Get last time I read this thread from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get the date of reading"
 					" of a thread",
-			     "SELECT ReadTime FROM forum_thr_read"
-			     " WHERE ThrCod=%ld AND UsrCod=%ld",
+			     "SELECT ReadTime"		// row[0]
+			      " FROM for_read"
+			     " WHERE ThrCod=%ld"
+			       " AND UsrCod=%ld",
 			     ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Get if last time I read this thread exists in database *****/
@@ -4557,7 +4563,8 @@ static long For_GetThrInMyClipboard (void)
    /***** Get if there is a thread ready to move in my clipboard from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not check if there is"
 					" any thread ready to be moved",
-	                     "SELECT ThrCod FROM forum_thr_clip"
+	                     "SELECT ThrCod"
+	                      " FROM for_clipboards"
 	                     " WHERE UsrCod=%ld",
 			     Gbl.Usrs.Me.UsrDat.UsrCod);
 
@@ -4681,7 +4688,7 @@ static void For_InsertThrInClipboard (long ThrCod)
 
    /***** Add thread to my clipboard *****/
    DB_QueryREPLACE ("can not add thread to clipboard",
-		    "REPLACE INTO forum_thr_clip"
+		    "REPLACE INTO for_clipboards"
 		    " (ThrCod,UsrCod)"
 		    " VALUES"
 		    " (%ld,%ld)",
@@ -4696,7 +4703,7 @@ static void For_RemoveExpiredThrsClipboards (void)
   {
    /***** Remove all expired clipboards *****/
    DB_QueryDELETE ("can not remove old threads from clipboards",
-		   "DELETE LOW_PRIORITY FROM forum_thr_clip"
+		   "DELETE LOW_PRIORITY FROM for_clipboards"
 		   " WHERE TimeInsert<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    Cfg_TIME_TO_DELETE_THREAD_CLIPBOARD);
   }
@@ -4709,7 +4716,8 @@ static void For_RemoveThrCodFromThrClipboard (long ThrCod)
   {
    /***** Remove thread from thread clipboard *****/
    DB_QueryDELETE ("can not remove a thread from clipboard",
-		   "DELETE FROM forum_thr_clip WHERE ThrCod=%ld",
+		   "DELETE FROM for_clipboards"
+		   " WHERE ThrCod=%ld",
 		   ThrCod);
   }
 
@@ -4721,7 +4729,8 @@ void For_RemoveUsrFromThrClipboard (long UsrCod)
   {
    /***** Remove clipboard of specified user *****/
    DB_QueryDELETE ("can not remove a thread from the clipboard of a user",
-		   "DELETE FROM forum_thr_clip WHERE UsrCod=%ld",
+		   "DELETE FROM for_clipboards"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
 
@@ -4748,17 +4757,17 @@ void For_RemoveForums (Hie_Lvl_Level_t Scope,long ForumLocation)
 
    /***** Remove disabled posts *****/
    DB_QueryDELETE ("can not remove the disabled posts in forums",
-		   "DELETE FROM for_disabled_posts"
+		   "DELETE FROM for_disabled"
 		   " USING for_threads,"
 		          "for_posts,"
-		          "for_disabled_posts"
+		          "for_disabled"
 		   " WHERE"
 		     " (for_threads.ForumType=%u"
 		      " OR"
 		      " for_threads.ForumType=%u)"
 		     " AND for_threads.Location=%ld"
 		     " AND for_threads.ThrCod=for_posts.ThrCod"
-		     " AND for_posts.PstCod=for_disabled_posts.PstCod",
+		     " AND for_posts.PstCod=for_disabled.PstCod",
 	           ForumType[Scope].Usrs,
 	           ForumType[Scope].Tchs,
 	           ForumLocation);
@@ -4780,14 +4789,15 @@ void For_RemoveForums (Hie_Lvl_Level_t Scope,long ForumLocation)
 
    /***** Remove threads read *****/
    DB_QueryDELETE ("can not remove read threads in forums",
-		   "DELETE FROM forum_thr_read"
-		   " USING for_threads,forum_thr_read"
+		   "DELETE FROM for_read"
+		   " USING for_threads,"
+		          "for_read"
 		   " WHERE"
 		     " (for_threads.ForumType=%u"
 		      " OR"
 		      " for_threads.ForumType=%u)"
 		     " AND for_threads.Location=%ld"
-		     " AND for_threads.ThrCod=forum_thr_read.ThrCod",
+		     " AND for_threads.ThrCod=for_read.ThrCod",
 	           ForumType[Scope].Usrs,
 	           ForumType[Scope].Tchs,
 	           ForumLocation);

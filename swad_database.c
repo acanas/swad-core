@@ -1435,9 +1435,28 @@ mysql> DESCRIBE fir_log;
 		   "INDEX(ClickTime),"
 		   "INDEX(IP))");
 
-   /***** Table for_disabled_posts *****/
+   /***** Table for_clipboards *****/
 /*
-mysql> DESCRIBE for_disabled_posts;
+mysql> DESCRIBE for_clipboards;
++------------+-----------+------+-----+-------------------+-------+
+| Field      | Type      | Null | Key | Default           | Extra |
++------------+-----------+------+-----+-------------------+-------+
+| ThrCod     | int(11)   | NO   | PRI | NULL              |       |
+| UsrCod     | int(11)   | NO   | UNI | NULL              |       |
+| TimeInsert | timestamp | NO   |     | CURRENT_TIMESTAMP |       |
++------------+-----------+------+-----+-------------------+-------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS for_clipboards ("
+			"ThrCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"TimeInsert TIMESTAMP NOT NULL,"
+		   "UNIQUE INDEX(ThrCod),"
+		   "UNIQUE INDEX(UsrCod))");
+
+   /***** Table for_disabled *****/
+/*
+mysql> DESCRIBE for_disabled;
 +-------------+----------+------+-----+---------+-------+
 | Field       | Type     | Null | Key | Default | Extra |
 +-------------+----------+------+-----+---------+-------+
@@ -1447,7 +1466,7 @@ mysql> DESCRIBE for_disabled_posts;
 +-------------+----------+------+-----+---------+-------+
 3 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS for_disabled_posts ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS for_disabled ("
 			"PstCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
 			"DisableTime DATETIME NOT NULL,"
@@ -1488,28 +1507,9 @@ mysql> DESCRIBE for_posts;
 		   "INDEX(ModifTime),"
 		   "INDEX(MedCod))");
 
-   /***** Table forum_thr_clip *****/
+   /***** Table for_read *****/
 /*
-mysql> DESCRIBE forum_thr_clip;
-+------------+-----------+------+-----+-------------------+-------+
-| Field      | Type      | Null | Key | Default           | Extra |
-+------------+-----------+------+-----+-------------------+-------+
-| ThrCod     | int(11)   | NO   | PRI | NULL              |       |
-| UsrCod     | int(11)   | NO   | UNI | NULL              |       |
-| TimeInsert | timestamp | NO   |     | CURRENT_TIMESTAMP |       |
-+------------+-----------+------+-----+-------------------+-------+
-3 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS forum_thr_clip ("
-			"ThrCod INT NOT NULL,"
-			"UsrCod INT NOT NULL,"
-			"TimeInsert TIMESTAMP NOT NULL,"
-		   "UNIQUE INDEX(ThrCod),"
-		   "UNIQUE INDEX(UsrCod))");
-
-   /***** Table forum_thr_read *****/
-/*
-mysql> DESCRIBE forum_thr_read;
+mysql> DESCRIBE for_read;
 +----------+----------+------+-----+---------------------+-------+
 | Field    | Type     | Null | Key | Default             | Extra |
 +----------+----------+------+-----+---------------------+-------+
@@ -1519,7 +1519,7 @@ mysql> DESCRIBE forum_thr_read;
 +----------+----------+------+-----+---------------------+-------+
 3 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS forum_thr_read ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS for_read ("
 			"ThrCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
 			"ReadTime DATETIME NOT NULL,"
