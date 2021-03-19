@@ -696,7 +696,7 @@ static long Tml_DB_GetMedCod (const char *Table,const char *Field,long Cod)
    /***** Get code of media associated to comment *****/
    if (DB_QuerySELECT (&mysql_res,"can not get media code",
 		       "SELECT MedCod"	// row[0]
-		       " FROM %s"
+		        " FROM %s"
 		       " WHERE %s=%ld",
 		      Table,Field,Cod) == 1)   // Result should have a unique row
      {

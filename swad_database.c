@@ -2102,9 +2102,9 @@ mysql> DESCRIBE marks_properties;
 			"Footer INT NOT NULL,"
 		   "UNIQUE INDEX(FilCod))");
 
-   /***** Table media *****/
+   /***** Table med_media *****/
 /*
-mysql> DESCRIBE media;
+mysql> DESCRIBE med_media;
 +--------+---------------------------------------------------------------+------+-----+---------+----------------+
 | Field  | Type                                                          | Null | Key | Default | Extra          |
 +--------+---------------------------------------------------------------+------+-----+---------+----------------+
@@ -2116,7 +2116,7 @@ mysql> DESCRIBE media;
 +--------+---------------------------------------------------------------+------+-----+---------+----------------+
 5 rows in set (0.01 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS media ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS med_media ("
 			"MedCod INT NOT NULL AUTO_INCREMENT,"
 			"Type ENUM('none','jpg','gif','mp4','webm','ogg','youtube','embed') NOT NULL DEFAULT 'none',"
 			"Name VARCHAR(43) NOT NULL DEFAULT '',"		// Med_BYTES_NAME

@@ -272,7 +272,8 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
 			            "Name,"	// row[1]
 			            "URL,"	// row[2]
 			            "Title"	// row[3]
-			     " FROM media WHERE MedCod=%ld",
+			      " FROM med_media"
+			     " WHERE MedCod=%ld",
 			     Media->MedCod);
 
    /***** Result should have a unique row *****/
@@ -1379,7 +1380,7 @@ void Med_StoreMediaInDB (struct Med_Media *Media)
   {
    /***** Insert media into database *****/
    Media->MedCod = DB_QueryINSERTandReturnCode ("can not create media",
-					        "INSERT INTO media"
+					        "INSERT INTO med_media"
 					        " (Type,Name,URL,Title)"
 					        " VALUES"
 					        " ('%s','%s','%s','%s')",
@@ -2033,7 +2034,8 @@ void Med_RemoveMedia (long MedCod)
 
    /***** Step 2. Remove entry for this media from database *****/
    DB_QueryDELETE ("can not remove media",
-		   "DELETE FROM media WHERE MedCod=%ld",
+		   "DELETE FROM med_media"
+		   " WHERE MedCod=%ld",
 		   MedCod);
 
    /***** Free media *****/

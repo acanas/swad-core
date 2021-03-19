@@ -2067,13 +2067,14 @@ static void ExaSet_RemoveMediaFromStemOfQst (long SetCod,long QstCod)
    unsigned NumMedia;
 
    /***** Get media code associated to stem of test question from database *****/
-   NumMedia =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
-			      "SELECT MedCod"	// row[0]
-			      " FROM exa_set_questions"
-			      " WHERE QstCod=%ld"
-			      " AND SetCod=%ld",	// Extra check
-			      QstCod,SetCod);
+   NumMedia = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get media",
+		   "SELECT MedCod"	// row[0]
+		    " FROM exa_set_questions"
+		   " WHERE QstCod=%ld"
+		     " AND SetCod=%ld",	// Extra check
+		   QstCod,
+		   SetCod);
 
    /***** Go over result removing media *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
@@ -2089,15 +2090,18 @@ static void ExaSet_RemoveMediaFromAllAnsOfQst (long SetCod,long QstCod)
    unsigned NumMedia;
 
    /***** Get media codes associated to answers of test question from database *****/
-   NumMedia =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
-			      "SELECT exa_set_answers.MedCod"	// row[0]
-			      " FROM exa_set_answers,exa_set_questions"
-			      " WHERE exa_set_answers.QstCod=%ld"
-			      " AND exa_set_answers.QstCod=exa_set_questions.QstCod"
-			      " AND exa_set_questions.SetCod=%ld"	// Extra check
-			      " AND exa_set_questions.QstCod=%ld",	// Extra check
-			      QstCod,SetCod,QstCod);
+   NumMedia = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get media",
+		   "SELECT exa_set_answers.MedCod"	// row[0]
+		    " FROM exa_set_answers,"
+			  "exa_set_questions"
+		   " WHERE exa_set_answers.QstCod=%ld"
+		     " AND exa_set_answers.QstCod=exa_set_questions.QstCod"
+		     " AND exa_set_questions.SetCod=%ld"	// Extra check
+		     " AND exa_set_questions.QstCod=%ld",	// Extra check
+		   QstCod,
+		   SetCod,
+		   QstCod);
 
    /***** Go over result removing media *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);

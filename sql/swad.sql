@@ -1004,9 +1004,9 @@ CREATE TABLE IF NOT EXISTS marks_properties (
 	Footer INT NOT NULL,
 	UNIQUE INDEX(FilCod));
 --
--- Table media: stores information about media (images, videos, YouTube)
+-- Table med_media: stores information about media (images, videos, YouTube)
 --
-CREATE TABLE IF NOT EXISTS media (
+CREATE TABLE IF NOT EXISTS med_media (
 	MedCod INT NOT NULL AUTO_INCREMENT,
 	Type ENUM('none','jpg','gif','mp4','webm','ogg','youtube','embed') NOT NULL DEFAULT 'none',
 	Name VARCHAR(43) NOT NULL DEFAULT '',
