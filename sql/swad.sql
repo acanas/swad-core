@@ -1243,6 +1243,25 @@ CREATE TABLE IF NOT EXISTS prj_usr (
 	UsrCod INT NOT NULL,
 	UNIQUE INDEX(PrjCod,RoleInProject,UsrCod));
 --
+-- Table roo_MACs: stores the associations between rooms and MAC addresses
+--
+CREATE TABLE IF NOT EXISTS roo_MACs (
+	RooCod INT NOT NULL AUTO_INCREMENT,
+	MAC BIGINT NOT NULL,
+	UNIQUE INDEX(RooCod,MAC),
+	UNIQUE INDEX(MAC,RooCod));
+--
+-- Table roo_check_in: stores the history of locations of users
+--
+CREATE TABLE IF NOT EXISTS roo_check_in (
+	ChkCod INT NOT NULL AUTO_INCREMENT,
+	UsrCod INT NOT NULL,
+	RooCod INT NOT NULL,
+	CheckInTime DATETIME NOT NULL,
+	UNIQUE INDEX(ChkCod),
+	INDEX(UsrCod,CheckInTime),
+	INDEX(CheckInTime));
+--
 -- Table roo_rooms: stores the rooms associated to each center
 --
 CREATE TABLE IF NOT EXISTS roo_rooms (
@@ -1256,25 +1275,6 @@ CREATE TABLE IF NOT EXISTS roo_rooms (
 	Capacity INT NOT NULL,
 	UNIQUE INDEX(RooCod),
 	INDEX(CtrCod,BldCod,Floor));
---
--- Table room_MAC: stores the associations between rooms and MAC addresses
---
-CREATE TABLE IF NOT EXISTS room_MAC (
-	RooCod INT NOT NULL AUTO_INCREMENT,
-	MAC BIGINT NOT NULL,
-	UNIQUE INDEX(RooCod,MAC),
-	UNIQUE INDEX(MAC,RooCod));
---
--- Table room_check_in: stores the history of locations of users
---
-CREATE TABLE IF NOT EXISTS room_check_in (
-	ChkCod INT NOT NULL AUTO_INCREMENT,
-	UsrCod INT NOT NULL,
-	RooCod INT NOT NULL,
-	CheckInTime DATETIME NOT NULL,
-	UNIQUE INDEX(ChkCod),
-	INDEX(UsrCod,CheckInTime),
-	INDEX(CheckInTime));
 --
 -- Table ses_params: stores some hidden parameters passed from a page to another using database instead of forms
 --

@@ -359,7 +359,7 @@ static unsigned Roo_GetMACAddresses (long RooCod,MYSQL_RES **mysql_res)
    /***** Get MAC addresses from database *****/
    return (unsigned) DB_QuerySELECT (mysql_res,"can not get MAC addresses",
 				     "SELECT MAC"		// row[0]
-				     " FROM room_MAC"
+				      " FROM roo_MACs"
 				     " WHERE RooCod=%ld"
 				     " ORDER BY MAC",
 				     RooCod);
@@ -394,14 +394,20 @@ void Roo_ChangeMAC (void)
    /***** Check if the new MAC is different from the old MAC *****/
    if (OldMACnum)
       DB_QueryDELETE ("can not remove MAC address",
-		      "DELETE FROM room_MAC"
-		      " WHERE RooCod=%ld AND MAC=%llu",
-		      Roo_EditingRoom->RooCod,OldMACnum);
+		      "DELETE FROM roo_MACs"
+		      " WHERE RooCod=%ld"
+		        " AND MAC=%llu",
+		      Roo_EditingRoom->RooCod,
+		      OldMACnum);
    if (NewMACnum)
       /***** Update the table of rooms-MACs changing the old MAC for the new one *****/
       DB_QueryREPLACE ("can not change MAC address",
-		       "REPLACE INTO room_MAC (RooCod,MAC) VALUES (%ld,%llu)",
-		       Roo_EditingRoom->RooCod,NewMACnum);
+		       "REPLACE INTO roo_MACs"
+		       " (RooCod,MAC)"
+		       " VALUES"
+		       " (%ld,%llu)",
+		       Roo_EditingRoom->RooCod,
+		       NewMACnum);
 
    Roo_EditingRoom->MACnum = NewMACnum;
   }
@@ -1632,7 +1638,7 @@ static void Roo_CreateRoom (struct Roo_Room *Room)
    /***** Create MAC address *****/
    if (Room->MACnum)
       DB_QueryINSERT ("can not create MAC address",
-		      "INSERT INTO room_MAC"
+		      "INSERT INTO roo_MACs"
 		      " (RooCod,MAC)"
 		      " VALUES"
 		      " (%ld,%llu)",

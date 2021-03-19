@@ -2646,26 +2646,26 @@ mysql> DESCRIBE roo_rooms;
 		   "UNIQUE INDEX(RooCod),"
 		   "INDEX(CtrCod,BldCod,Floor))");
 
-   /***** Table room_MAC *****/
+   /***** Table roo_MACs *****/
 /*
-mysql> DESCRIBE room_MAC;
-+--------+------------+------+-----+---------+----------------+
-| Field  | Type       | Null | Key | Default | Extra          |
-+--------+------------+------+-----+---------+----------------+
-| RooCod | int(11)    | NO   | PRI | NULL    | auto_increment |
-| MAC    | bigint(20) | NO   | PRI | NULL    |                |
-+--------+------------+------+-----+---------+----------------+
-2 rows in set (0.00 sec)
+mysql> DESCRIBE roo_MACs;
++--------+--------+------+-----+---------+----------------+
+| Field  | Type   | Null | Key | Default | Extra          |
++--------+--------+------+-----+---------+----------------+
+| RooCod | int    | NO   | PRI | NULL    | auto_increment |
+| MAC    | bigint | NO   | PRI | NULL    |                |
++--------+--------+------+-----+---------+----------------+
+2 rows in set (0.01 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS room_MAC ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS roo_MACs ("
 			"RooCod INT NOT NULL,"
 			"MAC BIGINT NOT NULL,"	// 12 digits hexadecimal number
 		   "UNIQUE INDEX(RooCod,MAC),"
 		   "UNIQUE INDEX(MAC,RooCod))");
 
-   /***** Table room_check_in *****/
+   /***** Table roo_check_in *****/
 /*
-mysql> DESCRIBE room_check_in;
+mysql> DESCRIBE roo_check_in;
 +-------------+----------+------+-----+---------+----------------+
 | Field       | Type     | Null | Key | Default | Extra          |
 +-------------+----------+------+-----+---------+----------------+
@@ -2676,7 +2676,7 @@ mysql> DESCRIBE room_check_in;
 +-------------+----------+------+-----+---------+----------------+
 4 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS room_check_in ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS roo_check_in ("
 			"ChkCod INT NOT NULL AUTO_INCREMENT,"
 			"UsrCod INT NOT NULL,"
 			"RooCod INT NOT NULL,"
