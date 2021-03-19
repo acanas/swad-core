@@ -533,23 +533,23 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
    static const char *OrderBySubQuery[Roo_NUM_ORDERS] =
      {
       [Roo_ORDER_BY_BUILDING ] = "bld_buildings.ShortName,"
-	                         "rooms.Floor,"
-	                         "rooms.ShortName",
-      [Roo_ORDER_BY_FLOOR    ] = "rooms.Floor,"
+	                         "roo_rooms.Floor,"
+	                         "roo_rooms.ShortName",
+      [Roo_ORDER_BY_FLOOR    ] = "roo_rooms.Floor,"
 	                         "bld_buildings.ShortName,"
-	                         "rooms.ShortName",
-      [Roo_ORDER_BY_TYPE     ] = "rooms.Type,"
+	                         "roo_rooms.ShortName",
+      [Roo_ORDER_BY_TYPE     ] = "roo_rooms.Type,"
 	                         "bld_buildings.ShortName,"
-	                         "rooms.Floor,"
-	                         "rooms.ShortName",
-      [Roo_ORDER_BY_SHRT_NAME] = "rooms.ShortName,"
-	                         "rooms.FullName",
-      [Roo_ORDER_BY_FULL_NAME] = "rooms.FullName,"
-	                         "rooms.ShortName",
-      [Roo_ORDER_BY_CAPACITY ] = "rooms.Capacity DESC,"
+	                         "roo_rooms.Floor,"
+	                         "roo_rooms.ShortName",
+      [Roo_ORDER_BY_SHRT_NAME] = "roo_rooms.ShortName,"
+	                         "roo_rooms.FullName",
+      [Roo_ORDER_BY_FULL_NAME] = "roo_rooms.FullName,"
+	                         "roo_rooms.ShortName",
+      [Roo_ORDER_BY_CAPACITY ] = "roo_rooms.Capacity DESC,"
 	                         "bld_buildings.ShortName,"
-	                         "rooms.Floor,"
-	                         "rooms.ShortName",
+	                         "roo_rooms.Floor,"
+	                         "roo_rooms.ShortName",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -562,17 +562,18 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
      {
       case Roo_ALL_DATA:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get rooms",
-				   "SELECT rooms.RooCod,"		// row[0]
-	                           	  "rooms.BldCod,"		// row[1]
+				   "SELECT roo_rooms.RooCod,"		// row[0]
+	                           	  "roo_rooms.BldCod,"		// row[1]
 	                                  "bld_buildings.ShortName,"	// row[2]
-					  "rooms.Floor,"		// row[3]
-					  "rooms.Type,"			// row[4]
-					  "rooms.ShortName,"		// row[5]
-					  "rooms.FullName,"		// row[6]
-					  "rooms.Capacity"		// row[7]
-				   " FROM rooms LEFT JOIN bld_buildings"
-				   " ON rooms.BldCod=bld_buildings.BldCod"
-				   " WHERE rooms.CtrCod=%ld"
+					  "roo_rooms.Floor,"		// row[3]
+					  "roo_rooms.Type,"		// row[4]
+					  "roo_rooms.ShortName,"	// row[5]
+					  "roo_rooms.FullName,"		// row[6]
+					  "roo_rooms.Capacity"		// row[7]
+				    " FROM roo_rooms"
+				    " LEFT JOIN bld_buildings"
+				      " ON roo_rooms.BldCod=bld_buildings.BldCod"
+				   " WHERE roo_rooms.CtrCod=%ld"
 				   " ORDER BY %s",
 				   Gbl.Hierarchy.Ctr.CtrCod,
 				   OrderBySubQuery[Rooms->SelectedOrder]);
@@ -580,11 +581,11 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
       case Roo_ONLY_SHRT_NAME:
       default:
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get rooms",
-				   "SELECT rooms.RooCod,"		// row[0]
-					  "rooms.ShortName"		// row[1]
-				   " FROM rooms LEFT JOIN bld_buildings"
-				   " ON rooms.BldCod=bld_buildings.BldCod"
-				   " WHERE rooms.CtrCod=%ld"
+				   "SELECT roo_rooms.RooCod,"		// row[0]
+					  "roo_rooms.ShortName"		// row[1]
+				    " FROM roo_rooms LEFT JOIN bld_buildings"
+				      " ON roo_rooms.BldCod=bld_buildings.BldCod"
+				   " WHERE roo_rooms.CtrCod=%ld"
 				   " ORDER BY %s",
 				   Gbl.Hierarchy.Ctr.CtrCod,
 				   OrderBySubQuery[Roo_ORDER_DEFAULT]);
@@ -668,16 +669,16 @@ static void Roo_GetDataOfRoomByCod (struct Roo_Room *Room)
 
    /***** Get data of a room from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a room",
-			     "SELECT rooms.BldCod,"		// row[0]
+			     "SELECT roo_rooms.BldCod,"		// row[0]
 	                            "bld_buildings.ShortName,"	// row[1]
-				    "rooms.Floor,"		// row[2]
-				    "rooms.Type,"		// row[3]
-				    "rooms.ShortName,"		// row[4]
-				    "rooms.FullName,"		// row[5]
-				    "rooms.Capacity"		// row[6]
-			     " FROM rooms LEFT JOIN bld_buildings"
-			     " ON rooms.BldCod=bld_buildings.BldCod"
-			     " WHERE rooms.RooCod=%ld",
+				    "roo_rooms.Floor,"		// row[2]
+				    "roo_rooms.Type,"		// row[3]
+				    "roo_rooms.ShortName,"	// row[4]
+				    "roo_rooms.FullName,"	// row[5]
+				    "roo_rooms.Capacity"	// row[6]
+			      " FROM roo_rooms LEFT JOIN bld_buildings"
+			        " ON roo_rooms.BldCod=bld_buildings.BldCod"
+			     " WHERE roo_rooms.RooCod=%ld",
 			     Room->RooCod);
 
    /***** Count number of rows in result *****/
@@ -1017,7 +1018,8 @@ void Roo_RemoveRoom (void)
 
    /***** Remove room *****/
    DB_QueryDELETE ("can not remove a room",
-		   "DELETE FROM rooms WHERE RooCod=%ld",
+		   "DELETE FROM roo_rooms"
+		   " WHERE RooCod=%ld",
 		   Roo_EditingRoom->RooCod);
 
    /***** Create message to show the change made *****/
@@ -1034,7 +1036,7 @@ void Roo_RemoveAllRoomsInCtr (long CtrCod)
   {
    /***** Remove all rooms in center *****/
    DB_QueryDELETE ("can not remove rooms",
-		   "DELETE FROM rooms"
+		   "DELETE FROM roo_rooms"
                    " WHERE CtrCod=%ld",
 		   CtrCod);
   }
@@ -1076,7 +1078,9 @@ void Roo_ChangeBuilding (void)
      {
       /***** Update the table of rooms changing the old building for the new one *****/
       DB_QueryUPDATE ("can not update the building of a room",
-		      "UPDATE rooms SET BldCod=%ld WHERE RooCod=%ld",
+		      "UPDATE roo_rooms"
+		        " SET BldCod=%ld"
+		      " WHERE RooCod=%ld",
                       NewBldCod,Roo_EditingRoom->RooCod);
 
       /***** Get updated data of the room from database *****/
@@ -1124,7 +1128,9 @@ void Roo_ChangeFloor (void)
      {
       /***** Update the table of rooms changing the old floor for the new one *****/
       DB_QueryUPDATE ("can not update the capacity of a room",
-		      "UPDATE rooms SET Floor=%d WHERE RooCod=%ld",
+		      "UPDATE roo_rooms"
+		        " SET Floor=%d"
+		      " WHERE RooCod=%ld",
                       NewFloor,Roo_EditingRoom->RooCod);
 
       /***** Get updated data of the room from database *****/
@@ -1175,7 +1181,9 @@ void Roo_ChangeType (void)
      {
       /***** Update the table of rooms changing the old type for the new one *****/
       DB_QueryUPDATE ("can not update the type of a room",
-		      "UPDATE rooms SET Type='%s' WHERE RooCod=%ld",
+		      "UPDATE roo_rooms"
+		        " SET Type='%s'"
+		      " WHERE RooCod=%ld",
                       Roo_TypesDB[NewType],
                       Roo_EditingRoom->RooCod);
 
@@ -1301,11 +1309,14 @@ static bool Roo_CheckIfRoomNameExists (const char *FieldName,const char *Name,lo
    /***** Get number of rooms with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of a room"
 			  " already existed",
-			  "SELECT COUNT(*) FROM rooms"
+			  "SELECT COUNT(*)"
+			   " FROM roo_rooms"
 			  " WHERE CtrCod=%ld"
-			  " AND %s='%s' AND RooCod<>%ld",
+			    " AND %s='%s'"
+			    " AND RooCod<>%ld",
 			  Gbl.Hierarchy.Ctr.CtrCod,
-			  FieldName,Name,RooCod) != 0);
+			  FieldName,Name,
+			  RooCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1316,7 +1327,9 @@ static void Roo_UpdateRoomNameDB (long RooCod,const char *FieldName,const char *
   {
    /***** Update room changing old name by new name */
    DB_QueryUPDATE ("can not update the name of a room",
-		   "UPDATE rooms SET %s='%s' WHERE RooCod=%ld",
+		   "UPDATE roo_rooms"
+		     " SET %s='%s'"
+		   " WHERE RooCod=%ld",
 		   FieldName,NewRoomName,RooCod);
   }
 
@@ -1360,7 +1373,9 @@ void Roo_ChangeCapacity (void)
      {
       /***** Update the table of rooms changing the old capacity for the new one *****/
       DB_QueryUPDATE ("can not update the capacity of a room",
-		      "UPDATE rooms SET Capacity=%u WHERE RooCod=%ld",
+		      "UPDATE roo_rooms"
+		        " SET Capacity=%u"
+		      " WHERE RooCod=%ld",
                       NewCapacity,Roo_EditingRoom->RooCod);
       Roo_EditingRoom->Capacity = NewCapacity;
 
@@ -1602,7 +1617,7 @@ static void Roo_CreateRoom (struct Roo_Room *Room)
    /***** Create a new room *****/
    Room->RooCod =
    DB_QueryINSERTandReturnCode ("can not create room",
-			        "INSERT INTO rooms"
+			        "INSERT INTO roo_rooms"
 			        " (CtrCod,BldCod,Floor,Type,ShortName,FullName,Capacity)"
 			        " VALUES"
 			        " (%ld,%ld,%d,'%s','%s','%s',%u)",

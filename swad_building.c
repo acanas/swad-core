@@ -565,12 +565,11 @@ void Bld_RemoveBuilding (void)
    Bld_GetDataOfBuildingByCod (Bld_EditingBuilding);
 
    /***** Update rooms assigned to this building *****/
-   /* TODO: Uncomment when rooms be associated to building
    DB_QueryUPDATE ("can not update building in groups",
-		   "UPDATE rooms SET BldCod=0"	// 0 means another building
+		   "UPDATE roo_rooms"
+		     " SET BldCod=0"	// 0 means another building
 		   " WHERE BldCod=%ld",
 		   Bld_EditingBuilding->BldCod);
-   */
 
    /***** Remove building *****/
    DB_QueryDELETE ("can not remove a building",

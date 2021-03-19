@@ -982,7 +982,7 @@ static void Grp_LockTables (void)
 	     "crs_grp_usr WRITE,"
 	     "crs_usr READ,"
 	     "crs_usr_last READ,"
-	     "rooms READ");
+	     "roo_rooms READ");
    Gbl.DB.LockedTables = true;
   }
 
@@ -3068,13 +3068,13 @@ unsigned long Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res)
 			  "SELECT crs_grp.GrpCod,"
 			         "crs_grp.GrpName,"
 			         "crs_grp.RooCod,"
-			         "rooms.ShortName,"
+			         "roo_rooms.ShortName,"
 			         "crs_grp.MaxStudents,"
 			         "crs_grp.Open,"
 			         "crs_grp.FileZones"
-			  " FROM crs_grp"
-			  " LEFT JOIN rooms"
-			  " ON crs_grp.RooCod=rooms.RooCod"
+			   " FROM crs_grp"
+			   " LEFT JOIN roo_rooms"
+			     " ON crs_grp.RooCod=roo_rooms.RooCod"
 			  " WHERE crs_grp.GrpTypCod=%ld"
 			  " ORDER BY crs_grp.GrpName",
 			  GrpTypCod);
@@ -3175,13 +3175,14 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
 				       "crs_grp_types.Multiple,"	// row[3]
 				       "crs_grp.GrpName,"		// row[4]
 				       "crs_grp.RooCod,"		// row[5]
-				       "rooms.ShortName,"		// row[6]
+				       "roo_rooms.ShortName,"		// row[6]
 				       "crs_grp.MaxStudents,"		// row[7]
 				       "crs_grp.Open,"			// row[8]
 				       "crs_grp.FileZones"		// row[9]
-				" FROM (crs_grp,crs_grp_types)"
-				" LEFT JOIN rooms"
-				" ON crs_grp.RooCod=rooms.RooCod"
+				" FROM (crs_grp,"
+				       "crs_grp_types)"
+				" LEFT JOIN roo_rooms"
+				  " ON crs_grp.RooCod=roo_rooms.RooCod"
 				" WHERE crs_grp.GrpCod=%ld"
 				" AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod",
 				GrpDat->GrpCod);

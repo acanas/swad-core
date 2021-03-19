@@ -607,6 +607,10 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
+	Version 20.51.19: Mar 19, 2021  Rooms database table renamed. (308059 lines)
+					1 change necessary in database:
+RENAME TABLE rooms TO roo_rooms;
+
 	Version 20.51.19: Mar 19, 2021  Media database table renamed. (308033 lines)
 					1 change necessary in database:
 RENAME TABLE media TO med_media;

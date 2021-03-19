@@ -1243,9 +1243,9 @@ CREATE TABLE IF NOT EXISTS prj_usr (
 	UsrCod INT NOT NULL,
 	UNIQUE INDEX(PrjCod,RoleInProject,UsrCod));
 --
--- Table rooms: stores the rooms associated to each center
+-- Table roo_rooms: stores the rooms associated to each center
 --
-CREATE TABLE IF NOT EXISTS rooms (
+CREATE TABLE IF NOT EXISTS roo_rooms (
 	RooCod INT NOT NULL AUTO_INCREMENT,
 	CtrCod INT NOT NULL,
 	BldCod INT NOT NULL DEFAULT -1,

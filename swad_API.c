@@ -6005,22 +6005,22 @@ int swad__getLocation (struct soap *soap,
 				    "bld_buildings.BldCod,"	// row[ 6]
 				    "bld_buildings.ShortName,"	// row[ 7]
 				    "bld_buildings.FullName,"	// row[ 8]
-				    "rooms.Floor,"		// row[ 9]
-				    "rooms.RooCod,"		// row[10]
-				    "rooms.ShortName,"		// row[11]
-				    "rooms.FullName"		// row[12]
+				    "roo_rooms.Floor,"		// row[ 9]
+				    "roo_rooms.RooCod,"		// row[10]
+				    "roo_rooms.ShortName,"	// row[11]
+				    "roo_rooms.FullName"	// row[12]
 			      " FROM room_MAC,"
-				    "rooms,"
+				    "roo_rooms,"
 				    "bld_buildings,"
 				    "ctr_centers,"
 				    "ins_instits"
 			     " WHERE room_MAC.MAC=%llu"
-			       " AND room_MAC.RooCod=rooms.RooCod"
-			       " AND rooms.BldCod=bld_buildings.BldCod"
+			       " AND room_MAC.RooCod=roo_rooms.RooCod"
+			       " AND roo_rooms.BldCod=bld_buildings.BldCod"
 			       " AND bld_buildings.CtrCod=ctr_centers.CtrCod"
 			       " AND ctr_centers.InsCod=ins_instits.InsCod"
-			     " ORDER BY rooms.Capacity DESC,"	// Get the biggest room
-				       "rooms.ShortName"
+			     " ORDER BY roo_rooms.Capacity DESC,"	// Get the biggest room
+				       "roo_rooms.ShortName"
 			     " LIMIT 1",
 			     MACnum);
 
@@ -6072,9 +6072,11 @@ int swad__sendMyLocation (struct soap *soap,
    DB_QueryINSERTandReturnCode ("can not save current location",
 				"INSERT INTO room_check_in"
 				" (UsrCod,RooCod,CheckInTime)"
-				" SELECT %ld,RooCod,NOW()"
-				" FROM rooms"
-				" WHERE RooCod=%d",	// Check that room exists
+				" SELECT %ld,"
+				        "RooCod,"
+				        "NOW()"
+			 	  " FROM roo_rooms"
+			 	 " WHERE RooCod=%d",	// Check that room exists
 				Gbl.Usrs.Me.UsrDat.UsrCod,roomCode);
 
    /***** Return notification code *****/
@@ -6146,16 +6148,16 @@ int swad__getLastLocation (struct soap *soap,
 				       "bld_buildings.BldCod,"				// row[ 6]
 				       "bld_buildings.ShortName,"			// row[ 7]
 				       "bld_buildings.FullName,"			// row[ 8]
-				       "rooms.Floor,"					// row[ 9]
-				       "rooms.RooCod,"					// row[10]
-				       "rooms.ShortName,"				// row[11]
-				       "rooms.FullName,"				// row[12]
+				       "roo_rooms.Floor,"				// row[ 9]
+				       "roo_rooms.RooCod,"				// row[10]
+				       "roo_rooms.ShortName,"				// row[11]
+				       "roo_rooms.FullName,"				// row[12]
 				       "UNIX_TIMESTAMP(room_check_in.CheckInTime)"	// row[13]
-			        " FROM room_check_in,"
-				      "rooms,"
-				      "bld_buildings,"
-				      "ctr_centers,"
-				      "ins_instits"
+			         " FROM room_check_in,"
+				       "roo_rooms,"
+				       "bld_buildings,"
+				       "ctr_centers,"
+				       "ins_instits"
 			       " WHERE room_check_in.UsrCod=%d"
 			         " AND room_check_in.ChkCod="
 			              "(SELECT ChkCod"
@@ -6163,8 +6165,8 @@ int swad__getLastLocation (struct soap *soap,
 			               " WHERE UsrCod=%d"
 			               " ORDER BY ChkCod DESC"
 			               " LIMIT 1)"	// Faster than SELECT MAX
-			         " AND room_check_in.RooCod=rooms.RooCod"
-			         " AND rooms.BldCod=bld_buildings.BldCod"
+			         " AND room_check_in.RooCod=roo_rooms.RooCod"
+			         " AND roo_rooms.BldCod=bld_buildings.BldCod"
 			         " AND bld_buildings.CtrCod=ctr_centers.CtrCod"
 			         " AND ctr_centers.InsCod=ins_instits.InsCod",
 				userCode,userCode);
@@ -6211,10 +6213,10 @@ static void API_GetDataOfLocation (struct soap *soap,
       bld_buildings.BldCod			// row[ 6]
       bld_buildings.ShortName			// row[ 7]
       bld_buildings.FullName			// row[ 8]
-      rooms.Floor				// row[ 9]
-      rooms.RooCod				// row[10]
-      rooms.ShortName				// row[11]
-      rooms.FullName				// row[12]
+      roo_rooms.Floor				// row[ 9]
+      roo_rooms.RooCod				// row[10]
+      roo_rooms.ShortName			// row[11]
+      roo_rooms.FullName			// row[12]
       UNIX_TIMESTAMP(room_check_in.CheckInTime)	// row[13] (optional)
       */
 

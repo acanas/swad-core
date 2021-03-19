@@ -2592,24 +2592,24 @@ mysql> DESCRIBE prj_usr;
 			"UsrCod INT NOT NULL,"
 			"UNIQUE INDEX(PrjCod,RoleInProject,UsrCod))");
 
-   /***** Table rooms *****/
+   /***** Table roo_rooms *****/
 /*
-mysql> DESCRIBE rooms;
+mysql> DESCRIBE roo_rooms;
 +-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
 | Field     | Type                                                                                                                                                                                                                                                                        | Null | Key | Default | Extra          |
 +-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
-| RooCod    | int(11)                                                                                                                                                                                                                                                                     | NO   | PRI | NULL    | auto_increment |
-| CtrCod    | int(11)                                                                                                                                                                                                                                                                     | NO   | MUL | NULL    |                |
-| BldCod    | int(11)                                                                                                                                                                                                                                                                     | NO   |     | -1      |                |
-| Floor     | int(11)                                                                                                                                                                                                                                                                     | NO   |     | 0       |                |
+| RooCod    | int                                                                                                                                                                                                                                                                         | NO   | PRI | NULL    | auto_increment |
+| CtrCod    | int                                                                                                                                                                                                                                                                         | NO   | MUL | NULL    |                |
+| BldCod    | int                                                                                                                                                                                                                                                                         | NO   |     | -1      |                |
+| Floor     | int                                                                                                                                                                                                                                                                         | NO   |     | 0       |                |
 | Type      | enum('no_type','administration','auditorium','cafeteria','canteen','classroom','concierge','corridor','gym','hall','kindergarten','laboratory','library','office','outdoors','parking','pavilion','room','secretariat','seminar','shop','store','toilets','virtual','yard') | NO   |     | no_type |                |
 | ShortName | varchar(511)                                                                                                                                                                                                                                                                | NO   |     | NULL    |                |
 | FullName  | varchar(2047)                                                                                                                                                                                                                                                               | NO   |     | NULL    |                |
-| Capacity  | int(11)                                                                                                                                                                                                                                                                     | NO   |     | NULL    |                |
+| Capacity  | int                                                                                                                                                                                                                                                                         | NO   |     | NULL    |                |
 +-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
 8 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS rooms ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS roo_rooms ("
 			"RooCod INT NOT NULL AUTO_INCREMENT,"
 			"CtrCod INT NOT NULL,"
 	                "BldCod INT NOT NULL DEFAULT -1,"
