@@ -2393,9 +2393,9 @@ mysql> DESCRIBE pho_clicks_without_photo;
 			"NumClicks INT NOT NULL,"
 		   "UNIQUE INDEX(UsrCod))");
 
-   /***** Table places *****/
+   /***** Table plc_places *****/
 /*
-mysql> DESCRIBE places;
+mysql> DESCRIBE plc_places;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
@@ -2406,7 +2406,7 @@ mysql> DESCRIBE places;
 +-----------+---------------+------+-----+---------+----------------+
 4 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS places ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS plc_places ("
 			"PlcCod INT NOT NULL AUTO_INCREMENT,"
 			"InsCod INT NOT NULL,"
 			"ShortName VARCHAR(511) NOT NULL,"	// Plc_MAX_BYTES_PLACE_SHRT_NAME

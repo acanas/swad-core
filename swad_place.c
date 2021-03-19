@@ -365,26 +365,27 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
 
    /***** Get places from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get places",
-			     "(SELECT places.PlcCod,"
-				     "places.ShortName,"
-				     "places.FullName,"
+			     "(SELECT plc_places.PlcCod,"
+				     "plc_places.ShortName,"
+				     "plc_places.FullName,"
 				     "COUNT(*) AS NumCtrs"
-			     " FROM places,"
-			           "ctr_centers"
-			     " WHERE places.InsCod=%ld"
-			     " AND places.PlcCod=ctr_centers.PlcCod"
-			     " AND ctr_centers.InsCod=%ld"
-			     " GROUP BY places.PlcCod)"
+			       " FROM plc_places,"
+			             "ctr_centers"
+			      " WHERE plc_places.InsCod=%ld"
+			        " AND plc_places.PlcCod=ctr_centers.PlcCod"
+			        " AND ctr_centers.InsCod=%ld"
+			      " GROUP BY plc_places.PlcCod)"
 			     " UNION "
 			     "(SELECT PlcCod,"
 				     "ShortName,"
 				     "FullName,"
 				     "0 AS NumCtrs"
-			     " FROM places"
-			     " WHERE InsCod=%ld"
-			     " AND PlcCod NOT IN"
-			     " (SELECT DISTINCT PlcCod FROM ctr_centers"
-			     " WHERE InsCod=%ld))"
+			       " FROM plc_places"
+			      " WHERE InsCod=%ld"
+			        " AND PlcCod NOT IN"
+			            " (SELECT DISTINCT PlcCod"
+			               " FROM ctr_centers"
+			              " WHERE InsCod=%ld))"
 			     " ORDER BY %s",
 			     Gbl.Hierarchy.Ins.InsCod,
 			     Gbl.Hierarchy.Ins.InsCod,
@@ -463,23 +464,24 @@ void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc)
      {
       /***** Get data of a place from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a place",
-			        "(SELECT places.ShortName,"
-					"places.FullName,"
+			        "(SELECT plc_places.ShortName,"
+					"plc_places.FullName,"
 					"COUNT(*)"
-				" FROM places,"
-				      "ctr_centers"
-				" WHERE places.PlcCod=%ld"
-				" AND places.PlcCod=ctr_centers.PlcCod"
-				" AND ctr_centers.PlcCod=%ld"
-				" GROUP BY places.PlcCod)"
+				  " FROM plc_places,"
+				        "ctr_centers"
+				 " WHERE plc_places.PlcCod=%ld"
+				   " AND plc_places.PlcCod=ctr_centers.PlcCod"
+				   " AND ctr_centers.PlcCod=%ld"
+				 " GROUP BY plc_places.PlcCod)"
 				" UNION "
 				"(SELECT ShortName,"
 					"FullName,"
 					"0"
-				" FROM places"
-				" WHERE PlcCod=%ld"
-				" AND PlcCod NOT IN"
-				" (SELECT DISTINCT PlcCod FROM ctr_centers))",
+				  " FROM plc_places"
+				 " WHERE PlcCod=%ld"
+				   " AND PlcCod NOT IN"
+				       " (SELECT DISTINCT PlcCod"
+				          " FROM ctr_centers))",
 				Plc->PlcCod,
 				Plc->PlcCod,
 				Plc->PlcCod);
@@ -634,7 +636,8 @@ void Plc_RemovePlace (void)
      {
       /***** Remove place *****/
       DB_QueryDELETE ("can not remove a place",
-		      "DELETE FROM places WHERE PlcCod=%ld",
+		      "DELETE FROM plc_places"
+		      " WHERE PlcCod=%ld",
 		      Plc_EditingPlc->PlcCod);
 
       /***** Write message to show the change made *****/
@@ -756,9 +759,11 @@ static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,l
    /***** Get number of places with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of a place"
 			  " already existed",
-			  "SELECT COUNT(*) FROM places"
+			  "SELECT COUNT(*)"
+			   " FROM plc_places"
 			  " WHERE InsCod=%ld"
-			  " AND %s='%s' AND PlcCod<>%ld",
+			    " AND %s='%s'"
+			    " AND PlcCod<>%ld",
 			  Gbl.Hierarchy.Ins.InsCod,
 			  FieldName,Name,PlcCod) != 0);
   }
@@ -771,8 +776,11 @@ static void Plc_UpdatePlcNameDB (long PlcCod,const char *FieldName,const char *N
   {
    /***** Update place changing old name by new name */
    DB_QueryUPDATE ("can not update the name of a place",
-		   "UPDATE places SET %s='%s' WHERE PlcCod=%ld",
-		   FieldName,NewPlcName,PlcCod);
+		   "UPDATE plc_places"
+		     " SET %s='%s'"
+		   " WHERE PlcCod=%ld",
+		   FieldName,NewPlcName,
+		   PlcCod);
   }
 
 /*****************************************************************************/

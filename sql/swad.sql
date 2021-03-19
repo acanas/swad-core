@@ -1148,9 +1148,9 @@ CREATE TABLE IF NOT EXISTS pho_clicks_without_photo (
 	NumClicks INT NOT NULL,
 	UNIQUE INDEX(UsrCod));
 --
--- Table places: stores the places associated to each institution, used in holidays
+-- Table plc_places: stores the places associated to each institution, used in holidays
 --
-CREATE TABLE IF NOT EXISTS places (
+CREATE TABLE IF NOT EXISTS plc_places (
 	PlcCod INT NOT NULL AUTO_INCREMENT,
 	InsCod INT NOT NULL,
 	ShortName VARCHAR(511) NOT NULL,

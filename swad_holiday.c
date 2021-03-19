@@ -335,29 +335,30 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
       DB_QuerySELECT (&mysql_res,"can not get holidays",
 		      "(SELECT hld_holidays.HldCod,"						// row[0]
 			      "hld_holidays.PlcCod,"						// row[1]
-			      "places.FullName as Place,"					// row[2]
+			      "plc_places.FullName as Place,"					// row[2]
 			      "hld_holidays.HldTyp,"						// row[3]
 			      "DATE_FORMAT(hld_holidays.StartDate,'%%Y%%m%%d') AS StartDate,"	// row[4]
 			      "DATE_FORMAT(hld_holidays.EndDate,'%%Y%%m%%d') AS EndDate,"	// row[5]
 			      "hld_holidays.Name"						// row[6]
-		       " FROM hld_holidays,places"
-		      " WHERE hld_holidays.InsCod=%ld"
-		        " AND hld_holidays.PlcCod=places.PlcCod"
-		        " AND places.InsCod=%ld)"
+		        " FROM hld_holidays,"
+		              "plc_places"
+		       " WHERE hld_holidays.InsCod=%ld"
+		         " AND hld_holidays.PlcCod=plc_places.PlcCod"
+		         " AND plc_places.InsCod=%ld)"
 		      " UNION "
 		      "(SELECT HldCod,"								// row[0]
 			      "PlcCod,"								// row[1]
 			      "'' as Place,"							// row[2]
 			      "HldTyp,"								// row[3]
-			       "DATE_FORMAT(StartDate,'%%Y%%m%%d') AS StartDate,"		// row[4]
-			     "DATE_FORMAT(EndDate,'%%Y%%m%%d') AS EndDate,"			// row[5]
+			      "DATE_FORMAT(StartDate,'%%Y%%m%%d') AS StartDate,"		// row[4]
+			      "DATE_FORMAT(EndDate,'%%Y%%m%%d') AS EndDate,"			// row[5]
 			      "Name"								// row[6]
-		       " FROM hld_holidays"
-		      " WHERE InsCod=%ld"
-		        " AND PlcCod NOT IN"
-			     "(SELECT DISTINCT PlcCod"
-			       " FROM places"
-			      " WHERE InsCod=%ld))"
+		        " FROM hld_holidays"
+		       " WHERE InsCod=%ld"
+		         " AND PlcCod NOT IN"
+			      "(SELECT DISTINCT PlcCod"
+			        " FROM plc_places"
+			       " WHERE InsCod=%ld))"
 		      " ORDER BY %s",
 		      Gbl.Hierarchy.Ins.InsCod,
 		      Gbl.Hierarchy.Ins.InsCod,
@@ -449,16 +450,17 @@ static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld)
    /***** Get data of holiday from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get data of a holiday",
 		       "(SELECT hld_holidays.PlcCod,"					// row[0]
-		               "places.FullName as Place,"				// row[1]
+		               "plc_places.FullName as Place,"				// row[1]
 		               "hld_holidays.HldTyp,"					// row[2]
 		               "DATE_FORMAT(hld_holidays.StartDate,'%%Y%%m%%d'),"	// row[3]
 		               "DATE_FORMAT(hld_holidays.EndDate,'%%Y%%m%%d'),"		// row[4]
 		               "hld_holidays.Name"					// row[5]
-		        " FROM hld_holidays,places"
-		       " WHERE hld_holidays.HldCod=%ld"
-		         " AND hld_holidays.InsCod=%ld"
-		         " AND hld_holidays.PlcCod=places.PlcCod"
-		         " AND places.InsCod=%ld)"
+		         " FROM hld_holidays,"
+		               "plc_places"
+		        " WHERE hld_holidays.HldCod=%ld"
+		          " AND hld_holidays.InsCod=%ld"
+		          " AND hld_holidays.PlcCod=plc_places.PlcCod"
+		          " AND plc_places.InsCod=%ld)"
 		       " UNION "
 		       "(SELECT PlcCod,"
 		               "'' as Place,"
@@ -466,13 +468,13 @@ static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld)
 		               "DATE_FORMAT(StartDate,'%%Y%%m%%d'),"
 		               "DATE_FORMAT(EndDate,'%%Y%%m%%d'),"
 		               "Name"
-		        " FROM hld_holidays"
-		       " WHERE HldCod=%ld"
-		         " AND InsCod=%ld"
-		         " AND PlcCod NOT IN"
-		              "(SELECT DISTINCT PlcCod"
-		                " FROM places"
-		               " WHERE InsCod=%ld))",
+		         " FROM hld_holidays"
+		        " WHERE HldCod=%ld"
+		          " AND InsCod=%ld"
+		          " AND PlcCod NOT IN"
+		               "(SELECT DISTINCT PlcCod"
+		                 " FROM plc_places"
+		                " WHERE InsCod=%ld))",
 		       Hld->HldCod,
 		       Gbl.Hierarchy.Ins.InsCod,
 		       Gbl.Hierarchy.Ins.InsCod,
