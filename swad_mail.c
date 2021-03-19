@@ -1625,7 +1625,7 @@ bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_M
 
    /***** Delete email (not confirmed) for other users *****/
    DB_QueryDELETE ("can not remove pending email for other users",
-		   "DELETE FROM pending_emails"
+		   "DELETE FROM usr_pending_emails"
 		   " WHERE E_mail='%s' AND UsrCod<>%ld",
 	           NewEmail,UsrDat->UsrCod);
 
@@ -1738,13 +1738,13 @@ static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]
   {
    /***** Remove expired pending emails from database *****/
    DB_QueryDELETE ("can not remove old pending mail keys",
-		   "DELETE LOW_PRIORITY FROM pending_emails"
+		   "DELETE LOW_PRIORITY FROM usr_pending_emails"
 		   " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    Cfg_TIME_TO_DELETE_OLD_PENDING_EMAILS);
 
    /***** Insert mail key in database *****/
    DB_QueryREPLACE ("can not create pending password",
-		    "INSERT INTO pending_emails"
+		    "INSERT INTO usr_pending_emails"
 		    " (UsrCod,E_mail,MailKey,DateAndTime)"
 		    " VALUES"
 		    " (%ld,'%s','%s',NOW())",
@@ -1776,7 +1776,9 @@ void Mai_ConfirmEmail (void)
 
    /***** Get user's code and email from key *****/
    if (DB_QuerySELECT (&mysql_res,"can not get user's code and email from key",
-		       "SELECT UsrCod,E_mail FROM pending_emails"
+		       "SELECT UsrCod,"		// row[0]
+		              "E_mail"		// row[1]
+		        " FROM usr_pending_emails"
 		       " WHERE MailKey='%s'",
 		       MailKey))
      {
@@ -1804,15 +1806,19 @@ void Mai_ConfirmEmail (void)
      {
       /***** Delete this key *****/
       DB_QueryDELETE ("can not remove an email key",
-		      "DELETE FROM pending_emails WHERE MailKey='%s'",
+		      "DELETE FROM usr_pending_emails"
+		      " WHERE MailKey='%s'",
 		      MailKey);
 
       /***** Check user's code and email
              and get if email is already confirmed *****/
       if (DB_QuerySELECT (&mysql_res,"can not check if email is confirmed",
-			  "SELECT Confirmed FROM usr_emails"
-			  " WHERE UsrCod=%ld AND E_mail='%s'",
-			  UsrCod,Email))
+			  "SELECT Confirmed"
+			   " FROM usr_emails"
+			  " WHERE UsrCod=%ld"
+			    " AND E_mail='%s'",
+			  UsrCod,
+			  Email))
 	{
 	 Confirmed = false;
 	 if (row)

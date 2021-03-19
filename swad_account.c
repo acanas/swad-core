@@ -1167,36 +1167,43 @@ static void Acc_RemoveUsr (struct UsrData *UsrDat)
   {
    /***** Remove user's webs / social networks *****/
    DB_QueryDELETE ("can not remove user's webs / social networks",
-		   "DELETE FROM usr_webs WHERE UsrCod=%ld",
+		   "DELETE FROM usr_webs"
+		   " WHERE UsrCod=%ld",
 		   UsrDat->UsrCod);
 
    /***** Remove user's nicknames *****/
    DB_QueryDELETE ("can not remove user's nicknames",
-		   "DELETE FROM usr_nicknames WHERE UsrCod=%ld",
+		   "DELETE FROM usr_nicknames"
+		   " WHERE UsrCod=%ld",
 		   UsrDat->UsrCod);
 
    /***** Remove user's emails *****/
    DB_QueryDELETE ("can not remove pending user's emails",
-		   "DELETE FROM pending_emails WHERE UsrCod=%ld",
+		   "DELETE FROM usr_pending_emails"
+		   " WHERE UsrCod=%ld",
 		   UsrDat->UsrCod);
 
    DB_QueryDELETE ("can not remove user's emails",
-		   "DELETE FROM usr_emails WHERE UsrCod=%ld",
+		   "DELETE FROM usr_emails"
+		   " WHERE UsrCod=%ld",
 		   UsrDat->UsrCod);
 
    /***** Remove user's IDs *****/
    DB_QueryDELETE ("can not remove user's IDs",
-		   "DELETE FROM usr_IDs WHERE UsrCod=%ld",
+		   "DELETE FROM usr_IDs"
+		   " WHERE UsrCod=%ld",
 		   UsrDat->UsrCod);
 
    /***** Remove user's last data *****/
    DB_QueryDELETE ("can not remove user's last data",
-		   "DELETE FROM usr_last WHERE UsrCod=%ld",
+		   "DELETE FROM usr_last"
+		   " WHERE UsrCod=%ld",
 		   UsrDat->UsrCod);
 
    /***** Remove user's data  *****/
    DB_QueryDELETE ("can not remove user's data",
-		   "DELETE FROM usr_data WHERE UsrCod=%ld",
+		   "DELETE FROM usr_data"
+		   " WHERE UsrCod=%ld",
 		   UsrDat->UsrCod);
   }
 

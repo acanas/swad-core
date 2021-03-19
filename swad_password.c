@@ -120,7 +120,8 @@ bool Pwd_CheckPendingPassword (void)
 
    /***** Get pending password from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get pending password",
-		       "SELECT PendingPassword FROM pending_passwd"
+		       "SELECT PendingPassword"
+		        " FROM usr_pending_passwd"
 		       " WHERE UsrCod=%ld",
 		       Gbl.Usrs.Me.UsrDat.UsrCod))
      {
@@ -160,7 +161,8 @@ void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void)
    /***** Remove my pending password from database
           since it is not longer necessary *****/
    DB_QueryDELETE ("can not remove pending password",
-		   "DELETE FROM pending_passwd WHERE UsrCod=%ld",
+		   "DELETE FROM usr_pending_passwd"
+		   " WHERE UsrCod=%ld",
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -493,13 +495,13 @@ void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD +
 
    /***** Remove expired pending passwords from database *****/
    DB_QueryDELETE ("can not remove expired pending passwords",
-		   "DELETE LOW_PRIORITY FROM pending_passwd"
+		   "DELETE LOW_PRIORITY FROM usr_pending_passwd"
 		   " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS);
 
    /***** Update my current password in database *****/
    DB_QueryREPLACE ("can not create pending password",
-		    "REPLACE INTO pending_passwd"
+		    "REPLACE INTO usr_pending_passwd"
 		    " (UsrCod,PendingPassword,DateAndTime)"
 		    " VALUES"
 		    " (%ld,'%s',NOW())",

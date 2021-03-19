@@ -2377,45 +2377,6 @@ mysql> DESCRIBE ntf_notifications;
 		   "INDEX(CrsCod),"
 		   "INDEX(TimeNotif))");
 
-   /***** Table pending_emails *****/
-/*
-mysql> DESCRIBE pending_emails;
-+-------------+--------------+------+-----+---------+-------+
-| Field       | Type         | Null | Key | Default | Extra |
-+-------------+--------------+------+-----+---------+-------+
-| UsrCod      | int(11)      | NO   | MUL | NULL    |       |
-| E_mail      | varchar(255) | NO   |     | NULL    |       |
-| MailKey     | char(43)     | NO   | PRI | NULL    |       |
-| DateAndTime | datetime     | NO   |     | NULL    |       |
-+-------------+--------------+------+-----+---------+-------+
-4 rows in set (0,00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS pending_emails ("
-			"UsrCod INT NOT NULL,"
-			"E_mail VARCHAR(255) COLLATE latin1_general_ci NOT NULL,"	// Cns_MAX_CHARS_EMAIL_ADDRESS
-			"MailKey CHAR(43) COLLATE latin1_bin NOT NULL,"			// Mai_LENGTH_EMAIL_CONFIRM_KEY
-			"DateAndTime DATETIME NOT NULL,"
-		   "INDEX(UsrCod),"
-		   "UNIQUE INDEX(MailKey))");
-
-   /***** Table pending_passwd *****/
-/*
-mysql> DESCRIBE pending_passwd;
-+-----------------+----------+------+-----+---------+-------+
-| Field           | Type     | Null | Key | Default | Extra |
-+-----------------+----------+------+-----+---------+-------+
-| UsrCod          | int(11)  | NO   | PRI | NULL    |       |
-| PendingPassword | char(86) | NO   |     | NULL    |       |
-| DateAndTime     | datetime | NO   |     | NULL    |       |
-+-----------------+----------+------+-----+---------+-------+
-3 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS pending_passwd ("
-			"UsrCod INT NOT NULL,"
-			"PendingPassword CHAR(86) COLLATE latin1_bin NOT NULL,"	// Pwd_BYTES_ENCRYPTED_PASSWORD
-			"DateAndTime DATETIME NOT NULL,"
-		   "PRIMARY KEY (UsrCod))");
-
    /***** Table pho_clicks_without_photo *****/
 /*
 mysql> DESCRIBE pho_clicks_without_photo;
@@ -3630,6 +3591,45 @@ mysql> DESCRIBE usr_nicknames;
 			"CreatTime DATETIME NOT NULL,"
 		   "UNIQUE INDEX(UsrCod,Nickname),"
 		   "UNIQUE INDEX(Nickname))");
+
+   /***** Table usr_pending_emails *****/
+/*
+mysql> DESCRIBE usr_pending_emails;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| UsrCod      | int(11)      | NO   | MUL | NULL    |       |
+| E_mail      | varchar(255) | NO   |     | NULL    |       |
+| MailKey     | char(43)     | NO   | PRI | NULL    |       |
+| DateAndTime | datetime     | NO   |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+4 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_pending_emails ("
+			"UsrCod INT NOT NULL,"
+			"E_mail VARCHAR(255) COLLATE latin1_general_ci NOT NULL,"	// Cns_MAX_CHARS_EMAIL_ADDRESS
+			"MailKey CHAR(43) COLLATE latin1_bin NOT NULL,"			// Mai_LENGTH_EMAIL_CONFIRM_KEY
+			"DateAndTime DATETIME NOT NULL,"
+		   "INDEX(UsrCod),"
+		   "UNIQUE INDEX(MailKey))");
+
+   /***** Table usr_pending_passwd *****/
+/*
+mysql> DESCRIBE usr_pending_passwd;
++-----------------+----------+------+-----+---------+-------+
+| Field           | Type     | Null | Key | Default | Extra |
++-----------------+----------+------+-----+---------+-------+
+| UsrCod          | int(11)  | NO   | PRI | NULL    |       |
+| PendingPassword | char(86) | NO   |     | NULL    |       |
+| DateAndTime     | datetime | NO   |     | NULL    |       |
++-----------------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_pending_passwd ("
+			"UsrCod INT NOT NULL,"
+			"PendingPassword CHAR(86) COLLATE latin1_bin NOT NULL,"	// Pwd_BYTES_ENCRYPTED_PASSWORD
+			"DateAndTime DATETIME NOT NULL,"
+		   "PRIMARY KEY (UsrCod))");
 
    /***** Table usr_report *****/
 /*

@@ -1141,24 +1141,6 @@ CREATE TABLE IF NOT EXISTS ntf_notifications (
 	INDEX(ToUsrCod),
 	INDEX(TimeNotif));
 --
--- Table pending_emails: stores the emails pending of confirmation
---
-CREATE TABLE IF NOT EXISTS pending_emails (
-	UsrCod INT NOT NULL,
-	E_mail VARCHAR(255) COLLATE latin1_general_ci NOT NULL,
-	MailKey CHAR(43) COLLATE latin1_bin NOT NULL,
-	DateAndTime DATETIME NOT NULL,
-	INDEX(UsrCod),
-	UNIQUE INDEX(MailKey));
---
--- Table pending_passwd: stores the passwords pending of activation, sent by e-mail when a user who have forgotten his/her password request a new one
---
-CREATE TABLE IF NOT EXISTS pending_passwd (
-	UsrCod INT NOT NULL,
-	PendingPassword CHAR(86) COLLATE latin1_bin NOT NULL,
-	DateAndTime DATETIME NOT NULL,
-	PRIMARY KEY(UsrCod));
---
 -- Table pho_clicks_without_photo: stores the number of clicks that remains to each user before being required to submit his/her photo
 --
 CREATE TABLE IF NOT EXISTS pho_clicks_without_photo (
@@ -1736,6 +1718,24 @@ CREATE TABLE IF NOT EXISTS usr_nicknames (
 	CreatTime DATETIME NOT NULL,
 	UNIQUE INDEX(UsrCod,Nickname),
 	UNIQUE INDEX(Nickname));
+--
+-- Table usr_pending_emails: stores the emails pending of confirmation
+--
+CREATE TABLE IF NOT EXISTS usr_pending_emails (
+	UsrCod INT NOT NULL,
+	E_mail VARCHAR(255) COLLATE latin1_general_ci NOT NULL,
+	MailKey CHAR(43) COLLATE latin1_bin NOT NULL,
+	DateAndTime DATETIME NOT NULL,
+	INDEX(UsrCod),
+	UNIQUE INDEX(MailKey));
+--
+-- Table usr_pending_passwd: stores the passwords pending of activation, sent by e-mail when a user who have forgotten his/her password request a new one
+--
+CREATE TABLE IF NOT EXISTS usr_pending_passwd (
+	UsrCod INT NOT NULL,
+	PendingPassword CHAR(86) COLLATE latin1_bin NOT NULL,
+	DateAndTime DATETIME NOT NULL,
+	PRIMARY KEY(UsrCod));
 --
 -- Table usr_report: stores users' usage reports
 --
