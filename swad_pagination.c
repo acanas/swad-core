@@ -67,7 +67,7 @@ static const char *Pag_ParamNumPag[Pag_NUM_WHAT_PAGINATE] =
    [Pag_EXAMS            ] = "NumPagExa",
    [Pag_GAMES            ] = "NumPagGam",
    [Pag_SURVEYS          ] = "NumPagSvy",
-   [Pag_ATT_EVENTS       ] = "NumPagAtt",
+   [Pag_ATmt_EVENTS       ] = "NumPagAtt",
    [Pag_THREADS_FORUM    ] = "NumPagThr",
    [Pag_POSTS_FORUM      ] = "NumPagPst",
    [Pag_MESSAGES_RECEIVED] = "NumPagRcv",
@@ -211,7 +211,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
-            case Pag_ATT_EVENTS:
+            case Pag_ATmt_EVENTS:
                Frm_StartFormAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
                Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
@@ -338,7 +338,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
-            case Pag_ATT_EVENTS:
+            case Pag_ATmt_EVENTS:
                Frm_StartFormAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
                Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
@@ -451,7 +451,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
-            case Pag_ATT_EVENTS:
+            case Pag_ATmt_EVENTS:
                Frm_StartFormAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
                Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
@@ -576,7 +576,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   WhichGroups = Grp_GetParamWhichGroups ();
                   Grp_PutParamWhichGroups (&WhichGroups);
                   break;
-               case Pag_ATT_EVENTS:
+               case Pag_ATmt_EVENTS:
                   Frm_StartFormAnchor (ActSeeAtt,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
                   Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
@@ -688,7 +688,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
-            case Pag_ATT_EVENTS:
+            case Pag_ATmt_EVENTS:
                Frm_StartFormAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
                Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
@@ -801,7 +801,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                WhichGroups = Grp_GetParamWhichGroups ();
                Grp_PutParamWhichGroups (&WhichGroups);
                break;
-            case Pag_ATT_EVENTS:
+            case Pag_ATmt_EVENTS:
                Frm_StartFormAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
                Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);

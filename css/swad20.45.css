@@ -3157,7 +3157,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	width:100%;
 	margin:0 auto;
 	}
-.TT_CELL
+.Tmt_CELL
 	{
 	box-sizing:border-box;
 	max-width:80px;
@@ -3166,7 +3166,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	text-overflow:ellipsis;
 	margin:0 auto;
 	}
-.TT_TXT
+.Tmt_TXT
 	{
 	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
 	color:#345C6C;
@@ -3174,21 +3174,21 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	line-height:100%;
 	letter-spacing:0;
 	}
-.TT_DAY
+.Tmt_DAY
 	{
 	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
 	color:#202020;
 	font-size:10pt;
 	letter-spacing:0;
 	}
-.TT_SUNDAY
+.Tmt_SUNDAY
 	{
 	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
 	color:red;
 	font-size:10pt;
 	letter-spacing:0;
 	}
-.TT_HOUR_BIG
+.Tmt_HOUR_BIG
 	{
 	color:#808080;
 	font-size:10pt;
@@ -3196,7 +3196,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	line-height:100%;
 	letter-spacing:0;
 	}
-.TT_HOUR_SMALL
+.Tmt_HOUR_SMALL
 	{
 	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
 	color:#A0A0A0;
@@ -3204,18 +3204,18 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	line-height:100%;
 	letter-spacing:0;
 	}
-.TT_HOURCOL	{box-sizing:border-box; height:16px; width:7%;}
-.TT_HOUR	{box-sizing:border-box; height:32px; width:7%;}
-.TT_MINICOL	{box-sizing:border-box; height:16px; width:2%;}
-.TT_ALIGN	{box-sizing:border-box; height:16px; width:1%;}
-.TT_FREE0	{box-sizing:border-box; height:16px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #EEEADC #F4F2EA;}
-.TT_FREE1	{box-sizing:border-box; height:16px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #E0D9C2 #F4F2EA;}
-.TT_FREE2	{box-sizing:border-box; height:16px; background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #F5F2E9 #FBFAF7;}
-.TT_FREE3	{box-sizing:border-box; height:16px; background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #E0D9C2 #FBFAF7;}
-.TT_LECT	{box-sizing:border-box; height:16px; background-color:#C0DAE4; border:solid 2px; border-color:#D5F1FC #AAC1C9 #AAC1C9 #D5F1FC;}
-.TT_PRAC	{box-sizing:border-box; height:16px; background-color:#DBE5E9; border:solid 2px; border-color:#EDF8FC #C7D0D4 #C7D0D4 #EDF8FC;}
-.TT_TUTO	{box-sizing:border-box; height:16px; background-color:#D6E9C3; border:solid 2px; border-color:#E8FCD3 #C2D4B1 #C2D4B1 #E8FCD3;}
-.TT_TYP, .TT_DUR, .TT_GRP, .TT_INF
+.Tmt_HOURCOL	{box-sizing:border-box; height:16px; width:7%;}
+.Tmt_HOUR	{box-sizing:border-box; height:32px; width:7%;}
+.Tmt_MINICOL	{box-sizing:border-box; height:16px; width:2%;}
+.Tmt_ALIGN	{box-sizing:border-box; height:16px; width:1%;}
+.Tmt_FREE0	{box-sizing:border-box; height:16px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #EEEADC #F4F2EA;}
+.Tmt_FREE1	{box-sizing:border-box; height:16px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #E0D9C2 #F4F2EA;}
+.Tmt_FREE2	{box-sizing:border-box; height:16px; background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #F5F2E9 #FBFAF7;}
+.Tmt_FREE3	{box-sizing:border-box; height:16px; background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #E0D9C2 #FBFAF7;}
+.Tmt_LECT	{box-sizing:border-box; height:16px; background-color:#C0DAE4; border:solid 2px; border-color:#D5F1FC #AAC1C9 #AAC1C9 #D5F1FC;}
+.Tmt_PRAC	{box-sizing:border-box; height:16px; background-color:#DBE5E9; border:solid 2px; border-color:#EDF8FC #C7D0D4 #C7D0D4 #EDF8FC;}
+.Tmt_TUTO	{box-sizing:border-box; height:16px; background-color:#D6E9C3; border:solid 2px; border-color:#E8FCD3 #C2D4B1 #C2D4B1 #E8FCD3;}
+.Tmt_TYP, .Tmt_DUR, .Tmt_GRP, .Tmt_INF
 	{
 	width:80px;
 	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
@@ -3410,14 +3410,14 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 
 /********************************* Attendance ********************************/
-.ATT_CHECK
+.ATmt_CHECK
 	{
 	display:inline-block;
 	font-size:13pt;
 	font-weight:bold;
 	color:darkgreen;
 	}
-.ATT_CROSS
+.ATmt_CROSS
 	{
 	display:inline-block;
 	font-size:13pt;

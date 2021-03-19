@@ -2871,9 +2871,9 @@ mysql> DESCRIBE svy_users;
 			"UsrCod INT NOT NULL,"
 		   "UNIQUE INDEX(SvyCod,UsrCod))");
 
-   /***** Table timetable_crs *****/
+   /***** Table tmt_courses *****/
 /*
-mysql> DESCRIBE timetable_crs;
+mysql> DESCRIBE tmt_courses;
 +-----------+------------------------------------+------+-----+---------+-------+
 | Field     | Type                               | Null | Key | Default | Extra |
 +-----------+------------------------------------+------+-----+---------+-------+
@@ -2887,19 +2887,19 @@ mysql> DESCRIBE timetable_crs;
 +-----------+------------------------------------+------+-----+---------+-------+
 7 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS timetable_crs ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tmt_courses ("
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"GrpCod INT NOT NULL DEFAULT -1,"
 			"Weekday TINYINT NOT NULL,"	// 0=Monday...6=Sunday
 			"StartTime TIME NOT NULL,"
 			"Duration TIME NOT NULL,"
 			"ClassType ENUM('free','lecture','practical') NOT NULL,"
-			"Info VARCHAR(2047) NOT NULL DEFAULT '',"	// TT_MAX_BYTES_INFO
+			"Info VARCHAR(2047) NOT NULL DEFAULT '',"	// Tmt_MAX_BYTES_INFO
 		   "INDEX(CrsCod,GrpCod))");
 
-   /***** Table timetable_tut *****/
+   /***** Table tmt_tutoring *****/
 /*
-mysql> DESCRIBE timetable_tut;
+mysql> DESCRIBE tmt_tutoring;
 +-----------+---------------+------+-----+---------+-------+
 | Field     | Type          | Null | Key | Default | Extra |
 +-----------+---------------+------+-----+---------+-------+
@@ -2911,12 +2911,12 @@ mysql> DESCRIBE timetable_tut;
 +-----------+---------------+------+-----+---------+-------+
 5 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS timetable_tut ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tmt_tutoring ("
 			"UsrCod INT NOT NULL,"
 			"Weekday TINYINT NOT NULL,"	// 0=Monday...6=Sunday
 			"StartTime TIME NOT NULL,"
 			"Duration TIME NOT NULL,"
-			"Info VARCHAR(2047) NOT NULL DEFAULT '',"	// TT_MAX_BYTES_INFO
+			"Info VARCHAR(2047) NOT NULL DEFAULT '',"	// Tmt_MAX_BYTES_INFO
 		   "INDEX(UsrCod))");
 
    /***** Table tml_comments *****/

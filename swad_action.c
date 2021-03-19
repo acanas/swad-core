@@ -415,7 +415,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActSeeBib		] = {  32, 4,TabCrs,ActSeeBib		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"book"			},
    [ActSeeFAQ		] = {  54, 5,TabCrs,ActSeeFAQ		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"question"		},
    [ActSeeCrsLnk	] = {   9, 6,TabCrs,ActSeeCrsLnk	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"link"			},
-   [ActSeeCrsTT		] = {  25, 7,TabCrs,ActSeeCrsTT		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_ShowClassTimeTable		,"clock"		},
+   [ActSeeCrsTT		] = {  25, 7,TabCrs,ActSeeCrsTT		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tmt_ShowClassTimeTable		,"clock"		},
 
    // Actions not in menu:
    [ActPrnCrsInf	] = {1028,-1,TabUnk,ActSeeCrsInf	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,CrsCfg_PrintConfiguration	,NULL},
@@ -544,10 +544,10 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRcvRchTxtFAQ	] = {1106,-1,TabUnk,ActSeeFAQ		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_RecAndChangeRichTxtInfo	,NULL},
    [ActRcvRchTxtCrsLnk	] = {1107,-1,TabUnk,ActSeeCrsLnk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_RecAndChangeRichTxtInfo	,NULL},
 
-   [ActPrnCrsTT		] = { 152,-1,TabUnk,ActSeeCrsTT		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,TT_ShowClassTimeTable		,NULL},
-   [ActEdiCrsTT		] = {  45,-1,TabUnk,ActSeeCrsTT		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_EditCrsTimeTable		,NULL},
-   [ActChgCrsTT		] = {  53,-1,TabUnk,ActSeeCrsTT		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_EditCrsTimeTable		,NULL},
-   [ActChgCrsTT1stDay	] = {1486,-1,TabUnk,ActSeeCrsTT		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,TT_ShowClassTimeTable		,NULL},
+   [ActPrnCrsTT		] = { 152,-1,TabUnk,ActSeeCrsTT		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Tmt_ShowClassTimeTable		,NULL},
+   [ActEdiCrsTT		] = {  45,-1,TabUnk,ActSeeCrsTT		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tmt_EditCrsTimeTable		,NULL},
+   [ActChgCrsTT		] = {  53,-1,TabUnk,ActSeeCrsTT		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tmt_EditCrsTimeTable		,NULL},
+   [ActChgCrsTT1stDay	] = {1486,-1,TabUnk,ActSeeCrsTT		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Tmt_ShowClassTimeTable		,NULL},
 
    // TabAss ******************************************************************
    // Actions in menu:
@@ -1740,7 +1740,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // Actions in menu:
    [ActFrmRolSes	] = { 843, 0,TabPrf,ActFrmRolSes	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WriteFormLogout		,"power-off"		},
    [ActMyCrs		] = { 987, 1,TabPrf,ActMyCrs		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_ReqSelectOneOfMyCourses	,"sitemap"		},
-   [ActSeeMyTT		] = { 408, 2,TabPrf,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_ShowClassTimeTable		,"clock"		},
+   [ActSeeMyTT		] = { 408, 2,TabPrf,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tmt_ShowClassTimeTable		,"clock"		},
    [ActSeeMyAgd		] = {1602, 3,TabPrf,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_GetParamsAndShowMyAgenda	,"calendar"		},
    [ActFrmMyAcc		] = {  36, 4,TabPrf,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_ShowFormMyAccount		,"at"			},
    [ActReqEdiRecSha	] = { 285, 5,TabPrf,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ShowMySharedRecordAndMore	,"address-card"		},
@@ -1814,10 +1814,10 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActPrnUsrQR		] = {1022,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Usr_PrintUsrQRCode		,NULL},
 
-   [ActPrnMyTT		] = { 409,-1,TabUnk,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,TT_ShowClassTimeTable		,NULL},
-   [ActEdiTut		] = {  65,-1,TabUnk,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_EditMyTutTimeTable		,NULL},
-   [ActChgTut		] = {  48,-1,TabUnk,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_EditMyTutTimeTable		,NULL},
-   [ActChgMyTT1stDay	] = {1487,-1,TabUnk,ActSeeMyTT		,0x3F8,0x3C7,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,TT_ShowClassTimeTable		,NULL},
+   [ActPrnMyTT		] = { 409,-1,TabUnk,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Tmt_ShowClassTimeTable		,NULL},
+   [ActEdiTut		] = {  65,-1,TabUnk,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tmt_EditMyTutTimeTable		,NULL},
+   [ActChgTut		] = {  48,-1,TabUnk,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tmt_EditMyTutTimeTable		,NULL},
+   [ActChgMyTT1stDay	] = {1487,-1,TabUnk,ActSeeMyTT		,0x3F8,0x3C7,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Tmt_ShowClassTimeTable		,NULL},
   };
 
 Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse unique action codes!

@@ -33,42 +33,42 @@
 /************************* Public constants and types ************************/
 /*****************************************************************************/
 
-#define TT_MAX_CHARS_INFO	(128 - 1)	// 127
-#define TT_MAX_BYTES_INFO	((TT_MAX_CHARS_INFO + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Tmt_MAX_CHARS_INFO	(128 - 1)	// 127
+#define Tmt_MAX_BYTES_INFO	((Tmt_MAX_CHARS_INFO + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 typedef enum
   {
-   TT_CRS_VIEW,
-   TT_TUT_VIEW,
-   TT_CRS_EDIT,
-   TT_TUT_EDIT,
-  } TT_TimeTableView_t;
+   Tmt_CRS_VIEW,
+   Tmt_TUT_VIEW,
+   Tmt_CRS_EDIT,
+   Tmt_TUT_EDIT,
+  } Tmt_TimeTableView_t;
 
-#define TT_NUM_TIMETABLE_TYPES 3
+#define Tmt_NUM_TIMETABLE_TYPES 3
 typedef enum
   {
-   TT_COURSE_TIMETABLE   = 0,
-   TT_MY_TIMETABLE       = 1,
-   TT_TUTORING_TIMETABLE = 2,
-  } TT_TimeTableType_t;
+   Tmt_COURSE_TIMETABLE   = 0,
+   Tmt_MY_TIMETABLE       = 1,
+   Tmt_TUTORING_TIMETABLE = 2,
+  } Tmt_TimeTableType_t;
 
 typedef enum
   {
-   TT_FREE_INTERVAL,
-   TT_FIRST_INTERVAL,
-   TT_NEXT_INTERVAL,
-  } TT_IntervalType_t;
+   Tmt_FREE_INTERVAL,
+   Tmt_FIRST_INTERVAL,
+   Tmt_NEXT_INTERVAL,
+  } Tmt_IntervalType_t;
 
-#define TT_NUM_CLASS_TYPES 4
+#define Tmt_NUM_CLASS_TYPES 4
 typedef enum
   {
-   TT_FREE      = 0,
-   TT_LECTURE   = 1,
-   TT_PRACTICAL = 2,
-   TT_TUTORING  = 3,
-  } TT_ClassType_t;
+   Tmt_FREE      = 0,
+   Tmt_LECTURE   = 1,
+   Tmt_PRACTICAL = 2,
+   Tmt_TUTORING  = 3,
+  } Tmt_ClassType_t;
 
-struct TT_Range
+struct Tmt_Range
   {
    struct
      {
@@ -78,25 +78,25 @@ struct TT_Range
    unsigned MinutesPerInterval;	// 5, 15 or 30 minutes
   };
 
-struct TT_Timetable
+struct Tmt_Timetable
   {
    struct
      {
-      struct TT_Range Range;
+      struct Tmt_Range Range;
       unsigned HoursPerDay;		// From start hour to end hour
       unsigned SecondsPerInterval;
       unsigned IntervalsPerHour;
       unsigned IntervalsPerDay;
       unsigned IntervalsBeforeStartHour;
      } Config;
-   TT_TimeTableType_t Type;
-   TT_TimeTableView_t View;
+   Tmt_TimeTableType_t Type;
+   Tmt_TimeTableView_t View;
    unsigned Weekday;
    unsigned Interval;
    unsigned Column;
-   TT_ClassType_t ClassType;
+   Tmt_ClassType_t ClassType;
    unsigned DurationIntervals;
-   char Info[TT_MAX_BYTES_INFO + 1];
+   char Info[Tmt_MAX_BYTES_INFO + 1];
    long GrpCod;		// Group code (-1 if no group selected)
    struct
      {
@@ -110,9 +110,9 @@ struct TT_Timetable
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TT_ShowClassTimeTable (void);
-void TT_EditCrsTimeTable (void);
-void TT_EditMyTutTimeTable (void);
-void TT_ShowTimeTable (struct TT_Timetable *Timetable,long UsrCod);
+void Tmt_ShowClassTimeTable (void);
+void Tmt_EditCrsTimeTable (void);
+void Tmt_EditMyTutTimeTable (void);
+void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod);
 
 #endif

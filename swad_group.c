@@ -1693,7 +1693,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
      } AssociationsToGrps[Grp_NUM_ASSOCIATIONS_TO_GROUPS] =
      {
       [Grp_ASSIGNMENT] = {"asg_grp"   ,"AsgCod"},
-      [Grp_ATT_EVENT ] = {"att_grp"   ,"AttCod"},
+      [Grp_ATmt_EVENT ] = {"att_grp"   ,"AttCod"},
       [Grp_SURVEY    ] = {"svy_grp"   ,"SvyCod"},
       [Grp_EXA_EVENT ] = {"exa_groups","SesCod"},
       [Grp_MATCH     ] = {"mch_groups","MchCod"},
@@ -4117,9 +4117,12 @@ static void Grp_RemoveGroupTypeCompletely (void)
 
    /***** Change all groups of this type in course timetable *****/
    DB_QueryUPDATE ("can not update all groups of a type in course timetable",
-		   "UPDATE timetable_crs SET GrpCod=-1"
+		   "UPDATE tmt_courses"
+		     " SET GrpCod=-1"
 		   " WHERE GrpCod IN"
-		   " (SELECT GrpCod FROM crs_grp WHERE GrpTypCod=%ld)",
+			 " (SELECT GrpCod"
+			  " FROM crs_grp"
+			  " WHERE GrpTypCod=%ld)",
                    Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove all the students in groups of this type *****/
@@ -4178,7 +4181,9 @@ static void Grp_RemoveGroupCompletely (void)
 
    /***** Change this group in course timetable *****/
    DB_QueryUPDATE ("can not update a group in course timetable",
-		   "UPDATE timetable_crs SET GrpCod=-1 WHERE GrpCod=%ld",
+		   "UPDATE tmt_courses"
+		     " SET GrpCod=-1"
+		   " WHERE GrpCod=%ld",
                    Gbl.Crs.Grps.GrpCod);
 
    /***** Remove all the students in this group *****/

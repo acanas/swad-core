@@ -136,7 +136,7 @@ typedef enum
 typedef enum
   {
    Grp_ASSIGNMENT,
-   Grp_ATT_EVENT,
+   Grp_ATmt_EVENT,
    Grp_SURVEY,
    Grp_EXA_EVENT,
    Grp_MATCH,

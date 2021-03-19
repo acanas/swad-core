@@ -48,7 +48,7 @@ typedef enum
    Pag_EXAMS			=  3,
    Pag_GAMES			=  4,
    Pag_SURVEYS			=  5,
-   Pag_ATT_EVENTS		=  6,
+   Pag_ATmt_EVENTS		=  6,
    Pag_THREADS_FORUM		=  7,
    Pag_POSTS_FORUM		=  8,
    Pag_MESSAGES_RECEIVED	=  9,

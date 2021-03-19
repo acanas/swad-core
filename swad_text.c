@@ -42446,27 +42446,6 @@ const char *Txt_Show_next_X_clicks =	// Warning: it is very important to include
 	"Mostrar %ld cliques subsequentes";
 #endif
 
-const char *Txt_Show_office_hours =
-#if   L==1	// ca
-	"Mostra horaris tutories";
-#elif L==2	// de
-	"Gesch&auml;ftszeiten anzeigen";
-#elif L==3	// en
-	"Show office hours";
-#elif L==4	// es
-	"Ver horarios tutor&iacute;as";
-#elif L==5	// fr
-	"Voir horaires tuteur";
-#elif L==6	// gn
-	"Ver horarios tutor&iacute;as";	// Okoteve traducción
-#elif L==7	// it
-	"Mostra orari tutoraggi";
-#elif L==8	// pl
-	"Poka&zdot; godzin pracy biura";
-#elif L==9	// pt
-	"Mostrar hor&aacute;rios tutor";
-#endif
-
 const char *Txt_Show_previous_X_clicks =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
 	"Mostrar %ld clics anteriores";		// Necessita traduccio
@@ -42528,6 +42507,27 @@ const char *Txt_Show_statistic =
 	"Show statistic";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Mostrar estat&iacute;stica";
+#endif
+
+const char *Txt_Show_tutoring_hours =
+#if   L==1	// ca
+	"Mostra horaris tutories";
+#elif L==2	// de
+	"Gesch&auml;ftszeiten anzeigen";
+#elif L==3	// en
+	"Show tutoring hours";
+#elif L==4	// es
+	"Ver horarios tutor&iacute;as";
+#elif L==5	// fr
+	"Voir horaires tuteur";
+#elif L==6	// gn
+	"Ver horarios tutor&iacute;as";	// Okoteve traducción
+#elif L==7	// it
+	"Mostra orari tutoraggi";
+#elif L==8	// pl
+	"Poka&zdot; godzin pracy biura";
+#elif L==9	// pt
+	"Mostrar hor&aacute;rios tutor";
 #endif
 
 const char *Txt_Shuffle =
@@ -53058,9 +53058,9 @@ const char *Txt_TIMELINE_posts =
 	"publica&ccedil;&otilde;es";
 #endif
 
-const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
+const char *Txt_TIMETABLE_TYPES[Tmt_NUM_TIMETABLE_TYPES] =
 	{
-	[TT_COURSE_TIMETABLE] =
+	[Tmt_COURSE_TIMETABLE] =
 #if   L==1	// ca
 	"Horari de classes de l'assignatura"
 #elif L==2	// de
@@ -53081,7 +53081,7 @@ const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 	"Hor&aacute;rio"
 #endif
 	,
-	[TT_MY_TIMETABLE] =
+	[Tmt_MY_TIMETABLE] =
 #if   L==1	// ca
 	"Horari de les meves assignatures"
 #elif L==2	// de
@@ -53102,13 +53102,13 @@ const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 	"Hor&aacute;rio minha disciplinas"
 #endif
 	,
-	[TT_TUTORING_TIMETABLE] =
+	[Tmt_TUTORING_TIMETABLE] =
 #if   L==1	// ca
 	"Horari de tutories"
 #elif L==2	// de
 	"Gesch&auml;ftszeiten"
 #elif L==3	// en
-	"Office hours"
+	"Tutoring hours"
 #elif L==4	// es
 	"Horario de tutor&iacute;as"
 #elif L==5	// fr
@@ -53187,9 +53187,9 @@ const char *Txt_TIMELINE_Shared_by_X_USERS =	// Warning: it is very important to
 	"Compartilhado por %ld";
 #endif
 
-const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
+const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES] =
 	{
-	[TT_FREE] =
+	[Tmt_FREE] =
 #if   L==1	// ca
 	"Lliure"
 #elif L==2	// de
@@ -53210,7 +53210,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 	"Livre"
 #endif
 	,
-	[TT_LECTURE] =
+	[Tmt_LECTURE] =
 #if   L==1	// ca
 	"Teoria"
 #elif L==2	// de
@@ -53231,7 +53231,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 	"Teoria"
 #endif
 	,
-	[TT_PRACTICAL] =
+	[Tmt_PRACTICAL] =
 #if   L==1	// ca
 	"Pr&agrave;ct."
 #elif L==2	// de
@@ -53252,7 +53252,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 	"Pr&aacute;ct."
 #endif
 	,
-	[TT_TUTORING] =
+	[Tmt_TUTORING] =
 #if   L==1	// ca
 	"Tutories"
 #elif L==2	// de
@@ -56353,7 +56353,7 @@ const char *Txt_View_record_and_office_hours =
 #elif L==2	// de
 	"Anzeigen profil und Gesch&auml;ftszeiten";
 #elif L==3	// en
-	"View record and office hours";
+	"View record and tutoring hours";
 #elif L==4	// es
 	"Ver ficha y horario de tutor&iacute;as";
 #elif L==5	// fr

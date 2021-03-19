@@ -1362,9 +1362,9 @@ CREATE TABLE IF NOT EXISTS svy_users (
 	UsrCod INT NOT NULL,
 	UNIQUE INDEX(SvyCod,UsrCod));
 --
--- Table timetable_crs: stores the timetables of the courses
+-- Table tmt_courses: stores the timetables of the courses
 --
-CREATE TABLE IF NOT EXISTS timetable_crs (
+CREATE TABLE IF NOT EXISTS tmt_courses (
 	CrsCod INT NOT NULL DEFAULT -1,
 	GrpCod INT NOT NULL DEFAULT -1,
 	Weekday TINYINT NOT NULL,
@@ -1374,9 +1374,9 @@ CREATE TABLE IF NOT EXISTS timetable_crs (
 	Info VARCHAR(2047) NOT NULL DEFAULT '',
 	INDEX(CrsCod,GrpCod));
 --
--- Table timetable_tut: stores the timetables of office hours of the teachers
+-- Table tmt_tutoring: stores the timetables of tutoring hours of the teachers
 --
-CREATE TABLE IF NOT EXISTS timetable_tut (
+CREATE TABLE IF NOT EXISTS tmt_tutoring (
 	UsrCod INT NOT NULL,
 	Weekday TINYINT NOT NULL,
 	StartTime TIME NOT NULL,

@@ -1931,7 +1931,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       /***** Remove information of the course ****/
       /* Remove timetable of the course */
       DB_QueryDELETE ("can not remove the timetable of a course",
-		      "DELETE FROM timetable_crs"
+		      "DELETE FROM tmt_courses"
 		      " WHERE CrsCod=%ld",
 		      CrsCod);
 
