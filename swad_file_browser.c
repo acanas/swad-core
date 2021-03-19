@@ -4382,7 +4382,9 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
             CrsCod);
 
    /***** Build subquery for projects *****/
-   sprintf (SubqueryPrj,"(SELECT PrjCod FROM projects WHERE CrsCod=%ld)",
+   sprintf (SubqueryPrj,"(SELECT PrjCod"
+	                  " FROM prj_projects"
+	                 " WHERE CrsCod=%ld)",
             CrsCod);
 
    /***** Remove format of files of marks *****/

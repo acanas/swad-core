@@ -1211,17 +1211,9 @@ CREATE TABLE IF NOT EXISTS prj_config (
 	Editable ENUM('N','Y') NOT NULL DEFAULT 'Y',
 	UNIQUE INDEX(CrsCod));
 --
--- Table prj_usr: stores the users inside projects
+-- Table prj_projects: stores the projects proposed by the teachers to their students
 --
-CREATE TABLE IF NOT EXISTS prj_usr (
-	PrjCod INT NOT NULL,
-	RoleInProject TINYINT NOT NULL DEFAULT 0,
-	UsrCod INT NOT NULL,
-	UNIQUE INDEX(PrjCod,RoleInProject,UsrCod));
---
--- Table projects: stores the projects proposed by the teachers to their students
---
-CREATE TABLE IF NOT EXISTS projects (
+CREATE TABLE IF NOT EXISTS prj_projects (
 	PrjCod INT NOT NULL AUTO_INCREMENT,
 	CrsCod INT NOT NULL DEFAULT -1,
 	DptCod INT NOT NULL DEFAULT -1,
@@ -1242,6 +1234,14 @@ CREATE TABLE IF NOT EXISTS projects (
 	INDEX(CrsCod,CreatTime),
 	INDEX(CrsCod,ModifTime),
 	INDEX(CrsCod,DptCod));
+--
+-- Table prj_usr: stores the users inside projects
+--
+CREATE TABLE IF NOT EXISTS prj_usr (
+	PrjCod INT NOT NULL,
+	RoleInProject TINYINT NOT NULL DEFAULT 0,
+	UsrCod INT NOT NULL,
+	UNIQUE INDEX(PrjCod,RoleInProject,UsrCod));
 --
 -- Table rooms: stores the rooms associated to each center
 --

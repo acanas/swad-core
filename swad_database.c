@@ -2528,27 +2528,9 @@ mysql> DESCRIBE prj_config;
 			"Editable ENUM('N','Y') NOT NULL DEFAULT 'Y',"
 		   "UNIQUE INDEX(CrsCod))");
 
-   /***** Table prj_usr *****/
+   /***** Table prj_projects *****/
 /*
-mysql> DESCRIBE prj_usr;
-+---------------+------------+------+-----+---------+-------+
-| Field         | Type       | Null | Key | Default | Extra |
-+---------------+------------+------+-----+---------+-------+
-| PrjCod        | int(11)    | NO   | PRI | NULL    |       |
-| RoleInProject | tinyint(4) | NO   | PRI | 0       |       |
-| UsrCod        | int(11)    | NO   | PRI | NULL    |       |
-+---------------+------------+------+-----+---------+-------+
-3 rows in set (0,00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_usr ("
-			"PrjCod INT NOT NULL,"
-			"RoleInProject TINYINT NOT NULL DEFAULT 0,"
-			"UsrCod INT NOT NULL,"
-			"UNIQUE INDEX(PrjCod,RoleInProject,UsrCod))");
-
-   /***** Table projects *****/
-/*
-mysql> DESCRIBE projects;
+mysql> DESCRIBE prj_projects;
 +-------------+-------------------------------------+------+-----+---------+----------------+
 | Field       | Type                                | Null | Key | Default | Extra          |
 +-------------+-------------------------------------+------+-----+---------+----------------+
@@ -2570,7 +2552,7 @@ mysql> DESCRIBE projects;
 +-------------+-------------------------------------+------+-----+---------+----------------+
 15 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS projects ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_projects ("
 			"PrjCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"DptCod INT NOT NULL DEFAULT -1,"
@@ -2591,6 +2573,24 @@ mysql> DESCRIBE projects;
 		   "INDEX(CrsCod,CreatTime),"
 		   "INDEX(CrsCod,ModifTime),"
 		   "INDEX(CrsCod,DptCod))");
+
+   /***** Table prj_usr *****/
+/*
+mysql> DESCRIBE prj_usr;
++---------------+------------+------+-----+---------+-------+
+| Field         | Type       | Null | Key | Default | Extra |
++---------------+------------+------+-----+---------+-------+
+| PrjCod        | int(11)    | NO   | PRI | NULL    |       |
+| RoleInProject | tinyint(4) | NO   | PRI | 0       |       |
+| UsrCod        | int(11)    | NO   | PRI | NULL    |       |
++---------------+------------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_usr ("
+			"PrjCod INT NOT NULL,"
+			"RoleInProject TINYINT NOT NULL DEFAULT 0,"
+			"UsrCod INT NOT NULL,"
+			"UNIQUE INDEX(PrjCod,RoleInProject,UsrCod))");
 
    /***** Table rooms *****/
 /*

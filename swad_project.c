@@ -1578,7 +1578,7 @@ static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
 				 "NumStds,"			// row[1] =
 				 "Title<>'',"			// row[2] = 0 / 1
 				 "Description<>''"		// row[3] = 0 / 1
-			  " FROM projects"
+			   " FROM prj_projects"
 			  " WHERE PrjCod=%ld",
 			  PrjCod))	// Project found...
 	{
@@ -2823,19 +2823,19 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
    char *DptCodSubQuery;
    static const char *OrderBySubQuery[Prj_NUM_ORDERS] =
      {
-      [Prj_ORDER_START_TIME] = "projects.CreatTime DESC,"
-			       "projects.ModifTime DESC,"
-			       "projects.Title",
-      [Prj_ORDER_END_TIME  ] = "projects.ModifTime DESC,"
-			       "projects.CreatTime DESC,"
-			       "projects.Title",
-      [Prj_ORDER_TITLE     ] = "projects.Title,"
-			       "projects.CreatTime DESC,"
-			       "projects.ModifTime DESC",
+      [Prj_ORDER_START_TIME] = "prj_projects.CreatTime DESC,"
+			       "prj_projects.ModifTime DESC,"
+			       "prj_projects.Title",
+      [Prj_ORDER_END_TIME  ] = "prj_projects.ModifTime DESC,"
+			       "prj_projects.CreatTime DESC,"
+			       "prj_projects.Title",
+      [Prj_ORDER_TITLE     ] = "prj_projects.Title,"
+			       "prj_projects.CreatTime DESC,"
+			       "prj_projects.ModifTime DESC",
       [Prj_ORDER_DEPARTMENT] = "dpt_departments.FullName,"
-			       "projects.CreatTime DESC,"
-			       "projects.ModifTime DESC,"
-			       "projects.Title",
+			       "prj_projects.CreatTime DESC,"
+			       "prj_projects.ModifTime DESC,"
+			       "prj_projects.Title",
      };
    MYSQL_RES *mysql_res = NULL;	// Initialized to avoid freeing when not assigned
    MYSQL_ROW row;
@@ -2861,11 +2861,11 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
       switch (Projects->Filter.Assign)
 	{
 	 case (1 << Prj_ASSIGNED):	// Assigned projects
-	    if (asprintf (&PreNonSubQuery," AND projects.Assigned='Y'") < 0)
+	    if (asprintf (&PreNonSubQuery," AND prj_projects.Assigned='Y'") < 0)
 	       Lay_NotEnoughMemoryExit ();
 	    break;
 	 case (1 << Prj_NONASSIG):	// Non-assigned projects
-	    if (asprintf (&PreNonSubQuery," AND projects.Assigned='N'") < 0)
+	    if (asprintf (&PreNonSubQuery," AND prj_projects.Assigned='N'") < 0)
 	       Lay_NotEnoughMemoryExit ();
 	    break;
 	 default:			// All projects
@@ -2878,7 +2878,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
       switch (Gbl.Usrs.Me.Role.Logged)
 	{
 	 case Rol_STD:	// Students can view only visible projects
-	    if (asprintf (&HidVisSubQuery," AND projects.Hidden='N'") < 0)
+	    if (asprintf (&HidVisSubQuery," AND prj_projects.Hidden='N'") < 0)
 	       Lay_NotEnoughMemoryExit ();
 	    break;
 	 case Rol_NET:
@@ -2887,11 +2887,11 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	    switch (Projects->Filter.Hidden)
 	      {
 	       case (1 << Prj_HIDDEN):	// Hidden projects
-		  if (asprintf (&HidVisSubQuery," AND projects.Hidden='Y'") < 0)
+		  if (asprintf (&HidVisSubQuery," AND prj_projects.Hidden='Y'") < 0)
 	             Lay_NotEnoughMemoryExit ();
 		  break;
 	       case (1 << Prj_VISIBL):	// Visible projects
-		  if (asprintf (&HidVisSubQuery," AND projects.Hidden='N'") < 0)
+		  if (asprintf (&HidVisSubQuery," AND prj_projects.Hidden='N'") < 0)
 	             Lay_NotEnoughMemoryExit ();
 		  break;
 	       default:			// All projects
@@ -2908,7 +2908,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
       /* Department subquery */
       if (Projects->Filter.DptCod >= 0)
         {
-	 if (asprintf (&DptCodSubQuery," AND projects.DptCod=%ld",
+	 if (asprintf (&DptCodSubQuery," AND prj_projects.DptCod=%ld",
 	               Projects->Filter.DptCod) < 0)
 	    Lay_NotEnoughMemoryExit ();
         }
@@ -2929,14 +2929,14 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	       case Prj_ORDER_END_TIME:
 	       case Prj_ORDER_TITLE:
 		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					    "SELECT projects.PrjCod"
-					     " FROM projects,"
+					    "SELECT prj_projects.PrjCod"
+					     " FROM prj_projects,"
 					           "prj_usr"
-					    " WHERE projects.CrsCod=%ld"
+					    " WHERE prj_projects.CrsCod=%ld"
 					    "%s%s%s"
-					      " AND projects.PrjCod=prj_usr.PrjCod"
+					      " AND prj_projects.PrjCod=prj_usr.PrjCod"
 					      " AND prj_usr.UsrCod=%ld"
-					    " GROUP BY projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+					    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 					    " ORDER BY %s",
 					    Gbl.Hierarchy.Crs.CrsCod,
 					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
@@ -2945,15 +2945,15 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 		  break;
 	       case Prj_ORDER_DEPARTMENT:
 		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					    "SELECT projects.PrjCod"
-					     " FROM prj_usr,"
-					           "projects LEFT JOIN dpt_departments"
-					       " ON projects.DptCod=dpt_departments.DptCod"
-					    " WHERE projects.CrsCod=%ld"
+					    "SELECT prj_projects.PrjCod"
+					     " FROM prj_projects LEFT JOIN dpt_departments,"
+					           "prj_usr"
+					       " ON prj_projects.DptCod=dpt_departments.DptCod"
+					    " WHERE prj_projects.CrsCod=%ld"
 					    "%s%s%s"
-					      " AND projects.PrjCod=prj_usr.PrjCod"
+					      " AND prj_projects.PrjCod=prj_usr.PrjCod"
 					      " AND prj_usr.UsrCod=%ld"
-					    " GROUP BY projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+					    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 					    " ORDER BY %s",
 					    Gbl.Hierarchy.Crs.CrsCod,
 					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
@@ -2982,13 +2982,14 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 		  case Prj_ORDER_END_TIME:
 		  case Prj_ORDER_TITLE:
 		     NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					       "SELECT projects.PrjCod"
-					       " FROM projects,prj_usr"
-					       " WHERE projects.CrsCod=%ld"
+					       "SELECT prj_projects.PrjCod"
+					        " FROM prj_projects,"
+					              "prj_usr"
+					       " WHERE prj_projects.CrsCod=%ld"
 					       "%s%s%s"
-					       " AND projects.PrjCod=prj_usr.PrjCod"
-					       " AND prj_usr.UsrCod IN (%s)"
-					       " GROUP BY projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+					         " AND prj_projects.PrjCod=prj_usr.PrjCod"
+					         " AND prj_usr.UsrCod IN (%s)"
+					       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 					       " ORDER BY %s",
 					       Gbl.Hierarchy.Crs.CrsCod,
 					       PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
@@ -2997,15 +2998,15 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 		     break;
 		  case Prj_ORDER_DEPARTMENT:
 		     NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					       "SELECT projects.PrjCod"
-					        " FROM prj_usr,"
-					              "projects LEFT JOIN dpt_departments"
-					          " ON projects.DptCod=dpt_departments.DptCod"
-					       " WHERE projects.CrsCod=%ld"
+					       "SELECT prj_projects.PrjCod"
+					        " FROM prj_projects LEFT JOIN dpt_departments,"
+					              "prj_usr"
+					          " ON prj_projects.DptCod=dpt_departments.DptCod"
+					       " WHERE prj_projects.CrsCod=%ld"
 					       "%s%s%s"
-					         " AND projects.PrjCod=prj_usr.PrjCod"
+					         " AND prj_projects.PrjCod=prj_usr.PrjCod"
 					         " AND prj_usr.UsrCod IN (%s)"
-					       " GROUP BY projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+					       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 					       " ORDER BY %s",
 					       Gbl.Hierarchy.Crs.CrsCod,
 					       PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
@@ -3031,9 +3032,9 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	       case Prj_ORDER_END_TIME:
 	       case Prj_ORDER_TITLE:
 		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					    "SELECT projects.PrjCod"
-					     " FROM projects"
-					    " WHERE projects.CrsCod=%ld"
+					    "SELECT prj_projects.PrjCod"
+					     " FROM prj_projects"
+					    " WHERE prj_projects.CrsCod=%ld"
 					    "%s%s%s"
 					    " ORDER BY %s",
 					    Gbl.Hierarchy.Crs.CrsCod,
@@ -3042,10 +3043,10 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 		  break;
 	       case Prj_ORDER_DEPARTMENT:
 		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					    "SELECT projects.PrjCod"
-					     " FROM projects LEFT JOIN dpt_departments"
-					       " ON projects.DptCod=dpt_departments.DptCod"
-					    " WHERE projects.CrsCod=%ld"
+					    "SELECT prj_projects.PrjCod"
+					     " FROM prj_projects LEFT JOIN dpt_departments"
+					       " ON prj_projects.DptCod=dpt_departments.DptCod"
+					    " WHERE prj_projects.CrsCod=%ld"
 					    "%s%s%s"
 					    " ORDER BY %s",
 					    Gbl.Hierarchy.Crs.CrsCod,
@@ -3124,7 +3125,9 @@ long Prj_GetCourseOfProject (long PrjCod)
      {
       /***** Get course code from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get project course",
-			  "SELECT CrsCod FROM projects WHERE PrjCod=%ld",
+			  "SELECT CrsCod"		// row[0]
+			   " FROM prj_projects"
+			  " WHERE PrjCod=%ld",
 			  PrjCod)) // Project found...
 	{
 	 /* Get row */
@@ -3174,8 +3177,9 @@ void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj)
 				 "Knowledge,"			// row[12]
 				 "Materials,"			// row[13]
 				 "URL"				// row[14]
-			  " FROM projects"
-			  " WHERE PrjCod=%ld AND CrsCod=%ld",
+			   " FROM prj_projects"
+			  " WHERE PrjCod=%ld"
+			    " AND CrsCod=%ld",
 			  Prj->PrjCod,
 			  Gbl.Hierarchy.Crs.CrsCod))	// Project found...
 	{
@@ -3378,19 +3382,25 @@ void Prj_RemoveProject (void)
      {
       /***** Remove users in project *****/
       DB_QueryDELETE ("can not remove project",
-		      "DELETE FROM prj_usr USING projects,prj_usr"
-		      " WHERE projects.PrjCod=%ld AND projects.CrsCod=%ld"
-		      " AND projects.PrjCod=prj_usr.PrjCod",
-	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
+		      "DELETE FROM prj_usr"
+		      " USING prj_projects,"
+		             "prj_usr"
+		      " WHERE projects.PrjCod=%ld"
+		        " AND projects.CrsCod=%ld"
+		        " AND projects.PrjCod=prj_usr.PrjCod",
+	              Prj.PrjCod,
+	              Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Flush cache *****/
       Prj_FlushCacheMyRolesInProject ();
 
       /***** Remove project *****/
       DB_QueryDELETE ("can not remove project",
-		      "DELETE FROM projects"
-		      " WHERE PrjCod=%ld AND CrsCod=%ld",
-	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
+		      "DELETE FROM prj_projects"
+		      " WHERE PrjCod=%ld"
+		        " AND CrsCod=%ld",
+	              Prj.PrjCod,
+	              Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Remove information related to files in project *****/
       Brw_RemovePrjFilesFromDB (Prj.PrjCod);
@@ -3441,9 +3451,12 @@ void Prj_HideProject (void)
    if (Prj_CheckIfICanEditProject (&Prj))
       /***** Hide project *****/
       DB_QueryUPDATE ("can not hide project",
-		      "UPDATE projects SET Hidden='Y'"
-		      " WHERE PrjCod=%ld AND CrsCod=%ld",
-	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
+		      "UPDATE prj_projects"
+		        " SET Hidden='Y'"
+		      " WHERE PrjCod=%ld"
+		        " AND CrsCod=%ld",
+	              Prj.PrjCod,
+	              Gbl.Hierarchy.Crs.CrsCod);
    else
       Lay_NoPermissionExit ();
 
@@ -3480,9 +3493,12 @@ void Prj_UnhideProject (void)
    if (Prj_CheckIfICanEditProject (&Prj))
       /***** Show project *****/
       DB_QueryUPDATE ("can not show project",
-		      "UPDATE projects SET Hidden='N'"
-		      " WHERE PrjCod=%ld AND CrsCod=%ld",
-	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
+		      "UPDATE prj_projects"
+		        " SET Hidden='N'"
+		      " WHERE PrjCod=%ld"
+		        " AND CrsCod=%ld",
+	              Prj.PrjCod,
+	              Gbl.Hierarchy.Crs.CrsCod);
    else
       Lay_NoPermissionExit ();
 
@@ -3962,7 +3978,7 @@ static void Prj_CreateProject (struct Prj_Project *Prj)
    /***** Create a new project *****/
    Prj->PrjCod =
    DB_QueryINSERTandReturnCode ("can not create new project",
-				"INSERT INTO projects"
+				"INSERT INTO prj_projects"
 				" (CrsCod,DptCod,Hidden,Assigned,NumStds,Proposal,"
 				"CreatTime,ModifTime,"
 				"Title,Description,Knowledge,Materials,URL)"
@@ -4011,19 +4027,20 @@ static void Prj_UpdateProject (struct Prj_Project *Prj)
 
    /***** Update the data of the project *****/
    DB_QueryUPDATE ("can not update project",
-		   "UPDATE projects"
-		   " SET DptCod=%ld,"
-		        "Hidden='%c',"
-		        "Assigned='%c',"
-		        "NumStds=%u,"
-		        "Proposal='%s',"
-		        "ModifTime=FROM_UNIXTIME(%ld),"
-		        "Title='%s',"
-		        "Description='%s',"
-		        "Knowledge='%s',"
-		        "Materials='%s',"
-		        "URL='%s'"
-		   " WHERE PrjCod=%ld AND CrsCod=%ld",
+		   "UPDATE prj_projects"
+		     " SET DptCod=%ld,"
+		          "Hidden='%c',"
+		          "Assigned='%c',"
+		          "NumStds=%u,"
+		          "Proposal='%s',"
+		          "ModifTime=FROM_UNIXTIME(%ld),"
+		          "Title='%s',"
+		          "Description='%s',"
+		          "Knowledge='%s',"
+		          "Materials='%s',"
+		          "URL='%s'"
+		   " WHERE PrjCod=%ld"
+		     " AND CrsCod=%ld",
 	           Prj->DptCod,
 	           Prj->Hidden == Prj_HIDDEN ? 'Y' :
 					       'N',
@@ -4467,8 +4484,10 @@ void Prj_LockProjectEdition (void)
 static void Prj_LockProjectEditionInDB (long PrjCod)
   {
    DB_QueryUPDATE ("can not lock project edition",
-		   "UPDATE projects SET Locked='Y'"
-		   " WHERE PrjCod=%ld AND CrsCod=%ld",
+		   "UPDATE prj_projects"
+		     " SET Locked='Y'"
+		   " WHERE PrjCod=%ld"
+		     " AND CrsCod=%ld",
 		   PrjCod,Gbl.Hierarchy.Crs.CrsCod);
   }
 
@@ -4514,8 +4533,10 @@ void Prj_UnloProjectEdition (void)
 static void Prj_UnlockProjectEditionInDB (long PrjCod)
   {
    DB_QueryUPDATE ("can not lock project edition",
-		   "UPDATE projects SET Locked='N'"
-		   " WHERE PrjCod=%ld AND CrsCod=%ld",
+		   "UPDATE prj_projects"
+		     " SET Locked='N'"
+		   " WHERE PrjCod=%ld"
+		     " AND CrsCod=%ld",
 		   PrjCod,Gbl.Hierarchy.Crs.CrsCod);
   }
 
@@ -4527,9 +4548,11 @@ void Prj_RemoveCrsProjects (long CrsCod)
   {
    /***** Remove users in projects of the course *****/
    DB_QueryDELETE ("can not remove all the projects of a course",
-		   "DELETE FROM prj_usr USING projects,prj_usr"
-		   " WHERE projects.CrsCod=%ld"
-		   " AND projects.PrjCod=prj_usr.PrjCod",
+		   "DELETE FROM prj_usr"
+		   " USING prj_projects,"
+		          "prj_usr"
+		   " WHERE prj_projects.CrsCod=%ld"
+		     " AND prj_projects.PrjCod=prj_usr.PrjCod",
                    CrsCod);
 
    /***** Flush cache *****/
@@ -4542,7 +4565,8 @@ void Prj_RemoveCrsProjects (long CrsCod)
 
    /***** Remove projects *****/
    DB_QueryDELETE ("can not remove all the projects of a course",
-		   "DELETE FROM projects WHERE CrsCod=%ld",
+		   "DELETE FROM prj_projects"
+		   " WHERE CrsCod=%ld",
 		   CrsCod);
   }
 
@@ -4556,7 +4580,8 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
 
    /***** Remove user from projects *****/
    DB_QueryDELETE ("can not remove user from projects",
-		   "DELETE FROM prj_usr WHERE UsrCod=%ld",
+		   "DELETE FROM prj_usr"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
 
    /***** Flush cache *****/
@@ -4580,66 +4605,66 @@ unsigned Prj_GetNumCoursesWithProjects (Hie_Lvl_Level_t Scope)
 	 return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with projects",
 			"SELECT COUNT(DISTINCT CrsCod)"
-			" FROM projects"
+			 " FROM prj_projects"
 			" WHERE CrsCod>0");
       case Hie_Lvl_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with projects",
-			"SELECT COUNT(DISTINCT projects.CrsCod)"
-			" FROM ins_instits,"
-			      "ctr_centers,"
-			      "deg_degrees,"
-			      "crs_courses,"
-			      "projects"
+			"SELECT COUNT(DISTINCT prj_projects.CrsCod)"
+			 " FROM ins_instits,"
+			       "ctr_centers,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "prj_projects"
 			" WHERE ins_instits.CtyCod=%ld"
-			" AND ins_instits.InsCod=ctr_centers.InsCod"
-			" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			" AND deg_degrees.DegCod=crs_courses.DegCod"
-			" AND crs_courses.Status=0"
-			" AND crs_courses.CrsCod=projects.CrsCod",
+			  " AND ins_instits.InsCod=ctr_centers.InsCod"
+			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			  " AND deg_degrees.DegCod=crs_courses.DegCod"
+			  " AND crs_courses.Status=0"
+			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
                         Gbl.Hierarchy.Cty.CtyCod);
       case Hie_Lvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with projects",
-			"SELECT COUNT(DISTINCT projects.CrsCod)"
-			" FROM ctr_centers,"
-			      "deg_degrees,"
-			      "crs_courses,"
-			      "projects"
+			"SELECT COUNT(DISTINCT prj_projects.CrsCod)"
+			 " FROM ctr_centers,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "prj_projects"
 			" WHERE ctr_centers.InsCod=%ld"
-			" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			" AND deg_degrees.DegCod=crs_courses.DegCod"
-			" AND crs_courses.Status=0"
-			" AND crs_courses.CrsCod=projects.CrsCod",
+			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			  " AND deg_degrees.DegCod=crs_courses.DegCod"
+			  " AND crs_courses.Status=0"
+			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
                         Gbl.Hierarchy.Ins.InsCod);
       case Hie_Lvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with projects",
-			"SELECT COUNT(DISTINCT projects.CrsCod)"
-			" FROM deg_degrees,"
-			      "crs_courses,"
-			      "projects"
+			"SELECT COUNT(DISTINCT prj_projects.CrsCod)"
+			 " FROM deg_degrees,"
+			       "crs_courses,"
+			      "prj_projects"
 			" WHERE deg_degrees.CtrCod=%ld"
-			" AND deg_degrees.DegCod=crs_courses.DegCod"
-			" AND crs_courses.Status=0"
-			" AND crs_courses.CrsCod=projects.CrsCod",
+			  " AND deg_degrees.DegCod=crs_courses.DegCod"
+			  " AND crs_courses.Status=0"
+			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
                         Gbl.Hierarchy.Ctr.CtrCod);
       case Hie_Lvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with projects",
-			"SELECT COUNT(DISTINCT projects.CrsCod)"
-			" FROM crs_courses,"
-			      "projects"
+			"SELECT COUNT(DISTINCT prj_projects.CrsCod)"
+			 " FROM crs_courses,"
+			       "prj_projects"
 			" WHERE crs_courses.DegCod=%ld"
-			" AND crs_courses.Status=0"
-			" AND crs_courses.CrsCod=projects.CrsCod",
+			  " AND crs_courses.Status=0"
+			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
                         Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_Lvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with projects",
 			"SELECT COUNT(DISTINCT CrsCod)"
-			" FROM projects"
+			 " FROM prj_projects"
 			" WHERE CrsCod=%ld",
 			Gbl.Hierarchy.Crs.CrsCod);
          break;
@@ -4662,66 +4687,66 @@ unsigned Prj_GetNumProjects (Hie_Lvl_Level_t Scope)
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
 			"SELECT COUNT(*)"
-                        " FROM projects"
+                         " FROM prj_projects"
                         " WHERE CrsCod>0");
          break;
       case Hie_Lvl_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
 			"SELECT COUNT(*)"
-			" FROM ins_instits,"
-			      "ctr_centers,"
-			      "deg_degrees,"
-			      "crs_courses,"
-			      "projects"
+			 " FROM ins_instits,"
+			       "ctr_centers,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "prj_projects"
 			" WHERE ins_instits.CtyCod=%ld"
-			" AND ins_instits.InsCod=ctr_centers.InsCod"
-			" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			" AND deg_degrees.DegCod=crs_courses.DegCod"
-			" AND crs_courses.CrsCod=projects.CrsCod",
+			  " AND ins_instits.InsCod=ctr_centers.InsCod"
+			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			  " AND deg_degrees.DegCod=crs_courses.DegCod"
+			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
                         Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_Lvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
 			"SELECT COUNT(*)"
-			" FROM ctr_centers,"
-			      "deg_degrees,"
-			      "crs_courses,"
-			      "projects"
+			 " FROM ctr_centers,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "prj_projects"
 			" WHERE ctr_centers.InsCod=%ld"
-			" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			" AND deg_degrees.DegCod=crs_courses.DegCod"
-			" AND crs_courses.CrsCod=projects.CrsCod",
+			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			  " AND deg_degrees.DegCod=crs_courses.DegCod"
+			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
                         Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
 			"SELECT COUNT(*)"
-			" FROM deg_degrees,"
-			      "crs_courses,"
-			      "projects"
+			 " FROM deg_degrees,"
+			       "crs_courses,"
+			       "prj_projects"
 			" WHERE deg_degrees.CtrCod=%ld"
-			" AND deg_degrees.DegCod=crs_courses.DegCod"
-			" AND crs_courses.CrsCod=projects.CrsCod",
+			  " AND deg_degrees.DegCod=crs_courses.DegCod"
+			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
                         Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_Lvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
 			"SELECT COUNT(*)"
-			" FROM crs_courses,"
-			      "projects"
+			 " FROM crs_courses,"
+			       "prj_projects"
 			" WHERE crs_courses.DegCod=%ld"
-			" AND crs_courses.CrsCod=projects.CrsCod",
+			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
                         Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_Lvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
 			"SELECT COUNT(*)"
-			" FROM projects"
+			 " FROM prj_projects"
 			" WHERE CrsCod=%ld",
                         Gbl.Hierarchy.Crs.CrsCod);
          break;
