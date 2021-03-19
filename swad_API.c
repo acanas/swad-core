@@ -3968,11 +3968,12 @@ int swad__sendNotice (struct soap *soap,
    /* Get the code of the inserted item */
    NotCod =
    DB_QueryINSERTandReturnCode ("can not create message",
-				"INSERT INTO notices"
+				"INSERT INTO not_notices"
 				" (CrsCod,UsrCod,CreatTime,Content,Status)"
 				" VALUES"
 				" (%ld,%ld,NOW(),'%s',%u)",
-				Gbl.Hierarchy.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+				Gbl.Hierarchy.Crs.CrsCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
 				body,(unsigned) Not_ACTIVE_NOTICE);
 
    /***** Create notifications *****/

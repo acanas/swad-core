@@ -1988,16 +1988,22 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       /***** Remove notices in the course *****/
       /* Copy all notices from the course to table of deleted notices */
       DB_QueryINSERT ("can not remove notices in a course",
-		      "INSERT INTO notices_deleted"
+		      "INSERT INTO not_deleted"
 		      " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
-		      " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif"
-		      " FROM notices"
+		      " SELECT NotCod,"
+		              "CrsCod,"
+		              "UsrCod,"
+		              "CreatTime,"
+		              "Content,"
+		              "NumNotif"
+		       " FROM not_notices"
 		      " WHERE CrsCod=%ld",
 	              CrsCod);
 
       /* Remove all notices from the course */
       DB_QueryDELETE ("can not remove notices in a course",
-		      "DELETE FROM notices WHERE CrsCod=%ld",
+		      "DELETE FROM not_notices"
+		      " WHERE CrsCod=%ld",
 		      CrsCod);
 
       /***** Remove all the threads and posts in forums of the course *****/

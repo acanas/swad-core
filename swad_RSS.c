@@ -159,11 +159,16 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
 
    /***** Get active notices in course *****/
    NumNotices = DB_QuerySELECT (&mysql_res,"can not get notices from database",
-				"SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS T,UsrCod,Content"
-				" FROM notices"
-				" WHERE CrsCod=%ld AND Status=%u"
+				"SELECT NotCod,"				// row[0]
+				       "UNIX_TIMESTAMP(CreatTime) AS T,"	// row[1]
+				       "UsrCod,"				// row[2]
+				       "Content"				// row[3]
+				 " FROM not_notices"
+				" WHERE CrsCod=%ld"
+				  " AND Status=%u"
 				" ORDER BY T DESC",
-				Crs->CrsCod,(unsigned) Not_ACTIVE_NOTICE);
+				Crs->CrsCod,
+				(unsigned) Not_ACTIVE_NOTICE);
 
    /***** Write items with notices *****/
    if (NumNotices)

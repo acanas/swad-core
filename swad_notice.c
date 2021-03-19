@@ -172,7 +172,7 @@ static long Not_InsertNoticeInDB (const char *Content)
    /***** Insert notice in the database *****/
    return
    DB_QueryINSERTandReturnCode ("can not create notice",
-				"INSERT INTO notices"
+				"INSERT INTO not_notices"
 				" (CrsCod,UsrCod,CreatTime,Content,Status)"
 				" VALUES"
 				" (%ld,%ld,NOW(),'%s',%u)",
@@ -189,7 +189,9 @@ static void Not_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,unsigned Nu
   {
    /***** Update number of users notified *****/
    DB_QueryUPDATE ("can not update the number of notifications of a notice",
-		   "UPDATE notices SET NumNotif=%u WHERE NotCod=%ld",
+		   "UPDATE not_notices"
+		     " SET NumNotif=%u"
+		   " WHERE NotCod=%ld",
 	           NumUsrsToBeNotifiedByEMail,NotCod);
   }
 
@@ -242,8 +244,10 @@ void Not_HideActiveNotice (void)
 
    /***** Set notice as hidden *****/
    DB_QueryUPDATE ("can not hide notice",
-		   "UPDATE notices SET Status=%u"
-		   " WHERE NotCod=%ld AND CrsCod=%ld",
+		   "UPDATE not_notices"
+		     " SET Status=%u"
+		   " WHERE NotCod=%ld"
+		     " AND CrsCod=%ld",
 	           (unsigned) Not_OBSOLETE_NOTICE,
 	           NotCod,Gbl.Hierarchy.Crs.CrsCod);
 
@@ -267,8 +271,10 @@ void Not_RevealHiddenNotice (void)
 
    /***** Set notice as active *****/
    DB_QueryUPDATE ("can not reveal notice",
-		   "UPDATE notices SET Status=%u"
-		   " WHERE NotCod=%ld AND CrsCod=%ld",
+		   "UPDATE not_notices"
+		     " SET Status=%u"
+		   " WHERE NotCod=%ld"
+		     " AND CrsCod=%ld",
 	           (unsigned) Not_ACTIVE_NOTICE,
 	           NotCod,Gbl.Hierarchy.Crs.CrsCod);
 
@@ -323,17 +329,24 @@ void Not_RemoveNotice (void)
    /***** Remove notice *****/
    /* Copy notice to table of deleted notices */
    DB_QueryINSERT ("can not remove notice",
-		   "INSERT IGNORE INTO notices_deleted"
+		   "INSERT IGNORE INTO not_deleted"
 		   " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
-		   " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif"
-		   " FROM notices"
-		   " WHERE NotCod=%ld AND CrsCod=%ld",
+		   " SELECT NotCod,"
+		           "CrsCod,"
+		           "UsrCod,"
+		           "CreatTime,"
+		           "Content,"
+		           "NumNotif"
+		    " FROM not_notices"
+		   " WHERE NotCod=%ld"
+		     " AND CrsCod=%ld",
                    NotCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /* Remove notice */
    DB_QueryDELETE ("can not remove notice",
-		   "DELETE FROM notices"
-		   " WHERE NotCod=%ld AND CrsCod=%ld",
+		   "DELETE FROM not_notices"
+		   " WHERE NotCod=%ld"
+		     " AND CrsCod=%ld",
                    NotCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Mark possible notifications as removed *****/
@@ -383,8 +396,9 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 					     "UsrCod,"
 					     "Content,"
 					     "Status"
-				      " FROM notices"
-				      " WHERE CrsCod=%ld AND Status=%u"
+				       " FROM not_notices"
+				      " WHERE CrsCod=%ld"
+				        " AND Status=%u"
 				      " ORDER BY CreatTime DESC",
 				      Gbl.Hierarchy.Crs.CrsCod,
 				      (unsigned) Not_ACTIVE_NOTICE);
@@ -396,7 +410,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 					     "UsrCod,"
 					     "Content,"
 					     "Status"
-				      " FROM notices"
+				       " FROM not_notices"
 				      " WHERE CrsCod=%ld"
 				      " ORDER BY CreatTime DESC",
 				      Gbl.Hierarchy.Crs.CrsCod);
@@ -565,11 +579,11 @@ static void Not_GetDataAndShowNotice (long NotCod)
 
    /***** Get notice data from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get notice from database",
-		       "SELECT UNIX_TIMESTAMP(CreatTime) AS F,"
-			      "UsrCod,"
-			      "Content,"
-			      "Status"
-		       " FROM notices"
+		       "SELECT UNIX_TIMESTAMP(CreatTime) AS F,"	// row[0]
+			      "UsrCod,"				// row[1]
+			      "Content,"			// row[2]
+			      "Status"				// row[3]
+		        " FROM not_notices"
 		       " WHERE NotCod=%ld AND CrsCod=%ld",
 		       NotCod,Gbl.Hierarchy.Crs.CrsCod))
      {
@@ -772,7 +786,9 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
    /***** Get subject of message from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get content of notice",
-		       "SELECT Content FROM notices WHERE NotCod=%ld",
+		       "SELECT Content"		// row[0]
+		        " FROM not_notices"
+		       " WHERE NotCod=%ld",
 		       NotCod) == 1)	// Result should have a unique row
      {
       /***** Get sumary / content *****/
@@ -822,79 +838,79 @@ unsigned Not_GetNumNotices (Hie_Lvl_Level_t Scope,Not_Status_t Status,unsigned *
      {
       case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
-			 "SELECT COUNT(*),"
-			        "SUM(NumNotif)"
-			 " FROM notices"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(NumNotif)"			// row[1]
+			  " FROM not_notices"
 			 " WHERE Status=%u",
                          Status);
          break;
       case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
-			 "SELECT COUNT(*),"
-			        "SUM(notices.NumNotif)"
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "notices"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(not_notices.NumNotif)"	// row[1]
+			  " FROM ins_instits,"
+			        "ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "not_notices"
 			 " WHERE ins_instits.CtyCod=%ld"
-			 " AND ins_instits.InsCod=ctr_centers.InsCod"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=notices.CrsCod"
-			 " AND notices.Status=%u",
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=not_notices.CrsCod"
+			   " AND not_notices.Status=%u",
                          Gbl.Hierarchy.Cty.CtyCod,
                          Status);
          break;
       case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
-			 "SELECT COUNT(*),"
-			        "SUM(notices.NumNotif)"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "notices"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(not_notices.NumNotif)"	// row[1]
+			  " FROM ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "not_notices"
 			 " WHERE ctr_centers.InsCod=%ld"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=notices.CrsCod"
-			 " AND notices.Status=%u",
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=not_notices.CrsCod"
+			   " AND not_notices.Status=%u",
                          Gbl.Hierarchy.Ins.InsCod,
                          Status);
          break;
       case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
-			 "SELECT COUNT(*),"
-			        "SUM(notices.NumNotif)"
-			 " FROM deg_degrees,"
-			       "crs_courses,"
-			       "notices"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(not_notices.NumNotif)"	// row[1]
+			  " FROM deg_degrees,"
+			        "crs_courses,"
+			        "not_notices"
 			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=notices.CrsCod"
-			 " AND notices.Status=%u",
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=not_notices.CrsCod"
+			   " AND not_notices.Status=%u",
                          Gbl.Hierarchy.Ctr.CtrCod,
                          Status);
          break;
       case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
-			 "SELECT COUNT(*),"
-			        "SUM(notices.NumNotif)"
-			 " FROM crs_courses,"
-			       "notices"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(not_notices.NumNotif)"	// row[1]
+			  " FROM crs_courses,"
+			        "not_notices"
 			 " WHERE crs_courses.DegCod=%ld"
-			 " AND crs_courses.CrsCod=notices.CrsCod"
-			 " AND notices.Status=%u",
+			   " AND crs_courses.CrsCod=not_notices.CrsCod"
+			   " AND not_notices.Status=%u",
                          Gbl.Hierarchy.Deg.DegCod,
                          Status);
          break;
       case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
-			 "SELECT COUNT(*),"
-			        "SUM(NumNotif)"
-			 " FROM notices"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(NumNotif)"			// row[1]
+			  " FROM not_notices"
 			 " WHERE CrsCod=%ld"
-			 " AND Status=%u",
+			   " AND Status=%u",
                          Gbl.Hierarchy.Crs.CrsCod,
                          Status);
          break;
@@ -940,67 +956,67 @@ unsigned Not_GetNumNoticesDeleted (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
      {
       case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
-			 "SELECT COUNT(*),"
-			        "SUM(NumNotif)"
-			 " FROM notices_deleted");
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(NumNotif)"			// row[1]
+			 " FROM not_deleted");
          break;
       case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
-			 "SELECT COUNT(*),"
-			        "SUM(notices_deleted.NumNotif)"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(not_deleted.NumNotif)"	// row[1]
 			 " FROM ins_instits,"
 			       "ctr_centers,"
 			       "deg_degrees,"
 			       "crs_courses,"
-			       "notices_deleted"
+			       "not_deleted"
 			 " WHERE ins_instits.CtyCod=%ld"
-			 " AND ins_instits.InsCod=ctr_centers.InsCod"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=notices_deleted.CrsCod",
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
                          Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
-			 "SELECT COUNT(*),"
-			        "SUM(notices_deleted.NumNotif)"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "notices_deleted"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(not_deleted.NumNotif)"	// row[1]
+			  " FROM ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "not_deleted"
 			 " WHERE ctr_centers.InsCod=%ld"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=notices_deleted.CrsCod",
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
-			 "SELECT COUNT(*),"
-			        "SUM(notices_deleted.NumNotif)"
-			 " FROM deg_degrees,"
-			       "crs_courses,"
-			       "notices_deleted"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(not_deleted.NumNotif)"	// row[1]
+			  " FROM deg_degrees,"
+			        "crs_courses,"
+			        "not_deleted"
 			 " WHERE deg_degrees.CtrCod=%ld"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=notices_deleted.CrsCod",
+			 " AND crs_courses.CrsCod=not_deleted.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
-			 "SELECT COUNT(*),"
-			        "SUM(notices_deleted.NumNotif)"
-			 " FROM crs_courses,"
-			       "notices_deleted"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(not_deleted.NumNotif)"	// row[1]
+			  " FROM crs_courses,"
+			        "not_deleted"
 			 " WHERE crs_courses.DegCod=%ld"
-			 " AND crs_courses.CrsCod=notices_deleted.CrsCod",
+			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
-			 "SELECT COUNT(*),"
-			        "SUM(NumNotif)"
-			 " FROM notices_deleted"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(NumNotif)"			// row[1]
+			  " FROM not_deleted"
 			 " WHERE CrsCod=%ld",
                          Gbl.Hierarchy.Crs.CrsCod);
          break;

@@ -1092,9 +1092,23 @@ CREATE TABLE IF NOT EXISTS msg_snt_deleted (
 	INDEX(CrsCod),
 	INDEX(UsrCod));
 --
--- Table notices: stores the yellow notes (post-it)
+-- Table not_deleted: stores the yellow notes (post-it) that have been deleted
 --
-CREATE TABLE IF NOT EXISTS notices (
+CREATE TABLE IF NOT EXISTS not_deleted (
+	NotCod INT NOT NULL,
+	CrsCod INT NOT NULL DEFAULT -1,
+	UsrCod INT NOT NULL,
+	CreatTime DATETIME NOT NULL,
+	Content TEXT NOT NULL,
+	NumNotif INT NOT NULL DEFAULT 0,
+	UNIQUE INDEX(NotCod),
+	INDEX(CrsCod),
+	INDEX(UsrCod),
+	INDEX(CreatTime));
+--
+-- Table not_notices: stores the yellow notes (post-it)
+--
+CREATE TABLE IF NOT EXISTS not_notices (
 	NotCod INT NOT NULL AUTO_INCREMENT,
 	CrsCod INT NOT NULL DEFAULT -1,
 	UsrCod INT NOT NULL,
@@ -1107,20 +1121,6 @@ CREATE TABLE IF NOT EXISTS notices (
 	INDEX(UsrCod),
 	INDEX(CreatTime),
 	INDEX(Status));
---
--- Table notices_deleted: stores the yellow notes (post-it) that have been deleted
---
-CREATE TABLE IF NOT EXISTS notices_deleted (
-	NotCod INT NOT NULL,
-	CrsCod INT NOT NULL DEFAULT -1,
-	UsrCod INT NOT NULL,
-	CreatTime DATETIME NOT NULL,
-	Content TEXT NOT NULL,
-	NumNotif INT NOT NULL DEFAULT 0,
-	UNIQUE INDEX(NotCod),
-	INDEX(CrsCod),
-	INDEX(UsrCod),
-	INDEX(CreatTime));
 --
 -- Table ntf_notifications: stores the notifications of events
 --

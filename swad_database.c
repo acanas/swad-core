@@ -2281,9 +2281,36 @@ mysql> DESCRIBE msg_snt_deleted;
 		   "INDEX(CrsCod),"
 		   "INDEX(UsrCod))");
 
-   /***** Table notices *****/
+   /***** Table not_deleted *****/
 /*
-mysql> DESCRIBE notices;
+mysql> DESCRIBE not_deleted;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| NotCod    | int(11)  | NO   | PRI | NULL    |       |
+| CrsCod    | int(11)  | NO   | MUL | -1      |       |
+| UsrCod    | int(11)  | NO   | MUL | NULL    |       |
+| CreatTime | datetime | NO   | MUL | NULL    |       |
+| Content   | text     | NO   |     | NULL    |       |
+| NumNotif  | int(11)  | NO   |     | 0       |       |
++-----------+----------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS not_deleted ("
+			"NotCod INT NOT NULL,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"UsrCod INT NOT NULL,"
+			"CreatTime DATETIME NOT NULL,"
+			"Content TEXT NOT NULL,"
+			"NumNotif INT NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(NotCod),"
+		   "INDEX(CrsCod),"
+		   "INDEX(UsrCod),"
+		   "INDEX(CreatTime))");
+
+   /***** Table not_notices *****/
+/*
+mysql> DESCRIBE not_notices;
 +-----------+------------+------+-----+---------+----------------+
 | Field     | Type       | Null | Key | Default | Extra          |
 +-----------+------------+------+-----+---------+----------------+
@@ -2297,7 +2324,7 @@ mysql> DESCRIBE notices;
 +-----------+------------+------+-----+---------+----------------+
 7 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS notices ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS not_notices ("
 			"NotCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"UsrCod INT NOT NULL,"
@@ -2310,33 +2337,6 @@ mysql> DESCRIBE notices;
 		   "INDEX(UsrCod),"
 		   "INDEX(CreatTime),"
 		   "INDEX(Status))");
-
-   /***** Table notices_deleted *****/
-/*
-mysql> DESCRIBE notices_deleted;
-+-----------+----------+------+-----+---------+-------+
-| Field     | Type     | Null | Key | Default | Extra |
-+-----------+----------+------+-----+---------+-------+
-| NotCod    | int(11)  | NO   | PRI | NULL    |       |
-| CrsCod    | int(11)  | NO   | MUL | -1      |       |
-| UsrCod    | int(11)  | NO   | MUL | NULL    |       |
-| CreatTime | datetime | NO   | MUL | NULL    |       |
-| Content   | text     | NO   |     | NULL    |       |
-| NumNotif  | int(11)  | NO   |     | 0       |       |
-+-----------+----------+------+-----+---------+-------+
-6 rows in set (0.01 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS notices_deleted ("
-			"NotCod INT NOT NULL,"
-			"CrsCod INT NOT NULL DEFAULT -1,"
-			"UsrCod INT NOT NULL,"
-			"CreatTime DATETIME NOT NULL,"
-			"Content TEXT NOT NULL,"
-			"NumNotif INT NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(NotCod),"
-		   "INDEX(CrsCod),"
-		   "INDEX(UsrCod),"
-		   "INDEX(CreatTime))");
 
    /***** Table ntf_notifications *****/
 /*
