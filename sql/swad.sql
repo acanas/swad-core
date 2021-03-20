@@ -1332,9 +1332,9 @@ CREATE TABLE IF NOT EXISTS svy_answers (
 	Answer TEXT NOT NULL,
 	UNIQUE INDEX(QstCod,AnsInd));
 --
--- Table svy_grp: stores the groups associated to each survey
+-- Table svy_groups: stores the groups associated to each survey
 --
-CREATE TABLE IF NOT EXISTS svy_grp (
+CREATE TABLE IF NOT EXISTS svy_groups (
 	SvyCod INT NOT NULL,
 	GrpCod INT NOT NULL,
 	UNIQUE INDEX(SvyCod,GrpCod));

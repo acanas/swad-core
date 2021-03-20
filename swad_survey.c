@@ -988,16 +988,18 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
       if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
         {
 	 if (asprintf (&SubQuery[Hie_Lvl_CRS],"%s("
-						"Scope='%s' AND Cod=%ld%s"
+						"Scope='%s'"
+						" AND Cod=%ld%s"
 						" AND "
 						"(SvyCod NOT IN"
-						" (SELECT SvyCod FROM svy_grp)"
+						" (SELECT SvyCod"
+						   " FROM svy_groups)"
 						" OR"
 						" SvyCod IN"
-						" (SELECT svy_grp.SvyCod"
-						" FROM svy_grp,crs_grp_usr"
-						" WHERE crs_grp_usr.UsrCod=%ld"
-						" AND svy_grp.GrpCod=crs_grp_usr.GrpCod))"
+						" (SELECT svy_groups.SvyCod"
+						   " FROM svy_groups,crs_grp_usr"
+						  " WHERE crs_grp_usr.UsrCod=%ld"
+						    " AND svy_groups.GrpCod=crs_grp_usr.GrpCod))"
 						")",
 		       SubQueryFilled ? " OR " :
 					"",
@@ -2151,8 +2153,8 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       HTM_LABEL_Begin (NULL);
       HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "id=\"WholeCrs\" value=\"Y\"%s onclick=\"uncheckChildren(this,'GrpCods')\"",
-			  Grp_CheckIfAssociatedToGrps ("svy_grp","SvyCod",SvyCod) ? "" :
-				                                                    " checked=\"checked\"");
+			  Grp_CheckIfAssociatedToGrps ("svy_groups","SvyCod",SvyCod) ? "" :
+				                                                       " checked=\"checked\"");
       HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -2420,7 +2422,8 @@ static void Svy_RemoveAllTheGrpsAssociatedToAndSurvey (long SvyCod)
   {
    /***** Remove groups of the survey *****/
    DB_QueryDELETE ("can not remove the groups associated to a survey",
-		   "DELETE FROM svy_grp WHERE SvyCod=%ld",
+		   "DELETE FROM svy_groups"
+		   " WHERE SvyCod=%ld",
 		   SvyCod);
   }
 
@@ -2433,7 +2436,8 @@ void Svy_RemoveGroup (long GrpCod)
    /***** Remove group from all the surveys *****/
    DB_QueryDELETE ("can not remove group from the associations"
 		   " between surveys and groups",
-		   "DELETE FROM svy_grp WHERE GrpCod=%ld",
+		   "DELETE FROM svy_groups"
+		   " WHERE GrpCod=%ld",
 		   GrpCod);
   }
 
@@ -2446,9 +2450,11 @@ void Svy_RemoveGroupsOfType (long GrpTypCod)
    /***** Remove group from all the surveys *****/
    DB_QueryDELETE ("can not remove groups of a type"
 	           " from the associations between surveys and groups",
-		   "DELETE FROM svy_grp USING crs_grp,svy_grp"
+		   "DELETE FROM svy_groups"
+		   " USING crs_grp,"
+		          "svy_groups"
                    " WHERE crs_grp.GrpTypCod=%ld"
-                   " AND crs_grp.GrpCod=svy_grp.GrpCod",
+                     " AND crs_grp.GrpCod=svy_groups.GrpCod",
 		   GrpTypCod);
   }
 
@@ -2466,7 +2472,7 @@ static void Svy_CreateGrps (long SvyCod)
 	NumGrpSel++)
       /* Create group */
       DB_QueryINSERT ("can not associate a group to a survey",
-		      "INSERT INTO svy_grp"
+		      "INSERT INTO svy_groups"
 	              " (SvyCod,GrpCod)"
 	              " VALUES"
 	              " (%ld,%ld)",
@@ -2490,13 +2496,14 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 
    /***** Get groups associated to a survey from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of a survey",
-			     "SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
-			     " FROM svy_grp,crs_grp,crs_grp_types"
-			     " WHERE svy_grp.SvyCod=%ld"
-			     " AND svy_grp.GrpCod=crs_grp.GrpCod"
-			     " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			     "SELECT crs_grp_types.GrpTypName,"
+			            "crs_grp.GrpName"
+			      " FROM svy_groups,crs_grp,crs_grp_types"
+			     " WHERE svy_groups.SvyCod=%ld"
+			       " AND svy_groups.GrpCod=crs_grp.GrpCod"
+			       " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
 			     " ORDER BY crs_grp_types.GrpTypName,"
-			     "crs_grp.GrpName",
+			               "crs_grp.GrpName",
 			     Svy->SvyCod);
 
    /***** Write heading *****/
@@ -2576,10 +2583,12 @@ void Svy_RemoveSurveys (Hie_Lvl_Level_t Scope,long Cod)
    /***** Remove groups *****/
    DB_QueryDELETE ("can not remove all the groups"
 	           " associated to surveys of a course",
-		   "DELETE FROM svy_grp"
-	           " USING svy_surveys,svy_grp"
-                   " WHERE svy_surveys.Scope='%s' AND svy_surveys.Cod=%ld"
-                   " AND svy_surveys.SvyCod=svy_grp.SvyCod",
+		   "DELETE FROM svy_groups"
+	           " USING svy_surveys,"
+	                  "svy_groups"
+                   " WHERE svy_surveys.Scope='%s'"
+                     " AND svy_surveys.Cod=%ld"
+                     " AND svy_surveys.SvyCod=svy_groups.SvyCod",
 		   Sco_GetDBStrFromScope (Scope),Cod);
 
    /***** Remove course surveys *****/
@@ -2598,12 +2607,19 @@ static bool Svy_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
   {
    /***** Get if I can do a survey from database *****/
    return (DB_QueryCOUNT ("can not check if I can do a survey",
-			  "SELECT COUNT(*) FROM svy_surveys"
+			  "SELECT COUNT(*)"
+			   " FROM svy_surveys"
 			  " WHERE SvyCod=%ld"
-			  " AND (SvyCod NOT IN (SELECT SvyCod FROM svy_grp) OR"
-			  " SvyCod IN (SELECT svy_grp.SvyCod FROM svy_grp,crs_grp_usr"
-			  " WHERE crs_grp_usr.UsrCod=%ld"
-			  " AND svy_grp.GrpCod=crs_grp_usr.GrpCod))",
+			    " AND"
+			  " (SvyCod NOT IN"
+			   " (SELECT SvyCod FROM svy_groups)"
+			   " OR"
+			   " SvyCod IN"
+			   " (SELECT svy_groups.SvyCod"
+			      " FROM crs_grp_usr,"
+			            "svy_groups"
+			     " WHERE crs_grp_usr.UsrCod=%ld"
+			       " AND svy_groups.GrpCod=crs_grp_usr.GrpCod))",
 			  SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
   }
 

@@ -2779,9 +2779,9 @@ mysql> DESCRIBE svy_answers;
 			"Answer TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(QstCod,AnsInd))");
 
-   /***** Table svy_grp *****/
+   /***** Table svy_groups *****/
 /*
-mysql> DESCRIBE svy_grp;
+mysql> DESCRIBE svy_groups;
 +--------+---------+------+-----+---------+-------+
 | Field  | Type    | Null | Key | Default | Extra |
 +--------+---------+------+-----+---------+-------+
@@ -2790,7 +2790,7 @@ mysql> DESCRIBE svy_grp;
 +--------+---------+------+-----+---------+-------+
 2 rows in set (0.01 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS svy_grp ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS svy_groups ("
 			"SvyCod INT NOT NULL,"
 			"GrpCod INT NOT NULL,"
 		   "UNIQUE INDEX(SvyCod,GrpCod))");

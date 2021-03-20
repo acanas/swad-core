@@ -1694,7 +1694,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
      {
       [Grp_ASSIGNMENT] = {"asg_groups","AsgCod"},
       [Grp_ATT_EVENT ] = {"att_groups","AttCod"},
-      [Grp_SURVEY    ] = {"svy_grp"   ,"SvyCod"},
+      [Grp_SURVEY    ] = {"svy_groups","SvyCod"},
       [Grp_EXA_EVENT ] = {"exa_groups","SesCod"},
       [Grp_MATCH     ] = {"mch_groups","MchCod"},
      };
