@@ -3691,9 +3691,9 @@ mysql> DESCRIBE usr_webs;
 			"URL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(UsrCod,Web))");
 
-/***** Table ws_keys *****/
+/***** Table API_keys *****/
 /*
-mysql> DESCRIBE ws_keys;
+mysql> DESCRIBE API_keys;
 +----------+----------+------+-----+---------+-------+
 | Field    | Type     | Null | Key | Default | Extra |
 +----------+----------+------+-----+---------+-------+
@@ -3704,7 +3704,7 @@ mysql> DESCRIBE ws_keys;
 +----------+----------+------+-----+---------+-------+
 4 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS ws_keys ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS API_keys ("
 			"WSKey CHAR(43) NOT NULL,"	// API_BYTES_WS_KEY
 			"UsrCod INT NOT NULL,"
 			"PlgCod INT NOT NULL,"

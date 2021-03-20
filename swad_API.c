@@ -463,7 +463,10 @@ static int API_CheckWSKey (char WSKey[API_BYTES_WS_KEY + 1])
 
    /***** Check that key does not exist in database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get existence of key",
-		       "SELECT UsrCod,PlgCod FROM ws_keys WHERE WSKey='%s'",
+		       "SELECT UsrCod,"		// row[0]
+		              "PlgCod"		// row[1]
+		        " FROM API_keys"
+		       " WHERE WSKey='%s'",
 		       WSKey))	// Session found in table of sessions
      {
       row = mysql_fetch_row (mysql_res);
@@ -538,7 +541,7 @@ static int API_GenerateNewWSKey (struct soap *soap,
 
    /***** Check that key does not exist in database *****/
    if (DB_QueryCOUNT ("can not get existence of key",
-		      "SELECT COUNT(*) FROM ws_keys"
+		      "SELECT COUNT(*) FROM API_keys"
 		      " WHERE WSKey='%s'",
 		      WSKey))
       return soap_receiver_fault (soap,
@@ -547,7 +550,7 @@ static int API_GenerateNewWSKey (struct soap *soap,
 
    /***** Insert key into database *****/
    DB_QueryINSERT ("can not insert new key",
-		   "INSERT INTO ws_keys"
+		   "INSERT INTO API_keys"
 	           " (WSKey,UsrCod,PlgCod,LastTime)"
                    " VALUES"
                    " ('%s',%ld,%ld,NOW())",
@@ -567,7 +570,7 @@ static int API_RemoveOldWSKeys (struct soap *soap)
    /***** Remove expired sessions *****/
    /* A session expire when last click (LastTime) is too old,
       or when there was at least one refresh (navigator supports AJAX) and last refresh is too old (browser probably was closed) */
-   sprintf (Query,"DELETE LOW_PRIORITY FROM ws_keys"
+   sprintf (Query,"DELETE LOW_PRIORITY FROM API_keys"
 	          " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
             Cfg_TIME_TO_DELETE_WEB_SERVICE_KEY);
    if (mysql_query (&Gbl.mysql,Query))
@@ -1209,29 +1212,31 @@ int swad__getAvailableRoles (struct soap *soap,
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
 
    /***** Return available roles *****/
+/*
    DB_QueryINSERT ("can not debug",
-		   "INSERT INTO debug"
+		   "INSERT INTO dbg_debug"
 		   " (DebugTime,Txt)"
 		   " VALUES"
 		   " (NOW(),'Gbl.Usrs.Me.Role.Available before Rol_SetMyRoles: %u')",
 		   Gbl.Usrs.Me.Role.Available);
-
+*/
    Rol_SetMyRoles ();
    getAvailableRolesOut->roles = Gbl.Usrs.Me.Role.Available;
+/*
    DB_QueryINSERT ("can not debug",
-		   "INSERT INTO debug"
+		   "INSERT INTO dbg_debug"
 		   " (DebugTime,Txt)"
 		   " VALUES"
 		   " (NOW(),'Gbl.Usrs.Me.Role.Available after Rol_SetMyRoles: %u')",
 		   Gbl.Usrs.Me.Role.Available);
 
    DB_QueryINSERT ("can not debug",
-		   "INSERT INTO debug"
+		   "INSERT INTO dbg_debug"
 		   " (DebugTime,Txt)"
 		   " VALUES"
 		   " (NOW(),'getAvailableRolesOut->roles: %d')",
 		   getAvailableRolesOut->roles);
-
+*/
    return SOAP_OK;
   }
 

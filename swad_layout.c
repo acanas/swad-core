@@ -1217,7 +1217,7 @@ static void Lay_ShowRightColumn (void)
 	         (tv2.tv_usec - tv1.tv_usec);
 
       DB_QueryINSERT ("can not debug",
-		      "INSERT INTO debug"
+		      "INSERT INTO dbg_debug"
 		      " (DebugTime,Txt)"
 		      " VALUES"
 		      " (NOW(),'Fol_SuggestUsrsToFollowMainZoneOnRightColumn: %ld us')",

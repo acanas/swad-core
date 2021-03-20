@@ -1,6 +1,18 @@
 CREATE DATABASE IF NOT EXISTS swad DEFAULT CHARACTER SET=latin1 DEFAULT COLLATE latin1_spanish_ci;
 USE swad;
 --
+-- Table API_keys: stores the keys used in the API / web service
+--
+CREATE TABLE IF NOT EXISTS API_keys (
+	WSKey CHAR(43) NOT NULL,
+	UsrCod INT NOT NULL,
+	PlgCod INT NOT NULL,
+	LastTime DATETIME NOT NULL,
+	UNIQUE INDEX(WSKey),
+	INDEX(UsrCod),
+	INDEX(PlgCod),
+	INDEX(LastTime));
+--
 -- Table IP_prefs: stores user's preferences for each IP address
 --
 CREATE TABLE IF NOT EXISTS IP_prefs (
@@ -456,9 +468,9 @@ CREATE TABLE IF NOT EXISTS cty_countrs (
 	INDEX(Name_pl),
 	INDEX(Name_pt));
 --
--- Table debug: used for debugging purposes
+-- Table dbg_debug: used for debugging purposes
 --
-CREATE TABLE IF NOT EXISTS debug (
+CREATE TABLE IF NOT EXISTS dbg_debug (
 	DebugTime DATETIME NOT NULL,
 	Txt TEXT NOT NULL,
 	INDEX(DebugTime));
@@ -1772,15 +1784,3 @@ CREATE TABLE IF NOT EXISTS usr_webs (
 		'youtube') NOT NULL,
 	URL VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(UsrCod,Web));
---
--- Table ws_keys: stores the keys used in plugins and web service
---
-CREATE TABLE IF NOT EXISTS ws_keys (
-	WSKey CHAR(43) NOT NULL,
-	UsrCod INT NOT NULL,
-	PlgCod INT NOT NULL,
-	LastTime DATETIME NOT NULL,
-	UNIQUE INDEX(WSKey),
-	INDEX(UsrCod),
-	INDEX(PlgCod),
-	INDEX(LastTime));
