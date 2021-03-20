@@ -1279,16 +1279,16 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 				   " WHERE asg_assignments.AsgCod=%ld"
 				     " AND asg_assignments.AsgCod NOT IN"
 				         " (SELECT AsgCod"
-				            " FROM asg_grp"
+				            " FROM asg_groups"
 				           " WHERE AsgCod=%ld)"
 				     " AND asg_assignments.CrsCod=crs_usr.CrsCod"
 				     " AND crs_usr.UsrCod<>%ld)"
 				   " UNION "
 				   "(SELECT DISTINCT crs_grp_usr.UsrCod"
-				     " FROM asg_grp,"
+				     " FROM asg_groups,"
 				           "crs_grp_usr"
-				    " WHERE asg_grp.AsgCod=%ld"
-				      " AND asg_grp.GrpCod=crs_grp_usr.GrpCod"
+				    " WHERE asg_groups.AsgCod=%ld"
+				      " AND asg_groups.GrpCod=crs_grp_usr.GrpCod"
 				      " AND crs_grp_usr.UsrCod<>%ld)",
 				   Cod,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,
 				   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);

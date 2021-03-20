@@ -206,7 +206,7 @@ void Att_SeeAttEvents (void)
    /***** Get parameters *****/
    Events.SelectedOrder = Att_GetParamAttOrder ();
    Grp_GetParamWhichGroups ();
-   Events.CurrentPage = Pag_GetParamPagNum (Pag_ATmt_EVENTS);
+   Events.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (&Events,Att_NEWEST_FIRST);
@@ -256,7 +256,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
      }
 
    /***** Write links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_ATmt_EVENTS,&Pagination,
+   Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,&Pagination,
 				  Events,-1L);
 
    if (Events->Num)
@@ -275,7 +275,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 	 Frm_BeginForm (ActSeeAtt);
          WhichGroups = Grp_GetParamWhichGroups ();
 	 Grp_PutParamWhichGroups (&WhichGroups);
-	 Pag_PutHiddenParamPagNum (Pag_ATmt_EVENTS,Events->CurrentPage);
+	 Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
 	 Dat_PutHiddenParamOrder (Order);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
 	 if (Order == Events->SelectedOrder)
@@ -308,7 +308,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
       Ale_ShowAlert (Ale_INFO,Txt_No_events);
 
    /***** Write again links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_ATmt_EVENTS,&Pagination,
+   Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,&Pagination,
 				  Events,-1L);
 
    /***** Button to create a new attendance event *****/
@@ -331,7 +331,7 @@ static void Att_ParamsWhichGroupsToShow (void *Events)
    if (Events)
      {
       Dat_PutHiddenParamOrder (((struct Att_Events *) Events)->SelectedOrder);
-      Pag_PutHiddenParamPagNum (Pag_ATmt_EVENTS,((struct Att_Events *) Events)->CurrentPage);
+      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -416,7 +416,7 @@ static void Att_PutParamsToCreateNewAttEvent (void *Events)
       Dat_PutHiddenParamOrder (((struct Att_Events *) Events)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
-      Pag_PutHiddenParamPagNum (Pag_ATmt_EVENTS,((struct Att_Events *) Events)->CurrentPage);
+      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -433,7 +433,7 @@ static void Att_PutParamsToListUsrsAttendance (void *Events)
       Dat_PutHiddenParamOrder (((struct Att_Events *) Events)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
-      Pag_PutHiddenParamPagNum (Pag_ATmt_EVENTS,((struct Att_Events *) Events)->CurrentPage);
+      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -635,7 +635,7 @@ static void Att_PutParams (void *Events)
       Dat_PutHiddenParamOrder (((struct Att_Events *) Events)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
-      Pag_PutHiddenParamPagNum (Pag_ATmt_EVENTS,((struct Att_Events *) Events)->CurrentPage);
+      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -929,7 +929,7 @@ void Att_AskRemAttEvent (void)
    /***** Get parameters *****/
    Events.SelectedOrder = Att_GetParamAttOrder ();
    Grp_GetParamWhichGroups ();
-   Events.CurrentPage = Pag_GetParamPagNum (Pag_ATmt_EVENTS);
+   Events.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
    if ((Event.AttCod = Att_GetParamAttCod ()) == -1L)
@@ -944,7 +944,7 @@ void Att_AskRemAttEvent (void)
    Dat_PutHiddenParamOrder (Events.SelectedOrder);
    WhichGroups = Grp_GetParamWhichGroups ();
    Grp_PutParamWhichGroups (&WhichGroups);
-   Pag_PutHiddenParamPagNum (Pag_ATmt_EVENTS,Events.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
 
    /* Ask for confirmation of removing */
    Ale_ShowAlert (Ale_WARNING,Txt_Do_you_really_want_to_remove_the_event_X,
@@ -1101,7 +1101,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    /***** Get parameters *****/
    Events.SelectedOrder = Att_GetParamAttOrder ();
    Grp_GetParamWhichGroups ();
-   Events.CurrentPage = Pag_GetParamPagNum (Pag_ATmt_EVENTS);
+   Events.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
    Event.AttCod = Att_GetParamAttCod ();
@@ -1141,7 +1141,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    Dat_PutHiddenParamOrder (Events.SelectedOrder);
    WhichGroups = Grp_GetParamWhichGroups ();
    Grp_PutParamWhichGroups (&WhichGroups);
-   Pag_PutHiddenParamPagNum (Pag_ATmt_EVENTS,Events.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
 
    /***** Begin box and table *****/
    if (ItsANewAttEvent)
@@ -1279,7 +1279,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 	   NumGrpTyp++)
          if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
             Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-                                               Grp_ATmt_EVENT,AttCod);
+                                               Grp_ATT_EVENT,AttCod);
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
@@ -1883,7 +1883,7 @@ static void Att_ShowEvent (struct Att_Events *Events)
    /***** Get parameters *****/
    Events->SelectedOrder = Att_GetParamAttOrder ();
    Grp_GetParamWhichGroups ();
-   Events->CurrentPage = Pag_GetParamPagNum (Pag_ATmt_EVENTS);
+   Events->CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Event,
@@ -3530,12 +3530,12 @@ static void Att_PutCheckOrCross (bool Present)
 
    if (Present)
      {
-      HTM_DIV_Begin ("class=\"ATmt_CHECK\" title=\"%s\"",Txt_Present);
+      HTM_DIV_Begin ("class=\"ATT_CHECK\" title=\"%s\"",Txt_Present);
       HTM_Txt ("&check;");
      }
    else
      {
-      HTM_DIV_Begin ("class=\"ATmt_CROSS\" title=\"%s\"",Txt_Absent);
+      HTM_DIV_Begin ("class=\"ATT_CROSS\" title=\"%s\"",Txt_Absent);
       HTM_Txt ("&cross;");
      }
    HTM_DIV_End ();

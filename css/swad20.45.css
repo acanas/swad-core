@@ -3410,14 +3410,14 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 
 /********************************* Attendance ********************************/
-.ATmt_CHECK
+.ATT_CHECK
 	{
 	display:inline-block;
 	font-size:13pt;
 	font-weight:bold;
 	color:darkgreen;
 	}
-.ATmt_CROSS
+.ATT_CROSS
 	{
 	display:inline-block;
 	font-size:13pt;

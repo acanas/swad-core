@@ -86,9 +86,9 @@ CREATE TABLE IF NOT EXISTS asg_assignments (
 	UNIQUE INDEX(AsgCod),
 	INDEX(CrsCod,Hidden));
 --
--- Table asg_grp: stores the groups associated to assigments
+-- Table asg_groups: stores the groups associated to assigments
 --
-CREATE TABLE IF NOT EXISTS asg_grp (
+CREATE TABLE IF NOT EXISTS asg_groups (
 	AsgCod INT NOT NULL,
 	GrpCod INT NOT NULL,
 	UNIQUE INDEX(AsgCod,GrpCod));

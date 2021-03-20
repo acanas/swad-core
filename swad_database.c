@@ -247,9 +247,9 @@ mysql> DESCRIBE asg_assignments;
 		   "UNIQUE INDEX(AsgCod),"
 		   "INDEX(CrsCod,Hidden))");
 
-   /***** Table asg_grp *****/
+   /***** Table asg_groups *****/
 /*
-mysql> DESCRIBE asg_grp;
+mysql> DESCRIBE asg_groups;
 +--------+---------+------+-----+---------+-------+
 | Field  | Type    | Null | Key | Default | Extra |
 +--------+---------+------+-----+---------+-------+
@@ -258,7 +258,7 @@ mysql> DESCRIBE asg_grp;
 +--------+---------+------+-----+---------+-------+
 2 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS asg_grp ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS asg_groups ("
 			"AsgCod INT NOT NULL,"
 			"GrpCod INT NOT NULL,"
 		   "UNIQUE INDEX(AsgCod,GrpCod))");

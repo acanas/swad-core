@@ -2736,14 +2736,15 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
 			       " AND Folder<>''"
 			       " AND ("
 			             "AsgCod NOT IN"
-			             " (SELECT AsgCod FROM asg_grp)"
+			             " (SELECT AsgCod"
+			                " FROM asg_groups)"
 			             " OR "
 			             "AsgCod IN"
-			             " (SELECT asg_grp.AsgCod"
-			                " FROM asg_grp,"
-			                      "crs_grp_usr"
+			             " (SELECT asg_groups.AsgCod"
+			                " FROM crs_grp_usr,"
+			                      "asg_groups"
 			               " WHERE crs_grp_usr.UsrCod=%ld"
-			                 " AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
+			                 " AND asg_groups.GrpCod=crs_grp_usr.GrpCod)"
 			            ")",
 			     Gbl.Hierarchy.Crs.CrsCod,ZoneUsrCod);
 

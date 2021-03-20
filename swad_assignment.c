@@ -701,15 +701,15 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
 					// Assignment is for the whole course
                                         "AsgCod NOT IN"
                                         " (SELECT AsgCod"
-				           " FROM asg_grp)"	// Not associated to any group
+				           " FROM asg_groups)"	// Not associated to any group
 				       " OR"
 					// Assignment is for some of my groups
 				       " AsgCod IN"
-				       " (SELECT asg_grp.AsgCod"
-				          " FROM asg_grp,"
+				       " (SELECT asg_groups.AsgCod"
+				          " FROM asg_groups,"
 				                "crs_grp_usr"
 				         " WHERE crs_grp_usr.UsrCod=%ld"
-				           " AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
+				           " AND asg_groups.GrpCod=crs_grp_usr.GrpCod)"
 				       ")"
 				" ORDER BY %s",
 				Gbl.Hierarchy.Crs.CrsCod,
@@ -1409,8 +1409,8 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
       HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 		          "id=\"WholeCrs\" value=\"Y\"%s"
 		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
-			  Grp_CheckIfAssociatedToGrps ("asg_grp","AsgCod",AsgCod) ? "" :
-				                                                    " checked=\"checked\"");
+			  Grp_CheckIfAssociatedToGrps ("asg_groups","AsgCod",AsgCod) ? "" :
+				                                                       " checked=\"checked\"");
       HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -1678,7 +1678,8 @@ static void Asg_RemoveAllTheGrpsAssociatedToAnAssignment (long AsgCod)
   {
    /***** Remove groups of the assignment *****/
    DB_QueryDELETE ("can not remove the groups associated to an assignment",
-		   "DELETE FROM asg_grp WHERE AsgCod=%ld",
+		   "DELETE FROM asg_groups"
+		   " WHERE AsgCod=%ld",
 		   AsgCod);
   }
 
@@ -1691,7 +1692,8 @@ void Asg_RemoveGroup (long GrpCod)
    /***** Remove group from all the assignments *****/
    DB_QueryDELETE ("can not remove group from the associations"
 	           " between assignments and groups",
-		   "DELETE FROM asg_grp WHERE GrpCod=%ld",
+		   "DELETE FROM asg_groups"
+		   " WHERE GrpCod=%ld",
 		   GrpCod);
   }
 
@@ -1704,9 +1706,11 @@ void Asg_RemoveGroupsOfType (long GrpTypCod)
    /***** Remove group from all the assignments *****/
    DB_QueryDELETE ("can not remove groups of a type from the associations"
 	           " between assignments and groups",
-		   "DELETE FROM asg_grp USING crs_grp,asg_grp"
+		   "DELETE FROM asg_groups"
+		   " USING crs_grp,"
+		          "asg_groups"
 		   " WHERE crs_grp.GrpTypCod=%ld"
-		   " AND crs_grp.GrpCod=asg_grp.GrpCod",
+		     " AND crs_grp.GrpCod=asg_groups.GrpCod",
                    GrpTypCod);
   }
 
@@ -1724,7 +1728,7 @@ static void Asg_CreateGrps (long AsgCod)
 	NumGrpSel++)
       /* Create group */
       DB_QueryINSERT ("can not associate a group to an assignment",
-		      "INSERT INTO asg_grp"
+		      "INSERT INTO asg_groups"
 		      " (AsgCod,GrpCod)"
 		      " VALUES"
 		      " (%ld,%ld)",
@@ -1750,11 +1754,14 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
    /***** Get groups associated to an assignment from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of an assignment",
 	                     "SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
-			     " FROM asg_grp,crs_grp,crs_grp_types"
-			     " WHERE asg_grp.AsgCod=%ld"
-			     " AND asg_grp.GrpCod=crs_grp.GrpCod"
-			     " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-			     " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
+			      " FROM asg_groups,"
+			            "crs_grp,"
+			            "crs_grp_types"
+			     " WHERE asg_groups.AsgCod=%ld"
+			       " AND asg_groups.GrpCod=crs_grp.GrpCod"
+			       " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			     " ORDER BY crs_grp_types.GrpTypName,"
+			               "crs_grp.GrpName",
 			     Asg->AsgCod);
 
    /***** Write heading *****/
@@ -1804,11 +1811,11 @@ void Asg_RemoveCrsAssignments (long CrsCod)
   {
    /***** Remove groups *****/
    DB_QueryDELETE ("can not remove groups associated to assignments in a course",
-		   "DELETE FROM asg_grp"
+		   "DELETE FROM asg_groups"
 		   " USING asg_assignments,"
-		          "asg_grp"
+		          "asg_groups"
 		   " WHERE asg_assignments.CrsCod=%ld"
-		     " AND asg_assignments.AsgCod=asg_grp.AsgCod",
+		     " AND asg_assignments.AsgCod=asg_groups.AsgCod",
                    CrsCod);
 
    /***** Remove assignments *****/
@@ -1838,15 +1845,16 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
 				  " AND ("
 					// Assignment is for the whole course
 					"AsgCod NOT IN"
-					" (SELECT AsgCod FROM asg_grp)"
+					" (SELECT AsgCod"
+					   " FROM asg_groups)"
 					" OR "
 					// Assignment is for some of my groups
 					"AsgCod IN"
-					" (SELECT asg_grp.AsgCod"
-					   " FROM asg_grp,"
-					         "crs_grp_usr"
+					" (SELECT asg_groups.AsgCod"
+					   " FROM crs_grp_usr,"
+					         "asg_groups"
 					  " WHERE crs_grp_usr.UsrCod=%ld"
-					    " AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
+					    " AND asg_groups.GrpCod=crs_grp_usr.GrpCod)"
 				       ")",
 				AsgCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
       case Rol_SYS_ADM:
