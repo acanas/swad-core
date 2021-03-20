@@ -1692,8 +1692,8 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
       const char *Field;
      } AssociationsToGrps[Grp_NUM_ASSOCIATIONS_TO_GROUPS] =
      {
-      [Grp_ASSIGNMENT] = {"asg_groups"   ,"AsgCod"},
-      [Grp_ATT_EVENT ] = {"att_grp"   ,"AttCod"},
+      [Grp_ASSIGNMENT] = {"asg_groups","AsgCod"},
+      [Grp_ATT_EVENT ] = {"att_groups","AttCod"},
       [Grp_SURVEY    ] = {"svy_grp"   ,"SvyCod"},
       [Grp_EXA_EVENT ] = {"exa_groups","SesCod"},
       [Grp_MATCH     ] = {"mch_groups","MchCod"},

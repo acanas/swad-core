@@ -2712,7 +2712,9 @@ static void API_GetListGrpsInAttendanceEventFromDB (struct soap *soap,
    NumGrps =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get groups"
 					 " of an attendance event",
-			      "SELECT GrpCod FROM att_grp WHERE AttCod=%ld",
+			      "SELECT GrpCod"
+			       " FROM att_groups"
+			      " WHERE AttCod=%ld",
 			      AttCod);
    if (NumGrps == 0)
       *ListGroups = NULL;
@@ -3006,21 +3008,28 @@ int swad__getAttendanceUsers (struct soap *soap,
 	                          "Requester must be a teacher");
 
    /***** Query list of attendance users *****/
-   if (Grp_CheckIfAssociatedToGrps ("att_grp","AttCod",Event.AttCod))
+   if (Grp_CheckIfAssociatedToGrps ("att_groups","AttCod",Event.AttCod))
       // Event for one or more groups
       // Subquery: list of users in groups of this attendance event...
       // ...who have no entry in attendance list of users
-      sprintf (SubQuery,"SELECT DISTINCT crs_grp_usr.UsrCod AS UsrCod,'N' AS Present"
-		        " FROM att_grp,crs_grp,crs_grp_types,crs_usr,crs_grp_usr"
-		        " WHERE att_grp.AttCod=%ld"
-		        " AND att_grp.GrpCod=crs_grp.GrpCod"
-		        " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-		        " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
-		        " AND crs_usr.Role=%u"
-		        " AND crs_usr.UsrCod=crs_grp_usr.UsrCod"
-		        " AND crs_grp_usr.GrpCod=att_grp.GrpCod"
-		        " AND crs_grp_usr.UsrCod NOT IN"
-		        " (SELECT UsrCod FROM att_usr WHERE AttCod=%ld)",
+      sprintf (SubQuery,"SELECT DISTINCT crs_grp_usr.UsrCod AS UsrCod,"
+	                      "'N' AS Present"
+		         " FROM att_groups,"
+		               "crs_grp,"
+		               "crs_grp_types,"
+		               "crs_usr,"
+		               "crs_grp_usr"
+		        " WHERE att_groups.AttCod=%ld"
+		          " AND att_groups.GrpCod=crs_grp.GrpCod"
+		          " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+		          " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
+		          " AND crs_usr.Role=%u"
+		          " AND crs_usr.UsrCod=crs_grp_usr.UsrCod"
+		          " AND crs_grp_usr.GrpCod=att_groups.GrpCod"
+		          " AND crs_grp_usr.UsrCod NOT IN"
+		              " (SELECT UsrCod"
+		                 " FROM att_usr"
+		                " WHERE AttCod=%ld)",
 	       Event.AttCod,
 	       (unsigned) Rol_STD,
 	       Event.AttCod);

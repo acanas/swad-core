@@ -294,9 +294,9 @@ mysql> DESCRIBE att_events;
 		   "UNIQUE INDEX(AttCod),"
 		   "INDEX(CrsCod,Hidden))");
 
-   /***** Table att_grp *****/
+   /***** Table att_groups *****/
 /*
-mysql> DESCRIBE att_grp;
+mysql> DESCRIBE att_groups;
 +--------+---------+------+-----+---------+-------+
 | Field  | Type    | Null | Key | Default | Extra |
 +--------+---------+------+-----+---------+-------+
@@ -305,7 +305,7 @@ mysql> DESCRIBE att_grp;
 +--------+---------+------+-----+---------+-------+
 2 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS att_grp ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS att_groups ("
 			"AttCod INT NOT NULL,"
 			"GrpCod INT NOT NULL,"
 		   "UNIQUE INDEX(AttCod,GrpCod))");

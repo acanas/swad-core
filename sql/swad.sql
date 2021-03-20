@@ -108,9 +108,9 @@ CREATE TABLE IF NOT EXISTS att_events (
 	UNIQUE INDEX(AttCod),
 	INDEX(CrsCod,Hidden));
 --
--- Table att_grp: stores groups associated to control attendance
+-- Table att_groups: stores groups associated to control attendance
 --
-CREATE TABLE IF NOT EXISTS att_grp (
+CREATE TABLE IF NOT EXISTS att_groups (
 	AttCod INT NOT NULL,
 	GrpCod INT NOT NULL,
 	UNIQUE INDEX(AttCod,GrpCod));

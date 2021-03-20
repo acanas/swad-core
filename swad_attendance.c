@@ -679,12 +679,19 @@ static void Att_GetListAttEvents (struct Att_Events *Events,
    if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
       NumRows = DB_QuerySELECT (&mysql_res,"can not get attendance events",
 				"SELECT AttCod"
-				" FROM att_events"
-				" WHERE CrsCod=%ld%s"
-				" AND (AttCod NOT IN (SELECT AttCod FROM att_grp) OR"
-				" AttCod IN (SELECT att_grp.AttCod FROM att_grp,crs_grp_usr"
-				" WHERE crs_grp_usr.UsrCod=%ld"
-				" AND att_grp.GrpCod=crs_grp_usr.GrpCod))"
+				 " FROM att_events"
+				" WHERE CrsCod=%ld"
+				  "%s"
+				  " AND (AttCod NOT IN"
+				       " (SELECT AttCod"
+				        " FROM att_groups)"
+				       " OR"
+				       " AttCod IN"
+				       " (SELECT att_groups.AttCod"
+				          " FROM crs_grp_usr,"
+				                "att_groups"
+				         " WHERE crs_grp_usr.UsrCod=%ld"
+				           " AND att_groups.GrpCod=crs_grp_usr.GrpCod))"
 				" ORDER BY %s",
 				Gbl.Hierarchy.Crs.CrsCod,
 				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
@@ -1265,8 +1272,8 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
       HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 		          "id=\"WholeCrs\" value=\"Y\"%s"
 		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
-			  Grp_CheckIfAssociatedToGrps ("att_grp","AttCod",AttCod) ? "" :
-				                                                    " checked=\"checked\"");
+			  Grp_CheckIfAssociatedToGrps ("att_groups","AttCod",AttCod) ? "" :
+				                                                       " checked=\"checked\"");
       HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -1461,7 +1468,8 @@ static void Att_RemoveAllTheGrpsAssociatedToAnAttEvent (long AttCod)
    /***** Remove groups of the attendance event *****/
    DB_QueryDELETE ("can not remove the groups"
 		   " associated to an attendance event",
-		   "DELETE FROM att_grp WHERE AttCod=%ld",
+		   "DELETE FROM att_groups"
+		   " WHERE AttCod=%ld",
 		   AttCod);
   }
 
@@ -1474,7 +1482,8 @@ void Att_RemoveGroup (long GrpCod)
    /***** Remove group from all the attendance events *****/
    DB_QueryDELETE ("can not remove group from the associations"
 	           " between attendance events and groups",
-		   "DELETE FROM att_grp WHERE GrpCod=%ld",
+		   "DELETE FROM att_groups"
+		   " WHERE GrpCod=%ld",
 		   GrpCod);
   }
 
@@ -1487,9 +1496,11 @@ void Att_RemoveGroupsOfType (long GrpTypCod)
    /***** Remove group from all the attendance events *****/
    DB_QueryDELETE ("can not remove groups of a type from the associations"
 		   " between attendance events and groups",
-		   "DELETE FROM att_grp USING crs_grp,att_grp"
+		   "DELETE FROM att_groups"
+		   " USING crs_grp,"
+		          "att_groups"
 		   " WHERE crs_grp.GrpTypCod=%ld"
-		   " AND crs_grp.GrpCod=att_grp.GrpCod",
+		     " AND crs_grp.GrpCod=att_groups.GrpCod",
                    GrpTypCod);
   }
 
@@ -1507,7 +1518,7 @@ static void Att_CreateGrps (long AttCod)
 	NumGrpSel++)
       /* Create group */
       DB_QueryINSERT ("can not associate a group to an attendance event",
-		      "INSERT INTO att_grp"
+		      "INSERT INTO att_groups"
 		      " (AttCod,GrpCod)"
 		      " VALUES"
 		      " (%ld,%ld)",
@@ -1535,13 +1546,13 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct Att_Event *Ev
 				        "SELECT crs_grp_types.GrpTypName,"
 				               "crs_grp.GrpName,"
 				               "roo_rooms.ShortName"
-					" FROM (att_grp,"
-					       "crs_grp,"
-					       "crs_grp_types)"
+					 " FROM (att_groups,"
+					        "crs_grp,"
+					        "crs_grp_types)"
 				         " LEFT JOIN roo_rooms"
 				           " ON crs_grp.RooCod=roo_rooms.RooCod"
-					" WHERE att_grp.AttCod=%ld"
-					  " AND att_grp.GrpCod=crs_grp.GrpCod"
+					" WHERE att_groups.AttCod=%ld"
+					  " AND att_groups.GrpCod=crs_grp.GrpCod"
 					  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
 					" ORDER BY crs_grp_types.GrpTypName,"
 					          "crs_grp.GrpName",
@@ -1659,14 +1670,17 @@ void Att_RemoveCrsAttEvents (long CrsCod)
    /***** Remove groups *****/
    DB_QueryDELETE ("can not remove all the groups associated"
 		   " to attendance events of a course",
-		   "DELETE FROM att_grp USING att_events,att_grp"
+		   "DELETE FROM att_groups"
+		   " USING att_events,"
+		          "att_groups"
 		   " WHERE att_events.CrsCod=%ld"
-		   " AND att_events.AttCod=att_grp.AttCod",
+		   " AND att_events.AttCod=att_groups.AttCod",
                    CrsCod);
 
    /***** Remove attendance events *****/
    DB_QueryDELETE ("can not remove all the attendance events of a course",
-		   "DELETE FROM att_events WHERE CrsCod=%ld",
+		   "DELETE FROM att_events"
+		   " WHERE CrsCod=%ld",
 		   CrsCod);
   }
 
@@ -2253,8 +2267,9 @@ static void Att_PutParamsCodGrps (long AttCod)
    /***** Get groups associated to an attendance event from database *****/
    if (Gbl.Crs.Grps.NumGrps)
       NumGrps = (unsigned) DB_QuerySELECT (&mysql_res,"can not get groups of an attendance event",
-					   "SELECT GrpCod FROM att_grp"
-					   " WHERE att_grp.AttCod=%ld",
+					   "SELECT GrpCod"	// row[0]
+					    " FROM att_groups"
+					   " WHERE att_groups.AttCod=%ld",
 					   AttCod);
    else
       NumGrps = 0;
@@ -3044,8 +3059,9 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
 	       /***** Get groups associated to an attendance event from database *****/
 	       NumGrpsInThisEvent = (unsigned) DB_QuerySELECT (&mysql_res,"can not get groups"
 									  " of an attendance event",
-							       "SELECT GrpCod FROM att_grp"
-							       " WHERE att_grp.AttCod=%ld",
+							       "SELECT GrpCod"		// row[0]
+							        " FROM att_groups"
+							       " WHERE att_groups.AttCod=%ld",
 							       Events->Lst[NumAttEvent].AttCod);
 	       if (NumGrpsInThisEvent)	// This event is associated to groups
 		  /* Get groups associated to this event */
