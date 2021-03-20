@@ -4390,12 +4390,12 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    /***** Remove format of files of marks *****/
    DB_QueryDELETE ("can not remove the properties of marks"
 		   " associated to a course",
-		   "DELETE FROM marks_properties"
+		   "DELETE FROM mrk_marks"
 		   " USING brw_files,"
-		          "marks_properties"
+		          "mrk_marks"
 		   " WHERE brw_files.FileBrowser=%u"
 		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=marks_properties.FilCod",
+		     " AND brw_files.FilCod=mrk_marks.FilCod",
 	           (unsigned) Brw_ADMI_MRK_CRS,
 	           CrsCod);
 
@@ -4627,12 +4627,12 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
    /***** Remove format of files of marks *****/
    DB_QueryDELETE ("can not remove the properties of marks"
 		   " associated to a group",
-		   "DELETE FROM marks_properties"
+		   "DELETE FROM mrk_marks"
 		   " USING brw_files,"
-		          "marks_properties"
+		          "mrk_marks"
 		   " WHERE brw_files.FileBrowser=%u"
 		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=marks_properties.FilCod",
+		     " AND brw_files.FilCod=mrk_marks.FilCod",
 	           (unsigned) Brw_ADMI_MRK_GRP,
 	           GrpCod);
 
@@ -11260,14 +11260,16 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1])
    if (FileBrowser == Brw_ADMI_MRK_CRS ||
        FileBrowser == Brw_ADMI_MRK_GRP)
       DB_QueryDELETE ("can not remove properties of marks from database",
-		      "DELETE FROM marks_properties"
+		      "DELETE FROM mrk_marks"
 		      " USING brw_files,"
-		             "marks_properties"
+		             "mrk_marks"
 		      " WHERE brw_files.FileBrowser=%u"
 		        " AND brw_files.Cod=%ld"
 		        " AND brw_files.Path='%s'"
-		        " AND brw_files.FilCod=marks_properties.FilCod",
-	              (unsigned) FileBrowser,Cod,Path);
+		        " AND brw_files.FilCod=mrk_marks.FilCod",
+	              (unsigned) FileBrowser,
+	              Cod,
+	              Path);
 
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views from database",
@@ -11311,14 +11313,16 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1])
    if (FileBrowser == Brw_ADMI_MRK_CRS ||
        FileBrowser == Brw_ADMI_MRK_GRP)
       DB_QueryDELETE ("can not remove properties of marks from database",
-		      "DELETE FROM marks_properties"
+		      "DELETE FROM mrk_marks"
 		      " USING brw_files,"
-		             "marks_properties"
+		             "mrk_marks"
 		      " WHERE brw_files.FileBrowser=%u"
 		        " AND brw_files.Cod=%ld"
 		        " AND brw_files.Path LIKE '%s/%%'"
-		        " AND brw_files.FilCod=marks_properties.FilCod",
-	              (unsigned) FileBrowser,Cod,Path);
+		        " AND brw_files.FilCod=mrk_marks.FilCod",
+	              (unsigned) FileBrowser,
+	              Cod,
+	              Path);
 
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views from database",

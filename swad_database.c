@@ -2084,24 +2084,6 @@ mysql> DESCRIBE ntf_mail_domains;
 		   "UNIQUE INDEX(MaiCod),"
 		   "UNIQUE INDEX(Domain))");
 
-   /***** Table marks_properties *****/
-/*
-mysql> DESCRIBE marks_properties;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| FilCod | int(11) | NO   | PRI | NULL    |       |
-| Header | int(11) | NO   |     | NULL    |       |
-| Footer | int(11) | NO   |     | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-3 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS marks_properties ("
-			"FilCod INT NOT NULL,"
-			"Header INT NOT NULL,"
-			"Footer INT NOT NULL,"
-		   "UNIQUE INDEX(FilCod))");
-
    /***** Table med_media *****/
 /*
 mysql> DESCRIBE med_media;
@@ -2124,6 +2106,24 @@ mysql> DESCRIBE med_media;
 			"Title VARCHAR(2047) NOT NULL DEFAULT '',"	// Med_MAX_BYTES_TITLE
 		   "UNIQUE INDEX(MedCod),"
 		   "INDEX(Type))");
+
+   /***** Table mrk_marks *****/
+/*
+mysql> DESCRIBE mrk_marks;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| FilCod | int(11) | NO   | PRI | NULL    |       |
+| Header | int(11) | NO   |     | NULL    |       |
+| Footer | int(11) | NO   |     | NULL    |       |
++--------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mrk_marks ("
+			"FilCod INT NOT NULL,"
+			"Header INT NOT NULL,"
+			"Footer INT NOT NULL,"
+		   "UNIQUE INDEX(FilCod))");
 
    /***** Table msg_banned *****/
 /*

@@ -996,14 +996,6 @@ CREATE TABLE IF NOT EXISTS ntf_mail_domains (
 	UNIQUE INDEX(MaiCod),
 	UNIQUE INDEX(Domain));
 --
--- Table marks_properties: stores information about files of marks
---
-CREATE TABLE IF NOT EXISTS marks_properties (
-	FilCod INT NOT NULL AUTO_INCREMENT,
-	Header INT NOT NULL,
-	Footer INT NOT NULL,
-	UNIQUE INDEX(FilCod));
---
 -- Table med_media: stores information about media (images, videos, YouTube)
 --
 CREATE TABLE IF NOT EXISTS med_media (
@@ -1014,6 +1006,14 @@ CREATE TABLE IF NOT EXISTS med_media (
 	Title VARCHAR(2047) NOT NULL DEFAULT '',
 	UNIQUE INDEX(MedCod),
 	INDEX(Type));
+--
+-- Table mrk_marks: stores information about files of marks
+--
+CREATE TABLE IF NOT EXISTS mrk_marks (
+	FilCod INT NOT NULL AUTO_INCREMENT,
+	Header INT NOT NULL,
+	Footer INT NOT NULL,
+	UNIQUE INDEX(FilCod));
 --
 -- Table msg_banned: stores the users whose messages are banned (FromUsrCod is a recipien banned from ToUsrCod)
 --
