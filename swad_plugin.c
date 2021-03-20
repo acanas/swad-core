@@ -231,8 +231,15 @@ static void Plg_GetListPlugins (void)
 
    /***** Get plugins from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get plugins",
-			     "SELECT PlgCod,Name,Description,Logo,AppKey,URL,IP"
-			     " FROM plugins ORDER BY Name");
+			     "SELECT PlgCod,"		// row[0]
+			            "Name,"		// row[1]
+			            "Description,"	// row[2]
+			            "Logo,"		// row[3]
+			            "AppKey,"		// row[4]
+			            "URL,"		// row[5]
+			            "IP"		// row[6]
+			      " FROM plg_plugins"
+			     " ORDER BY Name");
 
    /***** Count number of rows in result *****/
    if (NumRows) // Plugins found...
@@ -300,8 +307,13 @@ bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
 
    /***** Get data of a plugin from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a plugin",
-			     "SELECT Name,Description,Logo,AppKey,URL,IP"
-			     " FROM plugins"
+			     "SELECT Name,"		// row[0]
+			            "Description,"	// row[1]
+			            "Logo,"		// row[2]
+			            "AppKey,"		// row[3]
+			            "URL,"		// row[4]
+			            "IP"		// row[5]
+			      " FROM plg_plugins"
 			     " WHERE PlgCod=%ld",
 			     Plg->PlgCod);
 
@@ -496,7 +508,8 @@ void Plg_RemovePlugin (void)
 
    /***** Remove plugin *****/
    DB_QueryDELETE ("can not remove a plugin",
-		   "DELETE FROM plugins WHERE PlgCod=%ld",
+		   "DELETE FROM plg_plugins"
+		   " WHERE PlgCod=%ld",
 		   Plg_EditingPlg->PlgCod);
 
    /***** Write message to show the change made *****/
@@ -546,7 +559,9 @@ void Plg_RenamePlugin (void)
            {
             /* Update the table changing old name by new name */
             DB_QueryUPDATE ("can not update the name of a plugin",
-        		    "UPDATE plugins SET Name='%s' WHERE PlgCod=%ld",
+        		    "UPDATE plg_plugins"
+        		      " SET Name='%s'"
+        		    " WHERE PlgCod=%ld",
                             NewPlgName,Plg_EditingPlg->PlgCod);
 
             /***** Write message to show the change made *****/
@@ -576,8 +591,9 @@ static bool Plg_CheckIfPluginNameExists (const char *Name,long PlgCod)
    /***** Get number of plugins with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of a plugin"
 			  " already existed",
-			  "SELECT COUNT(*) FROM plugins"
-			  " WHERE Name='%s' AND PlgCod<>%ld",
+			  "SELECT COUNT(*) FROM plg_plugins"
+			  " WHERE Name='%s'"
+			    " AND PlgCod<>%ld",
 			  Name,PlgCod) != 0);
   }
 
@@ -609,8 +625,11 @@ void Plg_ChangePlgDescription (void)
      {
       /* Update the table changing old description by new description */
       DB_QueryUPDATE ("can not update the description of a plugin",
-		      "UPDATE plugins SET Description='%s' WHERE PlgCod=%ld",
-                      NewDescription,Plg_EditingPlg->PlgCod);
+		      "UPDATE plg_plugins"
+		        " SET Description='%s'"
+		      " WHERE PlgCod=%ld",
+                      NewDescription,
+                      Plg_EditingPlg->PlgCod);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -653,8 +672,11 @@ void Plg_ChangePlgLogo (void)
      {
       /* Update the table changing old logo by new logo */
       DB_QueryUPDATE ("can not update the logo of a plugin",
-		      "UPDATE plugins SET Logo='%s' WHERE PlgCod=%ld",
-                      NewLogo,Plg_EditingPlg->PlgCod);
+		      "UPDATE plg_plugins"
+		        " SET Logo='%s'"
+		      " WHERE PlgCod=%ld",
+                      NewLogo,
+                      Plg_EditingPlg->PlgCod);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -696,8 +718,11 @@ void Plg_ChangePlgAppKey (void)
      {
       /* Update the table changing old application key by new application key */
       DB_QueryUPDATE ("can not update the application key of a plugin",
-		      "UPDATE plugins SET AppKey='%s' WHERE PlgCod=%ld",
-                      NewAppKey,Plg_EditingPlg->PlgCod);
+		      "UPDATE plg_plugins"
+		        " SET AppKey='%s'"
+		      " WHERE PlgCod=%ld",
+                      NewAppKey,
+                      Plg_EditingPlg->PlgCod);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -739,8 +764,11 @@ void Plg_ChangePlgURL (void)
      {
       /* Update the table changing old WWW by new WWW */
       DB_QueryUPDATE ("can not update the URL of a plugin",
-		      "UPDATE plugins SET URL='%s' WHERE PlgCod=%ld",
-                      NewURL,Plg_EditingPlg->PlgCod);
+		      "UPDATE plg_plugins"
+		        " SET URL='%s'"
+		      " WHERE PlgCod=%ld",
+                      NewURL,
+                      Plg_EditingPlg->PlgCod);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -782,8 +810,11 @@ void Plg_ChangePlgIP (void)
      {
       /* Update the table changing old IP by new IP */
       DB_QueryUPDATE ("can not update the IP address of a plugin",
-		      "UPDATE plugins SET IP='%s' WHERE PlgCod=%ld",
-                      NewIP,Plg_EditingPlg->PlgCod);
+		      "UPDATE plg_plugins"
+		        " SET IP='%s'"
+		      " WHERE PlgCod=%ld",
+                      NewIP,
+                      Plg_EditingPlg->PlgCod);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1002,14 +1033,16 @@ static void Plg_CreatePlugin (struct Plugin *Plg)
   {
    /***** Create a new plugin *****/
    DB_QueryINSERT ("can not create plugin",
-		   "INSERT INTO plugins"
-		   " (Name,Description,Logo,"
-		   "AppKey,URL,IP)"
+		   "INSERT INTO plg_plugins"
+		   " (Name,Description,Logo,AppKey,URL,IP)"
 		   " VALUES"
-		   " ('%s','%s','%s',"
-		   "'%s','%s','%s')",
-                   Plg->Name,Plg->Description,Plg->Logo,
-		   Plg->AppKey,Plg->URL,Plg->IP);
+		   " ('%s','%s','%s','%s','%s','%s')",
+                   Plg->Name,
+                   Plg->Description,
+                   Plg->Logo,
+                   Plg->AppKey,
+                   Plg->URL,
+                   Plg->IP);
   }
 
 /*****************************************************************************/

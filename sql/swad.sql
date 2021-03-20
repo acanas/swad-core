@@ -1158,9 +1158,9 @@ CREATE TABLE IF NOT EXISTS plc_places (
 	UNIQUE INDEX(PlcCod),
 	INDEX(InsCod));
 --
--- Table plugins: stores the plugins
+-- Table plg_plugins: stores the plugins
 --
-CREATE TABLE IF NOT EXISTS plugins (
+CREATE TABLE IF NOT EXISTS plg_plugins (
 	PlgCod INT NOT NULL AUTO_INCREMENT,
 	Name VARCHAR(511) NOT NULL,
 	Description VARCHAR(2047) NOT NULL,

@@ -364,7 +364,9 @@ static int API_GetPlgCodFromAppKey (struct soap *soap,
 
    /***** Get number of plugins with a IP address *****/
    if (DB_QuerySELECT (&mysql_res,"can not check application key",
-		       "SELECT PlgCod FROM plugins WHERE AppKey='%s'",
+		       "SELECT PlgCod"
+		        " FROM plg_plugins"
+		       " WHERE AppKey='%s'",
 		       appKey))	// Session found in table of sessions
      {
       row = mysql_fetch_row (mysql_res);

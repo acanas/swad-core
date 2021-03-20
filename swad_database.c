@@ -2414,9 +2414,9 @@ mysql> DESCRIBE plc_places;
 		   "UNIQUE INDEX(PlcCod),"
 		   "INDEX(InsCod))");
 
-   /***** Table plugins *****/
+   /***** Table plg_plugins *****/
 /*
-mysql> DESCRIBE plugins;
+mysql> DESCRIBE plg_plugins;
 +-------------+---------------+------+-----+---------+----------------+
 | Field       | Type          | Null | Key | Default | Extra          |
 +-------------+---------------+------+-----+---------+----------------+
@@ -2430,7 +2430,7 @@ mysql> DESCRIBE plugins;
 +-------------+---------------+------+-----+---------+----------------+
 7 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS plugins ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS plg_plugins ("
 			"PlgCod INT NOT NULL AUTO_INCREMENT,"
 			"Name VARCHAR(511) NOT NULL,"		// Plg_MAX_BYTES_PLUGIN_NAME
 			"Description VARCHAR(2047) NOT NULL,"	// Plg_MAX_BYTES_PLUGIN_DESCRIPTION
