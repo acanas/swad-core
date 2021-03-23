@@ -1244,26 +1244,26 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
             case Brw_ADMI_MRK_GRP:	// Notify all users in group except me
                NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
-					 "SELECT UsrCod"	// row[0]
-					  " FROM crs_grp_usr"
-					 " WHERE crs_grp_usr.GrpCod=%ld"
-					   " AND crs_grp_usr.UsrCod<>%ld",
+					 "SELECT UsrCod"		// row[0]
+					  " FROM grp_users"
+					 " WHERE GrpCod=%ld"
+					   " AND UsrCod<>%ld",
 					 Gbl.Crs.Grps.GrpCod,
 					 Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
             case Brw_ADMI_TCH_GRP:	// Notify all teachers in group except me
                NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
-				         "SELECT crs_grp_usr.UsrCod"	// row[0]
-					  " FROM crs_grp_usr,"
+				         "SELECT grp_users.UsrCod"	// row[0]
+					  " FROM grp_users,"
 					        "grp_groups,"
-					        "crs_grp_types,"
+					        "grp_types,"
 					        "crs_users"
-					 " WHERE crs_grp_usr.GrpCod=%ld"
-					   " AND crs_grp_usr.UsrCod<>%ld"
-					   " AND crs_grp_usr.GrpCod=grp_groups.GrpCod"
-					   " AND grp_groups.GrpTypCod=crs_grp_types.GrpTypCod"
-					   " AND crs_grp_types.CrsCod=crs_users.CrsCod"
+					 " WHERE grp_users.GrpCod=%ld"
+					   " AND grp_users.UsrCod<>%ld"
+					   " AND grp_users.GrpCod=grp_groups.GrpCod"
+					   " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+					   " AND grp_types.CrsCod=crs_users.CrsCod"
 					   " AND crs_users.Role=%u",	// Notify teachers only
 					 Gbl.Crs.Grps.GrpCod,
 					 Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -1290,12 +1290,12 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 				     " AND asg_assignments.CrsCod=crs_users.CrsCod"
 				     " AND crs_users.UsrCod<>%ld)"
 				   " UNION "
-				   "(SELECT DISTINCT crs_grp_usr.UsrCod"
+				   "(SELECT DISTINCT grp_users.UsrCod"
 				     " FROM asg_groups,"
-				           "crs_grp_usr"
+				           "grp_users"
 				    " WHERE asg_groups.AsgCod=%ld"
-				      " AND asg_groups.GrpCod=crs_grp_usr.GrpCod"
-				      " AND crs_grp_usr.UsrCod<>%ld)",
+				      " AND asg_groups.GrpCod=grp_users.GrpCod"
+				      " AND grp_users.UsrCod<>%ld)",
 				   Cod,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,
 				   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
@@ -1431,15 +1431,15 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 				      " AND crs_users.UsrCod<>%ld"
 				      " AND (svy_surveys.Roles&(1<<crs_users.Role))<>0)"
 				   " UNION "
-				   "(SELECT DISTINCT crs_grp_usr.UsrCod"
+				   "(SELECT DISTINCT grp_users.UsrCod"
 				     " FROM svy_groups,"
-				           "crs_grp_usr,"
+				           "grp_users,"
 				           "svy_surveys,"
 				           "crs_users"
 				    " WHERE svy_groups.SvyCod=%ld"
-				      " AND svy_groups.GrpCod=crs_grp_usr.GrpCod"
-				      " AND crs_grp_usr.UsrCod=crs_users.UsrCod"
-				      " AND crs_grp_usr.UsrCod<>%ld"
+				      " AND svy_groups.GrpCod=grp_users.GrpCod"
+				      " AND grp_users.UsrCod=crs_users.UsrCod"
+				      " AND grp_users.UsrCod<>%ld"
 				      " AND svy_groups.SvyCod=svy_surveys.SvyCod"
 				      " AND svy_surveys.Scope='%s'"
 				      " AND svy_surveys.Cod=crs_users.CrsCod"

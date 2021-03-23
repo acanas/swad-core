@@ -187,9 +187,10 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 				    " OR"
 				    " SesCod IN"
 				    " (SELECT exa_groups.SesCod"
-				    " FROM exa_groups,crs_grp_usr"
-				    " WHERE crs_grp_usr.UsrCod=%ld"
-				    " AND exa_groups.GrpCod=crs_grp_usr.GrpCod))",
+				       " FROM exa_groups,"
+				             "grp_users"
+				      " WHERE grp_users.UsrCod=%ld"
+				        " AND exa_groups.GrpCod=grp_users.GrpCod))",
 		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
 	  Lay_NotEnoughMemoryExit ();
       }
@@ -665,15 +666,15 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 
    /***** Get groups associated to an exam session from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of an exam session",
-			     "SELECT crs_grp_types.GrpTypName,"	// row[0]
+			     "SELECT grp_types.GrpTypName,"	// row[0]
 			            "grp_groups.GrpName"	// row[1]
 			      " FROM exa_groups,"
 			            "grp_groups,"
-			            "crs_grp_types"
+			            "grp_types"
 			     " WHERE exa_groups.SesCod=%ld"
 			       " AND exa_groups.GrpCod=grp_groups.GrpCod"
-			       " AND grp_groups.GrpTypCod=crs_grp_types.GrpTypCod"
-			     " ORDER BY crs_grp_types.GrpTypName,"
+			       " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+			     " ORDER BY grp_types.GrpTypName,"
 			               "grp_groups.GrpName",
 			     Session->SesCod);
 
@@ -1733,17 +1734,18 @@ bool ExaSes_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
 	 /***** Check if I belong to any of the groups
 	        associated to the exam session *****/
 	 return (DB_QueryCOUNT ("can not check if I can play an exam session",
-				"SELECT COUNT(*) FROM exa_sessions"
+				"SELECT COUNT(*)"
+				 " FROM exa_sessions"
 				" WHERE SesCod=%ld"
-				" AND"
-				"(SesCod NOT IN"
-				" (SELECT SesCod FROM exa_groups)"
-				" OR"
-				" SesCod IN"
-				" (SELECT exa_groups.SesCod"
-				" FROM exa_groups,crs_grp_usr"
-				" WHERE crs_grp_usr.UsrCod=%ld"
-				" AND crs_grp_usr.GrpCod=exa_groups.GrpCod))",
+				" AND (SesCod NOT IN"
+				     " (SELECT SesCod FROM exa_groups)"
+				     " OR"
+				     " SesCod IN"
+				     " (SELECT exa_groups.SesCod"
+					" FROM exa_groups,"
+					      "grp_users"
+				       " WHERE grp_users.UsrCod=%ld"
+					 " AND grp_users.GrpCod=exa_groups.GrpCod))",
 				SesCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
 	 break;
       case Rol_NET:

@@ -707,9 +707,9 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
 				       " AsgCod IN"
 				       " (SELECT asg_groups.AsgCod"
 				          " FROM asg_groups,"
-				                "crs_grp_usr"
-				         " WHERE crs_grp_usr.UsrCod=%ld"
-				           " AND asg_groups.GrpCod=crs_grp_usr.GrpCod)"
+				                "grp_users"
+				         " WHERE grp_users.UsrCod=%ld"
+				           " AND asg_groups.GrpCod=grp_users.GrpCod)"
 				       ")"
 				" ORDER BY %s",
 				Gbl.Hierarchy.Crs.CrsCod,
@@ -1753,15 +1753,15 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
 
    /***** Get groups associated to an assignment from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of an assignment",
-	                     "SELECT crs_grp_types.GrpTypName,"
-	                            "grp_groups.GrpName"
+	                     "SELECT grp_types.GrpTypName,"	// row[0]
+	                            "grp_groups.GrpName"	// row[1]
 			      " FROM asg_groups,"
 			            "grp_groups,"
-			            "crs_grp_types"
+			            "grp_types"
 			     " WHERE asg_groups.AsgCod=%ld"
 			       " AND asg_groups.GrpCod=grp_groups.GrpCod"
-			       " AND grp_groups.GrpTypCod=crs_grp_types.GrpTypCod"
-			     " ORDER BY crs_grp_types.GrpTypName,"
+			       " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+			     " ORDER BY grp_types.GrpTypName,"
 			               "grp_groups.GrpName",
 			     Asg->AsgCod);
 
@@ -1852,10 +1852,10 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
 					// Assignment is for some of my groups
 					"AsgCod IN"
 					" (SELECT asg_groups.AsgCod"
-					   " FROM crs_grp_usr,"
+					   " FROM grp_users,"
 					         "asg_groups"
-					  " WHERE crs_grp_usr.UsrCod=%ld"
-					    " AND asg_groups.GrpCod=crs_grp_usr.GrpCod)"
+					  " WHERE grp_users.UsrCod=%ld"
+					    " AND asg_groups.GrpCod=grp_users.GrpCod)"
 				       ")",
 				AsgCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
       case Rol_SYS_ADM:

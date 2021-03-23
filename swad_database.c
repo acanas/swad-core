@@ -678,9 +678,9 @@ mysql> DESCRIBE grp_groups;
 		   "INDEX(GrpTypCod),"
 		   "INDEX(RooCod))");
 
-   /***** Table crs_grp_types *****/
+   /***** Table grp_types *****/
 /*
-mysql> DESCRIBE crs_grp_types;
+mysql> DESCRIBE grp_types;
 +--------------+---------------+------+-----+---------+----------------+
 | Field        | Type          | Null | Key | Default | Extra          |
 +--------------+---------------+------+-----+---------+----------------+
@@ -694,7 +694,7 @@ mysql> DESCRIBE crs_grp_types;
 +--------------+---------------+------+-----+---------+----------------+
 7 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_grp_types ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS grp_types ("
 			"GrpTypCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"GrpTypName VARCHAR(2047) NOT NULL,"	// Grp_MAX_BYTES_GROUP_TYPE_NAME
@@ -705,9 +705,9 @@ mysql> DESCRIBE crs_grp_types;
 		   "UNIQUE INDEX(GrpTypCod),"
 		   "INDEX(CrsCod))");
 
-   /***** Table crs_grp_usr *****/
+   /***** Table grp_users *****/
 /*
-mysql> DESCRIBE crs_grp_usr;
+mysql> DESCRIBE grp_users;
 +--------+---------+------+-----+---------+-------+
 | Field  | Type    | Null | Key | Default | Extra |
 +--------+---------+------+-----+---------+-------+
@@ -716,7 +716,7 @@ mysql> DESCRIBE crs_grp_usr;
 +--------+---------+------+-----+---------+-------+
 2 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_grp_usr ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS grp_users ("
 			"GrpCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
 		   "UNIQUE INDEX(GrpCod,UsrCod),"

@@ -510,10 +510,10 @@ static int API_CheckCourseAndGroupCodes (struct soap *soap,
       /***** Query if group code already exists in database *****/
       if (DB_QueryCOUNT ("can not get group",
 			 "SELECT COUNT(*)"
-			  " FROM crs_grp_types,"
+			  " FROM grp_types,"
 			        "grp_groups"
-			 " WHERE crs_grp_types.CrsCod=%ld"
-			   " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			 " WHERE grp_types.CrsCod=%ld"
+			   " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 			   " AND grp_groups.GrpCod=%ld",
 			 CrsCod,GrpCod) != 1)
          return soap_sender_fault (soap,
@@ -2108,12 +2108,12 @@ int swad__getGroupTypes (struct soap *soap,
    /***** Query group types in a course from database *****/
    NumRows =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get group types",
-			      "SELECT GrpTypCod,"
-			             "GrpTypName,"
-			             "Mandatory,"
-			             "Multiple,"
-			             "UNIX_TIMESTAMP(OpenTime)"
-			      " FROM crs_grp_types"
+			      "SELECT GrpTypCod,"		// row[0]
+			             "GrpTypName,"		// row[1]
+			             "Mandatory,"		// row[2]
+			             "Multiple,"		// row[3]
+			             "UNIX_TIMESTAMP(OpenTime)"	// row[4]
+			       " FROM grp_types"
 			      " WHERE CrsCod=%d"
 			      " ORDER BY GrpTypName",
 			      courseCode);
@@ -2227,18 +2227,18 @@ int swad__getGroups (struct soap *soap,
    /***** Query groups in a course from database *****/
    NumRows =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's groups",
-			      "SELECT crs_grp_types.GrpTypCod,"
-				     "crs_grp_types.GrpTypName,"
-				     "grp_groups.GrpCod,"
-				     "grp_groups.GrpName,"
-				     "grp_groups.MaxStudents,"
-				     "grp_groups.Open,"
-				     "grp_groups.FileZones"
-			       " FROM crs_grp_types,"
+			      "SELECT grp_types.GrpTypCod,"	// row[0]
+				     "grp_types.GrpTypName,"	// row[1]
+				     "grp_groups.GrpCod,"	// row[2]
+				     "grp_groups.GrpName,"	// row[3]
+				     "grp_groups.MaxStudents,"	// row[4]
+				     "grp_groups.Open,	"	// row[5]
+				     "grp_groups.FileZones"	// row[6]
+			       " FROM grp_types,"
 			             "grp_groups"
-			      " WHERE crs_grp_types.CrsCod=%d"
-			        " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
-			      " ORDER BY crs_grp_types.GrpTypName,"
+			      " WHERE grp_types.CrsCod=%d"
+			        " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			      " ORDER BY grp_types.GrpTypName,"
 			                "grp_groups.GrpName",
 			      courseCode);
 
@@ -2401,18 +2401,18 @@ int swad__sendMyGroups (struct soap *soap,
    /***** Query groups in a course from database *****/
    NumRows =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's groups",
-			      "SELECT crs_grp_types.GrpTypCod,"
-				     "crs_grp_types.GrpTypName,"
-				     "grp_groups.GrpCod,"
-				     "grp_groups.GrpName,"
-				     "grp_groups.MaxStudents,"
-				     "grp_groups.Open,"
-				     "grp_groups.FileZones"
-			       " FROM crs_grp_types,"
+			      "SELECT grp_types.GrpTypCod,"	// row[0]
+				     "grp_types.GrpTypName,"	// row[1]
+				     "grp_groups.GrpCod,"	// row[2]
+				     "grp_groups.GrpName,"	// row[3]
+				     "grp_groups.MaxStudents,"	// row[4]
+				     "grp_groups.Open,"		// row[5]
+				     "grp_groups.FileZones"	// row[6]
+			       " FROM grp_types,"
 			             "grp_groups"
-			      " WHERE crs_grp_types.CrsCod=%d"
-			        " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
-			      " ORDER BY crs_grp_types.GrpTypName,"
+			      " WHERE grp_types.CrsCod=%d"
+			        " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			      " ORDER BY grp_types.GrpTypName,"
 			                "grp_groups.GrpName",
 			      courseCode);
 
@@ -3021,21 +3021,21 @@ int swad__getAttendanceUsers (struct soap *soap,
       // Event for one or more groups
       // Subquery: list of users in groups of this attendance event...
       // ...who have no entry in attendance list of users
-      sprintf (SubQuery,"SELECT DISTINCT crs_grp_usr.UsrCod AS UsrCod,"
-	                       "'N' AS Present"
+      sprintf (SubQuery,"SELECT DISTINCT grp_users.UsrCod AS UsrCod,"	// row[0]
+	                       "'N' AS Present"				// row[1]
 		         " FROM att_groups,"
 		               "grp_groups,"
-		               "crs_grp_types,"
+		               "grp_types,"
 		               "crs_users,"
-		               "crs_grp_usr"
+		               "grp_users"
 		        " WHERE att_groups.AttCod=%ld"
 		          " AND att_groups.GrpCod=grp_groups.GrpCod"
-		          " AND grp_groups.GrpTypCod=crs_grp_types.GrpTypCod"
-		          " AND crs_grp_types.CrsCod=crs_users.CrsCod"
+		          " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+		          " AND grp_types.CrsCod=crs_users.CrsCod"
 		          " AND crs_users.Role=%u"
-		          " AND crs_users.UsrCod=crs_grp_usr.UsrCod"
-		          " AND crs_grp_usr.GrpCod=att_groups.GrpCod"
-		          " AND crs_grp_usr.UsrCod NOT IN"
+		          " AND crs_users.UsrCod=grp_users.UsrCod"
+		          " AND grp_users.GrpCod=att_groups.GrpCod"
+		          " AND grp_users.UsrCod NOT IN"
 		              " (SELECT UsrCod"
 		                 " FROM att_users"
 		                " WHERE AttCod=%ld)",
@@ -5062,18 +5062,18 @@ int swad__getMatches (struct soap *soap,
 				    "UNIX_TIMESTAMP(EndTime),"		// row[ 3]
 				    "Title,"				// row[ 4]
 				    "QstInd"				// row[ 5]
-				    " FROM mch_matches"
-				    " WHERE GamCod=%ld"
-				    " AND"
-				    "(MchCod NOT IN"
+			      " FROM mch_matches"
+			     " WHERE GamCod=%ld"
+			       " AND (MchCod NOT IN"
 				    " (SELECT MchCod FROM mch_groups)"
 				    " OR"
 				    " MchCod IN"
 				    " (SELECT mch_groups.MchCod"
-				    " FROM mch_groups,crs_grp_usr"
-				    " WHERE crs_grp_usr.UsrCod=%ld"
-				    " AND mch_groups.GrpCod=crs_grp_usr.GrpCod))"
-				    " ORDER BY MchCod",
+				       " FROM mch_groups,"
+				             "grp_users"
+				      " WHERE grp_users.UsrCod=%ld"
+				        " AND mch_groups.GrpCod=grp_users.GrpCod))"
+			     " ORDER BY MchCod",
 			     Game.GamCod,
 			     Gbl.Usrs.Me.UsrDat.UsrCod);
    getMatchesOut->matchesArray.__size =

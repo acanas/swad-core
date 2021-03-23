@@ -310,9 +310,10 @@ void Mch_ListMatches (struct Gam_Games *Games,
 			      " OR"
 			      " MchCod IN"
 			      " (SELECT mch_groups.MchCod"
-			      " FROM mch_groups,crs_grp_usr"
-			      " WHERE crs_grp_usr.UsrCod=%ld"
-			      " AND mch_groups.GrpCod=crs_grp_usr.GrpCod))",
+			         " FROM grp_users,"
+			               "mch_groups"
+			        " WHERE grp_users.UsrCod=%ld"
+			          " AND grp_users.GrpCod=mch_groups.GrpCod))",
 		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
 	  Lay_NotEnoughMemoryExit ();
       }
@@ -766,15 +767,15 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match 
 
    /***** Get groups associated to a match from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of a match",
-			     "SELECT crs_grp_types.GrpTypName,"
+			     "SELECT grp_types.GrpTypName,"
 			            "grp_groups.GrpName"
 			      " FROM mch_groups,"
 			            "grp_groups,"
-			            "crs_grp_types"
+			            "grp_types"
 			     " WHERE mch_groups.MchCod=%ld"
 			       " AND mch_groups.GrpCod=grp_groups.GrpCod"
-			       " AND grp_groups.GrpTypCod=crs_grp_types.GrpTypCod"
-			     " ORDER BY crs_grp_types.GrpTypName,"
+			       " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+			     " ORDER BY grp_types.GrpTypName,"
 			               "grp_groups.GrpName",
 			     Match->MchCod);
 
@@ -2524,9 +2525,10 @@ bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Mch_Match *Match)
 				" OR"
 				" MchCod IN"
 				" (SELECT mch_groups.MchCod"
-				" FROM mch_groups,crs_grp_usr"
-				" WHERE crs_grp_usr.UsrCod=%ld"
-				" AND crs_grp_usr.GrpCod=mch_groups.GrpCod))",
+			  	   " FROM grp_users,"
+				         "mch_groups"
+				  " WHERE grp_users.UsrCod=%ld"
+				    " AND grp_users.GrpCod=mch_groups.GrpCod))",
 				Match->MchCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
 	 break;
       case Rol_NET:

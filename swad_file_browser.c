@@ -2742,10 +2742,10 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
 			             " OR "
 			             "AsgCod IN"
 			             " (SELECT asg_groups.AsgCod"
-			                " FROM crs_grp_usr,"
+			                " FROM grp_users,"
 			                      "asg_groups"
-			               " WHERE crs_grp_usr.UsrCod=%ld"
-			                 " AND asg_groups.GrpCod=crs_grp_usr.GrpCod)"
+			               " WHERE grp_users.UsrCod=%ld"
+			                 " AND asg_groups.GrpCod=grp_users.GrpCod)"
 			            ")",
 			     Gbl.Hierarchy.Crs.CrsCod,ZoneUsrCod);
 
@@ -4380,10 +4380,10 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /***** Build subquery for groups *****/
    sprintf (SubqueryGrp,"(SELECT grp_groups.GrpCod"
-	                  " FROM crs_grp_types,"
+	                  " FROM grp_types,"
 	                        "grp_groups"
-		         " WHERE crs_grp_types.CrsCod=%ld"
-		           " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod)",
+		         " WHERE grp_types.CrsCod=%ld"
+		           " AND grp_types.GrpTypCod=grp_groups.GrpTypCod)",
             CrsCod);
 
    /***** Build subquery for projects *****/
@@ -4792,10 +4792,10 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod)
 			    "(FileBrowser IN (%u,%u,%u,%u)"
 			    " AND Cod IN"
 			    " (SELECT grp_groups.GrpCod"
-			       " FROM crs_grp_types,"
+			       " FROM grp_types,"
 			             "grp_groups"
-			      " WHERE crs_grp_types.CrsCod=%ld"
-			        " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod))"
+			      " WHERE grp_types.CrsCod=%ld"
+			        " AND grp_types.GrpTypCod=grp_groups.GrpTypCod))"
 		          ")",
 	           UsrCod,
 	           (unsigned) Brw_ADMI_DOC_CRS,
@@ -4824,10 +4824,10 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod)
 			    "(FileBrowser IN (%u,%u,%u,%u)"
 			    " AND Cod IN"
 			    " (SELECT grp_groups.GrpCod"
-			       " FROM crs_grp_types,"
+			       " FROM grp_types,"
 			             "grp_groups"
-			      " WHERE crs_grp_types.CrsCod=%ld"
-			        " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod))"
+			      " WHERE grp_types.CrsCod=%ld"
+			        " AND grp_types.GrpTypCod=grp_groups.GrpTypCod))"
 		          ")",
 	           UsrCod,
 	           (unsigned) Brw_ADMI_DOC_CRS,
@@ -4859,10 +4859,10 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod)
 			    "(FileBrowser IN (%u,%u,%u,%u)"
 			    " AND Cod IN"
 			    " (SELECT grp_groups.GrpCod"
-			       " FROM crs_grp_types,"
+			       " FROM grp_types,"
 			             "grp_groups"
-			      " WHERE crs_grp_types.CrsCod=%ld"
-			        " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod))"
+			      " WHERE grp_types.CrsCod=%ld"
+			        " AND grp_types.GrpTypCod=grp_groups.GrpTypCod))"
 		          ")",
 	           UsrCod,
 	           (unsigned) Brw_ADMI_DOC_CRS,

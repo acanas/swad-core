@@ -4098,11 +4098,11 @@ long Usr_GetRamdomStdFromGrp (long GrpCod)
 
    /***** Get a random student from a group from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get a random student from a group",
-		       "SELECT crs_grp_usr.UsrCod"	// row[0]
-		        " FROM crs_grp_usr,"
+		       "SELECT grp_users.UsrCod"	// row[0]
+		        " FROM grp_users,"
 		              "crs_users"
-		       " WHERE crs_grp_usr.GrpCod=%ld"
-		         " AND crs_grp_usr.UsrCod=crs_users.UsrCod"
+		       " WHERE grp_users.GrpCod=%ld"
+		         " AND grp_users.UsrCod=crs_users.UsrCod"
 		         " AND crs_users.Role=%u"
 		       " ORDER BY RAND()"
 		       " LIMIT 1",
@@ -4520,7 +4520,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
            {
             Str_Concat (*Query," AND (crs_users.UsrCod IN"
 			       " (SELECT DISTINCT UsrCod"
-			          " FROM crs_grp_usr"
+			          " FROM grp_users"
 			         " WHERE",
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             NumPositiveCods = 0;
@@ -4553,15 +4553,15 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
                Str_Concat (*Query," AND (",Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             /* Select all the students of the course who don't belong to any group of type GrpTypCod */
             Str_Concat (*Query,"crs_users.UsrCod NOT IN"
-			       " (SELECT DISTINCT crs_grp_usr.UsrCod"
+			       " (SELECT DISTINCT grp_users.UsrCod"
 			          " FROM grp_groups,"
-			                "crs_grp_usr"
+			                "grp_users"
 			         " WHERE grp_groups.GrpTypCod='",
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             snprintf (LongStr,sizeof (LongStr),"%ld",
 		      Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
             Str_Concat (*Query,LongStr,Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
-            Str_Concat (*Query,"' AND grp_groups.GrpCod=crs_grp_usr.GrpCod)",
+            Str_Concat (*Query,"' AND grp_groups.GrpCod=grp_users.GrpCod)",
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             NumNegativeCods++;
            }

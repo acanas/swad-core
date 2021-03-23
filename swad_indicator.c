@@ -1494,11 +1494,11 @@ static unsigned long Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod)
 		      " FROM brw_sizes"
 		     " WHERE FileBrowser=%u AND Cod=%ld) +"
 		   " (SELECT COALESCE(SUM(brw_sizes.NumFiles),0)"
-		      " FROM crs_grp_types,"
+		      " FROM grp_types,"
 		            "grp_groups,"
 		            "brw_sizes"
-		     " WHERE crs_grp_types.CrsCod=%ld"
-		       " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+		     " WHERE grp_types.CrsCod=%ld"
+		       " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 		       " AND brw_sizes.FileBrowser=%u"
 		       " AND brw_sizes.Cod=grp_groups.GrpCod)",
 		   (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOC_CRS],
@@ -1537,11 +1537,11 @@ static unsigned long Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod)
 		      " FROM brw_sizes"
 		     " WHERE FileBrowser=%u AND Cod=%ld) +"
 		   " (SELECT COALESCE(SUM(brw_sizes.NumFiles),0)"
-		      " FROM crs_grp_types,"
+		      " FROM grp_types,"
 		            "grp_groups,"
 		            "brw_sizes"
-		     " WHERE crs_grp_types.CrsCod=%ld"
-		       " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+		     " WHERE grp_types.CrsCod=%ld"
+		       " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 		       " AND brw_sizes.FileBrowser=%u"
 		       " AND brw_sizes.Cod=grp_groups.GrpCod)",
 	           (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHR_CRS],

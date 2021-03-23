@@ -293,9 +293,9 @@ CREATE TABLE IF NOT EXISTS grp_groups (
 	INDEX(GrpTypCod),
 	INDEX(RooCod));
 --
--- Table crs_grp_types: stores the types of groups in courses
+-- Table grp_types: stores the types of groups in courses
 --
-CREATE TABLE IF NOT EXISTS crs_grp_types (
+CREATE TABLE IF NOT EXISTS grp_types (
 	GrpTypCod INT NOT NULL AUTO_INCREMENT,
 	CrsCod INT NOT NULL DEFAULT -1,
 	GrpTypName VARCHAR(2047) NOT NULL,
@@ -306,9 +306,9 @@ CREATE TABLE IF NOT EXISTS crs_grp_types (
 	UNIQUE INDEX(GrpTypCod),
 	INDEX(CrsCod));
 --
--- Table crs_grp_usr: stores the users beloging to each group
+-- Table grp_users: stores the users beloging to each group
 --
-CREATE TABLE IF NOT EXISTS crs_grp_usr (
+CREATE TABLE IF NOT EXISTS grp_users (
 	GrpCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	UNIQUE INDEX(GrpCod,UsrCod),

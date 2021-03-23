@@ -997,9 +997,10 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
 						" OR"
 						" SvyCod IN"
 						" (SELECT svy_groups.SvyCod"
-						   " FROM svy_groups,crs_grp_usr"
-						  " WHERE crs_grp_usr.UsrCod=%ld"
-						    " AND svy_groups.GrpCod=crs_grp_usr.GrpCod))"
+						   " FROM grp_users,"
+						         "svy_groups"
+						  " WHERE grp_users.UsrCod=%ld"
+						    " AND grp_users.GrpCod=svy_groups.GrpCod))"
 						")",
 		       SubQueryFilled ? " OR " :
 					"",
@@ -2496,15 +2497,15 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 
    /***** Get groups associated to a survey from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of a survey",
-			     "SELECT crs_grp_types.GrpTypName,"
+			     "SELECT grp_types.GrpTypName,"
 			            "grp_groups.GrpName"
 			      " FROM svy_groups,"
 			            "grp_groups,"
-			            "crs_grp_types"
+			            "grp_types"
 			     " WHERE svy_groups.SvyCod=%ld"
 			       " AND svy_groups.GrpCod=grp_groups.GrpCod"
-			       " AND grp_groups.GrpTypCod=crs_grp_types.GrpTypCod"
-			     " ORDER BY crs_grp_types.GrpTypName,"
+			       " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+			     " ORDER BY grp_types.GrpTypName,"
 			               "grp_groups.GrpName",
 			     Svy->SvyCod);
 
@@ -2618,10 +2619,10 @@ static bool Svy_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
 			   " OR"
 			   " SvyCod IN"
 			   " (SELECT svy_groups.SvyCod"
-			      " FROM crs_grp_usr,"
+			      " FROM grp_users,"
 			            "svy_groups"
-			     " WHERE crs_grp_usr.UsrCod=%ld"
-			       " AND svy_groups.GrpCod=crs_grp_usr.GrpCod))",
+			     " WHERE grp_users.UsrCod=%ld"
+			       " AND grp_users.GrpCod=svy_groups.GrpCod))",
 			  SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
   }
 

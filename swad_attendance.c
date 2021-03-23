@@ -688,10 +688,10 @@ static void Att_GetListAttEvents (struct Att_Events *Events,
 				       " OR"
 				       " AttCod IN"
 				       " (SELECT att_groups.AttCod"
-				          " FROM crs_grp_usr,"
+				          " FROM grp_users,"
 				                "att_groups"
-				         " WHERE crs_grp_usr.UsrCod=%ld"
-				           " AND att_groups.GrpCod=crs_grp_usr.GrpCod))"
+				         " WHERE grp_users.UsrCod=%ld"
+				           " AND att_groups.GrpCod=grp_users.GrpCod))"
 				" ORDER BY %s",
 				Gbl.Hierarchy.Crs.CrsCod,
 				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
@@ -1543,18 +1543,18 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct Att_Event *Ev
 
    /***** Get groups associated to an attendance event from database *****/
    NumGrps = (unsigned) DB_QuerySELECT (&mysql_res,"can not get groups of an attendance event",
-				        "SELECT crs_grp_types.GrpTypName,"
-				               "grp_groups.GrpName,"
-				               "roo_rooms.ShortName"
+				        "SELECT grp_types.GrpTypName,"	// row[0]
+				               "grp_groups.GrpName,"	// row[1]
+				               "roo_rooms.ShortName"	// row[2]
 					 " FROM (att_groups,"
 					        "grp_groups,"
-					        "crs_grp_types)"
+					        "grp_types)"
 				         " LEFT JOIN roo_rooms"
 				           " ON grp_groups.RooCod=roo_rooms.RooCod"
 					" WHERE att_groups.AttCod=%ld"
 					  " AND att_groups.GrpCod=grp_groups.GrpCod"
-					  " AND grp_groups.GrpTypCod=crs_grp_types.GrpTypCod"
-					" ORDER BY crs_grp_types.GrpTypName,"
+					  " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+					" ORDER BY grp_types.GrpTypName,"
 					          "grp_groups.GrpName",
 					Event->AttCod);
 
