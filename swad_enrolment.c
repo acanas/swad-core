@@ -248,9 +248,13 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
 
    /***** Update the role of a user in a course *****/
    DB_QueryUPDATE ("can not modify user's role in course",
-		   "UPDATE crs_usr SET Role=%u"
-		   " WHERE CrsCod=%ld AND UsrCod=%ld",
-	           (unsigned) NewRole,Gbl.Hierarchy.Crs.CrsCod,UsrDat->UsrCod);
+		   "UPDATE crs_users"
+		     " SET Role=%u"
+		   " WHERE CrsCod=%ld"
+		     " AND UsrCod=%ld",
+	           (unsigned) NewRole,
+	           Gbl.Hierarchy.Crs.CrsCod,
+	           UsrDat->UsrCod);
 
    /***** Flush caches *****/
    Usr_FlushCachesUsr ();
@@ -291,7 +295,7 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 
    /***** Register user in current course in database *****/
    DB_QueryINSERT ("can not register user in course",
-		   "INSERT INTO crs_usr"
+		   "INSERT INTO crs_users"
 		   " (CrsCod,UsrCod,Role,Accepted)"
 		   " VALUES"
 		   " (%ld,%ld,%u,'%c')",
@@ -514,8 +518,9 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    if (DB_QuerySELECT (&mysql_res,"can not get user's role"
 	                          " in course",
 		       "SELECT Role"
-		       " FROM crs_usr"
-		       " WHERE CrsCod=%ld AND UsrCod=%ld",
+		        " FROM crs_users"
+		       " WHERE CrsCod=%ld"
+		         " AND UsrCod=%ld",
 		       CrsCod,UsrCod) == 1)	// Result should have a unique row
      {
       /***** Get user's role in course *****/
@@ -880,14 +885,16 @@ void Enr_RemoveOldUsrs (void)
    /***** Get old users from database *****/
    NumUsrs = DB_QuerySELECT (&mysql_res,"can not get old users",
 			     "SELECT UsrCod FROM"
-			     "("
-			     "SELECT UsrCod FROM usr_last WHERE"
-			     " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
-			     " UNION "
-			     "SELECT UsrCod FROM usr_data WHERE"
-			     " UsrCod NOT IN (SELECT UsrCod FROM usr_last)"
-			     ") AS candidate_usrs"
-			     " WHERE UsrCod NOT IN (SELECT DISTINCT UsrCod FROM crs_usr)",
+			      "("
+			       "SELECT UsrCod FROM usr_last WHERE"
+			       " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
+			       " UNION "
+			       "SELECT UsrCod FROM usr_data WHERE"
+			       " UsrCod NOT IN (SELECT UsrCod FROM usr_last)"
+			      ") AS candidate_usrs"
+			     " WHERE UsrCod NOT IN"
+			           " (SELECT DISTINCT UsrCod"
+			              " FROM crs_users)",
 			     (unsigned long) SecondsWithoutAccess);
    if (NumUsrs)
      {
@@ -2331,17 +2338,17 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in all courses in which I am teacher
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM crs_usr,"
-			             "crs_usr_requests"
-			       " WHERE crs_usr.UsrCod=%ld"
-			       " AND crs_usr.Role=%u"
-			       " AND crs_usr.CrsCod=crs_usr_requests.CrsCod"
-			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
+			        " FROM crs_users,"
+			              "crs_usr_requests"
+			       " WHERE crs_users.UsrCod=%ld"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.CrsCod=crs_usr_requests.CrsCod"
+			         " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
@@ -2351,11 +2358,11 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in all degrees administrated by me
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
 			       " FROM usr_admins,"
 			             "crs_courses,"
 			             "crs_usr_requests"
@@ -2372,11 +2379,11 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in all centers administrated by me
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
 			       " FROM usr_admins,"
 			             "deg_degrees,"
 			             "crs_courses,"
@@ -2395,11 +2402,11 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in all institutions administrated by me
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
 			       " FROM usr_admins,"
 			             "ctr_centers,"
 			             "deg_degrees,"
@@ -2420,11 +2427,11 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // All requests
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT ReqCod,"
-			              "CrsCod,"
-			              "UsrCod,"
-			              "Role,"
-			              "UNIX_TIMESTAMP(RequestTime)"
+			       "SELECT ReqCod,"				// row[0]
+			              "CrsCod,"				// row[1]
+			              "UsrCod,"				// row[2]
+			              "Role,"				// row[3]
+			              "UNIX_TIMESTAMP(RequestTime)"	// row[4]
 			       " FROM crs_usr_requests"
 			       " WHERE ((1<<Role)&%u)<>0"
 			       " ORDER BY RequestTime DESC",
@@ -2442,26 +2449,26 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in courses of this country in which I am teacher
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM crs_usr,"
-			             "ins_instits,"
-			             "ctr_centers,"
-			             "deg_degrees,"
-			             "crs_courses,"
-			             "crs_usr_requests"
-			       " WHERE crs_usr.UsrCod=%ld"
-			       " AND crs_usr.Role=%u"
-			       " AND crs_usr.CrsCod=crs_courses.CrsCod"
-			       " AND crs_courses.DegCod=deg_degrees.DegCod"
-			       " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			       " AND ctr_centers.InsCod=ins_instits.InsCod"
-			       " AND ins_instits.CtyCod=%ld"
-			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
-			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// roe[4]
+			        " FROM crs_users,"
+			              "ins_instits,"
+			              "ctr_centers,"
+			              "deg_degrees,"
+			              "crs_courses,"
+			              "crs_usr_requests"
+			       " WHERE crs_users.UsrCod=%ld"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.CrsCod=crs_courses.CrsCod"
+			         " AND crs_courses.DegCod=deg_degrees.DegCod"
+			         " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			         " AND ctr_centers.InsCod=ins_instits.InsCod"
+			         " AND ins_instits.CtyCod=%ld"
+			         " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
+			         " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
@@ -2472,26 +2479,26 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in degrees of this country administrated by me
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM usr_admins,"
-			             "ins_instits,"
-			             "ctr_centers,"
-			             "deg_degrees,"
-			             "crs_courses,"
-			             "crs_usr_requests"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
+			        " FROM usr_admins,"
+			              "ins_instits,"
+			              "ctr_centers,"
+			              "deg_degrees,"
+			              "crs_courses,"
+			              "crs_usr_requests"
 			       " WHERE usr_admins.UsrCod=%ld"
-			       " AND usr_admins.Scope='%s'"
-			       " AND usr_admins.Cod=deg_degrees.DegCod"
-			       " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			       " AND ctr_centers.InsCod=ins_instits.InsCod"
-			       " AND ins_instits.CtyCod=%ld"
-			       " AND deg_degrees.DegCod=crs_courses.DegCod"
-			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
-			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+			         " AND usr_admins.Scope='%s'"
+			         " AND usr_admins.Cod=deg_degrees.DegCod"
+			         " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			         " AND ctr_centers.InsCod=ins_instits.InsCod"
+			         " AND ins_instits.CtyCod=%ld"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
+			         " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       Sco_GetDBStrFromScope (Hie_Lvl_DEG),
@@ -2502,26 +2509,26 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in centers of this country administrated by me
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM usr_admins,"
-			             "ins_instits,"
-			             "ctr_centers,"
-			             "deg_degrees,"
-			             "crs_courses,"
-			             "crs_usr_requests"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
+			        " FROM usr_admins,"
+			              "ins_instits,"
+			              "ctr_centers,"
+			              "deg_degrees,"
+			              "crs_courses,"
+			              "crs_usr_requests"
 			       " WHERE usr_admins.UsrCod=%ld"
-			       " AND usr_admins.Scope='%s'"
-			       " AND usr_admins.Cod=ctr_centers.CtrCod"
-			       " AND ctr_centers.InsCod=ins_instits.InsCod"
-			       " AND ins_instits.CtyCod=%ld"
-			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			       " AND deg_degrees.DegCod=crs_courses.DegCod"
-			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
-			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+			         " AND usr_admins.Scope='%s'"
+			         " AND usr_admins.Cod=ctr_centers.CtrCod"
+			         " AND ctr_centers.InsCod=ins_instits.InsCod"
+			         " AND ins_instits.CtyCod=%ld"
+			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
+			         " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       Sco_GetDBStrFromScope (Hie_Lvl_CTR),
@@ -2531,28 +2538,27 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             case Rol_INS_ADM:
                // Requests in institutions of this country administrated by me
                NumReqs =
-               DB_QuerySELECT (&mysql_res,"can not get requests"
-						    " for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM usr_admins,"
-			             "ins_instits,"
-			             "ctr_centers,"
-			             "deg_degrees,"
-			             "crs_courses,"
-			             "crs_usr_requests"
+               DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
+			        " FROM usr_admins,"
+			              "ins_instits,"
+			              "ctr_centers,"
+			              "deg_degrees,"
+			              "crs_courses,"
+			              "crs_usr_requests"
 			       " WHERE usr_admins.UsrCod=%ld"
-			       " AND usr_admins.Scope='%s'"
-			       " AND usr_admins.Cod=ins_instits.InsCod"
-			       " AND ins_instits.CtyCod=%ld"
-			       " AND ins_instits.InsCod=ctr_centers.InsCod"
-			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			       " AND deg_degrees.DegCod=crs_courses.DegCod"
-			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
-			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+			         " AND usr_admins.Scope='%s'"
+			         " AND usr_admins.Cod=ins_instits.InsCod"
+			         " AND ins_instits.CtyCod=%ld"
+			         " AND ins_instits.InsCod=ctr_centers.InsCod"
+			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
+			         " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       Sco_GetDBStrFromScope (Hie_Lvl_INS),
@@ -2563,22 +2569,22 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in any course of this country
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM ins_instits,"
-			             "ctr_centers,"
-			             "deg_degrees,"
-			             "crs_courses,"
-			             "crs_usr_requests"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
+			        " FROM ins_instits,"
+			              "ctr_centers,"
+			              "deg_degrees,"
+			              "crs_courses,"
+			              "crs_usr_requests"
 			       " WHERE ins_instits.CtyCod=%ld"
-			       " AND ins_instits.InsCod=ctr_centers.InsCod"
-			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			       " AND deg_degrees.DegCod=crs_courses.DegCod"
-			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
-			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+			         " AND ins_instits.InsCod=ctr_centers.InsCod"
+			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
+			         " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
 			       Gbl.Hierarchy.Cty.CtyCod,
 			       RolesSelected);
@@ -2595,24 +2601,24 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in courses of this institution in which I am teacher
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM crs_usr,"
-			             "ctr_centers,"
-			             "deg_degrees,"
-			             "crs_courses,"
-			             "crs_usr_requests"
-			       " WHERE crs_usr.UsrCod=%ld"
-			       " AND crs_usr.Role=%u"
-			       " AND crs_usr.CrsCod=crs_courses.CrsCod"
-			       " AND crs_courses.DegCod=deg_degrees.DegCod"
-			       " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			       " AND ctr_centers.InsCod=%ld"
-			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
-			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
+			        " FROM crs_users,"
+			              "ctr_centers,"
+			              "deg_degrees,"
+			              "crs_courses,"
+			              "crs_usr_requests"
+			       " WHERE crs_users.UsrCod=%ld"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.CrsCod=crs_courses.CrsCod"
+			         " AND crs_courses.DegCod=deg_degrees.DegCod"
+			         " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			         " AND ctr_centers.InsCod=%ld"
+			         " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
+			         " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
@@ -2623,24 +2629,24 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in degrees of this institution administrated by me
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM usr_admins,"
-			             "ctr_centers,"
-			             "deg_degrees,"
-			             "crs_courses,"
-			             "crs_usr_requests"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
+			        " FROM usr_admins,"
+			              "ctr_centers,"
+			              "deg_degrees,"
+			              "crs_courses,"
+			              "crs_usr_requests"
 			       " WHERE usr_admins.UsrCod=%ld"
-			       " AND usr_admins.Scope='%s'"
-			       " AND usr_admins.Cod=deg_degrees.DegCod"
-			       " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			       " AND ctr_centers.InsCod=%ld"
-			       " AND deg_degrees.DegCod=crs_courses.DegCod"
-			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
-			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+			         " AND usr_admins.Scope='%s'"
+			         " AND usr_admins.Cod=deg_degrees.DegCod"
+			         " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			         " AND ctr_centers.InsCod=%ld"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
+			         " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       Sco_GetDBStrFromScope (Hie_Lvl_DEG),
@@ -2651,24 +2657,24 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in centers of this institution administrated by me
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM usr_admins,"
-			             "ctr_centers,"
-			             "deg_degrees,"
-			             "crs_courses,"
-			             "crs_usr_requests"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
+			        " FROM usr_admins,"
+			              "ctr_centers,"
+			              "deg_degrees,"
+			              "crs_courses,"
+			              "crs_usr_requests"
 			       " WHERE usr_admins.UsrCod=%ld"
-			       " AND usr_admins.Scope='%s'"
-			       " AND usr_admins.Cod=ctr_centers.CtrCod"
-			       " AND ctr_centers.InsCod=%ld"
-			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			       " AND deg_degrees.DegCod=crs_courses.DegCod"
-			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
-			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+			         " AND usr_admins.Scope='%s'"
+			         " AND usr_admins.Cod=ctr_centers.CtrCod"
+			         " AND ctr_centers.InsCod=%ld"
+			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
+			         " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,Sco_GetDBStrFromScope (Hie_Lvl_CTR),
 			       Gbl.Hierarchy.Ins.InsCod,
@@ -2679,20 +2685,20 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in any course of this institution
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM ctr_centers,"
-			             "deg_degrees,"
-			             "crs_courses,"
-			             "crs_usr_requests"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
+			        " FROM ctr_centers,"
+			              "deg_degrees,"
+			              "crs_courses,"
+			              "crs_usr_requests"
 			       " WHERE ctr_centers.InsCod=%ld"
-			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			       " AND deg_degrees.DegCod=crs_courses.DegCod"
-			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
-			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
+			         " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
 			       Gbl.Hierarchy.Ins.InsCod,
 			       RolesSelected);
@@ -2709,22 +2715,22 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in courses of this center in which I am teacher
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM crs_usr,"
-			             "deg_degrees,"
-			             "crs_courses,"
-			             "crs_usr_requests"
-			       " WHERE crs_usr.UsrCod=%ld"
-			       " AND crs_usr.Role=%u"
-			       " AND crs_usr.CrsCod=crs_courses.CrsCod"
-			       " AND crs_courses.DegCod=deg_degrees.DegCod"
-			       " AND deg_degrees.CtrCod=%ld"
-			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
-			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
+			        " FROM crs_users,"
+			              "deg_degrees,"
+			              "crs_courses,"
+			              "crs_usr_requests"
+			       " WHERE crs_users.UsrCod=%ld"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.CrsCod=crs_courses.CrsCod"
+			         " AND crs_courses.DegCod=deg_degrees.DegCod"
+			         " AND deg_degrees.CtrCod=%ld"
+			         " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
+			         " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
@@ -2735,22 +2741,22 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in degrees of this center administrated by me
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM usr_admins,"
-			             "deg_degrees,"
-			             "crs_courses,"
-			             "crs_usr_requests"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
+			        " FROM usr_admins,"
+			              "deg_degrees,"
+			              "crs_courses,"
+			              "crs_usr_requests"
 			       " WHERE usr_admins.UsrCod=%ld"
-			       " AND usr_admins.Scope='%s'"
-			       " AND usr_admins.Cod=deg_degrees.DegCod"
-			       " AND deg_degrees.CtrCod=%ld"
-			       " AND deg_degrees.DegCod=crs_courses.DegCod"
-			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
-			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+			         " AND usr_admins.Scope='%s'"
+			         " AND usr_admins.Cod=deg_degrees.DegCod"
+			         " AND deg_degrees.CtrCod=%ld"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
+			         " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       Sco_GetDBStrFromScope (Hie_Lvl_DEG),
@@ -2763,18 +2769,18 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Request in any course of this center
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM deg_degrees,"
-			             "crs_courses,"
-			             "crs_usr_requests"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
+			        " FROM deg_degrees,"
+			              "crs_courses,"
+			              "crs_usr_requests"
 			       " WHERE deg_degrees.CtrCod=%ld"
-			       " AND deg_degrees.DegCod=crs_courses.DegCod"
-			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
-			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
+			         " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
 			       Gbl.Hierarchy.Ctr.CtrCod,
 			       RolesSelected);
@@ -2791,20 +2797,20 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in courses of this degree in which I am teacher
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM crs_usr,"
-			             "crs_courses,"
-			             "crs_usr_requests"
-			       " WHERE crs_usr.UsrCod=%ld"
-			       " AND crs_usr.Role=%u"
-			       " AND crs_usr.CrsCod=crs_courses.CrsCod"
-			       " AND crs_courses.DegCod=%ld"
-			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
-			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
+			        " FROM crs_users,"
+			              "crs_courses,"
+			              "crs_usr_requests"
+			       " WHERE crs_users.UsrCod=%ld"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.CrsCod=crs_courses.CrsCod"
+			         " AND crs_courses.DegCod=%ld"
+			         " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
+			         " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
@@ -2818,16 +2824,16 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in any course of this degree
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT crs_usr_requests.ReqCod,"
-			              "crs_usr_requests.CrsCod,"
-			              "crs_usr_requests.UsrCod,"
-			              "crs_usr_requests.Role,"
-			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-			       " FROM crs_courses,"
-			             "crs_usr_requests"
+			       "SELECT crs_usr_requests.ReqCod,"			// row[0]
+			              "crs_usr_requests.CrsCod,"			// row[1]
+			              "crs_usr_requests.UsrCod,"			// row[2]
+			              "crs_usr_requests.Role,"				// row[3]
+			              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"	// row[4]
+			        " FROM crs_courses,"
+			              "crs_usr_requests"
 			       " WHERE crs_courses.DegCod=%ld"
-			       " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
-			       " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+			         " AND crs_courses.CrsCod=crs_usr_requests.CrsCod"
+			         " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 			       " ORDER BY crs_usr_requests.RequestTime DESC",
 			       Gbl.Hierarchy.Deg.DegCod,
 			       RolesSelected);
@@ -2848,14 +2854,14 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                // Requests in this course
                NumReqs =
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
-			       "SELECT ReqCod,"
-			              "CrsCod,"
-			              "UsrCod,"
-			              "Role,"
-			              "UNIX_TIMESTAMP(RequestTime)"
-			       " FROM crs_usr_requests"
+			       "SELECT ReqCod,"				// row[0]
+			              "CrsCod,"				// row[1]
+			              "UsrCod,"				// row[2]
+			              "Role,"				// row[3]
+			              "UNIX_TIMESTAMP(RequestTime)"	// row[4]
+			        " FROM crs_usr_requests"
 			       " WHERE CrsCod=%ld"
-			       " AND ((1<<Role)&%u)<>0"
+			         " AND ((1<<Role)&%u)<>0"
 			       " ORDER BY RequestTime DESC",
 			       Gbl.Hierarchy.Crs.CrsCod,
 			       RolesSelected);
@@ -4100,8 +4106,10 @@ void Enr_AcceptUsrInCrs (long UsrCod)
   {
    /***** Set enrolment of a user to "accepted" in the current course *****/
    DB_QueryUPDATE ("can not confirm user's enrolment",
-		   "UPDATE crs_usr SET Accepted='Y'"
-		   " WHERE CrsCod=%ld AND UsrCod=%ld",
+		   "UPDATE crs_users"
+		     " SET Accepted='Y'"
+		   " WHERE CrsCod=%ld"
+		     " AND UsrCod=%ld",
                    Gbl.Hierarchy.Crs.CrsCod,UsrCod);
   }
 
@@ -4212,11 +4220,13 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
       /***** Remove user from the tables of courses-users *****/
       DB_QueryDELETE ("can not remove a user from a course",
 		      "DELETE FROM crs_usr_last"
-		      " WHERE UsrCod=%ld AND CrsCod=%ld",
+		      " WHERE UsrCod=%ld"
+		        " AND CrsCod=%ld",
                       UsrDat->UsrCod,Crs->CrsCod);
       DB_QueryDELETE ("can not remove a user from a course",
-		      "DELETE FROM crs_usr"
-		      " WHERE CrsCod=%ld AND UsrCod=%ld",
+		      "DELETE FROM crs_users"
+		      " WHERE CrsCod=%ld"
+		        " AND UsrCod=%ld",
                       Crs->CrsCod,UsrDat->UsrCod);
 
       /***** Flush caches *****/

@@ -2185,10 +2185,13 @@ unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod)
    return
    (unsigned) DB_QueryCOUNT ("can not get the number of messages"
 			     " sent by teachers",
-			     "SELECT COUNT(*) FROM msg_snt,crs_usr"
+			     "SELECT COUNT(*)"
+			      " FROM msg_snt,"
+			            "crs_users"
 			     " WHERE msg_snt.CrsCod=%ld"
-			     " AND crs_usr.CrsCod=%ld AND crs_usr.Role=%u"
-			     " AND msg_snt.UsrCod=crs_usr.UsrCod",
+			       " AND crs_users.CrsCod=%ld"
+			       " AND crs_users.Role=%u"
+			       " AND msg_snt.UsrCod=crs_users.UsrCod",
 			     CrsCod,CrsCod,(unsigned) Rol_TCH);
   }
 

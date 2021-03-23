@@ -2105,16 +2105,16 @@ unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery,
       NumInssWithUsrs = (unsigned)
       DB_QueryCOUNT ("can not get number of institutions with users",
 		     "SELECT COUNT(DISTINCT ins_instits.InsCod)"
-		     " FROM ins_instits,"
-		           "ctr_centers,"
-		           "deg_degrees,"
-		           "crs_courses,"
-		           "crs_usr"
+		      " FROM ins_instits,"
+		            "ctr_centers,"
+		            "deg_degrees,"
+		            "crs_courses,"
+		            "crs_users"
 		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
-		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		     " AND deg_degrees.DegCod=crs_courses.DegCod"
-		     " AND crs_courses.CrsCod=crs_usr.CrsCod"
-		     " AND crs_usr.Role=%u",
+		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		       " AND deg_degrees.DegCod=crs_courses.DegCod"
+		       " AND crs_courses.CrsCod=crs_users.CrsCod"
+		       " AND crs_users.Role=%u",
 		     SubQuery,(unsigned) Role);
       FigCch_UpdateFigureIntoCache (FigureInss[Role],Scope,Cod,
 				    FigCch_UNSIGNED,&NumInssWithUsrs);

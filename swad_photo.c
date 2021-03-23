@@ -1430,15 +1430,16 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
    /* Get one degree with students not yet computed */
    NumRows =
    DB_QuerySELECT (&mysql_res,"can not get degrees",
-		   "SELECT DISTINCT deg_degrees.DegCod"
-		   " FROM deg_degrees,"
-		         "crs_courses,"
-		         "crs_usr"
+		   "SELECT DISTINCT deg_degrees.DegCod"	// row[0]
+		    " FROM deg_degrees,"
+		          "crs_courses,"
+		          "crs_users"
 		   " WHERE deg_degrees.DegCod=crs_courses.DegCod"
-		   " AND crs_courses.CrsCod=crs_usr.CrsCod"
-		   " AND crs_usr.Role=%u"
-		   " AND deg_degrees.DegCod NOT IN"
-		   " (SELECT DISTINCT DegCod FROM sta_degrees)"
+		     " AND crs_courses.CrsCod=crs_users.CrsCod"
+		     " AND crs_users.Role=%u"
+		     " AND deg_degrees.DegCod NOT IN"
+		         " (SELECT DISTINCT DegCod"
+		            " FROM sta_degrees)"
 		   " LIMIT 1",
 		 (unsigned) Rol_STD);
 
@@ -1462,15 +1463,16 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
       /* Get degrees from database */
       NumRows =
       DB_QuerySELECT (&mysql_res,"can not get degrees",
-		      "SELECT sta_degrees.DegCod"
-		      " FROM sta_degrees,"
-		            "crs_courses,"
-		            "crs_usr"
+		      "SELECT sta_degrees.DegCod"	// row[0]
+		       " FROM sta_degrees,"
+		             "crs_courses,"
+		             "crs_users"
 		      " WHERE sta_degrees.TimeAvgPhoto<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
-		      " AND sta_degrees.DegCod=crs_courses.DegCod"
-		      " AND crs_courses.CrsCod=crs_usr.CrsCod"
-		      " AND crs_usr.Role=%u"
-		      " ORDER BY sta_degrees.TimeAvgPhoto LIMIT 1",
+		        " AND sta_degrees.DegCod=crs_courses.DegCod"
+		        " AND crs_courses.CrsCod=crs_users.CrsCod"
+		        " AND crs_users.Role=%u"
+		      " ORDER BY sta_degrees.TimeAvgPhoto"
+		      " LIMIT 1",
 		      Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO,
 		      (unsigned) Rol_STD);
 

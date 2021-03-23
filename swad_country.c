@@ -2065,13 +2065,13 @@ unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery,
 		           "ctr_centers,"
 		           "deg_degrees,"
 		           "crs_courses,"
-		           "crs_usr"
+		           "crs_users"
 		     " WHERE %scty_countrs.CtyCod=ins_instits.CtyCod"
 		     " AND ins_instits.InsCod=ctr_centers.InsCod"
 		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		     " AND deg_degrees.DegCod=crs_courses.DegCod"
-		     " AND crs_courses.CrsCod=crs_usr.CrsCod"
-		     " AND crs_usr.Role=%u",
+		     " AND crs_courses.CrsCod=crs_users.CrsCod"
+		     " AND crs_users.Role=%u",
 		     SubQuery,(unsigned) Role);
       FigCch_UpdateFigureIntoCache (FigureCtys[Role],Scope,Cod,
 				    FigCch_UNSIGNED,&NumCtysWithUsrs);

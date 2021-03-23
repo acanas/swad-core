@@ -1219,20 +1219,22 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
             case Brw_ADMI_SHR_CRS:
             case Brw_ADMI_MRK_CRS:	// Notify all users in course except me
                NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					      " to be notified",
-					 "SELECT UsrCod FROM crs_usr"
+					           " to be notified",
+					 "SELECT UsrCod"	// row[0]
+					  " FROM crs_users"
 					 " WHERE CrsCod=%ld"
-					 " AND UsrCod<>%ld",
+					   " AND UsrCod<>%ld",
 					 Gbl.Hierarchy.Crs.CrsCod,
 					 Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
             case Brw_ADMI_TCH_CRS:	// Notify all teachers in course except me
                NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
-					 "SELECT UsrCod FROM crs_usr"
+					 "SELECT UsrCod"	// row[0]
+					  " FROM crs_users"
 					 " WHERE CrsCod=%ld"
-					 " AND UsrCod<>%ld"
-					 " AND Role=%u",	// Notify teachers only
+					   " AND UsrCod<>%ld"
+					   " AND Role=%u",	// Notify teachers only
 					 Gbl.Hierarchy.Crs.CrsCod,
 					 Gbl.Usrs.Me.UsrDat.UsrCod,
 					 (unsigned) Rol_TCH);
@@ -1242,23 +1244,27 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
             case Brw_ADMI_MRK_GRP:	// Notify all users in group except me
                NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
-					 "SELECT UsrCod FROM crs_grp_usr"
+					 "SELECT UsrCod"	// row[0]
+					  " FROM crs_grp_usr"
 					 " WHERE crs_grp_usr.GrpCod=%ld"
-					 " AND crs_grp_usr.UsrCod<>%ld",
+					   " AND crs_grp_usr.UsrCod<>%ld",
 					 Gbl.Crs.Grps.GrpCod,
 					 Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
             case Brw_ADMI_TCH_GRP:	// Notify all teachers in group except me
                NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
-				         "SELECT crs_grp_usr.UsrCod"
-					 " FROM crs_grp_usr,crs_grp,crs_grp_types,crs_usr"
+				         "SELECT crs_grp_usr.UsrCod"	// row[0]
+					  " FROM crs_grp_usr,"
+					        "crs_grp,"
+					        "crs_grp_types,"
+					        "crs_users"
 					 " WHERE crs_grp_usr.GrpCod=%ld"
-					 " AND crs_grp_usr.UsrCod<>%ld"
-					 " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
-					 " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-					 " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
-					 " AND crs_usr.Role=%u",	// Notify teachers only
+					   " AND crs_grp_usr.UsrCod<>%ld"
+					   " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
+					   " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+					   " AND crs_grp_types.CrsCod=crs_users.CrsCod"
+					   " AND crs_users.Role=%u",	// Notify teachers only
 					 Gbl.Crs.Grps.GrpCod,
 					 Gbl.Usrs.Me.UsrDat.UsrCod,
 					 (unsigned) Rol_TCH);
@@ -1273,16 +1279,16 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          // Cases 1 and 2 are mutually exclusive, so the union returns the case 1 or 2
          NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
-				   "(SELECT crs_usr.UsrCod"	// row[0]
+				   "(SELECT crs_users.UsrCod"	// row[0]
 				     " FROM asg_assignments,"
-				           "crs_usr"
+				           "crs_users"
 				   " WHERE asg_assignments.AsgCod=%ld"
 				     " AND asg_assignments.AsgCod NOT IN"
 				         " (SELECT AsgCod"
 				            " FROM asg_groups"
 				           " WHERE AsgCod=%ld)"
-				     " AND asg_assignments.CrsCod=crs_usr.CrsCod"
-				     " AND crs_usr.UsrCod<>%ld)"
+				     " AND asg_assignments.CrsCod=crs_users.CrsCod"
+				     " AND crs_users.UsrCod<>%ld)"
 				   " UNION "
 				   "(SELECT DISTINCT crs_grp_usr.UsrCod"
 				     " FROM asg_groups,"
@@ -1297,8 +1303,10 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_NOTICE:
          NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
-				   "SELECT UsrCod FROM crs_usr"
-				   " WHERE CrsCod=%ld AND UsrCod<>%ld",
+				   "SELECT UsrCod"	// row[0]
+				    " FROM crs_users"
+				   " WHERE CrsCod=%ld"
+				     " AND UsrCod<>%ld",
 				   Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
@@ -1312,10 +1320,11 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	    // If this course has teachers ==> send notification to teachers
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					         " to be notified",
-				      "SELECT UsrCod FROM crs_usr"
+				      "SELECT UsrCod"	// row[0]
+				       " FROM crs_users"
 				      " WHERE CrsCod=%ld"
-				      " AND UsrCod<>%ld"
-				      " AND Role=%u",	// Notify teachers only
+				        " AND UsrCod<>%ld"
+				        " AND Role=%u",	// Notify teachers only
 				      Gbl.Hierarchy.Crs.CrsCod,
 				      Gbl.Usrs.Me.UsrDat.UsrCod,
 				      (unsigned) Rol_TCH);
@@ -1326,12 +1335,13 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	    // ==> send notification to administrators or superusers
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					         " to be notified",
-				      "SELECT UsrCod FROM usr_admins"
+				      "SELECT UsrCod"	// row[0]
+				       " FROM usr_admins"
 				      " WHERE (Scope='%s'"
-				      " OR (Scope='%s' AND Cod=%ld)"
-				      " OR (Scope='%s' AND Cod=%ld)"
-				      " OR (Scope='%s' AND Cod=%ld))"
-				      " AND UsrCod<>%ld",
+				             " OR (Scope='%s' AND Cod=%ld)"
+				             " OR (Scope='%s' AND Cod=%ld)"
+				             " OR (Scope='%s' AND Cod=%ld))"
+				        " AND UsrCod<>%ld",
 				      Sco_GetDBStrFromScope (Hie_Lvl_SYS),
 				      Sco_GetDBStrFromScope (Hie_Lvl_INS),Gbl.Hierarchy.Ins.InsCod,
 				      Sco_GetDBStrFromScope (Hie_Lvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
@@ -1342,11 +1352,13 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          // Cod is the code of the social publishing
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
-				   "SELECT DISTINCT(PublisherCod) FROM tml_pubs"
+				   "SELECT DISTINCT(PublisherCod)"	// row[0]
+				    " FROM tml_pubs"
 				   " WHERE NotCod="
-				   "(SELECT NotCod FROM tml_pubs"
-				   " WHERE PubCod=%ld)"
-				   " AND PublisherCod<>%ld",
+				   "(SELECT NotCod"
+				     " FROM tml_pubs"
+				    " WHERE PubCod=%ld)"
+				      " AND PublisherCod<>%ld",
 				   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_TL_FAV:		// New favourite to one of my social notes or comments
@@ -1364,16 +1376,21 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	    case For_FORUM_COURSE_USRS:
 	       NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					            " to be notified",
-					 "SELECT UsrCod FROM crs_usr"
-					 " WHERE CrsCod=%ld AND UsrCod<>%ld",
+					 "SELECT UsrCod"	// row[0]
+					  " FROM crs_users"
+					 " WHERE CrsCod=%ld"
+					   " AND UsrCod<>%ld",
 					 Gbl.Hierarchy.Crs.CrsCod,
 					 Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case For_FORUM_COURSE_TCHS:
 	       NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					            " to be notified",
-					 "SELECT UsrCod FROM crs_usr"
-					 " WHERE CrsCod=%ld AND Role=%u AND UsrCod<>%ld",
+					 "SELECT UsrCod"	// row[0]
+					  " FROM crs_users"
+					 " WHERE CrsCod=%ld"
+					   " AND Role=%u"
+					   " AND UsrCod<>%ld",
 					 Gbl.Hierarchy.Crs.CrsCod,
 					 (unsigned) Rol_TCH,
 					 Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -1385,7 +1402,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_FORUM_REPLY:
          NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
-				   "SELECT DISTINCT(UsrCod)"
+				   "SELECT DISTINCT(UsrCod)"	// row[0]
 				    " FROM for_posts"
 				   " WHERE ThrCod = (SELECT ThrCod"
 				                     " FROM for_posts"
@@ -1401,32 +1418,32 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          // Cases 1 and 2 are mutually exclusive, so the union returns the case 1 or 2
          NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					      " to be notified",
-				   "(SELECT crs_usr.UsrCod"
+				   "(SELECT crs_users.UsrCod"	// row[0]
 				     " FROM svy_surveys,"
-				           "crs_usr"
+				           "crs_users"
 				    " WHERE svy_surveys.SvyCod=%ld"
 				      " AND svy_surveys.SvyCod NOT IN"
 				          " (SELECT SvyCod"
 				             " FROM svy_groups"
 				            " WHERE SvyCod=%ld)"
 				      " AND svy_surveys.Scope='%s'"
-				      " AND svy_surveys.Cod=crs_usr.CrsCod"
-				      " AND crs_usr.UsrCod<>%ld"
-				      " AND (svy_surveys.Roles&(1<<crs_usr.Role))<>0)"
+				      " AND svy_surveys.Cod=crs_users.CrsCod"
+				      " AND crs_users.UsrCod<>%ld"
+				      " AND (svy_surveys.Roles&(1<<crs_users.Role))<>0)"
 				   " UNION "
 				   "(SELECT DISTINCT crs_grp_usr.UsrCod"
 				     " FROM svy_groups,"
 				           "crs_grp_usr,"
 				           "svy_surveys,"
-				           "crs_usr"
+				           "crs_users"
 				    " WHERE svy_groups.SvyCod=%ld"
 				      " AND svy_groups.GrpCod=crs_grp_usr.GrpCod"
-				      " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
+				      " AND crs_grp_usr.UsrCod=crs_users.UsrCod"
 				      " AND crs_grp_usr.UsrCod<>%ld"
 				      " AND svy_groups.SvyCod=svy_surveys.SvyCod"
 				      " AND svy_surveys.Scope='%s'"
-				      " AND svy_surveys.Cod=crs_usr.CrsCod"
-				      " AND (svy_surveys.Roles&(1<<crs_usr.Role))<>0)",
+				      " AND svy_surveys.Cod=crs_users.CrsCod"
+				      " AND (svy_surveys.Roles&(1<<crs_users.Role))<>0)",
 				   Cod,
 				   Cod,
 				   Sco_GetDBStrFromScope (Hie_Lvl_CRS),

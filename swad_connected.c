@@ -512,15 +512,15 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			              "ctr_centers,"
 			              "deg_degrees,"
 			              "crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "usr_connected,"
 			              "usr_data"
 			       " WHERE ins_instits.CtyCod=%ld"
 			         " AND ins_instits.InsCod=ctr_centers.InsCod"
 			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Cty.CtyCod);
 	       break;
@@ -534,14 +534,14 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			        " FROM ctr_centers,"
 			              "deg_degrees,"
 			              "crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "usr_connected,"
 			              "usr_data"
 			       " WHERE ctr_centers.InsCod=%ld"
 			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Ins.InsCod);
 	       break;
@@ -554,13 +554,13 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			              "MIN(usr_data.Sex)"			// row[2]
 			        " FROM deg_degrees,"
 			              "crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "usr_connected,"
 			              "usr_data"
 			       " WHERE deg_degrees.CtrCod=%ld"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Ctr.CtrCod);
 	       break;
@@ -572,12 +572,12 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
 			              "MIN(usr_data.Sex)"			// row[2]
 			        " FROM crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "usr_connected,"
 			              "usr_data"
 			       " WHERE crs_courses.DegCod=%ld"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Deg.DegCod);
 	       break;
@@ -588,11 +588,11 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
 			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
 			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM crs_usr,"
+			        " FROM crs_users,"
 			              "usr_connected,"
 			              "usr_data"
-			       " WHERE crs_usr.CrsCod=%ld"
-			         " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			       " WHERE crs_users.CrsCod=%ld"
+			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Crs.CrsCod);
 	       break;
@@ -610,7 +610,9 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			        "MIN(usr_data.Sex)"				// row[2]
 			  " FROM usr_connected,"
 			        "usr_data"
-			 " WHERE usr_connected.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			 " WHERE usr_connected.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM crs_users)"
 			   " AND usr_connected.UsrCod=usr_data.UsrCod");
 	 break;
       case Rol_STD:
@@ -626,10 +628,10 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
 			              "MIN(usr_data.Sex)"			// row[2]
 			        " FROM usr_connected,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "usr_data"
-			       " WHERE usr_connected.UsrCod=crs_usr.UsrCod"
-			         " AND crs_usr.Role=%u"
+			       " WHERE usr_connected.UsrCod=crs_users.UsrCod"
+			         " AND crs_users.Role=%u"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       (unsigned) Role);
 	       break;
@@ -644,16 +646,16 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			              "ctr_centers,"
 			              "deg_degrees,"
 			              "crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "usr_connected,"
 			              "usr_data"
 			       " WHERE ins_instits.CtyCod=%ld"
 			         " AND ins_instits.InsCod=ctr_centers.InsCod"
 			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.Role=%u"
-			         " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Cty.CtyCod,
 			       (unsigned) Role);
@@ -668,15 +670,15 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			        " FROM ctr_centers,"
 			              "deg_degrees,"
 			              "crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "usr_connected,"
 			              "usr_data"
 			       " WHERE ctr_centers.InsCod=%ld"
 			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.Role=%u"
-			         " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Ins.InsCod,
 			       (unsigned) Role);
@@ -690,14 +692,14 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			              "MIN(usr_data.Sex)"			// row[2]
 			        " FROM deg_degrees,"
 			              "crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "usr_connected,"
 			              "usr_data"
 			       " WHERE deg_degrees.CtrCod=%ld"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.Role=%u"
-			         " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Ctr.CtrCod,
 			       (unsigned) Role);
@@ -710,13 +712,13 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
 			              "MIN(usr_data.Sex)"			// row[2]
 			        " FROM crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "usr_connected,"
 			              "usr_data"
 			       " WHERE crs_courses.DegCod=%ld"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.Role=%u"
-			         " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Deg.DegCod,
 			       (unsigned) Role);
@@ -728,12 +730,12 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
 			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
 			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM crs_usr,"
+			        " FROM crs_users,"
 			              "usr_connected,"
 			              "usr_data"
-			       " WHERE crs_usr.CrsCod=%ld"
-			         " AND crs_usr.Role=%u"
-			         " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			       " WHERE crs_users.CrsCod=%ld"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Crs.CrsCod,
 			       (unsigned) Role);
@@ -788,14 +790,14 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
    /***** Get connected users who belong to current course from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get list of connected users"
 					" who belong to this course",
-			     "SELECT usr_connected.UsrCod,"
-			            "usr_connected.LastCrsCod,"
-			            "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(usr_connected.LastTime) AS Dif"
-			      " FROM crs_usr,"
+			     "SELECT usr_connected.UsrCod,"						// row[0]
+			            "usr_connected.LastCrsCod,"						// row[1]
+			            "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(usr_connected.LastTime) AS Dif"	// row[2]
+			      " FROM crs_users,"
 			            "usr_connected"
-			     " WHERE crs_usr.CrsCod=%ld"
-			       " AND crs_usr.Role=%u"
-			       " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			     " WHERE crs_users.CrsCod=%ld"
+			       " AND crs_users.Role=%u"
+			       " AND crs_users.UsrCod=usr_connected.UsrCod"
 			     " ORDER BY Dif",
 			     Gbl.Hierarchy.Crs.CrsCod,
 			     (unsigned) Role);
@@ -969,8 +971,10 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			        "LastCrsCod,"						// row[1]
 			        "UNIX_TIMESTAMP()-"
 			        "UNIX_TIMESTAMP(LastTime) AS Dif"			// row[2]
-			 " FROM usr_connected"
-			 " WHERE UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			  " FROM usr_connected"
+			 " WHERE UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM crs_users)"
 			 " ORDER BY Dif");
 	 break;
       case Rol_STD:
@@ -988,9 +992,9 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			              "UNIX_TIMESTAMP()-"
 			              "UNIX_TIMESTAMP(usr_connected.LastTime) AS Dif"	// row[2]
 			        " FROM usr_connected,"
-			              "crs_usr"
-			       " WHERE usr_connected.UsrCod=crs_usr.UsrCod"
-			         " AND crs_usr.Role=%u"
+			              "crs_users"
+			       " WHERE usr_connected.UsrCod=crs_users.UsrCod"
+			         " AND crs_users.Role=%u"
 			       " ORDER BY Dif",
 			       (unsigned) Role);
 	       break;
@@ -1007,15 +1011,15 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			              "ctr_centers,"
 			              "deg_degrees,"
 			              "crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "usr_connected"
 			       " WHERE ins_instits.CtyCod=%ld"
 			         " AND ins_instits.InsCod=ctr_centers.InsCod"
 			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.Role=%u"
-			         " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			       " ORDER BY Dif",
 			       Gbl.Hierarchy.Cty.CtyCod,
 			       (unsigned) Role);
@@ -1032,14 +1036,14 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			        " FROM ctr_centers,"
 			              "deg_degrees,"
 			              "crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "usr_connected"
 			       " WHERE ctr_centers.InsCod=%ld"
 			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.Role=%u"
-			         " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			       " ORDER BY Dif",
 			       Gbl.Hierarchy.Ins.InsCod,
 			       (unsigned) Role);
@@ -1055,13 +1059,13 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			              "UNIX_TIMESTAMP(usr_connected.LastTime) AS Dif"	// row[2]
 			        " FROM deg_degrees,"
 			              "crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "usr_connected"
 			       " WHERE deg_degrees.CtrCod=%ld"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.Role=%u"
-			         " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			       " ORDER BY Dif",
 			       Gbl.Hierarchy.Ctr.CtrCod,
 			       (unsigned) Role);
@@ -1076,12 +1080,12 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			              "UNIX_TIMESTAMP()-"
 			              "UNIX_TIMESTAMP(usr_connected.LastTime) AS Dif"	// row[2]
 			        " FROM crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "usr_connected"
 			       " WHERE crs_courses.DegCod=%ld"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.Role=%u"
-			         " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			       " ORDER BY Dif",
 			       Gbl.Hierarchy.Deg.DegCod,
 			       (unsigned) Role);
@@ -1094,11 +1098,11 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			              "usr_connected.LastCrsCod,"			// row[1]
 			              "UNIX_TIMESTAMP()-"
 			              "UNIX_TIMESTAMP(usr_connected.LastTime) AS Dif"	// row[2]
-			        " FROM crs_usr,"
+			        " FROM crs_users,"
 			              "usr_connected"
-			       " WHERE crs_usr.CrsCod=%ld"
-			         " AND crs_usr.Role=%u"
-			         " AND crs_usr.UsrCod=usr_connected.UsrCod"
+			       " WHERE crs_users.CrsCod=%ld"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			       " ORDER BY Dif",
 			       Gbl.Hierarchy.Crs.CrsCod,
 			       (unsigned) Role);

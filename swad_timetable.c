@@ -724,10 +724,10 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 					        "tmt_courses.GrpCod,"
 					        "tmt_courses.CrsCod"
 					  " FROM tmt_courses,"
-					        "crs_usr"
-					 " WHERE crs_usr.UsrCod=%ld"
+					        "crs_users"
+					 " WHERE crs_users.UsrCod=%ld"
 					   " AND tmt_courses.GrpCod=-1"
-					   " AND tmt_courses.CrsCod=crs_usr.CrsCod"
+					   " AND tmt_courses.CrsCod=crs_users.CrsCod"
 					 " UNION DISTINCT "
 					 "SELECT tmt_courses.Weekday,"
 					        "TIME_TO_SEC(tmt_courses.StartTime) AS S,"
@@ -764,9 +764,9 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 					        "tmt_courses.GrpCod,"				// row[5]
 					        "tmt_courses.CrsCod"				// row[6]
 					  " FROM tmt_courses,"
-					        "crs_usr"
-					 " WHERE crs_usr.UsrCod=%ld"
-					   " AND tmt_courses.CrsCod=crs_usr.CrsCod"
+					        "crs_users"
+					 " WHERE crs_users.UsrCod=%ld"
+					   " AND tmt_courses.CrsCod=crs_users.CrsCod"
 					 " UNION "
 					 "SELECT Weekday,"					// row[0]
 					        "TIME_TO_SEC(StartTime) AS S,"
@@ -817,10 +817,11 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 					     "tmt_courses.ClassType,"			// row[4]
 					     "tmt_courses.GrpCod"			// row[5]
 				       " FROM tmt_courses,"
-				             "crs_usr"
+				             "crs_users"
 				      " WHERE tmt_courses.CrsCod=%ld"
-				        " AND tmt_courses.GrpCod=-1 AND crs_usr.UsrCod=%ld"
-				        " AND tmt_courses.CrsCod=crs_usr.CrsCod"
+				        " AND tmt_courses.GrpCod=-1"
+				        " AND crs_users.UsrCod=%ld"
+				        " AND tmt_courses.CrsCod=crs_users.CrsCod"
 				      " UNION DISTINCT "
 				      "SELECT tmt_courses.Weekday,"			// row[0]
 					     "TIME_TO_SEC(tmt_courses.StartTime) AS S,"	// row[1]

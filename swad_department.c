@@ -348,11 +348,11 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
 			      "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[5]
 		        " FROM dpt_departments,"
 		              "usr_data,"
-		              "crs_usr"
+		              "crs_users"
 		       " WHERE dpt_departments.InsCod=%ld"
 		         " AND dpt_departments.DptCod=usr_data.DptCod"
-		         " AND usr_data.UsrCod=crs_usr.UsrCod"
-		         " AND crs_usr.Role IN (%u,%u)"
+		         " AND usr_data.UsrCod=crs_users.UsrCod"
+		         " AND crs_users.Role IN (%u,%u)"
 		       " GROUP BY dpt_departments.DptCod)"
 		      " UNION "
 		      "(SELECT DptCod,"						// row[0]
@@ -365,9 +365,9 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
 		       " WHERE InsCod=%ld"
 		       " AND DptCod NOT IN"
 			   " (SELECT DISTINCT usr_data.DptCod"
-			    " FROM usr_data,crs_usr"
-			   " WHERE crs_usr.Role IN (%u,%u)"
-			     " AND crs_usr.UsrCod=usr_data.UsrCod))"
+			    " FROM usr_data,crs_users"
+			   " WHERE crs_users.Role IN (%u,%u)"
+			     " AND crs_users.UsrCod=usr_data.UsrCod))"
 		      " ORDER BY %s",
 		      InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
 		      InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
@@ -448,11 +448,11 @@ void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt)
 			      "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[4]
 		        " FROM dpt_departments,"
 			      "usr_data,"
-			      "crs_usr"
+			      "crs_users"
 		       " WHERE dpt_departments.DptCod=%ld"
 		         " AND dpt_departments.DptCod=usr_data.DptCod"
-		         " AND usr_data.UsrCod=crs_usr.UsrCod"
-		         " AND crs_usr.Role=%u"
+		         " AND usr_data.UsrCod=crs_users.UsrCod"
+		         " AND crs_users.Role=%u"
 		       " GROUP BY dpt_departments.DptCod)"
 		      " UNION "
 		      "(SELECT InsCod,"						// row[0]
@@ -465,9 +465,9 @@ void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt)
 		         " AND DptCod NOT IN"
 		             " (SELECT DISTINCT usr_data.DptCod"
 		                " FROM usr_data,"
-		                      "crs_usr"
-		               " WHERE crs_usr.Role=%u"
-		                 " AND crs_usr.UsrCod=usr_data.UsrCod))",
+		                      "crs_users"
+		               " WHERE crs_users.Role=%u"
+		                 " AND crs_users.UsrCod=usr_data.UsrCod))",
 		      Dpt->DptCod,(unsigned) Rol_TCH,
 		      Dpt->DptCod,(unsigned) Rol_TCH);
       if (NumRows) // Department found...

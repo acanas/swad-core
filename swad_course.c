@@ -642,17 +642,19 @@ unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery,
       NumCrssWithUsrs = (unsigned)
       DB_QueryCOUNT ("can not get number of courses with users",
 		     "SELECT COUNT(DISTINCT crs_courses.CrsCod)"
-		     " FROM ins_instits,"
-		           "ctr_centers,"
-		           "deg_degrees,"
-		           "crs_courses,"
-		           "crs_usr"
-		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
-		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		     " AND deg_degrees.DegCod=crs_courses.DegCod"
-		     " AND crs_courses.CrsCod=crs_usr.CrsCod"
-		     " AND crs_usr.Role=%u",
-		     SubQuery,(unsigned) Role);
+		      " FROM ins_instits,"
+		            "ctr_centers,"
+		            "deg_degrees,"
+		            "crs_courses,"
+		            "crs_users"
+		     " WHERE %s"
+		            "institutions.InsCod=ctr_centers.InsCod"
+		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		       " AND deg_degrees.DegCod=crs_courses.DegCod"
+		       " AND crs_courses.CrsCod=crs_users.CrsCod"
+		       " AND crs_users.Role=%u",
+		     SubQuery,
+		     (unsigned) Role);
       FigCch_UpdateFigureIntoCache (FigureCrss[Role],Scope,Cod,
 				    FigCch_UNSIGNED,&NumCrssWithUsrs);
      }
@@ -2025,36 +2027,43 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       /* Remove all the users in groups in the course */
       DB_QueryDELETE ("can not remove users from groups of a course",
 		      "DELETE FROM crs_grp_usr"
-		      " USING crs_grp_types,crs_grp,crs_grp_usr"
+		      " USING crs_grp_types,"
+		             "crs_grp,"
+		             "crs_grp_usr"
 		      " WHERE crs_grp_types.CrsCod=%ld"
-		      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		      " AND crs_grp.GrpCod=crs_grp_usr.GrpCod",
+		        " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+		        " AND crs_grp.GrpCod=crs_grp_usr.GrpCod",
 	              CrsCod);
 
       /* Remove all the groups in the course */
       DB_QueryDELETE ("can not remove groups of a course",
 		      "DELETE FROM crs_grp"
-		      " USING crs_grp_types,crs_grp"
+		      " USING crs_grp_types,"
+		             "crs_grp"
 		      " WHERE crs_grp_types.CrsCod=%ld"
-		      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod",
+		        " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod",
 	              CrsCod);
 
       /* Remove all the group types in the course */
       DB_QueryDELETE ("can not remove types of group of a course",
-		      "DELETE FROM crs_grp_types WHERE CrsCod=%ld",
+		      "DELETE FROM crs_grp_types"
+		      " WHERE CrsCod=%ld",
 		      CrsCod);
 
       /***** Remove users' requests for inscription in the course *****/
       DB_QueryDELETE ("can not remove requests for inscription to a course",
-		      "DELETE FROM crs_usr_requests WHERE CrsCod=%ld",
+		      "DELETE FROM crs_usr_requests"
+		      " WHERE CrsCod=%ld",
 		      CrsCod);
 
       /***** Remove possible users remaining in the course (teachers) *****/
       DB_QueryDELETE ("can not remove users from a course",
-		      "DELETE FROM crs_usr_last WHERE CrsCod=%ld",
+		      "DELETE FROM crs_usr_last"
+		      " WHERE CrsCod=%ld",
 		      CrsCod);
       DB_QueryDELETE ("can not remove users from a course",
-		      "DELETE FROM crs_usr WHERE CrsCod=%ld",
+		      "DELETE FROM crs_users"
+		      " WHERE CrsCod=%ld",
 		      CrsCod);
 
       /***** Remove directories of the course *****/
@@ -2611,7 +2620,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
      }
    else
      {
-      if (asprintf (&SubQuery," AND crs_usr.Role=%u",(unsigned) Role) < 0)
+      if (asprintf (&SubQuery," AND crs_users.Role=%u",(unsigned) Role) < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
    NumCrss = (unsigned)
@@ -2623,15 +2632,15 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
 			  "crs_courses.Year,"		// row[4]
 			  "crs_courses.FullName,"	// row[5]
 			  "ctr_centers.ShortName,"	// row[6]
-			  "crs_usr.Accepted"		// row[7]
-		   " FROM crs_usr,"
-		         "crs_courses,"
-		         "deg_degrees,"
-		         "ctr_centers"
-		   " WHERE crs_usr.UsrCod=%ld%s"
-		   " AND crs_usr.CrsCod=crs_courses.CrsCod"
-		   " AND crs_courses.DegCod=deg_degrees.DegCod"
-		   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			  "crs_users.Accepted"		// row[7]
+		    " FROM crs_users,"
+		          "crs_courses,"
+		          "deg_degrees,"
+		          "ctr_centers"
+		   " WHERE crs_users.UsrCod=%ld%s"
+		     " AND crs_users.CrsCod=crs_courses.CrsCod"
+		     " AND crs_courses.DegCod=deg_degrees.DegCod"
+		     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 		   " ORDER BY deg_degrees.FullName,"
 		             "crs_courses.Year,"
 		             "crs_courses.FullName",
@@ -2781,7 +2790,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	  crs_courses.Year		row[4]
 	  crs_courses.FullName		row[5]
 	  ctr_centers.ShortName		row[6]
-	  crs_usr.Accepted		row[7]	(only if WriteColumnAccepted == true)
+	  crs_users.Accepted		row[7]	(only if WriteColumnAccepted == true)
    */
 
    /***** Get degree code (row[0]) *****/
@@ -2989,9 +2998,11 @@ void Crs_RemoveOldCrss (void)
    /***** Get old courses from database *****/
    NumCrss = DB_QuerySELECT (&mysql_res,"can not get old courses",
 			     "SELECT CrsCod"
-			     " FROM crs_last"
+			      " FROM crs_last"
 			     " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
-			     " AND CrsCod NOT IN (SELECT DISTINCT CrsCod FROM crs_usr)",
+			       " AND CrsCod NOT IN"
+			           " (SELECT DISTINCT CrsCod"
+			              " FROM crs_users)",
 			     SecondsWithoutAccess);
    if (NumCrss)
      {

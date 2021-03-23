@@ -977,12 +977,12 @@ static void Grp_LockTables (void)
   {
    DB_Query ("can not lock tables to change user's groups",
 	     "LOCK TABLES "
-	     "crs_grp_types WRITE,"
-	     "crs_grp WRITE,"
-	     "crs_grp_usr WRITE,"
-	     "crs_usr READ,"
-	     "crs_usr_last READ,"
-	     "roo_rooms READ");
+	          "crs_grp_types WRITE,"
+	          "crs_grp WRITE,"
+	          "crs_grp_usr WRITE,"
+	          "crs_users READ,"
+	          "crs_usr_last READ,"
+	          "roo_rooms READ");
    Gbl.DB.LockedTables = true;
   }
 
@@ -3302,13 +3302,16 @@ unsigned Grp_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod)
    return
    (unsigned) DB_QueryCOUNT ("can not get number of users in a group",
 			     "SELECT COUNT(*)"
-			     " FROM crs_grp_usr,crs_grp,crs_grp_types,crs_usr"
+			      " FROM crs_grp_usr,"
+			            "crs_grp,"
+			            "crs_grp_types,"
+			            "crs_users"
 			     " WHERE crs_grp_usr.GrpCod=%ld"
-			     " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
-			     " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-			     " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
-			     " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
-			     " AND crs_usr.Role=%u",
+			       " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
+			       " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			       " AND crs_grp_types.CrsCod=crs_users.CrsCod"
+			       " AND crs_grp_usr.UsrCod=crs_users.UsrCod"
+			       " AND crs_users.Role=%u",
 			     GrpCod,(unsigned) Role);
   }
 
@@ -3321,13 +3324,16 @@ static unsigned long Grp_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTyp
    /***** Get number of users not belonging to groups of a type ******/
    return DB_QueryCOUNT ("can not get the number of users"
 	                 " not belonging to groups of a type",
-			 "SELECT COUNT(UsrCod) FROM crs_usr"
-			 " WHERE CrsCod=%ld AND Role=%u"
-			 " AND UsrCod NOT IN"
-			 " (SELECT DISTINCT crs_grp_usr.UsrCod"
-			 " FROM crs_grp,crs_grp_usr"
-			 " WHERE crs_grp.GrpTypCod=%ld"
-			 " AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
+			 "SELECT COUNT(UsrCod)"
+			  " FROM crs_users"
+			 " WHERE CrsCod=%ld"
+			   " AND Role=%u"
+			   " AND UsrCod NOT IN"
+			       " (SELECT DISTINCT crs_grp_usr.UsrCod"
+			          " FROM crs_grp,"
+			                "crs_grp_usr"
+			         " WHERE crs_grp.GrpTypCod=%ld"
+			           " AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
 			 Gbl.Hierarchy.Crs.CrsCod,
 			 (unsigned) Role,GrpTypCod);
   }
@@ -3498,17 +3504,20 @@ bool Grp_GetIfAvailableGrpTyp (long GrpTypCod)
 	                     "SELECT GrpTypCod FROM"
 			     " ("
 			     "SELECT crs_grp_types.GrpTypCod AS GrpTypCod,"
-			     "COUNT(*) AS NumStudents,"
-			     "crs_grp.MaxStudents as MaxStudents"
-			     " FROM crs_grp_types,crs_grp,crs_grp_usr,crs_usr"
+			            "COUNT(*) AS NumStudents,"
+			            "crs_grp.MaxStudents as MaxStudents"
+			      " FROM crs_grp_types,"
+			            "crs_grp,"
+			            "crs_grp_usr,"
+			            "crs_users"
 			     " WHERE %s"				// Which group types?
-			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			     " AND crs_grp.Open='Y'"			// Open
-			     " AND crs_grp.MaxStudents>0"		// Admits students
-			     " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
-			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-			     " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
-			     " AND crs_usr.Role=%u"			// Student
+			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			       " AND crs_grp.Open='Y'"			// Open
+			       " AND crs_grp.MaxStudents>0"		// Admits students
+			       " AND crs_grp_types.CrsCod=crs_users.CrsCod"
+			       " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
+			       " AND crs_grp_usr.UsrCod=crs_users.UsrCod"
+			       " AND crs_users.Role=%u"			// Student
 			     " GROUP BY crs_grp.GrpCod"
 			     " HAVING NumStudents<MaxStudents"		// Not full
 			     ") AS available_grp_types_with_stds"
@@ -3517,31 +3526,35 @@ bool Grp_GetIfAvailableGrpTyp (long GrpTypCod)
 
 			     // Available mandatory groups...
 			     "SELECT crs_grp_types.GrpTypCod AS GrpTypCod"
-			     " FROM crs_grp_types,crs_grp"
+			      " FROM crs_grp_types,"
+			            "crs_grp"
 			     " WHERE %s"				// Which group types?
-			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			     " AND crs_grp.Open='Y'"			// Open
-			     " AND crs_grp.MaxStudents>0"		// Admits students
+			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			       " AND crs_grp.Open='Y'"			// Open
+			       " AND crs_grp.MaxStudents>0"		// Admits students
 			     // ...without students
-			     " AND crs_grp.GrpCod NOT IN"
-			     " (SELECT crs_grp_usr.GrpCod"
-			     " FROM crs_usr,crs_grp_usr"
-			     " WHERE crs_usr.CrsCod=%ld"
-			     " AND crs_usr.Role=%u"			// Student
-			     " AND crs_usr.UsrCod=crs_grp_usr.UsrCod)"
+			       " AND crs_grp.GrpCod NOT IN"
+			           " (SELECT crs_grp_usr.GrpCod"
+			              " FROM crs_users,"
+			                    "crs_grp_usr"
+			             " WHERE crs_users.CrsCod=%ld"
+			               " AND crs_users.Role=%u"		// Student
+			               " AND crs_users.UsrCod=crs_grp_usr.UsrCod)"
 
 			     ") AS available_grp_types"
 
 			     // ...to which I don't belong
 			     " WHERE GrpTypCod NOT IN"
-			     " (SELECT crs_grp_types.GrpTypCod"
-			     " FROM crs_grp_types,crs_grp,crs_grp_usr"
-			     " WHERE %s"				// Which group types?
-			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			     " AND crs_grp.Open='Y'"			// Open
-			     " AND crs_grp.MaxStudents>0"		// Admits students
-			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-			     " AND crs_grp_usr.UsrCod=%ld)",		// I belong
+			           " (SELECT crs_grp_types.GrpTypCod"
+			              " FROM crs_grp_types,"
+			                    "crs_grp,"
+			                    "crs_grp_usr"
+			             " WHERE %s"				// Which group types?
+			               " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			               " AND crs_grp.Open='Y'"			// Open
+			               " AND crs_grp.MaxStudents>0"		// Admits students
+			               " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
+			               " AND crs_grp_usr.UsrCod=%ld)",		// I belong
 
 			     SubQueryGrpTypes,(unsigned) Rol_STD,
 			     SubQueryGrpTypes,

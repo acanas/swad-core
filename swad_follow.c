@@ -321,45 +321,48 @@ static unsigned long Fol_GetUsrsToFollow (unsigned long MaxUsrsToShow,
 			  "("
 			  "SELECT DISTINCT usr_follow.FollowedCod AS UsrCod"
 			  " FROM usr_follow,"
-			  "(SELECT FollowedCod FROM usr_follow"
-			  " WHERE FollowerCod=%ld) AS my_followed,"
-			  " usr_data"
+			        "(SELECT FollowedCod"
+			          " FROM usr_follow"
+			         " WHERE FollowerCod=%ld) AS my_followed,"
+			       " usr_data"
 			  " WHERE usr_follow.FollowerCod=my_followed.FollowedCod"
-			  " AND usr_follow.FollowedCod<>%ld"
-			  " AND usr_follow.FollowedCod=usr_data.UsrCod"
-			  " AND usr_data.Surname1<>''"	// Surname 1 not empty
-			  " AND usr_data.FirstName<>''"	// First name not empty
-			  "%s"				// SubQuery1
+			    " AND usr_follow.FollowedCod<>%ld"
+			    " AND usr_follow.FollowedCod=usr_data.UsrCod"
+			    " AND usr_data.Surname1<>''"	// Surname 1 not empty
+			    " AND usr_data.FirstName<>''"	// First name not empty
+			    "%s"				// SubQuery1
 			  ")"
 			  " UNION "
 			  // 2. Users who share any course with me
 			  "("
-			  "SELECT DISTINCT crs_usr.UsrCod"
-			  " FROM crs_usr,"
-			  "(SELECT CrsCod FROM crs_usr"
-			  " WHERE UsrCod=%ld) AS my_crs,"
-			  " usr_data"
-			  " WHERE crs_usr.CrsCod=my_crs.CrsCod"
-			  " AND crs_usr.UsrCod<>%ld"
-			  " AND crs_usr.UsrCod=usr_data.UsrCod"
-			  " AND usr_data.Surname1<>''"	// Surname 1 not empty
-			  " AND usr_data.FirstName<>''"	// First name not empty
-			  "%s"				// SubQuery2
+			  "SELECT DISTINCT crs_users.UsrCod"
+			   " FROM crs_users,"
+			         "(SELECT CrsCod"
+			           " FROM crs_users"
+			          " WHERE UsrCod=%ld) AS my_crs,"
+			        " usr_data"
+			  " WHERE crs_users.CrsCod=my_crs.CrsCod"
+			    " AND crs_users.UsrCod<>%ld"
+			    " AND crs_users.UsrCod=usr_data.UsrCod"
+			    " AND usr_data.Surname1<>''"	// Surname 1 not empty
+			    " AND usr_data.FirstName<>''"	// First name not empty
+			    "%s"				// SubQuery2
 			  ")"
 			  " UNION "
 			  // 3. Users who share any course with me with another role
 			  "("
-			  "SELECT DISTINCT crs_usr.UsrCod"
-			  " FROM crs_usr,"
-			  "(SELECT CrsCod,Role FROM crs_usr"
-			  " WHERE UsrCod=%ld) AS my_crs_role,"
-			  " usr_data"
-			  " WHERE crs_usr.CrsCod=my_crs_role.CrsCod"
-			  " AND crs_usr.Role<>my_crs_role.Role"
-			  " AND crs_usr.UsrCod=usr_data.UsrCod"
-			  " AND usr_data.Surname1<>''"	// Surname 1 not empty
-			  " AND usr_data.FirstName<>''"	// First name not empty
-			  "%s"				// SubQuery3
+			  "SELECT DISTINCT crs_users.UsrCod"
+			  " FROM crs_users,"
+			        "(SELECT CrsCod,Role"
+			          " FROM crs_users"
+			         " WHERE UsrCod=%ld) AS my_crs_role,"
+			       " usr_data"
+			  " WHERE crs_users.CrsCod=my_crs_role.CrsCod"
+			    " AND crs_users.Role<>my_crs_role.Role"
+			    " AND crs_users.UsrCod=usr_data.UsrCod"
+			    " AND usr_data.Surname1<>''"	// Surname 1 not empty
+			    " AND usr_data.FirstName<>''"	// First name not empty
+			    "%s"				// SubQuery3
 			  ")"
 			  ") AS LikelyKnownUsrsToFollow"
 			  // Do not select my followed
@@ -379,24 +382,26 @@ static unsigned long Fol_GetUsrsToFollow (unsigned long MaxUsrsToShow,
 			  // with codes >= that random code
 			  // that getting all users and then ordering by rand.
 			  "SELECT usr_data.UsrCod"
-			  " FROM usr_data,"
-			  "(SELECT ROUND(RAND()*(SELECT MAX(UsrCod) FROM usr_data)) AS RandomUsrCod)"	// a random user code
-			  " AS random_usr"
+			   " FROM usr_data,"
+			         "(SELECT ROUND(RAND()*(SELECT MAX(UsrCod)"
+			           " FROM usr_data)) AS RandomUsrCod) AS random_usr"	// a random user code
 			  " WHERE usr_data.UsrCod<>%ld"
-			  " AND usr_data.Surname1<>''"	// Surname 1 not empty
-			  " AND usr_data.FirstName<>''"	// First name not empty
+			    " AND usr_data.Surname1<>''"	// Surname 1 not empty
+			    " AND usr_data.FirstName<>''"	// First name not empty
 			  "%s"				// SubQuery4
 			  // Do not select my followed
 			  " AND usr_data.UsrCod NOT IN"
-			  " (SELECT FollowedCod FROM usr_follow"
-			  " WHERE FollowerCod=%ld)"
+			      " (SELECT FollowedCod"
+			         " FROM usr_follow"
+			        " WHERE FollowerCod=%ld)"
 			  " AND usr_data.UsrCod>=random_usr.RandomUsrCod"	// random user code could not exists in table of users
 			  // Get only MaxUsrsToShow users
 			  " LIMIT %lu"
 			  ")"
 			  ") AS UsrsToFollow"
 			  // Get only MaxUsrsToShow users
-			  " ORDER BY RAND() LIMIT %lu",
+			  " ORDER BY RAND()"
+			  " LIMIT %lu",
 
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -1378,20 +1383,20 @@ void Fol_GetAndShowRankingFollowers (void)
       case Hie_Lvl_CTY:
          NumUsrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT usr_follow.FollowedCod,"
-			        "COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr,"
-			       "usr_follow"
+			 "SELECT usr_follow.FollowedCod,"			// row[0]
+			        "COUNT(DISTINCT usr_follow.FollowerCod) AS N"	// row[1]
+			  " FROM ins_instits,"
+			        "ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "usr_follow"
 			 " WHERE ins_instits.CtyCod=%ld"
-			 " AND ins_instits.InsCod=ctr_centers.InsCod"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=usr_follow.FollowedCod"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_follow.FollowedCod"
 			 " GROUP BY usr_follow.FollowedCod"
 			 " ORDER BY N DESC,"
 			           "usr_follow.FollowedCod"
@@ -1401,18 +1406,18 @@ void Fol_GetAndShowRankingFollowers (void)
       case Hie_Lvl_INS:
          NumUsrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT usr_follow.FollowedCod,"
-			        "COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr,"
-			       "usr_follow"
+			 "SELECT usr_follow.FollowedCod,"			// row[0]
+			        "COUNT(DISTINCT usr_follow.FollowerCod) AS N"	// row[1]
+			  " FROM ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "usr_follow"
 			 " WHERE ctr_centers.InsCod=%ld"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=usr_follow.FollowedCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_follow.FollowedCod"
 			 " GROUP BY usr_follow.FollowedCod"
 			 " ORDER BY N DESC,"
 			           "usr_follow.FollowedCod"
@@ -1422,16 +1427,16 @@ void Fol_GetAndShowRankingFollowers (void)
       case Hie_Lvl_CTR:
          NumUsrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT usr_follow.FollowedCod,"
-			        "COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-			 " FROM deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr,"
-			       "usr_follow"
+			 "SELECT usr_follow.FollowedCod,"			// row[0]
+			        "COUNT(DISTINCT usr_follow.FollowerCod) AS N"	// row[1]
+			  " FROM deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "usr_follow"
 			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=usr_follow.FollowedCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_follow.FollowedCod"
 			 " GROUP BY usr_follow.FollowedCod"
 			 " ORDER BY N DESC,"
 			           "usr_follow.FollowedCod"
@@ -1441,14 +1446,14 @@ void Fol_GetAndShowRankingFollowers (void)
       case Hie_Lvl_DEG:
          NumUsrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT usr_follow.FollowedCod,"
-			        "COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-			 " FROM crs_courses,"
-			       "crs_usr,"
-			       "usr_follow"
+			 "SELECT usr_follow.FollowedCod,"			// row[0]
+			        "COUNT(DISTINCT usr_follow.FollowerCod) AS N"	// row[1]
+			  " FROM crs_courses,"
+			        "crs_users,"
+			        "usr_follow"
 			 " WHERE crs_courses.DegCod=%ld"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=usr_follow.FollowedCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_follow.FollowedCod"
 			 " GROUP BY usr_follow.FollowedCod"
 			 " ORDER BY N DESC,"
 			           "usr_follow.FollowedCod"
@@ -1458,12 +1463,12 @@ void Fol_GetAndShowRankingFollowers (void)
       case Hie_Lvl_CRS:
          NumUsrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT usr_follow.FollowedCod,"
-			        "COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-			 " FROM crs_usr,"
-			       "usr_follow"
-			 " WHERE crs_usr.CrsCod=%ld"
-			 " AND crs_usr.UsrCod=usr_follow.FollowedCod"
+			 "SELECT usr_follow.FollowedCod,"			// row[0]
+			        "COUNT(DISTINCT usr_follow.FollowerCod) AS N"	// row[1]
+			  " FROM crs_users,"
+			        "usr_follow"
+			 " WHERE crs_users.CrsCod=%ld"
+			   " AND crs_users.UsrCod=usr_follow.FollowedCod"
 			 " GROUP BY usr_follow.FollowedCod"
 			 " ORDER BY N DESC,"
 			           "usr_follow.FollowedCod"

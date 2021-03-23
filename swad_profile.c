@@ -1437,11 +1437,13 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
       case Hie_Lvl_SYS:
 	 NumUsrs = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT UsrCod,"
-			        "%s"
+			 "SELECT UsrCod,"		// row[0]
+			        "%s"			// row[1]
 			 " FROM usr_figures"
 			 " WHERE %s>0"
-			 " AND UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			 " AND UsrCod NOT IN"
+			     " (SELECT UsrCod"
+			        " FROM usr_banned)"
 			 " ORDER BY %s DESC,"
 			           "UsrCod"
 			 " LIMIT 100",
@@ -1452,22 +1454,24 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
          NumUsrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get ranking",
 			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"
-			        "usr_figures.%s"
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr,"
-			       "usr_figures"
+			        "usr_figures.UsrCod,"	// row[0]
+			        "usr_figures.%s"	// row[1]
+			  " FROM ins_instits,"
+			        "ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
 			 " WHERE ins_instits.CtyCod=%ld"
-			 " AND ins_instits.InsCod=ctr_centers.InsCod"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			 " AND usr_figures.%s>0"
-			 " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.%s>0"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
 			 " ORDER BY usr_figures.%s DESC,"
 			           "usr_figures.UsrCod"
 			 " LIMIT 100",
@@ -1479,20 +1483,22 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
          NumUsrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get ranking",
 			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"
-			        "usr_figures.%s"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr,"
-			       "usr_figures"
+			        "usr_figures.UsrCod,"	// row[0]
+			        "usr_figures.%s"	// row[1]
+			  " FROM ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
 			 " WHERE ctr_centers.InsCod=%ld"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			 " AND usr_figures.%s>0"
-			 " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.%s>0"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
 			 " ORDER BY usr_figures.%s DESC,"
 			           "usr_figures.UsrCod"
 			 " LIMIT 100",
@@ -1504,18 +1510,20 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
          NumUsrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get ranking",
 			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"
-			        "usr_figures.%s"
-			 " FROM deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr,"
-			       "usr_figures"
+			        "usr_figures.UsrCod,"	// row[0]
+			        "usr_figures.%s"	// row[1]
+			  " FROM deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
 			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			 " AND usr_figures.%s>0"
-			 " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.%s>0"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
 			 " ORDER BY usr_figures.%s DESC,"
 			           "usr_figures.UsrCod"
 			 " LIMIT 100",
@@ -1527,16 +1535,18 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
          NumUsrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get ranking",
 			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"
-			        "usr_figures.%s"
-			 " FROM crs_courses,"
-			       "crs_usr,"
-			       "usr_figures"
+			        "usr_figures.UsrCod,"	// row[0]
+			        "usr_figures.%s"	// row[1]
+			  " FROM crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
 			 " WHERE crs_courses.DegCod=%ld"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			 " AND usr_figures.%s>0"
-			 " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.%s>0"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
 			 " ORDER BY usr_figures.%s DESC,"
 			           "usr_figures.UsrCod"
 			 " LIMIT 100",
@@ -1548,14 +1558,16 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
          NumUsrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get ranking",
 			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"
-			        "usr_figures.%s"
-			 " FROM crs_usr,"
-			       "usr_figures"
-			 " WHERE crs_usr.CrsCod=%ld"
-			 " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			 " AND usr_figures.%s>0"
-			 " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			        "usr_figures.UsrCod,"	// row[0]
+			        "usr_figures.%s"	// row[1]
+			  " FROM crs_users,"
+			        "usr_figures"
+			 " WHERE crs_users.CrsCod=%ld"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.%s>0"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
 			 " ORDER BY usr_figures.%s DESC,"
 			           "usr_figures.UsrCod"
 			 " LIMIT 100",
@@ -1654,13 +1666,15 @@ void Prf_GetAndShowRankingClicksPerDay (void)
       case Hie_Lvl_SYS:
 	 NumUsrs = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT UsrCod,"
+			 "SELECT UsrCod,"						// row[0]
 			        "NumClicks/(DATEDIFF(NOW(),"
-			        "FirstClickTime)+1) AS NumClicksPerDay"
+			        "FirstClickTime)+1) AS NumClicksPerDay"			// row[1]
 			 " FROM usr_figures"
 			 " WHERE NumClicks>0"
 			 " AND FirstClickTime>FROM_UNIXTIME(0)"
-			 " AND UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			 " AND UsrCod NOT IN"
+			     " (SELECT UsrCod"
+			        " FROM usr_banned)"
 			 " ORDER BY NumClicksPerDay DESC,UsrCod"
 			 " LIMIT 100");
          break;
@@ -1668,24 +1682,26 @@ void Prf_GetAndShowRankingClicksPerDay (void)
          NumUsrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get ranking",
 			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"
+			        "usr_figures.UsrCod,"					// row[0]
 			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
-			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr,"
-			       "usr_figures"
+			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
+			  " FROM ins_instits,"
+			        "ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
 			 " WHERE ins_instits.CtyCod=%ld"
-			 " AND ins_instits.InsCod=ctr_centers.InsCod"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			 " AND usr_figures.NumClicks>0"
-			 " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
-			 " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.NumClicks>0"
+			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
 			 " ORDER BY NumClicksPerDay DESC,"
 				   "usr_figures.UsrCod"
 			 " LIMIT 100",
@@ -1695,22 +1711,24 @@ void Prf_GetAndShowRankingClicksPerDay (void)
          NumUsrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get ranking",
 			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"
+			        "usr_figures.UsrCod,"					// row[0]
 			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
-			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr,"
-			       "usr_figures"
+			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
+			  " FROM ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
 			 " WHERE ctr_centers.InsCod=%ld"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			 " AND usr_figures.NumClicks>0"
-			 " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
-			 " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.NumClicks>0"
+			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
 			 " ORDER BY NumClicksPerDay DESC,"
 				   "usr_figures.UsrCod"
 			 " LIMIT 100",
@@ -1720,20 +1738,22 @@ void Prf_GetAndShowRankingClicksPerDay (void)
          NumUsrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get ranking",
 			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"
+			        "usr_figures.UsrCod,"					// row[0]
 			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
-			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
-			 " FROM deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr,"
-			       "usr_figures"
+			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
+			  " FROM deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
 			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			 " AND usr_figures.NumClicks>0"
-			 " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
-			 " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.NumClicks>0"
+			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
 			 " ORDER BY NumClicksPerDay DESC,"
 				   "usr_figures.UsrCod"
 			 " LIMIT 100",
@@ -1743,18 +1763,20 @@ void Prf_GetAndShowRankingClicksPerDay (void)
          NumUsrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get ranking",
 			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"
+			        "usr_figures.UsrCod,"					// row[0]
 			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
-			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
-			 " FROM crs_courses,"
-			       "crs_usr,"
-			       "usr_figures"
+			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
+			  " FROM crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
 			 " WHERE crs_courses.DegCod=%ld"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			 " AND usr_figures.NumClicks>0"
-			 " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
-			 " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.NumClicks>0"
+			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
 			 " ORDER BY NumClicksPerDay DESC,"
 				   "usr_figures.UsrCod"
 			 " LIMIT 100",
@@ -1764,16 +1786,16 @@ void Prf_GetAndShowRankingClicksPerDay (void)
          NumUsrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get ranking",
 			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"
+			        "usr_figures.UsrCod,"					// row[0]
 			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
-			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
-			 " FROM crs_usr,"
-			       "usr_figures"
-			 " WHERE crs_usr.CrsCod=%ld"
-			 " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			 " AND usr_figures.NumClicks>0"
-			 " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
-			 " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
+			  " FROM crs_users,"
+			        "usr_figures"
+			 " WHERE crs_users.CrsCod=%ld"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.NumClicks>0"
+			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
+			   " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			 " ORDER BY NumClicksPerDay DESC,"
 				   "usr_figures.UsrCod"
 			 " LIMIT 100",

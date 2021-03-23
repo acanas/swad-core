@@ -863,10 +863,10 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		   " (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
 		   " ENGINE=MEMORY"
 		   " SELECT brw_files.FilCod"
-		     " FROM crs_usr,"
+		     " FROM crs_users,"
 		           "brw_files"
-		    " WHERE crs_usr.UsrCod=%ld"
-		      " AND crs_usr.CrsCod=brw_files.Cod"
+		    " WHERE crs_users.UsrCod=%ld"
+		      " AND crs_users.CrsCod=brw_files.Cod"
 		      " AND brw_files.FileBrowser IN (%u,%u,%u,%u)",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Brw_ADMI_DOC_CRS,
@@ -879,7 +879,8 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		   " (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
 		   " ENGINE=MEMORY"
 		   " SELECT brw_files.FilCod"
-		     " FROM crs_grp_usr,brw_files"
+		     " FROM crs_grp_usr,"
+		           "brw_files"
 		    " WHERE crs_grp_usr.UsrCod=%ld"
 		      " AND crs_grp_usr.GrpCod=brw_files.Cod"
 		      " AND brw_files.FileBrowser IN (%u,%u,%u,%u)",

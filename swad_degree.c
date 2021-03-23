@@ -1084,12 +1084,12 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
 			  "deg_degrees.ShortName,"		// row[5]
 			  "deg_degrees.FullName,"		// row[6]
 			  "deg_degrees.WWW"			// row[7]
-		   " FROM deg_degrees,"
-		         "crs_courses,"
-		         "crs_usr"
+		    " FROM deg_degrees,"
+		          "crs_courses,"
+		          "crs_users"
 		   " WHERE deg_degrees.DegCod=crs_courses.DegCod"
-		   " AND crs_courses.CrsCod=crs_usr.CrsCod"
-		   " AND crs_usr.Role=%u"
+		     " AND crs_courses.CrsCod=crs_users.CrsCod"
+		     " AND crs_users.Role=%u"
 		   " ORDER BY deg_degrees.ShortName",
 		   (unsigned) Rol_STD);
 
@@ -2128,16 +2128,16 @@ unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery,
       NumDegsWithUsrs = (unsigned)
       DB_QueryCOUNT ("can not get number of degrees with users",
 		     "SELECT COUNT(DISTINCT deg_degrees.DegCod)"
-		     " FROM ins_instits,"
-		           "ctr_centers,"
-		           "deg_degrees,"
-		           "crs_courses,"
-		           "crs_usr"
+		      " FROM ins_instits,"
+		            "ctr_centers,"
+		            "deg_degrees,"
+		            "crs_courses,"
+		            "crs_users"
 		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
-		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		     " AND deg_degrees.DegCod=crs_courses.DegCod"
-		     " AND crs_courses.CrsCod=crs_usr.CrsCod"
-		     " AND crs_usr.Role=%u",
+		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		       " AND deg_degrees.DegCod=crs_courses.DegCod"
+		       " AND crs_courses.CrsCod=crs_users.CrsCod"
+		       " AND crs_users.Role=%u",
 		     SubQuery,(unsigned) Role);
       FigCch_UpdateFigureIntoCache (FigureDegs[Role],Scope,Cod,
 				    FigCch_UNSIGNED,&NumDegsWithUsrs);

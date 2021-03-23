@@ -839,9 +839,9 @@ mysql> DESCRIBE crs_records;
 			"Txt TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(FieldCod,UsrCod))");
 
-   /***** Table crs_usr *****/
+   /***** Table crs_users *****/
 /*
-mysql> DESCRIBE crs_usr;
+mysql> DESCRIBE crs_users;
 +----------+---------------+------+-----+---------+-------+
 | Field    | Type          | Null | Key | Default | Extra |
 +----------+---------------+------+-----+---------+-------+
@@ -852,7 +852,7 @@ mysql> DESCRIBE crs_usr;
 +----------+---------------+------+-----+---------+-------+
 4 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_usr ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_users ("
 			"CrsCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
 			"Role TINYINT NOT NULL DEFAULT 0,"

@@ -890,7 +890,7 @@ static void Fig_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
          NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod);
 	 break;
      case Hie_Lvl_CRS:
-         sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",Gbl.Hierarchy.Crs.CrsCod);
+         sprintf (SubQuery,"crs_users.CrsCod=%ld AND ",Gbl.Hierarchy.Crs.CrsCod);
          NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod);
          NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod);
          NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod);
@@ -1304,14 +1304,14 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void)
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"
-			        "COUNT(DISTINCT crs_usr.UsrCod) AS N"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr"
+			        "COUNT(DISTINCT crs_users.UsrCod) AS N"
+			  " FROM ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users"
 			 " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			 " GROUP BY InsCod"
 			 " ORDER BY N DESC");
          break;
@@ -1319,17 +1319,17 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void)
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"
-			        "COUNT(DISTINCT crs_usr.UsrCod) AS N"
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr"
+			        "COUNT(DISTINCT crs_users.UsrCod) AS N"
+			  " FROM ins_instits,"
+			        "ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users"
 			 " WHERE ins_instits.CtyCod=%ld"
-			 " AND ins_instits.InsCod=ctr_centers.InsCod"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			 " GROUP BY ctr_centers.InsCod"
 			 " ORDER BY N DESC",
 			 Gbl.Hierarchy.Cty.CtyCod);
@@ -1341,15 +1341,15 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void)
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"
-			        "COUNT(DISTINCT crs_usr.UsrCod) AS N"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr"
+			        "COUNT(DISTINCT crs_users.UsrCod) AS N"
+			  " FROM ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users"
 			 " WHERE ctr_centers.InsCod=%ld"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			 " GROUP BY ctr_centers.InsCod"
 			 " ORDER BY N DESC",
 			 Gbl.Hierarchy.Ins.InsCod);
@@ -1956,14 +1956,14 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			              "ctr_centers,"
 			              "deg_degrees,"
 			              "crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "brw_sizes"
 			       " WHERE ins_instits.CtyCod=%ld"
 	                         " AND ins_instits.InsCod=ctr_centers.InsCod"
 			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.UsrCod=brw_sizes.ZoneUsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"
 			         " AND brw_sizes.FileBrowser=%u",
 			       Gbl.Hierarchy.Cty.CtyCod,
 			       (unsigned) FileBrowser);
@@ -2123,13 +2123,13 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			        " FROM ctr_centers,"
 			              "deg_degrees,"
 			              "crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "brw_sizes"
 			       " WHERE ctr_centers.InsCod=%ld"
 			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.UsrCod=brw_sizes.ZoneUsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"
 			         " AND brw_sizes.FileBrowser=%u",
 			       Gbl.Hierarchy.Ins.InsCod,
 			       (unsigned) FileBrowser);
@@ -2278,12 +2278,12 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(brw_sizes.TotalSize)"		// row[6]
 			        " FROM deg_degrees,"
 			              "crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "brw_sizes"
 			       " WHERE deg_degrees.CtrCod=%ld"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.UsrCod=brw_sizes.ZoneUsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"
 			         " AND brw_sizes.FileBrowser=%u",
 			       Gbl.Hierarchy.Ctr.CtrCod,
 			       (unsigned) FileBrowser);
@@ -2421,11 +2421,11 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(brw_sizes.NumFiles),"		// row[5]
 				      "SUM(brw_sizes.TotalSize)"		// row[6]
 			        " FROM crs_courses,"
-			              "crs_usr,"
+			              "crs_users,"
 			              "brw_sizes"
 			       " WHERE crs_courses.DegCod=%ld"
-			         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			         " AND crs_usr.UsrCod=brw_sizes.ZoneUsrCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"
 			         " AND brw_sizes.FileBrowser=%u",
 			       Gbl.Hierarchy.Deg.DegCod,
 			       (unsigned) FileBrowser);
@@ -2552,10 +2552,10 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(brw_sizes.NumFolders),"		// row[4]
 				      "SUM(brw_sizes.NumFiles),"		// row[5]
 				      "SUM(brw_sizes.TotalSize)"		// row[6]
-			        " FROM crs_usr,"
+			        " FROM crs_users,"
 			              "brw_sizes"
-			       " WHERE crs_usr.CrsCod=%ld"
-			         " AND crs_usr.UsrCod=brw_sizes.ZoneUsrCod"
+			       " WHERE crs_users.CrsCod=%ld"
+			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"
 			         " AND brw_sizes.FileBrowser=%u",
 			       Gbl.Hierarchy.Crs.CrsCod,
 			       (unsigned) FileBrowser);
@@ -3598,85 +3598,85 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	 case Hie_Lvl_CTY:
 	    NumRows =
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"
-				   "COUNT(DISTINCT tml_notes.UsrCod)"
-			    " FROM ins_instits,"
-			          "ctr_centers,"
-			          "deg_degrees,"
-			          "crs_courses,"
-			          "crs_usr,"
-			          "tml_notes"
+			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+			     " FROM ins_instits,"
+			           "ctr_centers,"
+			           "deg_degrees,"
+			           "crs_courses,"
+			           "crs_users,"
+			           "tml_notes"
 			    " WHERE ins_instits.CtyCod=%ld"
-			    " AND ins_instits.InsCod=ctr_centers.InsCod"
-			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			    " AND crs_usr.UsrCod=tml_notes.UsrCod"
-			    " AND tml_notes.NoteType=%u",
+			      " AND ins_instits.InsCod=ctr_centers.InsCod"
+			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=crs_users.CrsCod"
+			      " AND crs_users.UsrCod=tml_notes.UsrCod"
+			      " AND tml_notes.NoteType=%u",
 			    Gbl.Hierarchy.Cty.CtyCod,
 			    (unsigned) NoteType);
 	    break;
 	 case Hie_Lvl_INS:
 	    NumRows =
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"
-				   "COUNT(DISTINCT tml_notes.UsrCod)"
-			    " FROM ctr_centers,"
-			          "deg_degrees,"
-			          "crs_courses,"
-			          "crs_usr,"
-			          "tml_notes"
+			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+			     " FROM ctr_centers,"
+			           "deg_degrees,"
+			           "crs_courses,"
+			           "crs_users,"
+			           "tml_notes"
 			    " WHERE ctr_centers.InsCod=%ld"
-			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			    " AND crs_usr.UsrCod=tml_notes.UsrCod"
-			    " AND tml_notes.NoteType=%u",
+			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=crs_users.CrsCod"
+			      " AND crs_users.UsrCod=tml_notes.UsrCod"
+			      " AND tml_notes.NoteType=%u",
 			    Gbl.Hierarchy.Ins.InsCod,
 			    (unsigned) NoteType);
 	    break;
 	 case Hie_Lvl_CTR:
 	    NumRows =
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"
-				   "COUNT(DISTINCT tml_notes.UsrCod)"
-			    " FROM deg_degrees,"
-			          "crs_courses,"
-			          "crs_usr,"
-			          "tml_notes"
+			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+			     " FROM deg_degrees,"
+			           "crs_courses,"
+			           "crs_users,"
+			           "tml_notes"
 			    " WHERE deg_degrees.CtrCod=%ld"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			    " AND crs_usr.UsrCod=tml_notes.UsrCod"
-			    " AND tml_notes.NoteType=%u",
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=crs_users.CrsCod"
+			      " AND crs_users.UsrCod=tml_notes.UsrCod"
+			      " AND tml_notes.NoteType=%u",
 			    Gbl.Hierarchy.Ctr.CtrCod,
 			    (unsigned) NoteType);
 	    break;
 	 case Hie_Lvl_DEG:
 	    NumRows =
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"
-				   "COUNT(DISTINCT tml_notes.UsrCod)"
-			    " FROM crs_courses,"
-			          "crs_usr,"
-			          "tml_notes"
+			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+			     " FROM crs_courses,"
+			           "crs_users,"
+			           "tml_notes"
 			    " WHERE crs_courses.DegCod=%ld"
-			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			    " AND crs_usr.UsrCod=tml_notes.UsrCod"
-			    " AND tml_notes.NoteType=%u",
+			      " AND crs_courses.CrsCod=crs_users.CrsCod"
+			      " AND crs_users.UsrCod=tml_notes.UsrCod"
+			      " AND tml_notes.NoteType=%u",
 			    Gbl.Hierarchy.Deg.DegCod,
 			    (unsigned) NoteType);
 	    break;
 	 case Hie_Lvl_CRS:
 	    NumRows =
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"
-				   "COUNT(DISTINCT tml_notes.UsrCod)"
-			    " FROM crs_usr,"
-			          "tml_notes"
-			    " WHERE crs_usr.CrsCod=%ld"
-			    " AND crs_usr.UsrCod=tml_notes.UsrCod"
-			    " AND tml_notes.NoteType=%u",
+			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+			     " FROM crs_users,"
+			           "tml_notes"
+			    " WHERE crs_users.CrsCod=%ld"
+			      " AND crs_users.UsrCod=tml_notes.UsrCod"
+			      " AND tml_notes.NoteType=%u",
 			    Gbl.Hierarchy.Crs.CrsCod,
 			    (unsigned) NoteType);
 	    break;
@@ -3749,76 +3749,76 @@ static void Fig_GetAndShowTimelineActivityStats (void)
       case Hie_Lvl_CTY:
 	 NumRows =
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"
-			        "COUNT(DISTINCT tml_notes.UsrCod)"
-		         " FROM ins_instits,"
-		               "ctr_centers,"
-		               "deg_degrees,"
-		               "crs_courses,"
-		               "crs_usr,"
-		               "tml_notes"
+		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+			        "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+		          " FROM ins_instits,"
+		                "ctr_centers,"
+		                "deg_degrees,"
+		                "crs_courses,"
+		                "crs_users,"
+		                "tml_notes"
 		         " WHERE ins_instits.CtyCod=%ld"
-		         " AND ins_instits.InsCod=ctr_centers.InsCod"
-		         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		         " AND deg_degrees.DegCod=crs_courses.DegCod"
-		         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-		         " AND crs_usr.UsrCod=tml_notes.UsrCod",
+		           " AND ins_instits.InsCod=ctr_centers.InsCod"
+		           " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		           " AND deg_degrees.DegCod=crs_courses.DegCod"
+		           " AND crs_courses.CrsCod=crs_users.CrsCod"
+		           " AND crs_users.UsrCod=tml_notes.UsrCod",
 		         Gbl.Hierarchy.Cty.CtyCod);
 	 break;
       case Hie_Lvl_INS:
 	 NumRows =
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"
-			        "COUNT(DISTINCT tml_notes.UsrCod)"
-		         " FROM ctr_centers,"
-		               "deg_degrees,"
-		               "crs_courses,"
-		               "crs_usr,"
-		               "tml_notes"
+		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+			        "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+		          " FROM ctr_centers,"
+		                "deg_degrees,"
+		                "crs_courses,"
+		                "crs_users,"
+		                "tml_notes"
 		         " WHERE ctr_centers.InsCod=%ld"
-		         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		         " AND deg_degrees.DegCod=crs_courses.DegCod"
-		         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-		         " AND crs_usr.UsrCod=tml_notes.UsrCod",
+		           " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		           " AND deg_degrees.DegCod=crs_courses.DegCod"
+		           " AND crs_courses.CrsCod=crs_users.CrsCod"
+		           " AND crs_users.UsrCod=tml_notes.UsrCod",
 		         Gbl.Hierarchy.Ins.InsCod);
 	 break;
       case Hie_Lvl_CTR:
 	 NumRows =
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"
-			        "COUNT(DISTINCT tml_notes.UsrCod)"
-		         " FROM deg_degrees,"
-		               "crs_courses,"
-		               "crs_usr,"
-		               "tml_notes"
+		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+			        "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+		          " FROM deg_degrees,"
+		                "crs_courses,"
+		                "crs_users,"
+		                "tml_notes"
 		         " WHERE deg_degrees.CtrCod=%ld"
-		         " AND deg_degrees.DegCod=crs_courses.DegCod"
-		         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-		         " AND crs_usr.UsrCod=tml_notes.UsrCod",
+		           " AND deg_degrees.DegCod=crs_courses.DegCod"
+		           " AND crs_courses.CrsCod=crs_users.CrsCod"
+		           " AND crs_users.UsrCod=tml_notes.UsrCod",
 		         Gbl.Hierarchy.Ctr.CtrCod);
 	 break;
       case Hie_Lvl_DEG:
 	 NumRows =
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"
-			        "COUNT(DISTINCT tml_notes.UsrCod)"
-		         " FROM crs_courses,"
-		               "crs_usr,"
-		               "tml_notes"
+		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+			        "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+		          " FROM crs_courses,"
+		                "crs_users,"
+		                "tml_notes"
 		         " WHERE crs_courses.DegCod=%ld"
-		         " AND crs_courses.CrsCod=crs_usr.CrsCod"
-		         " AND crs_usr.UsrCod=tml_notes.UsrCod",
+		           " AND crs_courses.CrsCod=crs_users.CrsCod"
+		           " AND crs_users.UsrCod=tml_notes.UsrCod",
 		         Gbl.Hierarchy.Deg.DegCod);
 	 break;
       case Hie_Lvl_CRS:
 	 NumRows =
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"
-			        "COUNT(DISTINCT tml_notes.UsrCod)"
-		         " FROM crs_usr,"
-		               "tml_notes"
-		         " WHERE crs_usr.CrsCod=%ld"
-		         " AND crs_usr.UsrCod=tml_notes.UsrCod",
+		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+			        "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+		          " FROM crs_users,"
+		                "tml_notes"
+		         " WHERE crs_users.CrsCod=%ld"
+		           " AND crs_users.UsrCod=tml_notes.UsrCod",
 		         Gbl.Hierarchy.Crs.CrsCod);
 	 break;
       default:
@@ -3952,18 +3952,18 @@ static void Fig_GetAndShowFollowStats (void)
 	    NumUsrs = (unsigned)
 	    DB_QueryCOUNT ("can not get the total number of following/followers",
 			   "SELECT COUNT(DISTINCT usr_follow.%s)"
-			   " FROM ins_instits,"
-			         "ctr_centers,"
-			         "deg_degrees,"
-			         "crs_courses,"
-			         "crs_usr,"
-			         "usr_follow"
+			    " FROM ins_instits,"
+			          "ctr_centers,"
+			          "deg_degrees,"
+			          "crs_courses,"
+			          "crs_users,"
+			          "usr_follow"
 			   " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_follow.%s",
+			     " AND ins_instits.InsCod=ctr_centers.InsCod"
+			     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			     " AND deg_degrees.DegCod=crs_courses.DegCod"
+			     " AND crs_courses.CrsCod=crs_users.CrsCod"
+			     " AND crs_users.UsrCod=usr_follow.%s",
 			   FieldDB[Fol],
 			   Gbl.Hierarchy.Cty.CtyCod,
 			   FieldDB[Fol]);
@@ -3972,16 +3972,16 @@ static void Fig_GetAndShowFollowStats (void)
 	    NumUsrs = (unsigned)
 	    DB_QueryCOUNT ("can not get the total number of following/followers",
 			   "SELECT COUNT(DISTINCT usr_follow.%s)"
-			   " FROM ctr_centers,"
-			         "deg_degrees,"
-			         "crs_courses,"
-			         "crs_usr,"
-			         "usr_follow"
+			    " FROM ctr_centers,"
+			          "deg_degrees,"
+			          "crs_courses,"
+			          "crs_users,"
+			          "usr_follow"
 			   " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_follow.%s",
+			     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			     " AND deg_degrees.DegCod=crs_courses.DegCod"
+			     " AND crs_courses.CrsCod=crs_users.CrsCod"
+			     " AND crs_users.UsrCod=usr_follow.%s",
 			   FieldDB[Fol],
 			   Gbl.Hierarchy.Ins.InsCod,
 			   FieldDB[Fol]);
@@ -3992,12 +3992,12 @@ static void Fig_GetAndShowFollowStats (void)
 			   "SELECT COUNT(DISTINCT usr_follow.%s)"
 			   " FROM deg_degrees,"
 			         "crs_courses,"
-			         "crs_usr,"
+			         "crs_users,"
 			         "usr_follow"
 			   " WHERE deg_degrees.CtrCod=%ld"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_follow.%s",
+			     " AND deg_degrees.DegCod=crs_courses.DegCod"
+			     " AND crs_courses.CrsCod=crs_users.CrsCod"
+			     " AND crs_users.UsrCod=usr_follow.%s",
 			   FieldDB[Fol],
 			   Gbl.Hierarchy.Ctr.CtrCod,
 			   FieldDB[Fol]);
@@ -4006,12 +4006,12 @@ static void Fig_GetAndShowFollowStats (void)
 	    NumUsrs = (unsigned)
 	    DB_QueryCOUNT ("can not get the total number of following/followers",
 			   "SELECT COUNT(DISTINCT usr_follow.%s)"
-			   " FROM crs_courses,"
-			         "crs_usr,"
-			         "usr_follow"
+			    " FROM crs_courses,"
+			          "crs_users,"
+			          "usr_follow"
 			   " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_follow.%s",
+			     " AND crs_courses.CrsCod=crs_users.CrsCod"
+			     " AND crs_users.UsrCod=usr_follow.%s",
 			   FieldDB[Fol],
 			   Gbl.Hierarchy.Deg.DegCod,
 			   FieldDB[Fol]);
@@ -4020,10 +4020,10 @@ static void Fig_GetAndShowFollowStats (void)
 	    NumUsrs = (unsigned)
 	    DB_QueryCOUNT ("can not get the total number of following/followers",
 			   "SELECT COUNT(DISTINCT usr_follow.%s)"
-			   " FROM crs_usr,"
-			         "usr_follow"
-			   " WHERE crs_usr.CrsCod=%ld"
-			   " AND crs_usr.UsrCod=usr_follow.%s",
+			    " FROM crs_users,"
+			          "usr_follow"
+			   " WHERE crs_users.CrsCod=%ld"
+			     " AND crs_users.UsrCod=usr_follow.%s",
 			   FieldDB[Fol],
 			   Gbl.Hierarchy.Crs.CrsCod,
 			   FieldDB[Fol]);
@@ -4065,31 +4065,31 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_SYS:
 	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				       " per survey",
-			    "SELECT AVG(N) FROM "
+			    "SELECT AVG(N) FROM "				// row[0]
 			    "(SELECT COUNT(%s) AS N"
-			    " FROM usr_follow"
-			    " GROUP BY %s) AS F",
+			      " FROM usr_follow"
+			     " GROUP BY %s) AS F",
 			    FieldDB[Fol],
 			    FieldDB[1 - Fol]);
 	    break;
 	 case Hie_Lvl_CTY:
 	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				       " per survey",
-			    "SELECT AVG(N) FROM "
+			    "SELECT AVG(N) FROM "				// row[0]
 			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			    " FROM ins_instits,"
-			          "ctr_centers,"
-			          "deg_degrees,"
-			          "crs_courses,"
-			          "crs_usr,"
-			          "usr_follow"
-			    " WHERE ins_instits.CtyCod=%ld"
-			    " AND ins_instits.InsCod=ctr_centers.InsCod"
-			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			    " AND crs_usr.UsrCod=usr_follow.%s"
-			    " GROUP BY %s) AS F",
+			      " FROM ins_instits,"
+			            "ctr_centers,"
+			            "deg_degrees,"
+			            "crs_courses,"
+			            "crs_users,"
+			            "usr_follow"
+			     " WHERE ins_instits.CtyCod=%ld"
+			       " AND ins_instits.InsCod=ctr_centers.InsCod"
+			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			       " AND deg_degrees.DegCod=crs_courses.DegCod"
+			       " AND crs_courses.CrsCod=crs_users.CrsCod"
+			       " AND crs_users.UsrCod=usr_follow.%s"
+			     " GROUP BY %s) AS F",
 			    FieldDB[Fol],
 			    Gbl.Hierarchy.Cty.CtyCod,
 			    FieldDB[Fol],
@@ -4098,19 +4098,19 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_INS:
 	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				       " per survey",
-			    "SELECT AVG(N) FROM "
+			    "SELECT AVG(N) FROM "				// row[0]
 			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			    " FROM ctr_centers,"
-			          "deg_degrees,"
-			          "crs_courses,"
-			          "crs_usr,"
-			          "usr_follow"
-			    " WHERE ctr_centers.InsCod=%ld"
-			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			    " AND crs_usr.UsrCod=usr_follow.%s"
-			    " GROUP BY %s) AS F",
+			      " FROM ctr_centers,"
+			            "deg_degrees,"
+			            "crs_courses,"
+			            "crs_users,"
+			            "usr_follow"
+			     " WHERE ctr_centers.InsCod=%ld"
+			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			       " AND deg_degrees.DegCod=crs_courses.DegCod"
+			       " AND crs_courses.CrsCod=crs_users.CrsCod"
+			       " AND crs_users.UsrCod=usr_follow.%s"
+			     " GROUP BY %s) AS F",
 			    FieldDB[Fol],
 			    Gbl.Hierarchy.Ins.InsCod,
 			    FieldDB[Fol],
@@ -4119,17 +4119,17 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_CTR:
 	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				       " per survey",
-			    "SELECT AVG(N) FROM "
+			    "SELECT AVG(N) FROM "				// row[0]
 			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			    " FROM deg_degrees,"
-			          "crs_courses,"
-			          "crs_usr,"
-			          "usr_follow"
-			    " WHERE deg_degrees.CtrCod=%ld"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			    " AND crs_usr.UsrCod=usr_follow.%s"
-			    " GROUP BY %s) AS F",
+			      " FROM deg_degrees,"
+			            "crs_courses,"
+			            "crs_users,"
+			            "usr_follow"
+			     " WHERE deg_degrees.CtrCod=%ld"
+			       " AND deg_degrees.DegCod=crs_courses.DegCod"
+			       " AND crs_courses.CrsCod=crs_users.CrsCod"
+			       " AND crs_users.UsrCod=usr_follow.%s"
+			     " GROUP BY %s) AS F",
 			    FieldDB[Fol],
 			    Gbl.Hierarchy.Ctr.CtrCod,
 			    FieldDB[Fol],
@@ -4138,15 +4138,15 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_DEG:
 	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				       " per survey",
-			    "SELECT AVG(N) FROM "
+			    "SELECT AVG(N) FROM "				// row[0]
 			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			    " FROM crs_courses,"
-			          "crs_usr,"
-			          "usr_follow"
-			    " WHERE crs_courses.DegCod=%ld"
-			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			    " AND crs_usr.UsrCod=usr_follow.%s"
-			    " GROUP BY %s) AS F",
+			      " FROM crs_courses,"
+			            "crs_users,"
+			            "usr_follow"
+			     " WHERE crs_courses.DegCod=%ld"
+			       " AND crs_courses.CrsCod=crs_users.CrsCod"
+			       " AND crs_users.UsrCod=usr_follow.%s"
+			     " GROUP BY %s) AS F",
 			    FieldDB[Fol],
 			    Gbl.Hierarchy.Deg.DegCod,
 			    FieldDB[Fol],
@@ -4155,13 +4155,13 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_CRS:
 	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				       " per survey",
-			    "SELECT AVG(N) FROM "
+			    "SELECT AVG(N) FROM "				// row[0]
 			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			    " FROM crs_usr,"
-			          "usr_follow"
-			    " WHERE crs_usr.CrsCod=%ld"
-			    " AND crs_usr.UsrCod=usr_follow.%s"
-			    " GROUP BY %s) AS F",
+			      " FROM crs_users,"
+			            "usr_follow"
+			     " WHERE crs_users.CrsCod=%ld"
+			       " AND crs_users.UsrCod=usr_follow.%s"
+			     " GROUP BY %s) AS F",
 			    FieldDB[Fol],
 			    Gbl.Hierarchy.Crs.CrsCod,
 			    FieldDB[Fol],
@@ -5807,75 +5807,75 @@ unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 	 NumUsrs = (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		        " FROM ins_instits,"
-			      "ctr_centers,"
-			      "deg_degrees,"
-			      "crs_courses,"
-			      "crs_usr,"
-			      "usr_data"
+		         " FROM ins_instits,"
+			       "ctr_centers,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "crs_users,"
+			       "usr_data"
 		        " WHERE ins_instits.CtyCod=%ld"
-		        " AND ins_instits.InsCod=ctr_centers.InsCod"
-		        " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		        " AND deg_degrees.DegCod=crs_courses.DegCod"
-		        " AND crs_courses.CrsCod=crs_usr.CrsCod"
-		        " AND crs_usr.UsrCod=usr_data.UsrCod"
-		        " AND %s",
+		          " AND ins_instits.InsCod=ctr_centers.InsCod"
+		          " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		          " AND deg_degrees.DegCod=crs_courses.DegCod"
+		          " AND crs_courses.CrsCod=crs_users.CrsCod"
+		          " AND crs_users.UsrCod=usr_data.UsrCod"
+		          " AND %s",
 		        Gbl.Hierarchy.Cty.CtyCod,SubQuery);
 	 break;
       case Hie_Lvl_INS:
 	 NumUsrs = (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		        " FROM ctr_centers,"
-		              "deg_degrees,"
-		              "crs_courses,"
-		              "crs_usr,"
-		              "usr_data"
+		         " FROM ctr_centers,"
+		               "deg_degrees,"
+		               "crs_courses,"
+		               "crs_users,"
+		               "usr_data"
 		        " WHERE ctr_centers.InsCod=%ld"
-		        " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		        " AND deg_degrees.DegCod=crs_courses.DegCod"
-		        " AND crs_courses.CrsCod=crs_usr.CrsCod"
-		        " AND crs_usr.UsrCod=usr_data.UsrCod"
-		        " AND %s",
+		          " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		          " AND deg_degrees.DegCod=crs_courses.DegCod"
+		          " AND crs_courses.CrsCod=crs_users.CrsCod"
+		          " AND crs_users.UsrCod=usr_data.UsrCod"
+		          " AND %s",
 		        Gbl.Hierarchy.Ins.InsCod,SubQuery);
 	 break;
       case Hie_Lvl_CTR:
 	 NumUsrs = (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		        " FROM deg_degrees,"
-		              "crs_courses,"
-		              "crs_usr,"
-		              "usr_data"
+		         " FROM deg_degrees,"
+		               "crs_courses,"
+		               "crs_users,"
+		               "usr_data"
 		        " WHERE deg_degrees.CtrCod=%ld"
-		        " AND deg_degrees.DegCod=crs_courses.DegCod"
-		        " AND crs_courses.CrsCod=crs_usr.CrsCod"
-		        " AND crs_usr.UsrCod=usr_data.UsrCod"
-		        " AND %s",
+		          " AND deg_degrees.DegCod=crs_courses.DegCod"
+		          " AND crs_courses.CrsCod=crs_users.CrsCod"
+		          " AND crs_users.UsrCod=usr_data.UsrCod"
+		          " AND %s",
 		        Gbl.Hierarchy.Ctr.CtrCod,SubQuery);
 	 break;
       case Hie_Lvl_DEG:
 	 NumUsrs = (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		        " FROM crs_courses,"
-		              "crs_usr,"
-		              "usr_data"
+		         " FROM crs_courses,"
+		               "crs_users,"
+		               "usr_data"
 		        " WHERE crs_courses.DegCod=%ld"
-		        " AND crs_courses.CrsCod=crs_usr.CrsCod"
-		        " AND crs_usr.UsrCod=usr_data.UsrCod"
-		        " AND %s",
+		          " AND crs_courses.CrsCod=crs_users.CrsCod"
+		          " AND crs_users.UsrCod=usr_data.UsrCod"
+		          " AND %s",
 		        Gbl.Hierarchy.Deg.DegCod,SubQuery);
 	 break;
       case Hie_Lvl_CRS:
 	 NumUsrs = (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		        " FROM crs_usr,"
-		              "usr_data"
-		        " WHERE crs_usr.CrsCod=%ld"
-		        " AND crs_usr.UsrCod=usr_data.UsrCod"
-		        " AND %s",
+		         " FROM crs_users,"
+		               "usr_data"
+		        " WHERE crs_users.CrsCod=%ld"
+		          " AND crs_users.UsrCod=usr_data.UsrCod"
+		          " AND %s",
 		        Gbl.Hierarchy.Crs.CrsCod,SubQuery);
 	 break;
       default:

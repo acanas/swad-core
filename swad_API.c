@@ -661,9 +661,12 @@ static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
      {
       /* Get the role in the given course */
       if (DB_QuerySELECT (&mysql_res,"can not get user's role",
-			  "SELECT Role FROM crs_usr"
-			  " WHERE CrsCod=%ld AND UsrCod=%ld",
-			  CrsCod,UsrDat->UsrCod))	// User belongs to course
+			  "SELECT Role"
+			   " FROM crs_users"
+			  " WHERE CrsCod=%ld"
+			    " AND UsrCod=%ld",
+			  CrsCod,
+			  UsrDat->UsrCod))	// User belongs to course
 	{
 	 row = mysql_fetch_row (mysql_res);
 	 if (row[0])
@@ -693,7 +696,8 @@ static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
       /* Get the maximum role in any course */
       if (DB_QuerySELECT (&mysql_res,"can not get user's role",
 			  "SELECT MAX(Role)"
-			  " FROM crs_usr WHERE UsrCod=%ld",
+			   " FROM crs_users"
+			  " WHERE UsrCod=%ld",
 			  UsrDat->UsrCod) == 1)
 	{
 	 row = mysql_fetch_row (mysql_res);
@@ -1375,11 +1379,11 @@ int swad__getCourses (struct soap *soap,
 			      "SELECT crs_courses.CrsCod,"
 				     "crs_courses.ShortName,"
 				     "crs_courses.FullName,"
-				     "crs_usr.Role"
-			      " FROM crs_usr,"
-			            "crs_courses"
-			      " WHERE crs_usr.UsrCod=%ld"
-			      " AND crs_usr.CrsCod=crs_courses.CrsCod"
+				     "crs_users.Role"
+			       " FROM crs_users,"
+			             "crs_courses"
+			      " WHERE crs_users.UsrCod=%ld"
+			        " AND crs_users.CrsCod=crs_courses.CrsCod"
 			      " ORDER BY crs_courses.FullName",
 			      Gbl.Usrs.Me.UsrDat.UsrCod);
 
@@ -3013,18 +3017,18 @@ int swad__getAttendanceUsers (struct soap *soap,
       // Subquery: list of users in groups of this attendance event...
       // ...who have no entry in attendance list of users
       sprintf (SubQuery,"SELECT DISTINCT crs_grp_usr.UsrCod AS UsrCod,"
-	                      "'N' AS Present"
+	                       "'N' AS Present"
 		         " FROM att_groups,"
 		               "crs_grp,"
 		               "crs_grp_types,"
-		               "crs_usr,"
+		               "crs_users,"
 		               "crs_grp_usr"
 		        " WHERE att_groups.AttCod=%ld"
 		          " AND att_groups.GrpCod=crs_grp.GrpCod"
 		          " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-		          " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
-		          " AND crs_usr.Role=%u"
-		          " AND crs_usr.UsrCod=crs_grp_usr.UsrCod"
+		          " AND crs_grp_types.CrsCod=crs_users.CrsCod"
+		          " AND crs_users.Role=%u"
+		          " AND crs_users.UsrCod=crs_grp_usr.UsrCod"
 		          " AND crs_grp_usr.GrpCod=att_groups.GrpCod"
 		          " AND crs_grp_usr.UsrCod NOT IN"
 		              " (SELECT UsrCod"
@@ -3037,14 +3041,14 @@ int swad__getAttendanceUsers (struct soap *soap,
       // Event for the whole course
       // Subquery: list of users in the course of this attendance event...
       // ...who have no entry in attendance list of users
-      sprintf (SubQuery,"SELECT crs_usr.UsrCod AS UsrCod,"	// row[0]
+      sprintf (SubQuery,"SELECT crs_users.UsrCod AS UsrCod,"	// row[0]
 	                       "'N' AS Present"			// row[1]
 		         " FROM att_events,"
-		               "crs_usr"
+		               "crs_users"
 		        " WHERE att_events.AttCod=%ld"
-		          " AND att_events.CrsCod=crs_usr.CrsCod"
-		          " AND crs_usr.Role=%u"
-		          " AND crs_usr.UsrCod NOT IN"
+		          " AND att_events.CrsCod=crs_users.CrsCod"
+		          " AND crs_users.Role=%u"
+		          " AND crs_users.UsrCod NOT IN"
 		              " (SELECT UsrCod"
 		                 " FROM att_users"
 		                " WHERE AttCod=%ld)",
@@ -6143,19 +6147,19 @@ int swad__getLastLocation (struct soap *soap,
    if (DB_QueryCOUNT ("can not get session data",
 		       "SELECT COUNT(*) FROM "
 		       "(SELECT DISTINCT deg_degrees.CtrCod"
-		       " FROM crs_usr,"
-		             "crs_courses,"
-		             "deg_degrees"
-		       " WHERE crs_usr.UsrCod=%ld"
-		       " AND crs_usr.CrsCod=crs_courses.CrsCod"
-		       " AND crs_courses.DegCod=deg_degrees.DegCod) AS C1,"	// centers of my courses
+		         " FROM crs_users,"
+		               "crs_courses,"
+		               "deg_degrees"
+		        " WHERE crs_users.UsrCod=%ld"
+		          " AND crs_users.CrsCod=crs_courses.CrsCod"
+		          " AND crs_courses.DegCod=deg_degrees.DegCod) AS C1,"	// centers of my courses
 		       "(SELECT DISTINCT deg_degrees.CtrCod"
-		       " FROM crs_usr,"
-		             "crs_courses,"
-		             "deg_degrees"
-		       " WHERE crs_usr.UsrCod=%d"
-		       " AND crs_usr.CrsCod=crs_courses.CrsCod"
-		       " AND crs_courses.DegCod=deg_degrees.DegCod) AS C2"	// centers of user's courses
+		         " FROM crs_users,"
+		               "crs_courses,"
+		               "deg_degrees"
+		        " WHERE crs_users.UsrCod=%d"
+		          " AND crs_users.CrsCod=crs_courses.CrsCod"
+		          " AND crs_courses.DegCod=deg_degrees.DegCod) AS C2"	// centers of user's courses
 		       " WHERE C1.CtrCod=C2.CtrCod",
 	               Gbl.Usrs.Me.UsrDat.UsrCod,
 	               userCode))

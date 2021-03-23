@@ -1893,70 +1893,70 @@ unsigned Agd_GetNumUsrsWithEvents (Hie_Lvl_Level_t Scope)
        case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
                          "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr,"
-			       "agd_agendas"
+			  " FROM ins_instits,"
+			        "ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "agd_agendas"
 			 " WHERE ins_instits.CtyCod=%ld"
-			 " AND ins_instits.InsCod=ctr_centers.InsCod"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.Status=0"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.Status=0"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=agd_agendas.UsrCod",
 		         Gbl.Hierarchy.Cty.CtyCod);
          break;
        case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
                          "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr,"
-			       "agd_agendas"
+			  " FROM ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "agd_agendas"
 			 " WHERE ctr_centers.InsCod=%ld"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.Status=0"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.Status=0"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
                          "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
-			 " FROM deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr,"
-			       "agd_agendas"
+			 "  FROM deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "agd_agendas"
 			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.Status=0"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.Status=0"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
                          "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
-			 " FROM crs_courses,"
-			       "crs_usr,"
-			       "agd_agendas"
+			  " FROM crs_courses,"
+			        "crs_users,"
+			        "agd_agendas"
 			 " WHERE crs_courses.DegCod=%ld"
-			 " AND crs_courses.Status=0"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
+			   " AND crs_courses.Status=0"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
                          "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
-			 " FROM crs_usr,"
-			       "agd_agendas"
-			 " WHERE crs_usr.CrsCod=%ld"
-			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
+			  " FROM crs_users,"
+			        "agd_agendas"
+			 " WHERE crs_users.CrsCod=%ld"
+			   " AND crs_users.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
@@ -1998,66 +1998,66 @@ unsigned Agd_GetNumEvents (Hie_Lvl_Level_t Scope)
       case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of events",
                          "SELECT COUNT(*)"
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr,"
-			       "agd_agendas"
+			  " FROM ins_instits,"
+			        "ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "agd_agendas"
 			 " WHERE ins_instits.CtyCod=%ld"
-			 " AND ins_instits.InsCod=ctr_centers.InsCod"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of events",
                          "SELECT COUNT(*)"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr,"
-			       "agd_agendas"
+			  " FROM ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "agd_agendas"
 			 " WHERE ctr_centers.InsCod=%ld"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of events",
                          "SELECT COUNT(*)"
-			 " FROM deg_degrees,"
-			       "crs_courses,"
-			       "crs_usr,"
-			       "agd_agendas"
+			  " FROM deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "agd_agendas"
 			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of events",
                          "SELECT COUNT(*)"
-			 " FROM crs_courses,"
-			       "crs_usr,"
-			       "agd_agendas"
+			  " FROM crs_courses,"
+			        "crs_users,"
+			        "agd_agendas"
 			 " WHERE crs_courses.DegCod=%ld"
-			 " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of events",
                          "SELECT COUNT(*)"
-			 " FROM crs_usr,"
-			       "agd_agendas"
-			 " WHERE crs_usr.CrsCod=%ld"
-			 " AND crs_usr.UsrCod=agd_agendas.UsrCod",
+			  " FROM crs_users,"
+			        "agd_agendas"
+			 " WHERE crs_users.CrsCod=%ld"
+			   " AND crs_users.UsrCod=agd_agendas.UsrCod",
                          Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:

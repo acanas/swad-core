@@ -1013,13 +1013,17 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 				 "SELECT my_courses.CrsCod,"		// row[0]
                                         "COUNT(*) AS N"			// row[1]
                                  " FROM"
-                                 " (SELECT CrsCod FROM crs_usr"
-                                 " WHERE UsrCod=%ld AND Role=%u) AS my_courses"	// It's imperative to use a derived table to not block crs_usr!
+                                 " (SELECT CrsCod"
+                                    " FROM crs_users"
+                                   " WHERE UsrCod=%ld"
+                                     " AND Role=%u) AS my_courses"	// It's imperative to use a derived table to not block crs_usr!
                                  " LEFT JOIN log"
                                  " ON (my_courses.CrsCod=log.CrsCod)"
-                                 " WHERE log.UsrCod=%ld AND log.Role=%u"
+                                 " WHERE log.UsrCod=%ld"
+                                   " AND log.Role=%u"
                                  " GROUP BY my_courses.CrsCod"
-                                 " ORDER BY N DESC,my_courses.CrsCod DESC",
+                                 " ORDER BY N DESC,"
+                                           "my_courses.CrsCod DESC",
 				 Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role,
 				 Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role);
 

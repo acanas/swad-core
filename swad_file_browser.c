@@ -2681,7 +2681,8 @@ bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
    /***** Get all the users belonging to current course from database *****/
    NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get users"
 						   " from current course",
-				        "SELECT UsrCod FROM crs_usr"
+				        "SELECT UsrCod"		// row[0]
+				         " FROM crs_users"
 				        " WHERE CrsCod=%ld",
 					Gbl.Hierarchy.Crs.CrsCod);
 
@@ -2796,7 +2797,8 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
    /***** Get all the users belonging to current course from database *****/
    NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get users"
 						   " from current course",
-				        "SELECT UsrCod FROM crs_usr"
+				        "SELECT UsrCod"		// row[0]
+				         " FROM crs_users"
 				        " WHERE CrsCod=%ld",
 					Gbl.Hierarchy.Crs.CrsCod);
 
@@ -2915,7 +2917,8 @@ void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
    /***** Get all the users belonging to current course from database *****/
    NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get users"
 						   " from current course",
-				        "SELECT UsrCod FROM crs_usr"
+				        "SELECT UsrCod"		// row[0]
+				         " FROM crs_users"
 				        " WHERE CrsCod=%ld",
 					Gbl.Hierarchy.Crs.CrsCod);
 

@@ -355,20 +355,20 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
                NumCrss = (unsigned)
                DB_QuerySELECT (mysql_res,"can not get courses",
 			       "SELECT DISTINCTROW "
-				      "deg_degrees.FullName,"
-				      "crs_courses.FullName,"
-				      "crs_courses.CrsCod,"
-				      "crs_courses.InsCrsCod"
-			       " FROM deg_degrees,"
-			             "crs_courses,"
-			             "crs_usr,"
-			             "usr_data"
+				      "deg_degrees.FullName,"	// row[0]
+				      "crs_courses.FullName,"	// row[1]
+				      "crs_courses.CrsCod,"	// row[2]
+				      "crs_courses.InsCrsCod"	// row[3]
+			        " FROM deg_degrees,"
+			              "crs_courses,"
+			              "crs_users,"
+			              "usr_data"
 			       " WHERE deg_degrees.DegTypCod=%ld"
-			       " AND deg_degrees.DegCod=crs_courses.DegCod"
-			       " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			       " AND crs_usr.Role=%u"
-			       " AND crs_usr.UsrCod=usr_data.UsrCod"
-			       " AND usr_data.DptCod=%ld"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.UsrCod=usr_data.UsrCod"
+			         " AND usr_data.DptCod=%ld"
 			       " ORDER BY deg_degrees.FullName,"
 					 "crs_courses.FullName",
 			       Indicators->DegTypCod,
@@ -378,19 +378,19 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
                NumCrss = (unsigned)
                DB_QuerySELECT (mysql_res,"can not get courses",
 			       "SELECT DISTINCTROW "
-				      "deg_degrees.FullName,"
-				      "crs_courses.FullName,"
-				      "crs_courses.CrsCod,"
-				      "crs_courses.InsCrsCod"
-			       " FROM deg_degrees,"
-			             "crs_courses,"
-			             "crs_usr,"
-			             "usr_data"
+				      "deg_degrees.FullName,"	// row[0]
+				      "crs_courses.FullName,"	// row[1]
+				      "crs_courses.CrsCod,"	// row[2]
+				      "crs_courses.InsCrsCod"	// row[3]
+			        " FROM deg_degrees,"
+			              "crs_courses,"
+			              "crs_users,"
+			              "usr_data"
 			       " WHERE deg_degrees.DegCod=crs_courses.DegCod"
-			       " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			       " AND crs_usr.Role=%u"
-			       " AND crs_usr.UsrCod=usr_data.UsrCod"
-			       " AND usr_data.DptCod=%ld"
+			         " AND crs_courses.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.Role=%u"
+			         " AND crs_users.UsrCod=usr_data.UsrCod"
+			         " AND usr_data.DptCod=%ld"
 			       " ORDER BY deg_degrees.FullName,"
 				 	 "crs_courses.FullName",
 			       (unsigned) Rol_TCH,
@@ -401,26 +401,26 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
             if (Indicators->DegTypCod > 0)
                NumCrss = (unsigned)
                DB_QuerySELECT (mysql_res,"can not get courses",
-			       "SELECT deg_degrees.FullName,"
-				      "crs_courses.FullName,"
-				      "crs_courses.CrsCod,"
-				      "crs_courses.InsCrsCod"
-			       " FROM deg_degrees,"
-			             "crs_courses"
+			       "SELECT deg_degrees.FullName,"	// row[0]
+				      "crs_courses.FullName,"	// row[1]
+				      "crs_courses.CrsCod,"	// row[2]
+				      "crs_courses.InsCrsCod"	// row[3]
+			        " FROM deg_degrees,"
+			              "crs_courses"
 			       " WHERE deg_degrees.DegTypCod=%ld"
-			       " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			       " ORDER BY deg_degrees.FullName,"
 					 "crs_courses.FullName",
 			       Indicators->DegTypCod);
             else
                NumCrss = (unsigned)
                DB_QuerySELECT (mysql_res,"can not get courses",
-			       "SELECT deg_degrees.FullName,"
-				      "crs_courses.FullName,"
-				      "crs_courses.CrsCod,"
-				      "crs_courses.InsCrsCod"
-			       " FROM deg_degrees,"
-			             "crs_courses"
+			       "SELECT deg_degrees.FullName,"	// row[0]
+				      "crs_courses.FullName,"	// row[1]
+				      "crs_courses.CrsCod,"	// row[2]
+				      "crs_courses.InsCrsCod"	// row[3]
+			        " FROM deg_degrees,"
+			              "crs_courses"
 			       " WHERE deg_degrees.DegCod=crs_courses.DegCod"
 			       " ORDER BY deg_degrees.FullName,"
 					 "crs_courses.FullName");
@@ -431,24 +431,24 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
             NumCrss = (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
 			    "SELECT DISTINCTROW "
-				   "deg_degrees.FullName,"
-				   "crs_courses.FullName,"
-				   "crs_courses.CrsCod,"
-				   "crs_courses.InsCrsCod"
-			    " FROM ins_instits,"
-			          "ctr_centers,"
-			          "deg_degrees,"
-			          "crs_courses,"
-			          "crs_usr,"
-			          "usr_data"
+				   "deg_degrees.FullName,"	// row[0]
+				   "crs_courses.FullName,"	// row[1]
+				   "crs_courses.CrsCod,"	// row[2]
+				   "crs_courses.InsCrsCod"	// row[3]
+			     " FROM ins_instits,"
+			           "ctr_centers,"
+			           "deg_degrees,"
+			           "crs_courses,"
+			           "crs_users,"
+			           "usr_data"
 			    " WHERE ins_instits.CtyCod=%ld"
-			    " AND ins_instits.InsCod=ctr_centers.InsCod"
-			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			    " AND crs_usr.Role=%u"
-			    " AND crs_usr.UsrCod=usr_data.UsrCod"
-			    " AND usr_data.DptCod=%ld"
+			      " AND ins_instits.InsCod=ctr_centers.InsCod"
+			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=crs_users.CrsCod"
+			      " AND crs_users.Role=%u"
+			      " AND crs_users.UsrCod=usr_data.UsrCod"
+			      " AND usr_data.DptCod=%ld"
 			    " ORDER BY deg_degrees.FullName,"
 				      "crs_courses.FullName",
 			    Gbl.Hierarchy.Cty.CtyCod,
@@ -457,18 +457,18 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
          else
             NumCrss = (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT deg_degrees.FullName,"
-				   "crs_courses.FullName,"
-				   "crs_courses.CrsCod,"
-				   "crs_courses.InsCrsCod"
-			    " FROM ins_instits,"
-			          "ctr_centers,"
-			          "deg_degrees,"
-			          "crs_courses"
+			    "SELECT deg_degrees.FullName,"	// row[0]
+				   "crs_courses.FullName,"	// row[1]
+				   "crs_courses.CrsCod,"	// row[2]
+				   "crs_courses.InsCrsCod"	// row[3]
+			     " FROM ins_instits,"
+			           "ctr_centers,"
+			           "deg_degrees,"
+			           "crs_courses"
 			    " WHERE ins_instits.CtyCod=%ld"
-			    " AND ins_instits.InsCod=ctr_centers.InsCod"
-			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND ins_instits.InsCod=ctr_centers.InsCod"
+			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
 			    " ORDER BY deg_degrees.FullName,"
 				      "crs_courses.FullName",
 			    Gbl.Hierarchy.Cty.CtyCod);
@@ -478,22 +478,22 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
             NumCrss = (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
 			    "SELECT DISTINCTROW "
-				   "deg_degrees.FullName,"
-				   "crs_courses.FullName,"
-				   "crs_courses.CrsCod,"
-				   "crs_courses.InsCrsCod"
-			    " FROM ctr_centers,"
-			          "deg_degrees,"
-			          "crs_courses,"
-			          "crs_usr,"
-			          "usr_data"
+				   "deg_degrees.FullName,"	// row[0]
+				   "crs_courses.FullName,"	// row[1]
+				   "crs_courses.CrsCod,"	// row[2]
+				   "crs_courses.InsCrsCod"	// row[3]
+			     " FROM ctr_centers,"
+			           "deg_degrees,"
+			           "crs_courses,"
+			           "crs_users,"
+			           "usr_data"
 			    " WHERE ctr_centers.InsCod=%ld"
-			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			    " AND crs_usr.Role=%u"
-			    " AND crs_usr.UsrCod=usr_data.UsrCod"
-			    " AND usr_data.DptCod=%ld"
+			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=crs_users.CrsCod"
+			      " AND crs_users.Role=%u"
+			      " AND crs_users.UsrCod=usr_data.UsrCod"
+			      " AND usr_data.DptCod=%ld"
 			    " ORDER BY deg_degrees.FullName,"
 				      "crs_courses.FullName",
 			    Gbl.Hierarchy.Ins.InsCod,
@@ -502,16 +502,16 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
          else
             NumCrss = (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT deg_degrees.FullName,"
-				   "crs_courses.FullName,"
-				   "crs_courses.CrsCod,"
-				   "crs_courses.InsCrsCod"
-			    " FROM ctr_centers,"
-			          "deg_degrees,"
-			          "crs_courses"
+			    "SELECT deg_degrees.FullName,"	// row[0]
+				   "crs_courses.FullName,"	// row[1]
+				   "crs_courses.CrsCod,"	// row[2]
+				   "crs_courses.InsCrsCod"	// row[3]
+			     " FROM ctr_centers,"
+			           "deg_degrees,"
+			           "crs_courses"
 			    " WHERE ctr_centers.InsCod=%ld"
-			    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
 			    " ORDER BY deg_degrees.FullName,"
 				      "crs_courses.FullName",
 			    Gbl.Hierarchy.Ins.InsCod);
@@ -521,20 +521,20 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
             NumCrss = (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
 			    "SELECT DISTINCTROW "
-				   "deg_degrees.FullName,"
-				   "crs_courses.FullName,"
-				   "crs_courses.CrsCod,"
-				   "crs_courses.InsCrsCod"
-			    " FROM deg_degrees,"
-			          "crs_courses,"
-			          "crs_usr,"
-			          "usr_data"
+				   "deg_degrees.FullName,"	// row[0]
+				   "crs_courses.FullName,"	// row[1]
+				   "crs_courses.CrsCod,"	// row[2]
+				   "crs_courses.InsCrsCod"	// row[3]
+			     " FROM deg_degrees,"
+			           "crs_courses,"
+			           "crs_users,"
+			           "usr_data"
 			    " WHERE deg_degrees.CtrCod=%ld"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			    " AND crs_usr.Role=%u"
-			    " AND crs_usr.UsrCod=usr_data.UsrCod"
-			    " AND usr_data.DptCod=%ld"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=crs_users.CrsCod"
+			      " AND crs_users.Role=%u"
+			      " AND crs_users.UsrCod=usr_data.UsrCod"
+			      " AND usr_data.DptCod=%ld"
 			    " ORDER BY deg_degrees.FullName,"
 				      "crs_courses.FullName",
 			    Gbl.Hierarchy.Ctr.CtrCod,
@@ -543,14 +543,14 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
          else
             NumCrss = (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT deg_degrees.FullName,"
-				   "crs_courses.FullName,"
-				   "crs_courses.CrsCod,"
-				   "crs_courses.InsCrsCod"
-			    " FROM deg_degrees,"
-			          "crs_courses"
+			    "SELECT deg_degrees.FullName,"	// row[0]
+				   "crs_courses.FullName,"	// row[1]
+				   "crs_courses.CrsCod,"	// row[2]
+				   "crs_courses.InsCrsCod"	// row[3]
+			     " FROM deg_degrees,"
+			           "crs_courses"
 			    " WHERE deg_degrees.CtrCod=%ld"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
 			    " ORDER BY deg_degrees.FullName,"
 				      "crs_courses.FullName",
 			    Gbl.Hierarchy.Ctr.CtrCod);
@@ -560,20 +560,20 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
             NumCrss = (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
 			    "SELECT DISTINCTROW "
-				   "deg_degrees.FullName,"
-				   "crs_courses.FullName,"
-				   "crs_courses.CrsCod,"
-				   "crs_courses.InsCrsCod"
-			    " FROM deg_degrees,"
-			          "crs_courses,"
-			          "crs_usr,"
-			          "usr_data"
+				   "deg_degrees.FullName,"	// row[0]
+				   "crs_courses.FullName,"	// row[1]
+				   "crs_courses.CrsCod,"	// row[2]
+				   "crs_courses.InsCrsCod"	// row[3]
+			     " FROM deg_degrees,"
+			           "crs_courses,"
+			           "crs_users,"
+			           "usr_data"
 			    " WHERE deg_degrees.DegCod=%ld"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			    " AND crs_usr.Role=%u"
-			    " AND crs_usr.UsrCod=usr_data.UsrCod"
-			    " AND usr_data.DptCod=%ld"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=crs_users.CrsCod"
+			      " AND crs_users.Role=%u"
+			      " AND crs_users.UsrCod=usr_data.UsrCod"
+			      " AND usr_data.DptCod=%ld"
 			    " ORDER BY deg_degrees.FullName,"
 				      "crs_courses.FullName",
 			    Gbl.Hierarchy.Deg.DegCod,
@@ -582,14 +582,14 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
          else
             NumCrss = (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT deg_degrees.FullName,"
-				   "crs_courses.FullName,"
-				   "crs_courses.CrsCod,"
-				   "crs_courses.InsCrsCod"
-			    " FROM deg_degrees,"
-			          "crs_courses"
+			    "SELECT deg_degrees.FullName,"	// row[0]
+				   "crs_courses.FullName,"	// row[1]
+				   "crs_courses.CrsCod,"	// row[2]
+				   "crs_courses.InsCrsCod"	// row[3]
+			     " FROM deg_degrees,"
+			           "crs_courses"
 			    " WHERE deg_degrees.DegCod=%ld"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
 			    " ORDER BY deg_degrees.FullName,"
 				      "crs_courses.FullName",
 			    Gbl.Hierarchy.Deg.DegCod);
@@ -599,21 +599,21 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
             NumCrss = (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
 			    "SELECT DISTINCTROW "
-				   "deg_degrees.FullName,"
-				   "crs_courses.FullName,"
-				   "crs_courses.CrsCod,"
-				   "crs_courses.InsCrsCod"
-			    " FROM deg_degrees,"
-			          "crs_courses,"
-			          "crs_usr,"
-			          "usr_data"
+				   "deg_degrees.FullName,"	// row[0]
+				   "crs_courses.FullName,"	// row[1]
+				   "crs_courses.CrsCod,"	// row[2]
+				   "crs_courses.InsCrsCod"	// row[3]
+			     " FROM deg_degrees,"
+			           "crs_courses,"
+			           "crs_users,"
+			           "usr_data"
 			    " WHERE crs_courses.CrsCod=%ld"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " AND crs_courses.CrsCod=crs_usr.CrsCod"
-			    " AND crs_usr.CrsCod=%ld"
-			    " AND crs_usr.Role=%u"
-			    " AND crs_usr.UsrCod=usr_data.UsrCod"
-			    " AND usr_data.DptCod=%ld"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=crs_users.CrsCod"
+			      " AND crs_users.CrsCod=%ld"
+			      " AND crs_users.Role=%u"
+			      " AND crs_users.UsrCod=usr_data.UsrCod"
+			      " AND usr_data.DptCod=%ld"
 			    " ORDER BY deg_degrees.FullName,"
 				      "crs_courses.FullName",
 			    Gbl.Hierarchy.Crs.CrsCod,
@@ -623,14 +623,14 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
          else
             NumCrss = (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT deg_degrees.FullName,"
-				   "crs_courses.FullName,"
-				   "crs_courses.CrsCod,"
-				   "crs_courses.InsCrsCod"
-			    " FROM deg_degrees,"
-			          "crs_courses"
+			    "SELECT deg_degrees.FullName,"	// row[0]
+				   "crs_courses.FullName,"	// row[1]
+				   "crs_courses.CrsCod,"	// row[2]
+				   "crs_courses.InsCrsCod"	// row[3]
+			     " FROM deg_degrees,"
+			           "crs_courses"
 			    " WHERE crs_courses.CrsCod=%ld"
-			    " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
 			    " ORDER BY deg_degrees.FullName,"
 				      "crs_courses.FullName",
 			    Gbl.Hierarchy.Crs.CrsCod);

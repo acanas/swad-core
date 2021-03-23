@@ -387,8 +387,10 @@ Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
    Gbl.Cache.RoleUsrInCrs.CrsCod = CrsCod;
    Gbl.Cache.RoleUsrInCrs.Role = Rol_UNK;
    if (DB_QuerySELECT (&mysql_res,"can not get the role of a user in a course",
-		       "SELECT Role FROM crs_usr"
-		       " WHERE CrsCod=%ld AND UsrCod=%ld",
+		       "SELECT Role"		// row[0]
+		        " FROM crs_users"
+		       " WHERE CrsCod=%ld"
+		         " AND UsrCod=%ld",
 		       CrsCod,UsrCod) == 1)	// User belongs to the course
      {
       row = mysql_fetch_row (mysql_res);
@@ -419,7 +421,8 @@ void Rol_GetRolesInAllCrssIfNotYetGot (struct UsrData *UsrDat)
       NumRoles =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get the roles of a user"
 					    " in all his/her courses",
-				 "SELECT DISTINCT(Role) FROM crs_usr"
+				 "SELECT DISTINCT(Role)"	// row[0]
+				  " FROM crs_users"
 				 " WHERE UsrCod=%ld",
 				 UsrDat->UsrCod);
       for (NumRole = 0, UsrDat->Roles.InCrss = 0;

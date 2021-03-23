@@ -368,9 +368,9 @@ CREATE TABLE IF NOT EXISTS crs_records (
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(FieldCod,UsrCod));
 --
--- Table crs_usr: stores who users belong to what courses
+-- Table crs_users: stores who users belong to what courses
 --
-CREATE TABLE IF NOT EXISTS crs_usr (
+CREATE TABLE IF NOT EXISTS crs_users (
 	CrsCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	Role TINYINT NOT NULL DEFAULT 0,
