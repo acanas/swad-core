@@ -666,12 +666,15 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
    /***** Get groups associated to an exam session from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of an exam session",
 			     "SELECT crs_grp_types.GrpTypName,"	// row[0]
-			            "crs_grp.GrpName"		// row[1]
-			     " FROM exa_groups,crs_grp,crs_grp_types"
+			            "grp_groups.GrpName"	// row[1]
+			      " FROM exa_groups,"
+			            "grp_groups,"
+			            "crs_grp_types"
 			     " WHERE exa_groups.SesCod=%ld"
-			     " AND exa_groups.GrpCod=crs_grp.GrpCod"
-			     " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-			     " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
+			       " AND exa_groups.GrpCod=grp_groups.GrpCod"
+			       " AND grp_groups.GrpTypCod=crs_grp_types.GrpTypCod"
+			     " ORDER BY crs_grp_types.GrpTypName,"
+			               "grp_groups.GrpName",
 			     Session->SesCod);
 
    /***** Write heading *****/
@@ -1661,9 +1664,10 @@ void ExaSes_RemoveGroupsOfType (long GrpTypCod)
    DB_QueryDELETE ("can not remove groups of a type"
 	           " from the associations between sessions and groups",
 		   "DELETE FROM exa_groups"
-		   " USING crs_grp,exa_groups"
-		   " WHERE crs_grp.GrpTypCod=%ld"
-		   " AND crs_grp.GrpCod=exa_groups.GrpCod",
+		   " USING grp_groups,"
+		          "exa_groups"
+		   " WHERE grp_groups.GrpTypCod=%ld"
+		     " AND grp_groups.GrpCod=exa_groups.GrpCod",
                    GrpTypCod);
   }
 

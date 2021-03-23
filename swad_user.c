@@ -4554,14 +4554,14 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
             /* Select all the students of the course who don't belong to any group of type GrpTypCod */
             Str_Concat (*Query,"crs_users.UsrCod NOT IN"
 			       " (SELECT DISTINCT crs_grp_usr.UsrCod"
-			          " FROM crs_grp,"
+			          " FROM grp_groups,"
 			                "crs_grp_usr"
-			         " WHERE crs_grp.GrpTypCod='",
+			         " WHERE grp_groups.GrpTypCod='",
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             snprintf (LongStr,sizeof (LongStr),"%ld",
 		      Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
             Str_Concat (*Query,LongStr,Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
-            Str_Concat (*Query,"' AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
+            Str_Concat (*Query,"' AND grp_groups.GrpCod=crs_grp_usr.GrpCod)",
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             NumNegativeCods++;
            }

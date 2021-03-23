@@ -766,12 +766,16 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match 
 
    /***** Get groups associated to a match from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of a match",
-			     "SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
-			     " FROM mch_groups,crs_grp,crs_grp_types"
+			     "SELECT crs_grp_types.GrpTypName,"
+			            "grp_groups.GrpName"
+			      " FROM mch_groups,"
+			            "grp_groups,"
+			            "crs_grp_types"
 			     " WHERE mch_groups.MchCod=%ld"
-			     " AND mch_groups.GrpCod=crs_grp.GrpCod"
-			     " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-			     " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
+			       " AND mch_groups.GrpCod=grp_groups.GrpCod"
+			       " AND grp_groups.GrpTypCod=crs_grp_types.GrpTypCod"
+			     " ORDER BY crs_grp_types.GrpTypName,"
+			               "grp_groups.GrpName",
 			     Match->MchCod);
 
    /***** Write heading *****/
@@ -1970,9 +1974,10 @@ void Mch_RemoveGroupsOfType (long GrpTypCod)
    DB_QueryDELETE ("can not remove groups of a type"
 	           " from the associations between matches and groups",
 		   "DELETE FROM mch_groups"
-		   " USING crs_grp,mch_groups"
-		   " WHERE crs_grp.GrpTypCod=%ld"
-		   " AND crs_grp.GrpCod=mch_groups.GrpCod",
+		   " USING grp_groups,"
+		          "mch_groups"
+		   " WHERE grp_groups.GrpTypCod=%ld"
+		     " AND grp_groups.GrpCod=mch_groups.GrpCod",
                    GrpTypCod);
   }
 

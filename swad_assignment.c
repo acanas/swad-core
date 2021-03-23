@@ -1707,10 +1707,10 @@ void Asg_RemoveGroupsOfType (long GrpTypCod)
    DB_QueryDELETE ("can not remove groups of a type from the associations"
 	           " between assignments and groups",
 		   "DELETE FROM asg_groups"
-		   " USING crs_grp,"
+		   " USING grp_groups,"
 		          "asg_groups"
-		   " WHERE crs_grp.GrpTypCod=%ld"
-		     " AND crs_grp.GrpCod=asg_groups.GrpCod",
+		   " WHERE grp_groups.GrpTypCod=%ld"
+		     " AND grp_groups.GrpCod=asg_groups.GrpCod",
                    GrpTypCod);
   }
 
@@ -1753,15 +1753,16 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
 
    /***** Get groups associated to an assignment from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of an assignment",
-	                     "SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
+	                     "SELECT crs_grp_types.GrpTypName,"
+	                            "grp_groups.GrpName"
 			      " FROM asg_groups,"
-			            "crs_grp,"
+			            "grp_groups,"
 			            "crs_grp_types"
 			     " WHERE asg_groups.AsgCod=%ld"
-			       " AND asg_groups.GrpCod=crs_grp.GrpCod"
-			       " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			       " AND asg_groups.GrpCod=grp_groups.GrpCod"
+			       " AND grp_groups.GrpTypCod=crs_grp_types.GrpTypCod"
 			     " ORDER BY crs_grp_types.GrpTypName,"
-			               "crs_grp.GrpName",
+			               "grp_groups.GrpName",
 			     Asg->AsgCod);
 
    /***** Write heading *****/

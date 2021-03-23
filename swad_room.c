@@ -1018,7 +1018,8 @@ void Roo_RemoveRoom (void)
 
    /***** Update groups assigned to this room *****/
    DB_QueryUPDATE ("can not update room in groups",
-		   "UPDATE crs_grp SET RooCod=0"	// 0 means another room
+		   "UPDATE grp_groups"
+		     " SET RooCod=0"	// 0 means another room
 		   " WHERE RooCod=%ld",
 		   Roo_EditingRoom->RooCod);
 

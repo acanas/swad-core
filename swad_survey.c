@@ -2451,10 +2451,10 @@ void Svy_RemoveGroupsOfType (long GrpTypCod)
    DB_QueryDELETE ("can not remove groups of a type"
 	           " from the associations between surveys and groups",
 		   "DELETE FROM svy_groups"
-		   " USING crs_grp,"
+		   " USING grp_groups,"
 		          "svy_groups"
-                   " WHERE crs_grp.GrpTypCod=%ld"
-                     " AND crs_grp.GrpCod=svy_groups.GrpCod",
+                   " WHERE grp_groups.GrpTypCod=%ld"
+                     " AND grp_groups.GrpCod=svy_groups.GrpCod",
 		   GrpTypCod);
   }
 
@@ -2497,13 +2497,15 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
    /***** Get groups associated to a survey from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of a survey",
 			     "SELECT crs_grp_types.GrpTypName,"
-			            "crs_grp.GrpName"
-			      " FROM svy_groups,crs_grp,crs_grp_types"
+			            "grp_groups.GrpName"
+			      " FROM svy_groups,"
+			            "grp_groups,"
+			            "crs_grp_types"
 			     " WHERE svy_groups.SvyCod=%ld"
-			       " AND svy_groups.GrpCod=crs_grp.GrpCod"
-			       " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			       " AND svy_groups.GrpCod=grp_groups.GrpCod"
+			       " AND grp_groups.GrpTypCod=crs_grp_types.GrpTypCod"
 			     " ORDER BY crs_grp_types.GrpTypName,"
-			               "crs_grp.GrpName",
+			               "grp_groups.GrpName",
 			     Svy->SvyCod);
 
    /***** Write heading *****/

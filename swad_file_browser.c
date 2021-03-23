@@ -4379,10 +4379,11 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    char SubqueryPrj[128];
 
    /***** Build subquery for groups *****/
-   sprintf (SubqueryGrp,"(SELECT crs_grp.GrpCod"
-	                  " FROM crs_grp_types,crs_grp"
+   sprintf (SubqueryGrp,"(SELECT grp_groups.GrpCod"
+	                  " FROM crs_grp_types,"
+	                        "grp_groups"
 		         " WHERE crs_grp_types.CrsCod=%ld"
-		           " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod)",
+		           " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod)",
             CrsCod);
 
    /***** Build subquery for projects *****/
@@ -4790,11 +4791,11 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod)
 			    " OR "
 			    "(FileBrowser IN (%u,%u,%u,%u)"
 			    " AND Cod IN"
-			    " (SELECT crs_grp.GrpCod"
+			    " (SELECT grp_groups.GrpCod"
 			       " FROM crs_grp_types,"
-			             "crs_grp"
+			             "grp_groups"
 			      " WHERE crs_grp_types.CrsCod=%ld"
-			        " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod))"
+			        " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod))"
 		          ")",
 	           UsrCod,
 	           (unsigned) Brw_ADMI_DOC_CRS,
@@ -4822,11 +4823,11 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod)
 			    " OR "
 			    "(FileBrowser IN (%u,%u,%u,%u)"
 			    " AND Cod IN"
-			    " (SELECT crs_grp.GrpCod"
+			    " (SELECT grp_groups.GrpCod"
 			       " FROM crs_grp_types,"
-			             "crs_grp"
+			             "grp_groups"
 			      " WHERE crs_grp_types.CrsCod=%ld"
-			        " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod))"
+			        " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod))"
 		          ")",
 	           UsrCod,
 	           (unsigned) Brw_ADMI_DOC_CRS,
@@ -4857,11 +4858,11 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod)
 			    " OR "
 			    "(FileBrowser IN (%u,%u,%u,%u)"
 			    " AND Cod IN"
-			    " (SELECT crs_grp.GrpCod"
+			    " (SELECT grp_groups.GrpCod"
 			       " FROM crs_grp_types,"
-			             "crs_grp"
+			             "grp_groups"
 			      " WHERE crs_grp_types.CrsCod=%ld"
-			        " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod))"
+			        " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod))"
 		          ")",
 	           UsrCod,
 	           (unsigned) Brw_ADMI_DOC_CRS,

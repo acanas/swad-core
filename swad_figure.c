@@ -1710,10 +1710,10 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "brw_sizes.NumFiles,"
 				      "brw_sizes.TotalSize"
 			        " FROM crs_grp_types,"
-			              "crs_grp,"
+			              "grp_groups,"
 			              "brw_sizes"
-			       " WHERE crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			         " AND crs_grp.GrpCod=brw_sizes.Cod"
+			       " WHERE crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser IN (%u,%u,%u,%u)"
 			       ") AS sizes",
 			       (unsigned) Brw_ADMI_DOC_CRS,
@@ -1756,10 +1756,10 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(brw_sizes.NumFiles),"		// row[5]
 				      "SUM(brw_sizes.TotalSize)"		// row[6]
 			        " FROM crs_grp_types,"
-			              "crs_grp,"
+			              "grp_groups,"
 			              "brw_sizes"
-			       " WHERE crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			         " AND crs_grp.GrpCod=brw_sizes.Cod"
+			       " WHERE crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 	                         " AND brw_sizes.FileBrowser=%u",
 			       (unsigned) FileBrowser);
 	       break;
@@ -1839,15 +1839,15 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			              "deg_degrees,"
 			              "crs_courses,"
 			              "crs_grp_types,"
-			              "crs_grp,"
+			              "grp_groups,"
 			              "brw_sizes"
 			       " WHERE ins_instits.CtyCod=%ld"
 	                         " AND ins_instits.InsCod=ctr_centers.InsCod"
 			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			         " AND crs_courses.CrsCod=crs_grp_types.CrsCod"
-			         " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			         " AND crs_grp.GrpCod=brw_sizes.Cod"
+			         " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser IN (%u,%u,%u,%u)"
 			       ") AS sizes",
 			       Gbl.Hierarchy.Cty.CtyCod,
@@ -1906,15 +1906,15 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			              "deg_degrees,"
 			              "crs_courses,"
 			              "crs_grp_types,"
-			              "crs_grp,"
+			              "grp_groups,"
 			              "brw_sizes"
 			       " WHERE ins_instits.CtyCod=%ld"
 	                         " AND ins_instits.InsCod=ctr_centers.InsCod"
 			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			         " AND crs_courses.CrsCod=crs_grp_types.CrsCod"
-			         " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			         " AND crs_grp.GrpCod=brw_sizes.Cod"
+			         " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
 			       Gbl.Hierarchy.Cty.CtyCod,
 			       (unsigned) FileBrowser);
@@ -2014,14 +2014,14 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			              "deg_degrees,"
 			              "crs_courses,"
 			              "crs_grp_types,"
-			              "crs_grp,"
+			              "grp_groups,"
 			              "brw_sizes"
 			       " WHERE ctr_centers.InsCod=%ld"
 			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			         " AND crs_courses.CrsCod=crs_grp_types.CrsCod"
-			         " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			         " AND crs_grp.GrpCod=brw_sizes.Cod"
+			         " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser IN (%u,%u,%u,%u)"
 			       ") AS sizes",
 			       Gbl.Hierarchy.Ins.InsCod,
@@ -2077,14 +2077,14 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			              "deg_degrees,"
 			              "crs_courses,"
 			              "crs_grp_types,"
-			              "crs_grp,"
+			              "grp_groups,"
 			              "brw_sizes"
 			       " WHERE ctr_centers.InsCod=%ld"
 			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			         " AND crs_courses.CrsCod=crs_grp_types.CrsCod"
-			         " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			         " AND crs_grp.GrpCod=brw_sizes.Cod"
+			         " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
 			       Gbl.Hierarchy.Ins.InsCod,
 			       (unsigned) FileBrowser);
@@ -2177,13 +2177,13 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			        " FROM deg_degrees,"
 			              "crs_courses,"
 			              "crs_grp_types,"
-			              "crs_grp,"
+			              "grp_groups,"
 			              "brw_sizes"
 			       " WHERE deg_degrees.CtrCod=%ld"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			         " AND crs_courses.CrsCod=crs_grp_types.CrsCod"
-			         " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			         " AND crs_grp.GrpCod=brw_sizes.Cod"
+			         " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser IN (%u,%u,%u,%u)"
 			       ") AS sizes",
 			       Gbl.Hierarchy.Ctr.CtrCod,
@@ -2236,13 +2236,13 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			        " FROM deg_degrees,"
 			              "crs_courses,"
 			              "crs_grp_types,"
-			              "crs_grp,"
+			              "grp_groups,"
 			              "brw_sizes"
 			       " WHERE deg_degrees.CtrCod=%ld"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			         " AND crs_courses.CrsCod=crs_grp_types.CrsCod"
-			         " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			         " AND crs_grp.GrpCod=brw_sizes.Cod"
+			         " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
 			       Gbl.Hierarchy.Ctr.CtrCod,
 			       (unsigned) FileBrowser);
@@ -2328,12 +2328,12 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "brw_sizes.TotalSize"
 			        " FROM crs_courses,"
 			              "crs_grp_types,"
-			              "crs_grp,"
+			              "grp_groups,"
 			              "brw_sizes"
 			       " WHERE crs_courses.DegCod=%ld"
 			         " AND crs_courses.CrsCod=crs_grp_types.CrsCod"
-			         " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			         " AND crs_grp.GrpCod=brw_sizes.Cod"
+			         " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser IN (%u,%u,%u,%u)"
 			       ") AS sizes",
 			       Gbl.Hierarchy.Deg.DegCod,
@@ -2383,12 +2383,12 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(brw_sizes.TotalSize)"		// row[6]
 			        " FROM crs_courses,"
 			              "crs_grp_types,"
-			              "crs_grp,"
+			              "grp_groups,"
 			              "brw_sizes"
 			       " WHERE crs_courses.DegCod=%ld"
 			         " AND crs_courses.CrsCod=crs_grp_types.CrsCod"
-			         " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			         " AND crs_grp.GrpCod=brw_sizes.Cod"
+			         " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
 			       Gbl.Hierarchy.Deg.DegCod,
 			       (unsigned) FileBrowser);
@@ -2467,11 +2467,11 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "brw_sizes.NumFiles,"
 				      "brw_sizes.TotalSize"
 			        " FROM crs_grp_types,"
-			              "crs_grp,"
+			              "grp_groups,"
 			              "brw_sizes"
 			       " WHERE crs_grp_types.CrsCod=%ld"
-			         " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			         " AND crs_grp.GrpCod=brw_sizes.Cod"
+			         " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser IN (%u,%u,%u,%u)"
 			       ") AS sizes",
 			       Gbl.Hierarchy.Crs.CrsCod,
@@ -2518,11 +2518,11 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 				      "SUM(brw_sizes.NumFiles),"		// row[5]
 				      "SUM(brw_sizes.TotalSize)"		// row[6]
 			        " FROM crs_grp_types,"
-			              "crs_grp,"
+			              "grp_groups,"
 			              "brw_sizes"
 			       " WHERE crs_grp_types.CrsCod=%ld"
-			         " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			         " AND crs_grp.GrpCod=brw_sizes.Cod"
+			         " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
 			       Gbl.Hierarchy.Crs.CrsCod,
 			       (unsigned) FileBrowser);

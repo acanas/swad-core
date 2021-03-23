@@ -650,9 +650,9 @@ mysql> DESCRIBE crs_courses;
 		   "INDEX(DegCod,Year),"
 		   "INDEX(Status))");
 
-   /***** Table crs_grp *****/
+   /***** Table grp_groups *****/
 /*
-mysql> DESCRIBE crs_grp;
+mysql> DESCRIBE grp_groups;
 +-------------+---------------+------+-----+---------+----------------+
 | Field       | Type          | Null | Key | Default | Extra          |
 +-------------+---------------+------+-----+---------+----------------+
@@ -666,7 +666,7 @@ mysql> DESCRIBE crs_grp;
 +-------------+---------------+------+-----+---------+----------------+
 7 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_grp ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS grp_groups ("
 			"GrpCod INT NOT NULL AUTO_INCREMENT,"
 			"GrpTypCod INT NOT NULL,"
 			"GrpName VARCHAR(2047) NOT NULL,"	// Grp_MAX_BYTES_GROUP_NAME

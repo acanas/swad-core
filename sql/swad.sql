@@ -279,9 +279,9 @@ CREATE TABLE IF NOT EXISTS crs_courses (
 	INDEX(DegCod,Year),
 	INDEX(Status));
 --
--- Table crs_grp: stores the groups in courses
+-- Table grp_groups: stores the groups in courses
 --
-CREATE TABLE IF NOT EXISTS crs_grp (
+CREATE TABLE IF NOT EXISTS grp_groups (
 	GrpCod INT NOT NULL AUTO_INCREMENT,
 	GrpTypCod INT NOT NULL,
 	GrpName VARCHAR(2047) NOT NULL,

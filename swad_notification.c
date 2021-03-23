@@ -1256,13 +1256,13 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 					      " to be notified",
 				         "SELECT crs_grp_usr.UsrCod"	// row[0]
 					  " FROM crs_grp_usr,"
-					        "crs_grp,"
+					        "grp_groups,"
 					        "crs_grp_types,"
 					        "crs_users"
 					 " WHERE crs_grp_usr.GrpCod=%ld"
 					   " AND crs_grp_usr.UsrCod<>%ld"
-					   " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
-					   " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+					   " AND crs_grp_usr.GrpCod=grp_groups.GrpCod"
+					   " AND grp_groups.GrpTypCod=crs_grp_types.GrpTypCod"
 					   " AND crs_grp_types.CrsCod=crs_users.CrsCod"
 					   " AND crs_users.Role=%u",	// Notify teachers only
 					 Gbl.Crs.Grps.GrpCod,

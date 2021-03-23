@@ -1497,10 +1497,10 @@ void Att_RemoveGroupsOfType (long GrpTypCod)
    DB_QueryDELETE ("can not remove groups of a type from the associations"
 		   " between attendance events and groups",
 		   "DELETE FROM att_groups"
-		   " USING crs_grp,"
+		   " USING grp_groups,"
 		          "att_groups"
-		   " WHERE crs_grp.GrpTypCod=%ld"
-		     " AND crs_grp.GrpCod=att_groups.GrpCod",
+		   " WHERE grp_groups.GrpTypCod=%ld"
+		     " AND grp_groups.GrpCod=att_groups.GrpCod",
                    GrpTypCod);
   }
 
@@ -1544,18 +1544,18 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct Att_Event *Ev
    /***** Get groups associated to an attendance event from database *****/
    NumGrps = (unsigned) DB_QuerySELECT (&mysql_res,"can not get groups of an attendance event",
 				        "SELECT crs_grp_types.GrpTypName,"
-				               "crs_grp.GrpName,"
+				               "grp_groups.GrpName,"
 				               "roo_rooms.ShortName"
 					 " FROM (att_groups,"
-					        "crs_grp,"
+					        "grp_groups,"
 					        "crs_grp_types)"
 				         " LEFT JOIN roo_rooms"
-				           " ON crs_grp.RooCod=roo_rooms.RooCod"
+				           " ON grp_groups.RooCod=roo_rooms.RooCod"
 					" WHERE att_groups.AttCod=%ld"
-					  " AND att_groups.GrpCod=crs_grp.GrpCod"
-					  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+					  " AND att_groups.GrpCod=grp_groups.GrpCod"
+					  " AND grp_groups.GrpTypCod=crs_grp_types.GrpTypCod"
 					" ORDER BY crs_grp_types.GrpTypName,"
-					          "crs_grp.GrpName",
+					          "grp_groups.GrpName",
 					Event->AttCod);
 
    /***** Write heading *****/

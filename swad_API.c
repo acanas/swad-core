@@ -509,10 +509,12 @@ static int API_CheckCourseAndGroupCodes (struct soap *soap,
      {
       /***** Query if group code already exists in database *****/
       if (DB_QueryCOUNT ("can not get group",
-			 "SELECT COUNT(*) FROM crs_grp_types,crs_grp"
+			 "SELECT COUNT(*)"
+			  " FROM crs_grp_types,"
+			        "grp_groups"
 			 " WHERE crs_grp_types.CrsCod=%ld"
-			 " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			 " AND crs_grp.GrpCod=%ld",
+			   " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			   " AND grp_groups.GrpCod=%ld",
 			 CrsCod,GrpCod) != 1)
          return soap_sender_fault (soap,
                                    "Bad group code",
@@ -2227,16 +2229,17 @@ int swad__getGroups (struct soap *soap,
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's groups",
 			      "SELECT crs_grp_types.GrpTypCod,"
 				     "crs_grp_types.GrpTypName,"
-				     "crs_grp.GrpCod,"
-				     "crs_grp.GrpName,"
-				     "crs_grp.MaxStudents,"
-				     "crs_grp.Open,"
-				     "crs_grp.FileZones"
-			      " FROM crs_grp_types,crs_grp"
+				     "grp_groups.GrpCod,"
+				     "grp_groups.GrpName,"
+				     "grp_groups.MaxStudents,"
+				     "grp_groups.Open,"
+				     "grp_groups.FileZones"
+			       " FROM crs_grp_types,"
+			             "grp_groups"
 			      " WHERE crs_grp_types.CrsCod=%d"
-			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			        " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
 			      " ORDER BY crs_grp_types.GrpTypName,"
-			      "crs_grp.GrpName",
+			                "grp_groups.GrpName",
 			      courseCode);
 
    getGroupsOut->numGroups = (int) NumRows;
@@ -2400,15 +2403,17 @@ int swad__sendMyGroups (struct soap *soap,
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's groups",
 			      "SELECT crs_grp_types.GrpTypCod,"
 				     "crs_grp_types.GrpTypName,"
-				     "crs_grp.GrpCod,"
-				     "crs_grp.GrpName,"
-				     "crs_grp.MaxStudents,"
-				     "crs_grp.Open,"
-				     "crs_grp.FileZones"
-			      " FROM crs_grp_types,crs_grp"
+				     "grp_groups.GrpCod,"
+				     "grp_groups.GrpName,"
+				     "grp_groups.MaxStudents,"
+				     "grp_groups.Open,"
+				     "grp_groups.FileZones"
+			       " FROM crs_grp_types,"
+			             "grp_groups"
 			      " WHERE crs_grp_types.CrsCod=%d"
-			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			      " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
+			        " AND crs_grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			      " ORDER BY crs_grp_types.GrpTypName,"
+			                "grp_groups.GrpName",
 			      courseCode);
 
    SendMyGroupsOut->numGroups = (int) NumRows;
@@ -3019,13 +3024,13 @@ int swad__getAttendanceUsers (struct soap *soap,
       sprintf (SubQuery,"SELECT DISTINCT crs_grp_usr.UsrCod AS UsrCod,"
 	                       "'N' AS Present"
 		         " FROM att_groups,"
-		               "crs_grp,"
+		               "grp_groups,"
 		               "crs_grp_types,"
 		               "crs_users,"
 		               "crs_grp_usr"
 		        " WHERE att_groups.AttCod=%ld"
-		          " AND att_groups.GrpCod=crs_grp.GrpCod"
-		          " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+		          " AND att_groups.GrpCod=grp_groups.GrpCod"
+		          " AND grp_groups.GrpTypCod=crs_grp_types.GrpTypCod"
 		          " AND crs_grp_types.CrsCod=crs_users.CrsCod"
 		          " AND crs_users.Role=%u"
 		          " AND crs_users.UsrCod=crs_grp_usr.UsrCod"
