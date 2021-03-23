@@ -310,9 +310,9 @@ mysql> DESCRIBE att_groups;
 			"GrpCod INT NOT NULL,"
 		   "UNIQUE INDEX(AttCod,GrpCod))");
 
-   /***** Table att_usr *****/
+   /***** Table att_users *****/
 /*
-mysql> DESCRIBE att_usr;
+mysql> DESCRIBE att_users;
 +------------+---------------+------+-----+---------+-------+
 | Field      | Type          | Null | Key | Default | Extra |
 +------------+---------------+------+-----+---------+-------+
@@ -324,7 +324,7 @@ mysql> DESCRIBE att_usr;
 +------------+---------------+------+-----+---------+-------+
 5 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS att_usr ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS att_users ("
 			"AttCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
 			"Present ENUM('N','Y') NOT NULL DEFAULT 'Y',"

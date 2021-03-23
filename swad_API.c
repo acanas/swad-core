@@ -3028,7 +3028,7 @@ int swad__getAttendanceUsers (struct soap *soap,
 		          " AND crs_grp_usr.GrpCod=att_groups.GrpCod"
 		          " AND crs_grp_usr.UsrCod NOT IN"
 		              " (SELECT UsrCod"
-		                 " FROM att_usr"
+		                 " FROM att_users"
 		                " WHERE AttCod=%ld)",
 	       Event.AttCod,
 	       (unsigned) Rol_STD,
@@ -3037,13 +3037,17 @@ int swad__getAttendanceUsers (struct soap *soap,
       // Event for the whole course
       // Subquery: list of users in the course of this attendance event...
       // ...who have no entry in attendance list of users
-      sprintf (SubQuery,"SELECT crs_usr.UsrCod AS UsrCod,'N' AS Present"
-		        " FROM att_events,crs_usr"
+      sprintf (SubQuery,"SELECT crs_usr.UsrCod AS UsrCod,"	// row[0]
+	                       "'N' AS Present"			// row[1]
+		         " FROM att_events,"
+		               "crs_usr"
 		        " WHERE att_events.AttCod=%ld"
-		        " AND att_events.CrsCod=crs_usr.CrsCod"
-		        " AND crs_usr.Role=%u"
-		        " AND crs_usr.UsrCod NOT IN"
-		        " (SELECT UsrCod FROM att_usr WHERE AttCod=%ld)",
+		          " AND att_events.CrsCod=crs_usr.CrsCod"
+		          " AND crs_usr.Role=%u"
+		          " AND crs_usr.UsrCod NOT IN"
+		              " (SELECT UsrCod"
+		                 " FROM att_users"
+		                " WHERE AttCod=%ld)",
 	       Event.AttCod,
 	       (unsigned) Rol_STD,
 	       Event.AttCod);
@@ -3051,10 +3055,11 @@ int swad__getAttendanceUsers (struct soap *soap,
    NumRows =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get users"
 					 " in an attendance event",
-			      "SELECT u.UsrCod,u.Present FROM "
-			      "(SELECT UsrCod,Present"
-			      " FROM att_usr WHERE AttCod=%ld"
-			      " UNION %s) AS u,usr_data"
+			      "SELECT u.UsrCod,u.Present"
+			       " FROM (SELECT UsrCod,Present"
+			               " FROM att_users WHERE AttCod=%ld"
+			              " UNION %s) AS u,"
+			             "usr_data"
 			      " WHERE u.UsrCod=usr_data.UsrCod"
 			      " ORDER BY usr_data.Surname1,"
 					"usr_data.Surname2,"
@@ -3270,14 +3275,16 @@ int swad__sendAttendanceUsers (struct soap *soap,
          Str_Concat (SubQueryAllUsrs,")",Length);
 
       DB_QueryUPDATE ("can not set other users as absent",
-      		     "UPDATE att_usr SET Present='N'"
-		     " WHERE AttCod=%ld%s",
+      		     "UPDATE att_users"
+      		       " SET Present='N'"
+		     " WHERE AttCod=%ld"
+		         "%s",
 		     Event.AttCod,SubQueryAllUsrs);
 
       /* Free memory for subquery string */
       free (SubQueryAllUsrs);
 
-      /* Clean table att_usr */
+      /* Clean attendance users table */
       Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (Event.AttCod);
      }
 

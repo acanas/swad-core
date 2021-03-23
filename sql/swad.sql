@@ -115,9 +115,9 @@ CREATE TABLE IF NOT EXISTS att_groups (
 	GrpCod INT NOT NULL,
 	UNIQUE INDEX(AttCod,GrpCod));
 --
--- Table att_usr: stores users who have attended to events
+-- Table att_users: stores users who have attended to events
 --
-CREATE TABLE IF NOT EXISTS att_usr (
+CREATE TABLE IF NOT EXISTS att_users (
 	AttCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	Present ENUM('N','Y') NOT NULL DEFAULT 'Y',

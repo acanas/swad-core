@@ -1610,7 +1610,8 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct Att_Event *Ev
 static void Att_RemoveAllUsrsFromAnAttEvent (long AttCod)
   {
    DB_QueryDELETE ("can not remove attendance event",
-		   "DELETE FROM att_usr WHERE AttCod=%ld",
+		   "DELETE FROM att_users"
+		   " WHERE AttCod=%ld",
 		   AttCod);
   }
 
@@ -1622,7 +1623,8 @@ void Att_RemoveUsrFromAllAttEvents (long UsrCod)
   {
    /***** Remove group from all the attendance events *****/
    DB_QueryDELETE ("can not remove user from all attendance events",
-		   "DELETE FROM att_usr WHERE UsrCod=%ld",
+		   "DELETE FROM att_users"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
 
@@ -1634,10 +1636,12 @@ void Att_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
   {
    /***** Remove group from all the attendance events *****/
    DB_QueryDELETE ("can not remove user from attendance events of a course",
-		   "DELETE FROM att_usr USING att_events,att_usr"
+		   "DELETE FROM att_users"
+		   " USING att_events,"
+		          "att_users"
 		   " WHERE att_events.CrsCod=%ld"
-		   " AND att_events.AttCod=att_usr.AttCod"
-		   " AND att_usr.UsrCod=%ld",
+		     " AND att_events.AttCod=att_users.AttCod"
+		     " AND att_users.UsrCod=%ld",
                    CrsCod,UsrCod);
   }
 
@@ -1662,9 +1666,11 @@ void Att_RemoveCrsAttEvents (long CrsCod)
    /***** Remove students *****/
    DB_QueryDELETE ("can not remove all the students registered"
 		   " in events of a course",
-		   "DELETE FROM att_usr USING att_events,att_usr"
+		   "DELETE FROM att_users"
+		   " USING att_events,"
+		          "att_users"
 		   " WHERE att_events.CrsCod=%ld"
-		   " AND att_events.AttCod=att_usr.AttCod",
+		     " AND att_events.AttCod=att_users.AttCod",
                    CrsCod);
 
    /***** Remove groups *****/
@@ -2368,8 +2374,8 @@ void Att_RegisterMeAsStdInAttEvent (void)
    4. Loop over the list Gbl.Usrs.Selected.List[Rol_STD],
       that holds the list of the students marked as present,
       marking the students in Gbl.Usrs.LstUsrs[Rol_STD].Lst as Remove=false
-   5. Delete from att_usr all the students marked as Remove=true
-   6. Replace (insert without duplicated) into att_usr all the students marked as Remove=false
+   5. Delete from att_users all students marked as Remove=true
+   6. Replace (insert without duplicated) into att_users all students marked as Remove=false
  */
 void Att_RegisterStudentsInAttEvent (void)
   {
@@ -2443,8 +2449,8 @@ void Att_RegisterStudentsInAttEvent (void)
       /* Free memory used by list of selected students' codes */
       Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
-      // 5. Delete from att_usr all the students marked as Remove=true
-      // 6. Replace (insert without duplicated) into att_usr all the students marked as Remove=false
+      // 5. Delete from att_users all students marked as Remove=true
+      // 6. Replace (insert without duplicated) into att_users all students marked as Remove=false
       for (NumUsr = 0, NumStdsAbsent = NumStdsPresent = 0;
 	   NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
 	   NumUsr++)
@@ -2502,12 +2508,13 @@ void Att_RegisterStudentsInAttEvent (void)
 static void Att_GetNumStdsTotalWhoAreInAttEvent (struct Att_Event *Event)
   {
    /***** Count number of students registered in an event in database *****/
-   Event->NumStdsTotal =
-   (unsigned) DB_QueryCOUNT ("can not get number of students"
-			     " who are registered in an event",
-			     "SELECT COUNT(*) FROM att_usr"
-			     " WHERE AttCod=%ld AND Present='Y'",
-			     Event->AttCod);
+   Event->NumStdsTotal = (unsigned)
+   DB_QueryCOUNT ("can not get number of students registered in an event",
+		  "SELECT COUNT(*)"
+		   " FROM att_users"
+		  " WHERE AttCod=%ld"
+		    " AND Present='Y'",
+		  Event->AttCod);
   }
 
 /*****************************************************************************/
@@ -2528,13 +2535,15 @@ static unsigned Att_GetNumUsrsFromAListWhoAreInAttEvent (long AttCod,
 				 &SubQueryUsrs);
 
       /***** Get number of users in attendance event from database ****/
-      NumUsrsInAttEvent =
-      (unsigned) DB_QueryCOUNT ("can not get number of students"
-			        " from a list who are registered in an event",
-				"SELECT COUNT(*) FROM att_usr"
-				" WHERE AttCod=%ld"
-				" AND UsrCod IN (%s) AND Present='Y'",
-				AttCod,SubQueryUsrs);
+      NumUsrsInAttEvent = (unsigned)
+      DB_QueryCOUNT ("can not get number of students from a list"
+	             " who are registered in an event",
+		     "SELECT COUNT(*)"
+		      " FROM att_users"
+	             " WHERE AttCod=%ld"
+		       " AND UsrCod IN (%s)"
+		       " AND Present='Y'",
+	  	     AttCod,SubQueryUsrs);
 
       /***** Free memory for subquery string *****/
       Usr_FreeSubqueryUsrCods (SubQueryUsrs);
@@ -2553,20 +2562,18 @@ static bool Att_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,bool *Present
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    bool InDBTable;
 
    /***** Check if a student is registered in an event in database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get if a student"
-					" is already registered"
-					" in an event",
-			     "SELECT Present FROM att_usr"
-			     " WHERE AttCod=%ld AND UsrCod=%ld",
-			     AttCod,UsrCod);
-   if (NumRows)
+   InDBTable = (DB_QuerySELECT (&mysql_res,"can not check if a student"
+	                                   " is already registered in an event",
+		                "SELECT Present"
+			         " FROM att_users"
+		                " WHERE AttCod=%ld"
+			          " AND UsrCod=%ld",
+		                AttCod,UsrCod) != 0);
+   if (InDBTable)
      {
-      InDBTable = true;
-
       /* Get row */
       row = mysql_fetch_row (mysql_res);
 
@@ -2574,10 +2581,7 @@ static bool Att_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,bool *Present
       *Present = (row[0][0] == 'Y');
      }
    else	// User is not present
-     {
-      InDBTable = false;
       *Present = false;
-     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2613,12 +2617,15 @@ static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long Us
 
    /***** Check if a students is registered in an event in database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get if a student"
-				        " is already registered"
-				        " in an event",
-			     "SELECT Present,CommentStd,CommentTch"
-			     " FROM att_usr"
-			     " WHERE AttCod=%ld AND UsrCod=%ld",
-			     AttCod,UsrCod);
+				        " is already registered in an event",
+			     "SELECT Present,"		// row[0]
+			            "CommentStd,"	// row[1]
+			            "CommentTch"	// row[2]
+			      " FROM att_users"
+			     " WHERE AttCod=%ld"
+			       " AND UsrCod=%ld",
+			     AttCod,
+			     UsrCod);
    if (NumRows)
      {
       /* Get row */
@@ -2652,18 +2659,21 @@ void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod)
   {
    bool Present;
 
-   /***** Check if user is already in table att_usr (present or not) *****/
-   if (Att_CheckIfUsrIsInTableAttUsr (AttCod,UsrCod,&Present))	// User is in table att_usr
+   /***** Check if user is already in table att_users (present or not) *****/
+   if (Att_CheckIfUsrIsInTableAttUsr (AttCod,UsrCod,&Present))	// User is in table att_users
      {
       // If already present ==> nothing to do
       if (!Present)
 	 /***** Set user as present in database *****/
 	 DB_QueryUPDATE ("can not set user as present in an event",
-			 "UPDATE att_usr SET Present='Y'"
-			 " WHERE AttCod=%ld AND UsrCod=%ld",
-		         AttCod,UsrCod);
+			 "UPDATE att_users"
+			   " SET Present='Y'"
+			 " WHERE AttCod=%ld"
+			   " AND UsrCod=%ld",
+		         AttCod,
+		         UsrCod);
      }
-   else			// User is not in table att_usr
+   else			// User is not in table att_users
       Att_RegUsrInAttEventChangingComments (AttCod,UsrCod,true,"","");
   }
 
@@ -2676,7 +2686,7 @@ static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool P
   {
    /***** Register user as assistant to an event in database *****/
    DB_QueryREPLACE ("can not register user in an event",
-		    "REPLACE INTO att_usr"
+		    "REPLACE INTO att_users"
 		    " (AttCod,UsrCod,Present,CommentStd,CommentTch)"
 		    " VALUES"
 		    " (%ld,%ld,'%c','%s','%s')",
@@ -2695,7 +2705,9 @@ static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod)
   {
    /***** Remove user if there is no comment in database *****/
    DB_QueryDELETE ("can not remove student from an event",
-		   "DELETE FROM att_usr WHERE AttCod=%ld AND UsrCod=%ld",
+		   "DELETE FROM att_users"
+		   " WHERE AttCod=%ld"
+		     " AND UsrCod=%ld",
                    AttCod,UsrCod);
   }
 
@@ -2705,12 +2717,14 @@ static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod)
 
 void Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod)
   {
-   /***** Clean table att_usr *****/
+   /***** Clean table att_users *****/
    DB_QueryDELETE ("can not remove users absent"
 	           " without comments from an event",
-		   "DELETE FROM att_usr"
-		   " WHERE AttCod=%ld AND Present='N'"
-		   " AND CommentStd='' AND CommentTch=''",
+		   "DELETE FROM att_users"
+		   " WHERE AttCod=%ld"
+		     " AND Present='N'"
+		     " AND CommentStd=''"
+		     " AND CommentTch=''",
 	           AttCod);
   }
 
