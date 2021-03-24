@@ -163,9 +163,9 @@ CREATE TABLE IF NOT EXISTS brw_clipboards (
 	INDEX(FileBrowser,Cod),
 	INDEX(WorksUsrCod));
 --
--- Table brw_expanded_folders: stores the expanded folders for each user
+-- Table brw_expanded: stores the expanded folders for each user
 --
-CREATE TABLE IF NOT EXISTS brw_expanded_folders (
+CREATE TABLE IF NOT EXISTS brw_expanded (
 	UsrCod INT NOT NULL,
 	FileBrowser TINYINT NOT NULL,
 	Cod INT NOT NULL DEFAULT -1,

@@ -409,9 +409,9 @@ mysql> DESCRIBE brw_clipboards;
 		   "INDEX(FileBrowser,Cod),"
 		   "INDEX(WorksUsrCod))");
 
-   /***** Table brw_expanded_folders *****/
+   /***** Table brw_expanded *****/
 /*
-mysql> DESCRIBE brw_expanded_folders;
+mysql> DESCRIBE brw_expanded;
 +-------------+------------+------+-----+---------+-------+
 | Field       | Type       | Null | Key | Default | Extra |
 +-------------+------------+------+-----+---------+-------+
@@ -424,7 +424,7 @@ mysql> DESCRIBE brw_expanded_folders;
 +-------------+------------+------+-----+---------+-------+
 6 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_expanded_folders ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_expanded ("
 			"UsrCod INT NOT NULL,"
 			"FileBrowser TINYINT NOT NULL,"
 			"Cod INT NOT NULL DEFAULT -1,"

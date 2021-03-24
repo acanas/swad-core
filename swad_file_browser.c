@@ -4189,7 +4189,7 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
 
    /***** Remove from database expanded folders *****/
    DB_QueryDELETE ("can not remove expanded folders of an institution",
-		   "DELETE LOW_PRIORITY FROM brw_expanded_folders"
+		   "DELETE LOW_PRIORITY FROM brw_expanded"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_INS,
@@ -4257,7 +4257,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 
    /***** Remove from database expanded folders *****/
    DB_QueryDELETE ("can not remove expanded folders of a center",
-		   "DELETE LOW_PRIORITY FROM brw_expanded_folders"
+		   "DELETE LOW_PRIORITY FROM brw_expanded"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CTR,
@@ -4321,7 +4321,7 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
 
    /***** Remove from database expanded folders *****/
    DB_QueryDELETE ("can not remove expanded folders of a degree",
-		   "DELETE LOW_PRIORITY FROM brw_expanded_folders"
+		   "DELETE LOW_PRIORITY FROM brw_expanded"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_DEG,
@@ -4450,7 +4450,7 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    /***** Remove from database expanded folders *****/
    /* Remove from course file zones */
    DB_QueryDELETE ("can not remove expanded folders of a course",
-		   "DELETE LOW_PRIORITY FROM brw_expanded_folders"
+		   "DELETE LOW_PRIORITY FROM brw_expanded"
 		   " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_CRS,
@@ -4465,7 +4465,7 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /* Remove from group file zones */
    DB_QueryDELETE ("can not remove expanded folders of a course",
-		   "DELETE LOW_PRIORITY FROM brw_expanded_folders"
+		   "DELETE LOW_PRIORITY FROM brw_expanded"
 		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
 		     " AND Cod IN %s",
 	           (unsigned) Brw_ADMI_DOC_GRP,
@@ -4476,7 +4476,7 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /* Remove from project file zones */
    DB_QueryDELETE ("can not remove expanded folders of a course",
-		   "DELETE LOW_PRIORITY FROM brw_expanded_folders"
+		   "DELETE LOW_PRIORITY FROM brw_expanded"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod IN %s",
 	           (unsigned) Brw_ADMI_DOC_PRJ,
@@ -4657,7 +4657,7 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
 
    /***** Remove from database expanded folders *****/
    DB_QueryDELETE ("can not remove expanded folders of a group",
-		   "DELETE LOW_PRIORITY FROM brw_expanded_folders"
+		   "DELETE LOW_PRIORITY FROM brw_expanded"
 		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
 		   " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_GRP,
@@ -4731,7 +4731,7 @@ void Brw_RemovePrjFilesFromDB (long PrjCod)
 
    /***** Remove from database expanded folders *****/
    DB_QueryDELETE ("can not remove expanded folders of a project",
-		   "DELETE LOW_PRIORITY FROM brw_expanded_folders"
+		   "DELETE LOW_PRIORITY FROM brw_expanded"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld",
 	           (unsigned) Brw_ADMI_DOC_PRJ,
@@ -4783,7 +4783,7 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod)
   {
    /***** Remove from database expanded folders *****/
    DB_QueryDELETE ("can not remove expanded folders for a user in a course",
-		   "DELETE LOW_PRIORITY FROM brw_expanded_folders"
+		   "DELETE LOW_PRIORITY FROM brw_expanded"
 		   " WHERE UsrCod=%ld"
 		     " AND ("
 			    "(FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
@@ -4899,7 +4899,7 @@ void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod)
 
    /***** Remove from database expanded folders *****/
    DB_QueryDELETE ("can not remove expanded folders of a group",
-		   "DELETE LOW_PRIORITY FROM brw_expanded_folders"
+		   "DELETE LOW_PRIORITY FROM brw_expanded"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld"
 		     " AND WorksUsrCod=%ld",
@@ -4957,7 +4957,7 @@ void Brw_RemoveUsrFilesFromDB (long UsrCod)
 
    /***** Remove from database expanded folders *****/
    DB_QueryDELETE ("can not remove expanded folders for a user",
-		   "DELETE LOW_PRIORITY FROM brw_expanded_folders"
+		   "DELETE LOW_PRIORITY FROM brw_expanded"
 		   " WHERE UsrCod=%ld",
 	           UsrCod);
 
@@ -7387,7 +7387,7 @@ static void Brw_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1])
    /***** Update path time in table of expanded folders *****/
    // Path must be stored with final '/'
    DB_QueryINSERT ("can not expand the content of a folder",
-		   "INSERT INTO brw_expanded_folders"
+		   "INSERT INTO brw_expanded"
 		   " (UsrCod,FileBrowser,Cod,WorksUsrCod,Path,ClickTime)"
 		   " VALUES"
 		   " (%ld,%u,%ld,%ld,'%s/',NOW())",
@@ -7412,7 +7412,7 @@ static void Brw_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void)
      {
       if (WorksUsrCod > 0)
 	 DB_QueryUPDATE ("can not update expanded folder",
-			 "UPDATE brw_expanded_folders"
+			 "UPDATE brw_expanded"
 			   " SET ClickTime=NOW()"
 			 " WHERE UsrCod=%ld"
 			   " AND FileBrowser=%u"
@@ -7424,7 +7424,7 @@ static void Brw_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void)
 		         WorksUsrCod);
       else
 	 DB_QueryUPDATE ("can not update expanded folder",
-			 "UPDATE brw_expanded_folders"
+			 "UPDATE brw_expanded"
 			   " SET ClickTime=NOW()"
 			 " WHERE UsrCod=%ld"
 			   " AND FileBrowser=%u"
@@ -7435,7 +7435,7 @@ static void Brw_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void)
      }
    else	// Briefcase
       DB_QueryUPDATE ("can not update expanded folder",
-		      "UPDATE brw_expanded_folders"
+		      "UPDATE brw_expanded"
 		        " SET ClickTime=NOW()"
 		      " WHERE UsrCod=%ld"
 		        " AND FileBrowser=%u",
@@ -7458,7 +7458,7 @@ static void Brw_RemoveFolderFromExpandedFolders (const char Path[PATH_MAX + 1])
      {
       if (WorksUsrCod > 0)
          DB_QueryDELETE ("can not contract the content of a folder",
-			 "DELETE FROM brw_expanded_folders"
+			 "DELETE FROM brw_expanded"
 			 " WHERE UsrCod=%ld"
 			   " AND FileBrowser=%u"
 			   " AND Cod=%ld"
@@ -7468,7 +7468,7 @@ static void Brw_RemoveFolderFromExpandedFolders (const char Path[PATH_MAX + 1])
 		         Cod,WorksUsrCod,Path);
       else
 	 DB_QueryDELETE ("can not contract the content of a folder",
-		         "DELETE FROM brw_expanded_folders"
+		         "DELETE FROM brw_expanded"
 			 " WHERE UsrCod=%ld"
 			   " AND FileBrowser=%u"
 			   " AND Cod=%ld"
@@ -7479,7 +7479,7 @@ static void Brw_RemoveFolderFromExpandedFolders (const char Path[PATH_MAX + 1])
      }
    else	// Briefcase
       DB_QueryDELETE ("can not contract the content of a folder",
-		      "DELETE FROM brw_expanded_folders"
+		      "DELETE FROM brw_expanded"
 		      " WHERE UsrCod=%ld"
 		        " AND FileBrowser=%u"
 		        " AND Path='%s/'",
@@ -7502,7 +7502,7 @@ static void Brw_RemoveAffectedExpandedFolders (const char Path[PATH_MAX + 1])
      {
       if (WorksUsrCod > 0)
          DB_QueryDELETE ("can not remove expanded folders",
-			 "DELETE FROM brw_expanded_folders"
+			 "DELETE FROM brw_expanded"
 			 " WHERE UsrCod=%ld"
 			   " AND FileBrowser=%u"
 			   " AND Cod=%ld"
@@ -7512,7 +7512,7 @@ static void Brw_RemoveAffectedExpandedFolders (const char Path[PATH_MAX + 1])
 		         Cod,WorksUsrCod,Path);
       else
          DB_QueryDELETE ("can not remove expanded folders",
-			 "DELETE FROM brw_expanded_folders"
+			 "DELETE FROM brw_expanded"
 			 " WHERE UsrCod=%ld"
 			   " AND FileBrowser=%u"
 			   " AND Cod=%ld"
@@ -7523,7 +7523,7 @@ static void Brw_RemoveAffectedExpandedFolders (const char Path[PATH_MAX + 1])
      }
    else	// Briefcase
       DB_QueryDELETE ("can not remove expanded folders",
-		      "DELETE FROM brw_expanded_folders"
+		      "DELETE FROM brw_expanded"
 		      " WHERE UsrCod=%ld"
 		        " AND FileBrowser=%u"
 		        " AND Path LIKE '%s/%%'",
@@ -7551,7 +7551,7 @@ static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
 	{
 	 if (WorksUsrCod > 0)
 	    DB_QueryUPDATE ("can not update expanded folders",
-			    "UPDATE brw_expanded_folders"
+			    "UPDATE brw_expanded"
 			      " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
 			    " WHERE UsrCod=%ld"
 			      " AND FileBrowser=%u"
@@ -7564,7 +7564,7 @@ static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
 		            OldPath);
 	 else
 	    DB_QueryUPDATE ("can not update expanded folders",
-			    "UPDATE brw_expanded_folders"
+			    "UPDATE brw_expanded"
 			      " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
 			    " WHERE UsrCod=%ld"
 			      " AND FileBrowser=%u"
@@ -7579,7 +7579,7 @@ static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
 	{
 	 if (WorksUsrCod > 0)
 	    DB_QueryUPDATE ("can not update expanded folders",
-			    "UPDATE brw_expanded_folders"
+			    "UPDATE brw_expanded"
 			      " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
 			    " WHERE FileBrowser=%u"
 			      " AND Cod=%ld"
@@ -7591,7 +7591,7 @@ static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
 		            OldPath);
 	 else
 	    DB_QueryUPDATE ("can not update expanded folders",
-			    "UPDATE brw_expanded_folders"
+			    "UPDATE brw_expanded"
 			      " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
 			    " WHERE FileBrowser=%u"
 			      " AND Cod=%ld"
@@ -7603,7 +7603,7 @@ static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
      }
    else	// Briefcase
       DB_QueryUPDATE ("can not update expanded folders",
-		      "UPDATE brw_expanded_folders"
+		      "UPDATE brw_expanded"
 		        " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
 		      " WHERE UsrCod=%ld"
 		        " AND FileBrowser=%u"
@@ -7630,7 +7630,8 @@ static bool Brw_GetIfExpandedTree (const char Path[PATH_MAX + 1])
      {
       if (WorksUsrCod > 0)
          Expanded = (DB_QueryCOUNT ("can not get check if a folder is expanded",
-				    "SELECT COUNT(*) FROM brw_expanded_folders"
+				    "SELECT COUNT(*)"
+				     " FROM brw_expanded"
 				    " WHERE UsrCod=%ld"
 				      " AND FileBrowser=%u"
 				      " AND Cod=%ld"
@@ -7642,7 +7643,8 @@ static bool Brw_GetIfExpandedTree (const char Path[PATH_MAX + 1])
 				    Path) != 0);
       else
          Expanded = (DB_QueryCOUNT ("can not get check if a folder is expanded",
-				    "SELECT COUNT(*) FROM brw_expanded_folders"
+				    "SELECT COUNT(*)"
+				     " FROM brw_expanded"
 				    " WHERE UsrCod=%ld"
 				      " AND FileBrowser=%u"
 				      " AND Cod=%ld"
@@ -7654,7 +7656,8 @@ static bool Brw_GetIfExpandedTree (const char Path[PATH_MAX + 1])
      }
    else	// Briefcase
       Expanded = (DB_QueryCOUNT ("can not get check if a folder is expanded",
-				 "SELECT COUNT(*) FROM brw_expanded_folders"
+				 "SELECT COUNT(*)"
+				  " FROM brw_expanded"
 				 " WHERE UsrCod=%ld"
 				   " AND FileBrowser=%u"
 				   " AND Path='%s/'",
@@ -7724,7 +7727,7 @@ void Brw_RemoveExpiredExpandedFolders (void)
   {
    /***** Remove all expired clipboards *****/
    DB_QueryDELETE ("can not remove old expanded folders",
-		   "DELETE LOW_PRIORITY FROM brw_expanded_folders"
+		   "DELETE LOW_PRIORITY FROM brw_expanded"
 		   " WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    Cfg_TIME_TO_DELETE_BROWSER_EXPANDED_FOLDERS);
   }
