@@ -545,9 +545,9 @@ mysql> DESCRIBE brw_views;
 		   "UNIQUE INDEX(FilCod,UsrCod),"
 		   "INDEX(UsrCod))");
 
-   /***** Table cfe_calls_for_exams *****/
+   /***** Table cfe_exams *****/
 /*
-mysql> DESCRIBE cfe_calls_for_exams;
+mysql> DESCRIBE cfe_exams;
 +-------------+---------------+------+-----+---------+----------------+
 | Field       | Type          | Null | Key | Default | Extra          |
 +-------------+---------------+------+-----+---------+----------------+
@@ -571,7 +571,7 @@ mysql> DESCRIBE cfe_calls_for_exams;
 +-------------+---------------+------+-----+---------+----------------+
 17 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS cfe_calls_for_exams ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS cfe_exams ("
 			"ExaCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"Status TINYINT NOT NULL DEFAULT 0,"

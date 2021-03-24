@@ -51,7 +51,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs);
-static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Crs_Course *Crs);
+static void RSS_WriteCallsForExams (FILE *FileRSS,struct Crs_Course *Crs);
 
 /*****************************************************************************/
 /******* Update RSS archive with active notices in the current course ********/
@@ -129,7 +129,7 @@ void RSS_UpdateRSSFileForACrs (struct Crs_Course *Crs)
    RSS_WriteNotices (FileRSS,Crs);
 
    /***** Write exam announcements as RSS items *****/
-   RSS_WriteExamAnnouncements (FileRSS,Crs);
+   RSS_WriteCallsForExams (FileRSS,Crs);
 
    /***** Write channel footer *****/
    fprintf (FileRSS,"</channel>\n");
@@ -241,10 +241,10 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
   }
 
 /*****************************************************************************/
-/******** Write exam announcements of a course as items of RSS file **********/
+/********** Write calls for exams of a course as items of RSS file ***********/
 /*****************************************************************************/
 
-static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Crs_Course *Crs)
+static void RSS_WriteCallsForExams (FILE *FileRSS,struct Crs_Course *Crs)
   {
    extern const char *Txt_Exam;
    MYSQL_RES *mysql_res;
@@ -253,17 +253,18 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Crs_Course *Crs)
    struct tm *tm;
    time_t CallTimeUTC;
    long ExaCod;
-   unsigned long NumExa,NumExamAnnouncements;
+   unsigned long NumExa;
+   unsigned long NumExams;
 
    if (Gbl.DB.DatabaseIsOpen)
      {
       /***** Get exam announcements (only future exams) in current course from database *****/
-      NumExamAnnouncements =
-      DB_QuerySELECT (&mysql_res,"can not get exam announcements",
+      NumExams =
+      DB_QuerySELECT (&mysql_res,"can not get calls for exams",
 		      "SELECT ExaCod,"						// row[0]
 			     "UNIX_TIMESTAMP(CallDate) AS T,"			// row[1]
 			     "DATE_FORMAT(ExamDate,'%%d/%%m/%%Y %%H:%%i')"	// row[2]
-		       " FROM cfe_calls_for_exams"
+		       " FROM cfe_exams"
 		      " WHERE CrsCod=%ld"
 		        " AND Status=%u"
 		        " AND ExamDate>=NOW()"
@@ -272,12 +273,12 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Crs_Course *Crs)
 		      (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
 
       /***** Write items with notices *****/
-      if (NumExamAnnouncements)
+      if (NumExams)
 	{
 	 Usr_UsrDataConstructor (&UsrDat);
 
 	 for (NumExa = 0;
-	      NumExa < NumExamAnnouncements;
+	      NumExa < NumExams;
 	      NumExa++)
 	   {
 	    /***** Get data of the exam announcement *****/

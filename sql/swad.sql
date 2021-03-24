@@ -216,9 +216,9 @@ CREATE TABLE IF NOT EXISTS brw_views (
 	NumViews INT NOT NULL DEFAULT 0,
 	UNIQUE INDEX(FilCod,UsrCod),INDEX(UsrCod));
 --
--- Table cfe_calls_for_exams: stores the calls for examination
+-- Table cfe_exams: stores the calls for exams
 --
-CREATE TABLE IF NOT EXISTS cfe_calls_for_exams (
+CREATE TABLE IF NOT EXISTS cfe_exams (
 	ExaCod INT NOT NULL AUTO_INCREMENT,
 	CrsCod INT NOT NULL DEFAULT -1,
 	Status TINYINT NOT NULL DEFAULT 0,

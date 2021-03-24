@@ -1951,7 +1951,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       /***** Remove exam announcements in the course *****/
       /* Mark all exam announcements in the course as deleted */
       DB_QueryUPDATE ("can not remove exam announcements of a course",
-		      "UPDATE cfe_calls_for_exams"
+		      "UPDATE cfe_exams"
 		        " SET Status=%u"
 		      " WHERE CrsCod=%ld",
 	              (unsigned) Cfe_DELETED_CALL_FOR_EXAM,CrsCod);

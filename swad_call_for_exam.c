@@ -400,7 +400,7 @@ static void Cfe_UpdateNumUsrsNotifiedByEMailAboutCallForExam (long ExaCod,
    /***** Update number of users notified *****/
    DB_QueryUPDATE ("can not update the number of notifications"
 		   " of a call for exam",
-		   "UPDATE cfe_calls_for_exams"
+		   "UPDATE cfe_exams"
 		     " SET NumNotif=NumNotif+%u"
 		   " WHERE ExaCod=%ld",
                    NumUsrsToBeNotifiedByEMail,ExaCod);
@@ -492,7 +492,7 @@ void Cfe_RemoveCallForExam1 (void)
 
    /***** Mark the call for exam as deleted in the database *****/
    DB_QueryUPDATE ("can not remove call for exam",
-		   "UPDATE cfe_calls_for_exams"
+		   "UPDATE cfe_exams"
 		     " SET Status=%u"
 		   " WHERE ExaCod=%ld"
 		     " AND CrsCod=%ld",
@@ -540,7 +540,7 @@ void Cfe_HideCallForExam (void)
 
    /***** Mark the call for exam as hidden in the database *****/
    DB_QueryUPDATE ("can not hide call for exam",
-		   "UPDATE cfe_calls_for_exams"
+		   "UPDATE cfe_exams"
 		     " SET Status=%u"
 		   " WHERE ExaCod=%ld"
 		     " AND CrsCod=%ld",
@@ -571,7 +571,7 @@ void Cfe_UnhideCallForExam (void)
 
    /***** Mark the call for exam as visible in the database *****/
    DB_QueryUPDATE ("can not unhide call for exam",
-		   "UPDATE cfe_calls_for_exams"
+		   "UPDATE cfe_exams"
 		     " SET Status=%u"
 		   " WHERE ExaCod=%ld"
 		     " AND CrsCod=%ld",
@@ -704,7 +704,7 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
    NumExaAnns = DB_QuerySELECT (&mysql_res,"can not get calls for exams"
 	                                   " in this course for listing",
 				"SELECT ExaCod"			// row[0]
-				 " FROM cfe_calls_for_exams"
+				 " FROM cfe_exams"
 				" WHERE CrsCod=%ld"
 				  " AND %s"
 				" ORDER BY ExamDate DESC",
@@ -808,7 +808,7 @@ static long Cfe_AddCallForExamToDB (const struct Cfe_CallsForExams *CallsForExam
    /***** Add call for exam *****/
    ExaCod =
    DB_QueryINSERTandReturnCode ("can not create a new call for exam",
-				"INSERT INTO cfe_calls_for_exams "
+				"INSERT INTO cfe_exams "
 				"(CrsCod,Status,NumNotif,CrsFullName,Year,ExamSession,"
 				"CallDate,ExamDate,Duration,"
 				"Place,ExamMode,Structure,DocRequired,MatRequired,MatAllowed,OtherInfo)"
@@ -848,7 +848,7 @@ static void Cfe_ModifyCallForExamInDB (const struct Cfe_CallsForExams *CallsForE
   {
    /***** Modify call for exam *****/
    DB_QueryUPDATE ("can not update a call for exam",
-		   "UPDATE cfe_calls_for_exams"
+		   "UPDATE cfe_exams"
 		     " SET CrsFullName='%s',"
 		          "Year=%u,"
 		          "ExamSession='%s',"
@@ -902,7 +902,7 @@ void Cfe_CreateListCallsForExams (struct Cfe_CallsForExams *CallsForExams)
 	                                      " in this course",
 				   "SELECT ExaCod,"		// row[0]
 				          "DATE(ExamDate)"	// row[1]
-				    " FROM cfe_calls_for_exams"
+				    " FROM cfe_exams"
 				   " WHERE CrsCod=%ld AND Status=%u"
 				   " ORDER BY ExamDate DESC",
 				   Gbl.Hierarchy.Crs.CrsCod,
@@ -992,7 +992,7 @@ static void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExam
 				       "MatRequired,"		// row[12]
 				       "MatAllowed,"		// row[13]
 				       "OtherInfo"		// row[14]
-				 " FROM cfe_calls_for_exams"
+				 " FROM cfe_exams"
 				" WHERE ExaCod=%ld",
 				ExaCod);
 
