@@ -145,8 +145,14 @@ void Set_GetSettingsFromIP (void)
      {
       /***** Get settings from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get settings",
-				"SELECT FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols"
-				" FROM IP_prefs WHERE IP='%s'",
+				"SELECT FirstDayOfWeek,"	// row[0]
+				       "DateFormat,"		// row[1]
+				       "Theme,"			// row[2]
+				       "IconSet,"		// row[3]
+				       "Menu,"			// row[4]
+				       "SideCols"		// row[5]
+				 " FROM set_ip_settings"
+				" WHERE IP='%s'",
 				Gbl.IP);
       if (NumRows)
 	{
@@ -194,7 +200,7 @@ void Set_SetSettingsFromIP (void)
 
    /***** Update settings from current IP in database *****/
    DB_QueryREPLACE ("can not store settings from current IP address",
-		    "REPLACE INTO IP_prefs"
+		    "REPLACE INTO set_ip_settings"
 		    " (IP,UsrCod,LastChange,"
 		    "FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols)"
 		    " VALUES"
@@ -211,9 +217,13 @@ void Set_SetSettingsFromIP (void)
    /***** If a user is logged, update its settings in database for all its IP's *****/
    if (Gbl.Usrs.Me.Logged)
       DB_QueryUPDATE ("can not update your settings",
-		      "UPDATE IP_prefs"
-		      " SET FirstDayOfWeek=%u,DateFormat=%u,"
-		      "Theme='%s',IconSet='%s',Menu=%u,SideCols=%u"
+		      "UPDATE set_ip_settings"
+		        " SET FirstDayOfWeek=%u,"
+		             "DateFormat=%u,"
+		             "Theme='%s',"
+		             "IconSet='%s',"
+		             "Menu=%u,"
+		             "SideCols=%u"
 		      " WHERE UsrCod=%ld",
 		      Gbl.Prefs.FirstDayOfWeek,
 		      (unsigned) Gbl.Prefs.DateFormat,
@@ -232,7 +242,7 @@ void Set_RemoveOldSettingsFromIP (void)
   {
    /***** Remove old settings *****/
    DB_QueryDELETE ("can not remove old settings",
-		   "DELETE LOW_PRIORITY FROM IP_prefs"
+		   "DELETE LOW_PRIORITY FROM set_ip_settings"
 		   " WHERE LastChange<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    Cfg_TIME_TO_DELETE_IP_PREFS);
   }

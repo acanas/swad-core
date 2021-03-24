@@ -92,38 +92,6 @@ void DB_CreateTablesIfNotExist (void)
    Ale_ShowAlert (Ale_INFO,Txt_Creating_database_tables_if_they_do_not_exist);
    HTM_OL_Begin ();
 
-   /***** Table IP_prefs *****/
-/*
-mysql> DESCRIBE IP_prefs;
-+----------------+------------+------+-----+---------+-------+
-| Field          | Type       | Null | Key | Default | Extra |
-+----------------+------------+------+-----+---------+-------+
-| IP             | char(15)   | NO   | PRI | NULL    |       |
-| UsrCod         | int(11)    | NO   | MUL | -1      |       |
-| LastChange     | datetime   | NO   | MUL | NULL    |       |
-| FirstDayOfWeek | tinyint(4) | NO   |     | 0       |       |
-| DateFormat     | tinyint(4) | NO   |     | 0       |       |
-| Theme          | char(16)   | NO   |     | NULL    |       |
-| IconSet        | char(16)   | NO   |     | NULL    |       |
-| Menu           | tinyint(4) | NO   |     | 0       |       |
-| SideCols       | tinyint(4) | NO   |     | NULL    |       |
-+----------------+------------+------+-----+---------+-------+
-9 rows in set (0,00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS IP_prefs ("
-			"IP CHAR(15) NOT NULL,"		// Cns_MAX_BYTES_IP
-			"UsrCod INT NOT NULL DEFAULT -1,"
-			"LastChange DATETIME NOT NULL,"
-			"FirstDayOfWeek TINYINT NOT NULL DEFAULT 0,"
-			"DateFormat TINYINT NOT NULL DEFAULT 0,"
-			"Theme CHAR(16) NOT NULL,"	// The_MAX_BYTES_THEME_ID
-			"IconSet CHAR(16) NOT NULL,"	// Ico_MAX_BYTES_ICON_SET_ID
-			"Menu TINYINT NOT NULL DEFAULT 0,"
-			"SideCols TINYINT NOT NULL,"
-		   "PRIMARY KEY (IP),"
-		   "INDEX(UsrCod),"
-		   "INDEX(LastChange))");
-
    /***** Table act_MFU *****/
 /*
 mysql> DESCRIBE act_MFU;
@@ -2712,6 +2680,38 @@ mysql> DESCRIBE ses_sessions;
 			"SideCols TINYINT NOT NULL DEFAULT 3,"
 		   "UNIQUE INDEX(SessionId),"
 		   "INDEX(UsrCod))");
+
+   /***** Table set_ip_settings *****/
+/*
+mysql> DESCRIBE set_ip_settings;
++----------------+------------+------+-----+---------+-------+
+| Field          | Type       | Null | Key | Default | Extra |
++----------------+------------+------+-----+---------+-------+
+| IP             | char(15)   | NO   | PRI | NULL    |       |
+| UsrCod         | int(11)    | NO   | MUL | -1      |       |
+| LastChange     | datetime   | NO   | MUL | NULL    |       |
+| FirstDayOfWeek | tinyint(4) | NO   |     | 0       |       |
+| DateFormat     | tinyint(4) | NO   |     | 0       |       |
+| Theme          | char(16)   | NO   |     | NULL    |       |
+| IconSet        | char(16)   | NO   |     | NULL    |       |
+| Menu           | tinyint(4) | NO   |     | 0       |       |
+| SideCols       | tinyint(4) | NO   |     | NULL    |       |
++----------------+------------+------+-----+---------+-------+
+9 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS set_ip_settings ("
+			"IP CHAR(15) NOT NULL,"		// Cns_MAX_BYTES_IP
+			"UsrCod INT NOT NULL DEFAULT -1,"
+			"LastChange DATETIME NOT NULL,"
+			"FirstDayOfWeek TINYINT NOT NULL DEFAULT 0,"
+			"DateFormat TINYINT NOT NULL DEFAULT 0,"
+			"Theme CHAR(16) NOT NULL,"	// The_MAX_BYTES_THEME_ID
+			"IconSet CHAR(16) NOT NULL,"	// Ico_MAX_BYTES_ICON_SET_ID
+			"Menu TINYINT NOT NULL DEFAULT 0,"
+			"SideCols TINYINT NOT NULL,"
+		   "PRIMARY KEY (IP),"
+		   "INDEX(UsrCod),"
+		   "INDEX(LastChange))");
 
    /***** Table sta_degrees *****/
 /*

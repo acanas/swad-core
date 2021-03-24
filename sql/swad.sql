@@ -13,22 +13,6 @@ CREATE TABLE IF NOT EXISTS API_keys (
 	INDEX(PlgCod),
 	INDEX(LastTime));
 --
--- Table IP_prefs: stores user's preferences for each IP address
---
-CREATE TABLE IF NOT EXISTS IP_prefs (
-	IP CHAR(15) NOT NULL,
-	UsrCod INT NOT NULL DEFAULT -1,
-	LastChange DATETIME NOT NULL,
-	FirstDayOfWeek TINYINT NOT NULL DEFAULT 0,
-	DateFormat TINYINT NOT NULL DEFAULT 0,
-	Theme CHAR(16) NOT NULL,
-	IconSet CHAR(16) NOT NULL,
-	Menu TINYINT NOT NULL DEFAULT 0,
-	SideCols TINYINT NOT NULL,
-	PRIMARY KEY(IP),
-	INDEX(UsrCod),
-	INDEX(LastChange));
---
 -- Table act_MFU: stores the recent actions more frequently made by each user
 --
 CREATE TABLE IF NOT EXISTS act_MFU (
@@ -1301,6 +1285,22 @@ CREATE TABLE IF NOT EXISTS ses_sessions (
 	SideCols TINYINT NOT NULL DEFAULT 3,
 	UNIQUE INDEX(SessionId),
 	INDEX(UsrCod));
+--
+-- Table set_ip_settings: stores user's settings (preferences) for each IP address
+--
+CREATE TABLE IF NOT EXISTS set_ip_settings (
+	IP CHAR(15) NOT NULL,
+	UsrCod INT NOT NULL DEFAULT -1,
+	LastChange DATETIME NOT NULL,
+	FirstDayOfWeek TINYINT NOT NULL DEFAULT 0,
+	DateFormat TINYINT NOT NULL DEFAULT 0,
+	Theme CHAR(16) NOT NULL,
+	IconSet CHAR(16) NOT NULL,
+	Menu TINYINT NOT NULL DEFAULT 0,
+	SideCols TINYINT NOT NULL,
+	PRIMARY KEY(IP),
+	INDEX(UsrCod),
+	INDEX(LastChange));
 --
 -- Table sta_degrees: stores statistics about degrees
 --
