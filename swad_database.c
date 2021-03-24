@@ -182,6 +182,29 @@ mysql> DESCRIBE ann_seen;
 			"UsrCod INT NOT NULL,"
 		   "UNIQUE INDEX(AnnCod,UsrCod))");
 
+/***** Table api_keys *****/
+/*
+mysql> DESCRIBE api_keys;
++----------+----------+------+-----+---------+-------+
+| Field    | Type     | Null | Key | Default | Extra |
++----------+----------+------+-----+---------+-------+
+| WSKey    | char(43) | NO   | PRI | NULL    |       |
+| UsrCod   | int(11)  | NO   | MUL | NULL    |       |
+| PlgCod   | int(11)  | NO   |     | NULL    |       |
+| LastTime | datetime | NO   | MUL | NULL    |       |
++----------+----------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS api_keys ("
+			"WSKey CHAR(43) NOT NULL,"	// API_BYTES_WS_KEY
+			"UsrCod INT NOT NULL,"
+			"PlgCod INT NOT NULL,"
+			"LastTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(WSKey),"
+		   "INDEX(UsrCod),"
+		   "INDEX(PlgCod),"
+		   "INDEX(LastTime))");
+
    /***** Table asg_assignments *****/
 /*
 mysql> DESCRIBE asg_assignments;
@@ -3690,29 +3713,6 @@ mysql> DESCRIBE usr_webs;
 			"'youtube') NOT NULL,"
 			"URL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(UsrCod,Web))");
-
-/***** Table API_keys *****/
-/*
-mysql> DESCRIBE API_keys;
-+----------+----------+------+-----+---------+-------+
-| Field    | Type     | Null | Key | Default | Extra |
-+----------+----------+------+-----+---------+-------+
-| WSKey    | char(43) | NO   | PRI | NULL    |       |
-| UsrCod   | int(11)  | NO   | MUL | NULL    |       |
-| PlgCod   | int(11)  | NO   |     | NULL    |       |
-| LastTime | datetime | NO   | MUL | NULL    |       |
-+----------+----------+------+-----+---------+-------+
-4 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS API_keys ("
-			"WSKey CHAR(43) NOT NULL,"	// API_BYTES_WS_KEY
-			"UsrCod INT NOT NULL,"
-			"PlgCod INT NOT NULL,"
-			"LastTime DATETIME NOT NULL,"
-		   "UNIQUE INDEX(WSKey),"
-		   "INDEX(UsrCod),"
-		   "INDEX(PlgCod),"
-		   "INDEX(LastTime))");
 
    /***** Show success message *****/
    HTM_OL_End ();

@@ -1,18 +1,6 @@
 CREATE DATABASE IF NOT EXISTS swad DEFAULT CHARACTER SET=latin1 DEFAULT COLLATE latin1_spanish_ci;
 USE swad;
 --
--- Table API_keys: stores the keys used in the API / web service
---
-CREATE TABLE IF NOT EXISTS API_keys (
-	WSKey CHAR(43) NOT NULL,
-	UsrCod INT NOT NULL,
-	PlgCod INT NOT NULL,
-	LastTime DATETIME NOT NULL,
-	UNIQUE INDEX(WSKey),
-	INDEX(UsrCod),
-	INDEX(PlgCod),
-	INDEX(LastTime));
---
 -- Table act_MFU: stores the recent actions more frequently made by each user
 --
 CREATE TABLE IF NOT EXISTS act_MFU (
@@ -53,6 +41,18 @@ CREATE TABLE IF NOT EXISTS ann_seen (
 	AnnCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	UNIQUE INDEX(AnnCod,UsrCod));
+--
+-- Table api_keys: stores the keys used in the API / web service
+--
+CREATE TABLE IF NOT EXISTS api_keys (
+	WSKey CHAR(43) NOT NULL,
+	UsrCod INT NOT NULL,
+	PlgCod INT NOT NULL,
+	LastTime DATETIME NOT NULL,
+	UNIQUE INDEX(WSKey),
+	INDEX(UsrCod),
+	INDEX(PlgCod),
+	INDEX(LastTime));
 --
 -- Table asg_assignments: stores the assignments proposed by the teachers to their students
 --

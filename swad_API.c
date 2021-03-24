@@ -465,7 +465,7 @@ static int API_CheckWSKey (char WSKey[API_BYTES_WS_KEY + 1])
    if (DB_QuerySELECT (&mysql_res,"can not get existence of key",
 		       "SELECT UsrCod,"		// row[0]
 		              "PlgCod"		// row[1]
-		        " FROM API_keys"
+		        " FROM api_keys"
 		       " WHERE WSKey='%s'",
 		       WSKey))	// Session found in table of sessions
      {
@@ -543,7 +543,8 @@ static int API_GenerateNewWSKey (struct soap *soap,
 
    /***** Check that key does not exist in database *****/
    if (DB_QueryCOUNT ("can not get existence of key",
-		      "SELECT COUNT(*) FROM API_keys"
+		      "SELECT COUNT(*)"
+		       " FROM api_keys"
 		      " WHERE WSKey='%s'",
 		      WSKey))
       return soap_receiver_fault (soap,
@@ -552,7 +553,7 @@ static int API_GenerateNewWSKey (struct soap *soap,
 
    /***** Insert key into database *****/
    DB_QueryINSERT ("can not insert new key",
-		   "INSERT INTO API_keys"
+		   "INSERT INTO api_keys"
 	           " (WSKey,UsrCod,PlgCod,LastTime)"
                    " VALUES"
                    " ('%s',%ld,%ld,NOW())",
@@ -572,7 +573,7 @@ static int API_RemoveOldWSKeys (struct soap *soap)
    /***** Remove expired sessions *****/
    /* A session expire when last click (LastTime) is too old,
       or when there was at least one refresh (navigator supports AJAX) and last refresh is too old (browser probably was closed) */
-   sprintf (Query,"DELETE LOW_PRIORITY FROM API_keys"
+   sprintf (Query,"DELETE LOW_PRIORITY FROM api_keys"
 	          " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
             Cfg_TIME_TO_DELETE_WEB_SERVICE_KEY);
    if (mysql_query (&Gbl.mysql,Query))
