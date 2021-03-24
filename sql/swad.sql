@@ -926,6 +926,16 @@ CREATE TABLE IF NOT EXISTS log (
 	PARTITION p2050 VALUES LESS THAN MAXVALUE
 	);
 --
+-- Table log_api: stores the log of calls to API (web service) from plugins
+--
+CREATE TABLE IF NOT EXISTS log_api (
+	LogCod INT NOT NULL,
+	PlgCod INT NOT NULL,
+	FunCod INT NOT NULL,
+	UNIQUE INDEX(LogCod),
+	INDEX(PlgCod),
+	INDEX(FunCod));
+--
 -- Table log_banners: stores the log of clicked banners
 --
 CREATE TABLE IF NOT EXISTS log_banners (
@@ -972,16 +982,6 @@ CREATE TABLE IF NOT EXISTS log_search (
 	LogCod INT NOT NULL,
 	SearchStr VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(LogCod));
---
--- Table log_ws: stores the log of calls to web service from plugins
---
-CREATE TABLE IF NOT EXISTS log_ws (
-	LogCod INT NOT NULL,
-	PlgCod INT NOT NULL,
-	FunCod INT NOT NULL,
-	UNIQUE INDEX(LogCod),
-	INDEX(PlgCod),
-	INDEX(FunCod));
 --
 -- Table ntf_mail_domains: stores e-mail domains to which sending of notifications is allowed
 --

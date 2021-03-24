@@ -1937,6 +1937,27 @@ mysql> DESCRIBE log;
 			"PARTITION p2050 VALUES LESS THAN MAXVALUE"
 			")");
 
+   /***** Table log_api *****/
+/*
+mysql> DESCRIBE log_api;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| LogCod | int(11) | NO   | PRI | NULL    |       |
+| PlgCod | int(11) | NO   | MUL | NULL    |       |
+| FunCod | int(11) | NO   | MUL | NULL    |       |
++--------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+*/
+// TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_api ("
+			"LogCod INT NOT NULL,"
+			"PlgCod INT NOT NULL,"
+			"FunCod INT NOT NULL,"
+		   "UNIQUE INDEX(LogCod),"
+		   "INDEX(PlgCod),"
+		   "INDEX(FunCod))");
+
    /***** Table log_banners *****/
 /*
 mysql> DESCRIBE log_banners;
@@ -2034,27 +2055,6 @@ mysql> DESCRIBE log_search;
 			"LogCod INT NOT NULL,"
 			"SearchStr VARCHAR(2047) NOT NULL,"	// Sch_MAX_BYTES_STRING_TO_FIND
 		   "UNIQUE INDEX(LogCod))");
-
-   /***** Table log_ws *****/
-/*
-mysql> DESCRIBE log_ws;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| LogCod | int(11) | NO   | PRI | NULL    |       |
-| PlgCod | int(11) | NO   | MUL | NULL    |       |
-| FunCod | int(11) | NO   | MUL | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-3 rows in set (0.00 sec)
-*/
-// TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_ws ("
-			"LogCod INT NOT NULL,"
-			"PlgCod INT NOT NULL,"
-			"FunCod INT NOT NULL,"
-		   "UNIQUE INDEX(LogCod),"
-		   "INDEX(PlgCod),"
-		   "INDEX(FunCod))");
 
    /***** Table ntf_mail_domains *****/
 /*

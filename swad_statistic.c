@@ -945,34 +945,43 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      {
       case Sta_CLICKS_CRS_DETAILED_LIST:
    	 snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE LogCod,UsrCod,Role,"
-   		   "UNIX_TIMESTAMP(ClickTime) AS F,ActCod FROM %s",
+   	           "SELECT SQL_NO_CACHE LogCod,"
+   	                               "UsrCod,"
+   	                               "Role,"
+   		                       "UNIX_TIMESTAMP(ClickTime) AS F,"
+   		                       "ActCod"
+   		    " FROM %s",
                    LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_USR:
 	 snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE UsrCod,%s AS Num FROM %s",
-                   StrQueryCountType,LogTable);
+   	           "SELECT SQL_NO_CACHE UsrCod,"
+   	                               "%s AS Num"
+   	            " FROM %s",
+                   StrQueryCountType,
+                   LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_DAY:
       case Sta_CLICKS_GBL_PER_DAY:
          snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE "
-                   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m%%d') AS Day,"
-                   "%s FROM %s",
+   	           "SELECT SQL_NO_CACHE DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m%%d') AS Day,"
+                                       "%s"
+                    " FROM %s",
                    BrowserTimeZone,
-                   StrQueryCountType,LogTable);
+                   StrQueryCountType,
+                   LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_DAY_AND_HOUR:
       case Sta_CLICKS_GBL_PER_DAY_AND_HOUR:
          snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE "
-                   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m%%d') AS Day,"
-                   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H') AS Hour,"
-                   "%s FROM %s",
+   	           "SELECT SQL_NO_CACHE DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m%%d') AS Day,"
+                                       "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H') AS Hour,"
+                                       "%s"
+                    " FROM %s",
                    BrowserTimeZone,
                    BrowserTimeZone,
-                   StrQueryCountType,LogTable);
+                   StrQueryCountType,
+                   LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_WEEK:
       case Sta_CLICKS_GBL_PER_WEEK:
@@ -980,100 +989,136 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	    With %X%V the weeks are counted from sunday to saturday. */
 	 snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
    	           (Gbl.Prefs.FirstDayOfWeek == 0) ?
-	           "SELECT SQL_NO_CACHE "	// Weeks start on monday
-		   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%x%%v') AS Week,"
-		   "%s FROM %s" :
-		   "SELECT SQL_NO_CACHE "	// Weeks start on sunday
-		   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%X%%V') AS Week,"
-		   "%s FROM %s",
+	           "SELECT SQL_NO_CACHE DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%x%%v') AS Week,"// Weeks start on monday
+		                       "%s"
+		    " FROM %s" :
+		   "SELECT SQL_NO_CACHE DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%X%%V') AS Week,"// Weeks start on sunday
+		                       "%s"
+		    " FROM %s",
 		   BrowserTimeZone,
-		   StrQueryCountType,LogTable);
+		   StrQueryCountType,
+		   LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_MONTH:
       case Sta_CLICKS_GBL_PER_MONTH:
          snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE "
-                   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m') AS Month,"
-                   "%s FROM %s",
+   	           "SELECT SQL_NO_CACHE DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m') AS Month,"
+                                       "%s"
+                    " FROM %s",
                    BrowserTimeZone,
-                   StrQueryCountType,LogTable);
+                   StrQueryCountType,
+                   LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_YEAR:
       case Sta_CLICKS_GBL_PER_YEAR:
          snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE "
-                   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y') AS Year,"
-                   "%s FROM %s",
+   	           "SELECT SQL_NO_CACHE DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y') AS Year,"
+                                       "%s"
+                    " FROM %s",
                    BrowserTimeZone,
-                   StrQueryCountType,LogTable);
+                   StrQueryCountType,
+                   LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_HOUR:
       case Sta_CLICKS_GBL_PER_HOUR:
          snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE "
-                   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H') AS Hour,"
-                   "%s FROM %s",
+   	           "SELECT SQL_NO_CACHE DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H') AS Hour,"
+                                       "%s"
+                   " FROM %s",
                    BrowserTimeZone,
-                   StrQueryCountType,LogTable);
+                   StrQueryCountType,
+                   LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_MINUTE:
       case Sta_CLICKS_GBL_PER_MINUTE:
          snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE "
-                   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H%%i') AS Minute,"
-                   "%s FROM %s",
+   	           "SELECT SQL_NO_CACHE DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H%%i') AS Minute,"
+                                       "%s"
+                    " FROM %s",
                    BrowserTimeZone,
-                   StrQueryCountType,LogTable);
+                   StrQueryCountType,
+                   LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_ACTION:
       case Sta_CLICKS_GBL_PER_ACTION:
          snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE ActCod,%s AS Num FROM %s",
-                   StrQueryCountType,LogTable);
+   	           "SELECT SQL_NO_CACHE ActCod,"
+   	                               "%s AS Num"
+   	            " FROM %s",
+                   StrQueryCountType,
+                   LogTable);
 	 break;
       case Sta_CLICKS_GBL_PER_PLUGIN:
          snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE log_ws.PlgCod,%s AS Num FROM %s,log_ws",
-                   StrQueryCountType,LogTable);
+   	           "SELECT SQL_NO_CACHE log_api.PlgCod,"
+   	                                "%s AS Num"
+   	            " FROM %s,"
+   	                  "log_api",
+                   StrQueryCountType,
+                   LogTable);
          break;
       case Sta_CLICKS_GBL_PER_API_FUNCTION:
          snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE log_ws.FunCod,%s AS Num FROM %s,log_ws",
-                   StrQueryCountType,LogTable);
+   	           "SELECT SQL_NO_CACHE log_api.FunCod,"
+   	                               "%s AS Num"
+   	            " FROM %s,"
+   	                  "log_api",
+                   StrQueryCountType,
+                   LogTable);
          break;
       case Sta_CLICKS_GBL_PER_BANNER:
          snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE log_banners.BanCod,%s AS Num FROM %s,log_banners",
-                   StrQueryCountType,LogTable);
+   	           "SELECT SQL_NO_CACHE log_banners.BanCod,"
+   	                               "%s AS Num"
+   	            " FROM %s,"
+   	                  "log_banners",
+                   StrQueryCountType,
+                   LogTable);
          break;
       case Sta_CLICKS_GBL_PER_COUNTRY:
          snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE CtyCod,%s AS Num FROM %s",
-                   StrQueryCountType,LogTable);
+   	           "SELECT SQL_NO_CACHE CtyCod,"
+   	                               "%s AS Num"
+   	            " FROM %s",
+                   StrQueryCountType,
+                   LogTable);
 	 break;
       case Sta_CLICKS_GBL_PER_INSTITUTION:
          snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE InsCod,%s AS Num FROM %s",
-                   StrQueryCountType,LogTable);
+   	           "SELECT SQL_NO_CACHE InsCod,"
+   	                               "%s AS Num"
+   	            " FROM %s",
+                   StrQueryCountType,
+                   LogTable);
 	 break;
       case Sta_CLICKS_GBL_PER_CENTER:
          snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE CtrCod,%s AS Num FROM %s",
-                   StrQueryCountType,LogTable);
+   	           "SELECT SQL_NO_CACHE CtrCod,"
+   	                               "%s AS Num"
+   	            " FROM %s",
+                   StrQueryCountType,
+                   LogTable);
 	 break;
       case Sta_CLICKS_GBL_PER_DEGREE:
          snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE DegCod,%s AS Num FROM %s",
-                   StrQueryCountType,LogTable);
+   	           "SELECT SQL_NO_CACHE DegCod,"
+   	                               "%s AS Num"
+   	            " FROM %s",
+                   StrQueryCountType,
+                   LogTable);
 	 break;
       case Sta_CLICKS_GBL_PER_COURSE:
 	 snprintf (Query,Sta_MAX_BYTES_QUERY_ACCESS + 1,
-   	           "SELECT SQL_NO_CACHE CrsCod,%s AS Num FROM %s",
-                   StrQueryCountType,LogTable);
+   	           "SELECT SQL_NO_CACHE CrsCod,"
+   	                               "%s AS Num"
+   	            " FROM %s",
+                   StrQueryCountType,
+                   LogTable);
 	 break;
      }
    sprintf (QueryAux," WHERE %s.ClickTime"
-	             " BETWEEN FROM_UNIXTIME(%ld) AND FROM_UNIXTIME(%ld)",
+	             " BETWEEN FROM_UNIXTIME(%ld)"
+	                 " AND FROM_UNIXTIME(%ld)",
             LogTable,
             (long) Gbl.DateRange.TimeUTC[Dat_START_TIME],
             (long) Gbl.DateRange.TimeUTC[Dat_END_TIME  ]);
@@ -1199,7 +1244,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
            {
             case Sta_CLICKS_GBL_PER_PLUGIN:
             case Sta_CLICKS_GBL_PER_API_FUNCTION:
-               sprintf (QueryAux," AND %s.LogCod=log_ws.LogCod",
+               sprintf (QueryAux," AND %s.LogCod=log_api.LogCod",
                         LogTable);
                Str_Concat (Query,QueryAux,Sta_MAX_BYTES_QUERY_ACCESS);
                break;
@@ -1319,12 +1364,12 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          Str_Concat (Query,QueryAux,Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_PLUGIN:
-         Str_Concat (Query," GROUP BY log_ws.PlgCod"
+         Str_Concat (Query," GROUP BY log_api.PlgCod"
         	           " ORDER BY Num DESC",
                      Sta_MAX_BYTES_QUERY_ACCESS);
          break;
       case Sta_CLICKS_GBL_PER_API_FUNCTION:
-         Str_Concat (Query," GROUP BY log_ws.FunCod"
+         Str_Concat (Query," GROUP BY log_api.FunCod"
         	           " ORDER BY Num DESC",
                      Sta_MAX_BYTES_QUERY_ACCESS);
          break;

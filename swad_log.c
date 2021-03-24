@@ -159,7 +159,7 @@ void Log_LogAccess (const char *Comments)
    if (Gbl.WebService.IsWebService)
       /* Log web service plugin and function */
       DB_QueryINSERT ("can not log access (comments)",
-		      "INSERT INTO log_ws"
+		      "INSERT INTO log_api"
 	              " (LogCod,PlgCod,FunCod)"
                       " VALUES"
                       " (%ld,%ld,%u)",
