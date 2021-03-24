@@ -384,9 +384,9 @@ CREATE TABLE IF NOT EXISTS crs_usr_last (
 	ListWithPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',
 	UNIQUE INDEX(UsrCod,CrsCod));
 --
--- Table crs_usr_requests: stores requests for enrollment in courses
+-- Table crs_requests: stores requests for enrollment in courses
 --
-CREATE TABLE IF NOT EXISTS crs_usr_requests (
+CREATE TABLE IF NOT EXISTS crs_requests (
 	ReqCod INT NOT NULL AUTO_INCREMENT,
 	CrsCod INT NOT NULL DEFAULT -1,
 	UsrCod INT NOT NULL,

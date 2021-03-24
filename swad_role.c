@@ -622,8 +622,10 @@ Rol_Role_t Rol_GetRequestedRole (long UsrCod)
 
    /***** Get requested role from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get requested role",
-		       "SELECT Role FROM crs_usr_requests"
-		       " WHERE CrsCod=%ld AND UsrCod=%ld",
+		       "SELECT Role"
+		        " FROM crs_requests"
+		       " WHERE CrsCod=%ld"
+		         " AND UsrCod=%ld",
 		       Gbl.Hierarchy.Crs.CrsCod,UsrCod))
      {
       /***** Get role *****/

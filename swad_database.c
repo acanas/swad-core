@@ -891,9 +891,9 @@ mysql> DESCRIBE crs_usr_last;
 			"ListWithPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',"
 		   "UNIQUE INDEX(UsrCod,CrsCod))");
 
-   /***** Table crs_usr_requests *****/
+   /***** Table crs_requests *****/
 /*
-mysql> DESCRIBE crs_usr_requests;
+mysql> DESCRIBE crs_requests;
 +-------------+------------+------+-----+---------+----------------+
 | Field       | Type       | Null | Key | Default | Extra          |
 +-------------+------------+------+-----+---------+----------------+
@@ -905,7 +905,7 @@ mysql> DESCRIBE crs_usr_requests;
 +-------------+------------+------+-----+---------+----------------+
 5 rows in set (0.01 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_usr_requests ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_requests ("
 			"ReqCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"UsrCod INT NOT NULL,"

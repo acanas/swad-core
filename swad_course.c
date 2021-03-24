@@ -2052,7 +2052,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Remove users' requests for inscription in the course *****/
       DB_QueryDELETE ("can not remove requests for inscription to a course",
-		      "DELETE FROM crs_usr_requests"
+		      "DELETE FROM crs_requests"
 		      " WHERE CrsCod=%ld",
 		      CrsCod);
 

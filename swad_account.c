@@ -1040,7 +1040,8 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 
    /***** Remove user's requests for inscription *****/
    DB_QueryDELETE ("can not remove user's requests for inscription",
-		   "DELETE FROM crs_usr_requests WHERE UsrCod=%ld",
+		   "DELETE FROM crs_requests"
+		   " WHERE UsrCod=%ld",
 	           UsrDat->UsrCod);
 
    /***** Remove user from possible duplicate users *****/
