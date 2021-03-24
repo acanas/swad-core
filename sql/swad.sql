@@ -493,26 +493,6 @@ CREATE TABLE IF NOT EXISTS dpt_departments (
 	UNIQUE INDEX(DptCod),
 	INDEX(InsCod));
 --
--- Table exa_groups: stores the groups associated to each event in an exam
---
-CREATE TABLE IF NOT EXISTS exa_groups (
-	SesCod INT NOT NULL,
-	GrpCod INT NOT NULL,
-	UNIQUE INDEX(SesCod,GrpCod));
---
--- Table exa_sessions: stores the exam sessions that have already taken place
---
-CREATE TABLE IF NOT EXISTS exa_sessions (
-	SesCod INT NOT NULL AUTO_INCREMENT,
-	ExaCod INT NOT NULL,
-	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
-	UsrCod INT NOT NULL,
-	StartTime DATETIME NOT NULL,
-	EndTime DATETIME NOT NULL,
-	Title VARCHAR(2047) NOT NULL,
-	UNIQUE INDEX(SesCod),
-	INDEX(ExaCod));
---
 -- Table exa_exams: stores the exams
 --
 CREATE TABLE IF NOT EXISTS exa_exams (
@@ -526,6 +506,13 @@ CREATE TABLE IF NOT EXISTS exa_exams (
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(ExaCod),
 	INDEX(CrsCod));
+--
+-- Table exa_groups: stores the groups associated to each session in an exam
+--
+CREATE TABLE IF NOT EXISTS exa_groups (
+	SesCod INT NOT NULL,
+	GrpCod INT NOT NULL,
+	UNIQUE INDEX(SesCod,GrpCod));
 --
 -- Table exa_log: stores the access log to exam prints
 --
@@ -541,18 +528,18 @@ CREATE TABLE IF NOT EXISTS exa_log (
 	UNIQUE INDEX(PrnCod,LogCod),
 	INDEX(ClickTime));
 --
--- Table exa_log_session: stores the session id field for access log to exam prints
+-- Table exa_log_sessions: stores the session id fields for access log to exam prints
 --
-CREATE TABLE IF NOT EXISTS exa_log_session (
+CREATE TABLE IF NOT EXISTS exa_log_sessions (
 	LogCod INT NOT NULL,
 	PrnCod INT NOT NULL,
 	SessionId CHAR(43) NOT NULL,
 	UNIQUE INDEX(LogCod),
 	UNIQUE INDEX(PrnCod,LogCod));
 --
--- Table exa_log_user_agent: stores the user agent field for access log to exam prints
+-- Table exa_log_user_agents: stores the user agent fields for access log to exam prints
 --
-CREATE TABLE IF NOT EXISTS exa_log_user_agent (
+CREATE TABLE IF NOT EXISTS exa_log_user_agents (
 	LogCod INT NOT NULL,
 	PrnCod INT NOT NULL,
 	UserAgent TEXT NOT NULL,
@@ -571,7 +558,7 @@ CREATE TABLE IF NOT EXISTS exa_print_questions (
 	Answers TEXT NOT NULL,
 	UNIQUE INDEX(PrnCod,QstCod));
 --
--- Table exa_prints: stores the exam prints of every exam event
+-- Table exa_prints: stores the exam prints of every exam session
 --
 CREATE TABLE IF NOT EXISTS exa_prints (
 	PrnCod INT NOT NULL AUTO_INCREMENT,
@@ -585,6 +572,19 @@ CREATE TABLE IF NOT EXISTS exa_prints (
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
 	UNIQUE INDEX(PrnCod),
 	UNIQUE INDEX(SesCod,UsrCod));
+--
+-- Table exa_sessions: stores the exam sessions
+--
+CREATE TABLE IF NOT EXISTS exa_sessions (
+	SesCod INT NOT NULL AUTO_INCREMENT,
+	ExaCod INT NOT NULL,
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	UsrCod INT NOT NULL,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
+	Title VARCHAR(2047) NOT NULL,
+	UNIQUE INDEX(SesCod),
+	INDEX(ExaCod));
 --
 -- Table exa_set_answers: stores the answers of questions in exam sets
 --

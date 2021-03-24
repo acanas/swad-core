@@ -1161,9 +1161,9 @@ mysql> DESCRIBE exa_log;
 		   "UNIQUE INDEX(PrnCod,LogCod),"
 		   "INDEX(ClickTime))");
 
-   /***** Table exa_log_session *****/
+   /***** Table exa_log_sessions *****/
 /*
-mysql> DESCRIBE exa_log_session;
+mysql> DESCRIBE exa_log_sessions;
 +-----------+----------+------+-----+---------+-------+
 | Field     | Type     | Null | Key | Default | Extra |
 +-----------+----------+------+-----+---------+-------+
@@ -1174,16 +1174,16 @@ mysql> DESCRIBE exa_log_session;
 3 rows in set (0.00 sec)
 */
 // TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_log_session ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_log_sessions ("
 			"LogCod INT NOT NULL,"
 			"PrnCod INT NOT NULL,"
 			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
 		   "UNIQUE INDEX(LogCod),"
 		   "UNIQUE INDEX(PrnCod,LogCod))");
 
-   /***** Table exa_log_user_agent *****/
+   /***** Table exa_log_user_agents *****/
 /*
-mysql> DESCRIBE exa_log_user_agent;
+mysql> DESCRIBE exa_log_user_agents;
 +-----------+---------+------+-----+---------+-------+
 | Field     | Type    | Null | Key | Default | Extra |
 +-----------+---------+------+-----+---------+-------+
@@ -1194,7 +1194,7 @@ mysql> DESCRIBE exa_log_user_agent;
 3 rows in set (0.00 sec)
 */
 // TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_log_user_agent ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_log_user_agents ("
 			"LogCod INT NOT NULL,"
 			"PrnCod INT NOT NULL,"
 			"UserAgent TEXT NOT NULL,"

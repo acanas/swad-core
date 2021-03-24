@@ -182,12 +182,12 @@ static void ExaLog_LogSession (long LogCod,long PrnCod)
           is the same as the last stored in database *****/
    TheSameAsTheLast = (DB_QueryCOUNT ("can not check session",
 				      "SELECT COUNT(*)"
-				      " FROM exa_log_session"
+				       " FROM exa_log_sessions"
 				      " WHERE LogCod="
-				      "(SELECT MAX(LogCod)"
-				      " FROM exa_log_session"
-				      " WHERE PrnCod=%ld)"
-				      " AND SessionId='%s'",
+					     "(SELECT MAX(LogCod)"
+					       " FROM exa_log_sessions"
+					      " WHERE PrnCod=%ld)"
+				        " AND SessionId='%s'",
 				      PrnCod,
 				      Gbl.Session.Id) != 0);
 
@@ -196,7 +196,7 @@ static void ExaLog_LogSession (long LogCod,long PrnCod)
           only if it's not the same as the last one stored *****/
    if (!TheSameAsTheLast)
       DB_QueryINSERT ("can not log session",
-		      "INSERT INTO exa_log_session "
+		      "INSERT INTO exa_log_sessions "
 		      "(LogCod,PrnCod,SessionId)"
 		      " VALUES "
 		      "(%ld,%ld,'%s')",
@@ -245,12 +245,12 @@ static void ExaLog_LogUsrAgent (long LogCod,long PrnCod)
           is the same as the last stored in database *****/
    TheSameAsTheLast = (DB_QueryCOUNT ("can not check user agent",
 				      "SELECT COUNT(*)"
-				      " FROM exa_log_user_agent"
+				       " FROM exa_log_user_agents"
 				      " WHERE LogCod="
-				      "(SELECT MAX(LogCod)"
-				      " FROM exa_log_user_agent"
-				      " WHERE PrnCod=%ld)"
-				      " AND UserAgent='%s'",
+					     "(SELECT MAX(LogCod)"
+					       " FROM exa_log_user_agents"
+					      " WHERE PrnCod=%ld)"
+				        " AND UserAgent='%s'",
 				      PrnCod,
 				      UserAgentDB) != 0);
 
@@ -259,7 +259,7 @@ static void ExaLog_LogUsrAgent (long LogCod,long PrnCod)
           only if it's not the same as the last one stored *****/
    if (!TheSameAsTheLast)
       DB_QueryINSERT ("can not log user agent",
-		      "INSERT INTO exa_log_user_agent "
+		      "INSERT INTO exa_log_user_agents "
 		      "(LogCod,PrnCod,UserAgent)"
 		      " VALUES "
 		      "(%ld,%ld,'%s')",
@@ -313,12 +313,13 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 			              "exa_log.CanAnswer,"			// row[2]
 			              "UNIX_TIMESTAMP(exa_log.ClickTime),"	// row[3]
 			              "exa_log.IP,"				// row[4]
-			              "exa_log_session.SessionId,"		// row[5]
-				      "exa_log_user_agent.UserAgent"		// row[6]
-			       " FROM exa_log LEFT JOIN exa_log_session"
-	                       " ON exa_log.LogCod=exa_log_session.LogCod"
-			       " LEFT JOIN exa_log_user_agent"
-	                       " ON exa_log.LogCod=exa_log_user_agent.LogCod"
+			              "exa_log_sessions.SessionId,"		// row[5]
+				      "exa_log_user_agents.UserAgent"		// row[6]
+			        " FROM exa_log"
+			        " LEFT JOIN exa_log_sessions"
+	                          " ON exa_log.LogCod=exa_log_sessions.LogCod"
+			        " LEFT JOIN exa_log_user_agents"
+	                          " ON exa_log.LogCod=exa_log_user_agents.LogCod"
 			       " WHERE exa_log.PrnCod=%ld"
 			       " ORDER BY exa_log.LogCod",
 			       Print->PrnCod);
