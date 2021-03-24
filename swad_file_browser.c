@@ -4177,12 +4177,12 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
   {
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of an institution",
-		   "DELETE FROM brw_file_views"
+		   "DELETE FROM brw_views"
 		   " USING brw_files,"
-		          "brw_file_views"
+		          "brw_views"
 		   " WHERE brw_files.FileBrowser IN (%u,%u)"
 		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=brw_file_views.FilCod",
+		     " AND brw_files.FilCod=brw_views.FilCod",
 	           (unsigned) Brw_ADMI_DOC_INS,
 	           (unsigned) Brw_ADMI_SHR_INS,
 	           InsCod);
@@ -4245,12 +4245,12 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
   {
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of a center",
-		   "DELETE FROM brw_file_views"
+		   "DELETE FROM brw_views"
 		   " USING brw_files,"
-		          "brw_file_views"
+		          "brw_views"
 		   " WHERE brw_files.FileBrowser IN (%u,%u)"
 		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=brw_file_views.FilCod",
+		     " AND brw_files.FilCod=brw_views.FilCod",
 	           (unsigned) Brw_ADMI_DOC_CTR,
 	           (unsigned) Brw_ADMI_SHR_CTR,
 	           CtrCod);
@@ -4309,12 +4309,12 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
   {
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of a degree",
-		   "DELETE FROM brw_file_views"
+		   "DELETE FROM brw_views"
 		   " USING brw_files,"
-		          "brw_file_views"
+		          "brw_views"
 		   " WHERE brw_files.FileBrowser IN (%u,%u)"
 		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=brw_file_views.FilCod",
+		     " AND brw_files.FilCod=brw_views.FilCod",
 	           (unsigned) Brw_ADMI_DOC_DEG,
 	           (unsigned) Brw_ADMI_SHR_DEG,
 	           DegCod);
@@ -4407,12 +4407,12 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    /***** Remove from database the entries that store the file views *****/
    /* Remove from course file zones */
    DB_QueryDELETE ("can not remove file views to files of a course",
-		   "DELETE FROM brw_file_views"
+		   "DELETE FROM brw_views"
 		   " USING brw_files,"
-		          "brw_file_views"
+		          "brw_views"
 		   " WHERE brw_files.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
 		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=brw_file_views.FilCod",
+		     " AND brw_files.FilCod=brw_views.FilCod",
 	           (unsigned) Brw_ADMI_DOC_CRS,
 	           (unsigned) Brw_ADMI_TCH_CRS,
 	           (unsigned) Brw_ADMI_SHR_CRS,
@@ -4423,12 +4423,12 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /* Remove from group file zones */
    DB_QueryDELETE ("can not remove file views to files of a course",
-		   "DELETE FROM brw_file_views"
+		   "DELETE FROM brw_views"
 		   " USING brw_files,"
-		          "brw_file_views"
+		          "brw_views"
 		   " WHERE brw_files.FileBrowser IN (%u,%u,%u,%u)"
 		     " AND brw_files.Cod IN %s"
-		     " AND brw_files.FilCod=brw_file_views.FilCod",
+		     " AND brw_files.FilCod=brw_views.FilCod",
 	           (unsigned) Brw_ADMI_DOC_GRP,
 	           (unsigned) Brw_ADMI_TCH_GRP,
 	           (unsigned) Brw_ADMI_SHR_GRP,
@@ -4437,12 +4437,12 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /* Remove from project file zones */
    DB_QueryDELETE ("can not remove file views to files of a course",
-		   "DELETE FROM brw_file_views"
+		   "DELETE FROM brw_views"
 		   " USING brw_files,"
-		          "brw_file_views"
+		          "brw_views"
 		   " WHERE brw_files.FileBrowser IN (%u,%u)"
 		     " AND brw_files.Cod IN %s"
-		     " AND brw_files.FilCod=brw_file_views.FilCod",
+		     " AND brw_files.FilCod=brw_views.FilCod",
 	           (unsigned) Brw_ADMI_DOC_PRJ,
 	           (unsigned) Brw_ADMI_ASS_PRJ,
 	           SubqueryPrj);
@@ -4643,12 +4643,12 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
 
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of a group",
-		   "DELETE FROM brw_file_views"
+		   "DELETE FROM brw_views"
 		   " USING brw_files,"
-		          "brw_file_views"
+		          "brw_views"
 		   " WHERE brw_files.FileBrowser IN (%u,%u,%u,%u)"
 		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=brw_file_views.FilCod",
+		     " AND brw_files.FilCod=brw_views.FilCod",
 	           (unsigned) Brw_ADMI_DOC_GRP,
 	           (unsigned) Brw_ADMI_TCH_GRP,
 	           (unsigned) Brw_ADMI_SHR_GRP,
@@ -4719,12 +4719,12 @@ void Brw_RemovePrjFilesFromDB (long PrjCod)
   {
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of a project",
-		   "DELETE FROM brw_file_views"
+		   "DELETE FROM brw_views"
 		   " USING brw_files,"
-		          "brw_file_views"
+		          "brw_views"
 		   " WHERE brw_files.FileBrowser IN (%u,%u)"
 		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=brw_file_views.FilCod",
+		     " AND brw_files.FilCod=brw_views.FilCod",
 	           (unsigned) Brw_ADMI_DOC_PRJ,
 	           (unsigned) Brw_ADMI_ASS_PRJ,
 	           PrjCod);
@@ -4886,13 +4886,13 @@ void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod)
   {
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views",
-		   "DELETE FROM brw_file_views"
+		   "DELETE FROM brw_views"
 		   " USING brw_files,"
-		          "brw_file_views"
+		          "brw_views"
 		   " WHERE brw_files.FileBrowser IN (%u,%u)"
 		     " AND brw_files.Cod=%ld"
 		     " AND brw_files.ZoneUsrCod=%ld"
-		     " AND brw_files.FilCod=brw_file_views.FilCod",
+		     " AND brw_files.FilCod=brw_views.FilCod",
 	           (unsigned) Brw_ADMI_ASG_USR,
 	           (unsigned) Brw_ADMI_WRK_USR,
 	           CrsCod,UsrCod);
@@ -4945,14 +4945,14 @@ void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod)
 void Brw_RemoveUsrFilesFromDB (long UsrCod)
   {
    /***** Remove from database the entries that store the file views *****/
-   // User is not removed from brw_file_views table,
+   // User is not removed from brw_views table,
    // in order to take into account his/her views
    DB_QueryDELETE ("can not remove file views to files of a user",
-		   "DELETE FROM brw_file_views"
+		   "DELETE FROM brw_views"
 		   " USING brw_files,"
-		          "brw_file_views"
+		          "brw_views"
 		   " WHERE brw_files.ZoneUsrCod=%ld"
-		     " AND brw_files.FilCod=brw_file_views.FilCod",
+		     " AND brw_files.FilCod=brw_views.FilCod",
 	           UsrCod);
 
    /***** Remove from database expanded folders *****/
@@ -10784,7 +10784,7 @@ unsigned long Brw_GetNumFileViewsUsr (long UsrCod)
    /***** Get number of filw views *****/
    if (DB_QuerySELECT (&mysql_res,"can not get number of file views",
 	               "SELECT SUM(NumViews)"	// row[0]
-	                " FROM brw_file_views"
+	                " FROM brw_views"
 	               " WHERE UsrCod=%ld",
                        UsrCod))
      {
@@ -10825,7 +10825,7 @@ static void Brw_GetFileViewsFromLoggedUsrs (struct FileMetadata *FileMetadata)
 				  " from logged users",
 		       "SELECT COUNT(DISTINCT UsrCod),"	// row[0]
 		              "SUM(NumViews)"		// row[1]
-		        " FROM brw_file_views"
+		        " FROM brw_views"
 		       " WHERE FilCod=%ld"
 		         " AND UsrCod>0",
 		       FileMetadata->FilCod))
@@ -10868,7 +10868,7 @@ static void Brw_GetFileViewsFromNonLoggedUsrs (struct FileMetadata *FileMetadata
    if (DB_QuerySELECT (&mysql_res,"can not get number of public views"
 				  " of a file",
 		       "SELECT SUM(NumViews)"	// row[0]
-		        " FROM brw_file_views"
+		        " FROM brw_views"
 		       " WHERE FilCod=%ld"
 		         " AND UsrCod<=0",
 	               FileMetadata->FilCod))
@@ -10903,7 +10903,7 @@ static unsigned Brw_GetFileViewsFromMe (long FilCod)
    /***** Get number of my views *****/
    if (DB_QuerySELECT (&mysql_res,"can not get your number of views of a file",
 		       "SELECT NumViews"	// row[0]
-		        " FROM brw_file_views"
+		        " FROM brw_views"
 		       " WHERE FilCod=%ld"
 		         " AND UsrCod=%ld",
 		       FilCod,Gbl.Usrs.Me.UsrDat.UsrCod))
@@ -10931,7 +10931,7 @@ static void Brw_UpdateFileViews (unsigned NumViews,long FilCod)
    if (NumViews)
       /* Update number of views in database */
       DB_QueryUPDATE ("can not update number of views of a file",
-		      "UPDATE brw_file_views"
+		      "UPDATE brw_views"
 		        " SET NumViews=NumViews+1"
 		      " WHERE FilCod=%ld"
 		        " AND UsrCod=%ld",
@@ -10939,7 +10939,7 @@ static void Brw_UpdateFileViews (unsigned NumViews,long FilCod)
    else	// NumViews == 0
       /* Insert number of views in database */
       DB_QueryINSERT ("can not insert number of views of a file",
-		      "INSERT INTO brw_file_views"
+		      "INSERT INTO brw_views"
 		      " (FilCod,UsrCod,NumViews)"
 		      " VALUES"
 		      " (%ld,%ld,1)",
@@ -11281,14 +11281,14 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1])
 
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views from database",
-		  "DELETE FROM brw_file_views"
+		  "DELETE FROM brw_views"
 		  " USING brw_files,"
-		         "brw_file_views"
+		         "brw_views"
 		  " WHERE brw_files.FileBrowser=%u"
 		    " AND brw_files.Cod=%ld"
 		    " AND brw_files.ZoneUsrCod=%ld"
 		    " AND brw_files.Path='%s'"
-		    " AND brw_files.FilCod=brw_file_views.FilCod",
+		    " AND brw_files.FilCod=brw_views.FilCod",
 	          (unsigned) FileBrowser,Cod,ZoneUsrCod,Path);
 
    /***** Remove from database the entry that stores the data of a file *****/
@@ -11334,14 +11334,14 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1])
 
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views from database",
-		  "DELETE FROM brw_file_views"
+		  "DELETE FROM brw_views"
 		  " USING brw_files,"
-		         "brw_file_views"
+		         "brw_views"
 		  " WHERE brw_files.FileBrowser=%u"
 		    " AND brw_files.Cod=%ld"
 		    " AND brw_files.ZoneUsrCod=%ld"
 		    " AND brw_files.Path LIKE '%s/%%'"
-		    " AND brw_files.FilCod=brw_file_views.FilCod",
+		    " AND brw_files.FilCod=brw_views.FilCod",
                   (unsigned) FileBrowser,Cod,ZoneUsrCod,Path);
 
    /***** Remove from database the entries that store the data of files *****/

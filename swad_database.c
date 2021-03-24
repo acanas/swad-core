@@ -381,6 +381,24 @@ mysql> DESCRIBE bld_buildings;
 		   "UNIQUE INDEX(BldCod),"
 		   "INDEX(CtrCod))");
 
+   /***** Table brw_caches *****/
+/*
+mysql> DESCRIBE brw_caches;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| SessionId | char(43) | NO   | MUL | NULL    |       |
+| PrivPath  | text     | NO   |     | NULL    |       |
+| TmpPubDir | text     | NO   |     | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_caches ("
+			"SessionId CHAR(43) NOT NULL,"			// Cns_BYTES_SESSION_ID
+			"PrivPath VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
+			"TmpPubDir VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
+		   "UNIQUE INDEX(SessionId))");
+
    /***** Table brw_clipboards *****/
 /*
 mysql> DESCRIBE brw_clipboards;
@@ -434,43 +452,6 @@ mysql> DESCRIBE brw_expanded;
 		   "INDEX(UsrCod,FileBrowser,Cod),"
 		   "INDEX(FileBrowser,Cod),"
 		   "INDEX(WorksUsrCod))");
-
-   /***** Table brw_file_caches *****/
-/*
-mysql> DESCRIBE brw_file_caches;
-+-----------+----------+------+-----+---------+-------+
-| Field     | Type     | Null | Key | Default | Extra |
-+-----------+----------+------+-----+---------+-------+
-| SessionId | char(43) | NO   | MUL | NULL    |       |
-| PrivPath  | text     | NO   |     | NULL    |       |
-| TmpPubDir | text     | NO   |     | NULL    |       |
-+-----------+----------+------+-----+---------+-------+
-3 rows in set (0.01 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_file_caches ("
-			"SessionId CHAR(43) NOT NULL,"			// Cns_BYTES_SESSION_ID
-			"PrivPath VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
-			"TmpPubDir VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
-		   "UNIQUE INDEX(SessionId))");
-
-   /***** Table brw_file_views *****/
-/*
-mysql> DESCRIBE brw_file_views;
-+----------+---------+------+-----+---------+-------+
-| Field    | Type    | Null | Key | Default | Extra |
-+----------+---------+------+-----+---------+-------+
-| FilCod   | int(11) | NO   | PRI | NULL    |       |
-| UsrCod   | int(11) | NO   | PRI | NULL    |       |
-| NumViews | int(11) | NO   |     | 0       |       |
-+----------+---------+------+-----+---------+-------+
-3 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_file_views ("
-			"FilCod INT NOT NULL,"
-			"UsrCod INT NOT NULL,"
-			"NumViews INT NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(FilCod,UsrCod),"
-		   "INDEX(UsrCod))");
 
    /***** Table brw_files *****/
 /*
@@ -553,6 +534,25 @@ mysql> DESCRIBE brw_sizes;
 			"TotalSize BIGINT NOT NULL,"
 		   "UNIQUE INDEX(FileBrowser,Cod,ZoneUsrCod),"
 		   "INDEX(ZoneUsrCod))");
+
+   /***** Table brw_views *****/
+/*
+mysql> DESCRIBE brw_views;
++----------+---------+------+-----+---------+-------+
+| Field    | Type    | Null | Key | Default | Extra |
++----------+---------+------+-----+---------+-------+
+| FilCod   | int(11) | NO   | PRI | NULL    |       |
+| UsrCod   | int(11) | NO   | PRI | NULL    |       |
+| NumViews | int(11) | NO   |     | 0       |       |
++----------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_views ("
+			"FilCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"NumViews INT NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(FilCod,UsrCod),"
+		   "INDEX(UsrCod))");
 
    /***** Table cfe_calls_for_exams *****/
 /*

@@ -489,7 +489,7 @@ bool Ses_GetPublicDirFromCache (const char *FullPathMediaPriv,
       /***** Get temporary directory from cache *****/
       if (DB_QuerySELECT (&mysql_res,"can not get check if file is cached",
 			  "SELECT TmpPubDir"
-			   " FROM brw_file_caches"
+			   " FROM brw_caches"
 			  " WHERE SessionId='%s'"
 			    " AND PrivPath='%s'",
 			  Gbl.Session.Id,FullPathMediaPriv))
@@ -528,7 +528,7 @@ static void Ses_DeletePublicDirFromCache (const char *FullPathMediaPriv)
    /***** Delete possible entry *****/
    if (Gbl.Session.IsOpen)
       DB_QueryDELETE ("can not remove cached file",
-		      "DELETE FROM brw_file_caches"
+		      "DELETE FROM brw_caches"
 		      " WHERE SessionId='%s'"
 		        " AND PrivPath='%s'",
 		      Gbl.Session.Id,FullPathMediaPriv);
@@ -549,7 +549,7 @@ void Ses_AddPublicDirToCache (const char *FullPathMediaPriv,
 
       /* Insert new entry */
       DB_QueryINSERT ("can not cache file",
-		      "INSERT INTO brw_file_caches"
+		      "INSERT INTO brw_caches"
 		      " (SessionId,PrivPath,TmpPubDir)"
 		      " VALUES"
 		      " ('%s','%s','%s')",
@@ -566,7 +566,7 @@ void Ses_RemovePublicDirsCache (void)
    /***** Insert into cache *****/
    if (Gbl.Session.IsOpen)
       DB_QueryDELETE ("can not cache file",
-		      "DELETE FROM brw_file_caches"
+		      "DELETE FROM brw_caches"
 		      " WHERE SessionId='%s'",
 		      Gbl.Session.Id);
   }
@@ -580,7 +580,7 @@ void Ses_RemovePublicDirsFromExpiredSessions (void)
   {
    /***** Remove public directories in expired sessions *****/
    DB_QueryDELETE ("can not remove public directories in expired sessions",
-		   "DELETE FROM brw_file_caches"
+		   "DELETE FROM brw_caches"
                    " WHERE SessionId NOT IN"
                          " (SELECT SessionId"
                           " FROM ses_sessions)");

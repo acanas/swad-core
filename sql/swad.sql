@@ -149,6 +149,14 @@ CREATE TABLE IF NOT EXISTS bld_buildings (
 	UNIQUE INDEX(BldCod),
 	INDEX(CtrCod));
 --
+-- Table brw_caches: stores the media private paths linked from public directories in current session 
+--
+CREATE TABLE IF NOT EXISTS brw_caches (
+	SessionId CHAR(43) NOT NULL,
+	PrivPath TEXT COLLATE latin1_bin NOT NULL,
+	TmpPubDir TEXT COLLATE latin1_bin NOT NULL,
+	INDEX(SessionId));
+--
 -- Table brw_clipboards: clipboard (paths used to copy-paste folders and files)
 --
 CREATE TABLE IF NOT EXISTS brw_clipboards (
@@ -175,22 +183,6 @@ CREATE TABLE IF NOT EXISTS brw_expanded (
 	INDEX(UsrCod,FileBrowser,Cod),
 	INDEX(FileBrowser,Cod),
 	INDEX(WorksUsrCod));
---
--- Table brw_file_caches: stores the media private paths linked from public directories in current session 
---
-CREATE TABLE IF NOT EXISTS brw_file_caches (
-	SessionId CHAR(43) NOT NULL,
-	PrivPath TEXT COLLATE latin1_bin NOT NULL,
-	TmpPubDir TEXT COLLATE latin1_bin NOT NULL,
-	INDEX(SessionId));
---
--- Table brw_file_views: stores the number of times each user has seen each file
---
-CREATE TABLE IF NOT EXISTS brw_file_views (
-	FilCod INT NOT NULL,
-	UsrCod INT NOT NULL,
-	NumViews INT NOT NULL DEFAULT 0,
-	UNIQUE INDEX(FilCod,UsrCod),INDEX(UsrCod));
 --
 -- Table brw_files: stores metadata about each file
 --
@@ -231,6 +223,14 @@ CREATE TABLE IF NOT EXISTS brw_sizes (
 	TotalSize BIGINT NOT NULL,
 	UNIQUE INDEX(FileBrowser,Cod,ZoneUsrCod),
 	INDEX(ZoneUsrCod));
+--
+-- Table brw_views: stores the number of times each user has seen each file
+--
+CREATE TABLE IF NOT EXISTS brw_views (
+	FilCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	NumViews INT NOT NULL DEFAULT 0,
+	UNIQUE INDEX(FilCod,UsrCod),INDEX(UsrCod));
 --
 -- Table cfe_calls_for_exams: stores the calls for examination
 --
