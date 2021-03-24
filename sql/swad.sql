@@ -352,6 +352,18 @@ CREATE TABLE IF NOT EXISTS crs_records (
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(FieldCod,UsrCod));
 --
+-- Table crs_requests: stores requests for enrollment in courses
+--
+CREATE TABLE IF NOT EXISTS crs_requests (
+	ReqCod INT NOT NULL AUTO_INCREMENT,
+	CrsCod INT NOT NULL DEFAULT -1,
+	UsrCod INT NOT NULL,
+	Role TINYINT NOT NULL DEFAULT 0,
+	RequestTime DATETIME NOT NULL,
+	UNIQUE INDEX(ReqCod),
+	UNIQUE INDEX(CrsCod,UsrCod),
+	INDEX(UsrCod));
+--
 -- Table crs_users: stores who users belong to what courses
 --
 CREATE TABLE IF NOT EXISTS crs_users (
@@ -368,9 +380,9 @@ CREATE TABLE IF NOT EXISTS crs_users (
 	INDEX(CrsCod,Role),
 	INDEX(UsrCod,Role));
 --
--- Table crs_usr_last: stores last prefs of users in courses
+-- Table crs_user_settings: stores last settings (preferences) of users in courses
 --
-CREATE TABLE IF NOT EXISTS crs_usr_last (
+CREATE TABLE IF NOT EXISTS crs_user_settings (
 	UsrCod INT NOT NULL,
 	CrsCod INT NOT NULL,
 	LastDowGrpCod INT NOT NULL DEFAULT -1,
@@ -383,18 +395,6 @@ CREATE TABLE IF NOT EXISTS crs_usr_last (
 	ColsClassPhoto TINYINT NOT NULL,
 	ListWithPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',
 	UNIQUE INDEX(UsrCod,CrsCod));
---
--- Table crs_requests: stores requests for enrollment in courses
---
-CREATE TABLE IF NOT EXISTS crs_requests (
-	ReqCod INT NOT NULL AUTO_INCREMENT,
-	CrsCod INT NOT NULL DEFAULT -1,
-	UsrCod INT NOT NULL,
-	Role TINYINT NOT NULL DEFAULT 0,
-	RequestTime DATETIME NOT NULL,
-	UNIQUE INDEX(ReqCod),
-	UNIQUE INDEX(CrsCod,UsrCod),
-	INDEX(UsrCod));
 --
 -- Table ctr_centers: centers (faculties, schools...)
 --

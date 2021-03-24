@@ -830,6 +830,30 @@ mysql> DESCRIBE crs_records;
 			"Txt TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(FieldCod,UsrCod))");
 
+   /***** Table crs_requests *****/
+/*
+mysql> DESCRIBE crs_requests;
++-------------+------------+------+-----+---------+----------------+
+| Field       | Type       | Null | Key | Default | Extra          |
++-------------+------------+------+-----+---------+----------------+
+| ReqCod      | int(11)    | NO   | PRI | NULL    | auto_increment |
+| CrsCod      | int(11)    | NO   | MUL | -1      |                |
+| UsrCod      | int(11)    | NO   | MUL | NULL    |                |
+| Role        | tinyint(4) | NO   |     | 0       |                |
+| RequestTime | datetime   | NO   |     | NULL    |                |
++-------------+------------+------+-----+---------+----------------+
+5 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_requests ("
+			"ReqCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"UsrCod INT NOT NULL,"
+			"Role TINYINT NOT NULL DEFAULT 0,"
+			"RequestTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(ReqCod),"
+		   "UNIQUE INDEX(CrsCod,UsrCod),"
+		   "INDEX(UsrCod))");
+
    /***** Table crs_users *****/
 /*
 mysql> DESCRIBE crs_users;
@@ -857,9 +881,9 @@ mysql> DESCRIBE crs_users;
 		   "INDEX(CrsCod,Role),"
 		   "INDEX(UsrCod,Role))");
 
-   /***** Table crs_usr_last *****/
+   /***** Table crs_user_settings *****/
 /*
-mysql> DESCRIBE crs_usr_last;
+mysql> DESCRIBE crs_user_settings;
 +----------------+---------------------------+------+-----+------------+-------+
 | Field          | Type                      | Null | Key | Default    | Extra |
 +----------------+---------------------------+------+-----+------------+-------+
@@ -877,7 +901,7 @@ mysql> DESCRIBE crs_usr_last;
 +----------------+---------------------------+------+-----+------------+-------+
 11 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_usr_last ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_user_settings ("
 			"UsrCod INT NOT NULL,"
 			"CrsCod INT NOT NULL,"
 			"LastDowGrpCod INT NOT NULL DEFAULT -1,"
@@ -890,30 +914,6 @@ mysql> DESCRIBE crs_usr_last;
 			"ColsClassPhoto TINYINT NOT NULL,"
 			"ListWithPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',"
 		   "UNIQUE INDEX(UsrCod,CrsCod))");
-
-   /***** Table crs_requests *****/
-/*
-mysql> DESCRIBE crs_requests;
-+-------------+------------+------+-----+---------+----------------+
-| Field       | Type       | Null | Key | Default | Extra          |
-+-------------+------------+------+-----+---------+----------------+
-| ReqCod      | int(11)    | NO   | PRI | NULL    | auto_increment |
-| CrsCod      | int(11)    | NO   | MUL | -1      |                |
-| UsrCod      | int(11)    | NO   | MUL | NULL    |                |
-| Role        | tinyint(4) | NO   |     | 0       |                |
-| RequestTime | datetime   | NO   |     | NULL    |                |
-+-------------+------------+------+-----+---------+----------------+
-5 rows in set (0.01 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_requests ("
-			"ReqCod INT NOT NULL AUTO_INCREMENT,"
-			"CrsCod INT NOT NULL DEFAULT -1,"
-			"UsrCod INT NOT NULL,"
-			"Role TINYINT NOT NULL DEFAULT 0,"
-			"RequestTime DATETIME NOT NULL,"
-		   "UNIQUE INDEX(ReqCod),"
-		   "UNIQUE INDEX(CrsCod,UsrCod),"
-		   "INDEX(UsrCod))");
 
    /***** Table ctr_centers *****/
 /*

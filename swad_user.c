@@ -7752,8 +7752,10 @@ static void Usr_GetMyUsrListTypeFromDB (void)
 
    /***** Get type of listing of users from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get type of listing of users",
-			     "SELECT UsrListType FROM crs_usr_last"
-			     " WHERE UsrCod=%ld AND CrsCod=%ld",
+			     "SELECT UsrListType"
+			      " FROM crs_user_settings"
+			     " WHERE UsrCod=%ld"
+			       " AND CrsCod=%ld",
 			     Gbl.Usrs.Me.UsrDat.UsrCod,
 			     Gbl.Hierarchy.Crs.CrsCod);
    if (NumRows == 1)		// Should be one only row
@@ -7791,8 +7793,10 @@ static void Usr_UpdateMyUsrListTypeInDB (void)
   {
    /***** Update type of users listing *****/
    DB_QueryUPDATE ("can not update type of listing",
-		   "UPDATE crs_usr_last SET UsrListType='%s'"
-                   " WHERE UsrCod=%ld AND CrsCod=%ld",
+		   "UPDATE crs_user_settings"
+		     " SET UsrListType='%s'"
+                   " WHERE UsrCod=%ld"
+                     " AND CrsCod=%ld",
 		   Usr_StringsUsrListTypeInDB[Gbl.Usrs.Me.ListType],
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Hierarchy.Crs.CrsCod);
@@ -7857,8 +7861,10 @@ static void Usr_GetMyColsClassPhotoFromDB (void)
       /***** Get number of columns in class photo from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get number of columns"
 					   " in class photo",
-				"SELECT ColsClassPhoto FROM crs_usr_last"
-				" WHERE UsrCod=%ld AND CrsCod=%ld",
+				"SELECT ColsClassPhoto"
+				 " FROM crs_user_settings"
+				" WHERE UsrCod=%ld"
+				  " AND CrsCod=%ld",
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Gbl.Hierarchy.Crs.CrsCod);
       if (NumRows == 1)		// Should be one only row
@@ -7891,8 +7897,10 @@ static void Usr_UpdateMyColsClassPhotoInDB (void)
        Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
       /***** Update number of colums in class photo for current course *****/
       DB_QueryUPDATE ("can not update number of columns in class photo",
-		      "UPDATE crs_usr_last SET ColsClassPhoto=%u"
-                      " WHERE UsrCod=%ld AND CrsCod=%ld",
+		      "UPDATE crs_user_settings"
+		        " SET ColsClassPhoto=%u"
+                      " WHERE UsrCod=%ld"
+                        " AND CrsCod=%ld",
 		      Gbl.Usrs.ClassPhoto.Cols,
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
 		      Gbl.Hierarchy.Crs.CrsCod);
@@ -7962,8 +7970,10 @@ void Usr_GetMyPrefAboutListWithPhotosFromDB (void)
       /***** Get if listing of users must show photos from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not check if listing of users"
 					   " must show photos",
-				"SELECT ListWithPhotos FROM crs_usr_last"
-				" WHERE UsrCod=%ld AND CrsCod=%ld",
+				"SELECT ListWithPhotos"
+				 " FROM crs_user_settings"
+				" WHERE UsrCod=%ld"
+				  " AND CrsCod=%ld",
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Gbl.Hierarchy.Crs.CrsCod);
       if (NumRows == 1)                // Should be one only row
@@ -7993,8 +8003,10 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void)
        Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
       /***** Update number of colums in class photo for current course *****/
       DB_QueryUPDATE ("can not update your preference about photos in listing",
-		      "UPDATE crs_usr_last SET ListWithPhotos='%c'"
-                      " WHERE UsrCod=%ld AND CrsCod=%ld",
+		      "UPDATE crs_user_settings"
+		        " SET ListWithPhotos='%c'"
+                      " WHERE UsrCod=%ld"
+                        " AND CrsCod=%ld",
 		      Gbl.Usrs.Listing.WithPhotos ? 'Y' :
 						    'N',
 		      Gbl.Usrs.Me.UsrDat.UsrCod,

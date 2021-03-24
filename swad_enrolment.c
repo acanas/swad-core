@@ -305,7 +305,7 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 
    /***** Register last prefs in current course in database *****/
    DB_QueryINSERT ("can not register user in course",
-		   "INSERT INTO crs_usr_last"
+		   "INSERT INTO crs_user_settings"
 		   " (UsrCod,CrsCod,"
 		   "LastDowGrpCod,LastComGrpCod,LastAssGrpCod,"
 		   "NumAccTst,LastAccTst,NumQstsLastTst,"
@@ -4229,7 +4229,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 
       /***** Remove user from the tables of courses-users *****/
       DB_QueryDELETE ("can not remove a user from a course",
-		      "DELETE FROM crs_usr_last"
+		      "DELETE FROM crs_user_settings"
 		      " WHERE UsrCod=%ld"
 		        " AND CrsCod=%ld",
                       UsrDat->UsrCod,Crs->CrsCod);

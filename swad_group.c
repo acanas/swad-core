@@ -981,7 +981,7 @@ static void Grp_LockTables (void)
 	          "grp_groups WRITE,"
 	          "grp_users WRITE,"
 	          "crs_users READ,"
-	          "crs_usr_last READ,"
+	          "crs_user_settings READ,"
 	          "roo_rooms READ");
    Gbl.DB.LockedTables = true;
   }

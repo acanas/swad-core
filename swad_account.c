@@ -1049,7 +1049,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 
    /***** Remove user from the tables of courses and users *****/
    DB_QueryDELETE ("can not remove a user from all courses",
-		   "DELETE FROM crs_usr_last"
+		   "DELETE FROM crs_user_settings"
 		   " WHERE UsrCod=%ld",
 		   UsrDat->UsrCod);
    DB_QueryDELETE ("can not remove a user from all courses",
