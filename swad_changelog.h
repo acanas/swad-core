@@ -607,7 +607,11 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
-	Version 20.51.43: Mar 24, 2021  Log API database table renamed. (308698 lines)
+	Version 20.51.44: Mar 25, 2021  Project users database table renamed. (308751 lines)
+					1 change necessary in database:
+RENAME TABLE prj_usr TO prj_users;
+
+	Version 20.51.43: Mar 24, 2021  Log API database table renamed. (308751 lines)
 					1 change necessary in database:
 RENAME TABLE log_ws TO log_api;
 

@@ -724,77 +724,6 @@ CREATE TABLE IF NOT EXISTS gam_games (
 	UNIQUE INDEX(GamCod),
 	INDEX(CrsCod));
 --
--- Table mch_answers: stores the users' answers to the matches
---
-CREATE TABLE IF NOT EXISTS mch_answers (
-	MchCod INT NOT NULL,
-	UsrCod INT NOT NULL,
-	QstInd INT NOT NULL,
-	NumOpt TINYINT NOT NULL,
-	AnsInd TINYINT NOT NULL,
-	UNIQUE INDEX(MchCod,UsrCod,QstInd));
---
--- Table mch_groups: stores the groups associated to each match in a game
---
-CREATE TABLE IF NOT EXISTS mch_groups (
-	MchCod INT NOT NULL,
-	GrpCod INT NOT NULL,
-	UNIQUE INDEX(MchCod,GrpCod));
---
--- Table mch_matches: stores the matches (games instances) already played
---
-CREATE TABLE IF NOT EXISTS mch_matches (
-	MchCod INT NOT NULL AUTO_INCREMENT,
-	GamCod INT NOT NULL,
-	UsrCod INT NOT NULL,
-	StartTime DATETIME NOT NULL,
-	EndTime DATETIME NOT NULL,
-	Title VARCHAR(2047) NOT NULL,
-	QstInd INT NOT NULL DEFAULT 0,
-	QstCod INT NOT NULL DEFAULT -1,
-	Showing ENUM('start','stem','answers','results','end') NOT NULL DEFAULT 'start',
-	Countdown INT NOT NULL DEFAULT -1,
-	NumCols INT NOT NULL DEFAULT 1,
-	ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',
-	ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',
-	UNIQUE INDEX(MchCod),
-	INDEX(GamCod));
---
--- Table mch_playing: stores the current matches being played
---
-CREATE TABLE IF NOT EXISTS mch_playing (
-	MchCod INT NOT NULL,
-	TS TIMESTAMP,
-	UNIQUE INDEX(MchCod));
---
--- Table mch_players: stores the current match players
---
-CREATE TABLE IF NOT EXISTS mch_players (
-	MchCod INT NOT NULL,
-	UsrCod INT NOT NULL,
-	TS TIMESTAMP,
-	UNIQUE INDEX(MchCod,UsrCod));
---
--- Table mch_indexes: stores the order of answers in a match
---
-CREATE TABLE IF NOT EXISTS mch_indexes (
-	MchCod INT NOT NULL,
-	QstInd INT NOT NULL,
-	Indexes TEXT NOT NULL,
-	UNIQUE INDEX(MchCod,QstInd));
---
--- Table mch_results: stores match results
---
-CREATE TABLE IF NOT EXISTS mch_results (
-	MchCod INT NOT NULL,
-	UsrCod INT NOT NULL,
-	StartTime DATETIME NOT NULL,
-	EndTime DATETIME NOT NULL,
-	NumQsts INT NOT NULL DEFAULT 0,
-	NumQstsNotBlank INT NOT NULL DEFAULT 0,
-	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
-	UNIQUE INDEX(MchCod,UsrCod));
---
 -- Table gam_questions: stores the questions in the games
 --
 CREATE TABLE IF NOT EXISTS gam_questions (
@@ -803,14 +732,6 @@ CREATE TABLE IF NOT EXISTS gam_questions (
 	QstCod INT NOT NULL,
 	UNIQUE INDEX(GamCod,QstInd),
 	UNIQUE INDEX(GamCod,QstCod));
---
--- Table mch_times: stores the elapsed time in every question in every match played
---
-CREATE TABLE IF NOT EXISTS mch_times (
-	MchCod INT NOT NULL,
-	QstInd INT NOT NULL,
-	ElapsedTime TIME NOT NULL DEFAULT 0,
-	UNIQUE INDEX(MchCod,QstInd));
 --
 -- Table hld_holidays: stores the holidays in each institution
 --
@@ -983,14 +904,77 @@ CREATE TABLE IF NOT EXISTS log_search (
 	SearchStr VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(LogCod));
 --
--- Table ntf_mail_domains: stores e-mail domains to which sending of notifications is allowed
+-- Table mch_answers: stores the users' answers to the matches
 --
-CREATE TABLE IF NOT EXISTS ntf_mail_domains (
-	MaiCod INT NOT NULL AUTO_INCREMENT,
-	Domain VARCHAR(255) NOT NULL,
-	Info VARCHAR(2047) NOT NULL,
-	UNIQUE INDEX(MaiCod),
-	UNIQUE INDEX(Domain));
+CREATE TABLE IF NOT EXISTS mch_answers (
+	MchCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	QstInd INT NOT NULL,
+	NumOpt TINYINT NOT NULL,
+	AnsInd TINYINT NOT NULL,
+	UNIQUE INDEX(MchCod,UsrCod,QstInd));
+--
+-- Table mch_indexes: stores the order of answers in a match
+--
+CREATE TABLE IF NOT EXISTS mch_indexes (
+	MchCod INT NOT NULL,
+	QstInd INT NOT NULL,
+	Indexes TEXT NOT NULL,
+	UNIQUE INDEX(MchCod,QstInd));
+--
+-- Table mch_matches: stores the matches (games instances) already played
+--
+CREATE TABLE IF NOT EXISTS mch_matches (
+	MchCod INT NOT NULL AUTO_INCREMENT,
+	GamCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
+	Title VARCHAR(2047) NOT NULL,
+	QstInd INT NOT NULL DEFAULT 0,
+	QstCod INT NOT NULL DEFAULT -1,
+	Showing ENUM('start','stem','answers','results','end') NOT NULL DEFAULT 'start',
+	Countdown INT NOT NULL DEFAULT -1,
+	NumCols INT NOT NULL DEFAULT 1,
+	ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',
+	ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',
+	UNIQUE INDEX(MchCod),
+	INDEX(GamCod));
+--
+-- Table mch_players: stores the current match players
+--
+CREATE TABLE IF NOT EXISTS mch_players (
+	MchCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	TS TIMESTAMP,
+	UNIQUE INDEX(MchCod,UsrCod));
+--
+-- Table mch_playing: stores the current matches being played
+--
+CREATE TABLE IF NOT EXISTS mch_playing (
+	MchCod INT NOT NULL,
+	TS TIMESTAMP,
+	UNIQUE INDEX(MchCod));
+--
+-- Table mch_results: stores match results
+--
+CREATE TABLE IF NOT EXISTS mch_results (
+	MchCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
+	NumQsts INT NOT NULL DEFAULT 0,
+	NumQstsNotBlank INT NOT NULL DEFAULT 0,
+	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
+	UNIQUE INDEX(MchCod,UsrCod));
+--
+-- Table mch_times: stores the elapsed time in every question in every match played
+--
+CREATE TABLE IF NOT EXISTS mch_times (
+	MchCod INT NOT NULL,
+	QstInd INT NOT NULL,
+	ElapsedTime TIME NOT NULL DEFAULT 0,
+	UNIQUE INDEX(MchCod,QstInd));
 --
 -- Table med_media: stores information about media (images, videos, YouTube)
 --
@@ -1118,6 +1102,15 @@ CREATE TABLE IF NOT EXISTS not_notices (
 	INDEX(CreatTime),
 	INDEX(Status));
 --
+-- Table ntf_mail_domains: stores e-mail domains to which sending of notifications is allowed
+--
+CREATE TABLE IF NOT EXISTS ntf_mail_domains (
+	MaiCod INT NOT NULL AUTO_INCREMENT,
+	Domain VARCHAR(255) NOT NULL,
+	Info VARCHAR(2047) NOT NULL,
+	UNIQUE INDEX(MaiCod),
+	UNIQUE INDEX(Domain));
+--
 -- Table ntf_notifications: stores the notifications of events
 --
 CREATE TABLE IF NOT EXISTS ntf_notifications (
@@ -1213,9 +1206,9 @@ CREATE TABLE IF NOT EXISTS prj_projects (
 	INDEX(CrsCod,ModifTime),
 	INDEX(CrsCod,DptCod));
 --
--- Table prj_usr: stores the users inside projects
+-- Table prj_users: stores the users inside projects
 --
-CREATE TABLE IF NOT EXISTS prj_usr (
+CREATE TABLE IF NOT EXISTS prj_users (
 	PrjCod INT NOT NULL,
 	RoleInProject TINYINT NOT NULL DEFAULT 0,
 	UsrCod INT NOT NULL,

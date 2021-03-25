@@ -2255,9 +2255,11 @@ static unsigned Prj_GetNumUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProje
    /***** Get users in project from database *****/
    return (unsigned) DB_QueryCOUNT ("can not get number of users in project",
 				    "SELECT COUNT(UsrCod)"
-				    " FROM prj_usr"
-				    " WHERE PrjCod=%ld AND RoleInProject=%u",
-				    PrjCod,(unsigned) RoleInProject);
+				     " FROM prj_users"
+				    " WHERE PrjCod=%ld"
+				      " AND RoleInProject=%u",
+				    PrjCod,
+				    (unsigned) RoleInProject);
   }
 
 /*****************************************************************************/
@@ -2269,15 +2271,18 @@ static unsigned Prj_GetUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,
   {
    /***** Get users in project from database *****/
    return (unsigned) DB_QuerySELECT (mysql_res,"can not get users in project",
-				     "SELECT prj_usr.UsrCod,"	// row[0]
-				     "usr_data.Surname1 AS S1,"	// row[1]
-				     "usr_data.Surname2 AS S2,"	// row[2]
-				     "usr_data.FirstName AS FN"	// row[3]
-				     " FROM prj_usr,usr_data"
-				     " WHERE prj_usr.PrjCod=%ld"
-				     " AND prj_usr.RoleInProject=%u"
-				     " AND prj_usr.UsrCod=usr_data.UsrCod"
-				     " ORDER BY S1,S2,FN",
+				     "SELECT prj_users.UsrCod,"		// row[0]
+				            "usr_data.Surname1 AS S1,"	// row[1]
+				            "usr_data.Surname2 AS S2,"	// row[2]
+				            "usr_data.FirstName AS FN"	// row[3]
+				      " FROM prj_users,"
+				            "usr_data"
+				     " WHERE prj_users.PrjCod=%ld"
+				       " AND prj_users.RoleInProject=%u"
+				       " AND prj_users.UsrCod=usr_data.UsrCod"
+				     " ORDER BY S1,"
+				               "S2,"
+				               "FN",
 				     PrjCod,(unsigned) RoleInProject);
   }
 
@@ -2313,9 +2318,12 @@ unsigned Prj_GetMyRolesInProject (long PrjCod)
    Gbl.Cache.MyRolesInProject.PrjCod         = PrjCod;
    Gbl.Cache.MyRolesInProject.RolesInProject = 0;
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get my roles in project",
-		                        "SELECT RoleInProject FROM prj_usr"
-		                        " WHERE PrjCod=%ld AND UsrCod=%ld",
-		                        PrjCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+		                        "SELECT RoleInProject"
+		                         " FROM prj_users"
+		                        " WHERE PrjCod=%ld"
+		                          " AND UsrCod=%ld",
+		                        PrjCod,
+		                        Gbl.Usrs.Me.UsrDat.UsrCod);
    for (NumRow = 0;
 	NumRow < NumRows;
 	NumRow++)
@@ -2510,7 +2518,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
         {
 	 /* Add user to project */
 	 DB_QueryREPLACE ("can not add user to project",
-			  "REPLACE INTO prj_usr"
+			  "REPLACE INTO prj_users"
 			  " (PrjCod,RoleInProject,UsrCod)"
 			  " VALUES"
 			  " (%ld,%u,%ld)",
@@ -2690,9 +2698,10 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	{
 	 /***** Remove user from the table of project-users *****/
 	 DB_QueryDELETE ("can not remove a user from a project",
-			 "DELETE FROM prj_usr"
-			 " WHERE PrjCod=%ld AND RoleInProject=%u"
-			 " AND UsrCod=%ld",
+			 "DELETE FROM prj_users"
+			 " WHERE PrjCod=%ld"
+			   " AND RoleInProject=%u"
+			   " AND UsrCod=%ld",
 		         Prj.PrjCod,
 		         (unsigned) RoleInProject,
 		         Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -2931,11 +2940,11 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
 					    "SELECT prj_projects.PrjCod"
 					     " FROM prj_projects,"
-					           "prj_usr"
+					           "prj_users"
 					    " WHERE prj_projects.CrsCod=%ld"
 					    "%s%s%s"
-					      " AND prj_projects.PrjCod=prj_usr.PrjCod"
-					      " AND prj_usr.UsrCod=%ld"
+					      " AND prj_projects.PrjCod=prj_users.PrjCod"
+					      " AND prj_users.UsrCod=%ld"
 					    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 					    " ORDER BY %s",
 					    Gbl.Hierarchy.Crs.CrsCod,
@@ -2947,12 +2956,12 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
 					    "SELECT prj_projects.PrjCod"
 					     " FROM prj_projects LEFT JOIN dpt_departments,"
-					           "prj_usr"
+					           "prj_users"
 					       " ON prj_projects.DptCod=dpt_departments.DptCod"
 					    " WHERE prj_projects.CrsCod=%ld"
 					    "%s%s%s"
-					      " AND prj_projects.PrjCod=prj_usr.PrjCod"
-					      " AND prj_usr.UsrCod=%ld"
+					      " AND prj_projects.PrjCod=prj_users.PrjCod"
+					      " AND prj_users.UsrCod=%ld"
 					    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 					    " ORDER BY %s",
 					    Gbl.Hierarchy.Crs.CrsCod,
@@ -2984,11 +2993,11 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 		     NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
 					       "SELECT prj_projects.PrjCod"
 					        " FROM prj_projects,"
-					              "prj_usr"
+					              "prj_users"
 					       " WHERE prj_projects.CrsCod=%ld"
 					       "%s%s%s"
-					         " AND prj_projects.PrjCod=prj_usr.PrjCod"
-					         " AND prj_usr.UsrCod IN (%s)"
+					         " AND prj_projects.PrjCod=prj_users.PrjCod"
+					         " AND prj_users.UsrCod IN (%s)"
 					       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 					       " ORDER BY %s",
 					       Gbl.Hierarchy.Crs.CrsCod,
@@ -3000,12 +3009,12 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 		     NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
 					       "SELECT prj_projects.PrjCod"
 					        " FROM prj_projects LEFT JOIN dpt_departments,"
-					              "prj_usr"
+					              "prj_users"
 					          " ON prj_projects.DptCod=dpt_departments.DptCod"
 					       " WHERE prj_projects.CrsCod=%ld"
 					       "%s%s%s"
-					         " AND prj_projects.PrjCod=prj_usr.PrjCod"
-					         " AND prj_usr.UsrCod IN (%s)"
+					         " AND prj_projects.PrjCod=prj_users.PrjCod"
+					         " AND prj_users.UsrCod IN (%s)"
 					       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 					       " ORDER BY %s",
 					       Gbl.Hierarchy.Crs.CrsCod,
@@ -3382,12 +3391,12 @@ void Prj_RemoveProject (void)
      {
       /***** Remove users in project *****/
       DB_QueryDELETE ("can not remove project",
-		      "DELETE FROM prj_usr"
+		      "DELETE FROM prj_users"
 		      " USING prj_projects,"
-		             "prj_usr"
+		             "prj_users"
 		      " WHERE projects.PrjCod=%ld"
 		        " AND projects.CrsCod=%ld"
-		        " AND projects.PrjCod=prj_usr.PrjCod",
+		        " AND projects.PrjCod=prj_users.PrjCod",
 	              Prj.PrjCod,
 	              Gbl.Hierarchy.Crs.CrsCod);
 
@@ -4004,7 +4013,7 @@ static void Prj_CreateProject (struct Prj_Project *Prj)
 
    /***** Insert creator as first tutor *****/
    DB_QueryINSERT ("can not add tutor",
-		   "INSERT INTO prj_usr"
+		   "INSERT INTO prj_users"
 		   " (PrjCod,RoleInProject,UsrCod)"
 		   " VALUES"
 		   " (%ld,%u,%ld)",
@@ -4548,11 +4557,11 @@ void Prj_RemoveCrsProjects (long CrsCod)
   {
    /***** Remove users in projects of the course *****/
    DB_QueryDELETE ("can not remove all the projects of a course",
-		   "DELETE FROM prj_usr"
+		   "DELETE FROM prj_users"
 		   " USING prj_projects,"
-		          "prj_usr"
+		          "prj_users"
 		   " WHERE prj_projects.CrsCod=%ld"
-		     " AND prj_projects.PrjCod=prj_usr.PrjCod",
+		     " AND prj_projects.PrjCod=prj_users.PrjCod",
                    CrsCod);
 
    /***** Flush cache *****/
@@ -4580,7 +4589,7 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
 
    /***** Remove user from projects *****/
    DB_QueryDELETE ("can not remove user from projects",
-		   "DELETE FROM prj_usr"
+		   "DELETE FROM prj_users"
 		   " WHERE UsrCod=%ld",
 		   UsrCod);
 

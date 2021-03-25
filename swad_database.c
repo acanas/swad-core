@@ -2526,9 +2526,9 @@ mysql> DESCRIBE prj_projects;
 		   "INDEX(CrsCod,ModifTime),"
 		   "INDEX(CrsCod,DptCod))");
 
-   /***** Table prj_usr *****/
+   /***** Table prj_users *****/
 /*
-mysql> DESCRIBE prj_usr;
+mysql> DESCRIBE prj_users;
 +---------------+------------+------+-----+---------+-------+
 | Field         | Type       | Null | Key | Default | Extra |
 +---------------+------------+------+-----+---------+-------+
@@ -2538,7 +2538,7 @@ mysql> DESCRIBE prj_usr;
 +---------------+------------+------+-----+---------+-------+
 3 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_usr ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_users ("
 			"PrjCod INT NOT NULL,"
 			"RoleInProject TINYINT NOT NULL DEFAULT 0,"
 			"UsrCod INT NOT NULL,"
