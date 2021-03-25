@@ -1,9 +1,9 @@
 CREATE DATABASE IF NOT EXISTS swad DEFAULT CHARACTER SET=latin1 DEFAULT COLLATE latin1_spanish_ci;
 USE swad;
 --
--- Table act_MFU: stores the recent actions more frequently made by each user
+-- Table act_frequent: stores the recent actions more frequently made by each user
 --
-CREATE TABLE IF NOT EXISTS act_MFU (
+CREATE TABLE IF NOT EXISTS act_frequent (
 	UsrCod INT NOT NULL,
 	ActCod INT NOT NULL,
 	Score FLOAT NOT NULL,

@@ -111,7 +111,7 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
    /***** Get most frequently used actions *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get most frequently used actions",
 			     "SELECT ActCod"	// row[0]
-			     " FROM act_MFU"
+			      " FROM act_frequent"
 			     " WHERE UsrCod=%ld"
 			     " ORDER BY Score DESC,"
 			               "LastClick DESC",
@@ -158,7 +158,7 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
       NumActions = (unsigned)
       DB_QuerySELECT (&mysql_res,"can not get the most frequently used actions",
 		      "SELECT ActCod"	// row[0]
-		      " FROM act_MFU"
+		       " FROM act_frequent"
 		      " WHERE UsrCod=%ld"
 		      " ORDER BY LastClick DESC,"
 		                "Score DESC",
@@ -354,9 +354,9 @@ void MFU_UpdateMFUActions (void)
    /***** Get current score *****/
    if (DB_QuerySELECT (&mysql_res,"can not get score for current action",
 	               "SELECT Score"	// row[0]
-	               " FROM act_MFU"
+	                " FROM act_frequent"
 		       " WHERE UsrCod=%ld"
-		       " AND ActCod=%ld",
+		         " AND ActCod=%ld",
 		       Gbl.Usrs.Me.UsrDat.UsrCod,
 		       ActCod))
      {
@@ -375,7 +375,7 @@ void MFU_UpdateMFUActions (void)
 
    /***** Update score for the current action *****/
    DB_QueryREPLACE ("can not update most frequently used actions",
-		    "REPLACE INTO act_MFU"
+		    "REPLACE INTO act_frequent"
 		    " (UsrCod,ActCod,Score,LastClick)"
 		    " VALUES"
 		    " (%ld,%ld,'%15lg',NOW())",
@@ -383,9 +383,10 @@ void MFU_UpdateMFUActions (void)
 
    /***** Update score for other actions *****/
    DB_QueryUPDATE ("can not update most frequently used actions",
-		   "UPDATE act_MFU"
-		   " SET Score=GREATEST(Score*'%.15lg','%.15lg')"
-		   " WHERE UsrCod=%ld AND ActCod<>%ld",
+		   "UPDATE act_frequent"
+		     " SET Score=GREATEST(Score*'%.15lg','%.15lg')"
+		   " WHERE UsrCod=%ld"
+		     " AND ActCod<>%ld",
                    MFU_DECREASE_FACTOR,MFU_MIN_SCORE,
                    Gbl.Usrs.Me.UsrDat.UsrCod,ActCod);
 

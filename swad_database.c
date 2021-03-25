@@ -92,9 +92,9 @@ void DB_CreateTablesIfNotExist (void)
    Ale_ShowAlert (Ale_INFO,Txt_Creating_database_tables_if_they_do_not_exist);
    HTM_OL_Begin ();
 
-   /***** Table act_MFU *****/
+   /***** Table act_frequent *****/
 /*
-mysql> DESCRIBE act_MFU;
+mysql> DESCRIBE act_frequent;
 +-----------+----------+------+-----+---------+-------+
 | Field     | Type     | Null | Key | Default | Extra |
 +-----------+----------+------+-----+---------+-------+
@@ -105,7 +105,7 @@ mysql> DESCRIBE act_MFU;
 +-----------+----------+------+-----+---------+-------+
 4 rows in set (0.01 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS act_MFU ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS act_frequent ("
 			"UsrCod INT NOT NULL,"
 			"ActCod INT NOT NULL,"
 			"Score FLOAT NOT NULL,"
