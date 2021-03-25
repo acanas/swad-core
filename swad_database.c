@@ -3654,9 +3654,9 @@ mysql> DESCRIBE usr_pending_passwd;
 			"DateAndTime DATETIME NOT NULL,"
 		   "PRIMARY KEY (UsrCod))");
 
-   /***** Table usr_report *****/
+   /***** Table usr_reports *****/
 /*
-mysql> DESCRIBE usr_report;
+mysql> DESCRIBE usr_reports;
 +---------------+--------------+------+-----+---------+----------------+
 | Field         | Type         | Null | Key | Default | Extra          |
 +---------------+--------------+------+-----+---------+----------------+
@@ -3670,7 +3670,7 @@ mysql> DESCRIBE usr_report;
 +---------------+--------------+------+-----+---------+----------------+
 7 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_report ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_reports ("
 			"RepCod INT NOT NULL AUTO_INCREMENT,"
 			"UsrCod INT NOT NULL,"
 			"ReportTimeUTC DATETIME NOT NULL,"

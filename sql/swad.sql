@@ -1742,9 +1742,9 @@ CREATE TABLE IF NOT EXISTS usr_pending_passwd (
 	DateAndTime DATETIME NOT NULL,
 	PRIMARY KEY(UsrCod));
 --
--- Table usr_report: stores users' usage reports
+-- Table usr_reports: stores users' usage reports
 --
-CREATE TABLE IF NOT EXISTS usr_report (
+CREATE TABLE IF NOT EXISTS usr_reports (
 	RepCod INT NOT NULL AUTO_INCREMENT,
 	UsrCod INT NOT NULL,
 	ReportTimeUTC DATETIME NOT NULL,

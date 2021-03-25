@@ -421,7 +421,7 @@ static void Rep_CreateNewReportEntryIntoDB (const struct Rep_Report *Report)
   {
    /***** Insert a new user's usage report into database *****/
    DB_QueryINSERT ("can not create new user's usage report",
-		   "INSERT INTO usr_report"
+		   "INSERT INTO usr_reports"
 	           " (UsrCod,ReportTimeUTC,"
 	           "UniqueDirL,UniqueDirR,Filename,Permalink)"
                    " VALUES"
@@ -1424,8 +1424,9 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
    /***** Get directories for the reports *****/
    NumReports =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's usage reports",
-			      "SELECT UniqueDirL,UniqueDirR"
-			      " FROM usr_report"
+			      "SELECT UniqueDirL,"	// row[0]
+			             "UniqueDirR"	// row[1]
+			       " FROM usr_reports"
 			      " WHERE UsrCod=%ld",
 			      UsrCod);
 
@@ -1455,6 +1456,7 @@ static void Rep_RemoveUsrReportsFromDB (long UsrCod)
   {
    /***** Insert a new user's usage report into database *****/
    DB_QueryDELETE ("can not remove user's usage reports",
-		   "DELETE FROM usr_report WHERE UsrCod=%ld",
+		   "DELETE FROM usr_reports"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
