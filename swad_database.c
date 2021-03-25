@@ -2760,9 +2760,9 @@ mysql> DESCRIBE sta_degrees;
 			"TimeToComputeAvgPhoto INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(DegCod,Sex))");
 
-   /***** Table sta_notif *****/
+   /***** Table sta_notifications *****/
 /*
-mysql> DESCRIBE sta_notif;
+mysql> DESCRIBE sta_notifications;
 +-------------+------------+------+-----+---------+-------+
 | Field       | Type       | Null | Key | Default | Extra |
 +-------------+------------+------+-----+---------+-------+
@@ -2774,7 +2774,7 @@ mysql> DESCRIBE sta_notif;
 +-------------+------------+------+-----+---------+-------+
 5 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS sta_notif ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS sta_notifications ("
 			"DegCod INT NOT NULL,"
 			"CrsCod INT NOT NULL,"
 			"NotifyEvent TINYINT NOT NULL,"

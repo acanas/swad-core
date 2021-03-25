@@ -1306,9 +1306,9 @@ CREATE TABLE IF NOT EXISTS sta_degrees (
 	TimeToComputeAvgPhoto INT NOT NULL DEFAULT -1,
 	UNIQUE INDEX(DegCod,Sex));
 --
--- Table sta_notif: stores statistics about notifications: number of notified events and number of e-mails sent
+-- Table sta_notifications: stores statistics about notifications: number of notified events and number of e-mails sent
 --
-CREATE TABLE IF NOT EXISTS sta_notif (
+CREATE TABLE IF NOT EXISTS sta_notifications (
 	DegCod INT NOT NULL,
 	CrsCod INT NOT NULL,
 	NotifyEvent TINYINT NOT NULL,

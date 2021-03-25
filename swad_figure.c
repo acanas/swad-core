@@ -4621,72 +4621,78 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
          case Hie_Lvl_SYS:
             DB_QuerySELECT (&mysql_res,"can not get the number"
         			       " of notifications by email",
-        		    "SELECT SUM(NumEvents),SUM(NumMails)"
-                            " FROM sta_notif"
+        		    "SELECT SUM(NumEvents),"			// row[0]
+        		           "SUM(NumMails)"			// row[1]
+                             " FROM sta_notifications"
                             " WHERE NotifyEvent=%u",
 			    (unsigned) NotifyEvent);
             break;
 	 case Hie_Lvl_CTY:
             DB_QuerySELECT (&mysql_res,"can not get the number"
         			       " of notifications by email",
-        		    "SELECT SUM(sta_notif.NumEvents),"
-        		           "SUM(sta_notif.NumMails)"
-                            " FROM ins_instits,"
-                                  "ctr_centers,"
-                                  "deg_degrees,"
-                                  "sta_notif"
+        		    "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
+        		           "SUM(sta_notifications.NumMails)"	// row[1]
+                             " FROM ins_instits,"
+                                   "ctr_centers,"
+                                   "deg_degrees,"
+                                   "sta_notifications"
                             " WHERE ins_instits.CtyCod=%ld"
-                            " AND ins_instits.InsCod=ctr_centers.InsCod"
-                            " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-                            " AND deg_degrees.DegCod=sta_notif.DegCod"
-                            " AND sta_notif.NotifyEvent=%u",
-			    Gbl.Hierarchy.Cty.CtyCod,(unsigned) NotifyEvent);
+                              " AND ins_instits.InsCod=ctr_centers.InsCod"
+                              " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+                              " AND deg_degrees.DegCod=sta_notifications.DegCod"
+                              " AND sta_notifications.NotifyEvent=%u",
+			    Gbl.Hierarchy.Cty.CtyCod,
+			    (unsigned) NotifyEvent);
             break;
 	 case Hie_Lvl_INS:
             DB_QuerySELECT (&mysql_res,"can not get the number"
         			       " of notifications by email",
-        		    "SELECT SUM(sta_notif.NumEvents),"
-        		           "SUM(sta_notif.NumMails)"
-                            " FROM ctr_centers,"
-                                  "deg_degrees,"
-                                  "sta_notif"
+        		    "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
+        		           "SUM(sta_notifications.NumMails)"	// row[1]
+                             " FROM ctr_centers,"
+                                   "deg_degrees,"
+                                   "sta_notifications"
                             " WHERE ctr_centers.InsCod=%ld"
-                            " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-                            " AND deg_degrees.DegCod=sta_notif.DegCod"
-                            " AND sta_notif.NotifyEvent=%u",
-			    Gbl.Hierarchy.Ins.InsCod,(unsigned) NotifyEvent);
+                              " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+                              " AND deg_degrees.DegCod=sta_notifications.DegCod"
+                              " AND sta_notifications.NotifyEvent=%u",
+			    Gbl.Hierarchy.Ins.InsCod,
+			    (unsigned) NotifyEvent);
             break;
          case Hie_Lvl_CTR:
             DB_QuerySELECT (&mysql_res,"can not get the number"
         			       " of notifications by email",
-        		    "SELECT SUM(sta_notif.NumEvents),"
-        		           "SUM(sta_notif.NumMails)"
-                            " FROM deg_degrees,"
-                                  "sta_notif"
+        		    "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
+        		           "SUM(sta_notifications.NumMails)"	// row[1]
+                             " FROM deg_degrees,"
+                                   "sta_notifications"
                             " WHERE deg_degrees.CtrCod=%ld"
-                            " AND deg_degrees.DegCod=sta_notif.DegCod"
-                            " AND sta_notif.NotifyEvent=%u",
-			    Gbl.Hierarchy.Ctr.CtrCod,(unsigned) NotifyEvent);
+                              " AND deg_degrees.DegCod=sta_notifications.DegCod"
+                              " AND sta_notifications.NotifyEvent=%u",
+			    Gbl.Hierarchy.Ctr.CtrCod,
+			    (unsigned) NotifyEvent);
             break;
          case Hie_Lvl_DEG:
             DB_QuerySELECT (&mysql_res,"can not get the number"
         			       " of notifications by email",
-        		    "SELECT SUM(NumEvents),"
-        		           "SUM(NumMails)"
-                            " FROM sta_notif"
+        		    "SELECT SUM(NumEvents),"			// row[0]
+        		           "SUM(NumMails)"			// row[1]
+                             " FROM sta_notifications"
                             " WHERE DegCod=%ld"
-                            " AND NotifyEvent=%u",
-			    Gbl.Hierarchy.Deg.DegCod,(unsigned) NotifyEvent);
+                              " AND NotifyEvent=%u",
+			    Gbl.Hierarchy.Deg.DegCod,
+			    (unsigned) NotifyEvent);
             break;
          case Hie_Lvl_CRS:
             DB_QuerySELECT (&mysql_res,"can not get the number"
         			       " of notifications by email",
-        		    "SELECT SUM(NumEvents),"
-        		           "SUM(NumMails)"
-                            " FROM sta_notif"
+        		    "SELECT SUM(NumEvents),"			// row[0]
+        		           "SUM(NumMails)"			// row[1]
+                             " FROM sta_notifications"
                             " WHERE CrsCod=%ld"
-                            " AND NotifyEvent=%u",
-			    Gbl.Hierarchy.Crs.CrsCod,(unsigned) NotifyEvent);
+                              " AND NotifyEvent=%u",
+			    Gbl.Hierarchy.Crs.CrsCod,
+			    (unsigned) NotifyEvent);
             break;
 	 default:
 	    Lay_WrongScopeExit ();

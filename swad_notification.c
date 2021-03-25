@@ -1907,10 +1907,15 @@ static void Ntf_GetNumNotifSent (long DegCod,long CrsCod,
    /***** Get number of notifications sent by email from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of notifications"
 				        " sent by email",
-			     "SELECT NumEvents,NumMails FROM sta_notif"
-			     " WHERE DegCod=%ld AND CrsCod=%ld"
-			     " AND NotifyEvent=%u",
-			     DegCod,CrsCod,(unsigned) NotifyEvent);
+			     "SELECT NumEvents,"	// row[0]
+			            "NumMails"		// row[1]
+			      " FROM sta_notifications"
+			     " WHERE DegCod=%ld"
+			       " AND CrsCod=%ld"
+			       " AND NotifyEvent=%u",
+			     DegCod,
+			     CrsCod,
+			     (unsigned) NotifyEvent);
 
    /***** Get number of rows *****/
    if (NumRows)
@@ -1944,7 +1949,7 @@ static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
 
    /***** Update number of users notified *****/
    DB_QueryREPLACE ("can not update the number of sent notifications",
-		    "REPLACE INTO sta_notif"
+		    "REPLACE INTO sta_notifications"
 		    " (DegCod,CrsCod,NotifyEvent,NumEvents,NumMails)"
 		    " VALUES"
 		    " (%ld,%ld,%u,%u,%u)",
