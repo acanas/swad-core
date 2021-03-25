@@ -1214,14 +1214,6 @@ CREATE TABLE IF NOT EXISTS prj_users (
 	UsrCod INT NOT NULL,
 	UNIQUE INDEX(PrjCod,RoleInProject,UsrCod));
 --
--- Table roo_MACs: stores the associations between rooms and MAC addresses
---
-CREATE TABLE IF NOT EXISTS roo_MACs (
-	RooCod INT NOT NULL AUTO_INCREMENT,
-	MAC BIGINT NOT NULL,
-	UNIQUE INDEX(RooCod,MAC),
-	UNIQUE INDEX(MAC,RooCod));
---
 -- Table roo_check_in: stores the history of locations of users
 --
 CREATE TABLE IF NOT EXISTS roo_check_in (
@@ -1232,6 +1224,14 @@ CREATE TABLE IF NOT EXISTS roo_check_in (
 	UNIQUE INDEX(ChkCod),
 	INDEX(UsrCod,CheckInTime),
 	INDEX(CheckInTime));
+--
+-- Table roo_macs: stores the associations between rooms and MAC addresses
+--
+CREATE TABLE IF NOT EXISTS roo_macs (
+	RooCod INT NOT NULL AUTO_INCREMENT,
+	MAC BIGINT NOT NULL,
+	UNIQUE INDEX(RooCod,MAC),
+	UNIQUE INDEX(MAC,RooCod));
 --
 -- Table roo_rooms: stores the rooms associated to each center
 --

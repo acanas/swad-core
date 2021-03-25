@@ -6043,13 +6043,13 @@ int swad__getLocation (struct soap *soap,
 				    "roo_rooms.RooCod,"		// row[10]
 				    "roo_rooms.ShortName,"	// row[11]
 				    "roo_rooms.FullName"	// row[12]
-			      " FROM roo_MACs,"
+			      " FROM roo_macs,"
 				    "roo_rooms,"
 				    "bld_buildings,"
 				    "ctr_centers,"
 				    "ins_instits"
-			     " WHERE roo_MACs.MAC=%llu"
-			       " AND roo_MACs.RooCod=roo_rooms.RooCod"
+			     " WHERE roo_macs.MAC=%llu"
+			       " AND roo_macs.RooCod=roo_rooms.RooCod"
 			       " AND roo_rooms.BldCod=bld_buildings.BldCod"
 			       " AND bld_buildings.CtrCod=ctr_centers.CtrCod"
 			       " AND ctr_centers.InsCod=ins_instits.InsCod"
