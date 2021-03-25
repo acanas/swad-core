@@ -212,11 +212,12 @@ void Acc_CheckIfEmptyAccountExists (void)
    if (ID_CheckIfUsrIDIsValid (ID))
      {
       NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's codes",
-					   "SELECT usr_IDs.UsrCod"
-					   " FROM usr_IDs,usr_data"
-					   " WHERE usr_IDs.UsrID='%s'"
-					   " AND usr_IDs.UsrCod=usr_data.UsrCod"
-					   " AND usr_data.Password=''",
+					   "SELECT usr_ids.UsrCod"
+					    " FROM usr_ids,"
+					          "usr_data"
+					   " WHERE usr_ids.UsrID='%s'"
+					     " AND usr_ids.UsrCod=usr_data.UsrCod"
+					     " AND usr_data.Password=''",
 					   ID);
       if (NumUsrs)
 	{
@@ -797,7 +798,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
      {
       Str_ConvertToUpperText (UsrDat->IDs.List[NumID].ID);
       DB_QueryINSERT ("can not store user's ID when creating user",
-		      "INSERT INTO usr_IDs"
+		      "INSERT INTO usr_ids"
 		      " (UsrCod,UsrID,CreatTime,Confirmed)"
 		      " VALUES"
 		      " (%ld,'%s',NOW(),'%c')",
@@ -1193,7 +1194,7 @@ static void Acc_RemoveUsr (struct UsrData *UsrDat)
 
    /***** Remove user's IDs *****/
    DB_QueryDELETE ("can not remove user's IDs",
-		   "DELETE FROM usr_IDs"
+		   "DELETE FROM usr_ids"
 		   " WHERE UsrCod=%ld",
 		   UsrDat->UsrCod);
 

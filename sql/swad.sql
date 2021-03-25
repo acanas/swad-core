@@ -1690,9 +1690,9 @@ CREATE TABLE IF NOT EXISTS usr_follow (
 	UNIQUE INDEX (FollowedCod,FollowerCod),
 	INDEX (FollowTime));
 --
--- Table usr_IDs: stores the users' IDs
+-- Table usr_ids: stores the users' IDs
 --
-CREATE TABLE IF NOT EXISTS usr_IDs (
+CREATE TABLE IF NOT EXISTS usr_ids (
 	UsrCod INT NOT NULL,
 	UsrID CHAR(16) NOT NULL,
 	CreatTime DATETIME NOT NULL,

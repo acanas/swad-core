@@ -3283,27 +3283,6 @@ mysql> DESCRIBE tst_tags;
 		   "UNIQUE INDEX(TagCod),"
 		   "INDEX(CrsCod,ChangeTime))");
 
-/***** Table usr_IDs *****/
-/*
-mysql> DESCRIBE usr_IDs;
-+-----------+---------------+------+-----+---------+-------+
-| Field     | Type          | Null | Key | Default | Extra |
-+-----------+---------------+------+-----+---------+-------+
-| UsrCod    | int(11)       | NO   | PRI | NULL    |       |
-| UsrID     | char(16)      | NO   | PRI | NULL    |       |
-| CreatTime | datetime      | NO   |     | NULL    |       |
-| Confirmed | enum('N','Y') | NO   |     | N       |       |
-+-----------+---------------+------+-----+---------+-------+
-4 rows in set (0.01 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_IDs ("
-			"UsrCod INT NOT NULL,"
-			"UsrID CHAR(16) NOT NULL,"	// ID_MAX_BYTES_USR_ID
-			"CreatTime DATETIME NOT NULL,"
-			"Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',"
-		   "UNIQUE INDEX(UsrCod,UsrID),"
-		   "INDEX(UsrID))");
-
 /***** Table usr_admins *****/
 /*
 mysql> DESCRIBE usr_admins;
@@ -3564,6 +3543,27 @@ mysql> DESCRIBE usr_follow;
 		   "UNIQUE INDEX (FollowerCod,FollowedCod),"
 		   "UNIQUE INDEX (FollowedCod,FollowerCod),"
 		   "INDEX (FollowTime))");
+
+/***** Table usr_ids *****/
+/*
+mysql> DESCRIBE usr_ids;
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| UsrCod    | int(11)       | NO   | PRI | NULL    |       |
+| UsrID     | char(16)      | NO   | PRI | NULL    |       |
+| CreatTime | datetime      | NO   |     | NULL    |       |
+| Confirmed | enum('N','Y') | NO   |     | N       |       |
++-----------+---------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_ids ("
+			"UsrCod INT NOT NULL,"
+			"UsrID CHAR(16) NOT NULL,"	// ID_MAX_BYTES_USR_ID
+			"CreatTime DATETIME NOT NULL,"
+			"Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',"
+		   "UNIQUE INDEX(UsrCod,UsrID),"
+		   "INDEX(UsrID))");
 
    /***** Table usr_last *****/
 /*

@@ -952,12 +952,14 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 	 // TODO: Get only if ID confirmed?
 	 NumRows =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's data",
-				    "SELECT usr_IDs.UsrCod"
-				    " FROM usr_IDs,usr_data"
-				    " WHERE usr_IDs.UsrID='%s'"
-				    " AND usr_IDs.UsrCod=usr_data.UsrCod"
-				    " AND usr_data.Password='%s'",
-				    UsrIDNickOrEmail,userPassword);
+				    "SELECT usr_ids.UsrCod"
+				     " FROM usr_ids,"
+				           "usr_data"
+				    " WHERE usr_ids.UsrID='%s'"
+				      " AND usr_ids.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Password='%s'",
+				    UsrIDNickOrEmail,
+				    userPassword);
 	}
       else	// String is not a valid user's nickname, email or ID
 	 return soap_receiver_fault (soap,
@@ -1307,7 +1309,8 @@ int swad__getNewPassword (struct soap *soap,
 	 // TODO: Get only if ID confirmed?
 	 NumRows =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's data",
-				    "SELECT UsrCod FROM usr_IDs"
+				    "SELECT UsrCod"
+				     " FROM usr_ids"
 				    " WHERE UsrID='%s'",
 				    UsrIDNickOrEmail);
 	}

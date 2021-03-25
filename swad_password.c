@@ -552,7 +552,8 @@ static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword)
 
    /***** Get if password is found in user's ID from database *****/
    Found = (DB_QueryCOUNT ("can not check if a password matches a user's ID",
-			   "SELECT COUNT(*) FROM usr_IDs"
+			   "SELECT COUNT(*)"
+			    " FROM usr_ids"
 			   " WHERE UsrID='%s'",
 			   PlainPassword) != 0);
 
@@ -560,11 +561,14 @@ static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword)
    if (!Found)
       Found = (DB_QueryCOUNT ("can not check if a password matches"
 			      " a first name or a surname",
-			      "SELECT COUNT(*) FROM usr_data"
+			      "SELECT COUNT(*)"
+			       " FROM usr_data"
 			      " WHERE FirstName='%s'"
-			      " OR Surname1='%s'"
-			      " OR Surname2='%s'",
-			      PlainPassword,PlainPassword,PlainPassword) != 0);
+			         " OR Surname1='%s'"
+			         " OR Surname2='%s'",
+			      PlainPassword,
+			      PlainPassword,
+			      PlainPassword) != 0);
 
    return Found;
   }

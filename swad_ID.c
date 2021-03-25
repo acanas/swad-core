@@ -103,9 +103,12 @@ void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
       // First the confirmed  (Confirmed == 'Y')
       // Then the unconfirmed (Confirmed == 'N')
       NumIDs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's IDs",
-					  "SELECT UsrID,Confirmed FROM usr_IDs"
+					  "SELECT UsrID,"	// row[0]
+					         "Confirmed"	// row[1]
+					   " FROM usr_ids"
 					  " WHERE UsrCod=%ld"
-					  " ORDER BY Confirmed DESC,UsrID",
+					  " ORDER BY Confirmed DESC,"
+					            "UsrID",
 					  UsrDat->UsrCod);
       if (NumIDs)
 	{
@@ -215,22 +218,26 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
 	 // or if password in database is empty (new user)
 	 ListUsrCods->NumUsrs =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's codes",
-				    "SELECT DISTINCT(usr_IDs.UsrCod) FROM usr_IDs,usr_data"
-				    " WHERE usr_IDs.UsrID IN (%s)"
-				    "%s"
-				    " AND usr_IDs.UsrCod=usr_data.UsrCod"
-				    " AND (usr_data.Password='%s' OR usr_data.Password='')",
+				    "SELECT DISTINCT(usr_ids.UsrCod)"
+				     " FROM usr_ids,"
+				           "usr_data"
+				    " WHERE usr_ids.UsrID IN (%s)"
+				       "%s"
+				      " AND usr_ids.UsrCod=usr_data.UsrCod"
+				      " AND (usr_data.Password='%s'"
+				        " OR usr_data.Password='')",
 				    SubQueryAllUsrs,
-	                            OnlyConfirmedIDs ? " AND usr_IDs.Confirmed='Y'" :
+	                            OnlyConfirmedIDs ? " AND usr_ids.Confirmed='Y'" :
 	                        	               "",
 				    EncryptedPassword);
         }
       else
 	 ListUsrCods->NumUsrs =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's codes",
-				    "SELECT DISTINCT(UsrCod) FROM usr_IDs"
+				    "SELECT DISTINCT(UsrCod)"
+				     " FROM usr_ids"
 				    " WHERE UsrID IN (%s)"
-				    "%s",
+				       "%s",
 				    SubQueryAllUsrs,
 				    OnlyConfirmedIDs ? " AND Confirmed='Y'" :
 	                        	               "");
@@ -832,9 +839,13 @@ static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID)
   {
    /***** Get if ID is confirmed from database *****/
    return (DB_QueryCOUNT ("can not check if ID is confirmed",
-			  "SELECT COUNT(*) FROM usr_IDs"
-			  " WHERE UsrCod=%ld AND UsrID='%s' AND Confirmed='Y'",
-			  UsrCod,UsrID) != 0);
+			  "SELECT COUNT(*)"
+			   " FROM usr_ids"
+			  " WHERE UsrCod=%ld"
+			    " AND UsrID='%s'"
+			    " AND Confirmed='Y'",
+			  UsrCod,
+			  UsrID) != 0);
   }
 
 /*****************************************************************************/
@@ -845,8 +856,9 @@ static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID)
   {
    /***** Remove one of my user's IDs *****/
    DB_QueryREPLACE ("can not remove a user's ID",
-		    "DELETE FROM usr_IDs"
-		    " WHERE UsrCod=%ld AND UsrID='%s'",
+		    "DELETE FROM usr_ids"
+		    " WHERE UsrCod=%ld"
+		      " AND UsrID='%s'",
                     UsrCod,UsrID);
   }
 
@@ -982,7 +994,7 @@ static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed
   {
    /***** Update my nickname in database *****/
    DB_QueryINSERT ("can not insert a new ID",
-		   "INSERT INTO usr_IDs"
+		   "INSERT INTO usr_ids"
 		   " (UsrCod,UsrID,CreatTime,Confirmed)"
 		   " VALUES"
 		   " (%ld,'%s',NOW(),'%c')",
@@ -1106,7 +1118,11 @@ void ID_ConfirmUsrID (const struct UsrData *UsrDat,const char *UsrID)
   {
    /***** Update database *****/
    DB_QueryINSERT ("can not confirm a user's ID",
-		   "UPDATE usr_IDs SET Confirmed='Y'"
-		   " WHERE UsrCod=%ld AND UsrID='%s' AND Confirmed<>'Y'",
-                   UsrDat->UsrCod,UsrID);
+		   "UPDATE usr_ids"
+		     " SET Confirmed='Y'"
+		   " WHERE UsrCod=%ld"
+		     " AND UsrID='%s'"
+		     " AND Confirmed<>'Y'",
+                   UsrDat->UsrCod,
+                   UsrID);
   }
