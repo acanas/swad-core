@@ -1770,9 +1770,13 @@ static bool Grp_CheckIfAssociatedToGrp (const char *Table,const char *Field,
    /***** Get if an assignment, attendance event, survey, exam event or match
           is associated to a given group from database *****/
    return (DB_QueryCOUNT ("can not check if associated to a group",
-			  "SELECT COUNT(*) FROM %s"
-			  " WHERE %s=%ld AND GrpCod=%ld",
-		  	  Table,Field,Cod,GrpCod) != 0);
+			  "SELECT COUNT(*)"
+			   " FROM %s"
+			  " WHERE %s=%ld"
+			    " AND GrpCod=%ld",
+		  	  Table,
+		  	  Field,Cod,
+		  	  GrpCod) != 0);
   }
 
 
@@ -1790,9 +1794,11 @@ bool Grp_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod)
    /***** Get if an assignment, attendance event, survey, exam event or match
           is associated to any group from database *****/
    return (DB_QueryCOUNT ("can not check if associated to groups",
-			  "SELECT COUNT(*) FROM %s"
+			  "SELECT COUNT(*)"
+			   " FROM %s"
 			  " WHERE %s=%ld",
-			  Table,Field,Cod) != 0);
+			  Table,
+			  Field,Cod) != 0);
   }
 
 /*****************************************************************************/
@@ -3090,13 +3096,13 @@ unsigned long Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res)
    /***** Get groups of a type from database *****/
    // Don't use INNER JOIN because there are groups without assigned room
    return DB_QuerySELECT (mysql_res,"can not get groups of a type",
-			  "SELECT grp_groups.GrpCod,"
-			         "grp_groups.GrpName,"
-			         "grp_groups.RooCod,"
-			         "roo_rooms.ShortName,"
-			         "grp_groups.MaxStudents,"
-			         "grp_groups.Open,"
-			         "grp_groups.FileZones"
+			  "SELECT grp_groups.GrpCod,"		// row[0]
+			         "grp_groups.GrpName,"		// row[1]
+			         "grp_groups.RooCod,"		// row[2]
+			         "roo_rooms.ShortName,"		// row[3]
+			         "grp_groups.MaxStudents,"	// row[4]
+			         "grp_groups.Open,"		// row[5]
+			         "grp_groups.FileZones"		// row[6]
 			   " FROM grp_groups"
 			   " LEFT JOIN roo_rooms"
 			     " ON grp_groups.RooCod=roo_rooms.RooCod"

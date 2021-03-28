@@ -129,16 +129,16 @@ void Deg_SeeDegWithPendingCrss (void)
       case Rol_DEG_ADM:
          NumDegs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get degrees with pending courses",
-			 "SELECT crs_courses.DegCod,"
-			        "COUNT(*)"
-			 " FROM usr_admins,"
-			       "crs_courses,"
-			       "deg_degrees"
+			 "SELECT crs_courses.DegCod,"	// row[0]
+			        "COUNT(*)"		// row[1]
+			  " FROM usr_admins,"
+			        "crs_courses,"
+			        "deg_degrees"
 			 " WHERE usr_admins.UsrCod=%ld"
-			 " AND usr_admins.Scope='%s'"
-			 " AND usr_admins.Cod=crs_courses.DegCod"
-			 " AND (crs_courses.Status & %u)<>0"
-			 " AND crs_courses.DegCod=deg_degrees.DegCod"
+			   " AND usr_admins.Scope='%s'"
+			   " AND usr_admins.Cod=crs_courses.DegCod"
+			   " AND (crs_courses.Status & %u)<>0"
+			   " AND crs_courses.DegCod=deg_degrees.DegCod"
 			 " GROUP BY crs_courses.DegCod"
 			 " ORDER BY deg_degrees.ShortName",
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -148,12 +148,12 @@ void Deg_SeeDegWithPendingCrss (void)
       case Rol_SYS_ADM:
          NumDegs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get degrees with pending courses",
-			 "SELECT crs_courses.DegCod,"
-			        "COUNT(*)"
-			 " FROM crs_courses,"
-			       "deg_degrees"
+			 "SELECT crs_courses.DegCod,"	// row[0]
+			        "COUNT(*)"		// row[1]
+			  " FROM crs_courses,"
+			        "deg_degrees"
 			 " WHERE (crs_courses.Status & %u)<>0"
-			 " AND crs_courses.DegCod=deg_degrees.DegCod"
+			   " AND crs_courses.DegCod=deg_degrees.DegCod"
 			 " GROUP BY crs_courses.DegCod"
 			 " ORDER BY deg_degrees.ShortName",
 			 (unsigned) Crs_STATUS_BIT_PENDING);
@@ -277,13 +277,14 @@ void Deg_WriteSelectorOfDegree (void)
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
      {
       /***** Get degrees belonging to the current center from database *****/
-      NumDegs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get degrees"
-						      " of a center",
-					   "SELECT DegCod,ShortName"
-					   " FROM deg_degrees"
-					   " WHERE CtrCod=%ld"
-					   " ORDER BY ShortName",
-					   Gbl.Hierarchy.Ctr.CtrCod);
+      NumDegs = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get degrees of a center",
+		      "SELECT DegCod,"		// row[0]
+			     "ShortName"	// row[1]
+		       " FROM deg_degrees"
+		      " WHERE CtrCod=%ld"
+		      " ORDER BY ShortName",
+		      Gbl.Hierarchy.Ctr.CtrCod);
 
       /***** Get degrees of this center *****/
       for (NumDeg = 0;
@@ -1138,7 +1139,7 @@ void Deg_GetListDegsInCurrentCtr (void)
 			            "ShortName,"	// row[5]
 			            "FullName,"		// row[6]
 			            "WWW"		// row[7]
-			     " FROM deg_degrees"
+			      " FROM deg_degrees"
 			     " WHERE CtrCod=%ld"
 			     " ORDER BY FullName",
 			     Gbl.Hierarchy.Ctr.CtrCod);
@@ -1375,7 +1376,8 @@ bool Deg_GetDataOfDegreeByCod (struct Deg_Degree *Deg)
 			         "ShortName,"		// row[5]
 			         "FullName,"		// row[6]
 			         "WWW"			// row[7]
-			  " FROM deg_degrees WHERE DegCod=%ld",
+			   " FROM deg_degrees"
+			  " WHERE DegCod=%ld",
 			  Deg->DegCod)) // Degree found...
 	{
 	 /***** Get data of degree *****/
@@ -1436,7 +1438,9 @@ void Deg_GetShortNameOfDegreeByCod (struct Deg_Degree *Deg)
      {
       /***** Get the short name of a degree from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get the short name of a degree",
-			  "SELECT ShortName FROM deg_degrees WHERE DegCod=%ld",
+			  "SELECT ShortName"
+			   " FROM deg_degrees"
+			  " WHERE DegCod=%ld",
 			  Deg->DegCod) == 1)
 	{
 	 /***** Get the short name of this degree *****/
@@ -1463,7 +1467,9 @@ long Deg_GetCtrCodOfDegreeByCod (long DegCod)
      {
       /***** Get the center code of a degree from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get the center of a degree",
-			  "SELECT CtrCod FROM deg_degrees WHERE DegCod=%ld",
+			  "SELECT CtrCod"
+			   " FROM deg_degrees"
+			  " WHERE DegCod=%ld",
 			  DegCod) == 1)
 	{
 	 /***** Get the center code of this degree *****/
@@ -1493,10 +1499,10 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod)
       /***** Get the institution code of a degree from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get the institution of a degree",
 			  "SELECT ctr_centers.InsCod"
-			  " FROM deg_degrees,"
-			        "ctr_centers"
+			   " FROM deg_degrees,"
+			         "ctr_centers"
 			  " WHERE deg_degrees.DegCod=%ld"
-			  " AND deg_degrees.CtrCod=ctr_centers.CtrCod",
+			    " AND deg_degrees.CtrCod=ctr_centers.CtrCod",
 			  DegCod) == 1)
 	{
 	 /***** Get the institution code of this degree *****/
@@ -1527,7 +1533,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    /***** Get courses of a degree from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get courses of a degree",
 			     "SELECT CrsCod"
-			     " FROM crs_courses"
+			      " FROM crs_courses"
 			     " WHERE DegCod=%ld",
 			     DegCod);
 
@@ -1690,9 +1696,14 @@ bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
    /***** Get number of degrees with a type and a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of a degree"
 			  " already existed",
-			  "SELECT COUNT(*) FROM deg_degrees"
-			  " WHERE CtrCod=%ld AND %s='%s' AND DegCod<>%ld",
-			  CtrCod,FieldName,Name,DegCod) != 0);
+			  "SELECT COUNT(*)"
+			   " FROM deg_degrees"
+			  " WHERE CtrCod=%ld"
+			    " AND %s='%s'"
+			    " AND DegCod<>%ld",
+			  CtrCod,
+			  FieldName,Name,
+			  DegCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1955,12 +1966,12 @@ unsigned Deg_GetNumDegsInCty (long CtyCod)
    Gbl.Cache.NumDegsInCty.NumDegs = (unsigned)
    DB_QueryCOUNT ("can not get the number of degrees in a country",
 		  "SELECT COUNT(*)"
-		  " FROM ins_instits,"
-		        "ctr_centers,"
-		        "deg_degrees"
+		   " FROM ins_instits,"
+		         "ctr_centers,"
+		         "deg_degrees"
 		  " WHERE ins_instits.CtyCod=%ld"
-		  " AND ins_instits.InsCod=ctr_centers.InsCod"
-		  " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
+		    " AND ins_instits.InsCod=ctr_centers.InsCod"
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
 		  CtyCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_Lvl_CTY,Gbl.Cache.NumDegsInCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInCty.NumDegs);
@@ -2005,10 +2016,10 @@ unsigned Deg_GetNumDegsInIns (long InsCod)
    Gbl.Cache.NumDegsInIns.NumDegs = (unsigned)
    DB_QueryCOUNT ("can not get the number of degrees in an institution",
 		  "SELECT COUNT(*)"
-		  " FROM ctr_centers,"
-		        "deg_degrees"
+		   " FROM ctr_centers,"
+		         "deg_degrees"
 		  " WHERE ctr_centers.InsCod=%ld"
-		  " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
 		  InsCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_Lvl_INS,Gbl.Cache.NumDegsInIns.InsCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInIns.NumDegs);
@@ -2052,7 +2063,8 @@ unsigned Deg_GetNumDegsInCtr (long CtrCod)
    Gbl.Cache.NumDegsInCtr.CtrCod  = CtrCod;
    Gbl.Cache.NumDegsInCtr.NumDegs =
    (unsigned) DB_QueryCOUNT ("can not get the number of degrees in a center",
-			     "SELECT COUNT(*) FROM deg_degrees"
+			     "SELECT COUNT(*)"
+			      " FROM deg_degrees"
 			     " WHERE CtrCod=%ld",
 			     CtrCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_Lvl_CTR,Gbl.Cache.NumDegsInCtr.CtrCod,
@@ -2090,13 +2102,13 @@ unsigned Deg_GetCachedNumDegsWithCrss (const char *SubQuery,
       NumDegsWithCrss = (unsigned)
       DB_QueryCOUNT ("can not get number of degrees with courses",
 		     "SELECT COUNT(DISTINCT deg_degrees.DegCod)"
-		     " FROM ins_instits,"
-		           "ctr_centers,"
-		           "deg_degrees,"
-		           "crs_courses"
+		      " FROM ins_instits,"
+		            "ctr_centers,"
+		            "deg_degrees,"
+		            "crs_courses"
 		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
-		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		     " AND deg_degrees.DegCod=crs_courses.DegCod",
+		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		       " AND deg_degrees.DegCod=crs_courses.DegCod",
 		     SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS_WITH_CRSS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumDegsWithCrss);

@@ -275,8 +275,9 @@ void Log_GetAndShowLastClicks (void)
 			            "InsCod,"				// row[5]
 			            "CtrCod,"				// row[6]
 			            "DegCod"				// row[7]
-			     " FROM log_recent"
-			     " ORDER BY LogCod DESC LIMIT 20");
+			      " FROM log_recent"
+			     " ORDER BY LogCod DESC"
+			     " LIMIT 20");
 
    /***** Write list of connected users *****/
    HTM_TABLE_BeginCenterPadding (1);

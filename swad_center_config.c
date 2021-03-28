@@ -517,7 +517,8 @@ static void CtrCfg_GetPhotoAttr (long CtrCod,char **PhotoAttribution)
 
    /***** Get photo attribution from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get photo attribution",
-		       "SELECT PhotoAttribution FROM ctr_centers"
+		       "SELECT PhotoAttribution"
+		        " FROM ctr_centers"
 		       " WHERE CtrCod=%ld",
 		       CtrCod))
      {

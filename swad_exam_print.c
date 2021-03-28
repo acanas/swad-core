@@ -265,7 +265,7 @@ void ExaPrn_GetDataOfPrintByPrnCod (struct ExaPrn_Print *Print)
 				    "NumQstsNotBlank,"			// row[6]
 				    "Sent,"				// row[7]
 				    "Score"				// row[8]
-			     " FROM exa_prints"
+			      " FROM exa_prints"
 			     " WHERE PrnCod=%ld",
 			     Print->PrnCod);
 
@@ -293,9 +293,9 @@ void ExaPrn_GetDataOfPrintBySesCodAndUsrCod (struct ExaPrn_Print *Print)
 				    "NumQstsNotBlank,"			// row[6]
 				    "Sent,"				// row[7]
 				    "Score"				// row[8]
-			     " FROM exa_prints"
+			      " FROM exa_prints"
 			     " WHERE SesCod=%ld"
-			     " AND UsrCod=%ld",
+			       " AND UsrCod=%ld",
 			     Print->SesCod,
 			     Print->UsrCod);
 
@@ -374,7 +374,7 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,lon
 			     "SELECT SetCod,"		// row[0]
 				    "NumQstsToPrint,"	// row[1]
 				    "Title"		// row[2]
-			     " FROM exa_sets"
+			      " FROM exa_sets"
 			     " WHERE ExaCod=%ld"
 			     " ORDER BY SetInd",
 			     ExaCod);
@@ -440,7 +440,7 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
 				  "SELECT QstCod,"	// row[0]
 					 "AnsType,"	// row[1]
 					 "Shuffle"	// row[2]
-				  " FROM exa_set_questions"
+				   " FROM exa_set_questions"
 				  " WHERE SetCod=%ld"
 				  " ORDER BY RAND()"	// Don't use RAND(NOW()) because the same ordering will be repeated across sets
 				  " LIMIT %u",
@@ -617,7 +617,7 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 			             "Score,"	// row[2]
 			             "Indexes,"	// row[3]
 			             "Answers"	// row[4]
-			      " FROM exa_print_questions"
+			       " FROM exa_print_questions"
 			      " WHERE PrnCod=%ld"
 			      " ORDER BY QstInd",
 			      Print->PrnCod);
@@ -1276,7 +1276,7 @@ static void ExaPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question)
    Question->Answer.NumOptions =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
 			      "SELECT Answer"		// row[0]
-			      " FROM exa_set_answers"
+			       " FROM exa_set_answers"
 			      " WHERE QstCod=%ld",
 			      Question->QstCod);
 
@@ -1303,7 +1303,7 @@ static void ExaPrn_GetCorrectFltAnswerFromDB (struct Tst_Question *Question)
    Question->Answer.NumOptions =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
 			      "SELECT Answer"		// row[0]
-			      " FROM exa_set_answers"
+			       " FROM exa_set_answers"
 			      " WHERE QstCod=%ld",
 			      Question->QstCod);
 
@@ -1341,7 +1341,7 @@ static void ExaPrn_GetCorrectTF_AnswerFromDB (struct Tst_Question *Question)
    Question->Answer.NumOptions =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
 			      "SELECT Answer"		// row[0]
-			      " FROM exa_set_answers"
+			       " FROM exa_set_answers"
 			      " WHERE QstCod=%ld",
 			      Question->QstCod);
 
@@ -1366,7 +1366,7 @@ static void ExaPrn_GetCorrectChoAnswerFromDB (struct Tst_Question *Question)
    Question->Answer.NumOptions =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
 			      "SELECT Correct"		// row[0]
-			      " FROM exa_set_answers"
+			       " FROM exa_set_answers"
 			      " WHERE QstCod=%ld"
 			      " ORDER BY AnsInd",
 			      Question->QstCod);
@@ -1395,7 +1395,7 @@ static void ExaPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question)
    Question->Answer.NumOptions =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
 			      "SELECT Answer"		// row[0]
-			      " FROM exa_set_answers"
+			       " FROM exa_set_answers"
 			      " WHERE QstCod=%ld",
 			      Question->QstCod);
 
@@ -1437,8 +1437,9 @@ static void ExaPrn_GetAnswerFromDB (struct ExaPrn_Print *Print,long QstCod,
    /***** Get questions of an exam print from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get answer in an exam print",
 		       "SELECT Answers"
-		       " FROM exa_print_questions"
-		       " WHERE PrnCod=%ld AND QstCod=%ld",
+		        " FROM exa_print_questions"
+		       " WHERE PrnCod=%ld"
+		         " AND QstCod=%ld",
 		       Print->PrnCod,QstCod))
      {
       row = mysql_fetch_row (mysql_res);
@@ -1484,11 +1485,12 @@ static void ExaPrn_GetNumQstsNotBlank (struct ExaPrn_Print *Print)
   {
    /***** Count number of questions not blank in exam print in database *****/
    Print->NumQsts.NotBlank = (unsigned)
-			     DB_QueryCOUNT ("can not get number of questions not blank",
-					    "SELECT COUNT(*)"
-					    " FROM exa_print_questions"
-					    " WHERE PrnCod=%ld AND Answers<>''",
-					    Print->PrnCod);
+   DB_QueryCOUNT ("can not get number of questions not blank",
+		  "SELECT COUNT(*)"
+		   " FROM exa_print_questions"
+		  " WHERE PrnCod=%ld"
+		    " AND Answers<>''",
+		  Print->PrnCod);
   }
 
 /*****************************************************************************/
@@ -1506,7 +1508,7 @@ static void ExaPrn_ComputeTotalScoreOfPrint (struct ExaPrn_Print *Print)
    /***** Compute total score of exam print *****/
    if (DB_QuerySELECT (&mysql_res,"can not get score of exam print",
 		       "SELECT SUM(Score)"
-		       " FROM exa_print_questions"
+		        " FROM exa_print_questions"
 		       " WHERE PrnCod=%ld",
 		       Print->PrnCod))
      {

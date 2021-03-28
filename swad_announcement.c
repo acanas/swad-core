@@ -104,7 +104,7 @@ void Ann_ShowAllAnnouncements (void)
 	                                                   "Roles,"	// row[2]
 	                                                   "Subject,"	// row[3]
 	                                                   "Content"	// row[4]
-						    " FROM ann_announcements"
+						     " FROM ann_announcements"
 						    " ORDER BY AnnCod DESC");
      }
    else if (Gbl.Usrs.Me.Logged)
@@ -117,7 +117,7 @@ void Ann_ShowAllAnnouncements (void)
 	                                                   "Roles,"	// row[2]
 	                                                   "Subject,"	// row[3]
 	                                                   "Content"	// row[4]
-						    " FROM ann_announcements"
+						     " FROM ann_announcements"
 						    " WHERE (Roles&%u)<>0 "	// All my roles in different courses
 						    " ORDER BY AnnCod DESC",
 						    (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);
@@ -131,8 +131,9 @@ void Ann_ShowAllAnnouncements (void)
 	                                                   "Roles,"	// row[2]
 	                                                   "Subject,"	// row[3]
 	                                                   "Content"	// row[4]
-						    " FROM ann_announcements"
-						    " WHERE Status=%u AND (Roles&%u)<>0 "
+						     " FROM ann_announcements"
+						    " WHERE Status=%u"
+						      " AND (Roles&%u)<>0 "
 						    " ORDER BY AnnCod DESC",
 						    (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
 						    (unsigned) (1 << Rol_UNK));
@@ -234,13 +235,13 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 	                                         "SELECT AnnCod,"	// row[0]
 	                                                "Subject,"	// row[1]
 	                                                "Content"	// row[2]
-	                                         " FROM ann_announcements"
+	                                          " FROM ann_announcements"
 						 " WHERE Status=%u"
 						   " AND (Roles&%u)<>0 "	// All my roles in different courses
 						   " AND AnnCod NOT IN"
 						       " (SELECT AnnCod"
-						       " FROM ann_seen"
-						       " WHERE UsrCod=%ld)"
+						          " FROM ann_seen"
+						         " WHERE UsrCod=%ld)"
 						 " ORDER BY AnnCod DESC",	// Newest first
 						 (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
 						 (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss,

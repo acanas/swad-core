@@ -135,9 +135,9 @@ void Fir_CheckFirewallAndExitIfTooManyRequests (void)
    /***** Get number of clicks from database *****/
    NumClicks = DB_QueryCOUNT ("can not check firewall log",
 		              "SELECT COUNT(*)"
-		              " FROM fir_log"
+		               " FROM fir_log"
 			      " WHERE IP='%s'"
-			      " AND ClickTime>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+			        " AND ClickTime>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 			      Gbl.IP,
                               Fw_CHECK_INTERVAL);
 

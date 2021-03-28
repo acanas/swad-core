@@ -3835,7 +3835,8 @@ unsigned long DB_GetNumRowsTable (const char *Table)
   {
    /***** Get total number of rows from database *****/
    return DB_QueryCOUNT ("can not get number of rows in table",
-			 "SELECT COUNT(*) FROM %s",
+			 "SELECT COUNT(*)"
+			  " FROM %s",
 			 Table);
   }
 

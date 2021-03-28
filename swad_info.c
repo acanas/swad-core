@@ -506,8 +506,11 @@ static bool Inf_CheckIfIHaveReadInfo (void)
   {
    /***** Get if info source is already stored in database *****/
    return (DB_QueryCOUNT ("can not get if I have read course info",
-			  "SELECT COUNT(*) FROM crs_info_read"
-			  " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
+			  "SELECT COUNT(*)"
+			   " FROM crs_info_read"
+			  " WHERE UsrCod=%ld"
+			    " AND CrsCod=%ld"
+			    " AND InfoType='%s'",
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
 			  Gbl.Hierarchy.Crs.CrsCod,
 			  Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type]) != 0);
@@ -534,11 +537,15 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
    /***** Get info types where students must read info *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get if you must read"
 					" any course info",
-			     "SELECT InfoType FROM crs_info_src"
-			     " WHERE CrsCod=%ld AND MustBeRead='Y'"
-			     " AND InfoType NOT IN"
-			     " (SELECT InfoType FROM crs_info_read"
-			     " WHERE UsrCod=%ld AND CrsCod=%ld)",
+			     "SELECT InfoType"
+			      " FROM crs_info_src"
+			     " WHERE CrsCod=%ld"
+			       " AND MustBeRead='Y'"
+			       " AND InfoType NOT IN"
+			           " (SELECT InfoType"
+			              " FROM crs_info_read"
+			             " WHERE UsrCod=%ld"
+			               " AND CrsCod=%ld)",
 			     Gbl.Hierarchy.Crs.CrsCod,
 			     Gbl.Usrs.Me.UsrDat.UsrCod,
 			     Gbl.Hierarchy.Crs.CrsCod);
@@ -1408,23 +1415,30 @@ void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
   {
    /***** Get if info source is already stored in database *****/
    if (DB_QueryCOUNT ("can not get if info source is already stored in database",
-		      "SELECT COUNT(*) FROM crs_info_src"
-		      " WHERE CrsCod=%ld AND InfoType='%s'",
+		      "SELECT COUNT(*)"
+		       " FROM crs_info_src"
+		      " WHERE CrsCod=%ld"
+		        " AND InfoType='%s'",
 		      Gbl.Hierarchy.Crs.CrsCod,
 		      Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type]))
       // Info is already stored in database, so update it
      {	// Update info source
       if (InfoSrc == Inf_INFO_SRC_NONE)
          DB_QueryUPDATE ("can not update info source",
-			 "UPDATE crs_info_src SET InfoSrc='%s',MustBeRead='N'"
-			 " WHERE CrsCod=%ld AND InfoType='%s'",
+			 "UPDATE crs_info_src"
+			   " SET InfoSrc='%s',"
+			        "MustBeRead='N'"
+			 " WHERE CrsCod=%ld"
+			   " AND InfoType='%s'",
                          Inf_NamesInDBForInfoSrc[Inf_INFO_SRC_NONE],
                          Gbl.Hierarchy.Crs.CrsCod,
                          Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type]);
       else	// MustBeRead remains unchanged
          DB_QueryUPDATE ("can not update info source",
-			 "UPDATE crs_info_src SET InfoSrc='%s'"
-		         " WHERE CrsCod=%ld AND InfoType='%s'",
+			 "UPDATE crs_info_src"
+			   " SET InfoSrc='%s'"
+		         " WHERE CrsCod=%ld"
+		           " AND InfoType='%s'",
 		         Inf_NamesInDBForInfoSrc[InfoSrc],
 		         Gbl.Hierarchy.Crs.CrsCod,
 		         Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type]);
@@ -1453,9 +1467,12 @@ Inf_InfoSrc_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType)
 
    /***** Get info source for a specific type of info from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get info source",
-		       "SELECT InfoSrc FROM crs_info_src"
-		       " WHERE CrsCod=%ld AND InfoType='%s'",
-		       CrsCod,Inf_NamesInDBForInfoType[InfoType]))
+		       "SELECT InfoSrc"
+		        " FROM crs_info_src"
+		       " WHERE CrsCod=%ld"
+		         " AND InfoType='%s'",
+		       CrsCod,
+		       Inf_NamesInDBForInfoType[InfoType]))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1491,9 +1508,13 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
 
    /***** Get info source for a specific type of info from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get info source",
-			     "SELECT InfoSrc,MustBeRead FROM crs_info_src"
-			     " WHERE CrsCod=%ld AND InfoType='%s'",
-			     CrsCod,Inf_NamesInDBForInfoType[InfoType]);
+			     "SELECT InfoSrc,"
+			            "MustBeRead"
+			      " FROM crs_info_src"
+			     " WHERE CrsCod=%ld"
+			       " AND InfoType='%s'",
+			     CrsCod,
+			     Inf_NamesInDBForInfoType[InfoType]);
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
@@ -1647,9 +1668,13 @@ void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
    /***** Get info source for a specific type of course information
           (bibliography, FAQ, links or evaluation) from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get info text",
-			     "SELECT InfoTxtHTML,InfoTxtMD FROM crs_info_txt"
-			     " WHERE CrsCod=%ld AND InfoType='%s'",
-			     CrsCod,Inf_NamesInDBForInfoType[InfoType]);
+			     "SELECT InfoTxtHTML,"
+			            "InfoTxtMD"
+			      " FROM crs_info_txt"
+			     " WHERE CrsCod=%ld"
+			       " AND InfoType='%s'",
+			     CrsCod,
+			     Inf_NamesInDBForInfoType[InfoType]);
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)

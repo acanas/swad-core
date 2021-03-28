@@ -1375,7 +1375,9 @@ int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
 
    /***** Get number of indicators of a course from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get number of indicators",
-	               "SELECT NumIndicators FROM crs_courses WHERE CrsCod=%ld",
+	               "SELECT NumIndicators"
+	                " FROM crs_courses"
+	               " WHERE CrsCod=%ld",
 		       CrsCod))
      {
       /***** Get row *****/

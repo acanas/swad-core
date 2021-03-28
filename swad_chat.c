@@ -356,7 +356,7 @@ static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode)
    /***** Get number of users connected to chat rooms from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get number of users"
 				  " connected to a chat room",
-		       "SELECT NumUsrs"
+		       "SELECT NumUsrs"	// row[0]
 		        " FROM cht_rooms"
 		       " WHERE RoomCode='%s'",
 		       RoomCode))

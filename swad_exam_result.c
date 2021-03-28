@@ -436,14 +436,14 @@ static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams,long ExaCod)
 
    /***** Get all users who have answered any session question in this exam *****/
    NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in exam",
-			     "SELECT users.UsrCod FROM"
-			     " (SELECT DISTINCT exa_prints.UsrCod AS UsrCod"	// row[0]
-			     " FROM exa_prints,exa_sessions,exa_exams"
-			     " WHERE exa_sessions.ExaCod=%ld"
-			     " AND exa_sessions.SesCod=exa_prints.SesCod"
-			     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
-			     " AND exa_exams.CrsCod=%ld)"			// Extra check
-			     " AS users,usr_data"
+			     "SELECT users.UsrCod"	// row[0]
+			      " FROM (SELECT DISTINCT exa_prints.UsrCod AS UsrCod"
+			              " FROM exa_prints,exa_sessions,exa_exams"
+			             " WHERE exa_sessions.ExaCod=%ld"
+			               " AND exa_sessions.SesCod=exa_prints.SesCod"
+			               " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+			               " AND exa_exams.CrsCod=%ld) AS users,"		// Extra check
+			            "usr_data"
 			     " WHERE users.UsrCod=usr_data.UsrCod"
 			     " ORDER BY usr_data.Surname1,"
 			               "usr_data.Surname2,"
@@ -532,14 +532,14 @@ static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams,long SesCod)
 
    /***** Get all users who have answered any session question in this exam *****/
    NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in session",
-			     "SELECT users.UsrCod FROM"
-			     " (SELECT exa_prints.UsrCod AS UsrCod"	// row[0]
-			     " FROM exa_prints,exa_sessions,exa_exams"
-			     " WHERE exa_prints.SesCod=%ld"
-			     " AND exa_prints.SesCod=exa_sessions.SesCod"
-			     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
-			     " AND exa_exams.CrsCod=%ld)"		// Extra check
-			     " AS users,usr_data"
+			     "SELECT users.UsrCod"
+			      " FROM (SELECT exa_prints.UsrCod AS UsrCod"	// row[0]
+				      " FROM exa_prints,exa_sessions,exa_exams"
+				     " WHERE exa_prints.SesCod=%ld"
+				       " AND exa_prints.SesCod=exa_sessions.SesCod"
+				       " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+				       " AND exa_exams.CrsCod=%ld) AS users,"	// Extra check
+			            "usr_data"
 			     " WHERE users.UsrCod=usr_data.UsrCod"
 			     " ORDER BY usr_data.Surname1,"
 			               "usr_data.Surname2,"
@@ -923,15 +923,15 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
    NumResults =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get sessions results",
 			      "SELECT exa_prints.PrnCod"			// row[0]
-			      " FROM exa_prints,exa_sessions,exa_exams"
+			       " FROM exa_prints,exa_sessions,exa_exams"
 			      " WHERE exa_prints.UsrCod=%ld"
-			      "%s"	// Session subquery
-			      " AND exa_prints.SesCod=exa_sessions.SesCod"
-                              "%s"	// Hidden sessions subquery
-			      "%s"	// Exams subquery
-			      " AND exa_sessions.ExaCod=exa_exams.ExaCod"
-                              "%s"	// Hidden exams subquery
-			      " AND exa_exams.CrsCod=%ld"			// Extra check
+			         "%s"	// Session subquery
+			        " AND exa_prints.SesCod=exa_sessions.SesCod"
+                                 "%s"	// Hidden sessions subquery
+			         "%s"	// Exams subquery
+			        " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+                                 "%s"	// Hidden exams subquery
+			        " AND exa_exams.CrsCod=%ld"			// Extra check
 			      " ORDER BY exa_sessions.Title",
 			      UsrDat->UsrCod,
 			      SesSubQuery,
@@ -1578,7 +1578,7 @@ static void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
       QuestionExists = (DB_QuerySELECT (&mysql_res,"can not get a question",
 					"SELECT Invalid,"	// row[0]
 					       "AnsType"	// row[1]
-					" FROM exa_set_questions"
+					 " FROM exa_set_questions"
 					" WHERE QstCod=%ld",
 					Question.QstCod) != 0);
       if (QuestionExists)

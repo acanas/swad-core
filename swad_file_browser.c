@@ -7113,7 +7113,7 @@ static bool Brw_GetMyClipboard (void)
 		          "WorksUsrCod,"	// row[2]
 		          "FileType,"		// row[3]
 		          "Path"		// row[4]
-		   " FROM brw_clipboards"
+		    " FROM brw_clipboards"
 		   " WHERE UsrCod=%ld",
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
 
@@ -9420,12 +9420,15 @@ bool Brw_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata)
       2) the argument Path begins by 'x/', where x is a path stored in database
    */
    return (DB_QueryCOUNT ("can not check if a file or folder is hidden",
-			  "SELECT COUNT(*) FROM brw_files"
+			  "SELECT COUNT(*)"
+			   " FROM brw_files"
 			  " WHERE FileBrowser=%u"
 			    " AND Cod=%ld"
 			    " AND ZoneUsrCod=%ld"
 			    " AND Hidden='Y'"
-			    " AND (Path='%s' OR LOCATE(CONCAT(Path,'/'),'%s')=1)",
+			    " AND (Path='%s'"
+			         " OR"
+			         " LOCATE(CONCAT(Path,'/'),'%s')=1)",
 			  FileMetadata->FileBrowser,
 			  FileMetadata->Cod,
 			  FileMetadata->ZoneUsrCod,
@@ -10382,7 +10385,8 @@ long Brw_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
 		       " WHERE FileBrowser=%u"
 		         " AND Cod=%ld"
 		         " AND ZoneUsrCod=%ld"
-		         " AND Path='%s'%s",
+		         " AND Path='%s'"
+		         "%s",
 		       (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		       Cod,ZoneUsrCod,
 		       Path,
@@ -11758,7 +11762,9 @@ static long Brw_GetPublisherOfSubtree (void)
 			      " FROM brw_files"
 			     " WHERE FileBrowser=%u"
 			       " AND Cod=%ld"
-			       " AND (Path='%s' OR Path LIKE '%s/%%')",
+			       " AND (Path='%s'"
+			            " OR"
+			            " Path LIKE '%s/%%')",
 			     (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 			     Cod,
 			     Gbl.FileBrowser.FilFolLnk.Full,

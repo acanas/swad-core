@@ -250,12 +250,12 @@ static void CtyCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
 			"AVG(ctr_centers.Longitude),"						// row[1]
 			"GREATEST(MAX(ctr_centers.Latitude)-MIN(ctr_centers.Latitude),"
 				 "MAX(ctr_centers.Longitude)-MIN(ctr_centers.Longitude))"	// row[2]
-		 " FROM ins_instits,"
-		       "ctr_centers"
+		  " FROM ins_instits,"
+		        "ctr_centers"
 		 " WHERE ins_instits.CtyCod=%ld"
-		 " AND ins_instits.InsCod=ctr_centers.InsCod"
-		 " AND ctr_centers.Latitude<>0"
-		 " AND ctr_centers.Longitude<>0",
+		   " AND ins_instits.InsCod=ctr_centers.InsCod"
+		   " AND ctr_centers.Latitude<>0"
+		   " AND ctr_centers.Longitude<>0",
 		 Gbl.Hierarchy.Cty.CtyCod) < 0)
       Lay_NotEnoughMemoryExit ();
    Map_GetCoordAndZoom (Coord,Zoom,Query);
@@ -300,16 +300,16 @@ static void CtyCfg_Map (void)
    Map_AddTileLayer ();
 
    /* Get centers with coordinates */
-   NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centers"
-						   " with coordinates",
-					"SELECT ctr_centers.CtrCod"	// row[0]
-					" FROM ins_instits,"
-					      "ctr_centers"
-					" WHERE ins_instits.CtyCod=%ld"
-					" AND ins_instits.InsCod=ctr_centers.InsCod"
-					" AND ctr_centers.Latitude<>0"
-					" AND ctr_centers.Longitude<>0",
-					Gbl.Hierarchy.Cty.CtyCod);
+   NumCtrs = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get centers with coordinates",
+		   "SELECT ctr_centers.CtrCod"	// row[0]
+		    " FROM ins_instits,"
+			  "ctr_centers"
+		   " WHERE ins_instits.CtyCod=%ld"
+		     " AND ins_instits.InsCod=ctr_centers.InsCod"
+		     " AND ctr_centers.Latitude<>0"
+		     " AND ctr_centers.Longitude<>0",
+		   Gbl.Hierarchy.Cty.CtyCod);
 
    /* Add a marker and a popup for each center */
    for (NumCtr = 0;
@@ -584,7 +584,7 @@ static void CtyCfg_GetMapAttr (long CtyCod,char **MapAttribution)
    /***** Get photo attribution from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get photo attribution",
 		       "SELECT MapAttribution"
-		       " FROM cty_countrs"
+		        " FROM cty_countrs"
 		       " WHERE CtyCod=%ld",
 	               CtyCod))
      {

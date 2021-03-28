@@ -903,7 +903,8 @@ void Cfe_CreateListCallsForExams (struct Cfe_CallsForExams *CallsForExams)
 				   "SELECT ExaCod,"		// row[0]
 				          "DATE(ExamDate)"	// row[1]
 				    " FROM cfe_exams"
-				   " WHERE CrsCod=%ld AND Status=%u"
+				   " WHERE CrsCod=%ld"
+				     " AND Status=%u"
 				   " ORDER BY ExamDate DESC",
 				   Gbl.Hierarchy.Crs.CrsCod,
 				   (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);

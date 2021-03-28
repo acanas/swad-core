@@ -138,7 +138,7 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
    /***** Get figure's value if cached and recent *****/
    if (DB_QuerySELECT (&mysql_res,"can not get cached figure value",
 		       "SELECT %s"		// row[0]
-		       " FROM fig_figures"
+		        " FROM fig_figures"
 		       " WHERE Figure=%u"
 		         " AND Scope='%s'"
 		         " AND Cod=%ld"

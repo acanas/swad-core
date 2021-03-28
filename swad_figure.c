@@ -1077,7 +1077,7 @@ static void Fig_GetAndShowInssOrderedByNumCtrs (void)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT InsCod,"
 			        "COUNT(*) AS N"
-			 " FROM ctr_centers"
+			  " FROM ctr_centers"
 			 " GROUP BY InsCod"
 			 " ORDER BY N DESC");
          break;
@@ -1086,10 +1086,10 @@ static void Fig_GetAndShowInssOrderedByNumCtrs (void)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"
 			        "COUNT(*) AS N"
-			 " FROM ins_instits,"
-			       "ctr_centers"
+			  " FROM ins_instits,"
+			        "ctr_centers"
 			 " WHERE ins_instits.CtyCod=%ld"
-			 " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
 			 " GROUP BY ctr_centers.InsCod"
 			 " ORDER BY N DESC",
 			 Gbl.Hierarchy.Cty.CtyCod);
@@ -1102,7 +1102,7 @@ static void Fig_GetAndShowInssOrderedByNumCtrs (void)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT InsCod,"
 			        "COUNT(*) AS N"
-			 " FROM ctr_centers"
+			  " FROM ctr_centers"
 			 " WHERE InsCod=%ld"
 			 " GROUP BY InsCod"
 			 " ORDER BY N DESC",
@@ -1147,8 +1147,8 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"
 			        "COUNT(*) AS N"
-			 " FROM ctr_centers,"
-			       "deg_degrees"
+			  " FROM ctr_centers,"
+			        "deg_degrees"
 			 " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " GROUP BY InsCod"
 			 " ORDER BY N DESC");
@@ -1158,12 +1158,12 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"
 			        "COUNT(*) AS N"
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees"
+			  " FROM ins_instits,"
+			        "ctr_centers,"
+			        "deg_degrees"
 			 " WHERE ins_instits.CtyCod=%ld"
-			 " AND ins_instits.InsCod=ctr_centers.InsCod"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " GROUP BY ctr_centers.InsCod"
 			 " ORDER BY N DESC",
 			 Gbl.Hierarchy.Cty.CtyCod);
@@ -1176,10 +1176,10 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"
 			        "COUNT(*) AS N"
-			 " FROM ctr_centers,"
-			       "deg_degrees"
+			  " FROM ctr_centers,"
+			        "deg_degrees"
 			 " WHERE ctr_centers.InsCod=%ld"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			 " GROUP BY ctr_centers.InsCod"
 			 " ORDER BY N DESC",
 			 Gbl.Hierarchy.Ins.InsCod);
@@ -1223,11 +1223,11 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"
 			        "COUNT(*) AS N"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses"
+			  " FROM ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses"
 			 " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " GROUP BY InsCod"
 			 " ORDER BY N DESC");
          break;
@@ -1236,14 +1236,14 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"
 			        "COUNT(*) AS N"
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses"
+			  " FROM ins_instits,"
+			        "ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses"
 			 " WHERE ins_instits.CtyCod=%ld"
-			 " AND ins_instits.InsCod=ctr_centers.InsCod"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " GROUP BY ctr_centers.InsCod"
 			 " ORDER BY N DESC",
 			 Gbl.Hierarchy.Cty.CtyCod);
@@ -1256,12 +1256,12 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"
 			        "COUNT(*) AS N"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses"
+			  " FROM ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses"
 			 " WHERE ctr_centers.InsCod=%ld"
-			 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " GROUP BY ctr_centers.InsCod"
 			 " ORDER BY N DESC",
 			 Gbl.Hierarchy.Ins.InsCod);
@@ -1393,7 +1393,7 @@ static void Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 	 NumInss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
 				    "SELECT InsCod,COUNT(*) AS N"
-				    " FROM usr_data"
+				     " FROM usr_data"
 				    " WHERE InsCod>0"
 				    " GROUP BY InsCod"
 				    " ORDER BY N DESC");
@@ -1402,9 +1402,9 @@ static void Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 	 NumInss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
 				    "SELECT usr_data.InsCod,COUNT(*) AS N"
-				    " FROM ins_instits,usr_data"
+				     " FROM ins_instits,usr_data"
 				    " WHERE ins_instits.CtyCod=%ld"
-				    " AND ins_instits.InsCod=usr_data.InsCod"
+				      " AND ins_instits.InsCod=usr_data.InsCod"
 				    " GROUP BY usr_data.InsCod"
 				    " ORDER BY N DESC",
 				    Gbl.Hierarchy.Cty.CtyCod);
@@ -1416,7 +1416,7 @@ static void Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 	 NumInss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
 				    "SELECT InsCod,COUNT(*) AS N"
-				    " FROM usr_data"
+				     " FROM usr_data"
 				    " WHERE InsCod=%ld"
 				    " GROUP BY InsCod"
 				    " ORDER BY N DESC",
@@ -4065,31 +4065,31 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_SYS:
 	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				       " per survey",
-			    "SELECT AVG(N) FROM "				// row[0]
-			    "(SELECT COUNT(%s) AS N"
-			      " FROM usr_follow"
-			     " GROUP BY %s) AS F",
+			    "SELECT AVG(N)"			// row[0]
+			     " FROM (SELECT COUNT(%s) AS N"
+			             " FROM usr_follow"
+			            " GROUP BY %s) AS F",
 			    FieldDB[Fol],
 			    FieldDB[1 - Fol]);
 	    break;
 	 case Hie_Lvl_CTY:
 	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				       " per survey",
-			    "SELECT AVG(N) FROM "				// row[0]
-			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			      " FROM ins_instits,"
-			            "ctr_centers,"
-			            "deg_degrees,"
-			            "crs_courses,"
-			            "crs_users,"
-			            "usr_follow"
-			     " WHERE ins_instits.CtyCod=%ld"
-			       " AND ins_instits.InsCod=ctr_centers.InsCod"
-			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			       " AND deg_degrees.DegCod=crs_courses.DegCod"
-			       " AND crs_courses.CrsCod=crs_users.CrsCod"
-			       " AND crs_users.UsrCod=usr_follow.%s"
-			     " GROUP BY %s) AS F",
+			    "SELECT AVG(N)"			// row[0]
+			     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+				     " FROM ins_instits,"
+					   "ctr_centers,"
+					   "deg_degrees,"
+					   "crs_courses,"
+					   "crs_users,"
+					   "usr_follow"
+				    " WHERE ins_instits.CtyCod=%ld"
+				      " AND ins_instits.InsCod=ctr_centers.InsCod"
+				      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				      " AND deg_degrees.DegCod=crs_courses.DegCod"
+				      " AND crs_courses.CrsCod=crs_users.CrsCod"
+				      " AND crs_users.UsrCod=usr_follow.%s"
+				    " GROUP BY %s) AS F",
 			    FieldDB[Fol],
 			    Gbl.Hierarchy.Cty.CtyCod,
 			    FieldDB[Fol],
@@ -4098,19 +4098,19 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_INS:
 	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				       " per survey",
-			    "SELECT AVG(N) FROM "				// row[0]
-			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			      " FROM ctr_centers,"
-			            "deg_degrees,"
-			            "crs_courses,"
-			            "crs_users,"
-			            "usr_follow"
-			     " WHERE ctr_centers.InsCod=%ld"
-			       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			       " AND deg_degrees.DegCod=crs_courses.DegCod"
-			       " AND crs_courses.CrsCod=crs_users.CrsCod"
-			       " AND crs_users.UsrCod=usr_follow.%s"
-			     " GROUP BY %s) AS F",
+			    "SELECT AVG(N)"			// row[0]
+			     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+				     " FROM ctr_centers,"
+					   "deg_degrees,"
+					   "crs_courses,"
+					   "crs_users,"
+					   "usr_follow"
+				    " WHERE ctr_centers.InsCod=%ld"
+				      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				      " AND deg_degrees.DegCod=crs_courses.DegCod"
+				      " AND crs_courses.CrsCod=crs_users.CrsCod"
+				      " AND crs_users.UsrCod=usr_follow.%s"
+				    " GROUP BY %s) AS F",
 			    FieldDB[Fol],
 			    Gbl.Hierarchy.Ins.InsCod,
 			    FieldDB[Fol],
@@ -4119,17 +4119,17 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_CTR:
 	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				       " per survey",
-			    "SELECT AVG(N) FROM "				// row[0]
-			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			      " FROM deg_degrees,"
-			            "crs_courses,"
-			            "crs_users,"
-			            "usr_follow"
-			     " WHERE deg_degrees.CtrCod=%ld"
-			       " AND deg_degrees.DegCod=crs_courses.DegCod"
-			       " AND crs_courses.CrsCod=crs_users.CrsCod"
-			       " AND crs_users.UsrCod=usr_follow.%s"
-			     " GROUP BY %s) AS F",
+			    "SELECT AVG(N)"			// row[0]
+			     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+				     " FROM deg_degrees,"
+					   "crs_courses,"
+					   "crs_users,"
+					   "usr_follow"
+				    " WHERE deg_degrees.CtrCod=%ld"
+				      " AND deg_degrees.DegCod=crs_courses.DegCod"
+				      " AND crs_courses.CrsCod=crs_users.CrsCod"
+				      " AND crs_users.UsrCod=usr_follow.%s"
+				    " GROUP BY %s) AS F",
 			    FieldDB[Fol],
 			    Gbl.Hierarchy.Ctr.CtrCod,
 			    FieldDB[Fol],
@@ -4138,15 +4138,15 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_DEG:
 	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				       " per survey",
-			    "SELECT AVG(N) FROM "				// row[0]
-			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			      " FROM crs_courses,"
-			            "crs_users,"
-			            "usr_follow"
-			     " WHERE crs_courses.DegCod=%ld"
-			       " AND crs_courses.CrsCod=crs_users.CrsCod"
-			       " AND crs_users.UsrCod=usr_follow.%s"
-			     " GROUP BY %s) AS F",
+			    "SELECT AVG(N)"			// row[0]
+			     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+				     " FROM crs_courses,"
+					   "crs_users,"
+					   "usr_follow"
+				    " WHERE crs_courses.DegCod=%ld"
+				      " AND crs_courses.CrsCod=crs_users.CrsCod"
+				      " AND crs_users.UsrCod=usr_follow.%s"
+				    " GROUP BY %s) AS F",
 			    FieldDB[Fol],
 			    Gbl.Hierarchy.Deg.DegCod,
 			    FieldDB[Fol],
@@ -4155,13 +4155,13 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_CRS:
 	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				       " per survey",
-			    "SELECT AVG(N) FROM "				// row[0]
-			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			      " FROM crs_users,"
-			            "usr_follow"
-			     " WHERE crs_users.CrsCod=%ld"
-			       " AND crs_users.UsrCod=usr_follow.%s"
-			     " GROUP BY %s) AS F",
+			    "SELECT AVG(N)"		// row[0]
+			     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+				     " FROM crs_users,"
+					   "usr_follow"
+				    " WHERE crs_users.CrsCod=%ld"
+				      " AND crs_users.UsrCod=usr_follow.%s"
+				    " GROUP BY %s) AS F",
 			    FieldDB[Fol],
 			    Gbl.Hierarchy.Crs.CrsCod,
 			    FieldDB[Fol],
@@ -5806,7 +5806,7 @@ unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 	 NumUsrs = (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(*)"
-		        " FROM usr_data WHERE %s",
+		         " FROM usr_data WHERE %s",
 		        SubQuery);
 	 break;
       case Hie_Lvl_CTY:

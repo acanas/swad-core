@@ -1151,7 +1151,8 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
      {
       /* Make query */
       NumRows = DB_QuerySELECT (&mysql_res,"can not get agenda events",
-	                        "SELECT AgdCod FROM agd_agendas"
+	                        "SELECT AgdCod"
+	                         " FROM agd_agendas"
 				" WHERE %s%s%s%s"
 				" ORDER BY %s",
 				UsrSubQuery,
@@ -1300,9 +1301,9 @@ static void Agd_GetEventTxtFromDB (struct Agd_Event *AgdEvent,
    /***** Get text of event from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get event text",
 	                     "SELECT Txt"	// row[0]
-	                     " FROM agd_agendas"
+	                      " FROM agd_agendas"
 			     " WHERE AgdCod=%ld"
-			     " AND UsrCod=%ld",
+			       " AND UsrCod=%ld",
 			     AgdEvent->AgdCod,
 			     AgdEvent->UsrCod);
 
@@ -1865,7 +1866,7 @@ unsigned Agd_GetNumEventsFromUsr (long UsrCod)
    /***** Get number of events in a course from database *****/
    return (unsigned) DB_QueryCOUNT ("can not get number of events from user",
 				    "SELECT COUNT(*)"
-				    " FROM agd_agendas"
+				     " FROM agd_agendas"
 				    " WHERE UsrCod=%ld",
 				    UsrCod);
   }
@@ -1887,7 +1888,7 @@ unsigned Agd_GetNumUsrsWithEvents (Hie_Lvl_Level_t Scope)
       case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of users with events",
                          "SELECT COUNT(DISTINCT UsrCod)"
-			 " FROM agd_agendas"
+			  " FROM agd_agendas"
 			 " WHERE UsrCod>0");
          break;
        case Hie_Lvl_CTY:
@@ -1992,7 +1993,7 @@ unsigned Agd_GetNumEvents (Hie_Lvl_Level_t Scope)
       case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of events",
                          "SELECT COUNT(*)"
-			 " FROM agd_agendas"
+			  " FROM agd_agendas"
 			 " WHERE UsrCod>0");
          break;
       case Hie_Lvl_CTY:

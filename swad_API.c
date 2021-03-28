@@ -497,7 +497,8 @@ static int API_CheckCourseAndGroupCodes (struct soap *soap,
 
    /***** Query if course code already exists in database *****/
    if (DB_QueryCOUNT ("can not get course",
-		      "SELECT COUNT(*) FROM crs_courses"
+		      "SELECT COUNT(*)"
+		       " FROM crs_courses"
 		      " WHERE CrsCod=%ld",
 		      CrsCod) != 1)
       return soap_sender_fault (soap,
@@ -598,7 +599,9 @@ static int API_GetCurrentDegCodFromCurrentCrsCod (void)
 
    /***** Check that key does not exist in database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get the degree of a course",
-		       "SELECT DegCod FROM crs_courses WHERE CrsCod=%ld",
+		       "SELECT DegCod"
+		        " FROM crs_courses"
+		       " WHERE CrsCod=%ld",
 		       Gbl.Hierarchy.Crs.CrsCod))	// Course found in table of courses
      {
       row = mysql_fetch_row (mysql_res);
@@ -633,7 +636,8 @@ static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
 		              "FirstName,"				// row[2]
 		              "Photo,"					// row[3]
 		              "DATE_FORMAT(Birthday,'%%Y%%m%%d')"	// row[4]
-		       " FROM usr_data WHERE UsrCod=%ld",
+		       " FROM usr_data"
+		      " WHERE UsrCod=%ld",
 		       UsrDat->UsrCod) != 1)
       return false;
 
@@ -837,7 +841,8 @@ static int API_CheckParamsNewAccount (char *NewNickWithArr,	// Input
 
       /***** Check if the new nickname matches any of the nicknames of other users *****/
       if (DB_QueryCOUNT ("can not check if nickname already existed",
-			 "SELECT COUNT(*) FROM usr_nicknames"
+			 "SELECT COUNT(*)"
+			  " FROM usr_nicknames"
 			 " WHERE Nickname='%s'",
 			 NewNickWithoutArr))	// A nickname of another user is the same that this nickname
 	 return API_CHECK_NEW_ACCOUNT_NICKNAME_REGISTERED_BY_ANOTHER_USER;
@@ -850,8 +855,10 @@ static int API_CheckParamsNewAccount (char *NewNickWithArr,	// Input
      {
       /***** Check if the new email matches any of the confirmed emails of other users *****/
       if (DB_QueryCOUNT ("can not check if email already existed",
-			 "SELECT COUNT(*) FROM usr_emails"
-			 " WHERE E_mail='%s' AND Confirmed='Y'",
+			 "SELECT COUNT(*)"
+			  " FROM usr_emails"
+			 " WHERE E_mail='%s'"
+			   " AND Confirmed='Y'",
 			 NewEmail))	// An email of another user is the same that my email
 	 return API_CHECK_NEW_ACCOUNT_EMAIL_REGISTERED_BY_ANOTHER_USER;
      }
@@ -922,11 +929,13 @@ int swad__loginByUserPasswordKey (struct soap *soap,
       NumRows =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's data",
 				 "SELECT usr_nicknames.UsrCod"
-				 " FROM usr_nicknames,usr_data"
+				  " FROM usr_nicknames,"
+				        "usr_data"
 				 " WHERE usr_nicknames.Nickname='%s'"
-				 " AND usr_nicknames.UsrCod=usr_data.UsrCod"
-				 " AND usr_data.Password='%s'",
-				 UsrIDNickOrEmail,userPassword);
+				   " AND usr_nicknames.UsrCod=usr_data.UsrCod"
+				   " AND usr_data.Password='%s'",
+				 UsrIDNickOrEmail,
+				 userPassword);
      }
    else if (Mai_CheckIfEmailIsValid (UsrIDNickOrEmail))		// 2: It's an email
      {
@@ -935,11 +944,12 @@ int swad__loginByUserPasswordKey (struct soap *soap,
       NumRows =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's data",
 				 "SELECT usr_emails.UsrCod"
-				 " FROM usr_emails,usr_data"
+				  " FROM usr_emails,usr_data"
 				 " WHERE usr_emails.E_mail='%s'"
-				 " AND usr_emails.UsrCod=usr_data.UsrCod"
-				 " AND usr_data.Password='%s'",
-				 UsrIDNickOrEmail,userPassword);
+				   " AND usr_emails.UsrCod=usr_data.UsrCod"
+				   " AND usr_data.Password='%s'",
+				 UsrIDNickOrEmail,
+				 userPassword);
      }
    else									// 3: It's not a nickname nor email
      {
@@ -1284,7 +1294,8 @@ int swad__getNewPassword (struct soap *soap,
       /* User has typed a nickname */
       NumRows =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's data",
-				 "SELECT UsrCod FROM usr_nicknames"
+				 "SELECT UsrCod"
+				  " FROM usr_nicknames"
 				 " WHERE Nickname='%s'",
 				 UsrIDNickOrEmail);
      }
@@ -1294,7 +1305,8 @@ int swad__getNewPassword (struct soap *soap,
       // TODO: Get only if email confirmed?
       NumRows =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's data",
-				 "SELECT UsrCod FROM usr_emails"
+				 "SELECT UsrCod"
+				  " FROM usr_emails"
 				 " WHERE E_mail='%s'",
 				 UsrIDNickOrEmail);
      }
@@ -2591,13 +2603,19 @@ int swad__getAttendanceEvents (struct soap *soap,
    /***** Query list of attendance events *****/
    NumRows =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get attendance events",
-			      "SELECT AttCod,Hidden,UsrCod,"
-			      "UNIX_TIMESTAMP(StartTime) AS ST,"
-			      "UNIX_TIMESTAMP(EndTime) AS ET,"
-			      "CommentTchVisible,Title,Txt"
-			      " FROM att_events"
+			      "SELECT AttCod,"
+			             "Hidden,"
+			             "UsrCod,"
+			             "UNIX_TIMESTAMP(StartTime) AS ST,"
+			             "UNIX_TIMESTAMP(EndTime) AS ET,"
+			             "CommentTchVisible,"
+			             "Title,"
+			             "Txt"
+			       " FROM att_events"
 			      " WHERE CrsCod=%d"
-			      " ORDER BY ST DESC,ET DESC,Title DESC",
+			      " ORDER BY ST DESC,"
+			             "ET DESC,"
+			             "Title DESC",
 			      courseCode);
 
    getAttendanceEventsOut->eventsArray.__size =
@@ -3068,9 +3086,12 @@ int swad__getAttendanceUsers (struct soap *soap,
    NumRows =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get users"
 					 " in an attendance event",
-			      "SELECT u.UsrCod,u.Present"
-			       " FROM (SELECT UsrCod,Present"
-			               " FROM att_users WHERE AttCod=%ld"
+			      "SELECT u.UsrCod,"
+			             "u.Present"
+			       " FROM (SELECT UsrCod,"
+			                     "Present"
+			               " FROM att_users"
+			              " WHERE AttCod=%ld"
 			              " UNION %s) AS u,"
 			             "usr_data"
 			      " WHERE u.UsrCod=usr_data.UsrCod"
@@ -3572,7 +3593,8 @@ static int API_GetMyLanguage (struct soap *soap)
 
    /***** Get user's language *****/
    if (DB_QuerySELECT (&mysql_res,"can not get user's language",
-		       "SELECT Language FROM usr_data"
+		       "SELECT Language"
+		        " FROM usr_data"
 		       " WHERE UsrCod=%ld",
 		       Gbl.Usrs.Me.UsrDat.UsrCod) != 1)
       return soap_receiver_fault (soap,
@@ -3716,12 +3738,16 @@ int swad__sendMessage (struct soap *soap,
      {
       /***** Check if the original message was really received by me *****/
       if (!DB_QuerySELECT (&mysql_res,"can not check original message",
-			   "SELECT SUM(N) FROM"
-			   " (SELECT COUNT(*) AS N FROM msg_rcv"
-			   " WHERE UsrCod=%ld AND MsgCod=%ld"
-			   " UNION"
-			   " SELECT COUNT(*) AS N FROM msg_rcv_deleted"
-			   " WHERE UsrCod=%ld AND MsgCod=%ld) AS T",
+			   "SELECT SUM(N)"
+			    " FROM (SELECT COUNT(*) AS N"
+			            " FROM msg_rcv"
+			           " WHERE UsrCod=%ld"
+			             " AND MsgCod=%ld"
+			          " UNION"
+			          " SELECT COUNT(*) AS N"
+			            " FROM msg_rcv_deleted"
+			           " WHERE UsrCod=%ld"
+			             " AND MsgCod=%ld) AS T",
 			   Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode,
 			   Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode))
          return soap_sender_fault (soap,
@@ -3746,12 +3772,15 @@ int swad__sendMessage (struct soap *soap,
       /***** Get the recipient of the message *****/
       NumRows =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not check original message",
-				 "SELECT UsrCod FROM msg_snt"
+				 "SELECT UsrCod"
+				  " FROM msg_snt"
 				 " WHERE MsgCod=%ld"
 				 " UNION "
-				 "SELECT UsrCod FROM msg_snt_deleted"
+				 "SELECT UsrCod"
+				  " FROM msg_snt_deleted"
 				 " WHERE MsgCod=%ld",
-				 (long) messageCode,(long) messageCode);
+				 (long) messageCode,
+				 (long) messageCode);
       if (NumRows)	// Message found in any of the two tables of sent messages
         {
          row = mysql_fetch_row (mysql_res);
@@ -3774,7 +3803,10 @@ int swad__sendMessage (struct soap *soap,
    /***** Build query for recipients from database *****/
    if (ReplyUsrCod > 0)
       snprintf (Query,API_MAX_BYTES_QUERY_RECIPIENTS + 1,
-	        "SELECT UsrCod FROM usr_data WHERE UsrCod=%ld",ReplyUsrCod);
+	        "SELECT UsrCod"
+	         " FROM usr_data"
+	        " WHERE UsrCod=%ld",
+	        ReplyUsrCod);
    else
       Query[0] = '\0';
 
@@ -3802,7 +3834,8 @@ int swad__sendMessage (struct soap *soap,
 	   {
 	    if (ReplyUsrCod > 0)
 	       Str_Concat (Query," UNION ",API_MAX_BYTES_QUERY_RECIPIENTS);
-	    Str_Concat (Query,"SELECT UsrCod FROM usr_nicknames"
+	    Str_Concat (Query,"SELECT UsrCod"
+		               " FROM usr_nicknames"
 			      " WHERE Nickname IN ('",
 			API_MAX_BYTES_QUERY_RECIPIENTS);
 	    FirstNickname = false;
@@ -4131,8 +4164,14 @@ static int API_GetTstConfig (long CrsCod)
 
    /***** Query database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get test configuration",
-		       "SELECT Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Visibility"
-		       " FROM tst_config WHERE CrsCod=%ld",
+		       "SELECT Pluggable,"		// row[0]
+		              "Min,"			// row[1]
+		              "Def,"			// row[2]
+		              "Max,"			// row[3]
+		              "MinTimeNxtTstPerQst,"	// row[4]
+		              "Visibility"		// row[5]
+		        " FROM tst_config"
+		       " WHERE CrsCod=%ld",
 		       CrsCod))
      {
       /***** Get minimun, default and maximum *****/
@@ -4166,20 +4205,23 @@ static int API_GetNumTestQuestionsInCrs (long CrsCod)
    return
    (int) DB_QueryCOUNT ("can not get number of test questions",
 			"SELECT COUNT(*)"
-			" FROM tst_questions,tst_question_tags,tst_tags"
+			 " FROM tst_questions,"
+			       "tst_question_tags,"
+			       "tst_tags"
 			" WHERE tst_questions.CrsCod=%ld"
-			" AND tst_questions.QstCod NOT IN"
-
-			" (SELECT tst_question_tags.QstCod"
-			" FROM tst_tags,tst_question_tags"
-			" WHERE tst_tags.CrsCod=%ld"
-			" AND tst_tags.TagHidden='Y'"
-			" AND tst_tags.TagCod=tst_question_tags.TagCod)"
-
-			" AND tst_questions.QstCod=tst_question_tags.QstCod"
-			" AND tst_question_tags.TagCod=tst_tags.TagCod"
-			" AND tst_tags.CrsCod=%ld",
-			CrsCod,CrsCod,CrsCod);
+			  " AND tst_questions.QstCod NOT IN"
+			      " (SELECT tst_question_tags.QstCod"
+			         " FROM tst_tags,"
+			               "tst_question_tags"
+			        " WHERE tst_tags.CrsCod=%ld"
+			          " AND tst_tags.TagHidden='Y'"
+			          " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+			  " AND tst_questions.QstCod=tst_question_tags.QstCod"
+			  " AND tst_question_tags.TagCod=tst_tags.TagCod"
+			  " AND tst_tags.CrsCod=%ld",
+			CrsCod,
+			CrsCod,
+			CrsCod);
   }
 
 /*****************************************************************************/
@@ -4286,9 +4328,11 @@ static int API_GetTstTags (struct soap *soap,
 
    /***** Get available tags from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get test tags",
-			     "SELECT TagCod,TagTxt"
-			     " FROM tst_tags"
-			     " WHERE CrsCod=%ld AND TagHidden='N'"
+			     "SELECT TagCod,"	// row[0]
+			            "TagTxt"	// row[1]
+			      " FROM tst_tags"
+			     " WHERE CrsCod=%ld"
+			       " AND TagHidden='N'"
 			     " ORDER BY TagTxt",
 			     CrsCod);
 
@@ -4345,24 +4389,28 @@ static int API_GetTstQuestions (struct soap *soap,
    // DISTINCTROW is necessary to not repeat questions
    NumRows =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get test questions",
-			      "SELECT DISTINCTROW tst_questions.QstCod,"
-			      "tst_questions.AnsType,tst_questions.Shuffle,"
-			      "tst_questions.Stem,tst_questions.Feedback"
-			      " FROM tst_questions,tst_question_tags,tst_tags"
+			      "SELECT DISTINCTROW tst_questions.QstCod,"	// row[0]
+			                         "tst_questions.AnsType,"	// row[1]
+			                         "tst_questions.Shuffle,"	// row[2]
+			                         "tst_questions.Stem,"		// row[3]
+			                         "tst_questions.Feedback"	// row[4]
+			       " FROM tst_questions,"
+			             "tst_question_tags,"
+			             "tst_tags"
 			      " WHERE tst_questions.CrsCod=%ld"
-			      " AND tst_questions.QstCod NOT IN"
-			      " (SELECT tst_question_tags.QstCod FROM tst_tags,tst_question_tags"
-			      " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
-			      " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-			      " AND tst_questions.QstCod=tst_question_tags.QstCod"
-			      " AND tst_question_tags.TagCod=tst_tags.TagCod"
-			      " AND tst_tags.CrsCod=%ld"
-			      " AND "
-			      "("
-			      "tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
-			      " OR "
-			      "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)"
-			      ")"
+			        " AND tst_questions.QstCod NOT IN"
+				    " (SELECT tst_question_tags.QstCod"
+				       " FROM tst_tags,"
+				             "tst_question_tags"
+				      " WHERE tst_tags.CrsCod=%ld"
+				        " AND tst_tags.TagHidden='Y'"
+				        " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+			        " AND tst_questions.QstCod=tst_question_tags.QstCod"
+			        " AND tst_question_tags.TagCod=tst_tags.TagCod"
+			        " AND tst_tags.CrsCod=%ld"
+			        " AND (tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
+				      " OR "
+				      "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld))"
 			      " ORDER BY QstCod",
 			      CrsCod,CrsCod,CrsCod,
 			      BeginTime,
@@ -4437,26 +4485,33 @@ static int API_GetTstAnswers (struct soap *soap,
    /***** Get recent test questions from database *****/
    NumRows =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get test answers",
-			      "SELECT QstCod,AnsInd,Correct,Answer,Feedback"
-			      " FROM tst_answers WHERE QstCod IN "
-			      "(SELECT tst_questions.QstCod"
-			      " FROM tst_questions,tst_question_tags,tst_tags"
-			      " WHERE tst_questions.CrsCod=%ld"
-			      " AND tst_questions.QstCod NOT IN"
-			      " (SELECT tst_question_tags.QstCod FROM tst_tags,tst_question_tags"
-			      " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
-			      " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-			      " AND tst_questions.QstCod=tst_question_tags.QstCod"
-			      " AND tst_question_tags.TagCod=tst_tags.TagCod"
-			      " AND tst_tags.CrsCod=%ld"
-			      " AND "
-			      "("
-			      "tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
-			      " OR "
-			      "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)"
-			      ")"
-			      ")"
-			      " ORDER BY QstCod,AnsInd",
+			      "SELECT QstCod,"
+			             "AnsInd,"
+			             "Correct,"
+			             "Answer,"
+			             "Feedback"
+			       " FROM tst_answers"
+			      " WHERE QstCod IN "
+				     "(SELECT tst_questions.QstCod"
+				       " FROM tst_questions,"
+				             "tst_question_tags,"
+				             "tst_tags"
+				      " WHERE tst_questions.CrsCod=%ld"
+				        " AND tst_questions.QstCod NOT IN"
+					    " (SELECT tst_question_tags.QstCod"
+					       " FROM tst_tags,"
+					             "tst_question_tags"
+					      " WHERE tst_tags.CrsCod=%ld"
+					        " AND tst_tags.TagHidden='Y'"
+					        " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+				       " AND tst_questions.QstCod=tst_question_tags.QstCod"
+				       " AND tst_question_tags.TagCod=tst_tags.TagCod"
+				       " AND tst_tags.CrsCod=%ld"
+				       " AND (tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
+					    " OR "
+					     "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)))"
+			      " ORDER BY QstCod,"
+			                "AnsInd",
 			      CrsCod,CrsCod,CrsCod,
 			      BeginTime,
 			      BeginTime);
@@ -4528,26 +4583,31 @@ static int API_GetTstQuestionTags (struct soap *soap,
    /***** Get recent test questions from database *****/
    NumRows =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get test question tags",
-			      "SELECT QstCod,TagCod,TagInd"
-			      " FROM tst_question_tags WHERE QstCod IN "
-			      "(SELECT tst_questions.QstCod"
-			      " FROM tst_questions,tst_question_tags,tst_tags"
-			      " WHERE tst_questions.CrsCod=%ld"
-			      " AND tst_questions.QstCod NOT IN"
-			      " (SELECT tst_question_tags.QstCod FROM tst_tags,tst_question_tags"
-			      " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
-			      " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-			      " AND tst_questions.QstCod=tst_question_tags.QstCod"
-			      " AND tst_question_tags.TagCod=tst_tags.TagCod"
-			      " AND tst_tags.CrsCod=%ld"
-			      " AND "
-			      "("
-			      "tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
-			      " OR "
-			      "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)"
-			      ")"
-			      ")"
-			      " ORDER BY QstCod,TagInd",
+			      "SELECT QstCod,"
+			             "TagCod,"
+			             "TagInd"
+			       " FROM tst_question_tags"
+			      " WHERE QstCod IN "
+				     "(SELECT tst_questions.QstCod"
+				       " FROM tst_questions,"
+				             "tst_question_tags,"
+				             "tst_tags"
+				      " WHERE tst_questions.CrsCod=%ld"
+				        " AND tst_questions.QstCod NOT IN"
+					    " (SELECT tst_question_tags.QstCod"
+					       " FROM tst_tags,"
+					             "tst_question_tags"
+					      " WHERE tst_tags.CrsCod=%ld"
+					        " AND tst_tags.TagHidden='Y'"
+					        " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+				        " AND tst_questions.QstCod=tst_question_tags.QstCod"
+				        " AND tst_question_tags.TagCod=tst_tags.TagCod"
+				        " AND tst_tags.CrsCod=%ld"
+				        " AND (tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
+					     " OR "
+					      "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)))"
+			      " ORDER BY QstCod,"
+			                "TagInd",
 			      CrsCod,CrsCod,CrsCod,
 			      BeginTime,
 			      BeginTime);
@@ -4680,29 +4740,32 @@ int swad__getTrivialQuestion (struct soap *soap,
    NumRows =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get test questions",
 			      "SELECT DISTINCTROW "
-			             "tst_questions.QstCod,"
-			             "tst_questions.AnsType,"
-			             "tst_questions.Shuffle,"
-			             "tst_questions.Stem,"
-			             "tst_questions.Feedback,"
-			             "tst_questions.Score/tst_questions.NumHits AS S"
-			      " FROM crs_courses,"
-			            "tst_questions"
+			             "tst_questions.QstCod,"		// row[0]
+			             "tst_questions.AnsType,"		// row[1]
+			             "tst_questions.Shuffle,"		// row[2]
+			             "tst_questions.Stem,"		// row[3]
+			             "tst_questions.Feedback,"		// row[4]
+			             "tst_questions.Score/"
+			             "tst_questions.NumHits AS S"	// row[5]
+			       " FROM crs_courses,"
+			             "tst_questions"
 			      " WHERE crs_courses.DegCod IN (%s)"
-			      " AND crs_courses.CrsCod=tst_questions.CrsCod"
-			      " AND tst_questions.AnsType='unique_choice'"
-			      " AND tst_questions.NumHits>0"
-			      " AND tst_questions.QstCod NOT IN"
-			      " (SELECT tst_question_tags.QstCod"
-			      " FROM crs_courses,"
-			            "tst_tags,"
-			            "tst_question_tags"
-			      " WHERE crs_courses.DegCod IN (%s)"
-			      " AND crs_courses.CrsCod=tst_tags.CrsCod"
-			      " AND tst_tags.TagHidden='Y'"
-			      " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-			      " HAVING S>='%f' AND S<='%f'"
-			      " ORDER BY RAND() LIMIT 1",
+			        " AND crs_courses.CrsCod=tst_questions.CrsCod"
+			        " AND tst_questions.AnsType='unique_choice'"
+			        " AND tst_questions.NumHits>0"
+			        " AND tst_questions.QstCod NOT IN"
+				    " (SELECT tst_question_tags.QstCod"
+				       " FROM crs_courses,"
+					     "tst_tags,"
+					     "tst_question_tags"
+				      " WHERE crs_courses.DegCod IN (%s)"
+				        " AND crs_courses.CrsCod=tst_tags.CrsCod"
+				        " AND tst_tags.TagHidden='Y'"
+				        " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+			      " HAVING S>='%f'"
+			         " AND S<='%f'"
+			      " ORDER BY RAND()"
+			      " LIMIT 1",
 			      DegreesStr,DegreesStr,
 			      lowerScore,upperScore);
    Str_SetDecimalPointToLocal ();	// Return to local system
@@ -4765,12 +4828,17 @@ int swad__getTrivialQuestion (struct soap *soap,
    if (QstCod > 0)
      {
       /***** Get answer from database *****/
-      NumRows =
-      (unsigned) DB_QuerySELECT (&mysql_res,"can not get test answers",
-				 "SELECT QstCod,AnsInd,Correct,Answer,Feedback"
-				 " FROM tst_answers WHERE QstCod=%ld"
-				 " ORDER BY AnsInd",
-				 QstCod);
+      NumRows = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get test answers",
+		      "SELECT QstCod,"		// row[0]
+			     "AnsInd,"		// row[1]
+			     "Correct,"		// row[2]
+			     "Answer,"		// row[3]
+			     "Feedback"		// row[4]
+		       " FROM tst_answers"
+		      " WHERE QstCod=%ld"
+		      " ORDER BY AnsInd",
+		      QstCod);
 
       getTrivialQuestionOut->answersArray.__size = (int) NumRows;
 
@@ -4885,11 +4953,11 @@ int swad__getGames (struct soap *soap,
 				    "gam_games.Visibility,"					// row[5]
 			            "gam_games.Title,"						// row[6]
 			            "gam_games.Txt"						// row[7]
-			     " FROM gam_games"
-			     " LEFT JOIN mch_matches"
-			     " ON gam_games.GamCod=mch_matches.GamCod"
+			      " FROM gam_games"
+			      " LEFT JOIN mch_matches"
+			        " ON gam_games.GamCod=mch_matches.GamCod"
 			     " WHERE gam_games.CrsCod=%ld"
-			     " AND Hidden='N'"
+			       " AND Hidden='N'"
 			     " GROUP BY gam_games.GamCod"
 			     " ORDER BY StartTime DESC,"
 			               "EndTime DESC,"
@@ -5401,10 +5469,12 @@ static void API_GetListGrpsInGameFromDB (struct soap *soap,
    size_t Length;
 
    /***** Get list of groups *****/
-   NumGrps =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get groups of a match",
-			      "SELECT GrpCod FROM mch_groups WHERE MchCod=%ld",
-			      MchCod);
+   NumGrps = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get groups of a match",
+		   "SELECT GrpCod"
+		    " FROM mch_groups"
+		   " WHERE MchCod=%ld",
+	           MchCod);
    if (NumGrps == 0)
       *ListGroups = NULL;
    else	// Groups found

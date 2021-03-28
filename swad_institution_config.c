@@ -259,10 +259,10 @@ static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
 			"AVG(Longitude),"				// row[1]
 			"GREATEST(MAX(Latitude)-MIN(Latitude),"
 				 "MAX(Longitude)-MIN(Longitude))"	// row[2]
-		 " FROM ctr_centers"
+		  " FROM ctr_centers"
 		 " WHERE InsCod=%ld"
-		 " AND Latitude<>0"
-		 " AND Longitude<>0",
+		   " AND Latitude<>0"
+		   " AND Longitude<>0",
 		 Gbl.Hierarchy.Ins.InsCod) < 0)
       Lay_NotEnoughMemoryExit ();
    Map_GetCoordAndZoom (Coord,Zoom,Query);
@@ -306,14 +306,14 @@ static void InsCfg_Map (void)
    Map_AddTileLayer ();
 
    /* Get centers with coordinates */
-   NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centers"
-						   " with coordinates",
-					"SELECT CtrCod"	// row[0]
-					" FROM ctr_centers"
-					" WHERE InsCod=%ld"
-					" AND Latitude<>0"
-					" AND Longitude<>0",
-					Gbl.Hierarchy.Ins.InsCod);
+   NumCtrs = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get centers with coordinates",
+		   "SELECT CtrCod"	// row[0]
+		    " FROM ctr_centers"
+		   " WHERE InsCod=%ld"
+		     " AND Latitude<>0"
+		     " AND Longitude<>0",
+		   Gbl.Hierarchy.Ins.InsCod);
 
    /* Add a marker and a popup for each center */
    for (NumCtr = 0;

@@ -517,7 +517,8 @@ unsigned Dpt_GetNumDepartmentsInInstitution (long InsCod)
    /***** Get number of departments in an institution from database *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get number of departments in an institution",
-		  "SELECT COUNT(*) FROM dpt_departments"
+		  "SELECT COUNT(*)"
+		   " FROM dpt_departments"
 		  " WHERE InsCod=%ld",
 		  InsCod);
   }
@@ -833,7 +834,8 @@ static bool Dpt_CheckIfDepartmentNameExists (const char *FieldName,const char *N
   {
    /***** Get number of departments with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the department name already existed",
-			  "SELECT COUNT(*) FROM dpt_departments"
+			  "SELECT COUNT(*)"
+			   " FROM dpt_departments"
 			  " WHERE %s='%s'"
 			    " AND DptCod<>%ld",
 			  FieldName,Name,
@@ -1131,7 +1133,8 @@ unsigned Dpt_GetNumDptsInIns (long InsCod)
    Gbl.Cache.NumDptsInIns.InsCod  = InsCod;
    Gbl.Cache.NumDptsInIns.NumDpts = (unsigned)
    DB_QueryCOUNT ("can not get number of departments in an institution",
-		  "SELECT COUNT(*) FROM departments"
+		  "SELECT COUNT(*)"
+		   " FROM departments"
 		  " WHERE InsCod=%ld",
 		  InsCod);
    return Gbl.Cache.NumDptsInIns.NumDpts;

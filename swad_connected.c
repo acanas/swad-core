@@ -466,7 +466,7 @@ static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role)
    return (unsigned)
    DB_QueryCOUNT ("can not get number of connected users",
 		  "SELECT COUNT(*)"
-		  " FROM usr_connected"
+		   " FROM usr_connected"
 		  " WHERE RoleInLastCrs=%u",
 		  (unsigned) Role);
   }

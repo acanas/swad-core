@@ -144,12 +144,15 @@ void Dup_ListDuplicateUsrs (void)
                  Hlp_USERS_Duplicates_possibly_duplicate_users,Box_NOT_CLOSABLE);
 
    /***** Make query *****/
-   NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get possibly"
-						   " duplicate users",
-					"SELECT UsrCod,COUNT(*) AS N,UNIX_TIMESTAMP(MIN(InformTime)) AS T"
-				        " FROM usr_duplicated"
-				        " GROUP BY UsrCod"
-				        " ORDER BY N DESC,T DESC");
+   NumUsrs = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get possibly duplicate users",
+		   "SELECT UsrCod,"
+		          "COUNT(*) AS N,"
+		          "UNIX_TIMESTAMP(MIN(InformTime)) AS T"
+		    " FROM usr_duplicated"
+		   " GROUP BY UsrCod"
+		   " ORDER BY N DESC,"
+		             "T DESC");
 
    /***** List possible duplicated users *****/
    if (NumUsrs)
@@ -293,8 +296,12 @@ static void Dup_ListSimilarUsrs (void)
 					   Gbl.Usrs.Other.UsrDat.FrstName);
    else
       NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get similar users",
-					   "SELECT DISTINCT UsrCod FROM usr_ids"
-					   " WHERE UsrID IN (SELECT UsrID FROM usr_ids WHERE UsrCod=%ld)",
+					   "SELECT DISTINCT UsrCod"
+					    " FROM usr_ids"
+					   " WHERE UsrID IN"
+					         " (SELECT UsrID"
+					            " FROM usr_ids"
+					           " WHERE UsrCod=%ld)",
 					   Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** List possible similar users *****/
@@ -401,7 +408,8 @@ static bool Dup_CheckIfUsrIsDup (long UsrCod)
   {
    return (DB_QueryCOUNT ("can not if user is in list"
 			  " of possible duplicate users",
-			  "SELECT COUNT(*) FROM usr_duplicated"
+			  "SELECT COUNT(*)"
+			   " FROM usr_duplicated"
 			  " WHERE UsrCod=%ld",
 			  UsrCod) != 0);
   }

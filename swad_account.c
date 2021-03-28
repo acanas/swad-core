@@ -659,8 +659,10 @@ static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_F
       /* Check if the new nickname
          matches any of the nicknames of other users */
       if (DB_QueryCOUNT ("can not check if nickname already existed",
-			 "SELECT COUNT(*) FROM usr_nicknames"
-			 " WHERE Nickname='%s' AND UsrCod<>%ld",
+			 "SELECT COUNT(*)"
+			  " FROM usr_nicknames"
+			 " WHERE Nickname='%s'"
+			   " AND UsrCod<>%ld",
 			 NewNickWithoutArr,
 			 Gbl.Usrs.Me.UsrDat.UsrCod))	// A nickname of another user is the same that this nickname
 	{
@@ -686,8 +688,10 @@ static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_F
       /* Check if the new email matches
          any of the confirmed emails of other users */
       if (DB_QueryCOUNT ("can not check if email already existed",
-			 "SELECT COUNT(*) FROM usr_emails"
-		         " WHERE E_mail='%s' AND Confirmed='Y'",
+			 "SELECT COUNT(*)"
+			  " FROM usr_emails"
+		         " WHERE E_mail='%s'"
+		           " AND Confirmed='Y'",
 	                 NewEmail))	// An email of another user is the same that my email
 	{
 	 Error = true;

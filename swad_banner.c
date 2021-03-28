@@ -147,7 +147,7 @@ void Ban_SeeBanners (void)
 			            "FullName,"		// row[3]
 			            "Img,"		// row[4]
 			            "WWW"		// row[5]
-			     " FROM ban_banners"
+			      " FROM ban_banners"
 			     " WHERE Hidden='N'"
 			     " ORDER BY ShortName");
    Ban_GetListBanners (&Banners,&mysql_res,NumRows);

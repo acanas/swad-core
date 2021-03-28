@@ -210,7 +210,7 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 				      "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
 				      "Title,"					// row[7]
 				      "ShowUsrResults"				// row[8]
-			       " FROM exa_sessions"
+			        " FROM exa_sessions"
 			       " WHERE ExaCod=%ld%s%s"
 			       " ORDER BY SesCod",
 			       Exam->ExaCod,HiddenSubQuery,GroupsSubQuery);
@@ -313,11 +313,12 @@ void ExaSes_GetDataOfSessionByCod (struct ExaSes_Session *Session)
 	                     	    "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
 				    "Title,"					// row[7]
 				    "ShowUsrResults"				// row[8]
-			     " FROM exa_sessions"
+			      " FROM exa_sessions"
 			     " WHERE SesCod=%ld"
-			     " AND ExaCod IN"		// Extra check
-			     " (SELECT ExaCod FROM exa_exams"
-			     " WHERE CrsCod='%ld')",
+			       " AND ExaCod IN"		// Extra check
+			           " (SELECT ExaCod"
+			              " FROM exa_exams"
+			             " WHERE CrsCod='%ld')",
 			     Session->SesCod,
 			     Gbl.Hierarchy.Crs.CrsCod);
    if (NumRows) // Session found...
@@ -1685,7 +1686,8 @@ unsigned ExaSes_GetNumSessionsInExam (long ExaCod)
    /***** Get number of sessions in an exam from database *****/
    return
    (unsigned) DB_QueryCOUNT ("can not get number of sessions of an exam",
-			     "SELECT COUNT(*) FROM exa_sessions"
+			     "SELECT COUNT(*)"
+			      " FROM exa_sessions"
 			     " WHERE ExaCod=%ld",
 			     ExaCod);
   }
@@ -1703,9 +1705,10 @@ unsigned ExaSes_GetNumOpenSessionsInExam (long ExaCod)
    /***** Get number of open sessions in an exam from database *****/
    return
    (unsigned) DB_QueryCOUNT ("can not get number of open sessions of an exam",
-			     "SELECT COUNT(*) FROM exa_sessions"
+			     "SELECT COUNT(*)"
+			      " FROM exa_sessions"
 			     " WHERE ExaCod=%ld"
-                             " AND NOW() BETWEEN StartTime AND EndTime",
+                               " AND NOW() BETWEEN StartTime AND EndTime",
 			     ExaCod);
   }
 
@@ -1718,7 +1721,9 @@ bool ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
   {
    /***** 1. Sessions in hidden exams are not accesible
           2. Hidden or closed sessions are not accesible *****/
-   if (Exam->Hidden || Session->Hidden || !Session->Open)
+   if (Exam->Hidden ||
+       Session->Hidden ||
+       !Session->Open)
       return false;
 
    /***** Exam is visible, session is visible and open ==>

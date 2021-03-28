@@ -130,15 +130,15 @@ void Ctr_SeeCtrWithPendingDegs (void)
       case Rol_CTR_ADM:
          NumCtrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get centers with pending degrees",
-			 "SELECT deg_degrees.CtrCod,"
-			        "COUNT(*)"
-			 " FROM deg_degrees,"
-			       "ctr_admin,"
-			       "ctr_centers"
+			 "SELECT deg_degrees.CtrCod,"	// row[0]
+			        "COUNT(*)"		// row[1]
+			  " FROM deg_degrees,"
+			        "ctr_admin,"
+			        "ctr_centers"
 			 " WHERE (deg_degrees.Status & %u)<>0"
-			 " AND deg_degrees.CtrCod=ctr_admin.CtrCod"
-			 " AND ctr_admin.UsrCod=%ld"
-			 " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			   " AND deg_degrees.CtrCod=ctr_admin.CtrCod"
+			   " AND ctr_admin.UsrCod=%ld"
+			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			 " GROUP BY deg_degrees.CtrCod"
 			 " ORDER BY ctr_centers.ShortName",
 			 (unsigned) Deg_STATUS_BIT_PENDING,
@@ -149,10 +149,10 @@ void Ctr_SeeCtrWithPendingDegs (void)
          DB_QuerySELECT (&mysql_res,"can not get centers with pending degrees",
 			 "SELECT deg_degrees.CtrCod,"
 			        "COUNT(*)"
-			 " FROM deg_degrees,"
-			       "ctr_centers"
+			  " FROM deg_degrees,"
+			        "ctr_centers"
 			 " WHERE (deg_degrees.Status & %u)<>0"
-			 " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			 " GROUP BY deg_degrees.CtrCod"
 			 " ORDER BY ctr_centers.ShortName",
 			 (unsigned) Deg_STATUS_BIT_PENDING);
@@ -567,7 +567,7 @@ void Ctr_GetBasicListOfCenters (long InsCod)
 			            "ShortName,"	// row[ 8]
 			            "FullName,"		// row[ 9]
 			            "WWW"		// row[10]
-			     " FROM ctr_centers"
+			      " FROM ctr_centers"
 			     " WHERE InsCod=%ld"
 			     " ORDER BY FullName",
 			     InsCod);
@@ -636,9 +636,9 @@ void Ctr_GetFullListOfCenters (long InsCod)
 			             "ctr_centers.FullName,"		// row[ 9]
 			             "ctr_centers.WWW,"			// row[10]
 				     "COUNT(*) AS NumUsrs"		// row[11]
-			     " FROM ctr_centers,usr_data"
+			      " FROM ctr_centers,usr_data"
 			     " WHERE ctr_centers.InsCod=%ld"
-			     " AND ctr_centers.CtrCod=usr_data.CtrCod"
+			       " AND ctr_centers.CtrCod=usr_data.CtrCod"
 			     " GROUP BY ctr_centers.CtrCod)"
 			     " UNION "
 			     "(SELECT CtrCod,"				// row[ 0]
@@ -653,12 +653,14 @@ void Ctr_GetFullListOfCenters (long InsCod)
 			             "FullName,"			// row[ 9]
 			             "WWW,"				// row[10]
 				     "0 AS NumUsrs"			// row[11]
-			     " FROM ctr_centers"
+			      " FROM ctr_centers"
 			     " WHERE InsCod=%ld"
-			     " AND CtrCod NOT IN"
-			     " (SELECT DISTINCT CtrCod FROM usr_data))"
+			       " AND CtrCod NOT IN"
+			           " (SELECT DISTINCT CtrCod"
+			              " FROM usr_data))"
 			     " ORDER BY %s",
-			     InsCod,InsCod,
+			     InsCod,
+			     InsCod,
 			     OrderBySubQuery[Gbl.Hierarchy.Ctrs.SelectedOrder]);
 
    if (NumRows) // Centers found...
@@ -732,7 +734,7 @@ bool Ctr_GetDataOfCenterByCod (struct Ctr_Center *Ctr)
 				       "ShortName,"		// row[ 8]
 				       "FullName,"		// row[ 9]
 				       "WWW"			// row[10]
-				" FROM ctr_centers"
+				 " FROM ctr_centers"
 				" WHERE CtrCod=%ld",
 				Ctr->CtrCod);
       if (NumRows) // Center found...
@@ -801,7 +803,9 @@ long Ctr_GetInsCodOfCenterByCod (long CtrCod)
      {
       /***** Get the institution code of a center from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get the institution of a center",
-			  "SELECT InsCod FROM ctr_centers WHERE CtrCod=%ld",
+			  "SELECT InsCod"
+			   " FROM ctr_centers"
+			  " WHERE CtrCod=%ld",
 			  CtrCod) == 1)
 	{
 	 /***** Get the institution code of this center *****/
@@ -830,7 +834,9 @@ void Ctr_GetShortNameOfCenterByCod (struct Ctr_Center *Ctr)
      {
       /***** Get the short name of a center from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get the short name of a center",
-			  "SELECT ShortName FROM ctr_centers WHERE CtrCod=%ld",
+			  "SELECT ShortName"
+			   " FROM ctr_centers"
+			  " WHERE CtrCod=%ld",
 			  Ctr->CtrCod) == 1)
 	{
 	 /***** Get the short name of this center *****/
@@ -892,7 +898,7 @@ void Ctr_WriteSelectorOfCenter (void)
       DB_QuerySELECT (&mysql_res,"can not get centers",
 		      "SELECT DISTINCT CtrCod,"
 		                      "ShortName"
-		      " FROM ctr_centers"
+		       " FROM ctr_centers"
 		      " WHERE InsCod=%ld"
 		      " ORDER BY ShortName",
 		      Gbl.Hierarchy.Ins.InsCod);
@@ -1435,9 +1441,15 @@ bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
    /***** Get number of centers with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of a center"
 			  " already existed",
-			  "SELECT COUNT(*) FROM ctr_centers"
-			  " WHERE InsCod=%ld AND %s='%s' AND CtrCod<>%ld",
-			  InsCod,FieldName,Name,CtrCod) != 0);
+			  "SELECT COUNT(*)"
+			   " FROM ctr_centers"
+			  " WHERE InsCod=%ld"
+			    " AND %s='%s'"
+			    " AND CtrCod<>%ld",
+			  InsCod,
+			  FieldName,
+			  Name,
+			  CtrCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1953,10 +1965,10 @@ static unsigned Ctr_GetNumCtrsInCty (long CtyCod)
    Gbl.Cache.NumCtrsInCty.NumCtrs = (unsigned)
    DB_QueryCOUNT ("can not get number of centers in a country",
 		  "SELECT COUNT(*)"
-		  " FROM ins_instits,"
-		        "ctr_centers"
+		   " FROM ins_instits,"
+		         "ctr_centers"
 		  " WHERE ins_instits.CtyCod=%ld"
-		  " AND ins_instits.InsCod=ctr_centers.InsCod",
+		    " AND ins_instits.InsCod=ctr_centers.InsCod",
 		  CtyCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_Lvl_CTY,Gbl.Cache.NumCtrsInCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCtrsInCty.NumCtrs);
@@ -2000,7 +2012,9 @@ unsigned Ctr_GetNumCtrsInIns (long InsCod)
    Gbl.Cache.NumCtrsInIns.InsCod  = InsCod;
    Gbl.Cache.NumCtrsInIns.NumCtrs = (unsigned)
    DB_QueryCOUNT ("can not get number of centers in an institution",
-		  "SELECT COUNT(*) FROM ctr_centers WHERE InsCod=%ld",
+		  "SELECT COUNT(*)"
+		   " FROM ctr_centers"
+		  " WHERE InsCod=%ld",
 		  InsCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,Hie_Lvl_INS,Gbl.Cache.NumCtrsInIns.InsCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCtrsInIns.NumCtrs);
@@ -2036,8 +2050,10 @@ unsigned Ctr_GetCachedNumCtrsWithMapInSys (void)
       /* Ccoordinates 0, 0 means not set ==> don't show map */
       NumCtrsWithMap = (unsigned)
       DB_QueryCOUNT ("can not get number of centers with map",
-		     "SELECT COUNT(*) FROM ctr_centers"
-		     " WHERE Latitude<>0 OR Longitude<>0");
+		     "SELECT COUNT(*)"
+		      " FROM ctr_centers"
+		     " WHERE Latitude<>0"
+		        " OR Longitude<>0");
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_Lvl_SYS,-1L,
                                     FigCch_UNSIGNED,&NumCtrsWithMap);
      }
@@ -2062,12 +2078,12 @@ unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod)
       NumCtrsWithMap = (unsigned)
       DB_QueryCOUNT ("can not get number of centers with map",
 		     "SELECT COUNT(*)"
-		     " FROM ins_instits,"
-		           "ctr_centers"
+		      " FROM ins_instits,"
+		            "ctr_centers"
 		     " WHERE ins_instits.CtyCod=%ld"
-		     " AND ins_instits.InsCod=ctr_centers.InsCod"
-		     " AND (ctr_centers.Latitude<>0"
-		       " OR ctr_centers.Longitude<>0)",
+		       " AND ins_instits.InsCod=ctr_centers.InsCod"
+		       " AND (ctr_centers.Latitude<>0"
+		         " OR ctr_centers.Longitude<>0)",
 		     CtyCod);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_Lvl_CTY,CtyCod,
                                     FigCch_UNSIGNED,&NumCtrsWithMap);
@@ -2092,9 +2108,11 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
       /* Ccoordinates 0, 0 means not set ==> don't show map */
       NumCtrsWithMap = (unsigned)
       DB_QueryCOUNT ("can not get number of centers with map",
-		     "SELECT COUNT(*) FROM ctr_centers"
+		     "SELECT COUNT(*)"
+		      " FROM ctr_centers"
 		     " WHERE InsCod=%ld"
-		     " AND (Latitude<>0 OR Longitude<>0)",
+		       " AND (Latitude<>0"
+		         " OR Longitude<>0)",
 		     InsCod);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,Hie_Lvl_INS,InsCod,
                                     FigCch_UNSIGNED,&NumCtrsWithMap);
@@ -2112,9 +2130,12 @@ unsigned Ctr_GetNumCtrsInPlc (long PlcCod)
    /***** Get number of centers (of the current institution) in a place *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get the number of centers in a place",
-		  "SELECT COUNT(*) FROM ctr_centers"
-		  " WHERE InsCod=%ld AND PlcCod=%ld",
-		  Gbl.Hierarchy.Ins.InsCod,PlcCod);
+		  "SELECT COUNT(*)"
+		   " FROM ctr_centers"
+		  " WHERE InsCod=%ld"
+		    " AND PlcCod=%ld",
+		  Gbl.Hierarchy.Ins.InsCod,
+		  PlcCod);
   }
 
 /*****************************************************************************/
@@ -2134,11 +2155,11 @@ unsigned Ctr_GetCachedNumCtrsWithDegs (const char *SubQuery,
       NumCtrsWithDegs = (unsigned)
       DB_QueryCOUNT ("can not get number of centers with degrees",
 		     "SELECT COUNT(DISTINCT ctr_centers.CtrCod)"
-		     " FROM ins_instits,"
-		           "ctr_centers,"
-		           "deg_degrees"
+		      " FROM ins_instits,"
+		            "ctr_centers,"
+		            "deg_degrees"
 		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
-		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
+		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
 		     SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_DEGS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumCtrsWithDegs);
@@ -2164,13 +2185,13 @@ unsigned Ctr_GetCachedNumCtrsWithCrss (const char *SubQuery,
       NumCtrsWithCrss = (unsigned)
       DB_QueryCOUNT ("can not get number of centers with courses",
 		     "SELECT COUNT(DISTINCT ctr_centers.CtrCod)"
-		     " FROM ins_instits,"
-			   "ctr_centers,"
-			   "deg_degrees,"
-			   "crs_courses"
+		      " FROM ins_instits,"
+			    "ctr_centers,"
+			    "deg_degrees,"
+			    "crs_courses"
 		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
-		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		     " AND deg_degrees.DegCod=crs_courses.DegCod",
+		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		       " AND deg_degrees.DegCod=crs_courses.DegCod",
 		     SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_CRSS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumCtrsWithCrss);

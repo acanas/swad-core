@@ -461,8 +461,10 @@ bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
 
    /***** Check if a user is a follower of another user *****/
    return (DB_QueryCOUNT ("can not get if a user is a follower of another one",
-			  "SELECT COUNT(*) FROM usr_follow"
-			  " WHERE FollowerCod=%ld AND FollowedCod=%ld",
+			  "SELECT COUNT(*)"
+			   " FROM usr_follow"
+			  " WHERE FollowerCod=%ld"
+			    " AND FollowedCod=%ld",
 			  FollowerCod,FollowedCod) != 0);
   }
 
@@ -499,12 +501,14 @@ void Fol_GetNumFollow (long UsrCod,
    Gbl.Cache.Follow.UsrCod = UsrCod;
    *NumFollowing = Gbl.Cache.Follow.NumFollowing =
       (unsigned) DB_QueryCOUNT ("can not get number of followed",
-	                        "SELECT COUNT(*) FROM usr_follow"
+	                        "SELECT COUNT(*)"
+	                         " FROM usr_follow"
 	                        " WHERE FollowerCod=%ld",
                                 UsrCod);
    *NumFollowers = Gbl.Cache.Follow.NumFollowers =
       (unsigned) DB_QueryCOUNT ("can not get number of followers",
-			        "SELECT COUNT(*) FROM usr_follow"
+			        "SELECT COUNT(*)"
+			         " FROM usr_follow"
 			        " WHERE FollowedCod=%ld",
 			        UsrCod);
   }
@@ -681,7 +685,8 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
      {
       /***** Check if a user is a follower of another user *****/
       NumUsrs = DB_QuerySELECT (&mysql_res,"can not get followed users",
-				"SELECT FollowedCod FROM usr_follow"
+				"SELECT FollowedCod"
+				 " FROM usr_follow"
 				" WHERE FollowerCod=%ld"
 				" ORDER BY FollowTime DESC",
 				UsrDat->UsrCod);
@@ -765,7 +770,8 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
      {
       /***** Check if a user is a follower of another user *****/
       NumUsrs = DB_QuerySELECT (&mysql_res,"can not get followers",
-				"SELECT FollowerCod FROM usr_follow"
+				"SELECT FollowerCod"
+				 " FROM usr_follow"
 				" WHERE FollowedCod=%ld"
 				" ORDER BY FollowTime DESC",
 				UsrDat->UsrCod);
@@ -1372,9 +1378,9 @@ void Fol_GetAndShowRankingFollowers (void)
       case Hie_Lvl_SYS:
 	 NumUsrs = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT FollowedCod,"
-			        "COUNT(FollowerCod) AS N"
-			 " FROM usr_follow"
+			 "SELECT FollowedCod,"			// row[0]
+			        "COUNT(FollowerCod) AS N"	// row[1]
+			  " FROM usr_follow"
 			 " GROUP BY FollowedCod"
 			 " ORDER BY N DESC,"
 			           "FollowedCod"
@@ -1526,8 +1532,8 @@ void Fol_CreateTmpTableMeAndUsrsIFollow (void)
 	     " SELECT %ld AS UsrCod"		// Me
 	     " UNION"
 	     " SELECT FollowedCod AS UsrCod"	// Users I follow
-	     " FROM usr_follow"
-	     " WHERE FollowerCod=%ld",
+	       " FROM usr_follow"
+	      " WHERE FollowerCod=%ld",
 	     Gbl.Usrs.Me.UsrDat.UsrCod,
 	     Gbl.Usrs.Me.UsrDat.UsrCod);
   }

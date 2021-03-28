@@ -131,36 +131,34 @@ void Ins_SeeInsWithPendingCtrs (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_INS_ADM:
-         NumInss =
-         (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions"
-					       " with pending centers",
-				    "SELECT ctr_centers.InsCod,"
-				           "COUNT(*)"
-				    " FROM ctr_centers,"
-				          "ins_admin,"
-				          "ins_instits"
-				    " WHERE (ctr_centers.Status & %u)<>0"
-				    " AND ctr_centers.InsCod=ins_admin.InsCod"
-				    " AND ins_admin.UsrCod=%ld"
-				    " AND ctr_centers.InsCod=ins_instits.InsCod"
-				    " GROUP BY ctr_centers.InsCod"
-				    " ORDER BY ins_instits.ShortName",
-				    (unsigned) Ctr_STATUS_BIT_PENDING,
-				    Gbl.Usrs.Me.UsrDat.UsrCod);
+         NumInss = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get institutions with pending centers",
+			 "SELECT ctr_centers.InsCod,"
+			        "COUNT(*)"
+			  " FROM ctr_centers,"
+			        "ins_admin,"
+			        "ins_instits"
+			 " WHERE (ctr_centers.Status & %u)<>0"
+			   " AND ctr_centers.InsCod=ins_admin.InsCod"
+			   " AND ins_admin.UsrCod=%ld"
+			   " AND ctr_centers.InsCod=ins_instits.InsCod"
+			 " GROUP BY ctr_centers.InsCod"
+			 " ORDER BY ins_instits.ShortName",
+			 (unsigned) Ctr_STATUS_BIT_PENDING,
+			 Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Rol_SYS_ADM:
-         NumInss =
-         (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions"
-					       " with pending centers",
-				    "SELECT ctr_centers.InsCod,"
-				           "COUNT(*)"
-				    " FROM ctr_centers,"
-				          "ins_instits"
-				    " WHERE (ctr_centers.Status & %u)<>0"
-				    " AND ctr_centers.InsCod=ins_instits.InsCod"
-				    " GROUP BY ctr_centers.InsCod"
-				    " ORDER BY ins_instits.ShortName",
-				    (unsigned) Ctr_STATUS_BIT_PENDING);
+         NumInss = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get institutions with pending centers",
+			 "SELECT ctr_centers.InsCod,"
+			        "COUNT(*)"
+			  " FROM ctr_centers,"
+			        "ins_instits"
+			 " WHERE (ctr_centers.Status & %u)<>0"
+			   " AND ctr_centers.InsCod=ins_instits.InsCod"
+			 " GROUP BY ctr_centers.InsCod"
+			 " ORDER BY ins_instits.ShortName",
+			 (unsigned) Ctr_STATUS_BIT_PENDING);
          break;
       default:	// Forbidden for other users
 	 return;
@@ -643,7 +641,7 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
 				    "ShortName,"		// row[4]
 				    "FullName,"			// row[5]
 				    "WWW"			// row[6]
-			     " FROM ins_instits"
+			      " FROM ins_instits"
 			     " WHERE CtyCod=%ld"
 			     " ORDER BY FullName",
 			     CtyCod);
@@ -710,11 +708,12 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
 				     "ins_instits.RequesterUsrCod,"	// row[3]
 				     "ins_instits.ShortName,"		// row[4]
 				     "ins_instits.FullName,"		// row[5]
-				     "ins_instits.WWW,"		// row[6]
+				     "ins_instits.WWW,"			// row[6]
 				     "COUNT(*) AS NumUsrs"		// row[7]
-			     " FROM ins_instits,usr_data"
+			      " FROM ins_instits,"
+			            "usr_data"
 			     " WHERE ins_instits.CtyCod=%ld"
-			     " AND ins_instits.InsCod=usr_data.InsCod"
+			       " AND ins_instits.InsCod=usr_data.InsCod"
 			     " GROUP BY ins_instits.InsCod)"
 			     " UNION "
 			     "(SELECT InsCod,"				// row[0]
@@ -725,12 +724,15 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
 				     "FullName,"			// row[5]
 				     "WWW,"				// row[6]
 				     "0 AS NumUsrs"			// row[7]
-			     " FROM ins_instits"
-			     " WHERE CtyCod=%ld"
-			     " AND InsCod NOT IN"
-			     " (SELECT DISTINCT InsCod FROM usr_data))"
-			     " ORDER BY %s",
-			     CtyCod,CtyCod,OrderBySubQuery[Gbl.Hierarchy.Inss.SelectedOrder]);
+			       " FROM ins_instits"
+			      " WHERE CtyCod=%ld"
+			        " AND InsCod NOT IN"
+			            " (SELECT DISTINCT InsCod"
+			               " FROM usr_data))"
+			              " ORDER BY %s",
+			     CtyCod,
+			     CtyCod,
+			     OrderBySubQuery[Gbl.Hierarchy.Inss.SelectedOrder]);
 
    if (NumRows) // Institutions found...
      {
@@ -818,7 +820,8 @@ bool Ins_GetDataOfInstitutionByCod (struct Ins_Instit *Ins)
 			         "ShortName,"		// row[4]
 			         "FullName,"		// row[5]
 			         "WWW"			// row[6]
-			  " FROM ins_instits WHERE InsCod=%ld",
+			   " FROM ins_instits"
+			  " WHERE InsCod=%ld",
 			  Ins->InsCod))	// Institution found...
 	{
          /* Get institution data */
@@ -898,7 +901,8 @@ void Ins_GetShortNameOfInstitution (struct Ins_Instit *Ins)
 
    if (DB_QuerySELECT (&mysql_res,"can not get the short name"
 				  " of an institution",
-	               "SELECT ShortName FROM ins_instits"
+	               "SELECT ShortName"
+	                " FROM ins_instits"
 	               " WHERE InsCod=%ld",
 	               Ins->InsCod) == 1)
      {
@@ -961,10 +965,10 @@ static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
 				  " of an institution",
 		       "SELECT ins_instits.ShortName,"	// row[0]
 		              "cty_countrs.Name_%s"	// row[1]
-		       " FROM ins_instits,"
-		             "cty_countrs"
+		        " FROM ins_instits,"
+		              "cty_countrs"
 		       " WHERE ins_instits.InsCod=%ld"
-		       " AND ins_instits.CtyCod=cty_countrs.CtyCod",
+		         " AND ins_instits.CtyCod=cty_countrs.CtyCod",
 		       Lan_STR_LANG_ID[Gbl.Prefs.Language],Ins->InsCod) == 1)
      {
       /* Get row */
@@ -1039,7 +1043,7 @@ void Ins_WriteSelectorOfInstitution (void)
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
 	                         "SELECT DISTINCT InsCod,"
 	                                         "ShortName"
-	                         " FROM ins_instits"
+	                          " FROM ins_instits"
 				 " WHERE CtyCod=%ld"
 				 " ORDER BY ShortName",
 				 Gbl.Hierarchy.Cty.CtyCod);
@@ -1533,8 +1537,11 @@ bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,
    /***** Get number of institutions in current country with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of an institution"
 			  " already existed",
-			  "SELECT COUNT(*) FROM ins_instits"
-			  " WHERE CtyCod=%ld AND %s='%s' AND InsCod<>%ld",
+			  "SELECT COUNT(*)"
+			   " FROM ins_instits"
+			  " WHERE CtyCod=%ld"
+			    " AND %s='%s'"
+			    " AND InsCod<>%ld",
 			  CtyCod,FieldName,Name,InsCod) != 0);
   }
 
@@ -1970,7 +1977,8 @@ unsigned Ins_GetNumInssInCty (long CtyCod)
    Gbl.Cache.NumInssInCty.NumInss =
    (unsigned) DB_QueryCOUNT ("can not get the number of institutions"
 			     " in a country",
-			     "SELECT COUNT(*) FROM ins_instits"
+			     "SELECT COUNT(*)"
+			      " FROM ins_instits"
 			     " WHERE CtyCod=%ld",
 			     CtyCod);
    Gbl.Cache.NumInssInCty.Valid = true;
@@ -2009,8 +2017,8 @@ unsigned Ins_GetCachedNumInssWithCtrs (const char *SubQuery,
       NumInssWithCtrs = (unsigned)
       DB_QueryCOUNT ("can not get number of institutions with centers",
 		     "SELECT COUNT(DISTINCT ins_instits.InsCod)"
-		     " FROM ins_instits,"
-			   "ctr_centers"
+		      " FROM ins_instits,"
+			    "ctr_centers"
 		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod",
 		     SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_CTRS,Scope,Cod,
@@ -2037,11 +2045,11 @@ unsigned Ins_GetCachedNumInssWithDegs (const char *SubQuery,
       NumInssWithDegs = (unsigned)
       DB_QueryCOUNT ("can not get number of institutions with degrees",
 		     "SELECT COUNT(DISTINCT ins_instits.InsCod)"
-		     " FROM ins_instits,"
-		           "ctr_centers,"
-		           "deg_degrees"
+		      " FROM ins_instits,"
+		            "ctr_centers,"
+		            "deg_degrees"
 		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
-		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
+		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
 		     SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_DEGS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumInssWithDegs);
@@ -2067,13 +2075,13 @@ unsigned Ins_GetCachedNumInssWithCrss (const char *SubQuery,
       NumInssWithCrss = (unsigned)
       DB_QueryCOUNT ("can not get number of institutions with courses",
 		     "SELECT COUNT(DISTINCT ins_instits.InsCod)"
-		     " FROM ins_instits,"
-		           "ctr_centers,"
-		           "deg_degrees,"
-		           "crs_courses"
+		      " FROM ins_instits,"
+		            "ctr_centers,"
+		            "deg_degrees,"
+		            "crs_courses"
 		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
-		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		     " AND deg_degrees.DegCod=crs_courses.DegCod",
+		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		       " AND deg_degrees.DegCod=crs_courses.DegCod",
 		     SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_CRSS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumInssWithCrss);
@@ -2240,9 +2248,12 @@ bool Ins_GetIfMapIsAvailable (long InsCod)
           (coordinates 0, 0 means not set ==> don't show map) *****/
    if (DB_QuerySELECT (&mysql_res,"can not get if map is available",
 		       "SELECT EXISTS"
-		       "(SELECT * FROM ctr_centers"
-		       " WHERE InsCod=%ld"
-		       " AND (Latitude<>0 OR Longitude<>0))",
+		       "(SELECT *"
+		         " FROM ctr_centers"
+		        " WHERE InsCod=%ld"
+		          " AND (Latitude<>0"
+		               " OR"
+		               " Longitude<>0))",
 		       InsCod))
      {
       /* Get if map is available */

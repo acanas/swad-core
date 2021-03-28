@@ -448,14 +448,14 @@ unsigned Crs_GetNumCrssInCty (long CtyCod)
    Gbl.Cache.NumCrssInCty.NumCrss = (unsigned)
    DB_QueryCOUNT ("can not get the number of courses in a country",
 		  "SELECT COUNT(*)"
-		  " FROM ins_instits,"
-		        "ctr_centers,"
-		        "deg_degrees,"
-		        "crs_courses"
+		   " FROM ins_instits,"
+		         "ctr_centers,"
+		         "deg_degrees,"
+		         "crs_courses"
 		  " WHERE ins_instits.CtyCod=%ld"
-		  " AND ins_instits.InsCod=ctr_centers.InsCod"
-		  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		  " AND deg_degrees.DegCod=crs_courses.DegCod",
+		    " AND ins_instits.InsCod=ctr_centers.InsCod"
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		    " AND deg_degrees.DegCod=crs_courses.DegCod",
 		  CtyCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_Lvl_CTY,Gbl.Cache.NumCrssInCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInCty.NumCrss);
@@ -500,12 +500,12 @@ unsigned Crs_GetNumCrssInIns (long InsCod)
    Gbl.Cache.NumCrssInIns.NumCrss = (unsigned)
    DB_QueryCOUNT ("can not get the number of courses in an institution",
 		  "SELECT COUNT(*)"
-		  " FROM ctr_centers,"
-		        "deg_degrees,"
-		        "crs_courses"
+		   " FROM ctr_centers,"
+		         "deg_degrees,"
+		         "crs_courses"
 		  " WHERE ctr_centers.InsCod=%ld"
-		  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		  " AND deg_degrees.DegCod=crs_courses.DegCod",
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		    " AND deg_degrees.DegCod=crs_courses.DegCod",
 		  InsCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_Lvl_INS,Gbl.Cache.NumCrssInIns.InsCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInIns.NumCrss);
@@ -550,10 +550,10 @@ unsigned Crs_GetNumCrssInCtr (long CtrCod)
    Gbl.Cache.NumCrssInCtr.NumCrss = (unsigned)
    DB_QueryCOUNT ("can not get the number of courses in a center",
 		  "SELECT COUNT(*)"
-		  " FROM deg_degrees,"
-		        "crs_courses"
+		   " FROM deg_degrees,"
+		         "crs_courses"
 		  " WHERE deg_degrees.CtrCod=%ld"
-		  " AND deg_degrees.DegCod=crs_courses.DegCod",
+		    " AND deg_degrees.DegCod=crs_courses.DegCod",
 		  CtrCod);
    return Gbl.Cache.NumCrssInCtr.NumCrss;
   }
@@ -599,7 +599,9 @@ unsigned Crs_GetNumCrssInDeg (long DegCod)
    Gbl.Cache.NumCrssInDeg.DegCod  = DegCod;
    Gbl.Cache.NumCrssInDeg.NumCrss = (unsigned)
    DB_QueryCOUNT ("can not get the number of courses in a degree",
-		  "SELECT COUNT(*) FROM crs_courses WHERE DegCod=%ld",
+		  "SELECT COUNT(*)"
+		   " FROM crs_courses"
+		  " WHERE DegCod=%ld",
 		  DegCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_Lvl_DEG,Gbl.Cache.NumCrssInDeg.DegCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInDeg.NumCrss);
@@ -692,9 +694,9 @@ void Crs_WriteSelectorOfCourse (void)
       /***** Get courses belonging to the current degree from database *****/
       NumCrss = (unsigned)
       DB_QuerySELECT (&mysql_res,"can not get courses of a degree",
-		      "SELECT CrsCod,"
-		             "ShortName"
-		      " FROM crs_courses"
+		      "SELECT CrsCod,"		// row[0]
+		             "ShortName"	// row[1]
+		       " FROM crs_courses"
 		      " WHERE DegCod=%ld"
 		      " ORDER BY ShortName",
 		      Gbl.Hierarchy.Deg.DegCod);
@@ -768,33 +770,37 @@ static void Crs_GetListCrssInCurrentDeg (Crs_WhatCourses_t WhatCourses)
       case Crs_ACTIVE_COURSES:
          NumCrss = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get courses of a degree",
-			 "SELECT CrsCod,"
-			        "DegCod,"
-			        "Year,"
-			        "InsCrsCod,"
-			        "Status,"
-			        "RequesterUsrCod,"
-			        "ShortName,"
-			        "FullName"
-			 " FROM crs_courses"
-			 " WHERE DegCod=%ld AND Status=0"
-			 " ORDER BY Year,ShortName",
+			 "SELECT CrsCod,"		// row[0]
+			        "DegCod,"		// row[1]
+			        "Year,"			// row[2]
+			        "InsCrsCod,"		// row[3]
+			        "Status,"		// row[4]
+			        "RequesterUsrCod,"	// row[5]
+			        "ShortName,"		// row[6]
+			        "FullName"		// row[7]
+			  " FROM crs_courses"
+			 " WHERE DegCod=%ld"
+			   " AND Status=0"
+			 " ORDER BY Year,"
+			           "ShortName",
 			 Gbl.Hierarchy.Deg.DegCod);
          break;
       case Crs_ALL_COURSES_EXCEPT_REMOVED:
          NumCrss = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get courses of a degree",
-			 "SELECT CrsCod,"
-			        "DegCod,"
-			        "Year,"
-			        "InsCrsCod,"
-			        "Status,"
-			        "RequesterUsrCod,"
-			        "ShortName,"
-			        "FullName"
-			 " FROM crs_courses"
-			 " WHERE DegCod=%ld AND (Status & %u)=0"
-			 " ORDER BY Year,ShortName",
+			 "SELECT CrsCod,"		// row[0]
+			        "DegCod,"		// row[1]
+			        "Year,"			// row[2]
+			        "InsCrsCod,"		// row[3]
+			        "Status,"		// row[4]
+			        "RequesterUsrCod,"	// row[5]
+			        "ShortName,"		// row[6]
+			        "FullName"		// row[7]
+			  " FROM crs_courses"
+			 " WHERE DegCod=%ld"
+			   " AND (Status & %u)=0"
+			 " ORDER BY Year,"
+			           "ShortName",
 			 Gbl.Hierarchy.Deg.DegCod,
 			 (unsigned) Crs_STATUS_BIT_REMOVED);
          break;
@@ -1797,7 +1803,7 @@ bool Crs_GetDataOfCourseByCod (struct Crs_Course *Crs)
 			         "RequesterUsrCod,"	// row[5]
 			         "ShortName,"		// row[6]
 			         "FullName"		// row[7]
-			  " FROM crs_courses"
+			   " FROM crs_courses"
 			  " WHERE CrsCod=%ld",
 			  Crs->CrsCod)) // Course found...
 	{
@@ -1864,12 +1870,12 @@ static void Crs_GetShortNamesByCod (long CrsCod,
      {
       /***** Get the short name of a degree from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get the short name of a course",
-			  "SELECT crs_courses.ShortName,"
-			         "deg_degrees.ShortName"
-			  " FROM crs_courses,"
-			        "deg_degrees"
+			  "SELECT crs_courses.ShortName,"	// row[0]
+			         "deg_degrees.ShortName"	// row[1]
+			   " FROM crs_courses,"
+			         "deg_degrees"
 			  " WHERE crs_courses.CrsCod=%ld"
-			  " AND crs_courses.DegCod=deg_degrees.DegCod",
+			    " AND crs_courses.DegCod=deg_degrees.DegCod",
 			  CrsCod) == 1)
 	{
 	 /***** Get the course short name and degree short name *****/
@@ -2327,10 +2333,17 @@ bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name
    /***** Get number of courses in a year of a degree and with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name"
 	                  " of a course already existed",
-			  "SELECT COUNT(*) FROM crs_courses"
-			  " WHERE DegCod=%ld AND Year=%u"
-			  " AND %s='%s' AND CrsCod<>%ld",
-			  DegCod,Year,FieldName,Name,CrsCod) != 0);
+			  "SELECT COUNT(*)"
+			   " FROM crs_courses"
+			  " WHERE DegCod=%ld"
+			   " AND Year=%u"
+			   " AND %s='%s'"
+			   " AND CrsCod<>%ld",
+			  DegCod,
+			  Year,
+			  FieldName,
+			  Name,
+			  CrsCod) != 0);
   }
 
 /*****************************************************************************/

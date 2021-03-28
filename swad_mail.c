@@ -273,10 +273,13 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
    DB_Query ("can not create temporary table",
 	     "CREATE TEMPORARY TABLE T1 ENGINE=MEMORY"
 	     " SELECT SUBSTRING_INDEX(E_mail,'@',-1) AS Domain,COUNT(*) as N"
-    	     " FROM usr_emails GROUP BY Domain");
+    	       " FROM usr_emails"
+    	      " GROUP BY Domain");
 
    DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE T2 ENGINE=MEMORY SELECT * FROM T1");
+	     "CREATE TEMPORARY TABLE T2 ENGINE=MEMORY"
+	     " SELECT *"
+	       " FROM T1");
 
    /***** Get mail domains from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get mail domains",
@@ -293,7 +296,8 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
 				     "0 AS N"					// row[3]
 			       " FROM ntf_mail_domains"
 			      " WHERE Domain NOT IN"
-			            " (SELECT Domain COLLATE 'latin1_bin' FROM T2))"
+			            " (SELECT Domain COLLATE 'latin1_bin'"
+			               " FROM T2))"
 			     " ORDER BY %s",	// COLLATE necessary to avoid error in comparisons
 			     OrderBySubQuery[Gbl.Mails.SelectedOrder]);
 
@@ -1083,9 +1087,12 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
 
    /***** Get current (last updated) user's nickname from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get email address",
-			     "SELECT E_mail,Confirmed FROM usr_emails"
+			     "SELECT E_mail,"
+			            "Confirmed"
+			      " FROM usr_emails"
 			     " WHERE UsrCod=%ld"
-			     " ORDER BY CreatTime DESC LIMIT 1",
+			     " ORDER BY CreatTime DESC"
+			     " LIMIT 1",
 			     UsrDat->UsrCod);
 
    if (NumRows == 0)
@@ -1126,12 +1133,14 @@ long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
 	{
 	 /***** Get user's code from database *****/
 	 /* Check if user code from table usr_emails is also in table usr_data */
-	 NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's code",
-					      "SELECT usr_emails.UsrCod"
-					      " FROM usr_emails,usr_data"
-					      " WHERE usr_emails.E_mail='%s'"
-					      " AND usr_emails.UsrCod=usr_data.UsrCod",
-					      Email);
+	 NumUsrs = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get user's code",
+			 "SELECT usr_emails.UsrCod"
+			  " FROM usr_emails,"
+			        "usr_data"
+			 " WHERE usr_emails.E_mail='%s'"
+			   " AND usr_emails.UsrCod=usr_data.UsrCod",
+			 Email);
 	 if (NumUsrs == 0)
 	    /* User not found for this email ==> set user's code to void */
 	    UsrCod = -1L;
@@ -1253,14 +1262,14 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
       Ale_ShowAlert (Ale_WARNING,Txt_Please_confirm_your_email_address);
 
    /***** Get my emails *****/
-   NumEmails = (unsigned) DB_QuerySELECT (&mysql_res,"can not get"
-						     " old email addresses"
-						     " of a user",
-					  "SELECT E_mail,Confirmed"
-					  " FROM usr_emails"
-					  " WHERE UsrCod=%ld"
-					  " ORDER BY CreatTime DESC",
-					  UsrDat->UsrCod);
+   NumEmails = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get old email addresses of a user",
+		   "SELECT E_mail,"	// row[0]
+		          "Confirmed"	// row[1]
+		    " FROM usr_emails"
+		   " WHERE UsrCod=%ld"
+		   " ORDER BY CreatTime DESC",
+		  UsrDat->UsrCod);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -1617,23 +1626,30 @@ bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_M
   {
    /***** Check if the new email matches any of the confirmed emails of other users *****/
    if (DB_QueryCOUNT ("can not check if email already existed",
-		      "SELECT COUNT(*) FROM usr_emails"
-		      " WHERE E_mail='%s' AND Confirmed='Y'"
-		      " AND UsrCod<>%ld",
-		      NewEmail,UsrDat->UsrCod))	// An email of another user is the same that my email
+		      "SELECT COUNT(*)"
+		       " FROM usr_emails"
+		      " WHERE E_mail='%s'"
+		        " AND Confirmed='Y'"
+		        " AND UsrCod<>%ld",
+		      NewEmail,
+		      UsrDat->UsrCod))	// An email of another user is the same that my email
       return false;	// Don't update
 
    /***** Delete email (not confirmed) for other users *****/
    DB_QueryDELETE ("can not remove pending email for other users",
 		   "DELETE FROM usr_pending_emails"
-		   " WHERE E_mail='%s' AND UsrCod<>%ld",
-	           NewEmail,UsrDat->UsrCod);
+		   " WHERE E_mail='%s'"
+		     " AND UsrCod<>%ld",
+	           NewEmail,
+	           UsrDat->UsrCod);
 
    DB_QueryDELETE ("can not remove not confirmed email for other users",
 		   "DELETE FROM usr_emails"
-		   " WHERE E_mail='%s' AND Confirmed='N'"
-		   " AND UsrCod<>%ld",
-	           NewEmail,UsrDat->UsrCod);
+		   " WHERE E_mail='%s'"
+		     " AND Confirmed='N'"
+		     " AND UsrCod<>%ld",
+	           NewEmail,
+	           UsrDat->UsrCod);
 
    /***** Update email in database *****/
    DB_QueryREPLACE ("can not update email",

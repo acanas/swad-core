@@ -190,7 +190,8 @@ static unsigned ExaSet_GetNumQstsInSet (long SetCod)
    /***** Get number of questions in set from database *****/
    return
    (unsigned) DB_QueryCOUNT ("can not get number of questions in a set",
-			     "SELECT COUNT(*) FROM exa_set_questions"
+			     "SELECT COUNT(*)"
+			      " FROM exa_set_questions"
 			     " WHERE SetCod=%ld",
 			     SetCod);
   }
@@ -220,7 +221,7 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
 			      "SetInd,"		// row[2]
 			      "NumQstsToPrint,"	// row[3]
 			      "Title"		// row[4]
-		       " FROM exa_sets"
+		        " FROM exa_sets"
 		       " WHERE SetCod=%ld",
 		       Set->SetCod)) // Set found...
      {
@@ -266,11 +267,14 @@ static bool ExaSet_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
   {
    /***** Get number of set of questions with a field value from database *****/
    return (DB_QueryCOUNT ("can not get similar sets of questions",
-			  "SELECT COUNT(*) FROM exa_sets,exa_exams"
-			  " WHERE exa_sets.ExaCod=%ld AND exa_sets.Title='%s'"
-			  " AND exa_sets.SetCod<>%ld"
-			  " AND exa_sets.ExaCod=exa_exams.ExaCod"
-			  " AND exa_exams.CrsCod=%ld",	// Extra check
+			  "SELECT COUNT(*)"
+			   " FROM exa_sets,"
+			         "exa_exams"
+			  " WHERE exa_sets.ExaCod=%ld"
+			    " AND exa_sets.Title='%s'"
+			    " AND exa_sets.SetCod<>%ld"
+			    " AND exa_sets.ExaCod=exa_exams.ExaCod"
+			    " AND exa_exams.CrsCod=%ld",	// Extra check
 			  Set->ExaCod,Title,
 			  Set->SetCod,
 			  Gbl.Hierarchy.Crs.CrsCod) != 0);
@@ -624,7 +628,8 @@ unsigned ExaSet_GetNumSetsExam (long ExaCod)
    /***** Get number of sets in an exam from database *****/
    return
    (unsigned) DB_QueryCOUNT ("can not get number of sets in an exam",
-			     "SELECT COUNT(*) FROM exa_sets"
+			     "SELECT COUNT(*)"
+			      " FROM exa_sets"
 			     " WHERE ExaCod=%ld",
 			     ExaCod);
   }
@@ -641,7 +646,8 @@ unsigned ExaSet_GetNumQstsExam (long ExaCod)
 
    /***** Get total number of questions to appear in exam print *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get number of questions in an exam print",
-			"SELECT SUM(NumQstsToPrint) FROM exa_sets"
+			"SELECT SUM(NumQstsToPrint)"
+			 " FROM exa_sets"
 			" WHERE ExaCod=%ld",
 			ExaCod))
       Lay_ShowErrorAndExit ("Error: wrong question index.");
@@ -784,9 +790,10 @@ static unsigned ExaSet_GetSetIndFromSetCod (long ExaCod,long SetCod)
 
    /***** Get set index from set code *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get set index",
-			"SELECT SetInd FROM exa_sets"
+			"SELECT SetInd"
+			 " FROM exa_sets"
 			" WHERE SetCod=%u"
-			" AND ExaCod=%ld",	// Extra check
+			  " AND ExaCod=%ld",	// Extra check
 			SetCod,ExaCod))
       Lay_ShowErrorAndExit ("Error: wrong set code.");
 
@@ -812,8 +819,10 @@ static long ExaSet_GetSetCodFromSetInd (long ExaCod,unsigned SetInd)
 
    /***** Get set code from set index *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get set code",
-			"SELECT SetCod FROM exa_sets"
-			" WHERE ExaCod=%ld AND SetInd=%u",
+			"SELECT SetCod"
+			 " FROM exa_sets"
+			" WHERE ExaCod=%ld"
+			  " AND SetInd=%u",
 			ExaCod,SetInd))
       Lay_ShowErrorAndExit ("Error: wrong set index.");
 
@@ -843,7 +852,7 @@ static unsigned ExaSet_GetMaxSetIndexInExam (long ExaCod)
    /***** Get maximum set index in an exam from database *****/
    DB_QuerySELECT (&mysql_res,"can not get max set index",
 		   "SELECT MAX(SetInd)"
-		   " FROM exa_sets"
+		    " FROM exa_sets"
 		   " WHERE ExaCod=%ld",
                    ExaCod);
    row = mysql_fetch_row (mysql_res);
@@ -873,8 +882,10 @@ static unsigned ExaSet_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd)
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
    if (!DB_QuerySELECT (&mysql_res,"can not get previous set index",
-			"SELECT MAX(SetInd) FROM exa_sets"
-			" WHERE ExaCod=%ld AND SetInd<%u",
+			"SELECT MAX(SetInd)"
+			 " FROM exa_sets"
+			" WHERE ExaCod=%ld"
+			  " AND SetInd<%u",
 			ExaCod,SetInd))
       Lay_ShowErrorAndExit ("Error: previous set index not found.");
 
@@ -907,8 +918,10 @@ static unsigned ExaSet_GetNextSetIndexInExam (long ExaCod,unsigned SetInd)
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
    if (!DB_QuerySELECT (&mysql_res,"can not get next set index",
-			"SELECT MIN(SetInd) FROM exa_sets"
-			" WHERE ExaCod=%ld AND SetInd>%u",
+			"SELECT MIN(SetInd)"
+			 " FROM exa_sets"
+			" WHERE ExaCod=%ld"
+			  " AND SetInd>%u",
 			ExaCod,SetInd))
       Lay_ShowErrorAndExit ("Error: next set index not found.");
 
@@ -950,7 +963,7 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams,
 			             "SetInd,"		// row[1]
 				     "NumQstsToPrint,"	// row[2]
 				     "Title"		// row[3]
-			      " FROM exa_sets"
+			       " FROM exa_sets"
 			      " WHERE ExaCod=%ld"
 			      " ORDER BY SetInd",
 			      Exam->ExaCod);
@@ -997,7 +1010,7 @@ static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
    NumQsts = (unsigned)
              DB_QuerySELECT (&mysql_res,"can not get exam questions",
 			      "SELECT QstCod"	// row[0]
-			      " FROM exa_set_questions"
+			       " FROM exa_set_questions"
 			      " WHERE SetCod=%ld"
 			      " ORDER BY Stem",
 			      Set->SetCod);
@@ -1369,7 +1382,7 @@ Tst_AnswerType_t ExaSet_GetQstAnswerTypeFromDB (long QstCod)
    /***** Get type of answer from database *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get the type of a question",
 		       "SELECT AnsType"		// row[0]
-		       " FROM exa_set_questions"
+		        " FROM exa_set_questions"
 		       " WHERE QstCod=%ld",
 		       QstCod))
       Lay_ShowErrorAndExit ("Question does not exist.");
@@ -1403,7 +1416,7 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
 					    "Stem,"			// row[3]
 					    "Feedback,"			// row[4]
 					    "MedCod"			// row[5]
-				     " FROM exa_set_questions"
+				      " FROM exa_set_questions"
 				     " WHERE QstCod=%ld",
 				     Question->QstCod) != 0);
 
@@ -1531,7 +1544,7 @@ void ExaSet_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
 			  "Feedback,"		// row[2]
 			  "MedCod,"		// row[3]
 			  "Correct"		// row[4]
-		   " FROM exa_set_answers"
+		    " FROM exa_set_answers"
 		   " WHERE QstCod=%ld"
 		   " ORDER BY %s",
 		   Question->QstCod,

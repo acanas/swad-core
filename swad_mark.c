@@ -179,8 +179,8 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
 				        " in header and footer",
 			     "SELECT mrk_marks.%s,"	// row[0]
 			            "mrk_marks.%s"	// row[1]
-			     " FROM brw_files,"
-			           "mrk_marks"
+			      " FROM brw_files,"
+			            "mrk_marks"
 			     " WHERE brw_files.FileBrowser=%u"
 			       " AND brw_files.Cod=%ld"
 			       " AND brw_files.Path='%s'"
@@ -729,11 +729,11 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    /***** Get subject of message from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get the number of rows"
 				  " in header and footer",
-		       "SELECT brw_files.FileBrowser,"
-		              "brw_files.Cod,"
-		              "brw_files.Path,"
-		              "mrk_marks.Header,"
-		              "mrk_marks.Footer"
+		       "SELECT brw_files.FileBrowser,"	// row[0]
+		              "brw_files.Cod,"		// row[1]
+		              "brw_files.Path,"		// row[2]
+		              "mrk_marks.Header,"	// row[3]
+		              "mrk_marks.Footer"	// row[4]
 		        " FROM brw_files,"
 		              "mrk_marks"
 		       " WHERE brw_files.FilCod=%ld"
