@@ -779,12 +779,14 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
 
    /***** Make the query *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get clicks",
-			     "SELECT SQL_NO_CACHE ActCod,COUNT(*) AS N"
-			     " FROM log"
+			     "SELECT SQL_NO_CACHE ActCod,"		// row[0]
+					         "COUNT(*) AS N"	// row[1]
+			      " FROM log"
 			     " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
-			     " AND UsrCod=%ld"
+			       " AND UsrCod=%ld"
 			     " GROUP BY ActCod"
-			     " ORDER BY N DESC LIMIT %u",
+			     " ORDER BY N DESC"
+			     " LIMIT %u",
 			     (long) Report->UsrFigures.FirstClickTimeUTC,
 			     Gbl.Usrs.Me.UsrDat.UsrCod,
 			     Rep_MAX_ACTIONS);
@@ -922,30 +924,28 @@ static void Rep_GetMaxHitsPerYear (struct Rep_Report *Report)
    DB_QuerySELECT (&mysql_res,"can not get last question index",
 		   "SELECT MAX(N) FROM ("
 		   // Clicks without course selected --------------------------
-	           "SELECT "
-	           "-1 AS CrsCod,"
-	           "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
-	           "%u AS Role,"
-	           "COUNT(*) AS N"
-	           " FROM log"
+	           "SELECT -1 AS CrsCod,"
+	                  "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
+	                  "%u AS Role,"
+	                  "COUNT(*) AS N"
+	            " FROM log"
 	           " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
-	           " AND UsrCod=%ld"
-	           " AND CrsCod<=0"
+	             " AND UsrCod=%ld"
+	             " AND CrsCod<=0"
 	           " GROUP BY Year"
 		   // ---------------------------------------------------------
 	           " UNION "
 		   // Clicks as student, non-editing teacher or teacher in courses
-	           "SELECT "
-	           "CrsCod,"
-	           "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
-	           "Role,"
-	           "COUNT(*) AS N"
-	           " FROM log"
+	           "SELECT CrsCod,"
+	                  "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
+	                  "Role,"
+	                  "COUNT(*) AS N"
+	            " FROM log"
 	           " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
-	           " AND UsrCod=%ld"
-	           " AND Role>=%u"	// Student
-	           " AND Role<=%u"	// Teacher
-	           " AND CrsCod>0"
+	             " AND UsrCod=%ld"
+	             " AND Role>=%u"	// Student
+	             " AND Role<=%u"	// Teacher
+	             " AND CrsCod>0"
 	           " GROUP BY CrsCod,Year,Role"
 		   // ---------------------------------------------------------
 	           ") AS hits_per_crs_year",
@@ -1012,13 +1012,12 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses of a user",
 				 "SELECT my_courses.CrsCod,"		// row[0]
                                         "COUNT(*) AS N"			// row[1]
-                                 " FROM"
-                                 " (SELECT CrsCod"
-                                    " FROM crs_users"
-                                   " WHERE UsrCod=%ld"
-                                     " AND Role=%u) AS my_courses"	// It's imperative to use a derived table to not block crs_usr!
-                                 " LEFT JOIN log"
-                                 " ON (my_courses.CrsCod=log.CrsCod)"
+                                  " FROM (SELECT CrsCod"
+                                          " FROM crs_users"
+                                         " WHERE UsrCod=%ld"
+                                           " AND Role=%u) AS my_courses"	// It's imperative to use a derived table to not block crs_usr!
+                                  " LEFT JOIN log"
+                                    " ON (my_courses.CrsCod=log.CrsCod)"
                                  " WHERE log.UsrCod=%ld"
                                    " AND log.Role=%u"
                                  " GROUP BY my_courses.CrsCod"
@@ -1102,9 +1101,12 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
    /***** Get historic courses of a user from log *****/
    NumCrss =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses of a user",
-			      "SELECT CrsCod,COUNT(*) AS N"
-			      " FROM log"
-			      " WHERE UsrCod=%ld AND Role=%u AND CrsCod>0"
+			      "SELECT CrsCod,"
+			             "COUNT(*) AS N"
+			       " FROM log"
+			      " WHERE UsrCod=%ld"
+			        " AND Role=%u"
+			        " AND CrsCod>0"
 			      " GROUP BY CrsCod"
 			      " HAVING N>%u"
 			      " ORDER BY N DESC",
@@ -1240,11 +1242,12 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
       sprintf (SubQueryRol," AND Role=%u",(unsigned) Role);
 
    NumRows = DB_QuerySELECT (&mysql_res,"can not get clicks",
-			     "SELECT SQL_NO_CACHE "
-			     "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
-			     "COUNT(*) FROM log"
+			     "SELECT SQL_NO_CACHE YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
+			                         "COUNT(*) FROM log"
 			     " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
-			     " AND UsrCod=%ld%s%s"
+			       " AND UsrCod=%ld"
+			       "%s"
+			       "%s"
 			     " GROUP BY Year"
 			     " ORDER BY Year DESC",
 			     (long) Report->UsrFigures.FirstClickTimeUTC,

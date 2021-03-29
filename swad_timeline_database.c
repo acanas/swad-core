@@ -86,7 +86,8 @@ unsigned Tml_DB_GetWho (MYSQL_RES **mysql_res)
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get which timeline users",
 		   "SELECT TimelineUsrs"	// row[0]
-		   " FROM usr_last WHERE UsrCod=%ld",
+		    " FROM usr_last"
+		   " WHERE UsrCod=%ld",
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -98,7 +99,8 @@ void Tml_DB_UpdateWho (Usr_Who_t Who)
   {
    /***** Update which users in database *****/
    DB_QueryUPDATE ("can not update which timeline users",
-		   "UPDATE usr_last SET TimelineUsrs=%u"
+		   "UPDATE usr_last"
+		     " SET TimelineUsrs=%u"
 		   " WHERE UsrCod=%ld",
 		   (unsigned) Who,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -125,7 +127,7 @@ unsigned Tml_DB_GetDataOfNoteByCod (long NotCod,MYSQL_RES **mysql_res)
 			  "HieCod,"			// row[4]
 			  "Unavailable,"		// row[5]
 			  "UNIX_TIMESTAMP(TimeNote)"	// row[6]
-		   " FROM tml_notes"
+		    " FROM tml_notes"
 		   " WHERE NotCod=%ld",
 		   NotCod);
   }
@@ -142,9 +144,12 @@ long Tml_DB_GetPubCodOfOriginalNote (long NotCod)
 
    /***** Get code of publication of the original note *****/
    if (DB_QuerySELECT (&mysql_res,"can not get code of publication",
-		       "SELECT PubCod FROM tml_pubs"
-		       " WHERE NotCod=%ld AND PubType=%u",
-		       NotCod,(unsigned) Tml_Pub_ORIGINAL_NOTE) == 1)
+		       "SELECT PubCod"
+		        " FROM tml_pubs"
+		       " WHERE NotCod=%ld"
+		         " AND PubType=%u",
+		       NotCod,
+		       (unsigned) Tml_Pub_ORIGINAL_NOTE) == 1)
      {	// Result should have a unique row
       /* Get code of publication (row[0]) */
       row = mysql_fetch_row (mysql_res);
@@ -235,7 +240,9 @@ void Tml_DB_CreateTmpTableVisibleTimeline (void)
 	     "CREATE TEMPORARY TABLE tml_tmp_visible_timeline "
 	     "(NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod))"
 	     " ENGINE=MEMORY"
-	     " SELECT NotCod FROM tml_timelines WHERE SessionId='%s'",
+	     " SELECT NotCod"
+	       " FROM tml_timelines"
+	      " WHERE SessionId='%s'",
 	     Gbl.Session.Id);
   }
 
@@ -290,7 +297,9 @@ mysql> SELECT SessionId,COUNT(*) FROM tml_timelines GROUP BY SessionId;
    DB_QueryINSERT ("can not insert notes in timeline",
 		   "INSERT IGNORE INTO tml_timelines"
 	           " (SessionId,NotCod)"
-	           " SELECT '%s',NotCod FROM tml_tmp_just_retrieved_notes",
+	           " SELECT '%s',"
+	                    "NotCod"
+	             " FROM tml_tmp_just_retrieved_notes",
 		   Gbl.Session.Id);
   }
 
@@ -409,7 +418,7 @@ unsigned Tml_DB_GetPostByCod (long PstCod,MYSQL_RES **mysql_res)
 			     " of a post",
 		   "SELECT Txt,"	// row[0]
 			  "MedCod"	// row[1]
-		   " FROM tml_posts"
+		    " FROM tml_posts"
 		   " WHERE PstCod=%ld",
 		   PstCod);
   }
@@ -464,8 +473,10 @@ void Tml_DB_RemoveAllPostsUsr (long UsrCod)
    DB_QueryDELETE ("can not remove posts",
 		   "DELETE FROM tml_posts"
 		   " WHERE PstCod IN"
-		   " (SELECT Cod FROM tml_notes"
-	           " WHERE UsrCod=%ld AND NoteType=%u)",
+		   " (SELECT Cod"
+		      " FROM tml_notes"
+	             " WHERE UsrCod=%ld"
+	               " AND NoteType=%u)",
 		   UsrCod,(unsigned) TL_NOTE_POST);
   }
 
@@ -477,8 +488,10 @@ unsigned Tml_DB_GetNumCommsInNote (long NotCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of comments in a note",
-		  "SELECT COUNT(*) FROM tml_pubs"
-		  " WHERE NotCod=%ld AND PubType=%u",
+		  "SELECT COUNT(*)"
+		   " FROM tml_pubs"
+		  " WHERE NotCod=%ld"
+		    " AND PubType=%u",
 		  NotCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE);
   }
 
@@ -492,8 +505,9 @@ unsigned Tml_DB_GetComms (long NotCod,MYSQL_RES **mysql_res)
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get comments",
 		   "SELECT PubCod"	// row[0]
-		   " FROM tml_pubs"
-		   " WHERE NotCod=%ld AND PubType=%u",
+		    " FROM tml_pubs"
+		   " WHERE NotCod=%ld"
+		     " AND PubType=%u",
 		   NotCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE);
   }
 
@@ -513,10 +527,10 @@ unsigned Tml_DB_GetInitialComms (long NotCod,unsigned NumInitialCommsToGet,
 			  "UNIX_TIMESTAMP(tml_pubs.TimePublish),"	// row[3]
 			  "tml_comments.Txt,"				// row[4]
 			  "tml_comments.MedCod"				// row[5]
-		   " FROM tml_pubs,tml_comments"
+		    " FROM tml_pubs,tml_comments"
 		   " WHERE tml_pubs.NotCod=%ld"
-		   " AND tml_pubs.PubType=%u"
-		   " AND tml_pubs.PubCod=tml_comments.PubCod"
+		     " AND tml_pubs.PubType=%u"
+		     " AND tml_pubs.PubCod=tml_comments.PubCod"
 		   " ORDER BY tml_pubs.PubCod"
 		   " LIMIT %lu",
 		   NotCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE,
@@ -534,20 +548,19 @@ unsigned Tml_DB_GetFinalComms (long NotCod,unsigned NumFinalCommsToGet,
    /***** Get final comments of a note from database *****/
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get comments",
-		   "SELECT * FROM "
-		   "("
-		   "SELECT tml_pubs.PubCod,"				// row[0]
-			  "tml_pubs.PublisherCod,"			// row[1]
-			  "tml_pubs.NotCod,"				// row[2]
-			  "UNIX_TIMESTAMP(tml_pubs.TimePublish),"	// row[3]
-			  "tml_comments.Txt,"				// row[4]
-			  "tml_comments.MedCod"				// row[5]
-	          " FROM tml_pubs,tml_comments"
-		  " WHERE tml_pubs.NotCod=%ld"
-		  " AND tml_pubs.PubType=%u"
-		  " AND tml_pubs.PubCod=tml_comments.PubCod"
-		  " ORDER BY tml_pubs.PubCod DESC LIMIT %u"
-		  ") AS comments"
+		   "SELECT *"
+		    " FROM (SELECT tml_pubs.PubCod,"				// row[0]
+				  "tml_pubs.PublisherCod,"			// row[1]
+				  "tml_pubs.NotCod,"				// row[2]
+				  "UNIX_TIMESTAMP(tml_pubs.TimePublish),"	// row[3]
+				  "tml_comments.Txt,"				// row[4]
+				  "tml_comments.MedCod"				// row[5]
+			    " FROM tml_pubs,tml_comments"
+			   " WHERE tml_pubs.NotCod=%ld"
+			     " AND tml_pubs.PubType=%u"
+			     " AND tml_pubs.PubCod=tml_comments.PubCod"
+			   " ORDER BY tml_pubs.PubCod DESC"
+			   " LIMIT %u) AS comments"
 		  " ORDER BY PubCod",
 		  NotCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE,
 		  NumFinalCommsToGet);
@@ -573,10 +586,10 @@ unsigned Tml_DB_GetDataOfCommByCod (long PubCod,MYSQL_RES **mysql_res)
 			  "UNIX_TIMESTAMP(tml_pubs.TimePublish),"	// row[3]
 			  "tml_comments.Txt,"				// row[4]
 			  "tml_comments.MedCod"				// row[5]
-		   " FROM tml_pubs,tml_comments"
+		    " FROM tml_pubs,tml_comments"
 		   " WHERE tml_pubs.PubCod=%ld"
-		   " AND tml_pubs.PubType=%u"
-		   " AND tml_pubs.PubCod=tml_comments.PubCod",
+		     " AND tml_pubs.PubType=%u"
+		     " AND tml_pubs.PubCod=tml_comments.PubCod",
 		   PubCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE);
   }
 
@@ -769,7 +782,9 @@ void Tml_DB_CreateSubQueryAlreadyExists (const struct Tml_Timeline *Timeline,
      };
 
    snprintf (SubQueries->AlreadyExists,sizeof (SubQueries->AlreadyExists),
-	     " tml_pubs.NotCod NOT IN (SELECT NotCod FROM %s)",
+	     " tml_pubs.NotCod NOT IN"
+	     " (SELECT NotCod"
+	        " FROM %s)",
 	     Table[Timeline->WhatToGet]);
   }
 
@@ -807,9 +822,10 @@ unsigned Tml_DB_SelectTheMostRecentPub (const struct Tml_Pub_SubQueries *SubQuer
 			  "tml_pubs.NotCod,"		// row[1]
 			  "tml_pubs.PublisherCod,"	// row[2]
 			  "tml_pubs.PubType"		// row[3]
-		   " FROM tml_pubs%s"
+		    " FROM tml_pubs%s"
 		   " WHERE %s%s%s%s"
-		   " ORDER BY tml_pubs.PubCod DESC LIMIT 1",
+		   " ORDER BY tml_pubs.PubCod"
+		    " DESC LIMIT 1",
 		   SubQueries->TablePublishers,
 		   SubQueries->RangeBottom,
 		   SubQueries->RangeTop,
@@ -835,7 +851,8 @@ unsigned Tml_DB_GetDataOfPubByCod (long PubCod,MYSQL_RES **mysql_res)
 		          "NotCod,"		// row[1]
 			  "PublisherCod,"	// row[2]
 			  "PubType"		// row[3]
-		   " FROM tml_pubs WHERE PubCod=%ld",
+		    " FROM tml_pubs"
+		   " WHERE PubCod=%ld",
 		   PubCod);
   }
 
@@ -851,7 +868,8 @@ long Tml_DB_GetNotCodFromPubCod (long PubCod)
 
    /***** Get code of note from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get code of note",
-		       "SELECT NotCod FROM tml_pubs"
+		       "SELECT NotCod"
+		        " FROM tml_pubs"
 		       " WHERE PubCod=%ld",
 		       PubCod) == 1)   // Result should have a unique row
      {
@@ -908,7 +926,8 @@ unsigned long Tml_DB_GetNumPubsUsr (long UsrCod)
   {
    /***** Get number of posts from a user from database *****/
    return DB_QueryCOUNT ("can not get number of publications from a user",
-			 "SELECT COUNT(*) FROM tml_pubs"
+			 "SELECT COUNT(*)"
+			  " FROM tml_pubs"
 			 " WHERE PublisherCod=%ld",
 			 UsrCod);
   }
@@ -956,7 +975,7 @@ void Tml_DB_UpdateLastPubCodInSession (void)
 		   "UPDATE ses_sessions"
 		     " SET LastPubCod="
 			  "(SELECT IFNULL(MAX(PubCod),0)"
-			  " FROM tml_pubs)"	// The most recent publication
+			    " FROM tml_pubs)"	// The most recent publication
 		   " WHERE SessionId='%s'",
 		   Gbl.Session.Id);
   }
@@ -972,7 +991,7 @@ void Tml_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
 		     " SET FirstPubCod=%ld,"
 			  "LastPubCod="
 			  "(SELECT IFNULL(MAX(PubCod),0)"
-			  " FROM tml_pubs)"	// The most recent publication
+			    " FROM tml_pubs)"	// The most recent publication
 		   " WHERE SessionId='%s'",
 		   FirstPubCod,
 		   Gbl.Session.Id);
@@ -1016,8 +1035,10 @@ bool Tml_DB_CheckIfFavedByUsr (Tml_Usr_FavSha_t FavSha,long Cod,long UsrCod)
   {
    /***** Check if a user has favourited a note/comment from database *****/
    return (DB_QueryCOUNT ("can not check if a user has favourited",
-			  "SELECT COUNT(*) FROM %s"
-			  " WHERE %s=%ld AND UsrCod=%ld",
+			  "SELECT COUNT(*)"
+			   " FROM %s"
+			  " WHERE %s=%ld"
+			    " AND UsrCod=%ld",
 			  Tml_DB_TableFav[FavSha],
 			  Tml_DB_FieldFav[FavSha],Cod,UsrCod) != 0);
   }
@@ -1031,9 +1052,10 @@ unsigned Tml_DB_GetNumFavers (Tml_Usr_FavSha_t FavSha,long Cod,long UsrCod)
    /***** Get number of times (users) a note/comment has been favourited *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get number of times has been favourited",
-		  "SELECT COUNT(*) FROM %s"
+		  "SELECT COUNT(*)"
+		   " FROM %s"
 		  " WHERE %s=%ld"
-		  " AND UsrCod<>%ld",	// Extra check
+		    " AND UsrCod<>%ld",	// Extra check
 		  Tml_DB_TableFav[FavSha],
 		  Tml_DB_FieldFav[FavSha],Cod,
 		  UsrCod);		// The author
@@ -1051,10 +1073,11 @@ unsigned Tml_DB_GetFavers (Tml_Usr_FavSha_t FavSha,
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get favers",
 		   "SELECT UsrCod"	// row[0]
-		   " FROM %s"
+		    " FROM %s"
 		   " WHERE %s=%ld"
-		   " AND UsrCod<>%ld"	// Extra check
-		   " ORDER BY FavCod LIMIT %u",
+		     " AND UsrCod<>%ld"	// Extra check
+		   " ORDER BY FavCod"
+		   " LIMIT %u",
 		   Tml_DB_TableFav[FavSha],
 		   Tml_DB_FieldFav[FavSha],Cod,
 		   UsrCod,
@@ -1149,10 +1172,11 @@ void Tml_DB_RemoveAllFavsToAllCommsInAllNotesBy (long UsrCod)
 bool Tml_DB_CheckIfSharedByUsr (long NotCod,long UsrCod)
   {
    return (DB_QueryCOUNT ("can not check if a user has shared a note",
-			  "SELECT COUNT(*) FROM tml_pubs"
+			  "SELECT COUNT(*)"
+			   " FROM tml_pubs"
 			  " WHERE NotCod=%ld"
-			  " AND PublisherCod=%ld"
-			  " AND PubType=%u",
+			    " AND PublisherCod=%ld"
+			    " AND PubType=%u",
 			  NotCod,
 			  UsrCod,
 			  (unsigned) Tml_Pub_SHARED_NOTE) != 0);
@@ -1167,10 +1191,11 @@ unsigned Tml_DB_GetNumSharers (long NotCod,long UsrCod)
    /***** Get number of times (users) this note has been shared *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get number of times a note has been shared",
-		  "SELECT COUNT(*) FROM tml_pubs"
+		  "SELECT COUNT(*)"
+		   " FROM tml_pubs"
 		  " WHERE NotCod=%ld"
-		  " AND PublisherCod<>%ld"
-		  " AND PubType=%u",
+		    " AND PublisherCod<>%ld"
+		    " AND PubType=%u",
 		  NotCod,
 		  UsrCod,	// Author of the note
 		  (unsigned) Tml_Pub_SHARED_NOTE);
@@ -1187,11 +1212,12 @@ unsigned Tml_DB_GetSharers (long NotCod,long UsrCod,unsigned MaxUsrs,
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get users",
 		   "SELECT PublisherCod"	// row[0]
-		   " FROM tml_pubs"
+		    " FROM tml_pubs"
 		   " WHERE NotCod=%ld"
-		   " AND PublisherCod<>%ld"
-		   " AND PubType=%u"
-		   " ORDER BY PubCod LIMIT %u",
+		     " AND PublisherCod<>%ld"
+		     " AND PubType=%u"
+		   " ORDER BY PubCod"
+		   " LIMIT %u",
 		   NotCod,
 		   UsrCod,
 		   (unsigned) Tml_Pub_SHARED_NOTE,

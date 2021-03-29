@@ -2942,7 +2942,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 					     " FROM prj_projects,"
 					           "prj_users"
 					    " WHERE prj_projects.CrsCod=%ld"
-					    "%s%s%s"
+					      "%s%s%s"
 					      " AND prj_projects.PrjCod=prj_users.PrjCod"
 					      " AND prj_users.UsrCod=%ld"
 					    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
@@ -2959,7 +2959,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 					           "prj_users"
 					       " ON prj_projects.DptCod=dpt_departments.DptCod"
 					    " WHERE prj_projects.CrsCod=%ld"
-					    "%s%s%s"
+					      "%s%s%s"
 					      " AND prj_projects.PrjCod=prj_users.PrjCod"
 					      " AND prj_users.UsrCod=%ld"
 					    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
@@ -2995,7 +2995,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 					        " FROM prj_projects,"
 					              "prj_users"
 					       " WHERE prj_projects.CrsCod=%ld"
-					       "%s%s%s"
+					         "%s%s%s"
 					         " AND prj_projects.PrjCod=prj_users.PrjCod"
 					         " AND prj_users.UsrCod IN (%s)"
 					       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
@@ -3012,7 +3012,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 					              "prj_users"
 					          " ON prj_projects.DptCod=dpt_departments.DptCod"
 					       " WHERE prj_projects.CrsCod=%ld"
-					       "%s%s%s"
+					         "%s%s%s"
 					         " AND prj_projects.PrjCod=prj_users.PrjCod"
 					         " AND prj_users.UsrCod IN (%s)"
 					       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
@@ -3044,7 +3044,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 					    "SELECT prj_projects.PrjCod"
 					     " FROM prj_projects"
 					    " WHERE prj_projects.CrsCod=%ld"
-					    "%s%s%s"
+					      "%s%s%s"
 					    " ORDER BY %s",
 					    Gbl.Hierarchy.Crs.CrsCod,
 					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
@@ -3056,7 +3056,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 					     " FROM prj_projects LEFT JOIN dpt_departments"
 					       " ON prj_projects.DptCod=dpt_departments.DptCod"
 					    " WHERE prj_projects.CrsCod=%ld"
-					    "%s%s%s"
+					      "%s%s%s"
 					    " ORDER BY %s",
 					    Gbl.Hierarchy.Crs.CrsCod,
 					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
@@ -4153,7 +4153,8 @@ static void Prj_GetConfigPrjFromDB (struct Prj_Projects *Projects)
    /***** Get configuration of projects for current course from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get configuration of test",
 			     "SELECT Editable"		// row[0]
-			     " FROM prj_config WHERE CrsCod=%ld",
+			      " FROM prj_config"
+			     " WHERE CrsCod=%ld",
 			     Gbl.Hierarchy.Crs.CrsCod);
 
    if (NumRows == 0)

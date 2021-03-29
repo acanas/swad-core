@@ -399,8 +399,8 @@ void Ses_RemoveParamsFromExpiredSessions (void)
    DB_QueryDELETE ("can not remove session parameters of expired sessions",
 		   "DELETE FROM ses_params"
                    " WHERE SessionId NOT IN"
-                   " (SELECT SessionId"
-                      " FROM ses_sessions)");
+                         " (SELECT SessionId"
+                            " FROM ses_sessions)");
   }
 
 /*****************************************************************************/

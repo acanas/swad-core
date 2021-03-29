@@ -120,7 +120,7 @@ bool Pwd_CheckPendingPassword (void)
 
    /***** Get pending password from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get pending password",
-		       "SELECT PendingPassword"
+		       "SELECT PendingPassword"	// row[0]
 		        " FROM usr_pending_passwd"
 		       " WHERE UsrCod=%ld",
 		       Gbl.Usrs.Me.UsrDat.UsrCod))
@@ -594,9 +594,12 @@ static unsigned Pwd_GetNumOtherUsrsWhoUseThisPassword (const char *EncryptedPass
    /***** Get number of other users who use a password from database *****/
    NumUsrs =
    (unsigned) DB_QueryCOUNT ("can not check if a password is trivial",
-			     "SELECT COUNT(*) FROM usr_data"
-			     " WHERE Password='%s'%s",
-			     EncryptedPassword,SubQuery);
+			     "SELECT COUNT(*)"
+			      " FROM usr_data"
+			     " WHERE Password='%s'"
+			        "%s",
+			     EncryptedPassword,
+			     SubQuery);
 
    /***** Free subquery *****/
    if (UsrCod > 0)

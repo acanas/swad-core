@@ -467,10 +467,12 @@ static unsigned Sch_SearchCountriesInDB (const char *RangeQuery)
 	    NumCtys = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get countries",
 			    "SELECT CtyCod"	// row[0]
-			    " FROM cty_countrs"
-			    " WHERE %s%s"
+			     " FROM cty_countrs"
+			    " WHERE %s"
+			       "%s"
 			    " ORDER BY Name_%s",
-			    SearchQuery,RangeQuery,
+			    SearchQuery,
+			    RangeQuery,
 			    Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 	    Cty_ListCtysFound (&mysql_res,NumCtys);
 	    return NumCtys;
@@ -505,14 +507,15 @@ static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery)
 	    NumInss = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get institutions",
 			    "SELECT ins_instits.InsCod"	// row[0]
-			    " FROM ins_instits,"
-				  "cty_countrs"
+			     " FROM ins_instits,"
+				   "cty_countrs"
 			    " WHERE %s"
-			    " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-			    "%s"
+			      " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+			      "%s"
 			    " ORDER BY ins_instits.FullName,"
 			              "cty_countrs.Name_%s",
-			    SearchQuery,RangeQuery,
+			    SearchQuery,
+			    RangeQuery,
 			    Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 	    Ins_ListInssFound (&mysql_res,NumInss);
 	    return NumInss;
@@ -544,13 +547,13 @@ static unsigned Sch_SearchCentersInDB (const char *RangeQuery)
 	    NumCtrs = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get centers",
 			    "SELECT ctr_centers.CtrCod"	// row[0]
-			    " FROM ctr_centers,"
-			          "ins_instits,"
-			          "cty_countrs"
+			     " FROM ctr_centers,"
+			           "ins_instits,"
+			           "cty_countrs"
 			    " WHERE %s"
-			    " AND ctr_centers.InsCod=ins_instits.InsCod"
-			    " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-			    "%s"
+			      " AND ctr_centers.InsCod=ins_instits.InsCod"
+			      " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+			      "%s"
 			    " ORDER BY ctr_centers.FullName,"
 			              "ins_instits.FullName",
 			    SearchQuery,RangeQuery);
@@ -583,15 +586,15 @@ static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
 	    NumDegs = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get degrees",
 			    "SELECT deg_degrees.DegCod"	// row[0]
-			    " FROM deg_degrees,"
-			          "ctr_centers,"
-			          "ins_instits,"
-			          "cty_countrs"
+			     " FROM deg_degrees,"
+			           "ctr_centers,"
+			           "ins_instits,"
+			           "cty_countrs"
 			    " WHERE %s"
-			    " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			    " AND ctr_centers.InsCod=ins_instits.InsCod"
-			    " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-			    "%s"
+			      " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			      " AND ctr_centers.InsCod=ins_instits.InsCod"
+			      " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+			      "%s"
 			    " ORDER BY deg_degrees.FullName,"
 				      "ins_instits.FullName",
 			    SearchQuery,RangeQuery);
@@ -628,17 +631,17 @@ static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
 			        "crs_courses.Year,"		// row[4]
 			        "crs_courses.FullName,"		// row[5]
 			        "ctr_centers.ShortName"		// row[6]
-		         " FROM crs_courses,"
-		               "deg_degrees,"
-		               "ctr_centers,"
-		               "ins_instits,"
-		               "cty_countrs"
+		          " FROM crs_courses,"
+		                "deg_degrees,"
+		                "ctr_centers,"
+		                "ins_instits,"
+		                "cty_countrs"
 		         " WHERE %s"
-		         " AND crs_courses.DegCod=deg_degrees.DegCod"
-		         " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		         " AND ctr_centers.InsCod=ins_instits.InsCod"
-		         " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		         "%s"
+		           " AND crs_courses.DegCod=deg_degrees.DegCod"
+		           " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		           " AND ctr_centers.InsCod=ins_instits.InsCod"
+		           " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+		           "%s"
 		         " ORDER BY crs_courses.FullName,"
 				   "ins_instits.FullName,"
 				   "degrees.FullName,"
@@ -912,7 +915,9 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		                "ctr_centers,"
 		                "ins_instits,"
 		                "cty_countrs"
-		         " WHERE brw_files.FilCod IN (SELECT FilCod FROM my_files_crs)"
+		         " WHERE brw_files.FilCod IN"
+		               " (SELECT FilCod"
+		                  " FROM my_files_crs)"
 		           " AND %s"
 		           " AND brw_files.FileBrowser IN (%u,%u,%u,%u)"
 		           " AND brw_files.Cod=crs_courses.CrsCod"
@@ -941,7 +946,9 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		                "ctr_centers,"
 		                "ins_instits,"
 		                "cty_countrs"
-		         " WHERE brw_files.FilCod IN (SELECT FilCod FROM my_files_grp)"
+		         " WHERE brw_files.FilCod IN"
+		               " (SELECT FilCod"
+		                  " FROM my_files_grp)"
 		           " AND %s"
 		           " AND brw_files.FileBrowser IN (%u,%u,%u,%u)"
 		           " AND brw_files.Cod=grp_groups.GrpCod"

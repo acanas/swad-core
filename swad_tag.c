@@ -129,7 +129,8 @@ bool Tag_CheckIfCurrentCrsHasTestTags (void)
   {
    /***** Get available tags from database *****/
    return (DB_QueryCOUNT ("can not check if course has tags",
-			  "SELECT COUNT(*) FROM tst_tags"
+			  "SELECT COUNT(*)"
+			   " FROM tst_tags"
 			  " WHERE CrsCod=%ld",
 			  Gbl.Hierarchy.Crs.CrsCod) != 0);
   }
@@ -146,7 +147,7 @@ unsigned Tag_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
 				     "SELECT TagCod,"	// row[0]
 					    "TagTxt,"	// row[1]
 					    "TagHidden"	// row[2]
-				     " FROM tst_tags"
+				      " FROM tst_tags"
 				     " WHERE CrsCod=%ld"
 				     " ORDER BY TagTxt",
 				     Gbl.Hierarchy.Crs.CrsCod);
@@ -163,8 +164,9 @@ unsigned Tag_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
    return (unsigned) DB_QuerySELECT (mysql_res,"can not get available enabled tags",
 				     "SELECT TagCod,"	// row[0]
 					    "TagTxt"	// row[1]
-				     " FROM tst_tags"
-				     " WHERE CrsCod=%ld AND TagHidden='N'"
+				      " FROM tst_tags"
+				     " WHERE CrsCod=%ld"
+				       " AND TagHidden='N'"
 				     " ORDER BY TagTxt",
 				     Gbl.Hierarchy.Crs.CrsCod);
   }
@@ -290,8 +292,9 @@ void Tag_RenameTag (void)
 	    DB_Query ("can not create temporary table",
 		      "CREATE TEMPORARY TABLE tst_question_tags_tmp"
 		      " ENGINE=MEMORY"
-		      " SELECT QstCod FROM tst_question_tags"
-	   	      " WHERE TagCod=%ld",
+		      " SELECT QstCod"
+		        " FROM tst_question_tags"
+	   	       " WHERE TagCod=%ld",
 		      ExistingTagCod);
 
 	    /* Remove old tag in questions where it would be repeated */
@@ -299,18 +302,20 @@ void Tag_RenameTag (void)
 	    DB_QueryDELETE ("can not remove a tag from some questions",
 			    "DELETE FROM tst_question_tags"
 			    " WHERE TagCod=%ld"
-			    " AND QstCod IN"
-			    " (SELECT QstCod FROM tst_question_tags_tmp)",
+			      " AND QstCod IN"
+			          " (SELECT QstCod"
+			             " FROM tst_question_tags_tmp)",
 			    OldTagCod);
 
 	    /* Change old tag to new tag in questions where it would not be repeated */
 	    // New tag did not exist for a question ==> change old tag to new tag
 	    DB_QueryUPDATE ("can not update a tag in some questions",
 			    "UPDATE tst_question_tags"
-			    " SET TagCod=%ld"
+			      " SET TagCod=%ld"
 			    " WHERE TagCod=%ld"
-			    " AND QstCod NOT IN"
-			    " (SELECT QstCod FROM tst_question_tags_tmp)",
+			      " AND QstCod NOT IN"
+			          " (SELECT QstCod"
+			             " FROM tst_question_tags_tmp)",
 			    ExistingTagCod,
 			    OldTagCod);
 
@@ -321,17 +326,22 @@ void Tag_RenameTag (void)
 	    /***** Delete old tag from tst_tags
 		   because it is not longer used *****/
 	    DB_QueryDELETE ("can not remove old tag",
-			    "DELETE FROM tst_tags WHERE TagCod=%ld",
+			    "DELETE FROM tst_tags"
+			    " WHERE TagCod=%ld",
 			    OldTagCod);
 	   }
 	 else			// Renaming is easy
 	   {
 	    /***** Simple update replacing each instance of the old tag by the new tag *****/
 	    DB_QueryUPDATE ("can not update tag",
-			    "UPDATE tst_tags SET TagTxt='%s',ChangeTime=NOW()"
+			    "UPDATE tst_tags"
+			      " SET TagTxt='%s',"
+			           "ChangeTime=NOW()"
 			    " WHERE tst_tags.CrsCod=%ld"
-			    " AND tst_tags.TagTxt='%s'",
-			    NewTagTxt,Gbl.Hierarchy.Crs.CrsCod,OldTagTxt);
+			      " AND tst_tags.TagTxt='%s'",
+			    NewTagTxt,
+			    Gbl.Hierarchy.Crs.CrsCod,
+			    OldTagTxt);
 	   }
 
 	 /***** Write message to show the change made *****/
@@ -359,8 +369,10 @@ static long Tag_GetTagCodFromTagTxt (const char *TagTxt)
 
    /***** Get tag code from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get tag",
-			     "SELECT TagCod FROM tst_tags"
-			     " WHERE CrsCod=%ld AND TagTxt='%s'",
+			     "SELECT TagCod"
+			      " FROM tst_tags"
+			     " WHERE CrsCod=%ld"
+			       " AND TagTxt='%s'",
 			     Gbl.Hierarchy.Crs.CrsCod,TagTxt);
    if (NumRows == 1)
      {
@@ -664,11 +676,13 @@ void Tag_RemoveUnusedTagsFromCrs (long CrsCod)
    /***** Remove unused tags from tst_tags *****/
    DB_QueryDELETE ("can not remove unused tags",
 		   "DELETE FROM tst_tags"
-	           " WHERE CrsCod=%ld AND TagCod NOT IN"
-                   " (SELECT DISTINCT tst_question_tags.TagCod"
-                   " FROM tst_questions,tst_question_tags"
-                   " WHERE tst_questions.CrsCod=%ld"
-                   " AND tst_questions.QstCod=tst_question_tags.QstCod)",
+	           " WHERE CrsCod=%ld"
+	             " AND TagCod NOT IN"
+			 " (SELECT DISTINCT tst_question_tags.TagCod"
+			    " FROM tst_questions,"
+			          "tst_question_tags"
+			   " WHERE tst_questions.CrsCod=%ld"
+			     " AND tst_questions.QstCod=tst_question_tags.QstCod)",
 		   CrsCod,
 		   CrsCod);
   }

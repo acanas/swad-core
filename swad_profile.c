@@ -887,10 +887,12 @@ static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName)
    /***** Select number of rows with figure
           greater than the figure of this user *****/
    return DB_QueryCOUNT ("can not get ranking using a figure",
-			 "SELECT COUNT(*)+1 FROM usr_figures"
+			 "SELECT COUNT(*)+1"
+			  " FROM usr_figures"
 			 " WHERE UsrCod<>%ld"	// Really not necessary here
-			 " AND %s>"
-			 "(SELECT %s FROM usr_figures WHERE UsrCod=%ld)",
+			   " AND %s>(SELECT %s"
+			             " FROM usr_figures"
+			            " WHERE UsrCod=%ld)",
 			 UsrCod,FieldName,FieldName,UsrCod);
   }
 
@@ -902,7 +904,8 @@ static unsigned long Prf_GetNumUsrsWithFigure (const char *FieldName)
   {
    /***** Select number of rows with values already calculated *****/
    return DB_QueryCOUNT ("can not get number of users with a figure",
-			 "SELECT COUNT(*) FROM usr_figures"
+			 "SELECT COUNT(*)"
+			  " FROM usr_figures"
 			 " WHERE %s>=0",
 			 FieldName);
   }
@@ -916,20 +919,18 @@ static unsigned long Prf_GetRankingNumClicksPerDay (long UsrCod)
    /***** Select number of rows with number of clicks per day
           greater than the clicks per day of this user *****/
    return DB_QueryCOUNT ("can not get ranking using number of clicks per day",
-			 "SELECT COUNT(*)+1 FROM"
-			 " (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
-			 " AS NumClicksPerDay"
-			 " FROM usr_figures"
-			 " WHERE UsrCod<>%ld"	// Necessary because the following comparison is not exact in floating point
-			 " AND NumClicks>0"
-			 " AND FirstClickTime>FROM_UNIXTIME(0))"
-			 " AS TableNumClicksPerDay"
+			 "SELECT COUNT(*)+1"
+			  " FROM (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay"
+				  " FROM usr_figures"
+				 " WHERE UsrCod<>%ld"	// Necessary because the following comparison is not exact in floating point
+				   " AND NumClicks>0"
+				   " AND FirstClickTime>FROM_UNIXTIME(0)) AS TableNumClicksPerDay"
 			 " WHERE NumClicksPerDay>"
-			 "(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
-			 " FROM usr_figures"
-			 " WHERE UsrCod=%ld"
-			 " AND NumClicks>0"
-			 " AND FirstClickTime>FROM_UNIXTIME(0))",
+			        "(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
+				  " FROM usr_figures"
+			         " WHERE UsrCod=%ld"
+				   " AND NumClicks>0"
+				   " AND FirstClickTime>FROM_UNIXTIME(0))",
 			 UsrCod,UsrCod);
   }
 
@@ -942,9 +943,10 @@ static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void)
    /***** Select number of rows with values already calculated *****/
    return DB_QueryCOUNT ("can not get number of users"
 			 " with number of clicks per day",
-			 "SELECT COUNT(*) FROM usr_figures"
+			 "SELECT COUNT(*)"
+			  " FROM usr_figures"
 			 " WHERE NumClicks>0"
-			 " AND FirstClickTime>FROM_UNIXTIME(0)");
+			   " AND FirstClickTime>FROM_UNIXTIME(0)");
   }
 
 /*****************************************************************************/
@@ -1056,8 +1058,9 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
       /***** Get first click from log table *****/
       if (DB_QuerySELECT (&mysql_res,"can not get user's first click",
 			  "SELECT UNIX_TIMESTAMP("
-			  "(SELECT MIN(ClickTime) FROM log"
-			  " WHERE UsrCod=%ld)"
+			  "(SELECT MIN(ClickTime)"
+			    " FROM log"
+			   " WHERE UsrCod=%ld)"
 			  ")",
 			  UsrCod))
 	{
@@ -1100,7 +1103,8 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
       /***** Get number of clicks from database *****/
       UsrFigures.NumClicks =
       (long) DB_QueryCOUNT ("can not get number of clicks",
-			    "SELECT COUNT(*) FROM log"
+			    "SELECT COUNT(*)"
+			     " FROM log"
 			    " WHERE UsrCod=%ld",
 			    UsrCod);
 
@@ -1439,16 +1443,17 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 	 DB_QuerySELECT (&mysql_res,"can not get ranking",
 			 "SELECT UsrCod,"		// row[0]
 			        "%s"			// row[1]
-			 " FROM usr_figures"
+			  " FROM usr_figures"
 			 " WHERE %s>0"
-			 " AND UsrCod NOT IN"
-			     " (SELECT UsrCod"
-			        " FROM usr_banned)"
+			   " AND UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
 			 " ORDER BY %s DESC,"
 			           "UsrCod"
 			 " LIMIT 100",
 			 FieldName,
-			 FieldName,FieldName);
+			 FieldName,
+			 FieldName);
          break;
       case Hie_Lvl_CTY:
          NumUsrs = (unsigned)
@@ -1477,7 +1482,8 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 			 " LIMIT 100",
 			 FieldName,
 			 Gbl.Hierarchy.Cty.CtyCod,
-			 FieldName,FieldName);
+			 FieldName,
+			 FieldName);
          break;
       case Hie_Lvl_INS:
          NumUsrs = (unsigned)
@@ -1504,7 +1510,8 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 			 " LIMIT 100",
 			 FieldName,
 			 Gbl.Hierarchy.Ins.InsCod,
-			 FieldName,FieldName);
+			 FieldName,
+			 FieldName);
          break;
       case Hie_Lvl_CTR:
          NumUsrs = (unsigned)
@@ -1668,14 +1675,15 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	 DB_QuerySELECT (&mysql_res,"can not get ranking",
 			 "SELECT UsrCod,"						// row[0]
 			        "NumClicks/(DATEDIFF(NOW(),"
-			        "FirstClickTime)+1) AS NumClicksPerDay"			// row[1]
-			 " FROM usr_figures"
+			                   "FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
+			  " FROM usr_figures"
 			 " WHERE NumClicks>0"
-			 " AND FirstClickTime>FROM_UNIXTIME(0)"
-			 " AND UsrCod NOT IN"
-			     " (SELECT UsrCod"
-			        " FROM usr_banned)"
-			 " ORDER BY NumClicksPerDay DESC,UsrCod"
+			   " AND FirstClickTime>FROM_UNIXTIME(0)"
+			   " AND UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
+			 " ORDER BY NumClicksPerDay DESC,"
+			           "UsrCod"
 			 " LIMIT 100");
          break;
       case Hie_Lvl_CTY:

@@ -99,7 +99,7 @@ void TstCfg_GetConfigFromDB (void)
 				    "Max,"			// row[3]
 				    "MinTimeNxtTstPerQst,"	// row[4]
 				    "Visibility"		// row[5]
-			     " FROM tst_config"
+			      " FROM tst_config"
 			     " WHERE CrsCod=%ld",
 			     Gbl.Hierarchy.Crs.CrsCod);
 

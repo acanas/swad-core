@@ -591,7 +591,8 @@ static bool Plg_CheckIfPluginNameExists (const char *Name,long PlgCod)
    /***** Get number of plugins with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of a plugin"
 			  " already existed",
-			  "SELECT COUNT(*) FROM plg_plugins"
+			  "SELECT COUNT(*)"
+			   " FROM plg_plugins"
 			  " WHERE Name='%s'"
 			    " AND PlgCod<>%ld",
 			  Name,PlgCod) != 0);

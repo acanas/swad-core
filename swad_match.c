@@ -306,14 +306,15 @@ void Mch_ListMatches (struct Gam_Games *Games,
      {
       if (asprintf (&SubQuery," AND"
 			      " (MchCod NOT IN"
-			      " (SELECT MchCod FROM mch_groups)"
-			      " OR"
-			      " MchCod IN"
-			      " (SELECT mch_groups.MchCod"
-			         " FROM grp_users,"
-			               "mch_groups"
-			        " WHERE grp_users.UsrCod=%ld"
-			          " AND grp_users.GrpCod=mch_groups.GrpCod))",
+			       " (SELECT MchCod"
+			          " FROM mch_groups)"
+			       " OR"
+			       " MchCod IN"
+			       " (SELECT mch_groups.MchCod"
+			          " FROM grp_users,"
+			                "mch_groups"
+			         " WHERE grp_users.UsrCod=%ld"
+			           " AND grp_users.GrpCod=mch_groups.GrpCod))",
 		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
 	  Lay_NotEnoughMemoryExit ();
       }
@@ -322,25 +323,26 @@ void Mch_ListMatches (struct Gam_Games *Games,
 	  Lay_NotEnoughMemoryExit ();
 
    /* Make query */
-   NumMatches = (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches",
-					   "SELECT MchCod,"				// row[ 0]
-						  "GamCod,"				// row[ 1]
-						  "UsrCod,"				// row[ 2]
-						  "UNIX_TIMESTAMP(StartTime),"		// row[ 3]
-						  "UNIX_TIMESTAMP(EndTime),"		// row[ 4]
-						  "Title,"				// row[ 5]
-						  "QstInd,"				// row[ 6]
-						  "QstCod,"				// row[ 7]
-						  "Showing,"				// row[ 8]
-						  "Countdown,"				// row[ 9]
-						  "NumCols,"				// row[10]
-					          "ShowQstResults,"			// row[11]
-					          "ShowUsrResults"			// row[12]
-					   " FROM mch_matches"
-					   " WHERE GamCod=%ld%s"
-					   " ORDER BY MchCod",
-					   Game->GamCod,
-					   SubQuery);
+   NumMatches = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get matches",
+		   "SELECT MchCod,"			// row[ 0]
+			  "GamCod,"			// row[ 1]
+			  "UsrCod,"			// row[ 2]
+			  "UNIX_TIMESTAMP(StartTime),"	// row[ 3]
+			  "UNIX_TIMESTAMP(EndTime),"	// row[ 4]
+			  "Title,"			// row[ 5]
+			  "QstInd,"			// row[ 6]
+			  "QstCod,"			// row[ 7]
+			  "Showing,"			// row[ 8]
+			  "Countdown,"			// row[ 9]
+			  "NumCols,"			// row[10]
+			  "ShowQstResults,"		// row[11]
+			  "ShowUsrResults"		// row[12]
+		    " FROM mch_matches"
+		   " WHERE GamCod=%ld%s"
+		   " ORDER BY MchCod",
+		   Game->GamCod,
+		   SubQuery);
 
    /* Free allocated memory for subquery */
    free (SubQuery);
@@ -406,27 +408,28 @@ void Mch_GetDataOfMatchByCod (struct Mch_Match *Match)
 
    /***** Get data of match from database *****/
    NumRows = (unsigned)
-	     DB_QuerySELECT (&mysql_res,"can not get matches",
-			     "SELECT MchCod,"			// row[ 0]
-				    "GamCod,"			// row[ 1]
-				    "UsrCod,"			// row[ 2]
-				    "UNIX_TIMESTAMP(StartTime),"// row[ 3]
-				    "UNIX_TIMESTAMP(EndTime),"	// row[ 4]
-				    "Title,"			// row[ 5]
-				    "QstInd,"			// row[ 6]
-				    "QstCod,"			// row[ 7]
-				    "Showing,"			// row[ 8]
-				    "Countdown,"		// row[ 9]
-				    "NumCols,"			// row[10]
-				    "ShowQstResults,"		// row[11]
-				    "ShowUsrResults"		// row[12]
-			     " FROM mch_matches"
-			     " WHERE MchCod=%ld"
-			     " AND GamCod IN"		// Extra check
-			     " (SELECT GamCod FROM gam_games"
-			     " WHERE CrsCod='%ld')",
-			     Match->MchCod,
-			     Gbl.Hierarchy.Crs.CrsCod);
+   DB_QuerySELECT (&mysql_res,"can not get matches",
+		   "SELECT MchCod,"			// row[ 0]
+			  "GamCod,"			// row[ 1]
+			  "UsrCod,"			// row[ 2]
+			  "UNIX_TIMESTAMP(StartTime),"	// row[ 3]
+			  "UNIX_TIMESTAMP(EndTime),"	// row[ 4]
+			  "Title,"			// row[ 5]
+			  "QstInd,"			// row[ 6]
+			  "QstCod,"			// row[ 7]
+			  "Showing,"			// row[ 8]
+			  "Countdown,"			// row[ 9]
+			  "NumCols,"			// row[10]
+			  "ShowQstResults,"		// row[11]
+			  "ShowUsrResults"		// row[12]
+		    " FROM mch_matches"
+		   " WHERE MchCod=%ld"
+		     " AND GamCod IN"		// Extra check
+		         " (SELECT GamCod"
+		            " FROM gam_games"
+		           " WHERE CrsCod='%ld')",
+		 Match->MchCod,
+		 Gbl.Hierarchy.Crs.CrsCod);
    if (NumRows) // Match found...
       /* Get match data from row */
       Mch_GetMatchDataFromRow (mysql_res,Match);
@@ -1789,9 +1792,9 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
 			            "gam_questions.QstInd,"	// row[1]
 			            "tst_questions.AnsType,"	// row[2]
 			            "tst_questions.Shuffle"	// row[3]
-			     " FROM gam_questions,tst_questions"
+			      " FROM gam_questions,tst_questions"
 			     " WHERE gam_questions.GamCod=%ld"
-			     " AND gam_questions.QstCod=tst_questions.QstCod"
+			       " AND gam_questions.QstCod=tst_questions.QstCod"
 			     " ORDER BY gam_questions.QstInd",
 			     GamCod);
 
@@ -1861,14 +1864,14 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
 
    /***** Get questions of the game *****/
    NumAnss = (unsigned)
-	     DB_QuerySELECT (&mysql_res,"can not get questions of a game",
-			     "SELECT AnsInd"	// row[0]
-			     " FROM tst_answers"
-			     " WHERE QstCod=%ld"
-			     " ORDER BY %s",
-			     Question->QstCod,
-			     Question->Answer.Shuffle ? "RAND()" :	// Use RAND() because is really random; RAND(NOW()) repeats order
-				                        "AnsInd");
+   DB_QuerySELECT (&mysql_res,"can not get questions of a game",
+		   "SELECT AnsInd"	// row[0]
+		    " FROM tst_answers"
+		   " WHERE QstCod=%ld"
+		   " ORDER BY %s",
+		   Question->QstCod,
+		   Question->Answer.Shuffle ? "RAND()" :	// Use RAND() because is really random; RAND(NOW()) repeats order
+					      "AnsInd");
 
    /***** For each answer in question... *****/
    for (NumAns = 0;
@@ -1915,9 +1918,11 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
    /***** Get indexes for a question from database *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
 			"SELECT Indexes"	// row[0]
-			" FROM mch_indexes"
-			" WHERE MchCod=%ld AND QstInd=%u",
-			MchCod,QstInd))
+			 " FROM mch_indexes"
+			" WHERE MchCod=%ld"
+			  " AND QstInd=%u",
+			MchCod,
+			QstInd))
       Lay_ShowErrorAndExit ("No indexes found for a question.");
    row = mysql_fetch_row (mysql_res);
 
@@ -2067,11 +2072,14 @@ static void Mch_GetElapsedTimeInQuestion (const struct Mch_Match *Match,
    unsigned NumRows;
 
    /***** Query database *****/
-   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get elapsed time",
-				        "SELECT ElapsedTime"
-				        " FROM mch_times"
-				        " WHERE MchCod=%ld AND QstInd=%u",
-				        Match->MchCod,Match->Status.QstInd);
+   NumRows = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get elapsed time",
+		   "SELECT ElapsedTime"
+		    " FROM mch_times"
+		   " WHERE MchCod=%ld"
+		     " AND QstInd=%u",
+		   Match->MchCod,
+		   Match->Status.QstInd);
 
    /***** Get elapsed time from query result *****/
    Mch_GetElapsedTime (NumRows,mysql_res,Time);
@@ -2091,10 +2099,12 @@ static void Mch_GetElapsedTimeInMatch (const struct Mch_Match *Match,
    unsigned NumRows;
 
    /***** Query database *****/
-   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get elapsed time",
-				        "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(ElapsedTime)))"
-				        " FROM mch_times WHERE MchCod=%ld",
-				        Match->MchCod);
+   NumRows = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get elapsed time",
+		   "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(ElapsedTime)))"
+		    " FROM mch_times"
+		   " WHERE MchCod=%ld",
+		   Match->MchCod);
 
    /***** Get elapsed time from query result *****/
    Mch_GetElapsedTime (NumRows,mysql_res,Time);
@@ -2480,11 +2490,12 @@ unsigned Mch_GetNumMchsInGame (long GamCod)
       return 0;		// ...has no matches
 
    /***** Get number of matches in a game from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of matches of a game",
-			     "SELECT COUNT(*) FROM mch_matches"
-			     " WHERE GamCod=%ld",
-			     GamCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of matches of a game",
+		  "SELECT COUNT(*)"
+		   " FROM mch_matches"
+		  " WHERE GamCod=%ld",
+		  GamCod);
   }
 
 /*****************************************************************************/
@@ -2498,11 +2509,14 @@ unsigned Mch_GetNumUnfinishedMchsInGame (long GamCod)
       return 0;		// ...has no matches
 
    /***** Get number of matches in a game from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of unfinished matches of a game",
-			     "SELECT COUNT(*) FROM mch_matches"
-			     " WHERE GamCod=%ld AND Showing<>'%s'",
-			     GamCod,Mch_ShowingStringsDB[Mch_END]);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of unfinished matches of a game",
+		  "SELECT COUNT(*)"
+		   " FROM mch_matches"
+		  " WHERE GamCod=%ld"
+		    " AND Showing<>'%s'",
+		  GamCod,
+		  Mch_ShowingStringsDB[Mch_END]);
   }
 
 /*****************************************************************************/
@@ -2517,19 +2531,21 @@ bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Mch_Match *Match)
 	 /***** Check if I belong to any of the groups
 	        associated to the match *****/
 	 return (DB_QueryCOUNT ("can not check if I can play a match",
-				"SELECT COUNT(*) FROM mch_matches"
+				"SELECT COUNT(*)"
+				 " FROM mch_matches"
 				" WHERE MchCod=%ld"
-				" AND"
-				"(MchCod NOT IN"
-				" (SELECT MchCod FROM mch_groups)"
-				" OR"
-				" MchCod IN"
-				" (SELECT mch_groups.MchCod"
-			  	   " FROM grp_users,"
-				         "mch_groups"
-				  " WHERE grp_users.UsrCod=%ld"
-				    " AND grp_users.GrpCod=mch_groups.GrpCod))",
-				Match->MchCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+				  " AND (MchCod NOT IN"
+				       " (SELECT MchCod"
+				          " FROM mch_groups)"
+				       " OR"
+				       " MchCod IN"
+				       " (SELECT mch_groups.MchCod"
+					  " FROM grp_users,"
+					        "mch_groups"
+					 " WHERE grp_users.UsrCod=%ld"
+					   " AND grp_users.GrpCod=mch_groups.GrpCod))",
+				Match->MchCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
 	 break;
       case Rol_NET:
 	 /***** Only if I am the creator *****/
@@ -3489,13 +3505,12 @@ static void Mch_ShowMatchScore (const struct Mch_Match *Match)
 
    /***** Get maximum number of users *****/
    if (DB_QuerySELECT (&mysql_res,"can not get max users",
-		       "SELECT MAX(NumUsrs)"
-		       " FROM "
-		       "(SELECT COUNT(*) AS NumUsrs"	// row[1]
-		       " FROM mch_results"
-		       " WHERE MchCod=%ld"
-		       " GROUP BY Score"
-		       " ORDER BY Score) AS Scores",
+		       "SELECT MAX(NumUsrs)"	// row[1]
+		        " FROM (SELECT COUNT(*) AS NumUsrs"
+		                " FROM mch_results"
+		               " WHERE MchCod=%ld"
+		               " GROUP BY Score"
+		               " ORDER BY Score) AS Scores",
 		       Match->MchCod))
      {
       row = mysql_fetch_row (mysql_res);
@@ -3515,7 +3530,7 @@ static void Mch_ShowMatchScore (const struct Mch_Match *Match)
 	       DB_QuerySELECT (&mysql_res,"can not get scores",
 			       "SELECT Score,"			// row[0]
 				      "COUNT(*) AS NumUsrs"	// row[1]
-			       " FROM mch_results"
+			        " FROM mch_results"
 			       " WHERE MchCod=%ld"
 			       " GROUP BY Score"
 			       " ORDER BY Score DESC",
@@ -3832,7 +3847,8 @@ static bool Mch_GetIfMatchIsBeingPlayed (long MchCod)
    /***** Get if a match is being played or not *****/
    return
    (bool) (DB_QueryCOUNT ("can not get if match is being played",
-			  "SELECT COUNT(*) FROM mch_playing"
+			  "SELECT COUNT(*)"
+			   " FROM mch_playing"
 			  " WHERE MchCod=%ld",
 			  MchCod) != 0);
   }
@@ -3846,7 +3862,8 @@ static void Mch_GetNumPlayers (struct Mch_Match *Match)
    /***** Get number of players who are playing a match *****/
    Match->Status.NumPlayers =
    (unsigned) DB_QueryCOUNT ("can not get number of players",
-			     "SELECT COUNT(*) FROM mch_players"
+			     "SELECT COUNT(*)"
+			      " FROM mch_players"
 			     " WHERE MchCod=%ld",
 			     Match->MchCod);
   }
@@ -4101,11 +4118,13 @@ void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's answer to a match question",
 					"SELECT NumOpt,"	// row[0]
 					       "AnsInd"		// row[1]
-					" FROM mch_answers"
+					 " FROM mch_answers"
 					" WHERE MchCod=%ld"
-					" AND UsrCod=%ld"
-					" AND QstInd=%u",
-					MchCod,UsrCod,QstInd);
+					  " AND UsrCod=%ld"
+					  " AND QstInd=%u",
+					MchCod,
+					UsrCod,
+					QstInd);
    if (NumRows) // Answer found...
      {
       row = mysql_fetch_row (mysql_res);
@@ -4255,18 +4274,18 @@ void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print)
 
    /***** Get questions and answers of a match result *****/
    Print->NumQsts.All = (unsigned)
-		        DB_QuerySELECT (&mysql_res,"can not get questions and answers"
-						   " of a match result",
-					"SELECT gam_questions.QstCod,"	// row[0]
-					       "gam_questions.QstInd,"	// row[1]
-					       "mch_indexes.Indexes"	// row[2]
-					" FROM mch_matches,gam_questions,mch_indexes"
-					" WHERE mch_matches.MchCod=%ld"
-					" AND mch_matches.GamCod=gam_questions.GamCod"
-					" AND mch_matches.MchCod=mch_indexes.MchCod"
-					" AND gam_questions.QstInd=mch_indexes.QstInd"
-					" ORDER BY gam_questions.QstInd",
-					Print->MchCod);
+   DB_QuerySELECT (&mysql_res,"can not get questions and answers"
+			      " of a match result",
+		   "SELECT gam_questions.QstCod,"	// row[0]
+			  "gam_questions.QstInd,"	// row[1]
+			  "mch_indexes.Indexes"	// row[2]
+		    " FROM mch_matches,gam_questions,mch_indexes"
+		   " WHERE mch_matches.MchCod=%ld"
+		     " AND mch_matches.GamCod=gam_questions.GamCod"
+		     " AND mch_matches.MchCod=mch_indexes.MchCod"
+		     " AND gam_questions.QstInd=mch_indexes.QstInd"
+		   " ORDER BY gam_questions.QstInd",
+		   Print->MchCod);
    for (NumQst = 0, Print->NumQsts.NotBlank = 0;
 	NumQst < Print->NumQsts.All;
 	NumQst++)
@@ -4340,11 +4359,14 @@ unsigned Mch_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd)
   {
    /***** Get number of users who answered
           a question in a match from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of users who answered a question",
-			     "SELECT COUNT(*) FROM mch_answers"
-			     " WHERE MchCod=%ld AND QstInd=%u",
-			     MchCod,QstInd);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users who answered a question",
+		  "SELECT COUNT(*)"
+		   " FROM mch_answers"
+		  " WHERE MchCod=%ld"
+		    " AND QstInd=%u",
+		  MchCod,
+		  QstInd);
   }
 
 /*****************************************************************************/
@@ -4355,11 +4377,16 @@ unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned An
   {
    /***** Get number of users who have chosen
           an answer of a question from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of users who have chosen an answer",
-			     "SELECT COUNT(*) FROM mch_answers"
-			     " WHERE MchCod=%ld AND QstInd=%u AND AnsInd=%u",
-			     MchCod,QstInd,AnsInd);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users who have chosen an answer",
+		  "SELECT COUNT(*)"
+		   " FROM mch_answers"
+		  " WHERE MchCod=%ld"
+		    " AND QstInd=%u"
+		    " AND AnsInd=%u",
+		  MchCod,
+		  QstInd,
+		  AnsInd);
   }
 
 /*****************************************************************************/
@@ -4371,11 +4398,12 @@ static unsigned Mch_GetNumUsrsWhoHavePlayedMch (long MchCod)
    /***** Get number of users who have played the match
           (users who have a result for this match, even blank result)
           from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of users who have played a match",
-			     "SELECT COUNT(*) FROM mch_results"
-			     " WHERE MchCod=%ld",
-			     MchCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users who have played a match",
+		  "SELECT COUNT(*)"
+		   " FROM mch_results"
+		  " WHERE MchCod=%ld",
+		  MchCod);
   }
 
 /*****************************************************************************/

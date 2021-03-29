@@ -402,14 +402,16 @@ static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games,long GamCod)
 
    /***** Get all users who have answered any match question in this game *****/
    NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in game",
-			     "SELECT users.UsrCod FROM"
-			     " (SELECT DISTINCT mch_results.UsrCod AS UsrCod"	// row[0]
-			     " FROM mch_results,mch_matches,gam_games"
-			     " WHERE mch_matches.GamCod=%ld"
-			     " AND mch_matches.MchCod=mch_results.MchCod"
-			     " AND mch_matches.GamCod=gam_games.GamCod"
-			     " AND gam_games.CrsCod=%ld)"			// Extra check
-			     " AS users,usr_data"
+			     "SELECT users.UsrCod"	// row[0]
+			      " FROM (SELECT DISTINCT mch_results.UsrCod AS UsrCod"
+				      " FROM mch_results,"
+				            "mch_matches,"
+				            "gam_games"
+				     " WHERE mch_matches.GamCod=%ld"
+				       " AND mch_matches.MchCod=mch_results.MchCod"
+				       " AND mch_matches.GamCod=gam_games.GamCod"
+				       " AND gam_games.CrsCod=%ld) AS users,"		// Extra check
+				     "usr_data"
 			     " WHERE users.UsrCod=usr_data.UsrCod"
 			     " ORDER BY usr_data.Surname1,"
 			               "usr_data.Surname2,"
@@ -496,14 +498,16 @@ static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod)
 
    /***** Get all users who have answered any match question in this game *****/
    NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in match",
-			     "SELECT users.UsrCod FROM"
-			     " (SELECT mch_results.UsrCod AS UsrCod"	// row[0]
-			     " FROM mch_results,mch_matches,gam_games"
-			     " WHERE mch_results.MchCod=%ld"
-			     " AND mch_results.MchCod=mch_matches.MchCod"
-			     " AND mch_matches.GamCod=gam_games.GamCod"
-			     " AND gam_games.CrsCod=%ld)"		// Extra check
-			     " AS users,usr_data"
+			     "SELECT users.UsrCod"
+			      " FROM (SELECT mch_results.UsrCod AS UsrCod"	// row[0]
+				      " FROM mch_results,"
+				            "mch_matches,"
+				            "gam_games"
+				     " WHERE mch_results.MchCod=%ld"
+				       " AND mch_results.MchCod=mch_matches.MchCod"
+				       " AND mch_matches.GamCod=gam_games.GamCod"
+				       " AND gam_games.CrsCod=%ld) AS users,"	// Extra check
+				    "usr_data"
 			     " WHERE users.UsrCod=usr_data.UsrCod"
 			     " ORDER BY usr_data.Surname1,"
 			               "usr_data.Surname2,"
@@ -850,15 +854,17 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
    /***** Make database query *****/
    NumResults =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches results",
-			      "SELECT mch_results.MchCod"			// row[0]
-			      " FROM mch_results,mch_matches,gam_games"
+			      "SELECT mch_results.MchCod"	// row[0]
+			       " FROM mch_results,"
+			             "mch_matches,"
+			             "gam_games"
 			      " WHERE mch_results.UsrCod=%ld"
-			      "%s"	// Match subquery
-			      " AND mch_results.MchCod=mch_matches.MchCod"
-			      "%s"	// Games subquery
-			      " AND mch_matches.GamCod=gam_games.GamCod"
-                              "%s"	// Hidden games subquery
-			      " AND gam_games.CrsCod=%ld"			// Extra check
+			         "%s"	// Match subquery
+			        " AND mch_results.MchCod=mch_matches.MchCod"
+			        "%s"	// Games subquery
+			        " AND mch_matches.GamCod=gam_games.GamCod"
+                                "%s"	// Hidden games subquery
+			        " AND gam_games.CrsCod=%ld"	// Extra check
 			      " ORDER BY mch_matches.Title",
 			      UsrDat->UsrCod,
 			      MchSubQuery,

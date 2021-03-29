@@ -121,8 +121,11 @@ bool Nck_GetNicknameFromUsrCod (long UsrCod,
 
    /***** Get current (last updated) user's nickname from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get nickname",
-		       "SELECT Nickname FROM usr_nicknames"
-		       " WHERE UsrCod=%ld ORDER BY CreatTime DESC LIMIT 1",
+		       "SELECT Nickname"
+		        " FROM usr_nicknames"
+		       " WHERE UsrCod=%ld"
+		       " ORDER BY CreatTime DESC"
+		       " LIMIT 1",
 		       UsrCod))
      {
       /* Get nickname */
@@ -166,9 +169,10 @@ long Nck_GetUsrCodFromNickname (const char *Nickname)
 	 /* Check if user code from table usr_nicknames is also in table usr_data */
 	 if (DB_QuerySELECT (&mysql_res,"can not get user's code",
 			     "SELECT usr_nicknames.UsrCod"
-			     " FROM usr_nicknames,usr_data"
+			      " FROM usr_nicknames,"
+			            "usr_data"
 			     " WHERE usr_nicknames.Nickname='%s'"
-			     " AND usr_nicknames.UsrCod=usr_data.UsrCod",
+			       " AND usr_nicknames.UsrCod=usr_data.UsrCod",
 			     NickWithoutArr))
 	   {
 	    /* Get row */
@@ -237,7 +241,8 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
    /***** Get my nicknames *****/
    NumNicks =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get nicknames of a user",
-			      "SELECT Nickname FROM usr_nicknames"
+			      "SELECT Nickname"
+			       " FROM usr_nicknames"
 			      " WHERE UsrCod=%ld"
 			      " ORDER BY CreatTime DESC",
 			      UsrDat->UsrCod);
@@ -577,14 +582,20 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
         {
          /***** Check if the new nickname matches any of my old nicknames *****/
          if (!DB_QueryCOUNT ("can not check if nickname already existed",
-			     "SELECT COUNT(*) FROM usr_nicknames"
-			     " WHERE UsrCod=%ld AND Nickname='%s'",
-			     UsrDat->UsrCod,NewNickWithoutArr))	// No matches
+			     "SELECT COUNT(*)"
+			      " FROM usr_nicknames"
+			     " WHERE UsrCod=%ld"
+			       " AND Nickname='%s'",
+			     UsrDat->UsrCod,
+			     NewNickWithoutArr))	// No matches
             /***** Check if the new nickname matches any of the nicknames of other users *****/
             if (DB_QueryCOUNT ("can not check if nickname already existed",
-        		       "SELECT COUNT(*) FROM usr_nicknames"
-			       " WHERE Nickname='%s' AND UsrCod<>%ld",
-			       NewNickWithoutArr,UsrDat->UsrCod))	// A nickname of another user is the same that user's nickname
+        		       "SELECT COUNT(*)"
+        		        " FROM usr_nicknames"
+			       " WHERE Nickname='%s'"
+			         " AND UsrCod<>%ld",
+			       NewNickWithoutArr,
+			       UsrDat->UsrCod))	// A nickname of another user is the same that user's nickname
                Ale_CreateAlert (Ale_WARNING,Nck_NICKNAME_SECTION_ID,
         	                Txt_The_nickname_X_had_been_registered_by_another_user,
                                 NewNickWithoutArr);

@@ -207,9 +207,9 @@ static void SysCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
 			"AVG(Longitude),"				// row[1]
 			"GREATEST(MAX(Latitude)-MIN(Latitude),"
 				 "MAX(Longitude)-MIN(Longitude))"	// row[2]
-		 " FROM ctr_centers"
+		  " FROM ctr_centers"
 		 " WHERE Latitude<>0"
-		 " AND Longitude<>0") < 0)
+		   " AND Longitude<>0") < 0)
       Lay_NotEnoughMemoryExit ();
    Map_GetCoordAndZoom (Coord,Zoom,Query);
    free (Query);
@@ -256,9 +256,9 @@ static void SysCfg_Map (void)
    NumCtrs = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get centers with coordinates",
 		   "SELECT CtrCod"	// row[0]
-		   " FROM ctr_centers"
+		    " FROM ctr_centers"
 		   " WHERE ctr_centers.Latitude<>0"
-		   " AND ctr_centers.Longitude<>0");
+		     " AND ctr_centers.Longitude<>0");
 
    /* Add a marker and a popup for each center */
    for (NumCtr = 0;

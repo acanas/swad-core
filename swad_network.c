@@ -225,9 +225,12 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
      {
       /***** Check if exists the web / social network for this user *****/
       if (DB_QuerySELECT (&mysql_res,"can not get user's web / social network",
-	                  "SELECT URL FROM usr_webs"
-			  " WHERE UsrCod=%ld AND Web='%s'",
-			  UsrDat->UsrCod,Net_WebsAndSocialNetworksDB[NumURL]))
+	                  "SELECT URL"
+	                   " FROM usr_webs"
+			  " WHERE UsrCod=%ld"
+			    " AND Web='%s'",
+			  UsrDat->UsrCod,
+			  Net_WebsAndSocialNetworksDB[NumURL]))
 	{
 	 /* Get URL */
 	 row = mysql_fetch_row (mysql_res);
@@ -301,8 +304,10 @@ void Net_ShowFormMyWebsAndSocialNets (void)
      {
       /***** Get user's web / social network from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get user's web / social network",
-			  "SELECT URL FROM usr_webs"
-			  " WHERE UsrCod=%ld AND Web='%s'",
+			  "SELECT URL"
+			   " FROM usr_webs"
+			  " WHERE UsrCod=%ld"
+			   " AND Web='%s'",
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
 			  Net_WebsAndSocialNetworksDB[NumURL]))
 	{
@@ -459,9 +464,10 @@ void Net_ShowWebAndSocialNetworksStats (void)
 				    " with webs / social networks",
 			 "SELECT Web,"					// row[0]
 			        "COUNT(*) AS N"				// row[1]
-			 " FROM usr_webs"
+			  " FROM usr_webs"
 			 " GROUP BY Web"
-			 " ORDER BY N DESC,Web");
+			 " ORDER BY N DESC,"
+			           "Web");
          break;
       case Hie_Lvl_CTY:
          NumRows = (unsigned)

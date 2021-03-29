@@ -200,13 +200,16 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
       return;
 
    /***** Get fields of records in a course from database *****/
-   Gbl.Crs.Records.LstFields.Num =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get fields of records"
-					 " in a course",
-			      "SELECT FieldCod,FieldName,NumLines,Visibility"
-			      " FROM crs_record_fields"
-			      " WHERE CrsCod=%ld ORDER BY FieldName",
-			      Gbl.Hierarchy.Crs.CrsCod);
+   Gbl.Crs.Records.LstFields.Num = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get fields of records in a course",
+		   "SELECT FieldCod,"
+			  "FieldName,"
+			  "NumLines,"
+			  "Visibility"
+		    " FROM crs_record_fields"
+		   " WHERE CrsCod=%ld"
+		   " ORDER BY FieldName",
+		   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Get the fields of records *****/
    if (Gbl.Crs.Records.LstFields.Num)
@@ -520,9 +523,12 @@ unsigned long Rec_GetAllFieldsInCurrCrs (MYSQL_RES **mysql_res)
    /***** Get fields of records in current course from database *****/
    return DB_QuerySELECT (mysql_res,"can not get fields of records"
 				    " in a course",
-			  "SELECT FieldCod,FieldName,Visibility"
-			  " FROM crs_record_fields"
-			  " WHERE CrsCod=%ld ORDER BY FieldName",
+			  "SELECT FieldCod,"	// row[0]
+			         "FieldName,"	// row[1]
+			         "Visibility"	// row[2]
+			   " FROM crs_record_fields"
+			  " WHERE CrsCod=%ld"
+			  " ORDER BY FieldName",
 			  Gbl.Hierarchy.Crs.CrsCod);
   }
 
@@ -589,7 +595,8 @@ unsigned Rec_CountNumRecordsInCurrCrsWithField (long FieldCod)
    return
    (unsigned) DB_QueryCOUNT ("can not get number of records"
 			     " with a given field not empty in a course",
-			     "SELECT COUNT(*) FROM crs_records"
+			     "SELECT COUNT(*)"
+			     v" FROM crs_records"
 			     " WHERE FieldCod=%ld",
 			     FieldCod);
   }
@@ -678,9 +685,12 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
    /***** Get a field of a record in a course from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get a field of a record"
 					" in a course",
-			     "SELECT FieldName,NumLines,Visibility"
-			     " FROM crs_record_fields"
-			     " WHERE CrsCod=%ld AND FieldCod=%ld",
+			     "SELECT FieldName,"	// row[0]
+			            "NumLines,"		// row[1]
+			            "Visibility"	// row[2]
+			      " FROM crs_record_fields"
+			     " WHERE CrsCod=%ld"
+			       " AND FieldCod=%ld",
 			     Gbl.Hierarchy.Crs.CrsCod,FieldCod);
 
    /***** Count number of rows in result *****/
@@ -1846,8 +1856,10 @@ unsigned long Rec_GetFieldFromCrsRecord (long UsrCod,long FieldCod,MYSQL_RES **m
    /***** Get the text of a field of a record from database *****/
    return DB_QuerySELECT (mysql_res,"can not get the text"
 				    " of a field of a record",
-			  "SELECT Txt FROM crs_records"
-			  " WHERE FieldCod=%ld AND UsrCod=%ld",
+			  "SELECT Txt"
+			   " FROM crs_records"
+			  " WHERE FieldCod=%ld"
+			    " AND UsrCod=%ld",
 			  FieldCod,UsrCod);
   }
 
@@ -1930,8 +1942,11 @@ void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Crs_Course *Crs)
    /***** Remove text of the field of record course *****/
    DB_QueryDELETE ("can not remove user's record in a course",
 		   "DELETE FROM crs_records"
-		   " WHERE UsrCod=%ld AND FieldCod IN"
-		   " (SELECT FieldCod FROM crs_record_fields WHERE CrsCod=%ld)",
+		   " WHERE UsrCod=%ld"
+		     " AND FieldCod IN"
+		         " (SELECT FieldCod"
+		            " FROM crs_record_fields"
+		           " WHERE CrsCod=%ld)",
                    UsrCod,Crs->CrsCod);
   }
 

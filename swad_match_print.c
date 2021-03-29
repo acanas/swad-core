@@ -101,17 +101,20 @@ static void MchPrn_UpdateMyMatchPrintInDB (struct MchPrn_Print *Print)
   {
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    if (DB_QueryCOUNT ("can not get if match result exists",
-		      "SELECT COUNT(*) FROM mch_results"
-		      " WHERE MchCod=%ld AND UsrCod=%ld",
+		      "SELECT COUNT(*)"
+		       " FROM mch_results"
+		      " WHERE MchCod=%ld"
+		        " AND UsrCod=%ld",
 		      Print->MchCod,Print->UsrCod))	// Match print exists
       /* Update result */
       DB_QueryUPDATE ("can not update match result",
 		       "UPDATE mch_results"
-		       " SET EndTime=NOW(),"
-			    "NumQsts=%u,"
-			    "NumQstsNotBlank=%u,"
-			    "Score='%.15lg'"
-		       " WHERE MchCod=%ld AND UsrCod=%ld",
+		         " SET EndTime=NOW(),"
+			      "NumQsts=%u,"
+			      "NumQstsNotBlank=%u,"
+			      "Score='%.15lg'"
+		       " WHERE MchCod=%ld"
+		         " AND UsrCod=%ld",
 		       Print->NumQsts.All,
 		       Print->NumQsts.NotBlank,
 		       Print->Score,
@@ -153,12 +156,14 @@ void MchPrn_GetMatchPrintDataByMchCodAndUsrCod (struct MchPrn_Print *Print)
 		              "mch_results.NumQsts,"			// row[3]
 		              "mch_results.NumQstsNotBlank,"		// row[4]
 		              "mch_results.Score"			// row[5]
-		       " FROM mch_results,mch_matches,gam_games"
+		        " FROM mch_results,"
+		              "mch_matches,"
+		              "gam_games"
 		       " WHERE mch_results.MchCod=%ld"
-		       " AND mch_results.UsrCod=%ld"
-		       " AND mch_results.MchCod=mch_matches.MchCod"
-		       " AND mch_matches.GamCod=gam_games.GamCod"
-		       " AND gam_games.CrsCod=%ld",	// Extra check
+		         " AND mch_results.UsrCod=%ld"
+		         " AND mch_results.MchCod=mch_matches.MchCod"
+		         " AND mch_matches.GamCod=gam_games.GamCod"
+		         " AND gam_games.CrsCod=%ld",	// Extra check
 		       Print->MchCod,Print->UsrCod,
 		       Gbl.Hierarchy.Crs.CrsCod) == 1)
      {

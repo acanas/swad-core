@@ -337,17 +337,19 @@ void Not_RemoveNotice (void)
 		           "CreatTime,"
 		           "Content,"
 		           "NumNotif"
-		    " FROM not_notices"
-		   " WHERE NotCod=%ld"
-		     " AND CrsCod=%ld",
-                   NotCod,Gbl.Hierarchy.Crs.CrsCod);
+		     " FROM not_notices"
+		    " WHERE NotCod=%ld"
+		      " AND CrsCod=%ld",
+                   NotCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
 
    /* Remove notice */
    DB_QueryDELETE ("can not remove notice",
 		   "DELETE FROM not_notices"
 		   " WHERE NotCod=%ld"
 		     " AND CrsCod=%ld",
-                   NotCod,Gbl.Hierarchy.Crs.CrsCod);
+                   NotCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_NOTICE,NotCod);
@@ -584,8 +586,10 @@ static void Not_GetDataAndShowNotice (long NotCod)
 			      "Content,"			// row[2]
 			      "Status"				// row[3]
 		        " FROM not_notices"
-		       " WHERE NotCod=%ld AND CrsCod=%ld",
-		       NotCod,Gbl.Hierarchy.Crs.CrsCod))
+		       " WHERE NotCod=%ld"
+		         " AND CrsCod=%ld",
+		       NotCod,
+		       Gbl.Hierarchy.Crs.CrsCod))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -958,17 +962,17 @@ unsigned Not_GetNumNoticesDeleted (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(NumNotif)"			// row[1]
-			 " FROM not_deleted");
+			  " FROM not_deleted");
          break;
       case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(not_deleted.NumNotif)"	// row[1]
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "not_deleted"
+			  " FROM ins_instits,"
+			        "ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "not_deleted"
 			 " WHERE ins_instits.CtyCod=%ld"
 			   " AND ins_instits.InsCod=ctr_centers.InsCod"
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"

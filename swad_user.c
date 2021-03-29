@@ -463,7 +463,8 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
      {
       /***** Get user's code from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get user's code",
-				"SELECT UsrCod FROM usr_data"
+				"SELECT UsrCod"
+				 " FROM usr_data"
 				" WHERE EncryptedUsrCod='%s'",
 				UsrDat->EnUsrCod);
       if (NumRows != 1)
@@ -528,8 +529,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
 					  "NotifNtfEvents,"	// row[21]
 					  "EmailNtfEvents"	// row[22]
 				    " FROM usr_data"
-				    " WHERE UsrCod=%ld",
-				    UsrDat->UsrCod);
+				   " WHERE UsrCod=%ld",
+				   UsrDat->UsrCod);
 	 break;
       case Usr_GET_PREFS:
       default:
@@ -570,8 +571,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
 					  "SideCols,"		// row[29]
 					  "ThirdPartyCookies"	// row[30]
 				    " FROM usr_data"
-				    " WHERE UsrCod=%ld",
-				    UsrDat->UsrCod);
+				   " WHERE UsrCod=%ld",
+				   UsrDat->UsrCod);
          break;
      }
 
@@ -755,7 +756,8 @@ static void Usr_GetMyLastData (void)
 				    "LastRole,"			   // row[4]
 				    "UNIX_TIMESTAMP(LastTime),"    // row[5]
 				    "UNIX_TIMESTAMP(LastAccNotif)" // row[6]
-			     " FROM usr_last WHERE UsrCod=%ld",
+			      " FROM usr_last"
+			     " WHERE UsrCod=%ld",
 			     Gbl.Usrs.Me.UsrDat.UsrCod);
    if (NumRows == 0)
      {
@@ -906,9 +908,14 @@ bool Usr_CheckIfUsrIsAdm (long UsrCod,Hie_Lvl_Level_t Scope,long Cod)
   {
    /***** Get if a user is administrator of a degree from database *****/
    return (DB_QueryCOUNT ("can not check if a user is administrator",
-			  "SELECT COUNT(*) FROM usr_admins"
-			  " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
-			  UsrCod,Sco_GetDBStrFromScope (Scope),Cod) != 0);
+			  "SELECT COUNT(*)"
+			   " FROM usr_admins"
+			  " WHERE UsrCod=%ld"
+			    " AND Scope='%s'"
+			    " AND Cod=%ld",
+			  UsrCod,
+			  Sco_GetDBStrFromScope (Scope),
+			  Cod) != 0);
   }
 
 /*****************************************************************************/
@@ -935,9 +942,12 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
    Gbl.Cache.UsrIsSuperuser.UsrCod = UsrCod;
    Gbl.Cache.UsrIsSuperuser.IsSuperuser =
       (DB_QueryCOUNT ("can not check if a user is superuser",
-		      "SELECT COUNT(*) FROM usr_admins"
-		      " WHERE UsrCod=%ld AND Scope='%s'",
-		      UsrCod,Sco_GetDBStrFromScope (Hie_Lvl_SYS)) != 0);
+		      "SELECT COUNT(*)"
+		       " FROM usr_admins"
+		      " WHERE UsrCod=%ld"
+		        " AND Scope='%s'",
+		      UsrCod,
+		      Sco_GetDBStrFromScope (Hie_Lvl_SYS)) != 0);
    return Gbl.Cache.UsrIsSuperuser.IsSuperuser;
   }
 
@@ -1063,7 +1073,8 @@ unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role)
 		   " FROM crs_users"
 		  " WHERE UsrCod=%ld"
 		    " AND Role=%u",
-		  UsrCod,(unsigned) Role);
+		  UsrCod,
+		  (unsigned) Role);
   }
 
 /*****************************************************************************/
@@ -1080,7 +1091,8 @@ unsigned Usr_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role)
 		  " WHERE UsrCod=%ld"
 		    " AND Role=%u"
 		    " AND Accepted='N'",
-		  UsrCod,(unsigned) Role);
+		  UsrCod,
+		  (unsigned) Role);
   }
 
 /*****************************************************************************/
@@ -1131,7 +1143,7 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 	     " SELECT CrsCod"
 	       " FROM crs_users"
 	      " WHERE UsrCod=%ld"
-	     "%s",
+	         "%s",
 	     UsrCod,SubQueryRole);
 
    /***** Get the number of students/teachers in a course from database ******/
@@ -1149,7 +1161,8 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
    NumUsrs =
    (unsigned) DB_QueryCOUNT ("can not get number of users",
 			     "SELECT COUNT(DISTINCT crs_users.UsrCod)"
-			      " FROM crs_users,usr_courses_tmp"
+			      " FROM crs_users,"
+			            "usr_courses_tmp"
 			     " WHERE crs_users.CrsCod=usr_courses_tmp.CrsCod"
 			       " AND crs_users.Role IN (%s)",
 			     OthersRolesStr);
@@ -1753,7 +1766,9 @@ void Usr_GetMyCourses (void)
 	 NumCrss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get which courses"
 					       " you belong to",
-				    "SELECT CrsCod,Role,DegCod"
+				    "SELECT CrsCod,"
+				           "Role,"
+				           "DegCod"
 				    " FROM my_courses_tmp");
 	 for (NumCrs = 0;
 	      NumCrs < NumCrss;
@@ -2470,7 +2485,8 @@ bool Usr_ChkIfEncryptedUsrCodExists (const char EncryptedUsrCod[Cry_BYTES_ENCRYP
    /***** Get if an encrypted user's code already existed in database *****/
    return (DB_QueryCOUNT ("can not check if an encrypted user's code"
 			  " already existed",
-			  "SELECT COUNT(*) FROM usr_data"
+			  "SELECT COUNT(*)"
+			   " FROM usr_data"
 			  " WHERE EncryptedUsrCod='%s'",
 			  EncryptedUsrCod) != 0);
   }
@@ -3536,13 +3552,19 @@ void Usr_UpdateMyLastData (void)
   {
    /***** Check if it exists an entry for me *****/
    if (DB_QueryCOUNT ("can not get last user's click",
-		      "SELECT COUNT(*) FROM usr_last WHERE UsrCod=%ld",
+		      "SELECT COUNT(*)"
+		       " FROM usr_last"
+		      " WHERE UsrCod=%ld",
 		      Gbl.Usrs.Me.UsrDat.UsrCod))
       /***** Update my last accessed course, tab and time of click in database *****/
       // WhatToSearch, LastAccNotif remain unchanged
       DB_QueryUPDATE ("can not update last user's data",
 		      "UPDATE usr_last"
-		      " SET LastSco='%s',LastCod=%ld,LastAct=%ld,LastRole=%u,LastTime=NOW()"
+		        " SET LastSco='%s',"
+		             "LastCod=%ld,"
+		             "LastAct=%ld,"
+		             "LastRole=%u,"
+		             "LastTime=NOW()"
                       " WHERE UsrCod=%ld",
 		      Sco_GetDBStrFromScope (Gbl.Hierarchy.Level),
 		      Gbl.Hierarchy.Cod,
@@ -4167,7 +4189,8 @@ unsigned Usr_GetNumUsrsWhoDontClaimToBelongToAnyCty (void)
                    from database *****/
    Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs =
    (unsigned) DB_QueryCOUNT ("can not get number of users",
-			     "SELECT COUNT(UsrCod) FROM usr_data"
+			     "SELECT COUNT(UsrCod)"
+			      " FROM usr_data"
 			     " WHERE CtyCod<0");
    Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid = true;
    FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,Hie_Lvl_CTY,-1L,
@@ -4207,7 +4230,8 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToAnotherCty (void)
                    from database *****/
    Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs =
    (unsigned) DB_QueryCOUNT ("can not get number of users",
-			     "SELECT COUNT(UsrCod) FROM usr_data"
+			     "SELECT COUNT(UsrCod)"
+			      " FROM usr_data"
 			     " WHERE CtyCod=0");
    Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid = true;
    FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,Hie_Lvl_CTY,0,
@@ -4262,7 +4286,8 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty)
    Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs =
    Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs =
    (unsigned) DB_QueryCOUNT ("can not get number of users",
-			     "SELECT COUNT(UsrCod) FROM usr_data"
+			     "SELECT COUNT(UsrCod)"
+			      " FROM usr_data"
 			     " WHERE CtyCod=%ld",
 			     Cty->CtyCod);
    Cty->NumUsrsWhoClaimToBelongToCty.Valid = true;
@@ -4318,7 +4343,8 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
    Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs =
    Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs =
    (unsigned) DB_QueryCOUNT ("can not get number of users",
-			     "SELECT COUNT(UsrCod) FROM usr_data"
+			     "SELECT COUNT(UsrCod)"
+			      " FROM usr_data"
 			     " WHERE InsCod=%ld",
 			     Ins->InsCod);
    Ins->NumUsrsWhoClaimToBelongToIns.Valid = true;
@@ -4374,7 +4400,8 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr)
    Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs =
    Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs =
    (unsigned) DB_QueryCOUNT ("can not get number of users",
-			     "SELECT COUNT(UsrCod) FROM usr_data"
+			     "SELECT COUNT(UsrCod)"
+			      " FROM usr_data"
 			     " WHERE CtrCod=%ld",
 			     Ctr->CtrCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTR,Hie_Lvl_CTR,Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod,
@@ -5089,7 +5116,9 @@ void Usr_CreateTmpTableAndSearchCandidateUsrs (const char SearchQuery[Sch_MAX_BY
    */
    sprintf (Query,"CREATE TEMPORARY TABLE candidate_users"
 		  " (UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
-		  " SELECT UsrCod FROM usr_data WHERE %s",
+		  " SELECT UsrCod"
+		    " FROM usr_data"
+		   " WHERE %s",
 	    SearchQuery);
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create temporary table");
@@ -5151,10 +5180,10 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
       case Hie_Lvl_SYS:	// All admins
 	 DB_BuildQuery (&Query,
 			"SELECT %s"
-			" FROM usr_data"
+			 " FROM usr_data"
 			" WHERE UsrCod IN "
-			"(SELECT DISTINCT UsrCod"
-			" FROM usr_admins)"
+			       "(SELECT DISTINCT UsrCod"
+				 " FROM usr_admins)"
 			" ORDER BY Surname1,"
 			          "Surname2,"
 			          "FirstName,"
@@ -5165,37 +5194,38 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
 				// and admins of the institutions, centers and degrees in the current country
          DB_BuildQuery (&Query,
                         "SELECT %s"
-                        " FROM usr_data"
+                         " FROM usr_data"
 			" WHERE UsrCod IN "
-			"(SELECT UsrCod FROM usr_admins"
-			" WHERE Scope='%s')"
-			" OR UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s')"
+			   " OR UsrCod IN "
+			       "(SELECT usr_admins.UsrCod"
+			         " FROM usr_admins,"
+				       "ins_instits"
+				" WHERE usr_admins.Scope='%s'"
+			          " AND usr_admins.Cod=ins_instits.InsCod"
+			          " AND ins_instits.CtyCod=%ld)"
+			   " OR UsrCod IN "
 			"(SELECT usr_admins.UsrCod"
-			" FROM usr_admins,"
-			      "ins_instits"
-			" WHERE usr_admins.Scope='%s'"
-			" AND usr_admins.Cod=ins_instits.InsCod"
-			" AND ins_instits.CtyCod=%ld)"
-			" OR UsrCod IN "
-			"(SELECT usr_admins.UsrCod"
-			" FROM usr_admins,"
-			      "ctr_centers,"
-			      "ins_instits"
-			" WHERE usr_admins.Scope='%s'"
-			" AND usr_admins.Cod=ctr_centers.CtrCod"
-			" AND ctr_centers.InsCod=ins_instits.InsCod"
-			" AND ins_instits.CtyCod=%ld)"
-			" OR UsrCod IN "
-			"(SELECT usr_admins.UsrCod"
-			" FROM usr_admins,"
-			      "deg_degrees,"
-			      "ctr_centers,"
-			      "ins_instits"
-			" WHERE usr_admins.Scope='%s'"
-			" AND usr_admins.Cod=deg_degrees.DegCod"
-			" AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			" AND ctr_centers.InsCod=ins_instits.InsCod"
-			" AND ins_instits.CtyCod=%ld)"
+			  " FROM usr_admins,"
+			        "ctr_centers,"
+			        "ins_instits"
+			 " WHERE usr_admins.Scope='%s'"
+			   " AND usr_admins.Cod=ctr_centers.CtrCod"
+			   " AND ctr_centers.InsCod=ins_instits.InsCod"
+			   " AND ins_instits.CtyCod=%ld)"
+			    " OR UsrCod IN "
+				"(SELECT usr_admins.UsrCod"
+				  " FROM usr_admins,"
+				        "deg_degrees,"
+					"ctr_centers,"
+					"ins_instits"
+				 " WHERE usr_admins.Scope='%s'"
+				   " AND usr_admins.Cod=deg_degrees.DegCod"
+				   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+				   " AND ctr_centers.InsCod=ins_instits.InsCod"
+				   " AND ins_instits.CtyCod=%ld)"
 			" ORDER BY Surname1,"
 			          "Surname2,"
 			          "FirstName,"
@@ -5211,31 +5241,32 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
 				// and admins of the centers and degrees in the current institution
          DB_BuildQuery (&Query,
                         "SELECT %s"
-                        " FROM usr_data"
+                         " FROM usr_data"
 			" WHERE UsrCod IN "
-			"(SELECT UsrCod"
-			" FROM usr_admins"
-			" WHERE Scope='%s')"
-			" OR UsrCod IN "
-			"(SELECT UsrCod"
-			" FROM usr_admins"
-			" WHERE Scope='%s' AND Cod=%ld)"
-			" OR UsrCod IN "
-			"(SELECT usr_admins.UsrCod"
-			" FROM usr_admins,"
-			      "ctr_centers"
-			" WHERE usr_admins.Scope='%s'"
-			" AND usr_admins.Cod=ctr_centers.CtrCod"
-			" AND ctr_centers.InsCod=%ld)"
-			" OR UsrCod IN "
-			"(SELECT usr_admins.UsrCod"
-			" FROM usr_admins,"
-			      "deg_degrees,"
-			      "ctr_centers"
-			" WHERE usr_admins.Scope='%s'"
-			" AND usr_admins.Cod=deg_degrees.DegCod"
-			" AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			" AND ctr_centers.InsCod=%ld)"
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s')"
+			   " OR UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s'"
+			          " AND Cod=%ld)"
+			   " OR UsrCod IN "
+			       "(SELECT usr_admins.UsrCod"
+			         " FROM usr_admins,"
+				       "ctr_centers"
+			        " WHERE usr_admins.Scope='%s'"
+			          " AND usr_admins.Cod=ctr_centers.CtrCod"
+			          " AND ctr_centers.InsCod=%ld)"
+			   " OR UsrCod IN "
+			       "(SELECT usr_admins.UsrCod"
+			         " FROM usr_admins,"
+				       "deg_degrees,"
+				       "ctr_centers"
+			        " WHERE usr_admins.Scope='%s'"
+			          " AND usr_admins.Cod=deg_degrees.DegCod"
+			          " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			          " AND ctr_centers.InsCod=%ld)"
 			" ORDER BY Surname1,"
 			          "Surname2,"
 			          "FirstName,"
@@ -5252,26 +5283,28 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
 				// and admins of the degrees in the current center
 	 DB_BuildQuery (&Query,
 			"SELECT %s"
-			" FROM usr_data"
+			 " FROM usr_data"
 			" WHERE UsrCod IN "
-			"(SELECT UsrCod"
-			" FROM usr_admins"
-			" WHERE Scope='%s')"
-			" OR UsrCod IN "
-			"(SELECT UsrCod"
-			" FROM usr_admins"
-			" WHERE Scope='%s' AND Cod=%ld)"
-			" OR UsrCod IN "
-			"(SELECT UsrCod"
-			" FROM usr_admins"
-			" WHERE Scope='%s' AND Cod=%ld)"
-			" OR UsrCod IN "
-			"(SELECT usr_admins.UsrCod"
-			" FROM usr_admins,"
-			      "deg_degrees"
-			" WHERE usr_admins.Scope='%s'"
-			" AND usr_admins.Cod=deg_degrees.DegCod"
-			" AND deg_degrees.CtrCod=%ld)"
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s')"
+			   " OR UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s'"
+			          " AND Cod=%ld)"
+			   " OR UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s'"
+			          " AND Cod=%ld)"
+			   " OR UsrCod IN "
+			       "(SELECT usr_admins.UsrCod"
+			        " FROM usr_admins,"
+				      "deg_degrees"
+			       " WHERE usr_admins.Scope='%s'"
+			         " AND usr_admins.Cod=deg_degrees.DegCod"
+			         " AND deg_degrees.CtrCod=%ld)"
 			" ORDER BY Surname1,"
 			          "Surname2,"
 			          "FirstName,"
@@ -5286,23 +5319,26 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
 				// and admins of the current institution, center or degree
          DB_BuildQuery (&Query,
 			"SELECT %s"
-			" FROM usr_data"
+			 " FROM usr_data"
 			" WHERE UsrCod IN "
-			"(SELECT UsrCod"
-			" FROM usr_admins"
-			" WHERE Scope='%s')"
-			" OR UsrCod IN "
-			"(SELECT UsrCod"
-			" FROM usr_admins"
-			" WHERE Scope='%s' AND Cod=%ld)"
-			" OR UsrCod IN "
-			"(SELECT UsrCod"
-			" FROM usr_admins"
-			" WHERE Scope='%s' AND Cod=%ld)"
-			" OR UsrCod IN "
-			"(SELECT UsrCod"
-			" FROM usr_admins"
-			" WHERE Scope='%s' AND Cod=%ld)"
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s')"
+			   " OR UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s'"
+			          " AND Cod=%ld)"
+			   " OR UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s'"
+			          " AND Cod=%ld)"
+			   " OR UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s'"
+			          " AND Cod=%ld)"
 			" ORDER BY Surname1,"
 			          "Surname2,"
 			          "FirstName,"
@@ -5375,7 +5411,9 @@ static void Usr_GetGstsLst (Hie_Lvl_Level_t Scope)
 	 DB_BuildQuery (&Query,
 			"SELECT %s"
 			 " FROM usr_data"
-			" WHERE (CtyCod=%ld OR InsCtyCod=%ld)"
+			" WHERE (CtyCod=%ld"
+			       " OR"
+			       " InsCtyCod=%ld)"
 			  " AND UsrCod NOT IN"
 			      " (SELECT UsrCod"
 			         " FROM crs_users)"
@@ -9313,7 +9351,8 @@ bool Usr_ChkIfUsrCodExists (long UsrCod)
 
    /***** Get if a user exists in database *****/
    return (DB_QueryCOUNT ("can not check if a user exists",
-			  "SELECT COUNT(*) FROM usr_data"
+			  "SELECT COUNT(*)"
+			   " FROM usr_data"
 			  " WHERE UsrCod=%ld",
 			  UsrCod) != 0);
   }
@@ -9361,7 +9400,8 @@ unsigned Usr_GetTotalNumberOfUsersInPlatform (void)
    /***** Get number of users from database *****/
    return
    (unsigned) DB_QueryCOUNT ("can not get number of users",
-			     "SELECT COUNT(UsrCod) FROM usr_data");
+			     "SELECT COUNT(UsrCod)"
+			      " FROM usr_data");
   }
 
 /*****************************************************************************/
@@ -10060,7 +10100,8 @@ double Usr_GetCachedNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Rol
 bool Usr_CheckIfUsrBanned (long UsrCod)
   {
    return (DB_QueryCOUNT ("can not check if user is banned",
-			  "SELECT COUNT(*) FROM usr_banned"
+			  "SELECT COUNT(*)"
+			   " FROM usr_banned"
 			  " WHERE UsrCod=%ld",
 			  UsrCod) != 0);
   }

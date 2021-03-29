@@ -1354,12 +1354,12 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 					      " to be notified",
 				   "SELECT DISTINCT(PublisherCod)"	// row[0]
 				    " FROM tml_pubs"
-				   " WHERE NotCod="
-				   "(SELECT NotCod"
-				     " FROM tml_pubs"
-				    " WHERE PubCod=%ld)"
-				      " AND PublisherCod<>%ld",
-				   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
+				   " WHERE NotCod=(SELECT NotCod"
+				                   " FROM tml_pubs"
+				                  " WHERE PubCod=%ld)"
+				                    " AND PublisherCod<>%ld",
+				   Cod,
+				   Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_TL_FAV:		// New favourite to one of my social notes or comments
       case Ntf_EVENT_TL_SHARE:		// New sharing of one of my social notes
@@ -1404,11 +1404,12 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 					      " to be notified",
 				   "SELECT DISTINCT(UsrCod)"	// row[0]
 				    " FROM for_posts"
-				   " WHERE ThrCod = (SELECT ThrCod"
-				                     " FROM for_posts"
-				                    " WHERE PstCod=%ld)"
+				   " WHERE ThrCod=(SELECT ThrCod"
+				                   " FROM for_posts"
+				                  " WHERE PstCod=%ld)"
 				   " AND UsrCod<>%ld",
-				   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
+				   Cod,
+				   Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_MESSAGE:		// This function should not be called in this case
 	 return 0;

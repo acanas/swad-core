@@ -464,9 +464,9 @@ void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc)
      {
       /***** Get data of a place from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a place",
-			        "(SELECT plc_places.ShortName,"
-					"plc_places.FullName,"
-					"COUNT(*)"
+			        "(SELECT plc_places.ShortName,"	// row[0]
+					"plc_places.FullName,"	// row[1]
+					"COUNT(*)"		// row[2]
 				  " FROM plc_places,"
 				        "ctr_centers"
 				 " WHERE plc_places.PlcCod=%ld"
@@ -474,9 +474,9 @@ void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc)
 				   " AND ctr_centers.PlcCod=%ld"
 				 " GROUP BY plc_places.PlcCod)"
 				" UNION "
-				"(SELECT ShortName,"
-					"FullName,"
-					"0"
+				"(SELECT ShortName,"		// row[0]
+					"FullName,"		// row[1]
+					"0"			// row[2]
 				  " FROM plc_places"
 				 " WHERE PlcCod=%ld"
 				   " AND PlcCod NOT IN"

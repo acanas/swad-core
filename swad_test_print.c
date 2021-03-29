@@ -875,7 +875,7 @@ static void TstPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question)
    Question->Answer.NumOptions =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
 			      "SELECT Answer"		// row[0]
-			      " FROM tst_answers"
+			       " FROM tst_answers"
 			      " WHERE QstCod=%ld",
 			      Question->QstCod);
 
@@ -902,7 +902,7 @@ static void TstPrn_GetCorrectFltAnswerFromDB (struct Tst_Question *Question)
    Question->Answer.NumOptions =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
 			      "SELECT Answer"		// row[0]
-			      " FROM tst_answers"
+			       " FROM tst_answers"
 			      " WHERE QstCod=%ld",
 			      Question->QstCod);
 
@@ -940,7 +940,7 @@ static void TstPrn_GetCorrectTF_AnswerFromDB (struct Tst_Question *Question)
    Question->Answer.NumOptions =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
 			      "SELECT Answer"		// row[0]
-			      " FROM tst_answers"
+			       " FROM tst_answers"
 			      " WHERE QstCod=%ld",
 			      Question->QstCod);
 
@@ -965,7 +965,7 @@ static void TstPrn_GetCorrectChoAnswerFromDB (struct Tst_Question *Question)
    Question->Answer.NumOptions =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
 			      "SELECT Correct"		// row[0]
-			      " FROM tst_answers"
+			       " FROM tst_answers"
 			      " WHERE QstCod=%ld"
 			      " ORDER BY AnsInd",
 			      Question->QstCod);
@@ -994,7 +994,7 @@ static void TstPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question)
    Question->Answer.NumOptions =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
 			      "SELECT Answer"		// row[0]
-			      " FROM tst_answers"
+			       " FROM tst_answers"
 			      " WHERE QstCod=%ld",
 			      Question->QstCod);
 
@@ -2070,10 +2070,11 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
    NumPrints =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get test exams of a user",
 			      "SELECT ExaCod"			// row[0]
-			      " FROM tst_exams"
-			      " WHERE CrsCod=%ld AND UsrCod=%ld"
-			      " AND EndTime>=FROM_UNIXTIME(%ld)"
-			      " AND StartTime<=FROM_UNIXTIME(%ld)"
+			       " FROM tst_exams"
+			      " WHERE CrsCod=%ld"
+			        " AND UsrCod=%ld"
+			        " AND EndTime>=FROM_UNIXTIME(%ld)"
+			        " AND StartTime<=FROM_UNIXTIME(%ld)"
 			      " ORDER BY ExaCod",
 			      Gbl.Hierarchy.Crs.CrsCod,
 			      UsrDat->UsrCod,
@@ -2624,12 +2625,12 @@ static void TstPrn_ShowTagsPresentInAPrint (long ResCod)
 	     DB_QuerySELECT (&mysql_res,"can not get tags"
 					" present in a test exam",
 			     "SELECT tst_tags.TagTxt"	// row[0]
-			     " FROM"
-			     " (SELECT DISTINCT(tst_question_tags.TagCod)"
-			     " FROM tst_question_tags,tst_exam_questions"
-			     " WHERE tst_exam_questions.ExaCod=%ld"
-			     " AND tst_exam_questions.QstCod=tst_question_tags.QstCod)"
-			     " AS TagsCods,tst_tags"
+			      " FROM (SELECT DISTINCT(tst_question_tags.TagCod)"
+			              " FROM tst_question_tags,"
+			                    "tst_exam_questions"
+			             " WHERE tst_exam_questions.ExaCod=%ld"
+			               " AND tst_exam_questions.QstCod=tst_question_tags.QstCod) AS TagsCods,"
+			            "tst_tags"
 			     " WHERE TagsCods.TagCod=tst_tags.TagCod"
 			     " ORDER BY tst_tags.TagTxt",
 			     ResCod);
@@ -2697,8 +2698,9 @@ void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
 			      "Sent,"				// row[5]
 		              "AllowTeachers,"			// row[6]
 		              "Score"				// row[7]
-		       " FROM tst_exams"
-		       " WHERE ExaCod=%ld AND CrsCod=%ld",
+		        " FROM tst_exams"
+		       " WHERE ExaCod=%ld"
+		         " AND CrsCod=%ld",
 		       Print->PrnCod,
 		       Gbl.Hierarchy.Crs.CrsCod) == 1)
      {
@@ -2757,7 +2759,7 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
 			             "Score,"	// row[1]
 			             "Indexes,"	// row[2]
 			             "Answers"	// row[3]
-			      " FROM tst_exam_questions"
+			       " FROM tst_exam_questions"
 			      " WHERE ExaCod=%ld"
 			      " ORDER BY QstInd",
 			      Print->PrnCod);
