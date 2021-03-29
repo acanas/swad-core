@@ -596,7 +596,7 @@ unsigned Rec_CountNumRecordsInCurrCrsWithField (long FieldCod)
    (unsigned) DB_QueryCOUNT ("can not get number of records"
 			     " with a given field not empty in a course",
 			     "SELECT COUNT(*)"
-			     v" FROM crs_records"
+			      " FROM crs_records"
 			     " WHERE FieldCod=%ld",
 			     FieldCod);
   }
