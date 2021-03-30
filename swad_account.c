@@ -193,7 +193,6 @@ void Acc_CheckIfEmptyAccountExists (void)
    unsigned NumUsr;
    struct UsrData UsrDat;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -211,14 +210,15 @@ void Acc_CheckIfEmptyAccountExists (void)
    /***** Check if there are users with this user's ID *****/
    if (ID_CheckIfUsrIDIsValid (ID))
      {
-      NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's codes",
-					   "SELECT usr_ids.UsrCod"
-					    " FROM usr_ids,"
-					          "usr_data"
-					   " WHERE usr_ids.UsrID='%s'"
-					     " AND usr_ids.UsrCod=usr_data.UsrCod"
-					     " AND usr_data.Password=''",
-					   ID);
+      NumUsrs = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get user's codes",
+		      "SELECT usr_ids.UsrCod"	// row[0]
+		       " FROM usr_ids,"
+			     "usr_data"
+		      " WHERE usr_ids.UsrID='%s'"
+			" AND usr_ids.UsrCod=usr_data.UsrCod"
+			" AND usr_data.Password=''",
+		      ID);
       if (NumUsrs)
 	{
          /***** Begin box and table *****/
@@ -237,10 +237,8 @@ void Acc_CheckIfEmptyAccountExists (void)
 	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
 	    /***** Get user's data from query result *****/
-	    row = mysql_fetch_row (mysql_res);
-
 	    /* Get user's code */
-	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	    UsrDat.UsrCod = DB_GetNextCod (mysql_res);
 
 	    /* Get user's data */
             Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);

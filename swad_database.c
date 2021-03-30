@@ -3828,6 +3828,22 @@ static unsigned long DB_QuerySELECTusingQueryStr (char *Query,
   }
 
 /*****************************************************************************/
+/********************** Get next code from query result **********************/
+/*****************************************************************************/
+/* Each row of the result should hold a code (long) */
+
+long DB_GetNextCod (MYSQL_RES *mysql_res)
+  {
+   MYSQL_ROW row;
+
+   /***** Get next row from query result *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** row[0] should hold a code (long) ******/
+   return Str_ConvertStrCodToLongCod (row[0]);
+  }
+
+/*****************************************************************************/
 /**************** Make a SELECT COUNT query from database ********************/
 /*****************************************************************************/
 
