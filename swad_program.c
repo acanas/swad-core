@@ -2205,7 +2205,6 @@ unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope)
 			   " AND ins_instits.InsCod=ctr_centers.InsCod"
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.Status=0"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Cty.CtyCod);
        case Hie_Lvl_INS:
@@ -2219,7 +2218,6 @@ unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope)
 			 " WHERE ctr_centers.InsCod=%ld"
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.Status=0"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
       case Hie_Lvl_CTR:
@@ -2231,7 +2229,6 @@ unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope)
 			        "prg_items"
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.Status=0"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
       case Hie_Lvl_DEG:
@@ -2241,7 +2238,6 @@ unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope)
 			  " FROM crs_courses,"
 			        "prg_items"
 			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.Status=0"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
       case Hie_Lvl_CRS:

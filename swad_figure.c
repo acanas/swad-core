@@ -31,6 +31,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
+#include "swad_agenda.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_figure.h"
@@ -182,6 +183,8 @@ static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum);
 static void Fig_GetAndShowNumUsrsPerNotifyEvent (void);
 static void Fig_GetAndShowNoticesStats (void);
 static void Fig_GetAndShowMsgsStats (void);
+
+static void Fig_GetAndShowAgendasStats (void);
 
 static void Fig_GetAndShowSurveysStats (void);
 static void Fig_GetAndShowNumUsrsPerPrivacy (void);
@@ -347,6 +350,7 @@ void Fig_ShowFigures (void)
       [Fig_NOTIFY_EVENTS    ] = Fig_GetAndShowNumUsrsPerNotifyEvent,
       [Fig_NOTICES          ] = Fig_GetAndShowNoticesStats,
       [Fig_MESSAGES         ] = Fig_GetAndShowMsgsStats,
+      [Fig_AGENDAS          ] = Fig_GetAndShowAgendasStats,
       [Fig_SOCIAL_NETWORKS  ] = Net_ShowWebAndSocialNetworksStats,
       [Fig_LANGUAGES        ] = Fig_GetAndShowNumUsrsPerLanguage,
       [Fig_FIRST_DAY_OF_WEEK] = Fig_GetAndShowNumUsrsPerFirstDayOfWeek,
@@ -431,7 +435,7 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
 	      (Gbl.Scope.Current == Hie_Lvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
 	      (Gbl.Scope.Current == Hie_Lvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
 	      (Gbl.Scope.Current == Hie_Lvl_CRS ? Gbl.Hierarchy.Crs.CrsCod :
-					      -1L)))));
+					          -1L)))));
    char *Class = (Role == Rol_UNK) ? "DAT_N LINE_TOP RB" :
 	                             "DAT RB";
    unsigned Roles = (Role == Rol_UNK) ? ((1 << Rol_STD) |
@@ -3567,18 +3571,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    HTM_TR_End ();
 
    /***** Get total number of users *****/
-   NumUsrsTotal =
-   (Gbl.Scope.Current == Hie_Lvl_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
-                                    Usr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,
-							        (Gbl.Scope.Current == Hie_Lvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
-							        (Gbl.Scope.Current == Hie_Lvl_INS ? Gbl.Hierarchy.Ins.InsCod :
-							        (Gbl.Scope.Current == Hie_Lvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
-							        (Gbl.Scope.Current == Hie_Lvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
-							        (Gbl.Scope.Current == Hie_Lvl_CRS ? Gbl.Hierarchy.Crs.CrsCod :
-											        -1L))))),
-								1 << Rol_STD |
-								1 << Rol_NET |
-								1 << Rol_TCH);
+   NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
 
    /***** Get total number of following/followers from database *****/
    for (NoteType  = (Tml_Not_NoteType_t) 0;
@@ -3921,18 +3914,7 @@ static void Fig_GetAndShowFollowStats (void)
    HTM_TR_End ();
 
    /***** Get total number of users *****/
-   NumUsrsTotal =
-   (Gbl.Scope.Current == Hie_Lvl_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
-				    Usr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,
-							        (Gbl.Scope.Current == Hie_Lvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
-							        (Gbl.Scope.Current == Hie_Lvl_INS ? Gbl.Hierarchy.Ins.InsCod :
-							        (Gbl.Scope.Current == Hie_Lvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
-							        (Gbl.Scope.Current == Hie_Lvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
-							        (Gbl.Scope.Current == Hie_Lvl_CRS ? Gbl.Hierarchy.Crs.CrsCod :
-											        -1L))))),
-								1 << Rol_STD |
-								1 << Rol_NET |
-								1 << Rol_TCH);
+   NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
 
    /***** Get total number of following/followers from database *****/
    for (Fol = 0;
@@ -4553,8 +4535,8 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
    extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
-   extern const char *Txt_Number_of_BR_events;
-   extern const char *Txt_Number_of_BR_emails;
+   extern const char *Txt_Number_of_events;
+   extern const char *Txt_Number_of_emails;
    extern const char *Txt_Total;
    Ntf_NotifyEvent_t NotifyEvent;
    char *SubQuery;
@@ -4579,24 +4561,13 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
    HTM_TH (1,1,"LM",Txt_Event);
    HTM_TH (1,1,"RM",Txt_Number_of_users);
    HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_events);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_emails);
+   HTM_TH (1,1,"RM",Txt_Number_of_events);
+   HTM_TH (1,1,"RM",Txt_Number_of_emails);
 
    HTM_TR_End ();
 
    /***** Get total number of users *****/
-   NumUsrsTotal =
-   (Gbl.Scope.Current == Hie_Lvl_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
-				    Usr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,
-							        (Gbl.Scope.Current == Hie_Lvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
-							        (Gbl.Scope.Current == Hie_Lvl_INS ? Gbl.Hierarchy.Ins.InsCod :
-							        (Gbl.Scope.Current == Hie_Lvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
-							        (Gbl.Scope.Current == Hie_Lvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
-							        (Gbl.Scope.Current == Hie_Lvl_CRS ? Gbl.Hierarchy.Crs.CrsCod :
-											        -1L))))),
-								1 << Rol_STD |
-								1 << Rol_NET |
-								1 << Rol_TCH);
+   NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
 
    /***** Get total number of users who want to be
           notified by email on some event, from database *****/
@@ -4956,6 +4927,76 @@ static void Fig_GetAndShowMsgsStats (void)
 
    HTM_TD_Begin ("class=\"DAT RM\"");
    HTM_Unsigned (NumMsgsReceivedAndNotified);
+   HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }
+
+
+/*****************************************************************************/
+/********* Get and show number of users who have chosen a language ***********/
+/*****************************************************************************/
+
+static void Fig_GetAndShowAgendasStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_agendas;
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Number_of_events;
+   extern const char *Txt_Number_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   extern const char *Txt_Number_of_events_per_user;
+   unsigned NumEvents;
+   unsigned NumUsrs;
+   unsigned NumUsrsTotal;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_AGENDAS],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_agendas,Box_NOT_CLOSABLE,2);
+
+   /***** Heading row *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TH (1,1,"RM",Txt_Number_of_events);
+   HTM_TH (1,1,"RM",Txt_Number_of_users);
+   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_events_per_user);
+
+   HTM_TR_End ();
+
+   /***** Number of agenda events *****/
+   NumEvents = Agd_GetNumEvents (Gbl.Scope.Current);
+
+   /***** Number of users with agenda events *****/
+   NumUsrs = Agd_GetNumUsrsWithEvents (Gbl.Scope.Current);
+
+   /***** Get total number of users in current scope *****/
+   NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
+
+   /***** Write number of users who have chosen each language *****/
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"DAT RM\"");
+   HTM_Unsigned (NumEvents);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT RM\"");
+   HTM_Unsigned (NumUsrs);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT RM\"");
+   HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
+				  (double) NumUsrsTotal :
+				  0);
+   HTM_TD_End ();
+
+   HTM_TD_Begin ("class=\"DAT RM\"");
+   HTM_Double2Decimals (NumUsrs ? (double) NumEvents /
+			          (double) NumUsrs :
+			          0);
    HTM_TD_End ();
 
    HTM_TR_End ();

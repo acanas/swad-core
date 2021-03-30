@@ -9395,13 +9395,34 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
 /****************** Get total number of users in platform ********************/
 /*****************************************************************************/
 
-unsigned Usr_GetTotalNumberOfUsersInPlatform (void)
+unsigned Usr_GetTotalNumberOfUsers (void)
   {
-   /***** Get number of users from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of users",
-			     "SELECT COUNT(UsrCod)"
-			      " FROM usr_data");
+   long Cod;
+   unsigned Roles;
+
+   /***** Get number of users with events from database *****/
+   switch (Gbl.Scope.Current)
+     {
+      case Hie_Lvl_SYS:
+	 return (unsigned) DB_GetNumRowsTable ("usr_data");			// All users in platform
+      case Hie_Lvl_CTY:
+      case Hie_Lvl_INS:
+      case Hie_Lvl_CTR:
+      case Hie_Lvl_DEG:
+      case Hie_Lvl_CRS:
+         Cod = (Gbl.Scope.Current == Hie_Lvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
+	       (Gbl.Scope.Current == Hie_Lvl_INS ? Gbl.Hierarchy.Ins.InsCod :
+	       (Gbl.Scope.Current == Hie_Lvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
+	       (Gbl.Scope.Current == Hie_Lvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
+	                                           Gbl.Hierarchy.Crs.CrsCod))));
+         Roles = (1 << Rol_STD) |
+	         (1 << Rol_NET) |
+	         (1 << Rol_TCH);
+         return Usr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles);	// All users in courses
+      default:
+	 Lay_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
   }
 
 /*****************************************************************************/

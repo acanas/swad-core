@@ -21319,7 +21319,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==1	// ca
 	"Agenda"
 #elif L==2	// de
-	"Organizer"
+	"Agenda"
 #elif L==3	// en
 	"Agenda"
 #elif L==4	// es
@@ -23246,7 +23246,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==1	// ca
 	"Agenda"
 #elif L==2	// de
-	"Organizer"
+	"Agenda"
 #elif L==3	// en
 	"Agenda (personal organizer)"
 #elif L==4	// es
@@ -29245,46 +29245,67 @@ const char *Txt_Number_of_BR_courses_with_BR_surveys =
 	"N.&ordm; de<br />disciplinas<br />com inqu&eacute;ritos";
 #endif
 
-const char *Txt_Number_of_BR_events =
+const char *Txt_Number_of_events =
 #if   L==1	// ca
-	"N.&ordm; d'<br />esdeveniments.";
+	"N.&ordm; d'esdeveniments";
 #elif L==2	// de
-	"Anzahl der<br />Ereignisse";
+	"Anzahl der Ereignisse";
 #elif L==3	// en
-	"Number of<br />events";
+	"Number of events";
 #elif L==4	// es
-	"N.&ordm; de<br />eventos";
+	"N.&ordm; de eventos";
 #elif L==5	// fr
-	"Nombre<br />d'&eacute;v&eacute;nements";
+	"Nombre d'&eacute;v&eacute;nements";
 #elif L==6	// gn
-	"N.&ordm; de<br />eventos";	// Okoteve traducción
+	"N.&ordm; de eventos";	// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />eventi";
+	"Numero di eventi";
 #elif L==8	// pl
-	"Liczba of<br />zdarzenia";
+	"Liczba of zdarzenia";
 #elif L==9	// pt
-	"N&uacute;mero de<br />eventos";
+	"N&uacute;mero de eventos";
 #endif
 
-const char *Txt_Number_of_BR_emails =
+const char *Txt_Number_of_events_per_user =
 #if   L==1	// ca
-	"N.&ordm; de<br />correos";	// Necessita traduccio
+	"N.&ordm; d'esdeveniments per usuari";
 #elif L==2	// de
-	"Anzahl der<br />E-Mails";
+	"Anzahl der Ereignisse pro Benutzer";
 #elif L==3	// en
-	"Number of<br />emails";
+	"Number of events per user";
 #elif L==4	// es
-	"N.&ordm; de<br />correos";
+	"N.&ordm; de eventos por usuario";
 #elif L==5	// fr
-	"Nombre<br />d'emails";
+	"Nombre d'&eacute;v&eacute;nements par utilisateur";
 #elif L==6	// gn
-	"N.&ordm; de<br />correos";	// Okoteve traducción
+	"N.&ordm; de eventos por usuario";		// Okoteve traducción
 #elif L==7	// it
-	"Numero di<br />email";
+	"Numero di eventi per utente";
 #elif L==8	// pl
-	"Liczba<br />email";
+	"Liczba zdarze&nacute; na u&zdot;ytkownika";
 #elif L==9	// pt
-	"N&uacute;mero de<br />emails";
+	"N&uacute;mero de eventos por utilizador";
+#endif
+
+const char *Txt_Number_of_emails =
+#if   L==1	// ca
+	"N.&ordm; de correos";	// Necessita traduccio
+#elif L==2	// de
+	"Anzahl der E-Mails";
+#elif L==3	// en
+	"Number of emails";
+#elif L==4	// es
+	"N.&ordm; de correos";
+#elif L==5	// fr
+	"Nombre d'emails";
+#elif L==6	// gn
+	"N.&ordm; de correos";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di email";
+#elif L==8	// pl
+	"Liczba email";
+#elif L==9	// pt
+	"N&uacute;mero de emails";
 #endif
 
 const char *Txt_Number_of_BR_exams =
@@ -32770,7 +32791,7 @@ const char *Txt_Public_agenda_USER =	// Warning: it is very important to include
 #if   L==1	// ca
 	"Agenda p&uacute;blica de %s";
 #elif L==2	// de
-	"&Ouml;ffentliche Organizer von %s";
+	"&Ouml;ffentliche Agenda von %s";
 #elif L==3	// en
 	"%s's public agenda";
 #elif L==4	// es
@@ -44378,6 +44399,27 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Wiadomo&sacute;ci"
 #elif L==9	// pt
 	"Mensagens"
+#endif
+	,
+	[Fig_AGENDAS] =
+#if   L==1	// ca
+	"Agendes"
+#elif L==2	// de
+	"Agenden"
+#elif L==3	// en
+	"Agendas"
+#elif L==4	// es
+	"Agendas"
+#elif L==5	// fr
+	"Agendas"
+#elif L==6	// gn
+	"Aporyr&atilde;"
+#elif L==7	// it
+	"Agende"
+#elif L==8	// pl
+	"Pami&eogon;tnik"
+#elif L==9	// pt
+	"Agendas"
 #endif
 	,
 	[Fig_SOCIAL_NETWORKS] =

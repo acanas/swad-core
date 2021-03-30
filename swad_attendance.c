@@ -1743,7 +1743,6 @@ unsigned Att_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
 			 " WHERE ctr_centers.InsCod=%ld"
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.Status=0"
 			   " AND crs_courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
@@ -1755,7 +1754,6 @@ unsigned Att_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
 			        "att_events"
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.Status=0"
 			   " AND crs_courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
@@ -1765,7 +1763,6 @@ unsigned Att_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
 			  " FROM crs_courses,"
 			        "att_events"
 			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.Status=0"
 			   " AND crs_courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;

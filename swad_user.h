@@ -516,7 +516,7 @@ bool Usr_ChkIfUsrCodExists (long UsrCod);
 
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 
-unsigned Usr_GetTotalNumberOfUsersInPlatform (void);
+unsigned Usr_GetTotalNumberOfUsers (void);
 unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles);
 unsigned Usr_GetCachedNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles);
 

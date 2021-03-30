@@ -33,7 +33,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Fig_NUM_FIGURES 30
+#define Fig_NUM_FIGURES 31
 typedef enum
   {
    Fig_USERS,			// Number of users
@@ -56,6 +56,7 @@ typedef enum
    Fig_NOTIFY_EVENTS,		// Number of users per notify event
    Fig_NOTICES,			// Number of notices
    Fig_MESSAGES,		// Number of users' (sent and received) messages
+   Fig_AGENDAS,			// Number of agendas
    Fig_SOCIAL_NETWORKS,		// Number of users in social networks
    Fig_LANGUAGES,		// Number of users per language
    Fig_FIRST_DAY_OF_WEEK,	// Number of users per first day of week

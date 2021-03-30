@@ -1896,7 +1896,6 @@ unsigned Asg_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope)
 			  " AND ins_instits.InsCod=ctr_centers.InsCod"
 			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
-			  " AND crs_courses.Status=0"
 			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                         Gbl.Hierarchy.Cty.CtyCod);
        case Hie_Lvl_INS:
@@ -1910,7 +1909,6 @@ unsigned Asg_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope)
 			" WHERE ctr_centers.InsCod=%ld"
 			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
-			  " AND crs_courses.Status=0"
 			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                         Gbl.Hierarchy.Ins.InsCod);
       case Hie_Lvl_CTR:
@@ -1922,7 +1920,6 @@ unsigned Asg_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope)
 			       "asg_assignments"
 			" WHERE deg_degrees.CtrCod=%ld"
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
-			  " AND crs_courses.Status=0"
 			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                         Gbl.Hierarchy.Ctr.CtrCod);
       case Hie_Lvl_DEG:
@@ -1932,7 +1929,6 @@ unsigned Asg_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope)
 			 " FROM crs_courses,"
 			       "asg_assignments"
 			" WHERE crs_courses.DegCod=%ld"
-			  " AND crs_courses.Status=0"
 			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                         Gbl.Hierarchy.Deg.DegCod);
       case Hie_Lvl_CRS:

@@ -3288,6 +3288,27 @@ const char *Hlp_ANALYTICS_Figures_messages =
 	"ANALYTICS.Figures.en#messages";
 #endif
 
+const char *Hlp_ANALYTICS_Figures_agendas =
+#if   L==1
+	"ANALYTICS.Figures.es#agendas";
+#elif L==2
+	"ANALYTICS.Figures.en#agendas";
+#elif L==3
+	"ANALYTICS.Figures.en#agendas";
+#elif L==4
+	"ANALYTICS.Figures.es#agendas";
+#elif L==5
+	"ANALYTICS.Figures.en#agendas";
+#elif L==6
+	"ANALYTICS.Figures.es#agendas";
+#elif L==7
+	"ANALYTICS.Figures.en#agendas";
+#elif L==8
+	"ANALYTICS.Figures.en#agendas";
+#elif L==9
+	"ANALYTICS.Figures.en#agendas";
+#endif
+
 const char *Hlp_ANALYTICS_Figures_webs_social_networks =
 #if   L==1
 	"ANALYTICS.Figures.es#webs--redes-sociales";
