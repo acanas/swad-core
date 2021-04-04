@@ -3793,14 +3793,52 @@ unsigned long DB_QuerySELECT (MYSQL_RES **mysql_res,const char *MsgError,
    int NumBytesPrinted;
    char *Query;
 
+   /***** Create query string *****/
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
       Lay_NotEnoughMemoryExit ();
 
+   /***** Do SELECT query *****/
    return DB_QuerySELECTusingQueryStr (Query,mysql_res,MsgError);
   }
+
+/*****************************************************************************/
+/*** Make a SELECT query for a unique row with one long code from database ***/
+/*****************************************************************************/
+
+long DB_QuerySELECTCod (const char *MsgError,
+                        const char *fmt,...)
+  {
+   MYSQL_RES *mysql_res;
+   va_list ap;
+   int NumBytesPrinted;
+   char *Query;
+   long Cod;
+
+   /***** Create query string *****/
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Query,fmt,ap);
+   va_end (ap);
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+      Lay_NotEnoughMemoryExit ();
+
+   /***** Do SELECT query *****/
+   if (DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError))	// Row found
+      Cod = DB_GetNextCod (mysql_res);
+   else
+      Cod = -1L;
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return Cod;
+  }
+
+/*****************************************************************************/
+/*********** Make a SELECT query from database using query string ************/
+/*****************************************************************************/
 
 static unsigned long DB_QuerySELECTusingQueryStr (char *Query,
 					          MYSQL_RES **mysql_res,

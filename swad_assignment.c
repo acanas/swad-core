@@ -684,7 +684,6 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
       [Dat_END_TIME  ] = "EndTime DESC,StartTime DESC,Title DESC",
      };
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumRows;
    unsigned NumAsg;
 
@@ -741,8 +740,7 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
 	   NumAsg++)
         {
          /* Get next assignment code */
-         row = mysql_fetch_row (mysql_res);
-         if ((Assignments->LstAsgCods[NumAsg] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Assignments->LstAsgCods[NumAsg] = DB_GetNextCod (mysql_res)) < 0)
             Lay_ShowErrorAndExit ("Error: wrong assignment code.");
         }
      }
