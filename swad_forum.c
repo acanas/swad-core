@@ -731,9 +731,8 @@ static void For_GetThrSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 
    MYSQL_ROW row;
 
    /***** Get subject of a thread from database *****/
-   DB_QuerySELECT (&mysql_res,"can not get the subject"
-			      " of a thread of a forum",
-		   "SELECT for_posts.Subject"
+   DB_QuerySELECT (&mysql_res,"can not get the subject of a thread of a forum",
+		   "SELECT for_posts.Subject"	// row[0]
 		    " FROM for_threads,"
 		          "for_posts"
 		   " WHERE for_threads.ThrCod=%ld"
@@ -827,23 +826,18 @@ static void For_UpdateThrLastPst (long ThrCod,long LastPstCod)
 
 static long For_GetLastPstCod (long ThrCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    long LastPstCod;
 
    /***** Get the code of the last post of a thread from database *****/
-   DB_QuerySELECT (&mysql_res,"can not get the most recent post"
-			      " of a thread of a forum",
-		   "SELECT PstCod"
-		    " FROM for_posts"
-		   " WHERE ThrCod=%ld"
-		   " ORDER BY CreatTime DESC"
-		   " LIMIT 1",
-                   ThrCod);
-
-   /***** Write the subject of the thread *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%ld",&LastPstCod) != 1)
+   LastPstCod = DB_QuerySELECTCode ("can not get the most recent post"
+			            " of a thread of a forum",
+				    "SELECT PstCod"
+				     " FROM for_posts"
+				    " WHERE ThrCod=%ld"
+				    " ORDER BY CreatTime DESC"
+				    " LIMIT 1",
+				    ThrCod);
+   if (LastPstCod <= 0)
       Lay_ShowErrorAndExit ("Error when getting the most recent post of a thread of a forum.");
 
    return LastPstCod;
@@ -894,29 +888,12 @@ static unsigned For_GetNumOfReadersOfThr (long ThrCod)
 
 static unsigned For_GetNumOfWritersInThr (long ThrCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumWriters;
-
    /***** Get number of distinct writers in a thread from database *****/
-   DB_QuerySELECT (&mysql_res,"can not get the number of writers"
-	                      " in a thread of a forum",
-		   "SELECT COUNT(DISTINCT UsrCod)"
-		    " FROM for_posts"
-		   " WHERE ThrCod=%ld",
-                   ThrCod);
-
-   /* Get row with number of writers */
-   row = mysql_fetch_row (mysql_res);
-
-   /* Get number of writers (row[0]) */
-   if (sscanf (row[0],"%u",&NumWriters) != 1)
-      Lay_ShowErrorAndExit ("Error when getting the number of writers in a thread of a forum.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumWriters;
+   return DB_QueryCOUNT ("can not get the number of writers in a thread of a forum",
+			 "SELECT COUNT(DISTINCT UsrCod)"
+			  " FROM for_posts"
+			 " WHERE ThrCod=%ld",
+			 ThrCod);
   }
 
 /*****************************************************************************/
@@ -2473,7 +2450,6 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
    extern const char *Txt_ReaBRders;
    char SubQuery[256];
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    char FrameTitle[128 + For_MAX_BYTES_FORUM_NAME];
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    unsigned NumThr;
@@ -2531,13 +2507,9 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
    for (NumThr = PaginationThrs.FirstItemVisible, NumThrInScreen = 0;
         NumThr <= PaginationThrs.LastItemVisible;
         NumThr++, NumThrInScreen++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
       /* Get thread code(row[0]) */
-      if ((ThrCods[NumThrInScreen] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((ThrCods[NumThrInScreen] = DB_GetNextCode (mysql_res)) < 0)
          Lay_ShowErrorAndExit ("Error when getting thread of a forum.");
-     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3688,12 +3660,12 @@ static void For_GetThreadData (struct For_Thread *Thr)
    /***** Get data of a thread from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get data"
 					" of a thread of a forum",
-			     "SELECT m0.PstCod,"
-			            "m1.PstCod,"
-			            "m0.UsrCod,"
-			            "m1.UsrCod,"
-			            "UNIX_TIMESTAMP(m0.CreatTime),"
-			            "UNIX_TIMESTAMP(m1.CreatTime),"
+			     "SELECT m0.PstCod,"			// row[0]
+			            "m1.PstCod,"			// row[1]
+			            "m0.UsrCod,"			// row[2]
+			            "m1.UsrCod,"			// row[3]
+			            "UNIX_TIMESTAMP(m0.CreatTime),"	// row[4]
+			            "UNIX_TIMESTAMP(m1.CreatTime),"	// row[5]
 			            "m0.Subject"
 			      " FROM for_threads,"
 			            "for_posts AS m0,"
@@ -4555,31 +4527,13 @@ static bool For_CheckIfICanMoveThreads (void)
 
 static long For_GetThrInMyClipboard (void)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   long ThrCod = -1L;
-
    /***** Get if there is a thread ready to move in my clipboard from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not check if there is"
-					" any thread ready to be moved",
-	                     "SELECT ThrCod"
-	                      " FROM for_clipboards"
-	                     " WHERE UsrCod=%ld",
-			     Gbl.Usrs.Me.UsrDat.UsrCod);
-
-   if (NumRows == 1)
-     {
-      /* Get thread code */
-      row = mysql_fetch_row (mysql_res);
-      if (sscanf (row[0],"%ld",&ThrCod) != 1)
-         Lay_ShowErrorAndExit ("Error when checking if there is any thread ready to be moved.");
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return ThrCod;
+   return DB_QuerySELECTCode ("can not check if there is"
+			      " any thread ready to be moved",
+	                      "SELECT ThrCod"
+	                       " FROM for_clipboards"
+	                      " WHERE UsrCod=%ld",
+			      Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

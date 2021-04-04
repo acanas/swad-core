@@ -307,22 +307,22 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 
    /***** Get print log from database *****/
    NumClicks = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get exam print log",
-			       "SELECT exa_log.ActCod,"				// row[0]
-			              "exa_log.QstInd,"				// row[1]
-			              "exa_log.CanAnswer,"			// row[2]
-			              "UNIX_TIMESTAMP(exa_log.ClickTime),"	// row[3]
-			              "exa_log.IP,"				// row[4]
-			              "exa_log_sessions.SessionId,"		// row[5]
-				      "exa_log_user_agents.UserAgent"		// row[6]
-			        " FROM exa_log"
-			        " LEFT JOIN exa_log_sessions"
-	                          " ON exa_log.LogCod=exa_log_sessions.LogCod"
-			        " LEFT JOIN exa_log_user_agents"
-	                          " ON exa_log.LogCod=exa_log_user_agents.LogCod"
-			       " WHERE exa_log.PrnCod=%ld"
-			       " ORDER BY exa_log.LogCod",
-			       Print->PrnCod);
+   DB_QuerySELECT (&mysql_res,"can not get exam print log",
+		   "SELECT exa_log.ActCod,"				// row[0]
+			  "exa_log.QstInd,"				// row[1]
+			  "exa_log.CanAnswer,"			// row[2]
+			  "UNIX_TIMESTAMP(exa_log.ClickTime),"	// row[3]
+			  "exa_log.IP,"				// row[4]
+			  "exa_log_sessions.SessionId,"		// row[5]
+			  "exa_log_user_agents.UserAgent"		// row[6]
+		    " FROM exa_log"
+		    " LEFT JOIN exa_log_sessions"
+		      " ON exa_log.LogCod=exa_log_sessions.LogCod"
+		    " LEFT JOIN exa_log_user_agents"
+		      " ON exa_log.LogCod=exa_log_user_agents.LogCod"
+		   " WHERE exa_log.PrnCod=%ld"
+		   " ORDER BY exa_log.LogCod",
+		   Print->PrnCod);
 
    if (NumClicks)
      {

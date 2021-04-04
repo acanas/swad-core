@@ -2671,7 +2671,6 @@ static void Brw_SetPathFileBrowser (void)
 bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumUsrs;
    unsigned NumUsr;
    long UsrCod;
@@ -2692,8 +2691,7 @@ bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
 	NumUsr++)
      {
       /* Get next user */
-      row = mysql_fetch_row (mysql_res);
-      UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+      UsrCod = DB_GetNextCode (mysql_res);
 
       /* Check if folder exists */
       snprintf (PathFolder,sizeof (PathFolder),"%s/usr/%02u/%ld/%s/%s",
@@ -2782,7 +2780,6 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
    extern const char *Txt_Folders_renamed;
    extern const char *Txt_Folders_not_renamed;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumUsrs;
    unsigned NumUsr;
    long UsrCod;
@@ -2795,12 +2792,12 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
    unsigned NumUsrsSuccess = 0;
 
    /***** Get all the users belonging to current course from database *****/
-   NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get users"
-						   " from current course",
-				        "SELECT UsrCod"		// row[0]
-				         " FROM crs_users"
-				        " WHERE CrsCod=%ld",
-					Gbl.Hierarchy.Crs.CrsCod);
+   NumUsrs = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get users from current course",
+		   "SELECT UsrCod"		// row[0]
+		    " FROM crs_users"
+		   " WHERE CrsCod=%ld",
+		   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Check if there exist folders with the new name *****/
    for (NumUsr = 0;
@@ -2808,8 +2805,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
 	NumUsr++)
      {
       /* Get next user */
-      row = mysql_fetch_row (mysql_res);
-      UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+      UsrCod = DB_GetNextCode (mysql_res);
 
       /* Rename folder if exists */
       snprintf (PathOldFolder,sizeof (PathOldFolder),"%s/usr/%02u/%ld/%s/%s",
@@ -2838,8 +2834,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
 	   NumUsr++)
         {
 	 /* Get next user */
-	 row = mysql_fetch_row (mysql_res);
-	 UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	 UsrCod = DB_GetNextCode (mysql_res);
 
          /* Rename folder if exists */
          snprintf (PathOldFolder,sizeof (PathOldFolder),"%s/usr/%02u/%ld/%s/%s",
@@ -2908,19 +2903,18 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
 void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumUsrs;
    unsigned NumUsr;
    long UsrCod;
    char PathFolder[PATH_MAX * 2 + 128];
 
    /***** Get all the users belonging to current course from database *****/
-   NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get users"
-						   " from current course",
-				        "SELECT UsrCod"		// row[0]
-				         " FROM crs_users"
-				        " WHERE CrsCod=%ld",
-					Gbl.Hierarchy.Crs.CrsCod);
+   NumUsrs = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get users from current course",
+		   "SELECT UsrCod"		// row[0]
+		    " FROM crs_users"
+		   " WHERE CrsCod=%ld",
+		   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Remove folders *****/
    for (NumUsr = 0;
@@ -2928,8 +2922,7 @@ void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
 	NumUsr++)
      {
       /* Get next user */
-      row = mysql_fetch_row (mysql_res);
-      UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+      UsrCod = DB_GetNextCode (mysql_res);
 
       /* Remove tree if exists */
       snprintf (PathFolder,sizeof (PathFolder),"%s/usr/%02u/%ld/%s/%s",
@@ -9381,7 +9374,7 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
    /***** Get if a file or folder is hidden from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not check if a file is hidden",
 		       "SELECT Hidden"		// row[0]
-		        " FROM brw_files"	// row[1]
+		        " FROM brw_files"
 		       " WHERE FileBrowser=%u"
 		         " AND Cod=%ld"
 		         " AND ZoneUsrCod=%ld"
@@ -10374,38 +10367,22 @@ long Brw_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long FilCod;
 
    /***** Get code of a file from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get file code",
-		       "SELECT FilCod"
-		        " FROM brw_files"
-		       " WHERE FileBrowser=%u"
-		         " AND Cod=%ld"
-		         " AND ZoneUsrCod=%ld"
-		         " AND Path='%s'"
-		         "%s",
-		       (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		       Cod,ZoneUsrCod,
-		       Path,
-		       OnlyIfPublic ? " AND Public='Y'" :
-				      ""))
-     {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get file code (row[0]) */
-      FilCod = Str_ConvertStrCodToLongCod (row[0]);
-     }
-   else
-      FilCod = -1L;
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return FilCod;
+   return DB_QuerySELECTCode ("can not get file code",
+			      "SELECT FilCod"
+			       " FROM brw_files"
+			      " WHERE FileBrowser=%u"
+			        " AND Cod=%ld"
+			        " AND ZoneUsrCod=%ld"
+			        " AND Path='%s'"
+			        "%s",
+			      (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+			      Cod,
+			      ZoneUsrCod,
+			      Path,
+			      OnlyIfPublic ? " AND Public='Y'" :
+					     "");
   }
 
 /*****************************************************************************/
@@ -11749,41 +11726,22 @@ static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void)
 
 static long Brw_GetPublisherOfSubtree (void)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   long PublisherUsrCod;
    long Cod = Brw_GetCodForFiles ();
 
    /***** Get all common files that are equal to full path (including filename)
 	  or that are under that full path from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get publishers of files",
-			     "SELECT DISTINCT(PublisherUsrCod)"
-			      " FROM brw_files"
-			     " WHERE FileBrowser=%u"
-			       " AND Cod=%ld"
-			       " AND (Path='%s'"
-			            " OR"
-			            " Path LIKE '%s/%%')",
-			     (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-			     Cod,
-			     Gbl.FileBrowser.FilFolLnk.Full,
-			     Gbl.FileBrowser.FilFolLnk.Full);
-
-   /***** Check all common files that are equal to full path (including filename)
-	  or that are under that full path *****/
-   if (NumRows == 1)	// Get the publisher of the file(s)
-     {
-      row = mysql_fetch_row (mysql_res);
-      PublisherUsrCod = Str_ConvertStrCodToLongCod (row[0]);
-     }
-   else
-      PublisherUsrCod = -1L;
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return PublisherUsrCod;
+   return DB_QuerySELECTCode ("can not get publishers of files",
+			      "SELECT DISTINCT(PublisherUsrCod)"
+			       " FROM brw_files"
+			      " WHERE FileBrowser=%u"
+			        " AND Cod=%ld"
+			        " AND (Path='%s'"
+				     " OR"
+				     " Path LIKE '%s/%%')",
+			      (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+			      Cod,
+			      Gbl.FileBrowser.FilFolLnk.Full,
+			      Gbl.FileBrowser.FilFolLnk.Full);
   }
 
 /*****************************************************************************/

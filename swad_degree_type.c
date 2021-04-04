@@ -882,7 +882,7 @@ bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
 
    /***** Get the name of a type of degree from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get the name of a type of degree",
-			     "SELECT DegTypName"
+			     "SELECT DegTypName"	// row[0]
 			      " FROM deg_types"
 			     " WHERE DegTypCod=%ld",
 			     DegTyp->DegTypCod);
@@ -923,14 +923,13 @@ bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
 static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumRows;
    unsigned long NumRow;
    long DegCod;
 
    /***** Get degrees of a type from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get degrees of a type",
-			     "SELECT DegCod"
+			     "SELECT DegCod"	// row[0]
 			      " FROM deg_degrees"
 			     " WHERE DegTypCod=%ld",
 			     DegTypCod);
@@ -941,10 +940,7 @@ static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
 	NumRow++)
      {
       /* Get next degree */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get degree code (row[0]) */
-      if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((DegCod = DB_GetNextCode (mysql_res)) < 0)
          Lay_ShowErrorAndExit ("Wrong code of degree.");
 
       /* Remove degree */
@@ -956,7 +952,8 @@ static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
 
    /***** Remove the degree type *****/
    DB_QueryDELETE ("can not remove a type of degree",
-		   "DELETE FROM deg_types WHERE DegTypCod=%ld",
+		   "DELETE FROM deg_types"
+		   " WHERE DegTypCod=%ld",
 		   DegTypCod);
   }
 

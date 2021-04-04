@@ -1929,7 +1929,6 @@ long Med_CloneMedia (const struct Med_Media *MediaSrc)
 
 void Med_RemoveMediaFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res)
   {
-   MYSQL_ROW row;
    unsigned NumMed;
    long MedCod;
 
@@ -1938,9 +1937,8 @@ void Med_RemoveMediaFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res)
 	NumMed < NumMedia;
 	NumMed++)
      {
-      /***** Get media code (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-      MedCod = Str_ConvertStrCodToLongCod (row[0]);
+      /***** Get media code *****/
+      MedCod = DB_GetNextCode (mysql_res);
 
       /***** Remove media files *****/
       Med_RemoveMedia (MedCod);

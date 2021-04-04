@@ -427,7 +427,6 @@ void ExaRes_ShowAllResultsInExa (void)
 static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams,long ExaCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumUsrs;
    unsigned long NumUsr;
 
@@ -450,26 +449,20 @@ static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams,long ExaCod)
 			               "usr_data.FirstName",
 			     ExaCod,
 			     Gbl.Hierarchy.Crs.CrsCod);
-   if (NumUsrs)
-     {
-      /***** List sessions results for each user *****/
-      for (NumUsr = 0;
-	   NumUsr < NumUsrs;
-	   NumUsr++)
-	{
-	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get session code (row[0]) */
-	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
-	       if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
-		 {
-		  /***** Show sessions results *****/
-		  Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-		  ExaRes_ShowResults (Exams,Usr_OTHER,-1L,ExaCod,NULL);
-		 }
-	}
-     }
+   /***** List sessions results for each user *****/
+   for (NumUsr = 0;
+	NumUsr < NumUsrs;
+	NumUsr++)
+      /* Get session code */
+      if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
+	      {
+	       /***** Show sessions results *****/
+	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       ExaRes_ShowResults (Exams,Usr_OTHER,-1L,ExaCod,NULL);
+	      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -523,7 +516,6 @@ void ExaRes_ShowAllResultsInSes (void)
 static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams,long SesCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumUsrs;
    unsigned long NumUsr;
 
@@ -532,7 +524,7 @@ static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams,long SesCod)
 
    /***** Get all users who have answered any session question in this exam *****/
    NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in session",
-			     "SELECT users.UsrCod"
+			     "SELECT users.UsrCod"	// row[0]
 			      " FROM (SELECT exa_prints.UsrCod AS UsrCod"	// row[0]
 				      " FROM exa_prints,exa_sessions,exa_exams"
 				     " WHERE exa_prints.SesCod=%ld"
@@ -546,26 +538,20 @@ static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams,long SesCod)
 			               "usr_data.FirstName",
 			     SesCod,
 			     Gbl.Hierarchy.Crs.CrsCod);
-   if (NumUsrs)
-     {
-      /***** List sessions results for each user *****/
-      for (NumUsr = 0;
-	   NumUsr < NumUsrs;
-	   NumUsr++)
-	{
-	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get session code (row[0]) */
-	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
-	       if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
-		 {
-		  /***** Show sessions results *****/
-		  Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-		  ExaRes_ShowResults (Exams,Usr_OTHER,SesCod,-1L,NULL);
-		 }
-	}
-     }
+   /***** List sessions results for each user *****/
+   for (NumUsr = 0;
+	NumUsr < NumUsrs;
+	NumUsr++)
+      /* Get session code (row[0]) */
+      if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
+	      {
+	       /***** Show sessions results *****/
+	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       ExaRes_ShowResults (Exams,Usr_OTHER,SesCod,-1L,NULL);
+	      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -814,7 +800,6 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
    char *HidExaSubQuery;
    char *ExaSubQuery;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    struct UsrData *UsrDat;
    unsigned NumResults;
    unsigned NumResult;
@@ -955,10 +940,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	   NumResult < NumResults;
 	   NumResult++)
 	{
-	 row = mysql_fetch_row (mysql_res);
-
 	 /* Get print code (row[0]) */
-	 if ((Print.PrnCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	 if ((Print.PrnCod = DB_GetNextCode (mysql_res)) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of exam print.");
 
 	 /* Get print data */

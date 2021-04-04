@@ -147,8 +147,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
       case Rol_SYS_ADM:
          NumCtrs = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get centers with pending degrees",
-			 "SELECT deg_degrees.CtrCod,"
-			        "COUNT(*)"
+			 "SELECT deg_degrees.CtrCod,"	// row[0]
+			        "COUNT(*)"		// row[1]
 			  " FROM deg_degrees,"
 			        "ctr_centers"
 			 " WHERE (deg_degrees.Status & %u)<>0"
@@ -795,29 +795,16 @@ static void Ctr_GetDataOfCenterFromRow (struct Ctr_Center *Ctr,MYSQL_ROW row)
 
 long Ctr_GetInsCodOfCenterByCod (long CtrCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long InsCod = -1L;
+   /***** Trivial check: center code should be > 0 *****/
+   if (CtrCod <= 0)
+      return -1L;
 
-   if (CtrCod > 0)
-     {
-      /***** Get the institution code of a center from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get the institution of a center",
-			  "SELECT InsCod"
-			   " FROM ctr_centers"
-			  " WHERE CtrCod=%ld",
-			  CtrCod) == 1)
-	{
-	 /***** Get the institution code of this center *****/
-	 row = mysql_fetch_row (mysql_res);
-	 InsCod = Str_ConvertStrCodToLongCod (row[0]);
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-
-   return InsCod;
+   /***** Get the institution code of a center from database *****/
+   return DB_QuerySELECTCode ("can not get the institution of a center",
+			      "SELECT InsCod"
+			       " FROM ctr_centers"
+			      " WHERE CtrCod=%ld",
+			      CtrCod);
   }
 
 /*****************************************************************************/
@@ -834,7 +821,7 @@ void Ctr_GetShortNameOfCenterByCod (struct Ctr_Center *Ctr)
      {
       /***** Get the short name of a center from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get the short name of a center",
-			  "SELECT ShortName"
+			  "SELECT ShortName"	// row[0]
 			   " FROM ctr_centers"
 			  " WHERE CtrCod=%ld",
 			  Ctr->CtrCod) == 1)
@@ -896,8 +883,8 @@ void Ctr_WriteSelectorOfCenter (void)
       /***** Get centers from database *****/
       NumCtrs = (unsigned)
       DB_QuerySELECT (&mysql_res,"can not get centers",
-		      "SELECT DISTINCT CtrCod,"
-		                      "ShortName"
+		      "SELECT DISTINCT CtrCod,"		// row[0]
+		                      "ShortName"	// row[1]
 		       " FROM ctr_centers"
 		      " WHERE InsCod=%ld"
 		      " ORDER BY ShortName",

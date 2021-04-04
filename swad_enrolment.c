@@ -515,9 +515,8 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';        // Return nothing on error
 
    /***** Get user's role in course from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get user's role"
-	                          " in course",
-		       "SELECT Role"
+   if (DB_QuerySELECT (&mysql_res,"can not get user's role in course",
+		       "SELECT Role"		// row[0]
 		        " FROM crs_users"
 		       " WHERE CrsCod=%ld"
 		         " AND UsrCod=%ld",
@@ -866,7 +865,6 @@ void Enr_RemoveOldUsrs (void)
    unsigned MonthsWithoutAccess;
    time_t SecondsWithoutAccess;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumUsr;
    unsigned long NumUsrs;
    unsigned NumUsrsEliminated = 0;
@@ -884,14 +882,17 @@ void Enr_RemoveOldUsrs (void)
 
    /***** Get old users from database *****/
    NumUsrs = DB_QuerySELECT (&mysql_res,"can not get old users",
-			     "SELECT UsrCod FROM"
-			      "("
-			       "SELECT UsrCod FROM usr_last WHERE"
-			       " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
-			       " UNION "
-			       "SELECT UsrCod FROM usr_data WHERE"
-			       " UsrCod NOT IN (SELECT UsrCod FROM usr_last)"
-			      ") AS candidate_usrs"
+			     "SELECT UsrCod"
+			      " FROM (SELECT UsrCod"
+			              " FROM usr_last"
+			             " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
+				     " UNION "
+				     "SELECT UsrCod"
+				      " FROM usr_data"
+				     " WHERE UsrCod NOT IN"
+				           " (SELECT UsrCod"
+				              " FROM usr_last)"
+				    ") AS candidate_usrs"
 			     " WHERE UsrCod NOT IN"
 			           " (SELECT DISTINCT UsrCod"
 			              " FROM crs_users)",
@@ -911,8 +912,7 @@ void Enr_RemoveOldUsrs (void)
            NumUsr < NumUsrs;
            NumUsr++)
         {
-         row = mysql_fetch_row (mysql_res);
-         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+         UsrDat.UsrCod = DB_GetNextCode (mysql_res);
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
            {
             Acc_CompletelyEliminateAccount (&UsrDat,Cns_QUIET);
@@ -1973,8 +1973,6 @@ void Enr_SignUpInCrs (void)
    extern const char *Txt_You_were_already_enroled_as_X_in_the_course_Y;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    Rol_Role_t RoleFromForm;
    bool Notify;
    long ReqCod = -1L;
@@ -2000,20 +1998,13 @@ void Enr_SignUpInCrs (void)
          Rol_WrongRoleExit ();
 
       /***** Try to get and old request of the same user in the same course from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get enrolment request",
-			  "SELECT ReqCod"
-			   " FROM crs_requests"
-			  " WHERE CrsCod=%ld"
-			    " AND UsrCod=%ld",
-			  Gbl.Hierarchy.Crs.CrsCod,
-			  Gbl.Usrs.Me.UsrDat.UsrCod))
-        {
-         row = mysql_fetch_row (mysql_res);
-         /* Get request code (row[0]) */
-         ReqCod = Str_ConvertStrCodToLongCod (row[0]);
-        }
-      /* Free structure that stores the query result */
-      DB_FreeMySQLResult (&mysql_res);
+      ReqCod = DB_QuerySELECTCode ("can not get enrolment request",
+				   "SELECT ReqCod"
+				    " FROM crs_requests"
+				   " WHERE CrsCod=%ld"
+				     " AND UsrCod=%ld",
+				   Gbl.Hierarchy.Crs.CrsCod,
+				   Gbl.Usrs.Me.UsrDat.UsrCod);
 
       /***** Request user in current course in database *****/
       if (ReqCod > 0)        // Old request exists in database
@@ -3049,29 +3040,21 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    long ReqCod;
 
    /***** Mark possible notifications as removed
           Important: do this before removing the request *****/
    /* Request request code (returns 0 or 1 rows) */
-   if (DB_QuerySELECT (&mysql_res,"can not get request code",
-		       "SELECT ReqCod"
-		        " FROM crs_requests"
-		       " WHERE CrsCod=%ld"
-		         " AND UsrCod=%ld",
-                       CrsCod,UsrCod))        // Request exists
-     {
-      /* Get request code */
-      row = mysql_fetch_row (mysql_res);
-      ReqCod = Str_ConvertStrCodToLongCod (row[0]);
+   ReqCod = DB_QuerySELECTCode ("can not get request code",
+				"SELECT ReqCod"
+				 " FROM crs_requests"
+				" WHERE CrsCod=%ld"
+				  " AND UsrCod=%ld",
+				CrsCod,
+				UsrCod);
 
-      /* Mark possible notifications as removed */
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
-     }
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
+   /* Mark possible notifications as removed */
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
 
    /***** Remove enrolment request *****/
    DB_QueryDELETE ("can not remove a request for enrolment",

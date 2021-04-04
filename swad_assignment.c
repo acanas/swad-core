@@ -740,7 +740,7 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
 	   NumAsg++)
         {
          /* Get next assignment code */
-         if ((Assignments->LstAsgCods[NumAsg] = DB_GetNextCod (mysql_res)) < 0)
+         if ((Assignments->LstAsgCods[NumAsg] = DB_GetNextCode (mysql_res)) < 0)
             Lay_ShowErrorAndExit ("Error: wrong assignment code.");
         }
      }

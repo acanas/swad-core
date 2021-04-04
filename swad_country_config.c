@@ -271,7 +271,6 @@ static void CtyCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
 static void CtyCfg_Map (void)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    struct Coordinates CtyAvgCoord;
    unsigned Zoom;
    unsigned NumCtrs;
@@ -317,10 +316,7 @@ static void CtyCfg_Map (void)
 	NumCtr++)
      {
       /* Get next center */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get center code (row[0]) */
-      Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
+      Ctr.CtrCod = DB_GetNextCode (mysql_res);
 
       /* Get data of center */
       Ctr_GetDataOfCenterByCod (&Ctr);
@@ -583,7 +579,7 @@ static void CtyCfg_GetMapAttr (long CtyCod,char **MapAttribution)
 
    /***** Get photo attribution from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get photo attribution",
-		       "SELECT MapAttribution"
+		       "SELECT MapAttribution"	// row[0]
 		        " FROM cty_countrs"
 		       " WHERE CtyCod=%ld",
 	               CtyCod))

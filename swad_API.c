@@ -358,11 +358,11 @@ static int API_GetPlgCodFromAppKey (struct soap *soap,
                                     const char *appKey)
   {
    /***** Get number of plugins with a IP address *****/
-   Gbl.WebService.PlgCod = DB_QuerySELECTCod ("can not check application key",
-					      "SELECT PlgCod"
-					       " FROM plg_plugins"
-					      " WHERE AppKey='%s'",
-					      appKey);	// Session found in table of sessions
+   Gbl.WebService.PlgCod = DB_QuerySELECTCode ("can not check application key",
+					       "SELECT PlgCod"
+					        " FROM plg_plugins"
+					       " WHERE AppKey='%s'",
+					       appKey);	// Session found in table of sessions
    if (Gbl.WebService.PlgCod < 0)
       return soap_sender_fault (soap,
 	                        "Unknown application key",
@@ -578,11 +578,11 @@ static int API_RemoveOldWSKeys (struct soap *soap)
 static int API_GetCurrentDegCodFromCurrentCrsCod (void)
   {
    /***** Check that key does not exist in database *****/
-   Gbl.Hierarchy.Deg.DegCod = DB_QuerySELECTCod ("can not get the degree of a course",
-						 "SELECT DegCod"
-						  " FROM crs_courses"
-						 " WHERE CrsCod=%ld",
-						 Gbl.Hierarchy.Crs.CrsCod);	// Course found in table of courses
+   Gbl.Hierarchy.Deg.DegCod = DB_QuerySELECTCode ("can not get the degree of a course",
+						  "SELECT DegCod"
+						   " FROM crs_courses"
+						  " WHERE CrsCod=%ld",
+						  Gbl.Hierarchy.Crs.CrsCod);	// Course found in table of courses
 
    return SOAP_OK;
   }
@@ -895,28 +895,28 @@ int swad__loginByUserPasswordKey (struct soap *soap,
       Str_RemoveLeadingArrobas (UsrIDNickOrEmail);
 
       /* User has typed a nickname */
-      Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCod ("can not get user's data",
-						     "SELECT usr_nicknames.UsrCod"
-						      " FROM usr_nicknames,"
-							    "usr_data"
-						     " WHERE usr_nicknames.Nickname='%s'"
-						       " AND usr_nicknames.UsrCod=usr_data.UsrCod"
-						       " AND usr_data.Password='%s'",
-						     UsrIDNickOrEmail,
-						     userPassword);
+      Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCode ("can not get user's data",
+						      "SELECT usr_nicknames.UsrCod"
+						       " FROM usr_nicknames,"
+							     "usr_data"
+						      " WHERE usr_nicknames.Nickname='%s'"
+						        " AND usr_nicknames.UsrCod=usr_data.UsrCod"
+						        " AND usr_data.Password='%s'",
+						      UsrIDNickOrEmail,
+						      userPassword);
      }
    else if (Mai_CheckIfEmailIsValid (UsrIDNickOrEmail))		// 2: It's an email
      {
       /* User has typed an email */
       // TODO: Get only if email confirmed?
-      Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCod ("can not get user's data",
-						     "SELECT usr_emails.UsrCod"
-						      " FROM usr_emails,usr_data"
-						     " WHERE usr_emails.E_mail='%s'"
-						       " AND usr_emails.UsrCod=usr_data.UsrCod"
-						       " AND usr_data.Password='%s'",
-						     UsrIDNickOrEmail,
-						     userPassword);
+      Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCode ("can not get user's data",
+						      "SELECT usr_emails.UsrCod"
+						       " FROM usr_emails,usr_data"
+						      " WHERE usr_emails.E_mail='%s'"
+						        " AND usr_emails.UsrCod=usr_data.UsrCod"
+						        " AND usr_data.Password='%s'",
+						      UsrIDNickOrEmail,
+						      userPassword);
      }
    else									// 3: It's not a nickname nor email
      {
@@ -927,15 +927,15 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 	{
 	 /* User has typed a valid user's ID (existing or not) */
 	 // TODO: Get only if ID confirmed?
-	 Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCod ("can not get user's data",
-							"SELECT usr_ids.UsrCod"
-							 " FROM usr_ids,"
-							       "usr_data"
-							" WHERE usr_ids.UsrID='%s'"
-							  " AND usr_ids.UsrCod=usr_data.UsrCod"
-							  " AND usr_data.Password='%s'",
-							UsrIDNickOrEmail,
-							userPassword);
+	 Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCode ("can not get user's data",
+							 "SELECT usr_ids.UsrCod"
+							  " FROM usr_ids,"
+							        "usr_data"
+							 " WHERE usr_ids.UsrID='%s'"
+							   " AND usr_ids.UsrCod=usr_data.UsrCod"
+							   " AND usr_data.Password='%s'",
+							 UsrIDNickOrEmail,
+							 userPassword);
 	}
       else	// String is not a valid user's nickname, email or ID
 	 return soap_receiver_fault (soap,
@@ -1245,20 +1245,20 @@ int swad__getNewPassword (struct soap *soap,
       Str_RemoveLeadingArrobas (UsrIDNickOrEmail);
 
       /* User has typed a nickname */
-      Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCod ("can not get user's data",
-						     "SELECT UsrCod"
-						      " FROM usr_nicknames"
-						     " WHERE Nickname='%s'",
-						     UsrIDNickOrEmail);
+      Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCode ("can not get user's data",
+						      "SELECT UsrCod"
+						       " FROM usr_nicknames"
+						      " WHERE Nickname='%s'",
+						      UsrIDNickOrEmail);
      }
    else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an email
       /* User has typed an email */
       // TODO: Get only if email confirmed?
-      Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCod ("can not get user's data",
-						     "SELECT UsrCod"
-						      " FROM usr_emails"
-						     " WHERE E_mail='%s'",
-						     UsrIDNickOrEmail);
+      Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCode ("can not get user's data",
+						      "SELECT UsrCod"
+						       " FROM usr_emails"
+						      " WHERE E_mail='%s'",
+						      UsrIDNickOrEmail);
    else									// 3: It's not a nickname nor email
      {
       // Users' IDs are always stored internally in capitals and without leading zeros
@@ -1267,11 +1267,11 @@ int swad__getNewPassword (struct soap *soap,
       if (ID_CheckIfUsrIDIsValid (UsrIDNickOrEmail))
 	 /* User has typed a valid user's ID (existing or not) */
 	 // TODO: Get only if ID confirmed?
-	 Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCod ("can not get user's data",
-						        "SELECT UsrCod"
-						         " FROM usr_ids"
-						        " WHERE UsrID='%s'",
-						        UsrIDNickOrEmail);
+	 Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCode ("can not get user's data",
+						         "SELECT UsrCod"
+						          " FROM usr_ids"
+						         " WHERE UsrID='%s'",
+						         UsrIDNickOrEmail);
       else	// String is not a valid user's nickname, email or ID
 	 return soap_receiver_fault (soap,
 				     "Bad log in",
@@ -2697,7 +2697,7 @@ static void API_GetListGrpsInAttendanceEventFromDB (struct soap *soap,
 	   NumGrp++)
 	{
 	 /* Get next group */
-	 GrpCod = DB_GetNextCod (mysql_res);
+	 GrpCod = DB_GetNextCode (mysql_res);
 	 snprintf (GrpCodStr,sizeof (GrpCodStr),NumGrp ? ",%ld" :
 			                                 "%ld",
 		   GrpCod);
@@ -3704,16 +3704,16 @@ int swad__sendMessage (struct soap *soap,
                                    "Original message does not exist");
 
       /***** Get the recipient of the message *****/
-      ReplyUsrCod = DB_QuerySELECTCod ("can not check original message",
-				       "SELECT UsrCod"
-					" FROM msg_snt"
-				       " WHERE MsgCod=%ld"
-				       " UNION "
-				       "SELECT UsrCod"
-					" FROM msg_snt_deleted"
-				       " WHERE MsgCod=%ld",
-				       (long) messageCode,
-				       (long) messageCode);
+      ReplyUsrCod = DB_QuerySELECTCode ("can not check original message",
+				        "SELECT UsrCod"
+					 " FROM msg_snt"
+				        " WHERE MsgCod=%ld"
+				        " UNION "
+				        "SELECT UsrCod"
+					 " FROM msg_snt_deleted"
+				        " WHERE MsgCod=%ld",
+				        (long) messageCode,
+				        (long) messageCode);
       if (ReplyUsrCod <= 0)
          return soap_sender_fault (soap,
                                    "Can not send reply message",
@@ -5418,7 +5418,7 @@ static void API_GetListGrpsInGameFromDB (struct soap *soap,
 	   NumGrp++)
 	{
 	 /* Get next group */
-	 GrpCod = DB_GetNextCod (mysql_res);
+	 GrpCod = DB_GetNextCode (mysql_res);
 	 snprintf (GrpCodStr,sizeof (GrpCodStr),NumGrp ? ",%ld" :
 			                                 "%ld",
 		   GrpCod);

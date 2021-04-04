@@ -3808,8 +3808,8 @@ unsigned long DB_QuerySELECT (MYSQL_RES **mysql_res,const char *MsgError,
 /*** Make a SELECT query for a unique row with one long code from database ***/
 /*****************************************************************************/
 
-long DB_QuerySELECTCod (const char *MsgError,
-                        const char *fmt,...)
+long DB_QuerySELECTCode (const char *MsgError,
+                         const char *fmt,...)
   {
    MYSQL_RES *mysql_res;
    va_list ap;
@@ -3826,7 +3826,7 @@ long DB_QuerySELECTCod (const char *MsgError,
 
    /***** Do SELECT query *****/
    if (DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError))	// Row found
-      Cod = DB_GetNextCod (mysql_res);
+      Cod = DB_GetNextCode (mysql_res);
    else
       Cod = -1L;
 
@@ -3870,7 +3870,7 @@ static unsigned long DB_QuerySELECTusingQueryStr (char *Query,
 /*****************************************************************************/
 /* Each row of the result should hold a code (long) */
 
-long DB_GetNextCod (MYSQL_RES *mysql_res)
+long DB_GetNextCode (MYSQL_RES *mysql_res)
   {
    MYSQL_ROW row;
 

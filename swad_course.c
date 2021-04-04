@@ -2992,7 +2992,6 @@ void Crs_RemoveOldCrss (void)
    unsigned MonthsWithoutAccess;
    unsigned long SecondsWithoutAccess;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumCrs;
    unsigned long NumCrss;
    unsigned NumCrssRemoved = 0;
@@ -3029,8 +3028,7 @@ void Crs_RemoveOldCrss (void)
            NumCrs < NumCrss;
            NumCrs++)
         {
-         row = mysql_fetch_row (mysql_res);
-         CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+         CrsCod = DB_GetNextCode (mysql_res);
          Crs_RemoveCourseCompletely (CrsCod);
          NumCrssRemoved++;
         }

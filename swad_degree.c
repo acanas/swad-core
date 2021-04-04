@@ -1438,7 +1438,7 @@ void Deg_GetShortNameOfDegreeByCod (struct Deg_Degree *Deg)
      {
       /***** Get the short name of a degree from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get the short name of a degree",
-			  "SELECT ShortName"
+			  "SELECT ShortName"	// row[0]
 			   " FROM deg_degrees"
 			  " WHERE DegCod=%ld",
 			  Deg->DegCod) == 1)
@@ -1459,29 +1459,16 @@ void Deg_GetShortNameOfDegreeByCod (struct Deg_Degree *Deg)
 
 long Deg_GetCtrCodOfDegreeByCod (long DegCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long CtrCod = -1L;
+   /***** Trivial check: degree code should be > 0 *****/
+   if (DegCod <= 0)
+      return -1L;
 
-   if (DegCod > 0)
-     {
-      /***** Get the center code of a degree from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get the center of a degree",
-			  "SELECT CtrCod"
-			   " FROM deg_degrees"
-			  " WHERE DegCod=%ld",
-			  DegCod) == 1)
-	{
-	 /***** Get the center code of this degree *****/
-	 row = mysql_fetch_row (mysql_res);
-	 CtrCod = Str_ConvertStrCodToLongCod (row[0]);
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-
-   return CtrCod;
+   /***** Get the center code of a degree from database *****/
+   return DB_QuerySELECTCode ("can not get the center of a degree",
+			      "SELECT CtrCod"
+			       " FROM deg_degrees"
+			      " WHERE DegCod=%ld",
+			      DegCod);
   }
 
 /*****************************************************************************/
@@ -1490,31 +1477,18 @@ long Deg_GetCtrCodOfDegreeByCod (long DegCod)
 
 long Deg_GetInsCodOfDegreeByCod (long DegCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long InsCod = -1L;
+   /***** Trivial check: degree code should be > 0 *****/
+   if (DegCod <= 0)
+      return -1L;
 
-   if (DegCod > 0)
-     {
-      /***** Get the institution code of a degree from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get the institution of a degree",
-			  "SELECT ctr_centers.InsCod"
-			   " FROM deg_degrees,"
-			         "ctr_centers"
-			  " WHERE deg_degrees.DegCod=%ld"
-			    " AND deg_degrees.CtrCod=ctr_centers.CtrCod",
-			  DegCod) == 1)
-	{
-	 /***** Get the institution code of this degree *****/
-	 row = mysql_fetch_row (mysql_res);
-	 InsCod = Str_ConvertStrCodToLongCod (row[0]);
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-
-   return InsCod;
+   /***** Get the institution code of a degree from database *****/
+   return DB_QuerySELECTCode ("can not get the institution of a degree",
+			     "SELECT ctr_centers.InsCod"
+			      " FROM deg_degrees,"
+				    "ctr_centers"
+			     " WHERE deg_degrees.DegCod=%ld"
+			       " AND deg_degrees.CtrCod=ctr_centers.CtrCod",
+			     DegCod);
   }
 
 /*****************************************************************************/
@@ -1524,7 +1498,6 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod)
 void Deg_RemoveDegreeCompletely (long DegCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumRows;
    unsigned long NumRow;
    long CrsCod;
@@ -1532,7 +1505,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
 
    /***** Get courses of a degree from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get courses of a degree",
-			     "SELECT CrsCod"
+			     "SELECT CrsCod"	// row[0]
 			      " FROM crs_courses"
 			     " WHERE DegCod=%ld",
 			     DegCod);
@@ -1543,10 +1516,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
 	NumRow++)
      {
       /* Get next course */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get course code (row[0]) */
-      if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((CrsCod = DB_GetNextCode (mysql_res)) < 0)
          Lay_ShowErrorAndExit ("Wrong code of course.");
 
       /* Remove course */

@@ -1079,8 +1079,8 @@ static void Fig_GetAndShowInssOrderedByNumCtrs (void)
       case Hie_Lvl_SYS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT InsCod,"
-			        "COUNT(*) AS N"
+			 "SELECT InsCod,"		// row[0]
+			        "COUNT(*) AS N"		// row[1]
 			  " FROM ctr_centers"
 			 " GROUP BY InsCod"
 			 " ORDER BY N DESC");
@@ -1088,8 +1088,8 @@ static void Fig_GetAndShowInssOrderedByNumCtrs (void)
       case Hie_Lvl_CTY:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"
-			        "COUNT(*) AS N"
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+			        "COUNT(*) AS N"		// row[1]
 			  " FROM ins_instits,"
 			        "ctr_centers"
 			 " WHERE ins_instits.CtyCod=%ld"
@@ -1104,8 +1104,8 @@ static void Fig_GetAndShowInssOrderedByNumCtrs (void)
       case Hie_Lvl_CRS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT InsCod,"
-			        "COUNT(*) AS N"
+			 "SELECT InsCod,"		// row[0]
+			        "COUNT(*) AS N"		// row[1]
 			  " FROM ctr_centers"
 			 " WHERE InsCod=%ld"
 			 " GROUP BY InsCod"
@@ -1149,8 +1149,8 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
       case Hie_Lvl_SYS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"
-			        "COUNT(*) AS N"
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+			        "COUNT(*) AS N"		// row[1]
 			  " FROM ctr_centers,"
 			        "deg_degrees"
 			 " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
@@ -1160,8 +1160,8 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
       case Hie_Lvl_CTY:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"
-			        "COUNT(*) AS N"
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+			        "COUNT(*) AS N"		// row[1]
 			  " FROM ins_instits,"
 			        "ctr_centers,"
 			        "deg_degrees"
@@ -1178,8 +1178,8 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
       case Hie_Lvl_CRS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"
-			        "COUNT(*) AS N"
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+			        "COUNT(*) AS N"		// row[1]
 			  " FROM ctr_centers,"
 			        "deg_degrees"
 			 " WHERE ctr_centers.InsCod=%ld"
@@ -1225,8 +1225,8 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
       case Hie_Lvl_SYS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"
-			        "COUNT(*) AS N"
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+			        "COUNT(*) AS N"		// row[1]
 			  " FROM ctr_centers,"
 			        "deg_degrees,"
 			        "crs_courses"
@@ -1238,8 +1238,8 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
       case Hie_Lvl_CTY:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"
-			        "COUNT(*) AS N"
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+			        "COUNT(*) AS N"		// row[1]
 			  " FROM ins_instits,"
 			        "ctr_centers,"
 			        "deg_degrees,"
@@ -1258,8 +1258,8 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
       case Hie_Lvl_CRS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"
-			        "COUNT(*) AS N"
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+			        "COUNT(*) AS N"		// row[1]
 			  " FROM ctr_centers,"
 			        "deg_degrees,"
 			        "crs_courses"
@@ -1307,8 +1307,8 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void)
       case Hie_Lvl_SYS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"
-			        "COUNT(DISTINCT crs_users.UsrCod) AS N"
+			 "SELECT ctr_centers.InsCod,"			// row[0]
+			        "COUNT(DISTINCT crs_users.UsrCod) AS N"	// row[1]
 			  " FROM ctr_centers,"
 			        "deg_degrees,"
 			        "crs_courses,"
@@ -1322,8 +1322,8 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void)
       case Hie_Lvl_CTY:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"
-			        "COUNT(DISTINCT crs_users.UsrCod) AS N"
+			 "SELECT ctr_centers.InsCod,"			// row[0]
+			        "COUNT(DISTINCT crs_users.UsrCod) AS N"	// row[1]
 			  " FROM ins_instits,"
 			        "ctr_centers,"
 			        "deg_degrees,"
@@ -1344,8 +1344,8 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void)
       case Hie_Lvl_CRS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"
-			        "COUNT(DISTINCT crs_users.UsrCod) AS N"
+			 "SELECT ctr_centers.InsCod,"			// row[0]
+			        "COUNT(DISTINCT crs_users.UsrCod) AS N"	// row[1]
 			  " FROM ctr_centers,"
 			        "deg_degrees,"
 			        "crs_courses,"
@@ -1396,7 +1396,8 @@ static void Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
       case Hie_Lvl_SYS:
 	 NumInss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
-				    "SELECT InsCod,COUNT(*) AS N"
+				    "SELECT InsCod,"		// row[0]
+				           "COUNT(*) AS N"	// row[1]
 				     " FROM usr_data"
 				    " WHERE InsCod>0"
 				    " GROUP BY InsCod"
@@ -1405,7 +1406,8 @@ static void Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
       case Hie_Lvl_CTY:
 	 NumInss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
-				    "SELECT usr_data.InsCod,COUNT(*) AS N"
+				    "SELECT usr_data.InsCod,"	// row[0]
+				           "COUNT(*) AS N"	// row[1]
 				     " FROM ins_instits,usr_data"
 				    " WHERE ins_instits.CtyCod=%ld"
 				      " AND ins_instits.InsCod=usr_data.InsCod"
@@ -1419,7 +1421,8 @@ static void Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
       case Hie_Lvl_CRS:
 	 NumInss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
-				    "SELECT InsCod,COUNT(*) AS N"
+				    "SELECT InsCod,"		// row[0]
+				           "COUNT(*) AS N"	// row[1]
 				     " FROM usr_data"
 				    " WHERE InsCod=%ld"
 				    " GROUP BY InsCod"
@@ -3583,8 +3586,8 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	 case Hie_Lvl_SYS:
 	    NumRows =
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			    "SELECT COUNT(*),"
-				   "COUNT(DISTINCT UsrCod)"
+			    "SELECT COUNT(*),"				// row[0]
+				   "COUNT(DISTINCT UsrCod)"		// row[1]
 			    " FROM tml_notes WHERE NoteType=%u",
 			    NoteType);
 	    break;
@@ -3735,8 +3738,8 @@ static void Fig_GetAndShowTimelineActivityStats (void)
       case Hie_Lvl_SYS:
 	 NumRows =
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-		         "SELECT COUNT(*),"
-			        "COUNT(DISTINCT UsrCod)"
+		         "SELECT COUNT(*),"				// row[0]
+			        "COUNT(DISTINCT UsrCod)"		// row[1]
 		         " FROM tml_notes");
 	 break;
       case Hie_Lvl_CTY:

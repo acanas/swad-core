@@ -238,7 +238,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	   {
 	    /***** Get user's data from query result *****/
 	    /* Get user's code */
-	    UsrDat.UsrCod = DB_GetNextCod (mysql_res);
+	    UsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
 	    /* Get user's data */
             Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);

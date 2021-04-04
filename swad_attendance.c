@@ -720,7 +720,7 @@ static void Att_GetListAttEvents (struct Att_Events *Events,
 	   NumAttEvent++)
         {
          /* Get next attendance event code */
-         if ((Events->Lst[NumAttEvent].AttCod = DB_GetNextCod (mysql_res)) < 0)
+         if ((Events->Lst[NumAttEvent].AttCod = DB_GetNextCode (mysql_res)) < 0)
             Lay_ShowErrorAndExit ("Error: wrong attendance event code.");
         }
      }
@@ -3069,7 +3069,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
 		       NumGrpInThisEvent++)
 		    {
 		     /* Get next group associated to this event */
-		     if ((GrpCodInThisEvent = DB_GetNextCod (mysql_res)) > 0)
+		     if ((GrpCodInThisEvent = DB_GetNextCode (mysql_res)) > 0)
 			/* Check if this group is selected */
 			for (NumGrpSel = 0;
 			     NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps &&

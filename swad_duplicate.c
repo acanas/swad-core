@@ -146,9 +146,9 @@ void Dup_ListDuplicateUsrs (void)
    /***** Make query *****/
    NumUsrs = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get possibly duplicate users",
-		   "SELECT UsrCod,"
-		          "COUNT(*) AS N,"
-		          "UNIX_TIMESTAMP(MIN(InformTime)) AS T"
+		   "SELECT UsrCod,"					// row[0]
+		          "COUNT(*) AS N,"				// row[1]
+		          "UNIX_TIMESTAMP(MIN(InformTime)) AS T"	// row[2]
 		    " FROM usr_duplicated"
 		   " GROUP BY UsrCod"
 		   " ORDER BY N DESC,"
@@ -263,7 +263,6 @@ static void Dup_ListSimilarUsrs (void)
    extern const char *Txt_Similar_users;
    struct UsrData UsrDat;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumUsrs;
    unsigned NumUsr;
 
@@ -325,10 +324,8 @@ static void Dup_ListSimilarUsrs (void)
            NumUsr < NumUsrs;
            NumUsr++)
         {
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get user code (row[0]) */
-         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+         /* Get user code */
+         UsrDat.UsrCod = DB_GetNextCode (mysql_res);
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
            {
             /* Get if user has accepted all his/her courses */

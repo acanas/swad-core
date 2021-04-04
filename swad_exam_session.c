@@ -200,20 +200,20 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 
    /***** Get data of sessions from database *****/
    NumSessions = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get sessions",
-			       "SELECT SesCod,"					// row[0]
-				      "ExaCod,"					// row[1]
-				      "Hidden,"					// row[2]
-				      "UsrCod,"					// row[3]
-				      "UNIX_TIMESTAMP(StartTime),"		// row[4]
-				      "UNIX_TIMESTAMP(EndTime),"		// row[5]
-				      "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
-				      "Title,"					// row[7]
-				      "ShowUsrResults"				// row[8]
-			        " FROM exa_sessions"
-			       " WHERE ExaCod=%ld%s%s"
-			       " ORDER BY SesCod",
-			       Exam->ExaCod,HiddenSubQuery,GroupsSubQuery);
+   DB_QuerySELECT (&mysql_res,"can not get sessions",
+		   "SELECT SesCod,"					// row[0]
+			  "ExaCod,"					// row[1]
+			  "Hidden,"					// row[2]
+			  "UsrCod,"					// row[3]
+			  "UNIX_TIMESTAMP(StartTime),"		// row[4]
+			  "UNIX_TIMESTAMP(EndTime),"		// row[5]
+			  "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
+			  "Title,"					// row[7]
+			  "ShowUsrResults"				// row[8]
+		    " FROM exa_sessions"
+		   " WHERE ExaCod=%ld%s%s"
+		   " ORDER BY SesCod",
+		   Exam->ExaCod,HiddenSubQuery,GroupsSubQuery);
 
    /***** Free allocated memory for subqueries *****/
    free (GroupsSubQuery);
@@ -303,24 +303,24 @@ void ExaSes_GetDataOfSessionByCod (struct ExaSes_Session *Session)
 
    /***** Get exam data session from database *****/
    NumRows = (unsigned)
-	     DB_QuerySELECT (&mysql_res,"can not get sessions",
-			     "SELECT SesCod,"					// row[0]
-				    "ExaCod,"					// row[1]
-				    "Hidden,"					// row[2]
-				    "UsrCod,"					// row[3]
-				    "UNIX_TIMESTAMP(StartTime),"		// row[4]
-				    "UNIX_TIMESTAMP(EndTime),"			// row[5]
-	                     	    "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
-				    "Title,"					// row[7]
-				    "ShowUsrResults"				// row[8]
-			      " FROM exa_sessions"
-			     " WHERE SesCod=%ld"
-			       " AND ExaCod IN"		// Extra check
-			           " (SELECT ExaCod"
-			              " FROM exa_exams"
-			             " WHERE CrsCod='%ld')",
-			     Session->SesCod,
-			     Gbl.Hierarchy.Crs.CrsCod);
+   DB_QuerySELECT (&mysql_res,"can not get sessions",
+		   "SELECT SesCod,"					// row[0]
+			  "ExaCod,"					// row[1]
+			  "Hidden,"					// row[2]
+			  "UsrCod,"					// row[3]
+			  "UNIX_TIMESTAMP(StartTime),"			// row[4]
+			  "UNIX_TIMESTAMP(EndTime),"			// row[5]
+			  "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
+			  "Title,"					// row[7]
+			  "ShowUsrResults"				// row[8]
+		    " FROM exa_sessions"
+		   " WHERE SesCod=%ld"
+		     " AND ExaCod IN"		// Extra check
+		         " (SELECT ExaCod"
+			    " FROM exa_exams"
+			   " WHERE CrsCod='%ld')",
+		   Session->SesCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
    if (NumRows) // Session found...
       /* Get exam session data from row */
       ExaSes_GetSessionDataFromRow (mysql_res,Session);

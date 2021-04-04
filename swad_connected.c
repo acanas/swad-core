@@ -637,8 +637,8 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	       break;
 	    case Hie_Lvl_CTY:		// Show connected users in the current country
 	       DB_QuerySELECT (&mysql_res,"can not get number"
-					      " of connected users"
-					      " who belong to this location",
+					  " of connected users"
+					  " who belong to this location",
 			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
 			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
 			              "MIN(usr_data.Sex)"			// row[2]

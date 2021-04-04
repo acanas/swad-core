@@ -675,7 +675,6 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
   {
    extern const char *Txt_Following;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumUsrs;
    unsigned long NumUsr;
    struct UsrData FollowingUsrDat;
@@ -685,7 +684,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
      {
       /***** Check if a user is a follower of another user *****/
       NumUsrs = DB_QuerySELECT (&mysql_res,"can not get followed users",
-				"SELECT FollowedCod"
+				"SELECT FollowedCod"	// row[0]
 				 " FROM usr_follow"
 				" WHERE FollowerCod=%ld"
 				" ORDER BY FollowTime DESC",
@@ -705,11 +704,8 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 	      NumUsr < NumUsrs;
 	      NumUsr++)
 	   {
-	    /***** Get user *****/
-	    row = mysql_fetch_row (mysql_res);
-
-	    /* Get user's code (row[0]) */
-	    FollowingUsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	    /***** Get user's code *****/
+	    FollowingUsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
 	    /***** Show user *****/
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
@@ -759,7 +755,6 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
   {
    extern const char *Txt_Followers;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumUsrs;
    unsigned long NumUsr;
    struct UsrData FollowerUsrDat;
@@ -790,11 +785,8 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 	      NumUsr < NumUsrs;
 	      NumUsr++)
 	   {
-	    /***** Get user and number of clicks *****/
-	    row = mysql_fetch_row (mysql_res);
-
-	    /* Get user's code (row[0]) */
-	    FollowerUsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	    /***** Get user's code *****/
+	    FollowerUsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
 	    /***** Show user *****/
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
@@ -1378,8 +1370,8 @@ void Fol_GetAndShowRankingFollowers (void)
       case Hie_Lvl_SYS:
 	 NumUsrs = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT FollowedCod,"			// row[0]
-			        "COUNT(FollowerCod) AS N"	// row[1]
+			 "SELECT FollowedCod,"					// row[0]
+			        "COUNT(FollowerCod) AS N"			// row[1]
 			  " FROM usr_follow"
 			 " GROUP BY FollowedCod"
 			 " ORDER BY N DESC,"

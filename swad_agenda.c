@@ -1175,7 +1175,7 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
 	      NumEvent < Agenda->Num;
 	      NumEvent++)
 	    /* Get next event code */
-	    if ((Agenda->LstAgdCods[NumEvent] = DB_GetNextCod (mysql_res)) < 0)
+	    if ((Agenda->LstAgdCods[NumEvent] = DB_GetNextCode (mysql_res)) < 0)
 	       Lay_ShowErrorAndExit ("Error: wrong event code.");
 	}
 
