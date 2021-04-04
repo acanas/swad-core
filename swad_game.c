@@ -1138,7 +1138,7 @@ static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 
    /***** Get text of game from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get game text",
-			     "SELECT Txt"
+			     "SELECT Txt"	// row[0]
 			      " FROM gam_games"
 			     " WHERE GamCod=%ld",
 			     GamCod);
@@ -1878,26 +1878,18 @@ static unsigned Gam_GetQstIndFromQstCod (long GamCod,long QstCod)
 
 long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    long QstCod;
 
    /***** Get question code of the question to be moved up *****/
-   if (!DB_QuerySELECT (&mysql_res,"can not get question code",
-			"SELECT QstCod"
-			 " FROM gam_questions"
-			" WHERE GamCod=%ld"
-			  " AND QstInd=%u",
-			GamCod,QstInd))
+   QstCod = DB_QuerySELECTCode ("can not get question code",
+				"SELECT QstCod"
+				 " FROM gam_questions"
+				" WHERE GamCod=%ld"
+				  " AND QstInd=%u",
+				GamCod,
+				QstInd);
+   if (QstCod <= 0)
       Lay_ShowErrorAndExit ("Error: wrong question index.");
-
-   /***** Get question code (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-      Lay_ShowErrorAndExit ("Error: wrong question code.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
 
    return QstCod;
   }
@@ -1916,7 +1908,7 @@ static unsigned Gam_GetMaxQuestionIndexInGame (long GamCod)
 
    /***** Get maximum question index in a game from database *****/
    DB_QuerySELECT (&mysql_res,"can not get last question index",
-		   "SELECT MAX(QstInd)"
+		   "SELECT MAX(QstInd)"		// row[0]
 		    " FROM gam_questions"
 		   " WHERE GamCod=%ld",
                    GamCod);
@@ -1984,7 +1976,7 @@ unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
    if (!DB_QuerySELECT (&mysql_res,"can not get next question index",
-			"SELECT MIN(QstInd)"
+			"SELECT MIN(QstInd)"	// row[0]
 			 " FROM gam_questions"
 			" WHERE GamCod=%ld"
 			  " AND QstInd>%u",
@@ -2834,7 +2826,7 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
      {
       case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
-			 "SELECT AVG(NumQsts)"
+			 "SELECT AVG(NumQsts)"		// row[0]
 			  " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
 				  " FROM gam_games,"
 					"gam_questions"
@@ -2843,7 +2835,7 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
          break;
       case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
-			 "SELECT AVG(NumQsts)"
+			 "SELECT AVG(NumQsts)"		// row[0]
 			 " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
 				 " FROM ins_instits,"
 				       "ctr_centers,"
@@ -2862,7 +2854,7 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
          break;
       case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
-			 "SELECT AVG(NumQsts)"
+			 "SELECT AVG(NumQsts)"		// row[0]
 			 " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
 			         " FROM ctr_centers,"
 				       "deg_degrees,"
@@ -2879,7 +2871,7 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
          break;
       case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
-			 "SELECT AVG(NumQsts)"
+			 "SELECT AVG(NumQsts)"		// row[0]
 			  " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
 				  " FROM deg_degrees,"
 					"crs_courses,"
@@ -2894,7 +2886,7 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
          break;
       case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
-			 "SELECT AVG(NumQsts)"
+			 "SELECT AVG(NumQsts)"		// row[0]
 			  " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
 			          " FROM crs_courses,"
 				        "gam_games,"
@@ -2907,7 +2899,7 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
          break;
       case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
-			 "SELECT AVG(NumQsts)"
+			 "SELECT AVG(NumQsts)"		// row[0]
 			  " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
 			          " FROM gam_games,"
 				        "gam_questions"
@@ -2964,39 +2956,22 @@ void Gam_ShowTstTagsPresentInAGame (long GamCod)
 
 void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumRows;
-   unsigned NumRow;
    unsigned NumAnswers;
 
    /***** Get maximum score of a game from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get data of a question",
-		   "SELECT COUNT(tst_answers.AnsInd) AS N"
-		    " FROM tst_answers,"
-			  "gam_questions"
-		   " WHERE gam_questions.GamCod=%ld"
-		     " AND gam_questions.QstCod=tst_answers.QstCod"
-		   " GROUP BY tst_answers.QstCod",
-		   GamCod);
-   for (NumRow = 0, *MinScore = *MaxScore = 0.0;
-	NumRow < NumRows;
-	NumRow++)
-     {
-      row = mysql_fetch_row (mysql_res);
+   NumAnswers = DB_QueryCOUNT ("can not number of answers of a question",
+			       "SELECT COUNT(tst_answers.AnsInd)"
+				" FROM tst_answers,"
+				      "gam_questions"
+			       " WHERE gam_questions.GamCod=%ld"
+				 " AND gam_questions.QstCod=tst_answers.QstCod"
+			       " GROUP BY tst_answers.QstCod",
+			       GamCod);
+   if (NumAnswers < 2)
+      Lay_ShowErrorAndExit ("Wrong number of answers.");
 
-      /* Get min answers (row[0]) */
-      if (sscanf (row[0],"%u",&NumAnswers) != 1)
-         NumAnswers = 0;
-
-      /* Accumulate minimum and maximum score */
-      if (NumAnswers < 2)
-	 Lay_ShowErrorAndExit ("Wrong number of answers.");
-      *MinScore += -1.0 / (double) (NumAnswers - 1);
-      *MaxScore +=  1.0;
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   /***** Set minimum and maximum scores *****/
+   *MinScore = *MaxScore = 0.0;
+   *MinScore += -1.0 / (double) (NumAnswers - 1);
+   *MaxScore +=  1.0;
   }
