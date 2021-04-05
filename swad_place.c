@@ -365,10 +365,10 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
 
    /***** Get places from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get places",
-			     "(SELECT plc_places.PlcCod,"
-				     "plc_places.ShortName,"
-				     "plc_places.FullName,"
-				     "COUNT(*) AS NumCtrs"
+			     "(SELECT plc_places.PlcCod,"	// row[0]
+				     "plc_places.ShortName,"	// row[1]
+				     "plc_places.FullName,"	// row[2]
+				     "COUNT(*) AS NumCtrs"	// row[3]
 			       " FROM plc_places,"
 			             "ctr_centers"
 			      " WHERE plc_places.InsCod=%ld"

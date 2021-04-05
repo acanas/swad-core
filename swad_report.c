@@ -1101,8 +1101,8 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
    /***** Get historic courses of a user from log *****/
    NumCrss =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses of a user",
-			      "SELECT CrsCod,"
-			             "COUNT(*) AS N"
+			      "SELECT CrsCod,"		// row[0]
+			             "COUNT(*) AS N"	// row[1]
 			       " FROM log"
 			      " WHERE UsrCod=%ld"
 			        " AND Role=%u"
@@ -1242,8 +1242,9 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
       sprintf (SubQueryRol," AND Role=%u",(unsigned) Role);
 
    NumRows = DB_QuerySELECT (&mysql_res,"can not get clicks",
-			     "SELECT SQL_NO_CACHE YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
-			                         "COUNT(*) FROM log"
+			     "SELECT SQL_NO_CACHE YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"	// row[0]
+			                         "COUNT(*)"								// row[1]
+			      " FROM log"
 			     " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
 			       " AND UsrCod=%ld"
 			       "%s"

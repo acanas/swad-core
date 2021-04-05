@@ -133,8 +133,8 @@ void Ins_SeeInsWithPendingCtrs (void)
       case Rol_INS_ADM:
          NumInss = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get institutions with pending centers",
-			 "SELECT ctr_centers.InsCod,"
-			        "COUNT(*)"
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+			        "COUNT(*)"		// row[1]
 			  " FROM ctr_centers,"
 			        "ins_admin,"
 			        "ins_instits"
@@ -150,8 +150,8 @@ void Ins_SeeInsWithPendingCtrs (void)
       case Rol_SYS_ADM:
          NumInss = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get institutions with pending centers",
-			 "SELECT ctr_centers.InsCod,"
-			        "COUNT(*)"
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+			        "COUNT(*)"		// row[1]
 			  " FROM ctr_centers,"
 			        "ins_instits"
 			 " WHERE (ctr_centers.Status & %u)<>0"
@@ -899,9 +899,8 @@ void Ins_GetShortNameOfInstitution (struct Ins_Instit *Ins)
    /***** 3. Slow: get short name of institution from database *****/
    Gbl.Cache.InstitutionShrtName.InsCod = Ins->InsCod;
 
-   if (DB_QuerySELECT (&mysql_res,"can not get the short name"
-				  " of an institution",
-	               "SELECT ShortName"
+   if (DB_QuerySELECT (&mysql_res,"can not get the short name of an institution",
+	               "SELECT ShortName"	// row[0]
 	                " FROM ins_instits"
 	               " WHERE InsCod=%ld",
 	               Ins->InsCod) == 1)
@@ -1041,8 +1040,8 @@ void Ins_WriteSelectorOfInstitution (void)
       /***** Get institutions of selected country from database *****/
       NumInss =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
-	                         "SELECT DISTINCT InsCod,"
-	                                         "ShortName"
+	                         "SELECT DISTINCT InsCod,"	// row[0]
+	                                         "ShortName"	// row[1]
 	                          " FROM ins_instits"
 				 " WHERE CtyCod=%ld"
 				 " ORDER BY ShortName",
@@ -2139,7 +2138,6 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
   {
    extern const char *Txt_institution;
    extern const char *Txt_institutions;
-   MYSQL_ROW row;
    unsigned NumIns;
    struct Ins_Instit Ins;
 
@@ -2164,10 +2162,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
 	   NumIns++)
 	{
 	 /* Get next institution */
-	 row = mysql_fetch_row (*mysql_res);
-
-	 /* Get institution code (row[0]) */
-	 Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
+	 Ins.InsCod = DB_GetNextCode (*mysql_res);
 
 	 /* Get data of institution */
 	 Ins_GetDataOfInstitutionByCod (&Ins);
@@ -2247,7 +2242,7 @@ bool Ins_GetIfMapIsAvailable (long InsCod)
    /***** Get if any center in current institution has a coordinate set
           (coordinates 0, 0 means not set ==> don't show map) *****/
    if (DB_QuerySELECT (&mysql_res,"can not get if map is available",
-		       "SELECT EXISTS"
+		       "SELECT EXISTS"	// row[0]
 		       "(SELECT *"
 		         " FROM ctr_centers"
 		        " WHERE InsCod=%ld"

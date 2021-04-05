@@ -537,7 +537,7 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
    /***** Get info types where students must read info *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get if you must read"
 					" any course info",
-			     "SELECT InfoType"
+			     "SELECT InfoType"		// row[0]
 			      " FROM crs_info_src"
 			     " WHERE CrsCod=%ld"
 			       " AND MustBeRead='Y'"
@@ -1467,7 +1467,7 @@ Inf_InfoSrc_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType)
 
    /***** Get info source for a specific type of info from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get info source",
-		       "SELECT InfoSrc"
+		       "SELECT InfoSrc"		// row[0]
 		        " FROM crs_info_src"
 		       " WHERE CrsCod=%ld"
 		         " AND InfoType='%s'",
@@ -1508,8 +1508,8 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
 
    /***** Get info source for a specific type of info from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get info source",
-			     "SELECT InfoSrc,"
-			            "MustBeRead"
+			     "SELECT InfoSrc,"		// row[0]
+			            "MustBeRead"	// row[1]
 			      " FROM crs_info_src"
 			     " WHERE CrsCod=%ld"
 			       " AND InfoType='%s'",
@@ -1668,8 +1668,8 @@ void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
    /***** Get info source for a specific type of course information
           (bibliography, FAQ, links or evaluation) from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get info text",
-			     "SELECT InfoTxtHTML,"
-			            "InfoTxtMD"
+			     "SELECT InfoTxtHTML,"	// row[0]
+			            "InfoTxtMD"		// row[1]
 			      " FROM crs_info_txt"
 			     " WHERE CrsCod=%ld"
 			       " AND InfoType='%s'",

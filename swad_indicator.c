@@ -1375,7 +1375,7 @@ int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
 
    /***** Get number of indicators of a course from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get number of indicators",
-	               "SELECT NumIndicators"
+	               "SELECT NumIndicators"	// row[0]
 	                " FROM crs_courses"
 	               " WHERE CrsCod=%ld",
 		       CrsCod))
@@ -1492,10 +1492,10 @@ static unsigned long Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod)
    /***** Get number of files in document zones of a course from database *****/
    DB_QuerySELECT (&mysql_res,"can not get the number of files",
 		   "SELECT"
-		   " (SELECT COALESCE(SUM(NumFiles),0)"
+		   " (SELECT COALESCE(SUM(NumFiles),0)"			// row[0]
 		      " FROM brw_sizes"
 		     " WHERE FileBrowser=%u AND Cod=%ld) +"
-		   " (SELECT COALESCE(SUM(brw_sizes.NumFiles),0)"
+		   " (SELECT COALESCE(SUM(brw_sizes.NumFiles),0)"	// row[0]
 		      " FROM grp_types,"
 		            "grp_groups,"
 		            "brw_sizes"
@@ -1535,10 +1535,10 @@ static unsigned long Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod)
    /***** Get number of files in document zones of a course from database *****/
    DB_QuerySELECT (&mysql_res,"can not get the number of files",
 		   "SELECT"
-		   " (SELECT COALESCE(SUM(NumFiles),0)"
+		   " (SELECT COALESCE(SUM(NumFiles),0)"			// row[0]
 		      " FROM brw_sizes"
 		     " WHERE FileBrowser=%u AND Cod=%ld) +"
-		   " (SELECT COALESCE(SUM(brw_sizes.NumFiles),0)"
+		   " (SELECT COALESCE(SUM(brw_sizes.NumFiles),0)"	// row[0]
 		      " FROM grp_types,"
 		            "grp_groups,"
 		            "brw_sizes"
@@ -1577,7 +1577,7 @@ static unsigned long Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod)
 
    /***** Get number of files in document zones of a course from database *****/
    DB_QuerySELECT (&mysql_res,"can not get the number of files",
-		   "SELECT COALESCE(SUM(NumFiles),0)"
+		   "SELECT COALESCE(SUM(NumFiles),0)"	// row[0]
 		    " FROM brw_sizes"
 		   " WHERE FileBrowser=%u"
 		     " AND Cod=%ld",
@@ -1610,7 +1610,7 @@ static unsigned long Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod)
 
    /***** Get number of files in document zones of a course from database *****/
    DB_QuerySELECT (&mysql_res,"can not get the number of files",
-		   "SELECT COALESCE(SUM(NumFiles),0)"
+		   "SELECT COALESCE(SUM(NumFiles),0)"	// row[0]
 		    " FROM brw_sizes"
 		   " WHERE FileBrowser=%u"
 		     " AND Cod=%ld",

@@ -770,8 +770,8 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match 
 
    /***** Get groups associated to a match from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of a match",
-			     "SELECT grp_types.GrpTypName,"
-			            "grp_groups.GrpName"
+			     "SELECT grp_types.GrpTypName,"	// row[0]
+			            "grp_groups.GrpName"	// row[1]
 			      " FROM mch_groups,"
 			            "grp_groups,"
 			            "grp_types"
@@ -2074,7 +2074,7 @@ static void Mch_GetElapsedTimeInQuestion (const struct Mch_Match *Match,
    /***** Query database *****/
    NumRows = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get elapsed time",
-		   "SELECT ElapsedTime"
+		   "SELECT ElapsedTime"	// row[0]
 		    " FROM mch_times"
 		   " WHERE MchCod=%ld"
 		     " AND QstInd=%u",
@@ -2101,7 +2101,7 @@ static void Mch_GetElapsedTimeInMatch (const struct Mch_Match *Match,
    /***** Query database *****/
    NumRows = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get elapsed time",
-		   "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(ElapsedTime)))"
+		   "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(ElapsedTime)))"	// row[0]
 		    " FROM mch_times"
 		   " WHERE MchCod=%ld",
 		   Match->MchCod);
@@ -3505,7 +3505,7 @@ static void Mch_ShowMatchScore (const struct Mch_Match *Match)
 
    /***** Get maximum number of users *****/
    if (DB_QuerySELECT (&mysql_res,"can not get max users",
-		       "SELECT MAX(NumUsrs)"	// row[1]
+		       "SELECT MAX(NumUsrs)"	// row[0]
 		        " FROM (SELECT COUNT(*) AS NumUsrs"
 		                " FROM mch_results"
 		               " WHERE MchCod=%ld"
@@ -4115,16 +4115,17 @@ void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
    UsrAnswer->AnsInd = -1;	// < 0 ==> no answer selected
 
    /***** Get student's answer *****/
-   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's answer to a match question",
-					"SELECT NumOpt,"	// row[0]
-					       "AnsInd"		// row[1]
-					 " FROM mch_answers"
-					" WHERE MchCod=%ld"
-					  " AND UsrCod=%ld"
-					  " AND QstInd=%u",
-					MchCod,
-					UsrCod,
-					QstInd);
+   NumRows = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get user's answer to a match question",
+		   "SELECT NumOpt,"	// row[0]
+			  "AnsInd"	// row[1]
+		    " FROM mch_answers"
+		   " WHERE MchCod=%ld"
+		     " AND UsrCod=%ld"
+		     " AND QstInd=%u",
+		   MchCod,
+		   UsrCod,
+		   QstInd);
    if (NumRows) // Answer found...
      {
       row = mysql_fetch_row (mysql_res);

@@ -121,7 +121,7 @@ bool Nck_GetNicknameFromUsrCod (long UsrCod,
 
    /***** Get current (last updated) user's nickname from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get nickname",
-		       "SELECT Nickname"
+		       "SELECT Nickname"	// row[0]
 		        " FROM usr_nicknames"
 		       " WHERE UsrCod=%ld"
 		       " ORDER BY CreatTime DESC"
@@ -154,39 +154,27 @@ bool Nck_GetNicknameFromUsrCod (long UsrCod,
 long Nck_GetUsrCodFromNickname (const char *Nickname)
   {
    char NickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long UsrCod = -1L;
 
-   if (Nickname)
-      if (Nickname[0])
-	{
-	 /***** Make a copy without possible starting arrobas *****/
-	 Str_Copy (NickWithoutArr,Nickname,sizeof (NickWithoutArr) - 1);
-	 Str_RemoveLeadingArrobas (NickWithoutArr);
+   /***** Trivial check 1: nickname should be not null *****/
+   if (!Nickname)
+      return -1L;
 
-	 /***** Get user's code from database *****/
-	 /* Check if user code from table usr_nicknames is also in table usr_data */
-	 if (DB_QuerySELECT (&mysql_res,"can not get user's code",
-			     "SELECT usr_nicknames.UsrCod"
-			      " FROM usr_nicknames,"
-			            "usr_data"
-			     " WHERE usr_nicknames.Nickname='%s'"
-			       " AND usr_nicknames.UsrCod=usr_data.UsrCod",
-			     NickWithoutArr))
-	   {
-	    /* Get row */
-	    row = mysql_fetch_row (mysql_res);
+   /***** Trivial check 2: nickname should be not empty *****/
+   if (!Nickname[0])
+      return -1L;
 
-	    /* Get user's code */
-	    UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-	   }
+   /***** Make a copy without possible starting arrobas *****/
+   Str_Copy (NickWithoutArr,Nickname,sizeof (NickWithoutArr) - 1);
+   Str_RemoveLeadingArrobas (NickWithoutArr);
 
-	 /***** Free structure that stores the query result *****/
-	 DB_FreeMySQLResult (&mysql_res);
-	}
-
-   return UsrCod;
+   /***** Get user's code from database *****/
+   return DB_QuerySELECTCode ("can not get user's code",
+			      "SELECT usr_nicknames.UsrCod"
+			       " FROM usr_nicknames,"
+				     "usr_data"
+			      " WHERE usr_nicknames.Nickname='%s'"
+				" AND usr_nicknames.UsrCod=usr_data.UsrCod",
+			      NickWithoutArr);
   }
 
 /*****************************************************************************/
@@ -239,13 +227,13 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
    HTM_SECTION_Begin (Nck_NICKNAME_SECTION_ID);
 
    /***** Get my nicknames *****/
-   NumNicks =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get nicknames of a user",
-			      "SELECT Nickname"
-			       " FROM usr_nicknames"
-			      " WHERE UsrCod=%ld"
-			      " ORDER BY CreatTime DESC",
-			      UsrDat->UsrCod);
+   NumNicks = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get nicknames of a user",
+		   "SELECT Nickname"	// row[0]
+		    " FROM usr_nicknames"
+		   " WHERE UsrCod=%ld"
+		   " ORDER BY CreatTime DESC",
+		   UsrDat->UsrCod);
 
    /***** Begin box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);

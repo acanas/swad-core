@@ -2136,7 +2136,6 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
   {
    extern const char *Txt_degree;
    extern const char *Txt_degrees;
-   MYSQL_ROW row;
    unsigned NumDeg;
    struct Deg_Degree Deg;
 
@@ -2161,10 +2160,7 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
 	   NumDeg++)
 	{
 	 /* Get next degree */
-	 row = mysql_fetch_row (*mysql_res);
-
-	 /* Get degree code (row[0]) */
-	 Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
+	 Deg.DegCod = DB_GetNextCode (*mysql_res);
 
 	 /* Get data of degree */
 	 Deg_GetDataOfDegreeByCod (&Deg);

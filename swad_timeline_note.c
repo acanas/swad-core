@@ -1252,7 +1252,6 @@ static void Tml_Not_RemoveNote (void)
 static void Tml_Not_RemoveNoteMediaAndDBEntries (struct Tml_Not_Note *Not)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    long PubCod;
    unsigned long NumComms;
    unsigned long NumComm;
@@ -1268,8 +1267,7 @@ static void Tml_Not_RemoveNoteMediaAndDBEntries (struct Tml_Not_Note *Not)
 	NumComm++)
      {
       /* Get code of comment **/
-      row = mysql_fetch_row (mysql_res);
-      PubCod = Str_ConvertStrCodToLongCod (row[0]);
+      PubCod = DB_GetNextCode (mysql_res);
 
       /* Remove media associated to comment
 	 and delete comment from database */

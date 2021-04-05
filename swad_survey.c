@@ -937,7 +937,6 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
       [Dat_END_TIME  ] = "EndTime DESC,StartTime DESC,Title DESC",
      };
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumRows;
    unsigned NumSvy;
    unsigned ScopesAllowed = 0;
@@ -1067,12 +1066,9 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
       for (NumSvy = 0;
 	   NumSvy < Surveys->Num;
 	   NumSvy++)
-        {
          /* Get next survey code */
-         row = mysql_fetch_row (mysql_res);
-         if ((Surveys->LstSvyCods[NumSvy] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Surveys->LstSvyCods[NumSvy] = DB_GetNextCode (mysql_res)) < 0)
             Lay_ShowErrorAndExit ("Error: wrong survey code.");
-        }
      }
    else
       Surveys->Num = 0;
@@ -1494,7 +1490,7 @@ static void Svy_GetSurveyTxtFromDB (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]
 
    /***** Get text of survey from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get survey text",
-			     "SELECT Txt"
+			     "SELECT Txt"		// row[0]
 			      " FROM svy_surveys"
 			     " WHERE SvyCod=%ld",
 			     SvyCod);
@@ -2510,8 +2506,8 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 
    /***** Get groups associated to a survey from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of a survey",
-			     "SELECT grp_types.GrpTypName,"
-			            "grp_groups.GrpName"
+			     "SELECT grp_types.GrpTypName,"	// row[0]
+			            "grp_groups.GrpName"	// row[1]
 			      " FROM svy_groups,"
 			            "grp_groups,"
 			            "grp_types"
@@ -2984,9 +2980,9 @@ static unsigned Svy_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res)
 
    /***** Get answers of a question from database *****/
    NumRows = DB_QuerySELECT (mysql_res,"can not get answers of a question",
-			     "SELECT AnsInd,"
-			            "NumUsrs,"
-			            "Answer"
+			     "SELECT AnsInd,"	// row[0]
+			            "NumUsrs,"	// row[1]
+			            "Answer"	// row[2]
 			      " FROM svy_answers"
 			     " WHERE QstCod=%ld"
 			     " ORDER BY AnsInd",
@@ -3223,7 +3219,7 @@ static unsigned Svy_GetQstIndFromQstCod (long QstCod)
 
    /***** Get number of surveys with a field value from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get question index",
-			     "SELECT QstInd"
+			     "SELECT QstInd"		// row[0]
 			      " FROM svy_questions"
 			     " WHERE QstCod=%ld",
 			     QstCod);
@@ -3256,7 +3252,7 @@ static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod)
 
    /***** Get number of surveys with a field value from database *****/
    DB_QuerySELECT (&mysql_res,"can not get last question index",
-		   "SELECT MAX(QstInd)"
+		   "SELECT MAX(QstInd)"		// row[0]
 		    " FROM svy_questions"
 		   " WHERE SvyCod=%ld",
 		   SvyCod);
@@ -3809,7 +3805,6 @@ void Svy_ReceiveSurveyAnswers (void)
 static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumQst;
    unsigned NumQsts;
    long QstCod;
@@ -3835,11 +3830,8 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
 	   NumQst < NumQsts;
 	   NumQst++)
         {
-         /* Get next answer */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get question code (row[0]) */
-         if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+         /* Get next question */
+         if ((QstCod = DB_GetNextCode (mysql_res)) <= 0)
             Lay_ShowErrorAndExit ("Error: wrong question code.");
 
          /* Get possible parameter with the user's answer */
@@ -4032,16 +4024,16 @@ unsigned Svy_GetNumCrsSurveys (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
      {
       case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
-			 "SELECT COUNT(*),"
-			        "SUM(NumNotif)"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(NumNotif)"			// row[1]
                           " FROM svy_surveys"
                          " WHERE Scope='%s'",
 			 Sco_GetDBStrFromScope (Hie_Lvl_CRS));
          break;
       case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
-			 "SELECT COUNT(*),"
-			        "SUM(svy_surveys.NumNotif)"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(svy_surveys.NumNotif)"	// row[1]
                           " FROM ins_instits,"
                                 "ctr_centers,"
                                 "deg_degrees,"
@@ -4058,8 +4050,8 @@ unsigned Svy_GetNumCrsSurveys (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
          break;
       case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
-			 "SELECT COUNT(*),"
-			        "SUM(svy_surveys.NumNotif)"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(svy_surveys.NumNotif)"	// row[1]
                           " FROM ctr_centers,"
                                 "deg_degrees,"
                                 "crs_courses,"
@@ -4074,8 +4066,8 @@ unsigned Svy_GetNumCrsSurveys (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
          break;
       case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
-			 "SELECT COUNT(*),"
-			        "SUM(svy_surveys.NumNotif)"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(svy_surveys.NumNotif)"	// row[1]
                           " FROM deg_degrees,"
                                 "crs_courses,"
                                 "svy_surveys"
@@ -4088,8 +4080,8 @@ unsigned Svy_GetNumCrsSurveys (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
          break;
       case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
-			 "SELECT COUNT(*),"
-			        "SUM(svy_surveys.NumNotif)"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(svy_surveys.NumNotif)"	// row[1]
                           " FROM crs_courses,"
                                 "svy_surveys"
                          " WHERE crs_courses.DegCod=%ld"
@@ -4100,8 +4092,8 @@ unsigned Svy_GetNumCrsSurveys (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
          break;
       case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
-			 "SELECT COUNT(*),"
-			        "SUM(NumNotif)"
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(NumNotif)"			// row[1]
                           " FROM svy_surveys"
                          " WHERE svy_surveys.Scope='%s'"
                            " AND CrsCod=%ld",
@@ -4149,7 +4141,7 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope)
       case Hie_Lvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				    " per survey",
-			 "SELECT AVG(NumQsts)"
+			 "SELECT AVG(NumQsts)"			// row[0]
 			  " FROM (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
 				  " FROM svy_surveys,"
 					"svy_questions"
@@ -4161,7 +4153,7 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope)
       case Hie_Lvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				    " per survey",
-			 "SELECT AVG(NumQsts)"
+			 "SELECT AVG(NumQsts)"			// row[0]
 			  " FROM (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
 				  " FROM ins_instits,"
 					"ctr_centers,"
@@ -4183,7 +4175,7 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope)
       case Hie_Lvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				    " per survey",
-			 "SELECT AVG(NumQsts)"
+			 "SELECT AVG(NumQsts)"			// row[0]
 			  " FROM (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
 				  " FROM ctr_centers,"
 					"deg_degrees,"
@@ -4203,7 +4195,7 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope)
       case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				    " per survey",
-			 "SELECT AVG(NumQsts)"
+			 "SELECT AVG(NumQsts)"			// row[0]
 			  " FROM (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
 				  " FROM deg_degrees,"
 					"crs_courses,"
@@ -4221,7 +4213,7 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope)
       case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				    " per survey",
-			 "SELECT AVG(NumQsts)"
+			 "SELECT AVG(NumQsts)"			// row[0]
 			  " FROM (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
 				  " FROM crs_courses,"
 					"svy_surveys,"
@@ -4237,7 +4229,7 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope)
       case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions"
 				    " per survey",
-			 "SELECT AVG(NumQsts)"
+			 "SELECT AVG(NumQsts)"			// row[0]
 			  " FROM (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
 				  " FROM svy_surveys,"
 					"svy_questions"

@@ -202,10 +202,10 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
    /***** Get fields of records in a course from database *****/
    Gbl.Crs.Records.LstFields.Num = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get fields of records in a course",
-		   "SELECT FieldCod,"
-			  "FieldName,"
-			  "NumLines,"
-			  "Visibility"
+		   "SELECT FieldCod,"		// row[0]
+			  "FieldName,"		// row[1]
+			  "NumLines,"		// row[2]
+			  "Visibility"		// row[3]
 		    " FROM crs_record_fields"
 		   " WHERE CrsCod=%ld"
 		   " ORDER BY FieldName",
@@ -1856,7 +1856,7 @@ unsigned long Rec_GetFieldFromCrsRecord (long UsrCod,long FieldCod,MYSQL_RES **m
    /***** Get the text of a field of a record from database *****/
    return DB_QuerySELECT (mysql_res,"can not get the text"
 				    " of a field of a record",
-			  "SELECT Txt"
+			  "SELECT Txt"		// row[0]
 			   " FROM crs_records"
 			  " WHERE FieldCod=%ld"
 			    " AND UsrCod=%ld",

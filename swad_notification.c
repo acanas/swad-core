@@ -1192,7 +1192,6 @@ void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod)
 unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumRow;
    unsigned long NumRows = 0;	// Initialized to avoid warning
    struct UsrData UsrDat;
@@ -1229,7 +1228,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
                break;
             case Brw_ADMI_TCH_CRS:	// Notify all teachers in course except me
                NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					      " to be notified",
+					            " to be notified",
 					 "SELECT UsrCod"	// row[0]
 					  " FROM crs_users"
 					 " WHERE CrsCod=%ld"
@@ -1243,7 +1242,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
             case Brw_ADMI_SHR_GRP:
             case Brw_ADMI_MRK_GRP:	// Notify all users in group except me
                NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					      " to be notified",
+					            " to be notified",
 					 "SELECT UsrCod"		// row[0]
 					  " FROM grp_users"
 					 " WHERE GrpCod=%ld"
@@ -1253,7 +1252,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
                break;
             case Brw_ADMI_TCH_GRP:	// Notify all teachers in group except me
                NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					      " to be notified",
+					            " to be notified",
 				         "SELECT grp_users.UsrCod"	// row[0]
 					  " FROM grp_users,"
 					        "grp_groups,"
@@ -1500,10 +1499,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	   NumRow++)
 	{
          /* Get next user */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get user code */
-         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+         UsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))		// Get user's data from the database
             if ((UsrDat.NtfEvents.CreateNotif & NotifyEventMask))	// Create notification
@@ -1573,7 +1569,6 @@ static void Ntf_UpdateMyLastAccessToNotifications (void)
 void Ntf_SendPendingNotifByEMailToAllUsrs (void)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumRows;
    unsigned long NumRow;
    struct UsrData UsrDat;
@@ -1608,10 +1603,7 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
 	   NumRow++)
 	{
          /* Get next user */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get user code */
-         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+         UsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
          /* Get user's data */
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))		// Get user's data from the database
@@ -1680,13 +1672,13 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
       /***** Get pending notifications of this user from database ******/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get pending notifications"
 					   " of a user",
-				"SELECT NotifyEvent,"
-				       "FromUsrCod,"
-				       "InsCod,"
-				       "CtrCod,"
-				       "DegCod,"
-				       "CrsCod,"
-				       "Cod"
+				"SELECT NotifyEvent,"	// row[0]
+				       "FromUsrCod,"	// row[1]
+				       "InsCod,"	// row[2]
+				       "CtrCod,"	// row[3]
+				       "DegCod,"	// row[4]
+				       "CrsCod,"	// row[5]
+				       "Cod"		// row[6]
 				 " FROM ntf_notifications"
 				" WHERE ToUsrCod=%ld"
 				  " AND (Status & %u)<>0"

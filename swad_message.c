@@ -1439,7 +1439,6 @@ static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Mess
                                                  const char *FilterFromToSubquery)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long MsgNum;
    unsigned long NumMsgs;
    long MsgCod;
@@ -1455,9 +1454,10 @@ static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Mess
 	MsgNum < NumMsgs;
 	MsgNum++)
      {
-      row = mysql_fetch_row (mysql_res);
-      if (sscanf (row[0],"%ld",&MsgCod) != 1)
+      MsgCod = DB_GetNextCode (mysql_res);
+      if (MsgCod <= 0)
          Lay_ShowErrorAndExit ("Wrong code of message.");
+
       switch (Messages->TypeOfMessages)
         {
          case Msg_RECEIVED:
@@ -2861,8 +2861,8 @@ static void Msg_GetDistinctCoursesInMyMessages (struct Msg_Messages *Messages)
       case Msg_RECEIVED:
          NumRows =
          DB_QuerySELECT (&mysql_res,"can not get distinct courses in your messages",
-			 "SELECT DISTINCT crs_courses.CrsCod,"
-			                 "crs_courses.ShortName"
+			 "SELECT DISTINCT crs_courses.CrsCod,"		// row[0]
+			                 "crs_courses.ShortName"	// row[1]
 			  " FROM msg_rcv,"
 			        "msg_snt,"
 			        "crs_courses"
@@ -2875,8 +2875,8 @@ static void Msg_GetDistinctCoursesInMyMessages (struct Msg_Messages *Messages)
       case Msg_SENT:
          NumRows =
          DB_QuerySELECT (&mysql_res,"can not get distinct courses in your messages",
-			  "SELECT DISTINCT crs_courses.CrsCod,"
-			                  "crs_courses.ShortName"
+			  "SELECT DISTINCT crs_courses.CrsCod,"		// row[0]
+			                  "crs_courses.ShortName"	// row[1]
 			   " FROM msg_snt,"
 			         "crs_courses"
 			  " WHERE msg_snt.UsrCod=%ld"
@@ -3097,7 +3097,7 @@ static void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 
 
    /***** Get subject of message from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get the subject of a message",
-	               "SELECT Subject"
+	               "SELECT Subject"		// row[0]
 	                " FROM msg_content"
 	               " WHERE MsgCod=%ld",
 		       MsgCod) == 1)	// Result should have a unique row
@@ -3163,7 +3163,7 @@ static void Msg_GetStatusOfSentMsg (long MsgCod,bool *Expanded)
    /***** Get if sent message has been replied/expanded from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get if a sent message"
 				        " has been replied/expanded",
-			     "SELECT Expanded"
+			     "SELECT Expanded"		// row[0]
 			      " FROM msg_snt"
 			     " WHERE MsgCod=%ld"
 			       " AND UsrCod=%ld",
@@ -3197,9 +3197,9 @@ static void Msg_GetStatusOfReceivedMsg (long MsgCod,bool *Open,bool *Replied,boo
    /***** Get if received message has been replied/expanded from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get if a received message"
 				        " has been replied/expanded",
-			     "SELECT Open,"
-			            "Replied,"
-			            "Expanded"
+			     "SELECT Open,"		// row[0]
+			            "Replied,"		// row[1]
+			            "Expanded"		// row[2]
 			      " FROM msg_rcv"
 			     " WHERE MsgCod=%ld"
 			       " AND UsrCod=%ld",
@@ -3427,8 +3427,8 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    /***** Get subject of message from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get subject and content"
 				  " of a message",
-		       "SELECT Subject,"
-		              "Content"
+		       "SELECT Subject,"	// row[0]
+		              "Content"		// row[1]
 		        " FROM msg_content"
 		       " WHERE MsgCod=%ld",
 		       MsgCod) == 1)	// Result should have a unique row
@@ -3780,23 +3780,23 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
    /***** Get recipients of a message from database *****/
    NumRecipientsKnown =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get recipients of a message",
-			      "(SELECT msg_rcv.UsrCod,"
-				      "'N',"
-				      "msg_rcv.Open,"
-				      "usr_data.Surname1 AS S1,"
-				      "usr_data.Surname2 AS S2,"
-				      "usr_data.FirstName AS FN"
+			      "(SELECT msg_rcv.UsrCod,"			// row[0]
+				      "'N',"				// row[1]
+				      "msg_rcv.Open,"			// row[2]
+				      "usr_data.Surname1 AS S1,"	// row[3]
+				      "usr_data.Surname2 AS S2,"	// row[4]
+				      "usr_data.FirstName AS FN"	// row[5]
 			        " FROM msg_rcv,"
 			              "usr_data"
 			       " WHERE msg_rcv.MsgCod=%ld"
 			         " AND msg_rcv.UsrCod=usr_data.UsrCod)"
 			      " UNION "
-			      "(SELECT msg_rcv_deleted.UsrCod,"
-				      "'Y',"
-				      "msg_rcv_deleted.Open,"
-				      "usr_data.Surname1 AS S1,"
-				      "usr_data.Surname2 AS S2,"
-				      "usr_data.FirstName AS FN"
+			      "(SELECT msg_rcv_deleted.UsrCod,"		// row[0]
+				      "'Y',"				// row[1]
+				      "msg_rcv_deleted.Open,"		// row[2]
+				      "usr_data.Surname1 AS S1,"	// row[3]
+				      "usr_data.Surname2 AS S2,"	// row[4]
+				      "usr_data.FirstName AS FN"	// row[5]
 			        " FROM msg_rcv_deleted,"
 			              "usr_data"
 			       " WHERE msg_rcv_deleted.MsgCod=%ld"
@@ -4149,8 +4149,8 @@ void Msg_ListBannedUsrs (void)
    extern const char *Txt_Banned_users;
    extern const char *Txt_Sender_banned_click_to_unban_him;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumUsr,NumUsrs;
+   unsigned NumUsr;
+   unsigned NumUsrs;
    struct UsrData UsrDat;
 
    /***** Get my banned users *****/
@@ -4182,10 +4182,8 @@ void Msg_ListBannedUsrs (void)
 	   NumUsr <= NumUsrs;
 	   NumUsr++)
         {
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get user's code (row[0]) */
-         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+         /* Get user's code */
+         UsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
          /* Get user's data from database */
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))

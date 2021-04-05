@@ -225,7 +225,7 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
      {
       /***** Check if exists the web / social network for this user *****/
       if (DB_QuerySELECT (&mysql_res,"can not get user's web / social network",
-	                  "SELECT URL"
+	                  "SELECT URL"	// row[0]
 	                   " FROM usr_webs"
 			  " WHERE UsrCod=%ld"
 			    " AND Web='%s'",
@@ -304,7 +304,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
      {
       /***** Get user's web / social network from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get user's web / social network",
-			  "SELECT URL"
+			  "SELECT URL"	// row[0]
 			   " FROM usr_webs"
 			  " WHERE UsrCod=%ld"
 			   " AND Web='%s'",

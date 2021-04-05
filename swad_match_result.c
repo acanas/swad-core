@@ -393,7 +393,6 @@ void MchRes_ShowAllMchResultsInGam (void)
 static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games,long GamCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumUsrs;
    unsigned long NumUsr;
 
@@ -402,7 +401,7 @@ static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games,long GamCod)
 
    /***** Get all users who have answered any match question in this game *****/
    NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in game",
-			     "SELECT users.UsrCod"	// row[0]
+			     "SELECT users.UsrCod"
 			      " FROM (SELECT DISTINCT mch_results.UsrCod AS UsrCod"
 				      " FROM mch_results,"
 				            "mch_matches,"
@@ -418,26 +417,20 @@ static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games,long GamCod)
 			               "usr_data.FirstName",
 			     GamCod,
 			     Gbl.Hierarchy.Crs.CrsCod);
-   if (NumUsrs)
-     {
-      /***** List matches results for each user *****/
-      for (NumUsr = 0;
-	   NumUsr < NumUsrs;
-	   NumUsr++)
-	{
-	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get match code (row[0]) */
-	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
-	       if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
-		 {
-		  /***** Show matches results *****/
-		  Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-		  MchRes_ShowMchResults (Games,Usr_OTHER,-1L,GamCod,NULL);
-		 }
-	}
-     }
+   /***** List matches results for each user *****/
+   for (NumUsr = 0;
+	NumUsr < NumUsrs;
+	NumUsr++)
+      /* Get match code */
+      if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
+	      {
+	       /***** Show matches results *****/
+	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       MchRes_ShowMchResults (Games,Usr_OTHER,-1L,GamCod,NULL);
+	      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -489,7 +482,6 @@ void MchRes_ShowAllMchResultsInMch (void)
 static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumUsrs;
    unsigned long NumUsr;
 
@@ -499,7 +491,7 @@ static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod)
    /***** Get all users who have answered any match question in this game *****/
    NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in match",
 			     "SELECT users.UsrCod"
-			      " FROM (SELECT mch_results.UsrCod AS UsrCod"	// row[0]
+			      " FROM (SELECT mch_results.UsrCod AS UsrCod"
 				      " FROM mch_results,"
 				            "mch_matches,"
 				            "gam_games"
@@ -514,26 +506,20 @@ static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod)
 			               "usr_data.FirstName",
 			     MchCod,
 			     Gbl.Hierarchy.Crs.CrsCod);
-   if (NumUsrs)
-     {
-      /***** List matches results for each user *****/
-      for (NumUsr = 0;
-	   NumUsr < NumUsrs;
-	   NumUsr++)
-	{
-	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get match code (row[0]) */
-	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
-	       if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
-		 {
-		  /***** Show matches results *****/
-		  Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-		  MchRes_ShowMchResults (Games,Usr_OTHER,MchCod,-1L,NULL);
-		 }
-	}
-     }
+   /***** List matches results for each user *****/
+   for (NumUsr = 0;
+	NumUsr < NumUsrs;
+	NumUsr++)
+      /* Get match code (row[0]) */
+      if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
+	      {
+	       /***** Show matches results *****/
+	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       MchRes_ShowMchResults (Games,Usr_OTHER,MchCod,-1L,NULL);
+	      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -770,7 +756,6 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
    char *GamSubQuery;
    char *HidGamSubQuery;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    struct UsrData *UsrDat;
    struct MchRes_ICanView ICanView;
    unsigned NumResults;
@@ -852,25 +837,25 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
      }
 
    /***** Make database query *****/
-   NumResults =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches results",
-			      "SELECT mch_results.MchCod"	// row[0]
-			       " FROM mch_results,"
-			             "mch_matches,"
-			             "gam_games"
-			      " WHERE mch_results.UsrCod=%ld"
-			         "%s"	// Match subquery
-			        " AND mch_results.MchCod=mch_matches.MchCod"
-			        "%s"	// Games subquery
-			        " AND mch_matches.GamCod=gam_games.GamCod"
-                                "%s"	// Hidden games subquery
-			        " AND gam_games.CrsCod=%ld"	// Extra check
-			      " ORDER BY mch_matches.Title",
-			      UsrDat->UsrCod,
-			      MchSubQuery,
-			      GamSubQuery,
-			      HidGamSubQuery,
-			      Gbl.Hierarchy.Crs.CrsCod);
+   NumResults = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get matches results",
+		   "SELECT mch_results.MchCod"
+		    " FROM mch_results,"
+			  "mch_matches,"
+			  "gam_games"
+		   " WHERE mch_results.UsrCod=%ld"
+		      "%s"	// Match subquery
+		     " AND mch_results.MchCod=mch_matches.MchCod"
+		     "%s"	// Games subquery
+		     " AND mch_matches.GamCod=gam_games.GamCod"
+		     "%s"	// Hidden games subquery
+		     " AND gam_games.CrsCod=%ld"	// Extra check
+		   " ORDER BY mch_matches.Title",
+		   UsrDat->UsrCod,
+		   MchSubQuery,
+		   GamSubQuery,
+		   HidGamSubQuery,
+		   Gbl.Hierarchy.Crs.CrsCod);
    free (HidGamSubQuery);
    free (GamSubQuery);
    free (MchSubQuery);
@@ -886,11 +871,9 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	   NumResult < NumResults;
 	   NumResult++)
 	{
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get match code (row[0]) */
+	 /* Get match code */
          MchPrn_ResetPrint (&Print);
-	 if ((Print.MchCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	 if ((Print.MchCod = DB_GetNextCode (mysql_res)) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of match.");
 
 	 /* Get match result data */

@@ -2318,7 +2318,7 @@ unsigned Prj_GetMyRolesInProject (long PrjCod)
    Gbl.Cache.MyRolesInProject.PrjCod         = PrjCod;
    Gbl.Cache.MyRolesInProject.RolesInProject = 0;
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get my roles in project",
-		                        "SELECT RoleInProject"
+		                        "SELECT RoleInProject"	// row[0]
 		                         " FROM prj_users"
 		                        " WHERE PrjCod=%ld"
 		                          " AND UsrCod=%ld",
@@ -2847,7 +2847,6 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 			       "prj_projects.Title",
      };
    MYSQL_RES *mysql_res = NULL;	// Initialized to avoid freeing when not assigned
-   MYSQL_ROW row;
    unsigned NumUsrsInList;
    long *LstSelectedUsrCods;
    char *SubQueryUsrs;
@@ -3090,8 +3089,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	      NumPrj++)
 	   {
 	    /* Get next project code */
-	    row = mysql_fetch_row (mysql_res);
-	    if ((PrjCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	    if ((PrjCod = DB_GetNextCode (mysql_res)) < 0)
                Lay_WrongProjectExit ();
 
 	    /* Filter projects depending on faultiness */
@@ -3126,31 +3124,16 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 
 long Prj_GetCourseOfProject (long PrjCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long CrsCod = -1L;
+   /***** Trivial check: project code should be > 0 *****/
+   if (PrjCod <= 0)
+      return -1L;
 
-   if (PrjCod > 0)
-     {
-      /***** Get course code from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get project course",
-			  "SELECT CrsCod"		// row[0]
-			   " FROM prj_projects"
-			  " WHERE PrjCod=%ld",
-			  PrjCod)) // Project found...
-	{
-	 /* Get row */
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get code of the course (row[0]) */
-	 CrsCod = Str_ConvertStrCodToLongCod (row[0]);
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-
-   return CrsCod;
+   /***** Get course code from database *****/
+   return DB_QuerySELECTCode ("can not get project course",
+			      "SELECT CrsCod"		// row[0]
+			       " FROM prj_projects"
+			      " WHERE PrjCod=%ld",
+			      PrjCod); // Project found...
   }
 
 /*****************************************************************************/

@@ -1766,9 +1766,9 @@ void Usr_GetMyCourses (void)
 	 NumCrss =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get which courses"
 					       " you belong to",
-				    "SELECT CrsCod,"
-				           "Role,"
-				           "DegCod"
+				    "SELECT CrsCod,"	// row[0]
+				           "Role,"	// row[1]
+				           "DegCod"	// row[2]
 				    " FROM my_courses_tmp");
 	 for (NumCrs = 0;
 	      NumCrs < NumCrss;
@@ -2269,8 +2269,8 @@ unsigned long Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res)
    if (CtyCod > 0)
       return DB_QuerySELECT (mysql_res,"can not get the institutions"
 				       " a user belongs to",
-			     "SELECT ins_instits.InsCod,"
-			            "MAX(crs_users.Role)"
+			     "SELECT ins_instits.InsCod,"	// row[0]
+			            "MAX(crs_users.Role)"	// row[1]
 			      " FROM crs_users,"
 			            "crs_courses,"
 			            "deg_degrees,"
@@ -2288,8 +2288,8 @@ unsigned long Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res)
    else
       return DB_QuerySELECT (mysql_res,"can not get the ins_instits"
 				       " a user belongs to",
-			     "SELECT ins_instits.InsCod,"
-			            "MAX(crs_users.Role)"
+			     "SELECT ins_instits.InsCod,"	// row[0]
+			            "MAX(crs_users.Role)"	// row[1]
 			      " FROM crs_users,"
 			            "crs_courses,"
 			            "deg_degrees,"
@@ -2316,8 +2316,8 @@ unsigned long Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res)
    if (InsCod > 0)
       return DB_QuerySELECT (mysql_res,"can not check the centers"
 				       " a user belongs to",
-			     "SELECT ctr_centers.CtrCod,"
-				    "MAX(crs_users.Role)"
+			     "SELECT ctr_centers.CtrCod,"	// row[0]
+				    "MAX(crs_users.Role)"	// row[1]
 			      " FROM crs_users,"
 				    "crs_courses,"
 				    "deg_degrees,"
@@ -2333,8 +2333,8 @@ unsigned long Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res)
    else
       return DB_QuerySELECT (mysql_res,"can not check the centers"
 				       " a user belongs to",
-			     "SELECT deg_degrees.CtrCod,"
-			            "MAX(crs_users.Role)"
+			     "SELECT deg_degrees.CtrCod,"	// row[0]
+			            "MAX(crs_users.Role)"	// row[1]
 			      " FROM crs_users,"
 			            "crs_courses,"
 			            "deg_degrees,"
@@ -2359,8 +2359,8 @@ unsigned long Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res)
    if (CtrCod > 0)
       return DB_QuerySELECT (mysql_res,"can not check the degrees"
 	                               " a user belongs to",
-			     "SELECT deg_degrees.DegCod,"
-			            "MAX(crs_users.Role)"
+			     "SELECT deg_degrees.DegCod,"	// row[0]
+			            "MAX(crs_users.Role)"	// row[1]
 			      " FROM crs_users,"
 			            "crs_courses,"
 			            "deg_degrees"
@@ -2374,8 +2374,8 @@ unsigned long Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res)
    else
       return DB_QuerySELECT (mysql_res,"can not check the degrees"
 	                               " a user belongs to",
-			     "SELECT deg_degrees.DegCod,"
-			            "MAX(crs_users.Role)"
+			     "SELECT deg_degrees.DegCod,"	// row[0]
+			            "MAX(crs_users.Role)"	// row[1]
 			      " FROM crs_users,"
 			            "crs_courses,"
 			            "deg_degrees"
@@ -2398,9 +2398,9 @@ unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res)
    if (DegCod > 0)	// Courses in a degree
       return DB_QuerySELECT (mysql_res,"can not get the courses"
 				       " a user belongs to",
-	                     "SELECT crs_users.CrsCod,"
-	                            "crs_users.Role,"
-	                            "crs_courses.DegCod"
+	                     "SELECT crs_users.CrsCod,"		// row[0]
+	                            "crs_users.Role,"		// row[1]
+	                            "crs_courses.DegCod"	// row[2]
 			      " FROM crs_users,"
 			            "crs_courses"
 			     " WHERE crs_users.UsrCod=%ld"
@@ -2411,9 +2411,9 @@ unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res)
    else			// All the courses
       return DB_QuerySELECT (mysql_res,"can not get the courses"
 				       " a user belongs to",
-	                     "SELECT crs_users.CrsCod,"
-	                            "crs_users.Role,"
-	                            "crs_courses.DegCod"
+	                     "SELECT crs_users.CrsCod,"		// row[0]
+	                            "crs_users.Role,"		// row[1]
+	                            "crs_courses.DegCod"	// row[2]
 			      " FROM crs_users,"
 			            "crs_courses,"
 			            "deg_degrees"
@@ -4080,31 +4080,16 @@ static void Usr_WriteUsrData (const char *BgColor,
 
 long Usr_GetRamdomStdFromCrs (long CrsCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long UsrCod = -1L;	// -1 means user not found
-
    /***** Get a random student from current course from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get a random student"
-				  " from the current course",
-		       "SELECT UsrCod"
-		        " FROM crs_users"
-		       " WHERE CrsCod=%ld"
-		         " AND Role=%u"
-		       " ORDER BY RAND()"
-		       " LIMIT 1",
-		       CrsCod,
-		       (unsigned) Rol_STD))
-     {
-      /***** Get user code *****/
-      row = mysql_fetch_row (mysql_res);
-      UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return UsrCod;
+   return DB_QuerySELECTCode ("can not get a random student from a course",
+			      "SELECT UsrCod"
+			       " FROM crs_users"
+			      " WHERE CrsCod=%ld"
+			        " AND Role=%u"
+			      " ORDER BY RAND()"
+			      " LIMIT 1",
+			      CrsCod,
+			      (unsigned) Rol_STD);
   }
 
 /*****************************************************************************/
@@ -4114,31 +4099,18 @@ long Usr_GetRamdomStdFromCrs (long CrsCod)
 
 long Usr_GetRamdomStdFromGrp (long GrpCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long UsrCod = -1L;	// -1 means user not found
-
    /***** Get a random student from a group from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get a random student from a group",
-		       "SELECT grp_users.UsrCod"	// row[0]
-		        " FROM grp_users,"
-		              "crs_users"
-		       " WHERE grp_users.GrpCod=%ld"
-		         " AND grp_users.UsrCod=crs_users.UsrCod"
-		         " AND crs_users.Role=%u"
-		       " ORDER BY RAND()"
-		       " LIMIT 1",
-		       GrpCod,(unsigned) Rol_STD))
-     {
-      /***** Get user code *****/
-      row = mysql_fetch_row (mysql_res);
-      UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-
-   return UsrCod;
+   return DB_QuerySELECTCode ("can not get a random student from a group",
+			      "SELECT grp_users.UsrCod"
+			       " FROM grp_users,"
+				     "crs_users"
+			      " WHERE grp_users.GrpCod=%ld"
+			        " AND grp_users.UsrCod=crs_users.UsrCod"
+			        " AND crs_users.Role=%u"
+			      " ORDER BY RAND()"
+			      " LIMIT 1",
+			      GrpCod,
+			      (unsigned) Rol_STD);
   }
 
 /*****************************************************************************/
@@ -7790,7 +7762,7 @@ static void Usr_GetMyUsrListTypeFromDB (void)
 
    /***** Get type of listing of users from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get type of listing of users",
-			     "SELECT UsrListType"
+			     "SELECT UsrListType"	// row[0]
 			      " FROM crs_user_settings"
 			     " WHERE UsrCod=%ld"
 			       " AND CrsCod=%ld",
@@ -7899,7 +7871,7 @@ static void Usr_GetMyColsClassPhotoFromDB (void)
       /***** Get number of columns in class photo from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get number of columns"
 					   " in class photo",
-				"SELECT ColsClassPhoto"
+				"SELECT ColsClassPhoto"	// row[0]
 				 " FROM crs_user_settings"
 				" WHERE UsrCod=%ld"
 				  " AND CrsCod=%ld",
@@ -8008,7 +7980,7 @@ void Usr_GetMyPrefAboutListWithPhotosFromDB (void)
       /***** Get if listing of users must show photos from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not check if listing of users"
 					   " must show photos",
-				"SELECT ListWithPhotos"
+				"SELECT ListWithPhotos"	// row[0]
 				 " FROM crs_user_settings"
 				" WHERE UsrCod=%ld"
 				  " AND CrsCod=%ld",
@@ -9746,13 +9718,13 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_SYS:
 	 if (Role == Rol_UNK)	// Any user
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
-			    "SELECT AVG(NumCrss)"
+			    "SELECT AVG(NumCrss)"	// row[0]
 			     " FROM (SELECT COUNT(CrsCod) AS NumCrss"
 			             " FROM crs_users"
 			            " GROUP BY UsrCod) AS NumCrssTable");
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
-			    "SELECT AVG(NumCrss)"
+			    "SELECT AVG(NumCrss)"	// row[0]
 			     " FROM (SELECT COUNT(CrsCod) AS NumCrss"
 			             " FROM crs_users"
 			            " WHERE Role=%u"
@@ -9762,7 +9734,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_CTY:
 	 if (Role == Rol_UNK)	// Any user
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
-			    "SELECT AVG(NumCrss)"
+			    "SELECT AVG(NumCrss)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
 				     " FROM ins_instits,"
 					   "ctr_centers,"
@@ -9778,7 +9750,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
-			    "SELECT AVG(NumCrss)"
+			    "SELECT AVG(NumCrss)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
 				     " FROM ins_instits,"
 					   "ctr_centers,"
@@ -9798,7 +9770,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_INS:
 	 if (Role == Rol_UNK)	// Any user
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
-			    "SELECT AVG(NumCrss)"
+			    "SELECT AVG(NumCrss)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
 				     " FROM ctr_centers,"
 					   "deg_degrees,"
@@ -9812,7 +9784,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
-			    "SELECT AVG(NumCrss)"
+			    "SELECT AVG(NumCrss)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
 				     " FROM ctr_centers,"
 					   "deg_degrees,"
@@ -9830,7 +9802,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_CTR:
 	 if (Role == Rol_UNK)	// Any user
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
-			    "SELECT AVG(NumCrss)"
+			    "SELECT AVG(NumCrss)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
 				     " FROM deg_degrees,"
 					   "crs_courses,"
@@ -9842,7 +9814,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
-			    "SELECT AVG(NumCrss)"
+			    "SELECT AVG(NumCrss)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
 				     " FROM deg_degrees,"
 					   "crs_courses,"
@@ -9858,7 +9830,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_DEG:
 	 if (Role == Rol_UNK)	// Any user
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
-			    "SELECT AVG(NumCrss)"
+			    "SELECT AVG(NumCrss)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
 				     " FROM crs_courses,"
 					   "crs_users"
@@ -9868,7 +9840,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of courses per user",
-			    "SELECT AVG(NumCrss)"
+			    "SELECT AVG(NumCrss)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
 				     " FROM crs_courses,"
 					   "crs_users"
@@ -9936,13 +9908,13 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_SYS:
 	 if (Role == Rol_UNK)	// Any user
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
-			    "SELECT AVG(NumUsrs)"
+			    "SELECT AVG(NumUsrs)"	// row[0]
 			     " FROM (SELECT COUNT(UsrCod) AS NumUsrs"
 			             " FROM crs_users"
 			            " GROUP BY CrsCod) AS NumUsrsTable");
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
-			    "SELECT AVG(NumUsrs)"
+			    "SELECT AVG(NumUsrs)"	// row[0]
 			     " FROM (SELECT COUNT(UsrCod) AS NumUsrs"
 			             " FROM crs_users"
 			            " WHERE Role=%u GROUP BY CrsCod) AS NumUsrsTable",
@@ -9951,7 +9923,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_CTY:
 	 if (Role == Rol_UNK)	// Any user
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
-			    "SELECT AVG(NumUsrs)"
+			    "SELECT AVG(NumUsrs)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 				     " FROM ins_instits,"
 					   "ctr_centers,"
@@ -9967,7 +9939,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
-			    "SELECT AVG(NumUsrs)"
+			    "SELECT AVG(NumUsrs)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 				     " FROM ins_instits,"
 					   "ctr_centers,"
@@ -9987,7 +9959,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_INS:
 	 if (Role == Rol_UNK)	// Any user
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
-			    "SELECT AVG(NumUsrs)"
+			    "SELECT AVG(NumUsrs)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 				     " FROM ctr_centers,"
 					   "deg_degrees,"
@@ -10001,7 +9973,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
-			    "SELECT AVG(NumUsrs)"
+			    "SELECT AVG(NumUsrs)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 				     " FROM ctr_centers,"
 					   "deg_degrees,"
@@ -10019,7 +9991,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_CTR:
 	 if (Role == Rol_UNK)	// Any user
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
-			    "SELECT AVG(NumUsrs)"
+			    "SELECT AVG(NumUsrs)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 				     " FROM deg_degrees,"
 					   "crs_courses,"
@@ -10031,7 +10003,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
-			    "SELECT AVG(NumUsrs)"
+			    "SELECT AVG(NumUsrs)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 				     " FROM deg_degrees,"
 					   "crs_courses,"
@@ -10047,7 +10019,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_DEG:
 	 if (Role == Rol_UNK)	// Any user
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
-			    "SELECT AVG(NumUsrs)"
+			    "SELECT AVG(NumUsrs)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 				     " FROM crs_courses,"
 					   "crs_users"
@@ -10057,7 +10029,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 			    Cod);
 	 else
 	    DB_QuerySELECT (&mysql_res,"can not get number of users per course",
-			    "SELECT AVG(NumUsrs)"
+			    "SELECT AVG(NumUsrs)"	// row[0]
 			     " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 				     " FROM crs_courses,"
 					   "crs_users"

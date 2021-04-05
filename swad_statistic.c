@@ -1789,7 +1789,7 @@ static void Sta_WriteLogComments (long LogCod)
 
    /***** Get log comments from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get log comments",
-		       "SELECT Comments"
+		       "SELECT Comments"	// row[0]
 		        " FROM log_comments"
 		       " WHERE LogCod=%ld",
 		       LogCod))

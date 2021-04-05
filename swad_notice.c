@@ -393,11 +393,11 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
      {
       case Not_LIST_BRIEF_NOTICES:
 	 NumNotices = DB_QuerySELECT (&mysql_res,"can not get notices from database",
-				      "SELECT NotCod,"
-					     "UNIX_TIMESTAMP(CreatTime) AS F,"
-					     "UsrCod,"
-					     "Content,"
-					     "Status"
+				      "SELECT NotCod,"				// row[0]
+					     "UNIX_TIMESTAMP(CreatTime) AS F,"	// row[1]
+					     "UsrCod,"				// row[2]
+					     "Content,"				// row[3]
+					     "Status"				// row[4]
 				       " FROM not_notices"
 				      " WHERE CrsCod=%ld"
 				        " AND Status=%u"
@@ -407,11 +407,11 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	 break;
       case Not_LIST_FULL_NOTICES:
 	 NumNotices = DB_QuerySELECT (&mysql_res,"can not get notices from database",
-				      "SELECT NotCod,"
-					     "UNIX_TIMESTAMP(CreatTime) AS F,"
-					     "UsrCod,"
-					     "Content,"
-					     "Status"
+				      "SELECT NotCod,"				// row[0]
+					     "UNIX_TIMESTAMP(CreatTime) AS F,"	// row[1]
+					     "UsrCod,"				// row[2]
+					     "Content,"				// row[3]
+					     "Status"				// row[4]
 				       " FROM not_notices"
 				      " WHERE CrsCod=%ld"
 				      " ORDER BY CreatTime DESC",

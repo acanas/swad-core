@@ -822,17 +822,18 @@ void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
    unsigned NumRows;
 
    /***** Get user's figures from database *****/
-   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's figures",
-					"SELECT UNIX_TIMESTAMP(FirstClickTime),"	// row[0]
-					       "DATEDIFF(NOW(),FirstClickTime)+1,"	// row[1]
-					       "NumClicks,"				// row[2]
-					       "NumSocPub,"				// row[3]
-					       "NumFileViews,"				// row[4]
-					       "NumForPst,"				// row[5]
-					       "NumMsgSnt"				// row[6]
-				         " FROM usr_figures"
-				        " WHERE UsrCod=%ld",
-				        UsrCod);
+   NumRows = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get user's figures",
+		   "SELECT UNIX_TIMESTAMP(FirstClickTime),"	// row[0]
+			  "DATEDIFF(NOW(),FirstClickTime)+1,"	// row[1]
+			  "NumClicks,"				// row[2]
+			  "NumSocPub,"				// row[3]
+			  "NumFileViews,"			// row[4]
+			  "NumForPst,"				// row[5]
+			  "NumMsgSnt"				// row[6]
+		    " FROM usr_figures"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
    if (NumRows)
      {
       /***** Get user's figures *****/
@@ -1057,11 +1058,9 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
 
       /***** Get first click from log table *****/
       if (DB_QuerySELECT (&mysql_res,"can not get user's first click",
-			  "SELECT UNIX_TIMESTAMP("
-			  "(SELECT MIN(ClickTime)"
-			    " FROM log"
-			   " WHERE UsrCod=%ld)"
-			  ")",
+			  "SELECT UNIX_TIMESTAMP((SELECT MIN(ClickTime)"
+					          " FROM log"
+						 " WHERE UsrCod=%ld))",
 			  UsrCod))
 	{
 	 /* Get first click */

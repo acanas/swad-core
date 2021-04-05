@@ -181,14 +181,10 @@ void Map_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom,
       /* Get row */
       row = mysql_fetch_row (mysql_res);
 
-      /* Get latitude (row[0]) */
-      Coord->Latitude = Map_GetLatitudeFromStr (row[0]);
-
-      /* Get longitude (row[1]) */
+      /* Get latitude (row[0]), longitude (row[1]) and maximum distance (row[2]) */
+      Coord->Latitude  = Map_GetLatitudeFromStr (row[0]);
       Coord->Longitude = Map_GetLongitudeFromStr (row[1]);
-
-      /* Get maximum distance (row[2]) */
-      MaxDistance = Str_GetDoubleFromStr (row[2]);
+      MaxDistance      = Str_GetDoubleFromStr (row[2]);
      }
    else
       Coord->Latitude  =

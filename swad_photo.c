@@ -129,8 +129,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
 static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
-static unsigned long Pho_BuildQueryOfDegrees (Pho_HowOrderDegrees_t HowOrderDegrees,
-                                              MYSQL_RES **mysql_res);
+static unsigned long Pho_QueryDegrees (Pho_HowOrderDegrees_t HowOrderDegrees,
+                                       MYSQL_RES **mysql_res);
 static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *NumStdsWithPhoto);
 static void Pho_UpdateDegStats (long DegCod,Usr_Sex_t Sex,unsigned NumStds,unsigned NumStdsWithPhoto,long TimeToComputeAvgPhoto);
 static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto);
@@ -932,7 +932,7 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
    /***** Get number of clicks without photo from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of clicks"
 				        " without photo",
-			     "SELECT NumClicks"
+			     "SELECT NumClicks"		// row[0]
 			      " FROM pho_clicks_without_photo"
 			     " WHERE UsrCod=%ld",
 			     Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -1417,79 +1417,43 @@ void Pho_CalcPhotoDegree (void)
 
 static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows = 0;
-   long DegCod = -1L;
+   long DegCod;
 
    /***** Delete all the degrees in sta_degrees table not present in degrees table *****/
    Pho_RemoveObsoleteStatDegrees ();
 
    /***** 1. If a degree is not in table of computed degrees,
              choose it as least recently updated *****/
-   /* Get one degree with students not yet computed */
-   NumRows =
-   DB_QuerySELECT (&mysql_res,"can not get degrees",
-		   "SELECT DISTINCT deg_degrees.DegCod"	// row[0]
-		    " FROM deg_degrees,"
-		          "crs_courses,"
-		          "crs_users"
-		   " WHERE deg_degrees.DegCod=crs_courses.DegCod"
-		     " AND crs_courses.CrsCod=crs_users.CrsCod"
-		     " AND crs_users.Role=%u"
-		     " AND deg_degrees.DegCod NOT IN"
-		         " (SELECT DISTINCT DegCod"
-		            " FROM sta_degrees)"
-		   " LIMIT 1",
-		 (unsigned) Rol_STD);
+   DegCod = DB_QuerySELECTCode ("can not get degrees",
+			        "SELECT DISTINCT deg_degrees.DegCod"
+				 " FROM deg_degrees,"
+				       "crs_courses,"
+				       "crs_users"
+			        " WHERE deg_degrees.DegCod=crs_courses.DegCod"
+				  " AND crs_courses.CrsCod=crs_users.CrsCod"
+				  " AND crs_users.Role=%u"
+				  " AND deg_degrees.DegCod NOT IN"
+				      " (SELECT DISTINCT DegCod"
+					 " FROM sta_degrees)"
+			        " LIMIT 1",
+			      (unsigned) Rol_STD);
 
-   /* If number of rows is 1, then get the degree code */
-   if (NumRows == 1)
-     {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get degree code (row[0]) */
-      if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Lay_ShowErrorAndExit ("Wrong code of degree.");
-     }
-   else   // NumRows == 0
-     {
-      /* Free structure that stores the query result */
-      DB_FreeMySQLResult (&mysql_res);
-
+   if (DegCod <= 0)
       /***** 2. If all the degrees are in table,
                 choose the least recently updated that has students *****/
-      /* Get degrees from database */
-      NumRows =
-      DB_QuerySELECT (&mysql_res,"can not get degrees",
-		      "SELECT sta_degrees.DegCod"	// row[0]
-		       " FROM sta_degrees,"
-		             "crs_courses,"
-		             "crs_users"
-		      " WHERE sta_degrees.TimeAvgPhoto<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
-		        " AND sta_degrees.DegCod=crs_courses.DegCod"
-		        " AND crs_courses.CrsCod=crs_users.CrsCod"
-		        " AND crs_users.Role=%u"
-		      " ORDER BY sta_degrees.TimeAvgPhoto"
-		      " LIMIT 1",
-		      Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO,
-		      (unsigned) Rol_STD);
-
-      /* If number of rows is 1, then get the degree code */
-      if (NumRows == 1)
-        {
-         /* Get row */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get degree code (row[0]) */
-         if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of degree.");
-        }
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      DegCod = DB_QuerySELECTCode ("can not get degrees",
+				   "SELECT sta_degrees.DegCod"
+				    " FROM sta_degrees,"
+					  "crs_courses,"
+					  "crs_users"
+				   " WHERE sta_degrees.TimeAvgPhoto<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
+				     " AND sta_degrees.DegCod=crs_courses.DegCod"
+				     " AND crs_courses.CrsCod=crs_users.CrsCod"
+				     " AND crs_users.Role=%u"
+				   " ORDER BY sta_degrees.TimeAvgPhoto"
+				   " LIMIT 1",
+				   Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO,
+				   (unsigned) Rol_STD);
 
    return DegCod;
   }
@@ -1521,7 +1485,7 @@ static long Pho_GetTimeAvgPhotoWasComputed (long DegCod)
    /***** Get last time an average photo was computed from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get last time"
 					" an average photo was computed",
-			     "SELECT MIN(UNIX_TIMESTAMP(TimeAvgPhoto))"
+			     "SELECT MIN(UNIX_TIMESTAMP(TimeAvgPhoto))"	// row[0]
 			      " FROM sta_degrees"
 			     " WHERE DegCod=%ld",
 			     DegCod);
@@ -2149,7 +2113,6 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumDeg;
    unsigned long NumDegs;
    struct Deg_Degree Deg;
@@ -2159,7 +2122,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
    bool TRIsOpen = false;
 
    /***** Get degrees from database *****/
-   NumDegs = Pho_BuildQueryOfDegrees (DegPhotos->HowOrderDegrees,&mysql_res);
+   NumDegs = Pho_QueryDegrees (DegPhotos->HowOrderDegrees,&mysql_res);
 
    if (NumDegs)	// Degrees with students found
      {
@@ -2174,10 +2137,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 	   NumDeg++)
 	{
 	 /***** Get next degree *****/
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get degree code (row[0]) */
-	 if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	 if ((Deg.DegCod = DB_GetNextCode (mysql_res)) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of degree.");
 
 	 /* Get data of degree */
@@ -2243,7 +2203,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
    Usr_Sex_t Sex;
 
    /***** Get degrees from database *****/
-   NumDegs = Pho_BuildQueryOfDegrees (DegPhotos->HowOrderDegrees,&mysql_res);
+   NumDegs = Pho_QueryDegrees (DegPhotos->HowOrderDegrees,&mysql_res);
 
    if (NumDegs)	// Degrees with students found
      {
@@ -2333,8 +2293,8 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 /****** Build a query to get the degrees ordered by different criteria *******/
 /*****************************************************************************/
 
-static unsigned long Pho_BuildQueryOfDegrees (Pho_HowOrderDegrees_t HowOrderDegrees,
-                                              MYSQL_RES **mysql_res)
+static unsigned long Pho_QueryDegrees (Pho_HowOrderDegrees_t HowOrderDegrees,
+                                       MYSQL_RES **mysql_res)
   {
    unsigned long NumDegs = 0;	// Initialized to avoid warning
 
@@ -2401,8 +2361,8 @@ static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *
    /***** Get the number of students in a degree from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get the number of students"
 				        " in a degree",
-	                     "SELECT NumStds,"
-	                            "NumStdsWithPhoto"
+	                     "SELECT NumStds,"		// row[0]
+	                            "NumStdsWithPhoto"	// row[1]
 	                      " FROM sta_degrees"
 			     " WHERE DegCod=%ld"
 			       " AND Sex='%s'",

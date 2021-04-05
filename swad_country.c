@@ -2090,7 +2090,6 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
   {
    extern const char *Txt_country;
    extern const char *Txt_countries;
-   MYSQL_ROW row;
    unsigned NumCty;
    struct Cty_Countr Cty;
 
@@ -2115,10 +2114,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
 	   NumCty++)
 	{
 	 /* Get next country */
-	 row = mysql_fetch_row (*mysql_res);
-
-	 /* Get country code (row[0]) */
-	 Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
+	 Cty.CtyCod = DB_GetNextCode (*mysql_res);
 
 	 /* Get data of country */
 	 Cty_GetDataOfCountryByCod (&Cty);

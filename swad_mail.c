@@ -1087,8 +1087,8 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
 
    /***** Get current (last updated) user's nickname from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get email address",
-			     "SELECT E_mail,"
-			            "Confirmed"
+			     "SELECT E_mail,"		// row[0]
+			            "Confirmed"		// row[1]
 			      " FROM usr_emails"
 			     " WHERE UsrCod=%ld"
 			     " ORDER BY CreatTime DESC"
@@ -1123,43 +1123,22 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
 
 long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumUsrs;
-   long UsrCod = -1L;
+   /***** Trivial check 1: email should be not null ******/
+   if (!Email)
+      return -1L;
 
-   if (Email)
-      if (Email[0])
-	{
-	 /***** Get user's code from database *****/
-	 /* Check if user code from table usr_emails is also in table usr_data */
-	 NumUsrs = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get user's code",
-			 "SELECT usr_emails.UsrCod"
-			  " FROM usr_emails,"
-			        "usr_data"
-			 " WHERE usr_emails.E_mail='%s'"
-			   " AND usr_emails.UsrCod=usr_data.UsrCod",
-			 Email);
-	 if (NumUsrs == 0)
-	    /* User not found for this email ==> set user's code to void */
-	    UsrCod = -1L;
-	 else if (NumUsrs == 1)	// One user found
-	   {
-	    /* Get row */
-	    row = mysql_fetch_row (mysql_res);
+   /***** Trivial check 2: email should be not empty ******/
+   if (!Email[0])
+      return -1L;
 
-	    /* Get user's code */
-	    UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-	   }
-	 else	// NumRows > 1 ==> impossible, an email can not be reapeated
-	    Lay_ShowErrorAndExit ("Internal error: email is repeated in database.");
-
-	 /***** Free structure that stores the query result *****/
-	 DB_FreeMySQLResult (&mysql_res);
-	}
-
-   return UsrCod;
+   /***** Get user's code from database *****/
+   return DB_QuerySELECTCode ("can not get user's code",
+			      "SELECT usr_emails.UsrCod"
+			       " FROM usr_emails,"
+				     "usr_data"
+			      " WHERE usr_emails.E_mail='%s'"
+				" AND usr_emails.UsrCod=usr_data.UsrCod",
+			      Email);
   }
 
 /*****************************************************************************/
@@ -1829,7 +1808,7 @@ void Mai_ConfirmEmail (void)
       /***** Check user's code and email
              and get if email is already confirmed *****/
       if (DB_QuerySELECT (&mysql_res,"can not check if email is confirmed",
-			  "SELECT Confirmed"
+			  "SELECT Confirmed"	// row[0]
 			   " FROM usr_emails"
 			  " WHERE UsrCod=%ld"
 			    " AND E_mail='%s'",

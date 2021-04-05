@@ -1165,7 +1165,7 @@ static void Prg_GetItemTxtFromDB (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 
    /***** Get text of program item from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get program item text",
-	                     "SELECT Txt"
+	                     "SELECT Txt"		// row[0]
 	                      " FROM prg_items"
 			     " WHERE ItmCod=%ld"
 			       " AND CrsCod=%ld",	// Extra check

@@ -437,7 +437,7 @@ void Ses_GetParamFromDB (const char *ParamName,char *ParamValue,size_t MaxBytes)
      {
       /***** Get a session parameter from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get a session parameter",
-				"SELECT ParamValue"
+				"SELECT ParamValue"	// row[0]
 				 " FROM ses_params"
 				" WHERE SessionId='%s'"
 				  " AND ParamName='%s'",
@@ -488,7 +488,7 @@ bool Ses_GetPublicDirFromCache (const char *FullPathMediaPriv,
      {
       /***** Get temporary directory from cache *****/
       if (DB_QuerySELECT (&mysql_res,"can not get check if file is cached",
-			  "SELECT TmpPubDir"
+			  "SELECT TmpPubDir"	// row[0]
 			   " FROM brw_caches"
 			  " WHERE SessionId='%s'"
 			    " AND PrivPath='%s'",

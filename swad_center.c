@@ -2237,7 +2237,6 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
   {
    extern const char *Txt_center;
    extern const char *Txt_centers;
-   MYSQL_ROW row;
    unsigned NumCtr;
    struct Ctr_Center Ctr;
 
@@ -2262,10 +2261,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
 	   NumCtr++)
 	{
 	 /* Get next center */
-	 row = mysql_fetch_row (*mysql_res);
-
-	 /* Get center code (row[0]) */
-	 Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
+	 Ctr.CtrCod = DB_GetNextCode (*mysql_res);
 
 	 /* Get data of center */
 	 Ctr_GetDataOfCenterByCod (&Ctr);

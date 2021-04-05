@@ -102,14 +102,15 @@ void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
       /***** Get user's IDs from database *****/
       // First the confirmed  (Confirmed == 'Y')
       // Then the unconfirmed (Confirmed == 'N')
-      NumIDs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's IDs",
-					  "SELECT UsrID,"	// row[0]
-					         "Confirmed"	// row[1]
-					   " FROM usr_ids"
-					  " WHERE UsrCod=%ld"
-					  " ORDER BY Confirmed DESC,"
-					            "UsrID",
-					  UsrDat->UsrCod);
+      NumIDs = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get user's IDs",
+		      "SELECT UsrID,"		// row[0]
+			     "Confirmed"	// row[1]
+		       " FROM usr_ids"
+		      " WHERE UsrCod=%ld"
+		      " ORDER BY Confirmed DESC,"
+			        "UsrID",
+		      UsrDat->UsrCod);
       if (NumIDs)
 	{
 	 /***** Allocate space for the list *****/
@@ -182,7 +183,6 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
    char *SubQueryAllUsrs = NULL;
    char SubQueryOneUsr[1 + ID_MAX_BYTES_USR_ID + 1 + 1];
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    size_t MaxLength;
    unsigned NumID;
    unsigned NumUsr;
@@ -216,31 +216,31 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
         {
 	 // Get user's code if I have written the correct password
 	 // or if password in database is empty (new user)
-	 ListUsrCods->NumUsrs =
-	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's codes",
-				    "SELECT DISTINCT(usr_ids.UsrCod)"
-				     " FROM usr_ids,"
-				           "usr_data"
-				    " WHERE usr_ids.UsrID IN (%s)"
-				       "%s"
-				      " AND usr_ids.UsrCod=usr_data.UsrCod"
-				      " AND (usr_data.Password='%s'"
-				        " OR usr_data.Password='')",
-				    SubQueryAllUsrs,
-	                            OnlyConfirmedIDs ? " AND usr_ids.Confirmed='Y'" :
-	                        	               "",
-				    EncryptedPassword);
+	 ListUsrCods->NumUsrs = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get user's codes",
+			 "SELECT DISTINCT(usr_ids.UsrCod)"
+			  " FROM usr_ids,"
+			        "usr_data"
+			 " WHERE usr_ids.UsrID IN (%s)"
+			    "%s"
+			   " AND usr_ids.UsrCod=usr_data.UsrCod"
+			   " AND (usr_data.Password='%s'"
+			     " OR usr_data.Password='')",
+			 SubQueryAllUsrs,
+			 OnlyConfirmedIDs ? " AND usr_ids.Confirmed='Y'" :
+					    "",
+			 EncryptedPassword);
         }
       else
-	 ListUsrCods->NumUsrs =
-	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's codes",
-				    "SELECT DISTINCT(UsrCod)"
-				     " FROM usr_ids"
-				    " WHERE UsrID IN (%s)"
-				       "%s",
-				    SubQueryAllUsrs,
-				    OnlyConfirmedIDs ? " AND Confirmed='Y'" :
-	                        	               "");
+	 ListUsrCods->NumUsrs = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get user's codes",
+			 "SELECT DISTINCT(UsrCod)"
+			  " FROM usr_ids"
+			 " WHERE UsrID IN (%s)"
+			    "%s",
+			 SubQueryAllUsrs,
+			 OnlyConfirmedIDs ? " AND Confirmed='Y'" :
+					    "");
 
       /***** Free memory for subquery string *****/
       free (SubQueryAllUsrs);
@@ -255,11 +255,8 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
 	 for (NumUsr = 0;
 	      NumUsr < ListUsrCods->NumUsrs;
 	      NumUsr++)
-	   {
-	    /***** Get user's code *****/
-	    row = mysql_fetch_row (mysql_res);
-	    ListUsrCods->Lst[NumUsr] = Str_ConvertStrCodToLongCod (row[0]);
-	   }
+	    /* Get user's code */
+	    ListUsrCods->Lst[NumUsr] = DB_GetNextCode (mysql_res);
 	 UsrDat->UsrCod = ListUsrCods->Lst[0];	// The first user found
         }
       else	// ListUsrCods->NumUsrs == 0

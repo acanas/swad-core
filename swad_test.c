@@ -4008,48 +4008,27 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
 
 static long Tst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   long MedCod = -1L;
+   /***** Trivial check: question code should be > 0 *****/
+   if (QstCod <= 0)
+      return -1L;
 
-   if (QstCod > 0)	// Existing question
-     {
-      /***** Query depending on NumOpt *****/
-      if (NumOpt < 0)
-	 // Get media associated to stem
-	 NumRows = DB_QuerySELECT (&mysql_res,"can not get media",
-				   "SELECT MedCod"		// row[0]
-				    " FROM tst_questions"
-				   " WHERE QstCod=%ld"
-				     " AND CrsCod=%ld",
-				   QstCod,CrsCod);
-      else
-	 // Get media associated to answer
-	 NumRows = DB_QuerySELECT (&mysql_res,"can not get media",
-				   "SELECT MedCod"		// row[0]
-				    " FROM tst_answers"
-				   " WHERE QstCod=%ld"
-				     " AND AnsInd=%u",
-				   QstCod,(unsigned) NumOpt);
-
-      if (NumRows)
-	{
-	 if (NumRows == 1)
-	   {
-	    /***** Get media code (row[0]) *****/
-	    row = mysql_fetch_row (mysql_res);
-	    MedCod = Str_ConvertStrCodToLongCod (row[0]);
-	   }
-	 else	// NumRows > 1
-	    Lay_ShowErrorAndExit ("Duplicated media in database.");
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-
-   return MedCod;
+   /***** Query depending on NumOpt *****/
+   if (NumOpt < 0)
+      // Get media associated to stem
+      return DB_QuerySELECTCode ("can not get media",
+				 "SELECT MedCod"
+				  " FROM tst_questions"
+				 " WHERE QstCod=%ld"
+				   " AND CrsCod=%ld",
+				 QstCod,CrsCod);
+   else
+      // Get media associated to answer
+      return DB_QuerySELECTCode ("can not get media",
+				 "SELECT MedCod"
+				  " FROM tst_answers"
+				 " WHERE QstCod=%ld"
+				   " AND AnsInd=%u",
+				 QstCod,(unsigned) NumOpt);
   }
 
 /*****************************************************************************/
@@ -4555,15 +4534,14 @@ bool Tst_CheckIfQuestionExistsInDB (struct Tst_Question *Question)
            NumQst++)
         {
 	 /* Get question code */
-         row = mysql_fetch_row (mysql_res_qst);
-         if ((Question->QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Question->QstCod = DB_GetNextCode (mysql_res_qst)) < 0)
             Lay_ShowErrorAndExit ("Wrong code of question.");
 
          /* Get answers from this question */
          NumOptsExistingQstInDB =
          (unsigned) DB_QuerySELECT (&mysql_res_ans,"can not get the answer"
 						   " of a question",
-				    "SELECT Answer"
+				    "SELECT Answer"	// row[0]
 				     " FROM tst_answers"
 				    " WHERE QstCod=%ld"
 				    " ORDER BY AnsInd",
@@ -5222,7 +5200,7 @@ static void Tst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod)
    /***** Get media code associated to stem of test question from database *****/
    NumMedia =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
-			      "SELECT MedCod"	// row[0]
+			      "SELECT MedCod"
 			       " FROM tst_questions"
 			      " WHERE QstCod=%ld"
 			        " AND CrsCod=%ld",	// Extra check
@@ -5361,15 +5339,15 @@ static unsigned Tst_GetNumTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t A
       case Hie_Lvl_SYS:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"
-        		           "SUM(NumHits),"
-        		           "SUM(Score)"
+        		    "SELECT COUNT(*),"		// row[0]
+        		           "SUM(NumHits),"	// row[1]
+        		           "SUM(Score)"		// row[2]
         	             " FROM tst_questions");
          else
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"
-        		           "SUM(NumHits),"
-        		           "SUM(Score)"
+        		    "SELECT COUNT(*),"		// row[0]
+        		           "SUM(NumHits),"	// row[1]
+        		           "SUM(Score)"		// row[2]
         	             " FROM tst_questions"
                             " WHERE AnsType='%s'",
 			    Tst_StrAnswerTypesDB[AnsType]);
@@ -5377,9 +5355,9 @@ static unsigned Tst_GetNumTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t A
       case Hie_Lvl_CTY:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"
-        		           "SUM(NumHits),"
-        		           "SUM(Score)"
+        		    "SELECT COUNT(*),"		// row[0]
+        		           "SUM(NumHits),"	// row[1]
+        		           "SUM(Score)"		// row[2]
         	             " FROM ins_instits,"
         	                   "ctr_centers,"
         	                   "deg_degrees,"
@@ -5393,9 +5371,9 @@ static unsigned Tst_GetNumTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t A
 			    Gbl.Hierarchy.Cty.CtyCod);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"
-        		           "SUM(NumHits),"
-        		           "SUM(Score)"
+        		    "SELECT COUNT(*),"		// row[0]
+        		           "SUM(NumHits),"	// row[1]
+        		           "SUM(Score)"		// row[2]
         	             " FROM ins_instits,"
         	                   "ctr_centers,"
         	                   "deg_degrees,"
@@ -5413,9 +5391,9 @@ static unsigned Tst_GetNumTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t A
       case Hie_Lvl_INS:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"
-        		           "SUM(NumHits),"
-        		           "SUM(Score)"
+        		    "SELECT COUNT(*),"		// row[0]
+        		           "SUM(NumHits),"	// row[1]
+        		           "SUM(Score)"		// row[2]
         	             " FROM ctr_centers,"
         	                   "deg_degrees,"
         	                   "crs_courses,"
@@ -5427,9 +5405,9 @@ static unsigned Tst_GetNumTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t A
 			    Gbl.Hierarchy.Ins.InsCod);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"
-        		           "SUM(NumHits),"
-        		           "SUM(Score)"
+        		    "SELECT COUNT(*),"		// row[0]
+        		           "SUM(NumHits),"	// row[1]
+        		           "SUM(Score)"		// row[2]
         	             " FROM ctr_centers,"
         	                   "deg_degrees,"
         	                   "crs_courses,"
@@ -5445,9 +5423,9 @@ static unsigned Tst_GetNumTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t A
       case Hie_Lvl_CTR:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"
-        		           "SUM(NumHits),"
-        		           "SUM(Score)"
+        		    "SELECT COUNT(*),"		// row[0]
+        		           "SUM(NumHits),"	// row[1]
+        		           "SUM(Score)"		// row[2]
         	             " FROM deg_degrees,"
         	                   "crs_courses,"
         	                   "tst_questions"
@@ -5457,9 +5435,9 @@ static unsigned Tst_GetNumTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t A
 			    Gbl.Hierarchy.Ctr.CtrCod);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"
-        		           "SUM(NumHits),"
-        		           "SUM(Score)"
+        		    "SELECT COUNT(*),"		// row[0]
+        		           "SUM(NumHits),"	// row[1]
+        		           "SUM(Score)"		// row[2]
         	             " FROM deg_degrees,"
         	                   "crs_courses,"
         	                   "tst_questions"
@@ -5473,9 +5451,9 @@ static unsigned Tst_GetNumTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t A
       case Hie_Lvl_DEG:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"
-        		           "SUM(NumHits),"
-        		           "SUM(Score)"
+        		    "SELECT COUNT(*),"		// row[0]
+        		           "SUM(NumHits),"	// row[1]
+        		           "SUM(Score)"		// row[2]
         	             " FROM crs_courses,"
         	                   "tst_questions"
                             " WHERE crs_courses.DegCod=%ld"
@@ -5483,9 +5461,9 @@ static unsigned Tst_GetNumTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t A
 			    Gbl.Hierarchy.Deg.DegCod);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"
-        		           "SUM(NumHits),"
-        		           "SUM(Score)"
+        		    "SELECT COUNT(*),"		// row[0]
+        		           "SUM(NumHits),"	// row[1]
+        		           "SUM(Score)"		// row[2]
         	             " FROM crs_courses,"
         	                   "tst_questions"
                             " WHERE crs_courses.DegCod=%ld"
@@ -5497,17 +5475,17 @@ static unsigned Tst_GetNumTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t A
       case Hie_Lvl_CRS:
          if (AnsType == Tst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"
-        		           "SUM(NumHits),"
-        		           "SUM(Score)"
+        		    "SELECT COUNT(*),"		// row[0]
+        		           "SUM(NumHits),"	// row[1]
+        		           "SUM(Score)"		// row[2]
         	             " FROM tst_questions"
                             " WHERE CrsCod=%ld",
 			    Gbl.Hierarchy.Crs.CrsCod);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"
-        		           "SUM(NumHits),"
-        		           "SUM(Score)"
+        		    "SELECT COUNT(*),"		// row[0]
+        		           "SUM(NumHits),"	// row[1]
+        		           "SUM(Score)"		// row[2]
         	             " FROM tst_questions"
                             " WHERE CrsCod=%ld"
                               " AND AnsType='%s'",

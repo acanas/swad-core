@@ -102,7 +102,6 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumRows;
    unsigned long NumRow;
    long ActCod;
@@ -110,7 +109,7 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
 
    /***** Get most frequently used actions *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get most frequently used actions",
-			     "SELECT ActCod"	// row[0]
+			     "SELECT ActCod"
 			      " FROM act_frequent"
 			     " WHERE UsrCod=%ld"
 			     " ORDER BY Score DESC,"
@@ -122,10 +121,8 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
         NumRow < NumRows && ListMFUActions->NumActions < MaxActionsShown;
         NumRow++)
      {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get action code (row[0]) */
-      ActCod = Str_ConvertStrCodToLongCod (row[0]);
+      /* Get action code */
+      ActCod = DB_GetNextCode (mysql_res);
       if (ActCod >= 0 && ActCod <= Act_MAX_ACTION_COD)
          if ((Action = Act_FromActCodToAction[ActCod]) >= 0)
             if (Act_GetIndexInMenu (Action) >= 0)	// MFU actions must be only actions shown on menu (database could contain wrong action numbers)
@@ -145,7 +142,6 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumActions;
    unsigned NumAct;
    long ActCod;
@@ -157,7 +153,7 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
       /***** Get my most frequently used actions *****/
       NumActions = (unsigned)
       DB_QuerySELECT (&mysql_res,"can not get the most frequently used actions",
-		      "SELECT ActCod"	// row[0]
+		      "SELECT ActCod"
 		       " FROM act_frequent"
 		      " WHERE UsrCod=%ld"
 		      " ORDER BY LastClick DESC,"
@@ -169,10 +165,8 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
 	   NumAct < NumActions;
 	   NumAct++)
         {
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get action code (row[0]) */
-         ActCod = Str_ConvertStrCodToLongCod (row[0]);
+         /* Get action code */
+         ActCod = DB_GetNextCode (mysql_res);
          if (ActCod >= 0 && ActCod <= Act_MAX_ACTION_COD)
             if ((Action = Act_FromActCodToAction[ActCod]) >= 0)
                if (Act_GetTab (Act_GetSuperAction (Action)) == Gbl.Action.Tab)

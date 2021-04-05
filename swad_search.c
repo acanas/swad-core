@@ -466,7 +466,7 @@ static unsigned Sch_SearchCountriesInDB (const char *RangeQuery)
 	    /***** Query database and list institutions found *****/
 	    NumCtys = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get countries",
-			    "SELECT CtyCod"	// row[0]
+			    "SELECT CtyCod"
 			     " FROM cty_countrs"
 			    " WHERE %s"
 			       "%s"
@@ -506,7 +506,7 @@ static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery)
 	    /***** Query database and list institutions found *****/
 	    NumInss = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get institutions",
-			    "SELECT ins_instits.InsCod"	// row[0]
+			    "SELECT ins_instits.InsCod"
 			     " FROM ins_instits,"
 				   "cty_countrs"
 			    " WHERE %s"
@@ -546,7 +546,7 @@ static unsigned Sch_SearchCentersInDB (const char *RangeQuery)
 	    /***** Query database and list centers found *****/
 	    NumCtrs = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get centers",
-			    "SELECT ctr_centers.CtrCod"	// row[0]
+			    "SELECT ctr_centers.CtrCod"
 			     " FROM ctr_centers,"
 			           "ins_instits,"
 			           "cty_countrs"
@@ -585,7 +585,7 @@ static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
 	    /***** Query database and list degrees found *****/
 	    NumDegs = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get degrees",
-			    "SELECT deg_degrees.DegCod"	// row[0]
+			    "SELECT deg_degrees.DegCod"
 			     " FROM deg_degrees,"
 			           "ctr_centers,"
 			           "ins_instits,"

@@ -362,32 +362,19 @@ void Tag_RenameTag (void)
 
 static long Tag_GetTagCodFromTagTxt (const char *TagTxt)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   long TagCod = -1L;	// -1 means that the tag does not exist in database
+   long TagCod;
 
    /***** Get tag code from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get tag",
-			     "SELECT TagCod"
-			      " FROM tst_tags"
-			     " WHERE CrsCod=%ld"
-			       " AND TagTxt='%s'",
-			     Gbl.Hierarchy.Crs.CrsCod,TagTxt);
-   if (NumRows == 1)
-     {
-      /***** Get tag code *****/
-      row = mysql_fetch_row (mysql_res);
-      if ((TagCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Ale_CreateAlert (Ale_ERROR,NULL,
-                          "Wrong code of tag.");
-     }
-   else if (NumRows > 1)
+   TagCod = DB_QuerySELECTCode ("can not get tag",
+				"SELECT TagCod"
+				 " FROM tst_tags"
+				" WHERE CrsCod=%ld"
+				  " AND TagTxt='%s'",
+				Gbl.Hierarchy.Crs.CrsCod,
+				TagTxt);
+   if (TagCod <= 0)
       Ale_CreateAlert (Ale_ERROR,NULL,
-	               "Duplicated tag.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+		       "Wrong tag.");
 
    /***** Abort on error *****/
    if (Ale_GetTypeOfLastAlert () == Ale_ERROR)

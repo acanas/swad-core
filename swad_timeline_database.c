@@ -138,28 +138,14 @@ unsigned Tml_DB_GetDataOfNoteByCod (long NotCod,MYSQL_RES **mysql_res)
 
 long Tml_DB_GetPubCodOfOriginalNote (long NotCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long OriginalPubCod = -1L;	// Default value
-
    /***** Get code of publication of the original note *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get code of publication",
-		       "SELECT PubCod"
-		        " FROM tml_pubs"
-		       " WHERE NotCod=%ld"
-		         " AND PubType=%u",
-		       NotCod,
-		       (unsigned) Tml_Pub_ORIGINAL_NOTE) == 1)
-     {	// Result should have a unique row
-      /* Get code of publication (row[0]) */
-      row = mysql_fetch_row (mysql_res);
-      OriginalPubCod = Str_ConvertStrCodToLongCod (row[0]);
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return OriginalPubCod;
+   return DB_QuerySELECTCode ("can not get code of publication",
+			      "SELECT PubCod"
+			       " FROM tml_pubs"
+			      " WHERE NotCod=%ld"
+			        " AND PubType=%u",
+			      NotCod,
+			      (unsigned) Tml_Pub_ORIGINAL_NOTE);
   }
 
 /*****************************************************************************/
@@ -702,26 +688,13 @@ void Tml_DB_RemoveAllCommsMadeBy (long UsrCod)
 
 static long Tml_DB_GetMedCod (const char *Table,const char *Field,long Cod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long MedCod = -1L;	// Default value
-
    /***** Get code of media associated to comment *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get media code",
-		       "SELECT MedCod"	// row[0]
-		        " FROM %s"
-		       " WHERE %s=%ld",
-		      Table,Field,Cod) == 1)   // Result should have a unique row
-     {
-      /* Get media code */
-      row = mysql_fetch_row (mysql_res);
-      MedCod = Str_ConvertStrCodToLongCod (row[0]);
-     }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-
-   return MedCod;
+   return DB_QuerySELECTCode ("can not get media code",
+			      "SELECT MedCod"	// row[0]
+			       " FROM %s"
+			      " WHERE %s=%ld",
+			      Table,
+			      Field,Cod);
   }
 
 /*****************************************************************************/
@@ -862,26 +835,12 @@ unsigned Tml_DB_GetDataOfPubByCod (long PubCod,MYSQL_RES **mysql_res)
 
 long Tml_DB_GetNotCodFromPubCod (long PubCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long NotCod = -1L;	// Default value
-
    /***** Get code of note from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get code of note",
-		       "SELECT NotCod"
-		        " FROM tml_pubs"
-		       " WHERE PubCod=%ld",
-		       PubCod) == 1)   // Result should have a unique row
-     {
-      /* Get code of note */
-      row = mysql_fetch_row (mysql_res);
-      NotCod = Str_ConvertStrCodToLongCod (row[0]);
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NotCod;
+   return DB_QuerySELECTCode ("can not get code of note",
+			      "SELECT NotCod"
+			       " FROM tml_pubs"
+			      " WHERE PubCod=%ld",
+			      PubCod);
   }
 
 /*****************************************************************************/

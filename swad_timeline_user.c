@@ -149,9 +149,9 @@ static void Tml_Usr_GetAndShowSharersOrFavers (Tml_Usr_FavSha_t FavSha,
    if (NumUsrs)
       NumFirstUsrs =
       Tml_Usr_GetListFaversOrSharers (FavSha,Cod,UsrCod,
-                                     HowManyUsrs == Tml_Usr_SHOW_FEW_USRS ? Tml_Usr_DEF_USRS_SHOWN :
-				                                           Tml_Usr_MAX_USRS_SHOWN,
-                                     &mysql_res);
+                                      HowManyUsrs == Tml_Usr_SHOW_FEW_USRS ? Tml_Usr_DEF_USRS_SHOWN :
+				                                             Tml_Usr_MAX_USRS_SHOWN,
+                                      &mysql_res);
    else
       NumFirstUsrs = 0;
 
@@ -167,8 +167,8 @@ static void Tml_Usr_GetAndShowSharersOrFavers (Tml_Usr_FavSha_t FavSha,
       if (NumFirstUsrs < NumUsrs)		// Not all are shown
 	 /* Clickable ellipsis to show all users */
 	 Tml_Frm_PutFormToSeeAllFaversSharers (Action[FavSha],
-					      ParamFormat[FavSha],Cod,
-					      HowManyUsrs);
+					       ParamFormat[FavSha],Cod,
+					       HowManyUsrs);
    HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/
@@ -190,7 +190,6 @@ static void Tml_Usr_ShowNumSharersOrFavers (unsigned NumUsrs)
 static void Tml_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
 			                 unsigned NumUsrs,unsigned NumFirstUsrs)
   {
-   MYSQL_ROW row;
    unsigned NumUsr;
    struct UsrData UsrDat;
 
@@ -211,8 +210,7 @@ static void Tml_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
 	NumUsr++)
      {
       /***** Get user's code *****/
-      row = mysql_fetch_row (*mysql_res);
-      UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+      UsrDat.UsrCod = DB_GetNextCode (*mysql_res);
 
       /***** Get user's data and show user's photo *****/
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
