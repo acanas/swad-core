@@ -1843,33 +1843,18 @@ static void Gam_RemAnswersOfAQuestion (long GamCod,unsigned QstInd)
 /*****************************************************************************/
 /************ Get question index given game and code of question *************/
 /*****************************************************************************/
+// Return 0 is question is not present in game
 
 static unsigned Gam_GetQstIndFromQstCod (long GamCod,long QstCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned QstInd = 0;	// Return 0 is question is not present in game
-
    /***** Get question index in a game given the question code *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get question index",
-		       "SELECT QstInd"		// row[0]
-		        " FROM gam_questions"
-		       " WHERE GamCod=%ld"
-		         " AND QstCod=%ld",
-		       GamCod,
-		       QstCod))
-     {
-      /***** Get question code (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-      QstInd = Str_ConvertStrToUnsigned (row[0]);
-      if (QstInd == 0)
-	 Lay_ShowErrorAndExit ("Error: wrong question index.");
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return QstInd;
+   return DB_QuerySELECTUnsigned ("can not get question index",
+				  "SELECT QstInd"
+				   " FROM gam_questions"
+				  " WHERE GamCod=%ld"
+				    " AND QstCod=%ld",
+				  GamCod,
+				  QstCod);
   }
 
 /*****************************************************************************/
@@ -1902,25 +1887,12 @@ long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd)
 
 static unsigned Gam_GetMaxQuestionIndexInGame (long GamCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned QstInd = 0;
-
    /***** Get maximum question index in a game from database *****/
-   DB_QuerySELECT (&mysql_res,"can not get last question index",
-		   "SELECT MAX(QstInd)"		// row[0]
-		    " FROM gam_questions"
-		   " WHERE GamCod=%ld",
-                   GamCod);
-   row = mysql_fetch_row (mysql_res);
-   if (row[0])	// There are questions
-      if (sscanf (row[0],"%u",&QstInd) != 1)
-         Lay_ShowErrorAndExit ("Error when getting last question index.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return QstInd;
+   return DB_QuerySELECTUnsigned ("can not get last question index",
+				  "SELECT MAX(QstInd)"
+				   " FROM gam_questions"
+				  " WHERE GamCod=%ld",
+				  GamCod);
   }
 
 /*****************************************************************************/
@@ -1931,33 +1903,16 @@ static unsigned Gam_GetMaxQuestionIndexInGame (long GamCod)
 
 unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned PrevQstInd = 0;
-
    /***** Get previous question index in a game from database *****/
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
-   if (!DB_QuerySELECT (&mysql_res,"can not get previous question index",
-			"SELECT MAX(QstInd)"	// row[0]
-			 " FROM gam_questions"
-			" WHERE GamCod=%ld"
-			  " AND QstInd<%u",
-			GamCod,
-			QstInd))
-      Lay_ShowErrorAndExit ("Error: previous question index not found.");
-
-   /***** Get previous question index (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   if (row)
-      if (row[0])
-	 if (sscanf (row[0],"%u",&PrevQstInd) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting previous question index.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return PrevQstInd;
+   return DB_QuerySELECTUnsigned ("can not get previous question index",
+				  "SELECT MAX(QstInd)"
+				   " FROM gam_questions"
+				  " WHERE GamCod=%ld"
+				    " AND QstInd<%u",
+				  GamCod,
+				  QstInd);
   }
 
 /*****************************************************************************/
@@ -1968,31 +1923,20 @@ unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
 
 unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NextQstInd = Mch_AFTER_LAST_QUESTION;	// End of questions has been reached
+   unsigned NextQstInd;
 
    /***** Get next question index in a game from database *****/
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
-   if (!DB_QuerySELECT (&mysql_res,"can not get next question index",
-			"SELECT MIN(QstInd)"	// row[0]
-			 " FROM gam_questions"
-			" WHERE GamCod=%ld"
-			  " AND QstInd>%u",
-			GamCod,
-			QstInd))
-      Lay_ShowErrorAndExit ("Error: next question index not found.");
-
-   /***** Get next question index (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   if (row)
-      if (row[0])
-	 if (sscanf (row[0],"%u",&NextQstInd) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting next question index.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   NextQstInd = DB_QuerySELECTUnsigned ("can not get next question index",
+					"SELECT MIN(QstInd)"
+					 " FROM gam_questions"
+					" WHERE GamCod=%ld"
+					  " AND QstInd>%u",
+					GamCod,
+					QstInd);
+   if (NextQstInd == 0)
+      NextQstInd = Mch_AFTER_LAST_QUESTION;	// End of questions has been reached
 
    return NextQstInd;
   }

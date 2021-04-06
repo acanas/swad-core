@@ -822,25 +822,12 @@ static long ExaSet_GetSetCodFromSetInd (long ExaCod,unsigned SetInd)
 
 static unsigned ExaSet_GetMaxSetIndexInExam (long ExaCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned SetInd = 0;
-
    /***** Get maximum set index in an exam from database *****/
-   DB_QuerySELECT (&mysql_res,"can not get max set index",
-		   "SELECT MAX(SetInd)"		// row[0]
-		    " FROM exa_sets"
-		   " WHERE ExaCod=%ld",
-                   ExaCod);
-   row = mysql_fetch_row (mysql_res);
-   if (row[0])	// There are sets
-      if (sscanf (row[0],"%u",&SetInd) != 1)
-         Lay_ShowErrorAndExit ("Error when getting max set index.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return SetInd;
+   return DB_QuerySELECTUnsigned ("can not get max set index",
+				  "SELECT MAX(SetInd)"
+				   " FROM exa_sets"
+				  " WHERE ExaCod=%ld",
+				  ExaCod);
   }
 
 /*****************************************************************************/
@@ -851,66 +838,40 @@ static unsigned ExaSet_GetMaxSetIndexInExam (long ExaCod)
 
 static unsigned ExaSet_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned PrevSetInd = 0;
-
    /***** Get previous set index in an exam from database *****/
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
-   if (!DB_QuerySELECT (&mysql_res,"can not get previous set index",
-			"SELECT MAX(SetInd)"	// row[0]
-			 " FROM exa_sets"
-			" WHERE ExaCod=%ld"
-			  " AND SetInd<%u",
-			ExaCod,SetInd))
-      Lay_ShowErrorAndExit ("Error: previous set index not found.");
-
-   /***** Get previous set index (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   if (row)
-      if (row[0])
-	 if (sscanf (row[0],"%u",&PrevSetInd) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting previous set index.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return PrevSetInd;
+   return DB_QuerySELECTUnsigned ("can not get previous set index",
+				  "SELECT MAX(SetInd)"
+				   " FROM exa_sets"
+				  " WHERE ExaCod=%ld"
+				    " AND SetInd<%u",
+				  ExaCod,
+				  SetInd);
   }
 
 /*****************************************************************************/
 /*************** Get next set index to a given index in an exam **************/
 /*****************************************************************************/
 // Input set index can be 0, 1, 2, 3... n-1
-// Return set index will be 1, 2, 3... n if next set exists, or 0 if no next set
+// Return set index will be 1, 2, 3... n if next set exists, or big number if no next set
 
 static unsigned ExaSet_GetNextSetIndexInExam (long ExaCod,unsigned SetInd)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NextSetInd = ExaSes_AFTER_LAST_QUESTION;	// End of sets has been reached
+   unsigned NextSetInd;
 
    /***** Get next set index in an exam from database *****/
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
-   if (!DB_QuerySELECT (&mysql_res,"can not get next set index",
-			"SELECT MIN(SetInd)"	// row[0]
-			 " FROM exa_sets"
-			" WHERE ExaCod=%ld"
-			  " AND SetInd>%u",
-			ExaCod,SetInd))
-      Lay_ShowErrorAndExit ("Error: next set index not found.");
-
-   /***** Get next set index (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   if (row)
-      if (row[0])
-	 if (sscanf (row[0],"%u",&NextSetInd) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting next set index.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   NextSetInd = DB_QuerySELECTUnsigned ("can not get next set index",
+					"SELECT MIN(SetInd)"
+					 " FROM exa_sets"
+					" WHERE ExaCod=%ld"
+					  " AND SetInd>%u",
+					ExaCod,
+					SetInd);
+   if (NextSetInd == 0)
+      NextSetInd = ExaSes_AFTER_LAST_QUESTION;	// End of sets has been reached
 
    return NextSetInd;
   }

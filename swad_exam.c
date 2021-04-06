@@ -1769,8 +1769,6 @@ unsigned Exa_GetParamQstInd (void)
 
 long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    long QstCod;
 
    /***** Get question code of the question to be moved up *****/
@@ -1784,14 +1782,6 @@ long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd)
    if (QstCod <= 0)
       Lay_ShowErrorAndExit ("Error: wrong question index.");
 
-   /***** Get question code (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-      Lay_ShowErrorAndExit ("Error: wrong question code.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
    return QstCod;
   }
 
@@ -1803,67 +1793,39 @@ long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd)
 
 unsigned Exa_GetPrevQuestionIndexInExam (long ExaCod,unsigned QstInd)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned PrevQstInd = 0;
-
    /***** Get previous question index in an exam from database *****/
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
-   if (!DB_QuerySELECT (&mysql_res,"can not get previous question index",
-			"SELECT MAX(QstInd)"	// row[0]
-			 " FROM exa_set_questions"
-			" WHERE ExaCod=%ld"
-			  " AND QstInd<%u",
-			ExaCod,
-			QstInd))
-      Lay_ShowErrorAndExit ("Error: previous question index not found.");
-
-   /***** Get previous question index (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   if (row)
-      if (row[0])
-	 if (sscanf (row[0],"%u",&PrevQstInd) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting previous question index.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return PrevQstInd;
+   return DB_QuerySELECTUnsigned ("can not get previous question index",
+				  "SELECT MAX(QstInd)"	// row[0]
+				   " FROM exa_set_questions"
+				  " WHERE ExaCod=%ld"
+				    " AND QstInd<%u",
+				  ExaCod,
+				  QstInd);
   }
 
 /*****************************************************************************/
 /************* Get next question index to a given index in an exam ************/
 /*****************************************************************************/
 // Input question index can be 0, 1, 2, 3... n-1
-// Return question index will be 1, 2, 3... n if next question exists, or 0 if no next question
+// Return question index will be 1, 2, 3... n if next question exists, or big number if no next question
 
 unsigned Exa_GetNextQuestionIndexInExam (long ExaCod,unsigned QstInd)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NextQstInd = ExaSes_AFTER_LAST_QUESTION;	// End of questions has been reached
+   unsigned NextQstInd;
 
    /***** Get next question index in an exam from database *****/
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
-   if (!DB_QuerySELECT (&mysql_res,"can not get next question index",
-			"SELECT MIN(QstInd)"	// row[0]
-			 " FROM exa_set_questions"
-			" WHERE ExaCod=%ld"
-			  " AND QstInd>%u",
-			ExaCod,QstInd))
-      Lay_ShowErrorAndExit ("Error: next question index not found.");
-
-   /***** Get next question index (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   if (row)
-      if (row[0])
-	 if (sscanf (row[0],"%u",&NextQstInd) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting next question index.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   NextQstInd = DB_QuerySELECTUnsigned ("can not get next question index",
+					"SELECT MIN(QstInd)"
+					 " FROM exa_set_questions"
+					" WHERE ExaCod=%ld"
+					  " AND QstInd>%u",
+					ExaCod,QstInd);
+   if (NextQstInd == 0)
+      NextQstInd = ExaSes_AFTER_LAST_QUESTION;	// End of questions has been reached
 
    return NextQstInd;
   }

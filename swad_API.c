@@ -686,14 +686,14 @@ static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
 	       UsrDat->Roles.InCurrentCrs.Valid = true;
 	    else
 	      {
-	       UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
+	       UsrDat->Roles.InCurrentCrs.Role  = Rol_UNK;
 	       UsrDat->Roles.InCurrentCrs.Valid = false;
 	      }
 	   }
 	 else
 	    // MAX(Role) == NULL if user does not belong to any course
 	   {
-	    UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
+	    UsrDat->Roles.InCurrentCrs.Role  = Rol_UNK;
 	    UsrDat->Roles.InCurrentCrs.Valid = true;
 	   }
 	}
@@ -3672,7 +3672,7 @@ int swad__sendMessage (struct soap *soap,
      {
       /***** Check if the original message was really received by me *****/
       if (DB_QuerySELECTUnsigned ("can not check original message",
-				  "SELECT SUM(N)"	// row[0]
+				  "SELECT SUM(N)"
 				   " FROM (SELECT COUNT(*) AS N"
 					   " FROM msg_rcv"
 					  " WHERE UsrCod=%ld"

@@ -3494,7 +3494,7 @@ static void Mch_ShowMatchScore (const struct Mch_Match *Match)
    double Range;
    double NumRowsPerScorePoint;
    double Score;
-   unsigned MaxUsrs = 0;
+   unsigned MaxUsrs;
    unsigned NumUsrs;
    unsigned NumRowForThisScore;
    unsigned NumRow;
@@ -3507,26 +3507,14 @@ static void Mch_ShowMatchScore (const struct Mch_Match *Match)
    NumRowsPerScorePoint = (double) Mch_NUM_ROWS_SCORE / Range;
 
    /***** Get maximum number of users *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get max users",
-		       "SELECT MAX(NumUsrs)"	// row[0]
-		        " FROM (SELECT COUNT(*) AS NumUsrs"
-		                " FROM mch_results"
-		               " WHERE MchCod=%ld"
-		               " GROUP BY Score"
-		               " ORDER BY Score) AS Scores",
-		       Match->MchCod))
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get maximum number of users (row[0]) *****/
-      if (row)
-         if (row[0])
-	    if (sscanf (row[0],"%u",&MaxUsrs) != 1)
-	       MaxUsrs = 0;
-     }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
+   MaxUsrs = DB_QuerySELECTUnsigned ("can not get max users",
+				     "SELECT MAX(NumUsrs)"
+				      " FROM (SELECT COUNT(*) AS NumUsrs"
+					      " FROM mch_results"
+					     " WHERE MchCod=%ld"
+					     " GROUP BY Score"
+					     " ORDER BY Score) AS Scores",
+				     Match->MchCod);
 
    /***** Get scores from database *****/
    NumScores = (unsigned)
