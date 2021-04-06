@@ -2040,110 +2040,91 @@ unsigned Exa_GetNumExams (Hie_Lvl_Level_t Scope)
 
 double Exa_GetNumQstsPerCrsExam (Hie_Lvl_Level_t Scope)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   double NumQstsPerExam;
-
    /***** Get number of questions per exam from database *****/
    switch (Scope)
      {
       case Hie_Lvl_SYS:
-         DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
-			 "SELECT AVG(NumQsts)"	// row[0]
-			  " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
-			          " FROM exa_exams,"
-			                "exa_set_questions"
-			         " WHERE exa_exams.ExaCod=exa_set_questions.ExaCod"
-			         " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable");
-         break;
+         return DB_QuerySELECTDouble ("can not get number of questions per exam",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+					       " FROM exa_exams,"
+						     "exa_set_questions"
+					      " WHERE exa_exams.ExaCod=exa_set_questions.ExaCod"
+					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable");
       case Hie_Lvl_CTY:
-         DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
-			 "SELECT AVG(NumQsts)"	// row[0]
-			  " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
-				 "  FROM ins_instits,"
-				        "ctr_centers,"
-					"deg_degrees,"
-					"crs_courses,"
-					"exa_exams,"
-					"exa_set_questions"
-				  " WHERE ins_instits.CtyCod=%ld"
-				    " AND ins_instits.InsCod=ctr_centers.InsCod"
-				    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-				    " AND deg_degrees.DegCod=crs_courses.DegCod"
-				    " AND crs_courses.CrsCod=exa_exams.CrsCod"
-				    " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
-				  " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
-                         Gbl.Hierarchy.Cty.CtyCod);
-         break;
+         return DB_QuerySELECTDouble ("can not get number of questions per exam",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+					      "  FROM ins_instits,"
+						     "ctr_centers,"
+						     "deg_degrees,"
+						     "crs_courses,"
+						     "exa_exams,"
+						     "exa_set_questions"
+					       " WHERE ins_instits.CtyCod=%ld"
+						 " AND ins_instits.InsCod=ctr_centers.InsCod"
+						 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+						 " AND deg_degrees.DegCod=crs_courses.DegCod"
+						 " AND crs_courses.CrsCod=exa_exams.CrsCod"
+						 " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
+					       " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
+				      Gbl.Hierarchy.Cty.CtyCod);
       case Hie_Lvl_INS:
-         DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
-			 "SELECT AVG(NumQsts)"	// row[0]
-			  " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
-				  " FROM ctr_centers,"
-					"deg_degrees,"
-					"crs_courses,"
-					"exa_exams,"
-					"exa_set_questions"
-				 " WHERE ctr_centers.InsCod=%ld"
-				   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-				   " AND deg_degrees.DegCod=crs_courses.DegCod"
-				   " AND crs_courses.CrsCod=exa_exams.CrsCod"
-				   " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
-				 " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
-		         Gbl.Hierarchy.Ins.InsCod);
-         break;
+         return DB_QuerySELECTDouble ("can not get number of questions per exam",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+					       " FROM ctr_centers,"
+						     "deg_degrees,"
+						     "crs_courses,"
+						     "exa_exams,"
+						     "exa_set_questions"
+					      " WHERE ctr_centers.InsCod=%ld"
+					        " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+					        " AND deg_degrees.DegCod=crs_courses.DegCod"
+					        " AND crs_courses.CrsCod=exa_exams.CrsCod"
+					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
+					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
+				      Gbl.Hierarchy.Ins.InsCod);
       case Hie_Lvl_CTR:
-         DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
-			 "SELECT AVG(NumQsts)"	// row[0]
-			  " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
-				  " FROM deg_degrees,"
-					"crs_courses,"
-					"exa_exams,"
-					"exa_set_questions"
-				 " WHERE deg_degrees.CtrCod=%ld"
-				   " AND deg_degrees.DegCod=crs_courses.DegCod"
-				   " AND crs_courses.CrsCod=exa_exams.CrsCod"
-				   " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
-				 " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
-                         Gbl.Hierarchy.Ctr.CtrCod);
-         break;
+         return DB_QuerySELECTDouble ("can not get number of questions per exam",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+					       " FROM deg_degrees,"
+						     "crs_courses,"
+						     "exa_exams,"
+						     "exa_set_questions"
+					      " WHERE deg_degrees.CtrCod=%ld"
+					        " AND deg_degrees.DegCod=crs_courses.DegCod"
+					        " AND crs_courses.CrsCod=exa_exams.CrsCod"
+					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
+					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
+				      Gbl.Hierarchy.Ctr.CtrCod);
       case Hie_Lvl_DEG:
-         DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
-			 "SELECT AVG(NumQsts)"	// row[0]
-			  " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
-			          " FROM crs_courses,"
-				        "exa_exams,"
-				        "exa_set_questions"
-			         " WHERE crs_courses.DegCod=%ld"
-			           " AND crs_courses.CrsCod=exa_exams.CrsCod"
-			           " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
-			         " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
-		         Gbl.Hierarchy.Deg.DegCod);
-         break;
+         return DB_QuerySELECTDouble ("can not get number of questions per exam",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+					       " FROM crs_courses,"
+						     "exa_exams,"
+						     "exa_set_questions"
+					      " WHERE crs_courses.DegCod=%ld"
+					        " AND crs_courses.CrsCod=exa_exams.CrsCod"
+					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
+					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
+				      Gbl.Hierarchy.Deg.DegCod);
       case Hie_Lvl_CRS:
-         DB_QuerySELECT (&mysql_res,"can not get number of questions per exam",
-			 "SELECT AVG(NumQsts)"	// row[0]
-			  " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
-			          " FROM exa_exams,"
-				        "exa_set_questions"
-			         " WHERE exa_exams.Cod=%ld"
-			           " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
-			         " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
-                         Gbl.Hierarchy.Crs.CrsCod);
-         break;
+         return DB_QuerySELECTDouble ("can not get number of questions per exam",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+					       " FROM exa_exams,"
+						     "exa_set_questions"
+					      " WHERE exa_exams.Cod=%ld"
+					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
+					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
+				      Gbl.Hierarchy.Crs.CrsCod);
       default:
 	 Lay_WrongScopeExit ();
-	 break;
+	 return 0.0;	// Not reached
      }
-
-   /***** Get average number of questions per exam *****/
-   row = mysql_fetch_row (mysql_res);
-   NumQstsPerExam = Str_GetDoubleFromStr (row[0]);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumQstsPerExam;
   }
 
 /*****************************************************************************/

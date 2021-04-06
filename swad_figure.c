@@ -3895,8 +3895,6 @@ static void Fig_GetAndShowFollowStats (void)
       "FollowedCod",
       "FollowerCod"
      };
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned Fol;
    unsigned NumUsrsTotal;
    unsigned NumUsrs;
@@ -4048,121 +4046,115 @@ static void Fig_GetAndShowFollowStats (void)
       switch (Gbl.Scope.Current)
 	{
 	 case Hie_Lvl_SYS:
-	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
-				       " per survey",
-			    "SELECT AVG(N)"			// row[0]
-			     " FROM (SELECT COUNT(%s) AS N"
-			             " FROM usr_follow"
-			            " GROUP BY %s) AS F",
-			    FieldDB[Fol],
-			    FieldDB[1 - Fol]);
+	    Average = DB_QuerySELECTDouble ("can not get number of questions"
+				            " per survey",
+					    "SELECT AVG(N)"			// row[0]
+					     " FROM (SELECT COUNT(%s) AS N"
+						     " FROM usr_follow"
+						    " GROUP BY %s) AS F",
+					    FieldDB[Fol],
+					    FieldDB[1 - Fol]);
 	    break;
 	 case Hie_Lvl_CTY:
-	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
-				       " per survey",
-			    "SELECT AVG(N)"			// row[0]
-			     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-				     " FROM ins_instits,"
-					   "ctr_centers,"
-					   "deg_degrees,"
-					   "crs_courses,"
-					   "crs_users,"
-					   "usr_follow"
-				    " WHERE ins_instits.CtyCod=%ld"
-				      " AND ins_instits.InsCod=ctr_centers.InsCod"
-				      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-				      " AND deg_degrees.DegCod=crs_courses.DegCod"
-				      " AND crs_courses.CrsCod=crs_users.CrsCod"
-				      " AND crs_users.UsrCod=usr_follow.%s"
-				    " GROUP BY %s) AS F",
-			    FieldDB[Fol],
-			    Gbl.Hierarchy.Cty.CtyCod,
-			    FieldDB[Fol],
-			    FieldDB[1 - Fol]);
+	    Average = DB_QuerySELECTDouble ("can not get number of questions"
+				            " per survey",
+					    "SELECT AVG(N)"			// row[0]
+					     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+						     " FROM ins_instits,"
+							   "ctr_centers,"
+							   "deg_degrees,"
+							   "crs_courses,"
+							   "crs_users,"
+							   "usr_follow"
+						    " WHERE ins_instits.CtyCod=%ld"
+						      " AND ins_instits.InsCod=ctr_centers.InsCod"
+						      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+						      " AND deg_degrees.DegCod=crs_courses.DegCod"
+						      " AND crs_courses.CrsCod=crs_users.CrsCod"
+						      " AND crs_users.UsrCod=usr_follow.%s"
+						    " GROUP BY %s) AS F",
+					    FieldDB[Fol],
+					    Gbl.Hierarchy.Cty.CtyCod,
+					    FieldDB[Fol],
+					    FieldDB[1 - Fol]);
 	    break;
 	 case Hie_Lvl_INS:
-	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
-				       " per survey",
-			    "SELECT AVG(N)"			// row[0]
-			     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-				     " FROM ctr_centers,"
-					   "deg_degrees,"
-					   "crs_courses,"
-					   "crs_users,"
-					   "usr_follow"
-				    " WHERE ctr_centers.InsCod=%ld"
-				      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-				      " AND deg_degrees.DegCod=crs_courses.DegCod"
-				      " AND crs_courses.CrsCod=crs_users.CrsCod"
-				      " AND crs_users.UsrCod=usr_follow.%s"
-				    " GROUP BY %s) AS F",
-			    FieldDB[Fol],
-			    Gbl.Hierarchy.Ins.InsCod,
-			    FieldDB[Fol],
-			    FieldDB[1 - Fol]);
+	    Average = DB_QuerySELECTDouble ("can not get number of questions"
+					    " per survey",
+					    "SELECT AVG(N)"			// row[0]
+					     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+						     " FROM ctr_centers,"
+							   "deg_degrees,"
+							   "crs_courses,"
+							   "crs_users,"
+							   "usr_follow"
+						    " WHERE ctr_centers.InsCod=%ld"
+						      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+						      " AND deg_degrees.DegCod=crs_courses.DegCod"
+						      " AND crs_courses.CrsCod=crs_users.CrsCod"
+						      " AND crs_users.UsrCod=usr_follow.%s"
+						    " GROUP BY %s) AS F",
+					    FieldDB[Fol],
+					    Gbl.Hierarchy.Ins.InsCod,
+					    FieldDB[Fol],
+					    FieldDB[1 - Fol]);
 	    break;
 	 case Hie_Lvl_CTR:
-	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
-				       " per survey",
-			    "SELECT AVG(N)"			// row[0]
-			     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-				     " FROM deg_degrees,"
-					   "crs_courses,"
-					   "crs_users,"
-					   "usr_follow"
-				    " WHERE deg_degrees.CtrCod=%ld"
-				      " AND deg_degrees.DegCod=crs_courses.DegCod"
-				      " AND crs_courses.CrsCod=crs_users.CrsCod"
-				      " AND crs_users.UsrCod=usr_follow.%s"
-				    " GROUP BY %s) AS F",
-			    FieldDB[Fol],
-			    Gbl.Hierarchy.Ctr.CtrCod,
-			    FieldDB[Fol],
-			    FieldDB[1 - Fol]);
+	    Average = DB_QuerySELECTDouble ("can not get number of questions"
+				            " per survey",
+					    "SELECT AVG(N)"			// row[0]
+					     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+						     " FROM deg_degrees,"
+							   "crs_courses,"
+							   "crs_users,"
+							   "usr_follow"
+						    " WHERE deg_degrees.CtrCod=%ld"
+						      " AND deg_degrees.DegCod=crs_courses.DegCod"
+						      " AND crs_courses.CrsCod=crs_users.CrsCod"
+						      " AND crs_users.UsrCod=usr_follow.%s"
+						    " GROUP BY %s) AS F",
+					    FieldDB[Fol],
+					    Gbl.Hierarchy.Ctr.CtrCod,
+					    FieldDB[Fol],
+					    FieldDB[1 - Fol]);
 	    break;
 	 case Hie_Lvl_DEG:
-	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
-				       " per survey",
-			    "SELECT AVG(N)"			// row[0]
-			     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-				     " FROM crs_courses,"
-					   "crs_users,"
-					   "usr_follow"
-				    " WHERE crs_courses.DegCod=%ld"
-				      " AND crs_courses.CrsCod=crs_users.CrsCod"
-				      " AND crs_users.UsrCod=usr_follow.%s"
-				    " GROUP BY %s) AS F",
-			    FieldDB[Fol],
-			    Gbl.Hierarchy.Deg.DegCod,
-			    FieldDB[Fol],
-			    FieldDB[1 - Fol]);
+	    Average = DB_QuerySELECTDouble ("can not get number of questions"
+				            " per survey",
+					    "SELECT AVG(N)"			// row[0]
+					     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+						     " FROM crs_courses,"
+							   "crs_users,"
+							   "usr_follow"
+						    " WHERE crs_courses.DegCod=%ld"
+						      " AND crs_courses.CrsCod=crs_users.CrsCod"
+						      " AND crs_users.UsrCod=usr_follow.%s"
+						    " GROUP BY %s) AS F",
+					    FieldDB[Fol],
+					    Gbl.Hierarchy.Deg.DegCod,
+					    FieldDB[Fol],
+					    FieldDB[1 - Fol]);
 	    break;
 	 case Hie_Lvl_CRS:
-	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
-				       " per survey",
-			    "SELECT AVG(N)"		// row[0]
-			     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-				     " FROM crs_users,"
-					   "usr_follow"
-				    " WHERE crs_users.CrsCod=%ld"
-				      " AND crs_users.UsrCod=usr_follow.%s"
-				    " GROUP BY %s) AS F",
-			    FieldDB[Fol],
-			    Gbl.Hierarchy.Crs.CrsCod,
-			    FieldDB[Fol],
-			    FieldDB[1 - Fol]);
+	    Average = DB_QuerySELECTDouble ("can not get number of questions"
+				            " per survey",
+					    "SELECT AVG(N)"		// row[0]
+					     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+						     " FROM crs_users,"
+							   "usr_follow"
+						    " WHERE crs_users.CrsCod=%ld"
+						      " AND crs_users.UsrCod=usr_follow.%s"
+						    " GROUP BY %s) AS F",
+					    FieldDB[Fol],
+					    Gbl.Hierarchy.Crs.CrsCod,
+					    FieldDB[Fol],
+					    FieldDB[1 - Fol]);
 	    break;
 	 default:
 	    Lay_WrongScopeExit ();
+	    Average = 0.0;	// Not reached
 	    break;
 	}
-
-      /***** Get average *****/
-      row = mysql_fetch_row (mysql_res);
-      Average = Str_GetDoubleFromStr (row[0]);
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
 
       /***** Write number of followed per follower *****/
       HTM_TR_Begin (NULL);
