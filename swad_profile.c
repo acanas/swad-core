@@ -1163,12 +1163,13 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of file views from database *****/
-      UsrFigures.NumFileViews = Brw_GetNumFileViewsUsr (UsrCod);
+      UsrFigures.NumFileViews = (long) Brw_GetNumFileViewsUsr (UsrCod);
 
       /***** Update number of file views in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
-			 "UPDATE usr_figures SET NumFileViews=%ld"
+			 "UPDATE usr_figures"
+			   " SET NumFileViews=%ld"
 			 " WHERE UsrCod=%ld",
 		         UsrFigures.NumFileViews,UsrCod);
       else			// User entry does not exist

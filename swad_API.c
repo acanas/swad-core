@@ -3671,34 +3671,19 @@ int swad__sendMessage (struct soap *soap,
    if (messageCode)
      {
       /***** Check if the original message was really received by me *****/
-      if (!DB_QuerySELECT (&mysql_res,"can not check original message",
-			   "SELECT SUM(N)"	// row[0]
-			    " FROM (SELECT COUNT(*) AS N"
-			            " FROM msg_rcv"
-			           " WHERE UsrCod=%ld"
-			             " AND MsgCod=%ld"
-			          " UNION"
-			          " SELECT COUNT(*) AS N"
-			            " FROM msg_rcv_deleted"
-			           " WHERE UsrCod=%ld"
-			             " AND MsgCod=%ld) AS T",
-			   Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode,
-			   Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode))
-         return soap_sender_fault (soap,
-                                   "Can not check original message",
-                                   "Error reading from database");
-
-      /***** Get number of rows *****/
-      row = mysql_fetch_row (mysql_res);
-      if (sscanf (row[0],"%u",&NumRows) != 1)
-         return soap_sender_fault (soap,
-                                   "Can not check original message",
-                                   "Error reading from database");
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-
-      if (!NumRows)
+      if (DB_QuerySELECTUnsigned ("can not check original message",
+				  "SELECT SUM(N)"	// row[0]
+				   " FROM (SELECT COUNT(*) AS N"
+					   " FROM msg_rcv"
+					  " WHERE UsrCod=%ld"
+					    " AND MsgCod=%ld"
+					 " UNION"
+					 " SELECT COUNT(*) AS N"
+					   " FROM msg_rcv_deleted"
+					  " WHERE UsrCod=%ld"
+					    " AND MsgCod=%ld) AS T",
+				  Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode,
+				  Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode) == 0)
          return soap_sender_fault (soap,
                                    "Can not send reply message",
                                    "Original message does not exist");

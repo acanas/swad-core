@@ -1996,8 +1996,8 @@ unsigned Asg_GetNumAssignments (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
          break;
       case Hie_Lvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
-                         "SELECT COUNT(*),"
-                                "SUM(asg_assignments.NumNotif)"
+                         "SELECT COUNT(*),"			// row[0]
+                                "SUM(asg_assignments.NumNotif)"	// row[1]
 			  " FROM deg_degrees,"
 			        "crs_courses,"
 			        "asg_assignments"
@@ -2008,8 +2008,8 @@ unsigned Asg_GetNumAssignments (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
          break;
       case Hie_Lvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
-                         "SELECT COUNT(*),"
-                                "SUM(asg_assignments.NumNotif)"
+                         "SELECT COUNT(*),"			// row[0]
+                                "SUM(asg_assignments.NumNotif)"	// row[1]
 			  " FROM crs_courses,"
 			        "asg_assignments"
 			 " WHERE crs_courses.DegCod=%ld"
@@ -2018,8 +2018,8 @@ unsigned Asg_GetNumAssignments (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
          break;
       case Hie_Lvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of assignments",
-                         "SELECT COUNT(*),"
-                                "SUM(NumNotif)"
+                         "SELECT COUNT(*),"			// row[0]
+                                "SUM(NumNotif)"			// row[1]
 			  " FROM asg_assignments"
 			 " WHERE CrsCod=%ld",
                          Gbl.Hierarchy.Crs.CrsCod);

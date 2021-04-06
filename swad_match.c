@@ -2130,7 +2130,10 @@ static void Mch_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
 
       if (row[0])
 	 /* Get the elapsed time (row[0]) */
-	 if (sscanf (row[0],"%u:%02u:%02u",&Time->Hour,&Time->Minute,&Time->Second) == 3)
+	 if (sscanf (row[0],"%u:%02u:%02u",
+	             &Time->Hour,
+	             &Time->Minute,
+	             &Time->Second) == 3)
 	    ElapsedTimeGotFromDB = true;
      }
 

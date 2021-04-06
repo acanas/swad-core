@@ -640,27 +640,12 @@ unsigned ExaSet_GetNumSetsExam (long ExaCod)
 
 unsigned ExaSet_GetNumQstsExam (long ExaCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumQsts = 0;
-
    /***** Get total number of questions to appear in exam print *****/
-   if (!DB_QuerySELECT (&mysql_res,"can not get number of questions in an exam print",
-			"SELECT SUM(NumQstsToPrint)"	// row[0]
-			 " FROM exa_sets"
-			" WHERE ExaCod=%ld",
-			ExaCod))
-      Lay_ShowErrorAndExit ("Error: wrong question index.");
-
-   /***** Get number of questions (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   if (row[0])
-      NumQsts = Str_ConvertStrToUnsigned (row[0]);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumQsts;
+   return DB_QuerySELECTUnsigned ("can not get number of questions in an exam print",
+				  "SELECT SUM(NumQstsToPrint)"
+				   " FROM exa_sets"
+				  " WHERE ExaCod=%ld",
+				  ExaCod);
   }
 
 /*****************************************************************************/

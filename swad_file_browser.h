@@ -228,7 +228,7 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata);
 bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata);
 void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata);
 void Brw_UpdateMyFileViews (long FilCod);
-unsigned long Brw_GetNumFileViewsUsr (long UsrCod);
+unsigned Brw_GetNumFileViewsUsr (long UsrCod);
 unsigned Brw_GetNumFilesUsr (long UsrCod);
 unsigned Brw_GetNumPublicFilesUsr (long UsrCod);
 

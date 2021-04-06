@@ -45,6 +45,8 @@ long DB_QuerySELECTCode (const char *MsgError,
                          const char *fmt,...);
 double DB_QuerySELECTDouble (const char *MsgError,
                              const char *fmt,...);
+unsigned DB_QuerySELECTUnsigned (const char *MsgError,
+                                 const char *fmt,...);
 long DB_GetNextCode (MYSQL_RES *mysql_res);
 unsigned long DB_GetNumRowsTable (const char *Table);
 unsigned long DB_QueryCOUNT (const char *MsgError,const char *fmt,...);

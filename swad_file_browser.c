@@ -10760,36 +10760,14 @@ void Brw_UpdateMyFileViews (long FilCod)
 /******************** Get number of file views from a user *******************/
 /*****************************************************************************/
 
-unsigned long Brw_GetNumFileViewsUsr (long UsrCod)
+unsigned Brw_GetNumFileViewsUsr (long UsrCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long FileViews;
-
    /***** Get number of filw views *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get number of file views",
-	               "SELECT SUM(NumViews)"	// row[0]
-	                " FROM brw_views"
-	               " WHERE UsrCod=%ld",
-                       UsrCod))
-     {
-      /* Get number of file views */
-      row = mysql_fetch_row (mysql_res);
-      if (row[0])
-	{
-	 if (sscanf (row[0],"%lu",&FileViews) != 1)
-	    FileViews = 0;
-	}
-      else
-	 FileViews = 0;
-     }
-   else
-      FileViews = 0;
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return FileViews;
+   return DB_QuerySELECTUnsigned ("can not get number of file views",
+				  "SELECT SUM(NumViews)"
+				   " FROM brw_views"
+				  " WHERE UsrCod=%ld",
+				  UsrCod);
   }
 
 /*****************************************************************************/
@@ -10846,33 +10824,14 @@ static void Brw_GetFileViewsFromLoggedUsrs (struct FileMetadata *FileMetadata)
 */
 static void Brw_GetFileViewsFromNonLoggedUsrs (struct FileMetadata *FileMetadata)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
    /***** Get number of public views *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get number of public views"
-				  " of a file",
-		       "SELECT SUM(NumViews)"	// row[0]
-		        " FROM brw_views"
-		       " WHERE FilCod=%ld"
-		         " AND UsrCod<=0",
-	               FileMetadata->FilCod))
-     {
-      /* Get number of public views */
-      row = mysql_fetch_row (mysql_res);
-      if (row[0])
-	{
-	 if (sscanf (row[0],"%u",&(FileMetadata->NumPublicViews)) != 1)
-	    FileMetadata->NumPublicViews = 0;
-	}
-      else
-	 FileMetadata->NumPublicViews = 0;
-     }
-   else
-      FileMetadata->NumPublicViews = 0;
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   FileMetadata->NumPublicViews =
+   DB_QuerySELECTUnsigned ("can not get number of public views of a file",
+			   "SELECT SUM(NumViews)"
+			    " FROM brw_views"
+			   " WHERE FilCod=%ld"
+			     " AND UsrCod<=0",
+			   FileMetadata->FilCod);
   }
 
 /*****************************************************************************/

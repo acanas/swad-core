@@ -36,16 +36,16 @@
 
 struct Ind_IndicatorsCrs
   {
-   unsigned long NumFilesInDocumentZones;
-   unsigned long NumFilesInSharedZones;
+   unsigned NumFilesInDocumentZones;
+   unsigned NumFilesInSharedZones;
    bool ThereIsSyllabus;
    Inf_InfoSrc_t TeachingGuideSrc;
    Inf_InfoSrc_t SyllabusLecSrc;
    Inf_InfoSrc_t SyllabusPraSrc;
    bool ThereAreAssignments;
    unsigned NumAssignments;
-   unsigned long NumFilesAssignments;
-   unsigned long NumFilesWorks;
+   unsigned NumFilesAssignments;
+   unsigned NumFilesWorks;
    bool ThereIsOnlineTutoring;
    unsigned NumThreads;
    unsigned NumPosts;

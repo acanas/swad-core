@@ -1498,33 +1498,12 @@ static void ExaPrn_GetNumQstsNotBlank (struct ExaPrn_Print *Print)
 
 static void ExaPrn_ComputeTotalScoreOfPrint (struct ExaPrn_Print *Print)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   /***** Default score *****/
-   Print->Score.All = 0.0;
-
    /***** Compute total score of exam print *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get score of exam print",
-		       "SELECT SUM(Score)"	// row[0]
-		        " FROM exa_print_questions"
-		       " WHERE PrnCod=%ld",
-		       Print->PrnCod))
-     {
-      /***** Get sum of individual scores (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-      if (row[0])
-	{
-	 /* Get score (row[0]) */
-	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-	 if (sscanf (row[0],"%lf",&Print->Score.All) != 1)
-	    Print->Score.All = 0.0;
-	 Str_SetDecimalPointToLocal ();	// Return to local system
-	}
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   Print->Score.All = DB_QuerySELECTDouble ("can not get score of exam print",
+					    "SELECT SUM(Score)"
+					     " FROM exa_print_questions"
+					    " WHERE PrnCod=%ld",
+					    Print->PrnCod);
   }
 
 /*****************************************************************************/
