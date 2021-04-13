@@ -476,8 +476,6 @@ void Ses_GetParamFromDB (const char *ParamName,char *ParamValue,size_t MaxBytes)
 bool Ses_GetPublicDirFromCache (const char *FullPathMediaPriv,
                                 char TmpPubDir[PATH_MAX + 1])
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    bool Cached;
    bool TmpPubDirExists;
 
@@ -487,22 +485,14 @@ bool Ses_GetPublicDirFromCache (const char *FullPathMediaPriv,
    if (Gbl.Session.IsOpen)
      {
       /***** Get temporary directory from cache *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get check if file is cached",
-			  "SELECT TmpPubDir"	// row[0]
-			   " FROM brw_caches"
-			  " WHERE SessionId='%s'"
-			    " AND PrivPath='%s'",
-			  Gbl.Session.Id,FullPathMediaPriv))
-	{
-	 /* Get the temporary public directory (row[0]) */
-	 row = mysql_fetch_row (mysql_res);
-	 Str_Copy (TmpPubDir,row[0],PATH_MAX);
-	}
-      else
-	 Cached = false;
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+      DB_QuerySELECTString (TmpPubDir,PATH_MAX,"can not get check if file is cached",
+			    "SELECT TmpPubDir"
+			     " FROM brw_caches"
+			    " WHERE SessionId='%s'"
+			      " AND PrivPath='%s'",
+			    Gbl.Session.Id,
+			    FullPathMediaPriv);
+      Cached = (TmpPubDir[0] != '\0');
 
       /***** Check if temporary public directory exists *****/
       if (Cached)

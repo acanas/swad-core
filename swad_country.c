@@ -1130,8 +1130,6 @@ void Cty_GetCountryName (long CtyCod,Lan_Language_t Language,
 			 char CtyName[Cty_MAX_BYTES_NAME + 1])
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
    /***** 1. Fast check: Trivial case *****/
    if (CtyCod <= 0)
@@ -1151,26 +1149,14 @@ void Cty_GetCountryName (long CtyCod,Lan_Language_t Language,
    /***** 3. Slow: get country name from database *****/
    Gbl.Cache.CountryName.CtyCod   = CtyCod;
    Gbl.Cache.CountryName.Language = Language;
-
-   if (DB_QuerySELECT (&mysql_res,"can not get the name of a country",
-		       "SELECT Name_%s"		// row[0]
-		        " FROM cty_countrs"
-		       " WHERE CtyCod='%03ld'",
-	               Lan_STR_LANG_ID[Language],CtyCod)) // Country found...
-     {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get the name of the country */
-      Str_Copy (Gbl.Cache.CountryName.CtyName,row[0],
-		sizeof (Gbl.Cache.CountryName.CtyName) - 1);
-     }
-   else
-      Gbl.Cache.CountryName.CtyName[0] = '\0';
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-
+   DB_QuerySELECTString (Gbl.Cache.CountryName.CtyName,
+                         sizeof (Gbl.Cache.CountryName.CtyName) - 1,
+                         "can not get the name of a country",
+		         "SELECT Name_%s"
+		          " FROM cty_countrs"
+		         " WHERE CtyCod='%03ld'",
+	                 Lan_STR_LANG_ID[Language],
+	                 CtyCod);
    Str_Copy (CtyName,Gbl.Cache.CountryName.CtyName,Cty_MAX_BYTES_NAME);
   }
 

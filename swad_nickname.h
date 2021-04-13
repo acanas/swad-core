@@ -48,7 +48,7 @@
 
 bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr);
 
-bool Nck_GetNicknameFromUsrCod (long UsrCod,
+void Nck_GetNicknameFromUsrCod (long UsrCod,
                                 char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1]);
 long Nck_GetUsrCodFromNickname (const char *Nickname);
 

@@ -2622,18 +2622,18 @@ static void TstPrn_ShowTagsPresentInAPrint (long ResCod)
 
    /***** Get all tags of questions in this test *****/
    NumTags = (unsigned)
-	     DB_QuerySELECT (&mysql_res,"can not get tags"
-					" present in a test exam",
-			     "SELECT tst_tags.TagTxt"	// row[0]
-			      " FROM (SELECT DISTINCT(tst_question_tags.TagCod)"
-			              " FROM tst_question_tags,"
-			                    "tst_exam_questions"
-			             " WHERE tst_exam_questions.ExaCod=%ld"
-			               " AND tst_exam_questions.QstCod=tst_question_tags.QstCod) AS TagsCods,"
-			            "tst_tags"
-			     " WHERE TagsCods.TagCod=tst_tags.TagCod"
-			     " ORDER BY tst_tags.TagTxt",
-			     ResCod);
+   DB_QuerySELECT (&mysql_res,"can not get tags"
+			      " present in a test exam",
+		   "SELECT tst_tags.TagTxt"	// row[0]
+		    " FROM (SELECT DISTINCT(tst_question_tags.TagCod)"
+			    " FROM tst_question_tags,"
+				  "tst_exam_questions"
+			   " WHERE tst_exam_questions.ExaCod=%ld"
+			     " AND tst_exam_questions.QstCod=tst_question_tags.QstCod) AS TagsCods,"
+			  "tst_tags"
+		   " WHERE TagsCods.TagCod=tst_tags.TagCod"
+		   " ORDER BY tst_tags.TagTxt",
+		   ResCod);
    Tst_ShowTagList (NumTags,mysql_res);
 
    /***** Free structure that stores the query result *****/

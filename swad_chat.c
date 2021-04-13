@@ -349,29 +349,13 @@ void Cht_WriteParamsRoomCodeAndNames (const char *RoomCode,const char *RoomShrtN
 
 static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumUsrs = 0;
-
    /***** Get number of users connected to chat rooms from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get number of users"
+   return DB_QuerySELECTUnsigned ("can not get number of users"
 				  " connected to a chat room",
-		       "SELECT NumUsrs"	// row[0]
-		        " FROM cht_rooms"
-		       " WHERE RoomCode='%s'",
-		       RoomCode))
-     {
-      /* Get number of users connected to the chat room */
-      row = mysql_fetch_row (mysql_res);
-      if (row[0])
-         if (sscanf (row[0],"%u",&NumUsrs) != 1)
-            NumUsrs = 0;
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumUsrs;
+				  "SELECT NumUsrs"	// row[0]
+				   " FROM cht_rooms"
+				  " WHERE RoomCode='%s'",
+				  RoomCode);
   }
 
 /*****************************************************************************/

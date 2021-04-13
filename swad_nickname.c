@@ -112,37 +112,18 @@ bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr)
 /************* Get nickname of a user from his/her user's code ***************/
 /*****************************************************************************/
 
-bool Nck_GetNicknameFromUsrCod (long UsrCod,
+void Nck_GetNicknameFromUsrCod (long UsrCod,
                                 char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1])
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   bool Found;
-
    /***** Get current (last updated) user's nickname from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get nickname",
-		       "SELECT Nickname"	// row[0]
-		        " FROM usr_nicknames"
-		       " WHERE UsrCod=%ld"
-		       " ORDER BY CreatTime DESC"
-		       " LIMIT 1",
-		       UsrCod))
-     {
-      /* Get nickname */
-      row = mysql_fetch_row (mysql_res);
-      Str_Copy (Nickname,row[0],Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
-      Found = true;
-     }
-   else
-     {
-      Nickname[0] = '\0';
-      Found = false;
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return Found;
+   DB_QuerySELECTString (Nickname,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA,
+                         "can not get nickname",
+		         "SELECT Nickname"
+		          " FROM usr_nicknames"
+		         " WHERE UsrCod=%ld"
+		         " ORDER BY CreatTime DESC"
+		         " LIMIT 1",
+		         UsrCod);
   }
 
 /*****************************************************************************/

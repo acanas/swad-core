@@ -47379,30 +47379,6 @@ const char *Txt_The_email_address_X_has_been_registered_successfully =	// Warnin
 	" foi registrado com sucesso.";
 #endif
 
-const char *Txt_The_email_address_has_not_been_confirmed =
-#if   L==1	// ca
-	"La direcci&oacute;n de correo"
-	" no ha podido confirmarse.";			// Necessita traduccio
-#elif L==2	// de
-	"The email address has not been confirmed.";	// Need Übersetzung
-#elif L==3	// en
-	"The email address has not been confirmed.";
-#elif L==4	// es
-	"La direcci&oacute;n de correo"
-	" no ha podido confirmarse.";
-#elif L==5	// fr
-	"The email address has not been confirmed.";	// Besoin de traduction
-#elif L==6	// gn
-	"La direcci&oacute;n de correo"
-	" no ha podido confirmarse.";			// Okoteve traducción
-#elif L==7	// it
-	"The email address has not been confirmed.";	// Bisogno di traduzione
-#elif L==8	// pl
-	"The email address has not been confirmed.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O endere&ccedil;o de email n&atilde;o foi confirmado.";
-#endif
-
 const char *Txt_The_email_address_X_matches_one_previously_registered =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"La direcci&oacute;n de correo <strong>%s</strong>"

@@ -932,34 +932,14 @@ static void Asg_FreeListAssignments (struct Asg_Assignments *Assignments)
 
 static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-
    /***** Get text of assignment from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get assignment text",
-	                     "SELECT Txt"		// row[0]
-	                      " FROM asg_assignments"
-			     " WHERE AsgCod=%ld"
-			       " AND CrsCod=%ld",
-			     AsgCod,
-			     Gbl.Hierarchy.Crs.CrsCod);
-
-   /***** The result of the query must have one row or none *****/
-   if (NumRows == 1)
-     {
-      /* Get info text */
-      row = mysql_fetch_row (mysql_res);
-      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
-     }
-   else
-      Txt[0] = '\0';
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   if (NumRows > 1)
-      Lay_ShowErrorAndExit ("Error when getting assignment text.");
+   DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get assignment text",
+		         "SELECT Txt"		// row[0]
+			  " FROM asg_assignments"
+		         " WHERE AsgCod=%ld"
+			   " AND CrsCod=%ld",
+		         AsgCod,
+		         Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

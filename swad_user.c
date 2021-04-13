@@ -2236,26 +2236,26 @@ unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    /***** Get the institutions a user belongs to from database *****/
-   return
-   (unsigned) DB_QuerySELECT (mysql_res,"can not get the countries"
-					" a user belongs to",
-			      "SELECT cty_countrs.CtyCod,"	// row[0]
-			             "MAX(crs_users.Role)"	// row[1]
-			       " FROM crs_users,"
-			             "crs_courses,"
-			             "deg_degrees,"
-			             "ctr_centers,"
-			             "ins_instits,"
-			             "cty_countrs"
-			      " WHERE crs_users.UsrCod=%ld"
-			        " AND crs_users.CrsCod=crs_courses.CrsCod"
-			        " AND crs_courses.DegCod=deg_degrees.DegCod"
-			        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			        " AND ctr_centers.InsCod=ins_instits.InsCod"
-			        " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-			      " GROUP BY cty_countrs.CtyCod"
-			      " ORDER BY cty_countrs.Name_%s",
-			      UsrCod,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get the countries a user belongs to",
+		   "SELECT cty_countrs.CtyCod,"	// row[0]
+			  "MAX(crs_users.Role)"	// row[1]
+		    " FROM crs_users,"
+			  "crs_courses,"
+			  "deg_degrees,"
+			  "ctr_centers,"
+			  "ins_instits,"
+			  "cty_countrs"
+		   " WHERE crs_users.UsrCod=%ld"
+		     " AND crs_users.CrsCod=crs_courses.CrsCod"
+		     " AND crs_courses.DegCod=deg_degrees.DegCod"
+		     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		     " AND ctr_centers.InsCod=ins_instits.InsCod"
+		     " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+		   " GROUP BY cty_countrs.CtyCod"
+		   " ORDER BY cty_countrs.Name_%s",
+		   UsrCod,
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
   }
 
 /*****************************************************************************/

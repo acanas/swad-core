@@ -813,27 +813,20 @@ long Ctr_GetInsCodOfCenterByCod (long CtrCod)
 
 void Ctr_GetShortNameOfCenterByCod (struct Ctr_Center *Ctr)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   Ctr->ShrtName[0] = '\0';
-   if (Ctr->CtrCod > 0)
+   /***** Trivial check: center code should be > 0 *****/
+   if (Ctr->CtrCod <= 0)
      {
-      /***** Get the short name of a center from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get the short name of a center",
-			  "SELECT ShortName"	// row[0]
-			   " FROM ctr_centers"
-			  " WHERE CtrCod=%ld",
-			  Ctr->CtrCod) == 1)
-	{
-	 /***** Get the short name of this center *****/
-	 row = mysql_fetch_row (mysql_res);
-	 Str_Copy (Ctr->ShrtName,row[0],sizeof (Ctr->ShrtName) - 1);
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+      Ctr->ShrtName[0] = '\0';
+      return;
      }
+
+   /***** Get the short name of a center from database *****/
+   DB_QuerySELECTString (Ctr->ShrtName,sizeof (Ctr->ShrtName) - 1,
+			 "can not get the short name of a center",
+		         "SELECT ShortName"
+			  " FROM ctr_centers"
+		         " WHERE CtrCod=%ld",
+		         Ctr->CtrCod);
   }
 
 /*****************************************************************************/

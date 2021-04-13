@@ -878,9 +878,6 @@ void Ins_FlushCacheShortNameOfInstitution (void)
 
 void Ins_GetShortNameOfInstitution (struct Ins_Instit *Ins)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
    /***** 1. Fast check: Trivial case *****/
    if (Ins->InsCod <= 0)
      {
@@ -898,25 +895,13 @@ void Ins_GetShortNameOfInstitution (struct Ins_Instit *Ins)
 
    /***** 3. Slow: get short name of institution from database *****/
    Gbl.Cache.InstitutionShrtName.InsCod = Ins->InsCod;
-
-   if (DB_QuerySELECT (&mysql_res,"can not get the short name of an institution",
-	               "SELECT ShortName"	// row[0]
-	                " FROM ins_instits"
-	               " WHERE InsCod=%ld",
-	               Ins->InsCod) == 1)
-     {
-      /* Get the short name of this institution */
-      row = mysql_fetch_row (mysql_res);
-
-      Str_Copy (Gbl.Cache.InstitutionShrtName.ShrtName,row[0],
-		sizeof (Gbl.Cache.InstitutionShrtName.ShrtName) - 1);
-     }
-   else
-      Gbl.Cache.InstitutionShrtName.ShrtName[0] = '\0';
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-
+   DB_QuerySELECTString (Gbl.Cache.InstitutionShrtName.ShrtName,
+			 sizeof (Gbl.Cache.InstitutionShrtName.ShrtName) - 1,
+			 "can not get the short name of an institution",
+			 "SELECT ShortName"
+			  " FROM ins_instits"
+			 " WHERE InsCod=%ld",
+			 Ins->InsCod);
    Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtName.ShrtName,
 	     sizeof (Ins->ShrtName) - 1);
   }
@@ -1038,14 +1023,14 @@ void Ins_WriteSelectorOfInstitution (void)
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
      {
       /***** Get institutions of selected country from database *****/
-      NumInss =
-      (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
-	                         "SELECT DISTINCT InsCod,"	// row[0]
-	                                         "ShortName"	// row[1]
-	                          " FROM ins_instits"
-				 " WHERE CtyCod=%ld"
-				 " ORDER BY ShortName",
-				 Gbl.Hierarchy.Cty.CtyCod);
+      NumInss = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get institutions",
+		      "SELECT DISTINCT InsCod,"		// row[0]
+				      "ShortName"	// row[1]
+		       " FROM ins_instits"
+		      " WHERE CtyCod=%ld"
+		      " ORDER BY ShortName",
+		      Gbl.Hierarchy.Cty.CtyCod);
 
       /***** List institutions *****/
       for (NumIns = 0;

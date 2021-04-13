@@ -3836,6 +3836,40 @@ long DB_QuerySELECTCode (const char *MsgError,
    return Cod;
   }
 
+/*****************************************************************************/
+/*** Make a SELECT query for a unique row with one unsigned from database ****/
+/*****************************************************************************/
+
+unsigned DB_QuerySELECTUnsigned (const char *MsgError,
+                                 const char *fmt,...)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   va_list ap;
+   int NumBytesPrinted;
+   char *Query;
+   unsigned UnsignedNum = 0;
+
+   /***** Create query string *****/
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Query,fmt,ap);
+   va_end (ap);
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+      Lay_NotEnoughMemoryExit ();
+
+   /***** Do SELECT query *****/
+   if (DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError))	// Row found
+     {
+      row = mysql_fetch_row (mysql_res);
+      if (row[0])
+	 UnsignedNum = Str_ConvertStrToUnsigned (row[0]);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return UnsignedNum;
+  }
 
 /*****************************************************************************/
 /**** Make a SELECT query for a unique row with one double from database *****/
@@ -3872,19 +3906,20 @@ double DB_QuerySELECTDouble (const char *MsgError,
    return DoubleNum;
   }
 
-/*****************************************************************************/
-/*** Make a SELECT query for a unique row with one unsigned from database ****/
-/*****************************************************************************/
 
-unsigned DB_QuerySELECTUnsigned (const char *MsgError,
-                                 const char *fmt,...)
+/*****************************************************************************/
+/**** Make a SELECT query for a unique row with one double from database *****/
+/*****************************************************************************/
+// StrSize does not include the ending byte '\0'
+
+void DB_QuerySELECTString (char *Str,size_t StrSize,const char *MsgError,
+                           const char *fmt,...)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    va_list ap;
    int NumBytesPrinted;
    char *Query;
-   unsigned UnsignedNum = 0;
 
    /***** Create query string *****/
    va_start (ap,fmt);
@@ -3894,17 +3929,16 @@ unsigned DB_QuerySELECTUnsigned (const char *MsgError,
       Lay_NotEnoughMemoryExit ();
 
    /***** Do SELECT query *****/
-   if (DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError))	// Row found
+   if (DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError) == 1)	// Row found
      {
       row = mysql_fetch_row (mysql_res);
-      if (row[0])
-	 UnsignedNum = Str_ConvertStrToUnsigned (row[0]);
+      Str_Copy (Str,row[0],StrSize);
      }
+   else
+      Str[0] = '\0';
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   return UnsignedNum;
   }
 
 /*****************************************************************************/

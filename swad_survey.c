@@ -1484,32 +1484,12 @@ void Svy_FreeListSurveys (struct Svy_Surveys *Surveys)
 
 static void Svy_GetSurveyTxtFromDB (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-
    /***** Get text of survey from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get survey text",
-			     "SELECT Txt"		// row[0]
-			      " FROM svy_surveys"
-			     " WHERE SvyCod=%ld",
-			     SvyCod);
-
-   /***** The result of the query must have one row or none *****/
-   if (NumRows == 1)
-     {
-      /* Get info text */
-      row = mysql_fetch_row (mysql_res);
-      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
-     }
-   else
-      Txt[0] = '\0';
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   if (NumRows > 1)
-      Lay_ShowErrorAndExit ("Error when getting survey text.");
+   DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get survey text",
+		         "SELECT Txt"
+			  " FROM svy_surveys"
+		         " WHERE SvyCod=%ld",
+		         SvyCod);
   }
 
 /*****************************************************************************/

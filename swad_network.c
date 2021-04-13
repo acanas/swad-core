@@ -206,8 +206,6 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void);
 
 void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[Cns_MAX_BYTES_WWW + 1];
 
@@ -224,26 +222,19 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
 	NumURL++)
      {
       /***** Check if exists the web / social network for this user *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get user's web / social network",
-	                  "SELECT URL"	// row[0]
-	                   " FROM usr_webs"
-			  " WHERE UsrCod=%ld"
-			    " AND Web='%s'",
-			  UsrDat->UsrCod,
-			  Net_WebsAndSocialNetworksDB[NumURL]))
-	{
-	 /* Get URL */
-	 row = mysql_fetch_row (mysql_res);
-	 Str_Copy (URL,row[0],sizeof (URL) - 1);
-
+      DB_QuerySELECTString (URL,sizeof (URL) - 1,
+                            "can not get user's web / social network",
+			    "SELECT URL"	// row[0]
+			     " FROM usr_webs"
+			    " WHERE UsrCod=%ld"
+			      " AND Web='%s'",
+			    UsrDat->UsrCod,
+			    Net_WebsAndSocialNetworksDB[NumURL]);
+      if (URL[0])
 	 /* Show the web / social network */
 	 Net_ShowAWebOrSocialNet (URL,
 	                          Net_WebsAndSocialNetworksIcons[NumURL],
 	                          Net_WebsAndSocialNetworksTitle[NumURL]);
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
      }
 
    /***** End container *****/
@@ -275,8 +266,6 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Webs_social_networks;
    extern const char *Txt_Save_changes;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[Cns_MAX_BYTES_WWW + 1];
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
@@ -303,25 +292,14 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	NumURL++)
      {
       /***** Get user's web / social network from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get user's web / social network",
-			  "SELECT URL"	// row[0]
-			   " FROM usr_webs"
-			  " WHERE UsrCod=%ld"
-			   " AND Web='%s'",
-			  Gbl.Usrs.Me.UsrDat.UsrCod,
-			  Net_WebsAndSocialNetworksDB[NumURL]))
-	{
-	 /***** Read the data comunes a all the users *****/
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get URL */
-	 Str_Copy (URL,row[0],sizeof (URL) - 1);
-	}
-      else
-	 URL[0] = '\0';
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+      DB_QuerySELECTString (URL,sizeof (URL) - 1,
+                            "can not get user's web / social network",
+			    "SELECT URL"	// row[0]
+			     " FROM usr_webs"
+			    " WHERE UsrCod=%ld"
+			     " AND Web='%s'",
+			    Gbl.Usrs.Me.UsrDat.UsrCod,
+			    Net_WebsAndSocialNetworksDB[NumURL]);
 
       /***** Row for this web / social network *****/
       snprintf (StrName,sizeof (StrName),"URL%u",(unsigned) NumURL);

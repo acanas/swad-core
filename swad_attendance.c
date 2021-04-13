@@ -865,35 +865,14 @@ static void Att_FreeListAttEvents (struct Att_Events *Events)
 
 static void Att_GetAttEventDescriptionFromDB (long AttCod,char Description[Cns_MAX_BYTES_TEXT + 1])
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-
    /***** Get text of attendance event from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get attendance event text",
-			     "SELECT Txt"	// row[0]
-			      " FROM att_events"
-			     " WHERE AttCod=%ld"
-			       " AND CrsCod=%ld",
-			     AttCod,Gbl.Hierarchy.Crs.CrsCod);
-
-   /***** The result of the query must have one row or none *****/
-   if (NumRows == 1)
-     {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get info text */
-      Str_Copy (Description,row[0],Cns_MAX_BYTES_TEXT);
-     }
-   else
-      Description[0] = '\0';
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   if (NumRows > 1)
-      Lay_ShowErrorAndExit ("Error when getting attendance event text.");
+   DB_QuerySELECTString (Description,Cns_MAX_BYTES_TEXT,"can not get attendance event text",
+		         "SELECT Txt"
+			  " FROM att_events"
+		         " WHERE AttCod=%ld"
+			   " AND CrsCod=%ld",
+		         AttCod,
+		         Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -2545,33 +2524,29 @@ static unsigned Att_GetNumUsrsFromAListWhoAreInAttEvent (long AttCod,
 
 static bool Att_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,bool *Present)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   bool InDBTable;
+   char StrPresent[1 + 1];
 
    /***** Check if a student is registered in an event in database *****/
-   InDBTable = (DB_QuerySELECT (&mysql_res,"can not check if a student"
-	                                   " is already registered in an event",
-		                "SELECT Present"	// row[0]
-			         " FROM att_users"
-		                " WHERE AttCod=%ld"
-			          " AND UsrCod=%ld",
-		                AttCod,UsrCod) != 0);
-   if (InDBTable)
+   DB_QuerySELECTString (StrPresent,1,"can not check if a student"
+	                              " is already registered in an event",
+		         "SELECT Present"
+			  " FROM att_users"
+		         " WHERE AttCod=%ld"
+			   " AND UsrCod=%ld",
+		         AttCod,
+		         UsrCod);
+   switch (StrPresent[0])
      {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get if present (row[0]) */
-      *Present = (row[0][0] == 'Y');
+      case '\0':
+	 *Present = false;
+	 return false;
+      case 'Y':
+	 *Present = true;
+	 return true;
+      default:
+	 *Present = false;
+	 return true;
      }
-   else	// User is not present
-      *Present = false;
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return InDBTable;
   }
 
 /*****************************************************************************/

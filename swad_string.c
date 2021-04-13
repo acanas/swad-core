@@ -3003,7 +3003,7 @@ void Str_CreateRandomAlphanumStr (char *Str,size_t Length)
 /*****************************************************************************/
 /****************************** Safe string copy *****************************/
 /*****************************************************************************/
-// DstSize does not include ending byte '\0'
+// DstSize does not include the ending byte '\0'
 
 void Str_Copy (char *Dst,const char *Src,size_t DstSize)
   {

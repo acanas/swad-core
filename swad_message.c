@@ -566,8 +566,11 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    else if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// If there is a recipient
 						// and there's no list of explicit recipients,
 						// write @nickname of original sender
-      if (Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Nickname))
+     {
+      Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Nickname);
+      if (Nickname[0])
          HTM_TxtF ("@%s",Nickname);
+     }
    HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
@@ -4154,16 +4157,17 @@ void Msg_ListBannedUsrs (void)
    struct UsrData UsrDat;
 
    /***** Get my banned users *****/
-   NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get banned users",
-				        "SELECT msg_banned.FromUsrCod"
-				         " FROM msg_banned,"
-				               "usr_data"
-				        " WHERE msg_banned.ToUsrCod=%ld"
-				          " AND msg_banned.FromUsrCod=usr_data.UsrCod"
-				        " ORDER BY usr_data.Surname1,"
-				                  "usr_data.Surname2,"
-				                  "usr_data.FirstName",
-				        Gbl.Usrs.Me.UsrDat.UsrCod);
+   NumUsrs = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get banned users",
+		   "SELECT msg_banned.FromUsrCod"
+		    " FROM msg_banned,"
+			  "usr_data"
+		   " WHERE msg_banned.ToUsrCod=%ld"
+		     " AND msg_banned.FromUsrCod=usr_data.UsrCod"
+		   " ORDER BY usr_data.Surname1,"
+			     "usr_data.Surname2,"
+			     "usr_data.FirstName",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
 
    if (NumUsrs == 0)   // If not result ==> sent message is deleted
       Ale_ShowAlert (Ale_INFO,Txt_You_have_not_banned_any_sender);

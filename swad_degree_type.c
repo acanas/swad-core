@@ -853,12 +853,12 @@ long DT_GetAndCheckParamOtherDegTypCod (long MinCodAllowed)
 static unsigned DT_CountNumDegsOfType (long DegTypCod)
   {
    /***** Get number of degrees of a type from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of degrees of a type",
-			     "SELECT COUNT(*)"
-			      " FROM deg_degrees"
-			     " WHERE DegTypCod=%ld",
-			     DegTypCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of degrees of a type",
+		  "SELECT COUNT(*)"
+		   " FROM deg_degrees"
+		  " WHERE DegTypCod=%ld",
+		  DegTypCod);
   }
 
 /*****************************************************************************/
@@ -867,53 +867,31 @@ static unsigned DT_CountNumDegsOfType (long DegTypCod)
 
 bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   bool DegTypFound = false;
-
+   /***** Trivial check: code of degree type should be >= 0 *****/
    if (DegTyp->DegTypCod <= 0)
      {
-      DegTyp->DegTypCod = -1L;
       DegTyp->DegTypName[0] = '\0';
       DegTyp->NumDegs = 0;
       return false;
      }
 
    /***** Get the name of a type of degree from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get the name of a type of degree",
-			     "SELECT DegTypName"	// row[0]
-			      " FROM deg_types"
-			     " WHERE DegTypCod=%ld",
-			     DegTyp->DegTypCod);
-   if (NumRows == 1)
+   DB_QuerySELECTString (DegTyp->DegTypName,sizeof (DegTyp->DegTypName) - 1,
+		         "can not get the name of a type of degree",
+		         "SELECT DegTypName"
+			  " FROM deg_types"
+		         " WHERE DegTypCod=%ld",
+		         DegTyp->DegTypCod);
+   if (DegTyp->DegTypName[0])
      {
-      /***** Get data of degree type *****/
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get the name of the degree type (row[0]) */
-      Str_Copy (DegTyp->DegTypName,row[0],sizeof (DegTyp->DegTypName) - 1);
-
       /* Count number of degrees of this type */
       DegTyp->NumDegs = DT_CountNumDegsOfType (DegTyp->DegTypCod);
-
-      /* Set return value */
-      DegTypFound = true;
+      return true;
      }
-   else if (NumRows == 0)
-     {
-      DegTyp->DegTypCod = -1L;
-      DegTyp->DegTypName[0] = '\0';
-      DegTyp->NumDegs = 0;
-      return false;
-     }
-   else // NumRows > 1
-      Lay_ShowErrorAndExit ("Type of degree repeated in database.");
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return DegTypFound;
+   DegTyp->DegTypName[0] = '\0';
+   DegTyp->NumDegs = 0;
+   return false;
   }
 
 /*****************************************************************************/
@@ -929,7 +907,7 @@ static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
 
    /***** Get degrees of a type from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get degrees of a type",
-			     "SELECT DegCod"	// row[0]
+			     "SELECT DegCod"
 			      " FROM deg_degrees"
 			     " WHERE DegTypCod=%ld",
 			     DegTypCod);

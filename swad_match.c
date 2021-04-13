@@ -1911,26 +1911,19 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
 void Mch_GetIndexes (long MchCod,unsigned QstInd,
 		     unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION])
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
 
    /***** Get indexes for a question from database *****/
-   if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
-			"SELECT Indexes"	// row[0]
-			 " FROM mch_indexes"
-			" WHERE MchCod=%ld"
-			  " AND QstInd=%u",
-			MchCod,
-			QstInd))
+   DB_QuerySELECTString (StrIndexesOneQst,sizeof (StrIndexesOneQst) - 1,
+                         "can not get data of a question",
+			 "SELECT Indexes"	// row[0]
+			  " FROM mch_indexes"
+			 " WHERE MchCod=%ld"
+			   " AND QstInd=%u",
+		 	 MchCod,
+			 QstInd);
+   if (!StrIndexesOneQst[0])
       Lay_ShowErrorAndExit ("No indexes found for a question.");
-   row = mysql_fetch_row (mysql_res);
-
-   /* Get indexes (row[0]) */
-   Str_Copy (StrIndexesOneQst,row[0],sizeof (StrIndexesOneQst) - 1);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
 
    /***** Get indexes from string *****/
    TstPrn_GetIndexesFromStr (StrIndexesOneQst,Indexes);

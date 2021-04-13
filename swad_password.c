@@ -115,26 +115,14 @@ bool Pwd_CheckCurrentPassword (void)
 
 bool Pwd_CheckPendingPassword (void)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
    /***** Get pending password from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get pending password",
-		       "SELECT PendingPassword"	// row[0]
-		        " FROM usr_pending_passwd"
-		       " WHERE UsrCod=%ld",
-		       Gbl.Usrs.Me.UsrDat.UsrCod))
-     {
-      /* Get encrypted pending password */
-      row = mysql_fetch_row (mysql_res);
-      Str_Copy (Gbl.Usrs.Me.PendingPassword,row[0],
-                sizeof (Gbl.Usrs.Me.PendingPassword) - 1);
-     }
-   else
-      Gbl.Usrs.Me.PendingPassword[0] = '\0';
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   DB_QuerySELECTString (Gbl.Usrs.Me.PendingPassword,
+                         sizeof (Gbl.Usrs.Me.PendingPassword) - 1,
+                         "can not get pending password",
+		         "SELECT PendingPassword"	// row[0]
+		          " FROM usr_pending_passwd"
+		         " WHERE UsrCod=%ld",
+		         Gbl.Usrs.Me.UsrDat.UsrCod);
 
    return (Gbl.Usrs.Me.PendingPassword[0] ?
            !strcmp (Gbl.Usrs.Me.LoginEncryptedPassword,Gbl.Usrs.Me.PendingPassword) :

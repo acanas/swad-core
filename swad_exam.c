@@ -1067,32 +1067,12 @@ void Exa_FreeListExams (struct Exa_Exams *Exams)
 
 void Exa_GetExamTxtFromDB (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-
    /***** Get text of exam from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get exam text",
-			     "SELECT Txt"	// row[0]
-			      " FROM exa_exams"
-			     " WHERE ExaCod=%ld",
-			     ExaCod);
-
-   /***** The result of the query must have one row or none *****/
-   if (NumRows == 1)
-     {
-      /* Get info text */
-      row = mysql_fetch_row (mysql_res);
-      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
-     }
-   else
-      Txt[0] = '\0';
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   if (NumRows > 1)
-      Lay_ShowErrorAndExit ("Error when getting exam text.");
+   DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get exam text",
+		         "SELECT Txt"
+			  " FROM exa_exams"
+		         " WHERE ExaCod=%ld",
+		         ExaCod);
   }
 
 /*****************************************************************************/
@@ -1264,7 +1244,7 @@ static void Exa_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
    /***** Get media codes associated to stems of exam questions from database *****/
    NumMedia =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
-			      "SELECT exa_set_questions.MedCod"	// row[0]
+			      "SELECT exa_set_questions.MedCod"
 			       " FROM exa_exams,"
 			             "exa_sets,"
 			             "exa_set_questions"
@@ -1292,7 +1272,7 @@ static void Exa_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod)
    /***** Get names of media files associated to answers of exam questions from database *****/
    NumMedia = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get media",
-		   "SELECT exa_set_answers.MedCod"	// row[0]
+		   "SELECT exa_set_answers.MedCod"
 		    " FROM exa_exams,"
 			  "exa_sets,"
 			  "exa_set_questions,"

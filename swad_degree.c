@@ -1430,27 +1430,20 @@ static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row)
 
 void Deg_GetShortNameOfDegreeByCod (struct Deg_Degree *Deg)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   Deg->ShrtName[0] = '\0';
+   /***** Trivial check: degree code should be > 0 *****/
    if (Deg->DegCod > 0)
      {
-      /***** Get the short name of a degree from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get the short name of a degree",
-			  "SELECT ShortName"	// row[0]
-			   " FROM deg_degrees"
-			  " WHERE DegCod=%ld",
-			  Deg->DegCod) == 1)
-	{
-	 /***** Get the short name of this degree *****/
-	 row = mysql_fetch_row (mysql_res);
-	 Str_Copy (Deg->ShrtName,row[0],sizeof (Deg->ShrtName) - 1);
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+      Deg->ShrtName[0] = '\0';
+      return;
      }
+
+   /***** Get the short name of a degree from database *****/
+   DB_QuerySELECTString (Deg->ShrtName,sizeof (Deg->ShrtName) - 1,
+			 "can not get the short name of a degree",
+			 "SELECT ShortName"
+			  " FROM deg_degrees"
+			 " WHERE DegCod=%ld",
+			 Deg->DegCod);
   }
 
 /*****************************************************************************/

@@ -2317,13 +2317,14 @@ unsigned Prj_GetMyRolesInProject (long PrjCod)
 			 The result of the query will have one row or none *****/
    Gbl.Cache.MyRolesInProject.PrjCod         = PrjCod;
    Gbl.Cache.MyRolesInProject.RolesInProject = 0;
-   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get my roles in project",
-		                        "SELECT RoleInProject"	// row[0]
-		                         " FROM prj_users"
-		                        " WHERE PrjCod=%ld"
-		                          " AND UsrCod=%ld",
-		                        PrjCod,
-		                        Gbl.Usrs.Me.UsrDat.UsrCod);
+   NumRows = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get my roles in project",
+		   "SELECT RoleInProject"	// row[0]
+		    " FROM prj_users"
+		   " WHERE PrjCod=%ld"
+		     " AND UsrCod=%ld",
+		   PrjCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
    for (NumRow = 0;
 	NumRow < NumRows;
 	NumRow++)

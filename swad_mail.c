@@ -1754,17 +1754,16 @@ static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]
 
 void Mai_ConfirmEmail (void)
   {
+   extern const char *Txt_Failed_email_confirmation_key;
    extern const char *Txt_Email_X_has_already_been_confirmed_before;
    extern const char *Txt_The_email_X_has_been_confirmed;
-   extern const char *Txt_The_email_address_has_not_been_confirmed;
-   extern const char *Txt_Failed_email_confirmation_key;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1];
    long UsrCod;
    char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
    bool KeyIsCorrect;
-   bool Confirmed;
+   char StrConfirmed[1 + 1];
 
    /***** Get parameter Key *****/
    Par_GetParToText ("key",MailKey,Mai_LENGTH_EMAIL_CONFIRM_KEY);
@@ -1807,43 +1806,34 @@ void Mai_ConfirmEmail (void)
 
       /***** Check user's code and email
              and get if email is already confirmed *****/
-      if (DB_QuerySELECT (&mysql_res,"can not check if email is confirmed",
-			  "SELECT Confirmed"	// row[0]
-			   " FROM usr_emails"
-			  " WHERE UsrCod=%ld"
-			    " AND E_mail='%s'",
-			  UsrCod,
-			  Email))
-	{
-	 Confirmed = false;
-	 if (row)
-            if (row[0])
-               Confirmed = (row[0][0] == 'Y');
-
-         /***** Confirm email *****/
-         if (Confirmed)
+      DB_QuerySELECTString (StrConfirmed,1,"can not check if email is confirmed",
+			    "SELECT Confirmed"
+			     " FROM usr_emails"
+			    " WHERE UsrCod=%ld"
+			      " AND E_mail='%s'",
+			    UsrCod,
+			    Email);
+      switch (StrConfirmed[0])
+        {
+	 case '\0':
+            Ale_ShowAlert (Ale_WARNING,Txt_Failed_email_confirmation_key);
+            break;
+	 case 'Y':
             Ale_ShowAlert (Ale_SUCCESS,Txt_Email_X_has_already_been_confirmed_before,
 		           Email);
-         else
-           {
+            break;
+	 default:
+            /***** Confirm email *****/
 	    DB_QueryUPDATE ("can not confirm email",
 			    "UPDATE usr_emails SET Confirmed='Y'"
 			    " WHERE usr_emails.UsrCod=%ld"
 			    " AND usr_emails.E_mail='%s'",
 		            UsrCod,Email);
-
             Ale_ShowAlert (Ale_SUCCESS,Txt_The_email_X_has_been_confirmed,
 		           Email);
-           }
-	}
-      else
-	 Ale_ShowAlert (Ale_WARNING,Txt_The_email_address_has_not_been_confirmed);
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+            break;
+        }
      }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_Failed_email_confirmation_key);
 
    /***** Form to log in *****/
    Usr_WriteFormLogin (ActLogIn,NULL);
