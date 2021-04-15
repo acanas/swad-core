@@ -323,8 +323,8 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->EnUsrCod[0] = '\0';
    UsrDat->Nickname[0] = '\0';
    UsrDat->Password[0] = '\0';
-   UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
-   UsrDat->Roles.InCurrentCrs.Valid = false;
+   UsrDat->Roles.InCurrentCrs.Role   = Rol_UNK;
+   UsrDat->Roles.InCurrentCrs.Filled = false;
    UsrDat->Roles.InCrss = -1;	// < 0 ==> not yet got from database
    UsrDat->Accepted = false;
 
@@ -589,9 +589,9 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
    Str_Copy (UsrDat->Password,row[1],sizeof (UsrDat->Password) - 1);
 
    /* Get roles */
-   UsrDat->Roles.InCurrentCrs.Role = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
-                                                          Gbl.Hierarchy.Crs.CrsCod);
-   UsrDat->Roles.InCurrentCrs.Valid = true;
+   UsrDat->Roles.InCurrentCrs.Role   = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
+                                                            Gbl.Hierarchy.Crs.CrsCod);
+   UsrDat->Roles.InCurrentCrs.Filled = true;
    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
 
@@ -894,6 +894,7 @@ void Usr_FlushCachesUsr (void)
    Usr_FlushCacheUsrBelongsToCurrentCrs ();
    Usr_FlushCacheUsrHasAcceptedInCurrentCrs ();
    Usr_FlushCacheUsrSharesAnyOfMyCrs ();
+   Rol_FlushCacheMyRoleInCurrentCrs ();
    Rol_FlushCacheRoleUsrInCrs ();
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
    Grp_FlushCacheIBelongToGrp ();
@@ -2077,9 +2078,9 @@ bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat)
       return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
 
    /***** 3. Fast check: If we know role of user in the current course *****/
-   if (UsrDat->Roles.InCurrentCrs.Valid)
+   if (UsrDat->Roles.InCurrentCrs.Filled)
      {
-      Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod = UsrDat->UsrCod;
+      Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod  = UsrDat->UsrCod;
       Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = UsrDat->Roles.InCurrentCrs.Role == Rol_STD ||
 	                                         UsrDat->Roles.InCurrentCrs.Role == Rol_NET ||
 	                                         UsrDat->Roles.InCurrentCrs.Role == Rol_TCH;
@@ -2087,7 +2088,7 @@ bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat)
      }
 
    /***** 4. Fast / slow check: Get if user belongs to current course *****/
-   Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod = UsrDat->UsrCod;
+   Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod  = UsrDat->UsrCod;
    Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
 						                          Gbl.Hierarchy.Crs.CrsCod,
 						                          false);
@@ -3415,9 +3416,8 @@ static void Usr_SetMyPrefsAndRoles (void)
 	 /* Course may have changed ==> get my role in current course again */
 	 if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
 	   {
-	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role = Rol_GetRoleUsrInCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
-									      Gbl.Hierarchy.Crs.CrsCod);
-	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid = true;
+	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role   = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Crs.CrsCod);
+	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Filled = true;
 	   }
 
 	 // role and action will be got from last data
@@ -9745,7 +9745,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"	// row[0]
+					 "SELECT AVG(NumCrss)"
 					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
 						  " FROM ins_instits,"
 						        "ctr_centers,"
@@ -9764,7 +9764,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_INS:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"	// row[0]
+					 "SELECT AVG(NumCrss)"
 					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
 						  " FROM ctr_centers,"
 						        "deg_degrees,"
@@ -9778,7 +9778,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"	// row[0]
+					 "SELECT AVG(NumCrss)"
 					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
 						  " FROM ctr_centers,"
 						        "deg_degrees,"
@@ -9795,7 +9795,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_CTR:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"	// row[0]
+					 "SELECT AVG(NumCrss)"
 					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
 						  " FROM deg_degrees,"
 						        "crs_courses,"
@@ -9807,7 +9807,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"	// row[0]
+					 "SELECT AVG(NumCrss)"
 					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
 						  " FROM deg_degrees,"
 						        "crs_courses,"
@@ -9822,7 +9822,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_DEG:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"	// row[0]
+					 "SELECT AVG(NumCrss)"
 					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
 						  " FROM crs_courses,"
 						        "crs_users"
@@ -9832,7 +9832,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"	// row[0]
+					 "SELECT AVG(NumCrss)"
 					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
 						  " FROM crs_courses,"
 						        "crs_users"
@@ -9886,13 +9886,13 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_SYS:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"	// row[0]
+					 "SELECT AVG(NumUsrs)"
 					  " FROM (SELECT COUNT(UsrCod) AS NumUsrs"
 						  " FROM crs_users"
 						 " GROUP BY CrsCod) AS NumUsrsTable");
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"	// row[0]
+					 "SELECT AVG(NumUsrs)"
 					  " FROM (SELECT COUNT(UsrCod) AS NumUsrs"
 						  " FROM crs_users"
 						 " WHERE Role=%u GROUP BY CrsCod) AS NumUsrsTable",
@@ -9900,7 +9900,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_CTY:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"	// row[0]
+					 "SELECT AVG(NumUsrs)"
 					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 						  " FROM ins_instits,"
 						        "ctr_centers,"
@@ -9916,7 +9916,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"	// row[0]
+					 "SELECT AVG(NumUsrs)"
 					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 						  " FROM ins_instits,"
 						        "ctr_centers,"
@@ -9935,7 +9935,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_INS:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"	// row[0]
+					 "SELECT AVG(NumUsrs)"
 					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 						  " FROM ctr_centers,"
 						        "deg_degrees,"
@@ -9949,7 +9949,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"	// row[0]
+					 "SELECT AVG(NumUsrs)"
 					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 						  " FROM ctr_centers,"
 						        "deg_degrees,"
@@ -9966,7 +9966,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_CTR:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"	// row[0]
+					 "SELECT AVG(NumUsrs)"
 					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 						  " FROM deg_degrees,"
 						        "crs_courses,"
@@ -9978,7 +9978,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"	// row[0]
+					 "SELECT AVG(NumUsrs)"
 					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 						  " FROM deg_degrees,"
 						        "crs_courses,"
@@ -9993,7 +9993,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_DEG:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"	// row[0]
+					 "SELECT AVG(NumUsrs)"
 					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 						  " FROM crs_courses,"
 						        "crs_users"
@@ -10003,7 +10003,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"	// row[0]
+					 "SELECT AVG(NumUsrs)"
 					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
 						  " FROM crs_courses,"
 						        "crs_users"

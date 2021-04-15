@@ -635,77 +635,25 @@ static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
    Nck_GetNicknameFromUsrCod (UsrDat->UsrCod,UsrDat->Nickname);
 
    /***** Get user's role *****/
-   /* Query database */
    if (CrsCod > 0)
-     {
       /* Get the role in the given course */
-      if (DB_QuerySELECT (&mysql_res,"can not get user's role",
-			  "SELECT Role"		// row[0]
+      UsrDat->Roles.InCurrentCrs.Role =
+      DB_QuerySELECTRole ("can not get user's role",
+			  "SELECT Role"
 			   " FROM crs_users"
 			  " WHERE CrsCod=%ld"
 			    " AND UsrCod=%ld",
 			  CrsCod,
-			  UsrDat->UsrCod))	// User belongs to course
-	{
-	 row = mysql_fetch_row (mysql_res);
-	 if (row[0])
-	   {
-	    if (sscanf (row[0],"%u",&UsrDat->Roles.InCurrentCrs.Role) == 1)
-	       UsrDat->Roles.InCurrentCrs.Valid = true;
-	    else
-	      {
-	       UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
-	       UsrDat->Roles.InCurrentCrs.Valid = false;
-	      }
-	   }
-	 else	// Impossible
-	   {
-	    UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
-	    UsrDat->Roles.InCurrentCrs.Valid = false;
-	   }
-	}
-      else	// User does not belong to course
-	{
-	 UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
-	 UsrDat->Roles.InCurrentCrs.Valid = true;
-	}
-     }
+			  UsrDat->UsrCod);
    else
-     {
       /* Get the maximum role in any course */
-      if (DB_QuerySELECT (&mysql_res,"can not get user's role",
-			  "SELECT MAX(Role)"	// row[0]
+      UsrDat->Roles.InCurrentCrs.Role =
+      DB_QuerySELECTRole ("can not get user's role",
+			  "SELECT MAX(Role)"
 			   " FROM crs_users"
 			  " WHERE UsrCod=%ld",
-			  UsrDat->UsrCod) == 1)
-	{
-	 row = mysql_fetch_row (mysql_res);
-	 if (row[0])
-	   {
-	    if (sscanf (row[0],"%u",&UsrDat->Roles.InCurrentCrs.Role) == 1)
-	       UsrDat->Roles.InCurrentCrs.Valid = true;
-	    else
-	      {
-	       UsrDat->Roles.InCurrentCrs.Role  = Rol_UNK;
-	       UsrDat->Roles.InCurrentCrs.Valid = false;
-	      }
-	   }
-	 else
-	    // MAX(Role) == NULL if user does not belong to any course
-	   {
-	    UsrDat->Roles.InCurrentCrs.Role  = Rol_UNK;
-	    UsrDat->Roles.InCurrentCrs.Valid = true;
-	   }
-	}
-      else	// Impossible
-	{
-	 UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
-         UsrDat->Roles.InCurrentCrs.Valid = false;
-	}
-     }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
+			  UsrDat->UsrCod);
+   UsrDat->Roles.InCurrentCrs.Filled = true;
 
    return true;
   }

@@ -314,9 +314,9 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 	  Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// ...and a course is selected
 	{
 	 /* Get user's role in current course */
-	 UsrDat->Roles.InCurrentCrs.Role = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
-	                                                        Gbl.Hierarchy.Crs.CrsCod);
-	 UsrDat->Roles.InCurrentCrs.Valid = true;
+	 UsrDat->Roles.InCurrentCrs.Role   = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
+	                                                          Gbl.Hierarchy.Crs.CrsCod);
+	 UsrDat->Roles.InCurrentCrs.Filled = true;
 
 	 /* Get if user has accepted enrolment in current course */
 	 UsrDat->Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);

@@ -171,7 +171,7 @@ struct UsrData
      {
       struct
         {
-	 bool Valid;	// Role is valid (is already filled)?
+	 bool Filled;	// Role is valid (is already filled)?
 	 Rol_Role_t Role;
         } InCurrentCrs;	// Role in current course (Rol_UNK is no course selected)
       int InCrss;	// Roles in all his/her courses

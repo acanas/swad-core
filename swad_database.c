@@ -3906,6 +3906,40 @@ double DB_QuerySELECTDouble (const char *MsgError,
    return DoubleNum;
   }
 
+/*****************************************************************************/
+/***** Make a SELECT query for a unique row with one role from database ******/
+/*****************************************************************************/
+
+Rol_Role_t DB_QuerySELECTRole (const char *MsgError,
+                               const char *fmt,...)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   va_list ap;
+   int NumBytesPrinted;
+   char *Query;
+   Rol_Role_t Role = Rol_UNK;
+
+   /***** Create query string *****/
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Query,fmt,ap);
+   va_end (ap);
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+      Lay_NotEnoughMemoryExit ();
+
+   /***** Do SELECT query *****/
+   if (DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError))	// Row found
+     {
+      row = mysql_fetch_row (mysql_res);
+      if (row[0])
+	 Role = Rol_ConvertUnsignedStrToRole (row[0]);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return Role;
+  }
 
 /*****************************************************************************/
 /**** Make a SELECT query for a unique row with one double from database *****/

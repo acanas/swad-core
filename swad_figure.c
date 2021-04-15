@@ -4048,7 +4048,7 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_SYS:
 	    Average = DB_QuerySELECTDouble ("can not get number of questions"
 				            " per survey",
-					    "SELECT AVG(N)"			// row[0]
+					    "SELECT AVG(N)"
 					     " FROM (SELECT COUNT(%s) AS N"
 						     " FROM usr_follow"
 						    " GROUP BY %s) AS F",
@@ -4058,7 +4058,7 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_CTY:
 	    Average = DB_QuerySELECTDouble ("can not get number of questions"
 				            " per survey",
-					    "SELECT AVG(N)"			// row[0]
+					    "SELECT AVG(N)"
 					     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
 						     " FROM ins_instits,"
 							   "ctr_centers,"
@@ -4081,7 +4081,7 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_INS:
 	    Average = DB_QuerySELECTDouble ("can not get number of questions"
 					    " per survey",
-					    "SELECT AVG(N)"			// row[0]
+					    "SELECT AVG(N)"
 					     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
 						     " FROM ctr_centers,"
 							   "deg_degrees,"
@@ -4102,7 +4102,7 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_CTR:
 	    Average = DB_QuerySELECTDouble ("can not get number of questions"
 				            " per survey",
-					    "SELECT AVG(N)"			// row[0]
+					    "SELECT AVG(N)"
 					     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
 						     " FROM deg_degrees,"
 							   "crs_courses,"
@@ -4121,7 +4121,7 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_DEG:
 	    Average = DB_QuerySELECTDouble ("can not get number of questions"
 				            " per survey",
-					    "SELECT AVG(N)"			// row[0]
+					    "SELECT AVG(N)"
 					     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
 						     " FROM crs_courses,"
 							   "crs_users,"
@@ -4138,7 +4138,7 @@ static void Fig_GetAndShowFollowStats (void)
 	 case Hie_Lvl_CRS:
 	    Average = DB_QuerySELECTDouble ("can not get number of questions"
 				            " per survey",
-					    "SELECT AVG(N)"		// row[0]
+					    "SELECT AVG(N)"
 					     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
 						     " FROM crs_users,"
 							   "usr_follow"

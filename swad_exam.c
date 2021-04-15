@@ -1777,7 +1777,7 @@ unsigned Exa_GetPrevQuestionIndexInExam (long ExaCod,unsigned QstInd)
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
    return DB_QuerySELECTUnsigned ("can not get previous question index",
-				  "SELECT MAX(QstInd)"	// row[0]
+				  "SELECT MAX(QstInd)"
 				   " FROM exa_set_questions"
 				  " WHERE ExaCod=%ld"
 				    " AND QstInd<%u",

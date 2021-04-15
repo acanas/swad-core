@@ -85,10 +85,10 @@ void Rol_SetMyRoles (void)
    bool ICanBeDegAdm = false;
 
    /***** Get my role in current course if not yet filled *****/
-   if (!Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid)
+   if (!Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Filled)
      {
-      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Crs.CrsCod);
-      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid = true;
+      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role   = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Crs.CrsCod);
+      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Filled = true;
      }
 
    /***** Set the user's role I am logged *****/
@@ -315,44 +315,68 @@ Rol_Role_t Rol_GetMyMaxRoleInDeg (long DegCod)
   {
    unsigned NumMyDeg;
 
-   if (DegCod > 0)
-     {
-      /***** Fill the list with the degrees I belong to (if not already filled) *****/
-      Usr_GetMyDegrees ();
+   /***** 1. Fast check: trivial cases *****/
+   if (DegCod <= 0)
+      return Rol_UNK;
 
-      /***** Check if the degree passed as parameter is any of my degrees *****/
-      for (NumMyDeg = 0;
-           NumMyDeg < Gbl.Usrs.Me.MyDegs.Num;
-           NumMyDeg++)
-         if (Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod == DegCod)
-            return Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].MaxRole;
-      return Rol_GST;
-     }
-   return Rol_UNK;   // No degree
+   /***** Fill the list with the degrees I belong to (if not already filled) *****/
+   Usr_GetMyDegrees ();
+
+   /***** Check if the degree passed as parameter is any of my degrees *****/
+   for (NumMyDeg = 0;
+	NumMyDeg < Gbl.Usrs.Me.MyDegs.Num;
+	NumMyDeg++)
+      if (Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod == DegCod)
+	 return Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].MaxRole;
+   return Rol_GST;
   }
 
 /*****************************************************************************/
 /*************************** Get my role in a course *************************/
 /*****************************************************************************/
 
+void Rol_FlushCacheMyRoleInCurrentCrs (void)
+  {
+   Gbl.Cache.MyRoleInCurrentCrs.Cached = false;
+   Gbl.Cache.MyRoleInCurrentCrs.Role   = Rol_UNK;
+  }
+
 Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
   {
    unsigned NumMyCrs;
+   Rol_Role_t Role;
 
-   if (CrsCod > 0)
+   /***** 1. Fast check: trivial cases *****/
+   if (CrsCod <= 0)
+      return Rol_UNK;
+
+   /***** 2. Fast check: is my role in current course already calculated? *****/
+   if (CrsCod == Gbl.Hierarchy.Crs.CrsCod &&
+       Gbl.Cache.MyRoleInCurrentCrs.Cached)
+      return Gbl.Cache.MyRoleInCurrentCrs.Role;
+
+   /***** 3. Slow check: get my role from list of my courses *****/
+   /* Fill the list with the courses I belong to (if not already filled) */
+   Usr_GetMyCourses ();
+
+   /* Check if the current course is any of my courses */
+   for (NumMyCrs = 0, Role = Rol_UNK;
+	NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
+	NumMyCrs++)
+      if (Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod == CrsCod)
+	{
+	 Role = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].Role;
+	 break;
+	}
+
+   /* Update my role in current course */
+   if (CrsCod == Gbl.Hierarchy.Crs.CrsCod)
      {
-      /***** Fill the list with the courses I belong to (if not already filled) *****/
-      Usr_GetMyCourses ();
-
-      /***** Check if the course is any of my courses *****/
-      for (NumMyCrs = 0;
-           NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
-           NumMyCrs++)
-         if (Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod == CrsCod)
-            return Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].Role;
+      Gbl.Cache.MyRoleInCurrentCrs.Role   = Role;
+      Gbl.Cache.MyRoleInCurrentCrs.Cached = true;
      }
 
-   return Rol_UNK;
+   return Role;
   }
 
 /*****************************************************************************/
@@ -363,14 +387,11 @@ void Rol_FlushCacheRoleUsrInCrs (void)
   {
    Gbl.Cache.RoleUsrInCrs.UsrCod = -1L;
    Gbl.Cache.RoleUsrInCrs.CrsCod = -1L;
-   Gbl.Cache.RoleUsrInCrs.Role = Rol_UNK;
+   Gbl.Cache.RoleUsrInCrs.Role   = Rol_UNK;
   }
 
 Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
    /***** 1. Fast check: trivial cases *****/
    if (UsrCod <= 0 ||
        CrsCod <= 0)
@@ -378,26 +399,26 @@ Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
 
    /***** 2. Fast check: Is role in course already calculated? *****/
    if (UsrCod == Gbl.Cache.RoleUsrInCrs.UsrCod &&
-       CrsCod == Gbl.Cache.RoleUsrInCrs.CrsCod )
+       CrsCod == Gbl.Cache.RoleUsrInCrs.CrsCod)
       return Gbl.Cache.RoleUsrInCrs.Role;
 
-   /***** 3. Slow check: Get rol of a user in a course from database.
+   /***** 3. Slow check: Get role of a user in a course from database.
 			 The result of the query will have one row or none *****/
    Gbl.Cache.RoleUsrInCrs.UsrCod = UsrCod;
    Gbl.Cache.RoleUsrInCrs.CrsCod = CrsCod;
-   Gbl.Cache.RoleUsrInCrs.Role = Rol_UNK;
-   if (DB_QuerySELECT (&mysql_res,"can not get the role of a user in a course",
-		       "SELECT Role"		// row[0]
-		        " FROM crs_users"
-		       " WHERE CrsCod=%ld"
-		         " AND UsrCod=%ld",
-		       CrsCod,UsrCod) == 1)	// User belongs to the course
-     {
-      row = mysql_fetch_row (mysql_res);
-      Gbl.Cache.RoleUsrInCrs.Role = Rol_ConvertUnsignedStrToRole (row[0]);
-     }
-   DB_FreeMySQLResult (&mysql_res);
-
+   if (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+      /* Get my role in course */
+      Gbl.Cache.RoleUsrInCrs.Role = Rol_GetMyRoleInCrs (CrsCod);
+   else
+      /* Get role of the user in course from database */
+      Gbl.Cache.RoleUsrInCrs.Role =
+      DB_QuerySELECTRole ("can not get the role of a user in a course",
+			  "SELECT Role"
+			   " FROM crs_users"
+			  " WHERE CrsCod=%ld"
+			    " AND UsrCod=%ld",
+			  CrsCod,
+			  UsrCod);
    return Gbl.Cache.RoleUsrInCrs.Role;
   }
 

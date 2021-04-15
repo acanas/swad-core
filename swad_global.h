@@ -604,6 +604,11 @@ struct Globals
 	} RoleUsrInCrs;
       struct
 	{
+	 bool Cached;
+	 Rol_Role_t Role;
+	} MyRoleInCurrentCrs;
+      struct
+	{
 	 long PrjCod;
 	 unsigned RolesInProject;
 	} MyRolesInProject;

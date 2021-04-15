@@ -352,7 +352,7 @@ static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode)
    /***** Get number of users connected to chat rooms from database *****/
    return DB_QuerySELECTUnsigned ("can not get number of users"
 				  " connected to a chat room",
-				  "SELECT NumUsrs"	// row[0]
+				  "SELECT NumUsrs"
 				   " FROM cht_rooms"
 				  " WHERE RoomCode='%s'",
 				  RoomCode);

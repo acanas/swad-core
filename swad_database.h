@@ -29,6 +29,8 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 
+#include "swad_role.h"
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -47,6 +49,8 @@ unsigned DB_QuerySELECTUnsigned (const char *MsgError,
                                  const char *fmt,...);
 double DB_QuerySELECTDouble (const char *MsgError,
                              const char *fmt,...);
+Rol_Role_t DB_QuerySELECTRole (const char *MsgError,
+                               const char *fmt,...);
 void DB_QuerySELECTString (char *Str,size_t StrSize,const char *MsgError,
                            const char *fmt,...);
 

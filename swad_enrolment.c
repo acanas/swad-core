@@ -260,8 +260,8 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
    Usr_FlushCachesUsr ();
 
    /***** Set user's roles *****/
-   UsrDat->Roles.InCurrentCrs.Role = NewRole;
-   UsrDat->Roles.InCurrentCrs.Valid = true;
+   UsrDat->Roles.InCurrentCrs.Role   = NewRole;
+   UsrDat->Roles.InCurrentCrs.Filled = true;
    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get roles
 
@@ -326,8 +326,8 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
    Usr_FlushCachesUsr ();
 
    /***** Set roles *****/
-   UsrDat->Roles.InCurrentCrs.Role = NewRole;
-   UsrDat->Roles.InCurrentCrs.Valid = true;
+   UsrDat->Roles.InCurrentCrs.Role   = NewRole;
+   UsrDat->Roles.InCurrentCrs.Filled = true;
    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get roles
 
@@ -3960,8 +3960,8 @@ void Enr_ModifyUsr1 (void)
 		  /***** If it's me, change my roles *****/
 		  if (ItsMe)
 		    {
-		     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role;
-                     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid = true;
+		     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role   = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role;
+                     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Filled = true;
                      Gbl.Usrs.Me.UsrDat.Roles.InCrss = Gbl.Usrs.Other.UsrDat.Roles.InCrss;
                      Rol_SetMyRoles ();
 		    }
@@ -4243,8 +4243,8 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role =
 	 UsrDat->Roles.InCurrentCrs.Role            = Rol_UNK;
 
-	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid =
-	 UsrDat->Roles.InCurrentCrs.Valid            = true;
+	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Filled =
+	 UsrDat->Roles.InCurrentCrs.Filled            = true;
 
 	 Gbl.Usrs.Me.UsrDat.Roles.InCrss =
 	 UsrDat->Roles.InCrss            = -1;	// not yet filled/calculated
@@ -4254,9 +4254,9 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
       else	// Not me
        {
          /* Now he/she does not belong to current course */
-         UsrDat->Accepted                 = false;
-	 UsrDat->Roles.InCurrentCrs.Role  = Rol_USR;
-	 UsrDat->Roles.InCurrentCrs.Valid = false;
+         UsrDat->Accepted                  = false;
+	 UsrDat->Roles.InCurrentCrs.Role   = Rol_USR;
+	 UsrDat->Roles.InCurrentCrs.Filled = false;	// TODO: Set to true?
         }
 
       if (QuietOrVerbose == Cns_VERBOSE)
