@@ -10923,15 +10923,15 @@ static bool Brw_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
 unsigned Brw_GetNumFilesUsr (long UsrCod)
   {
    /***** Get current number of files published by a user from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of files from a user",
-			     "SELECT COUNT(*)"
-			      " FROM brw_files"
-			     " WHERE PublisherUsrCod=%ld"
-			       " AND FileType IN (%u,%u)",
-			     UsrCod,
-			     (unsigned) Brw_IS_FILE,
-			     (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of files from a user",
+		  "SELECT COUNT(*)"
+		   " FROM brw_files"
+		  " WHERE PublisherUsrCod=%ld"
+		    " AND FileType IN (%u,%u)",
+		  UsrCod,
+		  (unsigned) Brw_IS_FILE,
+		  (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
   }
 
 /*****************************************************************************/
@@ -10941,16 +10941,16 @@ unsigned Brw_GetNumFilesUsr (long UsrCod)
 unsigned Brw_GetNumPublicFilesUsr (long UsrCod)
   {
    /***** Get current number of public files published by a user from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of public files from a user",
-			     "SELECT COUNT(*)"
-			      " FROM brw_files"
-			     " WHERE PublisherUsrCod=%ld"
-			       " AND FileType IN (%u,%u)"
-			       " AND Public='Y'",
-			     UsrCod,
-			     (unsigned) Brw_IS_FILE,
-			     (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of public files from a user",
+		  "SELECT COUNT(*)"
+		   " FROM brw_files"
+		  " WHERE PublisherUsrCod=%ld"
+		    " AND FileType IN (%u,%u)"
+		    " AND Public='Y'",
+		  UsrCod,
+		  (unsigned) Brw_IS_FILE,
+		  (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
   }
 
 /*****************************************************************************/

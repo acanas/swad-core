@@ -110,7 +110,7 @@ void Msg_ShowSntMsgs (void);
 void Msg_ShowRecMsgs (void);
 
 unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod);
-unsigned long Msg_GetNumMsgsSentByUsr (long UsrCod);
+unsigned Msg_GetNumMsgsSentByUsr (long UsrCod);
 unsigned Msg_GetNumMsgsSent (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus);
 unsigned Msg_GetNumMsgsReceived (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus);
 

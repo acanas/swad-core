@@ -2253,13 +2253,14 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
 static unsigned Prj_GetNumUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject)
   {
    /***** Get users in project from database *****/
-   return (unsigned) DB_QueryCOUNT ("can not get number of users in project",
-				    "SELECT COUNT(UsrCod)"
-				     " FROM prj_users"
-				    " WHERE PrjCod=%ld"
-				      " AND RoleInProject=%u",
-				    PrjCod,
-				    (unsigned) RoleInProject);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users in project",
+		  "SELECT COUNT(UsrCod)"
+		   " FROM prj_users"
+		  " WHERE PrjCod=%ld"
+		    " AND RoleInProject=%u",
+		  PrjCod,
+		  (unsigned) RoleInProject);
   }
 
 /*****************************************************************************/

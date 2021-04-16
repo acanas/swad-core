@@ -188,12 +188,12 @@ long ExaSet_GetParamSetCod (void)
 static unsigned ExaSet_GetNumQstsInSet (long SetCod)
   {
    /***** Get number of questions in set from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of questions in a set",
-			     "SELECT COUNT(*)"
-			      " FROM exa_set_questions"
-			     " WHERE SetCod=%ld",
-			     SetCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of questions in a set",
+		  "SELECT COUNT(*)"
+		   " FROM exa_set_questions"
+		  " WHERE SetCod=%ld",
+		  SetCod);
   }
 
 /*****************************************************************************/
@@ -626,12 +626,12 @@ static void ExaSet_UpdateNumQstsToExamDB (const struct ExaSet_Set *Set,
 unsigned ExaSet_GetNumSetsExam (long ExaCod)
   {
    /***** Get number of sets in an exam from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of sets in an exam",
-			     "SELECT COUNT(*)"
-			      " FROM exa_sets"
-			     " WHERE ExaCod=%ld",
-			     ExaCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of sets in an exam",
+		  "SELECT COUNT(*)"
+		   " FROM exa_sets"
+		  " WHERE ExaCod=%ld",
+		  ExaCod);
   }
 
 /*****************************************************************************/

@@ -1160,14 +1160,14 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 	    Str_Concat (OthersRolesStr,",",sizeof (OthersRolesStr) - 1);
 	 Str_Concat (OthersRolesStr,UnsignedStr,sizeof (OthersRolesStr) - 1);
         }
-   NumUsrs =
-   (unsigned) DB_QueryCOUNT ("can not get number of users",
-			     "SELECT COUNT(DISTINCT crs_users.UsrCod)"
-			      " FROM crs_users,"
-			            "usr_courses_tmp"
-			     " WHERE crs_users.CrsCod=usr_courses_tmp.CrsCod"
-			       " AND crs_users.Role IN (%s)",
-			     OthersRolesStr);
+   NumUsrs = (unsigned)
+   DB_QueryCOUNT ("can not get number of users",
+		  "SELECT COUNT(DISTINCT crs_users.UsrCod)"
+		   " FROM crs_users,"
+			 "usr_courses_tmp"
+		  " WHERE crs_users.CrsCod=usr_courses_tmp.CrsCod"
+		    " AND crs_users.Role IN (%s)",
+		  OthersRolesStr);
 
    /***** Remove temporary table *****/
    DB_Query ("can not remove temporary tables",
@@ -1914,19 +1914,19 @@ bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
    Gbl.Cache.UsrBelongsToIns.UsrCod = UsrCod;
    Gbl.Cache.UsrBelongsToIns.InsCod = InsCod;
    Gbl.Cache.UsrBelongsToIns.Belongs =
-   (DB_QueryCOUNT ("can not check if a user belongs to an institution",
-		   "SELECT COUNT(DISTINCT ctr_centers.InsCod)"
-		    " FROM crs_users,"
-			  "crs_courses,"
-			  "deg_degrees,"
-			  "ctr_centers"
-		   " WHERE crs_users.UsrCod=%ld"
-		     " AND crs_users.Accepted='Y'"	// Only if user accepted
-		     " AND crs_users.CrsCod=crs_courses.CrsCod"
-		     " AND crs_courses.DegCod=deg_degrees.DegCod"
-		     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		     " AND ctr_centers.InsCod=%ld",
-		   UsrCod,InsCod) != 0);
+      (DB_QueryCOUNT ("can not check if a user belongs to an institution",
+		      "SELECT COUNT(DISTINCT ctr_centers.InsCod)"
+		       " FROM crs_users,"
+			     "crs_courses,"
+			     "deg_degrees,"
+			     "ctr_centers"
+		      " WHERE crs_users.UsrCod=%ld"
+			" AND crs_users.Accepted='Y'"	// Only if user accepted
+			" AND crs_users.CrsCod=crs_courses.CrsCod"
+			" AND crs_courses.DegCod=deg_degrees.DegCod"
+			" AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			" AND ctr_centers.InsCod=%ld",
+		      UsrCod,InsCod) != 0);
    return Gbl.Cache.UsrBelongsToIns.Belongs;
   }
 
@@ -4163,11 +4163,11 @@ unsigned Usr_GetNumUsrsWhoDontClaimToBelongToAnyCty (void)
 
    /***** 2. Slow: number of users who don't claim to belong to any country
                    from database *****/
-   Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs =
-   (unsigned) DB_QueryCOUNT ("can not get number of users",
-			     "SELECT COUNT(UsrCod)"
-			      " FROM usr_data"
-			     " WHERE CtyCod<0");
+   Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs = (unsigned)
+   DB_QueryCOUNT ("can not get number of users",
+		  "SELECT COUNT(UsrCod)"
+		   " FROM usr_data"
+		  " WHERE CtyCod<0");
    Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid = true;
    FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,Hie_Lvl_CTY,-1L,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs);
@@ -4204,11 +4204,11 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToAnotherCty (void)
 
    /***** 2. Slow: number of users who claim to belong to another country
                    from database *****/
-   Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs =
-   (unsigned) DB_QueryCOUNT ("can not get number of users",
-			     "SELECT COUNT(UsrCod)"
-			      " FROM usr_data"
-			     " WHERE CtyCod=0");
+   Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs = (unsigned)
+   DB_QueryCOUNT ("can not get number of users",
+		  "SELECT COUNT(UsrCod)"
+		   " FROM usr_data"
+		  " WHERE CtyCod=0");
    Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid = true;
    FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,Hie_Lvl_CTY,0,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs);
@@ -4260,12 +4260,12 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty)
                    from database *****/
    Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod  = Cty->CtyCod;
    Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs =
-   Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs =
-   (unsigned) DB_QueryCOUNT ("can not get number of users",
-			     "SELECT COUNT(UsrCod)"
-			      " FROM usr_data"
-			     " WHERE CtyCod=%ld",
-			     Cty->CtyCod);
+   Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs = (unsigned)
+   DB_QueryCOUNT ("can not get number of users",
+		  "SELECT COUNT(UsrCod)"
+		   " FROM usr_data"
+		  " WHERE CtyCod=%ld",
+		  Cty->CtyCod);
    Cty->NumUsrsWhoClaimToBelongToCty.Valid = true;
    FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,Hie_Lvl_CTY,Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs);
@@ -4317,12 +4317,12 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
                    from database *****/
    Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod  = Ins->InsCod;
    Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs =
-   Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs =
-   (unsigned) DB_QueryCOUNT ("can not get number of users",
-			     "SELECT COUNT(UsrCod)"
-			      " FROM usr_data"
-			     " WHERE InsCod=%ld",
-			     Ins->InsCod);
+   Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs = (unsigned)
+   DB_QueryCOUNT ("can not get number of users",
+		  "SELECT COUNT(UsrCod)"
+		   " FROM usr_data"
+		  " WHERE InsCod=%ld",
+		  Ins->InsCod);
    Ins->NumUsrsWhoClaimToBelongToIns.Valid = true;
    FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_INS,Hie_Lvl_INS,Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs);
@@ -4374,12 +4374,12 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr)
                    from database *****/
    Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod  = Ctr->CtrCod;
    Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs =
-   Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs =
-   (unsigned) DB_QueryCOUNT ("can not get number of users",
-			     "SELECT COUNT(UsrCod)"
-			      " FROM usr_data"
-			     " WHERE CtrCod=%ld",
-			     Ctr->CtrCod);
+   Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs = (unsigned)
+   DB_QueryCOUNT ("can not get number of users",
+		  "SELECT COUNT(UsrCod)"
+		   " FROM usr_data"
+		  " WHERE CtrCod=%ld",
+		  Ctr->CtrCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTR,Hie_Lvl_CTR,Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs);
    return Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs;
@@ -9324,6 +9324,7 @@ void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1 + Cns_MAX_DECIM
 
 bool Usr_ChkIfUsrCodExists (long UsrCod)
   {
+   /***** Trivial check: user's code should be > 0 *****/
    if (UsrCod <= 0)	// Wrong user's code
       return false;
 
@@ -9488,17 +9489,18 @@ unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
      {
       case Hie_Lvl_SYS:
          if (AnyUserInCourses)	// Any user
-            NumUsrs =
-            (unsigned) DB_QueryCOUNT ("can not get number of users",
-        			      "SELECT COUNT(DISTINCT UsrCod)"
-        			       " FROM crs_users");
+            NumUsrs = (unsigned)
+            DB_QueryCOUNT ("can not get number of users",
+			   "SELECT COUNT(DISTINCT UsrCod)"
+			    " FROM crs_users");
          else
-            NumUsrs =
-            (unsigned) DB_QueryCOUNT ("can not get number of users",
-        			      "SELECT COUNT(DISTINCT UsrCod)"
-        			       " FROM crs_users"
-        			      " WHERE Role%s",
-				      SubQueryRoles);
+            NumUsrs = (unsigned)
+            DB_QueryCOUNT ("can not get number of users",
+			   "SELECT COUNT(DISTINCT UsrCod)"
+			    " FROM crs_users"
+			   " WHERE Role"
+			     "%s",
+			   SubQueryRoles);
          break;
       case Hie_Lvl_CTY:
          if (AnyUserInCourses)	// Any user
@@ -9694,13 +9696,13 @@ unsigned Usr_GetCachedNumUsrsNotBelongingToAnyCrs (void)
      {
       /***** Get current number of guests from database and update cache *****/
       NumGsts = (unsigned)
-	        DB_QueryCOUNT ("can not get number of users"
-			       " who do not belong to any course",
-			       "SELECT COUNT(*)"
-			        " FROM usr_data"
-			       " WHERE UsrCod NOT IN"
-			             " (SELECT DISTINCT(UsrCod)"
-			                " FROM crs_users)");
+      DB_QueryCOUNT ("can not get number of users"
+		     " who do not belong to any course",
+		     "SELECT COUNT(*)"
+		      " FROM usr_data"
+		     " WHERE UsrCod NOT IN"
+			   " (SELECT DISTINCT(UsrCod)"
+			      " FROM crs_users)");
       FigCch_UpdateFigureIntoCache (FigCch_NUM_GSTS,Hie_Lvl_SYS,-1L,
                                     FigCch_UNSIGNED,&NumGsts);
      }

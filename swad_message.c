@@ -95,12 +95,12 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
                                 char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
 
 static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages);
-static unsigned long Msg_GetNumUsrsBannedByMe (void);
+static unsigned Msg_GetNumUsrsBannedByMe (void);
 static void Msg_PutLinkToViewBannedUsers(void);
-static unsigned long Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
-						long UsrCod,
-						const char *FilterFromToSubquery,
-						MYSQL_RES **mysql_res);
+static unsigned Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
+					   long UsrCod,
+					   const char *FilterFromToSubquery,
+					   MYSQL_RES **mysql_res);
 
 static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
                                char **NumMsgsStr,unsigned NumUnreadMsgs);
@@ -1438,8 +1438,8 @@ static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Mess
                                                  const char *FilterFromToSubquery)
   {
    MYSQL_RES *mysql_res;
-   unsigned long MsgNum;
-   unsigned long NumMsgs;
+   unsigned NumMsgs;
+   unsigned NumMsg;
    long MsgCod;
 
    /***** Get some of the messages received or sent by this user from database *****/
@@ -1449,9 +1449,9 @@ static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Mess
 				        &mysql_res);
 
    /***** Delete each message *****/
-   for (MsgNum = 0;
-	MsgNum < NumMsgs;
-	MsgNum++)
+   for (NumMsg = 0;
+	NumMsg < NumMsgs;
+	NumMsg++)
      {
       MsgCod = DB_GetNextCode (mysql_res);
       if (MsgCod <= 0)
@@ -1784,20 +1784,20 @@ static unsigned Msg_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
      }
 
    if (Messages->FilterContent[0])
-      NumMsgs =
-      (unsigned) DB_QueryCOUNT ("can not get number of unread messages",
-				"SELECT COUNT(*)"
-				 " FROM msg_content"
-				" WHERE MsgCod IN (%s)"
-			 	  " AND MATCH (Subject,Content) AGAINST ('%s')",
-				SubQuery,
-				Messages->FilterContent);
+      NumMsgs = (unsigned)
+      DB_QueryCOUNT ("can not get number of unread messages",
+		     "SELECT COUNT(*)"
+		      " FROM msg_content"
+		     " WHERE MsgCod IN (%s)"
+		       " AND MATCH (Subject,Content) AGAINST ('%s')",
+		     SubQuery,
+		     Messages->FilterContent);
    else
-      NumMsgs =
-      (unsigned) DB_QueryCOUNT ("can not get number of unread messages",
-				"SELECT COUNT(*)"
-				 " FROM (%s) AS T",
-				SubQuery);
+      NumMsgs = (unsigned)
+      DB_QueryCOUNT ("can not get number of unread messages",
+		     "SELECT COUNT(*)"
+		      " FROM (%s) AS T",
+		     SubQuery);
 
    free (SubQuery);
 
@@ -2033,14 +2033,15 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
 /********************* Get number of user I have banned **********************/
 /*****************************************************************************/
 
-static unsigned long Msg_GetNumUsrsBannedByMe (void)
+static unsigned Msg_GetNumUsrsBannedByMe (void)
   {
    /***** Get number of users I have banned *****/
-   return DB_QueryCOUNT ("can not get number of users you have banned",
-			 "SELECT COUNT(*)"
-			  " FROM msg_banned"
-			 " WHERE ToUsrCod=%ld",
-			 Gbl.Usrs.Me.UsrDat.UsrCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users you have banned",
+		  "SELECT COUNT(*)"
+		   " FROM msg_banned"
+		  " WHERE ToUsrCod=%ld",
+		  Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -2061,10 +2062,10 @@ static void Msg_PutLinkToViewBannedUsers(void)
 /********* Generate a query to select messages received or sent **************/
 /*****************************************************************************/
 
-static unsigned long Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
-						long UsrCod,
-						const char *FilterFromToSubquery,
-						MYSQL_RES **mysql_res)
+static unsigned Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
+					   long UsrCod,
+					   const char *FilterFromToSubquery,
+					   MYSQL_RES **mysql_res)
   {
    char *SubQuery;
    const char *StrUnreadMsg;
@@ -2289,20 +2290,21 @@ unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod)
 /************** Get the number of unique messages sent by a user *************/
 /*****************************************************************************/
 
-unsigned long Msg_GetNumMsgsSentByUsr (long UsrCod)
+unsigned Msg_GetNumMsgsSentByUsr (long UsrCod)
   {
    /***** Get the number of unique messages sent by any teacher from this course *****/
-   return DB_QueryCOUNT ("can not get the number of messages sent by a user",
-			 "SELECT"
-			 " (SELECT COUNT(*)"
-			    " FROM msg_snt"
-			 " WHERE UsrCod=%ld)"
-			 " +"
-			 " (SELECT COUNT(*)"
-			    " FROM msg_snt_deleted"
-			 " WHERE UsrCod=%ld)",
-			 UsrCod,
-			 UsrCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of messages sent by a user",
+		  "SELECT"
+		  " (SELECT COUNT(*)"
+		     " FROM msg_snt"
+		    " WHERE UsrCod=%ld)"
+		  " +"
+		  " (SELECT COUNT(*)"
+		     " FROM msg_snt_deleted"
+		    " WHERE UsrCod=%ld)",
+		  UsrCod,
+		  UsrCod);
   }
 
 /*****************************************************************************/
@@ -3735,18 +3737,18 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
      };
 
    /***** Get number of recipients of a message from database *****/
-   NumRecipientsTotal =
-   (unsigned) DB_QueryCOUNT ("can not get number of recipients",
-			     "SELECT "
-			     "(SELECT COUNT(*)"
-			       " FROM msg_rcv"
-			      " WHERE MsgCod=%ld)"
-			     " + "
-			     "(SELECT COUNT(*)"
-			       " FROM msg_rcv_deleted"
-			      " WHERE MsgCod=%ld)",
-			     MsgCod,
-			     MsgCod);
+   NumRecipientsTotal = (unsigned)
+   DB_QueryCOUNT ("can not get number of recipients",
+		  "SELECT "
+		  "(SELECT COUNT(*)"
+		    " FROM msg_rcv"
+		   " WHERE MsgCod=%ld)"
+		  " + "
+		  "(SELECT COUNT(*)"
+		    " FROM msg_rcv_deleted"
+		   " WHERE MsgCod=%ld)",
+		  MsgCod,
+		  MsgCod);
 
    /***** Get recipients of a message from database *****/
    NumRecipientsKnown = (unsigned)

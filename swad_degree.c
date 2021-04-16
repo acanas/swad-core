@@ -2021,12 +2021,12 @@ unsigned Deg_GetNumDegsInCtr (long CtrCod)
 
    /***** 3. Slow: number of degrees in a center from database *****/
    Gbl.Cache.NumDegsInCtr.CtrCod  = CtrCod;
-   Gbl.Cache.NumDegsInCtr.NumDegs =
-   (unsigned) DB_QueryCOUNT ("can not get the number of degrees in a center",
-			     "SELECT COUNT(*)"
-			      " FROM deg_degrees"
-			     " WHERE CtrCod=%ld",
-			     CtrCod);
+   Gbl.Cache.NumDegsInCtr.NumDegs = (unsigned)
+   DB_QueryCOUNT ("can not get the number of degrees in a center",
+		  "SELECT COUNT(*)"
+		   " FROM deg_degrees"
+		  " WHERE CtrCod=%ld",
+		  CtrCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,Hie_Lvl_CTR,Gbl.Cache.NumDegsInCtr.CtrCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInCtr.NumDegs);
    return Gbl.Cache.NumDegsInCtr.NumDegs;

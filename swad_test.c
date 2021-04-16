@@ -2671,11 +2671,12 @@ void Tst_PutParamsEditQst (void *Test)
 
 unsigned Tst_GetNumAnswersQst (long QstCod)
   {
-   return (unsigned) DB_QueryCOUNT ("can not get number of answers of a question",
-			            "SELECT COUNT(*)"
-			             " FROM tst_answers"
-			            " WHERE QstCod=%ld",
-			            QstCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of answers of a question",
+		  "SELECT COUNT(*)"
+		   " FROM tst_answers"
+		  " WHERE QstCod=%ld",
+		  QstCod);
   }
 
 void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,

@@ -1108,12 +1108,12 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of clicks from database *****/
-      UsrFigures.NumClicks =
-      (long) DB_QueryCOUNT ("can not get number of clicks",
-			    "SELECT COUNT(*)"
-			     " FROM log"
-			    " WHERE UsrCod=%ld",
-			    UsrCod);
+      UsrFigures.NumClicks = (int)
+      DB_QueryCOUNT ("can not get number of clicks",
+		     "SELECT COUNT(*)"
+		      " FROM log"
+		     " WHERE UsrCod=%ld",
+		     UsrCod);
 
       /***** Update number of clicks in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
@@ -1142,7 +1142,7 @@ static void Prf_GetNumSocialPubsAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of forum posts from database *****/
-      UsrFigures.NumSocPub = Tml_DB_GetNumPubsUsr (UsrCod);
+      UsrFigures.NumSocPub = (int) Tml_DB_GetNumPubsUsr (UsrCod);
 
       /***** Update number of forum posts in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
@@ -1229,7 +1229,7 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of messages sent from database *****/
-      UsrFigures.NumMsgSnt = Msg_GetNumMsgsSentByUsr (UsrCod);
+      UsrFigures.NumMsgSnt = (int) Msg_GetNumMsgsSentByUsr (UsrCod);
 
       /***** Update number of messages sent in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))

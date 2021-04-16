@@ -580,14 +580,14 @@ static unsigned Pwd_GetNumOtherUsrsWhoUseThisPassword (const char *EncryptedPass
       SubQuery = "";
 
    /***** Get number of other users who use a password from database *****/
-   NumUsrs =
-   (unsigned) DB_QueryCOUNT ("can not check if a password is trivial",
-			     "SELECT COUNT(*)"
-			      " FROM usr_data"
-			     " WHERE Password='%s'"
-			        "%s",
-			     EncryptedPassword,
-			     SubQuery);
+   NumUsrs = (unsigned)
+   DB_QueryCOUNT ("can not check if a password is trivial",
+		  "SELECT COUNT(*)"
+		   " FROM usr_data"
+		  " WHERE Password='%s'"
+		     "%s",
+		  EncryptedPassword,
+		  SubQuery);
 
    /***** Free subquery *****/
    if (UsrCod > 0)

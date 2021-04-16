@@ -2622,12 +2622,12 @@ static bool Svy_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
 static unsigned Svy_GetNumQstsSvy (long SvyCod)
   {
    /***** Get data of questions from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of questions of a survey",
-			     "SELECT COUNT(*)"
-			      " FROM svy_questions"
-			     " WHERE SvyCod=%ld",
-			     SvyCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of questions of a survey",
+		  "SELECT COUNT(*)"
+		   " FROM svy_questions"
+		  " WHERE SvyCod=%ld",
+		  SvyCod);
   }
 
 /*****************************************************************************/
@@ -3870,13 +3870,12 @@ static bool Svy_CheckIfIHaveAnsweredSvy (long SvyCod)
 static unsigned Svy_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod)
   {
    /***** Get number of surveys with a field value from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of users"
-			     " who have answered a survey",
-			     "SELECT COUNT(*)"
-			      " FROM svy_users"
-			     " WHERE SvyCod=%ld",
-			     SvyCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users who have answered a survey",
+		  "SELECT COUNT(*)"
+		   " FROM svy_users"
+		  " WHERE SvyCod=%ld",
+		  SvyCod);
   }
 
 /*****************************************************************************/

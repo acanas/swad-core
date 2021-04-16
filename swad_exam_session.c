@@ -1682,12 +1682,12 @@ unsigned ExaSes_GetNumSessionsInExam (long ExaCod)
       return 0;		// ...has no sessions
 
    /***** Get number of sessions in an exam from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of sessions of an exam",
-			     "SELECT COUNT(*)"
-			      " FROM exa_sessions"
-			     " WHERE ExaCod=%ld",
-			     ExaCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of sessions of an exam",
+		  "SELECT COUNT(*)"
+		   " FROM exa_sessions"
+		  " WHERE ExaCod=%ld",
+		  ExaCod);
   }
 
 /*****************************************************************************/
@@ -1701,13 +1701,13 @@ unsigned ExaSes_GetNumOpenSessionsInExam (long ExaCod)
       return 0;		// ...has no sessions
 
    /***** Get number of open sessions in an exam from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of open sessions of an exam",
-			     "SELECT COUNT(*)"
-			      " FROM exa_sessions"
-			     " WHERE ExaCod=%ld"
-                               " AND NOW() BETWEEN StartTime AND EndTime",
-			     ExaCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of open sessions of an exam",
+		  "SELECT COUNT(*)"
+		   " FROM exa_sessions"
+		  " WHERE ExaCod=%ld"
+		    " AND NOW() BETWEEN StartTime AND EndTime",
+		  ExaCod);
   }
 
 /*****************************************************************************/

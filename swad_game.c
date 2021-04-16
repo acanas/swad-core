@@ -2858,14 +2858,15 @@ void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore)
    unsigned NumAnswers;
 
    /***** Get maximum score of a game from database *****/
-   NumAnswers = DB_QueryCOUNT ("can not number of answers of a question",
-			       "SELECT COUNT(tst_answers.AnsInd)"
-				" FROM tst_answers,"
-				      "gam_questions"
-			       " WHERE gam_questions.GamCod=%ld"
-				 " AND gam_questions.QstCod=tst_answers.QstCod"
-			       " GROUP BY tst_answers.QstCod",
-			       GamCod);
+   NumAnswers = (unsigned)
+   DB_QueryCOUNT ("can not number of answers of a question",
+		  "SELECT COUNT(tst_answers.AnsInd)"
+		   " FROM tst_answers,"
+		         "gam_questions"
+		  " WHERE gam_questions.GamCod=%ld"
+		    " AND gam_questions.QstCod=tst_answers.QstCod"
+		  " GROUP BY tst_answers.QstCod",
+		  GamCod);
    if (NumAnswers < 2)
       Lay_ShowErrorAndExit ("Wrong number of answers.");
 

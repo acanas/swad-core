@@ -500,18 +500,18 @@ void Fol_GetNumFollow (long UsrCod,
 
    /***** 3. Slow check: Get number of following/followers from database *****/
    Gbl.Cache.Follow.UsrCod = UsrCod;
-   *NumFollowing = Gbl.Cache.Follow.NumFollowing =
-      (unsigned) DB_QueryCOUNT ("can not get number of followed",
-	                        "SELECT COUNT(*)"
-	                         " FROM usr_follow"
-	                        " WHERE FollowerCod=%ld",
-                                UsrCod);
-   *NumFollowers = Gbl.Cache.Follow.NumFollowers =
-      (unsigned) DB_QueryCOUNT ("can not get number of followers",
-			        "SELECT COUNT(*)"
-			         " FROM usr_follow"
-			        " WHERE FollowedCod=%ld",
-			        UsrCod);
+   *NumFollowing = Gbl.Cache.Follow.NumFollowing = (unsigned)
+   DB_QueryCOUNT ("can not get number of followed",
+		  "SELECT COUNT(*)"
+		   " FROM usr_follow"
+		  " WHERE FollowerCod=%ld",
+		  UsrCod);
+   *NumFollowers = Gbl.Cache.Follow.NumFollowers = (unsigned)
+   DB_QueryCOUNT ("can not get number of followers",
+		  "SELECT COUNT(*)"
+		   " FROM usr_follow"
+		  " WHERE FollowedCod=%ld",
+		  UsrCod);
   }
 
 /*****************************************************************************/

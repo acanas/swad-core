@@ -881,14 +881,15 @@ long Tml_DB_GetPubCodFromSession (const char *FieldName)
 /****************** Get number of publications from a user *******************/
 /*****************************************************************************/
 
-unsigned long Tml_DB_GetNumPubsUsr (long UsrCod)
+unsigned Tml_DB_GetNumPubsUsr (long UsrCod)
   {
    /***** Get number of posts from a user from database *****/
-   return DB_QueryCOUNT ("can not get number of publications from a user",
-			 "SELECT COUNT(*)"
-			  " FROM tml_pubs"
-			 " WHERE PublisherCod=%ld",
-			 UsrCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of publications from a user",
+		  "SELECT COUNT(*)"
+		   " FROM tml_pubs"
+		  " WHERE PublisherCod=%ld",
+		  UsrCod);
   }
 
 /*****************************************************************************/

@@ -255,7 +255,7 @@ static int API_GetMyLanguage (struct soap *soap);
 static int API_SendMessageToUsr (long OriginalMsgCod,long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,bool NotifyByEmail,const char *Subject,const char *Content);
 
 static int API_GetTstConfig (long CrsCod);
-static int API_GetNumTestQuestionsInCrs (long CrsCod);
+static unsigned API_GetNumTestQuestionsInCrs (long CrsCod);
 static int API_GetTstTags (struct soap *soap,
 			   long CrsCod,struct swad__getTestsOutput *getTestsOut);
 static int API_GetTstQuestions (struct soap *soap,
@@ -4005,7 +4005,7 @@ int swad__getTestConfig (struct soap *soap,
    /***** Get number of tests *****/
    if (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_YES &&
        TstCfg_GetConfigMax () > 0)
-      getTestConfigOut->numQuestions = API_GetNumTestQuestionsInCrs ((long) courseCode);
+      getTestConfigOut->numQuestions = (int) API_GetNumTestQuestionsInCrs ((long) courseCode);
 
    return SOAP_OK;
   }
@@ -4054,31 +4054,31 @@ static int API_GetTstConfig (long CrsCod)
 /** Get number of visible test questions from database giving a course code **/
 /*****************************************************************************/
 
-static int API_GetNumTestQuestionsInCrs (long CrsCod)
+static unsigned API_GetNumTestQuestionsInCrs (long CrsCod)
   {
    /***** Get number of questions *****/
    // Reject questions with any tag hidden
    // Select only questions with tags
-   return
-   (int) DB_QueryCOUNT ("can not get number of test questions",
-			"SELECT COUNT(*)"
-			 " FROM tst_questions,"
-			       "tst_question_tags,"
-			       "tst_tags"
-			" WHERE tst_questions.CrsCod=%ld"
-			  " AND tst_questions.QstCod NOT IN"
-			      " (SELECT tst_question_tags.QstCod"
-			         " FROM tst_tags,"
-			               "tst_question_tags"
-			        " WHERE tst_tags.CrsCod=%ld"
-			          " AND tst_tags.TagHidden='Y'"
-			          " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-			  " AND tst_questions.QstCod=tst_question_tags.QstCod"
-			  " AND tst_question_tags.TagCod=tst_tags.TagCod"
-			  " AND tst_tags.CrsCod=%ld",
-			CrsCod,
-			CrsCod,
-			CrsCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of test questions",
+		  "SELECT COUNT(*)"
+		   " FROM tst_questions,"
+			 "tst_question_tags,"
+			 "tst_tags"
+		  " WHERE tst_questions.CrsCod=%ld"
+		    " AND tst_questions.QstCod NOT IN"
+			" (SELECT tst_question_tags.QstCod"
+			   " FROM tst_tags,"
+				 "tst_question_tags"
+			  " WHERE tst_tags.CrsCod=%ld"
+			    " AND tst_tags.TagHidden='Y'"
+			    " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+		    " AND tst_questions.QstCod=tst_question_tags.QstCod"
+		    " AND tst_question_tags.TagCod=tst_tags.TagCod"
+		    " AND tst_tags.CrsCod=%ld",
+		  CrsCod,
+		  CrsCod,
+		  CrsCod);
   }
 
 /*****************************************************************************/

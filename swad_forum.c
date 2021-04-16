@@ -873,13 +873,12 @@ static void For_UpdateThrReadTime (long ThrCod,
 static unsigned For_GetNumOfReadersOfThr (long ThrCod)
   {
    /***** Get number of distinct readers of a thread from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get the number of readers"
-	                     " of a thread of a forum",
-			     "SELECT COUNT(*)"
-			      " FROM for_read"
-			     " WHERE ThrCod=%ld",
-			     ThrCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of readers of a thread of a forum",
+		  "SELECT COUNT(*)"
+		   " FROM for_read"
+		  " WHERE ThrCod=%ld",
+		  ThrCod);
   }
 
 /*****************************************************************************/
@@ -903,13 +902,12 @@ static unsigned For_GetNumOfWritersInThr (long ThrCod)
 static unsigned For_GetNumPstsInThr (long ThrCod)
   {
    /***** Get number of posts in a thread from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get the number of posts"
-	                     " in a thread of a forum",
-			     "SELECT COUNT(*)"
-			      " FROM for_posts"
-			     " WHERE ThrCod=%ld",
-			     ThrCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of posts in a thread of a forum",
+		  "SELECT COUNT(*)"
+		   " FROM for_posts"
+		  " WHERE ThrCod=%ld",
+		  ThrCod);
   }
 
 /*****************************************************************************/
@@ -919,14 +917,14 @@ static unsigned For_GetNumPstsInThr (long ThrCod)
 static unsigned For_GetNumMyPstInThr (long ThrCod)
   {
    /***** Get if I have write posts in a thread from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not check if you have written"
-	                     " posts in a thead of a forum",
-			     "SELECT COUNT(*)"
-			      " FROM for_posts"
-			     " WHERE ThrCod=%ld"
-			       " AND UsrCod=%ld",
-			     ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not check if you have written posts in a thead of a forum",
+		  "SELECT COUNT(*)"
+		   " FROM for_posts"
+		  " WHERE ThrCod=%ld"
+		    " AND UsrCod=%ld",
+		  ThrCod,
+		  Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -1467,19 +1465,18 @@ static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod)
                Forums->Forum.Location);
    else
       SubQuery[0] = '\0';
-   NumPsts =
-   (unsigned) DB_QueryCOUNT ("can not get the number of posts of a user"
-			     " in a forum",
-			     "SELECT COUNT(*)"
-			      " FROM for_posts,"
-			            "for_threads"
-			     " WHERE for_posts.UsrCod=%ld"
-			       " AND for_posts.ThrCod=for_threads.ThrCod"
-			       " AND for_threads.ForumType=%u"
-			       "%s",
-			     UsrCod,
-			     (unsigned) Forums->Forum.Type,
-			     SubQuery);
+   NumPsts = (unsigned)
+   DB_QueryCOUNT ("can not get the number of posts of a user in a forum",
+		  "SELECT COUNT(*)"
+		   " FROM for_posts,"
+			 "for_threads"
+		  " WHERE for_posts.UsrCod=%ld"
+		    " AND for_posts.ThrCod=for_threads.ThrCod"
+		    " AND for_threads.ForumType=%u"
+		    "%s",
+		  UsrCod,
+		  (unsigned) Forums->Forum.Type,
+		  SubQuery);
 
    /***** Write number of threads and number of posts *****/
    HTM_TxtF ("[%u %s]",NumPsts,NumPsts == 1 ? Txt_FORUM_post :
@@ -2377,14 +2374,14 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
 static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time)
   {
    /***** Get the number of posts in thread with a modify time > a specified time from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not check if there are new posts"
-			     " in a thread of a forum",
-			     "SELECT COUNT(*)"
-			      " FROM for_posts"
-			     " WHERE ThrCod=%ld"
-			       " AND ModifTime>'%s'",
-			     ThrCod,Time);
+   return (unsigned)
+   DB_QueryCOUNT ("can not check if there are new posts in a thread of a forum",
+		  "SELECT COUNT(*)"
+		   " FROM for_posts"
+		  " WHERE ThrCod=%ld"
+		    " AND ModifTime>'%s'",
+		  ThrCod,
+		  Time);
   }
 
 /*****************************************************************************/
@@ -3137,14 +3134,14 @@ static unsigned For_GetNumThrsInForum (const struct For_Forum *Forum)
       sprintf (SubQuery," AND Location=%ld",Forum->Location);
    else
       SubQuery[0] = '\0';
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of threads in a forum",
-			     "SELECT COUNT(*)"
-			      " FROM for_threads"
-			     " WHERE ForumType=%u"
-			     "%s",
-			     (unsigned) Forum->Type,
-			     SubQuery);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of threads in a forum",
+		  "SELECT COUNT(*)"
+		   " FROM for_threads"
+		  " WHERE ForumType=%u"
+		   "%s",
+		  (unsigned) Forum->Type,
+		  SubQuery);
   }
 
 /*****************************************************************************/

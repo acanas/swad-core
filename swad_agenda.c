@@ -1836,11 +1836,12 @@ void Agd_RemoveUsrEvents (long UsrCod)
 unsigned Agd_GetNumEventsFromUsr (long UsrCod)
   {
    /***** Get number of events in a course from database *****/
-   return (unsigned) DB_QueryCOUNT ("can not get number of events from user",
-				    "SELECT COUNT(*)"
-				     " FROM agd_agendas"
-				    " WHERE UsrCod=%ld",
-				    UsrCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of events from user",
+		  "SELECT COUNT(*)"
+		   " FROM agd_agendas"
+		  " WHERE UsrCod=%ld",
+		  UsrCod);
   }
 
 /*****************************************************************************/

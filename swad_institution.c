@@ -1946,13 +1946,12 @@ unsigned Ins_GetNumInssInCty (long CtyCod)
 
    /***** 2. Slow: number of institutions in a country from database *****/
    Gbl.Cache.NumInssInCty.CtyCod  = CtyCod;
-   Gbl.Cache.NumInssInCty.NumInss =
-   (unsigned) DB_QueryCOUNT ("can not get the number of institutions"
-			     " in a country",
-			     "SELECT COUNT(*)"
-			      " FROM ins_instits"
-			     " WHERE CtyCod=%ld",
-			     CtyCod);
+   Gbl.Cache.NumInssInCty.NumInss = (unsigned)
+   DB_QueryCOUNT ("can not get the number of institutions in a country",
+		  "SELECT COUNT(*)"
+		   " FROM ins_instits"
+		  " WHERE CtyCod=%ld",
+		  CtyCod);
    Gbl.Cache.NumInssInCty.Valid = true;
    FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,Hie_Lvl_CTY,Gbl.Cache.NumInssInCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumInssInCty.NumInss);

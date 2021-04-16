@@ -3929,11 +3929,11 @@ static void Fig_GetAndShowFollowStats (void)
       switch (Gbl.Scope.Current)
 	{
 	 case Hie_Lvl_SYS:
-	    NumUsrs =
-	    (unsigned) DB_QueryCOUNT ("can not get the total number"
-				      " of following/followers",
-				      "SELECT COUNT(DISTINCT %s) FROM usr_follow",
-				      FieldDB[Fol]);
+	    NumUsrs = (unsigned)
+	    DB_QueryCOUNT ("can not get the total number of following/followers",
+			   "SELECT COUNT(DISTINCT %s)"
+			    " FROM usr_follow",
+			   FieldDB[Fol]);
 	    break;
 	 case Hie_Lvl_CTY:
 	    NumUsrs = (unsigned)

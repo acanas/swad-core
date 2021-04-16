@@ -3830,8 +3830,7 @@ static void Mch_SetMatchAsNotBeingPlayed (long MchCod)
 static bool Mch_GetIfMatchIsBeingPlayed (long MchCod)
   {
    /***** Get if a match is being played or not *****/
-   return
-   (bool) (DB_QueryCOUNT ("can not get if match is being played",
+   return (DB_QueryCOUNT ("can not get if match is being played",
 			  "SELECT COUNT(*)"
 			   " FROM mch_playing"
 			  " WHERE MchCod=%ld",
@@ -3845,12 +3844,12 @@ static bool Mch_GetIfMatchIsBeingPlayed (long MchCod)
 static void Mch_GetNumPlayers (struct Mch_Match *Match)
   {
    /***** Get number of players who are playing a match *****/
-   Match->Status.NumPlayers =
-   (unsigned) DB_QueryCOUNT ("can not get number of players",
-			     "SELECT COUNT(*)"
-			      " FROM mch_players"
-			     " WHERE MchCod=%ld",
-			     Match->MchCod);
+   Match->Status.NumPlayers = (unsigned)
+   DB_QueryCOUNT ("can not get number of players",
+		  "SELECT COUNT(*)"
+		   " FROM mch_players"
+		  " WHERE MchCod=%ld",
+		  Match->MchCod);
   }
 
 /*****************************************************************************/

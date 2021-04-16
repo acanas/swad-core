@@ -550,13 +550,13 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
       else if (strcasecmp (UsrDat->Nickname,NewNickWithoutArr))	// User's nickname does not match, not even case insensitive, the new nickname
         {
          /***** Check if the new nickname matches any of my old nicknames *****/
-         if (!DB_QueryCOUNT ("can not check if nickname already existed",
-			     "SELECT COUNT(*)"
-			      " FROM usr_nicknames"
-			     " WHERE UsrCod=%ld"
-			       " AND Nickname='%s'",
-			     UsrDat->UsrCod,
-			     NewNickWithoutArr))	// No matches
+         if (DB_QueryCOUNT ("can not check if nickname already existed",
+			    "SELECT COUNT(*)"
+			     " FROM usr_nicknames"
+			    " WHERE UsrCod=%ld"
+			      " AND Nickname='%s'",
+			    UsrDat->UsrCod,
+			    NewNickWithoutArr) == 0)	// No matches
             /***** Check if the new nickname matches any of the nicknames of other users *****/
             if (DB_QueryCOUNT ("can not check if nickname already existed",
         		       "SELECT COUNT(*)"

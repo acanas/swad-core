@@ -2072,14 +2072,15 @@ void Exa_GetScoreRange (long ExaCod,double *MinScore,double *MaxScore)
    unsigned NumAnswers;
 
    /***** Get number of answers of exam from database *****/
-   NumAnswers = DB_QueryCOUNT ("can not get data of a question",
-			       "SELECT COUNT(tst_answers.AnsInd)"
-				" FROM tst_answers,"
-				      "exa_set_questions"
-			       " WHERE exa_set_questions.ExaCod=%ld"
-				 " AND exa_set_questions.QstCod=tst_answers.QstCod"
-			       " GROUP BY tst_answers.QstCod",
-			       ExaCod);
+   NumAnswers = (unsigned)
+   DB_QueryCOUNT ("can not get data of a question",
+		  "SELECT COUNT(tst_answers.AnsInd)"
+		   " FROM tst_answers,"
+		         "exa_set_questions"
+		  " WHERE exa_set_questions.ExaCod=%ld"
+		    " AND exa_set_questions.QstCod=tst_answers.QstCod"
+		  " GROUP BY tst_answers.QstCod",
+		  ExaCod);
    if (NumAnswers < 2)
       Lay_ShowErrorAndExit ("Wrong number of answers.");
 
