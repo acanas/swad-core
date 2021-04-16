@@ -872,12 +872,12 @@ static void TstPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question)
    MYSQL_ROW row;
 
    /***** Query database *****/
-   Question->Answer.NumOptions =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-			      "SELECT Answer"		// row[0]
-			       " FROM tst_answers"
-			      " WHERE QstCod=%ld",
-			      Question->QstCod);
+   Question->Answer.NumOptions = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+		   "SELECT Answer"		// row[0]
+		    " FROM tst_answers"
+		   " WHERE QstCod=%ld",
+		   Question->QstCod);
 
    /***** Check if number of rows is correct *****/
    Tst_CheckIfNumberOfAnswersIsOne (Question);
@@ -899,12 +899,12 @@ static void TstPrn_GetCorrectFltAnswerFromDB (struct Tst_Question *Question)
    double Tmp;
 
    /***** Query database *****/
-   Question->Answer.NumOptions =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-			      "SELECT Answer"		// row[0]
-			       " FROM tst_answers"
-			      " WHERE QstCod=%ld",
-			      Question->QstCod);
+   Question->Answer.NumOptions = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+		   "SELECT Answer"		// row[0]
+		    " FROM tst_answers"
+		   " WHERE QstCod=%ld",
+		   Question->QstCod);
 
    /***** Check if number of rows is correct *****/
    if (Question->Answer.NumOptions != 2)
@@ -937,12 +937,12 @@ static void TstPrn_GetCorrectTF_AnswerFromDB (struct Tst_Question *Question)
    MYSQL_ROW row;
 
    /***** Query database *****/
-   Question->Answer.NumOptions =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-			      "SELECT Answer"		// row[0]
-			       " FROM tst_answers"
-			      " WHERE QstCod=%ld",
-			      Question->QstCod);
+   Question->Answer.NumOptions = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+		   "SELECT Answer"		// row[0]
+		    " FROM tst_answers"
+		   " WHERE QstCod=%ld",
+		   Question->QstCod);
 
    /***** Check if number of rows is correct *****/
    Tst_CheckIfNumberOfAnswersIsOne (Question);
@@ -962,13 +962,13 @@ static void TstPrn_GetCorrectChoAnswerFromDB (struct Tst_Question *Question)
    unsigned NumOpt;
 
    /***** Query database *****/
-   Question->Answer.NumOptions =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-			      "SELECT Correct"		// row[0]
-			       " FROM tst_answers"
-			      " WHERE QstCod=%ld"
-			      " ORDER BY AnsInd",
-			      Question->QstCod);
+   Question->Answer.NumOptions = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+		   "SELECT Correct"		// row[0]
+		    " FROM tst_answers"
+		   " WHERE QstCod=%ld"
+		   " ORDER BY AnsInd",
+		   Question->QstCod);
    for (NumOpt = 0;
 	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
@@ -991,12 +991,12 @@ static void TstPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question)
    unsigned NumOpt;
 
    /***** Query database *****/
-   Question->Answer.NumOptions =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-			      "SELECT Answer"		// row[0]
-			       " FROM tst_answers"
-			      " WHERE QstCod=%ld",
-			      Question->QstCod);
+   Question->Answer.NumOptions = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+		   "SELECT Answer"		// row[0]
+		    " FROM tst_answers"
+		   " WHERE QstCod=%ld",
+		   Question->QstCod);
 
    /***** Get text and correctness of answers for this question from database (one row per answer) *****/
    for (NumOpt = 0;
@@ -2067,19 +2067,19 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
    -----|______Exam_|_____|-----------------|_____|_Exam______|-----> time
       Start         |    End              Start   |          End
    */
-   NumPrints =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get test exams of a user",
-			      "SELECT ExaCod"			// row[0]
-			       " FROM tst_exams"
-			      " WHERE CrsCod=%ld"
-			        " AND UsrCod=%ld"
-			        " AND EndTime>=FROM_UNIXTIME(%ld)"
-			        " AND StartTime<=FROM_UNIXTIME(%ld)"
-			      " ORDER BY ExaCod",
-			      Gbl.Hierarchy.Crs.CrsCod,
-			      UsrDat->UsrCod,
-			      (long) Gbl.DateRange.TimeUTC[Dat_START_TIME],
-			      (long) Gbl.DateRange.TimeUTC[Dat_END_TIME  ]);
+   NumPrints = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get test exams of a user",
+		   "SELECT ExaCod"			// row[0]
+		    " FROM tst_exams"
+		   " WHERE CrsCod=%ld"
+		     " AND UsrCod=%ld"
+		     " AND EndTime>=FROM_UNIXTIME(%ld)"
+		     " AND StartTime<=FROM_UNIXTIME(%ld)"
+		   " ORDER BY ExaCod",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   UsrDat->UsrCod,
+		   (long) Gbl.DateRange.TimeUTC[Dat_START_TIME],
+		   (long) Gbl.DateRange.TimeUTC[Dat_END_TIME  ]);
 
    /***** Show user's data *****/
    HTM_TR_Begin (NULL);
@@ -2752,17 +2752,16 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
    unsigned NumQst;
 
    /***** Get questions of a test exam print from database *****/
-   NumQsts =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions"
-					 " of a test exam",
-			      "SELECT QstCod,"	// row[0]
-			             "Score,"	// row[1]
-			             "Indexes,"	// row[2]
-			             "Answers"	// row[3]
-			       " FROM tst_exam_questions"
-			      " WHERE ExaCod=%ld"
-			      " ORDER BY QstInd",
-			      Print->PrnCod);
+   NumQsts = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get questions of a test exam",
+		   "SELECT QstCod,"	// row[0]
+			  "Score,"	// row[1]
+			  "Indexes,"	// row[2]
+			  "Answers"	// row[3]
+		    " FROM tst_exam_questions"
+		   " WHERE ExaCod=%ld"
+		   " ORDER BY QstInd",
+		   Print->PrnCod);
 
    /***** Get questions *****/
    if (NumQsts == Print->NumQsts.All)

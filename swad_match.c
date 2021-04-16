@@ -404,7 +404,7 @@ void Mch_ListMatches (struct Gam_Games *Games,
 void Mch_GetDataOfMatchByCod (struct Mch_Match *Match)
   {
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
+   unsigned NumRows;
 
    /***** Get data of match from database *****/
    NumRows = (unsigned)
@@ -765,35 +765,36 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match 
    extern const char *Txt_The_whole_course;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
+   unsigned NumGrps;
+   unsigned NumGrp;
 
    /***** Get groups associated to a match from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of a match",
-			     "SELECT grp_types.GrpTypName,"	// row[0]
-			            "grp_groups.GrpName"	// row[1]
-			      " FROM mch_groups,"
-			            "grp_groups,"
-			            "grp_types"
-			     " WHERE mch_groups.MchCod=%ld"
-			       " AND mch_groups.GrpCod=grp_groups.GrpCod"
-			       " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-			     " ORDER BY grp_types.GrpTypName,"
-			               "grp_groups.GrpName",
-			     Match->MchCod);
+   NumGrps = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get groups of a match",
+		   "SELECT grp_types.GrpTypName,"	// row[0]
+			  "grp_groups.GrpName"		// row[1]
+		    " FROM mch_groups,"
+			  "grp_groups,"
+			  "grp_types"
+		   " WHERE mch_groups.MchCod=%ld"
+		     " AND mch_groups.GrpCod=grp_groups.GrpCod"
+		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+		   " ORDER BY grp_types.GrpTypName,"
+			     "grp_groups.GrpName",
+		   Match->MchCod);
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"ASG_GRP\"");
-   HTM_TxtColonNBSP (NumRows == 1 ? Txt_Group  :
+   HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
                                     Txt_Groups);
 
    /***** Write groups *****/
-   if (NumRows) // Groups found...
+   if (NumGrps) // Groups found...
      {
       /* Get and write the group types and names */
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumGrp = 0;
+	   NumGrp < NumGrps;
+	   NumGrp++)
         {
          /* Get next group */
          row = mysql_fetch_row (mysql_res);
@@ -801,12 +802,12 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match 
          /* Write group type name and group name */
          HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
 
-         if (NumRows >= 2)
+         if (NumGrps >= 2)
            {
-            if (NumRow == NumRows-2)
+            if (NumGrp == NumGrps - 2)
                HTM_TxtF (" %s ",Txt_and);
-            if (NumRows >= 3)
-              if (NumRow < NumRows-2)
+            if (NumGrps >= 3)
+              if (NumGrp < NumGrps - 2)
                   HTM_Txt (", ");
            }
         }
@@ -1787,16 +1788,16 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
 
    /***** Get questions of the game *****/
    NumQsts = (unsigned)
-	     DB_QuerySELECT (&mysql_res,"can not get questions of a game",
-			     "SELECT gam_questions.QstCod,"	// row[0]
-			            "gam_questions.QstInd,"	// row[1]
-			            "tst_questions.AnsType,"	// row[2]
-			            "tst_questions.Shuffle"	// row[3]
-			      " FROM gam_questions,tst_questions"
-			     " WHERE gam_questions.GamCod=%ld"
-			       " AND gam_questions.QstCod=tst_questions.QstCod"
-			     " ORDER BY gam_questions.QstInd",
-			     GamCod);
+   DB_QuerySELECT (&mysql_res,"can not get questions of a game",
+		   "SELECT gam_questions.QstCod,"	// row[0]
+			  "gam_questions.QstInd,"	// row[1]
+			  "tst_questions.AnsType,"	// row[2]
+			  "tst_questions.Shuffle"	// row[3]
+		    " FROM gam_questions,tst_questions"
+		   " WHERE gam_questions.GamCod=%ld"
+		     " AND gam_questions.QstCod=tst_questions.QstCod"
+		   " ORDER BY gam_questions.QstInd",
+		   GamCod);
 
    /***** For each question in game... *****/
    for (NumQst = 0;
@@ -3511,14 +3512,14 @@ static void Mch_ShowMatchScore (const struct Mch_Match *Match)
 
    /***** Get scores from database *****/
    NumScores = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get scores",
-			       "SELECT Score,"			// row[0]
-				      "COUNT(*) AS NumUsrs"	// row[1]
-			        " FROM mch_results"
-			       " WHERE MchCod=%ld"
-			       " GROUP BY Score"
-			       " ORDER BY Score DESC",
-			       Match->MchCod);
+   DB_QuerySELECT (&mysql_res,"can not get scores",
+		   "SELECT Score,"			// row[0]
+			  "COUNT(*) AS NumUsrs"	// row[1]
+		    " FROM mch_results"
+		   " WHERE MchCod=%ld"
+		   " GROUP BY Score"
+		   " ORDER BY Score DESC",
+		   Match->MchCod);
 
    /***** Begin table ****/
    HTM_TABLE_BeginWide ();

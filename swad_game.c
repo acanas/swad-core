@@ -866,7 +866,6 @@ void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char *HiddenSubQuery;
-   unsigned long NumRows = 0;	// Initialized to avoid warning
    unsigned NumGame;
 
    /***** Free list of games *****/
@@ -895,30 +894,30 @@ void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
      }
 
    /***** Get list of games from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get games",
-			     "SELECT gam_games.GamCod,"				// row[0]
-			            "MIN(mch_matches.StartTime) AS StartTime,"	// row[1]
-			            "MAX(mch_matches.EndTime) AS EndTime"	// row[2]
-			      " FROM gam_games"
-			      " LEFT JOIN mch_matches"
-			        " ON gam_games.GamCod=mch_matches.GamCod"
-			     " WHERE gam_games.CrsCod=%ld"
-			        "%s"
-			     " GROUP BY gam_games.GamCod"
-			     " ORDER BY %s",
-			     Gbl.Hierarchy.Crs.CrsCod,
-			     HiddenSubQuery,
-			     OrderBySubQuery[SelectedOrder]);
+   Games->Num = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get games",
+		   "SELECT gam_games.GamCod,"				// row[0]
+			  "MIN(mch_matches.StartTime) AS StartTime,"	// row[1]
+			  "MAX(mch_matches.EndTime) AS EndTime"	// row[2]
+		    " FROM gam_games"
+		    " LEFT JOIN mch_matches"
+		      " ON gam_games.GamCod=mch_matches.GamCod"
+		   " WHERE gam_games.CrsCod=%ld"
+		      "%s"
+		   " GROUP BY gam_games.GamCod"
+		   " ORDER BY %s",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   HiddenSubQuery,
+		   OrderBySubQuery[SelectedOrder]);
 
    /***** Free allocated memory for subquery *****/
    free (HiddenSubQuery);
 
-   if (NumRows) // Games found...
+   if (Games->Num) // Games found...
      {
-      Games->Num = (unsigned) NumRows;
-
       /***** Create list of games *****/
-      if ((Games->Lst = malloc (NumRows * sizeof (*Games->Lst))) == NULL)
+      if ((Games->Lst = malloc ((size_t) Games->Num *
+                                sizeof (*Games->Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the games codes *****/
@@ -932,8 +931,6 @@ void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
             Lay_ShowErrorAndExit ("Error: wrong game code.");
         }
      }
-   else
-      Games->Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1017,25 +1014,23 @@ void Gam_GetDataOfGameByCod (struct Gam_Game *Game)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Get data of game from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get game data",
-			     "SELECT gam_games.GamCod,"		// row[0]
-			            "gam_games.CrsCod,"		// row[1]
-			            "gam_games.Hidden,"		// row[2]
-			            "gam_games.UsrCod,"		// row[3]
-			            "gam_games.MaxGrade,"	// row[4]
-			            "gam_games.Visibility,"	// row[5]
-			            "gam_games.Title"		// row[6]
-			      " FROM gam_games"
-			      " LEFT JOIN mch_matches"
-			        " ON gam_games.GamCod=mch_matches.GamCod"
-			     " WHERE gam_games.GamCod=%ld"
-			       " AND gam_games.CrsCod='%ld'",	// Extra check
-			     Game->GamCod,
-			     Gbl.Hierarchy.Crs.CrsCod);
-   if (NumRows) // Game found...
+   if (DB_QuerySELECT (&mysql_res,"can not get game data",
+		       "SELECT gam_games.GamCod,"		// row[0]
+			      "gam_games.CrsCod,"		// row[1]
+			      "gam_games.Hidden,"		// row[2]
+			      "gam_games.UsrCod,"		// row[3]
+			      "gam_games.MaxGrade,"	// row[4]
+			      "gam_games.Visibility,"	// row[5]
+			      "gam_games.Title"		// row[6]
+			" FROM gam_games"
+			" LEFT JOIN mch_matches"
+			  " ON gam_games.GamCod=mch_matches.GamCod"
+		       " WHERE gam_games.GamCod=%ld"
+			 " AND gam_games.CrsCod='%ld'",	// Extra check
+		       Game->GamCod,
+		       Gbl.Hierarchy.Crs.CrsCod)) // Game found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1082,13 +1077,12 @@ void Gam_GetDataOfGameByCod (struct Gam_Game *Game)
    if (Game->GamCod > 0)
      {
       /***** Get start and end times from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get game data",
-				"SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
-				       "UNIX_TIMESTAMP(MAX(EndTime))"		// row[1]
-				" FROM mch_matches"
-				" WHERE GamCod=%ld",
-				Game->GamCod);
-      if (NumRows)
+      if (DB_QuerySELECT (&mysql_res,"can not get game data",
+			  "SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
+				 "UNIX_TIMESTAMP(MAX(EndTime))"		// row[1]
+			  " FROM mch_matches"
+			  " WHERE GamCod=%ld",
+			  Game->GamCod))
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
@@ -1935,13 +1929,13 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games,struct Gam_Game *Game
 
    /***** Get data of questions from database *****/
    NumQsts = (unsigned)
-             DB_QuerySELECT (&mysql_res,"can not get game questions",
-			      "SELECT QstInd,"	// row[0]
-				     "QstCod"	// row[1]
-			       " FROM gam_questions"
-			      " WHERE GamCod=%ld"
-			      " ORDER BY QstInd",
-			      Game->GamCod);
+   DB_QuerySELECT (&mysql_res,"can not get game questions",
+		   "SELECT QstInd,"	// row[0]
+			  "QstCod"	// row[1]
+		    " FROM gam_questions"
+		   " WHERE GamCod=%ld"
+		   " ORDER BY QstInd",
+		   Game->GamCod);
 
    /***** Begin box *****/
    Games->GamCod = Game->GamCod;

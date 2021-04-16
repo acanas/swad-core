@@ -274,34 +274,36 @@ static void Dup_ListSimilarUsrs (void)
    /***** Make query *****/
    if (Gbl.Usrs.Other.UsrDat.Surname1[0] &&
        Gbl.Usrs.Other.UsrDat.FrstName[0])	// Name and surname 1 not empty
-      NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get similar users",
-					   "SELECT DISTINCT UsrCod"
-					   " FROM (SELECT DISTINCT UsrCod"
-						   " FROM usr_ids"
-						  " WHERE UsrID IN"
-							" (SELECT UsrID"
-							   " FROM usr_ids"
-							  " WHERE UsrCod=%ld)"
-						 " UNION"
-						 " SELECT UsrCod"
-						   " FROM usr_data"
-						  " WHERE Surname1='%s'"
-						    " AND Surname2='%s'"
-						    " AND FirstName='%s')"
-						 " AS U",
-					   Gbl.Usrs.Other.UsrDat.UsrCod,
-					   Gbl.Usrs.Other.UsrDat.Surname1,
-					   Gbl.Usrs.Other.UsrDat.Surname2,
-					   Gbl.Usrs.Other.UsrDat.FrstName);
+      NumUsrs = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get similar users",
+		      "SELECT DISTINCT UsrCod"
+		      " FROM (SELECT DISTINCT UsrCod"
+			      " FROM usr_ids"
+			     " WHERE UsrID IN"
+				   " (SELECT UsrID"
+				      " FROM usr_ids"
+				     " WHERE UsrCod=%ld)"
+			    " UNION"
+			    " SELECT UsrCod"
+			      " FROM usr_data"
+			     " WHERE Surname1='%s'"
+			       " AND Surname2='%s'"
+			       " AND FirstName='%s')"
+			    " AS U",
+		      Gbl.Usrs.Other.UsrDat.UsrCod,
+		      Gbl.Usrs.Other.UsrDat.Surname1,
+		      Gbl.Usrs.Other.UsrDat.Surname2,
+		      Gbl.Usrs.Other.UsrDat.FrstName);
    else
-      NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get similar users",
-					   "SELECT DISTINCT UsrCod"
-					    " FROM usr_ids"
-					   " WHERE UsrID IN"
-					         " (SELECT UsrID"
-					            " FROM usr_ids"
-					           " WHERE UsrCod=%ld)",
-					   Gbl.Usrs.Other.UsrDat.UsrCod);
+      NumUsrs = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get similar users",
+		      "SELECT DISTINCT UsrCod"
+		       " FROM usr_ids"
+		      " WHERE UsrID IN"
+			    " (SELECT UsrID"
+			       " FROM usr_ids"
+			      " WHERE UsrCod=%ld)",
+		      Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** List possible similar users *****/
    if (NumUsrs)

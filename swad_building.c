@@ -318,7 +318,6 @@ void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    unsigned NumBuilding;
    struct Bld_Building *Building;
 
@@ -326,36 +325,36 @@ void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
    switch (WhichData)
      {
       case Bld_ALL_DATA:
-	 NumRows = DB_QuerySELECT (&mysql_res,"can not get buildings",
-				   "SELECT BldCod,"		// row[0]
-					  "ShortName,"		// row[1]
-					  "FullName,"		// row[2]
-					  "Location"		// row[3]
-				    " FROM bld_buildings"
-				   " WHERE CtrCod=%ld"
-				   " ORDER BY %s",
-				   Gbl.Hierarchy.Ctr.CtrCod,
-				   OrderBySubQuery[Buildings->SelectedOrder]);
+	 Buildings->Num = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get buildings",
+		         "SELECT BldCod,"		// row[0]
+			        "ShortName,"		// row[1]
+			        "FullName,"		// row[2]
+			        "Location"		// row[3]
+			  " FROM bld_buildings"
+		         " WHERE CtrCod=%ld"
+		         " ORDER BY %s",
+		         Gbl.Hierarchy.Ctr.CtrCod,
+		         OrderBySubQuery[Buildings->SelectedOrder]);
 	 break;
       case Bld_ONLY_SHRT_NAME:
       default:
-	 NumRows = DB_QuerySELECT (&mysql_res,"can not get buildings",
-				   "SELECT BldCod,"		// row[0]
-					  "ShortName"		// row[1]
-				    " FROM bld_buildings"
-				   " WHERE CtrCod=%ld"
-				   " ORDER BY ShortName",
-				   Gbl.Hierarchy.Ctr.CtrCod);
+	 Buildings->Num = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get buildings",
+		         "SELECT BldCod,"		// row[0]
+			        "ShortName"		// row[1]
+			  " FROM bld_buildings"
+		         " WHERE CtrCod=%ld"
+		         " ORDER BY ShortName",
+		         Gbl.Hierarchy.Ctr.CtrCod);
 	 break;
      }
 
    /***** Count number of rows in result *****/
-   if (NumRows) // Buildings found...
+   if (Buildings->Num) // Buildings found...
      {
-      Buildings->Num = (unsigned) NumRows;
-
       /***** Create list with courses in center *****/
-      if ((Buildings->Lst = calloc (NumRows,sizeof (*Buildings->Lst))) == NULL)
+      if ((Buildings->Lst = calloc ((size_t) Buildings->Num,sizeof (*Buildings->Lst))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the buildings *****/
@@ -383,8 +382,6 @@ void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
            }
         }
      }
-   else
-      Buildings->Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -398,7 +395,6 @@ void Bld_GetDataOfBuildingByCod (struct Bld_Building *Building)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Clear data *****/
    Building->ShrtName[0] = '\0';
@@ -409,16 +405,13 @@ void Bld_GetDataOfBuildingByCod (struct Bld_Building *Building)
    if (Building->BldCod > 0)
      {
       /***** Get data of a building from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a building",
-			        "SELECT ShortName,"	// row[0]
-				       "FullName,"	// row[1]
-				       "Location"	// row[2]
-				 " FROM bld_buildings"
-				" WHERE BldCod=%ld",
-				Building->BldCod);
-
-      /***** Count number of rows in result *****/
-      if (NumRows) // Building found...
+      if (DB_QuerySELECT (&mysql_res,"can not get data of a building",
+			  "SELECT ShortName,"	// row[0]
+				 "FullName,"	// row[1]
+				 "Location"	// row[2]
+			   " FROM bld_buildings"
+			  " WHERE BldCod=%ld",
+			  Building->BldCod)) // Building found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);

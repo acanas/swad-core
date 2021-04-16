@@ -1018,8 +1018,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
    char FrameTitle[128 + Cns_MAX_BYTES_SUBJECT];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
+   unsigned NumRow;
    unsigned NumPst = 0;		// Initialized to avoid warning
    unsigned NumPsts;
    time_t ReadTimeUTC;		// Read time of thread for the current user
@@ -1056,15 +1055,15 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
                  Hlp_COMMUNICATION_Forums_posts,Box_NOT_CLOSABLE);
 
    /***** Get posts of a thread from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get posts of a thread",
-			     "SELECT PstCod,"			// row[0]
-			            "UNIX_TIMESTAMP(CreatTime)"	// row[1]
-			      " FROM for_posts"
-			     " WHERE ThrCod=%ld"
-			     " ORDER BY PstCod",
-			     Thread.ThrCod);
+   NumPsts = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get posts of a thread",
+		   "SELECT PstCod,"			// row[0]
+			  "UNIX_TIMESTAMP(CreatTime)"	// row[1]
+		    " FROM for_posts"
+		   " WHERE ThrCod=%ld"
+		   " ORDER BY PstCod",
+		   Thread.ThrCod);
 
-   NumPsts = (unsigned) NumRows;
    LastSubject[0] = '\0';
    if (NumPsts)		// If there are posts...
      {
@@ -1125,7 +1124,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 
          CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 
-         NumPst = (unsigned) NumRow;
+         NumPst = NumRow;
          NewPst = (CreatTimeUTC > ReadTimeUTC);
 
          if (NewPst && NumRow == PaginationPsts.LastItemVisible)
@@ -1140,7 +1139,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 
          /* Show post */
          For_ShowAForumPost (Forums,NumPst,
-                             (NumRow == NumRows),LastSubject,
+                             (NumRow == NumPsts),LastSubject,
                              NewPst,ICanModerateForum);
 
          /* Mark possible notification as seen */
@@ -1367,10 +1366,9 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
 
    /***** Get data of a post from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a post",
+   if (DB_QuerySELECT (&mysql_res,"can not get data of a post",
 			     "SELECT UsrCod,"				// row[0]
 			            "UNIX_TIMESTAMP(CreatTime),"	// row[1]
 			            "Subject,"				// row[2]
@@ -1378,10 +1376,7 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
 			            "MedCod"				// row[4]
 			      " FROM for_posts"
 			     " WHERE PstCod=%ld",
-			     PstCod);
-
-   /***** Result should have a unique row *****/
-   if (NumRows != 1)
+			     PstCod) != 1)
       Lay_ShowErrorAndExit ("Internal error in database when getting data of a post.");
 
    /***** Get number of rows *****/
@@ -1690,69 +1685,68 @@ static void For_ShowForumList (struct For_Forums *Forums)
                                        IsLastItemInLevel);
 
             /* Get my centers in this institution from database */
-            if ((NumCtrs = Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                               InsCod,
-                                               &mysql_resCtr)) > 0) // Centers found in this institution
-               for (NumCtr = 0;
-        	    NumCtr < NumCtrs;
-        	    NumCtr++)
-                 {
-                  /* Get next center */
-                  row = mysql_fetch_row (mysql_resCtr);
-                  CtrCod = Str_ConvertStrCodToLongCod (row[0]);
+            NumCtrs = Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
+                                          InsCod,&mysql_resCtr);
+	    for (NumCtr = 0;
+		 NumCtr < NumCtrs;
+		 NumCtr++)
+	      {
+	       /* Get next center */
+	       row = mysql_fetch_row (mysql_resCtr);
+	       CtrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-                  /* Links to forums of this center */
-                  if (For_WriteLinksToCtrForums (Forums,
-                                                 CtrCod,
-                                                 (NumCtr == NumCtrs - 1),
-                                                 IsLastItemInLevel) > 0)
-                    {
-		     /* Get my degrees in this institution from database */
-		     if ((NumDegs = Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-		                                        CtrCod,
-		                                        &mysql_resDeg)) > 0) // Degrees found in this center
-			for (NumDeg = 0;
-			     NumDeg < NumDegs;
-			     NumDeg++)
+	       /* Links to forums of this center */
+	       if (For_WriteLinksToCtrForums (Forums,
+					      CtrCod,
+					      (NumCtr == NumCtrs - 1),
+					      IsLastItemInLevel) > 0)
+		 {
+		  /* Get my degrees in this institution from database */
+		  if ((NumDegs = Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
+						     CtrCod,
+						     &mysql_resDeg)) > 0) // Degrees found in this center
+		     for (NumDeg = 0;
+			  NumDeg < NumDegs;
+			  NumDeg++)
+		       {
+			/* Get next degree */
+			row = mysql_fetch_row (mysql_resDeg);
+			DegCod = Str_ConvertStrCodToLongCod (row[0]);
+
+			/* Links to forums of this degree */
+			if (For_WriteLinksToDegForums (Forums,
+						       DegCod,
+						       (NumDeg == NumDegs - 1),
+						       IsLastItemInLevel) > 0)
 			  {
-			   /* Get next degree */
-			   row = mysql_fetch_row (mysql_resDeg);
-                           DegCod = Str_ConvertStrCodToLongCod (row[0]);
-
-			   /* Links to forums of this degree */
-			   if (For_WriteLinksToDegForums (Forums,
-			                                  DegCod,
-			                                  (NumDeg == NumDegs - 1),
-			                                  IsLastItemInLevel) > 0)
+			   /* Get my courses in this degree from database */
+			   NumCrss = Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
+							 DegCod,
+							 &mysql_resCrs);
+			   for (NumCrs = 0;
+				NumCrs < NumCrss;
+				NumCrs++)
 			     {
-			      /* Get my courses in this degree from database */
-			      if ((NumCrss = Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-			                                         DegCod,
-			                                         &mysql_resCrs)) > 0) // Courses found in this degree
-				 for (NumCrs = 0;
-				      NumCrs < NumCrss;
-				      NumCrs++)
-				   {
-				    /* Get next course */
-				    row = mysql_fetch_row (mysql_resCrs);
-                                    CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+			      /* Get next course */
+			      row = mysql_fetch_row (mysql_resCrs);
+			      CrsCod = Str_ConvertStrCodToLongCod (row[0]);
 
-				    /* Links to forums of this course */
-				    For_WriteLinksToCrsForums (Forums,
-				                               CrsCod,
-				                               (NumCrs == NumCrss - 1),
-				                               IsLastItemInLevel);
-				   }
-
-			      /* Free structure that stores the query result */
-			      DB_FreeMySQLResult (&mysql_resCrs);
+			      /* Links to forums of this course */
+			      For_WriteLinksToCrsForums (Forums,
+							 CrsCod,
+							 (NumCrs == NumCrss - 1),
+							 IsLastItemInLevel);
 			     }
-			  }
 
-		     /* Free structure that stores the query result */
-                     DB_FreeMySQLResult (&mysql_resDeg);
-                    }
-                 }
+			   /* Free structure that stores the query result */
+			   DB_FreeMySQLResult (&mysql_resCrs);
+			  }
+		       }
+
+		  /* Free structure that stores the query result */
+		  DB_FreeMySQLResult (&mysql_resDeg);
+		 }
+	      }
 
             /* Free structure that stores the query result */
             DB_FreeMySQLResult (&mysql_resCtr);
@@ -2286,7 +2280,6 @@ static unsigned For_GetNumThrsWithNewPstsInForum (const struct For_Forum *Forum,
    char SubQuery[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    unsigned NumThrsWithNewPosts = NumThreads;	// By default, all the threads are new to me
 
    /***** Get last time I read this forum from database *****/
@@ -2294,17 +2287,18 @@ static unsigned For_GetNumThrsWithNewPstsInForum (const struct For_Forum *Forum,
       sprintf (SubQuery," AND for_threads.Location=%ld",Forum->Location);
    else
       SubQuery[0] = '\0';
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get the date of reading of a forum",
-			     "SELECT IFNULL(MAX(for_read.ReadTime),"	// row[0]
-			            "FROM_UNIXTIME(0))"			// row[1]
-			      " FROM for_read,"
-			            "for_threads"
-			     " WHERE for_read.UsrCod=%ld"
-			       " AND for_read.ThrCod=for_threads.ThrCod"
-			       " AND for_threads.ForumType=%u%s",
-			     Gbl.Usrs.Me.UsrDat.UsrCod,
-			     (unsigned) Forum->Type,SubQuery);
-   if (NumRows)
+   if (DB_QuerySELECT (&mysql_res,"can not get the date of reading of a forum",
+		       "SELECT IFNULL(MAX(for_read.ReadTime),"	// row[0]
+			      "FROM_UNIXTIME(0))"			// row[1]
+			" FROM for_read,"
+			      "for_threads"
+		       " WHERE for_read.UsrCod=%ld"
+			 " AND for_read.ThrCod=for_threads.ThrCod"
+			 " AND for_threads.ForumType=%u"
+			 "%s",
+		       Gbl.Usrs.Me.UsrDat.UsrCod,
+		       (unsigned) Forum->Type,
+		       SubQuery))
      {
       /***** Get number of threads with a last message modify time > newest read time (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
@@ -2354,20 +2348,16 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    unsigned NumUnreadPosts = NumPostsInThr;	// By default, all the posts are unread by me
 
    /***** Get last time I read this thread from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get the date of reading"
-					" of a thread",
-			     "SELECT ReadTime"		// row[0]
-			      " FROM for_read"
-			     " WHERE ThrCod=%ld"
-			       " AND UsrCod=%ld",
-			     ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-
-   /***** Get if last time I read this thread exists in database *****/
-   if (NumRows)
+   if (DB_QuerySELECT (&mysql_res,"can not get the date of reading of a thread",
+		       "SELECT ReadTime"		// row[0]
+			" FROM for_read"
+		       " WHERE ThrCod=%ld"
+			 " AND UsrCod=%ld",
+		       ThrCod,
+		       Gbl.Usrs.Me.UsrDat.UsrCod))
      {
       /***** Get the number of posts in thread with a modify time > newest read time for me (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
@@ -2472,24 +2462,30 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
    switch (Forums->ThreadsOrder)
      {
       case Dat_START_TIME:	// First post time
-         NumThrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get thread of a forum",
-					      "SELECT for_threads.ThrCod"	// row[0]
-					       " FROM for_threads,"
-					             "for_posts"
-					      " WHERE for_threads.ForumType=%u%s"
-					        " AND for_threads.FirstPstCod=for_posts.PstCod"
-					      " ORDER BY for_posts.CreatTime DESC",
-					      (unsigned) Forums->Forum.Type,SubQuery);
+         NumThrs = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get thread of a forum",
+			 "SELECT for_threads.ThrCod"	// row[0]
+			  " FROM for_threads,"
+				"for_posts"
+			 " WHERE for_threads.ForumType=%u"
+			   "%s"
+			   " AND for_threads.FirstPstCod=for_posts.PstCod"
+			 " ORDER BY for_posts.CreatTime DESC",
+			 (unsigned) Forums->Forum.Type,
+			 SubQuery);
          break;
       case Dat_END_TIME:	// Last post time
-         NumThrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get thread of a forum",
-					      "SELECT for_threads.ThrCod"	// row[0]
-					       " FROM for_threads,"
-					             "for_posts"
-					      " WHERE for_threads.ForumType=%u%s"
-					        " AND for_threads.LastPstCod=for_posts.PstCod"
-					      " ORDER BY for_posts.CreatTime DESC",
-					      (unsigned) Forums->Forum.Type,SubQuery);
+         NumThrs = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get thread of a forum",
+			 "SELECT for_threads.ThrCod"	// row[0]
+			  " FROM for_threads,"
+				"for_posts"
+			 " WHERE for_threads.ForumType=%u"
+			   "%s"
+			   " AND for_threads.LastPstCod=for_posts.PstCod"
+			 " ORDER BY for_posts.CreatTime DESC",
+			 (unsigned) Forums->Forum.Type,
+			 SubQuery);
          break;
       default:	// Impossible
 	 return;
@@ -3654,29 +3650,24 @@ static void For_GetThreadData (struct For_Thread *Thr)
    extern const char *Txt_no_subject;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    Dat_StartEndTime_t Order;
 
    /***** Get data of a thread from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get data"
-					" of a thread of a forum",
-			     "SELECT m0.PstCod,"			// row[0]
-			            "m1.PstCod,"			// row[1]
-			            "m0.UsrCod,"			// row[2]
-			            "m1.UsrCod,"			// row[3]
-			            "UNIX_TIMESTAMP(m0.CreatTime),"	// row[4]
-			            "UNIX_TIMESTAMP(m1.CreatTime),"	// row[5]
-			            "m0.Subject"
-			      " FROM for_threads,"
-			            "for_posts AS m0,"
-			            "for_posts AS m1"
-			     " WHERE for_threads.ThrCod=%ld"
-			       " AND for_threads.FirstPstCod=m0.PstCod"
-			       " AND for_threads.LastPstCod=m1.PstCod",
-			     Thr->ThrCod);
-
-   /***** The result of the query should have one row *****/
-   if (NumRows != 1)
+   if (DB_QuerySELECT (&mysql_res,"can not get data of a thread of a forum",
+		       "SELECT m0.PstCod,"			// row[0]
+			      "m1.PstCod,"			// row[1]
+			      "m0.UsrCod,"			// row[2]
+			      "m1.UsrCod,"			// row[3]
+			      "UNIX_TIMESTAMP(m0.CreatTime),"	// row[4]
+			      "UNIX_TIMESTAMP(m1.CreatTime),"	// row[5]
+			      "m0.Subject"
+			" FROM for_threads,"
+			      "for_posts AS m0,"
+			      "for_posts AS m1"
+		       " WHERE for_threads.ThrCod=%ld"
+			 " AND for_threads.FirstPstCod=m0.PstCod"
+			 " AND for_threads.LastPstCod=m1.PstCod",
+		       Thr->ThrCod) != 1)
       Lay_ShowErrorAndExit ("Error when getting data of a thread of a forum.");
    row = mysql_fetch_row (mysql_res);
 

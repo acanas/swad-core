@@ -114,8 +114,8 @@ void Cht_ShowListOfAvailableChatRooms (void)
    struct Crs_Course Crs;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
+   unsigned NumCrss;
+   unsigned NumCrs;
    char ThisRoomCode    [Cht_MAX_BYTES_ROOM_CODE + 1];
    char ThisRoomShrtName[Cht_MAX_BYTES_ROOM_SHRT_NAME + 1];
    char ThisRoomFullName[Cht_MAX_BYTES_ROOM_FULL_NAME + 1];
@@ -190,33 +190,33 @@ void Cht_ShowListOfAvailableChatRooms (void)
       Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 
       /* Get my courses in this degree from database */
-      if ((NumRows = Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Deg.DegCod,&mysql_res)) > 0) // Courses found in this degree
-         for (NumRow = 0;
-              NumRow < NumRows;
-              NumRow++)
+      NumCrss = Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Deg.DegCod,&mysql_res);
+      for (NumCrs = 0;
+	   NumCrs < NumCrss;
+	   NumCrs++)
+	{
+	 /* Get next course */
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get course code */
+	 if ((Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	   {
-	    /* Get next course */
-	    row = mysql_fetch_row (mysql_res);
+	    /* Get data of this course */
+	    Crs_GetDataOfCourseByCod (&Crs);
 
-            /* Get course code */
-	    if ((Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-	      {
-               /* Get data of this course */
-               Crs_GetDataOfCourseByCod (&Crs);
-
-               /* Link to the room of this course */
-               IsLastItemInLevel[2] = (NumRow == NumRows - 1);
-               snprintf (ThisRoomCode,sizeof (ThisRoomCode),"CRS_%ld",
-			 Crs.CrsCod);
-               snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),"%s",
-			 Crs.ShrtName);
-               snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
-			 Txt_Course,Crs.ShrtName);
-               Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,2,IsLastItemInLevel);
-               Ico_PutIcon ("chalkboard-teacher.svg",ThisRoomFullName,"ICO16x16");
-               Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
-	      }
+	    /* Link to the room of this course */
+	    IsLastItemInLevel[2] = (NumCrs == NumCrss - 1);
+	    snprintf (ThisRoomCode,sizeof (ThisRoomCode),"CRS_%ld",
+		      Crs.CrsCod);
+	    snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),"%s",
+		      Crs.ShrtName);
+	    snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
+		      Txt_Course,Crs.ShrtName);
+	    Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,2,IsLastItemInLevel);
+	    Ico_PutIcon ("chalkboard-teacher.svg",ThisRoomFullName,"ICO16x16");
+	    Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 	   }
+	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -238,19 +238,19 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
    extern const char *Txt_Number_of_users;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
-   unsigned long NumRow;
+   unsigned NumRooms;
+   unsigned NumRoom;
 
    /***** Get chat rooms with connected users from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get chat rooms"
-					" with connected users",
-			     "SELECT RoomCode,"		// row[0]
-			            "NumUsrs"		// row[1]
-			      " FROM cht_rooms"
-			     " WHERE NumUsrs>0"
-			     " ORDER BY NumUsrs DESC,"
-			               "RoomCode");
-   if (NumRows > 0) // If not empty chat rooms found
+   NumRooms = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get chat rooms with connected users",
+		   "SELECT RoomCode,"		// row[0]
+			  "NumUsrs"		// row[1]
+		    " FROM cht_rooms"
+		   " WHERE NumUsrs>0"
+		   " ORDER BY NumUsrs DESC,"
+			     "RoomCode");
+   if (NumRooms) // If not empty chat rooms found
      {
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,Txt_Rooms_with_users,
@@ -266,9 +266,9 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
       HTM_TR_End ();
 
       /***** Loop over chat rooms *****/
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumRoom = 0;
+	   NumRoom < NumRooms;
+	   NumRoom++)
 	{
 	 /* Get next chat room */
 	 row = mysql_fetch_row (mysql_res);

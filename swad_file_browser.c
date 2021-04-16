@@ -2678,12 +2678,12 @@ bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
    bool FolderExists = false;
 
    /***** Get all the users belonging to current course from database *****/
-   NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get users"
-						   " from current course",
-				        "SELECT UsrCod"		// row[0]
-				         " FROM crs_users"
-				        " WHERE CrsCod=%ld",
-					Gbl.Hierarchy.Crs.CrsCod);
+   NumUsrs = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get users from current course",
+		   "SELECT UsrCod"
+		    " FROM crs_users"
+		   " WHERE CrsCod=%ld",
+		   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Check folders *****/
    for (NumUsr = 0;
@@ -2722,35 +2722,37 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
-   unsigned long NumRow;
+   unsigned NumFolders;
+   unsigned NumFolder;
    char PathFolderAsg[PATH_MAX + 1 + PATH_MAX + 1];
 
    /***** Get assignment folders from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get folders of assignments",
-			     "SELECT Folder"		// row[0]
-			      " FROM asg_assignments"
-			     " WHERE CrsCod=%ld"
-			       " AND Hidden='N'"
-			       " AND Folder<>''"
-			       " AND ("
-			             "AsgCod NOT IN"
-			             " (SELECT AsgCod"
-			                " FROM asg_groups)"
-			             " OR "
-			             "AsgCod IN"
-			             " (SELECT asg_groups.AsgCod"
-			                " FROM grp_users,"
-			                      "asg_groups"
-			               " WHERE grp_users.UsrCod=%ld"
-			                 " AND asg_groups.GrpCod=grp_users.GrpCod)"
-			            ")",
-			     Gbl.Hierarchy.Crs.CrsCod,ZoneUsrCod);
+   NumFolders = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get folders of assignments",
+		   "SELECT Folder"		// row[0]
+		    " FROM asg_assignments"
+		   " WHERE CrsCod=%ld"
+		     " AND Hidden='N'"
+		     " AND Folder<>''"
+		     " AND ("
+			   "AsgCod NOT IN"
+			   " (SELECT AsgCod"
+			      " FROM asg_groups)"
+			   " OR "
+			   "AsgCod IN"
+			   " (SELECT asg_groups.AsgCod"
+			      " FROM grp_users,"
+				    "asg_groups"
+			     " WHERE grp_users.UsrCod=%ld"
+			       " AND asg_groups.GrpCod=grp_users.GrpCod)"
+			  ")",
+		  Gbl.Hierarchy.Crs.CrsCod,
+		   ZoneUsrCod);
 
    /***** Create one folder for each assignment *****/
-   for (NumRow = 0;
-	NumRow < NumRows;
-	NumRow++)
+   for (NumFolder = 0;
+	NumFolder < NumFolders;
+	NumFolder++)
      {
       /* Get next assignment with folder */
       row = mysql_fetch_row (mysql_res);
@@ -5159,7 +5161,7 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
    long Cod;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned NumRows;
 
    /***** Get date of last accesss to a file browser from database *****/
    switch (Gbl.FileBrowser.Type)
@@ -5209,16 +5211,17 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
       default:
 	 return;
      }
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get date-time"
-					" of last access to a file browser",
-			     "SELECT UNIX_TIMESTAMP(LastClick)"	// row[0]
-			      " FROM brw_last"
-			     " WHERE UsrCod=%ld"
-			       " AND FileBrowser=%u"
-			       " AND Cod=%ld",
-			     Gbl.Usrs.Me.UsrDat.UsrCod,
-			     (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
-			     Cod);
+   NumRows = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get date-time"
+			      " of last access to a file browser",
+		   "SELECT UNIX_TIMESTAMP(LastClick)"	// row[0]
+		    " FROM brw_last"
+		   " WHERE UsrCod=%ld"
+		     " AND FileBrowser=%u"
+		     " AND Cod=%ld",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
+		   Cod);
 
    if (NumRows == 0)	// May be an administrator not belonging to this course
       Gbl.Usrs.Me.TimeLastAccToThisFileBrowser = LONG_MAX;	// Initialize to a big value in order to show files as old
@@ -5256,24 +5259,24 @@ static long Brw_GetGrpLastAccZone (const char *FieldNameDB)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned NumGrps;
    long GrpCod = -1L;
 
    /***** Get the group of my last access to a common zone from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get the group"
-					" of your last access"
-					" to a file browser",
-			     "SELECT %s"	// row[0]
-			      " FROM crs_user_settings"
-			     " WHERE UsrCod=%ld"
-			       " AND CrsCod=%ld",
-			     FieldNameDB,
-			     Gbl.Usrs.Me.UsrDat.UsrCod,
-			     Gbl.Hierarchy.Crs.CrsCod);
+   NumGrps = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get the group of your last access"
+			      " to a file browser",
+		   "SELECT %s"	// row[0]
+		    " FROM crs_user_settings"
+		   " WHERE UsrCod=%ld"
+		     " AND CrsCod=%ld",
+		   FieldNameDB,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
 
-   if (NumRows == 0)	// May be an administrator not belonging to this course
+   if (NumGrps == 0)	// May be an administrator not belonging to this course
       GrpCod = -1L;
-   else if (NumRows == 1)
+   else if (NumGrps == 1)
      {
       /* Get the group code (row[0]) */
       row = mysql_fetch_row (mysql_res);
@@ -11710,27 +11713,22 @@ static long Brw_GetPublisherOfSubtree (void)
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
+   unsigned NumGrps;
+   unsigned NumGrp;
    long GrpCod;
 
    /***** Query database *****/
-   if ((NumRows = Grp_GetGrpsOfType (GrpTypCod,&mysql_res)))	// If there exists groups...
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
-        {
-	 /* Get next group */
-	 row = mysql_fetch_row (mysql_res);
+   NumGrps = Grp_GetGrpsOfType (GrpTypCod,&mysql_res);
+   for (NumGrp = 0;
+	NumGrp < NumGrps;
+	NumGrp++)
+     {
+      /* Get next group */
+      GrpCod = DB_GetNextCode (mysql_res);
 
-         /* Group code is in row[0] */
-         if (sscanf (row[0],"%ld",&GrpCod) != 1)
-            Lay_ShowErrorAndExit ("Wrong group code.");
-
-         /* Remove file zones of this group */
-         Brw_RemoveGrpZones (Gbl.Hierarchy.Crs.CrsCod,GrpCod);
-	}
+      /* Remove file zones of this group */
+      Brw_RemoveGrpZones (Gbl.Hierarchy.Crs.CrsCod,GrpCod);
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -11783,27 +11781,27 @@ void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
-   unsigned long NumRow;
+   unsigned long NumCrss;
+   unsigned long NumCrs;
    unsigned NumCrssWorksRemoved = 0;
    struct Crs_Course Crs;
 
    /***** Query database *****/
-   if ((NumRows = Usr_GetCrssFromUsr (UsrDat->UsrCod,-1L,&mysql_res)) > 0) // If courses found
+   NumCrss = Usr_GetCrssFromUsr (UsrDat->UsrCod,-1L,&mysql_res);
+
+   /***** Remove the zone of works of the user in the courses he/she belongs to *****/
+   for (NumCrs = 0;
+	NumCrs < NumCrss;
+	NumCrs++)
      {
-      /***** Remove the zone of works of the user in the courses he/she belongs to *****/
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
-	{
-	 /* Get the next course */
-	 row = mysql_fetch_row (mysql_res);
-         Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
-         /* Get data of course */
-         Crs_GetDataOfCourseByCod (&Crs);
-         Brw_RemoveUsrWorksInCrs (UsrDat,&Crs);
-         NumCrssWorksRemoved++;
-	}
+      /* Get the next course */
+      row = mysql_fetch_row (mysql_res);
+      Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+
+      /* Get data of course */
+      Crs_GetDataOfCourseByCod (&Crs);
+      Brw_RemoveUsrWorksInCrs (UsrDat,&Crs);
+      NumCrssWorksRemoved++;
      }
 
    /***** Free structure that stores the query result *****/

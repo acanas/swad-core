@@ -256,8 +256,8 @@ void Log_GetAndShowLastClicks (void)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
+   unsigned NumClicks;
+   unsigned NumClick;
    long ActCod;
    Act_Action_t Action;
    const char *ClassRow;
@@ -265,19 +265,20 @@ void Log_GetAndShowLastClicks (void)
    struct Hie_Hierarchy Hie;
 
    /***** Get last clicks from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get last clicks",
-			     "SELECT LogCod,"				// row[0]
-			            "ActCod,"				// row[1]
-			            "UNIX_TIMESTAMP()-"
-			            "UNIX_TIMESTAMP(ClickTime),"	// row[2]
-			            "Role,"				// row[3]
-			            "CtyCod,"				// row[4]
-			            "InsCod,"				// row[5]
-			            "CtrCod,"				// row[6]
-			            "DegCod"				// row[7]
-			      " FROM log_recent"
-			     " ORDER BY LogCod DESC"
-			     " LIMIT 20");
+   NumClicks = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get last clicks",
+		   "SELECT LogCod,"			// row[0]
+			  "ActCod,"			// row[1]
+			  "UNIX_TIMESTAMP()-"
+			  "UNIX_TIMESTAMP(ClickTime),"	// row[2]
+			  "Role,"			// row[3]
+			  "CtyCod,"			// row[4]
+			  "InsCod,"			// row[5]
+			  "CtrCod,"			// row[6]
+			  "DegCod"			// row[7]
+		    " FROM log_recent"
+		   " ORDER BY LogCod DESC"
+		   " LIMIT 20");
 
    /***** Write list of connected users *****/
    HTM_TABLE_BeginCenterPadding (1);
@@ -294,9 +295,9 @@ void Log_GetAndShowLastClicks (void)
 
    HTM_TR_End ();
 
-   for (NumRow = 0;
-	NumRow < NumRows;
-	NumRow++)
+   for (NumClick = 0;
+	NumClick < NumClicks;
+	NumClick++)
      {
       row = mysql_fetch_row (mysql_res);
 

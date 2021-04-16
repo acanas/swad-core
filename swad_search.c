@@ -704,106 +704,115 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 	 /***** Query database *****/
 	 NumDocs =
 	 DB_QuerySELECT (&mysql_res,"can not get files",
-		         "SELECT * FROM "
-		         "("
-		         "SELECT brw_files.FilCod,"	// Institution
-			        "SUBSTRING(brw_files.Path,LOCATE('/',brw_files.Path)) AS PathFromRoot,"
-			        "ins_instits.InsCod,"
-			        "ins_instits.ShortName AS InsShortName,"
-			        "-1 AS CtrCod,"
-			        "'' AS CtrShortName,"
-			        "-1 AS DegCod,"
-			        "'' AS DegShortName,"
-			        "-1 AS CrsCod,"
-			        "'' AS CrsShortName,"
-			        "-1 AS GrpCod"
-		          " FROM brw_files,"
-		                "crs_courses,"
-		                "deg_degrees,"
-		                "ctr_centers,"
-		                "ins_instits,"
-		                "cty_countrs"
-		         " WHERE brw_files.Public='Y'"
-		           " AND %s"
-		           " AND brw_files.FileBrowser IN (%u,%u)"
-		           " AND brw_files.Cod=ins_instits.InsCod"
-		           " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		           "%s"
-		         " UNION "
-		         "SELECT brw_files.FilCod,"	// Center
-			        "SUBSTRING(brw_files.Path,LOCATE('/',brw_files.Path)) AS PathFromRoot,"
-			        "ins_instits.InsCod,"
-			        "ins_instits.ShortName AS InsShortName,"
-			        "ctr_centers.CtrCod,"
-			        "ctr_centers.ShortName AS CtrShortName,"
-			        "-1 AS DegCod,"
-			        "'' AS DegShortName,"
-			        "-1 AS CrsCod,"
-			        "'' AS CrsShortName,"
-			        "-1 AS GrpCod"
-		          " FROM brw_files,"
-		                "crs_courses,"
-		                "deg_degrees,"
-		                "ctr_centers,"
-		                "ins_instits,"
-		                "cty_countrs"
-		         " WHERE brw_files.Public='Y' AND %s"
-		           " AND brw_files.FileBrowser IN (%u,%u)"
-		           " AND brw_files.Cod=ctr_centers.CtrCod"
-		           " AND ctr_centers.InsCod=ins_instits.InsCod"
-		           " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		           "%s"
-		         " UNION "
-		         "SELECT brw_files.FilCod,"	// Degree
-			        "SUBSTRING(brw_files.Path,LOCATE('/',brw_files.Path)) AS PathFromRoot,"
-			        "ins_instits.InsCod,"
-			        "ins_instits.ShortName AS InsShortName,"
-			        "ctr_centers.CtrCod,"
-			        "ctr_centers.ShortName AS CtrShortName,"
-			        "deg_degrees.DegCod,"
-			        "deg_degrees.ShortName AS DegShortName,"
-			        "-1,'' AS CrsShortName,"
-			        "-1"
-		          " FROM brw_files,"
-		                "crs_courses,"
-		                "deg_degrees,"
-		                "ctr_centers,"
-		                "ins_instits,"
-		                "cty_countrs"
-		         " WHERE brw_files.Public='Y' AND %s"
-		           " AND brw_files.FileBrowser IN (%u,%u)"
-		           " AND brw_files.Cod=deg_degrees.DegCod"
-		           " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		             " AND ctr_centers.InsCod=ins_instits.InsCod"
-		         " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		           "%s"
-		         " UNION "
-		         "SELECT brw_files.FilCod,"	// Course
-			        "SUBSTRING(brw_files.Path,LOCATE('/',brw_files.Path)) AS PathFromRoot,"
-			        "ins_instits.InsCod,"
-			        "ins_instits.ShortName AS InsShortName,"
-			        "ctr_centers.CtrCod,"
-			        "ctr_centers.ShortName AS CtrShortName,"
-			        "deg_degrees.DegCod,"
-			        "deg_degrees.ShortName AS DegShortName,"
-			        "crs_courses.CrsCod,"
-			        "crs_courses.ShortName AS CrsShortName,"
-			        "-1"
-		          " FROM brw_files,"
-		                "crs_courses,"
-		                "deg_degrees,"
-		                "ctr_centers,"
-		                "ins_instits,"
-		                "cty_countrs"
-		         " WHERE brw_files.Public='Y' AND %s"
-		           " AND brw_files.FileBrowser IN (%u,%u)"
-		           " AND brw_files.Cod=crs_courses.CrsCod"
-		           " AND crs_courses.DegCod=deg_degrees.DegCod"
-		           " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		           " AND ctr_centers.InsCod=ins_instits.InsCod"
-		           " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		           "%s"
-		         ") AS selected_files"
+		         "SELECT *"
+		          " FROM "
+	                        // Institution
+		                "(SELECT brw_files.FilCod,"						// row[ 0]
+					"SUBSTRING(brw_files.Path,"
+					          "LOCATE('/',brw_files.Path)) AS PathFromRoot,"	// row[ 1]
+					"ins_instits.InsCod,"						// row[ 2]
+					"ins_instits.ShortName AS InsShortName,"			// row[ 3]
+					"-1 AS CtrCod,"							// row[ 4]
+					"'' AS CtrShortName,"						// row[ 5]
+					"-1 AS DegCod,"							// row[ 6]
+					"'' AS DegShortName,"						// row[ 7]
+					"-1 AS CrsCod,"							// row[ 8]
+					"'' AS CrsShortName,"						// row[ 9]
+					"-1 AS GrpCod"							// row[10]
+				  " FROM brw_files,"
+					"crs_courses,"
+					"deg_degrees,"
+					"ctr_centers,"
+					"ins_instits,"
+					"cty_countrs"
+				 " WHERE brw_files.Public='Y'"
+				   " AND %s"
+				   " AND brw_files.FileBrowser IN (%u,%u)"
+				   " AND brw_files.Cod=ins_instits.InsCod"
+				   " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+				   "%s"
+				 " UNION "
+	                         // Center -------------------------------------
+				 "SELECT brw_files.FilCod,"						// row[ 0]
+					"SUBSTRING(brw_files.Path,"
+					          "LOCATE('/',brw_files.Path)) AS PathFromRoot,"	// row[ 1]
+					"ins_instits.InsCod,"						// row[ 2]
+					"ins_instits.ShortName AS InsShortName,"			// row[ 3]
+					"ctr_centers.CtrCod,"						// row[ 4]
+					"ctr_centers.ShortName AS CtrShortName,"			// row[ 5]
+					"-1 AS DegCod,"							// row[ 6]
+					"'' AS DegShortName,"						// row[ 7]
+					"-1 AS CrsCod,"							// row[ 8]
+					"'' AS CrsShortName,"						// row[ 9]
+					"-1 AS GrpCod"							// row[10]
+				  " FROM brw_files,"
+					"crs_courses,"
+					"deg_degrees,"
+					"ctr_centers,"
+					"ins_instits,"
+					"cty_countrs"
+				 " WHERE brw_files.Public='Y' AND %s"
+				   " AND brw_files.FileBrowser IN (%u,%u)"
+				   " AND brw_files.Cod=ctr_centers.CtrCod"
+				   " AND ctr_centers.InsCod=ins_instits.InsCod"
+				   " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+				   "%s"
+				 " UNION "
+	                         // Degree -------------------------------------
+				 "SELECT brw_files.FilCod,"						// row[ 0]
+					"SUBSTRING(brw_files.Path,"
+					          "LOCATE('/',brw_files.Path)) AS PathFromRoot,"	// row[ 1]
+					"ins_instits.InsCod,"						// row[ 2]
+					"ins_instits.ShortName AS InsShortName,"			// row[ 3]
+					"ctr_centers.CtrCod,"						// row[ 4]
+					"ctr_centers.ShortName AS CtrShortName,"			// row[ 5]
+					"deg_degrees.DegCod,"						// row[ 6]
+					"deg_degrees.ShortName AS DegShortName,"			// row[ 7]
+					"-1 AS CrsCod,"							// row[ 8]
+					"'' AS CrsShortName,"						// row[ 9]
+					"-1 AS GrpCod"							// row[10]
+				  " FROM brw_files,"
+					"crs_courses,"
+					"deg_degrees,"
+					"ctr_centers,"
+					"ins_instits,"
+					"cty_countrs"
+				 " WHERE brw_files.Public='Y' AND %s"
+				   " AND brw_files.FileBrowser IN (%u,%u)"
+				   " AND brw_files.Cod=deg_degrees.DegCod"
+				   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+				   " AND ctr_centers.InsCod=ins_instits.InsCod"
+				   " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+				   "%s"
+				 " UNION "
+				 // Course -------------------------------------
+				 "SELECT brw_files.FilCod,"						// row[ 0]
+					"SUBSTRING(brw_files.Path,"
+					          "LOCATE('/',brw_files.Path)) AS PathFromRoot,"	// row[ 1]
+					"ins_instits.InsCod,"						// row[ 2]
+					"ins_instits.ShortName AS InsShortName,"			// row[ 3]
+					"ctr_centers.CtrCod,"						// row[ 4]
+					"ctr_centers.ShortName AS CtrShortName,"			// row[ 5]
+					"deg_degrees.DegCod,"						// row[ 6]
+					"deg_degrees.ShortName AS DegShortName,"			// row[ 7]
+					"crs_courses.CrsCod,"						// row[ 8]
+					"crs_courses.ShortName AS CrsShortName,"			// row[ 9]
+					"-1 AS GrpCod"							// row[10]
+				  " FROM brw_files,"
+					"crs_courses,"
+					"deg_degrees,"
+					"ctr_centers,"
+					"ins_instits,"
+					"cty_countrs"
+				 " WHERE brw_files.Public='Y' AND %s"
+				   " AND brw_files.FileBrowser IN (%u,%u)"
+				   " AND brw_files.Cod=crs_courses.CrsCod"
+				   " AND crs_courses.DegCod=deg_degrees.DegCod"
+				   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+				   " AND ctr_centers.InsCod=ins_instits.InsCod"
+				   " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+				   "%s"
+				") AS selected_files"
 		         " WHERE PathFromRoot<>''"
 		         " ORDER BY InsShortName,"
 				   "CtrShortName,"
@@ -859,11 +868,13 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	 /***** Create temporary table with codes of files in documents and shared areas accessible by me.
 		It is necessary to speed up the second query *****/
 	 DB_Query ("can not remove temporary table",
-	           "DROP TEMPORARY TABLE IF EXISTS my_files_crs,my_files_grp");
+	           "DROP TEMPORARY TABLE IF EXISTS my_files_crs,"
+	                                          "my_files_grp");
 
 	 DB_Query ("can not create temporary table",
 		   "CREATE TEMPORARY TABLE my_files_crs"
-		   " (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
+		   " (FilCod INT NOT NULL,"
+		     "UNIQUE INDEX(FilCod))"
 		   " ENGINE=MEMORY"
 		   " SELECT brw_files.FilCod"
 		     " FROM crs_users,"
@@ -879,7 +890,8 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 
 	 DB_Query ("can not create temporary table",
 	           "CREATE TEMPORARY TABLE my_files_grp"
-		   " (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
+		   " (FilCod INT NOT NULL,"
+		     "UNIQUE INDEX(FilCod))"
 		   " ENGINE=MEMORY"
 		   " SELECT brw_files.FilCod"
 		     " FROM grp_users,"
@@ -896,70 +908,76 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	 /***** Build the query *****/
 	 NumDocs =
 	 DB_QuerySELECT (&mysql_res,"can not get files",
-		         "SELECT * FROM "
-		         "("
-		         "SELECT brw_files.FilCod,"
-			        "SUBSTRING(brw_files.Path,LOCATE('/',brw_files.Path)) AS PathFromRoot,"
-			        "ins_instits.InsCod,"
-			        "ins_instits.ShortName AS InsShortName,"
-			        "ctr_centers.CtrCod,"
-			        "ctr_centers.ShortName AS CtrShortName,"
-			        "deg_degrees.DegCod,"
-			        "deg_degrees.ShortName AS DegShortName,"
-			        "crs_courses.CrsCod,"
-			        "crs_courses.ShortName AS CrsShortName,"
-			        "-1 AS GrpCod"
-		          " FROM brw_files,"
-		                "crs_courses,"
-		                "deg_degrees,"
-		                "ctr_centers,"
-		                "ins_instits,"
-		                "cty_countrs"
-		         " WHERE brw_files.FilCod IN"
-		               " (SELECT FilCod"
-		                  " FROM my_files_crs)"
-		           " AND %s"
-		           " AND brw_files.FileBrowser IN (%u,%u,%u,%u)"
-		           " AND brw_files.Cod=crs_courses.CrsCod"
-		           " AND crs_courses.DegCod=deg_degrees.DegCod"
-		           " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		           " AND ctr_centers.InsCod=ins_instits.InsCod"
-		           " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		           "%s"
-		         " UNION "
-		         "SELECT brw_files.FilCod,"
-			        "SUBSTRING(brw_files.Path,LOCATE('/',brw_files.Path)) AS PathFromRoot,"
-			        "ins_instits.InsCod,"
-			        "ins_instits.ShortName AS InsShortName,"
-			        "ctr_centers.CtrCod,"
-			        "ctr_centers.ShortName AS CtrShortName,"
-			        "deg_degrees.DegCod,"
-			        "deg_degrees.ShortName AS DegShortName,"
-			        "crs_courses.CrsCod,"
-			        "crs_courses.ShortName AS CrsShortName,"
-			        "grp_groups.GrpCod"
-		          " FROM brw_files,"
-		                "grp_groups,"
-		                "grp_types,"
-		                "crs_courses,"
-		                "deg_degrees,"
-		                "ctr_centers,"
-		                "ins_instits,"
-		                "cty_countrs"
-		         " WHERE brw_files.FilCod IN"
-		               " (SELECT FilCod"
-		                  " FROM my_files_grp)"
-		           " AND %s"
-		           " AND brw_files.FileBrowser IN (%u,%u,%u,%u)"
-		           " AND brw_files.Cod=grp_groups.GrpCod"
-		           " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-		           " AND grp_types.CrsCod=crs_courses.CrsCod"
-		           " AND crs_courses.DegCod=deg_degrees.DegCod"
-		           " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		           " AND ctr_centers.InsCod=ins_instits.InsCod"
-		           " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		           "%s"
-		         ") AS selected_files"
+		         "SELECT *"
+		          " FROM ("
+				 // Files in course zones ----------------------
+		                 "SELECT brw_files.FilCod,"					// row[ 0]
+					"SUBSTRING(brw_files.Path,"
+					          "LOCATE('/',"
+					                 "brw_files.Path)) AS PathFromRoot,"	// row[ 1]
+					"ins_instits.InsCod,"					// row[ 2]
+					"ins_instits.ShortName AS InsShortName,"		// row[ 3]
+					"ctr_centers.CtrCod,"					// row[ 4]
+					"ctr_centers.ShortName AS CtrShortName,"		// row[ 5]
+					"deg_degrees.DegCod,"					// row[ 6]
+					"deg_degrees.ShortName AS DegShortName,"		// row[ 7]
+					 "crs_courses.CrsCod,"					// row[ 8]
+					"crs_courses.ShortName AS CrsShortName,"		// row[ 9]
+					"-1 AS GrpCod"						// row[10]
+				  " FROM brw_files,"
+					"crs_courses,"
+					"deg_degrees,"
+					"ctr_centers,"
+					"ins_instits,"
+					"cty_countrs"
+				 " WHERE brw_files.FilCod IN"
+				       " (SELECT FilCod"
+					  " FROM my_files_crs)"
+				   " AND %s"
+				   " AND brw_files.FileBrowser IN (%u,%u,%u,%u)"
+				   " AND brw_files.Cod=crs_courses.CrsCod"
+				   " AND crs_courses.DegCod=deg_degrees.DegCod"
+				   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+				   " AND ctr_centers.InsCod=ins_instits.InsCod"
+				   " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+				   "%s"
+				 " UNION "
+				 // Files in group zones -----------------------
+				 "SELECT brw_files.FilCod,"					// row[ 0]
+					"SUBSTRING(brw_files.Path,"
+					          "LOCATE('/',"
+					                 "brw_files.Path)) AS PathFromRoot,"	// row[ 1]
+					"ins_instits.InsCod,"					// row[ 2]
+					"ins_instits.ShortName AS InsShortName,"		// row[ 3]
+					"ctr_centers.CtrCod,"					// row[ 4]
+					"ctr_centers.ShortName AS CtrShortName,"		// row[ 5]
+					"deg_degrees.DegCod,"					// row[ 6]
+					"deg_degrees.ShortName AS DegShortName,"		// row[ 7]
+					"crs_courses.CrsCod,"					// row[ 8]
+					"crs_courses.ShortName AS CrsShortName,"		// row[ 9]
+					"grp_groups.GrpCod"					// row[10]
+				  " FROM brw_files,"
+					"grp_groups,"
+					"grp_types,"
+					"crs_courses,"
+					"deg_degrees,"
+					"ctr_centers,"
+					"ins_instits,"
+					"cty_countrs"
+				 " WHERE brw_files.FilCod IN"
+				       " (SELECT FilCod"
+					  " FROM my_files_grp)"
+				   " AND %s"
+				   " AND brw_files.FileBrowser IN (%u,%u,%u,%u)"
+				   " AND brw_files.Cod=grp_groups.GrpCod"
+				   " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+				   " AND grp_types.CrsCod=crs_courses.CrsCod"
+				   " AND crs_courses.DegCod=deg_degrees.DegCod"
+				   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+				   " AND ctr_centers.InsCod=ins_instits.InsCod"
+				   " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+				   "%s"
+				") AS selected_files"
 		         " WHERE PathFromRoot<>''"
 		         " ORDER BY InsShortName,"
 				   "CtrShortName,"
@@ -986,7 +1004,8 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 
 	 /***** Drop temporary table *****/
 	 DB_Query ("can not remove temporary table",
-		   "DROP TEMPORARY TABLE IF EXISTS my_files_crs,my_files_grp");
+		   "DROP TEMPORARY TABLE IF EXISTS my_files_crs,"
+		                                  "my_files_grp");
 
 	 return (unsigned) NumDocs;
 	}
@@ -1015,156 +1034,174 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 	 /***** Build the query *****/
 	 NumDocs =
 	 DB_QuerySELECT (&mysql_res,"can not get files",
-		         "SELECT * FROM "
-		         "("
-		         "SELECT brw_files.FilCod,"	// Institution
-			        "SUBSTRING(brw_files.Path,LOCATE('/',brw_files.Path)) AS PathFromRoot,"
-			        "ins_instits.InsCod,"
-			        "ins_instits.ShortName AS InsShortName,"
-			        "-1 AS CtrCod,"
-			        "'' AS CtrShortName,"
-			        "-1 AS DegCod,"
-			        "'' AS DegShortName,"
-			        "-1 AS CrsCod,"
-			        "'' AS CrsShortName,"
-			        "-1 AS GrpCod"
-		          " FROM brw_files,"
-		                "crs_courses,"
-		                "deg_degrees,"
-		                "ctr_centers,"
-		                "ins_instits,"
-		                "cty_countrs"
-		         " WHERE brw_files.PublisherUsrCod=%ld"
-		           " AND %s"
-		           " AND brw_files.FileBrowser IN (%u,%u)"
-		           " AND brw_files.Cod=ins_instits.InsCod"
-		           " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		           "%s"
-		         " UNION "
-		         "SELECT brw_files.FilCod,"	// Center
-			        "SUBSTRING(brw_files.Path,LOCATE('/',brw_files.Path)) AS PathFromRoot,"
-			        "ins_instits.InsCod,"
-			        "ins_instits.ShortName AS InsShortName,"
-			        "ctr_centers.CtrCod,"
-			        "ctr_centers.ShortName AS CtrShortName,"
-			        "-1 AS DegCod,"
-			        "'' AS DegShortName,"
-			        "-1 AS CrsCod,"
-			        "'' AS CrsShortName,"
-			        "-1 AS GrpCod"
-		          " FROM brw_files,"
-		                "crs_courses,"
-		                "deg_degrees,"
-		                "ctr_centers,"
-		                "ins_instits,"
-		                "cty_countrs"
-		         " WHERE brw_files.PublisherUsrCod=%ld AND %s"
-		           " AND brw_files.FileBrowser IN (%u,%u)"
-		           " AND brw_files.Cod=ctr_centers.CtrCod"
-		           " AND ctr_centers.InsCod=ins_instits.InsCod"
-		           " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		           "%s"
-		         " UNION "
-		         "SELECT brw_files.FilCod,"	// Degree
-			        "SUBSTRING(brw_files.Path,LOCATE('/',brw_files.Path)) AS PathFromRoot,"
-			        "ins_instits.InsCod,"
-			        "ins_instits.ShortName AS InsShortName,"
-			        "ctr_centers.CtrCod,"
-			        "ctr_centers.ShortName AS CtrShortName,"
-			        "deg_degrees.DegCod,"
-			        "deg_degrees.ShortName AS DegShortName,"
-			        "-1 AS CrsCod,"
-			        "'' AS CrsShortName,"
-			        "-1 AS GrpCod"
-		          " FROM brw_files,"
-		                "crs_courses,"
-		                "deg_degrees,"
-		                "ctr_centers,"
-		                "ins_instits,"
-		                "cty_countrs"
-		         " WHERE brw_files.PublisherUsrCod=%ld"
-		           " AND %s"
-		           " AND brw_files.FileBrowser IN (%u,%u)"
-		           " AND brw_files.Cod=deg_degrees.DegCod"
-		           " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		           " AND ctr_centers.InsCod=ins_instits.InsCod"
-		           " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		           "%s"
-		         " UNION "
-		         "SELECT brw_files.FilCod,"	// Course
-			        "SUBSTRING(brw_files.Path,LOCATE('/',brw_files.Path)) AS PathFromRoot,"
-			        "ins_instits.InsCod,"
-			        "ins_instits.ShortName AS InsShortName,"
-			        "ctr_centers.CtrCod,"
-			        "ctr_centers.ShortName AS CtrShortName,"
-			        "deg_degrees.DegCod,"
-			        "deg_degrees.ShortName AS DegShortName,"
-			        "crs_courses.CrsCod,"
-			        "crs_courses.ShortName AS CrsShortName,"
-			        "-1 AS GrpCod"
-		          " FROM brw_files,"
-		                "crs_courses,"
-		                "deg_degrees,"
-		                "ctr_centers,"
-		                "ins_instits,"
-		                "cty_countrs"
-		         " WHERE brw_files.PublisherUsrCod=%ld"
-		           " AND %s"
-		           " AND brw_files.FileBrowser IN (%u,%u,%u,%u)"
-		           " AND brw_files.Cod=crs_courses.CrsCod"
-		           " AND crs_courses.DegCod=deg_degrees.DegCod"
-		           " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		           " AND ctr_centers.InsCod=ins_instits.InsCod"
-		           " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		           "%s"
-		         " UNION "
-		         "SELECT brw_files.FilCod,"	// Group
-			        "SUBSTRING(brw_files.Path,LOCATE('/',brw_files.Path)) AS PathFromRoot,"
-			        "ins_instits.InsCod,"
-			        "ins_instits.ShortName AS InsShortName,"
-			        "ctr_centers.CtrCod,"
-			        "ctr_centers.ShortName AS CtrShortName,"
-			        "deg_degrees.DegCod,"
-			        "deg_degrees.ShortName AS DegShortName,"
-			        "crs_courses.CrsCod,"
-			        "crs_courses.ShortName AS CrsShortName,"
-			        "grp_groups.GrpCod"
-		          " FROM brw_files,"
-		                "grp_groups,"
-		                "grp_types,"
-		                "crs_courses,"
-		                "deg_degrees,"
-		                "ctr_centers,"
-		                "ins_instits,"
-		                "cty_countrs"
-		         " WHERE brw_files.PublisherUsrCod=%ld"
-		           " AND %s"
-		           " AND brw_files.FileBrowser IN (%u,%u,%u,%u)"
-		           " AND brw_files.Cod=grp_groups.GrpCod"
-		           " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-		           " AND grp_types.CrsCod=crs_courses.CrsCod"
-		           " AND crs_courses.DegCod=deg_degrees.DegCod"
-		           " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		           " AND ctr_centers.InsCod=ins_instits.InsCod"
-		           " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		           "%s"
-		         " UNION "
-		         "SELECT brw_files.FilCod,"	// Briefcase
-			        "SUBSTRING(brw_files.Path,LOCATE('/',brw_files.Path)) AS PathFromRoot,"
-			        "-1 AS InsCod,"
-			        "'' AS InsShortName,"
-			        "-1 AS CtrCod,"
-			        "'' AS CtrShortName,"
-			        "-1 AS DegCod,"
-			        "'' AS DegShortName,"
-			        "-1 AS CrsCod,"
-			        "'' AS CrsShortName,"
-			        "-1 AS GrpCod"
-		          " FROM brw_files"
-		         " WHERE brw_files.PublisherUsrCod=%ld"
-		           " AND %s"
-		           " AND brw_files.FileBrowser=%u"
-		         ") AS selected_files"
+		         "SELECT *"
+		          " FROM ("
+	                         // Institution --------------------------------
+				 "SELECT brw_files.FilCod,"					// row[ 0]
+					"SUBSTRING(brw_files.Path,"
+					          "LOCATE('/',"
+					                 "brw_files.Path)) AS PathFromRoot,"	// row[ 1]
+					"ins_instits.InsCod,"					// row[ 2]
+					"ins_instits.ShortName AS InsShortName,"		// row[ 3]
+					"-1 AS CtrCod,"						// row[ 4]
+					"'' AS CtrShortName,"					// row[ 5]
+					"-1 AS DegCod,"						// row[ 6]
+					"'' AS DegShortName,"					// row[ 7]
+					"-1 AS CrsCod,"						// row[ 8]
+					"'' AS CrsShortName,"					// row[ 9]
+					"-1 AS GrpCod"						// row[10]
+				  " FROM brw_files,"
+					"crs_courses,"
+					"deg_degrees,"
+					"ctr_centers,"
+					"ins_instits,"
+					"cty_countrs"
+				 " WHERE brw_files.PublisherUsrCod=%ld"
+				   " AND %s"
+				   " AND brw_files.FileBrowser IN (%u,%u)"
+				   " AND brw_files.Cod=ins_instits.InsCod"
+				   " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+				   "%s"
+				 " UNION "
+	                         // Center -------------------------------------
+				 "SELECT brw_files.FilCod,"					// row[ 0]
+					"SUBSTRING(brw_files.Path,"
+					          "LOCATE('/',"
+					                 "brw_files.Path)) AS PathFromRoot,"	// row[ 1]
+					"ins_instits.InsCod,"					// row[ 2]
+					"ins_instits.ShortName AS InsShortName,"		// row[ 3]
+					"ctr_centers.CtrCod,"					// row[ 4]
+					"ctr_centers.ShortName AS CtrShortName,"		// row[ 5]
+					"-1 AS DegCod,"						// row[ 6]
+					"'' AS DegShortName,"					// row[ 7]
+					"-1 AS CrsCod,"						// row[ 8]
+					"'' AS CrsShortName,"					// row[ 9]
+					"-1 AS GrpCod"						// row[10]
+				  " FROM brw_files,"
+					"crs_courses,"
+					"deg_degrees,"
+					"ctr_centers,"
+					"ins_instits,"
+					"cty_countrs"
+				 " WHERE brw_files.PublisherUsrCod=%ld AND %s"
+				   " AND brw_files.FileBrowser IN (%u,%u)"
+				   " AND brw_files.Cod=ctr_centers.CtrCod"
+				   " AND ctr_centers.InsCod=ins_instits.InsCod"
+				   " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+				   "%s"
+				 " UNION "
+	                         // Degree -------------------------------------
+				 "SELECT brw_files.FilCod,"					// row[ 0]
+					"SUBSTRING(brw_files.Path,"
+					          "LOCATE('/',"
+					                 "brw_files.Path)) AS PathFromRoot,"	// row[ 1]
+					"ins_instits.InsCod,"					// row[ 2]
+					"ins_instits.ShortName AS InsShortName,"		// row[ 3]
+					"ctr_centers.CtrCod,"					// row[ 4]
+					"ctr_centers.ShortName AS CtrShortName,"		// row[ 5]
+					"deg_degrees.DegCod,"					// row[ 6]
+					"deg_degrees.ShortName AS DegShortName,"		// row[ 7]
+					"-1 AS CrsCod,"						// row[ 8]
+					"'' AS CrsShortName,"					// row[ 9]
+					"-1 AS GrpCod"						// row[10]
+				  " FROM brw_files,"
+					"crs_courses,"
+					"deg_degrees,"
+					"ctr_centers,"
+					"ins_instits,"
+					"cty_countrs"
+				 " WHERE brw_files.PublisherUsrCod=%ld"
+				   " AND %s"
+				   " AND brw_files.FileBrowser IN (%u,%u)"
+				   " AND brw_files.Cod=deg_degrees.DegCod"
+				   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+				   " AND ctr_centers.InsCod=ins_instits.InsCod"
+				   " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+				   "%s"
+				 " UNION "
+	                         // Course -------------------------------------
+				 "SELECT brw_files.FilCod,"					// row[ 0]
+					"SUBSTRING(brw_files.Path,"
+					          "LOCATE('/',"
+					                 "brw_files.Path)) AS PathFromRoot,"	// row[ 1]
+					"ins_instits.InsCod,"					// row[ 2]
+					"ins_instits.ShortName AS InsShortName,"		// row[ 3]
+					"ctr_centers.CtrCod,"					// row[ 4]
+					"ctr_centers.ShortName AS CtrShortName,"		// row[ 5]
+					"deg_degrees.DegCod,"					// row[ 6]
+					"deg_degrees.ShortName AS DegShortName,"		// row[ 7]
+					"crs_courses.CrsCod,"					// row[ 8]
+					"crs_courses.ShortName AS CrsShortName,"		// row[ 9]
+					"-1 AS GrpCod"						// row[10]
+				  " FROM brw_files,"
+					"crs_courses,"
+					"deg_degrees,"
+					"ctr_centers,"
+					"ins_instits,"
+					"cty_countrs"
+				 " WHERE brw_files.PublisherUsrCod=%ld"
+				   " AND %s"
+				   " AND brw_files.FileBrowser IN (%u,%u,%u,%u)"
+				   " AND brw_files.Cod=crs_courses.CrsCod"
+				   " AND crs_courses.DegCod=deg_degrees.DegCod"
+				   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+				   " AND ctr_centers.InsCod=ins_instits.InsCod"
+				   " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+				   "%s"
+				 " UNION "
+	                         // Group --------------------------------------
+				 "SELECT brw_files.FilCod,"					// row[ 0]
+					"SUBSTRING(brw_files.Path,"
+					          "LOCATE('/',"
+					                 "brw_files.Path)) AS PathFromRoot,"	// row[ 1]
+					"ins_instits.InsCod,"					// row[ 2]
+					"ins_instits.ShortName AS InsShortName,"		// row[ 3]
+					"ctr_centers.CtrCod,"					// row[ 4]
+					"ctr_centers.ShortName AS CtrShortName,"		// row[ 5]
+					"deg_degrees.DegCod,"					// row[ 6]
+					"deg_degrees.ShortName AS DegShortName,"		// row[ 7]
+					"crs_courses.CrsCod,"					// row[ 8]
+					"crs_courses.ShortName AS CrsShortName,"		// row[ 9]
+					"grp_groups.GrpCod"					// row[10]
+				  " FROM brw_files,"
+					"grp_groups,"
+					"grp_types,"
+					"crs_courses,"
+					"deg_degrees,"
+					"ctr_centers,"
+					"ins_instits,"
+					"cty_countrs"
+				 " WHERE brw_files.PublisherUsrCod=%ld"
+				   " AND %s"
+				   " AND brw_files.FileBrowser IN (%u,%u,%u,%u)"
+				   " AND brw_files.Cod=grp_groups.GrpCod"
+				   " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+				   " AND grp_types.CrsCod=crs_courses.CrsCod"
+				   " AND crs_courses.DegCod=deg_degrees.DegCod"
+				   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+				   " AND ctr_centers.InsCod=ins_instits.InsCod"
+				   " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+				   "%s"
+				 " UNION "
+	                         // Briefcase ----------------------------------
+				 "SELECT brw_files.FilCod,"					// row[ 0]
+					"SUBSTRING(brw_files.Path,"
+					          "LOCATE('/',"
+					                 "brw_files.Path)) AS PathFromRoot,"	// row[ 1]
+					"-1 AS InsCod,"						// row[ 2]
+					"'' AS InsShortName,"					// row[ 3]
+					"-1 AS CtrCod,"						// row[ 4]
+					"'' AS CtrShortName,"					// row[ 5]
+					"-1 AS DegCod,"						// row[ 6]
+					"'' AS DegShortName,"					// row[ 7]
+					"-1 AS CrsCod,"						// row[ 8]
+					"'' AS CrsShortName,"					// row[ 9]
+					"-1 AS GrpCod"						// row[10]
+				  " FROM brw_files"
+				 " WHERE brw_files.PublisherUsrCod=%ld"
+				   " AND %s"
+				   " AND brw_files.FileBrowser=%u"
+				") AS selected_files"
 		         " WHERE PathFromRoot<>''"
 		         " ORDER BY InsShortName,"
 		                   "CtrShortName,"

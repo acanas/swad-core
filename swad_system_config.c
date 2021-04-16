@@ -254,7 +254,7 @@ static void SysCfg_Map (void)
    /* Get centers with coordinates */
    NumCtrs = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get centers with coordinates",
-		   "SELECT CtrCod"	// row[0]
+		   "SELECT CtrCod"
 		    " FROM ctr_centers"
 		   " WHERE ctr_centers.Latitude<>0"
 		     " AND ctr_centers.Longitude<>0");

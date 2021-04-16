@@ -1394,40 +1394,40 @@ static void Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
    switch (Gbl.Scope.Current)
      {
       case Hie_Lvl_SYS:
-	 NumInss =
-	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
-				    "SELECT InsCod,"		// row[0]
-				           "COUNT(*) AS N"	// row[1]
-				     " FROM usr_data"
-				    " WHERE InsCod>0"
-				    " GROUP BY InsCod"
-				    " ORDER BY N DESC");
+	 NumInss = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get institutions",
+			 "SELECT InsCod,"		// row[0]
+			        "COUNT(*) AS N"		// row[1]
+			  " FROM usr_data"
+			 " WHERE InsCod>0"
+			 " GROUP BY InsCod"
+			 " ORDER BY N DESC");
          break;
       case Hie_Lvl_CTY:
-	 NumInss =
-	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
-				    "SELECT usr_data.InsCod,"	// row[0]
-				           "COUNT(*) AS N"	// row[1]
-				     " FROM ins_instits,usr_data"
-				    " WHERE ins_instits.CtyCod=%ld"
-				      " AND ins_instits.InsCod=usr_data.InsCod"
-				    " GROUP BY usr_data.InsCod"
-				    " ORDER BY N DESC",
-				    Gbl.Hierarchy.Cty.CtyCod);
+	 NumInss = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get institutions",
+			 "SELECT usr_data.InsCod,"	// row[0]
+			        "COUNT(*) AS N"		// row[1]
+			  " FROM ins_instits,usr_data"
+			 " WHERE ins_instits.CtyCod=%ld"
+			   " AND ins_instits.InsCod=usr_data.InsCod"
+			 " GROUP BY usr_data.InsCod"
+			 " ORDER BY N DESC",
+			 Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_Lvl_INS:
       case Hie_Lvl_CTR:
       case Hie_Lvl_DEG:
       case Hie_Lvl_CRS:
-	 NumInss =
-	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
-				    "SELECT InsCod,"		// row[0]
-				           "COUNT(*) AS N"	// row[1]
-				     " FROM usr_data"
-				    " WHERE InsCod=%ld"
-				    " GROUP BY InsCod"
-				    " ORDER BY N DESC",
-				    Gbl.Hierarchy.Ins.InsCod);
+	 NumInss = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get institutions",
+			 "SELECT InsCod,"		// row[0]
+			        "COUNT(*) AS N"		// row[1]
+			  " FROM usr_data"
+			 " WHERE InsCod=%ld"
+			 " GROUP BY InsCod"
+			 " ORDER BY N DESC",
+			 Gbl.Hierarchy.Ins.InsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -3552,8 +3552,8 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Tml_Not_NoteType_t NoteType;
-   unsigned long NumNotes;
-   unsigned long NumRows;
+   unsigned NumNotes;
+   unsigned NumRows;
    unsigned NumUsrs;
    unsigned NumUsrsTotal;
 
@@ -3584,7 +3584,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
       switch (Gbl.Scope.Current)
 	{
 	 case Hie_Lvl_SYS:
-	    NumRows =
+	    NumRows = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 			    "SELECT COUNT(*),"				// row[0]
 				   "COUNT(DISTINCT UsrCod)"		// row[1]
@@ -3592,7 +3592,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    NoteType);
 	    break;
 	 case Hie_Lvl_CTY:
-	    NumRows =
+	    NumRows = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
 				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
@@ -3613,7 +3613,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    (unsigned) NoteType);
 	    break;
 	 case Hie_Lvl_INS:
-	    NumRows =
+	    NumRows = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
 				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
@@ -3632,7 +3632,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    (unsigned) NoteType);
 	    break;
 	 case Hie_Lvl_CTR:
-	    NumRows =
+	    NumRows = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
 				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
@@ -3649,7 +3649,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    (unsigned) NoteType);
 	    break;
 	 case Hie_Lvl_DEG:
-	    NumRows =
+	    NumRows = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
 				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
@@ -3664,7 +3664,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    (unsigned) NoteType);
 	    break;
 	 case Hie_Lvl_CRS:
-	    NumRows =
+	    NumRows = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
 				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
@@ -3691,7 +3691,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 
 	 /* Get number of social notes */
 	 if (row[0])
-	    if (sscanf (row[0],"%lu",&NumNotes) != 1)
+	    if (sscanf (row[0],"%u",&NumNotes) != 1)
 	       NumNotes = 0;
 
 	 /* Get number of users */
@@ -3711,7 +3711,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_UnsignedLong (NumNotes);
+      HTM_Unsigned (NumNotes);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -3736,14 +3736,14 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    switch (Gbl.Scope.Current)
      {
       case Hie_Lvl_SYS:
-	 NumRows =
+	 NumRows = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 		         "SELECT COUNT(*),"				// row[0]
 			        "COUNT(DISTINCT UsrCod)"		// row[1]
 		         " FROM tml_notes");
 	 break;
       case Hie_Lvl_CTY:
-	 NumRows =
+	 NumRows = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
 			        "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
@@ -3762,7 +3762,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 		         Gbl.Hierarchy.Cty.CtyCod);
 	 break;
       case Hie_Lvl_INS:
-	 NumRows =
+	 NumRows = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
 			        "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
@@ -3779,7 +3779,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 		         Gbl.Hierarchy.Ins.InsCod);
 	 break;
       case Hie_Lvl_CTR:
-	 NumRows =
+	 NumRows = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
 			        "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
@@ -3794,7 +3794,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 		         Gbl.Hierarchy.Ctr.CtrCod);
 	 break;
       case Hie_Lvl_DEG:
-	 NumRows =
+	 NumRows = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
 			        "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
@@ -3807,7 +3807,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 		         Gbl.Hierarchy.Deg.DegCod);
 	 break;
       case Hie_Lvl_CRS:
-	 NumRows =
+	 NumRows = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
 			        "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
@@ -3832,7 +3832,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 
       /* Get number of social notes */
       if (row[0])
-	 if (sscanf (row[0],"%lu",&NumNotes) != 1)
+	 if (sscanf (row[0],"%u",&NumNotes) != 1)
 	    NumNotes = 0;
 
       /* Get number of users */
@@ -3852,7 +3852,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_UnsignedLong (NumNotes);
+   HTM_Unsigned (NumNotes);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");

@@ -423,7 +423,6 @@ void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt)
    extern const char *Txt_Another_department;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Clear data *****/
    Dpt->InsCod = -1L;
@@ -439,38 +438,36 @@ void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt)
    else if (Dpt->DptCod > 0)
      {
       /***** Get data of a department from database *****/
-      NumRows =
-      DB_QuerySELECT (&mysql_res,"can not get data of a department",
-		      "(SELECT dpt_departments.InsCod,"				// row[0]
-			      "dpt_departments.ShortName,"			// row[1]
-			      "dpt_departments.FullName,"			// row[2]
-			      "dpt_departments.WWW,"				// row[3]
-			      "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[4]
-		        " FROM dpt_departments,"
-			      "usr_data,"
-			      "crs_users"
-		       " WHERE dpt_departments.DptCod=%ld"
-		         " AND dpt_departments.DptCod=usr_data.DptCod"
-		         " AND usr_data.UsrCod=crs_users.UsrCod"
-		         " AND crs_users.Role=%u"
-		       " GROUP BY dpt_departments.DptCod)"
-		      " UNION "
-		      "(SELECT InsCod,"						// row[0]
-		              "ShortName,"					// row[1]
-		              "FullName,"					// row[2]
-		              "WWW,"						// row[3]
-		              "0"						// row[4]
-		        " FROM dpt_departments"
-		       " WHERE DptCod=%ld"
-		         " AND DptCod NOT IN"
-		             " (SELECT DISTINCT usr_data.DptCod"
-		                " FROM usr_data,"
-		                      "crs_users"
-		               " WHERE crs_users.Role=%u"
-		                 " AND crs_users.UsrCod=usr_data.UsrCod))",
-		      Dpt->DptCod,(unsigned) Rol_TCH,
-		      Dpt->DptCod,(unsigned) Rol_TCH);
-      if (NumRows) // Department found...
+      if (DB_QuerySELECT (&mysql_res,"can not get data of a department",
+			  "(SELECT dpt_departments.InsCod,"				// row[0]
+				  "dpt_departments.ShortName,"			// row[1]
+				  "dpt_departments.FullName,"			// row[2]
+				  "dpt_departments.WWW,"				// row[3]
+				  "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[4]
+			    " FROM dpt_departments,"
+				  "usr_data,"
+				  "crs_users"
+			   " WHERE dpt_departments.DptCod=%ld"
+			     " AND dpt_departments.DptCod=usr_data.DptCod"
+			     " AND usr_data.UsrCod=crs_users.UsrCod"
+			     " AND crs_users.Role=%u"
+			   " GROUP BY dpt_departments.DptCod)"
+			  " UNION "
+			  "(SELECT InsCod,"						// row[0]
+				  "ShortName,"					// row[1]
+				  "FullName,"					// row[2]
+				  "WWW,"						// row[3]
+				  "0"						// row[4]
+			    " FROM dpt_departments"
+			   " WHERE DptCod=%ld"
+			     " AND DptCod NOT IN"
+				 " (SELECT DISTINCT usr_data.DptCod"
+				    " FROM usr_data,"
+					  "crs_users"
+				   " WHERE crs_users.Role=%u"
+				     " AND crs_users.UsrCod=usr_data.UsrCod))",
+			  Dpt->DptCod,(unsigned) Rol_TCH,
+			  Dpt->DptCod,(unsigned) Rol_TCH)) // Department found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);

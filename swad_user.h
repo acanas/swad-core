@@ -358,10 +358,10 @@ bool Usr_CheckIfIBelongToDeg (long DegCod);
 bool Usr_CheckIfIBelongToCrs (long CrsCod);
 
 unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res);
-unsigned long Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res);
-unsigned long Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res);
-unsigned long Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res);
-unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res);
+unsigned Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res);
+unsigned Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res);
+unsigned Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res);
+unsigned Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res);
 void Usr_GetMainDeg (long UsrCod,
 		     char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
 		     Rol_Role_t *MaxRole);

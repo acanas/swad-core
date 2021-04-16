@@ -2935,7 +2935,6 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
    unsigned NumGrp;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    struct GroupType *GrpTyp;
    struct Group *Grp;
    Rol_Role_t Role;
@@ -2952,13 +2951,11 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
       if (GrpTyp->NumGrps)	 // If there are groups of this type...
         {
          /***** Query database *****/
-         if ((NumRows = Grp_GetGrpsOfType (GrpTyp->GrpTypCod,&mysql_res)) > 0) // Groups found...
+	 GrpTyp->NumGrps = Grp_GetGrpsOfType (GrpTyp->GrpTypCod,&mysql_res);
+         if (GrpTyp->NumGrps > 0) // Groups found...
            {
-	    // NumRows should be equal to GrpTyp->NumGrps
-            GrpTyp->NumGrps = (unsigned) NumRows;
-
             /***** Create list with groups of this type *****/
-            if ((GrpTyp->LstGrps = calloc (GrpTyp->NumGrps,
+            if ((GrpTyp->LstGrps = calloc ((size_t) GrpTyp->NumGrps,
                                            sizeof (*GrpTyp->LstGrps))) == NULL)
                Lay_NotEnoughMemoryExit ();
 
@@ -3005,9 +3002,6 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
                Grp->FileZones = (row[6][0] == 'Y');
               }
            }
-         else	// Error: groups should be found, but really they haven't be found.
-		// This never should happen.
-            GrpTyp->NumGrps = 0;
 
          /***** Free structure that stores the query result *****/
          DB_FreeMySQLResult (&mysql_res);
@@ -3085,24 +3079,25 @@ static unsigned Grp_CountNumGrpsInThisCrsOfType (long GrpTypCod)
 /******************** Get groups of a type in this course ********************/
 /*****************************************************************************/
 
-unsigned long Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res)
+unsigned Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res)
   {
    /***** Get groups of a type from database *****/
    // Don't use INNER JOIN because there are groups without assigned room
-   return DB_QuerySELECT (mysql_res,"can not get groups of a type",
-			  "SELECT grp_groups.GrpCod,"		// row[0]
-			         "grp_groups.GrpName,"		// row[1]
-			         "grp_groups.RooCod,"		// row[2]
-			         "roo_rooms.ShortName,"		// row[3]
-			         "grp_groups.MaxStudents,"	// row[4]
-			         "grp_groups.Open,"		// row[5]
-			         "grp_groups.FileZones"		// row[6]
-			   " FROM grp_groups"
-			   " LEFT JOIN roo_rooms"
-			     " ON grp_groups.RooCod=roo_rooms.RooCod"
-			  " WHERE grp_groups.GrpTypCod=%ld"
-			  " ORDER BY grp_groups.GrpName",
-			  GrpTypCod);
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get groups of a type",
+		   "SELECT grp_groups.GrpCod,"		// row[0]
+			  "grp_groups.GrpName,"		// row[1]
+			  "grp_groups.RooCod,"		// row[2]
+			  "roo_rooms.ShortName,"	// row[3]
+			  "grp_groups.MaxStudents,"	// row[4]
+			  "grp_groups.Open,"		// row[5]
+			  "grp_groups.FileZones"	// row[6]
+		    " FROM grp_groups"
+		    " LEFT JOIN roo_rooms"
+		      " ON grp_groups.RooCod=roo_rooms.RooCod"
+		   " WHERE grp_groups.GrpTypCod=%ld"
+		   " ORDER BY grp_groups.GrpName",
+		   GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -3177,7 +3172,6 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Reset values *****/
    GrpDat->GrpTypCod             = -1L;
@@ -3195,26 +3189,24 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
    if (GrpDat->GrpCod > 0)
      {
       /***** Get data of a group from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a group",
-				"SELECT grp_groups.GrpTypCod,"		// row[0]
-				       "grp_types.CrsCod,"		// row[1]
-				       "grp_types.GrpTypName,"		// row[2]
-				       "grp_types.Multiple,"		// row[3]
-				       "grp_groups.GrpName,"		// row[4]
-				       "grp_groups.RooCod,"		// row[5]
-				       "roo_rooms.ShortName,"		// row[6]
-				       "grp_groups.MaxStudents,"	// row[7]
-				       "grp_groups.Open,"		// row[8]
-				       "grp_groups.FileZones"		// row[9]
-				 " FROM (grp_groups,"
-				        "grp_types)"
-				 " LEFT JOIN roo_rooms"
-				   " ON grp_groups.RooCod=roo_rooms.RooCod"
-				" WHERE grp_groups.GrpCod=%ld"
-				  " AND grp_groups.GrpTypCod=grp_types.GrpTypCod",
-				GrpDat->GrpCod);
-
-      if (NumRows == 1)
+      if (DB_QuerySELECT (&mysql_res,"can not get data of a group",
+			  "SELECT grp_groups.GrpTypCod,"	// row[0]
+				 "grp_types.CrsCod,"		// row[1]
+				 "grp_types.GrpTypName,"	// row[2]
+				 "grp_types.Multiple,"		// row[3]
+				 "grp_groups.GrpName,"		// row[4]
+				 "grp_groups.RooCod,"		// row[5]
+				 "roo_rooms.ShortName,"		// row[6]
+				 "grp_groups.MaxStudents,"	// row[7]
+				 "grp_groups.Open,"		// row[8]
+				 "grp_groups.FileZones"		// row[9]
+			   " FROM (grp_groups,"
+				  "grp_types)"
+			   " LEFT JOIN roo_rooms"
+			     " ON grp_groups.RooCod=roo_rooms.RooCod"
+			  " WHERE grp_groups.GrpCod=%ld"
+			    " AND grp_groups.GrpTypCod=grp_types.GrpTypCod",
+			  GrpDat->GrpCod) == 1)
 	{
 	 /***** Get data of group *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -3735,34 +3727,35 @@ void Grp_GetNamesGrpsStdBelongsTo (long GrpTypCod,long UsrCod,char *GroupNames)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
+   unsigned NumGrps;
+   unsigned NumGrp;
    size_t MaxLength = (Grp_MAX_BYTES_GROUP_NAME + 2) *
 		      Gbl.Crs.Grps.GrpTypes.NumGrpsTotal;
 
    /***** Get the names of groups which a user belongs to, from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get the names of groups"
-				        " a user belongs to",
-			     "SELECT grp_groups.GrpName"	// row[0]
-			      " FROM grp_groups,"
-			            "grp_users"
-			     " WHERE grp_groups.GrpTypCod=%ld"
-			       " AND grp_groups.GrpCod=grp_users.GrpCod"
-			       " AND grp_users.UsrCod=%ld"
-			     " ORDER BY grp_groups.GrpName",
-			     GrpTypCod,UsrCod);
+   NumGrps = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get names of groups a user belongs to",
+		   "SELECT grp_groups.GrpName"	// row[0]
+		    " FROM grp_groups,"
+			  "grp_users"
+		   " WHERE grp_groups.GrpTypCod=%ld"
+		     " AND grp_groups.GrpCod=grp_users.GrpCod"
+		     " AND grp_users.UsrCod=%ld"
+		   " ORDER BY grp_groups.GrpName",
+		   GrpTypCod,
+		   UsrCod);
 
    /***** Get the groups *****/
    GroupNames[0] = '\0';
-   for (NumRow = 0;
-	NumRow < NumRows;
-	NumRow++)
+   for (NumGrp = 0;
+	NumGrp < NumGrps;
+	NumGrp++)
      {
       /* Get next group */
       row = mysql_fetch_row (mysql_res);
 
-      /* El group name in row[0] */
-      if (NumRow)
+      /* Group name is in row[0] */
+      if (NumGrp)
          Str_Concat (GroupNames,", ",MaxLength);
       Str_Concat (GroupNames,row[0],MaxLength);
      }

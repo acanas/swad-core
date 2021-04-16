@@ -1013,14 +1013,14 @@ int swad__loginBySessionKey (struct soap *soap,
 
    // Now, we know that sessionID is a valid session identifier
    /***** Query data of the session from database *****/
-   NumRows =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get session data",
-			      "SELECT UsrCod,"	// row[0]
-			             "DegCod,"	// row[1]
-			             "CrsCod"	// row[2]
-			       " FROM ses_sessions"
-			      " WHERE SessionId='%s'",
-			      sessionID);
+   NumRows = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get session data",
+		   "SELECT UsrCod,"	// row[0]
+			  "DegCod,"	// row[1]
+			  "CrsCod"	// row[2]
+		    " FROM ses_sessions"
+		   " WHERE SessionId='%s'",
+		   sessionID);
    if (NumRows == 1)	// Session found in table of sessions
      {
       row = mysql_fetch_row (mysql_res);
@@ -2625,13 +2625,12 @@ static void API_GetListGrpsInAttendanceEventFromDB (struct soap *soap,
    size_t Length;
 
    /***** Get list of groups *****/
-   NumGrps =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get groups"
-					 " of an attendance event",
-			      "SELECT GrpCod"
-			       " FROM att_groups"
-			      " WHERE AttCod=%ld",
-			      AttCod);
+   NumGrps = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get groups of an attendance event",
+		   "SELECT GrpCod"
+		    " FROM att_groups"
+		   " WHERE AttCod=%ld",
+		   AttCod);
    if (NumGrps == 0)
       *ListGroups = NULL;
    else	// Events found
@@ -3587,8 +3586,8 @@ int swad__sendMessage (struct soap *soap,
    char *Query = NULL;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRow;
-   unsigned NumRows;
+   unsigned NumUsrs;
+   unsigned NumUsr;
    bool FirstNickname = true;
    bool ThereAreNicknames = false;
    const char *Ptr;
@@ -3715,22 +3714,23 @@ int swad__sendMessage (struct soap *soap,
    if (ReplyUsrCod > 0 || ThereAreNicknames)	// There are a recipient to reply or nicknames in "to"
      {
       /***** Get users *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get users",
-				"%s",
-				Query);
+      NumUsrs = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get users",
+		      "%s",
+	              Query);
 
-      sendMessageOut->numUsers = (int) NumRows;
-      sendMessageOut->usersArray.__size = (int) NumRows;
+      sendMessageOut->numUsers = (int) NumUsrs;
+      sendMessageOut->usersArray.__size = (int) NumUsrs;
 
-      if (NumRows)	// Users found
+      if (NumUsrs)	// Users found
         {
          sendMessageOut->usersArray.__ptr = soap_malloc (soap,
 							 (sendMessageOut->usersArray.__size) *
 							 sizeof (*(sendMessageOut->usersArray.__ptr)));
 
-         for (NumRow = 0;
-              NumRow < NumRows;
-              NumRow++)
+         for (NumUsr = 0;
+              NumUsr < NumUsrs;
+              NumUsr++)
            {
             /* Get next user */
             row = mysql_fetch_row (mysql_res);
@@ -3754,7 +3754,7 @@ int swad__sendMessage (struct soap *soap,
 
                   /* Copy user's data into output structure */
                   API_CopyUsrData (soap,
-				   &(sendMessageOut->usersArray.__ptr[NumRow]),
+				   &(sendMessageOut->usersArray.__ptr[NumUsr]),
 				   &Gbl.Usrs.Other.UsrDat,
 				   false);
         	 }
@@ -4180,22 +4180,23 @@ static int API_GetTstTags (struct soap *soap,
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRow;
-   unsigned NumRows;
+   unsigned NumTags;
+   unsigned NumTag;
 
    /***** Get available tags from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get test tags",
-			     "SELECT TagCod,"	// row[0]
-			            "TagTxt"	// row[1]
-			      " FROM tst_tags"
-			     " WHERE CrsCod=%ld"
-			       " AND TagHidden='N'"
-			     " ORDER BY TagTxt",
-			     CrsCod);
+   NumTags = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get test tags",
+		   "SELECT TagCod,"	// row[0]
+			  "TagTxt"	// row[1]
+		    " FROM tst_tags"
+		   " WHERE CrsCod=%ld"
+		     " AND TagHidden='N'"
+		   " ORDER BY TagTxt",
+		   CrsCod);
 
-   getTestsOut->tagsArray.__size = (int) NumRows;
+   getTestsOut->tagsArray.__size = (int) NumTags;
 
-   if (NumRows == 0)
+   if (NumTags == 0)
       getTestsOut->tagsArray.__ptr = NULL;
    else	// Tags found
      {
@@ -4203,20 +4204,20 @@ static int API_GetTstTags (struct soap *soap,
 						  (getTestsOut->tagsArray.__size) *
 						  sizeof (*(getTestsOut->tagsArray.__ptr)));
 
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumTag = 0;
+	   NumTag < NumTags;
+	   NumTag++)
 	{
 	 /* Get next tag */
 	 row = mysql_fetch_row (mysql_res);
 
          /* Get tag code (row[0]) */
-	 getTestsOut->tagsArray.__ptr[NumRow].tagCode = (int) Str_ConvertStrCodToLongCod (row[0]);
+	 getTestsOut->tagsArray.__ptr[NumTag].tagCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get tag text (row[1]) */
-         getTestsOut->tagsArray.__ptr[NumRow].tagText =
+         getTestsOut->tagsArray.__ptr[NumTag].tagText =
             soap_malloc (soap,Tag_MAX_BYTES_TAG + 1);
-	 Str_Copy (getTestsOut->tagsArray.__ptr[NumRow].tagText,row[1],
+	 Str_Copy (getTestsOut->tagsArray.__ptr[NumTag].tagText,row[1],
 	           Tag_MAX_BYTES_TAG);
 	}
      }
@@ -4766,7 +4767,7 @@ int swad__getGames (struct soap *soap,
    int ReturnCode;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned NumGames;
    int NumGame;
    long GamCod;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
@@ -4808,27 +4809,28 @@ int swad__getGames (struct soap *soap,
 				  "Requester must be a student in the course");
 
    /***** Query list of games *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get games",
-			     "SELECT gam_games.GamCod,"						// row[0]
-			            "gam_games.UsrCod,"						// row[1]
-			            "UNIX_TIMESTAMP(MIN(mch_matches.StartTime)) AS StartTime,"	// row[2]
-			            "UNIX_TIMESTAMP(MAX(mch_matches.EndTime)) AS EndTime,"	// row[3]
-				    "gam_games.MaxGrade,"					// row[4]
-				    "gam_games.Visibility,"					// row[5]
-			            "gam_games.Title,"						// row[6]
-			            "gam_games.Txt"						// row[7]
-			      " FROM gam_games"
-			      " LEFT JOIN mch_matches"
-			        " ON gam_games.GamCod=mch_matches.GamCod"
-			     " WHERE gam_games.CrsCod=%ld"
-			       " AND Hidden='N'"
-			     " GROUP BY gam_games.GamCod"
-			     " ORDER BY StartTime DESC,"
-			               "EndTime DESC,"
-			               "gam_games.Title DESC",
-			     Gbl.Hierarchy.Crs.CrsCod);
+   NumGames = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get games",
+		   "SELECT gam_games.GamCod,"						// row[0]
+			  "gam_games.UsrCod,"						// row[1]
+			  "UNIX_TIMESTAMP(MIN(mch_matches.StartTime)) AS StartTime,"	// row[2]
+			  "UNIX_TIMESTAMP(MAX(mch_matches.EndTime)) AS EndTime,"	// row[3]
+			  "gam_games.MaxGrade,"						// row[4]
+			  "gam_games.Visibility,"					// row[5]
+			  "gam_games.Title,"						// row[6]
+			  "gam_games.Txt"						// row[7]
+		    " FROM gam_games"
+		    " LEFT JOIN mch_matches"
+		      " ON gam_games.GamCod=mch_matches.GamCod"
+		   " WHERE gam_games.CrsCod=%ld"
+		     " AND Hidden='N'"
+		   " GROUP BY gam_games.GamCod"
+		   " ORDER BY StartTime DESC,"
+			     "EndTime DESC,"
+			     "gam_games.Title DESC",
+		   Gbl.Hierarchy.Crs.CrsCod);
    getGamesOut->gamesArray.__size =
-   getGamesOut->numGames          = (int) NumRows;
+   getGamesOut->numGames          = (int) NumGames;
 
    if (getGamesOut->numGames == 0)
       getGamesOut->gamesArray.__ptr = NULL;
@@ -4938,7 +4940,7 @@ int swad__getMatches (struct soap *soap,
    struct Gam_Game Game;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned NumMatches;
    int NumMatch;
    long MchCod;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
@@ -4991,29 +4993,30 @@ int swad__getMatches (struct soap *soap,
 				  "Requester must be a student in the course");
 
    /***** Query list of matches *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get matches",
-			     "SELECT MchCod,"				// row[ 0]
-				    "UsrCod,"				// row[ 1]
-				    "UNIX_TIMESTAMP(StartTime),"	// row[ 2]
-				    "UNIX_TIMESTAMP(EndTime),"		// row[ 3]
-				    "Title,"				// row[ 4]
-				    "QstInd"				// row[ 5]
-			      " FROM mch_matches"
-			     " WHERE GamCod=%ld"
-			       " AND (MchCod NOT IN"
-				    " (SELECT MchCod FROM mch_groups)"
-				    " OR"
-				    " MchCod IN"
-				    " (SELECT mch_groups.MchCod"
-				       " FROM mch_groups,"
-				             "grp_users"
-				      " WHERE grp_users.UsrCod=%ld"
-				        " AND mch_groups.GrpCod=grp_users.GrpCod))"
-			     " ORDER BY MchCod",
-			     Game.GamCod,
-			     Gbl.Usrs.Me.UsrDat.UsrCod);
+   NumMatches = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get matches",
+		   "SELECT MchCod,"			// row[ 0]
+			  "UsrCod,"			// row[ 1]
+			  "UNIX_TIMESTAMP(StartTime),"	// row[ 2]
+			  "UNIX_TIMESTAMP(EndTime),"	// row[ 3]
+			  "Title,"			// row[ 4]
+			  "QstInd"			// row[ 5]
+		    " FROM mch_matches"
+		   " WHERE GamCod=%ld"
+		     " AND (MchCod NOT IN"
+			  " (SELECT MchCod FROM mch_groups)"
+			  " OR"
+			  " MchCod IN"
+			  " (SELECT mch_groups.MchCod"
+			     " FROM mch_groups,"
+				   "grp_users"
+			    " WHERE grp_users.UsrCod=%ld"
+			      " AND mch_groups.GrpCod=grp_users.GrpCod))"
+		   " ORDER BY MchCod",
+		   Game.GamCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
    getMatchesOut->matchesArray.__size =
-   getMatchesOut->numMatches          = (int) NumRows;
+   getMatchesOut->numMatches          = (int) NumMatches;
 
    if (getMatchesOut->numMatches == 0)
       getMatchesOut->matchesArray.__ptr = NULL;

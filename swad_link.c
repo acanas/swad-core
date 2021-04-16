@@ -287,27 +287,26 @@ void Lnk_GetListLinks (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    unsigned NumLnk;
    struct Link *Lnk;
 
    if (Gbl.DB.DatabaseIsOpen)
      {
       /***** Get institutional links from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get institutional links",
-				"SELECT LnkCod,"	// row[0]
-				       "ShortName,"	// row[1]
-				       "FullName,"	// row[2]
-				       "WWW"		// row[3]
-			         " FROM lnk_links"
-			        " ORDER BY ShortName");
+      Gbl.Links.Num = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get institutional links",
+		      "SELECT LnkCod,"		// row[0]
+			     "ShortName,"	// row[1]
+			     "FullName,"	// row[2]
+			     "WWW"		// row[3]
+		       " FROM lnk_links"
+		      " ORDER BY ShortName");
 
-      if (NumRows) // Places found...
+      if (Gbl.Links.Num) // Places found...
 	{
-	 Gbl.Links.Num = (unsigned) NumRows;
-
 	 /***** Create list with places *****/
-	 if ((Gbl.Links.Lst = calloc (NumRows,sizeof (*Gbl.Links.Lst))) == NULL)
+	 if ((Gbl.Links.Lst = calloc ((size_t) Gbl.Links.Num,
+	                              sizeof (*Gbl.Links.Lst))) == NULL)
 	     Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the links *****/
@@ -331,8 +330,6 @@ void Lnk_GetListLinks (void)
 	    Str_Copy (Lnk->WWW     ,row[3],sizeof (Lnk->WWW     ) - 1);
 	   }
 	}
-      else
-	 Gbl.Links.Num = 0;
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -347,7 +344,6 @@ void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Clear data *****/
    Lnk->ShrtName[0] = Lnk->FullName[0] = Lnk->WWW[0] = '\0';
@@ -356,16 +352,13 @@ void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
    if (Lnk->LnkCod > 0)
      {
       /***** Get data of an institutional link from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get data"
-					   " of an institutional link",
-				"SELECT ShortName,"	// row[0]
-				       "FullName,"	// row[1]
-				       "WWW"		// row[2]
-				 " FROM lnk_links"
-				" WHERE LnkCod=%ld",
-				Lnk->LnkCod);
-
-      if (NumRows) // Link found...
+      if (DB_QuerySELECT (&mysql_res,"can not get data of an institutional link",
+			  "SELECT ShortName,"	// row[0]
+				 "FullName,"	// row[1]
+				 "WWW"		// row[2]
+			   " FROM lnk_links"
+			  " WHERE LnkCod=%ld",
+			  Lnk->LnkCod)) // Link found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);

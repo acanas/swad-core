@@ -194,7 +194,7 @@ void Grp_FreeListGrpTypesAndGrps (void);
 void Grp_OpenGroupsAutomatically (void);
 void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes);
 unsigned Grp_CountNumGrpsInCurrentCrs (void);
-unsigned long Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res);
+unsigned Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res);
 void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat);
 bool Grp_CheckIfGroupExists (long GrpCod);
 bool Grp_CheckIfGroupBelongsToCourse (long GrpCod,long CrsCod);

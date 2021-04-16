@@ -143,7 +143,7 @@ void Tst_WriteParamQstCod (unsigned NumQst,long QstCod);
 
 void Tst_CheckIfNumberOfAnswersIsOne (const struct Tst_Question *Question);
 
-unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res);
+unsigned Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res);
 void Tst_GetAndWriteTagsQst (long QstCod);
 
 void Tst_ShowFormConfig (void);
@@ -161,7 +161,7 @@ bool Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt
 
 Tst_AnswerType_t Tst_GetQstAnswerTypeFromDB (long QstCod);
 bool Tst_GetQstDataFromDB (struct Tst_Question *Question);
-Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
+Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeDB);
 void Tst_ReceiveQst (void);
 bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Question);
 

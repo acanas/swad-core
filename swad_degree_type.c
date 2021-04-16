@@ -901,21 +901,22 @@ bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
 static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
   {
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
-   unsigned long NumRow;
+   unsigned NumDegs;
+   unsigned NumDeg;
    long DegCod;
 
    /***** Get degrees of a type from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get degrees of a type",
-			     "SELECT DegCod"
-			      " FROM deg_degrees"
-			     " WHERE DegTypCod=%ld",
-			     DegTypCod);
+   NumDegs = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get degrees of a type",
+		   "SELECT DegCod"
+		    " FROM deg_degrees"
+		   " WHERE DegTypCod=%ld",
+		   DegTypCod);
 
    /* Get degrees of this type */
-   for (NumRow = 0;
-	NumRow < NumRows;
-	NumRow++)
+   for (NumDeg = 0;
+	NumDeg < NumDegs;
+	NumDeg++)
      {
       /* Get next degree */
       if ((DegCod = DB_GetNextCode (mysql_res)) < 0)

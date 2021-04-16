@@ -169,32 +169,28 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
    long Cod = Brw_GetCodForFiles ();
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Get number of rows of header and footer from database *****/
    /* There should be a single file in database.
       If, due to an error, there is more than one file,
       get the number of rows of the more recent file. */
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get the number of rows"
-				        " in header and footer",
-			     "SELECT mrk_marks.%s,"	// row[0]
-			            "mrk_marks.%s"	// row[1]
-			      " FROM brw_files,"
-			            "mrk_marks"
-			     " WHERE brw_files.FileBrowser=%u"
-			       " AND brw_files.Cod=%ld"
-			       " AND brw_files.Path='%s'"
-			       " AND brw_files.FilCod=mrk_marks.FilCod"
-			     " ORDER BY brw_files.FilCod DESC"
-			     " LIMIT 1",	// On duplicate entries, get the more recent
-			     Mrk_HeadOrFootStr[Brw_HEADER],
-			     Mrk_HeadOrFootStr[Brw_FOOTER],
-			     (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-			     Cod,
-			     Gbl.FileBrowser.FilFolLnk.Full);
-
-   /***** The result of the query must have only one row *****/
-   if (NumRows == 1)
+   if (DB_QuerySELECT (&mysql_res,"can not get the number of rows"
+				  " in header and footer",
+		       "SELECT mrk_marks.%s,"	// row[0]
+			      "mrk_marks.%s"	// row[1]
+			" FROM brw_files,"
+			      "mrk_marks"
+		       " WHERE brw_files.FileBrowser=%u"
+			 " AND brw_files.Cod=%ld"
+			 " AND brw_files.Path='%s'"
+			 " AND brw_files.FilCod=mrk_marks.FilCod"
+		       " ORDER BY brw_files.FilCod DESC"
+		       " LIMIT 1",	// On duplicate entries, get the more recent
+		       Mrk_HeadOrFootStr[Brw_HEADER],
+		       Mrk_HeadOrFootStr[Brw_FOOTER],
+		       (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		       Cod,
+		       Gbl.FileBrowser.FilFolLnk.Full) == 1)
      {
       /***** Get number of header and footer rows *****/
       row = mysql_fetch_row (mysql_res);

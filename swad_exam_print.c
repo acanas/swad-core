@@ -69,7 +69,7 @@ extern struct Globals Gbl;
 
 static void ExaPrn_GetDataOfPrint (struct ExaPrn_Print *Print,
                                    MYSQL_RES **mysql_res,
-				   unsigned long NumRows);
+				   unsigned NumPrints);
 
 static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,long ExaCod);
 static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
@@ -252,25 +252,26 @@ void ExaPrn_ShowExamPrint (void)
 void ExaPrn_GetDataOfPrintByPrnCod (struct ExaPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
+   unsigned NumPrints;
 
    /***** Make database query *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get data of an exam print",
-			     "SELECT PrnCod,"				// row[0]
-				    "SesCod,"				// row[1]
-				    "UsrCod,"				// row[2]
-				    "UNIX_TIMESTAMP(StartTime),"	// row[3]
-				    "UNIX_TIMESTAMP(EndTime),"		// row[4]
-				    "NumQsts,"				// row[5]
-				    "NumQstsNotBlank,"			// row[6]
-				    "Sent,"				// row[7]
-				    "Score"				// row[8]
-			      " FROM exa_prints"
-			     " WHERE PrnCod=%ld",
-			     Print->PrnCod);
+   NumPrints = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get data of an exam print",
+		   "SELECT PrnCod,"			// row[0]
+			  "SesCod,"			// row[1]
+			  "UsrCod,"			// row[2]
+			  "UNIX_TIMESTAMP(StartTime),"	// row[3]
+			  "UNIX_TIMESTAMP(EndTime),"	// row[4]
+			  "NumQsts,"			// row[5]
+			  "NumQstsNotBlank,"		// row[6]
+			  "Sent,"			// row[7]
+			  "Score"			// row[8]
+		    " FROM exa_prints"
+		   " WHERE PrnCod=%ld",
+		   Print->PrnCod);
 
    /***** Get data of print *****/
-   ExaPrn_GetDataOfPrint (Print,&mysql_res,NumRows);
+   ExaPrn_GetDataOfPrint (Print,&mysql_res,NumPrints);
   }
 
 /*****************************************************************************/
@@ -280,27 +281,28 @@ void ExaPrn_GetDataOfPrintByPrnCod (struct ExaPrn_Print *Print)
 void ExaPrn_GetDataOfPrintBySesCodAndUsrCod (struct ExaPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
+   unsigned NumPrints;
 
    /***** Make database query *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get data of an exam print",
-			     "SELECT PrnCod,"				// row[0]
-				    "SesCod,"				// row[1]
-				    "UsrCod,"				// row[2]
-				    "UNIX_TIMESTAMP(StartTime),"	// row[3]
-				    "UNIX_TIMESTAMP(EndTime),"		// row[4]
-				    "NumQsts,"				// row[5]
-				    "NumQstsNotBlank,"			// row[6]
-				    "Sent,"				// row[7]
-				    "Score"				// row[8]
-			      " FROM exa_prints"
-			     " WHERE SesCod=%ld"
-			       " AND UsrCod=%ld",
-			     Print->SesCod,
-			     Print->UsrCod);
+   NumPrints = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get data of an exam print",
+		   "SELECT PrnCod,"			// row[0]
+			  "SesCod,"			// row[1]
+			  "UsrCod,"			// row[2]
+			  "UNIX_TIMESTAMP(StartTime),"	// row[3]
+			  "UNIX_TIMESTAMP(EndTime),"	// row[4]
+			  "NumQsts,"			// row[5]
+			  "NumQstsNotBlank,"		// row[6]
+			  "Sent,"			// row[7]
+			  "Score"			// row[8]
+		    " FROM exa_prints"
+		   " WHERE SesCod=%ld"
+		     " AND UsrCod=%ld",
+		   Print->SesCod,
+		   Print->UsrCod);
 
    /***** Get data of print *****/
-   ExaPrn_GetDataOfPrint (Print,&mysql_res,NumRows);
+   ExaPrn_GetDataOfPrint (Print,&mysql_res,NumPrints);
   }
 
 /*****************************************************************************/
@@ -309,11 +311,11 @@ void ExaPrn_GetDataOfPrintBySesCodAndUsrCod (struct ExaPrn_Print *Print)
 
 static void ExaPrn_GetDataOfPrint (struct ExaPrn_Print *Print,
                                    MYSQL_RES **mysql_res,
-				   unsigned long NumRows)
+				   unsigned NumPrints)
   {
    MYSQL_ROW row;
 
-   if (NumRows)
+   if (NumPrints)
      {
       row = mysql_fetch_row (*mysql_res);
 

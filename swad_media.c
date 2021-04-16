@@ -267,14 +267,15 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
    size_t Length;
 
    /***** Get data of a media from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get media",
-			     "SELECT Type,"	// row[0]
-			            "Name,"	// row[1]
-			            "URL,"	// row[2]
-			            "Title"	// row[3]
-			      " FROM med_media"
-			     " WHERE MedCod=%ld",
-			     Media->MedCod);
+   NumRows = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get media",
+		   "SELECT Type,"	// row[0]
+			  "Name,"	// row[1]
+			  "URL,"	// row[2]
+			  "Title"	// row[3]
+		    " FROM med_media"
+		   " WHERE MedCod=%ld",
+		   Media->MedCod);
 
    /***** Result should have a unique row *****/
    if (NumRows == 0)	// Media not found

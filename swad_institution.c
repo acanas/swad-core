@@ -628,31 +628,28 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows = 0;	// Initialized to avoid warning
    unsigned NumIns;
    struct Ins_Instit *Ins;
 
    /***** Get institutions from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get institutions",
-			     "SELECT InsCod,"			// row[0]
-				    "CtyCod,"			// row[1]
-				    "Status,"			// row[2]
-				    "RequesterUsrCod,"		// row[3]
-				    "ShortName,"		// row[4]
-				    "FullName,"			// row[5]
-				    "WWW"			// row[6]
-			      " FROM ins_instits"
-			     " WHERE CtyCod=%ld"
-			     " ORDER BY FullName",
-			     CtyCod);
+   Gbl.Hierarchy.Inss.Num = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get institutions",
+		   "SELECT InsCod,"		// row[0]
+			  "CtyCod,"		// row[1]
+			  "Status,"		// row[2]
+			  "RequesterUsrCod,"	// row[3]
+			  "ShortName,"		// row[4]
+			  "FullName,"		// row[5]
+			  "WWW"			// row[6]
+		    " FROM ins_instits"
+		   " WHERE CtyCod=%ld"
+		   " ORDER BY FullName",
+		   CtyCod);
 
-   if (NumRows) // Institutions found...
+   if (Gbl.Hierarchy.Inss.Num) // Institutions found...
      {
-      // NumRows should be equal to Deg->NumCourses
-      Gbl.Hierarchy.Inss.Num = (unsigned) NumRows;
-
       /***** Create list with institutions *****/
-      if ((Gbl.Hierarchy.Inss.Lst = calloc (NumRows,
+      if ((Gbl.Hierarchy.Inss.Lst = calloc ((size_t) Gbl.Hierarchy.Inss.Num,
                                             sizeof (*Gbl.Hierarchy.Inss.Lst))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
@@ -672,10 +669,7 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
         }
      }
    else
-     {
-      Gbl.Hierarchy.Inss.Num = 0;
       Gbl.Hierarchy.Inss.Lst = NULL;
-     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -695,52 +689,49 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows = 0;	// Initialized to avoid warning
    unsigned NumIns;
    struct Ins_Instit *Ins;
 
    /***** Get institutions from database *****/
    /* Query database */
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get institutions",
-			     "(SELECT ins_instits.InsCod,"		// row[0]
-				     "ins_instits.CtyCod,"		// row[1]
-				     "ins_instits.Status,"		// row[2]
-				     "ins_instits.RequesterUsrCod,"	// row[3]
-				     "ins_instits.ShortName,"		// row[4]
-				     "ins_instits.FullName,"		// row[5]
-				     "ins_instits.WWW,"			// row[6]
-				     "COUNT(*) AS NumUsrs"		// row[7]
-			      " FROM ins_instits,"
-			            "usr_data"
-			     " WHERE ins_instits.CtyCod=%ld"
-			       " AND ins_instits.InsCod=usr_data.InsCod"
-			     " GROUP BY ins_instits.InsCod)"
-			     " UNION "
-			     "(SELECT InsCod,"				// row[0]
-				     "CtyCod,"				// row[1]
-				     "Status,"				// row[2]
-				     "RequesterUsrCod,"			// row[3]
-				     "ShortName,"			// row[4]
-				     "FullName,"			// row[5]
-				     "WWW,"				// row[6]
-				     "0 AS NumUsrs"			// row[7]
-			       " FROM ins_instits"
-			      " WHERE CtyCod=%ld"
-			        " AND InsCod NOT IN"
-			            " (SELECT DISTINCT InsCod"
-			               " FROM usr_data))"
-			              " ORDER BY %s",
-			     CtyCod,
-			     CtyCod,
-			     OrderBySubQuery[Gbl.Hierarchy.Inss.SelectedOrder]);
+   Gbl.Hierarchy.Inss.Num = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get institutions",
+		   "(SELECT ins_instits.InsCod,"		// row[0]
+			   "ins_instits.CtyCod,"		// row[1]
+			   "ins_instits.Status,"		// row[2]
+			   "ins_instits.RequesterUsrCod,"	// row[3]
+			   "ins_instits.ShortName,"		// row[4]
+			   "ins_instits.FullName,"		// row[5]
+			   "ins_instits.WWW,"			// row[6]
+			   "COUNT(*) AS NumUsrs"		// row[7]
+		    " FROM ins_instits,"
+			  "usr_data"
+		   " WHERE ins_instits.CtyCod=%ld"
+		     " AND ins_instits.InsCod=usr_data.InsCod"
+		   " GROUP BY ins_instits.InsCod)"
+		   " UNION "
+		   "(SELECT InsCod,"				// row[0]
+			   "CtyCod,"				// row[1]
+			   "Status,"				// row[2]
+			   "RequesterUsrCod,"			// row[3]
+			   "ShortName,"				// row[4]
+			   "FullName,"				// row[5]
+			   "WWW,"				// row[6]
+			   "0 AS NumUsrs"			// row[7]
+		     " FROM ins_instits"
+		    " WHERE CtyCod=%ld"
+		      " AND InsCod NOT IN"
+			  " (SELECT DISTINCT InsCod"
+			     " FROM usr_data))"
+			    " ORDER BY %s",
+		   CtyCod,
+		   CtyCod,
+		   OrderBySubQuery[Gbl.Hierarchy.Inss.SelectedOrder]);
 
-   if (NumRows) // Institutions found...
+   if (Gbl.Hierarchy.Inss.Num) // Institutions found...
      {
-      // NumRows should be equal to Deg->NumCourses
-      Gbl.Hierarchy.Inss.Num = (unsigned) NumRows;
-
       /***** Create list with institutions *****/
-      if ((Gbl.Hierarchy.Inss.Lst = calloc (NumRows,
+      if ((Gbl.Hierarchy.Inss.Lst = calloc ((size_t) Gbl.Hierarchy.Inss.Num,
                                             sizeof (*Gbl.Hierarchy.Inss.Lst))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
@@ -762,10 +753,7 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
         }
      }
    else
-     {
-      Gbl.Hierarchy.Inss.Num = 0;
       Gbl.Hierarchy.Inss.Lst = NULL;
-     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

@@ -668,7 +668,6 @@ static void Att_GetListAttEvents (struct Att_Events *Events,
       [Dat_END_TIME  ][Att_OLDEST_FIRST] = "EndTime,StartTime,Title",
      };
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
    unsigned NumAttEvent;
 
    if (Events->LstIsRead)
@@ -676,42 +675,42 @@ static void Att_GetListAttEvents (struct Att_Events *Events,
 
    /***** Get list of attendance events from database *****/
    if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get attendance events",
-				"SELECT AttCod"
-				 " FROM att_events"
-				" WHERE CrsCod=%ld"
-				  "%s"
-				  " AND (AttCod NOT IN"
-				       " (SELECT AttCod"
-				        " FROM att_groups)"
-				       " OR"
-				       " AttCod IN"
-				       " (SELECT att_groups.AttCod"
-				          " FROM grp_users,"
-				                "att_groups"
-				         " WHERE grp_users.UsrCod=%ld"
-				           " AND att_groups.GrpCod=grp_users.GrpCod))"
-				" ORDER BY %s",
-				Gbl.Hierarchy.Crs.CrsCod,
-				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				OrderBySubQuery[Events->SelectedOrder][OrderNewestOldest]);
+      Events->Num = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get attendance events",
+		      "SELECT AttCod"
+		       " FROM att_events"
+		      " WHERE CrsCod=%ld"
+		        "%s"
+		        " AND (AttCod NOT IN"
+			     " (SELECT AttCod"
+			      " FROM att_groups)"
+			     " OR"
+			     " AttCod IN"
+			     " (SELECT att_groups.AttCod"
+			        " FROM grp_users,"
+				      "att_groups"
+			       " WHERE grp_users.UsrCod=%ld"
+			         " AND att_groups.GrpCod=grp_users.GrpCod))"
+		      " ORDER BY %s",
+		      Gbl.Hierarchy.Crs.CrsCod,
+		      HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      OrderBySubQuery[Events->SelectedOrder][OrderNewestOldest]);
    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get attendance events",
-				"SELECT AttCod"
-				 " FROM att_events"
-				" WHERE CrsCod=%ld%s"
-				" ORDER BY %s",
-				Gbl.Hierarchy.Crs.CrsCod,
-				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
-				OrderBySubQuery[Events->SelectedOrder][OrderNewestOldest]);
+      Events->Num = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get attendance events",
+		      "SELECT AttCod"
+		       " FROM att_events"
+		      " WHERE CrsCod=%ld%s"
+		      " ORDER BY %s",
+		      Gbl.Hierarchy.Crs.CrsCod,
+		      HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
+		      OrderBySubQuery[Events->SelectedOrder][OrderNewestOldest]);
 
-   if (NumRows) // Attendance events found...
+   if (Events->Num) // Attendance events found...
      {
-      Events->Num = (unsigned) NumRows;
-
       /***** Create list of attendance events *****/
-      if ((Events->Lst = calloc (NumRows,sizeof (*Events->Lst))) == NULL)
+      if ((Events->Lst = calloc (Events->Num,sizeof (*Events->Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the attendance events codes *****/
@@ -724,8 +723,6 @@ static void Att_GetListAttEvents (struct Att_Events *Events,
             Lay_ShowErrorAndExit ("Error: wrong attendance event code.");
         }
      }
-   else
-      Events->Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -758,7 +755,7 @@ bool Att_GetDataOfAttEventByCod (struct Att_Event *Event)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned NumAttEvents;
    bool Found = false;
 
    /***** Reset attendance event data *****/
@@ -767,22 +764,23 @@ bool Att_GetDataOfAttEventByCod (struct Att_Event *Event)
    if (Event->AttCod > 0)
      {
       /***** Build query *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get attendance event data",
-	                        "SELECT AttCod,"				// row[0]
-	                               "CrsCod,"				// row[1]
-	                               "Hidden,"				// row[2]
-	                               "UsrCod,"				// row[3]
-				       "UNIX_TIMESTAMP(StartTime),"		// row[4]
-				       "UNIX_TIMESTAMP(EndTime),"		// row[5]
-				       "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
-				       "CommentTchVisible,"			// row[7]
-				       "Title"					// row[8]
-				 " FROM att_events"
-				" WHERE AttCod=%ld",
-				Event->AttCod);
+      NumAttEvents = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get attendance event data",
+		      "SELECT AttCod,"					// row[0]
+			     "CrsCod,"					// row[1]
+			     "Hidden,"					// row[2]
+			     "UsrCod,"					// row[3]
+			     "UNIX_TIMESTAMP(StartTime),"		// row[4]
+			     "UNIX_TIMESTAMP(EndTime),"			// row[5]
+			     "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
+			     "CommentTchVisible,"			// row[7]
+			     "Title"					// row[8]
+		       " FROM att_events"
+		      " WHERE AttCod=%ld",
+		      Event->AttCod);
 
       /***** Get data of attendance event from database *****/
-      if ((Found = (NumRows != 0))) // Attendance event found...
+      if ((Found = (NumAttEvents != 0))) // Attendance event found...
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
@@ -2236,11 +2234,12 @@ static void Att_PutParamsCodGrps (long AttCod)
 
    /***** Get groups associated to an attendance event from database *****/
    if (Gbl.Crs.Grps.NumGrps)
-      NumGrps = (unsigned) DB_QuerySELECT (&mysql_res,"can not get groups of an attendance event",
-					   "SELECT GrpCod"	// row[0]
-					    " FROM att_groups"
-					   " WHERE att_groups.AttCod=%ld",
-					   AttCod);
+      NumGrps = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get groups of an attendance event",
+		      "SELECT GrpCod"	// row[0]
+		       " FROM att_groups"
+		      " WHERE att_groups.AttCod=%ld",
+		      AttCod);
    else
       NumGrps = 0;
 
@@ -2572,21 +2571,19 @@ static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long Us
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    bool Present;
 
    /***** Check if a students is registered in an event in database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get if a student"
-				        " is already registered in an event",
-			     "SELECT Present,"		// row[0]
-			            "CommentStd,"	// row[1]
-			            "CommentTch"	// row[2]
-			      " FROM att_users"
-			     " WHERE AttCod=%ld"
-			       " AND UsrCod=%ld",
-			     AttCod,
-			     UsrCod);
-   if (NumRows)
+   if (DB_QuerySELECT (&mysql_res,"can not get if a student"
+				  " is already registered in an event",
+		       "SELECT Present,"		// row[0]
+			      "CommentStd,"	// row[1]
+			      "CommentTch"	// row[2]
+			" FROM att_users"
+		       " WHERE AttCod=%ld"
+			 " AND UsrCod=%ld",
+		       AttCod,
+		       UsrCod))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);

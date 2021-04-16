@@ -753,26 +753,24 @@ void Cty_GetBasicListOfCountries (void)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows = 0;
    unsigned NumCty;
    struct Cty_Countr *Cty;
    Lan_Language_t Lan;
 
    /***** Get countries from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get countries",
-			     "SELECT CtyCod,"	// row[0]
-			            "Alpha2,"	// row[1]
-			            "Name_%s"	// row[2]
-			      " FROM cty_countrs"
-			     " ORDER BY Name_%s",
-			     Lan_STR_LANG_ID[Gbl.Prefs.Language],
-			     Lan_STR_LANG_ID[Gbl.Prefs.Language]);
-   if (NumRows) // Countries found...
+   Gbl.Hierarchy.Ctys.Num = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get countries",
+		   "SELECT CtyCod,"	// row[0]
+			  "Alpha2,"	// row[1]
+			  "Name_%s"	// row[2]
+		    " FROM cty_countrs"
+		   " ORDER BY Name_%s",
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+   if (Gbl.Hierarchy.Ctys.Num) // Countries found...
      {
-      Gbl.Hierarchy.Ctys.Num = (unsigned) NumRows;
-
       /***** Create list with countries *****/
-      if ((Gbl.Hierarchy.Ctys.Lst = calloc (NumRows,
+      if ((Gbl.Hierarchy.Ctys.Lst = calloc ((size_t) Gbl.Hierarchy.Ctys.Num,
                                             sizeof (*Gbl.Hierarchy.Ctys.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
@@ -809,8 +807,6 @@ void Cty_GetBasicListOfCountries (void)
 	 Cty->NumUsrsWhoClaimToBelongToCty.Valid = false;
         }
      }
-   else
-      Gbl.Hierarchy.Ctys.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -839,7 +835,6 @@ void Cty_GetFullListOfCountries (void)
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows = 0;
    unsigned NumCty;
    struct Cty_Countr *Cty;
    Lan_Language_t Lan;
@@ -870,39 +865,38 @@ void Cty_GetFullListOfCountries (void)
       Lay_NotEnoughMemoryExit ();
 
    /* Query database */
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get countries",
-			     "(SELECT cty_countrs.CtyCod,"	// row[0]
-			             "cty_countrs.Alpha2,"	// row[1]
-			             "%s"			// row[...]
-			             "%s"			// row[...]
-			             "COUNT(*) AS NumUsrs"	// row[...]
-			      " FROM cty_countrs,"
-			            "usr_data"
-			     " WHERE cty_countrs.CtyCod=usr_data.CtyCod"
-			     " GROUP BY cty_countrs.CtyCod)"
-			     " UNION "
-			     "(SELECT CtyCod,"			// row[0]
-			             "Alpha2,"			// row[1]
-			             "%s"			// row[...]
-			             "%s"			// row[...]
-			             "0 AS NumUsrs"		// row[...]
-			      " FROM cty_countrs"
-			     " WHERE CtyCod NOT IN"
-			           " (SELECT DISTINCT CtyCod"
-			              " FROM usr_data))"
-			     " ORDER BY %s",
-			     SubQueryNam1,SubQueryWWW1,
-			     SubQueryNam2,SubQueryWWW2,OrderBySubQuery);
+   Gbl.Hierarchy.Ctys.Num = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get countries",
+		   "(SELECT cty_countrs.CtyCod,"	// row[0]
+			   "cty_countrs.Alpha2,"	// row[1]
+			   "%s"				// row[...]
+			   "%s"				// row[...]
+			   "COUNT(*) AS NumUsrs"	// row[...]
+		    " FROM cty_countrs,"
+			  "usr_data"
+		   " WHERE cty_countrs.CtyCod=usr_data.CtyCod"
+		   " GROUP BY cty_countrs.CtyCod)"
+		   " UNION "
+		   "(SELECT CtyCod,"			// row[0]
+			   "Alpha2,"			// row[1]
+			   "%s"				// row[...]
+			   "%s"				// row[...]
+			   "0 AS NumUsrs"		// row[...]
+		    " FROM cty_countrs"
+		   " WHERE CtyCod NOT IN"
+		         " (SELECT DISTINCT CtyCod"
+			    " FROM usr_data))"
+		   " ORDER BY %s",
+		   SubQueryNam1,SubQueryWWW1,
+		   SubQueryNam2,SubQueryWWW2,OrderBySubQuery);
 
    /* Free memory for subquery */
    free (OrderBySubQuery);
 
-   if (NumRows) // Countries found...
+   if (Gbl.Hierarchy.Ctys.Num) // Countries found...
      {
-      Gbl.Hierarchy.Ctys.Num = (unsigned) NumRows;
-
       /***** Create list with countries *****/
-      if ((Gbl.Hierarchy.Ctys.Lst = calloc (NumRows,
+      if ((Gbl.Hierarchy.Ctys.Lst = calloc ((size_t) Gbl.Hierarchy.Ctys.Num,
                                             sizeof (*Gbl.Hierarchy.Ctys.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
@@ -941,8 +935,6 @@ void Cty_GetFullListOfCountries (void)
 	    Cty->NumUsrsWhoClaimToBelongToCty.Valid = true;
         }
      }
-   else
-      Gbl.Hierarchy.Ctys.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1045,7 +1037,6 @@ bool Cty_GetDataOfCountryByCod (struct Cty_Countr *Cty)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows = 0;
    Lan_Language_t Lan;
    bool CtyFound;
 
@@ -1079,7 +1070,7 @@ bool Cty_GetDataOfCountryByCod (struct Cty_Countr *Cty)
    // Here Cty->CtyCod > 0
 
    /***** Get data of a country from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a country",
+   if(DB_QuerySELECT (&mysql_res,"can not get data of a country",
 			     "SELECT Alpha2,"	// row[0]
 			            "Name_%s,"	// row[1]
 			            "WWW_%s"	// row[2]
@@ -1087,10 +1078,7 @@ bool Cty_GetDataOfCountryByCod (struct Cty_Countr *Cty)
 			     " WHERE CtyCod='%03ld'",
 			     Lan_STR_LANG_ID[Gbl.Prefs.Language],
 			     Lan_STR_LANG_ID[Gbl.Prefs.Language],
-			     Cty->CtyCod);
-
-   /***** Count number of rows in result *****/
-   if (NumRows) // Country found...
+			     Cty->CtyCod)) // Country found...
      {
       CtyFound = true;
 

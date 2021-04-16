@@ -457,17 +457,15 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    if (UsrDat->EnUsrCod[0])
      {
       /***** Get user's code from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get user's code",
-				"SELECT UsrCod"
-				 " FROM usr_data"
-				" WHERE EncryptedUsrCod='%s'",
-				UsrDat->EnUsrCod);
-      if (NumRows != 1)
+      if (DB_QuerySELECT (&mysql_res,"can not get user's code",
+			  "SELECT UsrCod"
+			   " FROM usr_data"
+			  " WHERE EncryptedUsrCod='%s'",
+			  UsrDat->EnUsrCod) != 1)
          Lay_ShowErrorAndExit ("Error when getting user's code.");
 
       /***** Get user's code *****/
@@ -494,7 +492,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned NumRows;
    The_Theme_t Theme;
    Ico_IconSet_t IconSet;
    Lan_Language_t Lan;
@@ -503,76 +501,78 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
    switch (GetPrefs)
      {
       case Usr_DONT_GET_PREFS:
-	 NumRows = DB_QuerySELECT (&mysql_res,"can not get user's data",
-				   "SELECT EncryptedUsrCod,"	// row[ 0]
-					  "Password,"		// row[ 1]
-					  "Surname1,"		// row[ 2]
-					  "Surname2,"		// row[ 3]
-					  "FirstName,"		// row[ 4]
-					  "Sex,"		// row[ 5]
-					  "Photo,"		// row[ 6]
-					  "PhotoVisibility,"	// row[ 7]
-					  "BaPrfVisibility,"	// row[ 8]
-					  "ExPrfVisibility,"	// row[ 9]
-					  "CtyCod,"		// row[10]
-					  "InsCtyCod,"		// row[11]
-					  "InsCod,"		// row[12]
-					  "DptCod,"		// row[13]
-					  "CtrCod,"		// row[14]
-					  "Office,"		// row[15]
-					  "OfficePhone,"	// row[16]
-					  "LocalPhone,"		// row[17]
-					  "FamilyPhone,"	// row[18]
-					  "DATE_FORMAT(Birthday,"
-					  "'%%Y%%m%%d'),"	// row[19]
-					  "Comments,"		// row[20]
-					  "NotifNtfEvents,"	// row[21]
-					  "EmailNtfEvents"	// row[22]
-				    " FROM usr_data"
-				   " WHERE UsrCod=%ld",
-				   UsrDat->UsrCod);
+	 NumRows = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get user's data",
+		         "SELECT EncryptedUsrCod,"	// row[ 0]
+			        "Password,"		// row[ 1]
+			        "Surname1,"		// row[ 2]
+			        "Surname2,"		// row[ 3]
+			        "FirstName,"		// row[ 4]
+			        "Sex,"			// row[ 5]
+			        "Photo,"		// row[ 6]
+			        "PhotoVisibility,"	// row[ 7]
+			        "BaPrfVisibility,"	// row[ 8]
+			        "ExPrfVisibility,"	// row[ 9]
+			        "CtyCod,"		// row[10]
+			        "InsCtyCod,"		// row[11]
+			        "InsCod,"		// row[12]
+			        "DptCod,"		// row[13]
+			        "CtrCod,"		// row[14]
+			        "Office,"		// row[15]
+			        "OfficePhone,"		// row[16]
+			        "LocalPhone,"		// row[17]
+			        "FamilyPhone,"		// row[18]
+			        "DATE_FORMAT(Birthday,"
+			        "'%%Y%%m%%d'),"		// row[19]
+			        "Comments,"		// row[20]
+			        "NotifNtfEvents,"	// row[21]
+			        "EmailNtfEvents"	// row[22]
+			  " FROM usr_data"
+		         " WHERE UsrCod=%ld",
+		          UsrDat->UsrCod);
 	 break;
       case Usr_GET_PREFS:
       default:
-	 NumRows = DB_QuerySELECT (&mysql_res,"can not get user's data",
-				   "SELECT EncryptedUsrCod,"	// row[ 0]
-					  "Password,"		// row[ 1]
-					  "Surname1,"		// row[ 2]
-					  "Surname2,"		// row[ 3]
-					  "FirstName,"		// row[ 4]
-					  "Sex,"		// row[ 5]
-					  "Photo,"		// row[ 6]
-					  "PhotoVisibility,"	// row[ 7]
-					  "BaPrfVisibility,"	// row[ 8]
-					  "ExPrfVisibility,"	// row[ 9]
-					  "CtyCod,"		// row[10]
-					  "InsCtyCod,"		// row[11]
-					  "InsCod,"		// row[12]
-					  "DptCod,"		// row[13]
-					  "CtrCod,"		// row[14]
-					  "Office,"		// row[15]
-					  "OfficePhone,"	// row[16]
-					  "LocalPhone,"		// row[17]
-					  "FamilyPhone,"	// row[18]
-					  "DATE_FORMAT(Birthday,"
-					  "'%%Y%%m%%d'),"	// row[19]
-					  "Comments,"		// row[20]
-					  "NotifNtfEvents,"	// row[21]
-					  "EmailNtfEvents,"	// row[22]
+	 NumRows = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get user's data",
+		         "SELECT EncryptedUsrCod,"	// row[ 0]
+			        "Password,"		// row[ 1]
+			        "Surname1,"		// row[ 2]
+			        "Surname2,"		// row[ 3]
+			        "FirstName,"		// row[ 4]
+			        "Sex,"			// row[ 5]
+			        "Photo,"		// row[ 6]
+			        "PhotoVisibility,"	// row[ 7]
+			        "BaPrfVisibility,"	// row[ 8]
+			        "ExPrfVisibility,"	// row[ 9]
+			        "CtyCod,"		// row[10]
+			        "InsCtyCod,"		// row[11]
+			        "InsCod,"		// row[12]
+			        "DptCod,"		// row[13]
+			        "CtrCod,"		// row[14]
+			        "Office,"		// row[15]
+			        "OfficePhone,"		// row[16]
+			        "LocalPhone,"		// row[17]
+			        "FamilyPhone,"		// row[18]
+			        "DATE_FORMAT(Birthday,"
+			        "'%%Y%%m%%d'),"		// row[19]
+			        "Comments,"		// row[20]
+			        "NotifNtfEvents,"	// row[21]
+			        "EmailNtfEvents,"	// row[22]
 
-					  // Settings (usually not necessary
-					  // when getting another user's data)
-					  "Language,"		// row[23]
-					  "FirstDayOfWeek,"	// row[24]
-					  "DateFormat,"		// row[25]
-					  "Theme,"		// row[26]
-					  "IconSet,"		// row[27]
-					  "Menu,"		// row[28]
-					  "SideCols,"		// row[29]
-					  "ThirdPartyCookies"	// row[30]
-				    " FROM usr_data"
-				   " WHERE UsrCod=%ld",
-				   UsrDat->UsrCod);
+			        // Settings (usually not necessary
+			        // when getting another user's data)
+			        "Language,"		// row[23]
+			        "FirstDayOfWeek,"	// row[24]
+			        "DateFormat,"		// row[25]
+			        "Theme,"		// row[26]
+			        "IconSet,"		// row[27]
+			        "Menu,"			// row[28]
+			        "SideCols,"		// row[29]
+			        "ThirdPartyCookies"	// row[30]
+			  " FROM usr_data"
+		         " WHERE UsrCod=%ld",
+		         UsrDat->UsrCod);
          break;
      }
 
@@ -743,22 +743,23 @@ static void Usr_GetMyLastData (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned NumRows;
    unsigned UnsignedNum;
    long ActCod;
 
    /***** Get user's last data from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get user's last data",
-			     "SELECT WhatToSearch,"		   // row[0]
-				    "LastSco,"			   // row[1]
-				    "LastCod,"			   // row[2]
-				    "LastAct,"			   // row[3]
-				    "LastRole,"			   // row[4]
-				    "UNIX_TIMESTAMP(LastTime),"    // row[5]
-				    "UNIX_TIMESTAMP(LastAccNotif)" // row[6]
-			      " FROM usr_last"
-			     " WHERE UsrCod=%ld",
-			     Gbl.Usrs.Me.UsrDat.UsrCod);
+   NumRows = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get user's last data",
+		   "SELECT WhatToSearch,"			// row[0]
+			  "LastSco,"				// row[1]
+			  "LastCod,"				// row[2]
+			  "LastAct,"				// row[3]
+			  "LastRole,"				// row[4]
+			  "UNIX_TIMESTAMP(LastTime),"		// row[5]
+			  "UNIX_TIMESTAMP(LastAccNotif)"	// row[6]
+		    " FROM usr_last"
+		   " WHERE UsrCod=%ld",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
    if (NumRows == 0)
      {
       /***** Free structure that stores the query result *****/
@@ -1551,26 +1552,26 @@ void Usr_GetMyCountrs (void)
       Gbl.Usrs.Me.MyCtys.Num = 0;
 
       /***** Get my institutions from database *****/
-      if ((NumCtys = (unsigned) Usr_GetCtysFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,&mysql_res)) > 0) // Countries found
-         for (NumCty = 0;
-              NumCty < NumCtys;
-              NumCty++)
-           {
-            /* Get next country */
-            row = mysql_fetch_row (mysql_res);
+      NumCtys = Usr_GetCtysFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,&mysql_res);
+      for (NumCty = 0;
+	   NumCty < NumCtys;
+	   NumCty++)
+	{
+	 /* Get next country */
+	 row = mysql_fetch_row (mysql_res);
 
-            /* Get country code */
-            if ((CtyCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-              {
-               if (Gbl.Usrs.Me.MyCtys.Num == Cty_MAX_COUNTRS_PER_USR)
-                  Lay_ShowErrorAndExit ("Maximum number of countries of a user exceeded.");
+	 /* Get country code */
+	 if ((CtyCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	   {
+	    if (Gbl.Usrs.Me.MyCtys.Num == Cty_MAX_COUNTRS_PER_USR)
+	       Lay_ShowErrorAndExit ("Maximum number of countries of a user exceeded.");
 
-               Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].CtyCod  = CtyCod;
-               Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+	    Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].CtyCod  = CtyCod;
+	    Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
-               Gbl.Usrs.Me.MyCtys.Num++;
-              }
-           }
+	    Gbl.Usrs.Me.MyCtys.Num++;
+	   }
+	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -1598,26 +1599,26 @@ void Usr_GetMyInstits (void)
       Gbl.Usrs.Me.MyInss.Num = 0;
 
       /***** Get my institutions from database *****/
-      if ((NumInss = (unsigned) Usr_GetInssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res)) > 0) // Institutions found
-         for (NumIns = 0;
-              NumIns < NumInss;
-              NumIns++)
-           {
-            /* Get next institution */
-            row = mysql_fetch_row (mysql_res);
+      NumInss = Usr_GetInssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res);
+      for (NumIns = 0;
+	   NumIns < NumInss;
+	   NumIns++)
+	{
+	 /* Get next institution */
+	 row = mysql_fetch_row (mysql_res);
 
-            /* Get institution code */
-            if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-              {
-               if (Gbl.Usrs.Me.MyInss.Num == Ins_MAX_INSTITS_PER_USR)
-                  Lay_ShowErrorAndExit ("Maximum number of institutions of a user exceeded.");
+	 /* Get institution code */
+	 if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	   {
+	    if (Gbl.Usrs.Me.MyInss.Num == Ins_MAX_INSTITS_PER_USR)
+	       Lay_ShowErrorAndExit ("Maximum number of institutions of a user exceeded.");
 
-               Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].InsCod  = InsCod;
-               Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+	    Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].InsCod  = InsCod;
+	    Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
-               Gbl.Usrs.Me.MyInss.Num++;
-              }
-           }
+	    Gbl.Usrs.Me.MyInss.Num++;
+	   }
+	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -1645,26 +1646,26 @@ void Usr_GetMyCenters (void)
       Gbl.Usrs.Me.MyCtrs.Num = 0;
 
       /***** Get my centers from database *****/
-      if ((NumCtrs = (unsigned) Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res)) > 0) // Centers found
-         for (NumCtr = 0;
-              NumCtr < NumCtrs;
-              NumCtr++)
-           {
-            /* Get next center */
-            row = mysql_fetch_row (mysql_res);
+      NumCtrs = Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res);
+      for (NumCtr = 0;
+	   NumCtr < NumCtrs;
+	   NumCtr++)
+	{
+	 /* Get next center */
+	 row = mysql_fetch_row (mysql_res);
 
-            /* Get center code */
-            if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-              {
-               if (Gbl.Usrs.Me.MyCtrs.Num == Ctr_MAX_CENTERS_PER_USR)
-                  Lay_ShowErrorAndExit ("Maximum number of centers of a user exceeded.");
+	 /* Get center code */
+	 if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	   {
+	    if (Gbl.Usrs.Me.MyCtrs.Num == Ctr_MAX_CENTERS_PER_USR)
+	       Lay_ShowErrorAndExit ("Maximum number of centers of a user exceeded.");
 
-               Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].CtrCod = CtrCod;
-               Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+	    Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].CtrCod = CtrCod;
+	    Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
-               Gbl.Usrs.Me.MyCtrs.Num++;
-              }
-           }
+	    Gbl.Usrs.Me.MyCtrs.Num++;
+	   }
+	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -1692,26 +1693,26 @@ void Usr_GetMyDegrees (void)
       Gbl.Usrs.Me.MyDegs.Num = 0;
 
       /***** Get my degrees from database *****/
-      if ((NumDegs = (unsigned) Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res)) > 0) // Degrees found
-         for (NumDeg = 0;
-              NumDeg < NumDegs;
-              NumDeg++)
-           {
-            /* Get next degree */
-            row = mysql_fetch_row (mysql_res);
+      NumDegs = Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res);
+      for (NumDeg = 0;
+	   NumDeg < NumDegs;
+	   NumDeg++)
+	{
+	 /* Get next degree */
+	 row = mysql_fetch_row (mysql_res);
 
-            /* Get degree code */
-            if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-              {
-               if (Gbl.Usrs.Me.MyDegs.Num == Deg_MAX_DEGREES_PER_USR)
-                  Lay_ShowErrorAndExit ("Maximum number of degrees of a user exceeded.");
+	 /* Get degree code */
+	 if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	   {
+	    if (Gbl.Usrs.Me.MyDegs.Num == Deg_MAX_DEGREES_PER_USR)
+	       Lay_ShowErrorAndExit ("Maximum number of degrees of a user exceeded.");
 
-               Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].DegCod  = DegCod;
-               Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+	    Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].DegCod  = DegCod;
+	    Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
-               Gbl.Usrs.Me.MyDegs.Num++;
-              }
-           }
+	    Gbl.Usrs.Me.MyDegs.Num++;
+	   }
+	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -1764,13 +1765,12 @@ void Usr_GetMyCourses (void)
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	 /***** Get my courses from database *****/
-	 NumCrss =
-	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get which courses"
-					       " you belong to",
-				    "SELECT CrsCod,"	// row[0]
-				           "Role,"	// row[1]
-				           "DegCod"	// row[2]
-				    " FROM my_courses_tmp");
+	 NumCrss = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get which courses you belong to",
+			 "SELECT CrsCod,"	// row[0]
+			        "Role,"		// row[1]
+			        "DegCod"	// row[2]
+			 " FROM my_courses_tmp");
 	 for (NumCrs = 0;
 	      NumCrs < NumCrss;
 	      NumCrs++)
@@ -2264,46 +2264,47 @@ unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res)
 /*****************************************************************************/
 // Returns the number of rows of the result
 
-unsigned long Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res)
+unsigned Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res)
   {
    /***** Get the institutions a user belongs to from database *****/
    if (CtyCod > 0)
-      return DB_QuerySELECT (mysql_res,"can not get the institutions"
-				       " a user belongs to",
-			     "SELECT ins_instits.InsCod,"	// row[0]
-			            "MAX(crs_users.Role)"	// row[1]
-			      " FROM crs_users,"
-			            "crs_courses,"
-			            "deg_degrees,"
-			            "ctr_centers,"
-			            "ins_instits"
-			     " WHERE crs_users.UsrCod=%ld"
-			       " AND crs_users.CrsCod=crs_courses.CrsCod"
-			       " AND crs_courses.DegCod=deg_degrees.DegCod"
-			       " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			       " AND ctr_centers.InsCod=ins_instits.InsCod"
-			       " AND ins_instits.CtyCod=%ld"
-			     " GROUP BY ins_instits.InsCod"
-			     " ORDER BY ins_instits.ShortName",
-			     UsrCod,CtyCod);
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not get the institutions a user belongs to",
+		      "SELECT ins_instits.InsCod,"	// row[0]
+			     "MAX(crs_users.Role)"	// row[1]
+		       " FROM crs_users,"
+			     "crs_courses,"
+			     "deg_degrees,"
+			     "ctr_centers,"
+			     "ins_instits"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=deg_degrees.DegCod"
+		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		        " AND ctr_centers.InsCod=ins_instits.InsCod"
+		        " AND ins_instits.CtyCod=%ld"
+		      " GROUP BY ins_instits.InsCod"
+		      " ORDER BY ins_instits.ShortName",
+		      UsrCod,
+		      CtyCod);
    else
-      return DB_QuerySELECT (mysql_res,"can not get the ins_instits"
-				       " a user belongs to",
-			     "SELECT ins_instits.InsCod,"	// row[0]
-			            "MAX(crs_users.Role)"	// row[1]
-			      " FROM crs_users,"
-			            "crs_courses,"
-			            "deg_degrees,"
-			            "ctr_centers,"
-			            "ins_instits"
-			     " WHERE crs_users.UsrCod=%ld"
-			       " AND crs_users.CrsCod=crs_courses.CrsCod"
-			       " AND crs_courses.DegCod=deg_degrees.DegCod"
-			       " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			       " AND ctr_centers.InsCod=ins_instits.InsCod"
-			     " GROUP BY ins_instits.InsCod"
-			     " ORDER BY ins_instits.ShortName",
-			     UsrCod);
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not get the institutions a user belongs to",
+		      "SELECT ins_instits.InsCod,"	// row[0]
+			     "MAX(crs_users.Role)"	// row[1]
+		       " FROM crs_users,"
+			     "crs_courses,"
+			     "deg_degrees,"
+			     "ctr_centers,"
+			     "ins_instits"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=deg_degrees.DegCod"
+		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		        " AND ctr_centers.InsCod=ins_instits.InsCod"
+		      " GROUP BY ins_instits.InsCod"
+		      " ORDER BY ins_instits.ShortName",
+		      UsrCod);
   }
 
 /*****************************************************************************/
@@ -2311,42 +2312,43 @@ unsigned long Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res)
 /*****************************************************************************/
 // Returns the number of rows of the result
 
-unsigned long Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res)
+unsigned Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res)
   {
    /***** Get from database the centers a user belongs to *****/
    if (InsCod > 0)
-      return DB_QuerySELECT (mysql_res,"can not check the centers"
-				       " a user belongs to",
-			     "SELECT ctr_centers.CtrCod,"	// row[0]
-				    "MAX(crs_users.Role)"	// row[1]
-			      " FROM crs_users,"
-				    "crs_courses,"
-				    "deg_degrees,"
-				    "ctr_centers"
-			     " WHERE crs_users.UsrCod=%ld"
-			       " AND crs_users.CrsCod=crs_courses.CrsCod"
-			       " AND crs_courses.DegCod=deg_degrees.DegCod"
-			       " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			       " AND ctr_centers.InsCod=%ld"
-			     " GROUP BY ctr_centers.CtrCod"
-			     " ORDER BY ctr_centers.ShortName",
-			     UsrCod,InsCod);
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not check the centers a user belongs to",
+		      "SELECT ctr_centers.CtrCod,"	// row[0]
+			     "MAX(crs_users.Role)"	// row[1]
+		       " FROM crs_users,"
+			     "crs_courses,"
+			     "deg_degrees,"
+			     "ctr_centers"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=deg_degrees.DegCod"
+		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		        " AND ctr_centers.InsCod=%ld"
+		      " GROUP BY ctr_centers.CtrCod"
+		      " ORDER BY ctr_centers.ShortName",
+		      UsrCod,
+		      InsCod);
    else
-      return DB_QuerySELECT (mysql_res,"can not check the centers"
-				       " a user belongs to",
-			     "SELECT deg_degrees.CtrCod,"	// row[0]
-			            "MAX(crs_users.Role)"	// row[1]
-			      " FROM crs_users,"
-			            "crs_courses,"
-			            "deg_degrees,"
-			            "ctr_centers"
-			     " WHERE crs_users.UsrCod=%ld"
-			       " AND crs_users.CrsCod=crs_courses.CrsCod"
-			       " AND crs_courses.DegCod=deg_degrees.DegCod"
-			       " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			     " GROUP BY ctr_centers.CtrCod"
-			     " ORDER BY ctr_centers.ShortName",
-			     UsrCod);
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not check the centers a user belongs to",
+		      "SELECT deg_degrees.CtrCod,"	// row[0]
+			     "MAX(crs_users.Role)"	// row[1]
+		       " FROM crs_users,"
+			     "crs_courses,"
+			     "deg_degrees,"
+			     "ctr_centers"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=deg_degrees.DegCod"
+		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		      " GROUP BY ctr_centers.CtrCod"
+		      " ORDER BY ctr_centers.ShortName",
+		      UsrCod);
   }
 
 /*****************************************************************************/
@@ -2354,38 +2356,39 @@ unsigned long Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res)
 /*****************************************************************************/
 // Returns the number of rows of the result
 
-unsigned long Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res)
+unsigned Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res)
   {
    /***** Get from database the degrees a user belongs to *****/
    if (CtrCod > 0)
-      return DB_QuerySELECT (mysql_res,"can not check the degrees"
-	                               " a user belongs to",
-			     "SELECT deg_degrees.DegCod,"	// row[0]
-			            "MAX(crs_users.Role)"	// row[1]
-			      " FROM crs_users,"
-			            "crs_courses,"
-			            "deg_degrees"
-			     " WHERE crs_users.UsrCod=%ld"
-			       " AND crs_users.CrsCod=crs_courses.CrsCod"
-			       " AND crs_courses.DegCod=deg_degrees.DegCod"
-			       " AND deg_degrees.CtrCod=%ld"
-			     " GROUP BY deg_degrees.DegCod"
-			     " ORDER BY deg_degrees.ShortName",
-			     UsrCod,CtrCod);
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not check the degrees a user belongs to",
+		      "SELECT deg_degrees.DegCod,"	// row[0]
+			     "MAX(crs_users.Role)"	// row[1]
+		       " FROM crs_users,"
+			     "crs_courses,"
+			     "deg_degrees"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=deg_degrees.DegCod"
+		        " AND deg_degrees.CtrCod=%ld"
+		      " GROUP BY deg_degrees.DegCod"
+		      " ORDER BY deg_degrees.ShortName",
+		      UsrCod,
+		      CtrCod);
    else
-      return DB_QuerySELECT (mysql_res,"can not check the degrees"
-	                               " a user belongs to",
-			     "SELECT deg_degrees.DegCod,"	// row[0]
-			            "MAX(crs_users.Role)"	// row[1]
-			      " FROM crs_users,"
-			            "crs_courses,"
-			            "deg_degrees"
-			     " WHERE crs_users.UsrCod=%ld"
-			       " AND crs_users.CrsCod=crs_courses.CrsCod"
-			       " AND crs_courses.DegCod=deg_degrees.DegCod"
-			     " GROUP BY deg_degrees.DegCod"
-			     " ORDER BY deg_degrees.ShortName",
-			     UsrCod);
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not check the degrees a user belongs to",
+		      "SELECT deg_degrees.DegCod,"	// row[0]
+			     "MAX(crs_users.Role)"	// row[1]
+		       " FROM crs_users,"
+			     "crs_courses,"
+			     "deg_degrees"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=deg_degrees.DegCod"
+		      " GROUP BY deg_degrees.DegCod"
+		      " ORDER BY deg_degrees.ShortName",
+		      UsrCod);
   }
 
 /*****************************************************************************/
@@ -2393,37 +2396,38 @@ unsigned long Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res)
 /*****************************************************************************/
 // Returns the number of rows of the result
 
-unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res)
+unsigned Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res)
   {
    /***** Get from database the courses a user belongs to *****/
    if (DegCod > 0)	// Courses in a degree
-      return DB_QuerySELECT (mysql_res,"can not get the courses"
-				       " a user belongs to",
-	                     "SELECT crs_users.CrsCod,"		// row[0]
-	                            "crs_users.Role,"		// row[1]
-	                            "crs_courses.DegCod"	// row[2]
-			      " FROM crs_users,"
-			            "crs_courses"
-			     " WHERE crs_users.UsrCod=%ld"
-			       " AND crs_users.CrsCod=crs_courses.CrsCod"
-			       " AND crs_courses.DegCod=%ld"
-			     " ORDER BY crs_courses.ShortName",
-			     UsrCod,DegCod);
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not get the courses a user belongs to",
+		      "SELECT crs_users.CrsCod,"	// row[0]
+			     "crs_users.Role,"		// row[1]
+			     "crs_courses.DegCod"	// row[2]
+		       " FROM crs_users,"
+			     "crs_courses"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=%ld"
+		      " ORDER BY crs_courses.ShortName",
+		      UsrCod,
+		      DegCod);
    else			// All the courses
-      return DB_QuerySELECT (mysql_res,"can not get the courses"
-				       " a user belongs to",
-	                     "SELECT crs_users.CrsCod,"		// row[0]
-	                            "crs_users.Role,"		// row[1]
-	                            "crs_courses.DegCod"	// row[2]
-			      " FROM crs_users,"
-			            "crs_courses,"
-			            "deg_degrees"
-			     " WHERE crs_users.UsrCod=%ld"
-			       " AND crs_users.CrsCod=crs_courses.CrsCod"
-			       " AND crs_courses.DegCod=deg_degrees.DegCod"
-			     " ORDER BY deg_degrees.ShortName,"
-			               "crs_courses.ShortName",
-			     UsrCod);
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not get the courses a user belongs to",
+		      "SELECT crs_users.CrsCod,"	// row[0]
+			     "crs_users.Role,"		// row[1]
+			     "crs_courses.DegCod"	// row[2]
+		       " FROM crs_users,"
+			     "crs_courses,"
+			     "deg_degrees"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=deg_degrees.DegCod"
+		      " ORDER BY deg_degrees.ShortName,"
+			        "crs_courses.ShortName",
+		      UsrCod);
   }
 
 /*****************************************************************************/
@@ -5499,10 +5503,10 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
      }
 
    /***** Query database *****/
-   if ((Gbl.Usrs.LstUsrs[Role].NumUsrs =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get list of users",
-			      "%s",
-			      Query)))
+   if ((Gbl.Usrs.LstUsrs[Role].NumUsrs = (unsigned)
+       DB_QuerySELECT (&mysql_res,"can not get list of users",
+		       "%s",
+		       Query)))
      {
       if (Gbl.Usrs.LstUsrs[Role].NumUsrs > Cfg_MAX_USRS_IN_LIST)
         {
@@ -5831,7 +5835,7 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs)
       if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
 	{
 	 Ses_GetParamFromDB (ParamName,SelectedUsrs->List[Rol_UNK],
-				 Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+			     Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 	 Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,SelectedUsrs->List[Rol_UNK],
 			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);
 	}
@@ -7757,17 +7761,18 @@ static void Usr_GetMyUsrListTypeFromDB (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned NumRows;
    Usr_ShowUsrsType_t ListType;
 
    /***** Get type of listing of users from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get type of listing of users",
-			     "SELECT UsrListType"	// row[0]
-			      " FROM crs_user_settings"
-			     " WHERE UsrCod=%ld"
-			       " AND CrsCod=%ld",
-			     Gbl.Usrs.Me.UsrDat.UsrCod,
-			     Gbl.Hierarchy.Crs.CrsCod);
+   NumRows = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get type of listing of users",
+		   "SELECT UsrListType"	// row[0]
+		    " FROM crs_user_settings"
+		   " WHERE UsrCod=%ld"
+		     " AND CrsCod=%ld",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
    if (NumRows == 1)		// Should be one only row
      {
       /* Get type of users' listing used to select some of them */
@@ -7860,7 +7865,7 @@ static void Usr_GetMyColsClassPhotoFromDB (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned NumRows;
 
    Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
 
@@ -7869,14 +7874,14 @@ static void Usr_GetMyColsClassPhotoFromDB (void)
        Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
      {
       /***** Get number of columns in class photo from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get number of columns"
-					   " in class photo",
-				"SELECT ColsClassPhoto"	// row[0]
-				 " FROM crs_user_settings"
-				" WHERE UsrCod=%ld"
-				  " AND CrsCod=%ld",
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Gbl.Hierarchy.Crs.CrsCod);
+      NumRows = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get number of columns in class photo",
+		      "SELECT ColsClassPhoto"	// row[0]
+		       " FROM crs_user_settings"
+		      " WHERE UsrCod=%ld"
+		        " AND CrsCod=%ld",
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      Gbl.Hierarchy.Crs.CrsCod);
       if (NumRows == 1)		// Should be one only row
         {
          /* Get number of columns in class photo */
@@ -7970,7 +7975,7 @@ void Usr_GetMyPrefAboutListWithPhotosFromDB (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned NumRows;
 
    Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
 
@@ -7978,14 +7983,15 @@ void Usr_GetMyPrefAboutListWithPhotosFromDB (void)
    if (Gbl.Usrs.Me.Logged && Gbl.Hierarchy.Crs.CrsCod)
      {
       /***** Get if listing of users must show photos from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not check if listing of users"
-					   " must show photos",
-				"SELECT ListWithPhotos"	// row[0]
-				 " FROM crs_user_settings"
-				" WHERE UsrCod=%ld"
-				  " AND CrsCod=%ld",
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Gbl.Hierarchy.Crs.CrsCod);
+      NumRows = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not check if listing of users"
+			         " must show photos",
+		      "SELECT ListWithPhotos"	// row[0]
+		       " FROM crs_user_settings"
+		      " WHERE UsrCod=%ld"
+		        " AND CrsCod=%ld",
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      Gbl.Hierarchy.Crs.CrsCod);
       if (NumRows == 1)                // Should be one only row
         {
          /* Get number of columns in class photo */

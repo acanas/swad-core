@@ -237,8 +237,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       HTM_LI_End ();
 
       /***** Get my institutions in this country *****/
-      NumInss = (unsigned) Usr_GetInssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                               Hie.Cty.CtyCod,&mysql_resIns);
+      NumInss = Usr_GetInssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
+                                    Hie.Cty.CtyCod,&mysql_resIns);
       for (NumIns = 0;
 	   NumIns < NumInss;
 	   NumIns++)
@@ -271,8 +271,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 HTM_LI_End ();
 
 	 /***** Get my centers in this institution *****/
-	 NumCtrs = (unsigned) Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-	                                          Hie.Ins.InsCod,&mysql_resCtr);
+	 NumCtrs = Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
+	                               Hie.Ins.InsCod,&mysql_resCtr);
 	 for (NumCtr = 0;
 	      NumCtr < NumCtrs;
 	      NumCtr++)
@@ -305,8 +305,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    HTM_LI_End ();
 
 	    /***** Get my degrees in this center *****/
-	    NumDegs = (unsigned) Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-	                                             Hie.Ctr.CtrCod,&mysql_resDeg);
+	    NumDegs = Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
+	                                  Hie.Ctr.CtrCod,&mysql_resDeg);
 	    for (NumDeg = 0;
 		 NumDeg < NumDegs;
 		 NumDeg++)
@@ -339,8 +339,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       HTM_LI_End ();
 
 	       /***** Get my courses in this degree *****/
-	       NumCrss = (unsigned) Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-	                                                Hie.Deg.DegCod,&mysql_resCrs);
+	       NumCrss = Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
+	                                     Hie.Deg.DegCod,&mysql_resCrs);
 	       for (NumCrs = 0;
 		    NumCrs < NumCrss;
 		    NumCrs++)
@@ -2992,8 +2992,8 @@ void Crs_RemoveOldCrss (void)
    unsigned MonthsWithoutAccess;
    unsigned long SecondsWithoutAccess;
    MYSQL_RES *mysql_res;
-   unsigned long NumCrs;
-   unsigned long NumCrss;
+   unsigned NumCrss;
+   unsigned NumCrs;
    unsigned NumCrssRemoved = 0;
    long CrsCod;
 
@@ -3008,14 +3008,15 @@ void Crs_RemoveOldCrss (void)
    SecondsWithoutAccess = (unsigned long) MonthsWithoutAccess * Dat_SECONDS_IN_ONE_MONTH;
 
    /***** Get old courses from database *****/
-   NumCrss = DB_QuerySELECT (&mysql_res,"can not get old courses",
-			     "SELECT CrsCod"
-			      " FROM crs_last"
-			     " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
-			       " AND CrsCod NOT IN"
-			           " (SELECT DISTINCT CrsCod"
-			              " FROM crs_users)",
-			     SecondsWithoutAccess);
+   NumCrss = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get old courses",
+		   "SELECT CrsCod"
+		    " FROM crs_last"
+		   " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
+		     " AND CrsCod NOT IN"
+		         " (SELECT DISTINCT CrsCod"
+			    " FROM crs_users)",
+		   SecondsWithoutAccess);
    if (NumCrss)
      {
       Ale_ShowAlert (Ale_INFO,Txt_Eliminating_X_courses_whithout_users_and_with_more_than_Y_months_without_access,

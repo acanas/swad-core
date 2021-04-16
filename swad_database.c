@@ -32,6 +32,7 @@
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For FILE, vasprintf
 #include <stdlib.h>		// For free
+#include <string.h>		// For strlen
 
 #include "swad_config.h"
 #include "swad_database.h"
@@ -3954,6 +3955,8 @@ void DB_QuerySELECTString (char *Str,size_t StrSize,const char *MsgError,
    va_list ap;
    int NumBytesPrinted;
    char *Query;
+   bool TooBig = false;
+   char ErrorTxt[256];
 
    /***** Create query string *****/
    va_start (ap,fmt);
@@ -3963,16 +3966,27 @@ void DB_QuerySELECTString (char *Str,size_t StrSize,const char *MsgError,
       Lay_NotEnoughMemoryExit ();
 
    /***** Do SELECT query *****/
+   Str[0] = '\0';
    if (DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError) == 1)	// Row found
      {
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Str,row[0],StrSize);
+
+      TooBig = (strlen (row[0]) > StrSize);
+      if (!TooBig)
+         Str_Copy (Str,row[0],StrSize);
      }
-   else
-      Str[0] = '\0';
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   if (TooBig)
+     {
+      snprintf (ErrorTxt,sizeof (ErrorTxt),
+	        "Too large string from database,"
+                " it exceed the maximum allowed size (%zu bytes).",
+                StrSize);
+      Lay_ShowErrorAndExit (ErrorTxt);
+     }
   }
 
 /*****************************************************************************/

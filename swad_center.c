@@ -550,35 +550,32 @@ void Ctr_GetBasicListOfCenters (long InsCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    unsigned NumCtr;
    struct Ctr_Center *Ctr;
 
    /***** Get centers from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get centers",
-			     "SELECT CtrCod,"		// row[ 0]
-			            "InsCod,"		// row[ 1]
-			            "PlcCod,"		// row[ 2]
-			            "Status,"		// row[ 3]
-			            "RequesterUsrCod,"	// row[ 4]
-			            "Latitude,"		// row[ 5]
-			            "Longitude,"	// row[ 6]
-			            "Altitude,"		// row[ 7]
-			            "ShortName,"	// row[ 8]
-			            "FullName,"		// row[ 9]
-			            "WWW"		// row[10]
-			      " FROM ctr_centers"
-			     " WHERE InsCod=%ld"
-			     " ORDER BY FullName",
-			     InsCod);
+   Gbl.Hierarchy.Ctrs.Num = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get centers",
+		   "SELECT CtrCod,"		// row[ 0]
+			  "InsCod,"		// row[ 1]
+			  "PlcCod,"		// row[ 2]
+			  "Status,"		// row[ 3]
+			  "RequesterUsrCod,"	// row[ 4]
+			  "Latitude,"		// row[ 5]
+			  "Longitude,"		// row[ 6]
+			  "Altitude,"		// row[ 7]
+			  "ShortName,"		// row[ 8]
+			  "FullName,"		// row[ 9]
+			  "WWW"			// row[10]
+		    " FROM ctr_centers"
+		   " WHERE InsCod=%ld"
+		   " ORDER BY FullName",
+		   InsCod);
 
-   if (NumRows) // Centers found...
+   if (Gbl.Hierarchy.Ctrs.Num) // Centers found...
      {
-      // NumRows should be equal to Deg->NumCourses
-      Gbl.Hierarchy.Ctrs.Num = (unsigned) NumRows;
-
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.Ctrs.Lst = calloc (NumRows,
+      if ((Gbl.Hierarchy.Ctrs.Lst = calloc ((size_t) Gbl.Hierarchy.Ctrs.Num,
                                             sizeof (*Gbl.Hierarchy.Ctrs.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
@@ -597,8 +594,6 @@ void Ctr_GetBasicListOfCenters (long InsCod)
          Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = false;
         }
      }
-   else
-      Gbl.Hierarchy.Ctrs.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -618,58 +613,55 @@ void Ctr_GetFullListOfCenters (long InsCod)
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    unsigned NumCtr;
    struct Ctr_Center *Ctr;
 
    /***** Get centers from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get centers",
-			     "(SELECT ctr_centers.CtrCod,"		// row[ 0]
-			             "ctr_centers.InsCod,"		// row[ 1]
-			             "ctr_centers.PlcCod,"		// row[ 2]
-			             "ctr_centers.Status,"		// row[ 3]
-			             "ctr_centers.RequesterUsrCod,"	// row[ 4]
-			             "ctr_centers.Latitude,"		// row[ 5]
-			             "ctr_centers.Longitude,"		// row[ 6]
-			             "ctr_centers.Altitude,"		// row[ 7]
-			             "ctr_centers.ShortName,"		// row[ 8]
-			             "ctr_centers.FullName,"		// row[ 9]
-			             "ctr_centers.WWW,"			// row[10]
-				     "COUNT(*) AS NumUsrs"		// row[11]
-			      " FROM ctr_centers,usr_data"
-			     " WHERE ctr_centers.InsCod=%ld"
-			       " AND ctr_centers.CtrCod=usr_data.CtrCod"
-			     " GROUP BY ctr_centers.CtrCod)"
-			     " UNION "
-			     "(SELECT CtrCod,"				// row[ 0]
-			             "InsCod,"				// row[ 1]
-			             "PlcCod,"				// row[ 2]
-			             "Status,"				// row[ 3]
-			             "RequesterUsrCod,"			// row[ 4]
-			             "Latitude,"			// row[ 5]
-			             "Longitude,"			// row[ 6]
-			             "Altitude,"			// row[ 7]
-			             "ShortName,"			// row[ 8]
-			             "FullName,"			// row[ 9]
-			             "WWW,"				// row[10]
-				     "0 AS NumUsrs"			// row[11]
-			      " FROM ctr_centers"
-			     " WHERE InsCod=%ld"
-			       " AND CtrCod NOT IN"
-			           " (SELECT DISTINCT CtrCod"
-			              " FROM usr_data))"
-			     " ORDER BY %s",
-			     InsCod,
-			     InsCod,
-			     OrderBySubQuery[Gbl.Hierarchy.Ctrs.SelectedOrder]);
+   Gbl.Hierarchy.Ctrs.Num = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get centers",
+		   "(SELECT ctr_centers.CtrCod,"		// row[ 0]
+			   "ctr_centers.InsCod,"		// row[ 1]
+			   "ctr_centers.PlcCod,"		// row[ 2]
+			   "ctr_centers.Status,"		// row[ 3]
+			   "ctr_centers.RequesterUsrCod,"	// row[ 4]
+			   "ctr_centers.Latitude,"		// row[ 5]
+			   "ctr_centers.Longitude,"		// row[ 6]
+			   "ctr_centers.Altitude,"		// row[ 7]
+			   "ctr_centers.ShortName,"		// row[ 8]
+			   "ctr_centers.FullName,"		// row[ 9]
+			   "ctr_centers.WWW,"			// row[10]
+			   "COUNT(*) AS NumUsrs"		// row[11]
+		    " FROM ctr_centers,usr_data"
+		   " WHERE ctr_centers.InsCod=%ld"
+		     " AND ctr_centers.CtrCod=usr_data.CtrCod"
+		   " GROUP BY ctr_centers.CtrCod)"
+		   " UNION "
+		   "(SELECT CtrCod,"				// row[ 0]
+			   "InsCod,"				// row[ 1]
+			   "PlcCod,"				// row[ 2]
+			   "Status,"				// row[ 3]
+			   "RequesterUsrCod,"			// row[ 4]
+			   "Latitude,"				// row[ 5]
+			   "Longitude,"				// row[ 6]
+			   "Altitude,"				// row[ 7]
+			   "ShortName,"				// row[ 8]
+			   "FullName,"				// row[ 9]
+			   "WWW,"				// row[10]
+			   "0 AS NumUsrs"			// row[11]
+		    " FROM ctr_centers"
+		   " WHERE InsCod=%ld"
+		     " AND CtrCod NOT IN"
+		         " (SELECT DISTINCT CtrCod"
+			    " FROM usr_data))"
+		   " ORDER BY %s",
+		   InsCod,
+		   InsCod,
+		   OrderBySubQuery[Gbl.Hierarchy.Ctrs.SelectedOrder]);
 
-   if (NumRows) // Centers found...
+   if (Gbl.Hierarchy.Ctrs.Num) // Centers found...
      {
-      // NumRows should be equal to Deg->NumCourses
-      Gbl.Hierarchy.Ctrs.Num = (unsigned) NumRows;
-
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.Ctrs.Lst = calloc (NumRows,
+      if ((Gbl.Hierarchy.Ctrs.Lst = calloc ((size_t) Gbl.Hierarchy.Ctrs.Num,
                                             sizeof (*Gbl.Hierarchy.Ctrs.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
@@ -690,8 +682,6 @@ void Ctr_GetFullListOfCenters (long InsCod)
 	    Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = true;
         }
      }
-   else
-      Gbl.Hierarchy.Ctrs.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -705,7 +695,6 @@ bool Ctr_GetDataOfCenterByCod (struct Ctr_Center *Ctr)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    bool CtrFound = false;
 
    /***** Clear data *****/
@@ -722,22 +711,21 @@ bool Ctr_GetDataOfCenterByCod (struct Ctr_Center *Ctr)
    if (Ctr->CtrCod > 0)
      {
       /***** Get data of a center from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a center",
-				"SELECT CtrCod,"		// row[ 0]
-				       "InsCod,"		// row[ 1]
-				       "PlcCod,"		// row[ 2]
-				       "Status,"		// row[ 3]
-				       "RequesterUsrCod,"	// row[ 4]
-			               "Latitude,"		// row[ 5]
-			               "Longitude,"		// row[ 6]
-			               "Altitude,"		// row[ 7]
-				       "ShortName,"		// row[ 8]
-				       "FullName,"		// row[ 9]
-				       "WWW"			// row[10]
-				 " FROM ctr_centers"
-				" WHERE CtrCod=%ld",
-				Ctr->CtrCod);
-      if (NumRows) // Center found...
+      if (DB_QuerySELECT (&mysql_res,"can not get data of a center",
+			  "SELECT CtrCod,"		// row[ 0]
+				 "InsCod,"		// row[ 1]
+				 "PlcCod,"		// row[ 2]
+				 "Status,"		// row[ 3]
+				 "RequesterUsrCod,"	// row[ 4]
+				 "Latitude,"		// row[ 5]
+				 "Longitude,"		// row[ 6]
+				 "Altitude,"		// row[ 7]
+				 "ShortName,"		// row[ 8]
+				 "FullName,"		// row[ 9]
+				 "WWW"			// row[10]
+			   " FROM ctr_centers"
+			  " WHERE CtrCod=%ld",
+			  Ctr->CtrCod)) // Center found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);

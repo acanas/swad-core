@@ -1784,23 +1784,19 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 
 static void Sta_WriteLogComments (long LogCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
+   char Comments[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get log comments from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get log comments",
-		       "SELECT Comments"	// row[0]
-		        " FROM log_comments"
-		       " WHERE LogCod=%ld",
-		       LogCod))
-     {
-      /***** Get and write comments *****/
-      row = mysql_fetch_row (mysql_res);
-      HTM_Txt (row[0]);
-     }
+   DB_QuerySELECTString (Comments,sizeof (Comments) - 1,
+                         "can not get log comments",
+			 "SELECT Comments"
+			  " FROM log_comments"
+			 " WHERE LogCod=%ld",
+			 LogCod);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   /***** Write comments *****/
+   if (Comments[0])
+      HTM_Txt (Comments);
   }
 
 /*****************************************************************************/

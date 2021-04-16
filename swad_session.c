@@ -423,50 +423,20 @@ static bool Ses_CheckIfParamIsAlreadyInDB (const char *ParamName)
 /*****************************************************************************/
 /***************** Get session parameter from the database *******************/
 /*****************************************************************************/
+// StrSize is the size of the parameter value, not including the ending '\0'
 
-void Ses_GetParamFromDB (const char *ParamName,char *ParamValue,size_t MaxBytes)
+void Ses_GetParamFromDB (const char *ParamName,char *ParamValue,size_t StrSize)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   bool ParameterIsTooBig = false;
-   char ErrorTxt[256];
-
    ParamValue[0] = '\0';
    if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
-     {
       /***** Get a session parameter from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get a session parameter",
-				"SELECT ParamValue"	// row[0]
-				 " FROM ses_params"
-				" WHERE SessionId='%s'"
-				  " AND ParamName='%s'",
-				Gbl.Session.Id,
-				ParamName);
-
-      /***** Check if the parameter is found in database *****/
-      if (NumRows)
-        {
-         /***** Get the value del parameter *****/
-         row = mysql_fetch_row (mysql_res);
-
-         ParameterIsTooBig = (strlen (row[0]) > MaxBytes);
-         if (!ParameterIsTooBig)
-	    Str_Copy (ParamValue,row[0],MaxBytes);
-        }
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-
-   if (ParameterIsTooBig)
-     {
-      snprintf (ErrorTxt,sizeof (ErrorTxt),
-	        "Session parameter <strong>%s</strong> too large,"
-                " it exceed the maximum allowed size (%lu bytes).",
-                ParamName,(unsigned long) MaxBytes);
-      Lay_ShowErrorAndExit (ErrorTxt);
-     }
+      DB_QuerySELECTString (ParamValue,StrSize,"can not get a session parameter",
+			    "SELECT ParamValue"	// row[0]
+			     " FROM ses_params"
+			    " WHERE SessionId='%s'"
+			      " AND ParamName='%s'",
+			    Gbl.Session.Id,
+			    ParamName);
   }
 
 /*****************************************************************************/

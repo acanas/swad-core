@@ -83,7 +83,7 @@ static void Ban_PutIconToEditBanners (void);
 static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
                                      const struct Ban_Banner *Ban);
 static void Ban_GetListBanners (struct Ban_Banners *Banners,
-                                MYSQL_RES **mysql_res,unsigned long NumRows);
+                                MYSQL_RES **mysql_res,unsigned NumBanners);
 static void Ban_FreeListBanners (struct Ban_Banners *Banners);
 
 static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args);
@@ -134,23 +134,24 @@ void Ban_SeeBanners (void)
    extern const char *Txt_New_banner;
    struct Ban_Banners Banners;
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
+   unsigned NumBanners;
 
    /***** Reset banners *****/
    Ban_ResetBanners (&Banners);
 
    /***** Get list of banners *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get banners",
-			     "SELECT BanCod,"		// row[0]
-			            "Hidden,"		// row[1]
-			            "ShortName,"	// row[2]
-			            "FullName,"		// row[3]
-			            "Img,"		// row[4]
-			            "WWW"		// row[5]
-			      " FROM ban_banners"
-			     " WHERE Hidden='N'"
-			     " ORDER BY ShortName");
-   Ban_GetListBanners (&Banners,&mysql_res,NumRows);
+   NumBanners = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get banners",
+		   "SELECT BanCod,"	// row[0]
+			  "Hidden,"	// row[1]
+			  "ShortName,"	// row[2]
+			  "FullName,"	// row[3]
+			  "Img,"	// row[4]
+			  "WWW"		// row[5]
+		    " FROM ban_banners"
+		   " WHERE Hidden='N'"
+		   " ORDER BY ShortName");
+   Ban_GetListBanners (&Banners,&mysql_res,NumBanners);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Banners,
@@ -258,19 +259,20 @@ static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
    extern const char *Hlp_SYSTEM_Banners_edit;
    extern const char *Txt_Banners;
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
+   unsigned NumBanners;
 
    /***** Get list of banners *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get banners",
-			     "SELECT BanCod,"		// row[0]
-			            "Hidden,"		// row[1]
-			            "ShortName,"	// row[2]
-			            "FullName,"		// row[3]
-			            "Img,"		// row[4]
-			            "WWW"		// row[5]
-			      " FROM ban_banners"
-			     " ORDER BY ShortName");
-   Ban_GetListBanners (Banners,&mysql_res,NumRows);
+   NumBanners = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get banners",
+		   "SELECT BanCod,"	// row[0]
+			  "Hidden,"	// row[1]
+			  "ShortName,"	// row[2]
+			  "FullName,"	// row[3]
+			  "Img,"	// row[4]
+			  "WWW"		// row[5]
+		    " FROM ban_banners"
+		   " ORDER BY ShortName");
+   Ban_GetListBanners (Banners,&mysql_res,NumBanners);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Banners,
@@ -296,19 +298,19 @@ static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
 /*****************************************************************************/
 
 static void Ban_GetListBanners (struct Ban_Banners *Banners,
-                                MYSQL_RES **mysql_res,unsigned long NumRows)
+                                MYSQL_RES **mysql_res,unsigned NumBanners)
   {
    MYSQL_ROW row;
    unsigned NumBan;
    struct Ban_Banner *Ban;
 
    /***** Get banners from database *****/
-   if (NumRows) // Banners found...
+   Banners->Num = NumBanners;
+   if (Banners->Num) // Banners found...
      {
-      Banners->Num = (unsigned) NumRows;
 
       /***** Create list with banners *****/
-      if ((Banners->Lst = calloc (NumRows,sizeof (*Banners->Lst))) == NULL)
+      if ((Banners->Lst = calloc ((size_t) Banners->Num,sizeof (*Banners->Lst))) == NULL)
 	 Lay_NotEnoughMemoryExit ();
 
       /***** Get the banners *****/
@@ -336,8 +338,6 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
 	 Str_Copy (Ban->WWW     ,row[5],sizeof (Ban->WWW     ) - 1);
 	}
      }
-   else
-      Banners->Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (mysql_res);
@@ -351,7 +351,6 @@ void Ban_GetDataOfBannerByCod (struct Ban_Banner *Ban)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Clear data *****/
    Ban->Hidden = false;
@@ -361,16 +360,15 @@ void Ban_GetDataOfBannerByCod (struct Ban_Banner *Ban)
    if (Ban->BanCod > 0)
      {
       /***** Get data of a banner from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a banner",
-				"SELECT Hidden,"	// row[0]
-				       "ShortName,"	// row[1]
-				       "FullName,"	// row[2]
-				       "Img,"		// row[3]
-				       "WWW"		// row[4]
-			         " FROM ban_banners"
-			        " WHERE BanCod=%ld",
-			        Ban->BanCod);
-      if (NumRows) // Banner found...
+      if (DB_QuerySELECT (&mysql_res,"can not get data of a banner",
+			  "SELECT Hidden,"	// row[0]
+				 "ShortName,"	// row[1]
+				 "FullName,"	// row[2]
+				 "Img,"		// row[3]
+				 "WWW"		// row[4]
+			   " FROM ban_banners"
+			  " WHERE BanCod=%ld",
+			  Ban->BanCod)) // Banner found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);
@@ -1103,7 +1101,7 @@ void Ban_WriteMenuWithBanners (void)
   {
    struct Ban_Banners Banners;
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
+   unsigned NumBanners;
    unsigned NumBan;
 
    /***** Reset banners *****/
@@ -1111,21 +1109,22 @@ void Ban_WriteMenuWithBanners (void)
 
    /***** Get random banner *****/
    // The banner(s) will change once in a while
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get banners",
-			     "SELECT BanCod,"		// row[0]
-			            "Hidden,"		// row[1]
-			            "ShortName,"	// row[2]
-			            "FullName,"		// row[3]
-			            "Img,"		// row[4]
-			            "WWW"		// row[5]
-			      " FROM ban_banners"
-			     " WHERE Hidden='N'"
-			     " ORDER BY RAND(%lu)"
-			     " LIMIT %u",
-			     (unsigned long) (Gbl.StartExecutionTimeUTC /
-				              Cfg_TIME_TO_CHANGE_BANNER),
-			     Cfg_NUMBER_OF_BANNERS);
-   Ban_GetListBanners (&Banners,&mysql_res,NumRows);
+   NumBanners = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get banners",
+		   "SELECT BanCod,"	// row[0]
+			  "Hidden,"	// row[1]
+			  "ShortName,"	// row[2]
+			  "FullName,"	// row[3]
+			  "Img,"	// row[4]
+			  "WWW"		// row[5]
+		    " FROM ban_banners"
+		   " WHERE Hidden='N'"
+		   " ORDER BY RAND(%lu)"
+		   " LIMIT %u",
+		   (unsigned long) (Gbl.StartExecutionTimeUTC /
+				    Cfg_TIME_TO_CHANGE_BANNER),
+		   Cfg_NUMBER_OF_BANNERS);
+   Ban_GetListBanners (&Banners,&mysql_res,NumBanners);
 
    /***** Write all the banners *****/
    for (NumBan = 0;

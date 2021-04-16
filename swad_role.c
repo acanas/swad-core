@@ -435,28 +435,27 @@ void Rol_GetRolesInAllCrssIfNotYetGot (struct UsrData *UsrDat)
    unsigned NumRole;
    unsigned NumRoles;
 
-   /***** If roles is already filled ==> nothing to do *****/
-   if (UsrDat->Roles.InCrss < 0)	// Not yet filled
-     {
-      /***** Get distinct roles in all courses of the user from database *****/
-      NumRoles =
-      (unsigned) DB_QuerySELECT (&mysql_res,"can not get the roles of a user"
-					    " in all his/her courses",
-				 "SELECT DISTINCT(Role)"	// row[0]
-				  " FROM crs_users"
-				 " WHERE UsrCod=%ld",
-				 UsrDat->UsrCod);
-      for (NumRole = 0, UsrDat->Roles.InCrss = 0;
-	   NumRole < NumRoles;
-	   NumRole++)
-	{
-	 row = mysql_fetch_row (mysql_res);
-	 UsrDat->Roles.InCrss |= (int) (1 << Rol_ConvertUnsignedStrToRole (row[0]));
-	}
+   /***** Trivial check: if already filled, nothing to do *****/
+   if (UsrDat->Roles.InCrss >= 0)
+      return;
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+   /***** Get distinct roles in all courses of the user from database *****/
+   NumRoles = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get user's roles in all courses",
+		   "SELECT DISTINCT(Role)"	// row[0]
+		    " FROM crs_users"
+		   " WHERE UsrCod=%ld",
+		   UsrDat->UsrCod);
+   for (NumRole = 0, UsrDat->Roles.InCrss = 0;
+	NumRole < NumRoles;
+	NumRole++)
+     {
+      row = mysql_fetch_row (mysql_res);
+      UsrDat->Roles.InCrss |= (int) (1 << Rol_ConvertUnsignedStrToRole (row[0]));
      }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -637,27 +636,14 @@ unsigned Rol_GetSelectedRoles (void)
 
 Rol_Role_t Rol_GetRequestedRole (long UsrCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   Rol_Role_t Role = Rol_UNK;
-
    /***** Get requested role from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get requested role",
-		       "SELECT Role"		// row[0]
-		        " FROM crs_requests"
-		       " WHERE CrsCod=%ld"
-		         " AND UsrCod=%ld",
-		       Gbl.Hierarchy.Crs.CrsCod,UsrCod))
-     {
-      /***** Get role *****/
-      row = mysql_fetch_row (mysql_res);
-      Role = Rol_ConvertUnsignedStrToRole (row[0]);
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return Role;
+   return DB_QuerySELECTRole ("can not get requested role",
+			      "SELECT Role"
+			       " FROM crs_requests"
+			      " WHERE CrsCod=%ld"
+			        " AND UsrCod=%ld",
+			      Gbl.Hierarchy.Crs.CrsCod,
+			      UsrCod);
   }
 
 /*****************************************************************************/

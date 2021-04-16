@@ -252,13 +252,18 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
   {
    static const char *OrderBySubQuery[Mai_NUM_ORDERS] =
      {
-      [Mai_ORDER_BY_DOMAIN] = "Domain,Info,N DESC",
-      [Mai_ORDER_BY_INFO  ] = "Info,Domain,N DESC",
-      [Mai_ORDER_BY_USERS ] = "N DESC,Info,Domain",
+      [Mai_ORDER_BY_DOMAIN] = "Domain,"
+	                      "Info,"
+	                      "N DESC",
+      [Mai_ORDER_BY_INFO  ] = "Info,"
+	                      "Domain,"
+	                      "N DESC",
+      [Mai_ORDER_BY_USERS ] = "N DESC,"
+	                      "Info,"
+	                      "Domain",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    unsigned NumMai;
    struct Mail *Mai;
 
@@ -282,31 +287,31 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
 	       " FROM T1");
 
    /***** Get mail domains from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get mail domains",
-			     "(SELECT ntf_mail_domains.MaiCod,"			// row[0]
-				     "ntf_mail_domains.Domain AS Domain,"	// row[1]
-				     "ntf_mail_domains.Info AS Info,"		// row[2]
-				     "T1.N AS N"				// row[3]
-			       " FROM ntf_mail_domains,T1"
-			      " WHERE ntf_mail_domains.Domain=T1.Domain COLLATE 'latin1_bin')"
-			     " UNION "
-			     "(SELECT MaiCod,"					// row[0]
-				     "Domain,"					// row[1]
-				     "Info,"					// row[2]
-				     "0 AS N"					// row[3]
-			       " FROM ntf_mail_domains"
-			      " WHERE Domain NOT IN"
-			            " (SELECT Domain COLLATE 'latin1_bin'"
-			               " FROM T2))"
-			     " ORDER BY %s",	// COLLATE necessary to avoid error in comparisons
-			     OrderBySubQuery[Gbl.Mails.SelectedOrder]);
+   Gbl.Mails.Num = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get mail domains",
+		   "(SELECT ntf_mail_domains.MaiCod,"		// row[0]
+			   "ntf_mail_domains.Domain AS Domain,"	// row[1]
+			   "ntf_mail_domains.Info AS Info,"	// row[2]
+			   "T1.N AS N"				// row[3]
+		    " FROM ntf_mail_domains,T1"
+		    " WHERE ntf_mail_domains.Domain=T1.Domain COLLATE 'latin1_bin')"
+		   " UNION "
+		   "(SELECT MaiCod,"				// row[0]
+			   "Domain,"				// row[1]
+			   "Info,"				// row[2]
+			   "0 AS N"				// row[3]
+		     " FROM ntf_mail_domains"
+		    " WHERE Domain NOT IN"
+			  " (SELECT Domain COLLATE 'latin1_bin'"
+			     " FROM T2))"
+		   " ORDER BY %s",	// COLLATE necessary to avoid error in comparisons
+		   OrderBySubQuery[Gbl.Mails.SelectedOrder]);
 
-   if (NumRows) // Mail domains found...
+   if (Gbl.Mails.Num) // Mail domains found...
      {
-      Gbl.Mails.Num = (unsigned) NumRows;
-
       /***** Create list with places *****/
-      if ((Gbl.Mails.Lst = calloc (NumRows,sizeof (*Gbl.Mails.Lst))) == NULL)
+      if ((Gbl.Mails.Lst = calloc ((size_t) Gbl.Mails.Num,
+                                   sizeof (*Gbl.Mails.Lst))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the mail domains *****/
@@ -332,15 +337,14 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
             Mai->NumUsrs = 0;
         }
      }
-   else
-      Gbl.Mails.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Drop temporary table *****/
    DB_Query ("can not remove temporary tables",
-	     "DROP TEMPORARY TABLE IF EXISTS T1,T2");
+	     "DROP TEMPORARY TABLE IF EXISTS T1,"
+	                                    "T2");
   }
 
 /*****************************************************************************/
@@ -424,7 +428,6 @@ void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Clear data *****/
    Mai->Domain[0] = Mai->Info[0] = '\0';
@@ -433,15 +436,12 @@ void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
    if (Mai->MaiCod > 0)
      {
       /***** Get data of a mail domain from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get data"
-					   " of a mail domain",
-				"SELECT Domain,"	// row[0]
-				       "Info"		// row[1]
-				 " FROM ntf_mail_domains"
-				" WHERE MaiCod=%ld",
-				Mai->MaiCod);
-
-      if (NumRows) // Mail found...
+      if (DB_QuerySELECT (&mysql_res,"can not get data of a mail domain",
+			  "SELECT Domain,"	// row[0]
+				 "Info"		// row[1]
+			   " FROM ntf_mail_domains"
+			  " WHERE MaiCod=%ld",
+			  Mai->MaiCod)) // Mail found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);
@@ -1082,20 +1082,17 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    bool Found;
 
    /***** Get current (last updated) user's nickname from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get email address",
-			     "SELECT E_mail,"		// row[0]
-			            "Confirmed"		// row[1]
-			      " FROM usr_emails"
-			     " WHERE UsrCod=%ld"
-			     " ORDER BY CreatTime DESC"
-			     " LIMIT 1",
-			     UsrDat->UsrCod);
-
-   if (NumRows == 0)
+   if (DB_QuerySELECT (&mysql_res,"can not get email address",
+		       "SELECT E_mail,"		// row[0]
+			      "Confirmed"	// row[1]
+			" FROM usr_emails"
+		       " WHERE UsrCod=%ld"
+		       " ORDER BY CreatTime DESC"
+		       " LIMIT 1",
+		       UsrDat->UsrCod) == 0)
      {
       UsrDat->Email[0] = '\0';
       UsrDat->EmailConfirmed = false;

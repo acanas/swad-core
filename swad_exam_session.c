@@ -291,7 +291,6 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 void ExaSes_GetDataOfSessionByCod (struct ExaSes_Session *Session)
   {
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
 
    /***** Trivial check *****/
    if (Session->SesCod <= 0)
@@ -302,26 +301,24 @@ void ExaSes_GetDataOfSessionByCod (struct ExaSes_Session *Session)
      }
 
    /***** Get exam data session from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get sessions",
-		   "SELECT SesCod,"					// row[0]
-			  "ExaCod,"					// row[1]
-			  "Hidden,"					// row[2]
-			  "UsrCod,"					// row[3]
-			  "UNIX_TIMESTAMP(StartTime),"			// row[4]
-			  "UNIX_TIMESTAMP(EndTime),"			// row[5]
-			  "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
-			  "Title,"					// row[7]
-			  "ShowUsrResults"				// row[8]
-		    " FROM exa_sessions"
-		   " WHERE SesCod=%ld"
-		     " AND ExaCod IN"		// Extra check
-		         " (SELECT ExaCod"
-			    " FROM exa_exams"
-			   " WHERE CrsCod='%ld')",
-		   Session->SesCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
-   if (NumRows) // Session found...
+   if (DB_QuerySELECT (&mysql_res,"can not get sessions",
+		       "SELECT SesCod,"					// row[0]
+			      "ExaCod,"					// row[1]
+			      "Hidden,"					// row[2]
+			      "UsrCod,"					// row[3]
+			      "UNIX_TIMESTAMP(StartTime),"		// row[4]
+			      "UNIX_TIMESTAMP(EndTime),"		// row[5]
+			      "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
+			      "Title,"					// row[7]
+			      "ShowUsrResults"				// row[8]
+		        " FROM exa_sessions"
+		       " WHERE SesCod=%ld"
+			 " AND ExaCod IN"		// Extra check
+			     " (SELECT ExaCod"
+			        " FROM exa_exams"
+			       " WHERE CrsCod='%ld')",
+		       Session->SesCod,
+		       Gbl.Hierarchy.Crs.CrsCod)) // Session found...
       /* Get exam session data from row */
       ExaSes_GetSessionDataFromRow (mysql_res,Session);
    else
@@ -662,36 +659,37 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
    extern const char *Txt_The_whole_course;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
+   unsigned NumGrps;
+   unsigned NumGrp;
 
    /***** Get groups associated to an exam session from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of an exam session",
-			     "SELECT grp_types.GrpTypName,"	// row[0]
-			            "grp_groups.GrpName"	// row[1]
-			      " FROM exa_groups,"
-			            "grp_groups,"
-			            "grp_types"
-			     " WHERE exa_groups.SesCod=%ld"
-			       " AND exa_groups.GrpCod=grp_groups.GrpCod"
-			       " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-			     " ORDER BY grp_types.GrpTypName,"
-			               "grp_groups.GrpName",
-			     Session->SesCod);
+   NumGrps = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get groups of an exam session",
+		   "SELECT grp_types.GrpTypName,"	// row[0]
+			  "grp_groups.GrpName"	// row[1]
+		    " FROM exa_groups,"
+			  "grp_groups,"
+			  "grp_types"
+		   " WHERE exa_groups.SesCod=%ld"
+		     " AND exa_groups.GrpCod=grp_groups.GrpCod"
+		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+		   " ORDER BY grp_types.GrpTypName,"
+			     "grp_groups.GrpName",
+		   Session->SesCod);
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Session->Hidden ? "ASG_GRP_LIGHT":
 					           "ASG_GRP");
-   HTM_TxtColonNBSP (NumRows == 1 ? Txt_Group  :
+   HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
                                     Txt_Groups);
 
    /***** Write groups *****/
-   if (NumRows) // Groups found...
+   if (NumGrps) // Groups found...
      {
       /* Get and write the group types and names */
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumGrp = 0;
+	   NumGrp < NumGrps;
+	   NumGrp++)
         {
          /* Get next group */
          row = mysql_fetch_row (mysql_res);
@@ -699,12 +697,12 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
          /* Write group type name and group name */
          HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
 
-         if (NumRows >= 2)
+         if (NumGrps >= 2)
            {
-            if (NumRow == NumRows-2)
+            if (NumGrp == NumGrps - 2)
                HTM_TxtF (" %s ",Txt_and);
-            if (NumRows >= 3)
-              if (NumRow < NumRows-2)
+            if (NumGrps >= 3)
+              if (NumGrp < NumGrps - 2)
                   HTM_Txt (", ");
            }
         }

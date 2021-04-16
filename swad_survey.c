@@ -3187,37 +3187,17 @@ void Svy_ReceiveQst (void)
   }
 
 /*****************************************************************************/
-/******************* Get next question index in a survey *********************/
+/************ Get question index from question code in a survey **************/
 /*****************************************************************************/
 
 static unsigned Svy_GetQstIndFromQstCod (long QstCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   unsigned QstInd = 0;
-
-   /***** Get number of surveys with a field value from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get question index",
-			     "SELECT QstInd"		// row[0]
-			      " FROM svy_questions"
-			     " WHERE QstCod=%ld",
-			     QstCod);
-
-   /***** Get number of users *****/
-   if (NumRows)
-     {
-      row = mysql_fetch_row (mysql_res);
-      if (sscanf (row[0],"%u",&QstInd) != 1)
-         Lay_ShowErrorAndExit ("Error when getting question index.");
-     }
-   else
-      Lay_ShowErrorAndExit ("Error when getting question index.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return QstInd;
+   /***** Get question index from database *****/
+   return DB_QuerySELECTUnsigned ("can not get question index",
+				  "SELECT QstInd"
+				   " FROM svy_questions"
+				  " WHERE QstCod=%ld",
+				  QstCod);
   }
 
 /*****************************************************************************/

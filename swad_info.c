@@ -524,8 +524,8 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
+   unsigned NumInfos;
+   unsigned NumInfo;
    Inf_InfoType_t InfoType;
 
    /***** Reset must-be-read to false for all info types *****/
@@ -535,25 +535,25 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
       Gbl.Crs.Info.MustBeRead[InfoType] = false;
 
    /***** Get info types where students must read info *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get if you must read"
-					" any course info",
-			     "SELECT InfoType"		// row[0]
-			      " FROM crs_info_src"
-			     " WHERE CrsCod=%ld"
-			       " AND MustBeRead='Y'"
-			       " AND InfoType NOT IN"
-			           " (SELECT InfoType"
-			              " FROM crs_info_read"
-			             " WHERE UsrCod=%ld"
-			               " AND CrsCod=%ld)",
-			     Gbl.Hierarchy.Crs.CrsCod,
-			     Gbl.Usrs.Me.UsrDat.UsrCod,
-			     Gbl.Hierarchy.Crs.CrsCod);
+   NumInfos = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get if you must read any course info",
+		   "SELECT InfoType"		// row[0]
+		    " FROM crs_info_src"
+		   " WHERE CrsCod=%ld"
+		     " AND MustBeRead='Y'"
+		     " AND InfoType NOT IN"
+		         " (SELECT InfoType"
+			    " FROM crs_info_read"
+			   " WHERE UsrCod=%ld"
+			     " AND CrsCod=%ld)",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Set must-be-read to true for each rown in result *****/
-   for (NumRow = 0;
-	NumRow < NumRows;
-	NumRow++)
+   for (NumInfo = 0;
+	NumInfo < NumInfos;
+	NumInfo++)
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -566,7 +566,7 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return (NumRows != 0);
+   return (NumInfos != 0);
   }
 
 /*****************************************************************************/
@@ -1500,24 +1500,20 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Set default values *****/
    *InfoSrc = Inf_INFO_SRC_NONE;
    *MustBeRead = false;
 
    /***** Get info source for a specific type of info from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get info source",
-			     "SELECT InfoSrc,"		// row[0]
-			            "MustBeRead"	// row[1]
-			      " FROM crs_info_src"
-			     " WHERE CrsCod=%ld"
-			       " AND InfoType='%s'",
-			     CrsCod,
-			     Inf_NamesInDBForInfoType[InfoType]);
-
-   /***** The result of the query must have one row or none *****/
-   if (NumRows == 1)
+   if (DB_QuerySELECT (&mysql_res,"can not get info source",
+		       "SELECT InfoSrc,"		// row[0]
+			      "MustBeRead"	// row[1]
+			" FROM crs_info_src"
+		       " WHERE CrsCod=%ld"
+			 " AND InfoType='%s'",
+		       CrsCod,
+		       Inf_NamesInDBForInfoType[InfoType]) == 1)
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1528,12 +1524,11 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
       /* Get if students must read info (row[1]) */
       *MustBeRead = (row[1][0] == 'Y');
      }
+   else
+      Lay_ShowErrorAndExit ("Error when getting info source.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   if (NumRows > 1)
-      Lay_ShowErrorAndExit ("Error when getting info source.");
 
    /***** If info is empty, return Inf_INFO_SRC_NONE *****/
    switch (*InfoSrc)
@@ -1663,21 +1658,17 @@ void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Get info source for a specific type of course information
           (bibliography, FAQ, links or evaluation) from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get info text",
+   if (DB_QuerySELECT (&mysql_res,"can not get info text",
 			     "SELECT InfoTxtHTML,"	// row[0]
 			            "InfoTxtMD"		// row[1]
 			      " FROM crs_info_txt"
 			     " WHERE CrsCod=%ld"
 			       " AND InfoType='%s'",
 			     CrsCod,
-			     Inf_NamesInDBForInfoType[InfoType]);
-
-   /***** The result of the query must have one row or none *****/
-   if (NumRows == 1)
+			     Inf_NamesInDBForInfoType[InfoType]) == 1)
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
@@ -1695,14 +1686,11 @@ void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
       if (InfoTxtHTML)
          InfoTxtHTML[0] = '\0';
       if (InfoTxtMD)
-         InfoTxtMD  [0]   = '\0';
+         InfoTxtMD  [0] = '\0';
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   if (NumRows > 1)
-      Lay_ShowErrorAndExit ("Error when getting info text.");
   }
 
 /*****************************************************************************/

@@ -301,16 +301,16 @@ static void TsI_ExportQuestion (struct Tst_Question *Question,FILE *FileXML)
 static void TsI_GetAndWriteTagsXML (long QstCod,FILE *FileXML)
   {
    extern const char *Txt_NEW_LINE;
-   unsigned long NumRow;
-   unsigned long NumRows;
+   unsigned NumTags;
+   unsigned NumTag;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   if ((NumRows = Tst_GetTagsQst (QstCod,&mysql_res)))	// Result: TagTxt
+   if ((NumTags = Tst_GetTagsQst (QstCod,&mysql_res)))	// Result: TagTxt
       /***** Write the tags *****/
-      for (NumRow = 1;
-	   NumRow <= NumRows;
-	   NumRow++)
+      for (NumTag = 1;
+	   NumTag <= NumTags;
+	   NumTag++)
         {
          row = mysql_fetch_row (mysql_res);
          fprintf (FileXML,"<tag>%s</tag>%s",

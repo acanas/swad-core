@@ -784,25 +784,26 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned NumUsrs;
    unsigned NumUsr = Gbl.Usrs.Connected.NumUsrs;	// Save current number of users
 
    /***** Get connected users who belong to current course from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get list of connected users"
-					" who belong to this course",
-			     "SELECT usr_connected.UsrCod,"						// row[0]
-			            "usr_connected.LastCrsCod,"						// row[1]
-			            "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(usr_connected.LastTime) AS Dif"	// row[2]
-			      " FROM crs_users,"
-			            "usr_connected"
-			     " WHERE crs_users.CrsCod=%ld"
-			       " AND crs_users.Role=%u"
-			       " AND crs_users.UsrCod=usr_connected.UsrCod"
-			     " ORDER BY Dif",
-			     Gbl.Hierarchy.Crs.CrsCod,
-			     (unsigned) Role);
-   Gbl.Usrs.Connected.NumUsrs       += (unsigned) NumRows;
-   Gbl.Usrs.Connected.NumUsrsToList += (unsigned) NumRows;
+   NumUsrs = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get list of connected users"
+			      " who belong to this course",
+		   "SELECT usr_connected.UsrCod,"						// row[0]
+			  "usr_connected.LastCrsCod,"						// row[1]
+			  "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(usr_connected.LastTime) AS Dif"	// row[2]
+		    " FROM crs_users,"
+			  "usr_connected"
+		   " WHERE crs_users.CrsCod=%ld"
+		     " AND crs_users.Role=%u"
+		     " AND crs_users.UsrCod=usr_connected.UsrCod"
+		   " ORDER BY Dif",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   (unsigned) Role);
+   Gbl.Usrs.Connected.NumUsrs       += NumUsrs;
+   Gbl.Usrs.Connected.NumUsrsToList += NumUsrs;
    if (Gbl.Usrs.Connected.NumUsrsToList > Cfg_MAX_CONNECTED_SHOWN)
       Gbl.Usrs.Connected.NumUsrsToList = Cfg_MAX_CONNECTED_SHOWN;
 

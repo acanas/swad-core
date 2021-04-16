@@ -1355,15 +1355,16 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void)
    extern const char *TstCfg_PluggableDB[TstCfg_NUM_OPTIONS_PLUGGABLE];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned NumRows;
    TstCfg_Pluggable_t Pluggable;
 
    /***** Get pluggability of tests for current course from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get configuration of test",
-			     "SELECT Pluggable"		// row[0]
-			      " FROM tst_config"
-			     " WHERE CrsCod=%ld",
-			     Gbl.Hierarchy.Crs.CrsCod);
+   NumRows = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get configuration of test",
+		   "SELECT Pluggable"		// row[0]
+		    " FROM tst_config"
+		   " WHERE CrsCod=%ld",
+		   Gbl.Hierarchy.Crs.CrsCod);
 
    if (NumRows == 0)
       TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
@@ -2908,18 +2909,20 @@ void Tst_CheckIfNumberOfAnswersIsOne (const struct Tst_Question *Question)
 /************************* Get tags of a test question ***********************/
 /*****************************************************************************/
 
-unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res)
+unsigned Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res)
   {
    /***** Get the tags of a question from database *****/
-   return DB_QuerySELECT (mysql_res,"can not get the tags of a question",
-			  "SELECT tst_tags.TagTxt"	// row[0]
-			   " FROM tst_question_tags,"
-			         "tst_tags"
-			  " WHERE tst_question_tags.QstCod=%ld"
-			    " AND tst_question_tags.TagCod=tst_tags.TagCod"
-			    " AND tst_tags.CrsCod=%ld"
-			  " ORDER BY tst_question_tags.TagInd",
-			  QstCod,Gbl.Hierarchy.Crs.CrsCod);
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get the tags of a question",
+		   "SELECT tst_tags.TagTxt"	// row[0]
+		    " FROM tst_question_tags,"
+			  "tst_tags"
+		   " WHERE tst_question_tags.QstCod=%ld"
+		     " AND tst_question_tags.TagCod=tst_tags.TagCod"
+		     " AND tst_tags.CrsCod=%ld"
+		   " ORDER BY tst_question_tags.TagInd",
+		   QstCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -2929,18 +2932,18 @@ unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res)
 void Tst_GetAndWriteTagsQst (long QstCod)
   {
    extern const char *Txt_no_tags;
-   unsigned long NumRow;
-   unsigned long NumRows;
+   unsigned NumTags;
+   unsigned NumTag;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   if ((NumRows = Tst_GetTagsQst (QstCod,&mysql_res)))
+   if ((NumTags = Tst_GetTagsQst (QstCod,&mysql_res)))
      {
       /***** Write the tags *****/
       HTM_UL_Begin ("class=\"TEST_TAG_LIST DAT_SMALL\"");
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumTag = 0;
+	   NumTag < NumTags;
+	   NumTag++)
         {
          row = mysql_fetch_row (mysql_res);
          HTM_LI_Begin (NULL);
@@ -3813,26 +3816,16 @@ static void Tst_FreeMediaOfQuestion (struct Tst_Question *Question)
 
 Tst_AnswerType_t Tst_GetQstAnswerTypeFromDB (long QstCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   Tst_AnswerType_t AnswerType;
+   char StrAnsTypeDB[256];
 
    /***** Get type of answer from database *****/
-   if (!DB_QuerySELECT (&mysql_res,"can not get the type of a question",
-		       "SELECT AnsType"		// row[0]
-		        " FROM tst_questions"
-		       " WHERE QstCod=%ld",
-		       QstCod))
-      Lay_ShowErrorAndExit ("Question does not exist.");
-
-   /* Get type of answer */
-   row = mysql_fetch_row (mysql_res);
-   AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-
-   return AnswerType;
+   DB_QuerySELECTString (StrAnsTypeDB,sizeof (StrAnsTypeDB) - 1,
+                         "can not get the type of a question",
+		         "SELECT AnsType"
+		          " FROM tst_questions"
+		         " WHERE QstCod=%ld",
+		         QstCod);
+   return Tst_ConvertFromStrAnsTypDBToAnsTyp (StrAnsTypeDB);
   }
 
 /*****************************************************************************/
@@ -3844,8 +3837,8 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool QuestionExists;
-   unsigned long NumRows;
-   unsigned long NumRow;
+   unsigned NumTags;
+   unsigned NumTag;
    unsigned NumOpt;
 
    /***** Get question data from database *****/
@@ -3914,14 +3907,14 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Get the tags from the database *****/
-      NumRows = Tst_GetTagsQst (Question->QstCod,&mysql_res);
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      NumTags = Tst_GetTagsQst (Question->QstCod,&mysql_res);
+      for (NumTag = 0;
+	   NumTag < NumTags;
+	   NumTag++)
 	{
 	 row = mysql_fetch_row (mysql_res);
-	 Str_Copy (Question->Tags.Txt[NumRow],row[0],
-	           sizeof (Question->Tags.Txt[NumRow]) - 1);
+	 Str_Copy (Question->Tags.Txt[NumTag],row[0],
+	           sizeof (Question->Tags.Txt[NumTag]) - 1);
 	}
 
       /* Free structure that stores the query result */
@@ -4049,16 +4042,17 @@ static void Tst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
 /** Convert a string with the type of answer in database to type of answer ***/
 /*****************************************************************************/
 
-Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD)
+Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeDB)
   {
    Tst_AnswerType_t AnsType;
 
-   if (StrAnsTypeBD != NULL)
-      for (AnsType  = (Tst_AnswerType_t) 0;
-	   AnsType <= (Tst_AnswerType_t) (Tst_NUM_ANS_TYPES - 1);
-	   AnsType++)
-         if (!strcmp (StrAnsTypeBD,Tst_StrAnswerTypesDB[AnsType]))
-            return AnsType;
+   if (StrAnsTypeDB != NULL)
+      if (StrAnsTypeDB[0])
+	 for (AnsType  = (Tst_AnswerType_t) 0;
+	      AnsType <= (Tst_AnswerType_t) (Tst_NUM_ANS_TYPES - 1);
+	      AnsType++)
+	    if (!strcmp (StrAnsTypeDB,Tst_StrAnswerTypesDB[AnsType]))
+	       return AnsType;
 
    return Tst_ANS_UNKNOWN;
   }
@@ -5223,18 +5217,18 @@ static void Tst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod)
    unsigned NumMedia;
 
    /***** Get media codes associated to answers of test questions from database *****/
-   NumMedia =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
-			      "SELECT tst_answers.MedCod"	// row[0]
-			       " FROM tst_answers,"
-			             "tst_questions"
-			      " WHERE tst_answers.QstCod=%ld"
-			        " AND tst_answers.QstCod=tst_questions.QstCod"
-			        " AND tst_questions.CrsCod=%ld"	// Extra check
-			        " AND tst_questions.QstCod=%ld",	// Extra check
-			      QstCod,
-			      CrsCod,
-			      QstCod);
+   NumMedia = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get media",
+		   "SELECT tst_answers.MedCod"
+		    " FROM tst_answers,"
+			  "tst_questions"
+		   " WHERE tst_answers.QstCod=%ld"
+		     " AND tst_answers.QstCod=tst_questions.QstCod"
+		     " AND tst_questions.CrsCod=%ld"	// Extra check
+		     " AND tst_questions.QstCod=%ld",	// Extra check
+		   QstCod,
+		   CrsCod,
+		   QstCod);
 
    /***** Go over result removing media *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
@@ -5277,14 +5271,14 @@ static void Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod)
    unsigned NumMedia;
 
    /***** Get names of media files associated to answers of test questions from database *****/
-   NumMedia =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
-			      "SELECT tst_answers.MedCod"	// row[0]
-			       " FROM tst_questions,"
-			             "tst_answers"
-			      " WHERE tst_questions.CrsCod=%ld"
-			        " AND tst_questions.QstCod=tst_answers.QstCod",
-			      CrsCod);
+   NumMedia = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get media",
+		   "SELECT tst_answers.MedCod"
+		    " FROM tst_questions,"
+			  "tst_answers"
+		   " WHERE tst_questions.CrsCod=%ld"
+		     " AND tst_questions.QstCod=tst_answers.QstCod",
+		   CrsCod);
 
    /***** Go over result removing media files *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);

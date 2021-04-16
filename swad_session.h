@@ -50,7 +50,7 @@ bool Ses_GetSessionData (void);
 void Ses_InsertParamInDB (const char *ParamName,const char *ParamValue);
 void Ses_RemoveParamFromThisSession (void);
 void Ses_RemoveParamsFromExpiredSessions (void);
-void Ses_GetParamFromDB (const char *ParamName,char *ParamValue,size_t MaxBytes);
+void Ses_GetParamFromDB (const char *ParamName,char *ParamValue,size_t StrSize);
 
 bool Ses_GetPublicDirFromCache (const char *FullPathMediaPriv,
                                 char TmpPubDir[PATH_MAX + 1]);

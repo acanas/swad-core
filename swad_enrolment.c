@@ -865,8 +865,8 @@ void Enr_RemoveOldUsrs (void)
    unsigned MonthsWithoutAccess;
    time_t SecondsWithoutAccess;
    MYSQL_RES *mysql_res;
-   unsigned long NumUsr;
-   unsigned long NumUsrs;
+   unsigned NumUsr;
+   unsigned NumUsrs;
    unsigned NumUsrsEliminated = 0;
    struct UsrData UsrDat;
 
@@ -881,22 +881,23 @@ void Enr_RemoveOldUsrs (void)
    SecondsWithoutAccess = (time_t) MonthsWithoutAccess * Dat_SECONDS_IN_ONE_MONTH;
 
    /***** Get old users from database *****/
-   NumUsrs = DB_QuerySELECT (&mysql_res,"can not get old users",
-			     "SELECT UsrCod"
-			      " FROM (SELECT UsrCod"
-			              " FROM usr_last"
-			             " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
-				     " UNION "
-				     "SELECT UsrCod"
-				      " FROM usr_data"
-				     " WHERE UsrCod NOT IN"
-				           " (SELECT UsrCod"
-				              " FROM usr_last)"
-				    ") AS candidate_usrs"
-			     " WHERE UsrCod NOT IN"
-			           " (SELECT DISTINCT UsrCod"
-			              " FROM crs_users)",
-			     (unsigned long) SecondsWithoutAccess);
+   NumUsrs = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get old users",
+		   "SELECT UsrCod"
+		    " FROM (SELECT UsrCod"
+			    " FROM usr_last"
+			   " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
+			   " UNION "
+			   "SELECT UsrCod"
+			    " FROM usr_data"
+			   " WHERE UsrCod NOT IN"
+			         " (SELECT UsrCod"
+				    " FROM usr_last)"
+			  ") AS candidate_usrs"
+		   " WHERE UsrCod NOT IN"
+		         " (SELECT DISTINCT UsrCod"
+			    " FROM crs_users)",
+		   (unsigned long) SecondsWithoutAccess);
    if (NumUsrs)
      {
       Ale_ShowAlert (Ale_INFO,Txt_Eliminating_X_users_who_were_not_enroled_in_any_course_and_with_more_than_Y_months_without_access_to_Z,
@@ -2260,8 +2261,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    extern const char *Txt_No_enrolment_requests;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumReqs = 0;	// Initialized to avoid warning
-   unsigned long NumReq;
+   unsigned NumReqs = 0;	// Initialized to avoid warning
+   unsigned NumReq;
    long ReqCod;
    struct Deg_Degree Deg;
    struct Crs_Course Crs;
@@ -2334,7 +2335,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
            {
             case Rol_TCH:
                // Requests in all courses in which I am teacher
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2354,7 +2355,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                break;
             case Rol_DEG_ADM:
                // Requests in all degrees administrated by me
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2375,7 +2376,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                break;
             case Rol_CTR_ADM:
                // Requests in all centers administrated by me
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2398,7 +2399,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                break;
             case Rol_INS_ADM:
                // Requests in all institutions administrated by me
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2423,7 +2424,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                break;
            case Rol_SYS_ADM:
                // All requests
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT ReqCod,"				// row[0]
 			              "CrsCod,"				// row[1]
@@ -2445,7 +2446,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
            {
             case Rol_TCH:
                // Requests in courses of this country in which I am teacher
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2475,7 +2476,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                break;
             case Rol_DEG_ADM:
                // Requests in degrees of this country administrated by me
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2505,7 +2506,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                break;
             case Rol_CTR_ADM:
                // Requests in centers of this country administrated by me
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2535,7 +2536,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                break;
             case Rol_INS_ADM:
                // Requests in institutions of this country administrated by me
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2565,7 +2566,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                break;
             case Rol_SYS_ADM:
                // Requests in any course of this country
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2597,7 +2598,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
            {
             case Rol_TCH:
                // Requests in courses of this institution in which I am teacher
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2625,7 +2626,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                break;
             case Rol_DEG_ADM:
                // Requests in degrees of this institution administrated by me
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2653,7 +2654,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                break;
             case Rol_CTR_ADM:
                // Requests in centers of this institution administrated by me
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2681,7 +2682,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this institution
             case Rol_SYS_ADM:
                // Requests in any course of this institution
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2711,7 +2712,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
            {
             case Rol_TCH:
                // Requests in courses of this center in which I am teacher
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2737,7 +2738,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                break;
             case Rol_DEG_ADM:
                // Requests in degrees of this center administrated by me
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2765,7 +2766,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this center
             case Rol_SYS_ADM:
                // Request in any course of this center
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2793,7 +2794,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
            {
             case Rol_TCH:
                // Requests in courses of this degree in which I am teacher
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2820,7 +2821,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this degree
             case Rol_SYS_ADM:
                // Requests in any course of this degree
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT crs_requests.ReqCod,"				// row[0]
 			              "crs_requests.CrsCod,"				// row[1]
@@ -2850,7 +2851,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this course
             case Rol_SYS_ADM:
                // Requests in this course
-               NumReqs =
+               NumReqs = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get requests for enrolment",
 			       "SELECT ReqCod,"				// row[0]
 			              "CrsCod,"				// row[1]
@@ -2932,7 +2933,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             /***** Number *****/
             HTM_TR_Begin (NULL);
 	    HTM_TD_Begin ("class=\"DAT RT\"");
-	    HTM_UnsignedLong (NumReqs - NumReq);
+	    HTM_Unsigned (NumReqs - NumReq);
 	    HTM_TD_End ();
 
             /***** Link to course *****/

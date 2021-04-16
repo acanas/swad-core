@@ -691,8 +691,8 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
    extern const char *Txt_Incomplete_timetable_for_lack_of_space;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows = 0;	// Initialized to avoid warning
-   unsigned long NumRow;
+   unsigned NumRows = 0;	// Initialized to avoid warning
+   unsigned NumRow;
    unsigned Weekday;
    unsigned Interval;
    unsigned i;	// To iterate through intervals
@@ -715,7 +715,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
          switch (Gbl.Crs.Grps.WhichGrps)
            {
             case Grp_MY_GROUPS:
-               NumRows =
+               NumRows = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get timetable",
 			       "SELECT tmt_courses.Weekday,"				// row[0]
 				      "TIME_TO_SEC(tmt_courses.StartTime) AS S,"	// row[1]
@@ -763,7 +763,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 			     UsrCod);
                break;
             case Grp_ALL_GROUPS:
-               NumRows =
+               NumRows = (unsigned)
                DB_QuerySELECT (&mysql_res,"can not get timetable",
 			       "SELECT tmt_courses.Weekday,"				// row[0]
 				      "TIME_TO_SEC(tmt_courses.StartTime) AS S,"	// row[1]
@@ -802,7 +802,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
          if (Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS ||
              Gbl.Action.Act == ActEdiCrsTT ||
              Gbl.Action.Act == ActChgCrsTT)	// If we are editing, all groups are shown
-            NumRows =
+            NumRows = (unsigned)
             DB_QuerySELECT (&mysql_res,"can not get timetable",
 			    "SELECT Weekday,"				// row[0]
 				   "TIME_TO_SEC(StartTime) AS S,"	// row[1]
@@ -820,7 +820,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 				      "D DESC",
 			    Gbl.Hierarchy.Crs.CrsCod);
          else
-            NumRows =
+            NumRows = (unsigned)
             DB_QuerySELECT (&mysql_res,"can not get timetable",
 			    "SELECT tmt_courses.Weekday,"			// row[0]
 				   "TIME_TO_SEC(tmt_courses.StartTime) AS S,"	// row[1]
@@ -856,7 +856,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 			    Gbl.Hierarchy.Crs.CrsCod,UsrCod);
 	 break;
       case Tmt_TUTORING_TIMETABLE:
-         NumRows =
+         NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get timetable",
 		         "SELECT Weekday,"			// row[0]
 			        "TIME_TO_SEC(StartTime) AS S,"	// row[1]

@@ -89,7 +89,7 @@ static void Asg_PutParams (void *Assignments);
 static void Asg_GetListAssignments (struct Asg_Assignments *Assignments);
 static void Asg_GetDataOfAssignment (struct Asg_Assignment *Asg,
                                      MYSQL_RES **mysql_res,
-				     unsigned long NumRows);
+				     unsigned NumAsgs);
 static void Asg_ResetAssignment (struct Asg_Assignment *Asg);
 static void Asg_FreeListAssignments (struct Asg_Assignments *Assignments);
 static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
@@ -684,7 +684,7 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
       [Dat_END_TIME  ] = "EndTime DESC,StartTime DESC,Title DESC",
      };
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
+   unsigned NumAsgs;
    unsigned NumAsg;
 
    if (Assignments->LstIsRead)
@@ -692,45 +692,47 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
 
    /***** Get list of assignments from database *****/
    if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get assignments",
-	                        "SELECT AsgCod"
-				 " FROM asg_assignments"
-				" WHERE CrsCod=%ld%s"
-				  " AND ("
-					// Assignment is for the whole course
-                                        "AsgCod NOT IN"
-                                        " (SELECT AsgCod"
-				           " FROM asg_groups)"	// Not associated to any group
-				       " OR"
-					// Assignment is for some of my groups
-				       " AsgCod IN"
-				       " (SELECT asg_groups.AsgCod"
-				          " FROM asg_groups,"
-				                "grp_users"
-				         " WHERE grp_users.UsrCod=%ld"
-				           " AND asg_groups.GrpCod=grp_users.GrpCod)"
-				       ")"
-				" ORDER BY %s",
-				Gbl.Hierarchy.Crs.CrsCod,
-				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				OrderBySubQuery[Assignments->SelectedOrder]);
+      NumAsgs = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get assignments",
+		      "SELECT AsgCod"
+		       " FROM asg_assignments"
+		      " WHERE CrsCod=%ld%s"
+		        " AND ("
+			      // Assignment is for the whole course
+			      "AsgCod NOT IN"
+			      " (SELECT AsgCod"
+			         " FROM asg_groups)"	// Not associated to any group
+			     " OR"
+			      // Assignment is for some of my groups
+			     " AsgCod IN"
+			     " (SELECT asg_groups.AsgCod"
+			        " FROM asg_groups,"
+				      "grp_users"
+			       " WHERE grp_users.UsrCod=%ld"
+			         " AND asg_groups.GrpCod=grp_users.GrpCod)"
+			     ")"
+		      " ORDER BY %s",
+		      Gbl.Hierarchy.Crs.CrsCod,
+		      HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      OrderBySubQuery[Assignments->SelectedOrder]);
    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get assignments",
-	                        "SELECT AsgCod"
-				 " FROM asg_assignments"
-				" WHERE CrsCod=%ld%s"
-				" ORDER BY %s",
-				Gbl.Hierarchy.Crs.CrsCod,
-				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
-				OrderBySubQuery[Assignments->SelectedOrder]);
+      NumAsgs = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get assignments",
+		      "SELECT AsgCod"
+		       " FROM asg_assignments"
+		      " WHERE CrsCod=%ld%s"
+		      " ORDER BY %s",
+		      Gbl.Hierarchy.Crs.CrsCod,
+		      HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
+		      OrderBySubQuery[Assignments->SelectedOrder]);
 
-   if (NumRows) // Assignments found...
+   if (NumAsgs) // Assignments found...
      {
-      Assignments->Num = (unsigned) NumRows;
+      Assignments->Num = (unsigned) NumAsgs;
 
       /***** Create list of assignments *****/
-      if ((Assignments->LstAsgCods = calloc (NumRows,
+      if ((Assignments->LstAsgCods = calloc (NumAsgs,
                                              sizeof (*Assignments->LstAsgCods))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
@@ -760,28 +762,29 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
 void Asg_GetDataOfAssignmentByCod (struct Asg_Assignment *Asg)
   {
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
+   unsigned NumAsgs;
 
    if (Asg->AsgCod > 0)
      {
       /***** Build query *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get assignment data",
-				"SELECT AsgCod,"				// row[0]
-				       "Hidden,"				// row[1]
-				       "UsrCod,"				// row[2]
-				       "UNIX_TIMESTAMP(StartTime),"		// row[3]
-				       "UNIX_TIMESTAMP(EndTime),"		// row[4]
-				       "NOW() BETWEEN StartTime AND EndTime,"	// row[5]
-				       "Title,"					// row[6]
-				       "Folder"					// row[7]
-				 " FROM asg_assignments"
-				" WHERE AsgCod=%ld"
-				  " AND CrsCod=%ld",
-				Asg->AsgCod,
-				Gbl.Hierarchy.Crs.CrsCod);
+      NumAsgs = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get assignment data",
+		      "SELECT AsgCod,"					// row[0]
+			     "Hidden,"					// row[1]
+			     "UsrCod,"					// row[2]
+			     "UNIX_TIMESTAMP(StartTime),"		// row[3]
+			     "UNIX_TIMESTAMP(EndTime),"			// row[4]
+			     "NOW() BETWEEN StartTime AND EndTime,"	// row[5]
+			     "Title,"					// row[6]
+			     "Folder"					// row[7]
+		       " FROM asg_assignments"
+		      " WHERE AsgCod=%ld"
+			" AND CrsCod=%ld",
+		      Asg->AsgCod,
+		      Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Get data of assignment *****/
-      Asg_GetDataOfAssignment (Asg,&mysql_res,NumRows);
+      Asg_GetDataOfAssignment (Asg,&mysql_res,NumAsgs);
      }
    else
      {
@@ -798,28 +801,29 @@ void Asg_GetDataOfAssignmentByCod (struct Asg_Assignment *Asg)
 void Asg_GetDataOfAssignmentByFolder (struct Asg_Assignment *Asg)
   {
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
+   unsigned NumAsgs;
 
    if (Asg->Folder[0])
      {
       /***** Query database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get assignment data",
-	                        "SELECT AsgCod,"				// row[0]
-	                               "Hidden,"				// row[1]
-	                               "UsrCod,"				// row[2]
-				       "UNIX_TIMESTAMP(StartTime),"		// row[3]
-				       "UNIX_TIMESTAMP(EndTime),"		// row[4]
-				       "NOW() BETWEEN StartTime AND EndTime,"	// row[5]
-				       "Title,"					// row[6]
-				       "Folder"					// row[7]
-				 " FROM asg_assignments"
-				" WHERE CrsCod=%ld"
-				  " AND Folder='%s'",
-				Gbl.Hierarchy.Crs.CrsCod,
-				Asg->Folder);
+      NumAsgs = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get assignment data",
+		      "SELECT AsgCod,"					// row[0]
+			     "Hidden,"					// row[1]
+			     "UsrCod,"					// row[2]
+			     "UNIX_TIMESTAMP(StartTime),"		// row[3]
+			     "UNIX_TIMESTAMP(EndTime),"			// row[4]
+			     "NOW() BETWEEN StartTime AND EndTime,"	// row[5]
+			     "Title,"					// row[6]
+			     "Folder"					// row[7]
+		       " FROM asg_assignments"
+		      " WHERE CrsCod=%ld"
+		        " AND Folder='%s'",
+		      Gbl.Hierarchy.Crs.CrsCod,
+		      Asg->Folder);
 
       /***** Get data of assignment *****/
-      Asg_GetDataOfAssignment (Asg,&mysql_res,NumRows);
+      Asg_GetDataOfAssignment (Asg,&mysql_res,NumAsgs);
      }
    else
      {
@@ -835,7 +839,7 @@ void Asg_GetDataOfAssignmentByFolder (struct Asg_Assignment *Asg)
 
 static void Asg_GetDataOfAssignment (struct Asg_Assignment *Asg,
                                      MYSQL_RES **mysql_res,
-				     unsigned long NumRows)
+				     unsigned NumAsgs)
   {
    MYSQL_ROW row;
 
@@ -843,7 +847,7 @@ static void Asg_GetDataOfAssignment (struct Asg_Assignment *Asg,
    Asg_ResetAssignment (Asg);
 
    /***** Get data of assignment from database *****/
-   if (NumRows) // Assignment found...
+   if (NumAsgs) // Assignment found...
      {
       /* Get row */
       row = mysql_fetch_row (*mysql_res);
@@ -953,21 +957,22 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned NumAsgs;
    size_t Length;
 
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Build query *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get assignment title and text",
-	                     "SELECT Title,"		// row[0]
-	                            "Txt"		// row[1]
-	                      " FROM asg_assignments"
-	                     " WHERE AsgCod=%ld",
-			     AsgCod);
+   NumAsgs = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get assignment title and text",
+		   "SELECT Title,"	// row[0]
+			  "Txt"		// row[1]
+		    " FROM asg_assignments"
+		   " WHERE AsgCod=%ld",
+		   AsgCod);
 
    /***** Result should have a unique row *****/
-   if (NumRows == 1)
+   if (NumAsgs == 1)
      {
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);
@@ -1727,36 +1732,37 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
    extern const char *Txt_The_whole_course;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
+   unsigned NumGrps;
+   unsigned NumGrp;
 
    /***** Get groups associated to an assignment from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of an assignment",
-	                     "SELECT grp_types.GrpTypName,"	// row[0]
-	                            "grp_groups.GrpName"	// row[1]
-			      " FROM asg_groups,"
-			            "grp_groups,"
-			            "grp_types"
-			     " WHERE asg_groups.AsgCod=%ld"
-			       " AND asg_groups.GrpCod=grp_groups.GrpCod"
-			       " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-			     " ORDER BY grp_types.GrpTypName,"
-			               "grp_groups.GrpName",
-			     Asg->AsgCod);
+   NumGrps = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get groups of an assignment",
+		   "SELECT grp_types.GrpTypName,"	// row[0]
+			  "grp_groups.GrpName"	// row[1]
+		    " FROM asg_groups,"
+			  "grp_groups,"
+			  "grp_types"
+		   " WHERE asg_groups.AsgCod=%ld"
+		     " AND asg_groups.GrpCod=grp_groups.GrpCod"
+		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+		   " ORDER BY grp_types.GrpTypName,"
+			     "grp_groups.GrpName",
+		   Asg->AsgCod);
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Asg->Hidden ? "ASG_GRP_LIGHT" :
         	                               "ASG_GRP");
-   HTM_TxtColonNBSP (NumRows == 1 ? Txt_Group  :
+   HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
                                     Txt_Groups);
 
    /***** Write groups *****/
-   if (NumRows) // Groups found...
+   if (NumGrps) // Groups found...
      {
       /* Get and write the group types and names */
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumGrp = 0;
+	   NumGrp < NumGrps;
+	   NumGrp++)
         {
          /* Get next group */
          row = mysql_fetch_row (mysql_res);
@@ -1764,12 +1770,12 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
          /* Write group type name and group name */
          HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
 
-         if (NumRows >= 2)
+         if (NumGrps >= 2)
            {
-            if (NumRow == NumRows-2)
+            if (NumGrp == NumGrps - 2)
                HTM_TxtF (" %s ",Txt_and);
-            if (NumRows >= 3)
-              if (NumRow < NumRows-2)
+            if (NumGrps >= 3)
+              if (NumGrp < NumGrps - 2)
                   HTM_Txt (", ");
            }
         }

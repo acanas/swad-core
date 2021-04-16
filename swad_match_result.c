@@ -393,30 +393,31 @@ void MchRes_ShowAllMchResultsInGam (void)
 static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games,long GamCod)
   {
    MYSQL_RES *mysql_res;
-   unsigned long NumUsrs;
-   unsigned long NumUsr;
+   unsigned NumUsrs;
+   unsigned NumUsr;
 
    /***** Table head *****/
    MchRes_ShowHeaderMchResults (Usr_OTHER);
 
    /***** Get all users who have answered any match question in this game *****/
-   NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in game",
-			     "SELECT users.UsrCod"
-			      " FROM (SELECT DISTINCT mch_results.UsrCod AS UsrCod"
-				      " FROM mch_results,"
-				            "mch_matches,"
-				            "gam_games"
-				     " WHERE mch_matches.GamCod=%ld"
-				       " AND mch_matches.MchCod=mch_results.MchCod"
-				       " AND mch_matches.GamCod=gam_games.GamCod"
-				       " AND gam_games.CrsCod=%ld) AS users,"		// Extra check
-				     "usr_data"
-			     " WHERE users.UsrCod=usr_data.UsrCod"
-			     " ORDER BY usr_data.Surname1,"
-			               "usr_data.Surname2,"
-			               "usr_data.FirstName",
-			     GamCod,
-			     Gbl.Hierarchy.Crs.CrsCod);
+   NumUsrs = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get users in game",
+		   "SELECT users.UsrCod"
+		    " FROM (SELECT DISTINCT mch_results.UsrCod AS UsrCod"
+			    " FROM mch_results,"
+				  "mch_matches,"
+				  "gam_games"
+			   " WHERE mch_matches.GamCod=%ld"
+			     " AND mch_matches.MchCod=mch_results.MchCod"
+			     " AND mch_matches.GamCod=gam_games.GamCod"
+			     " AND gam_games.CrsCod=%ld) AS users,"		// Extra check
+			   "usr_data"
+		   " WHERE users.UsrCod=usr_data.UsrCod"
+		   " ORDER BY usr_data.Surname1,"
+			     "usr_data.Surname2,"
+			     "usr_data.FirstName",
+		   GamCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** List matches results for each user *****/
    for (NumUsr = 0;
@@ -482,30 +483,31 @@ void MchRes_ShowAllMchResultsInMch (void)
 static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod)
   {
    MYSQL_RES *mysql_res;
-   unsigned long NumUsrs;
-   unsigned long NumUsr;
+   unsigned NumUsrs;
+   unsigned NumUsr;
 
    /***** Table head *****/
    MchRes_ShowHeaderMchResults (Usr_OTHER);
 
    /***** Get all users who have answered any match question in this game *****/
-   NumUsrs = DB_QuerySELECT (&mysql_res,"can not get users in match",
-			     "SELECT users.UsrCod"
-			      " FROM (SELECT mch_results.UsrCod AS UsrCod"
-				      " FROM mch_results,"
-				            "mch_matches,"
-				            "gam_games"
-				     " WHERE mch_results.MchCod=%ld"
-				       " AND mch_results.MchCod=mch_matches.MchCod"
-				       " AND mch_matches.GamCod=gam_games.GamCod"
-				       " AND gam_games.CrsCod=%ld) AS users,"	// Extra check
-				    "usr_data"
-			     " WHERE users.UsrCod=usr_data.UsrCod"
-			     " ORDER BY usr_data.Surname1,"
-			               "usr_data.Surname2,"
-			               "usr_data.FirstName",
-			     MchCod,
-			     Gbl.Hierarchy.Crs.CrsCod);
+   NumUsrs = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get users in match",
+		   "SELECT users.UsrCod"
+		    " FROM (SELECT mch_results.UsrCod AS UsrCod"
+			    " FROM mch_results,"
+				  "mch_matches,"
+				  "gam_games"
+			   " WHERE mch_results.MchCod=%ld"
+			     " AND mch_results.MchCod=mch_matches.MchCod"
+			     " AND mch_matches.GamCod=gam_games.GamCod"
+			     " AND gam_games.CrsCod=%ld) AS users,"	// Extra check
+			  "usr_data"
+		   " WHERE users.UsrCod=usr_data.UsrCod"
+		   " ORDER BY usr_data.Surname1,"
+			     "usr_data.Surname2,"
+			     "usr_data.FirstName",
+		   MchCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** List matches results for each user *****/
    for (NumUsr = 0;

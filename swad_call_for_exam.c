@@ -683,8 +683,8 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
    extern const char *Txt_No_calls_for_exams_of_X;
    char SubQueryStatus[64];
    MYSQL_RES *mysql_res;
-   unsigned long NumExaAnn;
-   unsigned long NumExaAnns;
+   unsigned NumExaAnns;
+   unsigned NumExaAnn;
    long ExaCod;
    bool HighLight;
    bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
@@ -700,14 +700,16 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 
    /***** Get calls for exams (the most recent first)
           in current course from database *****/
-   NumExaAnns = DB_QuerySELECT (&mysql_res,"can not get calls for exams"
-	                                   " in this course for listing",
-				"SELECT ExaCod"			// row[0]
-				 " FROM cfe_exams"
-				" WHERE CrsCod=%ld"
-				  " AND %s"
-				" ORDER BY ExamDate DESC",
-				Gbl.Hierarchy.Crs.CrsCod,SubQueryStatus);
+   NumExaAnns = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get calls for exams"
+			      " in this course for listing",
+		   "SELECT ExaCod"			// row[0]
+		    " FROM cfe_exams"
+		   " WHERE CrsCod=%ld"
+		     " AND %s"
+		   " ORDER BY ExamDate DESC",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   SubQueryStatus);
 
    /***** Begin box *****/
    if (ICanEdit)
@@ -887,24 +889,24 @@ void Cfe_CreateListCallsForExams (struct Cfe_CallsForExams *CallsForExams)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumExaAnn;
-   unsigned long NumExaAnns;
+   unsigned NumExaAnns;
+   unsigned NumExaAnn;
 
    if (Gbl.DB.DatabaseIsOpen)
      {
       /***** Get exam dates (ordered from more recent to older)
              of visible calls for exams
              in current course from database *****/
-      NumExaAnns = DB_QuerySELECT (&mysql_res,"can not get calls for exams"
-	                                      " in this course",
-				   "SELECT ExaCod,"		// row[0]
-				          "DATE(ExamDate)"	// row[1]
-				    " FROM cfe_exams"
-				   " WHERE CrsCod=%ld"
-				     " AND Status=%u"
-				   " ORDER BY ExamDate DESC",
-				   Gbl.Hierarchy.Crs.CrsCod,
-				   (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
+      NumExaAnns = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get calls for exams in this course",
+		      "SELECT ExaCod,"		// row[0]
+			     "DATE(ExamDate)"	// row[1]
+		       " FROM cfe_exams"
+		      " WHERE CrsCod=%ld"
+		        " AND Status=%u"
+		      " ORDER BY ExamDate DESC",
+		      Gbl.Hierarchy.Crs.CrsCod,
+		      (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
 
       /***** The result of the query may be empty *****/
       CallsForExams->Lst = NULL;
@@ -966,36 +968,31 @@ static void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExam
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumExaAnns;
    unsigned UnsignedNum;
    unsigned Hour;
    unsigned Minute;
    unsigned Second;
 
    /***** Get data of a call for exam from database *****/
-   NumExaAnns = DB_QuerySELECT (&mysql_res,"can not get data"
-					   " of a call for exam",
-	                        "SELECT CrsCod,"		// row[ 0]
-	                               "Status,"		// row[ 1]
-	                               "CrsFullName,"		// row[ 2]
-	                               "Year,"			// row[ 3]
-	                               "ExamSession,"		// row[ 4]
-				       "CallDate,"		// row[ 5]
-				       "ExamDate,"		// row[ 6]
-				       "Duration,"		// row[ 7]
-				       "Place,"			// row[ 8]
-				       "ExamMode,"		// row[ 9]
-				       "Structure,"		// row[10]
-				       "DocRequired,"		// row[11]
-				       "MatRequired,"		// row[12]
-				       "MatAllowed,"		// row[13]
-				       "OtherInfo"		// row[14]
-				 " FROM cfe_exams"
-				" WHERE ExaCod=%ld",
-				ExaCod);
-
-   /***** The result of the query must have one row *****/
-   if (NumExaAnns != 1)
+   if (DB_QuerySELECT (&mysql_res,"can not get data of a call for exam",
+		       "SELECT CrsCod,"		// row[ 0]
+			      "Status,"		// row[ 1]
+			      "CrsFullName,"	// row[ 2]
+			      "Year,"		// row[ 3]
+			      "ExamSession,"	// row[ 4]
+			      "CallDate,"	// row[ 5]
+			      "ExamDate,"	// row[ 6]
+			      "Duration,"	// row[ 7]
+			      "Place,"		// row[ 8]
+			      "ExamMode,"	// row[ 9]
+			      "Structure,"	// row[10]
+			      "DocRequired,"	// row[11]
+			      "MatRequired,"	// row[12]
+			      "MatAllowed,"	// row[13]
+			      "OtherInfo"	// row[14]
+			" FROM cfe_exams"
+		       " WHERE ExaCod=%ld",
+		       ExaCod) != 1)
       Lay_WrongCallForExamExit ();
 
    /***** Get the data of the call for exam *****/

@@ -102,24 +102,25 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
-   unsigned long NumRow;
+   unsigned NumActions;
+   unsigned NumAction;
    long ActCod;
    Act_Action_t Action;
 
    /***** Get most frequently used actions *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get most frequently used actions",
-			     "SELECT ActCod"
-			      " FROM act_frequent"
-			     " WHERE UsrCod=%ld"
-			     " ORDER BY Score DESC,"
-			               "LastClick DESC",
-			     Gbl.Usrs.Me.UsrDat.UsrCod);
+   NumActions = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get most frequently used actions",
+		   "SELECT ActCod"
+		    " FROM act_frequent"
+		   " WHERE UsrCod=%ld"
+		   " ORDER BY Score DESC,"
+			     "LastClick DESC",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Write list of frequently used actions *****/
-   for (NumRow = 0, ListMFUActions->NumActions = 0;
-        NumRow < NumRows && ListMFUActions->NumActions < MaxActionsShown;
-        NumRow++)
+   for (NumAction = 0, ListMFUActions->NumActions = 0;
+        NumAction < NumActions && ListMFUActions->NumActions < MaxActionsShown;
+        NumAction++)
      {
       /* Get action code */
       ActCod = DB_GetNextCode (mysql_res);

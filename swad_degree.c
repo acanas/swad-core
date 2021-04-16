@@ -1125,32 +1125,30 @@ void Deg_GetListDegsInCurrentCtr (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    unsigned NumDeg;
    struct Deg_Degree *Deg;
 
    /***** Get degrees of the current center from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get degrees of a center",
-			     "SELECT DegCod,"		// row[0]
-			            "CtrCod,"		// row[1]
-			            "DegTypCod,"	// row[2]
-			            "Status,"		// row[3]
-			            "RequesterUsrCod,"	// row[4]
-			            "ShortName,"	// row[5]
-			            "FullName,"		// row[6]
-			            "WWW"		// row[7]
-			      " FROM deg_degrees"
-			     " WHERE CtrCod=%ld"
-			     " ORDER BY FullName",
-			     Gbl.Hierarchy.Ctr.CtrCod);
+   Gbl.Hierarchy.Degs.Num = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get degrees of a center",
+		   "SELECT DegCod,"		// row[0]
+			  "CtrCod,"		// row[1]
+			  "DegTypCod,"		// row[2]
+			  "Status,"		// row[3]
+			  "RequesterUsrCod,"	// row[4]
+			  "ShortName,"		// row[5]
+			  "FullName,"		// row[6]
+			  "WWW"			// row[7]
+		    " FROM deg_degrees"
+		   " WHERE CtrCod=%ld"
+		   " ORDER BY FullName",
+		   Gbl.Hierarchy.Ctr.CtrCod);
 
    /***** Count number of rows in result *****/
-   if (NumRows) // Degrees found...
+   if (Gbl.Hierarchy.Degs.Num) // Degrees found...
      {
-      Gbl.Hierarchy.Degs.Num = (unsigned) NumRows;
-
       /***** Create list with degrees of this center *****/
-      if ((Gbl.Hierarchy.Degs.Lst = calloc (Gbl.Hierarchy.Degs.Num,
+      if ((Gbl.Hierarchy.Degs.Lst = calloc ((size_t) Gbl.Hierarchy.Degs.Num,
                                             sizeof (*Gbl.Hierarchy.Degs.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
@@ -1166,8 +1164,6 @@ void Deg_GetListDegsInCurrentCtr (void)
          Deg_GetDataOfDegreeFromRow (Deg,row);
         }
      }
-   else
-      Gbl.Hierarchy.Degs.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1491,22 +1487,23 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod)
 void Deg_RemoveDegreeCompletely (long DegCod)
   {
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
-   unsigned long NumRow;
+   unsigned NumCrss;
+   unsigned NumCrs;
    long CrsCod;
    char PathDeg[PATH_MAX + 1];
 
    /***** Get courses of a degree from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get courses of a degree",
-			     "SELECT CrsCod"	// row[0]
-			      " FROM crs_courses"
-			     " WHERE DegCod=%ld",
-			     DegCod);
+   NumCrss = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get courses of a degree",
+		   "SELECT CrsCod"
+		    " FROM crs_courses"
+		   " WHERE DegCod=%ld",
+		   DegCod);
 
    /* Get courses in this degree */
-   for (NumRow = 0;
-	NumRow < NumRows;
-	NumRow++)
+   for (NumCrs = 0;
+	NumCrs < NumCrss;
+	NumCrs++)
      {
       /* Get next course */
       if ((CrsCod = DB_GetNextCode (mysql_res)) < 0)

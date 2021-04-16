@@ -358,7 +358,7 @@ static unsigned Roo_GetMACAddresses (long RooCod,MYSQL_RES **mysql_res)
   {
    /***** Get MAC addresses from database *****/
    return (unsigned) DB_QuerySELECT (mysql_res,"can not get MAC addresses",
-				     "SELECT MAC"		// row[0]
+				     "SELECT MAC"	// row[0]
 				      " FROM roo_macs"
 				     " WHERE RooCod=%ld"
 				     " ORDER BY MAC",

@@ -800,7 +800,6 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char *HiddenSubQuery;
-   unsigned long NumRows = 0;	// Initialized to avoid warning
    unsigned NumExam;
 
    /***** Free list of exams *****/
@@ -829,30 +828,30 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
      }
 
    /***** Get list of exams from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get exams",
-			     "SELECT exa_exams.ExaCod,"				// row[0]
-			            "MIN(exa_sessions.StartTime) AS StartTime,"	// row[1]
-			            "MAX(exa_sessions.EndTime) AS EndTime"	// row[2]
-			      " FROM exa_exams"
-			      " LEFT JOIN exa_sessions"
-			        " ON exa_exams.ExaCod=exa_sessions.ExaCod"
-			     " WHERE exa_exams.CrsCod=%ld"
-			         "%s"
-			     " GROUP BY exa_exams.ExaCod"
-			     " ORDER BY %s",
-			     Gbl.Hierarchy.Crs.CrsCod,
-			     HiddenSubQuery,
-			     OrderBySubQuery[SelectedOrder]);
+   Exams->Num = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get exams",
+		   "SELECT exa_exams.ExaCod,"				// row[0]
+			  "MIN(exa_sessions.StartTime) AS StartTime,"	// row[1]
+			  "MAX(exa_sessions.EndTime) AS EndTime"	// row[2]
+		    " FROM exa_exams"
+		    " LEFT JOIN exa_sessions"
+		      " ON exa_exams.ExaCod=exa_sessions.ExaCod"
+		   " WHERE exa_exams.CrsCod=%ld"
+		       "%s"
+		   " GROUP BY exa_exams.ExaCod"
+		   " ORDER BY %s",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   HiddenSubQuery,
+		   OrderBySubQuery[SelectedOrder]);
 
    /***** Free allocated memory for subquery *****/
    free (HiddenSubQuery);
 
-   if (NumRows) // Exams found...
+   if (Exams->Num) // Exams found...
      {
-      Exams->Num = (unsigned) NumRows;
-
       /***** Create list of exams *****/
-      if ((Exams->Lst = malloc (NumRows * sizeof (*Exams->Lst))) == NULL)
+      if ((Exams->Lst = malloc ((size_t) Exams->Num *
+                                sizeof (*Exams->Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the exams codes *****/
@@ -866,8 +865,6 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
             Lay_ShowErrorAndExit ("Error: wrong exam code.");
         }
      }
-   else
-      Exams->Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -945,7 +942,6 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Trivial check *****/
    if (Exam->ExaCod <= 0)
@@ -956,18 +952,17 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
      }
 
    /***** Get exam data from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get exam data",
-			     "SELECT ExaCod,"		// row[0]
-			            "CrsCod,"		// row[1]
-			            "Hidden,"		// row[2]
-			            "UsrCod,"		// row[3]
-			            "MaxGrade,"		// row[4]
-			            "Visibility,"	// row[5]
-			            "Title"		// row[6]
-			      " FROM exa_exams"
-			     " WHERE ExaCod=%ld",
-			     Exam->ExaCod);
-   if (NumRows) // Exam found...
+   if (DB_QuerySELECT (&mysql_res,"can not get exam data",
+		       "SELECT ExaCod,"		// row[0]
+			      "CrsCod,"		// row[1]
+			      "Hidden,"		// row[2]
+			      "UsrCod,"		// row[3]
+			      "MaxGrade,"	// row[4]
+			      "Visibility,"	// row[5]
+			      "Title"		// row[6]
+			" FROM exa_exams"
+		       " WHERE ExaCod=%ld",
+		       Exam->ExaCod)) // Exam found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1017,13 +1012,12 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
    if (Exam->ExaCod > 0)
      {
       /***** Get start and end times from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get exam data",
-				"SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
-				       "UNIX_TIMESTAMP(MAX(EndTime))"		// row[1]
-				 " FROM exa_sessions"
-				" WHERE ExaCod=%ld",
-				Exam->ExaCod);
-      if (NumRows)
+      if (DB_QuerySELECT (&mysql_res,"can not get exam data",
+			  "SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
+				 "UNIX_TIMESTAMP(MAX(EndTime))"		// row[1]
+			   " FROM exa_sessions"
+			  " WHERE ExaCod=%ld",
+			  Exam->ExaCod))
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
@@ -1242,16 +1236,16 @@ static void Exa_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
    unsigned NumMedia;
 
    /***** Get media codes associated to stems of exam questions from database *****/
-   NumMedia =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
-			      "SELECT exa_set_questions.MedCod"
-			       " FROM exa_exams,"
-			             "exa_sets,"
-			             "exa_set_questions"
-			      " WHERE exa_exams.CrsCod=%ld"
-                                " AND exa_exams.ExaCod=exa_sets.ExaCod"
-                                " AND exa_sets.SetCod=exa_set_questions.SetCod",
-			      CrsCod);
+   NumMedia = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get media",
+		   "SELECT exa_set_questions.MedCod"
+		    " FROM exa_exams,"
+			  "exa_sets,"
+			  "exa_set_questions"
+		   " WHERE exa_exams.CrsCod=%ld"
+		     " AND exa_exams.ExaCod=exa_sets.ExaCod"
+		     " AND exa_sets.SetCod=exa_set_questions.SetCod",
+		   CrsCod);
 
    /***** Go over result removing media files *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
