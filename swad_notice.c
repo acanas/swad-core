@@ -375,8 +375,8 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    char StrWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
    char PathRelRSSFile[PATH_MAX + 1];
    long NotCod;
-   unsigned long NumNot;
-   unsigned long NumNotices = 0;	// Initialized to avoid warning
+   unsigned NumNot;
+   unsigned NumNotices = 0;	// Initialized to avoid warning
    char Content[Cns_MAX_BYTES_TEXT + 1];
    time_t TimeUTC;
    long UsrCod;
@@ -392,30 +392,32 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    switch (TypeNoticesListing)
      {
       case Not_LIST_BRIEF_NOTICES:
-	 NumNotices = DB_QuerySELECT (&mysql_res,"can not get notices from database",
-				      "SELECT NotCod,"				// row[0]
-					     "UNIX_TIMESTAMP(CreatTime) AS F,"	// row[1]
-					     "UsrCod,"				// row[2]
-					     "Content,"				// row[3]
-					     "Status"				// row[4]
-				       " FROM not_notices"
-				      " WHERE CrsCod=%ld"
-				        " AND Status=%u"
-				      " ORDER BY CreatTime DESC",
-				      Gbl.Hierarchy.Crs.CrsCod,
-				      (unsigned) Not_ACTIVE_NOTICE);
+	 NumNotices = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get notices from database",
+		         "SELECT NotCod,"				// row[0]
+			        "UNIX_TIMESTAMP(CreatTime) AS F,"	// row[1]
+			        "UsrCod,"				// row[2]
+			        "Content,"				// row[3]
+			        "Status"				// row[4]
+			  " FROM not_notices"
+		        " WHERE CrsCod=%ld"
+			   " AND Status=%u"
+		         " ORDER BY CreatTime DESC",
+		         Gbl.Hierarchy.Crs.CrsCod,
+		         (unsigned) Not_ACTIVE_NOTICE);
 	 break;
       case Not_LIST_FULL_NOTICES:
-	 NumNotices = DB_QuerySELECT (&mysql_res,"can not get notices from database",
-				      "SELECT NotCod,"				// row[0]
-					     "UNIX_TIMESTAMP(CreatTime) AS F,"	// row[1]
-					     "UsrCod,"				// row[2]
-					     "Content,"				// row[3]
-					     "Status"				// row[4]
-				       " FROM not_notices"
-				      " WHERE CrsCod=%ld"
-				      " ORDER BY CreatTime DESC",
-				      Gbl.Hierarchy.Crs.CrsCod);
+	 NumNotices = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get notices from database",
+		         "SELECT NotCod,"				// row[0]
+			        "UNIX_TIMESTAMP(CreatTime) AS F,"	// row[1]
+			        "UsrCod,"				// row[2]
+			        "Content,"				// row[3]
+			        "Status"				// row[4]
+			  " FROM not_notices"
+		         " WHERE CrsCod=%ld"
+		         " ORDER BY CreatTime DESC",
+		         Gbl.Hierarchy.Crs.CrsCod);
 	 break;
      }
 

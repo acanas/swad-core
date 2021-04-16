@@ -156,7 +156,7 @@ void Sta_SeeGblAccesses (void);
 void Sta_SeeCrsAccesses (void);
 
 void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
-                                 unsigned long NumRows,
+                                 unsigned NumHits,
                                  MYSQL_RES *mysql_res,unsigned Field,
                                  unsigned Divisor);
 

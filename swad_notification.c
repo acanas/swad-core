@@ -319,8 +319,8 @@ void Ntf_ShowMyNotifications (void)
    char SubQuery[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumNotif;
-   unsigned long NumNotifications;
+   unsigned NumNotif;
+   unsigned NumNotifications;
    bool AllNotifications;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
    struct UsrData UsrDat;
@@ -347,7 +347,7 @@ void Ntf_ShowMyNotifications (void)
       sprintf (SubQuery," AND (Status&%u)=0",
                Ntf_STATUS_BIT_READ |
                Ntf_STATUS_BIT_REMOVED);
-   NumNotifications =
+   NumNotifications = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get your notifications",
 		   "SELECT NotifyEvent,"		// row[0]
 			  "FromUsrCod,"			// row[1]
@@ -1192,8 +1192,8 @@ void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod)
 unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
    MYSQL_RES *mysql_res;
-   unsigned long NumRow;
-   unsigned long NumRows = 0;	// Initialized to avoid warning
+   unsigned NumUsrs = 0;	// Initialized to avoid warning
+   unsigned NumUsr;
    struct UsrData UsrDat;
    struct For_Forum ForumSelected;
    long InsCod;
@@ -1217,56 +1217,56 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
             case Brw_ADMI_DOC_CRS:
             case Brw_ADMI_SHR_CRS:
             case Brw_ADMI_MRK_CRS:	// Notify all users in course except me
-               NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					           " to be notified",
-					 "SELECT UsrCod"	// row[0]
-					  " FROM crs_users"
-					 " WHERE CrsCod=%ld"
-					   " AND UsrCod<>%ld",
-					 Gbl.Hierarchy.Crs.CrsCod,
-					 Gbl.Usrs.Me.UsrDat.UsrCod);
+               NumUsrs = (unsigned)
+               DB_QuerySELECT (&mysql_res,"can not get users to be notified",
+			       "SELECT UsrCod"
+			        " FROM crs_users"
+			       " WHERE CrsCod=%ld"
+			         " AND UsrCod<>%ld",
+			       Gbl.Hierarchy.Crs.CrsCod,
+			       Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
             case Brw_ADMI_TCH_CRS:	// Notify all teachers in course except me
-               NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					            " to be notified",
-					 "SELECT UsrCod"	// row[0]
-					  " FROM crs_users"
-					 " WHERE CrsCod=%ld"
-					   " AND UsrCod<>%ld"
-					   " AND Role=%u",	// Notify teachers only
-					 Gbl.Hierarchy.Crs.CrsCod,
-					 Gbl.Usrs.Me.UsrDat.UsrCod,
-					 (unsigned) Rol_TCH);
+               NumUsrs = (unsigned)
+               DB_QuerySELECT (&mysql_res,"can not get users to be notified",
+			       "SELECT UsrCod"
+			        " FROM crs_users"
+			       " WHERE CrsCod=%ld"
+			         " AND UsrCod<>%ld"
+			         " AND Role=%u",	// Notify teachers only
+			       Gbl.Hierarchy.Crs.CrsCod,
+			       Gbl.Usrs.Me.UsrDat.UsrCod,
+			       (unsigned) Rol_TCH);
                break;
             case Brw_ADMI_DOC_GRP:
             case Brw_ADMI_SHR_GRP:
             case Brw_ADMI_MRK_GRP:	// Notify all users in group except me
-               NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					            " to be notified",
-					 "SELECT UsrCod"		// row[0]
-					  " FROM grp_users"
-					 " WHERE GrpCod=%ld"
-					   " AND UsrCod<>%ld",
-					 Gbl.Crs.Grps.GrpCod,
-					 Gbl.Usrs.Me.UsrDat.UsrCod);
+               NumUsrs = (unsigned)
+               DB_QuerySELECT (&mysql_res,"can not get users to be notified",
+			       "SELECT UsrCod"
+			        " FROM grp_users"
+			       " WHERE GrpCod=%ld"
+			         " AND UsrCod<>%ld",
+			       Gbl.Crs.Grps.GrpCod,
+			       Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
             case Brw_ADMI_TCH_GRP:	// Notify all teachers in group except me
-               NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					            " to be notified",
-				         "SELECT grp_users.UsrCod"	// row[0]
-					  " FROM grp_users,"
-					        "grp_groups,"
-					        "grp_types,"
-					        "crs_users"
-					 " WHERE grp_users.GrpCod=%ld"
-					   " AND grp_users.UsrCod<>%ld"
-					   " AND grp_users.GrpCod=grp_groups.GrpCod"
-					   " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-					   " AND grp_types.CrsCod=crs_users.CrsCod"
-					   " AND crs_users.Role=%u",	// Notify teachers only
-					 Gbl.Crs.Grps.GrpCod,
-					 Gbl.Usrs.Me.UsrDat.UsrCod,
-					 (unsigned) Rol_TCH);
+               NumUsrs = (unsigned)
+               DB_QuerySELECT (&mysql_res,"can not get users to be notified",
+			       "SELECT grp_users.UsrCod"
+			        " FROM grp_users,"
+				      "grp_groups,"
+				      "grp_types,"
+				      "crs_users"
+			       " WHERE grp_users.GrpCod=%ld"
+			         " AND grp_users.UsrCod<>%ld"
+			         " AND grp_users.GrpCod=grp_groups.GrpCod"
+			         " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+			         " AND grp_types.CrsCod=crs_users.CrsCod"
+			         " AND crs_users.Role=%u",	// Notify teachers only
+			       Gbl.Crs.Grps.GrpCod,
+			       Gbl.Usrs.Me.UsrDat.UsrCod,
+			       (unsigned) Rol_TCH);
                break;
             default:	// This function should not be called in other cases
                return 0;
@@ -1276,38 +1276,38 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          // 1. If the assignment is available for the whole course ==> get all users enroled in the course except me
          // 2. If the assignment is available only for some groups ==> get all users who belong to any of the groups except me
          // Cases 1 and 2 are mutually exclusive, so the union returns the case 1 or 2
-         NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					      " to be notified",
-				   "(SELECT crs_users.UsrCod"	// row[0]
-				     " FROM asg_assignments,"
-				           "crs_users"
-				   " WHERE asg_assignments.AsgCod=%ld"
-				     " AND asg_assignments.AsgCod NOT IN"
-				         " (SELECT AsgCod"
-				            " FROM asg_groups"
-				           " WHERE AsgCod=%ld)"
-				     " AND asg_assignments.CrsCod=crs_users.CrsCod"
-				     " AND crs_users.UsrCod<>%ld)"
-				   " UNION "
-				   "(SELECT DISTINCT grp_users.UsrCod"
-				     " FROM asg_groups,"
-				           "grp_users"
-				    " WHERE asg_groups.AsgCod=%ld"
-				      " AND asg_groups.GrpCod=grp_users.GrpCod"
-				      " AND grp_users.UsrCod<>%ld)",
-				   Cod,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,
-				   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
+         NumUsrs = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get users to be notified",
+		         "(SELECT crs_users.UsrCod"
+			   " FROM asg_assignments,"
+			         "crs_users"
+		         " WHERE asg_assignments.AsgCod=%ld"
+			   " AND asg_assignments.AsgCod NOT IN"
+			       " (SELECT AsgCod"
+				  " FROM asg_groups"
+			         " WHERE AsgCod=%ld)"
+			   " AND asg_assignments.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod<>%ld)"
+		         " UNION "
+		         "(SELECT DISTINCT grp_users.UsrCod"
+			   " FROM asg_groups,"
+			         "grp_users"
+			  " WHERE asg_groups.AsgCod=%ld"
+			    " AND asg_groups.GrpCod=grp_users.GrpCod"
+			    " AND grp_users.UsrCod<>%ld)",
+		         Cod,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,
+		         Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_CALL_FOR_EXAM:
       case Ntf_EVENT_NOTICE:
-         NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					      " to be notified",
-				   "SELECT UsrCod"	// row[0]
-				    " FROM crs_users"
-				   " WHERE CrsCod=%ld"
-				     " AND UsrCod<>%ld",
-				   Gbl.Hierarchy.Crs.CrsCod,
-				   Gbl.Usrs.Me.UsrDat.UsrCod);
+         NumUsrs = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get users to be notified",
+		         "SELECT UsrCod"
+			  " FROM crs_users"
+		         " WHERE CrsCod=%ld"
+			   " AND UsrCod<>%ld",
+		         Gbl.Hierarchy.Crs.CrsCod,
+		         Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_ENROLMENT_STD:	// This function should not be called in this case
       case Ntf_EVENT_ENROLMENT_NET:	// This function should not be called in this case
@@ -1317,48 +1317,48 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	 if (Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
 				   1 << Rol_TCH))
 	    // If this course has teachers ==> send notification to teachers
-	    NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					         " to be notified",
-				      "SELECT UsrCod"	// row[0]
-				       " FROM crs_users"
-				      " WHERE CrsCod=%ld"
-				        " AND UsrCod<>%ld"
-				        " AND Role=%u",	// Notify teachers only
-				      Gbl.Hierarchy.Crs.CrsCod,
-				      Gbl.Usrs.Me.UsrDat.UsrCod,
-				      (unsigned) Rol_TCH);
+	    NumUsrs = (unsigned)
+            DB_QuerySELECT (&mysql_res,"can not get users to be notified",
+			    "SELECT UsrCod"
+			     " FROM crs_users"
+			    " WHERE CrsCod=%ld"
+			      " AND UsrCod<>%ld"
+			      " AND Role=%u",	// Notify teachers only
+			    Gbl.Hierarchy.Crs.CrsCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod,
+			    (unsigned) Rol_TCH);
 	 else	// Course without teachers
 	    // If this course has no teachers
 	    // and I want to be a teacher (checked before calling this function
 	    // to not send requests to be a student to admins)
 	    // ==> send notification to administrators or superusers
-	    NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					         " to be notified",
-				      "SELECT UsrCod"	// row[0]
-				       " FROM usr_admins"
-				      " WHERE (Scope='%s'"
-				             " OR (Scope='%s' AND Cod=%ld)"
-				             " OR (Scope='%s' AND Cod=%ld)"
-				             " OR (Scope='%s' AND Cod=%ld))"
-				        " AND UsrCod<>%ld",
-				      Sco_GetDBStrFromScope (Hie_Lvl_SYS),
-				      Sco_GetDBStrFromScope (Hie_Lvl_INS),Gbl.Hierarchy.Ins.InsCod,
-				      Sco_GetDBStrFromScope (Hie_Lvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
-				      Sco_GetDBStrFromScope (Hie_Lvl_DEG),Gbl.Hierarchy.Deg.DegCod,
-				      Gbl.Usrs.Me.UsrDat.UsrCod);
+	    NumUsrs = (unsigned)
+            DB_QuerySELECT (&mysql_res,"can not get users to be notified",
+			    "SELECT UsrCod"
+			     " FROM usr_admins"
+			    " WHERE (Scope='%s'"
+				   " OR (Scope='%s' AND Cod=%ld)"
+				   " OR (Scope='%s' AND Cod=%ld)"
+				   " OR (Scope='%s' AND Cod=%ld))"
+			      " AND UsrCod<>%ld",
+			    Sco_GetDBStrFromScope (Hie_Lvl_SYS),
+			    Sco_GetDBStrFromScope (Hie_Lvl_INS),Gbl.Hierarchy.Ins.InsCod,
+			    Sco_GetDBStrFromScope (Hie_Lvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
+			    Sco_GetDBStrFromScope (Hie_Lvl_DEG),Gbl.Hierarchy.Deg.DegCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_TL_COMMENT:	// New comment to one of my social notes or comments
          // Cod is the code of the social publishing
-	 NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					      " to be notified",
-				   "SELECT DISTINCT(PublisherCod)"	// row[0]
-				    " FROM tml_pubs"
-				   " WHERE NotCod=(SELECT NotCod"
-				                   " FROM tml_pubs"
-				                  " WHERE PubCod=%ld)"
-				                    " AND PublisherCod<>%ld",
-				   Cod,
-				   Gbl.Usrs.Me.UsrDat.UsrCod);
+	 NumUsrs = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get users to be notified",
+		         "SELECT DISTINCT(PublisherCod)"
+			  " FROM tml_pubs"
+		         " WHERE NotCod=(SELECT NotCod"
+				         " FROM tml_pubs"
+				        " WHERE PubCod=%ld)"
+					  " AND PublisherCod<>%ld",
+		         Cod,
+		         Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_TL_FAV:		// New favourite to one of my social notes or comments
       case Ntf_EVENT_TL_SHARE:		// New sharing of one of my social notes
@@ -1373,42 +1373,42 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	 switch (ForumSelected.Type)
 	   {
 	    case For_FORUM_COURSE_USRS:
-	       NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					            " to be notified",
-					 "SELECT UsrCod"	// row[0]
-					  " FROM crs_users"
-					 " WHERE CrsCod=%ld"
-					   " AND UsrCod<>%ld",
-					 Gbl.Hierarchy.Crs.CrsCod,
-					 Gbl.Usrs.Me.UsrDat.UsrCod);
+	       NumUsrs = (unsigned)
+               DB_QuerySELECT (&mysql_res,"can not get users to be notified",
+			       "SELECT UsrCod"
+			        " FROM crs_users"
+			       " WHERE CrsCod=%ld"
+			         " AND UsrCod<>%ld",
+			       Gbl.Hierarchy.Crs.CrsCod,
+			       Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case For_FORUM_COURSE_TCHS:
-	       NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					            " to be notified",
-					 "SELECT UsrCod"	// row[0]
-					  " FROM crs_users"
-					 " WHERE CrsCod=%ld"
-					   " AND Role=%u"
-					   " AND UsrCod<>%ld",
-					 Gbl.Hierarchy.Crs.CrsCod,
-					 (unsigned) Rol_TCH,
-					 Gbl.Usrs.Me.UsrDat.UsrCod);
+	       NumUsrs = (unsigned)
+               DB_QuerySELECT (&mysql_res,"can not get users to be notified",
+			       "SELECT UsrCod"
+			        " FROM crs_users"
+			       " WHERE CrsCod=%ld"
+			         " AND Role=%u"
+			         " AND UsrCod<>%ld",
+			       Gbl.Hierarchy.Crs.CrsCod,
+			       (unsigned) Rol_TCH,
+			       Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    default:
 	       return 0;
 	   }
          break;
       case Ntf_EVENT_FORUM_REPLY:
-         NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					      " to be notified",
-				   "SELECT DISTINCT(UsrCod)"	// row[0]
-				    " FROM for_posts"
-				   " WHERE ThrCod=(SELECT ThrCod"
-				                   " FROM for_posts"
-				                  " WHERE PstCod=%ld)"
-				   " AND UsrCod<>%ld",
-				   Cod,
-				   Gbl.Usrs.Me.UsrDat.UsrCod);
+         NumUsrs = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get users to be notified",
+		         "SELECT DISTINCT(UsrCod)"
+			  " FROM for_posts"
+		         " WHERE ThrCod=(SELECT ThrCod"
+				         " FROM for_posts"
+				        " WHERE PstCod=%ld)"
+		         " AND UsrCod<>%ld",
+		         Cod,
+		         Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_MESSAGE:		// This function should not be called in this case
 	 return 0;
@@ -1416,41 +1416,41 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          // 1. If the survey is available for the whole course ==> get users enroled in the course whose role is available in survey, except me
          // 2. If the survey is available only for some groups ==> get users who belong to any of the groups and whose role is available in survey, except me
          // Cases 1 and 2 are mutually exclusive, so the union returns the case 1 or 2
-         NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					      " to be notified",
-				   "(SELECT crs_users.UsrCod"	// row[0]
-				     " FROM svy_surveys,"
-				           "crs_users"
-				    " WHERE svy_surveys.SvyCod=%ld"
-				      " AND svy_surveys.SvyCod NOT IN"
-				          " (SELECT SvyCod"
-				             " FROM svy_groups"
-				            " WHERE SvyCod=%ld)"
-				      " AND svy_surveys.Scope='%s'"
-				      " AND svy_surveys.Cod=crs_users.CrsCod"
-				      " AND crs_users.UsrCod<>%ld"
-				      " AND (svy_surveys.Roles&(1<<crs_users.Role))<>0)"
-				   " UNION "
-				   "(SELECT DISTINCT grp_users.UsrCod"
-				     " FROM svy_groups,"
-				           "grp_users,"
-				           "svy_surveys,"
-				           "crs_users"
-				    " WHERE svy_groups.SvyCod=%ld"
-				      " AND svy_groups.GrpCod=grp_users.GrpCod"
-				      " AND grp_users.UsrCod=crs_users.UsrCod"
-				      " AND grp_users.UsrCod<>%ld"
-				      " AND svy_groups.SvyCod=svy_surveys.SvyCod"
-				      " AND svy_surveys.Scope='%s'"
-				      " AND svy_surveys.Cod=crs_users.CrsCod"
-				      " AND (svy_surveys.Roles&(1<<crs_users.Role))<>0)",
-				   Cod,
-				   Cod,
-				   Sco_GetDBStrFromScope (Hie_Lvl_CRS),
-				   Gbl.Usrs.Me.UsrDat.UsrCod,
-				   Cod,
-				   Gbl.Usrs.Me.UsrDat.UsrCod,
-				   Sco_GetDBStrFromScope (Hie_Lvl_CRS));
+         NumUsrs = (unsigned)
+         DB_QuerySELECT (&mysql_res,"can not get users to be notified",
+		         "(SELECT crs_users.UsrCod"
+			   " FROM svy_surveys,"
+			         "crs_users"
+			  " WHERE svy_surveys.SvyCod=%ld"
+			    " AND svy_surveys.SvyCod NOT IN"
+			        " (SELECT SvyCod"
+				   " FROM svy_groups"
+				  " WHERE SvyCod=%ld)"
+			    " AND svy_surveys.Scope='%s'"
+			    " AND svy_surveys.Cod=crs_users.CrsCod"
+			    " AND crs_users.UsrCod<>%ld"
+			    " AND (svy_surveys.Roles&(1<<crs_users.Role))<>0)"
+		         " UNION "
+		         "(SELECT DISTINCT grp_users.UsrCod"
+			   " FROM svy_groups,"
+			         "grp_users,"
+			         "svy_surveys,"
+			         "crs_users"
+			  " WHERE svy_groups.SvyCod=%ld"
+			    " AND svy_groups.GrpCod=grp_users.GrpCod"
+			    " AND grp_users.UsrCod=crs_users.UsrCod"
+			    " AND grp_users.UsrCod<>%ld"
+			    " AND svy_groups.SvyCod=svy_surveys.SvyCod"
+			    " AND svy_surveys.Scope='%s'"
+			    " AND svy_surveys.Cod=crs_users.CrsCod"
+			    " AND (svy_surveys.Roles&(1<<crs_users.Role))<>0)",
+		         Cod,
+		         Cod,
+		         Sco_GetDBStrFromScope (Hie_Lvl_CRS),
+		         Gbl.Usrs.Me.UsrDat.UsrCod,
+		         Cod,
+		         Gbl.Usrs.Me.UsrDat.UsrCod,
+		         Sco_GetDBStrFromScope (Hie_Lvl_CRS));
          break;
      }
 
@@ -1488,15 +1488,15 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       CrsCod = Gbl.Hierarchy.Crs.CrsCod;
      }
 
-   if (NumRows) // Users found
+   if (NumUsrs) // Users found
      {
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Notify the users one by one *****/
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumUsr = 0;
+	   NumUsr < NumUsrs;
+	   NumUsr++)
 	{
          /* Get next user */
          UsrDat.UsrCod = DB_GetNextCode (mysql_res);
@@ -1569,8 +1569,8 @@ static void Ntf_UpdateMyLastAccessToNotifications (void)
 void Ntf_SendPendingNotifByEMailToAllUsrs (void)
   {
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
-   unsigned long NumRow;
+   unsigned NumUsrs;
+   unsigned NumUsr;
    struct UsrData UsrDat;
    unsigned NumNotif;
    unsigned NumTotalNotif = 0;
@@ -1581,26 +1581,26 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
    //  (Status & Ntf_STATUS_BIT_EMAIL) &&
    // !(Status & Ntf_STATUS_BIT_SENT) &&
    // !(Status & (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED))
-   if ((NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
-					     " who must be notified",
-				  "SELECT DISTINCT ToUsrCod"
-				   " FROM ntf_notifications"
-				  " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
-				    " AND (Status & %u)<>0"
-				    " AND (Status & %u)=0"
-				    " AND (Status & %u)=0",
-				  Cfg_TIME_TO_SEND_PENDING_NOTIF,
-				  (unsigned) Ntf_STATUS_BIT_EMAIL,
-				  (unsigned) Ntf_STATUS_BIT_SENT,
-				  (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED)))) // Events found
+   if ((NumUsrs = (unsigned)
+	DB_QuerySELECT (&mysql_res,"can not get users who must be notified",
+		        "SELECT DISTINCT ToUsrCod"
+		         " FROM ntf_notifications"
+		        " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
+			  " AND (Status & %u)<>0"
+			  " AND (Status & %u)=0"
+			  " AND (Status & %u)=0",
+		        Cfg_TIME_TO_SEND_PENDING_NOTIF,
+		        (unsigned) Ntf_STATUS_BIT_EMAIL,
+		        (unsigned) Ntf_STATUS_BIT_SENT,
+		        (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED)))) // Events found
      {
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Notify the users one by one *****/
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumUsr = 0;
+	   NumUsr < NumUsrs;
+	   NumUsr++)
 	{
          /* Get next user */
          UsrDat.UsrCod = DB_GetNextCode (mysql_res);
@@ -1647,8 +1647,8 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    extern const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
+   unsigned NumNots;
+   unsigned NumNot;
    Lan_Language_t ToUsrLanguage;
    struct UsrData FromUsrDat;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
@@ -1670,28 +1670,29 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    if (Mai_CheckIfUsrCanReceiveEmailNotif (ToUsrDat))
      {
       /***** Get pending notifications of this user from database ******/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get pending notifications"
-					   " of a user",
-				"SELECT NotifyEvent,"	// row[0]
-				       "FromUsrCod,"	// row[1]
-				       "InsCod,"	// row[2]
-				       "CtrCod,"	// row[3]
-				       "DegCod,"	// row[4]
-				       "CrsCod,"	// row[5]
-				       "Cod"		// row[6]
-				 " FROM ntf_notifications"
-				" WHERE ToUsrCod=%ld"
-				  " AND (Status & %u)<>0"
-				  " AND (Status & %u)=0"
-				  " AND (Status & %u)=0"
-				" ORDER BY TimeNotif,"
-				          "NotifyEvent",
-				ToUsrDat->UsrCod,
-				(unsigned) Ntf_STATUS_BIT_EMAIL,
-				(unsigned) Ntf_STATUS_BIT_SENT,
-				(unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
+      NumNots = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get pending notifications"
+			         " of a user",
+		      "SELECT NotifyEvent,"	// row[0]
+			     "FromUsrCod,"	// row[1]
+			     "InsCod,"		// row[2]
+			     "CtrCod,"		// row[3]
+			     "DegCod,"		// row[4]
+			     "CrsCod,"		// row[5]
+			     "Cod"		// row[6]
+		       " FROM ntf_notifications"
+		      " WHERE ToUsrCod=%ld"
+		        " AND (Status & %u)<>0"
+		        " AND (Status & %u)=0"
+		        " AND (Status & %u)=0"
+		      " ORDER BY TimeNotif,"
+			        "NotifyEvent",
+		      ToUsrDat->UsrCod,
+		      (unsigned) Ntf_STATUS_BIT_EMAIL,
+		      (unsigned) Ntf_STATUS_BIT_SENT,
+		      (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
 
-      if (NumRows) // Events found
+      if (NumNots) // Events found
 	{
 	 /***** If user has no language, set it to current language *****/
 	 ToUsrLanguage = ToUsrDat->Prefs.Language;
@@ -1703,21 +1704,21 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
 	 /***** Welcome note *****/
 	 Mai_WriteWelcomeNoteEMail (FileMail,ToUsrDat);
-	 if (NumRows == 1)
+	 if (NumNots == 1)
 	    fprintf (FileMail,Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[ToUsrLanguage],
 		     Cfg_PLATFORM_SHORT_NAME);
 	 else
 	    fprintf (FileMail,Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[ToUsrLanguage],
-		     (unsigned) NumRows,Cfg_PLATFORM_SHORT_NAME);
+		     (unsigned) NumNots,Cfg_PLATFORM_SHORT_NAME);
 	 fprintf (FileMail,": \n");
 
 	 /***** Initialize structure with origin user's data *****/
 	 Usr_UsrDataConstructor (&FromUsrDat);
 
 	 /***** Inform about the events one by one *****/
-	 for (NumRow = 0;
-	      NumRow < NumRows;
-	      NumRow++)
+	 for (NumNot = 0;
+	      NumNot < NumNots;
+	      NumNot++)
 	   {
 	    /* Get next event */
 	    row = mysql_fetch_row (mysql_res);
@@ -1843,7 +1844,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	 ReturnCode = WEXITSTATUS(ReturnCode);
 	 if (ReturnCode == 0)	// Message sent successfully
 	   {
-	    *NumNotif = (unsigned) NumRows;
+	    *NumNotif = NumNots;
 	    *NumMails = 1;
 
 	    /* Update statistics about notifications */
@@ -1895,23 +1896,19 @@ static void Ntf_GetNumNotifSent (long DegCod,long CrsCod,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Get number of notifications sent by email from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get number of notifications"
-				        " sent by email",
-			     "SELECT NumEvents,"	// row[0]
-			            "NumMails"		// row[1]
-			      " FROM sta_notifications"
-			     " WHERE DegCod=%ld"
-			       " AND CrsCod=%ld"
-			       " AND NotifyEvent=%u",
-			     DegCod,
-			     CrsCod,
-			     (unsigned) NotifyEvent);
-
-   /***** Get number of rows *****/
-   if (NumRows)
+   if (DB_QuerySELECT (&mysql_res,"can not get number of notifications"
+				  " sent by email",
+		       "SELECT NumEvents,"	// row[0]
+			      "NumMails"		// row[1]
+			" FROM sta_notifications"
+		       " WHERE DegCod=%ld"
+			 " AND CrsCod=%ld"
+			 " AND NotifyEvent=%u",
+		       DegCod,
+		       CrsCod,
+		       (unsigned) NotifyEvent))
      {
       row = mysql_fetch_row (mysql_res);
       if (sscanf (row[0],"%u",NumEvents) != 1)

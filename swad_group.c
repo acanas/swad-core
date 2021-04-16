@@ -139,7 +139,7 @@ static unsigned Grp_CountNumGrpsInThisCrsOfType (long GrpTypCod);
 static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp);
 static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod);
 static long Grp_GetTypeOfGroupOfAGroup (long GrpCod);
-static unsigned long Grp_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod);
+static unsigned Grp_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod);
 static bool Grp_CheckIfIBelongToGrpsOfType (long GrpTypCod);
 static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,long UsrCod,
                                          struct ListCodGrps *LstGrps);
@@ -2369,7 +2369,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 	Role--)
      {
       HTM_TD_Begin ("class=\"DAT CM\"");
-      HTM_UnsignedLong (Grp_CountNumUsrsInNoGrpsOfType (Role,GrpTyp->GrpTypCod));
+      HTM_Unsigned (Grp_CountNumUsrsInNoGrpsOfType (Role,GrpTyp->GrpTypCod));
       HTM_TD_End ();
      }
 
@@ -3331,23 +3331,25 @@ unsigned Grp_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod)
 /*** Count # of users of current course not belonging to groups of a type ****/
 /*****************************************************************************/
 
-static unsigned long Grp_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod)
+static unsigned Grp_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod)
   {
    /***** Get number of users not belonging to groups of a type ******/
-   return DB_QueryCOUNT ("can not get the number of users"
-	                 " not belonging to groups of a type",
-			 "SELECT COUNT(UsrCod)"
-			  " FROM crs_users"
-			 " WHERE CrsCod=%ld"
-			   " AND Role=%u"
-			   " AND UsrCod NOT IN"
-			       " (SELECT DISTINCT grp_users.UsrCod"
-			          " FROM grp_groups,"
-			                "grp_users"
-			         " WHERE grp_groups.GrpTypCod=%ld"
-			           " AND grp_groups.GrpCod=grp_users.GrpCod)",
-			 Gbl.Hierarchy.Crs.CrsCod,
-			 (unsigned) Role,GrpTypCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of users"
+		  " not belonging to groups of a type",
+		  "SELECT COUNT(UsrCod)"
+		   " FROM crs_users"
+		  " WHERE CrsCod=%ld"
+		    " AND Role=%u"
+		    " AND UsrCod NOT IN"
+		        " (SELECT DISTINCT grp_users.UsrCod"
+			   " FROM grp_groups,"
+			         "grp_users"
+			  " WHERE grp_groups.GrpTypCod=%ld"
+			    " AND grp_groups.GrpCod=grp_users.GrpCod)",
+		  Gbl.Hierarchy.Crs.CrsCod,
+		  (unsigned) Role,
+		  GrpTypCod);
   }
 
 /*****************************************************************************/

@@ -154,21 +154,23 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
    struct tm *tm;
    time_t CreatTimeUTC;
    long NotCod;
-   unsigned long NumNot,NumNotices;
+   unsigned NumNotices;
+   unsigned NumNot;
    char Content[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get active notices in course *****/
-   NumNotices = DB_QuerySELECT (&mysql_res,"can not get notices from database",
-				"SELECT NotCod,"				// row[0]
-				       "UNIX_TIMESTAMP(CreatTime) AS T,"	// row[1]
-				       "UsrCod,"				// row[2]
-				       "Content"				// row[3]
-				 " FROM not_notices"
-				" WHERE CrsCod=%ld"
-				  " AND Status=%u"
-				" ORDER BY T DESC",
-				Crs->CrsCod,
-				(unsigned) Not_ACTIVE_NOTICE);
+   NumNotices = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get notices from database",
+		   "SELECT NotCod,"				// row[0]
+			  "UNIX_TIMESTAMP(CreatTime) AS T,"	// row[1]
+			  "UsrCod,"				// row[2]
+			  "Content"				// row[3]
+		    " FROM not_notices"
+		   " WHERE CrsCod=%ld"
+		     " AND Status=%u"
+		   " ORDER BY T DESC",
+		   Crs->CrsCod,
+		   (unsigned) Not_ACTIVE_NOTICE);
 
    /***** Write items with notices *****/
    if (NumNotices)
@@ -253,13 +255,13 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Crs_Course *Crs)
    struct tm *tm;
    time_t CallTimeUTC;
    long ExaCod;
-   unsigned long NumExa;
-   unsigned long NumExams;
+   unsigned NumExams;
+   unsigned NumExa;
 
    if (Gbl.DB.DatabaseIsOpen)
      {
       /***** Get exam announcements (only future exams) in current course from database *****/
-      NumExams =
+      NumExams = (unsigned)
       DB_QuerySELECT (&mysql_res,"can not get calls for exams",
 		      "SELECT ExaCod,"						// row[0]
 			     "UNIX_TIMESTAMP(CallDate) AS T,"			// row[1]

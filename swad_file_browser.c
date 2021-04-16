@@ -1359,7 +1359,7 @@ static void Brw_GetFileNameToShow (Brw_FileType_t FileType,
                                    char FileNameToShow[NAME_MAX + 1]);
 static void Brw_WriteDatesAssignment (void);
 static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata);
-static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod);
+static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod);
 static void Brw_AskConfirmRemoveFolderNotEmpty (void);
 
 static void Brw_WriteCurrentClipboard (void);
@@ -1445,7 +1445,7 @@ static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void);
 static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void);
 static long Brw_GetPublisherOfSubtree (void);
 
-static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row);
+static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 
 static void Brw_PutLinkToAskRemOldFiles (void);
 static void Brw_RemoveOldFilesInBrowser (unsigned Months,struct Brw_NumObjects *Removed);
@@ -6531,7 +6531,7 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
 /************** Write the user who published the file or folder **************/
 /*****************************************************************************/
 
-static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
+static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
   {
    extern const char *Txt_Unknown_or_without_photo;
    bool ShowUsr = false;
@@ -11781,8 +11781,8 @@ void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumCrss;
-   unsigned long NumCrs;
+   unsigned NumCrss;
+   unsigned NumCrs;
    unsigned NumCrssWorksRemoved = 0;
    struct Crs_Course Crs;
 
@@ -11871,7 +11871,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 /**************************** List documents found ***************************/
 /*****************************************************************************/
 
-void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
+void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 			const char *TitleSingular,const char *TitlePlural)
   {
    extern const char *Txt_Institution;
@@ -11883,9 +11883,9 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
    extern const char *Txt_hidden_document;
    extern const char *Txt_hidden_documents;
    MYSQL_ROW row;
-   unsigned long NumDoc;
-   unsigned long NumDocsNotHidden = 0;
-   unsigned long NumDocsHidden;
+   unsigned NumDoc;
+   unsigned NumDocsNotHidden = 0;
+   unsigned NumDocsHidden;
 
    /***** Query database *****/
    if (NumDocs)
@@ -11931,8 +11931,9 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
       HTM_TH_Begin (1,7,"CM");
       HTM_Txt ("(");
       NumDocsHidden = NumDocs - NumDocsNotHidden;
-      HTM_TxtF ("%lu %s",NumDocsHidden,NumDocsHidden == 1 ? Txt_hidden_document :
-	                                                    Txt_hidden_documents);
+      HTM_TxtF ("%u %s",
+                NumDocsHidden,NumDocsHidden == 1 ? Txt_hidden_document :
+	                                           Txt_hidden_documents);
       HTM_Txt (")");
       HTM_TH_End ();
 
@@ -11950,7 +11951,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
 /************ Write the data of a document (result of a query) ***************/
 /*****************************************************************************/
 
-static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
+static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
   {
    extern const char *Txt_Documents_area;
    extern const char *Txt_Teachers_files_area;
@@ -12023,7 +12024,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 
       /***** Write number of document in this search *****/
       HTM_TD_Begin ("class=\"RT DAT %s\"",BgColor);
-      HTM_UnsignedLong (++(*NumDocsNotHidden));
+      HTM_Unsigned (++(*NumDocsNotHidden));
       HTM_TD_End ();
 
       /***** Write institution logo, institution short name *****/

@@ -225,29 +225,27 @@ static void Plg_GetListPlugins (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    unsigned NumPlg;
    struct Plugin *Plg;
 
    /***** Get plugins from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get plugins",
-			     "SELECT PlgCod,"		// row[0]
-			            "Name,"		// row[1]
-			            "Description,"	// row[2]
-			            "Logo,"		// row[3]
-			            "AppKey,"		// row[4]
-			            "URL,"		// row[5]
-			            "IP"		// row[6]
-			      " FROM plg_plugins"
-			     " ORDER BY Name");
+   Gbl.Plugins.Num = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get plugins",
+		   "SELECT PlgCod,"		// row[0]
+			  "Name,"		// row[1]
+			  "Description,"	// row[2]
+			  "Logo,"		// row[3]
+			  "AppKey,"		// row[4]
+			  "URL,"		// row[5]
+			  "IP"			// row[6]
+		    " FROM plg_plugins"
+		   " ORDER BY Name");
 
    /***** Count number of rows in result *****/
-   if (NumRows) // Plugins found...
+   if (Gbl.Plugins.Num) // Plugins found...
      {
-      Gbl.Plugins.Num = (unsigned) NumRows;
-
       /***** Create list with plugins *****/
-      if ((Gbl.Plugins.Lst = calloc (Gbl.Plugins.Num,
+      if ((Gbl.Plugins.Lst = calloc ((size_t) Gbl.Plugins.Num,
                                      sizeof (*Gbl.Plugins.Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
@@ -275,8 +273,6 @@ static void Plg_GetListPlugins (void)
          Str_Copy (Plg->IP         ,row[6],sizeof (Plg->IP         ) - 1);
         }
      }
-   else
-      Gbl.Plugins.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -290,7 +286,6 @@ bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    bool PluginFound;
 
    /***** Clear data *****/
@@ -306,19 +301,16 @@ bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
    // Plg->PlgCod > 0
 
    /***** Get data of a plugin from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a plugin",
-			     "SELECT Name,"		// row[0]
-			            "Description,"	// row[1]
-			            "Logo,"		// row[2]
-			            "AppKey,"		// row[3]
-			            "URL,"		// row[4]
-			            "IP"		// row[5]
-			      " FROM plg_plugins"
-			     " WHERE PlgCod=%ld",
-			     Plg->PlgCod);
-
-   /***** Count number of rows in result *****/
-   if (NumRows) // Plugin found...
+   if (DB_QuerySELECT (&mysql_res,"can not get data of a plugin",
+		       "SELECT Name,"		// row[0]
+			      "Description,"	// row[1]
+			      "Logo,"		// row[2]
+			      "AppKey,"		// row[3]
+			      "URL,"		// row[4]
+			      "IP"		// row[5]
+			" FROM plg_plugins"
+		       " WHERE PlgCod=%ld",
+		       Plg->PlgCod)) // Plugin found...
      {
       PluginFound = true;
 

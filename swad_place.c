@@ -359,47 +359,46 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    unsigned NumPlc;
    struct Plc_Place *Plc;
 
    /***** Get places from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get places",
-			     "(SELECT plc_places.PlcCod,"	// row[0]
-				     "plc_places.ShortName,"	// row[1]
-				     "plc_places.FullName,"	// row[2]
-				     "COUNT(*) AS NumCtrs"	// row[3]
-			       " FROM plc_places,"
-			             "ctr_centers"
-			      " WHERE plc_places.InsCod=%ld"
-			        " AND plc_places.PlcCod=ctr_centers.PlcCod"
-			        " AND ctr_centers.InsCod=%ld"
-			      " GROUP BY plc_places.PlcCod)"
-			     " UNION "
-			     "(SELECT PlcCod,"
-				     "ShortName,"
-				     "FullName,"
-				     "0 AS NumCtrs"
-			       " FROM plc_places"
-			      " WHERE InsCod=%ld"
-			        " AND PlcCod NOT IN"
-			            " (SELECT DISTINCT PlcCod"
-			               " FROM ctr_centers"
-			              " WHERE InsCod=%ld))"
-			     " ORDER BY %s",
-			     Gbl.Hierarchy.Ins.InsCod,
-			     Gbl.Hierarchy.Ins.InsCod,
-			     Gbl.Hierarchy.Ins.InsCod,
-			     Gbl.Hierarchy.Ins.InsCod,
-			     OrderBySubQuery[Places->SelectedOrder]);
+   Places->Num = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get places",
+		   "(SELECT plc_places.PlcCod,"		// row[0]
+			   "plc_places.ShortName,"	// row[1]
+			   "plc_places.FullName,"	// row[2]
+			   "COUNT(*) AS NumCtrs"	// row[3]
+		     " FROM plc_places,"
+			   "ctr_centers"
+		    " WHERE plc_places.InsCod=%ld"
+		      " AND plc_places.PlcCod=ctr_centers.PlcCod"
+		      " AND ctr_centers.InsCod=%ld"
+		    " GROUP BY plc_places.PlcCod)"
+		   " UNION "
+		   "(SELECT PlcCod,"
+			   "ShortName,"
+			   "FullName,"
+			   "0 AS NumCtrs"
+		     " FROM plc_places"
+		    " WHERE InsCod=%ld"
+		      " AND PlcCod NOT IN"
+			  " (SELECT DISTINCT PlcCod"
+			     " FROM ctr_centers"
+			    " WHERE InsCod=%ld))"
+		   " ORDER BY %s",
+		   Gbl.Hierarchy.Ins.InsCod,
+		   Gbl.Hierarchy.Ins.InsCod,
+		   Gbl.Hierarchy.Ins.InsCod,
+		   Gbl.Hierarchy.Ins.InsCod,
+		   OrderBySubQuery[Places->SelectedOrder]);
 
    /***** Count number of rows in result *****/
-   if (NumRows) // Places found...
+   if (Places->Num) // Places found...
      {
-      Places->Num = (unsigned) NumRows;
-
       /***** Create list with courses in center *****/
-      if ((Places->Lst = calloc (NumRows,sizeof (*Places->Lst))) == NULL)
+      if ((Places->Lst = calloc ((size_t) Places->Num,
+                                 sizeof (*Places->Lst))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the places *****/
@@ -425,8 +424,6 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
             Plc->NumCtrs = 0;
         }
      }
-   else
-      Places->Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -442,7 +439,6 @@ void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc)
    extern const char *Txt_Another_place;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Clear data *****/
    Plc->ShrtName[0] = '\0';
@@ -463,31 +459,28 @@ void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc)
    else if (Plc->PlcCod > 0)
      {
       /***** Get data of a place from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a place",
-			        "(SELECT plc_places.ShortName,"	// row[0]
-					"plc_places.FullName,"	// row[1]
-					"COUNT(*)"		// row[2]
-				  " FROM plc_places,"
-				        "ctr_centers"
-				 " WHERE plc_places.PlcCod=%ld"
-				   " AND plc_places.PlcCod=ctr_centers.PlcCod"
-				   " AND ctr_centers.PlcCod=%ld"
-				 " GROUP BY plc_places.PlcCod)"
-				" UNION "
-				"(SELECT ShortName,"		// row[0]
-					"FullName,"		// row[1]
-					"0"			// row[2]
-				  " FROM plc_places"
-				 " WHERE PlcCod=%ld"
-				   " AND PlcCod NOT IN"
-				       " (SELECT DISTINCT PlcCod"
-				          " FROM ctr_centers))",
-				Plc->PlcCod,
-				Plc->PlcCod,
-				Plc->PlcCod);
-
-      /***** Count number of rows in result *****/
-      if (NumRows) // Place found...
+      if (DB_QuerySELECT (&mysql_res,"can not get data of a place",
+			  "(SELECT plc_places.ShortName,"	// row[0]
+				  "plc_places.FullName,"	// row[1]
+				  "COUNT(*)"			// row[2]
+			    " FROM plc_places,"
+				  "ctr_centers"
+			   " WHERE plc_places.PlcCod=%ld"
+			     " AND plc_places.PlcCod=ctr_centers.PlcCod"
+			     " AND ctr_centers.PlcCod=%ld"
+			   " GROUP BY plc_places.PlcCod)"
+			  " UNION "
+			  "(SELECT ShortName,"			// row[0]
+				  "FullName,"			// row[1]
+				  "0"				// row[2]
+			    " FROM plc_places"
+			   " WHERE PlcCod=%ld"
+			     " AND PlcCod NOT IN"
+				 " (SELECT DISTINCT PlcCod"
+				    " FROM ctr_centers))",
+			  Plc->PlcCod,
+			  Plc->PlcCod,
+			  Plc->PlcCod)) // Place found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);

@@ -97,15 +97,16 @@ void Fir_PurgeFirewall (void)
 
 void Fir_CheckFirewallAndExitIfBanned (void)
   {
-   unsigned long NumCurrentBans;
+   unsigned NumCurrentBans;
 
    /***** Get number of current bans from database *****/
-   NumCurrentBans = DB_QueryCOUNT ("can not check firewall log",
-		                   "SELECT COUNT(*)"
-		                    " FROM fir_banned"
-			           " WHERE IP='%s'"
-			             " AND UnbanTime>NOW()",
-			           Gbl.IP);
+   NumCurrentBans = (unsigned)
+   DB_QueryCOUNT ("can not check firewall log",
+		  "SELECT COUNT(*)"
+		   " FROM fir_banned"
+		  " WHERE IP='%s'"
+		    " AND UnbanTime>NOW()",
+		  Gbl.IP);
 
    /***** Exit with status 403 if banned *****/
    /* RFC 6585 suggests "403 Forbidden", according to
@@ -130,16 +131,17 @@ void Fir_CheckFirewallAndExitIfBanned (void)
 
 void Fir_CheckFirewallAndExitIfTooManyRequests (void)
   {
-   unsigned long NumClicks;
+   unsigned NumClicks;
 
    /***** Get number of clicks from database *****/
-   NumClicks = DB_QueryCOUNT ("can not check firewall log",
-		              "SELECT COUNT(*)"
-		               " FROM fir_log"
-			      " WHERE IP='%s'"
-			        " AND ClickTime>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-			      Gbl.IP,
-                              Fw_CHECK_INTERVAL);
+   NumClicks = (unsigned)
+   DB_QueryCOUNT ("can not check firewall log",
+		  "SELECT COUNT(*)"
+		   " FROM fir_log"
+		  " WHERE IP='%s'"
+		    " AND ClickTime>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+		  Gbl.IP,
+		  Fw_CHECK_INTERVAL);
 
    /***** Exit with status 429 if too many connections *****/
    /* RFC 6585 suggests "429 Too Many Requests", according to

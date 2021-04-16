@@ -83,6 +83,8 @@ extern struct Globals Gbl;
 
 static void Rec_WriteHeadingRecordFields (void);
 
+static unsigned Rec_GetAllFieldsInCurrCrs (MYSQL_RES **mysql_res);
+
 static void Rec_PutParamFieldCod (void *FieldCod);
 static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 1],
                                unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility);
@@ -487,8 +489,8 @@ bool Rec_CheckIfRecordFieldIsRepeated (const char *FieldName)
    bool FieldIsRepeated = false;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
-   unsigned long NumRow;
+   unsigned NumRows;
+   unsigned NumRow;
 
    /* Query database */
    if ((NumRows = Rec_GetAllFieldsInCurrCrs (&mysql_res)) > 0)	// If se han encontrado groups...
@@ -518,7 +520,7 @@ bool Rec_CheckIfRecordFieldIsRepeated (const char *FieldName)
 /******* Get the fields of records already present in current course *********/
 /*****************************************************************************/
 
-unsigned long Rec_GetAllFieldsInCurrCrs (MYSQL_RES **mysql_res)
+static unsigned Rec_GetAllFieldsInCurrCrs (MYSQL_RES **mysql_res)
   {
    /***** Get fields of records in current course from database *****/
    return DB_QuerySELECT (mysql_res,"can not get fields of records"
@@ -679,22 +681,17 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    unsigned Vis;
 
    /***** Get a field of a record in a course from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get a field of a record"
-					" in a course",
-			     "SELECT FieldName,"	// row[0]
-			            "NumLines,"		// row[1]
-			            "Visibility"	// row[2]
-			      " FROM crs_record_fields"
-			     " WHERE CrsCod=%ld"
-			       " AND FieldCod=%ld",
-			     Gbl.Hierarchy.Crs.CrsCod,FieldCod);
-
-   /***** Count number of rows in result *****/
-   if (NumRows != 1)
+   if (DB_QuerySELECT (&mysql_res,"can not get a field of a record in a course",
+		       "SELECT FieldName,"	// row[0]
+			      "NumLines,"		// row[1]
+			      "Visibility"	// row[2]
+			" FROM crs_record_fields"
+		       " WHERE CrsCod=%ld"
+			 " AND FieldCod=%ld",
+		       Gbl.Hierarchy.Crs.CrsCod,FieldCod) != 1)
       Lay_ShowErrorAndExit ("Error when getting a field of a record in a course.");
 
    /***** Get the field *****/
@@ -1851,7 +1848,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 /************** Get the text of a field of a record of course ****************/
 /*****************************************************************************/
 
-unsigned long Rec_GetFieldFromCrsRecord (long UsrCod,long FieldCod,MYSQL_RES **mysql_res)
+unsigned Rec_GetFieldFromCrsRecord (long UsrCod,long FieldCod,MYSQL_RES **mysql_res)
   {
    /***** Get the text of a field of a record from database *****/
    return DB_QuerySELECT (mysql_res,"can not get the text"
@@ -1860,7 +1857,8 @@ unsigned long Rec_GetFieldFromCrsRecord (long UsrCod,long FieldCod,MYSQL_RES **m
 			   " FROM crs_records"
 			  " WHERE FieldCod=%ld"
 			    " AND UsrCod=%ld",
-			  FieldCod,UsrCod);
+			  FieldCod,
+			  UsrCod);
   }
 
 /*****************************************************************************/

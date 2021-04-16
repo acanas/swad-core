@@ -189,7 +189,7 @@ static void Prg_GetListItems (void);
 static void Prg_GetDataOfItemByCod (struct ProgramItem *Item);
 static void Prg_GetDataOfItem (struct ProgramItem *Item,
                                MYSQL_RES **mysql_res,
-			       unsigned long NumRows);
+			       unsigned NumRows);
 static void Prg_ResetItem (struct ProgramItem *Item);
 static void Prg_FreeListItems (void);
 static void Prg_GetItemTxtFromDB (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
@@ -975,17 +975,18 @@ static void Prg_GetListItems (void)
       Prg_FreeListItems ();
 
    /***** Get list of program items from database *****/
-   Prg_Gbl.List.NumItems =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get program items",
-			      "SELECT ItmCod,"	// row[0]
-				     "ItmInd,"	// row[1]
-				     "Level,"	// row[2]
-				     "Hidden"	// row[3]
-			       " FROM prg_items"
-			      " WHERE CrsCod=%ld%s"
-			      " ORDER BY ItmInd",
-			      Gbl.Hierarchy.Crs.CrsCod,
-			      HiddenSubQuery[Gbl.Usrs.Me.Role.Logged]);
+   Prg_Gbl.List.NumItems = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get program items",
+		   "SELECT ItmCod,"	// row[0]
+			  "ItmInd,"	// row[1]
+			  "Level,"	// row[2]
+			  "Hidden"	// row[3]
+		    " FROM prg_items"
+		   " WHERE CrsCod=%ld"
+		     "%s"
+		   " ORDER BY ItmInd",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   HiddenSubQuery[Gbl.Usrs.Me.Role.Logged]);
 
    if (Prg_Gbl.List.NumItems) // Items found...
      {
@@ -1030,25 +1031,27 @@ static void Prg_GetListItems (void)
 static void Prg_GetDataOfItemByCod (struct ProgramItem *Item)
   {
    MYSQL_RES *mysql_res;
-   unsigned long NumRows;
+   unsigned NumRows;
 
    if (Item->Hierarchy.ItmCod > 0)
      {
       /***** Build query *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get program item data",
-				"SELECT ItmCod,"				// row[0]
-				       "ItmInd,"				// row[1]
-				       "Level,"					// row[2]
-				       "Hidden,"				// row[3]
-				       "UsrCod,"				// row[4]
-				       "UNIX_TIMESTAMP(StartTime),"		// row[5]
-				       "UNIX_TIMESTAMP(EndTime),"		// row[6]
-				       "NOW() BETWEEN StartTime AND EndTime,"	// row[7]
-				       "Title"					// row[8]
-				 " FROM prg_items"
-				" WHERE ItmCod=%ld"
-				  " AND CrsCod=%ld",	// Extra check
-				Item->Hierarchy.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
+      NumRows = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get program item data",
+		      "SELECT ItmCod,"					// row[0]
+			     "ItmInd,"					// row[1]
+			     "Level,"					// row[2]
+			     "Hidden,"					// row[3]
+			     "UsrCod,"					// row[4]
+			     "UNIX_TIMESTAMP(StartTime),"		// row[5]
+			     "UNIX_TIMESTAMP(EndTime),"			// row[6]
+			     "NOW() BETWEEN StartTime AND EndTime,"	// row[7]
+			     "Title"					// row[8]
+		       " FROM prg_items"
+		      " WHERE ItmCod=%ld"
+		        " AND CrsCod=%ld",	// Extra check
+		      Item->Hierarchy.ItmCod,
+		      Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Get data of program item *****/
       Prg_GetDataOfItem (Item,&mysql_res,NumRows);
@@ -1064,7 +1067,7 @@ static void Prg_GetDataOfItemByCod (struct ProgramItem *Item)
 
 static void Prg_GetDataOfItem (struct ProgramItem *Item,
                                MYSQL_RES **mysql_res,
-			       unsigned long NumRows)
+			       unsigned NumRows)
   {
    MYSQL_ROW row;
 

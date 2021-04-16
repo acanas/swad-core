@@ -157,7 +157,9 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
                                             struct Fig_SizeOfFileZones *SizeOfFileZones);
 
 static void Fig_GetAndShowOERsStats (void);
-static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,Brw_License_t License,unsigned long NumFiles[2]);
+static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,
+                                       Brw_License_t License,
+                                       unsigned long NumFiles[2]);
 
 static void Fig_GetAndShowCourseProgramStats (void); // TODO: Change function from assignments to schedule
 
@@ -2958,7 +2960,9 @@ static void Fig_GetAndShowOERsStats (void)
 /**************** Get the size of a file zone from database ******************/
 /*****************************************************************************/
 
-static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,Brw_License_t License,unsigned long NumFiles[2])
+static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,
+                                       Brw_License_t License,
+                                       unsigned long NumFiles[2])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

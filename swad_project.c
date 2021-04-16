@@ -2270,20 +2270,21 @@ static unsigned Prj_GetUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,
                                   MYSQL_RES **mysql_res)
   {
    /***** Get users in project from database *****/
-   return (unsigned) DB_QuerySELECT (mysql_res,"can not get users in project",
-				     "SELECT prj_users.UsrCod,"		// row[0]
-				            "usr_data.Surname1 AS S1,"	// row[1]
-				            "usr_data.Surname2 AS S2,"	// row[2]
-				            "usr_data.FirstName AS FN"	// row[3]
-				      " FROM prj_users,"
-				            "usr_data"
-				     " WHERE prj_users.PrjCod=%ld"
-				       " AND prj_users.RoleInProject=%u"
-				       " AND prj_users.UsrCod=usr_data.UsrCod"
-				     " ORDER BY S1,"
-				               "S2,"
-				               "FN",
-				     PrjCod,(unsigned) RoleInProject);
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get users in project",
+		   "SELECT prj_users.UsrCod,"		// row[0]
+			  "usr_data.Surname1 AS S1,"	// row[1]
+			  "usr_data.Surname2 AS S2,"	// row[2]
+			  "usr_data.FirstName AS FN"	// row[3]
+		    " FROM prj_users,"
+			  "usr_data"
+		   " WHERE prj_users.PrjCod=%ld"
+		     " AND prj_users.RoleInProject=%u"
+		     " AND prj_users.UsrCod=usr_data.UsrCod"
+		   " ORDER BY S1,"
+			     "S2,"
+			     "FN",
+		   PrjCod,(unsigned) RoleInProject);
   }
 
 /*****************************************************************************/
@@ -2851,8 +2852,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
    unsigned NumUsrsInList;
    long *LstSelectedUsrCods;
    char *SubQueryUsrs;
-   unsigned long NumRows = 0;	// Initialized to avoid warning
-   unsigned NumPrjsFromDB;
+   unsigned NumPrjsFromDB = 0;
    unsigned NumPrjsAfterFilter = 0;
    unsigned NumPrj;
    struct Prj_Faults Faults;
@@ -2937,37 +2937,47 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	       case Prj_ORDER_START_TIME:
 	       case Prj_ORDER_END_TIME:
 	       case Prj_ORDER_TITLE:
-		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					    "SELECT prj_projects.PrjCod"
-					     " FROM prj_projects,"
-					           "prj_users"
-					    " WHERE prj_projects.CrsCod=%ld"
-					      "%s%s%s"
-					      " AND prj_projects.PrjCod=prj_users.PrjCod"
-					      " AND prj_users.UsrCod=%ld"
-					    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
-					    " ORDER BY %s",
-					    Gbl.Hierarchy.Crs.CrsCod,
-					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-					    Gbl.Usrs.Me.UsrDat.UsrCod,
-					    OrderBySubQuery[Projects->SelectedOrder]);
+		  NumPrjsFromDB = (unsigned)
+		  DB_QuerySELECT (&mysql_res,"can not get projects",
+				  "SELECT prj_projects.PrjCod"
+				   " FROM prj_projects,"
+				         "prj_users"
+				  " WHERE prj_projects.CrsCod=%ld"
+				    "%s"
+				    "%s"
+				    "%s"
+				    " AND prj_projects.PrjCod=prj_users.PrjCod"
+				    " AND prj_users.UsrCod=%ld"
+				  " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+				  " ORDER BY %s",
+				  Gbl.Hierarchy.Crs.CrsCod,
+				  PreNonSubQuery,
+				  HidVisSubQuery,
+				  DptCodSubQuery,
+				  Gbl.Usrs.Me.UsrDat.UsrCod,
+				  OrderBySubQuery[Projects->SelectedOrder]);
 		  break;
 	       case Prj_ORDER_DEPARTMENT:
-		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					    "SELECT prj_projects.PrjCod"
-					     " FROM prj_projects LEFT JOIN dpt_departments,"
-					           "prj_users"
-					       " ON prj_projects.DptCod=dpt_departments.DptCod"
-					    " WHERE prj_projects.CrsCod=%ld"
-					      "%s%s%s"
-					      " AND prj_projects.PrjCod=prj_users.PrjCod"
-					      " AND prj_users.UsrCod=%ld"
-					    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
-					    " ORDER BY %s",
-					    Gbl.Hierarchy.Crs.CrsCod,
-					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-					    Gbl.Usrs.Me.UsrDat.UsrCod,
-					    OrderBySubQuery[Projects->SelectedOrder]);
+		  NumPrjsFromDB = (unsigned)
+		  DB_QuerySELECT (&mysql_res,"can not get projects",
+				  "SELECT prj_projects.PrjCod"
+				   " FROM prj_projects LEFT JOIN dpt_departments,"
+				         "prj_users"
+				     " ON prj_projects.DptCod=dpt_departments.DptCod"
+				  " WHERE prj_projects.CrsCod=%ld"
+				    "%s"
+				    "%s"
+				    "%s"
+				    " AND prj_projects.PrjCod=prj_users.PrjCod"
+				    " AND prj_users.UsrCod=%ld"
+				  " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+				  " ORDER BY %s",
+				  Gbl.Hierarchy.Crs.CrsCod,
+				  PreNonSubQuery,
+				  HidVisSubQuery,
+				  DptCodSubQuery,
+				  Gbl.Usrs.Me.UsrDat.UsrCod,
+				  OrderBySubQuery[Projects->SelectedOrder]);
 		  break;
 	      }
 	    break;
@@ -2990,37 +3000,47 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 		  case Prj_ORDER_START_TIME:
 		  case Prj_ORDER_END_TIME:
 		  case Prj_ORDER_TITLE:
-		     NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					       "SELECT prj_projects.PrjCod"
-					        " FROM prj_projects,"
-					              "prj_users"
-					       " WHERE prj_projects.CrsCod=%ld"
-					         "%s%s%s"
-					         " AND prj_projects.PrjCod=prj_users.PrjCod"
-					         " AND prj_users.UsrCod IN (%s)"
-					       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
-					       " ORDER BY %s",
-					       Gbl.Hierarchy.Crs.CrsCod,
-					       PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-					       SubQueryUsrs,
-					       OrderBySubQuery[Projects->SelectedOrder]);
+		     NumPrjsFromDB = (unsigned)
+		     DB_QuerySELECT (&mysql_res,"can not get projects",
+				     "SELECT prj_projects.PrjCod"
+				      " FROM prj_projects,"
+					    "prj_users"
+				     " WHERE prj_projects.CrsCod=%ld"
+				       "%s"
+				       "%s"
+				       "%s"
+				       " AND prj_projects.PrjCod=prj_users.PrjCod"
+				       " AND prj_users.UsrCod IN (%s)"
+				     " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+				     " ORDER BY %s",
+				     Gbl.Hierarchy.Crs.CrsCod,
+				     PreNonSubQuery,
+				     HidVisSubQuery,
+				     DptCodSubQuery,
+				     SubQueryUsrs,
+				     OrderBySubQuery[Projects->SelectedOrder]);
 		     break;
 		  case Prj_ORDER_DEPARTMENT:
-		     NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					       "SELECT prj_projects.PrjCod"
-					        " FROM prj_projects LEFT JOIN dpt_departments,"
-					              "prj_users"
-					          " ON prj_projects.DptCod=dpt_departments.DptCod"
-					       " WHERE prj_projects.CrsCod=%ld"
-					         "%s%s%s"
-					         " AND prj_projects.PrjCod=prj_users.PrjCod"
-					         " AND prj_users.UsrCod IN (%s)"
-					       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
-					       " ORDER BY %s",
-					       Gbl.Hierarchy.Crs.CrsCod,
-					       PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-					       SubQueryUsrs,
-					       OrderBySubQuery[Projects->SelectedOrder]);
+		     NumPrjsFromDB = (unsigned)
+		     DB_QuerySELECT (&mysql_res,"can not get projects",
+				     "SELECT prj_projects.PrjCod"
+				      " FROM prj_projects LEFT JOIN dpt_departments,"
+					    "prj_users"
+				        " ON prj_projects.DptCod=dpt_departments.DptCod"
+				     " WHERE prj_projects.CrsCod=%ld"
+				       "%s"
+				       "%s"
+				       "%s"
+				       " AND prj_projects.PrjCod=prj_users.PrjCod"
+				       " AND prj_users.UsrCod IN (%s)"
+				     " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+				     " ORDER BY %s",
+				     Gbl.Hierarchy.Crs.CrsCod,
+				     PreNonSubQuery,
+				     HidVisSubQuery,
+				     DptCodSubQuery,
+				     SubQueryUsrs,
+				     OrderBySubQuery[Projects->SelectedOrder]);
 		     break;
 		 }
 
@@ -3030,8 +3050,6 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	       /* Free list of user codes */
 	       Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
 	      }
-	    else
-	       NumRows = 0;
 	    break;
          case Usr_WHO_ALL:
 	    /* Get list of projects */
@@ -3040,27 +3058,37 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	       case Prj_ORDER_START_TIME:
 	       case Prj_ORDER_END_TIME:
 	       case Prj_ORDER_TITLE:
-		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					    "SELECT prj_projects.PrjCod"
-					     " FROM prj_projects"
-					    " WHERE prj_projects.CrsCod=%ld"
-					      "%s%s%s"
-					    " ORDER BY %s",
-					    Gbl.Hierarchy.Crs.CrsCod,
-					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-					    OrderBySubQuery[Projects->SelectedOrder]);
+		  NumPrjsFromDB = (unsigned)
+		  DB_QuerySELECT (&mysql_res,"can not get projects",
+				  "SELECT prj_projects.PrjCod"
+				   " FROM prj_projects"
+				  " WHERE prj_projects.CrsCod=%ld"
+				    "%s"
+				    "%s"
+				    "%s"
+				  " ORDER BY %s",
+				  Gbl.Hierarchy.Crs.CrsCod,
+				  PreNonSubQuery,
+				  HidVisSubQuery,
+				  DptCodSubQuery,
+				  OrderBySubQuery[Projects->SelectedOrder]);
 		  break;
 	       case Prj_ORDER_DEPARTMENT:
-		  NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
-					    "SELECT prj_projects.PrjCod"
-					     " FROM prj_projects LEFT JOIN dpt_departments"
-					       " ON prj_projects.DptCod=dpt_departments.DptCod"
-					    " WHERE prj_projects.CrsCod=%ld"
-					      "%s%s%s"
-					    " ORDER BY %s",
-					    Gbl.Hierarchy.Crs.CrsCod,
-					    PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-					    OrderBySubQuery[Projects->SelectedOrder]);
+		  NumPrjsFromDB = (unsigned)
+		  DB_QuerySELECT (&mysql_res,"can not get projects",
+				  "SELECT prj_projects.PrjCod"
+				   " FROM prj_projects LEFT JOIN dpt_departments"
+				     " ON prj_projects.DptCod=dpt_departments.DptCod"
+				  " WHERE prj_projects.CrsCod=%ld"
+				    "%s"
+				    "%s"
+				    "%s"
+				  " ORDER BY %s",
+				  Gbl.Hierarchy.Crs.CrsCod,
+				  PreNonSubQuery,
+				  HidVisSubQuery,
+				  DptCodSubQuery,
+				  OrderBySubQuery[Projects->SelectedOrder]);
 		  break;
 	      }
 	    break;
@@ -3074,13 +3102,10 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
       free (HidVisSubQuery);
       free (DptCodSubQuery);
 
-      if (NumRows) // Projects found...
+      if (NumPrjsFromDB) // Projects found...
 	{
-	 /***** Initialize number of projects *****/
-	 NumPrjsFromDB = (unsigned) NumRows;
-
 	 /***** Create list of projects *****/
-	 if ((Projects->LstPrjCods = calloc (NumRows,
+	 if ((Projects->LstPrjCods = calloc ((size_t) NumPrjsFromDB,
 	                                     sizeof (*Projects->LstPrjCods))) == NULL)
 	    Lay_NotEnoughMemoryExit ();
 
@@ -4132,16 +4157,13 @@ static void Prj_GetConfigPrjFromDB (struct Prj_Projects *Projects)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Get configuration of projects for current course from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get configuration of test",
-			     "SELECT Editable"		// row[0]
-			      " FROM prj_config"
-			     " WHERE CrsCod=%ld",
-			     Gbl.Hierarchy.Crs.CrsCod);
-
-   if (NumRows == 0)
+   if (DB_QuerySELECT (&mysql_res,"can not get configuration of test",
+		       "SELECT Editable"		// row[0]
+			" FROM prj_config"
+		       " WHERE CrsCod=%ld",
+		       Gbl.Hierarchy.Crs.CrsCod) == 0)
       Projects->Config.Editable = Prj_EDITABLE_DEFAULT;
    else // NumRows == 1
      {

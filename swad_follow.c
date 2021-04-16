@@ -203,8 +203,8 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
    extern const char *Txt_No_user_to_whom_you_can_follow_Try_again_later;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumUsrs;
-   unsigned long NumUsr;
+   unsigned NumUsrs;
+   unsigned NumUsr;
    struct UsrData UsrDat;
 
    /***** Get users *****/

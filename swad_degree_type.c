@@ -591,7 +591,7 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow;
+   unsigned NumTyp;
 
    /***** Get types of degree from database *****/
    switch (Scope)
@@ -709,23 +709,23 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get degree types *****/
-      for (NumRow = 0;
-	   NumRow < Gbl.DegTypes.Num;
-	   NumRow++)
+      for (NumTyp = 0;
+	   NumTyp < Gbl.DegTypes.Num;
+	   NumTyp++)
         {
          /* Get next degree type */
          row = mysql_fetch_row (mysql_res);
 
          /* Get degree type code (row[0]) */
-         if ((Gbl.DegTypes.Lst[NumRow].DegTypCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Gbl.DegTypes.Lst[NumTyp].DegTypCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Wrong code of type of degree.");
 
          /* Get degree type name (row[1]) */
-         Str_Copy (Gbl.DegTypes.Lst[NumRow].DegTypName,row[1],
-                   sizeof (Gbl.DegTypes.Lst[NumRow].DegTypName) - 1);
+         Str_Copy (Gbl.DegTypes.Lst[NumTyp].DegTypName,row[1],
+                   sizeof (Gbl.DegTypes.Lst[NumTyp].DegTypName) - 1);
 
          /* Number of degrees of this type (row[2]) */
-         if (sscanf (row[2],"%u",&Gbl.DegTypes.Lst[NumRow].NumDegs) != 1)
+         if (sscanf (row[2],"%u",&Gbl.DegTypes.Lst[NumTyp].NumDegs) != 1)
             Lay_ShowErrorAndExit ("Error when getting number of degrees of a type");
         }
      }

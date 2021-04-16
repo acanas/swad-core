@@ -123,7 +123,6 @@ void Rec_ShowFormCreateRecordField (void);
 void Rec_ReceiveFormField (void);
 unsigned Rec_ConvertToNumLinesField (const char *StrNumLines);
 bool Rec_CheckIfRecordFieldIsRepeated (const char *FieldName);
-unsigned long Rec_GetAllFieldsInCurrCrs (MYSQL_RES **mysql_res);
 void Rec_CreateRecordField (void);
 void Rec_ReqRemField (void);
 long Rec_GetFieldCod (void);
@@ -151,7 +150,7 @@ void Rec_ListRecordsTchsPrint (void);
 
 void Rec_UpdateAndShowMyCrsRecord (void);
 void Rec_UpdateAndShowOtherCrsRecord (void);
-unsigned long Rec_GetFieldFromCrsRecord (long UsrCod,long FieldCod,MYSQL_RES **mysql_res);
+unsigned Rec_GetFieldFromCrsRecord (long UsrCod,long FieldCod,MYSQL_RES **mysql_res);
 void Rec_GetFieldsCrsRecordFromForm (void);
 void Rec_UpdateCrsRecord (long UsrCod);
 void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Crs_Course *Crs);

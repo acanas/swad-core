@@ -357,12 +357,13 @@ static void Roo_GetAndEditMACAddresses (long RooCod,const char *Anchor)
 static unsigned Roo_GetMACAddresses (long RooCod,MYSQL_RES **mysql_res)
   {
    /***** Get MAC addresses from database *****/
-   return (unsigned) DB_QuerySELECT (mysql_res,"can not get MAC addresses",
-				     "SELECT MAC"	// row[0]
-				      " FROM roo_macs"
-				     " WHERE RooCod=%ld"
-				     " ORDER BY MAC",
-				     RooCod);
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get MAC addresses",
+		   "SELECT MAC"	// row[0]
+		    " FROM roo_macs"
+		   " WHERE RooCod=%ld"
+		   " ORDER BY MAC",
+		   RooCod);
   }
 
 /*****************************************************************************/
@@ -559,7 +560,6 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    unsigned NumRoom;
    struct Roo_Room *Room;
 
@@ -567,44 +567,45 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
    switch (WhichData)
      {
       case Roo_ALL_DATA:
-	 NumRows = DB_QuerySELECT (&mysql_res,"can not get rooms",
-				   "SELECT roo_rooms.RooCod,"		// row[0]
-	                           	  "roo_rooms.BldCod,"		// row[1]
-	                                  "bld_buildings.ShortName,"	// row[2]
-					  "roo_rooms.Floor,"		// row[3]
-					  "roo_rooms.Type,"		// row[4]
-					  "roo_rooms.ShortName,"	// row[5]
-					  "roo_rooms.FullName,"		// row[6]
-					  "roo_rooms.Capacity"		// row[7]
-				    " FROM roo_rooms"
-				    " LEFT JOIN bld_buildings"
-				      " ON roo_rooms.BldCod=bld_buildings.BldCod"
-				   " WHERE roo_rooms.CtrCod=%ld"
-				   " ORDER BY %s",
-				   Gbl.Hierarchy.Ctr.CtrCod,
-				   OrderBySubQuery[Rooms->SelectedOrder]);
+	 Rooms->Num = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get rooms",
+		         "SELECT roo_rooms.RooCod,"		// row[0]
+			        "roo_rooms.BldCod,"		// row[1]
+			        "bld_buildings.ShortName,"	// row[2]
+			        "roo_rooms.Floor,"		// row[3]
+			        "roo_rooms.Type,"		// row[4]
+			        "roo_rooms.ShortName,"		// row[5]
+			        "roo_rooms.FullName,"		// row[6]
+			        "roo_rooms.Capacity"		// row[7]
+			  " FROM roo_rooms"
+			  " LEFT JOIN bld_buildings"
+			    " ON roo_rooms.BldCod=bld_buildings.BldCod"
+		         " WHERE roo_rooms.CtrCod=%ld"
+		         " ORDER BY %s",
+		         Gbl.Hierarchy.Ctr.CtrCod,
+		         OrderBySubQuery[Rooms->SelectedOrder]);
 	 break;
       case Roo_ONLY_SHRT_NAME:
       default:
-	 NumRows = DB_QuerySELECT (&mysql_res,"can not get rooms",
-				   "SELECT roo_rooms.RooCod,"		// row[0]
-					  "roo_rooms.ShortName"		// row[1]
-				    " FROM roo_rooms LEFT JOIN bld_buildings"
-				      " ON roo_rooms.BldCod=bld_buildings.BldCod"
-				   " WHERE roo_rooms.CtrCod=%ld"
-				   " ORDER BY %s",
-				   Gbl.Hierarchy.Ctr.CtrCod,
-				   OrderBySubQuery[Roo_ORDER_DEFAULT]);
+	 Rooms->Num = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get rooms",
+		         "SELECT roo_rooms.RooCod,"		// row[0]
+			        "roo_rooms.ShortName"		// row[1]
+			  " FROM roo_rooms LEFT JOIN bld_buildings"
+			    " ON roo_rooms.BldCod=bld_buildings.BldCod"
+		         " WHERE roo_rooms.CtrCod=%ld"
+		         " ORDER BY %s",
+		         Gbl.Hierarchy.Ctr.CtrCod,
+		         OrderBySubQuery[Roo_ORDER_DEFAULT]);
 	 break;
      }
 
    /***** Count number of rows in result *****/
-   if (NumRows) // Rooms found...
+   if (Rooms->Num) // Rooms found...
      {
-      Rooms->Num = (unsigned) NumRows;
-
       /***** Create list with courses in center *****/
-      if ((Rooms->Lst = calloc (NumRows,sizeof (*Rooms->Lst))) == NULL)
+      if ((Rooms->Lst = calloc ((size_t) Rooms->Num,
+                                sizeof (*Rooms->Lst))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the rooms *****/
@@ -652,8 +653,6 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
            }
         }
      }
-   else
-      Rooms->Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -667,28 +666,24 @@ static void Roo_GetDataOfRoomByCod (struct Roo_Room *Room)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Trivial check *****/
    if (Room->RooCod <= 0)
       return;
 
    /***** Get data of a room from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a room",
-			     "SELECT roo_rooms.BldCod,"		// row[0]
-	                            "bld_buildings.ShortName,"	// row[1]
-				    "roo_rooms.Floor,"		// row[2]
-				    "roo_rooms.Type,"		// row[3]
-				    "roo_rooms.ShortName,"	// row[4]
-				    "roo_rooms.FullName,"	// row[5]
-				    "roo_rooms.Capacity"	// row[6]
-			      " FROM roo_rooms LEFT JOIN bld_buildings"
-			        " ON roo_rooms.BldCod=bld_buildings.BldCod"
-			     " WHERE roo_rooms.RooCod=%ld",
-			     Room->RooCod);
-
-   /***** Count number of rows in result *****/
-   if (NumRows) // Room found...
+   if (DB_QuerySELECT (&mysql_res,"can not get data of a room",
+		       "SELECT roo_rooms.BldCod,"		// row[0]
+			      "bld_buildings.ShortName,"	// row[1]
+			      "roo_rooms.Floor,"		// row[2]
+			      "roo_rooms.Type,"		// row[3]
+			      "roo_rooms.ShortName,"	// row[4]
+			      "roo_rooms.FullName,"	// row[5]
+			      "roo_rooms.Capacity"	// row[6]
+			" FROM roo_rooms LEFT JOIN bld_buildings"
+			  " ON roo_rooms.BldCod=bld_buildings.BldCod"
+		       " WHERE roo_rooms.RooCod=%ld",
+		       Room->RooCod)) // Room found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);

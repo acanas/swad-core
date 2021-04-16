@@ -137,23 +137,24 @@ void Set_EditSettings (void)
 
 void Set_GetSettingsFromIP (void)
   {
-   unsigned long NumRows;
+   unsigned NumRows;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    if (Gbl.IP[0])
      {
       /***** Get settings from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get settings",
-				"SELECT FirstDayOfWeek,"	// row[0]
-				       "DateFormat,"		// row[1]
-				       "Theme,"			// row[2]
-				       "IconSet,"		// row[3]
-				       "Menu,"			// row[4]
-				       "SideCols"		// row[5]
-				 " FROM set_ip_settings"
-				" WHERE IP='%s'",
-				Gbl.IP);
+      NumRows = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get settings",
+		      "SELECT FirstDayOfWeek,"	// row[0]
+			     "DateFormat,"	// row[1]
+			     "Theme,"		// row[2]
+			     "IconSet,"		// row[3]
+			     "Menu,"		// row[4]
+			     "SideCols"		// row[5]
+		       " FROM set_ip_settings"
+		      " WHERE IP='%s'",
+		      Gbl.IP);
       if (NumRows)
 	{
 	 if (NumRows != 1)

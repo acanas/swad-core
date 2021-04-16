@@ -37,13 +37,13 @@
 
 struct UsrFigures
   {
-   time_t FirstClickTimeUTC;	//   0 ==> unknown first click time of user never logged
-   int NumDays;			//  -1 ==> not applicable
-   long NumClicks;		// -1L ==> unknown number of clicks
-   long NumSocPub;		// -1L ==> unknown number of social publications
-   long NumFileViews;		// -1L ==> unknown number of file views
-   long NumForPst;		// -1L ==> unknown number of forum posts
-   long NumMsgSnt;		// -1L ==> unknown number of messages sent
+   time_t FirstClickTimeUTC;	//  0 ==> unknown first click time of user never logged
+   int NumDays;			// -1 ==> not applicable
+   int NumClicks;		// -1 ==> unknown number of clicks
+   int NumSocPub;		// -1 ==> unknown number of social publications
+   int NumFileViews;		// -1 ==> unknown number of file views
+   int NumForPst;		// -1 ==> unknown number of forum posts
+   int NumMsgSnt;		// -1 ==> unknown number of messages sent
   };
 
 /*****************************************************************************/

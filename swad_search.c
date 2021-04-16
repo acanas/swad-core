@@ -693,7 +693,7 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
    extern const char *Txt_open_documents;
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
    MYSQL_RES *mysql_res;
-   unsigned long NumDocs;
+   unsigned NumDocs;
 
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_OPEN_DOCUMENTS))
@@ -702,7 +702,7 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 				"_latin1 "," COLLATE latin1_general_ci"))
 	{
 	 /***** Query database *****/
-	 NumDocs =
+	 NumDocs = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get files",
 		         "SELECT *"
 		          " FROM "
@@ -841,7 +841,7 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 			    Txt_open_document,
 	                    Txt_open_documents);
 
-	 return (unsigned) NumDocs;
+	 return NumDocs;
 	}
 
    return 0;
@@ -857,7 +857,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
    extern const char *Txt_documents_in_my_courses;
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
    MYSQL_RES *mysql_res;
-   unsigned long NumDocs;
+   unsigned NumDocs;
 
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_DOCUM_IN_MY_COURSES))
@@ -906,7 +906,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		   (unsigned) Brw_ADMI_MRK_GRP);
 
 	 /***** Build the query *****/
-	 NumDocs =
+	 NumDocs = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get files",
 		         "SELECT *"
 		          " FROM ("
@@ -1007,7 +1007,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		   "DROP TEMPORARY TABLE IF EXISTS my_files_crs,"
 		                                  "my_files_grp");
 
-	 return (unsigned) NumDocs;
+	 return NumDocs;
 	}
 
    return 0;
@@ -1023,7 +1023,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
    extern const char *Txt_documents_from_me;
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
    MYSQL_RES *mysql_res;
-   unsigned long NumDocs;
+   unsigned NumDocs;
 
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_MY_DOCUMENTS))
@@ -1032,7 +1032,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 				"_latin1 "," COLLATE latin1_general_ci"))
 	{
 	 /***** Build the query *****/
-	 NumDocs =
+	 NumDocs = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get files",
 		         "SELECT *"
 		          " FROM ("
@@ -1240,7 +1240,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			    Txt_document_from_me,
 	                    Txt_documents_from_me);
 
-	 return (unsigned) NumDocs;
+	 return NumDocs;
 	}
 
    return 0;

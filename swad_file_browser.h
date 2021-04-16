@@ -267,7 +267,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                      char **ContentStr,
                                      long FilCod,bool GetContent);
 
-void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
+void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 			const char *TitleSingular,const char *TitlePlural);
 
 void Brw_AskRemoveOldFiles (void);

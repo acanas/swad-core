@@ -134,7 +134,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
                                    struct Rep_Report *Report);
 static void Rep_ComputeMaxAndTotalHits (struct Rep_Hits *Hits,
-                                        unsigned long NumRows,
+                                        unsigned NumHits,
                                         MYSQL_RES *mysql_res,unsigned Field);
 static void Rep_DrawBarNumHits (unsigned long HitsNum,unsigned long HitsMax,
                                 unsigned MaxBarWidth);
@@ -638,7 +638,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
    fprintf (Gbl.F.Rep,"<li>%s: ",Txt_Clicks);
    if (Report->UsrFigures.NumClicks >= 0)
      {
-      fprintf (Gbl.F.Rep,"%ld",Report->UsrFigures.NumClicks);
+      fprintf (Gbl.F.Rep,"%d",Report->UsrFigures.NumClicks);
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
@@ -669,7 +669,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
    fprintf (Gbl.F.Rep,"<li>%s: ",Txt_Downloads);
    if (Report->UsrFigures.NumFileViews >= 0)
      {
-      fprintf (Gbl.F.Rep,"%ld %s",
+      fprintf (Gbl.F.Rep,"%d %s",
                Report->UsrFigures.NumFileViews,
 	       (Report->UsrFigures.NumFileViews == 1) ? Txt_download :
 						        Txt_downloads);
@@ -689,7 +689,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
    fprintf (Gbl.F.Rep,"<li>%s: ",Txt_Forum_posts);
    if (Report->UsrFigures.NumForPst >= 0)
      {
-      fprintf (Gbl.F.Rep,"%ld %s",
+      fprintf (Gbl.F.Rep,"%d %s",
 	       Report->UsrFigures.NumForPst,
 	       (Report->UsrFigures.NumForPst == 1) ? Txt_FORUM_post :
 					             Txt_FORUM_posts);
@@ -709,7 +709,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
    fprintf (Gbl.F.Rep,"<li>%s: ",Txt_Messages_sent);
    if (Report->UsrFigures.NumMsgSnt >= 0)
      {
-      fprintf (Gbl.F.Rep,"%ld %s",
+      fprintf (Gbl.F.Rep,"%d %s",
 	       Report->UsrFigures.NumMsgSnt,
 	       (Report->UsrFigures.NumMsgSnt == 1) ? Txt_message :
 					             Txt_messages);
@@ -765,8 +765,8 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
    extern const char *Txt_Other_actions;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
-   unsigned long NumRow;
+   unsigned NumHits;
+   unsigned NumHit;
    long ActCod;
    Act_Action_t Action;
    Tab_Tab_t Tab;
@@ -778,27 +778,28 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
 	    Txt_Hits_per_action);
 
    /***** Make the query *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get clicks",
-			     "SELECT SQL_NO_CACHE ActCod,"		// row[0]
-					         "COUNT(*) AS N"	// row[1]
-			      " FROM log"
-			     " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
-			       " AND UsrCod=%ld"
-			     " GROUP BY ActCod"
-			     " ORDER BY N DESC"
-			     " LIMIT %u",
-			     (long) Report->UsrFigures.FirstClickTimeUTC,
-			     Gbl.Usrs.Me.UsrDat.UsrCod,
-			     Rep_MAX_ACTIONS);
+   NumHits = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get clicks",
+		   "SELECT SQL_NO_CACHE ActCod,"		// row[0]
+				       "COUNT(*) AS N"	// row[1]
+		    " FROM log"
+		   " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
+		     " AND UsrCod=%ld"
+		   " GROUP BY ActCod"
+		   " ORDER BY N DESC"
+		   " LIMIT %u",
+		   (long) Report->UsrFigures.FirstClickTimeUTC,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Rep_MAX_ACTIONS);
 
    /***** Compute maximum number of hits per action *****/
-   Rep_ComputeMaxAndTotalHits (&Report->Hits,NumRows,mysql_res,1);
+   Rep_ComputeMaxAndTotalHits (&Report->Hits,NumHits,mysql_res,1);
    mysql_data_seek (mysql_res,0);
 
    /***** Write rows *****/
-   for (NumRow = 1, NumClicks = 0;
-	NumRow <= NumRows;
-	NumRow++)
+   for (NumHit = 1, NumClicks = 0;
+	NumHit <= NumHits;
+	NumHit++)
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -1008,23 +1009,23 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 	       Txt_students_ABBREVIATION);
 
       /***** Get courses of a user from database *****/
-      NumCrss =
-      (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses of a user",
-				 "SELECT my_courses.CrsCod,"		// row[0]
-                                        "COUNT(*) AS N"			// row[1]
-                                  " FROM (SELECT CrsCod"
-                                          " FROM crs_users"
-                                         " WHERE UsrCod=%ld"
-                                           " AND Role=%u) AS my_courses"	// It's imperative to use a derived table to not block crs_usr!
-                                  " LEFT JOIN log"
-                                    " ON (my_courses.CrsCod=log.CrsCod)"
-                                 " WHERE log.UsrCod=%ld"
-                                   " AND log.Role=%u"
-                                 " GROUP BY my_courses.CrsCod"
-                                 " ORDER BY N DESC,"
-                                           "my_courses.CrsCod DESC",
-				 Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role,
-				 Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role);
+      NumCrss = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get courses of a user",
+		      "SELECT my_courses.CrsCod,"		// row[0]
+			     "COUNT(*) AS N"			// row[1]
+		       " FROM (SELECT CrsCod"
+			       " FROM crs_users"
+			      " WHERE UsrCod=%ld"
+			        " AND Role=%u) AS my_courses"	// It's imperative to use a derived table to not block crs_usr!
+		       " LEFT JOIN log"
+			 " ON (my_courses.CrsCod=log.CrsCod)"
+		      " WHERE log.UsrCod=%ld"
+		        " AND log.Role=%u"
+		      " GROUP BY my_courses.CrsCod"
+		      " ORDER BY N DESC,"
+			        "my_courses.CrsCod DESC",
+		      Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role,
+		      Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role);
 
       /***** List the courses (one row per course) *****/
       if (NumCrss)
@@ -1099,19 +1100,19 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
    long CrsCod;
 
    /***** Get historic courses of a user from log *****/
-   NumCrss =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses of a user",
-			      "SELECT CrsCod,"		// row[0]
-			             "COUNT(*) AS N"	// row[1]
-			       " FROM log"
-			      " WHERE UsrCod=%ld"
-			        " AND Role=%u"
-			        " AND CrsCod>0"
-			      " GROUP BY CrsCod"
-			      " HAVING N>%u"
-			      " ORDER BY N DESC",
-			      Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role,
-			      Rep_MIN_CLICKS_CRS);
+   NumCrss = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get courses of a user",
+		   "SELECT CrsCod,"		// row[0]
+			  "COUNT(*) AS N"	// row[1]
+		    " FROM log"
+		   " WHERE UsrCod=%ld"
+		     " AND Role=%u"
+		     " AND CrsCod>0"
+		   " GROUP BY CrsCod"
+		   " HAVING N>%u"
+		   " ORDER BY N DESC",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role,
+		   Rep_MIN_CLICKS_CRS);
 
    /***** List the courses (one row per course) *****/
    if (NumCrss)
@@ -1223,8 +1224,8 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
    char SubQueryRol[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
-   unsigned long NumRow;
+   unsigned NumHits;
+   unsigned NumHit;
    unsigned ReadYear;
    unsigned FirstYear;
    unsigned LastYear;
@@ -1241,20 +1242,21 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
    else
       sprintf (SubQueryRol," AND Role=%u",(unsigned) Role);
 
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get clicks",
-			     "SELECT SQL_NO_CACHE YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"	// row[0]
-			                         "COUNT(*)"								// row[1]
-			      " FROM log"
-			     " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
-			       " AND UsrCod=%ld"
-			       "%s"
-			       "%s"
-			     " GROUP BY Year"
-			     " ORDER BY Year DESC",
-			     (long) Report->UsrFigures.FirstClickTimeUTC,
-			     Gbl.Usrs.Me.UsrDat.UsrCod,
-			     SubQueryCrs,
-			     SubQueryRol);
+   NumHits = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get clicks",
+		   "SELECT SQL_NO_CACHE YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"	// row[0]
+				       "COUNT(*)"								// row[1]
+		    " FROM log"
+		   " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
+		     " AND UsrCod=%ld"
+		     "%s"
+		     "%s"
+		   " GROUP BY Year"
+		   " ORDER BY Year DESC",
+		   (long) Report->UsrFigures.FirstClickTimeUTC,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   SubQueryCrs,
+		   SubQueryRol);
 
    /***** Initialize first year *****/
    FirstYear = 1900 + Report->tm_FirstClickTime.tm_year;
@@ -1269,14 +1271,14 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
    else
      {
       /* Compute maximum number of hits per year */
-      Rep_ComputeMaxAndTotalHits (&Report->Hits,NumRows,mysql_res,1);
+      Rep_ComputeMaxAndTotalHits (&Report->Hits,NumHits,mysql_res,1);
       mysql_data_seek (mysql_res,0);
      }
 
    /***** Write rows *****/
-   for (NumRow = 1;
-	NumRow <= NumRows;
-	NumRow++)
+   for (NumHit = 1;
+	NumHit <= NumHits;
+	NumHit++)
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -1326,16 +1328,16 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
 /*****************************************************************************/
 
 static void Rep_ComputeMaxAndTotalHits (struct Rep_Hits *Hits,
-                                        unsigned long NumRows,
+                                        unsigned NumHits,
                                         MYSQL_RES *mysql_res,unsigned Field)
   {
-   unsigned long NumRow;
+   unsigned NumHit;
    MYSQL_ROW row;
 
    /***** For each row... *****/
-   for (NumRow = 1, Hits->Max = 0;
-	NumRow <= NumRows;
-	NumRow++)
+   for (NumHit = 1, Hits->Max = 0;
+	NumHit <= NumHits;
+	NumHit++)
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1426,13 +1428,13 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
    char PathUniqueDirReport[PATH_MAX + 1];
 
    /***** Get directories for the reports *****/
-   NumReports =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's usage reports",
-			      "SELECT UniqueDirL,"	// row[0]
-			             "UniqueDirR"	// row[1]
-			       " FROM usr_reports"
-			      " WHERE UsrCod=%ld",
-			      UsrCod);
+   NumReports = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get user's usage reports",
+		   "SELECT UniqueDirL,"	// row[0]
+			  "UniqueDirR"	// row[1]
+		    " FROM usr_reports"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
 
    /***** Remove the reports *****/
    for (NumReport = 0;

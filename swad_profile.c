@@ -101,11 +101,11 @@ static void Prf_StartListItem (const char *Title,const char *Icon);
 static void Prf_EndListItem (void);
 static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod);
 
-static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName);
-static unsigned long Prf_GetNumUsrsWithFigure (const char *FieldName);
-static unsigned long Prf_GetRankingNumClicksPerDay (long UsrCod);
-static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void);
-static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs);
+static unsigned Prf_GetRankingFigure (long UsrCod,const char *FieldName);
+static unsigned Prf_GetNumUsrsWithFigure (const char *FieldName);
+static unsigned Prf_GetRankingNumClicksPerDay (long UsrCod);
+static unsigned Prf_GetNumUsrsWithNumClicksPerDay (void);
+static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs);
 
 static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod);
 static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod);
@@ -613,7 +613,7 @@ static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
 	{
 	 HTM_TxtF ("&nbsp;%s","(");
 	 HTM_DoubleFewDigits ((double) UsrFigures->NumClicks /
-		     (double) UsrFigures->NumDays);
+		              (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s&nbsp;",Txt_day);
 	 Prf_ShowRanking (Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
 			  Prf_GetNumUsrsWithNumClicksPerDay ());
@@ -646,14 +646,14 @@ static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
      {
       HTM_Long (UsrFigures->NumFileViews);
       HTM_TxtF ("&nbsp;%s&nbsp;",(UsrFigures->NumFileViews == 1) ? Txt_download :
-						         Txt_downloads);
+						                   Txt_downloads);
       Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumFileViews"),
 		       Prf_GetNumUsrsWithFigure ("NumFileViews"));
       if (UsrFigures->NumDays > 0)
 	{
 	 HTM_TxtF ("&nbsp;%s","(");
 	 HTM_DoubleFewDigits ((double) UsrFigures->NumFileViews /
-	             (double) UsrFigures->NumDays);
+	                      (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
      }
@@ -681,7 +681,7 @@ static void Prf_ShowNumSocialPublications (const struct UsrData *UsrDat,
 
    if (UsrFigures->NumSocPub >= 0)
      {
-      HTM_Long (UsrFigures->NumSocPub);
+      HTM_Int (UsrFigures->NumSocPub);
       HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumSocPub == 1 ? Txt_TIMELINE_post :
 					                      Txt_TIMELINE_posts);
       Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumSocPub"),
@@ -690,7 +690,7 @@ static void Prf_ShowNumSocialPublications (const struct UsrData *UsrDat,
 	{
 	 HTM_TxtF ("&nbsp;%s","(");
 	 HTM_DoubleFewDigits ((double) UsrFigures->NumSocPub /
-		     (double) UsrFigures->NumDays);
+		              (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
      }
@@ -727,7 +727,7 @@ static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
 	{
 	 HTM_TxtF ("&nbsp;%s","(");
 	 HTM_DoubleFewDigits ((double) UsrFigures->NumForPst /
-		     (double) UsrFigures->NumDays);
+		              (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
      }
@@ -764,7 +764,7 @@ static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
 	{
 	 HTM_TxtF ("&nbsp;%s","(");
 	 HTM_DoubleFewDigits ((double) UsrFigures->NumMsgSnt /
-		     (double) UsrFigures->NumDays);
+		              (double) UsrFigures->NumDays);
 	 HTM_TxtF ("/%s)",Txt_day);
 	}
      }
@@ -852,24 +852,24 @@ void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
 	 UsrFigures->NumDays = -1;
 
       /* Get number of clicks (row[2]) */
-      if (sscanf (row[2],"%ld",&UsrFigures->NumClicks) != 1)
-	 UsrFigures->NumClicks = -1L;
+      if (sscanf (row[2],"%d",&UsrFigures->NumClicks) != 1)
+	 UsrFigures->NumClicks = -1;
 
       /* Get number of social publications (row[3]) */
-      if (sscanf (row[3],"%ld",&UsrFigures->NumSocPub) != 1)
-	 UsrFigures->NumSocPub = -1L;
+      if (sscanf (row[3],"%d",&UsrFigures->NumSocPub) != 1)
+	 UsrFigures->NumSocPub = -1;
 
       /* Get number of file views (row[4]) */
-      if (sscanf (row[4],"%ld",&UsrFigures->NumFileViews) != 1)
-	 UsrFigures->NumFileViews = -1L;
+      if (sscanf (row[4],"%d",&UsrFigures->NumFileViews) != 1)
+	 UsrFigures->NumFileViews = -1;
 
       /* Get number of forum posts (row[5]) */
-      if (sscanf (row[5],"%ld",&UsrFigures->NumForPst) != 1)
-	 UsrFigures->NumForPst = -1L;
+      if (sscanf (row[5],"%d",&UsrFigures->NumForPst) != 1)
+	 UsrFigures->NumForPst = -1;
 
       /* Get number of messages sent (row[6]) */
-      if (sscanf (row[6],"%ld",&UsrFigures->NumMsgSnt) != 1)
-	 UsrFigures->NumMsgSnt = -1L;
+      if (sscanf (row[6],"%d",&UsrFigures->NumMsgSnt) != 1)
+	 UsrFigures->NumMsgSnt = -1;
      }
    else
       /***** Return special user's figures indicating "not present" *****/
@@ -883,78 +883,85 @@ void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
 /********** Get ranking of a user according to the number of clicks **********/
 /*****************************************************************************/
 
-static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName)
+static unsigned Prf_GetRankingFigure (long UsrCod,const char *FieldName)
   {
    /***** Select number of rows with figure
           greater than the figure of this user *****/
-   return DB_QueryCOUNT ("can not get ranking using a figure",
-			 "SELECT COUNT(*)+1"
-			  " FROM usr_figures"
-			 " WHERE UsrCod<>%ld"	// Really not necessary here
-			   " AND %s>(SELECT %s"
-			             " FROM usr_figures"
-			            " WHERE UsrCod=%ld)",
-			 UsrCod,FieldName,FieldName,UsrCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get ranking using a figure",
+		  "SELECT COUNT(*)+1"
+		   " FROM usr_figures"
+		  " WHERE UsrCod<>%ld"	// Really not necessary here
+		    " AND %s>(SELECT %s"
+			      " FROM usr_figures"
+			     " WHERE UsrCod=%ld)",
+		  UsrCod,
+		  FieldName,
+		  FieldName,
+		  UsrCod);
   }
 
 /*****************************************************************************/
 /********************* Get number of users with a figure *********************/
 /*****************************************************************************/
 
-static unsigned long Prf_GetNumUsrsWithFigure (const char *FieldName)
+static unsigned Prf_GetNumUsrsWithFigure (const char *FieldName)
   {
    /***** Select number of rows with values already calculated *****/
-   return DB_QueryCOUNT ("can not get number of users with a figure",
-			 "SELECT COUNT(*)"
-			  " FROM usr_figures"
-			 " WHERE %s>=0",
-			 FieldName);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users with a figure",
+		  "SELECT COUNT(*)"
+		   " FROM usr_figures"
+		  " WHERE %s>=0",
+		  FieldName);
   }
 
 /*****************************************************************************/
 /****** Get ranking of a user according to the number of clicks per day ******/
 /*****************************************************************************/
 
-static unsigned long Prf_GetRankingNumClicksPerDay (long UsrCod)
+static unsigned Prf_GetRankingNumClicksPerDay (long UsrCod)
   {
    /***** Select number of rows with number of clicks per day
           greater than the clicks per day of this user *****/
-   return DB_QueryCOUNT ("can not get ranking using number of clicks per day",
-			 "SELECT COUNT(*)+1"
-			  " FROM (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay"
-				  " FROM usr_figures"
-				 " WHERE UsrCod<>%ld"	// Necessary because the following comparison is not exact in floating point
-				   " AND NumClicks>0"
-				   " AND FirstClickTime>FROM_UNIXTIME(0)) AS TableNumClicksPerDay"
-			 " WHERE NumClicksPerDay>"
-			        "(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
-				  " FROM usr_figures"
-			         " WHERE UsrCod=%ld"
-				   " AND NumClicks>0"
-				   " AND FirstClickTime>FROM_UNIXTIME(0))",
-			 UsrCod,UsrCod);
+   return (unsigned)
+   DB_QueryCOUNT ("can not get ranking using number of clicks per day",
+		  "SELECT COUNT(*)+1"
+		   " FROM (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay"
+			   " FROM usr_figures"
+			  " WHERE UsrCod<>%ld"	// Necessary because the following comparison is not exact in floating point
+			    " AND NumClicks>0"
+			    " AND FirstClickTime>FROM_UNIXTIME(0)) AS TableNumClicksPerDay"
+		  " WHERE NumClicksPerDay>"
+		         "(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
+			   " FROM usr_figures"
+			  " WHERE UsrCod=%ld"
+			    " AND NumClicks>0"
+			    " AND FirstClickTime>FROM_UNIXTIME(0))",
+		  UsrCod,
+		  UsrCod);
   }
 
 /*****************************************************************************/
 /************** Get number of users with number of clicks per day ************/
 /*****************************************************************************/
 
-static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void)
+static unsigned Prf_GetNumUsrsWithNumClicksPerDay (void)
   {
    /***** Select number of rows with values already calculated *****/
-   return DB_QueryCOUNT ("can not get number of users"
-			 " with number of clicks per day",
-			 "SELECT COUNT(*)"
-			  " FROM usr_figures"
-			 " WHERE NumClicks>0"
-			   " AND FirstClickTime>FROM_UNIXTIME(0)");
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users with number of clicks per day",
+		  "SELECT COUNT(*)"
+		   " FROM usr_figures"
+		  " WHERE NumClicks>0"
+		    " AND FirstClickTime>FROM_UNIXTIME(0)");
   }
 
 /*****************************************************************************/
 /************************* Show position in ranking **************************/
 /*****************************************************************************/
 
-static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
+static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
   {
    extern const char *The_ClassFormLinkOutBox[The_NUM_THEMES];
    extern const char *Txt_of_PART_OF_A_TOTAL;
@@ -964,11 +971,12 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
    Frm_BeginForm (ActSeeUseGbl);
    Sco_PutParamScope ("ScopeSta",Hie_Lvl_SYS);
    Par_PutHiddenParamUnsigned (NULL,"FigureType",(unsigned) Fig_USERS_RANKING);
-   if (asprintf (&Title,"#%lu %s %lu",Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)
+   if (asprintf (&Title,"#%u %s %u",
+                 Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)
       Lay_NotEnoughMemoryExit ();
    HTM_BUTTON_SUBMIT_Begin (Title,The_ClassFormLinkOutBox[Gbl.Prefs.Theme],NULL);
    free (Title);
-   HTM_TxtF ("#%lu",Rank);
+   HTM_TxtF ("#%u",Rank);
    HTM_BUTTON_End ();
    Frm_EndForm ();
   }
@@ -1140,7 +1148,7 @@ static void Prf_GetNumSocialPubsAndStoreAsUsrFigure (long UsrCod)
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
 			 "UPDATE usr_figures"
-			   " SET NumSocPub=%ld"
+			   " SET NumSocPub=%d"
 			 " WHERE UsrCod=%ld",
 		         UsrFigures.NumSocPub,
 		         UsrCod);
@@ -1169,9 +1177,10 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
 			 "UPDATE usr_figures"
-			   " SET NumFileViews=%ld"
+			   " SET NumFileViews=%d"
 			 " WHERE UsrCod=%ld",
-		         UsrFigures.NumFileViews,UsrCod);
+		         UsrFigures.NumFileViews,
+		         UsrCod);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
@@ -1197,7 +1206,7 @@ static void Prf_GetNumForumPostsAndStoreAsUsrFigure (long UsrCod)
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
 			 "UPDATE usr_figures"
-			   " SET NumForPst=%ld"
+			   " SET NumForPst=%d"
 			 " WHERE UsrCod=%ld",
 		         UsrFigures.NumForPst,
 		         UsrCod);
@@ -1226,7 +1235,7 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod)
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
 			 "UPDATE usr_figures"
-			   " SET NumMsgSnt=%ld"
+			   " SET NumMsgSnt=%d"
 			 " WHERE UsrCod=%ld",
 		         UsrFigures.NumMsgSnt,
 		         UsrCod);
@@ -1263,11 +1272,11 @@ static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures)
   {
    UsrFigures->FirstClickTimeUTC = (time_t) 0;	// unknown first click time or user never logged
    UsrFigures->NumDays      = -1;	// not applicable
-   UsrFigures->NumClicks    = -1L;	// unknown number of clicks
-   UsrFigures->NumSocPub    = -1L;	// unknown number of social publications
-   UsrFigures->NumFileViews = -1L;	// unknown number of file views
-   UsrFigures->NumForPst    = -1L;	// unknown number of forum posts
-   UsrFigures->NumMsgSnt    = -1L;	// unknown number of messages sent
+   UsrFigures->NumClicks    = -1;	// unknown number of clicks
+   UsrFigures->NumSocPub    = -1;	// unknown number of social publications
+   UsrFigures->NumFileViews = -1;	// unknown number of file views
+   UsrFigures->NumForPst    = -1;	// unknown number of forum posts
+   UsrFigures->NumMsgSnt    = -1;	// unknown number of messages sent
   }
 
 /*****************************************************************************/
@@ -1291,16 +1300,18 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
    /***** Create user's figures *****/
    DB_QueryINSERT ("can not create user's figures",
 		   "INSERT INTO usr_figures"
-		   " (UsrCod,FirstClickTime,NumClicks,NumSocPub,NumFileViews,NumForPst,NumMsgSnt)"
+		   " (UsrCod,FirstClickTime,"
+		     "NumClicks,NumSocPub,NumFileViews,NumForPst,NumMsgSnt)"
 		   " VALUES"
-		   " (%ld,%s,%ld,%ld,%ld,%ld,%ld)",
+		   " (%ld,%s,"
+		     "%d,%d,%d,%d,%d)",
 		   UsrCod,
 		   SubQueryFirstClickTime,
-		   UsrFigures->NumClicks,	// -1L ==> unknown number of clicks
-		   UsrFigures->NumSocPub,	// -1L ==> unknown number of social publications
-		   UsrFigures->NumFileViews,	// -1L ==> unknown number of file views
-		   UsrFigures->NumForPst,	// -1L ==> unknown number of forum posts
-		   UsrFigures->NumMsgSnt);	// -1L ==> unknown number of messages sent
+		   UsrFigures->NumClicks,	// -1 ==> unknown number of clicks
+		   UsrFigures->NumSocPub,	// -1 ==> unknown number of social publications
+		   UsrFigures->NumFileViews,	// -1 ==> unknown number of file views
+		   UsrFigures->NumForPst,	// -1 ==> unknown number of forum posts
+		   UsrFigures->NumMsgSnt);	// -1 ==> unknown number of messages sent
   }
 
 /*****************************************************************************/
@@ -1354,8 +1365,10 @@ void Prf_IncrementNumPubsUsr (long UsrCod)
    /***** Increment number of social publications *****/
    // If NumSocPub < 0 ==> not yet calculated, so do nothing
    DB_QueryINSERT ("can not increment user's social publications",
-		   "UPDATE IGNORE usr_figures SET NumSocPub=NumSocPub+1"
-		   " WHERE UsrCod=%ld AND NumSocPub>=0",
+		   "UPDATE IGNORE usr_figures"
+		     " SET NumSocPub=NumSocPub+1"
+		   " WHERE UsrCod=%ld"
+		     " AND NumSocPub>=0",
 	           UsrCod);
   }
 
@@ -1368,8 +1381,10 @@ void Prf_IncrementNumFileViewsUsr (long UsrCod)
    /***** Increment number of file views *****/
    // If NumFileViews < 0 ==> not yet calculated, so do nothing
    DB_QueryINSERT ("can not increment user's file views",
-		   "UPDATE IGNORE usr_figures SET NumFileViews=NumFileViews+1"
-		   " WHERE UsrCod=%ld AND NumFileViews>=0",
+		   "UPDATE IGNORE usr_figures"
+		     " SET NumFileViews=NumFileViews+1"
+		   " WHERE UsrCod=%ld"
+		     " AND NumFileViews>=0",
 	           UsrCod);
   }
 
@@ -1382,8 +1397,10 @@ void Prf_IncrementNumForPstUsr (long UsrCod)
    /***** Increment number of forum posts *****/
    // If NumForPst < 0 ==> not yet calculated, so do nothing
    DB_QueryINSERT ("can not increment user's forum posts",
-		   "UPDATE IGNORE usr_figures SET NumForPst=NumForPst+1"
-		   " WHERE UsrCod=%ld AND NumForPst>=0",
+		   "UPDATE IGNORE usr_figures"
+		     " SET NumForPst=NumForPst+1"
+		   " WHERE UsrCod=%ld"
+		     " AND NumForPst>=0",
 	           UsrCod);
   }
 
@@ -1396,8 +1413,10 @@ void Prf_IncrementNumMsgSntUsr (long UsrCod)
    /***** Increment number of messages sent *****/
    // If NumMsgSnt < 0 ==> not yet calculated, so do nothing
    DB_QueryINSERT ("can not increment user's messages sent",
-		   "UPDATE IGNORE usr_figures SET NumMsgSnt=NumMsgSnt+1"
-		   " WHERE UsrCod=%ld AND NumMsgSnt>=0",
+		   "UPDATE IGNORE usr_figures"
+		     " SET NumMsgSnt=NumMsgSnt+1"
+		   " WHERE UsrCod=%ld"
+		     " AND NumMsgSnt>=0",
 	           UsrCod);
   }
 

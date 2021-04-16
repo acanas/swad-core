@@ -664,10 +664,10 @@ void Cty_WriteScriptGoogleGeochart (void)
 static void Cty_GetParamCtyOrder (void)
   {
    Gbl.Hierarchy.Ctys.SelectedOrder = (Cty_Order_t)
-					  Par_GetParToUnsignedLong ("Order",
-								    0,
-								    Cty_NUM_ORDERS - 1,
-								    (unsigned long) Cty_ORDER_DEFAULT);
+				      Par_GetParToUnsignedLong ("Order",
+								0,
+								Cty_NUM_ORDERS - 1,
+								(unsigned long) Cty_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/

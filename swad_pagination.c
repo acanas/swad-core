@@ -945,20 +945,16 @@ unsigned Pag_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    unsigned NumPage;
 
    /***** Get last page of received/sent messages from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get last page of messages",
-			     "SELECT %s"		// row[0]
-			      " FROM ses_sessions"
-			     " WHERE SessionId='%s'",
-			     WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
-								     "LastPageMsgSnt",
-			     Gbl.Session.Id);
-
-   /***** Check number of rows of the result ****/
-   if (NumRows != 1)
+   if (DB_QuerySELECT (&mysql_res,"can not get last page of messages",
+		       "SELECT %s"		// row[0]
+			" FROM ses_sessions"
+		       " WHERE SessionId='%s'",
+		       WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
+							       "LastPageMsgSnt",
+		       Gbl.Session.Id))
       Lay_ShowErrorAndExit ("Error when getting last page of messages.");
 
    /***** Get last page of messages *****/

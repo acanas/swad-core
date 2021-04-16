@@ -122,7 +122,7 @@ void For_DisablePost (void);
 
 void For_GetForumTypeAndLocationOfAPost (long PstCod,struct For_Forum *Forum);
 
-unsigned long For_GetNumPostsUsr (long UsrCod);
+unsigned For_GetNumPostsUsr (long UsrCod);
 void For_RemoveUsrFromReadThrs (long UsrCod);
 
 void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
