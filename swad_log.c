@@ -87,12 +87,14 @@ void Log_LogAccess (const char *Comments)
    /* Log access in historical log */
    LogCod =
    DB_QueryINSERTandReturnCode ("can not log access",
-				"INSERT INTO log "
-				"(ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
-				"Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
-				" VALUES "
-				"(%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
-				"%u,NOW(),%ld,%ld,'%s')",
+				"INSERT INTO log"
+				" (ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
+				  "UsrCod,Role,ClickTime,"
+				  "TimeToGenerate,TimeToSend,IP)"
+				" VALUES"
+				" (%ld,%ld,%ld,%ld,%ld,%ld,"
+				  "%ld,%u,NOW(),"
+				  "%ld,%ld,'%s')",
 				ActCod,
 				Gbl.Hierarchy.Cty.CtyCod,
 				Gbl.Hierarchy.Ins.InsCod,
@@ -107,13 +109,16 @@ void Log_LogAccess (const char *Comments)
 
    /* Log access in recent log (log_recent) */
    DB_QueryINSERT ("can not log access (recent)",
-		   "INSERT INTO log_recent "
-	           "(LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
-	           "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
-                   " VALUES "
-                   "(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
-                   "%u,NOW(),%ld,%ld,'%s')",
-		   LogCod,ActCod,
+		   "INSERT INTO log_recent"
+	           " (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
+	             "UsrCod,Role,ClickTime,"
+	             "TimeToGenerate,TimeToSend,IP)"
+                   " VALUES"
+                   " (%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
+                     "%ld,%u,NOW(),"
+                     "%ld,%ld,'%s')",
+		   LogCod,
+		   ActCod,
 		   Gbl.Hierarchy.Cty.CtyCod,
 		   Gbl.Hierarchy.Ins.InsCod,
 		   Gbl.Hierarchy.Ctr.CtrCod,
@@ -142,7 +147,8 @@ void Log_LogAccess (const char *Comments)
 			 " (LogCod,Comments)"
 			 " VALUES"
 			 " (%ld,'%s')",
-			 LogCod,CommentsDB);
+			 LogCod,
+			 CommentsDB);
 	 free (CommentsDB);
 	}
      }
@@ -154,7 +160,8 @@ void Log_LogAccess (const char *Comments)
 		      " (LogCod,SearchStr)"
 		      " VALUES"
 		      " (%ld,'%s')",
-		      LogCod,Gbl.Search.Str);
+		      LogCod,
+		      Gbl.Search.Str);
 
    if (Gbl.WebService.IsWebService)
       /* Log web service plugin and function */
@@ -163,7 +170,8 @@ void Log_LogAccess (const char *Comments)
 	              " (LogCod,PlgCod,FunCod)"
                       " VALUES"
                       " (%ld,%ld,%u)",
-	              LogCod,Gbl.WebService.PlgCod,
+	              LogCod,
+	              Gbl.WebService.PlgCod,
 		      (unsigned) Gbl.WebService.Function);
    else
      {
@@ -175,7 +183,8 @@ void Log_LogAccess (const char *Comments)
 			 " (LogCod,BanCod)"
 			 " VALUES"
 			 " (%ld,%ld)",
-			 LogCod,BanCodClicked);
+			 LogCod,
+			 BanCodClicked);
      }
 
    /***** Increment my number of clicks *****/

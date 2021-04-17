@@ -1294,7 +1294,8 @@ static void Grp_AddUsrToGroup (struct UsrData *UsrDat,long GrpCod)
 		   " (GrpCod,UsrCod)"
 		   " VALUES"
 		   " (%ld,%ld)",
-                   GrpCod,UsrDat->UsrCod);
+                   GrpCod,
+                   UsrDat->UsrCod);
   }
 
 /*****************************************************************************/
@@ -3946,16 +3947,19 @@ static void Grp_CreateGroupType (void)
    Gbl.Crs.Grps.GrpTyp.GrpTypCod =
    DB_QueryINSERTandReturnCode ("can not create type of group",
 				"INSERT INTO grp_types"
-				" (CrsCod,GrpTypName,Mandatory,Multiple,MustBeOpened,OpenTime)"
+				" (CrsCod,GrpTypName,"
+				  "Mandatory,Multiple,MustBeOpened,OpenTime)"
 				" VALUES"
-				" (%ld,'%s','%c','%c','%c',FROM_UNIXTIME(%ld))",
-				Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Grps.GrpTyp.GrpTypName,
+				" (%ld,'%s',"
+				  "'%c','%c','%c',FROM_UNIXTIME(%ld))",
+				Gbl.Hierarchy.Crs.CrsCod,
+				Gbl.Crs.Grps.GrpTyp.GrpTypName,
 				Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment ? 'Y' :
-										'N',
+									 'N',
 				Gbl.Crs.Grps.GrpTyp.MultipleEnrolment ? 'Y' :
-									       'N',
+									'N',
 				Gbl.Crs.Grps.GrpTyp.MustBeOpened ? 'Y' :
-									  'N',
+								   'N',
 				(long) Gbl.Crs.Grps.GrpTyp.OpenTimeUTC);
   }
 

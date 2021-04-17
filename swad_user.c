@@ -3588,9 +3588,11 @@ static void Usr_InsertMyLastData (void)
    /***** Insert my last accessed course, tab and time of click in database *****/
    DB_QueryINSERT ("can not insert last user's data",
 		   "INSERT INTO usr_last"
-	           " (UsrCod,WhatToSearch,LastSco,LastCod,LastAct,LastRole,LastTime,LastAccNotif)"
+	           " (UsrCod,WhatToSearch,"
+	             "LastSco,LastCod,LastAct,LastRole,LastTime,LastAccNotif)"
                    " VALUES"
-                   " (%ld,%u,'%s',%ld,%ld,%u,NOW(),FROM_UNIXTIME(%ld))",
+                   " (%ld,%u,"
+                     "'%s',%ld,%ld,%u,NOW(),FROM_UNIXTIME(%ld))",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Sch_SEARCH_ALL,
 		   Sco_GetDBStrFromScope (Gbl.Hierarchy.Level),

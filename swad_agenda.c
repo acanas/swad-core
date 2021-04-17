@@ -1782,10 +1782,11 @@ static void Agd_CreateEvent (struct Agd_Event *AgdEvent,const char *Txt)
    AgdEvent->AgdCod =
    DB_QueryINSERTandReturnCode ("can not create new event",
 				"INSERT INTO agd_agendas"
-				" (UsrCod,StartTime,EndTime,Event,Location,Txt)"
+				" (UsrCod,StartTime,EndTime,"
+				  "Event,Location,Txt)"
 				" VALUES"
 				" (%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-				"'%s','%s','%s')",
+				  "'%s','%s','%s')",
 				AgdEvent->UsrCod,
 				AgdEvent->TimeUTC[Dat_START_TIME],
 				AgdEvent->TimeUTC[Dat_END_TIME  ],

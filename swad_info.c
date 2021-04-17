@@ -1645,7 +1645,8 @@ static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD)
 		    " (%ld,'%s','%s','%s')",
 		    Gbl.Hierarchy.Crs.CrsCod,
 		    Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type],
-		    InfoTxtHTML,InfoTxtMD);
+		    InfoTxtHTML,
+		    InfoTxtMD);
   }
 
 /*****************************************************************************/

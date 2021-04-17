@@ -4992,7 +4992,7 @@ static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question)
 						              'N',
 				   Question->Stem,
 				   Question->Feedback ? Question->Feedback :
-					                     "",
+					                "",
 				   Question->Media.MedCod);
      }
    else			// It's an existing question
@@ -5054,7 +5054,8 @@ static void Tst_InsertAnswersIntoDB (struct Tst_Question *Question)
                             " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
                             " VALUES"
                             " (%ld,%u,'%.15lg','',-1,'Y')",
-			    Question->QstCod,i,
+			    Question->QstCod,
+			    i,
 			    Question->Answer.FloatingPoint[i]);
          Str_SetDecimalPointToLocal ();	// Return to local system
          break;

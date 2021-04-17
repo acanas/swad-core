@@ -781,9 +781,12 @@ static void Deg_CreateDegree (unsigned Status)
    /***** Create a new degree *****/
    Deg_EditingDeg->DegCod =
    DB_QueryINSERTandReturnCode ("can not create a new degree",
-				"INSERT INTO deg_degrees (CtrCod,DegTypCod,Status,"
-				"RequesterUsrCod,ShortName,FullName,WWW)"
-				" VALUES (%ld,%ld,%u,%ld,'%s','%s','%s')",
+				"INSERT INTO deg_degrees"
+				" (CtrCod,DegTypCod,Status,"
+			 	  "RequesterUsrCod,ShortName,FullName,WWW)"
+				" VALUES"
+				" (%ld,%ld,%u,"
+				  "%ld,'%s','%s','%s')",
 				Deg_EditingDeg->CtrCod,
 				Deg_EditingDeg->DegTypCod,
 				Status,

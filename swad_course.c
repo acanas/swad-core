@@ -1717,11 +1717,12 @@ static void Crs_CreateCourse (unsigned Status)
    DB_QueryINSERTandReturnCode ("can not create a new course",
 				"INSERT INTO crs_courses"
 				" (DegCod,Year,InsCrsCod,Status,RequesterUsrCod,"
-				"ShortName,FullName)"
+				  "ShortName,FullName)"
 				" VALUES"
 				" (%ld,%u,'%s',%u,%ld,"
-				"'%s','%s')",
-				Crs_EditingCrs->DegCod,Crs_EditingCrs->Year,
+				  "'%s','%s')",
+				Crs_EditingCrs->DegCod,
+				Crs_EditingCrs->Year,
 				Crs_EditingCrs->InstitutionalCrsCod,
 				Status,
 				Gbl.Usrs.Me.UsrDat.UsrCod,

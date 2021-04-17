@@ -215,9 +215,13 @@ void TstPrn_CreatePrintInDB (struct TstPrn_Print *Print)
    Print->PrnCod =
    DB_QueryINSERTandReturnCode ("can not create new test exam print",
 				"INSERT INTO tst_exams"
-				" (CrsCod,UsrCod,StartTime,EndTime,NumQsts,NumQstsNotBlank,Sent,AllowTeachers,Score)"
+				" (CrsCod,UsrCod,StartTime,EndTime,"
+				  "NumQsts,NumQstsNotBlank,"
+				  "Sent,AllowTeachers,Score)"
 				" VALUES"
-				" (%ld,%ld,NOW(),NOW(),%u,0,'N','N',0)",
+				" (%ld,%ld,NOW(),NOW(),"
+				  "%u,0,"
+				  "'N','N',0)",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Print->NumQsts.All);
@@ -1837,7 +1841,8 @@ static void TstPrn_StoreOneQstOfPrintInDB (const struct TstPrn_Print *Print,
 		    " (ExaCod,QstCod,QstInd,Score,Indexes,Answers)"
 		    " VALUES"
 		    " (%ld,%ld,%u,'%.15lg','%s','%s')",
-		    Print->PrnCod,Print->PrintedQuestions[NumQst].QstCod,
+		    Print->PrnCod,
+		    Print->PrintedQuestions[NumQst].QstCod,
 		    NumQst,	// 0, 1, 2, 3...
 		    Print->PrintedQuestions[NumQst].Score,
 		    Print->PrintedQuestions[NumQst].StrIndexes,

@@ -410,7 +410,9 @@ void Tag_InsertTagsIntoDB (long QstCod,const struct Tag_Tags *Tags)
                          " (QstCod,TagCod,TagInd)"
                          " VALUES"
                          " (%ld,%ld,%u)",
-			 QstCod,TagCod,TagIdx);
+			 QstCod,
+			 TagCod,
+			 TagIdx);
 
          TagIdx++;
         }
@@ -429,7 +431,8 @@ static long Tag_CreateNewTag (long CrsCod,const char *TagTxt)
 				" (CrsCod,ChangeTime,TagTxt,TagHidden)"
 				" VALUES"
 				" (%ld,NOW(),'%s','Y')",	// Hidden by default
-				CrsCod,TagTxt);
+				CrsCod,
+				TagTxt);
   }
 
 /*****************************************************************************/

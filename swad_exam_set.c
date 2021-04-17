@@ -1665,19 +1665,22 @@ static void ExaSet_CopyQstFromBankToExamSet (struct ExaSet_Set *Set,long QstCod)
       CloneMedCod = Med_CloneMedia (&Question.Media);
 
       /***** Insert question in table of questions *****/
-      QstCodInSet = DB_QueryINSERTandReturnCode ("can not add question to set",
-						 "INSERT INTO exa_set_questions"
-						 " (SetCod,Invalid,AnsType,Shuffle,Stem,Feedback,MedCod)"
-						 " VALUES"
-						 " (%ld,'%c','%s','%c','%s','%s',%ld)",
-						 Set->SetCod,
-						 CharInvalid[Question.Validity],
-						 Tst_StrAnswerTypesDB[Question.Answer.Type],
-						 Question.Answer.Shuffle ? 'Y' :
-									   'N',
-						 Question.Stem,
-						 Question.Feedback,
-						 CloneMedCod);
+      QstCodInSet =
+      DB_QueryINSERTandReturnCode ("can not add question to set",
+				   "INSERT INTO exa_set_questions"
+				   " (SetCod,Invalid,AnsType,Shuffle,"
+				     "Stem,Feedback,MedCod)"
+				   " VALUES"
+				   " (%ld,'%c','%s','%c',"
+				    "'%s','%s',%ld)",
+				   Set->SetCod,
+				   CharInvalid[Question.Validity],
+				   Tst_StrAnswerTypesDB[Question.Answer.Type],
+				   Question.Answer.Shuffle ? 'Y' :
+							     'N',
+				   Question.Stem,
+				   Question.Feedback,
+				   CloneMedCod);
 
       /***** Get the answers from the database *****/
       Tst_GetAnswersQst (&Question,&mysql_res,

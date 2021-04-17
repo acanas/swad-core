@@ -493,7 +493,8 @@ void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD +
 		    " (UsrCod,PendingPassword,DateAndTime)"
 		    " VALUES"
 		    " (%ld,'%s',NOW())",
-                    Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PendingPassword);
+                    Gbl.Usrs.Me.UsrDat.UsrCod,
+                    Gbl.Usrs.Me.PendingPassword);
   }
 
 /*****************************************************************************/

@@ -1620,9 +1620,11 @@ static void Roo_CreateRoom (struct Roo_Room *Room)
    Room->RooCod =
    DB_QueryINSERTandReturnCode ("can not create room",
 			        "INSERT INTO roo_rooms"
-			        " (CtrCod,BldCod,Floor,Type,ShortName,FullName,Capacity)"
+			        " (CtrCod,BldCod,Floor,Type,"
+			          "ShortName,FullName,Capacity)"
 			        " VALUES"
-			        " (%ld,%ld,%d,'%s','%s','%s',%u)",
+			        " (%ld,%ld,%d,'%s',"
+			          "'%s','%s',%u)",
 			        Gbl.Hierarchy.Ctr.CtrCod,
 			        Room->BldCod,
 			        Room->Floor,

@@ -2377,7 +2377,10 @@ static void Pho_UpdateDegStats (long DegCod,Usr_Sex_t Sex,unsigned NumStds,unsig
 		    "TimeAvgPhoto,TimeToComputeAvgPhoto)"
 		    " VALUES"
 		    " (%ld,'%s',%u,%u,NOW(),%ld)",
-	            DegCod,Usr_StringsSexDB[Sex],NumStds,NumStdsWithPhoto,
+	            DegCod,
+	            Usr_StringsSexDB[Sex],
+	            NumStds,
+	            NumStdsWithPhoto,
 		    TimeToComputeAvgPhotoInMicroseconds);
   }
 

@@ -544,7 +544,9 @@ static int API_GenerateNewWSKey (struct soap *soap,
 	           " (WSKey,UsrCod,PlgCod,LastTime)"
                    " VALUES"
                    " ('%s',%ld,%ld,NOW())",
-		   WSKey,UsrCod,Gbl.WebService.PlgCod);
+		   WSKey,
+		   UsrCod,
+		   Gbl.WebService.PlgCod);
 
    return SOAP_OK;
   }
@@ -1135,31 +1137,9 @@ int swad__getAvailableRoles (struct soap *soap,
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
 
    /***** Return available roles *****/
-/*
-   DB_QueryINSERT ("can not debug",
-		   "INSERT INTO dbg_debug"
-		   " (DebugTime,Txt)"
-		   " VALUES"
-		   " (NOW(),'Gbl.Usrs.Me.Role.Available before Rol_SetMyRoles: %u')",
-		   Gbl.Usrs.Me.Role.Available);
-*/
    Rol_SetMyRoles ();
    getAvailableRolesOut->roles = Gbl.Usrs.Me.Role.Available;
-/*
-   DB_QueryINSERT ("can not debug",
-		   "INSERT INTO dbg_debug"
-		   " (DebugTime,Txt)"
-		   " VALUES"
-		   " (NOW(),'Gbl.Usrs.Me.Role.Available after Rol_SetMyRoles: %u')",
-		   Gbl.Usrs.Me.Role.Available);
 
-   DB_QueryINSERT ("can not debug",
-		   "INSERT INTO dbg_debug"
-		   " (DebugTime,Txt)"
-		   " VALUES"
-		   " (NOW(),'getAvailableRolesOut->roles: %d')",
-		   getAvailableRolesOut->roles);
-*/
    return SOAP_OK;
   }
 
@@ -3794,7 +3774,8 @@ static int API_SendMessageToUsr (long OriginalMsgCod,
 				   " (Subject,Content,MedCod)"
 				   " VALUES"
 				   " ('%s','%s',-1)",
-				   Subject,Content);
+				   Subject,
+				   Content);
 
       /* Insert message in sent messages */
       DB_QueryINSERT ("can not create message",
@@ -3802,7 +3783,8 @@ static int API_SendMessageToUsr (long OriginalMsgCod,
 	              " (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
                       " VALUES"
                       " (%ld,-1,%ld,'N',NOW())",
-		      NewMsgCod,SenderUsrCod);
+		      NewMsgCod,
+		      SenderUsrCod);
 
       MsgAlreadyInserted = true;
      }
@@ -3813,7 +3795,8 @@ static int API_SendMessageToUsr (long OriginalMsgCod,
 	           " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
                    " VALUES"
                    " (%ld,%ld,'%c','N','N','N')",
-		   NewMsgCod,RecipientUsrCod,
+		   NewMsgCod,
+		   RecipientUsrCod,
 		   NotifyByEmail ? 'Y' :
 				   'N');
 
@@ -6047,7 +6030,8 @@ int swad__sendMyLocation (struct soap *soap,
 				        "NOW()"
 			 	  " FROM roo_rooms"
 			 	 " WHERE RooCod=%d",	// Check that room exists
-				Gbl.Usrs.Me.UsrDat.UsrCod,roomCode);
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				roomCode);
 
    /***** Return notification code *****/
    sendMyLocationOut->success = (ChkCod > 0) ? 1 : 0;

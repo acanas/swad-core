@@ -1540,13 +1540,19 @@ void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
    DB_QueryINSERT ("can not create new notification event",
 		   "INSERT INTO ntf_notifications"
 		   " (NotifyEvent,ToUsrCod,FromUsrCod,"
-		   "InsCod,CtrCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
+		     "InsCod,CtrCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
 		   " VALUES"
 		   " (%u,%ld,%ld,"
-		   "%ld,%ld,%ld,%ld,%ld,NOW(),%u)",
+		     "%ld,%ld,%ld,%ld,%ld,NOW(),%u)",
 	           (unsigned) NotifyEvent,
-		   UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-	           InsCod,CtrCod,DegCod,CrsCod,Cod,(unsigned) Status);
+		   UsrDat->UsrCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+	           InsCod,
+	           CtrCod,
+	           DegCod,
+	           CrsCod,
+	           Cod,
+	           (unsigned) Status);
   }
 
 /*****************************************************************************/
@@ -1943,7 +1949,9 @@ static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
 		    " (DegCod,CrsCod,NotifyEvent,NumEvents,NumMails)"
 		    " VALUES"
 		    " (%ld,%ld,%u,%u,%u)",
-	            DegCod,CrsCod,(unsigned) NotifyEvent,
+	            DegCod,
+	            CrsCod,
+	            (unsigned) NotifyEvent,
 	            CurrentNumEvents + NumEvents,
 	            CurrentNumMails + NumMails);
   }

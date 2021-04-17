@@ -927,7 +927,9 @@ static void Bld_CreateBuilding (struct Bld_Building *Building)
 		   " VALUES"
 		   " (%ld,'%s','%s','%s')",
                    Gbl.Hierarchy.Ctr.CtrCod,
-		   Building->ShrtName,Building->FullName,Building->Location);
+		   Building->ShrtName,
+		   Building->FullName,
+		   Building->Location);
   }
 
 /*****************************************************************************/

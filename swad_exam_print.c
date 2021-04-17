@@ -585,9 +585,11 @@ static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print)
    Print->PrnCod =
    DB_QueryINSERTandReturnCode ("can not create new exam print",
 				"INSERT INTO exa_prints"
-				" (SesCod,UsrCod,StartTime,EndTime,NumQsts,NumQstsNotBlank,Sent,Score)"
+				" (SesCod,UsrCod,StartTime,EndTime,"
+				  "NumQsts,NumQstsNotBlank,Sent,Score)"
 				" VALUES"
-				" (%ld,%ld,NOW(),NOW(),%u,0,'N',0)",
+				" (%ld,%ld,NOW(),NOW(),"
+				  "%u,0,'N',0)",
 				Print->SesCod,
 				Print->UsrCod,
 				Print->NumQsts.All);
@@ -1469,7 +1471,8 @@ static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
 		    " (PrnCod,QstCod,QstInd,SetCod,Score,Indexes,Answers)"
 		    " VALUES"
 		    " (%ld,%ld,%u,%ld,'%.15lg','%s','%s')",
-		    Print->PrnCod,Print->PrintedQuestions[NumQst].QstCod,
+		    Print->PrnCod,
+		    Print->PrintedQuestions[NumQst].QstCod,
 		    NumQst,	// 0, 1, 2, 3...
 		    Print->PrintedQuestions[NumQst].SetCod,
 		    Print->PrintedQuestions[NumQst].Score,

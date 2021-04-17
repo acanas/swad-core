@@ -1380,15 +1380,19 @@ static bool Med_MoveTmpFileToDefDir (struct Med_Media *Media,
 void Med_StoreMediaInDB (struct Med_Media *Media)
   {
    /***** Insert media into database *****/
-   Media->MedCod = DB_QueryINSERTandReturnCode ("can not create media",
-					        "INSERT INTO med_media"
-					        " (Type,Name,URL,Title)"
-					        " VALUES"
-					        " ('%s','%s','%s','%s')",
-					        Med_GetStringTypeForDB (Media->Type),
-					        Media->Name  ? Media->Name  : "",
-					        Media->URL   ? Media->URL   : "",
-					        Media->Title ? Media->Title : "");
+   Media->MedCod =
+   DB_QueryINSERTandReturnCode ("can not create media",
+			        "INSERT INTO med_media"
+			        " (Type,Name,URL,Title)"
+			        " VALUES"
+			        " ('%s','%s','%s','%s')",
+			        Med_GetStringTypeForDB (Media->Type),
+			        Media->Name  ? Media->Name  :
+			        	       "",
+			        Media->URL   ? Media->URL   :
+			        	       "",
+			        Media->Title ? Media->Title :
+			        	       "");
    Media->Status = Med_STORED_IN_DB;
   }
 

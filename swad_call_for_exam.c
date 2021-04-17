@@ -809,12 +809,14 @@ static long Cfe_AddCallForExamToDB (const struct Cfe_CallsForExams *CallsForExam
    DB_QueryINSERTandReturnCode ("can not create a new call for exam",
 				"INSERT INTO cfe_exams "
 				"(CrsCod,Status,NumNotif,CrsFullName,Year,ExamSession,"
-				"CallDate,ExamDate,Duration,"
-				"Place,ExamMode,Structure,DocRequired,MatRequired,MatAllowed,OtherInfo)"
+				  "CallDate,ExamDate,Duration,"
+				  "Place,ExamMode,Structure,"
+				  "DocRequired,MatRequired,MatAllowed,OtherInfo)"
 				" VALUES "
 				"(%ld,%u,0,'%s',%u,'%s',"
-				"NOW(),'%04u-%02u-%02u %02u:%02u:00','%02u:%02u:00','%s',"
-				"'%s','%s','%s','%s','%s','%s')",
+				  "NOW(),'%04u-%02u-%02u %02u:%02u:00','%02u:%02u:00',"
+				  "'%s','%s','%s',"
+				  "'%s','%s','%s','%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
 				(unsigned) Cfe_VISIBLE_CALL_FOR_EXAM,
 				CallsForExams->CallForExam.CrsFullName,

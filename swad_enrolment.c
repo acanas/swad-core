@@ -299,7 +299,9 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 		   " (CrsCod,UsrCod,Role,Accepted)"
 		   " VALUES"
 		   " (%ld,%ld,%u,'%c')",
-	           Gbl.Hierarchy.Crs.CrsCod,UsrDat->UsrCod,(unsigned) NewRole,
+	           Gbl.Hierarchy.Crs.CrsCod,
+	           UsrDat->UsrCod,
+	           (unsigned) NewRole,
 	           KeepOrSetAccepted == Enr_SET_ACCEPTED_TO_TRUE ? 'Y' :
 							           'N');
 
@@ -307,15 +309,16 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
    DB_QueryINSERT ("can not register user in course",
 		   "INSERT INTO crs_user_settings"
 		   " (UsrCod,CrsCod,"
-		   "LastDowGrpCod,LastComGrpCod,LastAssGrpCod,"
-		   "NumAccTst,LastAccTst,NumQstsLastTst,"
-		   "UsrListType,ColsClassPhoto,ListWithPhotos)"
+		     "LastDowGrpCod,LastComGrpCod,LastAssGrpCod,"
+		     "NumAccTst,LastAccTst,NumQstsLastTst,"
+		     "UsrListType,ColsClassPhoto,ListWithPhotos)"
 		   " VALUES"
 		   " (%ld,%ld,"
-		   "-1,-1,-1,"
-		   "0,FROM_UNIXTIME(%ld),0,"
-		   "'%s',%u,'%c')",
-	           UsrDat->UsrCod,Gbl.Hierarchy.Crs.CrsCod,
+		     "-1,-1,-1,"
+		     "0,FROM_UNIXTIME(%ld),0,"
+		     "'%s',%u,'%c')",
+	           UsrDat->UsrCod,
+	           Gbl.Hierarchy.Crs.CrsCod,
 	           (long) (time_t) 0,	// The user never accessed to tests in this course
 	           Usr_StringsUsrListTypeInDB[Usr_SHOW_USRS_TYPE_DEFAULT],
 	           Usr_CLASS_PHOTO_COLS_DEF,
@@ -3478,7 +3481,9 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Hie_Lvl_Level_t Scope,long
 		       " (UsrCod,Scope,Cod)"
 		       " VALUES"
 		       " (%ld,'%s',%ld)",
-                       UsrDat->UsrCod,Sco_GetDBStrFromScope (Scope),Cod);
+                       UsrDat->UsrCod,
+                       Sco_GetDBStrFromScope (Scope),
+                       Cod);
 
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y,
                      UsrDat->FullName,InsCtrDegName);

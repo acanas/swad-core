@@ -165,10 +165,10 @@ void Ses_InsertSessionInDB (void)
    DB_QueryINSERT ("can not create session",
 		   "INSERT INTO ses_sessions"
 	           " (SessionId,UsrCod,Password,Role,"
-                   "CtyCod,InsCod,CtrCod,DegCod,CrsCod,LastTime,LastRefresh,WhatToSearch)"
+                     "CtyCod,InsCod,CtrCod,DegCod,CrsCod,LastTime,LastRefresh,WhatToSearch)"
                    " VALUES"
                    " ('%s',%ld,'%s',%u,"
-                   "%ld,%ld,%ld,%ld,%ld,NOW(),NOW(),%u)",
+                     "%ld,%ld,%ld,%ld,%ld,NOW(),NOW(),%u)",
 		   Gbl.Session.Id,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Usrs.Me.UsrDat.Password,
@@ -513,7 +513,9 @@ void Ses_AddPublicDirToCache (const char *FullPathMediaPriv,
 		      " (SessionId,PrivPath,TmpPubDir)"
 		      " VALUES"
 		      " ('%s','%s','%s')",
-		      Gbl.Session.Id,FullPathMediaPriv,TmpPubDir);
+		      Gbl.Session.Id,
+		      FullPathMediaPriv,
+		      TmpPubDir);
      }
   }
 

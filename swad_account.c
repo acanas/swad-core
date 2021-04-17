@@ -756,25 +756,27 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
    DB_QueryINSERTandReturnCode ("can not create user",
  	                        "INSERT INTO usr_data"
 				" (EncryptedUsrCod,Password,"
-				"Surname1,Surname2,FirstName,Sex,"
-				"Theme,IconSet,Language,FirstDayOfWeek,DateFormat,"
-				"PhotoVisibility,BaPrfVisibility,ExPrfVisibility,"
-				"CtyCod,"
-				"LocalPhone,FamilyPhone,"
-				"Birthday,Comments,"
-				"Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
+				  "Surname1,Surname2,FirstName,Sex,"
+				  "Theme,IconSet,Language,FirstDayOfWeek,DateFormat,"
+				  "PhotoVisibility,BaPrfVisibility,ExPrfVisibility,"
+				  "CtyCod,"
+				  "LocalPhone,FamilyPhone,"
+				  "Birthday,Comments,"
+				  "Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
 				" VALUES"
 				" ('%s','%s',"
-				"'%s','%s','%s','%s',"
-				"'%s','%s','%s',%u,%u,"
-				"'%s','%s','%s',"
-				"%ld,"
-				"'%s','%s',"
-				"%s,'%s',"
-				"%u,%u,-1,0)",
+				  "'%s','%s','%s','%s',"
+				  "'%s','%s','%s',%u,%u,"
+				  "'%s','%s','%s',"
+				  "%ld,"
+				  "'%s','%s',"
+				  "%s,'%s',"
+				  "%u,%u,-1,0)",
 				UsrDat->EnUsrCod,
 				UsrDat->Password,
-				UsrDat->Surname1,UsrDat->Surname2,UsrDat->FrstName,
+				UsrDat->Surname1,
+				UsrDat->Surname2,
+				UsrDat->FrstName,
 				Usr_StringsSexDB[UsrDat->Sex],
 				The_ThemeId[UsrDat->Prefs.Theme],
 				Ico_IconSetId[UsrDat->Prefs.IconSet],

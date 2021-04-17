@@ -151,7 +151,8 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Messages,
                                                  long UsrCod,
                                                  const char *FilterFromToSubquery);
-static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,bool NotifyByEmail);
+static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,
+                                         bool NotifyByEmail);
 static void Msg_SetReceivedMsgAsReplied (long MsgCod);
 static void Msg_MoveReceivedMsgToDeleted (long MsgCod,long UsrCod);
 static void Msg_MoveSentMsgToDeleted (long MsgCod);
@@ -1411,7 +1412,9 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 				" (Subject,Content,MedCod)"
 				" VALUES"
 				" ('%s','%s',%ld)",
-				Subject,Content,Media->MedCod);
+				Subject,
+				Content,
+				Media->MedCod);
 
    /***** Insert message in sent messages *****/
    DB_QueryINSERT ("can not create message",
@@ -1498,7 +1501,8 @@ void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
 
    /* Delete messages from msg_rcv *****/
    DB_QueryDELETE ("can not remove received messages",
-		   "DELETE FROM msg_rcv WHERE UsrCod=%ld",
+		   "DELETE FROM msg_rcv"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
 
    /***** Move message from msg_snt to msg_snt_deleted *****/
@@ -1516,7 +1520,8 @@ void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
 
    /* Delete message from msg_snt *****/
    DB_QueryDELETE ("can not remove sent messages",
-		   "DELETE FROM msg_snt WHERE UsrCod=%ld",
+		   "DELETE FROM msg_snt"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
 
@@ -1524,7 +1529,8 @@ void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
 /**** Insert a message y su destinatario in the table of messages received ***/
 /*****************************************************************************/
 
-static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,bool NotifyByEmail)
+static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,
+                                         bool NotifyByEmail)
   {
    /***** Insert message received in the database *****/
    DB_QueryINSERT ("can not create received message",
@@ -1532,7 +1538,8 @@ static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,bool NotifyByEm
 		   " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
 		   " VALUES"
 		   " (%ld,%ld,'%c','N','N','N')",
-	           MsgCod,UsrCod,
+	           MsgCod,
+	           UsrCod,
 	           NotifyByEmail ? 'Y' :
 			           'N');
   }
@@ -1642,7 +1649,8 @@ static void Msg_MoveMsgContentToDeleted (long MsgCod)
 
    /* Delete message from msg_content *****/
    DB_QueryUPDATE ("can not remove the content of a message",
-		   "DELETE FROM msg_content WHERE MsgCod=%ld",
+		   "DELETE FROM msg_content"
+		   " WHERE MsgCod=%ld",
 		   MsgCod);
   }
 
@@ -4021,7 +4029,8 @@ void Msg_BanSenderWhenShowingMsgs (void)
 		    " (FromUsrCod,ToUsrCod)"
 		    " VALUES"
 		    " (%ld,%ld)",
-                    Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+                    Gbl.Usrs.Other.UsrDat.UsrCod,
+                    Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show alert with the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_From_this_time_you_will_not_receive_messages_from_X,

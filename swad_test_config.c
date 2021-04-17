@@ -225,9 +225,11 @@ void TstCfg_ReceiveConfigTst (void)
    /***** Update database *****/
    DB_QueryREPLACE ("can not save configuration of tests",
 		    "REPLACE INTO tst_config"
-	            " (CrsCod,Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Visibility)"
+	            " (CrsCod,Pluggable,Min,Def,Max,"
+	              "MinTimeNxtTstPerQst,Visibility)"
                     " VALUES"
-                    " (%ld,'%s',%u,%u,%u,'%lu',%u)",
+                    " (%ld,'%s',%u,%u,%u,"
+                      "'%lu',%u)",
 		    Gbl.Hierarchy.Crs.CrsCod,
 		    TstCfg_PluggableDB[TstCfg_GetConfigPluggable ()],
 		    TstCfg_GetConfigMin (),

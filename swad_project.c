@@ -2525,7 +2525,8 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
 			  " (PrjCod,RoleInProject,UsrCod)"
 			  " VALUES"
 			  " (%ld,%u,%ld)",
-			  Projects.PrjCod,(unsigned) RoleInProject,
+			  Projects.PrjCod,
+			  (unsigned) RoleInProject,
 			  Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /* Flush cache */
@@ -3999,12 +4000,12 @@ static void Prj_CreateProject (struct Prj_Project *Prj)
    DB_QueryINSERTandReturnCode ("can not create new project",
 				"INSERT INTO prj_projects"
 				" (CrsCod,DptCod,Hidden,Assigned,NumStds,Proposal,"
-				"CreatTime,ModifTime,"
-				"Title,Description,Knowledge,Materials,URL)"
+				  "CreatTime,ModifTime,"
+				  "Title,Description,Knowledge,Materials,URL)"
 				" VALUES"
 				" (%ld,%ld,'%c','%c',%u,'%s',"
-				"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-				"'%s','%s','%s','%s','%s')",
+				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+				  "'%s','%s','%s','%s','%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Prj->DptCod,
 				Prj->Hidden == Prj_HIDDEN ? 'Y' :

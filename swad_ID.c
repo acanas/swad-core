@@ -856,7 +856,8 @@ static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID)
 		    "DELETE FROM usr_ids"
 		    " WHERE UsrCod=%ld"
 		      " AND UsrID='%s'",
-                    UsrCod,UsrID);
+                    UsrCod,
+                    UsrID);
   }
 
 /*****************************************************************************/
@@ -995,7 +996,8 @@ static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed
 		   " (UsrCod,UsrID,CreatTime,Confirmed)"
 		   " VALUES"
 		   " (%ld,'%s',NOW(),'%c')",
-	           UsrCod,NewID,
+	           UsrCod,
+	           NewID,
 	           Confirmed ? 'Y' :
 			       'N');
   }

@@ -1550,19 +1550,25 @@ static void ExaSes_CreateSession (struct ExaSes_Session *Session)
    /***** Insert this new exam session into database *****/
    Session->SesCod =
    DB_QueryINSERTandReturnCode ("can not create exam session",
-				"INSERT exa_sessions "
-				"(ExaCod,Hidden,UsrCod,StartTime,EndTime,Title,ShowUsrResults)"
-				" VALUES "
-				"(%ld,"			// ExaCod
-                                "'%c',"			// Hidden
-				"%ld,"			// UsrCod
-                                "FROM_UNIXTIME(%ld),"	// Start time
-                                "FROM_UNIXTIME(%ld),"	// End time
-				"'%s',"			// Title
-				"'N')",			// ShowUsrResults: Don't show user results initially
+				"INSERT exa_sessions"
+				" (ExaCod,"
+				  "Hidden,"
+				  "UsrCod,"
+				  "StartTime,"
+				  "EndTime,"
+				  "Title,"
+				  "ShowUsrResults)"
+				" VALUES"
+				" (%ld,"		// ExaCod
+                                 "'%c',"		// Hidden
+				 "%ld,"			// UsrCod
+                                 "FROM_UNIXTIME(%ld),"	// Start time
+                                 "FROM_UNIXTIME(%ld),"	// End time
+				 "'%s',"		// Title
+				 "'N')",		// ShowUsrResults: Don't show user results initially
 				Session->ExaCod,
 				Session->Hidden ? 'Y' :
-					        'N',
+					          'N',
 				Gbl.Usrs.Me.UsrDat.UsrCod,		// Session creator
 				Session->TimeUTC[Dat_START_TIME],	// Start time
 				Session->TimeUTC[Dat_END_TIME  ],	// End time
@@ -1626,7 +1632,8 @@ static void ExaSes_CreateGrps (long SesCod)
 		      " (SesCod,GrpCod)"
 		      " VALUES"
 		      " (%ld,%ld)",
-                      SesCod,Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+                      SesCod,
+                      Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/

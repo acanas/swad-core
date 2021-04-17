@@ -1604,10 +1604,13 @@ static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt)
    Asg->AsgCod =
    DB_QueryINSERTandReturnCode ("can not create new assignment",
 				"INSERT INTO asg_assignments"
-				" (CrsCod,UsrCod,StartTime,EndTime,Title,Folder,Txt)"
+				" (CrsCod,UsrCod,"
+				  "StartTime,EndTime,"
+				  "Title,Folder,Txt)"
 				" VALUES"
-				" (%ld,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-				"'%s','%s','%s')",
+				" (%ld,%ld,"
+				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+				  "'%s','%s','%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Asg->TimeUTC[Dat_START_TIME],

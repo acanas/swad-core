@@ -159,9 +159,11 @@ long Tml_DB_CreateNewNote (Tml_Not_NoteType_t NoteType,long Cod,
    return
    DB_QueryINSERTandReturnCode ("can not create new note",
 				"INSERT INTO tml_notes"
-				" (NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote)"
+				" (NoteType,Cod,UsrCod,HieCod,"
+				  "Unavailable,TimeNote)"
 				" VALUES"
-				" (%u,%ld,%ld,%ld,'N',NOW())",
+				" (%u,%ld,%ld,%ld,"
+				  "'N',NOW())",
 				(unsigned) NoteType,	// Post, file, exam, notice, forum
 				Cod,			// Post, file, exam, notice, forum code
 				PublisherCod,		// Publisher code

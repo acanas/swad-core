@@ -849,7 +849,9 @@ static void Lnk_CreateLink (struct Link *Lnk)
 		   " (ShortName,FullName,WWW)"
 		   " VALUES"
 		   " ('%s','%s','%s')",
-                   Lnk->ShrtName,Lnk->FullName,Lnk->WWW);
+                   Lnk->ShrtName,
+                   Lnk->FullName,
+                   Lnk->WWW);
   }
 
 /*****************************************************************************/

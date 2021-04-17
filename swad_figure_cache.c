@@ -73,7 +73,9 @@ void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
 			  " (Figure,Scope,Cod,ValueInt,ValueDouble)"
 			  " VALUES"
 			  " (%u,'%s',%ld,%u,'0.0')",
-			  (unsigned) Figure,Sco_GetDBStrFromScope (Scope),Cod,
+			  (unsigned) Figure,
+			  Sco_GetDBStrFromScope (Scope),
+			  Cod,
 			  *((unsigned *) ValuePtr));
 	 break;
       case FigCch_DOUBLE:
@@ -83,7 +85,9 @@ void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
 			  " (Figure,Scope,Cod,ValueInt,ValueDouble)"
 			  " VALUES"
 			  " (%u,'%s',%ld,0,'%.15lg')",
-			  (unsigned) Figure,Sco_GetDBStrFromScope (Scope),Cod,
+			  (unsigned) Figure,
+			  Sco_GetDBStrFromScope (Scope),
+			  Cod,
 			  *((double *) ValuePtr));
          Str_SetDecimalPointToLocal ();	// Return to local system
 	 break;

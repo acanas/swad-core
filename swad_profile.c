@@ -1348,7 +1348,7 @@ void Prf_IncrementNumClicksUsr (long UsrCod)
   {
    /***** Increment number of clicks *****/
    // If NumClicks < 0 ==> not yet calculated, so do nothing
-   DB_QueryINSERT ("can not increment user's clicks",
+   DB_QueryUPDATE ("can not increment user's clicks",
 		   "UPDATE IGNORE usr_figures"
 		     " SET NumClicks=NumClicks+1"
 		   " WHERE UsrCod=%ld"
@@ -1364,7 +1364,7 @@ void Prf_IncrementNumPubsUsr (long UsrCod)
   {
    /***** Increment number of social publications *****/
    // If NumSocPub < 0 ==> not yet calculated, so do nothing
-   DB_QueryINSERT ("can not increment user's social publications",
+   DB_QueryUPDATE ("can not increment user's social publications",
 		   "UPDATE IGNORE usr_figures"
 		     " SET NumSocPub=NumSocPub+1"
 		   " WHERE UsrCod=%ld"
@@ -1380,7 +1380,7 @@ void Prf_IncrementNumFileViewsUsr (long UsrCod)
   {
    /***** Increment number of file views *****/
    // If NumFileViews < 0 ==> not yet calculated, so do nothing
-   DB_QueryINSERT ("can not increment user's file views",
+   DB_QueryUPDATE ("can not increment user's file views",
 		   "UPDATE IGNORE usr_figures"
 		     " SET NumFileViews=NumFileViews+1"
 		   " WHERE UsrCod=%ld"
@@ -1396,7 +1396,7 @@ void Prf_IncrementNumForPstUsr (long UsrCod)
   {
    /***** Increment number of forum posts *****/
    // If NumForPst < 0 ==> not yet calculated, so do nothing
-   DB_QueryINSERT ("can not increment user's forum posts",
+   DB_QueryUPDATE ("can not increment user's forum posts",
 		   "UPDATE IGNORE usr_figures"
 		     " SET NumForPst=NumForPst+1"
 		   " WHERE UsrCod=%ld"
@@ -1412,7 +1412,7 @@ void Prf_IncrementNumMsgSntUsr (long UsrCod)
   {
    /***** Increment number of messages sent *****/
    // If NumMsgSnt < 0 ==> not yet calculated, so do nothing
-   DB_QueryINSERT ("can not increment user's messages sent",
+   DB_QueryUPDATE ("can not increment user's messages sent",
 		   "UPDATE IGNORE usr_figures"
 		     " SET NumMsgSnt=NumMsgSnt+1"
 		   " WHERE UsrCod=%ld"

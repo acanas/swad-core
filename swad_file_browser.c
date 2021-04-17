@@ -4154,10 +4154,10 @@ static void Brw_StoreSizeOfFileTreeInDB (void)
    DB_QueryREPLACE ("can not store the size of a file browser",
 		    "REPLACE INTO brw_sizes"
 		    " (FileBrowser,Cod,ZoneUsrCod,"
-		    "NumLevels,NumFolders,NumFiles,TotalSize)"
+		      "NumLevels,NumFolders,NumFiles,TotalSize)"
 		    " VALUES"
 		    " (%u,%ld,%ld,"
-		    "%u,'%lu','%lu','%llu')",
+		      "%u,'%lu','%lu','%llu')",
 	            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		    Cod,ZoneUsrCod,
 	            Gbl.FileBrowser.Size.NumLevls,
@@ -10890,7 +10890,8 @@ static void Brw_UpdateFileViews (unsigned NumViews,long FilCod)
 		      " (FilCod,UsrCod,NumViews)"
 		      " VALUES"
 		      " (%ld,%ld,1)",
-		      FilCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+		      FilCod,
+		      Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -11180,11 +11181,11 @@ long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
    return
    DB_QueryINSERTandReturnCode ("can not add path to database",
 				"INSERT INTO brw_files"
-				" (FileBrowser,Cod,ZoneUsrCod,"
-				"PublisherUsrCod,FileType,Path,Hidden,Public,License)"
+				" (FileBrowser,Cod,ZoneUsrCod,PublisherUsrCod,"
+				  "FileType,Path,Hidden,Public,License)"
 				" VALUES"
-				" (%u,%ld,%ld,"
-				"%ld,%u,'%s','N','%c',%u)",
+				" (%u,%ld,%ld,%ld,"
+				  "%u,'%s','N','%c',%u)",
 				(unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 				Cod,ZoneUsrCod,
 				PublisherUsrCod,

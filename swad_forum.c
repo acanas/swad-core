@@ -549,7 +549,8 @@ static void For_InsertPstIntoBannedPstTable (long PstCod)
 		    " (PstCod,UsrCod,DisableTime)"
 		    " VALUES"
 		    " (%ld,%ld,NOW())",
-                    PstCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+                    PstCod,
+                    Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -570,12 +571,14 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
    DB_QueryINSERTandReturnCode ("can not create a new post in a forum",
 				"INSERT INTO for_posts"
 				" (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,"
-				"Subject,Content,MedCod)"
+				  "Subject,Content,MedCod)"
 				" VALUES"
 				" (%ld,%ld,NOW(),NOW(),0,"
-				"'%s','%s',%ld)",
-				ThrCod,UsrCod,
-				Subject,Content,Media->MedCod);
+				  "'%s','%s',%ld)",
+				ThrCod,
+				UsrCod,
+				Subject,
+				Content,Media->MedCod);
 
    return PstCod;
   }
@@ -674,7 +677,8 @@ static long For_InsertForumThread (const struct For_Forums *Forums,
 				" (%u,%ld,%ld,%ld)",
 				(unsigned) Forums->Forum.Type,
 				Forums->Forum.Location,
-				FirstPstCod,FirstPstCod);
+				FirstPstCod,
+				FirstPstCod);
   }
 
 /*****************************************************************************/
@@ -862,7 +866,8 @@ static void For_UpdateThrReadTime (long ThrCod,
 		    " (ThrCod,UsrCod,ReadTime)"
 		    " VALUES"
 		    " (%ld,%ld,FROM_UNIXTIME(%ld))",
-	            ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+	            ThrCod,
+	            Gbl.Usrs.Me.UsrDat.UsrCod,
 	            (long) CreatTimeUTCOfTheMostRecentPostRead);
   }
 
@@ -4634,7 +4639,8 @@ static void For_InsertThrInClipboard (long ThrCod)
 		    " (ThrCod,UsrCod)"
 		    " VALUES"
 		    " (%ld,%ld)",
-                    ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+                    ThrCod,
+                    Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

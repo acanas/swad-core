@@ -1896,9 +1896,11 @@ static void Ins_CreateInstitution (unsigned Status)
    Ins_EditingIns->InsCod =
    DB_QueryINSERTandReturnCode ("can not create institution",
 				"INSERT INTO ins_instits"
-				" (CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW)"
+				" (CtyCod,Status,RequesterUsrCod,"
+				  "ShortName,FullName,WWW)"
 				" VALUES"
-				" (%ld,%u,%ld,'%s','%s','%s')",
+				" (%ld,%u,%ld,"
+				  "'%s','%s','%s')",
 				Ins_EditingIns->CtyCod,
 				Status,
 				Gbl.Usrs.Me.UsrDat.UsrCod,

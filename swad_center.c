@@ -1874,10 +1874,10 @@ static void Ctr_CreateCenter (unsigned Status)
    DB_QueryINSERTandReturnCode ("can not create a new center",
 				"INSERT INTO ctr_centers"
 				" (InsCod,PlcCod,Status,RequesterUsrCod,"
-				"ShortName,FullName,WWW,PhotoAttribution)"
+				  "ShortName,FullName,WWW,PhotoAttribution)"
 				" VALUES"
 				" (%ld,%ld,%u,%ld,"
-				"'%s','%s','%s','')",
+				  "'%s','%s','%s','')",
 				Ctr_EditingCtr->InsCod,
 				Ctr_EditingCtr->PlcCod,
 				Status,

@@ -574,7 +574,8 @@ static void DT_CreateDegreeType (struct DegreeType *DegTyp)
   {
    /***** Create a new degree type *****/
    DB_QueryINSERT ("can not create a new type of degree",
-		   "INSERT INTO deg_types SET DegTypName='%s'",
+		   "INSERT INTO deg_types"
+		     " SET DegTypName='%s'",
                    DegTyp->DegTypName);
   }
 

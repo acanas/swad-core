@@ -525,7 +525,9 @@ static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const cha
 		   " (Roles,Subject,Content)"
 		   " VALUES"
 		   " (%u,'%s','%s')",
-                   Roles,Subject,Content);
+                   Roles,
+                   Subject,
+                   Content);
   }
 
 /*****************************************************************************/
@@ -615,7 +617,8 @@ void Ann_MarkAnnouncementAsSeen (void)
 		    " (AnnCod,UsrCod)"
 		    " VALUES"
 		    " (%ld,%ld)",
-                    AnnCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+                    AnnCod,
+                    Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show other announcements again *****/
    Ann_ShowMyAnnouncementsNotMarkedAsSeen ();

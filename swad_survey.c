@@ -2346,12 +2346,15 @@ static void Svy_CreateSurvey (struct Svy_Survey *Svy,const char *Txt)
    Svy->SvyCod =
    DB_QueryINSERTandReturnCode ("can not create new survey",
 				"INSERT INTO svy_surveys"
-				" (Scope,Cod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
+				" (Scope,Cod,Hidden,Roles,UsrCod,"
+				  "StartTime,EndTime,"
+				  "Title,Txt)"
 				" VALUES"
 				" ('%s',%ld,'N',%u,%ld,"
-				"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-				"'%s','%s')",
-				Sco_GetDBStrFromScope (Svy->Scope),Svy->Cod,
+				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+				  "'%s','%s')",
+				Sco_GetDBStrFromScope (Svy->Scope),
+				Svy->Cod,
 				Svy->Roles,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Svy->TimeUTC[Svy_START_TIME],
@@ -2466,7 +2469,8 @@ static void Svy_CreateGrps (long SvyCod)
 	              " (SvyCod,GrpCod)"
 	              " VALUES"
 	              " (%ld,%ld)",
-		      SvyCod,Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+		      SvyCod,
+		      Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/
@@ -3134,15 +3138,21 @@ void Svy_ReceiveQst (void)
 				      " VALUES"
 				      " (%ld,%u,'%s','%s')",
 				      SvyCod,SvyQst.QstInd,
-				      Svy_StrAnswerTypesDB[SvyQst.AnswerType],Txt);
+				      Svy_StrAnswerTypesDB[SvyQst.AnswerType],
+				      Txt);
         }
       else			// It's an existing question
          /* Update question */
          DB_QueryUPDATE ("can not update question",
-			 "UPDATE svy_questions SET Stem='%s',AnsType='%s'"
-                         " WHERE QstCod=%ld AND SvyCod=%ld",
-			 Txt,Svy_StrAnswerTypesDB[SvyQst.AnswerType],
-			 SvyQst.QstCod,SvyCod);
+			 "UPDATE svy_questions"
+			   " SET Stem='%s',"
+			        "AnsType='%s'"
+                         " WHERE QstCod=%ld"
+                           " AND SvyCod=%ld",
+			 Txt,
+			 Svy_StrAnswerTypesDB[SvyQst.AnswerType],
+			 SvyQst.QstCod,
+			 SvyCod);
 
       /* Insert, update or delete answers in the answers table */
       for (NumAns = 0;
@@ -3153,15 +3163,20 @@ void Svy_ReceiveQst (void)
             if (SvyQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
                /* Update answer text */
                DB_QueryUPDATE ("can not update answer",
-        		       "UPDATE svy_answers SET Answer='%s'"
-                               " WHERE QstCod=%ld AND AnsInd=%u",
-			       SvyQst.AnsChoice[NumAns].Text,SvyQst.QstCod,NumAns);
+        		       "UPDATE svy_answers"
+        		         " SET Answer='%s'"
+                               " WHERE QstCod=%ld"
+                                 " AND AnsInd=%u",
+			       SvyQst.AnsChoice[NumAns].Text,
+			       SvyQst.QstCod,NumAns);
             else	// Answer is empty
                /* Delete answer from database */
                DB_QueryDELETE ("can not delete answer",
         		       "DELETE FROM svy_answers"
-                               " WHERE QstCod=%ld AND AnsInd=%u",
-			       SvyQst.QstCod,NumAns);
+                               " WHERE QstCod=%ld"
+                                 " AND AnsInd=%u",
+			       SvyQst.QstCod,
+			       NumAns);
            }
          else	// If this answer does not exist...
            {
@@ -3172,7 +3187,9 @@ void Svy_ReceiveQst (void)
         	               " (QstCod,AnsInd,NumUsrs,Answer)"
                                " VALUES"
                                " (%ld,%u,0,'%s')",
-			       SvyQst.QstCod,NumAns,SvyQst.AnsChoice[NumAns].Text);
+			       SvyQst.QstCod,
+			       NumAns,
+			       SvyQst.AnsChoice[NumAns].Text);
            }
 
       /***** List the questions of this survey, including the new one just inserted into the database *****/
@@ -3844,7 +3861,8 @@ static void Svy_RegisterIHaveAnsweredSvy (long SvyCod)
 	           " (SvyCod,UsrCod)"
                    " VALUES"
                    " (%ld,%ld)",
-		   SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+		   SvyCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

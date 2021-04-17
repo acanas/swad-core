@@ -1388,13 +1388,15 @@ void Att_CreateAttEvent (struct Att_Event *Event,const char *Description)
    DB_QueryINSERTandReturnCode ("can not create new attendance event",
 				"INSERT INTO att_events"
 				" (CrsCod,Hidden,UsrCod,"
-				"StartTime,EndTime,CommentTchVisible,Title,Txt)"
+				  "StartTime,EndTime,"
+				  "CommentTchVisible,Title,Txt)"
 				" VALUES"
 				" (%ld,'%c',%ld,"
-				"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),'%c','%s','%s')",
+				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+				  "'%c','%s','%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Event->Hidden ? 'Y' :
-					      'N',
+					        'N',
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Event->TimeUTC[Att_START_TIME],
 				Event->TimeUTC[Att_END_TIME  ],
@@ -2647,7 +2649,8 @@ static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool P
 		    " (AttCod,UsrCod,Present,CommentStd,CommentTch)"
 		    " VALUES"
 		    " (%ld,%ld,'%c','%s','%s')",
-                    AttCod,UsrCod,
+                    AttCod,
+                    UsrCod,
                     Present ? 'Y' :
         	              'N',
                     CommentStd,

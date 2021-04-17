@@ -393,7 +393,9 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
       else
 	 /***** Remove web / social network *****/
 	 DB_QueryDELETE ("can not remove user's web / social network",
-			 "DELETE FROM usr_webs WHERE UsrCod=%ld AND Web='%s'",
+			 "DELETE FROM usr_webs"
+			 " WHERE UsrCod=%ld"
+			   " AND Web='%s'",
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
 			 Net_WebsAndSocialNetworksDB[NumURL]);
      }

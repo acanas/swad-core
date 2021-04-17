@@ -203,11 +203,12 @@ void Set_SetSettingsFromIP (void)
    DB_QueryREPLACE ("can not store settings from current IP address",
 		    "REPLACE INTO set_ip_settings"
 		    " (IP,UsrCod,LastChange,"
-		    "FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols)"
+		      "FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols)"
 		    " VALUES"
 		    " ('%s',%ld,NOW(),"
-		    "%u,%u,'%s','%s',%u,%u)",
-	            Gbl.IP,Gbl.Usrs.Me.UsrDat.UsrCod,
+		      "%u,%u,'%s','%s',%u,%u)",
+	            Gbl.IP,
+	            Gbl.Usrs.Me.UsrDat.UsrCod,
 	            Gbl.Prefs.FirstDayOfWeek,
 	            (unsigned) Gbl.Prefs.DateFormat,
 	            The_ThemeId[Gbl.Prefs.Theme],

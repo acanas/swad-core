@@ -178,7 +178,8 @@ static long Not_InsertNoticeInDB (const char *Content)
 				" (%ld,%ld,NOW(),'%s',%u)",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Content,(unsigned) Not_ACTIVE_NOTICE);
+				Content,
+				(unsigned) Not_ACTIVE_NOTICE);
   }
 
 /*****************************************************************************/

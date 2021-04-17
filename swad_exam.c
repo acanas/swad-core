@@ -1667,9 +1667,11 @@ static void Exa_CreateExam (struct Exa_Exam *Exam,const char *Txt)
    Exam->ExaCod =
    DB_QueryINSERTandReturnCode ("can not create new exam",
 				"INSERT INTO exa_exams"
-				" (CrsCod,Hidden,UsrCod,MaxGrade,Visibility,Title,Txt)"
+				" (CrsCod,Hidden,UsrCod,MaxGrade,Visibility,"
+				  "Title,Txt)"
 				" VALUES"
-				" (%ld,'N',%ld,%.15lg,%u,'%s','%s')",
+				" (%ld,'N',%ld,%.15lg,%u,"
+				  "'%s','%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Exam->MaxGrade,

@@ -2110,20 +2110,24 @@ static void Prg_InsertItem (const struct ProgramItem *ParentItem,
 
 static long Prg_InsertItemIntoDB (struct ProgramItem *Item,const char *Txt)
   {
-   return DB_QueryINSERTandReturnCode ("can not create new program item",
-				       "INSERT INTO prg_items"
-				       " (CrsCod,ItmInd,Level,UsrCod,StartTime,EndTime,Title,Txt)"
-				       " VALUES"
-				       " (%ld,%u,%u,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-				       "'%s','%s')",
-				       Gbl.Hierarchy.Crs.CrsCod,
-				       Item->Hierarchy.Index,
-				       Item->Hierarchy.Level,
-				       Gbl.Usrs.Me.UsrDat.UsrCod,
-				       Item->TimeUTC[Dat_START_TIME],
-				       Item->TimeUTC[Dat_END_TIME  ],
-				       Item->Title,
-				       Txt);
+   return
+   DB_QueryINSERTandReturnCode ("can not create new program item",
+			        "INSERT INTO prg_items"
+			        " (CrsCod,ItmInd,Level,UsrCod,"
+				  "StartTime,EndTime,"
+				  "Title,Txt)"
+			        " VALUES"
+			        " (%ld,%u,%u,%ld,"
+				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+				  "'%s','%s')",
+			        Gbl.Hierarchy.Crs.CrsCod,
+			        Item->Hierarchy.Index,
+			        Item->Hierarchy.Level,
+			        Gbl.Usrs.Me.UsrDat.UsrCod,
+			        Item->TimeUTC[Dat_START_TIME],
+			        Item->TimeUTC[Dat_END_TIME  ],
+			        Item->Title,
+			        Txt);
   }
 
 /*****************************************************************************/

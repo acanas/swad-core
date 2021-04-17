@@ -1205,24 +1205,9 @@ static void Lay_ShowRightColumn (void)
      }
    else if (Gbl.Usrs.Me.Logged)		// I am logged
      {
-      /*
-      gettimeofday (&tv1,NULL);
-      */
       /***** Suggest one user to follow *****/
       HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
       Fol_SuggestUsrsToFollowMainZoneOnRightColumn ();
-      /*
-      gettimeofday (&tv2,NULL);
-      tv_usecs = (tv2.tv_sec  - tv1.tv_sec ) * 1E6 +
-	         (tv2.tv_usec - tv1.tv_usec);
-
-      DB_QueryINSERT ("can not debug",
-		      "INSERT INTO dbg_debug"
-		      " (DebugTime,Txt)"
-		      " VALUES"
-		      " (NOW(),'Fol_SuggestUsrsToFollowMainZoneOnRightColumn: %ld us')",
-		      tv_usecs);
-      */
       HTM_DIV_End ();
      }
 

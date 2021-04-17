@@ -928,7 +928,9 @@ static void Plc_CreatePlace (struct Plc_Place *Plc)
 		   " (InsCod,ShortName,FullName)"
 		   " VALUES"
 		   " (%ld,'%s','%s')",
-                   Gbl.Hierarchy.Ins.InsCod,Plc->ShrtName,Plc->FullName);
+                   Gbl.Hierarchy.Ins.InsCod,
+                   Plc->ShrtName,
+                   Plc->FullName);
   }
 
 /*****************************************************************************/

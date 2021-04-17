@@ -1650,9 +1650,11 @@ static void Gam_CreateGame (struct Gam_Game *Game,const char *Txt)
    Game->GamCod =
    DB_QueryINSERTandReturnCode ("can not create new game",
 				"INSERT INTO gam_games"
-				" (CrsCod,Hidden,UsrCod,MaxGrade,Visibility,Title,Txt)"
+				" (CrsCod,Hidden,UsrCod,MaxGrade,Visibility,"
+				  "Title,Txt)"
 				" VALUES"
-				" (%ld,'N',%ld,%.15lg,%u,'%s','%s')",
+				" (%ld,'N',%ld,%.15lg,%u,"
+				  "'%s','%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Game->MaxGrade,
@@ -2199,7 +2201,9 @@ void Gam_AddQstsToGame (void)
 			    " (GamCod,QstInd,QstCod)"
 			    " VALUES"
 			    " (%ld,%u,%ld)",
-			    Game.GamCod,MaxQstInd + 1,QstCod);
+			    Game.GamCod,
+			    MaxQstInd + 1,
+			    QstCod);
 
 	    NumQstsAdded++;
 	   }

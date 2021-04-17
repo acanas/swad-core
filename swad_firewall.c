@@ -177,7 +177,8 @@ static void Fir_BanIP (void)
 		   " (IP,BanTime,UnbanTime)"
 		   " VALUES"
 		   " ('%s',NOW(),FROM_UNIXTIME(UNIX_TIMESTAMP()+%lu))",
-		   Gbl.IP,(unsigned long) Fw_TIME_BANNED);
+		   Gbl.IP,
+		   (unsigned long) Fw_TIME_BANNED);
   }
 
 /*****************************************************************************/

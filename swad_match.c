@@ -1734,29 +1734,30 @@ static long Mch_CreateMatch (long GamCod,char Title[Mch_MAX_BYTES_TITLE + 1])
    long MchCod;
 
    /***** Insert this new match into database *****/
-   MchCod = DB_QueryINSERTandReturnCode ("can not create match",
-				         "INSERT mch_matches "
-				         "(GamCod,UsrCod,StartTime,EndTime,Title,"
-				         "QstInd,QstCod,Showing,Countdown,"
-				         "NumCols,ShowQstResults,ShowUsrResults)"
-				         " VALUES "
-				         "(%ld,"	// GamCod
-				         "%ld,"		// UsrCod
-				         "NOW(),"	// StartTime
-				         "NOW(),"	// EndTime
-				         "'%s',"	// Title
-				         "0,"		// QstInd: Match has not started, so not the first question yet
-				         "-1,"		// QstCod: Non-existent question
-				         "'%s',"	// Showing: What is being shown
-					 "-1,"		// Countdown: No countdown
-					 "%u,"		// NumCols: Number of columns in answers
-				         "'N',"		// ShowQstResults: Don't show question results initially
-				         "'N')",	// ShowUsrResults: Don't show user results initially
-				         GamCod,
-				         Gbl.Usrs.Me.UsrDat.UsrCod,	// Game creator
-				         Title,
-					 Mch_ShowingStringsDB[Mch_SHOWING_DEFAULT],
-					 Mch_NUM_COLS_DEFAULT);
+   MchCod =
+   DB_QueryINSERTandReturnCode ("can not create match",
+				"INSERT mch_matches"
+				" (GamCod,UsrCod,StartTime,EndTime,Title,"
+				  "QstInd,QstCod,Showing,Countdown,"
+				  "NumCols,ShowQstResults,ShowUsrResults)"
+				" VALUES"
+				" (%ld,"	// GamCod
+				  "%ld,"	// UsrCod
+				  "NOW(),"	// StartTime
+				  "NOW(),"	// EndTime
+				  "'%s',"	// Title
+				  "0,"		// QstInd: Match has not started, so not the first question yet
+				  "-1,"		// QstCod: Non-existent question
+				  "'%s',"	// Showing: What is being shown
+				  "-1,"		// Countdown: No countdown
+				  "%u,"		// NumCols: Number of columns in answers
+				  "'N',"	// ShowQstResults: Don't show question results initially
+				  "'N')",	// ShowUsrResults: Don't show user results initially
+				GamCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod,	// Game creator
+				Title,
+				Mch_ShowingStringsDB[Mch_SHOWING_DEFAULT],
+				Mch_NUM_COLS_DEFAULT);
 
    /***** Create indexes for answers *****/
    Mch_CreateIndexes (GamCod,MchCod);
@@ -1902,7 +1903,9 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
 		   " (MchCod,QstInd,Indexes)"
 		   " VALUES"
 		   " (%ld,%u,'%s')",
-		   MchCod,QstInd,StrAnswersOneQst);
+		   MchCod,
+		   QstInd,
+		   StrAnswersOneQst);
   }
 
 /*****************************************************************************/
@@ -1948,7 +1951,8 @@ static void Mch_CreateGrps (long MchCod)
 		      " (MchCod,GrpCod)"
 		      " VALUES"
 		      " (%ld,%ld)",
-                      MchCod,Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+                      MchCod,
+                      Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/
@@ -2046,11 +2050,14 @@ static void Mch_UpdateElapsedTimeInQuestion (const struct Mch_Match *Match)
        Match->Status.Showing != Mch_START &&
        Match->Status.Showing != Mch_END)
       DB_QueryINSERT ("can not update elapsed time in question",
-		      "INSERT INTO mch_times (MchCod,QstInd,ElapsedTime)"
-		      " VALUES (%ld,%u,SEC_TO_TIME(%u))"
+		      "INSERT INTO mch_times"
+		      " (MchCod,QstInd,ElapsedTime)"
+		      " VALUES"
+		      " (%ld,%u,SEC_TO_TIME(%u))"
 		      " ON DUPLICATE KEY"
 		      " UPDATE ElapsedTime=ADDTIME(ElapsedTime,SEC_TO_TIME(%u))",
-		      Match->MchCod,Match->Status.QstInd,
+		      Match->MchCod,
+		      Match->Status.QstInd,
 		      Cfg_SECONDS_TO_REFRESH_MATCH_TCH,
 		      Cfg_SECONDS_TO_REFRESH_MATCH_TCH);
   }
@@ -3800,7 +3807,10 @@ static void Mch_UpdateMatchAsBeingPlayed (long MchCod)
   {
    /***** Insert match as being played *****/
    DB_QueryREPLACE ("can not set match as being played",
-		    "REPLACE mch_playing (MchCod) VALUE (%ld)",
+		    "REPLACE mch_playing"
+		    " (MchCod)"
+		     " VALUE"
+		     " (%ld)",
 		    MchCod);
   }
 
@@ -3877,8 +3887,12 @@ bool Mch_RegisterMeAsPlayerInMatch (struct Mch_Match *Match)
 
    /***** Insert me as match player *****/
    DB_QueryREPLACE ("can not insert match player",
-		    "REPLACE mch_players (MchCod,UsrCod) VALUES (%ld,%ld)",
-		    Match->MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+		    "REPLACE mch_players"
+		    " (MchCod,UsrCod)"
+		    " VALUES"
+		    " (%ld,%ld)",
+		    Match->MchCod,
+		    Gbl.Usrs.Me.UsrDat.UsrCod);
    return true;
   }
 
@@ -4227,7 +4241,9 @@ static void Mch_UpdateMyAnswerToMatchQuestion (const struct Mch_Match *Match,
 		    " (MchCod,UsrCod,QstInd,NumOpt,AnsInd)"
 		    " VALUES"
 		    " (%ld,%ld,%u,%d,%d)",
-		    Match->MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,Match->Status.QstInd,
+		    Match->MchCod,
+		    Gbl.Usrs.Me.UsrDat.UsrCod,
+		    Match->Status.QstInd,
 		    UsrAnswer->NumOpt,
 		    UsrAnswer->AnsInd);
   }

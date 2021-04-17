@@ -374,7 +374,9 @@ void MFU_UpdateMFUActions (void)
 		    " (UsrCod,ActCod,Score,LastClick)"
 		    " VALUES"
 		    " (%ld,%ld,'%15lg',NOW())",
-	            Gbl.Usrs.Me.UsrDat.UsrCod,ActCod,Score);
+	            Gbl.Usrs.Me.UsrDat.UsrCod,
+	            ActCod,
+	            Score);
 
    /***** Update score for other actions *****/
    DB_QueryUPDATE ("can not update most frequently used actions",
@@ -382,8 +384,10 @@ void MFU_UpdateMFUActions (void)
 		     " SET Score=GREATEST(Score*'%.15lg','%.15lg')"
 		   " WHERE UsrCod=%ld"
 		     " AND ActCod<>%ld",
-                   MFU_DECREASE_FACTOR,MFU_MIN_SCORE,
-                   Gbl.Usrs.Me.UsrDat.UsrCod,ActCod);
+                   MFU_DECREASE_FACTOR,
+                   MFU_MIN_SCORE,
+                   Gbl.Usrs.Me.UsrDat.UsrCod,
+                   ActCod);
 
    Str_SetDecimalPointToLocal ();	// Return to local system
   }

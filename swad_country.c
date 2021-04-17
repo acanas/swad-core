@@ -1872,9 +1872,12 @@ static void Cty_CreateCountry (void)
 		   " (CtyCod,Alpha2,MapAttribution%s%s)"
 		   " VALUES"
 		   " ('%03ld','%s',''%s%s)",
-                   SubQueryNam1,SubQueryWWW1,
-                   Cty_EditingCty->CtyCod,Cty_EditingCty->Alpha2,
-		   SubQueryNam2,SubQueryWWW2);
+                   SubQueryNam1,
+                   SubQueryWWW1,
+                   Cty_EditingCty->CtyCod,
+                   Cty_EditingCty->Alpha2,
+		   SubQueryNam2,
+		   SubQueryWWW2);
   }
 
 /*****************************************************************************/

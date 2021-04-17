@@ -1490,8 +1490,10 @@ static void Mai_RemoveEmailFromDB (long UsrCod,const char Email[Cns_MAX_BYTES_EM
    /***** Remove an old email address *****/
    DB_QueryREPLACE ("can not remove an old email address",
 		    "DELETE FROM usr_emails"
-		    " WHERE UsrCod=%ld AND E_mail='%s'",
-                    UsrCod,Email);
+		    " WHERE UsrCod=%ld"
+		      " AND E_mail='%s'",
+                    UsrCod,
+                    Email);
   }
 
 /*****************************************************************************/
@@ -1633,7 +1635,8 @@ bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_M
 		    " (UsrCod,E_mail,CreatTime)"
 		    " VALUES"
 		    " (%ld,'%s',NOW())",
-                    UsrDat->UsrCod,NewEmail);
+                    UsrDat->UsrCod,
+                    NewEmail);
 
    return true;	// Successfully updated
   }
