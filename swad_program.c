@@ -1278,10 +1278,12 @@ void Prg_RemoveItem (void)
    /***** Remove program items *****/
    DB_QueryDELETE ("can not remove program item",
 		   "DELETE FROM prg_items"
-		   " WHERE CrsCod=%ld AND"
-		   " ItmInd>=%u AND ItmInd<=%u",
+		   " WHERE CrsCod=%ld"
+		     " AND ItmInd>=%u"
+		     " AND ItmInd<=%u",
                    Gbl.Hierarchy.Crs.CrsCod,
-		   ToRemove.Begin,ToRemove.End);
+		   ToRemove.Begin,
+		   ToRemove.End);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Item_X_removed,Item.Title);
@@ -2176,7 +2178,8 @@ void Prg_RemoveCrsItems (long CrsCod)
   {
    /***** Remove program items *****/
    DB_QueryDELETE ("can not remove all the program items of a course",
-		   "DELETE FROM prg_items WHERE CrsCod=%ld",
+		   "DELETE FROM prg_items"
+		   " WHERE CrsCod=%ld",
 		   CrsCod);
   }
 

@@ -4856,8 +4856,10 @@ static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod)
    /* Remove the question itself */
    DB_QueryDELETE ("can not remove a question",
 		   "DELETE FROM tst_questions"
-		   " WHERE QstCod=%ld AND CrsCod=%ld",
-		   QstCod,CrsCod);
+		   " WHERE QstCod=%ld"
+		     " AND CrsCod=%ld",
+		   QstCod,
+		   CrsCod);
 
    if (!mysql_affected_rows (&Gbl.mysql))
       Lay_ShowErrorAndExit ("Wrong question.");
@@ -5142,7 +5144,8 @@ void Tst_RemoveCrsTests (long CrsCod)
 
    /***** Remove test configuration of the course *****/
    DB_QueryDELETE ("can not remove configuration of tests of a course",
-		   "DELETE FROM tst_config WHERE CrsCod=%ld",
+		   "DELETE FROM tst_config"
+		   " WHERE CrsCod=%ld",
 		   CrsCod);
 
    /***** Remove associations between test questions
@@ -5150,14 +5153,16 @@ void Tst_RemoveCrsTests (long CrsCod)
    DB_QueryDELETE ("can not remove tags associated"
 		   " to questions of tests of a course",
 		   "DELETE FROM tst_question_tags"
-	           " USING tst_questions,tst_question_tags"
+	           " USING tst_questions,"
+	                  "tst_question_tags"
                    " WHERE tst_questions.CrsCod=%ld"
-                   " AND tst_questions.QstCod=tst_question_tags.QstCod",
+                     " AND tst_questions.QstCod=tst_question_tags.QstCod",
 		   CrsCod);
 
    /***** Remove test tags in the course *****/
    DB_QueryDELETE ("can not remove tags of test of a course",
-		   "DELETE FROM tst_tags WHERE CrsCod=%ld",
+		   "DELETE FROM tst_tags"
+		   " WHERE CrsCod=%ld",
 		   CrsCod);
 
    /***** Remove media associated to test questions in the course *****/
@@ -5167,14 +5172,16 @@ void Tst_RemoveCrsTests (long CrsCod)
    /***** Remove test answers in the course *****/
    DB_QueryDELETE ("can not remove answers of tests of a course",
 		   "DELETE FROM tst_answers"
-		   " USING tst_questions,tst_answers"
+		   " USING tst_questions,"
+		          "tst_answers"
                    " WHERE tst_questions.CrsCod=%ld"
-                   " AND tst_questions.QstCod=tst_answers.QstCod",
+                     " AND tst_questions.QstCod=tst_answers.QstCod",
 		   CrsCod);
 
    /***** Remove test questions in the course *****/
    DB_QueryDELETE ("can not remove test questions of a course",
-		   "DELETE FROM tst_questions WHERE CrsCod=%ld",
+		   "DELETE FROM tst_questions"
+		   " WHERE CrsCod=%ld",
 		   CrsCod);
   }
 
@@ -5186,7 +5193,8 @@ static void Tst_RemAnsFromQst (long QstCod)
   {
    /***** Remove answers *****/
    DB_QueryDELETE ("can not remove the answers of a question",
-		   "DELETE FROM tst_answers WHERE QstCod=%ld",
+		   "DELETE FROM tst_answers"
+		   " WHERE QstCod=%ld",
 		   QstCod);
   }
 

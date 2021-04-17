@@ -1642,7 +1642,8 @@ static void Msg_MoveSentMsgToDeleted (long MsgCod)
 
    /* Delete message from msg_snt *****/
    DB_QueryDELETE ("can not remove a sent message",
-		   "DELETE FROM msg_snt WHERE MsgCod=%ld",
+		   "DELETE FROM msg_snt"
+		   " WHERE MsgCod=%ld",
 		   MsgCod);
 
    /***** If message content is not longer necessary, move it to msg_content_deleted *****/
@@ -4109,8 +4110,10 @@ static void Msg_UnbanSender (void)
    /***** Remove pair (sender's code - my code) from table of banned senders *****/
    DB_QueryDELETE ("can not ban sender",
 		   "DELETE FROM msg_banned"
-		   " WHERE FromUsrCod=%ld AND ToUsrCod=%ld",
-                   Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+		   " WHERE FromUsrCod=%ld"
+		     " AND ToUsrCod=%ld",
+                   Gbl.Usrs.Other.UsrDat.UsrCod,
+                   Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show alert with the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_From_this_time_you_can_receive_messages_from_X,
@@ -4142,7 +4145,8 @@ void Msg_RemoveUsrFromBanned (long UsrCod)
           from table of banned senders *****/
    DB_QueryDELETE ("can not remove user from table of banned users",
 		   "DELETE FROM msg_banned"
-		   " WHERE FromUsrCod=%ld OR ToUsrCod=%ld",
+		   " WHERE FromUsrCod=%ld"
+		      " OR ToUsrCod=%ld",
                    UsrCod,UsrCod);
   }
 

@@ -987,7 +987,8 @@ static void ExaSes_RemoveSessionFromAllTables (long SesCod)
     * TODO: DO NOT REMOVE EXAMS PRINTS. Instead move them to tables of deleted prints
    DB_QueryDELETE ("can not remove exam print questions in exam session",
 		   "DELETE FROM exa_print_questions"
-		   " USING exa_print_questions,exa_prints"
+		   " USING exa_print_questions,
+		          "exa_prints"
                    " WHERE exa_prints.SesCod=%ld"
                    " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
 		   SesCod);
@@ -999,12 +1000,14 @@ static void ExaSes_RemoveSessionFromAllTables (long SesCod)
 
    /***** Remove groups associated to this exam session *****/
    DB_QueryDELETE ("can not remove groups associated to exam session",
-		   "DELETE FROM exa_groups WHERE SesCod=%ld",
+		   "DELETE FROM exa_groups"
+		   " WHERE SesCod=%ld",
 		   SesCod);
 
    /***** Remove exam session from main table *****/
    DB_QueryDELETE ("can not remove exam session",
-		   "DELETE FROM exa_sessions WHERE SesCod=%ld",
+		   "DELETE FROM exa_sessions"
+		   " WHERE SesCod=%ld",
 		   SesCod);
   }
 
@@ -1019,30 +1022,35 @@ void ExaSes_RemoveSessionsInExamFromAllTables (long ExaCod)
     * TODO: DO NOT REMOVE EXAMS PRINTS. Instead move them to tables of deleted prints
    DB_QueryDELETE ("can not remove exam print questions in exam",
 		   "DELETE FROM exa_print_questions"
-		   " USING exa_print_questions,exa_prints,exa_sessions"
+		   " USING exa_print_questions,
+		          "exa_prints,
+		          "exa_sessions"
                    " WHERE exa_sessions.ExaCod=%ld"
-                   " AND exa_sessions.SesCod=exa_prints.SesCod"
-                   " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
+                     " AND exa_sessions.SesCod=exa_prints.SesCod"
+                     " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
 		   ExaCod);
    DB_QueryDELETE ("can not remove exam prints in exam",
 		   "DELETE FROM exa_prints"
-		   " USING exa_prints,exa_sessions"
+		   " USING exa_prints,
+		          "exa_sessions"
                    " WHERE exa_sessions.ExaCod=%ld"
-                   " AND exa_sessions.SesCod=exa_prints.SesCod",
+                     " AND exa_sessions.SesCod=exa_prints.SesCod",
 		   ExaCod);
    */
 
    /***** Remove groups associated to exam sessions of this exam *****/
    DB_QueryDELETE ("can not remove groups associated to sessions of an exam",
 		   "DELETE FROM exa_groups"
-		   " USING exa_sessions,exa_groups"
+		   " USING exa_sessions,"
+		          "exa_groups"
 		   " WHERE exa_sessions.ExaCod=%ld"
-		   " AND exa_sessions.SesCod=exa_groups.SesCod",
+		     " AND exa_sessions.SesCod=exa_groups.SesCod",
 		   ExaCod);
 
    /***** Remove sessions from main table *****/
    DB_QueryDELETE ("can not remove sessions of an exam",
-		   "DELETE FROM exa_sessions WHERE ExaCod=%ld",
+		   "DELETE FROM exa_sessions"
+		   " WHERE ExaCod=%ld",
 		   ExaCod);
   }
 
@@ -1057,36 +1065,44 @@ void ExaSes_RemoveSessionInCourseFromAllTables (long CrsCod)
     * TODO: DO NOT REMOVE EXAMS PRINTS. Instead move them to tables of deleted prints
    DB_QueryDELETE ("can not remove exam print questions in course",
 		   "DELETE FROM exa_print_questions"
-		   " USING exa_print_questions,exa_prints,exa_sessions,exa_exams"
+		   " USING exa_print_questions,
+		          "exa_prints,
+		          "exa_sessions,
+		          "exa_exams"
 		   " WHERE exa_exams.CrsCod=%ld"
-                   " AND exa_exams.ExaCod=exa_sessions"
-                   " AND exa_sessions.SesCod=exa_prints.SesCod"
-                   " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
+                     " AND exa_exams.ExaCod=exa_sessions"
+                     " AND exa_sessions.SesCod=exa_prints.SesCod"
+                     " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
 		   CrsCod);
    DB_QueryDELETE ("can not remove exam print questions in course",
 		   "DELETE FROM exa_prints"
-		   " USING exa_prints,exa_sessions,exa_exams"
+		   " USING exa_prints,
+		          "exa_sessions,
+		          "exa_exams"
 		   " WHERE exa_exams.CrsCod=%ld"
-                   " AND exa_exams.ExaCod=exa_sessions"
-                   " AND exa_sessions.SesCod=exa_prints.SesCod",
+                     " AND exa_exams.ExaCod=exa_sessions"
+                     " AND exa_sessions.SesCod=exa_prints.SesCod",
 		   CrsCod);
    */
 
    /***** Remove sessions from table of sessions groups *****/
    DB_QueryDELETE ("can not remove sessions of a course",
 		   "DELETE FROM exa_groups"
-		   " USING exa_exams,exa_sessions,exa_groups"
+		   " USING exa_exams,"
+		          "exa_sessions,"
+		          "exa_groups"
 		   " WHERE exa_exams.CrsCod=%ld"
-		   " AND exa_exams.ExaCod=exa_sessions.ExaCod"
-		   " AND exa_sessions.SesCod=exa_groups.SesCod",
+		     " AND exa_exams.ExaCod=exa_sessions.ExaCod"
+		     " AND exa_sessions.SesCod=exa_groups.SesCod",
 		   CrsCod);
 
    /***** Remove sessions from exam sessions table *****/
    DB_QueryDELETE ("can not remove sessions of a course",
 		   "DELETE FROM exa_sessions"
-		   " USING exa_exams,exa_sessions"
+		   " USING exa_exams,"
+		          "exa_sessions"
 		   " WHERE exa_exams.CrsCod=%ld"
-		   " AND exa_exams.ExaCod=exa_sessions.ExaCod",
+		     " AND exa_exams.ExaCod=exa_sessions.ExaCod",
 		   CrsCod);
   }
 
@@ -1105,11 +1121,13 @@ static void ExaSes_RemoveUsrSesResultsInCrs (long UsrCod,long CrsCod,const char 
    /***** Remove sessions in course from secondary table *****/
    DB_QueryDELETE ("can not remove sessions of a user from table",
 		   "DELETE FROM %s"
-		   " USING exa_exams,exa_sessions,%s"
+		   " USING exa_exams,"
+		          "exa_sessions,"
+		          "%s"
 		   " WHERE exa_exams.CrsCod=%ld"
-		   " AND exa_exams.ExaCod=exa_sessions.ExaCod"
-		   " AND exa_sessions.SesCod=%s.SesCod"
-		   " AND %s.UsrCod=%ld",
+		     " AND exa_exams.ExaCod=exa_sessions.ExaCod"
+		     " AND exa_sessions.SesCod=%s.SesCod"
+		     " AND %s.UsrCod=%ld",
 		   TableName,
 		   TableName,
 		   CrsCod,
@@ -1648,7 +1666,8 @@ static void ExaSes_RemoveGroups (long SesCod)
   {
    /***** Remove all groups from one session *****/
    DB_QueryDELETE ("can not remove groups associated to a session",
-		   "DELETE FROM exa_groups WHERE SesCod=%ld",
+		   "DELETE FROM exa_groups"
+		   " WHERE SesCod=%ld",
 		   SesCod);
   }
 
@@ -1661,7 +1680,8 @@ void ExaSes_RemoveGroup (long GrpCod)
    /***** Remove group from all the sessions *****/
    DB_QueryDELETE ("can not remove group"
 	           " from the associations between sessions and groups",
-		   "DELETE FROM exa_groups WHERE GrpCod=%ld",
+		   "DELETE FROM exa_groups"
+		   " WHERE GrpCod=%ld",
 		   GrpCod);
   }
 

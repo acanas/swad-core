@@ -1371,7 +1371,7 @@ void Agd_RemoveEvent (void)
    DB_QueryDELETE ("can not remove event",
 		   "DELETE FROM agd_agendas"
 		   " WHERE AgdCod=%ld"
-		   " AND UsrCod=%ld",
+		     " AND UsrCod=%ld",
                    AgdEvent.AgdCod,
                    AgdEvent.UsrCod);
 

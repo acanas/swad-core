@@ -3073,7 +3073,8 @@ static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod)
 		   "DELETE FROM crs_requests"
 		   " WHERE CrsCod=%ld"
 		     " AND UsrCod=%ld",
-                   CrsCod,UsrCod);
+                   CrsCod,
+                   UsrCod);
   }
 
 /*****************************************************************************/
@@ -4230,12 +4231,14 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 		      "DELETE FROM crs_user_settings"
 		      " WHERE UsrCod=%ld"
 		        " AND CrsCod=%ld",
-                      UsrDat->UsrCod,Crs->CrsCod);
+                      UsrDat->UsrCod,
+                      Crs->CrsCod);
       DB_QueryDELETE ("can not remove a user from a course",
 		      "DELETE FROM crs_users"
 		      " WHERE CrsCod=%ld"
 		        " AND UsrCod=%ld",
-                      Crs->CrsCod,UsrDat->UsrCod);
+                      Crs->CrsCod,
+                      UsrDat->UsrCod);
 
       /***** Flush caches *****/
       Usr_FlushCachesUsr ();
@@ -4343,8 +4346,12 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Hie_Lvl_Level_t Scope,
       /***** Remove user from the table of admins *****/
       DB_QueryDELETE ("can not remove an administrator",
 		      "DELETE FROM usr_admins"
-		      " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
-                      UsrDat->UsrCod,Sco_GetDBStrFromScope (Scope),Cod);
+		      " WHERE UsrCod=%ld"
+		        " AND Scope='%s'"
+		        " AND Cod=%ld",
+                      UsrDat->UsrCod,
+                      Sco_GetDBStrFromScope (Scope),
+                      Cod);
 
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_administrator_of_Y,
                      UsrDat->FullName,InsCtrDegName);

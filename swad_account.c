@@ -1068,7 +1068,8 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 
    /***** Remove user as administrator of any degree *****/
    DB_QueryDELETE ("can not remove a user as administrator",
-		   "DELETE FROM usr_admins WHERE UsrCod=%ld",
+		   "DELETE FROM usr_admins"
+		   " WHERE UsrCod=%ld",
                    UsrDat->UsrCod);
 
    if (QuietOrVerbose == Cns_VERBOSE)

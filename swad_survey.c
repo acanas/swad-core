@@ -1622,12 +1622,15 @@ void Svy_RemoveSurvey (void)
 
    /***** Remove all the users in this survey *****/
    DB_QueryDELETE ("can not remove users who are answered a survey",
-		   "DELETE FROM svy_users WHERE SvyCod=%ld",
+		   "DELETE FROM svy_users"
+		   " WHERE SvyCod=%ld",
 		   Svy.SvyCod);
 
    /***** Remove all the answers in this survey *****/
    DB_QueryDELETE ("can not remove answers of a survey",
-		   "DELETE FROM svy_answers USING svy_questions,svy_answers"
+		   "DELETE FROM svy_answers"
+		   " USING svy_questions,"
+		          "svy_answers"
                    " WHERE svy_questions.SvyCod=%ld"
                    " AND svy_questions.QstCod=svy_answers.QstCod",
 		   Svy.SvyCod);
@@ -1643,7 +1646,8 @@ void Svy_RemoveSurvey (void)
 
    /***** Remove survey *****/
    DB_QueryDELETE ("can not remove survey",
-		   "DELETE FROM svy_surveys WHERE SvyCod=%ld",
+		   "DELETE FROM svy_surveys"
+		   " WHERE SvyCod=%ld",
 		   Svy.SvyCod);
 
    /***** Mark possible notifications as removed *****/
@@ -2565,29 +2569,39 @@ void Svy_RemoveSurveys (Hie_Lvl_Level_t Scope,long Cod)
    DB_QueryDELETE ("can not remove users"
 	           " who had answered surveys in a place on the hierarchy",
 		   "DELETE FROM svy_users"
-	           " USING svy_surveys,svy_users"
-                   " WHERE svy_surveys.Scope='%s' AND svy_surveys.Cod=%ld"
-                   " AND svy_surveys.SvyCod=svy_users.SvyCod",
-		   Sco_GetDBStrFromScope (Scope),Cod);
+	           " USING svy_surveys,"
+	                  "svy_users"
+                   " WHERE svy_surveys.Scope='%s'"
+                     " AND svy_surveys.Cod=%ld"
+                     " AND svy_surveys.SvyCod=svy_users.SvyCod",
+		   Sco_GetDBStrFromScope (Scope),
+		   Cod);
 
    /***** Remove all the answers in course surveys *****/
    DB_QueryDELETE ("can not remove answers of surveys"
 		   " in a place on the hierarchy",
 		   "DELETE FROM svy_answers"
-	           " USING svy_surveys,svy_questions,svy_answers"
-                   " WHERE svy_surveys.Scope='%s' AND svy_surveys.Cod=%ld"
-                   " AND svy_surveys.SvyCod=svy_questions.SvyCod"
-                   " AND svy_questions.QstCod=svy_answers.QstCod",
-		   Sco_GetDBStrFromScope (Scope),Cod);
+	           " USING svy_surveys,"
+	                  "svy_questions,"
+	                  "svy_answers"
+                   " WHERE svy_surveys.Scope='%s'"
+                     " AND svy_surveys.Cod=%ld"
+                     " AND svy_surveys.SvyCod=svy_questions.SvyCod"
+                     " AND svy_questions.QstCod=svy_answers.QstCod",
+		   Sco_GetDBStrFromScope (Scope),
+		   Cod);
 
    /***** Remove all the questions in course surveys *****/
    DB_QueryDELETE ("can not remove questions of surveys"
 		   " in a place on the hierarchy",
 		   "DELETE FROM svy_questions"
-	           " USING svy_surveys,svy_questions"
-                   " WHERE svy_surveys.Scope='%s' AND svy_surveys.Cod=%ld"
-                   " AND svy_surveys.SvyCod=svy_questions.SvyCod",
-		   Sco_GetDBStrFromScope (Scope),Cod);
+	           " USING svy_surveys,"
+	                  "svy_questions"
+                   " WHERE svy_surveys.Scope='%s'"
+                     " AND svy_surveys.Cod=%ld"
+                     " AND svy_surveys.SvyCod=svy_questions.SvyCod",
+		   Sco_GetDBStrFromScope (Scope),
+		   Cod);
 
    /***** Remove groups *****/
    DB_QueryDELETE ("can not remove all the groups"
@@ -2598,14 +2612,17 @@ void Svy_RemoveSurveys (Hie_Lvl_Level_t Scope,long Cod)
                    " WHERE svy_surveys.Scope='%s'"
                      " AND svy_surveys.Cod=%ld"
                      " AND svy_surveys.SvyCod=svy_groups.SvyCod",
-		   Sco_GetDBStrFromScope (Scope),Cod);
+		   Sco_GetDBStrFromScope (Scope),
+		   Cod);
 
    /***** Remove course surveys *****/
    DB_QueryDELETE ("can not remove all the surveys"
 		   " in a place on the hierarchy",
 		   "DELETE FROM svy_surveys"
-	           " WHERE Scope='%s' AND Cod=%ld",
-		   Sco_GetDBStrFromScope (Scope),Cod);
+	           " WHERE Scope='%s'"
+	             " AND Cod=%ld",
+		   Sco_GetDBStrFromScope (Scope),
+		   Cod);
   }
 
 /*****************************************************************************/
@@ -2931,7 +2948,8 @@ static void Svy_RemAnswersOfAQuestion (long QstCod)
   {
    /***** Remove answers *****/
    DB_QueryDELETE ("can not remove the answers of a question",
-		   "DELETE FROM svy_answers WHERE QstCod=%ld",
+		   "DELETE FROM svy_answers"
+		   " WHERE QstCod=%ld",
 		   QstCod);
   }
 
@@ -3735,7 +3753,8 @@ void Svy_RemoveQst (void)
 
    /* Remove the question itself */
    DB_QueryDELETE ("can not remove a question",
-		   "DELETE FROM svy_questions WHERE QstCod=%ld",
+		   "DELETE FROM svy_questions"
+		   " WHERE QstCod=%ld",
 		   SvyQst.QstCod);
    if (!mysql_affected_rows (&Gbl.mysql))
       Lay_ShowErrorAndExit ("The question to be removed does not exist.");

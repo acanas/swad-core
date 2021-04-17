@@ -1219,12 +1219,14 @@ static void Gam_RemoveGameFromAllTables (long GamCod)
 
    /***** Remove game question *****/
    DB_QueryDELETE ("can not remove game questions",
-		   "DELETE FROM gam_questions WHERE GamCod=%ld",
+		   "DELETE FROM gam_questions"
+		   " WHERE GamCod=%ld",
 		   GamCod);
 
    /***** Remove game *****/
    DB_QueryDELETE ("can not remove game",
-		   "DELETE FROM gam_games WHERE GamCod=%ld",
+		   "DELETE FROM gam_games"
+		   " WHERE GamCod=%ld",
 		   GamCod);
   }
 
@@ -1240,9 +1242,10 @@ void Gam_RemoveCrsGames (long CrsCod)
    /***** Remove the questions in games *****/
    DB_QueryDELETE ("can not remove questions in course games",
 		   "DELETE FROM gam_questions"
-		   " USING gam_games,gam_questions"
+		   " USING gam_games,"
+		          "gam_questions"
 		   " WHERE gam_games.CrsCod=%ld"
-		   " AND gam_games.GamCod=gam_questions.GamCod",
+		     " AND gam_games.GamCod=gam_questions.GamCod",
                    CrsCod);
 
    /***** Remove the games *****/
@@ -1813,10 +1816,11 @@ static void Gam_RemAnswersOfAQuestion (long GamCod,unsigned QstInd)
    /***** Remove answers from all matches of this game *****/
    DB_QueryDELETE ("can not remove the answers of a question",
 		   "DELETE FROM mch_answers"
-		   " USING mch_matches,mch_answers"
+		   " USING mch_matches,"
+		          "mch_answers"
 		   " WHERE mch_matches.GamCod=%ld"	// From all matches of this game...
-		   " AND mch_matches.MchCod=mch_answers.MchCod"
-		   " AND mch_answers.QstInd=%u",	// ...remove only answers to this question
+		     " AND mch_matches.MchCod=mch_answers.MchCod"
+		     " AND mch_answers.QstInd=%u",	// ...remove only answers to this question
 		   GamCod,QstInd);
   }
 

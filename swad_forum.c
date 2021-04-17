@@ -4755,9 +4755,9 @@ void For_RemoveForums (Hie_Lvl_Level_t Scope,long ForumLocation)
    DB_QueryDELETE ("can not remove threads in forums",
 		   "DELETE FROM for_threads"
 		   " WHERE"
-		   " (for_threads.ForumType=%u"
-		    " OR"
-		    " for_threads.ForumType=%u)"
+		    " (for_threads.ForumType=%u"
+		     " OR"
+		     " for_threads.ForumType=%u)"
 		     " AND Location=%ld",
 	           ForumType[Scope].Usrs,
 	           ForumType[Scope].Tchs,

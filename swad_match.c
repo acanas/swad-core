@@ -1184,7 +1184,8 @@ static void Mch_RemoveMatchFromAllTables (long MchCod)
 
    /***** Remove match from main table *****/
    DB_QueryDELETE ("can not remove match",
-		   "DELETE FROM mch_matches WHERE MchCod=%ld",
+		   "DELETE FROM mch_matches"
+		   " WHERE MchCod=%ld",
 		   MchCod);
   }
 
@@ -1192,7 +1193,8 @@ static void Mch_RemoveMatchFromTable (long MchCod,const char *TableName)
   {
    /***** Remove match from secondary table *****/
    DB_QueryDELETE ("can not remove match from table",
-		   "DELETE FROM %s WHERE MchCod=%ld",
+		   "DELETE FROM %s"
+		   " WHERE MchCod=%ld",
 		   TableName,
 		   MchCod);
   }
@@ -1214,7 +1216,8 @@ void Mch_RemoveMatchesInGameFromAllTables (long GamCod)
 
    /***** Remove matches from main table *****/
    DB_QueryDELETE ("can not remove matches of a game",
-		   "DELETE FROM mch_matches WHERE GamCod=%ld",
+		   "DELETE FROM mch_matches"
+		   " WHERE GamCod=%ld",
 		   GamCod);
   }
 
@@ -1223,9 +1226,10 @@ static void Mch_RemoveMatchesInGameFromTable (long GamCod,const char *TableName)
    /***** Remove matches in game from secondary table *****/
    DB_QueryDELETE ("can not remove matches of a game from table",
 		   "DELETE FROM %s"
-		   " USING mch_matches,%s"
+		   " USING mch_matches,"
+		          "%s"
 		   " WHERE mch_matches.GamCod=%ld"
-		   " AND mch_matches.MchCod=%s.MchCod",
+		     " AND mch_matches.MchCod=%s.MchCod",
 		   TableName,
 		   TableName,
 		   GamCod,
@@ -1250,9 +1254,10 @@ void Mch_RemoveMatchesInCourseFromAllTables (long CrsCod)
    /***** Remove matches from main table *****/
    DB_QueryDELETE ("can not remove matches of a course",
 		   "DELETE FROM mch_matches"
-		   " USING gam_games,mch_matches"
+		   " USING gam_games,"
+		          "mch_matches"
 		   " WHERE gam_games.CrsCod=%ld"
-		   " AND gam_games.GamCod=mch_matches.GamCod",
+		     " AND gam_games.GamCod=mch_matches.GamCod",
 		   CrsCod);
   }
 
@@ -1261,10 +1266,12 @@ static void Mch_RemoveMatchesInCourseFromTable (long CrsCod,const char *TableNam
    /***** Remove matches in course from secondary table *****/
    DB_QueryDELETE ("can not remove matches of a course from table",
 		   "DELETE FROM %s"
-		   " USING gam_games,mch_matches,%s"
+		   " USING gam_games,"
+		          "mch_matches,"
+		          "%s"
 		   " WHERE gam_games.CrsCod=%ld"
-		   " AND gam_games.GamCod=mch_matches.GamCod"
-		   " AND mch_matches.MchCod=%s.MchCod",
+		     " AND gam_games.GamCod=mch_matches.GamCod"
+		     " AND mch_matches.MchCod=%s.MchCod",
 		   TableName,
 		   TableName,
 		   CrsCod,
@@ -1310,11 +1317,13 @@ static void Mch_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long CrsCod,co
    /***** Remove matches in course from secondary table *****/
    DB_QueryDELETE ("can not remove matches of a user from table",
 		   "DELETE FROM %s"
-		   " USING gam_games,mch_matches,%s"
+		   " USING gam_games,"
+		          "mch_matches,"
+		          "%s"
 		   " WHERE gam_games.CrsCod=%ld"
-		   " AND gam_games.GamCod=mch_matches.GamCod"
-		   " AND mch_matches.MchCod=%s.MchCod"
-		   " AND %s.UsrCod=%ld",
+		     " AND gam_games.GamCod=mch_matches.GamCod"
+		     " AND mch_matches.MchCod=%s.MchCod"
+		     " AND %s.UsrCod=%ld",
 		   TableName,
 		   TableName,
 		   CrsCod,
@@ -1965,7 +1974,8 @@ void Mch_RemoveGroup (long GrpCod)
    /***** Remove group from all the matches *****/
    DB_QueryDELETE ("can not remove group"
 	           " from the associations between matches and groups",
-		   "DELETE FROM mch_groups WHERE GrpCod=%ld",
+		   "DELETE FROM mch_groups"
+		   " WHERE GrpCod=%ld",
 		   GrpCod);
   }
 
@@ -4260,8 +4270,12 @@ static void Mch_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match)
   {
    DB_QueryDELETE ("can not remove your answer to the match question",
 		    "DELETE FROM mch_answers"
-		    " WHERE MchCod=%ld AND UsrCod=%ld AND QstInd=%u",
-		    Match->MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,Match->Status.QstInd);
+		    " WHERE MchCod=%ld"
+		      " AND UsrCod=%ld"
+		      " AND QstInd=%u",
+		    Match->MchCod,
+		    Gbl.Usrs.Me.UsrDat.UsrCod,
+		    Match->Status.QstInd);
   }
 
 /*****************************************************************************/

@@ -1243,7 +1243,8 @@ void Ctr_RemoveCenter (void)
 
       /***** Remove center *****/
       DB_QueryDELETE ("can not remove a center",
-		      "DELETE FROM ctr_centers WHERE CtrCod=%ld",
+		      "DELETE FROM ctr_centers"
+		      " WHERE CtrCod=%ld",
 		      Ctr_EditingCtr->CtrCod);
 
       /***** Flush caches *****/

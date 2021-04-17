@@ -450,7 +450,7 @@ void Con_RemoveOldConnected (void)
 		   "DELETE FROM usr_connected"
 		   " WHERE UsrCod NOT IN"
 		         " (SELECT DISTINCT(UsrCod)"
-		          " FROM ses_sessions)");
+		            " FROM ses_sessions)");
   }
 
 /*****************************************************************************/

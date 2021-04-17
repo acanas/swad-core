@@ -1675,7 +1675,7 @@ void Att_RemoveCrsAttEvents (long CrsCod)
 		   " USING att_events,"
 		          "att_groups"
 		   " WHERE att_events.CrsCod=%ld"
-		   " AND att_events.AttCod=att_groups.AttCod",
+		     " AND att_events.AttCod=att_groups.AttCod",
                    CrsCod);
 
    /***** Remove attendance events *****/

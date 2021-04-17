@@ -1350,7 +1350,8 @@ static void Fol_UnfollowUsr (struct UsrData *UsrDat)
    /***** Unfollow user in database *****/
    DB_QueryDELETE ("can not unfollow user",
 		   "DELETE FROM usr_follow"
-		   " WHERE FollowerCod=%ld AND FollowedCod=%ld",
+		   " WHERE FollowerCod=%ld"
+		     " AND FollowedCod=%ld",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   UsrDat->UsrCod);
 
@@ -1505,7 +1506,8 @@ void Fol_RemoveUsrFromUsrFollow (long UsrCod)
   {
    DB_QueryDELETE ("can not remove user from followers and followed",
 		   "DELETE FROM usr_follow"
-		   " WHERE FollowerCod=%ld OR FollowedCod=%ld",
+		   " WHERE FollowerCod=%ld"
+		      " OR FollowedCod=%ld",
 	           UsrCod,UsrCod);
 
    /***** Flush cache *****/

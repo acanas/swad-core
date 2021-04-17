@@ -375,7 +375,7 @@ void Tml_DB_RemoveNote (long NotCod)
    DB_QueryDELETE ("can not remove a note",
 		   "DELETE FROM tml_notes"
 	           " WHERE NotCod=%ld"
-	           " AND UsrCod=%ld",		// Extra check: author
+	             " AND UsrCod=%ld",		// Extra check: author
 		   NotCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
@@ -388,7 +388,8 @@ void Tml_DB_RemoveAllNotesUsr (long UsrCod)
   {
    /***** Remove all notes created by user *****/
    DB_QueryDELETE ("can not remove notes",
-		   "DELETE FROM tml_notes WHERE UsrCod=%ld",
+		   "DELETE FROM tml_notes"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
 
@@ -647,8 +648,8 @@ void Tml_DB_RemoveCommPub (long PubCod)
    DB_QueryDELETE ("can not remove comment",
 		   "DELETE FROM tml_pubs"
 	           " WHERE PubCod=%ld"
-	           " AND PublisherCod=%ld"	// Extra check: author
-	           " AND PubType=%u",		// Extra check: it's a comment
+	             " AND PublisherCod=%ld"	// Extra check: author
+	             " AND PubType=%u",		// Extra check: it's a comment
 		   PubCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Tml_Pub_COMMENT_TO_NOTE);
@@ -663,11 +664,13 @@ void Tml_DB_RemoveAllCommsInAllNotesOf (long UsrCod)
    /***** Remove all comments in all notes of the user *****/
    DB_QueryDELETE ("can not remove comments",
 		   "DELETE FROM tml_comments"
-	           " USING tml_notes,tml_pubs,tml_comments"
+	           " USING tml_notes,"
+	                  "tml_pubs,"
+	                  "tml_comments"
 	           " WHERE tml_notes.UsrCod=%ld"
-		   " AND tml_notes.NotCod=tml_pubs.NotCod"
-                   " AND tml_pubs.PubType=%u"
-	           " AND tml_pubs.PubCod=tml_comments.PubCod",
+		     " AND tml_notes.NotCod=tml_pubs.NotCod"
+                     " AND tml_pubs.PubType=%u"
+	             " AND tml_pubs.PubCod=tml_comments.PubCod",
 		   UsrCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE);
   }
 
@@ -680,11 +683,13 @@ void Tml_DB_RemoveAllCommsMadeBy (long UsrCod)
    /***** Remove all comments made by this user in any note *****/
    DB_QueryDELETE ("can not remove comments",
 		   "DELETE FROM tml_comments"
-	           " USING tml_pubs,tml_comments"
+	           " USING tml_pubs,"
+	                  "tml_comments"
 	           " WHERE tml_pubs.PublisherCod=%ld"
-	           " AND tml_pubs.PubType=%u"
-	           " AND tml_pubs.PubCod=tml_comments.PubCod",
-		   UsrCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE);
+	             " AND tml_pubs.PubType=%u"
+	             " AND tml_pubs.PubCod=tml_comments.PubCod",
+		   UsrCod,
+		   (unsigned) Tml_Pub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -974,9 +979,10 @@ void Tml_DB_RemoveAllPubsPublishedByAnyUsrOfNotesAuthoredBy (long UsrCod)
           and related to notes authored by this user *****/
    DB_QueryDELETE ("can not remove publications",
 		   "DELETE FROM tml_pubs"
-                   " USING tml_notes,tml_pubs"
+                   " USING tml_notes,"
+                          "tml_pubs"
 	           " WHERE tml_notes.UsrCod=%ld"
-                   " AND tml_notes.NotCod=tml_pubs.NotCod",
+                     " AND tml_notes.NotCod=tml_pubs.NotCod",
 		   UsrCod);
   }
 
@@ -988,7 +994,8 @@ void Tml_DB_RemoveAllPubsPublishedBy (long UsrCod)
   {
    /***** Remove all publications published by the user *****/
    DB_QueryDELETE ("can not remove publications",
-		   "DELETE FROM tml_pubs WHERE PublisherCod=%ld",
+		   "DELETE FROM tml_pubs"
+		   " WHERE PublisherCod=%ld",
 		   UsrCod);
   }
 
@@ -1075,9 +1082,11 @@ void Tml_DB_UnmarkAsFav (Tml_Usr_FavSha_t FavSha,long Cod)
    /***** Delete the mark as favourite from database *****/
    DB_QueryDELETE ("can not unfavourite",
 		   "DELETE FROM %s"
-		   " WHERE %s=%ld AND UsrCod=%ld",
+		   " WHERE %s=%ld"
+		     " AND UsrCod=%ld",
 		   Tml_DB_TableFav[FavSha],
-		   Tml_DB_FieldFav[FavSha],Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Tml_DB_FieldFav[FavSha],Cod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -1088,8 +1097,10 @@ void Tml_DB_RemoveAllFavsMadeByUsr (Tml_Usr_FavSha_t FavSha,long UsrCod)
   {
    /* Remove all favs made by this user to any note/comment */
    DB_QueryDELETE ("can not remove favs",
-		   "DELETE FROM %s WHERE UsrCod=%ld",
-		   Tml_DB_TableFav[FavSha],UsrCod);
+		   "DELETE FROM %s"
+		   " WHERE UsrCod=%ld",
+		   Tml_DB_TableFav[FavSha],
+		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -1101,10 +1112,11 @@ void Tml_DB_RemoveAllFavsToPubsBy (Tml_Usr_FavSha_t FavSha,long UsrCod)
    /***** Remove all favs to notes/comments of this user *****/
    DB_QueryDELETE ("can not remove favs",
 		   "DELETE FROM %s"
-	           " USING tml_pubs,%s"
+	           " USING tml_pubs,"
+	                  "%s"
 	           " WHERE tml_pubs.PublisherCod=%ld"	// Author of the comment
-                   " AND tml_pubs.PubType=%u"
-	           " AND tml_pubs.PubCod=%s.PubCod",
+                     " AND tml_pubs.PubType=%u"
+	             " AND tml_pubs.PubCod=%s.PubCod",
 	           Tml_DB_TableFav[FavSha],
 	           Tml_DB_TableFav[FavSha],
 		   UsrCod,
@@ -1122,12 +1134,15 @@ void Tml_DB_RemoveAllFavsToAllCommsInAllNotesBy (long UsrCod)
           in all notes authored by this user *****/
    DB_QueryDELETE ("can not remove favs",
 		   "DELETE FROM tml_comments_fav"
-	           " USING tml_notes,tml_pubs,tml_comments_fav"
+	           " USING tml_notes,"
+	                  "tml_pubs,"
+	                  "tml_comments_fav"
 	           " WHERE tml_notes.UsrCod=%ld"		// Author of the note
-	           " AND tml_notes.NotCod=tml_pubs.NotCod"
-                   " AND tml_pubs.PubType=%u"
-	           " AND tml_pubs.PubCod=tml_comments_fav.PubCod",
-		   UsrCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE);
+	             " AND tml_notes.NotCod=tml_pubs.NotCod"
+                     " AND tml_pubs.PubType=%u"
+	             " AND tml_pubs.PubCod=tml_comments_fav.PubCod",
+		   UsrCod,
+		   (unsigned) Tml_Pub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -1199,8 +1214,8 @@ void Tml_DB_RemoveSharedPub (long NotCod)
    DB_QueryDELETE ("can not remove a publication",
 		   "DELETE FROM tml_pubs"
 		   " WHERE NotCod=%ld"
-		   " AND PublisherCod=%ld"
-		   " AND PubType=%u",	// Extra check: shared note
+		     " AND PublisherCod=%ld"
+		     " AND PubType=%u",	// Extra check: shared note
 		   NotCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Tml_Pub_SHARED_NOTE);

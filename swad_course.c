@@ -1903,12 +1903,14 @@ void Crs_RemoveCourseCompletely (long CrsCod)
 
       /***** Remove course from table of last accesses to courses in database *****/
       DB_QueryDELETE ("can not remove a course",
-		      "DELETE FROM crs_last WHERE CrsCod=%ld",
+		      "DELETE FROM crs_last"
+		      " WHERE CrsCod=%ld",
 		      CrsCod);
 
       /***** Remove course from table of courses in database *****/
       DB_QueryDELETE ("can not remove a course",
-		      "DELETE FROM crs_courses WHERE CrsCod=%ld",
+		      "DELETE FROM crs_courses"
+		      " WHERE CrsCod=%ld",
 		      CrsCod);
      }
   }

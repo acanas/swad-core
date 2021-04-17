@@ -1796,18 +1796,21 @@ void ExaSet_RemoveSet (void)
    /* Remove questions associated to set */
    DB_QueryDELETE ("can not remove questions associated to set",
 		   "DELETE FROM exa_set_questions"
-		   " USING exa_set_questions,exa_sets"
+		   " USING exa_set_questions,"
+		          "exa_sets"
 		   " WHERE exa_set_questions.SetCod=%ld"
-                   " AND exa_set_questions.SetCod=exa_sets.SetCod"
-		   " AND exa_sets.ExaCod=%ld",	// Extra check
-		   Set.SetCod,Set.ExaCod);
+                     " AND exa_set_questions.SetCod=exa_sets.SetCod"
+		     " AND exa_sets.ExaCod=%ld",	// Extra check
+		   Set.SetCod,
+		   Set.ExaCod);
 
    /* Remove the set itself */
    DB_QueryDELETE ("can not remove set",
 		   "DELETE FROM exa_sets"
 		   " WHERE SetCod=%ld"
-                   " AND ExaCod=%ld",		// Extra check
-		   Set.SetCod,Set.ExaCod);
+                     " AND ExaCod=%ld",		// Extra check
+		   Set.SetCod,
+		   Set.ExaCod);
    if (!mysql_affected_rows (&Gbl.mysql))
       Lay_ShowErrorAndExit ("The set to be removed does not exist.");
 
@@ -2000,8 +2003,9 @@ void ExaSet_RemoveQstFromSet (void)
    DB_QueryDELETE ("can not remove a question from a set",
 		   "DELETE FROM exa_set_questions"
 		   " WHERE QstCod=%ld"
-		   " AND SetCod=%ld",	// Extra check
-		   QstCod,Set.SetCod);
+		     " AND SetCod=%ld",	// Extra check
+		   QstCod,
+		   Set.SetCod);
    if (!mysql_affected_rows (&Gbl.mysql))
       Lay_ShowErrorAndExit ("The question to be removed does not exist.");
 

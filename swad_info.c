@@ -726,7 +726,9 @@ static void Inf_SetIHaveReadIntoDB (bool IHaveRead)
       /***** Remove I have read course information *****/
       DB_QueryDELETE ("can not set that I have not read course info",
 		      "DELETE FROM crs_info_read"
-		      " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
+		      " WHERE UsrCod=%ld"
+		        " AND CrsCod=%ld"
+		        " AND InfoType='%s'",
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
 		      Gbl.Hierarchy.Crs.CrsCod,
 		      Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type]);
@@ -741,7 +743,8 @@ void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
    /***** Remove user's status about reading of course information *****/
    DB_QueryDELETE ("can not set that I have not read course info",
 		   "DELETE FROM crs_info_read"
-		   " WHERE UsrCod=%ld AND CrsCod=%ld",
+		   " WHERE UsrCod=%ld"
+		     " AND CrsCod=%ld",
                    UsrCod,CrsCod);
   }
 

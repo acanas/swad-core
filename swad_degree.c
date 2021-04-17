@@ -1537,12 +1537,16 @@ void Deg_RemoveDegreeCompletely (long DegCod)
 
    /***** Remove administrators of this degree *****/
    DB_QueryDELETE ("can not remove administrators of a degree",
-		   "DELETE FROM usr_admins WHERE Scope='%s' AND Cod=%ld",
-                   Sco_GetDBStrFromScope (Hie_Lvl_DEG),DegCod);
+		   "DELETE FROM usr_admins"
+		   " WHERE Scope='%s'"
+		     " AND Cod=%ld",
+                   Sco_GetDBStrFromScope (Hie_Lvl_DEG),
+                   DegCod);
 
    /***** Remove the degree *****/
    DB_QueryDELETE ("can not remove a degree",
-		   "DELETE FROM deg_degrees WHERE DegCod=%ld",
+		   "DELETE FROM deg_degrees"
+		   " WHERE DegCod=%ld",
 		   DegCod);
 
    /***** Flush caches *****/

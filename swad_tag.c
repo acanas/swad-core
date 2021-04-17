@@ -657,7 +657,8 @@ void Tag_RemTagsFromQst (long QstCod)
   {
    /***** Remove tags *****/
    DB_QueryDELETE ("can not remove the tags of a question",
-		   "DELETE FROM tst_question_tags WHERE QstCod=%ld",
+		   "DELETE FROM tst_question_tags"
+		   " WHERE QstCod=%ld",
 		   QstCod);
   }
 

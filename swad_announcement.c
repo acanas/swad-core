@@ -590,7 +590,8 @@ void Ann_RemoveAnnouncement (void)
 
    /***** Remove users who have seen the announcement *****/
    DB_QueryDELETE ("can not remove announcement",
-		   "DELETE FROM ann_seen WHERE AnnCod=%ld",
+		   "DELETE FROM ann_seen"
+		   " WHERE AnnCod=%ld",
 		   AnnCod);
 
    /***** Write message of success *****/

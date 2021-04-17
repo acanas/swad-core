@@ -4581,7 +4581,8 @@ void Prj_RemoveCrsProjects (long CrsCod)
 
    /***** Remove configuration of projects in the course *****/
    DB_QueryDELETE ("can not remove configuration of projects of a course",
-		   "DELETE FROM prj_config WHERE CrsCod=%ld",
+		   "DELETE FROM prj_config"
+		   " WHERE CrsCod=%ld",
 		   CrsCod);
 
    /***** Remove projects *****/

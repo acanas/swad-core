@@ -2812,9 +2812,10 @@ void TstPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
    /***** Remove test prints questions for the given user *****/
    DB_QueryDELETE ("can not remove test exams made by a user",
 		   "DELETE FROM tst_exam_questions"
-	           " USING tst_exams,tst_exam_questions"
+	           " USING tst_exams,"
+	                  "tst_exam_questions"
                    " WHERE tst_exams.UsrCod=%ld"
-                   " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
+                     " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
 		   UsrCod);
 
    /***** Remove test prints made by the given user *****/
@@ -2833,15 +2834,20 @@ void TstPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
    /***** Remove test exams made by the given user *****/
    DB_QueryDELETE ("can not remove test exams made by a user in a course",
 		   "DELETE FROM tst_exam_questions"
-	           " USING tst_exams,tst_exam_questions"
-                   " WHERE tst_exams.CrsCod=%ld AND tst_exams.UsrCod=%ld"
-                   " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
-		   CrsCod,UsrCod);
+	           " USING tst_exams,"
+	                  "tst_exam_questions"
+                   " WHERE tst_exams.CrsCod=%ld"
+                     " AND tst_exams.UsrCod=%ld"
+                     " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
+		   CrsCod,
+		   UsrCod);
 
    DB_QueryDELETE ("can not remove test exams made by a user in a course",
 		   "DELETE FROM tst_exams"
-	           " WHERE CrsCod=%ld AND UsrCod=%ld",
-		   CrsCod,UsrCod);
+	           " WHERE CrsCod=%ld"
+	             " AND UsrCod=%ld",
+		   CrsCod,
+		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -2853,13 +2859,15 @@ void TstPrn_RemoveCrsPrints (long CrsCod)
    /***** Remove questions of test exams made in the course *****/
    DB_QueryDELETE ("can not remove test exams made in a course",
 		   "DELETE FROM tst_exam_questions"
-	           " USING tst_exams,tst_exam_questions"
+	           " USING tst_exams,"
+	                  "tst_exam_questions"
                    " WHERE tst_exams.CrsCod=%ld"
-                   " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
+                     " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
 		   CrsCod);
 
    /***** Remove test exams made in the course *****/
    DB_QueryDELETE ("can not remove test exams made in a course",
-		   "DELETE FROM tst_exams WHERE CrsCod=%ld",
+		   "DELETE FROM tst_exams"
+		   " WHERE CrsCod=%ld",
 		   CrsCod);
   }

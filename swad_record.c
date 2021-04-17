@@ -646,12 +646,14 @@ void Rec_RemoveFieldFromDB (void)
 
    /***** Remove field from all records *****/
    DB_QueryDELETE ("can not remove field from all students' records",
-		   "DELETE FROM crs_records WHERE FieldCod=%ld",
+		   "DELETE FROM crs_records"
+		   " WHERE FieldCod=%ld",
                    Gbl.Crs.Records.Field.FieldCod);
 
    /***** Remove the field *****/
    DB_QueryDELETE ("can not remove field of record",
-		   "DELETE FROM crs_record_fields WHERE FieldCod=%ld",
+		   "DELETE FROM crs_record_fields"
+		   " WHERE FieldCod=%ld",
                    Gbl.Crs.Records.Field.FieldCod);
 
    /***** Write message to show the change made *****/
@@ -1921,7 +1923,8 @@ void Rec_UpdateCrsRecord (long UsrCod)
                /***** Remove text of the field of record course *****/
                DB_QueryDELETE ("can not remove field of record",
         		       "DELETE FROM crs_records"
-			       " WHERE UsrCod=%ld AND FieldCod=%ld",
+			       " WHERE UsrCod=%ld"
+			         " AND FieldCod=%ld",
                                UsrCod,
 			       Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
            }
@@ -1963,7 +1966,8 @@ void Rec_RemoveFieldsCrsRecordAll (long UsrCod)
   {
    /***** Remove text of the field of record course *****/
    DB_QueryDELETE ("can not remove user's records in all courses",
-		   "DELETE FROM crs_records WHERE UsrCod=%ld",
+		   "DELETE FROM crs_records"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
 

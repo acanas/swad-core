@@ -1159,9 +1159,10 @@ static void Exa_RemoveExamFromAllTables (long ExaCod)
    /***** Remove exam questions *****/
    DB_QueryDELETE ("can not remove exam questions",
 		   "DELETE FROM exa_set_questions"
-		   " USING exa_sets,exa_set_questions"
+		   " USING exa_sets,"
+		          "exa_set_questions"
 		   " WHERE exa_sets.ExaCod=%ld"
-		   " AND exa_sets.SetCod=exa_set_questions.SetCod",
+		     " AND exa_sets.SetCod=exa_set_questions.SetCod",
 		   ExaCod);
 
    /***** Remove exam sets *****/
@@ -1172,7 +1173,8 @@ static void Exa_RemoveExamFromAllTables (long ExaCod)
 
    /***** Remove exam *****/
    DB_QueryDELETE ("can not remove exam",
-		   "DELETE FROM exa_exams WHERE ExaCod=%ld",
+		   "DELETE FROM exa_exams"
+		   " WHERE ExaCod=%ld",
 		   ExaCod);
   }
 
@@ -1195,28 +1197,34 @@ void Exa_RemoveCrsExams (long CrsCod)
    /***** Remove the answers in set of questions *****/
    DB_QueryDELETE ("can not remove answers in course exams",
 		   "DELETE FROM exa_set_answers"
-		   " USING exa_exams,exa_sets,exa_set_questions,exa_set_answers"
+		   " USING exa_exams,"
+		          "exa_sets,"
+		          "exa_set_questions,"
+		          "exa_set_answers"
 		   " WHERE exa_exams.CrsCod=%ld"
-		   " AND exa_exams.ExaCod=exa_sets.ExaCod",
-		   " AND exa_sets.SetCod=exa_set_questions.SetCod"
-		   " AND exa_set_questions.QstCod=exa_set_answers.QstCod",
+		     " AND exa_exams.ExaCod=exa_sets.ExaCod",
+		     " AND exa_sets.SetCod=exa_set_questions.SetCod"
+		     " AND exa_set_questions.QstCod=exa_set_answers.QstCod",
                    CrsCod);
 
    /***** Remove the questions in set of questions *****/
    DB_QueryDELETE ("can not remove questions in course exams",
 		   "DELETE FROM exa_set_questions"
-		   " USING exa_exams,exa_sets,exa_set_questions"
+		   " USING exa_exams,"
+		          "exa_sets,"
+		          "exa_set_questions"
 		   " WHERE exa_exams.CrsCod=%ld"
-		   " AND exa_exams.ExaCod=exa_sets.ExaCod",
-		   " AND exa_sets.SetCod=exa_set_questions.SetCod",
+		     " AND exa_exams.ExaCod=exa_sets.ExaCod",
+		     " AND exa_sets.SetCod=exa_set_questions.SetCod",
                    CrsCod);
 
    /***** Remove the sets of questions in exams *****/
    DB_QueryDELETE ("can not remove sets in course exams",
 		   "DELETE FROM exa_sets"
-		   " USING exa_exams,exa_sets"
+		   " USING exa_exams,"
+		          "exa_sets"
 		   " WHERE exa_exams.CrsCod=%ld"
-		   " AND exa_exams.ExaCod=exa_sets.ExaCod",
+		     " AND exa_exams.ExaCod=exa_sets.ExaCod",
                    CrsCod);
 
    /***** Remove the exams *****/

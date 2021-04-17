@@ -1379,7 +1379,8 @@ void Ins_RemoveInstitution (void)
 
       /***** Remove institution *****/
       DB_QueryDELETE ("can not remove an institution",
-		      "DELETE FROM ins_instits WHERE InsCod=%ld",
+		      "DELETE FROM ins_instits"
+		      " WHERE InsCod=%ld",
 		      Ins_EditingIns->InsCod);
 
       /***** Flush caches *****/
