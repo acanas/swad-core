@@ -1328,11 +1328,13 @@ static void Prg_HideUnhideItem (char YN)
 
    /***** Hide/unhide program item *****/
    DB_QueryUPDATE ("can not change program item",
-		   "UPDATE prg_items SET Hidden='%c'"
+		   "UPDATE prg_items"
+		     " SET Hidden='%c'"
 		   " WHERE ItmCod=%ld"
-		   " AND CrsCod=%ld",	// Extra check
+		     " AND CrsCod=%ld",	// Extra check
 		   YN,
-                   Item.Hierarchy.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
+                   Item.Hierarchy.ItmCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show program items highlighting subtree *****/
    Prg_SetItemRangeWithAllChildren (Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod),
@@ -1467,29 +1469,38 @@ Bottom.End:   |    49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   2
       /* Step 1: Change all indexes involved to negative,
 		 necessary to preserve unique index (CrsCod,ItmInd) */
       DB_QueryUPDATE ("can not exchange indexes of items",
-		      "UPDATE prg_items SET ItmInd=-ItmInd"
+		      "UPDATE prg_items"
+		        " SET ItmInd=-ItmInd"
 		      " WHERE CrsCod=%ld"
-		      " AND ItmInd>=%u AND ItmInd<=%u",
+		        " AND ItmInd>=%u"
+		        " AND ItmInd<=%u",
 		      Gbl.Hierarchy.Crs.CrsCod,
-		      Top.Begin,Bottom.End);		// All indexes in both parts
+		      Top.Begin,
+		      Bottom.End);		// All indexes in both parts
 
       /* Step 2: Increase top indexes */
       DB_QueryUPDATE ("can not exchange indexes of items",
-		      "UPDATE prg_items SET ItmInd=-ItmInd+%u"
+		      "UPDATE prg_items"
+		        " SET ItmInd=-ItmInd+%u"
 		      " WHERE CrsCod=%ld"
-		      " AND ItmInd>=-%u AND ItmInd<=-%u",
+		        " AND ItmInd>=-%u"
+		        " AND ItmInd<=-%u",
 		      DiffEnd,
 		      Gbl.Hierarchy.Crs.CrsCod,
-		      Top.End,Top.Begin);		// All indexes in top part
+		      Top.End,
+		      Top.Begin);		// All indexes in top part
 
       /* Step 3: Decrease bottom indexes */
       DB_QueryUPDATE ("can not exchange indexes of items",
-		      "UPDATE prg_items SET ItmInd=-ItmInd-%u"
+		      "UPDATE prg_items"
+		        " SET ItmInd=-ItmInd-%u"
 		      " WHERE CrsCod=%ld"
-		      " AND ItmInd>=-%u AND ItmInd<=-%u",
+		        " AND ItmInd>=-%u"
+		        " AND ItmInd<=-%u",
 		      DiffBegin,
 		      Gbl.Hierarchy.Crs.CrsCod,
-		      Bottom.End,Bottom.Begin);		// All indexes in bottom part
+		      Bottom.End,
+		      Bottom.Begin);		// All indexes in bottom part
 
       /***** Unlock table *****/
       Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
@@ -1613,12 +1624,15 @@ static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight)
 
       /* Move item and its children to left or right */
       DB_QueryUPDATE ("can not move items",
-		      "UPDATE prg_items SET Level=Level%c1"
+		      "UPDATE prg_items"
+		        " SET Level=Level%c1"
 		      " WHERE CrsCod=%ld"
-		      " AND ItmInd>=%u AND ItmInd<=%u",
+		        " AND ItmInd>=%u"
+		        " AND ItmInd<=%u",
 		      IncDec[LeftRight],
 		      Gbl.Hierarchy.Crs.CrsCod,
-		      ToMove.Begin,ToMove.End);
+		      ToMove.Begin,
+		      ToMove.End);
 
       /* Update list of program items */
       Prg_FreeListItems ();
@@ -2059,9 +2073,10 @@ static void Prg_InsertItem (const struct ProgramItem *ParentItem,
 
 	    /***** Move down all indexes of after last child of parent *****/
 	    DB_QueryUPDATE ("can not move down items",
-			    "UPDATE prg_items SET ItmInd=ItmInd+1"
+			    "UPDATE prg_items"
+			      " SET ItmInd=ItmInd+1"
 			    " WHERE CrsCod=%ld"
-			    " AND ItmInd>=%u"
+			      " AND ItmInd>=%u"
 			    " ORDER BY ItmInd DESC",	// Necessary to not create duplicate key (CrsCod,ItmInd)
 			    Gbl.Hierarchy.Crs.CrsCod,
 			    Item->Hierarchy.Index);
@@ -2138,17 +2153,19 @@ static void Prg_UpdateItem (struct ProgramItem *Item,const char *Txt)
   {
    /***** Update the data of the program item *****/
    DB_QueryUPDATE ("can not update program item",
-		   "UPDATE prg_items SET "
-		   "StartTime=FROM_UNIXTIME(%ld),"
-		   "EndTime=FROM_UNIXTIME(%ld),"
-		   "Title='%s',Txt='%s'"
+		   "UPDATE prg_items"
+		     " SET StartTime=FROM_UNIXTIME(%ld),"
+		          "EndTime=FROM_UNIXTIME(%ld),"
+		          "Title='%s',"
+		          "Txt='%s'"
 		   " WHERE ItmCod=%ld"
-		   " AND CrsCod=%ld",	// Extra check
+		     " AND CrsCod=%ld",	// Extra check
                    Item->TimeUTC[Dat_START_TIME],
                    Item->TimeUTC[Dat_END_TIME  ],
                    Item->Title,
                    Txt,
-                   Item->Hierarchy.ItmCod,Gbl.Hierarchy.Crs.CrsCod);
+                   Item->Hierarchy.ItmCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

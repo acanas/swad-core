@@ -641,7 +641,8 @@ static void Lnk_UpdateLnkNameDB (long LnkCod,const char *FieldName,const char *N
 		   "UPDATE lnk_links"
 		     " SET %s='%s'"
 		   " WHERE LnkCod=%ld",
-	           FieldName,NewLnkName,LnkCod);
+	           FieldName,NewLnkName,
+	           LnkCod);
   }
 
 /*****************************************************************************/
@@ -675,7 +676,8 @@ void Lnk_ChangeLinkWWW (void)
 		      "UPDATE lnk_links"
 		        " SET WWW='%s'"
 		      " WHERE LnkCod=%ld",
-                      NewWWW,Lnk_EditingLnk->LnkCod);
+                      NewWWW,
+                      Lnk_EditingLnk->LnkCod);
 
       /***** Message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,

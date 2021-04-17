@@ -403,7 +403,8 @@ static void Cfe_UpdateNumUsrsNotifiedByEMailAboutCallForExam (long ExaCod,
 		   "UPDATE cfe_exams"
 		     " SET NumNotif=NumNotif+%u"
 		   " WHERE ExaCod=%ld",
-                   NumUsrsToBeNotifiedByEMail,ExaCod);
+                   NumUsrsToBeNotifiedByEMail,
+                   ExaCod);
   }
 
 /*****************************************************************************/
@@ -497,7 +498,8 @@ void Cfe_RemoveCallForExam1 (void)
 		   " WHERE ExaCod=%ld"
 		     " AND CrsCod=%ld",
                    (unsigned) Cfe_DELETED_CALL_FOR_EXAM,
-                   ExaCod,Gbl.Hierarchy.Crs.CrsCod);
+                   ExaCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_CALL_FOR_EXAM,ExaCod);
@@ -545,7 +547,8 @@ void Cfe_HideCallForExam (void)
 		   " WHERE ExaCod=%ld"
 		     " AND CrsCod=%ld",
                    (unsigned) Cfe_HIDDEN_CALL_FOR_EXAM,
-                   ExaCod,Gbl.Hierarchy.Crs.CrsCod);
+                   ExaCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Set exam to be highlighted *****/
    CallsForExams->HighlightExaCod = ExaCod;
@@ -576,7 +579,8 @@ void Cfe_UnhideCallForExam (void)
 		   " WHERE ExaCod=%ld"
 		     " AND CrsCod=%ld",
                    (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM,
-                   ExaCod,Gbl.Hierarchy.Crs.CrsCod);
+                   ExaCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Set exam to be highlighted *****/
    CallsForExams->HighlightExaCod = ExaCod;

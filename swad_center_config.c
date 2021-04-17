@@ -1005,9 +1005,11 @@ void CtrCfg_ChangeCtrPhotoAttr (void)
    /***** Update the table changing old attribution by new attribution *****/
    DB_QueryUPDATE ("can not update the photo attribution"
 		   " of the current center",
-		   "UPDATE ctr_centers SET PhotoAttribution='%s'"
+		   "UPDATE ctr_centers"
+		     " SET PhotoAttribution='%s'"
 		   " WHERE CtrCod=%ld",
-	           NewPhotoAttribution,Gbl.Hierarchy.Ctr.CtrCod);
+	           NewPhotoAttribution,
+	           Gbl.Hierarchy.Ctr.CtrCod);
 
    /***** Show the center information again *****/
    CtrCfg_ShowConfiguration ();
@@ -1075,8 +1077,11 @@ static void CtrCfg_UpdateCtrInsDB (long CtrCod,long InsCod)
   {
    /***** Update institution in table of centers *****/
    DB_QueryUPDATE ("can not update the institution of a center",
-		   "UPDATE ctr_centers SET InsCod=%ld WHERE CtrCod=%ld",
-                   InsCod,CtrCod);
+		   "UPDATE ctr_centers"
+		     " SET InsCod=%ld"
+		   " WHERE CtrCod=%ld",
+                   InsCod,
+                   CtrCod);
   }
 
 /*****************************************************************************/
@@ -1189,8 +1194,12 @@ static void CtrCfg_UpdateCtrCoordinateDB (long CtrCod,
    /***** Update database changing old coordinate by new coordinate *****/
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    DB_QueryUPDATE ("can not update a coordinate of a center",
-		   "UPDATE ctr_centers SET %s='%.15lg' WHERE CtrCod=%ld",
-	           CoordField,NewCoord,CtrCod);
+		   "UPDATE ctr_centers"
+		     " SET %s='%.15lg'"
+		   " WHERE CtrCod=%ld",
+	           CoordField,
+	           NewCoord,
+	           CtrCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 

@@ -121,7 +121,8 @@ void Coo_ChangeMyPrefsCookies (void)
    /***** Store preference in database *****/
    if (Gbl.Usrs.Me.Logged)
       DB_QueryUPDATE ("can not update your preference about cookies",
-		      "UPDATE usr_data SET ThirdPartyCookies='%c'"
+		      "UPDATE usr_data"
+		        " SET ThirdPartyCookies='%c'"
 		      " WHERE UsrCod=%ld",
                       Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies ? 'Y' :
                 	                                                 'N',

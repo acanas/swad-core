@@ -1739,14 +1739,17 @@ void Svy_ResetSurvey (void)
 
    /***** Remove all the users in this survey *****/
    DB_QueryDELETE ("can not remove users who are answered a survey",
-		   "DELETE FROM svy_users WHERE SvyCod=%ld",
+		   "DELETE FROM svy_users"
+		   " WHERE SvyCod=%ld",
 		   Svy.SvyCod);
 
    /***** Reset all the answers in this survey *****/
    DB_QueryUPDATE ("can not reset answers of a survey",
-		   "UPDATE svy_answers,svy_questions SET svy_answers.NumUsrs=0"
+		   "UPDATE svy_answers,"
+		          "svy_questions"
+		     " SET svy_answers.NumUsrs=0"
                    " WHERE svy_questions.SvyCod=%ld"
-                   " AND svy_questions.QstCod=svy_answers.QstCod",
+                     " AND svy_questions.QstCod=svy_answers.QstCod",
 		   Svy.SvyCod);
 
    /***** Write message to show the change made *****/
@@ -1785,7 +1788,9 @@ void Svy_HideSurvey (void)
 
    /***** Hide survey *****/
    DB_QueryUPDATE ("can not hide survey",
-		   "UPDATE svy_surveys SET Hidden='Y' WHERE SvyCod=%ld",
+		   "UPDATE svy_surveys"
+		     " SET Hidden='Y'"
+		   " WHERE SvyCod=%ld",
 		   Svy.SvyCod);
 
    /***** Show surveys again *****/
@@ -1820,7 +1825,9 @@ void Svy_UnhideSurvey (void)
 
    /***** Show survey *****/
    DB_QueryUPDATE ("can not show survey",
-		   "UPDATE svy_surveys SET Hidden='N' WHERE SvyCod=%ld",
+		   "UPDATE svy_surveys"
+		     " SET Hidden='N'"
+		   " WHERE SvyCod=%ld",
 		   Svy.SvyCod);
 
    /***** Show surveys again *****/
@@ -2329,9 +2336,11 @@ static void Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
   {
    /***** Update number of users notified *****/
    DB_QueryUPDATE ("can not update the number of notifications of a survey",
-		   "UPDATE svy_surveys SET NumNotif=NumNotif+%u"
+		   "UPDATE svy_surveys"
+		     " SET NumNotif=NumNotif+%u"
                    " WHERE SvyCod=%ld",
-		   NumUsrsToBeNotifiedByEMail,SvyCod);
+		   NumUsrsToBeNotifiedByEMail,
+		   SvyCod);
   }
 
 /*****************************************************************************/
@@ -2382,12 +2391,16 @@ static void Svy_UpdateSurvey (struct Svy_Survey *Svy,const char *Txt)
    /***** Update the data of the survey *****/
    DB_QueryUPDATE ("can not update survey",
 		   "UPDATE svy_surveys"
-	           " SET Scope='%s',Cod=%ld,Roles=%u,"
-	           "StartTime=FROM_UNIXTIME(%ld),"
-	           "EndTime=FROM_UNIXTIME(%ld),"
-	           "Title='%s',Txt='%s'"
+	             " SET Scope='%s',"
+	                  "Cod=%ld,"
+	                  "Roles=%u,"
+	                  "StartTime=FROM_UNIXTIME(%ld),"
+	                  "EndTime=FROM_UNIXTIME(%ld),"
+	                  "Title='%s',"
+	                  "Txt='%s'"
                    " WHERE SvyCod=%ld",
-		   Sco_GetDBStrFromScope (Svy->Scope),Svy->Cod,
+		   Sco_GetDBStrFromScope (Svy->Scope),
+		   Svy->Cod,
 		   Svy->Roles,
 		   Svy->TimeUTC[Svy_START_TIME],
 		   Svy->TimeUTC[Svy_END_TIME  ],
@@ -3729,9 +3742,12 @@ void Svy_RemoveQst (void)
 
    /* Change index of questions greater than this */
    DB_QueryUPDATE ("can not update indexes of questions",
-		   "UPDATE svy_questions SET QstInd=QstInd-1"
-                   " WHERE SvyCod=%ld AND QstInd>%u",
-		   SvyCod,SvyQst.QstInd);
+		   "UPDATE svy_questions"
+		     " SET QstInd=QstInd-1"
+                   " WHERE SvyCod=%ld"
+                     " AND QstInd>%u",
+		   SvyCod,
+		   SvyQst.QstInd);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
@@ -3845,9 +3861,12 @@ static void Svy_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
   {
    /***** Increase number of users who have selected the answer AnsInd in the question QstCod *****/
    DB_QueryUPDATE ("can not register your answer to the survey",
-		   "UPDATE svy_answers SET NumUsrs=NumUsrs+1"
-                   " WHERE QstCod=%ld AND AnsInd=%u",
-		   QstCod,AnsInd);
+		   "UPDATE svy_answers"
+		     " SET NumUsrs=NumUsrs+1"
+                   " WHERE QstCod=%ld"
+                     " AND AnsInd=%u",
+		   QstCod,
+		   AnsInd);
   }
 
 /*****************************************************************************/

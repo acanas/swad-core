@@ -544,7 +544,7 @@ void Ann_HideActiveAnnouncement (void)
    /***** Set global announcement as hidden *****/
    DB_QueryUPDATE ("can not hide announcement",
 		   "UPDATE ann_announcements"
-		   " SET Status=%u"
+		     " SET Status=%u"
 		   " WHERE AnnCod=%ld",
                    (unsigned) Ann_OBSOLETE_ANNOUNCEMENT,
                    AnnCod);
@@ -564,7 +564,7 @@ void Ann_RevealHiddenAnnouncement (void)
    /***** Set global announcement as shown *****/
    DB_QueryUPDATE ("can not reveal announcement",
 		   "UPDATE ann_announcements"
-		   " SET Status=%u"
+		     " SET Status=%u"
 		   " WHERE AnnCod=%ld",
                    (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
                    AnnCod);

@@ -366,7 +366,8 @@ void Prf_ChangeBasicProfileVis (void)
    /***** Store public/private photo in database *****/
    DB_QueryUPDATE ("can not update your setting"
 		   " about public profile visibility",
-		   "UPDATE usr_data SET BaPrfVisibility='%s'"
+		   "UPDATE usr_data"
+		     " SET BaPrfVisibility='%s'"
 		   " WHERE UsrCod=%ld",
                    Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.BaPrfVisibility],
                    Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -386,7 +387,8 @@ void Prf_ChangeExtendedProfileVis (void)
    /***** Store public/private photo in database *****/
    DB_QueryUPDATE ("can not update your setting"
 		   " about public profile visibility",
-		   "UPDATE usr_data SET ExPrfVisibility='%s'"
+		   "UPDATE usr_data"
+		     " SET ExPrfVisibility='%s'"
 		   " WHERE UsrCod=%ld",
                    Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.ExPrfVisibility],
                    Gbl.Usrs.Me.UsrDat.UsrCod);

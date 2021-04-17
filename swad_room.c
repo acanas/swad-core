@@ -1083,7 +1083,8 @@ void Roo_ChangeBuilding (void)
 		      "UPDATE roo_rooms"
 		        " SET BldCod=%ld"
 		      " WHERE RooCod=%ld",
-                      NewBldCod,Roo_EditingRoom->RooCod);
+                      NewBldCod,
+                      Roo_EditingRoom->RooCod);
 
       /***** Get updated data of the room from database *****/
       Roo_GetDataOfRoomByCod (Roo_EditingRoom);
@@ -1133,7 +1134,8 @@ void Roo_ChangeFloor (void)
 		      "UPDATE roo_rooms"
 		        " SET Floor=%d"
 		      " WHERE RooCod=%ld",
-                      NewFloor,Roo_EditingRoom->RooCod);
+                      NewFloor,
+                      Roo_EditingRoom->RooCod);
 
       /***** Get updated data of the room from database *****/
       Roo_GetDataOfRoomByCod (Roo_EditingRoom);
@@ -1332,7 +1334,8 @@ static void Roo_UpdateRoomNameDB (long RooCod,const char *FieldName,const char *
 		   "UPDATE roo_rooms"
 		     " SET %s='%s'"
 		   " WHERE RooCod=%ld",
-		   FieldName,NewRoomName,RooCod);
+		   FieldName,NewRoomName,
+		   RooCod);
   }
 
 /*****************************************************************************/
@@ -1378,7 +1381,8 @@ void Roo_ChangeCapacity (void)
 		      "UPDATE roo_rooms"
 		        " SET Capacity=%u"
 		      " WHERE RooCod=%ld",
-                      NewCapacity,Roo_EditingRoom->RooCod);
+                      NewCapacity,
+                      Roo_EditingRoom->RooCod);
       Roo_EditingRoom->Capacity = NewCapacity;
 
       /***** Message to show the change made *****/

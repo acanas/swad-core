@@ -4475,7 +4475,8 @@ void Grp_ChangeGroupRoom (void)
 		   "UPDATE grp_groups"
 		     " SET RooCod=%ld"
 		   " WHERE GrpCod=%ld",
-		   NewRooCod,Gbl.Crs.Grps.GrpCod);
+		   NewRooCod,
+		   Gbl.Crs.Grps.GrpCod);
 
    /* Create message to show the change made */
    AlertType = Ale_SUCCESS;
@@ -4632,7 +4633,7 @@ void Grp_ChangeOpenTimeGrpTyp (void)
 		          "OpenTime=FROM_UNIXTIME(%ld)"
 		   " WHERE GrpTypCod=%ld",
                    Gbl.Crs.Grps.GrpTyp.MustBeOpened ? 'Y' :
-        	                                             'N',
+        	                                      'N',
                    (long) Gbl.Crs.Grps.GrpTyp.OpenTimeUTC,
                    Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
@@ -4691,7 +4692,8 @@ void Grp_ChangeMaxStdsGrp (void)
 		      "UPDATE grp_groups"
 		        " SET MaxStudents=%u"
 		      " WHERE GrpCod=%ld",
-                      NewMaxStds,Gbl.Crs.Grps.GrpCod);
+                      NewMaxStds,
+                      Gbl.Crs.Grps.GrpCod);
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
@@ -4870,7 +4872,8 @@ void Grp_RenameGroup (void)
         		    "UPDATE grp_groups"
         		      " SET GrpName='%s'"
         		    " WHERE GrpCod=%ld",
-                            NewNameGrp,Gbl.Crs.Grps.GrpCod);
+                            NewNameGrp,
+                            Gbl.Crs.Grps.GrpCod);
 
             /***** Write message to show the change made *****/
 	    AlertType = Ale_SUCCESS;

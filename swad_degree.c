@@ -1677,8 +1677,12 @@ static void Deg_UpdateDegNameDB (long DegCod,const char *FieldName,const char *N
   {
    /***** Update degree changing old name by new name *****/
    DB_QueryUPDATE ("can not update the name of a degree",
-		   "UPDATE deg_degrees SET %s='%s' WHERE DegCod=%ld",
-	           FieldName,NewDegName,DegCod);
+		   "UPDATE deg_degrees"
+		     " SET %s='%s'"
+		   " WHERE DegCod=%ld",
+	           FieldName,
+	           NewDegName,
+	           DegCod);
   }
 
 /*****************************************************************************/
@@ -1705,8 +1709,11 @@ void Deg_ChangeDegreeType (void)
 
    /***** Update the table of degrees changing old type by new type *****/
    DB_QueryUPDATE ("can not update the type of a degree",
-		   "UPDATE deg_degrees SET DegTypCod=%ld WHERE DegCod=%ld",
-	           NewDegTypCod,Deg_EditingDeg->DegCod);
+		   "UPDATE deg_degrees"
+		     " SET DegTypCod=%ld"
+		   " WHERE DegCod=%ld",
+	           NewDegTypCod,
+	           Deg_EditingDeg->DegCod);
    Deg_EditingDeg->DegTypCod = NewDegTypCod;
 
    /***** Create alert to show the change made
@@ -1763,8 +1770,11 @@ void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
    /***** Update database changing old WWW by new WWW *****/
    DB_QueryUPDATE ("can not update the web of a degree",
-		   "UPDATE deg_degrees SET WWW='%s' WHERE DegCod=%ld",
-	           NewWWW,DegCod);
+		   "UPDATE deg_degrees"
+		     " SET WWW='%s'"
+		   " WHERE DegCod=%ld",
+	           NewWWW,
+	           DegCod);
   }
 
 /*****************************************************************************/
@@ -1800,8 +1810,11 @@ void Deg_ChangeDegStatus (void)
 
    /***** Update status in table of degrees *****/
    DB_QueryUPDATE ("can not update the status of a degree",
-		   "UPDATE deg_degrees SET Status=%u WHERE DegCod=%ld",
-                   (unsigned) Status,Deg_EditingDeg->DegCod);
+		   "UPDATE deg_degrees"
+		     " SET Status=%u"
+		   " WHERE DegCod=%ld",
+                   (unsigned) Status,
+                   Deg_EditingDeg->DegCod);
    Deg_EditingDeg->Status = Status;
 
    /***** Write alert to show the change made

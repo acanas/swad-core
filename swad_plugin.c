@@ -554,7 +554,8 @@ void Plg_RenamePlugin (void)
         		    "UPDATE plg_plugins"
         		      " SET Name='%s'"
         		    " WHERE PlgCod=%ld",
-                            NewPlgName,Plg_EditingPlg->PlgCod);
+                            NewPlgName,
+                            Plg_EditingPlg->PlgCod);
 
             /***** Write message to show the change made *****/
             Ale_CreateAlert (Ale_SUCCESS,NULL,

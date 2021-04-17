@@ -696,8 +696,10 @@ static void Inf_SetForceReadIntoDB (bool MustBeRead)
   {
    /***** Insert or replace info source for a specific type of course information *****/
    DB_QueryUPDATE ("can not update if info must be read",
-		   "UPDATE crs_info_src SET MustBeRead='%c'"
-		   " WHERE CrsCod=%ld AND InfoType='%s'",
+		   "UPDATE crs_info_src"
+		     " SET MustBeRead='%c'"
+		   " WHERE CrsCod=%ld"
+		     " AND InfoType='%s'",
                    MustBeRead ? 'Y' :
         	                'N',
                    Gbl.Hierarchy.Crs.CrsCod,

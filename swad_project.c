@@ -4074,7 +4074,8 @@ static void Prj_UpdateProject (struct Prj_Project *Prj)
 	           Prj->Knowledge,
 	           Prj->Materials,
 	           Prj->URL,
-	           Prj->PrjCod,Gbl.Hierarchy.Crs.CrsCod);
+	           Prj->PrjCod,
+	           Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -4506,7 +4507,8 @@ static void Prj_LockProjectEditionInDB (long PrjCod)
 		     " SET Locked='Y'"
 		   " WHERE PrjCod=%ld"
 		     " AND CrsCod=%ld",
-		   PrjCod,Gbl.Hierarchy.Crs.CrsCod);
+		   PrjCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -4555,7 +4557,8 @@ static void Prj_UnlockProjectEditionInDB (long PrjCod)
 		     " SET Locked='N'"
 		   " WHERE PrjCod=%ld"
 		     " AND CrsCod=%ld",
-		   PrjCod,Gbl.Hierarchy.Crs.CrsCod);
+		   PrjCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

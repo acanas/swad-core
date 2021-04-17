@@ -137,7 +137,8 @@ void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void)
   {
    /***** Update my current password in database *****/
    DB_QueryUPDATE ("can not update your password",
-		   "UPDATE usr_data SET Password='%s'"
+		   "UPDATE usr_data"
+		     " SET Password='%s'"
 		   " WHERE UsrCod=%ld",
 	           Gbl.Usrs.Me.PendingPassword,
 	           Gbl.Usrs.Me.UsrDat.UsrCod);

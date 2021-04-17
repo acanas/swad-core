@@ -769,9 +769,11 @@ void Rec_RenameField (void)
            {
             /* Update the table of fields changing then old name by the new one */
             DB_QueryUPDATE ("can not update name of field of record",
-        		    "UPDATE crs_record_fields SET FieldName='%s'"
+        		    "UPDATE crs_record_fields"
+        		      " SET FieldName='%s'"
 			    " WHERE FieldCod=%ld",
-                            NewFieldName,Gbl.Crs.Records.Field.FieldCod);
+                            NewFieldName,
+                            Gbl.Crs.Records.Field.FieldCod);
 
             /***** Write message to show the change made *****/
             Ale_ShowAlert (Ale_SUCCESS,Txt_The_record_field_X_has_been_renamed_as_Y,
@@ -825,9 +827,11 @@ void Rec_ChangeLinesField (void)
      {
       /***** Update of the table of fields changing the old maximum of students by the new one *****/
       DB_QueryUPDATE ("can not update the number of lines of a record field",
-		      "UPDATE crs_record_fields SET NumLines=%u"
+		      "UPDATE crs_record_fields"
+		        " SET NumLines=%u"
 		      " WHERE FieldCod=%ld",
-                      NewNumLines,Gbl.Crs.Records.Field.FieldCod);
+                      NewNumLines,
+                      Gbl.Crs.Records.Field.FieldCod);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y,
@@ -873,7 +877,8 @@ void Rec_ChangeVisibilityField (void)
      {
       /***** Update of the table of fields changing the old visibility by the new *****/
       DB_QueryUPDATE ("can not update the visibility of a record field",
-		      "UPDATE crs_record_fields SET Visibility=%u"
+		      "UPDATE crs_record_fields"
+		        " SET Visibility=%u"
 		      " WHERE FieldCod=%ld",
                       (unsigned) NewVisibility,
 		      Gbl.Crs.Records.Field.FieldCod);
@@ -1905,8 +1910,10 @@ void Rec_UpdateCrsRecord (long UsrCod)
             if (Gbl.Crs.Records.LstFields.Lst[NumField].Text[0])
                /***** Update text of the field of record course *****/
                DB_QueryUPDATE ("can not update field of record",
-        		       "UPDATE crs_records SET Txt='%s'"
-			       " WHERE UsrCod=%ld AND FieldCod=%ld",
+        		       "UPDATE crs_records"
+        		         " SET Txt='%s'"
+			       " WHERE UsrCod=%ld"
+			         " AND FieldCod=%ld",
 			       Gbl.Crs.Records.LstFields.Lst[NumField].Text,
 			       UsrCod,
 			       Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
@@ -4177,7 +4184,9 @@ void Rec_UpdateMyOffice (void)
 
    /***** Update office *****/
    DB_QueryUPDATE ("can not update office",
-		   "UPDATE usr_data SET Office='%s' WHERE UsrCod=%ld",
+		   "UPDATE usr_data"
+		     " SET Office='%s'"
+		   " WHERE UsrCod=%ld",
 		   Gbl.Usrs.Me.UsrDat.Tch.Office,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
 
@@ -4196,7 +4205,9 @@ void Rec_UpdateMyOfficePhone (void)
 
    /***** Update office phone *****/
    DB_QueryUPDATE ("can not update office phone",
-		   "UPDATE usr_data SET OfficePhone='%s' WHERE UsrCod=%ld",
+		   "UPDATE usr_data"
+		     " SET OfficePhone='%s'"
+		   " WHERE UsrCod=%ld",
 	           Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
 

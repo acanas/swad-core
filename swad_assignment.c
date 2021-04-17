@@ -1129,7 +1129,7 @@ void Asg_HideAssignment (void)
    /***** Hide assignment *****/
    DB_QueryUPDATE ("can not hide assignment",
 		   "UPDATE asg_assignments"
-		   " SET Hidden='Y'"
+		     " SET Hidden='Y'"
 		   " WHERE AsgCod=%ld"
 		     " AND CrsCod=%ld",
                    Asg.AsgCod,
@@ -1166,7 +1166,7 @@ void Asg_ShowAssignment (void)
    /***** Hide assignment *****/
    DB_QueryUPDATE ("can not show assignment",
 		   "UPDATE asg_assignments"
-		   " SET Hidden='N'"
+		     " SET Hidden='N'"
 		   " WHERE AsgCod=%ld"
 		     " AND CrsCod=%ld",
                    Asg.AsgCod,
@@ -1588,7 +1588,7 @@ static void Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,unsigne
    /***** Update number of users notified *****/
    DB_QueryUPDATE ("can not update the number of notifs. of an assignment",
 		   "UPDATE asg_ssignments"
-		   " SET NumNotif=NumNotif+%u"
+		     " SET NumNotif=NumNotif+%u"
 		   " WHERE AsgCod=%ld",
                    NumUsrsToBeNotifiedByEMail,
                    AsgCod);
@@ -1633,11 +1633,11 @@ static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt)
    /***** Update the data of the assignment *****/
    DB_QueryUPDATE ("can not update assignment",
 		   "UPDATE asg_assignments"
-		   " SET StartTime=FROM_UNIXTIME(%ld),"
-		        "EndTime=FROM_UNIXTIME(%ld),"
-		        "Title='%s',"
-		        "Folder='%s',"
-		        "Txt='%s'"
+		     " SET StartTime=FROM_UNIXTIME(%ld),"
+		          "EndTime=FROM_UNIXTIME(%ld),"
+		          "Title='%s',"
+		          "Folder='%s',"
+		          "Txt='%s'"
 		   " WHERE AsgCod=%ld"
 		     " AND CrsCod=%ld",
                    Asg->TimeUTC[Dat_START_TIME],

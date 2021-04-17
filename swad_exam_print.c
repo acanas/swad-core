@@ -1526,13 +1526,15 @@ static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print)
 		        "Sent='%c',"
 	                "Score='%.15lg'"
 	           " WHERE PrnCod=%ld"
-	           " AND SesCod=%ld AND UsrCod=%ld",	// Extra checks
+	             " AND SesCod=%ld"
+	             " AND UsrCod=%ld",	// Extra checks
 		   Print->NumQsts.NotBlank,
 		   Print->Sent ? 'Y' :
 			         'N',
 		   Print->Score,
 		   Print->PrnCod,
-		   Print->SesCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Print->SesCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 

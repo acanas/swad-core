@@ -630,9 +630,10 @@ void CtyCfg_ChangeCtyMapAttr (void)
    /***** Update the table changing old attribution by new attribution *****/
    DB_QueryUPDATE ("can not update the map attribution of a country",
 		   "UPDATE cty_countrs"
-		   " SET MapAttribution='%s'"
+		     " SET MapAttribution='%s'"
 		   " WHERE CtyCod='%03ld'",
-	           NewMapAttribution,Gbl.Hierarchy.Cty.CtyCod);
+	           NewMapAttribution,
+	           Gbl.Hierarchy.Cty.CtyCod);
 
    /***** Show the country information again *****/
    CtyCfg_ShowConfiguration ();

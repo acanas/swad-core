@@ -572,10 +572,10 @@ static void ExaSet_UpdateSet (const struct ExaSet_Set *Set)
    /***** Update the data of the set of questions *****/
    DB_QueryUPDATE ("can not update set of questions",
 		   "UPDATE exa_sets"
-		   " SET ExaCod=%ld,"
-		        "SetInd=%u,"
-		        "NumQstsToPrint=%u,"
-		        "Title='%s'"
+		     " SET ExaCod=%ld,"
+		          "SetInd=%u,"
+		          "NumQstsToPrint=%u,"
+		          "Title='%s'"
 		   " WHERE SetCod=%ld",
 		   Set->ExaCod,
 		   Set->SetInd,
@@ -596,11 +596,13 @@ static void ExaSet_UpdateSetTitleDB (const struct ExaSet_Set *Set,
   {
    /***** Update set of questions changing old title by new title *****/
    DB_QueryUPDATE ("can not update the title of a set of questions",
-		   "UPDATE exa_sets SET Title='%s'"
+		   "UPDATE exa_sets"
+		     " SET Title='%s'"
 		   " WHERE SetCod=%ld"
-		   " AND ExaCod=%ld",	// Extra check
+		     " AND ExaCod=%ld",	// Extra check
 	           NewTitle,
-	           Set->SetCod,Set->ExaCod);
+	           Set->SetCod,
+	           Set->ExaCod);
   }
 
 /*****************************************************************************/
@@ -612,11 +614,13 @@ static void ExaSet_UpdateNumQstsToExamDB (const struct ExaSet_Set *Set,
   {
    /***** Update set of questions changing old number by new number *****/
    DB_QueryUPDATE ("can not update the number of questions to appear in exam print",
-		   "UPDATE exa_sets SET NumQstsToPrint=%u"
+		   "UPDATE exa_sets"
+		     " SET NumQstsToPrint=%u"
 		   " WHERE SetCod=%ld"
-		   " AND ExaCod=%ld",	// Extra check
+		     " AND ExaCod=%ld",	// Extra check
 	           NumQstsToPrint,
-	           Set->SetCod,Set->ExaCod);
+	           Set->SetCod,
+	           Set->ExaCod);
   }
 
 /*****************************************************************************/
@@ -1809,9 +1813,12 @@ void ExaSet_RemoveSet (void)
 
    /* Change index of sets greater than this */
    DB_QueryUPDATE ("can not update indexes of sets",
-		   "UPDATE exa_sets SET SetInd=SetInd-1"
-		   " WHERE ExaCod=%ld AND SetInd>%u",
-		   Set.ExaCod,Set.SetInd);
+		   "UPDATE exa_sets"
+		     " SET SetInd=SetInd-1"
+		   " WHERE ExaCod=%ld"
+		     " AND SetInd>%u",
+		   Set.ExaCod,
+		   Set.SetInd);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Set_of_questions_removed);
@@ -2098,14 +2105,15 @@ static void ExaSet_ChangeValidityQst (Tst_Validity_t Validity)
 
    /***** Validate question *****/
    DB_QueryUPDATE ("can not validate question",
-		   "UPDATE exa_set_questions,exa_sets,exa_exams"
-		   " SET exa_set_questions.Invalid='%c'"
+		   "UPDATE exa_set_questions,"
+		          "exa_sets,exa_exams"
+		     " SET exa_set_questions.Invalid='%c'"
 		   " WHERE exa_set_questions.QstCod=%ld"
-		   " AND exa_set_questions.SetCod=%ld"		// Extra check
-		   " AND exa_set_questions.SetCod=exa_sets.SetCod"
-		   " AND exa_sets.ExaCod=%ld"			// Extra check
-		   " AND exa_sets.ExaCod=exa_exams.ExaCod"
-		   " AND exa_exams.CrsCod=%ld",			// Extra check
+		     " AND exa_set_questions.SetCod=%ld"	// Extra check
+		     " AND exa_set_questions.SetCod=exa_sets.SetCod"
+		     " AND exa_sets.ExaCod=%ld"			// Extra check
+		     " AND exa_sets.ExaCod=exa_exams.ExaCod"
+		     " AND exa_exams.CrsCod=%ld",		// Extra check
 		   CharInvalid[Validity],
 		   QstCod,
 		   Set.SetCod,
@@ -2204,24 +2212,33 @@ static void ExaSet_ExchangeSets (long ExaCod,
    /* Step 1: change temporarily top index to minus bottom index
               in order to not repeat unique index (ExaCod,SetInd) */
    DB_QueryUPDATE ("can not exchange indexes of sets",
-		   "UPDATE exa_sets SET SetInd=-%u"
-		   " WHERE ExaCod=%ld AND SetCod=%ld",
+		   "UPDATE exa_sets"
+		     " SET SetInd=-%u"
+		   " WHERE ExaCod=%ld"
+		     " AND SetCod=%ld",
 		   SetIndBottom,
-		   ExaCod,SetCodTop);
+		   ExaCod,
+		   SetCodTop);
 
    /* Step 2: change bottom index to old top index  */
    DB_QueryUPDATE ("can not exchange indexes of sets",
-		   "UPDATE exa_sets SET SetInd=%u"
-		   " WHERE ExaCod=%ld AND SetCod=%ld",
+		   "UPDATE exa_sets"
+		     " SET SetInd=%u"
+		   " WHERE ExaCod=%ld"
+		     " AND SetCod=%ld",
 		   SetIndTop,
-		   ExaCod,SetCodBottom);
+		   ExaCod,
+		   SetCodBottom);
 
    /* Step 3: change top index to old bottom index */
    DB_QueryUPDATE ("can not exchange indexes of sets",
-		   "UPDATE exa_sets SET SetInd=%u"
-		   " WHERE ExaCod=%ld AND SetCod=%ld",
+		   "UPDATE exa_sets"
+		     " SET SetInd=%u"
+		   " WHERE ExaCod=%ld"
+		     " AND SetCod=%ld",
 		   SetIndBottom,
-		   ExaCod,SetCodTop);
+		   ExaCod,
+		   SetCodTop);
 
    /***** Unlock table *****/
    Gbl.DB.LockedTables = false;	// Set to false before the following unlock...

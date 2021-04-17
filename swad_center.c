@@ -1298,8 +1298,11 @@ void Ctr_ChangeCtrPlc (void)
 void Ctr_UpdateCtrPlcDB (long CtrCod,long NewPlcCod)
   {
    DB_QueryUPDATE ("can not update the place of a center",
-		   "UPDATE ctr_centers SET PlcCod=%ld WHERE CtrCod=%ld",
-	           NewPlcCod,CtrCod);
+		   "UPDATE ctr_centers"
+		     " SET PlcCod=%ld"
+		   " WHERE CtrCod=%ld",
+	           NewPlcCod,
+	           CtrCod);
   }
 
 /*****************************************************************************/
@@ -1428,8 +1431,12 @@ static void Ctr_UpdateInsNameDB (long CtrCod,const char *FieldName,const char *N
   {
    /***** Update center changing old name by new name */
    DB_QueryUPDATE ("can not update the name of a center",
-		   "UPDATE ctr_centers SET %s='%s' WHERE CtrCod=%ld",
-	           FieldName,NewCtrName,CtrCod);
+		   "UPDATE ctr_centers"
+		     " SET %s='%s'"
+		   " WHERE CtrCod=%ld",
+	           FieldName,
+	           NewCtrName,
+	           CtrCod);
   }
 
 /*****************************************************************************/
@@ -1478,8 +1485,11 @@ void Ctr_UpdateCtrWWWDB (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
    /***** Update database changing old WWW by new WWW *****/
    DB_QueryUPDATE ("can not update the web of a center",
-		   "UPDATE ctr_centers SET WWW='%s' WHERE CtrCod=%ld",
-	           NewWWW,CtrCod);
+		   "UPDATE ctr_centers"
+		     " SET WWW='%s'"
+		   " WHERE CtrCod=%ld",
+	           NewWWW,
+	           CtrCod);
   }
 
 /*****************************************************************************/
@@ -1514,8 +1524,11 @@ void Ctr_ChangeCtrStatus (void)
 
    /***** Update status in table of centers *****/
    DB_QueryUPDATE ("can not update the status of a center",
-		   "UPDATE ctr_centers SET Status=%u WHERE CtrCod=%ld",
-	           (unsigned) Status,Ctr_EditingCtr->CtrCod);
+		   "UPDATE ctr_centers"
+		     " SET Status=%u"
+		   " WHERE CtrCod=%ld",
+	           (unsigned) Status,
+	           Ctr_EditingCtr->CtrCod);
    Ctr_EditingCtr->Status = Status;
 
    /***** Write message to show the change made

@@ -209,11 +209,15 @@ static void Tag_EnableOrDisableTag (long TagCod,bool TagHidden)
   {
    /***** Insert new tag into tst_tags table *****/
    DB_QueryUPDATE ("can not update the visibility of a tag",
-		   "UPDATE tst_tags SET TagHidden='%c',ChangeTime=NOW()"
-                   " WHERE TagCod=%ld AND CrsCod=%ld",
+		   "UPDATE tst_tags"
+		     " SET TagHidden='%c',"
+		          "ChangeTime=NOW()"
+                   " WHERE TagCod=%ld"
+                     " AND CrsCod=%ld",
 		   TagHidden ? 'Y' :
 			       'N',
-		   TagCod,Gbl.Hierarchy.Crs.CrsCod);
+		   TagCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

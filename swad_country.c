@@ -1499,7 +1499,7 @@ static void Cty_UpdateCtyNameDB (long CtyCod,const char *FieldName,const char *N
    /***** Update country changing old name by new name */
    DB_QueryUPDATE ("can not update the name of a country",
 		   "UPDATE cty_countrs"
-		   " SET %s='%s'"
+		     " SET %s='%s'"
 		   " WHERE CtyCod='%03ld'",
 	           FieldName,NewCtyName,
 	           CtyCod);
@@ -1537,9 +1537,10 @@ void Cty_ChangeCtyWWW (void)
    /***** Update the table changing old WWW by new WWW *****/
    DB_QueryUPDATE ("can not update the web of a country",
 		   "UPDATE cty_countrs"
-		   " SET WWW_%s='%s'"
+		     " SET WWW_%s='%s'"
 		   " WHERE CtyCod='%03ld'",
-	           Lan_STR_LANG_ID[Language],NewWWW,Cty_EditingCty->CtyCod);
+	           Lan_STR_LANG_ID[Language],NewWWW,
+	           Cty_EditingCty->CtyCod);
    Str_Copy (Cty_EditingCty->WWW[Language],NewWWW,
 	     sizeof (Cty_EditingCty->WWW[Language]) - 1);
 

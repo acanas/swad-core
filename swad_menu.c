@@ -321,8 +321,11 @@ void Mnu_ChangeMenu (void)
    /***** Store menu in database *****/
    if (Gbl.Usrs.Me.Logged)
       DB_QueryUPDATE ("can not update your setting about menu",
-		      "UPDATE usr_data SET Menu=%u WHERE UsrCod=%ld",
-                      (unsigned) Gbl.Prefs.Menu,Gbl.Usrs.Me.UsrDat.UsrCod);
+		      "UPDATE usr_data"
+		        " SET Menu=%u"
+		      " WHERE UsrCod=%ld",
+                      (unsigned) Gbl.Prefs.Menu,
+                      Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Set settings from current IP *****/
    Set_SetSettingsFromIP ();

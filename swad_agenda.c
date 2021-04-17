@@ -1409,9 +1409,9 @@ void Agd_HideEvent (void)
    /***** Set event private *****/
    DB_QueryUPDATE ("can not hide event",
 		   "UPDATE agd_agendas"
-		   " SET Hidden='Y'"
+		     " SET Hidden='Y'"
 		   " WHERE AgdCod=%ld"
-		   " AND UsrCod=%ld",
+		     " AND UsrCod=%ld",
                    AgdEvent.AgdCod,
                    AgdEvent.UsrCod);
 
@@ -1445,9 +1445,9 @@ void Agd_UnhideEvent (void)
    /***** Set event public *****/
    DB_QueryUPDATE ("can not show event",
 		   "UPDATE agd_agendas"
-		   " SET Hidden='N'"
+		     " SET Hidden='N'"
 		   " WHERE AgdCod=%ld"
-		   " AND UsrCod=%ld",
+		     " AND UsrCod=%ld",
                    AgdEvent.AgdCod,
                    AgdEvent.UsrCod);
 
@@ -1482,9 +1482,9 @@ void Agd_MakeEventPrivate (void)
    /***** Make event private *****/
    DB_QueryUPDATE ("can not make event private",
 		   "UPDATE agd_agendas"
-		   " SET Public='N'"
+		     " SET Public='N'"
 		   " WHERE AgdCod=%ld"
-		   " AND UsrCod=%ld",
+		     " AND UsrCod=%ld",
                    AgdEvent.AgdCod,
                    AgdEvent.UsrCod);
 
@@ -1523,9 +1523,9 @@ void Agd_MakeEventPublic (void)
    /***** Make event public *****/
    DB_QueryUPDATE ("can not make event public",
 		   "UPDATE agd_agendas"
-		   " SET Public='Y'"
+		     " SET Public='Y'"
 		   " WHERE AgdCod=%ld"
-		   " AND UsrCod=%ld",
+		     " AND UsrCod=%ld",
                    AgdEvent.AgdCod,
                    AgdEvent.UsrCod);
 
@@ -1804,17 +1804,20 @@ static void Agd_UpdateEvent (struct Agd_Event *AgdEvent,const char *Txt)
    /***** Update the data of the event *****/
    DB_QueryUPDATE ("can not update event",
 		   "UPDATE agd_agendas"
-		   " SET StartTime=FROM_UNIXTIME(%ld),"
-		        "EndTime=FROM_UNIXTIME(%ld),"
-		        "Event='%s',"
-		        "Location='%s',"
-		        "Txt='%s'"
+		     " SET StartTime=FROM_UNIXTIME(%ld),"
+		          "EndTime=FROM_UNIXTIME(%ld),"
+		          "Event='%s',"
+		          "Location='%s',"
+		          "Txt='%s'"
 		   " WHERE AgdCod=%ld"
 		     " AND UsrCod=%ld",
                    AgdEvent->TimeUTC[Dat_START_TIME],
                    AgdEvent->TimeUTC[Dat_END_TIME  ],
-                   AgdEvent->Event,AgdEvent->Location,Txt,
-                   AgdEvent->AgdCod,AgdEvent->UsrCod);
+                   AgdEvent->Event,
+                   AgdEvent->Location,
+                   Txt,
+                   AgdEvent->AgdCod,
+                   AgdEvent->UsrCod);
   }
 
 /*****************************************************************************/

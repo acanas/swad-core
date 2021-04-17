@@ -237,13 +237,14 @@ void TstPrn_UpdatePrintInDB (const struct TstPrn_Print *Print)
    Str_SetDecimalPointToUS ();		// To print the floating point as a dot
    DB_QueryUPDATE ("can not update test exam",
 		   "UPDATE tst_exams"
-	           " SET EndTime=NOW(),"
-	                "NumQstsNotBlank=%u,"
-		        "Sent='%c',"
-		        "AllowTeachers='%c',"
-	                "Score='%.15lg'"
+	             " SET EndTime=NOW(),"
+	                  "NumQstsNotBlank=%u,"
+		          "Sent='%c',"
+		          "AllowTeachers='%c',"
+	                  "Score='%.15lg'"
 	           " WHERE ExaCod=%ld"
-	           " AND CrsCod=%ld AND UsrCod=%ld",	// Extra checks
+	             " AND CrsCod=%ld"	// Extra check
+	             " AND UsrCod=%ld",	// Extra check
 		   Print->NumQsts.NotBlank,
 		   Print->Sent ? 'Y' :
 			         'N',

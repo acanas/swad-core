@@ -825,12 +825,13 @@ void ExaSes_ToggleVisResultsSesUsr (void)
    /***** Toggle visibility of exam session results *****/
    Session.ShowUsrResults = !Session.ShowUsrResults;
    DB_QueryUPDATE ("can not toggle visibility of session results",
-		   "UPDATE exa_sessions,exa_exams"
-		   " SET exa_sessions.ShowUsrResults='%c'"
+		   "UPDATE exa_sessions,"
+		          "exa_exams"
+		     " SET exa_sessions.ShowUsrResults='%c'"
 		   " WHERE exa_sessions.SesCod=%ld"
-		   " AND exa_sessions.ExaCod=%ld"	// Extra check
-		   " AND exa_sessions.ExaCod=exa_exams.ExaCod"
-		   " AND exa_exams.CrsCod=%ld",		// Extra check
+		     " AND exa_sessions.ExaCod=%ld"	// Extra check
+		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+		     " AND exa_exams.CrsCod=%ld",		// Extra check
 		   Session.ShowUsrResults ? 'Y' :
 			                    'N',
 		   Session.SesCod,
@@ -1141,12 +1142,13 @@ void ExaSes_HideSession (void)
 
    /***** Hide session *****/
    DB_QueryUPDATE ("can not hide exam sessions",
-		   "UPDATE exa_sessions,exa_exams"
-		   " SET exa_sessions.Hidden='Y'"
+		   "UPDATE exa_sessions,"
+		          "exa_exams"
+		     " SET exa_sessions.Hidden='Y'"
 		   " WHERE exa_sessions.SesCod=%ld"
-		   " AND exa_sessions.ExaCod=%ld"	// Extra check
-		   " AND exa_sessions.ExaCod=exa_exams.ExaCod"
-		   " AND exa_exams.CrsCod=%ld",		// Extra check
+		     " AND exa_sessions.ExaCod=%ld"	// Extra check
+		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+		     " AND exa_exams.CrsCod=%ld",	// Extra check
 		   Session.SesCod,
 		   Session.ExaCod,
 		   Gbl.Hierarchy.Crs.CrsCod);
@@ -1180,12 +1182,13 @@ void ExaSes_UnhideSession (void)
 
    /***** Unhide session *****/
    DB_QueryUPDATE ("can not unhide exam session",
-		   "UPDATE exa_sessions,exa_exams"
-		   " SET exa_sessions.Hidden='N'"
+		   "UPDATE exa_sessions,"
+		          "exa_exams"
+		     " SET exa_sessions.Hidden='N'"
 		   " WHERE exa_sessions.SesCod=%ld"
-		   " AND exa_sessions.ExaCod=%ld"	// Extra check
-		   " AND exa_sessions.ExaCod=exa_exams.ExaCod"
-		   " AND exa_exams.CrsCod=%ld",		// Extra check
+		     " AND exa_sessions.ExaCod=%ld"	// Extra check
+		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+		     " AND exa_exams.CrsCod=%ld",	// Extra check
 		   Session.SesCod,
 		   Session.ExaCod,
 		   Gbl.Hierarchy.Crs.CrsCod);
@@ -1587,16 +1590,17 @@ static void ExaSes_UpdateSession (struct ExaSes_Session *Session)
   {
    /***** Insert this new exam session into database *****/
    DB_QueryUPDATE ("can not update exam session",
-		   "UPDATE exa_sessions,exa_exams"
-		   " SET exa_sessions.Hidden='%c',"
-		        "exa_sessions.StartTime=FROM_UNIXTIME(%ld),"
-                        "exa_sessions.EndTime=FROM_UNIXTIME(%ld),"
-                        "exa_sessions.Title='%s',"
-                        "exa_sessions.ShowUsrResults='%c'"
+		   "UPDATE exa_sessions,"
+		          "exa_exams"
+		     " SET exa_sessions.Hidden='%c',"
+		          "exa_sessions.StartTime=FROM_UNIXTIME(%ld),"
+                          "exa_sessions.EndTime=FROM_UNIXTIME(%ld),"
+                          "exa_sessions.Title='%s',"
+                          "exa_sessions.ShowUsrResults='%c'"
 		   " WHERE exa_sessions.SesCod=%ld"
-		   " AND exa_sessions.ExaCod=%ld"	// Extra check
-		   " AND exa_sessions.ExaCod=exa_exams.ExaCod"
-		   " AND exa_exams.CrsCod=%ld",		// Extra check
+		     " AND exa_sessions.ExaCod=%ld"	// Extra check
+		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+		     " AND exa_exams.CrsCod=%ld",	// Extra check
 		   Session->Hidden ? 'Y' :
 			             'N',
 	           Session->TimeUTC[Dat_START_TIME],	// Start time

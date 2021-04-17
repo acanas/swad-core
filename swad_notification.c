@@ -968,7 +968,8 @@ void Ntf_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 		   " WHERE NotifyEvent=%u"
 		     " AND Cod=%ld",
 	           (unsigned) Ntf_STATUS_BIT_REMOVED,
-	           (unsigned) NotifyEvent,Cod);
+	           (unsigned) NotifyEvent,
+	           Cod);
   }
 
 /*****************************************************************************/
@@ -1563,7 +1564,8 @@ static void Ntf_UpdateMyLastAccessToNotifications (void)
   {
    /***** Reset to 0 my number of new notifications *****/
    DB_QueryUPDATE ("can not update last access to notifications",
-		   "UPDATE usr_last SET LastAccNotif=NOW()"
+		   "UPDATE usr_last"
+		     " SET LastAccNotif=NOW()"
 		   " WHERE UsrCod=%ld",
                    Gbl.Usrs.Me.UsrDat.UsrCod);
   }
@@ -2102,7 +2104,8 @@ void Ntf_ChangeNotifyEvents (void)
    /***** Store settings about notify events *****/
    DB_QueryUPDATE ("can not update user's settings",
 		   "UPDATE usr_data"
-		   " SET NotifNtfEvents=%u,EmailNtfEvents=%u"
+		     " SET NotifNtfEvents=%u,"
+		          "EmailNtfEvents=%u"
 		   " WHERE UsrCod=%ld",
 	           Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif,
 	           Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail,

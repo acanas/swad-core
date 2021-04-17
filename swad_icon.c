@@ -166,7 +166,9 @@ void Ico_ChangeIconSet (void)
    /***** Store icon set in database *****/
    if (Gbl.Usrs.Me.Logged)
       DB_QueryUPDATE ("can not update your setting about icon set",
-		      "UPDATE usr_data SET IconSet='%s' WHERE UsrCod=%ld",
+		      "UPDATE usr_data"
+		        " SET IconSet='%s'"
+		      " WHERE UsrCod=%ld",
 		      Ico_IconSetId[Gbl.Prefs.IconSet],
 		      Gbl.Usrs.Me.UsrDat.UsrCod);
 

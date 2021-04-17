@@ -4892,11 +4892,14 @@ void Tst_ChangeShuffleQst (void)
    /***** Remove the question from all the tables *****/
    /* Update the question changing the current shuffle */
    DB_QueryUPDATE ("can not update the shuffle type of a question",
-		   "UPDATE tst_questions SET Shuffle='%c'"
-                   " WHERE QstCod=%ld AND CrsCod=%ld",
+		   "UPDATE tst_questions"
+		     " SET Shuffle='%c'"
+                   " WHERE QstCod=%ld"
+                     " AND CrsCod=%ld",
 		   Shuffle ? 'Y' :
 			     'N',
-		   Test.Question.QstCod,Gbl.Hierarchy.Crs.CrsCod);
+		   Test.Question.QstCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Shuffle ? Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled :
@@ -5001,21 +5004,23 @@ static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question)
       /* Update question in database */
       DB_QueryUPDATE ("can not update question",
 		      "UPDATE tst_questions"
-		      " SET EditTime=NOW(),"
-		           "AnsType='%s',"
-		           "Shuffle='%c',"
-		           "Stem='%s',"
-		           "Feedback='%s',"
-		           "MedCod=%ld"
-		      " WHERE QstCod=%ld AND CrsCod=%ld",
+		        " SET EditTime=NOW(),"
+		             "AnsType='%s',"
+		             "Shuffle='%c',"
+		             "Stem='%s',"
+		             "Feedback='%s',"
+		             "MedCod=%ld"
+		      " WHERE QstCod=%ld"
+		        " AND CrsCod=%ld",
 		      Tst_StrAnswerTypesDB[Question->Answer.Type],
 		      Question->Answer.Shuffle ? 'Y' :
 					         'N',
 		      Question->Stem,
 		      Question->Feedback ? Question->Feedback :
-			                        "",
+			                   "",
 		      Question->Media.MedCod,
-		      Question->QstCod,Gbl.Hierarchy.Crs.CrsCod);
+		      Question->QstCod,
+		      Gbl.Hierarchy.Crs.CrsCod);
 
       /* Remove answers and tags from this test question */
       Tst_RemAnsFromQst (Question->QstCod);
@@ -5111,15 +5116,16 @@ void Tst_UpdateQstScoreInDB (struct TstPrn_PrintedQuestion *PrintedQuestion)
    if (PrintedQuestion->StrAnswers[0])	// User's answer is not blank
       DB_QueryUPDATE ("can not update the score of a question",
 		      "UPDATE tst_questions"
-	              " SET NumHits=NumHits+1,NumHitsNotBlank=NumHitsNotBlank+1,"
-	              "Score=Score+(%.15lg)"
+	                " SET NumHits=NumHits+1,"
+	                     "NumHitsNotBlank=NumHitsNotBlank+1,"
+	                     "Score=Score+(%.15lg)"
                       " WHERE QstCod=%ld",
 		      PrintedQuestion->Score,
 		      PrintedQuestion->QstCod);
    else					// User's answer is blank
       DB_QueryUPDATE ("can not update the score of a question",
 		      "UPDATE tst_questions"
-	              " SET NumHits=NumHits+1"
+	                " SET NumHits=NumHits+1"
                       " WHERE QstCod=%ld",
 		      PrintedQuestion->QstCod);
    Str_SetDecimalPointToLocal ();	// Return to local system

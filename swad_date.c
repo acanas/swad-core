@@ -205,7 +205,8 @@ void Dat_ChangeDateFormat (void)
    /***** Store date format in database *****/
    if (Gbl.Usrs.Me.Logged)
       DB_QueryUPDATE ("can not update your setting about date format",
-		      "UPDATE usr_data SET DateFormat=%u"
+		      "UPDATE usr_data"
+		        " SET DateFormat=%u"
 		      " WHERE UsrCod=%ld",
                       (unsigned) Gbl.Prefs.DateFormat,
                       Gbl.Usrs.Me.UsrDat.UsrCod);

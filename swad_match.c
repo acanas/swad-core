@@ -977,7 +977,7 @@ void Mch_ToggleVisResultsMchUsr (void)
    Match.Status.ShowUsrResults = !Match.Status.ShowUsrResults;
    DB_QueryUPDATE ("can not toggle visibility of match results",
 		   "UPDATE mch_matches"
-		   " SET ShowUsrResults='%c'"
+		     " SET ShowUsrResults='%c'"
 		   " WHERE MchCod=%ld",
 		   Match.Status.ShowUsrResults ? 'Y' :
 			                         'N',
@@ -1681,7 +1681,8 @@ static void Mch_UpdateMatchTitleAndGrps (const struct Mch_Match *Match)
   {
    /***** Update match title into database *****/
    DB_QueryUPDATE ("can not update match",
-		   "UPDATE mch_matches SET Title='%s'"
+		   "UPDATE mch_matches"
+		     " SET Title='%s'"
                    " WHERE MchCod=%ld",
 		   Match->Title,
 		   Match->MchCod);
@@ -2007,20 +2008,22 @@ static void Mch_UpdateMatchStatusInDB (const struct Mch_Match *Match)
 
    /***** Update match status in database *****/
    DB_QueryUPDATE ("can not update match being played",
-		   "UPDATE mch_matches,gam_games"
-		   " SET %s"
-			"mch_matches.QstInd=%u,"
-			"mch_matches.QstCod=%ld,"
-			"mch_matches.Showing='%s',"
-		        "mch_matches.Countdown=%ld,"
-		        "mch_matches.NumCols=%u,"
-			"mch_matches.ShowQstResults='%c',"
-			"mch_matches.ShowUsrResults='%c'"
+		   "UPDATE mch_matches,"
+		          "gam_games"
+		     " SET %s"
+			  "mch_matches.QstInd=%u,"
+			  "mch_matches.QstCod=%ld,"
+			  "mch_matches.Showing='%s',"
+		          "mch_matches.Countdown=%ld,"
+		          "mch_matches.NumCols=%u,"
+			  "mch_matches.ShowQstResults='%c',"
+			  "mch_matches.ShowUsrResults='%c'"
 		   " WHERE mch_matches.MchCod=%ld"
-		   " AND mch_matches.GamCod=gam_games.GamCod"
-		   " AND gam_games.CrsCod=%ld",	// Extra check
+		     " AND mch_matches.GamCod=gam_games.GamCod"
+		     " AND gam_games.CrsCod=%ld",	// Extra check
 		   MchSubQuery,
-		   Match->Status.QstInd,Match->Status.QstCod,
+		   Match->Status.QstInd,
+		   Match->Status.QstCod,
 		   Mch_ShowingStringsDB[Match->Status.Showing],
 		   Match->Status.Countdown,
 		   Match->Status.NumCols,
@@ -2028,7 +2031,8 @@ static void Mch_UpdateMatchStatusInDB (const struct Mch_Match *Match)
 			                          'N',
 		   Match->Status.ShowUsrResults ? 'Y' :
 			                          'N',
-		   Match->MchCod,Gbl.Hierarchy.Crs.CrsCod);
+		   Match->MchCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
    free (MchSubQuery);
 
    if (Match->Status.Playing)	// Match is being played

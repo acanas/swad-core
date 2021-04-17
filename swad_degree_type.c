@@ -978,9 +978,11 @@ void DT_RenameDegreeType (void)
            {
             /* Update the table changing old name by new name */
             DB_QueryUPDATE ("can not update the type of a degree",
-        		    "UPDATE deg_types SET DegTypName='%s'"
+        		    "UPDATE deg_types"
+        		      " SET DegTypName='%s'"
 			    " WHERE DegTypCod=%ld",
-                            NewNameDegTyp,DT_EditingDegTyp->DegTypCod);
+                            NewNameDegTyp,
+                            DT_EditingDegTyp->DegTypCod);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,

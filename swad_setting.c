@@ -319,9 +319,11 @@ void Set_ChangeSideCols (void)
 static void Set_UpdateSideColsOnUsrDataTable (void)
   {
    DB_QueryUPDATE ("can not update your setting about side columns",
-		   "UPDATE usr_data SET SideCols=%u"
+		   "UPDATE usr_data"
+		     " SET SideCols=%u"
 		   " WHERE UsrCod=%ld",
-		   Gbl.Prefs.SideCols,Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Gbl.Prefs.SideCols,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

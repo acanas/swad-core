@@ -1961,7 +1961,8 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 		      "UPDATE cfe_exams"
 		        " SET Status=%u"
 		      " WHERE CrsCod=%ld",
-	              (unsigned) Cfe_DELETED_CALL_FOR_EXAM,CrsCod);
+	              (unsigned) Cfe_DELETED_CALL_FOR_EXAM,
+	              CrsCod);
 
       /***** Remove course cards of the course *****/
       /* Remove content of course cards */
@@ -2197,8 +2198,11 @@ void Crs_UpdateCrsYear (struct Crs_Course *Crs,unsigned NewYear)
   {
    /***** Update year/semester in table of courses *****/
    DB_QueryUPDATE ("can not update the year of a course",
-		   "UPDATE crs_courses SET Year=%u WHERE CrsCod=%ld",
-	           NewYear,Crs->CrsCod);
+		   "UPDATE crs_courses"
+		     " SET Year=%u"
+		   " WHERE CrsCod=%ld",
+	           NewYear,
+	           Crs->CrsCod);
 
    /***** Copy course year/semester *****/
    Crs->Year = NewYear;
@@ -2213,8 +2217,11 @@ void Crs_UpdateInstitutionalCrsCod (struct Crs_Course *Crs,const char *NewInstit
    /***** Update institutional course code in table of courses *****/
    DB_QueryUPDATE ("can not update the institutional code"
 	           " of the current course",
-		   "UPDATE crs_courses SET InsCrsCod='%s' WHERE CrsCod=%ld",
-                   NewInstitutionalCrsCod,Crs->CrsCod);
+		   "UPDATE crs_courses"
+		     " SET InsCrsCod='%s'"
+		   " WHERE CrsCod=%ld",
+                   NewInstitutionalCrsCod,
+                   Crs->CrsCod);
 
    /***** Copy institutional course code *****/
    Str_Copy (Crs->InstitutionalCrsCod,NewInstitutionalCrsCod,
@@ -2355,8 +2362,11 @@ static void Crs_UpdateCrsNameDB (long CrsCod,const char *FieldName,const char *N
   {
    /***** Update course changing old name by new name *****/
    DB_QueryUPDATE ("can not update the name of a course",
-		   "UPDATE crs_courses SET %s='%s' WHERE CrsCod=%ld",
-	           FieldName,NewCrsName,CrsCod);
+		   "UPDATE crs_courses"
+		     " SET %s='%s'"
+		   " WHERE CrsCod=%ld",
+	           FieldName,NewCrsName,
+	           CrsCod);
   }
 
 /*****************************************************************************/
@@ -2392,8 +2402,11 @@ void Crs_ChangeCrsStatus (void)
 
    /***** Update status in table of courses *****/
    DB_QueryUPDATE ("can not update the status of a course",
-		   "UPDATE crs_courses SET Status=%u WHERE CrsCod=%ld",
-                   (unsigned) Status,Crs_EditingCrs->CrsCod);
+		   "UPDATE crs_courses"
+		     " SET Status=%u"
+		   " WHERE CrsCod=%ld",
+                   (unsigned) Status,
+                   Crs_EditingCrs->CrsCod);
    Crs_EditingCrs->Status = Status;
 
    /***** Create alert to show the change made *****/
@@ -2914,10 +2927,12 @@ void Crs_UpdateCrsLast (void)
    if (Gbl.Hierarchy.Level == Hie_Lvl_CRS &&	// Course selected
        Gbl.Usrs.Me.Role.Logged >= Rol_STD)
       /***** Update my last access to current course *****/
-      DB_QueryUPDATE ("can not update last access to current course",
-		      "REPLACE INTO crs_last (CrsCod,LastTime)"
-		      " VALUES (%ld,NOW())",
-	              Gbl.Hierarchy.Crs.CrsCod);
+      DB_QueryREPLACE ("can not update last access to current course",
+		       "REPLACE INTO crs_last"
+		       " (CrsCod,LastTime)"
+		       " VALUES"
+		       " (%ld,NOW())",
+	               Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

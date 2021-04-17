@@ -193,7 +193,8 @@ static void Not_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,unsigned Nu
 		   "UPDATE not_notices"
 		     " SET NumNotif=%u"
 		   " WHERE NotCod=%ld",
-	           NumUsrsToBeNotifiedByEMail,NotCod);
+	           NumUsrsToBeNotifiedByEMail,
+	           NotCod);
   }
 
 /*****************************************************************************/
@@ -250,7 +251,8 @@ void Not_HideActiveNotice (void)
 		   " WHERE NotCod=%ld"
 		     " AND CrsCod=%ld",
 	           (unsigned) Not_OBSOLETE_NOTICE,
-	           NotCod,Gbl.Hierarchy.Crs.CrsCod);
+	           NotCod,
+	           Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
@@ -277,7 +279,8 @@ void Not_RevealHiddenNotice (void)
 		   " WHERE NotCod=%ld"
 		     " AND CrsCod=%ld",
 	           (unsigned) Not_ACTIVE_NOTICE,
-	           NotCod,Gbl.Hierarchy.Crs.CrsCod);
+	           NotCod,
+	           Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);

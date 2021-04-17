@@ -1313,7 +1313,9 @@ void Exa_HideExam (void)
 
    /***** Hide exam *****/
    DB_QueryUPDATE ("can not hide exam",
-		   "UPDATE exa_exams SET Hidden='Y' WHERE ExaCod=%ld",
+		   "UPDATE exa_exams"
+		     " SET Hidden='Y'"
+		   " WHERE ExaCod=%ld",
 		   Exam.ExaCod);
 
    /***** Show exams again *****/
@@ -1349,7 +1351,9 @@ void Exa_UnhideExam (void)
 
    /***** Unhide exam *****/
    DB_QueryUPDATE ("can not unhide exam",
-		   "UPDATE exa_exams SET Hidden='N' WHERE ExaCod=%ld",
+		   "UPDATE exa_exams"
+		     " SET Hidden='N'"
+		   " WHERE ExaCod=%ld",
 		   Exam.ExaCod);
 
    /***** Show exams again *****/
@@ -1697,11 +1701,11 @@ static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt)
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    DB_QueryUPDATE ("can not update exam",
 		   "UPDATE exa_exams"
-		   " SET CrsCod=%ld,"
-		        "MaxGrade=%.15lg,"
-		        "Visibility=%u,"
-		        "Title='%s',"
-		        "Txt='%s'"
+		     " SET CrsCod=%ld,"
+		          "MaxGrade=%.15lg,"
+		          "Visibility=%u,"
+		          "Title='%s',"
+		          "Txt='%s'"
 		   " WHERE ExaCod=%ld",
 		   Gbl.Hierarchy.Crs.CrsCod,
 		   Exam->MaxGrade,

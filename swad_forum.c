@@ -4223,7 +4223,8 @@ static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumU
 		   "UPDATE for_posts"
 		     " SET NumNotif=NumNotif+%u"
 		   " WHERE PstCod=%ld",
-                   NumUsrsToBeNotifiedByEMail,PstCod);
+                   NumUsrsToBeNotifiedByEMail,
+                   PstCod);
   }
 
 /*****************************************************************************/

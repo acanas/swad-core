@@ -722,7 +722,8 @@ static void Mai_UpdateMailDomainNameDB (long MaiCod,const char *FieldName,const 
 		   "UPDATE ntf_mail_domains"
 		     " SET %s='%s'"
 		   " WHERE MaiCod=%ld",
-	           FieldName,NewMaiName,MaiCod);
+	           FieldName,NewMaiName,
+	           MaiCod);
   }
 
 /*****************************************************************************/
@@ -1825,10 +1826,12 @@ void Mai_ConfirmEmail (void)
 	 default:
             /***** Confirm email *****/
 	    DB_QueryUPDATE ("can not confirm email",
-			    "UPDATE usr_emails SET Confirmed='Y'"
+			    "UPDATE usr_emails"
+			      " SET Confirmed='Y'"
 			    " WHERE usr_emails.UsrCod=%ld"
-			    " AND usr_emails.E_mail='%s'",
-		            UsrCod,Email);
+			      " AND usr_emails.E_mail='%s'",
+		            UsrCod,
+		            Email);
             Ale_ShowAlert (Ale_SUCCESS,Txt_The_email_X_has_been_confirmed,
 		           Email);
             break;

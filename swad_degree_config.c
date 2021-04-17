@@ -404,8 +404,11 @@ static void DegCfg_UpdateDegCtrDB (long DegCod,long CtrCod)
   {
    /***** Update center in table of degrees *****/
    DB_QueryUPDATE ("can not update the center of a degree",
-		   "UPDATE deg_degrees SET CtrCod=%ld WHERE DegCod=%ld",
-                   CtrCod,DegCod);
+		   "UPDATE deg_degrees"
+		     " SET CtrCod=%ld"
+		   " WHERE DegCod=%ld",
+                   CtrCod,
+                   DegCod);
   }
 
 /*****************************************************************************/

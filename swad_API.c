@@ -3174,7 +3174,8 @@ int swad__sendAttendanceUsers (struct soap *soap,
       		       " SET Present='N'"
 		     " WHERE AttCod=%ld"
 		         "%s",
-		     Event.AttCod,SubQueryAllUsrs);
+		     Event.AttCod,
+		     SubQueryAllUsrs);
 
       /* Free memory for subquery string */
       free (SubQueryAllUsrs);
@@ -3537,7 +3538,8 @@ int swad__markNotificationsAsRead (struct soap *soap,
 			    " WHERE NtfCod=%ld"
 			      " AND ToUsrCod=%ld",
 			    (unsigned) Ntf_STATUS_BIT_READ,
-			    (long) NtfCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+			    (long) NtfCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	    NumNtfsMarkedAsRead++;
            }
@@ -3818,9 +3820,12 @@ static int API_SendMessageToUsr (long OriginalMsgCod,
    if (RecipientUsrCod == ReplyUsrCod)
       /***** ...then update received message setting Replied field to true *****/
       DB_QueryUPDATE ("can not update a received message",
-		      "UPDATE msg_rcv SET Replied='Y'"
-	              " WHERE MsgCod=%ld AND UsrCod=%ld",
-		      OriginalMsgCod,SenderUsrCod);
+		      "UPDATE msg_rcv"
+		        " SET Replied='Y'"
+	              " WHERE MsgCod=%ld"
+	                " AND UsrCod=%ld",
+		      OriginalMsgCod,
+		      SenderUsrCod);
 
    return SOAP_OK;
   }

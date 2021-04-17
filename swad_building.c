@@ -721,7 +721,9 @@ static void Bld_UpdateBuildingNameDB (long BldCod,const char *FieldName,const ch
 		   "UPDATE bld_buildings"
 		     " SET %s='%s'"
 		   " WHERE BldCod=%ld",
-		   FieldName,NewBuildingName,BldCod);
+		   FieldName,
+		   NewBuildingName,
+		   BldCod);
   }
 
 /*****************************************************************************/

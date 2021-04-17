@@ -1525,8 +1525,11 @@ static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *N
   {
    /***** Update institution changing old name by new name */
    DB_QueryUPDATE ("can not update the name of an institution",
-		   "UPDATE ins_instits SET %s='%s' WHERE InsCod=%ld",
-	           FieldName,NewInsName,InsCod);
+		   "UPDATE ins_instits"
+		     " SET %s='%s'"
+		   " WHERE InsCod=%ld",
+	           FieldName,NewInsName,
+	           InsCod);
 
    /***** Flush caches *****/
    Ins_FlushCacheShortNameOfInstitution ();
@@ -1580,8 +1583,11 @@ void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
    /***** Update database changing old WWW by new WWW *****/
    DB_QueryUPDATE ("can not update the web of an institution",
-		   "UPDATE ins_instits SET WWW='%s' WHERE InsCod=%ld",
-	           NewWWW,InsCod);
+		   "UPDATE ins_instits"
+		     " SET WWW='%s'"
+		   " WHERE InsCod=%ld",
+	           NewWWW,
+	           InsCod);
   }
 
 /*****************************************************************************/
@@ -1617,8 +1623,11 @@ void Ins_ChangeInsStatus (void)
 
    /***** Update status in table of institutions *****/
    DB_QueryUPDATE ("can not update the status of an institution",
-		   "UPDATE ins_instits SET Status=%u WHERE InsCod=%ld",
-                   (unsigned) Status,Ins_EditingIns->InsCod);
+		   "UPDATE ins_instits"
+		     " SET Status=%u"
+		   " WHERE InsCod=%ld",
+                   (unsigned) Status,
+                   Ins_EditingIns->InsCod);
    Ins_EditingIns->Status = Status;
 
    /***** Create message to show the change made

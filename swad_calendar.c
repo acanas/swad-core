@@ -151,7 +151,8 @@ void Cal_ChangeFirstDayOfWeek (void)
    /***** Store icon first day of week database *****/
    if (Gbl.Usrs.Me.Logged)
       DB_QueryUPDATE ("can not update your setting about first day of week",
-		      "UPDATE usr_data SET FirstDayOfWeek=%u"
+		      "UPDATE usr_data"
+		        " SET FirstDayOfWeek=%u"
 		      " WHERE UsrCod=%ld",
                       Gbl.Prefs.FirstDayOfWeek,
                       Gbl.Usrs.Me.UsrDat.UsrCod);

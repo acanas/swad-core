@@ -521,8 +521,11 @@ static void CrsCfg_UpdateCrsDegDB (long CrsCod,long DegCod)
   {
    /***** Update degree in table of courses *****/
    DB_QueryUPDATE ("can not move course to another degree",
-		   "UPDATE crs_courses SET DegCod=%ld WHERE CrsCod=%ld",
-	           DegCod,CrsCod);
+		   "UPDATE crs_courses"
+		     " SET DegCod=%ld"
+		   " WHERE CrsCod=%ld",
+	           DegCod,
+	           CrsCod);
   }
 
 /*****************************************************************************/

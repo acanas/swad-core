@@ -1292,7 +1292,9 @@ static void Pho_ClearPhotoName (long UsrCod)
   {
    /***** Clear photo name in user's data *****/
    DB_QueryUPDATE ("can not clear the name of a user's photo",
-		   "UPDATE usr_data SET Photo='' WHERE UsrCod=%ld",
+		   "UPDATE usr_data"
+		     " SET Photo=''"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
 
@@ -1306,8 +1308,11 @@ void Pho_UpdatePhotoName (struct UsrData *UsrDat)
 
    /***** Update photo name in database *****/
    DB_QueryUPDATE ("can not update the name of a user's photo",
-		   "UPDATE usr_data SET Photo='%s' WHERE UsrCod=%ld",
-                   Gbl.UniqueNameEncrypted,UsrDat->UsrCod);
+		   "UPDATE usr_data"
+		     " SET Photo='%s'"
+		   " WHERE UsrCod=%ld",
+                   Gbl.UniqueNameEncrypted,
+                   UsrDat->UsrCod);
 
    /***** Remove the old symbolic link to photo *****/
    snprintf (PathPublPhoto,sizeof (PathPublPhoto),"%s/%s.jpg",
@@ -1332,7 +1337,9 @@ void Pho_ChangePhotoVisibility (void)
 
    /***** Store public/private photo in database *****/
    DB_QueryUPDATE ("can not update your setting about photo visibility",
-		   "UPDATE usr_data SET PhotoVisibility='%s' WHERE UsrCod=%ld",
+		   "UPDATE usr_data"
+		     " SET PhotoVisibility='%s'"
+		   " WHERE UsrCod=%ld",
 		   Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
 

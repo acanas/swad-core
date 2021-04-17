@@ -1005,9 +1005,12 @@ void Att_HideAttEvent (void)
 
    /***** Hide attendance event *****/
    DB_QueryUPDATE ("can not hide attendance event",
-		   "UPDATE att_events SET Hidden='Y'"
-		   " WHERE AttCod=%ld AND CrsCod=%ld",
-                   Event.AttCod,Gbl.Hierarchy.Crs.CrsCod);
+		   "UPDATE att_events"
+		     " SET Hidden='Y'"
+		   " WHERE AttCod=%ld"
+		     " AND CrsCod=%ld",
+                   Event.AttCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -1030,9 +1033,12 @@ void Att_ShowAttEvent (void)
 
    /***** Hide attendance event *****/
    DB_QueryUPDATE ("can not show attendance event",
-		   "UPDATE att_events SET Hidden='N'"
-		   " WHERE AttCod=%ld AND CrsCod=%ld",
-                   Event.AttCod,Gbl.Hierarchy.Crs.CrsCod);
+		   "UPDATE att_events"
+		     " SET Hidden='N'"
+		   " WHERE AttCod=%ld"
+		     " AND CrsCod=%ld",
+                   Event.AttCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -1418,21 +1424,25 @@ void Att_UpdateAttEvent (struct Att_Event *Event,const char *Description)
   {
    /***** Update the data of the attendance event *****/
    DB_QueryUPDATE ("can not update attendance event",
-		   "UPDATE att_events SET "
-		   "Hidden='%c',"
-		   "StartTime=FROM_UNIXTIME(%ld),"
-		   "EndTime=FROM_UNIXTIME(%ld),"
-		   "CommentTchVisible='%c',Title='%s',Txt='%s'"
-		   " WHERE AttCod=%ld AND CrsCod=%ld",
+		   "UPDATE att_events"
+		     " SET Hidden='%c',"
+		          "StartTime=FROM_UNIXTIME(%ld),"
+		          "EndTime=FROM_UNIXTIME(%ld),"
+		          "CommentTchVisible='%c',"
+		          "Title='%s',"
+		          "Txt='%s'"
+		   " WHERE AttCod=%ld"
+		     " AND CrsCod=%ld",
                    Event->Hidden ? 'Y' :
-        	                 'N',
+        	                   'N',
                    Event->TimeUTC[Att_START_TIME],
                    Event->TimeUTC[Att_END_TIME  ],
                    Event->CommentTchVisible ? 'Y' :
-        	                            'N',
+        	                              'N',
                    Event->Title,
                    Description,
-                   Event->AttCod,Gbl.Hierarchy.Crs.CrsCod);
+                   Event->AttCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Update groups *****/
    /* Remove old groups */

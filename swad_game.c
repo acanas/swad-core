@@ -1278,7 +1278,9 @@ void Gam_HideGame (void)
 
    /***** Hide game *****/
    DB_QueryUPDATE ("can not hide game",
-		   "UPDATE gam_games SET Hidden='Y' WHERE GamCod=%ld",
+		   "UPDATE gam_games"
+		     " SET Hidden='Y'"
+		   " WHERE GamCod=%ld",
 		   Game.GamCod);
 
    /***** Show games again *****/
@@ -1311,7 +1313,9 @@ void Gam_UnhideGame (void)
 
    /***** Show game *****/
    DB_QueryUPDATE ("can not show game",
-		   "UPDATE gam_games SET Hidden='N' WHERE GamCod=%ld",
+		   "UPDATE gam_games"
+		     " SET Hidden='N'"
+		   " WHERE GamCod=%ld",
 		   Game.GamCod);
 
    /***** Show games again *****/
@@ -1680,11 +1684,11 @@ static void Gam_UpdateGame (struct Gam_Game *Game,const char *Txt)
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    DB_QueryUPDATE ("can not update game",
 		   "UPDATE gam_games"
-		   " SET CrsCod=%ld,"
-		        "MaxGrade=%.15lg,"
-		        "Visibility=%u,"
-		        "Title='%s',"
-		        "Txt='%s'"
+		     " SET CrsCod=%ld,"
+		          "MaxGrade=%.15lg,"
+		          "Visibility=%u,"
+		          "Title='%s',"
+		          "Txt='%s'"
 		   " WHERE GamCod=%ld",
 		   Gbl.Hierarchy.Crs.CrsCod,
 		   Game->MaxGrade,
@@ -2335,23 +2339,30 @@ void Gam_RemoveQstFromGame (void)
    /* Remove the question itself */
    DB_QueryDELETE ("can not remove a question",
 		   "DELETE FROM gam_questions"
-		   " WHERE GamCod=%ld AND QstInd=%u",
-		   Game.GamCod,QstInd);
+		   " WHERE GamCod=%ld"
+		     " AND QstInd=%u",
+		   Game.GamCod,
+		   QstInd);
    if (!mysql_affected_rows (&Gbl.mysql))
       Lay_ShowErrorAndExit ("The question to be removed does not exist.");
 
    /* Change index of questions greater than this */
    DB_QueryUPDATE ("can not update indexes of questions in table of answers",
-		   "UPDATE mch_answers,mch_matches"
-		   " SET mch_answers.QstInd=mch_answers.QstInd-1"
+		   "UPDATE mch_answers,"
+		          "mch_matches"
+		     " SET mch_answers.QstInd=mch_answers.QstInd-1"
 		   " WHERE mch_matches.GamCod=%ld"
-		   " AND mch_matches.MchCod=mch_answers.MchCod"
-		   " AND mch_answers.QstInd>%u",
-		   Game.GamCod,QstInd);
+		     " AND mch_matches.MchCod=mch_answers.MchCod"
+		     " AND mch_answers.QstInd>%u",
+		   Game.GamCod,
+		   QstInd);
    DB_QueryUPDATE ("can not update indexes of questions",
-		   "UPDATE gam_questions SET QstInd=QstInd-1"
-		   " WHERE GamCod=%ld AND QstInd>%u",
-		   Game.GamCod,QstInd);
+		   "UPDATE gam_questions"
+		     " SET QstInd=QstInd-1"
+		   " WHERE GamCod=%ld"
+		     " AND QstInd>%u",
+		   Game.GamCod,
+		   QstInd);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
@@ -2502,24 +2513,33 @@ static void Gam_ExchangeQuestions (long GamCod,
    /* Step 1: change temporarily top index to minus bottom index
               in order to not repeat unique index (GamCod,QstInd) */
    DB_QueryUPDATE ("can not exchange indexes of questions",
-		   "UPDATE gam_questions SET QstInd=-%u"
-		   " WHERE GamCod=%ld AND QstCod=%ld",
+		   "UPDATE gam_questions"
+		     " SET QstInd=-%u"
+		   " WHERE GamCod=%ld"
+		     " AND QstCod=%ld",
 		   QstIndBottom,
-		   GamCod,QstCodTop);
+		   GamCod,
+		   QstCodTop);
 
    /* Step 2: change bottom index to old top index  */
    DB_QueryUPDATE ("can not exchange indexes of questions",
-		   "UPDATE gam_questions SET QstInd=%u"
-		   " WHERE GamCod=%ld AND QstCod=%ld",
+		   "UPDATE gam_questions"
+		     " SET QstInd=%u"
+		   " WHERE GamCod=%ld"
+		     " AND QstCod=%ld",
 		   QstIndTop,
-		   GamCod,QstCodBottom);
+		   GamCod,
+		   QstCodBottom);
 
    /* Step 3: change top index to old bottom index */
    DB_QueryUPDATE ("can not exchange indexes of questions",
-		   "UPDATE gam_questions SET QstInd=%u"
-		   " WHERE GamCod=%ld AND QstCod=%ld",
+		   "UPDATE gam_questions"
+		     " SET QstInd=%u"
+		   " WHERE GamCod=%ld"
+		     " AND QstCod=%ld",
 		   QstIndBottom,
-		   GamCod,QstCodTop);
+		   GamCod,
+		   QstCodTop);
 
    /***** Unlock table *****/
    Gbl.DB.LockedTables = false;	// Set to false before the following unlock...

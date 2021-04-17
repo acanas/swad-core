@@ -621,8 +621,11 @@ static void InsCfg_UpdateInsCtyDB (long InsCod,long CtyCod)
   {
    /***** Update country in table of institutions *****/
    DB_QueryUPDATE ("can not update the country of an institution",
-		   "UPDATE ins_instits SET CtyCod=%ld WHERE InsCod=%ld",
-                   CtyCod,InsCod);
+		   "UPDATE ins_instits"
+		     " SET CtyCod=%ld"
+		   " WHERE InsCod=%ld",
+                   CtyCod,
+                   InsCod);
   }
 
 /*****************************************************************************/

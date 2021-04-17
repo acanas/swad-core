@@ -769,7 +769,8 @@ void Hld_ChangeHolidayPlace (void)
 		   "UPDATE hld_holidays"
 		     " SET PlcCod=%ld"
 		   " WHERE HldCod=%ld",
-                   NewPlace.PlcCod,Hld_EditingHld->HldCod);
+                   NewPlace.PlcCod,
+                   Hld_EditingHld->HldCod);
    Hld_EditingHld->PlcCod = NewPlace.PlcCod;
    Str_Copy (Hld_EditingHld->PlaceFullName,NewPlace.FullName,
              sizeof (Hld_EditingHld->PlaceFullName) - 1);

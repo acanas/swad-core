@@ -178,9 +178,12 @@ void Tml_DB_MarkNoteAsUnavailable (Tml_Not_NoteType_t NoteType,long Cod)
   {
    /***** Mark note as unavailable *****/
    DB_QueryUPDATE ("can not mark note as unavailable",
-		   "UPDATE tml_notes SET Unavailable='Y'"
-		   " WHERE NoteType=%u AND Cod=%ld",
-		   (unsigned) NoteType,Cod);
+		   "UPDATE tml_notes"
+		     " SET Unavailable='Y'"
+		   " WHERE NoteType=%u"
+		     " AND Cod=%ld",
+		   (unsigned) NoteType,
+		   Cod);
   }
 
 /*****************************************************************************/

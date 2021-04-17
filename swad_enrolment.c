@@ -569,16 +569,21 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
    Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);	// It can include start and ending apostrophes
    DB_QueryUPDATE ("can not update user's data",
 		   "UPDATE usr_data"
-		   " SET Password='%s',"
-		   "Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
-		   "CtyCod=%ld,"
-		   "LocalPhone='%s',"
-		   "FamilyPhone='%s',"
-		   "Birthday=%s,"
-		   "Comments='%s'"
+		     " SET Password='%s',"
+		          "Surname1='%s',"
+		          "Surname2='%s',"
+		          "FirstName='%s',"
+		          "Sex='%s',"
+		          "CtyCod=%ld,"
+		          "LocalPhone='%s',"
+		          "FamilyPhone='%s',"
+		          "Birthday=%s,"
+		          "Comments='%s'"
 		   " WHERE UsrCod=%ld",
 	           UsrDat->Password,
-	           UsrDat->Surname1,UsrDat->Surname2,UsrDat->FrstName,
+	           UsrDat->Surname1,
+	           UsrDat->Surname2,
+	           UsrDat->FrstName,
 	           Usr_StringsSexDB[UsrDat->Sex],
 	           UsrDat->CtyCod,
 	           UsrDat->Phone[0],
@@ -611,7 +616,10 @@ void Enr_UpdateInstitutionCenterDepartment (void)
   {
    DB_QueryUPDATE ("can not update institution, center and department",
 		   "UPDATE usr_data"
-		   " SET InsCtyCod=%ld,InsCod=%ld,CtrCod=%ld,DptCod=%ld"
+		     " SET InsCtyCod=%ld,"
+		          "InsCod=%ld,"
+		          "CtrCod=%ld,"
+		          "DptCod=%ld"
 		   " WHERE UsrCod=%ld",
 	           Gbl.Usrs.Me.UsrDat.InsCtyCod,
 	           Gbl.Usrs.Me.UsrDat.InsCod,
@@ -4109,7 +4117,8 @@ void Enr_AcceptUsrInCrs (long UsrCod)
 		     " SET Accepted='Y'"
 		   " WHERE CrsCod=%ld"
 		     " AND UsrCod=%ld",
-                   Gbl.Hierarchy.Crs.CrsCod,UsrCod);
+                   Gbl.Hierarchy.Crs.CrsCod,
+                   UsrCod);
   }
 
 /*****************************************************************************/

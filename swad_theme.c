@@ -371,7 +371,8 @@ void The_ChangeTheme (void)
    /***** Store theme in database *****/
    if (Gbl.Usrs.Me.Logged)
       DB_QueryUPDATE ("can not update your setting about theme",
-		      "UPDATE usr_data SET Theme='%s'"
+		      "UPDATE usr_data"
+		        " SET Theme='%s'"
 		      " WHERE UsrCod=%ld",
                       The_ThemeId[Gbl.Prefs.Theme],
 		      Gbl.Usrs.Me.UsrDat.UsrCod);
