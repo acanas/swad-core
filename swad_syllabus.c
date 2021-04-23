@@ -220,7 +220,7 @@ bool Syl_CheckSyllabus (struct Syl_Syllabus *Syllabus,long CrsCod)
 
 bool Syl_CheckAndEditSyllabus (struct Syl_Syllabus *Syllabus)
   {
-   extern const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_INFO_TYPES];
+   extern const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_TYPES];
    extern const char *Txt_Done;
    bool ICanEdit;
    bool PutIconToEdit;
@@ -528,7 +528,7 @@ int Syl_ReadLevelItemSyllabus (void)
 static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus,
                               bool PutIconToEdit)
   {
-   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Hlp_COURSE_Syllabus_edit;
    extern const char *Hlp_COURSE_Syllabus;
    unsigned NumItem;
@@ -760,7 +760,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 
 void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp)
   {
-   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    unsigned NumItem;
    int i;
 
@@ -963,8 +963,8 @@ void Syl_RemoveItemSyllabus (void)
 
    /***** We are editing a syllabus with the internal editor,
           so change info source to internal editor in database *****/
-   Inf_SetInfoSrcIntoDB (Syl_LstItemsSyllabus.NumItems ? Inf_INFO_SRC_EDITOR :
-   	                                                 Inf_INFO_SRC_NONE);
+   Inf_SetInfoSrcIntoDB (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
+   	                                                 Inf_NONE);
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
@@ -1069,8 +1069,8 @@ static void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
 
    /***** We are editing a syllabus with the internal editor,
           so change info source to internal editor in database *****/
-   Inf_SetInfoSrcIntoDB (Syl_LstItemsSyllabus.NumItems ? Inf_INFO_SRC_EDITOR :
-						         Inf_INFO_SRC_NONE);
+   Inf_SetInfoSrcIntoDB (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
+						         Inf_NONE);
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
@@ -1238,8 +1238,8 @@ static void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreas
 
    /***** We are editing a syllabus with the internal editor,
           so change info source to internal editor in database *****/
-   Inf_SetInfoSrcIntoDB (Syl_LstItemsSyllabus.NumItems ? Inf_INFO_SRC_EDITOR :
-   	                                                 Inf_INFO_SRC_NONE);
+   Inf_SetInfoSrcIntoDB (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
+   	                                                 Inf_NONE);
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
@@ -1309,8 +1309,8 @@ void Syl_InsertItemSyllabus (void)
 
    /***** We are editing a syllabus with the internal editor,
           so change info source to internal editor in database *****/
-   Inf_SetInfoSrcIntoDB (Syl_LstItemsSyllabus.NumItems ? Inf_INFO_SRC_EDITOR :
-   	                                                 Inf_INFO_SRC_NONE);
+   Inf_SetInfoSrcIntoDB (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
+   	                                                 Inf_NONE);
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
@@ -1361,8 +1361,8 @@ void Syl_ModifyItemSyllabus (void)
 
    /***** We are editing a syllabus with the internal editor,
           so change info source to internal editor in database *****/
-   Inf_SetInfoSrcIntoDB (Syl_LstItemsSyllabus.NumItems ? Inf_INFO_SRC_EDITOR :
-   	                                                 Inf_INFO_SRC_NONE);
+   Inf_SetInfoSrcIntoDB (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
+   	                                                 Inf_NONE);
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();

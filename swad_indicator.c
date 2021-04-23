@@ -837,7 +837,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
    extern const char *Txt_Indicators;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Syllabus_of_the_course;
-   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_Number_of_files_in_SHARE_zones;
    extern const char *Txt_Number_of_files_in_DOCUM_zones;
    extern const char *Txt_Guided_academic_assignments;
@@ -852,7 +852,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
    extern const char *Txt_Assessment_criteria;
    extern const char *Txt_YES;
    extern const char *Txt_NO;
-   extern const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_INFO_SOURCES];
+   extern const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES];
    extern const char *Txt_Courses;
    MYSQL_ROW row;
    unsigned NumCrs;
@@ -1190,21 +1190,21 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-			        (IndicatorsCrs.SyllabusLecSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
+			        (IndicatorsCrs.SyllabusLecSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										      "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
 		  HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusLecSrc]);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-			        (IndicatorsCrs.SyllabusPraSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
+			        (IndicatorsCrs.SyllabusPraSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										      "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
 		  HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusPraSrc]);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"%s LM COLOR%u\">",
-			        (IndicatorsCrs.TeachingGuideSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
+			        (IndicatorsCrs.TeachingGuideSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										        "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
 		  HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
@@ -1315,14 +1315,14 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-			        (IndicatorsCrs.AssessmentSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
+			        (IndicatorsCrs.AssessmentSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										     "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
 		  HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.AssessmentSrc]);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-			        (IndicatorsCrs.TeachingGuideSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
+			        (IndicatorsCrs.TeachingGuideSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										        "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
 		  HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
@@ -1431,9 +1431,9 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
    IndicatorsCrs->SyllabusLecSrc   = Inf_GetInfoSrcFromDB (CrsCod,Inf_LECTURES);
    IndicatorsCrs->SyllabusPraSrc   = Inf_GetInfoSrcFromDB (CrsCod,Inf_PRACTICALS);
    IndicatorsCrs->TeachingGuideSrc = Inf_GetInfoSrcFromDB (CrsCod,Inf_TEACHING_GUIDE);
-   IndicatorsCrs->ThereIsSyllabus = (IndicatorsCrs->SyllabusLecSrc   != Inf_INFO_SRC_NONE) ||
-                                    (IndicatorsCrs->SyllabusPraSrc   != Inf_INFO_SRC_NONE) ||
-                                    (IndicatorsCrs->TeachingGuideSrc != Inf_INFO_SRC_NONE);
+   IndicatorsCrs->ThereIsSyllabus = (IndicatorsCrs->SyllabusLecSrc   != Inf_NONE) ||
+                                    (IndicatorsCrs->SyllabusPraSrc   != Inf_NONE) ||
+                                    (IndicatorsCrs->TeachingGuideSrc != Inf_NONE);
    if (IndicatorsCrs->ThereIsSyllabus)
       IndicatorsCrs->NumIndicators++;
 
@@ -1465,8 +1465,8 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
 
    /***** Indicator #5: information about assessment *****/
    IndicatorsCrs->AssessmentSrc = Inf_GetInfoSrcFromDB (CrsCod,Inf_ASSESSMENT);
-   IndicatorsCrs->ThereIsAssessment = (IndicatorsCrs->AssessmentSrc    != Inf_INFO_SRC_NONE) ||
-                                      (IndicatorsCrs->TeachingGuideSrc != Inf_INFO_SRC_NONE);
+   IndicatorsCrs->ThereIsAssessment = (IndicatorsCrs->AssessmentSrc    != Inf_NONE) ||
+                                      (IndicatorsCrs->TeachingGuideSrc != Inf_NONE);
    if (IndicatorsCrs->ThereIsAssessment)
       IndicatorsCrs->NumIndicators++;
 

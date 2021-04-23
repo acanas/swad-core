@@ -39,9 +39,9 @@ struct Ind_IndicatorsCrs
    unsigned NumFilesInDocumentZones;
    unsigned NumFilesInSharedZones;
    bool ThereIsSyllabus;
-   Inf_InfoSrc_t TeachingGuideSrc;
-   Inf_InfoSrc_t SyllabusLecSrc;
-   Inf_InfoSrc_t SyllabusPraSrc;
+   Inf_Src_t TeachingGuideSrc;
+   Inf_Src_t SyllabusLecSrc;
+   Inf_Src_t SyllabusPraSrc;
    bool ThereAreAssignments;
    unsigned NumAssignments;
    unsigned NumFilesAssignments;
@@ -53,7 +53,7 @@ struct Ind_IndicatorsCrs
    unsigned NumMsgsSentByTchs;
    bool ThereAreMaterials;
    bool ThereIsAssessment;
-   Inf_InfoSrc_t AssessmentSrc;
+   Inf_Src_t AssessmentSrc;
    unsigned NumIndicators;
    bool CoursePartiallyOK;
    bool CourseAllOK;

@@ -53,7 +53,7 @@ extern struct Globals Gbl;
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_INFO_TYPES] =
+const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_TYPES] =
   {
    [Inf_INTRODUCTION  ] = ActSeeCrsInf,
    [Inf_TEACHING_GUIDE] = ActSeeTchGui,
@@ -73,7 +73,7 @@ const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_INFO_TYPES] =
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-static const char *Inf_FileNamesForInfoType[Inf_NUM_INFO_TYPES] =
+static const char *Inf_FileNamesForInfoType[Inf_NUM_TYPES] =
   {
    [Inf_INTRODUCTION  ] = Cfg_CRS_INFO_INTRODUCTION,
    [Inf_TEACHING_GUIDE] = Cfg_CRS_INFO_TEACHING_GUIDE,
@@ -86,27 +86,27 @@ static const char *Inf_FileNamesForInfoType[Inf_NUM_INFO_TYPES] =
   };
 
 /* Functions to write forms in course edition (FAQ, links, etc.) */
-static void (*Inf_FormsForEditionTypes[Inf_NUM_INFO_SOURCES])(Inf_InfoSrc_t InfoSrc) =
+static void (*Inf_FormsForEditionTypes[Inf_NUM_SOURCES])(Inf_Src_t InfoSrc) =
   {
-   [Inf_INFO_SRC_NONE      ] = NULL,
-   [Inf_INFO_SRC_EDITOR    ] = Inf_FormToEnterIntegratedEditor,
-   [Inf_INFO_SRC_PLAIN_TEXT] = Inf_FormToEnterPlainTextEditor,
-   [Inf_INFO_SRC_RICH_TEXT ] = Inf_FormToEnterRichTextEditor,
-   [Inf_INFO_SRC_PAGE      ] = Inf_FormToSendPage,
-   [Inf_INFO_SRC_URL       ] = Inf_FormToSendURL,
+   [Inf_NONE      ] = NULL,
+   [Inf_EDITOR    ] = Inf_FormToEnterIntegratedEditor,
+   [Inf_PLAIN_TEXT] = Inf_FormToEnterPlainTextEditor,
+   [Inf_RICH_TEXT ] = Inf_FormToEnterRichTextEditor,
+   [Inf_PAGE      ] = Inf_FormToSendPage,
+   [Inf_URL       ] = Inf_FormToSendURL,
   };
 
-static const char *Inf_NamesInDBForInfoSrc[Inf_NUM_INFO_SOURCES] =
+static const char *Inf_NamesInDBForInfoSrc[Inf_NUM_SOURCES] =
   {
-   [Inf_INFO_SRC_NONE      ] = "none",
-   [Inf_INFO_SRC_EDITOR    ] = "editor",
-   [Inf_INFO_SRC_PLAIN_TEXT] = "plain_text",
-   [Inf_INFO_SRC_RICH_TEXT ] = "rich_text",
-   [Inf_INFO_SRC_PAGE      ] = "page",
-   [Inf_INFO_SRC_URL       ] = "URL",
+   [Inf_NONE      ] = "none",
+   [Inf_EDITOR    ] = "editor",
+   [Inf_PLAIN_TEXT] = "plain_text",
+   [Inf_RICH_TEXT ] = "rich_text",
+   [Inf_PAGE      ] = "page",
+   [Inf_URL       ] = "URL",
   };
 
-static const Act_Action_t Inf_ActionsEditInfo[Inf_NUM_INFO_TYPES] =
+static const Act_Action_t Inf_ActionsEditInfo[Inf_NUM_TYPES] =
   {
    [Inf_INTRODUCTION  ] = ActEdiCrsInf,
    [Inf_TEACHING_GUIDE] = ActEdiTchGui,
@@ -118,7 +118,7 @@ static const Act_Action_t Inf_ActionsEditInfo[Inf_NUM_INFO_TYPES] =
    [Inf_ASSESSMENT    ] = ActEdiAss,
   };
 
-static const Act_Action_t Inf_ActionsChangeForceReadInfo[Inf_NUM_INFO_TYPES] =
+static const Act_Action_t Inf_ActionsChangeForceReadInfo[Inf_NUM_TYPES] =
   {
    [Inf_INTRODUCTION  ] = ActChgFrcReaCrsInf,
    [Inf_TEACHING_GUIDE] = ActChgFrcReaTchGui,
@@ -130,7 +130,7 @@ static const Act_Action_t Inf_ActionsChangeForceReadInfo[Inf_NUM_INFO_TYPES] =
    [Inf_ASSESSMENT    ] = ActChgFrcReaAss,
   };
 
-static const Act_Action_t Inf_ActionsIHaveReadInfo[Inf_NUM_INFO_TYPES] =
+static const Act_Action_t Inf_ActionsIHaveReadInfo[Inf_NUM_TYPES] =
   {
    [Inf_INTRODUCTION  ] = ActChgHavReaCrsInf,
    [Inf_TEACHING_GUIDE] = ActChgHavReaTchGui,
@@ -142,7 +142,7 @@ static const Act_Action_t Inf_ActionsIHaveReadInfo[Inf_NUM_INFO_TYPES] =
    [Inf_ASSESSMENT    ] = ActChgHavReaAss,
   };
 
-static const Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_INFO_TYPES] =
+static const Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_TYPES] =
   {
    [Inf_INTRODUCTION  ] = ActSelInfSrcCrsInf,
    [Inf_TEACHING_GUIDE] = ActSelInfSrcTchGui,
@@ -154,64 +154,64 @@ static const Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_INFO_TYPES] =
    [Inf_ASSESSMENT    ] = ActSelInfSrcAss,
   };
 
-static const Act_Action_t Inf_ActionsInfo[Inf_NUM_INFO_SOURCES][Inf_NUM_INFO_TYPES] =
+static const Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
   {
-   [Inf_INFO_SRC_NONE      ][Inf_INTRODUCTION  ] = ActUnk,
-   [Inf_INFO_SRC_NONE      ][Inf_TEACHING_GUIDE] = ActUnk,
-   [Inf_INFO_SRC_NONE      ][Inf_LECTURES      ] = ActUnk,
-   [Inf_INFO_SRC_NONE      ][Inf_PRACTICALS    ] = ActUnk,
-   [Inf_INFO_SRC_NONE      ][Inf_BIBLIOGRAPHY  ] = ActUnk,
-   [Inf_INFO_SRC_NONE      ][Inf_FAQ           ] = ActUnk,
-   [Inf_INFO_SRC_NONE      ][Inf_LINKS         ] = ActUnk,
-   [Inf_INFO_SRC_NONE      ][Inf_ASSESSMENT    ] = ActUnk,
+   [Inf_NONE      ][Inf_INTRODUCTION  ] = ActUnk,
+   [Inf_NONE      ][Inf_TEACHING_GUIDE] = ActUnk,
+   [Inf_NONE      ][Inf_LECTURES      ] = ActUnk,
+   [Inf_NONE      ][Inf_PRACTICALS    ] = ActUnk,
+   [Inf_NONE      ][Inf_BIBLIOGRAPHY  ] = ActUnk,
+   [Inf_NONE      ][Inf_FAQ           ] = ActUnk,
+   [Inf_NONE      ][Inf_LINKS         ] = ActUnk,
+   [Inf_NONE      ][Inf_ASSESSMENT    ] = ActUnk,
 
-   [Inf_INFO_SRC_EDITOR    ][Inf_INTRODUCTION  ] = ActEditorCrsInf,
-   [Inf_INFO_SRC_EDITOR    ][Inf_TEACHING_GUIDE] = ActEditorTchGui,
-   [Inf_INFO_SRC_EDITOR    ][Inf_LECTURES      ] = ActEditorSylLec,
-   [Inf_INFO_SRC_EDITOR    ][Inf_PRACTICALS    ] = ActEditorSylPra,
-   [Inf_INFO_SRC_EDITOR    ][Inf_BIBLIOGRAPHY  ] = ActEditorBib,
-   [Inf_INFO_SRC_EDITOR    ][Inf_FAQ           ] = ActEditorFAQ,
-   [Inf_INFO_SRC_EDITOR    ][Inf_LINKS         ] = ActEditorCrsLnk,
-   [Inf_INFO_SRC_EDITOR    ][Inf_ASSESSMENT    ] = ActEditorAss,
+   [Inf_EDITOR    ][Inf_INTRODUCTION  ] = ActEditorCrsInf,
+   [Inf_EDITOR    ][Inf_TEACHING_GUIDE] = ActEditorTchGui,
+   [Inf_EDITOR    ][Inf_LECTURES      ] = ActEditorSylLec,
+   [Inf_EDITOR    ][Inf_PRACTICALS    ] = ActEditorSylPra,
+   [Inf_EDITOR    ][Inf_BIBLIOGRAPHY  ] = ActEditorBib,
+   [Inf_EDITOR    ][Inf_FAQ           ] = ActEditorFAQ,
+   [Inf_EDITOR    ][Inf_LINKS         ] = ActEditorCrsLnk,
+   [Inf_EDITOR    ][Inf_ASSESSMENT    ] = ActEditorAss,
 
-   [Inf_INFO_SRC_PLAIN_TEXT][Inf_INTRODUCTION  ] = ActPlaTxtEdiCrsInf,
-   [Inf_INFO_SRC_PLAIN_TEXT][Inf_TEACHING_GUIDE] = ActPlaTxtEdiTchGui,
-   [Inf_INFO_SRC_PLAIN_TEXT][Inf_LECTURES      ] = ActPlaTxtEdiSylLec,
-   [Inf_INFO_SRC_PLAIN_TEXT][Inf_PRACTICALS    ] = ActPlaTxtEdiSylPra,
-   [Inf_INFO_SRC_PLAIN_TEXT][Inf_BIBLIOGRAPHY  ] = ActPlaTxtEdiBib,
-   [Inf_INFO_SRC_PLAIN_TEXT][Inf_FAQ           ] = ActPlaTxtEdiFAQ,
-   [Inf_INFO_SRC_PLAIN_TEXT][Inf_LINKS         ] = ActPlaTxtEdiCrsLnk,
-   [Inf_INFO_SRC_PLAIN_TEXT][Inf_ASSESSMENT    ] = ActPlaTxtEdiAss,
+   [Inf_PLAIN_TEXT][Inf_INTRODUCTION  ] = ActPlaTxtEdiCrsInf,
+   [Inf_PLAIN_TEXT][Inf_TEACHING_GUIDE] = ActPlaTxtEdiTchGui,
+   [Inf_PLAIN_TEXT][Inf_LECTURES      ] = ActPlaTxtEdiSylLec,
+   [Inf_PLAIN_TEXT][Inf_PRACTICALS    ] = ActPlaTxtEdiSylPra,
+   [Inf_PLAIN_TEXT][Inf_BIBLIOGRAPHY  ] = ActPlaTxtEdiBib,
+   [Inf_PLAIN_TEXT][Inf_FAQ           ] = ActPlaTxtEdiFAQ,
+   [Inf_PLAIN_TEXT][Inf_LINKS         ] = ActPlaTxtEdiCrsLnk,
+   [Inf_PLAIN_TEXT][Inf_ASSESSMENT    ] = ActPlaTxtEdiAss,
 
-   [Inf_INFO_SRC_RICH_TEXT ][Inf_INTRODUCTION  ] = ActRchTxtEdiCrsInf,
-   [Inf_INFO_SRC_RICH_TEXT ][Inf_TEACHING_GUIDE] = ActRchTxtEdiTchGui,
-   [Inf_INFO_SRC_RICH_TEXT ][Inf_LECTURES      ] = ActRchTxtEdiSylLec,
-   [Inf_INFO_SRC_RICH_TEXT ][Inf_PRACTICALS    ] = ActRchTxtEdiSylPra,
-   [Inf_INFO_SRC_RICH_TEXT ][Inf_BIBLIOGRAPHY  ] = ActRchTxtEdiBib,
-   [Inf_INFO_SRC_RICH_TEXT ][Inf_FAQ           ] = ActRchTxtEdiFAQ,
-   [Inf_INFO_SRC_RICH_TEXT ][Inf_LINKS         ] = ActRchTxtEdiCrsLnk,
-   [Inf_INFO_SRC_RICH_TEXT ][Inf_ASSESSMENT    ] = ActRchTxtEdiAss,
+   [Inf_RICH_TEXT ][Inf_INTRODUCTION  ] = ActRchTxtEdiCrsInf,
+   [Inf_RICH_TEXT ][Inf_TEACHING_GUIDE] = ActRchTxtEdiTchGui,
+   [Inf_RICH_TEXT ][Inf_LECTURES      ] = ActRchTxtEdiSylLec,
+   [Inf_RICH_TEXT ][Inf_PRACTICALS    ] = ActRchTxtEdiSylPra,
+   [Inf_RICH_TEXT ][Inf_BIBLIOGRAPHY  ] = ActRchTxtEdiBib,
+   [Inf_RICH_TEXT ][Inf_FAQ           ] = ActRchTxtEdiFAQ,
+   [Inf_RICH_TEXT ][Inf_LINKS         ] = ActRchTxtEdiCrsLnk,
+   [Inf_RICH_TEXT ][Inf_ASSESSMENT    ] = ActRchTxtEdiAss,
 
-   [Inf_INFO_SRC_PAGE      ][Inf_INTRODUCTION  ] = ActRcvPagCrsInf,
-   [Inf_INFO_SRC_PAGE      ][Inf_TEACHING_GUIDE] = ActRcvPagTchGui,
-   [Inf_INFO_SRC_PAGE      ][Inf_LECTURES      ] = ActRcvPagSylLec,
-   [Inf_INFO_SRC_PAGE      ][Inf_PRACTICALS    ] = ActRcvPagSylPra,
-   [Inf_INFO_SRC_PAGE      ][Inf_BIBLIOGRAPHY  ] = ActRcvPagBib,
-   [Inf_INFO_SRC_PAGE      ][Inf_FAQ           ] = ActRcvPagFAQ,
-   [Inf_INFO_SRC_PAGE      ][Inf_LINKS         ] = ActRcvPagCrsLnk,
-   [Inf_INFO_SRC_PAGE      ][Inf_ASSESSMENT    ] = ActRcvPagAss,
+   [Inf_PAGE      ][Inf_INTRODUCTION  ] = ActRcvPagCrsInf,
+   [Inf_PAGE      ][Inf_TEACHING_GUIDE] = ActRcvPagTchGui,
+   [Inf_PAGE      ][Inf_LECTURES      ] = ActRcvPagSylLec,
+   [Inf_PAGE      ][Inf_PRACTICALS    ] = ActRcvPagSylPra,
+   [Inf_PAGE      ][Inf_BIBLIOGRAPHY  ] = ActRcvPagBib,
+   [Inf_PAGE      ][Inf_FAQ           ] = ActRcvPagFAQ,
+   [Inf_PAGE      ][Inf_LINKS         ] = ActRcvPagCrsLnk,
+   [Inf_PAGE      ][Inf_ASSESSMENT    ] = ActRcvPagAss,
 
-   [Inf_INFO_SRC_URL       ][Inf_INTRODUCTION  ] = ActRcvURLCrsInf,
-   [Inf_INFO_SRC_URL       ][Inf_TEACHING_GUIDE] = ActRcvURLTchGui,
-   [Inf_INFO_SRC_URL       ][Inf_LECTURES      ] = ActRcvURLSylLec,
-   [Inf_INFO_SRC_URL       ][Inf_PRACTICALS    ] = ActRcvURLSylPra,
-   [Inf_INFO_SRC_URL       ][Inf_BIBLIOGRAPHY  ] = ActRcvURLBib,
-   [Inf_INFO_SRC_URL       ][Inf_FAQ           ] = ActRcvURLFAQ,
-   [Inf_INFO_SRC_URL       ][Inf_LINKS         ] = ActRcvURLCrsLnk,
-   [Inf_INFO_SRC_URL       ][Inf_ASSESSMENT    ] = ActRcvURLAss,
+   [Inf_URL       ][Inf_INTRODUCTION  ] = ActRcvURLCrsInf,
+   [Inf_URL       ][Inf_TEACHING_GUIDE] = ActRcvURLTchGui,
+   [Inf_URL       ][Inf_LECTURES      ] = ActRcvURLSylLec,
+   [Inf_URL       ][Inf_PRACTICALS    ] = ActRcvURLSylPra,
+   [Inf_URL       ][Inf_BIBLIOGRAPHY  ] = ActRcvURLBib,
+   [Inf_URL       ][Inf_FAQ           ] = ActRcvURLFAQ,
+   [Inf_URL       ][Inf_LINKS         ] = ActRcvURLCrsLnk,
+   [Inf_URL       ][Inf_ASSESSMENT    ] = ActRcvURLAss,
   };
 
-static const Act_Action_t Inf_ActionsRcvPlaTxtInfo[Inf_NUM_INFO_TYPES] =
+static const Act_Action_t Inf_ActionsRcvPlaTxtInfo[Inf_NUM_TYPES] =
   {
    [Inf_INTRODUCTION  ] = ActRcvPlaTxtCrsInf,
    [Inf_TEACHING_GUIDE] = ActRcvPlaTxtTchGui,
@@ -223,7 +223,7 @@ static const Act_Action_t Inf_ActionsRcvPlaTxtInfo[Inf_NUM_INFO_TYPES] =
    [Inf_ASSESSMENT    ] = ActRcvPlaTxtAss,
   };
 
-static const Act_Action_t Inf_ActionsRcvRchTxtInfo[Inf_NUM_INFO_TYPES] =
+static const Act_Action_t Inf_ActionsRcvRchTxtInfo[Inf_NUM_TYPES] =
   {
    [Inf_INTRODUCTION  ] = ActRcvRchTxtCrsInf,
    [Inf_TEACHING_GUIDE] = ActRcvRchTxtTchGui,
@@ -235,7 +235,7 @@ static const Act_Action_t Inf_ActionsRcvRchTxtInfo[Inf_NUM_INFO_TYPES] =
    [Inf_ASSESSMENT    ] = ActRcvRchTxtAss,
   };
 
-static const char *Inf_NamesInDBForInfoType[Inf_NUM_INFO_TYPES] =
+static const char *Inf_NamesInDBForInfoType[Inf_NUM_TYPES] =
   {
    [Inf_INTRODUCTION  ] = "intro",		// TODO: Change this to "introduction"!
    [Inf_TEACHING_GUIDE] = "description",	// TODO: Change this to "guide"!
@@ -278,26 +278,26 @@ static bool Inf_GetIfIHaveReadFromForm (void);
 static void Inf_SetForceReadIntoDB (bool MustBeRead);
 static void Inf_SetIHaveReadIntoDB (bool IHaveRead);
 
-static bool Inf_CheckPage (long CrsCod,Inf_InfoType_t InfoType);
+static bool Inf_CheckPage (long CrsCod,Inf_Type_t InfoType);
 static bool Inf_CheckAndShowPage (void);
 
-static bool Inf_CheckURL (long CrsCod,Inf_InfoType_t InfoType);
+static bool Inf_CheckURL (long CrsCod,Inf_Type_t InfoType);
 static bool Inf_CheckAndShowURL (void);
-static void Inf_BuildPathURL (long CrsCod,Inf_InfoType_t InfoType,
+static void Inf_BuildPathURL (long CrsCod,Inf_Type_t InfoType,
                               char PathFile[PATH_MAX + 1]);
 
 static void Inf_ShowPage (const char *URL);
 
 static bool Inf_CheckIfInfoAvailable (struct Syl_Syllabus *Syllabus,
-                                      Inf_InfoSrc_t InfoSrc);
+                                      Inf_Src_t InfoSrc);
 static void Inf_AsignInfoType (struct Inf_Info *Info,
                                struct Syl_Syllabus *Syllabus);
 static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD);
 
-static bool Inf_CheckPlainTxt (long CrsCod,Inf_InfoType_t InfoType);
+static bool Inf_CheckPlainTxt (long CrsCod,Inf_Type_t InfoType);
 static bool Inf_CheckAndShowPlainTxt (void);
 
-static bool Inf_CheckRichTxt (long CrsCod,Inf_InfoType_t InfoType);
+static bool Inf_CheckRichTxt (long CrsCod,Inf_Type_t InfoType);
 static bool Inf_CheckAndShowRichTxt (void);
 
 /*****************************************************************************/
@@ -306,16 +306,15 @@ static bool Inf_CheckAndShowRichTxt (void);
 
 void Inf_ShowInfo (void)
   {
-   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_No_information;
    struct Syl_Syllabus Syllabus;
-   Inf_InfoSrc_t InfoSrc;
-   bool MustBeRead;
+   struct Inf_FromDB FromDB;
    bool Disabled;
    bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    bool ShowWarningNoInfo = false;
-   const char *Help[Inf_NUM_INFO_TYPES] =
+   const char *Help[Inf_NUM_TYPES] =
      {
       [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_textual_information,
       [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide,
@@ -337,7 +336,7 @@ void Inf_ShowInfo (void)
    Inf_GetAndCheckInfoSrcFromDB (&Syllabus,
                                  Gbl.Hierarchy.Crs.CrsCod,
                                  Gbl.Crs.Info.Type,
-                                 &InfoSrc,&MustBeRead);
+                                 &FromDB);
 
    switch (Gbl.Crs.Info.Type)
      {
@@ -352,7 +351,7 @@ void Inf_ShowInfo (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-         if (MustBeRead)
+         if (FromDB.MustBeRead)
            {
             /***** Contextual menu *****/
             Mnu_ContextMenuBegin ();
@@ -365,12 +364,12 @@ void Inf_ShowInfo (void)
       case Rol_TCH:
       case Rol_SYS_ADM:
          /* Put  */
-         if (InfoSrc != Inf_INFO_SRC_NONE)
+         if (FromDB.Src != Inf_NONE)
            {
             /***** Contextual menu *****/
             Mnu_ContextMenuBegin ();
             Disabled = (Gbl.Usrs.Me.Role.Logged == Rol_NET);	// Non-editing teachers can not change the status of checkbox
-            Inf_PutCheckboxForceStdsToReadInfo (MustBeRead,Disabled);	// Checkbox to force students...
+            Inf_PutCheckboxForceStdsToReadInfo (FromDB.MustBeRead,Disabled);	// Checkbox to force students...
 									// ...to read this couse info
             Mnu_ContextMenuEnd ();
            }
@@ -379,12 +378,12 @@ void Inf_ShowInfo (void)
          break;
      }
 
-   switch (InfoSrc)
+   switch (FromDB.Src)
      {
-      case Inf_INFO_SRC_NONE:
+      case Inf_NONE:
 	 ShowWarningNoInfo = true;
          break;
-      case Inf_INFO_SRC_EDITOR:
+      case Inf_EDITOR:
          switch (Gbl.Crs.Info.Type)
            {
             case Inf_LECTURES:
@@ -401,17 +400,17 @@ void Inf_ShowInfo (void)
 	       break;
            }
          break;
-      case Inf_INFO_SRC_PLAIN_TEXT:
+      case Inf_PLAIN_TEXT:
          ShowWarningNoInfo = !Inf_CheckAndShowPlainTxt ();
          break;
-      case Inf_INFO_SRC_RICH_TEXT:
+      case Inf_RICH_TEXT:
          ShowWarningNoInfo = !Inf_CheckAndShowRichTxt ();
          break;
-      case Inf_INFO_SRC_PAGE:
+      case Inf_PAGE:
          /***** Open file with web page *****/
 	 ShowWarningNoInfo = !Inf_CheckAndShowPage ();
          break;
-      case Inf_INFO_SRC_URL:
+      case Inf_URL:
          /***** Check if file with URL exists *****/
 	 ShowWarningNoInfo = !Inf_CheckAndShowURL ();
          break;
@@ -454,14 +453,14 @@ static void Inf_PutButtonToEditInfo (void)
 static void Inf_PutIconToViewInfo (void *Type)
   {
    if (Type)
-      Ico_PutContextualIconToView (Inf_ActionsSeeInfo[*((Inf_InfoType_t *) Type)],
+      Ico_PutContextualIconToView (Inf_ActionsSeeInfo[*((Inf_Type_t *) Type)],
 				   NULL,NULL);
   }
 
 void Inf_PutIconToEditInfo (void *Type)
   {
    if (Type)
-      Ico_PutContextualIconToEdit (Inf_ActionsEditInfo[*((Inf_InfoType_t *) Type)],NULL,
+      Ico_PutContextualIconToEdit (Inf_ActionsEditInfo[*((Inf_Type_t *) Type)],NULL,
 				   NULL,NULL);
   }
 
@@ -526,11 +525,11 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
    MYSQL_ROW row;
    unsigned NumInfos;
    unsigned NumInfo;
-   Inf_InfoType_t InfoType;
+   Inf_Type_t InfoType;
 
    /***** Reset must-be-read to false for all info types *****/
-   for (InfoType  = (Inf_InfoType_t) 0;
-	InfoType <= (Inf_InfoType_t) (Inf_NUM_INFO_TYPES - 1);
+   for (InfoType  = (Inf_Type_t) 0;
+	InfoType <= (Inf_Type_t) (Inf_NUM_TYPES - 1);
 	InfoType++)
       Gbl.Crs.Info.MustBeRead[InfoType] = false;
 
@@ -578,7 +577,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
    extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
    extern const char *Txt_Required_reading;
    extern const char *Txt_You_should_read_the_following_information;
-   Inf_InfoType_t InfoType;
+   Inf_Type_t InfoType;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Required_reading,
@@ -591,8 +590,8 @@ void Inf_WriteMsgYouMustReadInfo (void)
    /***** Write every information I must read *****/
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_UL_Begin ("class=\"LIST_I_MUST_READ\"");
-   for (InfoType  = (Inf_InfoType_t) 0;
-	InfoType <= (Inf_InfoType_t) (Inf_NUM_INFO_TYPES - 1);
+   for (InfoType  = (Inf_Type_t) 0;
+	InfoType <= (Inf_Type_t) (Inf_NUM_TYPES - 1);
 	InfoType++)
       if (Gbl.Crs.Info.MustBeRead[InfoType])
         {
@@ -753,7 +752,7 @@ void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
 /*****************************************************************************/
 // Return true if info available
 
-static bool Inf_CheckPage (long CrsCod,Inf_InfoType_t InfoType)
+static bool Inf_CheckPage (long CrsCod,Inf_Type_t InfoType)
   {
    char PathRelDirHTML[PATH_MAX + 1];
    char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
@@ -831,7 +830,7 @@ static bool Inf_CheckAndShowPage (void)
 /* Build path inside a course for a given a info type to store web page file */
 /*****************************************************************************/
 
-void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char PathDir[PATH_MAX + 1])
+void Inf_BuildPathPage (long CrsCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1])
   {
    snprintf (PathDir,PATH_MAX + 1,"%s/%ld/%s",
              Cfg_PATH_CRS_PUBLIC,CrsCod,Inf_FileNamesForInfoType[InfoType]);
@@ -842,7 +841,7 @@ void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char PathDir[PATH_MA
 /*****************************************************************************/
 // Return true if info available
 
-static bool Inf_CheckURL (long CrsCod,Inf_InfoType_t InfoType)
+static bool Inf_CheckURL (long CrsCod,Inf_Type_t InfoType)
   {
    char PathFile[PATH_MAX + 1];
    FILE *FileURL;
@@ -900,7 +899,7 @@ static bool Inf_CheckAndShowURL (void)
 /*** Build path inside a course for a given a info type to store URL file ****/
 /*****************************************************************************/
 
-static void Inf_BuildPathURL (long CrsCod,Inf_InfoType_t InfoType,
+static void Inf_BuildPathURL (long CrsCod,Inf_Type_t InfoType,
                               char PathFile[PATH_MAX + 1])
   {
    snprintf (PathFile,PATH_MAX + 1,"%s/%ld/%s.url",
@@ -941,10 +940,10 @@ static void Inf_ShowPage (const char *URL)
   {
    extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
    extern const char *Txt_View_in_a_new_window;
-   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-   const char *Help[Inf_NUM_INFO_TYPES] =
+   const char *Help[Inf_NUM_TYPES] =
      {
       [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_textual_information,
       [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide,
@@ -984,7 +983,7 @@ static void Inf_ShowPage (const char *URL)
 void Inf_SetInfoSrc (void)
   {
    struct Syl_Syllabus Syllabus;
-   Inf_InfoSrc_t InfoSrcSelected = Inf_GetInfoSrcFromForm ();
+   Inf_Src_t InfoSrcSelected = Inf_GetInfoSrcFromForm ();
 
    /***** Reset syllabus context *****/
    Syl_ResetSyllabus (&Syllabus);
@@ -1007,14 +1006,13 @@ void Inf_FormsToSelSendInfo (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Source_of_information;
-   extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES];
-   extern const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES];
+   extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES];
+   extern const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES];
    struct Syl_Syllabus Syllabus;
-   Inf_InfoSrc_t InfoSrc;
-   Inf_InfoSrc_t InfoSrcSelected;
-   bool InfoAvailable[Inf_NUM_INFO_SOURCES];
-   bool MustBeRead;
-   const char *HelpEdit[Inf_NUM_INFO_TYPES] =
+   struct Inf_FromDB FromDB;
+   Inf_Src_t InfoSrc;
+   bool InfoAvailable[Inf_NUM_SOURCES];
+   const char *HelpEdit[Inf_NUM_TYPES] =
      {
       [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_edit,
       [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide_edit,
@@ -1036,21 +1034,21 @@ void Inf_FormsToSelSendInfo (void)
    Inf_GetAndCheckInfoSrcFromDB (&Syllabus,
                                  Gbl.Hierarchy.Crs.CrsCod,
                                  Gbl.Crs.Info.Type,
-                                 &InfoSrcSelected,&MustBeRead);
+                                 &FromDB);
 
    /***** Check if info available *****/
-   for (InfoSrc  = (Inf_InfoSrc_t) 0;
-	InfoSrc <= (Inf_InfoSrc_t) (Inf_NUM_INFO_SOURCES - 1);
+   for (InfoSrc  = (Inf_Src_t) 0;
+	InfoSrc <= (Inf_Src_t) (Inf_NUM_SOURCES - 1);
 	InfoSrc++)
       InfoAvailable[InfoSrc] = Inf_CheckIfInfoAvailable (&Syllabus,InfoSrc);
 
    /***** Set info source to none
           when no info available for the current source *****/
-   if (InfoSrcSelected != Inf_INFO_SRC_NONE &&
-       !InfoAvailable[InfoSrcSelected])
+   if (FromDB.Src != Inf_NONE &&
+       !InfoAvailable[FromDB.Src])
      {
-      InfoSrcSelected = Inf_INFO_SRC_NONE;
-      Inf_SetInfoSrcIntoDB (Inf_INFO_SRC_NONE);
+      FromDB.Src = Inf_NONE;
+      Inf_SetInfoSrcIntoDB (Inf_NONE);
      }
 
    /***** Form to choice between alternatives *****/
@@ -1060,33 +1058,33 @@ void Inf_FormsToSelSendInfo (void)
                       HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE,4);
 
    /* Options */
-   for (InfoSrc  = (Inf_InfoSrc_t) 0;
-	InfoSrc <= (Inf_InfoSrc_t) (Inf_NUM_INFO_SOURCES - 1);
+   for (InfoSrc  = (Inf_Src_t) 0;
+	InfoSrc <= (Inf_Src_t) (Inf_NUM_SOURCES - 1);
 	InfoSrc++)
      {
       HTM_TR_Begin (NULL);
 
       /* Select info source */
-      if (InfoSrc == InfoSrcSelected)
+      if (InfoSrc == FromDB.Src)
 	 HTM_TD_Begin ("class=\"DAT LT LIGHT_BLUE\"");
       else
 	 HTM_TD_Begin ("class=\"DAT LT\"");
       Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
 
-      HTM_INPUT_RADIO ("InfoSrc",InfoSrc != InfoSrcSelected &&
-	                         (InfoSrc == Inf_INFO_SRC_NONE ||
+      HTM_INPUT_RADIO ("InfoSrc",InfoSrc != FromDB.Src &&
+	                         (InfoSrc == Inf_NONE ||
 	                          InfoAvailable[InfoSrc]),	// Info available for this source
 		       "id=\"InfoSrc%u\" value=\"%u\"%s",
 		       (unsigned) InfoSrc,(unsigned) InfoSrc,
-		       InfoSrc == InfoSrcSelected ? " checked=\"checked\"" :
-			                            (InfoSrc == Inf_INFO_SRC_NONE ||
-	                                            InfoAvailable[InfoSrc]) ? "" :	// Info available for this source
-						                              " disabled=\"disabled\"");
+		       InfoSrc == FromDB.Src ? " checked=\"checked\"" :
+			                       (InfoSrc == Inf_NONE ||
+	                                       InfoAvailable[InfoSrc]) ? "" :	// Info available for this source
+						                         " disabled=\"disabled\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
       /* Form for this info source */
-      if (InfoSrc == InfoSrcSelected)
+      if (InfoSrc == FromDB.Src)
 	 HTM_TD_Begin ("class=\"LT LIGHT_BLUE\"");
       else
 	 HTM_TD_Begin ("class=\"LT\"");
@@ -1117,13 +1115,13 @@ void Inf_FormsToSelSendInfo (void)
 /*****************************************************************************/
 
 static bool Inf_CheckIfInfoAvailable (struct Syl_Syllabus *Syllabus,
-                                      Inf_InfoSrc_t InfoSrc)
+                                      Inf_Src_t InfoSrc)
   {
    switch (InfoSrc)
      {
-      case Inf_INFO_SRC_NONE:
+      case Inf_NONE:
 	 return false;
-      case Inf_INFO_SRC_EDITOR:
+      case Inf_EDITOR:
          switch (Gbl.Crs.Info.Type)
            {
             case Inf_LECTURES:
@@ -1136,16 +1134,16 @@ static bool Inf_CheckIfInfoAvailable (struct Syl_Syllabus *Syllabus,
                return false;
            }
          return false;	// Not reached
-      case Inf_INFO_SRC_PLAIN_TEXT:
+      case Inf_PLAIN_TEXT:
          return Inf_CheckPlainTxt (Gbl.Hierarchy.Crs.CrsCod,
                                    Gbl.Crs.Info.Type);
-      case Inf_INFO_SRC_RICH_TEXT:
+      case Inf_RICH_TEXT:
          return Inf_CheckRichTxt (Gbl.Hierarchy.Crs.CrsCod,
                                   Gbl.Crs.Info.Type);
-      case Inf_INFO_SRC_PAGE:
+      case Inf_PAGE:
 	 return Inf_CheckPage (Gbl.Hierarchy.Crs.CrsCod,
                                Gbl.Crs.Info.Type);
-      case Inf_INFO_SRC_URL:
+      case Inf_URL:
 	 return Inf_CheckURL (Gbl.Hierarchy.Crs.CrsCod,
                               Gbl.Crs.Info.Type);
      }
@@ -1157,7 +1155,7 @@ static bool Inf_CheckIfInfoAvailable (struct Syl_Syllabus *Syllabus,
 /****************** Form to enter in integrated editor ***********************/
 /*****************************************************************************/
 
-void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc)
+void Inf_FormToEnterIntegratedEditor (Inf_Src_t InfoSrc)
   {
    extern const char *Txt_Edit;
 
@@ -1170,7 +1168,7 @@ void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc)
 /****************** Form to enter in plain text editor ***********************/
 /*****************************************************************************/
 
-void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc)
+void Inf_FormToEnterPlainTextEditor (Inf_Src_t InfoSrc)
   {
    extern const char *Txt_Edit_plain_text;
 
@@ -1183,7 +1181,7 @@ void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc)
 /******************* Form to enter in rich text editor ***********************/
 /*****************************************************************************/
 
-void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc)
+void Inf_FormToEnterRichTextEditor (Inf_Src_t InfoSrc)
   {
    extern const char *Txt_Edit_rich_text;
 
@@ -1196,7 +1194,7 @@ void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc)
 /******************* Form to upload a file with a page ***********************/
 /*****************************************************************************/
 
-void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
+void Inf_FormToSendPage (Inf_Src_t InfoSrc)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_File;
@@ -1226,7 +1224,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
 /********************* Form to send a link to a web page *********************/
 /*****************************************************************************/
 
-void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
+void Inf_FormToSendURL (Inf_Src_t InfoSrc)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_URL;
@@ -1401,22 +1399,22 @@ static void Inf_AsignInfoType (struct Inf_Info *Info,
 /********** Get info source for bibliography, FAQ, etc. from form ************/
 /*****************************************************************************/
 
-Inf_InfoSrc_t Inf_GetInfoSrcFromForm (void)
+Inf_Src_t Inf_GetInfoSrcFromForm (void)
   {
    /***** Get info source for a specific type of course information
           (introduction, teaching guide, bibliography, FAQ, links or evaluation) *****/
-   return (Inf_InfoSrc_t)
+   return (Inf_Src_t)
 	  Par_GetParToUnsignedLong ("InfoSrc",
                                     0,
-                                    Inf_NUM_INFO_SOURCES - 1,
-                                    (unsigned long) Inf_INFO_SRC_NONE);
+                                    Inf_NUM_SOURCES - 1,
+                                    (unsigned long) Inf_NONE);
   }
 
 /*****************************************************************************/
 /********* Set info source for a type of course info from database ***********/
 /*****************************************************************************/
 
-void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
+void Inf_SetInfoSrcIntoDB (Inf_Src_t InfoSrc)
   {
    /***** Get if info source is already stored in database *****/
    if (DB_QueryCOUNT ("can not get if info source is already stored in database",
@@ -1428,14 +1426,14 @@ void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
 		      Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type]))
       // Info is already stored in database, so update it
      {	// Update info source
-      if (InfoSrc == Inf_INFO_SRC_NONE)
+      if (InfoSrc == Inf_NONE)
          DB_QueryUPDATE ("can not update info source",
 			 "UPDATE crs_info_src"
 			   " SET InfoSrc='%s',"
 			        "MustBeRead='N'"
 			 " WHERE CrsCod=%ld"
 			   " AND InfoType='%s'",
-                         Inf_NamesInDBForInfoSrc[Inf_INFO_SRC_NONE],
+                         Inf_NamesInDBForInfoSrc[Inf_NONE],
                          Gbl.Hierarchy.Crs.CrsCod,
                          Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type]);
       else	// MustBeRead remains unchanged
@@ -1464,11 +1462,11 @@ void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
 /***** Get and check info source for a type of course info from database *****/
 /*****************************************************************************/
 
-Inf_InfoSrc_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType)
+Inf_Src_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_Type_t InfoType)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   Inf_InfoSrc_t InfoSrc;
+   Inf_Src_t InfoSrc;
 
    /***** Get info source for a specific type of info from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get info source",
@@ -1486,7 +1484,7 @@ Inf_InfoSrc_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType)
       InfoSrc = Inf_ConvertFromStrDBToInfoSrc (row[0]);
      }
    else
-      InfoSrc = Inf_INFO_SRC_NONE;
+      InfoSrc = Inf_NONE;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1500,65 +1498,54 @@ Inf_InfoSrc_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType)
 
 void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
                                    long CrsCod,
-                                   Inf_InfoType_t InfoType,
-                                   Inf_InfoSrc_t *InfoSrc,bool *MustBeRead)
+                                   Inf_Type_t Type,
+                                   struct Inf_FromDB *FromDB)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Set default values *****/
-   *InfoSrc = Inf_INFO_SRC_NONE;
-   *MustBeRead = false;
+   FromDB->Src        = Inf_NONE;
+   FromDB->MustBeRead = false;
 
    /***** Get info source for a specific type of info from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get info source",
-		       "SELECT InfoSrc,"		// row[0]
+		       "SELECT InfoSrc,"	// row[0]
 			      "MustBeRead"	// row[1]
 			" FROM crs_info_src"
 		       " WHERE CrsCod=%ld"
 			 " AND InfoType='%s'",
 		       CrsCod,
-		       Inf_NamesInDBForInfoType[InfoType]) == 1)
+		       Inf_NamesInDBForInfoType[Type]) == 1)
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
 
-      /* Get info source (row[0]) */
-      *InfoSrc = Inf_ConvertFromStrDBToInfoSrc (row[0]);
-
-      /* Get if students must read info (row[1]) */
-      *MustBeRead = (row[1][0] == 'Y');
+      /* Get info source (row[0]) and if students must read info (row[1]) */
+      FromDB->Src        = Inf_ConvertFromStrDBToInfoSrc (row[0]);
+      FromDB->MustBeRead = (row[1][0] == 'Y');
      }
-   else
-      Lay_ShowErrorAndExit ("Error when getting info source.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
    /***** If info is empty, return Inf_INFO_SRC_NONE *****/
-   switch (*InfoSrc)
+   switch (FromDB->Src)
      {
-      case Inf_INFO_SRC_NONE:
-         *MustBeRead = false;
+      case Inf_NONE:
          break;
-      case Inf_INFO_SRC_EDITOR:
-         switch (InfoType)
+      case Inf_EDITOR:
+         switch (Type)
            {
             case Inf_LECTURES:
 	       Syllabus->WhichSyllabus = Syl_LECTURES;
                if (!Syl_CheckSyllabus (Syllabus,CrsCod))
-                 {
-                  *InfoSrc = Inf_INFO_SRC_NONE;
-                  *MustBeRead = false;
-                 }
+                  FromDB->Src = Inf_NONE;
                break;
             case Inf_PRACTICALS:
 	       Syllabus->WhichSyllabus = Syl_PRACTICALS;
                if (!Syl_CheckSyllabus (Syllabus,CrsCod))
-                 {
-                  *InfoSrc = Inf_INFO_SRC_NONE;
-                  *MustBeRead = false;
-                 }
+                  FromDB->Src = Inf_NONE;
                break;
             case Inf_INTRODUCTION:
             case Inf_TEACHING_GUIDE:
@@ -1566,74 +1553,64 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
             case Inf_FAQ:
             case Inf_LINKS:
             case Inf_ASSESSMENT:
-               *InfoSrc = Inf_INFO_SRC_NONE;
-               *MustBeRead = false;
+               FromDB->Src = Inf_NONE;
 	       break;	// Internal editor is not yet available
            }
          break;
-      case Inf_INFO_SRC_PLAIN_TEXT:
-	 if (!Inf_CheckPlainTxt (CrsCod,InfoType))
-           {
-            *InfoSrc = Inf_INFO_SRC_NONE;
-            *MustBeRead = false;
-           }
+      case Inf_PLAIN_TEXT:
+	 if (!Inf_CheckPlainTxt (CrsCod,Type))
+            FromDB->Src = Inf_NONE;
          break;
-      case Inf_INFO_SRC_RICH_TEXT:
-	 if (!Inf_CheckRichTxt (CrsCod,InfoType))
-           {
-            *InfoSrc = Inf_INFO_SRC_NONE;
-            *MustBeRead = false;
-           }
+      case Inf_RICH_TEXT:
+	 if (!Inf_CheckRichTxt (CrsCod,Type))
+            FromDB->Src = Inf_NONE;
          break;
-      case Inf_INFO_SRC_PAGE:
-	 if (!Inf_CheckPage (CrsCod,InfoType))
-	   {
-	    *InfoSrc = Inf_INFO_SRC_NONE;
-	    *MustBeRead = false;
-	   }
+      case Inf_PAGE:
+	 if (!Inf_CheckPage (CrsCod,Type))
+	    FromDB->Src = Inf_NONE;
          break;
-      case Inf_INFO_SRC_URL:
-	 if (!Inf_CheckURL (CrsCod,InfoType))
-	   {
-	    *InfoSrc = Inf_INFO_SRC_NONE;
-	    *MustBeRead = false;
-	   }
+      case Inf_URL:
+	 if (!Inf_CheckURL (CrsCod,Type))
+	    FromDB->Src = Inf_NONE;
          break;
      }
+
+   if (FromDB->Src == Inf_NONE)
+      FromDB->MustBeRead = false;
   }
 
 /*****************************************************************************/
 /*** Convert a string with info type in database to a Inf_InfoType_t value ***/
 /*****************************************************************************/
 
-Inf_InfoType_t Inf_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB)
+Inf_Type_t Inf_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB)
   {
-   Inf_InfoType_t InfoType;
+   Inf_Type_t InfoType;
 
-   for (InfoType  = (Inf_InfoType_t) 0;
-	InfoType <= (Inf_InfoType_t) (Inf_NUM_INFO_TYPES - 1);
+   for (InfoType  = (Inf_Type_t) 0;
+	InfoType <= (Inf_Type_t) (Inf_NUM_TYPES - 1);
 	InfoType++)
       if (!strcmp (StrInfoTypeDB,Inf_NamesInDBForInfoType[InfoType]))
          return InfoType;
 
-   return (Inf_InfoType_t) 0;
+   return (Inf_Type_t) 0;
   }
 
 /*****************************************************************************/
 /** Convert a string with info source in database to a Inf_InfoSrc_t value ***/
 /*****************************************************************************/
 
-Inf_InfoSrc_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB)
+Inf_Src_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB)
   {
-   Inf_InfoSrc_t InfoSrc;
+   Inf_Src_t InfoSrc;
 
-   for (InfoSrc  = (Inf_InfoSrc_t) 0;
-	InfoSrc <= (Inf_InfoSrc_t) (Inf_NUM_INFO_SOURCES - 1);
+   for (InfoSrc  = (Inf_Src_t) 0;
+	InfoSrc <= (Inf_Src_t) (Inf_NUM_SOURCES - 1);
 	InfoSrc++)
       if (!strcmp (StrInfoSrcDB,Inf_NamesInDBForInfoSrc[InfoSrc]))
          return InfoSrc;
 
-   return Inf_INFO_SRC_NONE;
+   return Inf_NONE;
   }
 
 /*****************************************************************************/
@@ -1658,7 +1635,7 @@ static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD)
 /********** Get info text for a type of course info from database ************/
 /*****************************************************************************/
 
-void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
+void Inf_GetInfoTxtFromDB (long CrsCod,Inf_Type_t InfoType,
                            char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],
                            char InfoTxtMD  [Cns_MAX_BYTES_LONG_TEXT + 1])
   {
@@ -1704,7 +1681,7 @@ void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
 /*****************************************************************************/
 // Return true if info available
 
-static bool Inf_CheckPlainTxt (long CrsCod,Inf_InfoType_t InfoType)
+static bool Inf_CheckPlainTxt (long CrsCod,Inf_Type_t InfoType)
   {
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
 
@@ -1721,11 +1698,11 @@ static bool Inf_CheckPlainTxt (long CrsCod,Inf_InfoType_t InfoType)
 
 static bool Inf_CheckAndShowPlainTxt (void)
   {
-   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-   const char *Help[Inf_NUM_INFO_TYPES] =
+   const char *Help[Inf_NUM_TYPES] =
      {
       [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_textual_information,
       [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide,
@@ -1782,7 +1759,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
 /*****************************************************************************/
 // Return true if info available
 
-static bool Inf_CheckRichTxt (long CrsCod,Inf_InfoType_t InfoType)
+static bool Inf_CheckRichTxt (long CrsCod,Inf_Type_t InfoType)
   {
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    char TxtMD[Cns_MAX_BYTES_LONG_TEXT + 1];
@@ -1801,7 +1778,7 @@ static bool Inf_CheckRichTxt (long CrsCod,Inf_InfoType_t InfoType)
 
 static bool Inf_CheckAndShowRichTxt (void)
   {
-   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    char TxtMD[Cns_MAX_BYTES_LONG_TEXT + 1];
    char PathFileMD[PATH_MAX + 1];
@@ -1813,7 +1790,7 @@ static bool Inf_CheckAndShowRichTxt (void)
    int ReturnCode;
    bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-   const char *Help[Inf_NUM_INFO_TYPES] =
+   const char *Help[Inf_NUM_TYPES] =
      {
       [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_textual_information,
       [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide,
@@ -1933,11 +1910,11 @@ static bool Inf_CheckAndShowRichTxt (void)
 
 void Inf_EditPlainTxtInfo (void)
   {
-   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_Save_changes;
    struct Syl_Syllabus Syllabus;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
-   const char *HelpEdit[Inf_NUM_INFO_TYPES] =
+   const char *HelpEdit[Inf_NUM_TYPES] =
      {
       [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_edit,
       [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide_edit,
@@ -1988,11 +1965,11 @@ void Inf_EditPlainTxtInfo (void)
 
 void Inf_EditRichTxtInfo (void)
   {
-   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_Save_changes;
    struct Syl_Syllabus Syllabus;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
-   const char *HelpEdit[Inf_NUM_INFO_TYPES] =
+   const char *HelpEdit[Inf_NUM_TYPES] =
      {
       [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_edit,
       [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide_edit,
@@ -2066,8 +2043,8 @@ void Inf_RecAndChangePlainTxtInfo (void)
    Inf_SetInfoTxtIntoDB (Txt_HTMLFormat,Txt_MarkdownFormat);
 
    /***** Change info source to "plain text" in database *****/
-   Inf_SetInfoSrcIntoDB (Txt_HTMLFormat[0] ? Inf_INFO_SRC_PLAIN_TEXT :
-	                                     Inf_INFO_SRC_NONE);
+   Inf_SetInfoSrcIntoDB (Txt_HTMLFormat[0] ? Inf_PLAIN_TEXT :
+	                                     Inf_NONE);
    if (Txt_HTMLFormat[0])
       /***** Show the updated info *****/
       Inf_ShowInfo ();
@@ -2105,8 +2082,8 @@ void Inf_RecAndChangeRichTxtInfo (void)
    Inf_SetInfoTxtIntoDB (Txt_HTMLFormat,Txt_MarkdownFormat);
 
    /***** Change info source to "rich text" in database *****/
-   Inf_SetInfoSrcIntoDB (Txt_HTMLFormat[0] ? Inf_INFO_SRC_RICH_TEXT :
-	                                     Inf_INFO_SRC_NONE);
+   Inf_SetInfoSrcIntoDB (Txt_HTMLFormat[0] ? Inf_RICH_TEXT :
+	                                     Inf_NONE);
    if (Txt_HTMLFormat[0])
       /***** Show the updated info *****/
       Inf_ShowInfo ();
@@ -2159,7 +2136,7 @@ void Inf_ReceiveURLInfo (void)
    if (URLIsOK)
      {
       /***** Change info source to URL in database *****/
-      Inf_SetInfoSrcIntoDB (Inf_INFO_SRC_URL);
+      Inf_SetInfoSrcIntoDB (Inf_URL);
 
       /***** Show the updated info *****/
       Inf_ShowInfo ();
@@ -2167,7 +2144,7 @@ void Inf_ReceiveURLInfo (void)
    else
      {
       /***** Change info source to none in database *****/
-      Inf_SetInfoSrcIntoDB (Inf_INFO_SRC_NONE);
+      Inf_SetInfoSrcIntoDB (Inf_NONE);
 
       /***** Show again the form to select and send course info *****/
       Inf_FormsToSelSendInfo ();
@@ -2296,7 +2273,7 @@ void Inf_ReceivePagInfo (void)
    if (FileIsOK)
      {
       /***** Change info source to page in database *****/
-      Inf_SetInfoSrcIntoDB (Inf_INFO_SRC_PAGE);
+      Inf_SetInfoSrcIntoDB (Inf_PAGE);
 
       /***** Show the updated info *****/
       Inf_ShowInfo ();
@@ -2304,7 +2281,7 @@ void Inf_ReceivePagInfo (void)
    else
      {
       /***** Change info source to none in database *****/
-      Inf_SetInfoSrcIntoDB (Inf_INFO_SRC_NONE);
+      Inf_SetInfoSrcIntoDB (Inf_NONE);
 
       /***** Show again the form to select and send course info *****/
       Inf_FormsToSelSendInfo ();

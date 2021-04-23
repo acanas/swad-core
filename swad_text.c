@@ -16776,7 +16776,7 @@ const char *Txt_Info =
 	"Info";
 #endif
 
-const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES] =
+const char *Txt_INFO_TITLE[Inf_NUM_TYPES] =
 	{
 	[Inf_INTRODUCTION] =
 #if   L==1	// ca
@@ -16947,9 +16947,9 @@ const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES] =
 #endif
 	};
 
-const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES] =
+const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES] =
 	{
-	[Inf_INFO_SRC_NONE] =
+	[Inf_NONE] =
 #if   L==1	// ca
 	"No ofrecer ninguna informaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
@@ -16970,7 +16970,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES] =
 	"N&atilde;o d&ecirc; nenhuma informa&ccedil;&atilde;o"
 #endif
 	,
-	[Inf_INFO_SRC_EDITOR] =
+	[Inf_EDITOR] =
 #if   L==1	// ca
 	"Editor interno"	// Necessita traduccio
 #elif L==2	// de
@@ -16991,7 +16991,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES] =
 	"Interno editor"
 #endif
 	,
-	[Inf_INFO_SRC_PLAIN_TEXT] =
+	[Inf_PLAIN_TEXT] =
 #if   L==1	// ca
 	"Text sense format"
 #elif L==2	// de
@@ -17012,7 +17012,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES] =
 	"Texto plano"
 #endif
 	,
-	[Inf_INFO_SRC_RICH_TEXT] =
+	[Inf_RICH_TEXT] =
 #if   L==1	// ca
 	"Text enriquit"
 #elif L==2	// de
@@ -17033,7 +17033,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES] =
 	"Texto enriquecido"
 #endif
 	,
-	[Inf_INFO_SRC_PAGE] =
+	[Inf_PAGE] =
 #if   L==1	// ca
 	"P&aacute;gina web alojada aqu&iacute;"	// Necessita traduccio
 #elif L==2	// de
@@ -17054,7 +17054,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES] =
 	"P&aacute;gina Web hospedada aqui"
 #endif
 	,
-	[Inf_INFO_SRC_URL] =
+	[Inf_URL] =
 #if   L==1	// ca
 	"P&aacute;gina web alojada en otro servidor"	// Necessita traduccio
 #elif L==2	// de
@@ -17076,11 +17076,11 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES] =
 #endif
 	};
 
-const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
+const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES] =
 	{
-	[Inf_INFO_SRC_NONE] =
+	[Inf_NONE] =
 	NULL,
-	[Inf_INFO_SRC_EDITOR] =
+	[Inf_EDITOR] =
 #if   L==1	// ca
 	"editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"// Necessita traduccio
 #elif L==2	// de
@@ -17101,7 +17101,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 	"interno editor, apenas para programas de teoria y pr&aacute;tica"
 #endif
 	,
-	[Inf_INFO_SRC_PLAIN_TEXT] =
+	[Inf_PLAIN_TEXT] =
 #if   L==1	// ca
 	"editor de text sense format"
 #elif L==2	// de
@@ -17122,7 +17122,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 	"editor de texto simples"
 #endif
 	,
-	[Inf_INFO_SRC_RICH_TEXT] =
+	[Inf_RICH_TEXT] =
 #if   L==1	// ca
 	"editor de text enriquit"
 #elif L==2	// de
@@ -17143,7 +17143,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 	"editor de texto rico"
 #endif
 	,
-	[Inf_INFO_SRC_PAGE] =
+	[Inf_PAGE] =
 #if   L==1	// ca
 	"env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes"// Necessita traduccio
 #elif L==2	// de
@@ -17164,7 +17164,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 	"enviar um arquivo HTML, ou um arquivo ZIP que cont&eacute;m um arquivo index.html / index.htm e limas da imagem"
 #endif
 	,
-	[Inf_INFO_SRC_URL] =
+	[Inf_URL] =
 #if   L==1	// ca
 	"escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor"	// Necessita traduccio
 #elif L==2	// de
@@ -17186,9 +17186,9 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 #endif
 	};
 
-const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_INFO_SOURCES] =
+const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES] =
 	{
-	[Inf_INFO_SRC_NONE] =
+	[Inf_NONE] =
 #if   L==1	// ca
 	"Ninguna informaci&oacute;n"	// Necessita traduccio
 #elif L==2	// de
@@ -17209,7 +17209,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_INFO_SOURCES] =
 	"Sem informa&ccedil;&atilde;o"
 #endif
 	,
-	[Inf_INFO_SRC_EDITOR] =
+	[Inf_EDITOR] =
 #if   L==1	// ca
 	"Editor interno"	// Necessita traduccio
 #elif L==2	// de
@@ -17230,7 +17230,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_INFO_SOURCES] =
 	"Interno editor"
 #endif
 	,
-	[Inf_INFO_SRC_PLAIN_TEXT] =
+	[Inf_PLAIN_TEXT] =
 #if   L==1	// ca
 	"Text sense format"
 #elif L==2	// de
@@ -17251,7 +17251,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_INFO_SOURCES] =
 	"Texto plano"
 #endif
 	,
-	[Inf_INFO_SRC_RICH_TEXT] =
+	[Inf_RICH_TEXT] =
 #if   L==1	// ca
 	"Text enriquit"
 #elif L==2	// de
@@ -17272,7 +17272,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_INFO_SOURCES] =
 	"Texto enriquecido"
 #endif
 	,
-	[Inf_INFO_SRC_PAGE] =
+	[Inf_PAGE] =
 #if   L==1	// ca
 	"P&aacute;gina interna"	// Necessita traduccio
 #elif L==2	// de
@@ -17293,7 +17293,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_INFO_SOURCES] =
 	"Interna p&aacute;gina"
 #endif
 	,
-	[Inf_INFO_SRC_URL] =
+	[Inf_URL] =
 #if   L==1	// ca
 	"P&aacute;gina externa"	// Necessita traduccio
 #elif L==2	// de

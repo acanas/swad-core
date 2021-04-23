@@ -40,7 +40,7 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-#define Inf_NUM_INFO_TYPES 8
+#define Inf_NUM_TYPES 8
 typedef enum
   {
    Inf_INTRODUCTION   = 0,
@@ -51,25 +51,31 @@ typedef enum
    Inf_FAQ            = 5,
    Inf_LINKS          = 6,
    Inf_ASSESSMENT     = 7,
-  } Inf_InfoType_t;
+  } Inf_Type_t;
 
-#define Inf_NUM_INFO_SOURCES 6
+#define Inf_NUM_SOURCES 6
 typedef enum
   {
-   Inf_INFO_SRC_NONE		= 0,
-   Inf_INFO_SRC_EDITOR		= 1,
-   Inf_INFO_SRC_PLAIN_TEXT	= 2,
-   Inf_INFO_SRC_RICH_TEXT	= 3,
-   Inf_INFO_SRC_PAGE		= 4,
-   Inf_INFO_SRC_URL		= 5,
-  } Inf_InfoSrc_t;
+   Inf_NONE       = 0,
+   Inf_EDITOR     = 1,
+   Inf_PLAIN_TEXT = 2,
+   Inf_RICH_TEXT  = 3,
+   Inf_PAGE       = 4,
+   Inf_URL        = 5,
+  } Inf_Src_t;
 
 struct Inf_Info
   {
-   Inf_InfoType_t Type;
+   Inf_Type_t Type;
    char URL[Cns_MAX_BYTES_WWW + 1];
-   bool MustBeRead[Inf_NUM_INFO_TYPES];	// Students must read info?
+   bool MustBeRead[Inf_NUM_TYPES];	// Students must read info?
    bool ShowMsgMustBeRead;
+  };
+
+struct Inf_FromDB
+  {
+   Inf_Src_t Src;	// Info source
+   bool MustBeRead;	// Must be read by students?
   };
 
 /*****************************************************************************/
@@ -83,26 +89,26 @@ void Inf_ChangeForceReadInfo (void);
 void Inf_ChangeIHaveReadInfo (void);
 bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void);
 void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod);
-void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char PathDir[PATH_MAX + 1]);
+void Inf_BuildPathPage (long CrsCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1]);
 void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_WWW + 1]);
 void Inf_SetInfoSrc (void);
 void Inf_FormsToSelSendInfo (void);
-void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc);
-void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc);
-void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc);
-void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc);
-void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc);
-Inf_InfoSrc_t Inf_GetInfoSrcFromForm (void);
-void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc);
-Inf_InfoSrc_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType);
+void Inf_FormToEnterIntegratedEditor (Inf_Src_t InfoSrc);
+void Inf_FormToEnterPlainTextEditor (Inf_Src_t InfoSrc);
+void Inf_FormToEnterRichTextEditor (Inf_Src_t InfoSrc);
+void Inf_FormToSendPage (Inf_Src_t InfoSrc);
+void Inf_FormToSendURL (Inf_Src_t InfoSrc);
+Inf_Src_t Inf_GetInfoSrcFromForm (void);
+void Inf_SetInfoSrcIntoDB (Inf_Src_t InfoSrc);
+Inf_Src_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_Type_t InfoType);
 void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
                                    long CrsCod,
-                                   Inf_InfoType_t InfoType,
-                                   Inf_InfoSrc_t *InfoSrc,bool *MustBeRead);
-Inf_InfoType_t Inf_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB);
-Inf_InfoSrc_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB);
+                                   Inf_Type_t Type,
+                                   struct Inf_FromDB *FromDB);
+Inf_Type_t Inf_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB);
+Inf_Src_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB);
 
-void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
+void Inf_GetInfoTxtFromDB (long CrsCod,Inf_Type_t InfoType,
                            char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],
                            char InfoTxtMD  [Cns_MAX_BYTES_LONG_TEXT + 1]);
 

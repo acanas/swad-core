@@ -1328,12 +1328,11 @@ int swad__getCourseInfo (struct soap *soap,
   {
    int ReturnCode;
    struct Syl_Syllabus Syllabus;
-   Inf_InfoType_t InfoType;
+   Inf_Type_t InfoType;
    size_t Length;
-   Inf_InfoSrc_t InfoSrc;
-   bool MustBeRead;
+   struct Inf_FromDB FromDB;
    int Result = SOAP_OK;
-   const char *NamesInWSForInfoType[Inf_NUM_INFO_TYPES] =
+   const char *NamesInWSForInfoType[Inf_NUM_TYPES] =
      {
       [Inf_INTRODUCTION  ] = "introduction",
       [Inf_TEACHING_GUIDE] = "guide",
@@ -1344,14 +1343,14 @@ int swad__getCourseInfo (struct soap *soap,
       [Inf_LINKS         ] = "links",
       [Inf_ASSESSMENT    ] = "assessment",
      };
-   const char *NamesInWSForInfoSrc[Inf_NUM_INFO_SOURCES] =
+   const char *NamesInWSForInfoSrc[Inf_NUM_SOURCES] =
      {
-      [Inf_INFO_SRC_NONE      ] = "none",
-      [Inf_INFO_SRC_EDITOR    ] = "editor",
-      [Inf_INFO_SRC_PLAIN_TEXT] = "plainText",
-      [Inf_INFO_SRC_RICH_TEXT ] = "richText",
-      [Inf_INFO_SRC_PAGE      ] = "page",
-      [Inf_INFO_SRC_URL       ] = "URL",
+      [Inf_NONE      ] = "none",
+      [Inf_EDITOR    ] = "editor",
+      [Inf_PLAIN_TEXT] = "plainText",
+      [Inf_RICH_TEXT ] = "richText",
+      [Inf_PAGE      ] = "page",
+      [Inf_URL       ] = "URL",
      };
 
    /***** Initializations *****/
@@ -1396,12 +1395,12 @@ int swad__getCourseInfo (struct soap *soap,
    Syl_ResetSyllabus (&Syllabus);
 
    /***** Get info source *****/
-   for (InfoType  = (Inf_InfoType_t) 0;
-	InfoType <= (Inf_InfoType_t) (Inf_NUM_INFO_TYPES - 1);
+   for (InfoType  = (Inf_Type_t) 0;
+	InfoType <= (Inf_Type_t) (Inf_NUM_TYPES - 1);
 	InfoType++)
       if (!strcmp (infoType,NamesInWSForInfoType[InfoType]))
 	 break;
-   if (InfoType == Inf_NUM_INFO_TYPES)	// Not found!
+   if (InfoType == Inf_NUM_TYPES)	// Not found!
       return soap_receiver_fault (soap,
 	                          "Bad info type",
 	                          "Unknown requested info type");
@@ -1409,18 +1408,18 @@ int swad__getCourseInfo (struct soap *soap,
    Inf_GetAndCheckInfoSrcFromDB (&Syllabus,
                                  Gbl.Hierarchy.Crs.CrsCod,
                                  Gbl.Crs.Info.Type,
-                                 &InfoSrc,&MustBeRead);
-   Length = strlen (NamesInWSForInfoSrc[InfoSrc]);
+                                 &FromDB);
+   Length = strlen (NamesInWSForInfoSrc[FromDB.Src]);
    getCourseInfo->infoSrc = soap_malloc (soap,Length + 1);
-   Str_Copy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[InfoSrc],Length);
+   Str_Copy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[FromDB.Src],Length);
 
    /***** Get info text *****/
    getCourseInfo->infoTxt = NULL;
-   switch (InfoSrc)
+   switch (FromDB.Src)
      {
-      case Inf_INFO_SRC_NONE:		// No info available
+      case Inf_NONE:		// No info available
          break;
-      case Inf_INFO_SRC_EDITOR:		// Internal editor (only for syllabus)
+      case Inf_EDITOR:		// Internal editor (only for syllabus)
 	 switch (Gbl.Crs.Info.Type)
 	   {
 	    case Inf_LECTURES:		// Syllabus (lectures)
@@ -1431,14 +1430,14 @@ int swad__getCourseInfo (struct soap *soap,
                break;
 	   }
 	 break;
-      case Inf_INFO_SRC_PLAIN_TEXT:	// Plain text
-      case Inf_INFO_SRC_RICH_TEXT:	// Rich text (not yet available)
+      case Inf_PLAIN_TEXT:	// Plain text
+      case Inf_RICH_TEXT:	// Rich text (not yet available)
 	 Result = API_WritePlainTextIntoHTMLBuffer (soap,&(getCourseInfo->infoTxt));
          break;
-      case Inf_INFO_SRC_PAGE:		// Web page hosted in SWAD server
+      case Inf_PAGE:		// Web page hosted in SWAD server
 	 Result = API_WritePageIntoHTMLBuffer (soap,&(getCourseInfo->infoTxt));
          break;
-      case Inf_INFO_SRC_URL:		// Link to a web page
+      case Inf_URL:		// Link to a web page
          getCourseInfo->infoTxt = soap_malloc (soap,Cns_MAX_BYTES_WWW + 1);
          Inf_WriteURLIntoTxtBuffer (getCourseInfo->infoTxt);
          break;
@@ -1537,7 +1536,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
 static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
                                              char **HTMLBuffer)
   {
-   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    char FileNameHTMLTmp[PATH_MAX + 1];
    FILE *FileHTMLTmp;
