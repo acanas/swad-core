@@ -1191,21 +1191,21 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 
 		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
 			        (IndicatorsCrs.SyllabusLecSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
-										      "DAT_SMALL_RED",
+									     "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
 		  HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusLecSrc]);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
 			        (IndicatorsCrs.SyllabusPraSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
-										      "DAT_SMALL_RED",
+									     "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
 		  HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusPraSrc]);
 		  HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"%s LM COLOR%u\">",
+		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
 			        (IndicatorsCrs.TeachingGuideSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
-										        "DAT_SMALL_RED",
+									       "DAT_SMALL_RED",
 			        Gbl.RowEvenOdd);
 		  HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
 		  HTM_TD_End ();

@@ -29,6 +29,7 @@
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For sscanf, asprintf, etc.
+#include <stdlib.h>		// For free
 #include <string.h>
 
 #include "swad_box.h"

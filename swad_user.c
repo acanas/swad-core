@@ -1730,8 +1730,8 @@ void Usr_GetMyCourses (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumCrs;
    unsigned NumCrss;
+   unsigned NumCrs;
    long CrsCod;
 
    /***** If my courses are yet filled, there's nothing to do *****/
@@ -1746,11 +1746,11 @@ void Usr_GetMyCourses (void)
 
 	 /***** Create temporary table with my courses *****/
 	 DB_Query ("can not create temporary table",
-	           "CREATE TEMPORARY TABLE IF NOT EXISTS my_courses_tmp "
-		   "(CrsCod INT NOT NULL,"
-		   "Role TINYINT NOT NULL,"
-		   "DegCod INT NOT NULL,"
-		   "UNIQUE INDEX(CrsCod,Role,DegCod)) ENGINE=MEMORY"
+	           "CREATE TEMPORARY TABLE IF NOT EXISTS my_courses_tmp"
+		   " (CrsCod INT NOT NULL,"
+		       "Role TINYINT NOT NULL,"
+		     "DegCod INT NOT NULL,"
+		     "UNIQUE INDEX(CrsCod,Role,DegCod)) ENGINE=MEMORY"
 		   " SELECT crs_users.CrsCod,"
 		           "crs_users.Role,"
 		           "crs_courses.DegCod"
@@ -1779,7 +1779,8 @@ void Usr_GetMyCourses (void)
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Get course code */
-	    if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	    CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+	    if (CrsCod > 0)
 	      {
 	       if (Gbl.Usrs.Me.MyCrss.Num == Crs_MAX_COURSES_PER_USR)
 		  Lay_ShowErrorAndExit ("Maximum number of courses of a user exceeded.");
@@ -1793,10 +1794,10 @@ void Usr_GetMyCourses (void)
 
 	 /***** Free structure that stores the query result *****/
 	 DB_FreeMySQLResult (&mysql_res);
-	}
 
-      /***** Set boolean that indicates that my courses are yet filled *****/
-      Gbl.Usrs.Me.MyCrss.Filled = true;
+	 /***** Set boolean that indicates that my courses are already filled *****/
+	 Gbl.Usrs.Me.MyCrss.Filled = true;
+	}
      }
   }
 

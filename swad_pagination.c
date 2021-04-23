@@ -903,19 +903,16 @@ unsigned Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate)
 	       /* Expanding a message, perhaps it is the result of following a link
 	          from a notification of received message */
 	       /* Show the page corresponding to the expanded message */
-	       CurrentPage = 1;	// Now set the current page to the first,
+	       return 1;	// Now set the current page to the first,
 				// but later the correct page will be calculated
-	    else
-	       /* Show the last visited page */
-	       CurrentPage = Pag_GetLastPageMsgFromSession (Pag_MESSAGES_RECEIVED);
-	    break;
+
+	    /* Show the last visited page */
+	    return Pag_GetLastPageMsgFromSession (Pag_MESSAGES_RECEIVED);
 	 case Pag_MESSAGES_SENT:
 	    /* Show the last visited page */
-	    CurrentPage = Pag_GetLastPageMsgFromSession (Pag_MESSAGES_SENT);
-	    break;
+	    return Pag_GetLastPageMsgFromSession (Pag_MESSAGES_SENT);
 	 default:
-	    CurrentPage = 1;
-	    break;
+	    return 1;
 	}
 
    return CurrentPage;
@@ -943,25 +940,28 @@ void Pag_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned Nu
 
 unsigned Pag_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
+   static const char *Field[Pag_NUM_WHAT_PAGINATE] =
+     {
+      [Pag_MESSAGES_RECEIVED] = "LastPageMsgRcv",
+      [Pag_MESSAGES_SENT    ] = "LastPageMsgSnt",
+     };
    unsigned NumPage;
 
-   /***** Get last page of received/sent messages from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get last page of messages",
-		       "SELECT %s"		// row[0]
-			" FROM ses_sessions"
-		       " WHERE SessionId='%s'",
-		       WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
-							       "LastPageMsgSnt",
-		       Gbl.Session.Id))
-      Lay_ShowErrorAndExit ("Error when getting last page of messages.");
-
-   /***** Get last page of messages *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumPage) == 1)
-      if (NumPage == 0)
-         NumPage = 1;
-
-   return NumPage;
+   switch (WhatPaginate)
+     {
+      case Pag_MESSAGES_RECEIVED:
+      case Pag_MESSAGES_SENT:
+	 /***** Get last page of received/sent messages from database *****/
+	 NumPage = DB_QuerySELECTUnsigned ("can not get last page of messages",
+					   "SELECT %s"
+					    " FROM ses_sessions"
+					   " WHERE SessionId='%s'",
+					   Field[WhatPaginate],
+					   Gbl.Session.Id);
+	 if (NumPage == 0)
+	    return 1;
+	 return NumPage;
+      default:
+	 return 1;
+     }
   }
