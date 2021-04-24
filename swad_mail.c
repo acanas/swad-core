@@ -1288,7 +1288,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 					Mai_PutParamsRemoveMyEmail,row[0]);
       else
 	{
-	 switch (UsrDat->Roles.InCurrentCrs.Role)
+	 switch (UsrDat->Roles.InCurrentCrs)
 	   {
 	    case Rol_STD:
 	       NextAction = ActRemMaiStd;
@@ -1325,7 +1325,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	    Frm_StartFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
 	 else
 	   {
-	    switch (UsrDat->Roles.InCurrentCrs.Role)
+	    switch (UsrDat->Roles.InCurrentCrs)
 	      {
 	       case Rol_STD:
 		  NextAction = ActNewMaiStd;
@@ -1371,7 +1371,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
       Frm_StartFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
    else
      {
-      switch (UsrDat->Roles.InCurrentCrs.Role)
+      switch (UsrDat->Roles.InCurrentCrs)
 	{
 	 case Rol_STD:
 	    NextAction = ActNewMaiStd;
@@ -1902,8 +1902,8 @@ bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
       case Rol_STD:
 	 /* If I am a student in the current course,
 	    I can see the email of confirmed teachers */
-	 return (UsrDat->Roles.InCurrentCrs.Role == Rol_NET ||	// A non-editing teacher
-	         UsrDat->Roles.InCurrentCrs.Role == Rol_TCH) &&	// or a teacher
+	 return (UsrDat->Roles.InCurrentCrs == Rol_NET ||	// A non-editing teacher
+	         UsrDat->Roles.InCurrentCrs == Rol_TCH) &&	// or a teacher
 	         UsrDat->Accepted;				// who accepted registration
       case Rol_NET:
       case Rol_TCH:

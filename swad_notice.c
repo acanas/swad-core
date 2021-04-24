@@ -761,7 +761,9 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                   AuthorClass[Status]);
    Usr_UsrDataConstructor (&UsrDat);
    UsrDat.UsrCod = UsrCod;
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS)) // Get from the database the data of the autor
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get author's data from database
+                                                Usr_DONT_GET_PREFS,
+                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
       Usr_WriteFirstNameBRSurnames (&UsrDat);
    Usr_UsrDataDestructor (&UsrDat);
    HTM_DIV_End ();

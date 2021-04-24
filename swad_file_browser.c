@@ -3206,7 +3206,9 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                   Usr_DONT_GET_PREFS,
+                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	 if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    Gbl.Usrs.Other.UsrDat.Accepted =
@@ -3390,7 +3392,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 
       HTM_DIV_Begin ("class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
 
-	 switch (UsrDat->Roles.InCurrentCrs.Role)
+	 switch (UsrDat->Roles.InCurrentCrs)
 	   {
 	    case Rol_STD:
 	       NextAction = ActSeeRecOneStd;
@@ -6544,7 +6546,9 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
 
       /***** Get data of file/folder publisher *****/
       UsrDat.UsrCod = UsrCod;
-      ShowUsr = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);	// Get user's data from database
+      ShowUsr = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                                         Usr_DONT_GET_PREFS,
+                                                         Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
      }
 
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
@@ -6993,7 +6997,9 @@ static void Brw_WriteCurrentClipboard (void)
 	 Crs_GetDataOfCourseByCod (&Hie.Crs);
          Usr_UsrDataConstructor (&UsrDat);
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
-         Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+         Usr_GetAllUsrDataFromUsrCod (&UsrDat,
+                                      Usr_DONT_GET_PREFS,
+                                      Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_assignments_area,
@@ -7006,7 +7012,9 @@ static void Brw_WriteCurrentClipboard (void)
 	 Crs_GetDataOfCourseByCod (&Hie.Crs);
          Usr_UsrDataConstructor (&UsrDat);
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
-         Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+         Usr_GetAllUsrDataFromUsrCod (&UsrDat,
+                                      Usr_DONT_GET_PREFS,
+                                      Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_works_area,
@@ -8004,8 +8012,12 @@ static void Brw_PasteClipboard (void)
             if (Crs_GetDataOfCourseByCod (&Hie.Crs))
               {
                Usr_UsrDataConstructor (&UsrDat);
+               if (Usr_ChkIfUsrCodExists (Gbl.FileBrowser.Clipboard.WorksUsrCod))
+
 	       UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
-	       Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);	// Check that user exists
+	       Usr_GetAllUsrDataFromUsrCod (&UsrDat,
+	                                    Usr_DONT_GET_PREFS,
+	                                    Usr_DONT_GET_ROLE_IN_CURRENT_CRS);	// Check that user exists
 	       snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
                          Cfg_PATH_CRS_PRIVATE,Hie.Crs.CrsCod,Cfg_FOLDER_USR,
 			 (unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
@@ -9528,7 +9540,9 @@ void Brw_ShowFileMetadata (void)
 	    Usr_UsrDataConstructor (&PublisherUsrDat);
 
 	    PublisherUsrDat.UsrCod = FileMetadata.PublisherUsrCod;
-	    FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,Usr_DONT_GET_PREFS);
+	    FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,
+	                                                                Usr_DONT_GET_PREFS,
+	                                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 	   }
 	 else
 	    FileHasPublisher = false;	// Get user's data from database
@@ -11492,7 +11506,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 	 if (!Gbl.FileBrowser.Asg.IBelongToCrsOrGrps)	// If I do not belong to course / groups of this assignment
 	    return false; 				// I can not create anything inside this assignment
 
-	 switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
+	 switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
 	   {
 	    case Rol_STD:			// Students...
 	    case Rol_NET:			// ...and non-editing teachers...
@@ -11846,7 +11860,9 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 /* Initialize structure with publisher's data */
 	 Usr_UsrDataConstructor (&PublisherUsrDat);
 	 PublisherUsrDat.UsrCod = FileMetadata.PublisherUsrCod;
-	 FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,Usr_DONT_GET_PREFS);
+	 FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,
+	                                                             Usr_DONT_GET_PREFS,
+	                                                             Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 	}
       else
 	 /* Unknown publisher */

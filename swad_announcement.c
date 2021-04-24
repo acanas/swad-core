@@ -109,7 +109,7 @@ void Ann_ShowAllAnnouncements (void)
    else if (Gbl.Usrs.Me.Logged)
      {
       /* Select only announcements I can see */
-      Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+      Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
       NumAnnouncements = (unsigned)
       DB_QuerySELECT (&mysql_res,"can not get announcements",
 		      "SELECT AnnCod,"	// row[0]
@@ -229,7 +229,7 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
    char Content[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Select announcements not seen *****/
-   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+   Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
    NumAnnouncements = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get announcements",
 		   "SELECT AnnCod,"	// row[0]

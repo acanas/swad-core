@@ -179,7 +179,9 @@ void Dup_ListDuplicateUsrs (void)
 
          /* Get user code (row[0]) */
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                                      Usr_DONT_GET_PREFS,
+                                                      Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
            {
             /* Get if user has accepted all his/her courses */
             if (Usr_GetNumCrssOfUsr (UsrDat.UsrCod) != 0)
@@ -328,7 +330,9 @@ static void Dup_ListSimilarUsrs (void)
         {
          /* Get user code */
          UsrDat.UsrCod = DB_GetNextCode (mysql_res);
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                                      Usr_DONT_GET_PREFS,
+                                                      Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
            {
             /* Get if user has accepted all his/her courses */
             if (Usr_GetNumCrssOfUsr (UsrDat.UsrCod) != 0)

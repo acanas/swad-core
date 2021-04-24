@@ -1460,6 +1460,28 @@ void Lay_WrongWhoExit (void)
   }
 
 /*****************************************************************************/
+/************ Write error message and exit when user does not exists *********/
+/*****************************************************************************/
+
+void Lay_WrongUserExit (void)
+  {
+   extern const char *Txt_The_user_does_not_exist;
+
+   Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
+  }
+
+/*****************************************************************************/
+/*** Write error message and exit when no permission to perform an action ****/
+/*****************************************************************************/
+
+void Lay_NoPermissionExit (void)
+  {
+   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
+
+   Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
+  }
+
+/*****************************************************************************/
 /******* Write error message, close files, remove lock file, and exit ********/
 /*****************************************************************************/
 

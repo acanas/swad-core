@@ -833,7 +833,9 @@ void Msg_RecMsgFromUsr (void)
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDstData.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDstData);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDstData,Usr_DONT_GET_PREFS))		// Get recipient's data from the database
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDstData,	// Get recipient's data from database
+                                                   Usr_DONT_GET_PREFS,
+                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
         {
          /***** Check if recipient has banned me *****/
          RecipientHasBannedMe = Msg_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDstData.UsrCod);
@@ -3300,40 +3302,41 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",
-		 Messages->TypeOfMessages == Msg_RECEIVED ? (Open ? "BG_MSG_BLUE" :
-								    "BG_MSG_GREEN") :
-							    "BG_MSG_BLUE");
-   Ico_PutIcon (Messages->TypeOfMessages == Msg_RECEIVED ? (Open ? (Replied ? "reply.svg" :
-        	                                                              "envelope-open-text.svg") :
-                                                                   "envelope.svg") :
-                                                           "share.svg",
-		Title,"ICO16x16");
+      HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",
+		    Messages->TypeOfMessages == Msg_RECEIVED ? (Open ? "BG_MSG_BLUE" :
+								       "BG_MSG_GREEN") :
+							       "BG_MSG_BLUE");
+	 Ico_PutIcon (Messages->TypeOfMessages == Msg_RECEIVED ? (Open ? (Replied ? "reply.svg" :
+										    "envelope-open-text.svg") :
+									 "envelope.svg") :
+								 "share.svg",
+		      Title,"ICO16x16");
 
-   /***** Form to delete message *****/
-   HTM_BR ();
-   Messages->MsgCod = MsgCod;	// Message to be deleted
-   Ico_PutContextualIconToRemove (ActionDelMsg[Messages->TypeOfMessages],NULL,
-                                  Msg_PutHiddenParamsOneMsg,Messages);
-   HTM_TD_End ();
+	 /***** Form to delete message *****/
+	 HTM_BR ();
+	 Messages->MsgCod = MsgCod;	// Message to be deleted
+	 Ico_PutContextualIconToRemove (ActionDelMsg[Messages->TypeOfMessages],NULL,
+					Msg_PutHiddenParamsOneMsg,Messages);
+      HTM_TD_End ();
 
-   /***** Write message number *****/
-   Msg_WriteMsgNumber (MsgNum,!Open);
+      /***** Write message number *****/
+      Msg_WriteMsgNumber (MsgNum,!Open);
 
-   /***** Write message author *****/
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+      /***** Write message author *****/
+      HTM_TD_Begin ("class=\"%s LT\"",Open ? "MSG_AUT_BG" :
+					     "MSG_AUT_BG_NEW");
+	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+						  Usr_DONT_GET_PREFS,
+						  Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+	 Msg_WriteMsgAuthor (&UsrDat,true,NULL);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s LT\"",Open ? "MSG_AUT_BG" :
-			                  "MSG_AUT_BG_NEW");
-   Msg_WriteMsgAuthor (&UsrDat,true,NULL);
-   HTM_TD_End ();
+      /***** Write subject *****/
+      Msg_WriteSentOrReceivedMsgSubject (Messages,MsgCod,Subject,Open,Expanded);
 
-   /***** Write subject *****/
-   Msg_WriteSentOrReceivedMsgSubject (Messages,MsgCod,Subject,Open,Expanded);
-
-   /***** Write date-time *****/
-   Msg_WriteMsgDate (CreatTimeUTC,Open ? "MSG_TIT_BG" :
-	                                 "MSG_TIT_BG_NEW");
+      /***** Write date-time *****/
+      Msg_WriteMsgDate (CreatTimeUTC,Open ? "MSG_TIT_BG" :
+					    "MSG_TIT_BG_NEW");
 
    HTM_TR_End ();
 
@@ -3341,72 +3344,72 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
      {
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("rowspan=\"3\" colspan=\"2\" class=\"LT\"");
-      HTM_TABLE_BeginPadding (2);
+	 HTM_TD_Begin ("rowspan=\"3\" colspan=\"2\" class=\"LT\"");
+	    HTM_TABLE_BeginPadding (2);
 
-      /***** Write course origin of message *****/
-      HTM_TR_Begin (NULL);
-      HTM_TD_Begin ("class=\"LM\"");
-      FromThisCrs = Msg_WriteCrsOrgMsg (CrsCod);
-      HTM_TD_End ();
-      HTM_TR_End ();
+	       /***** Write course origin of message *****/
+	       HTM_TR_Begin (NULL);
+		  HTM_TD_Begin ("class=\"LM\"");
+		     FromThisCrs = Msg_WriteCrsOrgMsg (CrsCod);
+		  HTM_TD_End ();
+	       HTM_TR_End ();
 
-      /***** Form to reply message *****/
-      HTM_TR_Begin (NULL);
-      HTM_TD_Begin ("class=\"LM\"");
-      if (Messages->TypeOfMessages == Msg_RECEIVED &&
-	  Gbl.Usrs.Me.Role.Logged >= Rol_USR)
-	 // Guests (users without courses) can read messages but not reply them
-         Msg_WriteFormToReply (MsgCod,CrsCod,FromThisCrs,Replied,&UsrDat);
-      HTM_TD_End ();
-      HTM_TR_End ();
+	       /***** Form to reply message *****/
+	       HTM_TR_Begin (NULL);
+		  HTM_TD_Begin ("class=\"LM\"");
+		     if (Messages->TypeOfMessages == Msg_RECEIVED &&
+			 Gbl.Usrs.Me.Role.Logged >= Rol_USR)
+			// Guests (users without courses) can read messages but not reply them
+			Msg_WriteFormToReply (MsgCod,CrsCod,FromThisCrs,Replied,&UsrDat);
+		  HTM_TD_End ();
+	       HTM_TR_End ();
 
-      HTM_TABLE_End ();
-      HTM_TD_End ();
+	    HTM_TABLE_End ();
+	 HTM_TD_End ();
 
-      /***** Write "From:" *****/
-      HTM_TD_Begin ("class=\"RT MSG_TIT\"");
-      HTM_TxtColonNBSP (Txt_MSG_From);
-      HTM_TD_End ();
+	 /***** Write "From:" *****/
+	 HTM_TD_Begin ("class=\"RT MSG_TIT\"");
+	    HTM_TxtColonNBSP (Txt_MSG_From);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-      Msg_WriteMsgFrom (Messages,&UsrDat,Deleted);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	    Msg_WriteMsgFrom (Messages,&UsrDat,Deleted);
+	 HTM_TD_End ();
 
       HTM_TR_End ();
 
       /***** Write "To:" *****/
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"RT MSG_TIT\"");
-      HTM_TxtColonNBSP (Txt_MSG_To);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"RT MSG_TIT\"");
+	    HTM_TxtColonNBSP (Txt_MSG_To);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-      Msg_WriteMsgTo (Messages,MsgCod);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	    Msg_WriteMsgTo (Messages,MsgCod);
+	 HTM_TD_End ();
 
       HTM_TR_End ();
 
       HTM_TR_Begin (NULL);
 
-      /***** Write "Content:" *****/
-      HTM_TD_Begin ("class=\"RT MSG_TIT\"");
-      HTM_TxtColonNBSP (Txt_MSG_Content);
-      HTM_TD_End ();
+	 /***** Initialize media *****/
+	 Med_MediaConstructor (&Media);
 
-      /***** Initialize media *****/
-      Med_MediaConstructor (&Media);
+	 /***** Get message content and optional media *****/
+	 Msg_GetMsgContent (MsgCod,Content,&Media);
 
-      /***** Get message content and optional media *****/
-      Msg_GetMsgContent (MsgCod,Content,&Media);
+	 /***** Write "Content:" *****/
+	 HTM_TD_Begin ("class=\"RT MSG_TIT\"");
+	    HTM_TxtColonNBSP (Txt_MSG_Content);
+	 HTM_TD_End ();
 
-      /***** Show content and media *****/
-      HTM_TD_Begin ("colspan=\"2\" class=\"MSG_TXT LT\"");
-      if (Content[0])
-         Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
-      Med_ShowMedia (&Media,"MSG_IMG_CONT","MSG_IMG");
-      HTM_TD_End ();
+	 /***** Show content and media *****/
+	 HTM_TD_Begin ("colspan=\"2\" class=\"MSG_TXT LT\"");
+	    if (Content[0])
+	       Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+	    Med_ShowMedia (&Media,"MSG_IMG_CONT","MSG_IMG");
+	 HTM_TD_End ();
 
       HTM_TR_End ();
 
@@ -3847,7 +3850,9 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
          OpenByDst = (row[2][0] == 'Y');
 
          /* Get user's data */
-	 UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+	 UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+	                                                     Usr_DONT_GET_PREFS,
+	                                                     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
          /* Put an icon to show if user has read the message */
 	 Title = OpenByDst ? (Deleted ? Txt_MSG_Open_and_deleted :
@@ -4046,7 +4051,9 @@ void Msg_BanSenderWhenShowingMsgs (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
-   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                 Usr_DONT_GET_PREFS,
+                                                 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
       Lay_ShowErrorAndExit ("Sender does not exist.");
 
    /***** Insert pair (sender's code - my code) in table of banned senders if not inserted *****/
@@ -4104,7 +4111,9 @@ static void Msg_UnbanSender (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
-   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                 Usr_DONT_GET_PREFS,
+                                                 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
       Lay_ShowErrorAndExit ("Sender does not exist.");
 
    /***** Remove pair (sender's code - my code) from table of banned senders *****/
@@ -4198,27 +4207,29 @@ void Msg_ListBannedUsrs (void)
          UsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
          /* Get user's data from database */
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                                      Usr_DONT_GET_PREFS,
+                                                      Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
            {
             HTM_TR_Begin (NULL);
 
-            /* Put form to unban user */
-            HTM_TD_Begin ("class=\"BM\"");
-            Frm_BeginForm (ActUnbUsrLst);
-            Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
-            Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
-            Frm_EndForm ();
-            HTM_TD_End ();
+	       /* Put form to unban user */
+	       HTM_TD_Begin ("class=\"BM\"");
+		  Frm_BeginForm (ActUnbUsrLst);
+		     Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
+		     Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
+		  Frm_EndForm ();
+	       HTM_TD_End ();
 
-            /* Show photo */
-            HTM_TD_Begin ("class=\"LM\" style=\"width:30px;\"");
-            Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO21x28",Pho_ZOOM,false);
-            HTM_TD_End ();
+	       /* Show photo */
+	       HTM_TD_Begin ("class=\"LM\" style=\"width:30px;\"");
+		  Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+	       HTM_TD_End ();
 
-            /* Write user's full name */
-            HTM_TD_Begin ("class=\"DAT LM\"");
-            HTM_Txt (UsrDat.FullName);
-            HTM_TD_End ();
+	       /* Write user's full name */
+	       HTM_TD_Begin ("class=\"DAT LM\"");
+		  HTM_Txt (UsrDat.FullName);
+	       HTM_TD_End ();
 
             HTM_TR_End ();
            }

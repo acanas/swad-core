@@ -417,7 +417,9 @@ void Ntf_ShowMyNotifications (void)
 
          /* Get (from) user code (row[1]) */
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-         Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);		// Get user's data from the database
+         Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
+                                                  Usr_DONT_GET_PREFS,
+                                                  Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
          /* Get institution code (row[2]) */
          Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
@@ -1502,7 +1504,9 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          /* Get next user */
          UsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))		// Get user's data from the database
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
+	                                              Usr_DONT_GET_PREFS,
+	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
             if ((UsrDat.NtfEvents.CreateNotif & NotifyEventMask))	// Create notification
               {
 	       if ((UsrDat.NtfEvents.SendEmail & NotifyEventMask))	// Send notification by email
@@ -1614,7 +1618,9 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
          UsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
          /* Get user's data */
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))		// Get user's data from the database
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
+	                                              Usr_DONT_GET_PREFS,
+	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
            {
             /* Send one email to this user */
             Ntf_SendPendingNotifByEMailToOneUsr (&UsrDat,&NumNotif,&NumMails);
@@ -1736,7 +1742,9 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
 	    /* Get origin user code (row[1]) */
 	    FromUsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FromUsrDat,Usr_DONT_GET_PREFS);		// Get origin user's data from the database
+	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FromUsrDat,	// Get origin user's data from database
+	                                             Usr_DONT_GET_PREFS,
+	                                             Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
 	    /* Get institution code (row[2]) */
 	    Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);

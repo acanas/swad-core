@@ -270,7 +270,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 					   Nck_PutParamsRemoveMyNick,row[0]);
 	 else
 	   {
-	    switch (UsrDat->Roles.InCurrentCrs.Role)
+	    switch (UsrDat->Roles.InCurrentCrs)
 	      {
 	       case Rol_STD:
 		  NextAction = ActRemOldNicStd;
@@ -304,7 +304,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 	    Frm_StartFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
 	 else
 	   {
-	    switch (UsrDat->Roles.InCurrentCrs.Role)
+	    switch (UsrDat->Roles.InCurrentCrs)
 	      {
 	       case Rol_STD:
 		  NextAction = ActChgNicStd;
@@ -351,7 +351,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
       Frm_StartFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
    else
      {
-      switch (UsrDat->Roles.InCurrentCrs.Role)
+      switch (UsrDat->Roles.InCurrentCrs)
 	{
 	 case Rol_STD:
 	    NextAction = ActChgNicStd;

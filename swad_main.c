@@ -120,6 +120,7 @@ int main (void)
       Fir_CheckFirewallAndExitIfTooManyRequests ();
 
       Hie_InitHierarchy ();
+
       if (!Gbl.WebService.IsWebService)
 	{
 	 /***** Create file for HTML output *****/

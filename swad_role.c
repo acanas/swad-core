@@ -85,14 +85,11 @@ void Rol_SetMyRoles (void)
    bool ICanBeDegAdm = false;
 
    /***** Get my role in current course if not yet filled *****/
-   if (!Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Filled)
-     {
-      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role   = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Crs.CrsCod);
-      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Filled = true;
-     }
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_UNK)
+      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Set the user's role I am logged *****/
-   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);	// Get my roles if not yet got
+   Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);	// Get my roles if not yet got
    Gbl.Usrs.Me.Role.Max = Rol_GetMaxRoleInCrss ((unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);
 
    /***** Set the user's role I am logged *****/
@@ -101,17 +98,17 @@ void Rol_SetMyRoles (void)
    // 2. If it is not known, it will be retrieved from current session
    // 3. If a course is selected, it will be retrieved from my role in this course
    // 4. If none of the former options is satisfied, it will be set to user role
-   if (Gbl.Usrs.Me.Role.Logged == Rol_UNK)				// No role from last data
+   if (Gbl.Usrs.Me.Role.Logged == Rol_UNK)					// No role from last data
      {
-      if (Gbl.Usrs.Me.Role.FromSession == Rol_UNK)			// No role from session
+      if (Gbl.Usrs.Me.Role.FromSession == Rol_UNK)				// No role from session
         {
-	 if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role == Rol_UNK)	// No role in current course
-	    Gbl.Usrs.Me.Role.Logged = Rol_USR;				// User
+	 if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_UNK)			// No role in current course
+	    Gbl.Usrs.Me.Role.Logged = Rol_USR;					// User
 	 else
-	    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;	// Role in current course
+	    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;	// Role in current course
         }
       else
-	 Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.Role.FromSession;	// Role from session
+	 Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.Role.FromSession;		// Role from session
      }
 
    /***** Check if I am administrator of current institution/center/degree *****/
@@ -187,7 +184,7 @@ void Rol_SetMyRoles (void)
    if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)
      {
       if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-         Gbl.Usrs.Me.Role.Available = (1 << Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role);
+         Gbl.Usrs.Me.Role.Available = (1 << Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs);
       else if (Gbl.Usrs.Me.Role.Max >= Rol_STD)
          Gbl.Usrs.Me.Role.Available = (1 << Rol_USR);
       else
@@ -428,7 +425,7 @@ Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
 // Roles >=0 ==> already filled/calculated ==> nothing to do
 // Roles  <0 ==> not yet filled/calculated ==> get roles
 
-void Rol_GetRolesInAllCrssIfNotYetGot (struct UsrData *UsrDat)
+void Rol_GetRolesInAllCrss (struct UsrData *UsrDat)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -497,7 +494,9 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
    unsigned RoleUnsigned;
    bool PutClassSelect;
 
+   /***** Begin form *****/
    Frm_BeginForm (ActChgMyRol);
+
    PutClassSelect = false;
    if (ClassSelect)
       if (ClassSelect[0])
@@ -519,6 +518,8 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
 		     "%s",Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
         }
    HTM_SELECT_End ();
+
+   /***** End form *****/
    Frm_EndForm ();
   }
 

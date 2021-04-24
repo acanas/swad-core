@@ -195,7 +195,9 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
 
          /* Get author */
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
-         Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS); // Get from the database the data of the autor
+         Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get author's data from database
+                                                  Usr_DONT_GET_PREFS,
+                                                  Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
          /***** Write item with notice *****/
          fprintf (FileRSS,"<item>\n");

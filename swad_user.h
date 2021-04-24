@@ -94,6 +94,13 @@ typedef enum
    Usr_GET_PREFS      = 1,
   } Usr_GetPrefs_t;
 
+typedef enum
+  {
+   Usr_DONT_GET_ROLE_IN_CURRENT_CRS = 0,
+   Usr_GET_ROLE_IN_CURRENT_CRS      = 1,
+  } Usr_GetRoleInCurrentCrs_t;
+
+
 // Related with user's sexs
 #define Usr_NUM_SEXS 4	// Unknown, female, male, all
 typedef enum
@@ -169,11 +176,7 @@ struct UsrData
    char Password        [Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
    struct
      {
-      struct
-        {
-	 bool Filled;	// Role is valid (is already filled)?
-	 Rol_Role_t Role;
-        } InCurrentCrs;	// Role in current course (Rol_UNK is no course selected)
+      Rol_Role_t InCurrentCrs;	// Role in current course (Rol_UNK is not filled/calculated or no course selected)
       int InCrss;	// Roles in all his/her courses
 			// Check always if filled/calculated
 			// >=0 ==> filled/calculated
@@ -285,12 +288,16 @@ void Usr_UsrDataConstructor (struct UsrData *UsrDat);
 void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat);
 void Usr_ResetMyLastData (void);
 void Usr_UsrDataDestructor (struct UsrData *UsrDat);
-void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs);
+void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat,
+                                  Usr_GetPrefs_t GetPrefs,
+                                  Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs);
 void Usr_AllocateListUsrCods (struct ListUsrCods *ListUsrCods);
 void Usr_FreeListUsrCods (struct ListUsrCods *ListUsrCods);
 bool Usr_ItsMe (long UsrCod);
 void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat);
-void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs);
+void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,
+                               Usr_GetPrefs_t GetPrefs,
+                               Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs);
 
 void Usr_BuildFullName (struct UsrData *UsrDat);
 
@@ -395,7 +402,9 @@ void Usr_ChkUsrAndGetUsrData (void);
 
 void Usr_ShowFormsLogoutAndRole (void);
 
-bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs);
+bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat,
+                                              Usr_GetPrefs_t GetPrefs,
+                                              Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs);
 void Usr_UpdateMyLastData (void);
 void Usr_InsertMyLastCrsTabAndTime (void);
 
@@ -436,7 +445,8 @@ void Usr_DropTmpTableWithCandidateUsrs (void);
 
 void Usr_GetUnorderedStdsCodesInDeg (long DegCod);
 
-void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList *UsrInList);
+void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,
+                                   const struct UsrInList *UsrInList);
 void Usr_FreeUsrsList (Rol_Role_t Role);
 
 bool Usr_GetIfShowBigList (unsigned NumUsrs,

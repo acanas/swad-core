@@ -746,7 +746,9 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
 	       if (!ItsMe)	// Not me
 		 {
 		  /* Get user's data */
-		  Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+		  Usr_GetAllUsrDataFromUsrCod (&UsrDat,
+		                               Usr_DONT_GET_PREFS,
+		                               Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
 		  /* Create notification for the mentioned user *****/
 		  CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << Ntf_EVENT_TL_MENTION));

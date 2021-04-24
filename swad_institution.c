@@ -1090,125 +1090,128 @@ static void Ins_ListInstitutionsForEdition (void)
 
       HTM_TR_Begin (NULL);
 
-      /* Put icon to remove institution */
-      HTM_TD_Begin ("class=\"BM\"");
-      if (!ICanEdit ||
-	  NumCtrs ||		// Institution has centers
-	  NumUsrsIns ||		// Institution has users
-	  NumUsrsInCrssOfIns)	// Institution has users
-	 // Institution has centers or users ==> deletion forbidden
-         Ico_PutIconRemovalNotAllowed ();
-      else
-	 Ico_PutContextualIconToRemove (ActRemIns,NULL,
-					Ins_PutParamOtherInsCod,&Ins->InsCod);
-      HTM_TD_End ();
+	 /* Put icon to remove institution */
+	 HTM_TD_Begin ("class=\"BM\"");
+	 if (!ICanEdit ||
+	     NumCtrs ||		// Institution has centers
+	     NumUsrsIns ||		// Institution has users
+	     NumUsrsInCrssOfIns)	// Institution has users
+	    // Institution has centers or users ==> deletion forbidden
+	    Ico_PutIconRemovalNotAllowed ();
+	 else
+	    Ico_PutContextualIconToRemove (ActRemIns,NULL,
+					   Ins_PutParamOtherInsCod,&Ins->InsCod);
+	 HTM_TD_End ();
 
-      /* Institution code */
-      HTM_TD_Begin ("class=\"DAT CODE\"");
-      HTM_Long (Ins->InsCod);
-      HTM_TD_End ();
+	 /* Institution code */
+	 HTM_TD_Begin ("class=\"DAT CODE\"");
+	 HTM_Long (Ins->InsCod);
+	 HTM_TD_End ();
 
-      /* Institution logo */
-      HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins->FullName);
-      Lgo_DrawLogo (Hie_Lvl_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
-      HTM_TD_End ();
+	 /* Institution logo */
+	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins->FullName);
+	 Lgo_DrawLogo (Hie_Lvl_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
+	 HTM_TD_End ();
 
-      /* Institution short name */
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      if (ICanEdit)
-	{
-	 Frm_BeginForm (ActRenInsSho);
-	 Ins_PutParamOtherInsCod (&Ins->InsCod);
-	 HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
-	                 HTM_SUBMIT_ON_CHANGE,
-			 "class=\"INPUT_SHORT_NAME\"");
-	 Frm_EndForm ();
-	}
-      else
-	 HTM_Txt (Ins->ShrtName);
-      HTM_TD_End ();
+	 /* Institution short name */
+	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 if (ICanEdit)
+	   {
+	    Frm_BeginForm (ActRenInsSho);
+	    Ins_PutParamOtherInsCod (&Ins->InsCod);
+	    HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
+			    HTM_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_SHORT_NAME\"");
+	    Frm_EndForm ();
+	   }
+	 else
+	    HTM_Txt (Ins->ShrtName);
+	 HTM_TD_End ();
 
-      /* Institution full name */
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      if (ICanEdit)
-	{
-	 Frm_BeginForm (ActRenInsFul);
-	 Ins_PutParamOtherInsCod (&Ins->InsCod);
-	 HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins->FullName,
-	                 HTM_SUBMIT_ON_CHANGE,
-			 "class=\"INPUT_FULL_NAME\"");
-	 Frm_EndForm ();
-	}
-      else
-	 HTM_Txt (Ins->FullName);
-      HTM_TD_End ();
+	 /* Institution full name */
+	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 if (ICanEdit)
+	   {
+	    Frm_BeginForm (ActRenInsFul);
+	    Ins_PutParamOtherInsCod (&Ins->InsCod);
+	    HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins->FullName,
+			    HTM_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_FULL_NAME\"");
+	    Frm_EndForm ();
+	   }
+	 else
+	    HTM_Txt (Ins->FullName);
+	 HTM_TD_End ();
 
-      /* Institution WWW */
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      if (ICanEdit)
-	{
-	 Frm_BeginForm (ActChgInsWWW);
-	 Ins_PutParamOtherInsCod (&Ins->InsCod);
-	 HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
-			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
-	 Frm_EndForm ();
-	}
-      else
-	{
-         Str_Copy (WWW,Ins->WWW,sizeof (WWW) - 1);
-         HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
-         HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\"",
-		      Ins->WWW,Ins->WWW);
-         HTM_Txt (WWW);
-         HTM_A_End ();
-         HTM_DIV_End ();
-	}
-      HTM_TD_End ();
+	 /* Institution WWW */
+	 HTM_TD_Begin ("class=\"DAT LM\"");
+	    if (ICanEdit)
+	      {
+	       Frm_BeginForm (ActChgInsWWW);
+	       Ins_PutParamOtherInsCod (&Ins->InsCod);
+	       HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
+			      "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+	       Frm_EndForm ();
+	      }
+	    else
+	      {
+	       Str_Copy (WWW,Ins->WWW,sizeof (WWW) - 1);
+	       HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
+	       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\"",
+			    Ins->WWW,Ins->WWW);
+	       HTM_Txt (WWW);
+	       HTM_A_End ();
+	       HTM_DIV_End ();
+	      }
+	 HTM_TD_End ();
 
-      /* Number of users who claim to belong to this institution */
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumUsrsIns);
-      HTM_TD_End ();
+	 /* Number of users who claim to belong to this institution */
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumUsrsIns);
+	 HTM_TD_End ();
 
-      /* Number of centers */
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumCtrs);
-      HTM_TD_End ();
+	 /* Number of centers */
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumCtrs);
+	 HTM_TD_End ();
 
-      /* Number of users in courses of this institution */
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumUsrsInCrssOfIns);
-      HTM_TD_End ();
+	 /* Number of users in courses of this institution */
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumUsrsInCrssOfIns);
+	 HTM_TD_End ();
 
-      /* Institution requester */
-      UsrDat.UsrCod = Ins->RequesterUsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
-      HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
-      Msg_WriteMsgAuthor (&UsrDat,true,NULL);
-      HTM_TD_End ();
+	 /* Institution requester */
+	 HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
+	    UsrDat.UsrCod = Ins->RequesterUsrCod;
+	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+						     Usr_DONT_GET_PREFS,
+						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+	    Msg_WriteMsgAuthor (&UsrDat,true,NULL);
+	 HTM_TD_End ();
 
-      /* Institution status */
-      StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM &&
-	  StatusTxt == Ins_STATUS_PENDING)
-	{
-	 Frm_BeginForm (ActChgInsSta);
-	 Ins_PutParamOtherInsCod (&Ins->InsCod);
-	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			   "name=\"Status\" class=\"INPUT_STATUS\"");
-	 StatusUnsigned = (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_PENDING);
-	 HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
-		     "%s",Txt_INSTITUTION_STATUS[Ins_STATUS_PENDING]);
-	 StatusUnsigned = (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_ACTIVE);
-	 HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,false,false,
-		     "%s",Txt_INSTITUTION_STATUS[Ins_STATUS_ACTIVE]);
-	 HTM_SELECT_End ();
-	 Frm_EndForm ();
-	}
-      else if (StatusTxt != Ins_STATUS_ACTIVE)	// If active ==> do not show anything
-	 HTM_Txt (Txt_INSTITUTION_STATUS[StatusTxt]);
-      HTM_TD_End ();
+	 /* Institution status */
+	 HTM_TD_Begin ("class=\"DAT LM\"");
+	    StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
+	    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM &&
+		StatusTxt == Ins_STATUS_PENDING)
+	      {
+	       Frm_BeginForm (ActChgInsSta);
+	       Ins_PutParamOtherInsCod (&Ins->InsCod);
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				 "name=\"Status\" class=\"INPUT_STATUS\"");
+		  StatusUnsigned = (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_PENDING);
+		  HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
+			      "%s",Txt_INSTITUTION_STATUS[Ins_STATUS_PENDING]);
+		  StatusUnsigned = (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_ACTIVE);
+		  HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,false,false,
+			      "%s",Txt_INSTITUTION_STATUS[Ins_STATUS_ACTIVE]);
+	       HTM_SELECT_End ();
+	       Frm_EndForm ();
+	      }
+	    else if (StatusTxt != Ins_STATUS_ACTIVE)	// If active ==> do not show anything
+	       HTM_Txt (Txt_INSTITUTION_STATUS[StatusTxt]);
+	 HTM_TD_End ();
+
       HTM_TR_End ();
      }
 

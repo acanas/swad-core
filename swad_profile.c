@@ -245,7 +245,9 @@ void Prf_GetUsrDatAndShowUserProfile (void)
       Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Show profile and timeline *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                Usr_DONT_GET_PREFS,
+                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
       /* Show profile */
       if (Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))
 	{
@@ -314,9 +316,8 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 	  Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// ...and a course is selected
 	{
 	 /* Get user's role in current course */
-	 UsrDat->Roles.InCurrentCrs.Role   = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
-	                                                          Gbl.Hierarchy.Crs.CrsCod);
-	 UsrDat->Roles.InCurrentCrs.Filled = true;
+	 UsrDat->Roles.InCurrentCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
+	                                                   Gbl.Hierarchy.Crs.CrsCod);
 
 	 /* Get if user has accepted enrolment in current course */
 	 UsrDat->Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
@@ -1637,7 +1638,9 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 
 	 /* Get user's code (row[0]) */
 	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-	 Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+	 Usr_GetAllUsrDataFromUsrCod (&UsrDat,
+	                              Usr_DONT_GET_PREFS,
+	                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 	 ItsMe = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	 /* Get figure (row[1]) */
@@ -1851,7 +1854,9 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
 	 /* Get user's code (row[0]) */
 	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-	 Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+	 Usr_GetAllUsrDataFromUsrCod (&UsrDat,
+	                              Usr_DONT_GET_PREFS,
+	                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 	 ItsMe = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	 /* Get average number of clicks per day (row[1]) */

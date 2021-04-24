@@ -986,7 +986,9 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))                // Get from the database the data of the student
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get guest's data from database
+                                                   Usr_DONT_GET_PREFS,
+                                                   Usr_GET_ROLE_IN_CURRENT_CRS))
 	{
          /* Begin container for this user */
 	 snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
@@ -1032,7 +1034,9 @@ void Rec_GetUsrAndShowRecOneStdCrs (void)
    /***** Get the selected student *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))	// Get from the database the data of the student
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,	// Get student's data from database
+                                                Usr_DONT_GET_PREFS,
+                                                Usr_GET_ROLE_IN_CURRENT_CRS))
       if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat))
 	 Rec_ShowRecordOneStdCrs ();
   }
@@ -1184,7 +1188,9 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))                // Get from the database the data of the student
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get student's data from database
+                                                   Usr_DONT_GET_PREFS,
+                                                   Usr_GET_ROLE_IN_CURRENT_CRS))
          if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
            {
             /* Check if this user has accepted
@@ -1255,7 +1261,9 @@ void Rec_GetUsrAndShowRecOneTchCrs (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Show the record *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))	// Get from the database the data of the teacher
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,	// Get teacher's data from database
+                                                Usr_DONT_GET_PREFS,
+                                                Usr_GET_ROLE_IN_CURRENT_CRS))
       if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
 	 Rec_ShowRecordOneTchCrs ();
   }
@@ -1403,7 +1411,9 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))	// Get from the database the data of the student
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get teacher's data from database
+                                                   Usr_DONT_GET_PREFS,
+                                                   Usr_GET_ROLE_IN_CURRENT_CRS))
          if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
            {
             /* Check if this user has accepted
@@ -1595,7 +1605,9 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 
    /***** Get the user whose record we want to modify *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS);
+   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                            Usr_DONT_GET_PREFS,
+                                            Usr_GET_ROLE_IN_CURRENT_CRS);
 
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsInCurrentCrs ();
@@ -2059,9 +2071,8 @@ void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t Default
    /* In this case UsrDat->Roles.InCurrentCrsDB
       is not the current role in current course.
       Instead it is initialized with the preferred role. */
-   UsrDat->Roles.InCurrentCrs.Role   = (Gbl.Hierarchy.Level == Hie_Lvl_CRS) ? DefaultRole :	// Course selected
-	                                                                      Rol_UNK;		// No course selected
-   UsrDat->Roles.InCurrentCrs.Filled = true;
+   UsrDat->Roles.InCurrentCrs = (Gbl.Hierarchy.Level == Hie_Lvl_CRS) ? DefaultRole :	// Course selected
+	                                                               Rol_UNK;		// No course selected
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_USR_FORM,UsrDat,NULL);
   }
 
@@ -2098,7 +2109,9 @@ void Rec_ShowMySharedRecordUpd (void)
 void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat)
   {
    /***** Get password, user type and user's data from database *****/
-   Usr_GetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS);
+   Usr_GetAllUsrDataFromUsrCod (UsrDat,
+                                Usr_DONT_GET_PREFS,
+                                Usr_GET_ROLE_IN_CURRENT_CRS);
    UsrDat->Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
 
    /***** Show user's record *****/
@@ -2187,16 +2200,16 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	       UsrDat->Accepted);
    ShowIDRows = (TypeOfView != Rec_SHA_RECORD_PUBLIC);
 
-   StudentInCurrentCrs = UsrDat->Roles.InCurrentCrs.Role == Rol_STD;
-   TeacherInCurrentCrs = UsrDat->Roles.InCurrentCrs.Role == Rol_NET ||
-	                 UsrDat->Roles.InCurrentCrs.Role == Rol_TCH;
+   StudentInCurrentCrs = UsrDat->Roles.InCurrentCrs == Rol_STD;
+   TeacherInCurrentCrs = UsrDat->Roles.InCurrentCrs == Rol_NET ||
+	                 UsrDat->Roles.InCurrentCrs == Rol_TCH;
 
    ShowAddressRows = (TypeOfView == Rec_SHA_MY_RECORD_FORM  ||
 		      ((TypeOfView == Rec_SHA_RECORD_LIST   ||
 		        TypeOfView == Rec_SHA_RECORD_PRINT) &&
 		       IAmLoggedAsTeacherOrSysAdm &&
 		       StudentInCurrentCrs));			// He/she is a student in the current course
-   Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get user's roles if not got
+   Rol_GetRolesInAllCrss (UsrDat);	// Get user's roles if not got
    ShowTeacherRows = (TypeOfView == Rec_SHA_RECORD_LIST ||
 		      TypeOfView == Rec_SHA_RECORD_PRINT) &&
 		     TeacherInCurrentCrs;			// He/she is a teacher in the current course
@@ -2216,7 +2229,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
          break;
      }
 
-   Rec_RecordHelp[Rec_SHA_RECORD_LIST] = Rec_RecordListHelp[UsrDat->Roles.InCurrentCrs.Role];
+   Rec_RecordHelp[Rec_SHA_RECORD_LIST] = Rec_RecordListHelp[UsrDat->Roles.InCurrentCrs];
 
    PutFormLinks = !Gbl.Form.Inside &&						// Only if not inside another form
                   Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB;	// Only in main browser tab
@@ -2502,7 +2515,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	  Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM ||
 	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	{
-	 switch (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role)
+	 switch (Gbl.Record.UsrDat->Roles.InCurrentCrs)
 	   {
 	    case Rol_STD:
 	       NextAction = ActReqMdfStd;
@@ -2525,7 +2538,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 
       if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
 	{
-	 if (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role == Rol_STD)	// He/she is a student in current course
+	 if (Gbl.Record.UsrDat->Roles.InCurrentCrs == Rol_STD)	// He/she is a student in current course
 	   {
 	    /***** Buttons to view student's test, exam and match results *****/
 	    if (Usr_CheckIfICanViewTstExaMchResult (Gbl.Record.UsrDat))
@@ -2910,7 +2923,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
      {
       /***** Form to select a role *****/
       /* Get user's roles if not got */
-      Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
+      Rol_GetRolesInAllCrss (UsrDat);
 
       /* Label */
       Frm_LabelColumn ("REC_C1_BOT RM","Role",Txt_Role);
@@ -2947,12 +2960,12 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
             if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
 	      {
                /***** Set default role *****/
-	       switch (UsrDat->Roles.InCurrentCrs.Role)
+	       switch (UsrDat->Roles.InCurrentCrs)
 		 {
 		  case Rol_STD:	// Student in current course
 		  case Rol_NET:	// Non-editing teacher in current course
 		  case Rol_TCH:	// Teacher in current course
-		     DefaultRoleInForm = UsrDat->Roles.InCurrentCrs.Role;
+		     DefaultRoleInForm = UsrDat->Roles.InCurrentCrs;
 		     break;
 		  default:	// User does not belong to current course
 		     /* If there is a request of this user, default role is the requested role */
@@ -3137,7 +3150,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
-      HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+      HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
       HTM_TD_End ();
      }
 
@@ -3773,7 +3786,7 @@ void Rec_ShowMySharedRecordAndMore (void)
    bool IAmATeacher;
 
    /***** Get my roles if not yet got *****/
-   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+   Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
 
    /***** Check if I am a teacher *****/
    IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...

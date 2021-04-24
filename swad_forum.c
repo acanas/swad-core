@@ -1289,66 +1289,71 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    HTM_TD_End ();
    HTM_TR_End ();
 
-   /***** Form to ban/unban post *****/
    HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("class=\"CONTEXT_COL\"");
-   if (ICanModerateForum)
-     {
-      Frm_StartFormAnchor (Enabled ? For_ActionsDisPstFor[Forums->Forum.Type] :
-				     For_ActionsEnbPstFor[Forums->Forum.Type],
-			   For_FORUM_POSTS_SECTION_ID);
-      For_PutParamsForum (Forums);
-      Ico_PutIconLink (Enabled ? "eye-green.svg" :
-			         "eye-slash-red.svg",
-	               Str_BuildStringLong (Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
-	        				      Txt_FORUM_Post_X_banned_Click_to_unban_it,
-					    (long) PstNum));
-      Str_FreeString ();
-      Frm_EndForm ();
-     }
-   else
-     {
-      Ico_PutIcon (Enabled ? "eye-green.svg" :
-			     "eye-slash-red.svg",
-	           Str_BuildStringLong (Enabled ? Txt_FORUM_Post_X_allowed :
-	        			          Txt_FORUM_Post_X_banned,
-				        (long) PstNum),
-		   "ICO_HIDDEN ICO16x16");
-      Str_FreeString ();
-     }
 
-   /***** Form to remove post *****/
-   if (LastPst)
-      if (Usr_ItsMe (UsrDat.UsrCod))
-	 // Post can be removed if post is the last (without answers) and it's mine
-	 Ico_PutContextualIconToRemove (For_ActionsDelPstFor[Forums->Forum.Type],
-	                                PstNum == 1 ? For_FORUM_THREADS_SECTION_ID : 	// First and unique post in thread
-	                                	      For_FORUM_POSTS_SECTION_ID,	// Last of several posts in thread
-					For_PutParamsForum,Forums);
-   HTM_TD_End ();
+      /***** Form to ban/unban post *****/
+      HTM_TD_Begin ("class=\"CONTEXT_COL\"");
 
-   /***** Write author *****/
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
-   HTM_TD_Begin ("colspan=\"2\" class=\"AUTHOR_TXT LT\" style=\"width:150px;\"");
-   Msg_WriteMsgAuthor (&UsrDat,Enabled,NULL);
-   if (Enabled)
-      /* Write number of posts from this user */
-      For_WriteNumberOfPosts (Forums,UsrDat.UsrCod);
-   HTM_TD_End ();
+	 if (ICanModerateForum)
+	   {
+	    Frm_StartFormAnchor (Enabled ? For_ActionsDisPstFor[Forums->Forum.Type] :
+					   For_ActionsEnbPstFor[Forums->Forum.Type],
+				 For_FORUM_POSTS_SECTION_ID);
+	    For_PutParamsForum (Forums);
+	    Ico_PutIconLink (Enabled ? "eye-green.svg" :
+				       "eye-slash-red.svg",
+			     Str_BuildStringLong (Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
+							    Txt_FORUM_Post_X_banned_Click_to_unban_it,
+						  (long) PstNum));
+	    Str_FreeString ();
+	    Frm_EndForm ();
+	   }
+	 else
+	   {
+	    Ico_PutIcon (Enabled ? "eye-green.svg" :
+				   "eye-slash-red.svg",
+			 Str_BuildStringLong (Enabled ? Txt_FORUM_Post_X_allowed :
+							Txt_FORUM_Post_X_banned,
+					      (long) PstNum),
+			 "ICO_HIDDEN ICO16x16");
+	    Str_FreeString ();
+	   }
 
-   /***** Write post content *****/
-   HTM_TD_Begin ("class=\"MSG_TXT LT\"");
-   if (Enabled)
-     {
-      Str_Copy (Content,OriginalContent,sizeof (Content) - 1);
-      Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+	 /***** Form to remove post *****/
+	 if (LastPst)
+	    if (Usr_ItsMe (UsrDat.UsrCod))
+	       // Post can be removed if post is the last (without answers) and it's mine
+	       Ico_PutContextualIconToRemove (For_ActionsDelPstFor[Forums->Forum.Type],
+					      PstNum == 1 ? For_FORUM_THREADS_SECTION_ID : 	// First and unique post in thread
+							    For_FORUM_POSTS_SECTION_ID,	// Last of several posts in thread
+					      For_PutParamsForum,Forums);
 
-      /***** Show image *****/
-      Med_ShowMedia (&Media,"FOR_IMG_CONT","FOR_IMG");
-     }
-   else
-      HTM_Txt (Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);
-   HTM_TD_End ();
+      HTM_TD_End ();
+
+      /***** Write author *****/
+      HTM_TD_Begin ("colspan=\"2\" class=\"AUTHOR_TXT LT\" style=\"width:150px;\"");
+	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+						  Usr_DONT_GET_PREFS,
+						  Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+         Msg_WriteMsgAuthor (&UsrDat,Enabled,NULL);
+	 if (Enabled)
+	    /* Write number of posts from this user */
+	    For_WriteNumberOfPosts (Forums,UsrDat.UsrCod);
+      HTM_TD_End ();
+
+      /***** Write post content *****/
+      HTM_TD_Begin ("class=\"MSG_TXT LT\"");
+	 if (Enabled)
+	   {
+	    Str_Copy (Content,OriginalContent,sizeof (Content) - 1);
+	    Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+
+	    /***** Show image *****/
+	    Med_ShowMedia (&Media,"FOR_IMG_CONT","FOR_IMG");
+	   }
+	 else
+	    HTM_Txt (Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);
+      HTM_TD_End ();
    HTM_TR_End ();
 
    /***** Free image *****/
@@ -1824,7 +1829,7 @@ static void For_WriteLinksToGblForums (const struct For_Forums *Forums,
    struct For_Forum Forum;
 
    /***** Can I see teachers's forums? *****/
-   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+   Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
    ICanSeeTeacherForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
 	                 (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
 	                                                     (1 << Rol_TCH)));
@@ -1837,7 +1842,7 @@ static void For_WriteLinksToGblForums (const struct For_Forums *Forums,
    For_WriteLinkToForum (Forums,&Forum,Highlight,0,IsLastItemInLevel);
 
    /***** Link to forum of teachers global *****/
-   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+   Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
    if (ICanSeeTeacherForum)
      {
       Forum.Type = For_FORUM_GLOBAL_TCHS;
@@ -1861,7 +1866,7 @@ static void For_WriteLinksToPlatformForums (const struct For_Forums *Forums,
    struct For_Forum Forum;
 
    /***** Can I see teachers's forums? *****/
-   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+   Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
    ICanSeeTeacherForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
 	                 (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
 	                                                     (1 << Rol_TCH)));
@@ -3515,126 +3520,128 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	        ((Thr.ThrCod == ThrCodHighlighted)   ? "LIGHT_BLUE" :
                                                        Gbl.ColorRows[Gbl.RowEvenOdd]);
 
-      /***** Show my photo if I have any posts in this thread *****/
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"BT %s\"",BgColor);
-      if (Thr.NumMyPosts)
-         HTM_IMG (Gbl.Usrs.Me.PhotoURL[0] ? Gbl.Usrs.Me.PhotoURL :
-                                            Cfg_URL_ICON_PUBLIC,
-		  Gbl.Usrs.Me.PhotoURL[0] ? NULL :
-			                    "usr_bl.jpg",
-		  Txt_Thread_with_posts_from_you,
-	          "class=\"PHOTO15x20\"");
-      HTM_TD_End ();
+         /***** Show my photo if I have any posts in this thread *****/
+	 HTM_TD_Begin ("class=\"BT %s\"",BgColor);
+	    if (Thr.NumMyPosts)
+	       HTM_IMG (Gbl.Usrs.Me.PhotoURL[0] ? Gbl.Usrs.Me.PhotoURL :
+						  Cfg_URL_ICON_PUBLIC,
+			Gbl.Usrs.Me.PhotoURL[0] ? NULL :
+						  "usr_bl.jpg",
+			Txt_Thread_with_posts_from_you,
+			"class=\"PHOTO15x20\"");
+	 HTM_TD_End ();
 
-      /***** Put an icon with thread status *****/
-      HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",BgColor);
-      Ico_PutIcon (Thr.NumUnreadPosts ? "envelope.svg" :
-        	                        "envelope-open-text.svg",
-		   Thr.NumUnreadPosts ? Txt_There_are_new_posts :
-                                        Txt_No_new_posts,
-		   "ICO16x16");
+	 HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",BgColor);
+	    /***** Put an icon with thread status *****/
+	    Ico_PutIcon (Thr.NumUnreadPosts ? "envelope.svg" :
+					      "envelope-open-text.svg",
+			 Thr.NumUnreadPosts ? Txt_There_are_new_posts :
+					      Txt_No_new_posts,
+			 "ICO16x16");
 
-      /***** Put button to remove the thread *****/
-      if (PermissionThreadDeletion[Forums->Forum.Type] &
-	  (1 << Gbl.Usrs.Me.Role.Logged)) // If I have permission to remove thread in this forum...
-        {
-         HTM_BR ();
-         Ico_PutContextualIconToRemove (For_ActionsReqDelThr[Forums->Forum.Type],For_REMOVE_THREAD_SECTION_ID,
-				        For_PutParamsForum,Forums);
-        }
+	    /***** Put button to remove the thread *****/
+	    if (PermissionThreadDeletion[Forums->Forum.Type] &
+		(1 << Gbl.Usrs.Me.Role.Logged)) // If I have permission to remove thread in this forum...
+	      {
+	       HTM_BR ();
+	       Ico_PutContextualIconToRemove (For_ActionsReqDelThr[Forums->Forum.Type],For_REMOVE_THREAD_SECTION_ID,
+					      For_PutParamsForum,Forums);
+	      }
 
-      /***** Put button to cut the thread for moving it to another forum *****/
-      if (ICanMoveThreads)
-        {
-         HTM_BR ();
-         Frm_StartFormAnchor (For_ActionsCutThrFor[Forums->Forum.Type],
-                              For_FORUM_THREADS_SECTION_ID);
-	 For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
-                                      1,			// Page of posts   = first
-                                      Forums->ForumSet,
-				      Forums->ThreadsOrder,
-				      Forums->Forum.Location,
-				      Thr.ThrCod,
-				      -1L);
-         Ico_PutIconCut ();
-         Frm_EndForm ();
-        }
+	    /***** Put button to cut the thread for moving it to another forum *****/
+	    if (ICanMoveThreads)
+	      {
+	       HTM_BR ();
+	       Frm_StartFormAnchor (For_ActionsCutThrFor[Forums->Forum.Type],
+				    For_FORUM_THREADS_SECTION_ID);
+	       For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
+					    1,			// Page of posts   = first
+					    Forums->ForumSet,
+					    Forums->ThreadsOrder,
+					    Forums->Forum.Location,
+					    Thr.ThrCod,
+					    -1L);
+	       Ico_PutIconCut ();
+	       Frm_EndForm ();
+	      }
 
-      HTM_TD_End ();
+	 HTM_TD_End ();
 
-      /***** Write subject and links to thread pages *****/
-      HTM_TD_Begin ("class=\"LT %s\"",BgColor);
-      PaginationPsts.NumItems = Thr.NumPosts;
-      PaginationPsts.CurrentPage = 1;	// First page
-      Pag_CalculatePagination (&PaginationPsts);
-      PaginationPsts.Anchor = For_FORUM_POSTS_SECTION_ID;
-      Pag_WriteLinksToPages (Pag_POSTS_FORUM,
-                             &PaginationPsts,
-                             Forums,Thr.ThrCod,
-                             Thr.Enabled[Dat_START_TIME],
-                             Thr.Subject,
-                             Thr.NumUnreadPosts ? The_ClassFormInBoxBold[Gbl.Prefs.Theme] :
-                                                  The_ClassFormInBox[Gbl.Prefs.Theme],
-                             true);
-      HTM_TD_End ();
+	 /***** Write subject and links to thread pages *****/
+	 HTM_TD_Begin ("class=\"LT %s\"",BgColor);
+	    PaginationPsts.NumItems = Thr.NumPosts;
+	    PaginationPsts.CurrentPage = 1;	// First page
+	    Pag_CalculatePagination (&PaginationPsts);
+	    PaginationPsts.Anchor = For_FORUM_POSTS_SECTION_ID;
+	    Pag_WriteLinksToPages (Pag_POSTS_FORUM,
+				   &PaginationPsts,
+				   Forums,Thr.ThrCod,
+				   Thr.Enabled[Dat_START_TIME],
+				   Thr.Subject,
+				   Thr.NumUnreadPosts ? The_ClassFormInBoxBold[Gbl.Prefs.Theme] :
+							The_ClassFormInBox[Gbl.Prefs.Theme],
+				   true);
+	 HTM_TD_End ();
 
-      /***** Write the authors and date-times of first and last posts *****/
-      for (Order  = Dat_START_TIME;
-	   Order <= Dat_END_TIME;
-	   Order++)
-        {
-         if (Order == Dat_START_TIME || Thr.NumPosts > 1)	// Don't write twice the same author when thread has only one thread
-           {
-            /* Write the author of first or last message */
-            UsrDat.UsrCod = Thr.UsrCod[Order];
-            Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
-	    HTM_TD_Begin ("class=\"%s LT %s\"",Style,BgColor);
-            Msg_WriteMsgAuthor (&UsrDat,Thr.Enabled[Order],BgColor);
-	    HTM_TD_End ();
+	 /***** Write the authors and date-times of first and last posts *****/
+	 for (Order  = Dat_START_TIME;
+	      Order <= Dat_END_TIME;
+	      Order++)
+	   {
+	    if (Order == Dat_START_TIME || Thr.NumPosts > 1)	// Don't write twice the same author when thread has only one thread
+	      {
+	       /* Write the author of first or last message */
+	       UsrDat.UsrCod = Thr.UsrCod[Order];
+	       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							Usr_DONT_GET_PREFS,
+							Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+	       HTM_TD_Begin ("class=\"%s LT %s\"",Style,BgColor);
+		  Msg_WriteMsgAuthor (&UsrDat,Thr.Enabled[Order],BgColor);
+	       HTM_TD_End ();
 
-            /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */
-            TimeUTC = Thr.WriteTime[Order];
-	    UniqueId++;
-	    if (asprintf (&Id,"thr_date_%u",UniqueId) < 0)
-	       Lay_NotEnoughMemoryExit ();
-            HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",Id,Style,BgColor);
-	    Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-					  true,true,false,0x6);
-            HTM_TD_End ();
-            free (Id);
-           }
-         else
-            for (Column = 1;
-        	 Column <= 2;
-        	 Column++)
-              {
-               HTM_TD_Begin ("class=\"%s LT %s\"",Style,BgColor);
-               HTM_TD_End ();
-              }
-        }
+	       /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */
+	       TimeUTC = Thr.WriteTime[Order];
+	       UniqueId++;
+	       if (asprintf (&Id,"thr_date_%u",UniqueId) < 0)
+		  Lay_NotEnoughMemoryExit ();
+	       HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",Id,Style,BgColor);
+		  Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
+						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+						true,true,false,0x6);
+	       HTM_TD_End ();
+	       free (Id);
+	      }
+	    else
+	       for (Column = 1;
+		    Column <= 2;
+		    Column++)
+		 {
+		  HTM_TD_Begin ("class=\"%s LT %s\"",Style,BgColor);
+		  HTM_TD_End ();
+		 }
+	   }
 
-      /***** Write number of posts in this thread *****/
-      HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      HTM_TxtF ("%u&nbsp;",Thr.NumPosts);
-      HTM_TD_End ();
+	 /***** Write number of posts in this thread *****/
+	 HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
+	    HTM_TxtF ("%u&nbsp;",Thr.NumPosts);
+	 HTM_TD_End ();
 
-      /***** Write number of new posts in this thread *****/
-      HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      HTM_TxtF ("%u&nbsp;",Thr.NumUnreadPosts);
-      HTM_TD_End ();
+	 /***** Write number of new posts in this thread *****/
+	 HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
+	    HTM_TxtF ("%u&nbsp;",Thr.NumUnreadPosts);
+	 HTM_TD_End ();
 
-      /***** Write number of users who have write posts in this thread *****/
-      HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      HTM_TxtF ("%u&nbsp;",Thr.NumWriters);
-      HTM_TD_End ();
+	 /***** Write number of users who have write posts in this thread *****/
+	 HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
+	    HTM_TxtF ("%u&nbsp;",Thr.NumWriters);
+	 HTM_TD_End ();
 
-      /***** Write number of users who have read this thread *****/
-      HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
-      HTM_TxtF ("%u&nbsp;",Thr.NumReaders);
-      HTM_TD_End ();
+	 /***** Write number of users who have read this thread *****/
+	 HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
+	    HTM_TxtF ("%u&nbsp;",Thr.NumReaders);
+	 HTM_TD_End ();
 
       HTM_TR_End ();
      }
@@ -3938,7 +3945,7 @@ static void For_RestrictAccess (const struct For_Forums *Forums)
          break;
       case For_FORUM_GLOBAL_TCHS:
       case For_FORUM__SWAD__TCHS:
-         Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+         Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
          ICanSeeForum = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
                                                             (1 << Rol_TCH)));
          break;

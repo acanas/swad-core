@@ -1708,7 +1708,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
    HTM_TR_End ();
 
    /***** Write rows back *****/
-   for (NumRow = LastRow, UniqueId = 1, Gbl.RowEvenOdd = 0;
+   for (NumRow  = LastRow, UniqueId = 1, Gbl.RowEvenOdd = 0;
 	NumRow >= FirstRow;
 	NumRow--, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {
@@ -1720,7 +1720,9 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 
       /* Get user's data of the database */
       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                               Usr_DONT_GET_PREFS,
+                                               Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
       /* Get logged role */
       if (sscanf (row[2],"%u",&RoleFromLog) != 1)
@@ -1848,7 +1850,9 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 
       /* Get user's data from the database */
       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);	// Get the data of the user from the database
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
+                                               Usr_DONT_GET_PREFS,
+                                               Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
       HTM_TR_Begin (NULL);
 
@@ -1875,7 +1879,7 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 
       /* Write user's role */
       HTM_TD_Begin ("class=\"LOG CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%s&nbsp;",Txt_ROLES_SINGUL_Abc[UsrDat.Roles.InCurrentCrs.Role][UsrDat.Sex]);
+      HTM_TxtF ("%s&nbsp;",Txt_ROLES_SINGUL_Abc[UsrDat.Roles.InCurrentCrs][UsrDat.Sex]);
       HTM_TD_End ();
 
       /* Write the number of clicks */
@@ -1895,8 +1899,8 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
       if (BarWidth)
 	{
 	 HTM_IMG (Cfg_URL_ICON_PUBLIC,
-		  UsrDat.Roles.InCurrentCrs.Role == Rol_STD ? "o1x1.png" :	// Student
-			                                      "r1x1.png",	// Non-editing teacher or teacher
+		  UsrDat.Roles.InCurrentCrs == Rol_STD ? "o1x1.png" :	// Student
+			                                 "r1x1.png",	// Non-editing teacher or teacher
 		  NULL,
 	          "class=\"LT\" style=\"width:%upx; height:10px; padding-top:4px;\"",
 		  BarWidth);

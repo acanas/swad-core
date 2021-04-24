@@ -1790,6 +1790,4 @@ const char *Act_GetActionText (Act_Action_t Action);
 void Act_AdjustActionWhenNoUsrLogged (void);
 void Act_AdjustCurrentAction (void);
 
-void Lay_NoPermissionExit (void);
-
 #endif

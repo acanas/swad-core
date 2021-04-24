@@ -1061,7 +1061,9 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 
       /* Center requester */
       UsrDat.UsrCod = Ctr->RequesterUsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                               Usr_DONT_GET_PREFS,
+                                               Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
       HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
       HTM_TD_End ();

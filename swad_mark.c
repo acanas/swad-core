@@ -636,7 +636,9 @@ void Mrk_ShowMyMarks (void)
    if (UsrIsOK)
      {
       /***** Get list of user's IDs *****/
-      Usr_GetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS);
+      Usr_GetAllUsrDataFromUsrCod (UsrDat,
+                                   Usr_DONT_GET_PREFS,
+                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
       /***** Create temporal file to store my marks (in HTML) *****/
       /* If the private directory does not exist, create it */

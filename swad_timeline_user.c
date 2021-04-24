@@ -213,7 +213,9 @@ static void Tml_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
       UsrDat.UsrCod = DB_GetNextCode (*mysql_res);
 
       /***** Get user's data and show user's photo *****/
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                                   Usr_DONT_GET_PREFS,
+                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	{
 	 /* Begin container */
 	 HTM_DIV_Begin ("class=\"TL_SHARER\"");

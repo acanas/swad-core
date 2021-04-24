@@ -159,7 +159,7 @@ bool Pho_ICanChangeOtherUsrPhoto (struct UsrData *UsrDat)
      {
       case Rol_TCH:
 	 /* A teacher can change the photo of confirmed students */
-	 if (UsrDat->Roles.InCurrentCrs.Role != Rol_STD)	// Not a student
+	 if (UsrDat->Roles.InCurrentCrs != Rol_STD)	// Not a student
             return false;
 
 	 /* It's a student in this course,
@@ -206,7 +206,7 @@ void Pho_PutIconToChangeUsrPhoto (void)
 	 PhotoExists = Pho_BuildLinkToPhoto (Gbl.Record.UsrDat,PhotoURL);
 	 TitleText = PhotoExists ? Txt_Change_photo :
 				   Txt_Upload_photo;
-	 switch (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role)
+	 switch (Gbl.Record.UsrDat->Roles.InCurrentCrs)
 	   {
 	    case Rol_STD:
 	       NextAction = ActReqStdPho;
@@ -257,7 +257,7 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (__attribute__((unused)) voi
    PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
    if (PhotoExists)
      {
-      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
+      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
 	{
 	 case Rol_STD:
 	    NextAction = ActReqRemStdPho;
@@ -329,7 +329,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
       Frm_BeginForm (ActDetMyPho);
    else
      {
-      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
+      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
 	{
 	 case Rol_STD:
 	    NextAction = ActDetStdPho;
@@ -415,7 +415,9 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                Usr_DONT_GET_PREFS,
+                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
      {
       /***** Receive photo *****/
       if (!Pho_ReceivePhotoAndDetectFaces (false,&Gbl.Usrs.Other.UsrDat))
@@ -500,7 +502,9 @@ void Pho_ReqRemoveUsrPhoto (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                Usr_DONT_GET_PREFS,
+                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
      {
       if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
 	{
@@ -517,7 +521,7 @@ void Pho_ReqRemoveUsrPhoto (void)
 			      "PHOTO186x248",Pho_NO_ZOOM,false);
 
 	    /* End alert */
-	    switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
+	    switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
 	      {
 	       case Rol_STD:
 		  NextAction = ActRemStdPho;
@@ -557,7 +561,9 @@ void Pho_RemoveUsrPhoto (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                Usr_DONT_GET_PREFS,
+                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
      {
       /***** Remove photo *****/
       if (Pho_RemovePhoto (&Gbl.Usrs.Other.UsrDat))
@@ -692,7 +698,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
         	  Frm_BeginForm (ActUpdMyPho);
                else
         	 {
-               	  switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
+               	  switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
 		    {
 		     case Rol_STD:
 			NextAction = ActUpdStdPho;

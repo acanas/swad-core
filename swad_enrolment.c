@@ -260,10 +260,9 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
    Usr_FlushCachesUsr ();
 
    /***** Set user's roles *****/
-   UsrDat->Roles.InCurrentCrs.Role   = NewRole;
-   UsrDat->Roles.InCurrentCrs.Filled = true;
+   UsrDat->Roles.InCurrentCrs = NewRole;
    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
-   Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get roles
+   Rol_GetRolesInAllCrss (UsrDat);	// Get roles
 
    /***** Create notification for this user.
 	  If this user wants to receive notifications by email,
@@ -329,10 +328,9 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
    Usr_FlushCachesUsr ();
 
    /***** Set roles *****/
-   UsrDat->Roles.InCurrentCrs.Role   = NewRole;
-   UsrDat->Roles.InCurrentCrs.Filled = true;
+   UsrDat->Roles.InCurrentCrs = NewRole;
    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
-   Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get roles
+   Rol_GetRolesInAllCrss (UsrDat);	// Get roles
 
    /***** Create notification for this user.
 	  If this user wants to receive notifications by email,
@@ -439,11 +437,11 @@ void Enr_ReqAcceptRegisterInCrs (void)
 
    /***** Show message *****/
    Ale_ShowAlert (Ale_INFO,Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y,
-                  Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
+                  Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs][Gbl.Usrs.Me.UsrDat.Sex],
                   Gbl.Hierarchy.Crs.FullName);
 
    /***** Send button to accept register in the current course *****/
-   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
+   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
      {
       case Rol_STD:
 	 Frm_BeginForm (ActAccEnrStd);
@@ -461,7 +459,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Frm_EndForm ();
 
    /***** Send button to refuse register in the current course *****/
-   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
+   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
      {
       case Rol_STD:
 	 Frm_BeginForm (ActRemMe_Std);
@@ -482,7 +480,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Box_BoxEnd ();
 
    /***** Mark possible notification as seen *****/
-   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
+   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
      {
       case Rol_STD:
 	 NotifyEvent = Ntf_EVENT_ENROLMENT_STD;
@@ -533,7 +531,9 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
       /* Get user's data */
       UsrDat.UsrCod = UsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                               Usr_DONT_GET_PREFS,
+                                               Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
       /* Role (row[0]) */
       Role = Rol_ConvertUnsignedStrToRole (row[0]);
@@ -925,8 +925,11 @@ void Enr_RemoveOldUsrs (void)
            NumUsr++)
         {
          UsrDat.UsrCod = DB_GetNextCode (mysql_res);
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                                      Usr_DONT_GET_PREFS,
+                                                      Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
            {
+            // User's data exist...
             Acc_CompletelyEliminateAccount (&UsrDat,Cns_QUIET);
             NumUsrsEliminated++;
            }
@@ -1305,8 +1308,11 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	    if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove)        // If this student must be removed
 	      {
 	       UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod;
-	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
+	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+	                                                    Usr_DONT_GET_PREFS,
+	                                                    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 		 {
+		  // User's data exist...
 		  if (WhatToDo.EliminateUsrs)                // Eliminate user completely from the platform
 		    {
 		     Acc_CompletelyEliminateAccount (&UsrDat,Cns_QUIET);                // Remove definitely the user from the platform
@@ -1808,13 +1814,16 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
 
    /***** Check if the record of the user exists and get the type of user *****/
    if (UsrDat->UsrCod > 0)	// User exists in database
-      Usr_GetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS);	// Get user's data
+      /* Get user's data */
+      Usr_GetAllUsrDataFromUsrCod (UsrDat,
+                                   Usr_DONT_GET_PREFS,
+                                   Usr_GET_ROLE_IN_CURRENT_CRS);
    else				// User does not exist in database, create it using his/her ID!
      {
-      // Reset user's data
+      /* Reset user's data */
       Usr_ResetUsrDataExceptUsrCodAndIDs (UsrDat);	// It's necessary, because the same struct UsrDat was used for former user
 
-      // User does not exist in database; list of IDs is initialized
+      /* User does not exist in database; list of IDs is initialized */
       UsrDat->IDs.List[0].Confirmed = true;	// If he/she is a new user ==> his/her ID will be stored as confirmed in database
       Acc_CreateNewUsr (UsrDat,
                         false);	// I am NOT creating my own account
@@ -1825,7 +1834,7 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
      {
       if (Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
 	{
-	 if (RegRemRole != UsrDat->Roles.InCurrentCrs.Role)	// The role must be updated
+	 if (RegRemRole != UsrDat->Roles.InCurrentCrs)	// The role must be updated
 	    /* Modify role */
 	    Enr_ModifyRoleInCurrentCrs (UsrDat,RegRemRole);
 	}
@@ -1964,9 +1973,9 @@ void Enr_ReqSignUpInCrs (void)
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Check if I already belong to course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role >= Rol_STD)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs >= Rol_STD)
       Ale_ShowAlert (Ale_WARNING,Txt_You_were_already_enroled_as_X_in_the_course_Y,
-                     Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
+                     Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs][Gbl.Usrs.Me.UsrDat.Sex],
                      Gbl.Hierarchy.Crs.FullName);
    else if (Gbl.Usrs.Me.Role.Logged == Rol_GST ||
 	    Gbl.Usrs.Me.Role.Logged == Rol_USR)
@@ -1990,9 +1999,9 @@ void Enr_SignUpInCrs (void)
    long ReqCod = -1L;
 
    /***** Check if I already belong to course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role >= Rol_STD)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs >= Rol_STD)
       Ale_ShowAlert (Ale_WARNING,Txt_You_were_already_enroled_as_X_in_the_course_Y,
-                     Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
+                     Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs][Gbl.Usrs.Me.UsrDat.Sex],
                      Gbl.Hierarchy.Crs.FullName);
    else
      {
@@ -2092,7 +2101,9 @@ void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
       /* User's code (row[0]) */
       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                               Usr_DONT_GET_PREFS,
+                                               Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
       /* Role (row[1]) */
       DesiredRole = Rol_ConvertUnsignedStrToRole (row[1]);
@@ -2130,8 +2141,11 @@ void Enr_AskIfRejectSignUp (void)
    /***** Get user's code *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                Usr_DONT_GET_PREFS,
+                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
      {
+      // User's data exist...
       if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
         {
          /* User already belongs to this course */
@@ -2184,8 +2198,11 @@ void Enr_RejectSignUp (void)
    /***** Get user's code *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                Usr_DONT_GET_PREFS,
+                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
      {
+      // User's data exist...
       if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
         {
          /* User already belongs to this course */
@@ -2895,143 +2912,149 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
       /* Begin table */
       HTM_TABLE_BeginCenterPadding (2);
 
-      /* Table heading */
-      HTM_TR_Begin (NULL);
+	 /* Table heading */
+	 HTM_TR_Begin (NULL);
 
-      HTM_TH_Empty (1);
-      HTM_TH (1,1,"LT",Txt_Course);
-      HTM_TH (1,1,"RT",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-      HTM_TH (1,2,"LT",Txt_Requester);
-      HTM_TH (1,1,"LT",Txt_Role);
-      HTM_TH (1,1,"CT",Txt_Date);
-      HTM_TH_Empty (2);
+	    HTM_TH_Empty (1);
+	    HTM_TH (1,1,"LT",Txt_Course);
+	    HTM_TH (1,1,"RT",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	    HTM_TH (1,2,"LT",Txt_Requester);
+	    HTM_TH (1,1,"LT",Txt_Role);
+	    HTM_TH (1,1,"CT",Txt_Date);
+	    HTM_TH_Empty (2);
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-      /* List requests */
-      for (NumReq = 0;
-           NumReq < NumReqs;
-           NumReq++)
-        {
-         row = mysql_fetch_row (mysql_res);
+	 /* List requests */
+	 for (NumReq = 0;
+	      NumReq < NumReqs;
+	      NumReq++)
+	   {
+	    row = mysql_fetch_row (mysql_res);
 
-         /* Get request code (row[0]) */
-         ReqCod = Str_ConvertStrCodToLongCod (row[0]);
+	    /* Get request code (row[0]) */
+	    ReqCod = Str_ConvertStrCodToLongCod (row[0]);
 
-         /* Get course code (row[1]) */
-         Crs.CrsCod = Str_ConvertStrCodToLongCod (row[1]);
+	    /* Get course code (row[1]) */
+	    Crs.CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
-         /* Get user code (row[2]) */
-         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
-         UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+	    /* Get user code (row[2]) */
+	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
+	    UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+								 Usr_DONT_GET_PREFS,
+								 Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
-	 /***** Get requested role (row[3]) *****/
-	 DesiredRole = Rol_ConvertUnsignedStrToRole (row[3]);
+	    /***** Get requested role (row[3]) *****/
+	    DesiredRole = Rol_ConvertUnsignedStrToRole (row[3]);
 
-         if (UsrExists)
-            UsrBelongsToCrs = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
-                                                          Crs.CrsCod,
-                                                          false);
-         else
-            UsrBelongsToCrs = false;
+	    if (UsrExists)
+	       UsrBelongsToCrs = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
+							     Crs.CrsCod,
+							     false);
+	    else
+	       UsrBelongsToCrs = false;
 
-         if (UsrExists &&
-             !UsrBelongsToCrs &&
-             (DesiredRole == Rol_STD ||
-              DesiredRole == Rol_NET ||
-              DesiredRole == Rol_TCH))
-           {
-            /***** Number *****/
-            HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("class=\"DAT RT\"");
-	    HTM_Unsigned (NumReqs - NumReq);
-	    HTM_TD_End ();
+	    if (UsrExists &&
+		!UsrBelongsToCrs &&
+		(DesiredRole == Rol_STD ||
+		 DesiredRole == Rol_NET ||
+		 DesiredRole == Rol_TCH))
+	      {
+	       HTM_TR_Begin (NULL);
 
-            /***** Link to course *****/
-            Crs_GetDataOfCourseByCod (&Crs);
-            Deg.DegCod = Crs.DegCod;
-            Deg_GetDataOfDegreeByCod (&Deg);
-            HTM_TD_Begin (NULL);
-            Frm_BeginFormGoTo (ActSeeCrsInf);
-            Crs_PutParamCrsCod (Crs.CrsCod);
-            HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),
-				     "BT_LINK LT DAT",NULL);
-            Hie_FreeGoToMsg ();
-            HTM_TxtF ("%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
-            HTM_BUTTON_End ();
-            Frm_EndForm ();
-            HTM_TD_End ();
+		  /***** Number *****/
+		  HTM_TD_Begin ("class=\"DAT RT\"");
+		     HTM_Unsigned (NumReqs - NumReq);
+		  HTM_TD_End ();
 
-            /***** Number of teachers in the course *****/
-            HTM_TD_Begin ("class=\"DAT RT\"");
-            HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,Crs.CrsCod,
-				                1 << Rol_TCH));
-            HTM_TD_End ();
+		  /***** Link to course *****/
+		  HTM_TD_Begin (NULL);
 
-            /***** User photo *****/
-            HTM_TD_Begin ("class=\"DAT CT\" style=\"width:22px;\"");
-            Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO21x28",Pho_ZOOM,false);
-            HTM_TD_End ();
+		     Crs_GetDataOfCourseByCod (&Crs);
+		     Deg.DegCod = Crs.DegCod;
+		     Deg_GetDataOfDegreeByCod (&Deg);
 
-            /***** User name *****/
-            HTM_TD_Begin ("class=\"DAT LT\"");
-            HTM_DIV_Begin ("class=\"REQUESTER_NAME\"");	// Limited width
-            Usr_WriteFirstNameBRSurnames (&UsrDat);
-            HTM_DIV_End ();
-            HTM_TD_End ();
+		     Frm_BeginFormGoTo (ActSeeCrsInf);
+		     Crs_PutParamCrsCod (Crs.CrsCod);
+			HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),
+						 "BT_LINK LT DAT",NULL);
+			   Hie_FreeGoToMsg ();
+			   HTM_TxtF ("%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
+			HTM_BUTTON_End ();
+		     Frm_EndForm ();
 
-            /***** Requested role (row[3]) *****/
-            HTM_TD_Begin ("class=\"DAT LT\"");
-            HTM_Txt (Txt_ROLES_SINGUL_abc[DesiredRole][UsrDat.Sex]);
-            HTM_TD_End ();
+		  HTM_TD_End ();
 
-            /***** Request time (row[4]) *****/
-            Msg_WriteMsgDate (Dat_GetUNIXTimeFromStr (row[4]),"DAT");
+		  /***** Number of teachers in the course *****/
+		  HTM_TD_Begin ("class=\"DAT RT\"");
+		     HTM_Unsigned (Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,Crs.CrsCod,
+							 1 << Rol_TCH));
+		  HTM_TD_End ();
 
-            /***** Button to confirm the request *****/
-            HTM_TD_Begin ("class=\"DAT LT\"");
-            switch (DesiredRole)
-              {
-               case Rol_STD:
-        	  NextAction = ActReqMdfStd;
-        	  break;
-               case Rol_NET:
-        	  NextAction = ActReqMdfNET;
-        	  break;
-               case Rol_TCH:
-        	  NextAction = ActReqMdfTch;
-        	  break;
-               default:
-        	  NextAction = ActUnk;
-        	  Rol_WrongRoleExit ();
-        	  break;
-              }
-            Frm_BeginForm (NextAction);
-            Crs_PutParamCrsCod (Crs.CrsCod);
-            Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
-            Btn_PutCreateButtonInline (Txt_Register);
-            Frm_EndForm ();
-            HTM_TD_End ();
+		  /***** User photo *****/
+		  HTM_TD_Begin ("class=\"DAT CT\" style=\"width:22px;\"");
+		     Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+		  HTM_TD_End ();
 
-            /***** Button to reject the request *****/
-            HTM_TD_Begin ("class=\"DAT LT\"");
-            Frm_BeginForm (ActReqRejSignUp);
-            Crs_PutParamCrsCod (Crs.CrsCod);
-            Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
-            Btn_PutRemoveButtonInline (Txt_Reject);
-            Frm_EndForm ();
-            HTM_TD_End ();
+		  /***** User name *****/
+		  HTM_TD_Begin ("class=\"DAT LT\"");
+		     HTM_DIV_Begin ("class=\"REQUESTER_NAME\"");	// Limited width
+			Usr_WriteFirstNameBRSurnames (&UsrDat);
+		     HTM_DIV_End ();
+		  HTM_TD_End ();
 
-            HTM_TR_End ();
+		  /***** Requested role (row[3]) *****/
+		  HTM_TD_Begin ("class=\"DAT LT\"");
+		     HTM_Txt (Txt_ROLES_SINGUL_abc[DesiredRole][UsrDat.Sex]);
+		  HTM_TD_End ();
 
-            /***** Mark possible notification as seen *****/
-            Ntf_MarkNotifAsSeen (Ntf_EVENT_ENROLMENT_REQUEST,
-                                ReqCod,Gbl.Hierarchy.Crs.CrsCod,
-                                Gbl.Usrs.Me.UsrDat.UsrCod);
-           }
-         else        // User does not exists or user already belongs to course ==> remove pair from crs_requests table
-            Enr_RemoveEnrolmentRequest (Crs.CrsCod,UsrDat.UsrCod);
-        }
+		  /***** Request time (row[4]) *****/
+		  Msg_WriteMsgDate (Dat_GetUNIXTimeFromStr (row[4]),"DAT");
+
+		  /***** Button to confirm the request *****/
+		  HTM_TD_Begin ("class=\"DAT LT\"");
+		     switch (DesiredRole)
+		       {
+			case Rol_STD:
+			   NextAction = ActReqMdfStd;
+			   break;
+			case Rol_NET:
+			   NextAction = ActReqMdfNET;
+			   break;
+			case Rol_TCH:
+			   NextAction = ActReqMdfTch;
+			   break;
+			default:
+			   NextAction = ActUnk;
+			   Rol_WrongRoleExit ();
+			   break;
+		       }
+		     Frm_BeginForm (NextAction);
+		     Crs_PutParamCrsCod (Crs.CrsCod);
+		     Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
+			Btn_PutCreateButtonInline (Txt_Register);
+		     Frm_EndForm ();
+		  HTM_TD_End ();
+
+		  /***** Button to reject the request *****/
+		  HTM_TD_Begin ("class=\"DAT LT\"");
+		     Frm_BeginForm (ActReqRejSignUp);
+		     Crs_PutParamCrsCod (Crs.CrsCod);
+		     Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
+			Btn_PutRemoveButtonInline (Txt_Reject);
+		     Frm_EndForm ();
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+
+	       /***** Mark possible notification as seen *****/
+	       Ntf_MarkNotifAsSeen (Ntf_EVENT_ENROLMENT_REQUEST,
+				   ReqCod,Gbl.Hierarchy.Crs.CrsCod,
+				   Gbl.Usrs.Me.UsrDat.UsrCod);
+	      }
+	    else        // User does not exists or user already belongs to course ==> remove pair from crs_requests table
+	       Enr_RemoveEnrolmentRequest (Crs.CrsCod,UsrDat.UsrCod);
+	   }
 
       /* End table */
       HTM_TABLE_End ();
@@ -3322,7 +3345,9 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
 	{
 	 /* Get user's data */
          Gbl.Usrs.Other.UsrDat.UsrCod = ListUsrCods->Lst[NumUsr];
-         Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS);
+         Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                      Usr_DONT_GET_PREFS,
+                                      Usr_GET_ROLE_IN_CURRENT_CRS);
 
          /* Show form to edit user */
 	 Enr_ShowFormToEditOtherUsr ();
@@ -3816,7 +3841,7 @@ void Enr_CreateNewUsr1 (void)
 	{
 	 if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
 	   {
-	    OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role;	// Remember old role before changing it
+	    OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;	// Remember old role before changing it
 	    if (NewRole != OldRole)	// The role must be updated
 	      {
 	       /* Modify role */
@@ -3935,7 +3960,7 @@ void Enr_ModifyUsr1 (void)
 		  /***** Register user in current course in database *****/
 		  if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
 		    {
-		     OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role;	// Remember old role before changing it
+		     OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;	// Remember old role before changing it
 		     if (NewRole != OldRole)	// The role must be updated
 		       {
 			/* Modify role */
@@ -3975,8 +4000,7 @@ void Enr_ModifyUsr1 (void)
 		  /***** If it's me, change my roles *****/
 		  if (ItsMe)
 		    {
-		     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role   = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role;
-                     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Filled = true;
+		     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;
                      Gbl.Usrs.Me.UsrDat.Roles.InCrss = Gbl.Usrs.Other.UsrDat.Roles.InCrss;
                      Rol_SetMyRoles ();
 		    }
@@ -4149,7 +4173,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
       Rec_ShowSharedRecordUnmodifiable (UsrDat);
 
       /* Show form to request confirmation */
-      switch (UsrDat->Roles.InCurrentCrs.Role)
+      switch (UsrDat->Roles.InCurrentCrs)
         {
 	 case Rol_STD:
 	    NextAction = ActRemStdCrs;
@@ -4255,14 +4279,11 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
          Usr_GetMyCourses ();
 
          /* Set my roles */
-	 Gbl.Usrs.Me.Role.FromSession               =
-	 Gbl.Usrs.Me.Role.Logged                    =
-	 Gbl.Usrs.Me.Role.LoggedBeforeCloseSession  =
-	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role =
-	 UsrDat->Roles.InCurrentCrs.Role            = Rol_UNK;
-
-	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Filled =
-	 UsrDat->Roles.InCurrentCrs.Filled            = true;
+	 Gbl.Usrs.Me.Role.FromSession              =
+	 Gbl.Usrs.Me.Role.Logged                   =
+	 Gbl.Usrs.Me.Role.LoggedBeforeCloseSession =
+	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs     =
+	 UsrDat->Roles.InCurrentCrs                = Rol_UNK;
 
 	 Gbl.Usrs.Me.UsrDat.Roles.InCrss =
 	 UsrDat->Roles.InCrss            = -1;	// not yet filled/calculated
@@ -4272,9 +4293,8 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
       else	// Not me
        {
          /* Now he/she does not belong to current course */
-         UsrDat->Accepted                  = false;
-	 UsrDat->Roles.InCurrentCrs.Role   = Rol_USR;
-	 UsrDat->Roles.InCurrentCrs.Filled = false;	// TODO: Set to true?
+         UsrDat->Accepted           = false;
+	 UsrDat->Roles.InCurrentCrs = Rol_USR;
         }
 
       if (QuietOrVerbose == Cns_VERBOSE)

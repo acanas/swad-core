@@ -371,7 +371,9 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 	NumUsr++)
      {
       Gbl.Usrs.Me.UsrDat.UsrCod = ListUsrCods.Lst[NumUsr];
-      Usr_GetUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Usr_DONT_GET_PREFS);	// Get my data
+      Usr_GetUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,	// Get my data
+                                Usr_DONT_GET_PREFS,
+                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
       if (Gbl.Usrs.Me.UsrDat.Email[0])
 	 switch ((ReturnCode = Pwd_SendNewPasswordByEmail (NewRandomPlainPassword)))
@@ -816,7 +818,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 
    /***** Form to change password *****/
    /* Begin form */
-   switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
+   switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
      {
       case Rol_STD:
 	 NextAction = ActChgPwdStd;

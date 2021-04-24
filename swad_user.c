@@ -323,9 +323,8 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->EnUsrCod[0] = '\0';
    UsrDat->Nickname[0] = '\0';
    UsrDat->Password[0] = '\0';
-   UsrDat->Roles.InCurrentCrs.Role   = Rol_UNK;
-   UsrDat->Roles.InCurrentCrs.Filled = false;
-   UsrDat->Roles.InCrss = -1;	// < 0 ==> not yet got from database
+   UsrDat->Roles.InCurrentCrs = Rol_UNK;// not yet got from database
+   UsrDat->Roles.InCrss = -1;		// not yet got from database
    UsrDat->Accepted = false;
 
    UsrDat->Sex = Usr_SEX_UNKNOWN;
@@ -407,10 +406,12 @@ void Usr_UsrDataDestructor (struct UsrData *UsrDat)
 /*****************************************************************************/
 // Input: UsrDat->UsrCod must hold user's code
 
-void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
+void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat,
+                                  Usr_GetPrefs_t GetPrefs,
+                                  Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs)
   {
    ID_GetListIDsFromUsrCod (UsrDat);
-   Usr_GetUsrDataFromUsrCod (UsrDat,GetPrefs);
+   Usr_GetUsrDataFromUsrCod (UsrDat,GetPrefs,GetRoleInCurrentCrs);
   }
 
 /*****************************************************************************/
@@ -484,11 +485,12 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
 /*****************************************************************************/
 // UsrDat->UsrCod must contain an existing user's code
 
-void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
+void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,
+                               Usr_GetPrefs_t GetPrefs,
+                               Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs)
   {
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *The_ThemeId[The_NUM_THEMES];
-   extern const char *Txt_The_user_does_not_exist;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -577,7 +579,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
      }
 
    if (NumRows != 1)
-      Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
+      Lay_WrongUserExit ();
 
    /***** Read user's data *****/
    row = mysql_fetch_row (mysql_res);
@@ -589,11 +591,19 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
    Str_Copy (UsrDat->Password,row[1],sizeof (UsrDat->Password) - 1);
 
    /* Get roles */
-   UsrDat->Roles.InCurrentCrs.Role   = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
-                                                            Gbl.Hierarchy.Crs.CrsCod);
-   UsrDat->Roles.InCurrentCrs.Filled = true;
-   UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
-   Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
+   switch (GetRoleInCurrentCrs)
+     {
+      case Usr_DONT_GET_ROLE_IN_CURRENT_CRS:
+	 UsrDat->Roles.InCurrentCrs = Rol_UNK;
+	 UsrDat->Roles.InCrss = -1;
+	 break;
+      case Usr_GET_ROLE_IN_CURRENT_CRS:
+	 UsrDat->Roles.InCurrentCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
+							   Gbl.Hierarchy.Crs.CrsCod);
+	 UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
+	 // Rol_GetRolesInAllCrss (UsrDat);
+	 break;
+     }
 
    /* Get name (row[2], row[3], row[4]) */
    Str_Copy (UsrDat->Surname1,row[2],sizeof (UsrDat->Surname1) - 1);
@@ -1197,7 +1207,7 @@ bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
       return false;
 
    /***** 4. Fast check: Is he/she a student? *****/
-   if (UsrDat->Roles.InCurrentCrs.Role != Rol_STD)
+   if (UsrDat->Roles.InCurrentCrs != Rol_STD)
       return false;
 
    /***** 5. Fast check: Am I a system admin? *****/
@@ -1252,8 +1262,8 @@ bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
       return false;
 
    /***** 4. Fast check: Is he/she a non-editing teacher or a teacher? *****/
-   return (UsrDat->Roles.InCurrentCrs.Role == Rol_NET ||
-           UsrDat->Roles.InCurrentCrs.Role == Rol_TCH);
+   return (UsrDat->Roles.InCurrentCrs == Rol_NET ||
+           UsrDat->Roles.InCurrentCrs == Rol_TCH);
   }
 
 /*****************************************************************************/
@@ -1462,7 +1472,7 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
          return true;
 
    /***** 6. Fast/slow check: Does he/she belong to any course? *****/
-   Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
+   Rol_GetRolesInAllCrss (UsrDat);
    if (!(UsrDat->Roles.InCrss & ((1 << Rol_STD) |	// Any of his/her roles is student
 	                         (1 << Rol_NET) |	// or non-editing teacher
 			         (1 << Rol_TCH))))	// or teacher?
@@ -1734,71 +1744,70 @@ void Usr_GetMyCourses (void)
    unsigned NumCrs;
    long CrsCod;
 
-   /***** If my courses are yet filled, there's nothing to do *****/
-   if (!Gbl.Usrs.Me.MyCrss.Filled)
+   /***** Trivial check 1: if my courses are already filled, there's nothing to do *****/
+   if (Gbl.Usrs.Me.MyCrss.Filled)
+      return;
+
+   /***** Trivial check 2: if user's code is not set, don't query database *****/
+   if (Gbl.Usrs.Me.UsrDat.UsrCod <= 0)
+      return;
+
+   /***** Remove temporary table with my courses *****/
+   Usr_RemoveTemporaryTableMyCourses ();
+
+   /***** Create temporary table with my courses *****/
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE IF NOT EXISTS my_courses_tmp"
+	     " (CrsCod INT NOT NULL,"
+		 "Role TINYINT NOT NULL,"
+	       "DegCod INT NOT NULL,"
+	       "UNIQUE INDEX(CrsCod,Role,DegCod)) ENGINE=MEMORY"
+	     " SELECT crs_users.CrsCod,"
+		     "crs_users.Role,"
+		     "crs_courses.DegCod"
+	       " FROM crs_users,"
+		     "crs_courses,"
+		     "deg_degrees"
+	      " WHERE crs_users.UsrCod=%ld"
+		" AND crs_users.CrsCod=crs_courses.CrsCod"
+		" AND crs_courses.DegCod=deg_degrees.DegCod"
+	      " ORDER BY deg_degrees.ShortName,"
+			"crs_courses.ShortName",
+	     Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   /***** Get my courses from database *****/
+   NumCrss = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get which courses you belong to",
+		   "SELECT CrsCod,"	// row[0]
+			  "Role,"		// row[1]
+			  "DegCod"	// row[2]
+		   " FROM my_courses_tmp");
+   for (NumCrs = 0;
+	NumCrs < NumCrss;
+	NumCrs++)
      {
-      Gbl.Usrs.Me.MyCrss.Num = 0;
+      /* Get next course */
+      row = mysql_fetch_row (mysql_res);
 
-      if (Gbl.Usrs.Me.Logged)
+      /* Get course code */
+      CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+      if (CrsCod > 0)
 	{
-	 /***** Remove temporary table with my courses *****/
-	 Usr_RemoveTemporaryTableMyCourses ();
+	 if (Gbl.Usrs.Me.MyCrss.Num == Crs_MAX_COURSES_PER_USR)
+	    Lay_ShowErrorAndExit ("Maximum number of courses of a user exceeded.");
 
-	 /***** Create temporary table with my courses *****/
-	 DB_Query ("can not create temporary table",
-	           "CREATE TEMPORARY TABLE IF NOT EXISTS my_courses_tmp"
-		   " (CrsCod INT NOT NULL,"
-		       "Role TINYINT NOT NULL,"
-		     "DegCod INT NOT NULL,"
-		     "UNIQUE INDEX(CrsCod,Role,DegCod)) ENGINE=MEMORY"
-		   " SELECT crs_users.CrsCod,"
-		           "crs_users.Role,"
-		           "crs_courses.DegCod"
-		     " FROM crs_users,"
-		           "crs_courses,"
-		           "deg_degrees"
-		    " WHERE crs_users.UsrCod=%ld"
-		      " AND crs_users.CrsCod=crs_courses.CrsCod"
-		      " AND crs_courses.DegCod=deg_degrees.DegCod"
-		    " ORDER BY deg_degrees.ShortName,"
-		              "crs_courses.ShortName",
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
-
-	 /***** Get my courses from database *****/
-	 NumCrss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get which courses you belong to",
-			 "SELECT CrsCod,"	// row[0]
-			        "Role,"		// row[1]
-			        "DegCod"	// row[2]
-			 " FROM my_courses_tmp");
-	 for (NumCrs = 0;
-	      NumCrs < NumCrss;
-	      NumCrs++)
-	   {
-	    /* Get next course */
-	    row = mysql_fetch_row (mysql_res);
-
-	    /* Get course code */
-	    CrsCod = Str_ConvertStrCodToLongCod (row[0]);
-	    if (CrsCod > 0)
-	      {
-	       if (Gbl.Usrs.Me.MyCrss.Num == Crs_MAX_COURSES_PER_USR)
-		  Lay_ShowErrorAndExit ("Maximum number of courses of a user exceeded.");
-
-	       Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].CrsCod = CrsCod;
-	       Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].Role   = Rol_ConvertUnsignedStrToRole (row[1]);
-	       Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].DegCod = Str_ConvertStrCodToLongCod (row[2]);
-	       Gbl.Usrs.Me.MyCrss.Num++;
-	      }
-	   }
-
-	 /***** Free structure that stores the query result *****/
-	 DB_FreeMySQLResult (&mysql_res);
-
-	 /***** Set boolean that indicates that my courses are already filled *****/
-	 Gbl.Usrs.Me.MyCrss.Filled = true;
+	 Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].CrsCod = CrsCod;
+	 Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].Role   = Rol_ConvertUnsignedStrToRole (row[1]);
+	 Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].DegCod = Str_ConvertStrCodToLongCod (row[2]);
+	 Gbl.Usrs.Me.MyCrss.Num++;
 	}
      }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Set boolean that indicates that my courses are already filled *****/
+   Gbl.Usrs.Me.MyCrss.Filled = true;
   }
 
 /*****************************************************************************/
@@ -2079,12 +2088,12 @@ bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat)
       return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
 
    /***** 3. Fast check: If we know role of user in the current course *****/
-   if (UsrDat->Roles.InCurrentCrs.Filled)
+   if (UsrDat->Roles.InCurrentCrs != Rol_UNK)
      {
       Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod  = UsrDat->UsrCod;
-      Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = UsrDat->Roles.InCurrentCrs.Role == Rol_STD ||
-	                                         UsrDat->Roles.InCurrentCrs.Role == Rol_NET ||
-	                                         UsrDat->Roles.InCurrentCrs.Role == Rol_TCH;
+      Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = UsrDat->Roles.InCurrentCrs == Rol_STD ||
+	                                         UsrDat->Roles.InCurrentCrs == Rol_NET ||
+	                                         UsrDat->Roles.InCurrentCrs == Rol_TCH;
       return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
      }
 
@@ -3006,7 +3015,10 @@ bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Check if user exists and get her/his data *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))        // Existing user
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                Usr_DONT_GET_PREFS,
+                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+      // Existing user
       return true;
 
    return false;
@@ -3072,6 +3084,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    if (Usr_ChkUsrAndGetUsrDataFromSession ())	// User logged in
 	      {
 	       Gbl.Usrs.Me.Logged = true;
+
 	       Usr_SetMyPrefsAndRoles ();
 
 	       if (Gbl.Action.IsAJAXAutoRefresh)	// If refreshing ==> don't refresh LastTime in session
@@ -3114,8 +3127,11 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    /***** Get user's data *****/
 	    Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Me.UsrDat);
             Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Me.UsrDat);
-            if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Usr_GET_PREFS))	// User logged in
+            if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+                                                         Usr_GET_PREFS,
+                                                         Usr_GET_ROLE_IN_CURRENT_CRS))
 	      {
+               // User logged in
 	       Gbl.Usrs.Me.Logged = true;
 	       Usr_SetMyPrefsAndRoles ();
 
@@ -3283,7 +3299,9 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
      }
 
    /***** Get user's data *****/
-   Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Usr_GET_PREFS);
+   Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+                                Usr_GET_PREFS,
+                                Usr_GET_ROLE_IN_CURRENT_CRS);
 
    /***** Check password *****/
    /* Check user's password:
@@ -3316,7 +3334,9 @@ static bool Usr_ChkUsrAndGetUsrDataFromSession (void)
    Gbl.Usrs.Me.UsrDat.UsrCod = Gbl.Session.UsrCod;
 
    /* Check if user exists in database, and get his/her data */
-   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Usr_GET_PREFS))
+   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+                                                 Usr_GET_PREFS,
+                                                 Usr_GET_ROLE_IN_CURRENT_CRS))
      {
       Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
       return false;
@@ -3420,10 +3440,7 @@ static void Usr_SetMyPrefsAndRoles (void)
 
 	 /* Course may have changed ==> get my role in current course again */
 	 if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
-	   {
-	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role   = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Crs.CrsCod);
-	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Filled = true;
-	   }
+	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Crs.CrsCod);
 
 	 // role and action will be got from last data
          GetRoleAndActionFromLastData = true;
@@ -3492,18 +3509,18 @@ void Usr_ShowFormsLogoutAndRole (void)
    if (Rol_GetNumAvailableRoles () == 1)
      {
       HTM_SPAN_Begin ("class=\"DAT\"");
-      HTM_TxtColonNBSP (Txt_Role);
+	 HTM_TxtColonNBSP (Txt_Role);
       HTM_SPAN_End ();
 
       HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
-      HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
+	 HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
       HTM_SPAN_End ();
      }
    else
      {
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColonNBSP (Txt_Role);
-      Rol_PutFormToChangeMyRole (NULL);
+	 HTM_TxtColonNBSP (Txt_Role);
+	 Rol_PutFormToChangeMyRole (NULL);
       HTM_LABEL_End ();
      }
 
@@ -3533,13 +3550,15 @@ static void Usr_PutLinkToLogOut (__attribute__((unused)) void *Args)
 // Output: When true ==> UsrDat will hold all user's data
 //         When false ==> UsrDat is reset, except user's code
 
-bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
+bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat,
+                                              Usr_GetPrefs_t GetPrefs,
+                                              Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs)
   {
    /***** Check if a user exists having this user's code *****/
    if (Usr_ChkIfUsrCodExists (UsrDat->UsrCod))
      {
       /* Get user's data */
-      Usr_GetAllUsrDataFromUsrCod (UsrDat,GetPrefs);
+      Usr_GetAllUsrDataFromUsrCod (UsrDat,GetPrefs,GetRoleInCurrentCrs);
       return true;
      }
 
@@ -5658,20 +5677,21 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
 /********************** Copy user's basic data from list *********************/
 /*****************************************************************************/
 
-void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList *UsrInList)
+void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,
+                                   const struct UsrInList *UsrInList)
   {
-   UsrDat->UsrCod                  = UsrInList->UsrCod;
+   UsrDat->UsrCod             = UsrInList->UsrCod;
    Str_Copy (UsrDat->EnUsrCod,UsrInList->EnUsrCod,sizeof (UsrDat->EnUsrCod) - 1);
    Str_Copy (UsrDat->Surname1,UsrInList->Surname1,sizeof (UsrDat->Surname1) - 1);
    Str_Copy (UsrDat->Surname2,UsrInList->Surname2,sizeof (UsrDat->Surname2) - 1);
    Str_Copy (UsrDat->FrstName,UsrInList->FrstName,sizeof (UsrDat->FrstName) - 1);
-   UsrDat->Sex                     = UsrInList->Sex;
+   UsrDat->Sex                = UsrInList->Sex;
    Str_Copy (UsrDat->Photo   ,UsrInList->Photo   ,sizeof (UsrDat->Photo   ) - 1);
-   UsrDat->PhotoVisibility         = UsrInList->PhotoVisibility;
-   UsrDat->CtyCod                  = UsrInList->CtyCod;
-   UsrDat->InsCod                  = UsrInList->InsCod;
-   UsrDat->Roles.InCurrentCrs.Role = UsrInList->RoleInCurrentCrsDB;
-   UsrDat->Accepted                = UsrInList->Accepted;
+   UsrDat->PhotoVisibility    = UsrInList->PhotoVisibility;
+   UsrDat->CtyCod             = UsrInList->CtyCod;
+   UsrDat->InsCod             = UsrInList->InsCod;
+   UsrDat->Roles.InCurrentCrs = UsrInList->RoleInCurrentCrsDB;
+   UsrDat->Accepted           = UsrInList->Accepted;
   }
 
 /*****************************************************************************/
@@ -6036,7 +6056,9 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
             if (ListUsrCods.NumUsrs == 1)	// Only if user is valid
               {
                /* Get user's data */
-	       Usr_GetUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);	// Really only EncryptedUsrCod is needed
+	       Usr_GetUsrDataFromUsrCod (&UsrDat,	// Really only EncryptedUsrCod is needed
+	                                 Usr_DONT_GET_PREFS,
+	                                 Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
                /* Find if encrypted user's code is already in list */
                if (!Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (UsrDat.EnUsrCod,&Gbl.Usrs.Selected))        // If not in list ==> add it
@@ -7021,7 +7043,9 @@ void Usr_ListAllDataGsts (void)
            NumUsr < Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs; )
         {
          UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_GST].Lst[NumUsr].UsrCod;
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                                      Usr_DONT_GET_PREFS,
+                                                      Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
            {
             UsrDat.Accepted = false;	// Guests have no courses,...
             	    	    	    	// ...so they have not accepted...
@@ -7215,7 +7239,9 @@ void Usr_ListAllDataStds (void)
            NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs; )
         {
          UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod;
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                                      Usr_DONT_GET_PREFS,
+                                                      Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
            {
             UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Accepted;
             NumUsr++;
@@ -7278,7 +7304,9 @@ static void Usr_ListUsrsForSelection (Rol_Role_t Role,
 	   NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs; )
 	{
 	 UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+	                                              Usr_DONT_GET_PREFS,
+	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	   {
 	    UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
 	    Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true,Role,SelectedUsrs);
@@ -7414,7 +7442,9 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
 	NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs; )
      {
       UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                                   Usr_DONT_GET_PREFS,
+                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	{
 	 UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
 	 NumUsr++;
@@ -7659,7 +7689,9 @@ void Usr_ListDataAdms (void)
            NumUsr < Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs; )
         {
          UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].UsrCod;
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                                      Usr_DONT_GET_PREFS,
+                                                      Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
            {
             UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].Accepted;
             Usr_WriteRowAdmData (++NumUsr,&UsrDat);
@@ -10131,7 +10163,9 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
 
    /***** Get data of author *****/
    UsrDat.UsrCod = UsrCod;
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                                Usr_DONT_GET_PREFS,
+                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 
    /***** Show photo *****/
@@ -10175,7 +10209,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
       HTM_TD_Begin ("class=\"LT LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
 
    /* Action to go to user's record depending on role in course */
-   switch (UsrDat->Roles.InCurrentCrs.Role)
+   switch (UsrDat->Roles.InCurrentCrs)
      {
       case Rol_STD:
 	 NextAction = ActSeeRecOneStd;

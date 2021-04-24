@@ -741,7 +741,8 @@ void Grp_ChangeOtherUsrGrps (void)
 
       /***** A student can not be enroled in more than one group
 	     if the type of group is of single enrolment *****/
-      SelectionIsValid = Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role,&LstGrpsUsrWants);
+      SelectionIsValid = Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs,
+                                                                         &LstGrpsUsrWants);
 
       /***** Free list of groups types and groups in this course *****/
       // The lists of group types and groups need to be freed here...
@@ -920,7 +921,7 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
    bool RegisterUsrInThisGrp;
 
    /***** Lock tables to make the inscription atomic *****/
-   if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role == Rol_STD)
+   if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs == Rol_STD)
       Grp_LockTables ();
 
    /***** Get list of groups types and groups in this course *****/
@@ -962,7 +963,7 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
    Grp_FreeListCodGrp (&LstGrpsUsrBelongs);
 
    /***** Unlock tables after changes in groups *****/
-   if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role == Rol_STD)
+   if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs == Rol_STD)
       Grp_UnlockTables ();
 
    /***** Free list of groups types and groups in this course *****/

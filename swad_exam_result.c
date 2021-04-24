@@ -374,7 +374,9 @@ static void ExaRes_ListAllResultsInSelectedExams (struct Exa_Exams *Exams)
       Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                   Usr_DONT_GET_PREFS,
+                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    /***** Show sessions results *****/
@@ -458,7 +460,9 @@ static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams,long ExaCod)
 	NumUsr++)
       /* Get session code */
       if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+	                                              Usr_DONT_GET_PREFS,
+	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       /***** Show sessions results *****/
@@ -548,7 +552,9 @@ static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams,long SesCod)
 	NumUsr++)
       /* Get session code (row[0]) */
       if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+	                                              Usr_DONT_GET_PREFS,
+	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       /***** Show sessions results *****/
@@ -1433,7 +1439,6 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
                                    unsigned Visibility)
   {
    extern const char *Hlp_ASSESSMENT_Exams_results;
-   extern const char *Txt_The_user_does_not_exist;
 
    /***** Compute score taking into account only valid questions *****/
    ExaRes_ComputeValidPrintScore (Print);
@@ -1449,8 +1454,10 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 
    /***** Check user data *****/
    /* Get data of the user who answered the exam print */
-   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS))
-      Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
+   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,
+                                                 Usr_DONT_GET_PREFS,
+                                                 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+      Lay_WrongUserExit ();
    if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
       Lay_NoPermissionExit ();
 
@@ -1624,7 +1631,7 @@ void ExaRes_ShowExamResultUser (struct UsrData *UsrDat)
 
       /***** Label *****/
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-	 HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+	 HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
       HTM_TD_End ();
 
       /***** User's data *****/

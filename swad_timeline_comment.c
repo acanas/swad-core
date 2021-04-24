@@ -554,7 +554,9 @@ static void Tml_Com_WriteComm (const struct Tml_Timeline *Timeline,
    /***** Get author's data *****/
    Usr_UsrDataConstructor (&UsrDat);
    UsrDat.UsrCod = Com->UsrCod;
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                            Usr_DONT_GET_PREFS,
+                                            Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
    /***** Left: author's photo *****/
    Tml_Com_ShowAuthorPhoto (&UsrDat);

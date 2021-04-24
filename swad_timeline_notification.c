@@ -73,7 +73,9 @@ void Tml_Ntf_CreateNotifToAuthor (long AuthorCod,long PubCod,
    Usr_UsrDataConstructor (&UsrDat);
 
    UsrDat.UsrCod = AuthorCod;
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                                Usr_DONT_GET_PREFS,
+                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
      {
       /***** This fav must be notified by email? *****/
       CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << NotifyEvent));

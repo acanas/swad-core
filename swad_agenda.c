@@ -451,7 +451,9 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
         {
 	 /***** Get user *****/
 	 /* If nickname is correct, user code is already got from nickname */
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))        // Existing user
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,        // Existing user
+	                                              Usr_DONT_GET_PREFS,
+	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	   {
 	    /***** Reset agenda context *****/
 	    Agd_ResetAgenda (&Agenda);

@@ -49,7 +49,7 @@ void Rol_FlushCacheMyRoleInCurrentCrs (void);
 Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod);
 void Rol_FlushCacheRoleUsrInCrs (void);
 Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod);
-void Rol_GetRolesInAllCrssIfNotYetGot (struct UsrData *UsrDat);
+void Rol_GetRolesInAllCrss (struct UsrData *UsrDat);
 
 Rol_Role_t Rol_ConvertUnsignedStrToRole (const char *UnsignedStr);
 unsigned Rol_ConvertUnsignedStrToRoles (const char *UnsignedStr);

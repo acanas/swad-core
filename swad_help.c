@@ -139,12 +139,12 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	    if (Gbl.Action.Act != ActLogIn &&
 		Gbl.Action.Act != ActLogInNew &&
                 Gbl.Action.Act != ActLogInLan)	// I am not just logged
-	       if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role] != ActUnk)
+	       if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs] != ActUnk)
 		 {
 		  /* Request my removing from this course */
 		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Txt_Remove_me_from_THE_COURSE_X,
 									   Gbl.Hierarchy.Crs.ShrtName),
-						       ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role],
+						       ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs],
 						       Btn_REMOVE_BUTTON,Txt_Remove_me);
 		  Str_FreeString ();
 		 }
@@ -163,7 +163,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
       if (Gbl.Usrs.Me.MyCrss.Num)	// I am enroled in some courses
 	{
 	 if (Gbl.Hierarchy.Level == Hie_Lvl_CRS &&				// Course selected
-	     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role == Rol_TCH)	// I am a teacher in current course
+	     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_TCH)	// I am a teacher in current course
 	    if (!Usr_GetCachedNumUsrsInCrss (Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
 				             1 << Rol_STD))		// Current course probably has no students
 	      {

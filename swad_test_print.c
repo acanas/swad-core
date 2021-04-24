@@ -1973,7 +1973,9 @@ static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
       Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                   Usr_DONT_GET_PREFS,
+                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    /***** Show test exams *****/
@@ -2382,7 +2384,6 @@ void TstPrn_ShowOnePrint (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Result;
-   extern const char *Txt_The_user_does_not_exist;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
@@ -2427,8 +2428,10 @@ void TstPrn_ShowOnePrint (void)
 
       /***** User *****/
       /* Get data of the user who made the test */
-      if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
-	 Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
+      if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                    Usr_DONT_GET_PREFS,
+                                                    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+         Lay_WrongUserExit ();
       if (!Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
          Lay_NoPermissionExit ();
 
@@ -2436,7 +2439,7 @@ void TstPrn_ShowOnePrint (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Other.UsrDat.Sex]);
+      HTM_TxtColon (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs][Gbl.Usrs.Other.UsrDat.Sex]);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LB\"");

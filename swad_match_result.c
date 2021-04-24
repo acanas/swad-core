@@ -311,7 +311,9 @@ static void MchRes_ListAllMchResultsInSelectedGames (struct Gam_Games *Games)
       Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                   Usr_DONT_GET_PREFS,
+                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    /***** Show matches results *****/
@@ -426,7 +428,9 @@ static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games,long GamCod)
 	NumUsr++)
       /* Get match code */
       if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+	                                              Usr_DONT_GET_PREFS,
+	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       /***** Show matches results *****/
@@ -516,7 +520,9 @@ static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod)
 	NumUsr++)
       /* Get match code (row[0]) */
       if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+	                                              Usr_DONT_GET_PREFS,
+	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       /***** Show matches results *****/
@@ -1135,7 +1141,6 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
 void MchRes_ShowOneMchResult (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
-   extern const char *Txt_The_user_does_not_exist;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
@@ -1205,8 +1210,10 @@ void MchRes_ShowOneMchResult (void)
 
 	    /***** User *****/
 	    /* Get data of the user who answer the match */
-	    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS))
-	       Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
+	    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,
+	                                                  Usr_DONT_GET_PREFS,
+	                                                  Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+               Lay_WrongUserExit ();
 	    if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
 	       Lay_NoPermissionExit ();
 
@@ -1214,7 +1221,7 @@ void MchRes_ShowOneMchResult (void)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"DAT_N RT\"");
-		  HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+		  HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"DAT LB\"");

@@ -426,8 +426,8 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
             return true;
 
 	 /* Check 2: I can see the IDs of confirmed students */
-         if (UsrDat->Roles.InCurrentCrs.Role == Rol_STD &&	// A student
-	     UsrDat->Accepted)					// who accepted registration
+         if (UsrDat->Roles.InCurrentCrs == Rol_STD &&	// A student
+	     UsrDat->Accepted)				// who accepted registration
             return true;
 
          /* Check 3: I can see the IDs of users with user's data empty */
@@ -464,7 +464,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
    Act_Action_t NextAction;
 
    /***** Begin form *****/
-   switch (UsrDat->Roles.InCurrentCrs.Role)
+   switch (UsrDat->Roles.InCurrentCrs)
      {
       case Rol_STD:
 	 NextAction = ActCnfID_Std;
@@ -625,7 +625,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 				              ID_PutParamsRemoveMyID,UsrDat->IDs.List[NumID].ID);
 	    else
 	      {
-	       switch (UsrDat->Roles.InCurrentCrs.Role)
+	       switch (UsrDat->Roles.InCurrentCrs)
 		 {
 		  case Rol_STD:
 		     NextAction = ActRemID_Std;
@@ -688,7 +688,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 	 Frm_StartFormAnchor (ActChgMyID,ID_ID_SECTION_ID);
       else
 	{
-	 switch (UsrDat->Roles.InCurrentCrs.Role)
+	 switch (UsrDat->Roles.InCurrentCrs)
 	   {
 	    case Rol_STD:
 	       NextAction = ActNewID_Std;
@@ -1032,7 +1032,7 @@ void ID_ConfirmOtherUsrID (void)
 	 /* If user is a student in current course,
 	    check if he/she has accepted */
 	 if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)
-	    if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role == Rol_STD)
+	    if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs == Rol_STD)
 	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
 	 if (ID_ICanSeeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat))

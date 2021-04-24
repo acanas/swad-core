@@ -639,7 +639,7 @@ static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
    /***** Get user's role *****/
    if (CrsCod > 0)
       /* Get the role in the given course */
-      UsrDat->Roles.InCurrentCrs.Role =
+      UsrDat->Roles.InCurrentCrs =
       DB_QuerySELECTRole ("can not get user's role",
 			  "SELECT Role"
 			   " FROM crs_users"
@@ -649,13 +649,12 @@ static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
 			  UsrDat->UsrCod);
    else
       /* Get the maximum role in any course */
-      UsrDat->Roles.InCurrentCrs.Role =
+      UsrDat->Roles.InCurrentCrs =
       DB_QuerySELECTRole ("can not get user's role",
 			  "SELECT MAX(Role)"
 			   " FROM crs_users"
 			  " WHERE UsrCod=%ld",
 			  UsrDat->UsrCod);
-   UsrDat->Roles.InCurrentCrs.Filled = true;
 
    return true;
   }
@@ -903,7 +902,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    if (UsrFound)
      {
       Gbl.Usrs.Me.Logged = true;
-      Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+      Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
       loginByUserPasswordKeyOut->userCode = (int) Gbl.Usrs.Me.UsrDat.UsrCod;
 
@@ -929,7 +928,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
                 Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,Dat_LENGTH_YYYYMMDD);
 
       loginByUserPasswordKeyOut->userRole =
-      API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role];
+      API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs];
 
       /***** Generate a key used in subsequents calls to other web services *****/
       return API_GenerateNewWSKey (soap,
@@ -1058,7 +1057,7 @@ int swad__loginBySessionKey (struct soap *soap,
    if (UsrFound)
      {
       Gbl.Usrs.Me.Logged = true;
-      Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+      Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
       loginBySessionKeyOut->userCode = (int) Gbl.Usrs.Me.UsrDat.UsrCod;
 
@@ -1083,7 +1082,7 @@ int swad__loginBySessionKey (struct soap *soap,
       Str_Copy (loginBySessionKeyOut->userBirthday,
                 Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,Dat_LENGTH_YYYYMMDD);
 
-      loginBySessionKeyOut->userRole = API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role];
+      loginBySessionKeyOut->userRole = API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs];
 
       /***** Generate a key used in subsequents calls to other web services *****/
       return API_GenerateNewWSKey (soap,
@@ -1134,7 +1133,7 @@ int swad__getAvailableRoles (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Return available roles *****/
    Rol_SetMyRoles ();
@@ -1209,7 +1208,9 @@ int swad__getNewPassword (struct soap *soap,
    /***** Get user's data from database *****/
    if (Gbl.Usrs.Me.UsrDat.UsrCod > 0)	// One unique user found in table of users' data
      {
-      Usr_GetUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Usr_DONT_GET_PREFS);	// Get my data
+      Usr_GetUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,	// Get my data
+                                Usr_DONT_GET_PREFS,
+                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
       if (Gbl.Usrs.Me.UsrDat.Email[0])
 	 if (Pwd_SendNewPasswordByEmail (NewRandomPlainPassword) == 0) // Message sent successfully
@@ -1255,7 +1256,7 @@ int swad__getCourses (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Query my courses from database *****/
    NumRows = (unsigned)
@@ -1381,12 +1382,12 @@ int swad__getCourseInfo (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -1723,12 +1724,12 @@ int swad__getUsers (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 				  "Request forbidden",
 				  "Requester must belong to course");
@@ -1805,13 +1806,13 @@ int swad__findUsers (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
       /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-      if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
-          Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
-	  Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+      if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
+          Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
+	  Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
 	 return soap_receiver_fault (soap,
 				     "Request forbidden",
 				     "Requester must belong to course");
@@ -1976,12 +1977,12 @@ int swad__getGroupTypes (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -2095,12 +2096,12 @@ int swad__getGroups (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -2233,12 +2234,12 @@ int swad__sendMyGroups (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -2457,10 +2458,10 @@ int swad__getAttendanceEvents (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if I am a teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -2674,10 +2675,10 @@ int swad__sendAttendanceEvent (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if I am a teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -2794,10 +2795,10 @@ int swad__removeAttendanceEvent (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if I am a teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -2890,10 +2891,10 @@ int swad__getAttendanceUsers (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if I am a teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -3100,10 +3101,10 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if I am a teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -3241,7 +3242,7 @@ int swad__getNotifications (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Get my language from database *****/
    if ((ReturnCode = API_GetMyLanguage (soap)) != SOAP_OK)
@@ -3517,7 +3518,7 @@ int swad__markNotificationsAsRead (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    if (notifications[0])
      {
@@ -3593,7 +3594,7 @@ int swad__sendMessage (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if the message is a reply to a previous message *****/
    if (messageCode)
@@ -3719,7 +3720,9 @@ int swad__sendMessage (struct soap *soap,
             /* Get user's code (row[0]) */
             if ((Gbl.Usrs.Other.UsrDat.UsrCod = (long) Str_ConvertStrCodToLongCod (row[0])) > 0)
                /* Get recipient data */
-               if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+               if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                            Usr_DONT_GET_PREFS,
+                                                            Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
         	 {
                   /* This received message must be notified by email? */
         	  ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -3727,7 +3730,13 @@ int swad__sendMessage (struct soap *soap,
                                    (Gbl.Usrs.Other.UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE)));
 
                   /* Send message to this user */
-                  if ((ReturnCode = API_SendMessageToUsr ((long) messageCode,Gbl.Usrs.Me.UsrDat.UsrCod,ReplyUsrCod,Gbl.Usrs.Other.UsrDat.UsrCod,NotifyByEmail,subject,body)) != SOAP_OK)
+                  if ((ReturnCode = API_SendMessageToUsr ((long) messageCode,
+                                                          Gbl.Usrs.Me.UsrDat.UsrCod,
+                                                          ReplyUsrCod,
+                                                          Gbl.Usrs.Other.UsrDat.UsrCod,
+                                                          NotifyByEmail,
+                                                          subject,
+                                                          body)) != SOAP_OK)
                     {
                      DB_FreeMySQLResult (&mysql_res);
                      return ReturnCode;
@@ -3859,7 +3868,7 @@ int swad__sendNotice (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check course and group codes *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
@@ -3872,7 +3881,7 @@ int swad__sendNotice (struct soap *soap,
      return ReturnCode;
 
    /***** Check if I am a teacher *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -3930,7 +3939,7 @@ int swad__getTestConfig (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if course code is correct *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)
@@ -3939,9 +3948,9 @@ int swad__getTestConfig (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -4097,7 +4106,7 @@ int swad__getTests (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if course code is correct *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)
@@ -4106,9 +4115,9 @@ int swad__getTests (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -4545,7 +4554,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Loop over recipients' nicknames building query *****/
    DegreesStr[0] = '\0';
@@ -4787,7 +4796,7 @@ int swad__getGames (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if I am logged as student in the course *****/
    if (Gbl.Usrs.Me.Role.Logged != Rol_STD)
@@ -4971,7 +4980,7 @@ int swad__getMatches (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if I am logged as student in the course *****/
    if (Gbl.Usrs.Me.Role.Logged != Rol_STD)
@@ -5166,7 +5175,7 @@ int swad__getMatchStatus (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if I am logged as student in the course *****/
    if (Gbl.Usrs.Me.Role.Logged != Rol_STD)
@@ -5390,7 +5399,7 @@ int swad__getDirectoryTree (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check course and group codes *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
@@ -5399,9 +5408,9 @@ int swad__getDirectoryTree (struct soap *soap,
       return ReturnCode;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -5615,7 +5624,9 @@ static bool API_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,cons
 	                                        Gbl.FileBrowser.FilFolLnk.Full,false,Brw_LICENSE_DEFAULT);
 
       Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata.PublisherUsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS);
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                               Usr_DONT_GET_PREFS,
+                                               Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
       Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
 
       fprintf (Gbl.F.XML,"<file name=\"%s\">"
@@ -5721,7 +5732,7 @@ int swad__getFile (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check course and group codes *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
@@ -5730,9 +5741,9 @@ int swad__getFile (struct soap *soap,
       return ReturnCode;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -5756,7 +5767,7 @@ int swad__getFile (struct soap *soap,
       case Brw_ADMI_MRK_CRS:
       case Brw_ADMI_MRK_GRP:
 	 // Downloading a file of marks is only allowed for teachers
-	 if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+	 if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
 	    return soap_receiver_fault (soap,
 					"Wrong tree",
 					"Wrong file zone");
@@ -5800,9 +5811,11 @@ int swad__getFile (struct soap *soap,
 
    if ((Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata.PublisherUsrCod) > 0)
       /* Get publisher's data */
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
-	 /* Copy publisher's data into output structure */
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                   Usr_DONT_GET_PREFS,
+                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	{
+	 /* Copy publisher's data into output structure */
 	 Str_Copy (getFileOut->publisherName,Gbl.Usrs.Other.UsrDat.FullName,
 	           Usr_MAX_BYTES_FULL_NAME);
 
@@ -5872,12 +5885,12 @@ int swad__getMarks (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -5942,7 +5955,7 @@ int swad__getLocation (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Convert MAC string to number *****/
    if (sscanf (MAC,"%llx",&MACnum) != 1)
@@ -6021,7 +6034,7 @@ int swad__sendMyLocation (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check in (insert pair user-room) in the database *****/
    /* Get the code of the inserted item */

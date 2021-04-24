@@ -4029,7 +4029,7 @@ void Act_AdjustCurrentAction (void)
      }
 
    /***** Check if I am a teacher in any course *****/
-   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+   Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
    IAmATeacherInAnyCrs = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
 	                                                     (1 << Rol_TCH)));	// ...or a teacher in any course
 
@@ -4083,7 +4083,7 @@ void Act_AdjustCurrentAction (void)
              is to show a form to ask for enrolment *****/
       if (!Gbl.Usrs.Me.UsrDat.Accepted)
 	{
-	 switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
+	 switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
 	   {
 	    case Rol_STD:
 	       Gbl.Action.Act = ActReqAccEnrStd;
@@ -4170,15 +4170,4 @@ void Act_AdjustCurrentAction (void)
       Gbl.Action.Act = Act_DEFAULT_ACTION_AFTER_LOGIN;
       Tab_SetCurrentTab ();
      }
-  }
-
-/*****************************************************************************/
-/*** Write error message and exit when no permission to perform an action ****/
-/*****************************************************************************/
-
-void Lay_NoPermissionExit (void)
-  {
-   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
-
-   Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
   }

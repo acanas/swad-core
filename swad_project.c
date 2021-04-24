@@ -2122,7 +2122,9 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 	 Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	 /* Get user's data */
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+	                                              Usr_DONT_GET_PREFS,
+	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	   {
 	    /* Start row for this user */
 	    HTM_TR_Begin (NULL);
@@ -2224,7 +2226,9 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
 	 Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	 /* Get user's data */
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+	                                              Usr_DONT_GET_PREFS,
+	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	   {
 	    /* Write user's name in "Surname1 Surname2, FirstName" format */
             HTM_LI_Begin (NULL);
@@ -2517,7 +2521,9 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 
       /* Get user's data */
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+                                                   Usr_DONT_GET_PREFS,
+                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
         {
 	 /* Add user to project */
 	 DB_QueryREPLACE ("can not add user to project",

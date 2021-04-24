@@ -257,7 +257,9 @@ static void Tml_Not_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherC
 
    /***** Get user's data *****/
    PublisherDat.UsrCod = PublisherCod;
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherDat,Usr_DONT_GET_PREFS))	// Really we only need EncryptedUsrCod and FullName
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherDat,	// Really we only need EncryptedUsrCod and FullName
+                                                Usr_DONT_GET_PREFS,
+                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
      {
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"Tml_TOP_CONT Tml_TOP_PUBLISHER TL_WIDTH\"");
@@ -300,7 +302,9 @@ static void Tml_Not_WriteNote (const struct Tml_Timeline *Timeline,
    /***** Get author data *****/
    Usr_UsrDataConstructor (&UsrDat);
    UsrDat.UsrCod = Not->UsrCod;
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
+   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+                                            Usr_DONT_GET_PREFS,
+                                            Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
    /***** Left top: author's photo *****/
    Tml_Not_ShowAuthorPhoto (&UsrDat,true);	// Use unique id
