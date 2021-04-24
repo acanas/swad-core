@@ -176,7 +176,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
       /* Get data of this degree */
       Deg.DegCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
       if (!Deg_GetDataOfDegreeByCod (&Deg))
-         Lay_ShowErrorAndExit ("Degree not found.");
+         Lay_WrongDegreeExit ();
 
       /* Link to the room of this degree */
       IsLastItemInLevel[1] = (NumMyDeg == Gbl.Usrs.Me.MyDegs.Num - 1);

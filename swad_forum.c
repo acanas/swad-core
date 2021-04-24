@@ -2215,13 +2215,13 @@ void For_SetForumName (const struct For_Forum *Forum,
       case For_FORUM_INSTIT_USRS:
 	 Hie.Ins.InsCod = Forum->Location;
 	 if (!Ins_GetDataOfInstitutionByCod (&Hie.Ins))
-	    Lay_ShowErrorAndExit ("Institution not found.");
+	    Lay_WrongInstitExit ();
          Str_Copy (ForumName,Hie.Ins.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_INSTIT_TCHS:
 	 Hie.Ins.InsCod = Forum->Location;
 	 if (!Ins_GetDataOfInstitutionByCod (&Hie.Ins))
-	    Lay_ShowErrorAndExit ("Institution not found.");
+	    Lay_WrongInstitExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
                    Hie.Ins.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
@@ -2230,13 +2230,13 @@ void For_SetForumName (const struct For_Forum *Forum,
       case For_FORUM_CENTER_USRS:
 	 Hie.Ctr.CtrCod = Forum->Location;
 	 if (!Ctr_GetDataOfCenterByCod (&Hie.Ctr))
-	    Lay_ShowErrorAndExit ("Center not found.");
+	    Lay_WrongCenterExit ();
          Str_Copy (ForumName,Hie.Ctr.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_CENTER_TCHS:
 	 Hie.Ctr.CtrCod = Forum->Location;
 	 if (!Ctr_GetDataOfCenterByCod (&Hie.Ctr))
-	    Lay_ShowErrorAndExit ("Center not found.");
+	    Lay_WrongCenterExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
                    Hie.Ctr.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
@@ -2245,13 +2245,13 @@ void For_SetForumName (const struct For_Forum *Forum,
       case For_FORUM_DEGREE_USRS:
 	 Hie.Deg.DegCod = Forum->Location;
 	 if (!Deg_GetDataOfDegreeByCod (&Hie.Deg))
-	    Lay_ShowErrorAndExit ("Degree not found.");
+	    Lay_WrongDegreeExit ();
          Str_Copy (ForumName,Hie.Deg.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_DEGREE_TCHS:
 	 Hie.Deg.DegCod = Forum->Location;
 	 if (!Deg_GetDataOfDegreeByCod (&Hie.Deg))
-	    Lay_ShowErrorAndExit ("Degree not found.");
+	    Lay_WrongDegreeExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
                    Hie.Deg.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
@@ -2260,13 +2260,13 @@ void For_SetForumName (const struct For_Forum *Forum,
       case For_FORUM_COURSE_USRS:
 	 Hie.Crs.CrsCod = Forum->Location;
 	 if (!Crs_GetDataOfCourseByCod (&Hie.Crs))
-	    Lay_ShowErrorAndExit ("Course not found.");
+	    Lay_WrongCourseExit ();
          Str_Copy (ForumName,Hie.Crs.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_COURSE_TCHS:
 	 Hie.Crs.CrsCod = Forum->Location;
 	 if (!Crs_GetDataOfCourseByCod (&Hie.Crs))
-	    Lay_ShowErrorAndExit ("Course not found.");
+	    Lay_WrongCourseExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
                    Hie.Crs.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :

@@ -215,7 +215,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       /***** Get data of this institution *****/
       Hie.Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
       if (!Cty_GetDataOfCountryByCod (&Hie.Cty))
-	 Lay_ShowErrorAndExit ("Country not found.");
+	 Lay_WrongCountrExit ();
 
       /***** Write link to country *****/
       Highlight = (Gbl.Hierarchy.Ins.InsCod <= 0 &&
@@ -249,7 +249,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 /***** Get data of this institution *****/
 	 Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
 	 if (!Ins_GetDataOfInstitutionByCod (&Hie.Ins))
-	    Lay_ShowErrorAndExit ("Institution not found.");
+	    Lay_WrongInstitExit ();
 
 	 /***** Write link to institution *****/
 	 Highlight = (Gbl.Hierarchy.Ctr.CtrCod <= 0 &&
@@ -283,7 +283,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    /***** Get data of this center *****/
 	    Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
 	    if (!Ctr_GetDataOfCenterByCod (&Hie.Ctr))
-	       Lay_ShowErrorAndExit ("Center not found.");
+	       Lay_WrongCenterExit ();
 
 	    /***** Write link to center *****/
 	    Highlight = (Gbl.Hierarchy.Level == Hie_Lvl_CTR &&
@@ -317,7 +317,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       /***** Get data of this degree *****/
 	       Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
 	       if (!Deg_GetDataOfDegreeByCod (&Hie.Deg))
-		  Lay_ShowErrorAndExit ("Degree not found.");
+		  Lay_WrongDegreeExit ();
 
 	       /***** Write link to degree *****/
 	       Highlight = (Gbl.Hierarchy.Level == Hie_Lvl_DEG &&
@@ -351,7 +351,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  /***** Get data of this course *****/
 		  Hie.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
 		  if (!Crs_GetDataOfCourseByCod (&Hie.Crs))
-		     Lay_ShowErrorAndExit ("Course not found.");
+		     Lay_WrongCourseExit ();
 
 		  /***** Write link to course *****/
 		  Highlight = (Gbl.Hierarchy.Level == Hie_Lvl_CRS &&
@@ -711,7 +711,7 @@ void Crs_WriteSelectorOfCourse (void)
 
          /* Get course code (row[0]) */
          if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong course.");
+            Lay_WrongCourseExit ();
 
          /* Write option */
 	 HTM_OPTION (HTM_Type_LONG,&CrsCod,
@@ -1833,7 +1833,7 @@ static void Crs_GetDataOfCourseFromRow (struct Crs_Course *Crs,MYSQL_ROW row)
   {
    /***** Get course code (row[0]) *****/
    if ((Crs->CrsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-      Lay_ShowErrorAndExit ("Wrong code of course.");
+      Lay_WrongCourseExit ();
 
    /***** Get code of degree (row[1]) *****/
    Crs->DegCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -2619,7 +2619,7 @@ static long Crs_GetAndCheckParamOtherCrsCod (long MinCodAllowed)
 
    /***** Get and check parameter with code of course *****/
    if ((CrsCod = Par_GetParToLong ("OthCrsCod")) < MinCodAllowed)
-      Lay_ShowErrorAndExit ("Code of course is missing or invalid.");
+      Lay_WrongCourseExit ();
 
    return CrsCod;
   }
@@ -2826,13 +2826,13 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
    /***** Get degree code (row[0]) *****/
    if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-      Lay_ShowErrorAndExit ("Wrong code of degree.");
+      Lay_WrongDegreeExit ();
    if (!Deg_GetDataOfDegreeByCod (&Deg))
-      Lay_ShowErrorAndExit ("Degree not found.");
+      Lay_WrongDegreeExit ();
 
    /***** Get course code (row[1]) *****/
    if ((CrsCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
-      Lay_ShowErrorAndExit ("Wrong code of course.");
+      Lay_WrongCourseExit ();
 
    /***** Get number of teachers and students in this course *****/
    NumStds = Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,CrsCod,1 << Rol_STD);
@@ -3071,7 +3071,7 @@ static void Crs_EditingCourseConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Crs_EditingCrs != NULL)
-      Lay_ShowErrorAndExit ("Error initializing course.");
+      Lay_WrongCourseExit ();
 
    /***** Allocate memory for course *****/
    if ((Crs_EditingCrs = malloc (sizeof (*Crs_EditingCrs))) == NULL)

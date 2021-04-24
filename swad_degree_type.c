@@ -921,7 +921,7 @@ static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
      {
       /* Get next degree */
       if ((DegCod = DB_GetNextCode (mysql_res)) < 0)
-         Lay_ShowErrorAndExit ("Wrong code of degree.");
+         Lay_WrongDegreeExit ();
 
       /* Remove degree */
       Deg_RemoveDegreeCompletely (DegCod);

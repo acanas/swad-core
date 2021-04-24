@@ -1178,7 +1178,7 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
 	      NumEvent++)
 	    /* Get next event code */
 	    if ((Agenda->LstAgdCods[NumEvent] = DB_GetNextCode (mysql_res)) < 0)
-	       Lay_ShowErrorAndExit ("Error: wrong event code.");
+	       Lay_WrongEventExit ();
 	}
 
       /***** Free structure that stores the query result *****/
@@ -1326,8 +1326,8 @@ void Agd_AskRemEvent (void)
    Agd_GetParams (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of event is missing.");
+   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
+      Lay_WrongEventExit ();
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1362,8 +1362,8 @@ void Agd_RemoveEvent (void)
    Agd_GetParams (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of event is missing.");
+   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
+      Lay_WrongEventExit ();
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1401,8 +1401,8 @@ void Agd_HideEvent (void)
    Agd_GetParams (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of event is missing.");
+   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
+      Lay_WrongEventExit ();
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1437,8 +1437,8 @@ void Agd_UnhideEvent (void)
    Agd_GetParams (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of event is missing.");
+   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
+      Lay_WrongEventExit ();
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1474,8 +1474,8 @@ void Agd_MakeEventPrivate (void)
    Agd_GetParams (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of event is missing.");
+   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
+      Lay_WrongEventExit ();
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1515,8 +1515,8 @@ void Agd_MakeEventPublic (void)
    Agd_GetParams (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of event is missing.");
+   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
+      Lay_WrongEventExit ();
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;

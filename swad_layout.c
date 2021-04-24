@@ -1388,6 +1388,36 @@ void Lay_WrongScopeExit (void)
   }
 
 /*****************************************************************************/
+/********* Write error message and exit                              *********/
+/********* when wrong country, institution, center, degree or course *********/
+/*****************************************************************************/
+
+void Lay_WrongCountrExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong country.");
+  }
+
+void Lay_WrongInstitExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong institution.");
+  }
+
+void Lay_WrongCenterExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong center.");
+  }
+
+void Lay_WrongDegreeExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong degree.");
+  }
+
+void Lay_WrongCourseExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong course.");
+  }
+
+/*****************************************************************************/
 /************* Write error message and exit when wrong order *****************/
 /*****************************************************************************/
 
@@ -1442,6 +1472,15 @@ void Lay_WrongSetExit (void)
   }
 
 /*****************************************************************************/
+/************* Write error message and exit when wrong question **************/
+/*****************************************************************************/
+
+void Lay_WrongQuestionExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong question.");
+  }
+
+/*****************************************************************************/
 /*********** Write error message and exit when wrong exam session ************/
 /*****************************************************************************/
 
@@ -1451,12 +1490,35 @@ void Lay_WrongExamSessionExit (void)
   }
 
 /*****************************************************************************/
+/************ Write error message and exit when wrong game/match *************/
+/*****************************************************************************/
+
+void Lay_WrongGameExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong game.");
+  }
+
+void Lay_WrongMatchExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong match.");
+  }
+
+/*****************************************************************************/
 /*** Write error message and exit when wrong parameter "who" (which users) ***/
 /*****************************************************************************/
 
 void Lay_WrongWhoExit (void)
   {
    Lay_ShowErrorAndExit ("Wrong parameter who.");
+  }
+
+/*****************************************************************************/
+/**************** Write error message and exit when wrong event **************/
+/*****************************************************************************/
+
+void Lay_WrongEventExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong event.");
   }
 
 /*****************************************************************************/

@@ -309,7 +309,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 
 	 /* Show question */
 	 if (!Tst_GetQstDataFromDB (&Question))	// Question exists
-	    Lay_ShowErrorAndExit ("Wrong question.");
+	    Lay_WrongQuestionExit ();
 
 	 /* Write question and answers */
 	 TstPrn_WriteQstAndAnsToFill (&Print->PrintedQuestions[NumQst],NumQst,&Question);
@@ -2782,7 +2782,7 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
 
 	 /* Get question code (row[0]) */
 	 if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of question.");
+	    Lay_WrongQuestionExit ();
 
 	 /* Get score (row[1]) */
 	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot

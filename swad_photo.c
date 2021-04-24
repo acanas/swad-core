@@ -2135,7 +2135,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 	{
 	 /***** Get next degree *****/
 	 if ((Deg.DegCod = DB_GetNextCode (mysql_res)) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of degree.");
+	    Lay_WrongDegreeExit ();
 
 	 /* Get data of degree */
 	 Deg_GetDataOfDegreeByCod (&Deg);
@@ -2232,7 +2232,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 
 	 /* Get degree code (row[0]) */
 	 if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of degree.");
+	    Lay_WrongDegreeExit ();
 
 	 /* Get data of degree */
 	 Deg_GetDataOfDegreeByCod (&Deg);

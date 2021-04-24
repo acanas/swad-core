@@ -870,11 +870,11 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
    /***** Get session data *****/
    /* Code of the session (row[0]) */
    if ((Session->SesCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of exam session.");
+      Lay_WrongExamSessionExit ();
 
    /* Code of the exam (row[1]) */
    if ((Session->ExaCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of exam.");
+      Lay_WrongExamExit ();
 
    /* Get whether the session is hidden (row[2]) */
    Session->Hidden = (row[2][0] == 'Y');

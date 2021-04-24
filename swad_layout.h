@@ -71,14 +71,23 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 
 void Lay_NotEnoughMemoryExit (void);
 void Lay_WrongScopeExit (void);
+void Lay_WrongCountrExit (void);
+void Lay_WrongInstitExit (void);
+void Lay_WrongCenterExit (void);
+void Lay_WrongDegreeExit (void);
+void Lay_WrongCourseExit (void);
 void Lay_WrongOrderExit (void);
 void Lay_WrongTypeOfViewExit (void);
 void Lay_WrongProjectExit (void);
 void Lay_WrongCallForExamExit (void);
 void Lay_WrongExamExit (void);
 void Lay_WrongSetExit (void);
+void Lay_WrongQuestionExit (void);
 void Lay_WrongExamSessionExit (void);
+void Lay_WrongGameExit (void);
+void Lay_WrongMatchExit (void);
 void Lay_WrongWhoExit (void);
+void Lay_WrongEventExit (void);
 void Lay_WrongUserExit (void);
 void Lay_NoPermissionExit (void);
 void Lay_ShowErrorAndExit (const char *Txt);

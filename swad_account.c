@@ -736,7 +736,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
    char PathRelUsr[PATH_MAX + 1];
    unsigned NumID;
 
-   /***** Check if user's code is initialized *****/
+   /***** Trivial check: user's code should be <= 0 *****/
    if (UsrDat->UsrCod > 0)
       Lay_ShowErrorAndExit ("Can not create new user.");
 

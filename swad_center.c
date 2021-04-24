@@ -750,7 +750,7 @@ static void Ctr_GetDataOfCenterFromRow (struct Ctr_Center *Ctr,MYSQL_ROW row)
   {
    /***** Get center code (row[0]) *****/
    if ((Ctr->CtrCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of center.");
+      Lay_WrongCenterExit ();
 
    /***** Get institution code (row[1]) *****/
    Ctr->InsCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -881,7 +881,7 @@ void Ctr_WriteSelectorOfCenter (void)
 
          /* Get center code (row[0]) */
          if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of center.");
+            Lay_WrongCenterExit ();
 
          /* Write option */
 	 HTM_OPTION (HTM_Type_LONG,&CtrCod,
@@ -1185,7 +1185,7 @@ long Ctr_GetAndCheckParamOtherCtrCod (long MinCodAllowed)
 
    /***** Get and check parameter with code of center *****/
    if ((CtrCod = Par_GetParToLong ("OthCtrCod")) < MinCodAllowed)
-      Lay_ShowErrorAndExit ("Code of center is missing or invalid.");
+      Lay_WrongCenterExit ();
 
    return CtrCod;
   }
@@ -2283,7 +2283,7 @@ static void Ctr_EditingCenterConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Ctr_EditingCtr != NULL)
-      Lay_ShowErrorAndExit ("Error initializing center.");
+      Lay_WrongCenterExit ();
 
    /***** Allocate memory for center *****/
    if ((Ctr_EditingCtr = malloc (sizeof (*Ctr_EditingCtr))) == NULL)

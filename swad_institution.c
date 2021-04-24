@@ -835,7 +835,7 @@ static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row)
   {
    /***** Get institution code (row[0]) *****/
    if ((Ins->InsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-      Lay_ShowErrorAndExit ("Wrong code of institution.");
+      Lay_WrongInstitExit ();
 
    /***** Get country code (row[1]) *****/
    Ins->CtyCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -1030,7 +1030,7 @@ void Ins_WriteSelectorOfInstitution (void)
 
          /* Get institution code (row[0]) */
          if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of institution.");
+            Lay_WrongInstitExit ();
 
          /* Write option */
 	 HTM_OPTION (HTM_Type_LONG,&InsCod,
@@ -1314,7 +1314,7 @@ long Ins_GetAndCheckParamOtherInsCod (long MinCodAllowed)
 
    /***** Get and check parameter with code of institution *****/
    if ((InsCod = Ins_GetParamOtherInsCod ()) < MinCodAllowed)
-      Lay_ShowErrorAndExit ("Code of institution is missing or invalid.");
+      Lay_WrongInstitExit ();
 
    return InsCod;
   }
@@ -2174,7 +2174,7 @@ static void Ins_EditingInstitutionConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Ins_EditingIns != NULL)
-      Lay_ShowErrorAndExit ("Error initializing institution.");
+      Lay_WrongInstitExit ();
 
    /***** Allocate memory for institution *****/
    if ((Ins_EditingIns = malloc (sizeof (*Ins_EditingIns))) == NULL)

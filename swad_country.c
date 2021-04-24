@@ -786,7 +786,7 @@ void Cty_GetBasicListOfCountries (void)
 
          /* Get numerical country code (row[0]) */
          if ((Cty->CtyCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of country.");
+            Lay_WrongCountrExit ();
 
          /* Get Alpha-2 country code (row[1]) */
          Str_Copy (Cty->Alpha2,row[1],sizeof (Cty->Alpha2) - 1);
@@ -912,7 +912,7 @@ void Cty_GetFullListOfCountries (void)
 
          /* Get numerical country code (row[0]) */
          if ((Cty->CtyCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of country.");
+            Lay_WrongCountrExit ();
 
          /* Get Alpha-2 country code (row[1]) */
          Str_Copy (Cty->Alpha2,row[1],sizeof (Cty->Alpha2) - 1);
@@ -981,7 +981,7 @@ void Cty_WriteSelectorOfCountry (void)
 
       /* Get country code (row[0]) */
       if ((CtyCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Lay_ShowErrorAndExit ("Wrong code of country.");
+         Lay_WrongCountrExit ();
 
       /* Write option */
       HTM_OPTION (HTM_Type_LONG,&CtyCod,
@@ -1302,7 +1302,7 @@ long Cty_GetAndCheckParamOtherCtyCod (long MinCodAllowed)
 
    /***** Get and check parameter with code of country *****/
    if ((CtyCod = Cty_GetParamOtherCtyCod ()) < MinCodAllowed)
-      Lay_ShowErrorAndExit ("Code of country is missing or invalid.");
+      Lay_WrongCountrExit ();
 
    return CtyCod;
   }
@@ -2119,7 +2119,7 @@ static void Cty_EditingCountryConstructor (void)
 
    /***** Pointer must be NULL *****/
    if (Cty_EditingCty != NULL)
-      Lay_ShowErrorAndExit ("Error initializing country.");
+      Lay_WrongCountrExit ();
 
    /***** Allocate memory for country *****/
    if ((Cty_EditingCty = malloc (sizeof (*Cty_EditingCty))) == NULL)

@@ -3219,7 +3219,7 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
 
 	 /* Get the code of the course (row[1]) */
 	 if ((GrpDat->CrsCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
-	    Lay_ShowErrorAndExit ("Wrong code of course.");
+	    Lay_WrongCourseExit ();
 
 	 /* Get the name of the group type (row[2]) */
 	 Str_Copy (GrpDat->GrpTypName,row[2],sizeof (GrpDat->GrpTypName) - 1);

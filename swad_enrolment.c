@@ -4348,7 +4348,7 @@ static void Enr_AskIfRemAdm (bool ItsMe,Hie_Lvl_Level_t Scope,
                                        Txt_Remove_USER_as_an_administrator);
      }
    else
-      Lay_ShowErrorAndExit ("User doesn't exist.");
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

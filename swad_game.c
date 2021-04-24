@@ -469,7 +469,7 @@ void Gam_SeeOneGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Show game *****/
@@ -929,7 +929,7 @@ void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
          /* Get next game code (row[0]) */
          row = mysql_fetch_row (mysql_res);
          if ((Games->Lst[NumGame].GamCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Lay_ShowErrorAndExit ("Error: wrong game code.");
+            Lay_WrongGameExit ();
         }
      }
 
@@ -1154,7 +1154,7 @@ void Gam_AskRemGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
 
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
@@ -1190,8 +1190,8 @@ void Gam_RemoveGame (void)
    Gam_ResetGame (&Game);
 
    /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+   if ((Game.GamCod = Gam_GetParamGameCod ()) <= 0)
+      Lay_WrongGameExit ();
 
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
@@ -1273,7 +1273,7 @@ void Gam_HideGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
 
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
@@ -1308,7 +1308,7 @@ void Gam_UnhideGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
 
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
@@ -1366,7 +1366,7 @@ void Gam_ListGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
 
    /***** Get game data *****/
    Gam_GetDataOfGameByCod (&Game);
@@ -1738,7 +1738,7 @@ void Gam_ReqSelectQstsToAddToGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
@@ -1772,7 +1772,7 @@ void Gam_ListQstsToAddToGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
@@ -2170,7 +2170,7 @@ void Gam_AddQstsToGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
@@ -2196,7 +2196,7 @@ void Gam_AddQstsToGame (void)
 	 /* Get next code */
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	 if (sscanf (LongStr,"%ld",&QstCod) != 1)
-	    Lay_ShowErrorAndExit ("Wrong question code.");
+	    Lay_WrongQuestionExit ();
 
 	 /* Check if question is already present in game */
 	 if (Gam_GetQstIndFromQstCod (Game.GamCod,QstCod) == 0)	// This question is not yet in this game
@@ -2283,7 +2283,7 @@ void Gam_RequestRemoveQstFromGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
@@ -2327,7 +2327,7 @@ void Gam_RemoveQstFromGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
@@ -2349,7 +2349,7 @@ void Gam_RemoveQstFromGame (void)
 		   Game.GamCod,
 		   QstInd);
    if (!mysql_affected_rows (&Gbl.mysql))
-      Lay_ShowErrorAndExit ("The question to be removed does not exist.");
+      Lay_WrongQuestionExit ();
 
    /* Change index of questions greater than this */
    DB_QueryUPDATE ("can not update indexes of questions in table of answers",
@@ -2398,7 +2398,7 @@ void Gam_MoveUpQst (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
@@ -2449,7 +2449,7 @@ void Gam_MoveDownQst (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
@@ -2599,7 +2599,7 @@ void Gam_RequestNewMatch (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Show game *****/

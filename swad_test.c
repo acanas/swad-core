@@ -2169,7 +2169,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
       /***** Get question code (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
       if ((Test->Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Lay_ShowErrorAndExit ("Wrong code of question.");
+         Lay_WrongQuestionExit ();
 
       /***** Write question row *****/
       Tst_WriteQuestionListing (Test,NumQst);
@@ -2432,7 +2432,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exam
       /* Get question code (row[0]) */
       row = mysql_fetch_row (mysql_res);
       if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Lay_ShowErrorAndExit ("Wrong code of question.");
+         Lay_WrongQuestionExit ();
 
       /* Write question row */
       Tst_WriteQuestionRowForSelection (NumQst,&Question);
@@ -2517,7 +2517,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
       /* Get question code (row[0]) */
       row = mysql_fetch_row (mysql_res);
       if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Lay_ShowErrorAndExit ("Wrong code of question.");
+         Lay_WrongQuestionExit ();
 
       /* Write question row */
       Tst_WriteQuestionRowForSelection (NumQst,&Question);
@@ -3148,7 +3148,7 @@ unsigned Tst_CountNumQuestionsInList (const char *ListQuestions)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
       if (sscanf (LongStr,"%ld",&QstCod) != 1)
-         Lay_ShowErrorAndExit ("Wrong question code.");
+         Lay_WrongQuestionExit ();
       NumQuestions++;
      }
    return NumQuestions;
@@ -4530,7 +4530,7 @@ bool Tst_CheckIfQuestionExistsInDB (struct Tst_Question *Question)
         {
 	 /* Get question code */
          if ((Question->QstCod = DB_GetNextCode (mysql_res_qst)) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of question.");
+            Lay_WrongQuestionExit ();
 
          /* Get answers from this question */
          NumOptsExistingQstInDB =
@@ -4714,7 +4714,7 @@ void Tst_RemoveSelectedQsts (void)
 	 /* Get question code (row[0]) */
 	 row = mysql_fetch_row (mysql_res);
 	 if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of question.");
+	    Lay_WrongQuestionExit ();
 
 	 /* Remove test question from database */
 	 Tst_RemoveOneQstFromDB (Gbl.Hierarchy.Crs.CrsCod,QstCod);
@@ -4759,7 +4759,7 @@ void Tst_RequestRemoveOneQst (void)
    /* Get the question code */
    Test.Question.QstCod = Tst_GetParamQstCod ();
    if (Test.Question.QstCod <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of question.");
+      Lay_WrongQuestionExit ();
 
    /* Get a parameter that indicates whether it's necessary
       to continue listing the rest of questions */
@@ -4820,7 +4820,7 @@ void Tst_RemoveOneQst (void)
    /***** Get the question code *****/
    QstCod = Tst_GetParamQstCod ();
    if (QstCod <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of question.");
+      Lay_WrongQuestionExit ();
 
    /***** Get a parameter that indicates whether it's necessary
           to continue listing the rest of questions ******/
@@ -4862,7 +4862,7 @@ static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod)
 		   CrsCod);
 
    if (!mysql_affected_rows (&Gbl.mysql))
-      Lay_ShowErrorAndExit ("Wrong question.");
+      Lay_WrongQuestionExit ();
   }
 
 /*****************************************************************************/
@@ -4883,7 +4883,7 @@ void Tst_ChangeShuffleQst (void)
    /***** Get the question code *****/
    Test.Question.QstCod = Tst_GetParamQstCod ();
    if (Test.Question.QstCod <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of question.");
+      Lay_WrongQuestionExit ();
 
    /***** Get a parameter that indicates whether it's necessary to continue listing the rest of questions ******/
    EditingOnlyThisQst = Par_GetParToBool ("OnlyThisQst");

@@ -635,11 +635,11 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 
 	 /* Get question code (row[0]) */
 	 if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of question.");
+	    Lay_WrongQuestionExit ();
 
 	 /* Get set code (row[1]) */
 	 if ((Print->PrintedQuestions[NumQst].SetCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of set.");
+	    Lay_WrongSetExit ();
 
          /* Get score (row[2]) */
 	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot

@@ -1577,7 +1577,7 @@ static unsigned Fig_GetInsAndStat (struct Ins_Instit *Ins,MYSQL_RES *mysql_res)
    /***** Get data of this institution (row[0]) *****/
    Ins->InsCod = Str_ConvertStrCodToLongCod (row[0]);
    if (!Ins_GetDataOfInstitutionByCod (Ins))
-      Lay_ShowErrorAndExit ("Institution not found.");
+      Lay_WrongInstitExit ();
 
    /***** Get statistic (row[1]) *****/
    if (sscanf (row[1],"%u",&NumberThisRow) != 1)

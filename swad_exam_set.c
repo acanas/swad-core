@@ -785,7 +785,7 @@ static unsigned ExaSet_GetSetIndFromSetCod (long ExaCod,long SetCod)
 			" WHERE SetCod=%u"
 			  " AND ExaCod=%ld",	// Extra check
 			SetCod,ExaCod))
-      Lay_ShowErrorAndExit ("Error: wrong set code.");
+      Lay_WrongSetExit ();
 
    /***** Get set code (row[0]) *****/
    row = mysql_fetch_row (mysql_res);
@@ -814,7 +814,7 @@ static long ExaSet_GetSetCodFromSetInd (long ExaCod,unsigned SetInd)
 				ExaCod,
 				SetInd);
    if (SetCod <= 0)
-      Lay_ShowErrorAndExit ("Error: wrong set index.");
+      Lay_WrongSetExit ();
 
    return SetCod;
   }
@@ -1323,7 +1323,7 @@ Tst_AnswerType_t ExaSet_GetQstAnswerTypeFromDB (long QstCod)
 		        " FROM exa_set_questions"
 		       " WHERE QstCod=%ld",
 		       QstCod))
-      Lay_ShowErrorAndExit ("Question does not exist.");
+      Lay_WrongQuestionExit ();
 
    /* Get type of answer */
    row = mysql_fetch_row (mysql_res);
@@ -1464,7 +1464,7 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
    DB_FreeMySQLResult (&mysql_res);
 
    if (!QuestionExists)
-      Lay_ShowErrorAndExit ("Wrong question.");
+      Lay_WrongQuestionExit ();
   }
 
 /*****************************************************************************/
@@ -1596,7 +1596,7 @@ void ExaSet_AddQstsToSet (void)
 	 /* Get next code */
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	 if (sscanf (LongStr,"%ld",&QstCod) != 1)
-	    Lay_ShowErrorAndExit ("Wrong question code.");
+	    Lay_WrongQuestionExit ();
 
 	 ExaSet_CopyQstFromBankToExamSet (&Set,QstCod);
 	}
@@ -2008,7 +2008,7 @@ void ExaSet_RemoveQstFromSet (void)
 		   QstCod,
 		   Set.SetCod);
    if (!mysql_affected_rows (&Gbl.mysql))
-      Lay_ShowErrorAndExit ("The question to be removed does not exist.");
+      Lay_WrongQuestionExit ();
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);

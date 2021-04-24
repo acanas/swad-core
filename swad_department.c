@@ -395,7 +395,7 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
 
 	    /* Get institution code (row[1]) */
 	    if ((Dpt->InsCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
-	       Lay_ShowErrorAndExit ("Wrong code of institution.");
+	       Lay_WrongInstitExit ();
 
 	    /* Get short name (row[2]), full name (row[3])
 	       and URL (row[4]) of the department  */

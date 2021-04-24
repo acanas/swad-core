@@ -720,7 +720,7 @@ static void Att_GetListAttEvents (struct Att_Events *Events,
         {
          /* Get next attendance event code */
          if ((Events->Lst[NumAttEvent].AttCod = DB_GetNextCode (mysql_res)) < 0)
-            Lay_ShowErrorAndExit ("Error: wrong attendance event code.");
+            Lay_WrongEventExit ();
         }
      }
 
@@ -739,10 +739,10 @@ static void Att_GetDataOfAttEventByCodAndCheckCrs (struct Att_Event *Event)
    if (Att_GetDataOfAttEventByCod (Event))
      {
       if (Event->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-         Lay_ShowErrorAndExit ("Attendance event does not belong to current course.");
+         Lay_WrongEventExit ();
      }
    else	// Attendance event not found
-      Lay_ShowErrorAndExit ("Error when getting attendance event.");
+      Lay_WrongEventExit ();
   }
 
 /*****************************************************************************/
@@ -919,8 +919,8 @@ void Att_AskRemAttEvent (void)
    Events.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
-   if ((Event.AttCod = Att_GetParamAttCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of attendance event is missing.");
+   if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
+      Lay_WrongEventExit ();
 
    /***** Get data of the attendance event from database *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
@@ -954,8 +954,8 @@ void Att_GetAndRemAttEvent (void)
    struct Att_Event Event;
 
    /***** Get attendance event code *****/
-   if ((Event.AttCod = Att_GetParamAttCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of attendance event is missing.");
+   if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
+      Lay_WrongEventExit ();
 
    /***** Get data of the attendance event from database *****/
    // Inside this function, the course is checked to be the current one
@@ -997,8 +997,8 @@ void Att_HideAttEvent (void)
    struct Att_Event Event;
 
    /***** Get attendance event code *****/
-   if ((Event.AttCod = Att_GetParamAttCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of attendance event is missing.");
+   if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
+      Lay_WrongEventExit ();
 
    /***** Get data of the attendance event from database *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
@@ -1025,8 +1025,8 @@ void Att_ShowAttEvent (void)
    struct Att_Event Event;
 
    /***** Get attendance event code *****/
-   if ((Event.AttCod = Att_GetParamAttCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of attendance event is missing.");
+   if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
+      Lay_WrongEventExit ();
 
    /***** Get data of the attendance event from database *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
@@ -1861,8 +1861,8 @@ void Att_SeeOneAttEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get attendance event code *****/
-   if ((Events.AttCod = Att_GetParamAttCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of attendance event is missing.");
+   if ((Events.AttCod = Att_GetParamAttCod ()) < 0)
+      Lay_WrongEventExit ();
 
    /***** Show event *****/
    Att_ShowEvent (&Events);
@@ -2306,8 +2306,8 @@ void Att_RegisterMeAsStdInAttEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get attendance event code *****/
-   if ((Event.AttCod = Att_GetParamAttCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of attendance event is missing.");
+   if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
+      Lay_WrongEventExit ();
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);	// This checks that event belong to current course
 
    if (Event.Open)
@@ -2371,8 +2371,8 @@ void Att_RegisterStudentsInAttEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get attendance event code *****/
-   if ((Event.AttCod = Att_GetParamAttCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of attendance event is missing.");
+   if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
+      Lay_WrongEventExit ();
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);	// This checks that event belong to current course
 
    /***** Get groups selected *****/

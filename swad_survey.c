@@ -1282,7 +1282,7 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
 
       /* Get survey scope (row[1]) */
       if ((Svy->Scope = Sco_GetScopeFromDBStr (row[1])) == Hie_Lvl_UNK)
-         Lay_ShowErrorAndExit ("Wrong survey scope.");
+         Lay_WrongScopeExit ();
 
       /* Get code of the country, institution, center, degree or course (row[2]) */
       Svy->Cod = Str_ConvertStrCodToLongCod (row[2]);
@@ -1320,7 +1320,7 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
       switch (Svy->Scope)
         {
 	 case Hie_Lvl_UNK:	// Unknown
-            Lay_ShowErrorAndExit ("Wrong survey scope.");
+            Lay_WrongScopeExit ();
 	    break;
 	 case Hie_Lvl_SYS:	// System
             Svy->Status.IBelongToScope = Gbl.Usrs.Me.Logged;
@@ -2226,41 +2226,41 @@ void Svy_ReceiveFormSurvey (void)
      {
       case Hie_Lvl_SYS:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-	    Lay_ShowErrorAndExit ("Wrong survey scope.");
+	    Lay_WrongScopeExit ();
          NewSvy.Scope = Hie_Lvl_SYS;
          NewSvy.Cod = -1L;
          break;
       case Hie_Lvl_CTY:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-	    Lay_ShowErrorAndExit ("Wrong survey scope.");
+	    Lay_WrongScopeExit ();
 	 NewSvy.Scope = Hie_Lvl_CTY;
 	 NewSvy.Cod = Gbl.Hierarchy.Cty.CtyCod;
          break;
       case Hie_Lvl_INS:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_INS_ADM)
-	    Lay_ShowErrorAndExit ("Wrong survey scope.");
+	    Lay_WrongScopeExit ();
 	 NewSvy.Scope = Hie_Lvl_INS;
 	 NewSvy.Cod = Gbl.Hierarchy.Ins.InsCod;
          break;
       case Hie_Lvl_CTR:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_CTR_ADM)
-	    Lay_ShowErrorAndExit ("Wrong survey scope.");
+	    Lay_WrongScopeExit ();
 	 NewSvy.Scope = Hie_Lvl_CTR;
 	 NewSvy.Cod = Gbl.Hierarchy.Ctr.CtrCod;
          break;
       case Hie_Lvl_DEG:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_DEG_ADM)
-	    Lay_ShowErrorAndExit ("Wrong survey scope.");
+	    Lay_WrongScopeExit ();
 	 NewSvy.Scope = Hie_Lvl_DEG;
 	 NewSvy.Cod = Gbl.Hierarchy.Deg.DegCod;
          break;
       case Hie_Lvl_CRS:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_TCH)
-	    Lay_ShowErrorAndExit ("Wrong survey scope.");
+	    Lay_WrongScopeExit ();
 	 NewSvy.Scope = Hie_Lvl_CRS;
 	 NewSvy.Cod = Gbl.Hierarchy.Crs.CrsCod;
          break;
@@ -3700,7 +3700,7 @@ void Svy_RequestRemoveQst (void)
 
    /* Get question code */
    if ((SvyQst.QstCod = Svy_GetParamQstCod ()) < 0)
-      Lay_ShowErrorAndExit ("Wrong code of question.");
+      Lay_WrongQuestionExit ();
 
    /* Get question index */
    SvyQst.QstInd = Svy_GetQstIndFromQstCod (SvyQst.QstCod);
@@ -3742,7 +3742,7 @@ void Svy_RemoveQst (void)
 
    /* Get question code */
    if ((SvyQst.QstCod = Svy_GetParamQstCod ()) < 0)
-      Lay_ShowErrorAndExit ("Wrong code of question.");
+      Lay_WrongQuestionExit ();
 
    /* Get question index */
    SvyQst.QstInd = Svy_GetQstIndFromQstCod (SvyQst.QstCod);
@@ -3757,7 +3757,7 @@ void Svy_RemoveQst (void)
 		   " WHERE QstCod=%ld",
 		   SvyQst.QstCod);
    if (!mysql_affected_rows (&Gbl.mysql))
-      Lay_ShowErrorAndExit ("The question to be removed does not exist.");
+      Lay_WrongQuestionExit ();
 
    /* Change index of questions greater than this */
    DB_QueryUPDATE ("can not update indexes of questions",
@@ -3844,7 +3844,7 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
         {
          /* Get next question */
          if ((QstCod = DB_GetNextCode (mysql_res)) <= 0)
-            Lay_ShowErrorAndExit ("Error: wrong question code.");
+            Lay_WrongQuestionExit ();
 
          /* Get possible parameter with the user's answer */
          snprintf (ParamName,sizeof (ParamName),"Ans%010u",(unsigned) QstCod);

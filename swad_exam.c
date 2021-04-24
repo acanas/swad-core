@@ -863,7 +863,7 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
          /* Get next exam code (row[0]) */
          row = mysql_fetch_row (mysql_res);
          if ((Exams->Lst[NumExam].ExaCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Lay_ShowErrorAndExit ("Error: wrong exam code.");
+            Lay_WrongExamExit ();
         }
      }
 
@@ -1130,8 +1130,8 @@ void Exa_RemoveExam (void)
    Exa_ResetExam (&Exam);
 
    /***** Get exam code *****/
-   if ((Exam.ExaCod = Exa_GetParamExamCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of exam is missing.");
+   if ((Exam.ExaCod = Exa_GetParamExamCod ()) <= 0)
+      Lay_WrongExamExit ();
 
    /***** Get data of the exam from database *****/
    Exa_GetDataOfExamByCod (&Exam);

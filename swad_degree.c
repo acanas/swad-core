@@ -296,7 +296,7 @@ void Deg_WriteSelectorOfDegree (void)
 
          /* Get degree code (row[0]) */
          if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong degree.");
+            Lay_WrongDegreeExit ();
 
          /* Write option */
 	 HTM_OPTION (HTM_Type_LONG,&DegCod,
@@ -1339,7 +1339,7 @@ long Deg_GetAndCheckParamOtherDegCod (long MinCodAllowed)
 
    /***** Get and check parameter with code of degree *****/
    if ((DegCod = Par_GetParToLong ("OthDegCod")) < MinCodAllowed)
-      Lay_ShowErrorAndExit ("Code of degree is missing or invalid.");
+      Lay_WrongDegreeExit ();
 
    return DegCod;
   }
@@ -1404,7 +1404,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row)
   {
    /***** Get degree code (row[0]) *****/
    if ((Deg->DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-      Lay_ShowErrorAndExit ("Wrong code of degree.");
+      Lay_WrongDegreeExit ();
 
    /***** Get center code (row[1]) *****/
    Deg->CtrCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -1512,7 +1512,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
      {
       /* Get next course */
       if ((CrsCod = DB_GetNextCode (mysql_res)) < 0)
-         Lay_ShowErrorAndExit ("Wrong code of course.");
+         Lay_WrongCourseExit ();
 
       /* Remove course */
       Crs_RemoveCourseCompletely (CrsCod);
@@ -2197,7 +2197,7 @@ static void Deg_EditingDegreeConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Deg_EditingDeg != NULL)
-      Lay_ShowErrorAndExit ("Error initializing degree.");
+      Lay_WrongDegreeExit ();
 
    /***** Allocate memory for degree *****/
    if ((Deg_EditingDeg = malloc (sizeof (*Deg_EditingDeg))) == NULL)

@@ -169,7 +169,7 @@ void MchRes_ShowMyMchResultsInGam (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Game begin *****/
@@ -219,9 +219,9 @@ void MchRes_ShowMyMchResultsInMch (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
    if ((Match.MchCod = Mch_GetParamMchCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Code of match is missing.");
+      Lay_WrongMatchExit ();
    Gam_GetDataOfGameByCod (&Game);
    Mch_GetDataOfMatchByCod (&Match);
 
@@ -373,7 +373,7 @@ void MchRes_ShowAllMchResultsInGam (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Game begin *****/
@@ -462,9 +462,9 @@ void MchRes_ShowAllMchResultsInMch (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
    if ((Match.MchCod = Mch_GetParamMchCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Code of match is missing.");
+      Lay_WrongMatchExit ();
    Gam_GetDataOfGameByCod (&Game);
    Mch_GetDataOfMatchByCod (&Match);
 
@@ -883,7 +883,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 /* Get match code */
          MchPrn_ResetPrint (&Print);
 	 if ((Print.MchCod = DB_GetNextCode (mysql_res)) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of match.");
+	    Lay_WrongMatchExit ();
 
 	 /* Get match result data */
 	 Print.UsrCod = UsrDat->UsrCod;

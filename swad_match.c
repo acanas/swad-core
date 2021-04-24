@@ -1014,11 +1014,11 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    /***** Get match data *****/
    /* Code of the match (row[0]) */
    if ((Match->MchCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of match.");
+      Lay_WrongMatchExit ();
 
    /* Code of the game (row[1]) */
    if ((Match->GamCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of game.");
+      Lay_WrongGameExit ();
 
    /* Get match teacher (row[2]) */
    Match->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
@@ -1409,20 +1409,20 @@ void Mch_GetAndCheckParameters (struct Gam_Games *Games,
    /***** Get parameters *****/
    /* Get parameters of game */
    if ((Game->GamCod = Gam_GetParams (Games)) <= 0)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+      Lay_WrongGameExit ();
    Grp_GetParamWhichGroups ();
    Gam_GetDataOfGameByCod (Game);
 
    /* Get match code */
    if ((Match->MchCod = Mch_GetParamMchCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Code of match is missing.");
+      Lay_WrongMatchExit ();
    Mch_GetDataOfMatchByCod (Match);
 
    /***** Ensure parameters are correct *****/
    if (Game->GamCod != Match->GamCod)
-      Lay_ShowErrorAndExit ("Wrong game code.");
+      Lay_WrongGameExit ();
    if (Game->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-      Lay_ShowErrorAndExit ("Match does not belong to this course.");
+      Lay_WrongGameExit ();
 
    /***** Initialize context *****/
    Games->GamCod = Game->GamCod;
@@ -1624,8 +1624,8 @@ void Mch_CreateNewMatch (void)
 
    /***** Get form parameters *****/
    /* Get match code */
-   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+   if ((GamCod = Gam_GetParamGameCod ()) < 0)
+      Lay_WrongGameExit ();
 
    /* Get match title */
    Par_GetParToText ("Title",Title,Mch_MAX_BYTES_TITLE);
@@ -1830,7 +1830,7 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
 
       /* Get question code (row[0]) */
       if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	 Lay_ShowErrorAndExit ("Wrong code of question.");
+	 Lay_WrongQuestionExit ();
 
       /* Get question index (row[1]) */
       if ((LongNum = Str_ConvertStrCodToLongCod (row[1])) < 0)
@@ -3921,7 +3921,7 @@ void Mch_GetMatchBeingPlayed (void)
 
    /***** Get match code ****/
    if ((MchCodBeingPlayed = Mch_GetParamMchCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Code of match is missing.");
+      Lay_WrongMatchExit ();
 
    Mch_SetMchCodBeingPlayed (MchCodBeingPlayed);
   }
@@ -4314,11 +4314,11 @@ void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print)
 
       /* Get question code (row[0]) */
       if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	 Lay_ShowErrorAndExit ("Wrong code of question.");
+	 Lay_WrongQuestionExit ();
 
       /* Get question index (row[1]) */
       if ((LongNum = Str_ConvertStrCodToLongCod (row[1])) < 0)
-	 Lay_ShowErrorAndExit ("Wrong code of question.");
+	 Lay_WrongQuestionExit ();
       QstInd = (unsigned) LongNum;
 
       /* Get indexes for this question (row[2]) */
