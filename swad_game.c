@@ -1801,9 +1801,8 @@ unsigned Gam_GetParamQstInd (void)
   {
    long QstInd;
 
-   QstInd = Par_GetParToLong ("QstInd");
-   if (QstInd < 0)
-      Lay_ShowErrorAndExit ("Wrong question index.");
+   if ((QstInd = Par_GetParToLong ("QstInd")) <= 0)
+      Lay_WrongQuestionIndexExit ();
 
    return (unsigned) QstInd;
   }
@@ -1859,7 +1858,7 @@ long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd)
 				GamCod,
 				QstInd);
    if (QstCod <= 0)
-      Lay_ShowErrorAndExit ("Error: wrong question index.");
+      Lay_WrongQuestionIndexExit ();
 
    return QstCod;
   }
@@ -2414,7 +2413,7 @@ void Gam_MoveUpQst (void)
       /* Indexes of questions to be exchanged */
       QstIndTop = Gam_GetPrevQuestionIndexInGame (Game.GamCod,QstIndBottom);
       if (!QstIndTop)
-	 Lay_ShowErrorAndExit ("Wrong index of question.");
+	 Lay_WrongQuestionIndexExit ();
 
       /* Exchange questions */
       Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
@@ -2468,7 +2467,7 @@ void Gam_MoveDownQst (void)
       /* Indexes of questions to be exchanged */
       QstIndBottom = Gam_GetNextQuestionIndexInGame (Game.GamCod,QstIndTop);
       if (!QstIndBottom)
-	 Lay_ShowErrorAndExit ("Wrong index of question.");
+	 Lay_WrongQuestionIndexExit ();
 
       /* Exchange questions */
       Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);

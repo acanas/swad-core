@@ -1745,9 +1745,8 @@ unsigned Exa_GetParamQstInd (void)
   {
    long QstInd;
 
-   QstInd = Par_GetParToLong ("QstInd");
-   if (QstInd < 0)
-      Lay_ShowErrorAndExit ("Wrong question index.");
+   if ((QstInd = Par_GetParToLong ("QstInd")) <= 0)
+      Lay_WrongQuestionIndexExit ();
 
    return (unsigned) QstInd;
   }
@@ -1769,7 +1768,7 @@ long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd)
 				ExaCod,
 				QstInd);
    if (QstCod <= 0)
-      Lay_ShowErrorAndExit ("Error: wrong question index.");
+      Lay_WrongQuestionIndexExit ();
 
    return QstCod;
   }

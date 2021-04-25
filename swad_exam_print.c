@@ -556,7 +556,7 @@ static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *Printed
       else
          ErrorInIndex = true;
       if (ErrorInIndex)
-         Lay_ShowErrorAndExit ("Wrong index of answer.");
+         Lay_WrongAnswerIndexExit ();
 
       if (NumOpt == 0)
 	 snprintf (StrInd,sizeof (StrInd),"%u",Index);

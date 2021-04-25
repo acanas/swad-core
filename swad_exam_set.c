@@ -1414,7 +1414,7 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
 	       break;
 	    case Tst_ANS_FLOAT:
 	       if (Question->Answer.NumOptions != 2)
-		  Lay_ShowErrorAndExit ("Wrong answer.");
+		  Lay_WrongAnswerExit ();
 	       Question->Answer.FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[1]);
 	       break;
 	    case Tst_ANS_TRUE_FALSE:
@@ -1426,7 +1426,7 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
 	    case Tst_ANS_TEXT:
 	       /* Check number of options */
 	       if (Question->Answer.NumOptions > Tst_MAX_OPTIONS_PER_QUESTION)
-		  Lay_ShowErrorAndExit ("Wrong answer.");
+		  Lay_WrongAnswerExit ();
 
 	       /*  Allocate space for text and feedback */
 	       if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))

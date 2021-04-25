@@ -368,8 +368,8 @@ void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
          row = mysql_fetch_row (mysql_res);
 
          /* Get building code (row[0]) */
-         if ((Building->BldCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of building.");
+         if ((Building->BldCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+            Lay_WrongBuildingExit ();
 
          /* Get the short name of the building (row[1]) */
          Str_Copy (Building->ShrtName,row[1],sizeof (Building->ShrtName) - 1);
@@ -551,8 +551,8 @@ void Bld_RemoveBuilding (void)
    Bld_EditingBuildingConstructor ();
 
    /***** Get building code *****/
-   if ((Bld_EditingBuilding->BldCod = Bld_GetParamBldCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of building is missing.");
+   if ((Bld_EditingBuilding->BldCod = Bld_GetParamBldCod ()) <= 0)
+      Lay_WrongBuildingExit ();
 
    /***** Get data of the building from database *****/
    Bld_GetDataOfBuildingByCod (Bld_EditingBuilding);
@@ -648,8 +648,8 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the code of the building */
-   if ((Bld_EditingBuilding->BldCod = Bld_GetParamBldCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of building is missing.");
+   if ((Bld_EditingBuilding->BldCod = Bld_GetParamBldCod ()) <= 0)
+      Lay_WrongBuildingExit ();
 
    /* Get the new name for the building */
    Par_GetParToText (ParamName,NewClaName,MaxBytes);
@@ -741,8 +741,8 @@ void Bld_ChangeBuildingLocation (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the building */
-   if ((Bld_EditingBuilding->BldCod = Bld_GetParamBldCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of building is missing.");
+   if ((Bld_EditingBuilding->BldCod = Bld_GetParamBldCod ()) <= 0)
+      Lay_WrongBuildingExit ();
 
    /* Get the new location for the building */
    Par_GetParToText ("Location",NewLocation,Bld_MAX_BYTES_LOCATION);
@@ -942,7 +942,7 @@ static void Bld_EditingBuildingConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Bld_EditingBuilding != NULL)
-      Lay_ShowErrorAndExit ("Error initializing building.");
+      Lay_WrongBuildingExit ();
 
    /***** Allocate memory for building *****/
    if ((Bld_EditingBuilding = malloc (sizeof (*Bld_EditingBuilding))) == NULL)

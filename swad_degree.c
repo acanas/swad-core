@@ -904,7 +904,7 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
    /***** Get data of type of degree of this degree *****/
    DegTyp.DegTypCod = Deg->DegTypCod;
    if (!DT_GetDataOfDegreeTypeByCod (&DegTyp))
-      Lay_ShowErrorAndExit ("Code of type of degree not found.");
+      Lay_WrongDegTypExit ();
 
    if (Deg->Status & Deg_STATUS_BIT_PENDING)
      {

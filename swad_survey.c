@@ -433,8 +433,8 @@ void Svy_SeeOneSurvey (void)
    Surveys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
-   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of survey is missing.");
+   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
+      Lay_WrongSurveyExit ();
 
    /***** Show survey *****/
    Svy_ShowOneSurvey (&Surveys,Svy.SvyCod,true);
@@ -650,7 +650,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    switch (Svy.Scope)
      {
       case Hie_Lvl_UNK:	// Unknown
-         Lay_ShowErrorAndExit ("Wrong survey scope.");
+         Lay_WrongScopeExit ();
          break;
       case Hie_Lvl_SYS:	// System
          HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
@@ -1068,7 +1068,7 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
 	   NumSvy++)
          /* Get next survey code */
          if ((Surveys->LstSvyCods[NumSvy] = DB_GetNextCode (mysql_res)) < 0)
-            Lay_ShowErrorAndExit ("Error: wrong survey code.");
+            Lay_WrongSurveyExit ();
      }
    else
       Surveys->Num = 0;
@@ -1573,8 +1573,8 @@ void Svy_AskRemSurvey (void)
    Surveys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
-   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of survey is missing.");
+   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
+      Lay_WrongSurveyExit ();
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
@@ -1612,8 +1612,8 @@ void Svy_RemoveSurvey (void)
    Surveys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
-   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of survey is missing.");
+   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
+      Lay_WrongSurveyExit ();
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
@@ -1680,8 +1680,8 @@ void Svy_AskResetSurvey (void)
    Surveys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
-   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of survey is missing.");
+   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
+      Lay_WrongSurveyExit ();
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
@@ -1733,8 +1733,8 @@ void Svy_ResetSurvey (void)
    Surveys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
-   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of survey is missing.");
+   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
+      Lay_WrongSurveyExit ();
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
@@ -1782,8 +1782,8 @@ void Svy_HideSurvey (void)
    Surveys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
-   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of survey is missing.");
+   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
+      Lay_WrongSurveyExit ();
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
@@ -1819,8 +1819,8 @@ void Svy_UnhideSurvey (void)
    Surveys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
-   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of survey is missing.");
+   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
+      Lay_WrongSurveyExit ();
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
@@ -2685,8 +2685,8 @@ void Svy_RequestEditQuestion (void)
    Txt[0] = '\0';
 
    /***** Get survey code *****/
-   if ((SvyCod = Svy_GetParamSvyCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of survey is missing.");
+   if ((SvyCod = Svy_GetParamSvyCod ()) <= 0)
+      Lay_WrongSurveyExit ();
 
    /* Get the question code */
    SvyQst.QstCod = Svy_GetParamQstCod ();
@@ -2747,7 +2747,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
          /* Get question index inside survey (row[0]) */
          if (sscanf (row[0],"%u",&(SvyQst->QstInd)) != 1)
-            Lay_ShowErrorAndExit ("Error: wrong question index.");
+            Lay_WrongQuestionIndexExit ();
 
          /* Get the type of answer (row[1]) */
          SvyQst->AnswerType = Svy_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
@@ -3083,8 +3083,8 @@ void Svy_ReceiveQst (void)
 
    /***** Get parameters from form *****/
    /* Get survey code */
-   if ((SvyCod = Svy_GetParamSvyCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of survey is missing.");
+   if ((SvyCod = Svy_GetParamSvyCod ()) <= 0)
+      Lay_WrongSurveyExit ();
 
    /* Get question code */
    SvyQst.QstCod = Svy_GetParamQstCod ();
@@ -3363,47 +3363,47 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 
          /* row[0] holds the code of the question */
          if (sscanf (row[0],"%ld",&(SvyQst.QstCod)) != 1)
-            Lay_ShowErrorAndExit ("Wrong code of question.");
+            Lay_WrongQuestionExit ();
 
          HTM_TR_Begin (NULL);
 
-         if (Svy->Status.ICanEdit)
-           {
-	    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	    if (Svy->Status.ICanEdit)
+	      {
+	       HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
-	    /* Initialize context */
-            Surveys->SvyCod = Svy->SvyCod;
-            Surveys->QstCod = SvyQst.QstCod;
+		  /* Initialize context */
+		  Surveys->SvyCod = Svy->SvyCod;
+		  Surveys->QstCod = SvyQst.QstCod;
 
-            /* Write icon to remove the question */
-	    Ico_PutContextualIconToRemove (ActReqRemSvyQst,NULL,
-					   Svy_PutParamsToEditQuestion,Surveys);
+		  /* Write icon to remove the question */
+		  Ico_PutContextualIconToRemove (ActReqRemSvyQst,NULL,
+						 Svy_PutParamsToEditQuestion,Surveys);
 
-            /* Write icon to edit the question */
-            Ico_PutContextualIconToEdit (ActEdiOneSvyQst,NULL,
-                                         Svy_PutParamsToEditQuestion,Surveys);
+		  /* Write icon to edit the question */
+		  Ico_PutContextualIconToEdit (ActEdiOneSvyQst,NULL,
+					       Svy_PutParamsToEditQuestion,Surveys);
 
-            HTM_TD_End ();
-           }
+	       HTM_TD_End ();
+	      }
 
-         /* Write index of question inside survey (row[1]) */
-         if (sscanf (row[1],"%u",&(SvyQst.QstInd)) != 1)
-            Lay_ShowErrorAndExit ("Error: wrong question index.");
-         HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-         HTM_Unsigned (SvyQst.QstInd + 1);
-         HTM_TD_End ();
+	    /* Write index of question inside survey (row[1]) */
+	    HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+	       if (sscanf (row[1],"%u",&(SvyQst.QstInd)) != 1)
+		  Lay_WrongQuestionIndexExit ();
+	       HTM_Unsigned (SvyQst.QstInd + 1);
+	    HTM_TD_End ();
 
-         /* Write the question type (row[2]) */
-         SvyQst.AnswerType = Svy_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-         HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-         HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[SvyQst.AnswerType]);
-         HTM_TD_End ();
+	    /* Write the question type (row[2]) */
+	    HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+	       SvyQst.AnswerType = Svy_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+	       HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[SvyQst.AnswerType]);
+	    HTM_TD_End ();
 
-         /* Write the stem (row[3]) and the answers of this question */
-         HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-         Svy_WriteQstStem (row[3]);
-         Svy_WriteAnswersOfAQst (Svy,&SvyQst,PutFormAnswerSurvey);
-         HTM_TD_End ();
+	    /* Write the stem (row[3]) and the answers of this question */
+	    HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
+	       Svy_WriteQstStem (row[3]);
+	       Svy_WriteAnswersOfAQst (Svy,&SvyQst,PutFormAnswerSurvey);
+	    HTM_TD_End ();
 
          HTM_TR_End ();
         }
@@ -3695,8 +3695,8 @@ void Svy_RequestRemoveQst (void)
 
    /***** Get parameters from form *****/
    /* Get survey code */
-   if ((SvyCod = Svy_GetParamSvyCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of survey is missing.");
+   if ((SvyCod = Svy_GetParamSvyCod ()) <= 0)
+      Lay_WrongSurveyExit ();
 
    /* Get question code */
    if ((SvyQst.QstCod = Svy_GetParamQstCod ()) < 0)
@@ -3737,11 +3737,11 @@ void Svy_RemoveQst (void)
 
    /***** Get parameters from form *****/
    /* Get survey code */
-   if ((SvyCod = Svy_GetParamSvyCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of survey is missing.");
+   if ((SvyCod = Svy_GetParamSvyCod ()) <= 0)
+      Lay_WrongSurveyExit ();
 
    /* Get question code */
-   if ((SvyQst.QstCod = Svy_GetParamQstCod ()) < 0)
+   if ((SvyQst.QstCod = Svy_GetParamQstCod ()) <= 0)
       Lay_WrongQuestionExit ();
 
    /* Get question index */
@@ -3790,8 +3790,8 @@ void Svy_ReceiveSurveyAnswers (void)
    Svy_ResetSurveys (&Surveys);
 
    /***** Get survey code *****/
-   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of survey is missing.");
+   if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
+      Lay_WrongSurveyExit ();
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);

@@ -742,8 +742,8 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
 	   NumAsg++)
         {
          /* Get next assignment code */
-         if ((Assignments->LstAsgCods[NumAsg] = DB_GetNextCode (mysql_res)) < 0)
-            Lay_ShowErrorAndExit ("Error: wrong assignment code.");
+         if ((Assignments->LstAsgCods[NumAsg] = DB_GetNextCode (mysql_res)) <= 0)
+            Lay_WrongAssignmentExit ();
         }
      }
    else
@@ -1033,8 +1033,8 @@ void Asg_ReqRemAssignment (void)
    Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   if ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of assignment is missing.");
+   if ((Asg.AsgCod = Asg_GetParamAsgCod ()) <= 0)
+      Lay_WrongAssignmentExit ();
 
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Asg);
@@ -1070,8 +1070,8 @@ void Asg_RemoveAssignment (void)
    Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   if ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of assignment is missing.");
+   if ((Asg.AsgCod = Asg_GetParamAsgCod ()) <= 0)
+      Lay_WrongAssignmentExit ();
 
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Asg);	// Inside this function, the course is checked to be the current one
@@ -1120,8 +1120,8 @@ void Asg_HideAssignment (void)
    Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   if ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of assignment is missing.");
+   if ((Asg.AsgCod = Asg_GetParamAsgCod ()) <= 0)
+      Lay_WrongAssignmentExit ();
 
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Asg);
@@ -1157,8 +1157,8 @@ void Asg_ShowAssignment (void)
    Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   if ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of assignment is missing.");
+   if ((Asg.AsgCod = Asg_GetParamAsgCod ()) <= 0)
+      Lay_WrongAssignmentExit ();
 
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Asg);

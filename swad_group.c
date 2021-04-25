@@ -2840,8 +2840,8 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
          row = mysql_fetch_row (mysql_res);
 
          /* Get group type code (row[0]) */
-         if ((Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong type of group.");
+         if ((Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+            Lay_WrongGrpTypExit ();
 
          /* Get group type name (row[1]) */
          Str_Copy (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,row[1],
@@ -2972,8 +2972,8 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
                row = mysql_fetch_row (mysql_res);
 
                /* Get group code (row[0]) */
-               if ((Grp->GrpCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-                  Lay_ShowErrorAndExit ("Wrong code of group.");
+               if ((Grp->GrpCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+                  Lay_WrongGroupExit ();
 
                /* Get group name (row[1]) */
                Str_Copy (Grp->GrpName,row[1],sizeof (Grp->GrpName) - 1);
@@ -3123,7 +3123,7 @@ static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
 		       " WHERE CrsCod=%ld"
 			 " AND GrpTypCod=%ld",
 		       Gbl.Hierarchy.Crs.CrsCod,GrpTyp->GrpTypCod) != 1)
-      Lay_ShowErrorAndExit ("Error when getting type of group.");
+      Lay_WrongGrpTypExit ();
 
    /***** Get some data of group type *****/
    row = mysql_fetch_row (mysql_res);
@@ -3215,7 +3215,7 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
 
 	 /* Get the code of the group type (row[0]) */
 	 if ((GrpDat->GrpTypCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	    Lay_ShowErrorAndExit ("Wrong code of type of group.");
+	    Lay_WrongGrpTypExit ();
 
 	 /* Get the code of the course (row[1]) */
 	 if ((GrpDat->CrsCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
@@ -3270,7 +3270,7 @@ static long Grp_GetTypeOfGroupOfAGroup (long GrpCod)
 				   " WHERE GrpCod=%ld",
 				   GrpCod);
    if (GrpTypCod <= 0)
-      Lay_ShowErrorAndExit ("Error when getting group.");
+      Lay_WrongGrpTypExit ();
 
    return GrpTypCod;
   }
@@ -3649,8 +3649,8 @@ static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,
 	   NumGrp < LstGrps->NumGrps;
 	   NumGrp++)
          /* Get the code of group (row[0]) */
-         if ((LstGrps->GrpCods[NumGrp] = DB_GetNextCode (mysql_res)) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of group.");
+         if ((LstGrps->GrpCods[NumGrp] = DB_GetNextCode (mysql_res)) <= 0)
+            Lay_WrongGroupExit ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -3694,8 +3694,8 @@ void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps)
 	   NumGrp < LstGrps->NumGrps;
 	   NumGrp++)
          /* Get the code of group */
-         if ((LstGrps->GrpCods[NumGrp] = DB_GetNextCode (mysql_res)) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of group.");
+         if ((LstGrps->GrpCods[NumGrp] = DB_GetNextCode (mysql_res)) <= 0)
+            Lay_WrongGroupExit ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -3991,8 +3991,8 @@ void Grp_ReqRemGroupType (void)
    unsigned NumGrps;
 
    /***** Get the code of the group type *****/
-   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of group is missing.");
+   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
+      Lay_WrongGrpTypExit ();
 
    /***** Check if this group type has groups *****/
    if ((NumGrps = Grp_CountNumGrpsInThisCrsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod)))	// Group type has groups ==> Ask for confirmation
@@ -4008,8 +4008,8 @@ void Grp_ReqRemGroupType (void)
 void Grp_ReqRemGroup (void)
   {
    /***** Get group code *****/
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of group is missing.");
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
+      Lay_WrongGroupExit ();
 
    /***** Confirm removing *****/
    Grp_AskConfirmRemGrp ();
@@ -4105,8 +4105,8 @@ static void Grp_AskConfirmRemGrp (void)
 void Grp_RemoveGroupType (void)
   {
    /***** Get param with code of group type *****/
-   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of type of group is missing.");
+   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
+      Lay_WrongGrpTypExit ();
 
    /***** Remove group type and its groups *****/
    Grp_RemoveGroupTypeCompletely ();
@@ -4119,8 +4119,8 @@ void Grp_RemoveGroupType (void)
 void Grp_RemoveGroup (void)
   {
    /***** Get param with group code *****/
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of group is missing.");
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
+      Lay_WrongGroupExit ();
 
    /***** Remove group *****/
    Grp_RemoveGroupCompletely ();
@@ -4261,8 +4261,8 @@ void Grp_OpenGroup (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
-      Lay_ShowErrorAndExit ("Code of group is missing.");
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
+      Lay_WrongGroupExit ();
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -4296,8 +4296,8 @@ void Grp_CloseGroup (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
-      Lay_ShowErrorAndExit ("Code of group is missing.");
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
+      Lay_WrongGroupExit ();
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -4331,8 +4331,8 @@ void Grp_EnableFileZonesGrp (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
-      Lay_ShowErrorAndExit ("Code of group is missing.");
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
+      Lay_WrongGroupExit ();
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -4367,8 +4367,8 @@ void Grp_DisableFileZonesGrp (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
-      Lay_ShowErrorAndExit ("Code of group is missing.");
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
+      Lay_WrongGroupExit ();
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -4407,8 +4407,8 @@ void Grp_ChangeGroupType (void)
 
    /***** Get parameters from form *****/
    /* Get group code */
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of group is missing.");
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
+      Lay_WrongGroupExit ();
 
    /* Get the new group type */
    NewGrpTypCod = Grp_GetParamGrpTypCod ();
@@ -4461,8 +4461,8 @@ void Grp_ChangeGroupRoom (void)
 
    /***** Get parameters from form *****/
    /* Get group code */
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of group is missing.");
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
+      Lay_WrongGroupExit ();
 
    /* Get the new room */
    NewRooCod = Roo_GetParamRooCod ();
@@ -4506,8 +4506,8 @@ void Grp_ChangeMandatGrpTyp (void)
 
    /***** Get parameters of the form *****/
    /* Get the código of type of group */
-   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of type of group is missing.");
+   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
+      Lay_WrongGrpTypExit ();
 
    /* Get the new type of enrolment (mandatory or voluntaria) of this type of group */
    NewMandatoryEnrolment = Par_GetParToBool ("MandatoryEnrolment");
@@ -4564,8 +4564,8 @@ void Grp_ChangeMultiGrpTyp (void)
 
    /***** Get parameters from the form *****/
    /* Get the code of type of group */
-   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of type of group is missing.");
+   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
+      Lay_WrongGrpTypExit ();
 
    /* Get the new type of enrolment (single or multiple) of this type of group */
    NewMultipleEnrolment = Par_GetParToBool ("MultipleEnrolment");
@@ -4616,8 +4616,8 @@ void Grp_ChangeOpenTimeGrpTyp (void)
    extern const char *Txt_The_date_time_of_opening_of_groups_has_changed;
 
    /***** Get the code of type of group *****/
-   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of type of group is missing.");
+   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
+      Lay_WrongGrpTypExit ();
 
    /***** Get from the database the data of this type of group *****/
    Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
@@ -4662,8 +4662,8 @@ void Grp_ChangeMaxStdsGrp (void)
 
    /***** Get parameters of the form *****/
    /* Get group code */
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
-      Lay_ShowErrorAndExit ("Code of group is missing.");
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
+      Lay_WrongGroupExit ();
 
    /* Get the new maximum number of students of the group */
    NewMaxStds = (unsigned)
@@ -4757,8 +4757,8 @@ void Grp_RenameGroupType (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the group type */
-   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of type of group is missing.");
+   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
+      Lay_WrongGrpTypExit ();
 
    /* Get the new name for the group type */
    Par_GetParToText ("GrpTypName",NewNameGrpTyp,Grp_MAX_BYTES_GROUP_TYPE_NAME);
@@ -4836,8 +4836,8 @@ void Grp_RenameGroup (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the group */
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of group is missing.");
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
+      Lay_WrongGroupExit ();
 
    /* Get the new name for the group */
    Par_GetParToText ("GrpName",NewNameGrp,Grp_MAX_BYTES_GROUP_NAME);

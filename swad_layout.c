@@ -1407,6 +1407,11 @@ void Lay_WrongCenterExit (void)
    Lay_ShowErrorAndExit ("Wrong center.");
   }
 
+void Lay_WrongDegTypExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong degree type.");
+  }
+
 void Lay_WrongDegreeExit (void)
   {
    Lay_ShowErrorAndExit ("Wrong degree.");
@@ -1427,12 +1432,53 @@ void Lay_WrongOrderExit (void)
   }
 
 /*****************************************************************************/
+/********* Write error message and exit when wrong group type/group **********/
+/*****************************************************************************/
+
+void Lay_WrongGrpTypExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong group type.");
+  }
+
+void Lay_WrongGroupExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong group.");
+  }
+
+/*****************************************************************************/
 /************* Write error message and exit when wrong order *****************/
 /*****************************************************************************/
 
 void Lay_WrongTypeOfViewExit (void)
   {
    Lay_ShowErrorAndExit ("Wrong type of view.");
+  }
+
+/*****************************************************************************/
+/************* Write error message and exit when wrong banner ****************/
+/*****************************************************************************/
+
+void Lay_WrongBannerExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong banner.");
+  }
+
+/*****************************************************************************/
+/************ Write error message and exit when wrong building ***************/
+/*****************************************************************************/
+
+void Lay_WrongBuildingExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong building.");
+  }
+
+/*****************************************************************************/
+/*********** Write error message and exit when wrong assignment **************/
+/*****************************************************************************/
+
+void Lay_WrongAssignmentExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong assignment.");
   }
 
 /*****************************************************************************/
@@ -1480,6 +1526,25 @@ void Lay_WrongQuestionExit (void)
    Lay_ShowErrorAndExit ("Wrong question.");
   }
 
+void Lay_WrongQuestionIndexExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong question index.");
+  }
+
+/*****************************************************************************/
+/************** Write error message and exit when wrong answer ***************/
+/*****************************************************************************/
+
+void Lay_WrongAnswerExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong answer.");
+  }
+
+void Lay_WrongAnswerIndexExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong answer index.");
+  }
+
 /*****************************************************************************/
 /*********** Write error message and exit when wrong exam session ************/
 /*****************************************************************************/
@@ -1501,6 +1566,15 @@ void Lay_WrongGameExit (void)
 void Lay_WrongMatchExit (void)
   {
    Lay_ShowErrorAndExit ("Wrong match.");
+  }
+
+/*****************************************************************************/
+/************** Write error message and exit when wrong survey ***************/
+/*****************************************************************************/
+
+void Lay_WrongSurveyExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong survey.");
   }
 
 /*****************************************************************************/

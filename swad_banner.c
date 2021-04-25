@@ -324,8 +324,8 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
 	 row = mysql_fetch_row (*mysql_res);
 
 	 /* Get banner code (row[0]) */
-	 if ((Ban->BanCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of banner.");
+	 if ((Ban->BanCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	    Lay_WrongBannerExit ();
 
 	 /* Get if banner is hidden (row[1]) */
 	 Ban->Hidden = (row[1][0] == 'Y');
@@ -572,8 +572,8 @@ void Ban_RemoveBanner (void)
    Ban_ResetBanner (&Ban);
 
    /***** Get banner code *****/
-   if ((Ban.BanCod = Ban_GetParamBanCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of banner is missing.");
+   if ((Ban.BanCod = Ban_GetParamBanCod ()) <= 0)
+      Lay_WrongBannerExit ();
 
    /***** Get data of the banner from database *****/
    Ban_GetDataOfBannerByCod (&Ban);
@@ -636,8 +636,8 @@ void Ban_HideBanner (void)
 static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide)
   {
    /***** Get banner code *****/
-   if ((Ban->BanCod = Ban_GetParamBanCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of banner is missing.");
+   if ((Ban->BanCod = Ban_GetParamBanCod ()) <= 0)
+      Lay_WrongBannerExit ();
 
    /***** Get data of the banner from database *****/
    Ban_GetDataOfBannerByCod (Ban);
@@ -723,8 +723,8 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
-   if ((Ban->BanCod = Ban_GetParamBanCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of banner is missing.");
+   if ((Ban->BanCod = Ban_GetParamBanCod ()) <= 0)
+      Lay_WrongBannerExit ();
 
    /* Get the new name for the banner */
    Par_GetParToText (ParamName,NewBanName,MaxBytes);
@@ -815,8 +815,8 @@ void Ban_ChangeBannerImg (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
-   if ((Ban.BanCod = Ban_GetParamBanCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of banner is missing.");
+   if ((Ban.BanCod = Ban_GetParamBanCod ()) <= 0)
+      Lay_WrongBannerExit ();
 
    /* Get the new WWW for the banner */
    Par_GetParToText ("Img",NewImg,Ban_MAX_BYTES_IMAGE);
@@ -866,8 +866,8 @@ void Ban_ChangeBannerWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
-   if ((Ban.BanCod = Ban_GetParamBanCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of banner is missing.");
+   if ((Ban.BanCod = Ban_GetParamBanCod ()) <= 0)
+      Lay_WrongBannerExit ();
 
    /* Get the new WWW for the banner */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -1155,8 +1155,8 @@ void Ban_ClickOnBanner (void)
    struct Ban_Banner Ban;
 
    /***** Get banner code *****/
-   if ((Ban.BanCod = Ban_GetParamBanCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of banner is missing.");
+   if ((Ban.BanCod = Ban_GetParamBanCod ()) <= 0)
+      Lay_WrongBannerExit ();
 
    /***** Get data of the banner from database *****/
    Ban_GetDataOfBannerByCod (&Ban);

@@ -718,8 +718,8 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
          row = mysql_fetch_row (mysql_res);
 
          /* Get degree type code (row[0]) */
-         if ((Gbl.DegTypes.Lst[NumTyp].DegTypCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of type of degree.");
+         if ((Gbl.DegTypes.Lst[NumTyp].DegTypCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+            Lay_WrongDegTypExit ();
 
          /* Get degree type name (row[1]) */
          Str_Copy (Gbl.DegTypes.Lst[NumTyp].DegTypName,row[1],
@@ -804,7 +804,7 @@ void DT_RemoveDegreeType (void)
 
    /***** Get data of the degree type from database *****/
    if (!DT_GetDataOfDegreeTypeByCod (DT_EditingDegTyp))
-      Lay_ShowErrorAndExit ("Code of type of degree not found.");
+      Lay_WrongDegTypExit ();
 
    /***** Check if this degree type has degrees *****/
    if (DT_EditingDegTyp->NumDegs)	// Degree type has degrees => don't remove
@@ -842,7 +842,7 @@ long DT_GetAndCheckParamOtherDegTypCod (long MinCodAllowed)
 
    /***** Get and check parameter with code of degree type *****/
    if ((DegTypCod = Par_GetParToLong ("OthDegTypCod")) < MinCodAllowed)
-      Lay_ShowErrorAndExit ("Code of degree type is missing or invalid.");
+      Lay_WrongDegTypExit ();
 
    return DegTypCod;
   }
@@ -960,7 +960,7 @@ void DT_RenameDegreeType (void)
 
    /***** Get from the database the old name of the degree type *****/
    if (!DT_GetDataOfDegreeTypeByCod (DT_EditingDegTyp))
-      Lay_ShowErrorAndExit ("Code of type of degree not found.");
+      Lay_WrongDegTypExit ();
 
    /***** Check if new name is empty *****/
    if (NewNameDegTyp[0])
@@ -1045,7 +1045,7 @@ static void DT_EditingDegreeTypeConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (DT_EditingDegTyp != NULL)
-      Lay_ShowErrorAndExit ("Error initializing degree type.");
+      Lay_WrongDegTypExit ();
 
    /***** Allocate memory for degree type *****/
    if ((DT_EditingDegTyp = malloc (sizeof (*DT_EditingDegTyp))) == NULL)
