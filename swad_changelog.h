@@ -607,6 +607,7 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
+	Version 20.67.8:  Apr 25, 2021  Fixed bug in groups. (309674 lines)
 	Version 20.67.7:  Apr 25, 2021  Fixed bug in search of files. (309673 lines)
 	Version 20.67.6:  Apr 25, 2021  Fixed bug in surveys. (309672 lines)
 	Version 20.67.5:  Apr 25, 2021  Fixed bug in search of courses. (309671 lines)

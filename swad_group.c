@@ -978,7 +978,7 @@ static void Grp_LockTables (void)
   {
    DB_Query ("can not lock tables to change user's groups",
 	     "LOCK TABLES "
-	          "crs_types WRITE,"
+	          "grp_types WRITE,"
 	          "grp_groups WRITE,"
 	          "grp_users WRITE,"
 	          "crs_users READ,"
