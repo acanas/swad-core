@@ -1307,7 +1307,7 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
       Svy->Status.Open = (row[8][0] == '1');
 
       /* Get the title of the survey (row[9]) */
-      Str_Copy (Svy->Title,row[9],strlen (Svy->Title) - 1);
+      Str_Copy (Svy->Title,row[9],sizeof (Svy->Title) - 1);
 
       /* Get number of questions and number of users who have already answer this survey */
       Svy->NumQsts = Svy_GetNumQstsSvy (Svy->SvyCod);

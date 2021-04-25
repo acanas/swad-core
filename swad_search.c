@@ -644,7 +644,7 @@ static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
 		           "%s"
 		         " ORDER BY crs_courses.FullName,"
 				   "ins_instits.FullName,"
-				   "degrees.FullName,"
+				   "deg_degrees.FullName,"
 				   "crs_courses.Year",
 		         SearchQuery,RangeQuery);
 	 Crs_ListCrssFound (&mysql_res,NumCrss);
