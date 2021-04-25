@@ -230,7 +230,7 @@ static long Tag_GetParamTagCode (void)
 
    /***** Get tag code *****/
    if ((TagCod = Par_GetParToLong ("TagCod")) <= 0)
-      Lay_ShowErrorAndExit ("Code of tag is missing.");
+      Lay_WrongTagExit ();
 
    return TagCod;
   }
@@ -285,8 +285,8 @@ void Tag_RenameTag (void)
 		   - If the new tag did not exist for a question ==>
 		     change old tag to new tag in tst_question_tags *****/
 	    /* Get tag code of the old tag */
-	    if ((OldTagCod = Tag_GetTagCodFromTagTxt (OldTagTxt)) < 0)
-	       Lay_ShowErrorAndExit ("Tag does not exists.");
+	    if ((OldTagCod = Tag_GetTagCodFromTagTxt (OldTagTxt)) <= 0)
+	       Lay_WrongTagExit ();
 
 	    /* Create a temporary table with all the question codes
 	       that had the new tag as one of their tags */
@@ -577,8 +577,8 @@ void Tag_ShowFormEditTags (void)
 	 row[1] TagTxt
 	 row[2] TagHidden
 	 */
-         if ((TagCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of tag.");
+         if ((TagCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+            Lay_WrongTagExit ();
 
          HTM_TR_Begin (NULL);
 

@@ -320,8 +320,8 @@ void Lnk_GetListLinks (void)
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Get link code (row[0]) */
-	    if ((Lnk->LnkCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	       Lay_ShowErrorAndExit ("Wrong code of institutional link.");
+	    if ((Lnk->LnkCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	       Lay_WrongLinkExit ();
 
             /* Get the short name (row[0]), the full name (row[1])
                and de URL (row[2]) of the link */
@@ -493,8 +493,8 @@ void Lnk_RemoveLink (void)
    Lnk_EditingLinkConstructor ();
 
    /***** Get link code *****/
-   if ((Lnk_EditingLnk->LnkCod = Lnk_GetParamLnkCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of institutional link is missing.");
+   if ((Lnk_EditingLnk->LnkCod = Lnk_GetParamLnkCod ()) <= 0)
+      Lay_WrongLinkExit ();
 
    /***** Get data of the link from database *****/
    Lnk_GetDataOfLinkByCod (Lnk_EditingLnk);
@@ -570,8 +570,8 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the code of the link */
-   if ((Lnk_EditingLnk->LnkCod = Lnk_GetParamLnkCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of institutional link is missing.");
+   if ((Lnk_EditingLnk->LnkCod = Lnk_GetParamLnkCod ()) <= 0)
+      Lay_WrongLinkExit ();
 
    /* Get the new name for the link */
    Par_GetParToText (ParamName,NewLnkName,MaxBytes);
@@ -659,8 +659,8 @@ void Lnk_ChangeLinkWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the link */
-   if ((Lnk_EditingLnk->LnkCod = Lnk_GetParamLnkCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of institutional link is missing.");
+   if ((Lnk_EditingLnk->LnkCod = Lnk_GetParamLnkCod ()) <= 0)
+      Lay_WrongLinkExit ();
 
    /* Get the new WWW for the link */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -864,7 +864,7 @@ static void Lnk_EditingLinkConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Lnk_EditingLnk != NULL)
-      Lay_ShowErrorAndExit ("Error initializing link.");
+      Lay_WrongLinkExit ();
 
    /***** Allocate memory for link *****/
    if ((Lnk_EditingLnk = malloc (sizeof (*Lnk_EditingLnk))) == NULL)

@@ -760,7 +760,7 @@ static void Ctr_GetDataOfCenterFromRow (struct Ctr_Center *Ctr,MYSQL_ROW row)
 
    /***** Get center status (row[3]) *****/
    if (sscanf (row[3],"%u",&(Ctr->Status)) != 1)
-      Lay_ShowErrorAndExit ("Wrong center status.");
+      Lay_WrongStatusExit ();
 
    /***** Get requester user's code (row[4]) *****/
    Ctr->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
@@ -1518,7 +1518,7 @@ void Ctr_ChangeCtrStatus (void)
 				      (unsigned long) Ctr_MAX_STATUS,
 				      (unsigned long) Ctr_WRONG_STATUS);
    if (Status == Ctr_WRONG_STATUS)
-      Lay_ShowErrorAndExit ("Wrong status.");
+      Lay_WrongStatusExit ();
    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Status);
    Status = Ctr_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 

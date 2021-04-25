@@ -455,7 +455,7 @@ void Ntf_ShowMyNotifications (void)
 
          /* Get status (row[8]) */
          if (sscanf (row[8],"%u",&Status) != 1)
-            Lay_ShowErrorAndExit ("Wrong notification status.");
+            Lay_WrongStatusExit ();
          StatusTxt = Ntf_GetStatusTxtFromStatusBits (Status);
 
          if (Status & Ntf_STATUS_BIT_REMOVED)	// The source of the notification was removed

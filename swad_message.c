@@ -257,7 +257,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
    if ((Messages->Reply.IsReply = Par_GetParToBool ("IsReply")))
       /* Get original message code */
       if ((Messages->Reply.OriginalMsgCod = Msg_GetParamMsgCod ()) <= 0)
-         Lay_ShowErrorAndExit ("Wrong code of message.");
+         Lay_WrongMessageExit ();
 
    /***** Get user's code of possible preselected recipient *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())	// There is a preselected recipient
@@ -620,7 +620,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 			      " FROM msg_content"
 			     " WHERE MsgCod=%ld",
 			     MsgCod) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting message.");
+	    Lay_WrongMessageExit ();
 
 	 row = mysql_fetch_row (mysql_res);
 
@@ -770,7 +770,7 @@ void Msg_RecMsgFromUsr (void)
    if ((IsReply = Par_GetParToBool ("IsReply")))
       /* Get original message code */
       if ((OriginalMsgCod = Msg_GetParamMsgCod ()) <= 0)
-         Lay_ShowErrorAndExit ("Wrong code of message.");
+         Lay_WrongMessageExit ();
 
    /* Get user's code of possible preselected recipient */
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -1197,7 +1197,7 @@ void Msg_DelSntMsg (void)
 
    /***** Get the code of the message to delete *****/
    if ((MsgCod = Msg_GetParamMsgCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of message.");
+      Lay_WrongMessageExit ();
 
    /***** Delete the message *****/
    /* Delete the sent message */
@@ -1219,7 +1219,7 @@ void Msg_DelRecMsg (void)
 
    /***** Get the code of the message to delete *****/
    if ((MsgCod = Msg_GetParamMsgCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of message.");
+      Lay_WrongMessageExit ();
 
    /***** Delete the message *****/
    /* Delete the received message */
@@ -1243,7 +1243,7 @@ void Msg_ExpSntMsg (void)
 
    /***** Get the code of the message to expand *****/
    if ((Messages.ExpandedMsgCod = Msg_GetParamMsgCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of message.");
+      Lay_WrongMessageExit ();
 
    /***** Expand the message *****/
    Msg_ExpandSentMsg (Messages.ExpandedMsgCod);
@@ -1265,7 +1265,7 @@ void Msg_ExpRecMsg (void)
 
    /***** Get the code of the message to expand *****/
    if ((Messages.ExpandedMsgCod = Msg_GetParamMsgCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of message.");
+      Lay_WrongMessageExit ();
 
    /***** Expand the message *****/
    Msg_ExpandReceivedMsg (Messages.ExpandedMsgCod);
@@ -1289,7 +1289,7 @@ void Msg_ConSntMsg (void)
 
    /***** Get the code of the message to contract *****/
    if ((MsgCod = Msg_GetParamMsgCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of message.");
+      Lay_WrongMessageExit ();
 
    /***** Contract the message *****/
    Msg_ContractSentMsg (MsgCod);
@@ -1308,7 +1308,7 @@ void Msg_ConRecMsg (void)
 
    /***** Get the code of the message to contract *****/
    if ((MsgCod = Msg_GetParamMsgCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of message.");
+      Lay_WrongMessageExit ();
 
    /***** Contract the message *****/
    Msg_ContractReceivedMsg (MsgCod);
@@ -1480,9 +1480,8 @@ static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Mess
 	NumMsg < NumMsgs;
 	NumMsg++)
      {
-      MsgCod = DB_GetNextCode (mysql_res);
-      if (MsgCod <= 0)
-         Lay_ShowErrorAndExit ("Wrong code of message.");
+      if ((MsgCod = DB_GetNextCode (mysql_res)) <= 0)
+         Lay_WrongMessageExit ();
 
       switch (Messages->TypeOfMessages)
         {
@@ -2011,7 +2010,7 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
            {
             row = mysql_fetch_row (mysql_res);
             if (sscanf (row[0],"%ld",&MsgCod) != 1)
-               Lay_ShowErrorAndExit ("Wrong code of message when searching for a page.");
+               Lay_WrongMessageExit ();
 
             if (MsgCod == Messages->ExpandedMsgCod)	// Expanded message found
               {
@@ -2046,7 +2045,7 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
          row = mysql_fetch_row (mysql_res);
 
          if (sscanf (row[0],"%ld",&MsgCod) != 1)
-            Lay_ShowErrorAndExit ("Wrong code of message when listing the messages in a page.");
+            Lay_WrongMessageExit ();
          NumMsg = NumRows - NumRow + 1;
          Msg_ShowASentOrReceivedMessage (Messages,NumMsg,MsgCod);
         }
@@ -3106,7 +3105,7 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
 
    /* Result should have a unique row */
    if (NumRows != 1)
-      Lay_ShowErrorAndExit ("Error when getting data of a message.");
+      Lay_WrongMessageExit ();
 
    /* Get number of rows */
    row = mysql_fetch_row (mysql_res);
@@ -3159,7 +3158,7 @@ static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT 
 			      " FROM msg_content"
 			     " WHERE MsgCod=%ld",
 			     MsgCod) != 1)
-      Lay_ShowErrorAndExit ("Error when getting content of a message.");
+      Lay_WrongMessageExit ();
 
    /***** Get number of rows *****/
    row = mysql_fetch_row (mysql_res);
@@ -4054,7 +4053,7 @@ void Msg_BanSenderWhenShowingMsgs (void)
    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                  Usr_DONT_GET_PREFS,
                                                  Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-      Lay_ShowErrorAndExit ("Sender does not exist.");
+      Lay_WrongUserExit ();
 
    /***** Insert pair (sender's code - my code) in table of banned senders if not inserted *****/
    DB_QueryREPLACE ("can not ban sender",
@@ -4114,7 +4113,7 @@ static void Msg_UnbanSender (void)
    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                  Usr_DONT_GET_PREFS,
                                                  Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-      Lay_ShowErrorAndExit ("Sender does not exist.");
+      Lay_WrongUserExit ();
 
    /***** Remove pair (sender's code - my code) from table of banned senders *****/
    DB_QueryDELETE ("can not ban sender",

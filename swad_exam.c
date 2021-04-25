@@ -824,7 +824,7 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
 	    Lay_NotEnoughMemoryExit ();
 	 break;
       default:
-	 Rol_WrongRoleExit ();
+	 Lay_WrongRoleExit ();
 	 break;
      }
 

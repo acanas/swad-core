@@ -230,8 +230,8 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
          row = mysql_fetch_row (mysql_res);
 
          /* Get the code of field (row[0]) */
-         if ((Gbl.Crs.Records.LstFields.Lst[NumRow].FieldCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of field.");
+         if ((Gbl.Crs.Records.LstFields.Lst[NumRow].FieldCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+            Lay_WrongRecordFieldExit ();
 
          /* Name of the field (row[1]) */
          Str_Copy (Gbl.Crs.Records.LstFields.Lst[NumRow].Name,row[1],
@@ -242,7 +242,7 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
 
          /* Visible or editable by students? (row[3]) */
          if (sscanf (row[3],"%u",&Vis) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting field of record in current course.");
+	    Lay_WrongRecordFieldExit ();
          if (Vis < Rec_NUM_TYPES_VISIBILITY)
             Gbl.Crs.Records.LstFields.Lst[NumRow].Visibility = (Rec_VisibilityRecordFields_t) Vis;
          else
@@ -567,8 +567,8 @@ void Rec_ReqRemField (void)
    unsigned NumRecords;
 
    /***** Get the code of field *****/
-   if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) == -1)
-      Lay_ShowErrorAndExit ("Code of field is missing.");
+   if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) <= 0)
+      Lay_WrongRecordFieldExit ();
 
    /***** Check if exists any record with that field filled *****/
    if ((NumRecords = Rec_CountNumRecordsInCurrCrsWithField (Gbl.Crs.Records.Field.FieldCod)))	// There are records with that field filled
@@ -688,13 +688,13 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
    /***** Get a field of a record in a course from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get a field of a record in a course",
 		       "SELECT FieldName,"	// row[0]
-			      "NumLines,"		// row[1]
+			      "NumLines,"	// row[1]
 			      "Visibility"	// row[2]
 			" FROM crs_record_fields"
 		       " WHERE CrsCod=%ld"
 			 " AND FieldCod=%ld",
 		       Gbl.Hierarchy.Crs.CrsCod,FieldCod) != 1)
-      Lay_ShowErrorAndExit ("Error when getting a field of a record in a course.");
+      Lay_WrongRecordFieldExit ();
 
    /***** Get the field *****/
    row = mysql_fetch_row (mysql_res);
@@ -707,7 +707,7 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
 
    /* Visible or editable by students? (row[2]) */
    if (sscanf (row[2],"%u",&Vis) != 1)
-      Lay_ShowErrorAndExit ("Error when getting a field of a record in a course.");
+      Lay_WrongRecordFieldExit ();
    if (Vis < Rec_NUM_TYPES_VISIBILITY)
       *Visibility = (Rec_VisibilityRecordFields_t) Vis;
    else
@@ -724,8 +724,8 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
 void Rec_RemoveField (void)
   {
    /***** Get the code of the field *****/
-   if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) == -1)
-      Lay_ShowErrorAndExit ("Code of field is missing.");
+   if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) <= 0)
+      Lay_WrongRecordFieldExit ();
 
    /***** Borrarlo from the database *****/
    Rec_RemoveFieldFromDB ();
@@ -744,8 +744,8 @@ void Rec_RenameField (void)
 
    /***** Get parameters of the form *****/
    /* Get the code of the field */
-   if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) == -1)
-      Lay_ShowErrorAndExit ("Code of field is missing.");
+   if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) <= 0)
+      Lay_WrongRecordFieldExit ();
 
    /* Get the new group name */
    Par_GetParToText ("FieldName",NewFieldName,Rec_MAX_BYTES_NAME_FIELD);
@@ -807,8 +807,8 @@ void Rec_ChangeLinesField (void)
 
    /***** Get parameters of the form *****/
    /* Get the code of field */
-   if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) == -1)
-      Lay_ShowErrorAndExit ("Code of field is missing.");
+   if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) <= 0)
+      Lay_WrongRecordFieldExit ();
 
    /* Get the new number of lines */
    NewNumLines = (unsigned)
@@ -857,8 +857,8 @@ void Rec_ChangeVisibilityField (void)
 
    /***** Get parameters of the form *****/
    /* Get the code of field */
-   if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) == -1)
-      Lay_ShowErrorAndExit ("Code of field is missing.");
+   if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) <= 0)
+      Lay_WrongRecordFieldExit ();
 
    /* Get the new visibility of the field */
    NewVisibility = (Rec_VisibilityRecordFields_t)
@@ -1727,7 +1727,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	   }
 	 break;
       default:
-	 Rol_WrongRoleExit ();
+	 Lay_WrongRoleExit ();
      }
 
    /***** Begin box and table *****/
@@ -3697,7 +3697,7 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 	 break;
      }
    if (!RoleOK)
-      Rol_WrongRoleExit ();
+      Lay_WrongRoleExit ();
    return Role;
   }
 

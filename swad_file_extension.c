@@ -48,7 +48,9 @@ const char *Ext_FileExtensionsAllowed[] =
    "bz2"  ,
    "c"    ,
    "cc"   ,
+   "cct"  ,	// LogicWorks
    "cdr"  ,
+   "clf"  ,	// LogicWorks
    "cpp"  ,
    "css"  ,
    "csv"  ,
@@ -135,6 +137,7 @@ const char *Ext_FileExtensionsAllowed[] =
    "tex"  ,
    "tgz"  ,
    "tif"  ,
+   "tim"  ,	// LogicWorks
    "txt"  ,
    "voc"  ,
    "vp"   ,	// Justinmind, http://www.justinmind.com/

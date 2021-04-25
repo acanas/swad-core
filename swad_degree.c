@@ -1414,7 +1414,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row)
 
    /* Get course status (row[3]) */
    if (sscanf (row[3],"%u",&(Deg->Status)) != 1)
-      Lay_ShowErrorAndExit ("Wrong degree status.");
+      Lay_WrongStatusExit ();
 
    /* Get requester user's code (row[4]) */
    Deg->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
@@ -1807,7 +1807,7 @@ void Deg_ChangeDegStatus (void)
 	                              (unsigned long) Deg_MAX_STATUS,
                                       (unsigned long) Deg_WRONG_STATUS);
    if (Status == Deg_WRONG_STATUS)
-      Lay_ShowErrorAndExit ("Wrong status.");
+      Lay_WrongStatusExit ();
    StatusTxt = Deg_GetStatusTxtFromStatusBits (Status);
    Status = Deg_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 

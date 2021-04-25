@@ -380,8 +380,8 @@ void Roo_ChangeMAC (void)
 
    /***** Get parameters from form *****/
    /* Get room code */
-   if ((Roo_EditingRoom->RooCod = Par_GetParToLong ("Cod")) == -1L)
-      Lay_ShowErrorAndExit ("Code of room is missing.");
+   if ((Roo_EditingRoom->RooCod = Par_GetParToLong ("Cod")) <= 0)
+      Lay_WrongRoomExit ();
 
    /* Get the old MAC address of the room */
    OldMACnum = MAC_GetMACnumFromForm ("MAC");
@@ -619,8 +619,8 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
          row = mysql_fetch_row (mysql_res);
 
          /* Get room code (row[0]) */
-         if ((Room->RooCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of room.");
+         if ((Room->RooCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+            Lay_WrongRoomExit ();
 
 	 switch (WhichData)
 	   {
@@ -1005,8 +1005,8 @@ void Roo_RemoveRoom (void)
    Roo_EditingRoomConstructor ();
 
    /***** Get room code *****/
-   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of room is missing.");
+   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) <= 0)
+      Lay_WrongRoomExit ();
 
    /***** Get data of the room from database *****/
    Roo_GetDataOfRoomByCod (Roo_EditingRoom);
@@ -1058,8 +1058,8 @@ void Roo_ChangeBuilding (void)
 
    /***** Get parameters from form *****/
    /* Get room code */
-   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of room is missing.");
+   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) <= 0)
+      Lay_WrongRoomExit ();
 
    /* Get room building */
    NewBldCod = Bld_GetParamBldCod ();
@@ -1111,8 +1111,8 @@ void Roo_ChangeFloor (void)
 
    /***** Get parameters from form *****/
    /* Get room code */
-   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of room is missing.");
+   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) <= 0)
+      Lay_WrongRoomExit ();
 
    /* Get room floor */
    NewFloor = Roo_GetParamFloor ();
@@ -1163,8 +1163,8 @@ void Roo_ChangeType (void)
 
    /***** Get parameters from form *****/
    /* Get room code */
-   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of room is missing.");
+   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) <= 0)
+      Lay_WrongRoomExit ();
 
    /* Get room type */
    NewType = Roo_GetParamType ();
@@ -1260,8 +1260,8 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get room code */
-   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of room is missing.");
+   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) <= 0)
+      Lay_WrongRoomExit ();
 
    /* Get the new name for the room */
    Par_GetParToText (ParamName,NewClaName,MaxBytes);
@@ -1354,8 +1354,8 @@ void Roo_ChangeCapacity (void)
 
    /***** Get parameters from form *****/
    /* Get room code */
-   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of room is missing.");
+   if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) <= 0)
+      Lay_WrongRoomExit ();
 
    /* Get the seating capacity of the room */
    NewCapacity = (unsigned)
@@ -1656,7 +1656,7 @@ static void Roo_EditingRoomConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Roo_EditingRoom != NULL)
-      Lay_ShowErrorAndExit ("Error initializing room.");
+      Lay_WrongRoomExit ();
 
    /***** Allocate memory for room *****/
    if ((Roo_EditingRoom = malloc (sizeof (*Roo_EditingRoom))) == NULL)

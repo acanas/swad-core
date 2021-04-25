@@ -746,7 +746,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	   }
 	 break;
       default:
-	 Rol_WrongRoleExit ();
+	 Lay_WrongRoleExit ();
 	 break;
      }
 
@@ -910,7 +910,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	 Frm_BeginFormUnique (ActSeeRecOneTch);
 	 break;
       default:
-	 Rol_WrongRoleExit ();
+	 Lay_WrongRoleExit ();
 	 break;
      }
    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
@@ -1116,7 +1116,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	   }
 	 break;
       default:
-	 Rol_WrongRoleExit ();
+	 Lay_WrongRoleExit ();
 	 break;
      }
    if (NumUsrs)
@@ -1176,7 +1176,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 		     Frm_BeginForm (ActSeeRecOneTch);
 		     break;
 		  default:
-		     Rol_WrongRoleExit ();
+		     Lay_WrongRoleExit ();
 		 }
 	       Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
 	      }

@@ -1800,7 +1800,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong file browser.");
+	       Lay_WrongFileBrowserExit ();
 	       break;
 	   }
          break;
@@ -1978,7 +1978,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong file browser.");
+	       Lay_WrongFileBrowserExit ();
 	       break;
 	   }
          break;
@@ -2144,7 +2144,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong file browser.");
+	       Lay_WrongFileBrowserExit ();
 	       break;
 	   }
          break;
@@ -2298,7 +2298,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong file browser.");
+	       Lay_WrongFileBrowserExit ();
 	       break;
 	   }
          break;
@@ -2440,7 +2440,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong file browser.");
+	       Lay_WrongFileBrowserExit ();
 	       break;
 	   }
          break;
@@ -2570,7 +2570,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong file browser.");
+	       Lay_WrongFileBrowserExit ();
 	       break;
 	   }
          break;

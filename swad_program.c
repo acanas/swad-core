@@ -1004,8 +1004,8 @@ static void Prg_GetListItems (void)
          row = mysql_fetch_row (mysql_res);
 
          /* Get code of the program item (row[0]) */
-         if ((Prg_Gbl.List.Items[NumItem].ItmCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Error: wrong program item code.");
+         if ((Prg_Gbl.List.Items[NumItem].ItmCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+            Lay_WrongItemExit ();
 
          /* Get index of the program item (row[1]) */
          Prg_Gbl.List.Items[NumItem].Index = Str_ConvertStrToUnsigned (row[1]);
@@ -1201,7 +1201,7 @@ static unsigned Prg_GetNumItemFromItmCod (long ItmCod)
 
    /***** List of items must be filled *****/
    if (!Prg_Gbl.List.IsRead || Prg_Gbl.List.Items == NULL)
-      Lay_ShowErrorAndExit ("Wrong list of items.");
+      Lay_WrongItemsListExit ();
 
    /***** Find item code in list *****/
    for (NumItem = 0;
@@ -1211,7 +1211,7 @@ static unsigned Prg_GetNumItemFromItmCod (long ItmCod)
 	 return NumItem;
 
    /***** Not found *****/
-   Lay_ShowErrorAndExit ("Wrong item code.");
+   Lay_WrongItemExit ();
    return 0;	// Not reached
   }
 
@@ -1233,7 +1233,7 @@ void Prg_ReqRemItem (void)
    Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
    Prg_GetDataOfItemByCod (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
-      Lay_ShowErrorAndExit ("Wrong item code.");
+      Lay_WrongItemExit ();
 
    /***** Show question and button to remove the program item *****/
    Ale_ShowAlertAndButton (ActRemPrgItm,NULL,NULL,
@@ -1269,7 +1269,7 @@ void Prg_RemoveItem (void)
    Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
    Prg_GetDataOfItemByCod (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
-      Lay_ShowErrorAndExit ("Wrong item code.");
+      Lay_WrongItemExit ();
 
    /***** Indexes of items *****/
    Prg_SetItemRangeWithAllChildren (Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod),
@@ -1326,7 +1326,7 @@ static void Prg_HideUnhideItem (char YN)
    Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
    Prg_GetDataOfItemByCod (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
-      Lay_ShowErrorAndExit ("Wrong item code.");
+      Lay_WrongItemExit ();
 
    /***** Hide/unhide program item *****/
    DB_QueryUPDATE ("can not change program item",
@@ -1381,7 +1381,7 @@ static void Prg_MoveUpDownItem (Prg_MoveUpDown_t UpDown)
    Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
    Prg_GetDataOfItemByCod (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
-      Lay_ShowErrorAndExit ("Wrong item code.");
+      Lay_WrongItemExit ();
 
    /***** Move up/down item *****/
    NumItem = Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod);
@@ -1615,7 +1615,7 @@ static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight)
    Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
    Prg_GetDataOfItemByCod (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
-      Lay_ShowErrorAndExit ("Wrong item code.");
+      Lay_WrongItemExit ();
 
    /***** Move up/down item *****/
    NumItem = Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod);
@@ -1663,7 +1663,7 @@ static void Prg_SetItemRangeEmpty (struct ItemRange *ItemRange)
   {
    /***** List of items must be filled *****/
    if (!Prg_Gbl.List.IsRead)
-      Lay_ShowErrorAndExit ("Wrong list of items.");
+      Lay_WrongItemsListExit ();
 
    /***** Range is empty *****/
    if (Prg_Gbl.List.NumItems)
@@ -1678,7 +1678,7 @@ static void Prg_SetItemRangeOnlyItem (unsigned Index,struct ItemRange *ItemRange
   {
    /***** List of items must be filled *****/
    if (!Prg_Gbl.List.IsRead)
-      Lay_ShowErrorAndExit ("Wrong list of items.");
+      Lay_WrongItemsListExit ();
 
    /***** Range includes only this item *****/
    ItemRange->Begin =
@@ -1689,11 +1689,11 @@ static void Prg_SetItemRangeWithAllChildren (unsigned NumItem,struct ItemRange *
   {
    /***** List of items must be filled *****/
    if (!Prg_Gbl.List.IsRead)
-      Lay_ShowErrorAndExit ("Wrong list of items.");
+      Lay_WrongItemsListExit ();
 
    /***** Number of item must be in the correct range *****/
    if (NumItem >= Prg_Gbl.List.NumItems)
-      Lay_ShowErrorAndExit ("Wrong item number.");
+      Lay_WrongItemExit ();
 
    /***** Range includes this item and all its children *****/
    ItemRange->Begin = Prg_Gbl.List.Items[NumItem                   ].Index;
@@ -1712,7 +1712,7 @@ static unsigned Prg_GetLastChild (int NumItem)
    /***** Trivial check: if item is wrong, there are no children *****/
    if (NumItem < 0 ||
        NumItem >= (int) Prg_Gbl.List.NumItems)
-      Lay_ShowErrorAndExit ("Wrong number of item.");
+      Lay_WrongItemExit ();
 
    /***** Get next brother after item *****/
    // 0 <= NumItem < Prg_Gbl.List.NumItems
@@ -2013,7 +2013,7 @@ void Prg_ReceiveFormChgItem (void)
    NewItem.Hierarchy.ItmCod = Prg_GetParamItmCod ();
    Prg_GetDataOfItemByCod (&NewItem);
    if (NewItem.Hierarchy.ItmCod <= 0)
-      Lay_ShowErrorAndExit ("Wrong item code.");
+      Lay_WrongItemExit ();
 
    /***** Get data of the old (current) program item from database *****/
    OldItem.Hierarchy.ItmCod = NewItem.Hierarchy.ItmCod;

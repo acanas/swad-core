@@ -490,7 +490,7 @@ void For_DisablePost (void)
       For_ShowPostsOfAThread (&Forums,Ale_SUCCESS,Txt_FORUM_Post_banned);
      }
    else
-      Lay_ShowErrorAndExit ("The post to be banned no longer exists.");
+      Lay_WrongPostExit ();
   }
 
 /*****************************************************************************/
@@ -1123,7 +1123,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
          row = mysql_fetch_row (mysql_res);
 
          if (sscanf (row[0],"%ld",&Forums->PstCod) != 1)
-            Lay_ShowErrorAndExit ("Wrong code of post.");
+            Lay_WrongPostExit ();
 
          CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 
@@ -1385,7 +1385,7 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
 			      " FROM for_posts"
 			     " WHERE PstCod=%ld",
 			     PstCod) != 1)
-      Lay_ShowErrorAndExit ("Internal error in database when getting data of a post.");
+      Lay_WrongPostExit ();
 
    /***** Get number of rows *****/
    row = mysql_fetch_row (mysql_res);
@@ -3686,13 +3686,12 @@ static void For_GetThreadData (struct For_Thread *Thr)
    /***** Get the code of the last  post in this thread (row[1]) *****/
    Thr->PstCod[Dat_END_TIME ] = Str_ConvertStrCodToLongCod (row[1]);
 
-   /***** Get the code of the first message in this thread (row[0]) *****/
+   /***** Get the code of the first message (row[0])
+          and the last message (row[1]) in this thread *****/
    if (sscanf (row[0],"%ld",&(Thr->PstCod[Dat_START_TIME])) != 1)
-      Lay_ShowErrorAndExit ("Wrong code of post.");
-
-   /***** Get the code of the last message in this thread (row[1]) *****/
+      Lay_WrongPostExit ();
    if (sscanf (row[1],"%ld",&(Thr->PstCod[Dat_END_TIME])) != 1)
-      Lay_ShowErrorAndExit ("Wrong code of post.");
+      Lay_WrongPostExit ();
 
    /***** Get the author of the first post in this thread (row[2]) *****/
    Thr->UsrCod[Dat_START_TIME] = Str_ConvertStrCodToLongCod (row[2]);
@@ -4267,7 +4266,7 @@ void For_RemovePost (void)
    /***** Check if I can remove the post *****/
    /* Check if the message really exists, if it has not been removed */
    if (!For_GetIfForumPstExists (Forums.PstCod))
-      Lay_ShowErrorAndExit ("The post to remove no longer exists.");
+      Lay_WrongPostExit ();
 
    /* Check if I am the author of the message */
    ItsMe = Usr_ItsMe (UsrDat.UsrCod);
@@ -4627,7 +4626,7 @@ static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
 		         Forums->Thread.Current);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong forum.");
+	 Lay_WrongForumExit ();
 	 break;
      }
   }

@@ -890,7 +890,7 @@ void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
 	    Lay_NotEnoughMemoryExit ();
 	 break;
       default:
-	 Rol_WrongRoleExit ();
+	 Lay_WrongRoleExit ();
 	 break;
      }
 
@@ -2885,7 +2885,7 @@ void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore)
   {
    unsigned NumAnswers;
 
-   /***** Get maximum score of a game from database *****/
+   /***** Get number of answers of a game from database *****/
    NumAnswers = (unsigned)
    DB_QueryCOUNT ("can not number of answers of a question",
 		  "SELECT COUNT(tst_answers.AnsInd)"
@@ -2896,7 +2896,7 @@ void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore)
 		  " GROUP BY tst_answers.QstCod",
 		  GamCod);
    if (NumAnswers < 2)
-      Lay_ShowErrorAndExit ("Wrong number of answers.");
+      Lay_WrongAnswerExit ();
 
    /***** Set minimum and maximum scores *****/
    *MinScore = *MaxScore = 0.0;

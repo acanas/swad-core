@@ -1289,7 +1289,7 @@ static void ExaPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question)
    /***** Get correct answer *****/
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%ld",&Question->Answer.Integer) != 1)
-      Lay_ShowErrorAndExit ("Wrong integer answer.");
+      Lay_WrongAnswerExit ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1312,7 +1312,7 @@ static void ExaPrn_GetCorrectFltAnswerFromDB (struct Tst_Question *Question)
 
    /***** Check if number of rows is correct *****/
    if (Question->Answer.NumOptions != 2)
-      Lay_ShowErrorAndExit ("Wrong float range.");
+      Lay_WrongAnswerExit ();
 
    /***** Get float range *****/
    for (NumOpt = 0;

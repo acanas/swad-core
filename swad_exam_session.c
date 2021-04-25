@@ -175,7 +175,7 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 	    Lay_NotEnoughMemoryExit ();
 	 break;
       default:
-	 Rol_WrongRoleExit ();
+	 Lay_WrongRoleExit ();
 	 break;
      }
 
@@ -737,7 +737,7 @@ static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
 	 ExaSes_ListOneOrMoreSessionsResultTch (Exams,Session);
 	 break;
       default:
-	 Rol_WrongRoleExit ();
+	 Lay_WrongRoleExit ();
 	 break;
      }
 

@@ -1145,7 +1145,7 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 	 break;
       default:
 	 SubQueryRole[0] = '\0';
-	 Rol_WrongRoleExit ();
+	 Lay_WrongRoleExit ();
 	 break;
      }
    DB_Query ("can not create temporary table",
@@ -2977,11 +2977,11 @@ void Usr_GetParamOtherUsrCodEncrypted (struct UsrData *UsrDat)
   {
    Par_GetParToText ("OtherUsrCod",UsrDat->EnUsrCod,
                      Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-   if (UsrDat->EnUsrCod[0])        // If parameter exists...
+   if (UsrDat->EnUsrCod[0])	// If parameter exists...
      {
       Usr_GetUsrCodFromEncryptedUsrCod (UsrDat);
-      if (UsrDat->UsrCod < 0)        // Check is user's code is valid
-         Lay_ShowErrorAndExit ("Wrong user's code.");
+      if (UsrDat->UsrCod <= 0)	// Check is user's code is valid
+         Lay_WrongUserExit ();
      }
    else
       UsrDat->UsrCod = -1L;
@@ -5087,7 +5087,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	   }
 	 break;
       default:
-	 Rol_WrongRoleExit ();
+	 Lay_WrongRoleExit ();
 	 break;
      }
 
@@ -5656,7 +5656,7 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
 		    }
         	  break;
                default:
-		  Rol_WrongRoleExit ();
+		  Lay_WrongRoleExit ();
         	  break;
 	      }
 
@@ -6621,7 +6621,7 @@ static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
       free (ParamName);
      }
    else
-      Rol_WrongRoleExit ();
+      Lay_WrongRoleExit ();
    Sex = Usr_GetSexOfUsrsLst (Role);
    HTM_TxtColon (Gbl.Usrs.LstUsrs[Role].NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
                                                        Txt_ROLES_PLURAL_Abc[Role][Sex]);
@@ -6701,7 +6701,7 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
       free (ParamName);
      }
    else
-      Rol_WrongRoleExit ();
+      Lay_WrongRoleExit ();
   }
 
 /*****************************************************************************/
@@ -9712,7 +9712,7 @@ static FigCch_FigureCached_t Usr_GetFigureNumUsrsInCrss (unsigned Roles)
 	   1 << Rol_TCH:	// Any user in courses
 	 return FigCch_NUM_USRS_IN_CRSS;
       default:
-	 Rol_WrongRoleExit ();
+	 Lay_WrongRoleExit ();
 	 return FigCch_UNKNOWN;	// Not reached
      }
   }

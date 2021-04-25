@@ -186,7 +186,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
 
          /* Get notice code */
          if (sscanf (row[0],"%ld",&NotCod) != 1)
-            Lay_ShowErrorAndExit ("Wrong code of notice.");
+            Lay_WrongNoticeExit ();
 
          /* Get UTC date-time of publication */
          CreatTimeUTC = 0L;
@@ -285,12 +285,12 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Crs_Course *Crs)
 	      NumExa < NumExams;
 	      NumExa++)
 	   {
-	    /***** Get data of the exam announcement *****/
+	    /***** Get data of the call for exam *****/
 	    row = mysql_fetch_row (mysql_res);
 
-	    /* Get exam announcement code */
+	    /* Get call for exam code */
 	    if (sscanf (row[0],"%ld",&ExaCod) != 1)
-	       Lay_ShowErrorAndExit ("Wrong code of exam announcement.");
+	       Lay_WrongCallForExamExit ();
 
 	    /* Get UTC date-time of publication */
 	    CallTimeUTC = 0L;

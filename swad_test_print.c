@@ -890,7 +890,7 @@ static void TstPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question)
    /***** Get correct answer *****/
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%ld",&Question->Answer.Integer) != 1)
-      Lay_ShowErrorAndExit ("Wrong integer answer.");
+      Lay_WrongAnswerExit ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -913,7 +913,7 @@ static void TstPrn_GetCorrectFltAnswerFromDB (struct Tst_Question *Question)
 
    /***** Check if number of rows is correct *****/
    if (Question->Answer.NumOptions != 2)
-      Lay_ShowErrorAndExit ("Wrong float range.");
+      Lay_WrongAnswerExit ();
 
    /***** Get float range *****/
    for (NumOpt = 0;
@@ -1257,10 +1257,10 @@ void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES
       Par_GetNextStrUntilComma (&Ptr,StrOneIndex,Cns_MAX_DECIMAL_DIGITS_UINT);
 
       if (sscanf (StrOneIndex,"%u",&(Indexes[NumOpt])) != 1)
-	 Lay_ShowErrorAndExit ("Wrong index of answer.");
+	 Lay_WrongAnswerIndexExit ();
 
       if (Indexes[NumOpt] >= Tst_MAX_OPTIONS_PER_QUESTION)
-	 Lay_ShowErrorAndExit ("Wrong index of answer.");
+	 Lay_WrongAnswerIndexExit ();
      }
 
    /***** Initialize remaining to 0 *****/
@@ -1296,10 +1296,10 @@ void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS
       Par_GetNextStrUntilComma (&Ptr,StrOneAnswer,Cns_MAX_DECIMAL_DIGITS_UINT);
 
       if (sscanf (StrOneAnswer,"%u",&AnsUsr) != 1)
-	 Lay_ShowErrorAndExit ("Bad user's answer.");
+	 Lay_WrongAnswerExit ();
 
       if (AnsUsr >= Tst_MAX_OPTIONS_PER_QUESTION)
-	 Lay_ShowErrorAndExit ("Bad user's answer.");
+	 Lay_WrongAnswerExit ();
 
       UsrAnswers[AnsUsr] = true;
      }
@@ -1454,7 +1454,7 @@ static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
 
    /***** Check if number of rows is correct *****/
    if (Question->Answer.NumOptions != 2)
-      Lay_ShowErrorAndExit ("Wrong float range.");
+      Lay_WrongAnswerExit ();
 
    /***** Header with the title of each column *****/
    HTM_TABLE_BeginPadding (2);
@@ -2104,7 +2104,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 
          /* Get print code (row[0]) */
 	 if ((Print.PrnCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of test exam.");
+	    Lay_WrongTestExit ();
 
 	 /* Get print data */
          TstPrn_GetPrintDataByPrnCod (&Print);
@@ -2398,8 +2398,8 @@ void TstPrn_ShowOnePrint (void)
 
    /***** Get the code of the test *****/
    TstPrn_ResetPrint (&Print);
-   if ((Print.PrnCod = TstPrn_GetParamPrnCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of test is missing.");
+   if ((Print.PrnCod = TstPrn_GetParamPrnCod ()) <= 0)
+      Lay_WrongTestExit ();
 
    /***** Get test exam data *****/
    TstPrn_GetPrintDataByPrnCod (&Print);

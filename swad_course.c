@@ -1846,7 +1846,7 @@ static void Crs_GetDataOfCourseFromRow (struct Crs_Course *Crs,MYSQL_ROW row)
 
    /***** Get course status (row[4]) *****/
    if (sscanf (row[4],"%u",&(Crs->Status)) != 1)
-      Lay_ShowErrorAndExit ("Wrong course status.");
+      Lay_WrongStatusExit ();
 
    /***** Get requester user'code (row[5]) *****/
    Crs->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[5]);
@@ -2397,7 +2397,7 @@ void Crs_ChangeCrsStatus (void)
 	                              (unsigned long) Crs_MAX_STATUS,
                                       (unsigned long) Crs_WRONG_STATUS);
    if (Status == Crs_WRONG_STATUS)
-      Lay_ShowErrorAndExit ("Wrong status.");
+      Lay_WrongStatusExit ();
    StatusTxt = Crs_GetStatusTxtFromStatusBits (Status);
    Status = Crs_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 

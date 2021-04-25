@@ -842,7 +842,7 @@ static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row)
 
    /***** Get institution status (row[2]) *****/
    if (sscanf (row[2],"%u",&(Ins->Status)) != 1)
-      Lay_ShowErrorAndExit ("Wrong institution status.");
+      Lay_WrongStatusExit ();
 
    /***** Get requester user's code (row[3]) *****/
    Ins->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -1618,7 +1618,7 @@ void Ins_ChangeInsStatus (void)
 	                              (unsigned long) Ins_MAX_STATUS,
                                       (unsigned long) Ins_WRONG_STATUS);
    if (Status == Ins_WRONG_STATUS)
-      Lay_ShowErrorAndExit ("Wrong status.");
+      Lay_WrongStatusExit ();
    StatusTxt = Ins_GetStatusTxtFromStatusBits (Status);
    Status = Ins_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 

@@ -549,7 +549,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
 	    Frm_BeginForm (ActFrmCreAsgCrs);
 	    break;
 	 default:
-            Rol_WrongRoleExit ();
+            Lay_WrongRoleExit ();
 	    break;
         }
       Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
@@ -1233,7 +1233,7 @@ void Asg_RequestCreatOrEditAsg (void)
    Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
-   ItsANewAssignment = ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L);
+   ItsANewAssignment = ((Asg.AsgCod = Asg_GetParamAsgCod ()) <= 0);
 
    /***** Get from the database the data of the assignment *****/
    if (ItsANewAssignment)

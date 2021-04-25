@@ -1894,7 +1894,7 @@ void Svy_RequestCreatOrEditSvy (void)
    Surveys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get the code of the survey *****/
-   ItsANewSurvey = ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L);
+   ItsANewSurvey = ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0);
 
    /***** Get from the database the data of the survey *****/
    if (ItsANewSurvey)
@@ -2205,7 +2205,7 @@ void Svy_ReceiveFormSurvey (void)
    Surveys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get the code of the survey *****/
-   ItsANewSurvey = ((NewSvy.SvyCod = Svy_GetParamSvyCod ()) == -1L);
+   ItsANewSurvey = ((NewSvy.SvyCod = Svy_GetParamSvyCod ()) <= 0);
 
    if (ItsANewSurvey)
       NewSvy.Scope = Hie_Lvl_UNK;
@@ -2767,7 +2767,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
             row = mysql_fetch_row (mysql_res);
 
             if (NumAnswers > Svy_MAX_ANSWERS_PER_QUESTION)
-               Lay_ShowErrorAndExit ("Wrong answer.");
+               Lay_WrongAnswerExit ();
             if (!Svy_AllocateTextChoiceAnswer (SvyQst,NumAns))
 	       /* Abort on error */
 	       Ale_ShowAlertsAndExit ();

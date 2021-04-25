@@ -325,8 +325,8 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
          row = mysql_fetch_row (mysql_res);
 
          /* Get mail code (row[0]) */
-         if ((Mai->MaiCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of mail domain.");
+         if ((Mai->MaiCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+            Lay_WrongMailDomainExit ();
 
          /* Get the mail domain (row[1]) and the mail domain info (row[2]) */
          Str_Copy (Mai->Domain,row[1],sizeof (Mai->Domain) - 1);
@@ -574,8 +574,8 @@ void Mai_RemoveMailDomain (void)
    Mai_EditingMailDomainConstructor ();
 
    /***** Get mail code *****/
-   if ((Mai_EditingMai->MaiCod = Mai_GetParamMaiCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of mail domain is missing.");
+   if ((Mai_EditingMai->MaiCod = Mai_GetParamMaiCod ()) <= 0)
+      Lay_WrongMailDomainExit ();
 
    /***** Get data of the mail from database *****/
    Mai_GetDataOfMailDomainByCod (Mai_EditingMai);
@@ -651,8 +651,8 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the code of the mail */
-   if ((Mai_EditingMai->MaiCod = Mai_GetParamMaiCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of mail domain is missing.");
+   if ((Mai_EditingMai->MaiCod = Mai_GetParamMaiCod ()) <= 0)
+      Lay_WrongMailDomainExit ();
 
    /* Get the new name for the mail */
    Par_GetParToText (ParamName,NewMaiName,MaxBytes);
@@ -1941,7 +1941,7 @@ static void Mai_EditingMailDomainConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Mai_EditingMai != NULL)
-      Lay_ShowErrorAndExit ("Error initializing mail domain.");
+      Lay_WrongMailDomainExit ();
 
    /***** Allocate memory for mail domain *****/
    if ((Mai_EditingMai = malloc (sizeof (*Mai_EditingMai))) == NULL)

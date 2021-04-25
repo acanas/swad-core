@@ -1379,6 +1379,15 @@ void Lay_NotEnoughMemoryExit (void)
   }
 
 /*****************************************************************************/
+/************* Write error message and exit when wrong action ****************/
+/*****************************************************************************/
+
+void Lay_WrongActionExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong action.");
+  }
+
+/*****************************************************************************/
 /************* Write error message and exit when wrong scope *****************/
 /*****************************************************************************/
 
@@ -1423,12 +1432,107 @@ void Lay_WrongCourseExit (void)
   }
 
 /*****************************************************************************/
+/*********** Write error message and exit when wrong department **************/
+/*****************************************************************************/
+
+void Lay_WrongDepartmentExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong department.");
+  }
+
+/*****************************************************************************/
+/************** Write error message and exit when wrong place ****************/
+/*****************************************************************************/
+
+void Lay_WrongPlaceExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong department.");
+  }
+
+/*****************************************************************************/
 /************* Write error message and exit when wrong order *****************/
 /*****************************************************************************/
 
 void Lay_WrongOrderExit (void)
   {
    Lay_ShowErrorAndExit ("Wrong order.");
+  }
+
+/*****************************************************************************/
+/************* Write error message and exit when wrong status ****************/
+/*****************************************************************************/
+
+void Lay_WrongStatusExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong status.");
+  }
+
+/*****************************************************************************/
+/************* Write error message and exit when wrong date ****************/
+/*****************************************************************************/
+
+void Lay_WrongDateExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong date.");
+  }
+
+/*****************************************************************************/
+/************** Write error message and exit when wrong plugin ***************/
+/*****************************************************************************/
+
+void Lay_WrongPluginExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong plugin.");
+  }
+
+/*****************************************************************************/
+/********** Write error message and exit when wrong items list/item **********/
+/*****************************************************************************/
+
+void Lay_WrongItemsListExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong items list.");
+  }
+
+void Lay_WrongItemExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong item.");
+  }
+
+/*****************************************************************************/
+/********** Write error message and exit when wrong syllabus format **********/
+/*****************************************************************************/
+
+void Lay_WrongSyllabusFormatExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong syllabus format.");
+  }
+
+/*****************************************************************************/
+/*********** Write error message and exit when wrong file browser ************/
+/*****************************************************************************/
+
+void Lay_WrongFileBrowserExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong file browser.");
+  }
+
+/*****************************************************************************/
+/*********** Write error message and exit when wrong copy source *************/
+/*****************************************************************************/
+
+void Lay_WrongCopySrcExit (void)
+  {
+   Lay_ShowErrorAndExit ("The copy source does not exist.");
+  }
+
+/*****************************************************************************/
+/********** Write error message and exit when wrong number of rows ***********/
+/*****************************************************************************/
+
+void Lay_WrongNumberOfRowsExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong number of rows.");
   }
 
 /*****************************************************************************/
@@ -1455,7 +1559,7 @@ void Lay_WrongTypeOfViewExit (void)
   }
 
 /*****************************************************************************/
-/************* Write error message and exit when wrong banner ****************/
+/*********** Write error message and exit when wrong banner/link *************/
 /*****************************************************************************/
 
 void Lay_WrongBannerExit (void)
@@ -1463,13 +1567,41 @@ void Lay_WrongBannerExit (void)
    Lay_ShowErrorAndExit ("Wrong banner.");
   }
 
+void Lay_WrongLinkExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong link.");
+  }
+
 /*****************************************************************************/
-/************ Write error message and exit when wrong building ***************/
+/************* Write error message and exit when wrong holiday ***************/
+/*****************************************************************************/
+
+void Lay_WrongHolidayExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong holiday.");
+  }
+
+/*****************************************************************************/
+/********** Write error message and exit when wrong building/room ************/
 /*****************************************************************************/
 
 void Lay_WrongBuildingExit (void)
   {
    Lay_ShowErrorAndExit ("Wrong building.");
+  }
+
+void Lay_WrongRoomExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong room.");
+  }
+
+/*****************************************************************************/
+/*********** Write error message and exit when wrong record field ************/
+/*****************************************************************************/
+
+void Lay_WrongRecordFieldExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong record field.");
   }
 
 /*****************************************************************************/
@@ -1497,6 +1629,24 @@ void Lay_WrongProjectExit (void)
 void Lay_WrongCallForExamExit (void)
   {
    Lay_ShowErrorAndExit ("Wrong call for exam.");
+  }
+
+/*****************************************************************************/
+/************** Write error message and exit when wrong tag *****************/
+/*****************************************************************************/
+
+void Lay_WrongTagExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong tag.");
+  }
+
+/*****************************************************************************/
+/************** Write error message and exit when wrong test *****************/
+/*****************************************************************************/
+
+void Lay_WrongTestExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong test.");
   }
 
 /*****************************************************************************/
@@ -1593,6 +1743,65 @@ void Lay_WrongWhoExit (void)
 void Lay_WrongEventExit (void)
   {
    Lay_ShowErrorAndExit ("Wrong event.");
+  }
+
+/*****************************************************************************/
+/*********** Write error message and exit when wrong announcement ************/
+/*****************************************************************************/
+
+void Lay_WrongAnnouncementExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong announcement.");
+  }
+
+/*****************************************************************************/
+/************** Write error message and exit when wrong notice ***************/
+/*****************************************************************************/
+
+void Lay_WrongNoticeExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong notice.");
+  }
+
+/*****************************************************************************/
+/************ Write error message and exit when wrong forum/post *************/
+/*****************************************************************************/
+
+void Lay_WrongForumExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong forum.");
+  }
+
+void Lay_WrongPostExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong post.");
+  }
+
+/*****************************************************************************/
+/************** Write error message and exit when wrong message **************/
+/*****************************************************************************/
+
+void Lay_WrongMessageExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong message.");
+  }
+
+/*****************************************************************************/
+/************ Write error message and exit when wrong mail domain ************/
+/*****************************************************************************/
+
+void Lay_WrongMailDomainExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong mail domain.");
+  }
+
+/*****************************************************************************/
+/************* Show error message about wrong role and exit ******************/
+/*****************************************************************************/
+
+void Lay_WrongRoleExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong role.");
   }
 
 /*****************************************************************************/

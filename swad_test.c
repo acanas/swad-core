@@ -435,7 +435,7 @@ void Tst_ReceiveTestDraft (void)
    /* Get test exam code from form */
    TstPrn_ResetPrint (&Print);
    if ((Print.PrnCod = TstPrn_GetParamPrnCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Wrong test exam.");
+      Lay_WrongTestExit ();
 
    /* Get number of this test from form */
    NumTst = Tst_GetParamNumTst ();
@@ -491,7 +491,7 @@ void Tst_AssessTest (void)
    /* Get test exam code from form */
    TstPrn_ResetPrint (&Print);
    if ((Print.PrnCod = TstPrn_GetParamPrnCod ()) <= 0)
-      Lay_ShowErrorAndExit ("Wrong test exam.");
+      Lay_WrongTestExit ();
 
    /* Get number of this test from form */
    NumTst = Tst_GetParamNumTst ();
@@ -2903,7 +2903,7 @@ void Tst_WriteParamQstCod (unsigned NumQst,long QstCod)
 void Tst_CheckIfNumberOfAnswersIsOne (const struct Tst_Question *Question)
   {
    if (Question->Answer.NumOptions != 1)
-      Lay_ShowErrorAndExit ("Wrong answer.");
+      Lay_WrongAnswerExit ();
   }
 
 /*****************************************************************************/
@@ -3944,7 +3944,7 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
 	       break;
 	    case Tst_ANS_FLOAT:
 	       if (Question->Answer.NumOptions != 2)
-		  Lay_ShowErrorAndExit ("Wrong answer.");
+		  Lay_WrongAnswerExit ();
 	       Question->Answer.FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[1]);
 	       break;
 	    case Tst_ANS_TRUE_FALSE:
@@ -3956,7 +3956,7 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
 	    case Tst_ANS_TEXT:
 	       /* Check number of options */
 	       if (Question->Answer.NumOptions > Tst_MAX_OPTIONS_PER_QUESTION)
-		  Lay_ShowErrorAndExit ("Wrong answer.");
+		  Lay_WrongAnswerExit ();
 
 	       /*  Allocate space for text and feedback */
 	       if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
@@ -4142,7 +4142,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
 						     Tst_NUM_ANS_TYPES - 1,
 						     (unsigned long) Tst_ANS_UNKNOWN);
    if (Question->Answer.Type == Tst_ANS_UNKNOWN)
-      Lay_ShowErrorAndExit ("Wrong type of answer.");
+      Lay_WrongAnswerExit ();
 
    /***** Get question tags *****/
    for (NumTag = 0;
@@ -4279,9 +4279,9 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
               {
   	       Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
 	       if (sscanf (UnsignedStr,"%u",&NumCorrectAns) != 1)
-	          Lay_ShowErrorAndExit ("Wrong selected answer.");
+	          Lay_WrongAnswerExit ();
                if (NumCorrectAns >= Tst_MAX_OPTIONS_PER_QUESTION)
-	          Lay_ShowErrorAndExit ("Wrong selected answer.");
+	          Lay_WrongAnswerExit ();
                Question->Answer.Options[NumCorrectAns].Correct = true;
               }
            }

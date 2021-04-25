@@ -383,8 +383,8 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Get holiday code (row[0]) */
-	    if ((Hld->HldCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	       Lay_ShowErrorAndExit ("Wrong holiday code.");
+	    if ((Hld->HldCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	       Lay_WrongHolidayExit ();
 
 	    /* Get place code (row[1]) */
 	    Hld->PlcCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -398,7 +398,7 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
 
 	    /* Get start date (row[4] holds the start date in YYYYMMDD format) */
 	    if (!(Dat_GetDateFromYYYYMMDD (&(Hld->StartDate),row[4])))
-	       Lay_ShowErrorAndExit ("Wrong start date.");
+	       Lay_WrongDateExit ();
 
 	    /* Set / get end date */
 	    switch (Hld->HldTyp)
@@ -410,7 +410,7 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
 	       case Hld_NON_SCHOOL_PERIOD:	// One or more days
 	          /* Get end date (row[5] holds the end date in YYYYMMDD format) */
 		  if (!(Dat_GetDateFromYYYYMMDD (&(Hld->EndDate),row[5])))
-	             Lay_ShowErrorAndExit ("Wrong end date.");
+	             Lay_WrongDateExit ();
 		  break;
 	      }
 
@@ -445,7 +445,7 @@ static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld)
 
    /***** Check if holiday code is correct *****/
    if (Hld->HldCod <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of holiday.");
+      Lay_WrongHolidayExit ();
 
    /***** Get data of holiday from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get data of a holiday",
@@ -496,7 +496,7 @@ static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld)
 
       /* Get start date (row[3] holds the start date in YYYYMMDD format) */
       if (!(Dat_GetDateFromYYYYMMDD (&(Hld->StartDate),row[3])))
-	 Lay_ShowErrorAndExit ("Wrong start date.");
+	 Lay_WrongDateExit ();
 
       /* Set / get end date */
       switch (Hld->HldTyp)
@@ -508,7 +508,7 @@ static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld)
 	 case Hld_NON_SCHOOL_PERIOD:	// One or more days
 	    /* Get end date (row[4] holds the end date in YYYYMMDD format) */
 	    if (!(Dat_GetDateFromYYYYMMDD (&(Hld->EndDate),row[4])))
-	       Lay_ShowErrorAndExit ("Wrong end date.");
+	       Lay_WrongDateExit ();
 	    break;
 	}
 
@@ -542,10 +542,10 @@ static Hld_HolidayType_t Hld_GetTypeOfHoliday (const char *UnsignedStr)
    unsigned UnsignedNum;
 
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-      Lay_ShowErrorAndExit ("Wrong type of holiday.");
+      Lay_WrongHolidayExit ();
 
    if (UnsignedNum >= Hld_NUM_TYPES_HOLIDAY)
-      Lay_ShowErrorAndExit ("Wrong type of holiday.");
+      Lay_WrongHolidayExit ();
 
    return (Hld_HolidayType_t) UnsignedNum;
   }
@@ -720,8 +720,8 @@ void Hld_RemoveHoliday (void)
    Hld_EditingHolidayConstructor ();
 
    /***** Get holiday code *****/
-   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of holiday is missing.");
+   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) <= 0)
+      Lay_WrongHolidayExit ();
 
    /***** Get data of the holiday from database *****/
    Hld_GetDataOfHolidayByCod (Hld_EditingHld);
@@ -752,8 +752,8 @@ void Hld_ChangeHolidayPlace (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the holiday */
-   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of holiday is missing.");
+   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) <= 0)
+      Lay_WrongHolidayExit ();
 
    /* Get the new place for the holiday */
    NewPlace.PlcCod = Plc_GetParamPlcCod ();
@@ -793,8 +793,8 @@ void Hld_ChangeHolidayType (void)
    Hld_EditingHolidayConstructor ();
 
    /***** Get the code of the holiday *****/
-   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of holiday is missing.");
+   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) <= 0)
+      Lay_WrongHolidayExit ();
 
    /***** Get from the database the data of the holiday *****/
    Hld_GetDataOfHolidayByCod (Hld_EditingHld);
@@ -852,8 +852,8 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
    Hld_EditingHolidayConstructor ();
 
    /***** Get the code of the holiday *****/
-   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of holiday is missing.");
+   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) <= 0)
+      Lay_WrongHolidayExit ();
 
    /***** Get from the database the data of the holiday *****/
    Hld_GetDataOfHolidayByCod (Hld_EditingHld);
@@ -925,8 +925,8 @@ void Hld_RenameHoliday (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the holiday */
-   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of holiday is missing.");
+   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) <= 0)
+      Lay_WrongHolidayExit ();
 
    /* Get the new name for the holiday */
    Par_GetParToText ("Name",NewHldName,Hld_MAX_BYTES_HOLIDAY_NAME);
@@ -1214,7 +1214,7 @@ static void Hld_EditingHolidayConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Hld_EditingHld != NULL)
-      Lay_ShowErrorAndExit ("Error initializing holiday.");
+      Lay_WrongHolidayExit ();
 
    /***** Allocate memory for holiday *****/
    if ((Hld_EditingHld = malloc (sizeof (*Hld_EditingHld))) == NULL)

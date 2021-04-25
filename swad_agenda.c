@@ -1571,7 +1571,7 @@ void Agd_RequestCreatOrEditEvent (void)
    Agd_GetParams (&Agenda,Agd_MY_AGENDA);
 
    /***** Get the code of the event *****/
-   ItsANewEvent = ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L);
+   ItsANewEvent = ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) <= 0);
 
    /***** Get from the database the data of the event *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1709,7 +1709,7 @@ void Agd_ReceiveFormEvent (void)
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 
    /***** Get the code of the event *****/
-   ItsANewEvent = ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L);
+   ItsANewEvent = ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) <= 0);
 
    /***** Get start/end date-times *****/
    AgdEvent.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");

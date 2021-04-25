@@ -447,7 +447,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 
       /* Get notice code (row[0]) */
       if (sscanf (row[0],"%ld",&NotCod) != 1)
-	 Lay_ShowErrorAndExit ("Wrong code of notice.");
+	 Lay_WrongNoticeExit ();
 
       /* Get creation time (row[1] holds the UTC date-time) */
       TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);

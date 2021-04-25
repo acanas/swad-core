@@ -344,7 +344,7 @@ void Tmt_ShowClassTimeTable (void)
          Timetable.Type = Tmt_MY_TIMETABLE;
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong action.");
+	 Lay_WrongActionExit ();
      }
 
    Timetable.ContextualIcons.PutIconEditCrsTT = (Timetable.Type == Tmt_COURSE_TIMETABLE &&

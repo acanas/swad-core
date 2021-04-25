@@ -886,7 +886,7 @@ static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
 	 Mch_ListOneOrMoreMatchesResultTch (Games,Match);
 	 break;
       default:
-	 Rol_WrongRoleExit ();
+	 Lay_WrongRoleExit ();
 	 break;
      }
 
@@ -1829,18 +1829,18 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
       */
 
       /* Get question code (row[0]) */
-      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
 	 Lay_WrongQuestionExit ();
 
       /* Get question index (row[1]) */
-      if ((LongNum = Str_ConvertStrCodToLongCod (row[1])) < 0)
-	 Lay_ShowErrorAndExit ("Wrong question index.");
+      if ((LongNum = Str_ConvertStrCodToLongCod (row[1])) <= 0)
+	 Lay_WrongQuestionIndexExit ();
       QstInd = (unsigned) LongNum;
 
       /* Get answer type (row[2]) */
       Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
       if (Question.Answer.Type != Tst_ANS_UNIQUE_CHOICE)
-	 Lay_ShowErrorAndExit ("Wrong answer type.");
+	 Lay_WrongAnswerExit ();
 
       /* Get shuffle (row[3]) */
       Question.Answer.Shuffle = (row[3][0] == 'Y');
@@ -1894,8 +1894,8 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
       row = mysql_fetch_row (mysql_res);
 
       /* Get answer index (row[0]) */
-      if ((LongNum = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	 Lay_ShowErrorAndExit ("Wrong answer index.");
+      if ((LongNum = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	 Lay_WrongAnswerIndexExit ();
       AnsInd = (unsigned) LongNum;
       snprintf (StrOneAnswer,sizeof (StrOneAnswer),"%u",AnsInd);
 
@@ -3274,7 +3274,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
       /***** Show question *****/
       /* Check answer type */
       if (Question.Answer.Type != Tst_ANS_UNIQUE_CHOICE)
-	 Lay_ShowErrorAndExit ("Wrong answer type.");
+	 Lay_WrongAnswerExit ();
 
       /* Begin container */
       HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");	// Bottom

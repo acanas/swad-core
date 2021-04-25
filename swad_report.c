@@ -1285,7 +1285,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
 
       /* Get the year (in row[0] is the date in YYYY format) */
       if (sscanf (row[0],"%04u",&ReadYear) != 1)
-	 Lay_ShowErrorAndExit ("Wrong date.");
+	 Lay_WrongDateExit ();
 
       /* Get number hits (in row[1]) */
       if (sscanf (row[1],"%lu",&Report->Hits.Num) != 1)

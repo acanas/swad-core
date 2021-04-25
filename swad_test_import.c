@@ -218,8 +218,8 @@ void TsI_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
 
       /* Get question code (row[0]) */
       row = mysql_fetch_row (mysql_res);
-      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Lay_ShowErrorAndExit ("Wrong code of question.");
+      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+         Lay_WrongQuestionExit ();
 
       TsI_ExportQuestion (&Question,FileXML);
 
@@ -651,7 +651,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		 }
 	      }
 	    else	// Answer type not found
-	       Lay_ShowErrorAndExit ("Wrong type of answer.");
+	       Lay_WrongAnswerExit ();
 
 	    /***** Destroy test question *****/
 	    Tst_QstDestructor (&Question);
@@ -687,7 +687,7 @@ static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsT
          if (!strcasecmp (StrAnsTypeXML,Tst_StrAnswerTypesXML[AnsType]))
             return AnsType;
 
-   Lay_ShowErrorAndExit ("Wrong type of answer.");
+   Lay_WrongAnswerExit ();
    return (Tst_AnswerType_t) 0;	// Not reached
   }
 

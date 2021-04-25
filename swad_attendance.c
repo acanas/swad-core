@@ -1303,7 +1303,7 @@ void Att_ReceiveFormAttEvent (void)
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the attendance event *****/
-   ItsANewAttEvent = ((ReceivedAtt.AttCod = Att_GetParamAttCod ()) == -1L);
+   ItsANewAttEvent = ((ReceivedAtt.AttCod = Att_GetParamAttCod ()) <= 0);
 
    if (!ItsANewAttEvent)
      {

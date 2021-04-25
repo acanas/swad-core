@@ -390,11 +390,11 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Get department code (row[0]) */
-	    if ((Dpt->DptCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	       Lay_ShowErrorAndExit ("Wrong code of department.");
+	    if ((Dpt->DptCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	       Lay_WrongDepartmentExit ();
 
 	    /* Get institution code (row[1]) */
-	    if ((Dpt->InsCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
+	    if ((Dpt->InsCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
 	       Lay_WrongInstitExit ();
 
 	    /* Get short name (row[2]), full name (row[3])
@@ -644,7 +644,7 @@ long Dpt_GetAndCheckParamDptCod (long MinCodAllowed)
 
    /***** Get and check parameter with code of department *****/
    if ((DptCod = Par_GetParToLong (Dpt_PARAM_DPT_COD_NAME)) < MinCodAllowed)
-      Lay_ShowErrorAndExit ("Code of department is missing or invalid.");
+      Lay_WrongDepartmentExit ();
 
    return DptCod;
   }
@@ -1206,7 +1206,7 @@ static void Dpt_EditingDepartmentConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Dpt_EditingDpt != NULL)
-      Lay_ShowErrorAndExit ("Error initializing department.");
+      Lay_WrongDepartmentExit ();
 
    /***** Allocate memory for department *****/
    if ((Dpt_EditingDpt = malloc (sizeof (*Dpt_EditingDpt))) == NULL)

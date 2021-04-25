@@ -197,11 +197,11 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
 
       /* Header (row[0]) */
       if (sscanf (row[0],"%u",&(Marks->Header)) != 1)
-         Lay_ShowErrorAndExit ("Wrong number of header rows.");
+         Lay_WrongNumberOfRowsExit ();
 
       /* Footer (row[1]) */
       if (sscanf (row[1],"%u",&(Marks->Footer)) != 1)
-         Lay_ShowErrorAndExit ("Wrong number of footer rows.");
+         Lay_WrongNumberOfRowsExit ();
      }
    else	// Unknown numbers of header and footer rows
       Marks->Header =
@@ -268,7 +268,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
                      NumRows);
      }
    else
-      Lay_ShowErrorAndExit ("Wrong number of rows.");
+      Lay_WrongNumberOfRowsExit ();
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -764,11 +764,11 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	{
 	 /* Header (row[3]) */
 	 if (sscanf (row[3],"%u",&(Marks.Header)) != 1)
-	    Lay_ShowErrorAndExit ("Wrong number of header rows.");
+	    Lay_WrongNumberOfRowsExit ();
 
 	 /* Footer (row[4]) */
 	 if (sscanf (row[4],"%u",&(Marks.Footer)) != 1)
-	    Lay_ShowErrorAndExit ("Wrong number of footer rows.");
+	    Lay_WrongNumberOfRowsExit ();
 
 	 if (UsrDat.IDs.Num)
 	   {

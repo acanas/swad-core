@@ -1866,7 +1866,7 @@ void ExaSet_MoveUpSet (void)
       /* Indexes of sets to be exchanged */
       SetIndTop = ExaSet_GetPrevSetIndexInExam (Exam.ExaCod,SetIndBottom);
       if (!SetIndTop)
-	 Lay_ShowErrorAndExit ("Wrong index of set.");
+	 Lay_ShowErrorAndExit ("Wrong set index.");
 
       /* Exchange sets */
       ExaSet_ExchangeSets (Exam.ExaCod,SetIndTop,SetIndBottom);
@@ -1917,7 +1917,7 @@ void ExaSet_MoveDownSet (void)
       /* Indexes of sets to be exchanged */
       SetIndBottom = ExaSet_GetNextSetIndexInExam (Exam.ExaCod,SetIndTop);
       if (!SetIndBottom)
-	 Lay_ShowErrorAndExit ("Wrong index of set.");
+	 Lay_ShowErrorAndExit ("Wrong set index.");
 
       /* Exchange sets */
       ExaSet_ExchangeSets (Exam.ExaCod,SetIndTop,SetIndBottom);

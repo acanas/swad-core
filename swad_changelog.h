@@ -600,13 +600,20 @@ TODO: Salvador Romero Cortés: @acanas opción para editar posts
 
 TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates(), por ejemplo al cambiar el color de la gráfica de accesos por día y hora, no se respeta la zona horaria.
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.67.2 (2021-04-25)"
+#define Log_PLATFORM_VERSION	"SWAD 20.67.4 (2021-04-25)"
 #define CSS_FILE		"swad20.45.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
+	Version 20.67.4:  Apr 25, 2021  New file extensions for LogicWorks, reported by Eva Martínez Ortigosa. (309670 lines)
+Copy the following icons to icon public directory:
+sudo cp icon/filext32x32/cct32x32.gif /var/www/html/swad/icon/filext32x32/
+sudo cp icon/filext32x32/clf32x32.gif /var/www/html/swad/icon/filext32x32/
+sudo cp icon/filext32x32/tim32x32.gif /var/www/html/swad/icon/filext32x32/
+
+	Version 20.67.3:  Apr 25, 2021  Code refactoring in error messages. (309662 lines)
 	Version 20.67.2:  Apr 25, 2021  Code refactoring in error messages. (309482 lines)
 	Version 20.67.1:  Apr 24, 2021  Code refactoring in error messages. (309415 lines)
 	Version 20.67:    Apr 24, 2021  Bug fixing and code optimizations related to user's roles. (309356 lines)

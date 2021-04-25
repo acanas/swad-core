@@ -876,7 +876,7 @@ static Prj_HiddenVisibl_t Prj_GetHiddenParamHidVis (void)
 					  (unsigned) Prj_FILTER_HIDDEN_DEFAULT |
 					  (unsigned) Prj_FILTER_VISIBL_DEFAULT);
       default:
-	 Rol_WrongRoleExit ();
+	 Lay_WrongRoleExit ();
          return Prj_NEW_PRJ_HIDDEN_VISIBL_DEFAULT;	// Not reached
      }
   }
@@ -2430,7 +2430,7 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
 
    /***** Get parameters *****/
    Prj_GetParams (Projects);
-   if ((Projects->PrjCod = Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
+   if ((Projects->PrjCod = Prj.PrjCod = Prj_GetParamPrjCod ()) <= 0)
       Lay_WrongProjectExit ();
 
    /***** Put form to select users *****/
@@ -2508,7 +2508,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
 
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
-   if ((Projects.PrjCod = Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
+   if ((Projects.PrjCod = Prj.PrjCod = Prj_GetParamPrjCod ()) <= 0)
       Lay_WrongProjectExit ();
 
    /***** Add the selected users to project *****/
@@ -2918,7 +2918,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	      }
 	    break;
 	 default:
-	    Rol_WrongRoleExit ();
+	    Lay_WrongRoleExit ();
 	    break;
 	}
 

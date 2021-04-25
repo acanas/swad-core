@@ -412,8 +412,8 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
          row = mysql_fetch_row (mysql_res);
 
          /* Get place code (row[0]) */
-         if ((Plc->PlcCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of place.");
+         if ((Plc->PlcCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+            Lay_WrongPlaceExit ();
 
          /* Get the short (row[1]) and full (row[2]) names of the place */
          Str_Copy (Plc->ShrtName,row[1],sizeof (Plc->ShrtName) - 1);
@@ -615,8 +615,8 @@ void Plc_RemovePlace (void)
    Plc_EditingPlaceConstructor ();
 
    /***** Get place code *****/
-   if ((Plc_EditingPlc->PlcCod = Plc_GetParamPlcCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of place is missing.");
+   if ((Plc_EditingPlc->PlcCod = Plc_GetParamPlcCod ()) <= 0)
+      Lay_WrongPlaceExit ();
 
    /***** Get data of the place from database *****/
    Plc_GetDataOfPlaceByCod (Plc_EditingPlc);
@@ -699,8 +699,8 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the code of the place */
-   if ((Plc_EditingPlc->PlcCod = Plc_GetParamPlcCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of place is missing.");
+   if ((Plc_EditingPlc->PlcCod = Plc_GetParamPlcCod ()) <= 0)
+      Lay_WrongPlaceExit ();
 
    /* Get the new name for the place */
    Par_GetParToText (ParamName,NewPlcName,MaxBytes);
@@ -941,7 +941,7 @@ static void Plc_EditingPlaceConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Plc_EditingPlc != NULL)
-      Lay_ShowErrorAndExit ("Error initializing place.");
+      Lay_WrongPlaceExit ();
 
    /***** Allocate memory for place *****/
    if ((Plc_EditingPlc = malloc (sizeof (*Plc_EditingPlc))) == NULL)

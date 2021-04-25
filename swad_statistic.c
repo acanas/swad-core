@@ -1726,7 +1726,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 
       /* Get logged role */
       if (sscanf (row[2],"%u",&RoleFromLog) != 1)
-	 Rol_WrongRoleExit ();
+	 Lay_WrongRoleExit ();
 
       HTM_TR_Begin (NULL);
 
@@ -1764,7 +1764,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 
       /* Write the action */
       if (sscanf (row[4],"%ld",&ActCod) != 1)
-	 Lay_ShowErrorAndExit ("Wrong action code.");
+	 Lay_WrongActionExit ();
       HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
       if (ActCod >= 0)
          HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_FromActCodToAction[ActCod]));
@@ -1964,7 +1964,7 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 
       /* Get year, month and day (row[0] holds the date in YYYYMMDD format) */
       if (!(Dat_GetDateFromYYYYMMDD (&ReadDate,row[0])))
-	 Lay_ShowErrorAndExit ("Wrong date.");
+	 Lay_WrongDateExit ();
 
       /* Get number of pages generated (in row[1]) */
       Hits.Num = Str_GetDoubleFromStr (row[1]);
@@ -2172,11 +2172,11 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 
       /* Get year, month and day (row[0] holds the date in YYYYMMDD format) */
       if (!(Dat_GetDateFromYYYYMMDD (&CurrentReadDate,row[0])))
-	 Lay_ShowErrorAndExit ("Wrong date.");
+	 Lay_WrongDateExit ();
 
       /* Get the hour (in row[1] is the hour in formato HH) */
       if (sscanf (row[1],"%02u",&ReadHour) != 1)
-	 Lay_ShowErrorAndExit ("Wrong hour.");
+	 Lay_WrongDateExit ();
 
       /* Get number of pages generated (in row[2]) */
       Hits.Num = Str_GetDoubleFromStr (row[2]);
@@ -2542,7 +2542,7 @@ static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
 
       /* Get year and week (row[0] holds date in YYYYWW format) */
       if (sscanf (row[0],"%04u%02u",&ReadDate.Year,&ReadDate.Week) != 2)
-	 Lay_ShowErrorAndExit ("Wrong date.");
+	 Lay_WrongDateExit ();
 
       /* Get number of pages generated (in row[1]) */
       Hits.Num = Str_GetDoubleFromStr (row[1]);
@@ -2643,7 +2643,7 @@ static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
 
       /* Get the year and the month (in row[0] is the date in YYYYMM format) */
       if (sscanf (row[0],"%04u%02u",&ReadDate.Year,&ReadDate.Month) != 2)
-	 Lay_ShowErrorAndExit ("Wrong date.");
+	 Lay_WrongDateExit ();
 
       /* Get number of pages generated (in row[1]) */
       Hits.Num = Str_GetDoubleFromStr (row[1]);
@@ -2744,7 +2744,7 @@ static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
 
       /* Get the year (in row[0] is the date in YYYY format) */
       if (sscanf (row[0],"%04u",&ReadDate.Year) != 1)
-	 Lay_ShowErrorAndExit ("Wrong date.");
+	 Lay_WrongDateExit ();
 
       /* Get number of pages generated (in row[1]) */
       Hits.Num = Str_GetDoubleFromStr (row[1]);
@@ -2844,7 +2844,7 @@ static void Sta_ShowNumHitsPerHour (unsigned NumHits,
 	    row = mysql_fetch_row (mysql_res); // Get next result
 	    NumHit++;
 	    if (sscanf (row[0],"%02u",&ReadHour) != 1)   // In row[0] is the date in HH format
-	       Lay_ShowErrorAndExit ("Wrong hour.");
+	       Lay_WrongDateExit ();
 
 	    for (H = Hour;
 		 H < ReadHour;
@@ -2939,7 +2939,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned NumHits,MYSQL_RES *mysql_
 	    row = mysql_fetch_row (mysql_res); // Get next result
 	    NumHit++;
 	    if (sscanf (row[0],"%02u%02u",&ReadHour,&MinuteRead) != 2)   // In row[0] is the date in formato HHMM
-	       Lay_ShowErrorAndExit ("Wrong hour-minute.");
+	       Lay_WrongDateExit ();
 	    /* Get number of pages generated */
 	    Hits.Num = Str_GetDoubleFromStr (row[1]);
 	    MinuteDayRead = ReadHour * 60 + MinuteRead;
@@ -3221,7 +3221,7 @@ static void Sta_ShowNumHitsPerPlugin (Sta_CountType_t CountType,
 
       /* Write the plugin */
       if (sscanf (row[0],"%ld",&Plg.PlgCod) != 1)
-	 Lay_ShowErrorAndExit ("Wrong plugin code.");
+	 Lay_WrongPluginExit ();
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (Plg_GetDataOfPluginByCod (&Plg))
          HTM_Txt (Plg.Name);
@@ -3343,7 +3343,7 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
 
       /* Write the banner */
       if (sscanf (row[0],"%ld",&(Ban.BanCod)) != 1)
-	 Lay_ShowErrorAndExit ("Wrong banner code.");
+	 Lay_WrongBannerExit ();
       Ban_GetDataOfBannerByCod (&Ban);
       HTM_TD_Begin ("class=\"LOG LT\"");
       HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",

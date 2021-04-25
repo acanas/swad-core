@@ -155,7 +155,7 @@ void Ann_ShowAllAnnouncements (void)
 
       /* Get announcement code (row[0]) */
       if (sscanf (row[0],"%ld",&AnnCod) != 1)
-	 Lay_ShowErrorAndExit ("Wrong code of announcement.");
+	 Lay_WrongAnnouncementExit ();
 
       /* Get status of the announcement (row[1]) */
       Status = Ann_OBSOLETE_ANNOUNCEMENT;
@@ -260,7 +260,7 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 
 	 /* Get announcement code (row[0]) */
 	 if (sscanf (row[0],"%ld",&AnnCod) != 1)
-	    Lay_ShowErrorAndExit ("Wrong code of announcement.");
+	    Lay_WrongAnnouncementExit ();
 
 	 /* Get the subject (row[1]), the content (row[2]), and insert links */
 	 Str_Copy (Subject,row[1],sizeof (Subject) - 1);
@@ -395,7 +395,7 @@ static long Ann_GetParamAnnCod (void)
 
    /***** Get announcement code *****/
    if ((AnnCod = Par_GetParToLong ("AnnCod")) <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of announcement.");
+      Lay_WrongAnnouncementExit ();
 
    return AnnCod;
   }

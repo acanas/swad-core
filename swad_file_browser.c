@@ -1977,7 +1977,7 @@ void Brw_GetParAndInitFileBrowser (void)
 								  Brw_ADMI_MRK_CRS;
 	       break;
 	    default:
-	       Rol_WrongRoleExit ();
+	       Lay_WrongRoleExit ();
 	       break;
 	   }
          break;
@@ -3403,7 +3403,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 	       break;
 	    default:
 	       NextAction = ActUnk;
-	       Rol_WrongRoleExit ();
+	       Lay_WrongRoleExit ();
 	       break;
 	   }
 	 Frm_BeginForm (NextAction);
@@ -4035,7 +4035,7 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
 	       break;
 	    default:
 	       Subtitle[0] = '\0';
-	       Rol_WrongRoleExit ();
+	       Lay_WrongRoleExit ();
 	       break;
 	   }
  	 break;
@@ -7160,7 +7160,7 @@ static bool Brw_GetMyClipboard (void)
    DB_FreeMySQLResult (&mysql_res);
 
    if (NumRows > 1)
-      Lay_ShowErrorAndExit ("Error when getting source of copy.");
+      Lay_WrongCopySrcExit ();
 
    return (bool) (NumRows == 1);
   }
@@ -7953,7 +7953,7 @@ static void Brw_PasteClipboard (void)
 		         (unsigned) Hie.Ins.InsCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
-               Lay_ShowErrorAndExit ("The copy source does not exist.");
+               Lay_WrongCopySrcExit ();
             break;
          case Brw_ADMI_DOC_CTR:
          case Brw_ADMI_SHR_CTR:
@@ -7965,7 +7965,7 @@ static void Brw_PasteClipboard (void)
 		         (unsigned) Hie.Ctr.CtrCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
-               Lay_ShowErrorAndExit ("The copy source does not exist.");
+               Lay_WrongCopySrcExit ();
             break;
          case Brw_ADMI_DOC_DEG:
          case Brw_ADMI_SHR_DEG:
@@ -7977,7 +7977,7 @@ static void Brw_PasteClipboard (void)
 		         (unsigned) Hie.Deg.DegCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
-               Lay_ShowErrorAndExit ("The copy source does not exist.");
+               Lay_WrongCopySrcExit ();
             break;
          case Brw_ADMI_DOC_CRS:
          case Brw_ADMI_TCH_CRS:
@@ -7989,7 +7989,7 @@ static void Brw_PasteClipboard (void)
                          Cfg_PATH_CRS_PRIVATE,Hie.Crs.CrsCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
-               Lay_ShowErrorAndExit ("The copy source does not exist.");
+               Lay_WrongCopySrcExit ();
             break;
          case Brw_ADMI_DOC_GRP:
          case Brw_ADMI_TCH_GRP:
@@ -8004,7 +8004,7 @@ static void Brw_PasteClipboard (void)
 			 GrpDat.GrpCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
-               Lay_ShowErrorAndExit ("The copy source does not exist.");
+               Lay_WrongCopySrcExit ();
             break;
          case Brw_ADMI_ASG_CRS:
          case Brw_ADMI_WRK_CRS:
@@ -8026,7 +8026,7 @@ static void Brw_PasteClipboard (void)
 	       Usr_UsrDataDestructor (&UsrDat);
               }
             else
-               Lay_ShowErrorAndExit ("The copy source does not exist.");
+               Lay_WrongCopySrcExit ();
             break;
          case Brw_ADMI_ASG_USR:
          case Brw_ADMI_WRK_USR:
@@ -8038,7 +8038,7 @@ static void Brw_PasteClipboard (void)
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
-               Lay_ShowErrorAndExit ("The copy source does not exist.");
+               Lay_WrongCopySrcExit ();
             break;
          case Brw_ADMI_DOC_PRJ:
          case Brw_ADMI_ASS_PRJ:
@@ -8051,7 +8051,7 @@ static void Brw_PasteClipboard (void)
 			PrjCod,
 			Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
 	    else
-	       Lay_ShowErrorAndExit ("The copy source does not exist.");
+	       Lay_WrongCopySrcExit ();
             break;
          case Brw_ADMI_BRF_USR:
             snprintf (PathOrg,sizeof (PathOrg),"%s/%s",
@@ -8059,7 +8059,7 @@ static void Brw_PasteClipboard (void)
         	      Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             break;
          default:
-            Lay_ShowErrorAndExit ("Wrong file browser.");
+            Lay_WrongFileBrowserExit ();
             break;
         }
 
@@ -10749,7 +10749,7 @@ void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata)
       else
          FileMetadata->NumMyViews = FileMetadata->NumPublicViews;
 
-      /***** Update number of my views (if I am not logged, UsrCod == -1L) *****/
+      /***** Update number of my views *****/
       Brw_UpdateFileViews (FileMetadata->NumMyViews,FileMetadata->FilCod);
 
       /***** Increment number of file views in my user's figures *****/

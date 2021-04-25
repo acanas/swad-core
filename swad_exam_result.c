@@ -950,8 +950,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	   NumResult++)
 	{
 	 /* Get print code (row[0]) */
-	 if ((Print.PrnCod = DB_GetNextCode (mysql_res)) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of exam print.");
+	 if ((Print.PrnCod = DB_GetNextCode (mysql_res)) <= 0)
+	    Lay_WrongExamExit ();
 
 	 /* Get print data */
 	 ExaPrn_GetDataOfPrintByPrnCod (&Print);
