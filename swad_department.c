@@ -1131,7 +1131,7 @@ unsigned Dpt_GetNumDptsInIns (long InsCod)
    Gbl.Cache.NumDptsInIns.NumDpts = (unsigned)
    DB_QueryCOUNT ("can not get number of departments in an institution",
 		  "SELECT COUNT(*)"
-		   " FROM departments"
+		   " FROM dpt_departments"
 		  " WHERE InsCod=%ld",
 		  InsCod);
    return Gbl.Cache.NumDptsInIns.NumDpts;

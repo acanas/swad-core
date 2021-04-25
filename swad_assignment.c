@@ -1587,7 +1587,7 @@ static void Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,unsigne
   {
    /***** Update number of users notified *****/
    DB_QueryUPDATE ("can not update the number of notifs. of an assignment",
-		   "UPDATE asg_ssignments"
+		   "UPDATE asg_assignments"
 		     " SET NumNotif=NumNotif+%u"
 		   " WHERE AsgCod=%ld",
                    NumUsrsToBeNotifiedByEMail,
