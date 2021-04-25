@@ -3208,7 +3208,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                   Usr_GET_ROLE_IN_CURRENT_CRS))
 	 if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    Gbl.Usrs.Other.UsrDat.Accepted =
