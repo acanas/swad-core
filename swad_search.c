@@ -698,7 +698,7 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_OPEN_DOCUMENTS))
       /***** Split document string into words *****/
-      if (Sch_BuildSearchQuery (SearchQuery,"SUBSTRING_INDEX(files.Path,'/',-1)",
+      if (Sch_BuildSearchQuery (SearchQuery,"SUBSTRING_INDEX(brw_files.Path,'/',-1)",
 				"_latin1 "," COLLATE latin1_general_ci"))
 	{
 	 /***** Query database *****/
