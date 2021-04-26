@@ -79,7 +79,7 @@ void Cfg_GetConfigFromFile (void)
    /***** Read config from file to string *****/
    /* Open config file */
    if ((FileCfg = fopen (Cfg_FILE_CONFIG,"rb")) == NULL)
-      Err_ShowErrorAndExit ("Can not open config file.");
+      Err_FileFolderNotFoundExit ();
 
    /* Compute file size */
    fseek (FileCfg,0L,SEEK_END);

@@ -6650,7 +6650,7 @@ void Brw_RemFileFromTree (void)
 		        FileNameToShow);
         }
       else		// File / link not found
-         Err_ShowErrorAndExit ("File / link not found.");
+         Err_FileFolderNotFoundExit ();
      }
    else
       Err_ShowErrorAndExit (Txt_You_can_not_remove_this_file_or_link);
@@ -6703,7 +6703,7 @@ void Brw_RemFolderFromTree (void)
                            Gbl.FileBrowser.FilFolLnk.Name);
            }
       else		// Folder not found
-         Err_ShowErrorAndExit ("Folder not found.");
+         Err_FileFolderNotFoundExit ();
      }
    else
       Err_ShowErrorAndExit (Txt_You_can_not_remove_this_folder);

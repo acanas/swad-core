@@ -1223,7 +1223,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Question;
-   unsigned NumQst;
+   unsigned QstInd;
    struct Tst_Question Question;
    char *Anchor;
    static Act_Action_t NextAction[Tst_NUM_VALIDITIES] =
@@ -1254,11 +1254,11 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
    HTM_TR_End ();
 
    /***** Write rows *****/
-   for (NumQst = 0;
-	NumQst < NumQsts;
-	NumQst++)
+   for (QstInd = 0;
+	QstInd < NumQsts;
+	QstInd++)
      {
-      Gbl.RowEvenOdd = NumQst % 2;
+      Gbl.RowEvenOdd = QstInd % 2;
 
       /***** Create test question *****/
       Tst_QstConstructor (&Question);
@@ -1292,7 +1292,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
       HTM_TD_End ();
 
       /***** List question *****/
-      ExaSet_ListQuestionForEdition (&Question,NumQst + 1,Anchor);
+      ExaSet_ListQuestionForEdition (&Question,QstInd + 1,Anchor);
 
       /***** End row *****/
       HTM_TR_End ();

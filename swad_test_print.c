@@ -80,27 +80,27 @@ extern struct Globals Gbl;
 static void TstPrn_ResetPrintExceptPrnCod (struct TstPrn_Print *Print);
 
 static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                         unsigned NumQst,
+                                         unsigned QstInd,
                                          struct Tst_Question *Question);
 static void TstPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                       unsigned NumQst,
+                                       unsigned QstInd,
                                        struct Tst_Question *Question);
 
 //-----------------------------------------------------------------------------
 static void TstPrn_WriteIntAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
+                                      unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question);
 static void TstPrn_WriteFltAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
+                                      unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question);
 static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
+                                      unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question);
 static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
+                                      unsigned QstInd,
                                       struct Tst_Question *Question);
 static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
+                                      unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question);
 //-----------------------------------------------------------------------------
 
@@ -108,7 +108,7 @@ static void TstPrn_PutCheckBoxAllowTeachers (bool AllowTeachers);
 
 static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       struct TstPrn_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST],
-				       unsigned NumQst,
+				       unsigned QstInd,
 				       time_t TimeUTC[Dat_NUM_START_END_TIME],
 				       struct Tst_Question *Question,
 				       bool QuestionExists,
@@ -167,7 +167,7 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
 static void TstPrn_WriteHeadUserCorrect (struct UsrData *UsrDat);
 
 static void TstPrn_StoreOneQstOfPrintInDB (const struct TstPrn_Print *Print,
-                                           unsigned NumQst);
+                                           unsigned QstInd);
 
 static void TstPrn_PutFormToSelectUsrsToViewUsrsPrints (__attribute__((unused)) void *Args);
 
@@ -270,7 +270,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
    extern const char *Txt_Test;
    extern const char *Txt_Continue;
    extern const char *Txt_Send;
-   unsigned NumQst;
+   unsigned QstInd;
    struct Tst_Question Question;
    static const Act_Action_t Action[Tst_NUM_REQUEST_OR_CONFIRM] =
      {
@@ -294,49 +294,51 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
       TstPrn_PutParamPrnCod (Print->PrnCod);
       Par_PutHiddenParamUnsigned (NULL,"NumTst",NumExamsGeneratedByMe);
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (10);
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWideMarginPadding (10);
 
-      /***** Write one row for each question *****/
-      for (NumQst = 0;
-	   NumQst < Print->NumQsts.All;
-	   NumQst++)
-	{
-	 Gbl.RowEvenOdd = NumQst % 2;
+	    /***** Write one row for each question *****/
+	    for (QstInd = 0;
+		 QstInd < Print->NumQsts.All;
+		 QstInd++)
+	      {
+	       Gbl.RowEvenOdd = QstInd % 2;
 
-	 /* Create test question */
-	 Tst_QstConstructor (&Question);
-	 Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
+	       /* Create test question */
+	       Tst_QstConstructor (&Question);
+	       Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
 
-	 /* Show question */
-	 if (!Tst_GetQstDataFromDB (&Question))	// Question exists
-	    Err_WrongQuestionExit ();
+	       /* Show question */
+	       if (!Tst_GetQstDataFromDB (&Question))	// Question exists
+		  Err_WrongQuestionExit ();
 
-	 /* Write question and answers */
-	 TstPrn_WriteQstAndAnsToFill (&Print->PrintedQuestions[NumQst],NumQst,&Question);
+	       /* Write question and answers */
+	       TstPrn_WriteQstAndAnsToFill (&Print->PrintedQuestions[QstInd],QstInd,&Question);
 
-	 /* Destroy test question */
-	 Tst_QstDestructor (&Question);
-	}
+	       /* Destroy test question */
+	       Tst_QstDestructor (&Question);
+	      }
 
-      /***** End table *****/
-      HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
+
+         /***** Button *****/
+	 switch (RequestOrConfirm)
+	   {
+	    case TstPrn_REQUEST:
+	       /* Send button */
+	       Btn_PutConfirmButton (Txt_Continue);
+	       break;
+	    case TstPrn_CONFIRM:
+	       /* Will the test exam be visible by teachers? */
+	       TstPrn_PutCheckBoxAllowTeachers (true);
+
+	       /* Send button */
+	       Btn_PutCreateButton (Txt_Send);
+	       break;
+	   }
 
       /***** End form *****/
-      switch (RequestOrConfirm)
-        {
-	 case TstPrn_REQUEST:
-            /* Send button */
-            Btn_PutConfirmButton (Txt_Continue);
-	    break;
-	 case TstPrn_CONFIRM:
-	    /* Will the test exam be visible by teachers? */
-            TstPrn_PutCheckBoxAllowTeachers (true);
-
-            /* Send button */
-            Btn_PutCreateButton (Txt_Send);
-	    break;
-        }
       Frm_EndForm ();
      }
 
@@ -349,36 +351,36 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 /*****************************************************************************/
 
 static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                         unsigned NumQst,
+                                         unsigned QstInd,
                                          struct Tst_Question *Question)
   {
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
-   /***** Number of question and answer type *****/
-   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteNumQst (NumQst + 1,"BIG_INDEX");
-   Tst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
-   HTM_TD_End ();
+      /***** Number of question and answer type *****/
+      HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	 Tst_WriteNumQst (QstInd + 1,"BIG_INDEX");
+	 Tst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
+      HTM_TD_End ();
 
-   /***** Stem, media and answers *****/
-   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      /***** Stem, media and answers *****/
+      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
-   /* Write parameter with question code */
-   Tst_WriteParamQstCod (NumQst,Question->QstCod);
+	 /* Write parameter with question code */
+	 Tst_WriteParamQstCod (QstInd,Question->QstCod);
 
-   /* Stem */
-   Tst_WriteQstStem (Question->Stem,"TEST_TXT",true);
+	 /* Stem */
+	 Tst_WriteQstStem (Question->Stem,"TEST_TXT",true);
 
-   /* Media */
-   Med_ShowMedia (&Question->Media,
-		  "TEST_MED_SHOW_CONT",
-		  "TEST_MED_SHOW");
+	 /* Media */
+	 Med_ShowMedia (&Question->Media,
+			"TEST_MED_SHOW_CONT",
+			"TEST_MED_SHOW");
 
-   /* Answers */
-   TstPrn_WriteAnswersToFill (PrintedQuestion,NumQst,Question);
+	 /* Answers */
+	 TstPrn_WriteAnswersToFill (PrintedQuestion,QstInd,Question);
 
-   HTM_TD_End ();
+      HTM_TD_End ();
 
    /***** End row *****/
    HTM_TR_End ();
@@ -389,11 +391,11 @@ static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQ
 /*****************************************************************************/
 
 static void TstPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                       unsigned NumQst,
+                                       unsigned QstInd,
                                        struct Tst_Question *Question)
   {
    void (*TstPrn_WriteAnsBank[Tst_NUM_ANS_TYPES]) (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-						   unsigned NumQst,
+						   unsigned QstInd,
 						   struct Tst_Question *Question) =
     {
      [Tst_ANS_INT            ] = TstPrn_WriteIntAnsToFill,
@@ -405,7 +407,7 @@ static void TstPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *Prin
     };
 
    /***** Write answers *****/
-   TstPrn_WriteAnsBank[Question->Answer.Type] (PrintedQuestion,NumQst,Question);
+   TstPrn_WriteAnsBank[Question->Answer.Type] (PrintedQuestion,QstInd,Question);
   }
 
 /*****************************************************************************/
@@ -413,13 +415,13 @@ static void TstPrn_WriteAnswersToFill (const struct TstPrn_PrintedQuestion *Prin
 /*****************************************************************************/
 
 static void TstPrn_WriteIntAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
+                                      unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),"Ans%010u",NumQst);
+   snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
    HTM_INPUT_TEXT (StrAns,11,PrintedQuestion->StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"11\"");
@@ -430,13 +432,13 @@ static void TstPrn_WriteIntAnsToFill (const struct TstPrn_PrintedQuestion *Print
 /*****************************************************************************/
 
 static void TstPrn_WriteFltAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
+                                      unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),"Ans%010u",NumQst);
+   snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
    HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,PrintedQuestion->StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"11\"");
@@ -447,7 +449,7 @@ static void TstPrn_WriteFltAnsToFill (const struct TstPrn_PrintedQuestion *Print
 /*****************************************************************************/
 
 static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
+                                      unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question)
   {
    extern const char *Txt_TF_QST[2];
@@ -457,7 +459,7 @@ static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *Print
       If the user does not confirm the submission of their exam ==>
       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"Ans%010u\"",NumQst);
+		     "name=\"Ans%010u\"",QstInd);
    HTM_OPTION (HTM_Type_STRING,"" ,PrintedQuestion->StrAnswers[0] == '\0',false,"&nbsp;");
    HTM_OPTION (HTM_Type_STRING,"T",PrintedQuestion->StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
    HTM_OPTION (HTM_Type_STRING,"F",PrintedQuestion->StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
@@ -469,7 +471,7 @@ static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *Print
 /*****************************************************************************/
 
 static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
+                                      unsigned QstInd,
                                       struct Tst_Question *Question)
   {
    unsigned NumOpt;
@@ -503,20 +505,20 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 	 ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
       HTM_TD_Begin ("class=\"LT\"");
 
-      snprintf (StrAns,sizeof (StrAns),"Ans%010u",NumQst);
+      snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
       if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE)
 	 HTM_INPUT_RADIO (StrAns,false,
 			  "id=\"Ans%010u_%u\" value=\"%u\"%s"
 			  " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u);\"",
-			  NumQst,NumOpt,
+			  QstInd,NumOpt,
 			  Indexes[NumOpt],
 			  UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
 				                           "",
-                          NumQst,Question->Answer.NumOptions);
+                          QstInd,Question->Answer.NumOptions);
       else // Answer.Type == Tst_ANS_MULTIPLE_CHOICE
 	 HTM_INPUT_CHECKBOX (StrAns,HTM_DONT_SUBMIT_ON_CHANGE,
 			     "id=\"Ans%010u_%u\" value=\"%u\"%s",
-			     NumQst,NumOpt,
+			     QstInd,NumOpt,
 			     Indexes[NumOpt],
 			     UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
 				                           "");
@@ -524,14 +526,14 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
-      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",NumQst,NumOpt);
+      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
       HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
       /***** Write the option text *****/
       HTM_TD_Begin ("class=\"LT\"");
-      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",NumQst,NumOpt);
+      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
       HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
       HTM_LABEL_End ();
       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
@@ -551,13 +553,13 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 /*****************************************************************************/
 
 static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *PrintedQuestion,
-                                      unsigned NumQst,
+                                      unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
-   snprintf (StrAns,sizeof (StrAns),"Ans%010u",NumQst);
+   snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
    HTM_INPUT_TEXT (StrAns,Tst_MAX_CHARS_ANSWERS_ONE_QST,PrintedQuestion->StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"40\"");
@@ -590,7 +592,7 @@ static void TstPrn_PutCheckBoxAllowTeachers (bool AllowTeachers)
 
 void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
   {
-   unsigned NumQst;
+   unsigned QstInd;
    struct Tst_Question Question;
    bool QuestionExists;
 
@@ -601,37 +603,37 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
    Print->NumQsts.NotBlank = 0;
    Print->Score = 0.0;
 
-   for (NumQst = 0;
-	NumQst < Print->NumQsts.All;
-	NumQst++)
+   for (QstInd = 0;
+	QstInd < Print->NumQsts.All;
+	QstInd++)
      {
-      Gbl.RowEvenOdd = NumQst % 2;
+      Gbl.RowEvenOdd = QstInd % 2;
 
       /***** Create test question *****/
       Tst_QstConstructor (&Question);
-      Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
+      Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
 
       /***** Get question data *****/
       QuestionExists = Tst_GetQstDataFromDB (&Question);
 
       /***** Write question and answers *****/
       TstPrn_WriteQstAndAnsExam (&Gbl.Usrs.Me.UsrDat,
-				 Print->PrintedQuestions,NumQst,
+				 Print->PrintedQuestions,QstInd,
 				 Print->TimeUTC,
 				 &Question,QuestionExists,
 				 TstCfg_GetConfigVisibility ());
 
       /***** Store test exam question in database *****/
-      TstPrn_StoreOneQstOfPrintInDB (Print,NumQst);
+      TstPrn_StoreOneQstOfPrintInDB (Print,QstInd);
 
       /***** Compute total score *****/
-      Print->Score += Print->PrintedQuestions[NumQst].Score;
-      if (Print->PrintedQuestions[NumQst].StrAnswers[0])	// User's answer is not blank
+      Print->Score += Print->PrintedQuestions[QstInd].Score;
+      if (Print->PrintedQuestions[QstInd].StrAnswers[0])	// User's answer is not blank
 	 Print->NumQsts.NotBlank++;
 
       /***** Update the number of accesses and the score of this question *****/
       if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-	 Tst_UpdateQstScoreInDB (&Print->PrintedQuestions[NumQst]);
+	 Tst_UpdateQstScoreInDB (&Print->PrintedQuestions[QstInd]);
 
       /***** Destroy test question *****/
       Tst_QstDestructor (&Question);
@@ -647,7 +649,7 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
 
 static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       struct TstPrn_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST],
-				       unsigned NumQst,
+				       unsigned QstInd,
 				       time_t TimeUTC[Dat_NUM_START_END_TIME],
 				       struct Tst_Question *Question,
 				       bool QuestionExists,
@@ -699,7 +701,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 
    /***** Number of question and answer type *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteNumQst (NumQst + 1,"BIG_INDEX");
+   Tst_WriteNumQst (QstInd + 1,"BIG_INDEX");
    if (QuestionUneditedAfterExam)
       Tst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
    HTM_TD_End ();
@@ -720,8 +722,8 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 			   "TEST_MED_SHOW");
 
 	 /* Answers */
-	 TstPrn_ComputeAnswerScore (&PrintedQuestions[NumQst],Question);
-	 TstPrn_WriteAnswersExam (UsrDat,&PrintedQuestions[NumQst],Question,
+	 TstPrn_ComputeAnswerScore (&PrintedQuestions[QstInd],Question);
+	 TstPrn_WriteAnswersExam (UsrDat,&PrintedQuestions[QstInd],Question,
 	                          ICanView,"TEST_TXT","TEST_TXT_LIGHT");
 	}
       else
@@ -736,11 +738,11 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
       HTM_DIV_Begin ("class=\"DAT_SMALL LM\"");
       HTM_TxtColonNBSP (Txt_Score);
       HTM_SPAN_Begin ("class=\"%s\"",
-		      PrintedQuestions[NumQst].StrAnswers[0] ?
-		      (PrintedQuestions[NumQst].Score > 0 ? "ANS_OK" :	// Correct/semicorrect
+		      PrintedQuestions[QstInd].StrAnswers[0] ?
+		      (PrintedQuestions[QstInd].Score > 0 ? "ANS_OK" :	// Correct/semicorrect
 							    "ANS_BAD") :// Wrong
 							    "ANS_0");	// Blank answer
-      HTM_Double2Decimals (PrintedQuestions[NumQst].Score);
+      HTM_Double2Decimals (PrintedQuestions[QstInd].Score);
       HTM_SPAN_End ();
       HTM_DIV_End ();
      }
@@ -763,7 +765,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
                                                    bool UpdateQstScore)
   {
-   unsigned NumQst;
+   unsigned QstInd;
    struct Tst_Question Question;
 
    /***** Initialize total score *****/
@@ -771,29 +773,29 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
    Print->NumQsts.NotBlank = 0;
 
    /***** Compute and store scores of all questions *****/
-   for (NumQst = 0;
-	NumQst < Print->NumQsts.All;
-	NumQst++)
+   for (QstInd = 0;
+	QstInd < Print->NumQsts.All;
+	QstInd++)
      {
       /* Compute question score */
       Tst_QstConstructor (&Question);
-      Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
+      Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
       Question.Answer.Type = Tst_GetQstAnswerTypeFromDB (Question.QstCod);
-      TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
+      TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],&Question);
       Tst_QstDestructor (&Question);
 
       /* Store test exam question in database */
       TstPrn_StoreOneQstOfPrintInDB (Print,
-				     NumQst);	// 0, 1, 2, 3...
+				     QstInd);	// 0, 1, 2, 3...
 
       /* Accumulate total score */
-      Print->Score += Print->PrintedQuestions[NumQst].Score;
-      if (Print->PrintedQuestions[NumQst].StrAnswers[0])	// User's answer is not blank
+      Print->Score += Print->PrintedQuestions[QstInd].Score;
+      if (Print->PrintedQuestions[QstInd].StrAnswers[0])	// User's answer is not blank
 	 Print->NumQsts.NotBlank++;
 
       /* Update the number of hits and the score of this question in tests database */
       if (UpdateQstScore)
-	 Tst_UpdateQstScoreInDB (&Print->PrintedQuestions[NumQst]);
+	 Tst_UpdateQstScoreInDB (&Print->PrintedQuestions[QstInd]);
      }
   }
 
@@ -1834,7 +1836,7 @@ static void TstPrn_WriteHeadUserCorrect (struct UsrData *UsrDat)
 /*****************************************************************************/
 
 static void TstPrn_StoreOneQstOfPrintInDB (const struct TstPrn_Print *Print,
-                                           unsigned NumQst)
+                                           unsigned QstInd)
   {
    /***** Insert question and user's answers into database *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
@@ -1844,11 +1846,11 @@ static void TstPrn_StoreOneQstOfPrintInDB (const struct TstPrn_Print *Print,
 		    " VALUES"
 		    " (%ld,%ld,%u,'%.15lg','%s','%s')",
 		    Print->PrnCod,
-		    Print->PrintedQuestions[NumQst].QstCod,
-		    NumQst,	// 0, 1, 2, 3...
-		    Print->PrintedQuestions[NumQst].Score,
-		    Print->PrintedQuestions[NumQst].StrIndexes,
-		    Print->PrintedQuestions[NumQst].StrAnswers);
+		    Print->PrintedQuestions[QstInd].QstCod,
+		    QstInd,	// 0, 1, 2, 3...
+		    Print->PrintedQuestions[QstInd].Score,
+		    Print->PrintedQuestions[QstInd].StrIndexes,
+		    Print->PrintedQuestions[QstInd].StrAnswers);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
@@ -2660,26 +2662,26 @@ void TstPrn_ShowPrintAnswers (struct UsrData *UsrDat,
 			      time_t TimeUTC[Dat_NUM_START_END_TIME],
 			      unsigned Visibility)
   {
-   unsigned NumQst;
+   unsigned QstInd;
    struct Tst_Question Question;
    bool QuestionExists;
 
-   for (NumQst = 0;
-	NumQst < NumQsts;
-	NumQst++)
+   for (QstInd = 0;
+	QstInd < NumQsts;
+	QstInd++)
      {
-      Gbl.RowEvenOdd = NumQst % 2;
+      Gbl.RowEvenOdd = QstInd % 2;
 
       /***** Create test question *****/
       Tst_QstConstructor (&Question);
-      Question.QstCod = PrintedQuestions[NumQst].QstCod;
+      Question.QstCod = PrintedQuestions[QstInd].QstCod;
 
       /***** Get question data *****/
       QuestionExists = Tst_GetQstDataFromDB (&Question);
 
       /***** Write questions and answers *****/
       TstPrn_WriteQstAndAnsExam (UsrDat,
-				 PrintedQuestions,NumQst,
+				 PrintedQuestions,QstInd,
 				 TimeUTC,
 				 &Question,QuestionExists,
 				 Visibility);
@@ -2759,7 +2761,7 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumQsts;
-   unsigned NumQst;
+   unsigned QstInd;
 
    /***** Get questions of a test exam print from database *****/
    NumQsts = (unsigned)
@@ -2775,29 +2777,29 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
 
    /***** Get questions *****/
    if (NumQsts == Print->NumQsts.All)
-      for (NumQst = 0;
-	   NumQst < NumQsts;
-	   NumQst++)
+      for (QstInd = 0;
+	   QstInd < NumQsts;
+	   QstInd++)
 	{
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get question code (row[0]) */
-	 if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	 if ((Print->PrintedQuestions[QstInd].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Err_WrongQuestionExit ();
 
 	 /* Get score (row[1]) */
 	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-         if (sscanf (row[1],"%lf",&Print->PrintedQuestions[NumQst].Score) != 1)
+         if (sscanf (row[1],"%lf",&Print->PrintedQuestions[QstInd].Score) != 1)
             Err_ShowErrorAndExit ("Wrong question score.");
          Str_SetDecimalPointToLocal ();	// Return to local system
 
 	 /* Get indexes for this question (row[2]) */
-	 Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[2],
-		   sizeof (Print->PrintedQuestions[NumQst].StrIndexes) - 1);
+	 Str_Copy (Print->PrintedQuestions[QstInd].StrIndexes,row[2],
+		   sizeof (Print->PrintedQuestions[QstInd].StrIndexes) - 1);
 
 	 /* Get answers selected by user for this question (row[3]) */
-	 Str_Copy (Print->PrintedQuestions[NumQst].StrAnswers,row[3],
-		   sizeof (Print->PrintedQuestions[NumQst].StrAnswers) - 1);
+	 Str_Copy (Print->PrintedQuestions[QstInd].StrAnswers,row[3],
+		   sizeof (Print->PrintedQuestions[QstInd].StrAnswers) - 1);
 	}
 
    /***** Free structure that stores the query result *****/

@@ -155,7 +155,7 @@ static void Tst_ListOneQstToEdit (struct Tst_Test *Test);
 static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
                                                   MYSQL_RES *mysql_res);
 static void Tst_WriteHeadingRowQuestionsForEdition (struct Tst_Test *Test);
-static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst);
+static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned QstInd);
 static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exams,
 						          unsigned NumQsts,
                                                           MYSQL_RES *mysql_res);
@@ -163,7 +163,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
 						           unsigned NumQsts,
                                                            MYSQL_RES *mysql_res);
 static void Tst_PutCheckboxToSelectAllQuestions (void);
-static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
+static void Tst_WriteQuestionRowForSelection (unsigned QstInd,
                                               struct Tst_Question *Question);
 
 //-----------------------------------------------------------------------------
@@ -564,19 +564,19 @@ void Tst_AssessTest (void)
 
 static void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print)
   {
-   unsigned NumQst;
+   unsigned QstInd;
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Loop for every question getting user's answers *****/
-   for (NumQst = 0;
-	NumQst < Print->NumQsts.All;
-	NumQst++)
+   for (QstInd = 0;
+	QstInd < Print->NumQsts.All;
+	QstInd++)
      {
       /* Get answers selected by user for this question */
-      snprintf (StrAns,sizeof (StrAns),"Ans%010u",NumQst);
-      Par_GetParMultiToText (StrAns,Print->PrintedQuestions[NumQst].StrAnswers,
+      snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
+      Par_GetParMultiToText (StrAns,Print->PrintedQuestions[QstInd].StrAnswers,
                              Tst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
-      Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[NumQst].StrAnswers);
+      Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[QstInd].StrAnswers);
      }
   }
 
@@ -1890,7 +1890,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
    Tst_AnswerType_t AnswerType;
    bool Shuffle;
    char StrNumQsts[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   unsigned NumQst;
+   unsigned QstInd;
 
    /***** Trivial check: number of questions *****/
    if (Test->NumQsts == 0 ||
@@ -1987,9 +1987,9 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
 			                           Query);
 
    /***** Get questions and answers from database *****/
-   for (NumQst = 0;
-	NumQst < Print->NumQsts.All;
-	NumQst++)
+   for (QstInd = 0;
+	QstInd < Print->NumQsts.All;
+	QstInd++)
      {
       /* Get question row */
       row = mysql_fetch_row (mysql_res);
@@ -2000,7 +2000,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
       */
 
       /* Get question code (row[0]) */
-      if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Print->PrintedQuestions[QstInd].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Err_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get answer type (row[1]) */
@@ -2016,13 +2016,13 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
 	 case Tst_ANS_FLOAT:
 	 case Tst_ANS_TRUE_FALSE:
 	 case Tst_ANS_TEXT:
-	    Print->PrintedQuestions[NumQst].StrIndexes[0] = '\0';
+	    Print->PrintedQuestions[QstInd].StrIndexes[0] = '\0';
 	    break;
 	 case Tst_ANS_UNIQUE_CHOICE:
 	 case Tst_ANS_MULTIPLE_CHOICE:
             /* If answer type is unique or multiple option,
                generate indexes of answers depending on shuffle */
-	    Tst_GenerateChoiceIndexes (&Print->PrintedQuestions[NumQst],Shuffle);
+	    Tst_GenerateChoiceIndexes (&Print->PrintedQuestions[QstInd],Shuffle);
 	    break;
 	 default:
 	    break;
@@ -2032,7 +2032,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
          Initially user has not answered the question ==> initially all the answers will be blank.
          If the user does not confirm the submission of their exam ==>
          ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-      Print->PrintedQuestions[NumQst].StrAnswers[0] = '\0';
+      Print->PrintedQuestions[QstInd].StrAnswers[0] = '\0';
      }
 
    /***** Get if test exam will be visible by teachers *****/
@@ -2145,7 +2145,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Questions;
-   unsigned NumQst;
+   unsigned QstInd;
    MYSQL_ROW row;
 
    /***** Begin box *****/
@@ -2158,11 +2158,11 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
    Tst_WriteHeadingRowQuestionsForEdition (Test);
 
    /***** Write rows *****/
-   for (NumQst = 0;
-	NumQst < Test->NumQsts;
-	NumQst++)
+   for (QstInd = 0;
+	QstInd < Test->NumQsts;
+	QstInd++)
      {
-      Gbl.RowEvenOdd = NumQst % 2;
+      Gbl.RowEvenOdd = QstInd % 2;
 
       /***** Create test question *****/
       Tst_QstConstructor (&Test->Question);
@@ -2173,7 +2173,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
          Err_WrongQuestionExit ();
 
       /***** Write question row *****/
-      Tst_WriteQuestionListing (Test,NumQst);
+      Tst_WriteQuestionListing (Test,QstInd);
 
       /***** Destroy test question *****/
       Tst_QstDestructor (&Test->Question);
@@ -2254,7 +2254,7 @@ static void Tst_WriteHeadingRowQuestionsForEdition (struct Tst_Test *Test)
 /********** Write question row in listing of questions for edition ***********/
 /*****************************************************************************/
 
-static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
+static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned QstInd)
   {
    static unsigned UniqueId = 0;
    char *Id;
@@ -2280,7 +2280,7 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
 
       /* Number of question and answer type */
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteNumQst (NumQst + 1,"BIG_INDEX");
+      Tst_WriteNumQst (QstInd + 1,"BIG_INDEX");
       Tst_WriteAnswerType (Test->Question.Answer.Type,"DAT_SMALL");
       HTM_TD_End ();
 
@@ -2388,7 +2388,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exam
    extern const char *Txt_Shuffle;
    extern const char *Txt_Question;
    extern const char *Txt_Add_questions;
-   unsigned NumQst;
+   unsigned QstInd;
    struct Tst_Question Question;
    MYSQL_ROW row;
 
@@ -2421,11 +2421,11 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exam
    HTM_TR_End ();
 
    /***** Write rows *****/
-   for (NumQst = 0;
-	NumQst < NumQsts;
-	NumQst++)
+   for (QstInd = 0;
+	QstInd < NumQsts;
+	QstInd++)
      {
-      Gbl.RowEvenOdd = NumQst % 2;
+      Gbl.RowEvenOdd = QstInd % 2;
 
       /* Create test question */
       Tst_QstConstructor (&Question);
@@ -2436,7 +2436,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exam
          Err_WrongQuestionExit ();
 
       /* Write question row */
-      Tst_WriteQuestionRowForSelection (NumQst,&Question);
+      Tst_WriteQuestionRowForSelection (QstInd,&Question);
 
       /* Destroy test question */
       Tst_QstDestructor (&Question);
@@ -2473,7 +2473,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
    extern const char *Txt_Shuffle;
    extern const char *Txt_Question;
    extern const char *Txt_Add_questions;
-   unsigned NumQst;
+   unsigned QstInd;
    struct Tst_Question Question;
    MYSQL_ROW row;
 
@@ -2506,11 +2506,11 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
    HTM_TR_End ();
 
    /***** Write rows *****/
-   for (NumQst = 0;
-	NumQst < NumQsts;
-	NumQst++)
+   for (QstInd = 0;
+	QstInd < NumQsts;
+	QstInd++)
      {
-      Gbl.RowEvenOdd = NumQst % 2;
+      Gbl.RowEvenOdd = QstInd % 2;
 
       /* Create test question */
       Tst_QstConstructor (&Question);
@@ -2521,7 +2521,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
          Err_WrongQuestionExit ();
 
       /* Write question row */
-      Tst_WriteQuestionRowForSelection (NumQst,&Question);
+      Tst_WriteQuestionRowForSelection (QstInd,&Question);
 
       /* Destroy test question */
       Tst_QstDestructor (&Question);
@@ -2561,7 +2561,7 @@ static void Tst_PutCheckboxToSelectAllQuestions (void)
 /********************** Write question row for selection *********************/
 /*****************************************************************************/
 
-static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
+static void Tst_WriteQuestionRowForSelection (unsigned QstInd,
                                               struct Tst_Question *Question)
   {
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
@@ -2584,7 +2584,7 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
 
       /* Write number of question */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%u&nbsp;",NumQst + 1);
+      HTM_TxtF ("%u&nbsp;",QstInd + 1);
       HTM_TD_End ();
 
       /* Write question code */
@@ -2889,11 +2889,11 @@ void Tst_WriteAnsTF (char AnsTF)
 /*************** Write parameter with the code of a question *****************/
 /*****************************************************************************/
 
-void Tst_WriteParamQstCod (unsigned NumQst,long QstCod)
+void Tst_WriteParamQstCod (unsigned QstInd,long QstCod)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
-   snprintf (StrAns,sizeof (StrAns),"Qst%010u",NumQst);
+   snprintf (StrAns,sizeof (StrAns),"Qst%010u",QstInd);
    Par_PutHiddenParamLong (NULL,StrAns,QstCod);
   }
 

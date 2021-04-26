@@ -561,7 +561,7 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 
    /***** Check if user's code is initialized *****/
    if (UsrDat->UsrCod <= 0)
-      Err_ShowErrorAndExit ("Can not update user's data. Wrong user's code.");
+      Err_WrongUserExit ();
 
    /***** Filter some user's data before updating */
    Enr_FilterUsrDat (UsrDat);

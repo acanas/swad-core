@@ -600,13 +600,14 @@ TODO: Salvador Romero Cortés: @acanas opción para editar posts
 
 TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates(), por ejemplo al cambiar el color de la gráfica de accesos por día y hora, no se respeta la zona horaria.
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.68 (2021-04-26)"
+#define Log_PLATFORM_VERSION	"SWAD 20.68.1 (2021-04-26)"
 #define CSS_FILE		"swad20.45.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
+	Version 20.68.1:  Apr 26, 2021  Code refactoring in exams and tests. (309862 lines)
 	Version 20.68:    Apr 26, 2021  New module swad_error. (309853 lines)
 	Version 20.67.11: Apr 26, 2021  Fixed bug in departments. (309677 lines)
 	Version 20.67.10: Apr 25, 2021  Fixed bug in notification about new assignment, reported by Eva Martínez Ortigosa. (? lines)

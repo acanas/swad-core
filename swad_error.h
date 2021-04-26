@@ -58,6 +58,7 @@ void Err_WrongItemsListExit (void);
 void Err_WrongItemExit (void);
 void Err_WrongSyllabusFormatExit (void);
 void Err_WrongFileBrowserExit (void);
+void Err_FileFolderNotFoundExit (void);
 void Err_WrongCopySrcExit (void);
 void Err_WrongNumberOfRowsExit (void);
 void Err_WrongGrpTypExit (void);

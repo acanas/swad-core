@@ -203,6 +203,15 @@ void Err_WrongFileBrowserExit (void)
   }
 
 /*****************************************************************************/
+/******* Write error message and exit when file/folder does not exist ********/
+/*****************************************************************************/
+
+void Err_FileFolderNotFoundExit (void)
+  {
+   Err_ShowErrorAndExit ("File/folder not found.");
+  }
+
+/*****************************************************************************/
 /*********** Write error message and exit when wrong copy source *************/
 /*****************************************************************************/
 

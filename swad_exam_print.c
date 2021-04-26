@@ -87,32 +87,32 @@ static void ExaPrn_GetAndWriteDescription (long ExaCod);
 static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
 					    const struct ExaPrn_Print *Print);
 static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
-                                         unsigned NumQst,
+                                         unsigned QstInd,
                                          struct Tst_Question *Question);
 static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
-                                       unsigned NumQst,
+                                       unsigned QstInd,
                                        struct Tst_Question *Question);
 
 //-----------------------------------------------------------------------------
 static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
-				      unsigned NumQst,
+				      unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question);
 static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
-				      unsigned NumQst,
+				      unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question);
 static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
-	                              unsigned NumQst,
+	                              unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question);
 static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
-                                      unsigned NumQst,
+                                      unsigned QstInd,
                                       struct Tst_Question *Question);
 static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
-	                              unsigned NumQst,
+	                              unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question);
 //-----------------------------------------------------------------------------
 
 static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
-	                                     unsigned NumQst,
+	                                     unsigned QstInd,
 	                                     const char *Id,int NumOpt);
 
 static void ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print,unsigned QstInd);
@@ -120,7 +120,7 @@ static void ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print,unsigned QstInd
 static unsigned ExaPrn_GetParamQstInd (void);
 
 static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Print,
-                                                        unsigned NumQst);
+                                                        unsigned QstInd);
 
 //-----------------------------------------------------------------------------
 static void ExaPrn_GetCorrectAndComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
@@ -144,7 +144,7 @@ static void ExaPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question);
 static void ExaPrn_GetAnswerFromDB (struct ExaPrn_Print *Print,long QstCod,
                                     char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1]);
 static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
-                                           unsigned NumQst);
+                                           unsigned QstInd);
 
 static void ExaPrn_GetNumQstsNotBlank (struct ExaPrn_Print *Print);
 static void ExaPrn_ComputeTotalScoreOfPrint (struct ExaPrn_Print *Print);
@@ -580,7 +580,7 @@ static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *Printed
 
 static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print)
   {
-   unsigned NumQst;
+   unsigned QstInd;
 
    /***** Insert new exam print into table *****/
    Print->PrnCod =
@@ -597,10 +597,10 @@ static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print)
 
    /***** Store all questions (with blank answers)
           of this exam print just generated in database *****/
-   for (NumQst = 0;
-	NumQst < Print->NumQsts.All;
-	NumQst++)
-      ExaPrn_StoreOneQstOfPrintInDB (Print,NumQst);
+   for (QstInd = 0;
+	QstInd < Print->NumQsts.All;
+	QstInd++)
+      ExaPrn_StoreOneQstOfPrintInDB (Print,QstInd);
   }
 
 /*****************************************************************************/
@@ -611,7 +611,7 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumQst;
+   unsigned QstInd;
 
    /***** Get questions of an exam print from database *****/
    Print->NumQsts.All = (unsigned)
@@ -628,33 +628,33 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 
    /***** Get questions *****/
    if (Print->NumQsts.All <= ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT)
-      for (NumQst = 0;
-	   NumQst < Print->NumQsts.All;
-	   NumQst++)
+      for (QstInd = 0;
+	   QstInd < Print->NumQsts.All;
+	   QstInd++)
 	{
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get question code (row[0]) */
-	 if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	 if ((Print->PrintedQuestions[QstInd].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Err_WrongQuestionExit ();
 
 	 /* Get set code (row[1]) */
-	 if ((Print->PrintedQuestions[NumQst].SetCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
+	 if ((Print->PrintedQuestions[QstInd].SetCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
 	    Err_WrongSetExit ();
 
          /* Get score (row[2]) */
 	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-         if (sscanf (row[2],"%lf",&Print->PrintedQuestions[NumQst].Score) != 1)
+         if (sscanf (row[2],"%lf",&Print->PrintedQuestions[QstInd].Score) != 1)
             Err_ShowErrorAndExit ("Wrong question score.");
          Str_SetDecimalPointToLocal ();	// Return to local system
 
 	 /* Get indexes for this question (row[3]) */
-	 Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[3],
-		   sizeof (Print->PrintedQuestions[NumQst].StrIndexes) - 1);
+	 Str_Copy (Print->PrintedQuestions[QstInd].StrIndexes,row[3],
+		   sizeof (Print->PrintedQuestions[QstInd].StrIndexes) - 1);
 
 	 /* Get answers selected by user for this question (row[4]) */
-	 Str_Copy (Print->PrintedQuestions[NumQst].StrAnswers,row[4],
-		   sizeof (Print->PrintedQuestions[NumQst].StrAnswers) - 1);
+	 Str_Copy (Print->PrintedQuestions[QstInd].StrAnswers,row[4],
+		   sizeof (Print->PrintedQuestions[QstInd].StrAnswers) - 1);
 	}
 
    /***** Free structure that stores the query result *****/
@@ -740,26 +740,26 @@ static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
 					    const struct ExaPrn_Print *Print)
   {
    extern const char *Txt_I_have_finished;
-   unsigned NumQst;
+   unsigned QstInd;
    struct Tst_Question Question;
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (10);
 
    /***** Write one row for each question *****/
-   for (NumQst = 0;
-	NumQst < Print->NumQsts.All;
-	NumQst++)
+   for (QstInd = 0;
+	QstInd < Print->NumQsts.All;
+	QstInd++)
      {
       /* Create test question */
       Tst_QstConstructor (&Question);
-      Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
+      Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
 
       /* Get question from database */
       ExaSet_GetQstDataFromDB (&Question);
 
       /* Write question and answers */
-      ExaPrn_WriteQstAndAnsToFill (Print,NumQst,&Question);
+      ExaPrn_WriteQstAndAnsToFill (Print,QstInd,&Question);
 
       /* Destroy test question */
       Tst_QstDestructor (&Question);
@@ -780,7 +780,7 @@ static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
 /*****************************************************************************/
 
 static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
-                                         unsigned NumQst,
+                                         unsigned QstInd,
                                          struct Tst_Question *Question)
   {
    static struct ExaSet_Set CurrentSet =
@@ -792,10 +792,10 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
       .Title[0] = '\0'
      };
 
-   if (Print->PrintedQuestions[NumQst].SetCod != CurrentSet.SetCod)
+   if (Print->PrintedQuestions[QstInd].SetCod != CurrentSet.SetCod)
      {
       /***** Get data of this set *****/
-      CurrentSet.SetCod = Print->PrintedQuestions[NumQst].SetCod;
+      CurrentSet.SetCod = Print->PrintedQuestions[QstInd].SetCod;
       ExaSet_GetDataOfSetByCod (&CurrentSet);
 
       /***** Title for this set *****/
@@ -811,7 +811,7 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
 
    /***** Number of question and answer type *****/
    HTM_TD_Begin ("class=\"RT\"");
-   Tst_WriteNumQst (NumQst + 1,"BIG_INDEX");
+   Tst_WriteNumQst (QstInd + 1,"BIG_INDEX");
    Tst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
    HTM_TD_End ();
 
@@ -828,7 +828,7 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
 
    /* Answers */
    Frm_BeginFormNoAction ();	// Form that can not be submitted, to avoid enter key to send it
-   ExaPrn_WriteAnswersToFill (Print,NumQst,Question);
+   ExaPrn_WriteAnswersToFill (Print,QstInd,Question);
    Frm_EndForm ();
 
    HTM_TD_End ();
@@ -842,11 +842,11 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
 /*****************************************************************************/
 
 static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
-                                       unsigned NumQst,
+                                       unsigned QstInd,
                                        struct Tst_Question *Question)
   {
    void (*ExaPrn_WriteAnsToFill[Tst_NUM_ANS_TYPES]) (const struct ExaPrn_Print *Print,
-                                                     unsigned NumQst,
+                                                     unsigned QstInd,
                                                      struct Tst_Question *Question) =
     {
      [Tst_ANS_INT            ] = ExaPrn_WriteIntAnsToFill,
@@ -858,7 +858,7 @@ static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
     };
 
    /***** Write answers *****/
-   ExaPrn_WriteAnsToFill[Question->Answer.Type] (Print,NumQst,Question);
+   ExaPrn_WriteAnsToFill[Question->Answer.Type] (Print,QstInd,Question);
   }
 
 /*****************************************************************************/
@@ -866,17 +866,17 @@ static void ExaPrn_WriteAnswersToFill (const struct ExaPrn_Print *Print,
 /*****************************************************************************/
 
 static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
-				      unsigned NumQst,
+				      unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question)
   {
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
-   snprintf (Id,sizeof (Id),"Ans%010u",NumQst);
+   snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
    HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"Ans\""
 	     " size=\"11\" maxlength=\"11\" value=\"%s\"",
-	     Id,Print->PrintedQuestions[NumQst].StrAnswers);
-   ExaPrn_WriteJSToUpdateExamPrint (Print,NumQst,Id,-1);
+	     Id,Print->PrintedQuestions[QstInd].StrAnswers);
+   ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_Txt (" />");
   }
 
@@ -885,18 +885,18 @@ static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
 /*****************************************************************************/
 
 static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
-				      unsigned NumQst,
+				      unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question)
   {
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
-   snprintf (Id,sizeof (Id),"Ans%010u",NumQst);
+   snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
    HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"Ans\""
 	     " size=\"11\" maxlength=\"%u\" value=\"%s\"",
 	     Id,Tst_MAX_BYTES_FLOAT_ANSWER,
-	     Print->PrintedQuestions[NumQst].StrAnswers);
-   ExaPrn_WriteJSToUpdateExamPrint (Print,NumQst,Id,-1);
+	     Print->PrintedQuestions[QstInd].StrAnswers);
+   ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_Txt (" />");
   }
 
@@ -905,7 +905,7 @@ static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
 /*****************************************************************************/
 
 static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
-	                              unsigned NumQst,
+	                              unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question)
   {
    extern const char *Txt_TF_QST[2];
@@ -915,13 +915,13 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
    /* Initially user has not answered the question ==> initially all the answers will be blank.
       If the user does not confirm the submission of their exam ==>
       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-   snprintf (Id,sizeof (Id),"Ans%010u",NumQst);
+   snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
    HTM_TxtF ("<select id=\"%s\" name=\"Ans\"",Id);
-   ExaPrn_WriteJSToUpdateExamPrint (Print,NumQst,Id,-1);
+   ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_Txt (" />");
-   HTM_OPTION (HTM_Type_STRING,"" ,Print->PrintedQuestions[NumQst].StrAnswers[0] == '\0',false,"&nbsp;");
-   HTM_OPTION (HTM_Type_STRING,"T",Print->PrintedQuestions[NumQst].StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
-   HTM_OPTION (HTM_Type_STRING,"F",Print->PrintedQuestions[NumQst].StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
+   HTM_OPTION (HTM_Type_STRING,"" ,Print->PrintedQuestions[QstInd].StrAnswers[0] == '\0',false,"&nbsp;");
+   HTM_OPTION (HTM_Type_STRING,"T",Print->PrintedQuestions[QstInd].StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
+   HTM_OPTION (HTM_Type_STRING,"F",Print->PrintedQuestions[QstInd].StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
    HTM_Txt ("</select>");
   }
 
@@ -930,7 +930,7 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
 /*****************************************************************************/
 
 static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
-                                      unsigned NumQst,
+                                      unsigned QstInd,
                                       struct Tst_Question *Question)
   {
    unsigned NumOpt;
@@ -942,10 +942,10 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
    Tst_ChangeFormatAnswersText (Question);
 
    /***** Get indexes for this question from string *****/
-   TstPrn_GetIndexesFromStr (Print->PrintedQuestions[NumQst].StrIndexes,Indexes);
+   TstPrn_GetIndexesFromStr (Print->PrintedQuestions[QstInd].StrIndexes,Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   TstPrn_GetAnswersFromStr (Print->PrintedQuestions[NumQst].StrAnswers,UsrAnswers);
+   TstPrn_GetAnswersFromStr (Print->PrintedQuestions[QstInd].StrAnswers,UsrAnswers);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -963,26 +963,26 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 	 If the user does not confirm the submission of their exam ==>
 	 ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
       HTM_TD_Begin ("class=\"LT\"");
-      snprintf (Id,sizeof (Id),"Ans%010u",NumQst);
+      snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
       HTM_TxtF ("<input type=\"%s\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"%s",
 		Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE ? "radio" :
 								 "checkbox",
 		Id,NumOpt,Indexes[NumOpt],
 		UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
 					      "");
-      ExaPrn_WriteJSToUpdateExamPrint (Print,NumQst,Id,(int) NumOpt);
+      ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,(int) NumOpt);
       HTM_Txt (" />");
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
-      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",NumQst,NumOpt);
+      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
       HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
       /***** Write the option text *****/
       HTM_TD_Begin ("class=\"LT\"");
-      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",NumQst,NumOpt);
+      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
       HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
       HTM_LABEL_End ();
       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
@@ -1002,18 +1002,18 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 /*****************************************************************************/
 
 static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
-	                              unsigned NumQst,
+	                              unsigned QstInd,
                                       __attribute__((unused)) struct Tst_Question *Question)
   {
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
-   snprintf (Id,sizeof (Id),"Ans%010u",NumQst);
+   snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
    HTM_TxtF ("<input type=\"text\" id=\"%s\" name=\"Ans\""
 	     " size=\"40\" maxlength=\"%u\" value=\"%s\"",
 	     Id,Tst_MAX_CHARS_ANSWERS_ONE_QST,
-	     Print->PrintedQuestions[NumQst].StrAnswers);
-   ExaPrn_WriteJSToUpdateExamPrint (Print,NumQst,Id,-1);
+	     Print->PrintedQuestions[QstInd].StrAnswers);
+   ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
 
    HTM_Txt (" />");
   }
@@ -1023,20 +1023,20 @@ static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
 /*****************************************************************************/
 
 static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
-	                                     unsigned NumQst,
+	                                     unsigned QstInd,
 	                                     const char *Id,int NumOpt)
   {
    if (NumOpt < 0)
       HTM_TxtF (" onchange=\"updateExamPrint('examprint','%s','Ans',"
-			    "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u',%u);",
+			    "'act=%ld&ses=%s&SesCod=%ld&QstInd=%u',%u);",
 		Id,
-		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst,
+		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,QstInd,
 		(unsigned) Gbl.Prefs.Language);
    else	// NumOpt >= 0
       HTM_TxtF (" onclick=\"updateExamPrint('examprint','%s_%d','Ans',"
-		           "'act=%ld&ses=%s&SesCod=%ld&NumQst=%u',%u);",
+		           "'act=%ld&ses=%s&SesCod=%ld&QstInd=%u',%u);",
 		Id,NumOpt,
-		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,NumQst,
+		Act_GetActCod (ActAnsExaPrn),Gbl.Session.Id,Print->SesCod,QstInd,
 	        (unsigned) Gbl.Prefs.Language);
    HTM_Txt (" return false;\"");	// return false is necessary to not submit form
   }
@@ -1145,18 +1145,17 @@ static void ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print,unsigned QstInd
   }
 
 /*****************************************************************************/
-/******************* Get parameter with index of question ********************/
+/********************* Get parameter with question index *********************/
 /*****************************************************************************/
 
 static unsigned ExaPrn_GetParamQstInd (void)
   {
-   long NumQst;
+   long QstInd;
 
-   NumQst = Par_GetParToLong ("NumQst");
-   if (NumQst < 0)
-      Err_ShowErrorAndExit ("Wrong number of question.");
+   if ((QstInd = Par_GetParToLong ("QstInd")) < 0)
+      Err_WrongQuestionIndexExit ();
 
-   return (unsigned) NumQst;
+   return (unsigned) QstInd;
   }
 
 /*****************************************************************************/
@@ -1164,36 +1163,36 @@ static unsigned ExaPrn_GetParamQstInd (void)
 /*****************************************************************************/
 
 static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Print,
-                                                        unsigned NumQst)
+                                                        unsigned QstInd)
   {
    struct Tst_Question Question;
    char CurrentStrAnswersInDB[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
 
    /***** Compute question score *****/
    Tst_QstConstructor (&Question);
-   Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
+   Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
    Question.Answer.Type = ExaSet_GetQstAnswerTypeFromDB (Question.QstCod);
-   ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
+   ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],&Question);
    Tst_QstDestructor (&Question);
 
    /***** If type is unique choice and the option (radio button) is checked
           ==> uncheck it by deleting answer *****/
    if (Question.Answer.Type == Tst_ANS_UNIQUE_CHOICE)
      {
-      ExaPrn_GetAnswerFromDB (Print,Print->PrintedQuestions[NumQst].QstCod,
+      ExaPrn_GetAnswerFromDB (Print,Print->PrintedQuestions[QstInd].QstCod,
                               CurrentStrAnswersInDB);
-      if (!strcmp (Print->PrintedQuestions[NumQst].StrAnswers,CurrentStrAnswersInDB))
+      if (!strcmp (Print->PrintedQuestions[QstInd].StrAnswers,CurrentStrAnswersInDB))
 	{
 	 /* The answer just clicked by user
 	    is the same as the last one checked and stored in database */
-	 Print->PrintedQuestions[NumQst].StrAnswers[0]    = '\0';	// Uncheck option
-	 Print->PrintedQuestions[NumQst].Score            = 0;		// Clear question score
+	 Print->PrintedQuestions[QstInd].StrAnswers[0]    = '\0';	// Uncheck option
+	 Print->PrintedQuestions[QstInd].Score            = 0;		// Clear question score
 	}
      }
 
    /***** Store test exam question in database *****/
    ExaPrn_StoreOneQstOfPrintInDB (Print,
-				  NumQst);	// 0, 1, 2, 3...
+				  QstInd);	// 0, 1, 2, 3...
   }
 
 /*****************************************************************************/
@@ -1463,7 +1462,7 @@ static void ExaPrn_GetAnswerFromDB (struct ExaPrn_Print *Print,long QstCod,
 /*****************************************************************************/
 
 static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
-                                           unsigned NumQst)
+                                           unsigned QstInd)
   {
    /***** Insert question and user's answers into database *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
@@ -1473,12 +1472,12 @@ static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
 		    " VALUES"
 		    " (%ld,%ld,%u,%ld,'%.15lg','%s','%s')",
 		    Print->PrnCod,
-		    Print->PrintedQuestions[NumQst].QstCod,
-		    NumQst,	// 0, 1, 2, 3...
-		    Print->PrintedQuestions[NumQst].SetCod,
-		    Print->PrintedQuestions[NumQst].Score,
-		    Print->PrintedQuestions[NumQst].StrIndexes,
-		    Print->PrintedQuestions[NumQst].StrAnswers);
+		    Print->PrintedQuestions[QstInd].QstCod,
+		    QstInd,	// 0, 1, 2, 3...
+		    Print->PrintedQuestions[QstInd].SetCod,
+		    Print->PrintedQuestions[QstInd].Score,
+		    Print->PrintedQuestions[QstInd].StrIndexes,
+		    Print->PrintedQuestions[QstInd].StrAnswers);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 

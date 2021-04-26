@@ -1654,7 +1654,7 @@ static int API_WritePageIntoHTMLBuffer (struct soap *soap,
       /***** Write page from file to text buffer *****/
       /* Open file */
       if ((FileHTML = fopen (PathRelFileHTML,"rb")) == NULL)
-	 Err_ShowErrorAndExit ("Can not open XML file.");
+	 Err_FileFolderNotFoundExit ();
 
       /* Compute file size */
       fseek (FileHTML,0L,SEEK_END);
