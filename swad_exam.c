@@ -1775,63 +1775,6 @@ long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd)
   }
 
 /*****************************************************************************/
-/*********** Get previous question index to a given index in an exam **********/
-/*****************************************************************************/
-// Input question index can be 1, 2, 3... n-1
-// Return question index will be 1, 2, 3... n if previous question exists, or 0 if no previous question
-
-unsigned Exa_GetPrevQuestionIndexInExam (long ExaCod,unsigned QstInd)
-  {
-   /***** Get previous question index in an exam from database *****/
-   // Although indexes are always continuous...
-   // ...this implementation works even with non continuous indexes
-   return DB_QuerySELECTUnsigned ("can not get previous question index",
-				  "SELECT MAX(QstInd)"
-				   " FROM exa_set_questions"
-				  " WHERE ExaCod=%ld"
-				    " AND QstInd<%u",
-				  ExaCod,
-				  QstInd);
-  }
-
-/*****************************************************************************/
-/************* Get next question index to a given index in an exam ************/
-/*****************************************************************************/
-// Input question index can be 0, 1, 2, 3... n-1
-// Return question index will be 1, 2, 3... n if next question exists, or big number if no next question
-
-unsigned Exa_GetNextQuestionIndexInExam (long ExaCod,unsigned QstInd)
-  {
-   unsigned NextQstInd;
-
-   /***** Get next question index in an exam from database *****/
-   // Although indexes are always continuous...
-   // ...this implementation works even with non continuous indexes
-   NextQstInd = DB_QuerySELECTUnsigned ("can not get next question index",
-					"SELECT MIN(QstInd)"
-					 " FROM exa_set_questions"
-					" WHERE ExaCod=%ld"
-					  " AND QstInd>%u",
-					ExaCod,QstInd);
-   if (NextQstInd == 0)
-      NextQstInd = ExaSes_AFTER_LAST_QUESTION;	// End of questions has been reached
-
-   return NextQstInd;
-  }
-
-/*****************************************************************************/
-/*************** Put parameter with set code to edit, remove... **************/
-/*****************************************************************************/
-/*
-static void Exa_PutParamSetCod (void *SetCod)	// Should be a pointer to long
-  {
-   if (SetCod)
-      if (*((long *) SetCod) > 0)	// If set exists
-	 Par_PutHiddenParamLong (NULL,"SetCod",*((long *) SetCod));
-  }
-*/
-
-/*****************************************************************************/
 /********** Get number of sessions and check is edition is possible **********/
 /*****************************************************************************/
 // Before calling this function, number of sessions must be calculated

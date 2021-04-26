@@ -1806,7 +1806,8 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
 			  "gam_questions.QstInd,"	// row[1]
 			  "tst_questions.AnsType,"	// row[2]
 			  "tst_questions.Shuffle"	// row[3]
-		    " FROM gam_questions,tst_questions"
+		    " FROM gam_questions,"
+		          "tst_questions"
 		   " WHERE gam_questions.GamCod=%ld"
 		     " AND gam_questions.QstCod=tst_questions.QstCod"
 		   " ORDER BY gam_questions.QstInd",
@@ -2436,7 +2437,7 @@ static void Mch_SetMatchStatusToNextQst (struct Mch_Match *Match)
 							  Match->Status.QstInd);
 
    /***** Get question code *****/
-   if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// End of questions not reached
+   if (Match->Status.QstInd < Gam_AFTER_LAST_QUESTION)	// End of questions not reached
      {
       Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
 						      Match->Status.QstInd);
@@ -2452,7 +2453,7 @@ static void Mch_SetMatchStatusToNextQst (struct Mch_Match *Match)
 
 static void Mch_SetMatchStatusToEnd (struct Mch_Match *Match)
   {
-   Match->Status.QstInd  = Mch_AFTER_LAST_QUESTION;	// After last question
+   Match->Status.QstInd  = Gam_AFTER_LAST_QUESTION;	// After last question
    Match->Status.QstCod  = -1L;
    Match->Status.Playing = false;
    Match->Status.Showing = Mch_END;

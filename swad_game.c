@@ -1892,7 +1892,7 @@ unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
    return DB_QuerySELECTUnsigned ("can not get previous question index",
-				  "SELECT MAX(QstInd)"
+				  "SELECT COALESCE(MAX(QstInd),0)"
 				   " FROM gam_questions"
 				  " WHERE GamCod=%ld"
 				    " AND QstInd<%u",
@@ -1904,26 +1904,21 @@ unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
 /************* Get next question index to a given index in a game ************/
 /*****************************************************************************/
 // Input question index can be 0, 1, 2, 3... n-1
-// Return question index will be 1, 2, 3... n if next question exists, or 0 if no next question
+// Return question index will be 1, 2, 3... n if next question exists, or big number if no next question
 
 unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
   {
-   unsigned NextQstInd;
-
    /***** Get next question index in a game from database *****/
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
-   NextQstInd = DB_QuerySELECTUnsigned ("can not get next question index",
-					"SELECT MIN(QstInd)"
-					 " FROM gam_questions"
-					" WHERE GamCod=%ld"
-					  " AND QstInd>%u",
-					GamCod,
-					QstInd);
-   if (NextQstInd == 0)
-      NextQstInd = Mch_AFTER_LAST_QUESTION;	// End of questions has been reached
-
-   return NextQstInd;
+   return DB_QuerySELECTUnsigned ("can not get next question index",
+				  "SELECT COALESCE(MIN(QstInd),%u)"
+				   " FROM gam_questions"
+				  " WHERE GamCod=%ld"
+				    " AND QstInd>%u",
+				  Gam_AFTER_LAST_QUESTION,	// End of questions has been reached
+				  GamCod,
+				  QstInd);
   }
 
 /*****************************************************************************/
@@ -2467,7 +2462,7 @@ void Gam_MoveDownQst (void)
      {
       /* Indexes of questions to be exchanged */
       QstIndBottom = Gam_GetNextQuestionIndexInGame (Game.GamCod,QstIndTop);
-      if (!QstIndBottom)
+      if (QstIndBottom == Gam_AFTER_LAST_QUESTION)
 	 Err_WrongQuestionIndexExit ();
 
       /* Exchange questions */

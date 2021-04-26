@@ -93,9 +93,6 @@ void Exa_PutParamQstInd (unsigned QstInd);
 unsigned Exa_GetParamQstInd (void);
 long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd);
 
-unsigned Exa_GetPrevQuestionIndexInExam (long ExaCod,unsigned QstInd);
-unsigned Exa_GetNextQuestionIndexInExam (long ExaCod,unsigned QstInd);
-
 bool Exa_CheckIfEditable (const struct Exa_Exam *Exam);
 
 unsigned Exa_GetNumCoursesWithExams (Hie_Lvl_Level_t Scope);

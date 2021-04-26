@@ -41,8 +41,6 @@
 
 #define Mch_NEW_MATCH_SECTION_ID	"new_match"
 
-#define Mch_AFTER_LAST_QUESTION	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database to indicate that a match is finished
-
 #define Mch_NUM_SHOWING 5
 typedef enum
   {

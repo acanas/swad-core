@@ -65,6 +65,8 @@ extern struct Globals Gbl;
 #define ExaSet_MAX_SELECTED_QUESTIONS			10000
 #define ExaSet_MAX_BYTES_LIST_SELECTED_QUESTIONS	(ExaSet_MAX_SELECTED_QUESTIONS * (Cns_MAX_DECIMAL_DIGITS_LONG + 1))
 
+#define ExaSet_AFTER_LAST_SET	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database to indicate that a session is finished
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -848,7 +850,7 @@ static unsigned ExaSet_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd)
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
    return DB_QuerySELECTUnsigned ("can not get previous set index",
-				  "SELECT MAX(SetInd)"
+				  "SELECT COALESCE(MAX(SetInd),0)"
 				   " FROM exa_sets"
 				  " WHERE ExaCod=%ld"
 				    " AND SetInd<%u",
@@ -864,22 +866,17 @@ static unsigned ExaSet_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd)
 
 static unsigned ExaSet_GetNextSetIndexInExam (long ExaCod,unsigned SetInd)
   {
-   unsigned NextSetInd;
-
    /***** Get next set index in an exam from database *****/
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
-   NextSetInd = DB_QuerySELECTUnsigned ("can not get next set index",
-					"SELECT MIN(SetInd)"
-					 " FROM exa_sets"
-					" WHERE ExaCod=%ld"
-					  " AND SetInd>%u",
-					ExaCod,
-					SetInd);
-   if (NextSetInd == 0)
-      NextSetInd = ExaSes_AFTER_LAST_QUESTION;	// End of sets has been reached
-
-   return NextSetInd;
+   return DB_QuerySELECTUnsigned ("can not get next set index",
+				  "SELECT COALESCE(MIN(SetInd),%u)"
+				   " FROM exa_sets"
+				  " WHERE ExaCod=%ld"
+				    " AND SetInd>%u",
+				  ExaSet_AFTER_LAST_SET,	// End of sets has been reached
+				  ExaCod,
+				  SetInd);
   }
 
 /*****************************************************************************/
@@ -1866,7 +1863,7 @@ void ExaSet_MoveUpSet (void)
      {
       /* Indexes of sets to be exchanged */
       SetIndTop = ExaSet_GetPrevSetIndexInExam (Exam.ExaCod,SetIndBottom);
-      if (!SetIndTop)
+      if (SetIndTop == 0)
 	 Err_ShowErrorAndExit ("Wrong set index.");
 
       /* Exchange sets */
@@ -1917,7 +1914,7 @@ void ExaSet_MoveDownSet (void)
      {
       /* Indexes of sets to be exchanged */
       SetIndBottom = ExaSet_GetNextSetIndexInExam (Exam.ExaCod,SetIndTop);
-      if (!SetIndBottom)
+      if (SetIndBottom == ExaSet_AFTER_LAST_SET)
 	 Err_ShowErrorAndExit ("Wrong set index.");
 
       /* Exchange sets */

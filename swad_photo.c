@@ -1494,7 +1494,7 @@ static long Pho_GetTimeAvgPhotoWasComputed (long DegCod)
    /***** Get last time an average photo was computed from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get last time"
 				  " an average photo was computed",
-		       "SELECT MIN(UNIX_TIMESTAMP(TimeAvgPhoto))"	// row[0]
+		       "SELECT COALESCE(MIN(UNIX_TIMESTAMP(TimeAvgPhoto)),0)"	// row[0]
 			" FROM sta_degrees"
 		       " WHERE DegCod=%ld",
 		       DegCod) == 1)
