@@ -35,6 +35,7 @@
 #include "swad_config.h"
 #include "swad_connected.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_firewall.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
@@ -149,7 +150,7 @@ int main (void)
 
       /***** Check if the user have permission to execute the action *****/
       if (!Act_CheckIfIHavePermissionToExecuteAction (Gbl.Action.Act))
-	 Lay_NoPermissionExit ();
+	 Err_NoPermissionExit ();
 
       /***** Update most frequently used actions *****/
       MFU_UpdateMFUActions ();
@@ -202,7 +203,7 @@ int main (void)
      }
 
    /***** Cleanup and exit *****/
-   Lay_ShowErrorAndExit (NULL);
+   Err_ShowErrorAndExit (NULL);
 
    return 0; // Control don't reach this point. Used to avoid warning.
   }

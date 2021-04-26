@@ -35,6 +35,7 @@
 #include "swad_call_for_exam.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
@@ -262,25 +263,25 @@ static long Cfe_GetParamsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
 static void Cfe_AllocMemCallForExam (struct Cfe_CallsForExams *CallsForExams)
   {
    if ((CallsForExams->CallForExam.Place       = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    if ((CallsForExams->CallForExam.Mode        = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    if ((CallsForExams->CallForExam.Structure   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    if ((CallsForExams->CallForExam.DocRequired = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    if ((CallsForExams->CallForExam.MatRequired = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    if ((CallsForExams->CallForExam.MatAllowed  = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    if ((CallsForExams->CallForExam.OtherInfo   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/
@@ -424,7 +425,7 @@ void Cfe_PrintCallForExam (void)
 
    /***** Get the code of the call for exam *****/
    if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
-      Lay_WrongCallForExamExit ();
+      Err_WrongCallForExamExit ();
 
    /***** Read call for exam from the database *****/
    Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
@@ -453,7 +454,7 @@ void Cfe_ReqRemoveCallForExam (void)
 
    /***** Get the code of the call for exam *****/
    if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
-      Lay_WrongCallForExamExit ();
+      Err_WrongCallForExamExit ();
 
    /***** Show question and button to remove call for exam *****/
    /* Begin alert */
@@ -489,7 +490,7 @@ void Cfe_RemoveCallForExam1 (void)
 
    /***** Get the code of the call for exam *****/
    if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
-      Lay_WrongCallForExamExit ();
+      Err_WrongCallForExamExit ();
 
    /***** Mark the call for exam as deleted in the database *****/
    DB_QueryUPDATE ("can not remove call for exam",
@@ -538,7 +539,7 @@ void Cfe_HideCallForExam (void)
 
    /***** Get the code of the call for exam *****/
    if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
-      Lay_WrongCallForExamExit ();
+      Err_WrongCallForExamExit ();
 
    /***** Mark the call for exam as hidden in the database *****/
    DB_QueryUPDATE ("can not hide call for exam",
@@ -570,7 +571,7 @@ void Cfe_UnhideCallForExam (void)
 
    /***** Get the code of the call for exam *****/
    if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
-      Lay_WrongCallForExamExit ();
+      Err_WrongCallForExamExit ();
 
    /***** Mark the call for exam as visible in the database *****/
    DB_QueryUPDATE ("can not unhide call for exam",
@@ -737,7 +738,7 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
      {
       /***** Get the code of the call for exam (row[0]) *****/
       if ((ExaCod = DB_GetNextCode (mysql_res)) <= 0)
-         Lay_WrongCallForExamExit ();
+         Err_WrongCallForExamExit ();
 
       /***** Allocate memory for the call for exam *****/
       Cfe_AllocMemCallForExam (CallsForExams);
@@ -921,7 +922,7 @@ void Cfe_CreateListCallsForExams (struct Cfe_CallsForExams *CallsForExams)
 	{
 	 /***** Allocate memory for the list *****/
 	 if ((CallsForExams->Lst = calloc (NumExaAnns,sizeof (*CallsForExams->Lst))) == NULL)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Get the dates of the existing calls for exams *****/
 	 for (NumExaAnn = 0;
@@ -939,7 +940,7 @@ void Cfe_CreateListCallsForExams (struct Cfe_CallsForExams *CallsForExams)
 			&CallsForExams->Lst[CallsForExams->NumCallsForExams].ExamDate.Year,
 			&CallsForExams->Lst[CallsForExams->NumCallsForExams].ExamDate.Month,
 			&CallsForExams->Lst[CallsForExams->NumCallsForExams].ExamDate.Day) != 3)
-	       Lay_WrongCallForExamExit ();
+	       Err_WrongCallForExamExit ();
 
 	    /***** Increment number of elements in list *****/
 	    CallsForExams->NumCallsForExams++;
@@ -999,7 +1000,7 @@ static void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExam
 			" FROM cfe_exams"
 		       " WHERE ExaCod=%ld",
 		       ExaCod) != 1)
-      Lay_WrongCallForExamExit ();
+      Err_WrongCallForExamExit ();
 
    /***** Get the data of the call for exam *****/
    row = mysql_fetch_row (mysql_res);
@@ -1009,9 +1010,9 @@ static void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExam
 
    /* Status of the call for exam (row[1]) */
    if (sscanf (row[1],"%u",&UnsignedNum) != 1)
-      Lay_WrongCallForExamExit ();
+      Err_WrongCallForExamExit ();
    if (UnsignedNum >= Cfe_NUM_STATUS)
-      Lay_WrongCallForExamExit ();
+      Err_WrongCallForExamExit ();
    CallsForExams->CallForExam.Status = (Cfe_Status_t) UnsignedNum;
 
    /* Name of the course (row[2]) */
@@ -1020,7 +1021,7 @@ static void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExam
 
    /* Year (row[3]) */
    if (sscanf (row[3],"%u",&CallsForExams->CallForExam.Year) != 1)
-      Lay_WrongCallForExamExit ();
+      Err_WrongCallForExamExit ();
 
    /* Exam session (row[4]) */
    Str_Copy (CallsForExams->CallForExam.Session,row[4],
@@ -1034,7 +1035,7 @@ static void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExam
                &Hour,
 	       &Minute,
 	       &Second) != 6)
-      Lay_WrongCallForExamExit ();
+      Err_WrongCallForExamExit ();
 
    /* Date of exam (row[6]) */
    if (sscanf (row[6],"%04u-%02u-%02u %02u:%02u:%02u",
@@ -1044,7 +1045,7 @@ static void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExam
                &CallsForExams->CallForExam.StartTime.Hour,
 	       &CallsForExams->CallForExam.StartTime.Minute,
 	       &Second) != 6)
-      Lay_WrongCallForExamExit ();
+      Err_WrongCallForExamExit ();
    snprintf (CallsForExams->CallForExam.ExamDate.YYYYMMDD,
              sizeof (CallsForExams->CallForExam.ExamDate.YYYYMMDD),"%04u%02u%02u",
              CallsForExams->CallForExam.ExamDate.Year,
@@ -1056,7 +1057,7 @@ static void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExam
                &CallsForExams->CallForExam.Duration.Hour,
                &CallsForExams->CallForExam.Duration.Minute,
                &Second) != 3)
-      Lay_WrongCallForExamExit ();
+      Err_WrongCallForExamExit ();
 
    /* Place (row[8]), exam mode (row[9]), structure (row[10]),
       documentation required (row[11]), material required (row[12]),
@@ -1837,5 +1838,5 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
                  Txt_CALL_FOR_EXAM_Material_required,CallsForExams->CallForExam.MatRequired,
                  Txt_CALL_FOR_EXAM_Material_allowed,CallsForExams->CallForExam.MatAllowed,
                  Txt_CALL_FOR_EXAM_Other_information,CallsForExams->CallForExam.OtherInfo) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
   }

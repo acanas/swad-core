@@ -31,6 +31,7 @@
 #include <string.h>		// For strcasecmp...
 
 #include "swad_config.h"
+#include "swad_error.h"
 #include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_string.h"
@@ -78,7 +79,7 @@ void Cfg_GetConfigFromFile (void)
    /***** Read config from file to string *****/
    /* Open config file */
    if ((FileCfg = fopen (Cfg_FILE_CONFIG,"rb")) == NULL)
-      Lay_ShowErrorAndExit ("Can not open config file.");
+      Err_ShowErrorAndExit ("Can not open config file.");
 
    /* Compute file size */
    fseek (FileCfg,0L,SEEK_END);
@@ -89,14 +90,14 @@ void Cfg_GetConfigFromFile (void)
    if ((Config = malloc (Length + 1)) == NULL)
      {
       fclose (FileCfg);
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
      }
 
    /* Copy file content into buffer */
    if (fread (Config,sizeof (char),Length,FileCfg) != Length)
      {
       fclose (FileCfg);
-      Lay_ShowErrorAndExit ("Can not read config.");
+      Err_ShowErrorAndExit ("Can not read config.");
      }
    Config[Length] = '\0';
 
@@ -116,5 +117,5 @@ void Cfg_GetConfigFromFile (void)
 
    if (!Gbl.Config.DatabasePassword[0] ||
        !Gbl.Config.SMTPPassword[0])
-      Lay_ShowErrorAndExit ("Bad config format.");
+      Err_ShowErrorAndExit ("Bad config format.");
   }

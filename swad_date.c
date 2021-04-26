@@ -36,6 +36,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_date.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -384,7 +385,7 @@ struct tm *Dat_GetLocalTimeFromClock (const time_t *timep)
    struct tm *tm_ptr;
 
    if ((tm_ptr = localtime (timep)) == NULL)
-      Lay_ShowErrorAndExit ("Can not get local time from clock.");
+      Err_ShowErrorAndExit ("Can not get local time from clock.");
 
    /***** Convert from sunday, monday, tuesday...
 	  to monday, tuesday, wednesday... *****/
@@ -716,9 +717,9 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
    /***** Hidden field with UTC time (seconds since 1970) used to send time *****/
    if (asprintf (&IdTimeUTC,"%sTimeUTC",Id) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    if (asprintf (&ParamNameTimeUTC,"%sTimeUTC",ParamName) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    Par_PutHiddenParamLong (IdTimeUTC,ParamNameTimeUTC,(long) TimeUTC);
    free (ParamNameTimeUTC);
    free (IdTimeUTC);

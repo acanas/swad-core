@@ -30,6 +30,7 @@
 
 #include "swad_action.h"
 #include "swad_box.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
@@ -124,7 +125,7 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
 
    /***** Check level of nesting *****/
    if (Gbl.Box.Nested >= Box_MAX_NESTED - 1)	// Can not nest a new box
-      Lay_ShowErrorAndExit ("Box nesting limit reached.");
+      Err_ShowErrorAndExit ("Box nesting limit reached.");
 
    /***** Increase level of nesting *****/
    Gbl.Box.Nested++;
@@ -133,7 +134,7 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
    if (Closable == Box_CLOSABLE)
      {
       if ((Gbl.Box.Ids[Gbl.Box.Nested] = malloc (Frm_MAX_BYTES_ID + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
      }
    else
       Gbl.Box.Ids[Gbl.Box.Nested] = NULL;
@@ -224,7 +225,7 @@ void Box_BoxEnd (void)
   {
    /***** Check level of nesting *****/
    if (Gbl.Box.Nested < 0)
-      Lay_ShowErrorAndExit ("Trying to end a box not open.");
+      Err_ShowErrorAndExit ("Trying to end a box not open.");
 
    /***** Free memory allocated for box id string *****/
    if (Gbl.Box.Ids[Gbl.Box.Nested])

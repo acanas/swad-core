@@ -36,6 +36,7 @@
 #include "swad_config.h"
 #include "swad_course.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_help.h"
@@ -210,7 +211,7 @@ static void SysCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
 		  " FROM ctr_centers"
 		 " WHERE Latitude<>0"
 		   " AND Longitude<>0") < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    Map_GetCoordAndZoom (Coord,Zoom,Query);
    free (Query);
   }

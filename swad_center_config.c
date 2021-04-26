@@ -35,6 +35,7 @@
 
 #include "swad_center.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -464,10 +465,10 @@ static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
 		 Cfg_URL_CTR_PUBLIC,
 		 (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
 		 (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    if (asprintf (&Icon,"%u.jpg",
 		 (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    HTM_IMG (URL,Icon,Gbl.Hierarchy.Ctr.FullName,
 	    "class=\"%s\"",PrintView ? "CENTER_PHOTO_PRINT CENTER_PHOTO_WIDTH" :
 				       "CENTER_PHOTO_SHOW CENTER_PHOTO_WIDTH");
@@ -531,7 +532,7 @@ static void CtrCfg_GetPhotoAttr (long CtrCod,char **PhotoAttribution)
 	   {
 	    Length = strlen (row[0]);
 	    if (((*PhotoAttribution) = malloc (Length + 1)) == NULL)
-               Lay_NotEnoughMemoryExit ();
+               Err_NotEnoughMemoryExit ();
 	    Str_Copy (*PhotoAttribution,row[0],Length);
 	   }
      }
@@ -970,7 +971,7 @@ void CtrCfg_ReceivePhoto (void)
              PathFileImg);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
-      Lay_ShowErrorAndExit ("Error when running command to process image.");
+      Err_ShowErrorAndExit ("Error when running command to process image.");
 
    /***** Write message depending on return code *****/
    ReturnCode = WEXITSTATUS(ReturnCode);
@@ -980,7 +981,7 @@ void CtrCfg_ReceivePhoto (void)
 	        "Image could not be processed successfully.<br />"
 		"Error code returned by the program of processing: %d",
 	        ReturnCode);
-      Lay_ShowErrorAndExit (ErrorMsg);
+      Err_ShowErrorAndExit (ErrorMsg);
      }
 
    /***** Remove temporary file *****/

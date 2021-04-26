@@ -34,6 +34,7 @@
 #include "swad_agenda.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_figure_cache.h"
 #include "swad_file_browser.h"
@@ -674,7 +675,7 @@ static void Fig_GetAndShowHierarchyWithInss (void)
       case Hie_Lvl_CRS:
 	 break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -717,7 +718,7 @@ static void Fig_GetAndShowHierarchyWithCtrs (void)
       case Hie_Lvl_CRS:
 	 break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -766,7 +767,7 @@ static void Fig_GetAndShowHierarchyWithDegs (void)
       case Hie_Lvl_CRS:
 	 break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -823,7 +824,7 @@ static void Fig_GetAndShowHierarchyWithCrss (void)
       case Hie_Lvl_CRS:
 	 break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -904,7 +905,7 @@ static void Fig_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
          NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod);
 	 break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -962,7 +963,7 @@ static void Fig_GetAndShowHierarchyTotal (void)
      case Hie_Lvl_CRS:
 	 break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -1115,7 +1116,7 @@ static void Fig_GetAndShowInssOrderedByNumCtrs (void)
 			 Gbl.Hierarchy.Ins.InsCod);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -1191,7 +1192,7 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
 			 Gbl.Hierarchy.Ins.InsCod);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -1273,7 +1274,7 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
 			 Gbl.Hierarchy.Ins.InsCod);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -1361,7 +1362,7 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void)
 			 Gbl.Hierarchy.Ins.InsCod);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -1432,7 +1433,7 @@ static void Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 			 Gbl.Hierarchy.Ins.InsCod);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 NumInss = 0;	// Not reached. Initialized to avoid warning.
 	 break;
      }
@@ -1577,11 +1578,11 @@ static unsigned Fig_GetInsAndStat (struct Ins_Instit *Ins,MYSQL_RES *mysql_res)
    /***** Get data of this institution (row[0]) *****/
    Ins->InsCod = Str_ConvertStrCodToLongCod (row[0]);
    if (!Ins_GetDataOfInstitutionByCod (Ins))
-      Lay_WrongInstitExit ();
+      Err_WrongInstitExit ();
 
    /***** Get statistic (row[1]) *****/
    if (sscanf (row[1],"%u",&NumberThisRow) != 1)
-      Lay_ShowErrorAndExit ("Error in statistic");
+      Err_ShowErrorAndExit ("Error in statistic");
 
    return NumberThisRow;
   }
@@ -1800,7 +1801,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
-	       Lay_WrongFileBrowserExit ();
+	       Err_WrongFileBrowserExit ();
 	       break;
 	   }
          break;
@@ -1978,7 +1979,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
-	       Lay_WrongFileBrowserExit ();
+	       Err_WrongFileBrowserExit ();
 	       break;
 	   }
          break;
@@ -2144,7 +2145,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
-	       Lay_WrongFileBrowserExit ();
+	       Err_WrongFileBrowserExit ();
 	       break;
 	   }
          break;
@@ -2298,7 +2299,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
-	       Lay_WrongFileBrowserExit ();
+	       Err_WrongFileBrowserExit ();
 	       break;
 	   }
          break;
@@ -2440,7 +2441,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
-	       Lay_WrongFileBrowserExit ();
+	       Err_WrongFileBrowserExit ();
 	       break;
 	   }
          break;
@@ -2570,12 +2571,12 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
-	       Lay_WrongFileBrowserExit ();
+	       Err_WrongFileBrowserExit ();
 	       break;
 	   }
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -2591,37 +2592,37 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
    /* Get number of courses (row[0]) */
    if (row[0])
       if (sscanf (row[0],"%d",&(SizeOfFileZones->NumCrss)) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of courses.");
+         Err_ShowErrorAndExit ("Error when getting number of courses.");
 
    /* Get number of groups (row[1]) */
    if (row[1])
       if (sscanf (row[1],"%d",&(SizeOfFileZones->NumGrps)) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of groups.");
+         Err_ShowErrorAndExit ("Error when getting number of groups.");
 
    /* Get number of users (row[2]) */
    if (row[2])
       if (sscanf (row[2],"%d",&(SizeOfFileZones->NumUsrs)) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of users.");
+         Err_ShowErrorAndExit ("Error when getting number of users.");
 
    /* Get maximum number of levels (row[3]) */
    if (row[3])
       if (sscanf (row[3],"%u",&(SizeOfFileZones->MaxLevels)) != 1)
-         Lay_ShowErrorAndExit ("Error when getting maximum number of levels.");
+         Err_ShowErrorAndExit ("Error when getting maximum number of levels.");
 
    /* Get number of folders (row[4]) */
    if (row[4])
       if (sscanf (row[4],"%lu",&(SizeOfFileZones->NumFolders)) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of folders.");
+         Err_ShowErrorAndExit ("Error when getting number of folders.");
 
    /* Get number of files (row[5]) */
    if (row[5])
       if (sscanf (row[5],"%lu",&(SizeOfFileZones->NumFiles)) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of files.");
+         Err_ShowErrorAndExit ("Error when getting number of files.");
 
    /* Get total size (row[6]) */
    if (row[6])
       if (sscanf (row[6],"%llu",&(SizeOfFileZones->Size)) != 1)
-         Lay_ShowErrorAndExit ("Error when getting toal size.");
+         Err_ShowErrorAndExit ("Error when getting toal size.");
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -3079,7 +3080,7 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,
 			 (unsigned) License);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -3099,7 +3100,7 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,
 
       /* Get number of files (row[1]) */
       if (sscanf (row[1],"%lu",&NumFiles[Public]) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of files.");
+         Err_ShowErrorAndExit ("Error when getting number of files.");
      }
 
    /* Free structure that stores the query result */
@@ -3681,7 +3682,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    (unsigned) NoteType);
 	    break;
 	 default:
-	    Lay_WrongScopeExit ();
+	    Err_WrongScopeExit ();
 	    NumRows = 0;	// Initialized to avoid warning
 	    break;
 	}
@@ -3822,7 +3823,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 		         Gbl.Hierarchy.Crs.CrsCod);
 	 break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 NumRows = 0;	// Initialized to avoid warning
 	 break;
      }
@@ -4016,7 +4017,7 @@ static void Fig_GetAndShowFollowStats (void)
 			   FieldDB[Fol]);
 	    break;
 	 default:
-	    Lay_WrongScopeExit ();
+	    Err_WrongScopeExit ();
 	    NumUsrs = 0;	// Not reached. Initialized to av oid warning
 	    break;
 	}
@@ -4155,7 +4156,7 @@ static void Fig_GetAndShowFollowStats (void)
 					    FieldDB[1 - Fol]);
 	    break;
 	 default:
-	    Lay_WrongScopeExit ();
+	    Err_WrongScopeExit ();
 	    Average = 0.0;	// Not reached
 	    break;
 	}
@@ -4283,7 +4284,7 @@ static void Fig_GetAndShowForumStats (void)
          Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.CrsCod,&FiguresForum);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -4418,7 +4419,7 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    HTM_TD_Begin ("class=\"BT\"");
    if (asprintf (&ForumName,"%s%s",
 		 ForumName1,ForumName2) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    Ico_PutIcon (Icon,ForumName,"ICO16x16");
    free (ForumName);
    HTM_TD_End ();
@@ -4581,7 +4582,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
       /* Get the number of users who want to be notified by email on this event, from database */
       if (asprintf (&SubQuery,"((usr_data.EmailNtfEvents & %u)<>0)",
 	            (1 << NotifyEvent)) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       NumUsrs[NotifyEvent] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
       free (SubQuery);
 
@@ -4665,7 +4666,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
 			    (unsigned) NotifyEvent);
             break;
 	 default:
-	    Lay_WrongScopeExit ();
+	    Err_WrongScopeExit ();
 	    break;
         }
 
@@ -4675,7 +4676,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
       if (row[0])
         {
          if (sscanf (row[0],"%u",&NumEvents[NotifyEvent]) != 1)
-            Lay_ShowErrorAndExit ("Error when getting the number of notifications by email.");
+            Err_ShowErrorAndExit ("Error when getting the number of notifications by email.");
         }
       else
          NumEvents[NotifyEvent] = 0;
@@ -4684,7 +4685,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
       if (row[1])
         {
          if (sscanf (row[1],"%u",&NumMails[NotifyEvent]) != 1)
-            Lay_ShowErrorAndExit ("Error when getting the number of emails to notify events3.");
+            Err_ShowErrorAndExit ("Error when getting the number of emails to notify events3.");
         }
       else
          NumMails[NotifyEvent] = 0;
@@ -5146,7 +5147,7 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 	 /* Get the number of users who have chosen this privacy option from database */
 	 if (asprintf (&SubQuery,"usr_data.%s='%s'",
 		       FieldName,Pri_VisibilityDB[Visibility]) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 NumUsrs[Visibility] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
 	 free (SubQuery);
 
@@ -5234,7 +5235,7 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
       /* Get number of users who have chosen this menu from database */
       if (asprintf (&SubQuery,"usr_data.ThirdPartyCookies='%c'",
 	            AcceptedInDB[i]) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       NumUsrs[i] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
       free (SubQuery);
 
@@ -5310,7 +5311,7 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
       /* Get the number of users who have chosen this language from database */
       if (asprintf (&SubQuery,"usr_data.Language='%s'",
 		    Lan_STR_LANG_ID[Lan]) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       NumUsrs[Lan] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
       free (SubQuery);
 
@@ -5389,7 +5390,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 	 /* Get number of users who have chosen this first day of week from database */
 	 if (asprintf (&SubQuery,"usr_data.FirstDayOfWeek=%u",
 		       (unsigned) FirstDayOfWeek) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 NumUsrs[FirstDayOfWeek] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
 	 free (SubQuery);
 
@@ -5408,7 +5409,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 	 HTM_TD_Begin ("class=\"CM\"");
 	 if (asprintf (&Icon,"first-day-of-week-%u.png",
 		       FirstDayOfWeek) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 Ico_PutIcon (Icon,
 		      Str_BuildStringStr (Txt_First_day_of_the_week_X,
 				          Txt_DAYS_SMALL[FirstDayOfWeek]),
@@ -5472,7 +5473,7 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
       /* Get number of users who have chosen this date format from database */
       if (asprintf (&SubQuery,"usr_data.DateFormat=%u",
 	            (unsigned) Format) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       NumUsrs[Format] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
       free (SubQuery);
 
@@ -5550,7 +5551,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
       /* Get the number of users who have chosen this icon set from database */
       if (asprintf (&SubQuery,"usr_data.IconSet='%s'",
 	            Ico_IconSetId[IconSet]) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       NumUsrs[IconSet] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
       free (SubQuery);
 
@@ -5568,7 +5569,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
       HTM_TD_Begin ("class=\"LM\"");
       if (asprintf (&URL,"%s/%s",
 		    Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[IconSet]) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_IMG (URL,"cog.svg",Ico_IconSetNames[IconSet],
 	       "class=\"ICO40x40\"");
       free (URL);
@@ -5631,7 +5632,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
       /* Get number of users who have chosen this menu from database */
       if (asprintf (&SubQuery,"usr_data.Menu=%u",
 	            (unsigned) Menu) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       NumUsrs[Menu] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
       free (SubQuery);
 
@@ -5708,7 +5709,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
       /* Get number of users who have chosen this theme from database */
       if (asprintf (&SubQuery,"usr_data.Theme='%s'",
 		    The_ThemeId[Theme]) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       NumUsrs[Theme] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
       free (SubQuery);
 
@@ -5726,7 +5727,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
       HTM_TD_Begin ("class=\"CM\"");
       if (asprintf (&URL,"%s/%s",
 		    Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Theme]) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_IMG (URL,"theme_32x20.gif",The_ThemeNames[Theme],
 	       "style=\"width:40px;height:25px;\"");
       free (URL);
@@ -5789,7 +5790,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
       /* Get the number of users who have chosen this layout of columns from database */
       if (asprintf (&SubQuery,"usr_data.SideCols=%u",
 	            SideCols) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       NumUsrs[SideCols] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
       free (SubQuery);
 
@@ -5807,7 +5808,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
       HTM_TD_Begin ("class=\"CM\"");
       if (asprintf (&Icon,"layout%u%u_32x20.gif",
 		    SideCols >> 1,SideCols & 1) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Txt_LAYOUT_SIDE_COLUMNS[SideCols],
 	       "style=\"width:40px;height:25px;\"");
       free (Icon);
@@ -5925,7 +5926,7 @@ unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 		        Gbl.Hierarchy.Crs.CrsCod,SubQuery);
 	 break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 NumUsrs = 0;	// Not reached. Initialized to avoid warning.
 	 break;
      }

@@ -29,6 +29,7 @@
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -534,7 +535,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			 Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -571,7 +572,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	{
 	 /* Get number of users (row[1]) */
 	 if (sscanf (row[1],"%u",&NumUsrs) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting number of files.");
+	    Err_ShowErrorAndExit ("Error when getting number of files.");
 
 	 HTM_TR_Begin (NULL);
 

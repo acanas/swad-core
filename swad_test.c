@@ -40,6 +40,7 @@
 #include "swad_action.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_exam_set.h"
 #include "swad_figure.h"
 #include "swad_form.h"
@@ -435,7 +436,7 @@ void Tst_ReceiveTestDraft (void)
    /* Get test exam code from form */
    TstPrn_ResetPrint (&Print);
    if ((Print.PrnCod = TstPrn_GetParamPrnCod ()) <= 0)
-      Lay_WrongTestExit ();
+      Err_WrongTestExit ();
 
    /* Get number of this test from form */
    NumTst = Tst_GetParamNumTst ();
@@ -491,7 +492,7 @@ void Tst_AssessTest (void)
    /* Get test exam code from form */
    TstPrn_ResetPrint (&Print);
    if ((Print.PrnCod = TstPrn_GetParamPrnCod ()) <= 0)
-      Lay_WrongTestExit ();
+      Err_WrongTestExit ();
 
    /* Get number of this test from form */
    NumTst = Tst_GetParamNumTst ();
@@ -619,7 +620,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
             TimeNextTestUTC = Dat_GetUNIXTimeFromStr (row[1]);
      }
    else
-      Lay_ShowErrorAndExit ("Error when reading date of next allowed access to test.");
+      Err_ShowErrorAndExit ("Error when reading date of next allowed access to test.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -677,7 +678,7 @@ static unsigned Tst_GetNumExamsGeneratedByMe (void)
             NumExamsGeneratedByMe = 0;
         }
       else
-         Lay_ShowErrorAndExit ("Error when getting number of hits to test.");
+         Err_ShowErrorAndExit ("Error when getting number of hits to test.");
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -818,7 +819,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
 	 /* Convert the stem, that is in HTML, to rigorous HTML */
 	 StemLength = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
 	 if ((StemRigorousHTML = malloc (StemLength + 1)) == NULL)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 Str_Copy (StemRigorousHTML,Stem,StemLength);
 
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -917,7 +918,7 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 	 /***** Convert the feedback, that is in HTML, to rigorous HTML *****/
 	 FeedbackLength = strlen (Feedback) * Str_MAX_BYTES_PER_CHAR;
 	 if ((FeedbackRigorousHTML = malloc (FeedbackLength + 1)) == NULL)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 Str_Copy (FeedbackRigorousHTML,Feedback,FeedbackLength);
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			   FeedbackRigorousHTML,FeedbackLength,false);
@@ -1753,7 +1754,7 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
 
    /***** Allocate space for query *****/
    if ((Query = malloc (Tst_MAX_BYTES_QUERY_TEST + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Select questions *****/
    /* Start query */
@@ -1794,7 +1795,7 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
          Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
          LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 256)
-            Lay_ShowErrorAndExit ("Query size exceed.");
+            Err_ShowErrorAndExit ("Query size exceed.");
          Str_Concat (Query,
                      NumItemInList ? " OR tst_tags.TagTxt='" :
                                      " AND (tst_tags.TagTxt='",
@@ -1818,7 +1819,7 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
 	 AnsType = Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
          LengthQuery = LengthQuery + 35 + strlen (Tst_StrAnswerTypesDB[AnsType]) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 256)
-            Lay_ShowErrorAndExit ("Query size exceed.");
+            Err_ShowErrorAndExit ("Query size exceed.");
          Str_Concat (Query,
                      NumItemInList ? " OR tst_questions.AnsType='" :
                                      " AND (tst_questions.AnsType='",
@@ -1894,11 +1895,11 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
    /***** Trivial check: number of questions *****/
    if (Test->NumQsts == 0 ||
        Test->NumQsts > TstCfg_MAX_QUESTIONS_PER_TEST)
-      Lay_ShowErrorAndExit ("Wrong number of questions.");
+      Err_ShowErrorAndExit ("Wrong number of questions.");
 
    /***** Allocate space for query *****/
    if ((Query = malloc (Tst_MAX_BYTES_QUERY_TEST + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Select questions without hidden tags *****/
    /* Start query */
@@ -1935,7 +1936,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
          Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
          LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 128)
-            Lay_ShowErrorAndExit ("Query size exceed.");
+            Err_ShowErrorAndExit ("Query size exceed.");
          Str_Concat (Query,
                      NumItemInList ? " OR tst_tags.TagTxt='" :
                                      " AND (tst_tags.TagTxt='",
@@ -1959,7 +1960,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
 	 AnswerType = Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
          LengthQuery = LengthQuery + 35 + strlen (Tst_StrAnswerTypesDB[AnswerType]) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 128)
-            Lay_ShowErrorAndExit ("Query size exceed.");
+            Err_ShowErrorAndExit ("Query size exceed.");
          Str_Concat (Query,
                      NumItemInList ? " OR tst_questions.AnsType='" :
                                      " AND (tst_questions.AnsType='",
@@ -2000,7 +2001,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
 
       /* Get question code (row[0]) */
       if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	 Lay_ShowErrorAndExit ("Wrong code of question.");
+	 Err_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get answer type (row[1]) */
       AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
@@ -2086,7 +2087,7 @@ void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
       else
          ErrorInIndex = true;
       if (ErrorInIndex)
-         Lay_ShowErrorAndExit ("Wrong index of answer.");
+         Err_ShowErrorAndExit ("Wrong index of answer.");
 
       snprintf (StrInd,sizeof (StrInd),NumOpt ? ",%u" :
 						"%u",Index);
@@ -2169,7 +2170,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
       /***** Get question code (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
       if ((Test->Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Lay_WrongQuestionExit ();
+         Err_WrongQuestionExit ();
 
       /***** Write question row *****/
       Tst_WriteQuestionListing (Test,NumQst);
@@ -2290,7 +2291,7 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned NumQst)
 
       /* Date (row[0] has the UTC date-time) */
       if (asprintf (&Id,"tst_date_%u",++UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\"",
 		    Id,Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,Test->Question.EditTime,
@@ -2432,7 +2433,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exam
       /* Get question code (row[0]) */
       row = mysql_fetch_row (mysql_res);
       if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Lay_WrongQuestionExit ();
+         Err_WrongQuestionExit ();
 
       /* Write question row */
       Tst_WriteQuestionRowForSelection (NumQst,&Question);
@@ -2517,7 +2518,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
       /* Get question code (row[0]) */
       row = mysql_fetch_row (mysql_res);
       if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Lay_WrongQuestionExit ();
+         Err_WrongQuestionExit ();
 
       /* Write question row */
       Tst_WriteQuestionRowForSelection (NumQst,&Question);
@@ -2593,7 +2594,7 @@ static void Tst_WriteQuestionRowForSelection (unsigned NumQst,
 
       /* Write the date (row[0] has the UTC date-time) */
       if (asprintf (&Id,"tst_date_%u",++UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\">",
 		    Id,Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,Question->EditTime,
@@ -2903,7 +2904,7 @@ void Tst_WriteParamQstCod (unsigned NumQst,long QstCod)
 void Tst_CheckIfNumberOfAnswersIsOne (const struct Tst_Question *Question)
   {
    if (Question->Answer.NumOptions != 1)
-      Lay_WrongAnswerExit ();
+      Err_WrongAnswerExit ();
   }
 
 /*****************************************************************************/
@@ -2985,7 +2986,7 @@ static bool Tst_GetParamsTst (struct Tst_Test *Test,
 
    /* Get the tags */
    if ((Test->Tags.List = malloc (Tag_MAX_BYTES_TAGS_LIST + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    Par_GetParMultiToText ("ChkTag",Test->Tags.List,Tag_MAX_BYTES_TAGS_LIST);
 
    /* Check number of tags selected */
@@ -3148,7 +3149,7 @@ unsigned Tst_CountNumQuestionsInList (const char *ListQuestions)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
       if (sscanf (LongStr,"%ld",&QstCod) != 1)
-         Lay_WrongQuestionExit ();
+         Err_WrongQuestionExit ();
       NumQuestions++;
      }
    return NumQuestions;
@@ -3519,7 +3520,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
 	                                "",
 	           NumOpt);
       if (asprintf (&Title,"%s %c)",Txt_Expand,'a' + (char) NumOpt) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       Ico_PutIcon ("caret-right.svg",Title,"ICO16x16");
       free (Title);
       HTM_A_End ();
@@ -3532,7 +3533,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
 	                                " style=\"display:none;\"",	// Answer does not have content ==> Hide icon
                    NumOpt);
       if (asprintf (&Title,"%s %c)",Txt_Contract,'a' + (char) NumOpt) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       Ico_PutIcon ("caret-down.svg",Title,"ICO16x16");
       free (Title);
       HTM_A_End ();
@@ -3658,11 +3659,11 @@ void Tst_QstConstructor (struct Tst_Question *Question)
 
    /***** Allocate memory for stem and feedback *****/
    if ((Question->Stem = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    Question->Stem[0] = '\0';
 
    if ((Question->Feedback = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    Question->Feedback[0] = '\0';
 
    /***** Initialize answers *****/
@@ -3944,7 +3945,7 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
 	       break;
 	    case Tst_ANS_FLOAT:
 	       if (Question->Answer.NumOptions != 2)
-		  Lay_WrongAnswerExit ();
+		  Err_WrongAnswerExit ();
 	       Question->Answer.FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[1]);
 	       break;
 	    case Tst_ANS_TRUE_FALSE:
@@ -3956,7 +3957,7 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
 	    case Tst_ANS_TEXT:
 	       /* Check number of options */
 	       if (Question->Answer.NumOptions > Tst_MAX_OPTIONS_PER_QUESTION)
-		  Lay_WrongAnswerExit ();
+		  Err_WrongAnswerExit ();
 
 	       /*  Allocate space for text and feedback */
 	       if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
@@ -4067,9 +4068,9 @@ static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *Unsigned
    unsigned AnsType;
 
    if (sscanf (UnsignedStr,"%u",&AnsType) != 1)
-      Lay_ShowErrorAndExit ("Wrong type of answer. 2");
+      Err_ShowErrorAndExit ("Wrong type of answer. 2");
    if (AnsType >= Tst_NUM_ANS_TYPES)
-      Lay_ShowErrorAndExit ("Wrong type of answer. 3");
+      Err_ShowErrorAndExit ("Wrong type of answer. 3");
    return (Tst_AnswerType_t) AnsType;
   }
 
@@ -4142,7 +4143,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
 						     Tst_NUM_ANS_TYPES - 1,
 						     (unsigned long) Tst_ANS_UNKNOWN);
    if (Question->Answer.Type == Tst_ANS_UNKNOWN)
-      Lay_WrongAnswerExit ();
+      Err_WrongAnswerExit ();
 
    /***** Get question tags *****/
    for (NumTag = 0;
@@ -4279,9 +4280,9 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
               {
   	       Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
 	       if (sscanf (UnsignedStr,"%u",&NumCorrectAns) != 1)
-	          Lay_WrongAnswerExit ();
+	          Err_WrongAnswerExit ();
                if (NumCorrectAns >= Tst_MAX_OPTIONS_PER_QUESTION)
-	          Lay_WrongAnswerExit ();
+	          Err_WrongAnswerExit ();
                Question->Answer.Options[NumCorrectAns].Correct = true;
               }
            }
@@ -4530,7 +4531,7 @@ bool Tst_CheckIfQuestionExistsInDB (struct Tst_Question *Question)
         {
 	 /* Get question code */
          if ((Question->QstCod = DB_GetNextCode (mysql_res_qst)) < 0)
-            Lay_WrongQuestionExit ();
+            Err_WrongQuestionExit ();
 
          /* Get answers from this question */
          NumOptsExistingQstInDB =
@@ -4714,7 +4715,7 @@ void Tst_RemoveSelectedQsts (void)
 	 /* Get question code (row[0]) */
 	 row = mysql_fetch_row (mysql_res);
 	 if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_WrongQuestionExit ();
+	    Err_WrongQuestionExit ();
 
 	 /* Remove test question from database */
 	 Tst_RemoveOneQstFromDB (Gbl.Hierarchy.Crs.CrsCod,QstCod);
@@ -4759,7 +4760,7 @@ void Tst_RequestRemoveOneQst (void)
    /* Get the question code */
    Test.Question.QstCod = Tst_GetParamQstCod ();
    if (Test.Question.QstCod <= 0)
-      Lay_WrongQuestionExit ();
+      Err_WrongQuestionExit ();
 
    /* Get a parameter that indicates whether it's necessary
       to continue listing the rest of questions */
@@ -4768,7 +4769,7 @@ void Tst_RequestRemoveOneQst (void)
    /* Get other parameters */
    if (!EditingOnlyThisQst)
       if (!Tst_GetParamsTst (&Test,Tst_EDIT_TEST))
-	 Lay_ShowErrorAndExit ("Wrong test parameters.");
+	 Err_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/
    if (EditingOnlyThisQst)
@@ -4820,7 +4821,7 @@ void Tst_RemoveOneQst (void)
    /***** Get the question code *****/
    QstCod = Tst_GetParamQstCod ();
    if (QstCod <= 0)
-      Lay_WrongQuestionExit ();
+      Err_WrongQuestionExit ();
 
    /***** Get a parameter that indicates whether it's necessary
           to continue listing the rest of questions ******/
@@ -4862,7 +4863,7 @@ static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod)
 		   CrsCod);
 
    if (!mysql_affected_rows (&Gbl.mysql))
-      Lay_WrongQuestionExit ();
+      Err_WrongQuestionExit ();
   }
 
 /*****************************************************************************/
@@ -4883,7 +4884,7 @@ void Tst_ChangeShuffleQst (void)
    /***** Get the question code *****/
    Test.Question.QstCod = Tst_GetParamQstCod ();
    if (Test.Question.QstCod <= 0)
-      Lay_WrongQuestionExit ();
+      Err_WrongQuestionExit ();
 
    /***** Get a parameter that indicates whether it's necessary to continue listing the rest of questions ******/
    EditingOnlyThisQst = Par_GetParToBool ("OnlyThisQst");
@@ -5503,23 +5504,23 @@ static unsigned Tst_GetNumTstQuestions (Hie_Lvl_Level_t Scope,Tst_AnswerType_t A
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
    /***** Get number of questions *****/
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%u",&(Stats->NumQsts)) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of test questions.");
+      Err_ShowErrorAndExit ("Error when getting number of test questions.");
 
    if (Stats->NumQsts)
      {
       if (sscanf (row[1],"%lu",&(Stats->NumHits)) != 1)
-         Lay_ShowErrorAndExit ("Error when getting total number of hits in test questions.");
+         Err_ShowErrorAndExit ("Error when getting total number of hits in test questions.");
 
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
       if (sscanf (row[2],"%lf",&(Stats->TotalScore)) != 1)
-         Lay_ShowErrorAndExit ("Error when getting total score in test questions.");
+         Err_ShowErrorAndExit ("Error when getting total score in test questions.");
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
    else

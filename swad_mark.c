@@ -34,6 +34,7 @@
 #include <unistd.h>		// For unlink
 
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -197,11 +198,11 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
 
       /* Header (row[0]) */
       if (sscanf (row[0],"%u",&(Marks->Header)) != 1)
-         Lay_WrongNumberOfRowsExit ();
+         Err_WrongNumberOfRowsExit ();
 
       /* Footer (row[1]) */
       if (sscanf (row[1],"%u",&(Marks->Footer)) != 1)
-         Lay_WrongNumberOfRowsExit ();
+         Err_WrongNumberOfRowsExit ();
      }
    else	// Unknown numbers of header and footer rows
       Marks->Header =
@@ -268,7 +269,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
                      NumRows);
      }
    else
-      Lay_WrongNumberOfRowsExit ();
+      Err_WrongNumberOfRowsExit ();
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -648,14 +649,14 @@ void Mrk_ShowMyMarks (void)
       snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),"%s/%s.html",
 		Cfg_PATH_MARK_PRIVATE,Gbl.UniqueNameEncrypted);
       if ((FileUsrMarks = fopen (FileNameUsrMarks,"wb")) == NULL)
-         Lay_ShowErrorAndExit ("Can not open file for my marks.");
+         Err_ShowErrorAndExit ("Can not open file for my marks.");
 
       /***** Show my marks *****/
       if (Mrk_GetUsrMarks (FileUsrMarks,UsrDat,PathPrivate,&Marks))
         {
          fclose (FileUsrMarks);
          if ((FileUsrMarks = fopen (FileNameUsrMarks,"rb")) == NULL)
-            Lay_ShowErrorAndExit ("Can not open file with my marks.");
+            Err_ShowErrorAndExit ("Can not open file with my marks.");
 
          /* Start HTML output */
          /*  Do not write charset here.
@@ -764,11 +765,11 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	{
 	 /* Header (row[3]) */
 	 if (sscanf (row[3],"%u",&(Marks.Header)) != 1)
-	    Lay_WrongNumberOfRowsExit ();
+	    Err_WrongNumberOfRowsExit ();
 
 	 /* Footer (row[4]) */
 	 if (sscanf (row[4],"%u",&(Marks.Footer)) != 1)
-	    Lay_WrongNumberOfRowsExit ();
+	    Err_WrongNumberOfRowsExit ();
 
 	 if (UsrDat.IDs.Num)
 	   {
@@ -822,7 +823,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 		  fclose (FileUsrMarks);
 		  if (asprintf (ContentStr,"<![CDATA[%s]]>",
 				Ale_GetTextOfLastAlert ()) < 0)
-		     Lay_NotEnoughMemoryExit ();
+		     Err_NotEnoughMemoryExit ();
 	          Ale_ResetAllAlerts ();
 		 }
 	      }
@@ -830,7 +831,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	      {
 	       if (asprintf (ContentStr,"<![CDATA[%s]]>",
 			     "Can not open file of marks.") < 0)
-		  Lay_NotEnoughMemoryExit ();
+		  Err_NotEnoughMemoryExit ();
 	      }
 	    unlink (FileNameUsrMarks);	// File with marks is no longer necessary
 	   }
@@ -838,7 +839,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	   {
 	    if (asprintf (ContentStr,"<![CDATA[%s]]>",
 		          "User's IDs not found!") < 0)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	   }
 	}
      }

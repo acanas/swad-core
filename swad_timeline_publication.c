@@ -28,6 +28,7 @@
 #include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions
 
+#include "swad_error.h"
 #include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_profile.h"
@@ -329,7 +330,7 @@ static struct Tml_Pub_Publication *Tml_Pub_SelectTheMostRecentPub (const struct 
      {
       /* Allocate space for publication */
       if ((Pub = malloc (sizeof (*Pub))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /* Get data of publication */
       Tml_Pub_GetDataOfPubFromNextRow (mysql_res,Pub);

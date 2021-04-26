@@ -35,6 +35,7 @@
 #include "swad_attendance.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -434,7 +435,7 @@ void Svy_SeeOneSurvey (void)
 
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
-      Lay_WrongSurveyExit ();
+      Err_WrongSurveyExit ();
 
    /***** Show survey *****/
    Svy_ShowOneSurvey (&Surveys,Svy.SvyCod,true);
@@ -500,7 +501,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    /* Start date/time */
    UniqueId++;
    if (asprintf (&Id,"svy_date_start_%u",UniqueId) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    if (ShowOnlyThisSvyComplete)
       HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
 		    Id,
@@ -524,7 +525,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
    /* End date/time */
    if (asprintf (&Id,"svy_date_end_%u",UniqueId) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    if (ShowOnlyThisSvyComplete)
       HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
 		    Id,
@@ -650,7 +651,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    switch (Svy.Scope)
      {
       case Hie_Lvl_UNK:	// Unknown
-         Lay_WrongScopeExit ();
+         Err_WrongScopeExit ();
          break;
       case Hie_Lvl_SYS:	// System
          HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
@@ -972,13 +973,13 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
 		       Sco_GetDBStrFromScope (Scope),Cods[Scope],
 		       (HiddenAllowed & 1 << Scope) ? "" :
 						      " AND Hidden='N'") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 SubQueryFilled = true;
 	}
       else
         {
 	 if (asprintf (&SubQuery[Scope],"%s","") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
         }
 
    /* Fill subquery for course */
@@ -1007,7 +1008,7 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
 		       (HiddenAllowed & 1 << Hie_Lvl_CRS) ? "" :
 							      " AND Hidden='N'",
 		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
         }
       else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
         {
@@ -1017,14 +1018,14 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
 		       Sco_GetDBStrFromScope (Hie_Lvl_CRS),Cods[Hie_Lvl_CRS],
 		       (HiddenAllowed & 1 << Hie_Lvl_CRS) ? "" :
 							      " AND Hidden='N'") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
         }
       SubQueryFilled = true;
      }
    else
      {
       if (asprintf (&SubQuery[Hie_Lvl_CRS],"%s","") < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
 
    /* Make query */
@@ -1043,7 +1044,7 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
 				OrderBySubQuery[Surveys->SelectedOrder]);
    else
      {
-      Lay_ShowErrorAndExit ("Can not get list of surveys.");
+      Err_ShowErrorAndExit ("Can not get list of surveys.");
       NumRows = 0;	// Not reached. Initialized to avoid warning
      }
 
@@ -1060,7 +1061,7 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
       /***** Create list of surveys *****/
       if ((Surveys->LstSvyCods = calloc (NumRows,
                                          sizeof (*Surveys->LstSvyCods))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the surveys codes *****/
       for (NumSvy = 0;
@@ -1068,7 +1069,7 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
 	   NumSvy++)
          /* Get next survey code */
          if ((Surveys->LstSvyCods[NumSvy] = DB_GetNextCode (mysql_res)) < 0)
-            Lay_WrongSurveyExit ();
+            Err_WrongSurveyExit ();
      }
    else
       Surveys->Num = 0;
@@ -1282,7 +1283,7 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
 
       /* Get survey scope (row[1]) */
       if ((Svy->Scope = Sco_GetScopeFromDBStr (row[1])) == Hie_Lvl_UNK)
-         Lay_WrongScopeExit ();
+         Err_WrongScopeExit ();
 
       /* Get code of the country, institution, center, degree or course (row[2]) */
       Svy->Cod = Str_ConvertStrCodToLongCod (row[2]);
@@ -1292,7 +1293,7 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
 
       /* Get roles (row[4]) */
       if (sscanf (row[4],"%u",&Svy->Roles) != 1)
-      	 Lay_ShowErrorAndExit ("Error when reading roles of survey.");
+      	 Err_ShowErrorAndExit ("Error when reading roles of survey.");
 
       /* Get author of the survey (row[5]) */
       Svy->UsrCod = Str_ConvertStrCodToLongCod (row[5]);
@@ -1320,7 +1321,7 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
       switch (Svy->Scope)
         {
 	 case Hie_Lvl_UNK:	// Unknown
-            Lay_WrongScopeExit ();
+            Err_WrongScopeExit ();
 	    break;
 	 case Hie_Lvl_SYS:	// System
             Svy->Status.IBelongToScope = Gbl.Usrs.Me.Logged;
@@ -1525,7 +1526,7 @@ void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	{
 	 Length = strlen (row[1]);
 	 if ((*ContentStr = malloc (Length + 1)) == NULL)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
 	 Str_Copy (*ContentStr,row[1],Length);
 	}
      }
@@ -1574,12 +1575,12 @@ void Svy_AskRemSurvey (void)
 
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
-      Lay_WrongSurveyExit ();
+      Err_WrongSurveyExit ();
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Show question and button to remove survey *****/
    Surveys.SvyCod = Svy.SvyCod;
@@ -1613,12 +1614,12 @@ void Svy_RemoveSurvey (void)
 
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
-      Lay_WrongSurveyExit ();
+      Err_WrongSurveyExit ();
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Remove all the users in this survey *****/
    DB_QueryDELETE ("can not remove users who are answered a survey",
@@ -1681,12 +1682,12 @@ void Svy_AskResetSurvey (void)
 
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
-      Lay_WrongSurveyExit ();
+      Err_WrongSurveyExit ();
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Ask for confirmation of reset *****/
    Ale_ShowAlert (Ale_WARNING,Txt_Do_you_really_want_to_reset_the_survey_X,
@@ -1734,12 +1735,12 @@ void Svy_ResetSurvey (void)
 
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
-      Lay_WrongSurveyExit ();
+      Err_WrongSurveyExit ();
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Remove all the users in this survey *****/
    DB_QueryDELETE ("can not remove users who are answered a survey",
@@ -1783,12 +1784,12 @@ void Svy_HideSurvey (void)
 
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
-      Lay_WrongSurveyExit ();
+      Err_WrongSurveyExit ();
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Hide survey *****/
    DB_QueryUPDATE ("can not hide survey",
@@ -1820,12 +1821,12 @@ void Svy_UnhideSurvey (void)
 
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
-      Lay_WrongSurveyExit ();
+      Err_WrongSurveyExit ();
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Show survey *****/
    DB_QueryUPDATE ("can not show survey",
@@ -1901,7 +1902,7 @@ void Svy_RequestCreatOrEditSvy (void)
      {
       /***** Put link (form) to create new survey *****/
       if (!Svy_CheckIfICanCreateSvy ())
-         Lay_NoPermissionExit ();
+         Err_NoPermissionExit ();
 
       /* Initialize to empty survey */
       Svy.SvyCod = -1L;
@@ -1926,7 +1927,7 @@ void Svy_RequestCreatOrEditSvy (void)
       /* Get data of the survey from database */
       Svy_GetDataOfSurveyByCod (&Svy);
       if (!Svy.Status.ICanEdit)
-         Lay_NoPermissionExit ();
+         Err_NoPermissionExit ();
 
       /* Get text of the survey from database */
       Svy_GetSurveyTxtFromDB (Svy.SvyCod,Txt);
@@ -2116,7 +2117,7 @@ static void Svy_SetDefaultAndAllowedScope (struct Svy_Survey *Svy)
      }
 
    if (!ICanEdit)
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -2215,7 +2216,7 @@ void Svy_ReceiveFormSurvey (void)
       OldSvy.SvyCod = NewSvy.SvyCod;
       Svy_GetDataOfSurveyByCod (&OldSvy);
       if (!OldSvy.Status.ICanEdit)
-         Lay_NoPermissionExit ();
+         Err_NoPermissionExit ();
       NewSvy.Scope = OldSvy.Scope;
      }
 
@@ -2226,46 +2227,46 @@ void Svy_ReceiveFormSurvey (void)
      {
       case Hie_Lvl_SYS:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-	    Lay_WrongScopeExit ();
+	    Err_WrongScopeExit ();
          NewSvy.Scope = Hie_Lvl_SYS;
          NewSvy.Cod = -1L;
          break;
       case Hie_Lvl_CTY:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-	    Lay_WrongScopeExit ();
+	    Err_WrongScopeExit ();
 	 NewSvy.Scope = Hie_Lvl_CTY;
 	 NewSvy.Cod = Gbl.Hierarchy.Cty.CtyCod;
          break;
       case Hie_Lvl_INS:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_INS_ADM)
-	    Lay_WrongScopeExit ();
+	    Err_WrongScopeExit ();
 	 NewSvy.Scope = Hie_Lvl_INS;
 	 NewSvy.Cod = Gbl.Hierarchy.Ins.InsCod;
          break;
       case Hie_Lvl_CTR:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_CTR_ADM)
-	    Lay_WrongScopeExit ();
+	    Err_WrongScopeExit ();
 	 NewSvy.Scope = Hie_Lvl_CTR;
 	 NewSvy.Cod = Gbl.Hierarchy.Ctr.CtrCod;
          break;
       case Hie_Lvl_DEG:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_DEG_ADM)
-	    Lay_WrongScopeExit ();
+	    Err_WrongScopeExit ();
 	 NewSvy.Scope = Hie_Lvl_DEG;
 	 NewSvy.Cod = Gbl.Hierarchy.Deg.DegCod;
          break;
       case Hie_Lvl_CRS:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_TCH)
-	    Lay_WrongScopeExit ();
+	    Err_WrongScopeExit ();
 	 NewSvy.Scope = Hie_Lvl_CRS;
 	 NewSvy.Cod = Gbl.Hierarchy.Crs.CrsCod;
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -2686,7 +2687,7 @@ void Svy_RequestEditQuestion (void)
 
    /***** Get survey code *****/
    if ((SvyCod = Svy_GetParamSvyCod ()) <= 0)
-      Lay_WrongSurveyExit ();
+      Err_WrongSurveyExit ();
 
    /* Get the question code */
    SvyQst.QstCod = Svy_GetParamQstCod ();
@@ -2747,7 +2748,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
          /* Get question index inside survey (row[0]) */
          if (sscanf (row[0],"%u",&(SvyQst->QstInd)) != 1)
-            Lay_WrongQuestionIndexExit ();
+            Err_WrongQuestionIndexExit ();
 
          /* Get the type of answer (row[1]) */
          SvyQst->AnswerType = Svy_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
@@ -2767,7 +2768,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
             row = mysql_fetch_row (mysql_res);
 
             if (NumAnswers > Svy_MAX_ANSWERS_PER_QUESTION)
-               Lay_WrongAnswerExit ();
+               Err_WrongAnswerExit ();
             if (!Svy_AllocateTextChoiceAnswer (SvyQst,NumAns))
 	       /* Abort on error */
 	       Ale_ShowAlertsAndExit ();
@@ -2787,7 +2788,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
       Surveys->QstCod = SvyQst->QstCod;
 
       if (asprintf (&Title,"%s %u",Txt_Question,SvyQst->QstInd + 1) < 0)	// Question index may be 0, 1, 2, 3,...
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       Box_BoxBegin (NULL,Title,
                     Svy_PutIconToRemoveOneQst,Surveys,
                     NULL,Box_NOT_CLOSABLE);
@@ -3084,7 +3085,7 @@ void Svy_ReceiveQst (void)
    /***** Get parameters from form *****/
    /* Get survey code */
    if ((SvyCod = Svy_GetParamSvyCod ()) <= 0)
-      Lay_WrongSurveyExit ();
+      Err_WrongSurveyExit ();
 
    /* Get question code */
    SvyQst.QstCod = Svy_GetParamQstCod ();
@@ -3270,7 +3271,7 @@ static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod)
    if (row[0])	// There are questions
      {
       if (sscanf (row[0],"%u",&QstInd) != 1)
-         Lay_ShowErrorAndExit ("Error when getting last question index.");
+         Err_ShowErrorAndExit ("Error when getting last question index.");
       QstInd++;
      }
 
@@ -3363,7 +3364,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 
          /* row[0] holds the code of the question */
          if (sscanf (row[0],"%ld",&(SvyQst.QstCod)) != 1)
-            Lay_WrongQuestionExit ();
+            Err_WrongQuestionExit ();
 
          HTM_TR_Begin (NULL);
 
@@ -3389,7 +3390,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 	    /* Write index of question inside survey (row[1]) */
 	    HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
 	       if (sscanf (row[1],"%u",&(SvyQst.QstInd)) != 1)
-		  Lay_WrongQuestionIndexExit ();
+		  Err_WrongQuestionIndexExit ();
 	       HTM_Unsigned (SvyQst.QstInd + 1);
 	    HTM_TD_End ();
 
@@ -3488,7 +3489,7 @@ static void Svy_WriteQstStem (const char *Stem)
    /* Convert the stem, that is in HTML, to rigorous HTML */
    Length = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
    if ((HeadingRigorousHTML = malloc (Length + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    Str_Copy (HeadingRigorousHTML,Stem,Length);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      HeadingRigorousHTML,Length,false);
@@ -3523,7 +3524,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
      {
       /* Check number of answers */
       if (NumAnswers > Svy_MAX_ANSWERS_PER_QUESTION)
-	 Lay_ShowErrorAndExit ("Wrong number of answers.");
+	 Err_ShowErrorAndExit ("Wrong number of answers.");
 
       /* Write one row for each answer */
       HTM_TABLE_BeginPadding (5);
@@ -3536,7 +3537,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 
 	 /* Get number of users who have marked this answer (row[1]) */
 	 if (sscanf (row[1],"%u",&NumUsrsThisAnswer) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting number of users who have marked an answer.");
+	    Err_ShowErrorAndExit ("Error when getting number of users who have marked an answer.");
 
 	 /* Convert the answer (row[2]), that is in HTML, to rigorous HTML */
 	 if (!Svy_AllocateTextChoiceAnswer (SvyQst,NumAns))
@@ -3623,13 +3624,13 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
                     NumUsrs,
                     (unsigned) ((((double) NumUsrs * 100.0) / (double) MaxUsrs) + 0.5),
                     Txt_of_PART_OF_A_TOTAL,MaxUsrs) < 0)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
      }
    else
      {
       if (asprintf (&Title,"0&nbsp;(0%%&nbsp;%s&nbsp;%u)",
                     Txt_of_PART_OF_A_TOTAL,MaxUsrs) < 0)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
      }
 
    HTM_TD_Begin ("class=\"DAT LT\" style=\"width:%upx;\"",Svy_MAX_BAR_WIDTH + 125);
@@ -3696,11 +3697,11 @@ void Svy_RequestRemoveQst (void)
    /***** Get parameters from form *****/
    /* Get survey code */
    if ((SvyCod = Svy_GetParamSvyCod ()) <= 0)
-      Lay_WrongSurveyExit ();
+      Err_WrongSurveyExit ();
 
    /* Get question code */
    if ((SvyQst.QstCod = Svy_GetParamQstCod ()) < 0)
-      Lay_WrongQuestionExit ();
+      Err_WrongQuestionExit ();
 
    /* Get question index */
    SvyQst.QstInd = Svy_GetQstIndFromQstCod (SvyQst.QstCod);
@@ -3738,11 +3739,11 @@ void Svy_RemoveQst (void)
    /***** Get parameters from form *****/
    /* Get survey code */
    if ((SvyCod = Svy_GetParamSvyCod ()) <= 0)
-      Lay_WrongSurveyExit ();
+      Err_WrongSurveyExit ();
 
    /* Get question code */
    if ((SvyQst.QstCod = Svy_GetParamQstCod ()) <= 0)
-      Lay_WrongQuestionExit ();
+      Err_WrongQuestionExit ();
 
    /* Get question index */
    SvyQst.QstInd = Svy_GetQstIndFromQstCod (SvyQst.QstCod);
@@ -3757,7 +3758,7 @@ void Svy_RemoveQst (void)
 		   " WHERE QstCod=%ld",
 		   SvyQst.QstCod);
    if (!mysql_affected_rows (&Gbl.mysql))
-      Lay_WrongQuestionExit ();
+      Err_WrongQuestionExit ();
 
    /* Change index of questions greater than this */
    DB_QueryUPDATE ("can not update indexes of questions",
@@ -3791,7 +3792,7 @@ void Svy_ReceiveSurveyAnswers (void)
 
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) <= 0)
-      Lay_WrongSurveyExit ();
+      Err_WrongSurveyExit ();
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
@@ -3844,7 +3845,7 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
         {
          /* Get next question */
          if ((QstCod = DB_GetNextCode (mysql_res)) <= 0)
-            Lay_WrongQuestionExit ();
+            Err_WrongQuestionExit ();
 
          /* Get possible parameter with the user's answer */
          snprintf (ParamName,sizeof (ParamName),"Ans%010u",(unsigned) QstCod);
@@ -3863,7 +3864,7 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
         }
      }
    else		// This survey has no questions
-      Lay_ShowErrorAndExit ("Error: this survey has no questions.");
+      Err_ShowErrorAndExit ("Error: this survey has no questions.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -4116,20 +4117,20 @@ unsigned Svy_GetNumCrsSurveys (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
 			 Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
    /***** Get number of surveys *****/
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%u",&NumSurveys) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of surveys.");
+      Err_ShowErrorAndExit ("Error when getting number of surveys.");
 
    /***** Get number of notifications by email *****/
    if (row[1])
      {
       if (sscanf (row[1],"%u",NumNotif) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of notifications of surveys.");
+         Err_ShowErrorAndExit ("Error when getting number of notifications of surveys.");
      }
    else
       *NumNotif = 0;
@@ -4239,7 +4240,7 @@ double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope)
 					       " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
 				      Sco_GetDBStrFromScope (Hie_Lvl_CRS),Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 return 0.0;	// Not reached
      }
   }

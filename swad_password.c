@@ -35,6 +35,7 @@
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_enrolment.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -382,14 +383,14 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 	       Pwd_SetMyPendingPassword (NewRandomPlainPassword);
 	       break;
 	    case 1:
-	       Lay_ShowErrorAndExit (Txt_There_was_a_problem_sending_an_email_automatically);
+	       Err_ShowErrorAndExit (Txt_There_was_a_problem_sending_an_email_automatically);
 	       break;
 	    default:
 	       snprintf (ErrorTxt,sizeof (ErrorTxt),
 			 "Internal error: an email message has not been sent successfully."
 			 " Error code returned by the script: %d",
 			 ReturnCode);
-	       Lay_ShowErrorAndExit (ErrorTxt);
+	       Err_ShowErrorAndExit (ErrorTxt);
 	       break;
 	   }
      }
@@ -457,7 +458,7 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_
 	     FileNameMail);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
-      Lay_ShowErrorAndExit ("Error when running script to send email.");
+      Err_ShowErrorAndExit ("Error when running script to send email.");
 
    /***** Remove temporary file *****/
    unlink (FileNameMail);
@@ -578,7 +579,7 @@ static unsigned Pwd_GetNumOtherUsrsWhoUseThisPassword (const char *EncryptedPass
    if (UsrCod > 0)
      {
       if (asprintf (&SubQuery," AND UsrCod<>%ld",UsrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    else
       SubQuery = "";

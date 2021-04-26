@@ -35,6 +35,7 @@
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_department.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -383,7 +384,7 @@ static void Prj_ShowProjects (struct Prj_Projects *Projects)
          Prj_GetSelectedUsrsAndShowTheirPrjs (Projects);
          break;
       default:
-	 Lay_WrongWhoExit ();
+	 Err_WrongWhoExit ();
 	 break;
      }
   }
@@ -876,7 +877,7 @@ static Prj_HiddenVisibl_t Prj_GetHiddenParamHidVis (void)
 					  (unsigned) Prj_FILTER_HIDDEN_DEFAULT |
 					  (unsigned) Prj_FILTER_VISIBL_DEFAULT);
       default:
-	 Lay_WrongRoleExit ();
+	 Err_WrongRoleExit ();
          return Prj_NEW_PRJ_HIDDEN_VISIBL_DEFAULT;	// Not reached
      }
   }
@@ -1303,7 +1304,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
    /* Creation date/time */
    UniqueId++;
    if (asprintf (&Id,"prj_creat_%u",UniqueId) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
@@ -1324,7 +1325,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
    /* Modification date/time */
    UniqueId++;
    if (asprintf (&Id,"prj_modif_%u",UniqueId) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
@@ -1691,7 +1692,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
    /***** Start date/time *****/
    UniqueId++;
    if (asprintf (&Id,"prj_creat_%u",UniqueId) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    HTM_TD_Begin ("id=\"%s\" class=\"LT %s COLOR%u\"",
 		 Id,ClassDate,Gbl.RowEvenOdd);
    Dat_WriteLocalDateHMSFromUTC (Id,Prj->CreatTime,
@@ -1703,7 +1704,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
    /***** End date/time *****/
    UniqueId++;
    if (asprintf (&Id,"prj_modif_%u",UniqueId) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    HTM_TD_Begin ("id=\"%s\" class=\"LT %s COLOR%u\"",
 		 Id,ClassDate,Gbl.RowEvenOdd);
    Dat_WriteLocalDateHMSFromUTC (Id,Prj->ModifTime,
@@ -2431,12 +2432,12 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
    /***** Get parameters *****/
    Prj_GetParams (Projects);
    if ((Projects->PrjCod = Prj.PrjCod = Prj_GetParamPrjCod ()) <= 0)
-      Lay_WrongProjectExit ();
+      Err_WrongProjectExit ();
 
    /***** Put form to select users *****/
    if (asprintf (&TxtButton,Txt_Add_USERS,
 	         Txt_PROJECT_ROLES_PLURAL_abc[RoleInProject]) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    Usr_PutFormToSelectUsrsToGoToAct (&Prj_MembersToAdd,
 				     ActionAddUsr[RoleInProject],
 				     Prj_PutCurrentParams,Projects,
@@ -2509,7 +2510,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Projects.PrjCod = Prj.PrjCod = Prj_GetParamPrjCod ()) <= 0)
-      Lay_WrongProjectExit ();
+      Err_WrongProjectExit ();
 
    /***** Add the selected users to project *****/
    Ptr = Prj_MembersToAdd.List[Rol_UNK];
@@ -2611,7 +2612,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
    /***** Get parameters *****/
    Prj_GetParams (Projects);
    if ((Projects->PrjCod = Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_WrongProjectExit ();
+      Err_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
@@ -2696,7 +2697,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Projects.PrjCod = Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_WrongProjectExit ();
+      Err_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
@@ -2879,15 +2880,15 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	{
 	 case (1 << Prj_ASSIGNED):	// Assigned projects
 	    if (asprintf (&PreNonSubQuery," AND prj_projects.Assigned='Y'") < 0)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    break;
 	 case (1 << Prj_NONASSIG):	// Non-assigned projects
 	    if (asprintf (&PreNonSubQuery," AND prj_projects.Assigned='N'") < 0)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    break;
 	 default:			// All projects
 	    if (asprintf (&PreNonSubQuery,"%s","") < 0)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    break;
 	}
 
@@ -2896,7 +2897,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	{
 	 case Rol_STD:	// Students can view only visible projects
 	    if (asprintf (&HidVisSubQuery," AND prj_projects.Hidden='N'") < 0)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
@@ -2905,20 +2906,20 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	      {
 	       case (1 << Prj_HIDDEN):	// Hidden projects
 		  if (asprintf (&HidVisSubQuery," AND prj_projects.Hidden='Y'") < 0)
-	             Lay_NotEnoughMemoryExit ();
+	             Err_NotEnoughMemoryExit ();
 		  break;
 	       case (1 << Prj_VISIBL):	// Visible projects
 		  if (asprintf (&HidVisSubQuery," AND prj_projects.Hidden='N'") < 0)
-	             Lay_NotEnoughMemoryExit ();
+	             Err_NotEnoughMemoryExit ();
 		  break;
 	       default:			// All projects
 		  if (asprintf (&HidVisSubQuery,"%s","") < 0)
-	             Lay_NotEnoughMemoryExit ();
+	             Err_NotEnoughMemoryExit ();
 		  break;
 	      }
 	    break;
 	 default:
-	    Lay_WrongRoleExit ();
+	    Err_WrongRoleExit ();
 	    break;
 	}
 
@@ -2927,12 +2928,12 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
         {
 	 if (asprintf (&DptCodSubQuery," AND prj_projects.DptCod=%ld",
 	               Projects->Filter.DptCod) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
         }
       else	// Any department
 	{
 	 if (asprintf (&DptCodSubQuery,"%s","") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	}
 
       /* Query */
@@ -3101,7 +3102,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	      }
 	    break;
 	 default:
-	    Lay_WrongWhoExit ();
+	    Err_WrongWhoExit ();
 	    break;
         }
 
@@ -3115,7 +3116,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	 /***** Create list of projects *****/
 	 if ((Projects->LstPrjCods = calloc ((size_t) NumPrjsFromDB,
 	                                     sizeof (*Projects->LstPrjCods))) == NULL)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Get the projects codes *****/
 	 for (NumPrj = 0;
@@ -3124,7 +3125,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	   {
 	    /* Get next project code */
 	    if ((PrjCod = DB_GetNextCode (mysql_res)) < 0)
-               Lay_WrongProjectExit ();
+               Err_WrongProjectExit ();
 
 	    /* Filter projects depending on faultiness */
 	    switch (Projects->Filter.Faulti)
@@ -3354,7 +3355,7 @@ void Prj_ReqRemProject (void)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_WrongProjectExit ();
+      Err_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
@@ -3370,7 +3371,7 @@ void Prj_ReqRemProject (void)
 	                      Prj.Title);
      }
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -3399,7 +3400,7 @@ void Prj_RemoveProject (void)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_WrongProjectExit ();
+      Err_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);	// Inside this function, the course is checked to be the current one
@@ -3442,7 +3443,7 @@ void Prj_RemoveProject (void)
 	             Prj.Title);
      }
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -3469,7 +3470,7 @@ void Prj_HideProject (void)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_WrongProjectExit ();
+      Err_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
@@ -3484,7 +3485,7 @@ void Prj_HideProject (void)
 	              Prj.PrjCod,
 	              Gbl.Hierarchy.Crs.CrsCod);
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -3511,7 +3512,7 @@ void Prj_UnhideProject (void)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_WrongProjectExit ();
+      Err_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
@@ -3526,7 +3527,7 @@ void Prj_UnhideProject (void)
 	              Prj.PrjCod,
 	              Gbl.Hierarchy.Crs.CrsCod);
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -3566,7 +3567,7 @@ void Prj_RequestEditPrj (void)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Projects.PrjCod = Prj.PrjCod = Prj_GetParamPrjCod ()) <= 0)
-      Lay_WrongProjectExit ();
+      Err_WrongProjectExit ();
 
    /***** Form to edit project *****/
    Prj_RequestCreatOrEditPrj (&Projects,&Prj);
@@ -3844,13 +3845,13 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 void Prj_AllocMemProject (struct Prj_Project *Prj)
   {
    if ((Prj->Description = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    if ((Prj->Knowledge   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    if ((Prj->Materials   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/
@@ -3985,7 +3986,7 @@ void Prj_ReceiveFormProject (void)
       Prj_RequestCreatOrEditPrj (&Projects,&Prj);
      }
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -4295,7 +4296,7 @@ void Prj_ReqLockSelectedPrjsEdition (void)
       Prj_FreeListProjects (&Projects);
      }
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Show projects again *****/
    Prj_ShowProjects (&Projects);
@@ -4334,7 +4335,7 @@ void Prj_ReqUnloSelectedPrjsEdition (void)
       Prj_FreeListProjects (&Projects);
      }
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Show projects again *****/
    Prj_ShowProjects (&Projects);
@@ -4375,7 +4376,7 @@ void Prj_LockSelectedPrjsEdition (void)
       Prj_FreeListProjects (&Projects);
      }
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Show projects again *****/
    Prj_ShowProjects (&Projects);
@@ -4412,7 +4413,7 @@ void Prj_UnloSelectedPrjsEdition (void)
       Prj_FreeListProjects (&Projects);
      }
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Show projects again *****/
    Prj_ShowProjects (&Projects);
@@ -4446,7 +4447,7 @@ static void Prj_FormLockUnlock (const struct Prj_Project *Prj)
 		 Act_GetActCod (Prj_LockActions[Prj->Locked]),
 		 Gbl.Session.Id,
 		 Prj->PrjCod) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    Frm_BeginFormOnSubmit (ActUnk,OnSubmit);
    Ico_PutIconLink (Prj_LockIcons[Prj->Locked],Txt_LOCKED_UNLOCKED[Prj->Locked]);
    Frm_EndForm ();
@@ -4485,7 +4486,7 @@ void Prj_LockProjectEdition (void)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_WrongProjectExit ();
+      Err_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
@@ -4500,7 +4501,7 @@ void Prj_LockProjectEdition (void)
       Prj_FormLockUnlock (&Prj);
      }
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -4535,7 +4536,7 @@ void Prj_UnloProjectEdition (void)
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Lay_WrongProjectExit ();
+      Err_WrongProjectExit ();
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
@@ -4550,7 +4551,7 @@ void Prj_UnloProjectEdition (void)
       Prj_FormLockUnlock (&Prj);
      }
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);

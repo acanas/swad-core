@@ -29,6 +29,7 @@
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -271,7 +272,7 @@ void Frm_SetAnchorStr (long Cod,char **Anchor)
      {
       if (asprintf (Anchor,"cod_%ld",
 		    Cod) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    else
       *Anchor = NULL;

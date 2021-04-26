@@ -50,6 +50,8 @@ void Lay_WriteStartOfPage (void);
 
 void Lay_WriteHTTPStatus204NoContent (void);
 
+void Lay_WriteEndOfPage (void);
+
 void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 				    void (*FuncParams) (void *Args),void *Args,
 				    const char *Icon,
@@ -69,63 +71,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
                                 bool Checked,bool Disabled,
                                 const char *Title,const char *Text);
 
-void Lay_NotEnoughMemoryExit (void);
-void Lay_WrongActionExit (void);
-void Lay_WrongScopeExit (void);
-void Lay_WrongCountrExit (void);
-void Lay_WrongInstitExit (void);
-void Lay_WrongCenterExit (void);
-void Lay_WrongDegTypExit (void);
-void Lay_WrongDegreeExit (void);
-void Lay_WrongCourseExit (void);
-void Lay_WrongDepartmentExit (void);
-void Lay_WrongPlaceExit (void);
-void Lay_WrongOrderExit (void);
-void Lay_WrongStatusExit (void);
-void Lay_WrongDateExit (void);
-void Lay_WrongPluginExit (void);
-void Lay_WrongItemsListExit (void);
-void Lay_WrongItemExit (void);
-void Lay_WrongSyllabusFormatExit (void);
-void Lay_WrongFileBrowserExit (void);
-void Lay_WrongCopySrcExit (void);
-void Lay_WrongNumberOfRowsExit (void);
-void Lay_WrongGrpTypExit (void);
-void Lay_WrongGroupExit (void);
-void Lay_WrongTypeOfViewExit (void);
-void Lay_WrongBannerExit (void);
-void Lay_WrongLinkExit (void);
-void Lay_WrongHolidayExit (void);
-void Lay_WrongBuildingExit (void);
-void Lay_WrongRoomExit (void);
-void Lay_WrongRecordFieldExit (void);
-void Lay_WrongAssignmentExit (void);
-void Lay_WrongProjectExit (void);
-void Lay_WrongCallForExamExit (void);
-void Lay_WrongTagExit (void);
-void Lay_WrongTestExit (void);
-void Lay_WrongExamExit (void);
-void Lay_WrongSetExit (void);
-void Lay_WrongQuestionExit (void);
-void Lay_WrongQuestionIndexExit (void);
-void Lay_WrongAnswerExit (void);
-void Lay_WrongAnswerIndexExit (void);
-void Lay_WrongExamSessionExit (void);
-void Lay_WrongGameExit (void);
-void Lay_WrongMatchExit (void);
-void Lay_WrongSurveyExit (void);
-void Lay_WrongWhoExit (void);
-void Lay_WrongEventExit (void);
-void Lay_WrongAnnouncementExit (void);
-void Lay_WrongNoticeExit (void);
-void Lay_WrongForumExit (void);
-void Lay_WrongPostExit (void);
-void Lay_WrongMessageExit (void);
-void Lay_WrongMailDomainExit (void);
-void Lay_WrongRoleExit (void);
-void Lay_WrongUserExit (void);
-void Lay_NoPermissionExit (void);
-void Lay_ShowErrorAndExit (const char *Txt);
+void Lay_WriteAboutZone (void);
 
 void Lay_RefreshNotifsAndConnected (void);
 void Lay_RefreshLastClicks (void);

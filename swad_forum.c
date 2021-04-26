@@ -37,6 +37,7 @@
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_forum.h"
@@ -490,7 +491,7 @@ void For_DisablePost (void)
       For_ShowPostsOfAThread (&Forums,Ale_SUCCESS,Txt_FORUM_Post_banned);
      }
    else
-      Lay_WrongPostExit ();
+      Err_WrongPostExit ();
   }
 
 /*****************************************************************************/
@@ -651,9 +652,9 @@ static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod)
      {
       row = mysql_fetch_row (mysql_res);
       if (sscanf (row[0],"%u",&NumPsts) != 1)
-	 Lay_ShowErrorAndExit ("Error when getting number of posts in a thread.");
+	 Err_ShowErrorAndExit ("Error when getting number of posts in a thread.");
       if (sscanf (row[1],"%ld",ThrCod) != 1)
-	 Lay_ShowErrorAndExit ("Error when getting number of posts in a thread.");
+	 Err_ShowErrorAndExit ("Error when getting number of posts in a thread.");
      }
    DB_FreeMySQLResult (&mysql_res);
 
@@ -842,7 +843,7 @@ static long For_GetLastPstCod (long ThrCod)
 				    " LIMIT 1",
 				    ThrCod);
    if (LastPstCod <= 0)
-      Lay_ShowErrorAndExit ("Error when getting the most recent post of a thread of a forum.");
+      Err_ShowErrorAndExit ("Error when getting the most recent post of a thread of a forum.");
 
    return LastPstCod;
   }
@@ -1123,7 +1124,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
          row = mysql_fetch_row (mysql_res);
 
          if (sscanf (row[0],"%ld",&Forums->PstCod) != 1)
-            Lay_WrongPostExit ();
+            Err_WrongPostExit ();
 
          CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 
@@ -1385,7 +1386,7 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
 			      " FROM for_posts"
 			     " WHERE PstCod=%ld",
 			     PstCod) != 1)
-      Lay_WrongPostExit ();
+      Err_WrongPostExit ();
 
    /***** Get number of rows *****/
    row = mysql_fetch_row (mysql_res);
@@ -1442,7 +1443,7 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
 	 Length = strlen (row[1]);
 
 	 if ((*ContentStr = malloc (Length + 1)) == NULL)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
 
 	 if (Length)
 	    Str_Copy (*ContentStr,row[1],Length);
@@ -2215,13 +2216,13 @@ void For_SetForumName (const struct For_Forum *Forum,
       case For_FORUM_INSTIT_USRS:
 	 Hie.Ins.InsCod = Forum->Location;
 	 if (!Ins_GetDataOfInstitutionByCod (&Hie.Ins))
-	    Lay_WrongInstitExit ();
+	    Err_WrongInstitExit ();
          Str_Copy (ForumName,Hie.Ins.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_INSTIT_TCHS:
 	 Hie.Ins.InsCod = Forum->Location;
 	 if (!Ins_GetDataOfInstitutionByCod (&Hie.Ins))
-	    Lay_WrongInstitExit ();
+	    Err_WrongInstitExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
                    Hie.Ins.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
@@ -2230,13 +2231,13 @@ void For_SetForumName (const struct For_Forum *Forum,
       case For_FORUM_CENTER_USRS:
 	 Hie.Ctr.CtrCod = Forum->Location;
 	 if (!Ctr_GetDataOfCenterByCod (&Hie.Ctr))
-	    Lay_WrongCenterExit ();
+	    Err_WrongCenterExit ();
          Str_Copy (ForumName,Hie.Ctr.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_CENTER_TCHS:
 	 Hie.Ctr.CtrCod = Forum->Location;
 	 if (!Ctr_GetDataOfCenterByCod (&Hie.Ctr))
-	    Lay_WrongCenterExit ();
+	    Err_WrongCenterExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
                    Hie.Ctr.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
@@ -2245,13 +2246,13 @@ void For_SetForumName (const struct For_Forum *Forum,
       case For_FORUM_DEGREE_USRS:
 	 Hie.Deg.DegCod = Forum->Location;
 	 if (!Deg_GetDataOfDegreeByCod (&Hie.Deg))
-	    Lay_WrongDegreeExit ();
+	    Err_WrongDegreeExit ();
          Str_Copy (ForumName,Hie.Deg.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_DEGREE_TCHS:
 	 Hie.Deg.DegCod = Forum->Location;
 	 if (!Deg_GetDataOfDegreeByCod (&Hie.Deg))
-	    Lay_WrongDegreeExit ();
+	    Err_WrongDegreeExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
                    Hie.Deg.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
@@ -2260,13 +2261,13 @@ void For_SetForumName (const struct For_Forum *Forum,
       case For_FORUM_COURSE_USRS:
 	 Hie.Crs.CrsCod = Forum->Location;
 	 if (!Crs_GetDataOfCourseByCod (&Hie.Crs))
-	    Lay_WrongCourseExit ();
+	    Err_WrongCourseExit ();
          Str_Copy (ForumName,Hie.Crs.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_COURSE_TCHS:
 	 Hie.Crs.CrsCod = Forum->Location;
 	 if (!Crs_GetDataOfCourseByCod (&Hie.Crs))
-	    Lay_WrongCourseExit ();
+	    Err_WrongCourseExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
                    Hie.Crs.ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
@@ -2512,7 +2513,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
         NumThr++, NumThrInScreen++)
       /* Get thread code(row[0]) */
       if ((ThrCods[NumThrInScreen] = DB_GetNextCode (mysql_res)) < 0)
-         Lay_ShowErrorAndExit ("Error when getting thread of a forum.");
+         Err_ShowErrorAndExit ("Error when getting thread of a forum.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3452,13 +3453,13 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 
    /* Get number of posts (row[0]) */
    if (sscanf (row[0],"%u",&NumPosts) != 1)
-      Lay_ShowErrorAndExit ("Error when getting the total number of forums of a type.");
+      Err_ShowErrorAndExit ("Error when getting the total number of forums of a type.");
 
    /* Get number of users notified (row[1]) */
    if (row[1])
      {
       if (sscanf (row[1],"%u",NumUsrsToBeNotifiedByEMail) != 1)
-         Lay_ShowErrorAndExit ("Error when getting the total number of forums of a type.");
+         Err_ShowErrorAndExit ("Error when getting the total number of forums of a type.");
      }
    else
       *NumUsrsToBeNotifiedByEMail = 0;
@@ -3605,7 +3606,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	       TimeUTC = Thr.WriteTime[Order];
 	       UniqueId++;
 	       if (asprintf (&Id,"thr_date_%u",UniqueId) < 0)
-		  Lay_NotEnoughMemoryExit ();
+		  Err_NotEnoughMemoryExit ();
 	       HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",Id,Style,BgColor);
 		  Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -3677,7 +3678,7 @@ static void For_GetThreadData (struct For_Thread *Thr)
 			 " AND for_threads.FirstPstCod=m0.PstCod"
 			 " AND for_threads.LastPstCod=m1.PstCod",
 		       Thr->ThrCod) != 1)
-      Lay_ShowErrorAndExit ("Error when getting data of a thread of a forum.");
+      Err_ShowErrorAndExit ("Error when getting data of a thread of a forum.");
    row = mysql_fetch_row (mysql_res);
 
    /***** Get the code of the first post in this thread (row[0]) *****/
@@ -3689,9 +3690,9 @@ static void For_GetThreadData (struct For_Thread *Thr)
    /***** Get the code of the first message (row[0])
           and the last message (row[1]) in this thread *****/
    if (sscanf (row[0],"%ld",&(Thr->PstCod[Dat_START_TIME])) != 1)
-      Lay_WrongPostExit ();
+      Err_WrongPostExit ();
    if (sscanf (row[1],"%ld",&(Thr->PstCod[Dat_END_TIME])) != 1)
-      Lay_WrongPostExit ();
+      Err_WrongPostExit ();
 
    /***** Get the author of the first post in this thread (row[2]) *****/
    Thr->UsrCod[Dat_START_TIME] = Str_ConvertStrCodToLongCod (row[2]);
@@ -4005,7 +4006,7 @@ static void For_RestrictAccess (const struct For_Forums *Forums)
 	 break;
      }
    if (!ICanSeeForum)
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -4266,16 +4267,16 @@ void For_RemovePost (void)
    /***** Check if I can remove the post *****/
    /* Check if the message really exists, if it has not been removed */
    if (!For_GetIfForumPstExists (Forums.PstCod))
-      Lay_WrongPostExit ();
+      Err_WrongPostExit ();
 
    /* Check if I am the author of the message */
    ItsMe = Usr_ItsMe (UsrDat.UsrCod);
    if (!ItsMe)
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /* Check if the message is the last message in the thread */
    if (Forums.PstCod != For_GetLastPstCod (Forums.Thread.Current))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Remove the post *****/
    ThreadDeleted = For_RemoveForumPst (Forums.PstCod,Media.MedCod);
@@ -4411,7 +4412,7 @@ void For_RemoveThread (void)
 	 For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,Txt_Thread_removed);
      }
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -4626,7 +4627,7 @@ static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
 		         Forums->Thread.Current);
          break;
       default:
-	 Lay_WrongForumExit ();
+	 Err_WrongForumExit ();
 	 break;
      }
   }

@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_timeline.h"
@@ -743,7 +744,7 @@ void Tml_DB_CreateSubQueryPublishers (const struct Tml_Timeline *Timeline,
 	       SubQueries->Publishers[0] = '\0';
 	       break;
 	    default:
-	       Lay_WrongWhoExit ();
+	       Err_WrongWhoExit ();
 	       break;
 	   }
 	 break;

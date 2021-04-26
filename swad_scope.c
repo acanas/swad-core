@@ -28,6 +28,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_config.h"
+#include "swad_error.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
@@ -111,7 +112,7 @@ void Sco_PutSelectorScope (const char *ParamName,HTM_SubmitOnChange_t SubmitOnCh
 		  WriteScope = true;
 	       break;
 	    default:
-	       Lay_WrongScopeExit ();
+	       Err_WrongScopeExit ();
 	       break;
 	   }
 
@@ -164,7 +165,7 @@ void Sco_PutSelectorScope (const char *ParamName,HTM_SubmitOnChange_t SubmitOnCh
 			      Gbl.Hierarchy.Crs.ShrtName);
 		  break;
 	       default:
-		  Lay_WrongScopeExit ();
+		  Err_WrongScopeExit ();
 		  break;
 	      }
 	   }

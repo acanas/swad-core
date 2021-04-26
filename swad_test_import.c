@@ -32,6 +32,7 @@
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -202,7 +203,7 @@ void TsI_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
              Gbl.FileBrowser.TmpPubDir.L,
              Gbl.FileBrowser.TmpPubDir.R);
    if ((FileXML = fopen (PathPubFile,"wb")) == NULL)
-      Lay_ShowErrorAndExit ("Can not open target file.");
+      Err_ShowErrorAndExit ("Can not open target file.");
 
    /***** Start XML file *****/
    XML_WriteStartFile (FileXML,"test",false);
@@ -219,7 +220,7 @@ void TsI_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
       /* Get question code (row[0]) */
       row = mysql_fetch_row (mysql_res);
       if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-         Lay_WrongQuestionExit ();
+         Err_WrongQuestionExit ();
 
       TsI_ExportQuestion (&Question,FileXML);
 
@@ -445,7 +446,7 @@ static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML)
 
    /***** Open file *****/
    if ((FileXML = fopen (FileNameXML,"rb")) == NULL)
-      Lay_ShowErrorAndExit ("Can not open XML file.");
+      Err_ShowErrorAndExit ("Can not open XML file.");
 
    /***** Compute file size *****/
    fseek (FileXML,0L,SEEK_END);
@@ -454,7 +455,7 @@ static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML)
 
    /***** Allocate memory for XML buffer *****/
    if ((XMLBuffer = malloc (FileSize + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    else
      {
       /***** Read file contents into XML buffer *****/
@@ -646,12 +647,12 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		     Question.QstCod = -1L;
 		     Tst_InsertOrUpdateQstTagsAnsIntoDB (&Question);
 		     if (Question.QstCod <= 0)
-			Lay_ShowErrorAndExit ("Can not create question.");
+			Err_ShowErrorAndExit ("Can not create question.");
 		    }
 		 }
 	      }
 	    else	// Answer type not found
-	       Lay_WrongAnswerExit ();
+	       Err_WrongAnswerExit ();
 
 	    /***** Destroy test question *****/
 	    Tst_QstDestructor (&Question);
@@ -687,7 +688,7 @@ static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsT
          if (!strcasecmp (StrAnsTypeXML,Tst_StrAnswerTypesXML[AnsType]))
             return AnsType;
 
-   Lay_WrongAnswerExit ();
+   Err_WrongAnswerExit ();
    return (Tst_AnswerType_t) 0;	// Not reached
   }
 
@@ -1001,7 +1002,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
             AnswerTextLength = strlen (Question->Answer.Options[NumOpt].Text) *
         	               Str_MAX_BYTES_PER_CHAR;
             if ((AnswerText = malloc (AnswerTextLength + 1)) == NULL)
-               Lay_NotEnoughMemoryExit ();
+               Err_NotEnoughMemoryExit ();
             Str_Copy (AnswerText,Question->Answer.Options[NumOpt].Text,
                       AnswerTextLength);
             Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1016,7 +1017,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 	          AnswerFeedbackLength = strlen (Question->Answer.Options[NumOpt].Feedback) *
 					 Str_MAX_BYTES_PER_CHAR;
 	          if ((AnswerFeedback = malloc (AnswerFeedbackLength + 1)) == NULL)
-		     Lay_NotEnoughMemoryExit ();
+		     Err_NotEnoughMemoryExit ();
 		  Str_Copy (AnswerFeedback,
 		            Question->Answer.Options[NumOpt].Feedback,
 		            AnswerFeedbackLength);

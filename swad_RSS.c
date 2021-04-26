@@ -32,6 +32,7 @@
 #include "swad_call_for_exam.h"
 #include "swad_changelog.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_global.h"
 #include "swad_notice.h"
 #include "swad_RSS.h"
@@ -74,7 +75,7 @@ void RSS_UpdateRSSFileForACrs (struct Crs_Course *Crs)
    snprintf (PathRelPublRSSFile,sizeof (PathRelPublRSSFile),"%s/%s",
 	     PathRelPublRSSDir,Cfg_RSS_FILE);
    if ((FileRSS = fopen (PathRelPublRSSFile,"wb")) == NULL)
-      Lay_ShowErrorAndExit ("Can not create RSS file.");
+      Err_ShowErrorAndExit ("Can not create RSS file.");
 
    /***** Write RSS header *****/
    fprintf (FileRSS,"<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n");
@@ -186,7 +187,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
 
          /* Get notice code */
          if (sscanf (row[0],"%ld",&NotCod) != 1)
-            Lay_WrongNoticeExit ();
+            Err_WrongNoticeExit ();
 
          /* Get UTC date-time of publication */
          CreatTimeUTC = 0L;
@@ -290,7 +291,7 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Crs_Course *Crs)
 
 	    /* Get call for exam code */
 	    if (sscanf (row[0],"%ld",&ExaCod) != 1)
-	       Lay_WrongCallForExamExit ();
+	       Err_WrongCallForExamExit ();
 
 	    /* Get UTC date-time of publication */
 	    CallTimeUTC = 0L;

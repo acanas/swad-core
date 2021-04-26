@@ -35,6 +35,7 @@
 #include "swad_assignment.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -416,7 +417,7 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 	StartEndTime++)
      {
       if (asprintf (&Id,"asg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       if (PrintView)
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
 		       Id,
@@ -549,7 +550,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
 	    Frm_BeginForm (ActFrmCreAsgCrs);
 	    break;
 	 default:
-            Lay_WrongRoleExit ();
+            Err_WrongRoleExit ();
 	    break;
         }
       Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
@@ -734,7 +735,7 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
       /***** Create list of assignments *****/
       if ((Assignments->LstAsgCods = calloc (NumAsgs,
                                              sizeof (*Assignments->LstAsgCods))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the assignments codes *****/
       for (NumAsg = 0;
@@ -743,7 +744,7 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
         {
          /* Get next assignment code */
          if ((Assignments->LstAsgCods[NumAsg] = DB_GetNextCode (mysql_res)) <= 0)
-            Lay_WrongAssignmentExit ();
+            Err_WrongAssignmentExit ();
         }
      }
    else
@@ -985,7 +986,7 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	{
 	 Length = strlen (row[1]);
 	 if ((*ContentStr = malloc (Length + 1)) == NULL)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
 	 Str_Copy (*ContentStr,row[1],Length);
 	}
      }
@@ -1034,7 +1035,7 @@ void Asg_ReqRemAssignment (void)
 
    /***** Get assignment code *****/
    if ((Asg.AsgCod = Asg_GetParamAsgCod ()) <= 0)
-      Lay_WrongAssignmentExit ();
+      Err_WrongAssignmentExit ();
 
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Asg);
@@ -1071,7 +1072,7 @@ void Asg_RemoveAssignment (void)
 
    /***** Get assignment code *****/
    if ((Asg.AsgCod = Asg_GetParamAsgCod ()) <= 0)
-      Lay_WrongAssignmentExit ();
+      Err_WrongAssignmentExit ();
 
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Asg);	// Inside this function, the course is checked to be the current one
@@ -1121,7 +1122,7 @@ void Asg_HideAssignment (void)
 
    /***** Get assignment code *****/
    if ((Asg.AsgCod = Asg_GetParamAsgCod ()) <= 0)
-      Lay_WrongAssignmentExit ();
+      Err_WrongAssignmentExit ();
 
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Asg);
@@ -1158,7 +1159,7 @@ void Asg_ShowAssignment (void)
 
    /***** Get assignment code *****/
    if ((Asg.AsgCod = Asg_GetParamAsgCod ()) <= 0)
-      Lay_WrongAssignmentExit ();
+      Err_WrongAssignmentExit ();
 
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Asg);
@@ -1926,7 +1927,7 @@ unsigned Asg_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope)
 			" WHERE CrsCod=%ld",
                         Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 return 0;
      }
   }
@@ -2014,20 +2015,20 @@ unsigned Asg_GetNumAssignments (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
                          Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
    /***** Get number of assignments *****/
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%u",&NumAssignments) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of assignments.");
+      Err_ShowErrorAndExit ("Error when getting number of assignments.");
 
    /***** Get number of notifications by email *****/
    if (row[1])
      {
       if (sscanf (row[1],"%u",NumNotif) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of notifications of assignments.");
+         Err_ShowErrorAndExit ("Error when getting number of notifications of assignments.");
      }
    else
       *NumNotif = 0;

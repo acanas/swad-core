@@ -38,6 +38,7 @@
 
 #include "swad_box.h"
 #include "swad_config.h"
+#include "swad_error.h"
 #include "swad_file_browser.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -178,7 +179,7 @@ void ZIP_CreateZIPAsgWrk (void)
    /***** Change to directory of the assignments and works
           in order to start the path in the zip file from there *****/
    if (chdir (Path))
-      Lay_ShowErrorAndExit ("Can not change to temporary folder for compression.");
+      Err_ShowErrorAndExit ("Can not change to temporary folder for compression.");
 
    /***** Create public zip file with the assignment and works *****/
    snprintf (FileNameZIP,sizeof (FileNameZIP),"%s.zip",Txt_works_ZIP_FILE_NAME);
@@ -193,14 +194,14 @@ void ZIP_CreateZIPAsgWrk (void)
 
    /***** Return to the CGI directory *****/
    if (chdir (Cfg_PATH_CGI_BIN))
-      Lay_ShowErrorAndExit ("Can not change to cgi-bin folder.");
+      Err_ShowErrorAndExit ("Can not change to cgi-bin folder.");
 
    /***** If the zip command has been sucessful, write the link to zip file *****/
    if (Result == 0)
      {
       /***** Get file size *****/
       if (lstat (PathFileZIP,&FileStatus))	// On success ==> 0 is returned
-	 Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+	 Err_ShowErrorAndExit ("Can not get information about a file or folder.");
       else
 	{
 	 /***** Create URL pointing to ZIP file *****/
@@ -216,7 +217,7 @@ void ZIP_CreateZIPAsgWrk (void)
 	}
      }
    else
-      Lay_ShowErrorAndExit ("Can not compress files into zip file.");
+      Err_ShowErrorAndExit ("Can not compress files into zip file.");
 
    /***** Remove the directory of compression *****/
    Fil_RemoveTree (Path);
@@ -239,7 +240,7 @@ static void ZIP_CreateTmpDirForCompression (void)
    snprintf (PathDirTmp,sizeof (PathDirTmp),"%s/%s",
 	     Cfg_PATH_ZIP_PRIVATE,Gbl.FileBrowser.ZIP.TmpDir);
    if (mkdir (PathDirTmp,(mode_t) 0xFFF))
-      Lay_ShowErrorAndExit ("Can not create temporary folder for compression.");
+      Err_ShowErrorAndExit ("Can not create temporary folder for compression.");
   }
 
 /*****************************************************************************/
@@ -302,7 +303,7 @@ static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
 	}
 
       if (!Success)
-	 Lay_ShowErrorAndExit ("Can not create temporary link for compression.");
+	 Err_ShowErrorAndExit ("Can not create temporary link for compression.");
      }
   }
 
@@ -373,13 +374,13 @@ static void ZIP_CompressFolderIntoZIP (void)
       /***** Change to directory of the clone folder
 	     in order to start the path in the zip file from there *****/
       if (chdir (PathCompression))
-	 Lay_ShowErrorAndExit ("Can not change to temporary folder for compression.");
+	 Err_ShowErrorAndExit ("Can not change to temporary folder for compression.");
 
       /***** Create public zip file with the assignment and works *****/
       if (asprintf (&FileNameZIP,"%s.zip",
 	            strcmp (Gbl.FileBrowser.FilFolLnk.Name,".") ? Gbl.FileBrowser.FilFolLnk.Name :
 							          Txt_ROOT_FOLDER_EXTERNAL_NAMES[Gbl.FileBrowser.Type]) < 0)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
       snprintf (PathFileZIP,sizeof (PathFileZIP),"%s/%s/%s/%s",
 	        Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
 	        Gbl.FileBrowser.TmpPubDir.L,
@@ -391,16 +392,16 @@ static void ZIP_CompressFolderIntoZIP (void)
 
       /***** Return to the CGI directory *****/
       if (chdir (Cfg_PATH_CGI_BIN))
-	 Lay_ShowErrorAndExit ("Can not change to cgi-bin folder.");
+	 Err_ShowErrorAndExit ("Can not change to cgi-bin folder.");
 
       /***** If the zip command has not been sucessful, abort *****/
       if (Result)
-	 Lay_ShowErrorAndExit ("Can not compress files into zip file.");
+	 Err_ShowErrorAndExit ("Can not compress files into zip file.");
 
       /***** If the zip command has been sucessful, write the link to zip file *****/
       /* Get file size */
       if (lstat (PathFileZIP,&FileStatus))	// On success ==> 0 is returned
-	 Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+	 Err_ShowErrorAndExit ("Can not get information about a file or folder.");
       else
 	{
 	 /* Create URL pointing to ZIP file */
@@ -480,7 +481,7 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 
 	    FileType = Brw_IS_UNKNOWN;
 	    if (lstat (PathFile,&FileStatus))	// On success ==> 0 is returned
-	       Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+	       Err_ShowErrorAndExit ("Can not get information about a file or folder.");
 	    else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 	       FileType = Brw_IS_FOLDER;
 	    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
@@ -498,7 +499,7 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 
 		  /***** Create clone of subdirectory *****/
 		  if (mkdir (PathFileClone,(mode_t) 0xFFF))
-		     Lay_ShowErrorAndExit ("Can not create temporary subfolder for compression.");
+		     Err_ShowErrorAndExit ("Can not create temporary subfolder for compression.");
 
 		  /***** Clone subtree starting at this this directory *****/
 		  FullSize += ZIP_CloneDir (PathFile,PathFileClone,PathFileInTree);
@@ -510,7 +511,7 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 
 		  /***** Create a symbolic link (clone) to original file *****/
 		  if (symlink (PathFile,PathFileClone) != 0)
-		     Lay_ShowErrorAndExit ("Can not create temporary link for compression.");
+		     Err_ShowErrorAndExit ("Can not create temporary link for compression.");
 
 		  /***** Update number of my views of this file *****/
 		  Brw_UpdateMyFileViews (Brw_GetFilCodByPath (PathFileInTree,false));	// Any file, public or not
@@ -519,7 +520,7 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 	   }
      }
    else
-      Lay_ShowErrorAndExit ("Error while scanning directory.");
+      Err_ShowErrorAndExit ("Error while scanning directory.");
 
    return FullSize;
   }

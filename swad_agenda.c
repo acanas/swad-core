@@ -36,6 +36,7 @@
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_date.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_group.h"
@@ -821,7 +822,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 	StartEndTime++)
      {
       if (asprintf (&Id,"agd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"%s LB COLOR%u\"",
 		    Id,
 		    AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
@@ -1074,7 +1075,7 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
 	   {
 	    if (asprintf (&UsrSubQuery,"UsrCod=%ld",
 			  Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    if (AgendaType == Agd_MY_AGENDA_TODAY)
 	       Str_Copy (Past__FutureEventsSubQuery,
 			 " AND DATE(StartTime)<=CURDATE()"
@@ -1131,7 +1132,7 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
       case Agd_ANOTHER_AGENDA:
 	 if (asprintf (&UsrSubQuery,"UsrCod=%ld",
 	               Gbl.Usrs.Other.UsrDat.UsrCod) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 if (AgendaType == Agd_ANOTHER_AGENDA_TODAY)
 	    Str_Copy (Past__FutureEventsSubQuery,
 		      " AND DATE(StartTime)<=CURDATE()"
@@ -1170,7 +1171,7 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
 	 /***** Create list of events *****/
 	 if ((Agenda->LstAgdCods = calloc ((size_t) Agenda->Num,
 	                                   sizeof (*Agenda->LstAgdCods))) == NULL)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Get the events codes *****/
 	 for (NumEvent = 0;
@@ -1178,7 +1179,7 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
 	      NumEvent++)
 	    /* Get next event code */
 	    if ((Agenda->LstAgdCods[NumEvent] = DB_GetNextCode (mysql_res)) < 0)
-	       Lay_WrongEventExit ();
+	       Err_WrongEventExit ();
 	}
 
       /***** Free structure that stores the query result *****/
@@ -1327,7 +1328,7 @@ void Agd_AskRemEvent (void)
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
-      Lay_WrongEventExit ();
+      Err_WrongEventExit ();
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1363,7 +1364,7 @@ void Agd_RemoveEvent (void)
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
-      Lay_WrongEventExit ();
+      Err_WrongEventExit ();
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1402,7 +1403,7 @@ void Agd_HideEvent (void)
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
-      Lay_WrongEventExit ();
+      Err_WrongEventExit ();
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1438,7 +1439,7 @@ void Agd_UnhideEvent (void)
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
-      Lay_WrongEventExit ();
+      Err_WrongEventExit ();
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1475,7 +1476,7 @@ void Agd_MakeEventPrivate (void)
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
-      Lay_WrongEventExit ();
+      Err_WrongEventExit ();
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1516,7 +1517,7 @@ void Agd_MakeEventPublic (void)
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
-      Lay_WrongEventExit ();
+      Err_WrongEventExit ();
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1932,7 +1933,7 @@ unsigned Agd_GetNumUsrsWithEvents (Hie_Lvl_Level_t Scope)
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
                         Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 return 0;	// Not reached
      }
   }
@@ -2023,7 +2024,7 @@ unsigned Agd_GetNumEvents (Hie_Lvl_Level_t Scope)
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
                         Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 return 0;	// Not reached
      }
   }

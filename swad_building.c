@@ -32,6 +32,7 @@
 #include "swad_box.h"
 #include "swad_building.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -355,7 +356,7 @@ void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
      {
       /***** Create list with courses in center *****/
       if ((Buildings->Lst = calloc ((size_t) Buildings->Num,sizeof (*Buildings->Lst))) == NULL)
-          Lay_NotEnoughMemoryExit ();
+          Err_NotEnoughMemoryExit ();
 
       /***** Get the buildings *****/
       for (NumBuilding = 0;
@@ -369,7 +370,7 @@ void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
 
          /* Get building code (row[0]) */
          if ((Building->BldCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Lay_WrongBuildingExit ();
+            Err_WrongBuildingExit ();
 
          /* Get the short name of the building (row[1]) */
          Str_Copy (Building->ShrtName,row[1],sizeof (Building->ShrtName) - 1);
@@ -552,7 +553,7 @@ void Bld_RemoveBuilding (void)
 
    /***** Get building code *****/
    if ((Bld_EditingBuilding->BldCod = Bld_GetParamBldCod ()) <= 0)
-      Lay_WrongBuildingExit ();
+      Err_WrongBuildingExit ();
 
    /***** Get data of the building from database *****/
    Bld_GetDataOfBuildingByCod (Bld_EditingBuilding);
@@ -649,7 +650,7 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
    /***** Get parameters from form *****/
    /* Get the code of the building */
    if ((Bld_EditingBuilding->BldCod = Bld_GetParamBldCod ()) <= 0)
-      Lay_WrongBuildingExit ();
+      Err_WrongBuildingExit ();
 
    /* Get the new name for the building */
    Par_GetParToText (ParamName,NewClaName,MaxBytes);
@@ -742,7 +743,7 @@ void Bld_ChangeBuildingLocation (void)
    /***** Get parameters from form *****/
    /* Get the code of the building */
    if ((Bld_EditingBuilding->BldCod = Bld_GetParamBldCod ()) <= 0)
-      Lay_WrongBuildingExit ();
+      Err_WrongBuildingExit ();
 
    /* Get the new location for the building */
    Par_GetParToText ("Location",NewLocation,Bld_MAX_BYTES_LOCATION);
@@ -942,11 +943,11 @@ static void Bld_EditingBuildingConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Bld_EditingBuilding != NULL)
-      Lay_WrongBuildingExit ();
+      Err_WrongBuildingExit ();
 
    /***** Allocate memory for building *****/
    if ((Bld_EditingBuilding = malloc (sizeof (*Bld_EditingBuilding))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Reset building *****/
    Bld_EditingBuilding->BldCod      = -1L;

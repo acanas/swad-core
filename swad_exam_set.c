@@ -35,6 +35,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_exam.h"
 #include "swad_exam_result.h"
 #include "swad_exam_session.h"
@@ -367,7 +368,7 @@ void ExaSet_ReceiveFormSet (void)
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
    Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
    ItsANewSet = (Set.SetCod <= 0);
@@ -378,7 +379,7 @@ void ExaSet_ReceiveFormSet (void)
 
    /***** Check if exam is editable *****/
    if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** If I can edit exams ==> receive set from form *****/
    ExaSet_ReceiveSetFieldsFromForm (&Set);
@@ -454,7 +455,7 @@ void ExaSet_ChangeSetTitle (void)
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -466,7 +467,7 @@ void ExaSet_ChangeSetTitle (void)
 
    /***** Check if exam is editable *****/
    if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Receive new title from form *****/
    Par_GetParToText ("Title",NewTitle,ExaSet_MAX_BYTES_TITLE);
@@ -498,7 +499,7 @@ void ExaSet_ChangeNumQstsToExam (void)
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -510,7 +511,7 @@ void ExaSet_ChangeNumQstsToExam (void)
 
    /***** Check if exam is editable *****/
    if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Get number of questions in set to appear in exam print *****/
    NumQstsToPrint = (unsigned) Par_GetParToUnsignedLong ("NumQstsToPrint",
@@ -667,7 +668,7 @@ void ExaSet_RequestCreatOrEditSet (void)
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -677,7 +678,7 @@ void ExaSet_RequestCreatOrEditSet (void)
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
    Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
    ItsANewSet = (Set.SetCod <= 0);
@@ -785,7 +786,7 @@ static unsigned ExaSet_GetSetIndFromSetCod (long ExaCod,long SetCod)
 			" WHERE SetCod=%u"
 			  " AND ExaCod=%ld",	// Extra check
 			SetCod,ExaCod))
-      Lay_WrongSetExit ();
+      Err_WrongSetExit ();
 
    /***** Get set code (row[0]) *****/
    row = mysql_fetch_row (mysql_res);
@@ -814,7 +815,7 @@ static long ExaSet_GetSetCodFromSetInd (long ExaCod,unsigned SetInd)
 				ExaCod,
 				SetInd);
    if (SetCod <= 0)
-      Lay_WrongSetExit ();
+      Err_WrongSetExit ();
 
    return SetCod;
   }
@@ -1323,7 +1324,7 @@ Tst_AnswerType_t ExaSet_GetQstAnswerTypeFromDB (long QstCod)
 		        " FROM exa_set_questions"
 		       " WHERE QstCod=%ld",
 		       QstCod))
-      Lay_WrongQuestionExit ();
+      Err_WrongQuestionExit ();
 
    /* Get type of answer */
    row = mysql_fetch_row (mysql_res);
@@ -1414,7 +1415,7 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
 	       break;
 	    case Tst_ANS_FLOAT:
 	       if (Question->Answer.NumOptions != 2)
-		  Lay_WrongAnswerExit ();
+		  Err_WrongAnswerExit ();
 	       Question->Answer.FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[1]);
 	       break;
 	    case Tst_ANS_TRUE_FALSE:
@@ -1426,7 +1427,7 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
 	    case Tst_ANS_TEXT:
 	       /* Check number of options */
 	       if (Question->Answer.NumOptions > Tst_MAX_OPTIONS_PER_QUESTION)
-		  Lay_WrongAnswerExit ();
+		  Err_WrongAnswerExit ();
 
 	       /*  Allocate space for text and feedback */
 	       if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
@@ -1464,7 +1465,7 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
    DB_FreeMySQLResult (&mysql_res);
 
    if (!QuestionExists)
-      Lay_WrongQuestionExit ();
+      Err_WrongQuestionExit ();
   }
 
 /*****************************************************************************/
@@ -1596,7 +1597,7 @@ void ExaSet_AddQstsToSet (void)
 	 /* Get next code */
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	 if (sscanf (LongStr,"%ld",&QstCod) != 1)
-	    Lay_WrongQuestionExit ();
+	    Err_WrongQuestionExit ();
 
 	 ExaSet_CopyQstFromBankToExamSet (&Set,QstCod);
 	}
@@ -1621,7 +1622,7 @@ static void ExaSet_AllocateListSelectedQuestions (struct Exa_Exams *Exams)
    if (!Exams->ListQuestions)
      {
       if ((Exams->ListQuestions = malloc (ExaSet_MAX_BYTES_LIST_SELECTED_QUESTIONS + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
       Exams->ListQuestions[0] = '\0';
      }
   }
@@ -1756,7 +1757,7 @@ void ExaSet_RequestRemoveSet (void)
 
    /***** Check if exam is editable *****/
    if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Show question and button to remove question *****/
    Ale_ShowAlertAndButton (ActRemExaSet,NULL,NULL,
@@ -1791,7 +1792,7 @@ void ExaSet_RemoveSet (void)
 
    /***** Check if exam is editable *****/
    if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Remove the set from all the tables *****/
    /* Remove questions associated to set */
@@ -1813,7 +1814,7 @@ void ExaSet_RemoveSet (void)
 		   Set.SetCod,
 		   Set.ExaCod);
    if (!mysql_affected_rows (&Gbl.mysql))
-      Lay_ShowErrorAndExit ("The set to be removed does not exist.");
+      Err_ShowErrorAndExit ("The set to be removed does not exist.");
 
    /* Change index of sets greater than this */
    DB_QueryUPDATE ("can not update indexes of sets",
@@ -1855,7 +1856,7 @@ void ExaSet_MoveUpSet (void)
 
    /***** Check if exam is editable *****/
    if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Get set index *****/
    SetIndBottom = ExaSet_GetSetIndFromSetCod (Exam.ExaCod,Set.SetCod);
@@ -1866,7 +1867,7 @@ void ExaSet_MoveUpSet (void)
       /* Indexes of sets to be exchanged */
       SetIndTop = ExaSet_GetPrevSetIndexInExam (Exam.ExaCod,SetIndBottom);
       if (!SetIndTop)
-	 Lay_ShowErrorAndExit ("Wrong set index.");
+	 Err_ShowErrorAndExit ("Wrong set index.");
 
       /* Exchange sets */
       ExaSet_ExchangeSets (Exam.ExaCod,SetIndTop,SetIndBottom);
@@ -1903,7 +1904,7 @@ void ExaSet_MoveDownSet (void)
 
    /***** Check if exam is editable *****/
    if (!Exa_CheckIfEditable (&Exam))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Get set index *****/
    SetIndTop = ExaSet_GetSetIndFromSetCod (Exam.ExaCod,Set.SetCod);
@@ -1917,7 +1918,7 @@ void ExaSet_MoveDownSet (void)
       /* Indexes of sets to be exchanged */
       SetIndBottom = ExaSet_GetNextSetIndexInExam (Exam.ExaCod,SetIndTop);
       if (!SetIndBottom)
-	 Lay_ShowErrorAndExit ("Wrong set index.");
+	 Err_ShowErrorAndExit ("Wrong set index.");
 
       /* Exchange sets */
       ExaSet_ExchangeSets (Exam.ExaCod,SetIndTop,SetIndBottom);
@@ -2008,7 +2009,7 @@ void ExaSet_RemoveQstFromSet (void)
 		   QstCod,
 		   Set.SetCod);
    if (!mysql_affected_rows (&Gbl.mysql))
-      Lay_WrongQuestionExit ();
+      Err_WrongQuestionExit ();
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
@@ -2141,22 +2142,22 @@ static void ExaSet_GetAndCheckParameters (struct Exa_Exams *Exams,
    /***** Get parameters *****/
    Exa_GetParams (Exams);
    if (Exams->ExaCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exam->ExaCod = Exams->ExaCod;
    Grp_GetParamWhichGroups ();
    if ((Set->SetCod = ExaSet_GetParamSetCod ()) <= 0)
-      Lay_WrongSetExit ();
+      Err_WrongSetExit ();
 
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (Exam);
    if (Exam->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exams->ExaCod = Exam->ExaCod;
 
    /***** Get set data from database *****/
    ExaSet_GetDataOfSetByCod (Set);
    if (Set->ExaCod != Exam->ExaCod)
-      Lay_WrongSetExit ();
+      Err_WrongSetExit ();
    Exams->SetCod = Set->SetCod;
   }
 

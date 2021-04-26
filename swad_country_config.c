@@ -33,6 +33,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -257,7 +258,7 @@ static void CtyCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
 		   " AND ctr_centers.Latitude<>0"
 		   " AND ctr_centers.Longitude<>0",
 		 Gbl.Hierarchy.Cty.CtyCod) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    Map_GetCoordAndZoom (Coord,Zoom,Query);
    free (Query);
   }
@@ -593,7 +594,7 @@ static void CtyCfg_GetMapAttr (long CtyCod,char **MapAttribution)
 	   {
 	    Length = strlen (row[0]);
 	    if ((*MapAttribution = malloc (Length + 1)) == NULL)
-               Lay_NotEnoughMemoryExit ();
+               Err_NotEnoughMemoryExit ();
 	    Str_Copy (*MapAttribution,row[0],Length);
 	   }
      }

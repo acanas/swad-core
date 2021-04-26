@@ -32,6 +32,7 @@
 
 #include "swad_connected.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_timeline_database.h"
@@ -84,7 +85,7 @@ void Ses_CreateSession (void)
 
    /***** Check that session is not open *****/
    if (Ses_CheckIfSessionExists (Gbl.Session.Id))
-      Lay_ShowErrorAndExit ("Can not create session.");
+      Err_ShowErrorAndExit ("Can not create session.");
 
    /***** Add session to database *****/
    Ses_InsertSessionInDB ();

@@ -33,6 +33,7 @@
 #include "swad_database.h"
 #include "swad_degree.h"
 #include "swad_degree_config.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
@@ -296,7 +297,7 @@ void Deg_WriteSelectorOfDegree (void)
 
          /* Get degree code (row[0]) */
          if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_WrongDegreeExit ();
+            Err_WrongDegreeExit ();
 
          /* Write option */
 	 HTM_OPTION (HTM_Type_LONG,&DegCod,
@@ -604,7 +605,7 @@ static void Deg_PutFormToCreateDegree (void)
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
       Frm_BeginForm (ActReqDeg);
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_degree,
@@ -904,7 +905,7 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
    /***** Get data of type of degree of this degree *****/
    DegTyp.DegTypCod = Deg->DegTypCod;
    if (!DT_GetDataOfDegreeTypeByCod (&DegTyp))
-      Lay_WrongDegTypExit ();
+      Err_WrongDegTypExit ();
 
    if (Deg->Status & Deg_STATUS_BIT_PENDING)
      {
@@ -1103,7 +1104,7 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
      {
       /***** Create list with degrees *****/
       if ((Degs->Lst = calloc (Degs->Num,sizeof (*Degs->Lst))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the degrees *****/
       for (NumDeg = 0;
@@ -1155,7 +1156,7 @@ void Deg_GetListDegsInCurrentCtr (void)
       /***** Create list with degrees of this center *****/
       if ((Gbl.Hierarchy.Degs.Lst = calloc ((size_t) Gbl.Hierarchy.Degs.Num,
                                             sizeof (*Gbl.Hierarchy.Degs.Lst))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the degrees of this center *****/
       for (NumDeg = 0;
@@ -1339,7 +1340,7 @@ long Deg_GetAndCheckParamOtherDegCod (long MinCodAllowed)
 
    /***** Get and check parameter with code of degree *****/
    if ((DegCod = Par_GetParToLong ("OthDegCod")) < MinCodAllowed)
-      Lay_WrongDegreeExit ();
+      Err_WrongDegreeExit ();
 
    return DegCod;
   }
@@ -1404,7 +1405,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row)
   {
    /***** Get degree code (row[0]) *****/
    if ((Deg->DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-      Lay_WrongDegreeExit ();
+      Err_WrongDegreeExit ();
 
    /***** Get center code (row[1]) *****/
    Deg->CtrCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -1414,7 +1415,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row)
 
    /* Get course status (row[3]) */
    if (sscanf (row[3],"%u",&(Deg->Status)) != 1)
-      Lay_WrongStatusExit ();
+      Err_WrongStatusExit ();
 
    /* Get requester user's code (row[4]) */
    Deg->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
@@ -1512,7 +1513,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
      {
       /* Get next course */
       if ((CrsCod = DB_GetNextCode (mysql_res)) < 0)
-         Lay_WrongCourseExit ();
+         Err_WrongCourseExit ();
 
       /* Remove course */
       Crs_RemoveCourseCompletely (CrsCod);
@@ -1807,7 +1808,7 @@ void Deg_ChangeDegStatus (void)
 	                              (unsigned long) Deg_MAX_STATUS,
                                       (unsigned long) Deg_WRONG_STATUS);
    if (Status == Deg_WRONG_STATUS)
-      Lay_WrongStatusExit ();
+      Err_WrongStatusExit ();
    StatusTxt = Deg_GetStatusTxtFromStatusBits (Status);
    Status = Deg_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
@@ -2197,11 +2198,11 @@ static void Deg_EditingDegreeConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Deg_EditingDeg != NULL)
-      Lay_WrongDegreeExit ();
+      Err_WrongDegreeExit ();
 
    /***** Allocate memory for degree *****/
    if ((Deg_EditingDeg = malloc (sizeof (*Deg_EditingDeg))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Reset degree *****/
    Deg_EditingDeg->DegCod          = -1L;

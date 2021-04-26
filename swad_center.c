@@ -33,6 +33,7 @@
 #include "swad_center.h"
 #include "swad_center_config.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
@@ -577,7 +578,7 @@ void Ctr_GetBasicListOfCenters (long InsCod)
       /***** Create list with courses in degree *****/
       if ((Gbl.Hierarchy.Ctrs.Lst = calloc ((size_t) Gbl.Hierarchy.Ctrs.Num,
                                             sizeof (*Gbl.Hierarchy.Ctrs.Lst))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the centers *****/
       for (NumCtr = 0;
@@ -663,7 +664,7 @@ void Ctr_GetFullListOfCenters (long InsCod)
       /***** Create list with courses in degree *****/
       if ((Gbl.Hierarchy.Ctrs.Lst = calloc ((size_t) Gbl.Hierarchy.Ctrs.Num,
                                             sizeof (*Gbl.Hierarchy.Ctrs.Lst))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the centers *****/
       for (NumCtr = 0;
@@ -750,7 +751,7 @@ static void Ctr_GetDataOfCenterFromRow (struct Ctr_Center *Ctr,MYSQL_ROW row)
   {
    /***** Get center code (row[0]) *****/
    if ((Ctr->CtrCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-      Lay_WrongCenterExit ();
+      Err_WrongCenterExit ();
 
    /***** Get institution code (row[1]) *****/
    Ctr->InsCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -760,7 +761,7 @@ static void Ctr_GetDataOfCenterFromRow (struct Ctr_Center *Ctr,MYSQL_ROW row)
 
    /***** Get center status (row[3]) *****/
    if (sscanf (row[3],"%u",&(Ctr->Status)) != 1)
-      Lay_WrongStatusExit ();
+      Err_WrongStatusExit ();
 
    /***** Get requester user's code (row[4]) *****/
    Ctr->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
@@ -881,7 +882,7 @@ void Ctr_WriteSelectorOfCenter (void)
 
          /* Get center code (row[0]) */
          if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_WrongCenterExit ();
+            Err_WrongCenterExit ();
 
          /* Write option */
 	 HTM_OPTION (HTM_Type_LONG,&CtrCod,
@@ -1185,7 +1186,7 @@ long Ctr_GetAndCheckParamOtherCtrCod (long MinCodAllowed)
 
    /***** Get and check parameter with code of center *****/
    if ((CtrCod = Par_GetParToLong ("OthCtrCod")) < MinCodAllowed)
-      Lay_WrongCenterExit ();
+      Err_WrongCenterExit ();
 
    return CtrCod;
   }
@@ -1518,7 +1519,7 @@ void Ctr_ChangeCtrStatus (void)
 				      (unsigned long) Ctr_MAX_STATUS,
 				      (unsigned long) Ctr_WRONG_STATUS);
    if (Status == Ctr_WRONG_STATUS)
-      Lay_WrongStatusExit ();
+      Err_WrongStatusExit ();
    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Status);
    Status = Ctr_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
@@ -1603,7 +1604,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
       Frm_BeginForm (ActReqCtr);
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_center,
@@ -2283,11 +2284,11 @@ static void Ctr_EditingCenterConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Ctr_EditingCtr != NULL)
-      Lay_WrongCenterExit ();
+      Err_WrongCenterExit ();
 
    /***** Allocate memory for center *****/
    if ((Ctr_EditingCtr = malloc (sizeof (*Ctr_EditingCtr))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Reset center *****/
    Ctr_EditingCtr->CtrCod          = -1L;

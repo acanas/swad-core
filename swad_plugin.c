@@ -39,6 +39,7 @@ TODO: Check if web service is called from an authorized IP.
 #include "swad_constant.h"
 #include "swad_cryptography.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -247,7 +248,7 @@ static void Plg_GetListPlugins (void)
       /***** Create list with plugins *****/
       if ((Gbl.Plugins.Lst = calloc ((size_t) Gbl.Plugins.Num,
                                      sizeof (*Gbl.Plugins.Lst))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the plugins *****/
       for (NumPlg = 0;
@@ -261,7 +262,7 @@ static void Plg_GetListPlugins (void)
 
          /* Get plugin code (row[0]) */
          if ((Plg->PlgCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Lay_WrongPluginExit ();
+            Err_WrongPluginExit ();
 
          /* Get name (row[1]), description (row[2), logo (row[3]),
           * application key (row[4]), URL (row[5]) and IP (row[6]) of the plugin */
@@ -493,7 +494,7 @@ void Plg_RemovePlugin (void)
 
    /***** Get plugin code *****/
    if ((Plg_EditingPlg->PlgCod = Plg_GetParamPlgCod ()) <= 0)
-      Lay_WrongPluginExit ();
+      Err_WrongPluginExit ();
 
    /***** Get data of the plugin from database *****/
    Plg_GetDataOfPluginByCod (Plg_EditingPlg);
@@ -527,7 +528,7 @@ void Plg_RenamePlugin (void)
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
    if ((Plg_EditingPlg->PlgCod = Plg_GetParamPlgCod ()) <= 0)
-      Lay_WrongPluginExit ();
+      Err_WrongPluginExit ();
 
    /* Get the new name for the plugin */
    Par_GetParToText ("Name",NewPlgName,Plg_MAX_BYTES_PLUGIN_NAME);
@@ -606,7 +607,7 @@ void Plg_ChangePlgDescription (void)
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
    if ((Plg_EditingPlg->PlgCod = Plg_GetParamPlgCod ()) <= 0)
-      Lay_WrongPluginExit ();
+      Err_WrongPluginExit ();
 
    /* Get the new description for the plugin */
    Par_GetParToText ("Description",NewDescription,Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
@@ -653,7 +654,7 @@ void Plg_ChangePlgLogo (void)
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
    if ((Plg_EditingPlg->PlgCod = Plg_GetParamPlgCod ()) <= 0)
-      Lay_WrongPluginExit ();
+      Err_WrongPluginExit ();
 
    /* Get the new logo for the plugin */
    Par_GetParToText ("Logo",NewLogo,Plg_MAX_BYTES_PLUGIN_LOGO);
@@ -699,7 +700,7 @@ void Plg_ChangePlgAppKey (void)
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
    if ((Plg_EditingPlg->PlgCod = Plg_GetParamPlgCod ()) <= 0)
-      Lay_WrongPluginExit ();
+      Err_WrongPluginExit ();
 
    /* Get the new logo for the plugin */
    Par_GetParToText ("AppKey",NewAppKey,Plg_MAX_BYTES_PLUGIN_APP_KEY);
@@ -745,7 +746,7 @@ void Plg_ChangePlgURL (void)
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
    if ((Plg_EditingPlg->PlgCod = Plg_GetParamPlgCod ()) <= 0)
-      Lay_WrongPluginExit ();
+      Err_WrongPluginExit ();
 
    /* Get the new URL for the plugin */
    Par_GetParToText ("URL",NewURL,Cns_MAX_BYTES_WWW);
@@ -791,7 +792,7 @@ void Plg_ChangePlgIP (void)
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
    if ((Plg_EditingPlg->PlgCod = Plg_GetParamPlgCod ()) <= 0)
-      Lay_WrongPluginExit ();
+      Err_WrongPluginExit ();
 
    /* Get the new IP for the plugin */
    Par_GetParToText ("IP",NewIP,Cns_MAX_BYTES_IP);
@@ -1047,11 +1048,11 @@ static void Plg_EditingPluginConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Plg_EditingPlg != NULL)
-      Lay_WrongPluginExit ();
+      Err_WrongPluginExit ();
 
    /***** Allocate memory for plugin *****/
    if ((Plg_EditingPlg = malloc (sizeof (*Plg_EditingPlg))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Reset plugin *****/
    Plg_EditingPlg->PlgCod         = -1L;

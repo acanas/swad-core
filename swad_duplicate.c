@@ -30,6 +30,7 @@
 #include "swad_database.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -204,7 +205,7 @@ void Dup_ListDuplicateUsrs (void)
 
             /* Write number of informants (row[1]) if greater than 1 */
 	    if (sscanf (row[1],"%u",&NumInformants) != 1)
-	       Lay_ShowErrorAndExit ("Wrong number of informants.");
+	       Err_ShowErrorAndExit ("Wrong number of informants.");
             if (NumInformants > 1)
               {
                HTM_TxtColonNBSP (Txt_Informants);

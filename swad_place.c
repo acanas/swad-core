@@ -32,6 +32,7 @@
 #include "swad_box.h"
 #include "swad_constant.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -399,7 +400,7 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
       /***** Create list with courses in center *****/
       if ((Places->Lst = calloc ((size_t) Places->Num,
                                  sizeof (*Places->Lst))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the places *****/
       for (NumPlc = 0;
@@ -413,7 +414,7 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
 
          /* Get place code (row[0]) */
          if ((Plc->PlcCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Lay_WrongPlaceExit ();
+            Err_WrongPlaceExit ();
 
          /* Get the short (row[1]) and full (row[2]) names of the place */
          Str_Copy (Plc->ShrtName,row[1],sizeof (Plc->ShrtName) - 1);
@@ -616,7 +617,7 @@ void Plc_RemovePlace (void)
 
    /***** Get place code *****/
    if ((Plc_EditingPlc->PlcCod = Plc_GetParamPlcCod ()) <= 0)
-      Lay_WrongPlaceExit ();
+      Err_WrongPlaceExit ();
 
    /***** Get data of the place from database *****/
    Plc_GetDataOfPlaceByCod (Plc_EditingPlc);
@@ -700,7 +701,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
    /***** Get parameters from form *****/
    /* Get the code of the place */
    if ((Plc_EditingPlc->PlcCod = Plc_GetParamPlcCod ()) <= 0)
-      Lay_WrongPlaceExit ();
+      Err_WrongPlaceExit ();
 
    /* Get the new name for the place */
    Par_GetParToText (ParamName,NewPlcName,MaxBytes);
@@ -941,11 +942,11 @@ static void Plc_EditingPlaceConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Plc_EditingPlc != NULL)
-      Lay_WrongPlaceExit ();
+      Err_WrongPlaceExit ();
 
    /***** Allocate memory for place *****/
    if ((Plc_EditingPlc = malloc (sizeof (*Plc_EditingPlc))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Reset place *****/
    Plc_EditingPlc->PlcCod      = -1L;

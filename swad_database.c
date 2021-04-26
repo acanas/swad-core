@@ -36,6 +36,7 @@
 
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_language.h"
@@ -3741,7 +3742,7 @@ static void DB_CreateTable (const char *Query)
 void DB_OpenDBConnection (void)
   {
    if (mysql_init (&Gbl.mysql) == NULL)
-      Lay_ShowErrorAndExit ("Can not init MySQL.");
+      Err_ShowErrorAndExit ("Can not init MySQL.");
 
    if (mysql_real_connect (&Gbl.mysql,Cfg_DATABASE_HOST,
 	                   Cfg_DATABASE_USER,Gbl.Config.DatabasePassword,
@@ -3774,13 +3775,13 @@ void DB_BuildQuery (char **Query,const char *fmt,...)
    int NumBytesPrinted;
 
    if (*Query != NULL)
-      Lay_ShowErrorAndExit ("Error building query.");
+      Err_ShowErrorAndExit ("Error building query.");
 
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (Query,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/
@@ -3799,7 +3800,7 @@ unsigned long DB_QuerySELECT (MYSQL_RES **mysql_res,const char *MsgError,
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Do SELECT query *****/
    return DB_QuerySELECTusingQueryStr (Query,mysql_res,MsgError);
@@ -3823,7 +3824,7 @@ long DB_QuerySELECTCode (const char *MsgError,
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Do SELECT query *****/
    if (DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError))	// Row found
@@ -3856,7 +3857,7 @@ unsigned DB_QuerySELECTUnsigned (const char *MsgError,
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Do SELECT query *****/
    if (DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError))	// Row found
@@ -3891,7 +3892,7 @@ double DB_QuerySELECTDouble (const char *MsgError,
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Do SELECT query *****/
    if (DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError))	// Row found
@@ -3926,7 +3927,7 @@ Rol_Role_t DB_QuerySELECTRole (const char *MsgError,
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Do SELECT query *****/
    if (DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError))	// Row found
@@ -3963,7 +3964,7 @@ void DB_QuerySELECTString (char *Str,size_t StrSize,const char *MsgError,
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Do SELECT query *****/
    Str[0] = '\0';
@@ -3985,7 +3986,7 @@ void DB_QuerySELECTString (char *Str,size_t StrSize,const char *MsgError,
 	        "Too large string from database,"
                 " it exceed the maximum allowed size (%zu bytes).",
                 StrSize);
-      Lay_ShowErrorAndExit (ErrorTxt);
+      Err_ShowErrorAndExit (ErrorTxt);
      }
   }
 
@@ -4002,7 +4003,7 @@ static unsigned long DB_QuerySELECTusingQueryStr (char *Query,
    /***** Check that query string pointer
           does point to an allocated string *****/
    if (Query == NULL)
-      Lay_ShowErrorAndExit ("Wrong query string.");
+      Err_ShowErrorAndExit ("Wrong query string.");
 
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
@@ -4060,7 +4061,7 @@ unsigned long DB_QueryCOUNT (const char *MsgError,const char *fmt,...)
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Make query "SELECT COUNT(*) FROM..." *****/
    DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError);
@@ -4068,7 +4069,7 @@ unsigned long DB_QueryCOUNT (const char *MsgError,const char *fmt,...)
    /***** Get number of rows *****/
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%lu",&NumRows) != 1)
-      Lay_ShowErrorAndExit ("Error when counting number of rows.");
+      Err_ShowErrorAndExit ("Error when counting number of rows.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -4091,7 +4092,7 @@ void DB_QueryINSERT (const char *MsgError,const char *fmt,...)
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
@@ -4115,7 +4116,7 @@ long DB_QueryINSERTandReturnCode (const char *MsgError,const char *fmt,...)
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
@@ -4142,7 +4143,7 @@ void DB_QueryREPLACE (const char *MsgError,const char *fmt,...)
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
@@ -4166,7 +4167,7 @@ void DB_QueryUPDATE (const char *MsgError,const char *fmt,...)
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
@@ -4190,7 +4191,7 @@ void DB_QueryDELETE (const char *MsgError,const char *fmt,...)
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
@@ -4214,7 +4215,7 @@ void DB_Query (const char *MsgError,const char *fmt,...)
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
@@ -4247,5 +4248,5 @@ void DB_ExitOnMySQLError (const char *Message)
 
    snprintf (BigErrorMsg,sizeof (BigErrorMsg),"Database error: %s (%s).",
              Message,mysql_error (&Gbl.mysql));
-   Lay_ShowErrorAndExit (BigErrorMsg);
+   Err_ShowErrorAndExit (BigErrorMsg);
   }

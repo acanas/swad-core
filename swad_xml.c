@@ -31,6 +31,7 @@
 #include <string.h>		// For strlen (), etc.
 
 #include "swad_changelog.h"
+#include "swad_error.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_xml.h"
@@ -101,7 +102,7 @@ void XML_GetTree (const char *XMLBuffer,struct XMLElement **XMLRootElem)
   {
    /***** Allocate space for the root element *****/
    if ((*XMLRootElem = calloc (1,sizeof (**XMLRootElem))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    Gbl.XMLPtr = XMLBuffer;
    XML_GetElement (*XMLRootElem);
@@ -156,14 +157,14 @@ static void XML_GetElement (struct XMLElement *ParentElem)
             snprintf (ErrorTxt,sizeof (ErrorTxt),
 	              "XML syntax error. Expect end tag &lt;/%s&gt;.",
 		      ParentElem->TagName);
-            Lay_ShowErrorAndExit (ErrorTxt);
+            Err_ShowErrorAndExit (ErrorTxt);
            }
          if (strncmp (ParentElem->TagName,Gbl.XMLPtr,EndTagNameLength))	// XML tags are case sensitive
            {
             snprintf (ErrorTxt,sizeof (ErrorTxt),
 	              "XML syntax error. Expect end tag &lt;/%s&gt;.",
 		      ParentElem->TagName);
-            Lay_ShowErrorAndExit (ErrorTxt);
+            Err_ShowErrorAndExit (ErrorTxt);
            }
 
          // End of parent element found!
@@ -185,7 +186,7 @@ static void XML_GetElement (struct XMLElement *ParentElem)
          if (ContentLength)
            {
             if ((ParentElem->Content = malloc (ContentLength + 1)) == NULL)
-               Lay_NotEnoughMemoryExit ();
+               Err_NotEnoughMemoryExit ();
             strncpy (ParentElem->Content,StartContent,ContentLength);
             ParentElem->Content[ContentLength] = '\0';
             ParentElem->ContentLength = ContentLength;
@@ -210,7 +211,7 @@ static void XML_GetElement (struct XMLElement *ParentElem)
          */
          /***** Allocate space for the child element *****/
          if ((ChildElem = calloc (1,sizeof (*ChildElem))) == NULL)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
 
          /***** Adjust XML elements pointers *****/
          if (ParentElem->FirstChild)	// This child is a brother of a former child
@@ -222,7 +223,7 @@ static void XML_GetElement (struct XMLElement *ParentElem)
          /***** Get child tag name *****/
          ChildElem->TagNameLength = strcspn (Gbl.XMLPtr,">/ \t");
          if ((ChildElem->TagName = malloc (ChildElem->TagNameLength + 1)) == NULL)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
          strncpy (ChildElem->TagName,Gbl.XMLPtr,ChildElem->TagNameLength);
          ChildElem->TagName[ChildElem->TagNameLength] = '\0';
          Gbl.XMLPtr += ChildElem->TagNameLength;
@@ -252,7 +253,7 @@ static void XML_GetElement (struct XMLElement *ParentElem)
                           Gbl.XMLPtr
             */
             if (*Gbl.XMLPtr != '>')	// Here it should be the end of start tag
-               Lay_ShowErrorAndExit ("XML syntax error. Expect &gt; ending unary tag.");
+               Err_ShowErrorAndExit ("XML syntax error. Expect &gt; ending unary tag.");
             Gbl.XMLPtr++;
             /*
             <parent><child/>...</parent>
@@ -312,7 +313,7 @@ static void XML_GetAttributes (struct XMLElement *Elem)
             EndOfStartTag = true;
            }
          else
-            Lay_ShowErrorAndExit ("XML syntax error. Expect &gt; ending unary tag with attributes.");
+            Err_ShowErrorAndExit ("XML syntax error. Expect &gt; ending unary tag with attributes.");
         }
       else if (*Gbl.XMLPtr == '>')	// End of start tag?
         {
@@ -320,7 +321,7 @@ static void XML_GetAttributes (struct XMLElement *Elem)
          EndOfStartTag = true;
         }
       else if (*Gbl.XMLPtr == '\0')
-         Lay_ShowErrorAndExit ("XML syntax error. Unexpected end of file.");
+         Err_ShowErrorAndExit ("XML syntax error. Unexpected end of file.");
       else
         {
          /* Start of attribute name:
@@ -331,7 +332,7 @@ static void XML_GetAttributes (struct XMLElement *Elem)
          */
          /***** Allocate space for the attribute *****/
          if ((Attribute = calloc (1,sizeof (*Attribute))) == NULL)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
 
          /***** Adjust XML element and attribute pointers *****/
          if (Elem->FirstAttribute)	// This attribute is a brother of a former attribute in current element
@@ -343,7 +344,7 @@ static void XML_GetAttributes (struct XMLElement *Elem)
          /***** Get attribute name *****/
          Attribute->AttributeNameLength = strcspn (Gbl.XMLPtr,"=");
          if ((Attribute->AttributeName = malloc (Attribute->AttributeNameLength + 1)) == NULL)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
          strncpy (Attribute->AttributeName,Gbl.XMLPtr,Attribute->AttributeNameLength);
          Attribute->AttributeName[Attribute->AttributeNameLength] = '\0';
          Gbl.XMLPtr += Attribute->AttributeNameLength;
@@ -371,11 +372,11 @@ static void XML_GetAttributes (struct XMLElement *Elem)
 	              "XML syntax error after attribute &quot;%s&quot;"
 	              " inside element &quot;%s&quot;.",
                       Attribute->AttributeName,Elem->TagName);
-            Lay_ShowErrorAndExit (ErrorTxt);
+            Err_ShowErrorAndExit (ErrorTxt);
            }
 
          if ((Attribute->Content = malloc (Attribute->ContentLength + 1)) == NULL)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
          strncpy (Attribute->Content,Gbl.XMLPtr,Attribute->ContentLength);
          Attribute->Content[Attribute->ContentLength] = '\0';
          Gbl.XMLPtr += Attribute->ContentLength;
@@ -477,14 +478,14 @@ void XML_PrintTree (struct XMLElement *ParentElem)
 bool XML_GetAttributteYesNoFromXMLTree (struct XMLAttribute *Attribute)
   {
    if (!Attribute->Content)
-      Lay_ShowErrorAndExit ("XML attribute yes/no not found.");
+      Err_ShowErrorAndExit ("XML attribute yes/no not found.");
    if (!strcasecmp (Attribute->Content,"yes") ||
        !strcasecmp (Attribute->Content,"y"))	// case insensitive, because users can edit XML
       return true;
    if (!strcasecmp (Attribute->Content,"no") ||
        !strcasecmp (Attribute->Content,"n"))	// case insensitive, because users can edit XML
       return false;
-   Lay_ShowErrorAndExit ("XML attribute yes/no not found.");
+   Err_ShowErrorAndExit ("XML attribute yes/no not found.");
    return false;	// Not reached
   }
 

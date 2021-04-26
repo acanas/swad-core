@@ -30,6 +30,7 @@
 #include <stdio.h>		// For vasprintf
 #include <stdlib.h>		// For free
 
+#include "swad_error.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
 
@@ -128,7 +129,7 @@ void HTM_TABLE_Begin (const char *fmt,...)
 	 NumBytesPrinted = vasprintf (&Class,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_TxtF ("<table class=\"%s\">",Class);
@@ -252,7 +253,7 @@ void HTM_TBODY_Begin (const char *fmt,...)
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_TxtF ("<tbody %s>",Attr);
@@ -294,7 +295,7 @@ void HTM_TR_Begin (const char *fmt,...)
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_TxtF ("<tr %s>",Attr);
@@ -391,7 +392,7 @@ static void HTM_TH_BeginAttr (const char *fmt,...)
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_TxtF ("<th %s>",Attr);
@@ -453,7 +454,7 @@ void HTM_TD_Begin (const char *fmt,...)
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_TxtF ("<td %s>",Attr);
@@ -528,7 +529,7 @@ void HTM_DIV_Begin (const char *fmt,...)
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_TxtF ("<div %s>",Attr);
@@ -619,7 +620,7 @@ void HTM_SPAN_Begin (const char *fmt,...)
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_TxtF ("<span %s>",Attr);
@@ -685,7 +686,7 @@ void HTM_UL_Begin (const char *fmt,...)
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_TxtF ("<ul %s>",Attr);
@@ -734,7 +735,7 @@ void HTM_LI_Begin (const char *fmt,...)
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_TxtF ("<li %s>",Attr);
@@ -838,7 +839,7 @@ void HTM_A_Begin (const char *fmt,...)
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_TxtF ("<a %s>",Attr);
@@ -915,7 +916,7 @@ void HTM_PARAM (const char *Name,
 	 NumBytesPrinted = vasprintf (&Value,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_TxtF ("\n<param name=\"%s\" value=\"%s\">",Name,Value);
@@ -942,7 +943,7 @@ void HTM_LABEL_Begin (const char *fmt,...)
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_TxtF ("<label %s>",Attr);
@@ -996,7 +997,7 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
 	 HTM_SPTxt (Attr);
@@ -1030,7 +1031,7 @@ void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
 	 HTM_SPTxt (Attr);
@@ -1061,7 +1062,7 @@ void HTM_INPUT_TEL (const char *Name,const char *Value,
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
 	 HTM_SPTxt (Attr);
@@ -1095,7 +1096,7 @@ void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
 	 HTM_SPTxt (Attr);
@@ -1126,7 +1127,7 @@ void HTM_INPUT_URL (const char *Name,const char *Value,
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
 	 HTM_SPTxt (Attr);
@@ -1161,7 +1162,7 @@ void HTM_INPUT_FILE (const char *Name,const char *Accept,
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
 	 HTM_SPTxt (Attr);
@@ -1221,7 +1222,7 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
 	 HTM_SPTxt (Attr);
@@ -1254,7 +1255,7 @@ void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
 	 HTM_SPTxt (Attr);
@@ -1301,7 +1302,7 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
 	 HTM_SPTxt (Attr);
@@ -1330,7 +1331,7 @@ void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
 	 HTM_SPTxt (Attr);
@@ -1362,7 +1363,7 @@ void HTM_INPUT_CHECKBOX (const char *Name,HTM_SubmitOnChange_t SubmitOnChange,
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
 	 HTM_SPTxt (Attr);
@@ -1476,7 +1477,7 @@ void HTM_TEXTAREA_Begin (const char *fmt,...)
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_TxtF ("<textarea %s>",Attr);
@@ -1526,7 +1527,7 @@ void HTM_SELECT_Begin (HTM_SubmitOnChange_t SubmitOnChange,
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_TxtF ("<select %s",Attr);
@@ -1614,7 +1615,7 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disable
 	 NumBytesPrinted = vasprintf (&Content,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_Txt (Content);
@@ -1661,7 +1662,7 @@ void HTM_IMG (const char *URL,const char *Icon,const char *Title,
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print attributes *****/
 	 HTM_SPTxt (Attr);
@@ -1762,7 +1763,7 @@ void HTM_TxtF (const char *fmt,...)
 	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
 	 HTM_Txt (Attr);

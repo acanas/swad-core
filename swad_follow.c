@@ -30,6 +30,7 @@
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_follow.h"
 #include "swad_form.h"
@@ -1496,7 +1497,7 @@ void Fol_GetAndShowRankingFollowers (void)
 			 Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
-         Lay_WrongScopeExit ();
+         Err_WrongScopeExit ();
          break;
      }
 

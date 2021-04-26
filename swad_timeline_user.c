@@ -30,6 +30,7 @@
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdio.h>		// For asprintf
 
+#include "swad_error.h"
 #include "swad_global.h"
 #include "swad_photo.h"
 #include "swad_timeline.h"
@@ -246,7 +247,7 @@ bool Tml_Usr_CheckIfFavedSharedByUsr (Tml_Usr_FavSha_t FavSha,long Cod,long UsrC
       case Tml_Usr_SHA_UNS_NOTE:
 	 return Tml_DB_CheckIfSharedByUsr (Cod,UsrCod);
       default:
-         Lay_ShowErrorAndExit ("Wrong fav/share action.");
+         Err_ShowErrorAndExit ("Wrong fav/share action.");
      }
 
    return false;	// Not reached
@@ -268,7 +269,7 @@ static unsigned Tml_Usr_GetListFaversOrSharers (Tml_Usr_FavSha_t FavSha,
       case Tml_Usr_SHA_UNS_NOTE:
 	 return Tml_DB_GetSharers (Cod,UsrCod,MaxUsrs,mysql_res);
       default:
-         Lay_ShowErrorAndExit ("Wrong fav/share action.");
+         Err_ShowErrorAndExit ("Wrong fav/share action.");
      }
 
    return 0;	// Not reached
@@ -359,7 +360,7 @@ bool Tml_Usr_CheckIfICanFavSha (long Cod,long UsrCod)
 			   I can not fav/share my own notes/comments *****/
    if (!Gbl.Usrs.Me.Logged || Usr_ItsMe (UsrCod))
      {
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
       return false;	// Not reached
      }
 
@@ -385,7 +386,7 @@ bool Tml_Usr_CheckIfICanRemove (long Cod,long UsrCod)
 			   I can only remove my own notes/comments *****/
    if (!Gbl.Usrs.Me.Logged || !Usr_ItsMe (UsrCod))
      {
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
       return false;	// Not reached
      }
 

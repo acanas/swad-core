@@ -32,6 +32,7 @@
 
 #include "swad_action.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_exam_log.h"
 #include "swad_global.h"
 
@@ -231,7 +232,7 @@ static void ExaLog_LogUsrAgent (long LogCod,long PrnCod)
    else
       MaxBytes = 0;
    if ((UserAgentDB = malloc (MaxBytes + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    if (UserAgent)
      {
       Str_Copy (UserAgentDB,UserAgent,MaxBytes);
@@ -389,7 +390,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	 /* Get session id (row[6]) */
 	 if (asprintf (&UserAgent,"%s",row[6] ? row[6] :
 						"=") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Set color of row depending on action *****/
 	 if (UsrCouldAnswer)
@@ -422,7 +423,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 
 	 /* Write click time */
 	 if (asprintf (&Id,"click_date_%u",NumClick) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT COLOR%u %s\"",Id,Gbl.RowEvenOdd,Class);
 	 Dat_WriteLocalDateHMSFromUTC (Id,ClickTimeUTC,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,

@@ -34,6 +34,7 @@
 
 #include "swad_country_config.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
@@ -564,7 +565,7 @@ void Cty_DrawCountryMap (struct Cty_Countr *Cty,const char *Class)
       if (asprintf (&URL,"%s/%s",
 		    Cfg_URL_ICON_COUNTRIES_PUBLIC,
 	            Cty->Alpha2) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_IMG (URL,Str_BuildStringStr ("%s.png",Cty->Alpha2),
 	       Cty->Name[Gbl.Prefs.Language],
 	       "class=\"%s\"",Class);
@@ -772,7 +773,7 @@ void Cty_GetBasicListOfCountries (void)
       /***** Create list with countries *****/
       if ((Gbl.Hierarchy.Ctys.Lst = calloc ((size_t) Gbl.Hierarchy.Ctys.Num,
                                             sizeof (*Gbl.Hierarchy.Ctys.Lst))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the countries *****/
       for (NumCty = 0;
@@ -786,7 +787,7 @@ void Cty_GetBasicListOfCountries (void)
 
          /* Get numerical country code (row[0]) */
          if ((Cty->CtyCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_WrongCountrExit ();
+            Err_WrongCountrExit ();
 
          /* Get Alpha-2 country code (row[1]) */
          Str_Copy (Cty->Alpha2,row[1],sizeof (Cty->Alpha2) - 1);
@@ -862,7 +863,7 @@ void Cty_GetFullListOfCountries (void)
    /* Build order subquery */
    if (asprintf (&OrderBySubQuery,OrderBySubQueryFmt[Gbl.Hierarchy.Ctys.SelectedOrder],
 		 Lan_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /* Query database */
    Gbl.Hierarchy.Ctys.Num = (unsigned)
@@ -898,7 +899,7 @@ void Cty_GetFullListOfCountries (void)
       /***** Create list with countries *****/
       if ((Gbl.Hierarchy.Ctys.Lst = calloc ((size_t) Gbl.Hierarchy.Ctys.Num,
                                             sizeof (*Gbl.Hierarchy.Ctys.Lst))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the countries *****/
       for (NumCty = 0;
@@ -912,7 +913,7 @@ void Cty_GetFullListOfCountries (void)
 
          /* Get numerical country code (row[0]) */
          if ((Cty->CtyCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_WrongCountrExit ();
+            Err_WrongCountrExit ();
 
          /* Get Alpha-2 country code (row[1]) */
          Str_Copy (Cty->Alpha2,row[1],sizeof (Cty->Alpha2) - 1);
@@ -981,7 +982,7 @@ void Cty_WriteSelectorOfCountry (void)
 
       /* Get country code (row[0]) */
       if ((CtyCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Lay_WrongCountrExit ();
+         Err_WrongCountrExit ();
 
       /* Write option */
       HTM_OPTION (HTM_Type_LONG,&CtyCod,
@@ -1302,7 +1303,7 @@ long Cty_GetAndCheckParamOtherCtyCod (long MinCodAllowed)
 
    /***** Get and check parameter with code of country *****/
    if ((CtyCod = Cty_GetParamOtherCtyCod ()) < MinCodAllowed)
-      Lay_WrongCountrExit ();
+      Err_WrongCountrExit ();
 
    return CtyCod;
   }
@@ -2119,11 +2120,11 @@ static void Cty_EditingCountryConstructor (void)
 
    /***** Pointer must be NULL *****/
    if (Cty_EditingCty != NULL)
-      Lay_WrongCountrExit ();
+      Err_WrongCountrExit ();
 
    /***** Allocate memory for country *****/
    if ((Cty_EditingCty = malloc (sizeof (*Cty_EditingCty))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Reset country *****/
    Cty_EditingCty->CtyCod = -1L;

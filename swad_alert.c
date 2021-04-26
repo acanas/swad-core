@@ -33,6 +33,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_alert.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -78,7 +79,7 @@ void Ale_CreateAlert (Ale_AlertType_t Type,const char *Section,
    size_t i;
 
    if (Gbl.Alerts.Num + 1 > Ale_MAX_ALERTS)
-      Lay_ShowErrorAndExit ("Too many alerts.");
+      Err_ShowErrorAndExit ("Too many alerts.");
 
    i = Gbl.Alerts.Num;
    Gbl.Alerts.Num++;
@@ -90,13 +91,13 @@ void Ale_CreateAlert (Ale_AlertType_t Type,const char *Section,
       if (Section[0])
 	 if (asprintf (&Gbl.Alerts.List[i].Section,"%s",
 	               Section) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Gbl.Alerts.List[i].Text,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/
@@ -203,7 +204,7 @@ static void Ale_ResetAlert (size_t i)
 void Ale_ShowAlertsAndExit ()
   {
    Ale_ShowAlerts (NULL);
-   Lay_ShowErrorAndExit (NULL);
+   Err_ShowErrorAndExit (NULL);
   }
 
 /*****************************************************************************/
@@ -254,7 +255,7 @@ void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...)
       NumBytesPrinted = vasprintf (&Txt,fmt,ap);
       va_end (ap);
       if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
 
       /***** Show alert *****/
       Ale_ShowFixAlert (AlertType,Txt);
@@ -328,7 +329,7 @@ void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const ch
    NumBytesPrinted = vasprintf (&Txt,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /****** Print fix alert and button ******/
    Ale_ShowFixAlertAndButton1 (AlertType,Txt);
@@ -355,7 +356,7 @@ void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *fmt,...)
    NumBytesPrinted = vasprintf (&Txt,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /****** Print start of fix alert and button ******/
    Ale_ShowFixAlertAndButton1 (AlertType,Txt);

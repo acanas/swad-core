@@ -34,6 +34,7 @@
 #include "swad_account.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -312,7 +313,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
       /***** Create list with places *****/
       if ((Gbl.Mails.Lst = calloc ((size_t) Gbl.Mails.Num,
                                    sizeof (*Gbl.Mails.Lst))) == NULL)
-          Lay_NotEnoughMemoryExit ();
+          Err_NotEnoughMemoryExit ();
 
       /***** Get the mail domains *****/
       for (NumMai = 0;
@@ -326,7 +327,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
 
          /* Get mail code (row[0]) */
          if ((Mai->MaiCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Lay_WrongMailDomainExit ();
+            Err_WrongMailDomainExit ();
 
          /* Get the mail domain (row[1]) and the mail domain info (row[2]) */
          Str_Copy (Mai->Domain,row[1],sizeof (Mai->Domain) - 1);
@@ -575,7 +576,7 @@ void Mai_RemoveMailDomain (void)
 
    /***** Get mail code *****/
    if ((Mai_EditingMai->MaiCod = Mai_GetParamMaiCod ()) <= 0)
-      Lay_WrongMailDomainExit ();
+      Err_WrongMailDomainExit ();
 
    /***** Get data of the mail from database *****/
    Mai_GetDataOfMailDomainByCod (Mai_EditingMai);
@@ -652,7 +653,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
    /***** Get parameters from form *****/
    /* Get the code of the mail */
    if ((Mai_EditingMai->MaiCod = Mai_GetParamMaiCod ()) <= 0)
-      Lay_WrongMailDomainExit ();
+      Err_WrongMailDomainExit ();
 
    /* Get the new name for the mail */
    Par_GetParToText (ParamName,NewMaiName,MaxBytes);
@@ -971,12 +972,12 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 	       HTM_Txt (", ");
 	       LengthStrAddr ++;
 	       if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
-		  Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
+		  Err_ShowErrorAndExit ("The space allocated to store email addresses is full.");
 	       Str_Concat (StrAddresses,",",sizeof (StrAddresses) - 1);
 	      }
 	    LengthStrAddr += strlen (UsrDat.Email);
 	    if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
-	       Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
+	       Err_ShowErrorAndExit ("The space allocated to store email addresses is full.");
 	    Str_Concat (StrAddresses,UsrDat.Email,sizeof (StrAddresses) - 1);
 	    HTM_A_Begin ("href=\"mailto:%s?subject=%s\"",
 		         UsrDat.Email,Gbl.Hierarchy.Crs.FullName);
@@ -1697,7 +1698,7 @@ bool Mai_SendMailMsgToConfirmEmail (void)
              FileNameMail);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
-      Lay_ShowErrorAndExit ("Error when running script to send email.");
+      Err_ShowErrorAndExit ("Error when running script to send email.");
 
    /***** Remove temporary file *****/
    unlink (FileNameMail);
@@ -1851,7 +1852,7 @@ void Mai_CreateFileNameMail (char FileNameMail[PATH_MAX + 1],FILE **FileMail)
    snprintf (FileNameMail,PATH_MAX + 1,"%s/%s_mail.txt",
              Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
    if ((*FileMail = fopen (FileNameMail,"wb")) == NULL)
-      Lay_ShowErrorAndExit ("Can not open file to send email.");
+      Err_ShowErrorAndExit ("Can not open file to send email.");
   }
 
 /*****************************************************************************/
@@ -1941,11 +1942,11 @@ static void Mai_EditingMailDomainConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Mai_EditingMai != NULL)
-      Lay_WrongMailDomainExit ();
+      Err_WrongMailDomainExit ();
 
    /***** Allocate memory for mail domain *****/
    if ((Mai_EditingMai = malloc (sizeof (*Mai_EditingMai))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Reset place *****/
    Mai_EditingMai->MaiCod    = -1L;

@@ -34,6 +34,7 @@
 
 #include "swad_database.h"
 #include "swad_date.h"
+#include "swad_error.h"
 #include "swad_exam.h"
 #include "swad_exam_print.h"
 #include "swad_exam_result.h"
@@ -163,7 +164,7 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
      {
       case Rol_STD:
          if (asprintf (&HiddenSubQuery," AND Hidden='N'") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -172,10 +173,10 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
 	 if (asprintf (&HiddenSubQuery,"%s","") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 break;
       default:
-	 Lay_WrongRoleExit ();
+	 Err_WrongRoleExit ();
 	 break;
      }
 
@@ -193,11 +194,11 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 				      " WHERE grp_users.UsrCod=%ld"
 				        " AND exa_groups.GrpCod=grp_users.GrpCod))",
 		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-	  Lay_NotEnoughMemoryExit ();
+	  Err_NotEnoughMemoryExit ();
       }
     else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
        if (asprintf (&GroupsSubQuery,"%s","") < 0)
-	  Lay_NotEnoughMemoryExit ();
+	  Err_NotEnoughMemoryExit ();
 
    /***** Get data of sessions from database *****/
    NumSessions = (unsigned)
@@ -402,7 +403,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	{
 	 /***** Build anchor string *****/
 	 if (asprintf (&Anchor,"evt_%ld_%ld",Exam->ExaCod,Session.SesCod) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Begin row for this exam session ****/
 	 HTM_TR_Begin (NULL);
@@ -591,7 +592,7 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
 					     "DATE_RED");
 
       if (asprintf (&Id,"exa_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
 		    Id,Color,Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,Session->TimeUTC[StartEndTime],
@@ -737,7 +738,7 @@ static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
 	 ExaSes_ListOneOrMoreSessionsResultTch (Exams,Session);
 	 break;
       default:
-	 Lay_WrongRoleExit ();
+	 Err_WrongRoleExit ();
 	 break;
      }
 
@@ -821,7 +822,7 @@ void ExaSes_ToggleVisResultsSesUsr (void)
 
    /***** Check if visibility of session results can be changed *****/
    if (!ExaSes_CheckIfVisibilityOfResultsCanBeChanged (&Session))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Toggle visibility of exam session results *****/
    Session.ShowUsrResults = !Session.ShowUsrResults;
@@ -870,11 +871,11 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
    /***** Get session data *****/
    /* Code of the session (row[0]) */
    if ((Session->SesCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-      Lay_WrongExamSessionExit ();
+      Err_WrongExamSessionExit ();
 
    /* Code of the exam (row[1]) */
    if ((Session->ExaCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
 
    /* Get whether the session is hidden (row[2]) */
    Session->Hidden = (row[2][0] == 'Y');
@@ -956,7 +957,7 @@ void ExaSes_RemoveSession (void)
 
    /***** Check if I can remove this exam session *****/
    if (!ExaSes_CheckIfICanEditThisSession (&Session))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Remove the exam session from all database tables *****/
    ExaSes_RemoveSessionFromAllTables (Session.SesCod);
@@ -1157,7 +1158,7 @@ void ExaSes_HideSession (void)
 
    /***** Check if I can remove this exam session *****/
    if (!ExaSes_CheckIfICanEditThisSession (&Session))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Hide session *****/
    DB_QueryUPDATE ("can not hide exam sessions",
@@ -1197,7 +1198,7 @@ void ExaSes_UnhideSession (void)
 
    /***** Check if I can remove this exam session *****/
    if (!ExaSes_CheckIfICanEditThisSession (&Session))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Unhide session *****/
    DB_QueryUPDATE ("can not unhide exam session",
@@ -1250,22 +1251,22 @@ void ExaSes_GetAndCheckParameters (struct Exa_Exams *Exams,
    /***** Get parameters *****/
    Exa_GetParams (Exams);
    if (Exams->ExaCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exam->ExaCod = Exams->ExaCod;
    Grp_GetParamWhichGroups ();
    if ((Session->SesCod = ExaSes_GetParamSesCod ()) <= 0)
-      Lay_WrongExamSessionExit ();
+      Err_WrongExamSessionExit ();
 
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (Exam);
    if (Exam->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exams->ExaCod = Exam->ExaCod;
 
    /***** Get set data from database *****/
    ExaSes_GetDataOfSessionByCod (Session);
    if (Session->ExaCod != Exam->ExaCod)
-      Lay_WrongSetExit ();
+      Err_WrongSetExit ();
    Exams->SesCod = Session->SesCod;
   }
 
@@ -1445,7 +1446,7 @@ void ExaSes_RequestCreatOrEditSession (void)
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
    Grp_GetParamWhichGroups ();
    Session.SesCod = ExaSes_GetParamSesCod ();
@@ -1454,7 +1455,7 @@ void ExaSes_RequestCreatOrEditSession (void)
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
    if (Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exams.ExaCod = Exam.ExaCod;
 
    /***** Get session data *****/
@@ -1466,7 +1467,7 @@ void ExaSes_RequestCreatOrEditSession (void)
       /* Get session data from database */
       ExaSes_GetDataOfSessionByCod (&Session);
       if (Exam.ExaCod != Session.ExaCod)
-	 Lay_WrongExamExit ();
+	 Err_WrongExamExit ();
       Exams.SesCod = Session.SesCod;
      }
 
@@ -1496,7 +1497,7 @@ void ExaSes_ReceiveFormSession (void)
    /***** Get main parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
    Grp_GetParamWhichGroups ();
    Session.SesCod = ExaSes_GetParamSesCod ();
@@ -1505,7 +1506,7 @@ void ExaSes_ReceiveFormSession (void)
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
    if (Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exams.ExaCod = Exam.ExaCod;
 
    /***** Get session data from database *****/
@@ -1520,7 +1521,7 @@ void ExaSes_ReceiveFormSession (void)
       /* Get session data from database */
       ExaSes_GetDataOfSessionByCod (&Session);
       if (Session.ExaCod != Exam.ExaCod)
-	 Lay_WrongExamExit ();
+	 Err_WrongExamExit ();
       Exams.SesCod = Session.SesCod;
      }
 

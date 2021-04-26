@@ -34,6 +34,7 @@
 #include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_department.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -377,7 +378,7 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
 	 /***** Create list with courses in degree *****/
 	 if ((Departments->Lst = calloc (Departments->Num,
 	                                 sizeof (*Departments->Lst))) == NULL)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Get the departments *****/
 	 for (NumDpt = 0;
@@ -391,11 +392,11 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
 
 	    /* Get department code (row[0]) */
 	    if ((Dpt->DptCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	       Lay_WrongDepartmentExit ();
+	       Err_WrongDepartmentExit ();
 
 	    /* Get institution code (row[1]) */
 	    if ((Dpt->InsCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
-	       Lay_WrongInstitExit ();
+	       Err_WrongInstitExit ();
 
 	    /* Get short name (row[2]), full name (row[3])
 	       and URL (row[4]) of the department  */
@@ -644,7 +645,7 @@ long Dpt_GetAndCheckParamDptCod (long MinCodAllowed)
 
    /***** Get and check parameter with code of department *****/
    if ((DptCod = Par_GetParToLong (Dpt_PARAM_DPT_COD_NAME)) < MinCodAllowed)
-      Lay_WrongDepartmentExit ();
+      Err_WrongDepartmentExit ();
 
    return DptCod;
   }
@@ -1206,11 +1207,11 @@ static void Dpt_EditingDepartmentConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Dpt_EditingDpt != NULL)
-      Lay_WrongDepartmentExit ();
+      Err_WrongDepartmentExit ();
 
    /***** Allocate memory for department *****/
    if ((Dpt_EditingDpt = malloc (sizeof (*Dpt_EditingDpt))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Reset department *****/
    Dpt_EditingDpt->DptCod      = -1L;

@@ -34,6 +34,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_game.h"
@@ -469,7 +470,7 @@ void Gam_SeeOneGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Show game *****/
@@ -580,7 +581,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 	StartEndTime++)
      {
       if (asprintf (&Id,"gam_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       Color = Game->NumUnfinishedMchs ? (Game->Hidden ? "DATE_GREEN_LIGHT":
 							"DATE_GREEN") :
 					(Game->Hidden ? "DATE_RED_LIGHT":
@@ -878,7 +879,7 @@ void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
      {
       case Rol_STD:
          if (asprintf (&HiddenSubQuery," AND gam_games.Hidden='N'") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -887,10 +888,10 @@ void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
 	 if (asprintf (&HiddenSubQuery,"%s","") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 break;
       default:
-	 Lay_WrongRoleExit ();
+	 Err_WrongRoleExit ();
 	 break;
      }
 
@@ -919,7 +920,7 @@ void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
       /***** Create list of games *****/
       if ((Games->Lst = malloc ((size_t) Games->Num *
                                 sizeof (*Games->Lst))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the games codes *****/
       for (NumGame = 0;
@@ -929,7 +930,7 @@ void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
          /* Get next game code (row[0]) */
          row = mysql_fetch_row (mysql_res);
          if ((Games->Lst[NumGame].GamCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Lay_WrongGameExit ();
+            Err_WrongGameExit ();
         }
      }
 
@@ -961,7 +962,7 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
    /***** Allocate memory for list of games selected *****/
    MaxSizeListGamCodsSelected = Games->Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
    if ((Games->GamCodsSelected = malloc (MaxSizeListGamCodsSelected + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of games selected *****/
    Par_GetParMultiToText ("GamCod",Games->GamCodsSelected,MaxSizeListGamCodsSelected);
@@ -1154,12 +1155,12 @@ void Gam_AskRemGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
 
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
    if (!Gam_CheckIfICanEditGames ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Show question and button to remove game *****/
    Games.GamCod = Game.GamCod;
@@ -1191,12 +1192,12 @@ void Gam_RemoveGame (void)
 
    /***** Get game code *****/
    if ((Game.GamCod = Gam_GetParamGameCod ()) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
 
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
    if (!Gam_CheckIfICanEditGames ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Remove game from all tables *****/
    Gam_RemoveGameFromAllTables (Game.GamCod);
@@ -1273,12 +1274,12 @@ void Gam_HideGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
 
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
    if (!Gam_CheckIfICanEditGames ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Hide game *****/
    DB_QueryUPDATE ("can not hide game",
@@ -1308,12 +1309,12 @@ void Gam_UnhideGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
 
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
    if (!Gam_CheckIfICanEditGames ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Show game *****/
    DB_QueryUPDATE ("can not show game",
@@ -1362,11 +1363,11 @@ void Gam_ListGame (void)
 
    /***** Check if I can list game questions *****/
    if (!Gam_CheckIfICanListGameQuestions ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
 
    /***** Get game data *****/
    Gam_GetDataOfGameByCod (&Game);
@@ -1397,7 +1398,7 @@ void Gam_RequestCreatOrEditGame (void)
 
    /***** Check if I can edit games *****/
    if (!Gam_CheckIfICanEditGames ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Get parameters *****/
    ItsANewGame = ((Game.GamCod = Gam_GetParams (&Games)) <= 0);
@@ -1555,7 +1556,7 @@ void Gam_ReceiveFormGame (void)
 
    /***** Check if I can edit games *****/
    if (!Gam_CheckIfICanEditGames ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Get parameters *****/
    ItsANewGame = ((Game.GamCod = Gam_GetParams (&Games)) <= 0);
@@ -1594,7 +1595,7 @@ void Gam_ReceiveFormGame (void)
 	}
      }
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
   }
 
 static void Gam_ReceiveGameFieldsFromForm (struct Gam_Game *Game,
@@ -1738,12 +1739,12 @@ void Gam_ReqSelectQstsToAddToGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
    if (!Gam_CheckIfEditable (&Game))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Show form to create a new question in this game *****/
    Games.GamCod = Game.GamCod;
@@ -1772,12 +1773,12 @@ void Gam_ListQstsToAddToGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
    if (!Gam_CheckIfEditable (&Game))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** List several test questions for selection *****/
    Games.GamCod = Game.GamCod;
@@ -1802,7 +1803,7 @@ unsigned Gam_GetParamQstInd (void)
    long QstInd;
 
    if ((QstInd = Par_GetParToLong ("QstInd")) <= 0)
-      Lay_WrongQuestionIndexExit ();
+      Err_WrongQuestionIndexExit ();
 
    return (unsigned) QstInd;
   }
@@ -1858,7 +1859,7 @@ long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd)
 				GamCod,
 				QstInd);
    if (QstCod <= 0)
-      Lay_WrongQuestionIndexExit ();
+      Err_WrongQuestionIndexExit ();
 
    return QstCod;
   }
@@ -2169,12 +2170,12 @@ void Gam_AddQstsToGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
    if (!Gam_CheckIfEditable (&Game))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Get selected questions *****/
    /* Allocate space for selected question codes */
@@ -2195,7 +2196,7 @@ void Gam_AddQstsToGame (void)
 	 /* Get next code */
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	 if (sscanf (LongStr,"%ld",&QstCod) != 1)
-	    Lay_WrongQuestionExit ();
+	    Err_WrongQuestionExit ();
 
 	 /* Check if question is already present in game */
 	 if (Gam_GetQstIndFromQstCod (Game.GamCod,QstCod) == 0)	// This question is not yet in this game
@@ -2244,7 +2245,7 @@ static void Gam_AllocateListSelectedQuestions (struct Gam_Games *Games)
    if (!Games->ListQuestions)
      {
       if ((Games->ListQuestions = malloc (Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
       Games->ListQuestions[0] = '\0';
      }
   }
@@ -2282,12 +2283,12 @@ void Gam_RequestRemoveQstFromGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
    if (!Gam_CheckIfEditable (&Game))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Get question index *****/
    QstInd = Gam_GetParamQstInd ();
@@ -2326,12 +2327,12 @@ void Gam_RemoveQstFromGame (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
    if (!Gam_CheckIfEditable (&Game))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Get question index *****/
    QstInd = Gam_GetParamQstInd ();
@@ -2348,7 +2349,7 @@ void Gam_RemoveQstFromGame (void)
 		   Game.GamCod,
 		   QstInd);
    if (!mysql_affected_rows (&Gbl.mysql))
-      Lay_WrongQuestionExit ();
+      Err_WrongQuestionExit ();
 
    /* Change index of questions greater than this */
    DB_QueryUPDATE ("can not update indexes of questions in table of answers",
@@ -2397,12 +2398,12 @@ void Gam_MoveUpQst (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
    if (!Gam_CheckIfEditable (&Game))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Get question index *****/
    QstIndBottom = Gam_GetParamQstInd ();
@@ -2413,7 +2414,7 @@ void Gam_MoveUpQst (void)
       /* Indexes of questions to be exchanged */
       QstIndTop = Gam_GetPrevQuestionIndexInGame (Game.GamCod,QstIndBottom);
       if (!QstIndTop)
-	 Lay_WrongQuestionIndexExit ();
+	 Err_WrongQuestionIndexExit ();
 
       /* Exchange questions */
       Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
@@ -2448,12 +2449,12 @@ void Gam_MoveDownQst (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if game has matches *****/
    if (!Gam_CheckIfEditable (&Game))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Get question index *****/
    QstIndTop = Gam_GetParamQstInd ();
@@ -2467,7 +2468,7 @@ void Gam_MoveDownQst (void)
       /* Indexes of questions to be exchanged */
       QstIndBottom = Gam_GetNextQuestionIndexInGame (Game.GamCod,QstIndTop);
       if (!QstIndBottom)
-	 Lay_WrongQuestionIndexExit ();
+	 Err_WrongQuestionIndexExit ();
 
       /* Exchange questions */
       Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
@@ -2598,7 +2599,7 @@ void Gam_RequestNewMatch (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Show game *****/
@@ -2845,7 +2846,7 @@ double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
 					      " GROUP BY gam_questions.GamCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 return 0.0;	// Not reached
      }
   }
@@ -2896,7 +2897,7 @@ void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore)
 		  " GROUP BY tst_answers.QstCod",
 		  GamCod);
    if (NumAnswers < 2)
-      Lay_WrongAnswerExit ();
+      Err_WrongAnswerExit ();
 
    /***** Set minimum and maximum scores *****/
    *MinScore = *MaxScore = 0.0;

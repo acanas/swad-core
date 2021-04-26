@@ -40,6 +40,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_enrolment.h"
+#include "swad_error.h"
 #include "swad_file.h"
 #include "swad_file_browser.h"
 #include "swad_follow.h"
@@ -671,7 +672,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
 	     FileNamePhotoTmp);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
-      Lay_ShowErrorAndExit ("Error when running command to process photo and detect faces.");
+      Err_ShowErrorAndExit ("Error when running command to process photo and detect faces.");
 
    /***** Write message depending on return code *****/
    ReturnCode = WEXITSTATUS(ReturnCode);
@@ -682,7 +683,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
          snprintf (FileNameTxtMap,sizeof (FileNameTxtMap),"%s/%s_map.txt",
                    Cfg_PATH_PHOTO_TMP_PUBLIC,Gbl.UniqueNameEncrypted);
          if ((FileTxtMap = fopen (FileNameTxtMap,"rb")) == NULL)
-            Lay_ShowErrorAndExit ("Can not read text file with coordinates of detected faces.");
+            Err_ShowErrorAndExit ("Can not read text file with coordinates of detected faces.");
 
          /***** Read file with coordinates for image map and compute the number of faces *****/
          NumLastForm = Gbl.Form.Num;
@@ -730,7 +731,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
 	           "Photo could not be processed successfully.<br />"
                    "Error code returned by the program of processing: %d",
                    ReturnCode);
-         Lay_ShowErrorAndExit (ErrorTxt);
+         Err_ShowErrorAndExit (ErrorTxt);
          break;
      }
 
@@ -906,7 +907,7 @@ static void Pho_UpdatePhoto2 (void)
      {
       HTM_TD_Begin ("class=\"DAT CT\" style=\"width:33%%;\"");
       if (asprintf (&Img,"%s_paso%u.jpg",Gbl.Usrs.FileNamePhoto,NumPhoto + 1) < 0)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
       HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,Img,Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
 	       "style=\"width:%upx;height:%upx;\"",
 	       Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT);
@@ -1048,7 +1049,7 @@ bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char PhotoURL[PATH_MAX +
       /***** Create a symbolic link to the private photo, if not exists *****/
       if (!Fil_CheckIfPathExists (PathPublPhoto))
          if (symlink (PathPrivPhoto,PathPublPhoto) != 0)
-            Lay_ShowErrorAndExit ("Can not create public link"
+            Err_ShowErrorAndExit ("Can not create public link"
                                  " to access to user's private photo");
 
       /***** Create the public URL of the photo *****/
@@ -1387,7 +1388,7 @@ void Pho_CalcPhotoDegree (void)
    /***** Prevent the computing of an average photo too recently updated *****/
    if (Pho_GetTimeAvgPhotoWasComputed (DegCod) >=
        Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO)
-      Lay_ShowErrorAndExit ("Average photo has been computed recently.");
+      Err_ShowErrorAndExit ("Average photo has been computed recently.");
 
    /***** Get list of students in this degree *****/
    Usr_GetUnorderedStdsCodesInDeg (DegCod);
@@ -1590,7 +1591,7 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
    /***** Build name for file with average photo *****/
    if (asprintf (&PathRelAvgPhoto,"%s/%ld_%s.jpg",
                  DirAvgPhotosRelPath,DegCod,Usr_StringsSexDB[Sex]) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Remove old file if exists *****/
    if (Fil_CheckIfPathExists (PathRelAvgPhoto))  // If file exists
@@ -1599,9 +1600,9 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
    /***** Build names for text file with photo paths *****/
    if (asprintf (&FileNamePhotoNames,"%s/%ld.txt",
 	         Cfg_PATH_PHOTO_TMP_PRIVATE,DegCod) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    if ((FilePhotoNames = fopen (FileNamePhotoNames,"wb")) == NULL)
-      Lay_ShowErrorAndExit ("Can not open file to compute average photo.");
+      Err_ShowErrorAndExit ("Can not open file to compute average photo.");
 
    /***** Loop writing file names in text file *****/
    for (NumUsr = 0;
@@ -1632,11 +1633,11 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
 	        FileNamePhotoNames,PathRelAvgPhoto);
       ReturnCode = system (StrCallToProgram);
       if (ReturnCode == -1)
-	 Lay_ShowErrorAndExit ("Error when running program that computes the average photo.");
+	 Err_ShowErrorAndExit ("Error when running program that computes the average photo.");
 
       /* Write message depending on the return code */
       if (WEXITSTATUS(ReturnCode))
-	 Lay_ShowErrorAndExit ("The average photo has not been computed successfully.");
+	 Err_ShowErrorAndExit ("The average photo has not been computed successfully.");
      }
 
    free (PathRelAvgPhoto);
@@ -2135,7 +2136,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 	{
 	 /***** Get next degree *****/
 	 if ((Deg.DegCod = DB_GetNextCode (mysql_res)) < 0)
-	    Lay_WrongDegreeExit ();
+	    Err_WrongDegreeExit ();
 
 	 /* Get data of degree */
 	 Deg_GetDataOfDegreeByCod (&Deg);
@@ -2232,7 +2233,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 
 	 /* Get degree code (row[0]) */
 	 if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_WrongDegreeExit ();
+	    Err_WrongDegreeExit ();
 
 	 /* Get data of degree */
 	 Deg_GetDataOfDegreeByCod (&Deg);

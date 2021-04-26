@@ -34,6 +34,7 @@
 #include "swad_agenda.h"
 #include "swad_attendance.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_exam.h"
 #include "swad_form.h"
 #include "swad_forum.h"
@@ -269,9 +270,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                break;
            }
 	 if (asprintf (&ClassLink,"BT_LINK LT %s",ClassTxt) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
          if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
          HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
          free (Title);
          free (ClassLink);
@@ -296,7 +297,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
    if (Pagination->MoreThanOnePage)
      {
       if (asprintf (&ClassLink,"BT_LINK PAG %s",ClassTxt) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
 
       /***** Possible link to page 1 *****/
       if (Pagination->StartPage > 1)
@@ -396,7 +397,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                break;
            }
          if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
          HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
          HTM_Unsigned (1);
          HTM_BUTTON_End ();
@@ -510,7 +511,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
            }
          if (asprintf (&Title,Txt_Page_X_of_Y,
 		       Pagination->LeftPage,Pagination->NumPags) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
          HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
          HTM_Unsigned (Pagination->LeftPage);
          HTM_BUTTON_End ();
@@ -530,7 +531,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	   NumPage++)
         {
          if (asprintf (&Title,Txt_Page_X_of_Y,NumPage,Pagination->NumPags) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
          if (!LinkToPagCurrent && NumPage == Pagination->CurrentPage)
            {
             HTM_SPAN_Begin ("title=\"%s\" class=\"PAG_CUR %s\"",Title,ClassTxt);
@@ -747,7 +748,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
            }
          if (asprintf (&Title,Txt_Page_X_of_Y,
 		       Pagination->RightPage,Pagination->NumPags) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
          HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
          HTM_Unsigned (Pagination->RightPage);
          HTM_BUTTON_End ();
@@ -860,7 +861,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
            }
          if (asprintf (&Title,Txt_Page_X_of_Y,
 		       Pagination->NumPags,Pagination->NumPags) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
          HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
          HTM_Unsigned (Pagination->NumPags);
          HTM_BUTTON_End ();

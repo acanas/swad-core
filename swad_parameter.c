@@ -32,6 +32,7 @@
 
 #include "swad_action.h"
 #include "swad_config.h"
+#include "swad_error.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
@@ -179,7 +180,7 @@ static void Par_GetBoundary (void)
 
    /***** Check that boundary string is not too long *****/
    if (2 + 2 + strlen (PtrToBoundary) > Par_MAX_BYTES_BOUNDARY_WITH_CR_LF)
-      Lay_ShowErrorAndExit ("Delimiter string too long.");
+      Err_ShowErrorAndExit ("Delimiter string too long.");
 
    /***** Create boundary strings *****/
    snprintf (Gbl.Boundary.StrWithoutCRLF,sizeof (Gbl.Boundary.StrWithoutCRLF),
@@ -258,7 +259,7 @@ static void Par_CreateListOfParamsFromQueryString (void)
      {
       /* Allocate space for a new parameter initialized to 0 */
       if ((NewParam = calloc (1,sizeof (*NewParam))) == NULL)
-          Lay_NotEnoughMemoryExit ();
+          Err_NotEnoughMemoryExit ();
 
       /* Link the previous element in list with the current element */
       if (CurPos == 0)
@@ -334,7 +335,7 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 	   {
 	    /* Allocate space for a new parameter initialized to 0 */
 	    if ((NewParam = calloc (1,sizeof (*NewParam))) == NULL)
-               Lay_NotEnoughMemoryExit ();
+               Err_NotEnoughMemoryExit ();
 
 	    /* Link the previous element in list with the current element */
 	    if (CurPos == 0)
@@ -565,7 +566,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 	                       "Multiple parameter <strong>%s</strong> too large,"
 			       " it exceed the maximum allowed size (%lu bytes).",
 			       ParamName,(unsigned long) MaxBytes);
-		     Lay_ShowErrorAndExit (ErrorTxt);
+		     Err_ShowErrorAndExit (ErrorTxt);
 		    }
 
 		  /* Copy separator */
@@ -584,7 +585,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 	                       "Parameter <strong>%s</strong> too large,"
 			       " it exceed the maximum allowed size (%lu bytes).",
 			       ParamName,(unsigned long) MaxBytes);
-		     Lay_ShowErrorAndExit (ErrorTxt);
+		     Err_ShowErrorAndExit (ErrorTxt);
 		    }
 
 		  /* Copy parameter value */
@@ -602,7 +603,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 			   fseek (Gbl.F.Tmp,Param->Value.Start,SEEK_SET);
 			   if (fread (PtrDst,sizeof (char),Param->Value.Length,Gbl.F.Tmp) !=
 			       Param->Value.Length)
-			      Lay_ShowErrorAndExit ("Error while getting value of parameter.");
+			      Err_ShowErrorAndExit ("Error while getting value of parameter.");
 		          }
 			break;
 		    }

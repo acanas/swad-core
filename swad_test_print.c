@@ -34,6 +34,7 @@
 
 #include "swad_action.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -309,7 +310,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 
 	 /* Show question */
 	 if (!Tst_GetQstDataFromDB (&Question))	// Question exists
-	    Lay_WrongQuestionExit ();
+	    Err_WrongQuestionExit ();
 
 	 /* Write question and answers */
 	 TstPrn_WriteQstAndAnsToFill (&Print->PrintedQuestions[NumQst],NumQst,&Question);
@@ -890,7 +891,7 @@ static void TstPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question)
    /***** Get correct answer *****/
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%ld",&Question->Answer.Integer) != 1)
-      Lay_WrongAnswerExit ();
+      Err_WrongAnswerExit ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -913,7 +914,7 @@ static void TstPrn_GetCorrectFltAnswerFromDB (struct Tst_Question *Question)
 
    /***** Check if number of rows is correct *****/
    if (Question->Answer.NumOptions != 2)
-      Lay_WrongAnswerExit ();
+      Err_WrongAnswerExit ();
 
    /***** Get float range *****/
    for (NumOpt = 0;
@@ -1257,10 +1258,10 @@ void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES
       Par_GetNextStrUntilComma (&Ptr,StrOneIndex,Cns_MAX_DECIMAL_DIGITS_UINT);
 
       if (sscanf (StrOneIndex,"%u",&(Indexes[NumOpt])) != 1)
-	 Lay_WrongAnswerIndexExit ();
+	 Err_WrongAnswerIndexExit ();
 
       if (Indexes[NumOpt] >= Tst_MAX_OPTIONS_PER_QUESTION)
-	 Lay_WrongAnswerIndexExit ();
+	 Err_WrongAnswerIndexExit ();
      }
 
    /***** Initialize remaining to 0 *****/
@@ -1296,10 +1297,10 @@ void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS
       Par_GetNextStrUntilComma (&Ptr,StrOneAnswer,Cns_MAX_DECIMAL_DIGITS_UINT);
 
       if (sscanf (StrOneAnswer,"%u",&AnsUsr) != 1)
-	 Lay_WrongAnswerExit ();
+	 Err_WrongAnswerExit ();
 
       if (AnsUsr >= Tst_MAX_OPTIONS_PER_QUESTION)
-	 Lay_WrongAnswerExit ();
+	 Err_WrongAnswerExit ();
 
       UsrAnswers[AnsUsr] = true;
      }
@@ -1454,7 +1455,7 @@ static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
 
    /***** Check if number of rows is correct *****/
    if (Question->Answer.NumOptions != 2)
-      Lay_WrongAnswerExit ();
+      Err_WrongAnswerExit ();
 
    /***** Header with the title of each column *****/
    HTM_TABLE_BeginPadding (2);
@@ -2104,7 +2105,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 
          /* Get print code (row[0]) */
 	 if ((Print.PrnCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_WrongTestExit ();
+	    Err_WrongTestExit ();
 
 	 /* Get print data */
          TstPrn_GetPrintDataByPrnCod (&Print);
@@ -2124,7 +2125,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	      StartEndTime++)
 	   {
 	    if (asprintf (&Id,"tst_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
 		          Id,ClassDat,Gbl.RowEvenOdd);
 	    Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
@@ -2399,7 +2400,7 @@ void TstPrn_ShowOnePrint (void)
    /***** Get the code of the test *****/
    TstPrn_ResetPrint (&Print);
    if ((Print.PrnCod = TstPrn_GetParamPrnCod ()) <= 0)
-      Lay_WrongTestExit ();
+      Err_WrongTestExit ();
 
    /***** Get test exam data *****/
    TstPrn_GetPrintDataByPrnCod (&Print);
@@ -2431,9 +2432,9 @@ void TstPrn_ShowOnePrint (void)
       if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                     Usr_DONT_GET_PREFS,
                                                     Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-         Lay_WrongUserExit ();
+         Err_WrongUserExit ();
       if (!Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
-         Lay_NoPermissionExit ();
+         Err_NoPermissionExit ();
 
       /* User */
       HTM_TR_Begin (NULL);
@@ -2461,7 +2462,7 @@ void TstPrn_ShowOnePrint (void)
 	   StartEndTime++)
 	{
 	 if (asprintf (&Id,"tst_date_%u",(unsigned) StartEndTime) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 HTM_TR_Begin (NULL);
 
@@ -2573,7 +2574,7 @@ void TstPrn_ShowOnePrint (void)
       Box_BoxEnd ();
      }
    else	// I am not allowed to view this test exam
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -2782,12 +2783,12 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
 
 	 /* Get question code (row[0]) */
 	 if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_WrongQuestionExit ();
+	    Err_WrongQuestionExit ();
 
 	 /* Get score (row[1]) */
 	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
          if (sscanf (row[1],"%lf",&Print->PrintedQuestions[NumQst].Score) != 1)
-            Lay_ShowErrorAndExit ("Wrong question score.");
+            Err_ShowErrorAndExit ("Wrong question score.");
          Str_SetDecimalPointToLocal ();	// Return to local system
 
 	 /* Get indexes for this question (row[2]) */
@@ -2803,7 +2804,7 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
    DB_FreeMySQLResult (&mysql_res);
 
    if (NumQsts != Print->NumQsts.All)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
   }
 
 /*****************************************************************************/

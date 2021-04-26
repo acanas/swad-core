@@ -36,6 +36,7 @@
 #include "swad_action.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -1834,7 +1835,7 @@ static bool Inf_CheckAndShowRichTxt (void)
 
       /* Open Markdown file for writing */
       if ((FileMD = fopen (PathFileMD,"wb")) == NULL)
-	 Lay_ShowErrorAndExit ("Can not create temporary Markdown file.");
+	 Err_ShowErrorAndExit ("Can not create temporary Markdown file.");
 
       /* Write text into Markdown file */
       fprintf (FileMD,"%s",TxtMD);
@@ -1877,7 +1878,7 @@ static bool Inf_CheckAndShowRichTxt (void)
 	        PathFileHTML);
       ReturnCode = system (Command);
       if (ReturnCode == -1)
-	 Lay_ShowErrorAndExit ("Error when running command to convert from Markdown to HTML.");
+	 Err_ShowErrorAndExit ("Error when running command to convert from Markdown to HTML.");
 
       /***** Remove Markdown file *****/
       unlink (PathFileMD);
@@ -1885,7 +1886,7 @@ static bool Inf_CheckAndShowRichTxt (void)
       /***** Copy HTML file just created to HTML output *****/
       /* Open temporary HTML file for reading */
       if ((FileHTML = fopen (PathFileHTML,"rb")) == NULL)
-	 Lay_ShowErrorAndExit ("Can not open temporary HTML file.");
+	 Err_ShowErrorAndExit ("Can not open temporary HTML file.");
 
       /* Copy from temporary HTML file to output file */
       Fil_FastCopyOfOpenFiles (FileHTML,Gbl.F.Out);
@@ -2261,7 +2262,7 @@ void Inf_ReceivePagInfo (void)
 	         }
 	      }
             else
-               Lay_ShowErrorAndExit ("Can not unzip file.");
+               Err_ShowErrorAndExit ("Can not unzip file.");
            }
          else
             Ale_ShowAlert (Ale_ERROR,"Error uploading file.");

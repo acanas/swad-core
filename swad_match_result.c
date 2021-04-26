@@ -35,6 +35,7 @@
 #include "swad_action.h"
 #include "swad_database.h"
 #include "swad_date.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -169,7 +170,7 @@ void MchRes_ShowMyMchResultsInGam (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Game begin *****/
@@ -219,9 +220,9 @@ void MchRes_ShowMyMchResultsInMch (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
    if ((Match.MchCod = Mch_GetParamMchCod ()) <= 0)
-      Lay_WrongMatchExit ();
+      Err_WrongMatchExit ();
    Gam_GetDataOfGameByCod (&Game);
    Mch_GetDataOfMatchByCod (&Match);
 
@@ -373,7 +374,7 @@ void MchRes_ShowAllMchResultsInGam (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Game begin *****/
@@ -462,9 +463,9 @@ void MchRes_ShowAllMchResultsInMch (void)
 
    /***** Get parameters *****/
    if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
    if ((Match.MchCod = Mch_GetParamMchCod ()) <= 0)
-      Lay_WrongMatchExit ();
+      Err_WrongMatchExit ();
    Gam_GetDataOfGameByCod (&Game);
    Mch_GetDataOfMatchByCod (&Match);
 
@@ -734,7 +735,7 @@ static void MchRes_BuildGamesSelectedCommas (struct Gam_Games *Games,
    /***** Allocate memory for subquery of games selected *****/
    MaxLength = (size_t) Games->NumSelected * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
    if ((*GamesSelectedCommas = malloc (MaxLength + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Build subquery with list of selected games *****/
    (*GamesSelectedCommas)[0] = '\0';
@@ -795,19 +796,19 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
    if (MchCod > 0)
      {
       if (asprintf (&MchSubQuery," AND mch_results.MchCod=%ld",MchCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    else
      {
       if (asprintf (&MchSubQuery,"%s","") < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
 
    /***** Build games subquery *****/
    if (GamCod > 0)
      {
       if (asprintf (&GamSubQuery," AND mch_matches.GamCod=%ld",GamCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    else if (GamesSelectedCommas)
      {
@@ -815,18 +816,18 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	{
 	 if (asprintf (&GamSubQuery," AND mch_matches.GamCod IN (%s)",
 		       GamesSelectedCommas) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	}
       else
 	{
 	 if (asprintf (&GamSubQuery,"%s","") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	}
      }
    else
      {
       if (asprintf (&GamSubQuery,"%s","") < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
 
    /***** Subquery: get hidden games?
@@ -837,11 +838,11 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
      {
       case Usr_ME:	// A student watching her/his results
          if (asprintf (&HidGamSubQuery," AND gam_games.Hidden='N'") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 break;
       default:		// A teacher/admin watching the results of other users
 	 if (asprintf (&HidGamSubQuery,"%s","") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 break;
      }
 
@@ -883,7 +884,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 /* Get match code */
          MchPrn_ResetPrint (&Print);
 	 if ((Print.MchCod = DB_GetNextCode (mysql_res)) < 0)
-	    Lay_WrongMatchExit ();
+	    Err_WrongMatchExit ();
 
 	 /* Get match result data */
 	 Print.UsrCod = UsrDat->UsrCod;
@@ -908,7 +909,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	   {
 	    UniqueId++;
 	    if (asprintf (&Id,"mch_res_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    HTM_TD_Begin ("id =\"%s\" class=\"DAT LT COLOR%u\"",
 			  Id,Gbl.RowEvenOdd);
 	    Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
@@ -1213,9 +1214,9 @@ void MchRes_ShowOneMchResult (void)
 	    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,
 	                                                  Usr_DONT_GET_PREFS,
 	                                                  Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-               Lay_WrongUserExit ();
+               Err_WrongUserExit ();
 	    if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
-	       Lay_NoPermissionExit ();
+	       Err_NoPermissionExit ();
 
 	    /* User */
 	    HTM_TR_Begin (NULL);
@@ -1249,7 +1250,7 @@ void MchRes_ShowOneMchResult (void)
 		  HTM_TD_End ();
 
 		  if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
-		     Lay_NotEnoughMemoryExit ();
+		     Err_NotEnoughMemoryExit ();
 		  HTM_TD_Begin ("id=\"%s\" class=\"DAT LB\"",Id);
 		     Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
@@ -1355,7 +1356,7 @@ void MchRes_ShowOneMchResult (void)
       Box_BoxEnd ();
      }
    else	// I am not allowed to view this match result
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
   }
 
 /*****************************************************************************/

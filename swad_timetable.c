@@ -34,6 +34,7 @@
 #include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -188,7 +189,7 @@ static void Tmt_TimeTableConfigureIntervalsAndAllocateTimeTable (struct Tmt_Time
 	   Weekday++)
 	 if ((Tmt_TimeTable[Weekday] = malloc (Timetable->Config.IntervalsPerDay *
 					      sizeof (*Tmt_TimeTable[Weekday]))) == NULL)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
      }
    else
      {
@@ -288,12 +289,12 @@ static void Tmt_GetParamsTimeTable (struct Tmt_Timetable *Timetable)
       if (!strcmp (StrClassType,Tmt_ClassTypeDB[Timetable->ClassType]))
          break;
    if (Timetable->ClassType > (Tmt_ClassType_t) (Tmt_NUM_CLASS_TYPES - 1))
-      Lay_ShowErrorAndExit ("Type of timetable cell is missing.");
+      Err_ShowErrorAndExit ("Type of timetable cell is missing.");
 
    /***** Get class duration *****/
    Par_GetParToText ("TTDur",StrDuration,Tmt_MAX_BYTES_STR_DURATION);
    if (sscanf (StrDuration,"%u:%u",&Hours,&Minutes) != 2)
-      Lay_ShowErrorAndExit ("Duration is missing.");
+      Err_ShowErrorAndExit ("Duration is missing.");
    Timetable->DurationIntervals = Hours * Timetable->Config.IntervalsPerHour +
 	                          Minutes / Timetable->Config.Range.MinutesPerInterval;
 
@@ -344,7 +345,7 @@ void Tmt_ShowClassTimeTable (void)
          Timetable.Type = Tmt_MY_TIMETABLE;
          break;
       default:
-	 Lay_WrongActionExit ();
+	 Err_WrongActionExit ();
      }
 
    Timetable.ContextualIcons.PutIconEditCrsTT = (Timetable.Type == Tmt_COURSE_TIMETABLE &&
@@ -892,11 +893,11 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 
 	 /* StartTime formatted as seconds (row[1]) */
 	 if (sscanf (row[1],"%u",&StartTimeSeconds) != 1)
-	    Lay_ShowErrorAndExit ("Wrong start time in timetable.");
+	    Err_ShowErrorAndExit ("Wrong start time in timetable.");
 
 	 /* Duration formatted as seconds (row[2]) */
 	 if (sscanf (row[2],"%u",&DurationSeconds) != 1)
-	    Lay_ShowErrorAndExit ("Wrong duration in timetable.");
+	    Err_ShowErrorAndExit ("Wrong duration in timetable.");
 	 EndTimeSeconds = StartTimeSeconds + DurationSeconds;
 
 	 /* Compute hours and resolution */
@@ -949,24 +950,24 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 
 	 /* Day of week (row[0]) */
 	 if (sscanf (row[0],"%u",&Weekday) != 1)
-	    Lay_ShowErrorAndExit ("Wrong day of week in timetable.");
+	    Err_ShowErrorAndExit ("Wrong day of week in timetable.");
 	 if (Weekday >= Tmt_DAYS_PER_WEEK)
-	    Lay_ShowErrorAndExit ("Wrong day of week in timetable.");
+	    Err_ShowErrorAndExit ("Wrong day of week in timetable.");
 
 	 /* StartTime formatted as seconds (row[1])
 	    --> StartTime in number of intervals */
 	 if (sscanf (row[1],"%u",&StartTimeSeconds) != 1)
-	    Lay_ShowErrorAndExit ("Wrong start time in timetable.");
+	    Err_ShowErrorAndExit ("Wrong start time in timetable.");
 	 Interval = StartTimeSeconds /
 	            Timetable->Config.SecondsPerInterval;
 	 if (Interval < Timetable->Config.IntervalsBeforeStartHour)
-	    Lay_ShowErrorAndExit ("Wrong start time in timetable.");
+	    Err_ShowErrorAndExit ("Wrong start time in timetable.");
 	 Interval -= Timetable->Config.IntervalsBeforeStartHour;
 
 	 /* Duration formatted as seconds (row[2])
 	    --> Duration in number of intervals */
 	 if (sscanf (row[2],"%u",&DurationSeconds) != 1)
-	    Lay_ShowErrorAndExit ("Wrong duration in timetable.");
+	    Err_ShowErrorAndExit ("Wrong duration in timetable.");
 	 DurationNumIntervals = DurationSeconds /
 	                        Timetable->Config.SecondsPerInterval;
 
@@ -984,7 +985,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 		     break;
 		    }
 	       if (!Found)
-		  Lay_ShowErrorAndExit ("Wrong type of class in timetable.");
+		  Err_ShowErrorAndExit ("Wrong type of class in timetable.");
 	       break;
 	    case Tmt_TUTORING_TIMETABLE:
 	       ClassType = Tmt_TUTORING;
@@ -1426,7 +1427,7 @@ static unsigned Tmt_CalculateColsToDrawInCell (const struct Tmt_Timetable *Timet
               and initialize to false by using calloc *****/
       if ((Tmt_IntervalsChecked = calloc (Timetable->Config.IntervalsPerDay,
                                          sizeof (*Tmt_IntervalsChecked))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
    ColumnsToDraw = Tmt_TimeTable[Weekday][Interval].NumColumns;
 
@@ -1567,32 +1568,32 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
    if (RowSpan > 1)
      {
       if (asprintf (&RowSpanStr,"rowspan=\"%u\" ",RowSpan) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    else
      {
       if (asprintf (&RowSpanStr,"%s","") < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    if (ColSpan > 1)
      {
       if (asprintf (&ColSpanStr,"colspan=\"%u\" ",ColSpan) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    else
      {
       if (asprintf (&ColSpanStr,"%s","") < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    if (ClassType == Tmt_FREE)
      {
       if (asprintf (&ClassStr,"%s%u",TimeTableClasses[ClassType],Interval % 4) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    else
      {
       if (asprintf (&ClassStr,"%s CM DAT_SMALL",TimeTableClasses[ClassType]) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
 
    /* Begin cell */
@@ -1672,7 +1673,7 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
 	 /***** Create unique string for this cell used in labels *****/
 	 if (asprintf (&CellStr,"%02u%02u%02u",
 		       Weekday,Interval,Column) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** Put hidden parameters *****/
          Par_PutHiddenParamUnsigned (NULL,"TTDay",Weekday);
@@ -1707,7 +1708,7 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
 		          (Dur / Timetable->Config.IntervalsPerHour),		// Hours
 		          (Dur % Timetable->Config.IntervalsPerHour) *
 		          Timetable->Config.Range.MinutesPerInterval) < 0)	// Minutes
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    Par_PutHiddenParamString (NULL,"TTDur",TTDur);
 	    free (TTDur);
 	   }
@@ -1732,7 +1733,7 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
 			     (Dur / Timetable->Config.IntervalsPerHour),	// Hours
 			     (Dur % Timetable->Config.IntervalsPerHour) *
 			     Timetable->Config.Range.MinutesPerInterval) < 0)	// Minutes
-		  Lay_NotEnoughMemoryExit ();
+		  Err_NotEnoughMemoryExit ();
 	       HTM_OPTION (HTM_Type_STRING,TTDur,
 			   Dur == DurationNumIntervals,false,
 			   "%s",TTDur);
@@ -1767,12 +1768,12 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
 		     if (Grp->Room.RooCod > 0)
 		       {
 			if (asprintf (&Room," (%s)",Grp->Room.ShrtName) < 0)
-			   Lay_NotEnoughMemoryExit ();
+			   Err_NotEnoughMemoryExit ();
 		       }
 		     else
 		       {
 			if (asprintf (&Room,"%s","") < 0)
-			   Lay_NotEnoughMemoryExit ();
+			   Err_NotEnoughMemoryExit ();
 		       }
 		     HTM_OPTION (HTM_Type_LONG,&Grp->GrpCod,
 				 GrpCod == Grp->GrpCod,false,

@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For free
 
 #include "swad_action.h"
+#include "swad_error.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
@@ -118,7 +119,7 @@ void QR_ImageQRCode (const char *QRString)
 
    if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s",
 		 QR_CODE_SIZE,QR_CODE_SIZE,QRString) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    HTM_IMG (URL,NULL,QRString,
 	    "style=\"width:%upx;height:%upx;border:1px dashed silver;\"",
 	    QR_CODE_SIZE,QR_CODE_SIZE);
@@ -141,13 +142,13 @@ void QR_LinkTo (unsigned Size,const char *ParamName,long Cod)
      {
       if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?%s=%ld",
 		    Size,Size,Cfg_URL_SWAD_CGI,ParamName,Cod) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    else
      {
       if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/",
 		    Size,Size,Cfg_URL_SWAD_CGI) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    HTM_IMG (URL,NULL,Txt_Shortcut,
 	    "style=\"width:%upx;height:%upx;\"",Size,Size);
@@ -170,7 +171,7 @@ void QR_ExamAnnnouncement (void)
 		 300,300,
                  Cfg_URL_SWAD_CGI,Gbl.Hierarchy.Crs.CrsCod,
 		 Act_GetActCod (ActSeeAllExaAnn)) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    HTM_IMG (URL,NULL,Txt_Link_to_call_for_exam,
 	    "style=\"width:250px;height:250px;\"");
    free (URL);

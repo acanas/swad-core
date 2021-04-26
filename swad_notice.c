@@ -34,6 +34,7 @@
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -447,7 +448,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 
       /* Get notice code (row[0]) */
       if (sscanf (row[0],"%ld",&NotCod) != 1)
-	 Lay_WrongNoticeExit ();
+	 Err_WrongNoticeExit ();
 
       /* Get creation time (row[1] holds the UTC date-time) */
       TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
@@ -720,7 +721,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       HTM_BUTTON_SUBMIT_Begin (Txt_See_full_notice,"BT_LINK RT",NULL);
      }
    if (asprintf (&Id,"not_date_%u",UniqueId) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    HTM_SPAN_Begin ("id=\"%s\"",Id);
    HTM_SPAN_End ();
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
@@ -825,7 +826,7 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	{
 	 Length = strlen (row[0]);
 	 if ((*ContentStr = malloc (Length + 1)) == NULL)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
 	 Str_Copy (*ContentStr,row[0],Length);
 	}
      }
@@ -928,20 +929,20 @@ unsigned Not_GetNumNotices (Hie_Lvl_Level_t Scope,Not_Status_t Status,unsigned *
                          Status);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
    /***** Get number of notices *****/
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%u",&NumNotices) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of notices.");
+      Err_ShowErrorAndExit ("Error when getting number of notices.");
 
    /***** Get number of notifications by email *****/
    if (row[1])
      {
       if (sscanf (row[1],"%u",NumNotif) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of notifications of notices.");
+         Err_ShowErrorAndExit ("Error when getting number of notifications of notices.");
      }
    else
       *NumNotif = 0;
@@ -1034,20 +1035,20 @@ unsigned Not_GetNumNoticesDeleted (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
                          Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
    /***** Get number of notices *****/
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%u",&NumNotices) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of deleted notices.");
+      Err_ShowErrorAndExit ("Error when getting number of deleted notices.");
 
    /***** Get number of notifications by email *****/
    if (row[1])
      {
       if (sscanf (row[1],"%u",NumNotif) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of notifications of deleted notices.");
+         Err_ShowErrorAndExit ("Error when getting number of notifications of deleted notices.");
      }
    else
       *NumNotif = 0;

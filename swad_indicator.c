@@ -32,6 +32,7 @@
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_department.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
@@ -636,7 +637,7 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
 			    Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -723,7 +724,7 @@ static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 
 
       /* Get course code (row[2]) */
       if ((CrsCod = Str_ConvertStrCodToLongCod (row[2])) < 0)
-         Lay_WrongCourseExit ();
+         Err_WrongCourseExit ();
 
       /* Get stored number of indicators of this course */
       NumIndicators = Ind_GetAndUpdateNumIndicatorsCrs (CrsCod);
@@ -991,7 +992,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 
       /* Get course code (row[2]) */
       if ((CrsCod = Str_ConvertStrCodToLongCod (row[2])) < 0)
-         Lay_WrongCourseExit ();
+         Err_WrongCourseExit ();
 
       /* Get stored number of indicators of this course */
       NumIndicators = Ind_GetAndUpdateNumIndicatorsCrs (CrsCod);
@@ -1385,7 +1386,7 @@ int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
 
       /***** Get number of indicators (row[0]) *****/
       if (sscanf (row[0],"%d",&NumIndicatorsFromDB) != 1)
-	 Lay_ShowErrorAndExit ("Error when getting number of indicators.");
+	 Err_ShowErrorAndExit ("Error when getting number of indicators.");
      }
 
    /***** Free structure that stores the query result *****/

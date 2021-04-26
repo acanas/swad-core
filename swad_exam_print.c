@@ -33,6 +33,7 @@
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_exam.h"
 #include "swad_exam_log.h"
 #include "swad_exam_print.h"
@@ -415,7 +416,7 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,lon
 
    /***** Check *****/
    if (Print->NumQsts.All != NumQstInPrint)
-      Lay_ShowErrorAndExit ("Wrong number of questions.");
+      Err_ShowErrorAndExit ("Wrong number of questions.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -556,7 +557,7 @@ static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *Printed
       else
          ErrorInIndex = true;
       if (ErrorInIndex)
-         Lay_WrongAnswerIndexExit ();
+         Err_WrongAnswerIndexExit ();
 
       if (NumOpt == 0)
 	 snprintf (StrInd,sizeof (StrInd),"%u",Index);
@@ -635,16 +636,16 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 
 	 /* Get question code (row[0]) */
 	 if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_WrongQuestionExit ();
+	    Err_WrongQuestionExit ();
 
 	 /* Get set code (row[1]) */
 	 if ((Print->PrintedQuestions[NumQst].SetCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
-	    Lay_WrongSetExit ();
+	    Err_WrongSetExit ();
 
          /* Get score (row[2]) */
 	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
          if (sscanf (row[2],"%lf",&Print->PrintedQuestions[NumQst].Score) != 1)
-            Lay_ShowErrorAndExit ("Wrong question score.");
+            Err_ShowErrorAndExit ("Wrong question score.");
          Str_SetDecimalPointToLocal ();	// Return to local system
 
 	 /* Get indexes for this question (row[3]) */
@@ -660,7 +661,7 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
    DB_FreeMySQLResult (&mysql_res);
 
    if (Print->NumQsts.All > ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT)
-      Lay_ShowErrorAndExit ("Too many questions.");
+      Err_ShowErrorAndExit ("Too many questions.");
   }
 
 /*****************************************************************************/
@@ -1066,22 +1067,22 @@ void ExaPrn_ReceivePrintAnswer (void)
    Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    ExaPrn_GetDataOfPrintBySesCodAndUsrCod (&Print);
    if (Print.PrnCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
 
    /***** Get session data *****/
    Session.SesCod = Print.SesCod;
    ExaSes_GetDataOfSessionByCod (&Session);
    if (Session.SesCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exams.SesCod = Session.SesCod;
 
    /***** Get exam data *****/
    Exam.ExaCod = Session.ExaCod;
    Exa_GetDataOfExamByCod (&Exam);
    if (Exam.ExaCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    if (Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exams.ExaCod = Exam.ExaCod;
 
    /***** Get question index from form *****/
@@ -1153,7 +1154,7 @@ static unsigned ExaPrn_GetParamQstInd (void)
 
    NumQst = Par_GetParToLong ("NumQst");
    if (NumQst < 0)
-      Lay_ShowErrorAndExit ("Wrong number of question.");
+      Err_ShowErrorAndExit ("Wrong number of question.");
 
    return (unsigned) NumQst;
   }
@@ -1289,7 +1290,7 @@ static void ExaPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question)
    /***** Get correct answer *****/
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%ld",&Question->Answer.Integer) != 1)
-      Lay_WrongAnswerExit ();
+      Err_WrongAnswerExit ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1312,7 +1313,7 @@ static void ExaPrn_GetCorrectFltAnswerFromDB (struct Tst_Question *Question)
 
    /***** Check if number of rows is correct *****/
    if (Question->Answer.NumOptions != 2)
-      Lay_WrongAnswerExit ();
+      Err_WrongAnswerExit ();
 
    /***** Get float range *****/
    for (NumOpt = 0;

@@ -32,6 +32,7 @@
 
 #include "swad_action.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_tag.h"
@@ -230,7 +231,7 @@ static long Tag_GetParamTagCode (void)
 
    /***** Get tag code *****/
    if ((TagCod = Par_GetParToLong ("TagCod")) <= 0)
-      Lay_WrongTagExit ();
+      Err_WrongTagExit ();
 
    return TagCod;
   }
@@ -286,7 +287,7 @@ void Tag_RenameTag (void)
 		     change old tag to new tag in tst_question_tags *****/
 	    /* Get tag code of the old tag */
 	    if ((OldTagCod = Tag_GetTagCodFromTagTxt (OldTagTxt)) <= 0)
-	       Lay_WrongTagExit ();
+	       Err_WrongTagExit ();
 
 	    /* Create a temporary table with all the question codes
 	       that had the new tag as one of their tags */
@@ -578,7 +579,7 @@ void Tag_ShowFormEditTags (void)
 	 row[2] TagHidden
 	 */
          if ((TagCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Lay_WrongTagExit ();
+            Err_WrongTagExit ();
 
          HTM_TR_Begin (NULL);
 

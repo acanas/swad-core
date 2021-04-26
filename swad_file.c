@@ -39,6 +39,7 @@
 
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_global.h"
 #include "swad_file.h"
 #include "swad_string.h"
@@ -84,7 +85,7 @@ void Fil_CreateFileForHTMLOutput (void)
    if ((Gbl.F.Out = fopen (Gbl.HTMLOutput.FileName,"w+t")) == NULL)
      {
       Gbl.F.Out = stdout;
-      Lay_ShowErrorAndExit ("Can not create output file.");
+      Err_ShowErrorAndExit ("Can not create output file.");
      }
   }
 
@@ -118,7 +119,7 @@ bool Fil_ReadStdinIntoTmpFile (void)
    if ((Gbl.F.Tmp = tmpfile ()) == NULL)
      {
       Fil_EndOfReadingStdin ();
-      Lay_ShowErrorAndExit ("Can not create temporary file.");
+      Err_ShowErrorAndExit ("Can not create temporary file.");
      }
    for (TmpFileSize = 0;
 	!feof (stdin) && !FileIsTooBig && !TimeExceeded;
@@ -233,13 +234,13 @@ struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
       return Param;
      }
    if (Param->FileName.Length > PATH_MAX)
-      Lay_ShowErrorAndExit ("Error while getting filename.");
+      Err_ShowErrorAndExit ("Error while getting filename.");
 
    /* Copy filename */
    fseek (Gbl.F.Tmp,Param->FileName.Start,SEEK_SET);
    if (fread (FileName,sizeof (char),Param->FileName.Length,Gbl.F.Tmp) !=
        Param->FileName.Length)
-      Lay_ShowErrorAndExit ("Error while getting filename.");
+      Err_ShowErrorAndExit ("Error while getting filename.");
    FileName[Param->FileName.Length] = '\0';
 
    /***** Get MIME type *****/
@@ -247,13 +248,13 @@ struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
    if (Param->ContentType.Start == 0 ||
        Param->ContentType.Length == 0 ||
        Param->ContentType.Length > Brw_MAX_BYTES_MIME_TYPE)
-      Lay_ShowErrorAndExit ("Error while getting content type.");
+      Err_ShowErrorAndExit ("Error while getting content type.");
 
    /* Copy MIME type */
    fseek (Gbl.F.Tmp,Param->ContentType.Start,SEEK_SET);
    if (fread (MIMEType,sizeof (char),Param->ContentType.Length,Gbl.F.Tmp) !=
        Param->ContentType.Length)
-      Lay_ShowErrorAndExit ("Error while getting content type.");
+      Err_ShowErrorAndExit ("Error while getting content type.");
    MIMEType[Param->ContentType.Length] = '\0';
 
    return Param;
@@ -272,12 +273,12 @@ bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Param *Param)
 
    /***** Open destination file *****/
    if ((FileDataTmp = fopen (FileNameDataTmp,"wb")) == NULL)
-      Lay_ShowErrorAndExit ("Can not open temporary file.");
+      Err_ShowErrorAndExit ("Can not open temporary file.");
 
    /***** Copy file *****/
    /* Go to start of source */
    if (Param->Value.Start == 0)
-      Lay_ShowErrorAndExit ("Error while copying file.");
+      Err_ShowErrorAndExit ("Error while copying file.");
    fseek (Gbl.F.Tmp,Param->Value.Start,SEEK_SET);
 
    /* Copy part of Gbl.F.Tmp to FileDataTmp */
@@ -336,7 +337,7 @@ void Fil_CreateUpdateFile (const char CurrentName[PATH_MAX + 1],
      {
       snprintf (ErrorMsg,sizeof (ErrorMsg),
                 "Can not create file <strong>%s</strong>.",NewName);
-      Lay_ShowErrorAndExit (ErrorMsg);
+      Err_ShowErrorAndExit (ErrorMsg);
      }
   }
 
@@ -360,14 +361,14 @@ void Fil_CloseUpdateFile (const char CurrentName[PATH_MAX + 1],
       snprintf (ErrorMsg,sizeof (ErrorMsg),
 	        "Can not rename the file <strong>%s</strong> as <strong>%s</strong>.",
                 CurrentName,OldName);
-      Lay_ShowErrorAndExit (ErrorMsg);
+      Err_ShowErrorAndExit (ErrorMsg);
      }
    if (rename (NewName,CurrentName)) // mv NewName CurrentName Ej: mv file.new file.html
      {
       snprintf (ErrorMsg,sizeof (ErrorMsg),
 	        "Can not rename the file <strong>%s</strong> as <strong>%s</strong>.",
                 NewName,CurrentName);
-      Lay_ShowErrorAndExit (ErrorMsg);
+      Err_ShowErrorAndExit (ErrorMsg);
      }
   }
 
@@ -397,7 +398,7 @@ void Fil_CreateDirIfNotExists (const char Path[PATH_MAX + 1])
         {
 	 snprintf (ErrorMsg,sizeof (ErrorMsg),
 	           "Can not create folder <strong>%s</strong>.",Path);
-	 Lay_ShowErrorAndExit (ErrorMsg);
+	 Err_ShowErrorAndExit (ErrorMsg);
         }
   }
 
@@ -418,7 +419,7 @@ void Fil_RemoveTree (const char Path[PATH_MAX + 1])
    if (Fil_CheckIfPathExists (Path))
      {
       if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
-	 Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+	 Err_ShowErrorAndExit ("Can not get information about a file or folder.");
       else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 	{
 	 if (rmdir (Path))
@@ -447,7 +448,7 @@ void Fil_RemoveTree (const char Path[PATH_MAX + 1])
 		  free (FileList);
 		 }
 	       else
-		  Lay_ShowErrorAndExit ("Error while scanning directory.");
+		  Err_ShowErrorAndExit ("Error while scanning directory.");
 
 	       /***** Remove of new the directory, now empty *****/
 	       if (rmdir (Path))
@@ -459,13 +460,13 @@ void Fil_RemoveTree (const char Path[PATH_MAX + 1])
 	      {
 	       snprintf (ErrorMsg,sizeof (ErrorMsg),
 	                 "Can not remove folder %s.",Path);
-	       Lay_ShowErrorAndExit (ErrorMsg);
+	       Err_ShowErrorAndExit (ErrorMsg);
 	      }
 	   }
 	}
       else					// It's a file
 	 if (unlink (Path))
-	    Lay_ShowErrorAndExit ("Can not remove file.");
+	    Err_ShowErrorAndExit ("Can not remove file.");
      }
   }
 
@@ -516,7 +517,7 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,
 		  rmdir (Path);
 	   }
 	 else
-	    Lay_ShowErrorAndExit ("Error while scanning directory.");
+	    Err_ShowErrorAndExit ("Error while scanning directory.");
 	}
       else					// Not a directory
 	 if (FileStatus.st_mtime < Gbl.StartExecutionTimeUTC - TimeToRemove)
@@ -535,11 +536,11 @@ void Fil_FastCopyOfFiles (const char *PathSrc,const char *PathTgt)
 
    /***** Open source file *****/
    if ((FileSrc = fopen (PathSrc,"rb")) == NULL)
-      Lay_ShowErrorAndExit ("Can not open source file.");
+      Err_ShowErrorAndExit ("Can not open source file.");
 
    /***** Open destination file *****/
    if ((FileTgt = fopen (PathTgt,"wb")) == NULL)
-      Lay_ShowErrorAndExit ("Can not open target file.");
+      Err_ShowErrorAndExit ("Can not open target file.");
 
    /***** Copy source file into destination file *****/
    Fil_FastCopyOfOpenFiles (FileSrc,FileTgt);

@@ -105,6 +105,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_API.h"
 #include "swad_attendance.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_file_browser.h"
 #include "swad_forum.h"
 #include "swad_global.h"
@@ -1653,7 +1654,7 @@ static int API_WritePageIntoHTMLBuffer (struct soap *soap,
       /***** Write page from file to text buffer *****/
       /* Open file */
       if ((FileHTML = fopen (PathRelFileHTML,"rb")) == NULL)
-	 Lay_ShowErrorAndExit ("Can not open XML file.");
+	 Err_ShowErrorAndExit ("Can not open XML file.");
 
       /* Compute file size */
       fseek (FileHTML,0L,SEEK_END);
@@ -1664,7 +1665,7 @@ static int API_WritePageIntoHTMLBuffer (struct soap *soap,
       if ((*HTMLBuffer = malloc (Length + 1)) == NULL)
 	{
 	 fclose (FileHTML);
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
          return soap_receiver_fault (soap,
                                      "Web page can not be copied into buffer",
                                      "Not enough memory for buffer");
@@ -2262,7 +2263,7 @@ int swad__sendMyGroups (struct soap *soap,
          /***** Create a list of groups selected from myGroups *****/
          if ((LstGrpsIWant.GrpCods = calloc (LstGrpsIWant.NumGrps,
                                              sizeof (*LstGrpsIWant.GrpCods))) == NULL)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
          for (NumGrp = 0, Ptr = myGroups;
               *Ptr;
               NumGrp++)
@@ -2836,7 +2837,7 @@ static void API_GetLstGrpsSel (const char *Groups)
       // Here NestedCalls is always 1
       if ((Gbl.Crs.Grps.LstGrpsSel.GrpCods = calloc (Gbl.Crs.Grps.LstGrpsSel.NumGrps,
                                                      sizeof (*Gbl.Crs.Grps.LstGrpsSel.GrpCods))) == NULL)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
 
       for (Ptr = Groups, NumGrp = 0;
 	   *Ptr;
@@ -3636,7 +3637,7 @@ int swad__sendMessage (struct soap *soap,
 
    /***** Allocate space for query *****/
    if ((Query = malloc (API_MAX_BYTES_QUERY_RECIPIENTS + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Build query for recipients from database *****/
    if (ReplyUsrCod > 0)

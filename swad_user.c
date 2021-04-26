@@ -48,6 +48,7 @@
 #include "swad_department.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_figure_cache.h"
 #include "swad_follow.h"
@@ -305,7 +306,7 @@ void Usr_UsrDataConstructor (struct UsrData *UsrDat)
   {
    /***** Allocate memory for the comments *****/
    if ((UsrDat->Comments = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Initialize to zero the data of the user *****/
    Usr_ResetUsrDataExceptUsrCodAndIDs (UsrDat);
@@ -422,7 +423,7 @@ void Usr_AllocateListUsrCods (struct ListUsrCods *ListUsrCods)
   {
    if ((ListUsrCods->Lst = malloc (ListUsrCods->NumUsrs *
                                    sizeof (*ListUsrCods->Lst))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/
@@ -467,7 +468,7 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
 			   " FROM usr_data"
 			  " WHERE EncryptedUsrCod='%s'",
 			  UsrDat->EnUsrCod) != 1)
-         Lay_ShowErrorAndExit ("Error when getting user's code.");
+         Err_ShowErrorAndExit ("Error when getting user's code.");
 
       /***** Get user's code *****/
       row = mysql_fetch_row (mysql_res);
@@ -579,7 +580,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,
      }
 
    if (NumRows != 1)
-      Lay_WrongUserExit ();
+      Err_WrongUserExit ();
 
    /***** Read user's data *****/
    row = mysql_fetch_row (mysql_res);
@@ -837,7 +838,7 @@ static void Usr_GetMyLastData (void)
       DB_FreeMySQLResult (&mysql_res);
      }
    else
-      Lay_ShowErrorAndExit ("Error when getting user's last data.");
+      Err_ShowErrorAndExit ("Error when getting user's last data.");
   }
 
 /*****************************************************************************/
@@ -1145,7 +1146,7 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 	 break;
       default:
 	 SubQueryRole[0] = '\0';
-	 Lay_WrongRoleExit ();
+	 Err_WrongRoleExit ();
 	 break;
      }
    DB_Query ("can not create temporary table",
@@ -1574,7 +1575,7 @@ void Usr_GetMyCountrs (void)
 	 if ((CtyCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	   {
 	    if (Gbl.Usrs.Me.MyCtys.Num == Cty_MAX_COUNTRS_PER_USR)
-	       Lay_ShowErrorAndExit ("Maximum number of countries of a user exceeded.");
+	       Err_ShowErrorAndExit ("Maximum number of countries of a user exceeded.");
 
 	    Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].CtyCod  = CtyCod;
 	    Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
@@ -1621,7 +1622,7 @@ void Usr_GetMyInstits (void)
 	 if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	   {
 	    if (Gbl.Usrs.Me.MyInss.Num == Ins_MAX_INSTITS_PER_USR)
-	       Lay_ShowErrorAndExit ("Maximum number of institutions of a user exceeded.");
+	       Err_ShowErrorAndExit ("Maximum number of institutions of a user exceeded.");
 
 	    Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].InsCod  = InsCod;
 	    Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
@@ -1668,7 +1669,7 @@ void Usr_GetMyCenters (void)
 	 if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	   {
 	    if (Gbl.Usrs.Me.MyCtrs.Num == Ctr_MAX_CENTERS_PER_USR)
-	       Lay_ShowErrorAndExit ("Maximum number of centers of a user exceeded.");
+	       Err_ShowErrorAndExit ("Maximum number of centers of a user exceeded.");
 
 	    Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].CtrCod = CtrCod;
 	    Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
@@ -1715,7 +1716,7 @@ void Usr_GetMyDegrees (void)
 	 if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	   {
 	    if (Gbl.Usrs.Me.MyDegs.Num == Deg_MAX_DEGREES_PER_USR)
-	       Lay_ShowErrorAndExit ("Maximum number of degrees of a user exceeded.");
+	       Err_ShowErrorAndExit ("Maximum number of degrees of a user exceeded.");
 
 	    Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].DegCod  = DegCod;
 	    Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
@@ -1794,7 +1795,7 @@ void Usr_GetMyCourses (void)
       if (CrsCod > 0)
 	{
 	 if (Gbl.Usrs.Me.MyCrss.Num == Crs_MAX_COURSES_PER_USR)
-	    Lay_ShowErrorAndExit ("Maximum number of courses of a user exceeded.");
+	    Err_ShowErrorAndExit ("Maximum number of courses of a user exceeded.");
 
 	 Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].CrsCod = CrsCod;
 	 Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].Role   = Rol_ConvertUnsignedStrToRole (row[1]);
@@ -2981,7 +2982,7 @@ void Usr_GetParamOtherUsrCodEncrypted (struct UsrData *UsrDat)
      {
       Usr_GetUsrCodFromEncryptedUsrCod (UsrDat);
       if (UsrDat->UsrCod <= 0)	// Check is user's code is valid
-         Lay_WrongUserExit ();
+         Err_WrongUserExit ();
      }
    else
       UsrDat->UsrCod = -1L;
@@ -3150,7 +3151,7 @@ void Usr_ChkUsrAndGetUsrData (void)
    if (FormLogin.PutForm)
      {
       Usr_WriteFormLogin (FormLogin.Action,FormLogin.FuncParams);
-      Lay_ShowErrorAndExit (NULL);
+      Err_ShowErrorAndExit (NULL);
      }
 
    /***** Adjust tab and action *****/
@@ -4473,7 +4474,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
 
    /***** Allocate space for query *****/
    if ((*Query = malloc (Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Create query for users in the course *****/
    if (Gbl.Action.Act == ActReqMsgUsr)        // Selecting users to write a message
@@ -4513,7 +4514,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
       /***** Allocate memory for list of booleans AddStdsWithoutGroupOf *****/
       if ((AddStdsWithoutGroupOf = calloc (Gbl.Crs.Grps.GrpTypes.Num,
                                            sizeof (*AddStdsWithoutGroupOf))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Initialize vector of booleans that indicates whether it's necessary add to the list
              the students who don't belong to any group of each type *****/
@@ -4760,7 +4761,7 @@ void Usr_GetListUsrs (Hie_Lvl_Level_t Scope,Rol_Role_t Role)
 	 Usr_BuildQueryToGetUsrsLstCrs (&Query,Role);
 	 break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 /*
@@ -4922,7 +4923,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      OrderQuery);
 	       break;
 	    default:
-	       Lay_WrongScopeExit ();
+	       Err_WrongScopeExit ();
 	       break;
 	   }
          break;
@@ -5082,12 +5083,12 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      OrderQuery);
 	       break;
 	    default:
-	       Lay_WrongScopeExit ();
+	       Err_WrongScopeExit ();
 	       break;
 	   }
 	 break;
       default:
-	 Lay_WrongRoleExit ();
+	 Err_WrongRoleExit ();
 	 break;
      }
 
@@ -5348,7 +5349,7 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
 			Sco_GetDBStrFromScope (Hie_Lvl_DEG),Gbl.Hierarchy.Deg.DegCod);
          break;
       default:        // not aplicable
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
          break;
      }
 
@@ -5599,7 +5600,7 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
 		  switch (Scope)
 		    {
 		     case Hie_Lvl_UNK:	// Unknown
-			Lay_WrongScopeExit ();
+			Err_WrongScopeExit ();
 			break;
 		     case Hie_Lvl_SYS:	// System
 			// Query result has not a column with the acceptation
@@ -5637,7 +5638,7 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
 		  switch (Scope)
 		    {
 		     case Hie_Lvl_UNK:	// Unknown
-			Lay_WrongScopeExit ();
+			Err_WrongScopeExit ();
 			break;
 		     case Hie_Lvl_SYS:	// System
 		     case Hie_Lvl_CTY:	// Country
@@ -5656,7 +5657,7 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
 		    }
         	  break;
                default:
-		  Lay_WrongRoleExit ();
+		  Err_WrongRoleExit ();
         	  break;
 	      }
 
@@ -5670,7 +5671,7 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
    DB_FreeMySQLResult (&mysql_res);
 
    if (Abort)
-      Lay_ShowErrorAndExit (NULL);
+      Err_ShowErrorAndExit (NULL);
   }
 
 /*****************************************************************************/
@@ -5712,7 +5713,7 @@ if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
       if ((Gbl.Usrs.LstUsrs[Role].Lst = calloc (Gbl.Usrs.LstUsrs[Role].NumUsrs,
                                                 sizeof (*Gbl.Usrs.LstUsrs[Role].Lst))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/
@@ -5801,7 +5802,7 @@ void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct SelectedUsrs *Sel
      {
       if ((SelectedUsrs->List[Rol_UNK] =
 	   malloc (Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
       Str_Copy (SelectedUsrs->List[Rol_UNK],Gbl.Usrs.Other.UsrDat.EnUsrCod,
 		Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       SelectedUsrs->Filled = true;
@@ -5917,12 +5918,12 @@ static void Usr_BuildParamName (char **ParamName,
    if (ParamSuffix)
      {
       if (asprintf (ParamName,"%s%s",ParamRoot,ParamSuffix) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    else
      {
       if (asprintf (ParamName,"%s",ParamRoot) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
   }
 
@@ -6189,7 +6190,7 @@ static void Usr_AllocateListSelectedEncryptedUsrCods (struct SelectedUsrs *Selec
      {
       if ((SelectedUsrs->List[Role] =
 	   malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
       SelectedUsrs->List[Role][0] = '\0';
      }
   }
@@ -6237,7 +6238,7 @@ void Usr_GetListSelectedUsrCods (struct SelectedUsrs *SelectedUsrs,
    /***** Create list of user codes *****/
    if ((*LstSelectedUsrCods = calloc (NumUsrsInList,
                                       sizeof (**LstSelectedUsrCods))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -6279,7 +6280,7 @@ void Usr_CreateSubqueryUsrCods (long LstSelectedUsrCods[],
    /***** Allocate space for subquery *****/
    MaxLength = NumUsrsInList * (1 + Cns_MAX_DECIMAL_DIGITS_LONG);
    if ((*SubQueryUsrs = malloc (MaxLength + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    (*SubQueryUsrs)[0] = '\0';
 
    /***** Build subquery *****/
@@ -6311,7 +6312,7 @@ static void Usr_AllocateListOtherRecipients (void)
    if (!Gbl.Usrs.ListOtherRecipients)
      {
       if ((Gbl.Usrs.ListOtherRecipients = malloc (Nck_MAX_BYTES_LIST_NICKS + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
       Gbl.Usrs.ListOtherRecipients[0] = '\0';
      }
   }
@@ -6621,7 +6622,7 @@ static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
       free (ParamName);
      }
    else
-      Lay_WrongRoleExit ();
+      Err_WrongRoleExit ();
    Sex = Usr_GetSexOfUsrsLst (Role);
    HTM_TxtColon (Gbl.Usrs.LstUsrs[Role].NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
                                                        Txt_ROLES_PLURAL_Abc[Role][Sex]);
@@ -6701,7 +6702,7 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
       free (ParamName);
      }
    else
-      Lay_WrongRoleExit ();
+      Err_WrongRoleExit ();
   }
 
 /*****************************************************************************/
@@ -6845,7 +6846,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
       if ((GroupNames = malloc (Gbl.Crs.Grps.GrpTypes.NumGrpsTotal *
                                 (Grp_MAX_BYTES_GROUP_NAME + 3))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Begin table with list of students *****/
       if (!Gbl.Usrs.ClassPhoto.AllGroups)
@@ -7157,7 +7158,7 @@ void Usr_ListAllDataStds (void)
 	{
 	 Length = (Grp_MAX_BYTES_GROUP_NAME + 2) * Gbl.Crs.Grps.GrpTypes.NumGrpsTotal;
          if ((GroupNames = malloc (Length + 1)) == NULL)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
 	}
 
       /***** Begin table with list of students *****/
@@ -7829,7 +7830,7 @@ static void Usr_GetMyUsrListTypeFromDB (void)
       Gbl.Usrs.Me.ListType = Usr_SHOW_USRS_TYPE_DEFAULT;
    else				// Error in database:
 				// more than one row for a user in course
-      Lay_ShowErrorAndExit ("Error when getting type of listing of users.");
+      Err_ShowErrorAndExit ("Error when getting type of listing of users.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -7929,7 +7930,7 @@ static void Usr_GetMyColsClassPhotoFromDB (void)
         }
       else if (NumRows > 1)	// Error in database:
 				// more than one row for a user in course
-         Lay_ShowErrorAndExit ("Error when getting number of columns"
+         Err_ShowErrorAndExit ("Error when getting number of columns"
 			       " in class photo.");
 
       /***** Free structure that stores the query result *****/
@@ -8036,7 +8037,7 @@ void Usr_GetMyPrefAboutListWithPhotosFromDB (void)
         }
       else if (NumRows > 1)        // Error in database:
 				   // more than one row for a user in course
-         Lay_ShowErrorAndExit ("Error when checking if listing of users"
+         Err_ShowErrorAndExit ("Error when checking if listing of users"
 			       " must show photos.");
 
       /***** Free structure that stores the query result *****/
@@ -9434,7 +9435,7 @@ unsigned Usr_GetTotalNumberOfUsers (void)
 	         (1 << Rol_TCH);
          return Usr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles);	// All users in courses
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 return 0;	// Not reached
      }
   }
@@ -9671,7 +9672,7 @@ unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
 			   SubQueryRoles);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 NumUsrs = 0;	// Not reached. Initialized to avoid warning.
 	 break;
      }
@@ -9712,7 +9713,7 @@ static FigCch_FigureCached_t Usr_GetFigureNumUsrsInCrss (unsigned Roles)
 	   1 << Rol_TCH:	// Any user in courses
 	 return FigCch_NUM_USRS_IN_CRSS;
       default:
-	 Lay_WrongRoleExit ();
+	 Err_WrongRoleExit ();
 	 return FigCch_UNKNOWN;	// Not reached
      }
   }
@@ -9888,7 +9889,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
       case Hie_Lvl_CRS:
          return 1.0;
       default:
-         Lay_WrongScopeExit ();
+         Err_WrongScopeExit ();
          return 0.0;	// Not reached
      }
   }
@@ -10064,7 +10065,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 							         1 << Role);
 
       default:
-         Lay_WrongScopeExit ();
+         Err_WrongScopeExit ();
          return 0.0;	// Not reached
      }
   }
@@ -10295,7 +10296,7 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
 			  "ICO_HIGHLIGHT ICOx20");
 	 break;
       default:
-	Lay_WrongWhoExit ();
+	Err_WrongWhoExit ();
 	break;
      }
   }

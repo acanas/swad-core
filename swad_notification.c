@@ -38,6 +38,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_enrolment.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_follow.h"
 #include "swad_form.h"
@@ -455,7 +456,7 @@ void Ntf_ShowMyNotifications (void)
 
          /* Get status (row[8]) */
          if (sscanf (row[8],"%u",&Status) != 1)
-            Lay_WrongStatusExit ();
+            Err_WrongStatusExit ();
          StatusTxt = Ntf_GetStatusTxtFromStatusBits (Status);
 
          if (Status & Ntf_STATUS_BIT_REMOVED)	// The source of the notification was removed
@@ -1851,7 +1852,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 		   FileNameMail);
 	 ReturnCode = system (Command);
 	 if (ReturnCode == -1)
-	    Lay_ShowErrorAndExit ("Error when running script to send email.");
+	    Err_ShowErrorAndExit ("Error when running script to send email.");
 
 	 /***** Remove temporary file *****/
 	 unlink (FileNameMail);
@@ -1928,9 +1929,9 @@ static void Ntf_GetNumNotifSent (long DegCod,long CrsCod,
      {
       row = mysql_fetch_row (mysql_res);
       if (sscanf (row[0],"%u",NumEvents) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of notifications sent by email.");
+         Err_ShowErrorAndExit ("Error when getting number of notifications sent by email.");
       if (sscanf (row[1],"%u",NumMails) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of notifications sent by email.");
+         Err_ShowErrorAndExit ("Error when getting number of notifications sent by email.");
      }
    else
       *NumEvents = *NumMails = 0;

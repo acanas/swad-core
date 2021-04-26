@@ -37,6 +37,7 @@
 #include "swad_database.h"
 #include "swad_degree.h"
 #include "swad_degree_type.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -697,7 +698,7 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
 			 OrderBySubQuery[Order]);
 	 break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
@@ -707,7 +708,7 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
       /***** Create a list of degree types *****/
       if ((Gbl.DegTypes.Lst = calloc (Gbl.DegTypes.Num,
 			              sizeof (*Gbl.DegTypes.Lst))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get degree types *****/
       for (NumTyp = 0;
@@ -719,7 +720,7 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
 
          /* Get degree type code (row[0]) */
          if ((Gbl.DegTypes.Lst[NumTyp].DegTypCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Lay_WrongDegTypExit ();
+            Err_WrongDegTypExit ();
 
          /* Get degree type name (row[1]) */
          Str_Copy (Gbl.DegTypes.Lst[NumTyp].DegTypName,row[1],
@@ -727,7 +728,7 @@ void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order)
 
          /* Number of degrees of this type (row[2]) */
          if (sscanf (row[2],"%u",&Gbl.DegTypes.Lst[NumTyp].NumDegs) != 1)
-            Lay_ShowErrorAndExit ("Error when getting number of degrees of a type");
+            Err_ShowErrorAndExit ("Error when getting number of degrees of a type");
         }
      }
 
@@ -804,7 +805,7 @@ void DT_RemoveDegreeType (void)
 
    /***** Get data of the degree type from database *****/
    if (!DT_GetDataOfDegreeTypeByCod (DT_EditingDegTyp))
-      Lay_WrongDegTypExit ();
+      Err_WrongDegTypExit ();
 
    /***** Check if this degree type has degrees *****/
    if (DT_EditingDegTyp->NumDegs)	// Degree type has degrees => don't remove
@@ -842,7 +843,7 @@ long DT_GetAndCheckParamOtherDegTypCod (long MinCodAllowed)
 
    /***** Get and check parameter with code of degree type *****/
    if ((DegTypCod = Par_GetParToLong ("OthDegTypCod")) < MinCodAllowed)
-      Lay_WrongDegTypExit ();
+      Err_WrongDegTypExit ();
 
    return DegTypCod;
   }
@@ -921,7 +922,7 @@ static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
      {
       /* Get next degree */
       if ((DegCod = DB_GetNextCode (mysql_res)) < 0)
-         Lay_WrongDegreeExit ();
+         Err_WrongDegreeExit ();
 
       /* Remove degree */
       Deg_RemoveDegreeCompletely (DegCod);
@@ -960,7 +961,7 @@ void DT_RenameDegreeType (void)
 
    /***** Get from the database the old name of the degree type *****/
    if (!DT_GetDataOfDegreeTypeByCod (DT_EditingDegTyp))
-      Lay_WrongDegTypExit ();
+      Err_WrongDegTypExit ();
 
    /***** Check if new name is empty *****/
    if (NewNameDegTyp[0])
@@ -1045,11 +1046,11 @@ static void DT_EditingDegreeTypeConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (DT_EditingDegTyp != NULL)
-      Lay_WrongDegTypExit ();
+      Err_WrongDegTypExit ();
 
    /***** Allocate memory for degree type *****/
    if ((DT_EditingDegTyp = malloc (sizeof (*DT_EditingDegTyp))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Reset degree type *****/
    DT_EditingDegTyp->DegTypCod     = -1L;

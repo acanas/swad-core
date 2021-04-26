@@ -29,6 +29,7 @@
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For malloc, free
 
+#include "swad_error.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_test_visibility.h"
@@ -94,7 +95,7 @@ void TstVis_ShowVisibilityIcons (unsigned SelectedVisibility,bool Hidden)
       if (asprintf (&Title,"%s: %s",
 		    Txt_TST_STR_VISIBILITY[Visibility],
 		    Txt_TST_HIDDEN_VISIBLE[ItemVisible]) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       if (ItemVisible && !Hidden)
 	 Ico_PutIconOn  (Icons[Visibility][ItemVisible],Title);
       else
@@ -162,7 +163,7 @@ unsigned TstVis_GetVisibilityFromForm (void)
    /***** Allocate memory for list of attendance events selected *****/
    MaxSizeListVisibilitySelected = TstVis_NUM_ITEMS_VISIBILITY * (Cns_MAX_DECIMAL_DIGITS_UINT + 1);
    if ((StrVisibilitySelected = malloc (MaxSizeListVisibilitySelected + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of visibility items selected *****/
    Par_GetParMultiToText ("Visibility",StrVisibilitySelected,MaxSizeListVisibilitySelected);

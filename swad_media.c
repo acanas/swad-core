@@ -40,6 +40,7 @@
 #include "swad_config.h"
 #include "swad_cookie.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_file.h"
 #include "swad_file_browser.h"
 #include "swad_form.h"
@@ -308,7 +309,7 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
 	     Length = Cns_MAX_BYTES_WWW;
 
 	 if ((Media->URL = malloc (Length + 1)) == NULL)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
 	 Str_Copy (Media->URL,row[2],Length);
 	}
 
@@ -324,12 +325,12 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
 	     Length = Med_MAX_BYTES_TITLE;
 
 	 if ((Media->Title = malloc (Length + 1)) == NULL)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
 	 Str_Copy (Media->Title,row[3],Length);
 	}
      }
    else
-      Lay_ShowErrorAndExit ("Internal error in database when getting media data.");
+      Err_ShowErrorAndExit ("Internal error in database when getting media data.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -496,7 +497,7 @@ static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTE
 
    /***** Hidden field with form type *****/
    if (asprintf (&Id,"%s_%s",UniqueId,MediaUploader->ParamSuffix) < 0)	// <id>_ParamSuffix
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    Par_PutHiddenParamUnsignedDisabled (Id,ParamUploadMedia->FormType,
 			               (unsigned) MediaUploader->FormType);
    free (Id);
@@ -662,7 +663,7 @@ static void Usr_GetURLFromForm (const char *ParamName,struct Med_Media *Media)
          with the URL coming from the form */
       Med_FreeMediaURL (Media);
       if ((Media->URL = malloc (Length + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
       Str_Copy (Media->URL,URL,Length);
      }
   }
@@ -686,7 +687,7 @@ static void Usr_GetTitleFromForm (const char *ParamName,struct Med_Media *Media)
          with the title coming from the form */
       Med_FreeMediaTitle (Media);
       if ((Media->Title = malloc (Length + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
       Str_Copy (Media->Title,Title,Length);
      }
   }
@@ -983,7 +984,7 @@ static int Med_ResizeImage (struct Med_Media *Media,
              PathFileProcessed);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
-      Lay_ShowErrorAndExit ("Error when running command to process media.");
+      Err_ShowErrorAndExit ("Error when running command to process media.");
 
    ReturnCode = WEXITSTATUS(ReturnCode);
    return ReturnCode;
@@ -1006,7 +1007,7 @@ static int Med_GetFirstFrame (const char PathFileOriginal[PATH_MAX + 1],
              PathFileProcessed);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
-      Lay_ShowErrorAndExit ("Error when running command to process media.");
+      Err_ShowErrorAndExit ("Error when running command to process media.");
 
    ReturnCode = WEXITSTATUS(ReturnCode);
 
@@ -1501,7 +1502,7 @@ static void Med_ShowJPG (const struct Med_Media *Media,
 	     Media->Name,Med_Extensions[Med_JPG]);
    if (asprintf (&FullPathJPGPriv,"%s/%s",
 	         PathMedPriv,FileNameJPG) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Check if private media file exists *****/
    if (Fil_CheckIfPathExists (FullPathJPGPriv))
@@ -1524,7 +1525,7 @@ static void Med_ShowJPG (const struct Med_Media *Media,
       /***** Show media *****/
       if (asprintf (&URL,"%s/%s",
 		    Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_IMG (URL,FileNameJPG,Media->Title,
 	       "class=\"%s\" lazyload=\"on\"",ClassMedia);	// Lazy load of the media
       free (URL);
@@ -1559,13 +1560,13 @@ static void Med_ShowGIF (const struct Med_Media *Media,
 	     Media->Name,Med_Extensions[Med_GIF]);
    if (asprintf (&FullPathGIFPriv,"%s/%s",	// The animated GIF image
 		 PathMedPriv,FileNameGIF) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Build private path to static PNG image *****/
    snprintf (FileNamePNG,sizeof (FileNamePNG),"%s.png",Media->Name);
    if (asprintf (&FullPathPNGPriv,"%s/%s",
 		 PathMedPriv,FileNamePNG) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Check if private media file exists *****/
    if (Fil_CheckIfPathExists (FullPathGIFPriv))		// The animated GIF image
@@ -1589,11 +1590,11 @@ static void Med_ShowGIF (const struct Med_Media *Media,
       /***** Create URLs pointing to symbolic links *****/
       if (asprintf (&URL,"%s/%s",
 		    Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       if (asprintf (&URL_GIF,"%s/%s",URL,FileNameGIF) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       if (asprintf (&URL_PNG,"%s/%s",URL,FileNamePNG) < 0)	// The static PNG image
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
 
       /***** Check if private media file exists *****/
       if (Fil_CheckIfPathExists (FullPathPNGPriv))		// The static PNG image
@@ -1651,7 +1652,7 @@ static void Med_ShowVideo (const struct Med_Media *Media,
 	     Media->Name,Med_Extensions[Media->Type]);
    if (asprintf (&FullPathVideoPriv,"%s/%s",
 	         PathMedPriv,FileNameVideo) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Check if private media file exists *****/
    if (Fil_CheckIfPathExists (FullPathVideoPriv))
@@ -1674,7 +1675,7 @@ static void Med_ShowVideo (const struct Med_Media *Media,
       /***** Create URL pointing to symbolic link *****/
       if (asprintf (&URL,"%s/%s",
 		    Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDir) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
 
       /***** Show media *****/
       HTM_TxtF ("<video src=\"%s/%s\""
@@ -1847,7 +1848,7 @@ long Med_CloneMedia (const struct Med_Media *MediaSrc)
       if (Length > Cns_MAX_BYTES_WWW)
 	  Length = Cns_MAX_BYTES_WWW;
       if ((MediaDst.URL = malloc (Length + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
       Str_Copy (MediaDst.URL,MediaSrc->URL,Length);
      }
 
@@ -1860,7 +1861,7 @@ long Med_CloneMedia (const struct Med_Media *MediaSrc)
       if (Length > Cns_MAX_BYTES_WWW)
 	  Length = Cns_MAX_BYTES_WWW;
       if ((MediaDst.Title = malloc (Length + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
       Str_Copy (MediaDst.Title,MediaSrc->Title,Length);
      }
 
@@ -1994,7 +1995,7 @@ void Med_RemoveMedia (long MedCod)
 		  /***** Remove private JPG file *****/
 		  if (asprintf (&FullPathMediaPriv,"%s/%s.%s",
 			        PathMedPriv,Media.Name,Med_Extensions[Med_JPG]) < 0)
-		     Lay_NotEnoughMemoryExit ();
+		     Err_NotEnoughMemoryExit ();
 		  unlink (FullPathMediaPriv);
                   free (FullPathMediaPriv);
 		  break;
@@ -2002,14 +2003,14 @@ void Med_RemoveMedia (long MedCod)
 		  /***** Remove private GIF file *****/
 		  if (asprintf (&FullPathMediaPriv,"%s/%s.%s",
 			        PathMedPriv,Media.Name,Med_Extensions[Med_GIF]) < 0)
-		     Lay_NotEnoughMemoryExit ();
+		     Err_NotEnoughMemoryExit ();
 		  unlink (FullPathMediaPriv);
                   free (FullPathMediaPriv);
 
 		  /***** Remove private PNG file *****/
 		  if (asprintf (&FullPathMediaPriv,"%s/%s.png",
 			        PathMedPriv,Media.Name) < 0)
-		     Lay_NotEnoughMemoryExit ();
+		     Err_NotEnoughMemoryExit ();
 		  unlink (FullPathMediaPriv);
                   free (FullPathMediaPriv);
 
@@ -2020,7 +2021,7 @@ void Med_RemoveMedia (long MedCod)
 		  /***** Remove private video file *****/
 		  if (asprintf (&FullPathMediaPriv,"%s/%s.%s",
 			        PathMedPriv,Media.Name,Med_Extensions[Media.Type]) < 0)
-		     Lay_NotEnoughMemoryExit ();
+		     Err_NotEnoughMemoryExit ();
 		  unlink (FullPathMediaPriv);
 		  free (FullPathMediaPriv);
 

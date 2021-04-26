@@ -34,6 +34,7 @@
 #include "swad_banner.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
@@ -941,7 +942,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /***** Select clicks from the table of log *****/
    /* Allocate memory for the query */
    if ((Query = malloc (Sta_MAX_BYTES_QUERY_ACCESS + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /* Start the query */
    switch (Stats.ClicksGroupedBy)
@@ -1280,7 +1281,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	      {
 	       LengthQuery = LengthQuery + 25 + 10 + 1;
 	       if (LengthQuery > Sta_MAX_BYTES_QUERY_ACCESS - 128)
-                  Lay_ShowErrorAndExit ("Query is too large.");
+                  Err_ShowErrorAndExit ("Query is too large.");
                sprintf (QueryAux,
                         NumUsr ? " OR %s.UsrCod=%ld" :
                                  " AND (%s.UsrCod=%ld",
@@ -1726,7 +1727,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 
       /* Get logged role */
       if (sscanf (row[2],"%u",&RoleFromLog) != 1)
-	 Lay_WrongRoleExit ();
+	 Err_WrongRoleExit ();
 
       HTM_TR_Begin (NULL);
 
@@ -1754,7 +1755,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 
       /* Write the date-time (row[3]) */
       if (asprintf (&Id,"log_date_%u",UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"LOG RT COLOR%u\"",Id,Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,Dat_GetUNIXTimeFromStr (row[3]),
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
@@ -1764,7 +1765,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 
       /* Write the action */
       if (sscanf (row[4],"%ld",&ActCod) != 1)
-	 Lay_WrongActionExit ();
+	 Err_WrongActionExit ();
       HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
       if (ActCod >= 0)
          HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_FromActCodToAction[ActCod]));
@@ -1964,7 +1965,7 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 
       /* Get year, month and day (row[0] holds the date in YYYYMMDD format) */
       if (!(Dat_GetDateFromYYYYMMDD (&ReadDate,row[0])))
-	 Lay_WrongDateExit ();
+	 Err_WrongDateExit ();
 
       /* Get number of pages generated (in row[1]) */
       Hits.Num = Str_GetDoubleFromStr (row[1]);
@@ -2172,11 +2173,11 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 
       /* Get year, month and day (row[0] holds the date in YYYYMMDD format) */
       if (!(Dat_GetDateFromYYYYMMDD (&CurrentReadDate,row[0])))
-	 Lay_WrongDateExit ();
+	 Err_WrongDateExit ();
 
       /* Get the hour (in row[1] is the hour in formato HH) */
       if (sscanf (row[1],"%02u",&ReadHour) != 1)
-	 Lay_WrongDateExit ();
+	 Err_WrongDateExit ();
 
       /* Get number of pages generated (in row[2]) */
       Hits.Num = Str_GetDoubleFromStr (row[2]);
@@ -2542,7 +2543,7 @@ static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
 
       /* Get year and week (row[0] holds date in YYYYWW format) */
       if (sscanf (row[0],"%04u%02u",&ReadDate.Year,&ReadDate.Week) != 2)
-	 Lay_WrongDateExit ();
+	 Err_WrongDateExit ();
 
       /* Get number of pages generated (in row[1]) */
       Hits.Num = Str_GetDoubleFromStr (row[1]);
@@ -2643,7 +2644,7 @@ static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
 
       /* Get the year and the month (in row[0] is the date in YYYYMM format) */
       if (sscanf (row[0],"%04u%02u",&ReadDate.Year,&ReadDate.Month) != 2)
-	 Lay_WrongDateExit ();
+	 Err_WrongDateExit ();
 
       /* Get number of pages generated (in row[1]) */
       Hits.Num = Str_GetDoubleFromStr (row[1]);
@@ -2744,7 +2745,7 @@ static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
 
       /* Get the year (in row[0] is the date in YYYY format) */
       if (sscanf (row[0],"%04u",&ReadDate.Year) != 1)
-	 Lay_WrongDateExit ();
+	 Err_WrongDateExit ();
 
       /* Get number of pages generated (in row[1]) */
       Hits.Num = Str_GetDoubleFromStr (row[1]);
@@ -2844,7 +2845,7 @@ static void Sta_ShowNumHitsPerHour (unsigned NumHits,
 	    row = mysql_fetch_row (mysql_res); // Get next result
 	    NumHit++;
 	    if (sscanf (row[0],"%02u",&ReadHour) != 1)   // In row[0] is the date in HH format
-	       Lay_WrongDateExit ();
+	       Err_WrongDateExit ();
 
 	    for (H = Hour;
 		 H < ReadHour;
@@ -2939,7 +2940,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned NumHits,MYSQL_RES *mysql_
 	    row = mysql_fetch_row (mysql_res); // Get next result
 	    NumHit++;
 	    if (sscanf (row[0],"%02u%02u",&ReadHour,&MinuteRead) != 2)   // In row[0] is the date in formato HHMM
-	       Lay_WrongDateExit ();
+	       Err_WrongDateExit ();
 	    /* Get number of pages generated */
 	    Hits.Num = Str_GetDoubleFromStr (row[1]);
 	    MinuteDayRead = ReadHour * 60 + MinuteRead;
@@ -3221,7 +3222,7 @@ static void Sta_ShowNumHitsPerPlugin (Sta_CountType_t CountType,
 
       /* Write the plugin */
       if (sscanf (row[0],"%ld",&Plg.PlgCod) != 1)
-	 Lay_WrongPluginExit ();
+	 Err_WrongPluginExit ();
       HTM_TD_Begin ("class=\"LOG RT\"");
       if (Plg_GetDataOfPluginByCod (&Plg))
          HTM_Txt (Plg.Name);
@@ -3277,7 +3278,7 @@ static void Sta_ShowNumHitsPerWSFunction (Sta_CountType_t CountType,
 
       /* Write the plugin */
       if (sscanf (row[0],"%ld",&FunCod) != 1)
-	 Lay_ShowErrorAndExit ("Wrong function code.");
+	 Err_ShowErrorAndExit ("Wrong function code.");
 
       HTM_TD_Begin ("class=\"LOG LT\"");
       HTM_TxtF ("%s&nbsp;",API_GetFunctionNameFromFunCod (FunCod));
@@ -3343,7 +3344,7 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
 
       /* Write the banner */
       if (sscanf (row[0],"%ld",&(Ban.BanCod)) != 1)
-	 Lay_WrongBannerExit ();
+	 Err_WrongBannerExit ();
       Ban_GetDataOfBannerByCod (&Ban);
       HTM_TD_Begin ("class=\"LOG LT\"");
       HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
@@ -3884,7 +3885,7 @@ static void Sta_DrawBarNumHits (char Color,
       if (BarWidth == 0)
          BarWidth = 1;
       if (asprintf (&Icon,"%c1x1.png",Color) < 0)	// Background
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,NULL,
 	       "style=\"width:%upx;height:10px;\"",BarWidth);
       free (Icon);

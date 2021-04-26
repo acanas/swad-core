@@ -31,6 +31,7 @@
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -392,7 +393,7 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
              PathUniqueDirL,
              &Gbl.UniqueNameEncrypted[2]);
    if (mkdir (PathUniqueDirR,(mode_t) 0xFFF))
-      Lay_ShowErrorAndExit ("Can not create directory for report.");
+      Err_ShowErrorAndExit ("Can not create directory for report.");
 
    /***** Path of the public file with the report */
    snprintf (Report->FilenameReport,sizeof (Report->FilenameReport),
@@ -401,7 +402,7 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
    snprintf (PathFileReport,sizeof (PathFileReport),"%s/%s",
              PathUniqueDirR,Report->FilenameReport);
    if ((Gbl.F.Rep = fopen (PathFileReport,"wb")) == NULL)
-      Lay_ShowErrorAndExit ("Can not create report file.");
+      Err_ShowErrorAndExit ("Can not create report file.");
 
    /***** Permalink *****/
    snprintf (Permalink,sizeof (Permalink),"%s/%c%c/%s/%s",
@@ -964,7 +965,7 @@ static void Rep_GetMaxHitsPerYear (struct Rep_Report *Report)
    row = mysql_fetch_row (mysql_res);
    if (row[0])	// There are questions
       if (sscanf (row[0],"%lu",&Report->MaxHitsPerYear) != 1)
-         Lay_ShowErrorAndExit ("Error when getting maximum hits.");
+         Err_ShowErrorAndExit ("Error when getting maximum hits.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1285,7 +1286,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
 
       /* Get the year (in row[0] is the date in YYYY format) */
       if (sscanf (row[0],"%04u",&ReadYear) != 1)
-	 Lay_WrongDateExit ();
+	 Err_WrongDateExit ();
 
       /* Get number hits (in row[1]) */
       if (sscanf (row[1],"%lu",&Report->Hits.Num) != 1)

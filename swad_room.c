@@ -32,6 +32,7 @@
 #include "swad_box.h"
 #include "swad_building.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -381,7 +382,7 @@ void Roo_ChangeMAC (void)
    /***** Get parameters from form *****/
    /* Get room code */
    if ((Roo_EditingRoom->RooCod = Par_GetParToLong ("Cod")) <= 0)
-      Lay_WrongRoomExit ();
+      Err_WrongRoomExit ();
 
    /* Get the old MAC address of the room */
    OldMACnum = MAC_GetMACnumFromForm ("MAC");
@@ -606,7 +607,7 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
       /***** Create list with courses in center *****/
       if ((Rooms->Lst = calloc ((size_t) Rooms->Num,
                                 sizeof (*Rooms->Lst))) == NULL)
-          Lay_NotEnoughMemoryExit ();
+          Err_NotEnoughMemoryExit ();
 
       /***** Get the rooms *****/
       for (NumRoom = 0;
@@ -620,7 +621,7 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,
 
          /* Get room code (row[0]) */
          if ((Room->RooCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Lay_WrongRoomExit ();
+            Err_WrongRoomExit ();
 
 	 switch (WhichData)
 	   {
@@ -1006,7 +1007,7 @@ void Roo_RemoveRoom (void)
 
    /***** Get room code *****/
    if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) <= 0)
-      Lay_WrongRoomExit ();
+      Err_WrongRoomExit ();
 
    /***** Get data of the room from database *****/
    Roo_GetDataOfRoomByCod (Roo_EditingRoom);
@@ -1059,7 +1060,7 @@ void Roo_ChangeBuilding (void)
    /***** Get parameters from form *****/
    /* Get room code */
    if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) <= 0)
-      Lay_WrongRoomExit ();
+      Err_WrongRoomExit ();
 
    /* Get room building */
    NewBldCod = Bld_GetParamBldCod ();
@@ -1112,7 +1113,7 @@ void Roo_ChangeFloor (void)
    /***** Get parameters from form *****/
    /* Get room code */
    if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) <= 0)
-      Lay_WrongRoomExit ();
+      Err_WrongRoomExit ();
 
    /* Get room floor */
    NewFloor = Roo_GetParamFloor ();
@@ -1164,7 +1165,7 @@ void Roo_ChangeType (void)
    /***** Get parameters from form *****/
    /* Get room code */
    if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) <= 0)
-      Lay_WrongRoomExit ();
+      Err_WrongRoomExit ();
 
    /* Get room type */
    NewType = Roo_GetParamType ();
@@ -1261,7 +1262,7 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
    /***** Get parameters from form *****/
    /* Get room code */
    if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) <= 0)
-      Lay_WrongRoomExit ();
+      Err_WrongRoomExit ();
 
    /* Get the new name for the room */
    Par_GetParToText (ParamName,NewClaName,MaxBytes);
@@ -1355,7 +1356,7 @@ void Roo_ChangeCapacity (void)
    /***** Get parameters from form *****/
    /* Get room code */
    if ((Roo_EditingRoom->RooCod = Roo_GetParamRooCod ()) <= 0)
-      Lay_WrongRoomExit ();
+      Err_WrongRoomExit ();
 
    /* Get the seating capacity of the room */
    NewCapacity = (unsigned)
@@ -1656,11 +1657,11 @@ static void Roo_EditingRoomConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Roo_EditingRoom != NULL)
-      Lay_WrongRoomExit ();
+      Err_WrongRoomExit ();
 
    /***** Allocate memory for room *****/
    if ((Roo_EditingRoom = malloc (sizeof (*Roo_EditingRoom))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Reset room *****/
    Roo_EditingRoom->RooCod         = -1L;

@@ -31,6 +31,7 @@
 #include <stdlib.h>		// For free
 
 #include "swad_action.h"
+#include "swad_error.h"
 #include "swad_global.h"
 #include "swad_timeline.h"
 #include "swad_timeline_favourite.h"
@@ -271,7 +272,7 @@ void Tml_Frm_FormFavSha (const struct TL_Form *Form)
 		    Gbl.Session.Id,
 		    ParamStr,
 		    Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
      }
    else
@@ -282,7 +283,7 @@ void Tml_Frm_FormFavSha (const struct TL_Form *Form)
 		    Act_GetActCod (Tml_Frm_ActionGbl[Form->Action]),
 		    Gbl.Session.Id,
 		    ParamStr) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
      }
    Ico_PutIconLink (Form->Icon,Form->Title);
@@ -326,7 +327,7 @@ void Tml_Frm_FormToShowHiddenComms (long NotCod,
 			  IdComms,
 			  NumInitialComms,
 			  Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
 	   }
 	 else
@@ -341,7 +342,7 @@ void Tml_Frm_FormToShowHiddenComms (long NotCod,
 			  NotCod,
 			  IdComms,
 			  NumInitialComms) < 0)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
 	   }
 

@@ -35,6 +35,7 @@
 #include "swad_action.h"
 #include "swad_database.h"
 #include "swad_date.h"
+#include "swad_error.h"
 #include "swad_exam.h"
 #include "swad_exam_log.h"
 #include "swad_exam_print.h"
@@ -204,7 +205,7 @@ void ExaRes_ShowMyResultsInExa (void)
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
    /***** Get exam data from database *****/
@@ -256,10 +257,10 @@ void ExaRes_ShowMyResultsInSes (void)
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
    if ((Session.SesCod = ExaSes_GetParamSesCod ()) <= 0)
-      Lay_WrongExamSessionExit ();
+      Err_WrongExamSessionExit ();
    Exa_GetDataOfExamByCod (&Exam);
    Exams.ExaCod = Exam.ExaCod;
    ExaSes_GetDataOfSessionByCod (&Session);
@@ -406,7 +407,7 @@ void ExaRes_ShowAllResultsInExa (void)
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
    Exa_GetDataOfExamByCod (&Exam);
    Exams.ExaCod = Exam.ExaCod;
@@ -493,10 +494,10 @@ void ExaRes_ShowAllResultsInSes (void)
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
    if ((Session.SesCod = ExaSes_GetParamSesCod ()) <= 0)
-      Lay_WrongExamSessionExit ();
+      Err_WrongExamSessionExit ();
 
    /***** Get exam data and session *****/
    Exa_GetDataOfExamByCod (&Exam);
@@ -777,7 +778,7 @@ static void ExaRes_BuildExamsSelectedCommas (struct Exa_Exams *Exams,
    /***** Allocate memory for subquery of exams selected *****/
    MaxLength = (size_t) Exams->NumSelected * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
    if ((*ExamsSelectedCommas = malloc (MaxLength + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Build subquery with list of selected exams *****/
    (*ExamsSelectedCommas)[0] = '\0';
@@ -845,12 +846,12 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
    if (SesCod > 0)	// One unique session
      {
       if (asprintf (&SesSubQuery," AND exa_prints.SesCod=%ld",SesCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    else			// All sessions of selected exams
      {
       if (asprintf (&SesSubQuery,"%s","") < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
 
    /***** Subquery: get hidden sessions?
@@ -861,11 +862,11 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
      {
       case Usr_ME:	// A student watching her/his results
          if (asprintf (&HidSesSubQuery," AND exa_sessions.Hidden='N'") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 break;
       default:		// A teacher/admin watching the results of other users
 	 if (asprintf (&HidSesSubQuery,"%s","") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 break;
      }
 
@@ -873,7 +874,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
    if (ExaCod > 0)			// One unique exams
      {
       if (asprintf (&ExaSubQuery," AND exa_sessions.ExaCod=%ld",ExaCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    else if (ExamsSelectedCommas)
      {
@@ -881,18 +882,18 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	{
 	 if (asprintf (&ExaSubQuery," AND exa_sessions.ExaCod IN (%s)",
 		       ExamsSelectedCommas) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	}
       else
 	{
 	 if (asprintf (&ExaSubQuery,"%s","") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	}
      }
    else					// All exams
      {
       if (asprintf (&ExaSubQuery,"%s","") < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
 
    /***** Subquery: get hidden exams?
@@ -903,11 +904,11 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
      {
       case Usr_ME:	// A student watching her/his results
          if (asprintf (&HidExaSubQuery," AND exa_exams.Hidden='N'") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 break;
       default:		// A teacher/admin watching the results of other users
 	 if (asprintf (&HidExaSubQuery,"%s","") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 break;
      }
 
@@ -951,7 +952,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	{
 	 /* Get print code (row[0]) */
 	 if ((Print.PrnCod = DB_GetNextCode (mysql_res)) <= 0)
-	    Lay_WrongExamExit ();
+	    Err_WrongExamExit ();
 
 	 /* Get print data */
 	 ExaPrn_GetDataOfPrintByPrnCod (&Print);
@@ -975,7 +976,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	   {
 	    UniqueId++;
 	    if (asprintf (&Id,"exa_res_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    HTM_TD_Begin ("id =\"%s\" class=\"DAT LT COLOR%u\"",
 			  Id,Gbl.RowEvenOdd);
 	    Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
@@ -1457,9 +1458,9 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,
                                                  Usr_DONT_GET_PREFS,
                                                  Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-      Lay_WrongUserExit ();
+      Err_WrongUserExit ();
    if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (10);
@@ -1674,7 +1675,7 @@ static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print)
 
       /***** Time *****/
       if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"DAT LB\"",Id);
       Dat_WriteLocalDateHMSFromUTC (Id,Print->TimeUTC[StartEndTime],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,

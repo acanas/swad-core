@@ -33,6 +33,7 @@
 #include "swad_chat.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -176,7 +177,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
       /* Get data of this degree */
       Deg.DegCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
       if (!Deg_GetDataOfDegreeByCod (&Deg))
-         Lay_WrongDegreeExit ();
+         Err_WrongDegreeExit ();
 
       /* Link to the room of this degree */
       IsLastItemInLevel[1] = (NumMyDeg == Gbl.Usrs.Me.MyDegs.Num - 1);
@@ -399,9 +400,9 @@ void Cht_OpenChatWindow (void)
    Par_GetParToText ("RoomFullName",RoomFullName,Cht_MAX_BYTES_ROOM_FULL_NAME);
 
    if (!RoomCode[0] || !RoomShrtName[0] || !RoomFullName[0])
-      Lay_ShowErrorAndExit ("Wrong code or name of chat room.");
+      Err_ShowErrorAndExit ("Wrong code or name of chat room.");
    if (strcspn (RoomCode," \t\n\r") != strlen (RoomCode)) // If RoomCode contiene espacios
-      Lay_ShowErrorAndExit ("Wrong code of chat room.");
+      Err_ShowErrorAndExit ("Wrong code of chat room.");
 
    /***** Fill the lists with the degrees and courses I belong to *****/ 
    Usr_GetMyDegrees ();
@@ -521,7 +522,7 @@ void Cht_OpenChatWindow (void)
 
    /***** Open index.html file with the HTML page for the chat *****/
    if ((FileChat = fopen (Cfg_PATH_AND_FILE_REL_CHAT_PRIVATE,"rb")) == NULL)
-      Lay_ShowErrorAndExit ("Can not open chat.");
+      Err_ShowErrorAndExit ("Can not open chat.");
 
    /***** Start writing the index.html file to the output *****/
    HTM_Txt ("Content-type: text/html; charset=windows-1252\n\n");	// Two carriage returns at the end of the line are mandatory!

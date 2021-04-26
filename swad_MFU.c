@@ -33,6 +33,7 @@
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -80,7 +81,7 @@ void MFU_AllocateMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned 
   {
    if ((ListMFUActions->Actions = malloc (MaxActionsShown *
                                           sizeof (*ListMFUActions->Actions))) == NULL)
-      Lay_ShowErrorAndExit ("Can not allocate memory for list of most frequently used actions.");
+      Err_ShowErrorAndExit ("Can not allocate memory for list of most frequently used actions.");
   }
 
 /*****************************************************************************/
@@ -357,7 +358,7 @@ void MFU_UpdateMFUActions (void)
      {
       row = mysql_fetch_row (mysql_res);
       if (sscanf (row[0],"%lf",&Score) != 1)
-         Lay_ShowErrorAndExit ("Error when getting score for current action.");
+         Err_ShowErrorAndExit ("Error when getting score for current action.");
       Score *= MFU_INCREASE_FACTOR;
       if (Score > MFU_MAX_SCORE)
          Score = MFU_MAX_SCORE;

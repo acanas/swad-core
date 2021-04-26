@@ -32,6 +32,7 @@
 
 #include "swad_action.h"
 #include "swad_box.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -163,16 +164,16 @@ void Lgo_DrawLogo (Hie_Lvl_Level_t Scope,long Cod,const char *AltText,
 			     Cfg_URL_SWAD_PUBLIC,Folder,
 			     (unsigned) (Cod % 100),
 			     (unsigned) Cod) < 0)
-		  Lay_NotEnoughMemoryExit ();
+		  Err_NotEnoughMemoryExit ();
 	       if (asprintf (&Icon,"%u.png",(unsigned) Cod) < 0)
-		  Lay_NotEnoughMemoryExit ();
+		  Err_NotEnoughMemoryExit ();
 	      }
 	    else
 	      {
 	       if (asprintf (&URL,"%s",Cfg_URL_ICON_PUBLIC) < 0)
-		  Lay_NotEnoughMemoryExit ();
+		  Err_NotEnoughMemoryExit ();
 	       if (asprintf (&Icon,"%s",HieIcon[Scope]) < 0)
-		  Lay_NotEnoughMemoryExit ();
+		  Err_NotEnoughMemoryExit ();
 	      }
 	    ClassNotEmpty = false;
 	    if (Class)

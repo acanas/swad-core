@@ -36,6 +36,7 @@
 #include "swad_attendance.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_group.h"
@@ -486,7 +487,7 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
 	StartEndTime++)
      {
       if (asprintf (&Id,"att_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       if (ShowOnlyThisAttEventComplete)
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
 		       Id,
@@ -711,7 +712,7 @@ static void Att_GetListAttEvents (struct Att_Events *Events,
      {
       /***** Create list of attendance events *****/
       if ((Events->Lst = calloc (Events->Num,sizeof (*Events->Lst))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the attendance events codes *****/
       for (NumAttEvent = 0;
@@ -720,7 +721,7 @@ static void Att_GetListAttEvents (struct Att_Events *Events,
         {
          /* Get next attendance event code */
          if ((Events->Lst[NumAttEvent].AttCod = DB_GetNextCode (mysql_res)) < 0)
-            Lay_WrongEventExit ();
+            Err_WrongEventExit ();
         }
      }
 
@@ -739,10 +740,10 @@ static void Att_GetDataOfAttEventByCodAndCheckCrs (struct Att_Event *Event)
    if (Att_GetDataOfAttEventByCod (Event))
      {
       if (Event->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-         Lay_WrongEventExit ();
+         Err_WrongEventExit ();
      }
    else	// Attendance event not found
-      Lay_WrongEventExit ();
+      Err_WrongEventExit ();
   }
 
 /*****************************************************************************/
@@ -920,7 +921,7 @@ void Att_AskRemAttEvent (void)
 
    /***** Get attendance event code *****/
    if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
-      Lay_WrongEventExit ();
+      Err_WrongEventExit ();
 
    /***** Get data of the attendance event from database *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
@@ -955,7 +956,7 @@ void Att_GetAndRemAttEvent (void)
 
    /***** Get attendance event code *****/
    if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
-      Lay_WrongEventExit ();
+      Err_WrongEventExit ();
 
    /***** Get data of the attendance event from database *****/
    // Inside this function, the course is checked to be the current one
@@ -998,7 +999,7 @@ void Att_HideAttEvent (void)
 
    /***** Get attendance event code *****/
    if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
-      Lay_WrongEventExit ();
+      Err_WrongEventExit ();
 
    /***** Get data of the attendance event from database *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
@@ -1026,7 +1027,7 @@ void Att_ShowAttEvent (void)
 
    /***** Get attendance event code *****/
    if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
-      Lay_WrongEventExit ();
+      Err_WrongEventExit ();
 
    /***** Get data of the attendance event from database *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
@@ -1753,7 +1754,7 @@ unsigned Att_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
 			       " WHERE CrsCod=%ld",
 			       Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 return 0;	// Not reached
      }
   }
@@ -1825,20 +1826,20 @@ unsigned Att_GetNumAttEvents (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
                          Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 break;
      }
 
    /***** Get number of attendance events *****/
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%u",&NumAttEvents) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of attendance events.");
+      Err_ShowErrorAndExit ("Error when getting number of attendance events.");
 
    /***** Get number of notifications by email *****/
    if (row[1])
      {
       if (sscanf (row[1],"%u",NumNotif) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of notifications of attendance events.");
+         Err_ShowErrorAndExit ("Error when getting number of notifications of attendance events.");
      }
    else
       *NumNotif = 0;
@@ -1862,7 +1863,7 @@ void Att_SeeOneAttEvent (void)
 
    /***** Get attendance event code *****/
    if ((Events.AttCod = Att_GetParamAttCod ()) < 0)
-      Lay_WrongEventExit ();
+      Err_WrongEventExit ();
 
    /***** Show event *****/
    Att_ShowEvent (&Events);
@@ -2097,7 +2098,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 // A student can see only her/his attendance
 	 ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 	 if (!ItsMe)
-	    Lay_ShowErrorAndExit ("Wrong call.");
+	    Err_ShowErrorAndExit ("Wrong call.");
 	 ICanChangeStdAttendance = false;
 	 ICanEditStdComment = Event->Open;	// Attendance event is open
 	 ICanEditTchComment = false;
@@ -2260,7 +2261,7 @@ static void Att_PutParamsCodGrps (long AttCod)
      {
       MaxLengthGrpCods = NumGrps * (1 + 20) - 1;
       if ((GrpCods = malloc (MaxLengthGrpCods + 1)) == NULL)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       GrpCods[0] = '\0';
 
       /* Get groups */
@@ -2307,7 +2308,7 @@ void Att_RegisterMeAsStdInAttEvent (void)
 
    /***** Get attendance event code *****/
    if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
-      Lay_WrongEventExit ();
+      Err_WrongEventExit ();
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);	// This checks that event belong to current course
 
    if (Event.Open)
@@ -2372,7 +2373,7 @@ void Att_RegisterStudentsInAttEvent (void)
 
    /***** Get attendance event code *****/
    if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
-      Lay_WrongEventExit ();
+      Err_WrongEventExit ();
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);	// This checks that event belong to current course
 
    /***** Get groups selected *****/
@@ -2739,7 +2740,7 @@ static void Att_ReqListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 	 Att_FreeListAttEvents (&Events);
 	 break;
       default:
-	 Lay_WrongTypeOfViewExit ();
+	 Err_WrongTypeOfViewExit ();
 	 break;
      }
   }
@@ -2807,7 +2808,7 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 			     NULL,Box_NOT_CLOSABLE);
 	       break;
 	    default:
-	       Lay_WrongTypeOfViewExit ();
+	       Err_WrongTypeOfViewExit ();
 	       break;
 	   }
 
@@ -2837,7 +2838,7 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 	 Att_FreeListAttEvents (&Events);
 	 break;
       default:
-	 Lay_WrongTypeOfViewExit ();
+	 Err_WrongTypeOfViewExit ();
 	 break;
      }
   }
@@ -2923,7 +2924,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 				NULL,Box_NOT_CLOSABLE);
 		  break;
 	       default:
-		  Lay_WrongTypeOfViewExit ();
+		  Err_WrongTypeOfViewExit ();
 	      }
 
 	    /***** List events to select *****/
@@ -2957,7 +2958,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 	 Grp_FreeListCodSelectedGrps ();
 	 break;
       default:
-	 Lay_WrongTypeOfViewExit ();
+	 Err_WrongTypeOfViewExit ();
 	 break;
      }
   }
@@ -2982,7 +2983,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
    /***** Allocate memory for list of attendance events selected *****/
    MaxSizeListAttCodsSelected = (size_t) Events->Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
    if ((Events->StrAttCodsSelected = malloc (MaxSizeListAttCodsSelected + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of attendance events selected *****/
    Par_GetParMultiToText ("AttCods",Events->StrAttCodsSelected,MaxSizeListAttCodsSelected);
@@ -3241,7 +3242,7 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
       HTM_TD_End ();
 
       if (asprintf (&Id,"att_date_start_%u",UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
       HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
       HTM_SPAN_Begin ("id=\"%s\"",Id);
@@ -3684,7 +3685,7 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 	 HTM_TD_End ();
 
 	 if (asprintf (&Id,"att_date_start_%u_%u",NumUsr,UniqueId) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
 	 HTM_SPAN_Begin ("id=\"%s\"",Id);
 	 HTM_SPAN_End ();

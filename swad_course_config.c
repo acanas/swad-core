@@ -33,6 +33,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
@@ -445,7 +446,7 @@ static void CrsCfg_Indicators (void)
    if (asprintf (&Title,"%u %s %u",
 	         IndicatorsCrs.NumIndicators,
 	         Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    HTM_BUTTON_SUBMIT_Begin (Title,"BT_LINK DAT",NULL);
    HTM_TxtF ("%s&nbsp;",Title);
    Ico_PutIcon ((IndicatorsCrs.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :

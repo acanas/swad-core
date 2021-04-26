@@ -38,6 +38,7 @@
 #include "swad_config.h"
 #include "swad_course.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_forum.h"
@@ -257,7 +258,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
    if ((Messages->Reply.IsReply = Par_GetParToBool ("IsReply")))
       /* Get original message code */
       if ((Messages->Reply.OriginalMsgCod = Msg_GetParamMsgCod ()) <= 0)
-         Lay_WrongMessageExit ();
+         Err_WrongMessageExit ();
 
    /***** Get user's code of possible preselected recipient *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())	// There is a preselected recipient
@@ -620,7 +621,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 			      " FROM msg_content"
 			     " WHERE MsgCod=%ld",
 			     MsgCod) != 1)
-	    Lay_WrongMessageExit ();
+	    Err_WrongMessageExit ();
 
 	 row = mysql_fetch_row (mysql_res);
 
@@ -770,7 +771,7 @@ void Msg_RecMsgFromUsr (void)
    if ((IsReply = Par_GetParToBool ("IsReply")))
       /* Get original message code */
       if ((OriginalMsgCod = Msg_GetParamMsgCod ()) <= 0)
-         Lay_WrongMessageExit ();
+         Err_WrongMessageExit ();
 
    /* Get user's code of possible preselected recipient */
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -1197,7 +1198,7 @@ void Msg_DelSntMsg (void)
 
    /***** Get the code of the message to delete *****/
    if ((MsgCod = Msg_GetParamMsgCod ()) <= 0)
-      Lay_WrongMessageExit ();
+      Err_WrongMessageExit ();
 
    /***** Delete the message *****/
    /* Delete the sent message */
@@ -1219,7 +1220,7 @@ void Msg_DelRecMsg (void)
 
    /***** Get the code of the message to delete *****/
    if ((MsgCod = Msg_GetParamMsgCod ()) <= 0)
-      Lay_WrongMessageExit ();
+      Err_WrongMessageExit ();
 
    /***** Delete the message *****/
    /* Delete the received message */
@@ -1243,7 +1244,7 @@ void Msg_ExpSntMsg (void)
 
    /***** Get the code of the message to expand *****/
    if ((Messages.ExpandedMsgCod = Msg_GetParamMsgCod ()) <= 0)
-      Lay_WrongMessageExit ();
+      Err_WrongMessageExit ();
 
    /***** Expand the message *****/
    Msg_ExpandSentMsg (Messages.ExpandedMsgCod);
@@ -1265,7 +1266,7 @@ void Msg_ExpRecMsg (void)
 
    /***** Get the code of the message to expand *****/
    if ((Messages.ExpandedMsgCod = Msg_GetParamMsgCod ()) <= 0)
-      Lay_WrongMessageExit ();
+      Err_WrongMessageExit ();
 
    /***** Expand the message *****/
    Msg_ExpandReceivedMsg (Messages.ExpandedMsgCod);
@@ -1289,7 +1290,7 @@ void Msg_ConSntMsg (void)
 
    /***** Get the code of the message to contract *****/
    if ((MsgCod = Msg_GetParamMsgCod ()) <= 0)
-      Lay_WrongMessageExit ();
+      Err_WrongMessageExit ();
 
    /***** Contract the message *****/
    Msg_ContractSentMsg (MsgCod);
@@ -1308,7 +1309,7 @@ void Msg_ConRecMsg (void)
 
    /***** Get the code of the message to contract *****/
    if ((MsgCod = Msg_GetParamMsgCod ()) <= 0)
-      Lay_WrongMessageExit ();
+      Err_WrongMessageExit ();
 
    /***** Contract the message *****/
    Msg_ContractReceivedMsg (MsgCod);
@@ -1481,7 +1482,7 @@ static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Mess
 	NumMsg++)
      {
       if ((MsgCod = DB_GetNextCode (mysql_res)) <= 0)
-         Lay_WrongMessageExit ();
+         Err_WrongMessageExit ();
 
       switch (Messages->TypeOfMessages)
         {
@@ -1777,7 +1778,7 @@ static unsigned Msg_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
 		       Gbl.Usrs.Me.UsrDat.UsrCod,
 		       Messages->FilterCrsCod,
 		       FilterFromToSubquery) < 0)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
 	}
       else
         {
@@ -1790,7 +1791,7 @@ static unsigned Msg_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
 				   " AND msg_snt.CrsCod=%ld",
 			Gbl.Usrs.Me.UsrDat.UsrCod,
 			Messages->FilterCrsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
         }
      }
    else	// If no origin course selected
@@ -1805,7 +1806,7 @@ static unsigned Msg_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
 				   " AND msg_snt.UsrCod=usr_data.UsrCod%s",
 			Gbl.Usrs.Me.UsrDat.UsrCod,
 			FilterFromToSubquery) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
         }
       else
 	{
@@ -1814,7 +1815,7 @@ static unsigned Msg_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
 			         " WHERE UsrCod=%ld"
 			           " AND Open='N'",
 		        Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
         }
      }
 
@@ -2010,7 +2011,7 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
            {
             row = mysql_fetch_row (mysql_res);
             if (sscanf (row[0],"%ld",&MsgCod) != 1)
-               Lay_WrongMessageExit ();
+               Err_WrongMessageExit ();
 
             if (MsgCod == Messages->ExpandedMsgCod)	// Expanded message found
               {
@@ -2045,7 +2046,7 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
          row = mysql_fetch_row (mysql_res);
 
          if (sscanf (row[0],"%ld",&MsgCod) != 1)
-            Lay_WrongMessageExit ();
+            Err_WrongMessageExit ();
          NumMsg = NumRows - NumRow + 1;
          Msg_ShowASentOrReceivedMessage (Messages,NumMsg,MsgCod);
         }
@@ -2133,7 +2134,7 @@ static unsigned Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
 				          " AND msg_snt_deleted.UsrCod=usr_data.UsrCod%s)",
 			     UsrCod,StrUnreadMsg,Messages->FilterCrsCod,FilterFromToSubquery,
 			     UsrCod,StrUnreadMsg,Messages->FilterCrsCod,FilterFromToSubquery) < 0)
-                  Lay_NotEnoughMemoryExit ();
+                  Err_NotEnoughMemoryExit ();
               }
             else
               {
@@ -2154,7 +2155,7 @@ static unsigned Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
 				          " AND msg_snt_deleted.CrsCod=%ld)",
 			     UsrCod,StrUnreadMsg,Messages->FilterCrsCod,
 			     UsrCod,StrUnreadMsg,Messages->FilterCrsCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+                  Err_NotEnoughMemoryExit ();
               }
             break;
          case Msg_SENT:
@@ -2181,7 +2182,7 @@ static unsigned Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
 				          "%s)",
 			     UsrCod,Messages->FilterCrsCod,FilterFromToSubquery,
 			     UsrCod,Messages->FilterCrsCod,FilterFromToSubquery) < 0)
-                  Lay_NotEnoughMemoryExit ();
+                  Err_NotEnoughMemoryExit ();
               }
             else
               {
@@ -2190,7 +2191,7 @@ static unsigned Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
 				       " WHERE UsrCod=%ld"
 				         " AND CrsCod=%ld",
 			     UsrCod,Messages->FilterCrsCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+                  Err_NotEnoughMemoryExit ();
               }
             break;
          default: // Not aplicable here
@@ -2225,7 +2226,7 @@ static unsigned Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
 				          "%s)",
 			     UsrCod,StrUnreadMsg,FilterFromToSubquery,
 			     UsrCod,StrUnreadMsg,FilterFromToSubquery) < 0)
-                  Lay_NotEnoughMemoryExit ();
+                  Err_NotEnoughMemoryExit ();
               }
             else
               {
@@ -2236,7 +2237,7 @@ static unsigned Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
 				       " WHERE UsrCod=%ld"
 				          "%s",
 			     UsrCod,StrUnreadMsg) < 0)
-                  Lay_NotEnoughMemoryExit ();
+                  Err_NotEnoughMemoryExit ();
               }
             break;
          case Msg_SENT:
@@ -2259,7 +2260,7 @@ static unsigned Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
 				          " AND msg_rcv_deleted.UsrCod=usr_data.UsrCod%s)",
 			     UsrCod,FilterFromToSubquery,
 			     UsrCod,FilterFromToSubquery) < 0)
-                  Lay_NotEnoughMemoryExit ();
+                  Err_NotEnoughMemoryExit ();
               }
             else
               {
@@ -2267,7 +2268,7 @@ static unsigned Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
 				        " FROM msg_snt"
 				       " WHERE UsrCod=%ld",
                              UsrCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+                  Err_NotEnoughMemoryExit ();
               }
             break;
          default: // Not aplicable here
@@ -2720,12 +2721,12 @@ static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
 	      {
 	       if (asprintf (NumMsgsStr,"1 %s, 1 %s",
 			     Txt_message_received,Txt_unread_MESSAGE) < 0)
-                  Lay_NotEnoughMemoryExit ();
+                  Err_NotEnoughMemoryExit ();
 	      }
 	    else
 	      {
 	       if (asprintf (NumMsgsStr,"1 %s",Txt_message_received) < 0)
-                  Lay_NotEnoughMemoryExit ();
+                  Err_NotEnoughMemoryExit ();
 	      }
 	   }
 	 else
@@ -2734,21 +2735,21 @@ static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
 	      {
 	       if (asprintf (NumMsgsStr,"%u %s",
 			     Messages->NumMsgs,Txt_messages_received) < 0)
-                  Lay_NotEnoughMemoryExit ();
+                  Err_NotEnoughMemoryExit ();
 	      }
 	    else if (NumUnreadMsgs == 1)
 	      {
 	       if (asprintf (NumMsgsStr,"%u %s, 1 %s",
 			     Messages->NumMsgs,Txt_messages_received,
 			     Txt_unread_MESSAGE) < 0)
-                  Lay_NotEnoughMemoryExit ();
+                  Err_NotEnoughMemoryExit ();
 	      }
 	    else
 	      {
 	       if (asprintf (NumMsgsStr,"%u %s, %u %s",
 			     Messages->NumMsgs,Txt_messages_received,
 			     NumUnreadMsgs,Txt_unread_MESSAGES) < 0)
-                  Lay_NotEnoughMemoryExit ();
+                  Err_NotEnoughMemoryExit ();
 	      }
 	   }
 	 break;
@@ -2756,13 +2757,13 @@ static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
 	 if (Messages->NumMsgs == 1)
 	   {
 	    if (asprintf (NumMsgsStr,"1 %s",Txt_message_sent) < 0)
-               Lay_NotEnoughMemoryExit ();
+               Err_NotEnoughMemoryExit ();
 	   }
 	 else
 	   {
 	    if (asprintf (NumMsgsStr,"%u %s",
 			  Messages->NumMsgs,Txt_messages_sent) < 0)
-               Lay_NotEnoughMemoryExit ();
+               Err_NotEnoughMemoryExit ();
 	   }
 	 break;
       default:
@@ -3105,7 +3106,7 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
 
    /* Result should have a unique row */
    if (NumRows != 1)
-      Lay_WrongMessageExit ();
+      Err_WrongMessageExit ();
 
    /* Get number of rows */
    row = mysql_fetch_row (mysql_res);
@@ -3158,7 +3159,7 @@ static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT 
 			      " FROM msg_content"
 			     " WHERE MsgCod=%ld",
 			     MsgCod) != 1)
-      Lay_WrongMessageExit ();
+      Err_WrongMessageExit ();
 
    /***** Get number of rows *****/
    row = mysql_fetch_row (mysql_res);
@@ -3216,7 +3217,7 @@ static void Msg_GetStatusOfReceivedMsg (long MsgCod,bool *Open,bool *Replied,boo
 			 " AND UsrCod=%ld",
 		       MsgCod,
 		       Gbl.Usrs.Me.UsrDat.UsrCod) != 1)
-      Lay_ShowErrorAndExit ("Error when getting if a received message has been replied/expanded.");
+      Err_ShowErrorAndExit ("Error when getting if a received message has been replied/expanded.");
 
    /***** Get number of rows *****/
    row = mysql_fetch_row (mysql_res);
@@ -3461,7 +3462,7 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	{
 	 Length = strlen (row[1]);
 	 if ((*ContentStr = malloc (Length + 1)) == NULL)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
 	 Str_Copy (*ContentStr,row[1],Length);
 	}
      }
@@ -3949,7 +3950,7 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
 
    UniqueId++;
    if (asprintf (&Id,"msg_date_%u",UniqueId) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Start cell *****/
    HTM_TD_Begin ("id=\"%s\" class=\"%s RT\" style=\"width:106px;\"",
@@ -4053,7 +4054,7 @@ void Msg_BanSenderWhenShowingMsgs (void)
    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                  Usr_DONT_GET_PREFS,
                                                  Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-      Lay_WrongUserExit ();
+      Err_WrongUserExit ();
 
    /***** Insert pair (sender's code - my code) in table of banned senders if not inserted *****/
    DB_QueryREPLACE ("can not ban sender",
@@ -4113,7 +4114,7 @@ static void Msg_UnbanSender (void)
    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                  Usr_DONT_GET_PREFS,
                                                  Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-      Lay_WrongUserExit ();
+      Err_WrongUserExit ();
 
    /***** Remove pair (sender's code - my code) from table of banned senders *****/
    DB_QueryDELETE ("can not ban sender",

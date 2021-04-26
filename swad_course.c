@@ -36,6 +36,7 @@
 #include "swad_course.h"
 #include "swad_course_config.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
@@ -215,7 +216,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       /***** Get data of this institution *****/
       Hie.Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
       if (!Cty_GetDataOfCountryByCod (&Hie.Cty))
-	 Lay_WrongCountrExit ();
+	 Err_WrongCountrExit ();
 
       /***** Write link to country *****/
       Highlight = (Gbl.Hierarchy.Ins.InsCod <= 0 &&
@@ -249,7 +250,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 /***** Get data of this institution *****/
 	 Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
 	 if (!Ins_GetDataOfInstitutionByCod (&Hie.Ins))
-	    Lay_WrongInstitExit ();
+	    Err_WrongInstitExit ();
 
 	 /***** Write link to institution *****/
 	 Highlight = (Gbl.Hierarchy.Ctr.CtrCod <= 0 &&
@@ -283,7 +284,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    /***** Get data of this center *****/
 	    Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
 	    if (!Ctr_GetDataOfCenterByCod (&Hie.Ctr))
-	       Lay_WrongCenterExit ();
+	       Err_WrongCenterExit ();
 
 	    /***** Write link to center *****/
 	    Highlight = (Gbl.Hierarchy.Level == Hie_Lvl_CTR &&
@@ -317,7 +318,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       /***** Get data of this degree *****/
 	       Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
 	       if (!Deg_GetDataOfDegreeByCod (&Hie.Deg))
-		  Lay_WrongDegreeExit ();
+		  Err_WrongDegreeExit ();
 
 	       /***** Write link to degree *****/
 	       Highlight = (Gbl.Hierarchy.Level == Hie_Lvl_DEG &&
@@ -351,7 +352,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  /***** Get data of this course *****/
 		  Hie.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
 		  if (!Crs_GetDataOfCourseByCod (&Hie.Crs))
-		     Lay_WrongCourseExit ();
+		     Err_WrongCourseExit ();
 
 		  /***** Write link to course *****/
 		  Highlight = (Gbl.Hierarchy.Level == Hie_Lvl_CRS &&
@@ -711,7 +712,7 @@ void Crs_WriteSelectorOfCourse (void)
 
          /* Get course code (row[0]) */
          if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_WrongCourseExit ();
+            Err_WrongCourseExit ();
 
          /* Write option */
 	 HTM_OPTION (HTM_Type_LONG,&CrsCod,
@@ -812,7 +813,7 @@ static void Crs_GetListCrssInCurrentDeg (Crs_WhatCourses_t WhatCourses)
       /***** Create list with courses in degree *****/
       if ((Gbl.Hierarchy.Crss.Lst = calloc (NumCrss,
 	                                    sizeof (*Gbl.Hierarchy.Ctys.Lst))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the courses in degree *****/
       for (NumCrs = 0;
@@ -1464,7 +1465,7 @@ static void Crs_PutFormToCreateCourse (void)
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
       Frm_BeginForm (ActReqCrs);
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_course,
@@ -1772,7 +1773,7 @@ void Crs_RemoveCourse (void)
         }
      }
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -1833,7 +1834,7 @@ static void Crs_GetDataOfCourseFromRow (struct Crs_Course *Crs,MYSQL_ROW row)
   {
    /***** Get course code (row[0]) *****/
    if ((Crs->CrsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-      Lay_WrongCourseExit ();
+      Err_WrongCourseExit ();
 
    /***** Get code of degree (row[1]) *****/
    Crs->DegCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -1846,7 +1847,7 @@ static void Crs_GetDataOfCourseFromRow (struct Crs_Course *Crs,MYSQL_ROW row)
 
    /***** Get course status (row[4]) *****/
    if (sscanf (row[4],"%u",&(Crs->Status)) != 1)
-      Lay_WrongStatusExit ();
+      Err_WrongStatusExit ();
 
    /***** Get requester user'code (row[5]) *****/
    Crs->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[5]);
@@ -2128,7 +2129,7 @@ void Crs_ChangeInsCrsCod (void)
                           Crs_EditingCrs->ShrtName);
      }
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -2191,7 +2192,7 @@ void Crs_ChangeCrsYear (void)
 			  NewYear);
      }
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -2332,7 +2333,7 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
          Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
      }
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -2397,7 +2398,7 @@ void Crs_ChangeCrsStatus (void)
 	                              (unsigned long) Crs_MAX_STATUS,
                                       (unsigned long) Crs_WRONG_STATUS);
    if (Status == Crs_WRONG_STATUS)
-      Lay_WrongStatusExit ();
+      Err_WrongStatusExit ();
    StatusTxt = Crs_GetStatusTxtFromStatusBits (Status);
    Status = Crs_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
@@ -2619,7 +2620,7 @@ static long Crs_GetAndCheckParamOtherCrsCod (long MinCodAllowed)
 
    /***** Get and check parameter with code of course *****/
    if ((CrsCod = Par_GetParToLong ("OthCrsCod")) < MinCodAllowed)
-      Lay_WrongCourseExit ();
+      Err_WrongCourseExit ();
 
    return CrsCod;
   }
@@ -2647,12 +2648,12 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    if (Role == Rol_UNK)	// Role == Rol_UNK ==> any role
      {
       if (asprintf (&SubQuery,"%s","") < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    else
      {
       if (asprintf (&SubQuery," AND crs_users.Role=%u",(unsigned) Role) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    NumCrss = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get courses of a user",
@@ -2826,13 +2827,13 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
    /***** Get degree code (row[0]) *****/
    if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-      Lay_WrongDegreeExit ();
+      Err_WrongDegreeExit ();
    if (!Deg_GetDataOfDegreeByCod (&Deg))
-      Lay_WrongDegreeExit ();
+      Err_WrongDegreeExit ();
 
    /***** Get course code (row[1]) *****/
    if ((CrsCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
-      Lay_WrongCourseExit ();
+      Err_WrongCourseExit ();
 
    /***** Get number of teachers and students in this course *****/
    NumStds = Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,CrsCod,1 << Rol_STD);
@@ -3024,7 +3025,7 @@ void Crs_RemoveOldCrss (void)
                                                    Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS,
                                                    UINT_MAX);
    if (MonthsWithoutAccess == UINT_MAX)
-      Lay_ShowErrorAndExit ("Wrong number of months without clicks.");
+      Err_ShowErrorAndExit ("Wrong number of months without clicks.");
    SecondsWithoutAccess = (unsigned long) MonthsWithoutAccess * Dat_SECONDS_IN_ONE_MONTH;
 
    /***** Get old courses from database *****/
@@ -3071,11 +3072,11 @@ static void Crs_EditingCourseConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Crs_EditingCrs != NULL)
-      Lay_WrongCourseExit ();
+      Err_WrongCourseExit ();
 
    /***** Allocate memory for course *****/
    if ((Crs_EditingCrs = malloc (sizeof (*Crs_EditingCrs))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Reset course *****/
    Crs_EditingCrs->CrsCod      = -1L;

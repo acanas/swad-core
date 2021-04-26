@@ -35,6 +35,7 @@
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy_level.h"
@@ -104,7 +105,7 @@ void Con_ShowConnectedUsrs (void)
    if (asprintf (&Title,"%s"
 	                "<div id=\"connected_current_time\"></div>",
 	         Txt_Connected_users) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,
                  Con_PutIconToUpdateConnected,NULL,
 		 Hlp_USERS_Connected,Box_NOT_CLOSABLE);
@@ -597,7 +598,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       Gbl.Hierarchy.Crs.CrsCod);
 	       break;
 	    default:
-	       Lay_WrongScopeExit ();
+	       Err_WrongScopeExit ();
 	       break;
 	   }
 	 break;
@@ -741,12 +742,12 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       (unsigned) Role);
 	       break;
 	    default:
-	       Lay_WrongScopeExit ();
+	       Err_WrongScopeExit ();
 	       break;
 	   }
 	 break;
       default:
-	 Lay_WrongRoleExit ();
+	 Err_WrongRoleExit ();
 	 break;
      }
 
@@ -754,11 +755,11 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 
    /***** Get number of users (row[0]) *****/
    if (sscanf (row[0],"%u",&(Usrs->NumUsrs)) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of connected users who belong to this location.");
+      Err_ShowErrorAndExit ("Error when getting number of connected users who belong to this location.");
 
    /***** Get number of distinct sexs (row[1]) *****/
    if (sscanf (row[1],"%u",&NumSexs) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of sexs in connected users who belong to this location.");
+      Err_ShowErrorAndExit ("Error when getting number of sexs in connected users who belong to this location.");
 
    /***** Get users' sex (row[2]) *****/
    Usrs->Sex = Usr_SEX_UNKNOWN;
@@ -910,7 +911,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	 Frm_BeginFormUnique (ActSeeRecOneTch);
 	 break;
       default:
-	 Lay_WrongRoleExit ();
+	 Err_WrongRoleExit ();
 	 break;
      }
    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
@@ -1111,12 +1112,12 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			       (unsigned) Role);
 	       break;
 	    default:
-	       Lay_WrongScopeExit ();
+	       Err_WrongScopeExit ();
 	       break;
 	   }
 	 break;
       default:
-	 Lay_WrongRoleExit ();
+	 Err_WrongRoleExit ();
 	 break;
      }
    if (NumUsrs)
@@ -1176,7 +1177,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 		     Frm_BeginForm (ActSeeRecOneTch);
 		     break;
 		  default:
-		     Lay_WrongRoleExit ();
+		     Err_WrongRoleExit ();
 		 }
 	       Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
 	      }

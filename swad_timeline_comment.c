@@ -30,6 +30,7 @@
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 
+#include "swad_error.h"
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_message.h"
@@ -496,7 +497,7 @@ static void Tml_Com_PutIconToToggleComms (const char *UniqueId,
 
    /***** Build onclick text *****/
    if (asprintf (&OnClick,"toggleComments('%s')",UniqueId) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Link to toggle on/off some divs *****/
    HTM_BUTTON_BUTTON_Begin (Text,The_ClassFormLinkInBox[Gbl.Prefs.Theme],OnClick);

@@ -33,6 +33,7 @@
 #include "swad_account.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -151,7 +152,7 @@ void ID_ReallocateListIDs (struct UsrData *UsrDat,unsigned NumIDs)
 
    /***** Allocate space for the list *****/
    if ((UsrDat->IDs.List = malloc (NumIDs * sizeof (*UsrDat->IDs.List))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/
@@ -197,7 +198,7 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
       /***** Allocate memory for subquery string *****/
       MaxLength = 512 + UsrDat->IDs.Num * (1 + ID_MAX_BYTES_USR_ID + 1) - 1;
       if ((SubQueryAllUsrs = malloc (MaxLength + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
       SubQueryAllUsrs[0] = '\0';
 
       /***** Get user's code(s) from database *****/

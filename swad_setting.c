@@ -35,6 +35,7 @@
 #include "swad_cookie.h"
 #include "swad_database.h"
 #include "swad_date.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -158,7 +159,7 @@ void Set_GetSettingsFromIP (void)
       if (NumRows)
 	{
 	 if (NumRows != 1)
-	    Lay_ShowErrorAndExit ("Internal error while getting settings.");
+	    Err_ShowErrorAndExit ("Internal error while getting settings.");
 
 	 /***** Get settings from database *****/
 	 row = mysql_fetch_row (mysql_res);

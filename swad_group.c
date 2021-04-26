@@ -35,6 +35,7 @@
 #include "swad_attendance.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_exam_session.h"
 #include "swad_form.h"
 #include "swad_game.h"
@@ -503,7 +504,7 @@ void Grp_PutParamsCodGrps (void)
      {
       MaxLengthGrpCods = Gbl.Crs.Grps.LstGrpsSel.NumGrps * (Cns_MAX_DECIMAL_DIGITS_LONG + 1) - 1;
       if ((GrpCods = malloc (MaxLengthGrpCods + 1)) == NULL)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       GrpCods[0] = '\0';
 
       for (NumGrpSel = 0;
@@ -554,7 +555,7 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
 	 /* Allocate space for list of selected groups */
 	 if ((Gbl.Crs.Grps.LstGrpsSel.GrpCods = calloc (LstGrpsIBelong.NumGrps,
 	                                                sizeof (*Gbl.Crs.Grps.LstGrpsSel.GrpCods))) == NULL)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /* Fill list of selected groups with list of groups I belong to */
 	 for (NumGrp = 0;
@@ -592,7 +593,7 @@ void Grp_GetParCodsSeveralGrps (void)
      {
       /***** Allocate memory for the list of group codes selected *****/
       if ((ParamLstCodGrps = malloc (MaxSizeLstGrpCods + 1)) == NULL)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
 
       /***** Get parameter with list of groups to list *****/
       Par_GetParMultiToText ("GrpCods",ParamLstCodGrps,MaxSizeLstGrpCods);
@@ -611,7 +612,7 @@ void Grp_GetParCodsSeveralGrps (void)
 	    /***** Create a list of groups selected from LstCodGrps *****/
 	    if ((Gbl.Crs.Grps.LstGrpsSel.GrpCods = calloc (Gbl.Crs.Grps.LstGrpsSel.NumGrps,
 	                                                   sizeof (*Gbl.Crs.Grps.LstGrpsSel.GrpCods))) == NULL)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    for (Ptr = ParamLstCodGrps, NumGrp = 0;
 		 *Ptr;
 		 NumGrp++)
@@ -1068,7 +1069,7 @@ static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **Al
    /***** Allocate memory to a list of booleanos that indica if already se ha selected a group of cada type *****/
    if ((*AlreadyExistsGroupOfType = calloc (Gbl.Crs.Grps.GrpTypes.Num,
                                             sizeof (**AlreadyExistsGroupOfType))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Initialize the list *****/
    for (NumGrpTyp = 0;
@@ -2406,7 +2407,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
      {
       UniqueId++;
       if (asprintf (&Id,"open_time_%u",UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_BR ();
       HTM_TxtColonNBSP (Txt_Opening_of_groups);
       HTM_SPAN_Begin ("id=\"%s\"",Id);
@@ -2829,7 +2830,7 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
       /***** Create a list of group types *****/
       if ((Gbl.Crs.Grps.GrpTypes.LstGrpTypes = calloc (Gbl.Crs.Grps.GrpTypes.Num,
                                                        sizeof (*Gbl.Crs.Grps.GrpTypes.LstGrpTypes))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get group types *****/
       for (NumGrpTyp = 0;
@@ -2841,7 +2842,7 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 
          /* Get group type code (row[0]) */
          if ((Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Lay_WrongGrpTypExit ();
+            Err_WrongGrpTypExit ();
 
          /* Get group type name (row[1]) */
          Str_Copy (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,row[1],
@@ -2862,7 +2863,7 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 
          /* Number of groups of this type (row[6]) */
          if (sscanf (row[6],"%u",&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps) != 1)
-            Lay_ShowErrorAndExit ("Wrong number of groups of a type.");
+            Err_ShowErrorAndExit ("Wrong number of groups of a type.");
 
          /* Add number of groups to total number of groups */
          Gbl.Crs.Grps.GrpTypes.NumGrpsTotal += Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps;
@@ -2959,7 +2960,7 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
             /***** Create list with groups of this type *****/
             if ((GrpTyp->LstGrps = calloc ((size_t) GrpTyp->NumGrps,
                                            sizeof (*GrpTyp->LstGrps))) == NULL)
-               Lay_NotEnoughMemoryExit ();
+               Err_NotEnoughMemoryExit ();
 
             /***** Get the groups of this type *****/
             for (NumGrp = 0;
@@ -2973,7 +2974,7 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 
                /* Get group code (row[0]) */
                if ((Grp->GrpCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-                  Lay_WrongGroupExit ();
+                  Err_WrongGroupExit ();
 
                /* Get group name (row[1]) */
                Str_Copy (Grp->GrpName,row[1],sizeof (Grp->GrpName) - 1);
@@ -3123,7 +3124,7 @@ static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
 		       " WHERE CrsCod=%ld"
 			 " AND GrpTypCod=%ld",
 		       Gbl.Hierarchy.Crs.CrsCod,GrpTyp->GrpTypCod) != 1)
-      Lay_WrongGrpTypExit ();
+      Err_WrongGrpTypExit ();
 
    /***** Get some data of group type *****/
    row = mysql_fetch_row (mysql_res);
@@ -3154,7 +3155,7 @@ static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod)
 		        " FROM grp_types"
 		       " WHERE GrpTypCod=%ld",
                        GrpTypCod) != 1)
-      Lay_ShowErrorAndExit ("Error when getting type of enrolment.");
+      Err_ShowErrorAndExit ("Error when getting type of enrolment.");
 
    /***** Get multiple enrolment *****/
    row = mysql_fetch_row (mysql_res);
@@ -3215,11 +3216,11 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
 
 	 /* Get the code of the group type (row[0]) */
 	 if ((GrpDat->GrpTypCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	    Lay_WrongGrpTypExit ();
+	    Err_WrongGrpTypExit ();
 
 	 /* Get the code of the course (row[1]) */
 	 if ((GrpDat->CrsCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
-	    Lay_WrongCourseExit ();
+	    Err_WrongCourseExit ();
 
 	 /* Get the name of the group type (row[2]) */
 	 Str_Copy (GrpDat->GrpTypName,row[2],sizeof (GrpDat->GrpTypName) - 1);
@@ -3270,7 +3271,7 @@ static long Grp_GetTypeOfGroupOfAGroup (long GrpCod)
 				   " WHERE GrpCod=%ld",
 				   GrpCod);
    if (GrpTypCod <= 0)
-      Lay_WrongGrpTypExit ();
+      Err_WrongGrpTypExit ();
 
    return GrpTypCod;
   }
@@ -3504,14 +3505,14 @@ bool Grp_GetIfAvailableGrpTyp (long GrpTypCod)
      {
       if (asprintf (&SubQueryGrpTypes,"grp_types.GrpTypCod=%ld",
 	            GrpTypCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    else			// all mandatory group types in the current course
      {
       if (asprintf (&SubQueryGrpTypes,"grp_types.CrsCod=%ld"
 	                              " AND grp_types.Mandatory='Y'",
 	            Gbl.Hierarchy.Crs.CrsCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
 
    /***** Get the number of types of group in this course
@@ -3644,13 +3645,13 @@ static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,
       /***** Create a list of groups the user belongs to *****/
       if ((LstGrps->GrpCods = calloc (LstGrps->NumGrps,
                                       sizeof (*LstGrps->GrpCods))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
       for (NumGrp = 0;
 	   NumGrp < LstGrps->NumGrps;
 	   NumGrp++)
          /* Get the code of group (row[0]) */
          if ((LstGrps->GrpCods[NumGrp] = DB_GetNextCode (mysql_res)) <= 0)
-            Lay_WrongGroupExit ();
+            Err_WrongGroupExit ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -3689,13 +3690,13 @@ void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps)
       /***** Create a list of groups I belong to *****/
       if ((LstGrps->GrpCods = calloc (LstGrps->NumGrps,
                                       sizeof (*LstGrps->GrpCods))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
       for (NumGrp = 0;
 	   NumGrp < LstGrps->NumGrps;
 	   NumGrp++)
          /* Get the code of group */
          if ((LstGrps->GrpCods[NumGrp] = DB_GetNextCode (mysql_res)) <= 0)
-            Lay_WrongGroupExit ();
+            Err_WrongGroupExit ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -3992,7 +3993,7 @@ void Grp_ReqRemGroupType (void)
 
    /***** Get the code of the group type *****/
    if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
-      Lay_WrongGrpTypExit ();
+      Err_WrongGrpTypExit ();
 
    /***** Check if this group type has groups *****/
    if ((NumGrps = Grp_CountNumGrpsInThisCrsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod)))	// Group type has groups ==> Ask for confirmation
@@ -4009,7 +4010,7 @@ void Grp_ReqRemGroup (void)
   {
    /***** Get group code *****/
    if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Lay_WrongGroupExit ();
+      Err_WrongGroupExit ();
 
    /***** Confirm removing *****/
    Grp_AskConfirmRemGrp ();
@@ -4106,7 +4107,7 @@ void Grp_RemoveGroupType (void)
   {
    /***** Get param with code of group type *****/
    if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
-      Lay_WrongGrpTypExit ();
+      Err_WrongGrpTypExit ();
 
    /***** Remove group type and its groups *****/
    Grp_RemoveGroupTypeCompletely ();
@@ -4120,7 +4121,7 @@ void Grp_RemoveGroup (void)
   {
    /***** Get param with group code *****/
    if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Lay_WrongGroupExit ();
+      Err_WrongGroupExit ();
 
    /***** Remove group *****/
    Grp_RemoveGroupCompletely ();
@@ -4262,7 +4263,7 @@ void Grp_OpenGroup (void)
 
    /***** Get group code *****/
    if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Lay_WrongGroupExit ();
+      Err_WrongGroupExit ();
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -4297,7 +4298,7 @@ void Grp_CloseGroup (void)
 
    /***** Get group code *****/
    if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Lay_WrongGroupExit ();
+      Err_WrongGroupExit ();
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -4332,7 +4333,7 @@ void Grp_EnableFileZonesGrp (void)
 
    /***** Get group code *****/
    if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Lay_WrongGroupExit ();
+      Err_WrongGroupExit ();
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -4368,7 +4369,7 @@ void Grp_DisableFileZonesGrp (void)
 
    /***** Get group code *****/
    if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Lay_WrongGroupExit ();
+      Err_WrongGroupExit ();
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -4408,7 +4409,7 @@ void Grp_ChangeGroupType (void)
    /***** Get parameters from form *****/
    /* Get group code */
    if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Lay_WrongGroupExit ();
+      Err_WrongGroupExit ();
 
    /* Get the new group type */
    NewGrpTypCod = Grp_GetParamGrpTypCod ();
@@ -4462,7 +4463,7 @@ void Grp_ChangeGroupRoom (void)
    /***** Get parameters from form *****/
    /* Get group code */
    if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Lay_WrongGroupExit ();
+      Err_WrongGroupExit ();
 
    /* Get the new room */
    NewRooCod = Roo_GetParamRooCod ();
@@ -4507,7 +4508,7 @@ void Grp_ChangeMandatGrpTyp (void)
    /***** Get parameters of the form *****/
    /* Get the código of type of group */
    if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
-      Lay_WrongGrpTypExit ();
+      Err_WrongGrpTypExit ();
 
    /* Get the new type of enrolment (mandatory or voluntaria) of this type of group */
    NewMandatoryEnrolment = Par_GetParToBool ("MandatoryEnrolment");
@@ -4565,7 +4566,7 @@ void Grp_ChangeMultiGrpTyp (void)
    /***** Get parameters from the form *****/
    /* Get the code of type of group */
    if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
-      Lay_WrongGrpTypExit ();
+      Err_WrongGrpTypExit ();
 
    /* Get the new type of enrolment (single or multiple) of this type of group */
    NewMultipleEnrolment = Par_GetParToBool ("MultipleEnrolment");
@@ -4617,7 +4618,7 @@ void Grp_ChangeOpenTimeGrpTyp (void)
 
    /***** Get the code of type of group *****/
    if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
-      Lay_WrongGrpTypExit ();
+      Err_WrongGrpTypExit ();
 
    /***** Get from the database the data of this type of group *****/
    Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
@@ -4663,7 +4664,7 @@ void Grp_ChangeMaxStdsGrp (void)
    /***** Get parameters of the form *****/
    /* Get group code */
    if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Lay_WrongGroupExit ();
+      Err_WrongGroupExit ();
 
    /* Get the new maximum number of students of the group */
    NewMaxStds = (unsigned)
@@ -4758,7 +4759,7 @@ void Grp_RenameGroupType (void)
    /***** Get parameters from form *****/
    /* Get the code of the group type */
    if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
-      Lay_WrongGrpTypExit ();
+      Err_WrongGrpTypExit ();
 
    /* Get the new name for the group type */
    Par_GetParToText ("GrpTypName",NewNameGrpTyp,Grp_MAX_BYTES_GROUP_TYPE_NAME);
@@ -4837,7 +4838,7 @@ void Grp_RenameGroup (void)
    /***** Get parameters from form *****/
    /* Get the code of the group */
    if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Lay_WrongGroupExit ();
+      Err_WrongGroupExit ();
 
    /* Get the new name for the group */
    Par_GetParToText ("GrpName",NewNameGrp,Grp_MAX_BYTES_GROUP_NAME);
@@ -4953,7 +4954,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
    /***** Allocate memory for the strings with group codes in each type *****/
    if ((LstStrCodGrps = calloc (Gbl.Crs.Grps.GrpTypes.Num,
                                 sizeof (*LstStrCodGrps))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Get lists with the groups that I want in each type
           in order to count the total number of groups selected *****/
@@ -4964,7 +4965,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
       /***** Allocate memory for the list of group codes of this type *****/
       if ((LstStrCodGrps[NumGrpTyp] = malloc (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps *
                                               (Cns_MAX_DECIMAL_DIGITS_LONG + 1))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the multiple parameter code of group of this type *****/
       snprintf (Param,sizeof (Param),"GrpCod%ld",
@@ -4990,7 +4991,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
      {
       if ((LstGrpsWanted->GrpCods = calloc (LstGrpsWanted->NumGrps,
                                             sizeof (*LstGrpsWanted->GrpCods))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the groups *****/
       for (NumGrpTyp = 0, NumGrpWanted = 0;

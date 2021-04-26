@@ -35,6 +35,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_exam.h"
 #include "swad_exam_print.h"
 #include "swad_exam_result.h"
@@ -425,7 +426,7 @@ void Exa_SeeOneExam (void)
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
    /***** Get exam data *****/
@@ -525,7 +526,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 	StartEndTime++)
      {
       if (asprintf (&Id,"exa_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       Color = Exam->NumOpenSess ? (Exam->Hidden ? "DATE_GREEN_LIGHT":
 						  "DATE_GREEN") :
 				  (Exam->Hidden ? "DATE_RED_LIGHT":
@@ -812,7 +813,7 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
      {
       case Rol_STD:
          if (asprintf (&HiddenSubQuery," AND exa_exams.Hidden='N'") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -821,10 +822,10 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
 	 if (asprintf (&HiddenSubQuery,"%s","") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 break;
       default:
-	 Lay_WrongRoleExit ();
+	 Err_WrongRoleExit ();
 	 break;
      }
 
@@ -853,7 +854,7 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
       /***** Create list of exams *****/
       if ((Exams->Lst = malloc ((size_t) Exams->Num *
                                 sizeof (*Exams->Lst))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the exams codes *****/
       for (NumExam = 0;
@@ -863,7 +864,7 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
          /* Get next exam code (row[0]) */
          row = mysql_fetch_row (mysql_res);
          if ((Exams->Lst[NumExam].ExaCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Lay_WrongExamExit ();
+            Err_WrongExamExit ();
         }
      }
 
@@ -888,7 +889,7 @@ void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
    /***** Allocate memory for list of exams selected *****/
    MaxSizeListExaCodsSelected = Exams->Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
    if ((Exams->ExaCodsSelected = malloc (MaxSizeListExaCodsSelected + 1)) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of exams selected *****/
    Par_GetParMultiToText ("ExaCod",Exams->ExaCodsSelected,MaxSizeListExaCodsSelected);
@@ -1083,7 +1084,7 @@ void Exa_AskRemExam (void)
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -1092,7 +1093,7 @@ void Exa_AskRemExam (void)
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
    /***** Get data of the exam from database *****/
@@ -1123,7 +1124,7 @@ void Exa_RemoveExam (void)
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -1131,7 +1132,7 @@ void Exa_RemoveExam (void)
 
    /***** Get exam code *****/
    if ((Exam.ExaCod = Exa_GetParamExamCod ()) <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
 
    /***** Get data of the exam from database *****/
    Exa_GetDataOfExamByCod (&Exam);
@@ -1304,7 +1305,7 @@ void Exa_HideExam (void)
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -1313,7 +1314,7 @@ void Exa_HideExam (void)
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
    /***** Get data of the exam from database *****/
@@ -1342,7 +1343,7 @@ void Exa_UnhideExam (void)
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -1351,7 +1352,7 @@ void Exa_UnhideExam (void)
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
    if (Exams.ExaCod <= 0)
-      Lay_WrongExamExit ();
+      Err_WrongExamExit ();
    Exam.ExaCod = Exams.ExaCod;
 
    /***** Get data of the exam from database *****/
@@ -1400,7 +1401,7 @@ void Exa_RequestCreatOrEditExam (void)
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -1578,7 +1579,7 @@ void Exa_ReceiveFormExam (void)
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -1746,7 +1747,7 @@ unsigned Exa_GetParamQstInd (void)
    long QstInd;
 
    if ((QstInd = Par_GetParToLong ("QstInd")) <= 0)
-      Lay_WrongQuestionIndexExit ();
+      Err_WrongQuestionIndexExit ();
 
    return (unsigned) QstInd;
   }
@@ -1768,7 +1769,7 @@ long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd)
 				ExaCod,
 				QstInd);
    if (QstCod <= 0)
-      Lay_WrongQuestionIndexExit ();
+      Err_WrongQuestionIndexExit ();
 
    return QstCod;
   }
@@ -1909,7 +1910,7 @@ unsigned Exa_GetNumCoursesWithExams (Hie_Lvl_Level_t Scope)
 			       " WHERE CrsCod=%ld",
 			       Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 return 0;	// Not reached
      }
   }
@@ -1979,7 +1980,7 @@ unsigned Exa_GetNumExams (Hie_Lvl_Level_t Scope)
 			       " WHERE CrsCod=%ld",
 			       Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 return 0;	// Not reached
      }
   }
@@ -2072,7 +2073,7 @@ double Exa_GetNumQstsPerCrsExam (Hie_Lvl_Level_t Scope)
 					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Lay_WrongScopeExit ();
+	 Err_WrongScopeExit ();
 	 return 0.0;	// Not reached
      }
   }
@@ -2096,7 +2097,7 @@ void Exa_GetScoreRange (long ExaCod,double *MinScore,double *MaxScore)
 		  " GROUP BY tst_answers.QstCod",
 		  ExaCod);
    if (NumAnswers < 2)
-      Lay_ShowErrorAndExit ("Wrong number of answers.");
+      Err_ShowErrorAndExit ("Wrong number of answers.");
 
    /***** Set minimum and maximum scores *****/
    *MinScore = *MaxScore = 0.0;

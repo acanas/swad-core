@@ -33,6 +33,7 @@
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_follow.h"
 #include "swad_form.h"
@@ -976,7 +977,7 @@ static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
    Par_PutHiddenParamUnsigned (NULL,"FigureType",(unsigned) Fig_USERS_RANKING);
    if (asprintf (&Title,"#%u %s %u",
                  Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    HTM_BUTTON_SUBMIT_Begin (Title,The_ClassFormLinkOutBox[Gbl.Prefs.Theme],NULL);
    free (Title);
    HTM_TxtF ("#%u",Rank);
@@ -1605,7 +1606,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 			 FieldName,FieldName);
          break;
       default:
-         Lay_WrongScopeExit ();
+         Err_WrongScopeExit ();
          break;
      }
 
@@ -1645,7 +1646,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 
 	 /* Get figure (row[1]) */
 	 if (sscanf (row[1],"%ld",&Figure) != 1)
-	    Lay_ShowErrorAndExit ("Error reading user's figure.");
+	    Err_ShowErrorAndExit ("Error reading user's figure.");
 
 	 if (Figure < FigureHigh)
 	   {
@@ -1834,7 +1835,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 			 Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
-         Lay_WrongScopeExit ();
+         Err_WrongScopeExit ();
          break;
      }
 

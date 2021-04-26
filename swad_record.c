@@ -39,6 +39,7 @@
 #include "swad_database.h"
 #include "swad_department.h"
 #include "swad_enrolment.h"
+#include "swad_error.h"
 #include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -219,7 +220,7 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
       /***** Create a list of fields *****/
       if ((Gbl.Crs.Records.LstFields.Lst = calloc (Gbl.Crs.Records.LstFields.Num,
                                                    sizeof (*Gbl.Crs.Records.LstFields.Lst))) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Get the fields *****/
       for (NumRow = 0;
@@ -231,7 +232,7 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
 
          /* Get the code of field (row[0]) */
          if ((Gbl.Crs.Records.LstFields.Lst[NumRow].FieldCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Lay_WrongRecordFieldExit ();
+            Err_WrongRecordFieldExit ();
 
          /* Name of the field (row[1]) */
          Str_Copy (Gbl.Crs.Records.LstFields.Lst[NumRow].Name,row[1],
@@ -242,7 +243,7 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
 
          /* Visible or editable by students? (row[3]) */
          if (sscanf (row[3],"%u",&Vis) != 1)
-	    Lay_WrongRecordFieldExit ();
+	    Err_WrongRecordFieldExit ();
          if (Vis < Rec_NUM_TYPES_VISIBILITY)
             Gbl.Crs.Records.LstFields.Lst[NumRow].Visibility = (Rec_VisibilityRecordFields_t) Vis;
          else
@@ -568,7 +569,7 @@ void Rec_ReqRemField (void)
 
    /***** Get the code of field *****/
    if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) <= 0)
-      Lay_WrongRecordFieldExit ();
+      Err_WrongRecordFieldExit ();
 
    /***** Check if exists any record with that field filled *****/
    if ((NumRecords = Rec_CountNumRecordsInCurrCrsWithField (Gbl.Crs.Records.Field.FieldCod)))	// There are records with that field filled
@@ -694,7 +695,7 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
 		       " WHERE CrsCod=%ld"
 			 " AND FieldCod=%ld",
 		       Gbl.Hierarchy.Crs.CrsCod,FieldCod) != 1)
-      Lay_WrongRecordFieldExit ();
+      Err_WrongRecordFieldExit ();
 
    /***** Get the field *****/
    row = mysql_fetch_row (mysql_res);
@@ -707,7 +708,7 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
 
    /* Visible or editable by students? (row[2]) */
    if (sscanf (row[2],"%u",&Vis) != 1)
-      Lay_WrongRecordFieldExit ();
+      Err_WrongRecordFieldExit ();
    if (Vis < Rec_NUM_TYPES_VISIBILITY)
       *Visibility = (Rec_VisibilityRecordFields_t) Vis;
    else
@@ -725,7 +726,7 @@ void Rec_RemoveField (void)
   {
    /***** Get the code of the field *****/
    if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) <= 0)
-      Lay_WrongRecordFieldExit ();
+      Err_WrongRecordFieldExit ();
 
    /***** Borrarlo from the database *****/
    Rec_RemoveFieldFromDB ();
@@ -745,7 +746,7 @@ void Rec_RenameField (void)
    /***** Get parameters of the form *****/
    /* Get the code of the field */
    if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) <= 0)
-      Lay_WrongRecordFieldExit ();
+      Err_WrongRecordFieldExit ();
 
    /* Get the new group name */
    Par_GetParToText ("FieldName",NewFieldName,Rec_MAX_BYTES_NAME_FIELD);
@@ -808,7 +809,7 @@ void Rec_ChangeLinesField (void)
    /***** Get parameters of the form *****/
    /* Get the code of field */
    if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) <= 0)
-      Lay_WrongRecordFieldExit ();
+      Err_WrongRecordFieldExit ();
 
    /* Get the new number of lines */
    NewNumLines = (unsigned)
@@ -858,7 +859,7 @@ void Rec_ChangeVisibilityField (void)
    /***** Get parameters of the form *****/
    /* Get the code of field */
    if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) <= 0)
-      Lay_WrongRecordFieldExit ();
+      Err_WrongRecordFieldExit ();
 
    /* Get the new visibility of the field */
    NewVisibility = (Rec_VisibilityRecordFields_t)
@@ -1691,7 +1692,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       case Rec_CRS_PRINT_SEVERAL_RECORDS:
 		  break;
 	       default:
-		  Lay_NoPermissionExit ();
+		  Err_NoPermissionExit ();
 		  break;
 	      }
 
@@ -1708,7 +1709,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		    }
 	   }
 	 else	// Not me ==> I am a student trying to do something forbidden
-	    Lay_NoPermissionExit ();
+	    Err_NoPermissionExit ();
 	 break;
       case Rol_NET:
 	 break;
@@ -1727,7 +1728,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	   }
 	 break;
       default:
-	 Lay_WrongRoleExit ();
+	 Err_WrongRoleExit ();
      }
 
    /***** Begin box and table *****/
@@ -2015,7 +2016,7 @@ void Rec_AllocMemFieldsRecordsCrs (void)
       if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility))
          /* Allocate memory for the texts of the fields */
          if ((Gbl.Crs.Records.LstFields.Lst[NumField].Text = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-            Lay_NotEnoughMemoryExit ();
+            Err_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/
@@ -3363,11 +3364,11 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
 
    /***** Internal name / id *****/
    if (asprintf (&Name,"Phone%u",NumPhone) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Label to show *****/
    if (asprintf (&Label,"%s %u",Txt_Phone,NumPhone + 1) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Phone *****/
    HTM_TR_Begin (NULL);
@@ -3697,7 +3698,7 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 	 break;
      }
    if (!RoleOK)
-      Lay_WrongRoleExit ();
+      Err_WrongRoleExit ();
    return Role;
   }
 
@@ -3764,7 +3765,7 @@ static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat)
   {
    /***** Check if memory is allocated for comments *****/
    if (!UsrDat->Comments)
-      Lay_ShowErrorAndExit ("Can not read comments of a user.");
+      Err_ShowErrorAndExit ("Can not read comments of a user.");
 
    /***** Get the parameter with the comments *****/
    Par_GetParToHTML ("Comments",UsrDat->Comments,Cns_MAX_BYTES_TEXT);

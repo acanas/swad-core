@@ -41,6 +41,7 @@
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_file_browser.h"
 #include "swad_file_extension.h"
@@ -1977,7 +1978,7 @@ void Brw_GetParAndInitFileBrowser (void)
 								  Brw_ADMI_MRK_CRS;
 	       break;
 	    default:
-	       Lay_WrongRoleExit ();
+	       Err_WrongRoleExit ();
 	       break;
 	   }
          break;
@@ -2079,7 +2080,7 @@ void Brw_GetParAndInitFileBrowser (void)
          Gbl.FileBrowser.Type = Brw_ADMI_BRF_USR;
          break;
       default:
-         Lay_ShowErrorAndExit ("The type of file browser can not be determined.");
+         Err_ShowErrorAndExit ("The type of file browser can not be determined.");
          break;
      }
 
@@ -2278,9 +2279,9 @@ static void Brw_GetDataCurrentGrp (void)
 	    /***** For security, check if group file zones are enabled,
 		   and check if I belongs to the selected group *****/
 	    if (!GrpDat.FileZones)
-	       Lay_ShowErrorAndExit ("The group has no file zones.");
+	       Err_ShowErrorAndExit ("The group has no file zones.");
 	    else if (!Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod))
-	       Lay_ShowErrorAndExit ("You don't have access to the group.");
+	       Err_ShowErrorAndExit ("You don't have access to the group.");
 	    break;
 	}
 
@@ -2378,7 +2379,7 @@ static void Brw_GetParamsPathInTreeAndFileName (void)
 
    /* Check if path contains ".." */
    if (strstr (Gbl.FileBrowser.FilFolLnk.Path,".."))	// ".." is not allowed in path
-      Lay_ShowErrorAndExit ("Wrong path.");
+      Err_ShowErrorAndExit ("Wrong path.");
 
    /***** Get the name of the file, folder or link *****/
    Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_UNKNOWN;
@@ -2397,7 +2398,7 @@ static void Brw_GetParamsPathInTreeAndFileName (void)
 	                        Gbl.FileBrowser.FilFolLnk.Name,
                                 FileNameToShow);
 	 if (strstr (FileNameToShow,".."))	// ".." is not allowed in filename
-	    Lay_ShowErrorAndExit ("Wrong file name.");
+	    Err_ShowErrorAndExit ("Wrong file name.");
 	 break;
 	}
 
@@ -3361,13 +3362,13 @@ static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError
       if (!GrpDat->FileZones)
         {
          if (AbortOnError)
-            Lay_ShowErrorAndExit ("The file browser is disabled.");
+            Err_ShowErrorAndExit ("The file browser is disabled.");
          GrpDat->GrpCod = -1L;
         }
       else if (!Grp_GetIfIBelongToGrp (GrpDat->GrpCod))
         {
          if (AbortOnError)
-            Lay_NoPermissionExit ();
+            Err_NoPermissionExit ();
          GrpDat->GrpCod = -1L;
         }
      }
@@ -3403,7 +3404,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 	       break;
 	    default:
 	       NextAction = ActUnk;
-	       Lay_WrongRoleExit ();
+	       Err_WrongRoleExit ();
 	       break;
 	   }
 	 Frm_BeginForm (NextAction);
@@ -4035,7 +4036,7 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
 	       break;
 	    default:
 	       Subtitle[0] = '\0';
-	       Lay_WrongRoleExit ();
+	       Err_WrongRoleExit ();
 	       break;
 	   }
  	 break;
@@ -5148,7 +5149,7 @@ void Brw_CreateDirDownloadTmp (void)
    snprintf (PathUniqueDirR,sizeof (PathUniqueDirR),"%s/%s",
              PathUniqueDirL,Gbl.FileBrowser.TmpPubDir.R);
    if (mkdir (PathUniqueDirR,(mode_t) 0xFFF))
-      Lay_ShowErrorAndExit ("Can not create a temporary folder for download.");
+      Err_ShowErrorAndExit ("Can not create a temporary folder for download.");
 
    /* 4. Increase number of directory for next call */
    NumDir++;
@@ -5234,10 +5235,10 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
       if (row[0] == NULL)
          Gbl.Usrs.Me.TimeLastAccToThisFileBrowser = 0;
       else if (sscanf (row[0],"%ld",&Gbl.Usrs.Me.TimeLastAccToThisFileBrowser) != 1)
-         Lay_ShowErrorAndExit ("Error when reading date-time of last access to a file browser.");
+         Err_ShowErrorAndExit ("Error when reading date-time of last access to a file browser.");
      }
    else
-      Lay_ShowErrorAndExit ("Error when getting date-time of last access to a file browser.");
+      Err_ShowErrorAndExit ("Error when getting date-time of last access to a file browser.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -5285,13 +5286,13 @@ static long Brw_GetGrpLastAccZone (const char *FieldNameDB)
       if (row[0])
         {
          if (sscanf (row[0],"%ld",&GrpCod) != 1)
-            Lay_ShowErrorAndExit ("Error when reading the group of your last access to a file browser.");
+            Err_ShowErrorAndExit ("Error when reading the group of your last access to a file browser.");
         }
       else
          GrpCod = -1L;
      }
    else
-      Lay_ShowErrorAndExit ("Error when getting the group of your last access to a file browser.");
+      Err_ShowErrorAndExit ("Error when getting the group of your last access to a file browser.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -5359,7 +5360,7 @@ static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path)
 	    snprintf (PathFileRel,sizeof (PathFileRel),"%s/%s",
 		      Path,FileList[NumFile]->d_name);
 	    if (lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
-	       Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+	       Err_ShowErrorAndExit ("Can not get information about a file or folder.");
 	    else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 	      {
 	       Gbl.FileBrowser.Size.NumFolds++;
@@ -5377,7 +5378,7 @@ static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path)
       free (FileList);
      }
    else
-      Lay_ShowErrorAndExit ("Error while scanning directory.");
+      Err_ShowErrorAndExit ("Error while scanning directory.");
   }
 
 /*****************************************************************************/
@@ -5431,7 +5432,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 
 	    /***** Get file or folder status *****/
 	    if (lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
-	       Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+	       Err_ShowErrorAndExit ("Can not get information about a file or folder.");
 	    else if (S_ISDIR (FileStatus.st_mode))	// It's a directory
 	      {
 	       Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
@@ -5456,7 +5457,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 		     free (SubdirFileList);
 		    }
 		  else
-		     Lay_ShowErrorAndExit ("Error while scanning directory.");
+		     Err_ShowErrorAndExit ("Error while scanning directory.");
 		 }
 
 	       /***** Write a row for the subdirectory *****/
@@ -5483,7 +5484,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
       free (FileList);
      }
    else
-      Lay_ShowErrorAndExit ("Error while scanning directory.");
+      Err_ShowErrorAndExit ("Error while scanning directory.");
   }
 
 /*****************************************************************************/
@@ -5601,7 +5602,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    /***** Start this row *****/
    if (asprintf (&Anchor,"fil_brw_%u_%s",
 		 Gbl.FileBrowser.Id,RowId) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    switch (IconThisRow)
      {
       case Brw_ICON_TREE_NOTHING:
@@ -6236,7 +6237,7 @@ static void Brw_PutIconFile (Brw_FileType_t FileType,const char *FileName,
      {
       if (asprintf (&URL,"%s32x32",
 		    CfG_URL_ICON_FILEXT_PUBLIC) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       for (DocType = 0, NotFound = true;
 	   DocType < Ext_NUM_FILE_EXT_ALLOWED && NotFound;
 	   DocType++)
@@ -6244,18 +6245,18 @@ static void Brw_PutIconFile (Brw_FileType_t FileType,const char *FileName,
 	   {
 	    if (asprintf (&Icon,"%s32x32.gif",
 			  Ext_FileExtensionsAllowed[DocType]) < 0)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    if (asprintf (&Title,Txt_X_file,
 			  Ext_FileExtensionsAllowed[DocType]) < 0)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    NotFound = false;
 	   }
       if (NotFound)
 	{
 	 if (asprintf (&Icon,"xxx32x32.gif") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	 if (asprintf (&Title,"%s","") < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 	}
 
       if (Input)
@@ -6371,7 +6372,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 
       /* Link to the form and to the file */
       if (asprintf (&Class,"BT_LINK FILENAME %s",Gbl.FileBrowser.TxtStyle) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_BUTTON_SUBMIT_Begin ((Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
 			        Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_the_file :
 									    Txt_Download,
@@ -6436,7 +6437,7 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
              Gbl.FileBrowser.TmpPubDir.R,
 	     FileName);
    if (symlink (FullPathIncludingFile,Link) != 0)
-      Lay_ShowErrorAndExit ("Can not create temporary link.");
+      Err_ShowErrorAndExit ("Can not create temporary link.");
   }
 
 /*****************************************************************************/
@@ -6461,7 +6462,7 @@ static void Brw_WriteDatesAssignment (void)
 
       /***** Write start date *****/
       if (asprintf (&Id,"asg_start_date_%u",UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_SPAN_Begin ("id=\"%s\"",Id);
       Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_START_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
@@ -6474,7 +6475,7 @@ static void Brw_WriteDatesAssignment (void)
 
       /***** Write end date *****/
       if (asprintf (&Id,"asg_end_date_%u",UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_SPAN_Begin ("id=\"%s\"",Id);
       Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_END_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
@@ -6518,7 +6519,7 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
      {
       UniqueId++;
       if (asprintf (&Id,"filedate%u",UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_SPAN_Begin ("id=\"%s\"",Id);
       HTM_SPAN_End ();
       Dat_WriteLocalDateHMSFromUTC (Id,FileMetadata->Time,
@@ -6598,7 +6599,7 @@ void Brw_AskRemFileFromTree (void)
                               FileNameToShow);
      }
    else
-      Lay_ShowErrorAndExit (Txt_You_can_not_remove_this_file_or_link);
+      Err_ShowErrorAndExit (Txt_You_can_not_remove_this_file_or_link);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -6627,7 +6628,7 @@ void Brw_RemFileFromTree (void)
 
       /***** Check if is a file/link or a folder *****/
       if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
-	 Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+	 Err_ShowErrorAndExit ("Can not get information about a file or folder.");
       else if (S_ISREG (FileStatus.st_mode))		// It's a file or a link
         {
 	 /* Name of the file/link to be shown */
@@ -6649,10 +6650,10 @@ void Brw_RemFileFromTree (void)
 		        FileNameToShow);
         }
       else		// File / link not found
-         Lay_ShowErrorAndExit ("File / link not found.");
+         Err_ShowErrorAndExit ("File / link not found.");
      }
    else
-      Lay_ShowErrorAndExit (Txt_You_can_not_remove_this_file_or_link);
+      Err_ShowErrorAndExit (Txt_You_can_not_remove_this_file_or_link);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -6680,7 +6681,7 @@ void Brw_RemFolderFromTree (void)
 
       /***** Check if it's a file or a folder *****/
       if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
-	 Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+	 Err_ShowErrorAndExit ("Can not get information about a file or folder.");
       else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 	 if (Brw_RemoveFolderFromDiskAndDB (Path,
                                             Gbl.FileBrowser.FilFolLnk.Full))
@@ -6688,7 +6689,7 @@ void Brw_RemFolderFromTree (void)
 	    if (errno == ENOTEMPTY)	// The directory is not empty
 	       Brw_AskConfirmRemoveFolderNotEmpty ();
 	    else	// The directory is empty
-               Lay_ShowErrorAndExit ("Can not remove folder.");
+               Err_ShowErrorAndExit ("Can not remove folder.");
            }
          else
            {
@@ -6702,10 +6703,10 @@ void Brw_RemFolderFromTree (void)
                            Gbl.FileBrowser.FilFolLnk.Name);
            }
       else		// Folder not found
-         Lay_ShowErrorAndExit ("Folder not found.");
+         Err_ShowErrorAndExit ("Folder not found.");
      }
    else
-      Lay_ShowErrorAndExit (Txt_You_can_not_remove_this_folder);
+      Err_ShowErrorAndExit (Txt_You_can_not_remove_this_folder);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -7160,7 +7161,7 @@ static bool Brw_GetMyClipboard (void)
    DB_FreeMySQLResult (&mysql_res);
 
    if (NumRows > 1)
-      Lay_WrongCopySrcExit ();
+      Err_WrongCopySrcExit ();
 
    return (bool) (NumRows == 1);
   }
@@ -7953,7 +7954,7 @@ static void Brw_PasteClipboard (void)
 		         (unsigned) Hie.Ins.InsCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
-               Lay_WrongCopySrcExit ();
+               Err_WrongCopySrcExit ();
             break;
          case Brw_ADMI_DOC_CTR:
          case Brw_ADMI_SHR_CTR:
@@ -7965,7 +7966,7 @@ static void Brw_PasteClipboard (void)
 		         (unsigned) Hie.Ctr.CtrCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
-               Lay_WrongCopySrcExit ();
+               Err_WrongCopySrcExit ();
             break;
          case Brw_ADMI_DOC_DEG:
          case Brw_ADMI_SHR_DEG:
@@ -7977,7 +7978,7 @@ static void Brw_PasteClipboard (void)
 		         (unsigned) Hie.Deg.DegCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
-               Lay_WrongCopySrcExit ();
+               Err_WrongCopySrcExit ();
             break;
          case Brw_ADMI_DOC_CRS:
          case Brw_ADMI_TCH_CRS:
@@ -7989,7 +7990,7 @@ static void Brw_PasteClipboard (void)
                          Cfg_PATH_CRS_PRIVATE,Hie.Crs.CrsCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
-               Lay_WrongCopySrcExit ();
+               Err_WrongCopySrcExit ();
             break;
          case Brw_ADMI_DOC_GRP:
          case Brw_ADMI_TCH_GRP:
@@ -8004,7 +8005,7 @@ static void Brw_PasteClipboard (void)
 			 GrpDat.GrpCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
-               Lay_WrongCopySrcExit ();
+               Err_WrongCopySrcExit ();
             break;
          case Brw_ADMI_ASG_CRS:
          case Brw_ADMI_WRK_CRS:
@@ -8026,7 +8027,7 @@ static void Brw_PasteClipboard (void)
 	       Usr_UsrDataDestructor (&UsrDat);
               }
             else
-               Lay_WrongCopySrcExit ();
+               Err_WrongCopySrcExit ();
             break;
          case Brw_ADMI_ASG_USR:
          case Brw_ADMI_WRK_USR:
@@ -8038,7 +8039,7 @@ static void Brw_PasteClipboard (void)
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
 			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
-               Lay_WrongCopySrcExit ();
+               Err_WrongCopySrcExit ();
             break;
          case Brw_ADMI_DOC_PRJ:
          case Brw_ADMI_ASS_PRJ:
@@ -8051,7 +8052,7 @@ static void Brw_PasteClipboard (void)
 			PrjCod,
 			Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
 	    else
-	       Lay_WrongCopySrcExit ();
+	       Err_WrongCopySrcExit ();
             break;
          case Brw_ADMI_BRF_USR:
             snprintf (PathOrg,sizeof (PathOrg),"%s/%s",
@@ -8059,7 +8060,7 @@ static void Brw_PasteClipboard (void)
         	      Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             break;
          default:
-            Lay_WrongFileBrowserExit ();
+            Err_WrongFileBrowserExit ();
             break;
         }
 
@@ -8119,7 +8120,7 @@ static void Brw_PasteClipboard (void)
       Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
      }
    else
-      Lay_ShowErrorAndExit (Txt_You_can_not_paste_file_or_folder_here);	// It's difficult, but not impossible that a user sees this message
+      Err_ShowErrorAndExit (Txt_You_can_not_paste_file_or_folder_here);	// It's difficult, but not impossible that a user sees this message
   }
 
 /*****************************************************************************/
@@ -8185,7 +8186,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
    /***** Is it a file or a folder? *****/
    FileType = Brw_IS_UNKNOWN;
    if (lstat (PathOrg,&FileStatus))	// On success ==> 0 is returned
-      Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+      Err_ShowErrorAndExit ("Can not get information about a file or folder.");
    else if (S_ISDIR (FileStatus.st_mode))	// It's a directory
       FileType = Brw_IS_FOLDER;
    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
@@ -8233,7 +8234,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 		           FileNameToShow);
 	    break;
 	 default:
-            Lay_ShowErrorAndExit ("Can not paste unknown file type.");
+            Err_ShowErrorAndExit ("Can not paste unknown file type.");
         }
       CopyIsGoingSuccessful = false;
      }
@@ -8326,7 +8327,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 		 {
 		  /* Create directory */
 		  if (mkdir (PathDstWithFile,(mode_t) 0xFFF) != 0)
-		     Lay_ShowErrorAndExit ("Can not create folder.");
+		     Err_ShowErrorAndExit ("Can not create folder.");
 
 		  /* Add entry to the table of files/folders */
 		  Brw_AddPathToDB (Gbl.Usrs.Me.UsrDat.UsrCod,FileType,
@@ -8358,7 +8359,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 	    free (FileList);
 	   }
 	 else
-	    Lay_ShowErrorAndExit ("Error while scanning directory.");
+	    Err_ShowErrorAndExit ("Error while scanning directory.");
 
 	 if (CopyIsGoingSuccessful &&
 	     LevelOrg != 0)	// When copying all files inside root folder,
@@ -8417,7 +8418,7 @@ void Brw_ShowFormFileBrowser (void)
      }
    else
      {
-      Lay_ShowErrorAndExit (Txt_You_can_not_create_folders_files_or_links_here);	// It's difficult, but not impossible that a user sees this message
+      Err_ShowErrorAndExit (Txt_You_can_not_create_folders_files_or_links_here);	// It's difficult, but not impossible that a user sees this message
 
       /***** Show again file browser *****/
       Brw_ShowAgainFileBrowserOrWorks ();
@@ -8636,7 +8637,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    /* Label */
    if (asprintf (&Label,"%s&nbsp;(%s):&nbsp;",Txt_Save_as,Txt_optional) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    Frm_LabelColumn ("RT","NewLinkName",Label);
    free (Label);
 
@@ -8685,7 +8686,7 @@ void Brw_RecFolderFileBrowser (void)
 		   Gbl.FileBrowser.FilFolLnk.Full);
 
          if (strlen (Path) + 1 + strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
-	    Lay_ShowErrorAndExit ("Path is too long.");
+	    Err_ShowErrorAndExit ("Path is too long.");
          Str_Concat (Path,"/",sizeof (Path) - 1);
          Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,sizeof (Path) - 1);
 
@@ -8739,10 +8740,10 @@ void Brw_RecFolderFileBrowser (void)
 		   	         Gbl.FileBrowser.NewFilFolLnkName);
 	          break;
 	       case EACCES:
-	          Lay_ShowErrorAndExit ("Write forbidden.");
+	          Err_ShowErrorAndExit ("Write forbidden.");
 	          break;
 	       default:
-	          Lay_ShowErrorAndExit ("Can not create folder.");
+	          Err_ShowErrorAndExit ("Can not create folder.");
 	          break;
 	      }
 	   }
@@ -8751,7 +8752,7 @@ void Brw_RecFolderFileBrowser (void)
          Ale_ShowAlerts (NULL);
      }
    else
-      Lay_ShowErrorAndExit (Txt_You_can_not_create_folders_here);	// It's difficult, but not impossible that a user sees this message
+      Err_ShowErrorAndExit (Txt_You_can_not_create_folders_here);	// It's difficult, but not impossible that a user sees this message
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -8792,7 +8793,7 @@ void Brw_RenFolderFileBrowser (void)
             if (strlen (Gbl.FileBrowser.Priv.PathAboveRootFolder) + 1 +
                 strlen (Gbl.FileBrowser.FilFolLnk.Path) + 1 +
                 strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
-	       Lay_ShowErrorAndExit ("Path is too long.");
+	       Err_ShowErrorAndExit ("Path is too long.");
             snprintf (NewPathInTree,sizeof (NewPathInTree),"%s/%s",
         	      Gbl.FileBrowser.FilFolLnk.Path,
 		      Gbl.FileBrowser.NewFilFolLnkName);
@@ -8814,10 +8815,10 @@ void Brw_RenFolderFileBrowser (void)
 			            Gbl.FileBrowser.FilFolLnk.Name,Gbl.FileBrowser.NewFilFolLnkName);
 	             break;
 	          case EACCES:
-	             Lay_ShowErrorAndExit ("Write forbidden.");
+	             Err_ShowErrorAndExit ("Write forbidden.");
 	             break;
 	          default:
-	             Lay_ShowErrorAndExit ("Can not rename folder.");
+	             Err_ShowErrorAndExit ("Can not rename folder.");
 	             break;
 	         }
 	      }
@@ -8858,7 +8859,7 @@ void Brw_RenFolderFileBrowser (void)
          Ale_ShowAlerts (NULL);
      }
    else
-      Lay_ShowErrorAndExit (Txt_You_can_not_rename_this_folder);
+      Err_ShowErrorAndExit (Txt_You_can_not_rename_this_folder);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -8968,7 +8969,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                if (strlen (Path) + 1 +
         	   strlen (Gbl.FileBrowser.NewFilFolLnkName) +
 		   strlen (".tmp") > PATH_MAX)
-	          Lay_ShowErrorAndExit ("Path is too long.");
+	          Err_ShowErrorAndExit ("Path is too long.");
                Str_Concat (Path,"/",sizeof (Path) - 1);
                Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,sizeof (Path) - 1);
 
@@ -9165,7 +9166,7 @@ void Brw_RecLinkFileBrowser (void)
 		      Gbl.FileBrowser.Priv.PathAboveRootFolder,
 		      Gbl.FileBrowser.FilFolLnk.Full);
 	    if (strlen (Path) + 1 + strlen (FileName) + strlen (".url") > PATH_MAX)
-	       Lay_ShowErrorAndExit ("Path is too long.");
+	       Err_ShowErrorAndExit ("Path is too long.");
 	    Str_Concat (Path,"/",sizeof (Path) - 1);
 	    Str_Concat (Path,FileName,sizeof (Path) - 1);
 	    Str_Concat (Path,".url",sizeof (Path) - 1);
@@ -9258,7 +9259,7 @@ void Brw_RecLinkFileBrowser (void)
 	 Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_link);
      }
    else
-      Lay_ShowErrorAndExit (Txt_You_can_not_create_links_here);	// It's difficult, but not impossible that a user sees this message
+      Err_ShowErrorAndExit (Txt_You_can_not_create_links_here);	// It's difficult, but not impossible that a user sees this message
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -10345,7 +10346,7 @@ void Brw_ChgFileMetadata (void)
 	}
       else
 	 /***** Write error message and exit *****/
-	 Lay_NoPermissionExit ();
+	 Err_NoPermissionExit ();
      }
 
    /***** Show again the file browser *****/
@@ -11876,7 +11877,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 		    Txt_Uploaded_by,
 		    FileHasPublisher ? PublisherUsrDat.FullName :
 				       Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
 
       /* Free memory used for publisher's data */
       if (FileMetadata.PublisherUsrCod > 0)
@@ -12380,7 +12381,7 @@ static void Brw_ScanDirRemovingOldFiles (unsigned Level,
    // Folder st_mtime must be saved before remove files inside it
    // because st_mtime is updated by the deletion
    if (lstat (Path,&FolderStatus))	// On success ==> 0 is returned
-      Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+      Err_ShowErrorAndExit ("Can not get information about a file or folder.");
    /***** Scan directory *****/
    else if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
      {
@@ -12400,7 +12401,7 @@ static void Brw_ScanDirRemovingOldFiles (unsigned Level,
 
 	    /***** Get file or folder status *****/
 	    if (lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
-	       Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+	       Err_ShowErrorAndExit ("Can not get information about a file or folder.");
 	    else if (S_ISDIR (FileStatus.st_mode))				// It's a folder
 	       /* Scan subtree starting at this this directory recursively */
 	       Brw_ScanDirRemovingOldFiles (Level + 1,PathFileRel,
@@ -12440,7 +12441,7 @@ static void Brw_ScanDirRemovingOldFiles (unsigned Level,
 	       free (FileList);
 	      }
 	    else
-	       Lay_ShowErrorAndExit ("Error while scanning directory.");
+	       Err_ShowErrorAndExit ("Error while scanning directory.");
 	   }
 
 	 if (NumFiles <= 2 &&					// It's an empty folder
@@ -12448,7 +12449,7 @@ static void Brw_ScanDirRemovingOldFiles (unsigned Level,
 	   {
 	    /* Remove folder from disk and database */
 	    if (Brw_RemoveFolderFromDiskAndDB (Path,PathInTree))
-	       Lay_ShowErrorAndExit ("Can not remove folder.");
+	       Err_ShowErrorAndExit ("Can not remove folder.");
 
 	    /* Update number of files/links removed */
 	    (Removed->NumFolds)++;
@@ -12456,7 +12457,7 @@ static void Brw_ScanDirRemovingOldFiles (unsigned Level,
 	}
      }
    else
-      Lay_ShowErrorAndExit ("Error while scanning directory.");
+      Err_ShowErrorAndExit ("Error while scanning directory.");
   }
 
 /*****************************************************************************/
@@ -12468,7 +12469,7 @@ static void Brw_RemoveFileFromDiskAndDB (const char Path[PATH_MAX + 1],
   {
    /***** Remove file from disk *****/
    if (unlink (Path))
-      Lay_ShowErrorAndExit ("Can not remove file / link.");
+      Err_ShowErrorAndExit ("Can not remove file / link.");
 
    /***** If a file is removed,
           it is necessary to remove it from the database *****/

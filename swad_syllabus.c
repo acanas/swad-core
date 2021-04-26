@@ -37,6 +37,7 @@
 #include "swad_changelog.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
@@ -350,7 +351,7 @@ static void Syl_SetSyllabusTypeFromAction (struct Syl_Syllabus *Syllabus)
 	 Gbl.Crs.Info.Type = Inf_PRACTICALS;
          break;
       default:
-	 Lay_WrongActionExit ();
+	 Err_WrongActionExit ();
 	 break;
      }
   }
@@ -381,7 +382,7 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
 
    /***** Go to the start of the list of items *****/
    if (!Str_FindStrInFile (Gbl.F.XML,"<lista>",Str_NO_SKIP_HTML_COMMENTS))
-      Lay_WrongSyllabusFormatExit ();
+      Err_WrongSyllabusFormatExit ();
 
    /***** Save the position of the start of the list *****/
    PostBeginList = ftell (Gbl.F.XML);
@@ -394,7 +395,7 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
    /***** Allocate memory for the list of items *****/
    if ((Syl_LstItemsSyllabus.Lst = calloc (Syl_LstItemsSyllabus.NumItems + 1,
                                            sizeof (*Syl_LstItemsSyllabus.Lst))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Return to the start of the list *****/
    fseek (Gbl.F.XML,PostBeginList,SEEK_SET);
@@ -429,7 +430,7 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
 	{
 	 /* Go to the start of the item */
 	 if (!Str_FindStrInFile (Gbl.F.XML,"<item",Str_NO_SKIP_HTML_COMMENTS))
-	    Lay_WrongSyllabusFormatExit ();
+	    Err_WrongSyllabusFormatExit ();
 
 	 /* Get the level */
 	 Syl_LstItemsSyllabus.Lst[NumItem].Level = Syl_ReadLevelItemSyllabus ();
@@ -454,10 +455,10 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
 	 if (Result == 0) // Str too long
 	   {
 	    if (!Str_FindStrInFile (Gbl.F.XML,"</item>",Str_NO_SKIP_HTML_COMMENTS)) // End the search
-	       Lay_WrongSyllabusFormatExit ();
+	       Err_WrongSyllabusFormatExit ();
 	   }
 	 else if (Result == -1)
-	    Lay_WrongSyllabusFormatExit ();
+	    Err_WrongSyllabusFormatExit ();
 	}
 
    /***** Close the file with the syllabus *****/
@@ -507,12 +508,12 @@ int Syl_ReadLevelItemSyllabus (void)
    char StrlLevel[11 + 1];
 
    if (!Str_FindStrInFile (Gbl.F.XML,"nivel=\"",Str_NO_SKIP_HTML_COMMENTS))
-      Lay_WrongSyllabusFormatExit ();
+      Err_WrongSyllabusFormatExit ();
    if (Str_ReadFileUntilBoundaryStr (Gbl.F.XML,StrlLevel,"\"",1,
    	                             (unsigned long long) (11 + 1)) != 1)
-      Lay_WrongSyllabusFormatExit ();
+      Err_WrongSyllabusFormatExit ();
    if (sscanf (StrlLevel,"%d",&Level) != 1)
-      Lay_WrongSyllabusFormatExit ();
+      Err_WrongSyllabusFormatExit ();
    Str_FindStrInFile (Gbl.F.XML,">",Str_NO_SKIP_HTML_COMMENTS);
    if (Level < 1)
       Level = 1;
@@ -1400,18 +1401,18 @@ static void Syl_OpenSyllabusFile (const struct Syl_Syllabus *Syllabus,
 	{
 	 /* Can't open the file */
 	 if (!Fil_CheckIfPathExists (Syllabus->PathDir)) // Strange error, since it is just created
-	    Lay_ShowErrorAndExit ("Can not open syllabus file.");
+	    Err_ShowErrorAndExit ("Can not open syllabus file.");
 	 else
 	   {
 	    /* Create a new empty syllabus */
 	    if ((Gbl.F.XML = fopen (PathFile,"wb")) == NULL)
-	       Lay_ShowErrorAndExit ("Can not create syllabus file.");
+	       Err_ShowErrorAndExit ("Can not create syllabus file.");
 	    Syl_WriteStartFileSyllabus (Gbl.F.XML);
 	    Syl_WriteEndFileSyllabus (Gbl.F.XML);
 	    Fil_CloseXMLFile ();
 	    /* Open of new the file for reading */
 	    if ((Gbl.F.XML = fopen (PathFile,"rb")) == NULL)
-	       Lay_ShowErrorAndExit ("Can not open syllabus file.");
+	       Err_ShowErrorAndExit ("Can not open syllabus file.");
 	   }
 	}
      }

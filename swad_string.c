@@ -34,6 +34,7 @@
 #include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions
 
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_ID.h"
@@ -323,7 +324,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 		      ParamsStr);
 	    Anchor1NickLength = strlen (Anchor1Nick);
 	    if ((Links[NumLinks].Anchor1Nick = malloc (Anchor1NickLength + 1)) == NULL)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    strcpy (Links[NumLinks].Anchor1Nick,Anchor1Nick);
 	    Links[NumLinks].Anchor1NickLength = Anchor1NickLength;
 
@@ -336,7 +337,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 			                   Gbl.Form.Id);
 	    Anchor2NickLength = strlen (Anchor2Nick);
 	    if ((Links[NumLinks].Anchor2Nick = malloc (Anchor2NickLength + 1)) == NULL)
-	       Lay_NotEnoughMemoryExit ();
+	       Err_NotEnoughMemoryExit ();
 	    strcpy (Links[NumLinks].Anchor2Nick,Anchor2Nick);
 	    Links[NumLinks].Anchor2NickLength = Anchor2NickLength;
 
@@ -961,7 +962,7 @@ void Str_DoubleNumToStr (char **Str,double Number)
   {
    if (asprintf (Str,"%.15lg",
 		 Number) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/
@@ -980,7 +981,7 @@ void Str_DoubleNumToStrFewDigits (char **Str,double Number)
    if (FractionaryPart == 0.0)
      {
       if (asprintf (Str,"%.0f",IntegerPart) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
    else
      {
@@ -999,7 +1000,7 @@ void Str_DoubleNumToStrFewDigits (char **Str,double Number)
       else
          Format = "%le";
       if (asprintf (Str,Format,Number) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
      }
   }
 
@@ -1033,7 +1034,7 @@ double Str_GetDoubleFromStr (const char *Str)
 
    /***** Copy source string to temporary string to convert to point *****/
    if (asprintf (&StrPoint,"%s",Str) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** The string is "scanned" in floating point
           (it must have a point, not a comma as decimal separator) *****/
@@ -1149,7 +1150,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
      {
       /***** Allocate memory for a destination string where to do the changes *****/
       if ((StrDst = malloc (MaxLengthStr + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
 
       /***** Make the change *****/
       for (PtrSrc = Str, PtrDst = StrDst;
@@ -1548,7 +1549,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
 
             /* Check new length of destination string after the copy */
             if (LengthStrDst + LengthSpecStrDst > MaxLengthStr)
-               Lay_ShowErrorAndExit ("Space allocated to string is full.");
+               Err_ShowErrorAndExit ("Space allocated to string is full.");
 
             /* Copy to appropiate place the special character string */
             // strncpy (PtrDst,StrSpecialChar,LengthSpecStrDst);
@@ -1565,7 +1566,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
            {
             /* Check new length of destination string after the copy */
             if (LengthStrDst >= MaxLengthStr)
-               Lay_ShowErrorAndExit ("Space allocated to string is full.");
+               Err_ShowErrorAndExit ("Space allocated to string is full.");
 
             /* Copy char from source to destination and increment pointers */
             *PtrDst++ = *PtrSrc++;
@@ -2503,7 +2504,7 @@ void Str_CopyStrChangingSpaces (const char *StringWithSpaces,char *StringWithout
    *PtrDst = '\0';
 
    if (Length > MaxLength)
-      Lay_ShowErrorAndExit ("Path is too long.");
+      Err_ShowErrorAndExit ("Path is too long.");
   }
 
 /*****************************************************************************/
@@ -2758,7 +2759,7 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
       return 1;
      }
    if (LengthBoundaryStr > Str_MAX_BYTES_BOUNDARY_STR)
-      Lay_ShowErrorAndExit ("Delimiter string too large.");
+      Err_ShowErrorAndExit ("Delimiter string too large.");
    Ptr = StrDst;
 
    StartIndex = 0;
@@ -3018,7 +3019,7 @@ void Str_Copy (char *Dst,const char *Src,size_t DstSize)
       snprintf (ErrorTxt,sizeof (ErrorTxt),
 	        "Trying to copy %zu chars into a %zu-chars buffer.",
                 SrcLength,DstSize);
-      Lay_ShowErrorAndExit (ErrorTxt);
+      Err_ShowErrorAndExit (ErrorTxt);
      }
 
    /***** Copy source into destination *****/
@@ -3043,7 +3044,7 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
      {
       snprintf (ErrorTxt,sizeof (ErrorTxt),"%lu-chars buffer has %lu chars!",
                 DstSize,DstLength);
-      Lay_ShowErrorAndExit (ErrorTxt);
+      Err_ShowErrorAndExit (ErrorTxt);
      }
 
    /***** Check if buffer has enough space for source *****/
@@ -3056,7 +3057,7 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
 	        "Trying to concatenate %zu chars to a %zu-chars buffer"
 	        " with free space for only %zu chars!",
                 SrcLength,DstSize,FreeSpace);
-      Lay_ShowErrorAndExit (ErrorTxt);
+      Err_ShowErrorAndExit (ErrorTxt);
      }
 
    /***** Concatenate ******/
@@ -3076,7 +3077,7 @@ char *Str_BuildStringStr (const char *fmt,const char *Str)
   {
    Str_FreeString ();
    if (asprintf (&Str_String,fmt,Str) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    return Str_String;
   }
@@ -3088,7 +3089,7 @@ char *Str_BuildStringLong (const char *fmt,long Num)
   {
    Str_FreeString ();
    if (asprintf (&Str_String,fmt,Num) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    return Str_String;
   }
@@ -3099,7 +3100,7 @@ char *Str_BuildStringLongStr (long Num,const char *Str)
   {
    Str_FreeString ();
    if (asprintf (&Str_String,"%ld %s",Num,Str) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    return Str_String;
   }

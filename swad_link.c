@@ -33,6 +33,7 @@
 #include "swad_box.h"
 #include "swad_constant.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -307,7 +308,7 @@ void Lnk_GetListLinks (void)
 	 /***** Create list with places *****/
 	 if ((Gbl.Links.Lst = calloc ((size_t) Gbl.Links.Num,
 	                              sizeof (*Gbl.Links.Lst))) == NULL)
-	     Lay_NotEnoughMemoryExit ();
+	     Err_NotEnoughMemoryExit ();
 
 	 /***** Get the links *****/
 	 for (NumLnk = 0;
@@ -321,7 +322,7 @@ void Lnk_GetListLinks (void)
 
 	    /* Get link code (row[0]) */
 	    if ((Lnk->LnkCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	       Lay_WrongLinkExit ();
+	       Err_WrongLinkExit ();
 
             /* Get the short name (row[0]), the full name (row[1])
                and de URL (row[2]) of the link */
@@ -494,7 +495,7 @@ void Lnk_RemoveLink (void)
 
    /***** Get link code *****/
    if ((Lnk_EditingLnk->LnkCod = Lnk_GetParamLnkCod ()) <= 0)
-      Lay_WrongLinkExit ();
+      Err_WrongLinkExit ();
 
    /***** Get data of the link from database *****/
    Lnk_GetDataOfLinkByCod (Lnk_EditingLnk);
@@ -571,7 +572,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
    /***** Get parameters from form *****/
    /* Get the code of the link */
    if ((Lnk_EditingLnk->LnkCod = Lnk_GetParamLnkCod ()) <= 0)
-      Lay_WrongLinkExit ();
+      Err_WrongLinkExit ();
 
    /* Get the new name for the link */
    Par_GetParToText (ParamName,NewLnkName,MaxBytes);
@@ -660,7 +661,7 @@ void Lnk_ChangeLinkWWW (void)
    /***** Get parameters from form *****/
    /* Get the code of the link */
    if ((Lnk_EditingLnk->LnkCod = Lnk_GetParamLnkCod ()) <= 0)
-      Lay_WrongLinkExit ();
+      Err_WrongLinkExit ();
 
    /* Get the new WWW for the link */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -864,11 +865,11 @@ static void Lnk_EditingLinkConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Lnk_EditingLnk != NULL)
-      Lay_WrongLinkExit ();
+      Err_WrongLinkExit ();
 
    /***** Allocate memory for link *****/
    if ((Lnk_EditingLnk = malloc (sizeof (*Lnk_EditingLnk))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Reset link *****/
    Lnk_EditingLnk->LnkCod      = -1L;

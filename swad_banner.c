@@ -33,6 +33,7 @@
 #include "swad_box.h"
 #include "swad_constant.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -311,7 +312,7 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
 
       /***** Create list with banners *****/
       if ((Banners->Lst = calloc ((size_t) Banners->Num,sizeof (*Banners->Lst))) == NULL)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
 
       /***** Get the banners *****/
       for (NumBan = 0;
@@ -325,7 +326,7 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
 
 	 /* Get banner code (row[0]) */
 	 if ((Ban->BanCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	    Lay_WrongBannerExit ();
+	    Err_WrongBannerExit ();
 
 	 /* Get if banner is hidden (row[1]) */
 	 Ban->Hidden = (row[1][0] == 'Y');
@@ -573,7 +574,7 @@ void Ban_RemoveBanner (void)
 
    /***** Get banner code *****/
    if ((Ban.BanCod = Ban_GetParamBanCod ()) <= 0)
-      Lay_WrongBannerExit ();
+      Err_WrongBannerExit ();
 
    /***** Get data of the banner from database *****/
    Ban_GetDataOfBannerByCod (&Ban);
@@ -637,7 +638,7 @@ static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide)
   {
    /***** Get banner code *****/
    if ((Ban->BanCod = Ban_GetParamBanCod ()) <= 0)
-      Lay_WrongBannerExit ();
+      Err_WrongBannerExit ();
 
    /***** Get data of the banner from database *****/
    Ban_GetDataOfBannerByCod (Ban);
@@ -724,7 +725,7 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
    /***** Get parameters from form *****/
    /* Get the code of the banner */
    if ((Ban->BanCod = Ban_GetParamBanCod ()) <= 0)
-      Lay_WrongBannerExit ();
+      Err_WrongBannerExit ();
 
    /* Get the new name for the banner */
    Par_GetParToText (ParamName,NewBanName,MaxBytes);
@@ -816,7 +817,7 @@ void Ban_ChangeBannerImg (void)
    /***** Get parameters from form *****/
    /* Get the code of the banner */
    if ((Ban.BanCod = Ban_GetParamBanCod ()) <= 0)
-      Lay_WrongBannerExit ();
+      Err_WrongBannerExit ();
 
    /* Get the new WWW for the banner */
    Par_GetParToText ("Img",NewImg,Ban_MAX_BYTES_IMAGE);
@@ -867,7 +868,7 @@ void Ban_ChangeBannerWWW (void)
    /***** Get parameters from form *****/
    /* Get the code of the banner */
    if ((Ban.BanCod = Ban_GetParamBanCod ()) <= 0)
-      Lay_WrongBannerExit ();
+      Err_WrongBannerExit ();
 
    /* Get the new WWW for the banner */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -1156,7 +1157,7 @@ void Ban_ClickOnBanner (void)
 
    /***** Get banner code *****/
    if ((Ban.BanCod = Ban_GetParamBanCod ()) <= 0)
-      Lay_WrongBannerExit ();
+      Err_WrongBannerExit ();
 
    /***** Get data of the banner from database *****/
    Ban_GetDataOfBannerByCod (&Ban);

@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For free
 
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
@@ -195,7 +196,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    /***** Create CSS class of links *****/
    if (asprintf (&ClassLink,"BT_LINK %s",ClassTxt) < 0)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Form to go to the system *****/
    HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
@@ -768,7 +769,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		 }
 	       break;
 	    default:	// There are no administrators in other scopes
-	       Lay_WrongScopeExit ();
+	       Err_WrongScopeExit ();
 	       break;
            }
          HTM_TD_End ();

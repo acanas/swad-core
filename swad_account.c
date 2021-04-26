@@ -36,6 +36,7 @@
 #include "swad_database.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
+#include "swad_error.h"
 #include "swad_exam_print.h"
 #include "swad_follow.h"
 #include "swad_form.h"
@@ -738,7 +739,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 
    /***** Trivial check: user's code should be <= 0 *****/
    if (UsrDat->UsrCod > 0)
-      Lay_ShowErrorAndExit ("Can not create new user.");
+      Err_ShowErrorAndExit ("Can not create new user.");
 
    /***** Create encrypted user's code *****/
    Acc_CreateNewEncryptedUsrCod (UsrDat);
@@ -844,7 +845,7 @@ static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat)
           break;
      }
    if (NumTry == MAX_TRY)
-      Lay_ShowErrorAndExit ("Can not create a new encrypted user's code.");
+      Err_ShowErrorAndExit ("Can not create a new encrypted user's code.");
    }
 
 /*****************************************************************************/

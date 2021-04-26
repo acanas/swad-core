@@ -34,6 +34,7 @@
 
 #include "swad_database.h"
 #include "swad_date.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_game.h"
 #include "swad_global.h"
@@ -317,11 +318,11 @@ void Mch_ListMatches (struct Gam_Games *Games,
 			         " WHERE grp_users.UsrCod=%ld"
 			           " AND grp_users.GrpCod=mch_groups.GrpCod))",
 		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-	  Lay_NotEnoughMemoryExit ();
+	  Err_NotEnoughMemoryExit ();
       }
     else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
        if (asprintf (&SubQuery,"%s","") < 0)
-	  Lay_NotEnoughMemoryExit ();
+	  Err_NotEnoughMemoryExit ();
 
    /* Make query */
    NumMatches = (unsigned)
@@ -513,7 +514,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	{
 	 /***** Build anchor string *****/
 	 if (asprintf (&Anchor,"mch_%ld",Match.MchCod) < 0)
-	    Lay_NotEnoughMemoryExit ();
+	    Err_NotEnoughMemoryExit ();
 
 	 /***** First row for this match with match data ****/
 	 /* Begin first row */
@@ -708,7 +709,7 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Mch_Match *Match,unsigne
 	StartEndTime++)
      {
       if (asprintf (&Id,"mch_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
 		    Id,
 		    Match->Status.Showing == Mch_END ? "DATE_RED" :
@@ -886,7 +887,7 @@ static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
 	 Mch_ListOneOrMoreMatchesResultTch (Games,Match);
 	 break;
       default:
-	 Lay_WrongRoleExit ();
+	 Err_WrongRoleExit ();
 	 break;
      }
 
@@ -972,7 +973,7 @@ void Mch_ToggleVisResultsMchUsr (void)
 
    /***** Check if visibility of match results can be changed *****/
    if (!Mch_CheckIfVisibilityOfResultsCanBeChanged (&Match))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Toggle visibility of match results *****/
    Match.Status.ShowUsrResults = !Match.Status.ShowUsrResults;
@@ -1014,11 +1015,11 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    /***** Get match data *****/
    /* Code of the match (row[0]) */
    if ((Match->MchCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-      Lay_WrongMatchExit ();
+      Err_WrongMatchExit ();
 
    /* Code of the game (row[1]) */
    if ((Match->GamCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
 
    /* Get match teacher (row[2]) */
    Match->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
@@ -1151,7 +1152,7 @@ void Mch_RemoveMatch (void)
 
    /***** Check if I can remove this match *****/
    if (!Mch_CheckIfICanEditThisMatch (&Match))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Remove the match from all database tables *****/
    Mch_RemoveMatchFromAllTables (Match.MchCod);
@@ -1355,7 +1356,7 @@ void Mch_EditMatch (void)
 
    /***** Check if I can edit this match *****/
    if (!Mch_CheckIfICanEditThisMatch (&Match))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,&Game,
@@ -1409,20 +1410,20 @@ void Mch_GetAndCheckParameters (struct Gam_Games *Games,
    /***** Get parameters *****/
    /* Get parameters of game */
    if ((Game->GamCod = Gam_GetParams (Games)) <= 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
    Grp_GetParamWhichGroups ();
    Gam_GetDataOfGameByCod (Game);
 
    /* Get match code */
    if ((Match->MchCod = Mch_GetParamMchCod ()) <= 0)
-      Lay_WrongMatchExit ();
+      Err_WrongMatchExit ();
    Mch_GetDataOfMatchByCod (Match);
 
    /***** Ensure parameters are correct *****/
    if (Game->GamCod != Match->GamCod)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
    if (Game->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
 
    /***** Initialize context *****/
    Games->GamCod = Game->GamCod;
@@ -1625,7 +1626,7 @@ void Mch_CreateNewMatch (void)
    /***** Get form parameters *****/
    /* Get match code */
    if ((GamCod = Gam_GetParamGameCod ()) < 0)
-      Lay_WrongGameExit ();
+      Err_WrongGameExit ();
 
    /* Get match title */
    Par_GetParToText ("Title",Title,Mch_MAX_BYTES_TITLE);
@@ -1662,7 +1663,7 @@ void Mch_ChangeMatch (void)
 
    /***** Check if I can update this match *****/
    if (!Mch_CheckIfICanEditThisMatch (&Match))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Get match title and groups *****/
    /* Get match title */
@@ -1725,7 +1726,7 @@ void Mch_ResumeMatch (void)
 
    /***** Check if I have permission to resume match *****/
    if (!Mch_CheckIfICanEditThisMatch (&Match))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Update match status in database *****/
    Mch_UpdateMatchStatusInDB (&Match);
@@ -1830,17 +1831,17 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
 
       /* Get question code (row[0]) */
       if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	 Lay_WrongQuestionExit ();
+	 Err_WrongQuestionExit ();
 
       /* Get question index (row[1]) */
       if ((LongNum = Str_ConvertStrCodToLongCod (row[1])) <= 0)
-	 Lay_WrongQuestionIndexExit ();
+	 Err_WrongQuestionIndexExit ();
       QstInd = (unsigned) LongNum;
 
       /* Get answer type (row[2]) */
       Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
       if (Question.Answer.Type != Tst_ANS_UNIQUE_CHOICE)
-	 Lay_WrongAnswerExit ();
+	 Err_WrongAnswerExit ();
 
       /* Get shuffle (row[3]) */
       Question.Answer.Shuffle = (row[3][0] == 'Y');
@@ -1895,7 +1896,7 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
 
       /* Get answer index (row[0]) */
       if ((LongNum = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	 Lay_WrongAnswerIndexExit ();
+	 Err_WrongAnswerIndexExit ();
       AnsInd = (unsigned) LongNum;
       snprintf (StrOneAnswer,sizeof (StrOneAnswer),"%u",AnsInd);
 
@@ -1938,7 +1939,7 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
 		 	 MchCod,
 			 QstInd);
    if (!StrIndexesOneQst[0])
-      Lay_ShowErrorAndExit ("No indexes found for a question.");
+      Err_ShowErrorAndExit ("No indexes found for a question.");
 
    /***** Get indexes from string *****/
    TstPrn_GetIndexesFromStr (StrIndexesOneQst,Indexes);
@@ -2009,12 +2010,12 @@ static void Mch_UpdateMatchStatusInDB (const struct Mch_Match *Match)
    if (Match->Status.Playing)	// Match is being played
      {
       if (asprintf (&MchSubQuery,"mch_matches.EndTime=NOW(),") < 0)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
      }
    else				// Match is paused, not being played
      {
       if (asprintf (&MchSubQuery,"%s","") < 0)
-         Lay_NotEnoughMemoryExit ();
+         Err_NotEnoughMemoryExit ();
      }
 
    /***** Update match status in database *****/
@@ -2482,7 +2483,7 @@ static void Mch_ShowMatchStatusForStd (struct Mch_Match *Match,Mch_Update_t Upda
    /***** Can I play this match? *****/
    ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match);
    if (!ICanPlayThisMatchBasedOnGrps)
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Get student's answer to this question
 	  (<0 ==> no answer) *****/
@@ -2811,7 +2812,7 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActMchCntDwn),Gbl.Session.Id,
 		    Match->MchCod,Seconds) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       Frm_BeginFormOnSubmit (ActUnk,OnSubmit);
      }
 
@@ -3274,7 +3275,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
       /***** Show question *****/
       /* Check answer type */
       if (Question.Answer.Type != Tst_ANS_UNIQUE_CHOICE)
-	 Lay_WrongAnswerExit ();
+	 Err_WrongAnswerExit ();
 
       /* Begin container */
       HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");	// Bottom
@@ -3472,7 +3473,7 @@ static bool Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 		    Update == Mch_CHANGE_STATUS_BY_STUDENT ? " MCH_STD_ANSWER_SELECTED" :
 							     "",
 		    'A' + (char) NumOpt) < 0)
-	 Lay_NotEnoughMemoryExit ();
+	 Err_NotEnoughMemoryExit ();
       HTM_BUTTON_OnMouseDown_Begin (NULL,Class);
       HTM_TxtF ("%c",'a' + (char) NumOpt);
       HTM_BUTTON_End ();
@@ -3684,7 +3685,7 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
    /* Draw bar and write number of users for this score */
    HTM_TD_Begin ("class=\"MCH_SCO_NUM%s\"",Mch_GetClassBorder (NumRow));
    if (asprintf (&Icon,"score%u_1x1.png",Color) < 0)	// Background
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
    HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,
 	    Str_BuildStringLongStr ((long) NumUsrs,
 				    NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Rol_STD][Usr_SEX_UNKNOWN] :
@@ -3728,7 +3729,7 @@ static unsigned Mch_GetParamNumOpt (void)
 
    NumOpt = Par_GetParToLong ("NumOpt");
    if (NumOpt < 0)
-      Lay_ShowErrorAndExit ("Wrong number of option.");
+      Err_ShowErrorAndExit ("Wrong number of option.");
 
    return (unsigned) NumOpt;
   }
@@ -3921,7 +3922,7 @@ void Mch_GetMatchBeingPlayed (void)
 
    /***** Get match code ****/
    if ((MchCodBeingPlayed = Mch_GetParamMchCod ()) <= 0)
-      Lay_WrongMatchExit ();
+      Err_WrongMatchExit ();
 
    Mch_SetMchCodBeingPlayed (MchCodBeingPlayed);
   }
@@ -4145,11 +4146,11 @@ void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
 
       /***** Get number of option index (row[0]) *****/
       if (sscanf (row[0],"%d",&(UsrAnswer->NumOpt)) != 1)
-	 Lay_ShowErrorAndExit ("Error when getting student's answer to a match question.");
+	 Err_ShowErrorAndExit ("Error when getting student's answer to a match question.");
 
       /***** Get answer index (row[1]) *****/
       if (sscanf (row[1],"%d",&(UsrAnswer->AnsInd)) != 1)
-	 Lay_ShowErrorAndExit ("Error when getting student's answer to a match question.");
+	 Err_ShowErrorAndExit ("Error when getting student's answer to a match question.");
      }
 
    /***** Free structure that stores the query result *****/
@@ -4314,11 +4315,11 @@ void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print)
 
       /* Get question code (row[0]) */
       if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	 Lay_WrongQuestionExit ();
+	 Err_WrongQuestionExit ();
 
       /* Get question index (row[1]) */
       if ((LongNum = Str_ConvertStrCodToLongCod (row[1])) < 0)
-	 Lay_WrongQuestionExit ();
+	 Err_WrongQuestionExit ();
       QstInd = (unsigned) LongNum;
 
       /* Get indexes for this question (row[2]) */

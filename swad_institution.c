@@ -32,6 +32,7 @@
 
 #include "swad_database.h"
 #include "swad_department.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
@@ -651,7 +652,7 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
       /***** Create list with institutions *****/
       if ((Gbl.Hierarchy.Inss.Lst = calloc ((size_t) Gbl.Hierarchy.Inss.Num,
                                             sizeof (*Gbl.Hierarchy.Inss.Lst))) == NULL)
-          Lay_NotEnoughMemoryExit ();
+          Err_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
       for (NumIns = 0;
@@ -733,7 +734,7 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
       /***** Create list with institutions *****/
       if ((Gbl.Hierarchy.Inss.Lst = calloc ((size_t) Gbl.Hierarchy.Inss.Num,
                                             sizeof (*Gbl.Hierarchy.Inss.Lst))) == NULL)
-          Lay_NotEnoughMemoryExit ();
+          Err_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
       for (NumIns = 0;
@@ -835,14 +836,14 @@ static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row)
   {
    /***** Get institution code (row[0]) *****/
    if ((Ins->InsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-      Lay_WrongInstitExit ();
+      Err_WrongInstitExit ();
 
    /***** Get country code (row[1]) *****/
    Ins->CtyCod = Str_ConvertStrCodToLongCod (row[1]);
 
    /***** Get institution status (row[2]) *****/
    if (sscanf (row[2],"%u",&(Ins->Status)) != 1)
-      Lay_WrongStatusExit ();
+      Err_WrongStatusExit ();
 
    /***** Get requester user's code (row[3]) *****/
    Ins->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -1030,7 +1031,7 @@ void Ins_WriteSelectorOfInstitution (void)
 
          /* Get institution code (row[0]) */
          if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_WrongInstitExit ();
+            Err_WrongInstitExit ();
 
          /* Write option */
 	 HTM_OPTION (HTM_Type_LONG,&InsCod,
@@ -1314,7 +1315,7 @@ long Ins_GetAndCheckParamOtherInsCod (long MinCodAllowed)
 
    /***** Get and check parameter with code of institution *****/
    if ((InsCod = Ins_GetParamOtherInsCod ()) < MinCodAllowed)
-      Lay_WrongInstitExit ();
+      Err_WrongInstitExit ();
 
    return InsCod;
   }
@@ -1346,7 +1347,7 @@ void Ins_RemoveInstitution (void)
 
    /***** Check if this institution has users *****/
    if (!Ins_CheckIfICanEdit (Ins_EditingIns))
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
    else if (Ctr_GetNumCtrsInIns (Ins_EditingIns->InsCod))
       // Institution has centers ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
@@ -1618,7 +1619,7 @@ void Ins_ChangeInsStatus (void)
 	                              (unsigned long) Ins_MAX_STATUS,
                                       (unsigned long) Ins_WRONG_STATUS);
    if (Status == Ins_WRONG_STATUS)
-      Lay_WrongStatusExit ();
+      Err_WrongStatusExit ();
    StatusTxt = Ins_GetStatusTxtFromStatusBits (Status);
    Status = Ins_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
@@ -1702,7 +1703,7 @@ static void Ins_PutFormToCreateInstitution (void)
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
       Frm_BeginForm (ActReqIns);
    else
-      Lay_NoPermissionExit ();
+      Err_NoPermissionExit ();
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_New_institution,
@@ -2174,11 +2175,11 @@ static void Ins_EditingInstitutionConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Ins_EditingIns != NULL)
-      Lay_WrongInstitExit ();
+      Err_WrongInstitExit ();
 
    /***** Allocate memory for institution *****/
    if ((Ins_EditingIns = malloc (sizeof (*Ins_EditingIns))) == NULL)
-      Lay_NotEnoughMemoryExit ();
+      Err_NotEnoughMemoryExit ();
 
    /***** Reset institution *****/
    Ins_EditingIns->InsCod             = -1L;

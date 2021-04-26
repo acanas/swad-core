@@ -28,6 +28,7 @@
 #include "swad_announcement.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -155,7 +156,7 @@ void Ann_ShowAllAnnouncements (void)
 
       /* Get announcement code (row[0]) */
       if (sscanf (row[0],"%ld",&AnnCod) != 1)
-	 Lay_WrongAnnouncementExit ();
+	 Err_WrongAnnouncementExit ();
 
       /* Get status of the announcement (row[1]) */
       Status = Ann_OBSOLETE_ANNOUNCEMENT;
@@ -165,7 +166,7 @@ void Ann_ShowAllAnnouncements (void)
 
       /* Get roles (row[2]) */
       if (sscanf (row[2],"%u",&Roles) != 1)
-      	 Lay_ShowErrorAndExit ("Error when reading roles of announcement.");
+      	 Err_ShowErrorAndExit ("Error when reading roles of announcement.");
 
       /* Get the subject (row[3]), the content (row[4]), and insert links */
       Str_Copy (Subject,row[3],sizeof (Subject) - 1);
@@ -260,7 +261,7 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 
 	 /* Get announcement code (row[0]) */
 	 if (sscanf (row[0],"%ld",&AnnCod) != 1)
-	    Lay_WrongAnnouncementExit ();
+	    Err_WrongAnnouncementExit ();
 
 	 /* Get the subject (row[1]), the content (row[2]), and insert links */
 	 Str_Copy (Subject,row[1],sizeof (Subject) - 1);
@@ -395,7 +396,7 @@ static long Ann_GetParamAnnCod (void)
 
    /***** Get announcement code *****/
    if ((AnnCod = Par_GetParToLong ("AnnCod")) <= 0)
-      Lay_WrongAnnouncementExit ();
+      Err_WrongAnnouncementExit ();
 
    return AnnCod;
   }
