@@ -367,25 +367,14 @@ void Tag_RenameTag (void)
 
 static long Tag_GetTagCodFromTagTxt (const char *TagTxt)
   {
-   long TagCod;
-
    /***** Get tag code from database *****/
-   TagCod = DB_QuerySELECTCode ("can not get tag",
-				"SELECT TagCod"
-				 " FROM tst_tags"
-				" WHERE CrsCod=%ld"
-				  " AND TagTxt='%s'",
-				Gbl.Hierarchy.Crs.CrsCod,
-				TagTxt);
-   if (TagCod <= 0)
-      Ale_CreateAlert (Ale_ERROR,NULL,
-		       "Wrong tag.");
-
-   /***** Abort on error *****/
-   if (Ale_GetTypeOfLastAlert () == Ale_ERROR)
-      Ale_ShowAlertsAndExit ();
-
-   return TagCod;
+   return DB_QuerySELECTCode ("can not get tag",
+			      "SELECT TagCod"
+			       " FROM tst_tags"
+			      " WHERE CrsCod=%ld"
+			        " AND TagTxt='%s'",
+			      Gbl.Hierarchy.Crs.CrsCod,
+			      TagTxt);
   }
 
 /*****************************************************************************/

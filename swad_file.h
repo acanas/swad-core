@@ -42,7 +42,7 @@
 
 // Maximum allowed size (in bytes) of a file when uploading it.
 // Must be < 2 GiB, because off_t type is of type long int
-#define Fil_MAX_FILE_SIZE (1536ULL * 1024ULL * 1024ULL)	// 1.5 GiB
+#define Fil_MAX_FILE_SIZE (2000ULL * 1024ULL * 1024ULL)	// 2000 MiB = 1.95 GiB
 
 // Global files
 struct Files

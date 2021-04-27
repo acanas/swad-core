@@ -4948,6 +4948,7 @@ void Tst_InsertOrUpdateQstTagsAnsIntoDB (struct Tst_Question *Question)
   {
    /***** Insert or update question in the table of questions *****/
    Tst_InsertOrUpdateQstIntoDB (Question);
+
    if (Question->QstCod > 0)
      {
       /***** Insert tags in the tags table *****/
