@@ -79,20 +79,22 @@ struct TL_Form
 
 void Tml_Frm_PutFormToFavUnfShaUns (Tml_Usr_FavSha_t FavSha,long Cod);
 
-void Tml_Frm_BeginForm (const struct Tml_Timeline *Timeline,Tml_Frm_Action_t Action);
+void Tml_Frm_BeginForm (const struct Tml_Timeline *Timeline,
+                        Tml_Frm_Action_t Action);
 void Tml_Frm_EndForm (void);
 
 void Tml_Frm_PutFormToSeeAllFaversSharers (Tml_Frm_Action_t Action,
-		                          const char *ParamFormat,long ParamCod,
-                                          Tml_Usr_HowManyUsrs_t HowManyUsrs);
+		                           const char *ParamFormat,long ParamCod,
+                                           Tml_Usr_HowManyUsrs_t HowManyUsrs);
 void Tml_Frm_FormFavSha (const struct TL_Form *Form);
 
 void Tml_Frm_FormToShowHiddenComms (long NotCod,
-				   char IdComms[Frm_MAX_BYTES_ID + 1],
-				   unsigned NumInitialComms);
+				    char IdComms[Frm_MAX_BYTES_ID + 1],
+				    unsigned NumInitialComms);
 
 void Tml_Frm_BeginAlertRemove (const char *QuestionTxt);
-void Tml_Frm_EndAlertRemove (struct Tml_Timeline *Timeline,Tml_Frm_Action_t Action,
-                            void (*FuncParams) (void *Args));
+void Tml_Frm_EndAlertRemove (struct Tml_Timeline *Timeline,
+                             Tml_Frm_Action_t Action,
+                             void (*FuncParams) (void *Args));
 
 #endif

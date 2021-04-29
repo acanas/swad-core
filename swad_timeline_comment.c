@@ -388,8 +388,8 @@ static unsigned Tml_Com_WriteHiddenComms (struct Tml_Timeline *Timeline,
 
    /***** Get comments of this note from database *****/
    NumInitialCommsGot = Tml_DB_GetInitialComms (NotCod,
-				               NumInitialCommsToGet,
-				               &mysql_res);
+				                NumInitialCommsToGet,
+				                &mysql_res);
 
    /***** List comments *****/
    HTM_UL_Begin ("id=\"com_%s\" class=\"TL_LIST\"",IdComms);
@@ -478,7 +478,7 @@ static void Tml_Com_LinkToShowComms (Tml_Com_ContractExpand_t ConExp,
 
       /* Icon and text */
       Tml_Com_PutIconToToggleComms (IdComms,Icon[ConExp],
-				   Str_BuildStringLong (Text[ConExp],(long) NumComms));
+				    Str_BuildStringLong (Text[ConExp],(long) NumComms));
       Str_FreeString ();
 
    /* End container */
@@ -661,13 +661,12 @@ static void Tml_Com_WriteButtons (const struct Tml_Timeline *Timeline,
 	 Tml_Usr_PutIconFavSha (Tml_Usr_FAV_UNF_COMM,
 	                       Com->PubCod,Com->UsrCod,Com->NumFavs,
 			       Tml_Usr_SHOW_FEW_USRS);
-
       HTM_DIV_End ();
 
       /***** Foot column 2: icon to remove this comment *****/
       HTM_DIV_Begin ("class=\"TL_REM\"");
-      if (Usr_ItsMe (UsrDat->UsrCod))	// I am the author
-	 Tml_Com_PutFormToRemoveComm (Timeline,Com->PubCod);
+	 if (Usr_ItsMe (UsrDat->UsrCod))	// I am the author
+	    Tml_Com_PutFormToRemoveComm (Timeline,Com->PubCod);
       HTM_DIV_End ();
 
    /***** End buttons container *****/
@@ -957,6 +956,7 @@ void Tml_Com_RemoveComGbl (void)
 static void Tml_Com_RemoveComm (void)
   {
    extern const char *Txt_The_post_no_longer_exists;
+   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
    extern const char *Txt_Comment_removed;
    struct Tml_Com_Comment Com;
 
@@ -979,7 +979,7 @@ static void Tml_Com_RemoveComm (void)
    if (!Usr_ItsMe (Com.UsrCod))
      {
       Med_MediaDestructor (&Com.Content.Media);
-      Ale_ShowAlert (Ale_ERROR,"You are not the author.");
+      Ale_ShowAlert (Ale_ERROR,Txt_You_dont_have_permission_to_perform_this_action);
       return;
      }
 

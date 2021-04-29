@@ -180,8 +180,8 @@ void Tml_Not_ShowHighlightedNote (struct Tml_Timeline *Timeline,
 
          /* Check and write note with top message */
 	 Tml_Not_CheckAndWriteNoteWithTopMsg (Timeline,Not,
-					     TopMessages[NotifyEvent],
-					     PublisherDat.UsrCod);
+					      TopMessages[NotifyEvent],
+					      PublisherDat.UsrCod);
 
       /* End container */
       HTM_DIV_End ();
@@ -485,53 +485,60 @@ static void Tml_Not_WriteLocationInHierarchy (const struct Tml_Not_Note *Not,
 	                                      const struct Hie_Hierarchy *Hie,
                                               const char ForumName[For_MAX_BYTES_FORUM_NAME + 1])
   {
-   extern const char *Txt_Forum;
-   extern const char *Txt_Course;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Center;
    extern const char *Txt_Institution;
+   extern const char *Txt_Center;
+   extern const char *Txt_Degree;
+   extern const char *Txt_Course;
+   extern const char *Txt_Forum;
 
-   switch (Not->NoteType)
-     {
-      case TL_NOTE_INS_DOC_PUB_FILE:
-      case TL_NOTE_INS_SHA_PUB_FILE:
-	 /* Write location (institution) in hierarchy */
-	 HTM_DIV_Begin ("class=\"TL_LOC\"");
-	    HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Hie->Ins.ShrtName);
-	 HTM_DIV_End ();
-	 break;
-      case TL_NOTE_CTR_DOC_PUB_FILE:
-      case TL_NOTE_CTR_SHA_PUB_FILE:
-	 /* Write location (center) in hierarchy */
-	 HTM_DIV_Begin ("class=\"TL_LOC\"");
-	    HTM_TxtF ("%s:&nbsp;%s",Txt_Center,Hie->Ctr.ShrtName);
-	 HTM_DIV_End ();
-	 break;
-      case TL_NOTE_DEG_DOC_PUB_FILE:
-      case TL_NOTE_DEG_SHA_PUB_FILE:
-	 /* Write location (degree) in hierarchy */
-	 HTM_DIV_Begin ("class=\"TL_LOC\"");
-	    HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Hie->Deg.ShrtName);
-	 HTM_DIV_End ();
-	 break;
-      case TL_NOTE_CRS_DOC_PUB_FILE:
-      case TL_NOTE_CRS_SHA_PUB_FILE:
-      case TL_NOTE_CALL_FOR_EXAM:
-      case TL_NOTE_NOTICE:
-	 /* Write location (course) in hierarchy */
-	 HTM_DIV_Begin ("class=\"TL_LOC\"");
-	    HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Hie->Crs.ShrtName);
-	 HTM_DIV_End ();
-	 break;
-      case TL_NOTE_FORUM_POST:
-	 /* Write forum name */
-	 HTM_DIV_Begin ("class=\"TL_LOC\"");
-	    HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
-	 HTM_DIV_End ();
-	 break;
-      default:
-	 break;
-     }
+   /***** Begin container *****/
+   HTM_DIV_Begin ("class=\"TL_LOC\"");
+
+      /***** Write location *****/
+      switch (Not->NoteType)
+	{
+	 case TL_NOTE_INS_DOC_PUB_FILE:
+	 case TL_NOTE_INS_SHA_PUB_FILE:
+	    /* Write location (institution) in hierarchy */
+	    HTM_TxtF ("%s:&nbsp;%s",
+	              Txt_Institution,
+	              Hie->Ins.ShrtName);
+	    break;
+	 case TL_NOTE_CTR_DOC_PUB_FILE:
+	 case TL_NOTE_CTR_SHA_PUB_FILE:
+	    /* Write location (center) in hierarchy */
+	    HTM_TxtF ("%s:&nbsp;%s",
+	              Txt_Center,
+	              Hie->Ctr.ShrtName);
+	    break;
+	 case TL_NOTE_DEG_DOC_PUB_FILE:
+	 case TL_NOTE_DEG_SHA_PUB_FILE:
+	    /* Write location (degree) in hierarchy */
+	    HTM_TxtF ("%s:&nbsp;%s",
+	              Txt_Degree,
+	              Hie->Deg.ShrtName);
+	    break;
+	 case TL_NOTE_CRS_DOC_PUB_FILE:
+	 case TL_NOTE_CRS_SHA_PUB_FILE:
+	 case TL_NOTE_CALL_FOR_EXAM:
+	 case TL_NOTE_NOTICE:
+	    /* Write location (course) in hierarchy */
+	    HTM_TxtF ("%s:&nbsp;%s",
+	              Txt_Course,
+	              Hie->Crs.ShrtName);
+	    break;
+	 case TL_NOTE_FORUM_POST:
+	    /* Write forum name */
+	    HTM_TxtF ("%s:&nbsp;%s",
+	              Txt_Forum,
+	              ForumName);
+	    break;
+	 default:
+	    break;
+	}
+
+   /***** End container *****/
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

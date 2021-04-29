@@ -182,7 +182,8 @@ void Tml_Frm_PutFormToFavUnfShaUns (Tml_Usr_FavSha_t FavSha,long Cod)
 /***************** Begin a form in global or user timeline *******************/
 /*****************************************************************************/
 
-void Tml_Frm_BeginForm (const struct Tml_Timeline *Timeline,Tml_Frm_Action_t Action)
+void Tml_Frm_BeginForm (const struct Tml_Timeline *Timeline,
+                        Tml_Frm_Action_t Action)
   {
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
@@ -208,8 +209,8 @@ void Tml_Frm_EndForm (void)
 /*****************************************************************************/
 
 void Tml_Frm_PutFormToSeeAllFaversSharers (Tml_Frm_Action_t Action,
-		                          const char *ParamFormat,long ParamCod,
-                                          Tml_Usr_HowManyUsrs_t HowManyUsrs)
+		                           const char *ParamFormat,long ParamCod,
+                                           Tml_Usr_HowManyUsrs_t HowManyUsrs)
   {
    extern const char *Txt_View_all_USERS;
    struct TL_Form Form =
@@ -298,8 +299,8 @@ void Tml_Frm_FormFavSha (const struct TL_Form *Form)
 /*****************************************************************************/
 
 void Tml_Frm_FormToShowHiddenComms (long NotCod,
-				   char IdComms[Frm_MAX_BYTES_ID + 1],
-				   unsigned NumInitialComms)
+				    char IdComms[Frm_MAX_BYTES_ID + 1],
+				    unsigned NumInitialComms)
   {
    extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
    extern const char *Txt_See_the_previous_X_COMMENTS;
@@ -376,8 +377,9 @@ void Tml_Frm_BeginAlertRemove (const char *QuestionTxt)
    Ale_ShowAlertAndButton1 (Ale_QUESTION,QuestionTxt);
   }
 
-void Tml_Frm_EndAlertRemove (struct Tml_Timeline *Timeline,Tml_Frm_Action_t Action,
-                            void (*FuncParams) (void *Args))
+void Tml_Frm_EndAlertRemove (struct Tml_Timeline *Timeline,
+                             Tml_Frm_Action_t Action,
+                             void (*FuncParams) (void *Args))
   {
    extern const char *Txt_Remove;
 

@@ -84,8 +84,8 @@ void Tml_Fav_ShowAllFaversNoteGbl (void)
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
    Tml_Usr_PutIconFavSha (Tml_Usr_FAV_UNF_NOTE,
-                         Not.NotCod,Not.UsrCod,Not.NumFavs,
-                         Tml_Usr_SHOW_ALL_USRS);
+                          Not.NotCod,Not.UsrCod,Not.NumFavs,
+                          Tml_Usr_SHOW_ALL_USRS);
   }
 
 /*****************************************************************************/
@@ -110,8 +110,8 @@ void Tml_Fav_FavNoteGbl (void)
 
    /***** Write HTML inside DIV with form to unfav *****/
    Tml_Usr_PutIconFavSha (Tml_Usr_FAV_UNF_NOTE,
-                         Not.NotCod,Not.UsrCod,Not.NumFavs,
-                         Tml_Usr_SHOW_FEW_USRS);
+                          Not.NotCod,Not.UsrCod,Not.NumFavs,
+                          Tml_Usr_SHOW_FEW_USRS);
   }
 
 void Tml_Fav_UnfNoteUsr (void)
@@ -132,8 +132,8 @@ void Tml_Fav_UnfNoteGbl (void)
 
    /***** Write HTML inside DIV with form to fav *****/
    Tml_Usr_PutIconFavSha (Tml_Usr_FAV_UNF_NOTE,
-                         Not.NotCod,Not.UsrCod,Not.NumFavs,
-                         Tml_Usr_SHOW_FEW_USRS);
+                          Not.NotCod,Not.UsrCod,Not.NumFavs,
+                          Tml_Usr_SHOW_FEW_USRS);
   }
 
 static void Tml_Fav_FavNote (struct Tml_Not_Note *Not)
@@ -150,7 +150,7 @@ static void Tml_Fav_FavNote (struct Tml_Not_Note *Not)
 
    /***** Trivial check: Have I faved this note? *****/
    if (Tml_Usr_CheckIfFavedSharedByUsr (Tml_Usr_FAV_UNF_NOTE,Not->NotCod,
-                                       Gbl.Usrs.Me.UsrDat.UsrCod))
+                                        Gbl.Usrs.Me.UsrDat.UsrCod))
       return;
 
    /***** Mark note as favourite in database *****/
@@ -158,7 +158,7 @@ static void Tml_Fav_FavNote (struct Tml_Not_Note *Not)
 
    /***** Update number of times this note is favourited *****/
    Not->NumFavs = Tml_DB_GetNumFavers (Tml_Usr_FAV_UNF_NOTE,
-				      Not->NotCod,Not->UsrCod);
+				       Not->NotCod,Not->UsrCod);
 
    /***** Create notification about favourite post
 	  for the author of the post *****/
@@ -181,7 +181,7 @@ static void Tml_Fav_UnfNote (struct Tml_Not_Note *Not)
 
    /***** Trivial check: Have I faved this note? *****/
    if (!Tml_Usr_CheckIfFavedSharedByUsr (Tml_Usr_FAV_UNF_NOTE,Not->NotCod,
-                                        Gbl.Usrs.Me.UsrDat.UsrCod))
+                                         Gbl.Usrs.Me.UsrDat.UsrCod))
       return;
 
    /***** Delete the mark as favourite from database *****/
@@ -189,7 +189,7 @@ static void Tml_Fav_UnfNote (struct Tml_Not_Note *Not)
 
    /***** Update number of times this note is favourited *****/
    Not->NumFavs = Tml_DB_GetNumFavers (Tml_Usr_FAV_UNF_NOTE,
-			              Not->NotCod,Not->UsrCod);
+			               Not->NotCod,Not->UsrCod);
 
    /***** Mark possible notifications on this note as removed *****/
    OriginalPubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod);
@@ -222,8 +222,8 @@ void Tml_Fav_ShowAllFaversComGbl (void)
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
    Tml_Usr_PutIconFavSha (Tml_Usr_FAV_UNF_COMM,
-                         Com.PubCod,Com.UsrCod,Com.NumFavs,
-                         Tml_Usr_SHOW_ALL_USRS);
+                          Com.PubCod,Com.UsrCod,Com.NumFavs,
+                          Tml_Usr_SHOW_ALL_USRS);
   }
 
 /*****************************************************************************/
@@ -248,8 +248,8 @@ void Tml_Fav_FavCommGbl (void)
 
    /***** Write HTML inside DIV with form to unfav *****/
    Tml_Usr_PutIconFavSha (Tml_Usr_FAV_UNF_COMM,
-                         Com.PubCod,Com.UsrCod,Com.NumFavs,
-                         Tml_Usr_SHOW_FEW_USRS);
+                          Com.PubCod,Com.UsrCod,Com.NumFavs,
+                          Tml_Usr_SHOW_FEW_USRS);
   }
 
 void Tml_Fav_UnfCommUsr (void)
@@ -270,8 +270,8 @@ void Tml_Fav_UnfCommGbl (void)
 
    /***** Write HTML inside DIV with form to fav *****/
    Tml_Usr_PutIconFavSha (Tml_Usr_FAV_UNF_COMM,
-                         Com.PubCod,Com.UsrCod,Com.NumFavs,
-                         Tml_Usr_SHOW_FEW_USRS);
+                          Com.PubCod,Com.UsrCod,Com.NumFavs,
+                          Tml_Usr_SHOW_FEW_USRS);
   }
 
 static void Tml_Fav_FavComm (struct Tml_Com_Comment *Com)
@@ -292,7 +292,7 @@ static void Tml_Fav_FavComm (struct Tml_Com_Comment *Com)
 
    /***** Trivial check: Have I faved this comment? *****/
    if (Tml_Usr_CheckIfFavedSharedByUsr (Tml_Usr_FAV_UNF_COMM,Com->PubCod,
-				       Gbl.Usrs.Me.UsrDat.UsrCod))
+				        Gbl.Usrs.Me.UsrDat.UsrCod))
      {
       Med_MediaDestructor (&Com->Content.Media);
       return;
@@ -303,7 +303,7 @@ static void Tml_Fav_FavComm (struct Tml_Com_Comment *Com)
 
    /***** Update number of times this comment is favourited *****/
    Com->NumFavs = Tml_DB_GetNumFavers (Tml_Usr_FAV_UNF_COMM,
-				      Com->PubCod,Com->UsrCod);
+				       Com->PubCod,Com->UsrCod);
 
    /***** Create notification about favourite post
 	  for the author of the post *****/
@@ -331,7 +331,7 @@ static void Tml_Fav_UnfComm (struct Tml_Com_Comment *Com)
 
    /***** Trivial check: Have I faved this comment? *****/
    if (!Tml_Usr_CheckIfFavedSharedByUsr (Tml_Usr_FAV_UNF_COMM,Com->PubCod,
-				        Gbl.Usrs.Me.UsrDat.UsrCod))
+				         Gbl.Usrs.Me.UsrDat.UsrCod))
      {
       Med_MediaDestructor (&Com->Content.Media);
       return;
@@ -342,7 +342,7 @@ static void Tml_Fav_UnfComm (struct Tml_Com_Comment *Com)
 
    /***** Update number of times this comment is favourited *****/
    Com->NumFavs = Tml_DB_GetNumFavers (Tml_Usr_FAV_UNF_COMM,
-				      Com->PubCod,Com->UsrCod);
+				       Com->PubCod,Com->UsrCod);
 
    /***** Mark possible notifications on this comment as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV,Com->PubCod);
