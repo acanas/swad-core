@@ -247,8 +247,6 @@ void Tml_Not_CheckAndWriteNoteWithTopMsg (const struct Tml_Timeline *Timeline,
 
 static void Tml_Not_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherCod)
   {
-   extern const char *Txt_My_public_profile;
-   extern const char *Txt_Another_user_s_profile;
    extern const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[Tml_NUM_TOP_MESSAGES];
    struct UsrData PublisherDat;
 
@@ -265,19 +263,8 @@ static void Tml_Not_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherC
       HTM_DIV_Begin ("class=\"Tml_TOP_CONT Tml_TOP_PUBLISHER TL_WIDTH\"");
 
 	 /***** Show publisher's name inside form to go to user's public profile *****/
-         /* Begin form */
-	 Frm_BeginFormUnique (ActSeeOthPubPrf);
-	 Usr_PutParamUsrCodEncrypted (PublisherDat.EnUsrCod);
-
-	    /* Publisher's name */
-	    HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (PublisherCod) ? Txt_My_public_profile :
-								Txt_Another_user_s_profile,
-				     "BT_LINK Tml_TOP_PUBLISHER",NULL);
-	       HTM_Txt (PublisherDat.FullName);
-	    HTM_BUTTON_End ();
-
-	 /* End form */
-	 Frm_EndForm ();
+         Tml_Not_WriteAuthorName (&PublisherDat,
+                                  "BT_LINK Tml_TOP_PUBLISHER");
 
 	 /***** Show action made *****/
 	 HTM_TxtF (" %s:",Txt_TIMELINE_NOTE_TOP_MESSAGES[TopMessage]);
@@ -347,7 +334,8 @@ static void Tml_Not_WriteAuthorTimeAndContent (const struct Tml_Not_Note *Not,
    HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
 
       /***** Write author's full name *****/
-      Tml_Not_WriteAuthorName (UsrDat);
+      Tml_Not_WriteAuthorName (UsrDat,
+                               "BT_LINK TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH DAT_N_BOLD");
 
       /***** Write date and time *****/
       Tml_WriteDateTime (Not->DateTimeUTC);
@@ -363,7 +351,8 @@ static void Tml_Not_WriteAuthorTimeAndContent (const struct Tml_Not_Note *Not,
 /*************** Write name and nickname of author of a note *****************/
 /*****************************************************************************/
 
-void Tml_Not_WriteAuthorName (const struct UsrData *UsrDat)
+void Tml_Not_WriteAuthorName (const struct UsrData *UsrDat,
+                              const char *Class)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
@@ -376,8 +365,7 @@ void Tml_Not_WriteAuthorName (const struct UsrData *UsrDat)
       /* Author's name */
       HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
 							    Txt_Another_user_s_profile,
-			       "BT_LINK TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH DAT_N_BOLD",
-			       NULL);
+			       Class,NULL);
 	 HTM_Txt (UsrDat->FullName);
       HTM_BUTTON_End ();
 

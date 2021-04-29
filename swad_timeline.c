@@ -310,25 +310,26 @@ void Tml_RefreshNewTimelineGbl (void)
   {
    struct Tml_Timeline Timeline;
 
-   if (Gbl.Session.IsOpen)	// If session has been closed, do not write anything
-     {
-      /***** Reset timeline context *****/
-      Tml_ResetTimeline (&Timeline);
+   /***** Trivial check: session should be open *****/
+   if (!Gbl.Session.IsOpen)	// If session has been closed...
+      return;			// ...do not write anything
 
-      /***** Get which users *****/
-      Timeline.Who = Tml_Who_GetGlobalWho ();
+   /***** Reset timeline context *****/
+   Tml_ResetTimeline (&Timeline);
 
-      /***** Get list of pubications to show in timeline *****/
-      Timeline.UsrOrGbl  = Tml_Usr_TIMELINE_GBL;
-      Timeline.WhatToGet = Tml_GET_ONLY_NEW_PUBS;
-      Tml_Pub_GetListPubsToShowInTimeline (&Timeline);
+   /***** Get which users *****/
+   Timeline.Who = Tml_Who_GetGlobalWho ();
 
-      /***** Show new timeline *****/
-      Tml_Pub_InsertNewPubsInTimeline (&Timeline);
+   /***** Get list of pubications to show in timeline *****/
+   Timeline.UsrOrGbl  = Tml_Usr_TIMELINE_GBL;
+   Timeline.WhatToGet = Tml_GET_ONLY_NEW_PUBS;
+   Tml_Pub_GetListPubsToShowInTimeline (&Timeline);
 
-      /***** Free chained list of publications *****/
-      Tml_Pub_FreeListPubs (&Timeline);
-     }
+   /***** Show new timeline *****/
+   Tml_Pub_InsertNewPubsInTimeline (&Timeline);
+
+   /***** Free chained list of publications *****/
+   Tml_Pub_FreeListPubs (&Timeline);
   }
 
 /*****************************************************************************/
@@ -356,16 +357,16 @@ void Tml_RefreshOldTimelineUsr (void)
    struct Tml_Timeline Timeline;
 
    /***** Get user whom profile is displayed *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())	// Existing user
-     {
-      /***** Reset timeline context *****/
-      Tml_ResetTimeline (&Timeline);
+   if (!Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())	// If user does not exist...
+      return;							// ...do not write anything
 
-      /***** If user exists, show old publications *****/
-      Timeline.UsrOrGbl  = Tml_Usr_TIMELINE_USR;
-      Timeline.WhatToGet = Tml_GET_ONLY_OLD_PUBS;
-      Tml_GetAndShowOldTimeline (&Timeline);
-     }
+   /***** Reset timeline context *****/
+   Tml_ResetTimeline (&Timeline);
+
+   /***** If user exists, show old publications *****/
+   Timeline.UsrOrGbl  = Tml_Usr_TIMELINE_USR;
+   Timeline.WhatToGet = Tml_GET_ONLY_OLD_PUBS;
+   Tml_GetAndShowOldTimeline (&Timeline);
   }
 
 /*****************************************************************************/

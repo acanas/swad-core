@@ -179,7 +179,8 @@ static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
    HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
 
       /***** Author name *****/
-      Tml_Not_WriteAuthorName (&Gbl.Usrs.Me.UsrDat);
+      Tml_Not_WriteAuthorName (&Gbl.Usrs.Me.UsrDat,
+                               "BT_LINK TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH DAT_N_BOLD");
 
       /***** Form to write the post *****/
       /* Begin container */
