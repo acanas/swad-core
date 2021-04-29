@@ -140,7 +140,7 @@ static void Tml_Pst_ShowPostContent (struct Tml_Pst_Content *Content)
    /***** Show media *****/
    Med_ShowMedia (&Content->Media,"TL_PST_MED_CONT TL_RIGHT_WIDTH",
 	                          "TL_PST_MED TL_RIGHT_WIDTH");
-   }
+  }
 
 /*****************************************************************************/
 /********************** Form to write a new publication **********************/

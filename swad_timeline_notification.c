@@ -117,7 +117,7 @@ void Tml_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
    /***** Return nothing on error *****/
    Pub.PubType = Tml_Pub_UNKNOWN;
-   SummaryStr[0] = '\0';	// Return nothing on error
+   SummaryStr[0]  = '\0';	// Return nothing on error
    Content.Txt[0] = '\0';
 
    /***** Get summary and content from post from database *****/

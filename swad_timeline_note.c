@@ -848,8 +848,8 @@ static void Tml_Not_WriteFavShaRem (const struct Tml_Timeline *Timeline,
 	             " class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\"",
 		     Gbl.UniqueNameEncrypted,NumDiv);
 	 Tml_Usr_PutIconFavSha (Tml_Usr_SHA_UNS_NOTE,
-	                       Not->NotCod,Not->UsrCod,Not->NumShared,
-	                       Tml_Usr_SHOW_FEW_USRS);
+	                        Not->NotCod,Not->UsrCod,Not->NumShared,
+	                        Tml_Usr_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /***** Foot column 3: icon to remove this note *****/
@@ -1045,8 +1045,8 @@ void Tml_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
 	       return;
 	   }
          Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (NoteType,
-                                                       FileBrowser,Brw_GetCodForFiles (),
-                                                       Path);
+                                                        FileBrowser,Brw_GetCodForFiles (),
+                                                        Path);
          break;
       default:
 	 break;
@@ -1139,15 +1139,15 @@ static void Tml_Not_RequestRemovalNote (struct Tml_Timeline *Timeline)
 		 NULL,Box_CLOSABLE);
       HTM_DIV_Begin ("class=\"TL_WIDTH\"");
 	 Tml_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-					     Tml_TOP_MESSAGE_NONE,
-					     -1L);
+					      Tml_TOP_MESSAGE_NONE,
+					      -1L);
       HTM_DIV_End ();
    Box_BoxEnd ();
 
    /* End alert */
    Timeline->NotCod = Not.NotCod;	// Note to be removed
    Tml_Frm_EndAlertRemove (Timeline,Tml_Frm_REM_NOTE,
-			  Tml_Not_PutParamsRemoveNote);
+			   Tml_Not_PutParamsRemoveNote);
   }
 
 /*****************************************************************************/
@@ -1213,6 +1213,7 @@ void Tml_Not_RemoveNoteGbl (void)
 static void Tml_Not_RemoveNote (void)
   {
    extern const char *Txt_The_post_no_longer_exists;
+   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
    extern const char *Txt_TIMELINE_Post_removed;
    struct Tml_Not_Note Not;
 
@@ -1230,7 +1231,7 @@ static void Tml_Not_RemoveNote (void)
    /***** Trivial check 2: Am I the author of this note *****/
    if (!Usr_ItsMe (Not.UsrCod))
      {
-      Ale_ShowAlert (Ale_ERROR,"You are not the author.");
+      Ale_ShowAlert (Ale_ERROR,Txt_You_dont_have_permission_to_perform_this_action);
       return;
      }
 
@@ -1318,7 +1319,7 @@ static void Tml_Not_GetDataOfNoteFromRow (MYSQL_ROW row,struct Tml_Not_Note *Not
    row[3]: UsrCod
    row[4]: HieCod
    row[5]: Unavailable
-   row[5]: UNIX_TIMESTAMP(TimeNote)
+   row[6]: UNIX_TIMESTAMP(TimeNote)
    */
    /***** Get code (row[0]) *****/
    Not->NotCod      = Str_ConvertStrCodToLongCod (row[0]);
@@ -1342,11 +1343,11 @@ static void Tml_Not_GetDataOfNoteFromRow (MYSQL_ROW row,struct Tml_Not_Note *Not
    Not->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[6]);
 
    /***** Get number of times this note has been shared *****/
-   Not->NumShared = Tml_DB_GetNumSharers (Not->NotCod,Not->UsrCod);
+   Not->NumShared   = Tml_DB_GetNumSharers (Not->NotCod,Not->UsrCod);
 
    /***** Get number of times this note has been favourited *****/
-   Not->NumFavs = Tml_DB_GetNumFavers (Tml_Usr_FAV_UNF_NOTE,
-                                      Not->NotCod,Not->UsrCod);
+   Not->NumFavs     = Tml_DB_GetNumFavers (Tml_Usr_FAV_UNF_NOTE,
+                                           Not->NotCod,Not->UsrCod);
   }
 
 /*****************************************************************************/

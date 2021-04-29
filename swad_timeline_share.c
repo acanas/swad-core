@@ -81,8 +81,8 @@ void Tml_Sha_ShowAllSharersNoteGbl (void)
 
    /***** Write HTML inside DIV with form to share/unshare *****/
    Tml_Usr_PutIconFavSha (Tml_Usr_SHA_UNS_NOTE,
-	                 Not.NotCod,Not.UsrCod,Not.NumShared,
-	                 Tml_Usr_SHOW_ALL_USRS);
+	                  Not.NotCod,Not.UsrCod,Not.NumShared,
+	                  Tml_Usr_SHOW_ALL_USRS);
   }
 
 /*****************************************************************************/
@@ -107,8 +107,8 @@ void Tml_Sha_ShaNoteGbl (void)
 
    /***** Write HTML inside DIV with form to unshare *****/
    Tml_Usr_PutIconFavSha (Tml_Usr_SHA_UNS_NOTE,
-	                 Not.NotCod,Not.UsrCod,Not.NumShared,
-	                 Tml_Usr_SHOW_FEW_USRS);
+	                  Not.NotCod,Not.UsrCod,Not.NumShared,
+	                  Tml_Usr_SHOW_FEW_USRS);
   }
 
 static void Tml_Sha_ShaNote (struct Tml_Not_Note *Not)
@@ -126,7 +126,7 @@ static void Tml_Sha_ShaNote (struct Tml_Not_Note *Not)
 
    /***** Trivial check: Is note already shared by me? *****/
    if (Tml_Usr_CheckIfFavedSharedByUsr (Tml_Usr_SHA_UNS_NOTE,Not->NotCod,
-                                       Gbl.Usrs.Me.UsrDat.UsrCod))
+                                        Gbl.Usrs.Me.UsrDat.UsrCod))
       return;
 
    /***** Share (publish note in timeline) *****/
@@ -167,8 +167,8 @@ void Tml_Sha_UnsNoteGbl (void)
 
    /***** Write HTML inside DIV with form to share *****/
    Tml_Usr_PutIconFavSha (Tml_Usr_SHA_UNS_NOTE,
-	                 Not.NotCod,Not.UsrCod,Not.NumShared,
-	                 Tml_Usr_SHOW_FEW_USRS);
+	                  Not.NotCod,Not.UsrCod,Not.NumShared,
+	                  Tml_Usr_SHOW_FEW_USRS);
   }
 
 static void Tml_Sha_UnsNote (struct Tml_Not_Note *Not)

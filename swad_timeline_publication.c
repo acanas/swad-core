@@ -60,7 +60,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Tml_Pub_InitializeRangeOfPubs (Tml_WhatToGet_t WhatToGet,
-                                          struct Tml_Pub_RangePubsToGet *RangePubsToGet);
+                                           struct Tml_Pub_RangePubsToGet *RangePubsToGet);
 
 static unsigned Tml_Pub_GetMaxPubsToGet (const struct Tml_Timeline *Timeline);
 
@@ -165,7 +165,7 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
       Timeline->Pubs.Bottom = Pub;	// Update pointer to bottom publication
 
       if (Pub == NULL)	// Nothing got ==> abort loop
-         break;	// Last publication
+         break;		// Last publication
 
       /* Insert note in temporary tables with just retrieved notes.
 	 These tables will be used to not get notes already shown */
@@ -201,7 +201,7 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
 /*****************************************************************************/
 
 static void Tml_Pub_InitializeRangeOfPubs (Tml_WhatToGet_t WhatToGet,
-                                          struct Tml_Pub_RangePubsToGet *RangePubsToGet)
+                                           struct Tml_Pub_RangePubsToGet *RangePubsToGet)
   {
    /* Initialize range of pubs:
 
@@ -276,16 +276,14 @@ static void Tml_Pub_UpdateFirstLastPubCodesIntoSession (const struct Tml_Timelin
 	 Tml_DB_UpdateLastPubCodInSession ();
 	 break;
       case Tml_GET_ONLY_OLD_PUBS:	// Get only old publications
-	 // The oldest publication code retrieved and shown
-	 FirstPubCod = Timeline->Pubs.Bottom ? Timeline->Pubs.Bottom->PubCod :
-			                       0;
-	 Tml_DB_UpdateFirstPubCodInSession (FirstPubCod);
-	 break;
       case Tml_GET_RECENT_TIMELINE:	// Get last publications
 	 // The oldest publication code retrieved and shown
 	 FirstPubCod = Timeline->Pubs.Bottom ? Timeline->Pubs.Bottom->PubCod :
 			                       0;
-         Tml_DB_UpdateFirstLastPubCodsInSession (FirstPubCod);
+	 if (Timeline->WhatToGet == Tml_GET_ONLY_OLD_PUBS)
+	    Tml_DB_UpdateFirstPubCodInSession (FirstPubCod);
+	 else
+            Tml_DB_UpdateFirstLastPubCodsInSession (FirstPubCod);
 	 break;
      }
   }
@@ -367,8 +365,8 @@ void Tml_Pub_InsertNewPubsInTimeline (struct Tml_Timeline *Timeline)
       /* Write note */
       HTM_LI_Begin ("class=\"TL_WIDTH TL_SEP TL_NEW_PUB\"");
 	 Tml_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-					     Tml_Pub_GetTopMessage (Pub->PubType),
-					     Pub->PublisherCod);
+					      Tml_Pub_GetTopMessage (Pub->PubType),
+					      Pub->PublisherCod);
       HTM_LI_End ();
      }
   }
@@ -395,8 +393,8 @@ void Tml_Pub_ShowOldPubsInTimeline (struct Tml_Timeline *Timeline)
       /* Write note */
       HTM_LI_Begin ("class=\"TL_WIDTH TL_SEP\"");
 	 Tml_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-					     Tml_Pub_GetTopMessage (Pub->PubType),
-					     Pub->PublisherCod);
+					      Tml_Pub_GetTopMessage (Pub->PubType),
+					      Pub->PublisherCod);
       HTM_LI_End ();
      }
   }
