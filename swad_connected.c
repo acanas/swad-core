@@ -1139,8 +1139,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
                                                       Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
            {
 	    /* Get course code (row[1]) */
-	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) ==
-		       Gbl.Hierarchy.Crs.CrsCod);
+	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.Hierarchy.Crs.CrsCod);
 
 	    /* Compute time from last access */
 	    if (sscanf (row[2],"%ld",&TimeDiff) != 1)

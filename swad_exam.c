@@ -1730,51 +1730,6 @@ static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt)
   }
 
 /*****************************************************************************/
-/****************** Write parameter with index of question *******************/
-/*****************************************************************************/
-
-void Exa_PutParamQstInd (unsigned QstInd)
-  {
-   Par_PutHiddenParamUnsigned (NULL,"QstInd",QstInd);
-  }
-
-/*****************************************************************************/
-/******************* Get parameter with index of question ********************/
-/*****************************************************************************/
-
-unsigned Exa_GetParamQstInd (void)
-  {
-   long QstInd;
-
-   if ((QstInd = Par_GetParToLong ("QstInd")) <= 0)
-      Err_WrongQuestionIndexExit ();
-
-   return (unsigned) QstInd;
-  }
-
-/*****************************************************************************/
-/************ Get question code given exam and index of question *************/
-/*****************************************************************************/
-
-long Exa_GetQstCodFromQstInd (long ExaCod,unsigned QstInd)
-  {
-   long QstCod;
-
-   /***** Get question code of the question to be moved up *****/
-   QstCod = DB_QuerySELECTCode ("can not get question code",
-				"SELECT QstCod"
-				 " FROM exa_set_questions"
-				" WHERE ExaCod=%ld"
-				  " AND QstInd=%u",
-				ExaCod,
-				QstInd);
-   if (QstCod <= 0)
-      Err_WrongQuestionIndexExit ();
-
-   return QstCod;
-  }
-
-/*****************************************************************************/
 /********** Get number of sessions and check is edition is possible **********/
 /*****************************************************************************/
 // Before calling this function, number of sessions must be calculated

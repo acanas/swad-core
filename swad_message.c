@@ -2936,7 +2936,7 @@ static void Msg_GetDistinctCoursesInMyMessages (struct Msg_Messages *Messages)
       /* Get next course */
       row = mysql_fetch_row (mysql_res);
       Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
-      if (Crs.CrsCod >= 0 && Messages->NumCourses < Crs_MAX_COURSES_PER_USR)
+      if (Crs.CrsCod > 0 && Messages->NumCourses < Crs_MAX_COURSES_PER_USR)
          if (Crs_GetDataOfCourseByCod (&Crs))
            {
             Messages->Courses[Messages->NumCourses].CrsCod = Crs.CrsCod;

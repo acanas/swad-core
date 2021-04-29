@@ -635,11 +635,11 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get question code (row[0]) */
-	 if ((Print->PrintedQuestions[QstInd].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	 if ((Print->PrintedQuestions[QstInd].QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
 	    Err_WrongQuestionExit ();
 
 	 /* Get set code (row[1]) */
-	 if ((Print->PrintedQuestions[QstInd].SetCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
+	 if ((Print->PrintedQuestions[QstInd].SetCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
 	    Err_WrongSetExit ();
 
          /* Get score (row[2]) */
@@ -1152,7 +1152,7 @@ static unsigned ExaPrn_GetParamQstInd (void)
   {
    long QstInd;
 
-   if ((QstInd = Par_GetParToLong ("QstInd")) < 0)
+   if ((QstInd = Par_GetParToLong ("QstInd")) < 0)	// In exams, question index should be 0, 1, 2, 3...
       Err_WrongQuestionIndexExit ();
 
    return (unsigned) QstInd;

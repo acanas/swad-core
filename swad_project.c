@@ -1557,7 +1557,6 @@ static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   long LongNum;
    bool IsAssigned;
    bool HasTitle;
    bool HasDescription;
@@ -1591,9 +1590,7 @@ static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
 	 IsAssigned = (row[0][0] != '0');
 
 	 /* Get if project is assigned or not (row[1]) */
-	 LongNum = Str_ConvertStrCodToLongCod (row[1]);
-	 NumProposedStds = (LongNum > 0) ? (unsigned) LongNum :
-	                                              0;
+	 NumProposedStds = Str_ConvertStrToUnsigned (row[1]);
 
 	 /* Get the title of the project (row[2]) */
 	 HasTitle = (row[2][0] != '0');
@@ -3179,7 +3176,6 @@ void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   long LongNum;
    Prj_Proposal_t Proposal;
 
    if (Prj->PrjCod > 0)
@@ -3235,9 +3231,7 @@ void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj)
 					      Prj_NONASSIG;
 
 	 /* Get number of students (row[6]) */
-	 LongNum = Str_ConvertStrCodToLongCod (row[6]);
-	 Prj->NumStds = (LongNum > 0) ? (unsigned) LongNum :
-	                                           0;
+	 Prj->NumStds = Str_ConvertStrToUnsigned (row[6]);
 
 	 /* Get project status (row[7]) */
 	 Prj->Proposal = Prj_PROPOSAL_DEFAULT;

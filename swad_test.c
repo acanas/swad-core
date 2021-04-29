@@ -2000,7 +2000,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
       */
 
       /* Get question code (row[0]) */
-      if ((Print->PrintedQuestions[QstInd].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Print->PrintedQuestions[QstInd].QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
 	 Err_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get answer type (row[1]) */
@@ -2169,7 +2169,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
 
       /***** Get question code (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
-      if ((Test->Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Test->Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
          Err_WrongQuestionExit ();
 
       /***** Write question row *****/
@@ -2432,7 +2432,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exam
 
       /* Get question code (row[0]) */
       row = mysql_fetch_row (mysql_res);
-      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
          Err_WrongQuestionExit ();
 
       /* Write question row */
@@ -2517,7 +2517,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
 
       /* Get question code (row[0]) */
       row = mysql_fetch_row (mysql_res);
-      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
          Err_WrongQuestionExit ();
 
       /* Write question row */
@@ -4714,7 +4714,7 @@ void Tst_RemoveSelectedQsts (void)
 	{
 	 /* Get question code (row[0]) */
 	 row = mysql_fetch_row (mysql_res);
-	 if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	 if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
 	    Err_WrongQuestionExit ();
 
 	 /* Remove test question from database */

@@ -2747,8 +2747,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
          row = mysql_fetch_row (mysql_res);
 
          /* Get question index inside survey (row[0]) */
-         if (sscanf (row[0],"%u",&(SvyQst->QstInd)) != 1)
-            Err_WrongQuestionIndexExit ();
+         SvyQst->QstInd = Str_ConvertStrToUnsigned (row[0]);
 
          /* Get the type of answer (row[1]) */
          SvyQst->AnswerType = Svy_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
@@ -3389,8 +3388,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 
 	    /* Write index of question inside survey (row[1]) */
 	    HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-	       if (sscanf (row[1],"%u",&(SvyQst.QstInd)) != 1)
-		  Err_WrongQuestionIndexExit ();
+               SvyQst.QstInd = Str_ConvertStrToUnsigned (row[1]);
 	       HTM_Unsigned (SvyQst.QstInd + 1);
 	    HTM_TD_End ();
 

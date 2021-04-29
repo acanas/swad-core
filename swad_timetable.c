@@ -1050,7 +1050,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 			/* Course code (row[6]) */
 			Tmt_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].CrsCod =
 			   (Timetable->Type == Tmt_MY_TIMETABLE ? Str_ConvertStrCodToLongCod (row[6]) :
-								    Gbl.Hierarchy.Crs.CrsCod);
+								  Gbl.Hierarchy.Crs.CrsCod);
 			/* falls through */
 			/* no break */
 		     case Tmt_TUTORING_TIMETABLE:

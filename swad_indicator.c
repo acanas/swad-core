@@ -723,7 +723,7 @@ static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 
       row = mysql_fetch_row (mysql_res);
 
       /* Get course code (row[2]) */
-      if ((CrsCod = Str_ConvertStrCodToLongCod (row[2])) < 0)
+      if ((CrsCod = Str_ConvertStrCodToLongCod (row[2])) <= 0)
          Err_WrongCourseExit ();
 
       /* Get stored number of indicators of this course */
@@ -991,7 +991,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
       row = mysql_fetch_row (mysql_res);
 
       /* Get course code (row[2]) */
-      if ((CrsCod = Str_ConvertStrCodToLongCod (row[2])) < 0)
+      if ((CrsCod = Str_ConvertStrCodToLongCod (row[2])) <= 0)
          Err_WrongCourseExit ();
 
       /* Get stored number of indicators of this course */

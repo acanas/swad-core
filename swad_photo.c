@@ -2232,7 +2232,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get degree code (row[0]) */
-	 if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	 if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
 	    Err_WrongDegreeExit ();
 
 	 /* Get data of degree */

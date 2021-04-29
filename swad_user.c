@@ -1791,8 +1791,7 @@ void Usr_GetMyCourses (void)
       row = mysql_fetch_row (mysql_res);
 
       /* Get course code */
-      CrsCod = Str_ConvertStrCodToLongCod (row[0]);
-      if (CrsCod > 0)
+      if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	{
 	 if (Gbl.Usrs.Me.MyCrss.Num == Crs_MAX_COURSES_PER_USR)
 	    Err_ShowErrorAndExit ("Maximum number of courses of a user exceeded.");

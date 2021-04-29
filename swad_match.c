@@ -1796,7 +1796,6 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
    unsigned NumQsts;
    unsigned NumQst;
    struct Tst_Question Question;
-   long LongNum;
    unsigned QstInd;
 
    /***** Get questions of the game *****/
@@ -1835,9 +1834,7 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
 	 Err_WrongQuestionExit ();
 
       /* Get question index (row[1]) */
-      if ((LongNum = Str_ConvertStrCodToLongCod (row[1])) <= 0)
-	 Err_WrongQuestionIndexExit ();
-      QstInd = (unsigned) LongNum;
+      QstInd = Str_ConvertStrToUnsigned (row[1]);
 
       /* Get answer type (row[2]) */
       Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
@@ -1869,7 +1866,6 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
    MYSQL_ROW row;
    unsigned NumAnss;
    unsigned NumAns;
-   long LongNum;
    unsigned AnsInd;
    char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
@@ -1896,9 +1892,7 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
       row = mysql_fetch_row (mysql_res);
 
       /* Get answer index (row[0]) */
-      if ((LongNum = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	 Err_WrongAnswerIndexExit ();
-      AnsInd = (unsigned) LongNum;
+      AnsInd = Str_ConvertStrToUnsigned (row[0]);
       snprintf (StrOneAnswer,sizeof (StrOneAnswer),"%u",AnsInd);
 
       /* Concatenate answer index to list of answers */
@@ -4290,7 +4284,6 @@ void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumQst;
-   long LongNum;
    unsigned QstInd;
    struct Mch_UsrAnswer UsrAnswer;
 
@@ -4315,13 +4308,11 @@ void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print)
       row = mysql_fetch_row (mysql_res);
 
       /* Get question code (row[0]) */
-      if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Print->PrintedQuestions[NumQst].QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
 	 Err_WrongQuestionExit ();
 
       /* Get question index (row[1]) */
-      if ((LongNum = Str_ConvertStrCodToLongCod (row[1])) < 0)
-	 Err_WrongQuestionExit ();
-      QstInd = (unsigned) LongNum;
+      QstInd = Str_ConvertStrToUnsigned (row[1]);
 
       /* Get indexes for this question (row[2]) */
       Str_Copy (Print->PrintedQuestions[NumQst].StrIndexes,row[2],

@@ -13499,3 +13499,9 @@ RENAME TABLE roo_MACs TO roo_macs;
 RENAME TABLE usr_IDs TO usr_ids;
 RENAME TABLE pho_clicks_without_photo TO usr_clicks_without_photo;
 
+---------------------------
+
+
+SELECT gam_questions.QstCod,gam_questions.QstInd,tst_questions.AnsType,tst_questions.Shuffle FROM gam_questions,tst_questions WHERE gam_questions.GamCod=7 AND gam_questions.QstCod=tst_questions.QstCod ORDER BY gam_questions.QstInd;
+		   
+		   

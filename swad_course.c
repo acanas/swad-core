@@ -711,7 +711,7 @@ void Crs_WriteSelectorOfCourse (void)
          row = mysql_fetch_row (mysql_res);
 
          /* Get course code (row[0]) */
-         if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
             Err_WrongCourseExit ();
 
          /* Write option */
@@ -1833,7 +1833,7 @@ bool Crs_GetDataOfCourseByCod (struct Crs_Course *Crs)
 static void Crs_GetDataOfCourseFromRow (struct Crs_Course *Crs,MYSQL_ROW row)
   {
    /***** Get course code (row[0]) *****/
-   if ((Crs->CrsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+   if ((Crs->CrsCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Err_WrongCourseExit ();
 
    /***** Get code of degree (row[1]) *****/
@@ -2826,13 +2826,13 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    */
 
    /***** Get degree code (row[0]) *****/
-   if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+   if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Err_WrongDegreeExit ();
    if (!Deg_GetDataOfDegreeByCod (&Deg))
       Err_WrongDegreeExit ();
 
    /***** Get course code (row[1]) *****/
-   if ((CrsCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
+   if ((CrsCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
       Err_WrongCourseExit ();
 
    /***** Get number of teachers and students in this course *****/

@@ -2106,7 +2106,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
          row = mysql_fetch_row (mysql_res);
 
          /* Get print code (row[0]) */
-	 if ((Print.PrnCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	 if ((Print.PrnCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
 	    Err_WrongTestExit ();
 
 	 /* Get print data */

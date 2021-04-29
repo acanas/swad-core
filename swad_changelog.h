@@ -600,13 +600,14 @@ TODO: Salvador Romero Cortés: @acanas opción para editar posts
 
 TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates(), por ejemplo al cambiar el color de la gráfica de accesos por día y hora, no se respeta la zona horaria.
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.68.4 (2021-04-27)"
+#define Log_PLATFORM_VERSION	"SWAD 20.68.5 (2021-04-29)"
 #define CSS_FILE		"swad20.45.css"
 #define JS_FILE			"swad20.6.2.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
+	Version 20.68.5:  Apr 29, 2021  Fixed bug in matches. Reported by Jesús Garrido Alcázar. (309746 lines)
 	Version 20.68.4:  Apr 27, 2021  Fixed bug in question tags. Reported by Julio Ortega Lopera. (309802 lines)
 	Version 20.68.3:  Apr 27, 2021  Maximum file size increased from 1.5 GiB to 2000 MiB. (309809 lines)
 	Version 20.68.2:  Apr 26, 2021  Code optimization in games and exams. (309807 lines)

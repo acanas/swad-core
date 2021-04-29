@@ -786,7 +786,7 @@ void Cty_GetBasicListOfCountries (void)
          row = mysql_fetch_row (mysql_res);
 
          /* Get numerical country code (row[0]) */
-         if ((Cty->CtyCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Cty->CtyCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
             Err_WrongCountrExit ();
 
          /* Get Alpha-2 country code (row[1]) */
@@ -912,7 +912,7 @@ void Cty_GetFullListOfCountries (void)
          row = mysql_fetch_row (mysql_res);
 
          /* Get numerical country code (row[0]) */
-         if ((Cty->CtyCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Cty->CtyCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
             Err_WrongCountrExit ();
 
          /* Get Alpha-2 country code (row[1]) */
@@ -981,7 +981,7 @@ void Cty_WriteSelectorOfCountry (void)
       row = mysql_fetch_row (mysql_res);
 
       /* Get country code (row[0]) */
-      if ((CtyCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((CtyCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
          Err_WrongCountrExit ();
 
       /* Write option */

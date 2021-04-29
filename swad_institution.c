@@ -835,7 +835,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Ins_Instit *Ins)
 static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row)
   {
    /***** Get institution code (row[0]) *****/
-   if ((Ins->InsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+   if ((Ins->InsCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Err_WrongInstitExit ();
 
    /***** Get country code (row[1]) *****/
@@ -1030,7 +1030,7 @@ void Ins_WriteSelectorOfInstitution (void)
          row = mysql_fetch_row (mysql_res);
 
          /* Get institution code (row[0]) */
-         if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
             Err_WrongInstitExit ();
 
          /* Write option */

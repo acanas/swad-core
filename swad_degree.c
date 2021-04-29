@@ -296,7 +296,7 @@ void Deg_WriteSelectorOfDegree (void)
          row = mysql_fetch_row (mysql_res);
 
          /* Get degree code (row[0]) */
-         if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
             Err_WrongDegreeExit ();
 
          /* Write option */
@@ -1404,7 +1404,7 @@ bool Deg_GetDataOfDegreeByCod (struct Deg_Degree *Deg)
 static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row)
   {
    /***** Get degree code (row[0]) *****/
-   if ((Deg->DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+   if ((Deg->DegCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Err_WrongDegreeExit ();
 
    /***** Get center code (row[1]) *****/
