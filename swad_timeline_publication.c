@@ -363,7 +363,10 @@ void Tml_Pub_InsertNewPubsInTimeline (struct Tml_Timeline *Timeline)
       Tml_Not_GetDataOfNoteByCod (&Not);
 
       /* Write note */
-      HTM_LI_Begin ("class=\"TL_WIDTH TL_SEP TL_NEW_PUB\"");
+      HTM_LI_Begin ("class=\"TL_WIDTH TL_SEP TL_NEW_PUB\""
+	            " data-note-code=\"%ld\"",	// Note code to be read later...
+                    Not.NotCod);		// ...from JavaScript...
+						// ...to avoid repeating notes
 	 Tml_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
 					      Tml_Pub_GetTopMessage (Pub->PubType),
 					      Pub->PublisherCod);
