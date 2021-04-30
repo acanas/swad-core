@@ -938,7 +938,7 @@ function readNewTimelineData () {
 					// ...to the top of UL 'new_timeline_list')
 					var newTimeline = document.getElementById('new_timeline_list');	// Access to UL with the new timeline
 					for (var i=0; i<numNotesJustGot; i++)
-						newTimeline.insertBefore(justNowTimeline.lastChild, newTimeline.childNodes[0]);
+						newTimeline.insertBefore(justNowTimeline.lastChild, newTimeline.firstChild);
 
 					// Update number of new posts
 					var viewNewPostsCount = document.getElementById('view_new_posts_count');
@@ -977,7 +977,8 @@ function moveNewTimelineToTimeline () {
 			var lastChildIndex = numNewNotes - i;
 
 			for (var j=0; j<lastChildIndex; j++)
-				if (newTimeline.childNodes[j].dataset.noteCode == newTimeline.lastChild.dataset.noteCode) {
+				if (newTimeline.childNodes[j].dataset.noteCode ==
+					newTimeline.lastChild.dataset.noteCode) {
 					mostRecentOcurrenceOfNote = false;
 					break;
 				}
@@ -985,8 +986,8 @@ function moveNewTimelineToTimeline () {
 			// Move or remove node from new timeline
 			if (mostRecentOcurrenceOfNote) {
 				// Move node from new timeline to timeline
-				timeline.insertBefore(newTimeline.lastChild, timeline.childNodes[0]);
-				timeline.childNodes[0].className += " TL_NEW_PUB";
+				timeline.insertBefore(newTimeline.lastChild, timeline.firstChild);
+				timeline.firstChild.className += " TL_NEW_PUB";
 			}
 			else
 				// Remove last child (because is repeated in more recent pubs)
@@ -1072,7 +1073,7 @@ function evalScriptsInElem (elem) {
 	var scrs = elem.getElementsByTagName("script");
 	var s;
 	for (var i=0; i<scrs.length; i++) {
-		s = scrs[i].childNodes[0].nodeValue;
+		s = scrs[i].firstChild.nodeValue;
 		if (s != null) eval(s);
 	}
 }
