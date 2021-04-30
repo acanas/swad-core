@@ -992,7 +992,7 @@ function moveNewTimelineToTimeline () {
 				// Remove last child (because is repeated in more recent pubs)
 				newTimeline.removeChild(newTimeline.lastChild);
 		}
-    }
+	}
 
 	// Reset number of new posts after moving
 	var viewNewPostsCount = document.getElementById('view_new_posts_count');
