@@ -1117,12 +1117,14 @@ void Tml_DB_RemoveAllFavsToPubsBy (Tml_Usr_FavSha_t FavSha,long UsrCod)
 	                  "%s"
 	           " WHERE tml_pubs.PublisherCod=%ld"	// Author of the comment
                      " AND tml_pubs.PubType=%u"
-	             " AND tml_pubs.PubCod=%s.PubCod",
+	             " AND tml_pubs.%s=%s.%s",
 	           Tml_DB_TableFav[FavSha],
 	           Tml_DB_TableFav[FavSha],
 		   UsrCod,
 		   (unsigned) Tml_DB_PubTypeFav[FavSha],
-		   Tml_DB_TableFav[FavSha]);
+		   Tml_DB_FieldFav[FavSha],
+		   Tml_DB_TableFav[FavSha],
+		   Tml_DB_FieldFav[FavSha]);
   }
 
 /*****************************************************************************/

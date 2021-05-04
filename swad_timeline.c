@@ -39,11 +39,11 @@ mysql> SHOW TABLES LIKE 'tml_%';
 
    The timeline is a set of publications.
    A publication can be:
-   · an original note    (22783, 83% of 27396)
-   · a shared note       (  750,  3% of 27396)
-   · a comment to a note ( 3863, 14% of 27396)
+   · an original note    (23573, 80% of 29435)
+   · a shared note       ( 1007,  3% of 29435)
+   · a comment to a note ( 4855, 17% of 29435)
 
-    *Numbers are got from swad.ugr.es on february 2020
+    *Numbers are got from swad.ugr.es on may 2021
 
    ____tml_pubs___             _tml_comments
   |               |           |             |
@@ -58,28 +58,28 @@ mysql> SHOW TABLES LIKE 'tml_%';
   |Publication i+4|---------->|  Comment 1  |---+ |
   |   (comment)   |           | (to note n) |   | |
   |_______________|           |_____________|   | |
-  |               |                (3863)       | |
+  |               |                (4855)       | |
   |Publication i+3|--                           | |
   |(original note)|  \                          | |
   |_______________|   \       ___tml_notes___   | |     _calls_for_exams
   |               |    \     |               |  | |    |               |
-  |Publication i+2|--   ---->|     Note n    |<-+ |    | Call for exam | (5571)
-  |(original note)|  \       |(exam announc.)|-(2639)->|_______________|
-  |_______________|   \      |_______________|  12%     ____files____
+  |Publication i+2|--   ---->|     Note n    |<-+ |    | Call for exam | (5581)
+  |(original note)|  \       |(exam announc.)|-(2622)->|_______________|
+  |_______________|   \      |_______________|  11%     ____files____
   |               |    \     |               |    |    |             |
-  |Publication i+1|--   ---->|    Note n-1   |-(64)--->| Public file | (1473406)
+  |Publication i+1|--   ---->|    Note n-1   |-(64)--->| Public file | (1497132)
   |(original note)|  \       | (public file) |  <1%    |_____________|
   |_______________|   \      |_______________|    |     _notices_
   |               |    \     |               |    |    |         |
-  | Publication i |--   ---->|    Note n-2   |-(16693)>| Notice  | (14793)
-  |(original note)|  \       |    (notice)   |  73%    |_________|
+  | Publication i |--   ---->|    Note n-2   |-(17078)>| Notice  | (14984)
+  |(original note)|  \       |    (notice)   |  72%    |_________|
   |_______________|   \      |_______________|    |     __tml_posts__
   |               |    \     |               |    |    |             |
-  ·      ...      ·     ---->|    Note n-3   |-(3119)->|    Post s   |
-  ·      ...      ·          |   (tl. post)  |  14%    |             |
+  ·      ...      ·     ---->|    Note n-3   |-(3533)->|    Post s   |
+  ·      ...      ·          |   (tl. post)  |  15%    |             |
   |_______________|          |_______________|    |    |_____________|
   |               |          |               |    |    |             |
-  | Publication 3 |          ·      ...      ·    |    ·     ...     · (3119)
+  | Publication 3 |          ·      ...      ·    |    ·     ...     · (3533)
   | (shared note) |---       ·      ...      ·    |    ·     ...     ·
   |_______________|   \      |_______________|    |    |_____________|
   |               |    \     |               |    |    |             |
@@ -88,16 +88,16 @@ mysql> SHOW TABLES LIKE 'tml_%';
   |_______________|          |_______________|         |_____________|
   |               |          |               |          _forum_post_
   | Publication 1 |--------->|     Note 1    |         |            |
-  |(original note)|          | (forum post)  |-(268)-->| Forum post | (66226)
+  |(original note)|          | (forum post)  |-(276)-->| Forum post | (66226)
   |_______________|          |_______________|   1%    |____________|
-       (27396)                    (22783)
+       (29435)                    (23573)
 
    A note can be:
-   · a timeline post      ( 3119, 14% of 22783)
-   · a public file        (   64, <1% of 22783)
-   · an exam announcement ( 2639, 12% of 22783)
-   · a notice             (16693, 73% of 22783)
-   · a forum post         (  268,  1% of 22783)
+   · a timeline post      ( 3533, 15% of 23573)
+   · a public file        (   64, <1% of 23573)
+   · an exam announcement ( 2622, 11% of 23573)
+   · a notice             (17078, 72% of 23573)
+   · a forum post         (  276,  1% of 23573)
    written by an author in a date-time.
 
    A note can have comments attached to it.
