@@ -40,7 +40,7 @@ OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
        swad_exam_set.o \
        swad_figure.o swad_figure_cache.o swad_file.o swad_file_browser.o \
        swad_file_extension.o swad_file_MIME.o swad_firewall.o swad_follow.o \
-       swad_form.o swad_forum.o \
+       swad_follow_database.o swad_form.o swad_forum.o \
        swad_game.o swad_global.o swad_group.o \
        swad_help.o swad_hierarchy.o swad_hierarchy_config.o swad_holiday.o \
        swad_HTML.o \

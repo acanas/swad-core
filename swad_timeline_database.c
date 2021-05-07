@@ -733,7 +733,7 @@ void Tml_DB_CreateSubQueryPublishers (const struct Tml_Timeline *Timeline,
 	                 Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
 	    case Usr_WHO_FOLLOWED:	// Show the timeline of the users I follow
-	       Fol_CreateTmpTableMeAndUsrsIFollow ();
+	       Fol_DB_CreateTmpTableMeAndUsrsIFollow ();
 	       SubQueries->TablePublishers = ",fol_tmp_me_and_followed";
 	       Str_Copy (SubQueries->Publishers,
 			 "tml_pubs.PublisherCod=fol_tmp_me_and_followed.UsrCod AND ",

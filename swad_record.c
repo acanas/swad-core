@@ -40,7 +40,7 @@
 #include "swad_department.h"
 #include "swad_enrolment.h"
 #include "swad_error.h"
-#include "swad_follow.h"
+#include "swad_follow_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -2630,8 +2630,8 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
       /***** Button to follow / unfollow *****/
       if (!ItsMe)	// Not me
 	{
-	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-				       Gbl.Record.UsrDat->UsrCod))
+	 if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+				          Gbl.Record.UsrDat->UsrCod))
 	    // I follow user
 	    Lay_PutContextualLinkOnlyIcon (ActUnfUsr,NULL,
 					   Rec_PutParamUsrCodEncrypted,NULL,

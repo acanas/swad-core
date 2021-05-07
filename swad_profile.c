@@ -35,7 +35,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_figure.h"
-#include "swad_follow.h"
+#include "swad_follow_database.h"
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
@@ -335,12 +335,12 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 	 Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
 	 UsrFollowsMe = false;
 	 if (NumFollowing)
-	    UsrFollowsMe = Fol_CheckUsrIsFollowerOf (UsrDat->UsrCod,
-						     Gbl.Usrs.Me.UsrDat.UsrCod);
+	    UsrFollowsMe = Fol_DB_CheckUsrIsFollowerOf (UsrDat->UsrCod,
+						        Gbl.Usrs.Me.UsrDat.UsrCod);
 	 IFollowUsr   = false;
 	 if (NumFollowers)
-	    IFollowUsr   = Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-						     UsrDat->UsrCod);
+	    IFollowUsr   = Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+						        UsrDat->UsrCod);
 
 	 /***** Show following and followers *****/
 	 Fol_ShowFollowingAndFollowers (UsrDat,

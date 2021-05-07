@@ -1,7 +1,7 @@
-// swad_follow.h: user's followers and followed
+// swad_follow_database.h: user's followers and followed operations with database
 
-#ifndef _SWAD_FOL
-#define _SWAD_FOL
+#ifndef _SWAD_FOL_DB
+#define _SWAD_FOL_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,7 +27,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include "swad_notification.h"
+#include "swad_follow.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -37,48 +37,28 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-typedef enum
-  {
-   Fol_SUGGEST_ONLY_USERS_WITH_PHOTO,
-   Fol_SUGGEST_ANY_USER,
-  } Fol_WhichUsersSuggestToFollowThem_t;
-
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Fol_PutLinkWhoToFollow (void);
-void Fol_SuggestUsrsToFollowMainZone (void);
-void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void);
+unsigned Fol_DB_GetUsrsToFollow (unsigned MaxUsrsToShow,
+				 Fol_WhichUsersSuggestToFollowThem_t WhichUsersSuggestToFollowThem,
+				 MYSQL_RES **mysql_res);
 
-void Fol_FlushCacheFollow (void);
-void Fol_GetNumFollow (long UsrCod,
-                       unsigned *NumFollowing,unsigned *NumFollowers);
-unsigned Fol_GetNumFollowers (long UsrCod);
-void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
-                                    unsigned NumFollowing,unsigned NumFollowers,
-                                    bool UsrFollowsMe,bool IFollowUsr);
-void Fol_ListFollowing (void);
-void Fol_ListFollowers (void);
+bool Fol_DB_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod);
 
-void Fol_FollowUsr1 (void);
-void Fol_FollowUsr2 (void);
-void Fol_UnfollowUsr1 (void);
-void Fol_UnfollowUsr2 (void);
+unsigned Fol_DB_GetNumFollowing (long UsrCod);
+unsigned Fol_DB_GetNumFollowers (long UsrCod);
 
-void Fol_RequestFollowStds (void);
-void Fol_RequestFollowTchs (void);
-void Fol_RequestUnfollowStds (void);
-void Fol_RequestUnfollowTchs (void);
-void Fol_FollowUsrs (void);
-void Fol_UnfollowUsrs (void);
+unsigned Fol_DB_GetListFollowing (long UsrCod,MYSQL_RES **mysql_res);
+unsigned Fol_DB_GetListFollowers (long UsrCod,MYSQL_RES **mysql_res);
 
-void Fol_GetAndShowRankingFollowers (void);
+void Fol_DB_FollowUsr (long UsrCod);
+void Fol_DB_UnfollowUsr (long UsrCod);
 
-void Fol_GetNotifFollower (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                           char **ContentStr);
+unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res);
 
-void Fol_RemoveUsrFromUsrFollow (long UsrCod);
+void Fol_DB_RemoveUsrFromUsrFollow (long UsrCod);
 
 void Fol_DB_CreateTmpTableMeAndUsrsIFollow (void);
 void Fol_DB_DropTmpTableMeAndUsrsIFollow (void);

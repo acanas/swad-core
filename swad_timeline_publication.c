@@ -193,7 +193,7 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
    /* Drop temporary table with me and users I follow */
    if (Timeline->UsrOrGbl == Tml_Usr_TIMELINE_GBL &&	// Show the global timeline
        Timeline->Who == Usr_WHO_FOLLOWED)		// Show the timeline of the users I follow
-      Fol_DropTmpTableMeAndUsrsIFollow ();
+      Fol_DB_DropTmpTableMeAndUsrsIFollow ();
   }
 
 /*****************************************************************************/
