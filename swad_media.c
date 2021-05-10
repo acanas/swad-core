@@ -47,6 +47,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_media.h"
+#include "swad_media_database.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -55,18 +56,6 @@
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
-
-static const char *Med_StringsTypeDB[Med_NUM_TYPES] =
-  {
-   [Med_TYPE_NONE] = "none",
-   [Med_JPG      ] = "jpg",
-   [Med_GIF      ] = "gif",
-   [Med_MP4      ] = "mp4",
-   [Med_WEBM     ] = "webm",
-   [Med_OGG      ] = "ogg",
-   [Med_YOUTUBE  ] = "youtube",
-   [Med_EMBED    ] = "embed",
-  };
 
 static const char *Med_Extensions[Med_NUM_TYPES] =
   {
@@ -175,10 +164,8 @@ static void Med_ShowYoutube (const struct Med_Media *Media,const char *ClassMedi
 static void Med_ShowEmbed (const struct Med_Media *Media,const char *ClassMedia);
 static void Med_AlertThirdPartyCookies (void);
 
-static Med_Type_t Med_GetTypeFromStrInDB (const char *Str);
 static Med_Type_t Med_GetTypeFromExtAndMIME (const char *Extension,
                                              const char *MIMEType);
-static const char *Med_GetStringTypeForDB (Med_Type_t Type);
 
 /*****************************************************************************/
 /********************** Media (image/video) constructor **********************/
@@ -268,15 +255,7 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
    size_t Length;
 
    /***** Get data of a media from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get media",
-		   "SELECT Type,"	// row[0]
-			  "Name,"	// row[1]
-			  "URL,"	// row[2]
-			  "Title"	// row[3]
-		    " FROM med_media"
-		   " WHERE MedCod=%ld",
-		   Media->MedCod);
+   NumRows = Med_DB_GetMediaDataByCod (&mysql_res,Media->MedCod);
 
    /***** Result should have a unique row *****/
    if (NumRows == 0)	// Media not found
@@ -288,7 +267,7 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
       row = mysql_fetch_row (mysql_res);
 
       /***** Convert type string (row[0]) to type *****/
-      Media->Type = Med_GetTypeFromStrInDB (row[0]);
+      Media->Type = Med_DB_GetTypeFromStr (row[0]);
 
       /***** Set status of media file *****/
       Media->Status = (Media->Type != Med_TYPE_NONE) ? Med_STORED_IN_DB :
@@ -385,87 +364,110 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
    /***** Create unique id for this media uploader *****/
    Frm_SetUniqueId (Id);
 
-   /***** Start media uploader container *****/
-   HTM_DIV_Begin ("class=\"MED_UPLOADER\"");			// container
+   /***** Begin media uploader container *****/
+   HTM_DIV_Begin ("class=\"MED_UPLOADER\"");				// container
 
-   /***** Icon 'clip' *****/
-   HTM_DIV_Begin ("id=\"%s_med_ico\"",Id);			// <id>_med_ico
-   HTM_A_Begin ("href=\"\" onclick=\"mediaActivateMediaUploader('%s');return false;\"",
-                Id);
-   Ico_PutIcon ("paperclip.svg",Txt_Multimedia,"ICO_HIGHLIGHT ICOx16");
-   HTM_A_End ();
-   HTM_DIV_End ();						// <id>_med_ico
+      /***** Icon 'clip' *****/
+      /* Begin container */
+      HTM_DIV_Begin ("id=\"%s_med_ico\"",Id);				// <id>_med_ico
 
-   /***** Start media uploader *****/
-   HTM_DIV_Begin ("id=\"%s_med_upl\" style=\"display:none;\"",	// container <id>_med_upl
-		  Id);
+         /* Icon 'clip' */
+	 HTM_A_Begin ("href=\"\""
+		      " onclick=\"mediaActivateMediaUploader('%s');return false;\"",
+		      Id);
+	    Ico_PutIcon ("paperclip.svg",Txt_Multimedia,"ICO_HIGHLIGHT ICOx16");
+	 HTM_A_End ();
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Multimedia,
-                 NULL,NULL,
-                 Hlp_Multimedia,Box_NOT_CLOSABLE);
+      /* End container */
+      HTM_DIV_End ();							// <id>_med_ico
 
-   /***** Action to perform on media *****/
-   Par_PutHiddenParamUnsigned (NULL,ParamUploadMedia.Action,(unsigned) Med_ACTION_NEW_MEDIA);
+      /***** Begin media uploader *****/
+      HTM_DIV_Begin ("id=\"%s_med_upl\" style=\"display:none;\"",	// container <id>_med_upl
+		     Id);
 
-   /***** Icons *****/
-   /* Start icons */
-   HTM_DIV_Begin ("class=\"PREF_CONTS\"");			// icons containers
-   HTM_DIV_Begin ("class=\"PREF_CONT\"");			// icons container
+	 /***** Begin box *****/
+	 Box_BoxBegin (NULL,Txt_Multimedia,
+		       NULL,NULL,
+		       Hlp_Multimedia,Box_NOT_CLOSABLE);
 
-   /* Draw icons */
-   for (NumUploader = 0;
-	NumUploader < Med_NUM_MEDIA_UPLOADERS;
-	NumUploader++)
-      Med_PutIconMediaUploader (Id,&MediaUploader[NumUploader]);
+	 /***** Action to perform on media *****/
+	 Par_PutHiddenParamUnsigned (NULL,ParamUploadMedia.Action,
+	                             (unsigned) Med_ACTION_NEW_MEDIA);
 
-   /* End icons */
-   HTM_DIV_End ();						// icons container
-   HTM_DIV_End ();						// icons containers
+	 /***** Icons *****/
+	 /* Begin containers */
+	 HTM_DIV_Begin ("class=\"PREF_CONTS\"");
+	 HTM_DIV_Begin ("class=\"PREF_CONT\"");
 
-   /***** Form types *****/
-   for (NumUploader = 0;
-	NumUploader < Med_NUM_MEDIA_UPLOADERS;
-	NumUploader++)
-      Med_PutHiddenFormTypeMediaUploader (Id,&MediaUploader[NumUploader],
-					  &ParamUploadMedia);
+	    /* Draw icons */
+	    for (NumUploader = 0;
+		 NumUploader < Med_NUM_MEDIA_UPLOADERS;
+		 NumUploader++)
+	       Med_PutIconMediaUploader (Id,&MediaUploader[NumUploader]);
 
-   /***** Media file *****/
-   HTM_DIV_Begin (NULL);
-   HTM_INPUT_FILE (ParamUploadMedia.File,"image/,video/",	// <id>_fil
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"%s_fil\" class=\"%s\""
-		   " disabled=\"disabled\" style=\"display:none;\"",
-		   Id,ClassInput);
-   HTM_DIV_End ();						// <id>_fil
+	 /* End containers */
+	 HTM_DIV_End ();
+	 HTM_DIV_End ();
 
-   /***** Media URL *****/
-   HTM_DIV_Begin (NULL);
-   HTM_INPUT_URL (ParamUploadMedia.URL,"",HTM_DONT_SUBMIT_ON_CHANGE,// <id>_url
-	          "id=\"%s_url\" class=\"%s\""
-		  " placeholder=\"%s\" maxlength=\"%u\""
-	          " disabled=\"disabled\" style=\"display:none;\"",
-                  Id,ClassInput,Txt_Link,Cns_MAX_CHARS_WWW);
-   HTM_DIV_End ();						// <id>_url
+	 /***** Form types *****/
+	 for (NumUploader = 0;
+	      NumUploader < Med_NUM_MEDIA_UPLOADERS;
+	      NumUploader++)
+	    Med_PutHiddenFormTypeMediaUploader (Id,&MediaUploader[NumUploader],
+						&ParamUploadMedia);
 
-   /***** Media title *****/
-   HTM_DIV_Begin (NULL);
-   HTM_INPUT_TEXT (ParamUploadMedia.Title,Med_MAX_CHARS_TITLE,"",// <id>_tit
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-	           "id=\"%s_tit\" class=\"%s\""
-	           " placeholder=\"%s\""
-	           " disabled=\"disabled\" style=\"display:none;\"",
-		   Id,ClassInput,Txt_Title_attribution);
-   HTM_DIV_End ();						// <id>_tit
+	 /***** Media file *****/
+         /* Begin container */
+	 HTM_DIV_Begin (NULL);
 
-   /***** End box *****/
-   Box_BoxEnd ();
+	    /* Media file */
+	    HTM_INPUT_FILE (ParamUploadMedia.File,"image/,video/",
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"%s_fil\" class=\"%s\""		// <id>_fil
+			    " disabled=\"disabled\" style=\"display:none;\"",
+			    Id,ClassInput);
 
-   /***** End media uploader *****/
-   HTM_DIV_End ();						// container <id>_med_upl
+         /* End container */
+	 HTM_DIV_End ();
+
+	 /***** Media URL *****/
+         /* Begin container */
+	 HTM_DIV_Begin (NULL);
+
+	    /* Media URL */
+	    HTM_INPUT_URL (ParamUploadMedia.URL,"",
+	                   HTM_DONT_SUBMIT_ON_CHANGE,
+			   "id=\"%s_url\" class=\"%s\""			// <id>_url
+			   " placeholder=\"%s\" maxlength=\"%u\""
+			   " disabled=\"disabled\" style=\"display:none;\"",
+			   Id,ClassInput,Txt_Link,Cns_MAX_CHARS_WWW);
+
+         /* End container */
+	 HTM_DIV_End ();
+
+	 /***** Media title *****/
+         /* Begin container */
+	 HTM_DIV_Begin (NULL);
+
+	    /* Media title */
+	    HTM_INPUT_TEXT (ParamUploadMedia.Title,Med_MAX_CHARS_TITLE,"",
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"%s_tit\" class=\"%s\""		// <id>_tit
+			    " placeholder=\"%s\""
+			    " disabled=\"disabled\" style=\"display:none;\"",
+			    Id,ClassInput,Txt_Title_attribution);
+
+         /* End container */
+	 HTM_DIV_End ();
+
+	 /***** End box *****/
+	 Box_BoxEnd ();
+
+      /***** End media uploader *****/
+      HTM_DIV_End ();							// container <id>_med_upl
 
    /***** End media uploader container *****/
-   HTM_DIV_End ();						// container
+   HTM_DIV_End ();							// container
   }
 
 /*****************************************************************************/
@@ -476,13 +478,20 @@ static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
 				      struct MediaUploader *MediaUploader)
   {
    /***** Icon to activate form in media uploader *****/
-   HTM_DIV_Begin ("id=\"%s_%s\" class=\"PREF_OFF\"",		// <id>_IconSuffix
+   /* Begin container */
+   HTM_DIV_Begin ("id=\"%s_%s\" class=\"PREF_OFF\"",	// <id>_IconSuffix
                   UniqueId,MediaUploader->IconSuffix);
-   HTM_A_Begin ("href=\"\" onclick=\"%s('%s');return false;\"",
-	        MediaUploader->FunctionName,UniqueId);
-   Ico_PutIcon (MediaUploader->Icon,MediaUploader->Title,"ICO_HIGHLIGHT ICOx16");
-   HTM_A_End ();
-   HTM_DIV_End ();						// <id>_IconSuffix
+
+      /* Icon to upload media */
+      HTM_A_Begin ("href=\"\" onclick=\"%s('%s');return false;\"",
+		   MediaUploader->FunctionName,UniqueId);
+	 Ico_PutIcon (MediaUploader->Icon,
+	              MediaUploader->Title,
+	              "ICO_HIGHLIGHT ICOx16");
+      HTM_A_End ();
+
+   /* End container */
+   HTM_DIV_End ();					// <id>_IconSuffix
   }
 
 /*****************************************************************************/
@@ -501,7 +510,7 @@ static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTE
    Par_PutHiddenParamUnsignedDisabled (Id,ParamUploadMedia->FormType,
 			               (unsigned) MediaUploader->FormType);
    free (Id);
-   }
+  }
 
 /*****************************************************************************/
 /******************** Get media (image/video) from form **********************/
@@ -626,10 +635,10 @@ static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction)
   {
    /***** Get parameter with the action to perform on media *****/
    return (Med_Action_t)
-	  Par_GetParToUnsignedLong (ParamAction,
-                                    0,
-                                    Med_NUM_ACTIONS - 1,
-                                    (unsigned long) Med_ACTION_DEFAULT);
+   Par_GetParToUnsignedLong (ParamAction,
+			     0,
+			     Med_NUM_ACTIONS - 1,
+			     (unsigned long) Med_ACTION_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -638,10 +647,11 @@ static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction)
 
 static Med_FormType_t Usr_GetFormTypeFromForm (struct ParamUploadMedia *ParamUploadMedia)
   {
-   return (Med_FormType_t) Par_GetParToUnsignedLong (ParamUploadMedia->FormType,
-                                                     0,
-                                                     Med_NUM_FORM_TYPES - 1,
-                                                     (unsigned long) Med_FORM_NONE);
+   return (Med_FormType_t)
+   Par_GetParToUnsignedLong (ParamUploadMedia->FormType,
+			     0,
+			     Med_NUM_FORM_TYPES - 1,
+			     (unsigned long) Med_FORM_NONE);
   }
 
 /*****************************************************************************/
@@ -1381,19 +1391,7 @@ static bool Med_MoveTmpFileToDefDir (struct Med_Media *Media,
 void Med_StoreMediaInDB (struct Med_Media *Media)
   {
    /***** Insert media into database *****/
-   Media->MedCod =
-   DB_QueryINSERTandReturnCode ("can not create media",
-			        "INSERT INTO med_media"
-			        " (Type,Name,URL,Title)"
-			        " VALUES"
-			        " ('%s','%s','%s','%s')",
-			        Med_GetStringTypeForDB (Media->Type),
-			        Media->Name  ? Media->Name  :
-			        	       "",
-			        Media->URL   ? Media->URL   :
-			        	       "",
-			        Media->Title ? Media->Title :
-			        	       "");
+   Media->MedCod = Med_DB_StoreMedia (Media);
    Media->Status = Med_STORED_IN_DB;
   }
 
@@ -1413,70 +1411,71 @@ void Med_ShowMedia (const struct Med_Media *Media,
        Media->Type == Med_TYPE_NONE)
       return;
 
-   /***** Start media container *****/
+   /***** Begin media container *****/
    HTM_DIV_Begin ("class=\"%s\"",ClassContainer);
 
-   switch (Media->Type)
-     {
-      case Med_JPG:
-      case Med_GIF:
-      case Med_MP4:
-      case Med_WEBM:
-      case Med_OGG:
-	 /***** Show uploaded file *****/
-	 /* If no media to show ==> nothing to do */
-	 if (!Media->Name)
-	    return;
-	 if (!Media->Name[0])
-	    return;
+      /***** Show media *****/
+      switch (Media->Type)
+	{
+	 case Med_JPG:
+	 case Med_GIF:
+	 case Med_MP4:
+	 case Med_WEBM:
+	 case Med_OGG:
+	    /***** Show uploaded file *****/
+	    /* If no media to show ==> nothing to do */
+	    if (!Media->Name)
+	       return;
+	    if (!Media->Name[0])
+	       return;
 
-	 /* Start optional link to external URL */
-	 PutLink = false;
-	 if (Media->URL)
-	    if (Media->URL[0])
-	       PutLink = true;
-	 if (PutLink)
-	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Media->URL);
+	    /* Start optional link to external URL */
+	    PutLink = false;
+	    if (Media->URL)
+	       if (Media->URL[0])
+		  PutLink = true;
+	    if (PutLink)
+	       HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Media->URL);
 
-	 /* Build path to private directory with the media */
-	 snprintf (PathMedPriv,sizeof (PathMedPriv),"%s/%c%c",
-		   Cfg_PATH_MEDIA_PRIVATE,
-		   Media->Name[0],
-		   Media->Name[1]);
+	    /* Build path to private directory with the media */
+	    snprintf (PathMedPriv,sizeof (PathMedPriv),"%s/%c%c",
+		      Cfg_PATH_MEDIA_PRIVATE,
+		      Media->Name[0],
+		      Media->Name[1]);
 
-	 /* Show media */
-	 switch (Media->Type)
-	   {
-	    case Med_JPG:
-	       Med_ShowJPG (Media,PathMedPriv,ClassMedia);
-	       break;
-	    case Med_GIF:
-	       Med_ShowGIF (Media,PathMedPriv,ClassMedia);
-	       break;
-	    case Med_MP4:
-	    case Med_WEBM:
-	    case Med_OGG:
-	       Med_ShowVideo (Media,PathMedPriv,ClassMedia);
-	       break;
-	    default:
-	       break;
-	   }
+	    /* Show media */
+	    switch (Media->Type)
+	      {
+	       case Med_JPG:
+		  Med_ShowJPG (Media,PathMedPriv,ClassMedia);
+		  break;
+	       case Med_GIF:
+		  Med_ShowGIF (Media,PathMedPriv,ClassMedia);
+		  break;
+	       case Med_MP4:
+	       case Med_WEBM:
+	       case Med_OGG:
+		  Med_ShowVideo (Media,PathMedPriv,ClassMedia);
+		  break;
+	       default:
+		  break;
+	      }
 
-	 /* End optional link to external URL */
-	 if (PutLink)
-	    HTM_A_End ();
-	 break;
-      case Med_YOUTUBE:
-	 /***** Show embed YouTube video *****/
-	 Med_ShowYoutube (Media,ClassMedia);
-	 break;
-      case Med_EMBED:
-	 /***** Show other embed media *****/
-	 Med_ShowEmbed (Media,ClassMedia);
-	 break;
-      default:
-	 break;
-     }
+	    /* End optional link to external URL */
+	    if (PutLink)
+	       HTM_A_End ();
+	    break;
+	 case Med_YOUTUBE:
+	    /***** Show embed YouTube video *****/
+	    Med_ShowYoutube (Media,ClassMedia);
+	    break;
+	 case Med_EMBED:
+	    /***** Show other embed media *****/
+	    Med_ShowEmbed (Media,ClassMedia);
+	    break;
+	 default:
+	    break;
+	}
 
    /***** End media container *****/
    HTM_DIV_End ();
@@ -1600,21 +1599,23 @@ static void Med_ShowGIF (const struct Med_Media *Media,
       if (Fil_CheckIfPathExists (FullPathPNGPriv))		// The static PNG image
 	{
 	 /***** Show static PNG and animated GIF *****/
+	 /* Begin container */
 	 HTM_DIV_Begin ("class=\"MED_PLAY\""
 			" onmouseover=\"toggleOnGIF(this,'%s');\""
 			" onmouseout=\"toggleOffGIF(this,'%s');\"",
 			URL_GIF,
 			URL_PNG);
 
-	 /* Image */
-	 HTM_IMG (URL,FileNamePNG,Media->Title,
-		  "class=\"%s\" lazyload=\"on\"",ClassMedia);	// Lazy load of the media
+	    /* Image */
+	    HTM_IMG (URL,FileNamePNG,Media->Title,
+		     "class=\"%s\" lazyload=\"on\"",ClassMedia);	// Lazy load of the media
 
-	 /* Overlay with GIF label */
-	 HTM_SPAN_Begin ("class=\"MED_PLAY_ICO\"");
-	 HTM_Txt ("GIF");
-	 HTM_SPAN_End ();
+	    /* Overlay with GIF label */
+	    HTM_SPAN_Begin ("class=\"MED_PLAY_ICO\"");
+	       HTM_Txt ("GIF");
+	    HTM_SPAN_End ();
 
+	 /* End container */
 	 HTM_DIV_End ();
 	}
       else
@@ -1715,19 +1716,24 @@ static void Med_ShowYoutube (const struct Med_Media *Media,const char *ClassMedi
 	 // 	allow="accelerometer; autoplay; encrypted-media;
 	 // 	gyroscope; picture-in-picture" allowfullscreen>
 	 // </iframe>
+	 /* Begin container */
 	 HTM_DIV_Begin ("class=\"MED_VIDEO_CONT\"");
-	 HTM_TxtF ("<iframe src=\"https://www.youtube.com/embed/%s\""
-		   " frameborder=\"0\""
-		   " allow=\"accelerometer; autoplay; encrypted-media;"
-		   " gyroscope; picture-in-picture\""
-		   " allowfullscreen=\"allowfullscreen\""
-		   " class=\"%s\"",
-		   Media->Name,ClassMedia);
-	 if (Media->Title)
-	    if (Media->Title[0])
-	       HTM_TxtF (" title=\"%s\"",Media->Title);
-	 HTM_Txt (">"
-		  "</iframe>");
+
+	    /* iframe for video */
+	    HTM_TxtF ("<iframe src=\"https://www.youtube.com/embed/%s\""
+		      " frameborder=\"0\""
+		      " allow=\"accelerometer; autoplay; encrypted-media;"
+		      " gyroscope; picture-in-picture\""
+		      " allowfullscreen=\"allowfullscreen\""
+		      " class=\"%s\"",
+		      Media->Name,ClassMedia);
+	    if (Media->Title)
+	       if (Media->Title[0])
+		  HTM_TxtF (" title=\"%s\"",Media->Title);
+	    HTM_Txt (">"
+		     "</iframe>");
+
+	 /* End container */
 	 HTM_DIV_End ();
         }
       else
@@ -1755,18 +1761,23 @@ static void Med_ShowEmbed (const struct Med_Media *Media,const char *ClassMedia)
 	 // 	style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;"
 	 // 	allowfullscreen>
 	 // </iframe>
+	 /* Begin container */
 	 HTM_DIV_Begin ("class=\"MED_EMBED_CONT\"");
-	 HTM_TxtF ("<iframe src=\"%s\""
-		   " frameborder=\"0\""
-	 	   " marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\""
-		   " allowfullscreen=\"allowfullscreen\""
-		   " class=\"%s\"",
-		   Media->URL,ClassMedia);
-	 if (Media->Title)
-	    if (Media->Title[0])
-	       HTM_TxtF (" title=\"%s\"",Media->Title);
-	 HTM_Txt (">"
-		  "</iframe>");
+
+	    /* iframe for external media */
+	    HTM_TxtF ("<iframe src=\"%s\""
+		      " frameborder=\"0\""
+		      " marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\""
+		      " allowfullscreen=\"allowfullscreen\""
+		      " class=\"%s\"",
+		      Media->URL,ClassMedia);
+	    if (Media->Title)
+	       if (Media->Title[0])
+		  HTM_TxtF (" title=\"%s\"",Media->Title);
+	    HTM_Txt (">"
+		     "</iframe>");
+
+	 /* End container */
 	 HTM_DIV_End ();
         }
       else
@@ -2037,30 +2048,10 @@ void Med_RemoveMedia (long MedCod)
      }
 
    /***** Step 2. Remove entry for this media from database *****/
-   DB_QueryDELETE ("can not remove media",
-		   "DELETE FROM med_media"
-		   " WHERE MedCod=%ld",
-		   MedCod);
+   Med_DB_RemoveMedia (MedCod);
 
    /***** Free media *****/
    Med_MediaDestructor (&Media);
-  }
-
-/*****************************************************************************/
-/************************ Get media type from string *************************/
-/*****************************************************************************/
-
-static Med_Type_t Med_GetTypeFromStrInDB (const char *Str)
-  {
-   Med_Type_t Type;
-
-   for (Type  = (Med_Type_t) 0;
-        Type <= (Med_Type_t) (Med_NUM_TYPES - 1);
-        Type++)
-      if (!strcasecmp (Str,Med_StringsTypeDB[Type]))
-         return Type;
-
-   return Med_TYPE_NONE;
   }
 
 /*****************************************************************************/
@@ -2121,18 +2112,4 @@ static Med_Type_t Med_GetTypeFromExtAndMIME (const char *Extension,
 	 return Med_OGG;
 
    return Med_TYPE_NONE;
-  }
-
-/*****************************************************************************/
-/*************** Get string media type in database from type *****************/
-/*****************************************************************************/
-
-static const char *Med_GetStringTypeForDB (Med_Type_t Type)
-  {
-   /***** Check if type is out of valid range *****/
-   if (Type > (Med_Type_t) (Med_NUM_TYPES - 1))
-      return Med_StringsTypeDB[Med_TYPE_NONE];
-
-   /***** Get string from type *****/
-   return Med_StringsTypeDB[Type];
   }

@@ -600,14 +600,15 @@ TODO: Salvador Romero Cortés: @acanas opción para editar posts
 
 TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates(), por ejemplo al cambiar el color de la gráfica de accesos por día y hora, no se respeta la zona horaria.
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.70 (2021-05-07)"
+#define Log_PLATFORM_VERSION	"SWAD 20.71 (2021-05-10)"
 #define CSS_FILE		"swad20.45.css"
 #define JS_FILE			"swad20.69.1.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
-	Version 20.70:    May 07, 2021  New module swad_follow_database for database queries related to followin/followers. (309943 lines)
+	Version 20.71:    May 10, 2021  New module swad_media_database for database queries related to media. (310080 lines)
+	Version 20.70:    May 07, 2021  New module swad_follow_database for database queries related to following/followers. (309943 lines)
 	Version 20.69.2:  May 04, 2021  Fixed bug in removal of timeline favs. (309778 lines)
 	Version 20.69.1:  Apr 30, 2021  Code refactoring in JavaScript (firstChild instead of childNodes[0]). (309775 lines)
 	Version 20.69:    Apr 30, 2021  Changes in timeline to not repeat notes in new activity. (309773 lines)

@@ -1,7 +1,7 @@
 // swad_media.h: processing of image/video uploaded in a form
 
-#ifndef _SWAD_IMG
-#define _SWAD_IMG
+#ifndef _SWAD_MED
+#define _SWAD_MED
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
