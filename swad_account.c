@@ -29,7 +29,7 @@
 
 #include "swad_account.h"
 #include "swad_account_database.h"
-#include "swad_agenda.h"
+#include "swad_agenda_database.h"
 #include "swad_announcement.h"
 #include "swad_attendance.h"
 #include "swad_box.h"
@@ -157,23 +157,23 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
                  NULL,NULL,
                  Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
 
-   /***** Help alert *****/
-   Ale_ShowAlert (Ale_INFO,Txt_If_you_think_you_may_have_been_registered_);
+      /***** Help alert *****/
+      Ale_ShowAlert (Ale_INFO,Txt_If_you_think_you_may_have_been_registered_);
 
-   /***** Form to request user's ID for possible account already created *****/
-   Frm_BeginForm (ActChkUsrAcc);
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_ID);
-   HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"18\" required=\"required\"");
-   HTM_LABEL_End ();
-   Btn_PutCreateButtonInline (Txt_Check);
-   Frm_EndForm ();
+      /***** Form to request user's ID for possible account already created *****/
+      Frm_BeginForm (ActChkUsrAcc);
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColonNBSP (Txt_ID);
+	    HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"18\" required=\"required\"");
+	 HTM_LABEL_End ();
+	 Btn_PutCreateButtonInline (Txt_Check);
+      Frm_EndForm ();
 
-   /***** Form to skip this step *****/
-   Frm_BeginForm (ActCreMyAcc);
-   Btn_PutConfirmButton (Txt_Skip_this_step);
-   Frm_EndForm ();
+      /***** Form to skip this step *****/
+      Frm_BeginForm (ActCreMyAcc);
+	 Btn_PutConfirmButton (Txt_Skip_this_step);
+      Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -199,9 +199,9 @@ void Acc_CheckIfEmptyAccountExists (void)
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
-   Usr_PutLinkToLogin ();
-   Pwd_PutLinkToSendNewPasswd ();
-   Lan_PutLinkToChangeLanguage ();
+      Usr_PutLinkToLogin ();
+      Pwd_PutLinkToSendNewPasswd ();
+      Lan_PutLinkToChangeLanguage ();
    Mnu_ContextMenuEnd ();
 
    /***** Get new user's ID from form *****/
@@ -341,9 +341,9 @@ void Acc_ShowFormCreateMyAccount (void)
   {
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
-   Usr_PutLinkToLogin ();
-   Pwd_PutLinkToSendNewPasswd ();
-   Lan_PutLinkToChangeLanguage ();
+      Usr_PutLinkToLogin ();
+      Pwd_PutLinkToSendNewPasswd ();
+      Lan_PutLinkToChangeLanguage ();
    Mnu_ContextMenuEnd ();
 
    /**** Show form to create a new account *****/
@@ -374,46 +374,50 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutAr
 			 NULL,NULL,
 			 Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE,2);
 
-      /***** Nickname *****/
-      if (NewNickWithoutArr[0])
-	 snprintf (NewNickWithArr,sizeof (NewNickWithArr),"@%s",
-		   NewNickWithoutArr);
-      else
-	 NewNickWithArr[0] = '\0';
-      HTM_TR_Begin (NULL);
+	 /***** Nickname *****/
+	 /* Begin table row */
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","NewNick",Txt_Nickname);
+	    /* Label */
+	    Frm_LabelColumn ("RT","NewNick",Txt_Nickname);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
-			    NewNickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"NewNick\" size=\"18\" placeholder=\"%s\""
-			    " required=\"required\"",
-			    Txt_HELP_nickname);
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       if (NewNickWithoutArr[0])
+		  snprintf (NewNickWithArr,sizeof (NewNickWithArr),"@%s",
+			    NewNickWithoutArr);
+	       else
+		  NewNickWithArr[0] = '\0';
+	       HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
+			       NewNickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"NewNick\" size=\"18\" placeholder=\"%s\""
+			       " required=\"required\"",
+			       Txt_HELP_nickname);
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 /* End table row */
+	 HTM_TR_End ();
 
-      /***** Email *****/
-      HTM_TR_Begin (NULL);
+	 /***** Email *****/
+	 /* Begin table row */
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","NewEmail",Txt_Email);
+	    /* Label */
+	    Frm_LabelColumn ("RT","NewEmail",Txt_Email);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,NewEmail,
-			     "id=\"NewEmail\" size=\"18\" placeholder=\"%s\""
-			     " required=\"required\"",
-			     Txt_HELP_email);
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,NewEmail,
+				"id=\"NewEmail\" size=\"18\" placeholder=\"%s\""
+				" required=\"required\"",
+				Txt_HELP_email);
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 /* End table row */
+	 HTM_TR_End ();
 
-      /***** Password *****/
-      Pwd_PutFormToGetNewPasswordOnce ();
+	 /***** Password *****/
+	 Pwd_PutFormToGetNewPasswordOnce ();
 
       /***** End table, send button and end box *****/
       Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_account);

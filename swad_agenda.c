@@ -33,6 +33,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_agenda.h"
+#include "swad_agenda_database.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_date.h"
@@ -67,15 +68,6 @@ static const char *ParamHiddenVisiblName = "HiddenVisibl";
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
-
-#define Agd_NUM_AGENDA_TYPES 4
-typedef enum
-  {
-   Agd_MY_AGENDA_TODAY,
-   Agd_MY_AGENDA,
-   Agd_ANOTHER_AGENDA_TODAY,
-   Agd_ANOTHER_AGENDA,
-  } Agd_AgendaType_t;
 
 /*****************************************************************************/
 /***************************** Private variables *****************************/
@@ -131,11 +123,6 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
 static void Agd_GetDataOfEventByCod (struct Agd_Event *AgdEvent);
 
 static void Agd_FreeListEvents (struct Agd_Agenda *Agenda);
-
-static void Agd_GetEventTxtFromDB (struct Agd_Event *AgdEvent,
-                                   char Txt[Cns_MAX_BYTES_TEXT + 1]);
-static void Agd_CreateEvent (struct Agd_Event *AgdEvent,const char *Txt);
-static void Agd_UpdateEvent (struct Agd_Event *AgdEvent,const char *Txt);
 
 /*****************************************************************************/
 /*************************** Reset agenda context ****************************/
@@ -203,18 +190,18 @@ static void Agd_ShowMyAgenda (struct Agd_Agenda *Agenda)
                  Agd_PutIconsMyFullAgenda,Agenda,
 		 Hlp_PROFILE_Agenda,Box_NOT_CLOSABLE);
 
-   /***** Put forms to choice which events to show *****/
-   Set_BeginSettingsHead ();
-   Agd_ShowFormToSelPast__FutureEvents (Agenda);
-   Agd_ShowFormToSelPrivatPublicEvents (Agenda);
-   Agd_ShowFormToSelHiddenVisiblEvents (Agenda);
-   Set_EndSettingsHead ();
+      /***** Put forms to choice which events to show *****/
+      Set_BeginSettingsHead ();
+      Agd_ShowFormToSelPast__FutureEvents (Agenda);
+      Agd_ShowFormToSelPrivatPublicEvents (Agenda);
+      Agd_ShowFormToSelHiddenVisiblEvents (Agenda);
+      Set_EndSettingsHead ();
 
-   /***** Show the current events in the user's agenda *****/
-   Agd_ShowEventsToday (Agenda,Agd_MY_AGENDA_TODAY);
+      /***** Show the current events in the user's agenda *****/
+      Agd_ShowEventsToday (Agenda,Agd_MY_AGENDA_TODAY);
 
-   /***** Show all my events *****/
-   Agd_ShowEvents (Agenda,Agd_MY_AGENDA);
+      /***** Show all my events *****/
+      Agd_ShowEvents (Agenda,Agd_MY_AGENDA);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -242,16 +229,16 @@ static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda
       HTM_DIV_Begin ("class=\"%s\"",
 	             (Agenda->Past__FutureEvents & (1 << PstFut)) ? "PREF_ON" :
 							            "PREF_OFF");
-      Frm_BeginForm (ActSeeMyAgd);
-      Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents ^ (1 << PstFut),	// Toggle
-		             Agenda->PrivatPublicEvents,
-		             Agenda->HiddenVisiblEvents,
-			     Agenda->SelectedOrder,
-		             Agenda->CurrentPage,
-		             -1L);
-      Ico_PutSettingIconLink (Icon[PstFut],
-	                      Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
-      Frm_EndForm ();
+	 Frm_BeginForm (ActSeeMyAgd);
+	 Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents ^ (1 << PstFut),	// Toggle
+				Agenda->PrivatPublicEvents,
+				Agenda->HiddenVisiblEvents,
+				Agenda->SelectedOrder,
+				Agenda->CurrentPage,
+				-1L);
+	    Ico_PutSettingIconLink (Icon[PstFut],
+				    Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
+	 Frm_EndForm ();
       HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
@@ -279,16 +266,16 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
       HTM_DIV_Begin ("class=\"%s\"",
 	             (Agenda->PrivatPublicEvents & (1 << PrvPub)) ? "PREF_ON" :
 							            "PREF_OFF");
-      Frm_BeginForm (ActSeeMyAgd);
-      Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
-		             Agenda->PrivatPublicEvents ^ (1 << PrvPub),	// Toggle
-		             Agenda->HiddenVisiblEvents,
-			     Agenda->SelectedOrder,
-		             Agenda->CurrentPage,
-		             -1L);
-      Ico_PutSettingIconLink (Icon[PrvPub],
-	                      Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
-      Frm_EndForm ();
+	 Frm_BeginForm (ActSeeMyAgd);
+	 Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
+				Agenda->PrivatPublicEvents ^ (1 << PrvPub),	// Toggle
+				Agenda->HiddenVisiblEvents,
+				Agenda->SelectedOrder,
+				Agenda->CurrentPage,
+				-1L);
+	    Ico_PutSettingIconLink (Icon[PrvPub],
+				    Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
+	 Frm_EndForm ();
       HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
@@ -316,16 +303,16 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda
       HTM_DIV_Begin ("class=\"%s\"",
 	             (Agenda->HiddenVisiblEvents & (1 << HidVis)) ? "PREF_ON" :
 							            "PREF_OFF");
-      Frm_BeginForm (ActSeeMyAgd);
-      Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
-		             Agenda->PrivatPublicEvents,
-		             Agenda->HiddenVisiblEvents ^ (1 << HidVis),	// Toggle
-			     Agenda->SelectedOrder,
-		             Agenda->CurrentPage,
-		             -1L);
-      Ico_PutSettingIconLink (Icon[HidVis],
-	                      Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis]);
-      Frm_EndForm ();
+	 Frm_BeginForm (ActSeeMyAgd);
+	 Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
+				Agenda->PrivatPublicEvents,
+				Agenda->HiddenVisiblEvents ^ (1 << HidVis),	// Toggle
+				Agenda->SelectedOrder,
+				Agenda->CurrentPage,
+				-1L);
+	    Ico_PutSettingIconLink (Icon[HidVis],
+				    Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis]);
+	 Frm_EndForm ();
       HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
@@ -419,11 +406,11 @@ void Agd_ShowUsrAgenda (void)
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
          Str_FreeString ();
 
-	 /***** Show the current events in the user's agenda *****/
-	 Agd_ShowEventsToday (&Agenda,Agd_ANOTHER_AGENDA_TODAY);
+	    /***** Show the current events in the user's agenda *****/
+	    Agd_ShowEventsToday (&Agenda,Agd_ANOTHER_AGENDA_TODAY);
 
-	 /***** Show all the visible events in the user's agenda *****/
-	 Agd_ShowEvents (&Agenda,Agd_ANOTHER_AGENDA);
+	    /***** Show all the visible events in the user's agenda *****/
+	    Agd_ShowEvents (&Agenda,Agd_ANOTHER_AGENDA);
 
 	 /***** End box *****/
 	 Box_BoxEnd ();
@@ -473,11 +460,11 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 			     Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
             Str_FreeString ();
 
-	    /***** Show the current events in the user's agenda *****/
-	    Agd_ShowEventsToday (&Agenda,Agd_ANOTHER_AGENDA_TODAY);
+	       /***** Show the current events in the user's agenda *****/
+	       Agd_ShowEventsToday (&Agenda,Agd_ANOTHER_AGENDA_TODAY);
 
-	    /***** Show all the visible events in the user's agenda *****/
-	    Agd_ShowEvents (&Agenda,Agd_ANOTHER_AGENDA);
+	       /***** Show all the visible events in the user's agenda *****/
+	       Agd_ShowEvents (&Agenda,Agd_ANOTHER_AGENDA);
 
 	    /***** End box *****/
 	    Box_BoxEnd ();
@@ -534,14 +521,14 @@ static void Agd_ShowEvents (struct Agd_Agenda *Agenda,
       /***** Begin table *****/
       HTM_TABLE_BeginWideMarginPadding (2);
 
-      /***** Table head *****/
-      Agd_WriteHeaderListEvents (Agenda,AgendaType);
+	 /***** Table head *****/
+	 Agd_WriteHeaderListEvents (Agenda,AgendaType);
 
-      /***** Write all the events *****/
-      for (NumEvent = Pagination.FirstItemVisible;
-	   NumEvent <= Pagination.LastItemVisible;
-	   NumEvent++)
-	 Agd_ShowOneEvent (Agenda,AgendaType,Agenda->LstAgdCods[NumEvent - 1]);
+	 /***** Write all the events *****/
+	 for (NumEvent = Pagination.FirstItemVisible;
+	      NumEvent <= Pagination.LastItemVisible;
+	      NumEvent++)
+	    Agd_ShowOneEvent (Agenda,AgendaType,Agenda->LstAgdCods[NumEvent - 1]);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -603,14 +590,14 @@ static void Agd_ShowEventsToday (struct Agd_Agenda *Agenda,
 	    break;
         }
 
-      /***** Table head *****/
-      Agd_WriteHeaderListEvents (Agenda,AgendaType);
+	 /***** Table head *****/
+	 Agd_WriteHeaderListEvents (Agenda,AgendaType);
 
-      /***** Write all the events *****/
-      for (NumEvent = 0;
-	   NumEvent < Agenda->Num;
-	   NumEvent++)
-	 Agd_ShowOneEvent (Agenda,AgendaType,Agenda->LstAgdCods[NumEvent]);
+	 /***** Write all the events *****/
+	 for (NumEvent = 0;
+	      NumEvent < Agenda->Num;
+	      NumEvent++)
+	    Agd_ShowOneEvent (Agenda,AgendaType,Agenda->LstAgdCods[NumEvent]);
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
@@ -636,46 +623,48 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
    /***** Table head *****/
    HTM_TR_Begin (NULL);
 
-   for (Order  = Dat_START_TIME;
-	Order <= Dat_END_TIME;
-	Order++)
-     {
-      HTM_TH_Begin (1,1,"LM");
-      switch (AgendaType)
+      for (Order  = Dat_START_TIME;
+	   Order <= Dat_END_TIME;
+	   Order++)
 	{
-	 case Agd_MY_AGENDA_TODAY:
-	 case Agd_MY_AGENDA:
-	    Frm_BeginForm (ActSeeMyAgd);
-            Pag_PutHiddenParamPagNum (Pag_MY_AGENDA,Agenda->CurrentPage);
-	    break;
-	 case Agd_ANOTHER_AGENDA_TODAY:
-	 case Agd_ANOTHER_AGENDA:
-	    Frm_BeginForm (ActSeeUsrAgd);
-	    Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-            Pag_PutHiddenParamPagNum (Pag_ANOTHER_AGENDA,Agenda->CurrentPage);
-	    break;
+	 HTM_TH_Begin (1,1,"LM");
+	    switch (AgendaType)
+	      {
+	       case Agd_MY_AGENDA_TODAY:
+	       case Agd_MY_AGENDA:
+		  Frm_BeginForm (ActSeeMyAgd);
+		  Pag_PutHiddenParamPagNum (Pag_MY_AGENDA,Agenda->CurrentPage);
+		  break;
+	       case Agd_ANOTHER_AGENDA_TODAY:
+	       case Agd_ANOTHER_AGENDA:
+		  Frm_BeginForm (ActSeeUsrAgd);
+		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+		  Pag_PutHiddenParamPagNum (Pag_ANOTHER_AGENDA,Agenda->CurrentPage);
+		  break;
+	      }
+	    Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
+				   Agenda->PrivatPublicEvents,
+				   Agenda->HiddenVisiblEvents,
+				   Order,
+				   Agenda->CurrentPage,
+				   -1L);
+
+	       HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
+		  if (Order == Agenda->SelectedOrder)
+		     HTM_U_Begin ();
+
+		  HTM_Txt (Txt_START_END_TIME[Order]);
+
+		  if (Order == Agenda->SelectedOrder)
+		     HTM_U_End ();
+	       HTM_BUTTON_End ();
+
+	    Frm_EndForm ();
+	 HTM_TH_End ();
 	}
-      Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
-		             Agenda->PrivatPublicEvents,
-		             Agenda->HiddenVisiblEvents,
-			     Order,
-		             Agenda->CurrentPage,
-		             -1L);
 
-      HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
-      if (Order == Agenda->SelectedOrder)
-	 HTM_U_Begin ();
-      HTM_Txt (Txt_START_END_TIME[Order]);
-      if (Order == Agenda->SelectedOrder)
-	 HTM_U_End ();
-      HTM_BUTTON_End ();
-
-      Frm_EndForm ();
-      HTM_TH_End ();
-     }
-
-   HTM_TH (1,1,"LM",Txt_Event);
-   HTM_TH (1,1,"LM",Txt_Location);
+      HTM_TH (1,1,"LM",Txt_Event);
+      HTM_TH (1,1,"LM",Txt_Location);
 
    HTM_TR_End ();
   }
@@ -767,6 +756,7 @@ static void Agd_PutButtonToCreateNewEvent (const struct Agd_Agenda *Agenda)
   {
    extern const char *Txt_New_event;
 
+   /***** Begin form *****/
    Frm_BeginForm (ActFrmNewEvtMyAgd);
    Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
 		          Agenda->PrivatPublicEvents,
@@ -774,7 +764,11 @@ static void Agd_PutButtonToCreateNewEvent (const struct Agd_Agenda *Agenda)
 			  Agenda->SelectedOrder,
 		          Agenda->CurrentPage,
 		          -1L);
-   Btn_PutConfirmButton (Txt_New_event);
+
+      /***** Confirm button *****/
+      Btn_PutConfirmButton (Txt_New_event);
+
+   /***** End form *****/
    Frm_EndForm ();
   }
 
@@ -815,74 +809,73 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
    /***** Write first row of data of this event *****/
    HTM_TR_Begin (NULL);
 
-   /* Start/end date/time */
-   UniqueId++;
-   for (StartEndTime  = (Dat_StartEndTime_t) 0;
-	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	StartEndTime++)
-     {
-      if (asprintf (&Id,"agd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_TD_Begin ("id=\"%s\" class=\"%s LB COLOR%u\"",
-		    Id,
-		    AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
-				      Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
+      /* Start/end date/time */
+      UniqueId++;
+      for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	   StartEndTime++)
+	{
+	 if (asprintf (&Id,"agd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB COLOR%u\"",
+		       Id,
+		       AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
+					 Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
+		       Gbl.RowEvenOdd);
+	    Dat_WriteLocalDateHMSFromUTC (Id,AgdEvent.TimeUTC[StartEndTime],
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+					  true,true,true,0x6);
+	 HTM_TD_End ();
+	 free (Id);
+	}
+
+      /* Event */
+      HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
+		    AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
+				      "ASG_TITLE",
 		    Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC (Id,AgdEvent.TimeUTC[StartEndTime],
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				    true,true,true,0x6);
+	 HTM_ARTICLE_Begin (Anchor);
+	    HTM_Txt (AgdEvent.Event);
+	 HTM_ARTICLE_End ();
       HTM_TD_End ();
-      free (Id);
-     }
 
-   /* Event */
-   HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
-		 AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
-				   "ASG_TITLE",
-		 Gbl.RowEvenOdd);
-   HTM_ARTICLE_Begin (Anchor);
-   HTM_Txt (AgdEvent.Event);
-   HTM_ARTICLE_End ();
-   HTM_TD_End ();
-
-   /* Location */
-   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_DIV_Begin ("class=\"%s\"",AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
-        	                                   "ASG_TITLE");
-   HTM_Txt (AgdEvent.Location);
-   HTM_DIV_End ();
-   HTM_TD_End ();
+      /* Location */
+      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_DIV_Begin ("class=\"%s\"",AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
+							 "ASG_TITLE");
+	    HTM_Txt (AgdEvent.Location);
+	 HTM_DIV_End ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
    /***** Write second row of data of this event *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   switch (AgendaType)
-     {
-      case Agd_MY_AGENDA_TODAY:
-      case Agd_MY_AGENDA:
-         /* Forms to remove/edit this event */
-         Agd_PutFormsToRemEditOneEvent (Agenda,&AgdEvent,Anchor);
-         break;
-      default:
-	 break;
-     }
-   HTM_TD_End ();
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 switch (AgendaType)
+	   {
+	    case Agd_MY_AGENDA_TODAY:
+	    case Agd_MY_AGENDA:
+	       /* Forms to remove/edit this event */
+	       Agd_PutFormsToRemEditOneEvent (Agenda,&AgdEvent,Anchor);
+	       break;
+	    default:
+	       break;
+	   }
+      HTM_TD_End ();
 
-   /* Text of the event */
-   Agd_GetEventTxtFromDB (&AgdEvent,Txt);
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-   Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-
-   HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_DIV_Begin ("class=\"PAR %s\"",AgdEvent.Hidden ? "DAT_LIGHT" :
-        	                                       "DAT");
-   HTM_Txt (Txt);
-   HTM_DIV_End ();
-   HTM_TD_End ();
+      /* Text of the event */
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_DIV_Begin ("class=\"PAR %s\"",AgdEvent.Hidden ? "DAT_LIGHT" :
+							     "DAT");
+	    Agd_DB_GetEventTxt (&AgdEvent,Txt);
+	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+	    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+	    HTM_Txt (Txt);
+	 HTM_DIV_End ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
@@ -1045,24 +1038,13 @@ static void Agd_GetParamEventOrder (struct Agd_Agenda *Agenda)
 static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
                                Agd_AgendaType_t AgendaType)
   {
-   char *UsrSubQuery;
-   char Past__FutureEventsSubQuery[Agd_MAX_BYTES_SUBQUERY + 1];
-   char PrivatPublicEventsSubQuery[Agd_MAX_BYTES_SUBQUERY + 1];
-   char HiddenVisiblEventsSubQuery[Agd_MAX_BYTES_SUBQUERY + 1];
-   static const char *OrderBySubQuery[Dat_NUM_START_END_TIME] =
-     {
-      [Dat_START_TIME] = "StartTime,EndTime,Event,Location",
-      [Dat_END_TIME  ] = "EndTime,StartTime,Event,Location",
-     };
    MYSQL_RES *mysql_res;
    unsigned NumEvent;
-   bool DoQuery = true;
 
    /***** Initialize list of events *****/
    Agd_FreeListEvents (Agenda);
 
-   /***** Get list of events from database *****/
-   /* Build events subqueries */
+   /***** Trivial check: anything to get from database? *****/
    switch (AgendaType)
      {
       case Agd_MY_AGENDA_TODAY:
@@ -1070,121 +1052,35 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
 	 if (Agenda->Past__FutureEvents == 0 ||
              Agenda->PrivatPublicEvents == 0 ||
              Agenda->HiddenVisiblEvents == 0)	// All selectors are off
-	    DoQuery = false;			// Nothing to get from database
-	 else
 	   {
-	    if (asprintf (&UsrSubQuery,"UsrCod=%ld",
-			  Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    if (AgendaType == Agd_MY_AGENDA_TODAY)
-	       Str_Copy (Past__FutureEventsSubQuery,
-			 " AND DATE(StartTime)<=CURDATE()"
-			 " AND DATE(EndTime)>=CURDATE()",
-			 sizeof (Past__FutureEventsSubQuery) - 1);	// Today events
-	    else
-	       switch (Agenda->Past__FutureEvents)
-		 {
-		  case (1 << Agd_PAST___EVENTS):
-		     Str_Copy (Past__FutureEventsSubQuery,
-			       " AND DATE(StartTime)<=CURDATE()",
-			       sizeof (Past__FutureEventsSubQuery) - 1);	// Past and today events
-		     break;
-		  case (1 << Agd_FUTURE_EVENTS):
-		     Str_Copy (Past__FutureEventsSubQuery,
-			       " AND DATE(EndTime)>=CURDATE()",
-			       sizeof (Past__FutureEventsSubQuery) - 1);	// Today and future events
-		     break;
-		  default:
-		     Past__FutureEventsSubQuery[0] = '\0';	// All events
-		     break;
-		 }
-	    switch (Agenda->PrivatPublicEvents)
-	      {
-	       case (1 << Agd_PRIVAT_EVENTS):
-		  Str_Copy (PrivatPublicEventsSubQuery," AND Public='N'",
-		            sizeof (PrivatPublicEventsSubQuery) - 1);	// Private events
-		  break;
-	       case (1 << Agd_PUBLIC_EVENTS):
-		  Str_Copy (PrivatPublicEventsSubQuery," AND Public='Y'",
-		            sizeof (PrivatPublicEventsSubQuery) - 1);	// Public events
-		  break;
-	       default:
-		  PrivatPublicEventsSubQuery[0] = '\0';	// All events
-		  break;
-	      }
-	    switch (Agenda->HiddenVisiblEvents)
-	      {
-	       case (1 << Agd_HIDDEN_EVENTS):
-		  Str_Copy (HiddenVisiblEventsSubQuery," AND Hidden='Y'",
-		            sizeof (HiddenVisiblEventsSubQuery) - 1);	// Hidden events
-		  break;
-	       case (1 << Agd_VISIBL_EVENTS):
-		  Str_Copy (HiddenVisiblEventsSubQuery," AND Hidden='N'",
-		            sizeof (HiddenVisiblEventsSubQuery) - 1);	// Visible events
-		  break;
-	       default:
-		  HiddenVisiblEventsSubQuery[0] = '\0';	// All events
-		  break;
-	      }
+	    // Nothing to get from database
+	    Agenda->LstIsRead = true;
+	    return;
 	   }
 	 break;
-      case Agd_ANOTHER_AGENDA_TODAY:
-      case Agd_ANOTHER_AGENDA:
-	 if (asprintf (&UsrSubQuery,"UsrCod=%ld",
-	               Gbl.Usrs.Other.UsrDat.UsrCod) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 if (AgendaType == Agd_ANOTHER_AGENDA_TODAY)
-	    Str_Copy (Past__FutureEventsSubQuery,
-		      " AND DATE(StartTime)<=CURDATE()"
-		      " AND DATE(EndTime)>=CURDATE()",
-		      sizeof (Past__FutureEventsSubQuery) - 1);		// Today events
-	 else
-	    Str_Copy (Past__FutureEventsSubQuery,
-		      " AND DATE(EndTime)>=CURDATE()",
-		      sizeof (Past__FutureEventsSubQuery) - 1);		// Today and future events
-	 Str_Copy (PrivatPublicEventsSubQuery," AND Public='Y'",
-	           sizeof (PrivatPublicEventsSubQuery) - 1);		// Public events
-	 Str_Copy (HiddenVisiblEventsSubQuery," AND Hidden='N'",
-	           sizeof (HiddenVisiblEventsSubQuery) - 1);		// Visible events
+      default:
+	 break;
      }
 
-   if (DoQuery)
+   /***** Get list of events from database *****/
+   if ((Agenda->Num = Agd_DB_GetListEvents (&mysql_res,Agenda,AgendaType))) // Events found...
      {
-      /* Make query */
-      Agenda->Num = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get agenda events",
-		     "SELECT AgdCod"	// row[0]
-		      " FROM agd_agendas"
-		     " WHERE %s%s%s%s"
-		     " ORDER BY %s",
-		     UsrSubQuery,
-		     Past__FutureEventsSubQuery,
-		     PrivatPublicEventsSubQuery,
-		     HiddenVisiblEventsSubQuery,
-		     OrderBySubQuery[Agenda->SelectedOrder]);
+      /***** Create list of events *****/
+      if ((Agenda->LstAgdCods = calloc ((size_t) Agenda->Num,
+					sizeof (*Agenda->LstAgdCods))) == NULL)
+	 Err_NotEnoughMemoryExit ();
 
-      /* Free allocated memory for subquery */
-      free (UsrSubQuery);
-
-      if (Agenda->Num) // Events found...
-	{
-	 /***** Create list of events *****/
-	 if ((Agenda->LstAgdCods = calloc ((size_t) Agenda->Num,
-	                                   sizeof (*Agenda->LstAgdCods))) == NULL)
-	    Err_NotEnoughMemoryExit ();
-
-	 /***** Get the events codes *****/
-	 for (NumEvent = 0;
-	      NumEvent < Agenda->Num;
-	      NumEvent++)
-	    /* Get next event code */
-	    if ((Agenda->LstAgdCods[NumEvent] = DB_GetNextCode (mysql_res)) < 0)
-	       Err_WrongEventExit ();
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+      /***** Get the events codes *****/
+      for (NumEvent = 0;
+	   NumEvent < Agenda->Num;
+	   NumEvent++)
+	 /* Get next event code */
+	 if ((Agenda->LstAgdCods[NumEvent] = DB_GetNextCode (mysql_res)) < 0)
+	    Err_WrongEventExit ();
      }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    Agenda->LstIsRead = true;
   }
@@ -1199,21 +1095,7 @@ static void Agd_GetDataOfEventByCod (struct Agd_Event *AgdEvent)
    MYSQL_ROW row;
 
    /***** Get data of event from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get agenda event data",
-	               "SELECT AgdCod,"				// row[0]
-	                      "Public,"				// row[1]
-	                      "Hidden,"				// row[2]
-		              "UNIX_TIMESTAMP(StartTime),"	// row[3]
-		              "UNIX_TIMESTAMP(EndTime),"	// row[4]
-		              "NOW()>EndTime,"			// row[5]	Past event?
-		              "NOW()<StartTime,"		// row[6]	Future event?
-		              "Event,"				// row[7]
-		              "Location"			// row[8]
-		       " FROM agd_agendas"
-		       " WHERE AgdCod=%ld"
-		       " AND UsrCod=%ld",
-		       AgdEvent->AgdCod,
-		       AgdEvent->UsrCod))	// Event found...
+   if (Agd_DB_GetDataOfEventByCod (&mysql_res,AgdEvent))	// Event found...
      {
       /* Get row:
       row[0] AgdCod
@@ -1252,14 +1134,14 @@ static void Agd_GetDataOfEventByCod (struct Agd_Event *AgdEvent)
    else
      {
       /***** Clear all event data *****/
-      AgdEvent->AgdCod = -1L;
-      AgdEvent->Public = false;
-      AgdEvent->Hidden = false;
+      AgdEvent->AgdCod                  = -1L;
+      AgdEvent->Public                  = false;
+      AgdEvent->Hidden                  = false;
       AgdEvent->TimeUTC[Dat_START_TIME] =
       AgdEvent->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
-      AgdEvent->TimeStatus = Dat_FUTURE;
-      AgdEvent->Event[0]    = '\0';
-      AgdEvent->Location[0] = '\0';
+      AgdEvent->TimeStatus              = Dat_FUTURE;
+      AgdEvent->Event[0]                = '\0';
+      AgdEvent->Location[0]             = '\0';
      }
 
    /***** Free structure that stores the query result *****/
@@ -1280,23 +1162,6 @@ static void Agd_FreeListEvents (struct Agd_Agenda *Agenda)
       Agenda->Num = 0;
       Agenda->LstIsRead = false;
      }
-  }
-
-/*****************************************************************************/
-/*********************** Get event text from database ************************/
-/*****************************************************************************/
-
-static void Agd_GetEventTxtFromDB (struct Agd_Event *AgdEvent,
-                                   char Txt[Cns_MAX_BYTES_TEXT + 1])
-  {
-   /***** Get text of event from database *****/
-   DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get event text",
-		         "SELECT Txt"
-			  " FROM agd_agendas"
-		         " WHERE AgdCod=%ld"
-			   " AND UsrCod=%ld",
-		         AgdEvent->AgdCod,
-		         AgdEvent->UsrCod);
   }
 
 /*****************************************************************************/
@@ -1371,12 +1236,7 @@ void Agd_RemoveEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Remove event *****/
-   DB_QueryDELETE ("can not remove event",
-		   "DELETE FROM agd_agendas"
-		   " WHERE AgdCod=%ld"
-		     " AND UsrCod=%ld",
-                   AgdEvent.AgdCod,
-                   AgdEvent.UsrCod);
+   Agd_DB_RemoveEvent (&AgdEvent);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_removed,
@@ -1410,13 +1270,7 @@ void Agd_HideEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Set event private *****/
-   DB_QueryUPDATE ("can not hide event",
-		   "UPDATE agd_agendas"
-		     " SET Hidden='Y'"
-		   " WHERE AgdCod=%ld"
-		     " AND UsrCod=%ld",
-                   AgdEvent.AgdCod,
-                   AgdEvent.UsrCod);
+   Agd_DB_HideEvent (&AgdEvent);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda (&Agenda);
@@ -1446,13 +1300,7 @@ void Agd_UnhideEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Set event public *****/
-   DB_QueryUPDATE ("can not show event",
-		   "UPDATE agd_agendas"
-		     " SET Hidden='N'"
-		   " WHERE AgdCod=%ld"
-		     " AND UsrCod=%ld",
-                   AgdEvent.AgdCod,
-                   AgdEvent.UsrCod);
+   Agd_DB_UnhideEvent (&AgdEvent);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda (&Agenda);
@@ -1483,13 +1331,7 @@ void Agd_MakeEventPrivate (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Make event private *****/
-   DB_QueryUPDATE ("can not make event private",
-		   "UPDATE agd_agendas"
-		     " SET Public='N'"
-		   " WHERE AgdCod=%ld"
-		     " AND UsrCod=%ld",
-                   AgdEvent.AgdCod,
-                   AgdEvent.UsrCod);
+   Agd_DB_MakeEventPrivate (&AgdEvent);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_is_now_private,
@@ -1524,13 +1366,7 @@ void Agd_MakeEventPublic (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Make event public *****/
-   DB_QueryUPDATE ("can not make event public",
-		   "UPDATE agd_agendas"
-		     " SET Public='Y'"
-		   " WHERE AgdCod=%ld"
-		     " AND UsrCod=%ld",
-                   AgdEvent.AgdCod,
-                   AgdEvent.UsrCod);
+   Agd_DB_MakeEventPublic (&AgdEvent);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_is_now_visible_to_users_of_your_courses,
@@ -1592,7 +1428,7 @@ void Agd_RequestCreatOrEditEvent (void)
       Agd_GetDataOfEventByCod (&AgdEvent);
 
       /* Get text of the event from database */
-      Agd_GetEventTxtFromDB (&AgdEvent,Txt);
+      Agd_DB_GetEventTxt (&AgdEvent,Txt);
      }
 
    /***** Begin form *****/
@@ -1608,75 +1444,81 @@ void Agd_RequestCreatOrEditEvent (void)
      }
    Agd_PutCurrentParamsMyAgenda (&Agenda);
 
-   /***** Begin box and table *****/
-   if (ItsANewEvent)
-      Box_BoxTableBegin (NULL,Txt_New_event,
-                         NULL,NULL,
-			 Hlp_PROFILE_Agenda_new_event,Box_NOT_CLOSABLE,2);
-   else
-      Box_BoxTableBegin (NULL,Txt_Edit_event,
-                         NULL,NULL,
-			 Hlp_PROFILE_Agenda_edit_event,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      if (ItsANewEvent)
+	 Box_BoxTableBegin (NULL,Txt_New_event,
+			    NULL,NULL,
+			    Hlp_PROFILE_Agenda_new_event,Box_NOT_CLOSABLE,2);
+      else
+	 Box_BoxTableBegin (NULL,Txt_Edit_event,
+			    NULL,NULL,
+			    Hlp_PROFILE_Agenda_edit_event,Box_NOT_CLOSABLE,2);
 
-   /***** Event *****/
-   HTM_TR_Begin (NULL);
+      /***** Event *****/
+      /* Begin table row */
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Event",Txt_Event);
+	 /* Label */
+	 Frm_LabelColumn ("RT","Event",Txt_Event);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Event",Agd_MAX_CHARS_EVENT,AgdEvent.Event,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"Event\" required=\"required\""
-		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_INPUT_TEXT ("Event",Agd_MAX_CHARS_EVENT,AgdEvent.Event,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"Event\" required=\"required\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH\"");
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      /* End table row */
+      HTM_TR_End ();
 
-   /***** Location *****/
-   HTM_TR_Begin (NULL);
+      /***** Location *****/
+      /* Begin table row */
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Location",Txt_Location);
+	 /* Label */
+	 Frm_LabelColumn ("RT","Location",Txt_Location);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Location",Agd_MAX_CHARS_LOCATION,AgdEvent.Location,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"Location\" required=\"required\""
-		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_INPUT_TEXT ("Location",Agd_MAX_CHARS_LOCATION,AgdEvent.Location,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"Location\" required=\"required\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH\"");
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      /* End table row */
+      HTM_TR_End ();
 
-   /***** Start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (AgdEvent.TimeUTC,
-                                            Dat_FORM_SECONDS_OFF,
-					    SetHMS);
+      /***** Start and end dates *****/
+      Dat_PutFormStartEndClientLocalDateTimes (AgdEvent.TimeUTC,
+					       Dat_FORM_SECONDS_OFF,
+					       SetHMS);
 
-   /***** Text *****/
-   HTM_TR_Begin (NULL);
+      /***** Text *****/
+      /* Begin table row */
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Txt",Txt_Description);
+	 /* Label */
+	 Frm_LabelColumn ("RT","Txt",Txt_Description);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   if (!ItsANewEvent)
-      HTM_Txt (Txt);
-   HTM_TEXTAREA_End ();
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+				" class=\"TITLE_DESCRIPTION_WIDTH\"");
+	    if (!ItsANewEvent)
+	       HTM_Txt (Txt);
+	    HTM_TEXTAREA_End ();
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      /* End table row */
+      HTM_TR_End ();
 
-   /***** End table, send button and end box *****/
-   if (ItsANewEvent)
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_event);
-   else
-      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      /***** End table, send button and end box *****/
+      if (ItsANewEvent)
+	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_event);
+      else
+	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1750,7 +1592,7 @@ void Agd_ReceiveFormEvent (void)
      {
       if (ItsANewEvent)
 	{
-         Agd_CreateEvent (&AgdEvent,EventTxt);	// Add new event to database
+         AgdEvent.AgdCod = Agd_DB_CreateEvent (&AgdEvent,EventTxt);	// Add new event to database
 
 	 /***** Write success message *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
@@ -1758,7 +1600,7 @@ void Agd_ReceiveFormEvent (void)
 	}
       else
         {
-	 Agd_UpdateEvent (&AgdEvent,EventTxt);
+	 Agd_DB_UpdateEvent (&AgdEvent,EventTxt);
 
 	 /***** Write success message *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
@@ -1776,259 +1618,6 @@ void Agd_ReceiveFormEvent (void)
   }
 
 /*****************************************************************************/
-/************************** Create a new event *******************************/
-/*****************************************************************************/
-
-static void Agd_CreateEvent (struct Agd_Event *AgdEvent,const char *Txt)
-  {
-   /***** Create a new event *****/
-   AgdEvent->AgdCod =
-   DB_QueryINSERTandReturnCode ("can not create new event",
-				"INSERT INTO agd_agendas"
-				" (UsrCod,StartTime,EndTime,"
-				  "Event,Location,Txt)"
-				" VALUES"
-				" (%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-				  "'%s','%s','%s')",
-				AgdEvent->UsrCod,
-				AgdEvent->TimeUTC[Dat_START_TIME],
-				AgdEvent->TimeUTC[Dat_END_TIME  ],
-				AgdEvent->Event,
-				AgdEvent->Location,
-				Txt);
-  }
-
-/*****************************************************************************/
-/************************ Update an existing event ***************************/
-/*****************************************************************************/
-
-static void Agd_UpdateEvent (struct Agd_Event *AgdEvent,const char *Txt)
-  {
-   /***** Update the data of the event *****/
-   DB_QueryUPDATE ("can not update event",
-		   "UPDATE agd_agendas"
-		     " SET StartTime=FROM_UNIXTIME(%ld),"
-		          "EndTime=FROM_UNIXTIME(%ld),"
-		          "Event='%s',"
-		          "Location='%s',"
-		          "Txt='%s'"
-		   " WHERE AgdCod=%ld"
-		     " AND UsrCod=%ld",
-                   AgdEvent->TimeUTC[Dat_START_TIME],
-                   AgdEvent->TimeUTC[Dat_END_TIME  ],
-                   AgdEvent->Event,
-                   AgdEvent->Location,
-                   Txt,
-                   AgdEvent->AgdCod,
-                   AgdEvent->UsrCod);
-  }
-
-/*****************************************************************************/
-/********************** Remove all the events of a user **********************/
-/*****************************************************************************/
-
-void Agd_DB_RemoveUsrEvents (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove all the events of a user",
-		   "DELETE FROM agd_agendas"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
-  }
-
-/*****************************************************************************/
-/********************* Get number of events from a user **********************/
-/*****************************************************************************/
-
-unsigned Agd_GetNumEventsFromUsr (long UsrCod)
-  {
-   /***** Get number of events in a course from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of events from user",
-		  "SELECT COUNT(*)"
-		   " FROM agd_agendas"
-		  " WHERE UsrCod=%ld",
-		  UsrCod);
-  }
-
-/*****************************************************************************/
-/********************** Get number of users with events **********************/
-/*****************************************************************************/
-// Returns the number of users with events in a given scope
-
-unsigned Agd_GetNumUsrsWithEvents (Hie_Lvl_Level_t Scope)
-  {
-   /***** Get number of users with events from database *****/
-   switch (Scope)
-     {
-      case Hie_Lvl_SYS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of users with events",
-                        "SELECT COUNT(DISTINCT UsrCod)"
-			 " FROM agd_agendas"
-		        " WHERE UsrCod>0");
-       case Hie_Lvl_CTY:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of users with events",
-                        "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_users,"
-			       "agd_agendas"
-			" WHERE ins_instits.CtyCod=%ld"
-			  " AND ins_instits.InsCod=ctr_centers.InsCod"
-			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			  " AND deg_degrees.DegCod=crs_courses.DegCod"
-			  " AND crs_courses.CrsCod=crs_users.CrsCod"
-			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-		        Gbl.Hierarchy.Cty.CtyCod);
-       case Hie_Lvl_INS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of users with events",
-                        "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_users,"
-			       "agd_agendas"
-			" WHERE ctr_centers.InsCod=%ld"
-			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			  " AND deg_degrees.DegCod=crs_courses.DegCod"
-			  " AND crs_courses.CrsCod=crs_users.CrsCod"
-			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of users with events",
-                        "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
-			"  FROM deg_degrees,"
-			       "crs_courses,"
-			       "crs_users,"
-			       "agd_agendas"
-			" WHERE deg_degrees.CtrCod=%ld"
-			  " AND deg_degrees.DegCod=crs_courses.DegCod"
-			  " AND crs_courses.CrsCod=crs_users.CrsCod"
-			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of users with events",
-                        "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
-			 " FROM crs_courses,"
-			       "crs_users,"
-			       "agd_agendas"
-			" WHERE crs_courses.DegCod=%ld"
-			  " AND crs_courses.CrsCod=crs_users.CrsCod"
-			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of users with events",
-                        "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
-			 " FROM crs_users,"
-			       "agd_agendas"
-			" WHERE crs_users.CrsCod=%ld"
-			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Crs.CrsCod);
-      default:
-	 Err_WrongScopeExit ();
-	 return 0;	// Not reached
-     }
-  }
-
-/*****************************************************************************/
-/*************************** Get number of events ****************************/
-/*****************************************************************************/
-// Returns the number of events in a given scope
-
-unsigned Agd_GetNumEvents (Hie_Lvl_Level_t Scope)
-  {
-   /***** Get number of events from database *****/
-   switch (Scope)
-     {
-      case Hie_Lvl_SYS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of events",
-                        "SELECT COUNT(*)"
-			 " FROM agd_agendas"
-			" WHERE UsrCod>0");
-      case Hie_Lvl_CTY:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of events",
-                        "SELECT COUNT(*)"
-			 " FROM (SELECT DISTINCT crs_users.UsrCod"
-                                 " FROM ins_instits,"
-			               "ctr_centers,"
-			               "deg_degrees,"
-			               "crs_courses,"
-			               "crs_users"
-			        " WHERE ins_instits.CtyCod=%ld"
-			          " AND ins_instits.InsCod=ctr_centers.InsCod"
-			          " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			          " AND deg_degrees.DegCod=crs_courses.DegCod"
-			          " AND crs_courses.CrsCod=crs_users.CrsCod) AS users,"
-			       "agd_agendas"
-			" WHERE users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Cty.CtyCod);
-      case Hie_Lvl_INS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of events",
-                        "SELECT COUNT(*)"
-			 " FROM (SELECT DISTINCT crs_users.UsrCod"
-                                 " FROM ctr_centers,"
-			               "deg_degrees,"
-			               "crs_courses,"
-			               "crs_users"
-			        " WHERE ctr_centers.InsCod=%ld"
-			          " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			          " AND deg_degrees.DegCod=crs_courses.DegCod"
-			          " AND crs_courses.CrsCod=crs_users.CrsCod) AS users,"
-			       "agd_agendas"
-			" WHERE users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of events",
-                        "SELECT COUNT(*)"
-			 " FROM (SELECT DISTINCT crs_users.UsrCod"
-                                 " FROM deg_degrees,"
-			               "crs_courses,"
-			               "crs_users"
-			        " WHERE deg_degrees.CtrCod=%ld"
-			          " AND deg_degrees.DegCod=crs_courses.DegCod"
-			          " AND crs_courses.CrsCod=crs_users.CrsCod) AS users,"
-			       "agd_agendas"
-			" WHERE users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of events",
-                        "SELECT COUNT(*)"
-			 " FROM (SELECT DISTINCT crs_users.UsrCod"
-			         " FROM crs_courses,"
-			               "crs_users"
-			        " WHERE crs_courses.DegCod=%ld"
-			          " AND crs_courses.CrsCod=crs_users.CrsCod) AS users,"
-			       "agd_agendas"
-			" WHERE users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of events",
-                        "SELECT COUNT(*)"
-			 " FROM crs_users,"
-			       "agd_agendas"
-			" WHERE crs_users.CrsCod=%ld"
-			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Crs.CrsCod);
-      default:
-	 Err_WrongScopeExit ();
-	 return 0;	// Not reached
-     }
-  }
-
-/*****************************************************************************/
 /************************** Show an agenda QR code ***************************/
 /*****************************************************************************/
 
@@ -2043,8 +1632,8 @@ void Agd_PrintAgdQRCode (void)
                  NULL,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
-   /***** Print QR code ****/
-   QR_PrintQRCode ();
+      /***** Print QR code ****/
+      QR_PrintQRCode ();
 
    /***** End box *****/
    Box_BoxEnd ();

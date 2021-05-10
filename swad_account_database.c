@@ -25,37 +25,10 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-// #include <string.h>		// For string functions
-
 #include "swad_account.h"
 #include "swad_account_database.h"
-// #include "swad_agenda.h"
-// #include "swad_announcement.h"
-// #include "swad_attendance.h"
-// #include "swad_box.h"
 #include "swad_calendar.h"
-// #include "swad_database.h"
-// #include "swad_duplicate.h"
-// #include "swad_enrolment.h"
-// #include "swad_error.h"
-// #include "swad_exam_print.h"
-// #include "swad_follow.h"
-// #include "swad_form.h"
-// #include "swad_forum.h"
 #include "swad_global.h"
-// #include "swad_HTML.h"
-// #include "swad_ID.h"
-// #include "swad_language.h"
-// #include "swad_match.h"
-// #include "swad_message.h"
-// #include "swad_nickname.h"
-// #include "swad_notification.h"
-// #include "swad_parameter.h"
-// #include "swad_profile.h"
-// #include "swad_project.h"
-// #include "swad_report.h"
-// #include "swad_test_print.h"
-// #include "swad_timeline.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -131,7 +104,6 @@ bool Acc_DB_CheckIfEmailAlreadyExists (const char NewEmail[Cns_MAX_BYTES_EMAIL_A
 	                  NewEmail) != 0);	// An email of another user is the same that my email
   }
 
-
 /*****************************************************************************/
 /****************************** Create new user ******************************/
 /*****************************************************************************/
@@ -145,10 +117,8 @@ void Acc_DB_CreateNewUsr (struct UsrData *UsrDat)
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
 
-   /***** Create birthday string *****/
-   Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);	// It can include start and ending apostrophes
-
    /***** Create new user *****/
+   Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);	// It can include start and ending apostrophes
    UsrDat->UsrCod =
    DB_QueryINSERTandReturnCode ("can not create user",
  	                        "INSERT INTO usr_data"

@@ -91,6 +91,15 @@ struct Agd_Agenda
    unsigned CurrentPage;
   };
 
+#define Agd_NUM_AGENDA_TYPES 4
+typedef enum
+  {
+   Agd_MY_AGENDA_TODAY,
+   Agd_MY_AGENDA,
+   Agd_ANOTHER_AGENDA_TODAY,
+   Agd_ANOTHER_AGENDA,
+  } Agd_AgendaType_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -124,12 +133,6 @@ void Agd_MakeEventPrivate (void);
 void Agd_MakeEventPublic (void);
 
 void Agd_ReceiveFormEvent (void);
-
-void Agd_DB_RemoveUsrEvents (long UsrCod);
-unsigned Agd_GetNumEventsFromUsr (long UsrCod);
-
-unsigned Agd_GetNumUsrsWithEvents (Hie_Lvl_Level_t Scope);
-unsigned Agd_GetNumEvents (Hie_Lvl_Level_t Scope);
 
 void Agd_PrintAgdQRCode (void);
 

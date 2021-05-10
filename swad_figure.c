@@ -31,7 +31,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
-#include "swad_agenda.h"
+#include "swad_agenda_database.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -4968,10 +4968,10 @@ static void Fig_GetAndShowAgendasStats (void)
    HTM_TR_End ();
 
    /***** Number of agenda events *****/
-   NumEvents = Agd_GetNumEvents (Gbl.Scope.Current);
+   NumEvents = Agd_DB_GetNumEvents (Gbl.Scope.Current);
 
    /***** Number of users with agenda events *****/
-   NumUsrs = Agd_GetNumUsrsWithEvents (Gbl.Scope.Current);
+   NumUsrs = Agd_DB_GetNumUsrsWithEvents (Gbl.Scope.Current);
 
    /***** Get total number of users in current scope *****/
    NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
