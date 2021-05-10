@@ -444,14 +444,25 @@ void Con_UpdateMeInConnectedList (void)
 /************************** Remove old connected uses ************************/
 /*****************************************************************************/
 
-void Con_RemoveOldConnected (void)
+void Con_DB_RemoveOldConnected (void)
   {
-   /***** Remove old users from connected list *****/
    DB_QueryDELETE ("can not remove old users from list of connected users",
 		   "DELETE FROM usr_connected"
 		   " WHERE UsrCod NOT IN"
 		         " (SELECT DISTINCT(UsrCod)"
 		            " FROM ses_sessions)");
+  }
+
+/*****************************************************************************/
+/************* Remove a given user from list of connected users **************/
+/*****************************************************************************/
+
+void Con_DB_RemoveUsrFromConnected (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove a user from table of connected users",
+		   "DELETE FROM usr_connected"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
   }
 
 /*****************************************************************************/

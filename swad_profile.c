@@ -436,7 +436,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /***** Right list *****/
    HTM_DIV_Begin ("class=\"PRF_FIG_RIGHT_CONT\"");
 
-   UsrIsBannedFromRanking = Usr_CheckIfUsrBanned (UsrDat->UsrCod);
+   UsrIsBannedFromRanking = Usr_DB_CheckIfUsrBanned (UsrDat->UsrCod);
    if (!UsrIsBannedFromRanking)
      {
       /* Start right list */
@@ -1322,9 +1322,8 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
 /**************************** Remove user's figures **************************/
 /*****************************************************************************/
 
-void Prf_RemoveUsrFigures (long UsrCod)
+void Prf_DB_RemoveUsrFigures (long UsrCod)
   {
-   /***** Remove user's figures *****/
    DB_QueryDELETE ("can not delete user's figures",
 		   "DELETE FROM usr_figures"
 		   " WHERE UsrCod=%ld",

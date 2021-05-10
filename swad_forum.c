@@ -402,17 +402,18 @@ static void For_RestrictAccess (const struct For_Forums *Forums);
 static void For_WriteFormForumPst (struct For_Forums *Forums,
                                    bool IsReply,const char *Subject);
 
-static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
+static void For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,
+                                                          unsigned NumUsrsToBeNotifiedByEMail);
 
 static void For_PutAllHiddenParamsRemThread (void *Forums);
 
 static bool For_CheckIfICanMoveThreads (void);
-static long For_GetThrInMyClipboard (void);
-static bool For_CheckIfThrBelongsToForum (long ThrCod,const struct For_Forum *Forum);
-static void For_MoveThrToCurrentForum (const struct For_Forums *Forums);
+static long For_DB_GetThrInMyClipboard (void);
+static bool For_DB_CheckIfThrBelongsToForum (long ThrCod,const struct For_Forum *Forum);
+static void For_DB_MoveThrToCurrentForum (const struct For_Forums *Forums);
 static void For_InsertThrInClipboard (long ThrCod);
-static void For_RemoveExpiredThrsClipboards (void);
-static void For_RemoveThrCodFromThrClipboard (long ThrCod);
+static void For_DB_RemoveExpiredThrsClipboards (void);
+static void For_DB_RemoveThrCodFromThrClipboard (long ThrCod);
 
 /*****************************************************************************/
 /********************************** Reset forum ******************************/
@@ -692,7 +693,7 @@ static void For_RemoveThreadOnly (long ThrCod)
    For_DeleteThrFromReadThrs (ThrCod);
 
    /***** Remove thread code from thread clipboard *****/
-   For_RemoveThrCodFromThrClipboard (ThrCod);
+   For_DB_RemoveThrCodFromThrClipboard (ThrCod);
 
    /***** Delete thread from forum thread table *****/
    DB_QueryDELETE ("can not remove a thread from a forum",
@@ -995,12 +996,11 @@ static void For_DeleteThrFromReadThrs (long ThrCod)
   }
 
 /*****************************************************************************/
-/********************** Delete thread read status for an user ****************/
+/********************** Remove thread read status for a user *****************/
 /*****************************************************************************/
 
-void For_RemoveUsrFromReadThrs (long UsrCod)
+void For_DB_RemoveUsrFromReadThrs (long UsrCod)
   {
-   /***** Delete pairs ThrCod-UsrCod in for_read for a user *****/
    DB_QueryDELETE ("can not remove the status of reading by a user"
 		   " of all the threads of a forum",
 		   "DELETE FROM for_read"
@@ -1039,7 +1039,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 
    /***** Get if there is a thread ready to be moved *****/
    if (For_CheckIfICanMoveThreads ())
-      Forums->Thread.ToMove = For_GetThrInMyClipboard ();
+      Forums->Thread.ToMove = For_DB_GetThrInMyClipboard ();
 
    /***** Get thread read time for the current user *****/
    ReadTimeUTC = For_GetThrReadTime (Thread.ThrCod);
@@ -1602,7 +1602,7 @@ static void For_ShowForumList (struct For_Forums *Forums)
 
    /***** Get if there is a thread ready to be moved *****/
    if (For_CheckIfICanMoveThreads ())
-      Forums->Thread.ToMove = For_GetThrInMyClipboard ();
+      Forums->Thread.ToMove = For_DB_GetThrInMyClipboard ();
 
    /***** Fill the list with the institutions I belong to *****/
    Usr_GetMyInstits ();
@@ -2097,7 +2097,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
    if (Forums->Thread.ToMove >= 0) // If I have permission to paste threads and there is a thread ready to be pasted...
      {
       /* Check if thread to move is yet in current forum */
-      if (For_CheckIfThrBelongsToForum (Forums->Thread.ToMove,Forum))
+      if (For_DB_CheckIfThrBelongsToForum (Forums->Thread.ToMove,Forum))
          Ico_PutIcon ("paste.svg",Txt_Copy_not_allowed,"CONTEXT_OPT ICO_HIDDEN ICO16x16");
       else
         {
@@ -3501,7 +3501,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 
    /***** Get if there is a thread ready to be moved *****/
    if ((ICanMoveThreads = For_CheckIfICanMoveThreads ()))
-      ThreadInMyClipboard = For_GetThrInMyClipboard ();
+      ThreadInMyClipboard = For_DB_GetThrInMyClipboard ();
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -4187,7 +4187,7 @@ void For_ReceiveForumPost (void)
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
 	 if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_FORUM_POST_COURSE,PstCod)))
-	    For_UpdateNumUsrsNotifiedByEMailAboutPost (PstCod,NumUsrsToBeNotifiedByEMail);
+	    For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (PstCod,NumUsrsToBeNotifiedByEMail);
 	 break;
       default:
 	 break;
@@ -4196,7 +4196,7 @@ void For_ReceiveForumPost (void)
    /***** Notify the new post to previous writers in this thread *****/
    if (IsReply)
       if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_FORUM_REPLY,PstCod)))
-         For_UpdateNumUsrsNotifiedByEMailAboutPost (PstCod,NumUsrsToBeNotifiedByEMail);
+         For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (PstCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Insert forum post into public social activity *****/
    switch (Forums.Forum.Type)	// Only if forum is public for any logged user
@@ -4223,9 +4223,9 @@ void For_ReceiveForumPost (void)
 /********* Update number of users notified in table of forum posts **********/
 /*****************************************************************************/
 
-static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail)
+static void For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,
+                                                          unsigned NumUsrsToBeNotifiedByEMail)
   {
-   /***** Update number of users notified *****/
    DB_QueryUPDATE ("can not update the number of notifications of a post",
 		   "UPDATE for_posts"
 		     " SET NumNotif=NumNotif+%u"
@@ -4478,7 +4478,7 @@ void For_PasteThread (void)
    For_GetThrSubject (Forums.Thread.Current,Subject);
 
    /***** Check if paste (move) the thread to current forum has sense *****/
-   if (For_CheckIfThrBelongsToForum (Forums.Thread.Current,&Forums.Forum))
+   if (For_DB_CheckIfThrBelongsToForum (Forums.Thread.Current,&Forums.Forum))
      {
       /***** Show forum list again *****/
       For_ShowForumList (&Forums);
@@ -4496,7 +4496,7 @@ void For_PasteThread (void)
    else
      {
       /***** Paste (move) the thread to current forum *****/
-      For_MoveThrToCurrentForum (&Forums);
+      For_DB_MoveThrToCurrentForum (&Forums);
 
       /***** Show forum list again *****/
       For_ShowForumList (&Forums);
@@ -4526,9 +4526,8 @@ static bool For_CheckIfICanMoveThreads (void)
 /**************** Get if there is a thread ready to be moved *****************/
 /*****************************************************************************/
 
-static long For_GetThrInMyClipboard (void)
+static long For_DB_GetThrInMyClipboard (void)
   {
-   /***** Get if there is a thread ready to move in my clipboard from database *****/
    return DB_QuerySELECTCode ("can not check if there is"
 			      " any thread ready to be moved",
 	                      "SELECT ThrCod"
@@ -4541,7 +4540,7 @@ static long For_GetThrInMyClipboard (void)
 /***************** Get if a thread belongs to current forum ******************/
 /*****************************************************************************/
 
-static bool For_CheckIfThrBelongsToForum (long ThrCod,const struct For_Forum *Forum)
+static bool For_DB_CheckIfThrBelongsToForum (long ThrCod,const struct For_Forum *Forum)
   {
    char SubQuery[256];
 
@@ -4565,7 +4564,7 @@ static bool For_CheckIfThrBelongsToForum (long ThrCod,const struct For_Forum *Fo
 /************************ Move a thread to current forum *********************/
 /*****************************************************************************/
 
-static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
+static void For_DB_MoveThrToCurrentForum (const struct For_Forums *Forums)
   {
    /***** Move a thread to current forum *****/
    switch (Forums->Forum.Type)
@@ -4639,7 +4638,7 @@ static void For_MoveThrToCurrentForum (const struct For_Forums *Forums)
 static void For_InsertThrInClipboard (long ThrCod)
   {
    /***** Remove expired thread clipboards *****/
-   For_RemoveExpiredThrsClipboards ();
+   For_DB_RemoveExpiredThrsClipboards ();
 
    /***** Add thread to my clipboard *****/
    DB_QueryREPLACE ("can not add thread to clipboard",
@@ -4655,9 +4654,8 @@ static void For_InsertThrInClipboard (long ThrCod)
 /************* Remove expired thread clipboards (from all users) *************/
 /*****************************************************************************/
 
-static void For_RemoveExpiredThrsClipboards (void)
+static void For_DB_RemoveExpiredThrsClipboards (void)
   {
-   /***** Remove all expired clipboards *****/
    DB_QueryDELETE ("can not remove old threads from clipboards",
 		   "DELETE LOW_PRIORITY FROM for_clipboards"
 		   " WHERE TimeInsert<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
@@ -4668,9 +4666,8 @@ static void For_RemoveExpiredThrsClipboards (void)
 /**************** Remove thread code from thread clipboard *******************/
 /*****************************************************************************/
 
-static void For_RemoveThrCodFromThrClipboard (long ThrCod)
+static void For_DB_RemoveThrCodFromThrClipboard (long ThrCod)
   {
-   /***** Remove thread from thread clipboard *****/
    DB_QueryDELETE ("can not remove a thread from clipboard",
 		   "DELETE FROM for_clipboards"
 		   " WHERE ThrCod=%ld",
@@ -4681,9 +4678,8 @@ static void For_RemoveThrCodFromThrClipboard (long ThrCod)
 /********************* Remove thread clipboard of a user *********************/
 /*****************************************************************************/
 
-void For_RemoveUsrFromThrClipboard (long UsrCod)
+void For_DB_RemoveUsrFromThrClipboard (long UsrCod)
   {
-   /***** Remove clipboard of specified user *****/
    DB_QueryDELETE ("can not remove a thread from the clipboard of a user",
 		   "DELETE FROM for_clipboards"
 		   " WHERE UsrCod=%ld",

@@ -4221,7 +4221,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
    if (Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
       /***** Remove user from all the attendance events in course *****/
-      Att_RemoveUsrFromCrsAttEvents (UsrDat->UsrCod,Crs->CrsCod);
+      Att_DB_RemoveUsrFromCrsAttEvents (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove user from all the groups in course *****/
       Grp_RemUsrFromAllGrpsInCrs (UsrDat->UsrCod,Crs->CrsCod);
@@ -4242,7 +4242,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 	}
 
       /***** Remove fields of this user in its course record *****/
-      Rec_RemoveFieldsCrsRecordInCrs (UsrDat->UsrCod,Crs);
+      Rec_DB_RemoveFieldsCrsRecordInCrs (UsrDat->UsrCod,Crs);
 
       /***** Remove some information about files in course and groups *****/
       Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (UsrDat->UsrCod,Crs->CrsCod);
@@ -4306,6 +4306,30 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
    else        // User does not belong to course
       if (QuietOrVerbose == Cns_VERBOSE)
 	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+  }
+
+/*****************************************************************************/
+/************************ Remove a user from a course ************************/
+/*****************************************************************************/
+
+void Enr_DB_RemUsrRequests (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove user's requests for inscription",
+		   "DELETE FROM crs_requests"
+		   " WHERE UsrCod=%ld",
+	           UsrCod);
+  }
+
+/*****************************************************************************/
+/************************ Remove a user from a course ************************/
+/*****************************************************************************/
+
+void Enr_DB_RemUsrFromAllCrss (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove a user from all courses",
+		   "DELETE FROM crs_users"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -4380,4 +4404,16 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Hie_Lvl_Level_t Scope,
    else        // User is not an administrator of the current institution/center/degree
       Ale_ShowAlert (Ale_ERROR,Txt_THE_USER_X_is_not_an_administrator_of_Y,
                      UsrDat->FullName,InsCtrDegName);
+  }
+
+/*****************************************************************************/
+/******* Remove user as administrator of any degree/center/institution *******/
+/*****************************************************************************/
+
+void Enr_DB_RemUsrAsAdmin (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove a user as administrator",
+		   "DELETE FROM usr_admins"
+		   " WHERE UsrCod=%ld",
+                   UsrCod);
   }

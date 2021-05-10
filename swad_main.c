@@ -131,7 +131,7 @@ int main (void)
 	 Ses_RemoveExpiredSessions ();
 
 	 /***** Remove old users from connected list *****/
-	 Con_RemoveOldConnected ();
+	 Con_DB_RemoveOldConnected ();
 
 	 /***** Get number of sessions *****/
 	 switch (Act_GetBrowserTab (Gbl.Action.Act))

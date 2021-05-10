@@ -103,14 +103,14 @@ void Att_UpdateAttEvent (struct Att_Event *Event,const char *Description);
 void Att_RemoveGroupsOfType (long GrpTypCod);
 void Att_RemoveGroup (long GrpCod);
 
-void Att_RemoveUsrFromAllAttEvents (long UsrCod);
-void Att_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod);
+void Att_DB_RemoveUsrFromAllAttEvents (long UsrCod);
+void Att_DB_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod);
 
 void Att_RemoveCrsAttEvents (long CrsCod);
 
-unsigned Att_GetNumAttEventsInCrs(long CrsCod);
+unsigned Att_DB_GetNumAttEventsInCrs(long CrsCod);
 
-unsigned Att_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope);
+unsigned Att_DB_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope);
 unsigned Att_GetNumAttEvents (Hie_Lvl_Level_t Scope,unsigned *NumNotif);
 
 void Att_SeeOneAttEvent (void);

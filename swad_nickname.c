@@ -486,6 +486,18 @@ static void Nck_RemoveNicknameFromDB (long UsrCod,const char *Nickname)
   }
 
 /*****************************************************************************/
+/************************** Remove user's nicknames **************************/
+/*****************************************************************************/
+
+void Nck_DB_RemoveUsrNicknames (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove user's nicknames",
+		   "DELETE FROM usr_nicknames"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
 /***************************** Update my nickname ****************************/
 /*****************************************************************************/
 

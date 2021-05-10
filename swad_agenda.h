@@ -125,7 +125,7 @@ void Agd_MakeEventPublic (void);
 
 void Agd_ReceiveFormEvent (void);
 
-void Agd_RemoveUsrEvents (long UsrCod);
+void Agd_DB_RemoveUsrEvents (long UsrCod);
 unsigned Agd_GetNumEventsFromUsr (long UsrCod);
 
 unsigned Agd_GetNumUsrsWithEvents (Hie_Lvl_Level_t Scope);

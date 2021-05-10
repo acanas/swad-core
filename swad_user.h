@@ -408,6 +408,9 @@ bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat,
 void Usr_UpdateMyLastData (void);
 void Usr_InsertMyLastCrsTabAndTime (void);
 
+void Usr_DB_RemoveUsrLastData (long UsrCod);
+void Usr_DB_RemoveUsrData (long UsrCod);
+
 void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                               bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
 			      struct SelectedUsrs *SelectedUsrs);
@@ -535,8 +538,8 @@ unsigned Usr_GetCachedNumUsrsNotBelongingToAnyCrs (void);
 double Usr_GetCachedNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role);
 double Usr_GetCachedNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role);
 
-bool Usr_CheckIfUsrBanned (long UsrCod);
-void Usr_RemoveUsrFromUsrBanned (long UsrCod);
+bool Usr_DB_CheckIfUsrBanned (long UsrCod);
+void Usr_DB_RemoveUsrFromBanned (long UsrCod);
 
 void Usr_PrintUsrQRCode (void);
 

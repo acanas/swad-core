@@ -119,7 +119,7 @@ static void Att_CreateGrps (long AttCod);
 static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct Att_Event *Event);
 
 static void Att_RemoveAllUsrsFromAnAttEvent (long AttCod);
-static void Att_RemoveAttEventFromCurrentCrs (long AttCod);
+static void Att_DB_RemoveAttEventFromCurrentCrs (long AttCod);
 
 static void Att_ShowEvent (struct Att_Events *Events);
 
@@ -986,7 +986,7 @@ void Att_RemoveAttEventFromDB (long AttCod)
    Att_RemoveAllTheGrpsAssociatedToAnAttEvent (AttCod);
 
    /***** Remove attendance event *****/
-   Att_RemoveAttEventFromCurrentCrs (AttCod);
+   Att_DB_RemoveAttEventFromCurrentCrs (AttCod);
   }
 
 /*****************************************************************************/
@@ -1615,9 +1615,8 @@ static void Att_RemoveAllUsrsFromAnAttEvent (long AttCod)
 /* Remove one user from all the attendance events where he/she is registered */
 /*****************************************************************************/
 
-void Att_RemoveUsrFromAllAttEvents (long UsrCod)
+void Att_DB_RemoveUsrFromAllAttEvents (long UsrCod)
   {
-   /***** Remove group from all the attendance events *****/
    DB_QueryDELETE ("can not remove user from all attendance events",
 		   "DELETE FROM att_users"
 		   " WHERE UsrCod=%ld",
@@ -1628,9 +1627,8 @@ void Att_RemoveUsrFromAllAttEvents (long UsrCod)
 /*********** Remove one student from all the attendance events ***************/
 /*****************************************************************************/
 
-void Att_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
+void Att_DB_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
   {
-   /***** Remove group from all the attendance events *****/
    DB_QueryDELETE ("can not remove user from attendance events of a course",
 		   "DELETE FROM att_users"
 		   " USING att_events,"
@@ -1645,7 +1643,7 @@ void Att_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
 /*********************** Remove an attendance event **************************/
 /*****************************************************************************/
 
-static void Att_RemoveAttEventFromCurrentCrs (long AttCod)
+static void Att_DB_RemoveAttEventFromCurrentCrs (long AttCod)
   {
    DB_QueryDELETE ("can not remove attendance event",
 		   "DELETE FROM att_events"
@@ -1690,7 +1688,7 @@ void Att_RemoveCrsAttEvents (long CrsCod)
 /*************** Get number of attendance events in a course *****************/
 /*****************************************************************************/
 
-unsigned Att_GetNumAttEventsInCrs (long CrsCod)
+unsigned Att_DB_GetNumAttEventsInCrs (long CrsCod)
   {
    /***** Get number of attendance events in a course from database *****/
    return (unsigned)
@@ -1707,7 +1705,7 @@ unsigned Att_GetNumAttEventsInCrs (long CrsCod)
 // Returns the number of courses with attendance events
 // in this location (all the platform, current degree or current course)
 
-unsigned Att_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
+unsigned Att_DB_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
   {
    /***** Get number of courses with attendance events from database *****/
    switch (Scope)
@@ -1924,46 +1922,47 @@ static void Att_ListAttOnlyMeAsStudent (struct Att_Event *Event)
    /***** Get my setting about photos in users' list for current course *****/
    Usr_GetMyPrefAboutListWithPhotosFromDB ();
 
-   /***** Begin form *****/
-   if (Event->Open)
-     {
-      Frm_BeginForm (ActRecAttMe);
-      Att_PutParamAttCod (Event->AttCod);
-     }
-
    /***** List students (only me) *****/
    /* Begin box */
    Box_BoxBegin (NULL,Txt_Attendance,
                  NULL,NULL,
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
-   /* Begin table */
-   HTM_TABLE_BeginWideMarginPadding (2);
+      /***** Begin form *****/
+      if (Event->Open)
+	{
+	 Frm_BeginForm (ActRecAttMe);
+	 Att_PutParamAttCod (Event->AttCod);
+	}
 
-   /* Header */
-   HTM_TR_Begin (NULL);
+	 /***** List students (only me) *****/
+	 /* Begin table */
+	 HTM_TABLE_BeginWideMarginPadding (2);
 
-   HTM_TH_Empty (3);
-   if (Gbl.Usrs.Listing.WithPhotos)
-      HTM_TH_Empty (1);
-   HTM_TH (1,2,"TIT_TBL LM",Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
-   HTM_TH (1,1,"LM",Txt_Student_comment);
-   HTM_TH (1,1,"LM",Txt_Teachers_comment);
+	    /* Header */
+	    HTM_TR_Begin (NULL);
 
-   HTM_TR_End ();
+	       HTM_TH_Empty (3);
+	       if (Gbl.Usrs.Listing.WithPhotos)
+		  HTM_TH_Empty (1);
+	       HTM_TH (1,2,"TIT_TBL LM",Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
+	       HTM_TH (1,1,"LM",Txt_Student_comment);
+	       HTM_TH (1,1,"LM",Txt_Teachers_comment);
 
-   /* List of students (only me) */
-   Att_WriteRowUsrToCallTheRoll (1,&Gbl.Usrs.Me.UsrDat,Event);
+	    HTM_TR_End ();
 
-   /* End table */
-   HTM_TABLE_End ();
+	    /* List of students (only me) */
+	    Att_WriteRowUsrToCallTheRoll (1,&Gbl.Usrs.Me.UsrDat,Event);
 
-   /* Send button */
-   if (Event->Open)
-     {
-      Btn_PutConfirmButton (Txt_Save_changes);
-      Frm_EndForm ();
-     }
+	 /* End table */
+	 HTM_TABLE_End ();
+
+      /* Send button */
+      if (Event->Open)
+	{
+	 Btn_PutConfirmButton (Txt_Save_changes);
+	 Frm_EndForm ();
+	}
 
    /* End box */
    Box_BoxEnd ();

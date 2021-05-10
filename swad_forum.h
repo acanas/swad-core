@@ -123,7 +123,7 @@ void For_DisablePost (void);
 void For_GetForumTypeAndLocationOfAPost (long PstCod,struct For_Forum *Forum);
 
 unsigned For_GetNumPostsUsr (long UsrCod);
-void For_RemoveUsrFromReadThrs (long UsrCod);
+void For_DB_RemoveUsrFromReadThrs (long UsrCod);
 
 void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                        char **ContentStr,
@@ -157,7 +157,7 @@ void For_RequestRemoveThread (void);
 void For_RemoveThread (void);
 void For_CutThread (void);
 void For_PasteThread (void);
-void For_RemoveUsrFromThrClipboard (long UsrCod);
+void For_DB_RemoveUsrFromThrClipboard (long UsrCod);
 
 void For_RemoveForums (Hie_Lvl_Level_t Scope,long ForumLocation);
 

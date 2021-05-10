@@ -131,7 +131,7 @@ void Ses_CloseSession (void)
       Gbl.Session.Id[0] = '\0';
 
       /***** If there are no more sessions for current user ==> remove user from connected list *****/
-      Con_RemoveOldConnected ();
+      Con_DB_RemoveOldConnected ();
 
       /***** Remove unused data associated to expired sessions *****/
       Ses_RemoveParamsFromExpiredSessions ();
@@ -264,6 +264,18 @@ void Ses_RemoveExpiredSessions (void)
                          " LastRefresh<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu))",
                    Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_CLICK,
                    Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_REFRESH);
+  }
+
+/*****************************************************************************/
+/******************* Remove all sessions of a given user *********************/
+/*****************************************************************************/
+
+void Ses_DB_RemoveUsrSessions (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove sessions of a user",
+		   "DELETE FROM ses_sessions"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
   }
 
 /*****************************************************************************/

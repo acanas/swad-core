@@ -1827,9 +1827,8 @@ static void Agd_UpdateEvent (struct Agd_Event *AgdEvent,const char *Txt)
 /********************** Remove all the events of a user **********************/
 /*****************************************************************************/
 
-void Agd_RemoveUsrEvents (long UsrCod)
+void Agd_DB_RemoveUsrEvents (long UsrCod)
   {
-   /***** Remove events *****/
    DB_QueryDELETE ("can not remove all the events of a user",
 		   "DELETE FROM agd_agendas"
 		   " WHERE UsrCod=%ld",

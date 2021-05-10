@@ -143,7 +143,7 @@ static void Rep_DrawBarNumHits (unsigned long HitsNum,unsigned long HitsMax,
 static void Rep_WriteDouble (double Num);
 
 static void Rep_RemoveUsrReportsFiles (long UsrCod);
-static void Rep_RemoveUsrReportsFromDB (long UsrCod);
+static void Rep_DB_RemoveUsrReports (long UsrCod);
 
 /*****************************************************************************/
 /******* Request my usage report (report on my use of the platform) **********/
@@ -1414,7 +1414,7 @@ void Rep_RemoveUsrUsageReports (long UsrCod)
    Rep_RemoveUsrReportsFiles (UsrCod);
 
    /***** Remove all user's usage reports of a user from database *****/
-   Rep_RemoveUsrReportsFromDB (UsrCod);
+   Rep_DB_RemoveUsrReports (UsrCod);
   }
 
 /*****************************************************************************/
@@ -1460,9 +1460,8 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
 /********** Remove all user's usage reports of a user from database **********/
 /*****************************************************************************/
 
-static void Rep_RemoveUsrReportsFromDB (long UsrCod)
+static void Rep_DB_RemoveUsrReports (long UsrCod)
   {
-   /***** Insert a new user's usage report into database *****/
    DB_QueryDELETE ("can not remove user's usage reports",
 		   "DELETE FROM usr_reports"
 		   " WHERE UsrCod=%ld",

@@ -371,3 +371,15 @@ void Set_EndOneSettingSelector (void)
   {
    HTM_DIV_End ();
   }
+
+/*****************************************************************************/
+/************************ Remove a user from a course ************************/
+/*****************************************************************************/
+
+void Set_DB_RemCrsUsrSettings (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove a user from all courses",
+		   "DELETE FROM crs_user_settings"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
+  }

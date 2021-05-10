@@ -145,4 +145,8 @@ void Enr_ModifyUsr2 (void);
 
 void Enr_AcceptUsrInCrs (long UsrCod);
 
+void Enr_DB_RemUsrRequests (long UsrCod);
+void Enr_DB_RemUsrFromAllCrss (long UsrCod);
+void Enr_DB_RemUsrAsAdmin (long UsrCod);
+
 #endif

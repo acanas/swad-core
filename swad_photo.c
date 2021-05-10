@@ -879,7 +879,7 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
       Pho_UpdatePhotoName (UsrDat);
 
       /* Remove the user from the list of users without photo */
-      Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
+      Pho_DB_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 		       Txt_Photo_has_been_updated);
@@ -981,7 +981,7 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
 /******** Remove user from table with number of clicks without photo *********/
 /*****************************************************************************/
 
-void Pho_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod)
+void Pho_DB_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod)
   {
    DB_QueryDELETE ("can not remove a user from the list of users without photo",
 		   "DELETE FROM usr_clicks_without_photo"

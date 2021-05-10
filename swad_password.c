@@ -214,7 +214,8 @@ static void Pwd_CheckAndUpdateNewPwd (struct UsrData *UsrDat)
    Par_GetParToText ("Paswd2",NewPlainPassword[1],Pwd_MAX_BYTES_PLAIN_PASSWORD);
 
    /***** Check if I have written twice the same password *****/
-   if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
+   if (strcmp (NewPlainPassword[0],
+               NewPlainPassword[1]))
       // Passwords don't match
       Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
 	               Txt_You_have_not_written_twice_the_same_new_password);
@@ -505,8 +506,8 @@ void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD +
 /************************ Check if a password is good ************************/
 /*****************************************************************************/
 
-bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
-                                    const char *EncryptedPassword,
+bool Pwd_SlowCheckIfPasswordIsGood (const char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1],
+                                    const char EncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1],
                                     long UsrCod)
   {
    extern const char *Txt_The_password_is_too_trivial_;

@@ -227,7 +227,7 @@ void Dup_ListDuplicateUsrs (void)
            }
          else        // User does not exists ==>
                      // remove user from table of possible duplicate users
-            Dup_RemoveUsrFromDuplicated (UsrDat.UsrCod);
+            Dup_DB_RemoveUsrFromDuplicated (UsrDat.UsrCod);
         }
 
       /***** End table *****/
@@ -471,7 +471,7 @@ void Dup_RemoveUsrFromListDupUsrs (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       /* Remove entry from database */
-      Dup_RemoveUsrFromDuplicated (Gbl.Usrs.Other.UsrDat.UsrCod);
+      Dup_DB_RemoveUsrFromDuplicated (Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /* Show list of similar users again */
       // Dup_ListSimilarUsrsInternal ();
@@ -487,9 +487,8 @@ void Dup_RemoveUsrFromListDupUsrs (void)
 /******* Remove user from list of possible duplicate users in database *******/
 /*****************************************************************************/
 
-void Dup_RemoveUsrFromDuplicated (long UsrCod)
+void Dup_DB_RemoveUsrFromDuplicated (long UsrCod)
   {
-   /***** Remove user from list of duplicated users *****/
    DB_QueryDELETE ("can not remove a user from possible duplicates",
 		   "DELETE FROM usr_duplicated"
 		   " WHERE UsrCod=%ld",

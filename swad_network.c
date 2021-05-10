@@ -602,3 +602,15 @@ void Net_ShowWebAndSocialNetworksStats (void)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
   }
+
+/*****************************************************************************/
+/******************* Remove user's webs / social networks ********************/
+/*****************************************************************************/
+
+void Net_DB_RemoveUsrWebs (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove user's webs / social networks",
+		   "DELETE FROM usr_webs"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
+  }

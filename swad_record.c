@@ -1809,7 +1809,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
          HTM_TD_End ();
 
          /* Get the text of the field */
-         if (Rec_GetFieldFromCrsRecord (UsrDat->UsrCod,Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,&mysql_res))
+         if (Rec_DB_GetFieldFromCrsRecord (&mysql_res,UsrDat->UsrCod,
+                                           Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod))
            {
             ThisFieldHasText = true;
             row = mysql_fetch_row (mysql_res);
@@ -1868,9 +1869,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 /************** Get the text of a field of a record of course ****************/
 /*****************************************************************************/
 
-unsigned Rec_GetFieldFromCrsRecord (long UsrCod,long FieldCod,MYSQL_RES **mysql_res)
+unsigned Rec_DB_GetFieldFromCrsRecord (MYSQL_RES **mysql_res,long UsrCod,long FieldCod)
   {
-   /***** Get the text of a field of a record from database *****/
    return DB_QuerySELECT (mysql_res,"can not get the text"
 				    " of a field of a record",
 			  "SELECT Txt"		// row[0]
@@ -1918,7 +1918,8 @@ void Rec_UpdateCrsRecord (long UsrCod)
       if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility))
         {
          /***** Check if already exists this field for this user in database *****/
-         FieldAlreadyExists = (Rec_GetFieldFromCrsRecord (UsrCod,Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,&mysql_res) != 0);
+         FieldAlreadyExists = (Rec_DB_GetFieldFromCrsRecord (&mysql_res,UsrCod,
+                                                             Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod) != 0);
          DB_FreeMySQLResult (&mysql_res);
          if (FieldAlreadyExists)
            {
@@ -1958,9 +1959,8 @@ void Rec_UpdateCrsRecord (long UsrCod)
 /************ Remove fields of record of a user in current course ************/
 /*****************************************************************************/
 
-void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Crs_Course *Crs)
+void Rec_DB_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Crs_Course *Crs)
   {
-   /***** Remove text of the field of record course *****/
    DB_QueryDELETE ("can not remove user's record in a course",
 		   "DELETE FROM crs_records"
 		   " WHERE UsrCod=%ld"
@@ -1975,9 +1975,8 @@ void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Crs_Course *Crs)
 /************* Remove fields of record of a user in all courses **************/
 /*****************************************************************************/
 
-void Rec_RemoveFieldsCrsRecordAll (long UsrCod)
+void Rec_DB_RemoveFieldsCrsRecordAll (long UsrCod)
   {
-   /***** Remove text of the field of record course *****/
    DB_QueryDELETE ("can not remove user's records in all courses",
 		   "DELETE FROM crs_records"
 		   " WHERE UsrCod=%ld",

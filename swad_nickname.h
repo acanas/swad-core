@@ -57,6 +57,7 @@ void Nck_ShowFormChangeOtherUsrNickname (void);
 
 void Nck_RemoveMyNick (void);
 void Nck_RemoveOtherUsrNick (void);
+void Nck_DB_RemoveUsrNicknames (long UsrCod);
 
 void Nck_UpdateMyNick (void);
 void Nck_UpdateOtherUsrNick (void);

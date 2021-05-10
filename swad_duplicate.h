@@ -47,6 +47,6 @@ void Dup_ListDuplicateUsrs (void);
 void Dup_GetUsrCodAndListSimilarUsrs (void);
 
 void Dup_RemoveUsrFromListDupUsrs (void);
-void Dup_RemoveUsrFromDuplicated (long UsrCod);
+void Dup_DB_RemoveUsrFromDuplicated (long UsrCod);
 
 #endif

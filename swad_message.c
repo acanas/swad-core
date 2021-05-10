@@ -4148,10 +4148,8 @@ bool Msg_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod)
 /************************ Remove user from banned table **********************/
 /*****************************************************************************/
 
-void Msg_RemoveUsrFromBanned (long UsrCod)
+void Msg_DB_RemoveUsrFromBanned (long UsrCod)
   {
-   /***** Remove pair (sender's code - my code)
-          from table of banned senders *****/
    DB_QueryDELETE ("can not remove user from table of banned users",
 		   "DELETE FROM msg_banned"
 		   " WHERE FromUsrCod=%ld"

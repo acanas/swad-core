@@ -630,9 +630,8 @@ void Ann_MarkAnnouncementAsSeen (void)
 /******************** Remove user from seen announcements ********************/
 /*****************************************************************************/
 
-void Ann_RemoveUsrFromSeenAnnouncements (long UsrCod)
+void Ann_DB_RemoveUsrFromSeenAnnouncements (long UsrCod)
   {
-   /***** Remove user from seen announcements *****/
    DB_QueryDELETE ("can not remove user from seen announcements",
 		   "DELETE FROM ann_seen"
 		   " WHERE UsrCod=%ld",

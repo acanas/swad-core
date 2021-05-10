@@ -1499,6 +1499,30 @@ static void Mai_RemoveEmailFromDB (long UsrCod,const char Email[Cns_MAX_BYTES_EM
   }
 
 /*****************************************************************************/
+/**************************** Remove user's emails ***************************/
+/*****************************************************************************/
+
+void Mai_DB_RemoveUsrEmails (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove user's emails",
+		   "DELETE FROM usr_emails"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/************** Remove a given user from list of pending emails **************/
+/*****************************************************************************/
+
+void Mai_DB_RemoveUsrPendingEmails (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove pending user's emails",
+		   "DELETE FROM usr_pending_emails"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
 /************************* New user's email for me ***************************/
 /*****************************************************************************/
 

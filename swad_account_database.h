@@ -1,7 +1,7 @@
-// swad_session.h: sessions
+// swad_account_database.h: user's account operations with database
 
-#ifndef _SWAD_SES
-#define _SWAD_SES
+#ifndef _SWAD_ACC_DB
+#define _SWAD_ACC_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -24,40 +24,37 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************* Headers ***********************************/
+/********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include "swad_action.h"
+// #include <stdbool.h>		// For boolean type
+
+// #include "swad_constant.h"
+#include "swad_database.h"
+#include "swad_ID.h"
+// #include "swad_user.h"
 
 /*****************************************************************************/
-/***************************** Public constants ******************************/
+/****************************** Public constants *****************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
-/***************************** Public prototypes *****************************/
+/******************************** Public types *******************************/
 /*****************************************************************************/
 
-void Ses_GetNumSessions (void);
-void Ses_CreateSession (void);
-bool Ses_CheckIfSessionExists (const char *IdSes);
-void Ses_CloseSession (void);
-void Ses_InsertSessionInDB (void);
-void Ses_UpdateSessionDataInDB (void);
-void Ses_UpdateSessionLastRefreshInDB (void);
-void Ses_RemoveExpiredSessions (void);
-void Ses_DB_RemoveUsrSessions (long UsrCod);
-bool Ses_GetSessionData (void);
+/*****************************************************************************/
+/****************************** Public prototypes ****************************/
+/*****************************************************************************/
 
-void Ses_InsertParamInDB (const char *ParamName,const char *ParamValue);
-void Ses_RemoveParamFromThisSession (void);
-void Ses_RemoveParamsFromExpiredSessions (void);
-void Ses_GetParamFromDB (const char *ParamName,char *ParamValue,size_t StrSize);
+unsigned Acc_DB_GetUsrsWithID (MYSQL_RES **mysql_res,
+                               const char ID[ID_MAX_BYTES_USR_ID + 1]);
 
-bool Ses_GetPublicDirFromCache (const char *FullPathMediaPriv,
-                                char TmpPubDir[PATH_MAX + 1]);
-void Ses_AddPublicDirToCache (const char *FullPathMediaPriv,
-                              const char TmpPubDir[PATH_MAX + 1]);
-void Ses_RemovePublicDirsCache (void);
-void Ses_RemovePublicDirsFromExpiredSessions (void);
+bool Acc_DB_CheckIfNicknameAlreadyExists (const char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1]);
+bool Acc_DB_CheckIfEmailAlreadyExists (const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+
+void Acc_DB_CreateNewUsr (struct UsrData *UsrDat);
+void Acc_DB_CreateNewUsrID (long UsrCod,
+		            const char ID[ID_MAX_BYTES_USR_ID + 1],
+		            bool Confirmed);
 
 #endif

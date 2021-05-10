@@ -45,4 +45,6 @@ void Net_ShowFormMyWebsAndSocialNets (void);
 void Net_UpdateMyWebsAndSocialNets (void);
 void Net_ShowWebAndSocialNetworksStats (void);
 
+void Net_DB_RemoveUsrWebs (long UsrCod);
+
 #endif

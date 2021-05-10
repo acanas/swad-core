@@ -289,8 +289,8 @@ static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
                                     unsigned NumEvents,unsigned NumMails);
 
 static void Ntf_GetParamsNotifyEvents (void);
-static unsigned Ntf_GetNumberOfAllMyUnseenNtfs (void);
-static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void);
+static unsigned Ntf_DB_GetNumberOfAllMyUnseenNtfs (void);
+static unsigned Ntf_DB_GetNumberOfMyNewUnseenNtfs (void);
 
 /*****************************************************************************/
 /*************************** Show my notifications ***************************/
@@ -2141,8 +2141,8 @@ void Ntf_WriteNumberOfNewNtfs (void)
    unsigned NumNewNtfs = 0;
 
    /***** Get my number of unseen notifications *****/
-   if ((NumUnseenNtfs = Ntf_GetNumberOfAllMyUnseenNtfs ()))
-      NumNewNtfs = Ntf_GetNumberOfMyNewUnseenNtfs ();
+   if ((NumUnseenNtfs = Ntf_DB_GetNumberOfAllMyUnseenNtfs ()))
+      NumNewNtfs = Ntf_DB_GetNumberOfMyNewUnseenNtfs ();
 
    /***** Begin form *****/
    Frm_BeginFormId (ActSeeNewNtf,"form_ntf");
@@ -2150,8 +2150,9 @@ void Ntf_WriteNumberOfNewNtfs (void)
 
    /***** Number of unseen notifications *****/
    HTM_SPAN_Begin ("id=\"notif_all\"");
-   HTM_TxtF ("%u&nbsp;%s",NumUnseenNtfs,NumUnseenNtfs == 1 ? Txt_notification :
-				                             Txt_notifications);
+      HTM_TxtF ("%u&nbsp;%s",NumUnseenNtfs,
+                NumUnseenNtfs == 1 ? Txt_notification :
+				     Txt_notifications);
    HTM_SPAN_End ();
 
    /***** Icon and number of new notifications *****/
@@ -2162,8 +2163,8 @@ void Ntf_WriteNumberOfNewNtfs (void)
 	       "class=\"ICO16x16\"");
       HTM_TxtF ("&nbsp;%u",NumNewNtfs);
       HTM_SPAN_Begin ("id=\"notif_new\"");
-      HTM_TxtF ("&nbsp;%s",NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :
-				             Txt_NOTIF_new_PLURAL);
+	 HTM_TxtF ("&nbsp;%s",NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :
+						Txt_NOTIF_new_PLURAL);
       HTM_SPAN_End ();
      }
 
@@ -2176,7 +2177,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
 /************* Get the number of (all) my unseen notifications ***************/
 /*****************************************************************************/
 
-static unsigned Ntf_GetNumberOfAllMyUnseenNtfs (void)
+static unsigned Ntf_DB_GetNumberOfAllMyUnseenNtfs (void)
   {
    /***** Get number of places with a name from database *****/
    return (unsigned)
@@ -2193,7 +2194,7 @@ static unsigned Ntf_GetNumberOfAllMyUnseenNtfs (void)
 /************** Get the number of my new unseen notifications ****************/
 /*****************************************************************************/
 
-static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void)
+static unsigned Ntf_DB_GetNumberOfMyNewUnseenNtfs (void)
   {
    /***** Get number of places with a name from database *****/
    return (unsigned)
@@ -2212,9 +2213,8 @@ static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void)
 /**************** Remove all notifications made to a user ********************/
 /*****************************************************************************/
 
-void Ntf_RemoveUsrNtfs (long ToUsrCod)
+void Ntf_DB_RemoveUsrNtfs (long ToUsrCod)
   {
-   /***** Delete notifications of a user ******/
    DB_QueryDELETE ("can not remove notifications of a user",
 		   "DELETE LOW_PRIORITY FROM ntf_notifications"
 		   " WHERE ToUsrCod=%ld",

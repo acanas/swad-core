@@ -58,8 +58,8 @@ void Pwd_ChkIdLoginAndSendNewPwd (void);
 int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
 void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
 
-bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
-                                    const char *EncryptedPassword,
+bool Pwd_SlowCheckIfPasswordIsGood (const char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1],
+                                    const char EncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1],
                                     long UsrCod);
 bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword);
 

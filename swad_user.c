@@ -3623,6 +3623,31 @@ static void Usr_InsertMyLastData (void)
   }
 
 /*****************************************************************************/
+/*************************** Remove user's last data *************************/
+/*****************************************************************************/
+
+void Usr_DB_RemoveUsrLastData (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove user's last data",
+		   "DELETE FROM usr_last"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/****************************** Remove user's data ***************************/
+/*****************************************************************************/
+
+void Usr_DB_RemoveUsrData (long UsrCod)
+  {
+   /***** Remove user's data *****/
+   DB_QueryDELETE ("can not remove user's data",
+		   "DELETE FROM usr_data"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
 /*********** Write a row of a table with the main data of a user *************/
 /*****************************************************************************/
 
@@ -3871,7 +3896,8 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
            NumField++)
         {
          /* Get the text of the field */
-         if (Rec_GetFieldFromCrsRecord (UsrDat->UsrCod,Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,&mysql_res))
+         if (Rec_DB_GetFieldFromCrsRecord (&mysql_res,UsrDat->UsrCod,
+                                           Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod))
            {
             row = mysql_fetch_row (mysql_res);
             Str_Copy (Text,row[0],sizeof (Text) - 1);
@@ -10097,7 +10123,7 @@ double Usr_GetCachedNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Rol
 /****************** Check if a user is banned in ranking *********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfUsrBanned (long UsrCod)
+bool Usr_DB_CheckIfUsrBanned (long UsrCod)
   {
    return (DB_QueryCOUNT ("can not check if user is banned",
 			  "SELECT COUNT(*)"
@@ -10110,7 +10136,7 @@ bool Usr_CheckIfUsrBanned (long UsrCod)
 /**************** Remove user from banned users in ranking *******************/
 /*****************************************************************************/
 
-void Usr_RemoveUsrFromUsrBanned (long UsrCod)
+void Usr_DB_RemoveUsrFromBanned (long UsrCod)
   {
    DB_QueryDELETE ("can not remove user from users banned",
 		   "DELETE FROM usr_banned"

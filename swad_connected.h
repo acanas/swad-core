@@ -55,7 +55,8 @@ void Con_ShowGlobalConnectedUsrs (void);
 void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void);
 void Con_ShowConnectedUsrsBelongingToCurrentCrs (void);
 void Con_UpdateMeInConnectedList (void);
-void Con_RemoveOldConnected (void);
+void Con_DB_RemoveOldConnected (void);
+void Con_DB_RemoveUsrFromConnected (long UsrCod);
 
 void Con_WriteScriptClockConnected (void);
 

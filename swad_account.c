@@ -28,6 +28,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_account.h"
+#include "swad_account_database.h"
 #include "swad_agenda.h"
 #include "swad_announcement.h"
 #include "swad_attendance.h"
@@ -47,12 +48,14 @@
 #include "swad_language.h"
 #include "swad_match.h"
 #include "swad_message.h"
+#include "swad_network.h"
 #include "swad_nickname.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
 #include "swad_project.h"
 #include "swad_report.h"
+#include "swad_setting.h"
 #include "swad_test_print.h"
 #include "swad_timeline.h"
 
@@ -87,7 +90,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
 static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1],
                                                      const char *NewEmail);
 static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1],
-                                     char *NewEmail,
+                                     char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
                                      char *NewEncryptedPassword);
 static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat);
 
@@ -97,7 +100,6 @@ static void Acc_AskIfRemoveUsrAccount (bool ItsMe);
 static void Acc_AskIfRemoveOtherUsrAccount (void);
 
 static void Acc_RemoveUsrBriefcase (struct UsrData *UsrDat);
-static void Acc_RemoveUsr (struct UsrData *UsrDat);
 
 /*****************************************************************************/
 /******************** Put link to create a new account ***********************/
@@ -211,16 +213,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    /***** Check if there are users with this user's ID *****/
    if (ID_CheckIfUsrIDIsValid (ID))
      {
-      NumUsrs = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get user's codes",
-		      "SELECT usr_ids.UsrCod"	// row[0]
-		       " FROM usr_ids,"
-			     "usr_data"
-		      " WHERE usr_ids.UsrID='%s'"
-			" AND usr_ids.UsrCod=usr_data.UsrCod"
-			" AND usr_data.Password=''",
-		      ID);
-      if (NumUsrs)
+      if ((NumUsrs = Acc_DB_GetUsrsWithID (&mysql_res,ID)))
 	{
          /***** Begin box and table *****/
 	 Box_BoxTableBegin (NULL,
@@ -233,7 +226,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	 Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** List users found *****/
-	 for (NumUsr = 1, Gbl.RowEvenOdd = 0;
+	 for (NumUsr  = 1, Gbl.RowEvenOdd = 0;
 	      NumUsr <= NumUsrs;
 	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
@@ -286,51 +279,57 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    extern const char *Txt_yet_unnamed;
    extern const char *Txt_Its_me;
 
-   /***** Write number of user in the list *****/
+   /***** Begin 1st table row *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("rowspan=\"2\" class=\"USR_LIST_NUM_N RT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Unsigned (NumUsr);
-   HTM_TD_End ();
+      /***** Write number of user in the list *****/
+      HTM_TD_Begin ("rowspan=\"2\" class=\"USR_LIST_NUM_N RT COLOR%u\"",
+                    Gbl.RowEvenOdd);
+	 HTM_Unsigned (NumUsr);
+      HTM_TD_End ();
 
-   /***** Write user's ID and name *****/
-   HTM_TD_Begin ("class=\"DAT_N LT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtF ("%s:&nbsp;%s",Txt_ID,ID);
-   HTM_BR ();
-   HTM_TxtColonNBSP (Txt_Name);
-   if (UsrDat->FullName[0])
-     {
-      HTM_STRONG_Begin ();
-      HTM_Txt (UsrDat->FullName);
-      HTM_STRONG_End ();
-     }
-   else
-     {
-      HTM_EM_Begin ();
-      HTM_Txt (Txt_yet_unnamed);
-      HTM_EM_End ();
-     }
-   HTM_TD_End ();
+      /***** Write user's ID and name *****/
+      HTM_TD_Begin ("class=\"DAT_N LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TxtF ("%s:&nbsp;%s",Txt_ID,ID);
+	 HTM_BR ();
+	 HTM_TxtColonNBSP (Txt_Name);
+	 if (UsrDat->FullName[0])
+	   {
+	    HTM_STRONG_Begin ();
+	       HTM_Txt (UsrDat->FullName);
+	    HTM_STRONG_End ();
+	   }
+	 else
+	   {
+	    HTM_EM_Begin ();
+	       HTM_Txt (Txt_yet_unnamed);
+	    HTM_EM_End ();
+	   }
+      HTM_TD_End ();
 
-   /***** Button to login with this account *****/
-   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Frm_BeginForm (ActLogInNew);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-   Btn_PutCreateButtonInline (Txt_Its_me);
-   Frm_EndForm ();
-   HTM_TD_End ();
+      /***** Button to login with this account *****/
+      HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	 Frm_BeginForm (ActLogInNew);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Btn_PutCreateButtonInline (Txt_Its_me);
+	 Frm_EndForm ();
+      HTM_TD_End ();
 
+   /***** End 1st table row *****/
    HTM_TR_End ();
+
+   /***** Begin 2nd table row *****/
    HTM_TR_Begin (NULL);
 
    /***** Courses of this user *****/
    HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   UsrDat->Sex = Usr_SEX_UNKNOWN;
-   Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_TCH);
-   Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_NET);
-   Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_STD);
+      UsrDat->Sex = Usr_SEX_UNKNOWN;
+      Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_TCH);
+      Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_NET);
+      Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_STD);
    HTM_TD_End ();
 
+   /***** End 2nd table row *****/
    HTM_TR_End ();
   }
 
@@ -370,52 +369,54 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutAr
    /***** Begin form to enter some data of the new user *****/
    Frm_BeginForm (ActCreUsrAcc);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Create_account,
-                      NULL,NULL,
-                      Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_Create_account,
+			 NULL,NULL,
+			 Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE,2);
 
-   /***** Nickname *****/
-   if (NewNickWithoutArr[0])
-      snprintf (NewNickWithArr,sizeof (NewNickWithArr),"@%s",
-		NewNickWithoutArr);
-   else
-      NewNickWithArr[0] = '\0';
-   HTM_TR_Begin (NULL);
+      /***** Nickname *****/
+      if (NewNickWithoutArr[0])
+	 snprintf (NewNickWithArr,sizeof (NewNickWithArr),"@%s",
+		   NewNickWithoutArr);
+      else
+	 NewNickWithArr[0] = '\0';
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","NewNick",Txt_Nickname);
+	 /* Label */
+	 Frm_LabelColumn ("RT","NewNick",Txt_Nickname);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
-		   NewNickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"NewNick\" size=\"18\" placeholder=\"%s\" required=\"required\"",
-		   Txt_HELP_nickname);
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
+			    NewNickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"NewNick\" size=\"18\" placeholder=\"%s\""
+			    " required=\"required\"",
+			    Txt_HELP_nickname);
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Email *****/
-   HTM_TR_Begin (NULL);
+      /***** Email *****/
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","NewEmail",Txt_Email);
+	 /* Label */
+	 Frm_LabelColumn ("RT","NewEmail",Txt_Email);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,NewEmail,
-	            "id=\"NewEmail\" size=\"18\" placeholder=\"%s\" required=\"required\"",
-                    Txt_HELP_email);
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,NewEmail,
+			     "id=\"NewEmail\" size=\"18\" placeholder=\"%s\""
+			     " required=\"required\"",
+			     Txt_HELP_email);
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Password *****/
-   Pwd_PutFormToGetNewPasswordOnce ();
+      /***** Password *****/
+      Pwd_PutFormToGetNewPasswordOnce ();
 
-   /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_account);
+      /***** End table, send button and end box *****/
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_account);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -440,7 +441,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
    /***** Button to go to request the creation of a new account *****/
    Frm_BeginForm (ActFrmMyAcc);
-   Btn_PutCreateButton (Txt_Create_account);
+      Btn_PutCreateButton (Txt_Create_account);
    Frm_EndForm ();
 
    /***** End box *****/
@@ -493,17 +494,17 @@ void Acc_ShowFormChgMyAccount (void)
    /***** Begin container for this user *****/
    HTM_DIV_Begin ("class=\"REC_USR\"");
 
-   /***** Show form to change my password and my nickname ****/
-   HTM_DIV_Begin ("class=\"REC_LEFT\"");
-   Pwd_ShowFormChgMyPwd ();
-   Nck_ShowFormChangeMyNickname (IMustCreateMyNicknameNow);
-   HTM_DIV_End ();
+      /***** Show form to change my password and my nickname ****/
+      HTM_DIV_Begin ("class=\"REC_LEFT\"");
+	 Pwd_ShowFormChgMyPwd ();
+	 Nck_ShowFormChangeMyNickname (IMustCreateMyNicknameNow);
+      HTM_DIV_End ();
 
-   /***** Show form to change my email and my ID *****/
-   HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-   Mai_ShowFormChangeMyEmail (IMustFillInMyEmailNow,IShouldConfirmMyEmailNow);
-   ID_ShowFormChangeMyID (IShouldFillInMyIDNow);
-   HTM_DIV_End ();
+      /***** Show form to change my email and my ID *****/
+      HTM_DIV_Begin ("class=\"REC_RIGHT\"");
+	 Mai_ShowFormChangeMyEmail (IMustFillInMyEmailNow,IShouldConfirmMyEmailNow);
+	 ID_ShowFormChangeMyID (IShouldFillInMyIDNow);
+      HTM_DIV_End ();
 
    /***** Begin container for this user *****/
    HTM_DIV_End ();
@@ -532,17 +533,17 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 	 /***** Begin container for this user *****/
 	 HTM_DIV_Begin ("class=\"REC_USR\"");
 
-	 /***** Show form to change password and nickname *****/
-	 HTM_DIV_Begin ("class=\"REC_LEFT\"");
-	 Pwd_ShowFormChgOtherUsrPwd ();
-	 Nck_ShowFormChangeOtherUsrNickname ();
-	 HTM_DIV_End ();
+	    /***** Show form to change password and nickname *****/
+	    HTM_DIV_Begin ("class=\"REC_LEFT\"");
+	       Pwd_ShowFormChgOtherUsrPwd ();
+	       Nck_ShowFormChangeOtherUsrNickname ();
+	    HTM_DIV_End ();
 
-	 /***** Show form to change email and ID *****/
-	 HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-	 Mai_ShowFormChangeOtherUsrEmail ();
-	 ID_ShowFormChangeOtherUsrID ();
-	 HTM_DIV_End ();
+	    /***** Show form to change email and ID *****/
+	    HTM_DIV_Begin ("class=\"REC_RIGHT\"");
+	       Mai_ShowFormChangeOtherUsrEmail ();
+	       ID_ShowFormChangeOtherUsrID ();
+	    HTM_DIV_End ();
 
 	 /***** Begin container for this user *****/
 	 HTM_DIV_End ();
@@ -633,8 +634,8 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
 // Return false on error
 
 static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1],
-                                     char *NewEmail,
-                                     char *NewEncryptedPassword)
+                                     char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
+                                     char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1])
   {
    extern const char *Txt_The_nickname_X_had_been_registered_by_another_user;
    extern const char *Txt_The_nickname_entered_X_is_not_valid_;
@@ -659,13 +660,7 @@ static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_F
      {
       /* Check if the new nickname
          matches any of the nicknames of other users */
-      if (DB_QueryCOUNT ("can not check if nickname already existed",
-			 "SELECT COUNT(*)"
-			  " FROM usr_nicknames"
-			 " WHERE Nickname='%s'"
-			   " AND UsrCod<>%ld",
-			 NewNickWithoutArr,
-			 Gbl.Usrs.Me.UsrDat.UsrCod))	// A nickname of another user is the same that this nickname
+      if (Acc_DB_CheckIfNicknameAlreadyExists (NewNickWithoutArr))
 	{
 	 Error = true;
 	 Ale_ShowAlert (Ale_WARNING,Txt_The_nickname_X_had_been_registered_by_another_user,
@@ -688,12 +683,7 @@ static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_F
      {
       /* Check if the new email matches
          any of the confirmed emails of other users */
-      if (DB_QueryCOUNT ("can not check if email already existed",
-			 "SELECT COUNT(*)"
-			  " FROM usr_emails"
-		         " WHERE E_mail='%s'"
-		           " AND Confirmed='Y'",
-	                 NewEmail))	// An email of another user is the same that my email
+      if (Acc_DB_CheckIfEmailAlreadyExists (NewEmail))	// An email of another user is the same that my email
 	{
 	 Error = true;
 	 Ale_ShowAlert (Ale_WARNING,Txt_The_email_address_X_had_been_registered_by_another_user,
@@ -727,13 +717,6 @@ static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_F
 
 void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
   {
-   extern const char *The_ThemeId[The_NUM_THEMES];
-   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
-   char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
-   size_t CommentsLength;
    char PathRelUsr[PATH_MAX + 1];
    unsigned NumID;
 
@@ -749,54 +732,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 
    /***** Insert new user in database *****/
    /* Insert user's data */
-   Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);	// It can include start and ending apostrophes
-   if (UsrDat->Comments)
-      CommentsLength = strlen (UsrDat->Comments);
-   else
-      CommentsLength = 0;
-
-   UsrDat->UsrCod =
-   DB_QueryINSERTandReturnCode ("can not create user",
- 	                        "INSERT INTO usr_data"
-				" (EncryptedUsrCod,Password,"
-				  "Surname1,Surname2,FirstName,Sex,"
-				  "Theme,IconSet,Language,FirstDayOfWeek,DateFormat,"
-				  "PhotoVisibility,BaPrfVisibility,ExPrfVisibility,"
-				  "CtyCod,"
-				  "LocalPhone,FamilyPhone,"
-				  "Birthday,Comments,"
-				  "Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
-				" VALUES"
-				" ('%s','%s',"
-				  "'%s','%s','%s','%s',"
-				  "'%s','%s','%s',%u,%u,"
-				  "'%s','%s','%s',"
-				  "%ld,"
-				  "'%s','%s',"
-				  "%s,'%s',"
-				  "%u,%u,-1,0)",
-				UsrDat->EnUsrCod,
-				UsrDat->Password,
-				UsrDat->Surname1,
-				UsrDat->Surname2,
-				UsrDat->FrstName,
-				Usr_StringsSexDB[UsrDat->Sex],
-				The_ThemeId[UsrDat->Prefs.Theme],
-				Ico_IconSetId[UsrDat->Prefs.IconSet],
-				Lan_STR_LANG_ID[UsrDat->Prefs.Language],
-				Cal_FIRST_DAY_OF_WEEK_DEFAULT,
-				(unsigned) Dat_FORMAT_DEFAULT,
-				Pri_VisibilityDB[UsrDat->PhotoVisibility],
-				Pri_VisibilityDB[UsrDat->BaPrfVisibility],
-				Pri_VisibilityDB[UsrDat->ExPrfVisibility],
-				UsrDat->CtyCod,
-				UsrDat->Phone[0],
-				UsrDat->Phone[1],
-				BirthdayStrDB,
-				CommentsLength ? UsrDat->Comments :
-						 "",
-				(unsigned) Mnu_MENU_DEFAULT,
-				(unsigned) Cfg_DEFAULT_COLUMNS);
+   Acc_DB_CreateNewUsr (UsrDat);
 
    /* Insert user's IDs as confirmed */
    for (NumID = 0;
@@ -804,15 +740,9 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 	NumID++)
      {
       Str_ConvertToUpperText (UsrDat->IDs.List[NumID].ID);
-      DB_QueryINSERT ("can not store user's ID when creating user",
-		      "INSERT INTO usr_ids"
-		      " (UsrCod,UsrID,CreatTime,Confirmed)"
-		      " VALUES"
-		      " (%ld,'%s',NOW(),'%c')",
-		      UsrDat->UsrCod,
-		      UsrDat->IDs.List[NumID].ID,
-		      UsrDat->IDs.List[NumID].Confirmed ? 'Y' :
-							  'N');
+      Acc_DB_CreateNewUsrID (UsrDat->UsrCod,
+		             UsrDat->IDs.List[NumID].ID,
+		             UsrDat->IDs.List[NumID].Confirmed);
      }
 
    /***** Create directory for the user, if not exists *****/
@@ -1035,52 +965,40 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Brw_RemoveUsrWorksInAllCrss (UsrDat);        // Make this before of removing the user from the courses
 
    /***** Remove the fields of course record in all courses *****/
-   Rec_RemoveFieldsCrsRecordAll (UsrDat->UsrCod);
+   Rec_DB_RemoveFieldsCrsRecordAll (UsrDat->UsrCod);
 
    /***** Remove user from all his/her projects *****/
    Prj_RemoveUsrFromProjects (UsrDat->UsrCod);
 
    /***** Remove user from all the attendance events *****/
-   Att_RemoveUsrFromAllAttEvents (UsrDat->UsrCod);
+   Att_DB_RemoveUsrFromAllAttEvents (UsrDat->UsrCod);
 
    /***** Remove user from all the groups of all courses *****/
    Grp_RemUsrFromAllGrps (UsrDat->UsrCod);
 
-   /***** Remove user's requests for inscription *****/
-   DB_QueryDELETE ("can not remove user's requests for inscription",
-		   "DELETE FROM crs_requests"
-		   " WHERE UsrCod=%ld",
-	           UsrDat->UsrCod);
+   /***** Remove user's requests for enrolment *****/
+   Enr_DB_RemUsrRequests (UsrDat->UsrCod);
 
    /***** Remove user from possible duplicate users *****/
-   Dup_RemoveUsrFromDuplicated (UsrDat->UsrCod);
+   Dup_DB_RemoveUsrFromDuplicated (UsrDat->UsrCod);
 
    /***** Remove user from the tables of courses and users *****/
-   DB_QueryDELETE ("can not remove a user from all courses",
-		   "DELETE FROM crs_user_settings"
-		   " WHERE UsrCod=%ld",
-		   UsrDat->UsrCod);
-   DB_QueryDELETE ("can not remove a user from all courses",
-		   "DELETE FROM crs_users"
-		   " WHERE UsrCod=%ld",
-		   UsrDat->UsrCod);
+   Set_DB_RemCrsUsrSettings (UsrDat->UsrCod);
+   Enr_DB_RemUsrFromAllCrss (UsrDat->UsrCod);
 
    if (QuietOrVerbose == Cns_VERBOSE)
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_from_all_his_her_courses,
                      UsrDat->FullName);
 
-   /***** Remove user as administrator of any degree *****/
-   DB_QueryDELETE ("can not remove a user as administrator",
-		   "DELETE FROM usr_admins"
-		   " WHERE UsrCod=%ld",
-                   UsrDat->UsrCod);
+   /***** Remove user as administrator of any degree/center/institution *****/
+   Enr_DB_RemUsrAsAdmin (UsrDat->UsrCod);
 
    if (QuietOrVerbose == Cns_VERBOSE)
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_administrator,
                      UsrDat->FullName);
 
    /***** Remove user's clipboard in forums *****/
-   For_RemoveUsrFromThrClipboard (UsrDat->UsrCod);
+   For_DB_RemoveUsrFromThrClipboard (UsrDat->UsrCod);
 
    /***** Remove some files of the user's from database *****/
    Brw_RemoveUsrFilesFromDB (UsrDat->UsrCod);
@@ -1097,7 +1015,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Mch_RemoveMatchesMadeByUsrInAllCrss (UsrDat->UsrCod);
 
    /***** Remove user's notifications *****/
-   Ntf_RemoveUsrNtfs (UsrDat->UsrCod);
+   Ntf_DB_RemoveUsrNtfs (UsrDat->UsrCod);
 
    /***** Delete user's messages sent and received *****/
    Msg_DelAllRecAndSntMsgsUsr (UsrDat->UsrCod);
@@ -1106,32 +1024,26 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
                      UsrDat->FullName);
 
    /***** Remove user from tables of banned users *****/
-   Usr_RemoveUsrFromUsrBanned (UsrDat->UsrCod);
-   Msg_RemoveUsrFromBanned (UsrDat->UsrCod);
+   Usr_DB_RemoveUsrFromBanned (UsrDat->UsrCod);
+   Msg_DB_RemoveUsrFromBanned (UsrDat->UsrCod);
 
    /***** Delete thread read status for this user *****/
-   For_RemoveUsrFromReadThrs (UsrDat->UsrCod);
+   For_DB_RemoveUsrFromReadThrs (UsrDat->UsrCod);
 
    /***** Remove user from table of seen announcements *****/
-   Ann_RemoveUsrFromSeenAnnouncements (UsrDat->UsrCod);
+   Ann_DB_RemoveUsrFromSeenAnnouncements (UsrDat->UsrCod);
 
    /***** Remove user from table of connected users *****/
-   DB_QueryDELETE ("can not remove a user from table of connected users",
-		   "DELETE FROM usr_connected"
-		   " WHERE UsrCod=%ld",
-		   UsrDat->UsrCod);
+   Con_DB_RemoveUsrFromConnected (UsrDat->UsrCod);
 
    /***** Remove all sessions of this user *****/
-   DB_QueryDELETE ("can not remove sessions of a user",
-		   "DELETE FROM ses_sessions"
-		   " WHERE UsrCod=%ld",
-		   UsrDat->UsrCod);
+   Ses_DB_RemoveUsrSessions (UsrDat->UsrCod);
 
    /***** Remove social content associated to the user *****/
    Tml_Usr_RemoveUsrContent (UsrDat->UsrCod);
 
    /***** Remove user's figures *****/
-   Prf_RemoveUsrFigures (UsrDat->UsrCod);
+   Prf_DB_RemoveUsrFigures (UsrDat->UsrCod);
 
    /***** Remove user from table of followers *****/
    Fol_RemoveUsrFromUsrFollow (UsrDat->UsrCod);
@@ -1140,10 +1052,10 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Rep_RemoveUsrUsageReports (UsrDat->UsrCod);
 
    /***** Remove user's agenda *****/
-   Agd_RemoveUsrEvents (UsrDat->UsrCod);
+   Agd_DB_RemoveUsrEvents (UsrDat->UsrCod);
 
    /***** Remove the user from the list of users without photo *****/
-   Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
+   Pho_DB_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 
    /***** Remove user's photo *****/
    PhotoRemoved = Pho_RemovePhoto (UsrDat);
@@ -1151,8 +1063,25 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
       Ale_ShowAlert (Ale_SUCCESS,Txt_Photo_of_THE_USER_X_has_been_removed,
                      UsrDat->FullName);
 
-   /***** Remove user *****/
-   Acc_RemoveUsr (UsrDat);
+   /***** Remove user's webs / social networks *****/
+   Net_DB_RemoveUsrWebs (UsrDat->UsrCod);
+
+   /***** Remove user's nicknames *****/
+   Nck_DB_RemoveUsrNicknames (UsrDat->UsrCod);
+
+   /***** Remove user's emails *****/
+   Mai_DB_RemoveUsrPendingEmails (UsrDat->UsrCod);
+   Mai_DB_RemoveUsrEmails (UsrDat->UsrCod);
+
+   /***** Remove user's IDs *****/
+   ID_DB_RemoveUsrIDs (UsrDat->UsrCod);
+
+   /***** Remove user's last data *****/
+   Usr_DB_RemoveUsrLastData (UsrDat->UsrCod);
+
+   /***** Remove user's data *****/
+   Usr_DB_RemoveUsrData (UsrDat->UsrCod);
+
    if (QuietOrVerbose == Cns_VERBOSE)
       Ale_ShowAlert (Ale_SUCCESS,Txt_Record_card_of_THE_USER_X_has_been_removed,
                      UsrDat->FullName);
@@ -1169,54 +1098,6 @@ static void Acc_RemoveUsrBriefcase (struct UsrData *UsrDat)
    /***** Remove files of the user's briefcase from disc *****/
    Usr_ConstructPathUsr (UsrDat->UsrCod,PathRelUsr);
    Fil_RemoveTree (PathRelUsr);
-  }
-
-/*****************************************************************************/
-/************************ Remove a user from database ************************/
-/*****************************************************************************/
-
-static void Acc_RemoveUsr (struct UsrData *UsrDat)
-  {
-   /***** Remove user's webs / social networks *****/
-   DB_QueryDELETE ("can not remove user's webs / social networks",
-		   "DELETE FROM usr_webs"
-		   " WHERE UsrCod=%ld",
-		   UsrDat->UsrCod);
-
-   /***** Remove user's nicknames *****/
-   DB_QueryDELETE ("can not remove user's nicknames",
-		   "DELETE FROM usr_nicknames"
-		   " WHERE UsrCod=%ld",
-		   UsrDat->UsrCod);
-
-   /***** Remove user's emails *****/
-   DB_QueryDELETE ("can not remove pending user's emails",
-		   "DELETE FROM usr_pending_emails"
-		   " WHERE UsrCod=%ld",
-		   UsrDat->UsrCod);
-
-   DB_QueryDELETE ("can not remove user's emails",
-		   "DELETE FROM usr_emails"
-		   " WHERE UsrCod=%ld",
-		   UsrDat->UsrCod);
-
-   /***** Remove user's IDs *****/
-   DB_QueryDELETE ("can not remove user's IDs",
-		   "DELETE FROM usr_ids"
-		   " WHERE UsrCod=%ld",
-		   UsrDat->UsrCod);
-
-   /***** Remove user's last data *****/
-   DB_QueryDELETE ("can not remove user's last data",
-		   "DELETE FROM usr_last"
-		   " WHERE UsrCod=%ld",
-		   UsrDat->UsrCod);
-
-   /***** Remove user's data  *****/
-   DB_QueryDELETE ("can not remove user's data",
-		   "DELETE FROM usr_data"
-		   " WHERE UsrCod=%ld",
-		   UsrDat->UsrCod);
   }
 
 /*****************************************************************************/

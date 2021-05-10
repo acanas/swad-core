@@ -55,6 +55,6 @@ void Ann_HideActiveAnnouncement (void);
 void Ann_RevealHiddenAnnouncement (void);
 void Ann_RemoveAnnouncement (void);
 void Ann_MarkAnnouncementAsSeen (void);
-void Ann_RemoveUsrFromSeenAnnouncements (long UsrCod);
+void Ann_DB_RemoveUsrFromSeenAnnouncements (long UsrCod);
 
 #endif

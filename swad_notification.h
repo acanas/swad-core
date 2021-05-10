@@ -140,6 +140,6 @@ void Ntf_PutFormChangeNotifSentByEMail (void);
 void Ntf_ChangeNotifyEvents (void);
 
 void Ntf_WriteNumberOfNewNtfs (void);
-void Ntf_RemoveUsrNtfs (long ToUsrCod);
+void Ntf_DB_RemoveUsrNtfs (long ToUsrCod);
 
 #endif

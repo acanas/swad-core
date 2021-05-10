@@ -77,6 +77,7 @@ void ID_ShowFormChangeOtherUsrID (void);
 
 void ID_RemoveMyUsrID (void);
 void ID_RemoveOtherUsrID (void);
+void ID_DB_RemoveUsrIDs (long UsrCod);
 void ID_NewMyUsrID (void);
 void ID_NewOtherUsrID (void);
 
