@@ -94,14 +94,10 @@ long Asg_GetParamAsgCod (void);
 void Asg_ReqRemAssignment (void);
 void Asg_RemoveAssignment (void);
 void Asg_HideAssignment (void);
-void Asg_ShowAssignment (void);
+void Asg_UnhideAssignment (void);
 void Asg_ReceiveFormAssignment (void);
-void Asg_RemoveGroup (long GrpCod);
-void Asg_RemoveGroupsOfType (long GrpTypCod);
 void Asg_RemoveCrsAssignments (long CrsCod);
 
-unsigned Asg_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope);
 unsigned Asg_GetNumAssignments (Hie_Lvl_Level_t Scope,unsigned *NumNotif);
-unsigned Asg_GetNumAssignmentsInCrs (long CrsCod);
 
 #endif

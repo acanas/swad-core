@@ -30,7 +30,7 @@
 #include "swad_account.h"
 #include "swad_account_database.h"
 #include "swad_agenda_database.h"
-#include "swad_announcement.h"
+#include "swad_announcement_database.h"
 #include "swad_attendance.h"
 #include "swad_box.h"
 #include "swad_calendar.h"

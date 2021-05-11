@@ -32,6 +32,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
+#include "swad_assignment_database.h"
 #include "swad_attendance.h"
 #include "swad_box.h"
 #include "swad_database.h"
@@ -4143,7 +4144,7 @@ static void Grp_RemoveGroupTypeCompletely (void)
    Brw_RemoveZonesOfGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove the associations of assignments to groups of this type *****/
-   Asg_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+   Asg_DB_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove the associations of attendance events to groups of this type *****/
    Att_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
@@ -4212,7 +4213,7 @@ static void Grp_RemoveGroupCompletely (void)
    Brw_RemoveGrpZones (Gbl.Hierarchy.Crs.CrsCod,GrpDat.GrpCod);
 
    /***** Remove this group from all assignments *****/
-   Asg_RemoveGroup (GrpDat.GrpCod);
+   Asg_DB_RemoveGroup (GrpDat.GrpCod);
 
    /***** Remove this group from all attendance events *****/
    Att_RemoveGroup (GrpDat.GrpCod);

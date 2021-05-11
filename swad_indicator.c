@@ -29,6 +29,7 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_action.h"
+#include "swad_assignment_database.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_department.h"
@@ -1439,7 +1440,7 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
       IndicatorsCrs->NumIndicators++;
 
    /***** Indicator #2: information about assignments *****/
-   IndicatorsCrs->NumAssignments      = Asg_GetNumAssignmentsInCrs (CrsCod);
+   IndicatorsCrs->NumAssignments      = Asg_DB_GetNumAssignmentsInCrs (CrsCod);
    IndicatorsCrs->NumFilesAssignments = Ind_GetNumFilesInAssigZonesOfCrsFromDB (CrsCod);
    IndicatorsCrs->NumFilesWorks       = Ind_GetNumFilesInWorksZonesOfCrsFromDB (CrsCod);
    IndicatorsCrs->ThereAreAssignments = (IndicatorsCrs->NumAssignments      != 0) ||

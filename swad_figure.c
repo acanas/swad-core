@@ -32,6 +32,7 @@
 
 #include "swad_action.h"
 #include "swad_agenda_database.h"
+#include "swad_assignment_database.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -3182,7 +3183,7 @@ static void Fig_GetAndShowAssignmentsStats (void)
 
    /***** Get the number of assignments from this location *****/
    if ((NumAssignments = Asg_GetNumAssignments (Gbl.Scope.Current,&NumNotif)))
-      if ((NumCoursesWithAssignments = Asg_GetNumCoursesWithAssignments (Gbl.Scope.Current)) != 0)
+      if ((NumCoursesWithAssignments = Asg_DB_GetNumCoursesWithAssignments (Gbl.Scope.Current)) != 0)
          NumAssignmentsPerCourse = (double) NumAssignments /
 	                           (double) NumCoursesWithAssignments;
 

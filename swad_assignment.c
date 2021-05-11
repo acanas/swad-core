@@ -33,6 +33,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_assignment.h"
+#include "swad_assignment_database.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -93,14 +94,10 @@ static void Asg_GetDataOfAssignment (struct Asg_Assignment *Asg,
 				     unsigned NumAsgs);
 static void Asg_ResetAssignment (struct Asg_Assignment *Asg);
 static void Asg_FreeListAssignments (struct Asg_Assignments *Assignments);
-static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Asg_PutParamAsgCod (long AsgCod);
-static bool Asg_CheckIfSimilarAssignmentExists (const char *Field,const char *Value,long AsgCod);
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod);
-static void Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,unsigned NumUsrsToBeNotifiedByEMail);
 static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt);
 static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt);
-static void Asg_RemoveAllTheGrpsAssociatedToAnAssignment (long AsgCod);
 static void Asg_CreateGrps (long AsgCod);
 static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *Asg);
 static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod);
@@ -180,17 +177,19 @@ static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 
    if (Assignments->Num)
      {
-      /***** Table head *****/
+      /***** Begin table *****/
       HTM_TABLE_BeginWideMarginPadding (2);
-      Asg_PutHeadForSeeing (Assignments,false);	// Not print view
 
-      /***** Write all the assignments *****/
-      for (NumAsg = Pagination.FirstItemVisible;
-	   NumAsg <= Pagination.LastItemVisible;
-	   NumAsg++)
-	 Asg_ShowOneAssignment (Assignments,
-	                        Assignments->LstAsgCods[NumAsg - 1],
-	                        false);	// Not print view
+	 /***** Table head *****/
+	 Asg_PutHeadForSeeing (Assignments,false);	// Not print view
+
+	 /***** Write all the assignments *****/
+	 for (NumAsg = Pagination.FirstItemVisible;
+	      NumAsg <= Pagination.LastItemVisible;
+	      NumAsg++)
+	    Asg_ShowOneAssignment (Assignments,
+				   Assignments->LstAsgCods[NumAsg - 1],
+				   false);	// Not print view
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -229,37 +228,48 @@ static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
 
    HTM_TR_Begin (NULL);
 
-   HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
-   for (Order  = Dat_START_TIME;
-	Order <= Dat_END_TIME;
-	Order++)
-     {
-      HTM_TH_Begin (1,1,"LM");
-
-      if (!PrintView)
+      HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
+      for (Order  = Dat_START_TIME;
+	   Order <= Dat_END_TIME;
+	   Order++)
 	{
-	 Frm_BeginForm (ActSeeAsg);
-	 WhichGroups = Grp_GetParamWhichGroups ();
-	 Grp_PutParamWhichGroups (&WhichGroups);
-	 Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Assignments->CurrentPage);
-	 Dat_PutHiddenParamOrder (Order);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
-	 if (Order == Assignments->SelectedOrder)
-	    HTM_U_Begin ();
-	}
-      HTM_Txt (Txt_START_END_TIME[Order]);
-      if (!PrintView)
-	{
-	 if (Order == Assignments->SelectedOrder)
-	    HTM_U_End ();
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
+	 /* Begin head cell */
+	 HTM_TH_Begin (1,1,"LM");
 
-      HTM_TH_End ();
-     }
-   HTM_TH (1,1,"LM",Txt_Assignment);
-   HTM_TH (1,1,"LM",Txt_Folder);
+	    if (!PrintView)
+	      {
+	       /* Begin form */
+	       Frm_BeginForm (ActSeeAsg);
+	       WhichGroups = Grp_GetParamWhichGroups ();
+	       Grp_PutParamWhichGroups (&WhichGroups);
+	       Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Assignments->CurrentPage);
+	       Dat_PutHiddenParamOrder (Order);
+
+	          /* Begin link to select order */
+		  HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
+		  if (Order == Assignments->SelectedOrder)
+		     HTM_U_Begin ();
+	      }
+
+	    /* Start / end text */
+	    HTM_Txt (Txt_START_END_TIME[Order]);
+
+	    if (!PrintView)
+	      {
+	          /* End link to select order */
+		  if (Order == Assignments->SelectedOrder)
+		     HTM_U_End ();
+		  HTM_BUTTON_End ();
+
+	       /* End form */
+	       Frm_EndForm ();
+	      }
+
+	 /* End head cell */
+	 HTM_TH_End ();
+	}
+      HTM_TH (1,1,"LM",Txt_Assignment);
+      HTM_TH (1,1,"LM",Txt_Folder);
 
    HTM_TR_End ();
   }
@@ -317,11 +327,15 @@ static void Asg_PutButtonToCreateNewAsg (void *Assignments)
 
    if (Assignments)
      {
-      ((struct Asg_Assignments *) Assignments)->AsgCodToEdit = -1L;
-
+      /* Begin form */
       Frm_BeginForm (ActFrmNewAsg);
+      ((struct Asg_Assignments *) Assignments)->AsgCodToEdit = -1L;
       Asg_PutParams (Assignments);
-      Btn_PutConfirmButton (Txt_New_assignment);
+
+         /* Button to create new assignment */
+	 Btn_PutConfirmButton (Txt_New_assignment);
+
+      /* End form */
       Frm_EndForm ();
      }
   }
@@ -361,15 +375,17 @@ void Asg_PrintOneAssignment (void)
 			      Gbl.Hierarchy.Deg.DegCod,
 			      Gbl.Hierarchy.Crs.CrsCod);
 
-   /***** Table head *****/
+   /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (2);
-   Asg_PutHeadForSeeing (&Assignments,
-                         true);		// Print view
 
-   /***** Write assignment *****/
-   Asg_ShowOneAssignment (&Assignments,
-                          AsgCod,
-                          true);	// Print view
+      /***** Table head *****/
+      Asg_PutHeadForSeeing (&Assignments,
+			    true);		// Print view
+
+      /***** Write assignment *****/
+      Asg_ShowOneAssignment (&Assignments,
+			     AsgCod,
+			     true);	// Print view
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -399,100 +415,102 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
    /***** Write first row of data of this assignment *****/
    HTM_TR_Begin (NULL);
 
-   /* Forms to remove/edit this assignment */
-   if (PrintView)
-      HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
-   else
-     {
-      HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
-      Asg_PutFormsToRemEditOneAsg (Assignments,&Asg,Anchor);
-     }
-   HTM_TD_End ();
-
-   /* Start/end date/time */
-   UniqueId++;
-
-   for (StartEndTime  = (Dat_StartEndTime_t) 0;
-	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	StartEndTime++)
-     {
-      if (asprintf (&Id,"asg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	 Err_NotEnoughMemoryExit ();
+      /* Forms to remove/edit this assignment */
       if (PrintView)
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
-		       Id,
-		       Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
-					        "DATE_RED_LIGHT") :
-				    (Asg.Open ? "DATE_GREEN" :
-					        "DATE_RED"));
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
       else
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB COLOR%u\"",
-		       Id,
-		       Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
-					        "DATE_RED_LIGHT") :
-				    (Asg.Open ? "DATE_GREEN" :
-					        "DATE_RED"),
-		       Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC (Id,Asg.TimeUTC[StartEndTime],
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				    true,true,true,0x7);
+	{
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+	 Asg_PutFormsToRemEditOneAsg (Assignments,&Asg,Anchor);
+	}
       HTM_TD_End ();
-      free (Id);
-     }
 
-   /* Assignment title */
-   if (PrintView)
-      HTM_TD_Begin ("class=\"%s LT\"",
-		    Asg.Hidden ? "ASG_TITLE_LIGHT" :
-				 "ASG_TITLE");
-   else
-      HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
-		    Asg.Hidden ? "ASG_TITLE_LIGHT" :
-				 "ASG_TITLE",
-		    Gbl.RowEvenOdd);
-   HTM_ARTICLE_Begin (Anchor);
-   HTM_Txt (Asg.Title);
-   HTM_ARTICLE_End ();
-   HTM_TD_End ();
+      /* Start/end date/time */
+      UniqueId++;
 
-   /* Assignment folder */
-   if (PrintView)
-      HTM_TD_Begin ("class=\"DAT LT\"");
-   else
-      HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-   if (Asg.SendWork == Asg_SEND_WORK)
-      Asg_WriteAssignmentFolder (&Asg,PrintView);
-   HTM_TD_End ();
+      for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	   StartEndTime++)
+	{
+	 if (asprintf (&Id,"asg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 if (PrintView)
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
+			  Id,
+			  Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
+						   "DATE_RED_LIGHT") :
+				       (Asg.Open ? "DATE_GREEN" :
+						   "DATE_RED"));
+	 else
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LB COLOR%u\"",
+			  Id,
+			  Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
+						   "DATE_RED_LIGHT") :
+				       (Asg.Open ? "DATE_GREEN" :
+						   "DATE_RED"),
+			  Gbl.RowEvenOdd);
+	 Dat_WriteLocalDateHMSFromUTC (Id,Asg.TimeUTC[StartEndTime],
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+				       true,true,true,0x7);
+	 HTM_TD_End ();
+	 free (Id);
+	}
+
+      /* Assignment title */
+      if (PrintView)
+	 HTM_TD_Begin ("class=\"%s LT\"",
+		       Asg.Hidden ? "ASG_TITLE_LIGHT" :
+				    "ASG_TITLE");
+      else
+	 HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
+		       Asg.Hidden ? "ASG_TITLE_LIGHT" :
+				    "ASG_TITLE",
+		       Gbl.RowEvenOdd);
+      HTM_ARTICLE_Begin (Anchor);
+      HTM_Txt (Asg.Title);
+      HTM_ARTICLE_End ();
+      HTM_TD_End ();
+
+      /* Assignment folder */
+      if (PrintView)
+	 HTM_TD_Begin ("class=\"DAT LT\"");
+      else
+	 HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
+      if (Asg.SendWork == Asg_SEND_WORK)
+	 Asg_WriteAssignmentFolder (&Asg,PrintView);
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
    /***** Write second row of data of this assignment *****/
    HTM_TR_Begin (NULL);
 
-   /* Author of the assignment */
-   if (PrintView)
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-   else
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Asg_WriteAsgAuthor (&Asg);
-   HTM_TD_End ();
+      /* Author of the assignment */
+      if (PrintView)
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      else
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      Asg_WriteAsgAuthor (&Asg);
+      HTM_TD_End ();
 
-   /* Text of the assignment */
-   Asg_GetAssignmentTxtFromDB (Asg.AsgCod,Txt);
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-   Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   if (PrintView)
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-   else
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   if (Gbl.Crs.Grps.NumGrps)
-      Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
-   HTM_DIV_Begin ("class=\"PAR %s\"",Asg.Hidden ? "DAT_LIGHT" :
-        	                                  "DAT");
-   HTM_Txt (Txt);
-   HTM_DIV_End ();
-   HTM_TD_End ();
+      /* Text of the assignment */
+      Asg_DB_GetAssignmentTxtByCod (Asg.AsgCod,Txt);
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+      Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+      if (PrintView)
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      else
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      if (Gbl.Crs.Grps.NumGrps)
+	 Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
+
+      HTM_DIV_Begin ("class=\"PAR %s\"",Asg.Hidden ? "DAT_LIGHT" :
+						     "DAT");
+	 HTM_Txt (Txt);
+      HTM_DIV_End ();
+
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
@@ -591,10 +609,10 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
 static Dat_StartEndTime_t Asg_GetParamAsgOrder (void)
   {
    return (Dat_StartEndTime_t)
-	  Par_GetParToUnsignedLong ("Order",
-				    0,
-				    Dat_NUM_START_END_TIME - 1,
-				    (unsigned long) Asg_ORDER_DEFAULT);
+   Par_GetParToUnsignedLong ("Order",
+			     0,
+			     Dat_NUM_START_END_TIME - 1,
+			     (unsigned long) Asg_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -661,29 +679,11 @@ static void Asg_PutParams (void *Assignments)
   }
 
 /*****************************************************************************/
-/************************ List all the assignments ***************************/
+/*************************** List all assignments ****************************/
 /*****************************************************************************/
 
 static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
   {
-   static const char *HiddenSubQuery[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK    ] = " AND Hidden='N'",
-      [Rol_GST    ] = " AND Hidden='N'",
-      [Rol_USR    ] = " AND Hidden='N'",
-      [Rol_STD    ] = " AND Hidden='N'",
-      [Rol_NET    ] = " AND Hidden='N'",
-      [Rol_TCH    ] = "",
-      [Rol_DEG_ADM] = " AND Hidden='N'",
-      [Rol_CTR_ADM] = " AND Hidden='N'",
-      [Rol_INS_ADM] = " AND Hidden='N'",
-      [Rol_SYS_ADM] = "",
-     };
-   static const char *OrderBySubQuery[Dat_NUM_START_END_TIME] =
-     {
-      [Dat_START_TIME] = "StartTime DESC,EndTime DESC,Title DESC",
-      [Dat_END_TIME  ] = "EndTime DESC,StartTime DESC,Title DESC",
-     };
    MYSQL_RES *mysql_res;
    unsigned NumAsgs;
    unsigned NumAsg;
@@ -693,40 +693,9 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
 
    /***** Get list of assignments from database *****/
    if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
-      NumAsgs = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get assignments",
-		      "SELECT AsgCod"
-		       " FROM asg_assignments"
-		      " WHERE CrsCod=%ld%s"
-		        " AND ("
-			      // Assignment is for the whole course
-			      "AsgCod NOT IN"
-			      " (SELECT AsgCod"
-			         " FROM asg_groups)"	// Not associated to any group
-			     " OR"
-			      // Assignment is for some of my groups
-			     " AsgCod IN"
-			     " (SELECT asg_groups.AsgCod"
-			        " FROM asg_groups,"
-				      "grp_users"
-			       " WHERE grp_users.UsrCod=%ld"
-			         " AND asg_groups.GrpCod=grp_users.GrpCod)"
-			     ")"
-		      " ORDER BY %s",
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
-		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      OrderBySubQuery[Assignments->SelectedOrder]);
+      NumAsgs = Asg_DB_GetListAssignmentsMyGrps (&mysql_res,Assignments->SelectedOrder);
    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
-      NumAsgs = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get assignments",
-		      "SELECT AsgCod"
-		       " FROM asg_assignments"
-		      " WHERE CrsCod=%ld%s"
-		      " ORDER BY %s",
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
-		      OrderBySubQuery[Assignments->SelectedOrder]);
+      NumAsgs = Asg_DB_GetListAssignmentsAllGrps (&mysql_res,Assignments->SelectedOrder);
 
    if (NumAsgs) // Assignments found...
      {
@@ -741,11 +710,9 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
       for (NumAsg = 0;
 	   NumAsg < Assignments->Num;
 	   NumAsg++)
-        {
          /* Get next assignment code */
          if ((Assignments->LstAsgCods[NumAsg] = DB_GetNextCode (mysql_res)) <= 0)
             Err_WrongAssignmentExit ();
-        }
      }
    else
       Assignments->Num = 0;
@@ -768,21 +735,7 @@ void Asg_GetDataOfAssignmentByCod (struct Asg_Assignment *Asg)
    if (Asg->AsgCod > 0)
      {
       /***** Build query *****/
-      NumAsgs = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get assignment data",
-		      "SELECT AsgCod,"					// row[0]
-			     "Hidden,"					// row[1]
-			     "UsrCod,"					// row[2]
-			     "UNIX_TIMESTAMP(StartTime),"		// row[3]
-			     "UNIX_TIMESTAMP(EndTime),"			// row[4]
-			     "NOW() BETWEEN StartTime AND EndTime,"	// row[5]
-			     "Title,"					// row[6]
-			     "Folder"					// row[7]
-		       " FROM asg_assignments"
-		      " WHERE AsgCod=%ld"
-			" AND CrsCod=%ld",
-		      Asg->AsgCod,
-		      Gbl.Hierarchy.Crs.CrsCod);
+      NumAsgs = Asg_DB_GetDataOfAssignmentByCod (&mysql_res,Asg->AsgCod);
 
       /***** Get data of assignment *****/
       Asg_GetDataOfAssignment (Asg,&mysql_res,NumAsgs);
@@ -807,21 +760,7 @@ void Asg_GetDataOfAssignmentByFolder (struct Asg_Assignment *Asg)
    if (Asg->Folder[0])
      {
       /***** Query database *****/
-      NumAsgs = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get assignment data",
-		      "SELECT AsgCod,"					// row[0]
-			     "Hidden,"					// row[1]
-			     "UsrCod,"					// row[2]
-			     "UNIX_TIMESTAMP(StartTime),"		// row[3]
-			     "UNIX_TIMESTAMP(EndTime),"			// row[4]
-			     "NOW() BETWEEN StartTime AND EndTime,"	// row[5]
-			     "Title,"					// row[6]
-			     "Folder"					// row[7]
-		       " FROM asg_assignments"
-		      " WHERE CrsCod=%ld"
-		        " AND Folder='%s'",
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      Asg->Folder);
+      NumAsgs = Asg_DB_GetDataOfAssignmentByFolder (&mysql_res,Asg->Folder);
 
       /***** Get data of assignment *****/
       Asg_GetDataOfAssignment (Asg,&mysql_res,NumAsgs);
@@ -872,10 +811,8 @@ static void Asg_GetDataOfAssignment (struct Asg_Assignment *Asg,
       /* Get author of the assignment (row[2]) */
       Asg->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
-      /* Get start date (row[3] holds the start UTC time) */
+      /* Get start and end dates (row[3] and row[4] hold the start UTC time) */
       Asg->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
-
-      /* Get end date   (row[4] holds the end   UTC time) */
       Asg->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
 
       /* Get whether the assignment is open or closed (row(5)) */
@@ -932,22 +869,6 @@ static void Asg_FreeListAssignments (struct Asg_Assignments *Assignments)
   }
 
 /*****************************************************************************/
-/******************** Get assignment text from database **********************/
-/*****************************************************************************/
-
-static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
-  {
-   /***** Get text of assignment from database *****/
-   DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get assignment text",
-		         "SELECT Txt"		// row[0]
-			  " FROM asg_assignments"
-		         " WHERE AsgCod=%ld"
-			   " AND CrsCod=%ld",
-		         AsgCod,
-		         Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
 /***************** Get summary and content of an assignment  *****************/
 /*****************************************************************************/
 // This function may be called inside a web service
@@ -958,22 +879,12 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumAsgs;
    size_t Length;
 
    SummaryStr[0] = '\0';	// Return nothing on error
 
-   /***** Build query *****/
-   NumAsgs = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get assignment title and text",
-		   "SELECT Title,"	// row[0]
-			  "Txt"		// row[1]
-		    " FROM asg_assignments"
-		   " WHERE AsgCod=%ld",
-		   AsgCod);
-
-   /***** Result should have a unique row *****/
-   if (NumAsgs == 1)
+   /***** Query database. Result should have a unique row *****/
+   if (Asg_DB_GetAssignmentTitleAndTxtByCod (&mysql_res,AsgCod) == 1)
      {
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);
@@ -1082,15 +993,10 @@ void Asg_RemoveAssignment (void)
       Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (Asg.Folder);
 
    /***** Remove all the groups of this assignment *****/
-   Asg_RemoveAllTheGrpsAssociatedToAnAssignment (Asg.AsgCod);
+   Asg_DB_RemoveAllGrpsAssociatedToAnAssignment (Asg.AsgCod);
 
    /***** Remove assignment *****/
-   DB_QueryDELETE ("can not remove assignment",
-		   "DELETE FROM asg_assignments"
-		   " WHERE AsgCod=%ld"
-		     " AND CrsCod=%ld",
-                   Asg.AsgCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
+   Asg_DB_RemoveAssignment (Asg.AsgCod);
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Asg.AsgCod);
@@ -1128,23 +1034,17 @@ void Asg_HideAssignment (void)
    Asg_GetDataOfAssignmentByCod (&Asg);
 
    /***** Hide assignment *****/
-   DB_QueryUPDATE ("can not hide assignment",
-		   "UPDATE asg_assignments"
-		     " SET Hidden='Y'"
-		   " WHERE AsgCod=%ld"
-		     " AND CrsCod=%ld",
-                   Asg.AsgCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
+   Asg_DB_HideAssignment (Asg.AsgCod);
 
    /***** Show all assignments again *****/
    Asg_ShowAllAssignments (&Assignments);
   }
 
 /*****************************************************************************/
-/**************************** Show an assignment *****************************/
+/**************************** Unhide an assignment ***************************/
 /*****************************************************************************/
 
-void Asg_ShowAssignment (void)
+void Asg_UnhideAssignment (void)
   {
    struct Asg_Assignments Assignments;
    struct Asg_Assignment Asg;
@@ -1164,34 +1064,11 @@ void Asg_ShowAssignment (void)
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Asg);
 
-   /***** Hide assignment *****/
-   DB_QueryUPDATE ("can not show assignment",
-		   "UPDATE asg_assignments"
-		     " SET Hidden='N'"
-		   " WHERE AsgCod=%ld"
-		     " AND CrsCod=%ld",
-                   Asg.AsgCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
+   /***** Unhide assignment *****/
+   Asg_DB_UnhideAssignment (Asg.AsgCod);
 
    /***** Show all assignments again *****/
    Asg_ShowAllAssignments (&Assignments);
-  }
-
-/*****************************************************************************/
-/******** Check if the title or the folder of an assignment exists ***********/
-/*****************************************************************************/
-
-static bool Asg_CheckIfSimilarAssignmentExists (const char *Field,const char *Value,long AsgCod)
-  {
-   /***** Get number of assignments with a field value from database *****/
-   return (DB_QueryCOUNT ("can not get similar assignments",
-			  "SELECT COUNT(*)"
-			   " FROM asg_assignments"
-			  " WHERE CrsCod=%ld"
-			    " AND %s='%s'"
-			    " AND AsgCod<>%ld",
-			  Gbl.Hierarchy.Crs.CrsCod,
-			  Field,Value,AsgCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1255,7 +1132,7 @@ void Asg_RequestCreatOrEditAsg (void)
       Asg_GetDataOfAssignmentByCod (&Asg);
 
       /* Get text of the assignment from database */
-      Asg_GetAssignmentTxtFromDB (Asg.AsgCod,Txt);
+      Asg_DB_GetAssignmentTxtByCod (Asg.AsgCod,Txt);
      }
 
    /***** Begin form *****/
@@ -1377,42 +1254,42 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
       /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Groups);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColon (Txt_Groups);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"LT\"");
-      Box_BoxTableBegin ("100%",NULL,
-                         NULL,NULL,
-                         Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
+	 HTM_TD_Begin ("class=\"LT\"");
 
-      /***** First row: checkbox to select the whole course *****/
-      HTM_TR_Begin (NULL);
+	    Box_BoxTableBegin ("100%",NULL,
+			       NULL,NULL,
+			       Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
 
-      HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
-		          "id=\"WholeCrs\" value=\"Y\"%s"
-		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
-			  Grp_CheckIfAssociatedToGrps ("asg_groups","AsgCod",AsgCod) ? "" :
-				                                                       " checked=\"checked\"");
-      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+	       /***** First row: checkbox to select the whole course *****/
+	       HTM_TR_Begin (NULL);
+		  HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
+		     HTM_LABEL_Begin (NULL);
+			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
+					    "id=\"WholeCrs\" value=\"Y\"%s"
+					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
+					    Grp_CheckIfAssociatedToGrps ("asg_groups","AsgCod",AsgCod) ? "" :
+													 " checked=\"checked\"");
+			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+		     HTM_LABEL_End ();
+		  HTM_TD_End ();
+	       HTM_TR_End ();
 
-      HTM_TR_End ();
+	       /***** List the groups for each group type *****/
+	       for (NumGrpTyp = 0;
+		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+		    NumGrpTyp++)
+		  if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+		     Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+							Grp_ASSIGNMENT,AsgCod);
 
-      /***** List the groups for each group type *****/
-      for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
-	   NumGrpTyp++)
-         if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-                                               Grp_ASSIGNMENT,AsgCod);
+	    /***** End table and box *****/
+	    Box_BoxTableEnd ();
 
-      /***** End table and box *****/
-      Box_BoxTableEnd ();
-      HTM_TD_End ();
+	 HTM_TD_End ();
 
       HTM_TR_End ();
      }
@@ -1491,7 +1368,7 @@ void Asg_ReceiveFormAssignment (void)
    if (NewAsg.Title[0])	// If there's an assignment title
      {
       /* If title of assignment was in database... */
-      if (Asg_CheckIfSimilarAssignmentExists ("Title",NewAsg.Title,NewAsg.AsgCod))
+      if (Asg_DB_CheckIfSimilarAssignmentExists ("Title",NewAsg.Title,NewAsg.AsgCod))
         {
          NewAssignmentIsCorrect = false;
 
@@ -1504,7 +1381,7 @@ void Asg_ReceiveFormAssignment (void)
            {
             if (Str_ConvertFilFolLnkNameToValid (NewAsg.Folder))	// If folder name is valid...
               {
-               if (Asg_CheckIfSimilarAssignmentExists ("Folder",NewAsg.Folder,NewAsg.AsgCod))	// If folder of assignment was in database...
+               if (Asg_DB_CheckIfSimilarAssignmentExists ("Folder",NewAsg.Folder,NewAsg.AsgCod))	// If folder of assignment was in database...
                  {
                   NewAssignmentIsCorrect = false;
 
@@ -1570,7 +1447,8 @@ void Asg_ReceiveFormAssignment (void)
 
       /***** Notify by email about the new assignment *****/
       if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ASSIGNMENT,NewAsg.AsgCod)))
-	 Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (NewAsg.AsgCod,NumUsrsToBeNotifiedByEMail);
+	 Asg_DB_UpdateNumUsrsNotifiedByEMailAboutAssignment (NewAsg.AsgCod,
+	                                                     NumUsrsToBeNotifiedByEMail);
 
       /***** Show all assignments again *****/
       Asg_ShowAllAssignments (&Assignments);
@@ -1581,44 +1459,13 @@ void Asg_ReceiveFormAssignment (void)
   }
 
 /*****************************************************************************/
-/******** Update number of users notified in table of assignments ************/
-/*****************************************************************************/
-
-static void Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,unsigned NumUsrsToBeNotifiedByEMail)
-  {
-   /***** Update number of users notified *****/
-   DB_QueryUPDATE ("can not update the number of notifs. of an assignment",
-		   "UPDATE asg_assignments"
-		     " SET NumNotif=NumNotif+%u"
-		   " WHERE AsgCod=%ld",
-                   NumUsrsToBeNotifiedByEMail,
-                   AsgCod);
-  }
-
-/*****************************************************************************/
 /************************ Create a new assignment ****************************/
 /*****************************************************************************/
 
 static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt)
   {
    /***** Create a new assignment *****/
-   Asg->AsgCod =
-   DB_QueryINSERTandReturnCode ("can not create new assignment",
-				"INSERT INTO asg_assignments"
-				" (CrsCod,UsrCod,"
-				  "StartTime,EndTime,"
-				  "Title,Folder,Txt)"
-				" VALUES"
-				" (%ld,%ld,"
-				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-				  "'%s','%s','%s')",
-				Gbl.Hierarchy.Crs.CrsCod,
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Asg->TimeUTC[Dat_START_TIME],
-				Asg->TimeUTC[Dat_END_TIME  ],
-				Asg->Title,
-				Asg->Folder,
-				Txt);
+   Asg->AsgCod = Asg_DB_CreateAssignment (Asg,Txt);
 
    /***** Create groups *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
@@ -1632,74 +1479,15 @@ static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt)
 static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt)
   {
    /***** Update the data of the assignment *****/
-   DB_QueryUPDATE ("can not update assignment",
-		   "UPDATE asg_assignments"
-		     " SET StartTime=FROM_UNIXTIME(%ld),"
-		          "EndTime=FROM_UNIXTIME(%ld),"
-		          "Title='%s',"
-		          "Folder='%s',"
-		          "Txt='%s'"
-		   " WHERE AsgCod=%ld"
-		     " AND CrsCod=%ld",
-                   Asg->TimeUTC[Dat_START_TIME],
-                   Asg->TimeUTC[Dat_END_TIME  ],
-                   Asg->Title,
-                   Asg->Folder,
-                   Txt,
-                   Asg->AsgCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
+   Asg_DB_UpdateAssignment (Asg,Txt);
 
    /***** Update groups *****/
    /* Remove old groups */
-   Asg_RemoveAllTheGrpsAssociatedToAnAssignment (Asg->AsgCod);
+   Asg_DB_RemoveAllGrpsAssociatedToAnAssignment (Asg->AsgCod);
 
    /* Create new groups */
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Asg_CreateGrps (Asg->AsgCod);
-  }
-
-/*****************************************************************************/
-/********************* Remove groups of an assignment ************************/
-/*****************************************************************************/
-
-static void Asg_RemoveAllTheGrpsAssociatedToAnAssignment (long AsgCod)
-  {
-   /***** Remove groups of the assignment *****/
-   DB_QueryDELETE ("can not remove the groups associated to an assignment",
-		   "DELETE FROM asg_groups"
-		   " WHERE AsgCod=%ld",
-		   AsgCod);
-  }
-
-/*****************************************************************************/
-/**************** Remove one group from all the assignments ******************/
-/*****************************************************************************/
-
-void Asg_RemoveGroup (long GrpCod)
-  {
-   /***** Remove group from all the assignments *****/
-   DB_QueryDELETE ("can not remove group from the associations"
-	           " between assignments and groups",
-		   "DELETE FROM asg_groups"
-		   " WHERE GrpCod=%ld",
-		   GrpCod);
-  }
-
-/*****************************************************************************/
-/*********** Remove groups of one type from all the assignments **************/
-/*****************************************************************************/
-
-void Asg_RemoveGroupsOfType (long GrpTypCod)
-  {
-   /***** Remove group from all the assignments *****/
-   DB_QueryDELETE ("can not remove groups of a type from the associations"
-	           " between assignments and groups",
-		   "DELETE FROM asg_groups"
-		   " USING grp_groups,"
-		          "asg_groups"
-		   " WHERE grp_groups.GrpTypCod=%ld"
-		     " AND grp_groups.GrpCod=asg_groups.GrpCod",
-                   GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -1714,14 +1502,7 @@ static void Asg_CreateGrps (long AsgCod)
    for (NumGrpSel = 0;
 	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
-      /* Create group */
-      DB_QueryINSERT ("can not associate a group to an assignment",
-		      "INSERT INTO asg_groups"
-		      " (AsgCod,GrpCod)"
-		      " VALUES"
-		      " (%ld,%ld)",
-                      AsgCod,
-		      Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+      Asg_DB_CreateGrp (AsgCod,Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/
@@ -1740,52 +1521,39 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
    unsigned NumGrp;
 
    /***** Get groups associated to an assignment from database *****/
-   NumGrps = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get groups of an assignment",
-		   "SELECT grp_types.GrpTypName,"	// row[0]
-			  "grp_groups.GrpName"	// row[1]
-		    " FROM asg_groups,"
-			  "grp_groups,"
-			  "grp_types"
-		   " WHERE asg_groups.AsgCod=%ld"
-		     " AND asg_groups.GrpCod=grp_groups.GrpCod"
-		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-		   " ORDER BY grp_types.GrpTypName,"
-			     "grp_groups.GrpName",
-		   Asg->AsgCod);
+   NumGrps = Asg_DB_GetGrps (&mysql_res,Asg->AsgCod);
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Asg->Hidden ? "ASG_GRP_LIGHT" :
         	                               "ASG_GRP");
-   HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
-                                    Txt_Groups);
 
-   /***** Write groups *****/
-   if (NumGrps) // Groups found...
-     {
-      /* Get and write the group types and names */
-      for (NumGrp = 0;
-	   NumGrp < NumGrps;
-	   NumGrp++)
-        {
-         /* Get next group */
-         row = mysql_fetch_row (mysql_res);
+      HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
+				       Txt_Groups);
 
-         /* Write group type name and group name */
-         HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
+      /***** Write groups *****/
+      if (NumGrps) // Groups found...
+	 /* Get and write the group types and names */
+	 for (NumGrp = 0;
+	      NumGrp < NumGrps;
+	      NumGrp++)
+	   {
+	    /* Get next group */
+	    row = mysql_fetch_row (mysql_res);
 
-         if (NumGrps >= 2)
-           {
-            if (NumGrp == NumGrps - 2)
-               HTM_TxtF (" %s ",Txt_and);
-            if (NumGrps >= 3)
-              if (NumGrp < NumGrps - 2)
-                  HTM_Txt (", ");
-           }
-        }
-     }
-   else
-      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+	    /* Write group type name and group name */
+	    HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
+
+	    if (NumGrps >= 2)
+	      {
+	       if (NumGrp == NumGrps - 2)
+		  HTM_TxtF (" %s ",Txt_and);
+	       if (NumGrps >= 3)
+		 if (NumGrp < NumGrps - 2)
+		     HTM_Txt (", ");
+	      }
+	   }
+      else
+	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    HTM_DIV_End ();
 
@@ -1799,20 +1567,11 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
 
 void Asg_RemoveCrsAssignments (long CrsCod)
   {
-   /***** Remove groups *****/
-   DB_QueryDELETE ("can not remove groups associated to assignments in a course",
-		   "DELETE FROM asg_groups"
-		   " USING asg_assignments,"
-		          "asg_groups"
-		   " WHERE asg_assignments.CrsCod=%ld"
-		     " AND asg_assignments.AsgCod=asg_groups.AsgCod",
-                   CrsCod);
+   /***** Remove groups associated to assignments in course *****/
+   Asg_DB_RemoveGrpsAssociatedToAsgsInCrs (CrsCod);
 
    /***** Remove assignments *****/
-   DB_QueryDELETE ("can not remove all assignments in a course",
-		   "DELETE FROM asg_assignments"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
+   Asg_DB_RemoveCrsAssignments (CrsCod);
   }
 
 /*****************************************************************************/
@@ -1828,107 +1587,11 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
       case Rol_TCH:
 	 // Students and teachers can do assignments depending on groups
 	 /***** Get if I can do an assignment from database *****/
-	 return (DB_QueryCOUNT ("can not check if I can do an assignment",
-			        "SELECT COUNT(*)"
-			         " FROM asg_assignments"
-				" WHERE AsgCod=%ld"
-				  " AND ("
-					// Assignment is for the whole course
-					"AsgCod NOT IN"
-					" (SELECT AsgCod"
-					   " FROM asg_groups)"
-					" OR "
-					// Assignment is for some of my groups
-					"AsgCod IN"
-					" (SELECT asg_groups.AsgCod"
-					   " FROM grp_users,"
-					         "asg_groups"
-					  " WHERE grp_users.UsrCod=%ld"
-					    " AND asg_groups.GrpCod=grp_users.GrpCod)"
-				       ")",
-				AsgCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+	 return Asg_DB_CheckIfICanDoAssignment (AsgCod);
       case Rol_SYS_ADM:
          return true;
       default:
          return false;
-     }
-  }
-
-/*****************************************************************************/
-/****************** Get number of courses with assignments *******************/
-/*****************************************************************************/
-// Returns the number of courses with assignments
-// in this location (all the platform, current degree or current course)
-
-unsigned Asg_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope)
-  {
-   /***** Get number of courses with assignments from database *****/
-   switch (Scope)
-     {
-      case Hie_Lvl_SYS:
-	 return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with assignments",
-                        "SELECT COUNT(DISTINCT CrsCod)"
-			 " FROM asg_assignments"
-			" WHERE CrsCod>0");
-       case Hie_Lvl_CTY:
-	 return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with assignments",
-                        "SELECT COUNT(DISTINCT asg_assignments.CrsCod)"
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "courses,"
-			       "asg_assignments"
-			" WHERE ins_instits.CtyCod=%ld"
-			  " AND ins_instits.InsCod=ctr_centers.InsCod"
-			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			  " AND deg_degrees.DegCod=crs_courses.DegCod"
-			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                        Gbl.Hierarchy.Cty.CtyCod);
-       case Hie_Lvl_INS:
-	 return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with assignments",
-                        "SELECT COUNT(DISTINCT asg_assignments.CrsCod)"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "asg_assignments"
-			" WHERE ctr_centers.InsCod=%ld"
-			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			  " AND deg_degrees.DegCod=crs_courses.DegCod"
-			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                        Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with assignments",
-                        "SELECT COUNT(DISTINCT asg_assignments.CrsCod)"
-			 " FROM deg_degrees,"
-			       "crs_courses,"
-			       "asg_assignments"
-			" WHERE deg_degrees.CtrCod=%ld"
-			  " AND deg_degrees.DegCod=crs_courses.DegCod"
-			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                        Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with assignments",
-                        "SELECT COUNT(DISTINCT asg_assignments.CrsCod)"
-			 " FROM crs_courses,"
-			       "asg_assignments"
-			" WHERE crs_courses.DegCod=%ld"
-			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                        Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with assignments",
-                        "SELECT COUNT(DISTINCT CrsCod)"
-			 " FROM asg_assignments"
-			" WHERE CrsCod=%ld",
-                        Gbl.Hierarchy.Crs.CrsCod);
-      default:
-	 Err_WrongScopeExit ();
-	 return 0;
      }
   }
 
@@ -1944,112 +1607,26 @@ unsigned Asg_GetNumAssignments (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
    MYSQL_ROW row;
    unsigned NumAssignments;
 
+   /***** Default values *****/
+   NumAssignments = 0;
+   *NumNotif = 0;
+
    /***** Get number of assignments from database *****/
-   switch (Scope)
+   if (Asg_DB_GetNumAssignments (&mysql_res,Scope))
      {
-      case Hie_Lvl_SYS:
-         DB_QuerySELECT (&mysql_res,"can not get number of assignments",
-                         "SELECT COUNT(*),"			// row[0]
-                                "SUM(NumNotif)"			// row[1]
-			  " FROM asg_assignments"
-			 " WHERE CrsCod>0");
-         break;
-      case Hie_Lvl_CTY:
-         DB_QuerySELECT (&mysql_res,"can not get number of assignments",
-                         "SELECT COUNT(*),"			// row[0]
-                                "SUM(asg_assignments.NumNotif)"	// row[1]
-			  " FROM ins_instits,"
-			        "ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "asg_assignments"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                         Gbl.Hierarchy.Cty.CtyCod);
-         break;
-      case Hie_Lvl_INS:
-         DB_QuerySELECT (&mysql_res,"can not get number of assignments",
-                         "SELECT COUNT(*),"			// row[0]
-                                "SUM(asg_assignments.NumNotif)"	// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "asg_assignments"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                         Gbl.Hierarchy.Ins.InsCod);
-         break;
-      case Hie_Lvl_CTR:
-         DB_QuerySELECT (&mysql_res,"can not get number of assignments",
-                         "SELECT COUNT(*),"			// row[0]
-                                "SUM(asg_assignments.NumNotif)"	// row[1]
-			  " FROM deg_degrees,"
-			        "crs_courses,"
-			        "asg_assignments"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                         Gbl.Hierarchy.Ctr.CtrCod);
-         break;
-      case Hie_Lvl_DEG:
-         DB_QuerySELECT (&mysql_res,"can not get number of assignments",
-                         "SELECT COUNT(*),"			// row[0]
-                                "SUM(asg_assignments.NumNotif)"	// row[1]
-			  " FROM crs_courses,"
-			        "asg_assignments"
-			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                         Gbl.Hierarchy.Deg.DegCod);
-         break;
-      case Hie_Lvl_CRS:
-         DB_QuerySELECT (&mysql_res,"can not get number of assignments",
-                         "SELECT COUNT(*),"			// row[0]
-                                "SUM(NumNotif)"			// row[1]
-			  " FROM asg_assignments"
-			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.CrsCod);
-         break;
-      default:
-	 Err_WrongScopeExit ();
-	 break;
-     }
+      /***** Get number of assignments *****/
+      row = mysql_fetch_row (mysql_res);
+      if (sscanf (row[0],"%u",&NumAssignments) != 1)
+	 Err_ShowErrorAndExit ("Error when getting number of assignments.");
 
-   /***** Get number of assignments *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumAssignments) != 1)
-      Err_ShowErrorAndExit ("Error when getting number of assignments.");
-
-   /***** Get number of notifications by email *****/
-   if (row[1])
-     {
-      if (sscanf (row[1],"%u",NumNotif) != 1)
-         Err_ShowErrorAndExit ("Error when getting number of notifications of assignments.");
+      /***** Get number of notifications by email *****/
+      if (row[1])
+	 if (sscanf (row[1],"%u",NumNotif) != 1)
+	    Err_ShowErrorAndExit ("Error when getting number of notifications of assignments.");
      }
-   else
-      *NumNotif = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
    return NumAssignments;
-  }
-
-/*****************************************************************************/
-/****************** Get number of assignments in a course ********************/
-/*****************************************************************************/
-
-unsigned Asg_GetNumAssignmentsInCrs (long CrsCod)
-  {
-   /***** Get number of assignments in a course from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of assignments in course",
-		  "SELECT COUNT(*)"
-		   " FROM asg_assignments"
-		  " WHERE CrsCod=%ld",
-		  CrsCod);
   }

@@ -599,15 +599,18 @@ TODO: BUG: Cuando un tipo de grupo sólo tiene un grupo, inscribirse es voluntari
 TODO: Salvador Romero Cortés: @acanas opción para editar posts
 
 TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates(), por ejemplo al cambiar el color de la gráfica de accesos por día y hora, no se respeta la zona horaria.
+
+TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
 */
-#define Log_PLATFORM_VERSION	"SWAD 20.74 (2021-05-11)"
+#define Log_PLATFORM_VERSION	"SWAD 20.75 (2021-05-11)"
 #define CSS_FILE		"swad20.45.css"
 #define JS_FILE			"swad20.69.1.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
-	Version 20.74:    May 11, 2021  New module swad_announcement_database for database queries related to announcements. (? lines)
+	Version 20.75:    May 11, 2021  New module swad_assignment_database for database queries related to assignments. (310858 lines)
+	Version 20.74:    May 11, 2021  New module swad_announcement_database for database queries related to announcements. (310629 lines)
 	Version 20.73:    May 10, 2021  New module swad_agenda_database for database queries related to agenda. (310474 lines)
 	Version 20.72:    May 10, 2021  New module swad_account_database for database queries related to user's account. (310328 lines)
 	Version 20.71:    May 10, 2021  New module swad_media_database for database queries related to media. (310080 lines)
