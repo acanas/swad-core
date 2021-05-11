@@ -61,7 +61,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Ale_ResetLastAlert (void);
-static void Ale_ResetAlert (size_t i);
+static void Ale_ResetAlert (size_t NumAlert);
 
 static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt);
 
@@ -135,12 +135,12 @@ const char *Ale_GetTextOfLastAlert (void)
 
 void Ale_ResetAllAlerts (void)
   {
-   size_t i;
+   size_t NumAlert;
 
-   for (i = 0;
-	i < Gbl.Alerts.Num;
-	i++)
-      Ale_ResetAlert (i);
+   for (NumAlert = 0;
+	NumAlert < Gbl.Alerts.Num;
+	NumAlert++)
+      Ale_ResetAlert (NumAlert);
   }
 
 /*****************************************************************************/
@@ -157,29 +157,29 @@ static void Ale_ResetLastAlert (void)
 /********************* Reset one alert given its index ***********************/
 /*****************************************************************************/
 
-static void Ale_ResetAlert (size_t i)
+static void Ale_ResetAlert (size_t NumAlert)
   {
    bool NoMoreAlertsPending;
-   size_t j;
+   size_t i;
 
-   if (i < Gbl.Alerts.Num)
-      if (Gbl.Alerts.List[i].Type != Ale_NONE)
+   if (NumAlert < Gbl.Alerts.Num)
+      if (Gbl.Alerts.List[NumAlert].Type != Ale_NONE)
 	{
-	 /***** Reset i-esim alert *****/
-	 Gbl.Alerts.List[i].Type = Ale_NONE;	// Reset alert
+	 /***** Reset alert *****/
+	 Gbl.Alerts.List[NumAlert].Type = Ale_NONE;	// Reset alert
 
 	 /***** Free memory allocated for text *****/
-	 if (Gbl.Alerts.List[i].Text)
+	 if (Gbl.Alerts.List[NumAlert].Text)
 	   {
-	    free (Gbl.Alerts.List[i].Text);
-	    Gbl.Alerts.List[i].Text = NULL;
+	    free (Gbl.Alerts.List[NumAlert].Text);
+	    Gbl.Alerts.List[NumAlert].Text = NULL;
 	   }
 
 	 /***** Free memory allocated for section *****/
-	 if (Gbl.Alerts.List[i].Section)
+	 if (Gbl.Alerts.List[NumAlert].Section)
 	   {
-	    free (Gbl.Alerts.List[i].Section);
-	    Gbl.Alerts.List[i].Section = NULL;
+	    free (Gbl.Alerts.List[NumAlert].Section);
+	    Gbl.Alerts.List[NumAlert].Section = NULL;
 	   }
 	}
 
@@ -187,10 +187,10 @@ static void Ale_ResetAlert (size_t i)
           if there are no more alerts
           pending to be shown *****/
    NoMoreAlertsPending = true;
-   for (j = 0;
-	NoMoreAlertsPending && j < Gbl.Alerts.Num;
-	j++)
-      if (Gbl.Alerts.List[j].Type != Ale_NONE)
+   for (i = 0;
+	NoMoreAlertsPending && i < Gbl.Alerts.Num;
+	i++)
+      if (Gbl.Alerts.List[i].Type != Ale_NONE)
 	 NoMoreAlertsPending = false;
 
    if (NoMoreAlertsPending)
@@ -215,25 +215,25 @@ void Ale_ShowAlertsAndExit ()
 
 void Ale_ShowAlerts (const char *Section)
   {
-   size_t i;
-   bool ShowAlert;
    size_t NumAlerts = Ale_GetNumAlerts ();
+   size_t NumAlert;
+   bool ShowAlert;
 
-   for (i = 0;
-	i < NumAlerts;
-	i++)
-      if (Gbl.Alerts.List[i].Type != Ale_NONE)
+   for (NumAlert = 0;
+	NumAlert < NumAlerts;
+	NumAlert++)
+      if (Gbl.Alerts.List[NumAlert].Type != Ale_NONE)
         {
 	 if (Section)
-	    ShowAlert = (bool) !strcmp (Gbl.Alerts.List[i].Section,Section);
+	    ShowAlert = (bool) !strcmp (Gbl.Alerts.List[NumAlert].Section,Section);
 	 else
 	    ShowAlert = true;
 
 	 if (ShowAlert)
 	   {
-	    Ale_ShowFixAlert (Gbl.Alerts.List[i].Type,
-			      Gbl.Alerts.List[i].Text);
-	    Ale_ResetAlert (i);
+	    Ale_ShowFixAlert (Gbl.Alerts.List[NumAlert].Type,
+			      Gbl.Alerts.List[NumAlert].Text);
+	    Ale_ResetAlert (NumAlert);
 	   }
         }
   }
@@ -413,10 +413,10 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
    if (AlertClosable[AlertType])
      {
       HTM_DIV_Begin ("class=\"ALERT_CLOSE\"");
-      HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\" /",
-	           IdAlert);
-      Ico_PutIcon ("times.svg",Txt_Close,"ICO16x16");
-      HTM_A_End ();
+	 HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\" /",
+		      IdAlert);
+	    Ico_PutIcon ("times.svg",Txt_Close,"ICO16x16");
+	 HTM_A_End ();
       HTM_DIV_End ();
      }
 
@@ -447,10 +447,12 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
          /* Begin form */
          Frm_BeginFormAnchorOnSubmit (NextAction,Anchor,OnSubmit);
 	 if (FuncParams)
+	   {
 	    FuncParams (Args);
+	   }
 
-         /* Put button *****/
-	 Btn_PutButton (Button,TxtButton);
+	    /* Put button */
+	    Btn_PutButton (Button,TxtButton);
 
          /* End form */
 	 Frm_EndForm ();

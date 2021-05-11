@@ -1,7 +1,7 @@
-// swad_announcement.h: Global announcements
+// swad_announcement_database.h: Global announcements operations with database
 
-#ifndef _SWAD_ANN
-#define _SWAD_ANN
+#ifndef _SWAD_ANN_DB
+#define _SWAD_ANN_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,6 +27,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_database.h"
+
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
@@ -35,25 +37,26 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-#define Ann_NUM_STATUS 2
-typedef enum
-  {
-   Ann_ACTIVE_ANNOUNCEMENT   = 0,
-   Ann_OBSOLETE_ANNOUNCEMENT = 1,
-  } Ann_Status_t;	// Don't change these numbers because they are used in database
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Ann_ShowAllAnnouncements (void);
-void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void);
+unsigned Ann_DB_GetAllAnnouncements (MYSQL_RES **mysql_res);
+unsigned Ann_DB_GetAnnouncementsICanSee (MYSQL_RES **mysql_res);
+unsigned Ann_DB_GetAnnouncementsForUnknownUsers (MYSQL_RES **mysql_res);
+unsigned Ann_DB_GetAnnouncementsNotSeen (MYSQL_RES **mysql_res);
 
-void Ann_ShowFormAnnouncement (void);
-void Ann_ReceiveAnnouncement (void);
-void Ann_HideActiveAnnouncement (void);
-void Ann_RevealHiddenAnnouncement (void);
-void Ann_RemoveAnnouncement (void);
-void Ann_MarkAnnouncementAsSeen (void);
+void Ann_DB_CreateAnnouncement (unsigned Roles,
+                                const char *Subject,const char *Content);
+
+void Ann_DB_HideAnnouncement (long AnnCod);
+void Ann_DB_UnhideAnnouncement (long AnnCod);
+
+void Ann_DB_RemoveUsrsWhoSawAnnouncement (long AnnCod);
+void Ann_DB_RemoveAnnouncement (long AnnCod);
+
+void Ann_DB_MarkAnnouncementAsSeenByMe (long AnnCod);
+
+void Ann_DB_RemoveUsrFromSeenAnnouncements (long UsrCod);
 
 #endif

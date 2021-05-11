@@ -1506,8 +1506,8 @@ void Agd_RequestCreatOrEditEvent (void)
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
 				" class=\"TITLE_DESCRIPTION_WIDTH\"");
-	    if (!ItsANewEvent)
-	       HTM_Txt (Txt);
+	       if (!ItsANewEvent)
+		  HTM_Txt (Txt);
 	    HTM_TEXTAREA_End ();
 	 HTM_TD_End ();
 

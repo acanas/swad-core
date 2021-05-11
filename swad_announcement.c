@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #include "swad_announcement.h"
+#include "swad_announcement_database.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -72,7 +73,6 @@ static void Ann_PutParams (void *AnnCod);
 static long Ann_GetParamAnnCod (void);
 static void Ann_PutSubjectMessage (const char *Field,const char *Label,
                                    unsigned Rows);
-static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const char *Content);
 
 /*****************************************************************************/
 /************************** Show global announcements ************************/
@@ -98,89 +98,57 @@ void Ann_ShowAllAnnouncements (void)
    /***** Get announcements from database *****/
    if (ICanEdit)
       /* Select all announcements */
-      NumAnnouncements = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get announcements",
-		      "SELECT AnnCod,"	// row[0]
-			     "Status,"	// row[1]
-			     "Roles,"	// row[2]
-			     "Subject,"	// row[3]
-			     "Content"	// row[4]
-		       " FROM ann_announcements"
-		      " ORDER BY AnnCod DESC");
+      NumAnnouncements = Ann_DB_GetAllAnnouncements (&mysql_res);
    else if (Gbl.Usrs.Me.Logged)
-     {
       /* Select only announcements I can see */
-      Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
-      NumAnnouncements = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get announcements",
-		      "SELECT AnnCod,"	// row[0]
-			     "Status,"	// row[1]
-			     "Roles,"	// row[2]
-			     "Subject,"	// row[3]
-			     "Content"	// row[4]
-		       " FROM ann_announcements"
-		      " WHERE (Roles&%u)<>0 "	// All my roles in different courses
-		      " ORDER BY AnnCod DESC",
-		      (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);
-     }
+      NumAnnouncements = Ann_DB_GetAnnouncementsICanSee (&mysql_res);
    else // No user logged
       /* Select only active announcements for unknown users */
-      NumAnnouncements = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get announcements",
-		      "SELECT AnnCod,"	// row[0]
-			     "Status,"	// row[1]
-			     "Roles,"	// row[2]
-			     "Subject,"	// row[3]
-			     "Content"	// row[4]
-		       " FROM ann_announcements"
-		      " WHERE Status=%u"
-			" AND (Roles&%u)<>0 "
-		      " ORDER BY AnnCod DESC",
-		      (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
-		      (unsigned) (1 << Rol_UNK));
+      NumAnnouncements = Ann_DB_GetAnnouncementsForUnknownUsers (&mysql_res);
 
    /***** Begin box *****/
    Box_BoxBegin ("550px",Txt_Announcements,
                  ICanEdit ? Ann_PutIconToAddNewAnnouncement :
 			    NULL,NULL,
 		 Hlp_COMMUNICATION_Announcements,Box_NOT_CLOSABLE);
-   if (!NumAnnouncements)
-      Ale_ShowAlert (Ale_INFO,Txt_No_announcements);
 
-   /***** Show the announcements *****/
-   for (NumAnn = 0;
-	NumAnn < NumAnnouncements;
-	NumAnn++)
-     {
-      row = mysql_fetch_row (mysql_res);
+      if (!NumAnnouncements)
+	 Ale_ShowAlert (Ale_INFO,Txt_No_announcements);
 
-      /* Get announcement code (row[0]) */
-      if (sscanf (row[0],"%ld",&AnnCod) != 1)
-	 Err_WrongAnnouncementExit ();
+      /***** Show the announcements *****/
+      for (NumAnn = 0;
+	   NumAnn < NumAnnouncements;
+	   NumAnn++)
+	{
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get status of the announcement (row[1]) */
-      Status = Ann_OBSOLETE_ANNOUNCEMENT;
-      if (sscanf (row[1],"%u",&UnsignedNum) == 1)
-	 if (UnsignedNum < Ann_NUM_STATUS)
-	   Status = (Ann_Status_t) UnsignedNum;
+	 /* Get announcement code (row[0]) */
+	 if (sscanf (row[0],"%ld",&AnnCod) != 1)
+	    Err_WrongAnnouncementExit ();
 
-      /* Get roles (row[2]) */
-      if (sscanf (row[2],"%u",&Roles) != 1)
-      	 Err_ShowErrorAndExit ("Error when reading roles of announcement.");
+	 /* Get status of the announcement (row[1]) */
+	 Status = Ann_OBSOLETE_ANNOUNCEMENT;
+	 if (sscanf (row[1],"%u",&UnsignedNum) == 1)
+	    if (UnsignedNum < Ann_NUM_STATUS)
+	      Status = (Ann_Status_t) UnsignedNum;
 
-      /* Get the subject (row[3]), the content (row[4]), and insert links */
-      Str_Copy (Subject,row[3],sizeof (Subject) - 1);
-      Str_Copy (Content,row[4],sizeof (Content) - 1);
-      Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
+	 /* Get roles (row[2]) */
+	 if (sscanf (row[2],"%u",&Roles) != 1)
+	    Err_ShowErrorAndExit ("Error when reading roles of announcement.");
 
-      /* Show the announcement */
-      Ann_DrawAnAnnouncement (AnnCod,Status,Subject,Content,
-                              Roles,true,ICanEdit);
-     }
+	 /* Get the subject (row[3]), the content (row[4]), and insert links */
+	 Str_Copy (Subject,row[3],sizeof (Subject) - 1);
+	 Str_Copy (Content,row[4],sizeof (Content) - 1);
+	 Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
 
-   /***** Button to add new announcement *****/
-   if (ICanEdit)
-      Ann_PutButtonToAddNewAnnouncement ();
+	 /* Show the announcement */
+	 Ann_DrawAnAnnouncement (AnnCod,Status,Subject,Content,
+				 Roles,true,ICanEdit);
+	}
+
+      /***** Button to add new announcement *****/
+      if (ICanEdit)
+	 Ann_PutButtonToAddNewAnnouncement ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -231,47 +199,32 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 
    /***** Select announcements not seen *****/
    Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
-   NumAnnouncements = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get announcements",
-		   "SELECT AnnCod,"	// row[0]
-			  "Subject,"	// row[1]
-			  "Content"	// row[2]
-		    " FROM ann_announcements"
-		   " WHERE Status=%u"
-		     " AND (Roles&%u)<>0 "	// All my roles in different courses
-		     " AND AnnCod NOT IN"
-			 " (SELECT AnnCod"
-			    " FROM ann_seen"
-			   " WHERE UsrCod=%ld)"
-		   " ORDER BY AnnCod DESC",	// Newest first
-		   (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
-		   (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   NumAnnouncements = Ann_DB_GetAnnouncementsNotSeen (&mysql_res);
 
    /***** Show the announcements *****/
    if (NumAnnouncements)
      {
       HTM_DIV_Begin ("class=\"CM\"");
 
-      for (NumAnn = 0;
-	   NumAnn < NumAnnouncements;
-	   NumAnn++)
-	{
-	 row = mysql_fetch_row (mysql_res);
+	 for (NumAnn = 0;
+	      NumAnn < NumAnnouncements;
+	      NumAnn++)
+	   {
+	    row = mysql_fetch_row (mysql_res);
 
-	 /* Get announcement code (row[0]) */
-	 if (sscanf (row[0],"%ld",&AnnCod) != 1)
-	    Err_WrongAnnouncementExit ();
+	    /* Get announcement code (row[0]) */
+	    if (sscanf (row[0],"%ld",&AnnCod) != 1)
+	       Err_WrongAnnouncementExit ();
 
-	 /* Get the subject (row[1]), the content (row[2]), and insert links */
-	 Str_Copy (Subject,row[1],sizeof (Subject) - 1);
-	 Str_Copy (Content,row[2],sizeof (Content) - 1);
-	 Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
+	    /* Get the subject (row[1]), the content (row[2]), and insert links */
+	    Str_Copy (Subject,row[1],sizeof (Subject) - 1);
+	    Str_Copy (Content,row[2],sizeof (Content) - 1);
+	    Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
 
-	 /* Show the announcement */
-	 Ann_DrawAnAnnouncement (AnnCod,Ann_ACTIVE_ANNOUNCEMENT,Subject,Content,
-	                         0,false,false);
-	}
+	    /* Show the announcement */
+	    Ann_DrawAnAnnouncement (AnnCod,Ann_ACTIVE_ANNOUNCEMENT,Subject,Content,
+				    0,false,false);
+	   }
 
       HTM_DIV_End ();
      }
@@ -316,62 +269,64 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    /***** Start yellow note *****/
    HTM_DIV_Begin ("class=\"%s\"",ContainerClass[Status]);
 
-   if (ICanEdit)
-     {
-      /***** Put form to remove announcement *****/
-      Ico_PutContextualIconToRemove (ActRemAnn,NULL,
-                                     Ann_PutParams,&AnnCod);
-
-      /***** Put form to change the status of the announcement *****/
-      switch (Status)
+      if (ICanEdit)
 	{
-	 case Ann_ACTIVE_ANNOUNCEMENT:
-	    Ico_PutContextualIconToHide (ActHidAnn,NULL,
-	                                 Ann_PutParams,&AnnCod);
-	    break;
-	 case Ann_OBSOLETE_ANNOUNCEMENT:
-	    Ico_PutContextualIconToUnhide (ActRevAnn,NULL,
-	                                   Ann_PutParams,&AnnCod);
-	    break;
-	}
-     }
+	 /***** Put form to remove announcement *****/
+	 Ico_PutContextualIconToRemove (ActRemAnn,NULL,
+					Ann_PutParams,&AnnCod);
 
-   /***** Write the subject of the announcement *****/
-   HTM_DIV_Begin ("class=\"%s\"",SubjectClass[Status]);
-   HTM_Txt (Subject);
-   HTM_DIV_End ();
-
-   /***** Write the content of the announcement *****/
-   HTM_DIV_Begin ("class=\"%s\"",ContentClass[Status]);
-   HTM_Txt (Content);
-   HTM_DIV_End ();
-
-   /***** Write form *****/
-   HTM_DIV_Begin ("class=\"NOTICE_USERS %s\"",UsersClass[Status]);
-
-   if (ShowAllAnnouncements)
-     {
-      /* Users' roles who can view this announcement */
-      HTM_TxtColon (Txt_Users);
-      for (Role = Rol_UNK, SomeRolesAreSelected = false;
-	   Role <= Rol_TCH;
-	   Role++)
-	 if (Roles & (1 << Role))
+	 /***** Put form to change the status of the announcement *****/
+	 switch (Status)
 	   {
-	    if (SomeRolesAreSelected)
-	       HTM_Comma ();
-	    SomeRolesAreSelected = true;
-	    HTM_TxtF ("&nbsp;%s",Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
+	    case Ann_ACTIVE_ANNOUNCEMENT:
+	       Ico_PutContextualIconToHide (ActHidAnn,NULL,
+					    Ann_PutParams,&AnnCod);
+	       break;
+	    case Ann_OBSOLETE_ANNOUNCEMENT:
+	       Ico_PutContextualIconToUnhide (ActRevAnn,NULL,
+					      Ann_PutParams,&AnnCod);
+	       break;
 	   }
-     }
-   else
-      /***** Put form to mark announcement as seen *****/
-      Lay_PutContextualLinkIconText (ActAnnSee,NULL,
-                                     Ann_PutParams,&AnnCod,
-				     "times.svg",
-				     Txt_Do_not_show_again);
+	}
 
-   HTM_DIV_End ();
+      /***** Write the subject of the announcement *****/
+      HTM_DIV_Begin ("class=\"%s\"",SubjectClass[Status]);
+	 HTM_Txt (Subject);
+      HTM_DIV_End ();
+
+      /***** Write the content of the announcement *****/
+      HTM_DIV_Begin ("class=\"%s\"",ContentClass[Status]);
+	 HTM_Txt (Content);
+      HTM_DIV_End ();
+
+      /***** Write announcement foot *****/
+      /* Begin container for foot */
+      HTM_DIV_Begin ("class=\"NOTICE_USERS %s\"",UsersClass[Status]);
+
+	 if (ShowAllAnnouncements)
+	   {
+	    /* Users' roles who can view this announcement */
+	    HTM_TxtColon (Txt_Users);
+	    for (Role = Rol_UNK, SomeRolesAreSelected = false;
+		 Role <= Rol_TCH;
+		 Role++)
+	       if (Roles & (1 << Role))
+		 {
+		  if (SomeRolesAreSelected)
+		     HTM_Comma ();
+		  SomeRolesAreSelected = true;
+		  HTM_TxtF ("&nbsp;%s",Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
+		 }
+	   }
+	 else
+	    /***** Put form to mark announcement as seen *****/
+	    Lay_PutContextualLinkIconText (ActAnnSee,NULL,
+					   Ann_PutParams,&AnnCod,
+					   "times.svg",
+					   Txt_Do_not_show_again);
+
+      /* End container for foot */
+      HTM_DIV_End ();
 
    /***** End yellow note *****/
    HTM_DIV_End ();
@@ -418,40 +373,40 @@ void Ann_ShowFormAnnouncement (void)
    /***** Begin form *****/
    Frm_BeginForm (ActRcvAnn);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_announcement,
-                      NULL,NULL,
-                      Hlp_COMMUNICATION_Announcements,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_New_announcement,
+			 NULL,NULL,
+			 Hlp_COMMUNICATION_Announcements,Box_NOT_CLOSABLE,2);
 
-   /***** Announcement subject and body *****/
-   Ann_PutSubjectMessage ("Subject",Txt_MSG_Subject, 2);
-   Ann_PutSubjectMessage ("Content",Txt_MSG_Content,20);
+	 /***** Announcement subject and body *****/
+	 Ann_PutSubjectMessage ("Subject",Txt_MSG_Subject, 2);
+	 Ann_PutSubjectMessage ("Content",Txt_MSG_Content,20);
 
-   /***** Users' roles who can view the announcement *****/
-   HTM_TR_Begin (NULL);
+	 /***** Users' roles who can view the announcement *****/
+	 HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Users);
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TxtColonNBSP (Txt_Users);
+	    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
-   Rol_WriteSelectorRoles (1 << Rol_UNK |
-                           1 << Rol_GST |
-                           1 << Rol_STD |
-                           1 << Rol_NET |
-                           1 << Rol_TCH,
-	                   1 << Rol_UNK |
-                           1 << Rol_GST |
-                           1 << Rol_STD |
-                           1 << Rol_NET |
-                           1 << Rol_TCH,
-                           false,false);
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"DAT LT\"");
+	       Rol_WriteSelectorRoles (1 << Rol_UNK |
+				       1 << Rol_GST |
+				       1 << Rol_STD |
+				       1 << Rol_NET |
+				       1 << Rol_TCH,
+				       1 << Rol_UNK |
+				       1 << Rol_GST |
+				       1 << Rol_STD |
+				       1 << Rol_NET |
+				       1 << Rol_TCH,
+				       false,false);
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_announcement);
+      /***** End table, send button and end box *****/
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_announcement);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -469,15 +424,15 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
    /***** Subject or content *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",Field,Label);
+      /* Label */
+      Frm_LabelColumn ("RT",Field,Label);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" cols=\"75\" rows=\"%u\"",
-	               Field,Field,Rows);
-   HTM_TEXTAREA_End ();
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LT\"");
+	 HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" cols=\"75\" rows=\"%u\"",
+			     Field,Field,Rows);
+	 HTM_TEXTAREA_End ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -505,30 +460,13 @@ void Ann_ReceiveAnnouncement (void)
    Roles = Rol_GetSelectedRoles ();
 
    /***** Create a new announcement in database *****/
-   Ann_CreateAnnouncement (Roles,Subject,Content);
+   Ann_DB_CreateAnnouncement (Roles,Subject,Content);
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Announcement_created);
 
    /***** Refresh list of announcements *****/
    Ann_ShowAllAnnouncements ();
-  }
-
-/*****************************************************************************/
-/************************ Create a new announcement **************************/
-/*****************************************************************************/
-
-static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const char *Content)
-  {
-   /***** Select announcements not seen *****/
-   DB_QueryINSERT ("can not create announcement",
-		   "INSERT INTO ann_announcements"
-		   " (Roles,Subject,Content)"
-		   " VALUES"
-		   " (%u,'%s','%s')",
-                   Roles,
-                   Subject,
-                   Content);
   }
 
 /*****************************************************************************/
@@ -543,12 +481,7 @@ void Ann_HideActiveAnnouncement (void)
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Set global announcement as hidden *****/
-   DB_QueryUPDATE ("can not hide announcement",
-		   "UPDATE ann_announcements"
-		     " SET Status=%u"
-		   " WHERE AnnCod=%ld",
-                   (unsigned) Ann_OBSOLETE_ANNOUNCEMENT,
-                   AnnCod);
+   Ann_DB_HideAnnouncement (AnnCod);
   }
 
 /*****************************************************************************/
@@ -562,13 +495,8 @@ void Ann_RevealHiddenAnnouncement (void)
    /***** Get the code of the global announcement to show *****/
    AnnCod = Ann_GetParamAnnCod ();
 
-   /***** Set global announcement as shown *****/
-   DB_QueryUPDATE ("can not reveal announcement",
-		   "UPDATE ann_announcements"
-		     " SET Status=%u"
-		   " WHERE AnnCod=%ld",
-                   (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
-                   AnnCod);
+   /***** Set global announcement as not hidden *****/
+   Ann_DB_UnhideAnnouncement (AnnCod);
   }
 
 /*****************************************************************************/
@@ -583,17 +511,11 @@ void Ann_RemoveAnnouncement (void)
    /***** Get the code of the global announcement *****/
    AnnCod = Ann_GetParamAnnCod ();
 
-   /***** Remove announcement *****/
-   DB_QueryDELETE ("can not remove announcement",
-		   "DELETE FROM ann_announcements"
-		   " WHERE AnnCod=%ld",
-		   AnnCod);
-
    /***** Remove users who have seen the announcement *****/
-   DB_QueryDELETE ("can not remove announcement",
-		   "DELETE FROM ann_seen"
-		   " WHERE AnnCod=%ld",
-		   AnnCod);
+   Ann_DB_RemoveUsrsWhoSawAnnouncement (AnnCod);
+
+   /***** Remove the announcement *****/
+   Ann_DB_RemoveAnnouncement (AnnCod);
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Announcement_removed);
@@ -614,26 +536,8 @@ void Ann_MarkAnnouncementAsSeen (void)
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Mark announcement as seen *****/
-   DB_QueryREPLACE ("can not mark announcement as seen",
-		    "REPLACE INTO ann_seen"
-		    " (AnnCod,UsrCod)"
-		    " VALUES"
-		    " (%ld,%ld)",
-                    AnnCod,
-                    Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ann_DB_MarkAnnouncementAsSeenByMe (AnnCod);
 
    /***** Show other announcements again *****/
    Ann_ShowMyAnnouncementsNotMarkedAsSeen ();
-  }
-
-/*****************************************************************************/
-/******************** Remove user from seen announcements ********************/
-/*****************************************************************************/
-
-void Ann_DB_RemoveUsrFromSeenAnnouncements (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove user from seen announcements",
-		   "DELETE FROM ann_seen"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
   }
